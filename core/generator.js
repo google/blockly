@@ -37,60 +37,60 @@ const Generator = function(name) {
   this.name_ = name;
   this.FUNCTION_NAME_PLACEHOLDER_REGEXP_ =
       new RegExp(this.FUNCTION_NAME_PLACEHOLDER_, 'g');
+
+  /**
+   * Arbitrary code to inject into locations that risk causing infinite loops.
+   * Any instances of '%1' will be replaced by the block ID that failed.
+   * E.g. '  checkTimeout(%1);\n'
+   * @type {?string}
+   */
+  this.INFINITE_LOOP_TRAP = null;
+
+  /**
+   * Arbitrary code to inject before every statement.
+   * Any instances of '%1' will be replaced by the block ID of the statement.
+   * E.g. 'highlight(%1);\n'
+   * @type {?string}
+   */
+  this.STATEMENT_PREFIX = null;
+
+  /**
+   * Arbitrary code to inject after every statement.
+   * Any instances of '%1' will be replaced by the block ID of the statement.
+   * E.g. 'highlight(%1);\n'
+   * @type {?string}
+   */
+  this.STATEMENT_SUFFIX = null;
+
+  /**
+   * The method of indenting.  Defaults to two spaces, but language generators
+   * may override this to increase indent or change to tabs.
+   * @type {string}
+   */
+  this.INDENT = '  ';
+
+  /**
+   * Maximum length for a comment before wrapping.  Does not account for
+   * indenting level.
+   * @type {number}
+   */
+  this.COMMENT_WRAP = 60;
+
+  /**
+   * List of outer-inner pairings that do NOT require parentheses.
+   * @type {!Array<!Array<number>>}
+   */
+  this.ORDER_OVERRIDES = [];
+
+  /**
+   * Whether the init method has been called.
+   * Generators that set this flag to false after creation and true in init
+   * will cause blockToCode to emit a warning if the generator has not been
+   * initialized. If this flag is untouched, it will have no effect.
+   * @type {?boolean}
+   */
+  this.isInitialized = null;
 };
-
-/**
- * Arbitrary code to inject into locations that risk causing infinite loops.
- * Any instances of '%1' will be replaced by the block ID that failed.
- * E.g. '  checkTimeout(%1);\n'
- * @type {?string}
- */
-Generator.prototype.INFINITE_LOOP_TRAP = null;
-
-/**
- * Arbitrary code to inject before every statement.
- * Any instances of '%1' will be replaced by the block ID of the statement.
- * E.g. 'highlight(%1);\n'
- * @type {?string}
- */
-Generator.prototype.STATEMENT_PREFIX = null;
-
-/**
- * Arbitrary code to inject after every statement.
- * Any instances of '%1' will be replaced by the block ID of the statement.
- * E.g. 'highlight(%1);\n'
- * @type {?string}
- */
-Generator.prototype.STATEMENT_SUFFIX = null;
-
-/**
- * The method of indenting.  Defaults to two spaces, but language generators
- * may override this to increase indent or change to tabs.
- * @type {string}
- */
-Generator.prototype.INDENT = '  ';
-
-/**
- * Maximum length for a comment before wrapping.  Does not account for
- * indenting level.
- * @type {number}
- */
-Generator.prototype.COMMENT_WRAP = 60;
-
-/**
- * List of outer-inner pairings that do NOT require parentheses.
- * @type {!Array<!Array<number>>}
- */
-Generator.prototype.ORDER_OVERRIDES = [];
-
-/**
- * Whether the init method has been called.
- * Generators that set this flag to false after creation and true in init
- * will cause blockToCode to emit a warning if the generator has not been
- * initialized. If this flag is untouched, it will have no effect.
- * @type {?boolean}
- */
-Generator.prototype.isInitialized = null;
 
 /**
  * Generate code for all blocks in the workspace to the specified language.

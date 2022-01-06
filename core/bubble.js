@@ -59,6 +59,58 @@ const Bubble = function(
   this.shape_ = shape;
 
   /**
+   * Flag to stop incremental rendering during construction.
+   * @type {boolean}
+   * @private
+   */
+  this.rendered_ = false;
+
+  /**
+   * Absolute coordinate of anchor point, in workspace coordinates.
+   * @type {Coordinate}
+   * @private
+   */
+  this.anchorXY_ = null;
+
+  /**
+   * Relative X coordinate of bubble with respect to the anchor's centre,
+   * in workspace units.
+   * In RTL mode the initial value is negated.
+   * @type {number}
+   * @private
+   */
+  this.relativeLeft_ = 0;
+
+  /**
+   * Relative Y coordinate of bubble with respect to the anchor's centre, in
+   * workspace units.
+   * @type {number}
+   * @private
+   */
+  this.relativeTop_ = 0;
+
+  /**
+   * Width of bubble, in workspace units.
+   * @type {number}
+   * @private
+   */
+  this.width_ = 0;
+
+  /**
+   * Height of bubble, in workspace units.
+   * @type {number}
+   * @private
+   */
+  this.height_ = 0;
+
+  /**
+   * Automatically position and reposition the bubble.
+   * @type {boolean}
+   * @private
+   */
+  this.autoLayout_ = true;
+
+  /**
    * Method to call on resize of bubble.
    * @type {?function()}
    * @private
@@ -181,52 +233,6 @@ Bubble.bubbleMouseUp_ = function(_e) {
   Touch.clearTouchIdentifier();
   Bubble.unbindDragEvents_();
 };
-
-/**
- * Flag to stop incremental rendering during construction.
- * @private
- */
-Bubble.prototype.rendered_ = false;
-
-/**
- * Absolute coordinate of anchor point, in workspace coordinates.
- * @type {Coordinate}
- * @private
- */
-Bubble.prototype.anchorXY_ = null;
-
-/**
- * Relative X coordinate of bubble with respect to the anchor's centre,
- * in workspace units.
- * In RTL mode the initial value is negated.
- * @private
- */
-Bubble.prototype.relativeLeft_ = 0;
-
-/**
- * Relative Y coordinate of bubble with respect to the anchor's centre, in
- * workspace units.
- * @private
- */
-Bubble.prototype.relativeTop_ = 0;
-
-/**
- * Width of bubble, in workspace units.
- * @private
- */
-Bubble.prototype.width_ = 0;
-
-/**
- * Height of bubble, in workspace units.
- * @private
- */
-Bubble.prototype.height_ = 0;
-
-/**
- * Automatically position and reposition the bubble.
- * @private
- */
-Bubble.prototype.autoLayout_ = true;
 
 /**
  * Create the bubble's DOM.

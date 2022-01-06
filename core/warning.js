@@ -43,13 +43,14 @@ const Warning = function(block) {
   this.createIcon();
   // The text_ object can contain multiple warnings.
   this.text_ = Object.create(null);
+
+  /**
+   * Does this icon get hidden when the block is collapsed?
+   * @type {boolean}
+   */
+  this.collapseHidden = false;
 };
 object.inherits(Warning, Icon);
-
-/**
- * Does this icon get hidden when the block is collapsed.
- */
-Warning.prototype.collapseHidden = false;
 
 /**
  * Draw the warning icon.

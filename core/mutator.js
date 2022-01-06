@@ -57,27 +57,29 @@ goog.require('Blockly.Events.BubbleOpen');
 const Mutator = function(quarkNames) {
   Mutator.superClass_.constructor.call(this, null);
   this.quarkNames_ = quarkNames;
+
+  /**
+   * Workspace in the mutator's bubble.
+   * @type {?WorkspaceSvg}
+   * @private
+   */
+  this.workspace_ = null;
+
+  /**
+   * Width of workspace.
+   * @type {number}
+   * @private
+   */
+  this.workspaceWidth_ = 0;
+
+  /**
+   * Height of workspace.
+   * @type {number}
+   * @private
+   */
+  this.workspaceHeight_ = 0;
 };
 object.inherits(Mutator, Icon);
-
-/**
- * Workspace in the mutator's bubble.
- * @type {?WorkspaceSvg}
- * @private
- */
-Mutator.prototype.workspace_ = null;
-
-/**
- * Width of workspace.
- * @private
- */
-Mutator.prototype.workspaceWidth_ = 0;
-
-/**
- * Height of workspace.
- * @private
- */
-Mutator.prototype.workspaceHeight_ = 0;
 
 /**
  * Set the block this mutator is associated with.

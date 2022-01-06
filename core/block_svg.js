@@ -95,6 +95,88 @@ goog.require('Blockly.Touch');
  * @alias Blockly.BlockSvg
  */
 const BlockSvg = function(workspace, prototypeName, opt_id) {
+  /**
+   * An optional method called when a mutator dialog is first opened.
+   * This function must create and initialize a top-level block for the mutator
+   * dialog, and return it. This function should also populate this top-level
+   * block with any sub-blocks which are appropriate. This method must also be
+   * coupled with defining a `compose` method for the default mutation dialog
+   * button and UI to appear.
+   * @type {undefined|?function(WorkspaceSvg):!BlockSvg}
+   */
+  this.decompose = undefined;
+
+  /**
+   * An optional method called when a mutator dialog saves its content.
+   * This function is called to modify the original block according to new
+   * settings. This method must also be coupled with defining a `decompose`
+   * method for the default mutation dialog button and UI to appear.
+   * @type {undefined|?function(!BlockSvg)}
+   */
+  this.compose = undefined;
+
+  /**
+   * An optional method for defining custom block context menu items.
+   * @type {undefined|?function(!Array<!Object>)}
+   */
+  this.customContextMenu = undefined;
+
+  /**
+   * An property used internally to reference the block's rendering debugger.
+   * @type {?BlockRenderingDebug}
+   * @package
+   */
+  this.renderingDebugger = null;
+
+  /**
+   * Height of this block, not including any statement blocks above or below.
+   * Height is in workspace units.
+   * @type {number}
+   */
+  this.height = 0;
+
+  /**
+   * Width of this block, including any connected value blocks.
+   * Width is in workspace units.
+   * @type {number}
+   */
+  this.width = 0;
+
+  /**
+   * Map from IDs for warnings text to PIDs of functions to apply them.
+   * Used to be able to maintain multiple warnings.
+   * @type {Object<string, number>}
+   * @private
+   */
+  this.warningTextDb_ = null;
+
+  /**
+   * Block's mutator icon (if any).
+   * @type {?Mutator}
+   */
+  this.mutator = null;
+
+  /**
+   * Block's comment icon (if any).
+   * @type {?Comment}
+   * @deprecated August 2019. Use getCommentIcon instead.
+   */
+  this.comment = null;
+
+  /**
+   * Block's comment icon (if any).
+   * @type {?Comment}
+   * @private
+   */
+  this.commentIcon_ = null;
+
+  /**
+   * Block's warning icon (if any).
+   * @type {?Warning}
+   */
+  this.warning = null;
+
+
   // Create core elements for the block.
   /**
    * @type {!SVGGElement}
@@ -164,26 +246,6 @@ const BlockSvg = function(workspace, prototypeName, opt_id) {
 object.inherits(BlockSvg, Block);
 
 /**
- * Height of this block, not including any statement blocks above or below.
- * Height is in workspace units.
- */
-BlockSvg.prototype.height = 0;
-
-/**
- * Width of this block, including any connected value blocks.
- * Width is in workspace units.
- */
-BlockSvg.prototype.width = 0;
-
-/**
- * Map from IDs for warnings text to PIDs of functions to apply them.
- * Used to be able to maintain multiple warnings.
- * @type {Object<string, number>}
- * @private
- */
-BlockSvg.prototype.warningTextDb_ = null;
-
-/**
  * Constant for identifying rows that are to be rendered inline.
  * Don't collide with Blockly.inputTypes.
  * @const
@@ -198,39 +260,6 @@ BlockSvg.INLINE = -1;
  * @const
  */
 BlockSvg.COLLAPSED_WARNING_ID = 'TEMP_COLLAPSED_WARNING_';
-
-/**
- * An optional method called when a mutator dialog is first opened.
- * This function must create and initialize a top-level block for the mutator
- * dialog, and return it. This function should also populate this top-level
- * block with any sub-blocks which are appropriate. This method must also be
- * coupled with defining a `compose` method for the default mutation dialog
- * button and UI to appear.
- * @type {?function(WorkspaceSvg):!BlockSvg}
- */
-BlockSvg.prototype.decompose;
-
-/**
- * An optional method called when a mutator dialog saves its content.
- * This function is called to modify the original block according to new
- * settings. This method must also be coupled with defining a `decompose`
- * method for the default mutation dialog button and UI to appear.
- * @type {?function(!BlockSvg)}
- */
-BlockSvg.prototype.compose;
-
-/**
- * An optional method for defining custom block context menu items.
- * @type {?function(!Array<!Object>)}
- */
-BlockSvg.prototype.customContextMenu;
-
-/**
- * An property used internally to reference the block's rendering debugger.
- * @type {?BlockRenderingDebug}
- * @package
- */
-BlockSvg.prototype.renderingDebugger;
 
 /**
  * Create and initialize the SVG representation of the block.
@@ -322,32 +351,6 @@ BlockSvg.prototype.unselect = function() {
   common.setSelected(null);
   this.removeSelect();
 };
-
-/**
- * Block's mutator icon (if any).
- * @type {?Mutator}
- */
-BlockSvg.prototype.mutator = null;
-
-/**
- * Block's comment icon (if any).
- * @type {?Comment}
- * @deprecated August 2019. Use getCommentIcon instead.
- */
-BlockSvg.prototype.comment = null;
-
-/**
- * Block's comment icon (if any).
- * @type {?Comment}
- * @private
- */
-BlockSvg.prototype.commentIcon_ = null;
-
-/**
- * Block's warning icon (if any).
- * @type {?Warning}
- */
-BlockSvg.prototype.warning = null;
 
 /**
  * Returns a list of mutator, comment, and warning icons.

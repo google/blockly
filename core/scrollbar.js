@@ -87,6 +87,66 @@ const Scrollbar = function(
    */
   this.ratio = null;
 
+  /**
+   * The location of the origin of the workspace that the scrollbar is in,
+   * measured in CSS pixels relative to the injection div origin.  This is
+   * usually (0, 0).  When the scrollbar is in a flyout it may have a different
+   * origin.
+   * @type {Coordinate}
+   * @private
+   */
+  this.origin_ = new Coordinate(0, 0);
+
+  /**
+   * The position of the mouse along this scrollbar's major axis at the start of
+   * the most recent drag.
+   * Units are CSS pixels, with (0, 0) at the top left of the browser window.
+   * For a horizontal scrollbar this is the x coordinate of the mouse down
+   * event; for a vertical scrollbar it's the y coordinate of the mouse down
+   * event.
+   * @type {number}
+   * @private
+   */
+  this.startDragMouse_ = 0;
+
+  /**
+   * The length of the scrollbars (including the handle and the background), in
+   * CSS pixels. This is equivalent to scrollbar background length and the area
+   * within which the scrollbar handle can move.
+   * @type {number}
+   * @private
+   */
+  this.scrollbarLength_ = 0;
+
+  /**
+   * The length of the scrollbar handle in CSS pixels.
+   * @type {number}
+   * @private
+   */
+  this.handleLength_ = 0;
+
+  /**
+   * The offset of the start of the handle from the scrollbar position, in CSS
+   * pixels.
+   * @type {number}
+   * @private
+   */
+  this.handlePosition_ = 0;
+
+  /**
+   * Whether the scrollbar handle is visible.
+   * @type {boolean}
+   * @private
+   */
+  this.isVisible_ = true;
+
+  /**
+   * Whether the workspace containing this scrollbar is visible.
+   * @type {boolean}
+   * @private
+   */
+  this.containerVisible_ = true;
+
   this.createDom_(opt_class);
 
   /**
@@ -123,64 +183,6 @@ const Scrollbar = function(
   this.onMouseDownHandleWrapper_ = browserEvents.conditionalBind(
       this.svgHandle_, 'mousedown', scrollbar, scrollbar.onMouseDownHandle_);
 };
-
-/**
- * The location of the origin of the workspace that the scrollbar is in,
- * measured in CSS pixels relative to the injection div origin.  This is usually
- * (0, 0).  When the scrollbar is in a flyout it may have a different origin.
- * @type {Coordinate}
- * @private
- */
-Scrollbar.prototype.origin_ = new Coordinate(0, 0);
-
-/**
- * The position of the mouse along this scrollbar's major axis at the start of
- * the most recent drag.
- * Units are CSS pixels, with (0, 0) at the top left of the browser window.
- * For a horizontal scrollbar this is the x coordinate of the mouse down event;
- * for a vertical scrollbar it's the y coordinate of the mouse down event.
- * @type {number}
- * @private
- */
-Scrollbar.prototype.startDragMouse_ = 0;
-
-/**
- * The length of the scrollbars (including the handle and the background), in
- * CSS pixels. This is equivalent to scrollbar background length and the area
- * within which the scrollbar handle can move.
- * @type {number}
- * @private
- */
-Scrollbar.prototype.scrollbarLength_ = 0;
-
-/**
- * The length of the scrollbar handle in CSS pixels.
- * @type {number}
- * @private
- */
-Scrollbar.prototype.handleLength_ = 0;
-
-/**
- * The offset of the start of the handle from the scrollbar position, in CSS
- * pixels.
- * @type {number}
- * @private
- */
-Scrollbar.prototype.handlePosition_ = 0;
-
-/**
- * Whether the scrollbar handle is visible.
- * @type {boolean}
- * @private
- */
-Scrollbar.prototype.isVisible_ = true;
-
-/**
- * Whether the workspace containing this scrollbar is visible.
- * @type {boolean}
- * @private
- */
-Scrollbar.prototype.containerVisible_ = true;
 
 /**
  * Width of vertical scrollbar or height of horizontal scrollbar in CSS pixels.

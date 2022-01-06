@@ -130,6 +130,278 @@ const WorkspaceSvg = function(
     options, opt_blockDragSurface, opt_wsDragSurface) {
   WorkspaceSvg.superClass_.constructor.call(this, options);
 
+  /**
+   * A wrapper function called when a resize event occurs.
+   * You can pass the result to `eventHandling.unbind`.
+   * @type {?browserEvents.Data}
+   * @private
+   */
+  this.resizeHandlerWrapper_ = null;
+
+  /**
+   * The render status of an SVG workspace.
+   * Returns `false` for headless workspaces and true for instances of
+   * `WorkspaceSvg`.
+   * @type {boolean}
+   */
+  this.rendered = true;
+
+  /**
+   * Whether the workspace is visible.  False if the workspace has been hidden
+   * by calling `setVisible(false)`.
+   * @type {boolean}
+   * @private
+   */
+  this.isVisible_ = true;
+
+  /**
+   * Is this workspace the surface for a flyout?
+   * @type {boolean}
+   */
+  this.isFlyout = false;
+
+  /**
+   * Is this workspace the surface for a mutator?
+   * @type {boolean}
+   * @package
+   */
+  this.isMutator = false;
+
+  /**
+   * Whether this workspace has resizes enabled.
+   * Disable during batch operations for a performance improvement.
+   * @type {boolean}
+   * @private
+   */
+  this.resizesEnabled_ = true;
+
+  /**
+   * Current horizontal scrolling offset in pixel units, relative to the
+   * workspace origin.
+   *
+   * It is useful to think about a view, and a canvas moving beneath that
+   * view. As the canvas moves right, this value becomes more positive, and
+   * the view is now "seeing" the left side of the canvas. As the canvas moves
+   * left, this value becomes more negative, and the view is now "seeing" the
+   * right side of the canvas.
+   *
+   * The confusing thing about this value is that it does not, and must not
+   * include the absoluteLeft offset. This is because it is used to calculate
+   * the viewLeft value.
+   *
+   * The viewLeft is relative to the workspace origin (although in pixel
+   * units). The workspace origin is the top-left corner of the workspace (at
+   * least when it is enabled). It is shifted from the top-left of the
+   * blocklyDiv so as not to be beneath the toolbox.
+   *
+   * When the workspace is enabled the viewLeft and workspace origin are at
+   * the same X location. As the canvas slides towards the right beneath the
+   * view this value (scrollX) becomes more positive, and the viewLeft becomes
+   * more negative relative to the workspace origin (imagine the workspace
+   * origin as a dot on the canvas sliding to the right as the canvas moves).
+   *
+   * So if the scrollX were to include the absoluteLeft this would in a way
+   * "unshift" the workspace origin. This means that the viewLeft would be
+   * representing the left edge of the blocklyDiv, rather than the left edge
+   * of the workspace.
+   *
+   * @type {number}
+   */
+  this.scrollX = 0;
+
+  /**
+   * Current vertical scrolling offset in pixel units, relative to the
+   * workspace origin.
+   *
+   * It is useful to think about a view, and a canvas moving beneath that
+   * view. As the canvas moves down, this value becomes more positive, and the
+   * view is now "seeing" the upper part of the canvas. As the canvas moves
+   * up, this value becomes more negative, and the view is "seeing" the lower
+   * part of the canvas.
+   *
+   * This confusing thing about this value is that it does not, and must not
+   * include the absoluteTop offset. This is because it is used to calculate
+   * the viewTop value.
+   *
+   * The viewTop is relative to the workspace origin (although in pixel
+   * units). The workspace origin is the top-left corner of the workspace (at
+   * least when it is enabled). It is shifted from the top-left of the
+   * blocklyDiv so as not to be beneath the toolbox.
+   *
+   * When the workspace is enabled the viewTop and workspace origin are at the
+   * same Y location. As the canvas slides towards the bottom this value
+   * (scrollY) becomes more positive, and the viewTop becomes more negative
+   * relative to the workspace origin (image in the workspace origin as a dot
+   * on the canvas sliding downwards as the canvas moves).
+   *
+   * So if the scrollY were to include the absoluteTop this would in a way
+   * "unshift" the workspace origin. This means that the viewTop would be
+   * representing the top edge of the blocklyDiv, rather than the top edge of
+   * the workspace.
+   *
+   * @type {number}
+   */
+  this.scrollY = 0;
+
+  /**
+   * Horizontal scroll value when scrolling started in pixel units.
+   * @type {number}
+   */
+  this.startScrollX = 0;
+
+  /**
+   * Vertical scroll value when scrolling started in pixel units.
+   * @type {number}
+   */
+  this.startScrollY = 0;
+
+  /**
+   * Distance from mouse to object being dragged.
+   * @type {Coordinate}
+   * @private
+   */
+  this.dragDeltaXY_ = null;
+
+  /**
+   * Current scale.
+   * @type {number}
+   */
+  this.scale = 1;
+
+  /**
+   * Cached scale value. Used to detect changes in viewport.
+   * @type {number}
+   * @private
+   */
+  this.oldScale_ = 1;
+
+  /**
+   * Cached viewport top value. Used to detect changes in viewport.
+   * @type {number}
+   * @private
+   */
+  this.oldTop_ = 0;
+
+  /**
+   * Cached viewport left value. Used to detect changes in viewport.
+   * @type {number}
+   * @private
+   */
+  this.oldLeft_ = 0;
+
+  /**
+   * The workspace's trashcan (if any).
+   * @type {Trashcan}
+   */
+  this.trashcan = null;
+
+  /**
+   * This workspace's scrollbars, if they exist.
+   * @type {ScrollbarPair}
+   */
+  this.scrollbar = null;
+
+  /**
+   * Fixed flyout providing blocks which may be dragged into this workspace.
+   * @type {IFlyout}
+   * @private
+   */
+  this.flyout_ = null;
+
+  /**
+   * Category-based toolbox providing blocks which may be dragged into this
+   * workspace.
+   * @type {IToolbox}
+   * @private
+   */
+  this.toolbox_ = null;
+
+  /**
+   * The current gesture in progress on this workspace, if any.
+   * @type {TouchGesture}
+   * @private
+   */
+  this.currentGesture_ = null;
+
+  /**
+   * This workspace's surface for dragging blocks, if it exists.
+   * @type {BlockDragSurfaceSvg}
+   * @private
+   */
+  this.blockDragSurface_ = null;
+
+  /**
+   * This workspace's drag surface, if it exists.
+   * @type {WorkspaceDragSurfaceSvg}
+   * @private
+   */
+  this.workspaceDragSurface_ = null;
+
+  /**
+   * Whether to move workspace to the drag surface when it is dragged.
+   * True if it should move, false if it should be translated directly.
+   * @type {boolean}
+   * @private
+   */
+  this.useWorkspaceDragSurface_ = false;
+
+  /**
+   * Whether the drag surface is actively in use. When true, calls to
+   * translate will translate the drag surface instead of the translating the
+   * workspace directly.
+   * This is set to true in setupDragSurface and to false in resetDragSurface.
+   * @type {boolean}
+   * @private
+   */
+  this.isDragSurfaceActive_ = false;
+
+  /**
+   * The first parent div with 'injectionDiv' in the name, or null if not set.
+   * Access this with getInjectionDiv.
+   * @type {Element}
+   * @private
+   */
+  this.injectionDiv_ = null;
+
+  /**
+   * Last known position of the page scroll.
+   * This is used to determine whether we have recalculated screen coordinate
+   * stuff since the page scrolled.
+   * @type {Coordinate}
+   * @private
+   */
+  this.lastRecordedPageScroll_ = null;
+
+  /**
+   * Developers may define this function to add custom menu options to the
+   * workspace's context menu or edit the workspace-created set of menu options.
+   * @param {!Array<!Object>} options List of menu options to add to.
+   * @param {!Event} e The right-click event that triggered the context menu.
+   */
+  this.configureContextMenu;
+
+  /**
+   * In a flyout, the target workspace where blocks should be placed after a
+   * drag. Otherwise null.
+   * @type {WorkspaceSvg}
+   * @package
+   */
+  this.targetWorkspace = null;
+
+  /**
+   * Inverted screen CTM, for use in mouseToSvg.
+   * @type {?SVGMatrix}
+   * @private
+   */
+  this.inverseScreenCTM_ = null;
+
+  /**
+   * Inverted screen CTM is dirty, recalculate it.
+   * @type {boolean}
+   * @private
+   */
+  this.inverseScreenCTMDirty_ = true;
+
   const MetricsManagerClass = registry.getClassFromOptions(
       registry.Type.METRICS_MANAGER, options, true);
   /**
@@ -301,278 +573,6 @@ const WorkspaceSvg = function(
   this.cachedParentSvgSize_ = new Size(0, 0);
 };
 object.inherits(WorkspaceSvg, Workspace);
-
-/**
- * A wrapper function called when a resize event occurs.
- * You can pass the result to `eventHandling.unbind`.
- * @type {?browserEvents.Data}
- * @private
- */
-WorkspaceSvg.prototype.resizeHandlerWrapper_ = null;
-
-/**
- * The render status of an SVG workspace.
- * Returns `false` for headless workspaces and true for instances of
- * `WorkspaceSvg`.
- * @type {boolean}
- */
-WorkspaceSvg.prototype.rendered = true;
-
-/**
- * Whether the workspace is visible.  False if the workspace has been hidden
- * by calling `setVisible(false)`.
- * @type {boolean}
- * @private
- */
-WorkspaceSvg.prototype.isVisible_ = true;
-
-/**
- * Is this workspace the surface for a flyout?
- * @type {boolean}
- */
-WorkspaceSvg.prototype.isFlyout = false;
-
-/**
- * Is this workspace the surface for a mutator?
- * @type {boolean}
- * @package
- */
-WorkspaceSvg.prototype.isMutator = false;
-
-/**
- * Whether this workspace has resizes enabled.
- * Disable during batch operations for a performance improvement.
- * @type {boolean}
- * @private
- */
-WorkspaceSvg.prototype.resizesEnabled_ = true;
-
-/**
- * Current horizontal scrolling offset in pixel units, relative to the
- * workspace origin.
- *
- * It is useful to think about a view, and a canvas moving beneath that
- * view. As the canvas moves right, this value becomes more positive, and
- * the view is now "seeing" the left side of the canvas. As the canvas moves
- * left, this value becomes more negative, and the view is now "seeing" the
- * right side of the canvas.
- *
- * The confusing thing about this value is that it does not, and must not
- * include the absoluteLeft offset. This is because it is used to calculate
- * the viewLeft value.
- *
- * The viewLeft is relative to the workspace origin (although in pixel
- * units). The workspace origin is the top-left corner of the workspace (at
- * least when it is enabled). It is shifted from the top-left of the blocklyDiv
- * so as not to be beneath the toolbox.
- *
- * When the workspace is enabled the viewLeft and workspace origin are at
- * the same X location. As the canvas slides towards the right beneath the view
- * this value (scrollX) becomes more positive, and the viewLeft becomes more
- * negative relative to the workspace origin (imagine the workspace origin
- * as a dot on the canvas sliding to the right as the canvas moves).
- *
- * So if the scrollX were to include the absoluteLeft this would in a way
- * "unshift" the workspace origin. This means that the viewLeft would be
- * representing the left edge of the blocklyDiv, rather than the left edge
- * of the workspace.
- *
- * @type {number}
- */
-WorkspaceSvg.prototype.scrollX = 0;
-
-/**
- * Current vertical scrolling offset in pixel units, relative to the
- * workspace origin.
- *
- * It is useful to think about a view, and a canvas moving beneath that
- * view. As the canvas moves down, this value becomes more positive, and the
- * view is now "seeing" the upper part of the canvas. As the canvas moves
- * up, this value becomes more negative, and the view is "seeing" the lower
- * part of the canvas.
- *
- * This confusing thing about this value is that it does not, and must not
- * include the absoluteTop offset. This is because it is used to calculate
- * the viewTop value.
- *
- * The viewTop is relative to the workspace origin (although in pixel
- * units). The workspace origin is the top-left corner of the workspace (at
- * least when it is enabled). It is shifted from the top-left of the
- * blocklyDiv so as not to be beneath the toolbox.
- *
- * When the workspace is enabled the viewTop and workspace origin are at the
- * same Y location. As the canvas slides towards the bottom this value
- * (scrollY) becomes more positive, and the viewTop becomes more negative
- * relative to the workspace origin (image in the workspace origin as a dot
- * on the canvas sliding downwards as the canvas moves).
- *
- * So if the scrollY were to include the absoluteTop this would in a way
- * "unshift" the workspace origin. This means that the viewTop would be
- * representing the top edge of the blocklyDiv, rather than the top edge of
- * the workspace.
- *
- * @type {number}
- */
-WorkspaceSvg.prototype.scrollY = 0;
-
-/**
- * Horizontal scroll value when scrolling started in pixel units.
- * @type {number}
- */
-WorkspaceSvg.prototype.startScrollX = 0;
-
-/**
- * Vertical scroll value when scrolling started in pixel units.
- * @type {number}
- */
-WorkspaceSvg.prototype.startScrollY = 0;
-
-/**
- * Distance from mouse to object being dragged.
- * @type {Coordinate}
- * @private
- */
-WorkspaceSvg.prototype.dragDeltaXY_ = null;
-
-/**
- * Current scale.
- * @type {number}
- */
-WorkspaceSvg.prototype.scale = 1;
-
-/**
- * Cached scale value. Used to detect changes in viewport.
- * @type {number}
- * @private
- */
-WorkspaceSvg.prototype.oldScale_ = 1;
-
-/**
- * Cached viewport top value. Used to detect changes in viewport.
- * @type {number}
- * @private
- */
-WorkspaceSvg.prototype.oldTop_ = 0;
-
-/**
- * Cached viewport left value. Used to detect changes in viewport.
- * @type {number}
- * @private
- */
-WorkspaceSvg.prototype.oldLeft_ = 0;
-
-/**
- * The workspace's trashcan (if any).
- * @type {Trashcan}
- */
-WorkspaceSvg.prototype.trashcan = null;
-
-/**
- * This workspace's scrollbars, if they exist.
- * @type {ScrollbarPair}
- */
-WorkspaceSvg.prototype.scrollbar = null;
-
-/**
- * Fixed flyout providing blocks which may be dragged into this workspace.
- * @type {IFlyout}
- * @private
- */
-WorkspaceSvg.prototype.flyout_ = null;
-
-/**
- * Category-based toolbox providing blocks which may be dragged into this
- * workspace.
- * @type {IToolbox}
- * @private
- */
-WorkspaceSvg.prototype.toolbox_ = null;
-
-/**
- * The current gesture in progress on this workspace, if any.
- * @type {TouchGesture}
- * @private
- */
-WorkspaceSvg.prototype.currentGesture_ = null;
-
-/**
- * This workspace's surface for dragging blocks, if it exists.
- * @type {BlockDragSurfaceSvg}
- * @private
- */
-WorkspaceSvg.prototype.blockDragSurface_ = null;
-
-/**
- * This workspace's drag surface, if it exists.
- * @type {WorkspaceDragSurfaceSvg}
- * @private
- */
-WorkspaceSvg.prototype.workspaceDragSurface_ = null;
-
-/**
- * Whether to move workspace to the drag surface when it is dragged.
- * True if it should move, false if it should be translated directly.
- * @type {boolean}
- * @private
- */
-WorkspaceSvg.prototype.useWorkspaceDragSurface_ = false;
-
-/**
- * Whether the drag surface is actively in use. When true, calls to
- * translate will translate the drag surface instead of the translating the
- * workspace directly.
- * This is set to true in setupDragSurface and to false in resetDragSurface.
- * @type {boolean}
- * @private
- */
-WorkspaceSvg.prototype.isDragSurfaceActive_ = false;
-
-/**
- * The first parent div with 'injectionDiv' in the name, or null if not set.
- * Access this with getInjectionDiv.
- * @type {Element}
- * @private
- */
-WorkspaceSvg.prototype.injectionDiv_ = null;
-
-/**
- * Last known position of the page scroll.
- * This is used to determine whether we have recalculated screen coordinate
- * stuff since the page scrolled.
- * @type {Coordinate}
- * @private
- */
-WorkspaceSvg.prototype.lastRecordedPageScroll_ = null;
-
-/**
- * Developers may define this function to add custom menu options to the
- * workspace's context menu or edit the workspace-created set of menu options.
- * @param {!Array<!Object>} options List of menu options to add to.
- * @param {!Event} e The right-click event that triggered the context menu.
- */
-WorkspaceSvg.prototype.configureContextMenu;
-
-/**
- * In a flyout, the target workspace where blocks should be placed after a drag.
- * Otherwise null.
- * @type {WorkspaceSvg}
- * @package
- */
-WorkspaceSvg.prototype.targetWorkspace = null;
-
-/**
- * Inverted screen CTM, for use in mouseToSvg.
- * @type {?SVGMatrix}
- * @private
- */
-WorkspaceSvg.prototype.inverseScreenCTM_ = null;
-
-/**
- * Inverted screen CTM is dirty, recalculate it.
- * @type {boolean}
- * @private
- */
-WorkspaceSvg.prototype.inverseScreenCTMDirty_ = true;
 
 /**
  * Get the marker manager for this workspace.

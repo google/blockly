@@ -167,97 +167,97 @@ const Flyout = function(workspaceOptions) {
    * @private
    */
   this.recycledBlocks_ = [];
+
+  /**
+   * Does the flyout automatically close when a block is created?
+   * @type {boolean}
+   */
+  this.autoClose = true;
+
+  /**
+   * Whether the flyout is visible.
+   * @type {boolean}
+   * @private
+   */
+  this.isVisible_ = false;
+
+  /**
+   * Whether the workspace containing this flyout is visible.
+   * @type {boolean}
+   * @private
+   */
+  this.containerVisible_ = true;
+
+  /**
+   * Corner radius of the flyout background.
+   * @type {number}
+   * @const
+   */
+  this.CORNER_RADIUS = 8;
+
+  /**
+   * Margin around the edges of the blocks in the flyout.
+   * @type {number}
+   * @const
+   */
+  this.MARGIN = this.CORNER_RADIUS;
+
+  // TODO: Move GAP_X and GAP_Y to their appropriate files.
+
+  /**
+   * Gap between items in horizontal flyouts. Can be overridden with the "sep"
+   * element.
+   * @const {number}
+   */
+  this.GAP_X = this.MARGIN * 3;
+
+  /**
+   * Gap between items in vertical flyouts. Can be overridden with the "sep"
+   * element.
+   * @const {number}
+   */
+  this.GAP_Y = this.MARGIN * 3;
+
+  /**
+   * Top/bottom padding between scrollbar and edge of flyout background.
+   * @type {number}
+   * @const
+   */
+  this.SCROLLBAR_MARGIN = 2.5;
+
+  /**
+   * Width of flyout.
+   * @type {number}
+   * @protected
+   */
+  this.width_ = 0;
+
+  /**
+   * Height of flyout.
+   * @type {number}
+   * @protected
+   */
+  this.height_ = 0;
+
+  /**
+   * Range of a drag angle from a flyout considered "dragging toward workspace".
+   * Drags that are within the bounds of this many degrees from the orthogonal
+   * line to the flyout edge are considered to be "drags toward the workspace".
+   * Example:
+   * Flyout                                                  Edge   Workspace
+   * [block] /  <-within this angle, drags "toward workspace" |
+   * [block] ---- orthogonal to flyout boundary ----          |
+   * [block] \                                                |
+   * The angle is given in degrees from the orthogonal.
+   *
+   * This is used to know when to create a new block and when to scroll the
+   * flyout. Setting it to 360 means that all drags create a new block.
+   * @type {number}
+   * @protected
+   */
+  this.dragAngleRange_ = 70;
 };
 object.inherits(Flyout, DeleteArea);
-
-/**
- * Does the flyout automatically close when a block is created?
- * @type {boolean}
- */
-Flyout.prototype.autoClose = true;
-
-/**
- * Whether the flyout is visible.
- * @type {boolean}
- * @private
- */
-Flyout.prototype.isVisible_ = false;
-
-/**
- * Whether the workspace containing this flyout is visible.
- * @type {boolean}
- * @private
- */
-Flyout.prototype.containerVisible_ = true;
-
-/**
- * Corner radius of the flyout background.
- * @type {number}
- * @const
- */
-Flyout.prototype.CORNER_RADIUS = 8;
-
-/**
- * Margin around the edges of the blocks in the flyout.
- * @type {number}
- * @const
- */
-Flyout.prototype.MARGIN = Flyout.prototype.CORNER_RADIUS;
-
-// TODO: Move GAP_X and GAP_Y to their appropriate files.
-
-/**
- * Gap between items in horizontal flyouts. Can be overridden with the "sep"
- * element.
- * @const {number}
- */
-Flyout.prototype.GAP_X = Flyout.prototype.MARGIN * 3;
-
-/**
- * Gap between items in vertical flyouts. Can be overridden with the "sep"
- * element.
- * @const {number}
- */
-Flyout.prototype.GAP_Y = Flyout.prototype.MARGIN * 3;
-
-/**
- * Top/bottom padding between scrollbar and edge of flyout background.
- * @type {number}
- * @const
- */
-Flyout.prototype.SCROLLBAR_MARGIN = 2.5;
-
-/**
- * Width of flyout.
- * @type {number}
- * @protected
- */
-Flyout.prototype.width_ = 0;
-
-/**
- * Height of flyout.
- * @type {number}
- * @protected
- */
-Flyout.prototype.height_ = 0;
-
-/**
- * Range of a drag angle from a flyout considered "dragging toward workspace".
- * Drags that are within the bounds of this many degrees from the orthogonal
- * line to the flyout edge are considered to be "drags toward the workspace".
- * Example:
- * Flyout                                                  Edge   Workspace
- * [block] /  <-within this angle, drags "toward workspace" |
- * [block] ---- orthogonal to flyout boundary ----          |
- * [block] \                                                |
- * The angle is given in degrees from the orthogonal.
- *
- * This is used to know when to create a new block and when to scroll the
- * flyout. Setting it to 360 means that all drags create a new block.
- * @type {number}
- * @protected
- */
-Flyout.prototype.dragAngleRange_ = 70;
 
 /**
  * Creates the flyout's DOM.  Only needs to be called once.  The flyout can

@@ -93,6 +93,70 @@ const Trashcan = function(workspace) {
   if (this.workspace_.options.maxTrashcanContents <= 0) {
     return;
   }
+
+  /**
+   * Current open/close state of the lid.
+   * @type {boolean}
+   */
+  this.isLidOpen = false;
+
+  /**
+   * The minimum openness of the lid. Used to indicate if the trashcan contains
+   *  blocks.
+   * @type {number}
+   * @private
+   */
+  this.minOpenness_ = 0;
+
+  /**
+   * The SVG group containing the trash can.
+   * @type {SVGElement}
+   * @private
+   */
+  this.svgGroup_ = null;
+
+  /**
+   * The SVG image element of the trash can lid.
+   * @type {SVGElement}
+   * @private
+   */
+  this.svgLid_ = null;
+
+  /**
+   * Task ID of opening/closing animation.
+   * @type {number}
+   * @private
+   */
+  this.lidTask_ = 0;
+
+  /**
+   * Current state of lid opening (0.0 = closed, 1.0 = open).
+   * @type {number}
+   * @private
+   */
+  this.lidOpen_ = 0;
+
+  /**
+   * Left coordinate of the trash can.
+   * @type {number}
+   * @private
+   */
+  this.left_ = 0;
+
+  /**
+   * Top coordinate of the trash can.
+   * @type {number}
+   * @private
+   */
+  this.top_ = 0;
+
+  /**
+   * Whether this trash can has been initialized.
+   * @type {boolean}
+   * @private
+   */
+  this.initialized_ = false;
+
   // Create flyout options.
   const flyoutWorkspaceOptions = new Options(
       /** @type {!BlocklyOptions} */
@@ -201,69 +265,6 @@ const OPACITY_MAX = 0.8;
  * animation the lid will be open to this angle.
  */
 const MAX_LID_ANGLE = 45;
-
-/**
- * Current open/close state of the lid.
- * @type {boolean}
- */
-Trashcan.prototype.isLidOpen = false;
-
-/**
- * The minimum openness of the lid. Used to indicate if the trashcan contains
- *  blocks.
- * @type {number}
- * @private
- */
-Trashcan.prototype.minOpenness_ = 0;
-
-/**
- * The SVG group containing the trash can.
- * @type {SVGElement}
- * @private
- */
-Trashcan.prototype.svgGroup_ = null;
-
-/**
- * The SVG image element of the trash can lid.
- * @type {SVGElement}
- * @private
- */
-Trashcan.prototype.svgLid_ = null;
-
-/**
- * Task ID of opening/closing animation.
- * @type {number}
- * @private
- */
-Trashcan.prototype.lidTask_ = 0;
-
-/**
- * Current state of lid opening (0.0 = closed, 1.0 = open).
- * @type {number}
- * @private
- */
-Trashcan.prototype.lidOpen_ = 0;
-
-/**
- * Left coordinate of the trash can.
- * @type {number}
- * @private
- */
-Trashcan.prototype.left_ = 0;
-
-/**
- * Top coordinate of the trash can.
- * @type {number}
- * @private
- */
-Trashcan.prototype.top_ = 0;
-
-/**
- * Whether this has been initialized.
- * @type {boolean}
- * @private
- */
-Trashcan.prototype.initialized_ = false;
 
 /**
  * Create the trash can elements.

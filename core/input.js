@@ -69,20 +69,21 @@ const Input = function(type, name, block, connection) {
   this.connection = connection;
   /** @type {!Array<!Field>} */
   this.fieldRow = [];
+
+  /**
+   * Alignment of input's fields (left, right or centre).
+   * @type {number}
+   */
+  this.align = Align.LEFT;
+
+  /**
+   * Is the input visible?
+   * @type {boolean}
+   * @private
+   */
+  this.visible_ = true;
 };
 
-/**
- * Alignment of input's fields (left, right or centre).
- * @type {number}
- */
-Input.prototype.align = Align.LEFT;
-
-/**
- * Is the input visible?
- * @type {boolean}
- * @private
- */
-Input.prototype.visible_ = true;
 
 /**
  * Get the source block for this input.

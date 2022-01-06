@@ -102,7 +102,7 @@ const Workspace = function(opt_options) {
   const connectionCheckerClass = registry.getClassFromOptions(
       registry.Type.CONNECTION_CHECKER, this.options, true);
   /**
-   * An object that encapsulates logic for safety, type, and dragging checks.gi
+   * An object that encapsulates logic for safety, type, and dragging checks.
    * @type {!IConnectionChecker}
    */
   this.connectionChecker = new connectionCheckerClass(this);

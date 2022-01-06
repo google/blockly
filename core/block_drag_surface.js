@@ -252,11 +252,14 @@ BlockDragSurfaceSvg.prototype.getWsTranslation = function() {
  *     being moved to a different surface.
  */
 BlockDragSurfaceSvg.prototype.clearAndHide = function(opt_newSurface) {
-  if (opt_newSurface) {
-    // appendChild removes the node from this.dragGroup_
-    opt_newSurface.appendChild(this.getCurrentBlock());
-  } else {
-    this.dragGroup_.removeChild(this.getCurrentBlock());
+  const currentBlockElement = this.getCurrentBlock();
+  if (currentBlockElement) {
+    if (opt_newSurface) {
+      // appendChild removes the node from this.dragGroup_
+      opt_newSurface.appendChild(currentBlockElement);
+    } else {
+      this.dragGroup_.removeChild(currentBlockElement);
+    }
   }
   this.SVG_.style.display = 'none';
   if (this.dragGroup_.childNodes.length) {

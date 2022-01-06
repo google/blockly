@@ -890,7 +890,7 @@ BlockSvg.prototype.dispose = function(healStack, animate) {
     // The block has already been deleted.
     return;
   }
-  
+
   // BUG(#5788): Disposing of a block while dragging without rendering during/
   //     after drag can cause blocks to appear out of place.
   this.workspace.addToDragRenderQueue(this.getRootBlock(), true, true);

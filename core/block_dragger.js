@@ -19,6 +19,8 @@ const blockAnimation = goog.require('Blockly.blockAnimations');
 const bumpObjects = goog.require('Blockly.bumpObjects');
 const common = goog.require('Blockly.common');
 const dom = goog.require('Blockly.utils.dom');
+/* eslint-disable-next-line no-unused-vars */
+const Abstract = goog.requireType('Blockly.Events.Abstract');
 const eventUtils = goog.require('Blockly.Events.utils');
 const registry = goog.require('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */
@@ -35,6 +37,8 @@ const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 goog.require('Blockly.Events.BlockDrag');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockMove');
+/** @suppress {extraRequire} */
+goog.require('Blockly.Events.BlockDelete');
 
 
 /**
@@ -60,6 +64,26 @@ const BlockDragger = function(block, workspace) {
    * @protected
    */
   this.workspace_ = workspace;
+
+  /**
+   * The function that handles rendering of blocks added to queue for drag
+   *     events and removes itself from the change listeners and empties the
+   *     queue on the completion of a drag event.
+   * @type {function(Abstract)}
+   * @private
+   */
+  this.renderOnDragListener_ = null;
+
+  /**
+   * The blocks to render on drag until next BlockDrag Event is ended.
+   * @type {!Array<
+   * {
+   *   block: !BlockSvg,
+   *   bumpNeighbours: boolean
+   * }>}
+   * @private
+   */
+  this.blockDragRenderQueue_ = [];
 
   /**
    * Object that keeps track of connections on dragged blocks.
@@ -373,6 +397,57 @@ BlockDragger.prototype.fireDragEndEvent_ = function() {
   const event = new (eventUtils.get(eventUtils.BLOCK_DRAG))(
       this.draggingBlock_, false, this.draggingBlock_.getDescendants(false));
   eventUtils.fire(event);
+};
+
+/**
+ * Handles rendering of blocks added to queue for drag events and removes
+ *     itself from the change listeners and empties the queue on the completion
+ *     of a drag event.
+ * @param {Abstract} e the event to act on accordingly.
+ * @private
+ */
+BlockDragger.prototype.renderBlocksOnDrag_ = function(e) {
+  if ([eventUtils.BLOCK_DRAG, eventUtils.BLOCK_DELETE].includes(e.type)) {
+    this.blockDragRenderQueue_.forEach((blockBumpPair) => {
+      const block = blockBumpPair.block;
+      if (block.workspace === this.workspace_) {  // block hasn't been disposed
+        block.render();
+        if (blockBumpPair.bumpNeighbours) {
+          block.bumpNeighbours();
+        }
+      }
+    });
+
+    if (e.type === eventUtils.BLOCK_DRAG && !e.isStart) {
+      this.workspace_.removeChangeListener(this.renderOnDragListener_);
+    }
+  }
+};
+
+/**
+ * Add block to queue of blocks to be rendered on block drag events up to and
+ *     including the next block drag event concludes.
+ * @param {BlockSvg} block the block to be added.
+ * @param {boolean=} addDescendants If true, adds all descendants of this block
+ *     to this queue.
+ * @param {boolean=} bumpNeighbours If true, calls bumpNeighbors on drag for
+ *     this block (and descendants if allDescendants is true).
+ */
+BlockDragger.prototype.addToDragRenderQueue = function(
+    block, addDescendants, bumpNeighbours) {
+  const blocks =
+      (addDescendants ? block.getDescendants() : [
+        block
+      ]).filter((block) => !this.blockDragRenderQueue_.includes(block));
+
+
+  if (!this.renderOnDragListener_) {
+    this.renderOnDragListener_ = this.renderBlocksOnDrag_.bind(this);
+    this.workspace_.addChangeListener(this.renderOnDragListener_);
+  }
+
+  this.blockDragRenderQueue_.push(
+      ...blocks.map((block) => ({block, bumpNeighbours})));
 };
 
 /**

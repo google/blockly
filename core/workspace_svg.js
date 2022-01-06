@@ -262,26 +262,6 @@ const WorkspaceSvg = function(
       this.options.rendererOverrides);
 
   /**
-   * The function that handles rendering of blocks added to queue for drag
-   *     events and removes itself from the change listeners and empties the
-   *     queue on the completion of a drag event.
-   * @type {function(Blockly.Events.Abstract)}
-   * @private
-   */
-  this.renderOnDragListener_ = null;
-
-  /**
-   * The blocks to render on drag until next BlockDrag Event is ended.
-   * @type {!Array<
-   * {
-   *   block: !Blockly.BlockSvg,
-   *   bumpNeighbours: boolean
-   * }>}
-   * @private
-   */
-   this.blockDragRenderQueue_ = [];
-
-  /**
    * Cached parent SVG.
    * @type {SVGElement}
    * @private
@@ -1499,57 +1479,20 @@ WorkspaceSvg.prototype.render = function() {
 };
 
 /**
- * Handles rendering of blocks added to queue for drag events and removes
- *     itself from the change listeners and empties the queue on the completion
- *     of a drag event.
- * @param {Blockly.Events.Abstract} e the event to act on accordingly.
- * @private
- */
-WorkspaceSvg.prototype.renderBlocksOnDrag_ = function(e) {
-  if ([Blockly.Events.BLOCK_DRAG, Blockly.Events.BLOCK_DELETE]
-      .includes(e.type)) {
-    this.blockDragRenderQueue_.forEach((blockBumpPair) => {
-      const block = blockBumpPair.block;
-      if (block.workspace === this) { // block hasn't been disposed
-        block.render();
-        if (blockBumpPair.bumpNeighbours) {
-          block.bumpNeighbours();
-        }
-      }
-    });
-
-    if (e.type === Blockly.Events.BLOCK_DRAG && !e.isStart) {
-      this.blockDragRenderQueue_ = [];
-      this.removeChangeListener(this.renderOnDragListener_);
-      this.renderOnDragListener_ = null;
-    }
-  }
-};
-
-/**
  * Add block to queue of blocks to be rendered on block drag events up to and
  *     including the next block drag event concludes.
- * @param {Blockly.Block} block the block to be added.
+ * @param {BlockSvg} block the block to be added.
  * @param {boolean=} addDescendants If true, adds all descendants of this block
  *     to this queue.
  * @param {boolean=} bumpNeighbours If true, calls bumpNeighbors on drag for
  *     this block (and descendants if allDescendants is true).
  */
-WorkspaceSvg.prototype.addToDragRenderQueue = function(block, addDescendants, bumpNeighbours) {
-  if (!this.isDragging()) {
-    return;
+WorkspaceSvg.prototype.addToDragRenderQueue = function(
+    block, addDescendants, bumpNeighbours) {
+  if (this.isDragging()) {
+    const blockDragger = this.currentGesture_.getCurrentDragger();
+    blockDragger.addToDragRenderQueue(block, addDescendants, bumpNeighbours);
   }
-
-  const blocks = (addDescendants ? block.getDescendants() : [block])
-      .filter((block) => !this.blockDragRenderQueue_.includes(block));
-  
-  if (!this.renderOnDragListener_) {
-    this.renderOnDragListener_ = this.renderBlocksOnDrag_.bind(this);
-    this.addChangeListener(this.renderOnDragListener_);
-  }
-
-  this.blockDragRenderQueue_.push(
-      ...blocks.map((block) => ({block, bumpNeighbours})));
 };
 
 /**

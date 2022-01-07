@@ -56,6 +56,17 @@ IBlockDragger.prototype.drag;
 IBlockDragger.prototype.endDrag;
 
 /**
+ * Add block to queue of blocks to be rendered on block drag events up to and
+ *     including the next block drag event concludes.
+ * @param {BlockSvg} block the block to be added.
+ * @param {boolean=} addDescendants If true, adds all descendants of this block
+ *     to this queue.
+ * @param {boolean=} bumpNeighbours If true, calls bumpNeighbors on drag for
+ *     this block (and descendants if allDescendants is true).
+ */
+IBlockDragger.prototype.addToDragRenderQueue;
+
+/**
  * Get a list of the insertion markers that currently exist.  Drags have 0, 1,
  * or 2 insertion markers.
  * @return {!Array.<!BlockSvg>} A possibly empty list of insertion

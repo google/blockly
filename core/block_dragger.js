@@ -69,7 +69,7 @@ const BlockDragger = function(block, workspace) {
    * The function that handles rendering of blocks added to queue for drag
    *     events and removes itself from the change listeners and empties the
    *     queue on the completion of a drag event.
-   * @type {function(Abstract)}
+   * @type {function(Abstract)|null}
    * @private
    */
   this.renderOnDragListener_ = null;
@@ -436,8 +436,8 @@ BlockDragger.prototype.renderBlocksOnDrag_ = function(e) {
 BlockDragger.prototype.addToDragRenderQueue = function(
     block, addDescendants, bumpNeighbours) {
   const blocks =
-      (addDescendants ? block.getDescendants() : [
-        block
+      (addDescendants ? block.getDescendants(false) : [
+        block,
       ]).filter((block) => !this.blockDragRenderQueue_.includes(block));
 
 

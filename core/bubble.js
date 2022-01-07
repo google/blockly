@@ -246,7 +246,8 @@ const Bubble = class {
     if (hasResize) {
       this.resizeGroup_ = dom.createSvgElement(
           Svg.G, {
-            'class': this.workspace_.RTL ? 'blocklyResizeSW' : 'blocklyResizeSE'
+            'class': this.workspace_.RTL ? 'blocklyResizeSW' :
+                                           'blocklyResizeSE',
           },
           this.bubbleGroup_);
       const resizeSize = 2 * Bubble.BORDER_WIDTH;

@@ -66,6 +66,13 @@ const Bubble = function(
   this.rendered_ = false;
 
   /**
+   * The SVG group containing all parts of the bubble.
+   * @type {SVGGElement}
+   * @private
+   */
+  this.bubbleGroup_ = null;
+
+  /**
    * Absolute coordinate of anchor point, in workspace coordinates.
    * @type {Coordinate}
    * @private
@@ -326,7 +333,7 @@ Bubble.prototype.createDom_ = function(content, hasResize) {
  * @return {!SVGElement} The root SVG node of the bubble's group.
  */
 Bubble.prototype.getSvgRoot = function() {
-  return this.bubbleGroup_;
+  return /** @type {!SVGElement} */ (this.bubbleGroup_);
 };
 
 /**

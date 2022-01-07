@@ -209,6 +209,12 @@ const BlockSvg = function(workspace, prototypeName, opt_id) {
    */
   this.renderIsInProgress_ = false;
 
+  /**
+   * Whether mousedown events have been bound yet.
+   * @type {boolean}
+   * @private
+   */
+  this.eventsInit_ = false;
 
   /** @type {!WorkspaceSvg} */
   this.workspace = workspace;

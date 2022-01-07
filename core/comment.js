@@ -98,6 +98,28 @@ const Comment = function(block) {
    */
   this.onInputWrapper_ = null;
 
+  /**
+   * The SVG element that contains the text edit area, or null if not created.
+   * @type {?SVGForeignObjectElement}
+   * @private
+   */
+  this.foreignObject_ = null;
+
+  /**
+   * The editable text area, or null if not created.
+   * @type {?Element}
+   * @private
+   */
+  this.textarea_ = null;
+
+  /**
+   * The top-level node of the comment text, or null if not created.
+   * @type {?SVGTextElement}
+   * @private
+   */
+  this.paragraphElement_ = null;
+
+
   this.createIcon();
 };
 object.inherits(Comment, Icon);

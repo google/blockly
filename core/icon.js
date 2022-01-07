@@ -47,32 +47,33 @@ const Icon = function(block) {
    * @type {?SVGGElement}
    */
   this.iconGroup_ = null;
+
+  /**
+   * Whether this icon gets hidden when the block is collapsed.
+   * @type {boolean}
+   */
+  this.collapseHidden = true;
+
+  /**
+   * Height and width of icons.
+   * @const
+   */
+  this.SIZE = 17;
+
+  /**
+   * Bubble UI (if visible).
+   * @type {?Bubble}
+   * @protected
+   */
+  this.bubble_ = null;
+
+  /**
+   * Absolute coordinate of icon's center.
+   * @type {?Coordinate}
+   * @protected
+   */
+  this.iconXY_ = null;
 };
-
-/**
- * Does this icon get hidden when the block is collapsed.
- */
-Icon.prototype.collapseHidden = true;
-
-/**
- * Height and width of icons.
- * @const
- */
-Icon.prototype.SIZE = 17;
-
-/**
- * Bubble UI (if visible).
- * @type {?Bubble}
- * @protected
- */
-Icon.prototype.bubble_ = null;
-
-/**
- * Absolute coordinate of icon's center.
- * @type {?Coordinate}
- * @protected
- */
-Icon.prototype.iconXY_ = null;
 
 /**
  * Create the icon on the block.
@@ -197,7 +198,7 @@ Icon.prototype.getIconLocation = function() {
  */
 // TODO (#2562): Remove getCorrectedSize.
 Icon.prototype.getCorrectedSize = function() {
-  return new Size(Icon.prototype.SIZE, Icon.prototype.SIZE - 2);
+  return new Size(this.SIZE, this.SIZE - 2);
 };
 
 /**

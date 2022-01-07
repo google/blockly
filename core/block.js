@@ -291,6 +291,19 @@ const Block = function(workspace, prototypeName, opt_id) {
   this.rendered = null;
 
   /**
+   * String for block help, or function that returns a URL. Null for no help.
+   * @type {string|Function}
+   */
+  this.helpUrl = null;
+
+  /**
+   * A bound callback function to use when the parent workspace changes.
+   * @type {?function(Abstract)}
+   * @private
+   */
+  this.onchangeWrapper_ = null;
+
+  /**
    * A count of statement inputs on the block.
    * @type {number}
    * @package

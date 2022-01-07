@@ -78,6 +78,30 @@ const Mutator = function(quarkNames) {
    * @private
    */
   this.workspaceHeight_ = 0;
+
+  /**
+   * The SVG element that is the parent of the mutator workspace, or null if
+   * not created.
+   * @type {?SVGSVGElement}
+   * @private
+   */
+  this.svgDialog_ = null;
+
+  /**
+   * The root block of the mutator workspace, created by decomposing the source
+   * block.
+   * @type {?BlockSvg}
+   * @private
+   */
+  this.rootBlock_ = null;
+
+  /**
+   * Function registered on the main workspace to update the mutator contents
+   * when the main workspace changes.
+   * @type {?Function}
+   * @private
+   */
+  this.sourceListener_ = null;
 };
 object.inherits(Mutator, Icon);
 
@@ -341,12 +365,12 @@ Mutator.prototype.setVisible = function(visible) {
     this.rootBlock_.moveBy(x, margin);
     // Save the initial connections, then listen for further changes.
     if (this.block_.saveConnections) {
-      const thisMutator = this;
+      const thisRootBlock = this.rootBlock_;
       const mutatorBlock =
           /** @type {{saveConnections: function(!Block)}} */ (this.block_);
       mutatorBlock.saveConnections(this.rootBlock_);
       this.sourceListener_ = function() {
-        mutatorBlock.saveConnections(thisMutator.rootBlock_);
+        mutatorBlock.saveConnections(thisRootBlock);
       };
       this.block_.workspace.addChangeListener(this.sourceListener_);
     }

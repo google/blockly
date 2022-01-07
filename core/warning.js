@@ -45,6 +45,13 @@ const Warning = function(block) {
   this.text_ = Object.create(null);
 
   /**
+   * The top-level node of the warning text, or null if not created.
+   * @type {?SVGTextElement}
+   * @private
+   */
+  this.paragraphElement_ = null;
+
+  /**
    * Does this icon get hidden when the block is collapsed?
    * @type {boolean}
    */

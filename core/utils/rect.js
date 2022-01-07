@@ -54,7 +54,8 @@ const Rect = class {
    * @return {boolean} Whether this rectangle contains given coordinate.
    */
   contains(x, y) {
-    return x >= this.left && x <= this.right && y >= this.top && y <= this.bottom;
+    return x >= this.left && x <= this.right && y >= this.top &&
+        y <= this.bottom;
   }
 
   /**

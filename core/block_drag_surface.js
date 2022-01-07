@@ -50,8 +50,8 @@ const BlockDragSurfaceSvg = class {
     this.SVG_ = null;
 
     /**
-     * This is where blocks live while they are being dragged if the drag surface
-     * is enabled.
+     * This is where blocks live while they are being dragged if the drag
+     * surface is enabled.
      * @type {?SVGElement}
      * @private
      */
@@ -82,9 +82,9 @@ const BlockDragSurfaceSvg = class {
     this.surfaceXY_ = null;
 
     /**
-     * Cached value for the translation of the child drag surface in pixel units.
-     * Since the child drag surface tracks the translation of the workspace this
-     * is ultimately the translation of the workspace.
+     * Cached value for the translation of the child drag surface in pixel
+     * units. Since the child drag surface tracks the translation of the
+     * workspace this is ultimately the translation of the workspace.
      * @type {!Coordinate}
      * @private
      */
@@ -244,9 +244,9 @@ const BlockDragSurfaceSvg = class {
    * element.
    * If the block is being deleted it doesn't need to go back to the original
    * surface, since it would be removed immediately during dispose.
-   * @param {Element=} opt_newSurface Surface the dragging blocks should be moved
-   *     to, or null if the blocks should be removed from this surface without
-   *     being moved to a different surface.
+   * @param {Element=} opt_newSurface Surface the dragging blocks should be
+   *     moved to, or null if the blocks should be removed from this surface
+   *     without being moved to a different surface.
    */
   clearAndHide(opt_newSurface) {
     const currentBlockElement = this.getCurrentBlock();

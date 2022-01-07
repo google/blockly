@@ -55,8 +55,7 @@ const Bubble = class {
    * @struct
    * @alias Blockly.Bubble
    */
-  constructor(
-      workspace, content, shape, anchorXY, bubbleWidth, bubbleHeight) {
+  constructor(workspace, content, shape, anchorXY, bubbleWidth, bubbleHeight) {
     this.workspace_ = workspace;
     this.content_ = content;
     this.shape_ = shape;
@@ -184,7 +183,8 @@ const Bubble = class {
     this.arrow_radians_ = math.toRadians(angle);
 
     const canvas = workspace.getBubbleCanvas();
-    canvas.appendChild(this.createDom_(content, !!(bubbleWidth && bubbleHeight)));
+    canvas.appendChild(
+        this.createDom_(content, !!(bubbleWidth && bubbleHeight)));
 
     this.setAnchorLocation(anchorXY);
     if (!bubbleWidth || !bubbleHeight) {
@@ -245,8 +245,9 @@ const Bubble = class {
         bubbleEmboss);
     if (hasResize) {
       this.resizeGroup_ = dom.createSvgElement(
-          Svg.G,
-          {'class': this.workspace_.RTL ? 'blocklyResizeSW' : 'blocklyResizeSE'},
+          Svg.G, {
+            'class': this.workspace_.RTL ? 'blocklyResizeSW' : 'blocklyResizeSE'
+          },
           this.bubbleGroup_);
       const resizeSize = 2 * Bubble.BORDER_WIDTH;
       dom.createSvgElement(
@@ -436,7 +437,8 @@ const Bubble = class {
    */
   layoutBubble_() {
     // Get the metrics in workspace units.
-    const viewMetrics = this.workspace_.getMetricsManager().getViewMetrics(true);
+    const viewMetrics =
+        this.workspace_.getMetricsManager().getViewMetrics(true);
 
     const optimalLeft = this.getOptimalRelativeLeft_(viewMetrics);
     const optimalTop = this.getOptimalRelativeTop_(viewMetrics);
@@ -459,7 +461,8 @@ const Bubble = class {
     const topPositionOverlap = this.getOverlap_(topPosition, viewMetrics);
     const startPositionOverlap = this.getOverlap_(startPosition, viewMetrics);
     const closerPositionOverlap = this.getOverlap_(closerPosition, viewMetrics);
-    const fartherPositionOverlap = this.getOverlap_(fartherPosition, viewMetrics);
+    const fartherPositionOverlap =
+        this.getOverlap_(fartherPosition, viewMetrics);
 
     // Set the position to whichever position shows the most of the bubble,
     // with tiebreaks going in the order: top > start > close > far.
@@ -501,8 +504,9 @@ const Bubble = class {
   getOverlap_(relativeMin, viewMetrics) {
     // The position of the top-left corner of the bubble in workspace units.
     const bubbleMin = {
-      x: this.workspace_.RTL ? (this.anchorXY_.x - relativeMin.x - this.width_) :
-                               (relativeMin.x + this.anchorXY_.x),
+      x: this.workspace_.RTL ?
+          (this.anchorXY_.x - relativeMin.x - this.width_) :
+          (relativeMin.x + this.anchorXY_.x),
       y: relativeMin.y + this.anchorXY_.y,
     };
     // The position of the bottom-right corner of the bubble in workspace units.
@@ -513,8 +517,8 @@ const Bubble = class {
 
     // We could adjust these values to account for the scrollbars, but the
     // bubbles should have been adjusted to not collide with them anyway, so
-    // giving the workspace a slightly larger "bounding box" shouldn't affect the
-    // calculation.
+    // giving the workspace a slightly larger "bounding box" shouldn't affect
+    // the calculation.
 
     // The position of the top-left corner of the workspace.
     const workspaceMin = {x: viewMetrics.left, y: viewMetrics.top};
@@ -535,8 +539,8 @@ const Bubble = class {
   }
 
   /**
-   * Calculate what the optimal horizontal position of the top-left corner of the
-   * bubble is (relative to the anchor point) so that the most area of the
+   * Calculate what the optimal horizontal position of the top-left corner of
+   * the bubble is (relative to the anchor point) so that the most area of the
    * bubble is shown.
    * @param {!MetricsManager.ContainerRegion} viewMetrics The view metrics
    *     of the workspace the bubble will appear in.
@@ -649,7 +653,8 @@ const Bubble = class {
    * @package
    */
   moveTo(x, y) {
-    this.bubbleGroup_.setAttribute('transform', 'translate(' + x + ',' + y + ')');
+    this.bubbleGroup_.setAttribute(
+        'transform', 'translate(' + x + ',' + y + ')');
   }
 
   /**
@@ -778,8 +783,8 @@ const Bubble = class {
           'C' + (baseX1 + swirlRun) + ',' + (baseY1 + swirlRise) + ' ' +
           relAnchorX + ',' + relAnchorY + ' ' + relAnchorX + ',' + relAnchorY);
       steps.push(
-          'C' + relAnchorX + ',' + relAnchorY + ' ' + (baseX2 + swirlRun) + ',' +
-          (baseY2 + swirlRise) + ' ' + baseX2 + ',' + baseY2);
+          'C' + relAnchorX + ',' + relAnchorY + ' ' + (baseX2 + swirlRun) +
+          ',' + (baseY2 + swirlRise) + ' ' + baseX2 + ',' + baseY2);
     }
     steps.push('z');
     this.bubbleArrow_.setAttribute('d', steps.join(' '));
@@ -834,8 +839,8 @@ const Bubble = class {
   }
 
   /**
-   * Return the coordinates of the top-left corner of this bubble's body relative
-   * to the drawing surface's origin (0,0), in workspace units.
+   * Return the coordinates of the top-left corner of this bubble's body
+   * relative to the drawing surface's origin (0,0), in workspace units.
    * @return {!Coordinate} Object with .x and .y properties.
    */
   getRelativeToSurfaceXY() {
@@ -926,8 +931,8 @@ const Bubble = class {
       // Right-align the paragraph.
       // This cannot be done until the bubble is rendered on screen.
       const maxWidth = paragraphElement.getBBox().width;
-      for (let i = 0, textElement; (textElement = paragraphElement.childNodes[i]);
-           i++) {
+      for (let i = 0, textElement;
+           (textElement = paragraphElement.childNodes[i]); i++) {
         textElement.setAttribute('text-anchor', 'end');
         textElement.setAttribute('x', maxWidth + Bubble.BORDER_WIDTH);
       }

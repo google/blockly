@@ -151,7 +151,8 @@ const BubbleDragger = class {
       this.updateCursorDuringBubbleDrag_();
     }
 
-    // Call drag enter/exit/over after wouldDeleteBlock is called in shouldDelete_
+    // Call drag enter/exit/over after wouldDeleteBlock is called in
+    // shouldDelete_
     if (this.dragTarget_ !== oldDragTarget) {
       oldDragTarget && oldDragTarget.onDragExit(this.draggingBubble_);
       this.dragTarget_ && this.dragTarget_.onDragEnter(this.draggingBubble_);
@@ -241,7 +242,8 @@ const BubbleDragger = class {
    */
   fireMoveEvent_() {
     if (this.draggingBubble_.isComment) {
-      // TODO (adodson): Resolve build errors when requiring WorkspaceCommentSvg.
+      // TODO (adodson): Resolve build errors when requiring
+      // WorkspaceCommentSvg.
       const event = new (eventUtils.get(eventUtils.COMMENT_MOVE))(
           /** @type {!WorkspaceCommentSvg} */ (this.draggingBubble_));
       event.setOldCoordinate(this.startXY_);
@@ -269,9 +271,8 @@ const BubbleDragger = class {
         pixelCoord.y / this.workspace_.scale);
     if (this.workspace_.isMutator) {
       // If we're in a mutator, its scale is always 1, purely because of some
-      // oddities in our rendering optimizations.  The actual scale is the same as
-      // the scale on the parent workspace.
-      // Fix that for dragging.
+      // oddities in our rendering optimizations.  The actual scale is the same
+      // as the scale on the parent workspace. Fix that for dragging.
       const mainScale = this.workspace_.options.parentWorkspace.scale;
       result.scale(1 / mainScale);
     }

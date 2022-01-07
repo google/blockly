@@ -86,8 +86,8 @@ const BlockDragger = class {
     this.wouldDeleteBlock_ = false;
 
     /**
-     * The location of the top left corner of the dragging block at the beginning
-     * of the drag in workspace coordinates.
+     * The location of the top left corner of the dragging block at the
+     * beginning of the drag in workspace coordinates.
      * @type {!Coordinate}
      * @protected
      */
@@ -148,8 +148,8 @@ const BlockDragger = class {
     }
     this.draggingBlock_.setDragging(true);
     // For future consideration: we may be able to put moveToDragSurface inside
-    // the block dragger, which would also let the block not track the block drag
-    // surface.
+    // the block dragger, which would also let the block not track the block
+    // drag surface.
     this.draggingBlock_.moveToDragSurface();
   }
 
@@ -175,8 +175,7 @@ const BlockDragger = class {
    *     moved from the position at mouse down, in pixel units.
    * @protected
    */
-  disconnectBlock_(
-      healStack, currentDragDeltaXY) {
+  disconnectBlock_(healStack, currentDragDeltaXY) {
     this.draggingBlock_.unplug(healStack);
     const delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
     const newLoc = Coordinate.sum(this.startXY_, delta);
@@ -292,8 +291,8 @@ const BlockDragger = class {
    *     moved from the start of the drag, in pixel units.
    * @return {{delta: !Coordinate, newLocation:
    *     !Coordinate}} New location after drag. delta is in
-   *     workspace units. newLocation is the new coordinate where the block should
-   *     end up.
+   *     workspace units. newLocation is the new coordinate where the block
+   * should end up.
    * @protected
    */
   getNewLocationAfterDrag_(currentDragDeltaXY) {
@@ -304,9 +303,9 @@ const BlockDragger = class {
   }
 
   /**
-   * May delete the dragging block, if allowed. If `this.wouldDeleteBlock_` is not
-   * true, the block will not be deleted. This should be called at the end of a
-   * block drag.
+   * May delete the dragging block, if allowed. If `this.wouldDeleteBlock_` is
+   * not true, the block will not be deleted. This should be called at the end
+   * of a block drag.
    * @return {boolean} True if the block was deleted.
    * @protected
    */
@@ -353,7 +352,8 @@ const BlockDragger = class {
    * Adds or removes the style of the cursor for the toolbox.
    * This is what changes the cursor to display an x when a deletable block is
    * held over the toolbox.
-   * @param {boolean} isEnd True if we are at the end of a drag, false otherwise.
+   * @param {boolean} isEnd True if we are at the end of a drag, false
+   *     otherwise.
    * @protected
    */
   updateToolboxStyle_(isEnd) {
@@ -409,9 +409,8 @@ const BlockDragger = class {
         pixelCoord.y / this.workspace_.scale);
     if (this.workspace_.isMutator) {
       // If we're in a mutator, its scale is always 1, purely because of some
-      // oddities in our rendering optimizations.  The actual scale is the same as
-      // the scale on the parent workspace.
-      // Fix that for dragging.
+      // oddities in our rendering optimizations.  The actual scale is the same
+      // as the scale on the parent workspace. Fix that for dragging.
       const mainScale = this.workspace_.options.parentWorkspace.scale;
       result.scale(1 / mainScale);
     }

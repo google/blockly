@@ -46,8 +46,8 @@ const Menu = class {
 
     /**
      * Coordinates of the mousedown event that caused this menu to open. Used to
-     * prevent the consequent mouseup event due to a simple click from activating
-     * a menu item immediately.
+     * prevent the consequent mouseup event due to a simple click from
+     * activating a menu item immediately.
      * @type {?Coordinate}
      * @package
      */
@@ -285,8 +285,8 @@ const Menu = class {
   }
 
   /**
-   * Highlights the next highlightable item (or the first if nothing is currently
-   * highlighted).
+   * Highlights the next highlightable item (or the first if nothing is
+   * currently highlighted).
    * @package
    */
   highlightNext() {
@@ -374,8 +374,9 @@ const Menu = class {
       if (Coordinate.distance(oldCoords, newCoords) < 1) {
         // This menu was opened by a mousedown and we're handling the consequent
         // click event. The coords haven't changed, meaning this was the same
-        // opening event. Don't do the usual behavior because the menu just popped
-        // up under the mouse and the user didn't mean to activate this item.
+        // opening event. Don't do the usual behavior because the menu just
+        // popped up under the mouse and the user didn't mean to activate this
+        // item.
         return;
       }
     }
@@ -410,7 +411,8 @@ const Menu = class {
   // Keyboard events.
 
   /**
-   * Attempts to handle a keyboard event, if the menu item is enabled, by calling
+   * Attempts to handle a keyboard event, if the menu item is enabled, by
+   * calling
    * {@link handleKeyEventInternal_}.
    * @param {!Event} e Key event to handle.
    * @private

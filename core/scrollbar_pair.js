@@ -39,8 +39,7 @@ const ScrollbarPair = class {
    * @param {number=} opt_margin The margin to apply to these scrollbars.
    * @alias Blockly.ScrollbarPair
    */
-  constructor(
-      workspace, addHorizontal, addVertical, opt_class, opt_margin) {
+  constructor(workspace, addHorizontal, addVertical, opt_class, opt_margin) {
     /**
      * The workspace this scrollbar pair is bound to.
      * @type {!WorkspaceSvg}
@@ -190,11 +189,13 @@ const ScrollbarPair = class {
 
   /**
    * Record the origin of the workspace that the scrollbar is in, in pixels
-   * relative to the injection div origin. This is for times when the scrollbar is
-   * used in an object whose origin isn't the same as the main workspace
+   * relative to the injection div origin. This is for times when the scrollbar
+   * is used in an object whose origin isn't the same as the main workspace
    * (e.g. in a flyout.)
-   * @param {number} x The x coordinate of the scrollbar's origin, in CSS pixels.
-   * @param {number} y The y coordinate of the scrollbar's origin, in CSS pixels.
+   * @param {number} x The x coordinate of the scrollbar's origin, in CSS
+   *     pixels.
+   * @param {number} y The y coordinate of the scrollbar's origin, in CSS
+   *     pixels.
    * @package
    */
   setOrigin(x, y) {
@@ -210,7 +211,8 @@ const ScrollbarPair = class {
    * Set the handles of both scrollbars.
    * @param {number} x The horizontal content displacement, relative to the view
    *    in pixels.
-   * @param {number} y The vertical content displacement, relative to the view in
+   * @param {number} y The vertical content displacement, relative to the view
+   *     in
    *    pixels.
    * @param {boolean} updateMetrics Whether to update metrics on this set call.
    *    Defaults to true.
@@ -220,8 +222,8 @@ const ScrollbarPair = class {
     //   this.hScroll.set(x);
     //   this.vScroll.set(y);
     // However, that calls setMetrics twice which causes a chain of
-    // getAttribute->setAttribute->getAttribute resulting in an extra layout pass.
-    // Combining them speeds up rendering.
+    // getAttribute->setAttribute->getAttribute resulting in an extra layout
+    // pass. Combining them speeds up rendering.
     if (this.hScroll) {
       this.hScroll.set(x, false);
     }

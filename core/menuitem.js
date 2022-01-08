@@ -114,7 +114,8 @@ const MenuItem = class {
     // Set class and style
     // goog-menuitem* is deprecated, use blocklyMenuItem*.  May 2020.
     element.className = 'blocklyMenuItem goog-menuitem ' +
-        (this.enabled_ ? '' : 'blocklyMenuItemDisabled goog-menuitem-disabled ') +
+        (this.enabled_ ? '' :
+                         'blocklyMenuItemDisabled goog-menuitem-disabled ') +
         (this.checked_ ? 'blocklyMenuItemSelected goog-option-selected ' : '') +
         (this.highlight_ ? 'blocklyMenuItemHighlight goog-menuitem-highlight ' :
                            '') +
@@ -221,7 +222,8 @@ const MenuItem = class {
 
   /**
    * Highlights or unhighlights the component.
-   * @param {boolean} highlight Whether to highlight or unhighlight the component.
+   * @param {boolean} highlight Whether to highlight or unhighlight the
+   *     component.
    * @package
    */
   setHighlighted(highlight) {

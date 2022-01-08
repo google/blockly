@@ -32,8 +32,8 @@ const Names = class {
   /**
    * @param {string} reservedWords A comma-separated string of words that are
    *     illegal for use as names in a language (e.g. 'new,if,this,...').
-   * @param {string=} opt_variablePrefix Some languages need a '$' or a namespace
-   *     before all variable names (but not procedure names).
+   * @param {string=} opt_variablePrefix Some languages need a '$' or a
+   *     namespace before all variable names (but not procedure names).
    * @alias Blockly.Names
    */
   constructor(reservedWords, opt_variablePrefix) {

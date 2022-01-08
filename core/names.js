@@ -35,8 +35,42 @@ goog.requireType('Blockly.Procedures');
  * @alias Blockly.Names
  */
 const Names = function(reservedWords, opt_variablePrefix) {
+  /**
+   * The prefix to attach to variable names in generated code.
+   * @type {string}
+   * @private
+   */
   this.variablePrefix_ = opt_variablePrefix || '';
+
+  /**
+   * A dictionary of reserved words.
+   * @type {Object}
+   * @private
+   */
   this.reservedDict_ = Object.create(null);
+
+  /**
+   * A map from type (e.g. name, procedure) to maps from names to generated
+   * names.
+   * @type {Object<string, Object<string, string>>}
+   * @private
+   */
+  this.db_ = Object.create(null);
+
+  /**
+   * A map from used names to booleans to avoid collisions.
+   * @type {Object<string, boolean>}
+   * @private
+   */
+  this.dbReverse_ = Object.create(null);
+
+  /**
+   * The variable map from the workspace, containing Blockly variable models.
+   * @type {?VariableMap}
+   * @private
+   */
+  this.variableMap_ = null;
+
   if (reservedWords) {
     const splitWords = reservedWords.split(',');
     for (let i = 0; i < splitWords.length; i++) {

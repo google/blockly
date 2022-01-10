@@ -5,8 +5,7 @@
  */
 
 /**
- * @fileoverview Blockly module.
+ * @fileoverview Blockly module; this is a wrapper which selects
+ *     either browser.js or node.js, depending on which environment we
+ *     are running in.
  */
-
-/* eslint-disable */
-'use strict';

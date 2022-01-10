@@ -4,6 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.astNode');
+
+const {ASTNode} = goog.require('Blockly.ASTNode');
+const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+
+
 suite('ASTNode', function() {
   setup(function() {
     sharedTestSetup.call(this);
@@ -14,27 +20,27 @@ suite('ASTNode', function() {
         {
           "type": "field_input",
           "name": "NAME",
-          "text": "default"
+          "text": "default",
         },
         {
           "type": "field_input",
           "name": "NAME",
-          "text": "default"
+          "text": "default",
         },
         {
           "type": "input_value",
-          "name": "NAME"
+          "name": "NAME",
         },
         {
           "type": "input_statement",
-          "name": "NAME"
-        }
+          "name": "NAME",
+        },
       ],
       "previousStatement": null,
       "nextStatement": null,
       "colour": 230,
       "tooltip": "",
-      "helpUrl": ""
+      "helpUrl": "",
     },
     {
       "type": "value_input",
@@ -42,12 +48,12 @@ suite('ASTNode', function() {
       "args0": [
         {
           "type": "input_value",
-          "name": "NAME"
-        }
+          "name": "NAME",
+        },
       ],
       "colour": 230,
       "tooltip": "",
-      "helpUrl": ""
+      "helpUrl": "",
     },
     {
       "type": "field_input",
@@ -56,23 +62,23 @@ suite('ASTNode', function() {
         {
           "type": "field_input",
           "name": "NAME",
-          "text": "default"
-        }
+          "text": "default",
+        },
       ],
       "output": null,
       "colour": 230,
       "tooltip": "",
-      "helpUrl": ""
-    }
+      "helpUrl": "",
+    },
     ]);
     this.workspace = new Blockly.Workspace();
     this.cursor = this.workspace.cursor;
-    var statementInput1 = this.workspace.newBlock('input_statement');
-    var statementInput2 = this.workspace.newBlock('input_statement');
-    var statementInput3 = this.workspace.newBlock('input_statement');
-    var statementInput4 = this.workspace.newBlock('input_statement');
-    var fieldWithOutput = this.workspace.newBlock('field_input');
-    var valueInput = this.workspace.newBlock('value_input');
+    const statementInput1 = this.workspace.newBlock('input_statement');
+    const statementInput2 = this.workspace.newBlock('input_statement');
+    const statementInput3 = this.workspace.newBlock('input_statement');
+    const statementInput4 = this.workspace.newBlock('input_statement');
+    const fieldWithOutput = this.workspace.newBlock('field_input');
+    const valueInput = this.workspace.newBlock('value_input');
 
     statementInput1.nextConnection.connect(statementInput2.previousConnection);
     statementInput1.inputList[0].connection
@@ -86,7 +92,7 @@ suite('ASTNode', function() {
       statementInput3: statementInput3,
       statementInput4: statementInput4,
       fieldWithOutput: fieldWithOutput,
-      valueInput: valueInput
+      valueInput: valueInput,
     };
   });
   teardown(function() {
@@ -95,72 +101,71 @@ suite('ASTNode', function() {
 
   suite('HelperFunctions', function() {
     test('findNextForInput_', function() {
-      var input = this.blocks.statementInput1.inputList[0];
-      var input2 = this.blocks.statementInput1.inputList[1];
-      var connection = input.connection;
-      var node = Blockly.ASTNode.createConnectionNode(connection);
-      var newASTNode = node.findNextForInput_(input);
+      const input = this.blocks.statementInput1.inputList[0];
+      const input2 = this.blocks.statementInput1.inputList[1];
+      const connection = input.connection;
+      const node = ASTNode.createConnectionNode(connection);
+      const newASTNode = node.findNextForInput_(input);
       chai.assert.equal(newASTNode.getLocation(), input2.connection);
     });
 
     test('findPrevForInput_', function() {
-      var input = this.blocks.statementInput1.inputList[0];
-      var input2 = this.blocks.statementInput1.inputList[1];
-      var connection = input2.connection;
-      var node = Blockly.ASTNode.createConnectionNode(connection);
-      var newASTNode = node.findPrevForInput_(input2);
+      const input = this.blocks.statementInput1.inputList[0];
+      const input2 = this.blocks.statementInput1.inputList[1];
+      const connection = input2.connection;
+      const node = ASTNode.createConnectionNode(connection);
+      const newASTNode = node.findPrevForInput_(input2);
       chai.assert.equal(newASTNode.getLocation(), input.connection);
     });
 
     test('findNextForField_', function() {
-      var field = this.blocks.statementInput1.inputList[0].fieldRow[0];
-      var field2 = this.blocks.statementInput1.inputList[0].fieldRow[1];
-      var node = Blockly.ASTNode.createFieldNode(field);
-      var newASTNode = node.findNextForField_(field);
+      const field = this.blocks.statementInput1.inputList[0].fieldRow[0];
+      const field2 = this.blocks.statementInput1.inputList[0].fieldRow[1];
+      const node = ASTNode.createFieldNode(field);
+      const newASTNode = node.findNextForField_(field);
       chai.assert.equal(newASTNode.getLocation(), field2);
     });
 
     test('findPrevForField_', function() {
-      var field = this.blocks.statementInput1.inputList[0].fieldRow[0];
-      var field2 = this.blocks.statementInput1.inputList[0].fieldRow[1];
-      var node = Blockly.ASTNode.createFieldNode(field2);
-      var newASTNode = node.findPrevForField_(field2);
+      const field = this.blocks.statementInput1.inputList[0].fieldRow[0];
+      const field2 = this.blocks.statementInput1.inputList[0].fieldRow[1];
+      const node = ASTNode.createFieldNode(field2);
+      const newASTNode = node.findPrevForField_(field2);
       chai.assert.equal(newASTNode.getLocation(), field);
     });
 
     test('navigateBetweenStacks_Forward', function() {
-      var node = new Blockly.ASTNode(
-          Blockly.ASTNode.types.NEXT, this.blocks.statementInput1.nextConnection);
-      var newASTNode = node.navigateBetweenStacks_(true);
+      const node = new ASTNode(
+          ASTNode.types.NEXT, this.blocks.statementInput1.nextConnection);
+      const newASTNode = node.navigateBetweenStacks_(true);
       chai.assert.equal(newASTNode.getLocation(), this.blocks.statementInput4);
     });
 
     test('navigateBetweenStacks_Backward', function() {
-      var node = new Blockly.ASTNode(
-          Blockly.ASTNode.types.BLOCK, this.blocks.statementInput4);
-      var newASTNode = node.navigateBetweenStacks_(false);
+      const node = new ASTNode(
+          ASTNode.types.BLOCK, this.blocks.statementInput4);
+      const newASTNode = node.navigateBetweenStacks_(false);
       chai.assert.equal(newASTNode.getLocation(), this.blocks.statementInput1);
     });
     test('getOutAstNodeForBlock_', function() {
-      var node = new Blockly.ASTNode(
-          Blockly.ASTNode.types.BLOCK, this.blocks.statementInput2);
-      var newASTNode = node.getOutAstNodeForBlock_(this.blocks.statementInput2);
+      const node = new ASTNode(
+          ASTNode.types.BLOCK, this.blocks.statementInput2);
+      const newASTNode = node.getOutAstNodeForBlock_(this.blocks.statementInput2);
       chai.assert.equal(newASTNode.getLocation(), this.blocks.statementInput1);
     });
     test('getOutAstNodeForBlock_OneBlock', function() {
-      var node = new Blockly.ASTNode(
-          Blockly.ASTNode.types.BLOCK, this.blocks.statementInput4);
-      var newASTNode = node.getOutAstNodeForBlock_(this.blocks.statementInput4);
+      const node = new ASTNode(
+          ASTNode.types.BLOCK, this.blocks.statementInput4);
+      const newASTNode = node.getOutAstNodeForBlock_(this.blocks.statementInput4);
       chai.assert.equal(newASTNode.getLocation(), this.blocks.statementInput4);
     });
     test('findFirstFieldOrInput_', function() {
-      var node = new Blockly.ASTNode(
-          Blockly.ASTNode.types.BLOCK, this.blocks.statementInput4);
-      var field = this.blocks.statementInput4.inputList[0].fieldRow[0];
-      var newASTNode = node.findFirstFieldOrInput_(this.blocks.statementInput4);
+      const node = new ASTNode(
+          ASTNode.types.BLOCK, this.blocks.statementInput4);
+      const field = this.blocks.statementInput4.inputList[0].fieldRow[0];
+      const newASTNode = node.findFirstFieldOrInput_(this.blocks.statementInput4);
       chai.assert.equal(newASTNode.getLocation(), field);
     });
-
   });
 
   suite('NavigationFunctions', function() {
@@ -171,7 +176,7 @@ suite('ASTNode', function() {
         "previousStatement": null,
         "colour": 230,
         "tooltip": "",
-        "helpUrl": ""
+        "helpUrl": "",
       },
       {
         "type": "start_block",
@@ -179,7 +184,7 @@ suite('ASTNode', function() {
         "nextStatement": null,
         "colour": 230,
         "tooltip": "",
-        "helpUrl": ""
+        "helpUrl": "",
       },
       {
         "type": "fields_and_input",
@@ -188,26 +193,26 @@ suite('ASTNode', function() {
           {
             "type": "field_input",
             "name": "NAME",
-            "text": "default"
+            "text": "default",
           },
           {
-            "type": "input_dummy"
+            "type": "input_dummy",
           },
           {
             "type": "field_input",
             "name": "NAME",
-            "text": "default"
+            "text": "default",
           },
           {
             "type": "input_value",
-            "name": "NAME"
-          }
+            "name": "NAME",
+          },
         ],
         "previousStatement": null,
         "nextStatement": null,
         "colour": 230,
         "tooltip": "",
-        "helpUrl": ""
+        "helpUrl": "",
       },
       {
         "type": "two_fields",
@@ -216,12 +221,12 @@ suite('ASTNode', function() {
           {
             "type": "field_input",
             "name": "NAME",
-            "text": "default"
-          }
+            "text": "default",
+          },
         ],
         "colour": 230,
         "tooltip": "",
-        "helpUrl": ""
+        "helpUrl": "",
       },
       {
         "type": "fields_and_input2",
@@ -229,48 +234,48 @@ suite('ASTNode', function() {
         "args0": [
           {
             "type": "input_value",
-            "name": "NAME"
+            "name": "NAME",
           },
           {
             "type": "field_input",
             "name": "NAME",
-            "text": "default"
+            "text": "default",
           },
           {
             "type": "input_value",
-            "name": "NAME"
+            "name": "NAME",
           },
           {
             "type": "input_statement",
-            "name": "NAME"
-          }
+            "name": "NAME",
+          },
         ],
         "colour": 230,
         "tooltip": "",
-        "helpUrl": ""
+        "helpUrl": "",
       },
       {
         "type": "dummy_input",
         "message0": "Hello",
         "colour": 230,
         "tooltip": "",
-        "helpUrl": ""
+        "helpUrl": "",
       },
       {
         "type": "dummy_inputValue",
         "message0": "Hello %1  %2",
         "args0": [
           {
-            "type": "input_dummy"
+            "type": "input_dummy",
           },
           {
             "type": "input_value",
-            "name": "NAME"
-          }
+            "name": "NAME",
+          },
         ],
         "colour": 230,
         "tooltip": "",
-        "helpUrl": ""
+        "helpUrl": "",
       },
       {
         "type": "output_next",
@@ -279,35 +284,35 @@ suite('ASTNode', function() {
         "colour": 230,
         "tooltip": "",
         "helpUrl": "",
-        "nextStatement": null
+        "nextStatement": null,
       }]);
-      var noNextConnection = this.workspace.newBlock('top_connection');
-      var fieldAndInputs = this.workspace.newBlock('fields_and_input');
-      var twoFields = this.workspace.newBlock('two_fields');
-      var fieldAndInputs2 = this.workspace.newBlock('fields_and_input2');
-      var noPrevConnection = this.workspace.newBlock('start_block');
+      const noNextConnection = this.workspace.newBlock('top_connection');
+      const fieldAndInputs = this.workspace.newBlock('fields_and_input');
+      const twoFields = this.workspace.newBlock('two_fields');
+      const fieldAndInputs2 = this.workspace.newBlock('fields_and_input2');
+      const noPrevConnection = this.workspace.newBlock('start_block');
       this.blocks.noNextConnection = noNextConnection;
       this.blocks.fieldAndInputs = fieldAndInputs;
       this.blocks.twoFields = twoFields;
       this.blocks.fieldAndInputs2 = fieldAndInputs2;
       this.blocks.noPrevConnection = noPrevConnection;
 
-      var dummyInput = this.workspace.newBlock('dummy_input');
-      var dummyInputValue = this.workspace.newBlock('dummy_inputValue');
-      var fieldWithOutput2 = this.workspace.newBlock('field_input');
+      const dummyInput = this.workspace.newBlock('dummy_input');
+      const dummyInputValue = this.workspace.newBlock('dummy_inputValue');
+      const fieldWithOutput2 = this.workspace.newBlock('field_input');
       this.blocks.dummyInput = dummyInput;
       this.blocks.dummyInputValue = dummyInputValue;
       this.blocks.fieldWithOutput2 = fieldWithOutput2;
 
-      var secondBlock = this.workspace.newBlock('input_statement');
-      var outputNextBlock = this.workspace.newBlock('output_next');
+      const secondBlock = this.workspace.newBlock('input_statement');
+      const outputNextBlock = this.workspace.newBlock('output_next');
       this.blocks.secondBlock = secondBlock;
       this.blocks.outputNextBlock = outputNextBlock;
     });
     suite('Next', function() {
       setup(function() {
         this.singleBlockWorkspace = new Blockly.Workspace();
-        var singleBlock = this.singleBlockWorkspace.newBlock('two_fields');
+        const singleBlock = this.singleBlockWorkspace.newBlock('two_fields');
         this.blocks.singleBlock = singleBlock;
       });
       teardown(function() {
@@ -315,194 +320,194 @@ suite('ASTNode', function() {
       });
 
       test('fromPreviousToBlock', function() {
-        var prevConnection = this.blocks.statementInput1.previousConnection;
-        var node = Blockly.ASTNode.createConnectionNode(prevConnection);
-        var nextNode = node.next();
+        const prevConnection = this.blocks.statementInput1.previousConnection;
+        const node = ASTNode.createConnectionNode(prevConnection);
+        const nextNode = node.next();
         chai.assert.equal(nextNode.getLocation(), this.blocks.statementInput1);
       });
       test('fromBlockToNext', function() {
-        var nextConnection = this.blocks.statementInput1.nextConnection;
-        var node = Blockly.ASTNode.createBlockNode(this.blocks.statementInput1);
-        var nextNode = node.next();
+        const nextConnection = this.blocks.statementInput1.nextConnection;
+        const node = ASTNode.createBlockNode(this.blocks.statementInput1);
+        const nextNode = node.next();
         chai.assert.equal(nextNode.getLocation(), nextConnection);
       });
       test('fromBlockToNull', function() {
-        var node = Blockly.ASTNode.createBlockNode(this.blocks.noNextConnection);
-        var nextNode = node.next();
+        const node = ASTNode.createBlockNode(this.blocks.noNextConnection);
+        const nextNode = node.next();
         chai.assert.isNull(nextNode);
       });
       test('fromNextToPrevious', function() {
-        var nextConnection = this.blocks.statementInput1.nextConnection;
-        var prevConnection = this.blocks.statementInput2.previousConnection;
-        var node = Blockly.ASTNode.createConnectionNode(nextConnection);
-        var nextNode = node.next();
+        const nextConnection = this.blocks.statementInput1.nextConnection;
+        const prevConnection = this.blocks.statementInput2.previousConnection;
+        const node = ASTNode.createConnectionNode(nextConnection);
+        const nextNode = node.next();
         chai.assert.equal(nextNode.getLocation(), prevConnection);
       });
       test('fromNextToNull', function() {
-        var nextConnection = this.blocks.statementInput2.nextConnection;
-        var node = Blockly.ASTNode.createConnectionNode(nextConnection);
-        var nextNode = node.next();
+        const nextConnection = this.blocks.statementInput2.nextConnection;
+        const node = ASTNode.createConnectionNode(nextConnection);
+        const nextNode = node.next();
         chai.assert.isNull(nextNode);
       });
       test('fromInputToInput', function() {
-        var input = this.blocks.statementInput1.inputList[0];
-        var inputConnection = this.blocks.statementInput1.inputList[1].connection;
-        var node = Blockly.ASTNode.createInputNode(input);
-        var nextNode = node.next();
+        const input = this.blocks.statementInput1.inputList[0];
+        const inputConnection = this.blocks.statementInput1.inputList[1].connection;
+        const node = ASTNode.createInputNode(input);
+        const nextNode = node.next();
         chai.assert.equal(nextNode.getLocation(), inputConnection);
       });
       test('fromInputToStatementInput', function() {
-        var input = this.blocks.fieldAndInputs2.inputList[1];
-        var inputConnection = this.blocks.fieldAndInputs2.inputList[2].connection;
-        var node = Blockly.ASTNode.createInputNode(input);
-        var nextNode = node.next();
+        const input = this.blocks.fieldAndInputs2.inputList[1];
+        const inputConnection = this.blocks.fieldAndInputs2.inputList[2].connection;
+        const node = ASTNode.createInputNode(input);
+        const nextNode = node.next();
         chai.assert.equal(nextNode.getLocation(), inputConnection);
       });
       test('fromInputToField', function() {
-        var input = this.blocks.fieldAndInputs2.inputList[0];
-        var field = this.blocks.fieldAndInputs2.inputList[1].fieldRow[0];
-        var node = Blockly.ASTNode.createInputNode(input);
-        var nextNode = node.next();
+        const input = this.blocks.fieldAndInputs2.inputList[0];
+        const field = this.blocks.fieldAndInputs2.inputList[1].fieldRow[0];
+        const node = ASTNode.createInputNode(input);
+        const nextNode = node.next();
         chai.assert.equal(nextNode.getLocation(), field);
       });
       test('fromInputToNull', function() {
-        var input = this.blocks.fieldAndInputs2.inputList[2];
-        var node = Blockly.ASTNode.createInputNode(input);
-        var nextNode = node.next();
+        const input = this.blocks.fieldAndInputs2.inputList[2];
+        const node = ASTNode.createInputNode(input);
+        const nextNode = node.next();
         chai.assert.isNull(nextNode);
       });
       test('fromOutputToBlock', function() {
-        var output = this.blocks.fieldWithOutput.outputConnection;
-        var node = Blockly.ASTNode.createConnectionNode(output);
-        var nextNode = node.next();
+        const output = this.blocks.fieldWithOutput.outputConnection;
+        const node = ASTNode.createConnectionNode(output);
+        const nextNode = node.next();
         chai.assert.equal(nextNode.getLocation(), this.blocks.fieldWithOutput);
       });
       test('fromFieldToInput', function() {
-        var field = this.blocks.statementInput1.inputList[0].fieldRow[1];
-        var inputConnection = this.blocks.statementInput1.inputList[0].connection;
-        var node = Blockly.ASTNode.createFieldNode(field);
-        var nextNode = node.next();
+        const field = this.blocks.statementInput1.inputList[0].fieldRow[1];
+        const inputConnection = this.blocks.statementInput1.inputList[0].connection;
+        const node = ASTNode.createFieldNode(field);
+        const nextNode = node.next();
         chai.assert.equal(nextNode.getLocation(), inputConnection);
       });
       test('fromFieldToField', function() {
-        var field = this.blocks.fieldAndInputs.inputList[0].fieldRow[0];
-        var node = Blockly.ASTNode.createFieldNode(field);
-        var field2 = this.blocks.fieldAndInputs.inputList[1].fieldRow[0];
-        var nextNode = node.next();
+        const field = this.blocks.fieldAndInputs.inputList[0].fieldRow[0];
+        const node = ASTNode.createFieldNode(field);
+        const field2 = this.blocks.fieldAndInputs.inputList[1].fieldRow[0];
+        const nextNode = node.next();
         chai.assert.equal(nextNode.getLocation(), field2);
       });
       test('fromFieldToNull', function() {
-        var field = this.blocks.twoFields.inputList[0].fieldRow[0];
-        var node = Blockly.ASTNode.createFieldNode(field);
-        var nextNode = node.next();
+        const field = this.blocks.twoFields.inputList[0].fieldRow[0];
+        const node = ASTNode.createFieldNode(field);
+        const nextNode = node.next();
         chai.assert.isNull(nextNode);
       });
       test('fromStackToStack', function() {
-        var node = Blockly.ASTNode.createStackNode(this.blocks.statementInput1);
-        var nextNode = node.next();
+        const node = ASTNode.createStackNode(this.blocks.statementInput1);
+        const nextNode = node.next();
         chai.assert.equal(nextNode.getLocation(), this.blocks.statementInput4);
-        chai.assert.equal(nextNode.getType(), Blockly.ASTNode.types.STACK);
+        chai.assert.equal(nextNode.getType(), ASTNode.types.STACK);
       });
       test('fromStackToNull', function() {
-        var node = Blockly.ASTNode.createStackNode(this.blocks.singleBlock);
-        var nextNode = node.next();
+        const node = ASTNode.createStackNode(this.blocks.singleBlock);
+        const nextNode = node.next();
         chai.assert.isNull(nextNode);
       });
     });
 
     suite('Previous', function() {
       test('fromPreviousToNull', function() {
-        var prevConnection = this.blocks.statementInput1.previousConnection;
-        var node = Blockly.ASTNode.createConnectionNode(prevConnection);
-        var prevNode = node.prev();
+        const prevConnection = this.blocks.statementInput1.previousConnection;
+        const node = ASTNode.createConnectionNode(prevConnection);
+        const prevNode = node.prev();
         chai.assert.isNull(prevNode);
       });
       test('fromPreviousToNext', function() {
-        var prevConnection = this.blocks.statementInput2.previousConnection;
-        var node = Blockly.ASTNode.createConnectionNode(prevConnection);
-        var prevNode = node.prev();
-        var nextConnection = this.blocks.statementInput1.nextConnection;
+        const prevConnection = this.blocks.statementInput2.previousConnection;
+        const node = ASTNode.createConnectionNode(prevConnection);
+        const prevNode = node.prev();
+        const nextConnection = this.blocks.statementInput1.nextConnection;
         chai.assert.equal(prevNode.getLocation(), nextConnection);
       });
       test('fromPreviousToInput', function() {
-        var prevConnection = this.blocks.statementInput3.previousConnection;
-        var node = Blockly.ASTNode.createConnectionNode(prevConnection);
-        var prevNode = node.prev();
+        const prevConnection = this.blocks.statementInput3.previousConnection;
+        const node = ASTNode.createConnectionNode(prevConnection);
+        const prevNode = node.prev();
         chai.assert.isNull(prevNode);
       });
       test('fromBlockToPrevious', function() {
-        var node = Blockly.ASTNode.createBlockNode(this.blocks.statementInput1);
-        var prevNode = node.prev();
-        var prevConnection = this.blocks.statementInput1.previousConnection;
+        const node = ASTNode.createBlockNode(this.blocks.statementInput1);
+        const prevNode = node.prev();
+        const prevConnection = this.blocks.statementInput1.previousConnection;
         chai.assert.equal(prevNode.getLocation(), prevConnection);
       });
       test('fromBlockToNull', function() {
-        var node = Blockly.ASTNode.createBlockNode(this.blocks.noPrevConnection);
-        var prevNode = node.prev();
+        const node = ASTNode.createBlockNode(this.blocks.noPrevConnection);
+        const prevNode = node.prev();
         chai.assert.isNull(prevNode);
       });
       test('fromBlockToOutput', function() {
-        var node = Blockly.ASTNode.createBlockNode(this.blocks.fieldWithOutput);
-        var prevNode = node.prev();
-        var outputConnection = this.blocks.fieldWithOutput.outputConnection;
+        const node = ASTNode.createBlockNode(this.blocks.fieldWithOutput);
+        const prevNode = node.prev();
+        const outputConnection = this.blocks.fieldWithOutput.outputConnection;
         chai.assert.equal(prevNode.getLocation(), outputConnection);
       });
       test('fromNextToBlock', function() {
-        var nextConnection = this.blocks.statementInput1.nextConnection;
-        var node = Blockly.ASTNode.createConnectionNode(nextConnection);
-        var prevNode = node.prev();
+        const nextConnection = this.blocks.statementInput1.nextConnection;
+        const node = ASTNode.createConnectionNode(nextConnection);
+        const prevNode = node.prev();
         chai.assert.equal(prevNode.getLocation(), this.blocks.statementInput1);
       });
       test('fromInputToField', function() {
-        var input = this.blocks.statementInput1.inputList[0];
-        var node = Blockly.ASTNode.createInputNode(input);
-        var prevNode = node.prev();
+        const input = this.blocks.statementInput1.inputList[0];
+        const node = ASTNode.createInputNode(input);
+        const prevNode = node.prev();
         chai.assert.equal(prevNode.getLocation(), input.fieldRow[1]);
       });
       test('fromInputToNull', function() {
-        var input = this.blocks.fieldAndInputs2.inputList[0];
-        var node = Blockly.ASTNode.createInputNode(input);
-        var prevNode = node.prev();
+        const input = this.blocks.fieldAndInputs2.inputList[0];
+        const node = ASTNode.createInputNode(input);
+        const prevNode = node.prev();
         chai.assert.isNull(prevNode);
       });
       test('fromInputToInput', function() {
-        var input = this.blocks.fieldAndInputs2.inputList[2];
-        var inputConnection = this.blocks.fieldAndInputs2.inputList[1].connection;
-        var node = Blockly.ASTNode.createInputNode(input);
-        var prevNode = node.prev();
+        const input = this.blocks.fieldAndInputs2.inputList[2];
+        const inputConnection = this.blocks.fieldAndInputs2.inputList[1].connection;
+        const node = ASTNode.createInputNode(input);
+        const prevNode = node.prev();
         chai.assert.equal(prevNode.getLocation(), inputConnection);
       });
       test('fromOutputToNull', function() {
-        var output = this.blocks.fieldWithOutput.outputConnection;
-        var node = Blockly.ASTNode.createConnectionNode(output);
-        var prevNode = node.prev();
+        const output = this.blocks.fieldWithOutput.outputConnection;
+        const node = ASTNode.createConnectionNode(output);
+        const prevNode = node.prev();
         chai.assert.isNull(prevNode);
       });
       test('fromFieldToNull', function() {
-        var field = this.blocks.statementInput1.inputList[0].fieldRow[0];
-        var node = Blockly.ASTNode.createFieldNode(field);
-        var prevNode = node.prev();
+        const field = this.blocks.statementInput1.inputList[0].fieldRow[0];
+        const node = ASTNode.createFieldNode(field);
+        const prevNode = node.prev();
         chai.assert.isNull(prevNode);
       });
       test('fromFieldToInput', function() {
-        var field = this.blocks.fieldAndInputs2.inputList[1].fieldRow[0];
-        var inputConnection = this.blocks.fieldAndInputs2.inputList[0].connection;
-        var node = Blockly.ASTNode.createFieldNode(field);
-        var prevNode = node.prev();
+        const field = this.blocks.fieldAndInputs2.inputList[1].fieldRow[0];
+        const inputConnection = this.blocks.fieldAndInputs2.inputList[0].connection;
+        const node = ASTNode.createFieldNode(field);
+        const prevNode = node.prev();
         chai.assert.equal(prevNode.getLocation(), inputConnection);
       });
       test('fromFieldToField', function() {
-        var field = this.blocks.fieldAndInputs.inputList[1].fieldRow[0];
-        var field2 = this.blocks.fieldAndInputs.inputList[0].fieldRow[0];
-        var node = Blockly.ASTNode.createFieldNode(field);
-        var prevNode = node.prev();
+        const field = this.blocks.fieldAndInputs.inputList[1].fieldRow[0];
+        const field2 = this.blocks.fieldAndInputs.inputList[0].fieldRow[0];
+        const node = ASTNode.createFieldNode(field);
+        const prevNode = node.prev();
         chai.assert.equal(prevNode.getLocation(), field2);
       });
       test('fromStackToStack', function() {
-        var node = Blockly.ASTNode.createStackNode(this.blocks.statementInput4);
-        var prevNode = node.prev();
+        const node = ASTNode.createStackNode(this.blocks.statementInput4);
+        const prevNode = node.prev();
         chai.assert.equal(prevNode.getLocation(), this.blocks.statementInput1);
-        chai.assert.equal(prevNode.getType(), Blockly.ASTNode.types.STACK);
+        chai.assert.equal(prevNode.getType(), ASTNode.types.STACK);
       });
     });
 
@@ -515,186 +520,186 @@ suite('ASTNode', function() {
       });
 
       test('fromInputToOutput', function() {
-        var input = this.blocks.statementInput1.inputList[0];
-        var node = Blockly.ASTNode.createInputNode(input);
-        var inNode = node.in();
-        var outputConnection = this.blocks.fieldWithOutput.outputConnection;
+        const input = this.blocks.statementInput1.inputList[0];
+        const node = ASTNode.createInputNode(input);
+        const inNode = node.in();
+        const outputConnection = this.blocks.fieldWithOutput.outputConnection;
         chai.assert.equal(inNode.getLocation(), outputConnection);
       });
       test('fromInputToNull', function() {
-        var input = this.blocks.statementInput2.inputList[0];
-        var node = Blockly.ASTNode.createInputNode(input);
-        var inNode = node.in();
+        const input = this.blocks.statementInput2.inputList[0];
+        const node = ASTNode.createInputNode(input);
+        const inNode = node.in();
         chai.assert.isNull(inNode);
       });
       test('fromInputToPrevious', function() {
-        var input = this.blocks.statementInput2.inputList[1];
-        var previousConnection = this.blocks.statementInput3.previousConnection;
-        var node = Blockly.ASTNode.createInputNode(input);
-        var inNode = node.in();
+        const input = this.blocks.statementInput2.inputList[1];
+        const previousConnection = this.blocks.statementInput3.previousConnection;
+        const node = ASTNode.createInputNode(input);
+        const inNode = node.in();
         chai.assert.equal(inNode.getLocation(), previousConnection);
       });
       test('fromBlockToInput', function() {
-        var input = this.blocks.valueInput.inputList[0];
-        var node = Blockly.ASTNode.createBlockNode(this.blocks.valueInput);
-        var inNode = node.in();
+        const input = this.blocks.valueInput.inputList[0];
+        const node = ASTNode.createBlockNode(this.blocks.valueInput);
+        const inNode = node.in();
         chai.assert.equal(inNode.getLocation(), input.connection);
       });
       test('fromBlockToField', function() {
-        var node = Blockly.ASTNode.createBlockNode(this.blocks.statementInput1);
-        var inNode = node.in();
-        var field = this.blocks.statementInput1.inputList[0].fieldRow[0];
+        const node = ASTNode.createBlockNode(this.blocks.statementInput1);
+        const inNode = node.in();
+        const field = this.blocks.statementInput1.inputList[0].fieldRow[0];
         chai.assert.equal(inNode.getLocation(), field);
       });
       test('fromBlockToPrevious', function() {
-        var prevConnection = this.blocks.statementInput4.previousConnection;
-        var node = Blockly.ASTNode.createStackNode(this.blocks.statementInput4);
-        var inNode = node.in();
+        const prevConnection = this.blocks.statementInput4.previousConnection;
+        const node = ASTNode.createStackNode(this.blocks.statementInput4);
+        const inNode = node.in();
         chai.assert.equal(inNode.getLocation(), prevConnection);
-        chai.assert.equal(inNode.getType(), Blockly.ASTNode.types.PREVIOUS);
+        chai.assert.equal(inNode.getType(), ASTNode.types.PREVIOUS);
       });
       test('fromBlockToNull_DummyInput', function() {
-        var node = Blockly.ASTNode.createBlockNode(this.blocks.dummyInput);
-        var inNode = node.in();
+        const node = ASTNode.createBlockNode(this.blocks.dummyInput);
+        const inNode = node.in();
         chai.assert.isNull(inNode);
       });
       test('fromBlockToInput_DummyInputValue', function() {
-        var node = Blockly.ASTNode.createBlockNode(this.blocks.dummyInputValue);
-        var inputConnection = this.blocks.dummyInputValue.inputList[1].connection;
-        var inNode = node.in();
+        const node = ASTNode.createBlockNode(this.blocks.dummyInputValue);
+        const inputConnection = this.blocks.dummyInputValue.inputList[1].connection;
+        const inNode = node.in();
         chai.assert.equal(inNode.getLocation(), inputConnection);
       });
       test('fromOuputToNull', function() {
-        var output = this.blocks.fieldWithOutput.outputConnection;
-        var node = Blockly.ASTNode.createConnectionNode(output);
-        var inNode = node.in();
+        const output = this.blocks.fieldWithOutput.outputConnection;
+        const node = ASTNode.createConnectionNode(output);
+        const inNode = node.in();
         chai.assert.isNull(inNode);
       });
       test('fromFieldToNull', function() {
-        var field = this.blocks.statementInput1.inputList[0].fieldRow[0];
-        var node = Blockly.ASTNode.createFieldNode(field);
-        var inNode = node.in();
+        const field = this.blocks.statementInput1.inputList[0].fieldRow[0];
+        const node = ASTNode.createFieldNode(field);
+        const inNode = node.in();
         chai.assert.isNull(inNode);
       });
       test('fromWorkspaceToStack', function() {
-        var coordinate = new Blockly.utils.Coordinate(100, 100);
-        var node = Blockly.ASTNode.createWorkspaceNode(this.workspace, coordinate);
-        var inNode = node.in();
+        const coordinate = new Blockly.utils.Coordinate(100, 100);
+        const node = ASTNode.createWorkspaceNode(this.workspace, coordinate);
+        const inNode = node.in();
         chai.assert.equal(inNode.getLocation(), this.workspace.getTopBlocks()[0]);
-        chai.assert.equal(inNode.getType(), Blockly.ASTNode.types.STACK);
+        chai.assert.equal(inNode.getType(), ASTNode.types.STACK);
       });
       test('fromWorkspaceToNull', function() {
-        var coordinate = new Blockly.utils.Coordinate(100, 100);
-        var node = Blockly.ASTNode.createWorkspaceNode(
+        const coordinate = new Blockly.utils.Coordinate(100, 100);
+        const node = ASTNode.createWorkspaceNode(
             this.emptyWorkspace, coordinate);
-        var inNode = node.in();
+        const inNode = node.in();
         chai.assert.isNull(inNode);
       });
       test('fromStackToPrevious', function() {
-        var node = Blockly.ASTNode.createStackNode(this.blocks.statementInput1);
-        var previous = this.blocks.statementInput1.previousConnection;
-        var inNode = node.in();
+        const node = ASTNode.createStackNode(this.blocks.statementInput1);
+        const previous = this.blocks.statementInput1.previousConnection;
+        const inNode = node.in();
         chai.assert.equal(inNode.getLocation(), previous);
-        chai.assert.equal(inNode.getType(), Blockly.ASTNode.types.PREVIOUS);
+        chai.assert.equal(inNode.getType(), ASTNode.types.PREVIOUS);
       });
       test('fromStackToOutput', function() {
-        var node = Blockly.ASTNode.createStackNode(this.blocks.fieldWithOutput2);
-        var output = this.blocks.fieldWithOutput2.outputConnection;
-        var inNode = node.in();
+        const node = ASTNode.createStackNode(this.blocks.fieldWithOutput2);
+        const output = this.blocks.fieldWithOutput2.outputConnection;
+        const inNode = node.in();
         chai.assert.equal(inNode.getLocation(), output);
-        chai.assert.equal(inNode.getType(), Blockly.ASTNode.types.OUTPUT);
+        chai.assert.equal(inNode.getType(), ASTNode.types.OUTPUT);
       });
       test('fromStackToBlock', function() {
-        var node = Blockly.ASTNode.createStackNode(this.blocks.dummyInput);
-        var inNode = node.in();
+        const node = ASTNode.createStackNode(this.blocks.dummyInput);
+        const inNode = node.in();
         chai.assert.equal(inNode.getLocation(), this.blocks.dummyInput);
-        chai.assert.equal(inNode.getType(), Blockly.ASTNode.types.BLOCK);
+        chai.assert.equal(inNode.getType(), ASTNode.types.BLOCK);
       });
     });
 
     suite('Out', function() {
       setup(function() {
-        var secondBlock = this.blocks.secondBlock;
-        var outputNextBlock = this.blocks.outputNextBlock;
+        const secondBlock = this.blocks.secondBlock;
+        const outputNextBlock = this.blocks.outputNextBlock;
         this.blocks.noPrevConnection.nextConnection.connect(secondBlock.previousConnection);
         secondBlock.inputList[0].connection
             .connect(outputNextBlock.outputConnection);
       });
 
       test('fromInputToBlock', function() {
-        var input = this.blocks.statementInput1.inputList[0];
-        var node = Blockly.ASTNode.createInputNode(input);
-        var outNode = node.out();
-        chai.assert.equal(outNode.getType(), Blockly.ASTNode.types.BLOCK);
+        const input = this.blocks.statementInput1.inputList[0];
+        const node = ASTNode.createInputNode(input);
+        const outNode = node.out();
+        chai.assert.equal(outNode.getType(), ASTNode.types.BLOCK);
         chai.assert.equal(outNode.getLocation(), this.blocks.statementInput1);
       });
       test('fromOutputToInput', function() {
-        var output = this.blocks.fieldWithOutput.outputConnection;
-        var node = Blockly.ASTNode.createConnectionNode(output);
-        var outNode = node.out();
-        chai.assert.equal(outNode.getType(), Blockly.ASTNode.types.INPUT);
+        const output = this.blocks.fieldWithOutput.outputConnection;
+        const node = ASTNode.createConnectionNode(output);
+        const outNode = node.out();
+        chai.assert.equal(outNode.getType(), ASTNode.types.INPUT);
         chai.assert.equal(outNode.getLocation(),
             this.blocks.statementInput1.inputList[0].connection);
       });
       test('fromOutputToStack', function() {
-        var output = this.blocks.fieldWithOutput2.outputConnection;
-        var node = Blockly.ASTNode.createConnectionNode(output);
-        var outNode = node.out();
-        chai.assert.equal(outNode.getType(), Blockly.ASTNode.types.STACK);
+        const output = this.blocks.fieldWithOutput2.outputConnection;
+        const node = ASTNode.createConnectionNode(output);
+        const outNode = node.out();
+        chai.assert.equal(outNode.getType(), ASTNode.types.STACK);
         chai.assert.equal(outNode.getLocation(), this.blocks.fieldWithOutput2);
       });
       test('fromFieldToBlock', function() {
-        var field = this.blocks.statementInput1.inputList[0].fieldRow[0];
-        var node = Blockly.ASTNode.createFieldNode(field);
-        var outNode = node.out();
-        chai.assert.equal(outNode.getType(), Blockly.ASTNode.types.BLOCK);
+        const field = this.blocks.statementInput1.inputList[0].fieldRow[0];
+        const node = ASTNode.createFieldNode(field);
+        const outNode = node.out();
+        chai.assert.equal(outNode.getType(), ASTNode.types.BLOCK);
         chai.assert.equal(outNode.getLocation(), this.blocks.statementInput1);
       });
       test('fromStackToWorkspace', function() {
-        var stub = sinon.stub(this.blocks.statementInput4,
-            "getRelativeToSurfaceXY").returns({x: 10, y:10});
-        var node = Blockly.ASTNode.createStackNode(this.blocks.statementInput4);
-        var outNode = node.out();
-        chai.assert.equal(outNode.getType(), Blockly.ASTNode.types.WORKSPACE);
+        const stub = sinon.stub(this.blocks.statementInput4,
+            "getRelativeToSurfaceXY").returns({x: 10, y: 10});
+        const node = ASTNode.createStackNode(this.blocks.statementInput4);
+        const outNode = node.out();
+        chai.assert.equal(outNode.getType(), ASTNode.types.WORKSPACE);
         chai.assert.equal(outNode.wsCoordinate_.x, 10);
         chai.assert.equal(outNode.wsCoordinate_.y, -10);
         stub.restore();
       });
       test('fromPreviousToInput', function() {
-        var previous = this.blocks.statementInput3.previousConnection;
-        var inputConnection = this.blocks.statementInput2.inputList[1].connection;
-        var node = Blockly.ASTNode.createConnectionNode(previous);
-        var outNode = node.out();
-        chai.assert.equal(outNode.getType(), Blockly.ASTNode.types.INPUT);
+        const previous = this.blocks.statementInput3.previousConnection;
+        const inputConnection = this.blocks.statementInput2.inputList[1].connection;
+        const node = ASTNode.createConnectionNode(previous);
+        const outNode = node.out();
+        chai.assert.equal(outNode.getType(), ASTNode.types.INPUT);
         chai.assert.equal(outNode.getLocation(), inputConnection);
       });
       test('fromPreviousToStack', function() {
-        var previous = this.blocks.statementInput2.previousConnection;
-        var node = Blockly.ASTNode.createConnectionNode(previous);
-        var outNode = node.out();
-        chai.assert.equal(outNode.getType(), Blockly.ASTNode.types.STACK);
+        const previous = this.blocks.statementInput2.previousConnection;
+        const node = ASTNode.createConnectionNode(previous);
+        const outNode = node.out();
+        chai.assert.equal(outNode.getType(), ASTNode.types.STACK);
         chai.assert.equal(outNode.getLocation(), this.blocks.statementInput1);
       });
       test('fromNextToInput', function() {
-        var next = this.blocks.statementInput3.nextConnection;
-        var inputConnection = this.blocks.statementInput2.inputList[1].connection;
-        var node = Blockly.ASTNode.createConnectionNode(next);
-        var outNode = node.out();
-        chai.assert.equal(outNode.getType(), Blockly.ASTNode.types.INPUT);
+        const next = this.blocks.statementInput3.nextConnection;
+        const inputConnection = this.blocks.statementInput2.inputList[1].connection;
+        const node = ASTNode.createConnectionNode(next);
+        const outNode = node.out();
+        chai.assert.equal(outNode.getType(), ASTNode.types.INPUT);
         chai.assert.equal(outNode.getLocation(), inputConnection);
       });
       test('fromNextToStack', function() {
-        var next = this.blocks.statementInput2.nextConnection;
-        var node = Blockly.ASTNode.createConnectionNode(next);
-        var outNode = node.out();
-        chai.assert.equal(outNode.getType(), Blockly.ASTNode.types.STACK);
+        const next = this.blocks.statementInput2.nextConnection;
+        const node = ASTNode.createConnectionNode(next);
+        const outNode = node.out();
+        chai.assert.equal(outNode.getType(), ASTNode.types.STACK);
         chai.assert.equal(outNode.getLocation(), this.blocks.statementInput1);
       });
       test('fromNextToStack_NoPreviousConnection', function() {
-        var next = this.blocks.secondBlock.nextConnection;
-        var node = Blockly.ASTNode.createConnectionNode(next);
-        var outNode = node.out();
-        chai.assert.equal(outNode.getType(), Blockly.ASTNode.types.STACK);
+        const next = this.blocks.secondBlock.nextConnection;
+        const node = ASTNode.createConnectionNode(next);
+        const outNode = node.out();
+        chai.assert.equal(outNode.getType(), ASTNode.types.STACK);
         chai.assert.equal(outNode.getLocation(), this.blocks.noPrevConnection);
       });
       /**
@@ -702,99 +707,99 @@ suite('ASTNode', function() {
        * next connection attached to an input.
        */
       test('fromNextToInput_OutputAndPreviousConnection', function() {
-        var next = this.blocks.outputNextBlock.nextConnection;
-        var node = Blockly.ASTNode.createConnectionNode(next);
-        var outNode = node.out();
-        chai.assert.equal(outNode.getType(), Blockly.ASTNode.types.INPUT);
+        const next = this.blocks.outputNextBlock.nextConnection;
+        const node = ASTNode.createConnectionNode(next);
+        const outNode = node.out();
+        chai.assert.equal(outNode.getType(), ASTNode.types.INPUT);
         chai.assert.equal(outNode.getLocation(),
             this.blocks.secondBlock.inputList[0].connection);
       });
       test('fromBlockToStack', function() {
-        var node = Blockly.ASTNode.createBlockNode(this.blocks.statementInput2);
-        var outNode = node.out();
-        chai.assert.equal(outNode.getType(), Blockly.ASTNode.types.STACK);
+        const node = ASTNode.createBlockNode(this.blocks.statementInput2);
+        const outNode = node.out();
+        chai.assert.equal(outNode.getType(), ASTNode.types.STACK);
         chai.assert.equal(outNode.getLocation(), this.blocks.statementInput1);
       });
       test('fromBlockToInput', function() {
-        var input = this.blocks.statementInput2.inputList[1].connection;
-        var node = Blockly.ASTNode.createBlockNode(this.blocks.statementInput3);
-        var outNode = node.out();
-        chai.assert.equal(outNode.getType(), Blockly.ASTNode.types.INPUT);
+        const input = this.blocks.statementInput2.inputList[1].connection;
+        const node = ASTNode.createBlockNode(this.blocks.statementInput3);
+        const outNode = node.out();
+        chai.assert.equal(outNode.getType(), ASTNode.types.INPUT);
         chai.assert.equal(outNode.getLocation(), input);
       });
       test('fromTopBlockToStack', function() {
-        var node = Blockly.ASTNode.createBlockNode(this.blocks.statementInput1);
-        var outNode = node.out();
-        chai.assert.equal(outNode.getType(), Blockly.ASTNode.types.STACK);
+        const node = ASTNode.createBlockNode(this.blocks.statementInput1);
+        const outNode = node.out();
+        chai.assert.equal(outNode.getType(), ASTNode.types.STACK);
         chai.assert.equal(outNode.getLocation(), this.blocks.statementInput1);
       });
       test('fromBlockToStack_OutputConnection', function() {
-        var node = Blockly.ASTNode.createBlockNode(this.blocks.fieldWithOutput2);
-        var outNode = node.out();
-        chai.assert.equal(outNode.getType(), Blockly.ASTNode.types.STACK);
+        const node = ASTNode.createBlockNode(this.blocks.fieldWithOutput2);
+        const outNode = node.out();
+        chai.assert.equal(outNode.getType(), ASTNode.types.STACK);
         chai.assert.equal(outNode.getLocation(), this.blocks.fieldWithOutput2);
       });
       test('fromBlockToInput_OutputConnection', function() {
-        var node = Blockly.ASTNode.createBlockNode(this.blocks.outputNextBlock);
-        var inputConnection = this.blocks.secondBlock.inputList[0].connection;
-        var outNode = node.out();
-        chai.assert.equal(outNode.getType(), Blockly.ASTNode.types.INPUT);
+        const node = ASTNode.createBlockNode(this.blocks.outputNextBlock);
+        const inputConnection = this.blocks.secondBlock.inputList[0].connection;
+        const outNode = node.out();
+        chai.assert.equal(outNode.getType(), ASTNode.types.INPUT);
         chai.assert.equal(outNode.getLocation(), inputConnection);
       });
     });
 
     suite('createFunctions', function() {
       test('createFieldNode', function() {
-        var field = this.blocks.statementInput1.inputList[0].fieldRow[0];
-        var node = Blockly.ASTNode.createFieldNode(field);
+        const field = this.blocks.statementInput1.inputList[0].fieldRow[0];
+        const node = ASTNode.createFieldNode(field);
         chai.assert.equal(node.getLocation(), field);
-        chai.assert.equal(node.getType(), Blockly.ASTNode.types.FIELD);
+        chai.assert.equal(node.getType(), ASTNode.types.FIELD);
         chai.assert.isFalse(node.isConnection());
       });
       test('createConnectionNode', function() {
-        var prevConnection = this.blocks.statementInput4.previousConnection;
-        var node = Blockly.ASTNode.createConnectionNode(prevConnection);
+        const prevConnection = this.blocks.statementInput4.previousConnection;
+        const node = ASTNode.createConnectionNode(prevConnection);
         chai.assert.equal(node.getLocation(), prevConnection);
-        chai.assert.equal(node.getType(), Blockly.ASTNode.types.PREVIOUS);
+        chai.assert.equal(node.getType(), ASTNode.types.PREVIOUS);
         chai.assert.isTrue(node.isConnection());
       });
       test('createInputNode', function() {
-        var input = this.blocks.statementInput1.inputList[0];
-        var node = Blockly.ASTNode.createInputNode(input);
+        const input = this.blocks.statementInput1.inputList[0];
+        const node = ASTNode.createInputNode(input);
         chai.assert.equal(node.getLocation(), input.connection);
-        chai.assert.equal(node.getType(), Blockly.ASTNode.types.INPUT);
+        chai.assert.equal(node.getType(), ASTNode.types.INPUT);
         chai.assert.isTrue(node.isConnection());
       });
       test('createWorkspaceNode', function() {
-        var coordinate = new Blockly.utils.Coordinate(100, 100);
-        var node = Blockly.ASTNode
+        const coordinate = new Blockly.utils.Coordinate(100, 100);
+        const node = ASTNode
             .createWorkspaceNode(this.workspace, coordinate);
         chai.assert.equal(node.getLocation(), this.workspace);
-        chai.assert.equal(node.getType(), Blockly.ASTNode.types.WORKSPACE);
+        chai.assert.equal(node.getType(), ASTNode.types.WORKSPACE);
         chai.assert.equal(node.getWsCoordinate(), coordinate);
         chai.assert.isFalse(node.isConnection());
       });
       test('createStatementConnectionNode', function() {
-        var nextConnection = this.blocks.statementInput1.inputList[1].connection;
-        var inputConnection = this.blocks.statementInput1.inputList[1].connection;
-        var node = Blockly.ASTNode.createConnectionNode(nextConnection);
+        const nextConnection = this.blocks.statementInput1.inputList[1].connection;
+        const inputConnection = this.blocks.statementInput1.inputList[1].connection;
+        const node = ASTNode.createConnectionNode(nextConnection);
         chai.assert.equal(node.getLocation(), inputConnection);
-        chai.assert.equal(node.getType(), Blockly.ASTNode.types.INPUT);
+        chai.assert.equal(node.getType(), ASTNode.types.INPUT);
         chai.assert.isTrue(node.isConnection());
       });
       test('createTopNode-previous', function() {
-        var block = this.blocks.statementInput1;
-        var topNode = Blockly.ASTNode.createTopNode(block);
+        const block = this.blocks.statementInput1;
+        const topNode = ASTNode.createTopNode(block);
         chai.assert.equal(topNode.getLocation(), block.previousConnection);
       });
       test('createTopNode-block', function() {
-        var block = this.blocks.noPrevConnection;
-        var topNode = Blockly.ASTNode.createTopNode(block);
+        const block = this.blocks.noPrevConnection;
+        const topNode = ASTNode.createTopNode(block);
         chai.assert.equal(topNode.getLocation(), block);
       });
       test('createTopNode-output', function() {
-        var block = this.blocks.outputNextBlock;
-        var topNode = Blockly.ASTNode.createTopNode(block);
+        const block = this.blocks.outputNextBlock;
+        const topNode = ASTNode.createTopNode(block);
         chai.assert.equal(topNode.getLocation(), block.outputConnection);
       });
     });

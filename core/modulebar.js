@@ -21,15 +21,15 @@
  */
 'use strict';
 
-goog.provide('Blockly.ModuleBar');
+goog.module('Blockly.ModuleBar');
 
-goog.require('Blockly.Css');
-goog.require('Blockly.Touch');
-goog.require('Blockly.utils');
-goog.require('Blockly.utils.aria');
-goog.require('Blockly.utils.colour');
-goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.object');
+const Css = goog.require('Blockly.Css');
+// const Touch = goog.require('Blockly.Touch');
+const utils = goog.require('Blockly.utils');
+const utilsAria = goog.require('Blockly.utils.aria');
+const utilsColour = goog.require('Blockly.utils.colour');
+const utilsDom = goog.require('Blockly.utils.dom');
+const utilsObject = goog.require('Blockly.utils.object');
 
 
 /**
@@ -38,7 +38,7 @@ goog.require('Blockly.utils.object');
  * @param {!Blockly.WorkspaceSvg} workspace The workspace in which to create new module box.
  * @constructor
  */
-Blockly.ModuleBar = function(workspace) {
+const ModuleBar = function(workspace) {
   /**
    * @type {!Blockly.WorkspaceSvg}
    * @private
@@ -95,7 +95,7 @@ Blockly.ModuleBar = function(workspace) {
 /**
  * Initializes the module bar.
  */
-Blockly.ModuleBar.prototype.init = function() {
+ModuleBar.prototype.init = function() {
   var injectionContainer = this.workspace_.getInjectionDiv();
 
   /**
@@ -127,7 +127,7 @@ Blockly.ModuleBar.prototype.init = function() {
  * Fill the module Bar.
  * @package
  */
-Blockly.ModuleBar.prototype.render = function() {
+ModuleBar.prototype.render = function() {
   this.htmlContainer_.innerHTML = '';
 
   var modules = this.workspace_.getModuleManager().getAllModules();
@@ -141,7 +141,7 @@ Blockly.ModuleBar.prototype.render = function() {
 
     var name = document.createElement('span');
     name.className = 'blocklyModuleName';
-    name.appendChild(Blockly.utils.xml.createTextNode(modules[i].name));
+    name.appendChild(utils.xml.createTextNode(modules[i].name));
     link.appendChild(name);
 
 
@@ -185,7 +185,7 @@ Blockly.ModuleBar.prototype.render = function() {
  * Set whether this module bar's container is visible.
  * @param {boolean} visible Whether the container is visible.
  */
-Blockly.ModuleBar.prototype.setContainerVisible = function(visible) {
+ModuleBar.prototype.setContainerVisible = function(visible) {
   this.htmlContainer_.setAttribute('style', 'display: ' + (visible ? '' : 'none'));
 };
 
@@ -193,7 +193,7 @@ Blockly.ModuleBar.prototype.setContainerVisible = function(visible) {
  * Adds the event listeners.
  * @private
  */
-Blockly.ModuleBar.prototype.attachEvents_ = function() {
+ModuleBar.prototype.attachEvents_ = function() {
   this.onClickWrapper_ = Blockly.bindEventWithChecks_(this.htmlContainer_,
     'click', this, this.onMouseClick_);
 
@@ -211,7 +211,7 @@ Blockly.ModuleBar.prototype.attachEvents_ = function() {
  * Removes the event listeners.
  * @private
  */
-Blockly.ModuleBar.prototype.detachEvents_ = function() {
+ModuleBar.prototype.detachEvents_ = function() {
   if (this.onClickWrapper_) {
     Blockly.unbindEvent_(this.onClickWrapper_);
     this.onClickWrapper_ = null;
@@ -238,7 +238,7 @@ Blockly.ModuleBar.prototype.detachEvents_ = function() {
  * @param {!Event} e The browser event.
  * @private
  */
-Blockly.ModuleBar.prototype.onMouseClick_ = function(e) {
+ModuleBar.prototype.onMouseClick_ = function(e) {
   var role = e.target.getAttribute('role');
 
   switch (role) {
@@ -256,7 +256,7 @@ Blockly.ModuleBar.prototype.onMouseClick_ = function(e) {
  * @param {!Event} e The browser event.
  * @private
  */
-Blockly.ModuleBar.prototype.onMouseDown_ = function(e) {
+ModuleBar.prototype.onMouseDown_ = function(e) {
   var role = e.target.getAttribute('role');
   if (role === 'module-menu-control') {
     return;
@@ -291,7 +291,7 @@ Blockly.ModuleBar.prototype.onMouseDown_ = function(e) {
  * @param {!Event} e The browser event.
  * @private
  */
-Blockly.ModuleBar.prototype.onMouseUp_ = function(e) {
+ModuleBar.prototype.onMouseUp_ = function(e) {
   if (!this.dragDropModuleEl_) {
     return;
   }
@@ -320,7 +320,7 @@ Blockly.ModuleBar.prototype.onMouseUp_ = function(e) {
  * @param {!Event} e The browser event.
  * @private
  */
-Blockly.ModuleBar.prototype.onMouseMove_ = function(e) {
+ModuleBar.prototype.onMouseMove_ = function(e) {
   if (!this.dragDropModuleEl_) {
     return;
   }
@@ -352,7 +352,7 @@ Blockly.ModuleBar.prototype.onMouseMove_ = function(e) {
  * @param {!Event} e The browser event.
  * @private
  */
-Blockly.ModuleBar.prototype.onMouseClick_ = function(e) {
+ModuleBar.prototype.onMouseClick_ = function(e) {
   var role = e.target.getAttribute('role');
 
   switch (role) {
@@ -370,7 +370,7 @@ Blockly.ModuleBar.prototype.onMouseClick_ = function(e) {
  * Activate module control handler.
  * @private
  */
-Blockly.ModuleBar.prototype.handleShowModuleMenu_ = function(e) {
+ModuleBar.prototype.handleShowModuleMenu_ = function(e) {
   var self_ = this;
   var menuOptions = [
     {
@@ -397,7 +397,7 @@ Blockly.ModuleBar.prototype.handleShowModuleMenu_ = function(e) {
  * @param {!Event} e The browser event.
  * @private
  */
-Blockly.ModuleBar.prototype.handleActivateModule_ = function(e) {
+ModuleBar.prototype.handleActivateModule_ = function(e) {
   var moduleEl = this.getModuleElementFromEvent_(e);
   if (!moduleEl) {
     return;
@@ -418,7 +418,7 @@ Blockly.ModuleBar.prototype.handleActivateModule_ = function(e) {
  *     found.
  * @private
  */
-Blockly.ModuleBar.prototype.getModuleElementFromEvent_ = function(e) {
+ModuleBar.prototype.getModuleElementFromEvent_ = function(e) {
   var target = e.target;
   while (target instanceof Element) {
     var moduleId = target.getAttribute('data-module-id');
@@ -439,7 +439,7 @@ Blockly.ModuleBar.prototype.getModuleElementFromEvent_ = function(e) {
  * Create module control handler.
  * @private
  */
-Blockly.ModuleBar.prototype.handleCreateModule_ = function() {
+ModuleBar.prototype.handleCreateModule_ = function() {
   var workspace = this.workspace_;
 
   Blockly.prompt(Blockly.Msg['NEW_MODULE_TITLE'], '', function(moduleName) {
@@ -466,7 +466,7 @@ Blockly.ModuleBar.prototype.handleCreateModule_ = function() {
  * Rename module control handler.
  * @private
  */
-Blockly.ModuleBar.prototype.handleRenameModule_ = function() {
+ModuleBar.prototype.handleRenameModule_ = function() {
   var workspace = this.workspace_;
   var activeModule =  workspace.getModuleManager().getActiveModule();
 
@@ -486,7 +486,7 @@ Blockly.ModuleBar.prototype.handleRenameModule_ = function() {
  * Delete module control handler.
  * @private
  */
-Blockly.ModuleBar.prototype.handleDeleteModule_ = function() {
+ModuleBar.prototype.handleDeleteModule_ = function() {
   var workspace = this.workspace_;
   var activeModule =  workspace.getModuleManager().getActiveModule();
 
@@ -518,94 +518,98 @@ Blockly.ModuleBar.prototype.handleDeleteModule_ = function() {
  * Updates module bar colors from theme.
  * @package
  */
-Blockly.ModuleBar.prototype.updateColourFromTheme = function() {
+ModuleBar.prototype.updateColourFromTheme = function() {
   // TODO: theme
 };
 
 /**
  * Dispose of this moduleBar.
  */
-Blockly.ModuleBar.prototype.dispose = function() {
+ModuleBar.prototype.dispose = function() {
   this.detachEvents_();
 
   this.workspace_.getThemeManager().unsubscribe(this.htmlContainer_);
-  Blockly.utils.dom.removeNode(this.htmlContainer_);
+  utilsDom.removeNode(this.htmlContainer_);
 };
 
 /**
  * CSS for ModuleBar.  See css.js for use.
  */
-Blockly.Css.register([
+Css.register([
   /* eslint-disable indent */
-  '.blocklyModuleBarContainer {',
-    'display: -webkit-box;',
-    'display: -ms-flexbox;',
-    'display: flex;',
-    '-ms-flex-wrap: wrap;',
-    'flex-wrap: wrap;',
-    'list-style: none;',
-    'padding: 0;',
-    'margin: 0;',
-  '}',
+  `
+  .blocklyModuleBarContainer {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  '}
 
 
-  '.blocklyModuleBarTabDropZone {',
-    'border-right: 5px solid #ccc;',
-    'cursor: grab;',
-  '}',
+  .blocklyModuleBarTabDropZone {
+    border-right: 5px solid #ccc;
+    cursor: grab;
+  }
 
-  '.blocklyModuleBarLink {',
-    'display: block;',
-    'padding: 5px;',
-    'text-decoration: none;',
-    'border-top: 1px solid transparent;',
-    'border-left: 1px solid transparent;',
-    'border-right: 1px solid transparent;',
-    'border-top-left-radius: 8px;',
-    'border-top-right-radius: 8px;',
-    'font-family: sans-serif;',
-    'font-size: 16px;',
-  '}',
+  .blocklyModuleBarLink {
+    display: block;
+    padding: 5px;
+    text-decoration: none;
+    border-top: 1px solid transparent;
+    border-left: 1px solid transparent;
+    border-right: 1px solid transparent;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    font-family: sans-serif;
+    font-size: 16px;
+  }
 
-  '.blocklyModuleName {',
-    'margin: 0px 5px;',
-  '}',
+  .blocklyModuleName {
+    margin: 0px 5px;
+  }
 
-  '.blocklyModuleBarLinkActive {',
-    'background-color: #ddd;',
-    'cursor: grab;',
-    'border-color: #ddd;',
-  '}',
+  .blocklyModuleBarLinkActive {
+    background-color: #ddd;
+    cursor: grab;
+    border-color: #ddd;
+  }
 
-  '.blocklyModuleBarTab:not(.blocklyModuleBarTabDropZone) .blocklyModuleBarLink:not(.blocklyModuleBarLinkActive):hover {',
-    'background-color: #e4e4e4;',
-    'border-color: #e4e4e4;',
-  '}',
+  .blocklyModuleBarTab:not(.blocklyModuleBarTabDropZone) .blocklyModuleBarLink:not(.blocklyModuleBarLinkActive):hover {
+    background-color: #e4e4e4;
+    border-color: #e4e4e4;
+  }
 
-  '.blocklyModuleBarTabMenuIcon {',
-    'background-image: url("data:image/svg+xml,%3C%3Fxml version=\'1.0\' encoding=\'iso-8859-1\'%3F%3E%3C!DOCTYPE svg PUBLIC \'-//W3C//DTD SVG 1.1//EN\' \'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\'%3E%3Csvg version=\'1.1\' id=\'Capa_1\' xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\' x=\'0px\' y=\'0px\' width=\'255px\' height=\'255px\' viewBox=\'0 0 255 255\' style=\'enable-background:new 0 0 255 255;\' xml:space=\'preserve\'%3E%3Cg%3E%3Cg id=\'arrow-drop-down\'%3E%3Cpolygon points=\'0,63.75 127.5,191.25 255,63.75 \'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E%0A");',
-  '}',
+  .blocklyModuleBarTabMenuIcon {
+    background-image: url("data:image/svg+xml,%3C%3Fxml version=\'1.0\' encoding=\'iso-8859-1\'%3F%3E%3C!DOCTYPE svg PUBLIC \'-//W3C//DTD SVG 1.1//EN\' \'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\'%3E%3Csvg version=\'1.1\' id=\'Capa_1\' xmlns=\'http://www.w3.org/2000/svg\' xmlns:xlink=\'http://www.w3.org/1999/xlink\' x=\'0px\' y=\'0px\' width=\'255px\' height=\'255px\' viewBox=\'0 0 255 255\' style=\'enable-background:new 0 0 255 255;\' xml:space=\'preserve\'%3E%3Cg%3E%3Cg id=\'arrow-drop-down\'%3E%3Cpolygon points=\'0,63.75 127.5,191.25 255,63.75 \'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E%0A");
+  }
 
-  '.blocklyModuleBarTabCreateIcon {',
-    'background: url(\'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE2LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCINCgkgd2lkdGg9IjM1N3B4IiBoZWlnaHQ9IjM1N3B4IiB2aWV3Qm94PSIwIDAgMzU3IDM1NyIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMzU3IDM1NzsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPGc+DQoJPGcgaWQ9ImFkZCI+DQoJCTxwYXRoIGQ9Ik0zNTcsMjA0SDIwNHYxNTNoLTUxVjIwNEgwdi01MWgxNTNWMGg1MXYxNTNoMTUzVjIwNHoiLz4NCgk8L2c+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8L3N2Zz4NCg==\');',
-    'width: 15px;',
-    'height: 15px;',
-  '}',
+  .blocklyModuleBarTabCreateIcon {
+    background: url(\'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE2LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCINCgkgd2lkdGg9IjM1N3B4IiBoZWlnaHQ9IjM1N3B4IiB2aWV3Qm94PSIwIDAgMzU3IDM1NyIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMzU3IDM1NzsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPGc+DQoJPGcgaWQ9ImFkZCI+DQoJCTxwYXRoIGQ9Ik0zNTcsMjA0SDIwNHYxNTNoLTUxVjIwNEgwdi01MWgxNTNWMGg1MXYxNTNoMTUzVjIwNHoiLz4NCgk8L2c+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8L3N2Zz4NCg==\');
+    width: 15px;
+    height: 15px;
+  }
 
-  '.blocklyModuleBarTabIcon {',
-    'opacity: 0.5;',
-    'cursor: default;',
-    'background-repeat: no-repeat;',
-    'background-size: contain;',
-    'display: inline-block;',
-    'width: 12px;',
-    'height: 12px;',
-    'margin: 0px 2px;',
-  '}',
+  .blocklyModuleBarTabIcon {
+    opacity: 0.5;
+    cursor: default;
+    background-repeat: no-repeat;
+    background-size: contain;
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin: 0px 2px;
+  }
 
-  '.blocklyModuleBarTabIcon:hover {',
-    'opacity: 1;',
-  '}',
+  .blocklyModuleBarTabIcon:hover {
+    opacity: 1;
+  }
 
   /* eslint-enable indent */
+  `
 ]);
+
+exports.ModuleBar = ModuleBar

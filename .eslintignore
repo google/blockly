@@ -1,7 +1,8 @@
 *_compressed*.js
-*_uncompressed*.js
+blockly_uncompressed.js
 gulpfile.js
 /msg/*
+/build/*
 /dist/*
 /core/utils/global.js
 /tests/blocks/*

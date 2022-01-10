@@ -6,34 +6,39 @@
 
 /**
  * @fileoverview Events fired as a result of bubble open.
- * @author kozbial@google.com (Monica Kozbial)
  */
 'use strict';
 
-goog.provide('Blockly.Events.BubbleOpen');
+/**
+ * Events fired as a result of bubble open.
+ * @class
+ */
+goog.module('Blockly.Events.BubbleOpen');
 
-goog.require('Blockly.Events');
-goog.require('Blockly.Events.UiBase');
-goog.require('Blockly.registry');
-goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.BlockSvg');
+const eventUtils = goog.require('Blockly.Events.utils');
+const object = goog.require('Blockly.utils.object');
+const registry = goog.require('Blockly.registry');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {UiBase} = goog.require('Blockly.Events.UiBase');
 
 
 /**
  * Class for a bubble open event.
- * @param {Blockly.BlockSvg} opt_block The associated block. Undefined for a
+ * @param {BlockSvg} opt_block The associated block. Undefined for a
  *    blank event.
  * @param {boolean=} opt_isOpen Whether the bubble is opening (false if
  *    closing). Undefined for a blank event.
- * @param {string=} opt_bubbleType The type of bubble. One of 'mutator', 'comment'
+ * @param {string=} opt_bubbleType The type of bubble. One of 'mutator',
+ *     'comment'
  *    or 'warning'. Undefined for a blank event.
- * @extends {Blockly.Events.UiBase}
+ * @extends {UiBase}
  * @constructor
+ * @alias Blockly.Events.BubbleOpen
  */
-Blockly.Events.BubbleOpen = function(opt_block, opt_isOpen, opt_bubbleType) {
-  var workspaceId = opt_block ? opt_block.workspace.id : undefined;
-  Blockly.Events.BubbleOpen.superClass_.constructor.call(this, workspaceId);
+const BubbleOpen = function(opt_block, opt_isOpen, opt_bubbleType) {
+  const workspaceId = opt_block ? opt_block.workspace.id : undefined;
+  BubbleOpen.superClass_.constructor.call(this, workspaceId);
   this.blockId = opt_block ? opt_block.id : null;
 
   /**
@@ -48,20 +53,20 @@ Blockly.Events.BubbleOpen = function(opt_block, opt_isOpen, opt_bubbleType) {
    */
   this.bubbleType = opt_bubbleType;
 };
-Blockly.utils.object.inherits(Blockly.Events.BubbleOpen, Blockly.Events.UiBase);
+object.inherits(BubbleOpen, UiBase);
 
 /**
  * Type of this event.
  * @type {string}
  */
-Blockly.Events.BubbleOpen.prototype.type = Blockly.Events.BUBBLE_OPEN;
+BubbleOpen.prototype.type = eventUtils.BUBBLE_OPEN;
 
 /**
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
-Blockly.Events.BubbleOpen.prototype.toJson = function() {
-  var json = Blockly.Events.BubbleOpen.superClass_.toJson.call(this);
+BubbleOpen.prototype.toJson = function() {
+  const json = BubbleOpen.superClass_.toJson.call(this);
   json['isOpen'] = this.isOpen;
   json['bubbleType'] = this.bubbleType;
   json['blockId'] = this.blockId;
@@ -72,12 +77,13 @@ Blockly.Events.BubbleOpen.prototype.toJson = function() {
  * Decode the JSON event.
  * @param {!Object} json JSON representation.
  */
-Blockly.Events.BubbleOpen.prototype.fromJson = function(json) {
-  Blockly.Events.BubbleOpen.superClass_.fromJson.call(this, json);
+BubbleOpen.prototype.fromJson = function(json) {
+  BubbleOpen.superClass_.fromJson.call(this, json);
   this.isOpen = json['isOpen'];
   this.bubbleType = json['bubbleType'];
   this.blockId = json['blockId'];
 };
 
-Blockly.registry.register(Blockly.registry.Type.EVENT,
-    Blockly.Events.BUBBLE_OPEN, Blockly.Events.BubbleOpen);
+registry.register(registry.Type.EVENT, eventUtils.BUBBLE_OPEN, BubbleOpen);
+
+exports.BubbleOpen = BubbleOpen;

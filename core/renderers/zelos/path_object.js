@@ -6,40 +6,44 @@
 
 /**
  * @fileoverview An object that owns a block's rendering SVG elements.
- * @author samelh@google.com (Sam El-Husseini)
  */
 
 'use strict';
 
-goog.provide('Blockly.zelos.PathObject');
+/**
+ * An object that owns a block's rendering SVG elements.
+ * @class
+ */
+goog.module('Blockly.zelos.PathObject');
 
-goog.require('Blockly.blockRendering.PathObject');
-goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.object');
-goog.require('Blockly.utils.Svg');
-goog.require('Blockly.zelos.ConstantProvider');
-
-goog.requireType('Blockly.Theme');
+const dom = goog.require('Blockly.utils.dom');
+const object = goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider} = goog.requireType('Blockly.zelos.ConstantProvider');
+const {PathObject: BasePathObject} = goog.require('Blockly.blockRendering.PathObject');
+const {Svg} = goog.require('Blockly.utils.Svg');
+/* eslint-disable-next-line no-unused-vars */
+const {Theme} = goog.requireType('Blockly.Theme');
 
 
 /**
  * An object that handles creating and setting each of the SVG elements
  * used by the renderer.
  * @param {!SVGElement} root The root SVG element.
- * @param {!Blockly.Theme.BlockStyle} style The style object to use for
+ * @param {!Theme.BlockStyle} style The style object to use for
  *     colouring.
- * @param {!Blockly.zelos.ConstantProvider} constants The renderer's constants.
+ * @param {!ConstantProvider} constants The renderer's constants.
  * @constructor
- * @extends {Blockly.blockRendering.PathObject}
+ * @extends {BasePathObject}
  * @package
+ * @alias Blockly.zelos.PathObject
  */
-Blockly.zelos.PathObject = function(root, style, constants) {
-  Blockly.zelos.PathObject.superClass_.constructor.call(this, root, style,
-      constants);
+const PathObject = function(root, style, constants) {
+  PathObject.superClass_.constructor.call(this, root, style, constants);
 
   /**
    * The renderer's constant provider.
-   * @type {!Blockly.zelos.ConstantProvider}
+   * @type {!ConstantProvider}
    */
   this.constants = constants;
 
@@ -74,14 +78,13 @@ Blockly.zelos.PathObject = function(root, style, constants) {
    */
   this.outputShapeType = null;
 };
-Blockly.utils.object.inherits(Blockly.zelos.PathObject,
-    Blockly.blockRendering.PathObject);
+object.inherits(PathObject, BasePathObject);
 
 /**
  * @override
  */
-Blockly.zelos.PathObject.prototype.setPath = function(pathString) {
-  Blockly.zelos.PathObject.superClass_.setPath.call(this, pathString);
+PathObject.prototype.setPath = function(pathString) {
+  PathObject.superClass_.setPath.call(this, pathString);
   if (this.svgPathSelected_) {
     this.svgPathSelected_.setAttribute('d', pathString);
   }
@@ -90,15 +93,15 @@ Blockly.zelos.PathObject.prototype.setPath = function(pathString) {
 /**
  * @override
  */
-Blockly.zelos.PathObject.prototype.applyColour = function(block) {
-  Blockly.zelos.PathObject.superClass_.applyColour.call(this, block);
+PathObject.prototype.applyColour = function(block) {
+  PathObject.superClass_.applyColour.call(this, block);
   // Set shadow stroke colour.
   if (block.isShadow() && block.getParent()) {
     this.svgPath.setAttribute('stroke', block.getParent().style.colourTertiary);
   }
 
   // Apply colour to outlines.
-  for (var key in this.outlines_) {
+  for (const key in this.outlines_) {
     this.outlines_[key].setAttribute('fill', this.style.colourTertiary);
   }
 };
@@ -106,10 +109,10 @@ Blockly.zelos.PathObject.prototype.applyColour = function(block) {
 /**
  * @override
  */
-Blockly.zelos.PathObject.prototype.flipRTL = function() {
-  Blockly.zelos.PathObject.superClass_.flipRTL.call(this);
+PathObject.prototype.flipRTL = function() {
+  PathObject.superClass_.flipRTL.call(this);
   // Mirror each input outline path.
-  for (var key in this.outlines_) {
+  for (const key in this.outlines_) {
     this.outlines_[key].setAttribute('transform', 'scale(-1 1)');
   }
 };
@@ -117,15 +120,15 @@ Blockly.zelos.PathObject.prototype.flipRTL = function() {
 /**
  * @override
  */
-Blockly.zelos.PathObject.prototype.updateSelected = function(enable) {
+PathObject.prototype.updateSelected = function(enable) {
   this.setClass_('blocklySelected', enable);
   if (enable) {
     if (!this.svgPathSelected_) {
       this.svgPathSelected_ =
-        /** @type {!SVGElement} */ (this.svgPath.cloneNode(true));
+          /** @type {!SVGElement} */ (this.svgPath.cloneNode(true));
       this.svgPathSelected_.setAttribute('fill', 'none');
-      this.svgPathSelected_.setAttribute('filter',
-          'url(#' + this.constants.selectedGlowFilterId + ')');
+      this.svgPathSelected_.setAttribute(
+          'filter', 'url(#' + this.constants.selectedGlowFilterId + ')');
       this.svgRoot.appendChild(this.svgPathSelected_);
     }
   } else {
@@ -139,12 +142,11 @@ Blockly.zelos.PathObject.prototype.updateSelected = function(enable) {
 /**
  * @override
  */
-Blockly.zelos.PathObject.prototype.updateReplacementFade = function(
-    enable) {
+PathObject.prototype.updateReplacementFade = function(enable) {
   this.setClass_('blocklyReplaceable', enable);
   if (enable) {
-    this.svgPath.setAttribute('filter',
-        'url(#' + this.constants.replacementGlowFilterId + ')');
+    this.svgPath.setAttribute(
+        'filter', 'url(#' + this.constants.replacementGlowFilterId + ')');
   } else {
     this.svgPath.removeAttribute('filter');
   }
@@ -153,16 +155,15 @@ Blockly.zelos.PathObject.prototype.updateReplacementFade = function(
 /**
  * @override
  */
-Blockly.zelos.PathObject.prototype.updateShapeForInputHighlight = function(
-    conn, enable) {
-  var name = conn.getParentInput().name;
-  var outlinePath = this.getOutlinePath_(name);
+PathObject.prototype.updateShapeForInputHighlight = function(conn, enable) {
+  const name = conn.getParentInput().name;
+  const outlinePath = this.getOutlinePath_(name);
   if (!outlinePath) {
     return;
   }
   if (enable) {
-    outlinePath.setAttribute('filter',
-        'url(#' + this.constants.replacementGlowFilterId + ')');
+    outlinePath.setAttribute(
+        'filter', 'url(#' + this.constants.replacementGlowFilterId + ')');
   } else {
     outlinePath.removeAttribute('filter');
   }
@@ -172,9 +173,9 @@ Blockly.zelos.PathObject.prototype.updateShapeForInputHighlight = function(
  * Method that's called when the drawer is about to draw the block.
  * @package
  */
-Blockly.zelos.PathObject.prototype.beginDrawing = function() {
+PathObject.prototype.beginDrawing = function() {
   this.remainingOutlines_ = Object.create(null);
-  for (var key in this.outlines_) {
+  for (const key in this.outlines_) {
     // The value set here isn't used anywhere, we are just using the
     // object as a Set data structure.
     this.remainingOutlines_[key] = 1;
@@ -185,11 +186,11 @@ Blockly.zelos.PathObject.prototype.beginDrawing = function() {
  * Method that's called when the drawer is done drawing.
  * @package
  */
-Blockly.zelos.PathObject.prototype.endDrawing = function() {
+PathObject.prototype.endDrawing = function() {
   // Go through all remaining outlines that were not used this draw pass, and
   // remove them.
   if (this.remainingOutlines_) {
-    for (var key in this.remainingOutlines_) {
+    for (const key in this.remainingOutlines_) {
       this.removeOutlinePath_(key);
     }
   }
@@ -203,8 +204,8 @@ Blockly.zelos.PathObject.prototype.endDrawing = function() {
  * @param {string} pathString The path.
  * @package
  */
-Blockly.zelos.PathObject.prototype.setOutlinePath = function(name, pathString) {
-  var outline = this.getOutlinePath_(name);
+PathObject.prototype.setOutlinePath = function(name, pathString) {
+  const outline = this.getOutlinePath_(name);
   outline.setAttribute('d', pathString);
   outline.setAttribute('fill', this.style.colourTertiary);
 };
@@ -215,13 +216,14 @@ Blockly.zelos.PathObject.prototype.setOutlinePath = function(name, pathString) {
  * @return {!SVGElement} The SVG outline path.
  * @private
  */
-Blockly.zelos.PathObject.prototype.getOutlinePath_ = function(name) {
+PathObject.prototype.getOutlinePath_ = function(name) {
   if (!this.outlines_[name]) {
-    this.outlines_[name] = Blockly.utils.dom.createSvgElement(
-        Blockly.utils.Svg.PATH, {
+    this.outlines_[name] = dom.createSvgElement(
+        Svg.PATH, {
           'class': 'blocklyOutlinePath',
-          // IE doesn't like paths without the data definition, set empty default
-          'd': ''
+          // IE doesn't like paths without the data definition, set empty
+          // default
+          'd': '',
         },
         this.svgRoot);
   }
@@ -236,7 +238,9 @@ Blockly.zelos.PathObject.prototype.getOutlinePath_ = function(name) {
  * @param {string} name The input name.
  * @private
  */
-Blockly.zelos.PathObject.prototype.removeOutlinePath_ = function(name) {
+PathObject.prototype.removeOutlinePath_ = function(name) {
   this.outlines_[name].parentNode.removeChild(this.outlines_[name]);
   delete this.outlines_[name];
 };
+
+exports.PathObject = PathObject;

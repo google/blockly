@@ -8,15 +8,16 @@
  * @fileoverview Utility methods for rectangle manipulation.
  * These methods are not specific to Blockly, and could be factored out into
  * a JavaScript framework such as Closure.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
 /**
- * @name Blockly.utils.Rect
- * @namespace
+ * Utility methods for rectangle manipulation.
+ * These methods are not specific to Blockly, and could be factored out into
+ * a JavaScript framework such as Closure.
+ * @class
  */
-goog.provide('Blockly.utils.Rect');
+goog.module('Blockly.utils.Rect');
 
 
 /**
@@ -27,8 +28,9 @@ goog.provide('Blockly.utils.Rect');
  * @param {number} right Right.
  * @struct
  * @constructor
+ * @alias Blockly.utils.Rect
  */
-Blockly.utils.Rect = function(top, bottom, left, right) {
+const Rect = function(top, bottom, left, right) {
   /** @type {number} */
   this.top = top;
 
@@ -49,18 +51,21 @@ Blockly.utils.Rect = function(top, bottom, left, right) {
  * @param {number} y The y coordinate to test for containment.
  * @return {boolean} Whether this rectangle contains given coordinate.
  */
-Blockly.utils.Rect.prototype.contains = function(x, y) {
+Rect.prototype.contains = function(x, y) {
   return x >= this.left && x <= this.right && y >= this.top && y <= this.bottom;
 };
 
 /**
  * Tests whether this rectangle intersects the provided rectangle.
  * Assumes that the coordinate system increases going down and left.
- * @param {!Blockly.utils.Rect} other The other rectangle to check for
+ * @param {!Rect} other The other rectangle to check for
  *    intersection with.
  * @return {boolean} Whether this rectangle intersects the provided rectangle.
  */
-Blockly.utils.Rect.prototype.intersects = function(other) {
-  return !(this.left > other.right || this.right < other.left ||
+Rect.prototype.intersects = function(other) {
+  return !(
+      this.left > other.right || this.right < other.left ||
       this.top > other.bottom || this.bottom < other.top);
 };
+
+exports.Rect = Rect;

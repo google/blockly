@@ -4,6 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.helpers');
+
+const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
+const eventUtils = goog.require('Blockly.Events.utils');
+const {Blocks} = goog.require('Blockly.blocks');
+
+
 /**
  * Check if a variable with the given values exists.
  * @param {Blockly.Workspace|Blockly.VariableMap} container The workspace  or
@@ -13,16 +20,17 @@
  * @param {!string} id The expected id of the variable.
  */
 function assertVariableValues(container, name, type, id) {
-  var variable = container.getVariableById(id);
+  const variable = container.getVariableById(id);
   chai.assert.isDefined(variable);
   chai.assert.equal(variable.name, name);
   chai.assert.equal(variable.type, type);
   chai.assert.equal(variable.getId(), id);
 }
+exports.assertVariableValues = assertVariableValues;
 
 /**
  * Asserts that the given function logs the provided warning messages.
- * @param {function} innerFunc The function to call.
+ * @param {function()} innerFunc The function to call.
  * @param {Array<!RegExp>|!RegExp} messages A list of regex for the expected
  *    messages (in the expected order).
  */
@@ -30,20 +38,22 @@ function assertWarnings(innerFunc, messages) {
   if (!Array.isArray(messages)) {
     messages = [messages];
   }
-  var warnings = testHelpers.captureWarnings(innerFunc);
+  const warnings = testHelpers.captureWarnings(innerFunc);
   chai.assert.lengthOf(warnings, messages.length);
   messages.forEach((message, i) => {
     chai.assert.match(warnings[i], message);
   });
 }
+exports.assertWarnings = assertWarnings;
 
 /**
  * Asserts that the given function logs no warning messages.
- * @param {function} innerFunc The function to call.
+ * @param {function()} innerFunc The function to call.
  */
 function assertNoWarnings(innerFunc) {
   assertWarnings(innerFunc, []);
 }
+exports.assertNoWarnings = assertNoWarnings;
 
 /**
  * Stubs Blockly.utils.deprecation.warn call.
@@ -52,6 +62,7 @@ function assertNoWarnings(innerFunc) {
 function createDeprecationWarningStub() {
   return sinon.stub(Blockly.utils.deprecation, 'warn');
 }
+exports.createDeprecationWarningStub = createDeprecationWarningStub;
 
 /**
  * Asserts whether the given deprecation warning stub or call was called with
@@ -63,6 +74,7 @@ function createDeprecationWarningStub() {
 function assertDeprecationWarningCall(spyOrSpyCall, functionName) {
   sinon.assert.calledWith(spyOrSpyCall, functionName);
 }
+exports.assertDeprecationWarningCall = assertDeprecationWarningCall;
 
 /**
  * Asserts that there was a single deprecation warning call with the given
@@ -75,6 +87,7 @@ function assertSingleDeprecationWarningCall(spy, functionName) {
   sinon.assert.calledOnce(spy);
   assertDeprecationWarningCall(spy.getCall(0), functionName);
 }
+exports.assertSingleDeprecationWarningCall = assertSingleDeprecationWarningCall;
 
 /**
  * Safely disposes of Blockly workspace, logging any errors.
@@ -88,10 +101,11 @@ function workspaceTeardown(workspace) {
     workspace.dispose();
     this.clock.runAll();  // Run all remaining queued setTimeout calls.
   } catch (e) {
-    var testRef = this.currentTest || this.test;
+    const testRef = this.currentTest || this.test;
     console.error(testRef.fullTitle() + '\n', e);
   }
 }
+exports.workspaceTeardown = workspaceTeardown;
 
 /**
  * Creates stub for Blockly.Events.fire that advances the clock forward after
@@ -101,7 +115,7 @@ function workspaceTeardown(workspace) {
  * @private
  */
 function createEventsFireStubFireImmediately_(clock) {
-  var stub = sinon.stub(Blockly.Events, 'fire');
+  const stub = sinon.stub(eventUtils, 'fire');
   stub.callsFake(function(event) {
     // Call original method.
     stub.wrappedMethod.call(this, ...arguments);
@@ -121,6 +135,7 @@ function createEventsFireStubFireImmediately_(clock) {
 function addMessageToCleanup(sharedCleanupObj, message) {
   sharedCleanupObj.messagesCleanup_.push(message);
 }
+exports.addMessageToCleanup = addMessageToCleanup;
 
 /**
  * Adds block type to shared cleanup object so that it is cleaned from
@@ -132,6 +147,7 @@ function addMessageToCleanup(sharedCleanupObj, message) {
 function addBlockTypeToCleanup(sharedCleanupObj, blockType) {
   sharedCleanupObj.blockTypesCleanup_.push(blockType);
 }
+exports.addBlockTypeToCleanup = addBlockTypeToCleanup;
 
 /**
  * Wraps Blockly.defineBlocksWithJsonArray using stub in order to keep track of
@@ -142,7 +158,7 @@ function addBlockTypeToCleanup(sharedCleanupObj, blockType) {
  * @private
  */
 function wrapDefineBlocksWithJsonArrayWithCleanup_(sharedCleanupObj) {
-  var stub = sinon.stub(Blockly, 'defineBlocksWithJsonArray');
+  const stub = sinon.stub(Blockly, 'defineBlocksWithJsonArray');
   stub.callsFake(function(jsonArray) {
     if (jsonArray) {
       jsonArray.forEach((jsonBlock) => {
@@ -185,13 +201,13 @@ function sharedTestSetup(options = {}) {
   }
   this.sharedCleanup = {
     blockTypesCleanup_: [],
-    messagesCleanup_: []
-
+    messagesCleanup_: [],
   };
   this.blockTypesCleanup_ = this.sharedCleanup.blockTypesCleanup_;
   this.messagesCleanup_ = this.sharedCleanup.messagesCleanup_;
   wrapDefineBlocksWithJsonArrayWithCleanup_(this.sharedCleanup);
 }
+exports.sharedTestSetup = sharedTestSetup;
 
 /**
  * Shared cleanup method that clears up pending setTimeout calls, disposes of
@@ -199,10 +215,9 @@ function sharedTestSetup(options = {}) {
  * outermost suite using sharedTestTeardown.call(this).
  */
 function sharedTestTeardown() {
-  var testRef = this.currentTest || this.test;
+  const testRef = this.currentTest || this.test;
   if (!this.sharedSetupCalled_) {
-    console.error('"' + testRef.fullTitle() +
-        '" did not call sharedTestSetup');
+    console.error('"' + testRef.fullTitle() + '" did not call sharedTestSetup');
   }
 
   try {
@@ -216,32 +231,38 @@ function sharedTestTeardown() {
     console.error(testRef.fullTitle() + '\n', e);
   } finally {
     // Clear Blockly.Event state.
-    Blockly.Events.setGroup(false);
-    Blockly.Events.disabled_ = 0;
-    if (Blockly.Events.FIRE_QUEUE_.length) {
+    eventUtils.setGroup(false);
+    while (!eventUtils.isEnabled()) {
+      eventUtils.enable();
+    }
+    eventUtils.setRecordUndo(true);
+    if (eventUtils.TEST_ONLY.FIRE_QUEUE.length) {
       // If this happens, it may mean that some previous test is missing cleanup
       // (i.e. a previous test added an event to the queue on a timeout that
       // did not use a stubbed clock).
-      Blockly.Events.FIRE_QUEUE_.length = 0;
-      console.warn(testRef.fullTitle() +
-          '" needed cleanup of Blockly.Events.FIRE_QUEUE_. This may indicate ' +
-          'leakage from an earlier test');
+      eventUtils.TEST_ONLY.FIRE_QUEUE.length = 0;
+      console.warn('"' + testRef.fullTitle() +
+          '" needed cleanup of Blockly.Events.TEST_ONLY.FIRE_QUEUE. This may ' +
+          'indicate leakage from an earlier test');
     }
 
     // Restore all stubbed methods.
     this.sharedSetupSandbox_.restore();
     sinon.restore();
 
-    var blockTypes = this.sharedCleanup.blockTypesCleanup_;
+    const blockTypes = this.sharedCleanup.blockTypesCleanup_;
     for (let i = 0; i < blockTypes.length; i++) {
-      delete Blockly.Blocks[blockTypes[i]];
+      delete Blocks[blockTypes[i]];
     }
-    var messages = this.sharedCleanup.messagesCleanup_;
+    const messages = this.sharedCleanup.messagesCleanup_;
     for (let i = 0; i < messages.length; i++) {
       delete Blockly.Msg[messages[i]];
     }
+
+    Blockly.WidgetDiv.testOnly_setDiv(null);
   }
 }
+exports.sharedTestTeardown = sharedTestTeardown;
 
 /**
  * Creates stub for Blockly.utils.genUid that returns the provided id or ids.
@@ -253,9 +274,9 @@ function sharedTestTeardown() {
  * @return {!SinonStub} The created stub.
  */
 function createGenUidStubWithReturns(returnIds) {
-  var stub = sinon.stub(Blockly.utils, "genUid");
+  const stub = sinon.stub(Blockly.utils.idGenerator.TEST_ONLY, "genUid");
   if (Array.isArray(returnIds)) {
-    for (var i = 0; i < returnIds.length; i++) {
+    for (let i = 0; i < returnIds.length; i++) {
       stub.onCall(i).returns(returnIds[i]);
     }
   } else {
@@ -263,6 +284,7 @@ function createGenUidStubWithReturns(returnIds) {
   }
   return stub;
 }
+exports.createGenUidStubWithReturns = createGenUidStubWithReturns;
 
 /**
  * Creates spy for workspace fireChangeListener
@@ -273,6 +295,7 @@ function createGenUidStubWithReturns(returnIds) {
 function createFireChangeListenerSpy(workspace) {
   return sinon.spy(workspace, 'fireChangeListener');
 }
+exports.createFireChangeListenerSpy = createFireChangeListenerSpy;
 
 /**
  * Asserts whether the given xml property has the expected property.
@@ -282,7 +305,7 @@ function createFireChangeListenerSpy(workspace) {
  * @private
  */
 function assertXmlPropertyEqual_(xmlValue, expectedValue, message) {
-  var value = Blockly.Xml.domToText(xmlValue);
+  const value = Blockly.Xml.domToText(xmlValue);
   if (expectedValue instanceof Node) {
     expectedValue = Blockly.Xml.domToText(expectedValue);
   }
@@ -298,8 +321,8 @@ function assertXmlPropertyEqual_(xmlValue, expectedValue, message) {
  */
 function assertXmlProperties_(obj, expectedXmlProperties) {
   Object.keys(expectedXmlProperties).map((key) => {
-    var value = obj[key];
-    var expectedValue = expectedXmlProperties[key];
+    const value = obj[key];
+    const expectedValue = expectedXmlProperties[key];
     if (expectedValue === undefined) {
       chai.assert.isUndefined(value,
           'Expected ' + key + ' property to be undefined');
@@ -333,7 +356,7 @@ function isXmlProperty_(key) {
  */
 function assertEventEquals(event, expectedType,
     expectedWorkspaceId, expectedBlockId, expectedProperties, isUiEvent = false, message) {
-  var prependMessage = message ? message + ' ' : '';
+  let prependMessage = message ? message + ' ' : '';
   prependMessage += 'Event fired ';
   chai.assert.equal(event.type, expectedType,
       prependMessage + 'type');
@@ -342,8 +365,8 @@ function assertEventEquals(event, expectedType,
   chai.assert.equal(event.blockId, expectedBlockId,
       prependMessage + 'block id');
   Object.keys(expectedProperties).map((key) => {
-    var value = event[key];
-    var expectedValue = expectedProperties[key];
+    const value = event[key];
+    const expectedValue = expectedProperties[key];
     if (expectedValue === undefined) {
       chai.assert.isUndefined(value, prependMessage + key);
       return;
@@ -363,6 +386,7 @@ function assertEventEquals(event, expectedType,
     chai.assert.isFalse(event.isUiEvent);
   }
 }
+exports.assertEventEquals = assertEventEquals;
 
 /**
  * Asserts that an event with the given values was fired.
@@ -381,10 +405,11 @@ function assertEventFired(spy, instanceType, expectedProperties,
     workspaceId: expectedWorkspaceId,
     blockId: expectedBlockId,
   }, expectedProperties);
-  var expectedEvent =
+  const expectedEvent =
       sinon.match.instanceOf(instanceType).and(sinon.match(expectedProperties));
   sinon.assert.calledWith(spy, expectedEvent);
 }
+exports.assertEventFired = assertEventFired;
 
 /**
  * Asserts that an event with the given values was not fired.
@@ -405,21 +430,22 @@ function assertEventNotFired(spy, instanceType, expectedProperties,
   if (expectedBlockId !== undefined) {
     expectedProperties.blockId = expectedBlockId;
   }
-  var expectedEvent =
+  const expectedEvent =
       sinon.match.instanceOf(instanceType).and(sinon.match(expectedProperties));
   sinon.assert.neverCalledWith(spy, expectedEvent);
 }
+exports.assertEventNotFired = assertEventNotFired;
 
 /**
  * Filters out xml properties from given object based on key.
  * @param {Object<string, *>} properties The properties to filter.
- * @return {[Object<string, *>, Object<string, *>]} A list containing split non
- *    xml properties and xml properties.
+ * @return {Array<Object<string, *>>} A list containing split non
+ *    xml properties and xml properties. [Object<string, *>, Object<string, *>]
  * @private
  */
 function splitByXmlProperties_(properties) {
-  var xmlProperties = {};
-  var nonXmlProperties = {};
+  const xmlProperties = {};
+  const nonXmlProperties = {};
   Object.keys(properties).forEach((key) => {
     if (isXmlProperty_(key)) {
       xmlProperties[key] = properties[key];
@@ -445,77 +471,177 @@ function splitByXmlProperties_(properties) {
  */
 function assertNthCallEventArgEquals(spy, n, instanceType, expectedProperties,
     expectedWorkspaceId, expectedBlockId) {
-  var nthCall = spy.getCall(n);
-  var splitProperties = splitByXmlProperties_(expectedProperties);
-  var nonXmlProperties = splitProperties[0];
-  var xmlProperties = splitProperties[1];
+  const nthCall = spy.getCall(n);
+  const splitProperties = splitByXmlProperties_(expectedProperties);
+  const nonXmlProperties = splitProperties[0];
+  const xmlProperties = splitProperties[1];
 
   assertEventFired(nthCall, instanceType, nonXmlProperties, expectedWorkspaceId,
       expectedBlockId);
-  var eventArg = nthCall.firstArg;
+  const eventArg = nthCall.firstArg;
   assertXmlProperties_(eventArg, xmlProperties);
 }
+exports.assertNthCallEventArgEquals = assertNthCallEventArgEquals;
 
-function defineStackBlock(sharedCleanupObj) {
+function defineStackBlock(name = 'stack_block') {
   Blockly.defineBlocksWithJsonArray([{
-    "type": "stack_block",
+    "type": name,
     "message0": "",
     "previousStatement": null,
-    "nextStatement": null
+    "nextStatement": null,
   }]);
 }
+exports.defineStackBlock = defineStackBlock;
 
-function defineRowBlock(sharedCleanupObj) {
+function defineRowBlock(name = 'row_block') {
   Blockly.defineBlocksWithJsonArray([{
-    "type": "row_block",
+    "type": name,
     "message0": "%1",
     "args0": [
       {
         "type": "input_value",
-        "name": "INPUT"
-      }
+        "name": "INPUT",
+      },
     ],
-    "output": null
+    "output": null,
   }]);
 }
+exports.defineRowBlock = defineRowBlock;
 
-function defineStatementBlock(sharedCleanupObj) {
+function defineStatementBlock(name = 'statement_block') {
   Blockly.defineBlocksWithJsonArray([{
-    "type": "statement_block",
+    "type": name,
     "message0": "%1",
     "args0": [
       {
         "type": "input_statement",
-        "name": "NAME"
-      }
+        "name": "NAME",
+      },
     ],
     "previousStatement": null,
     "nextStatement": null,
     "colour": 230,
     "tooltip": "",
-    "helpUrl": ""
+    "helpUrl": "",
   }]);
 }
-function defineBasicBlockWithField(sharedCleanupObj) {
+exports.defineStatementBlock = defineStatementBlock;
+
+function defineBasicBlockWithField(name = 'test_field_block') {
   Blockly.defineBlocksWithJsonArray([{
-    "type": "test_field_block",
+    "type": name,
     "message0": "%1",
     "args0": [
       {
         "type": "field_input",
-        "name": "NAME"
-      }
+        "name": "NAME",
+      },
     ],
-    "output": null
+    "output": null,
   }]);
 }
+exports.defineBasicBlockWithField = defineBasicBlockWithField;
+
+function defineMutatorBlocks() {
+  Blockly.defineBlocksWithJsonArray([
+    {
+      'type': 'xml_block',
+      'mutator': 'xml_mutator',
+    },
+    {
+      'type': 'jso_block',
+      'mutator': 'jso_mutator',
+    },
+    {
+      'type': 'checkbox_block',
+      'message0': '%1',
+      'args0': [
+        {
+          'type': 'field_checkbox',
+          'name': 'CHECK',
+        },
+      ],
+    },
+  ]);
+
+  const xmlMutator = {
+    hasInput: false,
+
+    mutationToDom: function() {
+      const mutation = Blockly.utils.xml.createElement('mutation');
+      mutation.setAttribute('hasInput', this.hasInput);
+      return mutation;
+    },
+
+    domToMutation: function(mutation) {
+      this.hasInput = mutation.getAttribute('hasInput') == 'true';
+      this.updateShape();
+    },
+
+    decompose: function(workspace) {
+      const topBlock = workspace.newBlock('checkbox_block', 'check_block');
+      topBlock.initSvg();
+      topBlock.render();
+      return topBlock;
+    },
+
+    compose: function(topBlock) {
+      this.hasInput = topBlock.getFieldValue('CHECK') == 'TRUE';
+      this.updateShape();
+    },
+
+    updateShape: function() {
+      if (this.hasInput && !this.getInput('INPUT')) {
+        this.appendValueInput('INPUT');
+      } else if (!this.hasInput && this.getInput('INPUT')) {
+        this.removeInput('INPUT');
+      }
+    },
+  };
+  Blockly.Extensions.registerMutator('xml_mutator', xmlMutator);
+
+  const jsoMutator = {
+    hasInput: false,
+
+    saveExtraState: function() {
+      return {hasInput: this.hasInput};
+    },
+
+    loadExtraState: function(state) {
+      this.hasInput = state.hasInput || false;
+      this.updateShape();
+    },
+
+    decompose: function(workspace) {
+      const topBlock = workspace.newBlock('checkbox_block', 'check_block');
+      topBlock.initSvg();
+      topBlock.render();
+      return topBlock;
+    },
+
+    compose: function(topBlock) {
+      this.hasInput = topBlock.getFieldValue('CHECK') == 'TRUE';
+      this.updateShape();
+    },
+
+    updateShape: function() {
+      if (this.hasInput && !this.getInput('INPUT')) {
+        this.appendValueInput('INPUT');
+      } else if (!this.hasInput && this.getInput('INPUT')) {
+        this.removeInput('INPUT');
+      }
+    },
+  };
+  Blockly.Extensions.registerMutator('jso_mutator', jsoMutator);
+}
+exports.defineMutatorBlocks = defineMutatorBlocks;
 
 function createTestBlock() {
   return {
-    id: 'test',
-    rendered: false,
-    workspace: {
-      rendered: false
+    'id': 'test',
+    'rendered': false,
+    'workspace': {
+      'rendered': false,
     },
     'isShadow': function() {
       return false;
@@ -524,13 +650,15 @@ function createTestBlock() {
     'updateVarName': Blockly.Block.prototype.updateVarName,
   };
 }
+exports.createTestBlock = createTestBlock;
 
 function createRenderedBlock(workspaceSvg, type) {
-  var block = workspaceSvg.newBlock(type);
+  const block = workspaceSvg.newBlock(type);
   block.initSvg();
   block.render();
   return block;
 }
+exports.createRenderedBlock = createRenderedBlock;
 
 /**
  * Triggers pointer event on target.
@@ -555,43 +683,27 @@ function dispatchPointerEvent(target, type, properties) {
   const event = new PointerEvent(type, eventInitDict);
   target.dispatchEvent(event);
 }
+exports.dispatchPointerEvent = dispatchPointerEvent;
 
 /**
  * Creates a key down event used for testing.
  * @param {number} keyCode The keycode for the event. Use Blockly.utils.KeyCodes enum.
- * @param {string} type The type of the target. This only matters for the
- *     Blockly.utils.isTargetInput method.
- * @param {Array<number>} modifiers A list of modifiers. Use Blockly.utils.KeyCodes enum.
- * @return {{keyCode: *, getModifierState: (function(): boolean),
- *     preventDefault: preventDefault, target: {type: *}}} The mocked keydown event.
+ * @param {!Array<number>=} modifiers A list of modifiers. Use Blockly.utils.KeyCodes enum.
+ * @return {!KeyboardEvent} The mocked keydown event.
  */
-function createKeyDownEvent(keyCode, type, modifiers) {
-  var event = {
+function createKeyDownEvent(keyCode, modifiers) {
+  const event = {
     keyCode: keyCode,
-    target: {type: type},
-    getModifierState: function(name) {
-      if (name == 'Shift' && this.shiftKey) {
-        return true;
-      } else if (name == 'Control' && this.ctrlKey) {
-        return true;
-      } else if (name == 'Meta' && this.metaKey) {
-        return true;
-      } else if (name == 'Alt' && this.altKey) {
-        return true;
-      }
-      return false;
-    },
-    preventDefault: function() {}
   };
   if (modifiers && modifiers.length > 0) {
-    event.altKey = modifiers.indexOf(Blockly.utils.KeyCodes.ALT) > -1;
-    event.ctrlKey = modifiers.indexOf(Blockly.utils.KeyCodes.CTRL) > -1;
-    event.metaKey = modifiers.indexOf(Blockly.utils.KeyCodes.META) > -1;
-    event.shiftKey = modifiers.indexOf(Blockly.utils.KeyCodes.SHIFT) > -1;
+    event.altKey = modifiers.indexOf(KeyCodes.ALT) > -1;
+    event.ctrlKey = modifiers.indexOf(KeyCodes.CTRL) > -1;
+    event.metaKey = modifiers.indexOf(KeyCodes.META) > -1;
+    event.shiftKey = modifiers.indexOf(KeyCodes.SHIFT) > -1;
   }
-  return event;
+  return new KeyboardEvent('keydown', event);
 }
-
+exports.createKeyDownEvent = createKeyDownEvent;
 
 /**
  * Simulates mouse click by triggering relevant mouse events.
@@ -604,3 +716,4 @@ function simulateClick(target, properties) {
   dispatchPointerEvent(target, 'pointerup', properties);
   dispatchPointerEvent(target, 'click', properties);
 }
+exports.simulateClick = simulateClick;

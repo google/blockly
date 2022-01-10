@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 # Consolidates duplicate key-value pairs in a JSON file.
 # If the same key is used with different values, no warning is given,

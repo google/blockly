@@ -44,10 +44,10 @@ function sortRequires() {
         const requireTypesList = [];
         let firstIndex;
         let lastIndex;
-        while ((match = re.exec(contents)) != null) {
-          if (match[1] == 'require') requiresList.push(match[2]);
-          if (match[1] == 'requireType') requireTypesList.push(match[2]);
-          if (firstIndex == undefined) {
+        while ((match = re.exec(contents)) !== null) {
+          if (match[1] === 'require') requiresList.push(match[2]);
+          if (match[1] === 'requireType') requireTypesList.push(match[2]);
+          if (firstIndex === undefined) {
             firstIndex = match.index;
           } else {
             lastIndex = re.lastIndex;
@@ -70,7 +70,7 @@ function sortRequires() {
             '';
         const requires = `${requiresSection}${requireTypesSection}\n`;
 
-        if (firstIndex != undefined & lastIndex != undefined) {
+        if (firstIndex !== undefined & lastIndex !== undefined) {
           file.contents = Buffer.from(
               contents.substring(0, firstIndex) + requires +
               contents.substring(lastIndex).trimStart());

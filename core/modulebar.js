@@ -96,7 +96,7 @@ const ModuleBar = function(workspace) {
  * Initializes the module bar.
  */
 ModuleBar.prototype.init = function() {
-  var injectionContainer = this.workspace_.getInjectionDiv();
+  const injectionContainer = this.workspace_.getInjectionDiv();
 
   /**
    * HTML container for the ModuleBar.
@@ -111,15 +111,6 @@ ModuleBar.prototype.init = function() {
   }
 
   this.attachEvents_();
-
-  // TODO: theme settings
-  /*
-  var themeManager = workspace.getThemeManager();
-  themeManager.subscribe(this.htmlContainer_, 'moduleBarBackgroundColour',
-      'background-color');
-  themeManager.subscribe(this.htmlContainer_, 'moduleBarForegroundColour', 'color');
-  */
-
   this.render();
 };
 
@@ -130,26 +121,29 @@ ModuleBar.prototype.init = function() {
 ModuleBar.prototype.render = function() {
   this.htmlContainer_.innerHTML = '';
 
-  var modules = this.workspace_.getModuleManager().getAllModules();
+  const modules = this.workspace_.getModuleManager().getAllModules();
+
   for (var i = 0; i < modules.length; i++) {
-    var tab = document.createElement('li');
+    const tab = document.createElement('li');
+
     tab.className = 'blocklyModuleBarTab';
     tab.setAttribute('data-module-id', modules[i].getId());
     tab.setAttribute('ondragstart', 'return false;');
 
-    var link = document.createElement('a');
+    const link = document.createElement('a');
+    const name = document.createElement('span');
 
-    var name = document.createElement('span');
     name.className = 'blocklyModuleName';
-    name.appendChild(utils.xml.createTextNode(modules[i].name));
+    name.appendChild(utils.xml.createTextNode(modules[i].getName()));
     link.appendChild(name);
 
+    const activeModule = this.workspace_.getModuleManager().getActiveModule();
 
-    var activeModule = this.workspace_.getModuleManager().getActiveModule();
     if (activeModule && modules[i].getId() === activeModule.getId()) {
       link.className = 'blocklyModuleBarLink blocklyModuleBarLinkActive';
 
-      var menuIcon = document.createElement('span');
+      const menuIcon = document.createElement('span');
+
       menuIcon.className = 'blocklyModuleBarTabIcon blocklyModuleBarTabMenuIcon';
       menuIcon.setAttribute('role', 'module-menu-control');
       link.appendChild(menuIcon);
@@ -533,10 +527,9 @@ ModuleBar.prototype.dispose = function() {
 };
 
 /**
- * CSS for ModuleBar.  See css.js for use.
+ * CSS for ModuleBar. See css.js for use.
  */
-Css.register([
-  /* eslint-disable indent */
+Css.register(
   `
   .blocklyModuleBarContainer {
     display: -webkit-box;
@@ -547,7 +540,7 @@ Css.register([
     list-style: none;
     padding: 0;
     margin: 0;
-  '}
+  }
 
 
   .blocklyModuleBarTabDropZone {
@@ -607,9 +600,8 @@ Css.register([
   .blocklyModuleBarTabIcon:hover {
     opacity: 1;
   }
-
-  /* eslint-enable indent */
-  `
-]);
+  `,
+  'modulebar'
+);
 
 exports.ModuleBar = ModuleBar

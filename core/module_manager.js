@@ -50,7 +50,7 @@ const ModuleManager = function(workspace) {
    * @private
    * @type {ModuleModel}
    */
-  this.defaultModule_ =  new ModuleModel(workspace,Blockly.Msg['DEFAULT_MODULE_NAME'], 'general');
+  this.defaultModule_ =  new ModuleModel(workspace, 'DEFAULT_MODULE_NAME', 'general');
 
   /**
    * A map from module type to list of module names.  The lists contain all
@@ -120,8 +120,13 @@ ModuleManager.prototype.createDefaultModuleIfNeed = function() {
  * @param {string} newName New module name.
  */
 ModuleManager.prototype.renameModule = function(module, newName) {
-  var previousName = module.name;
+  const previousName = module.name;
   module.name = newName;
+
+  if (module._translationKey) {
+    module._translationKey = null;
+  }
+
   if (this.workspace instanceof Blockly.WorkspaceSvg && this.workspace.getModuleBar()) {
     this.workspace.getModuleBar().render();
   }
@@ -149,7 +154,7 @@ ModuleManager.prototype.moveModule = function(module, newOrder) {
 
 /**
  * Create a module with a given name, optional type, and optional ID.
- * @param {string} name The name of the module.
+ * @param {string} name The name of the module. It can be verbose name or key of Blockly.Msg
  * @param {?string=} opt_id The unique ID of the module. This will default to
  *     a UUID.
 *  @param {?number=} scrollX WS horizontal scrolling offset in pixel units.
@@ -162,10 +167,12 @@ ModuleManager.prototype.createModule = function(name, opt_id, scrollX, scrollY, 
     return this.getModuleById(opt_id);
   }
 
-  var id = opt_id || Blockly.utils.genUid();
-  var module = new ModuleModel(this.workspace, name, id);
+  const id = opt_id || Blockly.utils.genUid();
+  const module = new ModuleModel(this.workspace, name, id);
+
   module.scrollX = scrollX || 0;
   module.scrollY = scrollY || 0;
+
   if (scale) {
     module.scale = scale
   }
@@ -276,12 +283,13 @@ ModuleManager.prototype.fireMoveBlockToModule_ = function(block, newModuleId, pr
  * @return {ModuleModel} previous sibling module
  */
 ModuleManager.prototype.deleteModule = function(module) {
-  for (var i = 0; i < this.moduleMap_.length; i++) {
+  for (let i = 0; i < this.moduleMap_.length; i++) {
     if (this.moduleMap_[i].getId() === module.getId()) {
       this.moduleMap_.splice(i, 1);
 
       try {
-        var existingGroup = Blockly.Events.getGroup();
+        const existingGroup = Blockly.Events.getGroup();
+
         if (!existingGroup) {
           Blockly.Events.setGroup(true);
         }
@@ -309,7 +317,8 @@ ModuleManager.prototype.deleteModule = function(module) {
  */
 ModuleManager.prototype.fireDeleteEvent_ = function(module) {
   if (Blockly.Events.isEnabled()) {
-    var existingGroup = Blockly.Events.getGroup();
+    const existingGroup = Blockly.Events.getGroup();
+
     if (!existingGroup) {
       Blockly.Events.setGroup(true);
     }
@@ -333,9 +342,9 @@ ModuleManager.prototype.activateModule = function(module) {
   }
 
   Blockly.ContextMenu.hide();
-  var previousActive = this.getActiveModule();
+  const previousActive = this.getActiveModule();
+  const existingGroup = Blockly.Events.getGroup();
 
-  var existingGroup = Blockly.Events.getGroup();
   if (!existingGroup) {
     Blockly.Events.setGroup(true);
   }
@@ -352,7 +361,8 @@ ModuleManager.prototype.activateModule = function(module) {
         this.workspace.setResizesEnabled(false);
       }
 
-      var topBlocks = this.workspace.getTopBlocks(false, true)
+      const topBlocks = this.workspace.getTopBlocks(false, true)
+
       for (var i = 0; i < topBlocks.length; i++) {
         topBlocks[i].removeRender();
       }
@@ -364,7 +374,7 @@ ModuleManager.prototype.activateModule = function(module) {
     if (this.workspace.rendered) {
       var topBlocks = this.workspace.getTopBlocks(false, true)
 
-      var enableConnectionTracking = function (block) {
+      const enableConnectionTracking = function (block) {
         setTimeout(function () {
           if (!block.disposed) {
             block.setConnectionTracking(true);

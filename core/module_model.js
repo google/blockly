@@ -56,6 +56,12 @@ const ModuleModel = function(workspace, name, opt_id) {
   this.name = name;
 
   /**
+   * The translation key for get verbose name of the module. Typically defined for default modules.
+   * @type {string}
+   */
+  this._translationKey = Blockly.Msg[name] ? name : null;
+
+  /**
    * A unique id for the module. This should be defined at creation and
    * not change, even if the name changes. In most cases this should be a
    * UUID.
@@ -88,6 +94,15 @@ ModuleModel.prototype.scale = 1;
  */
 ModuleModel.prototype.getId = function() {
   return this.id_;
+};
+
+/**
+ * @return {string} Translateed or raw module name.
+ */
+ModuleModel.prototype.getName = function() {
+  const translatedName = Blockly.Msg[this._translationKey]
+
+  return translatedName || this.name;
 };
 
 exports.ModuleModel = ModuleModel

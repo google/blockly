@@ -57,27 +57,53 @@ goog.require('Blockly.Events.BubbleOpen');
 const Mutator = function(quarkNames) {
   Mutator.superClass_.constructor.call(this, null);
   this.quarkNames_ = quarkNames;
+
+  /**
+   * Workspace in the mutator's bubble.
+   * @type {?WorkspaceSvg}
+   * @private
+   */
+  this.workspace_ = null;
+
+  /**
+   * Width of workspace.
+   * @type {number}
+   * @private
+   */
+  this.workspaceWidth_ = 0;
+
+  /**
+   * Height of workspace.
+   * @type {number}
+   * @private
+   */
+  this.workspaceHeight_ = 0;
+
+  /**
+   * The SVG element that is the parent of the mutator workspace, or null if
+   * not created.
+   * @type {?SVGSVGElement}
+   * @private
+   */
+  this.svgDialog_ = null;
+
+  /**
+   * The root block of the mutator workspace, created by decomposing the source
+   * block.
+   * @type {?BlockSvg}
+   * @private
+   */
+  this.rootBlock_ = null;
+
+  /**
+   * Function registered on the main workspace to update the mutator contents
+   * when the main workspace changes.
+   * @type {?Function}
+   * @private
+   */
+  this.sourceListener_ = null;
 };
 object.inherits(Mutator, Icon);
-
-/**
- * Workspace in the mutator's bubble.
- * @type {?WorkspaceSvg}
- * @private
- */
-Mutator.prototype.workspace_ = null;
-
-/**
- * Width of workspace.
- * @private
- */
-Mutator.prototype.workspaceWidth_ = 0;
-
-/**
- * Height of workspace.
- * @private
- */
-Mutator.prototype.workspaceHeight_ = 0;
 
 /**
  * Set the block this mutator is associated with.
@@ -339,12 +365,12 @@ Mutator.prototype.setVisible = function(visible) {
     this.rootBlock_.moveBy(x, margin);
     // Save the initial connections, then listen for further changes.
     if (this.block_.saveConnections) {
-      const thisMutator = this;
+      const thisRootBlock = this.rootBlock_;
       const mutatorBlock =
           /** @type {{saveConnections: function(!Block)}} */ (this.block_);
       mutatorBlock.saveConnections(this.rootBlock_);
       this.sourceListener_ = function() {
-        mutatorBlock.saveConnections(thisMutator.rootBlock_);
+        mutatorBlock.saveConnections(thisRootBlock);
       };
       this.block_.workspace.addChangeListener(this.sourceListener_);
     }
@@ -419,7 +445,10 @@ Mutator.prototype.updateWorkspace_ = function() {
 
   // When the mutator's workspace changes, update the source block.
   if (this.rootBlock_.workspace === this.workspace_) {
-    eventUtils.setGroup(true);
+    const existingGroup = eventUtils.getGroup();
+    if (!existingGroup) {
+      eventUtils.setGroup(true);
+    }
     const block = /** @type {!BlockSvg} */ (this.block_);
     const oldExtraState = BlockChange.getExtraBlockState_(block);
 
@@ -444,11 +473,12 @@ Mutator.prototype.updateWorkspace_ = function() {
       eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
           block, 'mutation', null, oldExtraState, newExtraState));
       // Ensure that any bump is part of this mutation's event group.
-      const group = eventUtils.getGroup();
+      const mutationGroup = eventUtils.getGroup();
       setTimeout(function() {
-        eventUtils.setGroup(group);
+        const oldGroup = eventUtils.getGroup();
+        eventUtils.setGroup(mutationGroup);
         block.bumpNeighbours();
-        eventUtils.setGroup(false);
+        eventUtils.setGroup(oldGroup);
       }, internalConstants.BUMP_DELAY);
     }
 
@@ -457,7 +487,7 @@ Mutator.prototype.updateWorkspace_ = function() {
     if (!this.workspace_.isDragging()) {
       this.resizeBubble_();
     }
-    eventUtils.setGroup(false);
+    eventUtils.setGroup(existingGroup);
   }
 };
 

@@ -1,6 +1,6 @@
 {
   "name": "blockly",
-  "version": "7.20211209.0-beta.0",
+  "version": "7.20211209.0",
   "description": "Blockly is a library for building visual programming editors.",
   "keywords": [
     "blockly"
@@ -65,19 +65,18 @@
   },
   "license": "Apache-2.0",
   "devDependencies": {
-    "@blockly/block-test": "^1.0.0",
-    "@blockly/dev-tools": "^2.6.1",
+    "@blockly/block-test": "^2.0.1",
+    "@blockly/dev-tools": "^3.0.1",
     "@blockly/theme-modern": "^2.1.1",
     "@wdio/selenium-standalone-service": "^7.10.1",
-    "babel-eslint": "^10.1.0",
     "chai": "^4.2.0",
     "clang-format": "^1.6.0",
     "closure-calculate-chunks": "^3.0.2",
-    "concurrently": "^6.0.0",
-    "eslint": "^7.28.0",
+    "concurrently": "^7.0.0",
+    "eslint": "^8.4.1",
     "eslint-config-google": "^0.14.0",
-    "google-closure-compiler": "^20211107.0.0",
-    "google-closure-deps": "^20211107.0.0",
+    "google-closure-compiler": "^20211201.0.0",
+    "google-closure-deps": "^20211201.0.0",
     "gulp": "^4.0.2",
     "gulp-clang-format": "^1.0.27",
     "gulp-concat": "^2.6.1",

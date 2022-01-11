@@ -34,6 +34,14 @@ const {Svg} = goog.require('Blockly.utils.Svg');
  */
 const Grid = function(pattern, options) {
   /**
+   * The scale of the grid, used to set stroke width on grid lines.
+   * This should always be the same as the workspace scale.
+   * @type {number}
+   * @private
+   */
+  this.scale_ = 1;
+
+  /**
    * The grid's SVG pattern, created during injection.
    * @type {!SVGElement}
    * @private
@@ -76,14 +84,6 @@ const Grid = function(pattern, options) {
    */
   this.snapToGrid_ = options['snap'];
 };
-
-/**
- * The scale of the grid, used to set stroke width on grid lines.
- * This should always be the same as the workspace scale.
- * @type {number}
- * @private
- */
-Grid.prototype.scale_ = 1;
 
 /**
  * Dispose of this grid and unlink from the DOM.

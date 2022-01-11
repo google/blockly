@@ -121,7 +121,7 @@ exports.setParentContainer = setParentContainer;
 /**
  * Size the SVG image to completely fill its container. Call this when the view
  * actually changes sizes (e.g. on a window resize/device orientation change).
- * See Blockly.resizeSvgContents to resize the workspace when the contents
+ * See workspace.resizeContents to resize the workspace when the contents
  * change (e.g. when a block is added or removed).
  * Record the height/width of the SVG image.
  * @param {!WorkspaceSvg} workspace Any workspace in the SVG.

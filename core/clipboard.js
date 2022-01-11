@@ -15,7 +15,6 @@
  */
 goog.module('Blockly.clipboard');
 
-const eventUtils = goog.require('Blockly.Events.utils');
 /* eslint-disable-next-line no-unused-vars */
 const {ICopyable} = goog.requireType('Blockly.ICopyable');
 
@@ -55,9 +54,7 @@ const paste = function() {
   }
   if (copyData.typeCounts &&
       workspace.isCapacityAvailable(copyData.typeCounts)) {
-    eventUtils.setGroup(true);
     workspace.paste(copyData.saveInfo);
-    eventUtils.setGroup(false);
     return true;
   }
   return false;

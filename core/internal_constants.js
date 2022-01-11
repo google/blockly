@@ -122,22 +122,6 @@ const DRAG_STACK = true;
 exports.DRAG_STACK = DRAG_STACK;
 
 /**
- * The richness of block colours, regardless of the hue.
- * Must be in the range of 0 (inclusive) to 1 (exclusive).
- * @alias Blockly.internalConstants.HSV_SATURATION
- */
-const HSV_SATURATION = 0.45;
-exports.HSV_SATURATION = HSV_SATURATION;
-
-/**
- * The intensity of block colours, regardless of the hue.
- * Must be in the range of 0 (inclusive) to 1 (exclusive).
- * @alias Blockly.internalConstants.HSV_VALUE
- */
-const HSV_VALUE = 0.65;
-exports.HSV_VALUE = HSV_VALUE;
-
-/**
  * Sprited icons and images.
  * @alias Blockly.internalConstants.SPRITE
  */

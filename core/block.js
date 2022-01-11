@@ -82,6 +82,94 @@ const Block = function(workspace, prototypeName, opt_id) {
         '" conflicts with Blockly.Generator members.');
   }
 
+  /**
+   * Optional text data that round-trips between blocks and XML.
+   * Has no effect. May be used by 3rd parties for meta information.
+   * @type {?string}
+   */
+  this.data = null;
+
+  /**
+   * Has this block been disposed of?
+   * @type {boolean}
+   * @package
+   */
+  this.disposed = false;
+
+  /**
+   * Colour of the block as HSV hue value (0-360)
+   * This may be null if the block colour was not set via a hue number.
+   * @type {?number}
+   * @private
+   */
+  this.hue_ = null;
+
+  /**
+   * Colour of the block in '#RRGGBB' format.
+   * @type {string}
+   * @protected
+   */
+  this.colour_ = '#000000';
+
+  /**
+   * Name of the block style.
+   * @type {string}
+   * @protected
+   */
+  this.styleName_ = '';
+
+  /**
+   * An optional method called during initialization.
+   * @type {undefined|?function()}
+   */
+  this.init = undefined;
+
+  /**
+   * An optional serialization method for defining how to serialize the
+   * mutation state to XML. This must be coupled with defining `domToMutation`.
+   * @type {undefined|?function(...):!Element}
+   */
+  this.mutationToDom = undefined;
+
+  /**
+   * An optional deserialization method for defining how to deserialize the
+   * mutation state from XML. This must be coupled with defining
+   * `mutationToDom`.
+   * @type {undefined|?function(!Element)}
+   */
+  this.domToMutation = undefined;
+
+  /**
+   * An optional serialization method for defining how to serialize the block's
+   * extra state (eg mutation state) to something JSON compatible. This must be
+   * coupled with defining `loadExtraState`.
+   * @type {undefined|?function(): *}
+   */
+  this.saveExtraState = undefined;
+
+  /**
+   * An optional serialization method for defining how to deserialize the
+   * block's extra state (eg mutation state) from something JSON compatible.
+   * This must be coupled with defining `saveExtraState`.
+   * @type {undefined|?function(*)}
+   */
+  this.loadExtraState = undefined;
+
+  /**
+   * An optional property for suppressing adding STATEMENT_PREFIX and
+   * STATEMENT_SUFFIX to generated code.
+   * @type {?boolean}
+   */
+  this.suppressPrefixSuffix = false;
+
+  /**
+   * An optional property for declaring developer variables.  Return a list of
+   * variable names for use by generators.  Developer variables are never shown
+   * to the user, but are declared as global variables in the generated code.
+   * @type {undefined|?function():!Array<string>}
+   */
+  this.getDeveloperVariables = undefined;
+
   /** @type {string} */
   this.id = (opt_id && !workspace.getBlockById(opt_id)) ? opt_id :
                                                           idGenerator.genUid();
@@ -203,6 +291,19 @@ const Block = function(workspace, prototypeName, opt_id) {
   this.rendered = null;
 
   /**
+   * String for block help, or function that returns a URL. Null for no help.
+   * @type {string|Function}
+   */
+  this.helpUrl = null;
+
+  /**
+   * A bound callback function to use when the parent workspace changes.
+   * @type {?function(Abstract)}
+   * @private
+   */
+  this.onchangeWrapper_ = null;
+
+  /**
    * A count of statement inputs on the block.
    * @type {number}
    * @package
@@ -272,6 +373,14 @@ const Block = function(workspace, prototypeName, opt_id) {
 Block.CommentModel;
 
 /**
+ * An optional callback method to use whenever the block's parent workspace
+ * changes. This is usually only called from the constructor, the block type
+ * initializer function, or an extension initializer function.
+ * @type {undefined|?function(Abstract)}
+ */
+Block.prototype.onchange;
+
+/**
  * The language-neutral ID given to the collapsed input.
  * @const {string}
  */
@@ -282,101 +391,6 @@ Block.COLLAPSED_INPUT_NAME = constants.COLLAPSED_INPUT_NAME;
  * @const {string}
  */
 Block.COLLAPSED_FIELD_NAME = constants.COLLAPSED_FIELD_NAME;
-
-/**
- * Optional text data that round-trips between blocks and XML.
- * Has no effect. May be used by 3rd parties for meta information.
- * @type {?string}
- */
-Block.prototype.data = null;
-
-/**
- * Has this block been disposed of?
- * @type {boolean}
- * @package
- */
-Block.prototype.disposed = false;
-
-/**
- * Colour of the block as HSV hue value (0-360)
- * This may be null if the block colour was not set via a hue number.
- * @type {?number}
- * @private
- */
-Block.prototype.hue_ = null;
-
-/**
- * Colour of the block in '#RRGGBB' format.
- * @type {string}
- * @protected
- */
-Block.prototype.colour_ = '#000000';
-
-/**
- * Name of the block style.
- * @type {string}
- * @protected
- */
-Block.prototype.styleName_ = '';
-
-/**
- * An optional method called during initialization.
- * @type {?function()}
- */
-Block.prototype.init;
-
-/**
- * An optional callback method to use whenever the block's parent workspace
- * changes. This is usually only called from the constructor, the block type
- * initializer function, or an extension initializer function.
- * @type {?function(Abstract)}
- */
-Block.prototype.onchange;
-
-/**
- * An optional serialization method for defining how to serialize the
- * mutation state to XML. This must be coupled with defining `domToMutation`.
- * @type {?function(...):!Element}
- */
-Block.prototype.mutationToDom;
-
-/**
- * An optional deserialization method for defining how to deserialize the
- * mutation state from XML. This must be coupled with defining `mutationToDom`.
- * @type {?function(!Element)}
- */
-Block.prototype.domToMutation;
-
-/**
- * An optional serialization method for defining how to serialize the block's
- * extra state (eg mutation state) to something JSON compatible. This must be
- * coupled with defining `loadExtraState`.
- * @type {?function(): *}
- */
-Block.prototype.saveExtraState;
-
-/**
- * An optional serialization method for defining how to deserialize the block's
- * extra state (eg mutation state) from something JSON compatible. This must be
- * coupled with defining `saveExtraState`.
- * @type {?function(*)}
- */
-Block.prototype.loadExtraState;
-
-/**
- * An optional property for suppressing adding STATEMENT_PREFIX and
- * STATEMENT_SUFFIX to generated code.
- * @type {?boolean}
- */
-Block.prototype.suppressPrefixSuffix;
-
-/**
- * An optional property for declaring developer variables.  Return a list of
- * variable names for use by generators.  Developer variables are never shown to
- * the user, but are declared as global variables in the generated code.
- * @type {?function():!Array<string>}
- */
-Block.prototype.getDeveloperVariables;
 
 /**
  * Dispose of this block.

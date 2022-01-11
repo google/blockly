@@ -5,6 +5,9 @@
  */
 goog.module('Blockly.test.procedureHelpers');
 
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
+
+
 /**
  * Asserts that the procedure definition or call block has the expected var
  * models.
@@ -33,7 +36,7 @@ function assertCallBlockArgsStructure(callBlock, args) {
   for (let i = 0; i < args.length; i++) {
     const expectedName = args[i];
     const callInput = callBlock.inputList[i + 1];
-    chai.assert.equal(callInput.type, Blockly.INPUT_VALUE);
+    chai.assert.equal(callInput.type, ConnectionType.INPUT_VALUE);
     chai.assert.equal(callInput.name, 'ARG' + i);
     chai.assert.equal(callInput.fieldRow[0].getValue(), expectedName,
         'Call block consts did not match expected.');

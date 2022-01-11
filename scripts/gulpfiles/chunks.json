@@ -1,12 +1,12 @@
 {
   "chunk": [
-    "requires:258",
-    "all:10:requires",
-    "all1:11:requires",
-    "all2:11:requires",
-    "all3:11:requires",
-    "all4:11:requires",
-    "all5:11:requires"
+    "blockly:257",
+    "all:10:blockly",
+    "all1:11:blockly",
+    "all2:11:blockly",
+    "all3:11:blockly",
+    "all4:11:blockly",
+    "all5:11:blockly"
   ],
   "js": [
     "./core/inject.js",
@@ -244,10 +244,10 @@
     "./core/serialization/priorities.js",
     "./core/serialization/blocks.js",
     "./core/utils/toolbox.js",
-    "./core/mutator.js",
-    "./core/msg.js",
     "./core/connection_type.js",
     "./core/internal_constants.js",
+    "./core/mutator.js",
+    "./core/msg.js",
     "./core/utils/colour.js",
     "./core/utils/parsing.js",
     "./core/extensions.js",
@@ -264,9 +264,8 @@
     "./core/xml.js",
     "./core/connection.js",
     "./core/common.js",
-    "./core/blockly.js",
     "./closure/goog/base_minimal.js",
-    "./core/requires.js",
+    "./core/blockly.js",
     "./blocks/variables_dynamic.js",
     "./blocks/variables.js",
     "./blocks/text.js",

@@ -8,6 +8,7 @@ goog.module('Blockly.test.blocks');
 
 const eventUtils = goog.require('Blockly.Events.utils');
 const {Blocks} = goog.require('Blockly.blocks');
+const {ConnectionType} = goog.require('Blockly.ConnectionType');
 const {createDeprecationWarningStub, createRenderedBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
 
 
@@ -397,19 +398,19 @@ suite('Blocks', function() {
 
       this.getInputs = function() {
         return this.workspace
-            .connectionDBList[Blockly.INPUT_VALUE].connections_;
+            .connectionDBList[ConnectionType.INPUT_VALUE].connections_;
       };
       this.getOutputs = function() {
         return this.workspace
-            .connectionDBList[Blockly.OUTPUT_VALUE].connections_;
+            .connectionDBList[ConnectionType.OUTPUT_VALUE].connections_;
       };
       this.getNext = function() {
         return this.workspace
-            .connectionDBList[Blockly.NEXT_STATEMENT].connections_;
+            .connectionDBList[ConnectionType.NEXT_STATEMENT].connections_;
       };
       this.getPrevious = function() {
         return this.workspace
-            .connectionDBList[Blockly.PREVIOUS_STATEMENT].connections_;
+            .connectionDBList[ConnectionType.PREVIOUS_STATEMENT].connections_;
       };
 
       this.assertConnectionsEmpty = function() {

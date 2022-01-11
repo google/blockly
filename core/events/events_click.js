@@ -46,14 +46,14 @@ const Click = function(opt_block, opt_workspaceId, opt_targetType) {
    * @type {string|undefined}
    */
   this.targetType = opt_targetType;
+
+  /**
+   * Type of this event.
+   * @type {string}
+   */
+  this.type = eventUtils.CLICK;
 };
 object.inherits(Click, UiBase);
-
-/**
- * Type of this event.
- * @type {string}
- */
-Click.prototype.type = eventUtils.CLICK;
 
 /**
  * Encode the event as JSON.

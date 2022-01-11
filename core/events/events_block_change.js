@@ -41,6 +41,13 @@ const {Block} = goog.requireType('Blockly.Block');
 const BlockChange = function(
     opt_block, opt_element, opt_name, opt_oldValue, opt_newValue) {
   BlockChange.superClass_.constructor.call(this, opt_block);
+
+  /**
+   * Type of this event.
+   * @type {string}
+   */
+  this.type = eventUtils.BLOCK_CHANGE;
+
   if (!opt_block) {
     return;  // Blank event to be populated by fromJson.
   }
@@ -50,12 +57,6 @@ const BlockChange = function(
   this.newValue = typeof opt_newValue === 'undefined' ? '' : opt_newValue;
 };
 object.inherits(BlockChange, BlockBase);
-
-/**
- * Type of this event.
- * @type {string}
- */
-BlockChange.prototype.type = eventUtils.BLOCK_CHANGE;
 
 /**
  * Encode the event as JSON.

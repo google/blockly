@@ -34,6 +34,13 @@ const {VariableModel} = goog.requireType('Blockly.VariableModel');
  */
 const VarRename = function(opt_variable, newName) {
   VarRename.superClass_.constructor.call(this, opt_variable);
+
+  /**
+   * Type of this event.
+   * @type {string}
+   */
+  this.type = eventUtils.VAR_RENAME;
+
   if (!opt_variable) {
     return;  // Blank event to be populated by fromJson.
   }
@@ -42,12 +49,6 @@ const VarRename = function(opt_variable, newName) {
   this.newName = typeof newName === 'undefined' ? '' : newName;
 };
 object.inherits(VarRename, VarBase);
-
-/**
- * Type of this event.
- * @type {string}
- */
-VarRename.prototype.type = eventUtils.VAR_RENAME;
 
 /**
  * Encode the event as JSON.

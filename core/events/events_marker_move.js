@@ -70,14 +70,14 @@ const MarkerMove = function(opt_block, isCursor, opt_oldNode, opt_newNode) {
    * @type {boolean|undefined}
    */
   this.isCursor = isCursor;
+
+  /**
+   * Type of this event.
+   * @type {string}
+   */
+  this.type = eventUtils.MARKER_MOVE;
 };
 object.inherits(MarkerMove, UiBase);
-
-/**
- * Type of this event.
- * @type {string}
- */
-MarkerMove.prototype.type = eventUtils.MARKER_MOVE;
 
 /**
  * Encode the event as JSON.

@@ -35,6 +35,13 @@ const {Coordinate} = goog.require('Blockly.utils.Coordinate');
  */
 const BlockMove = function(opt_block) {
   BlockMove.superClass_.constructor.call(this, opt_block);
+
+  /**
+   * Type of this event.
+   * @type {string}
+   */
+  this.type = eventUtils.BLOCK_MOVE;
+
   if (!opt_block) {
     return;  // Blank event to be populated by fromJson.
   }
@@ -49,12 +56,6 @@ const BlockMove = function(opt_block) {
   this.oldCoordinate = location.coordinate;
 };
 object.inherits(BlockMove, BlockBase);
-
-/**
- * Type of this event.
- * @type {string}
- */
-BlockMove.prototype.type = eventUtils.BLOCK_MOVE;
 
 /**
  * Encode the event as JSON.

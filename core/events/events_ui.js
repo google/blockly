@@ -46,14 +46,14 @@ const Ui = function(opt_block, opt_element, opt_oldValue, opt_newValue) {
   this.element = typeof opt_element === 'undefined' ? '' : opt_element;
   this.oldValue = typeof opt_oldValue === 'undefined' ? '' : opt_oldValue;
   this.newValue = typeof opt_newValue === 'undefined' ? '' : opt_newValue;
+
+  /**
+   * Type of this event.
+   * @type {string}
+   */
+  this.type = eventUtils.UI;
 };
 object.inherits(Ui, UiBase);
-
-/**
- * Type of this event.
- * @type {string}
- */
-Ui.prototype.type = eventUtils.UI;
 
 /**
  * Encode the event as JSON.

@@ -35,6 +35,13 @@ const {WorkspaceComment} = goog.requireType('Blockly.WorkspaceComment');
  */
 const CommentChange = function(opt_comment, opt_oldContents, opt_newContents) {
   CommentChange.superClass_.constructor.call(this, opt_comment);
+
+  /**
+   * Type of this event.
+   * @type {string}
+   */
+  this.type = eventUtils.COMMENT_CHANGE;
+
   if (!opt_comment) {
     return;  // Blank event to be populated by fromJson.
   }
@@ -45,12 +52,6 @@ const CommentChange = function(opt_comment, opt_oldContents, opt_newContents) {
       typeof opt_newContents === 'undefined' ? '' : opt_newContents;
 };
 object.inherits(CommentChange, CommentBase);
-
-/**
- * Type of this event.
- * @type {string}
- */
-CommentChange.prototype.type = eventUtils.COMMENT_CHANGE;
 
 /**
  * Encode the event as JSON.

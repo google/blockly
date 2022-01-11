@@ -47,14 +47,14 @@ const ToolboxItemSelect = function(opt_oldItem, opt_newItem, opt_workspaceId) {
    * @type {?string|undefined}
    */
   this.newItem = opt_newItem;
+
+  /**
+   * Type of this event.
+   * @type {string}
+   */
+  this.type = eventUtils.TOOLBOX_ITEM_SELECT;
 };
 object.inherits(ToolboxItemSelect, UiBase);
-
-/**
- * Type of this event.
- * @type {string}
- */
-ToolboxItemSelect.prototype.type = eventUtils.TOOLBOX_ITEM_SELECT;
 
 /**
  * Encode the event as JSON.

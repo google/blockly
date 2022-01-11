@@ -38,14 +38,14 @@ const ThemeChange = function(opt_themeName, opt_workspaceId) {
    * @type {string|undefined}
    */
   this.themeName = opt_themeName;
+
+  /**
+   * Type of this event.
+   * @type {string}
+   */
+  this.type = eventUtils.THEME_CHANGE;
 };
 object.inherits(ThemeChange, UiBase);
-
-/**
- * Type of this event.
- * @type {string}
- */
-ThemeChange.prototype.type = eventUtils.THEME_CHANGE;
 
 /**
  * Encode the event as JSON.

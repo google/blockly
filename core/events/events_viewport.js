@@ -66,14 +66,14 @@ const ViewportChange = function(
    * @type {number|undefined}
    */
   this.oldScale = opt_oldScale;
+
+  /**
+   * Type of this event.
+   * @type {string}
+   */
+  this.type = eventUtils.VIEWPORT_CHANGE;
 };
 object.inherits(ViewportChange, UiBase);
-
-/**
- * Type of this event.
- * @type {string}
- */
-ViewportChange.prototype.type = eventUtils.VIEWPORT_CHANGE;
 
 /**
  * Encode the event as JSON.

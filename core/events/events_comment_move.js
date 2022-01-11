@@ -34,6 +34,13 @@ const {WorkspaceComment} = goog.requireType('Blockly.WorkspaceComment');
  */
 const CommentMove = function(opt_comment) {
   CommentMove.superClass_.constructor.call(this, opt_comment);
+
+  /**
+   * Type of this event.
+   * @type {string}
+   */
+  this.type = eventUtils.COMMENT_MOVE;
+
   if (!opt_comment) {
     return;  // Blank event to be populated by fromJson.
   }
@@ -72,12 +79,6 @@ CommentMove.prototype.recordNew = function() {
   this.newCoordinate_ = this.comment_.getXY();
   this.comment_ = null;
 };
-
-/**
- * Type of this event.
- * @type {string}
- */
-CommentMove.prototype.type = eventUtils.COMMENT_MOVE;
 
 /**
  * Override the location before the move.  Use this if you don't create the

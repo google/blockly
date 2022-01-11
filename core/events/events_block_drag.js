@@ -51,14 +51,14 @@ const BlockDrag = function(opt_block, opt_isStart, opt_blocks) {
    * @type {!Array<!Block>|undefined}
    */
   this.blocks = opt_blocks;
+
+  /**
+   * Type of this event.
+   * @type {string}
+   */
+  this.type = eventUtils.BLOCK_DRAG;
 };
 object.inherits(BlockDrag, UiBase);
-
-/**
- * Type of this event.
- * @type {string}
- */
-BlockDrag.prototype.type = eventUtils.BLOCK_DRAG;
 
 /**
  * Encode the event as JSON.

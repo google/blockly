@@ -35,6 +35,13 @@ const {Block} = goog.requireType('Blockly.Block');
  */
 const BlockCreate = function(opt_block) {
   BlockCreate.superClass_.constructor.call(this, opt_block);
+
+  /**
+   * Type of this event.
+   * @type {string}
+   */
+  this.type = eventUtils.BLOCK_CREATE;
+
   if (!opt_block) {
     return;  // Blank event to be populated by fromJson.
   }
@@ -54,12 +61,6 @@ const BlockCreate = function(opt_block) {
       blocks.save(opt_block, {addCoordinates: true}));
 };
 object.inherits(BlockCreate, BlockBase);
-
-/**
- * Type of this event.
- * @type {string}
- */
-BlockCreate.prototype.type = eventUtils.BLOCK_CREATE;
 
 /**
  * Encode the event as JSON.

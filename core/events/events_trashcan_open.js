@@ -39,14 +39,14 @@ const TrashcanOpen = function(opt_isOpen, opt_workspaceId) {
    * @type {boolean|undefined}
    */
   this.isOpen = opt_isOpen;
+
+  /**
+   * Type of this event.
+   * @type {string}
+   */
+  this.type = eventUtils.TRASHCAN_OPEN;
 };
 object.inherits(TrashcanOpen, UiBase);
-
-/**
- * Type of this event.
- * @type {string}
- */
-TrashcanOpen.prototype.type = eventUtils.TRASHCAN_OPEN;
 
 /**
  * Encode the event as JSON.

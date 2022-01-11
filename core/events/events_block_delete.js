@@ -35,6 +35,13 @@ const {Block} = goog.requireType('Blockly.Block');
  */
 const BlockDelete = function(opt_block) {
   BlockDelete.superClass_.constructor.call(this, opt_block);
+
+  /**
+   * Type of this event.
+   * @type {string}
+   */
+  this.type = eventUtils.BLOCK_DELETE;
+
   if (!opt_block) {
     return;  // Blank event to be populated by fromJson.
   }
@@ -63,12 +70,6 @@ const BlockDelete = function(opt_block) {
       blocks.save(opt_block, {addCoordinates: true}));
 };
 object.inherits(BlockDelete, BlockBase);
-
-/**
- * Type of this event.
- * @type {string}
- */
-BlockDelete.prototype.type = eventUtils.BLOCK_DELETE;
 
 /**
  * Encode the event as JSON.

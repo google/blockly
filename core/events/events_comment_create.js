@@ -34,6 +34,13 @@ const {WorkspaceComment} = goog.requireType('Blockly.WorkspaceComment');
  */
 const CommentCreate = function(opt_comment) {
   CommentCreate.superClass_.constructor.call(this, opt_comment);
+
+  /**
+   * Type of this event.
+   * @type {string}
+   */
+  this.type = eventUtils.COMMENT_CREATE;
+
   if (!opt_comment) {
     return;  // Blank event to be populated by fromJson.
   }
@@ -41,12 +48,6 @@ const CommentCreate = function(opt_comment) {
   this.xml = opt_comment.toXmlWithXY();
 };
 object.inherits(CommentCreate, CommentBase);
-
-/**
- * Type of this event.
- * @type {string}
- */
-CommentCreate.prototype.type = eventUtils.COMMENT_CREATE;
 
 /**
  * Encode the event as JSON.

@@ -47,14 +47,14 @@ const Selected = function(opt_oldElementId, opt_newElementId, opt_workspaceId) {
    * @type {?string|undefined}
    */
   this.newElementId = opt_newElementId;
+
+  /**
+   * Type of this event.
+   * @type {string}
+   */
+  this.type = eventUtils.SELECTED;
 };
 object.inherits(Selected, UiBase);
-
-/**
- * Type of this event.
- * @type {string}
- */
-Selected.prototype.type = eventUtils.SELECTED;
 
 /**
  * Encode the event as JSON.

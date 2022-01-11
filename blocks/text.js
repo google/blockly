@@ -22,7 +22,6 @@ const {Block} = goog.requireType('Blockly.Block');
 const {Blocks} = goog.require('Blockly.blocks');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
 const {FieldDropdown} = goog.require('Blockly.FieldDropdown');
-const {FieldImage} = goog.require('Blockly.FieldImage');
 const {FieldLabel} = goog.require('Blockly.FieldLabel');
 const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
 const {Mutator} = goog.require('Blockly.Mutator');

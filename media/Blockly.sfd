@@ -1,0 +1,139 @@
+SplineFontDB: 3.2
+FontName: Blockly
+FullName: Blockly
+FamilyName: Blockly
+Weight: Regular
+Copyright: Copyright (c) 2022, Google
+UComments: "2022-1-10: Created with FontForge (http://fontforge.org)"
+Version: 001.000
+ItalicAngle: 0
+UnderlinePosition: -102.4
+UnderlineWidth: 51.2
+Ascent: 819
+Descent: 205
+InvalidEm: 0
+LayerCount: 2
+Layer: 0 0 "Back" 1
+Layer: 1 0 "Fore" 0
+XUID: [1021 845 139597865 13401425]
+StyleMap: 0x0000
+FSType: 0
+OS2Version: 0
+OS2_WeightWidthSlopeOnly: 0
+OS2_UseTypoMetrics: 1
+CreationTime: 1641885434
+ModificationTime: 1641926972
+OS2TypoAscent: 0
+OS2TypoAOffset: 1
+OS2TypoDescent: 0
+OS2TypoDOffset: 1
+OS2TypoLinegap: 92
+OS2WinAscent: 0
+OS2WinAOffset: 1
+OS2WinDescent: 0
+OS2WinDOffset: 1
+HheadAscent: 0
+HheadAOffset: 1
+HheadDescent: 0
+HheadDOffset: 1
+MarkAttachClasses: 1
+DEI: 91125
+Encoding: UnicodeFull
+UnicodeInterp: none
+NameList: AGL For New Fonts
+DisplaySize: -48
+AntiAlias: 1
+FitToEm: 0
+WinInfo: 90 18 7
+BeginPrivate: 0
+EndPrivate
+BeginChars: 1114112 3
+
+StartChar: uni275D
+Encoding: 10077 10077 0
+Width: 1024
+Flags: HW
+LayerCount: 2
+Fore
+SplineSet
+551 454 m 1
+ 575 464 601 468 627 468 c 0
+ 724 468 764 406 764 321 c 0
+ 764 232 701 174 613 174 c 0
+ 475 174 419 270 419 392 c 0
+ 419 611 572 727 699 803 c 0
+ 708 808 715 810 724 810 c 4
+ 785 747 l 4
+ 785 734 780 722 768 714 c 0
+ 670 645 566 584 551 454 c 1
+133 454 m 1
+ 157 464 183 468 208 468 c 0
+ 305 468 346 404 346 320 c 0
+ 346 231 282 174 195 174 c 0
+ 56 174 0 270 0 393 c 0
+ 0 611 154 727 281 803 c 0
+ 290 808 298 810 307 810 c 0
+ 367 747 l 0
+ 367 734 363 722 351 714 c 0
+ 253 645 148 584 133 454 c 1
+EndSplineSet
+EndChar
+
+StartChar: uni275E
+Encoding: 10078 10078 1
+Width: 1024
+Flags: HW
+LayerCount: 2
+Fore
+SplineSet
+235 529 m 1
+ 211 519 184 515 159 515 c 0
+ 62 515 21 577 21 662 c 0
+ 21 751 85 809 172 809 c 0
+ 310 809 366 713 366 591 c 0
+ 366 372 214 256 87 180 c 0
+ 78 175 69 173 61 173 c 4
+ 0 236 l 4
+ 0 249 5 261 17 269 c 0
+ 115 338 220 399 235 529 c 1
+652 529 m 1
+ 628 519 602 515 577 515 c 0
+ 480 515 439 579 439 663 c 0
+ 439 752 503 809 590 809 c 0
+ 728 809 785 713 785 590 c 0
+ 785 371 631 256 504 180 c 0
+ 495 175 487 173 479 173 c 0
+ 418 236 l 0
+ 418 249 423 261 435 269 c 0
+ 533 338 637 399 652 529 c 1
+EndSplineSet
+EndChar
+
+StartChar: paragraph
+Encoding: 182 182 2
+Width: 1024
+VWidth: 2048
+Flags: HWO
+LayerCount: 2
+Fore
+SplineSet
+476 -173 m 1
+ 402 -173 l 1
+ 402 685 l 1
+ 286 685 l 1
+ 286 -173 l 1
+ 213 -173 l 1
+ 213 272 l 1
+ 142 273 89 298 53 346 c 128
+ 17 394 0 448 0 506 c 0
+ 0 555 12 599 36 638 c 0
+ 79 708 151 743 250 743 c 2
+ 538 743 l 1
+ 538 685 l 1
+ 476 685 l 1
+ 476 -173 l 1
+EndSplineSet
+Validated: 1
+EndChar
+EndChars
+EndSplineFont

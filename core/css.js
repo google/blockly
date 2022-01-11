@@ -72,15 +72,25 @@ const inject = function(hasCss, pathToMedia) {
   // Strip off any trailing slash (either Unix or Windows).
   const mediaPath = pathToMedia.replace(/[\\/]$/, '');
   const cssContent = content.replace(/<<<PATH>>>/g, mediaPath);
-  // Cleanup the collected css content after injecting it to the DOM.
+  // Cleanup the collected CSS content after injecting it to the DOM.
   content = '';
 
-  // Inject CSS tag at start of head.
+  // Inject Blockly custom font at start of head.
+  const fontNode = document.createElement('style');
+  const fontTextNode = document.createTextNode(`
+    @font-face {
+      font-family: "Blockly";
+      src: url("${mediaPath}/Blockly.ttf");
+    }`);
+  fontNode.appendChild(fontTextNode);
+  document.head.insertBefore(fontNode, document.head.firstChild);
+
+  // Inject CSS tag after custom font.
   const cssNode = document.createElement('style');
   cssNode.id = 'blockly-common-style';
   const cssTextNode = document.createTextNode(cssContent);
   cssNode.appendChild(cssTextNode);
-  document.head.insertBefore(cssNode, document.head.firstChild);
+  document.head.insertBefore(cssNode, fontNode.nextSibling);
 };
 exports.inject = inject;
 
@@ -100,7 +110,7 @@ let content = (`
   .blocklyWidgetDiv {
     display: none;
     position: absolute;
-    z-index: 99999;  /* big value for bootstrap3 compatibility */
+    z-index: 99999;  /* Big value for bootstrap3 compatibility */
   }
 
   .injectionDiv {
@@ -319,6 +329,10 @@ let content = (`
 
   .blocklyMultilineText {
     font-family: monospace;
+  }
+
+  .blocklyFont {
+    font-family: Blockly !important;
   }
 
   .blocklyNonEditableText>text {

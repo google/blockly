@@ -23,6 +23,7 @@ const {Blocks} = goog.require('Blockly.blocks');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
 const {FieldDropdown} = goog.require('Blockly.FieldDropdown');
 const {FieldImage} = goog.require('Blockly.FieldImage');
+const {FieldLabel} = goog.require('Blockly.FieldLabel');
 const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
 const {Mutator} = goog.require('Blockly.Mutator');
 /* eslint-disable-next-line no-unused-vars */
@@ -35,43 +36,14 @@ goog.require('Blockly.FieldVariable');
 
 
 defineBlocksWithJsonArray([
-  // Block for text value
-  {
-    'type': 'text',
-    'message0': '%1',
-    'args0': [{
-      'type': 'field_input',
-      'name': 'TEXT',
-      'text': '',
-    }],
-    'output': 'String',
-    'style': 'text_blocks',
-    'helpUrl': '%{BKY_TEXT_TEXT_HELPURL}',
-    'tooltip': '%{BKY_TEXT_TEXT_TOOLTIP}',
-    'extensions': [
-      'text_quotes',
-      'parent_tooltip_when_inline',
-    ],
-  },
   {
     'type': 'text_multiline',
     'message0': '%1 %2',
     'args0': [
       {
-        'type': 'field_image',
-        'src':
-            'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAARCAYAAADpP' +
-            'U2iAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAdhgAAHYYBXaITgQAAABh0RVh0' +
-            'U29mdHdhcmUAcGFpbnQubmV0IDQuMS42/U4J6AAAAP1JREFUOE+Vks0KQUEYhjm' +
-            'RIja4ABtZ2dm5A3t3Ia6AUm7CylYuQRaUhZSlLZJiQbFAyRnPN33y01HOW08z88' +
-            '73zpwzM4F3GWOCruvGIE4/rLaV+Nq1hVGMBqzhqlxgCys4wJA65xnogMHsQ5luj' +
-            'nYHTejBBCK2mE4abjCgMGhNxHgDFWjDSG07kdfVa2pZMf4ZyMAdWmpZMfYOsLiD' +
-            'MYMjlMB+K613QISRhTnITnsYg5yUd0DETmEoMlkFOeIT/A58iyK5E18BuTBfgYX' +
-            'fwNJv4P9/oEBerLylOnRhygmGdPpTTBZAPkde61lbQe4moWUvYUZYLfUNftIY4z' +
-            'wA5X2Z9AYnQrEAAAAASUVORK5CYII=',
-        'width': 12,
-        'height': 17,
-        'alt': '\u00B6',
+        'type': 'field_label',
+        'class': 'blocklyFont',
+        'text': '¶',
       },
       {
         'type': 'field_multilinetext',
@@ -238,6 +210,41 @@ defineBlocksWithJsonArray([
     'mutator': 'text_charAt_mutator',
   },
 ]);
+
+Blocks['text'] = {
+  /**
+   * Block for text value.
+   * @this {Block}
+   */
+  init: function() {
+    this.jsonInit({
+      'type': 'text',
+      'message0': '%1%2%3',
+      'args0': [{
+        'type': 'field_label',
+        'text': this.RTL ? '❞' : '❝',
+        'class': 'blocklyFont',
+      },
+      {
+        'type': 'field_input',
+        'name': 'TEXT',
+        'text': '',
+      },
+      {
+        'type': 'field_label',
+        'text': this.RTL ? '❝' : '❞',
+        'class': 'blocklyFont',
+      }],
+      'output': 'String',
+      'style': 'text_blocks',
+      'helpUrl': '%{BKY_TEXT_TEXT_HELPURL}',
+      'tooltip': '%{BKY_TEXT_TEXT_TOOLTIP}',
+      'extensions': [
+        'parent_tooltip_when_inline',
+      ],
+    });
+  },
+};
 
 Blocks['text_getSubstring'] = {
   /**
@@ -504,7 +511,6 @@ Blocks['text_prompt'] = {
    * @this {Block}
    */
   init: function() {
-    this.mixin(QUOTE_IMAGE_MIXIN);
     const TYPES = [
       [Msg['TEXT_PROMPT_TYPE_TEXT'], 'TEXT'],
       [Msg['TEXT_PROMPT_TYPE_NUMBER'], 'NUMBER'],
@@ -519,9 +525,9 @@ Blocks['text_prompt'] = {
     });
     this.appendDummyInput()
         .appendField(dropdown, 'TYPE')
-        .appendField(this.newQuote_(true))
+        .appendField(new FieldLabel(this.RTL ? '❞' : '❝', 'blocklyFont'))
         .appendField(new FieldTextInput(''), 'TEXT')
-        .appendField(this.newQuote_(false));
+        .appendField(new FieldLabel(this.RTL ? '❝' : '❞', 'blocklyFont'))
     this.setOutput(true, 'String');
     this.setTooltip(function() {
       return (thisBlock.getFieldValue('TYPE') === 'TEXT') ?
@@ -616,91 +622,6 @@ Blocks['text_reverse'] = {
       'helpUrl': Msg['TEXT_REVERSE_HELPURL'],
     });
   },
-};
-
-/**
- * @mixin
- * @package
- * @readonly
- */
-const QUOTE_IMAGE_MIXIN = {
-  /**
-   * Image data URI of an LTR opening double quote (same as RTL closing double
-   * quote).
-   * @readonly
-   */
-  QUOTE_IMAGE_LEFT_DATAURI:
-      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAKCAQAAAAqJXdxAAAA' +
-      'n0lEQVQI1z3OMa5BURSF4f/cQhAKjUQhuQmFNwGJEUi0RKN5rU7FHKhpjEH3TEMtkdBSCY' +
-      '1EIv8r7nFX9e29V7EBAOvu7RPjwmWGH/VuF8CyN9/OAdvqIXYLvtRaNjx9mMTDyo+NjAN1' +
-      'HNcl9ZQ5oQMM3dgDUqDo1l8DzvwmtZN7mnD+PkmLa+4mhrxVA9fRowBWmVBhFy5gYEjKMf' +
-      'z9AylsaRRgGzvZAAAAAElFTkSuQmCC',
-  /**
-   * Image data URI of an LTR closing double quote (same as RTL opening double
-   * quote).
-   * @readonly
-   */
-  QUOTE_IMAGE_RIGHT_DATAURI:
-      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAKCAQAAAAqJXdxAAAA' +
-      'qUlEQVQI1z3KvUpCcRiA8ef9E4JNHhI0aFEacm1o0BsI0Slx8wa8gLauoDnoBhq7DcfWhg' +
-      'gONDmJJgqCPA7neJ7p934EOOKOnM8Q7PDElo/4x4lFb2DmuUjcUzS3URnGib9qaPNbuXvB' +
-      'O3sGPHJDRG6fGVdMSeWDP2q99FQdFrz26Gu5Tq7dFMzUvbXy8KXeAj57cOklgA+u1B5Aos' +
-      'lLtGIHQMaCVnwDnADZIFIrXsoXrgAAAABJRU5ErkJggg==',
-  /**
-   * Pixel width of QUOTE_IMAGE_LEFT_DATAURI and QUOTE_IMAGE_RIGHT_DATAURI.
-   * @readonly
-   */
-  QUOTE_IMAGE_WIDTH: 12,
-  /**
-   * Pixel height of QUOTE_IMAGE_LEFT_DATAURI and QUOTE_IMAGE_RIGHT_DATAURI.
-   * @readonly
-   */
-  QUOTE_IMAGE_HEIGHT: 12,
-
-  /**
-   * Inserts appropriate quote images before and after the named field.
-   * @param {string} fieldName The name of the field to wrap with quotes.
-   * @this {Block}
-   */
-  quoteField_: function(fieldName) {
-    for (let i = 0, input; (input = this.inputList[i]); i++) {
-      for (let j = 0, field; (field = input.fieldRow[j]); j++) {
-        if (fieldName === field.name) {
-          input.insertFieldAt(j, this.newQuote_(true));
-          input.insertFieldAt(j + 2, this.newQuote_(false));
-          return;
-        }
-      }
-    }
-    console.warn(
-        'field named "' + fieldName + '" not found in ' + this.toDevString());
-  },
-
-  /**
-   * A helper function that generates a FieldImage of an opening or
-   * closing double quote. The selected quote will be adapted for RTL blocks.
-   * @param {boolean} open If the image should be open quote (“ in LTR).
-   *                       Otherwise, a closing quote is used (” in LTR).
-   * @return {!FieldImage} The new field.
-   * @this {Block}
-   */
-  newQuote_: function(open) {
-    const isLeft = this.RTL ? !open : open;
-    const dataUri =
-        isLeft ? this.QUOTE_IMAGE_LEFT_DATAURI : this.QUOTE_IMAGE_RIGHT_DATAURI;
-    return new FieldImage(
-        dataUri, this.QUOTE_IMAGE_WIDTH, this.QUOTE_IMAGE_HEIGHT,
-        isLeft ? '\u201C' : '\u201D');
-  },
-};
-
-/**
- * Wraps TEXT field with images of double quote characters.
- * @this {Block}
- */
-const TEXT_QUOTES_EXTENSION = function() {
-  this.mixin(QUOTE_IMAGE_MIXIN);
-  this.quoteField_('TEXT');
 };
 
 /**
@@ -820,8 +741,7 @@ const TEXT_JOIN_MUTATOR_MIXIN = {
       this.removeInput('EMPTY');
     } else if (!this.itemCount_ && !this.getInput('EMPTY')) {
       this.appendDummyInput('EMPTY')
-          .appendField(this.newQuote_(true))
-          .appendField(this.newQuote_(false));
+          .appendField(new FieldLabel('❝❞', 'blocklyFont'));
     }
     // Add new inputs.
     for (let i = 0; i < this.itemCount_; i++) {
@@ -844,8 +764,6 @@ const TEXT_JOIN_MUTATOR_MIXIN = {
  * @this {Block}
  */
 const TEXT_JOIN_EXTENSION = function() {
-  // Add the quote mixin for the itemCount_ = 0 case.
-  this.mixin(QUOTE_IMAGE_MIXIN);
   // Initialize the mutator values.
   this.itemCount_ = 2;
   this.updateShape_();
@@ -973,8 +891,6 @@ const TEXT_CHARAT_EXTENSION = function() {
 };
 
 Extensions.register('text_indexOf_tooltip', TEXT_INDEXOF_TOOLTIP_EXTENSION);
-
-Extensions.register('text_quotes', TEXT_QUOTES_EXTENSION);
 
 Extensions.registerMutator(
     'text_join_mutator', TEXT_JOIN_MUTATOR_MIXIN, TEXT_JOIN_EXTENSION);

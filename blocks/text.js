@@ -526,7 +526,7 @@ Blocks['text_prompt'] = {
         .appendField(dropdown, 'TYPE')
         .appendField(new FieldLabel(this.RTL ? '❞' : '❝', 'blocklyFont'))
         .appendField(new FieldTextInput(''), 'TEXT')
-        .appendField(new FieldLabel(this.RTL ? '❝' : '❞', 'blocklyFont'))
+        .appendField(new FieldLabel(this.RTL ? '❝' : '❞', 'blocklyFont'));
     this.setOutput(true, 'String');
     this.setTooltip(function() {
       return (thisBlock.getFieldValue('TYPE') === 'TEXT') ?

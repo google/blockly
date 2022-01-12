@@ -66,7 +66,16 @@ const BlockDragger = class {
      * @protected
      */
     this.workspace_ = workspace;
-    
+
+    /**
+     * The function that handles rendering of blocks added to queue for drag
+     *     events and removes itself from the change listeners and empties the
+     *     queue on the completion of a drag event.
+     * @type {?Function}
+     * @private
+     */
+    this.renderOnDragListener_ = null;
+
     /**
      * The blocks to render on drag until next BlockDrag Event is ended.
      * @type {!Array<

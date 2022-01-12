@@ -256,6 +256,21 @@ const Flyout = function(workspaceOptions) {
    * @protected
    */
   this.dragAngleRange_ = 70;
+
+  /**
+   * The path around the background of the flyout, which will be filled with a
+   * background colour.
+   * @type {SVGPathElement}
+   * @protected
+   */
+  this.svgBackground_ = null;
+
+  /**
+   * The root SVG group for the button or label.
+   * @type {SVGGElement}
+   * @protected
+   */
+  this.svgGroup_ = null;
 };
 object.inherits(Flyout, DeleteArea);
 
@@ -308,7 +323,8 @@ Flyout.prototype.init = function(targetWorkspace) {
   Array.prototype.push.apply(
       this.eventWrappers_,
       browserEvents.conditionalBind(
-          this.svgGroup_, 'wheel', this, this.wheel_));
+          /** @type {!SVGGElement} */ (this.svgGroup_), 'wheel', this,
+          this.wheel_));
   if (!this.autoClose) {
     this.filterWrapper_ = this.filterForCapacity_.bind(this);
     this.targetWorkspace.addChangeListener(this.filterWrapper_);
@@ -318,7 +334,8 @@ Flyout.prototype.init = function(targetWorkspace) {
   Array.prototype.push.apply(
       this.eventWrappers_,
       browserEvents.conditionalBind(
-          this.svgBackground_, 'mousedown', this, this.onMouseDown_));
+          /** @type {!SVGPathElement} */ (this.svgBackground_), 'mousedown',
+          this, this.onMouseDown_));
 
   // A flyout connected to a workspace doesn't have its own current gesture.
   this.workspace_.getGesture =
@@ -557,7 +574,8 @@ Flyout.prototype.show = function(flyoutDef) {
       };
 
   this.listeners_.push(browserEvents.conditionalBind(
-      this.svgBackground_, 'mouseover', this, deselectAll));
+      /** @type {!SVGPathElement} */ (this.svgBackground_), 'mouseover', this,
+      deselectAll));
 
   if (this.horizontalLayout) {
     this.height_ = 0;

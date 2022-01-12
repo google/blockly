@@ -26,8 +26,8 @@ const {UiBase} = goog.require('Blockly.Events.UiBase');
  */
 class TrashcanOpen extends UiBase {
   /**
-   * @param {boolean=} opt_isOpen Whether the trashcan flyout is opening (false if
-   *    opening). Undefined for a blank event.
+   * @param {boolean=} opt_isOpen Whether the trashcan flyout is opening (false
+   *     if opening). Undefined for a blank event.
    * @param {string=} opt_workspaceId The workspace identifier for this event.
    *    Undefined for a blank event.
    * @alias Blockly.Events.TrashcanOpen

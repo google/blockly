@@ -39,8 +39,7 @@ class BlockChange extends BlockBase {
    * @param {*=} opt_newValue New value of element.
    * @alias Blockly.Events.BlockChange
    */
-  constructor(
-      opt_block, opt_element, opt_name, opt_oldValue, opt_newValue) {
+  constructor(opt_block, opt_element, opt_name, opt_oldValue, opt_newValue) {
     super(opt_block);
 
     /**
@@ -135,7 +134,8 @@ class BlockChange extends BlockBase {
         const oldState = BlockChange.getExtraBlockState_(
             /** @type {!BlockSvg} */ (block));
         if (block.loadExtraState) {
-          block.loadExtraState(JSON.parse(/** @type {string} */ (value) || '{}'));
+          block.loadExtraState(
+              JSON.parse(/** @type {string} */ (value) || '{}'));
         } else if (block.domToMutation) {
           block.domToMutation(
               Xml.textToDom(/** @type {string} */ (value) || '<mutation/>'));
@@ -152,10 +152,11 @@ class BlockChange extends BlockBase {
   // TODO (#5397): Encapsulate this in the BlocklyMutationChange event when
   //    refactoring change events.
   /**
-   * Returns the extra state of the given block (either as XML or a JSO, depending
-   * on the block's definition).
+   * Returns the extra state of the given block (either as XML or a JSO,
+   * depending on the block's definition).
    * @param {!BlockSvg} block The block to get the extra state of.
-   * @return {string} A stringified version of the extra state of the given block.
+   * @return {string} A stringified version of the extra state of the given
+   *     block.
    * @package
    */
   static getExtraBlockState_(block) {

@@ -28,23 +28,23 @@ class ViewportChange extends UiBase {
   /**
    * @param {number=} opt_top Top-edge of the visible portion of the workspace,
    *    relative to the workspace origin. Undefined for a blank event.
-   * @param {number=} opt_left Left-edge of the visible portion of the workspace,
-   *    relative to the workspace origin. Undefined for a blank event.
-   * @param {number=} opt_scale The scale of the workspace. Undefined for a blank
-   *    event.
+   * @param {number=} opt_left Left-edge of the visible portion of the
+   *     workspace relative to the workspace origin. Undefined for a blank
+   *     event.
+   * @param {number=} opt_scale The scale of the workspace. Undefined for a
+   *     blank event.
    * @param {string=} opt_workspaceId The workspace identifier for this event.
    *    Undefined for a blank event.
-   * @param {number=} opt_oldScale The old scale of the workspace. Undefined for a
-   *    blank event.
+   * @param {number=} opt_oldScale The old scale of the workspace. Undefined for
+   *     a blank event.
    * @alias Blockly.Events.ViewportChange
    */
-  constructor(
-      opt_top, opt_left, opt_scale, opt_workspaceId, opt_oldScale) {
+  constructor(opt_top, opt_left, opt_scale, opt_workspaceId, opt_oldScale) {
     super(opt_workspaceId);
 
     /**
-     * Top-edge of the visible portion of the workspace, relative to the workspace
-     * origin.
+     * Top-edge of the visible portion of the workspace, relative to the
+     * workspace origin.
      * @type {number|undefined}
      */
     this.viewTop = opt_top;

@@ -174,7 +174,8 @@ class BlockMove extends BlockBase {
     } else {
       let blockConnection = block.outputConnection;
       if (!blockConnection ||
-          (block.previousConnection && block.previousConnection.isConnected())) {
+          (block.previousConnection &&
+           block.previousConnection.isConnected())) {
         blockConnection = block.previousConnection;
       }
       let parentConnection;

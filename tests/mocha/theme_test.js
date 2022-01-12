@@ -6,6 +6,7 @@
 
 goog.module('Blockly.test.theme');
 
+const eventUtils = goog.require('Blockly.Events.utils');
 const {assertEventFired, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
 
 
@@ -146,7 +147,7 @@ suite('Theme', function() {
 
       assertEventFired(
           this.eventsFireStub, Blockly.Events.ThemeChange,
-          {themeName: 'themeName'}, workspace.id);
+          {themeName: 'themeName', type: eventUtils.THEME_CHANGE}, workspace.id);
     } finally {
       workspaceTeardown.call(this, workspace);
     }

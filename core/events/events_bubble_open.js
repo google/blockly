@@ -52,14 +52,14 @@ const BubbleOpen = function(opt_block, opt_isOpen, opt_bubbleType) {
    * @type {string|undefined}
    */
   this.bubbleType = opt_bubbleType;
+
+  /**
+   * Type of this event.
+   * @type {string}
+   */
+  this.type = eventUtils.BUBBLE_OPEN;
 };
 object.inherits(BubbleOpen, UiBase);
-
-/**
- * Type of this event.
- * @type {string}
- */
-BubbleOpen.prototype.type = eventUtils.BUBBLE_OPEN;
 
 /**
  * Encode the event as JSON.

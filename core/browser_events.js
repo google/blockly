@@ -226,11 +226,8 @@ exports.isRightButton = isRightButton;
  * @alias Blockly.browserEvents.isMiddleButton
  */
  const isMiddleButton = function(e) {
-  // if (e.ctrlKey && userAgent.MAC) {
-  //   // Control-clicking on Mac OS X is treated as a right-click.
-  //   // WebKit on Mac OS X fails to change button to 1 (but Gecko does).
-  //   return true;
-  // }
+   // e.button === 1 event MouseUp middle button
+   // e.buttons === 4 event long press middle button
   return e.button === 1 || e.buttons === 4;
 };
 exports.isMiddleButton = isMiddleButton;

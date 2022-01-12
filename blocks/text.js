@@ -221,7 +221,7 @@ Blocks['text'] = {
       'message0': '%1%2%3',
       'args0': [{
         'type': 'field_label',
-        'text': this.RTL ? '❞' : '❝',
+        'text': this.RTL ? '”' : '“',
         'class': 'blocklyFont',
       },
       {
@@ -231,7 +231,7 @@ Blocks['text'] = {
       },
       {
         'type': 'field_label',
-        'text': this.RTL ? '❝' : '❞',
+        'text': this.RTL ? '“' : '”',
         'class': 'blocklyFont',
       }],
       'output': 'String',
@@ -524,9 +524,9 @@ Blocks['text_prompt'] = {
     });
     this.appendDummyInput()
         .appendField(dropdown, 'TYPE')
-        .appendField(new FieldLabel(this.RTL ? '❞' : '❝', 'blocklyFont'))
+        .appendField(new FieldLabel(this.RTL ? '”' : '“', 'blocklyFont'))
         .appendField(new FieldTextInput(''), 'TEXT')
-        .appendField(new FieldLabel(this.RTL ? '❝' : '❞', 'blocklyFont'));
+        .appendField(new FieldLabel(this.RTL ? '“' : '”', 'blocklyFont'));
     this.setOutput(true, 'String');
     this.setTooltip(function() {
       return (thisBlock.getFieldValue('TYPE') === 'TEXT') ?
@@ -740,7 +740,7 @@ const TEXT_JOIN_MUTATOR_MIXIN = {
       this.removeInput('EMPTY');
     } else if (!this.itemCount_ && !this.getInput('EMPTY')) {
       this.appendDummyInput('EMPTY')
-          .appendField(new FieldLabel('❝❞', 'blocklyFont'));
+          .appendField(new FieldLabel('“”', 'blocklyFont'));
     }
     // Add new inputs.
     for (let i = 0; i < this.itemCount_; i++) {

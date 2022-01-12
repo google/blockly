@@ -227,7 +227,7 @@
 	"MATH_RANDOM_FLOAT_TITLE_RANDOM": "1未満の正の乱数",
 	"MATH_RANDOM_FLOAT_TOOLTIP": "0.0以上で1.0未満の範囲の乱数を返します。",
 	"MATH_ATAN2_HELPURL": "https://en.wikipedia.org/wiki/Atan2",
-	"MATH_ATAN2_TITLE": "X:%1 Y:%2のaran2",
+	"MATH_ATAN2_TITLE": "X:%1 Y:%2のatan2",
 	"MATH_ATAN2_TOOLTIP": "点 (X, Y) の逆関数を -180 度から 180度まで返します。",
 	"TEXT_TEXT_HELPURL": "https://ja.wikipedia.org/wiki/文字列",
 	"TEXT_TEXT_TOOLTIP": "文字、単語、または行のテキスト。",

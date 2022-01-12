@@ -50,13 +50,13 @@ const UiBase = function(opt_workspaceId) {
 
   // UI events do not undo or redo.
   this.recordUndo = false;
+
+  /**
+   * Whether or not the event is a UI event.
+   * @type {boolean}
+   */
+  this.isUiEvent = true;
 };
 object.inherits(UiBase, Abstract);
-
-/**
- * Whether or not the event is a UI event.
- * @type {boolean}
- */
-UiBase.prototype.isUiEvent = true;
 
 exports.UiBase = UiBase;

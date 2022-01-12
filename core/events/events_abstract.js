@@ -53,13 +53,13 @@ const Abstract = function() {
    * @type {boolean}
    */
   this.recordUndo = eventUtils.getRecordUndo();
-};
 
-/**
- * Whether or not the event is a UI event.
- * @type {boolean}
- */
-Abstract.prototype.isUiEvent = false;
+  /**
+   * Whether or not the event is a UI event.
+   * @type {boolean}
+   */
+  this.isUiEvent = false;
+};
 
 /**
  * Encode the event as JSON.

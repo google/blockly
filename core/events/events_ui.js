@@ -18,7 +18,6 @@
 goog.module('Blockly.Events.Ui');
 
 const eventUtils = goog.require('Blockly.Events.utils');
-const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
@@ -27,60 +26,62 @@ const {UiBase} = goog.require('Blockly.Events.UiBase');
 
 /**
  * Class for a UI event.
- * @param {?Block=} opt_block The affected block.  Null for UI events
- *     that do not have an associated block.  Undefined for a blank event.
- * @param {string=} opt_element One of 'selected', 'comment', 'mutatorOpen',
- *     etc.
- * @param {*=} opt_oldValue Previous value of element.
- * @param {*=} opt_newValue New value of element.
  * @extends {UiBase}
  * @deprecated December 2020. Instead use a more specific UI event.
- * @constructor
- * @alias Blockly.Events.Ui
  */
-const Ui = function(opt_block, opt_element, opt_oldValue, opt_newValue) {
-  const workspaceId = opt_block ? opt_block.workspace.id : undefined;
-  Ui.superClass_.constructor.call(this, workspaceId);
+class Ui extends UiBase {
+  /**
+   * @param {?Block=} opt_block The affected block.  Null for UI events
+   *     that do not have an associated block.  Undefined for a blank event.
+   * @param {string=} opt_element One of 'selected', 'comment', 'mutatorOpen',
+   *     etc.
+   * @param {*=} opt_oldValue Previous value of element.
+   * @param {*=} opt_newValue New value of element.
+   * @alias Blockly.Events.Ui
+   */
+  constructor(opt_block, opt_element, opt_oldValue, opt_newValue) {
+    const workspaceId = opt_block ? opt_block.workspace.id : undefined;
+    super(workspaceId);
 
-  this.blockId = opt_block ? opt_block.id : null;
-  this.element = typeof opt_element === 'undefined' ? '' : opt_element;
-  this.oldValue = typeof opt_oldValue === 'undefined' ? '' : opt_oldValue;
-  this.newValue = typeof opt_newValue === 'undefined' ? '' : opt_newValue;
+    this.blockId = opt_block ? opt_block.id : null;
+    this.element = typeof opt_element === 'undefined' ? '' : opt_element;
+    this.oldValue = typeof opt_oldValue === 'undefined' ? '' : opt_oldValue;
+    this.newValue = typeof opt_newValue === 'undefined' ? '' : opt_newValue;
+
+    /**
+     * Type of this event.
+     * @type {string}
+     */
+    this.type = eventUtils.UI;
+  }
 
   /**
-   * Type of this event.
-   * @type {string}
+   * Encode the event as JSON.
+   * @return {!Object} JSON representation.
    */
-  this.type = eventUtils.UI;
-};
-object.inherits(Ui, UiBase);
-
-/**
- * Encode the event as JSON.
- * @return {!Object} JSON representation.
- */
-Ui.prototype.toJson = function() {
-  const json = Ui.superClass_.toJson.call(this);
-  json['element'] = this.element;
-  if (this.newValue !== undefined) {
-    json['newValue'] = this.newValue;
+  toJson() {
+    const json = super.toJson();
+    json['element'] = this.element;
+    if (this.newValue !== undefined) {
+      json['newValue'] = this.newValue;
+    }
+    if (this.blockId) {
+      json['blockId'] = this.blockId;
+    }
+    return json;
   }
-  if (this.blockId) {
-    json['blockId'] = this.blockId;
-  }
-  return json;
-};
 
-/**
- * Decode the JSON event.
- * @param {!Object} json JSON representation.
- */
-Ui.prototype.fromJson = function(json) {
-  Ui.superClass_.fromJson.call(this, json);
-  this.element = json['element'];
-  this.newValue = json['newValue'];
-  this.blockId = json['blockId'];
-};
+  /**
+   * Decode the JSON event.
+   * @param {!Object} json JSON representation.
+   */
+  fromJson(json) {
+    super.fromJson(json);
+    this.element = json['element'];
+    this.newValue = json['newValue'];
+    this.blockId = json['blockId'];
+  }
+}
 
 registry.register(registry.Type.EVENT, eventUtils.UI, Ui);
 

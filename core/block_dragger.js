@@ -391,7 +391,8 @@ const BlockDragger = class {
         }
       });
 
-      if (e.type === eventUtils.BLOCK_DRAG && !e.isStart) {
+      if (this.renderOnDragListener_ && e.type === eventUtils.BLOCK_DRAG &&
+          !e.isStart) {
         this.workspace_.removeChangeListener(this.renderOnDragListener_);
       }
     }

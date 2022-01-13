@@ -372,8 +372,8 @@ class ConstantProvider extends BaseConstantProvider {
     this.selectedGlowFilter_ = null;
 
     /**
-     * The ID of the replacement glow filter, or the empty string if no filter is
-     * set.
+     * The ID of the replacement glow filter, or the empty string if no filter
+     * is set.
      * @type {string}
      * @package
      */
@@ -440,7 +440,8 @@ class ConstantProvider extends BaseConstantProvider {
 
     this.SELECTED_GLOW_COLOUR = theme.getComponentStyle('selectedGlowColour') ||
         this.SELECTED_GLOW_COLOUR;
-    const selectedGlowSize = Number(theme.getComponentStyle('selectedGlowSize'));
+    const selectedGlowSize =
+        Number(theme.getComponentStyle('selectedGlowSize'));
     this.SELECTED_GLOW_SIZE = selectedGlowSize && !isNaN(selectedGlowSize) ?
         selectedGlowSize :
         this.SELECTED_GLOW_SIZE;
@@ -494,10 +495,10 @@ class ConstantProvider extends BaseConstantProvider {
 
     /**
      * Make the main path for the hexagonal connection shape out of two lines.
-     * The lines are defined with relative positions and require the block height.
-     * The 'up' and 'down' versions of the paths are the same, but the Y sign
-     * flips.  The 'left' and 'right' versions of the path are also the same, but
-     * the X sign flips.
+     * The lines are defined with relative positions and require the block
+     * height. The 'up' and 'down' versions of the paths are the same, but the Y
+     * sign flips.  The 'left' and 'right' versions of the path are also the
+     * same, but the X sign flips.
      * @param {number} height The height of the block the connection is on.
      * @param {boolean} up True if the path should be drawn from bottom to top,
      *     false otherwise.
@@ -559,12 +560,11 @@ class ConstantProvider extends BaseConstantProvider {
     /**
      * Make the main path for the rounded connection shape out of two arcs and
      * a line that joins them.  The arcs are defined with relative positions.
-     * Usually, the height of the block is split between the two arcs. In the case
-     * where the height of the block exceeds the maximum height, a line is drawn
-     * in between the two arcs.
-     * The 'up' and 'down' versions of the paths are the same, but the Y sign
-     * flips.  The 'up' and 'right' versions of the path flip the sweep-flag
-     * which moves the arc at negative angles.
+     * Usually, the height of the block is split between the two arcs. In the
+     * case where the height of the block exceeds the maximum height, a line is
+     * drawn in between the two arcs. The 'up' and 'down' versions of the paths
+     * are the same, but the Y sign flips.  The 'up' and 'right' versions of the
+     * path flip the sweep-flag which moves the arc at negative angles.
      * @param {number} blockHeight The height of the block the connection is on.
      * @param {boolean} up True if the path should be drawn from bottom to top,
      *     false otherwise.
@@ -579,7 +579,8 @@ class ConstantProvider extends BaseConstantProvider {
       const radius = height / 2;
       return svgPaths.arc(
                  'a', '0 0,1', radius,
-                 svgPaths.point((up ? -1 : 1) * radius, (up ? -1 : 1) * radius)) +
+                 svgPaths.point(
+                     (up ? -1 : 1) * radius, (up ? -1 : 1) * radius)) +
           svgPaths.lineOnAxis('v', (right ? 1 : -1) * remainingHeight) +
           svgPaths.arc(
               'a', '0 0,1', radius,
@@ -631,8 +632,8 @@ class ConstantProvider extends BaseConstantProvider {
      * and a single line in-between (a and v). These are defined in relative
      * positions and require the height of the block.
      * The 'left' and 'right' versions of the paths are the same, but the Y sign
-     * flips.  The 'up' and 'down' versions of the path determine where the corner
-     * point is placed and in turn the direction of the corners.
+     * flips.  The 'up' and 'down' versions of the path determine where the
+     * corner point is placed and in turn the direction of the corners.
      * @param {number} height The height of the block the connection is on.
      * @param {boolean} up True if the path should be drawn from bottom to top,
      *     false otherwise.
@@ -644,7 +645,8 @@ class ConstantProvider extends BaseConstantProvider {
       const innerHeight = height - radius * 2;
       return svgPaths.arc(
                  'a', '0 0,1', radius,
-                 svgPaths.point((up ? -1 : 1) * radius, (up ? -1 : 1) * radius)) +
+                 svgPaths.point(
+                     (up ? -1 : 1) * radius, (up ? -1 : 1) * radius)) +
           svgPaths.lineOnAxis('v', (right ? 1 : -1) * innerHeight) +
           svgPaths.arc(
               'a', '0 0,1', radius,
@@ -965,13 +967,14 @@ class ConstantProvider extends BaseConstantProvider {
       selector + ' .blocklyDraggable:not(.blocklyDisabled)',
       ' .blocklyEditableText:not(.editing):hover>rect,',
       selector + ' .blocklyDraggable:not(.blocklyDisabled)',
-      ' .blocklyEditableText:not(.editing):hover>.blocklyPath {', 'stroke: #fff;',
-      'stroke-width: 2;', '}',
+      ' .blocklyEditableText:not(.editing):hover>.blocklyPath {',
+      'stroke: #fff;', 'stroke-width: 2;', '}',
 
       // Text field input.
       selector + ' .blocklyHtmlInput {',
       'font-family: ' + this.FIELD_TEXT_FONTFAMILY + ';',
-      'font-weight: ' + this.FIELD_TEXT_FONTWEIGHT + ';', 'color: #575E75;', '}',
+      'font-weight: ' + this.FIELD_TEXT_FONTWEIGHT + ';', 'color: #575E75;',
+      '}',
 
       // Dropdown field.
       selector + ' .blocklyDropdownText {', 'fill: #fff !important;', '}',

@@ -134,8 +134,8 @@ class Renderer extends BaseRenderer {
   }
 
   /**
-   * Get the renderer's highlight constant provider.  We assume that when this is
-   * called, the renderer has already been initialized.
+   * Get the renderer's highlight constant provider.  We assume that when this
+   * is called, the renderer has already been initialized.
    * @return {!HighlightConstantProvider} The highlight constant
    *     provider.
    * @package

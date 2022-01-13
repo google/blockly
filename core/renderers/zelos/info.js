@@ -76,8 +76,8 @@ class RenderInfo extends BaseRenderInfo {
     this.isInline = true;
 
     /**
-     * Whether the block should be rendered as a multi-line block, either because
-     * it's not inline or because it has been collapsed.
+     * Whether the block should be rendered as a multi-line block, either
+     * because it's not inline or because it has been collapsed.
      * @type {boolean}
      */
     this.isMultiRow = !block.getInputsInline() || block.isCollapsed();
@@ -92,8 +92,9 @@ class RenderInfo extends BaseRenderInfo {
      * An object with rendering information about the right connection shape.
      * @type {RightConnectionShape}
      */
-    this.rightSide =
-        this.outputConnection ? new RightConnectionShape(this.constants_) : null;
+    this.rightSide = this.outputConnection ?
+        new RightConnectionShape(this.constants_) :
+        null;
   }
 
   /**
@@ -260,9 +261,9 @@ class RenderInfo extends BaseRenderInfo {
    * @override
    */
   addInput_(input, activeRow) {
-    // If we have two dummy inputs on the same row, one aligned left and the other
-    // right, keep track of the right aligned dummy input so we can add padding
-    // later.
+    // If we have two dummy inputs on the same row, one aligned left and the
+    // other right, keep track of the right aligned dummy input so we can add
+    // padding later.
     if (input.type === inputTypes.DUMMY && activeRow.hasDummyInput &&
         activeRow.align === Align.LEFT && input.align === Align.RIGHT) {
       activeRow.rightAlignedDummyInput = input;
@@ -305,9 +306,9 @@ class RenderInfo extends BaseRenderInfo {
   }
 
   /**
-   * Adjust the x position of fields to bump all non-label fields in the first row
-   * past the notch position.  This must be called before ``computeBounds`` is
-   * called.
+   * Adjust the x position of fields to bump all non-label fields in the first
+   * row past the notch position.  This must be called before ``computeBounds``
+   * is called.
    * @protected
    */
   adjustXPosition_() {
@@ -315,8 +316,8 @@ class RenderInfo extends BaseRenderInfo {
         this.constants_.NOTCH_OFFSET_LEFT + this.constants_.NOTCH_WIDTH;
     let minXPos = notchTotalWidth;
     // Run through every input row on the block and only apply bump logic to the
-    // first input row (if the block has prev connection) and every input row that
-    // has a prev and next notch.
+    // first input row (if the block has prev connection) and every input row
+    // that has a prev and next notch.
     for (let i = 2; i < this.rows.length - 1; i += 2) {
       const prevSpacer = this.rows[i - 1];
       const row = this.rows[i];
@@ -497,7 +498,8 @@ class RenderInfo extends BaseRenderInfo {
           elem.shape.type;
       // Special case for value to stack / value to statement blocks.
       if (connectedBlock && connectedBlock.outputConnection &&
-          (connectedBlock.statementInputCount || connectedBlock.nextConnection)) {
+          (connectedBlock.statementInputCount ||
+           connectedBlock.nextConnection)) {
         return 0;
       }
       // Special case for hexagonal output.
@@ -531,8 +533,8 @@ class RenderInfo extends BaseRenderInfo {
     if (this.outputConnection) {
       return;
     }
-    // Run through every input row on the block and only apply tight nesting logic
-    // to input rows that have a prev and next notch.
+    // Run through every input row on the block and only apply tight nesting
+    // logic to input rows that have a prev and next notch.
     for (let i = 2; i < this.rows.length - 1; i += 2) {
       const prevSpacer = this.rows[i - 1];
       const row = this.rows[i];

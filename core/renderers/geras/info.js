@@ -74,8 +74,8 @@ class RenderInfo extends BaseRenderInfo {
 
     // The minimum height of the bottom row is smaller in Geras than in other
     // renderers, because the dark path adds a pixel.
-    // If one of the row's elements has a greater height this will be overwritten
-    // in the compute pass.
+    // If one of the row's elements has a greater height this will be
+    // overwritten in the compute pass.
     if (!followsStatement) {
       this.bottomRow.minHeight =
           this.constants_.MEDIUM_PADDING - this.constants_.DARK_PATH_OFFSET;
@@ -97,8 +97,8 @@ class RenderInfo extends BaseRenderInfo {
       activeRow.elements.push(new ExternalValueInput(this.constants_, input));
       activeRow.hasExternalInput = true;
     } else if (input.type === inputTypes.DUMMY) {
-      // Dummy inputs have no visual representation, but the information is still
-      // important.
+      // Dummy inputs have no visual representation, but the information is
+      // still important.
       activeRow.minHeight =
           Math.max(activeRow.minHeight, this.constants_.DUMMY_INPUT_MIN_HEIGHT);
       activeRow.hasDummyInput = true;
@@ -138,7 +138,8 @@ class RenderInfo extends BaseRenderInfo {
       }
       row.elements.push(oldElems[oldElems.length - 1]);
       if (row.endsWithElemSpacer()) {
-        let spacing = this.getInRowSpacing_(oldElems[oldElems.length - 1], null);
+        let spacing =
+            this.getInRowSpacing_(oldElems[oldElems.length - 1], null);
         if (hasExternalInputs && row.hasDummyInput) {
           spacing += this.constants_.TAB_WIDTH;
         }
@@ -182,7 +183,8 @@ class RenderInfo extends BaseRenderInfo {
       if (Types.isHat(prev)) {
         return this.constants_.NO_PADDING;
       }
-      // Establish a minimum width for a block with a previous or next connection.
+      // Establish a minimum width for a block with a previous or next
+      // connection.
       if (Types.isPreviousOrNextConnection(prev)) {
         return this.constants_.LARGE_PADDING;
       }
@@ -255,9 +257,11 @@ class RenderInfo extends BaseRenderInfo {
       if (Types.isPreviousConnection(next)) {
         return next.notchOffset;
       } else if (Types.isNextConnection(next)) {
-        // Next connections are shifted slightly to the left (in both LTR and RTL)
-        // to make the dark path under the previous connection show through.
-        const offset = (this.RTL ? 1 : -1) * this.constants_.DARK_PATH_OFFSET / 2;
+        // Next connections are shifted slightly to the left (in both LTR and
+        // RTL) to make the dark path under the previous connection show
+        // through.
+        const offset =
+            (this.RTL ? 1 : -1) * this.constants_.DARK_PATH_OFFSET / 2;
         return next.notchOffset + offset;
       }
     }
@@ -267,9 +271,11 @@ class RenderInfo extends BaseRenderInfo {
       if (Types.isPreviousConnection(next)) {
         return next.notchOffset - this.constants_.CORNER_RADIUS;
       } else if (Types.isNextConnection(next)) {
-        // Next connections are shifted slightly to the left (in both LTR and RTL)
-        // to make the dark path under the previous connection show through.
-        const offset = (this.RTL ? 1 : -1) * this.constants_.DARK_PATH_OFFSET / 2;
+        // Next connections are shifted slightly to the left (in both LTR and
+        // RTL) to make the dark path under the previous connection show
+        // through.
+        const offset =
+            (this.RTL ? 1 : -1) * this.constants_.DARK_PATH_OFFSET / 2;
         return next.notchOffset - this.constants_.CORNER_RADIUS + offset;
       }
     }
@@ -344,7 +350,8 @@ class RenderInfo extends BaseRenderInfo {
     if (Types.isField(elem) || Types.isIcon(elem)) {
       result += (elem.height / 2);
       if ((row.hasInlineInput || row.hasStatement) &&
-          elem.height + this.constants_.TALL_INPUT_FIELD_OFFSET_Y <= row.height) {
+          elem.height + this.constants_.TALL_INPUT_FIELD_OFFSET_Y <=
+              row.height) {
         result += this.constants_.TALL_INPUT_FIELD_OFFSET_Y;
       }
     } else if (Types.isInlineInput(elem)) {
@@ -375,7 +382,8 @@ class RenderInfo extends BaseRenderInfo {
           this.alignStatementRow_(
               /** @type {!InputRow} */ (row));
         }
-        if (prevInput && prevInput.hasStatement && row.width < prevInput.width) {
+        if (prevInput && prevInput.hasStatement &&
+            row.width < prevInput.width) {
           row.nextRightEdge = prevInput.width;
         } else {
           nextRightEdge = row.width;
@@ -410,7 +418,8 @@ class RenderInfo extends BaseRenderInfo {
   getDesiredRowWidth_(row) {
     // Limit the width of a statement row when a block is inline.
     if (this.isInline && row.hasStatement) {
-      return this.statementEdge + this.constants_.MAX_BOTTOM_WIDTH + this.startX;
+      return this.statementEdge + this.constants_.MAX_BOTTOM_WIDTH +
+          this.startX;
     }
     return super.getDesiredRowWidth_(row);
   }

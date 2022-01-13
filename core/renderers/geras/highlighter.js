@@ -115,9 +115,10 @@ class Highlighter {
       } else if (Types.isHat(elem)) {
         this.steps_ += this.startPaths_.path(this.RTL_);
       } else if (Types.isSpacer(elem) && elem.width !== 0) {
-        // The end point of the spacer needs to be offset by the highlight amount.
-        // So instead of using the spacer's width for a relative horizontal, use
-        // its width and position for an absolute horizontal move.
+        // The end point of the spacer needs to be offset by the highlight
+        // amount. So instead of using the spacer's width for a relative
+        // horizontal, use its width and position for an absolute horizontal
+        // move.
         this.steps_ += svgPaths.lineOnAxis(
             'H', elem.xPos + elem.width - this.highlightOffset_);
       }
@@ -252,7 +253,8 @@ class Highlighter {
     if (!this.RTL_) {
       const topRow = this.info_.topRow;
       if (Types.isLeftRoundedCorner(topRow.elements[0])) {
-        this.steps_ += svgPaths.lineOnAxis('V', this.outsideCornerPaths_.height);
+        this.steps_ +=
+            svgPaths.lineOnAxis('V', this.outsideCornerPaths_.height);
       } else {
         this.steps_ +=
             svgPaths.lineOnAxis('V', topRow.capline + this.highlightOffset_);

@@ -127,7 +127,8 @@ class HighlightConstantProvider {
         'a', '0 0,0', radius + offset,
         svgPaths.point(radius + offset, radius + offset));
 
-    const pathBottomLtr = svgPaths.moveBy(distance45outside, -distance45outside) +
+    const pathBottomLtr =
+        svgPaths.moveBy(distance45outside, -distance45outside) +
         svgPaths.arc(
             'a', '0 0,0', radius + offset,
             svgPaths.point(
@@ -205,11 +206,12 @@ class HighlightConstantProvider {
     const width = this.constantProvider.TAB_WIDTH;
     const height = this.constantProvider.TAB_HEIGHT;
 
-    // This is how much of the vertical block edge is actually drawn by the puzzle
-    // tab.
+    // This is how much of the vertical block edge is actually drawn by the
+    // puzzle tab.
     const verticalOverlap = 2.5;
 
-    const highlightRtlUp = svgPaths.moveBy(-2, -height + verticalOverlap + 0.9) +
+    const highlightRtlUp =
+        svgPaths.moveBy(-2, -height + verticalOverlap + 0.9) +
         svgPaths.lineTo(width * -0.45, -2.1);
 
     const highlightRtlDown = svgPaths.lineOnAxis('v', verticalOverlap) +
@@ -226,7 +228,8 @@ class HighlightConstantProvider {
     const highlightLtrUp = svgPaths.lineOnAxis('v', -1.5) +
         svgPaths.moveBy(width * -0.92, -0.5) +
         svgPaths.curve(
-            'q', [svgPaths.point(width * -0.19, -5.5), svgPaths.point(0, -11)]) +
+            'q',
+            [svgPaths.point(width * -0.19, -5.5), svgPaths.point(0, -11)]) +
         svgPaths.moveBy(width * 0.92, 1);
 
     const highlightLtrDown =

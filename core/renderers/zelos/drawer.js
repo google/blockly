@@ -115,9 +115,9 @@ class Drawer extends BaseDrawer {
       const cornerHeight = this.constants_.INSIDE_CORNERS.rightHeight;
       const remainingHeight =
           row.height - (row.precedesStatement ? cornerHeight : 0);
-      this.outlinePath_ +=
-          (row.followsStatement ? this.constants_.INSIDE_CORNERS.pathBottomRight :
-                                  '') +
+      this.outlinePath_ += (row.followsStatement ?
+                                this.constants_.INSIDE_CORNERS.pathBottomRight :
+                                '') +
           (remainingHeight > 0 ?
                svgPaths.lineOnAxis('V', row.yPos + remainingHeight) :
                '') +
@@ -198,7 +198,8 @@ class Drawer extends BaseDrawer {
     const outlinePath = svgPaths.moveTo(connectionRight, yPos) +
         svgPaths.lineOnAxis('h', width) +
         input.shape.pathRightDown(input.height) +
-        svgPaths.lineOnAxis('h', -width) + input.shape.pathUp(input.height) + 'z';
+        svgPaths.lineOnAxis('h', -width) + input.shape.pathUp(input.height) +
+        'z';
     this.block_.pathObject.setOutlinePath(inputName, outlinePath);
   }
 
@@ -215,7 +216,8 @@ class Drawer extends BaseDrawer {
             'h', -(input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
         this.constants_.INSIDE_CORNERS.pathTop;
 
-    const innerHeight = row.height - (2 * this.constants_.INSIDE_CORNERS.height);
+    const innerHeight =
+        row.height - (2 * this.constants_.INSIDE_CORNERS.height);
 
     const innerBottomLeftCorner = this.constants_.INSIDE_CORNERS.pathBottom +
         svgPaths.lineOnAxis(

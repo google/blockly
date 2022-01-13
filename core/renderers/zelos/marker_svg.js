@@ -93,7 +93,8 @@ class MarkerSvg extends BaseMarkerSvg {
     // Gets the height and width of entire stack.
     const heightWidth = block.getHeightWidth();
 
-    // Add padding so that being on a stack looks different than being on a block.
+    // Add padding so that being on a stack looks different than being on a
+    // block.
     this.positionRect_(0, 0, heightWidth.width, heightWidth.height);
     this.setParent_(block);
     this.showCurrent_();

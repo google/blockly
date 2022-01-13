@@ -85,7 +85,8 @@ class RenderInfo extends BaseRenderInfo {
       }
       row.elements.push(oldElems[oldElems.length - 1]);
       if (row.endsWithElemSpacer()) {
-        let spacing = this.getInRowSpacing_(oldElems[oldElems.length - 1], null);
+        let spacing =
+            this.getInRowSpacing_(oldElems[oldElems.length - 1], null);
         if (hasExternalInputs && row.hasDummyInput) {
           spacing += this.constants_.TAB_WIDTH;
         }
@@ -129,7 +130,8 @@ class RenderInfo extends BaseRenderInfo {
       if (Types.isHat(prev)) {
         return this.constants_.NO_PADDING;
       }
-      // Establish a minimum width for a block with a previous or next connection.
+      // Establish a minimum width for a block with a previous or next
+      // connection.
       if (Types.isPreviousOrNextConnection(prev)) {
         return this.constants_.LARGE_PADDING;
       }
@@ -274,7 +276,8 @@ class RenderInfo extends BaseRenderInfo {
 
     let result = row.yPos;
     if (Types.isField(elem) && row.hasStatement) {
-      const offset = this.constants_.TALL_INPUT_FIELD_OFFSET_Y + elem.height / 2;
+      const offset =
+          this.constants_.TALL_INPUT_FIELD_OFFSET_Y + elem.height / 2;
       result += offset;
     } else {
       result += (row.height / 2);

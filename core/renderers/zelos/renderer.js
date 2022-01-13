@@ -125,8 +125,7 @@ class Renderer extends BaseRenderer {
   /**
    * @override
    */
-  getConnectionPreviewMethod(
-      closest, local, topBlock) {
+  getConnectionPreviewMethod(closest, local, topBlock) {
     if (local.type === ConnectionType.OUTPUT_VALUE) {
       if (!closest.isConnected()) {
         return InsertionMarkerManager.PREVIEW_TYPE.INPUT_OUTLINE;
@@ -139,8 +138,7 @@ class Renderer extends BaseRenderer {
       return InsertionMarkerManager.PREVIEW_TYPE.REPLACEMENT_FADE;
     }
 
-    return super.getConnectionPreviewMethod(
-        closest, local, topBlock);
+    return super.getConnectionPreviewMethod(closest, local, topBlock);
   }
 }
 

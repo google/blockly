@@ -45,7 +45,7 @@ const ZOOM_OUT_MULTIPLIER = 6;
 
 /**
  * Class for one gesture.
-   * @extends {Gesture}
+ * @extends {Gesture}
  */
 class TouchGesture extends Gesture {
   /**

@@ -430,7 +430,7 @@ class MetricsManager {
       flyoutHeight: flyoutMetrics.height,
     };
   }
-};
+}
 
 /**
  * Describes the width, height and location of the toolbox on the main

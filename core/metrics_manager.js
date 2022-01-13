@@ -72,7 +72,8 @@ class MetricsManager {
    * Gets the width and the height of the flyout on the workspace in pixel
    * coordinates. Returns 0 for the width and height if the workspace has a
    * category toolbox instead of a simple toolbox.
-   * @param {boolean=} opt_own Whether to only return the workspace's own flyout.
+   * @param {boolean=} opt_own Whether to only return the workspace's own
+   *     flyout.
    * @return {!MetricsManager.ToolboxMetrics} The width and height of the
    *     flyout.
    * @public
@@ -88,16 +89,18 @@ class MetricsManager {
   }
 
   /**
-   * Gets the width, height and position of the toolbox on the workspace in pixel
-   * coordinates. Returns 0 for the width and height if the workspace has a simple
-   * toolbox instead of a category toolbox. To get the width and height of a
+   * Gets the width, height and position of the toolbox on the workspace in
+   * pixel coordinates. Returns 0 for the width and height if the workspace has
+   * a simple toolbox instead of a category toolbox. To get the width and height
+   * of a
    * simple toolbox @see {@link getFlyoutMetrics}.
    * @return {!MetricsManager.ToolboxMetrics} The object with the width,
    *     height and position of the toolbox.
    * @public
    */
   getToolboxMetrics() {
-    const toolboxDimensions = this.getDimensionsPx_(this.workspace_.getToolbox());
+    const toolboxDimensions =
+        this.getDimensionsPx_(this.workspace_.getToolbox());
 
     return {
       width: toolboxDimensions.width,
@@ -119,7 +122,8 @@ class MetricsManager {
 
   /**
    * Gets the absolute left and absolute top in pixel coordinates.
-   * This is where the visible workspace starts in relation to the SVG container.
+   * This is where the visible workspace starts in relation to the SVG
+   * container.
    * @return {!MetricsManager.AbsoluteMetrics} The absolute metrics for
    *     the workspace.
    * @public
@@ -156,15 +160,14 @@ class MetricsManager {
   /**
    * Gets the metrics for the visible workspace in either pixel or workspace
    * coordinates. The visible workspace does not include the toolbox or flyout.
-   * @param {boolean=} opt_getWorkspaceCoordinates True to get the view metrics in
-   *     workspace coordinates, false to get them in pixel coordinates.
+   * @param {boolean=} opt_getWorkspaceCoordinates True to get the view metrics
+   *     in workspace coordinates, false to get them in pixel coordinates.
    * @return {!MetricsManager.ContainerRegion} The width, height, top and
    *     left of the viewport in either workspace coordinates or pixel
    *     coordinates.
    * @public
    */
-  getViewMetrics(
-      opt_getWorkspaceCoordinates) {
+  getViewMetrics(opt_getWorkspaceCoordinates) {
     const scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
     const svgMetrics = this.getSvgMetrics();
     const toolboxMetrics = this.getToolboxMetrics();
@@ -204,14 +207,14 @@ class MetricsManager {
    * Gets content metrics in either pixel or workspace coordinates.
    * The content area is a rectangle around all the top bounded elements on the
    * workspace (workspace comments and blocks).
-   * @param {boolean=} opt_getWorkspaceCoordinates True to get the content metrics
-   *     in workspace coordinates, false to get them in pixel coordinates.
+   * @param {boolean=} opt_getWorkspaceCoordinates True to get the content
+   *     metrics in workspace coordinates, false to get them in pixel
+   *     coordinates.
    * @return {!MetricsManager.ContainerRegion} The
    *     metrics for the content container.
    * @public
    */
-  getContentMetrics(
-      opt_getWorkspaceCoordinates) {
+  getContentMetrics(opt_getWorkspaceCoordinates) {
     const scale = opt_getWorkspaceCoordinates ? 1 : this.workspace_.scale;
 
     // Block bounding box is in workspace coordinates.
@@ -239,8 +242,8 @@ class MetricsManager {
   /**
    * Computes the fixed edges of the scroll area.
    * @param {!MetricsManager.ContainerRegion=} opt_viewMetrics The view
-   *     metrics if they have been previously computed. Passing in null may cause
-   *     the view metrics to be computed again, if it is needed.
+   *     metrics if they have been previously computed. Passing in null may
+   * cause the view metrics to be computed again, if it is needed.
    * @return {!MetricsManager.FixedEdges} The fixed edges of the scroll
    *     area.
    * @protected
@@ -278,8 +281,7 @@ class MetricsManager {
    *     padded content area.
    * @protected
    */
-  getPaddedContent_(
-      viewMetrics, contentMetrics) {
+  getPaddedContent_(viewMetrics, contentMetrics) {
     const contentBottom = contentMetrics.top + contentMetrics.height;
     const contentRight = contentMetrics.left + contentMetrics.width;
 
@@ -304,11 +306,12 @@ class MetricsManager {
 
   /**
    * Returns the metrics for the scroll area of the workspace.
-   * @param {boolean=} opt_getWorkspaceCoordinates True to get the scroll metrics
-   *     in workspace coordinates, false to get them in pixel coordinates.
+   * @param {boolean=} opt_getWorkspaceCoordinates True to get the scroll
+   *     metrics in workspace coordinates, false to get them in pixel
+   *     coordinates.
    * @param {!MetricsManager.ContainerRegion=} opt_viewMetrics The view
-   *     metrics if they have been previously computed. Passing in null may cause
-   *     the view metrics to be computed again, if it is needed.
+   *     metrics if they have been previously computed. Passing in null may
+   * cause the view metrics to be computed again, if it is needed.
    * @param {!MetricsManager.ContainerRegion=} opt_contentMetrics The
    *     content metrics if they have been previously computed. Passing in null
    *     may cause the content metrics to be computed again, if it is needed.
@@ -326,7 +329,8 @@ class MetricsManager {
     const paddedContent = this.getPaddedContent_(viewMetrics, contentMetrics);
 
     // Use combination of fixed bounds and padded content to make scroll area.
-    const top = fixedEdges.top !== undefined ? fixedEdges.top : paddedContent.top;
+    const top =
+        fixedEdges.top !== undefined ? fixedEdges.top : paddedContent.top;
     const left =
         fixedEdges.left !== undefined ? fixedEdges.left : paddedContent.left;
     const bottom = fixedEdges.bottom !== undefined ? fixedEdges.bottom :

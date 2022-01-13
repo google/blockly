@@ -65,8 +65,9 @@ class Gesture {
    */
   constructor(e, creatorWorkspace) {
     /**
-     * The position of the mouse when the gesture started.  Units are CSS pixels,
-     * with (0, 0) at the top left of the browser window (mouseEvent clientX/Y).
+     * The position of the mouse when the gesture started.  Units are CSS
+     * pixels, with (0, 0) at the top left of the browser window (mouseEvent
+     * clientX/Y).
      * @type {Coordinate}
      * @private
      */
@@ -124,10 +125,10 @@ class Gesture {
     this.startWorkspace_ = null;
 
     /**
-     * The workspace that created this gesture.  This workspace keeps a reference
-     * to the gesture, which will need to be cleared at deletion.
-     * This may be different from the start workspace.  For instance, a flyout is
-     * a workspace, but its parent workspace manages gestures for it.
+     * The workspace that created this gesture.  This workspace keeps a
+     * reference to the gesture, which will need to be cleared at deletion. This
+     * may be different from the start workspace.  For instance, a flyout is a
+     * workspace, but its parent workspace manages gestures for it.
      * @type {!WorkspaceSvg}
      * @private
      */
@@ -318,10 +319,11 @@ class Gesture {
   /**
    * Update this gesture to record whether a block is being dragged from the
    * flyout.
-   * This function should be called on a mouse/touch move event the first time the
-   * drag radius is exceeded.  It should be called no more than once per gesture.
-   * If a block should be dragged from the flyout this function creates the new
-   * block on the main workspace and updates targetBlock_ and startWorkspace_.
+   * This function should be called on a mouse/touch move event the first time
+   * the drag radius is exceeded.  It should be called no more than once per
+   * gesture. If a block should be dragged from the flyout this function creates
+   * the new block on the main workspace and updates targetBlock_ and
+   * startWorkspace_.
    * @return {boolean} True if a block is being dragged from the flyout.
    * @private
    */
@@ -336,8 +338,8 @@ class Gesture {
         this.flyout_.isDragTowardWorkspace(this.currentDragDeltaXY_)) {
       this.startWorkspace_ = this.flyout_.targetWorkspace;
       this.startWorkspace_.updateScreenCalculationsIfScrolled();
-      // Start the event group now, so that the same event group is used for block
-      // creation and block dragging.
+      // Start the event group now, so that the same event group is used for
+      // block creation and block dragging.
       if (!eventUtils.getGroup()) {
         eventUtils.setGroup(true);
       }
@@ -352,9 +354,9 @@ class Gesture {
 
   /**
    * Update this gesture to record whether a bubble is being dragged.
-   * This function should be called on a mouse/touch move event the first time the
-   * drag radius is exceeded.  It should be called no more than once per gesture.
-   * If a bubble should be dragged this function creates the necessary
+   * This function should be called on a mouse/touch move event the first time
+   * the drag radius is exceeded.  It should be called no more than once per
+   * gesture. If a bubble should be dragged this function creates the necessary
    * BubbleDragger and starts the drag.
    * @return {boolean} True if a bubble is being dragged.
    * @private
@@ -371,10 +373,11 @@ class Gesture {
 
   /**
    * Update this gesture to record whether a block is being dragged.
-   * This function should be called on a mouse/touch move event the first time the
-   * drag radius is exceeded.  It should be called no more than once per gesture.
-   * If a block should be dragged, either from the flyout or in the workspace,
-   * this function creates the necessary BlockDragger and starts the drag.
+   * This function should be called on a mouse/touch move event the first time
+   * the drag radius is exceeded.  It should be called no more than once per
+   * gesture. If a block should be dragged, either from the flyout or in the
+   * workspace, this function creates the necessary BlockDragger and starts the
+   * drag.
    * @return {boolean} True if a block is being dragged.
    * @private
    */
@@ -398,10 +401,10 @@ class Gesture {
 
   /**
    * Update this gesture to record whether a workspace is being dragged.
-   * This function should be called on a mouse/touch move event the first time the
-   * drag radius is exceeded.  It should be called no more than once per gesture.
-   * If a workspace is being dragged this function creates the necessary
-   * WorkspaceDragger and starts the drag.
+   * This function should be called on a mouse/touch move event the first time
+   * the drag radius is exceeded.  It should be called no more than once per
+   * gesture. If a workspace is being dragged this function creates the
+   * necessary WorkspaceDragger and starts the drag.
    * @private
    */
   updateIsDraggingWorkspace_() {
@@ -422,8 +425,9 @@ class Gesture {
 
   /**
    * Update this gesture to record whether anything is being dragged.
-   * This function should be called on a mouse/touch move event the first time the
-   * drag radius is exceeded.  It should be called no more than once per gesture.
+   * This function should be called on a mouse/touch move event the first time
+   * the drag radius is exceeded.  It should be called no more than once per
+   * gesture.
    * @private
    */
   updateIsDragging_() {
@@ -433,7 +437,8 @@ class Gesture {
     }
     this.calledUpdateIsDragging_ = true;
 
-    // First check if it was a bubble drag.  Bubbles always sit on top of blocks.
+    // First check if it was a bubble drag.  Bubbles always sit on top of
+    // blocks.
     if (this.updateIsDraggingBubble_()) {
       return;
     }
@@ -573,8 +578,8 @@ class Gesture {
       return;
     }
     this.isEnding_ = true;
-    // The ordering of these checks is important: drags have higher priority than
-    // clicks.  Fields have higher priority than blocks; blocks have higher
+    // The ordering of these checks is important: drags have higher priority
+    // than clicks.  Fields have higher priority than blocks; blocks have higher
     // priority than workspaces.
     // The ordering within drags does not matter, because the three types of
     // dragging are exclusive.
@@ -602,13 +607,14 @@ class Gesture {
   }
 
   /**
-   * Cancel an in-progress gesture.  If a workspace or block drag is in progress,
-   * end the drag at the most recent location.
+   * Cancel an in-progress gesture.  If a workspace or block drag is in
+   * progress, end the drag at the most recent location.
    * @package
    */
   cancel() {
     // Disposing of a block cancels in-progress drags, but dragging to a delete
-    // area disposes of a block and leads to recursive disposal. Break that cycle.
+    // area disposes of a block and leads to recursive disposal. Break that
+    // cycle.
     if (this.isEnding_) {
       return;
     }
@@ -617,7 +623,8 @@ class Gesture {
       this.bubbleDragger_.endBubbleDrag(
           this.mostRecentEvent_, this.currentDragDeltaXY_);
     } else if (this.isDraggingBlock_) {
-      this.blockDragger_.endDrag(this.mostRecentEvent_, this.currentDragDeltaXY_);
+      this.blockDragger_.endDrag(
+          this.mostRecentEvent_, this.currentDragDeltaXY_);
     } else if (this.isDraggingWorkspace_) {
       this.workspaceDragger_.endDrag(this.currentDragDeltaXY_);
     }
@@ -723,9 +730,9 @@ class Gesture {
     this.mostRecentEvent_ = e;
   }
 
-  /* Begin functions defining what actions to take to execute clicks on each type
-   * of target.  Any developer wanting to add behaviour on clicks should modify
-   * only this code. */
+  /* Begin functions defining what actions to take to execute clicks on each
+   * type of target.  Any developer wanting to add behaviour on clicks should
+   * modify only this code. */
 
   /**
    * Execute a bubble click.
@@ -891,8 +898,8 @@ class Gesture {
    * to change the definition of a click should modify only this code. */
 
   /**
-   * Whether this gesture is a click on a bubble.  This should only be called when
-   * ending a gesture (mouse up, touch end).
+   * Whether this gesture is a click on a bubble.  This should only be called
+   * when ending a gesture (mouse up, touch end).
    * @return {boolean} Whether this gesture was a click on a bubble.
    * @private
    */
@@ -903,21 +910,22 @@ class Gesture {
   }
 
   /**
-   * Whether this gesture is a click on a block.  This should only be called when
-   * ending a gesture (mouse up, touch end).
+   * Whether this gesture is a click on a block.  This should only be called
+   * when ending a gesture (mouse up, touch end).
    * @return {boolean} Whether this gesture was a click on a block.
    * @private
    */
   isBlockClick_() {
-    // A block click starts on a block, never escapes the drag radius, and is not
-    // a field click.
+    // A block click starts on a block, never escapes the drag radius, and is
+    // not a field click.
     const hasStartBlock = !!this.startBlock_;
-    return hasStartBlock && !this.hasExceededDragRadius_ && !this.isFieldClick_();
+    return hasStartBlock && !this.hasExceededDragRadius_ &&
+        !this.isFieldClick_();
   }
 
   /**
-   * Whether this gesture is a click on a field.  This should only be called when
-   * ending a gesture (mouse up, touch end).
+   * Whether this gesture is a click on a field.  This should only be called
+   * when ending a gesture (mouse up, touch end).
    * @return {boolean} Whether this gesture was a click on a field.
    * @private
    */

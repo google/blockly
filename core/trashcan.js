@@ -102,8 +102,8 @@ class Trashcan extends DeleteArea {
     this.isLidOpen = false;
 
     /**
-     * The minimum openness of the lid. Used to indicate if the trashcan contains
-     *  blocks.
+     * The minimum openness of the lid. Used to indicate if the trashcan
+     * contains blocks.
      * @type {number}
      * @private
      */
@@ -188,7 +188,8 @@ class Trashcan extends DeleteArea {
           toolbox.Position.LEFT :
           toolbox.Position.RIGHT;
       const VerticalFlyout = registry.getClassFromOptions(
-          registry.Type.FLYOUTS_VERTICAL_TOOLBOX, this.workspace_.options, true);
+          registry.Type.FLYOUTS_VERTICAL_TOOLBOX, this.workspace_.options,
+          true);
       this.flyout = new VerticalFlyout(flyoutWorkspaceOptions);
     }
     this.workspace_.addChangeListener(this.onDelete_.bind(this));
@@ -213,13 +214,15 @@ class Trashcan extends DeleteArea {
           clip-path="url(#blocklyTrashLidClipPath837493)"></image>
     </g>
     */
-    this.svgGroup_ = dom.createSvgElement(Svg.G, {'class': 'blocklyTrash'}, null);
+    this.svgGroup_ =
+        dom.createSvgElement(Svg.G, {'class': 'blocklyTrash'}, null);
     let clip;
     const rnd = String(Math.random()).substring(2);
     clip = dom.createSvgElement(
         Svg.CLIPPATH, {'id': 'blocklyTrashBodyClipPath' + rnd}, this.svgGroup_);
     dom.createSvgElement(
-        Svg.RECT, {'width': WIDTH, 'height': BODY_HEIGHT, 'y': LID_HEIGHT}, clip);
+        Svg.RECT, {'width': WIDTH, 'height': BODY_HEIGHT, 'y': LID_HEIGHT},
+        clip);
     const body = dom.createSvgElement(
         Svg.IMAGE, {
           'width': internalConstants.SPRITE.width,
@@ -235,7 +238,8 @@ class Trashcan extends DeleteArea {
 
     clip = dom.createSvgElement(
         Svg.CLIPPATH, {'id': 'blocklyTrashLidClipPath' + rnd}, this.svgGroup_);
-    dom.createSvgElement(Svg.RECT, {'width': WIDTH, 'height': LID_HEIGHT}, clip);
+    dom.createSvgElement(
+        Svg.RECT, {'width': WIDTH, 'height': LID_HEIGHT}, clip);
     this.svgLid_ = dom.createSvgElement(
         Svg.IMAGE, {
           'width': internalConstants.SPRITE.width,
@@ -524,8 +528,8 @@ class Trashcan extends DeleteArea {
   /**
    * Sets the minimum openness of the trashcan lid. If the lid is currently
    * closed, this will update lid's position.
-   * @param {number} newMin The new minimum openness of the lid. Should be between
-   *     0 and 1.
+   * @param {number} newMin The new minimum openness of the lid. Should be
+   *     between 0 and 1.
    * @private
    */
   setMinOpenness_(newMin) {
@@ -597,7 +601,8 @@ class Trashcan extends DeleteArea {
   }
 
   /**
-   * Handle a BLOCK_DELETE event. Adds deleted blocks oldXml to the content array.
+   * Handle a BLOCK_DELETE event. Adds deleted blocks oldXml to the content
+   * array.
    * @param {!Abstract} event Workspace event.
    * @private
    */

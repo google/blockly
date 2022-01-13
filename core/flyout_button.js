@@ -315,7 +315,8 @@ class FlyoutButton {
     }
 
     if (this.isLabel_ && this.callbackKey_) {
-      console.warn('Labels should not have callbacks. Label text: ' + this.text_);
+      console.warn(
+          'Labels should not have callbacks. Label text: ' + this.text_);
     } else if (
         !this.isLabel_ &&
         !(this.callbackKey_ &&

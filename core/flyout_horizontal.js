@@ -46,9 +46,9 @@ class HorizontalFlyout extends Flyout {
 
   /**
    * Sets the translation of the flyout to match the scrollbars.
-   * @param {!{x:number,y:number}} xyRatio Contains a y property which is a float
-   *     between 0 and 1 specifying the degree of scrolling and a
-   *     similar x property.
+   * @param {!{x:number,y:number}} xyRatio Contains a y property which is a
+   *     float between 0 and 1 specifying the degree of scrolling and a similar
+   *     x property.
    * @protected
    */
   setMetrics_(xyRatio) {
@@ -223,7 +223,8 @@ class HorizontalFlyout extends Flyout {
 
       const pos = (viewMetrics.left - scrollMetrics.left) + delta;
       this.workspace_.scrollbar.setX(pos);
-      // When the flyout moves from a wheel event, hide WidgetDiv and DropDownDiv.
+      // When the flyout moves from a wheel event, hide WidgetDiv and
+      // DropDownDiv.
       WidgetDiv.hide();
       DropDownDiv.hideWithoutAnimation();
     }
@@ -255,8 +256,8 @@ class HorizontalFlyout extends Flyout {
         const allBlocks = block.getDescendants(false);
         for (let j = 0, child; (child = allBlocks[j]); j++) {
           // Mark blocks as being inside a flyout.  This is used to detect and
-          // prevent the closure of the flyout if the user right-clicks on such a
-          // block.
+          // prevent the closure of the flyout if the user right-clicks on such
+          // a block.
           child.isInFlyout = true;
         }
         block.render();
@@ -293,8 +294,7 @@ class HorizontalFlyout extends Flyout {
    * @return {boolean} True if the drag is toward the workspace.
    * @package
    */
-  isDragTowardWorkspace(
-      currentDragDeltaXY) {
+  isDragTowardWorkspace(currentDragDeltaXY) {
     const dx = currentDragDeltaXY.x;
     const dy = currentDragDeltaXY.y;
     // Direction goes from -180 to 180, with 0 toward the right and 90 on top.
@@ -323,9 +323,10 @@ class HorizontalFlyout extends Flyout {
     }
 
     const flyoutRect = this.svgGroup_.getBoundingClientRect();
-    // BIG_NUM is offscreen padding so that blocks dragged beyond the shown flyout
-    // area are still deleted.  Must be larger than the largest screen size,
-    // but be smaller than half Number.MAX_SAFE_INTEGER (not available on IE).
+    // BIG_NUM is offscreen padding so that blocks dragged beyond the shown
+    // flyout area are still deleted.  Must be larger than the largest screen
+    // size, but be smaller than half Number.MAX_SAFE_INTEGER (not available on
+    // IE).
     const BIG_NUM = 1000000000;
     const top = flyoutRect.top;
 
@@ -367,9 +368,9 @@ class HorizontalFlyout extends Flyout {
       if (this.targetWorkspace.toolboxPosition === this.toolboxPosition_ &&
           this.toolboxPosition_ === toolbox.Position.TOP &&
           !this.targetWorkspace.getToolbox()) {
-        // This flyout is a simple toolbox. Reposition the workspace so that (0,0)
-        // is in the correct position relative to the new absolute edge (ie
-        // toolbox edge).
+        // This flyout is a simple toolbox. Reposition the workspace so that
+        // (0,0) is in the correct position relative to the new absolute edge
+        // (ie toolbox edge).
         this.targetWorkspace.translate(
             this.targetWorkspace.scrollX,
             this.targetWorkspace.scrollY + flyoutHeight);

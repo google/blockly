@@ -258,15 +258,13 @@ class Flyout extends DeleteArea {
     this.height_ = 0;
 
     /**
-     * Range of a drag angle from a flyout considered "dragging toward workspace".
-     * Drags that are within the bounds of this many degrees from the orthogonal
-     * line to the flyout edge are considered to be "drags toward the workspace".
-     * Example:
-     * Flyout                                                  Edge   Workspace
-     * [block] /  <-within this angle, drags "toward workspace" |
-     * [block] ---- orthogonal to flyout boundary ----          |
-     * [block] \                                                |
-     * The angle is given in degrees from the orthogonal.
+     * Range of a drag angle from a flyout considered "dragging toward
+     * workspace". Drags that are within the bounds of this many degrees from
+     * the orthogonal line to the flyout edge are considered to be "drags toward
+     * the workspace". Example: Flyout Edge   Workspace [block] /  <-within this
+     * angle, drags "toward workspace" | [block] ---- orthogonal to flyout
+     * boundary ----          | [block] \ | The angle is given in degrees from
+     * the orthogonal.
      *
      * This is used to know when to create a new block and when to scroll the
      * flyout. Setting it to 360 means that all drags create a new block.
@@ -443,8 +441,9 @@ class Flyout extends DeleteArea {
   }
 
   /**
-   * Set whether the flyout is visible. A value of true does not necessarily mean
-   * that the flyout is shown. It could be hidden because its container is hidden.
+   * Set whether the flyout is visible. A value of true does not necessarily
+   * mean that the flyout is shown. It could be hidden because its container is
+   * hidden.
    * @param {boolean} visible True if visible.
    */
   setVisible(visible) {
@@ -453,8 +452,8 @@ class Flyout extends DeleteArea {
     this.isVisible_ = visible;
     if (visibilityChanged) {
       if (!this.autoClose) {
-        // Auto-close flyouts are ignored as drag targets, so only non auto-close
-        // flyouts need to have their drag target updated.
+        // Auto-close flyouts are ignored as drag targets, so only non
+        // auto-close flyouts need to have their drag target updated.
         this.workspace_.recordDragTargets();
       }
       this.updateDisplay_();
@@ -684,7 +683,8 @@ class Flyout extends DeleteArea {
     // Look up the correct category generation function and call that to get a
     // valid XML list.
     const fnToApply =
-        this.workspace_.targetWorkspace.getToolboxCategoryCallback(categoryName);
+        this.workspace_.targetWorkspace.getToolboxCategoryCallback(
+            categoryName);
     if (typeof fnToApply !== 'function') {
       throw TypeError(
           'Couldn\'t find a callback function when opening' +
@@ -734,8 +734,8 @@ class Flyout extends DeleteArea {
       block = this.getRecycledBlock_(blockInfo['type']);
       if (!block) {
         if (blockInfo['enabled'] === undefined) {
-          blockInfo['enabled'] =
-              blockInfo['disabled'] !== 'true' && blockInfo['disabled'] !== true;
+          blockInfo['enabled'] = blockInfo['disabled'] !== 'true' &&
+              blockInfo['disabled'] !== true;
         }
         block = blocks.append(
             /** @type {blocks.State} */ (blockInfo), this.workspace_);
@@ -773,7 +773,8 @@ class Flyout extends DeleteArea {
    * Adds a gap in the flyout based on block info.
    * @param {!toolbox.BlockInfo} blockInfo Information about a block.
    * @param {!Array<number>} gaps The list of gaps between items in the flyout.
-   * @param {number} defaultGap The default gap between one element and the next.
+   * @param {number} defaultGap The default gap between one element and the
+   *     next.
    * @private
    */
   addBlockGap_(blockInfo, gaps, defaultGap) {
@@ -1014,12 +1015,12 @@ class Flyout extends DeleteArea {
    * @param {!BlockSvg} block The block to associate the rect to.
    * @param {number} x The x position of the cursor during this layout pass.
    * @param {number} y The y position of the cursor during this layout pass.
-   * @param {!{height: number, width: number}} blockHW The height and width of the
-   *     block.
-   * @param {number} index The index into the mats list where this rect should be
-   *     placed.
-   * @return {!SVGElement} Newly created SVG element for the rectangle behind the
-   *     block.
+   * @param {!{height: number, width: number}} blockHW The height and width of
+   *     the block.
+   * @param {number} index The index into the mats list where this rect should
+   *     be placed.
+   * @return {!SVGElement} Newly created SVG element for the rectangle behind
+   *     the block.
    * @protected
    */
   createRect_(block, x, y, blockHW, index) {
@@ -1063,8 +1064,9 @@ class Flyout extends DeleteArea {
 
   /**
    * Filter the blocks on the flyout to disable the ones that are above the
-   * capacity limit.  For instance, if the user may only place two more blocks on
-   * the workspace, an "a + b" block that has two shadow blocks would be disabled.
+   * capacity limit.  For instance, if the user may only place two more blocks
+   * on the workspace, an "a + b" block that has two shadow blocks would be
+   * disabled.
    * @private
    */
   filterForCapacity_() {
@@ -1095,8 +1097,8 @@ class Flyout extends DeleteArea {
   }
 
   /**
-   * @return {boolean} True if this flyout may be scrolled with a scrollbar or by
-   *     dragging.
+   * @return {boolean} True if this flyout may be scrolled with a scrollbar or
+   *     by dragging.
    * @package
    */
   isScrollable() {
@@ -1121,7 +1123,8 @@ class Flyout extends DeleteArea {
     const json = /** @type {!blocks.State} */ (blocks.save(oldBlock));
     // Normallly this resizes leading to weird jumps. Save it for terminateDrag.
     targetWorkspace.setResizesEnabled(false);
-    const block = /** @type {!BlockSvg} */ (blocks.append(json, targetWorkspace));
+    const block =
+        /** @type {!BlockSvg} */ (blocks.append(json, targetWorkspace));
 
     this.positionNewBlock_(oldBlock, block);
 
@@ -1137,8 +1140,8 @@ class Flyout extends DeleteArea {
   positionNewBlock_(oldBlock, block) {
     const targetWorkspace = this.targetWorkspace;
 
-    // The offset in pixels between the main workspace's origin and the upper left
-    // corner of the injection div.
+    // The offset in pixels between the main workspace's origin and the upper
+    // left corner of the injection div.
     const mainOffsetPixels = targetWorkspace.getOriginOffsetInPixels();
 
     // The offset in pixels between the flyout workspace's origin and the upper
@@ -1153,7 +1156,8 @@ class Flyout extends DeleteArea {
 
     // The position of the old block in pixels relative to the upper left corner
     // of the injection div.
-    const oldBlockOffsetPixels = Coordinate.sum(flyoutOffsetPixels, oldBlockPos);
+    const oldBlockOffsetPixels =
+        Coordinate.sum(flyoutOffsetPixels, oldBlockPos);
 
     // The position of the old block in pixels relative to the origin of the
     // main workspace.

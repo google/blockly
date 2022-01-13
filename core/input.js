@@ -49,15 +49,16 @@ exports.Align = Align;
 class Input {
   /**
    * @param {number} type The type of the input.
-   * @param {string} name Language-neutral identifier which may used to find this
-   *     input again.
+   * @param {string} name Language-neutral identifier which may used to find
+   *     this input again.
    * @param {!Block} block The block containing this input.
    * @param {Connection} connection Optional connection for this input.
    * @alias Blockly.Input
    */
   constructor(type, name, block, connection) {
     if (type !== inputTypes.DUMMY && !name) {
-      throw Error('Value inputs and statement inputs must have non-empty name.');
+      throw Error(
+          'Value inputs and statement inputs must have non-empty name.');
     }
     /** @type {number} */
     this.type = type;
@@ -96,11 +97,11 @@ class Input {
   }
 
   /**
-   * Add a field (or label from string), and all prefix and suffix fields, to the
-   * end of the input's field row.
+   * Add a field (or label from string), and all prefix and suffix fields, to
+   * the end of the input's field row.
    * @param {string|!Field} field Something to add as a field.
-   * @param {string=} opt_name Language-neutral identifier which may used to find
-   *     this field again.  Should be unique to the host block.
+   * @param {string=} opt_name Language-neutral identifier which may used to
+   *     find this field again.  Should be unique to the host block.
    * @return {!Input} The input being append to (to allow chaining).
    */
   appendField(field, opt_name) {
@@ -109,12 +110,12 @@ class Input {
   }
 
   /**
-   * Inserts a field (or label from string), and all prefix and suffix fields, at
-   * the location of the input's field row.
+   * Inserts a field (or label from string), and all prefix and suffix fields,
+   * at the location of the input's field row.
    * @param {number} index The index at which to insert field.
    * @param {string|!Field} field Something to add as a field.
-   * @param {string=} opt_name Language-neutral identifier which may used to find
-   *     this field again.  Should be unique to the host block.
+   * @param {string=} opt_name Language-neutral identifier which may used to
+   *     find this field again.  Should be unique to the host block.
    * @return {number} The index following the last inserted field.
    */
   insertFieldAt(index, field, opt_name) {
@@ -167,7 +168,8 @@ class Input {
   /**
    * Remove a field from this input.
    * @param {string} name The name of the field.
-   * @param {boolean=} opt_quiet True to prevent an error if field is not present.
+   * @param {boolean=} opt_quiet True to prevent an error if field is not
+   *     present.
    * @return {boolean} True if operation succeeds, false if field is not present
    *     and opt_quiet is true.
    * @throws {Error} if the field is not present and opt_quiet is false.

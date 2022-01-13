@@ -49,9 +49,9 @@ class VerticalFlyout extends Flyout {
 
   /**
    * Sets the translation of the flyout to match the scrollbars.
-   * @param {!{x:number,y:number}} xyRatio Contains a y property which is a float
-   *     between 0 and 1 specifying the degree of scrolling and a
-   *     similar x property.
+   * @param {!{x:number,y:number}} xyRatio Contains a y property which is a
+   *     float between 0 and 1 specifying the degree of scrolling and a similar
+   *     x property.
    * @protected
    */
   setMetrics_(xyRatio) {
@@ -144,7 +144,8 @@ class VerticalFlyout extends Flyout {
     this.height_ = targetWorkspaceViewMetrics.height;
 
     const edgeWidth = this.width_ - this.CORNER_RADIUS;
-    const edgeHeight = targetWorkspaceViewMetrics.height - 2 * this.CORNER_RADIUS;
+    const edgeHeight =
+        targetWorkspaceViewMetrics.height - 2 * this.CORNER_RADIUS;
     this.setBackgroundPath_(edgeWidth, edgeHeight);
 
     const x = this.getX();
@@ -207,7 +208,8 @@ class VerticalFlyout extends Flyout {
       const pos = (viewMetrics.top - scrollMetrics.top) + scrollDelta.y;
 
       this.workspace_.scrollbar.setY(pos);
-      // When the flyout moves from a wheel event, hide WidgetDiv and DropDownDiv.
+      // When the flyout moves from a wheel event, hide WidgetDiv and
+      // DropDownDiv.
       WidgetDiv.hide();
       DropDownDiv.hideWithoutAnimation();
     }
@@ -236,18 +238,20 @@ class VerticalFlyout extends Flyout {
         const allBlocks = block.getDescendants(false);
         for (let j = 0, child; (child = allBlocks[j]); j++) {
           // Mark blocks as being inside a flyout.  This is used to detect and
-          // prevent the closure of the flyout if the user right-clicks on such a
-          // block.
+          // prevent the closure of the flyout if the user right-clicks on such
+          // a block.
           child.isInFlyout = true;
         }
         block.render();
         const root = block.getSvgRoot();
         const blockHW = block.getHeightWidth();
-        const moveX = block.outputConnection ? cursorX - this.tabWidth_ : cursorX;
+        const moveX =
+            block.outputConnection ? cursorX - this.tabWidth_ : cursorX;
         block.moveBy(moveX, cursorY);
 
         const rect = this.createRect_(
-            block, this.RTL ? moveX - blockHW.width : moveX, cursorY, blockHW, i);
+            block, this.RTL ? moveX - blockHW.width : moveX, cursorY, blockHW,
+            i);
 
         this.addBlockListeners_(root, block, rect);
 
@@ -297,9 +301,10 @@ class VerticalFlyout extends Flyout {
     }
 
     const flyoutRect = this.svgGroup_.getBoundingClientRect();
-    // BIG_NUM is offscreen padding so that blocks dragged beyond the shown flyout
-    // area are still deleted.  Must be larger than the largest screen size,
-    // but be smaller than half Number.MAX_SAFE_INTEGER (not available on IE).
+    // BIG_NUM is offscreen padding so that blocks dragged beyond the shown
+    // flyout area are still deleted.  Must be larger than the largest screen
+    // size, but be smaller than half Number.MAX_SAFE_INTEGER (not available on
+    // IE).
     const BIG_NUM = 1000000000;
     const left = flyoutRect.left;
 
@@ -362,9 +367,9 @@ class VerticalFlyout extends Flyout {
       if (this.targetWorkspace.toolboxPosition === this.toolboxPosition_ &&
           this.toolboxPosition_ === toolbox.Position.LEFT &&
           !this.targetWorkspace.getToolbox()) {
-        // This flyout is a simple toolbox. Reposition the workspace so that (0,0)
-        // is in the correct position relative to the new absolute edge (ie
-        // toolbox edge).
+        // This flyout is a simple toolbox. Reposition the workspace so that
+        // (0,0) is in the correct position relative to the new absolute edge
+        // (ie toolbox edge).
         this.targetWorkspace.translate(
             this.targetWorkspace.scrollX + flyoutWidth,
             this.targetWorkspace.scrollY);

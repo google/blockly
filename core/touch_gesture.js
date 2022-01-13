@@ -125,7 +125,8 @@ class TouchGesture extends Gesture {
    * Overriding the gesture definition of this function, binding the same
    * functions for onMoveWrapper_ and onUpWrapper_ but passing
    * opt_noCaptureIdentifier.
-   * In addition, binding a second mouse down event to detect multi-touch events.
+   * In addition, binding a second mouse down event to detect multi-touch
+   * events.
    * @param {!Event} e A mouse down or touch start event.
    * @package
    */
@@ -242,8 +243,10 @@ class TouchGesture extends Gesture {
     const pointers = Object.keys(this.cachedPoints_);
     // If two pointers are down, store info
     if (pointers.length === 2) {
-      const point0 = /** @type {!Coordinate} */ (this.cachedPoints_[pointers[0]]);
-      const point1 = /** @type {!Coordinate} */ (this.cachedPoints_[pointers[1]]);
+      const point0 =
+          /** @type {!Coordinate} */ (this.cachedPoints_[pointers[0]]);
+      const point1 =
+          /** @type {!Coordinate} */ (this.cachedPoints_[pointers[1]]);
       this.startDistance_ = Coordinate.distance(point0, point1);
       this.isMultiTouch_ = true;
       e.preventDefault();
@@ -284,9 +287,8 @@ class TouchGesture extends Gesture {
 
     if (this.previousScale_ > 0 && this.previousScale_ < Infinity) {
       const gestureScale = scale - this.previousScale_;
-      const delta = gestureScale > 0 ?
-          gestureScale * ZOOM_IN_MULTIPLIER :
-          gestureScale * ZOOM_OUT_MULTIPLIER;
+      const delta = gestureScale > 0 ? gestureScale * ZOOM_IN_MULTIPLIER :
+                                       gestureScale * ZOOM_OUT_MULTIPLIER;
       const workspace = this.startWorkspace_;
       const position = browserEvents.mouseToSvg(
           e, workspace.getParentSvg(), workspace.getInverseScreenCTM());

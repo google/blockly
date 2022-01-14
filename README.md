@@ -11,7 +11,7 @@ The main feature of Varwin Blockly: "Modules" (`/core/module.*`)
 4. Run ```npm run build```
 5. Run the local playground, which is located in `tests/playground.html`
 6. If errors are found, then go to step 3 and solve the problems that have arisen. Pay attention to the section with common problems below.
-7. Run ```npm run prepare```
+7. Run ```npm run package```
 8. Go to the `dist` directory
 9. In file `/dist/package.json` check package name and update version
 10. Execute `npm publish`
@@ -25,7 +25,7 @@ Those.
 
 1. Making edits in Varwin Blockly
 2. Run ```npm run build```
-3. Run ```gulp package --output "~/node_modules/blockly/"```
+3. Run ```gulp buildCompiled --output "~/node_modules/blockly/"```
 4. Run the RMS build (or hot reload will pull up node_modules by itself)
 
 ## Frequent problems

@@ -1588,19 +1588,13 @@ WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock, jsonBlock) {
     let blockY = 0;
     if (xmlBlock) {
       block = Xml.domToBlock(xmlBlock, this);
-      blockX = parseInt(xmlBlock.getAttribute('x'), 10);
-      if (this.RTL) {
-        blockX = -blockX;
-      }
-      blockY = parseInt(xmlBlock.getAttribute('y'), 10);
     } else if (jsonBlock) {
       block = blocks.append(jsonBlock, this);
-      blockX = jsonBlock['x'] || 10;
-      if (this.RTL) {
-        blockX = this.getWidth() - blockX;
-      }
-      blockY = jsonBlock['y'] || 10;
     }
+
+    const metrics = this.getMetrics();
+    blockX = metrics.viewWidth / 2 + metrics.viewLeft;
+    blockY = metrics.viewHeight / 2 + metrics.viewTop;
 
     // Move the duplicate to original position.
     if (!isNaN(blockX) && !isNaN(blockY)) {

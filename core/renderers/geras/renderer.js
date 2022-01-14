@@ -94,8 +94,8 @@ class Renderer extends BaseRenderer {
   /**
    * Create a new instance of the renderer's drawer.
    * @param {!BlockSvg} block The block to render.
-   * @param {!BaseRenderInfo} info An object containing all
-   *   information needed to render this block.
+   * @param {!BaseRenderInfo} info An object containing all information needed
+   *     to render this block.
    * @return {!Drawer} The drawer.
    * @protected
    * @override
@@ -109,8 +109,7 @@ class Renderer extends BaseRenderer {
   /**
    * Create a new instance of a renderer path object.
    * @param {!SVGElement} root The root SVG element.
-   * @param {!Theme.BlockStyle} style The style object to use for
-   *     colouring.
+   * @param {!Theme.BlockStyle} style The style object to use for colouring.
    * @return {!PathObject} The renderer path object.
    * @package
    * @override
@@ -123,8 +122,7 @@ class Renderer extends BaseRenderer {
 
   /**
    * Create a new instance of the renderer's highlight constant provider.
-   * @return {!HighlightConstantProvider} The highlight constant
-   *     provider.
+   * @return {!HighlightConstantProvider} The highlight constant provider.
    * @protected
    */
   makeHighlightConstants_() {
@@ -136,8 +134,7 @@ class Renderer extends BaseRenderer {
   /**
    * Get the renderer's highlight constant provider.  We assume that when this
    * is called, the renderer has already been initialized.
-   * @return {!HighlightConstantProvider} The highlight constant
-   *     provider.
+   * @return {!HighlightConstantProvider} The highlight constant provider.
    * @package
    */
   getHighlightConstants() {

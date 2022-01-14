@@ -220,6 +220,19 @@ const isRightButton = function(e) {
 exports.isRightButton = isRightButton;
 
 /**
+ * Returns true this event is a middle-click (wheel button).
+ * @param {!Event} e Mouse event.
+ * @return {boolean} True if middle-click.
+ * @alias Blockly.browserEvents.isMiddleButton
+ */
+ const isMiddleButton = function(e) {
+   // e.button === 1 event MouseUp middle button
+   // e.buttons === 4 event long press middle button
+  return e.button === 1 || e.buttons === 4;
+};
+exports.isMiddleButton = isMiddleButton;
+
+/**
  * Returns the converted coordinates of the given mouse event.
  * The origin (0,0) is the top-left corner of the Blockly SVG.
  * @param {!Event} e Mouse event.

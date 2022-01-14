@@ -281,7 +281,7 @@ Gesture.prototype.updateFromEvent_ = function(e) {
   const changed = this.updateDragDelta_(currentXY);
   // Exceeded the drag radius for the first time.
   if (changed) {
-    this.updateIsDragging_();
+    this.updateIsDragging_(e);
     Touch.longStop();
   }
   this.mostRecentEvent_ = e;
@@ -422,9 +422,10 @@ Gesture.prototype.updateIsDraggingWorkspace_ = function() {
  * Update this gesture to record whether anything is being dragged.
  * This function should be called on a mouse/touch move event the first time the
  * drag radius is exceeded.  It should be called no more than once per gesture.
+ * @param {!Event} e The most recent mouse or touch event.
  * @private
  */
-Gesture.prototype.updateIsDragging_ = function() {
+Gesture.prototype.updateIsDragging_ = function(e) {
   // Sanity check.
   if (this.calledUpdateIsDragging_) {
     throw Error('updateIsDragging_ should only be called once per gesture.');
@@ -432,11 +433,11 @@ Gesture.prototype.updateIsDragging_ = function() {
   this.calledUpdateIsDragging_ = true;
 
   // First check if it was a bubble drag.  Bubbles always sit on top of blocks.
-  if (this.updateIsDraggingBubble_()) {
+  if (!browserEvents.isMiddleButton(e) && this.updateIsDraggingBubble_()) {
     return;
   }
   // Then check if it was a block drag.
-  if (this.updateIsDraggingBlock_()) {
+  if (!browserEvents.isMiddleButton(e) && this.updateIsDraggingBlock_()) {
     return;
   }
   // Then check if it's a workspace drag.
@@ -501,7 +502,7 @@ Gesture.prototype.doStart = function(e) {
 
   Tooltip.block();
 
-  if (this.targetBlock_) {
+  if (!browserEvents.isMiddleButton(e) && this.targetBlock_) {
     this.targetBlock_.select();
   }
 

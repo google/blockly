@@ -148,7 +148,7 @@ class Highlighter {
    * @package
    */
   drawValueInput(row) {
-    const input = row.getLastInput();
+    const input = /** @type {!InlineInput}} */ (row.getLastInput());
     if (this.RTL_) {
       const belowTabHeight = row.height - input.connectionHeight;
 

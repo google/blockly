@@ -20,11 +20,15 @@ goog.module('Blockly.thrasos.RenderInfo');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
+const {BottomRow} = goog.requireType('Blockly.blockRendering.BottomRow');
+/* eslint-disable-next-line no-unused-vars */
 const {Field} = goog.requireType('Blockly.blockRendering.Field');
 const {InRowSpacer} = goog.require('Blockly.blockRendering.InRowSpacer');
 const {RenderInfo: BaseRenderInfo} = goog.require('Blockly.blockRendering.RenderInfo');
 /* eslint-disable-next-line no-unused-vars */
 const {Renderer} = goog.requireType('Blockly.thrasos.Renderer');
+/* eslint-disable-next-line no-unused-vars */
+const {TopRow} = goog.requireType('Blockly.blockRendering.TopRow');
 const {Types} = goog.require('Blockly.blockRendering.Types');
 
 
@@ -261,17 +265,20 @@ class RenderInfo extends BaseRenderInfo {
       return row.yPos + elem.height / 2;
     }
     if (Types.isBottomRow(row)) {
-      const baseline = row.yPos + row.height - row.descenderHeight;
+      const bottomRow = /** @type {!BottomRow} */ (row);
+      const baseline =
+          bottomRow.yPos + bottomRow.height - bottomRow.descenderHeight;
       if (Types.isNextConnection(elem)) {
         return baseline + elem.height / 2;
       }
       return baseline - elem.height / 2;
     }
     if (Types.isTopRow(row)) {
+      const topRow = /** @type {!TopRow} */ (row);
       if (Types.isHat(elem)) {
-        return row.capline - elem.height / 2;
+        return topRow.capline - elem.height / 2;
       }
-      return row.capline + elem.height / 2;
+      return topRow.capline + elem.height / 2;
     }
 
     let result = row.yPos;

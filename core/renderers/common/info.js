@@ -695,17 +695,20 @@ RenderInfo.prototype.getElemCenterline_ = function(row, elem) {
     return row.yPos + elem.height / 2;
   }
   if (Types.isBottomRow(row)) {
-    const baseline = row.yPos + row.height - row.descenderHeight;
+    const bottomRow = /** @type {!BottomRow} */ (row);
+    const baseline =
+        bottomRow.yPos + bottomRow.height - bottomRow.descenderHeight;
     if (Types.isNextConnection(elem)) {
       return baseline + elem.height / 2;
     }
     return baseline - elem.height / 2;
   }
   if (Types.isTopRow(row)) {
+    const topRow = /** @type {!TopRow} */ (row);
     if (Types.isHat(elem)) {
-      return row.capline - elem.height / 2;
+      return topRow.capline - elem.height / 2;
     }
-    return row.capline + elem.height / 2;
+    return topRow.capline + elem.height / 2;
   }
   return row.yPos + row.height / 2;
 };

@@ -114,6 +114,13 @@ const MarkerSvg = function(workspace, constants, marker) {
    * @type {string}
    */
   this.colour_ = marker.colour || defaultColour;
+
+  /**
+   * The root SVG group containing the marker.
+   * @type {SVGGElement}
+   * @protected
+   */
+  this.markerSvg_ = null;
 };
 
 /**

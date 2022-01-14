@@ -30,14 +30,18 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  *   constants provider.
  * @package
  * @constructor
+ * @struct
  * @extends {Measurable}
  * @alias Blockly.blockRendering.Hat
  */
 const Hat = function(constants) {
   Hat.superClass_.constructor.call(this, constants);
   this.type |= Types.HAT;
+
   this.height = this.constants_.START_HAT.height;
   this.width = this.constants_.START_HAT.width;
+
+  /** @type {number} */
   this.ascenderHeight = this.height;
 };
 object.inherits(Hat, Measurable);

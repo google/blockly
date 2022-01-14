@@ -35,6 +35,7 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  * @package
  * @constructor
  * @extends {InputConnection}
+ * @struct
  * @alias Blockly.blockRendering.InlineInput
  */
 const InlineInput = function(constants, input) {
@@ -51,16 +52,23 @@ const InlineInput = function(constants, input) {
     this.height = this.connectedBlockHeight;
   }
 
+  /** @type {number} */
   this.connectionHeight =
       !this.isDynamicShape ? this.shape.height : this.shape.height(this.height);
+
+  /** @type {number} */
   this.connectionWidth =
       !this.isDynamicShape ? this.shape.width : this.shape.width(this.height);
   if (!this.connectedBlock) {
     this.width += this.connectionWidth * (this.isDynamicShape ? 2 : 1);
   }
+
+  /** @type {number} */
   this.connectionOffsetY = this.isDynamicShape ?
       this.shape.connectionOffsetY(this.connectionHeight) :
       this.constants_.TAB_OFFSET_FROM_TOP;
+
+  /** @type {number} */
   this.connectionOffsetX = this.isDynamicShape ?
       this.shape.connectionOffsetX(this.connectionWidth) :
       0;

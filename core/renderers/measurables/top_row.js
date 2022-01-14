@@ -37,6 +37,7 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  * @package
  * @constructor
  * @extends {Row}
+ * @struct
  * @alias Blockly.blockRendering.TopRow
  */
 const TopRow = function(constants) {

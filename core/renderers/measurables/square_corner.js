@@ -32,6 +32,7 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  * @package
  * @constructor
  * @extends {Measurable}
+ * @struct
  * @alias Blockly.blockRendering.SquareCorner
  */
 const SquareCorner = function(constants, opt_position) {

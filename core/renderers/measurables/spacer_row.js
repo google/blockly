@@ -31,15 +31,29 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  * @package
  * @constructor
  * @extends {Row}
+ * @struct
  * @alias Blockly.blockRendering.SpacerRow
  */
 const SpacerRow = function(constants, height, width) {
   SpacerRow.superClass_.constructor.call(this, constants);
   this.type |= Types.SPACER | Types.BETWEEN_ROW_SPACER;
+
+  /** @type {number} */
   this.width = width;
+
+  /** @type {number} */
   this.height = height;
+
+  /** @type {boolean} */
   this.followsStatement = false;
+
+  /** @type {boolean} */
+  this.precedesStatement = false;
+
+  /** @type {number} */
   this.widthWithConnectedBlocks = 0;
+
+  /** @type {!Array.<!InRowSpacer>} */
   this.elements = [new InRowSpacer(this.constants_, width)];
 };
 object.inherits(SpacerRow, Row);

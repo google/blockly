@@ -35,6 +35,7 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  * @package
  * @constructor
  * @extends {Connection}
+ * @struct
  * @alias Blockly.blockRendering.NextConnection
  */
 const NextConnection = function(constants, connectionModel) {

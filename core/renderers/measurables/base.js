@@ -32,11 +32,19 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  * @alias Blockly.blockRendering.Measurable
  */
 const Measurable = function(constants) {
+  /** @type {number} */
   this.width = 0;
+
+  /** @type {number} */
   this.height = 0;
+
+  /** @type {number} */
   this.type = Types.NONE;
 
+  /** @type {number} */
   this.xPos = 0;
+
+  /** @type {number} */
   this.centerline = 0;
 
   /**
@@ -46,6 +54,7 @@ const Measurable = function(constants) {
    */
   this.constants_ = constants;
 
+  /** @type {number} */
   this.notchOffset = this.constants_.NOTCH_OFFSET_LEFT;
 };
 

@@ -34,6 +34,7 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  *     information for.
  * @package
  * @constructor
+ * @struct
  * @extends {InputConnection}
  * @alias Blockly.blockRendering.StatementInput
  */

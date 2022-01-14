@@ -34,11 +34,16 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  * @package
  * @constructor
  * @extends {Measurable}
+ * @struct
  * @alias Blockly.blockRendering.Icon
  */
 const Icon = function(constants, icon) {
   Icon.superClass_.constructor.call(this, constants);
+
+  /** @type {!BlocklyIcon} */
   this.icon = icon;
+
+  /** @type {boolean} */
   this.isVisible = icon.isVisible();
   this.type |= Types.ICON;
 

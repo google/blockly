@@ -143,6 +143,9 @@ const Row = function(constants) {
    */
   this.constants_ = constants;
 
+  /**
+   * @type {number}
+   */
   this.notchOffset = this.constants_.NOTCH_OFFSET_LEFT;
 
   /**

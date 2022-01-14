@@ -39,8 +39,14 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  */
 const Connection = function(constants, connectionModel) {
   Connection.superClass_.constructor.call(this, constants);
+
+  /** @type {!RenderedConnection} */
   this.connectionModel = connectionModel;
+
+  /** @type {!Object} */
   this.shape = this.constants_.shapeFor(connectionModel);
+
+  /** @type {boolean} */
   this.isDynamicShape = !!this.shape['isDynamic'];
   this.type |= Types.CONNECTION;
 };

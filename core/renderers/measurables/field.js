@@ -36,19 +36,32 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  * @param {!Input} parentInput The parent input for the field.
  * @package
  * @constructor
+ * @struct
  * @extends {Measurable}
  * @alias Blockly.blockRendering.Field
  */
 const Field = function(constants, field, parentInput) {
   Field.superClass_.constructor.call(this, constants);
+
+  /** @type {!BlocklyField} */
   this.field = field;
+
+  /** @type {boolean} */
   this.isEditable = field.EDITABLE;
+
+  /** @type {boolean} */
   this.flipRtl = field.getFlipRtl();
   this.type |= Types.FIELD;
 
   const size = this.field.getSize();
+
+  /** @type {number} */
   this.height = size.height;
+
+  /** @type {number} */
   this.width = size.width;
+
+  /** @type {!Input} */
   this.parentInput = parentInput;
 };
 object.inherits(Field, Measurable);

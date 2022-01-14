@@ -36,6 +36,7 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  * @package
  * @constructor
  * @extends {Connection}
+ * @struct
  * @alias Blockly.blockRendering.OutputConnection
  */
 const OutputConnection = function(constants, connectionModel) {
@@ -45,9 +46,14 @@ const OutputConnection = function(constants, connectionModel) {
 
   this.height = !this.isDynamicShape ? this.shape.height : 0;
   this.width = !this.isDynamicShape ? this.shape.width : 0;
+
+  /** @type {number} */
   this.startX = this.width;
 
+  /** @type {number} */
   this.connectionOffsetY = this.constants_.TAB_OFFSET_FROM_TOP;
+
+  /** @type {number} */
   this.connectionOffsetX = 0;
 };
 object.inherits(OutputConnection, Connection);

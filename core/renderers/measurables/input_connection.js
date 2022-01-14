@@ -15,6 +15,8 @@
 goog.module('Blockly.blockRendering.InputConnection');
 
 const object = goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 const {Connection} = goog.require('Blockly.blockRendering.Connection');
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -39,10 +41,16 @@ const InputConnection = function(constants, input) {
       this, constants, input.connection);
 
   this.type |= Types.INPUT;
+
+  /** @type {!Input} */
   this.input = input;
+
+  /** @type {number} */
   this.align = input.align;
+
+  /** @type {BlockSvg} */
   this.connectedBlock = input.connection && input.connection.targetBlock() ?
-      input.connection.targetBlock() :
+      /** @type {BlockSvg} */ (input.connection.targetBlock()) :
       null;
 
   if (this.connectedBlock) {
@@ -54,7 +62,10 @@ const InputConnection = function(constants, input) {
     this.connectedBlockHeight = 0;
   }
 
+  /** @type {number} */
   this.connectionOffsetX = 0;
+
+  /** @type {number} */
   this.connectionOffsetY = 0;
 };
 object.inherits(InputConnection, Connection);

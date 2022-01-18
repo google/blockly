@@ -235,6 +235,13 @@ Flyout.prototype.SCROLLBAR_MARGIN = 2.5;
 Flyout.prototype.width_ = 0;
 
 /**
+ * Enable(false) / disable(true) auto calculate flyout width.
+ * @type {number}
+ * @protected
+ */
+Flyout.prototype.fixedWidth = true;
+
+/**
  * Height of flyout.
  * @type {number}
  * @protected
@@ -560,9 +567,9 @@ Flyout.prototype.show = function(flyoutDef) {
       this.svgBackground_, 'mouseover', this, deselectAll));
 
   if (this.horizontalLayout) {
-    this.height_ = 0;
+    if (!this.height_) this.height_ = 0;
   } else {
-    this.width_ = 0;
+    if (!this.width_) this.width_ = 0;
   }
   this.workspace_.setResizesEnabled(true);
   this.reflow();

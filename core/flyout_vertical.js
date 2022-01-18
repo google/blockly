@@ -327,21 +327,29 @@ VerticalFlyout.prototype.getClientRect = function() {
  */
 VerticalFlyout.prototype.reflowInternal_ = function() {
   this.workspace_.scale = this.getFlyoutScale();
-  let flyoutWidth = 0;
+
   const blocks = this.workspace_.getTopBlocks(false);
-  for (let i = 0, block; (block = blocks[i]); i++) {
-    let width = block.getHeightWidth().width;
-    if (block.outputConnection) {
-      width -= this.tabWidth_;
+  let flyoutWidth = 0;
+
+  if (this.fixedWidth) {
+    flyoutWidth = this.width_
+  } else {
+    for (let i = 0, block; (block = blocks[i]); i++) {
+      let width = block.getHeightWidth().width;
+      if (block.outputConnection) {
+        width -= this.tabWidth_;
+      }
+      flyoutWidth = Math.max(flyoutWidth, width);
     }
-    flyoutWidth = Math.max(flyoutWidth, width);
+
+    for (let i = 0, button; (button = this.buttons_[i]); i++) {
+      flyoutWidth = Math.max(flyoutWidth, button.width);
+    }
+
+    flyoutWidth += this.MARGIN * 1.5 + this.tabWidth_;
+    flyoutWidth *= this.workspace_.scale;
+    flyoutWidth += Scrollbar.scrollbarThickness;
   }
-  for (let i = 0, button; (button = this.buttons_[i]); i++) {
-    flyoutWidth = Math.max(flyoutWidth, button.width);
-  }
-  flyoutWidth += this.MARGIN * 1.5 + this.tabWidth_;
-  flyoutWidth *= this.workspace_.scale;
-  flyoutWidth += Scrollbar.scrollbarThickness;
 
   if (this.width_ !== flyoutWidth) {
     for (let i = 0, block; (block = blocks[i]); i++) {
@@ -358,6 +366,7 @@ VerticalFlyout.prototype.reflowInternal_ = function() {
         this.moveRectToBlock_(block.flyoutRect_, block);
       }
     }
+
     if (this.RTL) {
       // With the flyoutWidth known, right-align the buttons.
       for (let i = 0, button; (button = this.buttons_[i]); i++) {
@@ -380,13 +389,13 @@ VerticalFlyout.prototype.reflowInternal_ = function() {
     }
 
     // Record the width for workspace metrics and .position.
-    this.width_ = flyoutWidth;
+    this.width_ = flyoutWidth
+
     this.position();
     this.targetWorkspace.recordDragTargets();
   }
 };
 
-registry.register(
-    registry.Type.FLYOUTS_VERTICAL_TOOLBOX, registry.DEFAULT, VerticalFlyout);
+registry.register(registry.Type.FLYOUTS_VERTICAL_TOOLBOX, registry.DEFAULT, VerticalFlyout);
 
 exports.VerticalFlyout = VerticalFlyout;

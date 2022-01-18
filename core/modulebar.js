@@ -30,6 +30,7 @@ const utilsAria = goog.require('Blockly.utils.aria');
 const utilsColour = goog.require('Blockly.utils.colour');
 const utilsDom = goog.require('Blockly.utils.dom');
 const utilsObject = goog.require('Blockly.utils.object');
+const browserEvents = goog.require('Blockly.browserEvents');
 
 
 /**
@@ -188,17 +189,10 @@ ModuleBar.prototype.setContainerVisible = function(visible) {
  * @private
  */
 ModuleBar.prototype.attachEvents_ = function() {
-  this.onClickWrapper_ = Blockly.bindEventWithChecks_(this.htmlContainer_,
-    'click', this, this.onMouseClick_);
-
-  this.onMouseDownWrapper_ = Blockly.bindEventWithChecks_(this.htmlContainer_,
-    'mousedown', this, this.onMouseDown_);
-
-  this.onMouseUpWrapper_ = Blockly.bindEventWithChecks_(document,
-    'mouseup', this, this.onMouseUp_);
-
-  this.onMouseMoveWrapper_ = Blockly.bindEventWithChecks_(document,
-    'mousemove', this, this.onMouseMove_);
+  this.onClickWrapper_ = browserEvents.conditionalBind(this.htmlContainer_, 'click', this, this.onMouseClick_);
+  this.onMouseDownWrapper_ = browserEvents.conditionalBind(this.htmlContainer_, 'mousedown', this, this.onMouseDown_);
+  this.onMouseUpWrapper_ = browserEvents.conditionalBind(document, 'mouseup', this, this.onMouseUp_);
+  this.onMouseMoveWrapper_ = browserEvents.conditionalBind(document, 'mousemove', this, this.onMouseMove_);
 };
 
 /**

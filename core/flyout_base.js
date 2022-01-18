@@ -239,7 +239,7 @@ Flyout.prototype.width_ = 0;
  * @type {number}
  * @protected
  */
-Flyout.prototype.fixedWidth = true;
+Flyout.prototype.fixedWidth = false;
 
 /**
  * Height of flyout.

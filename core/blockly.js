@@ -655,8 +655,6 @@ const bindEventWithChecks_ = function(
 exports.bindEventWithChecks_ = bindEventWithChecks_;
 
 // Aliases to allow external code to access these values for legacy reasons.
-exports.LINE_MODE_MULTIPLIER = internalConstants.LINE_MODE_MULTIPLIER;
-exports.PAGE_MODE_MULTIPLIER = internalConstants.PAGE_MODE_MULTIPLIER;
 exports.DRAG_RADIUS = internalConstants.DRAG_RADIUS;
 exports.FLYOUT_DRAG_RADIUS = internalConstants.FLYOUT_DRAG_RADIUS;
 exports.SNAP_RADIUS = internalConstants.SNAP_RADIUS;
@@ -664,10 +662,7 @@ exports.CONNECTING_SNAP_RADIUS = internalConstants.CONNECTING_SNAP_RADIUS;
 exports.CURRENT_CONNECTION_PREFERENCE =
     internalConstants.CURRENT_CONNECTION_PREFERENCE;
 exports.BUMP_DELAY = internalConstants.BUMP_DELAY;
-exports.BUMP_RANDOMNESS = internalConstants.BUMP_RANDOMNESS;
 exports.COLLAPSE_CHARS = internalConstants.COLLAPSE_CHARS;
-exports.LONGPRESS = internalConstants.LONGPRESS;
-exports.SOUND_LIMIT = internalConstants.SOUND_LIMIT;
 exports.DRAG_STACK = internalConstants.DRAG_STACK;
 exports.SPRITE = internalConstants.SPRITE;
 exports.DRAG_NONE = internalConstants.DRAG_NONE;

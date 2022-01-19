@@ -131,6 +131,7 @@ FlyoutButton.prototype.height = 0;
  * @return {!SVGElement} The button's SVG group.
  */
 FlyoutButton.prototype.createDom = function() {
+  console.log('FlyoutButton -> createDom', this.text_, this.isLabel_)
   let cssClass = this.isLabel_ ? 'blocklyFlyoutLabel' : 'blocklyFlyoutButton';
   if (this.cssClass_) {
     cssClass += ' ' + this.cssClass_;

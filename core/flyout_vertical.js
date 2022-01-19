@@ -21,13 +21,13 @@ const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 const toolbox = goog.require('Blockly.utils.toolbox');
 /* eslint-disable-next-line no-unused-vars */
-const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
-const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
-const {Flyout} = goog.require('Blockly.Flyout');
+const { Coordinate } = goog.requireType('Blockly.utils.Coordinate');
+const { DropDownDiv } = goog.require('Blockly.DropDownDiv');
+const { Flyout } = goog.require('Blockly.Flyout');
 /* eslint-disable-next-line no-unused-vars */
-const {Options} = goog.requireType('Blockly.Options');
-const {Rect} = goog.require('Blockly.utils.Rect');
-const {Scrollbar} = goog.require('Blockly.Scrollbar');
+const { Options } = goog.requireType('Blockly.Options');
+const { Rect } = goog.require('Blockly.utils.Rect');
+const { Scrollbar } = goog.require('Blockly.Scrollbar');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Block');
 /** @suppress {extraRequire} */
@@ -42,7 +42,7 @@ goog.require('Blockly.constants');
  * @constructor
  * @alias Blockly.VerticalFlyout
  */
-const VerticalFlyout = function(workspaceOptions) {
+const VerticalFlyout = function (workspaceOptions) {
   VerticalFlyout.superClass_.constructor.call(this, workspaceOptions);
 };
 object.inherits(VerticalFlyout, Flyout);
@@ -60,7 +60,7 @@ VerticalFlyout.registryName = 'verticalFlyout';
  *     similar x property.
  * @protected
  */
-VerticalFlyout.prototype.setMetrics_ = function(xyRatio) {
+VerticalFlyout.prototype.setMetrics_ = function (xyRatio) {
   if (!this.isVisible()) {
     return;
   }
@@ -71,19 +71,19 @@ VerticalFlyout.prototype.setMetrics_ = function(xyRatio) {
 
   if (typeof xyRatio.y === 'number') {
     this.workspace_.scrollY =
-        -(scrollMetrics.top +
-          (scrollMetrics.height - viewMetrics.height) * xyRatio.y);
+      -(scrollMetrics.top +
+        (scrollMetrics.height - viewMetrics.height) * xyRatio.y);
   }
   this.workspace_.translate(
-      this.workspace_.scrollX + absoluteMetrics.left,
-      this.workspace_.scrollY + absoluteMetrics.top);
+    this.workspace_.scrollX + absoluteMetrics.left,
+    this.workspace_.scrollY + absoluteMetrics.top);
 };
 
 /**
  * Calculates the x coordinate for the flyout position.
  * @return {number} X coordinate.
  */
-VerticalFlyout.prototype.getX = function() {
+VerticalFlyout.prototype.getX = function () {
   if (!this.isVisible()) {
     return 0;
   }
@@ -131,7 +131,7 @@ VerticalFlyout.prototype.getX = function() {
  * Calculates the y coordinate for the flyout position.
  * @return {number} Y coordinate.
  */
-VerticalFlyout.prototype.getY = function() {
+VerticalFlyout.prototype.getY = function () {
   // Y is always 0 since this is a vertical flyout.
   return 0;
 };
@@ -139,7 +139,7 @@ VerticalFlyout.prototype.getY = function() {
 /**
  * Move the flyout to the edge of the workspace.
  */
-VerticalFlyout.prototype.position = function() {
+VerticalFlyout.prototype.position = function () {
   if (!this.isVisible() || !this.targetWorkspace.isVisible()) {
     return;
   }
@@ -167,7 +167,7 @@ VerticalFlyout.prototype.position = function() {
  *     rounded corners.
  * @private
  */
-VerticalFlyout.prototype.setBackgroundPath_ = function(width, height) {
+VerticalFlyout.prototype.setBackgroundPath_ = function (width, height) {
   const atRight = this.toolboxPosition_ === toolbox.Position.RIGHT;
   const totalWidth = width + this.CORNER_RADIUS;
 
@@ -177,14 +177,14 @@ VerticalFlyout.prototype.setBackgroundPath_ = function(width, height) {
   path.push('h', atRight ? -width : width);
   // Rounded corner.
   path.push(
-      'a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, atRight ? 0 : 1,
-      atRight ? -this.CORNER_RADIUS : this.CORNER_RADIUS, this.CORNER_RADIUS);
+    'a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, atRight ? 0 : 1,
+    atRight ? -this.CORNER_RADIUS : this.CORNER_RADIUS, this.CORNER_RADIUS);
   // Side closest to workspace.
   path.push('v', Math.max(0, height));
   // Rounded corner.
   path.push(
-      'a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, atRight ? 0 : 1,
-      atRight ? this.CORNER_RADIUS : -this.CORNER_RADIUS, this.CORNER_RADIUS);
+    'a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, atRight ? 0 : 1,
+    atRight ? this.CORNER_RADIUS : -this.CORNER_RADIUS, this.CORNER_RADIUS);
   // Bottom.
   path.push('h', atRight ? width : -width);
   path.push('z');
@@ -194,7 +194,7 @@ VerticalFlyout.prototype.setBackgroundPath_ = function(width, height) {
 /**
  * Scroll the flyout to the top.
  */
-VerticalFlyout.prototype.scrollToStart = function() {
+VerticalFlyout.prototype.scrollToStart = function () {
   this.workspace_.scrollbar.setY(0);
 };
 
@@ -203,7 +203,7 @@ VerticalFlyout.prototype.scrollToStart = function() {
  * @param {!Event} e Mouse wheel scroll event.
  * @protected
  */
-VerticalFlyout.prototype.wheel_ = function(e) {
+VerticalFlyout.prototype.wheel_ = function (e) {
   const scrollDelta = browserEvents.getScrollDeltaPixels(e);
 
   if (scrollDelta.y) {
@@ -230,8 +230,9 @@ VerticalFlyout.prototype.wheel_ = function(e) {
  * @param {!Array<number>} gaps The visible gaps between blocks.
  * @protected
  */
-VerticalFlyout.prototype.layout_ = function(contents, gaps) {
+VerticalFlyout.prototype.layout_ = function (contents, gaps) {
   this.workspace_.scale = this.targetWorkspace.scale;
+
   const margin = this.MARGIN;
   const cursorX = this.RTL ? margin : margin + this.tabWidth_;
   let cursorY = margin;
@@ -240,23 +241,27 @@ VerticalFlyout.prototype.layout_ = function(contents, gaps) {
     if (item.type === 'block') {
       const block = item.block;
       const allBlocks = block.getDescendants(false);
+
       for (let j = 0, child; (child = allBlocks[j]); j++) {
         // Mark blocks as being inside a flyout.  This is used to detect and
         // prevent the closure of the flyout if the user right-clicks on such a
         // block.
         child.isInFlyout = true;
       }
+
       if (block.isObsolete() || block.isRemoved()) {
         continue;
       }
+
       block.render();
+
       const root = block.getSvgRoot();
       const blockHW = block.getHeightWidth();
       const moveX = block.outputConnection ? cursorX - this.tabWidth_ : cursorX;
+
       block.moveBy(moveX, cursorY);
 
-      const rect = this.createRect_(
-          block, this.RTL ? moveX - blockHW.width : moveX, cursorY, blockHW, i);
+      const rect = this.createRect_(block, this.RTL ? moveX - blockHW.width : moveX, cursorY, blockHW, i);
 
       this.addBlockListeners_(root, block, rect);
 
@@ -277,7 +282,7 @@ VerticalFlyout.prototype.layout_ = function(contents, gaps) {
  * @return {boolean} True if the drag is toward the workspace.
  * @package
  */
-VerticalFlyout.prototype.isDragTowardWorkspace = function(currentDragDeltaXY) {
+VerticalFlyout.prototype.isDragTowardWorkspace = function (currentDragDeltaXY) {
   const dx = currentDragDeltaXY.x;
   const dy = currentDragDeltaXY.y;
   // Direction goes from -180 to 180, with 0 toward the right and 90 on top.
@@ -286,7 +291,7 @@ VerticalFlyout.prototype.isDragTowardWorkspace = function(currentDragDeltaXY) {
   const range = this.dragAngleRange_;
   // Check for left or right dragging.
   if ((dragDirection < range && dragDirection > -range) ||
-      (dragDirection < -180 + range || dragDirection > 180 - range)) {
+    (dragDirection < -180 + range || dragDirection > 180 - range)) {
     return true;
   }
   return false;
@@ -298,7 +303,7 @@ VerticalFlyout.prototype.isDragTowardWorkspace = function(currentDragDeltaXY) {
  * @return {?Rect} The component's bounding box. Null if drag
  *   target area should be ignored.
  */
-VerticalFlyout.prototype.getClientRect = function() {
+VerticalFlyout.prototype.getClientRect = function () {
   if (!this.svgGroup_ || this.autoClose || !this.isVisible()) {
     // The bounding rectangle won't compute correctly if the flyout is closed
     // and auto-close flyouts aren't valid drag targets (or delete areas).
@@ -325,7 +330,7 @@ VerticalFlyout.prototype.getClientRect = function() {
  * For RTL: Lay out the blocks and buttons to be right-aligned.
  * @protected
  */
-VerticalFlyout.prototype.reflowInternal_ = function() {
+VerticalFlyout.prototype.reflowInternal_ = function () {
   this.workspace_.scale = this.getFlyoutScale();
 
   const blocks = this.workspace_.getTopBlocks(false);
@@ -372,20 +377,20 @@ VerticalFlyout.prototype.reflowInternal_ = function() {
       for (let i = 0, button; (button = this.buttons_[i]); i++) {
         const y = button.getPosition().y;
         const x = flyoutWidth / this.workspace_.scale - button.width -
-            this.MARGIN - this.tabWidth_;
+          this.MARGIN - this.tabWidth_;
         button.moveTo(x, y);
       }
     }
 
     if (this.targetWorkspace.toolboxPosition === this.toolboxPosition_ &&
-        this.toolboxPosition_ === toolbox.Position.LEFT &&
-        !this.targetWorkspace.getToolbox()) {
+      this.toolboxPosition_ === toolbox.Position.LEFT &&
+      !this.targetWorkspace.getToolbox()) {
       // This flyout is a simple toolbox. Reposition the workspace so that (0,0)
       // is in the correct position relative to the new absolute edge (ie
       // toolbox edge).
       this.targetWorkspace.translate(
-          this.targetWorkspace.scrollX + flyoutWidth,
-          this.targetWorkspace.scrollY);
+        this.targetWorkspace.scrollX + flyoutWidth,
+        this.targetWorkspace.scrollY);
     }
 
     // Record the width for workspace metrics and .position.

@@ -312,10 +312,9 @@ Flyout.prototype.init = function(targetWorkspace) {
 
   this.hide();
 
-  Array.prototype.push.apply(
-      this.eventWrappers_,
-      browserEvents.conditionalBind(
-          this.svgGroup_, 'wheel', this, this.wheel_));
+  const wheelEvent = browserEvents.conditionalBind(this.svgGroup_, 'wheel', this, this.wheel_)
+  Array.prototype.push.apply(this.eventWrappers_, wheelEvent);
+
   if (!this.autoClose) {
     this.filterWrapper_ = this.filterForCapacity_.bind(this);
     this.targetWorkspace.addChangeListener(this.filterWrapper_);
@@ -395,7 +394,8 @@ Flyout.prototype.getHeight = function() {
  * @return {number} Flyout workspace scale.
  */
 Flyout.prototype.getFlyoutScale = function() {
-  return this.targetWorkspace.scale;
+  // return this.targetWorkspace.scale;
+  return 1;
 };
 
 /**
@@ -546,9 +546,9 @@ Flyout.prototype.show = function(flyoutDef) {
 
   // Parse the Array, Node or NodeList into a a list of flyout items.
   const parsedContent = toolbox.convertFlyoutDefToJsonArray(flyoutDef);
-  const flyoutInfo =
-      /** @type {{contents:!Array<!Object>, gaps:!Array<number>}} */ (
-          this.createFlyoutInfo_(parsedContent));
+  const flyoutInfo = /** @type {{contents:!Array<!Object>, gaps:!Array<number>}} */ (this.createFlyoutInfo_(parsedContent));
+  console.log('parsedContent', parsedContent)
+  console.log('flyoutInfo', flyoutInfo)
 
   this.layout_(flyoutInfo.contents, flyoutInfo.gaps);
 

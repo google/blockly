@@ -282,6 +282,7 @@ BlockSvg.prototype.getColourTertiary = function() {
  * if the block is not already selected.
  */
 BlockSvg.prototype.select = function() {
+  console.log('BlockSvg -> select', this)
   if (this.isShadow() && this.getParent()) {
     // Shadow blocks should not be selected.
     this.getParent().select();
@@ -318,6 +319,7 @@ BlockSvg.prototype.select = function() {
  * if the block is currently selected.
  */
 BlockSvg.prototype.unselect = function() {
+  console.log('BlockSvg unselect', this)
   if (common.getSelected() !== this) {
     return;
   }
@@ -720,6 +722,8 @@ BlockSvg.prototype.tab = function(start, forward) {
  * @private
  */
 BlockSvg.prototype.onMouseDown_ = function(e) {
+  console.log('onMouseDown_!', e)
+
   const gesture = this.workspace && this.workspace.getGesture(e);
   if (gesture) {
     gesture.handleBlockStart(e, this);
@@ -1267,7 +1271,82 @@ BlockSvg.prototype.setHighlighted = function(highlighted) {
  */
 BlockSvg.prototype.addSelect = function() {
   this.pathObject.updateSelected(true);
+
+  if (this.isInFlyout) {
+    this.createTwin()
+  }
 };
+
+BlockSvg.prototype.createTwin = function () {
+  if (this.hasTwin || this.twinDispatchMouseDown) return
+
+  setTimeout(() => {
+    if (this.hasTwin || this.twinDispatchMouseDown) return
+
+    const flyoutSVG = this.workspace.getParentSvg()
+    let flyoutWidth = flyoutSVG.style.width
+    if (!flyoutWidth) return
+
+    flyoutWidth = parseInt(flyoutWidth.slice(0, flyoutWidth.length - 2)) // '100px' -> 100
+    if (!flyoutWidth) return
+
+    const blockWidth = this.svgGroup_.getBBox().width
+
+    if (blockWidth < flyoutWidth) return
+
+    const blockClientRect = this.pathObject.svgRoot.getBoundingClientRect()
+    const flyoutClientRect = flyoutSVG.getBoundingClientRect()
+    const workspaceClientRect = this.workspace.getInjectionDiv().getBoundingClientRect()
+
+    const twinDiv = document.createElement('div')
+    twinDiv.style.zIndex = '9999' // fix
+    twinDiv.style.position = 'absolute'
+    twinDiv.style.top = `${blockClientRect.top - flyoutClientRect.top}px`
+    twinDiv.style.left = `${blockClientRect.left - workspaceClientRect.left}px`
+    twinDiv.style.background = '#ddd'
+    twinDiv.style.boxShadow = '0 0 5px #ddd'
+
+    const twinSVG = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    twinSVG.setAttribute('width', `${blockClientRect.width}px`)
+    twinSVG.setAttribute('height', `${blockClientRect.height}px`)
+    twinDiv.appendChild(twinSVG)
+
+    const svgRoot = this.pathObject.svgRoot.cloneNode(true)
+    svgRoot.removeAttribute('transform')
+    twinSVG.appendChild(svgRoot)
+
+    twinDiv.onmouseleave = () => {
+      twinDiv.remove()
+      this.hasTwin = false
+      this.removeSelect()
+      console.log('Destroy twin by onmouseout!')
+    }
+
+    twinDiv.onmousedown = (e) => {
+      twinDiv.remove()
+      this.hasTwin = false
+      console.log('Destroy twin by onmousedown!')
+
+      this.twinDispatchMouseDown = true
+
+      this.getSvgRoot().onmouseup = () => {
+        this.twinDispatchMouseDown = false
+        this.getSvgRoot().onmouseup = null
+      }
+
+      const mouseDownEvent = new Event('mousedown')
+      // this.getSvgRoot().dispatchEvent(e)
+      this.onMouseDown_(e)
+      // const dragstartEvent = new Event('dragstart')
+      // this.getSvgRoot().dispatchEvent(dragstartEvent)
+      console.log('dispatch mousedown on block svgRoot')
+    }
+
+    this.hasTwin = true
+    this.workspace.getParentSvg().parentElement.appendChild(twinDiv)
+    console.log('Create twin!')
+  })
+}
 
 /**
  * Removes the visual "select" effect from the block, but does not actually
@@ -1275,6 +1354,11 @@ BlockSvg.prototype.addSelect = function() {
  * @see BlockSvg#unselect
  */
 BlockSvg.prototype.removeSelect = function() {
+  if (this.hasTwin) {
+    console.log('has a twin. Twin should deselect block')
+    return
+  }
+
   this.pathObject.updateSelected(false);
 };
 

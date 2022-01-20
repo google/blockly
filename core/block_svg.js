@@ -161,6 +161,49 @@ const BlockSvg = function(workspace, prototypeName, opt_id, moduleId) {
     // can be set with setAttribute().
     this.svgGroup_.setAttribute('data-id', this.id);
   }
+
+  /**
+   * Flag that the block is moved to a position before the Flyout to
+   * display it in full (if the flyout width is less than the block width.
+   * @type {boolean}
+   * @private
+   */
+  this.isInFrontOfWorkspace = false
+
+  /**
+   * Temporary div for place block svg on front of the Flyout
+   * @type {Element}
+   * @private
+   */
+  this.tempRootDiv = null
+
+  /**
+   * Save the previous parent element to bring the block back when it becomes inactive
+   * @type {Element}
+   * @private
+   */
+  this.previousParent = null
+
+  /**
+   * Save the previous next sibling element to bring the block back when it becomes inactive
+   * @type {Element}
+   * @private
+   */
+  this.previousNextSibling = null
+
+  /**
+   * Save the previous transform style
+   * @type {Element}
+   * @private
+   */
+  this.previousSvgRootTransform = null
+
+  /**
+   * while the Drag&Drop of the block is running, we block the block from moving to the position before the flyout
+   * @type {Boolean}
+   * @private
+   */
+  this.disableMovingToFront = false
 };
 object.inherits(BlockSvg, Block);
 
@@ -723,12 +766,12 @@ BlockSvg.prototype.tab = function(start, forward) {
  * @private
  */
 BlockSvg.prototype.onMouseDown_ = function(e) {
-  if (this.hasTwin) {
-    this.disableCreateTwin = true
+  if (this.isInFrontOfWorkspace) {
+    this.disableMovingToFront = true
     this.previousParent.insertBefore(this.getSvgRoot(), this.previousNextSibling)
     this.getSvgRoot().setAttribute('transform', this.previousSvgRootTransform)
-    this.twinDiv.remove()
-    this.hasTwin = false
+    this.tempRootDiv.remove()
+    this.isInFrontOfWorkspace = false
   }
 
   const gesture = this.workspace && this.workspace.getGesture(e);
@@ -738,7 +781,7 @@ BlockSvg.prototype.onMouseDown_ = function(e) {
 };
 
 BlockSvg.prototype.onMouseUp_ = function() {
-  if (this.disableCreateTwin) this.disableCreateTwin = false
+  if (this.disableMovingToFront) this.disableMovingToFront = false
 }
 
 /**
@@ -1284,15 +1327,15 @@ BlockSvg.prototype.addSelect = function() {
   this.pathObject.updateSelected(true);
 
   if (this.isInFlyout) {
-    this.createTwin()
+    this.placeToFront()
   }
 };
 
-BlockSvg.prototype.createTwin = function () {
-  if (this.hasTwin || this.disableCreateTwin) return
+BlockSvg.prototype.placeToFront = function () {
+  if (this.isInFrontOfWorkspace || this.disableMovingToFront) return
 
   setTimeout(() => {
-    if (this.hasTwin) return
+    if (this.isInFrontOfWorkspace) return
 
     const flyoutSVG = this.workspace.getParentSvg()
     let flyoutWidth = flyoutSVG.style.width
@@ -1305,41 +1348,45 @@ BlockSvg.prototype.createTwin = function () {
 
     if (blockWidth < flyoutWidth) return
 
-    const blockSvgRoot = this.getSvgRoot()
-    const blockClientRect = blockSvgRoot.getBoundingClientRect()
+    const blockClientRect = this.getSvgRoot().getBoundingClientRect()
     const flyoutClientRect = flyoutSVG.getBoundingClientRect()
     const workspaceClientRect = this.workspace.getInjectionDiv().getBoundingClientRect()
 
-    this.twinDiv = document.createElement('div')
-    this.twinDiv.style.zIndex = '9999' // fix
-    this.twinDiv.style.position = 'absolute'
-    this.twinDiv.style.top = `${blockClientRect.top - flyoutClientRect.top}px`
-    this.twinDiv.style.left = `${blockClientRect.left - workspaceClientRect.left}px`
-    this.twinDiv.style.background = '#ddd'
-    this.twinDiv.style.boxShadow = '0 0 5px #ddd'
+    this.tempRootDiv = document.createElement('div')
+    this.tempRootDiv.style.zIndex = '21' // > flyout z-index == 20
+    this.tempRootDiv.style.position = 'absolute'
+    this.tempRootDiv.style.top = `${blockClientRect.top - flyoutClientRect.top}px`
+    this.tempRootDiv.style.left = `${blockClientRect.left - workspaceClientRect.left}px`
+    this.tempRootDiv.style.background = '#ddd'
+    this.tempRootDiv.style.boxShadow = '0 0 5px #ddd'
 
-    const twinSVG = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
-    twinSVG.setAttribute('width', `${blockClientRect.width}px`)
-    twinSVG.setAttribute('height', `${blockClientRect.height}px`)
-    this.twinDiv.appendChild(twinSVG)
+    const tempSVGRoot = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    tempSVGRoot.setAttribute('width', `${blockClientRect.width}px`)
+    tempSVGRoot.setAttribute('height', `${blockClientRect.height}px`)
+    this.tempRootDiv.appendChild(tempSVGRoot)
 
-    this.previousSvgRootTransform = blockSvgRoot.getAttribute('transform')
-    blockSvgRoot.removeAttribute('transform')
+    this.previousSvgRootTransform = this.getSvgRoot().getAttribute('transform')
+    this.getSvgRoot().removeAttribute('transform')
 
-    this.previousParent = blockSvgRoot.parentElement
-    this.previousNextSibling = blockSvgRoot.nextSibling
-    twinSVG.appendChild(blockSvgRoot)
+    this.previousParent = this.getSvgRoot().parentElement
+    this.previousNextSibling = this.getSvgRoot().nextSibling
+    tempSVGRoot.appendChild(this.getSvgRoot())
 
-    this.twinDiv.onmouseleave = () => {
-      this.previousParent.insertBefore(blockSvgRoot, this.previousNextSibling)
-      blockSvgRoot.setAttribute('transform', this.previousSvgRootTransform)
-      this.twinDiv.remove()
-      this.hasTwin = false
+    this.tempRootDiv.onmouseleave = () => {
+      this.previousParent.insertBefore(this.getSvgRoot(), this.previousNextSibling)
+      this.getSvgRoot().setAttribute('transform', this.previousSvgRootTransform)
+
+      this.tempRootDiv.remove()
+      this.tempRootDiv = null
+      this.previousSvgRootTransform = null
+      this.previousParent = null
+      this.previousNextSibling = null
+      this.isInFrontOfWorkspace = false
       this.removeSelect()
     }
 
-    this.hasTwin = true
-    this.workspace.getParentSvg().parentElement.appendChild(this.twinDiv)
+    this.isInFrontOfWorkspace = true
+    this.workspace.getParentSvg().parentElement.appendChild(this.tempRootDiv)
   })
 }
 
@@ -1349,7 +1396,7 @@ BlockSvg.prototype.createTwin = function () {
  * @see BlockSvg#unselect
  */
 BlockSvg.prototype.removeSelect = function() {
-  if (this.hasTwin) return
+  if (this.isInFrontOfWorkspace) return
 
   this.pathObject.updateSelected(false);
 };

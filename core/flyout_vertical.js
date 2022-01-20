@@ -331,8 +331,6 @@ VerticalFlyout.prototype.getClientRect = function () {
  * @protected
  */
 VerticalFlyout.prototype.reflowInternal_ = function () {
-  this.workspace_.scale = this.getFlyoutScale();
-
   const blocks = this.workspace_.getTopBlocks(false);
   let flyoutWidth = 0;
 

@@ -504,6 +504,8 @@ Flyout.prototype.hide = function() {
     return;
   }
   this.setVisible(false);
+
+  eventUtils.fire(new (eventUtils.get(eventUtils.FLYOUT_HIDE))(this.getWorkspace().id));
   // Delete all the event listeners.
   for (let i = 0, listen; (listen = this.listeners_[i]); i++) {
     browserEvents.unbind(listen);
@@ -523,9 +525,9 @@ Flyout.prototype.hide = function() {
  *     in the flyout. This is either an array of Nodes, a NodeList, a
  *     toolbox definition, or a string with the name of the dynamic category.
  */
-Flyout.prototype.show = function(flyoutDef) {
+Flyout.prototype.show = function(flyoutDef, { dontFireShowEvent }) {
   this.workspace_.setResizesEnabled(false);
-  this.hide();
+  this.hide({ dontFireHideEvent: true });
   this.clearOldBlocks_();
 
   // Handle dynamic categories, represented by a name instead of a list.
@@ -533,6 +535,8 @@ Flyout.prototype.show = function(flyoutDef) {
     flyoutDef = this.getDynamicCategoryContents_(flyoutDef);
   }
   this.setVisible(true);
+
+  eventUtils.fire(new (eventUtils.get(eventUtils.FLYOUT_SHOW))(this.getWorkspace().id));
 
   // Parse the Array, Node or NodeList into a a list of flyout items.
   const parsedContent = toolbox.convertFlyoutDefToJsonArray(flyoutDef);

@@ -254,6 +254,9 @@ BlockSvg.prototype.initSvg = function() {
   if (!this.workspace.options.readOnly && !this.eventsInit_ && svg) {
     browserEvents.conditionalBind(svg, 'mousedown', this, this.onMouseDown_);
   }
+  if (!this.workspace.options.readOnly && !this.eventsInit_ && svg) {
+    browserEvents.conditionalBind(svg, 'mouseup', this, this.onMouseUp_);
+  }
   this.eventsInit_ = true;
 
   if (!svg.parentNode) {
@@ -722,13 +725,23 @@ BlockSvg.prototype.tab = function(start, forward) {
  * @private
  */
 BlockSvg.prototype.onMouseDown_ = function(e) {
-  console.log('onMouseDown_!', e)
+  if (this.hasTwin) {
+    this.disableCreateTwin = true
+    this.previousParent.insertBefore(this.getSvgRoot(), this.previousNextSibling)
+    this.getSvgRoot().setAttribute('transform', this.previousSvgRootTransform)
+    this.twinDiv.remove()
+    this.hasTwin = false
+  }
 
   const gesture = this.workspace && this.workspace.getGesture(e);
   if (gesture) {
     gesture.handleBlockStart(e, this);
   }
 };
+
+BlockSvg.prototype.onMouseUp_ = function() {
+  if (this.disableCreateTwin) this.disableCreateTwin = false
+}
 
 /**
  * Load the block's help page in a new window.
@@ -1278,10 +1291,10 @@ BlockSvg.prototype.addSelect = function() {
 };
 
 BlockSvg.prototype.createTwin = function () {
-  if (this.hasTwin || this.twinDispatchMouseDown) return
+  if (this.hasTwin || this.disableCreateTwin) return
 
   setTimeout(() => {
-    if (this.hasTwin || this.twinDispatchMouseDown) return
+    if (this.hasTwin) return
 
     const flyoutSVG = this.workspace.getParentSvg()
     let flyoutWidth = flyoutSVG.style.width
@@ -1294,57 +1307,41 @@ BlockSvg.prototype.createTwin = function () {
 
     if (blockWidth < flyoutWidth) return
 
-    const blockClientRect = this.pathObject.svgRoot.getBoundingClientRect()
+    const blockSvgRoot = this.getSvgRoot()
+    const blockClientRect = blockSvgRoot.getBoundingClientRect()
     const flyoutClientRect = flyoutSVG.getBoundingClientRect()
     const workspaceClientRect = this.workspace.getInjectionDiv().getBoundingClientRect()
 
-    const twinDiv = document.createElement('div')
-    twinDiv.style.zIndex = '9999' // fix
-    twinDiv.style.position = 'absolute'
-    twinDiv.style.top = `${blockClientRect.top - flyoutClientRect.top}px`
-    twinDiv.style.left = `${blockClientRect.left - workspaceClientRect.left}px`
-    twinDiv.style.background = '#ddd'
-    twinDiv.style.boxShadow = '0 0 5px #ddd'
+    this.twinDiv = document.createElement('div')
+    this.twinDiv.style.zIndex = '9999' // fix
+    this.twinDiv.style.position = 'absolute'
+    this.twinDiv.style.top = `${blockClientRect.top - flyoutClientRect.top}px`
+    this.twinDiv.style.left = `${blockClientRect.left - workspaceClientRect.left}px`
+    this.twinDiv.style.background = '#ddd'
+    this.twinDiv.style.boxShadow = '0 0 5px #ddd'
 
     const twinSVG = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
     twinSVG.setAttribute('width', `${blockClientRect.width}px`)
     twinSVG.setAttribute('height', `${blockClientRect.height}px`)
-    twinDiv.appendChild(twinSVG)
+    this.twinDiv.appendChild(twinSVG)
 
-    const svgRoot = this.pathObject.svgRoot.cloneNode(true)
-    svgRoot.removeAttribute('transform')
-    twinSVG.appendChild(svgRoot)
+    this.previousSvgRootTransform = blockSvgRoot.getAttribute('transform')
+    blockSvgRoot.removeAttribute('transform')
 
-    twinDiv.onmouseleave = () => {
-      twinDiv.remove()
+    this.previousParent = blockSvgRoot.parentElement
+    this.previousNextSibling = blockSvgRoot.nextSibling
+    twinSVG.appendChild(blockSvgRoot)
+
+    this.twinDiv.onmouseleave = () => {
+      this.previousParent.insertBefore(blockSvgRoot, this.previousNextSibling)
+      blockSvgRoot.setAttribute('transform', this.previousSvgRootTransform)
+      this.twinDiv.remove()
       this.hasTwin = false
       this.removeSelect()
-      console.log('Destroy twin by onmouseout!')
-    }
-
-    twinDiv.onmousedown = (e) => {
-      twinDiv.remove()
-      this.hasTwin = false
-      console.log('Destroy twin by onmousedown!')
-
-      this.twinDispatchMouseDown = true
-
-      this.getSvgRoot().onmouseup = () => {
-        this.twinDispatchMouseDown = false
-        this.getSvgRoot().onmouseup = null
-      }
-
-      const mouseDownEvent = new Event('mousedown')
-      // this.getSvgRoot().dispatchEvent(e)
-      this.onMouseDown_(e)
-      // const dragstartEvent = new Event('dragstart')
-      // this.getSvgRoot().dispatchEvent(dragstartEvent)
-      console.log('dispatch mousedown on block svgRoot')
     }
 
     this.hasTwin = true
-    this.workspace.getParentSvg().parentElement.appendChild(twinDiv)
-    console.log('Create twin!')
+    this.workspace.getParentSvg().parentElement.appendChild(this.twinDiv)
   })
 }
 

@@ -300,7 +300,6 @@ WorkspaceCommentSvg.prototype.unselect = function () {
  * @package
  */
 WorkspaceCommentSvg.prototype.addSelect = function () {
-  console.log('WorkspaceCommentSvg addSelect', this)
   dom.addClass(
       /** @type {!Element} */(this.svgGroup_), 'blocklySelected');
   this.setFocus();

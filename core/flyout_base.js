@@ -547,8 +547,6 @@ Flyout.prototype.show = function(flyoutDef) {
   // Parse the Array, Node or NodeList into a a list of flyout items.
   const parsedContent = toolbox.convertFlyoutDefToJsonArray(flyoutDef);
   const flyoutInfo = /** @type {{contents:!Array<!Object>, gaps:!Array<number>}} */ (this.createFlyoutInfo_(parsedContent));
-  console.log('parsedContent', parsedContent)
-  console.log('flyoutInfo', flyoutInfo)
 
   this.layout_(flyoutInfo.contents, flyoutInfo.gaps);
 

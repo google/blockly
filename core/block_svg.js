@@ -285,7 +285,6 @@ BlockSvg.prototype.getColourTertiary = function() {
  * if the block is not already selected.
  */
 BlockSvg.prototype.select = function() {
-  console.log('BlockSvg -> select', this)
   if (this.isShadow() && this.getParent()) {
     // Shadow blocks should not be selected.
     this.getParent().select();
@@ -322,7 +321,6 @@ BlockSvg.prototype.select = function() {
  * if the block is currently selected.
  */
 BlockSvg.prototype.unselect = function() {
-  console.log('BlockSvg unselect', this)
   if (common.getSelected() !== this) {
     return;
   }
@@ -1351,10 +1349,7 @@ BlockSvg.prototype.createTwin = function () {
  * @see BlockSvg#unselect
  */
 BlockSvg.prototype.removeSelect = function() {
-  if (this.hasTwin) {
-    console.log('has a twin. Twin should deselect block')
-    return
-  }
+  if (this.hasTwin) return
 
   this.pathObject.updateSelected(false);
 };

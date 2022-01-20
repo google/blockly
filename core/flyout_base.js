@@ -161,6 +161,10 @@ const Flyout = function(workspaceOptions) {
    */
   this.targetWorkspace = null;
 
+  this.closeButton_ = null;
+
+  this.closeButtonHandler_ = null;
+
   /**
    * A list of blocks that can be reused.
    * @type {!Array<!BlockSvg>}
@@ -174,7 +178,7 @@ object.inherits(Flyout, DeleteArea);
  * Does the flyout automatically close when a block is created?
  * @type {boolean}
  */
-Flyout.prototype.autoClose = true;
+Flyout.prototype.autoClose = false;
 
 /**
  * Whether the flyout is visible.
@@ -195,14 +199,14 @@ Flyout.prototype.containerVisible_ = true;
  * @type {number}
  * @const
  */
-Flyout.prototype.CORNER_RADIUS = 8;
+Flyout.prototype.CORNER_RADIUS = 0;
 
 /**
  * Margin around the edges of the blocks in the flyout.
  * @type {number}
  * @const
  */
-Flyout.prototype.MARGIN = Flyout.prototype.CORNER_RADIUS;
+Flyout.prototype.MARGIN = 8;
 
 // TODO: Move GAP_X and GAP_Y to their appropriate files.
 
@@ -458,6 +462,74 @@ Flyout.prototype.updateDisplay_ = function() {
 };
 
 /**
+ * Handler for hide flyout.
+ * @private
+ */
+Flyout.prototype.onCloseButtonClick_ = function() {
+   this.hide();
+};
+
+/**
+ * Create close button for flyout.
+ * @param {number} marginLeft The computed width of the flyout's SVG group
+ * @protected
+ */
+Flyout.prototype.createCloseButton_ = function(marginLeft) {
+  if (this.closeButtonHandler_) {
+    browserEvents.unbind(this.closeButtonHandler_);
+    this.closeButtonHandler_ = null;
+  }
+
+  if (this.closeButton_) {
+    dom.removeNode(this.closeButton_);
+    this.closeButton_ = null;
+  }
+  
+  this.closeButton_ = dom.createSvgElement(Svg.G, {
+    'stroke': 'grey',
+    'stroke-width': '2',
+    'stroke-linecap': 'round',
+    'style': 'cursor: pointer',
+  }, this.svgGroup_);
+  
+  this.closeButtonHandler_ = browserEvents.conditionalBind(this.closeButton_, 'click', this, this.onCloseButtonClick_);
+
+  this.closeButton_.setAttribute('transform', 'translate(' + marginLeft + ', 15)');
+
+  dom.createSvgElement(
+    Svg.PATH, {
+      'class': 'blocklyFlyoutBackground',
+      'd': 'M -20 -15 h 32 a 8 8 0 0 1 8 8 v 24 a 8 8 0 0 1 -8 8 h -32 z',
+      'stroke': 'none',
+    },
+    this.closeButton_
+  );
+
+  dom.createSvgElement(
+    Svg.CIRCLE, {
+      'cx': 0,
+      'cy': 4,
+      'r': 10,
+      'style': 'fill: transparent; cursor: pointer',
+    }, this.closeButton_);
+    
+  // Create cross
+  dom.createSvgElement(Svg.LINE, {
+    'x1': -4,
+    'y1': 0,
+    'x2': 4,
+    'y2': 8,
+  }, this.closeButton_);
+
+  dom.createSvgElement(Svg.LINE, {
+    'x1': 4,
+    'y1': 0,
+    'x2': -4,
+    'y2': 8,
+  }, this.closeButton_);
+};
+
+/**
  * Update the view based on coordinates calculated in position().
  * @param {number} width The computed width of the flyout's SVG group
  * @param {number} height The computed height of the flyout's SVG group.
@@ -466,9 +538,12 @@ Flyout.prototype.updateDisplay_ = function() {
  * @protected
  */
 Flyout.prototype.positionAt_ = function(width, height, x, y) {
-  this.svgGroup_.setAttribute('width', width);
+  this.svgGroup_.setAttribute('width', (width + 40));
   this.svgGroup_.setAttribute('height', height);
   this.workspace_.setCachedParentSvgSize(width, height);
+
+  const merginLeft = width + 20;
+  this.createCloseButton_(merginLeft);
 
   if (this.svgGroup_.tagName === 'svg') {
     const transform = 'translate(' + x + 'px,' + y + 'px)';

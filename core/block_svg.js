@@ -204,6 +204,12 @@ const BlockSvg = function(workspace, prototypeName, opt_id, moduleId) {
    * @private
    */
   this.disableMovingToFront = false
+
+  /**
+   * @type {Boolean}
+   * @private
+   */
+  this.selected_ = false
 };
 object.inherits(BlockSvg, Block);
 
@@ -1325,6 +1331,7 @@ BlockSvg.prototype.setHighlighted = function(highlighted) {
  */
 BlockSvg.prototype.addSelect = function() {
   this.pathObject.updateSelected(true);
+  this.selected_ = true
 
   if (this.isInFlyout) {
     this.placeToFront()
@@ -1335,7 +1342,7 @@ BlockSvg.prototype.placeToFront = function () {
   if (this.isInFrontOfWorkspace || this.disableMovingToFront) return
 
   setTimeout(() => {
-    if (this.isInFrontOfWorkspace) return
+    if (this.isInFrontOfWorkspace || !this.selected_) return
 
     const flyoutSVG = this.workspace.getParentSvg()
     let flyoutWidth = flyoutSVG.style.width
@@ -1353,7 +1360,7 @@ BlockSvg.prototype.placeToFront = function () {
     const workspaceClientRect = this.workspace.getInjectionDiv().getBoundingClientRect()
 
     this.tempRootDiv = document.createElement('div')
-    this.tempRootDiv.style.zIndex = '21' // > flyout z-index == 20
+    this.tempRootDiv.style.zIndex = '31' // > flyout scrollbar z-index == 30
     this.tempRootDiv.style.position = 'absolute'
     this.tempRootDiv.style.top = `${blockClientRect.top - flyoutClientRect.top}px`
     this.tempRootDiv.style.left = `${blockClientRect.left - workspaceClientRect.left}px`
@@ -1387,7 +1394,7 @@ BlockSvg.prototype.placeToFront = function () {
 
     this.isInFrontOfWorkspace = true
     this.workspace.getParentSvg().parentElement.appendChild(this.tempRootDiv)
-  })
+  }, 100)
 }
 
 /**
@@ -1399,6 +1406,7 @@ BlockSvg.prototype.removeSelect = function() {
   if (this.isInFrontOfWorkspace) return
 
   this.pathObject.updateSelected(false);
+  this.selected_ = false
 };
 
 /**

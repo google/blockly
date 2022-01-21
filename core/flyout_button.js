@@ -39,7 +39,7 @@ const TEXT_MARGIN_X = 5;
 const TEXT_MARGIN_Y = 2;
 
 /**
- * Class for a button in the flyout.
+ * Class for a button or label in the flyout.
  */
 class FlyoutButton {
   /**
@@ -53,8 +53,6 @@ class FlyoutButton {
    * @alias Blockly.FlyoutButton
    */
   constructor(workspace, targetWorkspace, json, isLabel) {
-    // Labels behave the same as buttons, but are styled differently.
-
     /**
      * @type {!WorkspaceSvg}
      * @private
@@ -81,6 +79,7 @@ class FlyoutButton {
 
     /**
      * Whether this button should be styled as a label.
+     * Labels behave the same as buttons, but are styled differently.
      * @type {boolean}
      * @private
      */

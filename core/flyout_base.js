@@ -121,7 +121,7 @@ class Flyout extends DeleteArea {
     /**
      * Function that will be registered as a change listener on the workspace
      * to reflow when blocks in the flyout workspace change.
-     * @type {Function}
+     * @type {?Function}
      * @private
      */
     this.reflowWrapper_ = null;
@@ -130,7 +130,7 @@ class Flyout extends DeleteArea {
      * Function that disables blocks in the flyout based on max block counts
      * allowed in the target workspace. Registered as a change listener on the
      * target workspace.
-     * @type {Function}
+     * @type {?Function}
      * @private
      */
     this.filterWrapper_ = null;
@@ -257,20 +257,25 @@ class Flyout extends DeleteArea {
      */
     this.height_ = 0;
 
+    // clang-format off
     /**
      * Range of a drag angle from a flyout considered "dragging toward
      * workspace". Drags that are within the bounds of this many degrees from
      * the orthogonal line to the flyout edge are considered to be "drags toward
-     * the workspace". Example: Flyout Edge   Workspace [block] /  <-within this
-     * angle, drags "toward workspace" | [block] ---- orthogonal to flyout
-     * boundary ----          | [block] \ | The angle is given in degrees from
-     * the orthogonal.
+     * the workspace".
+     * Example:
+     * Flyout                                                 Edge   Workspace
+     * [block] /  <-within this angle, drags "toward workspace" |
+     * [block] ---- orthogonal to flyout boundary ----          |
+     * [block] \                                                |
+     * The angle is given in degrees from the orthogonal.
      *
      * This is used to know when to create a new block and when to scroll the
      * flyout. Setting it to 360 means that all drags create a new block.
      * @type {number}
      * @protected
      */
+    // clang-format on
     this.dragAngleRange_ = 70;
 
     /**

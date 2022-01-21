@@ -39,6 +39,12 @@ goog.require('Blockly.constants');
  */
 class VerticalFlyout extends Flyout {
   /**
+   * The name of the vertical flyout in the registry.
+   * @type {string}
+   */
+  static registryName = 'verticalFlyout';
+
+  /**
    * @param {!Options} workspaceOptions Dictionary of options for the
    *     workspace.
    * @alias Blockly.VerticalFlyout
@@ -382,12 +388,6 @@ class VerticalFlyout extends Flyout {
     }
   }
 }
-
-/**
- * The name of the vertical flyout in the registry.
- * @type {string}
- */
-VerticalFlyout.registryName = 'verticalFlyout';
 
 registry.register(
     registry.Type.FLYOUTS_VERTICAL_TOOLBOX, registry.DEFAULT, VerticalFlyout);

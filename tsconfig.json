@@ -1,17 +1,14 @@
 {
-  // Change this to match your project
   "include": [
     "core/**/*",
     "closure/goog/base_minimal.js",
-    //"typings/templates/blockly-header.d.ts",
-    //"typings/templates/blockly-interfaces.d.ts",
   ],
   "compilerOptions": {
     // Tells TypeScript to read JS files, as
     // normally they are ignored as source files
     "allowJs": true,
-    // checkJs: true,
 
+    // Enable the next few options for type declarations.
     // Generate d.ts files
     //"declaration": true,
     // Types should go into this directory.

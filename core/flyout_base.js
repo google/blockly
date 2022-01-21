@@ -235,6 +235,13 @@ Flyout.prototype.SCROLLBAR_MARGIN = 2.5;
 Flyout.prototype.width_ = 0;
 
 /**
+ * Enable(false) / disable(true) auto calculate flyout width.
+ * @type {number}
+ * @protected
+ */
+Flyout.prototype.fixedWidth = false;
+
+/**
  * Height of flyout.
  * @type {number}
  * @protected
@@ -305,10 +312,9 @@ Flyout.prototype.init = function(targetWorkspace) {
 
   this.hide();
 
-  Array.prototype.push.apply(
-      this.eventWrappers_,
-      browserEvents.conditionalBind(
-          this.svgGroup_, 'wheel', this, this.wheel_));
+  const wheelEvent = browserEvents.conditionalBind(this.svgGroup_, 'wheel', this, this.wheel_)
+  Array.prototype.push.apply(this.eventWrappers_, wheelEvent);
+
   if (!this.autoClose) {
     this.filterWrapper_ = this.filterForCapacity_.bind(this);
     this.targetWorkspace.addChangeListener(this.filterWrapper_);
@@ -380,15 +386,6 @@ Flyout.prototype.getWidth = function() {
  */
 Flyout.prototype.getHeight = function() {
   return this.height_;
-};
-
-/**
- * Get the scale (zoom level) of the flyout. By default,
- * this matches the target workspace scale, but this can be overridden.
- * @return {number} Flyout workspace scale.
- */
-Flyout.prototype.getFlyoutScale = function() {
-  return this.targetWorkspace.scale;
 };
 
 /**
@@ -507,6 +504,8 @@ Flyout.prototype.hide = function() {
     return;
   }
   this.setVisible(false);
+
+  eventUtils.fire(new (eventUtils.get(eventUtils.FLYOUT_HIDE))(this.getWorkspace().id));
   // Delete all the event listeners.
   for (let i = 0, listen; (listen = this.listeners_[i]); i++) {
     browserEvents.unbind(listen);
@@ -526,7 +525,7 @@ Flyout.prototype.hide = function() {
  *     in the flyout. This is either an array of Nodes, a NodeList, a
  *     toolbox definition, or a string with the name of the dynamic category.
  */
-Flyout.prototype.show = function(flyoutDef) {
+Flyout.prototype.show = function(flyoutDef, { dontFireShowEvent }) {
   this.workspace_.setResizesEnabled(false);
   this.hide();
   this.clearOldBlocks_();
@@ -537,11 +536,11 @@ Flyout.prototype.show = function(flyoutDef) {
   }
   this.setVisible(true);
 
+  eventUtils.fire(new (eventUtils.get(eventUtils.FLYOUT_SHOW))(this.getWorkspace().id));
+
   // Parse the Array, Node or NodeList into a a list of flyout items.
   const parsedContent = toolbox.convertFlyoutDefToJsonArray(flyoutDef);
-  const flyoutInfo =
-      /** @type {{contents:!Array<!Object>, gaps:!Array<number>}} */ (
-          this.createFlyoutInfo_(parsedContent));
+  const flyoutInfo = /** @type {{contents:!Array<!Object>, gaps:!Array<number>}} */ (this.createFlyoutInfo_(parsedContent));
 
   this.layout_(flyoutInfo.contents, flyoutInfo.gaps);
 
@@ -560,9 +559,9 @@ Flyout.prototype.show = function(flyoutDef) {
       this.svgBackground_, 'mouseover', this, deselectAll));
 
   if (this.horizontalLayout) {
-    this.height_ = 0;
+    if (!this.height_) this.height_ = 0;
   } else {
-    this.width_ = 0;
+    if (!this.width_) this.width_ = 0;
   }
   this.workspace_.setResizesEnabled(true);
   this.reflow();

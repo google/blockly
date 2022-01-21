@@ -642,16 +642,14 @@ exports.unbindEvent_ = unbindEvent_;
  * @see browserEvents.conditionalBind
  * @alias Blockly.bindEventWithChecks_
  */
-const bindEventWithChecks_ = function(
-    node, name, thisObject, func, opt_noCaptureIdentifier,
-    opt_noPreventDefault) {
+const bindEventWithChecks_ = function(node, name, thisObject, func, opt_noCaptureIdentifier, opt_noPreventDefault) {
   deprecation.warn(
       'Blockly.bindEventWithChecks_', 'December 2021', 'December 2022',
       'Blockly.browserEvents.conditionalBind');
-  return browserEvents.conditionalBind(
-      node, name, thisObject, func, opt_noCaptureIdentifier,
-      opt_noPreventDefault);
+  
+  return browserEvents.conditionalBind(node, name, thisObject, func, opt_noCaptureIdentifier, opt_noPreventDefault);
 };
+
 exports.bindEventWithChecks_ = bindEventWithChecks_;
 
 // Aliases to allow external code to access these values for legacy reasons.

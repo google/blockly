@@ -346,7 +346,6 @@ HorizontalFlyout.prototype.getClientRect = function() {
  * @protected
  */
 HorizontalFlyout.prototype.reflowInternal_ = function() {
-  this.workspace_.scale = this.getFlyoutScale();
   let flyoutHeight = 0;
   const blocks = this.workspace_.getTopBlocks(false);
   for (let i = 0, block; (block = blocks[i]); i++) {

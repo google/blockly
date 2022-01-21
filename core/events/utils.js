@@ -281,6 +281,20 @@ const FINISHED_LOADING = 'finished_loading';
 exports.FINISHED_LOADING = FINISHED_LOADING;
 
 /**
+ * Name of event that fired after show flyout
+ * @alias Blockly.Events.utils.FLYOUT_SHOW
+ */
+const FLYOUT_SHOW = 'flyout_show';
+exports.FLYOUT_SHOW = FLYOUT_SHOW;
+
+/**
+ * Name of event that fired after hide flyout
+ * @alias Blockly.Events.utils.FLYOUT_HIDE
+ */
+const FLYOUT_HIDE = 'flyout_hide';
+exports.FLYOUT_HIDE = FLYOUT_HIDE;
+
+/**
  * Name of event that create new module.
  * @alias Blockly.Events.utils.MODULE_CREATE
  */
@@ -374,6 +388,7 @@ exports.fire = fire;
  */
 const fireNow = function() {
   const queue = filter(FIRE_QUEUE, true);
+
   FIRE_QUEUE.length = 0;
   for (let i = 0, event; (event = queue[i]); i++) {
     if (!event.workspaceId) {
@@ -411,6 +426,7 @@ const filter = function(queueIn, forward) {
 
       const lastEntry = hash[key];
       const lastEvent = lastEntry ? lastEntry.event : null;
+
       if (!lastEntry) {
         // Each item in the hash table has the event and the index of that event
         // in the input array.  This lets us make sure we only merge adjacent

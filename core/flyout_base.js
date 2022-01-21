@@ -161,9 +161,26 @@ const Flyout = function(workspaceOptions) {
    */
   this.targetWorkspace = null;
 
-  this.closeButton_ = null;
+  /**
+   * The SVG group containt close flyout button.
+   * @type {?SVGElement}
+   * @private
+   */
+  this.closeButtonGroup_ = null;
 
-  this.closeButtonHandler_ = null;
+  /**
+   * Width SVG group closeButtonGroup_.
+   * @type {number}
+   * @const
+   */
+  this.WIDTH_CLOSE_BUTTON = 40;
+
+   /**
+   * Mouse down on closeButtonGroup_ event data.
+   * @type {?browserEvents.Data}
+   * @private
+   */
+  this.onMouseDownCloseWrapper_ = null;
 
   /**
    * A list of blocks that can be reused.
@@ -462,10 +479,11 @@ Flyout.prototype.updateDisplay_ = function() {
 };
 
 /**
- * Handler for hide flyout.
+ * The function to be called when close button is clicked.
+ * @type {?function(!FieldImage)}
  * @private
  */
-Flyout.prototype.onCloseButtonClick_ = function() {
+Flyout.prototype.onCloseHandler_ = function() {
    this.hide();
 };
 
@@ -475,58 +493,50 @@ Flyout.prototype.onCloseButtonClick_ = function() {
  * @protected
  */
 Flyout.prototype.createCloseButton_ = function(marginLeft) {
-  if (this.closeButtonHandler_) {
-    browserEvents.unbind(this.closeButtonHandler_);
-    this.closeButtonHandler_ = null;
+  if (this.onMouseDownCloseWrapper_) {
+    browserEvents.unbind(this.onMouseDownCloseWrapper_);
+    this.onMouseDownCloseWrapper_ = null;
   }
 
-  if (this.closeButton_) {
-    dom.removeNode(this.closeButton_);
-    this.closeButton_ = null;
+  if (this.closeButtonGroup_) {
+    dom.removeNode(this.closeButtonGroup_);
+    this.closeButtonGroup_ = null;
   }
   
-  this.closeButton_ = dom.createSvgElement(Svg.G, {
+  this.closeButtonGroup_ = dom.createSvgElement(Svg.G, {
     'stroke': 'grey',
     'stroke-width': '2',
     'stroke-linecap': 'round',
     'style': 'cursor: pointer',
   }, this.svgGroup_);
   
-  this.closeButtonHandler_ = browserEvents.conditionalBind(this.closeButton_, 'click', this, this.onCloseButtonClick_);
+  this.onMouseDownCloseWrapper_ = browserEvents.conditionalBind(this.closeButtonGroup_, 'click', this, this.onCloseHandler_);
 
-  this.closeButton_.setAttribute('transform', 'translate(' + marginLeft + ', 15)');
+  this.closeButtonGroup_.setAttribute('transform', 'translate(' + marginLeft + ', 15)');
 
   dom.createSvgElement(
     Svg.PATH, {
       'class': 'blocklyFlyoutBackground',
-      'd': 'M -20 -15 h 32 a 8 8 0 0 1 8 8 v 24 a 8 8 0 0 1 -8 8 h -32 z',
+      'd': 'M -8 -15 h 22 a 8 8 0 0 1 8 8 v 24 a 8 8 0 0 1 -8 8 h -22 z',
       'stroke': 'none',
     },
-    this.closeButton_
+    this.closeButtonGroup_
   );
-
-  dom.createSvgElement(
-    Svg.CIRCLE, {
-      'cx': 0,
-      'cy': 4,
-      'r': 10,
-      'style': 'fill: transparent; cursor: pointer',
-    }, this.closeButton_);
     
-  // Create cross
+  // Create left arrow
   dom.createSvgElement(Svg.LINE, {
-    'x1': -4,
-    'y1': 0,
-    'x2': 4,
-    'y2': 8,
-  }, this.closeButton_);
+    'x1': 0,
+    'y1': 4,
+    'x2': 6,
+    'y2': 10,
+  }, this.closeButtonGroup_);
 
   dom.createSvgElement(Svg.LINE, {
-    'x1': 4,
-    'y1': 0,
-    'x2': -4,
-    'y2': 8,
-  }, this.closeButton_);
+    'x1': 6,
+    'y1': -2,
+    'x2': 0,
+    'y2': 4,
+  }, this.closeButtonGroup_);
 };
 
 /**
@@ -538,12 +548,12 @@ Flyout.prototype.createCloseButton_ = function(marginLeft) {
  * @protected
  */
 Flyout.prototype.positionAt_ = function(width, height, x, y) {
-  this.svgGroup_.setAttribute('width', (width + 40));
+  this.svgGroup_.setAttribute('width', (width + this.WIDTH_CLOSE_BUTTON));
   this.svgGroup_.setAttribute('height', height);
   this.workspace_.setCachedParentSvgSize(width, height);
 
-  const merginLeft = width + 20;
-  this.createCloseButton_(merginLeft);
+  const marginLeft = width + Flyout.prototype.MARGIN;
+  this.createCloseButton_(marginLeft);
 
   if (this.svgGroup_.tagName === 'svg') {
     const transform = 'translate(' + x + 'px,' + y + 'px)';

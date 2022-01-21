@@ -19,11 +19,11 @@ goog.module('Blockly.zelos.PathObject');
 const dom = goog.require('Blockly.utils.dom');
 const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider} = goog.requireType('Blockly.zelos.ConstantProvider');
-const {PathObject: BasePathObject} = goog.require('Blockly.blockRendering.PathObject');
-const {Svg} = goog.require('Blockly.utils.Svg');
+const { ConstantProvider } = goog.requireType('Blockly.zelos.ConstantProvider');
+const { PathObject: BasePathObject } = goog.require('Blockly.blockRendering.PathObject');
+const { Svg } = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
-const {Theme} = goog.requireType('Blockly.Theme');
+const { Theme } = goog.requireType('Blockly.Theme');
 
 
 /**
@@ -38,7 +38,7 @@ const {Theme} = goog.requireType('Blockly.Theme');
  * @package
  * @alias Blockly.zelos.PathObject
  */
-const PathObject = function(root, style, constants) {
+const PathObject = function (root, style, constants) {
   PathObject.superClass_.constructor.call(this, root, style, constants);
 
   /**
@@ -83,7 +83,7 @@ object.inherits(PathObject, BasePathObject);
 /**
  * @override
  */
-PathObject.prototype.setPath = function(pathString) {
+PathObject.prototype.setPath = function (pathString) {
   PathObject.superClass_.setPath.call(this, pathString);
   if (this.svgPathSelected_) {
     this.svgPathSelected_.setAttribute('d', pathString);
@@ -93,7 +93,7 @@ PathObject.prototype.setPath = function(pathString) {
 /**
  * @override
  */
-PathObject.prototype.applyColour = function(block) {
+PathObject.prototype.applyColour = function (block) {
   PathObject.superClass_.applyColour.call(this, block);
   // Set shadow stroke colour.
   if (block.isShadow() && block.getParent()) {
@@ -109,7 +109,7 @@ PathObject.prototype.applyColour = function(block) {
 /**
  * @override
  */
-PathObject.prototype.flipRTL = function() {
+PathObject.prototype.flipRTL = function () {
   PathObject.superClass_.flipRTL.call(this);
   // Mirror each input outline path.
   for (const key in this.outlines_) {
@@ -120,7 +120,7 @@ PathObject.prototype.flipRTL = function() {
 /**
  * @override
  */
-PathObject.prototype.updateSelected = function(enable) {
+PathObject.prototype.updateSelected = function (enable) {
   this.setClass_('blocklySelected', enable);
   if (enable) {
     if (!this.svgPathSelected_) {
@@ -128,7 +128,7 @@ PathObject.prototype.updateSelected = function(enable) {
           /** @type {!SVGElement} */ (this.svgPath.cloneNode(true));
       this.svgPathSelected_.setAttribute('fill', 'none');
       this.svgPathSelected_.setAttribute(
-          'filter', 'url(#' + this.constants.selectedGlowFilterId + ')');
+        'filter', 'url(#' + this.constants.selectedGlowFilterId + ')');
       this.svgRoot.appendChild(this.svgPathSelected_);
     }
   } else {
@@ -142,11 +142,11 @@ PathObject.prototype.updateSelected = function(enable) {
 /**
  * @override
  */
-PathObject.prototype.updateReplacementFade = function(enable) {
+PathObject.prototype.updateReplacementFade = function (enable) {
   this.setClass_('blocklyReplaceable', enable);
   if (enable) {
     this.svgPath.setAttribute(
-        'filter', 'url(#' + this.constants.replacementGlowFilterId + ')');
+      'filter', 'url(#' + this.constants.replacementGlowFilterId + ')');
   } else {
     this.svgPath.removeAttribute('filter');
   }
@@ -155,7 +155,7 @@ PathObject.prototype.updateReplacementFade = function(enable) {
 /**
  * @override
  */
-PathObject.prototype.updateShapeForInputHighlight = function(conn, enable) {
+PathObject.prototype.updateShapeForInputHighlight = function (conn, enable) {
   const name = conn.getParentInput().name;
   const outlinePath = this.getOutlinePath_(name);
   if (!outlinePath) {
@@ -163,7 +163,7 @@ PathObject.prototype.updateShapeForInputHighlight = function(conn, enable) {
   }
   if (enable) {
     outlinePath.setAttribute(
-        'filter', 'url(#' + this.constants.replacementGlowFilterId + ')');
+      'filter', 'url(#' + this.constants.replacementGlowFilterId + ')');
   } else {
     outlinePath.removeAttribute('filter');
   }
@@ -173,7 +173,7 @@ PathObject.prototype.updateShapeForInputHighlight = function(conn, enable) {
  * Method that's called when the drawer is about to draw the block.
  * @package
  */
-PathObject.prototype.beginDrawing = function() {
+PathObject.prototype.beginDrawing = function () {
   this.remainingOutlines_ = Object.create(null);
   for (const key in this.outlines_) {
     // The value set here isn't used anywhere, we are just using the
@@ -186,7 +186,7 @@ PathObject.prototype.beginDrawing = function() {
  * Method that's called when the drawer is done drawing.
  * @package
  */
-PathObject.prototype.endDrawing = function() {
+PathObject.prototype.endDrawing = function () {
   // Go through all remaining outlines that were not used this draw pass, and
   // remove them.
   if (this.remainingOutlines_) {
@@ -204,7 +204,7 @@ PathObject.prototype.endDrawing = function() {
  * @param {string} pathString The path.
  * @package
  */
-PathObject.prototype.setOutlinePath = function(name, pathString) {
+PathObject.prototype.setOutlinePath = function (name, pathString) {
   const outline = this.getOutlinePath_(name);
   outline.setAttribute('d', pathString);
   outline.setAttribute('fill', this.style.colourTertiary);
@@ -216,16 +216,16 @@ PathObject.prototype.setOutlinePath = function(name, pathString) {
  * @return {!SVGElement} The SVG outline path.
  * @private
  */
-PathObject.prototype.getOutlinePath_ = function(name) {
+PathObject.prototype.getOutlinePath_ = function (name) {
   if (!this.outlines_[name]) {
     this.outlines_[name] = dom.createSvgElement(
-        Svg.PATH, {
-          'class': 'blocklyOutlinePath',
-          // IE doesn't like paths without the data definition, set empty
-          // default
-          'd': '',
-        },
-        this.svgRoot);
+      Svg.PATH, {
+      'class': 'blocklyOutlinePath',
+      // IE doesn't like paths without the data definition, set empty
+      // default
+      'd': '',
+    },
+      this.svgRoot);
   }
   if (this.remainingOutlines_) {
     delete this.remainingOutlines_[name];
@@ -238,7 +238,7 @@ PathObject.prototype.getOutlinePath_ = function(name) {
  * @param {string} name The input name.
  * @private
  */
-PathObject.prototype.removeOutlinePath_ = function(name) {
+PathObject.prototype.removeOutlinePath_ = function (name) {
   this.outlines_[name].parentNode.removeChild(this.outlines_[name]);
   delete this.outlines_[name];
 };

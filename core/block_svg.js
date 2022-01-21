@@ -161,6 +161,55 @@ const BlockSvg = function(workspace, prototypeName, opt_id, moduleId) {
     // can be set with setAttribute().
     this.svgGroup_.setAttribute('data-id', this.id);
   }
+
+  /**
+   * Flag that the block is moved to a position before the Flyout to
+   * display it in full (if the flyout width is less than the block width.
+   * @type {boolean}
+   * @private
+   */
+  this.isInFrontOfWorkspace = false
+
+  /**
+   * Temporary div for place block svg on front of the Flyout
+   * @type {Element}
+   * @private
+   */
+  this.tempRootDiv = null
+
+  /**
+   * Save the previous parent element to bring the block back when it becomes inactive
+   * @type {Element}
+   * @private
+   */
+  this.previousParent = null
+
+  /**
+   * Save the previous next sibling element to bring the block back when it becomes inactive
+   * @type {Element}
+   * @private
+   */
+  this.previousNextSibling = null
+
+  /**
+   * Save the previous transform style
+   * @type {Element}
+   * @private
+   */
+  this.previousSvgRootTransform = null
+
+  /**
+   * while the Drag&Drop of the block is running, we block the block from moving to the position before the flyout
+   * @type {Boolean}
+   * @private
+   */
+  this.disableMovingToFront = false
+
+  /**
+   * @type {Boolean}
+   * @private
+   */
+  this.selected_ = false
 };
 object.inherits(BlockSvg, Block);
 
@@ -253,6 +302,9 @@ BlockSvg.prototype.initSvg = function() {
   const svg = this.getSvgRoot();
   if (!this.workspace.options.readOnly && !this.eventsInit_ && svg) {
     browserEvents.conditionalBind(svg, 'mousedown', this, this.onMouseDown_);
+  }
+  if (!this.workspace.options.readOnly && !this.eventsInit_ && svg) {
+    browserEvents.conditionalBind(svg, 'mouseup', this, this.onMouseUp_);
   }
   this.eventsInit_ = true;
 
@@ -720,11 +772,23 @@ BlockSvg.prototype.tab = function(start, forward) {
  * @private
  */
 BlockSvg.prototype.onMouseDown_ = function(e) {
+  if (this.isInFrontOfWorkspace) {
+    this.disableMovingToFront = true
+    this.previousParent.insertBefore(this.getSvgRoot(), this.previousNextSibling)
+    this.getSvgRoot().setAttribute('transform', this.previousSvgRootTransform)
+    this.tempRootDiv.remove()
+    this.isInFrontOfWorkspace = false
+  }
+
   const gesture = this.workspace && this.workspace.getGesture(e);
   if (gesture) {
     gesture.handleBlockStart(e, this);
   }
 };
+
+BlockSvg.prototype.onMouseUp_ = function() {
+  if (this.disableMovingToFront) this.disableMovingToFront = false
+}
 
 /**
  * Load the block's help page in a new window.
@@ -1267,7 +1331,75 @@ BlockSvg.prototype.setHighlighted = function(highlighted) {
  */
 BlockSvg.prototype.addSelect = function() {
   this.pathObject.updateSelected(true);
+  this.selected_ = true
+
+  if (this.isInFlyout) {
+    this.placeToFront()
+  }
 };
+
+/**
+ * Create a temporary div and move the svg of the block in front of
+ * the entire flyout to display the block in its entirety
+ */
+BlockSvg.prototype.placeToFront = function () {
+  if (this.isInFrontOfWorkspace || this.disableMovingToFront) return
+
+  setTimeout(() => {
+    if (this.isInFrontOfWorkspace || !this.selected_) return
+
+    const flyoutSVG = this.workspace.getParentSvg()
+    let flyoutWidth = flyoutSVG.style.width
+    if (!flyoutWidth) return
+
+    flyoutWidth = parseInt(flyoutWidth.slice(0, flyoutWidth.length - 2)) // '100px' -> 100
+    if (!flyoutWidth) return
+
+    const blockWidth = this.svgGroup_.getBBox().width
+
+    if (blockWidth < flyoutWidth) return
+
+    const blockClientRect = this.getSvgRoot().getBoundingClientRect()
+    const flyoutClientRect = flyoutSVG.getBoundingClientRect()
+    const workspaceClientRect = this.workspace.getInjectionDiv().getBoundingClientRect()
+
+    this.tempRootDiv = document.createElement('div')
+    this.tempRootDiv.style.zIndex = '31' // > flyout scrollbar z-index == 30
+    this.tempRootDiv.style.position = 'absolute'
+    this.tempRootDiv.style.top = `${blockClientRect.top - flyoutClientRect.top}px`
+    this.tempRootDiv.style.left = `${blockClientRect.left - workspaceClientRect.left}px`
+    this.tempRootDiv.style.background = '#ddd'
+    this.tempRootDiv.style.boxShadow = '0 0 5px #ddd'
+
+    const tempSVGRoot = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+    tempSVGRoot.setAttribute('width', `${blockClientRect.width}px`)
+    tempSVGRoot.setAttribute('height', `${blockClientRect.height}px`)
+    this.tempRootDiv.appendChild(tempSVGRoot)
+
+    this.previousSvgRootTransform = this.getSvgRoot().getAttribute('transform')
+    this.getSvgRoot().removeAttribute('transform')
+
+    this.previousParent = this.getSvgRoot().parentElement
+    this.previousNextSibling = this.getSvgRoot().nextSibling
+    tempSVGRoot.appendChild(this.getSvgRoot())
+
+    this.tempRootDiv.onmouseleave = () => {
+      this.previousParent.insertBefore(this.getSvgRoot(), this.previousNextSibling)
+      this.getSvgRoot().setAttribute('transform', this.previousSvgRootTransform)
+
+      this.tempRootDiv.remove()
+      this.tempRootDiv = null
+      this.previousSvgRootTransform = null
+      this.previousParent = null
+      this.previousNextSibling = null
+      this.isInFrontOfWorkspace = false
+      this.removeSelect()
+    }
+
+    this.isInFrontOfWorkspace = true
+    this.workspace.getParentSvg().parentElement.appendChild(this.tempRootDiv)
+  }, 100) // This is enough to eliminate glitches when scrolling.
+}
 
 /**
  * Removes the visual "select" effect from the block, but does not actually
@@ -1275,7 +1407,10 @@ BlockSvg.prototype.addSelect = function() {
  * @see BlockSvg#unselect
  */
 BlockSvg.prototype.removeSelect = function() {
+  if (this.isInFrontOfWorkspace) return
+
   this.pathObject.updateSelected(false);
+  this.selected_ = false
 };
 
 /**

@@ -220,7 +220,7 @@ Workspace.prototype.sortObjects_ = function(a, b) {
       return aOrder - bOrder;
     }
   }
-  
+
   const aXY = a.getRelativeToSurfaceXY();
   const bXY = b.getRelativeToSurfaceXY();
   return (aXY.y + Workspace.prototype.sortObjects_.offset * aXY.x) -
@@ -254,7 +254,7 @@ Workspace.prototype.removeTopBlock = function(block) {
  */
 Workspace.prototype.getTopBlocks = function(ordered, inActiveModule) {
   let blocks = [];
-  
+
   if (inActiveModule) {
     for (var i = 0, block; (block = this.topBlocks_[i]); i++) {
       if (block.InActiveModule()) {
@@ -264,7 +264,7 @@ Workspace.prototype.getTopBlocks = function(ordered, inActiveModule) {
   } else {
     blocks = [].concat(this.topBlocks_);
   }
-  
+
   if (ordered && blocks.length > 1) {
     this.sortObjects_.offset = Math.sin(math.toRadians(Workspace.SCAN_ANGLE));
     if (this.RTL) {
@@ -385,19 +385,19 @@ Workspace.prototype.getTopComments = function(ordered) {
  */
 Workspace.prototype.getAllBlocks = function(ordered, inActiveModule) {
   let blocks;
-  
+
   if (ordered) {
     // Slow, but ordered.
     const topBlocks = this.getTopBlocks(true, inActiveModule);
     blocks = [];
-    
+
     for (let i = 0; i < topBlocks.length; i++) {
       blocks.push.apply(blocks, topBlocks[i].getDescendants(true));
     }
   } else {
     // Fast, but in no particular order.
     blocks = this.getTopBlocks(false, inActiveModule);
-    
+
     for (let i = 0; i < blocks.length; i++) {
       blocks.push.apply(blocks, blocks[i].getChildren(false));
     }
@@ -576,7 +576,7 @@ Workspace.prototype.getWidth = function() {
  */
 Workspace.prototype.newBlock = function(prototypeName, opt_id, moduleId) {
   const {Block} = goog.module.get('Blockly.Block');
-  
+
   return new Block(this, prototypeName, opt_id, moduleId);
 };
 
@@ -687,10 +687,10 @@ Workspace.prototype.undo = function(redo) {
     const event = events[i];
     outputStack.push(event);
   }
-  
+
   events = eventUtils.filter(events, redo);
   eventUtils.setRecordUndo(false);
-  
+
   try {
     for (let i = 0; i < events.length; i++) {
       const event = events[i];
@@ -744,6 +744,7 @@ Workspace.prototype.fireChangeListener = function(event) {
       this.undoStack_.shift();
     }
   }
+
   for (let i = 0; i < this.listeners_.length; i++) {
     const func = this.listeners_[i];
     func(event);

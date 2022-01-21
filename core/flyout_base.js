@@ -527,7 +527,7 @@ Flyout.prototype.hide = function() {
  */
 Flyout.prototype.show = function(flyoutDef, { dontFireShowEvent }) {
   this.workspace_.setResizesEnabled(false);
-  this.hide({ dontFireHideEvent: true });
+  this.hide();
   this.clearOldBlocks_();
 
   // Handle dynamic categories, represented by a name instead of a list.

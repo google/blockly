@@ -17,12 +17,18 @@
  */
 goog.module('Blockly.WorkspaceAudio');
 
-const internalConstants = goog.require('Blockly.internalConstants');
 const userAgent = goog.require('Blockly.utils.userAgent');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 const {globalThis} = goog.require('Blockly.utils.global');
 
+
+/**
+ * Prevent a sound from playing if another sound preceded it within this many
+ * milliseconds.
+ * @const
+ */
+const SOUND_LIMIT = 100;
 
 /**
  * Class for loading, storing, and playing audio for a workspace.
@@ -55,6 +61,7 @@ class WorkspaceAudio {
      */
     this.lastSound_ = null;
   }
+
   /**
    * Dispose of this audio manager.
    * @package
@@ -137,8 +144,7 @@ class WorkspaceAudio {
     if (sound) {
       // Don't play one sound on top of another.
       const now = new Date;
-      if (this.lastSound_ !== null &&
-          now - this.lastSound_ < internalConstants.SOUND_LIMIT) {
+      if (this.lastSound_ !== null && now - this.lastSound_ < SOUND_LIMIT) {
         return;
       }
       this.lastSound_ = now;

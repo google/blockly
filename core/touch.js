@@ -15,12 +15,17 @@
  */
 goog.module('Blockly.Touch');
 
-const internalConstants = goog.require('Blockly.internalConstants');
 const utilsString = goog.require('Blockly.utils.string');
 /* eslint-disable-next-line no-unused-vars */
 const {Gesture} = goog.requireType('Blockly.Gesture');
 const {globalThis} = goog.require('Blockly.utils.global');
 
+
+/**
+ * Length in ms for a touch to become a long press.
+ * @const
+ */
+const LONGPRESS = 750;
 
 /**
  * Whether touch is enabled in the browser.
@@ -107,7 +112,7 @@ const longStart = function(e, gesture) {
     if (gesture) {
       gesture.handleRightClick(e);
     }
-  }, internalConstants.LONGPRESS);
+  }, LONGPRESS);
 };
 exports.longStart = longStart;
 

@@ -102,6 +102,12 @@ RenderedConnection.TrackedState = {
 };
 
 /**
+ * Maximum randomness in workspace units for bumping a block.
+ * @const
+ */
+const BUMP_RANDOMNESS = 10;
+
+/**
  * Dispose of this connection. Remove it from the database (if it is
  * tracked) and call the super-function to deal with connected blocks.
  * @override
@@ -181,10 +187,10 @@ RenderedConnection.prototype.bumpAwayFrom = function(staticConnection) {
   const selected = common.getSelected() == rootBlock;
   selected || rootBlock.addSelect();
   let dx = (staticConnection.x + internalConstants.SNAP_RADIUS +
-            Math.floor(Math.random() * internalConstants.BUMP_RANDOMNESS)) -
+            Math.floor(Math.random() * BUMP_RANDOMNESS)) -
       this.x;
   let dy = (staticConnection.y + internalConstants.SNAP_RADIUS +
-            Math.floor(Math.random() * internalConstants.BUMP_RANDOMNESS)) -
+            Math.floor(Math.random() * BUMP_RANDOMNESS)) -
       this.y;
   if (reverse) {
     // When reversing a bump due to an uneditable block, bump up.
@@ -192,7 +198,7 @@ RenderedConnection.prototype.bumpAwayFrom = function(staticConnection) {
   }
   if (rootBlock.RTL) {
     dx = (staticConnection.x - internalConstants.SNAP_RADIUS -
-          Math.floor(Math.random() * internalConstants.BUMP_RANDOMNESS)) -
+          Math.floor(Math.random() * BUMP_RANDOMNESS)) -
         this.x;
   }
   rootBlock.moveBy(dx, dy);

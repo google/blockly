@@ -22,22 +22,6 @@ const {ConnectionType} = goog.require('Blockly.ConnectionType');
 
 
 /**
- * The multiplier for scroll wheel deltas using the line delta mode.
- * @type {number}
- * @alias Blockly.internalConstants.LINE_MODE_MULTIPLIER
- */
-const LINE_MODE_MULTIPLIER = 40;
-exports.LINE_MODE_MULTIPLIER = LINE_MODE_MULTIPLIER;
-
-/**
- * The multiplier for scroll wheel deltas using the page delta mode.
- * @type {number}
- * @alias Blockly.internalConstants.PAGE_MODE_MULTIPLIER
- */
-const PAGE_MODE_MULTIPLIER = 125;
-exports.PAGE_MODE_MULTIPLIER = PAGE_MODE_MULTIPLIER;
-
-/**
  * Number of pixels the mouse must move before a drag starts.
  * @alias Blockly.internalConstants.DRAG_RADIUS
  */
@@ -85,33 +69,11 @@ const BUMP_DELAY = 250;
 exports.BUMP_DELAY = BUMP_DELAY;
 
 /**
- * Maximum randomness in workspace units for bumping a block.
- * @alias Blockly.internalConstants.BUMP_RANDOMNESS
- */
-const BUMP_RANDOMNESS = 10;
-exports.BUMP_RANDOMNESS = BUMP_RANDOMNESS;
-
-/**
  * Number of characters to truncate a collapsed block to.
  * @alias Blockly.internalConstants.COLLAPSE_CHARS
  */
 const COLLAPSE_CHARS = 30;
 exports.COLLAPSE_CHARS = COLLAPSE_CHARS;
-
-/**
- * Length in ms for a touch to become a long press.
- * @alias Blockly.internalConstants.LONGPRESS
- */
-const LONGPRESS = 750;
-exports.LONGPRESS = LONGPRESS;
-
-/**
- * Prevent a sound from playing if another sound preceded it within this many
- * milliseconds.
- * @alias Blockly.internalConstants.SOUND_LIMIT
- */
-const SOUND_LIMIT = 100;
-exports.SOUND_LIMIT = SOUND_LIMIT;
 
 /**
  * When dragging a block out of a stack, split the stack in two (true), or drag

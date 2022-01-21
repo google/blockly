@@ -1338,6 +1338,10 @@ BlockSvg.prototype.addSelect = function() {
   }
 };
 
+/**
+ * Create a temporary div and move the svg of the block in front of
+ * the entire flyout to display the block in its entirety
+ */
 BlockSvg.prototype.placeToFront = function () {
   if (this.isInFrontOfWorkspace || this.disableMovingToFront) return
 
@@ -1394,7 +1398,7 @@ BlockSvg.prototype.placeToFront = function () {
 
     this.isInFrontOfWorkspace = true
     this.workspace.getParentSvg().parentElement.appendChild(this.tempRootDiv)
-  }, 100)
+  }, 100) // This is enough to eliminate glitches when scrolling.
 }
 
 /**

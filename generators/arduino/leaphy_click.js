@@ -4,15 +4,12 @@
  */
 
 /**
- * @fileoverview Code generator for Leaphy Original Blocks.
+ * @fileoverview Code generator for Leaphy Click Blocks.
  */
 'use strict';
-
 goog.provide('Blockly.Arduino.LeaphyClick');
 
 goog.require('Blockly.Arduino');
-
-Blockly.Arduino['leaphy_click_set_motor'] = Blockly.Arduino['leaphy_original_set_motor'];
 
 Blockly.Arduino['leaphy_click_rgb_digitalwrite'] = function (block) {
     var pin1 = block.getFieldValue('PIN1');

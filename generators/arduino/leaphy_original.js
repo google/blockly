@@ -27,8 +27,9 @@ Blockly.Arduino['leaphy_original_set_motor'] = function (block) {
     Blockly.Arduino.definitions_['define_leaphy_original'] = '#include "Leaphyoriginal1.h"\n';
     var code = 'setMotor(' + dropdown_Type + ', ' + speed + ');\n';
     return code;
-
 };
+
+Blockly.Arduino['leaphy_click_set_motor'] = Blockly.Arduino['leaphy_original_set_motor'];
 
 Blockly.Arduino['leaphy_original_get_distance'] = function (block) {
     Blockly.Arduino.definitions_['define_leaphy_original'] = '#include "Leaphyoriginal1.h"\n';

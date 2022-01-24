@@ -29,16 +29,6 @@ const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
- * The horizontal margin around the text in the button.
- */
-const TEXT_MARGIN_X = 5;
-
-/**
- * The vertical margin around the text in the button.
- */
-const TEXT_MARGIN_Y = 2;
-
-/**
  * Class for a button or label in the flyout.
  */
 class FlyoutButton {
@@ -128,14 +118,14 @@ class FlyoutButton {
 
     /**
      * The root SVG group for the button or label.
-     * @type {SVGGElement}
+     * @type {?SVGGElement}
      * @private
      */
     this.svgGroup_ = null;
 
     /**
      * The SVG element with the text of the label or button.
-     * @type {SVGTextElement}
+     * @type {?SVGTextElement}
      * @private
      */
     this.svgText_ = null;
@@ -207,8 +197,8 @@ class FlyoutButton {
     this.height = fontMetrics.height;
 
     if (!this.isLabel_) {
-      this.width += 2 * TEXT_MARGIN_X;
-      this.height += 2 * TEXT_MARGIN_Y;
+      this.width += 2 * FlyoutButton.TEXT_MARGIN_X;
+      this.height += 2 * FlyoutButton.TEXT_MARGIN_Y;
       shadow.setAttribute('width', this.width);
       shadow.setAttribute('height', this.height);
     }
@@ -326,6 +316,16 @@ class FlyoutButton {
     }
   }
 }
+
+/**
+ * The horizontal margin around the text in the button.
+ */
+FlyoutButton.TEXT_MARGIN_X = 5;
+
+/**
+ * The vertical margin around the text in the button.
+ */
+FlyoutButton.TEXT_MARGIN_Y = 2;
 
 /**
  * CSS for buttons and labels. See css.js for use.

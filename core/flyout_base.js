@@ -281,14 +281,14 @@ class Flyout extends DeleteArea {
     /**
      * The path around the background of the flyout, which will be filled with a
      * background colour.
-     * @type {SVGPathElement}
+     * @type {?SVGPathElement}
      * @protected
      */
     this.svgBackground_ = null;
 
     /**
      * The root SVG group for the button or label.
-     * @type {SVGGElement}
+     * @type {?SVGGElement}
      * @protected
      */
     this.svgGroup_ = null;

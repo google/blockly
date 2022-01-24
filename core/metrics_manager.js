@@ -446,6 +446,7 @@ class MetricsManager {
  *          }}
  */
 MetricsManager.ToolboxMetrics;
+
 /**
  * Describes where the viewport starts in relation to the workspace SVG.
  * @typedef {{
@@ -454,8 +455,10 @@ MetricsManager.ToolboxMetrics;
  *          }}
  */
 MetricsManager.AbsoluteMetrics;
+
 /**
- * All the measurements needed to describe the size and location of a container.
+ * All the measurements needed to describe the size and location of a
+ * container.
  * @typedef {{
  *            height: number,
  *            width: number,
@@ -464,6 +467,7 @@ MetricsManager.AbsoluteMetrics;
  *          }}
  */
 MetricsManager.ContainerRegion;
+
 /**
  * Describes fixed edges of the workspace.
  * @typedef {{
@@ -474,6 +478,7 @@ MetricsManager.ContainerRegion;
  *          }}
  */
 MetricsManager.FixedEdges;
+
 /**
  * Common metrics used for UI elements.
  * @typedef {{

@@ -37,6 +37,18 @@ const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
+ * An error message to throw if the block created by createMarkerBlock_ is
+ * missing any components.
+ * @type {string}
+ * @const
+ */
+const DUPLICATE_BLOCK_ERROR = 'The insertion marker ' +
+    'manager tried to create a marker but the result is missing %1. If ' +
+    'you are using a mutator, make sure your domToMutation method is ' +
+    'properly defined.';
+
+
+/**
  * Class that controls updates to connections during drags.  It is primarily
  * responsible for finding the closest eligible connection and highlighting or
  * unhighlighting it as needed during a drag.
@@ -291,16 +303,13 @@ class InsertionMarkerManager {
         }
         const resultInput = result.inputList[i];
         if (!resultInput) {
-          throw new Error(InsertionMarkerManager.DUPLICATE_BLOCK_ERROR.replace(
-              '%1', 'an input'));
+          throw new Error(DUPLICATE_BLOCK_ERROR.replace('%1', 'an input'));
         }
         for (let j = 0; j < sourceInput.fieldRow.length; j++) {
           const sourceField = sourceInput.fieldRow[j];
           const resultField = resultInput.fieldRow[j];
           if (!resultField) {
-            throw new Error(
-                InsertionMarkerManager.DUPLICATE_BLOCK_ERROR.replace(
-                    '%1', 'a field'));
+            throw new Error(DUPLICATE_BLOCK_ERROR.replace('%1', 'a field'));
           }
           resultField.setValue(sourceField.getValue());
         }
@@ -778,16 +787,5 @@ InsertionMarkerManager.PREVIEW_TYPE = {
   INPUT_OUTLINE: 1,
   REPLACEMENT_FADE: 2,
 };
-
-/**
- * An error message to throw if the block created by createMarkerBlock_ is
- * missing any components.
- * @type {string}
- * @const
- */
-InsertionMarkerManager.DUPLICATE_BLOCK_ERROR = 'The insertion marker ' +
-    'manager tried to create a marker but the result is missing %1. If ' +
-    'you are using a mutator, make sure your domToMutation method is ' +
-    'properly defined.';
 
 exports.InsertionMarkerManager = InsertionMarkerManager;

@@ -333,7 +333,7 @@ Flyout.prototype.init = function(targetWorkspace) {
 
   this.hide();
 
-  const wheelEvent = browserEvents.conditionalBind(this.svgGroup_, 'wheel', this, this.wheel_)
+  const wheelEvent = browserEvents.conditionalBind(this.svgGroup_, 'wheel', this, this.wheel_);
   Array.prototype.push.apply(this.eventWrappers_, wheelEvent);
 
   if (!this.autoClose) {
@@ -481,7 +481,7 @@ Flyout.prototype.updateDisplay_ = function() {
  * @private
  */
 Flyout.prototype.onCloseHandler_ = function() {
-   this.hide();
+   this.hide(true);
 };
 
 /**
@@ -584,13 +584,14 @@ Flyout.prototype.positionAt_ = function(width, height, x, y) {
 /**
  * Hide and empty the flyout.
  */
-Flyout.prototype.hide = function() {
+Flyout.prototype.hide = function(isButton = false
+  ) {
   if (!this.isVisible()) {
     return;
   }
   this.setVisible(false);
 
-  eventUtils.fire(new (eventUtils.get(eventUtils.FLYOUT_HIDE))(this.getWorkspace().id));
+  eventUtils.fire(new (eventUtils.get(eventUtils.FLYOUT_HIDE))(this.getWorkspace().id, isButton));
   // Delete all the event listeners.
   for (let i = 0, listen; (listen = this.listeners_[i]); i++) {
     browserEvents.unbind(listen);
@@ -610,7 +611,7 @@ Flyout.prototype.hide = function() {
  *     in the flyout. This is either an array of Nodes, a NodeList, a
  *     toolbox definition, or a string with the name of the dynamic category.
  */
-Flyout.prototype.show = function(flyoutDef, { dontFireShowEvent }) {
+Flyout.prototype.show = function(flyoutDef, {dontFireShowEvent}) {
   this.workspace_.setResizesEnabled(false);
   this.hide();
   this.clearOldBlocks_();

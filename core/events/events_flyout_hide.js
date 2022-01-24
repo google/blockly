@@ -26,16 +26,18 @@ const registry = goog.require('Blockly.registry');
  * @constructor
  * @alias Blockly.Events.FlyoutHide
  */
-const FlyoutHide = function(workspaceId) {
+const FlyoutHide = function(workspaceId, opt_isButtonClose) {
   FlyoutHide.superClass_.constructor.call(this);
+
+  this.isButtonClose = typeof opt_isButtonClose === 'undefined' ? false : opt_isButtonClose;
 
   /**
    * The workspace identifier for this event.
    * @type {string}
    */
-  this.workspaceId = workspaceId
+  this.workspaceId = workspaceId;
 
-  this.recordUndo = false
+  this.recordUndo = false;
 };
 object.inherits(FlyoutHide, Abstract);
 
@@ -50,14 +52,19 @@ FlyoutHide.prototype.type = eventUtils.FLYOUT_HIDE;
  * @return {!Object} JSON representation.
  */
 FlyoutHide.prototype.toJson = function() {
-  return {}
+  const json = FlyoutHide.superClass_.toJson.call(this);
+  json['isButtonClose'] = this.isButtonClose;
+  return json;
 };
 
 /**
  * Decode the JSON event.
  * @param {!Object} json JSON representation.
  */
-FlyoutHide.prototype.fromJson = function(json) {};
+FlyoutHide.prototype.fromJson = function(json) {
+  FlyoutHide.superClass_.fromJson.call(this, json);
+  this.isButtonClose = json['isButtonClose'];
+};
 
 registry.register(registry.Type.EVENT, eventUtils.FLYOUT_HIDE, FlyoutHide);
 

@@ -95,39 +95,6 @@ const SPRITE = {
 exports.SPRITE = SPRITE;
 
 /**
- * ENUM for no drag operation.
- * @const
- * @alias Blockly.internalConstants.DRAG_NONE
- */
-const DRAG_NONE = 0;
-exports.DRAG_NONE = DRAG_NONE;
-
-/**
- * ENUM for inside the sticky DRAG_RADIUS.
- * @const
- * @alias Blockly.internalConstants.DRAG_STICKY
- */
-const DRAG_STICKY = 1;
-exports.DRAG_STICKY = DRAG_STICKY;
-
-/**
- * ENUM for inside the non-sticky DRAG_RADIUS, for differentiating between
- * clicks and drags.
- * @const
- * @alias Blockly.internalConstants.DRAG_BEGIN
- */
-const DRAG_BEGIN = 1;
-exports.DRAG_BEGIN = DRAG_BEGIN;
-
-/**
- * ENUM for freely draggable (outside the DRAG_RADIUS, if one applies).
- * @const
- * @alias Blockly.internalConstants.DRAG_FREE
- */
-const DRAG_FREE = 2;
-exports.DRAG_FREE = DRAG_FREE;
-
-/**
  * Lookup table for determining the opposite type of a connection.
  * @const
  * @alias Blockly.internalConstants.OPPOSITE_TYPE

@@ -1,0 +1,25 @@
+{
+  "include": [
+    "core/**/*",
+    "closure/goog/base_minimal.js",
+  ],
+  "compilerOptions": {
+    // Tells TypeScript to read JS files, as
+    // normally they are ignored as source files
+    "allowJs": true,
+
+    // Enable the next few options for type declarations.
+    // Generate d.ts files
+    //"declaration": true,
+    // Types should go into this directory.
+    // Removing this would place the .d.ts files
+    // next to the .js files
+    //"declarationDir": "build/ts/declarations",
+
+    "outDir": "build/ts",
+    "module": "ES2015",
+    "moduleResolution": "node",
+    "target": "ES2020",
+    "strict": true,
+  }
+}

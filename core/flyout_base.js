@@ -162,6 +162,27 @@ const Flyout = function(workspaceOptions) {
   this.targetWorkspace = null;
 
   /**
+   * The SVG group containt close flyout button.
+   * @type {?SVGElement}
+   * @private
+   */
+  this.closeButtonGroup_ = null;
+
+  /**
+   * Width SVG group closeButtonGroup_.
+   * @type {number}
+   * @const
+   */
+  this.WIDTH_CLOSE_BUTTON = 40;
+
+   /**
+   * Mouse down on closeButtonGroup_ event data.
+   * @type {?browserEvents.Data}
+   * @private
+   */
+  this.onMouseDownCloseWrapper_ = null;
+
+  /**
    * A list of blocks that can be reused.
    * @type {!Array<!BlockSvg>}
    * @private
@@ -174,7 +195,7 @@ object.inherits(Flyout, DeleteArea);
  * Does the flyout automatically close when a block is created?
  * @type {boolean}
  */
-Flyout.prototype.autoClose = true;
+Flyout.prototype.autoClose = false;
 
 /**
  * Whether the flyout is visible.
@@ -195,14 +216,14 @@ Flyout.prototype.containerVisible_ = true;
  * @type {number}
  * @const
  */
-Flyout.prototype.CORNER_RADIUS = 8;
+Flyout.prototype.CORNER_RADIUS = 0;
 
 /**
  * Margin around the edges of the blocks in the flyout.
  * @type {number}
  * @const
  */
-Flyout.prototype.MARGIN = Flyout.prototype.CORNER_RADIUS;
+Flyout.prototype.MARGIN = 8;
 
 // TODO: Move GAP_X and GAP_Y to their appropriate files.
 
@@ -312,7 +333,7 @@ Flyout.prototype.init = function(targetWorkspace) {
 
   this.hide();
 
-  const wheelEvent = browserEvents.conditionalBind(this.svgGroup_, 'wheel', this, this.wheel_)
+  const wheelEvent = browserEvents.conditionalBind(this.svgGroup_, 'wheel', this, this.wheel_);
   Array.prototype.push.apply(this.eventWrappers_, wheelEvent);
 
   if (!this.autoClose) {
@@ -455,6 +476,67 @@ Flyout.prototype.updateDisplay_ = function() {
 };
 
 /**
+ * The function to be called when close button is clicked.
+ * @type {?function(!FieldImage)}
+ * @private
+ */
+Flyout.prototype.onCloseHandler_ = function() {
+   this.hide(true);
+};
+
+/**
+ * Create close button for flyout.
+ * @param {number} marginLeft The computed width of the flyout's SVG group
+ * @protected
+ */
+Flyout.prototype.createCloseButton_ = function(marginLeft) {
+  if (this.onMouseDownCloseWrapper_) {
+    browserEvents.unbind(this.onMouseDownCloseWrapper_);
+    this.onMouseDownCloseWrapper_ = null;
+  }
+
+  if (this.closeButtonGroup_) {
+    dom.removeNode(this.closeButtonGroup_);
+    this.closeButtonGroup_ = null;
+  }
+  
+  this.closeButtonGroup_ = dom.createSvgElement(Svg.G, {
+    'stroke': 'grey',
+    'stroke-width': '2',
+    'stroke-linecap': 'round',
+    'style': 'cursor: pointer',
+  }, this.svgGroup_);
+  
+  this.onMouseDownCloseWrapper_ = browserEvents.conditionalBind(this.closeButtonGroup_, 'click', this, this.onCloseHandler_);
+
+  this.closeButtonGroup_.setAttribute('transform', 'translate(' + marginLeft + ', 15)');
+
+  dom.createSvgElement(
+    Svg.PATH, {
+      'class': 'blocklyFlyoutBackground',
+      'd': 'M -8 -15 h 22 a 8 8 0 0 1 8 8 v 24 a 8 8 0 0 1 -8 8 h -22 z',
+      'stroke': 'none',
+    },
+    this.closeButtonGroup_
+  );
+    
+  // Create left arrow
+  dom.createSvgElement(Svg.LINE, {
+    'x1': 0,
+    'y1': 4,
+    'x2': 6,
+    'y2': 10,
+  }, this.closeButtonGroup_);
+
+  dom.createSvgElement(Svg.LINE, {
+    'x1': 6,
+    'y1': -2,
+    'x2': 0,
+    'y2': 4,
+  }, this.closeButtonGroup_);
+};
+
+/**
  * Update the view based on coordinates calculated in position().
  * @param {number} width The computed width of the flyout's SVG group
  * @param {number} height The computed height of the flyout's SVG group.
@@ -463,9 +545,12 @@ Flyout.prototype.updateDisplay_ = function() {
  * @protected
  */
 Flyout.prototype.positionAt_ = function(width, height, x, y) {
-  this.svgGroup_.setAttribute('width', width);
+  this.svgGroup_.setAttribute('width', (width + this.WIDTH_CLOSE_BUTTON));
   this.svgGroup_.setAttribute('height', height);
   this.workspace_.setCachedParentSvgSize(width, height);
+
+  const marginLeft = width + Flyout.prototype.MARGIN;
+  this.createCloseButton_(marginLeft);
 
   if (this.svgGroup_.tagName === 'svg') {
     const transform = 'translate(' + x + 'px,' + y + 'px)';
@@ -499,13 +584,14 @@ Flyout.prototype.positionAt_ = function(width, height, x, y) {
 /**
  * Hide and empty the flyout.
  */
-Flyout.prototype.hide = function() {
+Flyout.prototype.hide = function(isButton = false
+  ) {
   if (!this.isVisible()) {
     return;
   }
   this.setVisible(false);
 
-  eventUtils.fire(new (eventUtils.get(eventUtils.FLYOUT_HIDE))(this.getWorkspace().id));
+  eventUtils.fire(new (eventUtils.get(eventUtils.FLYOUT_HIDE))(this.getWorkspace().id, isButton));
   // Delete all the event listeners.
   for (let i = 0, listen; (listen = this.listeners_[i]); i++) {
     browserEvents.unbind(listen);
@@ -525,7 +611,7 @@ Flyout.prototype.hide = function() {
  *     in the flyout. This is either an array of Nodes, a NodeList, a
  *     toolbox definition, or a string with the name of the dynamic category.
  */
-Flyout.prototype.show = function(flyoutDef, { dontFireShowEvent }) {
+Flyout.prototype.show = function(flyoutDef, {dontFireShowEvent}) {
   this.workspace_.setResizesEnabled(false);
   this.hide();
   this.clearOldBlocks_();

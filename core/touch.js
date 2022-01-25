@@ -217,7 +217,7 @@ exports.checkTouchIdentifier = checkTouchIdentifier;
  * @alias Blockly.Touch.setClientFromTouch
  */
 const setClientFromTouch = function(e) {
-  if (utilsString.startsWith(e.type, 'touch')) {
+  if (utilsString.startsWith(e.type, 'touch') && e.changedTouches) {
     // Map the touch event's properties to the event.
     const touchPoint = e.changedTouches[0];
     e.clientX = touchPoint.clientX;

@@ -458,7 +458,7 @@ ModuleBar.prototype.handleRenameModule_ = function() {
   var workspace = this.workspace_;
   var activeModule =  workspace.getModuleManager().getActiveModule();
 
-  Blockly.prompt(Blockly.Msg['RENAME_MODULE_TITLE'], activeModule.name, function(moduleName) {
+  Blockly.prompt(Blockly.Msg['RENAME_MODULE_TITLE'], activeModule.getName(), function(moduleName) {
     if (moduleName) {
       moduleName = moduleName.replace(/[\s\xa0]+/g, ' ').trim();
     }

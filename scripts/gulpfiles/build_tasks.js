@@ -113,22 +113,6 @@ const chunks = [
     name: 'javascript',
     entry: 'generators/javascript/all.js',
     exports: 'Blockly.JavaScript',
-  }, {
-    name: 'python',
-    entry: 'generators/python/all.js',
-    exports: 'Blockly.Python',
-  }, {
-    name: 'php',
-    entry: 'generators/php/all.js',
-    exports: 'Blockly.PHP',
-  }, {
-    name: 'lua',
-    entry: 'generators/lua/all.js',
-    exports: 'Blockly.Lua',
-  }, {
-    name: 'dart',
-    entry: 'generators/dart/all.js',
-    exports: 'Blockly.Dart',
   }
 ];
 
@@ -236,14 +220,15 @@ function buildDeps(done) {
     'tests/mocha'
   ];
 
-  // Испоьзуй этот кусок кода, если необходимо добавить зависимости для новых модулей
+  // Use the code for build /tests/deps.js what used in build
+  // 
   // const args = roots.map(root => `--root '${root}' `).join('');
   // execSync(`closure-make-deps ${args} > tests/deps.js`, {stdio: 'inherit'});
-  //
-  // // Use grep to filter out the entries that are already in deps.js.
+
+  // Use grep to filter out the entries that are already in deps.js.
   // const testArgs = testRoots.map(root => `--root '${root}' `).join('');
-  // execSync(`closure-make-deps ${testArgs} | grep 'tests/mocha'` +
-  //     ' > tests/deps.mocha.js', {stdio: 'inherit'});
+  // execSync(`closure-make-deps ${testArgs} | grep 'tests/mocha' > tests/deps.mocha.js`, {stdio: 'inherit'});
+
   done();
 };
 

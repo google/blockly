@@ -305,8 +305,8 @@ Gesture.prototype.updateDragDelta_ = function(currentXY) {
     const currentDragDelta = Coordinate.magnitude(this.currentDragDeltaXY_);
 
     // The flyout has a different drag radius from the rest of Blockly.
-    const limitRadius = this.flyout_ ? constants.FLYOUT_DRAG_RADIUS :
-                                       constants.DRAG_RADIUS;
+    const limitRadius =
+        this.flyout_ ? constants.FLYOUT_DRAG_RADIUS : constants.DRAG_RADIUS;
 
     this.hasExceededDragRadius_ = currentDragDelta > limitRadius;
     return this.hasExceededDragRadius_;

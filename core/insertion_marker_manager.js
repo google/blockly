@@ -397,8 +397,7 @@ InsertionMarkerManager.prototype.shouldUpdatePreviews_ = function(
       // Slightly prefer the existing preview over a new preview.
       return !(
           candidateClosest &&
-          radius >
-              curDistance - constants.CURRENT_CONNECTION_PREFERENCE);
+          radius > curDistance - constants.CURRENT_CONNECTION_PREFERENCE);
     } else if (!this.localConnection_ && !this.closestConnection_) {
       // We weren't showing a preview before, but we should now.
       return true;

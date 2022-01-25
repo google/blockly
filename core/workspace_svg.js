@@ -1594,7 +1594,7 @@ WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock, jsonBlock) {
           const connections = block.getConnections_(false);
           for (let i = 0, connection; (connection = connections[i]); i++) {
             const neighbour = connection.closest(
-              constants.SNAP_RADIUS, new Coordinate(blockX, blockY));
+                constants.SNAP_RADIUS, new Coordinate(blockX, blockY));
             if (neighbour.connection) {
               collide = true;
               break;

@@ -25,7 +25,7 @@ var closureDeps = require('google-closure-deps');
 var argv = require('yargs').argv;
 var rimraf = require('rimraf');
 
-var {BUILD_DIR} = require('./config');
+var {BUILD_DIR, TSC_OUTPUT_DIR} = require('./config');
 var {getPackageJson} = require('./helper_tasks');
 
 ////////////////////////////////////////////////////////////
@@ -89,7 +89,7 @@ const NAMESPACE_OBJECT = '$';
  * The function getChunkOptions will, after running
  * closure-calculate-chunks, update each chunk to add the following
  * properties:
- * 
+ *
  * - .dependencies: a list of the chunks the chunk depends upon.
  * - .wrapper: the chunk wrapper.
  *
@@ -104,28 +104,34 @@ const chunks = [
     factoryPreamble: `const ${NAMESPACE_OBJECT}={};`,
     factoryPostamble:
         `${NAMESPACE_OBJECT}.Blockly.internal_=${NAMESPACE_OBJECT};`,
-  }, {
+  },
+  {
     name: 'blocks',
     entry: 'blocks/all.js',
     exports: 'Blockly.Blocks',
     importAs: 'BlocklyBlocks',
-  }, {
+  },
+  {
     name: 'javascript',
     entry: 'generators/javascript/all.js',
     exports: 'Blockly.JavaScript',
-  }, {
+  },
+  {
     name: 'python',
     entry: 'generators/python/all.js',
     exports: 'Blockly.Python',
-  }, {
+  },
+  {
     name: 'php',
     entry: 'generators/php/all.js',
     exports: 'Blockly.PHP',
-  }, {
+  },
+  {
     name: 'lua',
     entry: 'generators/lua/all.js',
     exports: 'Blockly.Lua',
-  }, {
+  },
+  {
     name: 'dart',
     entry: 'generators/dart/all.js',
     exports: 'Blockly.Dart',
@@ -224,9 +230,10 @@ function buildDeps(done) {
       'node_modules/google-closure-library/closure/goog' :
       'closure/goog';
 
+  const coreDir = argv.compileTs ? path.join(TSC_OUTPUT_DIR, 'core') : 'core';
   const roots = [
     closurePath,
-    'core',
+    coreDir,
     'blocks',
     'generators',
   ];
@@ -350,6 +357,9 @@ return ${NAMESPACE_OBJECT}.${chunk.exports};
  * TODO(cpcallen): maybeAddClosureLibrary?  Or maybe remove base.js?
  */
 function getChunkOptions() {
+  if (argv.compileTs) {
+    chunks[0].entry = path.join(TSC_OUTPUT_DIR, chunks[0].entry);
+  }
   const cccArgs = [
     '--closure-library-base-js-path ./closure/goog/base_minimal.js',
     '--deps-file ./tests/deps.js',
@@ -432,12 +442,12 @@ function getChunkOptions() {
   return {chunk: chunkList, js: rawOptions.js, chunk_wrapper: chunkWrappers};
 }
 
-/** 
+/**
  * RegExp that globally matches path.sep (i.e., "/" or "\").
  */
 const pathSepRegExp = new RegExp(path.sep.replace(/\\/, '\\\\'), "g");
 
-/** 
+/**
  * Modify the supplied gulp.rename path object to relax @package
  * restrictions in core/.
  *
@@ -457,10 +467,11 @@ const pathSepRegExp = new RegExp(path.sep.replace(/\\/, '\\\\'), "g");
  */
 function flattenCorePaths(pathObject) {
   const dirs = pathObject.dirname.split(path.sep);
-  if (dirs[0] === 'core') {
-    pathObject.dirname = dirs[0];
+  const coreIndex = argv.compileTs ? 2 : 0;
+  if (dirs[coreIndex] === 'core') {
+    pathObject.dirname = path.join(...dirs.slice(0, coreIndex + 1));
     pathObject.basename =
-        dirs.slice(1).concat(pathObject.basename).join('-slash-');
+        dirs.slice(coreIndex + 1).concat(pathObject.basename).join('-slash-');
   }
 }
 
@@ -503,7 +514,7 @@ function compile(options) {
 }
 
 /**
- * This task compiles the core library, blocks and generators, creating 
+ * This task compiles the core library, blocks and generators, creating
  * blockly_compressed.js, blocks_compressed.js, etc.
  *
  * The deps.js file must be up-to-date.
@@ -540,10 +551,15 @@ function buildCompiled() {
  * closure compiler's ADVANCED_COMPILATION mode.
  */
 function buildAdvancedCompilationTest() {
+  const coreSrcs = argv.compileTs ?
+      TSC_OUTPUT_DIR + '/core/**/*.js' : 'core/**/*.js';
   const srcs = [
     'closure/goog/base_minimal.js',
-    'core/**/*.js', 'blocks/**/*.js', 'generators/**/*.js',
-    'tests/compile/main.js', 'tests/compile/test_blocks.js',
+    coreSrcs,
+    'blocks/**/*.js',
+    'generators/**/*.js',
+    'tests/compile/main.js',
+    'tests/compile/test_blocks.js',
   ];
 
   // Closure Compiler options.
@@ -615,6 +631,11 @@ function format() {
       .pipe(gulp.dest('.'));
 };
 
+function buildTypescript(done) {
+  execSync('npx tsc', {stdio: 'inherit'});
+  done();
+}
+
 module.exports = {
   build: build,
   deps: buildDeps,
@@ -625,4 +646,5 @@ module.exports = {
   checkinBuilt: checkinBuilt,
   cleanBuildDir: cleanBuildDir,
   advancedCompilationTest: buildAdvancedCompilationTest,
+  buildTypescript: buildTypescript
 }

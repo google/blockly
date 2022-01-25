@@ -30,9 +30,9 @@ const blockRendering = goog.require('Blockly.blockRendering');
 const blocks = goog.require('Blockly.serialization.blocks');
 const browserEvents = goog.require('Blockly.browserEvents');
 const common = goog.require('Blockly.common');
+const constants = goog.require('Blockly.constants');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
-const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 const svgMath = goog.require('Blockly.utils.svgMath');
@@ -1594,7 +1594,7 @@ WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock, jsonBlock) {
           const connections = block.getConnections_(false);
           for (let i = 0, connection; (connection = connections[i]); i++) {
             const neighbour = connection.closest(
-                internalConstants.SNAP_RADIUS, new Coordinate(blockX, blockY));
+              constants.SNAP_RADIUS, new Coordinate(blockX, blockY));
             if (neighbour.connection) {
               collide = true;
               break;
@@ -1603,11 +1603,11 @@ WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock, jsonBlock) {
         }
         if (collide) {
           if (this.RTL) {
-            blockX -= internalConstants.SNAP_RADIUS;
+            blockX -= constants.SNAP_RADIUS;
           } else {
-            blockX += internalConstants.SNAP_RADIUS;
+            blockX += constants.SNAP_RADIUS;
           }
-          blockY += internalConstants.SNAP_RADIUS * 2;
+          blockY += constants.SNAP_RADIUS * 2;
         }
       } while (collide);
       block.moveTo(new Coordinate(blockX, blockY));

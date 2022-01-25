@@ -20,10 +20,10 @@ const Xml = goog.require('Blockly.Xml');
 const aria = goog.require('Blockly.utils.aria');
 const browserEvents = goog.require('Blockly.browserEvents');
 const clipboard = goog.require('Blockly.clipboard');
+const constants = goog.require('Blockly.constants');
 const deprecation = goog.require('Blockly.utils.deprecation');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
-const internalConstants = goog.require('Blockly.internalConstants');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const svgMath = goog.require('Blockly.utils.svgMath');
 /* eslint-disable-next-line no-unused-vars */
@@ -266,11 +266,11 @@ const callbackFactory = function(block, xml) {
       // Move the new block next to the old block.
       const xy = block.getRelativeToSurfaceXY();
       if (block.RTL) {
-        xy.x -= internalConstants.SNAP_RADIUS;
+        xy.x -= constants.SNAP_RADIUS;
       } else {
-        xy.x += internalConstants.SNAP_RADIUS;
+        xy.x += constants.SNAP_RADIUS;
       }
-      xy.y += internalConstants.SNAP_RADIUS * 2;
+      xy.y += constants.SNAP_RADIUS * 2;
       newBlock.moveBy(xy.x, xy.y);
     } finally {
       eventUtils.enable();

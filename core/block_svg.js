@@ -1552,7 +1552,7 @@ BlockSvg.prototype.bumpNeighbours = function() {
       connection.targetBlock().bumpNeighbours();
     }
 
-    const neighbours = connection.neighbours(internalConstants.SNAP_RADIUS);
+    const neighbours = connection.neighbours(constants.SNAP_RADIUS);
     for (let j = 0, otherConnection; (otherConnection = neighbours[j]); j++) {
       // If both connections are connected, that's probably fine.  But if
       // either one of them is unconnected, then there could be confusion.
@@ -1585,13 +1585,13 @@ BlockSvg.prototype.scheduleSnapAndBump = function() {
     eventUtils.setGroup(group);
     block.snapToGrid();
     eventUtils.setGroup(false);
-  }, internalConstants.BUMP_DELAY / 2);
+  }, constants.BUMP_DELAY / 2);
 
   setTimeout(function() {
     eventUtils.setGroup(group);
     block.bumpNeighbours();
     eventUtils.setGroup(false);
-  }, internalConstants.BUMP_DELAY);
+  }, constants.BUMP_DELAY);
 };
 
 /**

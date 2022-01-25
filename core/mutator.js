@@ -19,9 +19,9 @@ goog.module('Blockly.Mutator');
 
 /* eslint-disable-next-line no-unused-vars */
 const Abstract = goog.requireType('Blockly.Events.Abstract');
+const constants = goog.require('Blockly.constants');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
-const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
 const toolbox = goog.require('Blockly.utils.toolbox');
 const xml = goog.require('Blockly.utils.xml');
@@ -479,7 +479,7 @@ Mutator.prototype.updateWorkspace_ = function() {
         eventUtils.setGroup(mutationGroup);
         block.bumpNeighbours();
         eventUtils.setGroup(oldGroup);
-      }, internalConstants.BUMP_DELAY);
+      }, constants.BUMP_DELAY);
     }
 
     // Don't update the bubble until the drag has ended, to avoid moving blocks

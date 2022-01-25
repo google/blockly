@@ -224,18 +224,18 @@ function packageNode() {
       },{
         name: 'BlocklyJS',
         cjs: './javascript',
-      },{
-        name: 'BlocklyPython',
-        cjs: './python',
-      },{
-        name: 'BlocklyPHP',
-        cjs: './php',
-      },{
-        name: 'BlocklyLua',
-        cjs: './lua',
-      }, {
-        name: 'BlocklyDart',
-        cjs: './dart',
+      // },{
+      //   name: 'BlocklyPython',
+      //   cjs: './python',
+      // },{
+      //   name: 'BlocklyPHP',
+      //   cjs: './php',
+      // },{
+      //   name: 'BlocklyLua',
+      //   cjs: './lua',
+      // }, {
+      //   name: 'BlocklyDart',
+      //   cjs: './dart',
       }]))
     .pipe(gulp.rename('node.js'))
     .pipe(gulp.dest(releaseDir));
@@ -386,7 +386,7 @@ function packageJSON(cb) {
  * https://www.npmjs.com/package/blockly .
  */
 function packageReadme() {
-  return gulp.src('scripts/package/README.md')
+  return gulp.src('./README.md')
     .pipe(gulp.dest(releaseDir));
 };
 
@@ -437,10 +437,10 @@ const package = gulp.series(
         packageBlockly,
         packageBlocks,
         packageJavascript,
-        packagePython,
-        packageLua,
-        packageDart,
-        packagePHP,
+        // packagePython,
+        // packageLua,
+        // packageDart,
+        // packagePHP,
         packageLocales,
         packageMedia,
         packageUMDBundle,

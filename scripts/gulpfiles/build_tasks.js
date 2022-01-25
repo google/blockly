@@ -230,7 +230,7 @@ function buildDeps(done) {
       'node_modules/google-closure-library/closure/goog' :
       'closure/goog';
 
-  const coreDir = argv.compileTs ? TSC_OUTPUT_DIR + '/core' : 'core';
+  const coreDir = argv.compileTs ? path.join(TSC_OUTPUT_DIR, 'core') : 'core';
   const roots = [
     closurePath,
     coreDir,
@@ -358,7 +358,7 @@ return ${NAMESPACE_OBJECT}.${chunk.exports};
  */
 function getChunkOptions() {
   if (argv.compileTs) {
-    chunks[0].entry = TSC_OUTPUT_DIR + '/core/blockly.js';
+    chunks[0].entry = path.join(TSC_OUTPUT_DIR, chunks[0].entry);
   }
   const cccArgs = [
     '--closure-library-base-js-path ./closure/goog/base_minimal.js',
@@ -467,19 +467,11 @@ const pathSepRegExp = new RegExp(path.sep.replace(/\\/, '\\\\'), "g");
  */
 function flattenCorePaths(pathObject) {
   const dirs = pathObject.dirname.split(path.sep);
-
-  if (argv.compileTs) {
-    if (dirs[2] === 'core') {
-      pathObject.dirname = 'build/ts/core';
-      pathObject.basename =
-          dirs.slice(3).concat(pathObject.basename).join('-slash-');
-    }
-  } else {
-    if (dirs[0] === 'core') {
-      pathObject.dirname = dirs[0];
-      pathObject.basename =
-          dirs.slice(1).concat(pathObject.basename).join('-slash-');
-    }
+  const coreIndex = argv.compileTs ? 2 : 0;
+  if (dirs[coreIndex] === 'core') {
+    pathObject.dirname = path.join(...dirs.slice(0, coreIndex + 1));
+    pathObject.basename =
+        dirs.slice(coreIndex + 1).concat(pathObject.basename).join('-slash-');
   }
 }
 

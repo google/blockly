@@ -19,7 +19,7 @@
     "outDir": "build/ts",
     "module": "ES2015",
     "moduleResolution": "node",
-    "target": "ES2015",
+    "target": "ES2020",
     "strict": true,
   }
 }

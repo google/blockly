@@ -431,17 +431,17 @@ FieldMultilineInput.prototype.onHtmlInputKeyDown_ = function(e) {
  * CSS for multiline field.  See css.js for use.
  */
 Css.register(`
-  .blocklyHtmlTextAreaInput {
-    font-family: monospace;
-    resize: none;
-    overflow: hidden;
-    height: 100%;
-    text-align: left;
-  }
+.blocklyHtmlTextAreaInput {
+  font-family: monospace;
+  resize: none;
+  overflow: hidden;
+  height: 100%;
+  text-align: left;
+}
 
-  .blocklyHtmlTextAreaInputOverflowedY {
-    overflow-y: scroll;
-  }
+.blocklyHtmlTextAreaInputOverflowedY {
+  overflow-y: scroll;
+}
 `);
 
 fieldRegistry.register('field_multilinetext', FieldMultilineInput);

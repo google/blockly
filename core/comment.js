@@ -434,16 +434,16 @@ Comment.prototype.dispose = function() {
  * CSS for block comment.  See css.js for use.
  */
 Css.register(`
-  .blocklyCommentTextarea {
-    background-color: #fef49c;
-    border: 0;
-    display: block;
-    margin: 0;
-    outline: 0;
-    padding: 3px;
-    resize: none;
-    text-overflow: hidden;
-  }
+.blocklyCommentTextarea {
+  background-color: #fef49c;
+  border: 0;
+  display: block;
+  margin: 0;
+  outline: 0;
+  padding: 3px;
+  resize: none;
+  text-overflow: hidden;
+}
 `);
 
 exports.Comment = Comment;

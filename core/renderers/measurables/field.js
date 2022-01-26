@@ -36,7 +36,8 @@ class Field extends Measurable {
   /**
    * @param {!ConstantProvider} constants The rendering
    *   constants provider.
-   * @param {!BlocklyField} field The field to measure and store information for.
+   * @param {!BlocklyField} field The field to measure and store information
+   *     for.
    * @param {!Input} parentInput The parent input for the field.
    * @package
    * @alias Blockly.blockRendering.Field

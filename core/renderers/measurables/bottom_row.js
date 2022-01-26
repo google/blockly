@@ -60,8 +60,9 @@ class BottomRow extends Row {
     this.connection = null;
 
     /**
-     * The amount that the bottom of the block extends below the horizontal edge,
-     * e.g. because of a next connection.  Must be non-negative (see #2820).
+     * The amount that the bottom of the block extends below the horizontal
+     * edge, e.g. because of a next connection.  Must be non-negative (see
+     * #2820).
      * @package
      * @type {number}
      */

@@ -53,7 +53,8 @@ class ExternalValueInput extends InputConnection {
     }
 
     /** @type {number} */
-    this.width = this.shape.width + this.constants_.EXTERNAL_VALUE_INPUT_PADDING;
+    this.width =
+        this.shape.width + this.constants_.EXTERNAL_VALUE_INPUT_PADDING;
 
     /** @type {number} */
     this.connectionOffsetY = this.constants_.TAB_OFFSET_FROM_TOP;

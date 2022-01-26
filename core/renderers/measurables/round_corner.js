@@ -38,9 +38,9 @@ class RoundCorner extends Measurable {
    */
   constructor(constants, opt_position) {
     super(constants);
-    this.type =
-        ((!opt_position || opt_position === 'left') ? Types.LEFT_ROUND_CORNER :
-                                                      Types.RIGHT_ROUND_CORNER) |
+    this.type = ((!opt_position || opt_position === 'left') ?
+                     Types.LEFT_ROUND_CORNER :
+                     Types.RIGHT_ROUND_CORNER) |
         Types.CORNER;
     this.width = this.constants_.CORNER_RADIUS;
     // The rounded corner extends into the next row by 4 so we only take the

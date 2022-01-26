@@ -51,7 +51,8 @@ class StatementInput extends InputConnection {
       this.height =
           this.connectedBlockHeight + this.constants_.STATEMENT_BOTTOM_SPACER;
     }
-    this.width = this.constants_.STATEMENT_INPUT_NOTCH_OFFSET + this.shape.width;
+    this.width =
+        this.constants_.STATEMENT_INPUT_NOTCH_OFFSET + this.shape.width;
   }
 }
 

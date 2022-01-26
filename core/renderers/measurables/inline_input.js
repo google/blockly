@@ -54,8 +54,9 @@ class InlineInput extends InputConnection {
     }
 
     /** @type {number} */
-    this.connectionHeight =
-        !this.isDynamicShape ? this.shape.height : this.shape.height(this.height);
+    this.connectionHeight = !this.isDynamicShape ?
+        this.shape.height :
+        this.shape.height(this.height);
 
     /** @type {number} */
     this.connectionWidth =

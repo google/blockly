@@ -132,7 +132,7 @@ class Drawer extends BaseDrawer {
             (spacerRow.precedesStatement ?
                  this.constants_.INSIDE_CORNERS.pathTopRight :
                  '');
-          return;
+        return;
       }
     }
     this.outlinePath_ += svgPaths.lineOnAxis('V', row.yPos + row.height);

@@ -28,6 +28,8 @@ const {RenderInfo} = goog.requireType('Blockly.zelos.RenderInfo');
 const {Row} = goog.requireType('Blockly.blockRendering.Row');
 /* eslint-disable-next-line no-unused-vars */
 const {SpacerRow} = goog.requireType('Blockly.blockRendering.SpacerRow');
+/* eslint-disable-next-line no-unused-vars */
+const {StatementInput} = goog.requireType('Blockly.zelos.StatementInput');
 const {Types} = goog.require('Blockly.blockRendering.Types');
 
 
@@ -215,7 +217,7 @@ class Drawer extends BaseDrawer {
    * @override
    */
   drawStatementInput_(row) {
-    const input = row.getLastInput();
+    const input = /** @type {!StatementInput} */ (row.getLastInput());
     // Where to start drawing the notch, which is on the right side in LTR.
     const x = input.xPos + input.notchOffset + input.shape.width;
 

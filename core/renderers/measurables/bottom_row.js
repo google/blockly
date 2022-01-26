@@ -16,7 +16,6 @@
  */
 goog.module('Blockly.blockRendering.BottomRow');
 
-const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
@@ -32,105 +31,107 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  * a block as well as spacing information for the bottom row.
  * Elements in a bottom row can consist of corners, spacers and next
  * connections.
- * @param {!ConstantProvider} constants The rendering
- *   constants provider.
- * @package
- * @constructor
  * @extends {Row}
  * @struct
- * @alias Blockly.blockRendering.BottomRow
  */
-const BottomRow = function(constants) {
-  BottomRow.superClass_.constructor.call(this, constants);
-  this.type |= Types.BOTTOM_ROW;
-
+class BottomRow extends Row {
   /**
-   * Whether this row has a next connection.
+   * @param {!ConstantProvider} constants The rendering
+   *   constants provider.
    * @package
-   * @type {boolean}
+   * @alias Blockly.blockRendering.BottomRow
    */
-  this.hasNextConnection = false;
+  constructor(constants) {
+    super(constants);
+    this.type |= Types.BOTTOM_ROW;
+
+    /**
+     * Whether this row has a next connection.
+     * @package
+     * @type {boolean}
+     */
+    this.hasNextConnection = false;
+
+    /**
+     * The next connection on the row, if any.
+     * @package
+     * @type {NextConnection}
+     */
+    this.connection = null;
+
+    /**
+     * The amount that the bottom of the block extends below the horizontal edge,
+     * e.g. because of a next connection.  Must be non-negative (see #2820).
+     * @package
+     * @type {number}
+     */
+    this.descenderHeight = 0;
+
+    /**
+     * The Y position of the bottom edge of the block, relative to the origin
+     * of the block rendering.
+     * @type {number}
+     */
+    this.baseline = 0;
+  }
 
   /**
-   * The next connection on the row, if any.
-   * @package
-   * @type {NextConnection}
+   * Returns whether or not the bottom row has a left square corner.
+   * @param {!BlockSvg} block The block whose bottom row this represents.
+   * @return {boolean} Whether or not the bottom row has a left square corner.
    */
-  this.connection = null;
+  hasLeftSquareCorner(block) {
+    return !!block.outputConnection || !!block.getNextBlock();
+  }
 
   /**
-   * The amount that the bottom of the block extends below the horizontal edge,
-   * e.g. because of a next connection.  Must be non-negative (see #2820).
-   * @package
-   * @type {number}
+   * Returns whether or not the bottom row has a right square corner.
+   * @param {!BlockSvg} _block The block whose bottom row this represents.
+   * @return {boolean} Whether or not the bottom row has a right square corner.
    */
-  this.descenderHeight = 0;
+  hasRightSquareCorner(_block) {
+    return true;
+  }
 
   /**
-   * The Y position of the bottom edge of the block, relative to the origin
-   * of the block rendering.
-   * @type {number}
+   * @override
    */
-  this.baseline = 0;
-};
-object.inherits(BottomRow, Row);
-
-/**
- * Returns whether or not the bottom row has a left square corner.
- * @param {!BlockSvg} block The block whose bottom row this represents.
- * @return {boolean} Whether or not the bottom row has a left square corner.
- */
-BottomRow.prototype.hasLeftSquareCorner = function(block) {
-  return !!block.outputConnection || !!block.getNextBlock();
-};
-
-/**
- * Returns whether or not the bottom row has a right square corner.
- * @param {!BlockSvg} _block The block whose bottom row this represents.
- * @return {boolean} Whether or not the bottom row has a right square corner.
- */
-BottomRow.prototype.hasRightSquareCorner = function(_block) {
-  return true;
-};
-
-/**
- * @override
- */
-BottomRow.prototype.measure = function() {
-  let height = 0;
-  let width = 0;
-  let descenderHeight = 0;
-  for (let i = 0; i < this.elements.length; i++) {
-    const elem = this.elements[i];
-    width += elem.width;
-    if (!(Types.isSpacer(elem))) {
-      // Note: this assumes that next connections have *only* descenderHeight,
-      // with no height above the baseline.
-      if (Types.isNextConnection(elem)) {
-        descenderHeight = Math.max(descenderHeight, elem.height);
-      } else {
-        height = Math.max(height, elem.height);
+  measure() {
+    let height = 0;
+    let width = 0;
+    let descenderHeight = 0;
+    for (let i = 0; i < this.elements.length; i++) {
+      const elem = this.elements[i];
+      width += elem.width;
+      if (!(Types.isSpacer(elem))) {
+        // Note: this assumes that next connections have *only* descenderHeight,
+        // with no height above the baseline.
+        if (Types.isNextConnection(elem)) {
+          descenderHeight = Math.max(descenderHeight, elem.height);
+        } else {
+          height = Math.max(height, elem.height);
+        }
       }
     }
+    this.width = Math.max(this.minWidth, width);
+    this.height = Math.max(this.minHeight, height) + descenderHeight;
+    this.descenderHeight = descenderHeight;
+    this.widthWithConnectedBlocks = this.width;
   }
-  this.width = Math.max(this.minWidth, width);
-  this.height = Math.max(this.minHeight, height) + descenderHeight;
-  this.descenderHeight = descenderHeight;
-  this.widthWithConnectedBlocks = this.width;
-};
 
-/**
- * @override
- */
-BottomRow.prototype.startsWithElemSpacer = function() {
-  return false;
-};
+  /**
+   * @override
+   */
+  startsWithElemSpacer() {
+    return false;
+  }
 
-/**
- * @override
- */
-BottomRow.prototype.endsWithElemSpacer = function() {
-  return false;
-};
+  /**
+   * @override
+   */
+  endsWithElemSpacer() {
+    return false;
+  }
+}
 
 exports.BottomRow = BottomRow;

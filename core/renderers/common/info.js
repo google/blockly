@@ -90,7 +90,7 @@ const RenderInfo = function(renderer, block) {
       null :
       new OutputConnection(
           this.constants_,
-          /** @type {RenderedConnection} */ (block.outputConnection));
+          /** @type {!RenderedConnection} */ (block.outputConnection));
 
   /**
    * Whether the block should be rendered as a single line, either because it's
@@ -285,7 +285,7 @@ RenderInfo.prototype.populateTopRow_ = function() {
     this.topRow.hasPreviousConnection = true;
     this.topRow.connection = new PreviousConnection(
         this.constants_,
-        /** @type {RenderedConnection} */
+        /** @type {!RenderedConnection} */
         (this.block_.previousConnection));
     this.topRow.elements.push(this.topRow.connection);
   }
@@ -338,7 +338,7 @@ RenderInfo.prototype.populateBottomRow_ = function() {
   if (this.bottomRow.hasNextConnection) {
     this.bottomRow.connection = new NextConnection(
         this.constants_,
-        /** @type {RenderedConnection} */ (this.block_.nextConnection));
+        /** @type {!RenderedConnection} */ (this.block_.nextConnection));
     this.bottomRow.elements.push(this.bottomRow.connection);
   }
 

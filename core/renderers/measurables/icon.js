@@ -16,7 +16,6 @@
  */
 goog.module('Blockly.blockRendering.Icon');
 
-const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 /* eslint-disable-next-line no-unused-vars */
@@ -28,29 +27,33 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
 /**
  * An object containing information about the space an icon takes up during
  * rendering
- * @param {!ConstantProvider} constants The rendering
- *   constants provider.
- * @param {!BlocklyIcon} icon The icon to measure and store information for.
- * @package
- * @constructor
  * @extends {Measurable}
  * @struct
  * @alias Blockly.blockRendering.Icon
  */
-const Icon = function(constants, icon) {
-  Icon.superClass_.constructor.call(this, constants);
+class Icon extends Measurable {
+  /**
+   * An object containing information about the space an icon takes up during
+   * rendering
+   * @param {!ConstantProvider} constants The rendering
+   *   constants provider.
+   * @param {!BlocklyIcon} icon The icon to measure and store information for.
+   * @package
+   * @alias Blockly.blockRendering.Icon
+   */
+  constructor(constants, icon) {
+    super(constants);
 
-  /** @type {!BlocklyIcon} */
-  this.icon = icon;
+    /** @type {!BlocklyIcon} */
+    this.icon = icon;
 
-  /** @type {boolean} */
-  this.isVisible = icon.isVisible();
-  this.type |= Types.ICON;
+    /** @type {boolean} */
+    this.isVisible = icon.isVisible();
+    this.type |= Types.ICON;
 
-  const size = icon.getCorrectedSize();
-  this.height = size.height;
-  this.width = size.width;
-};
-object.inherits(Icon, Measurable);
-
+    const size = icon.getCorrectedSize();
+    this.height = size.height;
+    this.width = size.width;
+  }
+}
 exports.Icon = Icon;

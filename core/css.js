@@ -439,8 +439,7 @@ let content = (`
   }
 
   .blocklyFlyoutBackground {
-    fill: #ddd;
-    fill-opacity: .8;
+    fill: #eee;
   }
 
   .blocklyMainWorkspaceScrollbar {
@@ -449,6 +448,22 @@ let content = (`
 
   .blocklyFlyoutScrollbar {
     z-index: 30;
+  }
+  
+  .blocklyFlyoutCloseButton {
+    position: absolute;
+    z-index: 20;
+    width: 30px;
+    height: 40px;
+    cursor: pointer;
+  }
+  
+  .blocklyFlyoutEndShadow {
+    display: block;
+    position: absolute;
+    width: 10px;
+    background-color: #eee;
+    z-index: 21;
   }
 
   .blocklyScrollbarHorizontal,

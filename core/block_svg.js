@@ -1368,8 +1368,8 @@ BlockSvg.prototype.placeToFront = function () {
     this.tempRootDiv.style.position = 'absolute'
     this.tempRootDiv.style.top = `${blockClientRect.top - flyoutClientRect.top}px`
     this.tempRootDiv.style.left = `${blockClientRect.left - workspaceClientRect.left}px`
-    this.tempRootDiv.style.background = '#ddd'
-    this.tempRootDiv.style.boxShadow = '0 0 5px #ddd'
+    this.tempRootDiv.style.background = '#ccc'
+    this.tempRootDiv.style.boxShadow = '0 0 5px #ccc'
 
     const tempSVGRoot = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
     tempSVGRoot.setAttribute('width', `${blockClientRect.width}px`)

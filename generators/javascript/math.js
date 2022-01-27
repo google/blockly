@@ -149,11 +149,28 @@ JavaScript['math_constant'] = function(block) {
 JavaScript['math_number_property'] = function(block) {
   // Check if a number is even, odd, prime, whole, positive, or negative
   // or if it is divisible by certain number. Returns true or false.
-  const number_to_check = JavaScript.valueToCode(block, 'NUMBER_TO_CHECK',
-      JavaScript.ORDER_MODULUS) || '0';
-  const dropdown_property = block.getFieldValue('PROPERTY');
+  const PROPERTIES = {
+    'EVEN': [' % 2 === 0', JavaScript.ORDER_MODULUS,
+        JavaScript.ORDER_EQUALITY],
+    'ODD': [' % 2 === 1', JavaScript.ORDER_MODULUS,
+        JavaScript.ORDER_EQUALITY],
+    'WHOLE': [' % 1 === 0', JavaScript.ORDER_MODULUS,
+        JavaScript.ORDER_EQUALITY],
+    'POSITIVE': [' > 0', JavaScript.ORDER_RELATIONAL,
+        JavaScript.ORDER_RELATIONAL],
+    'NEGATIVE': [' < 0', JavaScript.ORDER_RELATIONAL,
+        JavaScript.ORDER_RELATIONAL],
+    'DIVISIBLE_BY': [null, JavaScript.ORDER_MODULUS,
+        JavaScript.ORDER_EQUALITY],
+    'PRIME': [null, JavaScript.ORDER_NONE,
+        JavaScript.ORDER_FUNCTION_CALL]
+  };
+  const dropdownProperty = block.getFieldValue('PROPERTY');
+  const [suffix, inputOrder, outputOrder] = PROPERTIES[dropdownProperty];
+  const numberToCheck = JavaScript.valueToCode(block, 'NUMBER_TO_CHECK',
+      inputOrder) || '0';
   let code;
-  if (dropdown_property === 'PRIME') {
+  if (dropdownProperty === 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
     const functionName = JavaScript.provideFunction_(
         'mathIsPrime',
@@ -176,33 +193,15 @@ JavaScript['math_number_property'] = function(block) {
          '  }',
          '  return true;',
          '}']);
-    code = functionName + '(' + number_to_check + ')';
-    return [code, JavaScript.ORDER_FUNCTION_CALL];
+    code = functionName + '(' + numberToCheck + ')';
+  } else if (dropdownProperty === 'DIVISIBLE_BY') {
+    const divisor = JavaScript.valueToCode(block, 'DIVISOR',
+        JavaScript.ORDER_MODULUS) || '0';
+    code = numberToCheck + ' % ' + divisor + ' === 0';
+  } else {
+    code = numberToCheck + suffix;
   }
-  switch (dropdown_property) {
-    case 'EVEN':
-      code = number_to_check + ' % 2 === 0';
-      break;
-    case 'ODD':
-      code = number_to_check + ' % 2 === 1';
-      break;
-    case 'WHOLE':
-      code = number_to_check + ' % 1 === 0';
-      break;
-    case 'POSITIVE':
-      code = number_to_check + ' > 0';
-      break;
-    case 'NEGATIVE':
-      code = number_to_check + ' < 0';
-      break;
-    case 'DIVISIBLE_BY': {
-      const divisor = JavaScript.valueToCode(block, 'DIVISOR',
-          JavaScript.ORDER_MODULUS) || '0';
-      code = number_to_check + ' % ' + divisor + ' === 0';
-      break;
-    }
-  }
-  return [code, JavaScript.ORDER_EQUALITY];
+  return [code, outputOrder];
 };
 
 JavaScript['math_change'] = function(block) {

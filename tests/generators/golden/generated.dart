@@ -440,12 +440,16 @@ void test_number_properties() {
   unittest_assertequals(42 % 2 == 0, true, 'even');
   unittest_assertequals(42.1 % 2 == 1, false, 'odd');
   unittest_assertequals(math_isPrime(5), true, 'prime 5');
+  unittest_assertequals(math_isPrime(5 + 2), true, 'prime 5 + 2 (extra parentheses)');
   unittest_assertequals(math_isPrime(25), false, 'prime 25');
   unittest_assertequals(math_isPrime(-31.1), false, 'prime negative');
   unittest_assertequals(Math.pi % 1 == 0, false, 'whole');
   unittest_assertequals(double.infinity > 0, true, 'positive');
+  unittest_assertequals(5 + 2 > 0, true, '5 + 2 is positive (extra parentheses)');
   unittest_assertequals(-42 < 0, true, 'negative');
+  unittest_assertequals(3 + 2 < 0, false, '3 + 2 is negative (extra parentheses)');
   unittest_assertequals(42 % 2 == 0, true, 'divisible');
+  unittest_assertequals(!false, true, 'divisible by 0');
 }
 
 /// Tests the "round" block.

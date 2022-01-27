@@ -1,4 +1,8 @@
 <xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable>varToChange</variable>
+    <variable>rand</variable>
+  </variables>
   <block type="unittest_main" x="13" y="13">
     <field name="SUITE_NAME">Math</field>
     <statement name="DO">
@@ -992,10 +996,10 @@
                 </value>
                 <next>
                   <block type="unittest_assertvalue" inline="false">
-                    <field name="EXPECTED">FALSE</field>
+                    <field name="EXPECTED">TRUE</field>
                     <value name="MESSAGE">
                       <block type="text">
-                        <field name="TEXT">prime 25</field>
+                        <field name="TEXT">prime 5 + 2 (extra parentheses)</field>
                       </block>
                     </value>
                     <value name="ACTUAL">
@@ -1003,8 +1007,18 @@
                         <mutation divisor_input="false"></mutation>
                         <field name="PROPERTY">PRIME</field>
                         <value name="NUMBER_TO_CHECK">
-                          <block type="math_number">
-                            <field name="NUM">25</field>
+                          <block type="math_arithmetic">
+                            <field name="OP">ADD</field>
+                            <value name="A">
+                              <block type="math_number">
+                                <field name="NUM">5</field>
+                              </block>
+                            </value>
+                            <value name="B">
+                              <block type="math_number">
+                                <field name="NUM">2</field>
+                              </block>
+                            </value>
                           </block>
                         </value>
                       </block>
@@ -1014,7 +1028,7 @@
                         <field name="EXPECTED">FALSE</field>
                         <value name="MESSAGE">
                           <block type="text">
-                            <field name="TEXT">prime negative</field>
+                            <field name="TEXT">prime 25</field>
                           </block>
                         </value>
                         <value name="ACTUAL">
@@ -1023,7 +1037,7 @@
                             <field name="PROPERTY">PRIME</field>
                             <value name="NUMBER_TO_CHECK">
                               <block type="math_number">
-                                <field name="NUM">-31.1</field>
+                                <field name="NUM">25</field>
                               </block>
                             </value>
                           </block>
@@ -1033,35 +1047,35 @@
                             <field name="EXPECTED">FALSE</field>
                             <value name="MESSAGE">
                               <block type="text">
-                                <field name="TEXT">whole</field>
+                                <field name="TEXT">prime negative</field>
                               </block>
                             </value>
                             <value name="ACTUAL">
                               <block type="math_number_property">
                                 <mutation divisor_input="false"></mutation>
-                                <field name="PROPERTY">WHOLE</field>
+                                <field name="PROPERTY">PRIME</field>
                                 <value name="NUMBER_TO_CHECK">
-                                  <block type="math_constant">
-                                    <field name="CONSTANT">PI</field>
+                                  <block type="math_number">
+                                    <field name="NUM">-31.1</field>
                                   </block>
                                 </value>
                               </block>
                             </value>
                             <next>
                               <block type="unittest_assertvalue" inline="false">
-                                <field name="EXPECTED">TRUE</field>
+                                <field name="EXPECTED">FALSE</field>
                                 <value name="MESSAGE">
                                   <block type="text">
-                                    <field name="TEXT">positive</field>
+                                    <field name="TEXT">whole</field>
                                   </block>
                                 </value>
                                 <value name="ACTUAL">
                                   <block type="math_number_property">
                                     <mutation divisor_input="false"></mutation>
-                                    <field name="PROPERTY">POSITIVE</field>
+                                    <field name="PROPERTY">WHOLE</field>
                                     <value name="NUMBER_TO_CHECK">
                                       <block type="math_constant">
-                                        <field name="CONSTANT">INFINITY</field>
+                                        <field name="CONSTANT">PI</field>
                                       </block>
                                     </value>
                                   </block>
@@ -1071,16 +1085,16 @@
                                     <field name="EXPECTED">TRUE</field>
                                     <value name="MESSAGE">
                                       <block type="text">
-                                        <field name="TEXT">negative</field>
+                                        <field name="TEXT">positive</field>
                                       </block>
                                     </value>
                                     <value name="ACTUAL">
                                       <block type="math_number_property">
                                         <mutation divisor_input="false"></mutation>
-                                        <field name="PROPERTY">NEGATIVE</field>
+                                        <field name="PROPERTY">POSITIVE</field>
                                         <value name="NUMBER_TO_CHECK">
-                                          <block type="math_number">
-                                            <field name="NUM">-42</field>
+                                          <block type="math_constant">
+                                            <field name="CONSTANT">INFINITY</field>
                                           </block>
                                         </value>
                                       </block>
@@ -1090,25 +1104,138 @@
                                         <field name="EXPECTED">TRUE</field>
                                         <value name="MESSAGE">
                                           <block type="text">
-                                            <field name="TEXT">divisible</field>
+                                            <field name="TEXT">5 + 2 is positive (extra parentheses)</field>
                                           </block>
                                         </value>
                                         <value name="ACTUAL">
                                           <block type="math_number_property">
-                                            <mutation divisor_input="true"></mutation>
-                                            <field name="PROPERTY">DIVISIBLE_BY</field>
+                                            <mutation divisor_input="false"></mutation>
+                                            <field name="PROPERTY">POSITIVE</field>
                                             <value name="NUMBER_TO_CHECK">
-                                              <block type="math_number">
-                                                <field name="NUM">42</field>
-                                              </block>
-                                            </value>
-                                            <value name="DIVISOR">
-                                              <block type="math_number">
-                                                <field name="NUM">2</field>
+                                              <block type="math_arithmetic">
+                                                <field name="OP">ADD</field>
+                                                <value name="A">
+                                                  <block type="math_number">
+                                                    <field name="NUM">5</field>
+                                                  </block>
+                                                </value>
+                                                <value name="B">
+                                                  <block type="math_number">
+                                                    <field name="NUM">2</field>
+                                                  </block>
+                                                </value>
                                               </block>
                                             </value>
                                           </block>
                                         </value>
+                                        <next>
+                                          <block type="unittest_assertvalue" inline="false">
+                                            <field name="EXPECTED">TRUE</field>
+                                            <value name="MESSAGE">
+                                              <block type="text">
+                                                <field name="TEXT">negative</field>
+                                              </block>
+                                            </value>
+                                            <value name="ACTUAL">
+                                              <block type="math_number_property">
+                                                <mutation divisor_input="false"></mutation>
+                                                <field name="PROPERTY">NEGATIVE</field>
+                                                <value name="NUMBER_TO_CHECK">
+                                                  <block type="math_number">
+                                                    <field name="NUM">-42</field>
+                                                  </block>
+                                                </value>
+                                              </block>
+                                            </value>
+                                            <next>
+                                              <block type="unittest_assertvalue" inline="false">
+                                                <field name="EXPECTED">FALSE</field>
+                                                <value name="MESSAGE">
+                                                  <block type="text">
+                                                    <field name="TEXT">3 + 2 is negative (extra parentheses)</field>
+                                                  </block>
+                                                </value>
+                                                <value name="ACTUAL">
+                                                  <block type="math_number_property">
+                                                    <mutation divisor_input="false"></mutation>
+                                                    <field name="PROPERTY">NEGATIVE</field>
+                                                    <value name="NUMBER_TO_CHECK">
+                                                      <block type="math_arithmetic">
+                                                        <field name="OP">ADD</field>
+                                                        <value name="A">
+                                                          <block type="math_number">
+                                                            <field name="NUM">3</field>
+                                                          </block>
+                                                        </value>
+                                                        <value name="B">
+                                                          <block type="math_number">
+                                                            <field name="NUM">2</field>
+                                                          </block>
+                                                        </value>
+                                                      </block>
+                                                    </value>
+                                                  </block>
+                                                </value>
+                                                <next>
+                                                  <block type="unittest_assertvalue" inline="false">
+                                                    <field name="EXPECTED">TRUE</field>
+                                                    <value name="MESSAGE">
+                                                      <block type="text">
+                                                        <field name="TEXT">divisible</field>
+                                                      </block>
+                                                    </value>
+                                                    <value name="ACTUAL">
+                                                      <block type="math_number_property">
+                                                        <mutation divisor_input="true"></mutation>
+                                                        <field name="PROPERTY">DIVISIBLE_BY</field>
+                                                        <value name="NUMBER_TO_CHECK">
+                                                          <block type="math_number">
+                                                            <field name="NUM">42</field>
+                                                          </block>
+                                                        </value>
+                                                        <value name="DIVISOR">
+                                                          <block type="math_number">
+                                                            <field name="NUM">2</field>
+                                                          </block>
+                                                        </value>
+                                                      </block>
+                                                    </value>
+                                                    <next>
+                                                      <block type="unittest_assertvalue">
+                                                        <field name="EXPECTED">TRUE</field>
+                                                        <value name="MESSAGE">
+                                                          <block type="text">
+                                                            <field name="TEXT">divisible by 0</field>
+                                                          </block>
+                                                        </value>
+                                                        <value name="ACTUAL">
+                                                          <block type="logic_negate">
+                                                            <value name="BOOL">
+                                                              <block type="math_number_property">
+                                                                <mutation divisor_input="true"></mutation>
+                                                                <field name="PROPERTY">DIVISIBLE_BY</field>
+                                                                <value name="NUMBER_TO_CHECK">
+                                                                  <block type="math_number">
+                                                                    <field name="NUM">42</field>
+                                                                  </block>
+                                                                </value>
+                                                                <value name="DIVISOR">
+                                                                  <block type="math_number">
+                                                                    <field name="NUM">0</field>
+                                                                  </block>
+                                                                </value>
+                                                              </block>
+                                                            </value>
+                                                          </block>
+                                                        </value>
+                                                      </block>
+                                                    </next>
+                                                  </block>
+                                                </next>
+                                              </block>
+                                            </next>
+                                          </block>
+                                        </next>
                                       </block>
                                     </next>
                                   </block>
@@ -1128,7 +1255,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="3738">
+  <block type="procedures_defnoreturn" x="48" y="3799">
     <field name="NAME">test round</field>
     <comment pinned="false" h="80" w="160">Tests the "round" block.</comment>
     <statement name="STACK">
@@ -1204,7 +1331,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" x="13" y="4038">
+  <block type="procedures_defnoreturn" x="46" y="4064">
     <field name="NAME">test change</field>
     <comment pinned="false" h="80" w="160">Tests the "change" block.</comment>
     <statement name="STACK">

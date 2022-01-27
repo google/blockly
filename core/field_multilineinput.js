@@ -170,36 +170,32 @@ FieldMultilineInput.prototype.initView = function() {
  * @override
  */
 FieldMultilineInput.prototype.getDisplayText_ = function() {
-  let textLines = this.getText();
+  const textLines = this.getText();
   if (!textLines) {
     // Prevent the field from disappearing if empty.
     return Field.NBSP;
   }
-  const lines = textLines.split('\n');
-  textLines = '';
-  const displayLinesNumber =
-      this.isOverflowedY_ ? this.maxLines_ : lines.length;
-  for (let i = 0; i < displayLinesNumber; i++) {
-    let text = lines[i];
-    if (text.length > this.maxDisplayLength) {
-      // Truncate displayed string and add an ellipsis ('...').
-      text = text.substring(0, this.maxDisplayLength - 4) + '...';
-    } else if (this.isOverflowedY_ && i === displayLinesNumber - 1) {
-      text = text.substring(0, text.length - 3) + '...';
-    }
-    // Replace whitespace with non-breaking spaces so the text doesn't collapse.
-    text = text.replace(/\s/g, Field.NBSP);
 
-    textLines += text;
-    if (i !== displayLinesNumber - 1) {
-      textLines += '\n';
+  const lines = textLines.split('\n');
+  let formatText = '';
+
+  lines.forEach((line) => {
+    if (line < this.maxDisplayLength) {
+      formatText += line;
+      return;
     }
-  }
+
+    for (let i = 0; i < line.length; i += this.maxDisplayLength) {
+      const trimLine = line.substring(i, i + this.maxDisplayLength);
+      formatText += `${trimLine}\n`;
+    }
+  });
+
   if (this.sourceBlock_.RTL) {
     // The SVG is LTR, force value to be RTL.
-    textLines += '\u200F';
+    formatText += '\u200F';
   }
-  return textLines;
+  return formatText;
 };
 
 /**

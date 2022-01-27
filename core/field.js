@@ -860,7 +860,7 @@ Field.prototype.getDisplayText_ = function() {
     // Prevent the field from disappearing if empty.
     return Field.NBSP;
   }
-  if (text.length > this.maxDisplayLength) {
+  if (text.length > this.maxDisplayLength && this.sourceBlock_.type !== 'text') {
     // Truncate displayed string and add an ellipsis ('...').
     text = text.substring(0, this.maxDisplayLength - 2) + '\u2026';
   }

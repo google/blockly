@@ -360,7 +360,6 @@ Flyout.prototype.init = function(targetWorkspace) {
     component: this,
     weight: 1,
     capabilities: [
-      ComponentManager.Capability.DELETE_AREA,
       ComponentManager.Capability.DRAG_TARGET,
     ],
   });
@@ -489,29 +488,29 @@ Flyout.prototype.onCloseHandler_ = function() {
  * @protected
  */
 Flyout.prototype.createCloseButton_ = function() {
-  this.removeCloseButton_()
+  this.removeCloseButton_();
 
   this.closeButtonSVG_ = dom.createSvgElement(Svg.SVG, {
     'stroke': 'grey',
     'stroke-width': '2',
     'stroke-linecap': 'round',
-  })
-  this.closeButtonSVG_.classList.add('blocklyFlyoutCloseButton')
+  });
+  this.closeButtonSVG_.classList.add('blocklyFlyoutCloseButton');
 
-  const flyoutSVG = this.workspace_.getParentSvg()
-  const flyoutParentEl = flyoutSVG.parentElement
+  const flyoutSVG = this.workspace_.getParentSvg();
+  const flyoutParentEl = flyoutSVG.parentElement;
 
-  const flyoutClientRect = flyoutSVG.getBoundingClientRect()
-  const flyoutParentClientRect = flyoutParentEl.getBoundingClientRect()
+  const flyoutClientRect = flyoutSVG.getBoundingClientRect();
+  const flyoutParentClientRect = flyoutParentEl.getBoundingClientRect();
 
-  const top = flyoutClientRect.top - flyoutParentClientRect.top
-  const left = flyoutClientRect.right - flyoutParentClientRect.left
+  const top = flyoutClientRect.top - flyoutParentClientRect.top;
+  const left = flyoutClientRect.right - flyoutParentClientRect.left;
 
   this.closeButtonSVG_.style.top = `${top}px`;
   this.closeButtonSVG_.style.left = `${left}px`;
 
   // insert close button after the flyout svg
-  flyoutParentEl.insertBefore(this.closeButtonSVG_, flyoutSVG.nextSibling)
+  flyoutParentEl.insertBefore(this.closeButtonSVG_, flyoutSVG.nextSibling);
 
   this.onMouseDownCloseWrapper_ = browserEvents.conditionalBind(this.closeButtonSVG_, 'click', this, this.onCloseHandler_);
 
@@ -519,7 +518,7 @@ Flyout.prototype.createCloseButton_ = function() {
     Svg.PATH, {
       'class': 'blocklyFlyoutBackground',
       'd': 'M 0 0 h 22 a 8 8 0 0 1 8 8 v 24 a 8 8 0 0 1 -8 8 h -22 z',
-      'stroke': 'none'
+      'stroke': 'none',
     }, this.closeButtonSVG_);
 
   // Create left arrow
@@ -538,7 +537,7 @@ Flyout.prototype.createCloseButton_ = function() {
   }, this.closeButtonSVG_);
 };
 
-Flyout.prototype.removeCloseButton_ = function () {
+Flyout.prototype.removeCloseButton_ = function() {
   if (this.onMouseDownCloseWrapper_) {
     browserEvents.unbind(this.onMouseDownCloseWrapper_);
     this.onMouseDownCloseWrapper_ = null;
@@ -548,9 +547,9 @@ Flyout.prototype.removeCloseButton_ = function () {
     dom.removeNode(this.closeButtonSVG_);
     this.closeButtonSVG_ = null;
   }
-}
+};
 
-Flyout.prototype.createFlyoutEndShadow_ = function () {
+Flyout.prototype.createFlyoutEndShadow_ = function() {
   this.removeFlyoutEndShadow_();
 
   this.flyoutEndShadowDiw_ = document.createElement('div');
@@ -573,14 +572,14 @@ Flyout.prototype.createFlyoutEndShadow_ = function () {
   this.flyoutEndShadowDiw_.style.height = `${height}px`;
 
   // insert close button after the flyout svg
-  flyoutParentEl.insertBefore(this.flyoutEndShadowDiw_, flyoutSVG.nextSibling)
-}
+  flyoutParentEl.insertBefore(this.flyoutEndShadowDiw_, flyoutSVG.nextSibling);
+};
 
-Flyout.prototype.removeFlyoutEndShadow_ = function () {
+Flyout.prototype.removeFlyoutEndShadow_ = function() {
   if (this.flyoutEndShadowDiw_) {
     this.flyoutEndShadowDiw_.remove();
   }
-}
+};
 
 
 /**

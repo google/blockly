@@ -478,8 +478,8 @@ function math_mean($myList) {
 
 function math_median($arr) {
   sort($arr,SORT_NUMERIC);
-  return (count($arr) % 2) ? $arr[floor(count($arr)/2)] :
-      ($arr[floor(count($arr)/2)] + $arr[floor(count($arr)/2) - 1]) / 2;
+  return (count($arr) % 2) ? $arr[floor(count($arr) / 2)] :
+      ($arr[floor(count($arr) / 2)] + $arr[floor(count($arr) / 2) - 1]) / 2;
 }
 
 function math_modes($values) {

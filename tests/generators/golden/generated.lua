@@ -535,7 +535,7 @@ function math_median(t)
   if #temp % 2 == 0 then
     return (temp[#temp / 2] + temp[(#temp / 2) + 1]) / 2
   else
-    return temp[math.ceil(#temp/2)]
+    return temp[math.ceil(#temp / 2)]
   end
 end
 

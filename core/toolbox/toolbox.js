@@ -238,7 +238,6 @@ Toolbox.prototype.init = function() {
     weight: 1,
     capabilities: [
       ComponentManager.Capability.AUTOHIDEABLE,
-      ComponentManager.Capability.DELETE_AREA,
       ComponentManager.Capability.DRAG_TARGET,
     ],
   });

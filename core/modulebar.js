@@ -124,7 +124,7 @@ ModuleBar.prototype.render = function() {
 
   const modules = this.workspace_.getModuleManager().getAllModules();
 
-  for (var i = 0; i < modules.length; i++) {
+  for (let i = 0; i < modules.length; i++) {
     const tab = document.createElement('li');
 
     tab.className = 'blocklyModuleBarTab';
@@ -158,16 +158,16 @@ ModuleBar.prototype.render = function() {
   }
 
   // create tab
-  var newTab = document.createElement('li');
+  const newTab = document.createElement('li');
   newTab.className = 'blocklyModuleBarTab blocklyModuleBarTabCreate';
   newTab.setAttribute('role', 'create-module-control');
   newTab.setAttribute('title', Blockly.Msg['NEW_MODULE']);
 
-  var newLink =  document.createElement('a');
+  const newLink = document.createElement('a');
   newLink.className = 'blocklyModuleBarLink';
   newLink.setAttribute('role', 'create-module-control');
 
-  var createIcon = document.createElement('span');
+  const createIcon = document.createElement('span');
   createIcon.className = 'blocklyModuleBarTabIcon blocklyModuleBarTabCreateIcon';
   createIcon.setAttribute('role', 'create-module-control');
 
@@ -227,7 +227,7 @@ ModuleBar.prototype.detachEvents_ = function() {
  * @private
  */
 ModuleBar.prototype.onMouseClick_ = function(e) {
-  var role = e.target.getAttribute('role');
+  const role = e.target.getAttribute('role');
 
   switch (role) {
     case 'module-menu-control':
@@ -245,7 +245,7 @@ ModuleBar.prototype.onMouseClick_ = function(e) {
  * @private
  */
 ModuleBar.prototype.onMouseDown_ = function(e) {
-  var role = e.target.getAttribute('role');
+  const role = e.target.getAttribute('role');
   if (role === 'module-menu-control') {
     return;
   }
@@ -254,12 +254,12 @@ ModuleBar.prototype.onMouseDown_ = function(e) {
     return;
   }
 
-  var moduleEl = this.getModuleElementFromEvent_(e);
+  const moduleEl = this.getModuleElementFromEvent_(e);
   if (!moduleEl) {
     return;
   }
 
-  var module = this.workspace_.getModuleManager().getModuleById(moduleEl.getAttribute('data-module-id'));
+  const module = this.workspace_.getModuleManager().getModuleById(moduleEl.getAttribute('data-module-id'));
   if (!module) {
     return;
   }
@@ -273,7 +273,6 @@ ModuleBar.prototype.onMouseDown_ = function(e) {
 };
 
 
-
 /**
  * Mouse up handler.
  * @param {!Event} e The browser event.
@@ -284,17 +283,17 @@ ModuleBar.prototype.onMouseUp_ = function(e) {
     return;
   }
 
-  var module = this.workspace_.getModuleManager().getModuleById(this.dragDropModuleEl_.getAttribute('data-module-id'));
+  const module = this.workspace_.getModuleManager().getModuleById(this.dragDropModuleEl_.getAttribute('data-module-id'));
   this.dragDropModuleEl_ = null;
   if (!this.dragDropTargetModuleEl_) {
     return;
   }
 
-  var targetModule = this.workspace_.getModuleManager().getModuleById(this.dragDropTargetModuleEl_.getAttribute('data-module-id'));
+  const targetModule = this.workspace_.getModuleManager().getModuleById(this.dragDropTargetModuleEl_.getAttribute('data-module-id'));
   this.dragDropTargetModuleEl_ = null;
 
-  var oldPostion = this.workspace_.getModuleManager().getModuleOrder(module.getId());
-  var newPosition = this.workspace_.getModuleManager().getModuleOrder(targetModule.getId());
+  const oldPostion = this.workspace_.getModuleManager().getModuleOrder(module.getId());
+  let newPosition = this.workspace_.getModuleManager().getModuleOrder(targetModule.getId());
 
   if (oldPostion > newPosition) {
     newPosition++;
@@ -313,7 +312,7 @@ ModuleBar.prototype.onMouseMove_ = function(e) {
     return;
   }
 
-  var targetModuleEl = this.getModuleElementFromEvent_(e);
+  const targetModuleEl = this.getModuleElementFromEvent_(e);
   if (!targetModuleEl || targetModuleEl === this.dragDropModuleEl_) {
     if (this.dragDropTargetModuleEl_) {
       this.dragDropTargetModuleEl_.classList.remove('blocklyModuleBarTabDropZone');
@@ -341,7 +340,7 @@ ModuleBar.prototype.onMouseMove_ = function(e) {
  * @private
  */
 ModuleBar.prototype.onMouseClick_ = function(e) {
-  var role = e.target.getAttribute('role');
+  const role = e.target.getAttribute('role');
 
   switch (role) {
     case 'module-menu-control':
@@ -359,22 +358,22 @@ ModuleBar.prototype.onMouseClick_ = function(e) {
  * @private
  */
 ModuleBar.prototype.handleShowModuleMenu_ = function(e) {
-  var self_ = this;
-  var menuOptions = [
+  const self_ = this;
+  const menuOptions = [
     {
       text: Blockly.Msg['RENAME_MODULE'],
       enabled: true,
       callback: function() {
         self_.handleRenameModule_();
-      }
+      },
     },
     {
       text: Blockly.Msg['DELETE_MODULE'],
       enabled: true,
       callback: function() {
         self_.handleDeleteModule_();
-      }
-    }
+      },
+    },
   ];
 
   Blockly.ContextMenu.show(e, menuOptions, this.workspace_.RTL);
@@ -386,12 +385,12 @@ ModuleBar.prototype.handleShowModuleMenu_ = function(e) {
  * @private
  */
 ModuleBar.prototype.handleActivateModule_ = function(e) {
-  var moduleEl = this.getModuleElementFromEvent_(e);
+  const moduleEl = this.getModuleElementFromEvent_(e);
   if (!moduleEl) {
     return;
   }
 
-  var module = this.workspace_.getModuleManager().getModuleById(moduleEl.getAttribute('data-module-id'));
+  const module = this.workspace_.getModuleManager().getModuleById(moduleEl.getAttribute('data-module-id'));
   if (!module) {
     return;
   }
@@ -407,9 +406,9 @@ ModuleBar.prototype.handleActivateModule_ = function(e) {
  * @private
  */
 ModuleBar.prototype.getModuleElementFromEvent_ = function(e) {
-  var target = e.target;
+  let target = e.target;
   while (target instanceof Element) {
-    var moduleId = target.getAttribute('data-module-id');
+    const moduleId = target.getAttribute('data-module-id');
     if (moduleId) {
       return target;
     }
@@ -428,20 +427,20 @@ ModuleBar.prototype.getModuleElementFromEvent_ = function(e) {
  * @private
  */
 ModuleBar.prototype.handleCreateModule_ = function() {
-  var workspace = this.workspace_;
+  const workspace = this.workspace_;
 
-  Blockly.prompt(Blockly.Msg['NEW_MODULE_TITLE'], '', function(moduleName) {
+  Blockly.dialog.prompt(Blockly.Msg['NEW_MODULE_TITLE'], '', function(moduleName) {
     if (moduleName) {
       moduleName = moduleName.replace(/[\s\xa0]+/g, ' ').trim();
     }
 
     if (moduleName) {
-      var existingGroup = Blockly.Events.getGroup();
+      const existingGroup = Blockly.Events.getGroup();
       if (!existingGroup) {
         Blockly.Events.setGroup(true);
       }
       try {
-        var module = workspace.getModuleManager().createModule(moduleName);
+        const module = workspace.getModuleManager().createModule(moduleName);
         workspace.getModuleManager().activateModule(module);
       } finally {
         Blockly.Events.setGroup(false);
@@ -455,10 +454,10 @@ ModuleBar.prototype.handleCreateModule_ = function() {
  * @private
  */
 ModuleBar.prototype.handleRenameModule_ = function() {
-  var workspace = this.workspace_;
-  var activeModule =  workspace.getModuleManager().getActiveModule();
+  const workspace = this.workspace_;
+  const activeModule = workspace.getModuleManager().getActiveModule();
 
-  Blockly.prompt(Blockly.Msg['RENAME_MODULE_TITLE'], activeModule.getName(), function(moduleName) {
+  Blockly.dialog.prompt(Blockly.Msg['RENAME_MODULE_TITLE'], activeModule.getName(), function(moduleName) {
     if (moduleName) {
       moduleName = moduleName.replace(/[\s\xa0]+/g, ' ').trim();
     }
@@ -475,8 +474,8 @@ ModuleBar.prototype.handleRenameModule_ = function() {
  * @private
  */
 ModuleBar.prototype.handleDeleteModule_ = function() {
-  var workspace = this.workspace_;
-  var activeModule =  workspace.getModuleManager().getActiveModule();
+  const workspace = this.workspace_;
+  const activeModule = workspace.getModuleManager().getActiveModule();
 
   if (workspace.getModuleManager().getAllModules().length <= 1) {
     Blockly.alert(Blockly.Msg['LAST_MODULE_DELETE_RESTRICTION']);
@@ -488,17 +487,16 @@ ModuleBar.prototype.handleDeleteModule_ = function() {
     return;
   }
 
-  var existingGroup = Blockly.Events.getGroup();
+  const existingGroup = Blockly.Events.getGroup();
   if (!existingGroup) {
     Blockly.Events.setGroup(true);
   }
   try {
-    var previousModule = workspace.getModuleManager().deleteModule(activeModule);
+    const previousModule = workspace.getModuleManager().deleteModule(activeModule);
     workspace.getModuleManager().activateModule(previousModule);
   } finally {
     Blockly.Events.setGroup(false);
   }
-
 };
 
 
@@ -598,4 +596,4 @@ Css.register(
   'modulebar'
 );
 
-exports.ModuleBar = ModuleBar
+exports.ModuleBar = ModuleBar;

@@ -39,6 +39,7 @@ const names = {
   PASTE: 'paste',
   UNDO: 'undo',
   REDO: 'redo',
+  DUPLICATE: 'duplicate',
 };
 exports.names = names;
 
@@ -62,6 +63,36 @@ const registerEscape = function() {
   ShortcutRegistry.registry.addKeyMapping(KeyCodes.ESC, escapeAction.name);
 };
 exports.registerEscape = registerEscape;
+
+const registerDuplicate = function() {
+  /** @type {!ShortcutRegistry.KeyboardShortcut} */
+  const duplicateShortcut = {
+    name: names.DUPLICATE,
+    preconditionFn: function(workspace) {
+      const selected = common.getSelected();
+      return !workspace.options.readOnly && !Gesture.inProgress() && selected &&
+          selected.isDeletable() && selected.isMovable();
+    },
+    callback: function(workspace, e) {
+      e.preventDefault();
+      workspace.hideChaff();
+      clipboard.duplicate(common.getSelected());
+      return true;
+    },
+  };
+
+  ShortcutRegistry.registry.register(duplicateShortcut);
+
+  const ctrlD = ShortcutRegistry.registry.createSerializedKey(KeyCodes.D, [KeyCodes.CTRL]);
+  ShortcutRegistry.registry.addKeyMapping(ctrlD, duplicateShortcut.name);
+
+  const altD = ShortcutRegistry.registry.createSerializedKey(KeyCodes.D, [KeyCodes.ALT]);
+  ShortcutRegistry.registry.addKeyMapping(altD, duplicateShortcut.name);
+
+  const metaD = ShortcutRegistry.registry.createSerializedKey(KeyCodes.D, [KeyCodes.META]);
+  ShortcutRegistry.registry.addKeyMapping(metaD, duplicateShortcut.name);
+};
+exports.registerDuplicate = registerDuplicate;
 
 /**
  * Keyboard shortcut to delete a block on delete or backspace
@@ -290,6 +321,7 @@ exports.registerRedo = registerRedo;
  */
 const registerDefaultShortcuts = function() {
   registerEscape();
+  registerDuplicate();
   registerDelete();
   registerCopy();
   registerCut();

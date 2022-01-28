@@ -167,7 +167,7 @@ ModuleManager.prototype.createModule = function(name, opt_id, scrollX, scrollY, 
     return this.getModuleById(opt_id);
   }
 
-  const id = opt_id || Blockly.utils.genUid();
+  const id = opt_id || Blockly.utils.idGenerator.genUid();
   const module = new ModuleModel(this.workspace, name, id);
 
   module.scrollX = scrollX || 0;

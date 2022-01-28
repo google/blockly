@@ -71,18 +71,18 @@ JavaScript['text_join'] = function(block) {
   // Create a string made up of any number of elements of any type.
   switch (block.itemCount_) {
     case 0:
-      return ['\'\'', JavaScript.ORDER_ATOMIC];
+      return ["''", JavaScript.ORDER_ATOMIC];
     case 1: {
       const element = JavaScript.valueToCode(block, 'ADD0',
-          JavaScript.ORDER_NONE) || '\'\'';
+          JavaScript.ORDER_NONE) || "''";
       const codeAndOrder = forceString(element);
       return codeAndOrder;
     }
     case 2: {
       const element0 = JavaScript.valueToCode(block, 'ADD0',
-          JavaScript.ORDER_NONE) || '\'\'';
+          JavaScript.ORDER_NONE) || "''";
       const element1 = JavaScript.valueToCode(block, 'ADD1',
-          JavaScript.ORDER_NONE) || '\'\'';
+          JavaScript.ORDER_NONE) || "''";
       const code = forceString(element0)[0] +
           ' + ' + forceString(element1)[0];
       return [code, JavaScript.ORDER_ADDITION];
@@ -91,7 +91,7 @@ JavaScript['text_join'] = function(block) {
       const elements = new Array(block.itemCount_);
       for (let i = 0; i < block.itemCount_; i++) {
         elements[i] = JavaScript.valueToCode(block, 'ADD' + i,
-            JavaScript.ORDER_NONE) || '\'\'';
+            JavaScript.ORDER_NONE) || "''";
       }
       const code = '[' + elements.join(',') + '].join(\'\')';
       return [code, JavaScript.ORDER_FUNCTION_CALL];
@@ -104,7 +104,7 @@ JavaScript['text_append'] = function(block) {
   const varName = JavaScript.nameDB_.getName(
       block.getFieldValue('VAR'), NameType.VARIABLE);
   const value = JavaScript.valueToCode(block, 'TEXT',
-      JavaScript.ORDER_NONE) || '\'\'';
+      JavaScript.ORDER_NONE) || "''";
   const code = varName + ' += ' +
       forceString(value)[0] + ';\n';
   return code;
@@ -113,14 +113,14 @@ JavaScript['text_append'] = function(block) {
 JavaScript['text_length'] = function(block) {
   // String or array length.
   const text = JavaScript.valueToCode(block, 'VALUE',
-      JavaScript.ORDER_MEMBER) || '\'\'';
+      JavaScript.ORDER_MEMBER) || "''";
   return [text + '.length', JavaScript.ORDER_MEMBER];
 };
 
 JavaScript['text_isEmpty'] = function(block) {
   // Is the string null or array empty?
   const text = JavaScript.valueToCode(block, 'VALUE',
-      JavaScript.ORDER_MEMBER) || '\'\'';
+      JavaScript.ORDER_MEMBER) || "''";
   return ['!' + text + '.length', JavaScript.ORDER_LOGICAL_NOT];
 };
 
@@ -129,9 +129,9 @@ JavaScript['text_indexOf'] = function(block) {
   const operator = block.getFieldValue('END') === 'FIRST' ?
       'indexOf' : 'lastIndexOf';
   const substring = JavaScript.valueToCode(block, 'FIND',
-      JavaScript.ORDER_NONE) || '\'\'';
+      JavaScript.ORDER_NONE) || "''";
   const text = JavaScript.valueToCode(block, 'VALUE',
-      JavaScript.ORDER_MEMBER) || '\'\'';
+      JavaScript.ORDER_MEMBER) || "''";
   const code = text + '.' + operator + '(' + substring + ')';
   // Adjust index if using one-based indices.
   if (block.workspace.options.oneBasedIndex) {
@@ -146,8 +146,7 @@ JavaScript['text_charAt'] = function(block) {
   const where = block.getFieldValue('WHERE') || 'FROM_START';
   const textOrder = (where === 'RANDOM') ? JavaScript.ORDER_NONE :
       JavaScript.ORDER_MEMBER;
-  const text = JavaScript.valueToCode(block, 'VALUE',
-      textOrder) || '\'\'';
+  const text = JavaScript.valueToCode(block, 'VALUE', textOrder) || "''";
   switch (where) {
     case 'FIRST': {
       const code = text + '.charAt(0)';
@@ -169,13 +168,12 @@ JavaScript['text_charAt'] = function(block) {
       return [code, JavaScript.ORDER_FUNCTION_CALL];
     }
     case 'RANDOM': {
-      const functionName = JavaScript.provideFunction_(
-          'textRandomLetter',
-          ['function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-              '(text) {',
-           '  var x = Math.floor(Math.random() * text.length);',
-           '  return text[x];',
-           '}']);
+      const functionName = JavaScript.provideFunction_('textRandomLetter', `
+function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(text) {
+  var x = Math.floor(Math.random() * text.length);
+  return text[x];
+}
+`);
       const code = functionName + '(' + text + ')';
       return [code, JavaScript.ORDER_FUNCTION_CALL];
     }
@@ -191,8 +189,7 @@ JavaScript['text_getSubstring'] = function(block) {
       where2 !== 'FROM_END' && where2 !== 'LAST');
   const textOrder = requiresLengthCall ? JavaScript.ORDER_MEMBER :
       JavaScript.ORDER_NONE;
-  const text = JavaScript.valueToCode(block, 'STRING',
-      textOrder) || '\'\'';
+  const text = JavaScript.valueToCode(block, 'STRING', textOrder) || "''";
   let code;
   if (where1 === 'FIRST' && where2 === 'LAST') {
     code = text;
@@ -238,22 +235,20 @@ JavaScript['text_getSubstring'] = function(block) {
     const at2 = JavaScript.getAdjusted(block, 'AT2');
     const wherePascalCase = {'FIRST': 'First', 'LAST': 'Last',
       'FROM_START': 'FromStart', 'FROM_END': 'FromEnd'};
+    // The value for 'FROM_END' and'FROM_START' depends on `at` so
+    // we add it as a parameter.
+    const at1Param =
+        (where1 === 'FROM_END' || where1 === 'FROM_START') ? ', at1' : '';
+    const at2Param =
+        (where2 === 'FROM_END' || where2 === 'FROM_START') ? ', at2' : '';
     const functionName = JavaScript.provideFunction_(
-        'subsequence' + wherePascalCase[where1] + wherePascalCase[where2], [
-          'function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-              '(sequence' +
-              // The value for 'FROM_END' and'FROM_START' depends on `at` so
-              // we add it as a parameter.
-              ((where1 === 'FROM_END' || where1 === 'FROM_START') ? ', at1' :
-                                                                    '') +
-              ((where2 === 'FROM_END' || where2 === 'FROM_START') ? ', at2' :
-                                                                    '') +
-              ') {',
-          '  var start = ' + getSubstringIndex('sequence', where1, 'at1') + ';',
-          '  var end = ' + getSubstringIndex('sequence', where2, 'at2') +
-              ' + 1;',
-          '  return sequence.slice(start, end);', '}'
-        ]);
+        'subsequence' + wherePascalCase[where1] + wherePascalCase[where2], `
+function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(sequence${at1Param}${at2Param}) {
+  var start = ${getSubstringIndex('sequence', where1, 'at1')};
+  var end = ${getSubstringIndex('sequence', where2, 'at2')} + 1;
+  return sequence.slice(start, end);
+}
+`);
     code = functionName + '(' + text +
         // The value for 'FROM_END' and 'FROM_START' depends on `at` so we
         // pass it.
@@ -269,27 +264,23 @@ JavaScript['text_changeCase'] = function(block) {
   const OPERATORS = {
     'UPPERCASE': '.toUpperCase()',
     'LOWERCASE': '.toLowerCase()',
-    'TITLECASE': null
+    'TITLECASE': null,
   };
   const operator = OPERATORS[block.getFieldValue('CASE')];
-  const textOrder = operator ? JavaScript.ORDER_MEMBER :
-      JavaScript.ORDER_NONE;
-  const text = JavaScript.valueToCode(block, 'TEXT',
-      textOrder) || '\'\'';
+  const textOrder = operator ? JavaScript.ORDER_MEMBER : JavaScript.ORDER_NONE;
+  const text = JavaScript.valueToCode(block, 'TEXT', textOrder) || "''";
   let code;
   if (operator) {
     // Upper and lower case are functions built into JavaScript.
     code = text + operator;
   } else {
     // Title case is not a native JavaScript function.  Define one.
-    const functionName = JavaScript.provideFunction_(
-        'textToTitleCase',
-        ['function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-            '(str) {',
-         '  return str.replace(/\\S+/g,',
-         '      function(txt) {return txt[0].toUpperCase() + ' +
-            'txt.substring(1).toLowerCase();});',
-         '}']);
+    const functionName = JavaScript.provideFunction_('textToTitleCase', `
+function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(str) {
+  return str.replace(/\\S+/g,
+      function(txt) {return txt[0].toUpperCase() + txt.substring(1).toLowerCase();});
+}
+`);
     code = functionName + '(' + text + ')';
   }
   return [code, JavaScript.ORDER_FUNCTION_CALL];
@@ -300,18 +291,18 @@ JavaScript['text_trim'] = function(block) {
   const OPERATORS = {
     'LEFT': ".replace(/^[\\s\\xa0]+/, '')",
     'RIGHT': ".replace(/[\\s\\xa0]+$/, '')",
-    'BOTH': '.trim()'
+    'BOTH': '.trim()',
   };
   const operator = OPERATORS[block.getFieldValue('MODE')];
   const text = JavaScript.valueToCode(block, 'TEXT',
-      JavaScript.ORDER_MEMBER) || '\'\'';
+      JavaScript.ORDER_MEMBER) || "''";
   return [text + operator, JavaScript.ORDER_FUNCTION_CALL];
 };
 
 JavaScript['text_print'] = function(block) {
   // Print statement.
   const msg = JavaScript.valueToCode(block, 'TEXT',
-      JavaScript.ORDER_NONE) || '\'\'';
+      JavaScript.ORDER_NONE) || "''";
   return 'window.alert(' + msg + ');\n';
 };
 
@@ -323,8 +314,7 @@ JavaScript['text_prompt_ext'] = function(block) {
     msg = JavaScript.quote_(block.getFieldValue('TEXT'));
   } else {
     // External message.
-    msg = JavaScript.valueToCode(block, 'TEXT',
-        JavaScript.ORDER_NONE) || '\'\'';
+    msg = JavaScript.valueToCode(block, 'TEXT', JavaScript.ORDER_NONE) || "''";
   }
   let code = 'window.prompt(' + msg + ')';
   const toNumber = block.getFieldValue('TYPE') === 'NUMBER';
@@ -338,48 +328,44 @@ JavaScript['text_prompt'] = JavaScript['text_prompt_ext'];
 
 JavaScript['text_count'] = function(block) {
   const text = JavaScript.valueToCode(block, 'TEXT',
-      JavaScript.ORDER_NONE) || '\'\'';
+      JavaScript.ORDER_NONE) || "''";
   const sub = JavaScript.valueToCode(block, 'SUB',
-      JavaScript.ORDER_NONE) || '\'\'';
-  const functionName = JavaScript.provideFunction_(
-      'textCount',
-      ['function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-          '(haystack, needle) {',
-       '  if (needle.length === 0) {',
-       '    return haystack.length + 1;',
-       '  } else {',
-       '    return haystack.split(needle).length - 1;',
-       '  }',
-       '}']);
+      JavaScript.ORDER_NONE) || "''";
+  const functionName = JavaScript.provideFunction_('textCount', `
+function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(haystack, needle) {
+  if (needle.length === 0) {
+    return haystack.length + 1;
+  } else {
+    return haystack.split(needle).length - 1;
+  }
+}
+`);
   const code = functionName + '(' + text + ', ' + sub + ')';
   return [code, JavaScript.ORDER_FUNCTION_CALL];
 };
 
 JavaScript['text_replace'] = function(block) {
   const text = JavaScript.valueToCode(block, 'TEXT',
-      JavaScript.ORDER_NONE) || '\'\'';
+      JavaScript.ORDER_NONE) || "''";
   const from = JavaScript.valueToCode(block, 'FROM',
-      JavaScript.ORDER_NONE) || '\'\'';
-  const to = JavaScript.valueToCode(block, 'TO',
-      JavaScript.ORDER_NONE) || '\'\'';
+      JavaScript.ORDER_NONE) || "''";
+  const to = JavaScript.valueToCode(block, 'TO', JavaScript.ORDER_NONE) || "''";
   // The regex escaping code below is taken from the implementation of
   // goog.string.regExpEscape.
-  const functionName = JavaScript.provideFunction_(
-      'textReplace',
-      ['function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-          '(haystack, needle, replacement) {',
-       '  needle = ' +
-           'needle.replace(/([-()\\[\\]{}+?*.$\\^|,:#<!\\\\])/g,"\\\\$1")',
-       '                 .replace(/\\x08/g,"\\\\x08");',
-       '  return haystack.replace(new RegExp(needle, \'g\'), replacement);',
-       '}']);
+  const functionName = JavaScript.provideFunction_('textReplace', `
+function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(haystack, needle, replacement) {
+  needle = needle.replace(/([-()\\[\\]{}+?*.$\\^|,:#<!\\\\])/g, '\\\\$1')
+                 .replace(/\\x08/g, '\\\\x08');
+  return haystack.replace(new RegExp(needle, \'g\'), replacement);
+}
+`);
   const code = functionName + '(' + text + ', ' + from + ', ' + to + ')';
   return [code, JavaScript.ORDER_FUNCTION_CALL];
 };
 
 JavaScript['text_reverse'] = function(block) {
   const text = JavaScript.valueToCode(block, 'TEXT',
-      JavaScript.ORDER_MEMBER) || '\'\'';
-  const code = text + '.split(\'\').reverse().join(\'\')';
+      JavaScript.ORDER_MEMBER) || "''";
+  const code = text + ".split('').reverse().join('')";
   return [code, JavaScript.ORDER_FUNCTION_CALL];
 };

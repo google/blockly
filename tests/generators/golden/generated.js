@@ -904,8 +904,8 @@ function test_text_reverse() {
 }
 
 function textReplace(haystack, needle, replacement) {
-  needle = needle.replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g,"\\$1")
-                 .replace(/\x08/g,"\\x08");
+  needle = needle.replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, '\\$1')
+                 .replace(/\x08/g, '\\x08');
   return haystack.replace(new RegExp(needle, 'g'), replacement);
 }
 
@@ -1335,15 +1335,15 @@ function test_split() {
 
 function listsGetSortCompare(type, direction) {
   var compareFuncs = {
-    "NUMERIC": function(a, b) {
+    'NUMERIC': function(a, b) {
         return Number(a) - Number(b); },
-    "TEXT": function(a, b) {
+    'TEXT': function(a, b) {
         return a.toString() > b.toString() ? 1 : -1; },
-    "IGNORE_CASE": function(a, b) {
+    'IGNORE_CASE': function(a, b) {
         return a.toString().toLowerCase() > b.toString().toLowerCase() ? 1 : -1; },
   };
   var compare = compareFuncs[type];
-  return function(a, b) { return compare(a, b) * direction; }
+  return function(a, b) { return compare(a, b) * direction; };
 }
 
 // Tests the "alphabetic sort" block.

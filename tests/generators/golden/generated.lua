@@ -521,15 +521,15 @@ function math_median(t)
   if #t == 0 then
     return 0
   end
-  local temp={}
+  local temp = {}
   for _, v in ipairs(t) do
-    if type(v) == "number" then
+    if type(v) == 'number' then
       table.insert(temp, v)
     end
   end
   table.sort(temp)
   if #temp % 2 == 0 then
-    return (temp[#temp/2] + temp[(#temp/2)+1]) / 2
+    return (temp[#temp / 2] + temp[(#temp / 2) + 1]) / 2
   else
     return temp[math.ceil(#temp/2)]
   end
@@ -537,7 +537,7 @@ end
 
 function math_modes(t)
   -- Source: http://lua-users.org/wiki/SimpleStats
-  local counts={}
+  local counts = {}
   for _, v in ipairs(t) do
     if counts[v] == nil then
       counts[v] = 1
@@ -551,7 +551,7 @@ function math_modes(t)
       biggestCount = v
     end
   end
-  local temp={}
+  local temp = {}
   for k, v in pairs(counts) do
     if v == biggestCount then
       table.insert(temp, k)
@@ -703,9 +703,8 @@ function firstIndexOf(str, substr)
   local i = string.find(str, substr, 1, true)
   if i == nil then
     return 0
-  else
-    return i
   end
+  return i
 end
 
 function lastIndexOf(str, substr)

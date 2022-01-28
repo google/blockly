@@ -64,13 +64,9 @@ JavaScript['math_single'] = function(block) {
     code = '-' + arg;
     return [code, JavaScript.ORDER_UNARY_NEGATION];
   }
-  if (operator === 'SIN' || operator === 'COS' || operator === 'TAN') {
-    arg = JavaScript.valueToCode(block, 'NUM',
-        JavaScript.ORDER_DIVISION) || '0';
-  } else {
-    arg = JavaScript.valueToCode(block, 'NUM',
-        JavaScript.ORDER_NONE) || '0';
-  }
+  const order = operator === 'SIN' || operator === 'COS' || operator === 'TAN' ?
+      JavaScript.ORDER_DIVISION : JavaScript.ORDER_NONE;
+  arg = JavaScript.valueToCode(block, 'NUM', order) || '0';
   // First, handle cases which generate values that don't need parentheses
   // wrapping the code.
   switch (operator) {
@@ -137,11 +133,10 @@ JavaScript['math_constant'] = function(block) {
   const CONSTANTS = {
     'PI': ['Math.PI', JavaScript.ORDER_MEMBER],
     'E': ['Math.E', JavaScript.ORDER_MEMBER],
-    'GOLDEN_RATIO':
-        ['(1 + Math.sqrt(5)) / 2', JavaScript.ORDER_DIVISION],
+    'GOLDEN_RATIO': ['(1 + Math.sqrt(5)) / 2', JavaScript.ORDER_DIVISION],
     'SQRT2': ['Math.SQRT2', JavaScript.ORDER_MEMBER],
     'SQRT1_2': ['Math.SQRT1_2', JavaScript.ORDER_MEMBER],
-    'INFINITY': ['Infinity', JavaScript.ORDER_ATOMIC]
+    'INFINITY': ['Infinity', JavaScript.ORDER_ATOMIC],
   };
   return CONSTANTS[block.getFieldValue('CONSTANT')];
 };
@@ -155,27 +150,26 @@ JavaScript['math_number_property'] = function(block) {
   let code;
   if (dropdown_property === 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
-    const functionName = JavaScript.provideFunction_(
-        'mathIsPrime',
-        ['function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '(n) {',
-         '  // https://en.wikipedia.org/wiki/Primality_test#Naive_methods',
-         '  if (n == 2 || n == 3) {',
-         '    return true;',
-         '  }',
-         '  // False if n is NaN, negative, is 1, or not whole.',
-         '  // And false if n is divisible by 2 or 3.',
-         '  if (isNaN(n) || n <= 1 || n % 1 !== 0 || n % 2 === 0 ||' +
-            ' n % 3 === 0) {',
-         '    return false;',
-         '  }',
-         '  // Check all the numbers of form 6k +/- 1, up to sqrt(n).',
-         '  for (var x = 6; x <= Math.sqrt(n) + 1; x += 6) {',
-         '    if (n % (x - 1) === 0 || n % (x + 1) === 0) {',
-         '      return false;',
-         '    }',
-         '  }',
-         '  return true;',
-         '}']);
+    const functionName = JavaScript.provideFunction_('mathIsPrime', `
+function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(n) {
+  // https://en.wikipedia.org/wiki/Primality_test#Naive_methods
+  if (n == 2 || n == 3) {
+    return true;
+  }
+  // False if n is NaN, negative, is 1, or not whole.
+  // And false if n is divisible by 2 or 3.
+  if (isNaN(n) || n <= 1 || n % 1 !== 0 || n % 2 === 0 || n % 3 === 0) {
+    return false;
+  }
+  // Check all the numbers of form 6k +/- 1, up to sqrt(n).
+  for (var x = 6; x <= Math.sqrt(n) + 1; x += 6) {
+    if (n % (x - 1) === 0 || n % (x + 1) === 0) {
+      return false;
+    }
+  }
+  return true;
+}
+`);
     code = functionName + '(' + number_to_check + ')';
     return [code, JavaScript.ORDER_FUNCTION_CALL];
   }
@@ -243,13 +237,11 @@ JavaScript['math_on_list'] = function(block) {
       break;
     case 'AVERAGE': {
       // mathMean([null,null,1,3]) === 2.0.
-      const functionName = JavaScript.provideFunction_(
-          'mathMean',
-          ['function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-              '(myList) {',
-            '  return myList.reduce(function(x, y) {return x + y;}) / ' +
-                  'myList.length;',
-            '}']);
+      const functionName = JavaScript.provideFunction_('mathMean', `
+function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(myList) {
+  return myList.reduce(function(x, y) {return x + y;}) / myList.length;
+}
+`);
       list = JavaScript.valueToCode(block, 'LIST',
           JavaScript.ORDER_NONE) || '[]';
       code = functionName + '(' + list + ')';
@@ -257,21 +249,18 @@ JavaScript['math_on_list'] = function(block) {
     }
     case 'MEDIAN': {
       // mathMedian([null,null,1,3]) === 2.0.
-      const functionName = JavaScript.provideFunction_(
-          'mathMedian',
-          ['function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-              '(myList) {',
-            '  var localList = myList.filter(function (x) ' +
-              '{return typeof x === \'number\';});',
-            '  if (!localList.length) return null;',
-            '  localList.sort(function(a, b) {return b - a;});',
-            '  if (localList.length % 2 === 0) {',
-            '    return (localList[localList.length / 2 - 1] + ' +
-              'localList[localList.length / 2]) / 2;',
-            '  } else {',
-            '    return localList[(localList.length - 1) / 2];',
-            '  }',
-            '}']);
+      const functionName = JavaScript.provideFunction_('mathMedian', `
+function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(myList) {
+  var localList = myList.filter(function (x) {return typeof x === 'number';});
+  if (!localList.length) return null;
+  localList.sort(function(a, b) {return b - a;});
+  if (localList.length % 2 === 0) {
+    return (localList[localList.length / 2 - 1] + localList[localList.length / 2]) / 2;
+  } else {
+    return localList[(localList.length - 1) / 2];
+  }
+}
+`);
       list = JavaScript.valueToCode(block, 'LIST',
           JavaScript.ORDER_NONE) || '[]';
       code = functionName + '(' + list + ')';
@@ -281,70 +270,67 @@ JavaScript['math_on_list'] = function(block) {
       // As a list of numbers can contain more than one mode,
       // the returned result is provided as an array.
       // Mode of [3, 'x', 'x', 1, 1, 2, '3'] -> ['x', 1].
-      const functionName = JavaScript.provideFunction_(
-          'mathModes',
-          ['function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-              '(values) {',
-            '  var modes = [];',
-            '  var counts = [];',
-            '  var maxCount = 0;',
-            '  for (var i = 0; i < values.length; i++) {',
-            '    var value = values[i];',
-            '    var found = false;',
-            '    var thisCount;',
-            '    for (var j = 0; j < counts.length; j++) {',
-            '      if (counts[j][0] === value) {',
-            '        thisCount = ++counts[j][1];',
-            '        found = true;',
-            '        break;',
-            '      }',
-            '    }',
-            '    if (!found) {',
-            '      counts.push([value, 1]);',
-            '      thisCount = 1;',
-            '    }',
-            '    maxCount = Math.max(thisCount, maxCount);',
-            '  }',
-            '  for (var j = 0; j < counts.length; j++) {',
-            '    if (counts[j][1] === maxCount) {',
-            '        modes.push(counts[j][0]);',
-            '    }',
-            '  }',
-            '  return modes;',
-            '}']);
+      const functionName = JavaScript.provideFunction_('mathModes', `
+function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(values) {
+  var modes = [];
+  var counts = [];
+  var maxCount = 0;
+  for (var i = 0; i < values.length; i++) {
+    var value = values[i];
+    var found = false;
+    var thisCount;
+    for (var j = 0; j < counts.length; j++) {
+      if (counts[j][0] === value) {
+        thisCount = ++counts[j][1];
+        found = true;
+        break;
+      }
+    }
+    if (!found) {
+      counts.push([value, 1]);
+      thisCount = 1;
+    }
+    maxCount = Math.max(thisCount, maxCount);
+  }
+  for (var j = 0; j < counts.length; j++) {
+    if (counts[j][1] === maxCount) {
+        modes.push(counts[j][0]);
+    }
+  }
+  return modes;
+}
+`);
       list = JavaScript.valueToCode(block, 'LIST',
           JavaScript.ORDER_NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
     }
     case 'STD_DEV': {
-      const functionName = JavaScript.provideFunction_(
-          'mathStandardDeviation',
-          ['function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-              '(numbers) {',
-            '  var n = numbers.length;',
-            '  if (!n) return null;',
-            '  var mean = numbers.reduce(function(x, y) {return x + y;}) / n;',
-            '  var variance = 0;',
-            '  for (var j = 0; j < n; j++) {',
-            '    variance += Math.pow(numbers[j] - mean, 2);',
-            '  }',
-            '  variance = variance / n;',
-            '  return Math.sqrt(variance);',
-            '}']);
+      const functionName = JavaScript.provideFunction_('mathStandardDeviation', `
+function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(numbers) {
+  var n = numbers.length;
+  if (!n) return null;
+  var mean = numbers.reduce(function(x, y) {return x + y;}) / n;
+  var variance = 0;
+  for (var j = 0; j < n; j++) {
+    variance += Math.pow(numbers[j] - mean, 2);
+  }
+  variance = variance / n;
+  return Math.sqrt(variance);
+}
+`);
       list = JavaScript.valueToCode(block, 'LIST',
           JavaScript.ORDER_NONE) || '[]';
       code = functionName + '(' + list + ')';
       break;
     }
     case 'RANDOM': {
-      const functionName = JavaScript.provideFunction_(
-          'mathRandomList',
-          ['function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-              '(list) {',
-            '  var x = Math.floor(Math.random() * list.length);',
-            '  return list[x];',
-            '}']);
+      const functionName = JavaScript.provideFunction_('mathRandomList', `
+function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(list) {
+  var x = Math.floor(Math.random() * list.length);
+  return list[x];
+}
+`);
       list = JavaScript.valueToCode(block, 'LIST',
           JavaScript.ORDER_NONE) || '[]';
       code = functionName + '(' + list + ')';
@@ -385,18 +371,17 @@ JavaScript['math_random_int'] = function(block) {
       JavaScript.ORDER_NONE) || '0';
   const argument1 = JavaScript.valueToCode(block, 'TO',
       JavaScript.ORDER_NONE) || '0';
-  const functionName = JavaScript.provideFunction_(
-      'mathRandomInt',
-      ['function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-          '(a, b) {',
-       '  if (a > b) {',
-       '    // Swap a and b to ensure a is smaller.',
-       '    var c = a;',
-       '    a = b;',
-       '    b = c;',
-       '  }',
-       '  return Math.floor(Math.random() * (b - a + 1) + a);',
-       '}']);
+  const functionName = JavaScript.provideFunction_('mathRandomInt', `
+function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(a, b) {
+  if (a > b) {
+    // Swap a and b to ensure a is smaller.
+    var c = a;
+    a = b;
+    b = c;
+  }
+  return Math.floor(Math.random() * (b - a + 1) + a);
+}
+`);
   const code = functionName + '(' + argument0 + ', ' + argument1 + ')';
   return [code, JavaScript.ORDER_FUNCTION_CALL];
 };

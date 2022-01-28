@@ -595,7 +595,7 @@ def test_find_text_complex():
 
 def text_random_letter(text):
   x = int(random.random() * len(text))
-  return text[x];
+  return text[x]
 
 # Tests the "get letter" block with a variable.
 def test_get_text_simple():

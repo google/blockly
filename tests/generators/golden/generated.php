@@ -599,9 +599,8 @@ function test_empty_text() {
 function length($value) {
   if (is_string($value)) {
     return strlen($value);
-  } else {
-    return count($value);
   }
+  return count($value);
 }
 
 // Tests the "length" block.
@@ -1380,9 +1379,9 @@ function test_split() {
 
 function lists_sort($list, $type, $direction) {
   $sortCmpFuncs = array(
-    "NUMERIC" => "strnatcasecmp",
-    "TEXT" => "strcmp",
-    "IGNORE_CASE" => "strcasecmp"
+    'NUMERIC' => 'strnatcasecmp',
+    'TEXT' => 'strcmp',
+    'IGNORE_CASE' => 'strcasecmp'
   );
   $sortCmp = $sortCmpFuncs[$type];
   $list2 = $list;

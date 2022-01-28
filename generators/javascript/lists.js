@@ -35,11 +35,15 @@ JavaScript['lists_create_with'] = function(block) {
 
 JavaScript['lists_repeat'] = function(block) {
   // Create a list with one element repeated.
-  const functionName = JavaScript.provideFunction_('listsRepeat', [
-    'function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '(value, n) {',
-    '  var array = [];', '  for (var i = 0; i < n; i++) {',
-    '    array[i] = value;', '  }', '  return array;', '}'
-  ]);
+  const functionName = JavaScript.provideFunction_('listsRepeat', `
+function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(value, n) {
+  var array = [];
+  for (var i = 0; i < n; i++) {
+    array[i] = value;
+  }
+  return array;
+}
+`);
   const element =
       JavaScript.valueToCode(block, 'ITEM', JavaScript.ORDER_NONE) || 'null';
   const repeatCount =
@@ -67,7 +71,7 @@ JavaScript['lists_indexOf'] = function(block) {
   const operator =
       block.getFieldValue('END') === 'FIRST' ? 'indexOf' : 'lastIndexOf';
   const item =
-      JavaScript.valueToCode(block, 'FIND', JavaScript.ORDER_NONE) || '\'\'';
+      JavaScript.valueToCode(block, 'FIND', JavaScript.ORDER_NONE) || "''";
   const list =
       JavaScript.valueToCode(block, 'VALUE', JavaScript.ORDER_MEMBER) || '[]';
   const code = list + '.' + operator + '(' + item + ')';
@@ -136,13 +140,16 @@ JavaScript['lists_getIndex'] = function(block) {
       break;
     }
     case ('RANDOM'): {
-      const functionName = JavaScript.provideFunction_('listsGetRandomItem', [
-        'function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-            '(list, remove) {',
-        '  var x = Math.floor(Math.random() * list.length);', '  if (remove) {',
-        '    return list.splice(x, 1)[0];', '  } else {', '    return list[x];',
-        '  }', '}'
-      ]);
+      const functionName = JavaScript.provideFunction_('listsGetRandomItem', `
+function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(list, remove) {
+  var x = Math.floor(Math.random() * list.length);
+  if (remove) {
+    return list.splice(x, 1)[0];
+  } else {
+    return list[x];
+  }
+}
+`);
       const code = functionName + '(' + list + ', ' + (mode !== 'GET') + ')';
       if (mode === 'GET' || mode === 'GET_REMOVE') {
         return [code, JavaScript.ORDER_FUNCTION_CALL];
@@ -309,23 +316,22 @@ JavaScript['lists_getSublist'] = function(block) {
       'FIRST': 'First',
       'LAST': 'Last',
       'FROM_START': 'FromStart',
-      'FROM_END': 'FromEnd'
+      'FROM_END': 'FromEnd',
     };
+    // The value for 'FROM_END' and'FROM_START' depends on `at` so
+    // we add it as a parameter.
+    const at1Param =
+        (where1 === 'FROM_END' || where1 === 'FROM_START') ? ', at1' : '';
+    const at2Param =
+        (where2 === 'FROM_END' || where2 === 'FROM_START') ? ', at2' : '';
     const functionName = JavaScript.provideFunction_(
-        'subsequence' + wherePascalCase[where1] + wherePascalCase[where2], [
-          'function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '(sequence' +
-              // The value for 'FROM_END' and'FROM_START' depends on `at` so
-              // we add it as a parameter.
-              ((where1 === 'FROM_END' || where1 === 'FROM_START') ? ', at1' :
-                                                                    '') +
-              ((where2 === 'FROM_END' || where2 === 'FROM_START') ? ', at2' :
-                                                                    '') +
-              ') {',
-          getSubstringIndex('sequence', where1, 'at1') + ';',
-          '  var end = ' + getSubstringIndex('sequence', where2, 'at2') +
-              ' + 1;',
-          '  return sequence.slice(start, end);', '}'
-        ]);
+        'subsequence' + wherePascalCase[where1] + wherePascalCase[where2], `
+function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(sequence${at1Param}${at2Param}) {
+  var start = ${getSubstringIndex('sequence', where1, 'at1')};
+  var end = ${getSubstringIndex('sequence', where2, 'at2')} + 1;
+  return sequence.slice(start, end);
+}
+`);
     code = functionName + '(' + list +
         // The value for 'FROM_END' and 'FROM_START' depends on `at` so we
         // pass it.
@@ -344,19 +350,20 @@ JavaScript['lists_sort'] = function(block) {
   const direction = block.getFieldValue('DIRECTION') === '1' ? 1 : -1;
   const type = block.getFieldValue('TYPE');
   const getCompareFunctionName =
-      JavaScript.provideFunction_('listsGetSortCompare', [
-        'function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-            '(type, direction) {',
-        '  var compareFuncs = {', '    "NUMERIC": function(a, b) {',
-        '        return Number(a) - Number(b); },',
-        '    "TEXT": function(a, b) {',
-        '        return a.toString() > b.toString() ? 1 : -1; },',
-        '    "IGNORE_CASE": function(a, b) {',
-        '        return a.toString().toLowerCase() > ' +
-            'b.toString().toLowerCase() ? 1 : -1; },',
-        '  };', '  var compare = compareFuncs[type];',
-        '  return function(a, b) { return compare(a, b) * direction; }', '}'
-      ]);
+      JavaScript.provideFunction_('listsGetSortCompare', `
+function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(type, direction) {
+  var compareFuncs = {
+    'NUMERIC': function(a, b) {
+        return Number(a) - Number(b); },
+    'TEXT': function(a, b) {
+        return a.toString() > b.toString() ? 1 : -1; },
+    'IGNORE_CASE': function(a, b) {
+        return a.toString().toLowerCase() > b.toString().toLowerCase() ? 1 : -1; },
+  };
+  var compare = compareFuncs[type];
+  return function(a, b) { return compare(a, b) * direction; };
+}
+      `);
   return [
     list + '.slice().sort(' + getCompareFunctionName + '("' + type + '", ' +
         direction + '))',
@@ -368,12 +375,12 @@ JavaScript['lists_split'] = function(block) {
   // Block for splitting text into a list, or joining a list into text.
   let input = JavaScript.valueToCode(block, 'INPUT', JavaScript.ORDER_MEMBER);
   const delimiter =
-      JavaScript.valueToCode(block, 'DELIM', JavaScript.ORDER_NONE) || '\'\'';
+      JavaScript.valueToCode(block, 'DELIM', JavaScript.ORDER_NONE) || "''";
   const mode = block.getFieldValue('MODE');
   let functionName;
   if (mode === 'SPLIT') {
     if (!input) {
-      input = '\'\'';
+      input = "''";
     }
     functionName = 'split';
   } else if (mode === 'JOIN') {

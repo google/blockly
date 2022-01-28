@@ -44,11 +44,15 @@ PHP['lists_create_with'] = function(block) {
 
 PHP['lists_repeat'] = function(block) {
   // Create a list with one element repeated.
-  const functionName = PHP.provideFunction_('lists_repeat', [
-    'function ' + PHP.FUNCTION_NAME_PLACEHOLDER_ + '($value, $count) {',
-    '  $array = array();', '  for ($index = 0; $index < $count; $index++) {',
-    '    $array[] = $value;', '  }', '  return $array;', '}'
-  ]);
+  const functionName = PHP.provideFunction_('lists_repeat', `
+function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($value, $count) {
+  $array = array();
+  for ($index = 0; $index < $count; $index++) {
+    $array[] = $value;
+  }
+  return $array;
+}
+`);
   const element = PHP.valueToCode(block, 'ITEM', PHP.ORDER_NONE) || 'null';
   const repeatCount = PHP.valueToCode(block, 'NUM', PHP.ORDER_NONE) || '0';
   const code = functionName + '(' + element + ', ' + repeatCount + ')';
@@ -57,12 +61,16 @@ PHP['lists_repeat'] = function(block) {
 
 PHP['lists_length'] = function(block) {
   // String or array length.
-  const functionName = PHP.provideFunction_('length', [
-    'function ' + PHP.FUNCTION_NAME_PLACEHOLDER_ + '($value) {',
-    '  if (is_string($value)) {', '    return strlen($value);', '  } else {',
-    '    return count($value);', '  }', '}'
-  ]);
-  const list = PHP.valueToCode(block, 'VALUE', PHP.ORDER_NONE) || '\'\'';
+  const functionName = PHP.provideFunction_('length', `
+function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($value) {
+  if (is_string($value)) {
+    return strlen($value);
+  } else {
+    return count($value);
+  }
+}
+`);
+  const list = PHP.valueToCode(block, 'VALUE', PHP.ORDER_NONE) || "''";
   return [functionName + '(' + list + ')', PHP.ORDER_FUNCTION_CALL];
 };
 
@@ -75,7 +83,7 @@ PHP['lists_isEmpty'] = function(block) {
 
 PHP['lists_indexOf'] = function(block) {
   // Find an item in the list.
-  const argument0 = PHP.valueToCode(block, 'FIND', PHP.ORDER_NONE) || '\'\'';
+  const argument0 = PHP.valueToCode(block, 'FIND', PHP.ORDER_NONE) || "''";
   const argument1 = PHP.valueToCode(block, 'VALUE', PHP.ORDER_MEMBER) || '[]';
   let errorIndex = ' -1';
   let indexAdjustment = '';
@@ -86,23 +94,25 @@ PHP['lists_indexOf'] = function(block) {
   let functionName;
   if (block.getFieldValue('END') === 'FIRST') {
     // indexOf
-    functionName = PHP.provideFunction_('indexOf', [
-      'function ' + PHP.FUNCTION_NAME_PLACEHOLDER_ + '($haystack, $needle) {',
-      '  for ($index = 0; $index < count($haystack); $index++) {',
-      '    if ($haystack[$index] == $needle) return $index' + indexAdjustment +
-          ';',
-      '  }', '  return ' + errorIndex + ';', '}'
-    ]);
+    functionName = PHP.provideFunction_('indexOf', `
+function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($haystack, $needle) {
+  for ($index = 0; $index < count($haystack); $index++) {
+    if ($haystack[$index] == $needle) return $index${indexAdjustment};
+  }
+  return ${errorIndex};
+}
+`);
   } else {
     // lastIndexOf
-    functionName = PHP.provideFunction_('lastIndexOf', [
-      'function ' + PHP.FUNCTION_NAME_PLACEHOLDER_ + '($haystack, $needle) {',
-      '  $last = ' + errorIndex + ';',
-      '  for ($index = 0; $index < count($haystack); $index++) {',
-      '    if ($haystack[$index] == $needle) $last = $index' + indexAdjustment +
-          ';',
-      '  }', '  return $last;', '}'
-    ]);
+    functionName = PHP.provideFunction_('lastIndexOf', `
+function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($haystack, $needle) {
+  $last = ${errorIndex};
+  for ($index = 0; $index < count($haystack); $index++) {
+    if ($haystack[$index] == $needle) $last = $index${indexAdjustment};
+  }
+  return $last;
+}
+`);
   }
 
   const code = functionName + '(' + argument1 + ', ' + argument0 + ')';
@@ -191,26 +201,30 @@ PHP['lists_getIndex'] = function(block) {
     case 'RANDOM': {
       const list = PHP.valueToCode(block, 'VALUE', PHP.ORDER_NONE) || 'array()';
       if (mode === 'GET') {
-        const functionName = PHP.provideFunction_('lists_get_random_item', [
-          'function ' + PHP.FUNCTION_NAME_PLACEHOLDER_ + '($list) {',
-          '  return $list[rand(0,count($list)-1)];', '}'
-        ]);
+        const functionName = PHP.provideFunction_('lists_get_random_item', `
+function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($list) {
+  return $list[rand(0,count($list)-1)];
+}
+`);
         const code = functionName + '(' + list + ')';
         return [code, PHP.ORDER_FUNCTION_CALL];
       } else if (mode === 'GET_REMOVE') {
         const functionName =
-            PHP.provideFunction_('lists_get_remove_random_item', [
-              'function ' + PHP.FUNCTION_NAME_PLACEHOLDER_ + '(&$list) {',
-              '  $x = rand(0,count($list)-1);', '  unset($list[$x]);',
-              '  return array_values($list);', '}'
-            ]);
+            PHP.provideFunction_('lists_get_remove_random_item', `
+function ${PHP.FUNCTION_NAME_PLACEHOLDER_}(&$list) {
+  $x = rand(0,count($list)-1);
+  unset($list[$x]);
+  return array_values($list);
+}
+`);
         const code = functionName + '(' + list + ')';
         return [code, PHP.ORDER_FUNCTION_CALL];
       } else if (mode === 'REMOVE') {
-        const functionName = PHP.provideFunction_('lists_remove_random_item', [
-          'function ' + PHP.FUNCTION_NAME_PLACEHOLDER_ + '(&$list) {',
-          '  unset($list[rand(0,count($list)-1)]);', '}'
-        ]);
+        const functionName = PHP.provideFunction_('lists_remove_random_item', `
+function ${PHP.FUNCTION_NAME_PLACEHOLDER_}(&$list) {
+  unset($list[rand(0,count($list)-1)]);
+}
+`);
         return functionName + '(' + list + ');\n';
       }
       break;
@@ -252,10 +266,11 @@ PHP['lists_setIndex'] = function(block) {
     case 'LAST': {
       const list = PHP.valueToCode(block, 'LIST', PHP.ORDER_NONE) || 'array()';
       if (mode === 'SET') {
-        const functionName = PHP.provideFunction_('lists_set_last_item', [
-          'function ' + PHP.FUNCTION_NAME_PLACEHOLDER_ + '(&$list, $value) {',
-          '  $list[count($list) - 1] = $value;', '}'
-        ]);
+        const functionName = PHP.provideFunction_('lists_set_last_item', `
+function ${PHP.FUNCTION_NAME_PLACEHOLDER_}(&$list, $value) {
+  $list[count($list) - 1] = $value;
+}
+`);
         return functionName + '(' + list + ', ' + value + ');\n';
       } else if (mode === 'INSERT') {
         return 'array_push(' + list + ', ' + value + ');\n';
@@ -279,18 +294,18 @@ PHP['lists_setIndex'] = function(block) {
       const list = PHP.valueToCode(block, 'LIST', PHP.ORDER_NONE) || 'array()';
       const at = PHP.getAdjusted(block, 'AT', 1);
       if (mode === 'SET') {
-        const functionName = PHP.provideFunction_('lists_set_from_end', [
-          'function ' + PHP.FUNCTION_NAME_PLACEHOLDER_ +
-              '(&$list, $at, $value) {',
-          '  $list[count($list) - $at] = $value;', '}'
-        ]);
+        const functionName = PHP.provideFunction_('lists_set_from_end', `
+function ${PHP.FUNCTION_NAME_PLACEHOLDER_}(&$list, $at, $value) {
+  $list[count($list) - $at] = $value;
+}
+`);
         return functionName + '(' + list + ', ' + at + ', ' + value + ');\n';
       } else if (mode === 'INSERT') {
-        const functionName = PHP.provideFunction_('lists_insert_from_end', [
-          'function ' + PHP.FUNCTION_NAME_PLACEHOLDER_ +
-              '(&$list, $at, $value) {',
-          '  return array_splice($list, count($list) - $at, 0, $value);', '}'
-        ]);
+        const functionName = PHP.provideFunction_('lists_insert_from_end', `
+function ${PHP.FUNCTION_NAME_PLACEHOLDER_}(&$list, $at, $value) {
+  return array_splice($list, count($list) - $at, 0, $value);
+}
+`);
         return functionName + '(' + list + ', ' + at + ', ' + value + ');\n';
       }
       break;
@@ -382,29 +397,28 @@ PHP['lists_getSublist'] = function(block) {
   } else {
     const at1 = PHP.getAdjusted(block, 'AT1');
     const at2 = PHP.getAdjusted(block, 'AT2');
-    const functionName = PHP.provideFunction_('lists_get_sublist', [
-      'function ' + PHP.FUNCTION_NAME_PLACEHOLDER_ +
-          '($list, $where1, $at1, $where2, $at2) {',
-      '  if ($where1 == \'FROM_END\') {',
-      '    $at1 = count($list) - 1 - $at1;',
-      '  } else if ($where1 == \'FIRST\') {',
-      '    $at1 = 0;',
-      '  } else if ($where1 != \'FROM_START\') {',
-      '    throw new Exception(\'Unhandled option (lists_get_sublist).\');',
-      '  }',
-      '  $length = 0;',
-      '  if ($where2 == \'FROM_START\') {',
-      '    $length = $at2 - $at1 + 1;',
-      '  } else if ($where2 == \'FROM_END\') {',
-      '    $length = count($list) - $at1 - $at2;',
-      '  } else if ($where2 == \'LAST\') {',
-      '    $length = count($list) - $at1;',
-      '  } else {',
-      '    throw new Exception(\'Unhandled option (lists_get_sublist).\');',
-      '  }',
-      '  return array_slice($list, $at1, $length);',
-      '}'
-    ]);
+    const functionName = PHP.provideFunction_('lists_get_sublist', `
+function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($list, $where1, $at1, $where2, $at2) {
+  if ($where1 == 'FROM_END') {
+    $at1 = count($list) - 1 - $at1;
+  } else if ($where1 == 'FIRST') {
+    $at1 = 0;
+  } else if ($where1 != 'FROM_START') {
+    throw new Exception('Unhandled option (lists_get_sublist).');
+  }
+  $length = 0;
+  if ($where2 == 'FROM_START') {
+    $length = $at2 - $at1 + 1;
+  } else if ($where2 == 'FROM_END') {
+    $length = count($list) - $at1 - $at2;
+  } else if ($where2 == 'LAST') {
+    $length = count($list) - $at1;
+  } else {
+    throw new Exception('Unhandled option (lists_get_sublist).');
+  }
+  return array_slice($list, $at1, $length);
+}
+`);
     code = functionName + '(' + list + ', \'' + where1 + '\', ' + at1 + ', \'' +
         where2 + '\', ' + at2 + ')';
   }
@@ -416,16 +430,22 @@ PHP['lists_sort'] = function(block) {
   const listCode = PHP.valueToCode(block, 'LIST', PHP.ORDER_NONE) || 'array()';
   const direction = block.getFieldValue('DIRECTION') === '1' ? 1 : -1;
   const type = block.getFieldValue('TYPE');
-  const functionName = PHP.provideFunction_('lists_sort', [
-    'function ' + PHP.FUNCTION_NAME_PLACEHOLDER_ +
-        '($list, $type, $direction) {',
-    '  $sortCmpFuncs = array(', '    "NUMERIC" => "strnatcasecmp",',
-    '    "TEXT" => "strcmp",', '    "IGNORE_CASE" => "strcasecmp"', '  );',
-    '  $sortCmp = $sortCmpFuncs[$type];',
-    '  $list2 = $list;',  // Clone list.
-    '  usort($list2, $sortCmp);', '  if ($direction == -1) {',
-    '    $list2 = array_reverse($list2);', '  }', '  return $list2;', '}'
-  ]);
+  const functionName = PHP.provideFunction_('lists_sort', `
+function ${PHP.FUNCTION_NAME_PLACEHOLDER_}($list, $type, $direction) {
+  $sortCmpFuncs = array(
+    'NUMERIC' => 'strnatcasecmp',
+    'TEXT' => 'strcmp',
+    'IGNORE_CASE' => 'strcasecmp'
+  );
+  $sortCmp = $sortCmpFuncs[$type];
+  $list2 = $list;
+  usort($list2, $sortCmp);
+  if ($direction == -1) {
+    $list2 = array_reverse($list2);
+  }
+  return $list2;
+}
+`);
   const sortCode =
       functionName + '(' + listCode + ', "' + type + '", ' + direction + ')';
   return [sortCode, PHP.ORDER_FUNCTION_CALL];
@@ -434,12 +454,12 @@ PHP['lists_sort'] = function(block) {
 PHP['lists_split'] = function(block) {
   // Block for splitting text into a list, or joining a list into text.
   let value_input = PHP.valueToCode(block, 'INPUT', PHP.ORDER_NONE);
-  const value_delim = PHP.valueToCode(block, 'DELIM', PHP.ORDER_NONE) || '\'\'';
+  const value_delim = PHP.valueToCode(block, 'DELIM', PHP.ORDER_NONE) || "''";
   const mode = block.getFieldValue('MODE');
   let functionName;
   if (mode === 'SPLIT') {
     if (!value_input) {
-      value_input = '\'\'';
+      value_input = "''";
     }
     functionName = 'explode';
   } else if (mode === 'JOIN') {

@@ -25,11 +25,11 @@ Lua['math_number'] = function(block) {
 Lua['math_arithmetic'] = function(block) {
   // Basic arithmetic operators, and power.
   const OPERATORS = {
-    ADD: [' + ', Lua.ORDER_ADDITIVE],
-    MINUS: [' - ', Lua.ORDER_ADDITIVE],
-    MULTIPLY: [' * ', Lua.ORDER_MULTIPLICATIVE],
-    DIVIDE: [' / ', Lua.ORDER_MULTIPLICATIVE],
-    POWER: [' ^ ', Lua.ORDER_EXPONENTIATION]
+    'ADD': [' + ', Lua.ORDER_ADDITIVE],
+    'MINUS': [' - ', Lua.ORDER_ADDITIVE],
+    'MULTIPLY': [' * ', Lua.ORDER_MULTIPLICATIVE],
+    'DIVIDE': [' / ', Lua.ORDER_MULTIPLICATIVE],
+    'POWER': [' ^ ', Lua.ORDER_EXPONENTIATION],
   };
   const tuple = OPERATORS[block.getFieldValue('OP')];
   const operator = tuple[0];
@@ -113,12 +113,12 @@ Lua['math_single'] = function(block) {
 Lua['math_constant'] = function(block) {
   // Constants: PI, E, the Golden Ratio, sqrt(2), 1/sqrt(2), INFINITY.
   const CONSTANTS = {
-    PI: ['math.pi', Lua.ORDER_HIGH],
-    E: ['math.exp(1)', Lua.ORDER_HIGH],
-    GOLDEN_RATIO: ['(1 + math.sqrt(5)) / 2', Lua.ORDER_MULTIPLICATIVE],
-    SQRT2: ['math.sqrt(2)', Lua.ORDER_HIGH],
-    SQRT1_2: ['math.sqrt(1 / 2)', Lua.ORDER_HIGH],
-    INFINITY: ['math.huge', Lua.ORDER_HIGH]
+    'PI': ['math.pi', Lua.ORDER_HIGH],
+    'E': ['math.exp(1)', Lua.ORDER_HIGH],
+    'GOLDEN_RATIO': ['(1 + math.sqrt(5)) / 2', Lua.ORDER_MULTIPLICATIVE],
+    'SQRT2': ['math.sqrt(2)', Lua.ORDER_HIGH],
+    'SQRT1_2': ['math.sqrt(1 / 2)', Lua.ORDER_HIGH],
+    'INFINITY': ['math.huge', Lua.ORDER_HIGH],
   };
   return CONSTANTS[block.getFieldValue('CONSTANT')];
 };
@@ -127,20 +127,13 @@ Lua['math_number_property'] = function(block) {
   // Check if a number is even, odd, prime, whole, positive, or negative
   // or if it is divisible by certain number. Returns true or false.
   const PROPERTIES = {
-    'EVEN': [' % 2 == 0', Lua.ORDER_MULTIPLICATIVE,
-        Lua.ORDER_RELATIONAL],
-    'ODD': [' % 2 == 1', Lua.ORDER_MULTIPLICATIVE,
-        Lua.ORDER_RELATIONAL],
-    'WHOLE': [' % 1 == 0', Lua.ORDER_MULTIPLICATIVE,
-        Lua.ORDER_RELATIONAL],
-    'POSITIVE': [' > 0', Lua.ORDER_RELATIONAL,
-        Lua.ORDER_RELATIONAL],
-    'NEGATIVE': [' < 0', Lua.ORDER_RELATIONAL,
-        Lua.ORDER_RELATIONAL],
-    'DIVISIBLE_BY': [null, Lua.ORDER_MULTIPLICATIVE,
-        Lua.ORDER_RELATIONAL],
-    'PRIME': [null, Lua.ORDER_NONE,
-        Lua.ORDER_HIGH]
+    'EVEN': [' % 2 == 0', Lua.ORDER_MULTIPLICATIVE, Lua.ORDER_RELATIONAL],
+    'ODD': [' % 2 == 1', Lua.ORDER_MULTIPLICATIVE, Lua.ORDER_RELATIONAL],
+    'WHOLE': [' % 1 == 0', Lua.ORDER_MULTIPLICATIVE, Lua.ORDER_RELATIONAL],
+    'POSITIVE': [' > 0', Lua.ORDER_RELATIONAL, Lua.ORDER_RELATIONAL],
+    'NEGATIVE': [' < 0', Lua.ORDER_RELATIONAL, Lua.ORDER_RELATIONAL],
+    'DIVISIBLE_BY': [null, Lua.ORDER_MULTIPLICATIVE, Lua.ORDER_RELATIONAL],
+    'PRIME': [null, Lua.ORDER_NONE, Lua.ORDER_HIGH],
   };
   const dropdownProperty = block.getFieldValue('PROPERTY');
   const [suffix, inputOrder, outputOrder] = PROPERTIES[dropdownProperty];
@@ -149,28 +142,28 @@ Lua['math_number_property'] = function(block) {
   let code;
   if (dropdownProperty === 'PRIME') {
     // Prime is a special case as it is not a one-liner test.
-    const functionName = Lua.provideFunction_(
-        'math_isPrime',
-        ['function ' + Lua.FUNCTION_NAME_PLACEHOLDER_ + '(n)',
-         '  -- https://en.wikipedia.org/wiki/Primality_test#Naive_methods',
-         '  if n == 2 or n == 3 then',
-         '    return true',
-         '  end',
-         '  -- False if n is NaN, negative, is 1, or not whole.',
-         '  -- And false if n is divisible by 2 or 3.',
-         '  if not(n > 1) or n % 1 ~= 0 or n % 2 == 0 or n % 3 == 0 then',
-         '    return false',
-         '  end',
-         '  -- Check all the numbers of form 6k +/- 1, up to sqrt(n).',
-         '  for x = 6, math.sqrt(n) + 1.5, 6 do',
-         '    if n % (x - 1) == 0 or n % (x + 1) == 0 then',
-         '      return false',
-         '    end',
-         '  end',
-         '  return true',
-         'end']);
+    const functionName = Lua.provideFunction_('math_isPrime', `
+function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(n)
+  -- https://en.wikipedia.org/wiki/Primality_test#Naive_methods
+  if n == 2 or n == 3 then
+    return true
+  end
+  -- False if n is NaN, negative, is 1, or not whole.
+  -- And false if n is divisible by 2 or 3.
+  if not(n > 1) or n % 1 ~= 0 or n % 2 == 0 or n % 3 == 0 then
+    return false
+  end
+  -- Check all the numbers of form 6k +/- 1, up to sqrt(n).
+  for x = 6, math.sqrt(n) + 1.5, 6 do
+    if n % (x - 1) == 0 or n % (x + 1) == 0 then
+      return false
+    end
+  end
+  return true
+end
+`);
     code = functionName + '(' + numberToCheck + ')';
-  } else if (dropdownProperty === 'DIVISIBLE_BY') {     
+  } else if (dropdownProperty === 'DIVISIBLE_BY') {
     const divisor = Lua.valueToCode(block, 'DIVISOR',
         Lua.ORDER_MULTIPLICATIVE) || '0';
     // If 'divisor' is some code that evals to 0, Lua will produce a nan.
@@ -209,11 +202,15 @@ Lua['math_on_list'] = function(block) {
 
   // Functions needed in more than one case.
   function provideSum() {
-    return Lua.provideFunction_('math_sum', [
-      'function ' + Lua.FUNCTION_NAME_PLACEHOLDER_ + '(t)',
-      '  local result = 0', '  for _, v in ipairs(t) do',
-      '    result = result + v', '  end', '  return result', 'end'
-    ]);
+    return Lua.provideFunction_('math_sum', `
+function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(t)
+  local result = 0
+  for _, v in ipairs(t) do
+    result = result + v
+  end
+  return result
+end
+`);
   }
 
   switch (func) {
@@ -223,103 +220,139 @@ Lua['math_on_list'] = function(block) {
 
     case 'MIN':
       // Returns 0 for the empty list.
-      functionName = Lua.provideFunction_('math_min', [
-        'function ' + Lua.FUNCTION_NAME_PLACEHOLDER_ + '(t)',
-        '  if #t == 0 then', '    return 0', '  end',
-        '  local result = math.huge', '  for _, v in ipairs(t) do',
-        '    if v < result then', '      result = v', '    end', '  end',
-        '  return result', 'end'
-      ]);
+      functionName = Lua.provideFunction_('math_min', `
+function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(t)
+  if #t == 0 then
+    return 0
+  end
+  local result = math.huge
+  for _, v in ipairs(t) do
+    if v < result then
+      result = v
+    end
+  end
+  return result
+end
+`);
       break;
 
     case 'AVERAGE':
       // Returns 0 for the empty list.
-      functionName = Lua.provideFunction_('math_average', [
-        'function ' + Lua.FUNCTION_NAME_PLACEHOLDER_ + '(t)',
-        '  if #t == 0 then', '    return 0', '  end',
-        '  return ' + provideSum() + '(t) / #t', 'end'
-      ]);
+      functionName = Lua.provideFunction_('math_average', `
+function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(t)
+  if #t == 0 then
+    return 0
+  end
+  return ${provideSum()}(t) / #t
+end
+`);
       break;
 
     case 'MAX':
       // Returns 0 for the empty list.
-      functionName = Lua.provideFunction_('math_max', [
-        'function ' + Lua.FUNCTION_NAME_PLACEHOLDER_ + '(t)',
-        '  if #t == 0 then', '    return 0', '  end',
-        '  local result = -math.huge', '  for _, v in ipairs(t) do',
-        '    if v > result then', '      result = v', '    end', '  end',
-        '  return result', 'end'
-      ]);
+      functionName = Lua.provideFunction_('math_max', `
+function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(t)
+  if #t == 0 then
+    return 0
+  end
+  local result = -math.huge
+  for _, v in ipairs(t) do
+    if v > result then
+      result = v
+    end
+  end
+  return result
+end
+`);
       break;
 
     case 'MEDIAN':
-      functionName = Lua.provideFunction_(
-          'math_median',
-          // This operation excludes non-numbers.
-          [
-            'function ' + Lua.FUNCTION_NAME_PLACEHOLDER_ + '(t)',
-            '  -- Source: http://lua-users.org/wiki/SimpleStats',
-            '  if #t == 0 then', '    return 0', '  end', '  local temp={}',
-            '  for _, v in ipairs(t) do', '    if type(v) == "number" then',
-            '      table.insert(temp, v)', '    end', '  end',
-            '  table.sort(temp)', '  if #temp % 2 == 0 then',
-            '    return (temp[#temp/2] + temp[(#temp/2)+1]) / 2', '  else',
-            '    return temp[math.ceil(#temp/2)]', '  end', 'end'
-          ]);
+      // This operation excludes non-numbers.
+      functionName = Lua.provideFunction_('math_median', `
+function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(t)
+  -- Source: http://lua-users.org/wiki/SimpleStats
+  if #t == 0 then
+    return 0
+  end
+  local temp = {}
+  for _, v in ipairs(t) do
+    if type(v) == 'number' then
+      table.insert(temp, v)
+    end
+  end
+  table.sort(temp)
+  if #temp % 2 == 0 then
+    return (temp[#temp / 2] + temp[(#temp / 2) + 1]) / 2
+  else
+    return temp[math.ceil(#temp / 2)]
+  end
+end
+`);
       break;
 
     case 'MODE':
-      functionName = Lua.provideFunction_(
-          'math_modes',
-          // As a list of numbers can contain more than one mode,
-          // the returned result is provided as an array.
-          // The Lua version includes non-numbers.
-          [
-            'function ' + Lua.FUNCTION_NAME_PLACEHOLDER_ + '(t)',
-            '  -- Source: http://lua-users.org/wiki/SimpleStats',
-            '  local counts={}',
-            '  for _, v in ipairs(t) do',
-            '    if counts[v] == nil then',
-            '      counts[v] = 1',
-            '    else',
-            '      counts[v] = counts[v] + 1',
-            '    end',
-            '  end',
-            '  local biggestCount = 0',
-            '  for _, v  in pairs(counts) do',
-            '    if v > biggestCount then',
-            '      biggestCount = v',
-            '    end',
-            '  end',
-            '  local temp={}',
-            '  for k, v in pairs(counts) do',
-            '    if v == biggestCount then',
-            '      table.insert(temp, k)',
-            '    end',
-            '  end',
-            '  return temp',
-            'end'
-          ]);
+      // As a list of numbers can contain more than one mode,
+      // the returned result is provided as an array.
+      // The Lua version includes non-numbers.
+      functionName = Lua.provideFunction_('math_modes', `
+function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(t)
+  -- Source: http://lua-users.org/wiki/SimpleStats
+  local counts = {}
+  for _, v in ipairs(t) do
+    if counts[v] == nil then
+      counts[v] = 1
+    else
+      counts[v] = counts[v] + 1
+    end
+  end
+  local biggestCount = 0
+  for _, v  in pairs(counts) do
+    if v > biggestCount then
+      biggestCount = v
+    end
+  end
+  local temp = {}
+  for k, v in pairs(counts) do
+    if v == biggestCount then
+      table.insert(temp, k)
+    end
+  end
+  return temp
+end
+`);
       break;
 
     case 'STD_DEV':
-      functionName = Lua.provideFunction_('math_standard_deviation', [
-        'function ' + Lua.FUNCTION_NAME_PLACEHOLDER_ + '(t)', '  local m',
-        '  local vm', '  local total = 0', '  local count = 0',
-        '  local result', '  m = #t == 0 and 0 or ' + provideSum() + '(t) / #t',
-        '  for _, v in ipairs(t) do', '    if type(v) == \'number\' then',
-        '      vm = v - m', '      total = total + (vm * vm)',
-        '      count = count + 1', '    end', '  end',
-        '  result = math.sqrt(total / (count-1))', '  return result', 'end'
-      ]);
+      functionName = Lua.provideFunction_('math_standard_deviation', `
+function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(t)
+  local m
+  local vm
+  local total = 0
+  local count = 0
+  local result
+  m = #t == 0 and 0 or ${provideSum()}(t) / #t
+  for _, v in ipairs(t) do
+    if type(v) == 'number' then
+      vm = v - m
+      total = total + (vm * vm)
+      count = count + 1
+    end
+  end
+  result = math.sqrt(total / (count-1))
+  return result
+end
+`);
       break;
 
     case 'RANDOM':
-      functionName = Lua.provideFunction_('math_random_list', [
-        'function ' + Lua.FUNCTION_NAME_PLACEHOLDER_ + '(t)',
-        '  if #t == 0 then', '    return nil', '  end',
-        '  return t[math.random(#t)]', 'end'
-      ]);
+      functionName = Lua.provideFunction_('math_random_list', `
+function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(t)
+  if #t == 0 then
+    return nil
+  end
+  return t[math.random(#t)]
+end
+`);
       break;
 
     default:

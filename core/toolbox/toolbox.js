@@ -1116,36 +1116,36 @@ Toolbox.prototype.dispose = function() {
  * CSS for Toolbox.  See css.js for use.
  */
 Css.register(`
-  .blocklyToolboxDelete {
-    cursor: url("<<<PATH>>>/handdelete.cur"), auto;
-  }
+.blocklyToolboxDelete {
+  cursor: url("<<<PATH>>>/handdelete.cur"), auto;
+}
 
-  .blocklyToolboxGrab {
-    cursor: url("<<<PATH>>>/handclosed.cur"), auto;
-    cursor: grabbing;
-    cursor: -webkit-grabbing;
-  }
+.blocklyToolboxGrab {
+  cursor: url("<<<PATH>>>/handclosed.cur"), auto;
+  cursor: grabbing;
+  cursor: -webkit-grabbing;
+}
 
-  /* Category tree in Toolbox. */
-  .blocklyToolboxDiv {
-    background-color: #ddd;
-    overflow-x: visible;
-    overflow-y: auto;
-    padding: 4px 0 4px 0;
-    position: absolute;
-    z-index: 70;  /* so blocks go under toolbox when dragging */
-    -webkit-tap-highlight-color: transparent;  /* issue #1345 */
-  }
+/* Category tree in Toolbox. */
+.blocklyToolboxDiv {
+  background-color: #ddd;
+  overflow-x: visible;
+  overflow-y: auto;
+  padding: 4px 0 4px 0;
+  position: absolute;
+  z-index: 70;  /* so blocks go under toolbox when dragging */
+  -webkit-tap-highlight-color: transparent;  /* issue #1345 */
+}
 
-  .blocklyToolboxContents {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-  }
+.blocklyToolboxContents {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
 
-  .blocklyToolboxContents:focus {
-    outline: none;
-  }
+.blocklyToolboxContents:focus {
+  outline: none;
+}
 `);
 
 registry.register(registry.Type.TOOLBOX, registry.DEFAULT, Toolbox);

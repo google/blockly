@@ -331,26 +331,26 @@ FlyoutButton.TEXT_MARGIN_Y = 2;
  * CSS for buttons and labels. See css.js for use.
  */
 Css.register(`
-  .blocklyFlyoutButton {
-    fill: #888;
-    cursor: default;
-  }
+.blocklyFlyoutButton {
+  fill: #888;
+  cursor: default;
+}
 
-  .blocklyFlyoutButtonShadow {
-    fill: #666;
-  }
+.blocklyFlyoutButtonShadow {
+  fill: #666;
+}
 
-  .blocklyFlyoutButton:hover {
-    fill: #aaa;
-  }
+.blocklyFlyoutButton:hover {
+  fill: #aaa;
+}
 
-  .blocklyFlyoutLabel {
-    cursor: default;
-  }
+.blocklyFlyoutLabel {
+  cursor: default;
+}
 
-  .blocklyFlyoutLabelBackground {
-    opacity: 0;
-  }
+.blocklyFlyoutLabelBackground {
+  opacity: 0;
+}
 `);
 
 exports.FlyoutButton = FlyoutButton;

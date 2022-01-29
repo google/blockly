@@ -1384,10 +1384,10 @@ void test_split() {
 
 List lists_sort(List list, String type, int direction) {
   var compareFuncs = {
-    "NUMERIC": (a, b) => (direction * a.compareTo(b)).toInt(),
-    "TEXT": (a, b) => direction * a.toString().compareTo(b.toString()),
-    "IGNORE_CASE":
-       (a, b) => direction *
+    'NUMERIC': (a, b) => (direction * a.compareTo(b)).toInt(),
+    'TEXT': (a, b) => direction * a.toString().compareTo(b.toString()),
+    'IGNORE_CASE':
+      (a, b) => direction *
       a.toString().toLowerCase().compareTo(b.toString().toLowerCase())
   };
   list = new List.from(list);

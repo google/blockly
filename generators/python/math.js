@@ -41,7 +41,7 @@ Python['math_arithmetic'] = function(block) {
     'MINUS': [' - ', Python.ORDER_ADDITIVE],
     'MULTIPLY': [' * ', Python.ORDER_MULTIPLICATIVE],
     'DIVIDE': [' / ', Python.ORDER_MULTIPLICATIVE],
-    'POWER': [' ** ', Python.ORDER_EXPONENTIATION]
+    'POWER': [' ** ', Python.ORDER_EXPONENTIATION],
   };
   const tuple = OPERATORS[block.getFieldValue('OP')];
   const operator = tuple[0];
@@ -142,7 +142,7 @@ Python['math_constant'] = function(block) {
     'GOLDEN_RATIO': ['(1 + math.sqrt(5)) / 2', Python.ORDER_MULTIPLICATIVE],
     'SQRT2': ['math.sqrt(2)', Python.ORDER_MEMBER],
     'SQRT1_2': ['math.sqrt(1.0 / 2)', Python.ORDER_MEMBER],
-    'INFINITY': ['float(\'inf\')', Python.ORDER_ATOMIC]
+    'INFINITY': ['float(\'inf\')', Python.ORDER_ATOMIC],
   };
   const constant = block.getFieldValue('CONSTANT');
   if (constant !== 'INFINITY') {
@@ -155,20 +155,15 @@ Python['math_number_property'] = function(block) {
    // Check if a number is even, odd, prime, whole, positive, or negative
    // or if it is divisible by certain number. Returns true or false.
   const PROPERTIES = {
-    'EVEN': [' % 2 == 0', Python.ORDER_MULTIPLICATIVE,
-        Python.ORDER_RELATIONAL],
-    'ODD': [' % 2 == 1', Python.ORDER_MULTIPLICATIVE,
-        Python.ORDER_RELATIONAL],
+    'EVEN': [' % 2 == 0', Python.ORDER_MULTIPLICATIVE, Python.ORDER_RELATIONAL],
+    'ODD': [' % 2 == 1', Python.ORDER_MULTIPLICATIVE, Python.ORDER_RELATIONAL],
     'WHOLE': [' % 1 == 0', Python.ORDER_MULTIPLICATIVE,
         Python.ORDER_RELATIONAL],
-    'POSITIVE': [' > 0', Python.ORDER_RELATIONAL,
-        Python.ORDER_RELATIONAL],
-    'NEGATIVE': [' < 0', Python.ORDER_RELATIONAL,
-        Python.ORDER_RELATIONAL],
+    'POSITIVE': [' > 0', Python.ORDER_RELATIONAL, Python.ORDER_RELATIONAL],
+    'NEGATIVE': [' < 0', Python.ORDER_RELATIONAL, Python.ORDER_RELATIONAL],
     'DIVISIBLE_BY': [null, Python.ORDER_MULTIPLICATIVE,
         Python.ORDER_RELATIONAL],
-    'PRIME': [null, Python.ORDER_NONE,
-        Python.ORDER_FUNCTION_CALL]
+    'PRIME': [null, Python.ORDER_NONE, Python.ORDER_FUNCTION_CALL],
   }
   const dropdownProperty = block.getFieldValue('PROPERTY');
   const [suffix, inputOrder, outputOrder] = PROPERTIES[dropdownProperty];
@@ -180,27 +175,26 @@ Python['math_number_property'] = function(block) {
     Python.definitions_['import_math'] = 'import math';
     Python.definitions_['from_numbers_import_Number'] =
         'from numbers import Number';
-    const functionName = Python.provideFunction_(
-      'math_isPrime',
-      ['def ' + Python.FUNCTION_NAME_PLACEHOLDER_ + '(n):',
-       '  # https://en.wikipedia.org/wiki/Primality_test#Naive_methods',
-       '  # If n is not a number but a string, try parsing it.',
-       '  if not isinstance(n, Number):',
-       '    try:',
-       '      n = float(n)',
-       '    except:',
-       '      return False',
-       '  if n == 2 or n == 3:',
-       '    return True',
-       '  # False if n is negative, is 1, or not whole,' +
-       ' or if n is divisible by 2 or 3.',
-       '  if n <= 1 or n % 1 != 0 or n % 2 == 0 or n % 3 == 0:',
-       '    return False',
-       '  # Check all the numbers of form 6k +/- 1, up to sqrt(n).',
-       '  for x in range(6, int(math.sqrt(n)) + 2, 6):',
-       '    if n % (x - 1) == 0 or n % (x + 1) == 0:',
-       '      return False',
-       '  return True']);
+    const functionName = Python.provideFunction_('math_isPrime', `
+def ${Python.FUNCTION_NAME_PLACEHOLDER_}(n):
+  # https://en.wikipedia.org/wiki/Primality_test#Naive_methods
+  # If n is not a number but a string, try parsing it.
+  if not isinstance(n, Number):
+    try:
+      n = float(n)
+    except:
+      return False
+  if n == 2 or n == 3:
+    return True
+  # False if n is negative, is 1, or not whole, or if n is divisible by 2 or 3.
+  if n <= 1 or n % 1 != 0 or n % 2 == 0 or n % 3 == 0:
+    return False
+  # Check all the numbers of form 6k +/- 1, up to sqrt(n).
+  for x in range(6, int(math.sqrt(n)) + 2, 6):
+    if n % (x - 1) == 0 or n % (x + 1) == 0:
+      return False
+  return True
+`);
        code = functionName + '(' + numberToCheck + ')';
   } else if (dropdownProperty === 'DIVISIBLE_BY') {
     const divisor = Python.valueToCode(block, 'DIVISOR',
@@ -251,71 +245,72 @@ Python['math_on_list'] = function(block) {
     case 'AVERAGE': {
       Python.definitions_['from_numbers_import_Number'] =
           'from numbers import Number';
-      const functionName = Python.provideFunction_(
-          'math_mean',
-          // This operation excludes null and values that aren't int or float:
-          // math_mean([null, null, "aString", 1, 9]) -> 5.0
-          [
-            'def ' + Python.FUNCTION_NAME_PLACEHOLDER_ + '(myList):',
-            '  localList = [e for e in myList if isinstance(e, Number)]',
-            '  if not localList: return',
-            '  return float(sum(localList)) / len(localList)'
-          ]);
+      // This operation excludes null and values that aren't int or float:
+      // math_mean([null, null, "aString", 1, 9]) -> 5.0
+      const functionName = Python.provideFunction_('math_mean', `
+def ${Python.FUNCTION_NAME_PLACEHOLDER_}(myList):
+  localList = [e for e in myList if isinstance(e, Number)]
+  if not localList: return
+  return float(sum(localList)) / len(localList)
+`);
       code = functionName + '(' + list + ')';
       break;
     }
     case 'MEDIAN': {
       Python.definitions_['from_numbers_import_Number'] =
           'from numbers import Number';
-      const functionName = Python.provideFunction_(
-          'math_median',
-          // This operation excludes null values:
-          // math_median([null, null, 1, 3]) -> 2.0
-          [
-            'def ' + Python.FUNCTION_NAME_PLACEHOLDER_ + '(myList):',
-            '  localList = sorted([e for e in myList if isinstance(e, Number)])',
-            '  if not localList: return', '  if len(localList) % 2 == 0:',
-            '    return (localList[len(localList) // 2 - 1] + ' +
-                'localList[len(localList) // 2]) / 2.0',
-            '  else:', '    return localList[(len(localList) - 1) // 2]'
-          ]);
+      // This operation excludes null values:
+      // math_median([null, null, 1, 3]) -> 2.0
+      const functionName = Python.provideFunction_( 'math_median', `
+def ${Python.FUNCTION_NAME_PLACEHOLDER_}(myList):
+  localList = sorted([e for e in myList if isinstance(e, Number)])
+  if not localList: return
+  if len(localList) % 2 == 0:
+    return (localList[len(localList) // 2 - 1] + localList[len(localList) // 2]) / 2.0
+  else:
+    return localList[(len(localList) - 1) // 2]
+`);
       code = functionName + '(' + list + ')';
       break;
     }
     case 'MODE': {
-      const functionName = Python.provideFunction_(
-          'math_modes',
-          // As a list of numbers can contain more than one mode,
-          // the returned result is provided as an array.
-          // Mode of [3, 'x', 'x', 1, 1, 2, '3'] -> ['x', 1]
-          [
-            'def ' + Python.FUNCTION_NAME_PLACEHOLDER_ + '(some_list):',
-            '  modes = []',
-            '  # Using a lists of [item, count] to keep count rather than dict',
-            '  # to avoid "unhashable" errors when the counted item is ' +
-                'itself a list or dict.',
-            '  counts = []', '  maxCount = 1', '  for item in some_list:',
-            '    found = False', '    for count in counts:',
-            '      if count[0] == item:', '        count[1] += 1',
-            '        maxCount = max(maxCount, count[1])',
-            '        found = True',
-            '    if not found:', '      counts.append([item, 1])',
-            '  for counted_item, item_count in counts:',
-            '    if item_count == maxCount:',
-            '      modes.append(counted_item)', '  return modes'
-          ]);
+      // As a list of numbers can contain more than one mode,
+      // the returned result is provided as an array.
+      // Mode of [3, 'x', 'x', 1, 1, 2, '3'] -> ['x', 1]
+      const functionName = Python.provideFunction_('math_modes', `
+def ${Python.FUNCTION_NAME_PLACEHOLDER_}(some_list):
+  modes = []
+  # Using a lists of [item, count] to keep count rather than dict
+  # to avoid "unhashable" errors when the counted item is itself a list or dict.
+  counts = []
+  maxCount = 1
+  for item in some_list:
+    found = False
+    for count in counts:
+      if count[0] == item:
+        count[1] += 1
+        maxCount = max(maxCount, count[1])
+        found = True
+    if not found:
+      counts.append([item, 1])
+  for counted_item, item_count in counts:
+    if item_count == maxCount:
+      modes.append(counted_item)
+  return modes
+`);
       code = functionName + '(' + list + ')';
       break;
     }
     case 'STD_DEV': {
       Python.definitions_['import_math'] = 'import math';
-      const functionName = Python.provideFunction_('math_standard_deviation', [
-        'def ' + Python.FUNCTION_NAME_PLACEHOLDER_ + '(numbers):',
-        '  n = len(numbers)', '  if n == 0: return',
-        '  mean = float(sum(numbers)) / n',
-        '  variance = sum((x - mean) ** 2 for x in numbers) / n',
-        '  return math.sqrt(variance)'
-      ]);
+      const functionName = Python.provideFunction_('math_standard_deviation', `
+def ${Python.FUNCTION_NAME_PLACEHOLDER_}(numbers):
+  n = len(numbers)
+  if n == 0: return
+  mean = float(sum(numbers)) / n
+  variance = sum((x - mean) ** 2 for x in numbers) / n
+  return math.sqrt(variance)
+`);
       code = functionName + '(' + list + ')';
       break;
     }

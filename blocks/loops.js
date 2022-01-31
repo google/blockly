@@ -18,11 +18,13 @@ const ContextMenu = goog.require('Blockly.ContextMenu');
 const Events = goog.require('Blockly.Events');
 const Extensions = goog.require('Blockly.Extensions');
 const Variables = goog.require('Blockly.Variables');
-const common = goog.require('Blockly.common');
 const xmlUtils = goog.require('Blockly.utils.xml');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockDefinition} = goog.requireType('Blockly.blocks');
 const {Msg} = goog.require('Blockly.Msg');
+const {createBlockDefinitionsFromJsonArray, defineBlocks} = goog.require('Blockly.common');
 /** @suppress {extraRequire} */
 goog.require('Blockly.FieldDropdown');
 /** @suppress {extraRequire} */
@@ -35,7 +37,11 @@ goog.require('Blockly.FieldVariable');
 goog.require('Blockly.Warning');
 
 
-common.defineBlocksWithJsonArray([
+/**
+ * A dictionary of the block definitions provided by this module.
+ * @type {!Object<string, !BlockDefinition>}
+ */
+const blocks = createBlockDefinitionsFromJsonArray([
   // Block for repeat n times (external number).
   {
     'type': 'controls_repeat_ext',
@@ -205,6 +211,7 @@ common.defineBlocksWithJsonArray([
     ],
   },
 ]);
+exports.blocks = blocks;
 
 /**
  * Tooltips for the 'controls_whileUntil' block, keyed by MODE value.
@@ -358,3 +365,6 @@ const CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
 
 Extensions.registerMixin(
     'controls_flow_in_loop_check', CONTROL_FLOW_IN_LOOP_CHECK_MIXIN);
+
+// Register provided blocks.
+defineBlocks(blocks);

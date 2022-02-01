@@ -316,7 +316,7 @@ const Block = function(workspace, prototypeName, opt_id) {
     this.type = prototypeName;
     const prototype = Blocks[prototypeName];
     if (!prototype || typeof prototype !== 'object') {
-      throw TypeError('Unknown block type: ' + prototypeName);
+      throw TypeError('Invalid block definition for type: ' + prototypeName);
     }
     object.mixin(this, prototype);
   }

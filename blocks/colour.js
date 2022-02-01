@@ -11,12 +11,18 @@
 
 goog.module('Blockly.blocks.colour');
 
-const {defineBlocksWithJsonArray} = goog.require('Blockly.common');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockDefinition} = goog.requireType('Blockly.blocks');
+const {createBlockDefinitionsFromJsonArray, defineBlocks} = goog.require('Blockly.common');
 /** @suppress {extraRequire} */
 goog.require('Blockly.FieldColour');
 
 
-defineBlocksWithJsonArray([
+/**
+ * A dictionary of the block definitions provided by this module.
+ * @type {!Object<string, !BlockDefinition>}
+ */
+const blocks = createBlockDefinitionsFromJsonArray([
   // Block for colour picker.
   {
     'type': 'colour_picker',
@@ -107,3 +113,7 @@ defineBlocksWithJsonArray([
     'tooltip': '%{BKY_COLOUR_BLEND_TOOLTIP}',
   },
 ]);
+exports.blocks = blocks;
+
+// Register provided blocks.
+defineBlocks(blocks);

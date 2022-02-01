@@ -459,7 +459,8 @@ Object.defineProperties(Generator.prototype, {
  *
  * @param {string} desiredName The desired name of the function
  *     (e.g. mathIsPrime).
- * @param {!Array<string>} code A list of statements.  Use '  ' for indents.
+ * @param {!Array<string>|string} code A list of statements or one multi-line
+ *     code string.  Use '  ' for indents (they will be replaced).
  * @return {string} The actual name of the new function.  This may differ
  *     from desiredName if the former has already been taken by the user.
  * @protected
@@ -469,7 +470,10 @@ Generator.prototype.provideFunction_ = function(desiredName, code) {
     const functionName =
         this.nameDB_.getDistinctName(desiredName, NameType.PROCEDURE);
     this.functionNames_[desiredName] = functionName;
-    let codeText = code.join('\n').replace(
+    if (Array.isArray(code)) {
+      code = code.join('\n');
+    }
+    let codeText = code.trim().replace(
         this.FUNCTION_NAME_PLACEHOLDER_REGEXP_, functionName);
     // Change all '  ' indents into the desired indent.
     // To avoid an infinite loop of replacements, change all indents to '\0'

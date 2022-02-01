@@ -57,7 +57,7 @@ Python['lists_isEmpty'] = function(block) {
 Python['lists_indexOf'] = function(block) {
   // Find an item in the list.
   const item = Python.valueToCode(block, 'FIND', Python.ORDER_NONE) || '[]';
-  const list = Python.valueToCode(block, 'VALUE', Python.ORDER_NONE) || '\'\'';
+  const list = Python.valueToCode(block, 'VALUE', Python.ORDER_NONE) || "''";
   let errorIndex = ' -1';
   let firstIndexAdjustment = '';
   let lastIndexAdjustment = ' - 1';
@@ -68,21 +68,22 @@ Python['lists_indexOf'] = function(block) {
     lastIndexAdjustment = '';
   }
 
+  let functionName;
   if (block.getFieldValue('END') === 'FIRST') {
-    const functionName = Python.provideFunction_('first_index', [
-      'def ' + Python.FUNCTION_NAME_PLACEHOLDER_ + '(my_list, elem):',
-      '  try: index = my_list.index(elem)' + firstIndexAdjustment,
-      '  except: index =' + errorIndex, '  return index'
-    ]);
-    const code = functionName + '(' + list + ', ' + item + ')';
-    return [code, Python.ORDER_FUNCTION_CALL];
+    functionName = Python.provideFunction_('first_index', `
+def ${Python.FUNCTION_NAME_PLACEHOLDER_}(my_list, elem):
+  try: index = my_list.index(elem)${firstIndexAdjustment}
+  except: index =${errorIndex}
+  return index
+`);
+  } else {
+    functionName = Python.provideFunction_('last_index', `
+def ${Python.FUNCTION_NAME_PLACEHOLDER_}(my_list, elem):
+  try: index = len(my_list) - my_list[::-1].index(elem)${lastIndexAdjustment}
+  except: index =${errorIndex}
+  return index
+`);
   }
-  const functionName = Python.provideFunction_('last_index', [
-    'def ' + Python.FUNCTION_NAME_PLACEHOLDER_ + '(my_list, elem):',
-    '  try: index = len(my_list) - my_list[::-1].index(elem)' +
-        lastIndexAdjustment,
-    '  except: index =' + errorIndex, '  return index'
-  ]);
   const code = functionName + '(' + list + ', ' + item + ')';
   return [code, Python.ORDER_FUNCTION_CALL];
 };
@@ -152,11 +153,11 @@ Python['lists_getIndex'] = function(block) {
         return [code, Python.ORDER_FUNCTION_CALL];
       } else {
         const functionName =
-            Python.provideFunction_('lists_remove_random_item', [
-              'def ' + Python.FUNCTION_NAME_PLACEHOLDER_ + '(myList):',
-              '  x = int(random.random() * len(myList))',
-              '  return myList.pop(x)'
-            ]);
+            Python.provideFunction_('lists_remove_random_item', `
+def ${Python.FUNCTION_NAME_PLACEHOLDER_}(myList):
+  x = int(random.random() * len(myList))
+  return myList.pop(x)
+`);
         const code = functionName + '(' + list + ')';
         if (mode === 'GET_REMOVE') {
           return [code, Python.ORDER_FUNCTION_CALL];
@@ -294,15 +295,22 @@ Python['lists_sort'] = function(block) {
   const list = (Python.valueToCode(block, 'LIST', Python.ORDER_NONE) || '[]');
   const type = block.getFieldValue('TYPE');
   const reverse = block.getFieldValue('DIRECTION') === '1' ? 'False' : 'True';
-  const sortFunctionName = Python.provideFunction_('lists_sort', [
-    'def ' + Python.FUNCTION_NAME_PLACEHOLDER_ + '(my_list, type, reverse):',
-    '  def try_float(s):', '    try:', '      return float(s)', '    except:',
-    '      return 0', '  key_funcs = {', '    "NUMERIC": try_float,',
-    '    "TEXT": str,', '    "IGNORE_CASE": lambda s: str(s).lower()', '  }',
-    '  key_func = key_funcs[type]',
-    '  list_cpy = list(my_list)',  // Clone the list.
-    '  return sorted(list_cpy, key=key_func, reverse=reverse)'
-  ]);
+  const sortFunctionName = Python.provideFunction_('lists_sort', `
+def ${Python.FUNCTION_NAME_PLACEHOLDER_}(my_list, type, reverse):
+  def try_float(s):
+    try:
+      return float(s)
+    except:
+      return 0
+  key_funcs = {
+    "NUMERIC": try_float,
+    "TEXT": str,
+    "IGNORE_CASE": lambda s: str(s).lower()
+  }
+  key_func = key_funcs[type]
+  list_cpy = list(my_list)
+  return sorted(list_cpy, key=key_func, reverse=reverse)
+`);
 
   const code =
       sortFunctionName + '(' + list + ', "' + type + '", ' + reverse + ')';
@@ -315,14 +323,14 @@ Python['lists_split'] = function(block) {
   let code;
   if (mode === 'SPLIT') {
     const value_input =
-        Python.valueToCode(block, 'INPUT', Python.ORDER_MEMBER) || '\'\'';
+        Python.valueToCode(block, 'INPUT', Python.ORDER_MEMBER) || "''";
     const value_delim = Python.valueToCode(block, 'DELIM', Python.ORDER_NONE);
     code = value_input + '.split(' + value_delim + ')';
   } else if (mode === 'JOIN') {
     const value_input =
         Python.valueToCode(block, 'INPUT', Python.ORDER_NONE) || '[]';
     const value_delim =
-        Python.valueToCode(block, 'DELIM', Python.ORDER_MEMBER) || '\'\'';
+        Python.valueToCode(block, 'DELIM', Python.ORDER_MEMBER) || "''";
     code = value_delim + '.join(' + value_input + ')';
   } else {
     throw Error('Unknown mode: ' + mode);

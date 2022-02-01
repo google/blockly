@@ -22,6 +22,8 @@ const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 /* eslint-disable-next-line no-unused-vars */
+const {ExternalValueInput} = goog.requireType('Blockly.blockRendering.ExternalValueInput');
+/* eslint-disable-next-line no-unused-vars */
 const {Field} = goog.requireType('Blockly.blockRendering.Field');
 /* eslint-disable-next-line no-unused-vars */
 const {Icon} = goog.requireType('Blockly.blockRendering.Icon');
@@ -175,7 +177,8 @@ Drawer.prototype.drawJaggedEdge_ = function(row) {
  * @protected
  */
 Drawer.prototype.drawValueInput_ = function(row) {
-  const input = row.getLastInput();
+  const input =
+      /** @type {ExternalValueInput|InlineInput} */ (row.getLastInput());
   this.positionExternalValueConnection_(row);
 
   const pathDown = (typeof input.shape.pathDown === 'function') ?

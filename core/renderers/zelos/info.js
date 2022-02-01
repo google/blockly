@@ -32,6 +32,8 @@ const {RenderInfo: BaseRenderInfo} = goog.require('Blockly.blockRendering.Render
 /* eslint-disable-next-line no-unused-vars */
 const {Renderer} = goog.requireType('Blockly.zelos.Renderer');
 const {RightConnectionShape} = goog.require('Blockly.zelos.RightConnectionShape');
+/* eslint-disable-next-line no-unused-vars */
+const {SpacerRow} = goog.requireType('Blockly.blockRendering.SpacerRow');
 const {StatementInput} = goog.require('Blockly.zelos.StatementInput');
 const {TopRow} = goog.require('Blockly.zelos.TopRow');
 const {Types} = goog.require('Blockly.blockRendering.Types');
@@ -202,7 +204,8 @@ class RenderInfo extends BaseRenderInfo {
     }
     // Top and bottom rows act as a spacer so we don't need any extra padding.
     if (Types.isTopRow(prev)) {
-      if (!prev.hasPreviousConnection &&
+      const topRow = /** @type {!TopRow} */ (prev);
+      if (!topRow.hasPreviousConnection &&
           (!this.outputConnection || this.hasStatementInput)) {
         return Math.abs(
             this.constants_.NOTCH_HEIGHT - this.constants_.CORNER_RADIUS);
@@ -210,6 +213,7 @@ class RenderInfo extends BaseRenderInfo {
       return this.constants_.NO_PADDING;
     }
     if (Types.isBottomRow(next)) {
+      const bottomRow = /** @type {!BottomRow} */ (next);
       if (!this.outputConnection) {
         const topHeight = Math.max(
                               this.topRow.minHeight,
@@ -218,7 +222,7 @@ class RenderInfo extends BaseRenderInfo {
                                   this.constants_.CORNER_RADIUS)) -
             this.constants_.CORNER_RADIUS;
         return topHeight;
-      } else if (!next.hasNextConnection && this.hasStatementInput) {
+      } else if (!bottomRow.hasNextConnection && this.hasStatementInput) {
         return Math.abs(
             this.constants_.NOTCH_HEIGHT - this.constants_.CORNER_RADIUS);
       }
@@ -319,9 +323,9 @@ class RenderInfo extends BaseRenderInfo {
     // first input row (if the block has prev connection) and every input row
     // that has a prev and next notch.
     for (let i = 2; i < this.rows.length - 1; i += 2) {
-      const prevSpacer = this.rows[i - 1];
+      const prevSpacer = /** @type {!SpacerRow} */ (this.rows[i - 1]);
       const row = this.rows[i];
-      const nextSpacer = this.rows[i + 1];
+      const nextSpacer = /** @type {!SpacerRow} */ (this.rows[i + 1]);
 
       const hasPrevNotch = i === 2 ? !!this.topRow.hasPreviousConnection :
                                      !!prevSpacer.followsStatement;
@@ -536,9 +540,9 @@ class RenderInfo extends BaseRenderInfo {
     // Run through every input row on the block and only apply tight nesting
     // logic to input rows that have a prev and next notch.
     for (let i = 2; i < this.rows.length - 1; i += 2) {
-      const prevSpacer = this.rows[i - 1];
+      const prevSpacer = /** @type {!SpacerRow} */ (this.rows[i - 1]);
       const row = this.rows[i];
-      const nextSpacer = this.rows[i + 1];
+      const nextSpacer = /** @type {!SpacerRow} */ (this.rows[i + 1]);
 
       const firstRow = i === 2;
       const hasPrevNotch = firstRow ? !!this.topRow.hasPreviousConnection :

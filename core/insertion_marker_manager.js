@@ -389,8 +389,7 @@ class InsertionMarkerManager {
         // Slightly prefer the existing preview over a new preview.
         return !(
             candidateClosest &&
-            radius >
-                curDistance - config.currentConnectionPreference);
+            radius > curDistance - config.currentConnectionPreference);
       } else if (!this.localConnection_ && !this.closestConnection_) {
         // We weren't showing a preview before, but we should now.
         return true;

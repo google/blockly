@@ -38,9 +38,9 @@ exports.COLLAPSED_FIELD_NAME = COLLAPSED_FIELD_NAME;
  * @const {!Object}
  * @alias Blockly.constants.SPRITE
  */
- const SPRITE = {
-    width: 96,
-    height: 124,
-    url: 'sprites.png',
-  };
-  exports.SPRITE = SPRITE;
+const SPRITE = {
+  width: 96,
+  height: 124,
+  url: 'sprites.png',
+};
+exports.SPRITE = SPRITE;

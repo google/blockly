@@ -32,9 +32,9 @@ const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 const {Bubble} = goog.require('Blockly.Bubble');
+const {config} = goog.require('Blockly.config');
 /* eslint-disable-next-line no-unused-vars */
 const {Connection} = goog.requireType('Blockly.Connection');
-const {config} = goog.require('Blockly.config');
 /* eslint-disable-next-line no-unused-vars */
 const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
 const {Icon} = goog.require('Blockly.Icon');

@@ -18,9 +18,9 @@ goog.module('Blockly.ZoomControls');
 const Css = goog.require('Blockly.Css');
 const Touch = goog.require('Blockly.Touch');
 const browserEvents = goog.require('Blockly.browserEvents');
+const constants = goog.require('Blockly.constants');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
-const constants = goog.require('Blockly.constants');
 const uiPosition = goog.require('Blockly.uiPosition');
 const {ComponentManager} = goog.require('Blockly.ComponentManager');
 /* eslint-disable-next-line no-unused-vars */

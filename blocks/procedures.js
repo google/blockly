@@ -19,12 +19,12 @@ const Events = goog.require('Blockly.Events');
 const Procedures = goog.require('Blockly.Procedures');
 const Variables = goog.require('Blockly.Variables');
 const Xml = goog.require('Blockly.Xml');
-const constants = goog.require('Blockly.constants');
 const xmlUtils = goog.require('Blockly.utils.xml');
 const {Align} = goog.require('Blockly.Input');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 const {Blocks} = goog.require('Blockly.blocks');
+const {config} = goog.require('Blockly.config');
 /* eslint-disable-next-line no-unused-vars */
 const {FieldCheckbox} = goog.require('Blockly.FieldCheckbox');
 const {FieldLabel} = goog.require('Blockly.FieldLabel');
@@ -950,8 +950,8 @@ const PROCEDURE_CALL_COMMON = {
         const block = xmlUtils.createElement('block');
         block.setAttribute('type', this.defType_);
         const xy = this.getRelativeToSurfaceXY();
-        const x = xy.x + constants.SNAP_RADIUS * (this.RTL ? -1 : 1);
-        const y = xy.y + constants.SNAP_RADIUS * 2;
+        const x = xy.x + config.snapRadius * (this.RTL ? -1 : 1);
+        const y = xy.y + config.snapRadius * 2;
         block.setAttribute('x', x);
         block.setAttribute('y', y);
         const mutation = this.mutationToDom();

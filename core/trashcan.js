@@ -20,9 +20,9 @@ const Abstract = goog.requireType('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
 const blocks = goog.requireType('Blockly.serialization.blocks');
 const browserEvents = goog.require('Blockly.browserEvents');
+const constants = goog.require('Blockly.constants');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
-const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 const toolbox = goog.require('Blockly.utils.toolbox');
@@ -294,32 +294,32 @@ Trashcan.prototype.createDom = function() {
       Svg.RECT, {'width': WIDTH, 'height': BODY_HEIGHT, 'y': LID_HEIGHT}, clip);
   const body = dom.createSvgElement(
       Svg.IMAGE, {
-        'width': internalConstants.SPRITE.width,
+        'width': constants.SPRITE.width,
         'x': -SPRITE_LEFT,
-        'height': internalConstants.SPRITE.height,
+        'height': constants.SPRITE.height,
         'y': -SPRITE_TOP,
         'clip-path': 'url(#blocklyTrashBodyClipPath' + rnd + ')',
       },
       this.svgGroup_);
   body.setAttributeNS(
       dom.XLINK_NS, 'xlink:href',
-      this.workspace_.options.pathToMedia + internalConstants.SPRITE.url);
+      this.workspace_.options.pathToMedia + constants.SPRITE.url);
 
   clip = dom.createSvgElement(
       Svg.CLIPPATH, {'id': 'blocklyTrashLidClipPath' + rnd}, this.svgGroup_);
   dom.createSvgElement(Svg.RECT, {'width': WIDTH, 'height': LID_HEIGHT}, clip);
   this.svgLid_ = dom.createSvgElement(
       Svg.IMAGE, {
-        'width': internalConstants.SPRITE.width,
+        'width': constants.SPRITE.width,
         'x': -SPRITE_LEFT,
-        'height': internalConstants.SPRITE.height,
+        'height': constants.SPRITE.height,
         'y': -SPRITE_TOP,
         'clip-path': 'url(#blocklyTrashLidClipPath' + rnd + ')',
       },
       this.svgGroup_);
   this.svgLid_.setAttributeNS(
       dom.XLINK_NS, 'xlink:href',
-      this.workspace_.options.pathToMedia + internalConstants.SPRITE.url);
+      this.workspace_.options.pathToMedia + constants.SPRITE.url);
 
   // bindEventWithChecks_ quashes events too aggressively. See:
   // https://groups.google.com/forum/#!topic/blockly/QF4yB9Wx00s

@@ -32,6 +32,7 @@ const {ASTNode} = goog.require('Blockly.ASTNode');
 const {Block} = goog.require('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const {Comment} = goog.requireType('Blockly.Comment');
+const {config} = goog.require('Blockly.config');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
 /* eslint-disable-next-line no-unused-vars */
 const {Connection} = goog.requireType('Blockly.Connection');
@@ -1552,7 +1553,7 @@ BlockSvg.prototype.bumpNeighbours = function() {
       connection.targetBlock().bumpNeighbours();
     }
 
-    const neighbours = connection.neighbours(constants.SNAP_RADIUS);
+    const neighbours = connection.neighbours(config.snapRadius);
     for (let j = 0, otherConnection; (otherConnection = neighbours[j]); j++) {
       // If both connections are connected, that's probably fine.  But if
       // either one of them is unconnected, then there could be confusion.
@@ -1585,13 +1586,13 @@ BlockSvg.prototype.scheduleSnapAndBump = function() {
     eventUtils.setGroup(group);
     block.snapToGrid();
     eventUtils.setGroup(false);
-  }, constants.BUMP_DELAY / 2);
+  }, config.bumpDelay / 2);
 
   setTimeout(function() {
     eventUtils.setGroup(group);
     block.bumpNeighbours();
     eventUtils.setGroup(false);
-  }, constants.BUMP_DELAY);
+  }, config.bumpDelay);
 };
 
 /**

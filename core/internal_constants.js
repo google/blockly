@@ -37,17 +37,6 @@ const DRAG_STACK = true;
 exports.DRAG_STACK = DRAG_STACK;
 
 /**
- * Sprited icons and images.
- * @alias Blockly.internalConstants.SPRITE
- */
-const SPRITE = {
-  width: 96,
-  height: 124,
-  url: 'sprites.png',
-};
-exports.SPRITE = SPRITE;
-
-/**
  * Lookup table for determining the opposite type of a connection.
  * @const
  * @alias Blockly.internalConstants.OPPOSITE_TYPE

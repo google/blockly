@@ -1,6 +1,6 @@
 {
   "chunk": [
-    "blockly:257",
+    "blockly:258",
     "all:10:blockly",
     "all1:11:blockly",
     "all2:11:blockly",
@@ -207,8 +207,10 @@
     "./core/interfaces/i_ast_node_location_svg.js",
     "./core/dropdowndiv.js",
     "./core/theme.js",
+    "./core/constants.js",
     "./core/interfaces/i_connection_checker.js",
     "./core/connection_db.js",
+    "./core/config.js",
     "./core/rendered_connection.js",
     "./core/utils/svg_paths.js",
     "./core/renderers/common/constants.js",
@@ -245,7 +247,6 @@
     "./core/serialization/priorities.js",
     "./core/serialization/blocks.js",
     "./core/utils/toolbox.js",
-    "./core/constants.js",
     "./core/mutator.js",
     "./core/msg.js",
     "./core/utils/colour.js",

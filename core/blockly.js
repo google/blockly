@@ -75,6 +75,7 @@ const {ConnectionChecker} = goog.require('Blockly.ConnectionChecker');
 const {ConnectionDB} = goog.require('Blockly.ConnectionDB');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
 const {Connection} = goog.require('Blockly.Connection');
+const {config} = goog.require('Blockly.config');
 const {ContextMenuRegistry} = goog.require('Blockly.ContextMenuRegistry');
 const {Cursor} = goog.require('Blockly.Cursor');
 const {DeleteArea} = goog.require('Blockly.DeleteArea');
@@ -657,7 +658,7 @@ exports.bindEventWithChecks_ = bindEventWithChecks_;
 // Aliases to allow external code to access these values for legacy reasons.
 exports.COLLAPSE_CHARS = internalConstants.COLLAPSE_CHARS;
 exports.DRAG_STACK = internalConstants.DRAG_STACK;
-exports.SPRITE = internalConstants.SPRITE;
+exports.SPRITE = constants.SPRITE;
 exports.OPPOSITE_TYPE = internalConstants.OPPOSITE_TYPE;
 exports.RENAME_VARIABLE_ID = internalConstants.RENAME_VARIABLE_ID;
 exports.DELETE_VARIABLE_ID = internalConstants.DELETE_VARIABLE_ID;
@@ -819,6 +820,7 @@ exports.clipboard = clipboard;
 exports.common = common;
 /** @deprecated Use Blockly.ConnectionType instead. */
 exports.connectionTypes = ConnectionType;
+exports.config = config;
 exports.constants = constants;
 exports.dialog = dialog;
 exports.fieldRegistry = fieldRegistry;

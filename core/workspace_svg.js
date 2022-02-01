@@ -30,7 +30,6 @@ const blockRendering = goog.require('Blockly.blockRendering');
 const blocks = goog.require('Blockly.serialization.blocks');
 const browserEvents = goog.require('Blockly.browserEvents');
 const common = goog.require('Blockly.common');
-const constants = goog.require('Blockly.constants');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
@@ -48,6 +47,7 @@ const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
 const {Block} = goog.requireType('Blockly.Block');
 const {Classic} = goog.require('Blockly.Themes.Classic');
 const {ComponentManager} = goog.require('Blockly.ComponentManager');
+const {config} = goog.require('Blockly.config');
 const {ConnectionDB} = goog.require('Blockly.ConnectionDB');
 const {ContextMenuRegistry} = goog.require('Blockly.ContextMenuRegistry');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
@@ -1594,7 +1594,7 @@ WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock, jsonBlock) {
           const connections = block.getConnections_(false);
           for (let i = 0, connection; (connection = connections[i]); i++) {
             const neighbour = connection.closest(
-                constants.SNAP_RADIUS, new Coordinate(blockX, blockY));
+                config.snapRadius, new Coordinate(blockX, blockY));
             if (neighbour.connection) {
               collide = true;
               break;
@@ -1603,11 +1603,11 @@ WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock, jsonBlock) {
         }
         if (collide) {
           if (this.RTL) {
-            blockX -= constants.SNAP_RADIUS;
+            blockX -= config.snapRadius;
           } else {
-            blockX += constants.SNAP_RADIUS;
+            blockX += config.snapRadius;
           }
-          blockY += constants.SNAP_RADIUS * 2;
+          blockY += config.snapRadius * 2;
         }
       } while (collide);
       block.moveTo(new Coordinate(blockX, blockY));

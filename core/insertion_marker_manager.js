@@ -22,6 +22,7 @@ const eventUtils = goog.require('Blockly.Events.utils');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 const {ComponentManager} = goog.require('Blockly.ComponentManager');
+const {config} = goog.require('Blockly.config');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
 /* eslint-disable-next-line no-unused-vars */
 const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
@@ -397,7 +398,7 @@ InsertionMarkerManager.prototype.shouldUpdatePreviews_ = function(
       // Slightly prefer the existing preview over a new preview.
       return !(
           candidateClosest &&
-          radius > curDistance - constants.CURRENT_CONNECTION_PREFERENCE);
+          radius > curDistance - config.currentConnectionPreference);
     } else if (!this.localConnection_ && !this.closestConnection_) {
       // We weren't showing a preview before, but we should now.
       return true;
@@ -465,9 +466,9 @@ InsertionMarkerManager.prototype.getStartRadius_ = function() {
   // range. By increasing radiusConnection when a connection already exists, we
   // never "lose" the connection from the offset.
   if (this.closestConnection_ && this.localConnection_) {
-    return constants.CONNECTING_SNAP_RADIUS;
+    return config.connectingSnapRadius;
   }
-  return constants.SNAP_RADIUS;
+  return config.snapRadius;
 };
 
 /**

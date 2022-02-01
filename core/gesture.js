@@ -22,13 +22,13 @@ const Touch = goog.require('Blockly.Touch');
 const blockAnimations = goog.require('Blockly.blockAnimations');
 const browserEvents = goog.require('Blockly.browserEvents');
 const common = goog.require('Blockly.common');
-const constants = goog.require('Blockly.constants');
 const eventUtils = goog.require('Blockly.Events.utils');
 const internalConstants = goog.require('Blockly.internalConstants');
 const registry = goog.require('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 const {BubbleDragger} = goog.require('Blockly.BubbleDragger');
+const {config} = goog.require('Blockly.config');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
 const {Field} = goog.requireType('Blockly.Field');
@@ -306,7 +306,7 @@ Gesture.prototype.updateDragDelta_ = function(currentXY) {
 
     // The flyout has a different drag radius from the rest of Blockly.
     const limitRadius =
-        this.flyout_ ? constants.FLYOUT_DRAG_RADIUS : constants.DRAG_RADIUS;
+        this.flyout_ ? config.flyoutDragRadius : config.dragRadius;
 
     this.hasExceededDragRadius_ = currentDragDelta > limitRadius;
     return this.hasExceededDragRadius_;

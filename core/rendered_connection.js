@@ -16,7 +16,6 @@
 goog.module('Blockly.RenderedConnection');
 
 const common = goog.require('Blockly.common');
-const constants = goog.require('Blockly.constants');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
 const internalConstants = goog.require('Blockly.internalConstants');
@@ -27,6 +26,7 @@ const svgMath = goog.require('Blockly.utils.svgMath');
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+const {config} = goog.require('Blockly.config');
 /* eslint-disable-next-line no-unused-vars */
 const {ConnectionDB} = goog.requireType('Blockly.ConnectionDB');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
@@ -187,10 +187,10 @@ RenderedConnection.prototype.bumpAwayFrom = function(staticConnection) {
   // Raise it to the top for extra visibility.
   const selected = common.getSelected() == rootBlock;
   selected || rootBlock.addSelect();
-  let dx = (staticConnection.x + constants.SNAP_RADIUS +
+  let dx = (staticConnection.x + config.snapRadius +
             Math.floor(Math.random() * BUMP_RANDOMNESS)) -
       this.x;
-  let dy = (staticConnection.y + constants.SNAP_RADIUS +
+  let dy = (staticConnection.y + config.snapRadius +
             Math.floor(Math.random() * BUMP_RANDOMNESS)) -
       this.y;
   if (reverse) {
@@ -198,7 +198,7 @@ RenderedConnection.prototype.bumpAwayFrom = function(staticConnection) {
     dy = -dy;
   }
   if (rootBlock.RTL) {
-    dx = (staticConnection.x - constants.SNAP_RADIUS -
+    dx = (staticConnection.x - config.snapRadius -
           Math.floor(Math.random() * BUMP_RANDOMNESS)) -
         this.x;
   }
@@ -453,7 +453,7 @@ RenderedConnection.prototype.onFailedConnect = function(otherConnection) {
         this.bumpAwayFrom(otherConnection);
         eventUtils.setGroup(false);
       }
-    }.bind(this), constants.BUMP_DELAY);
+    }.bind(this), config.bumpDelay);
   }
 };
 

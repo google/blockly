@@ -58,10 +58,10 @@ const {FieldLabel} = goog.require('Blockly.FieldLabel');
  
    if (this.sourceBlock_.isEditable()) {
      this.mouseOverWrapper_ =
-         Blockly.bindEvent_(
+         Blockly.browserEvents.bind(
              this.getClickTarget_(), 'mouseover', this, this.onMouseOver_);
      this.mouseOutWrapper_ =
-         Blockly.bindEvent_(
+         Blockly.browserEvents.bind(
              this.getClickTarget_(), 'mouseout', this, this.onMouseOut_);
    }
  };
@@ -120,7 +120,7 @@ const {FieldLabel} = goog.require('Blockly.FieldLabel');
    const gesture = this.sourceBlock_.workspace.getGesture(e);
    if (gesture && gesture.isDragging()) return;
    if (this.sourceBlock_.pathObject.svgPath) {
-     dom.addClass(this.sourceBlock_.pathObject.svgPath, 'blocklyFieldHover');
+     dom.addClass(this.sourceBlock_.pathObject.svgPath, 'editing');
      this.sourceBlock_.pathObject.svgPath.style.strokeDasharray = '2';
    }
  };
@@ -131,7 +131,7 @@ const {FieldLabel} = goog.require('Blockly.FieldLabel');
   */
  FieldLabelHover.prototype.clearHover = function() {
    if (this.sourceBlock_.pathObject.svgPath) {
-     dom.removeClass(this.sourceBlock_.pathObject.svgPath, 'blocklyFieldHover');
+     dom.removeClass(this.sourceBlock_.pathObject.svgPath, 'editing');
      this.sourceBlock_.pathObject.svgPath.style.strokeDasharray = '';
    }
  };
@@ -154,11 +154,11 @@ const {FieldLabel} = goog.require('Blockly.FieldLabel');
   */
  FieldLabelHover.dispose = function() {
    if (this.mouseOverWrapper_) {
-     Blockly.unbindEvent_(this.mouseOverWrapper_);
+    Blockly.browserEvents.unbind(this.mouseOverWrapper_);
      this.mouseOverWrapper_ = null;
    }
    if (this.mouseOutWrapper_) {
-     Blockly.unbindEvent_(this.mouseOutWrapper_);
+    Blockly.browserEvents.unbind(this.mouseOutWrapper_);
      this.mouseOutWrapper_ = null;
    }
    FieldLabelHover.superClass_.dispose.call(this);

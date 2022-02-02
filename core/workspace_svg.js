@@ -78,6 +78,8 @@ const {Metrics} = goog.requireType('Blockly.utils.Metrics');
 const {Options} = goog.require('Blockly.Options');
 const {Rect} = goog.require('Blockly.utils.Rect');
 /* eslint-disable-next-line no-unused-vars */
+const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
+/* eslint-disable-next-line no-unused-vars */
 const {Renderer} = goog.requireType('Blockly.blockRendering.Renderer');
 /* eslint-disable-next-line no-unused-vars */
 const {ScrollbarPair} = goog.requireType('Blockly.ScrollbarPair');
@@ -1593,7 +1595,7 @@ WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock, jsonBlock) {
           // Check for blocks in snap range to any of its connections.
           const connections = block.getConnections_(false);
           for (let i = 0, connection; (connection = connections[i]); i++) {
-            const neighbour = connection.closest(
+            const neighbour = /** @type {!RenderedConnection} */(connection).closest(
                 internalConstants.SNAP_RADIUS, new Coordinate(blockX, blockY));
             if (neighbour.connection) {
               collide = true;

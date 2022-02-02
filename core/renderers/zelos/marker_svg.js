@@ -21,12 +21,12 @@ const {ASTNode} = goog.requireType('Blockly.ASTNode');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
-const {Connection} = goog.requireType('Blockly.Connection');
-/* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 const {MarkerSvg: BaseMarkerSvg} = goog.require('Blockly.blockRendering.MarkerSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {Marker} = goog.requireType('Blockly.Marker');
+/* eslint-disable-next-line no-unused-vars */
+const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
 const {Svg} = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
@@ -61,7 +61,7 @@ class MarkerSvg extends BaseMarkerSvg {
    */
   showWithInputOutput_(curNode) {
     const block = /** @type {!BlockSvg} */ (curNode.getSourceBlock());
-    const connection = /** @type {!Connection} */ (curNode.getLocation());
+    const connection = /** @type {!RenderedConnection} */ (curNode.getLocation());
     const offsetInBlock = connection.getOffsetInBlock();
 
     this.positionCircle_(offsetInBlock.x, offsetInBlock.y);

@@ -35,6 +35,12 @@ goog.module('Blockly.config');
 let Config;  // eslint-disable-line no-unused-vars
 
 /**
+ * Default snap radius.
+ * @type {number}
+ */
+const DEFAULT_SNAP_RADIUS = 28;
+
+/**
  * Object holding all the values on Blockly that we expect developers to be
  * able to change.
  * @type {Config}
@@ -56,7 +62,13 @@ const config = {
    * Maximum misalignment between connections for them to snap together.
    * @alias Blockly.config.snapRadius
    */
-  snapRadius: 28,
+  snapRadius: DEFAULT_SNAP_RADIUS,
+/**
+ * Maximum misalignment between connections for them to snap together.
+ * This should be the same as the snap radius.
+ * @alias Blockly.config.connectingSnapRadius
+ */
+  connectingSnapRadius: DEFAULT_SNAP_RADIUS,
   /**
    * How much to prefer staying connected to the current connection over moving
    * to a new connection.  The current previewed connection is considered to be
@@ -71,12 +83,5 @@ const config = {
    */
   bumpDelay: 250,
 };
-
-/**
- * Maximum misalignment between connections for them to snap together.
- * This should be the same as the snap radius.
- * @alias Blockly.config.connectingSnapRadius
- */
-config.connectingSnapRadius = config.snapRadius;
 
 exports.config = config;

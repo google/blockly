@@ -63,11 +63,11 @@ const config = {
    * @alias Blockly.config.snapRadius
    */
   snapRadius: DEFAULT_SNAP_RADIUS,
-/**
- * Maximum misalignment between connections for them to snap together.
- * This should be the same as the snap radius.
- * @alias Blockly.config.connectingSnapRadius
- */
+  /**
+   * Maximum misalignment between connections for them to snap together.
+   * This should be the same as the snap radius.
+   * @alias Blockly.config.connectingSnapRadius
+   */
   connectingSnapRadius: DEFAULT_SNAP_RADIUS,
   /**
    * How much to prefer staying connected to the current connection over moving

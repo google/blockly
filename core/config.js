@@ -20,6 +20,25 @@
 goog.module('Blockly.config');
 
 
+/**
+ * All the values that we expect developers to be able to change
+ * before injecting Blockly.
+ * @typedef {{
+ *      dragRadius: number,
+ *      flyoutDragRadius: number,
+ *      snapRadius: number,
+ *      currentConnectionPreference: number,
+ *      bumpDelay: number,
+ *      connectingSnapRadius: number
+ *    }}
+ */
+let Config;  // eslint-disable-line no-unused-vars
+
+/**
+ * Object holding all the values on Blockly that we expect developers to be
+ * able to change.
+ * @type {Config}
+ */
 const config = {
   /**
    * Number of pixels the mouse must move before a drag starts.

@@ -818,9 +818,9 @@ exports.browserEvents = browserEvents;
 exports.bumpObjects = bumpObjects;
 exports.clipboard = clipboard;
 exports.common = common;
+exports.config = config;
 /** @deprecated Use Blockly.ConnectionType instead. */
 exports.connectionTypes = ConnectionType;
-exports.config = config;
 exports.constants = constants;
 exports.dialog = dialog;
 exports.fieldRegistry = fieldRegistry;

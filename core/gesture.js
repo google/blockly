@@ -23,6 +23,7 @@ const blockAnimations = goog.require('Blockly.blockAnimations');
 const browserEvents = goog.require('Blockly.browserEvents');
 const common = goog.require('Blockly.common');
 const eventUtils = goog.require('Blockly.Events.utils');
+const internalConstants = goog.require('Blockly.internalConstants');
 const registry = goog.require('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
@@ -243,7 +244,7 @@ class Gesture {
      * @type {boolean}
      * @private
      */
-    this.healStack_ = !config.dragStack;
+    this.healStack_ = !internalConstants.DRAG_STACK;
   }
 
   /**

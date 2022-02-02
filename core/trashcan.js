@@ -23,7 +23,6 @@ const browserEvents = goog.require('Blockly.browserEvents');
 const constants = goog.require('Blockly.constants');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
-const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 const toolbox = goog.require('Blockly.utils.toolbox');
 const uiPosition = goog.require('Blockly.uiPosition');

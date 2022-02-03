@@ -19,6 +19,8 @@ const debug = goog.require('Blockly.blockRendering.debug');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider} = goog.requireType('Blockly.geras.ConstantProvider');
 const {Drawer: BaseDrawer} = goog.require('Blockly.blockRendering.Drawer');
 const {Highlighter} = goog.require('Blockly.geras.Highlighter');
 /* eslint-disable-next-line no-unused-vars */
@@ -45,6 +47,9 @@ class Drawer extends BaseDrawer {
     super(block, info);
     // Unlike Thrasos, Geras has highlights and drop shadows.
     this.highlighter_ = new Highlighter(info);
+
+    /** @type {!ConstantProvider} */
+    this.constants_;
   }
 
   /**

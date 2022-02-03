@@ -58,6 +58,9 @@ class RenderInfo extends BaseRenderInfo {
   constructor(renderer, block) {
     super(renderer, block);
 
+    /** @type {!ConstantProvider} */
+    this.constants_;
+
     /**
      * An object with rendering information about the top row of the block.
      * @type {!TopRow}

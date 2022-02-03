@@ -21,7 +21,7 @@ const {ASTNode} = goog.requireType('Blockly.ASTNode');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {ConstantProvider: BaseConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 const {MarkerSvg: BaseMarkerSvg} = goog.require('Blockly.blockRendering.MarkerSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {Marker} = goog.requireType('Blockly.Marker');
@@ -30,6 +30,8 @@ const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
 const {Svg} = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider: ZelosConstantProvider} = goog.requireType('Blockly.zelos.ConstantProvider');
 
 
 /**
@@ -39,13 +41,16 @@ const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 class MarkerSvg extends BaseMarkerSvg {
   /**
    * @param {!WorkspaceSvg} workspace The workspace the marker belongs to.
-   * @param {!ConstantProvider} constants The constants for
+   * @param {!BaseConstantProvider} constants The constants for
    *     the renderer.
    * @param {!Marker} marker The marker to draw.
    * @alias Blockly.zelos.MarkerSvg
    */
   constructor(workspace, constants, marker) {
     super(workspace, constants, marker);
+
+    /** @type {!ZelosConstantProvider} */
+    this.constants_;
 
     /**
      * @type {SVGCircleElement}

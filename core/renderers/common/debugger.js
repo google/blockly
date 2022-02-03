@@ -29,6 +29,8 @@ const {Measurable} = goog.requireType('Blockly.blockRendering.Measurable');
 /* eslint-disable-next-line no-unused-vars */
 const {RenderInfo} = goog.requireType('Blockly.blockRendering.RenderInfo');
 /* eslint-disable-next-line no-unused-vars */
+const {RenderInfo: ZelosInfo} = goog.requireType('Blockly.zelos.RenderInfo');
+/* eslint-disable-next-line no-unused-vars */
 const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
 /* eslint-disable-next-line no-unused-vars */
 const {Row} = goog.requireType('Blockly.blockRendering.Row');
@@ -407,8 +409,12 @@ Debug.prototype.drawDebug = function(block, info) {
   if (block.outputConnection) {
     this.drawConnection(block.outputConnection);
   }
-  if (info.rightSide) {
-    this.drawRenderedElem(info.rightSide, info.RTL);
+  /** TODO: Find a better way to do this check without pulling in all of zelos,
+   * or just delete this line or the whole debug renderer.
+   */
+  const maybeZelosInfo = /** @type {!ZelosInfo} */ (info);
+  if (maybeZelosInfo.rightSide) {
+    this.drawRenderedElem(maybeZelosInfo.rightSide, info.RTL);
   }
 
   this.drawBoundingBox(info);

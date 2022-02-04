@@ -21,6 +21,8 @@ goog.module('Blockly.geras.RenderInfo');
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {BottomRow} = goog.requireType('Blockly.blockRendering.BottomRow');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider} = goog.requireType('Blockly.geras.ConstantProvider');
 const {ExternalValueInput} = goog.require('Blockly.blockRendering.ExternalValueInput');
 /* eslint-disable-next-line no-unused-vars */
 const {Field} = goog.requireType('Blockly.blockRendering.Field');
@@ -55,6 +57,9 @@ class RenderInfo extends BaseRenderInfo {
    */
   constructor(renderer, block) {
     super(renderer, block);
+
+    /** @type {!ConstantProvider} */
+    this.constants_;
   }
 
   /**

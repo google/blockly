@@ -18,7 +18,9 @@
 goog.module('Blockly.geras.InlineInput');
 
 /* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {ConstantProvider: BaseConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider: GerasConstantProvider} = goog.requireType('Blockly.geras.ConstantProvider');
 const {InlineInput: BaseInlineInput} = goog.require('Blockly.blockRendering.InlineInput');
 /* eslint-disable-next-line no-unused-vars */
 const {Input} = goog.requireType('Blockly.Input');
@@ -31,7 +33,7 @@ const {Input} = goog.requireType('Blockly.Input');
  */
 class InlineInput extends BaseInlineInput {
   /**
-   * @param {!ConstantProvider} constants The rendering
+   * @param {!BaseConstantProvider} constants The rendering
    *   constants provider.
    * @param {!Input} input The inline input to measure and store
    *     information for.
@@ -40,6 +42,9 @@ class InlineInput extends BaseInlineInput {
    */
   constructor(constants, input) {
     super(constants, input);
+
+    /** @type {!GerasConstantProvider} */
+    this.constants_;
 
     if (this.connectedBlock) {
       // We allow the dark path to show on the parent block so that the child

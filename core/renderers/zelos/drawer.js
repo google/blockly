@@ -47,6 +47,11 @@ class Drawer extends BaseDrawer {
    */
   constructor(block, info) {
     super(block, info);
+
+    /**
+     * @type {!RenderInfo}
+     */
+    this.info_;
   }
 
   /**

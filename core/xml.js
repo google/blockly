@@ -479,7 +479,7 @@ const domToWorkspace = function(xml, workspace) {
                 'Missing require for Blockly.WorkspaceCommentSvg, ' +
                 'ignoring workspace comment.');
           } else {
-            WorkspaceCommentSvg.fromXml(
+            WorkspaceCommentSvg.fromXmlRendered(
                 xmlChildElement,
                 /** @type {!WorkspaceSvg} */ (workspace), width);
           }

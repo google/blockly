@@ -23,17 +23,16 @@
  *     always serialized to XML.  It may only be edited programmatically.
  * @author fenichel@google.com (Rachel Fenichel)
  */
- 'use strict';
+'use strict';
 
- goog.module('Blockly.FieldLabelHover');
+goog.module('Blockly.FieldLabelHover');
 
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const object = goog.require('Blockly.utils.object');
 const parsing = goog.require('Blockly.utils.parsing');
 const dom = goog.require('Blockly.utils.dom');
 const {FieldLabel} = goog.require('Blockly.FieldLabel');
- 
- 
+
  /**
   * Class for a variable getter field.
   * @param {string} text The initial content of the field.
@@ -49,13 +48,13 @@ const {FieldLabel} = goog.require('Blockly.FieldLabel');
    this.arrowWidth_ = 0;
  };
  object.inherits(FieldLabelHover, FieldLabel);
- 
+
  /**
   * Install this field on a block.
   */
  FieldLabelHover.prototype.initView = function() {
    FieldLabelHover.superClass_.initView.call(this);
- 
+
    if (this.sourceBlock_.isEditable()) {
      this.mouseOverWrapper_ =
          Blockly.browserEvents.bind(
@@ -65,7 +64,7 @@ const {FieldLabel} = goog.require('Blockly.FieldLabel');
              this.getClickTarget_(), 'mouseout', this, this.onMouseOut_);
    }
  };
- 
+
  /**
   * Construct a FieldLabelHover from a JSON arg object,
   * dereferencing any string table references.
@@ -78,7 +77,7 @@ const {FieldLabel} = goog.require('Blockly.FieldLabel');
    const text = parsing.replaceMessageReferences(options['text']);
    return new this(text, options['class']);
  };
- 
+
  /**
   * Editable fields usually show some sort of UI for the user to change them.
   * This field should be serialized, but only edited programmatically.
@@ -86,7 +85,7 @@ const {FieldLabel} = goog.require('Blockly.FieldLabel');
   * @public
   */
  FieldLabelHover.prototype.EDITABLE = false;
- 
+
  /**
   * Serializable fields are saved by the XML renderer, non-serializable fields
   * are not.  This field should be serialized, but only edited programmatically.
@@ -94,7 +93,7 @@ const {FieldLabel} = goog.require('Blockly.FieldLabel');
   * @public
   */
  FieldLabelHover.prototype.SERIALIZABLE = true;
- 
+
  /**
   * Updates the width of the field. This calls getCachedWidth which won't cache
   * the approximated width on IE/Edge when `getComputedTextLength` fails. Once
@@ -109,7 +108,7 @@ const {FieldLabel} = goog.require('Blockly.FieldLabel');
        this.getConstants().FIELD_TEXT_FONTWEIGHT,
        this.getConstants().FIELD_TEXT_FONTFAMILY);
  };
- 
+
  /**
   * Handle a mouse over event on a input field.
   * @param {!Event} e Mouse over event.
@@ -124,7 +123,7 @@ const {FieldLabel} = goog.require('Blockly.FieldLabel');
      this.sourceBlock_.pathObject.svgPath.style.strokeDasharray = '2';
    }
  };
- 
+
  /**
   * Clear hover effect on the block
   * @param {!Event} e Clear hover effect
@@ -135,7 +134,7 @@ const {FieldLabel} = goog.require('Blockly.FieldLabel');
      this.sourceBlock_.pathObject.svgPath.style.strokeDasharray = '';
    }
  };
- 
+
  /**
   * Handle a mouse out event on a input field.
   * @param {!Event} e Mouse out event.
@@ -147,7 +146,7 @@ const {FieldLabel} = goog.require('Blockly.FieldLabel');
    if (gesture && gesture.isDragging()) return;
    this.clearHover();
  };
- 
+
  /**
   * Dispose of this field.
   * @public
@@ -165,8 +164,8 @@ const {FieldLabel} = goog.require('Blockly.FieldLabel');
    this.workspace_ = null;
    this.variableMap_ = null;
  };
- 
+
  fieldRegistry.register('field_label_hover', FieldLabelHover);
 
  exports.FieldLabelHover = FieldLabelHover;
- 
+

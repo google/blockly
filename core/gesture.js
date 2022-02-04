@@ -235,6 +235,14 @@ const Gesture = function(e, creatorWorkspace) {
   this.isEnding_ = false;
 
   /**
+   * True if dragging from the target block should duplicate the target block
+   * and drag the duplicate instead.  This has a lot of side effects.
+   * @type {boolean}
+   * @private
+   */
+  this.shouldDuplicateOnDrag_ = false;
+
+  /**
    * Boolean used to indicate whether or not to heal the stack after
    * disconnecting a block.
    * @type {boolean}
@@ -383,7 +391,7 @@ Gesture.prototype.updateIsDraggingBlock_ = function() {
 
   if (this.flyout_) {
     this.isDraggingBlock_ = this.updateIsDraggingFromFlyout_();
-  } else if (this.targetBlock_.isMovable()) {
+  } else if (this.targetBlock_.isMovable() || this.shouldDuplicateOnDrag_) {
     this.isDraggingBlock_ = true;
   }
 
@@ -449,6 +457,11 @@ Gesture.prototype.updateIsDragging_ = function(e) {
  * @private
  */
 Gesture.prototype.startDraggingBlock_ = function() {
+  // pxt-blockly
+  if (this.shouldDuplicateOnDrag_) {
+    this.duplicateOnDrag_();
+  }
+
   const BlockDraggerClass = registry.getClassFromOptions(
       registry.Type.BLOCK_DRAGGER, this.creatorWorkspace_.options, true);
 
@@ -837,7 +850,9 @@ Gesture.prototype.setStartBlock = function(block) {
   // If the gesture already went through a bubble, don't set the start block.
   if (!this.startBlock_ && !this.startBubble_) {
     this.startBlock_ = block;
-    if (block.isInFlyout && block !== block.getRootBlock()) {
+    this.shouldDuplicateOnDrag_ = !block.disabled && !block.getInheritedDisabled() &&
+        !block.isInFlyout && Gesture.isShadowArgumentReporter(block);
+    if (block.isInFlyout && block != block.getRootBlock()) {
       this.setTargetBlock_(block.getRootBlock());
     } else {
       this.setTargetBlock_(block);
@@ -853,7 +868,7 @@ Gesture.prototype.setStartBlock = function(block) {
  * @private
  */
 Gesture.prototype.setTargetBlock_ = function(block) {
-  if (block.isShadow()) {
+  if (block.isShadow() && !this.shouldDuplicateOnDrag_) {
     this.setTargetBlock_(block.getParent());
   } else {
     this.targetBlock_ = block;
@@ -1003,6 +1018,182 @@ Gesture.inProgress = function() {
   for (let i = 0, workspace; (workspace = workspaces[i]); i++) {
     if (workspace.currentGesture_) {
       return true;
+    }
+  }
+  return false;
+};
+
+/* Scratch-specific */
+
+/**
+ * Don't even think about using this function before talking to rachel-fenichel.
+ *
+ * Force a drag to start without clicking and dragging the block itself.  Used
+ * to attach duplicated blocks to the mouse pointer.
+ * @param {!Object} fakeEvent An object with the properties needed to start a
+ *     drag, including clientX and clientY.
+ * @param {!Blockly.BlockSvg} block The block to start dragging.
+ * @package
+ */
+Gesture.prototype.forceStartBlockDrag = function(fakeEvent, block) {
+  this.handleBlockStart(fakeEvent, block);
+  this.handleWsStart(fakeEvent, block.workspace);
+  this.isDraggingBlock_ = true;
+  this.hasExceededDragRadius_ = true;
+  this.startDraggingBlock_();
+};
+
+/**
+ * Duplicate the target block and start dragging the duplicated block.
+ * This should be done once we are sure that it is a block drag, and no earlier.
+ * Specifically for argument reporters in custom block defintions.
+ * @private
+ */
+Gesture.prototype.duplicateOnDrag_ = function() {
+  let newBlock = null;
+  Blockly.Events.disable();
+  try {
+    // Note: targetBlock_ should have no children.  If it has children we would
+    // need to update shadow block IDs to avoid problems in the VM.
+    // Resizes will be reenabled at the end of the drag.
+    this.startWorkspace_.setResizesEnabled(false);
+    let xmlBlock = Blockly.Xml.blockToDom(this.targetBlock_);
+    if (xmlBlock.getAttribute('type') == 'variables_get_reporter') {
+      // pxtblockly: special case, convert into a variable_get block with the same id
+      const xmlBlockField = xmlBlock.firstChild;
+      if (!xmlBlockField) {
+        throw "unable to create a variable_get block from a variables_get_reporter" +
+        " block, block has no VAR field";
+      }
+      const newVariableBlock = document.createElement('block');
+      newVariableBlock.setAttribute('type', 'variables_get');
+      const newVariableField = document.createElement('field');
+      newVariableField.setAttribute('name', xmlBlockField.getAttribute('name'));
+      newVariableField.setAttribute('id', xmlBlockField.getAttribute('id'));
+      newVariableField.textContent = xmlBlockField.textContent;
+      newVariableBlock.appendChild(newVariableField);
+      xmlBlock = newVariableBlock;
+    }
+    if (this.targetBlock_.inputList[0] &&
+        this.targetBlock_.inputList[0].fieldRow[0] &&
+        this.targetBlock_.inputList[0].fieldRow[0].clearHover) {
+      this.targetBlock_.inputList[0].fieldRow[0].clearHover();
+    }
+    newBlock = Blockly.Xml.domToBlock(xmlBlock, this.startWorkspace_);
+
+    // Move the duplicate to original position.
+    const xy = this.targetBlock_.getRelativeToSurfaceXY();
+    newBlock.moveBy(xy.x, xy.y);
+    newBlock.setShadow(false);
+    newBlock.setMovable(true);
+  } finally {
+    Blockly.Events.enable();
+  }
+  if (!newBlock) {
+    // Something went wrong.
+    console.error('Something went wrong while duplicating a block.');
+    return;
+  }
+  if (Blockly.Events.isEnabled()) {
+    Blockly.Events.fire(new Blockly.Events.BlockCreate(newBlock));
+  }
+  newBlock.select();
+  this.targetBlock_ = newBlock;
+};
+
+
+// todo: move it out of here
+/**
+ * Whitelist of blocks whose shadow blocks duplicate on drag
+ */
+Gesture._duplicateOnDragWhitelist = null;
+
+/**
+ * Measure some text using a canvas in-memory.
+ * Does not exist in Blockly, but needed in scratch-blocks
+ * @param {string} fontSize E.g., '10pt'
+ * @param {string} fontFamily E.g., 'Arial'
+ * @param {string} fontWeight E.g., '600'
+ * @param {string} text The actual text to measure
+ * @return {number} Width of the text in px.
+ * @package
+ */
+Gesture.measureText = function(fontSize, fontFamily,
+                                               fontWeight, text) {
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
+  context.font = fontWeight + ' ' + fontSize + ' ' + fontFamily;
+  return context.measureText(text).width;
+};
+
+/**
+ * Whether a block is both a shadow block and an argument reporter.  These
+ * blocks have special behaviour in scratch-blocks: they're duplicated when
+ * dragged, and they are rendered slightly differently from normal shadow
+ * blocks.
+ * @param {!Blockly.BlockSvg} block The block that should be used to make this
+ *     decision.
+ * @return {boolean} True if the block should be duplicated on drag.
+ * @package
+ */
+Gesture.isShadowArgumentReporter = function(block) {
+  return block.isShadow() &&
+      (block.type === 'variables_get_reporter' ||
+          block.type === 'argument_reporter_boolean' ||
+          block.type === 'argument_reporter_number' ||
+          block.type === 'argument_reporter_string' ||
+          block.type === 'argument_reporter_array' ||
+          block.type === 'argument_reporter_custom' ||
+          (Gesture._duplicateOnDragWhitelist &&
+              Gesture._duplicateOnDragWhitelist.indexOf(block.type) !== -1));
+};
+
+/**
+ * Whether a block is a function argument reporter.
+ * @param {!Blockly.BlockSvg} block The block that should be used to make this
+ *     decision.
+ * @return {boolean} True if the block is a function argument reporter.
+ */
+Gesture.isFunctionArgumentReporter = function(block) {
+  return block.type == 'argument_reporter_boolean' ||
+      block.type == 'argument_reporter_number' ||
+      block.type == 'argument_reporter_string' ||
+      block.type == 'argument_reporter_array' ||
+      block.type == 'argument_reporter_custom';
+};
+
+/**
+ * Sets a whitelist of blocks whose shadow blocks duplicate on drag (in addition
+ * to argument reporter blocks).
+ * @param {Array<string>} blockTypes a list of block
+ * @package
+ */
+Gesture.whitelistDraggableBlockTypes = function(blockTypes) {
+  Gesture._duplicateOnDragWhitelist = blockTypes.slice();
+};
+
+/**
+ * Finds and returns an argument reporter of the given name, argument type
+ * name, and reporter type on the given block, or null if none match.
+ * @param {!Blockly.Block} targetBlock The block to search.
+ * @param {!Blockly.Block} reporter The reporter to try to match.
+ * @return {boolean} Whether there is a matching reporter or not.
+ */
+Gesture.hasMatchingArgumentReporter = function(targetBlock, reporter) {
+  const argName = reporter.getFieldValue('VALUE');
+  const argTypeName = reporter.getTypeName();
+  for (let i = 0; i < targetBlock.inputList.length; ++i) {
+    const input = targetBlock.inputList[i];
+    if (input.type == Blockly.INPUT_VALUE) {
+      const potentialMatch = input.connection.targetBlock();
+      if (!potentialMatch || potentialMatch.type != reporter.type) {
+        continue;
+      }
+      const n = potentialMatch.getFieldValue('VALUE');
+      const tn = potentialMatch.getTypeName();
+      if (n == argName && argTypeName == tn) {
+        return true;
+      }
     }
   }
   return false;

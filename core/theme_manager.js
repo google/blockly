@@ -95,7 +95,8 @@ class ThemeManager {
     }
 
     // Refresh all subscribed workspaces.
-    for (let i = 0, workspace; (workspace = this.subscribedWorkspaces_[i]); i++) {
+    for (let i = 0, workspace; (workspace = this.subscribedWorkspaces_[i]);
+         i++) {
       workspace.refreshTheme();
     }
 
@@ -132,7 +133,8 @@ class ThemeManager {
    */
   unsubscribeWorkspace(workspace) {
     if (!arrayUtils.removeElem(this.subscribedWorkspaces_, workspace)) {
-      throw Error('Cannot unsubscribe a workspace that hasn\'t been subscribed.');
+      throw Error(
+          'Cannot unsubscribe a workspace that hasn\'t been subscribed.');
     }
   }
 
@@ -197,13 +199,13 @@ class ThemeManager {
   }
 }
 
-  /**
-   * A Blockly UI component type.
-   * @typedef {{
-   *            element:!Element,
-   *            propertyName:string
-   *          }}
-   */
-  ThemeManager.Component;
+/**
+ * A Blockly UI component type.
+ * @typedef {{
+ *            element:!Element,
+ *            propertyName:string
+ *          }}
+ */
+ThemeManager.Component;
 
 exports.ThemeManager = ThemeManager;

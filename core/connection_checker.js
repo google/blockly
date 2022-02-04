@@ -43,15 +43,14 @@ class ConnectionChecker {
    * connection.
    * @param {Connection} a Connection to check compatibility with.
    * @param {Connection} b Connection to check compatibility with.
-   * @param {boolean} isDragging True if the connection is being made by dragging
-   *     a block.
+   * @param {boolean} isDragging True if the connection is being made by
+   *     dragging a block.
    * @param {number=} opt_distance The max allowable distance between the
    *     connections for drag checks.
    * @return {boolean} Whether the connection is legal.
    * @public
    */
-  canConnect(
-      a, b, isDragging, opt_distance) {
+  canConnect(a, b, isDragging, opt_distance) {
     return this.canConnectWithReason(a, b, isDragging, opt_distance) ===
         Connection.CAN_CONNECT;
   }
@@ -61,16 +60,15 @@ class ConnectionChecker {
    * connection, and return an error code if there are problems.
    * @param {Connection} a Connection to check compatibility with.
    * @param {Connection} b Connection to check compatibility with.
-   * @param {boolean} isDragging True if the connection is being made by dragging
-   *     a block.
+   * @param {boolean} isDragging True if the connection is being made by
+   *     dragging a block.
    * @param {number=} opt_distance The max allowable distance between the
    *     connections for drag checks.
    * @return {number} Connection.CAN_CONNECT if the connection is legal,
    *    an error code otherwise.
    * @public
    */
-  canConnectWithReason(
-      a, b, isDragging, opt_distance) {
+  canConnectWithReason(a, b, isDragging, opt_distance) {
     const safety = this.doSafetyChecks(a, b);
     if (safety !== Connection.CAN_CONNECT) {
       return safety;
@@ -214,7 +212,8 @@ class ConnectionChecker {
    * Check whether this connection can be made by dragging.
    * @param {!RenderedConnection} a Connection to compare.
    * @param {!RenderedConnection} b Connection to compare against.
-   * @param {number} distance The maximum allowable distance between connections.
+   * @param {number} distance The maximum allowable distance between
+   *     connections.
    * @return {boolean} True if the connection is allowed during a drag.
    * @public
    */
@@ -251,10 +250,10 @@ class ConnectionChecker {
         break;
       }
       case ConnectionType.NEXT_STATEMENT: {
-        // Don't let a block with no next connection bump other blocks out of the
-        // stack.  But covering up a shadow block or stack of shadow blocks is
-        // fine.  Similarly, replacing a terminal statement with another terminal
-        // statement is allowed.
+        // Don't let a block with no next connection bump other blocks out of
+        // the stack.  But covering up a shadow block or stack of shadow blocks
+        // is fine.  Similarly, replacing a terminal statement with another
+        // terminal statement is allowed.
         if (b.isConnected() && !a.getSourceBlock().nextConnection &&
             !b.targetBlock().isShadow() && b.targetBlock().nextConnection) {
           return false;

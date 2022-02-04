@@ -132,11 +132,10 @@ class Comment extends Icon {
   drawIcon_(group) {
     // Circle.
     dom.createSvgElement(
-        Svg.CIRCLE, {'class': 'blocklyIconShape', 'r': '8', 'cx': '8', 'cy': '8'},
-        group);
-    // Can't use a real '?' text character since different browsers and operating
-    // systems render it differently.
-    // Body of question mark.
+        Svg.CIRCLE,
+        {'class': 'blocklyIconShape', 'r': '8', 'cx': '8', 'cy': '8'}, group);
+    // Can't use a real '?' text character since different browsers and
+    // operating systems render it differently. Body of question mark.
     dom.createSvgElement(
         Svg.PATH, {
           'class': 'blocklyIconSymbol',
@@ -375,8 +374,8 @@ class Comment extends Icon {
    */
   startEdit_(_e) {
     if (this.bubble_.promote()) {
-      // Since the act of moving this node within the DOM causes a loss of focus,
-      // we need to reapply the focus.
+      // Since the act of moving this node within the DOM causes a loss of
+      // focus, we need to reapply the focus.
       this.textarea_.focus();
     }
 

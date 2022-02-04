@@ -75,7 +75,7 @@ class Debug {
      * @type {string}
      * @private
      */
-    this.randomColour_ = "";
+    this.randomColour_ = '';
   }
 
   /**
@@ -212,8 +212,8 @@ class Debug {
    * share the same colours, as do previous and next.  When positioned correctly
    * a connected pair will look like a bullseye.
    * @param {RenderedConnection} conn The connection to circle.
-   * @suppress {visibility} Suppress visibility of conn.offsetInBlock_ since this
-   *     is a debug module.
+   * @suppress {visibility} Suppress visibility of conn.offsetInBlock_ since
+   * this is a debug module.
    * @package
    */
   drawConnection(conn) {
@@ -379,7 +379,8 @@ class Debug {
     this.clearElems();
     this.svgRoot_ = block.getSvgRoot();
 
-    this.randomColour_ = '#' + Math.floor(Math.random() * 16777215).toString(16);
+    this.randomColour_ =
+        '#' + Math.floor(Math.random() * 16777215).toString(16);
 
     let cursorY = 0;
     for (let i = 0; i < info.rows.length; i++) {
@@ -401,8 +402,9 @@ class Debug {
     if (block.outputConnection) {
       this.drawConnection(block.outputConnection);
     }
-    /** TODO: Find a better way to do this check without pulling in all of zelos,
-     * or just delete this line or the whole debug renderer.
+    /**
+     * TODO: Find a better way to do this check without pulling in all of
+     * zelos, or just delete this line or the whole debug renderer.
      */
     const maybeZelosInfo = /** @type {!ZelosInfo} */ (info);
     if (maybeZelosInfo.rightSide) {
@@ -423,7 +425,8 @@ class Debug {
     if (!Debug.config.render) {
       return;
     }
-    svgPath.setAttribute('filter', 'url(#' + this.constants_.debugFilterId + ')');
+    svgPath.setAttribute(
+        'filter', 'url(#' + this.constants_.debugFilterId + ')');
     setTimeout(function() {
       svgPath.setAttribute('filter', '');
     }, 100);

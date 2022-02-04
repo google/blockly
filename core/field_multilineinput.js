@@ -34,7 +34,8 @@ const {Svg} = goog.require('Blockly.utils.Svg');
  */
 class FieldMultilineInput extends FieldTextInput {
   /**
-   * @param {string=} opt_value The initial content of the field. Should cast to a
+   * @param {string=} opt_value The initial content of the field. Should cast to
+   *     a
    *    string. Defaults to an empty string if null or undefined.
    * @param {Function=} opt_validator An optional function that is called
    *     to validate any constraints on what the user entered.  Takes the new
@@ -103,8 +104,8 @@ class FieldMultilineInput extends FieldTextInput {
   toXml(fieldElement) {
     // Replace '\n' characters with HTML-escaped equivalent '&#10'. This is
     // needed so the plain-text representation of the XML produced by
-    // `Blockly.Xml.domToText` will appear on a single line (this is a limitation
-    // of the plain-text format).
+    // `Blockly.Xml.domToText` will appear on a single line (this is a
+    // limitation of the plain-text format).
     fieldElement.textContent = this.getValue().replace(/\n/g, '&#10;');
     return fieldElement;
   }
@@ -135,7 +136,8 @@ class FieldMultilineInput extends FieldTextInput {
 
   /**
    * Sets the field's value based on the given state.
-   * @param {*} state The state of the variable to assign to this variable field.
+   * @param {*} state The state of the variable to assign to this variable
+   *     field.
    * @override
    * @package
    */
@@ -160,8 +162,8 @@ class FieldMultilineInput extends FieldTextInput {
   }
 
   /**
-   * Get the text from this field as displayed on screen.  May differ from getText
-   * due to ellipsis, and other formatting.
+   * Get the text from this field as displayed on screen.  May differ from
+   * getText due to ellipsis, and other formatting.
    * @return {string} Currently displayed text.
    * @protected
    * @override
@@ -184,7 +186,8 @@ class FieldMultilineInput extends FieldTextInput {
       } else if (this.isOverflowedY_ && i === displayLinesNumber - 1) {
         text = text.substring(0, text.length - 3) + '...';
       }
-      // Replace whitespace with non-breaking spaces so the text doesn't collapse.
+      // Replace whitespace with non-breaking spaces so the text doesn't
+      // collapse.
       text = text.replace(/\s/g, Field.NBSP);
 
       textLines += text;
@@ -336,8 +339,8 @@ class FieldMultilineInput extends FieldTextInput {
    * Show the inline free-text editor on top of the text.
    * Overrides the default behaviour to force rerender in order to
    * correct block size, based on editor text.
-   * @param {Event=} _opt_e Optional mouse event that triggered the field to open,
-   *     or undefined if triggered programmatically.
+   * @param {Event=} _opt_e Optional mouse event that triggered the field to
+   *     open, or undefined if triggered programmatically.
    * @param {boolean=} opt_quietInput True if editor should be created without
    *     focus.  Defaults to false.
    * @override
@@ -366,9 +369,10 @@ class FieldMultilineInput extends FieldTextInput {
     const borderRadius = (FieldTextInput.BORDERRADIUS * scale) + 'px';
     htmlInput.style.borderRadius = borderRadius;
     const paddingX = this.getConstants().FIELD_BORDER_RECT_X_PADDING * scale;
-    const paddingY = this.getConstants().FIELD_BORDER_RECT_Y_PADDING * scale / 2;
-    htmlInput.style.padding =
-        paddingY + 'px ' + paddingX + 'px ' + paddingY + 'px ' + paddingX + 'px';
+    const paddingY =
+        this.getConstants().FIELD_BORDER_RECT_Y_PADDING * scale / 2;
+    htmlInput.style.padding = paddingY + 'px ' + paddingX + 'px ' + paddingY +
+        'px ' + paddingX + 'px';
     const lineHeight = this.getConstants().FIELD_TEXT_HEIGHT +
         this.getConstants().FIELD_BORDER_RECT_Y_PADDING;
     htmlInput.style.lineHeight = (lineHeight * scale) + 'px';

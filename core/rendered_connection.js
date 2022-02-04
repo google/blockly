@@ -53,7 +53,8 @@ class RenderedConnection extends Connection {
     super(source, type);
 
     /**
-     * Connection database for connections of this type on the current workspace.
+     * Connection database for connections of this type on the current
+     * workspace.
      * @const {!ConnectionDB}
      * @private
      */
@@ -66,7 +67,8 @@ class RenderedConnection extends Connection {
      * @private
      */
     this.dbOpposite_ =
-        source.workspace.connectionDBList[internalConstants.OPPOSITE_TYPE[type]];
+        source.workspace
+            .connectionDBList[internalConstants.OPPOSITE_TYPE[type]];
 
     /**
      * Workspace units, (0, 0) is top left of block.
@@ -212,8 +214,8 @@ class RenderedConnection extends Connection {
   }
 
   /**
-   * Move this connection to the location given by its offset within the block and
-   * the location of the block's top left corner.
+   * Move this connection to the location given by its offset within the block
+   * and the location of the block's top left corner.
    * @param {!Coordinate} blockTL The location of the top left
    *     corner of the block, in workspace coordinates.
    */
@@ -282,7 +284,8 @@ class RenderedConnection extends Connection {
   highlight() {
     let steps;
     const sourceBlockSvg = /** @type {!BlockSvg} */ (this.sourceBlock_);
-    const renderConstants = sourceBlockSvg.workspace.getRenderer().getConstants();
+    const renderConstants =
+        sourceBlockSvg.workspace.getRenderer().getConstants();
     const shape = renderConstants.shapeFor(this);
     if (this.type === ConnectionType.INPUT_VALUE ||
         this.type === ConnectionType.OUTPUT_VALUE) {
@@ -320,7 +323,8 @@ class RenderedConnection extends Connection {
 
   /**
    * Set whether this connections is tracked in the database or not.
-   * @param {boolean} doTracking If true, start tracking. If false, stop tracking.
+   * @param {boolean} doTracking If true, start tracking. If false, stop
+   *     tracking.
    * @package
    */
   setTracking(doTracking) {
@@ -362,7 +366,8 @@ class RenderedConnection extends Connection {
         // Stop tracking connections of all children.
         const connections = block.getConnections_(true);
         for (let j = 0; j < connections.length; j++) {
-          /** @type {!RenderedConnection} */(connections[j]).setTracking(false);
+          /** @type {!RenderedConnection} */ (connections[j])
+              .setTracking(false);
         }
         // Close all bubbles of all children.
         const icons = block.getIcons();
@@ -375,7 +380,8 @@ class RenderedConnection extends Connection {
 
   /**
    * Start tracking this connection, as well as all down-stream connections on
-   * any block attached to this connection. This happens when a block is expanded.
+   * any block attached to this connection. This happens when a block is
+   * expanded.
    * @return {!Array<!Block>} List of blocks to render.
    */
   startTrackingAll() {

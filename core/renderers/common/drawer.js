@@ -90,7 +90,8 @@ class Drawer {
   /**
    * Save sizing information back to the block
    * Most of the rendering information can be thrown away at the end of the
-   * render. Anything that needs to be kept around should be set in this function.
+   * render. Anything that needs to be kept around should be set in this
+   * function.
    * @protected
    */
   recordSizeOnBlock_() {
@@ -187,7 +188,8 @@ class Drawer {
         input.shape.pathDown;
 
     this.outlinePath_ += svgPaths.lineOnAxis('H', input.xPos + input.width) +
-        pathDown + svgPaths.lineOnAxis('v', row.height - input.connectionHeight);
+        pathDown +
+        svgPaths.lineOnAxis('v', row.height - input.connectionHeight);
   }
 
   /**
@@ -205,7 +207,8 @@ class Drawer {
             'h', -(input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
         this.constants_.INSIDE_CORNERS.pathTop;
 
-    const innerHeight = row.height - (2 * this.constants_.INSIDE_CORNERS.height);
+    const innerHeight =
+        row.height - (2 * this.constants_.INSIDE_CORNERS.height);
 
     this.outlinePath_ += svgPaths.lineOnAxis('H', x) + innerTopLeftCorner +
         svgPaths.lineOnAxis('v', innerHeight) +
@@ -282,8 +285,8 @@ class Drawer {
   }
 
   /**
-   * Draw the internals of the block: inline inputs, fields, and icons.  These do
-   * not depend on the outer path for placement.
+   * Draw the internals of the block: inline inputs, fields, and icons.  These
+   * do not depend on the outer path for placement.
    * @protected
    */
   drawInternals_() {
@@ -327,7 +330,8 @@ class Drawer {
     }
     if (Types.isIcon(fieldInfo)) {
       svgGroup.setAttribute('display', 'block');
-      svgGroup.setAttribute('transform', 'translate(' + xPos + ',' + yPos + ')');
+      svgGroup.setAttribute(
+          'transform', 'translate(' + xPos + ',' + yPos + ')');
       fieldInfo.icon.computeIconLocation();
     } else {
       svgGroup.setAttribute(
@@ -367,8 +371,8 @@ class Drawer {
 
   /**
    * Position the connection on an inline value input, taking into account
-   * RTL and the small gap between the parent block and child block which lets the
-   * parent block's dark path show through.
+   * RTL and the small gap between the parent block and child block which lets
+   * the parent block's dark path show through.
    * @param {InlineInput} input The information about
    * the input that the connection is on.
    * @protected
@@ -389,8 +393,8 @@ class Drawer {
 
   /**
    * Position the connection on a statement input, taking into account
-   * RTL and the small gap between the parent block and child block which lets the
-   * parent block's dark path show through.
+   * RTL and the small gap between the parent block and child block which lets
+   * the parent block's dark path show through.
    * @param {!Row} row The row that the connection is on.
    * @protected
    */
@@ -407,8 +411,8 @@ class Drawer {
 
   /**
    * Position the connection on an external value input, taking into account
-   * RTL and the small gap between the parent block and child block which lets the
-   * parent block's dark path show through.
+   * RTL and the small gap between the parent block and child block which lets
+   * the parent block's dark path show through.
    * @param {!Row} row The row that the connection is on.
    * @protected
    */
@@ -457,7 +461,8 @@ class Drawer {
    */
   positionOutputConnection_() {
     if (this.info_.outputConnection) {
-      const x = this.info_.startX + this.info_.outputConnection.connectionOffsetX;
+      const x =
+          this.info_.startX + this.info_.outputConnection.connectionOffsetX;
       const connX = this.info_.RTL ? -x : x;
       this.block_.outputConnection.setOffsetInBlock(
           connX, this.info_.outputConnection.connectionOffsetY);

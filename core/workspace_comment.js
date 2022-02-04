@@ -61,14 +61,16 @@ class WorkspaceComment {
     this.xy_ = new Coordinate(0, 0);
 
     /**
-     * The comment's height in workspace units.  Scale does not change this value.
+     * The comment's height in workspace units.  Scale does not change this
+     * value.
      * @type {number}
      * @protected
      */
     this.height_ = height;
 
     /**
-     * The comment's width in workspace units.  Scale does not change this value.
+     * The comment's width in workspace units.  Scale does not change this
+     * value.
      * @type {number}
      * @protected
      */
@@ -230,7 +232,8 @@ class WorkspaceComment {
    * @package
    */
   isMovable() {
-    return this.movable_ && !(this.workspace && this.workspace.options.readOnly);
+    return this.movable_ &&
+        !(this.workspace && this.workspace.options.readOnly);
   }
 
   /**
@@ -247,7 +250,8 @@ class WorkspaceComment {
    * @return {boolean} True if editable.
    */
   isEditable() {
-    return this.editable_ && !(this.workspace && this.workspace.options.readOnly);
+    return this.editable_ &&
+        !(this.workspace && this.workspace.options.readOnly);
   }
 
   /**
@@ -313,7 +317,8 @@ class WorkspaceComment {
   }
 
   /**
-   * Fire a create event for the given workspace comment, if comments are enabled.
+   * Fire a create event for the given workspace comment, if comments are
+   * enabled.
    * @param {!WorkspaceComment} comment The comment that was just created.
    * @package
    */
@@ -324,7 +329,8 @@ class WorkspaceComment {
         eventUtils.setGroup(true);
       }
       try {
-        eventUtils.fire(new (eventUtils.get(eventUtils.COMMENT_CREATE))(comment));
+        eventUtils.fire(
+            new (eventUtils.get(eventUtils.COMMENT_CREATE))(comment));
       } finally {
         if (!existingGroup) {
           eventUtils.setGroup(false);

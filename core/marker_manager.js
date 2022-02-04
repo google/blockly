@@ -78,8 +78,8 @@ class MarkerManager {
     if (this.markers_[id]) {
       this.unregisterMarker(id);
     }
-    marker.setDrawer(
-        this.workspace_.getRenderer().makeMarkerDrawer(this.workspace_, marker));
+    marker.setDrawer(this.workspace_.getRenderer().makeMarkerDrawer(
+        this.workspace_, marker));
     this.setMarkerSvg(marker.getDrawer().createDom());
     this.markers_[id] = marker;
   }
@@ -119,7 +119,8 @@ class MarkerManager {
   }
 
   /**
-   * Sets the cursor and initializes the drawer for use with keyboard navigation.
+   * Sets the cursor and initializes the drawer for use with keyboard
+   * navigation.
    * @param {Cursor} cursor The cursor used to move around this workspace.
    */
   setCursor(cursor) {
@@ -137,8 +138,8 @@ class MarkerManager {
 
   /**
    * Add the cursor SVG to this workspace SVG group.
-   * @param {?SVGElement} cursorSvg The SVG root of the cursor to be added to the
-   *     workspace SVG group.
+   * @param {?SVGElement} cursorSvg The SVG root of the cursor to be added to
+   *     the workspace SVG group.
    * @package
    */
   setCursorSvg(cursorSvg) {
@@ -153,8 +154,8 @@ class MarkerManager {
 
   /**
    * Add the marker SVG to this workspaces SVG group.
-   * @param {?SVGElement} markerSvg The SVG root of the marker to be added to the
-   *     workspace SVG group.
+   * @param {?SVGElement} markerSvg The SVG root of the marker to be added to
+   *     the workspace SVG group.
    * @package
    */
   setMarkerSvg(markerSvg) {
@@ -165,7 +166,8 @@ class MarkerManager {
 
     if (this.workspace_.getBlockCanvas()) {
       if (this.cursorSvg_) {
-        this.workspace_.getBlockCanvas().insertBefore(markerSvg, this.cursorSvg_);
+        this.workspace_.getBlockCanvas().insertBefore(
+            markerSvg, this.cursorSvg_);
       } else {
         this.workspace_.getBlockCanvas().appendChild(markerSvg);
       }

@@ -94,8 +94,8 @@ class RenderInfo {
             /** @type {!RenderedConnection} */ (block.outputConnection));
 
     /**
-     * Whether the block should be rendered as a single line, either because it's
-     * inline or because it has been collapsed.
+     * Whether the block should be rendered as a single line, either because
+     * it's inline or because it has been collapsed.
      * @type {boolean}
      */
     this.isInline = block.getInputsInline() && !block.isCollapsed();
@@ -132,8 +132,8 @@ class RenderInfo {
     this.widthWithChildren = 0;
 
     /**
-     * The width of the rendered block, excluding child blocks.  This is the right
-     * edge of the block when rendered LTR.
+     * The width of the rendered block, excluding child blocks.  This is the
+     * right edge of the block when rendered LTR.
      * @type {number}
      */
     this.width = 0;
@@ -274,8 +274,9 @@ class RenderInfo {
                                       this.constants_.ADD_START_HATS) &&
         !this.outputConnection && !hasPrevious;
 
-    let cornerClass =
-        this.topRow.hasLeftSquareCorner(this.block_) ? SquareCorner : RoundCorner;
+    let cornerClass = this.topRow.hasLeftSquareCorner(this.block_) ?
+        SquareCorner :
+        RoundCorner;
     this.topRow.elements.push(new cornerClass(this.constants_));
 
     if (hasHat) {
@@ -353,8 +354,8 @@ class RenderInfo {
   }
 
   /**
-   * Add an input element to the active row, if needed, and record the type of the
-   * input on the row.
+   * Add an input element to the active row, if needed, and record the type of
+   * the input on the row.
    * @param {!Input} input The input to record information about.
    * @param {!Row} activeRow The row that is currently being
    *     populated.
@@ -372,8 +373,8 @@ class RenderInfo {
       activeRow.elements.push(new ExternalValueInput(this.constants_, input));
       activeRow.hasExternalInput = true;
     } else if (input.type === inputTypes.DUMMY) {
-      // Dummy inputs have no visual representation, but the information is still
-      // important.
+      // Dummy inputs have no visual representation, but the information is
+      // still important.
       activeRow.minHeight = Math.max(
           activeRow.minHeight,
           input.getSourceBlock() && input.getSourceBlock().isShadow() ?
@@ -445,8 +446,8 @@ class RenderInfo {
 
   /**
    * Calculate the width of a spacer element in a row based on the previous and
-   * next elements in that row.  For instance, extra padding is added between two
-   * editable fields.
+   * next elements in that row.  For instance, extra padding is added between
+   * two editable fields.
    * @param {Measurable} prev The element before the
    *     spacer.
    * @param {Measurable} next The element after the spacer.
@@ -503,7 +504,8 @@ class RenderInfo {
       if (row.hasStatement) {
         const statementInput = row.getLastInput();
         const innerWidth = row.width - statementInput.width;
-        widestStatementRowFields = Math.max(widestStatementRowFields, innerWidth);
+        widestStatementRowFields =
+            Math.max(widestStatementRowFields, innerWidth);
       }
       widestRowWithConnectedBlocks =
           Math.max(widestRowWithConnectedBlocks, row.widthWithConnectedBlocks);
@@ -661,7 +663,8 @@ class RenderInfo {
    * Calculate the width of a spacer row.
    * @param {!Row} _prev The row before the spacer.
    * @param {!Row} _next The row after the spacer.
-   * @return {number} The desired width of the spacer row between these two rows.
+   * @return {number} The desired width of the spacer row between these two
+   *     rows.
    * @protected
    */
   getSpacerRowWidth_(_prev, _next) {
@@ -672,7 +675,8 @@ class RenderInfo {
    * Calculate the height of a spacer row.
    * @param {!Row} _prev The row before the spacer.
    * @param {!Row} _next The row after the spacer.
-   * @return {number} The desired height of the spacer row between these two rows.
+   * @return {number} The desired height of the spacer row between these two
+   *     rows.
    * @protected
    */
   getSpacerRowHeight_(_prev, _next) {

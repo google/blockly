@@ -70,9 +70,8 @@ class Warning extends Icon {
           'd': 'M2,15Q-1,15 0.5,12L6.5,1.7Q8,-1 9.5,1.7L15.5,12Q17,15 14,15z',
         },
         group);
-    // Can't use a real '!' text character since different browsers and operating
-    // systems render it differently.
-    // Body of exclamation point.
+    // Can't use a real '!' text character since different browsers and
+    // operating systems render it differently. Body of exclamation point.
     dom.createSvgElement(
         Svg.PATH, {
           'class': 'blocklyIconSymbol',

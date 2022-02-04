@@ -94,7 +94,8 @@ class Icon {
         dom.createSvgElement(Svg.G, {'class': 'blocklyIconGroup'}, null);
     if (this.block_.isInFlyout) {
       dom.addClass(
-          /** @type {!Element} */ (this.iconGroup_), 'blocklyIconGroupReadonly');
+          /** @type {!Element} */ (this.iconGroup_),
+          'blocklyIconGroupReadonly');
     }
     this.drawIcon_(this.iconGroup_);
 

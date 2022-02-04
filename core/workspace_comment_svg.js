@@ -85,8 +85,7 @@ class WorkspaceCommentSvg extends WorkspaceComment {
    *     create a new ID.
    * @alias Blockly.WorkspaceCommentSvg
    */
-  constructor(
-      workspace, content, height, width, opt_id) {
+  constructor(workspace, content, height, width, opt_id) {
     super(workspace, content, height, width, opt_id);
     /**
      * @type {!WorkspaceSvg}
@@ -174,7 +173,7 @@ class WorkspaceCommentSvg extends WorkspaceComment {
      * @private
      */
     this.svgGroup_ =
-    dom.createSvgElement(Svg.G, {'class': 'blocklyComment'}, null);
+        dom.createSvgElement(Svg.G, {'class': 'blocklyComment'}, null);
     this.svgGroup_.translate_ = '';
 
     this.svgRect_ = dom.createSvgElement(Svg.RECT, {
@@ -247,7 +246,8 @@ class WorkspaceCommentSvg extends WorkspaceComment {
     }
     if (!this.workspace.options.readOnly && !this.eventsInit_) {
       browserEvents.conditionalBind(
-          /** @type {!SVGRectElement} */ (this.svgRectTarget_), 'mousedown', this, this.pathMouseDown_);
+          /** @type {!SVGRectElement} */ (this.svgRectTarget_), 'mousedown',
+          this, this.pathMouseDown_);
       browserEvents.conditionalBind(
           /** @type {!SVGRectElement} */ (this.svgHandleTarget_), 'mousedown',
           this, this.pathMouseDown_);
@@ -405,7 +405,8 @@ class WorkspaceCommentSvg extends WorkspaceComment {
         // If this element is the current element on the drag surface, include
         // the translation of the drag surface itself.
         if (this.useDragSurface_ &&
-            this.workspace.getBlockDragSurface().getCurrentBlock() === element) {
+            this.workspace.getBlockDragSurface().getCurrentBlock() ===
+                element) {
           const surfaceTranslation =
               this.workspace.getBlockDragSurface().getSurfaceTranslation();
           x += surfaceTranslation.x;
@@ -445,7 +446,8 @@ class WorkspaceCommentSvg extends WorkspaceComment {
    */
   translate(x, y) {
     this.xy_ = new Coordinate(x, y);
-    this.getSvgRoot().setAttribute('transform', 'translate(' + x + ',' + y + ')');
+    this.getSvgRoot().setAttribute(
+        'transform', 'translate(' + x + ',' + y + ')');
   }
 
   /**
@@ -482,7 +484,8 @@ class WorkspaceCommentSvg extends WorkspaceComment {
     if (dragSurface) {
       dragSurface.translateSurface(newLoc.x, newLoc.y);
     } else {
-      this.svgGroup_.translate_ = 'translate(' + newLoc.x + ',' + newLoc.y + ')';
+      this.svgGroup_.translate_ =
+          'translate(' + newLoc.x + ',' + newLoc.y + ')';
       this.svgGroup_.setAttribute(
           'transform', this.svgGroup_.translate_ + this.svgGroup_.skew_);
     }
@@ -571,7 +574,8 @@ class WorkspaceCommentSvg extends WorkspaceComment {
   }
 
   /**
-   * Recursively adds or removes the dragging class to this node and its children.
+   * Recursively adds or removes the dragging class to this node and its
+   * children.
    * @param {boolean} adding True if adding, false if removing.
    * @package
    */
@@ -758,8 +762,8 @@ class WorkspaceCommentSvg extends WorkspaceComment {
    */
   createEditor_() {
     /* Create the editor.  Here's the markup that will be generated:
-      <foreignObject class="blocklyCommentForeignObject" x="0" y="10" width="164"
-      height="164"> <body xmlns="http://www.w3.org/1999/xhtml"
+      <foreignObject class="blocklyCommentForeignObject" x="0" y="10"
+      width="164" height="164"> <body xmlns="http://www.w3.org/1999/xhtml"
       class="blocklyMinimalBody"> <textarea xmlns="http://www.w3.org/1999/xhtml"
               class="blocklyCommentTextarea"
               style="height: 164px; width: 164px;"></textarea>
@@ -1004,7 +1008,8 @@ class WorkspaceCommentSvg extends WorkspaceComment {
     this.svgRectTarget_.setAttribute('width', width);
     this.svgRectTarget_.setAttribute('height', height);
     this.svgHandleTarget_.setAttribute('width', width);
-    this.svgHandleTarget_.setAttribute('height', WorkspaceCommentSvg.TOP_OFFSET);
+    this.svgHandleTarget_.setAttribute(
+        'height', WorkspaceCommentSvg.TOP_OFFSET);
     if (this.RTL) {
       this.svgRect_.setAttribute('transform', 'scale(-1 1)');
       this.svgRectTarget_.setAttribute('transform', 'scale(-1 1)');
@@ -1015,8 +1020,8 @@ class WorkspaceCommentSvg extends WorkspaceComment {
         // Mirror the resize group.
         this.resizeGroup_.setAttribute(
             'transform',
-            'translate(' + (-width + RESIZE_SIZE) + ',' + (height - RESIZE_SIZE) +
-                ') scale(-1 1)');
+            'translate(' + (-width + RESIZE_SIZE) + ',' +
+                (height - RESIZE_SIZE) + ') scale(-1 1)');
         this.deleteGroup_.setAttribute(
             'transform',
             'translate(' + (-width + RESIZE_SIZE) + ',' + (-RESIZE_SIZE) +
@@ -1024,8 +1029,8 @@ class WorkspaceCommentSvg extends WorkspaceComment {
       } else {
         this.resizeGroup_.setAttribute(
             'transform',
-            'translate(' + (width - RESIZE_SIZE) + ',' + (height - RESIZE_SIZE) +
-                ')');
+            'translate(' + (width - RESIZE_SIZE) + ',' +
+                (height - RESIZE_SIZE) + ')');
         this.deleteGroup_.setAttribute(
             'transform',
             'translate(' + (width - RESIZE_SIZE) + ',' + (-RESIZE_SIZE) + ')');
@@ -1062,8 +1067,12 @@ class WorkspaceCommentSvg extends WorkspaceComment {
       }
       comment.textarea_.focus();
       comment.addFocus();
-      dom.addClass(/** @type {!SVGRectElement} */ (comment.svgRectTarget_), 'blocklyCommentTargetFocused');
-      dom.addClass(/** @type {!SVGRectElement} */ (comment.svgHandleTarget_), 'blocklyCommentHandleTargetFocused');
+      dom.addClass(
+          /** @type {!SVGRectElement} */ (comment.svgRectTarget_),
+          'blocklyCommentTargetFocused');
+      dom.addClass(
+          /** @type {!SVGRectElement} */ (comment.svgHandleTarget_),
+          'blocklyCommentHandleTargetFocused');
     }, 0);
   }
 
@@ -1082,9 +1091,12 @@ class WorkspaceCommentSvg extends WorkspaceComment {
 
       comment.textarea_.blur();
       comment.removeFocus();
-      dom.removeClass(/** @type {!SVGRectElement} */ (comment.svgRectTarget_), 'blocklyCommentTargetFocused');
       dom.removeClass(
-          /** @type {!SVGRectElement} */ (comment.svgHandleTarget_), 'blocklyCommentHandleTargetFocused');
+          /** @type {!SVGRectElement} */ (comment.svgRectTarget_),
+          'blocklyCommentTargetFocused');
+      dom.removeClass(
+          /** @type {!SVGRectElement} */ (comment.svgHandleTarget_),
+          'blocklyCommentHandleTargetFocused');
     }, 0);
   }
 

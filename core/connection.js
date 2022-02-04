@@ -187,7 +187,8 @@ class Connection {
   }
 
   /**
-   * Does the connection belong to a superior block (higher in the source stack)?
+   * Does the connection belong to a superior block (higher in the source
+   * stack)?
    * @return {boolean} True if connection faces down or right.
    */
   isSuperior() {
@@ -214,8 +215,8 @@ class Connection {
   }
 
   /**
-   * Called when an attempted connection fails. NOP by default (i.e. for headless
-   * workspaces).
+   * Called when an attempted connection fails. NOP by default (i.e. for
+   * headless workspaces).
    * @param {!Connection} _otherConnection Connection that this connection
    *     failed to connect to.
    * @package
@@ -505,8 +506,8 @@ class Connection {
   /**
    * Returns the state of the shadowDom_ and shadowState_ properties, then
    * temporarily sets those properties to null so no shadow respawns.
-   * @return {{shadowDom: ?Element, shadowState: ?blocks.State}} The state of both
-   *     the shadowDom_ and shadowState_ properties.
+   * @return {{shadowDom: ?Element, shadowState: ?blocks.State}} The state of
+   *     both the shadowDom_ and shadowState_ properties.
    * @private
    */
   stashShadowState_() {
@@ -536,8 +537,7 @@ class Connection {
    *     connection to.
    * @private
    */
-  setShadowStateInternal_(
-      {shadowDom = null, shadowState = null} = {}) {
+  setShadowStateInternal_({shadowDom = null, shadowState = null} = {}) {
     // One or both of these should always be null.
     // If neither is null, the shadowState will get priority.
     this.shadowDom_ = shadowDom;
@@ -567,8 +567,8 @@ class Connection {
   /**
    * Creates a shadow block based on the current shadowState_ or shadowDom_.
    * shadowState_ gets priority.
-   * @param {boolean} attemptToConnect Whether to try to connect the shadow block
-   *     to this connection or not.
+   * @param {boolean} attemptToConnect Whether to try to connect the shadow
+   *     block to this connection or not.
    * @return {?Block} The shadow block that was created, or null if both the
    *     shadowState_ and shadowDom_ are null.
    * @private
@@ -642,8 +642,7 @@ class Connection {
    * @return {?Connection} The suitable connection point on the chain of
    *     blocks, or null.
    */
-  static getConnectionForOrphanedConnection(
-      startBlock, orphanConnection) {
+  static getConnectionForOrphanedConnection(startBlock, orphanConnection) {
     if (orphanConnection.type === ConnectionType.OUTPUT_VALUE) {
       return getConnectionForOrphanedOutput(
           startBlock, orphanConnection.getSourceBlock());

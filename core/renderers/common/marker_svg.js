@@ -290,8 +290,10 @@ class MarkerSvg {
     const markerOffset = this.constants_.CURSOR_BLOCK_PADDING;
 
     if (block.previousConnection) {
-      const connectionShape = this.constants_.shapeFor(block.previousConnection);
-      this.positionPrevious_(width, markerOffset, markerHeight, connectionShape);
+      const connectionShape =
+          this.constants_.shapeFor(block.previousConnection);
+      this.positionPrevious_(
+          width, markerOffset, markerHeight, connectionShape);
     } else if (block.outputConnection) {
       const connectionShape = this.constants_.shapeFor(block.outputConnection);
       this.positionOutput_(width, height, connectionShape);
@@ -415,7 +417,8 @@ class MarkerSvg {
     // Gets the height and width of entire stack.
     const heightWidth = block.getHeightWidth();
 
-    // Add padding so that being on a stack looks different than being on a block.
+    // Add padding so that being on a stack looks different than being on a
+    // block.
     const width = heightWidth.width + this.constants_.CURSOR_STACK_PADDING;
     const height = heightWidth.height + this.constants_.CURSOR_STACK_PADDING;
 
@@ -456,8 +459,7 @@ class MarkerSvg {
    * @param {number} markerHeight The height of the marker.
    * @protected
    */
-  positionBlock_(
-      width, markerOffset, markerHeight) {
+  positionBlock_(width, markerOffset, markerHeight) {
     const markerPath = svgPaths.moveBy(-markerOffset, markerHeight) +
         svgPaths.lineOnAxis('V', -markerOffset) +
         svgPaths.lineOnAxis('H', width + markerOffset * 2) +
@@ -532,13 +534,13 @@ class MarkerSvg {
    * Displays a half rectangle with a notch in the top to represent the previous
    * connection.
    * @param {number} width The width of the block.
-   * @param {number} markerOffset The offset of the marker from around the block.
+   * @param {number} markerOffset The offset of the marker from around the
+   *     block.
    * @param {number} markerHeight The height of the marker.
    * @param {!Object} connectionShape The shape object for the connection.
    * @protected
    */
-  positionPrevious_(
-      width, markerOffset, markerHeight, connectionShape) {
+  positionPrevious_(width, markerOffset, markerHeight, connectionShape) {
     const markerPath = svgPaths.moveBy(-markerOffset, markerHeight) +
         svgPaths.lineOnAxis('V', -markerOffset) +
         svgPaths.lineOnAxis('H', this.constants_.NOTCH_OFFSET_LEFT) +

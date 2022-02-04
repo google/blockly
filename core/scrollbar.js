@@ -46,8 +46,7 @@ class Scrollbar {
    * @param {number=} opt_margin The margin to apply to this scrollbar.
    * @alias Blockly.Scrollbar
    */
-  constructor(
-      workspace, horizontal, opt_pair, opt_class, opt_margin) {
+  constructor(workspace, horizontal, opt_pair, opt_class, opt_margin) {
     /**
      * The workspace this scrollbar is bound to.
      * @type {!WorkspaceSvg}
@@ -92,29 +91,28 @@ class Scrollbar {
     /**
      * The location of the origin of the workspace that the scrollbar is in,
      * measured in CSS pixels relative to the injection div origin.  This is
-     * usually (0, 0).  When the scrollbar is in a flyout it may have a different
-     * origin.
+     * usually (0, 0).  When the scrollbar is in a flyout it may have a
+     * different origin.
      * @type {Coordinate}
      * @private
      */
     this.origin_ = new Coordinate(0, 0);
 
     /**
-     * The position of the mouse along this scrollbar's major axis at the start of
-     * the most recent drag.
-     * Units are CSS pixels, with (0, 0) at the top left of the browser window.
-     * For a horizontal scrollbar this is the x coordinate of the mouse down
-     * event; for a vertical scrollbar it's the y coordinate of the mouse down
-     * event.
+     * The position of the mouse along this scrollbar's major axis at the start
+     * of the most recent drag. Units are CSS pixels, with (0, 0) at the top
+     * left of the browser window. For a horizontal scrollbar this is the x
+     * coordinate of the mouse down event; for a vertical scrollbar it's the y
+     * coordinate of the mouse down event.
      * @type {number}
      * @private
      */
     this.startDragMouse_ = 0;
 
     /**
-     * The length of the scrollbars (including the handle and the background), in
-     * CSS pixels. This is equivalent to scrollbar background length and the area
-     * within which the scrollbar handle can move.
+     * The length of the scrollbars (including the handle and the background),
+     * in CSS pixels. This is equivalent to scrollbar background length and the
+     * area within which the scrollbar handle can move.
      * @type {number}
      * @private
      */
@@ -242,7 +240,8 @@ class Scrollbar {
   /**
    * Constrain the handle's length within the minimum (0) and maximum
    * (scrollbar background) values allowed for the scrollbar.
-   * @param {number} value Value that is potentially out of bounds, in CSS pixels.
+   * @param {number} value Value that is potentially out of bounds, in CSS
+   *     pixels.
    * @return {number} Constrained value, in CSS pixels.
    * @private
    */
@@ -269,7 +268,8 @@ class Scrollbar {
   /**
    * Constrain the handle's position within the minimum (0) and maximum values
    * allowed for the scrollbar.
-   * @param {number} value Value that is potentially out of bounds, in CSS pixels.
+   * @param {number} value Value that is potentially out of bounds, in CSS
+   *     pixels.
    * @return {number} Constrained value, in CSS pixels.
    * @private
    */
@@ -310,7 +310,8 @@ class Scrollbar {
 
   /**
    * Set the position of the scrollbar's SVG group in CSS pixels relative to the
-   * scrollbar's origin.  This sets the scrollbar's location within the workspace.
+   * scrollbar's origin.  This sets the scrollbar's location within the
+   * workspace.
    * @param {number} x The new x coordinate.
    * @param {number} y The new y coordinate.
    * @package
@@ -392,8 +393,9 @@ class Scrollbar {
   }
 
   /**
-   * Recalculate a horizontal scrollbar's location on the screen and path length.
-   * This should be called when the layout or size of the window has changed.
+   * Recalculate a horizontal scrollbar's location on the screen and path
+   * length. This should be called when the layout or size of the window has
+   * changed.
    * @param {!Metrics} hostMetrics A data structure describing all
    *     the required dimensions, possibly fetched from the host object.
    */
@@ -410,7 +412,8 @@ class Scrollbar {
       xCoordinate += Scrollbar.scrollbarThickness;
     }
 
-    // Horizontal toolbar should always be just above the bottom of the workspace.
+    // Horizontal toolbar should always be just above the bottom of the
+    // workspace.
     const yCoordinate = hostMetrics.absoluteTop + hostMetrics.viewHeight -
         Scrollbar.scrollbarThickness - this.margin_;
     this.setPosition(xCoordinate, yCoordinate);
@@ -469,7 +472,8 @@ class Scrollbar {
     handleOffset = this.constrainHandlePosition_(handleOffset);
     this.setHandlePosition(handleOffset);
 
-    // Compute ratio (for use with set calls, which pass in content displacement).
+    // Compute ratio (for use with set calls, which pass in content
+    // displacement).
     this.ratio = maxHandleOffset / maxScrollDistance;
   }
 
@@ -509,8 +513,8 @@ class Scrollbar {
     const yCoordinate = hostMetrics.absoluteTop + this.margin_;
     this.setPosition(xCoordinate, yCoordinate);
 
-    // If the view has been resized, a content resize will also be necessary.  The
-    // reverse is not true.
+    // If the view has been resized, a content resize will also be necessary.
+    // The reverse is not true.
     this.resizeContentVertical(hostMetrics);
   }
 
@@ -539,8 +543,8 @@ class Scrollbar {
     }
 
     // Resize the handle.
-    let handleLength =
-        this.scrollbarLength_ * hostMetrics.viewHeight / hostMetrics.scrollHeight;
+    let handleLength = this.scrollbarLength_ * hostMetrics.viewHeight /
+        hostMetrics.scrollHeight;
     handleLength = this.constrainHandleLength_(handleLength);
     this.setHandleLength_(handleLength);
 
@@ -563,7 +567,8 @@ class Scrollbar {
     handleOffset = this.constrainHandlePosition_(handleOffset);
     this.setHandlePosition(handleOffset);
 
-    // Compute ratio (for use with set calls, which pass in content displacement).
+    // Compute ratio (for use with set calls, which pass in content
+    // displacement).
     this.ratio = maxHandleOffset / maxScrollDistance;
   }
 
@@ -593,7 +598,8 @@ class Scrollbar {
         Svg.RECT, {'class': 'blocklyScrollbarBackground'}, this.svgGroup_);
     const radius = Math.floor((Scrollbar.scrollbarThickness - 5) / 2);
     this.svgHandle_ = dom.createSvgElement(
-        Svg.RECT, {'class': 'blocklyScrollbarHandle', 'rx': radius, 'ry': radius},
+        Svg.RECT,
+        {'class': 'blocklyScrollbarHandle', 'rx': radius, 'ry': radius},
         this.svgGroup_);
     this.workspace_.getThemeManager().subscribe(
         this.svgHandle_, 'scrollbarColour', 'fill');
@@ -682,10 +688,12 @@ class Scrollbar {
       return;
     }
     const mouseXY = browserEvents.mouseToSvg(
-        e, this.workspace_.getParentSvg(), this.workspace_.getInverseScreenCTM());
+        e, this.workspace_.getParentSvg(),
+        this.workspace_.getInverseScreenCTM());
     const mouseLocation = this.horizontal_ ? mouseXY.x : mouseXY.y;
 
-    const handleXY = svgMath.getInjectionDivXY(/** @type {!Element} */ (this.svgHandle_));
+    const handleXY =
+        svgMath.getInjectionDivXY(/** @type {!Element} */ (this.svgHandle_));
     const handleStart = this.horizontal_ ? handleXY.x : handleXY.y;
     let handlePosition = this.handlePosition_;
 
@@ -795,8 +803,8 @@ class Scrollbar {
   }
 
   /**
-   * Updates workspace metrics based on new scroll ratio. Called when scrollbar is
-   * moved.
+   * Updates workspace metrics based on new scroll ratio. Called when scrollbar
+   * is moved.
    * @private
    */
   updateMetrics_() {
@@ -826,11 +834,13 @@ class Scrollbar {
 
   /**
    * Record the origin of the workspace that the scrollbar is in, in pixels
-   * relative to the injection div origin. This is for times when the scrollbar is
-   * used in an object whose origin isn't the same as the main workspace
+   * relative to the injection div origin. This is for times when the scrollbar
+   * is used in an object whose origin isn't the same as the main workspace
    * (e.g. in a flyout.)
-   * @param {number} x The x coordinate of the scrollbar's origin, in CSS pixels.
-   * @param {number} y The y coordinate of the scrollbar's origin, in CSS pixels.
+   * @param {number} x The x coordinate of the scrollbar's origin, in CSS
+   *     pixels.
+   * @param {number} y The y coordinate of the scrollbar's origin, in CSS
+   *     pixels.
    */
   setOrigin(x, y) {
     this.origin_ = new Coordinate(x, y);
@@ -848,7 +858,8 @@ class Scrollbar {
     return (
         first.viewWidth === second.viewWidth &&
         first.viewHeight === second.viewHeight &&
-        first.viewLeft === second.viewLeft && first.viewTop === second.viewTop &&
+        first.viewLeft === second.viewLeft &&
+        first.viewTop === second.viewTop &&
         first.absoluteTop === second.absoluteTop &&
         first.absoluteLeft === second.absoluteLeft &&
         first.scrollWidth === second.scrollWidth &&

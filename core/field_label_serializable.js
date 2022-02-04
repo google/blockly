@@ -41,7 +41,7 @@ class FieldLabelSerializable extends FieldLabel {
    * @alias Blockly.FieldLabelSerializable
    */
   constructor(opt_value, opt_class, opt_config) {
-    const stringValue = opt_value == undefined ? "" : String(opt_value);
+    const stringValue = opt_value == undefined ? '' : String(opt_value);
     super(stringValue, opt_class, opt_config);
 
     /**
@@ -71,8 +71,8 @@ class FieldLabelSerializable extends FieldLabel {
    */
   static fromJson(options) {
     const text = parsing.replaceMessageReferences(options['text']);
-    // `this` might be a subclass of FieldLabelSerializable if that class doesn't
-    // override the static fromJson method.
+    // `this` might be a subclass of FieldLabelSerializable if that class
+    // doesn't override the static fromJson method.
     return new this(text, undefined, options);
   }
 }

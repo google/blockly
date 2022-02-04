@@ -89,8 +89,8 @@ class Mutator extends Icon {
     this.svgDialog_ = null;
 
     /**
-     * The root block of the mutator workspace, created by decomposing the source
-     * block.
+     * The root block of the mutator workspace, created by decomposing the
+     * source block.
      * @type {?BlockSvg}
      * @private
      */
@@ -282,7 +282,8 @@ class Mutator extends Icon {
       width = -workspaceSize.x;
     }
     width += doubleBorderWidth * 3;
-    // Only resize if the size difference is significant.  Eliminates shuddering.
+    // Only resize if the size difference is significant.  Eliminates
+    // shuddering.
     if (Math.abs(this.workspaceWidth_ - width) > doubleBorderWidth ||
         Math.abs(this.workspaceHeight_ - height) > doubleBorderWidth) {
       // Record some layout information for workspace metrics.
@@ -482,8 +483,8 @@ class Mutator extends Icon {
         }, internalConstants.BUMP_DELAY);
       }
 
-      // Don't update the bubble until the drag has ended, to avoid moving blocks
-      // under the cursor.
+      // Don't update the bubble until the drag has ended, to avoid moving
+      // blocks under the cursor.
       if (!this.workspace_.isDragging()) {
         this.resizeBubble_();
       }
@@ -548,8 +549,8 @@ class Mutator extends Icon {
   }
 
   /**
-   * Get the parent workspace of a workspace that is inside a mutator, taking into
-   * account whether it is a flyout.
+   * Get the parent workspace of a workspace that is inside a mutator, taking
+   * into account whether it is a flyout.
    * @param {Workspace} workspace The workspace that is inside a mutator.
    * @return {?Workspace} The mutator's parent workspace or null.
    * @public

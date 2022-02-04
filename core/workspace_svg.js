@@ -129,8 +129,7 @@ class WorkspaceSvg extends Workspace {
    *     the workspace.
    * @alias Blockly.WorkspaceSvg
    */
-  constructor(
-      options, opt_blockDragSurface, opt_wsDragSurface) {
+  constructor(options, opt_blockDragSurface, opt_wsDragSurface) {
     super(options);
 
     /**
@@ -377,7 +376,8 @@ class WorkspaceSvg extends Workspace {
 
     /**
      * Developers may define this function to add custom menu options to the
-     * workspace's context menu or edit the workspace-created set of menu options.
+     * workspace's context menu or edit the workspace-created set of menu
+     * options.
      * @param {!Array<!Object>} options List of menu options to add to.
      * @param {!Event} e The right-click event that triggered the context menu.
      */
@@ -450,8 +450,8 @@ class WorkspaceSvg extends Workspace {
         !!this.workspaceDragSurface_ && svgMath.is3dSupported();
 
     /**
-     * List of currently highlighted blocks.  Block highlighting is often used to
-     * visually mark blocks currently being executed.
+     * List of currently highlighted blocks.  Block highlighting is often used
+     * to visually mark blocks currently being executed.
      * @type {!Array<!BlockSvg>}
      * @private
      */
@@ -482,8 +482,8 @@ class WorkspaceSvg extends Workspace {
     this.markerManager_ = new MarkerManager(this);
 
     /**
-     * Map from function names to callbacks, for deciding what to do when a custom
-     * toolbox category is opened.
+     * Map from function names to callbacks, for deciding what to do when a
+     * custom toolbox category is opened.
      * @type {!Object<string, ?function(!Workspace):
      *     !toolbox.FlyoutDefinition>}
      * @private
@@ -491,8 +491,8 @@ class WorkspaceSvg extends Workspace {
     this.toolboxCategoryCallbacks_ = Object.create(null);
 
     /**
-     * Map from function names to callbacks, for deciding what to do when a button
-     * is clicked.
+     * Map from function names to callbacks, for deciding what to do when a
+     * button is clicked.
      * @type {!Object<string, ?function(!FlyoutButton)>}
      * @private
      */
@@ -600,7 +600,8 @@ class WorkspaceSvg extends Workspace {
    */
   setMetricsManager(metricsManager) {
     this.metricsManager_ = metricsManager;
-    this.getMetrics = this.metricsManager_.getMetrics.bind(this.metricsManager_);
+    this.getMetrics =
+        this.metricsManager_.getMetrics.bind(this.metricsManager_);
   }
 
   /**
@@ -840,8 +841,8 @@ class WorkspaceSvg extends Workspace {
    * @package
    */
   getInjectionDiv() {
-    // NB: it would be better to pass this in at createDom, but is more likely to
-    // break existing uses of Blockly.
+    // NB: it would be better to pass this in at createDom, but is more likely
+    // to break existing uses of Blockly.
     if (!this.injectionDiv_) {
       let element = this.svgGroup_;
       while (element) {
@@ -932,8 +933,8 @@ class WorkspaceSvg extends Workspace {
     // Determine if there needs to be a category tree, or a simple list of
     // blocks.  This cannot be changed later, since the UI is very different.
     if (this.options.hasCategories) {
-      const ToolboxClass =
-          registry.getClassFromOptions(registry.Type.TOOLBOX, this.options, true);
+      const ToolboxClass = registry.getClassFromOptions(
+          registry.Type.TOOLBOX, this.options, true);
       this.toolbox_ = new ToolboxClass(this);
     }
     if (this.grid_) {
@@ -1119,8 +1120,8 @@ class WorkspaceSvg extends Workspace {
     this.flyout_.getWorkspace().setVisible(true);
 
     // Return the element so that callers can place it in their desired
-    // spot in the DOM.  For example, mutator flyouts do not go in the same place
-    // as main workspace flyouts.
+    // spot in the DOM.  For example, mutator flyouts do not go in the same
+    // place as main workspace flyouts.
     return this.flyout_.createDom(tagName);
   }
 
@@ -1128,7 +1129,8 @@ class WorkspaceSvg extends Workspace {
    * Getter for the flyout associated with this workspace.  This flyout may be
    * owned by either the toolbox or the workspace, depending on toolbox
    * configuration.  It will be null if there is no flyout.
-   * @param {boolean=} opt_own Whether to only return the workspace's own flyout.
+   * @param {boolean=} opt_own Whether to only return the workspace's own
+   *     flyout.
    * @return {?IFlyout} The flyout on this workspace.
    * @package
    */
@@ -1162,9 +1164,9 @@ class WorkspaceSvg extends Workspace {
   }
 
   /**
-   * If enabled, resize the parts of the workspace that change when the workspace
-   * contents (e.g. block positions) change.  This will also scroll the
-   * workspace contents if needed.
+   * If enabled, resize the parts of the workspace that change when the
+   * workspace contents (e.g. block positions) change.  This will also scroll
+   * the workspace contents if needed.
    * @package
    */
   resizeContents() {
@@ -1223,7 +1225,7 @@ class WorkspaceSvg extends Workspace {
       this.updateScreenCalculations_();
     }
   }
-/* eslint-enable indent */
+  /* eslint-enable indent */
 
   /**
    * Get the SVG element that forms the drawing surface.
@@ -1298,8 +1300,8 @@ class WorkspaceSvg extends Workspace {
     const left = -this.scrollX;
     if (scale === this.oldScale_ && Math.abs(top - this.oldTop_) < 1 &&
         Math.abs(left - this.oldLeft_) < 1) {
-      // Ignore sub-pixel changes in top and left. Due to #4192 there are a lot of
-      // negligible changes in viewport top/left.
+      // Ignore sub-pixel changes in top and left. Due to #4192 there are a lot
+      // of negligible changes in viewport top/left.
       return;
     }
     const event = new (eventUtils.get(eventUtils.VIEWPORT_CHANGE))(
@@ -1374,9 +1376,9 @@ class WorkspaceSvg extends Workspace {
 
     // This can happen if the user starts a drag, mouses up outside of the
     // document where the mouseup listener is registered (e.g. outside of an
-    // iframe) and then moves the mouse back in the workspace.  On mobile and ff,
-    // we get the mouseup outside the frame. On chrome and safari desktop we do
-    // not.
+    // iframe) and then moves the mouse back in the workspace.  On mobile and
+    // ff, we get the mouseup outside the frame. On chrome and safari desktop we
+    // do not.
     if (this.isDragSurfaceActive_) {
       return;
     }
@@ -1391,8 +1393,8 @@ class WorkspaceSvg extends Workspace {
     const height = parseInt(this.getParentSvg().getAttribute('height'), 10);
     const coord = svgMath.getRelativeXY(this.getCanvas());
     this.workspaceDragSurface_.setContentsAndShow(
-        this.getCanvas(), this.getBubbleCanvas(), previousElement, width, height,
-        this.scale);
+        this.getCanvas(), this.getBubbleCanvas(), previousElement, width,
+        height, this.scale);
     this.workspaceDragSurface_.translateSurface(coord.x, coord.y);
   }
 
@@ -1596,8 +1598,10 @@ class WorkspaceSvg extends Workspace {
             // Check for blocks in snap range to any of its connections.
             const connections = block.getConnections_(false);
             for (let i = 0, connection; (connection = connections[i]); i++) {
-              const neighbour = /** @type {!RenderedConnection} */(connection).closest(
-                  internalConstants.SNAP_RADIUS, new Coordinate(blockX, blockY));
+              const neighbour = /** @type {!RenderedConnection} */ (connection)
+                                    .closest(
+                                        internalConstants.SNAP_RADIUS,
+                                        new Coordinate(blockX, blockY));
               if (neighbour.connection) {
                 collide = true;
                 break;
@@ -1697,10 +1701,10 @@ class WorkspaceSvg extends Workspace {
    *     new variable immediately.
    * @param {string} name The new variable's name.
    * @param {?string=} opt_type The type of the variable like 'int' or 'string'.
-   *     Does not need to be unique. Field_variable can filter variables based on
-   *     their type. This will default to '' which is a specific type.
-   * @param {?string=} opt_id The unique ID of the variable. This will default to
-   *     a UUID.
+   *     Does not need to be unique. Field_variable can filter variables based
+   * on their type. This will default to '' which is a specific type.
+   * @param {?string=} opt_id The unique ID of the variable. This will default
+   *     to a UUID.
    * @return {!VariableModel} The newly created variable.
    */
   createVariable(name, opt_type, opt_id) {
@@ -1817,13 +1821,14 @@ class WorkspaceSvg extends Workspace {
    *
    * This means the user can reposition the X Y coordinates of the workspace
    * through input. This can be through scrollbars, scroll wheel, dragging, or
-   * through zooming with the scroll wheel or pinch (since the zoom is centered on
-   * the mouse position). This does not include zooming with the zoom controls
-   * since the X Y coordinates are decided programmatically.
+   * through zooming with the scroll wheel or pinch (since the zoom is centered
+   * on the mouse position). This does not include zooming with the zoom
+   * controls since the X Y coordinates are decided programmatically.
    * @return {boolean} True if the workspace is movable, false otherwise.
    */
   isMovable() {
-    return (this.options.moveOptions && !!this.options.moveOptions.scrollbars) ||
+    return (this.options.moveOptions &&
+            !!this.options.moveOptions.scrollbars) ||
         (this.options.moveOptions && this.options.moveOptions.wheel) ||
         (this.options.moveOptions && this.options.moveOptions.drag) ||
         (this.options.zoomOptions && this.options.zoomOptions.wheel) ||
@@ -1964,7 +1969,8 @@ class WorkspaceSvg extends Workspace {
       const xy = block.getRelativeToSurfaceXY();
       block.moveBy(-xy.x, cursorY - xy.y);
       block.snapToGrid();
-      cursorY = block.getRelativeToSurfaceXY().y + block.getHeightWidth().height +
+      cursorY = block.getRelativeToSurfaceXY().y +
+          block.getHeightWidth().height +
           this.renderer_.getConstants().MIN_BLOCK_HEIGHT;
     }
     eventUtils.setGroup(false);
@@ -2035,7 +2041,8 @@ class WorkspaceSvg extends Workspace {
       common.setMainWorkspace(this);
       // We call e.preventDefault in many event handlers which means we
       // need to explicitly grab focus (e.g from a textarea) because
-      // the browser will not do it for us.  How to do this is browser dependent.
+      // the browser will not do it for us.  How to do this is browser
+      // dependent.
       this.setBrowserFocus();
     }
   }
@@ -2351,9 +2358,10 @@ class WorkspaceSvg extends Workspace {
   }
 
   /**
-   * Get the workspace's zoom factor.  If the workspace has a parent, we call into
-   * the parent to get the workspace scale.
-   * @return {number} The workspace zoom factor. Units: (pixels / workspaceUnit).
+   * Get the workspace's zoom factor.  If the workspace has a parent, we call
+   * into the parent to get the workspace scale.
+   * @return {number} The workspace zoom factor. Units: (pixels /
+   *     workspaceUnit).
    */
   getScale() {
     if (this.options.parentWorkspace) {
@@ -2379,7 +2387,8 @@ class WorkspaceSvg extends Workspace {
     // to workspace coordinates so we have to inverse them.
     x = Math.min(x, -metrics.scrollLeft);
     y = Math.min(y, -metrics.scrollTop);
-    const maxXDisplacement = Math.max(0, metrics.scrollWidth - metrics.viewWidth);
+    const maxXDisplacement =
+        Math.max(0, metrics.scrollWidth - metrics.viewWidth);
     const maxXScroll = metrics.scrollLeft + maxXDisplacement;
     const maxYDisplacement =
         Math.max(0, metrics.scrollHeight - metrics.viewHeight);
@@ -2442,7 +2451,7 @@ class WorkspaceSvg extends Workspace {
    */
   removeTopBlock(block) {
     this.removeTopBoundedElement(/** @type {!BlockSvg} */ (block));
-    super.removeTopBlock( block);
+    super.removeTopBlock(block);
   }
 
   /**
@@ -2506,7 +2515,8 @@ class WorkspaceSvg extends Workspace {
   }
 
   /**
-   * Dispose of all blocks in workspace, with an optimization to prevent resizes.
+   * Dispose of all blocks in workspace, with an optimization to prevent
+   * resizes.
    */
   clear() {
     this.setResizesEnabled(false);
@@ -2534,8 +2544,8 @@ class WorkspaceSvg extends Workspace {
   }
 
   /**
-   * Get the callback function associated with a given key, for clicks on buttons
-   * and labels in the flyout.
+   * Get the callback function associated with a given key, for clicks on
+   * buttons and labels in the flyout.
    * @param {string} key The name to use to look up the function.
    * @return {?function(!FlyoutButton)} The function corresponding to the
    *     given key for this workspace; null if no callback is registered.
@@ -2555,11 +2565,11 @@ class WorkspaceSvg extends Workspace {
 
   /**
    * Register a callback function associated with a given key, for populating
-   * custom toolbox categories in this workspace.  See the variable and procedure
-   * categories as an example.
+   * custom toolbox categories in this workspace.  See the variable and
+   * procedure categories as an example.
    * @param {string} key The name to use to look up this function.
-   * @param {function(!Workspace): !toolbox.FlyoutDefinition} func The function to
-   *     call when the given toolbox category is opened.
+   * @param {function(!Workspace): !toolbox.FlyoutDefinition} func The function
+   *     to call when the given toolbox category is opened.
    */
   registerToolboxCategoryCallback(key, func) {
     if (typeof func !== 'function') {
@@ -2573,8 +2583,8 @@ class WorkspaceSvg extends Workspace {
    * custom toolbox categories in this workspace.
    * @param {string} key The name to use to look up the function.
    * @return {?function(!Workspace): !toolbox.FlyoutDefinition} The function
-   *     corresponding to the given key for this workspace, or null if no function
-   *     is registered.
+   *     corresponding to the given key for this workspace, or null if no
+   * function is registered.
    */
   getToolboxCategoryCallback(key) {
     return this.toolboxCategoryCallbacks_[key] || null;

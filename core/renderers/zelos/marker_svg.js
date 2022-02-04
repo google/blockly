@@ -66,7 +66,8 @@ class MarkerSvg extends BaseMarkerSvg {
    */
   showWithInputOutput_(curNode) {
     const block = /** @type {!BlockSvg} */ (curNode.getSourceBlock());
-    const connection = /** @type {!RenderedConnection} */ (curNode.getLocation());
+    const connection =
+        /** @type {!RenderedConnection} */ (curNode.getLocation());
     const offsetInBlock = connection.getOffsetInBlock();
 
     this.positionCircle_(offsetInBlock.x, offsetInBlock.y);

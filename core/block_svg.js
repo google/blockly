@@ -1423,14 +1423,17 @@ BlockSvg.prototype.appendInput_ = function(type, name) {
  */
 BlockSvg.prototype.setConnectionTracking = function(track) {
   if (this.previousConnection) {
-    /** @type {!RenderedConnection} */(this.previousConnection).setTracking(track);
+    /** @type {!RenderedConnection} */ (this.previousConnection)
+        .setTracking(track);
   }
   if (this.outputConnection) {
-    /** @type {!RenderedConnection} */(this.outputConnection).setTracking(track);
+    /** @type {!RenderedConnection} */ (this.outputConnection)
+        .setTracking(track);
   }
   if (this.nextConnection) {
-    /** @type {!RenderedConnection} */(this.nextConnection).setTracking(track);
-    const child = /** @type {!RenderedConnection} */(this.nextConnection).targetBlock();
+    /** @type {!RenderedConnection} */ (this.nextConnection).setTracking(track);
+    const child =
+        /** @type {!RenderedConnection} */ (this.nextConnection).targetBlock();
     if (child) {
       child.setConnectionTracking(track);
     }
@@ -1444,7 +1447,8 @@ BlockSvg.prototype.setConnectionTracking = function(track) {
   }
 
   for (let i = 0; i < this.inputList.length; i++) {
-    const conn = /** @type {!RenderedConnection} */(this.inputList[i].connection);
+    const conn =
+        /** @type {!RenderedConnection} */ (this.inputList[i].connection);
     if (conn) {
       conn.setTracking(track);
 
@@ -1547,7 +1551,7 @@ BlockSvg.prototype.bumpNeighbours = function() {
   // Loop through every connection on this block.
   const myConnections = this.getConnections_(false);
   for (let i = 0, connection; (connection = myConnections[i]); i++) {
-    const renderedConn = /** @type {!RenderedConnection} */(connection);
+    const renderedConn = /** @type {!RenderedConnection} */ (connection);
     // Spider down from this block bumping all sub-blocks.
     if (renderedConn.isConnected() && renderedConn.isSuperior()) {
       renderedConn.targetBlock().bumpNeighbours();
@@ -1555,7 +1559,8 @@ BlockSvg.prototype.bumpNeighbours = function() {
 
     const neighbours = renderedConn.neighbours(internalConstants.SNAP_RADIUS);
     for (let j = 0, otherConnection; (otherConnection = neighbours[j]); j++) {
-      const renderedOther = /** @type {!RenderedConnection} */ (otherConnection);
+      const renderedOther =
+          /** @type {!RenderedConnection} */ (otherConnection);
       // If both connections are connected, that's probably fine.  But if
       // either one of them is unconnected, then there could be confusion.
       if (!renderedConn.isConnected() || !renderedOther.isConnected()) {
@@ -1708,7 +1713,8 @@ BlockSvg.prototype.updateConnectionLocations_ = function() {
   }
 
   for (let i = 0; i < this.inputList.length; i++) {
-    const conn = /** @type {!RenderedConnection} */(this.inputList[i].connection);
+    const conn =
+        /** @type {!RenderedConnection} */ (this.inputList[i].connection);
     if (conn) {
       conn.moveToOffset(blockTL);
       if (conn.isConnected()) {

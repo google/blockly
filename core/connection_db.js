@@ -38,8 +38,8 @@ goog.require('Blockly.constants');
 class ConnectionDB {
   /**
    * @param {!IConnectionChecker} checker The workspace's
-   *     connection type checker, used to decide if connections are valid during a
-   *     drag.
+   *     connection type checker, used to decide if connections are valid during
+   * a drag.
    * @alias Blockly.ConnectionDB
    */
   constructor(checker) {
@@ -50,8 +50,8 @@ class ConnectionDB {
      */
     this.connections_ = [];
     /**
-     * The workspace's connection type checker, used to decide if connections are
-     * valid during a drag.
+     * The workspace's connection type checker, used to decide if connections
+     * are valid during a drag.
      * @type {!IConnectionChecker}
      * @private
      */
@@ -76,7 +76,8 @@ class ConnectionDB {
    * Starts by doing a binary search to find the approximate location, then
    * linearly searches nearby for the exact connection.
    * @param {!RenderedConnection} conn The connection to find.
-   * @param {number} yPos The y position used to find the index of the connection.
+   * @param {number} yPos The y position used to find the index of the
+   *     connection.
    * @return {number} The index of the connection, or -1 if the connection was
    *     not found.
    * @private
@@ -143,7 +144,8 @@ class ConnectionDB {
   /**
    * Remove a connection from the database.  Must already exist in DB.
    * @param {!RenderedConnection} connection The connection to be removed.
-   * @param {number} yPos The y position used to find the index of the connection.
+   * @param {number} yPos The y position used to find the index of the
+   *     connection.
    * @throws {Error} If the connection cannot be found in the database.
    */
   removeConnection(connection, yPos) {
@@ -182,9 +184,9 @@ class ConnectionDB {
 
     const neighbours = [];
     /**
-     * Computes if the current connection is within the allowed radius of another
-     * connection.
-     * This function is a closure and has access to outside variables.
+     * Computes if the current connection is within the allowed radius of
+     * another connection. This function is a closure and has access to outside
+     * variables.
      * @param {number} yIndex The other connection's index in the database.
      * @return {boolean} True if the current connection's vertical distance from
      *     the other connection is less than the allowed radius.

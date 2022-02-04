@@ -194,6 +194,14 @@ const CLICK = 'click';
 exports.CLICK = CLICK;
 
 /**
+ * Name of event that records a ctrl+click.
+ * @const
+ * @alias Blockly.Events.utils.CTRL_CLICK
+ */
+const CTRL_CLICK = 'ctrl_click';
+exports.CTRL_CLICK = CTRL_CLICK;
+
+/**
  * Name of event that records a marker move.
  * @const
  * @alias Blockly.Events.utils.MARKER_MOVE

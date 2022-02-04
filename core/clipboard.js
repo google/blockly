@@ -44,22 +44,21 @@ exports.copy = copy;
  * @package
  */
 const paste = function() {
-  if (!copyData) {
-    return false;
-  }
+  if (!copyData) return false;
   // Pasting always pastes to the main workspace, even if the copy
   // started in a flyout workspace.
   let workspace = copyData.source;
   if (workspace.isFlyout) {
     workspace = workspace.targetWorkspace;
   }
-  if (copyData.typeCounts &&
-      workspace.isCapacityAvailable(copyData.typeCounts)) {
+
+  if (copyData.typeCounts && workspace.isCapacityAvailable(copyData.typeCounts)) {
     eventUtils.setGroup(true);
     workspace.paste(copyData.saveInfo);
     eventUtils.setGroup(false);
     return true;
   }
+
   return false;
 };
 exports.paste = paste;
@@ -73,8 +72,10 @@ exports.paste = paste;
  */
 const duplicate = function(toDuplicate) {
   const oldCopyData = copyData;
+
   copy(toDuplicate);
   toDuplicate.workspace.paste(copyData.saveInfo);
+
   copyData = oldCopyData;
 };
 exports.duplicate = duplicate;

@@ -19,7 +19,7 @@ goog.module('Blockly.Events.Abstract');
 
 const eventUtils = goog.require('Blockly.Events.utils');
 /* eslint-disable-next-line no-unused-vars */
-const {Workspace} = goog.requireType('Blockly.Workspace');
+const { Workspace } = goog.requireType('Blockly.Workspace');
 
 
 /**
@@ -27,7 +27,7 @@ const {Workspace} = goog.requireType('Blockly.Workspace');
  * @constructor
  * @alias Blockly.Events.Abstract
  */
-const Abstract = function() {
+const Abstract = function () {
   /**
    * Whether or not the event is blank (to be populated by fromJson).
    * @type {?boolean}
@@ -65,8 +65,8 @@ Abstract.prototype.isUiEvent = false;
  * Encode the event as JSON.
  * @return {!Object} JSON representation.
  */
-Abstract.prototype.toJson = function() {
-  const json = {'type': this.type};
+Abstract.prototype.toJson = function () {
+  const json = { 'type': this.type };
   if (this.group) {
     json['group'] = this.group;
   }
@@ -77,7 +77,7 @@ Abstract.prototype.toJson = function() {
  * Decode the JSON event.
  * @param {!Object} json JSON representation.
  */
-Abstract.prototype.fromJson = function(json) {
+Abstract.prototype.fromJson = function (json) {
   this.isBlank = false;
   this.group = json['group'];
 };
@@ -86,7 +86,7 @@ Abstract.prototype.fromJson = function(json) {
  * Does this event record any change of state?
  * @return {boolean} True if null, false if something changed.
  */
-Abstract.prototype.isNull = function() {
+Abstract.prototype.isNull = function () {
   return false;
 };
 
@@ -94,7 +94,7 @@ Abstract.prototype.isNull = function() {
  * Run an event.
  * @param {boolean} _forward True if run forward, false if run backward (undo).
  */
-Abstract.prototype.run = function(_forward) {
+Abstract.prototype.run = function (_forward) {
   // Defined by subclasses.
 };
 
@@ -104,17 +104,18 @@ Abstract.prototype.run = function(_forward) {
  * @throws {Error} if workspace is null.
  * @protected
  */
-Abstract.prototype.getEventWorkspace_ = function() {
+Abstract.prototype.getEventWorkspace_ = function () {
   let workspace;
+
   if (this.workspaceId) {
-    const {Workspace} = goog.module.get('Blockly.Workspace');
+    const { Workspace } = goog.module.get('Blockly.Workspace');
     workspace = Workspace.getById(this.workspaceId);
   }
+
   if (!workspace) {
-    throw Error(
-        'Workspace is null. Event must have been generated from real' +
-        ' Blockly events.');
+    throw Error('Workspace is null. Event must have been generated from real Blockly events.');
   }
+
   return workspace;
 };
 

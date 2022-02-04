@@ -122,9 +122,6 @@ BlockDragSurfaceSvg.prototype.createDom = function() {
  * surface.
  */
 BlockDragSurfaceSvg.prototype.setBlocksAndShow = function(blocks) {
-  if (this.dragGroup_.childNodes.length) {
-    throw Error('Already dragging a block.');
-  }
   // appendChild removes the blocks from the previous parent
   this.dragGroup_.appendChild(blocks);
   this.SVG_.style.display = 'block';
@@ -252,16 +249,26 @@ BlockDragSurfaceSvg.prototype.getWsTranslation = function() {
  *     being moved to a different surface.
  */
 BlockDragSurfaceSvg.prototype.clearAndHide = function(opt_newSurface) {
+  const block = this.getCurrentBlock()
+
+  if (!block) {
+    this.SVG_.style.display = 'none';
+    this.surfaceXY_ = null;
+    return
+  }
+
   if (opt_newSurface) {
     // appendChild removes the node from this.dragGroup_
-    opt_newSurface.appendChild(this.getCurrentBlock());
+    opt_newSurface.appendChild(block);
   } else {
-    this.dragGroup_.removeChild(this.getCurrentBlock());
+    this.dragGroup_.removeChild(block);
   }
-  this.SVG_.style.display = 'none';
+
   if (this.dragGroup_.childNodes.length) {
-    throw Error('Drag group was not cleared.');
+    this.clearAndHide(opt_newSurface)
   }
+
+  this.SVG_.style.display = 'none';
   this.surfaceXY_ = null;
 };
 

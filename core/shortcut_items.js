@@ -56,6 +56,10 @@ const registerEscape = function() {
     },
     callback: function(workspace) {
       workspace.hideChaff();
+
+      const massOperations = workspace.getMassOperations()
+      if (massOperations) massOperations.cleanUp()
+
       return true;
     },
   };
@@ -121,9 +125,8 @@ const registerDelete = function() {
     },
   };
   ShortcutRegistry.registry.register(deleteShortcut);
-  ShortcutRegistry.registry.addKeyMapping(KeyCodes.DELETE, deleteShortcut.name);
-  ShortcutRegistry.registry.addKeyMapping(
-      KeyCodes.BACKSPACE, deleteShortcut.name);
+  ShortcutRegistry.registry.addKeyMapping(KeyCodes.DELETE, deleteShortcut.name, true);
+  ShortcutRegistry.registry.addKeyMapping(KeyCodes.BACKSPACE, deleteShortcut.name, true);
 };
 exports.registerDelete = registerDelete;
 
@@ -151,17 +154,14 @@ const registerCopy = function() {
   };
   ShortcutRegistry.registry.register(copyShortcut);
 
-  const ctrlC = ShortcutRegistry.registry.createSerializedKey(
-      KeyCodes.C, [KeyCodes.CTRL]);
-  ShortcutRegistry.registry.addKeyMapping(ctrlC, copyShortcut.name);
+  const ctrlC = ShortcutRegistry.registry.createSerializedKey(KeyCodes.C, [KeyCodes.CTRL]);
+  ShortcutRegistry.registry.addKeyMapping(ctrlC, copyShortcut.name, true);
 
-  const altC =
-      ShortcutRegistry.registry.createSerializedKey(KeyCodes.C, [KeyCodes.ALT]);
-  ShortcutRegistry.registry.addKeyMapping(altC, copyShortcut.name);
+  const altC = ShortcutRegistry.registry.createSerializedKey(KeyCodes.C, [KeyCodes.ALT]);
+  ShortcutRegistry.registry.addKeyMapping(altC, copyShortcut.name, true);
 
-  const metaC = ShortcutRegistry.registry.createSerializedKey(
-      KeyCodes.C, [KeyCodes.META]);
-  ShortcutRegistry.registry.addKeyMapping(metaC, copyShortcut.name);
+  const metaC = ShortcutRegistry.registry.createSerializedKey(KeyCodes.C, [KeyCodes.META]);
+  ShortcutRegistry.registry.addKeyMapping(metaC, copyShortcut.name, true);
 };
 exports.registerCopy = registerCopy;
 

@@ -231,8 +231,6 @@ VerticalFlyout.prototype.wheel_ = function (e) {
  * @protected
  */
 VerticalFlyout.prototype.layout_ = function (contents, gaps) {
-  this.workspace_.scale = this.targetWorkspace.scale;
-
   const margin = this.MARGIN;
   const cursorX = this.RTL ? margin : margin + this.tabWidth_;
   let cursorY = margin;

@@ -19,6 +19,9 @@
 			"Vlad5250"
 		]
 	},
+	"DELETE_ALL_SELECTED": "Удалить все выбранные блоки",
+	"MOVE_SELECTED_BLOCKS_TO_MODULE": "Переместить блоки в модуль %1",
+	"SELECT_ALL": "Выбрать все блоки",
 	"VARIABLES_DEFAULT_NAME": "элемент",
 	"UNNAMED_KEY": "без названия",
 	"TODAY": "Сегодня",

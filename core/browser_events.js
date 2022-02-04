@@ -204,6 +204,17 @@ const isTargetInput = function(e) {
 exports.isTargetInput = isTargetInput;
 
 /**
+ * Returns true this event is a left-click.
+ * @param {!Event} e Mouse event.
+ * @return {boolean} True if left-click.
+ * @alias Blockly.browserEvents.isLeftButton
+ */
+const isLeftButton = function(e) {
+  return e.button === 0;
+};
+exports.isLeftButton = isLeftButton;
+
+/**
  * Returns true this event is a right-click.
  * @param {!Event} e Mouse event.
  * @return {boolean} True if right-click.

@@ -102,6 +102,7 @@ const {Workspace} = goog.require('Blockly.Workspace');
 /* eslint-disable-next-line no-unused-vars */
 const {ZoomControls} = goog.requireType('Blockly.ZoomControls');
 const {ModuleBar} = goog.require('Blockly.ModuleBar');
+const {MassOperationsHandler} = goog.require('Blockly.MassOperations.Handler');
 
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
@@ -128,8 +129,7 @@ goog.require('Blockly.Msg');
  * @constructor
  * @alias Blockly.WorkspaceSvg
  */
-const WorkspaceSvg = function(
-    options, opt_blockDragSurface, opt_wsDragSurface) {
+const WorkspaceSvg = function(options, opt_blockDragSurface, opt_wsDragSurface) {
   WorkspaceSvg.superClass_.constructor.call(this, options);
 
   const MetricsManagerClass = registry.getClassFromOptions(
@@ -900,8 +900,7 @@ WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
    * </g>
    * @type {SVGElement}
    */
-  this.svgGroup_ =
-      dom.createSvgElement(Svg.G, {'class': 'blocklyWorkspace'}, null);
+  this.svgGroup_ = dom.createSvgElement(Svg.G, {'class': 'blocklyWorkspace'}, null);
 
   // Note that a <g> alone does not receive mouse events--it must have a
   // valid target inside it.  If no background class is specified, as in the
@@ -922,28 +921,23 @@ WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
     }
   }
   /** @type {SVGElement} */
-  this.svgBlockCanvas_ = dom.createSvgElement(
-      Svg.G, {'class': 'blocklyBlockCanvas'}, this.svgGroup_);
+  this.svgBlockCanvas_ = dom.createSvgElement(Svg.G, {'class': 'blocklyBlockCanvas'}, this.svgGroup_);
   /** @type {SVGElement} */
-  this.svgBubbleCanvas_ = dom.createSvgElement(
-      Svg.G, {'class': 'blocklyBubbleCanvas'}, this.svgGroup_);
+  this.svgBubbleCanvas_ = dom.createSvgElement(Svg.G, {'class': 'blocklyBubbleCanvas'}, this.svgGroup_);
 
   if (!this.isFlyout) {
-    browserEvents.conditionalBind(
-        this.svgGroup_, 'mousedown', this, this.onMouseDown_, false, true);
+    browserEvents.conditionalBind(this.svgGroup_, 'mousedown', this, this.onMouseDown_, false, true);
     // This no-op works around https://bugs.webkit.org/show_bug.cgi?id=226683,
     // which otherwise prevents zoom/scroll events from being observed in
     // Safari. Once that bug is fixed it should be removed.
     document.body.addEventListener('wheel', function() {});
-    browserEvents.conditionalBind(
-        this.svgGroup_, 'wheel', this, this.onMouseWheel_);
+    browserEvents.conditionalBind(this.svgGroup_, 'wheel', this, this.onMouseWheel_);
   }
 
   // Determine if there needs to be a category tree, or a simple list of
   // blocks.  This cannot be changed later, since the UI is very different.
   if (this.options.hasCategories) {
-    const ToolboxClass =
-        registry.getClassFromOptions(registry.Type.TOOLBOX, this.options, true);
+    const ToolboxClass = registry.getClassFromOptions(registry.Type.TOOLBOX, this.options, true);
     this.toolbox_ = new ToolboxClass(this);
   }
 
@@ -955,14 +949,24 @@ WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
     this.grid_.update(this.scale);
   }
   this.recordDragTargets();
-  const CursorClass =
-      registry.getClassFromOptions(registry.Type.CURSOR, this.options);
+  const CursorClass = registry.getClassFromOptions(registry.Type.CURSOR, this.options);
 
   CursorClass && this.markerManager_.setCursor(new CursorClass());
 
   this.renderer_.createDom(this.svgGroup_, this.getTheme());
+
   return this.svgGroup_;
 };
+
+/**
+ * Actions after the workspace appened to DOM el
+ */
+WorkspaceSvg.prototype.initAfterAppendDOM = function() {
+  if (!this.massOperationsHandler_) {
+    this.massOperationsHandler_ = new MassOperationsHandler(this)
+  }
+}
+
 
 /**
  * Dispose of this workspace.
@@ -1552,7 +1556,7 @@ WorkspaceSvg.prototype.highlightBlock = function(id, opt_state) {
  * @param {!Object|!Element|!DocumentFragment} state The representation of the
  *     thing to paste.
  */
-WorkspaceSvg.prototype.paste = function(state) {
+WorkspaceSvg.prototype.paste = function(state, options = {}) {
   if (!this.rendered || !state['type'] && !state.tagName) {
     return;
   }
@@ -1560,17 +1564,21 @@ WorkspaceSvg.prototype.paste = function(state) {
     this.currentGesture_.cancel();  // Dragging while pasting?  No.
   }
 
+  let block
+
   // Checks if this is JSON. JSON has a type property, while elements don't.
   if (state['type']) {
-    this.pasteBlock_(null, /** @type {!blocks.State} */ (state));
+    block = this.pasteBlock_(null, /** @type {!blocks.State} */ (state), options);
   } else {
     const xmlBlock = /** @type {!Element} */ (state);
     if (xmlBlock.tagName.toLowerCase() === 'comment') {
       this.pasteWorkspaceComment_(xmlBlock);
     } else {
-      this.pasteBlock_(xmlBlock, null);
+      block = this.pasteBlock_(xmlBlock, null);
     }
   }
+
+  return block
 };
 
 /**
@@ -1580,21 +1588,25 @@ WorkspaceSvg.prototype.paste = function(state) {
  *     representation.
  * @private
  */
-WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock, jsonBlock) {
+WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock, jsonBlock, { dontSelectNewBLock } = {}) {
   eventUtils.disable();
+
   let block;
   try {
-    let blockX = 0;
-    let blockY = 0;
+    const metrics = this.getMetrics();
+    let blockX = metrics.viewWidth / 2 + metrics.viewLeft;
+    let blockY = metrics.viewHeight / 2 + metrics.viewTop;
+
     if (xmlBlock) {
       block = Xml.domToBlock(xmlBlock, this);
     } else if (jsonBlock) {
+      if (jsonBlock.pasteOffset) {
+        blockX += jsonBlock.pasteOffset.x
+        blockY += jsonBlock.pasteOffset.y
+        delete jsonBlock.pasteOffset
+      }
       block = blocks.append(jsonBlock, this);
     }
-
-    const metrics = this.getMetrics();
-    blockX = metrics.viewWidth / 2 + metrics.viewLeft;
-    blockY = metrics.viewHeight / 2 + metrics.viewTop;
 
     // Move the duplicate to original position.
     if (!isNaN(blockX) && !isNaN(blockY)) {
@@ -1633,15 +1645,20 @@ WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock, jsonBlock) {
           blockY += internalConstants.SNAP_RADIUS * 2;
         }
       } while (collide);
+
       block.moveTo(new Coordinate(blockX, blockY));
     }
   } finally {
     eventUtils.enable();
   }
+
   if (eventUtils.isEnabled() && !block.isShadow()) {
     eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(block));
   }
-  block.select();
+
+  if (!dontSelectNewBLock) block.select();
+
+  return block
 };
 
 /**
@@ -1778,7 +1795,7 @@ WorkspaceSvg.prototype.getDragTarget = function(e) {
 
 /**
  * Handle a mouse-down on SVG drawing surface.
- * @param {!Event} e Mouse down event.
+ * @param {!MouseEvent} e Mouse down event.
  * @private
  */
 WorkspaceSvg.prototype.onMouseDown_ = function(e) {
@@ -1787,6 +1804,20 @@ WorkspaceSvg.prototype.onMouseDown_ = function(e) {
     gesture.handleWsStart(e, this);
   }
 };
+
+WorkspaceSvg.prototype.massOperationsHandler_ = null;
+
+WorkspaceSvg.prototype.cleanUpMassOperations = function () {
+  if (this.massOperationsHandler_) this.massOperationsHandler_.cleanUp()
+}
+
+WorkspaceSvg.prototype.getMassOperations = function () {
+  if (this.massOperationsHandler_) {
+    return this.massOperationsHandler_
+  } else if (this.svgGroup_) {
+    return new MassOperationsHandler(this)
+  }
+}
 
 /**
  * Start tracking a drag of an object on this workspace.

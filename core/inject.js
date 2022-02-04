@@ -151,48 +151,47 @@ const createDom = function(container, options) {
  *     SVG for the workspace.
  * @return {!WorkspaceSvg} Newly created main workspace.
  */
-const createMainWorkspace = function(
-    svg, options, blockDragSurface, workspaceDragSurface) {
+const createMainWorkspace = function( svg, options, blockDragSurface, workspaceDragSurface) {
   options.parentWorkspace = null;
-  const mainWorkspace =
-      new WorkspaceSvg(options, blockDragSurface, workspaceDragSurface);
+
+  const mainWorkspace = new WorkspaceSvg(options, blockDragSurface, workspaceDragSurface);
   const wsOptions = mainWorkspace.options;
+
   mainWorkspace.scale = wsOptions.zoomOptions.startScale;
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
+  mainWorkspace.initAfterAppendDOM()
 
   // Set the theme name and renderer name onto the injection div.
-  dom.addClass(
-      mainWorkspace.getInjectionDiv(),
-      mainWorkspace.getRenderer().getClassName());
-  dom.addClass(
-      mainWorkspace.getInjectionDiv(), mainWorkspace.getTheme().getClassName());
+  dom.addClass(mainWorkspace.getInjectionDiv(), mainWorkspace.getRenderer().getClassName());
+  dom.addClass(mainWorkspace.getInjectionDiv(), mainWorkspace.getTheme().getClassName());
 
   if (!wsOptions.hasCategories && wsOptions.languageTree) {
     // Add flyout as an <svg> that is a sibling of the workspace SVG.
     const flyout = mainWorkspace.addFlyout(Svg.SVG);
     dom.insertAfter(flyout, svg);
   }
+
   if (wsOptions.hasTrashcan) {
     mainWorkspace.addTrashcan();
   }
+
   if (wsOptions.zoomOptions && wsOptions.zoomOptions.controls) {
     mainWorkspace.addZoomControls();
   }
   // Register the workspace svg as a UI component.
-  mainWorkspace.getThemeManager().subscribe(
-      svg, 'workspaceBackgroundColour', 'background-color');
+  mainWorkspace.getThemeManager().subscribe(svg, 'workspaceBackgroundColour', 'background-color');
 
   // A null translation will also apply the correct initial scale.
   mainWorkspace.translate(0, 0);
 
-  mainWorkspace.addChangeListener(
-      bumpObjects.bumpIntoBoundsHandler(mainWorkspace));
+  mainWorkspace.addChangeListener(bumpObjects.bumpIntoBoundsHandler(mainWorkspace));
 
   // The SVG is now fully assembled.
   common.svgResize(mainWorkspace);
   WidgetDiv.createDom();
   DropDownDiv.createDom();
   Tooltip.createDom();
+
   return mainWorkspace;
 };
 

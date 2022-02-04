@@ -210,6 +210,12 @@ const BlockSvg = function(workspace, prototypeName, opt_id, moduleId) {
    * @private
    */
   this.selected_ = false
+
+  /**
+   * @type {Boolean}
+   * @private
+   */
+  this.selectedAsGroup_ = false
 };
 object.inherits(BlockSvg, Block);
 
@@ -300,10 +306,9 @@ BlockSvg.prototype.initSvg = function() {
   this.applyColour();
   this.pathObject.updateMovable(this.isMovable());
   const svg = this.getSvgRoot();
+
   if (!this.workspace.options.readOnly && !this.eventsInit_ && svg) {
     browserEvents.conditionalBind(svg, 'mousedown', this, this.onMouseDown_);
-  }
-  if (!this.workspace.options.readOnly && !this.eventsInit_ && svg) {
     browserEvents.conditionalBind(svg, 'mouseup', this, this.onMouseUp_);
   }
   this.eventsInit_ = true;
@@ -339,28 +344,27 @@ BlockSvg.prototype.select = function() {
     this.getParent().select();
     return;
   }
-  if (common.getSelected() === this) {
-    return;
-  }
 
-  if (!this.InActiveModule()) {
-    return;
-  }
+  if (common.getSelected() === this) return;
+
+  if (!this.InActiveModule()) return;
 
   let oldId = null;
   if (common.getSelected()) {
     oldId = common.getSelected().id;
     // Unselect any previously selected block.
     eventUtils.disable();
+
     try {
       common.getSelected().unselect();
     } finally {
       eventUtils.enable();
     }
   }
-  const event = new (eventUtils.get(eventUtils.SELECTED))(
-      oldId, this.id, this.workspace.id);
+
+  const event = new (eventUtils.get(eventUtils.SELECTED))(oldId, this.id, this.workspace.id);
   eventUtils.fire(event);
+
   common.setSelected(this);
   this.addSelect();
 };
@@ -370,7 +374,7 @@ BlockSvg.prototype.select = function() {
  * if the block is currently selected.
  */
 BlockSvg.prototype.unselect = function() {
-  if (common.getSelected() !== this) {
+  if (common.getSelected() !== this) { // TODO common should know how to work with mass selection
     return;
   }
   const event = new (eventUtils.get(eventUtils.SELECTED))(
@@ -478,29 +482,26 @@ BlockSvg.prototype.getRelativeToSurfaceXY = function() {
   let x = 0;
   let y = 0;
 
-  const dragSurfaceGroup = this.useDragSurface_ ?
-      this.workspace.getBlockDragSurface().getGroup() :
-      null;
+  const dragSurfaceGroup = this.useDragSurface_ ? this.workspace.getBlockDragSurface().getGroup() : null;
 
   let element = this.getSvgRoot();
   if (element) {
     do {
       // Loop through this block and every parent.
       const xy = svgMath.getRelativeXY(element);
+
       x += xy.x;
       y += xy.y;
       // If this element is the current element on the drag surface, include
       // the translation of the drag surface itself.
-      if (this.useDragSurface_ &&
-          this.workspace.getBlockDragSurface().getCurrentBlock() === element) {
-        const surfaceTranslation =
-            this.workspace.getBlockDragSurface().getSurfaceTranslation();
+      if (this.useDragSurface_ && this.workspace.getBlockDragSurface().getCurrentBlock() === element) {
+        const surfaceTranslation = this.workspace.getBlockDragSurface().getSurfaceTranslation();
+
         x += surfaceTranslation.x;
         y += surfaceTranslation.y;
       }
       element = /** @type {!SVGElement} */ (element.parentNode);
-    } while (element && element !== this.workspace.getCanvas() &&
-             element !== dragSurfaceGroup);
+    } while (element && element !== this.workspace.getCanvas() && element !== dragSurfaceGroup);
   }
   return new Coordinate(x, y);
 };
@@ -514,6 +515,7 @@ BlockSvg.prototype.moveBy = function(dx, dy) {
   if (this.parentBlock_) {
     throw Error('Block has parent.');
   }
+
   const eventsEnabled = eventUtils.isEnabled();
   let event;
   if (eventsEnabled) {
@@ -522,10 +524,12 @@ BlockSvg.prototype.moveBy = function(dx, dy) {
   const xy = this.getRelativeToSurfaceXY();
   this.translate(xy.x + dx, xy.y + dy);
   this.moveConnections(dx, dy);
+
   if (eventsEnabled) {
     event.recordNew();
     eventUtils.fire(event);
   }
+
   this.workspace.resizeContents();
 };
 
@@ -543,9 +547,10 @@ BlockSvg.prototype.translate = function(x, y) {
  * Move this block to its workspace's drag surface, accounting for positioning.
  * Generally should be called at the same time as setDragging_(true).
  * Does nothing if useDragSurface_ is false.
+ * @param {Coordinate} positionOnDragSurface Offset on drag surface.
  * @package
  */
-BlockSvg.prototype.moveToDragSurface = function() {
+BlockSvg.prototype.moveToDragSurface = function(positionOnDragSurface) {
   if (!this.useDragSurface_) {
     return;
   }
@@ -553,9 +558,15 @@ BlockSvg.prototype.moveToDragSurface = function() {
   // is equal to the current relative-to-surface position,
   // to keep the position in sync as it move on/off the surface.
   // This is in workspace coordinates.
-  const xy = this.getRelativeToSurfaceXY();
-  this.clearTransformAttributes_();
-  this.workspace.getBlockDragSurface().translateSurface(xy.x, xy.y);
+  let xy = this.getRelativeToSurfaceXY();
+
+  if (positionOnDragSurface) {
+    this.replaceTransformAttributes_(positionOnDragSurface);
+  } else {
+    this.clearTransformAttributes_();
+  }
+
+  this.workspace.getBlockDragSurface().translateSurface(xy.x, xy.y, true);
   // Execute the move on the top-level SVG component
   const svg = this.getSvgRoot();
   if (svg) {
@@ -614,6 +625,15 @@ BlockSvg.prototype.moveDuringDrag = function(newLoc) {
  */
 BlockSvg.prototype.clearTransformAttributes_ = function() {
   this.getSvgRoot().removeAttribute('transform');
+};
+
+/**
+ * Replace the block of transform="..." attributes.
+ * Used when the block is switching from 3d to 2d transform or vice versa.
+ * @private
+ */
+BlockSvg.prototype.replaceTransformAttributes_ = function(position) {
+  this.getSvgRoot().setAttribute('transform', `translate(${position.x}, ${position.y})`);
 };
 
 /**
@@ -768,10 +788,20 @@ BlockSvg.prototype.tab = function(start, forward) {
 
 /**
  * Handle a mouse-down on an SVG block.
- * @param {!Event} e Mouse down event or touch start event.
+ * @param {!MouseEvent} e Mouse down event or touch start event.
  * @private
  */
 BlockSvg.prototype.onMouseDown_ = function(e) {
+  if (!this.workspace.isFlyout && e.ctrlKey) {
+    e.stopPropagation();
+    e.preventDefault();
+
+    const massOperations = this.workspace.getMassOperations()
+    if (massOperations) massOperations.blockMouseDown(this, e)
+
+    return;
+  }
+
   if (this.isInFrontOfWorkspace) {
     this.disableMovingToFront = true
     this.previousParent.insertBefore(this.getSvgRoot(), this.previousNextSibling)
@@ -786,7 +816,20 @@ BlockSvg.prototype.onMouseDown_ = function(e) {
   }
 };
 
-BlockSvg.prototype.onMouseUp_ = function() {
+/**
+ * Handle a mouse-up on an SVG block.
+ * @param {!MouseEvent} e Mouse up event or touch end event.
+ * @private
+ */
+BlockSvg.prototype.onMouseUp_ = function(e) {
+  if (!this.workspace.isFlyout && e.ctrlKey) {
+    e.stopPropagation();
+    e.preventDefault();
+
+    const massOperations = this.workspace.getMassOperations()
+    if (massOperations) massOperations.blockMouseUp(this, e)
+  }
+
   if (this.disableMovingToFront) this.disableMovingToFront = false
 }
 
@@ -838,6 +881,11 @@ BlockSvg.prototype.generateContextMenu = function() {
  * @package
  */
 BlockSvg.prototype.showContextMenu = function(e) {
+  if (this.checkInGroupSelection()) {
+    this.workspace.getMassOperations().showContextMenu(e, this)
+    return
+  }
+
   const menuOptions = this.generateContextMenu();
 
   if (menuOptions && menuOptions.length) {
@@ -845,6 +893,15 @@ BlockSvg.prototype.showContextMenu = function(e) {
     ContextMenu.setCurrentBlock(this);
   }
 };
+
+BlockSvg.prototype.checkInGroupSelection = function () {
+  if (this.selectedAsGroup_) return true
+
+  const massOperations = this.workspace.getMassOperations()
+  if (massOperations) return massOperations.checkBlockInSelectGroup(this)
+
+  return false
+}
 
 /**
  * Move the connections for this block and all blocks attached under it.
@@ -1092,19 +1149,19 @@ BlockSvg.prototype.checkAndDelete = function() {
 };
 
 /**
- * Encode a block for copying.
+ * Encode a block for
+ * @param {Boolean} addNextBlocks
  * @return {?ICopyable.CopyData} Copy metadata, or null if the block is
  *     an insertion marker.
  * @package
  */
-BlockSvg.prototype.toCopyData = function() {
+BlockSvg.prototype.toCopyData = function(addNextBlocks = false) {
   if (this.isInsertionMarker_) {
     return null;
   }
 
   return {
-    saveInfo: /** @type {!blocks.State} */ (
-        blocks.save(this, {addCoordinates: true, addNextBlocks: false})),
+    saveInfo: /** @type {!blocks.State} */ (blocks.save(this, {addCoordinates: true, addNextBlocks})),
     source: this.workspace,
     typeCounts: common.getBlockTypeCounts(this, true),
   };
@@ -1332,10 +1389,17 @@ BlockSvg.prototype.setHighlighted = function(highlighted) {
 BlockSvg.prototype.addSelect = function() {
   this.pathObject.updateSelected(true);
   this.selected_ = true
+  this.selectedAsGroup_ = false
 
   if (this.isInFlyout) {
     this.placeToFront()
   }
+};
+
+BlockSvg.prototype.addSelectAsMassSelection = function() {
+  this.pathObject.updateMassSelected(true);
+  this.selected_ = true
+  this.selectedAsGroup_ = true
 };
 
 /**
@@ -1409,7 +1473,14 @@ BlockSvg.prototype.placeToFront = function () {
 BlockSvg.prototype.removeSelect = function() {
   if (this.isInFrontOfWorkspace) return
 
-  this.pathObject.updateSelected(false);
+  this.pathObject.updateSelected(false)
+  this.selectedAsGroup_ = false
+  this.selected_ = false
+};
+
+BlockSvg.prototype.removeSelectAsMassSelection = function() {
+  this.pathObject.updateMassSelected(false);
+  this.selectedAsGroup_ = false
   this.selected_ = false
 };
 

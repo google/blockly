@@ -256,6 +256,10 @@ PathObject.prototype.updateSelected = function (enable) {
   this.setClass_('blocklySelected', enable);
 };
 
+PathObject.prototype.updateMassSelected = function (enable) {
+  this.setClass_('blocklyMassSelected', enable)
+}
+
 /**
  * Add or remove styling showing that a block is dragged over a delete area.
  * @param {boolean} enable True if the block is being dragged over a delete

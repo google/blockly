@@ -18,7 +18,7 @@
 goog.module('Blockly.registry');
 
 /* eslint-disable-next-line no-unused-vars */
-const Abstract = goog.requireType('Blockly.Events.Abstract');
+const {Abstract} = goog.requireType('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
 const {Cursor} = goog.requireType('Blockly.Cursor');
 /* eslint-disable-next-line no-unused-vars */

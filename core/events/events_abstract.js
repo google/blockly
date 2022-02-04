@@ -118,4 +118,4 @@ Abstract.prototype.getEventWorkspace_ = function() {
   return workspace;
 };
 
-exports = Abstract;
+exports.Abstract = Abstract;

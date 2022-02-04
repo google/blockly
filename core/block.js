@@ -15,8 +15,6 @@
  */
 goog.module('Blockly.Block');
 
-/* eslint-disable-next-line no-unused-vars */
-const Abstract = goog.requireType('Blockly.Events.Abstract');
 const Extensions = goog.require('Blockly.Extensions');
 const Tooltip = goog.require('Blockly.Tooltip');
 const arrayUtils = goog.require('Blockly.utils.array');
@@ -27,6 +25,8 @@ const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const object = goog.require('Blockly.utils.object');
 const parsing = goog.require('Blockly.utils.parsing');
+/* eslint-disable-next-line no-unused-vars */
+const {Abstract} = goog.requireType('Blockly.Events.Abstract');
 const {Align, Input} = goog.require('Blockly.Input');
 const {ASTNode} = goog.require('Blockly.ASTNode');
 const {Blocks} = goog.require('Blockly.blocks');

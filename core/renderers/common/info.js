@@ -493,8 +493,6 @@ class RenderInfo {
    * inputs should be placed.
    * @protected
    */
-
-  // TODO: More cleanup.
   computeBounds_() {
     let widestStatementRowFields = 0;
     let blockWidth = 0;

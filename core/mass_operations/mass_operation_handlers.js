@@ -434,7 +434,7 @@ MassOperationsHandler.prototype.selectAll = function () {
   if (selected) selected.unselect();
 
   this.workspace_.getAllBlocks().forEach(block => {
-    this.addBlockToSelected(block)
+    if (block.inActiveModule()) this.addBlockToSelected(block)
   })
 }
 

@@ -29,6 +29,8 @@ const parsing = goog.require('Blockly.utils.parsing');
 const {Abstract} = goog.requireType('Blockly.Events.Abstract');
 const {Align, Input} = goog.require('Blockly.Input');
 const {ASTNode} = goog.require('Blockly.ASTNode');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockMove} = goog.requireType('Blockly.Events.BlockMove');
 const {Blocks} = goog.require('Blockly.blocks');
 /* eslint-disable-next-line no-unused-vars */
 const {Comment} = goog.requireType('Blockly.Comment');
@@ -2098,7 +2100,7 @@ Block.prototype.moveBy = function(dx, dy) {
   if (this.parentBlock_) {
     throw Error('Block has parent.');
   }
-  const event = new (eventUtils.get(eventUtils.BLOCK_MOVE))(this);
+  const event = /** @type {!BlockMove} */ (new (eventUtils.get(eventUtils.BLOCK_MOVE))(this));
   this.xy_.translate(dx, dy);
   event.recordNew();
   eventUtils.fire(event);

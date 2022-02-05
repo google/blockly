@@ -20,6 +20,8 @@ const blocks = goog.require('Blockly.serialization.blocks');
 const eventUtils = goog.require('Blockly.Events.utils');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockMove} = goog.requireType('Blockly.Events.BlockMove');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
 /* eslint-disable-next-line no-unused-vars */
 const {IASTNodeLocationWithBlock} = goog.require('Blockly.IASTNodeLocationWithBlock');
@@ -134,7 +136,8 @@ class Connection {
     // Connect the new connection to the parent.
     let event;
     if (eventUtils.isEnabled()) {
-      event = new (eventUtils.get(eventUtils.BLOCK_MOVE))(childBlock);
+      event = /** @type {!BlockMove} */
+          (new (eventUtils.get(eventUtils.BLOCK_MOVE))(childBlock));
     }
     connectReciprocally(parentConnection, childConnection);
     childBlock.setParent(parentBlock);
@@ -307,7 +310,8 @@ class Connection {
   disconnectInternal_(parentBlock, childBlock) {
     let event;
     if (eventUtils.isEnabled()) {
-      event = new (eventUtils.get(eventUtils.BLOCK_MOVE))(childBlock);
+      event = /** @type {!BlockMove} */
+          (new (eventUtils.get(eventUtils.BLOCK_MOVE))(childBlock));
     }
     const otherConnection = this.targetConnection;
     otherConnection.targetConnection = null;

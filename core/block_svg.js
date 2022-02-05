@@ -31,6 +31,8 @@ const userAgent = goog.require('Blockly.utils.userAgent');
 const {ASTNode} = goog.require('Blockly.ASTNode');
 const {Block} = goog.require('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
+const {BlockMove} = goog.requireType('Blockly.Events.BlockMove');
+/* eslint-disable-next-line no-unused-vars */
 const {Comment} = goog.requireType('Blockly.Comment');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
 /* eslint-disable-next-line no-unused-vars */
@@ -468,7 +470,8 @@ BlockSvg.prototype.moveBy = function(dx, dy) {
   const eventsEnabled = eventUtils.isEnabled();
   let event;
   if (eventsEnabled) {
-    event = new (eventUtils.get(eventUtils.BLOCK_MOVE))(this);
+    event = /** @type {!BlockMove} */
+        (new (eventUtils.get(eventUtils.BLOCK_MOVE))(this));
   }
   const xy = this.getRelativeToSurfaceXY();
   this.translate(xy.x + dx, xy.y + dy);

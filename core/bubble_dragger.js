@@ -248,7 +248,7 @@ const BubbleDragger = class {
       // WorkspaceCommentSvg.
       const event = /** @type {!CommentMove} */
           (new (eventUtils.get(eventUtils.COMMENT_MOVE))(
-          /** @type {!WorkspaceCommentSvg} */ (this.draggingBubble_)));
+              /** @type {!WorkspaceCommentSvg} */ (this.draggingBubble_)));
       event.setOldCoordinate(this.startXY_);
       event.recordNew();
       eventUtils.fire(event);

@@ -86,13 +86,13 @@ class DragTarget {
   }
 
   /**
-   * Returns whether the provided block or bubble should not be moved after being
-   * dropped on this component. If true, the element will return to where it was
-   * when the drag started.
+   * Returns whether the provided block or bubble should not be moved after
+   * being dropped on this component. If true, the element will return to where
+   * it was when the drag started.
    * @param {!IDraggable} _dragElement The block or bubble currently being
    *   dragged.
-   * @return {boolean} Whether the block or bubble provided should be returned to
-   *     drag start.
+   * @return {boolean} Whether the block or bubble provided should be returned
+   *     to drag start.
    */
   shouldPreventMove(_dragElement) {
     return false;

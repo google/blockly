@@ -442,8 +442,8 @@ class Toolbox extends DeleteArea {
    * @protected
    */
   renderContents_(toolboxDef) {
-    // This is for performance reasons. By using document fragment we only have to
-    // add to the DOM once.
+    // This is for performance reasons. By using document fragment we only have
+    // to add to the DOM once.
     const fragment = document.createDocumentFragment();
     for (let i = 0; i < toolboxDef.length; i++) {
       const toolboxItemDef = toolboxDef[i];
@@ -463,16 +463,16 @@ class Toolbox extends DeleteArea {
   createToolboxItem_(toolboxItemDef, fragment) {
     let registryName = toolboxItemDef['kind'];
 
-    // Categories that are collapsible are created using a class registered under
-    // a different name.
+    // Categories that are collapsible are created using a class registered
+    // under a different name.
     if (registryName.toUpperCase() === 'CATEGORY' &&
         toolbox.isCategoryCollapsible(
             /** @type {!toolbox.CategoryInfo} */ (toolboxItemDef))) {
       registryName = CollapsibleToolboxCategory.registrationName;
     }
 
-    const ToolboxItemClass =
-        registry.getClass(registry.Type.TOOLBOX_ITEM, registryName.toLowerCase());
+    const ToolboxItemClass = registry.getClass(
+        registry.Type.TOOLBOX_ITEM, registryName.toLowerCase());
     if (ToolboxItemClass) {
       const toolboxItem = new ToolboxItemClass(toolboxItemDef, this);
       this.addToolboxItem_(toolboxItem);
@@ -579,8 +579,8 @@ class Toolbox extends DeleteArea {
    *   dragged.
    * @param {boolean} _couldConnect Whether the element could could connect to
    *     another.
-   * @return {boolean} Whether the element provided would be deleted if dropped on
-   *     this area.
+   * @return {boolean} Whether the element provided would be deleted if dropped
+   *     on this area.
    * @override
    */
   wouldDelete(element, _couldConnect) {
@@ -721,8 +721,8 @@ class Toolbox extends DeleteArea {
 
   /**
    * Gets the previously selected item.
-   * @return {?ISelectableToolboxItem} The previously selected item, or null if no
-   *     item was previously selected.
+   * @return {?ISelectableToolboxItem} The previously selected item, or null if
+   *     no item was previously selected.
    * @public
    */
   getPreviouslySelectedItem() {
@@ -731,8 +731,8 @@ class Toolbox extends DeleteArea {
 
   /**
    * Gets whether or not the toolbox is horizontal.
-   * @return {boolean} True if the toolbox is horizontal, false if the toolbox is
-   *     vertical.
+   * @return {boolean} True if the toolbox is horizontal, false if the toolbox
+   *     is vertical.
    * @public
    */
   isHorizontal() {
@@ -740,8 +740,8 @@ class Toolbox extends DeleteArea {
   }
 
   /**
-   * Positions the toolbox based on whether it is a horizontal toolbox and whether
-   * the workspace is in rtl.
+   * Positions the toolbox based on whether it is a horizontal toolbox and
+   * whether the workspace is in rtl.
    * @public
    */
   position() {
@@ -781,8 +781,8 @@ class Toolbox extends DeleteArea {
    * @package
    */
   handleToolboxItemResize() {
-    // Reposition the workspace so that (0,0) is in the correct position relative
-    // to the new absolute edge (ie toolbox edge).
+    // Reposition the workspace so that (0,0) is in the correct position
+    // relative to the new absolute edge (ie toolbox edge).
     const workspace = this.workspace_;
     const rect = this.HtmlDiv.getBoundingClientRect();
     const newX = this.toolboxPosition === toolbox.Position.LEFT ?
@@ -820,8 +820,8 @@ class Toolbox extends DeleteArea {
   }
 
   /**
-   * Updates the flyout's content without closing it.  Should be used in response
-   * to a change in one of the dynamic categories, such as variables or
+   * Updates the flyout's content without closing it.  Should be used in
+   * response to a change in one of the dynamic categories, such as variables or
    * procedures.
    * @public
    */
@@ -844,8 +844,8 @@ class Toolbox extends DeleteArea {
 
     this.HtmlDiv.style.display = isVisible ? 'block' : 'none';
     this.isVisible_ = isVisible;
-    // Invisible toolbox is ignored as drag targets and must have the drag target
-    // updated.
+    // Invisible toolbox is ignored as drag targets and must have the drag
+    // target updated.
     this.workspace_.recordDragTargets();
   }
 
@@ -892,13 +892,15 @@ class Toolbox extends DeleteArea {
    *     toolbox item.
    * @param {?ISelectableToolboxItem} newItem The newly selected toolbox
    *     item.
-   * @return {boolean} True if the old item should be deselected, false otherwise.
+   * @return {boolean} True if the old item should be deselected, false
+   *     otherwise.
    * @protected
    */
   shouldDeselectItem_(oldItem, newItem) {
     // Deselect the old item unless the old item is collapsible and has been
     // previously clicked on.
-    return oldItem !== null && (!oldItem.isCollapsible() || oldItem !== newItem);
+    return oldItem !== null &&
+        (!oldItem.isCollapsible() || oldItem !== newItem);
   }
 
   /**
@@ -926,8 +928,8 @@ class Toolbox extends DeleteArea {
     this.previouslySelectedItem_ = item;
     item.setSelected(false);
     aria.setState(
-        /** @type {!Element} */ (this.contentsDiv_), aria.State.ACTIVEDESCENDANT,
-        '');
+        /** @type {!Element} */ (this.contentsDiv_),
+        aria.State.ACTIVEDESCENDANT, '');
   }
 
   /**
@@ -943,8 +945,8 @@ class Toolbox extends DeleteArea {
     this.previouslySelectedItem_ = oldItem;
     newItem.setSelected(true);
     aria.setState(
-        /** @type {!Element} */ (this.contentsDiv_), aria.State.ACTIVEDESCENDANT,
-        newItem.getId());
+        /** @type {!Element} */ (this.contentsDiv_),
+        aria.State.ACTIVEDESCENDANT, newItem.getId());
   }
 
   /**
@@ -1069,7 +1071,8 @@ class Toolbox extends DeleteArea {
 
   /**
    * Selects the previous visible toolbox item.
-   * @return {boolean} True if a previous category was selected, false otherwise.
+   * @return {boolean} True if a previous category was selected, false
+   *     otherwise.
    * @private
    */
   selectPrevious_() {

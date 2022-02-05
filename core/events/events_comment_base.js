@@ -111,7 +111,8 @@ class CommentBase extends Abstract {
         comment.dispose();
       } else {
         // Only complain about root-level block.
-        console.warn('Can\'t uncreate non-existent comment: ' + event.commentId);
+        console.warn(
+            'Can\'t uncreate non-existent comment: ' + event.commentId);
       }
     }
   }

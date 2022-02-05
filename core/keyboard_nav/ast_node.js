@@ -142,8 +142,8 @@ class ASTNode {
    * connection in the same block. The current location must be an input
    * connection.
    * @return {ASTNode} The AST node holding the next field or connection
-   *     or null if there is no editable field or input connection after the given
-   *     input.
+   *     or null if there is no editable field or input connection after the
+   * given input.
    * @private
    */
   findNextForInput_() {
@@ -252,7 +252,8 @@ class ASTNode {
         }
         fieldIdx--;
       }
-      // Reset the fieldIdx to the length of the field row of the previous input.
+      // Reset the fieldIdx to the length of the field row of the previous
+      // input.
       if (i - 1 >= 0) {
         fieldIdx = block.inputList[i - 1].fieldRow.length - 1;
       }
@@ -289,13 +290,14 @@ class ASTNode {
         return ASTNode.createStackNode(topBlocks[resultIndex]);
       }
     }
-    throw Error('Couldn\'t find ' + (forward ? 'next' : 'previous') + ' stack?!');
+    throw Error(
+        'Couldn\'t find ' + (forward ? 'next' : 'previous') + ' stack?!');
   }
 
   /**
    * Finds the top most AST node for a given block.
-   * This is either the previous connection, output connection or block depending
-   * on what kind of connections the block has.
+   * This is either the previous connection, output connection or block
+   * depending on what kind of connections the block has.
    * @param {!Block} block The block that we want to find the top
    *     connection on.
    * @return {!ASTNode} The AST node containing the top connection.
@@ -343,7 +345,8 @@ class ASTNode {
    * Find the first editable field or input with a connection on a given block.
    * @param {!Block} block The source block of the current location.
    * @return {ASTNode} An AST node pointing to the first field or input.
-   * Null if there are no editable fields or inputs with connections on the block.
+   * Null if there are no editable fields or inputs with connections on the
+   * block.
    * @private
    */
   findFirstFieldOrInput_(block) {
@@ -498,8 +501,8 @@ class ASTNode {
   }
 
   /**
-   * Find the next element that is one position above and all the way to the left
-   * of the current location.
+   * Find the next element that is one position above and all the way to the
+   * left of the current location.
    * @return {ASTNode} An AST node that wraps the next field, connection,
    *     workspace or block. Or null if we are at the workspace level.
    */
@@ -576,8 +579,9 @@ class ASTNode {
   }
 
   /**
-   * Creates an AST node pointing to a connection. If the connection has a parent
-   * input then create an AST node of type input that will hold the connection.
+   * Creates an AST node pointing to a connection. If the connection has a
+   * parent input then create an AST node of type input that will hold the
+   * connection.
    * @param {Connection} connection This is the connection the node will
    *     point to.
    * @return {ASTNode} An AST node pointing to a connection.
@@ -603,8 +607,8 @@ class ASTNode {
   }
 
   /**
-   * Creates an AST node pointing to an input. Stores the input connection as the
-   *     location.
+   * Creates an AST node pointing to an input. Stores the input connection as
+   * the location.
    * @param {Input} input The input used to create an AST node.
    * @return {ASTNode} An AST node pointing to a input.
    */
@@ -629,7 +633,8 @@ class ASTNode {
 
   /**
    * Create an AST node of type stack. A stack, represented by its top block, is
-   *     the set of all blocks connected to a top block, including the top block.
+   *     the set of all blocks connected to a top block, including the top
+   * block.
    * @param {Block} topBlock A top block has no parent and can be found
    *     in the list returned by workspace.getTopBlocks().
    * @return {ASTNode} An AST node of type stack that points to the top

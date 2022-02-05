@@ -56,11 +56,10 @@ class ComponentManager {
    * Adds a component.
    * @param {!ComponentManager.ComponentDatum} componentInfo The data for
    *   the component to register.
-   * @param {boolean=} opt_allowOverrides True to prevent an error when overriding
-   *     an already registered item.
+   * @param {boolean=} opt_allowOverrides True to prevent an error when
+   *     overriding an already registered item.
    */
-  addComponent(
-      componentInfo, opt_allowOverrides) {
+  addComponent(componentInfo, opt_allowOverrides) {
     // Don't throw an error if opt_allowOverrides is true.
     const id = componentInfo.component.id;
     if (!opt_allowOverrides && this.componentData_[id]) {

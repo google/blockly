@@ -75,8 +75,8 @@ class Cursor extends Marker {
     if (!curNode) {
       return null;
     }
-    // If we are on a previous or output connection, go to the block level before
-    // performing next operation.
+    // If we are on a previous or output connection, go to the block level
+    // before performing next operation.
     if (curNode.getType() === ASTNode.types.PREVIOUS ||
         curNode.getType() === ASTNode.types.OUTPUT) {
       curNode = curNode.next();

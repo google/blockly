@@ -58,8 +58,8 @@ class DeleteArea extends DragTarget {
    *   dragged.
    * @param {boolean} couldConnect Whether the element could could connect to
    *     another.
-   * @return {boolean} Whether the element provided would be deleted if dropped on
-   *     this area.
+   * @return {boolean} Whether the element provided would be deleted if dropped
+   *     on this area.
    */
   wouldDelete(element, couldConnect) {
     if (element instanceof BlockSvg) {

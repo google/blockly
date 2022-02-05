@@ -129,8 +129,8 @@ class BasicCursor extends Cursor {
 
   /**
    * Reverses the pre order traversal in order to find the previous node. This
-   * will allow a user to easily navigate the entire Blockly AST without having to
-   * go in and out levels on the tree.
+   * will allow a user to easily navigate the entire Blockly AST without having
+   * to go in and out levels on the tree.
    * @param {?ASTNode} node The current position in the AST.
    * @param {!function(ASTNode) : boolean} isValid A function true/false
    *     depending on whether the given node should be traversed.

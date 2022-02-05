@@ -2100,7 +2100,8 @@ Block.prototype.moveBy = function(dx, dy) {
   if (this.parentBlock_) {
     throw Error('Block has parent.');
   }
-  const event = /** @type {!BlockMove} */ (new (eventUtils.get(eventUtils.BLOCK_MOVE))(this));
+  const event = /** @type {!BlockMove} */ (
+      new (eventUtils.get(eventUtils.BLOCK_MOVE))(this));
   this.xy_.translate(dx, dy);
   event.recordNew();
   eventUtils.fire(event);

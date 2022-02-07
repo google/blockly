@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"23artashes",
 			"A.kolyan",
 			"Armenoid",
 			"Kareyac",
@@ -186,7 +187,7 @@
 	"TEXT_LENGTH_TOOLTIP": "Վերադարձնում է տրված տեքստի տառերի քանակը (ներառյալ բացատները)",
 	"TEXT_ISEMPTY_TITLE": "%1 -ը դատարկ է",
 	"TEXT_ISEMPTY_TOOLTIP": "Վերադարձնում է ճշմարիտ արժեք, եթե տրամադրված տեքստը դատարկ է:",
-	"TEXT_INDEXOF_TOOLTIP": "Վերադարձնում է առաջին տեքստի հանդիպման առաջին(կամ վերջին) դիրքը երկրորդ տեքստում։ Վերադարձնում %1 եթե տեքստը չի գտնվել։",
+	"TEXT_INDEXOF_TOOLTIP": "Վերադարձնում է առաջին տեքստի հանդիպման առաջին (կամ վերջին) դիրքը երկրորդ տեքստում։ Վերադարձնում է %1, եթե տեքստը չի գտնվել։",
 	"TEXT_INDEXOF_TITLE": "Տեքստում %1 %2 %3",
 	"TEXT_INDEXOF_OPERATOR_FIRST": "գտնել տեքստի առաջին հանդիպումը",
 	"TEXT_INDEXOF_OPERATOR_LAST": "գտնել տեքստի վերջին հանդիպումը",
@@ -194,7 +195,7 @@
 	"TEXT_CHARAT_FROM_START": "վերցնել տառ №",
 	"TEXT_CHARAT_FROM_END": "վերցնել տառ № վերջից",
 	"TEXT_CHARAT_FIRST": "վերցնել առաջին տառը",
-	"TEXT_CHARAT_LAST": "վերցնել վերջին տառ",
+	"TEXT_CHARAT_LAST": "վերցնել վերջին տառը",
 	"TEXT_CHARAT_RANDOM": "վերցնել պատահական տառ",
 	"TEXT_CHARAT_TOOLTIP": "Վերադարձնում է նշված դիրքի տառը",
 	"TEXT_GET_SUBSTRING_TOOLTIP": "Վերադարձնում է տեքստի նշված մասը։",

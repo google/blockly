@@ -222,6 +222,11 @@ MassOperationsHandler.prototype.blockMouseUp = function (block, e) {
 MassOperationsHandler.prototype.handleUp_ = function (e) {
   if (!browserEvents.isLeftButton(e)) return
 
+  if (this.blockDraggers_) {
+    this.blockDraggers_.forEach(dragger => dragger.endDrag(e, this.currentDragDeltaXY_));
+    this.blockDraggers_ = null
+  }
+
   this.cleanUp()
 }
 
@@ -396,11 +401,6 @@ MassOperationsHandler.prototype.cleanUp = function () {
     this.selectedBlocks_ = [];
   }
 
-  if (this.blockDraggers_) {
-    this.blockDraggers_.forEach(dragger => dragger.endDrag(e, this.currentDragDeltaXY_));
-    this.blockDraggers_ = null
-  }
-
   this.lastMouseDownBlock_ = null;
   this.mouseDownXY_ = null;
   this.currentDragDeltaXY_ = null
@@ -434,7 +434,7 @@ MassOperationsHandler.prototype.selectAll = function () {
   if (selected) selected.unselect();
 
   this.workspace_.getAllBlocks().forEach(block => {
-    this.addBlockToSelected(block)
+    if (block.inActiveModule()) this.addBlockToSelected(block)
   })
 }
 

@@ -30,7 +30,6 @@ const blockRendering = goog.require('Blockly.blockRendering');
 const blocks = goog.require('Blockly.serialization.blocks');
 const browserEvents = goog.require('Blockly.browserEvents');
 const common = goog.require('Blockly.common');
-const config = goog.require('Blockly.config');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
 const registry = goog.require('Blockly.registry');

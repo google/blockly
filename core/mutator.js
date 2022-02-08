@@ -480,7 +480,7 @@ class Mutator extends Icon {
           eventUtils.setGroup(mutationGroup);
           block.bumpNeighbours();
           eventUtils.setGroup(oldGroup);
-        }, internalConstants.BUMP_DELAY);
+        }, config.bumpDelay);
       }
 
       // Don't update the bubble until the drag has ended, to avoid moving

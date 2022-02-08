@@ -375,54 +375,6 @@ class Mutator extends Icon {
         };
         this.block_.workspace.addChangeListener(this.sourceListener_);
       }
-<<<<<<< HEAD
-    }
-  }
-
-  // When the mutator's workspace changes, update the source block.
-  if (this.rootBlock_.workspace === this.workspace_) {
-    const existingGroup = eventUtils.getGroup();
-    if (!existingGroup) {
-      eventUtils.setGroup(true);
-    }
-    const block = /** @type {!BlockSvg} */ (this.block_);
-    const oldExtraState = BlockChange.getExtraBlockState_(block);
-
-    // Switch off rendering while the source block is rebuilt.
-    const savedRendered = block.rendered;
-    // TODO(#4288): We should not be setting the rendered property to false.
-    block.rendered = false;
-
-    // Allow the source block to rebuild itself.
-    block.compose(this.rootBlock_);
-    // Restore rendering and show the changes.
-    block.rendered = savedRendered;
-    // Mutation may have added some elements that need initializing.
-    block.initSvg();
-
-    if (block.rendered) {
-      block.render();
-    }
-
-    const newExtraState = BlockChange.getExtraBlockState_(block);
-    if (oldExtraState !== newExtraState) {
-      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
-          block, 'mutation', null, oldExtraState, newExtraState));
-      // Ensure that any bump is part of this mutation's event group.
-      const mutationGroup = eventUtils.getGroup();
-      setTimeout(function() {
-        const oldGroup = eventUtils.getGroup();
-        eventUtils.setGroup(mutationGroup);
-        block.bumpNeighbours();
-        eventUtils.setGroup(oldGroup);
-      }, config.bumpDelay);
-    }
-
-    // Don't update the bubble until the drag has ended, to avoid moving blocks
-    // under the cursor.
-    if (!this.workspace_.isDragging()) {
-=======
->>>>>>> e3f40a6abc59abe719f750f4de6953b69e7b1229
       this.resizeBubble_();
       // When the mutator's workspace changes, update the source block.
       this.workspace_.addChangeListener(this.workspaceChanged_.bind(this));

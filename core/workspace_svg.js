@@ -1598,10 +1598,10 @@ class WorkspaceSvg extends Workspace {
             // Check for blocks in snap range to any of its connections.
             const connections = block.getConnections_(false);
             for (let i = 0, connection; (connection = connections[i]); i++) {
-              const neighbour = /** @type {!RenderedConnection} */ (connection)
-                                    .closest(
-                                        config.snapRadius,
-                                        new Coordinate(blockX, blockY));
+              const neighbour =
+                  /** @type {!RenderedConnection} */ (connection)
+                      .closest(
+                          config.snapRadius, new Coordinate(blockX, blockY));
               if (neighbour.connection) {
                 collide = true;
                 break;

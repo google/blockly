@@ -18,9 +18,9 @@ goog.module('Blockly.ZoomControls');
 const Css = goog.require('Blockly.Css');
 const Touch = goog.require('Blockly.Touch');
 const browserEvents = goog.require('Blockly.browserEvents');
-const constants = goog.require('Blockly.constants');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
+const {SPRITE} = goog.require('Blockly.sprite');
 const uiPosition = goog.require('Blockly.uiPosition');
 const {ComponentManager} = goog.require('Blockly.ComponentManager');
 /* eslint-disable-next-line no-unused-vars */
@@ -332,8 +332,8 @@ class ZoomControls {
         clip);
     const zoomoutSvg = dom.createSvgElement(
         Svg.IMAGE, {
-          'width': constants.SPRITE.width,
-          'height': constants.SPRITE.height,
+          'width': SPRITE.width,
+          'height': SPRITE.height,
           'x': -64,
           'y': -92,
           'clip-path': 'url(#blocklyZoomoutClipPath' + rnd + ')',
@@ -341,7 +341,7 @@ class ZoomControls {
         this.zoomOutGroup_);
     zoomoutSvg.setAttributeNS(
         dom.XLINK_NS, 'xlink:href',
-        this.workspace_.options.pathToMedia + constants.SPRITE.url);
+        this.workspace_.options.pathToMedia + SPRITE.url);
 
     // Attach listener.
     this.onZoomOutWrapper_ = browserEvents.conditionalBind(
@@ -377,8 +377,8 @@ class ZoomControls {
         clip);
     const zoominSvg = dom.createSvgElement(
         Svg.IMAGE, {
-          'width': constants.SPRITE.width,
-          'height': constants.SPRITE.height,
+          'width': SPRITE.width,
+          'height': SPRITE.height,
           'x': -32,
           'y': -92,
           'clip-path': 'url(#blocklyZoominClipPath' + rnd + ')',
@@ -386,7 +386,7 @@ class ZoomControls {
         this.zoomInGroup_);
     zoominSvg.setAttributeNS(
         dom.XLINK_NS, 'xlink:href',
-        this.workspace_.options.pathToMedia + constants.SPRITE.url);
+        this.workspace_.options.pathToMedia + SPRITE.url);
 
     // Attach listener.
     this.onZoomInWrapper_ = browserEvents.conditionalBind(
@@ -434,15 +434,15 @@ class ZoomControls {
     dom.createSvgElement(Svg.RECT, {'width': 32, 'height': 32}, clip);
     const zoomresetSvg = dom.createSvgElement(
         Svg.IMAGE, {
-          'width': constants.SPRITE.width,
-          'height': constants.SPRITE.height,
+          'width': SPRITE.width,
+          'height': SPRITE.height,
           'y': -92,
           'clip-path': 'url(#blocklyZoomresetClipPath' + rnd + ')',
         },
         this.zoomResetGroup_);
     zoomresetSvg.setAttributeNS(
         dom.XLINK_NS, 'xlink:href',
-        this.workspace_.options.pathToMedia + constants.SPRITE.url);
+        this.workspace_.options.pathToMedia + SPRITE.url);
 
     // Attach event listeners.
     this.onZoomResetWrapper_ = browserEvents.conditionalBind(

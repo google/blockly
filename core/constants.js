@@ -31,16 +31,3 @@ exports.COLLAPSED_INPUT_NAME = COLLAPSED_INPUT_NAME;
  */
 const COLLAPSED_FIELD_NAME = '_TEMP_COLLAPSED_FIELD';
 exports.COLLAPSED_FIELD_NAME = COLLAPSED_FIELD_NAME;
-
-/**
- * Contains the path to a single png tat holds the images for the trashcan
- * as well as the zoom controls.
- * @const {!Object}
- * @alias Blockly.constants.SPRITE
- */
-const SPRITE = {
-  width: 96,
-  height: 124,
-  url: 'sprites.png',
-};
-exports.SPRITE = SPRITE;

@@ -658,7 +658,6 @@ exports.bindEventWithChecks_ = bindEventWithChecks_;
 // Aliases to allow external code to access these values for legacy reasons.
 exports.COLLAPSE_CHARS = internalConstants.COLLAPSE_CHARS;
 exports.DRAG_STACK = internalConstants.DRAG_STACK;
-exports.SPRITE = constants.SPRITE;
 exports.OPPOSITE_TYPE = internalConstants.OPPOSITE_TYPE;
 exports.RENAME_VARIABLE_ID = internalConstants.RENAME_VARIABLE_ID;
 exports.DELETE_VARIABLE_ID = internalConstants.DELETE_VARIABLE_ID;

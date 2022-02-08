@@ -1,6 +1,6 @@
 {
   "chunk": [
-    "blockly:258",
+    "blockly:259",
     "all:10:blockly",
     "all1:11:blockly",
     "all2:11:blockly",
@@ -114,6 +114,7 @@
     "./core/drag_target.js",
     "./core/delete_area.js",
     "./core/positionable_helpers.js",
+    "./core/sprites.js",
     "./core/trashcan.js",
     "./core/touch_gesture.js",
     "./core/theme_manager.js",

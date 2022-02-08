@@ -15,11 +15,11 @@
  */
 goog.module('Blockly.Events.CommentBase');
 
-const AbstractEvents = goog.require('Blockly.Events.Abstract');
 const Xml = goog.require('Blockly.Xml');
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
 const utilsXml = goog.require('Blockly.utils.xml');
+const {Abstract} = goog.require('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
 const {CommentCreate} = goog.requireType('Blockly.Events.CommentCreate');
 /* eslint-disable-next-line no-unused-vars */
@@ -32,7 +32,7 @@ const {WorkspaceComment} = goog.requireType('Blockly.WorkspaceComment');
  * Abstract class for a comment event.
  * @param {!WorkspaceComment=} opt_comment The comment this event
  *     corresponds to.  Undefined for a blank event.
- * @extends {AbstractEvents}
+ * @extends {Abstract}
  * @constructor
  * @alias Blockly.Events.CommentBase
  */
@@ -69,7 +69,7 @@ const CommentBase = function(opt_comment) {
    */
   this.recordUndo = eventUtils.getRecordUndo();
 };
-object.inherits(CommentBase, AbstractEvents);
+object.inherits(CommentBase, Abstract);
 
 /**
  * Encode the event as JSON.

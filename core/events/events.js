@@ -15,9 +15,9 @@
  */
 goog.module('Blockly.Events');
 
-const Abstract = goog.require('Blockly.Events.Abstract');
 const deprecation = goog.require('Blockly.utils.deprecation');
 const eventUtils = goog.require('Blockly.Events.utils');
+const {Abstract} = goog.require('Blockly.Events.Abstract');
 const {BlockBase} = goog.require('Blockly.Events.BlockBase');
 const {BlockChange} = goog.require('Blockly.Events.BlockChange');
 const {BlockCreate} = goog.require('Blockly.Events.BlockCreate');

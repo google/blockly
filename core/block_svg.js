@@ -1424,14 +1424,17 @@ BlockSvg.prototype.appendInput_ = function(type, name) {
  */
 BlockSvg.prototype.setConnectionTracking = function(track) {
   if (this.previousConnection) {
-    this.previousConnection.setTracking(track);
+    /** @type {!RenderedConnection} */ (this.previousConnection)
+        .setTracking(track);
   }
   if (this.outputConnection) {
-    this.outputConnection.setTracking(track);
+    /** @type {!RenderedConnection} */ (this.outputConnection)
+        .setTracking(track);
   }
   if (this.nextConnection) {
-    this.nextConnection.setTracking(track);
-    const child = this.nextConnection.targetBlock();
+    /** @type {!RenderedConnection} */ (this.nextConnection).setTracking(track);
+    const child =
+        /** @type {!RenderedConnection} */ (this.nextConnection).targetBlock();
     if (child) {
       child.setConnectionTracking(track);
     }
@@ -1445,7 +1448,8 @@ BlockSvg.prototype.setConnectionTracking = function(track) {
   }
 
   for (let i = 0; i < this.inputList.length; i++) {
-    const conn = this.inputList[i].connection;
+    const conn =
+        /** @type {!RenderedConnection} */ (this.inputList[i].connection);
     if (conn) {
       conn.setTracking(track);
 
@@ -1548,23 +1552,26 @@ BlockSvg.prototype.bumpNeighbours = function() {
   // Loop through every connection on this block.
   const myConnections = this.getConnections_(false);
   for (let i = 0, connection; (connection = myConnections[i]); i++) {
+    const renderedConn = /** @type {!RenderedConnection} */ (connection);
     // Spider down from this block bumping all sub-blocks.
-    if (connection.isConnected() && connection.isSuperior()) {
-      connection.targetBlock().bumpNeighbours();
+    if (renderedConn.isConnected() && renderedConn.isSuperior()) {
+      renderedConn.targetBlock().bumpNeighbours();
     }
 
     const neighbours = connection.neighbours(config.snapRadius);
     for (let j = 0, otherConnection; (otherConnection = neighbours[j]); j++) {
+      const renderedOther =
+          /** @type {!RenderedConnection} */ (otherConnection);
       // If both connections are connected, that's probably fine.  But if
       // either one of them is unconnected, then there could be confusion.
-      if (!connection.isConnected() || !otherConnection.isConnected()) {
+      if (!renderedConn.isConnected() || !renderedOther.isConnected()) {
         // Only bump blocks if they are from different tree structures.
-        if (otherConnection.getSourceBlock().getRootBlock() !== rootBlock) {
+        if (renderedOther.getSourceBlock().getRootBlock() !== rootBlock) {
           // Always bump the inferior block.
-          if (connection.isSuperior()) {
-            otherConnection.bumpAwayFrom(connection);
+          if (renderedConn.isSuperior()) {
+            renderedOther.bumpAwayFrom(renderedConn);
           } else {
-            connection.bumpAwayFrom(otherConnection);
+            renderedConn.bumpAwayFrom(renderedOther);
           }
         }
       }
@@ -1707,7 +1714,8 @@ BlockSvg.prototype.updateConnectionLocations_ = function() {
   }
 
   for (let i = 0; i < this.inputList.length; i++) {
-    const conn = this.inputList[i].connection;
+    const conn =
+        /** @type {!RenderedConnection} */ (this.inputList[i].connection);
     if (conn) {
       conn.moveToOffset(blockTL);
       if (conn.isConnected()) {

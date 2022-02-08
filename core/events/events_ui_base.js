@@ -17,8 +17,8 @@
  */
 goog.module('Blockly.Events.UiBase');
 
-const Abstract = goog.require('Blockly.Events.Abstract');
 const object = goog.require('Blockly.utils.object');
+const {Abstract} = goog.require('Blockly.Events.Abstract');
 
 
 /**

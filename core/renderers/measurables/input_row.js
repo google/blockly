@@ -16,7 +16,6 @@
  */
 goog.module('Blockly.blockRendering.InputRow');
 
-const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 const {Row} = goog.require('Blockly.blockRendering.Row');
@@ -25,59 +24,62 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
 
 /**
  * An object containing information about a row that holds one or more inputs.
- * @param {!ConstantProvider} constants The rendering
- *   constants provider.
- * @package
- * @constructor
  * @extends {Row}
- * @alias Blockly.blockRendering.InputRow
+ * @struct
  */
-const InputRow = function(constants) {
-  InputRow.superClass_.constructor.call(this, constants);
-  this.type |= Types.INPUT_ROW;
+class InputRow extends Row {
+  /**
+   * @param {!ConstantProvider} constants The rendering
+   *   constants provider.
+   * @package
+   * @alias Blockly.blockRendering.InputRow
+   */
+  constructor(constants) {
+    super(constants);
+    this.type |= Types.INPUT_ROW;
+
+    /**
+     * The total width of all blocks connected to this row.
+     * @type {number}
+     * @package
+     */
+    this.connectedBlockWidths = 0;
+  }
 
   /**
-   * The total width of all blocks connected to this row.
-   * @type {number}
+   * Inspect all subcomponents and populate all size properties on the row.
    * @package
    */
-  this.connectedBlockWidths = 0;
-};
-object.inherits(InputRow, Row);
-
-/**
- * Inspect all subcomponents and populate all size properties on the row.
- * @package
- */
-InputRow.prototype.measure = function() {
-  this.width = this.minWidth;
-  this.height = this.minHeight;
-  let connectedBlockWidths = 0;
-  for (let i = 0; i < this.elements.length; i++) {
-    const elem = this.elements[i];
-    this.width += elem.width;
-    if (Types.isInput(elem)) {
-      if (Types.isStatementInput(elem)) {
-        connectedBlockWidths += elem.connectedBlockWidth;
-      } else if (
-          Types.isExternalInput(elem) && elem.connectedBlockWidth !== 0) {
-        connectedBlockWidths +=
-            (elem.connectedBlockWidth - elem.connectionWidth);
+  measure() {
+    this.width = this.minWidth;
+    this.height = this.minHeight;
+    let connectedBlockWidths = 0;
+    for (let i = 0; i < this.elements.length; i++) {
+      const elem = this.elements[i];
+      this.width += elem.width;
+      if (Types.isInput(elem)) {
+        if (Types.isStatementInput(elem)) {
+          connectedBlockWidths += elem.connectedBlockWidth;
+        } else if (
+            Types.isExternalInput(elem) && elem.connectedBlockWidth !== 0) {
+          connectedBlockWidths +=
+              (elem.connectedBlockWidth - elem.connectionWidth);
+        }
+      }
+      if (!(Types.isSpacer(elem))) {
+        this.height = Math.max(this.height, elem.height);
       }
     }
-    if (!(Types.isSpacer(elem))) {
-      this.height = Math.max(this.height, elem.height);
-    }
+    this.connectedBlockWidths = connectedBlockWidths;
+    this.widthWithConnectedBlocks = this.width + connectedBlockWidths;
   }
-  this.connectedBlockWidths = connectedBlockWidths;
-  this.widthWithConnectedBlocks = this.width + connectedBlockWidths;
-};
 
-/**
- * @override
- */
-InputRow.prototype.endsWithElemSpacer = function() {
-  return !this.hasExternalInput && !this.hasStatement;
-};
+  /**
+   * @override
+   */
+  endsWithElemSpacer() {
+    return !this.hasExternalInput && !this.hasStatement;
+  }
+}
 
 exports.InputRow = InputRow;

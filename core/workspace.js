@@ -15,8 +15,6 @@
  */
 goog.module('Blockly.Workspace');
 
-/* eslint-disable-next-line no-unused-vars */
-const Abstract = goog.requireType('Blockly.Events.Abstract');
 const arrayUtils = goog.require('Blockly.utils.array');
 const eventUtils = goog.require('Blockly.Events.utils');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
@@ -24,6 +22,8 @@ const math = goog.require('Blockly.utils.math');
 const registry = goog.require('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */
 const toolbox = goog.requireType('Blockly.utils.toolbox');
+/* eslint-disable-next-line no-unused-vars */
+const {Abstract} = goog.requireType('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
 const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
 /* eslint-disable-next-line no-unused-vars */

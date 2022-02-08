@@ -15,10 +15,10 @@
  */
 goog.module('Blockly.bumpObjects');
 
-/* eslint-disable-next-line no-unused-vars */
-const Abstract = goog.requireType('Blockly.Events.Abstract');
 const eventUtils = goog.require('Blockly.Events.utils');
 const mathUtils = goog.require('Blockly.utils.math');
+/* eslint-disable-next-line no-unused-vars */
+const {Abstract} = goog.requireType('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */

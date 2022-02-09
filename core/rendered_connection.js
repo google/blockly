@@ -25,6 +25,7 @@ const svgMath = goog.require('Blockly.utils.svgMath');
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+const {config} = goog.require('Blockly.config');
 /* eslint-disable-next-line no-unused-vars */
 const {ConnectionDB} = goog.requireType('Blockly.ConnectionDB');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
@@ -168,10 +169,10 @@ class RenderedConnection extends Connection {
     // Raise it to the top for extra visibility.
     const selected = common.getSelected() == rootBlock;
     selected || rootBlock.addSelect();
-    let dx = (staticConnection.x + internalConstants.SNAP_RADIUS +
+    let dx = (staticConnection.x + config.snapRadius +
               Math.floor(Math.random() * BUMP_RANDOMNESS)) -
         this.x;
-    let dy = (staticConnection.y + internalConstants.SNAP_RADIUS +
+    let dy = (staticConnection.y + config.snapRadius +
               Math.floor(Math.random() * BUMP_RANDOMNESS)) -
         this.y;
     if (reverse) {
@@ -179,7 +180,7 @@ class RenderedConnection extends Connection {
       dy = -dy;
     }
     if (rootBlock.RTL) {
-      dx = (staticConnection.x - internalConstants.SNAP_RADIUS -
+      dx = (staticConnection.x - config.snapRadius -
             Math.floor(Math.random() * BUMP_RANDOMNESS)) -
           this.x;
     }
@@ -438,7 +439,7 @@ class RenderedConnection extends Connection {
           this.bumpAwayFrom(otherConnection);
           eventUtils.setGroup(false);
         }
-      }.bind(this), internalConstants.BUMP_DELAY);
+      }.bind(this), config.bumpDelay);
     }
   }
 

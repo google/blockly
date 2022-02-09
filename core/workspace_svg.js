@@ -32,7 +32,6 @@ const browserEvents = goog.require('Blockly.browserEvents');
 const common = goog.require('Blockly.common');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
-const internalConstants = goog.require('Blockly.internalConstants');
 const registry = goog.require('Blockly.registry');
 const svgMath = goog.require('Blockly.utils.svgMath');
 const toolbox = goog.require('Blockly.utils.toolbox');
@@ -47,6 +46,7 @@ const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
 const {Block} = goog.requireType('Blockly.Block');
 const {Classic} = goog.require('Blockly.Themes.Classic');
 const {ComponentManager} = goog.require('Blockly.ComponentManager');
+const {config} = goog.require('Blockly.config');
 const {ConnectionDB} = goog.require('Blockly.ConnectionDB');
 const {ContextMenuRegistry} = goog.require('Blockly.ContextMenuRegistry');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
@@ -1598,10 +1598,10 @@ class WorkspaceSvg extends Workspace {
             // Check for blocks in snap range to any of its connections.
             const connections = block.getConnections_(false);
             for (let i = 0, connection; (connection = connections[i]); i++) {
-              const neighbour = /** @type {!RenderedConnection} */ (connection)
-                                    .closest(
-                                        internalConstants.SNAP_RADIUS,
-                                        new Coordinate(blockX, blockY));
+              const neighbour =
+                  /** @type {!RenderedConnection} */ (connection)
+                      .closest(
+                          config.snapRadius, new Coordinate(blockX, blockY));
               if (neighbour.connection) {
                 collide = true;
                 break;
@@ -1610,11 +1610,11 @@ class WorkspaceSvg extends Workspace {
           }
           if (collide) {
             if (this.RTL) {
-              blockX -= internalConstants.SNAP_RADIUS;
+              blockX -= config.snapRadius;
             } else {
-              blockX += internalConstants.SNAP_RADIUS;
+              blockX += config.snapRadius;
             }
-            blockY += internalConstants.SNAP_RADIUS * 2;
+            blockY += config.snapRadius * 2;
           }
         } while (collide);
         block.moveTo(new Coordinate(blockX, blockY));

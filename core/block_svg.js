@@ -34,6 +34,7 @@ const {Block} = goog.require('Blockly.Block');
 const {BlockMove} = goog.requireType('Blockly.Events.BlockMove');
 /* eslint-disable-next-line no-unused-vars */
 const {Comment} = goog.requireType('Blockly.Comment');
+const {config} = goog.require('Blockly.config');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
 /* eslint-disable-next-line no-unused-vars */
 const {Connection} = goog.requireType('Blockly.Connection');
@@ -1560,7 +1561,7 @@ BlockSvg.prototype.bumpNeighbours = function() {
       renderedConn.targetBlock().bumpNeighbours();
     }
 
-    const neighbours = renderedConn.neighbours(internalConstants.SNAP_RADIUS);
+    const neighbours = connection.neighbours(config.snapRadius);
     for (let j = 0, otherConnection; (otherConnection = neighbours[j]); j++) {
       const renderedOther =
           /** @type {!RenderedConnection} */ (otherConnection);
@@ -1595,13 +1596,13 @@ BlockSvg.prototype.scheduleSnapAndBump = function() {
     eventUtils.setGroup(group);
     block.snapToGrid();
     eventUtils.setGroup(false);
-  }, internalConstants.BUMP_DELAY / 2);
+  }, config.bumpDelay / 2);
 
   setTimeout(function() {
     eventUtils.setGroup(group);
     block.bumpNeighbours();
     eventUtils.setGroup(false);
-  }, internalConstants.BUMP_DELAY);
+  }, config.bumpDelay);
 };
 
 /**

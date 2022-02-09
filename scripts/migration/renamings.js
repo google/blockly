@@ -1011,6 +1011,39 @@ const renamings = {
       },
     },
   },
+  '7.20211209.0': {
+    'Blockly': {
+      exports: {
+        DRAG_RADIUS: {
+          module: 'Blockly.config',
+          export: 'config.dragRadius',
+        },
+        FLYOUT_DRAG_RADIUS: {
+          module: 'Blockly.config',
+          export: 'config.flyoutDragRadius',
+        },
+        SNAP_RADIUS: {
+          module: 'Blockly.config',
+          export: 'config.snapRadius',
+        },
+        CONNECTING_SNAP_RADIUS: {
+          module: 'Blockly.config',
+          export: 'config.connectingSnapRadius',
+        },
+        CURRENT_CONNECTION_PREFERENCE: {
+          module: 'Blockly.config',
+          export: 'config.currentConnectionPreference',
+        },
+        BUMP_DELAY: {
+          module: 'Blockly.config',
+          export: 'config.bumpDelay',
+        },
+        SPRITE: {
+          module: 'Blockly.constants',
+        },
+      },
+    },
+  },
 };
 
 exports.renamings = renamings;

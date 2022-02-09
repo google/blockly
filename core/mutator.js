@@ -19,7 +19,6 @@ goog.module('Blockly.Mutator');
 
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
-const internalConstants = goog.require('Blockly.internalConstants');
 const toolbox = goog.require('Blockly.utils.toolbox');
 const xml = goog.require('Blockly.utils.xml');
 /* eslint-disable-next-line no-unused-vars */
@@ -32,6 +31,7 @@ const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 const {Bubble} = goog.require('Blockly.Bubble');
+const {config} = goog.require('Blockly.config');
 /* eslint-disable-next-line no-unused-vars */
 const {Connection} = goog.requireType('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
@@ -480,7 +480,7 @@ class Mutator extends Icon {
           eventUtils.setGroup(mutationGroup);
           block.bumpNeighbours();
           eventUtils.setGroup(oldGroup);
-        }, internalConstants.BUMP_DELAY);
+        }, config.bumpDelay);
       }
 
       // Don't update the bubble until the drag has ended, to avoid moving

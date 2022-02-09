@@ -15,7 +15,7 @@
  * Used to traverse the Blockly AST.
  * @class
  */
-goog.module('Blockly.ASTNode');
+goog.declareModuleId('Blockly.ASTNode');
 
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
@@ -729,4 +729,4 @@ ASTNode.prototype.out = function() {
   return null;
 };
 
-exports.ASTNode = ASTNode;
+export {ASTNode};

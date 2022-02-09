@@ -17,7 +17,7 @@
  * a JavaScript framework such as Closure.
  * @class
  */
-goog.module('Blockly.utils.Coordinate');
+goog.declareModuleId('Blockly.utils.Coordinate');
 
 /**
  * Class for representing coordinates and positions.
@@ -135,4 +135,4 @@ const Coordinate = class {
   }
 };
 
-exports.Coordinate = Coordinate;
+export {Coordinate};

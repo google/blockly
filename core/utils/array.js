@@ -12,7 +12,7 @@
 /**
  * @namespace Blockly.utils.array
  */
-goog.module('Blockly.utils.array');
+goog.declareModuleId('Blockly.utils.array');
 
 
 /**
@@ -31,4 +31,4 @@ const removeElem = function(arr, value) {
   arr.splice(i, 1);
   return true;
 };
-exports.removeElem = removeElem;
+export {removeElem};

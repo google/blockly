@@ -13,7 +13,7 @@
  * Class for comment creation event.
  * @class
  */
-goog.module('Blockly.Events.CommentCreate');
+goog.declareModuleId('Blockly.Events.CommentCreate');
 
 const Xml = goog.require('Blockly.Xml');
 const eventUtils = goog.require('Blockly.Events.utils');
@@ -81,4 +81,4 @@ class CommentCreate extends CommentBase {
 registry.register(
     registry.Type.EVENT, eventUtils.COMMENT_CREATE, CommentCreate);
 
-exports.CommentCreate = CommentCreate;
+export {CommentCreate};

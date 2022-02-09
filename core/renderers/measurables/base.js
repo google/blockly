@@ -14,7 +14,7 @@
  * Methods for graphically rendering a block as SVG.
  * @class
  */
-goog.module('Blockly.blockRendering.Measurable');
+goog.declareModuleId('Blockly.blockRendering.Measurable');
 
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -58,4 +58,4 @@ const Measurable = function(constants) {
   this.notchOffset = this.constants_.NOTCH_OFFSET_LEFT;
 };
 
-exports.Measurable = Measurable;
+export {Measurable};

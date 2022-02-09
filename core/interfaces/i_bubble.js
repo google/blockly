@@ -14,7 +14,7 @@
  * The interface for a bubble.
  * @namespace Blockly.IBubble
  */
-goog.module('Blockly.IBubble');
+goog.declareModuleId('Blockly.IBubble');
 
 /* eslint-disable-next-line no-unused-vars */
 const {BlockDragSurfaceSvg} = goog.requireType('Blockly.BlockDragSurfaceSvg');
@@ -92,4 +92,4 @@ IBubble.prototype.setDeleteStyle;
  */
 IBubble.prototype.dispose;
 
-exports.IBubble = IBubble;
+export {IBubble};

@@ -13,7 +13,7 @@
  * Utility methods.
  * @namespace Blockly.utils
  */
-goog.module('Blockly.utils');
+goog.declareModuleId('Blockly.utils');
 
 const aria = goog.require('Blockly.utils.aria');
 const arrayUtils = goog.require('Blockly.utils.array');
@@ -47,28 +47,29 @@ const {Svg} = goog.require('Blockly.utils.Svg');
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 
-exports.aria = aria;
-exports.colour = colourUtils;
-exports.Coordinate = Coordinate;
-exports.deprecation = deprecation;
-exports.dom = dom;
-exports.global = global.globalThis;
-exports.idGenerator = idGenerator;
-exports.KeyCodes = KeyCodes;
-exports.math = math;
-exports.Metrics = Metrics;
-exports.object = object;
-exports.parsing = parsing;
-exports.Rect = Rect;
-exports.Size = Size;
-exports.string = stringUtils;
-exports.style = style;
-exports.Svg = Svg;
-exports.svgPaths = svgPaths;
-exports.svgMath = svgMath;
-exports.toolbox = toolbox;
-exports.userAgent = userAgent;
-exports.xml = xmlUtils;
+export {aria};
+export {colourUtils as colour};
+export {Coordinate};
+export {deprecation};
+export {dom};
+const globalThis = global.globalThis;
+export {globalThis as global};
+export {idGenerator};
+export {KeyCodes};
+export {math};
+export {Metrics};
+export {object};
+export {parsing};
+export {Rect};
+export {Size};
+export {stringUtils as string};
+export {style};
+export {Svg};
+export {svgPaths};
+export {svgMath};
+export {toolbox};
+export {userAgent};
+export {xmlUtils as xml};
 
 /**
  * Halts the propagation of the event without doing anything else.
@@ -82,7 +83,7 @@ const noEvent = function(e) {
   e.preventDefault();
   e.stopPropagation();
 };
-exports.noEvent = noEvent;
+export {noEvent};
 
 /**
  * Returns true if this event is targeting a text input widget?
@@ -97,7 +98,7 @@ const isTargetInput = function(e) {
       'Blockly.browserEvents.isTargetInput');
   return browserEvents.isTargetInput(e);
 };
-exports.isTargetInput = isTargetInput;
+export {isTargetInput};
 
 /**
  * Return the coordinates of the top-left corner of this element relative to
@@ -113,7 +114,7 @@ const getRelativeXY = function(element) {
       'Blockly.utils.svgMath.getRelativeXY');
   return svgMath.getRelativeXY(element);
 };
-exports.getRelativeXY = getRelativeXY;
+export {getRelativeXY};
 
 /**
  * Return the coordinates of the top-left corner of this element relative to
@@ -131,7 +132,7 @@ const getInjectionDivXY = function(element) {
       'Blockly.utils.svgMath.getInjectionDivXY');
   return svgMath.getInjectionDivXY(element);
 };
-exports.getInjectionDivXY_ = getInjectionDivXY;
+export {getInjectionDivXY as getInjectionDivXY_};
 
 /**
  * Returns true this event is a right-click.
@@ -146,7 +147,7 @@ const isRightButton = function(e) {
       'Blockly.browserEvents.isRightButton');
   return browserEvents.isRightButton(e);
 };
-exports.isRightButton = isRightButton;
+export {isRightButton};
 
 /**
  * Returns the converted coordinates of the given mouse event.
@@ -164,7 +165,7 @@ const mouseToSvg = function(e, svg, matrix) {
       'Blockly.browserEvents.mouseToSvg');
   return browserEvents.mouseToSvg(e, svg, matrix);
 };
-exports.mouseToSvg = mouseToSvg;
+export {mouseToSvg};
 
 /**
  * Returns the scroll delta of a mouse event in pixel units.
@@ -180,7 +181,7 @@ const getScrollDeltaPixels = function(e) {
       'Blockly.browserEvents.getScrollDeltaPixels');
   return browserEvents.getScrollDeltaPixels(e);
 };
-exports.getScrollDeltaPixels = getScrollDeltaPixels;
+export {getScrollDeltaPixels};
 
 /**
  * Parse a string with any number of interpolation tokens (%1, %2, ...).
@@ -200,7 +201,7 @@ const tokenizeInterpolation = function(message) {
       'Blockly.utils.parsing.tokenizeInterpolation');
   return parsing.tokenizeInterpolation(message);
 };
-exports.tokenizeInterpolation = tokenizeInterpolation;
+export {tokenizeInterpolation};
 
 /**
  * Replaces string table references in a message, if the message is a string.
@@ -218,7 +219,7 @@ const replaceMessageReferences = function(message) {
       'December 2022', 'Blockly.utils.parsing.replaceMessageReferences');
   return parsing.replaceMessageReferences(message);
 };
-exports.replaceMessageReferences = replaceMessageReferences;
+export {replaceMessageReferences};
 
 /**
  * Validates that any %{MSG_KEY} references in the message refer to keys of
@@ -235,7 +236,7 @@ const checkMessageReferences = function(message) {
       'Blockly.utils.parsing.checkMessageReferences');
   return parsing.checkMessageReferences(message);
 };
-exports.checkMessageReferences = checkMessageReferences;
+export {checkMessageReferences};
 
 /**
  * Generate a unique ID.
@@ -249,7 +250,7 @@ const genUid = function() {
       'Blockly.utils.idGenerator.genUid');
   return idGenerator.genUid();
 };
-exports.genUid = genUid;
+export {genUid};
 
 /**
  * Check if 3D transforms are supported by adding an element
@@ -264,7 +265,7 @@ const is3dSupported = function() {
       'Blockly.utils.svgMath.is3dSupported');
   return svgMath.is3dSupported();
 };
-exports.is3dSupported = is3dSupported;
+export {is3dSupported};
 
 /**
  * Get the position of the current viewport in window coordinates.  This takes
@@ -281,7 +282,7 @@ const getViewportBBox = function() {
       'Blockly.utils.svgMath.getViewportBBox');
   return svgMath.getViewportBBox();
 };
-exports.getViewportBBox = getViewportBBox;
+export {getViewportBBox};
 
 /**
  * Removes the first occurrence of a particular value from an array.
@@ -297,7 +298,7 @@ const arrayRemove = function(arr, value) {
       'Blockly.utils.arrayRemove', 'December 2021', 'December 2022');
   return arrayUtils.removeElem(arr, value);
 };
-exports.arrayRemove = arrayRemove;
+export {arrayRemove};
 
 /**
  * Gets the document scroll distance as a coordinate object.
@@ -312,7 +313,7 @@ const getDocumentScroll = function() {
       'Blockly.utils.svgMath.getDocumentScroll');
   return svgMath.getDocumentScroll();
 };
-exports.getDocumentScroll = getDocumentScroll;
+export {getDocumentScroll};
 
 /**
  * Get a map of all the block's descendants mapping their type to the number of
@@ -331,7 +332,7 @@ const getBlockTypeCounts = function(block, opt_stripFollowing) {
       'Blockly.common.getBlockTypeCounts');
   return common.getBlockTypeCounts(block, opt_stripFollowing);
 };
-exports.getBlockTypeCounts = getBlockTypeCounts;
+export {getBlockTypeCounts};
 
 /**
  * Converts screen coordinates to workspace coordinates.
@@ -347,7 +348,7 @@ const screenToWsCoordinates = function(ws, screenCoordinates) {
       'Blockly.utils.svgMath.screenToWsCoordinates');
   return svgMath.screenToWsCoordinates(ws, screenCoordinates);
 };
-exports.screenToWsCoordinates = screenToWsCoordinates;
+export {screenToWsCoordinates};
 
 /**
  * Parse a block colour from a number or string, as provided in a block
@@ -366,7 +367,7 @@ const parseBlockColour = function(colour) {
       'Blockly.utils.parsing.parseBlockColour');
   return parsing.parseBlockColour(colour);
 };
-exports.parseBlockColour = parseBlockColour;
+export {parseBlockColour};
 
 /**
  * Calls a function after the page has loaded, possibly immediately.
@@ -380,4 +381,4 @@ const runAfterPageLoad = function(fn) {
       'Blockly.utils.runAfterPageLoad', 'December 2021', 'December 2022');
   extensions.runAfterPageLoad(fn);
 };
-exports.runAfterPageLoad = runAfterPageLoad;
+export {runAfterPageLoad};

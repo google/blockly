@@ -14,7 +14,7 @@
  * The interface for an object that a style can be added to.
  * @namespace Blockly.IStyleable
  */
-goog.module('Blockly.IStyleable');
+goog.declareModuleId('Blockly.IStyleable');
 
 
 /**
@@ -36,4 +36,4 @@ IStyleable.prototype.addStyle;
  */
 IStyleable.prototype.removeStyle;
 
-exports.IStyleable = IStyleable;
+export {IStyleable};

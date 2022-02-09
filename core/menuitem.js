@@ -13,7 +13,7 @@
  * Blockly menu item similar to Closure's goog.ui.MenuItem
  * @class
  */
-goog.module('Blockly.MenuItem');
+goog.declareModuleId('Blockly.MenuItem');
 
 const aria = goog.require('Blockly.utils.aria');
 const dom = goog.require('Blockly.utils.dom');
@@ -286,4 +286,4 @@ const MenuItem = class {
   }
 };
 
-exports.MenuItem = MenuItem;
+export {MenuItem};

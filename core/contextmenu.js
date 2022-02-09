@@ -13,14 +13,13 @@
  * Functionality for the right-click context menus.
  * @namespace Blockly.ContextMenu
  */
-goog.module('Blockly.ContextMenu');
+goog.declareModuleId('Blockly.ContextMenu');
 
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const Xml = goog.require('Blockly.Xml');
 const aria = goog.require('Blockly.utils.aria');
 const browserEvents = goog.require('Blockly.browserEvents');
 const clipboard = goog.require('Blockly.clipboard');
-const deprecation = goog.require('Blockly.utils.deprecation');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
 const internalConstants = goog.require('Blockly.internalConstants');
@@ -41,6 +40,8 @@ const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 goog.require('Blockly.Events.BlockCreate');
 
 
+const widgetDivOwner = {};
+
 /**
  * Which block is the context menu attached to?
  * @type {?Block}
@@ -55,7 +56,7 @@ let currentBlock = null;
 const getCurrentBlock = function() {
   return currentBlock;
 };
-exports.getCurrentBlock = getCurrentBlock;
+export {getCurrentBlock};
 
 /**
  * Sets the block the context menu is currently attached to.
@@ -65,33 +66,7 @@ exports.getCurrentBlock = getCurrentBlock;
 const setCurrentBlock = function(block) {
   currentBlock = block;
 };
-exports.setCurrentBlock = setCurrentBlock;
-
-// Add JS accessors for backwards compatibility.
-Object.defineProperties(exports, {
-  /**
-   * Which block is the context menu attached to?
-   * @name Blockly.ContextMenu.currentBlock
-   * @type {Block}
-   * @deprecated Use Blockly.Tooltip.getCurrentBlock() /
-   *     .setCurrentBlock() instead.  (September 2021)
-   * @suppress {checkTypes}
-   */
-  currentBlock: {
-    get: function() {
-      deprecation.warn(
-          'Blockly.ContextMenu.currentBlock', 'September 2021',
-          'September 2022', 'Blockly.Tooltip.getCurrentBlock()');
-      return getCurrentBlock();
-    },
-    set: function(block) {
-      deprecation.warn(
-          'Blockly.ContextMenu.currentBlock', 'September 2021',
-          'September 2022', 'Blockly.Tooltip.setCurrentBlock(block)');
-      setCurrentBlock(block);
-    },
-  },
-});
+export {setCurrentBlock};
 
 /**
  * Menu object.
@@ -107,7 +82,7 @@ let menu_ = null;
  * @alias Blockly.ContextMenu.show
  */
 const show = function(e, options, rtl) {
-  WidgetDiv.show(exports, rtl, dispose);
+  WidgetDiv.show(widgetDivOwner, rtl, dispose);
   if (!options.length) {
     hide();
     return;
@@ -123,7 +98,7 @@ const show = function(e, options, rtl) {
   }, 1);
   currentBlock = null;  // May be set by Blockly.Block.
 };
-exports.show = show;
+export {show};
 
 /**
  * Create the context menu object and populate it with the given options.
@@ -232,10 +207,10 @@ const haltPropagation = function(e) {
  * @alias Blockly.ContextMenu.hide
  */
 const hide = function() {
-  WidgetDiv.hideIfOwner(exports);
+  WidgetDiv.hideIfOwner(widgetDivOwner);
   currentBlock = null;
 };
-exports.hide = hide;
+export {hide};
 
 /**
  * Dispose of the menu.
@@ -247,7 +222,7 @@ const dispose = function() {
     menu_ = null;
   }
 };
-exports.dispose = dispose;
+export {dispose};
 
 /**
  * Create a callback function that creates and configures a block,
@@ -281,7 +256,7 @@ const callbackFactory = function(block, xml) {
     newBlock.select();
   };
 };
-exports.callbackFactory = callbackFactory;
+export {callbackFactory};
 
 // Helper functions for creating context menu options.
 
@@ -305,7 +280,7 @@ const commentDeleteOption = function(comment) {
   };
   return deleteOption;
 };
-exports.commentDeleteOption = commentDeleteOption;
+export {commentDeleteOption};
 
 /**
  * Make a context menu option for duplicating the current workspace comment.
@@ -325,7 +300,7 @@ const commentDuplicateOption = function(comment) {
   };
   return duplicateOption;
 };
-exports.commentDuplicateOption = commentDuplicateOption;
+export {commentDuplicateOption};
 
 /**
  * Make a context menu option for adding a comment on the workspace.
@@ -392,4 +367,4 @@ const workspaceCommentOption = function(ws, e) {
   };
   return wsCommentOption;
 };
-exports.workspaceCommentOption = workspaceCommentOption;
+export {workspaceCommentOption};

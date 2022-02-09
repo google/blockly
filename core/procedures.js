@@ -13,7 +13,7 @@
  * Utility functions for handling procedures.
  * @namespace Blockly.Procedures
  */
-goog.module('Blockly.Procedures');
+goog.declareModuleId('Blockly.Procedures');
 
 const Variables = goog.require('Blockly.Variables');
 const Xml = goog.require('Blockly.Xml');
@@ -45,7 +45,7 @@ goog.require('Blockly.Events.BlockChange');
  * @alias Blockly.Procedures.CATEGORY_NAME
  */
 const CATEGORY_NAME = 'PROCEDURE';
-exports.CATEGORY_NAME = CATEGORY_NAME;
+export {CATEGORY_NAME};
 
 /**
  * The default argument for a procedures_mutatorarg block.
@@ -53,7 +53,7 @@ exports.CATEGORY_NAME = CATEGORY_NAME;
  * @alias Blockly.Procedures.DEFAULT_ARG
  */
 const DEFAULT_ARG = 'x';
-exports.DEFAULT_ARG = DEFAULT_ARG;
+export {DEFAULT_ARG};
 
 /**
  * Procedure block type.
@@ -65,7 +65,7 @@ exports.DEFAULT_ARG = DEFAULT_ARG;
  * @alias Blockly.Procedures.ProcedureBlock
  */
 let ProcedureBlock;
-exports.ProcedureBlock = ProcedureBlock;
+export {ProcedureBlock};
 
 /**
  * Find all user-created procedure definitions in a workspace.
@@ -90,7 +90,7 @@ const allProcedures = function(root) {
   proceduresReturn.sort(procTupleComparator);
   return [proceduresNoReturn, proceduresReturn];
 };
-exports.allProcedures = allProcedures;
+export {allProcedures};
 
 /**
  * Comparison function for case-insensitive sorting of the first element of
@@ -129,7 +129,7 @@ const findLegalName = function(name, block) {
   }
   return name;
 };
-exports.findLegalName = findLegalName;
+export {findLegalName};
 
 /**
  * Does this procedure have a legal name?  Illegal names include names of
@@ -170,7 +170,7 @@ const isNameUsed = function(name, workspace, opt_exclude) {
   }
   return false;
 };
-exports.isNameUsed = isNameUsed;
+export {isNameUsed};
 
 /**
  * Rename a procedure.  Called by the editable field.
@@ -200,7 +200,7 @@ const rename = function(name) {
   }
   return legalName;
 };
-exports.rename = rename;
+export {rename};
 
 /**
  * Construct the blocks required by the flyout for the procedure category.
@@ -286,7 +286,7 @@ const flyoutCategory = function(workspace) {
   populateProcedures(tuple[1], 'procedures_callreturn');
   return xmlList;
 };
-exports.flyoutCategory = flyoutCategory;
+export {flyoutCategory};
 
 /**
  * Updates the procedure mutator's flyout so that the arg block is not a
@@ -339,7 +339,7 @@ const mutatorOpenListener = function(e) {
   updateMutatorFlyout(workspace);
   workspace.addChangeListener(mutatorChangeListener);
 };
-exports.mutatorOpenListener = mutatorOpenListener;
+export {mutatorOpenListener};
 
 /**
  * Listens for changes in a procedure mutator and triggers flyout updates when
@@ -381,7 +381,7 @@ const getCallers = function(name, workspace) {
   }
   return callers;
 };
-exports.getCallers = getCallers;
+export {getCallers};
 
 /**
  * When a procedure definition changes its parameters, find and edit all its
@@ -412,7 +412,7 @@ const mutateCallers = function(defBlock) {
     }
   }
 };
-exports.mutateCallers = mutateCallers;
+export {mutateCallers};
 
 /**
  * Find the definition block for the named procedure.
@@ -437,4 +437,4 @@ const getDefinition = function(name, workspace) {
   }
   return null;
 };
-exports.getDefinition = getDefinition;
+export {getDefinition};

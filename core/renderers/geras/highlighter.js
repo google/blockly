@@ -15,7 +15,7 @@
  * compatibility mode.
  * @class
  */
-goog.module('Blockly.geras.Highlighter');
+goog.declareModuleId('Blockly.geras.Highlighter');
 
 const svgPaths = goog.require('Blockly.utils.svgPaths');
 /* eslint-disable-next-line no-unused-vars */
@@ -307,4 +307,4 @@ class Highlighter {
   }
 }
 
-exports.Highlighter = Highlighter;
+export {Highlighter};

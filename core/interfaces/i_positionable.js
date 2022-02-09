@@ -14,7 +14,7 @@
  * The interface for a positionable UI element.
  * @namespace Blockly.IPositionable
  */
-goog.module('Blockly.IPositionable');
+goog.declareModuleId('Blockly.IPositionable');
 
 /* eslint-disable-next-line no-unused-vars */
 const {IComponent} = goog.require('Blockly.IComponent');
@@ -48,4 +48,4 @@ IPositionable.prototype.position;
  */
 IPositionable.prototype.getBoundingRectangle;
 
-exports.IPositionable = IPositionable;
+export {IPositionable};

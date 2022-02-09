@@ -14,7 +14,7 @@
  * a rendered block.
  * @class
  */
-goog.module('Blockly.zelos.StatementInput');
+goog.declareModuleId('Blockly.zelos.StatementInput');
 
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -54,4 +54,4 @@ class StatementInput extends BaseStatementInput {
   }
 }
 
-exports.StatementInput = StatementInput;
+export {StatementInput};

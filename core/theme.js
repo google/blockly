@@ -13,7 +13,7 @@
  * The class representing a theme.
  * @class
  */
-goog.module('Blockly.Theme');
+goog.declareModuleId('Blockly.Theme');
 
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
@@ -225,4 +225,4 @@ Theme.ComponentStyle;
  */
 Theme.FontStyle;
 
-exports.Theme = Theme;
+export {Theme};

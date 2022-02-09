@@ -13,7 +13,7 @@
  * Touch handling for Blockly.
  * @namespace Blockly.Touch
  */
-goog.module('Blockly.Touch');
+goog.declareModuleId('Blockly.Touch');
 
 const utilsString = goog.require('Blockly.utils.string');
 /* eslint-disable-next-line no-unused-vars */
@@ -40,7 +40,7 @@ const TOUCH_ENABLED =
      !!(globalThis['navigator'] &&
         (globalThis['navigator']['maxTouchPoints'] ||
          globalThis['navigator']['msMaxTouchPoints'])));
-exports.TOUCH_ENABLED = TOUCH_ENABLED;
+export {TOUCH_ENABLED};
 
 /**
  * Which touch events are we currently paying attention to?
@@ -74,7 +74,7 @@ if (globalThis['PointerEvent']) {
     'mouseup': ['touchend', 'touchcancel'],
   };
 }
-exports.TOUCH_MAP = TOUCH_MAP;
+export {TOUCH_MAP};
 
 /**
  * PID of queued long-press task.
@@ -114,7 +114,7 @@ const longStart = function(e, gesture) {
     }
   }, LONGPRESS);
 };
-exports.longStart = longStart;
+export {longStart};
 
 /**
  * Nope, that's not a long-press.  Either touchend or touchcancel was fired,
@@ -128,7 +128,7 @@ const longStop = function() {
     longPid_ = 0;
   }
 };
-exports.longStop = longStop;
+export {longStop};
 
 /**
  * Clear the touch identifier that tracks which touch stream to pay attention
@@ -139,7 +139,7 @@ exports.longStop = longStop;
 const clearTouchIdentifier = function() {
   touchIdentifier_ = null;
 };
-exports.clearTouchIdentifier = clearTouchIdentifier;
+export {clearTouchIdentifier};
 
 /**
  * Decide whether Blockly should handle or ignore this event.
@@ -153,7 +153,7 @@ exports.clearTouchIdentifier = clearTouchIdentifier;
 const shouldHandleEvent = function(e) {
   return !isMouseOrTouchEvent(e) || checkTouchIdentifier(e);
 };
-exports.shouldHandleEvent = shouldHandleEvent;
+export {shouldHandleEvent};
 
 /**
  * Get the touch identifier from the given event.  If it was a mouse event, the
@@ -171,7 +171,7 @@ const getTouchIdentifierFromEvent = function(e) {
                                      e.changedTouches[0].identifier :
                                      'mouse';
 };
-exports.getTouchIdentifierFromEvent = getTouchIdentifierFromEvent;
+export {getTouchIdentifierFromEvent};
 
 /**
  * Check whether the touch identifier on the event matches the current saved
@@ -208,7 +208,7 @@ const checkTouchIdentifier = function(e) {
   // pointer was down.
   return false;
 };
-exports.checkTouchIdentifier = checkTouchIdentifier;
+export {checkTouchIdentifier};
 
 /**
  * Set an event's clientX and clientY from its first changed touch.  Use this to
@@ -224,7 +224,7 @@ const setClientFromTouch = function(e) {
     e.clientY = touchPoint.clientY;
   }
 };
-exports.setClientFromTouch = setClientFromTouch;
+export {setClientFromTouch};
 
 /**
  * Check whether a given event is a mouse or touch event.
@@ -237,7 +237,7 @@ const isMouseOrTouchEvent = function(e) {
       utilsString.startsWith(e.type, 'mouse') ||
       utilsString.startsWith(e.type, 'pointer');
 };
-exports.isMouseOrTouchEvent = isMouseOrTouchEvent;
+export {isMouseOrTouchEvent};
 
 /**
  * Check whether a given event is a touch event or a pointer event.
@@ -249,7 +249,7 @@ const isTouchEvent = function(e) {
   return utilsString.startsWith(e.type, 'touch') ||
       utilsString.startsWith(e.type, 'pointer');
 };
-exports.isTouchEvent = isTouchEvent;
+export {isTouchEvent};
 
 /**
  * Split an event into an array of events, one per changed touch or mouse
@@ -282,4 +282,4 @@ const splitEventByTouches = function(e) {
   }
   return events;
 };
-exports.splitEventByTouches = splitEventByTouches;
+export {splitEventByTouches};

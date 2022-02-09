@@ -13,7 +13,7 @@
  * Browser event handling.
  * @namespace Blockly.browserEvents
  */
-goog.module('Blockly.browserEvents');
+goog.declareModuleId('Blockly.browserEvents');
 
 const Touch = goog.require('Blockly.Touch');
 const userAgent = goog.require('Blockly.utils.userAgent');
@@ -27,7 +27,7 @@ const {globalThis} = goog.require('Blockly.utils.global');
  * @alias Blockly.browserEvents.Data
  */
 let Data;
-exports.Data = Data;
+export {Data};
 
 /**
  * The multiplier for scroll wheel deltas using the line delta mode.
@@ -122,7 +122,7 @@ const conditionalBind = function(
   }
   return bindData;
 };
-exports.conditionalBind = conditionalBind;
+export {conditionalBind};
 
 
 /**
@@ -182,7 +182,7 @@ const bind = function(node, name, thisObject, func) {
   }
   return bindData;
 };
-exports.bind = bind;
+export {bind};
 
 /**
  * Unbind one or more events event from a function call.
@@ -202,7 +202,7 @@ const unbind = function(bindData) {
   }
   return func;
 };
-exports.unbind = unbind;
+export {unbind};
 
 /**
  * Returns true if this event is targeting a text input widget?
@@ -218,7 +218,7 @@ const isTargetInput = function(e) {
       e.target.isContentEditable ||
       (e.target.dataset && e.target.dataset.isTextInput === 'true');
 };
-exports.isTargetInput = isTargetInput;
+export {isTargetInput};
 
 /**
  * Returns true this event is a right-click.
@@ -234,7 +234,7 @@ const isRightButton = function(e) {
   }
   return e.button === 2;
 };
-exports.isRightButton = isRightButton;
+export {isRightButton};
 
 /**
  * Returns the converted coordinates of the given mouse event.
@@ -255,7 +255,7 @@ const mouseToSvg = function(e, svg, matrix) {
   }
   return svgPoint.matrixTransform(matrix);
 };
-exports.mouseToSvg = mouseToSvg;
+export {mouseToSvg};
 
 /**
  * Returns the scroll delta of a mouse event in pixel units.
@@ -281,4 +281,4 @@ const getScrollDeltaPixels = function(e) {
       };
   }
 };
-exports.getScrollDeltaPixels = getScrollDeltaPixels;
+export {getScrollDeltaPixels};

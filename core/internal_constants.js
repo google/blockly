@@ -16,7 +16,7 @@
  * use these constants outside of the core library.
  * @namespace Blockly.internalConstants
  */
-goog.module('Blockly.internalConstants');
+goog.declareModuleId('Blockly.internalConstants');
 
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
 
@@ -26,7 +26,7 @@ const {ConnectionType} = goog.require('Blockly.ConnectionType');
  * @alias Blockly.internalConstants.DRAG_RADIUS
  */
 const DRAG_RADIUS = 5;
-exports.DRAG_RADIUS = DRAG_RADIUS;
+export {DRAG_RADIUS};
 
 /**
  * Number of pixels the mouse must move before a drag/scroll starts from the
@@ -35,14 +35,14 @@ exports.DRAG_RADIUS = DRAG_RADIUS;
  * @alias Blockly.internalConstants.FLYOUT_DRAG_RADIUS
  */
 const FLYOUT_DRAG_RADIUS = 10;
-exports.FLYOUT_DRAG_RADIUS = FLYOUT_DRAG_RADIUS;
+export {FLYOUT_DRAG_RADIUS};
 
 /**
  * Maximum misalignment between connections for them to snap together.
  * @alias Blockly.internalConstants.SNAP_RADIUS
  */
 const SNAP_RADIUS = 28;
-exports.SNAP_RADIUS = SNAP_RADIUS;
+export {SNAP_RADIUS};
 
 /**
  * Maximum misalignment between connections for them to snap together,
@@ -50,7 +50,7 @@ exports.SNAP_RADIUS = SNAP_RADIUS;
  * @alias Blockly.internalConstants.CONNECTING_SNAP_RADIUS
  */
 const CONNECTING_SNAP_RADIUS = SNAP_RADIUS;
-exports.CONNECTING_SNAP_RADIUS = CONNECTING_SNAP_RADIUS;
+export {CONNECTING_SNAP_RADIUS};
 
 /**
  * How much to prefer staying connected to the current connection over moving to
@@ -59,21 +59,21 @@ exports.CONNECTING_SNAP_RADIUS = CONNECTING_SNAP_RADIUS;
  * @alias Blockly.internalConstants.CURRENT_CONNECTION_PREFERENCE
  */
 const CURRENT_CONNECTION_PREFERENCE = 8;
-exports.CURRENT_CONNECTION_PREFERENCE = CURRENT_CONNECTION_PREFERENCE;
+export {CURRENT_CONNECTION_PREFERENCE};
 
 /**
  * Delay in ms between trigger and bumping unconnected block out of alignment.
  * @alias Blockly.internalConstants.BUMP_DELAY
  */
 const BUMP_DELAY = 250;
-exports.BUMP_DELAY = BUMP_DELAY;
+export {BUMP_DELAY};
 
 /**
  * Number of characters to truncate a collapsed block to.
  * @alias Blockly.internalConstants.COLLAPSE_CHARS
  */
 const COLLAPSE_CHARS = 30;
-exports.COLLAPSE_CHARS = COLLAPSE_CHARS;
+export {COLLAPSE_CHARS};
 
 /**
  * When dragging a block out of a stack, split the stack in two (true), or drag
@@ -81,7 +81,7 @@ exports.COLLAPSE_CHARS = COLLAPSE_CHARS;
  * @alias Blockly.internalConstants.DRAG_STACK
  */
 const DRAG_STACK = true;
-exports.DRAG_STACK = DRAG_STACK;
+export {DRAG_STACK};
 
 /**
  * Sprited icons and images.
@@ -92,7 +92,7 @@ const SPRITE = {
   height: 124,
   url: 'sprites.png',
 };
-exports.SPRITE = SPRITE;
+export {SPRITE};
 
 /**
  * ENUM for no drag operation.
@@ -100,7 +100,7 @@ exports.SPRITE = SPRITE;
  * @alias Blockly.internalConstants.DRAG_NONE
  */
 const DRAG_NONE = 0;
-exports.DRAG_NONE = DRAG_NONE;
+export {DRAG_NONE};
 
 /**
  * ENUM for inside the sticky DRAG_RADIUS.
@@ -108,7 +108,7 @@ exports.DRAG_NONE = DRAG_NONE;
  * @alias Blockly.internalConstants.DRAG_STICKY
  */
 const DRAG_STICKY = 1;
-exports.DRAG_STICKY = DRAG_STICKY;
+export {DRAG_STICKY};
 
 /**
  * ENUM for inside the non-sticky DRAG_RADIUS, for differentiating between
@@ -117,7 +117,7 @@ exports.DRAG_STICKY = DRAG_STICKY;
  * @alias Blockly.internalConstants.DRAG_BEGIN
  */
 const DRAG_BEGIN = 1;
-exports.DRAG_BEGIN = DRAG_BEGIN;
+export {DRAG_BEGIN};
 
 /**
  * ENUM for freely draggable (outside the DRAG_RADIUS, if one applies).
@@ -125,7 +125,7 @@ exports.DRAG_BEGIN = DRAG_BEGIN;
  * @alias Blockly.internalConstants.DRAG_FREE
  */
 const DRAG_FREE = 2;
-exports.DRAG_FREE = DRAG_FREE;
+export {DRAG_FREE};
 
 /**
  * Lookup table for determining the opposite type of a connection.
@@ -140,7 +140,7 @@ OPPOSITE_TYPE[ConnectionType.NEXT_STATEMENT] =
 OPPOSITE_TYPE[ConnectionType.PREVIOUS_STATEMENT] =
     ConnectionType.NEXT_STATEMENT;
 
-exports.OPPOSITE_TYPE = OPPOSITE_TYPE;
+export {OPPOSITE_TYPE};
 
 /**
  * String for use in the dropdown created in field_variable.
@@ -150,7 +150,7 @@ exports.OPPOSITE_TYPE = OPPOSITE_TYPE;
  * @alias Blockly.internalConstants.RENAME_VARIABLE_ID
  */
 const RENAME_VARIABLE_ID = 'RENAME_VARIABLE_ID';
-exports.RENAME_VARIABLE_ID = RENAME_VARIABLE_ID;
+export {RENAME_VARIABLE_ID};
 
 /**
  * String for use in the dropdown created in field_variable.
@@ -160,4 +160,4 @@ exports.RENAME_VARIABLE_ID = RENAME_VARIABLE_ID;
  * @alias Blockly.internalConstants.DELETE_VARIABLE_ID
  */
 const DELETE_VARIABLE_ID = 'DELETE_VARIABLE_ID';
-exports.DELETE_VARIABLE_ID = DELETE_VARIABLE_ID;
+export {DELETE_VARIABLE_ID};

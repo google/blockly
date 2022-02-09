@@ -15,7 +15,7 @@
  * Used primarily for keyboard navigation.
  * @class
  */
-goog.module('Blockly.Cursor');
+goog.declareModuleId('Blockly.Cursor');
 
 const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
@@ -139,4 +139,4 @@ Cursor.prototype.out = function() {
 
 registry.register(registry.Type.CURSOR, registry.DEFAULT, Cursor);
 
-exports.Cursor = Cursor;
+export {Cursor};

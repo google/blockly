@@ -16,7 +16,7 @@
  * bubble that is dropped on top of it.
  * @class
  */
-goog.module('Blockly.DeleteArea');
+goog.declareModuleId('Blockly.DeleteArea');
 
 const object = goog.require('Blockly.utils.object');
 const {BlockSvg} = goog.require('Blockly.BlockSvg');
@@ -81,4 +81,4 @@ DeleteArea.prototype.updateWouldDelete_ = function(wouldDelete) {
   this.wouldDelete_ = wouldDelete;
 };
 
-exports.DeleteArea = DeleteArea;
+export {DeleteArea};

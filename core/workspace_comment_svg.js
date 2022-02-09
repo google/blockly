@@ -13,7 +13,7 @@
  * Object representing a code comment on a rendered workspace.
  * @class
  */
-goog.module('Blockly.WorkspaceCommentSvg');
+goog.declareModuleId('Blockly.WorkspaceCommentSvg');
 
 const ContextMenu = goog.require('Blockly.ContextMenu');
 const Css = goog.require('Blockly.Css');
@@ -1220,4 +1220,4 @@ Css.register(`
 }
 `);
 
-exports.WorkspaceCommentSvg = WorkspaceCommentSvg;
+export {WorkspaceCommentSvg};

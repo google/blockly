@@ -13,7 +13,7 @@
  * Methods for graphically rendering a block as SVG.
  * @class
  */
-goog.module('Blockly.BlockSvg');
+goog.declareModuleId('Blockly.BlockSvg');
 
 const ContextMenu = goog.require('Blockly.ContextMenu');
 const Tooltip = goog.require('Blockly.Tooltip');
@@ -1794,4 +1794,4 @@ BlockSvg.prototype.highlightShapeForInput = function(conn, add) {
   this.pathObject.updateShapeForInputHighlight(conn, add);
 };
 
-exports.BlockSvg = BlockSvg;
+export {BlockSvg};

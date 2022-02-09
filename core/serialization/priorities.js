@@ -18,7 +18,7 @@
  * priorities are deserialized first.
  * @namespace Blockly.serialization.priorities
  */
-goog.module('Blockly.serialization.priorities');
+goog.declareModuleId('Blockly.serialization.priorities');
 
 
 /**
@@ -27,7 +27,7 @@ goog.module('Blockly.serialization.priorities');
  * @const
  * @alias Blockly.serialization.priorities.VARIABLES
  */
-exports.VARIABLES = 100;
+export var VARIABLES = 100;
 
 /**
  * The priority for deserializing blocks.
@@ -35,4 +35,4 @@ exports.VARIABLES = 100;
  * @const
  * @alias Blockly.serialization.priorities.BLOCKS
  */
-exports.BLOCKS = 50;
+export var BLOCKS = 50;

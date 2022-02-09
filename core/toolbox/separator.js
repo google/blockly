@@ -13,7 +13,7 @@
  * A separator used for separating toolbox categories.
  * @class
  */
-goog.module('Blockly.ToolboxSeparator');
+goog.declareModuleId('Blockly.ToolboxSeparator');
 
 const Css = goog.require('Blockly.Css');
 const dom = goog.require('Blockly.utils.dom');
@@ -129,4 +129,4 @@ registry.register(
     registry.Type.TOOLBOX_ITEM, ToolboxSeparator.registrationName,
     ToolboxSeparator);
 
-exports.ToolboxSeparator = ToolboxSeparator;
+export {ToolboxSeparator};

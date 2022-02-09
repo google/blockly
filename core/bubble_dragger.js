@@ -13,7 +13,7 @@
  * Methods for dragging a bubble visually.
  * @class
  */
-goog.module('Blockly.BubbleDragger');
+goog.declareModuleId('Blockly.BubbleDragger');
 
 const eventUtils = goog.require('Blockly.Events.utils');
 const svgMath = goog.require('Blockly.utils.svgMath');
@@ -292,4 +292,4 @@ const BubbleDragger = class {
   }
 };
 
-exports.BubbleDragger = BubbleDragger;
+export {BubbleDragger};

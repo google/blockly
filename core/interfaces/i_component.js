@@ -16,7 +16,7 @@
  * the ComponentManager.
  * @namespace Blockly.IComponent
  */
-goog.module('Blockly.IComponent');
+goog.declareModuleId('Blockly.IComponent');
 
 
 /**
@@ -34,4 +34,4 @@ const IComponent = function() {};
  */
 IComponent.id;
 
-exports.IComponent = IComponent;
+export {IComponent};

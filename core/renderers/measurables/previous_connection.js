@@ -14,7 +14,7 @@
  * during rendering.
  * @class
  */
-goog.module('Blockly.blockRendering.PreviousConnection');
+goog.declareModuleId('Blockly.blockRendering.PreviousConnection');
 
 const {Connection} = goog.require('Blockly.blockRendering.Connection');
 /* eslint-disable-next-line no-unused-vars */
@@ -47,4 +47,4 @@ class PreviousConnection extends Connection {
   }
 }
 
-exports.PreviousConnection = PreviousConnection;
+export {PreviousConnection};

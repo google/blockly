@@ -13,7 +13,7 @@
  * Class for a block move event.
  * @class
  */
-goog.module('Blockly.Events.BlockMove');
+goog.declareModuleId('Blockly.Events.BlockMove');
 
 const eventUtils = goog.require('Blockly.Events.utils');
 const registry = goog.require('Blockly.registry');
@@ -199,4 +199,4 @@ class BlockMove extends BlockBase {
 
 registry.register(registry.Type.EVENT, eventUtils.MOVE, BlockMove);
 
-exports.BlockMove = BlockMove;
+export {BlockMove};

@@ -14,7 +14,7 @@
  * rendering.
  * @class
  */
-goog.module('Blockly.blockRendering.NextConnection');
+goog.declareModuleId('Blockly.blockRendering.NextConnection');
 
 const {Connection} = goog.require('Blockly.blockRendering.Connection');
 /* eslint-disable-next-line no-unused-vars */
@@ -47,4 +47,4 @@ class NextConnection extends Connection {
   }
 }
 
-exports.NextConnection = NextConnection;
+export {NextConnection};

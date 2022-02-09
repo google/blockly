@@ -24,7 +24,7 @@
  * while dragging blocks.
  * @class
  */
-goog.module('Blockly.BlockDragSurfaceSvg');
+goog.declareModuleId('Blockly.BlockDragSurfaceSvg');
 
 const dom = goog.require('Blockly.utils.dom');
 const svgMath = goog.require('Blockly.utils.svgMath');
@@ -266,4 +266,4 @@ const BlockDragSurfaceSvg = class {
   }
 };
 
-exports.BlockDragSurfaceSvg = BlockDragSurfaceSvg;
+export {BlockDragSurfaceSvg};

@@ -13,7 +13,7 @@
  * Methods for graphically rendering a block as SVG.
  * @class
  */
-goog.module('Blockly.blockRendering.RenderInfo');
+goog.declareModuleId('Blockly.blockRendering.RenderInfo');
 
 const {Align} = goog.require('Blockly.Input');
 /* eslint-disable-next-line no-unused-vars */
@@ -772,4 +772,4 @@ class RenderInfo {
   }
 }
 
-exports.RenderInfo = RenderInfo;
+export {RenderInfo};

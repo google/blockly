@@ -12,7 +12,7 @@
  * Object representing a top row on a rendered block.
  * @class
  */
-goog.module('Blockly.blockRendering.TopRow');
+goog.declareModuleId('Blockly.blockRendering.TopRow');
 
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
@@ -139,4 +139,4 @@ class TopRow extends Row {
   }
 }
 
-exports.TopRow = TopRow;
+export {TopRow};

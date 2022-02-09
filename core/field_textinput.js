@@ -13,7 +13,7 @@
  * Text input field.
  * @class
  */
-goog.module('Blockly.FieldTextInput');
+goog.declareModuleId('Blockly.FieldTextInput');
 
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const aria = goog.require('Blockly.utils.aria');
@@ -584,4 +584,4 @@ FieldTextInput.prototype.getValueFromEditorText_ = function(text) {
 
 fieldRegistry.register('field_input', FieldTextInput);
 
-exports.FieldTextInput = FieldTextInput;
+export {FieldTextInput};

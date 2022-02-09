@@ -25,7 +25,7 @@ if ((location.hostname === 'localhost' || location.hostname === '127.0.0.1' ||
     !isIe) {
   document.write(
       `<script src="../blockly_uncompressed.js" id="blockly-uncompressed-script"></script>`);
-  document.write(`<script src="../msg/messages.js"></script>`);
+  document.write(`<script type="module" src="../msg/messages.js"></script>`);
   document.write(`<script src="../tests/themes/test_themes.js"></script>`);
   document.write(
       `<script src="../node_modules/@blockly/block-test/dist/index.js"></script>`);

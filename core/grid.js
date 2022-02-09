@@ -15,7 +15,7 @@
  * Blockly.
  * @class
  */
-goog.module('Blockly.Grid');
+goog.declareModuleId('Blockly.Grid');
 
 const dom = goog.require('Blockly.utils.dom');
 const userAgent = goog.require('Blockly.utils.userAgent');
@@ -223,4 +223,4 @@ class Grid {
   }
 }
 
-exports.Grid = Grid;
+export {Grid};

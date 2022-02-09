@@ -13,7 +13,7 @@
  * Image field.  Used for pictures, icons, etc.
  * @class
  */
-goog.module('Blockly.FieldImage');
+goog.declareModuleId('Blockly.FieldImage');
 
 const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
@@ -292,4 +292,4 @@ FieldImage.prototype.getText_ = function() {
 
 fieldRegistry.register('field_image', FieldImage);
 
-exports.FieldImage = FieldImage;
+export {FieldImage};

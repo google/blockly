@@ -13,7 +13,7 @@
  * Events fired as a result of UI click in Blockly's editor.
  * @class
  */
-goog.module('Blockly.Events.Click');
+goog.declareModuleId('Blockly.Events.Click');
 
 const eventUtils = goog.require('Blockly.Events.utils');
 const registry = goog.require('Blockly.registry');
@@ -84,4 +84,4 @@ class Click extends UiBase {
 
 registry.register(registry.Type.EVENT, eventUtils.CLICK, Click);
 
-exports.Click = Click;
+export {Click};

@@ -13,7 +13,7 @@
  * Flyout tray containing blocks which may be created.
  * @class
  */
-goog.module('Blockly.Flyout');
+goog.declareModuleId('Blockly.Flyout');
 
 const Tooltip = goog.require('Blockly.Tooltip');
 const Variables = goog.require('Blockly.Variables');
@@ -743,7 +743,7 @@ class Flyout extends DeleteArea {
               blockInfo['disabled'] !== true;
         }
         block = blocks.append(
-            /** @type {blocks.State} */ (blockInfo), this.workspace_);
+            /** @type {!blocks.State} */ (blockInfo), this.workspace_);
       }
     }
 
@@ -1243,4 +1243,4 @@ Flyout.prototype.getX;
  */
 Flyout.prototype.getY;
 
-exports.Flyout = Flyout;
+export {Flyout};

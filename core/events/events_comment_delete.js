@@ -13,7 +13,7 @@
  * Class for comment deletion event.
  * @class
  */
-goog.module('Blockly.Events.CommentDelete');
+goog.declareModuleId('Blockly.Events.CommentDelete');
 
 const eventUtils = goog.require('Blockly.Events.utils');
 const registry = goog.require('Blockly.registry');
@@ -78,4 +78,4 @@ class CommentDelete extends CommentBase {
 registry.register(
     registry.Type.EVENT, eventUtils.COMMENT_DELETE, CommentDelete);
 
-exports.CommentDelete = CommentDelete;
+export {CommentDelete};

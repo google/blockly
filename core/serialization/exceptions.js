@@ -14,7 +14,7 @@
  * Contains custom errors thrown by the serialization system.
  * @namespace Blockly.serialization.exceptions
  */
-goog.module('Blockly.serialization.exceptions');
+goog.declareModuleId('Blockly.serialization.exceptions');
 
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
@@ -26,7 +26,7 @@ const {State} = goog.requireType('Blockly.serialization.blocks');
  * @alias Blockly.serialization.exceptions.DeserializationError
  */
 class DeserializationError extends Error {}
-exports.DeserializationError = DeserializationError;
+export {DeserializationError};
 
 /**
  * Represents an error where the serialized state is expected to provide a
@@ -48,7 +48,7 @@ class MissingBlockType extends DeserializationError {
     this.state = state;
   }
 }
-exports.MissingBlockType = MissingBlockType;
+export {MissingBlockType};
 
 /**
  * Represents an error where deserialization encountered a block that did
@@ -80,7 +80,7 @@ connection`);
     this.state = state;
   }
 }
-exports.MissingConnection = MissingConnection;
+export {MissingConnection};
 
 /**
  * Represents an error where deserialization tried to connect two connections
@@ -115,7 +115,7 @@ ${childConnection} to its parent, because: ${reason}`);
     this.childState = childState;
   }
 }
-exports.BadConnectionCheck = BadConnectionCheck;
+export {BadConnectionCheck};
 
 /**
  * Represents an error where deserialization encountered a real block as it
@@ -141,4 +141,4 @@ children`);
     this.state = state;
   }
 }
-exports.RealChildOfShadow = RealChildOfShadow;
+export {RealChildOfShadow};

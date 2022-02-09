@@ -15,7 +15,7 @@
  * Used primarily for keyboard navigation to show a marked location.
  * @class
  */
-goog.module('Blockly.Marker');
+goog.declareModuleId('Blockly.Marker');
 
 /* eslint-disable-next-line no-unused-vars */
 const {ASTNode} = goog.requireType('Blockly.ASTNode');
@@ -127,4 +127,4 @@ Marker.prototype.dispose = function() {
   }
 };
 
-exports.Marker = Marker;
+export {Marker};

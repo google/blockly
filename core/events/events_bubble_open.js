@@ -13,7 +13,7 @@
  * Events fired as a result of bubble open.
  * @class
  */
-goog.module('Blockly.Events.BubbleOpen');
+goog.declareModuleId('Blockly.Events.BubbleOpen');
 
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
@@ -86,4 +86,4 @@ BubbleOpen.prototype.fromJson = function(json) {
 
 registry.register(registry.Type.EVENT, eventUtils.BUBBLE_OPEN, BubbleOpen);
 
-exports.BubbleOpen = BubbleOpen;
+export {BubbleOpen};

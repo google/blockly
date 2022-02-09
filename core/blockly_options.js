@@ -13,7 +13,7 @@
  * Object that defines user-specified options for the workspace.
  * @namespace Blockly.BlocklyOptions
  */
-goog.module('Blockly.BlocklyOptions');
+goog.declareModuleId('Blockly.BlocklyOptions');
 
 
 /**
@@ -25,4 +25,4 @@ goog.module('Blockly.BlocklyOptions');
  */
 const BlocklyOptions = function() {};
 
-exports.BlocklyOptions = BlocklyOptions;
+export {BlocklyOptions};

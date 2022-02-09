@@ -15,7 +15,7 @@
  * minimalist renderer.
  * @class
  */
-goog.module('Blockly.minimalist.ConstantProvider');
+goog.declareModuleId('Blockly.minimalist.ConstantProvider');
 
 const {ConstantProvider: BaseConstantProvider} = goog.require('Blockly.blockRendering.ConstantProvider');
 
@@ -34,4 +34,4 @@ class ConstantProvider extends BaseConstantProvider {
   }
 }
 
-exports.ConstantProvider = ConstantProvider;
+export {ConstantProvider};

@@ -15,7 +15,7 @@
  * rendered block.
  * @class
  */
-goog.module('Blockly.geras.InlineInput');
+goog.declareModuleId('Blockly.geras.InlineInput');
 
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider: BaseConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -55,4 +55,4 @@ class InlineInput extends BaseInlineInput {
   }
 }
 
-exports.InlineInput = InlineInput;
+export {InlineInput};

@@ -23,12 +23,11 @@
  * Third, call bindMouseEvents(e) passing the SVG element.
  * @namespace Blockly.Tooltip
  */
-goog.module('Blockly.Tooltip');
+goog.declareModuleId('Blockly.Tooltip');
 
 const blocklyString = goog.require('Blockly.utils.string');
 const browserEvents = goog.require('Blockly.browserEvents');
 const common = goog.require('Blockly.common');
-const deprecation = goog.require('Blockly.utils.deprecation');
 
 
 /**
@@ -40,7 +39,7 @@ const deprecation = goog.require('Blockly.utils.deprecation');
  * @alias Blockly.Tooltip.TipInfo
  */
 let TipInfo;
-exports.TipInfo = TipInfo;
+export {TipInfo};
 
 /**
  * Is a tooltip currently showing?
@@ -56,26 +55,7 @@ let visible = false;
 const isVisible = function() {
   return visible;
 };
-exports.isVisible = isVisible;
-
-Object.defineProperties(exports, {
-  /**
-   * Is a tooltip currently showing?
-   * @name Blockly.Tooltip.visible
-   * @type {boolean}
-   * @deprecated Use Blockly.Tooltip.isVisible() instead.  (September
-   *     2021)
-   * @suppress {checkTypes}
-   */
-  visible: {
-    get: function() {
-      deprecation.warn(
-          'Blockly.Tooltip.visible', 'September 2021', 'September 2022',
-          'Blockly.Tooltip.isVisible()');
-      return isVisible();
-    },
-  },
-});
+export {isVisible};
 
 /**
  * Is someone else blocking the tooltip from being shown?
@@ -88,7 +68,7 @@ let blocked = false;
  * @alias Blockly.Tooltip.LIMIT
  */
 const LIMIT = 50;
-exports.LIMIT = LIMIT;
+export {LIMIT};
 
 /**
  * PID of suspended thread to clear tooltip on mouse out.
@@ -128,35 +108,35 @@ let poisonedElement = null;
  * @alias Blockly.Tooltip.OFFSET_X
  */
 const OFFSET_X = 0;
-exports.OFFSET_X = OFFSET_X;
+export {OFFSET_X};
 
 /**
  * Vertical offset between mouse cursor and tooltip.
  * @alias Blockly.Tooltip.OFFSET_Y
  */
 const OFFSET_Y = 10;
-exports.OFFSET_Y = OFFSET_Y;
+export {OFFSET_Y};
 
 /**
  * Radius mouse can move before killing tooltip.
  * @alias Blockly.Tooltip.RADIUS_OK
  */
 const RADIUS_OK = 10;
-exports.RADIUS_OK = RADIUS_OK;
+export {RADIUS_OK};
 
 /**
  * Delay before tooltip appears.
  * @alias Blockly.Tooltip.HOVER_MS
  */
 const HOVER_MS = 750;
-exports.HOVER_MS = HOVER_MS;
+export {HOVER_MS};
 
 /**
  * Horizontal padding between tooltip and screen edge.
  * @alias Blockly.Tooltip.MARGINS
  */
 const MARGINS = 5;
-exports.MARGINS = MARGINS;
+export {MARGINS};
 
 /**
  * The HTML container.  Set once by createDom.
@@ -172,26 +152,7 @@ let DIV = null;
 const getDiv = function() {
   return DIV;
 };
-exports.getDiv = getDiv;
-
-Object.defineProperties(exports, {
-  /**
-   * The HTML container.  Set once by createDom.
-   * @name Blockly.Tooltip.DIV
-   * @type {Element}
-   * @deprecated Use Blockly.Tooltip.getDiv() and .setDiv().
-   *     (September 2021)
-   * @suppress {checkTypes}
-   */
-  DIV: {
-    get: function() {
-      deprecation.warn(
-          'Blockly.Tooltip.DIV', 'September 2021', 'September 2022',
-          'Blockly.Tooltip.getDiv()');
-      return getDiv();
-    },
-  },
-});
+export {getDiv};
 
 /**
  * Returns the tooltip text for the given element.
@@ -213,7 +174,7 @@ const getTooltipOfObject = function(object) {
   }
   return '';
 };
-exports.getTooltipOfObject = getTooltipOfObject;
+export {getTooltipOfObject};
 
 /**
  * Returns the target object that the given object is targeting for its
@@ -247,7 +208,7 @@ const createDom = function() {
   const container = common.getParentContainer() || document.body;
   container.appendChild(DIV);
 };
-exports.createDom = createDom;
+export {createDom};
 
 /**
  * Binds the required mouse events onto an SVG element.
@@ -265,7 +226,7 @@ const bindMouseEvents = function(element) {
   // context of a mouseover/mouseout.
   element.addEventListener('mousemove', onMouseMove, false);
 };
-exports.bindMouseEvents = bindMouseEvents;
+export {bindMouseEvents};
 
 /**
  * Unbinds tooltip mouse events from the SVG element.
@@ -280,7 +241,7 @@ const unbindMouseEvents = function(element) {
   browserEvents.unbind(element.mouseOutWrapper_);
   element.removeEventListener('mousemove', onMouseMove);
 };
-exports.unbindMouseEvents = unbindMouseEvents;
+export {unbindMouseEvents};
 
 /**
  * Hide the tooltip if the mouse is over a different object.
@@ -367,7 +328,7 @@ const dispose = function() {
   poisonedElement = null;
   hide();
 };
-exports.dispose = dispose;
+export {dispose};
 
 /**
  * Hide the tooltip.
@@ -384,7 +345,7 @@ const hide = function() {
     clearTimeout(showPid);
   }
 };
-exports.hide = hide;
+export {hide};
 
 /**
  * Hide any in-progress tooltips and block showing new tooltips until the next
@@ -396,7 +357,7 @@ const block = function() {
   hide();
   blocked = true;
 };
-exports.block = block;
+export {block};
 
 /**
  * Unblock tooltips: allow them to be scheduled and shown according to their own
@@ -407,7 +368,7 @@ exports.block = block;
 const unblock = function() {
   blocked = false;
 };
-exports.unblock = unblock;
+export {unblock};
 
 /**
  * Create the tooltip and show it.

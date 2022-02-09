@@ -15,7 +15,7 @@
  * rendered block.
  * @class
  */
-goog.module('Blockly.geras.StatementInput');
+goog.declareModuleId('Blockly.geras.StatementInput');
 
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider: BaseConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -54,4 +54,4 @@ class StatementInput extends BaseStatementInput {
   }
 }
 
-exports.StatementInput = StatementInput;
+export {StatementInput};

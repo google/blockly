@@ -7,8 +7,10 @@
   <!-- This script loads uncompressed when on localhost and loads compressed when it is being hosted.
        Please add any other dependencies to playgrounds/load_all.js.-->
 <script src="playgrounds/load_all.js"></script>
-<script>
+<script type="module">
 'use strict';
+
+import * as Blockly from '../core/blockly.js';
 
 const IS_UNCOMPRESSED = !!document.getElementById('blockly-uncompressed-script');
 var workspace = null;
@@ -380,7 +382,7 @@ var spaghettiXml = [
     },
     'next': { }
   });
-
+window.start = start;
 </script>
 
 <style>

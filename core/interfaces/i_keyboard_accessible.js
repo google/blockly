@@ -14,7 +14,7 @@
  * The interface for objects that handle keyboard shortcuts.
  * @namespace Blockly.IKeyboardAccessible
  */
-goog.module('Blockly.IKeyboardAccessible');
+goog.declareModuleId('Blockly.IKeyboardAccessible');
 
 /* eslint-disable-next-line no-unused-vars */
 const {ShortcutRegistry} = goog.requireType('Blockly.ShortcutRegistry');
@@ -35,4 +35,4 @@ const IKeyboardAccessible = function() {};
  */
 IKeyboardAccessible.prototype.onShortcut;
 
-exports.IKeyboardAccessible = IKeyboardAccessible;
+export {IKeyboardAccessible};

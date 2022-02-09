@@ -13,7 +13,7 @@
  * The class representing one block.
  * @class
  */
-goog.module('Blockly.Block');
+goog.declareModuleId('Blockly.Block');
 
 const Extensions = goog.require('Blockly.Extensions');
 const Tooltip = goog.require('Blockly.Tooltip');
@@ -2167,4 +2167,4 @@ Block.prototype.toDevString = function() {
   return msg;
 };
 
-exports.Block = Block;
+export {Block};

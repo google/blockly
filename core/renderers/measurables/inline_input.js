@@ -14,7 +14,7 @@
  * block.
  * @class
  */
-goog.module('Blockly.blockRendering.InlineInput');
+goog.declareModuleId('Blockly.blockRendering.InlineInput');
 
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -77,4 +77,4 @@ class InlineInput extends InputConnection {
   }
 }
 
-exports.InlineInput = InlineInput;
+export {InlineInput};

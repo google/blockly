@@ -13,7 +13,7 @@
  * Methods animating a block on connection and disconnection.
  * @namespace Blockly.blockAnimations
  */
-goog.module('Blockly.blockAnimations');
+goog.declareModuleId('Blockly.blockAnimations');
 
 const dom = goog.require('Blockly.utils.dom');
 /* eslint-disable-next-line no-unused-vars */
@@ -55,7 +55,7 @@ const disposeUiEffect = function(block) {
   // Start the animation.
   disposeUiStep(clone, workspace.RTL, new Date, workspace.scale);
 };
-exports.disposeUiEffect = disposeUiEffect;
+export {disposeUiEffect};
 
 /**
  * Animate a cloned block and eventually dispose of it.
@@ -120,7 +120,7 @@ const connectionUiEffect = function(block) {
   // Start the animation.
   connectionUiStep(ripple, new Date, scale);
 };
-exports.connectionUiEffect = connectionUiEffect;
+export {connectionUiEffect};
 
 /**
  * Expand a ripple around a connection.
@@ -162,7 +162,7 @@ const disconnectUiEffect = function(block) {
   // Start the animation.
   disconnectUiStep(block.getSvgRoot(), magnitude, new Date);
 };
-exports.disconnectUiEffect = disconnectUiEffect;
+export {disconnectUiEffect};
 
 /**
  * Animate a brief wiggle of a disconnected block.
@@ -203,4 +203,4 @@ const disconnectUiStop = function() {
     disconnectGroup = null;
   }
 };
-exports.disconnectUiStop = disconnectUiStop;
+export {disconnectUiStop};

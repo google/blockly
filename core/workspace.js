@@ -13,7 +13,7 @@
  * Object representing a workspace.
  * @class
  */
-goog.module('Blockly.Workspace');
+goog.declareModuleId('Blockly.Workspace');
 
 const arrayUtils = goog.require('Blockly.utils.array');
 const eventUtils = goog.require('Blockly.Events.utils');
@@ -813,4 +813,4 @@ Workspace.getAll = function() {
   return workspaces;
 };
 
-exports.Workspace = Workspace;
+export {Workspace};

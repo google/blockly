@@ -15,7 +15,7 @@
  * Geras: spirit of old age.
  * @class
  */
-goog.module('Blockly.geras.RenderInfo');
+goog.declareModuleId('Blockly.geras.RenderInfo');
 
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
@@ -483,4 +483,4 @@ class RenderInfo extends BaseRenderInfo {
   }
 }
 
-exports.RenderInfo = RenderInfo;
+export {RenderInfo};

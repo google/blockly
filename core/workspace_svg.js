@@ -13,7 +13,7 @@
  * Object representing a workspace rendered as SVG.
  * @class
  */
-goog.module('Blockly.WorkspaceSvg');
+goog.declareModuleId('Blockly.WorkspaceSvg');
 
 const ContextMenu = goog.require('Blockly.ContextMenu');
 /* eslint-disable-next-line no-unused-vars */
@@ -2722,6 +2722,5 @@ class WorkspaceSvg extends Workspace {
 const resizeSvgContents = function(workspace) {
   workspace.resizeContents();
 };
-exports.resizeSvgContents = resizeSvgContents;
-
-exports.WorkspaceSvg = WorkspaceSvg;
+export {resizeSvgContents};
+export {WorkspaceSvg};

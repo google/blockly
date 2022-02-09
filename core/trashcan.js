@@ -13,7 +13,7 @@
  * Object representing a trash can icon.
  * @class
  */
-goog.module('Blockly.Trashcan');
+goog.declareModuleId('Blockly.Trashcan');
 
 /* eslint-disable-next-line no-unused-vars */
 const blocks = goog.requireType('Blockly.serialization.blocks');
@@ -750,4 +750,4 @@ const OPACITY_MAX = 0.8;
  */
 const MAX_LID_ANGLE = 45;
 
-exports.Trashcan = Trashcan;
+export {Trashcan};

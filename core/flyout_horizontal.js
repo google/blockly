@@ -13,7 +13,7 @@
  * Horizontal flyout tray containing blocks which may be created.
  * @class
  */
-goog.module('Blockly.HorizontalFlyout');
+goog.declareModuleId('Blockly.HorizontalFlyout');
 
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const browserEvents = goog.require('Blockly.browserEvents');
@@ -388,4 +388,4 @@ registry.register(
     registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX, registry.DEFAULT,
     HorizontalFlyout);
 
-exports.HorizontalFlyout = HorizontalFlyout;
+export {HorizontalFlyout};

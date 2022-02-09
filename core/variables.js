@@ -13,7 +13,7 @@
  * Utility functions for handling variables.
  * @namespace Blockly.Variables
  */
-goog.module('Blockly.Variables');
+goog.declareModuleId('Blockly.Variables');
 
 const Xml = goog.require('Blockly.Xml');
 const dialog = goog.require('Blockly.dialog');
@@ -34,7 +34,7 @@ const {Workspace} = goog.requireType('Blockly.Workspace');
  * @alias Blockly.Variables.CATEGORY_NAME
  */
 const CATEGORY_NAME = 'VARIABLE';
-exports.CATEGORY_NAME = CATEGORY_NAME;
+export {CATEGORY_NAME};
 
 /**
  * Find all user-created variables that are in use in the workspace.
@@ -68,7 +68,7 @@ const allUsedVarModels = function(ws) {
   }
   return variableList;
 };
-exports.allUsedVarModels = allUsedVarModels;
+export {allUsedVarModels};
 
 /**
  * @type {Object<string,boolean>}
@@ -113,7 +113,7 @@ const allDeveloperVariables = function(workspace) {
   // Flatten the hash into a list.
   return Object.keys(variableHash);
 };
-exports.allDeveloperVariables = allDeveloperVariables;
+export {allDeveloperVariables};
 
 /**
  * Construct the elements (blocks and button) required by the flyout for the
@@ -138,7 +138,7 @@ const flyoutCategory = function(workspace) {
   xmlList = xmlList.concat(blockList);
   return xmlList;
 };
-exports.flyoutCategory = flyoutCategory;
+export {flyoutCategory};
 
 /**
  * Construct the blocks required by the flyout for the variable category.
@@ -188,13 +188,13 @@ const flyoutCategoryBlocks = function(workspace) {
   }
   return xmlList;
 };
-exports.flyoutCategoryBlocks = flyoutCategoryBlocks;
+export {flyoutCategoryBlocks};
 
 /**
  * @alias Blockly.Variables.VAR_LETTER_OPTIONS
  */
 const VAR_LETTER_OPTIONS = 'ijkmnopqrstuvwxyzabcdefgh';  // No 'l'.
-exports.VAR_LETTER_OPTIONS = VAR_LETTER_OPTIONS;
+export {VAR_LETTER_OPTIONS};
 
 /**
  * Return a new variable name that is not yet being used. This will try to
@@ -209,7 +209,7 @@ const generateUniqueName = function(workspace) {
   return generateUniqueNameFromOptions(
       VAR_LETTER_OPTIONS.charAt(0), workspace.getAllVariableNames());
 };
-exports.generateUniqueName = generateUniqueName;
+export {generateUniqueName};
 
 /**
  * Returns a unique name that is not present in the usedNames array. This
@@ -252,7 +252,7 @@ const generateUniqueNameFromOptions = function(startChar, usedNames) {
     potName = letters.charAt(letterIndex) + suffix;
   }
 };
-exports.generateUniqueNameFromOptions = generateUniqueNameFromOptions;
+export {generateUniqueNameFromOptions};
 
 /**
  * Handles "Create Variable" button in the default variables toolbox category.
@@ -308,7 +308,7 @@ const createVariableButtonHandler = function(
   };
   promptAndCheckWithAlert('');
 };
-exports.createVariableButtonHandler = createVariableButtonHandler;
+export {createVariableButtonHandler};
 
 /**
  * Opens a prompt that allows the user to enter a new name for a variable.
@@ -354,7 +354,7 @@ const renameVariable = function(workspace, variable, opt_callback) {
   };
   promptAndCheckWithAlert('');
 };
-exports.renameVariable = renameVariable;
+export {renameVariable};
 
 /**
  * Prompt the user for a new variable name.
@@ -378,7 +378,7 @@ const promptName = function(promptText, defaultText, callback) {
     callback(newVar);
   });
 };
-exports.promptName = promptName;
+export {promptName};
 
 /**
  * Check whether there exists a variable with the given name but a different
@@ -422,7 +422,7 @@ const nameUsedWithAnyType = function(name, workspace) {
   }
   return null;
 };
-exports.nameUsedWithAnyType = nameUsedWithAnyType;
+export {nameUsedWithAnyType};
 
 /**
  * Generate DOM objects representing a variable field.
@@ -443,7 +443,7 @@ const generateVariableFieldDom = function(variableModel) {
   field.appendChild(name);
   return field;
 };
-exports.generateVariableFieldDom = generateVariableFieldDom;
+export {generateVariableFieldDom};
 
 /**
  * Helper function to look up or create a variable on the given workspace.
@@ -465,7 +465,7 @@ const getOrCreateVariablePackage = function(workspace, id, opt_name, opt_type) {
   }
   return variable;
 };
-exports.getOrCreateVariablePackage = getOrCreateVariablePackage;
+export {getOrCreateVariablePackage};
 
 /**
  * Look up  a variable on the given workspace.
@@ -510,7 +510,7 @@ const getVariable = function(workspace, id, opt_name, opt_type) {
   }
   return variable;
 };
-exports.getVariable = getVariable;
+export {getVariable};
 
 /**
  * Helper function to create a variable on the given workspace.
@@ -527,7 +527,7 @@ const createVariable = function(workspace, id, opt_name, opt_type) {
   // Variables without names get uniquely named for this workspace.
   if (!opt_name) {
     const ws = workspace.isFlyout ? workspace.targetWorkspace : workspace;
-    opt_name = exports.generateUniqueName(ws);
+    opt_name = generateUniqueName(ws);
   }
 
   // Create a potential variable if in the flyout.
@@ -568,4 +568,4 @@ const getAddedVariables = function(workspace, originalVariables) {
   }
   return addedVariables;
 };
-exports.getAddedVariables = getAddedVariables;
+export {getAddedVariables};

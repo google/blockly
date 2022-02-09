@@ -12,7 +12,7 @@
  * Object representing a spacer between two rows.
  * @class
  */
-goog.module('Blockly.blockRendering.SpacerRow');
+goog.declareModuleId('Blockly.blockRendering.SpacerRow');
 
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -66,4 +66,4 @@ class SpacerRow extends Row {
   }
 }
 
-exports.SpacerRow = SpacerRow;
+export {SpacerRow};

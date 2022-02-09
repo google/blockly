@@ -41,6 +41,8 @@
         "no-redeclare": ["off"],
         "valid-jsdoc": ["error", {"requireReturn": false}],
         "no-console": ["off"],
+        "no-invalid-this": "off",
+        "no-var": "off",
         "no-multi-spaces": ["error", { "ignoreEOLComments": true }],
         "operator-linebreak": ["error", "after"],
         "spaced-comment": ["error", "always", {
@@ -50,7 +52,7 @@
             "exceptions": ["*"]
         }],
         // Blockly uses prefixes for optional arguments and test-only functions.
-        "camelcase": ["error", {
+        "camelcase": ["off", {
             "properties": "never",
             "allow": ["^opt_", "^_opt_", "^testOnly_"]
         }],
@@ -84,5 +86,9 @@
     },
     "extends": [
         "eslint:recommended", "google"
-    ]
+    ],
+    "parserOptions": {
+        "sourceType": "module",
+        "allowImportExportEverywhere": true
+    }
 }

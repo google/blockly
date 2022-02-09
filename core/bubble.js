@@ -13,7 +13,7 @@
  * Object representing a UI bubble.
  * @class
  */
-goog.module('Blockly.Bubble');
+goog.declareModuleId('Blockly.Bubble');
 
 const Touch = goog.require('Blockly.Touch');
 const browserEvents = goog.require('Blockly.browserEvents');
@@ -982,4 +982,4 @@ Bubble.onMouseUpWrapper_ = null;
  */
 Bubble.onMouseMoveWrapper_ = null;
 
-exports.Bubble = Bubble;
+export {Bubble};

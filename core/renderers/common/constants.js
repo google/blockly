@@ -13,7 +13,7 @@
  * An object that provides constants for rendering blocks.
  * @class
  */
-goog.module('Blockly.blockRendering.ConstantProvider');
+goog.declareModuleId('Blockly.blockRendering.ConstantProvider');
 
 const colour = goog.require('Blockly.utils.colour');
 const dom = goog.require('Blockly.utils.dom');
@@ -1247,4 +1247,4 @@ class ConstantProvider {
   }
 }
 
-exports.ConstantProvider = ConstantProvider;
+export {ConstantProvider};

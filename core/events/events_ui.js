@@ -15,7 +15,7 @@
  * Blockly's editor.
  * @class
  */
-goog.module('Blockly.Events.Ui');
+goog.declareModuleId('Blockly.Events.Ui');
 
 const eventUtils = goog.require('Blockly.Events.utils');
 const registry = goog.require('Blockly.registry');
@@ -85,4 +85,4 @@ class Ui extends UiBase {
 
 registry.register(registry.Type.EVENT, eventUtils.UI, Ui);
 
-exports.Ui = Ui;
+export {Ui};

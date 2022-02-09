@@ -17,10 +17,9 @@
  *     E.g. text input areas, colour pickers, context menus.
  * @namespace Blockly.WidgetDiv
  */
-goog.module('Blockly.WidgetDiv');
+goog.declareModuleId('Blockly.WidgetDiv');
 
 const common = goog.require('Blockly.common');
-const deprecation = goog.require('Blockly.utils.deprecation');
 const dom = goog.require('Blockly.utils.dom');
 /* eslint-disable-next-line no-unused-vars */
 const {Rect} = goog.requireType('Blockly.utils.Rect');
@@ -68,7 +67,7 @@ let DIV;
 const getDiv = function() {
   return DIV;
 };
-exports.getDiv = getDiv;
+export {getDiv};
 
 /**
  * Allows unit tests to reset the div.
@@ -79,26 +78,7 @@ exports.getDiv = getDiv;
 const testOnly_setDiv = function(newDiv) {
   DIV = newDiv;
 };
-exports.testOnly_setDiv = testOnly_setDiv;
-
-Object.defineProperties(exports, {
-  /**
-   * The HTML container for popup overlays (e.g. editor widgets).
-   * @name Blockly.WidgetDiv.DIV
-   * @type {?Element}
-   * @deprecated Use Blockly.WidgetDiv.getDiv() and .setDiv().
-   *     (September 2021)
-   * @suppress {checkTypes}
-   */
-  DIV: {
-    get: function() {
-      deprecation.warn(
-          'Blockly.WidgetDiv.DIV', 'September 2021', 'September 2022',
-          'Blockly.WidgetDiv.getDiv()');
-      return getDiv();
-    },
-  },
-});
+export {testOnly_setDiv};
 
 /**
  * Create the widget div and inject it onto the page.
@@ -114,7 +94,7 @@ const createDom = function() {
   const container = common.getParentContainer() || document.body;
   container.appendChild(DIV);
 };
-exports.createDom = createDom;
+export {createDom};
 
 /**
  * Initialize and display the widget div.  Close the old one if needed.
@@ -138,7 +118,7 @@ const show = function(newOwner, rtl, newDispose) {
   dom.addClass(div, rendererClassName);
   dom.addClass(div, themeClassName);
 };
-exports.show = show;
+export {show};
 
 /**
  * Destroy the widget and hide the div.
@@ -168,7 +148,7 @@ const hide = function() {
   }
   (/** @type {!WorkspaceSvg} */ (common.getMainWorkspace())).markFocused();
 };
-exports.hide = hide;
+export {hide};
 
 /**
  * Is the container visible?
@@ -178,7 +158,7 @@ exports.hide = hide;
 const isVisible = function() {
   return !!owner;
 };
-exports.isVisible = isVisible;
+export {isVisible};
 
 /**
  * Destroy the widget and hide the div if it is being used by the specified
@@ -191,7 +171,7 @@ const hideIfOwner = function(oldOwner) {
     hide();
   }
 };
-exports.hideIfOwner = hideIfOwner;
+export {hideIfOwner};
 
 /**
  * Set the widget div's position and height.  This function does nothing clever:
@@ -232,7 +212,7 @@ const positionWithAnchor = function(viewportBBox, anchorBBox, widgetSize, rtl) {
     positionInternal(x, y, widgetSize.height);
   }
 };
-exports.positionWithAnchor = positionWithAnchor;
+export {positionWithAnchor};
 
 /**
  * Calculate an x position (in window coordinates) such that the widget will not

@@ -14,7 +14,7 @@
  * of its subcomponents.
  * @class
  */
-goog.module('Blockly.blockRendering.BottomRow');
+goog.declareModuleId('Blockly.blockRendering.BottomRow');
 
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
@@ -135,4 +135,4 @@ class BottomRow extends Row {
   }
 }
 
-exports.BottomRow = BottomRow;
+export {BottomRow};

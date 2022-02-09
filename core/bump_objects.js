@@ -13,7 +13,7 @@
  * Utilities for bumping objects back into worksapce bounds.
  * @namespace Blockly.bumpObjects
  */
-goog.module('Blockly.bumpObjects');
+goog.declareModuleId('Blockly.bumpObjects');
 
 const eventUtils = goog.require('Blockly.Events.utils');
 const mathUtils = goog.require('Blockly.utils.math');
@@ -83,7 +83,7 @@ const bumpObjectIntoBounds = function(workspace, scrollMetrics, object) {
   }
   return false;
 };
-exports.bumpIntoBounds = bumpObjectIntoBounds;
+export {bumpObjectIntoBounds as bumpIntoBounds};
 
 /**
  * Creates a handler for bumping objects when they cross fixed bounds.
@@ -130,7 +130,7 @@ const bumpIntoBoundsHandler = function(workspace) {
     }
   };
 };
-exports.bumpIntoBoundsHandler = bumpIntoBoundsHandler;
+export {bumpIntoBoundsHandler};
 
 /**
  * Extracts the object from the given event.
@@ -177,4 +177,4 @@ const bumpTopObjectsIntoBounds = function(workspace) {
     bumpObjectIntoBounds(workspace, scrollMetricsInWsCoords, block);
   }
 };
-exports.bumpTopObjectsIntoBounds = bumpTopObjectsIntoBounds;
+export {bumpTopObjectsIntoBounds};

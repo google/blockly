@@ -13,7 +13,7 @@
  * Minimalist rendering drawer.
  * @class
  */
-goog.module('Blockly.minimalist.Drawer');
+goog.declareModuleId('Blockly.minimalist.Drawer');
 
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
@@ -39,4 +39,4 @@ class Drawer extends BaseDrawer {
   }
 }
 
-exports.Drawer = Drawer;
+export {Drawer};

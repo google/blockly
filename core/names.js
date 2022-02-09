@@ -13,7 +13,7 @@
  * Utility functions for handling variable and procedure names.
  * @class
  */
-goog.module('Blockly.Names');
+goog.declareModuleId('Blockly.Names');
 
 const Variables = goog.require('Blockly.Variables');
 const {Msg} = goog.require('Blockly.Msg');
@@ -275,7 +275,7 @@ const NameType = {
   VARIABLE: 'VARIABLE',
   PROCEDURE: 'PROCEDURE',
 };
-exports.NameType = NameType;
+export {NameType};
 
 /**
  * Constant to separate developer variable names from user-defined variable
@@ -286,4 +286,4 @@ exports.NameType = NameType;
  */
 Names.DEVELOPER_VARIABLE_TYPE = NameType.DEVELOPER_VARIABLE;
 
-exports.Names = Names;
+export {Names};

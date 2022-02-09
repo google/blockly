@@ -14,7 +14,7 @@
  * rendered block.
  * @class
  */
-goog.module('Blockly.blockRendering.ExternalValueInput');
+goog.declareModuleId('Blockly.blockRendering.ExternalValueInput');
 
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -67,4 +67,4 @@ class ExternalValueInput extends InputConnection {
   }
 }
 
-exports.ExternalValueInput = ExternalValueInput;
+export {ExternalValueInput};

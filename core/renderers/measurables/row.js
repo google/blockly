@@ -12,7 +12,7 @@
  * Object representing a single row on a rendered block.
  * @class
  */
-goog.module('Blockly.blockRendering.Row');
+goog.declareModuleId('Blockly.blockRendering.Row');
 
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -231,4 +231,4 @@ Row.prototype.getLastSpacer = function() {
   return null;
 };
 
-exports.Row = Row;
+export {Row};

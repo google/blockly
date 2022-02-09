@@ -13,7 +13,7 @@
  * Class for a block change event.
  * @class
  */
-goog.module('Blockly.Events.BlockChange');
+goog.declareModuleId('Blockly.Events.BlockChange');
 
 const Xml = goog.require('Blockly.Xml');
 const eventUtils = goog.require('Blockly.Events.utils');
@@ -173,4 +173,4 @@ class BlockChange extends BlockBase {
 
 registry.register(registry.Type.EVENT, eventUtils.CHANGE, BlockChange);
 
-exports.BlockChange = BlockChange;
+export {BlockChange};

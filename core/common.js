@@ -15,7 +15,7 @@
  * must not be at the top level to avoid circular dependencies.
  * @namespace Blockly.common
  */
-goog.module('Blockly.common');
+goog.declareModuleId('Blockly.common');
 
 /* eslint-disable-next-line no-unused-vars */
 const {BlockDefinition, Blocks} = goog.require('Blockly.blocks');
@@ -48,7 +48,7 @@ let mainWorkspace;
 const getMainWorkspace = function() {
   return mainWorkspace;
 };
-exports.getMainWorkspace = getMainWorkspace;
+export {getMainWorkspace};
 
 /**
  * Sets last used main workspace.
@@ -58,7 +58,7 @@ exports.getMainWorkspace = getMainWorkspace;
 const setMainWorkspace = function(workspace) {
   mainWorkspace = workspace;
 };
-exports.setMainWorkspace = setMainWorkspace;
+export {setMainWorkspace};
 
 /**
  * Currently selected block.
@@ -74,7 +74,7 @@ let selected = null;
 const getSelected = function() {
   return selected;
 };
-exports.getSelected = getSelected;
+export {getSelected};
 
 /**
  * Sets the currently selected block. This function does not visually mark the
@@ -87,7 +87,7 @@ exports.getSelected = getSelected;
 const setSelected = function(newSelection) {
   selected = newSelection;
 };
-exports.setSelected = setSelected;
+export {setSelected};
 
 /**
  * Container element in which to render the WidgetDiv, DropDownDiv and Tooltip.
@@ -104,7 +104,7 @@ let parentContainer;
 const getParentContainer = function() {
   return parentContainer;
 };
-exports.getParentContainer = getParentContainer;
+export {getParentContainer};
 
 /**
  * Set the parent container.  This is the container element that the WidgetDiv,
@@ -117,7 +117,7 @@ exports.getParentContainer = getParentContainer;
 const setParentContainer = function(newParent) {
   parentContainer = newParent;
 };
-exports.setParentContainer = setParentContainer;
+export {setParentContainer};
 
 /**
  * Size the SVG image to completely fill its container. Call this when the view
@@ -152,13 +152,13 @@ const svgResize = function(workspace) {
   }
   mainWorkspace.resize();
 };
-exports.svgResize = svgResize;
+export {svgResize};
 
 /**
  * All of the connections on blocks that are currently being dragged.
  * @type {!Array<!Connection>}
  */
-exports.draggingConnections = [];
+export var draggingConnections = [];
 
 /**
  * Get a map of all the block's descendants mapping their type to the number of
@@ -189,7 +189,7 @@ const getBlockTypeCounts = function(block, opt_stripFollowing) {
   }
   return typeCountsMap;
 };
-exports.getBlockTypeCounts = getBlockTypeCounts;
+export {getBlockTypeCounts};
 
 /**
  * Helper function for defining a block from JSON.  The resulting function has
@@ -213,7 +213,7 @@ const jsonInitFactory = function(jsonDef) {
 const defineBlocksWithJsonArray = function(jsonArray) {
   defineBlocks(createBlockDefinitionsFromJsonArray(jsonArray));
 };
-exports.defineBlocksWithJsonArray = defineBlocksWithJsonArray;
+export {defineBlocksWithJsonArray};
 
 /**
  * Define blocks from an array of JSON block definitions, as might be generated
@@ -242,8 +242,7 @@ const createBlockDefinitionsFromJsonArray = function(jsonArray) {
   }
   return blocks;
 };
-exports.createBlockDefinitionsFromJsonArray =
-    createBlockDefinitionsFromJsonArray;
+export {createBlockDefinitionsFromJsonArray};
 
 /**
  * Add the specified block definitions to the block definitions
@@ -262,4 +261,4 @@ const defineBlocks = function(blocks) {
     Blocks[type] = definition;
   }
 };
-exports.defineBlocks = defineBlocks;
+export {defineBlocks};

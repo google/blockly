@@ -14,7 +14,7 @@
  * An object that owns a block's rendering SVG elements.
  * @class
  */
-goog.module('Blockly.geras.PathObject');
+goog.declareModuleId('Blockly.geras.PathObject');
 
 const colour = goog.require('Blockly.utils.colour');
 const dom = goog.require('Blockly.utils.dom');
@@ -178,4 +178,4 @@ PathObject.prototype.updateDisabled_ = function(disabled) {
   }
 };
 
-exports.PathObject = PathObject;
+export {PathObject};

@@ -13,7 +13,7 @@
  * Object representing a code comment.
  * @class
  */
-goog.module('Blockly.Comment');
+goog.declareModuleId('Blockly.Comment');
 
 const Css = goog.require('Blockly.Css');
 const browserEvents = goog.require('Blockly.browserEvents');
@@ -446,4 +446,4 @@ Css.register(`
 }
 `);
 
-exports.Comment = Comment;
+export {Comment};

@@ -14,7 +14,7 @@
  * Methods for graphically rendering a marker as SVG.
  * @class
  */
-goog.module('Blockly.blockRendering.MarkerSvg');
+goog.declareModuleId('Blockly.blockRendering.MarkerSvg');
 
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
@@ -718,4 +718,4 @@ class MarkerSvg {
   }
 }
 
-exports.MarkerSvg = MarkerSvg;
+export {MarkerSvg};

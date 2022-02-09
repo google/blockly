@@ -10,7 +10,7 @@
  */
 'use strict';
 
-goog.module('Blockly.blocks.variables');
+goog.declareModuleId('Blockly.blocks.variables');
 
 const ContextMenu = goog.require('Blockly.ContextMenu');
 const Extensions = goog.require('Blockly.Extensions');
@@ -73,7 +73,7 @@ const blocks = createBlockDefinitionsFromJsonArray([
     'extensions': ['contextMenu_variableSetterGetter'],
   },
 ]);
-exports.blocks = blocks;
+export {blocks};
 
 
 /**

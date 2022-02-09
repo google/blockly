@@ -15,7 +15,7 @@
  * between tab navigable fields.
  * @class
  */
-goog.module('Blockly.TabNavigateCursor');
+goog.declareModuleId('Blockly.TabNavigateCursor');
 
 const object = goog.require('Blockly.utils.object');
 const {ASTNode} = goog.require('Blockly.ASTNode');
@@ -54,4 +54,4 @@ TabNavigateCursor.prototype.validNode_ = function(node) {
   return isValid;
 };
 
-exports.TabNavigateCursor = TabNavigateCursor;
+export {TabNavigateCursor};

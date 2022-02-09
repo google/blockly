@@ -13,7 +13,7 @@
  * Inject Blockly's CSS synchronously.
  * @namespace Blockly.Css
  */
-goog.module('Blockly.Css');
+goog.declareModuleId('Blockly.Css');
 
 const deprecation = goog.require('Blockly.utils.deprecation');
 
@@ -47,7 +47,7 @@ const register = function(cssContent) {
     content += ('\n' + cssContent);
   }
 };
-exports.register = register;
+export {register};
 
 /**
  * Inject the CSS into the DOM.  This is preferable over using a regular CSS
@@ -82,7 +82,7 @@ const inject = function(hasCss, pathToMedia) {
   cssNode.appendChild(cssTextNode);
   document.head.insertBefore(cssNode, document.head.firstChild);
 };
-exports.inject = inject;
+export {inject};
 
 /**
  * The CSS content for Blockly.
@@ -565,4 +565,4 @@ let content = (`
   margin-right: -24px;
 }
 `);
-exports.content = content;
+export {content};

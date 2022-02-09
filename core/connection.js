@@ -13,7 +13,7 @@
  * Components for creating connections between blocks.
  * @class
  */
-goog.module('Blockly.Connection');
+goog.declareModuleId('Blockly.Connection');
 
 const Xml = goog.require('Blockly.Xml');
 const blocks = goog.require('Blockly.serialization.blocks');
@@ -735,4 +735,4 @@ const getConnectionForOrphanedOutput = function(startBlock, orphanBlock) {
   return null;
 };
 
-exports.Connection = Connection;
+export {Connection};

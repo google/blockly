@@ -15,7 +15,7 @@
  *    labels, etc.
  * @class
  */
-goog.module('Blockly.FieldLabel');
+goog.declareModuleId('Blockly.FieldLabel');
 
 const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
@@ -135,4 +135,4 @@ FieldLabel.prototype.setClass = function(cssClass) {
 
 fieldRegistry.register('field_label', FieldLabel);
 
-exports.FieldLabel = FieldLabel;
+export {FieldLabel};

@@ -15,7 +15,7 @@
  * for both pointer and touch events.
  * @class
  */
-goog.module('Blockly.TouchGesture');
+goog.declareModuleId('Blockly.TouchGesture');
 
 const Touch = goog.require('Blockly.Touch');
 const browserEvents = goog.require('Blockly.browserEvents');
@@ -330,4 +330,4 @@ class TouchGesture extends Gesture {
   }
 }
 
-exports.TouchGesture = TouchGesture;
+export {TouchGesture};

@@ -10,7 +10,7 @@
  */
 'use strict';
 
-goog.module('Blockly.blocks.loops');
+goog.declareModuleId('Blockly.blocks.loops');
 
 /* eslint-disable-next-line no-unused-vars */
 const AbstractEvent = goog.requireType('Blockly.Events.Abstract');
@@ -211,7 +211,7 @@ const blocks = createBlockDefinitionsFromJsonArray([
     ],
   },
 ]);
-exports.blocks = blocks;
+export {blocks};
 
 /**
  * Tooltips for the 'controls_whileUntil' block, keyed by MODE value.
@@ -296,7 +296,7 @@ Extensions.register(
  * import {loopTypes} from 'blockly/blocks';
  * loopTypes.add('custom_loop');
  *
- * // Else if using Closure Compiler and goog.modules:
+ * // Else if using Closure Compiler and goog.declareModuleIds:
  * const {loopTypes} = goog.require('Blockly.blocks.loops');
  * loopTypes.add('custom_loop');
  *
@@ -309,7 +309,7 @@ const loopTypes = new Set([
   'controls_for',
   'controls_whileUntil',
 ]);
-exports.loopTypes = loopTypes;
+export {loopTypes};
 
 /**
  * This mixin adds a check to make sure the 'controls_flow_statements' block

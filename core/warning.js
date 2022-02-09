@@ -13,7 +13,7 @@
  * Object representing a warning.
  * @class
  */
-goog.module('Blockly.Warning');
+goog.declareModuleId('Blockly.Warning');
 
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
@@ -172,4 +172,4 @@ class Warning extends Icon {
   }
 }
 
-exports.Warning = Warning;
+export {Warning};

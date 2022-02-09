@@ -14,7 +14,7 @@
  * The interface for a toolbox.
  * @namespace Blockly.IToolbox
  */
-goog.module('Blockly.IToolbox');
+goog.declareModuleId('Blockly.IToolbox');
 
 /* eslint-disable-next-line no-unused-vars */
 const toolbox = goog.requireType('Blockly.utils.toolbox');
@@ -139,4 +139,4 @@ IToolbox.prototype.getSelectedItem;
  */
 IToolbox.prototype.dispose;
 
-exports.IToolbox = IToolbox;
+export {IToolbox};

@@ -13,7 +13,7 @@
  * Class for a block creation event.
  * @class
  */
-goog.module('Blockly.Events.BlockCreate');
+goog.declareModuleId('Blockly.Events.BlockCreate');
 
 const Xml = goog.require('Blockly.Xml');
 const blocks = goog.require('Blockly.serialization.blocks');
@@ -116,4 +116,4 @@ class BlockCreate extends BlockBase {
 
 registry.register(registry.Type.EVENT, eventUtils.CREATE, BlockCreate);
 
-exports.BlockCreate = BlockCreate;
+export {BlockCreate};

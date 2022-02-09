@@ -15,10 +15,9 @@
  * Blockly code.
  * @class
  */
-goog.module('Blockly.Generator');
+goog.declareModuleId('Blockly.Generator');
 
 const common = goog.require('Blockly.common');
-const deprecation = goog.require('Blockly.utils.deprecation');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
@@ -414,35 +413,6 @@ Generator.prototype.functionNames_;
  */
 Generator.prototype.nameDB_;
 
-Object.defineProperties(Generator.prototype, {
-  /**
-   * A database of variable names.
-   * @name Blockly.Generator.prototype.variableDB_
-   * @type {!Names|undefined}
-   * @protected
-   * @deprecated 'variableDB_' was renamed to 'nameDB_' (May 2021).
-   * @suppress {checkTypes}
-   */
-  variableDB_: {
-    /**
-     * @this {Generator}
-     * @return {!Names|undefined} Name database.
-     */
-    get: function() {
-      deprecation.warn('variableDB_', 'May 2021', 'May 2026', 'nameDB_');
-      return this.nameDB_;
-    },
-    /**
-     * @this {Generator}
-     * @param {!Names|undefined} nameDb New name database.
-     */
-    set: function(nameDb) {
-      deprecation.warn('variableDB_', 'May 2021', 'May 2026', 'nameDB_');
-      this.nameDB_ = nameDb;
-    },
-  },
-});
-
 /**
  * Define a developer-defined function (not a user-defined procedure) to be
  * included in the generated code.  Used for creating private helper functions.
@@ -552,4 +522,4 @@ Generator.prototype.scrubNakedValue = function(line) {
   return line;
 };
 
-exports.Generator = Generator;
+export {Generator};

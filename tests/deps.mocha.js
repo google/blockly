@@ -4,6 +4,7 @@ goog.addDependency('../../tests/mocha/block_change_event_test.js', ['Blockly.tes
 goog.addDependency('../../tests/mocha/block_create_event_test.js', ['Blockly.test.blockCreateEvent'], ['Blockly.Events.utils', 'Blockly.test.helpers'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../tests/mocha/block_json_test.js', ['Blockly.test.blockJson'], ['Blockly.Input'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../tests/mocha/block_test.js', ['Blockly.test.blocks'], ['Blockly.ConnectionType', 'Blockly.Events.utils', 'Blockly.blocks', 'Blockly.test.helpers'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('../../tests/mocha/bootstrap.js', [], [], {'lang': 'es6', 'module': 'es6'});
 goog.addDependency('../../tests/mocha/comment_test.js', ['Blockly.test.comments'], ['Blockly.Events.utils', 'Blockly.test.helpers'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../tests/mocha/connection_checker_test.js', ['Blockly.test.connectionChecker'], ['Blockly.ConnectionType', 'Blockly.test.helpers'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../tests/mocha/connection_db_test.js', ['Blockly.test.connectionDb'], ['Blockly.ConnectionType', 'Blockly.test.helpers'], {'lang': 'es6', 'module': 'goog'});

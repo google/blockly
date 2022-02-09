@@ -13,7 +13,7 @@
  * Base class for all types of block events.
  * @class
  */
-goog.module('Blockly.Events.BlockBase');
+goog.declareModuleId('Blockly.Events.BlockBase');
 
 const object = goog.require('Blockly.utils.object');
 const {Abstract} = goog.require('Blockly.Events.Abstract');
@@ -66,4 +66,4 @@ BlockBase.prototype.fromJson = function(json) {
   this.blockId = json['blockId'];
 };
 
-exports.BlockBase = BlockBase;
+export {BlockBase};

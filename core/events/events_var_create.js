@@ -13,7 +13,7 @@
  * Class for a variable creation event.
  * @class
  */
-goog.module('Blockly.Events.VarCreate');
+goog.declareModuleId('Blockly.Events.VarCreate');
 
 const eventUtils = goog.require('Blockly.Events.utils');
 const registry = goog.require('Blockly.registry');
@@ -86,4 +86,4 @@ class VarCreate extends VarBase {
 
 registry.register(registry.Type.EVENT, eventUtils.VAR_CREATE, VarCreate);
 
-exports.VarCreate = VarCreate;
+export {VarCreate};

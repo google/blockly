@@ -14,7 +14,7 @@
  * The interface for a Blockly field that can be registered.
  * @namespace Blockly.IRegistrableField
  */
-goog.module('Blockly.IRegistrableField');
+goog.declareModuleId('Blockly.IRegistrableField');
 
 /* eslint-disable-next-line no-unused-vars */
 const {Field} = goog.requireType('Blockly.Field');
@@ -36,4 +36,4 @@ const IRegistrableField = {};
  */
 IRegistrableField.fromJson;
 
-exports.IRegistrableField = IRegistrableField;
+export {IRegistrableField};

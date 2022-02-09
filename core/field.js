@@ -17,7 +17,7 @@
  * instances would be FieldTextInput, FieldDropdown, etc.
  * @class
  */
-goog.module('Blockly.Field');
+goog.declareModuleId('Blockly.Field');
 
 const Tooltip = goog.require('Blockly.Tooltip');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
@@ -1215,4 +1215,4 @@ Field.prototype.updateMarkers_ = function() {
   }
 };
 
-exports.Field = Field;
+export {Field};

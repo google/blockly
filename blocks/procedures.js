@@ -10,7 +10,7 @@
  */
 'use strict';
 
-goog.module('Blockly.blocks.procedures');
+goog.declareModuleId('Blockly.blocks.procedures');
 
 /* eslint-disable-next-line no-unused-vars */
 const AbstractEvent = goog.requireType('Blockly.Events.Abstract');
@@ -49,7 +49,7 @@ goog.require('Blockly.Warning');
  * @type {!Object<string, !BlockDefinition>}
  */
 const blocks = {};
-exports.blocks = blocks;
+export {blocks};
 
 /**
  * Common properties for the procedure_defnoreturn and

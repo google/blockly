@@ -13,7 +13,7 @@
  * Base renderer.
  * @class
  */
-goog.module('Blockly.blockRendering.Renderer');
+goog.declareModuleId('Blockly.blockRendering.Renderer');
 
 const debug = goog.require('Blockly.blockRendering.debug');
 const object = goog.require('Blockly.utils.object');
@@ -300,4 +300,4 @@ Renderer.prototype.render = function(block) {
   this.makeDrawer_(block, info).draw();
 };
 
-exports.Renderer = Renderer;
+export {Renderer};

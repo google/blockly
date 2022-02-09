@@ -13,7 +13,7 @@
  * Colour input field.
  * @class
  */
-goog.module('Blockly.FieldColour');
+goog.declareModuleId('Blockly.FieldColour');
 
 const Css = goog.require('Blockly.Css');
 const aria = goog.require('Blockly.utils.aria');
@@ -700,4 +700,4 @@ Css.register(`
 
 fieldRegistry.register('field_colour', FieldColour);
 
-exports.FieldColour = FieldColour;
+export {FieldColour};

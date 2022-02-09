@@ -13,7 +13,7 @@
  * An item in the toolbox.
  * @class
  */
-goog.module('Blockly.ToolboxItem');
+goog.declareModuleId('Blockly.ToolboxItem');
 
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 /* eslint-disable-next-line no-unused-vars */
@@ -24,6 +24,8 @@ const {ICollapsibleToolboxItem} = goog.requireType('Blockly.ICollapsibleToolboxI
 const {IToolboxItem} = goog.require('Blockly.IToolboxItem');
 /* eslint-disable-next-line no-unused-vars */
 const {IToolbox} = goog.requireType('Blockly.IToolbox');
+/* eslint-disable-next-line no-unused-vars */
+const {ToolboxItemInfo} = goog.requireType('Blockly.utils.toolbox');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
@@ -63,7 +65,7 @@ const ToolboxItem = function(toolboxItemDef, toolbox, opt_parent) {
 
   /**
    * The JSON definition of the toolbox item.
-   * @type {!toolbox.ToolboxItemInfo}
+   * @type {!ToolboxItemInfo}
    * @protected
    */
   this.toolboxItemDef_ = toolboxItemDef;
@@ -154,4 +156,4 @@ ToolboxItem.prototype.isCollapsible = function() {
  */
 ToolboxItem.prototype.dispose = function() {};
 
-exports.ToolboxItem = ToolboxItem;
+export {ToolboxItem};

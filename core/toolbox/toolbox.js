@@ -13,7 +13,7 @@
  * Toolbox from whence to create blocks.
  * @class
  */
-goog.module('Blockly.Toolbox');
+goog.declareModuleId('Blockly.Toolbox');
 
 const Css = goog.require('Blockly.Css');
 const Touch = goog.require('Blockly.Touch');
@@ -1150,4 +1150,4 @@ Css.register(`
 
 registry.register(registry.Type.TOOLBOX, registry.DEFAULT, Toolbox);
 
-exports.Toolbox = Toolbox;
+export {Toolbox};

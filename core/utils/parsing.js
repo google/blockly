@@ -12,7 +12,7 @@
 /**
  * @namespace Blockly.utils.parsing
  */
-goog.module('Blockly.utils.parsing');
+goog.declareModuleId('Blockly.utils.parsing');
 
 const colourUtils = goog.require('Blockly.utils.colour');
 const stringUtils = goog.require('Blockly.utils.string');
@@ -173,7 +173,7 @@ const tokenizeInterpolationInternal = function(
 const tokenizeInterpolation = function(message) {
   return tokenizeInterpolationInternal(message, true);
 };
-exports.tokenizeInterpolation = tokenizeInterpolation;
+export {tokenizeInterpolation};
 
 /**
  * Replaces string table references in a message, if the message is a string.
@@ -193,7 +193,7 @@ const replaceMessageReferences = function(message) {
   // most length 1.
   return interpolatedResult.length ? String(interpolatedResult[0]) : '';
 };
-exports.replaceMessageReferences = replaceMessageReferences;
+export {replaceMessageReferences};
 
 /**
  * Validates that any %{MSG_KEY} references in the message refer to keys of
@@ -221,7 +221,7 @@ const checkMessageReferences = function(message) {
 
   return validSoFar;
 };
-exports.checkMessageReferences = checkMessageReferences;
+export {checkMessageReferences};
 
 /**
  * Parse a block colour from a number or string, as provided in a block
@@ -258,4 +258,4 @@ const parseBlockColour = function(colour) {
     }
   }
 };
-exports.parseBlockColour = parseBlockColour;
+export {parseBlockColour};

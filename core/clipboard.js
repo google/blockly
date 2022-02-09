@@ -13,7 +13,7 @@
  * Blockly's internal clipboard for managing copy-paste.
  * @namespace Blockly.clipboard
  */
-goog.module('Blockly.clipboard');
+goog.declareModuleId('Blockly.clipboard');
 
 /* eslint-disable-next-line no-unused-vars */
 const {ICopyable} = goog.requireType('Blockly.ICopyable');
@@ -34,7 +34,7 @@ let copyData = null;
 const copy = function(toCopy) {
   copyData = toCopy.toCopyData();
 };
-exports.copy = copy;
+export {copy};
 
 /**
  * Paste a block or workspace comment on to the main workspace.
@@ -59,7 +59,7 @@ const paste = function() {
   }
   return false;
 };
-exports.paste = paste;
+export {paste};
 
 /**
  * Duplicate this block and its children, or a workspace comment.
@@ -74,4 +74,4 @@ const duplicate = function(toDuplicate) {
   toDuplicate.workspace.paste(copyData.saveInfo);
   copyData = oldCopyData;
 };
-exports.duplicate = duplicate;
+export {duplicate};

@@ -13,7 +13,7 @@
  * Variable input field.
  * @class
  */
-goog.module('Blockly.FieldVariable');
+goog.declareModuleId('Blockly.FieldVariable');
 
 const Variables = goog.require('Blockly.Variables');
 const Xml = goog.require('Blockly.Xml');
@@ -517,4 +517,4 @@ FieldVariable.prototype.referencesVariables = function() {
 
 fieldRegistry.register('field_variable', FieldVariable);
 
-exports.FieldVariable = FieldVariable;
+export {FieldVariable};

@@ -13,7 +13,7 @@
  * Utility methods realted to figuring out positions of SVG elements.
  * @namespace Blockly.utils.svgMath
  */
-goog.module('Blockly.utils.svgMath');
+goog.declareModuleId('Blockly.utils.svgMath');
 
 const deprecation = goog.require('Blockly.utils.deprecation');
 const global = goog.require('Blockly.utils.global');
@@ -87,7 +87,7 @@ const getRelativeXY = function(element) {
   }
   return xy;
 };
-exports.getRelativeXY = getRelativeXY;
+export {getRelativeXY};
 
 /**
  * Return the coordinates of the top-left corner of this element relative to
@@ -113,7 +113,7 @@ const getInjectionDivXY = function(element) {
   }
   return new Coordinate(x, y);
 };
-exports.getInjectionDivXY = getInjectionDivXY;
+export {getInjectionDivXY};
 
 /**
  * Check if 3D transforms are supported by adding an element
@@ -165,7 +165,7 @@ const is3dSupported = function() {
   is3dSupported.cached_ = has3d !== 'none';
   return is3dSupported.cached_;
 };
-exports.is3dSupported = is3dSupported;
+export {is3dSupported};
 
 /**
  * Get the position of the current viewport in window coordinates.  This takes
@@ -182,7 +182,7 @@ const getViewportBBox = function() {
       scrollOffset.y, document.documentElement.clientHeight + scrollOffset.y,
       scrollOffset.x, document.documentElement.clientWidth + scrollOffset.x);
 };
-exports.getViewportBBox = getViewportBBox;
+export {getViewportBBox};
 
 /**
  * Gets the document scroll distance as a coordinate object.
@@ -202,7 +202,7 @@ const getDocumentScroll = function() {
   return new Coordinate(
       win.pageXOffset || el.scrollLeft, win.pageYOffset || el.scrollTop);
 };
-exports.getDocumentScroll = getDocumentScroll;
+export {getDocumentScroll};
 
 /**
  * Converts screen coordinates to workspace coordinates.
@@ -239,7 +239,7 @@ const screenToWsCoordinates = function(ws, screenCoordinates) {
   const finalOffsetMainWs = finalOffsetPixels.scale(1 / ws.scale);
   return finalOffsetMainWs;
 };
-exports.screenToWsCoordinates = screenToWsCoordinates;
+export {screenToWsCoordinates};
 
 /**
  * Returns the dimensions of the specified SVG image.
@@ -259,10 +259,9 @@ const svgSize = function(svg) {
   svg = /** @type {?} */ (svg);
   return new Size(svg.cachedWidth_, svg.cachedHeight_);
 };
-exports.svgSize = svgSize;
+export {svgSize};
 
-
-exports.TEST_ONLY = {
+export var TEST_ONLY = {
   XY_REGEX,
   XY_STYLE_REGEX,
 };

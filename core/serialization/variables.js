@@ -15,7 +15,7 @@
  * state.
  * @namespace Blockly.serialization.variables
  */
-goog.module('Blockly.serialization.variables');
+goog.declareModuleId('Blockly.serialization.variables');
 
 const priorities = goog.require('Blockly.serialization.priorities');
 const serializationRegistry = goog.require('Blockly.serialization.registry');
@@ -35,7 +35,7 @@ const {Workspace} = goog.requireType('Blockly.Workspace');
  * @alias Blockly.serialization.variables.State
  */
 let State;
-exports.State = State;
+export {State};
 
 /**
  * Serializer for saving and loading variable state.

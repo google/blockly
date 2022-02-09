@@ -14,7 +14,7 @@
  * rendered block.
  * @class
  */
-goog.module('Blockly.blockRendering.InputRow');
+goog.declareModuleId('Blockly.blockRendering.InputRow');
 
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -82,4 +82,4 @@ class InputRow extends Row {
   }
 }
 
-exports.InputRow = InputRow;
+export {InputRow};

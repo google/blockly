@@ -19,6 +19,8 @@
  */
 'use strict';
 
+import * as Blockly from '../core/blockly.js';
+
 
 /**
  * Due to the frequency of long strings, the 80-column wrap rule need not apply
@@ -1597,3 +1599,5 @@ Blockly.Msg.DIALOG_OK = 'OK';
 /** @type {string} */
 /// button label - Pressing this button cancels a proposed action.\n{{Identical|Cancel}}
 Blockly.Msg.DIALOG_CANCEL = 'Cancel';
+
+window.Blockly = Blockly;

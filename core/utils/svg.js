@@ -15,7 +15,7 @@
  * all SVG tag names used by Blockly.
  * @class
  */
-goog.module('Blockly.utils.Svg');
+goog.declareModuleId('Blockly.utils.Svg');
 
 
 /**
@@ -181,4 +181,4 @@ Svg.TEXT = new Svg('text');
  */
 Svg.TSPAN = new Svg('tspan');
 
-exports.Svg = Svg;
+export {Svg};

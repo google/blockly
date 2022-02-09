@@ -14,7 +14,7 @@
  * The interface for a collapsible toolbox item.
  * @namespace Blockly.ICollapsibleToolboxItem
  */
-goog.module('Blockly.ICollapsibleToolboxItem');
+goog.declareModuleId('Blockly.ICollapsibleToolboxItem');
 
 /* eslint-disable-next-line no-unused-vars */
 const {ISelectableToolboxItem} = goog.require('Blockly.ISelectableToolboxItem');
@@ -50,4 +50,4 @@ ICollapsibleToolboxItem.prototype.isExpanded;
  */
 ICollapsibleToolboxItem.prototype.toggleExpanded;
 
-exports.ICollapsibleToolboxItem = ICollapsibleToolboxItem;
+export {ICollapsibleToolboxItem};

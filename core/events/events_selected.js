@@ -13,7 +13,7 @@
  * Events fired as a result of element select action.
  * @class
  */
-goog.module('Blockly.Events.Selected');
+goog.declareModuleId('Blockly.Events.Selected');
 
 const eventUtils = goog.require('Blockly.Events.utils');
 const registry = goog.require('Blockly.registry');
@@ -80,4 +80,4 @@ class Selected extends UiBase {
 
 registry.register(registry.Type.EVENT, eventUtils.SELECTED, Selected);
 
-exports.Selected = Selected;
+export {Selected};

@@ -13,7 +13,7 @@
  * An object representing the top row of a rendered block.
  * @class
  */
-goog.module('Blockly.zelos.TopRow');
+goog.declareModuleId('Blockly.zelos.TopRow');
 
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -68,4 +68,4 @@ class TopRow extends BaseTopRow {
   }
 }
 
-exports.TopRow = TopRow;
+export {TopRow};

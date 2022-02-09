@@ -15,7 +15,7 @@
  *
  * @namespace Blockly.VariablesDynamic
  */
-goog.module('Blockly.VariablesDynamic');
+goog.declareModuleId('Blockly.VariablesDynamic');
 
 const Variables = goog.require('Blockly.Variables');
 const xml = goog.require('Blockly.utils.xml');
@@ -36,25 +36,25 @@ const {Workspace} = goog.requireType('Blockly.Workspace');
  * @alias Blockly.VariablesDynamic.CATEGORY_NAME
  */
 const CATEGORY_NAME = 'VARIABLE_DYNAMIC';
-exports.CATEGORY_NAME = CATEGORY_NAME;
+export {CATEGORY_NAME};
 
 const stringButtonClickHandler = function(button) {
   Variables.createVariableButtonHandler(
       button.getTargetWorkspace(), undefined, 'String');
 };
-exports.onCreateVariableButtonClick_String = stringButtonClickHandler;
+export {stringButtonClickHandler as onCreateVariableButtonClick_String};
 
 const numberButtonClickHandler = function(button) {
   Variables.createVariableButtonHandler(
       button.getTargetWorkspace(), undefined, 'Number');
 };
-exports.onCreateVariableButtonClick_Number = numberButtonClickHandler;
+export {numberButtonClickHandler as onCreateVariableButtonClick_Number};
 
 const colourButtonClickHandler = function(button) {
   Variables.createVariableButtonHandler(
       button.getTargetWorkspace(), undefined, 'Colour');
 };
-exports.onCreateVariableButtonClick_Colour = colourButtonClickHandler;
+export {colourButtonClickHandler as onCreateVariableButtonClick_Colour};
 
 /**
  * Construct the elements (blocks and button) required by the flyout for the
@@ -90,7 +90,7 @@ const flyoutCategory = function(workspace) {
   xmlList = xmlList.concat(blockList);
   return xmlList;
 };
-exports.flyoutCategory = flyoutCategory;
+export {flyoutCategory};
 
 /**
  * Construct the blocks required by the flyout for the variable category.
@@ -124,4 +124,4 @@ const flyoutCategoryBlocks = function(workspace) {
   }
   return xmlList;
 };
-exports.flyoutCategoryBlocks = flyoutCategoryBlocks;
+export {flyoutCategoryBlocks};

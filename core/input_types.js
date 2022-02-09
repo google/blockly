@@ -14,7 +14,7 @@
  * An enum for the possible types of inputs.
  * @namespace Blockly.inputTypes
  */
-goog.module('Blockly.inputTypes');
+goog.declareModuleId('Blockly.inputTypes');
 
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
 
@@ -33,4 +33,4 @@ const inputTypes = {
   DUMMY: 5,
 };
 
-exports.inputTypes = inputTypes;
+export {inputTypes};

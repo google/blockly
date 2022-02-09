@@ -13,7 +13,7 @@
  * Abstract class for a variable event.
  * @class
  */
-goog.module('Blockly.Events.VarBase');
+goog.declareModuleId('Blockly.Events.VarBase');
 
 const object = goog.require('Blockly.utils.object');
 const {Abstract} = goog.require('Blockly.Events.Abstract');
@@ -66,4 +66,4 @@ VarBase.prototype.fromJson = function(json) {
   this.varId = json['varId'];
 };
 
-exports.VarBase = VarBase;
+export {VarBase};

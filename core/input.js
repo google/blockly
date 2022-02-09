@@ -13,7 +13,7 @@
  * Object representing an input (value, statement, or dummy).
  * @class
  */
-goog.module('Blockly.Input');
+goog.declareModuleId('Blockly.Input');
 
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 /* eslint-disable-next-line no-unused-vars */
@@ -41,7 +41,7 @@ const Align = {
   CENTRE: 0,
   RIGHT: 1,
 };
-exports.Align = Align;
+export {Align};
 
 /**
  * Class for an input with an optional field.
@@ -329,4 +329,4 @@ class Input {
   }
 }
 
-exports.Input = Input;
+export {Input};

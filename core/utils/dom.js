@@ -17,7 +17,7 @@
  * a JavaScript framework such as Closure.
  * @namespace Blockly.utils.dom
  */
-goog.module('Blockly.utils.dom');
+goog.declareModuleId('Blockly.utils.dom');
 
 const userAgent = goog.require('Blockly.utils.userAgent');
 /* eslint-disable-next-line no-unused-vars */
@@ -30,7 +30,7 @@ const {Svg} = goog.requireType('Blockly.utils.Svg');
  * @alias Blockly.utils.dom.SVG_NS
  */
 const SVG_NS = 'http://www.w3.org/2000/svg';
-exports.SVG_NS = SVG_NS;
+export {SVG_NS};
 
 /**
  * Required name space for HTML elements.
@@ -38,7 +38,7 @@ exports.SVG_NS = SVG_NS;
  * @alias Blockly.utils.dom.HTML_NS
  */
 const HTML_NS = 'http://www.w3.org/1999/xhtml';
-exports.HTML_NS = HTML_NS;
+export {HTML_NS};
 
 /**
  * Required name space for XLINK elements.
@@ -46,7 +46,7 @@ exports.HTML_NS = HTML_NS;
  * @alias Blockly.utils.dom.XLINK_NS
  */
 const XLINK_NS = 'http://www.w3.org/1999/xlink';
-exports.XLINK_NS = XLINK_NS;
+export {XLINK_NS};
 
 /**
  * Node type constants.
@@ -60,7 +60,7 @@ const NodeType = {
   COMMENT_NODE: 8,
   DOCUMENT_POSITION_CONTAINED_BY: 16,
 };
-exports.NodeType = NodeType;
+export {NodeType};
 
 /**
  * Temporary cache of text widths.
@@ -110,7 +110,7 @@ const createSvgElement = function(name, attrs, opt_parent) {
   }
   return e;
 };
-exports.createSvgElement = createSvgElement;
+export {createSvgElement};
 
 /**
  * Add a CSS class to a element.
@@ -131,7 +131,7 @@ const addClass = function(element, className) {
   element.setAttribute('class', classes + className);
   return true;
 };
-exports.addClass = addClass;
+export {addClass};
 
 /**
  * Removes multiple calsses from an element.
@@ -146,7 +146,7 @@ const removeClasses = function(element, classNames) {
     removeClass(element, classList[i]);
   }
 };
-exports.removeClasses = removeClasses;
+export {removeClasses};
 
 /**
  * Remove a CSS class from a element.
@@ -175,7 +175,7 @@ const removeClass = function(element, className) {
   }
   return true;
 };
-exports.removeClass = removeClass;
+export {removeClass};
 
 /**
  * Checks if an element has the specified CSS class.
@@ -189,7 +189,7 @@ const hasClass = function(element, className) {
   const classes = element.getAttribute('class');
   return (' ' + classes + ' ').indexOf(' ' + className + ' ') !== -1;
 };
-exports.hasClass = hasClass;
+export {hasClass};
 
 /**
  * Removes a node from its parent. No-op if not attached to a parent.
@@ -201,7 +201,7 @@ exports.hasClass = hasClass;
 const removeNode = function(node) {
   return node && node.parentNode ? node.parentNode.removeChild(node) : null;
 };
-exports.removeNode = removeNode;
+export {removeNode};
 
 /**
  * Insert a node after a reference node.
@@ -222,7 +222,7 @@ const insertAfter = function(newNode, refNode) {
     parentNode.appendChild(newNode);
   }
 };
-exports.insertAfter = insertAfter;
+export {insertAfter};
 
 /**
  * Whether a node contains another node.
@@ -236,7 +236,7 @@ const containsNode = function(parent, descendant) {
       parent.compareDocumentPosition(descendant) &
       NodeType.DOCUMENT_POSITION_CONTAINED_BY);
 };
-exports.containsNode = containsNode;
+export {containsNode};
 
 /**
  * Sets the CSS transform property on an element. This function sets the
@@ -250,7 +250,7 @@ const setCssTransform = function(element, transform) {
   element.style['transform'] = transform;
   element.style['-webkit-transform'] = transform;
 };
-exports.setCssTransform = setCssTransform;
+export {setCssTransform};
 
 /**
  * Start caching text widths. Every call to this function MUST also call
@@ -263,7 +263,7 @@ const startTextWidthCache = function() {
     cacheWidths = Object.create(null);
   }
 };
-exports.startTextWidthCache = startTextWidthCache;
+export {startTextWidthCache};
 
 /**
  * Stop caching field widths. Unless caching was already on when the
@@ -276,7 +276,7 @@ const stopTextWidthCache = function() {
     cacheWidths = null;
   }
 };
-exports.stopTextWidthCache = stopTextWidthCache;
+export {stopTextWidthCache};
 
 /**
  * Gets the width of a text element, caching it in the process.
@@ -317,7 +317,7 @@ const getTextWidth = function(textElement) {
   }
   return width;
 };
-exports.getTextWidth = getTextWidth;
+export {getTextWidth};
 
 /**
  * Gets the width of a text element using a faster method than `getTextWidth`.
@@ -335,7 +335,7 @@ const getFastTextWidth = function(
   return getFastTextWidthWithSizeString(
       textElement, fontSize + 'pt', fontWeight, fontFamily);
 };
-exports.getFastTextWidth = getFastTextWidth;
+export {getFastTextWidth};
 
 /**
  * Gets the width of a text element using a faster method than `getTextWidth`.
@@ -387,7 +387,7 @@ const getFastTextWidthWithSizeString = function(
   }
   return width;
 };
-exports.getFastTextWidthWithSizeString = getFastTextWidthWithSizeString;
+export {getFastTextWidthWithSizeString};
 
 /**
  * Measure a font's metrics. The height and baseline values.
@@ -427,4 +427,4 @@ const measureFontMetrics = function(text, fontSize, fontWeight, fontFamily) {
   }
   return result;
 };
-exports.measureFontMetrics = measureFontMetrics;
+export {measureFontMetrics};

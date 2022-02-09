@@ -13,7 +13,7 @@
  * Events fired as a result of selecting an item on the toolbox.
  * @class
  */
-goog.module('Blockly.Events.ToolboxItemSelect');
+goog.declareModuleId('Blockly.Events.ToolboxItemSelect');
 
 const eventUtils = goog.require('Blockly.Events.utils');
 const registry = goog.require('Blockly.registry');
@@ -81,4 +81,4 @@ class ToolboxItemSelect extends UiBase {
 registry.register(
     registry.Type.EVENT, eventUtils.TOOLBOX_ITEM_SELECT, ToolboxItemSelect);
 
-exports.ToolboxItemSelect = ToolboxItemSelect;
+export {ToolboxItemSelect};

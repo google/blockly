@@ -17,7 +17,7 @@
  * a JavaScript framework such as Closure.
  * @namespace Blockly.utils.math
  */
-goog.module('Blockly.utils.math');
+goog.declareModuleId('Blockly.utils.math');
 
 
 /**
@@ -30,7 +30,7 @@ goog.module('Blockly.utils.math');
 const toRadians = function(angleDegrees) {
   return angleDegrees * Math.PI / 180;
 };
-exports.toRadians = toRadians;
+export {toRadians};
 
 /**
  * Converts radians to degrees.
@@ -42,7 +42,7 @@ exports.toRadians = toRadians;
 const toDegrees = function(angleRadians) {
   return angleRadians * 180 / Math.PI;
 };
-exports.toDegrees = toDegrees;
+export {toDegrees};
 
 /**
  * Clamp the provided number between the lower bound and the upper bound.
@@ -60,4 +60,4 @@ const clamp = function(lowerBound, number, upperBound) {
   }
   return Math.max(lowerBound, Math.min(number, upperBound));
 };
-exports.clamp = clamp;
+export {clamp};

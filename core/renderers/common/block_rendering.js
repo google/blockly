@@ -13,7 +13,7 @@
  * Namespace for block rendering functionality.
  * @namespace Blockly.blockRendering
  */
-goog.module('Blockly.blockRendering');
+goog.declareModuleId('Blockly.blockRendering');
 
 const debug = goog.require('Blockly.blockRendering.debug');
 const deprecation = goog.require('Blockly.utils.deprecation');
@@ -63,7 +63,7 @@ const isDebuggerEnabled = function() {
       'September 2022', 'Blockly.blockRendering.debug.isDebuggerEnabled()');
   return debug.isDebuggerEnabled();
 };
-exports.isDebuggerEnabled = isDebuggerEnabled;
+export {isDebuggerEnabled};
 
 /**
  * Registers a new renderer.
@@ -75,7 +75,7 @@ exports.isDebuggerEnabled = isDebuggerEnabled;
 const register = function(name, rendererClass) {
   registry.register(registry.Type.RENDERER, name, rendererClass);
 };
-exports.register = register;
+export {register};
 
 /**
  * Unregisters the renderer registered with the given name.
@@ -85,7 +85,7 @@ exports.register = register;
 const unregister = function(name) {
   registry.unregister(registry.Type.RENDERER, name);
 };
-exports.unregister = unregister;
+export {unregister};
 
 /**
  * Turn on the blocks debugger.
@@ -98,7 +98,7 @@ const startDebugger = function() {
       'September 2022', 'Blockly.blockRendering.debug.startDebugger()');
   debug.startDebugger();
 };
-exports.startDebugger = startDebugger;
+export {startDebugger};
 
 /**
  * Turn off the blocks debugger.
@@ -111,7 +111,7 @@ const stopDebugger = function() {
       'September 2022', 'Blockly.blockRendering.debug.stopDebugger()');
   debug.stopDebugger();
 };
-exports.stopDebugger = stopDebugger;
+export {stopDebugger};
 
 /**
  * Initialize anything needed for rendering (constants, etc).
@@ -129,36 +129,35 @@ const init = function(name, theme, opt_rendererOverrides) {
   renderer.init(theme, opt_rendererOverrides);
   return renderer;
 };
-exports.init = init;
-
-exports.BottomRow = BottomRow;
-exports.Connection = Connection;
-exports.ConstantProvider = ConstantProvider;
-exports.Debug = Debug;
-exports.Drawer = Drawer;
-exports.ExternalValueInput = ExternalValueInput;
-exports.Field = Field;
-exports.Hat = Hat;
-exports.Icon = Icon;
-exports.InRowSpacer = InRowSpacer;
-exports.InlineInput = InlineInput;
-exports.InputConnection = InputConnection;
-exports.InputRow = InputRow;
-exports.IPathObject = IPathObject;
-exports.JaggedEdge = JaggedEdge;
-exports.MarkerSvg = MarkerSvg;
-exports.Measurable = Measurable;
-exports.NextConnection = NextConnection;
-exports.OutputConnection = OutputConnection;
-exports.PathObject = PathObject;
-exports.PreviousConnection = PreviousConnection;
-exports.Renderer = Renderer;
-exports.RenderInfo = RenderInfo;
-exports.RoundCorner = RoundCorner;
-exports.Row = Row;
-exports.SpacerRow = SpacerRow;
-exports.SquareCorner = SquareCorner;
-exports.StatementInput = StatementInput;
-exports.TopRow = TopRow;
-exports.Types = Types;
-exports.debug = debug;
+export {init};
+export {BottomRow};
+export {Connection};
+export {ConstantProvider};
+export {Debug};
+export {Drawer};
+export {ExternalValueInput};
+export {Field};
+export {Hat};
+export {Icon};
+export {InRowSpacer};
+export {InlineInput};
+export {InputConnection};
+export {InputRow};
+export {IPathObject};
+export {JaggedEdge};
+export {MarkerSvg};
+export {Measurable};
+export {NextConnection};
+export {OutputConnection};
+export {PathObject};
+export {PreviousConnection};
+export {Renderer};
+export {RenderInfo};
+export {RoundCorner};
+export {Row};
+export {SpacerRow};
+export {SquareCorner};
+export {StatementInput};
+export {TopRow};
+export {Types};
+export {debug};

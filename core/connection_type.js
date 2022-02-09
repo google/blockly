@@ -14,7 +14,7 @@
  * An enum for the possible types of connections.
  * @namespace Blockly.ConnectionType
  */
-goog.module('Blockly.ConnectionType');
+goog.declareModuleId('Blockly.ConnectionType');
 
 
 /**
@@ -33,4 +33,4 @@ const ConnectionType = {
   PREVIOUS_STATEMENT: 4,
 };
 
-exports.ConnectionType = ConnectionType;
+export {ConnectionType};

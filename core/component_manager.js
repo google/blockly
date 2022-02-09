@@ -14,7 +14,7 @@
  * Manager for all items registered with the workspace.
  * @class
  */
-goog.module('Blockly.ComponentManager');
+goog.declareModuleId('Blockly.ComponentManager');
 
 const arrayUtils = goog.require('Blockly.utils.array');
 /* eslint-disable-next-line no-unused-vars */
@@ -253,4 +253,4 @@ ComponentManager.Capability.DELETE_AREA =
 ComponentManager.Capability.AUTOHIDEABLE =
     new ComponentManager.Capability('autohideable');
 
-exports.ComponentManager = ComponentManager;
+export {ComponentManager};

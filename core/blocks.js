@@ -13,7 +13,7 @@
  * A mapping of block type names to block prototype objects.
  * @namespace Blockly.blocks
  */
-goog.module('Blockly.blocks');
+goog.declareModuleId('Blockly.blocks');
 
 
 /**
@@ -22,7 +22,7 @@ goog.module('Blockly.blocks');
  * @typedef {!Object}
  */
 let BlockDefinition;
-exports.BlockDefinition = BlockDefinition;
+export {BlockDefinition};
 
 /**
  * A mapping of block type names to block prototype objects.
@@ -30,4 +30,4 @@ exports.BlockDefinition = BlockDefinition;
  * @alias Blockly.blocks.Blocks
  */
 const Blocks = Object.create(null);
-exports.Blocks = Blocks;
+export {Blocks};

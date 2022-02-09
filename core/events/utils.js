@@ -15,7 +15,7 @@
  * actions in Blockly's editor.
  * @namespace Blockly.Events.utils
  */
-goog.module('Blockly.Events.utils');
+goog.declareModuleId('Blockly.Events.utils');
 
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const registry = goog.require('Blockly.registry');
@@ -55,7 +55,7 @@ let recordUndo = true;
 const setRecordUndo = function(newValue) {
   recordUndo = newValue;
 };
-exports.setRecordUndo = setRecordUndo;
+export {setRecordUndo};
 
 /**
  * Returns whether or not events will be added to the undo stack.
@@ -65,7 +65,7 @@ exports.setRecordUndo = setRecordUndo;
 const getRecordUndo = function() {
   return recordUndo;
 };
-exports.getRecordUndo = getRecordUndo;
+export {getRecordUndo};
 
 /**
  * Allow change events to be created and fired.
@@ -79,7 +79,7 @@ let disabled = 0;
  * @alias Blockly.Events.utils.CREATE
  */
 const CREATE = 'create';
-exports.CREATE = CREATE;
+export {CREATE};
 
 /**
  * Name of event that creates a block.
@@ -87,7 +87,7 @@ exports.CREATE = CREATE;
  * @alias Blockly.Events.utils.BLOCK_CREATE
  */
 const BLOCK_CREATE = CREATE;
-exports.BLOCK_CREATE = BLOCK_CREATE;
+export {BLOCK_CREATE};
 
 /**
  * Name of event that deletes a block. Will be deprecated for BLOCK_DELETE.
@@ -95,7 +95,7 @@ exports.BLOCK_CREATE = BLOCK_CREATE;
  * @alias Blockly.Events.utils.DELETE
  */
 const DELETE = 'delete';
-exports.DELETE = DELETE;
+export {DELETE};
 
 /**
  * Name of event that deletes a block.
@@ -103,7 +103,7 @@ exports.DELETE = DELETE;
  * @alias Blockly.Events.utils.BLOCK_DELETE
  */
 const BLOCK_DELETE = DELETE;
-exports.BLOCK_DELETE = BLOCK_DELETE;
+export {BLOCK_DELETE};
 
 /**
  * Name of event that changes a block. Will be deprecated for BLOCK_CHANGE.
@@ -111,7 +111,7 @@ exports.BLOCK_DELETE = BLOCK_DELETE;
  * @alias Blockly.Events.utils.CHANGE
  */
 const CHANGE = 'change';
-exports.CHANGE = CHANGE;
+export {CHANGE};
 
 /**
  * Name of event that changes a block.
@@ -119,7 +119,7 @@ exports.CHANGE = CHANGE;
  * @alias Blockly.Events.utils.BLOCK_CHANGE
  */
 const BLOCK_CHANGE = CHANGE;
-exports.BLOCK_CHANGE = BLOCK_CHANGE;
+export {BLOCK_CHANGE};
 
 /**
  * Name of event that moves a block. Will be deprecated for BLOCK_MOVE.
@@ -127,7 +127,7 @@ exports.BLOCK_CHANGE = BLOCK_CHANGE;
  * @alias Blockly.Events.utils.MOVE
  */
 const MOVE = 'move';
-exports.MOVE = MOVE;
+export {MOVE};
 
 /**
  * Name of event that moves a block.
@@ -135,7 +135,7 @@ exports.MOVE = MOVE;
  * @alias Blockly.Events.utils.BLOCK_MOVE
  */
 const BLOCK_MOVE = MOVE;
-exports.BLOCK_MOVE = BLOCK_MOVE;
+export {BLOCK_MOVE};
 
 /**
  * Name of event that creates a variable.
@@ -143,7 +143,7 @@ exports.BLOCK_MOVE = BLOCK_MOVE;
  * @alias Blockly.Events.utils.VAR_CREATE
  */
 const VAR_CREATE = 'var_create';
-exports.VAR_CREATE = VAR_CREATE;
+export {VAR_CREATE};
 
 /**
  * Name of event that deletes a variable.
@@ -151,7 +151,7 @@ exports.VAR_CREATE = VAR_CREATE;
  * @alias Blockly.Events.utils.VAR_DELETE
  */
 const VAR_DELETE = 'var_delete';
-exports.VAR_DELETE = VAR_DELETE;
+export {VAR_DELETE};
 
 /**
  * Name of event that renames a variable.
@@ -159,7 +159,7 @@ exports.VAR_DELETE = VAR_DELETE;
  * @alias Blockly.Events.utils.VAR_RENAME
  */
 const VAR_RENAME = 'var_rename';
-exports.VAR_RENAME = VAR_RENAME;
+export {VAR_RENAME};
 
 /**
  * Name of generic event that records a UI change.
@@ -167,7 +167,7 @@ exports.VAR_RENAME = VAR_RENAME;
  * @alias Blockly.Events.utils.UI
  */
 const UI = 'ui';
-exports.UI = UI;
+export {UI};
 
 /**
  * Name of event that record a block drags a block.
@@ -175,7 +175,7 @@ exports.UI = UI;
  * @alias Blockly.Events.utils.BLOCK_DRAG
  */
 const BLOCK_DRAG = 'drag';
-exports.BLOCK_DRAG = BLOCK_DRAG;
+export {BLOCK_DRAG};
 
 /**
  * Name of event that records a change in selected element.
@@ -183,7 +183,7 @@ exports.BLOCK_DRAG = BLOCK_DRAG;
  * @alias Blockly.Events.utils.SELECTED
  */
 const SELECTED = 'selected';
-exports.SELECTED = SELECTED;
+export {SELECTED};
 
 /**
  * Name of event that records a click.
@@ -191,7 +191,7 @@ exports.SELECTED = SELECTED;
  * @alias Blockly.Events.utils.CLICK
  */
 const CLICK = 'click';
-exports.CLICK = CLICK;
+export {CLICK};
 
 /**
  * Name of event that records a marker move.
@@ -199,7 +199,7 @@ exports.CLICK = CLICK;
  * @alias Blockly.Events.utils.MARKER_MOVE
  */
 const MARKER_MOVE = 'marker_move';
-exports.MARKER_MOVE = MARKER_MOVE;
+export {MARKER_MOVE};
 
 /**
  * Name of event that records a bubble open.
@@ -207,7 +207,7 @@ exports.MARKER_MOVE = MARKER_MOVE;
  * @alias Blockly.Events.utils.BUBBLE_OPEN
  */
 const BUBBLE_OPEN = 'bubble_open';
-exports.BUBBLE_OPEN = BUBBLE_OPEN;
+export {BUBBLE_OPEN};
 
 /**
  * Name of event that records a trashcan open.
@@ -215,7 +215,7 @@ exports.BUBBLE_OPEN = BUBBLE_OPEN;
  * @alias Blockly.Events.utils.TRASHCAN_OPEN
  */
 const TRASHCAN_OPEN = 'trashcan_open';
-exports.TRASHCAN_OPEN = TRASHCAN_OPEN;
+export {TRASHCAN_OPEN};
 
 /**
  * Name of event that records a toolbox item select.
@@ -223,7 +223,7 @@ exports.TRASHCAN_OPEN = TRASHCAN_OPEN;
  * @alias Blockly.Events.utils.TOOLBOX_ITEM_SELECT
  */
 const TOOLBOX_ITEM_SELECT = 'toolbox_item_select';
-exports.TOOLBOX_ITEM_SELECT = TOOLBOX_ITEM_SELECT;
+export {TOOLBOX_ITEM_SELECT};
 
 /**
  * Name of event that records a theme change.
@@ -231,7 +231,7 @@ exports.TOOLBOX_ITEM_SELECT = TOOLBOX_ITEM_SELECT;
  * @alias Blockly.Events.utils.THEME_CHANGE
  */
 const THEME_CHANGE = 'theme_change';
-exports.THEME_CHANGE = THEME_CHANGE;
+export {THEME_CHANGE};
 
 /**
  * Name of event that records a viewport change.
@@ -239,7 +239,7 @@ exports.THEME_CHANGE = THEME_CHANGE;
  * @alias Blockly.Events.utils.VIEWPORT_CHANGE
  */
 const VIEWPORT_CHANGE = 'viewport_change';
-exports.VIEWPORT_CHANGE = VIEWPORT_CHANGE;
+export {VIEWPORT_CHANGE};
 
 /**
  * Name of event that creates a comment.
@@ -247,7 +247,7 @@ exports.VIEWPORT_CHANGE = VIEWPORT_CHANGE;
  * @alias Blockly.Events.utils.COMMENT_CREATE
  */
 const COMMENT_CREATE = 'comment_create';
-exports.COMMENT_CREATE = COMMENT_CREATE;
+export {COMMENT_CREATE};
 
 /**
  * Name of event that deletes a comment.
@@ -255,7 +255,7 @@ exports.COMMENT_CREATE = COMMENT_CREATE;
  * @alias Blockly.Events.utils.COMMENT_DELETE
  */
 const COMMENT_DELETE = 'comment_delete';
-exports.COMMENT_DELETE = COMMENT_DELETE;
+export {COMMENT_DELETE};
 
 /**
  * Name of event that changes a comment.
@@ -263,7 +263,7 @@ exports.COMMENT_DELETE = COMMENT_DELETE;
  * @alias Blockly.Events.utils.COMMENT_CHANGE
  */
 const COMMENT_CHANGE = 'comment_change';
-exports.COMMENT_CHANGE = COMMENT_CHANGE;
+export {COMMENT_CHANGE};
 
 /**
  * Name of event that moves a comment.
@@ -271,14 +271,14 @@ exports.COMMENT_CHANGE = COMMENT_CHANGE;
  * @alias Blockly.Events.utils.COMMENT_MOVE
  */
 const COMMENT_MOVE = 'comment_move';
-exports.COMMENT_MOVE = COMMENT_MOVE;
+export {COMMENT_MOVE};
 
 /**
  * Name of event that records a workspace load.
  * @alias Blockly.Events.utils.FINISHED_LOADING
  */
 const FINISHED_LOADING = 'finished_loading';
-exports.FINISHED_LOADING = FINISHED_LOADING;
+export {FINISHED_LOADING};
 
 /**
  * Type of events that cause objects to be bumped back into the visible
@@ -291,7 +291,7 @@ exports.FINISHED_LOADING = FINISHED_LOADING;
  * @alias Blockly.Events.utils.BumpEvent
  */
 let BumpEvent;
-exports.BumpEvent = BumpEvent;
+export {BumpEvent};
 
 /**
  * List of events that cause objects to be bumped back into the visible
@@ -303,7 +303,7 @@ exports.BumpEvent = BumpEvent;
  * @alias Blockly.Events.utils.BUMP_EVENTS
  */
 const BUMP_EVENTS = [BLOCK_CREATE, BLOCK_MOVE, COMMENT_CREATE, COMMENT_MOVE];
-exports.BUMP_EVENTS = BUMP_EVENTS;
+export {BUMP_EVENTS};
 
 /**
  * List of events queued for firing.
@@ -325,7 +325,7 @@ const fire = function(event) {
   }
   FIRE_QUEUE.push(event);
 };
-exports.fire = fire;
+export {fire};
 
 /**
  * Fire all queued events.
@@ -419,7 +419,7 @@ const filter = function(queueIn, forward) {
   }
   return queue;
 };
-exports.filter = filter;
+export {filter};
 
 /**
  * Modify pending undo events so that when they are fired they don't land
@@ -431,7 +431,7 @@ const clearPendingUndo = function() {
     event.recordUndo = false;
   }
 };
-exports.clearPendingUndo = clearPendingUndo;
+export {clearPendingUndo};
 
 /**
  * Stop sending events.  Every call to this function MUST also call enable.
@@ -440,7 +440,7 @@ exports.clearPendingUndo = clearPendingUndo;
 const disable = function() {
   disabled++;
 };
-exports.disable = disable;
+export {disable};
 
 /**
  * Start sending events.  Unless events were already disabled when the
@@ -450,7 +450,7 @@ exports.disable = disable;
 const enable = function() {
   disabled--;
 };
-exports.enable = enable;
+export {enable};
 
 /**
  * Returns whether events may be fired or not.
@@ -460,7 +460,7 @@ exports.enable = enable;
 const isEnabled = function() {
   return disabled === 0;
 };
-exports.isEnabled = isEnabled;
+export {isEnabled};
 
 /**
  * Current group.
@@ -470,7 +470,7 @@ exports.isEnabled = isEnabled;
 const getGroup = function() {
   return group;
 };
-exports.getGroup = getGroup;
+export {getGroup};
 
 /**
  * Start or stop a group.
@@ -485,7 +485,7 @@ const setGroup = function(state) {
     group = state;
   }
 };
-exports.setGroup = setGroup;
+export {setGroup};
 
 /**
  * Compute a list of the IDs of the specified block and all its descendants.
@@ -502,7 +502,7 @@ const getDescendantIds = function(block) {
   }
   return ids;
 };
-exports.getDescendantIds = getDescendantIds;
+export {getDescendantIds};
 
 /**
  * Decode the JSON into an event.
@@ -522,7 +522,7 @@ const fromJson = function(json, workspace) {
   event.workspaceId = workspace.id;
   return event;
 };
-exports.fromJson = fromJson;
+export {fromJson};
 
 /**
  * Gets the class for a specific event type from the registry.
@@ -534,7 +534,7 @@ exports.fromJson = fromJson;
 const get = function(eventType) {
   return registry.getClass(registry.Type.EVENT, eventType);
 };
-exports.get = get;
+export {get};
 
 /**
  * Enable/disable a block depending on whether it is properly connected.
@@ -577,9 +577,9 @@ const disableOrphans = function(event) {
     }
   }
 };
-exports.disableOrphans = disableOrphans;
+export {disableOrphans};
 
-exports.TEST_ONLY = {
+export var TEST_ONLY = {
   FIRE_QUEUE,
   fireNow,
 };

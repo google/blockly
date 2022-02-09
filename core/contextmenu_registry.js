@@ -13,7 +13,7 @@
  * Registry for context menu option items.
  * @class
  */
-goog.module('Blockly.ContextMenuRegistry');
+goog.declareModuleId('Blockly.ContextMenuRegistry');
 
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
@@ -171,4 +171,4 @@ ContextMenuRegistry.prototype.getContextMenuOptions = function(
 // Creates and assigns the singleton instance.
 new ContextMenuRegistry();
 
-exports.ContextMenuRegistry = ContextMenuRegistry;
+export {ContextMenuRegistry};

@@ -536,7 +536,7 @@ function buildCompiled() {
   // Closure Compiler options.
   const packageJson = getPackageJson();  // For version number.
   const options = {
-    define: 'Blockly.VERSION="' + packageJson.version + '"',
+    // define: 'Blockly.VERSION="' + packageJson.version + '"',
     chunk: chunkOptions.chunk,
     chunk_wrapper: chunkOptions.chunk_wrapper,
     rename_prefix_namespace: NAMESPACE_OBJECT,

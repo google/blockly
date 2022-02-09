@@ -13,7 +13,7 @@
  * Components for creating connections between blocks.
  * @class
  */
-goog.module('Blockly.RenderedConnection');
+goog.declareModuleId('Blockly.RenderedConnection');
 
 const common = goog.require('Blockly.common');
 const dom = goog.require('Blockly.utils.dom');
@@ -574,4 +574,4 @@ RenderedConnection.TrackedState = {
   TRACKED: 1,
 };
 
-exports.RenderedConnection = RenderedConnection;
+export {RenderedConnection};

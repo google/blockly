@@ -13,7 +13,7 @@
  * Object representing a zoom icons.
  * @class
  */
-goog.module('Blockly.ZoomControls');
+goog.declareModuleId('Blockly.ZoomControls');
 
 const Css = goog.require('Blockly.Css');
 const Touch = goog.require('Blockly.Touch');
@@ -504,4 +504,4 @@ Css.register(`
 }
 `);
 
-exports.ZoomControls = ZoomControls;
+export {ZoomControls};

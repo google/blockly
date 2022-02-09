@@ -13,7 +13,7 @@
  * Class that controls updates to connections during drags.
  * @class
  */
-goog.module('Blockly.InsertionMarkerManager');
+goog.declareModuleId('Blockly.InsertionMarkerManager');
 
 const blockAnimations = goog.require('Blockly.blockAnimations');
 const common = goog.require('Blockly.common');
@@ -788,4 +788,4 @@ InsertionMarkerManager.PREVIEW_TYPE = {
   REPLACEMENT_FADE: 2,
 };
 
-exports.InsertionMarkerManager = InsertionMarkerManager;
+export {InsertionMarkerManager};

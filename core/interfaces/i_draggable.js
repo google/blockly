@@ -14,7 +14,7 @@
  * The interface for an object that is draggable.
  * @namespace Blockly.IDraggable
  */
-goog.module('Blockly.IDraggable');
+goog.declareModuleId('Blockly.IDraggable');
 
 /* eslint-disable-next-line no-unused-vars */
 const {IDeletable} = goog.require('Blockly.IDeletable');
@@ -28,4 +28,4 @@ const {IDeletable} = goog.require('Blockly.IDeletable');
  */
 const IDraggable = function() {};
 
-exports.IDraggable = IDraggable;
+export {IDraggable};

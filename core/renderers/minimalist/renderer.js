@@ -13,7 +13,7 @@
  * Minimalist renderer.
  * @class
  */
-goog.module('Blockly.minimalist.Renderer');
+goog.declareModuleId('Blockly.minimalist.Renderer');
 
 const blockRendering = goog.require('Blockly.blockRendering');
 /* eslint-disable-next-line no-unused-vars */
@@ -77,4 +77,4 @@ class Renderer extends BaseRenderer {
 
 blockRendering.register('minimalist', Renderer);
 
-exports.Renderer = Renderer;
+export {Renderer};

@@ -17,7 +17,7 @@
  *    edited programmatically.
  * @class
  */
-goog.module('Blockly.FieldLabelSerializable');
+goog.declareModuleId('Blockly.FieldLabelSerializable');
 
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const parsing = goog.require('Blockly.utils.parsing');
@@ -79,4 +79,4 @@ class FieldLabelSerializable extends FieldLabel {
 
 fieldRegistry.register('field_label_serializable', FieldLabelSerializable);
 
-exports.FieldLabelSerializable = FieldLabelSerializable;
+export {FieldLabelSerializable};

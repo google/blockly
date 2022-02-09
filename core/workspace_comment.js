@@ -13,7 +13,7 @@
  * Object representing a code comment on the workspace.
  * @class
  */
-goog.module('Blockly.WorkspaceComment');
+goog.declareModuleId('Blockly.WorkspaceComment');
 
 const eventUtils = goog.require('Blockly.Events.utils');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
@@ -396,4 +396,4 @@ class WorkspaceComment {
   }
 }
 
-exports.WorkspaceComment = WorkspaceComment;
+export {WorkspaceComment};

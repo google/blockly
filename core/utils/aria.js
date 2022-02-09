@@ -17,7 +17,7 @@
  * a JavaScript framework such as Closure.
  * @namespace Blockly.utils.aria
  */
-goog.module('Blockly.utils.aria');
+goog.declareModuleId('Blockly.utils.aria');
 
 
 /** ARIA states/properties prefix. */
@@ -70,7 +70,7 @@ const Role = {
   // ARIA role for a tree item that sometimes may be expanded or collapsed.
   TREEITEM: 'treeitem',
 };
-exports.Role = Role;
+export {Role};
 
 /**
  * ARIA states and properties.
@@ -137,7 +137,7 @@ const State = {
   // ARIA property for slider minimum value. Value: number.
   VALUEMIN: 'valuemin',
 };
-exports.State = State;
+export {State};
 
 /**
  * Sets the role of an element.
@@ -151,7 +151,7 @@ exports.State = State;
 const setRole = function(element, roleName) {
   element.setAttribute(ROLE_ATTRIBUTE, roleName);
 };
-exports.setRole = setRole;
+export {setRole};
 
 /**
  * Sets the state or property of an element.
@@ -171,4 +171,4 @@ const setState = function(element, stateName, value) {
   const attrStateName = ARIA_PREFIX + stateName;
   element.setAttribute(attrStateName, value);
 };
-exports.setState = setState;
+export {setState};

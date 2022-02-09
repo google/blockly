@@ -13,7 +13,7 @@
  * Class for a finished loading workspace event.
  * @class
  */
-goog.module('Blockly.Events.FinishedLoading');
+goog.declareModuleId('Blockly.Events.FinishedLoading');
 
 const eventUtils = goog.require('Blockly.Events.utils');
 const object = goog.require('Blockly.utils.object');
@@ -96,4 +96,4 @@ FinishedLoading.prototype.fromJson = function(json) {
 registry.register(
     registry.Type.EVENT, eventUtils.FINISHED_LOADING, FinishedLoading);
 
-exports.FinishedLoading = FinishedLoading;
+export {FinishedLoading};

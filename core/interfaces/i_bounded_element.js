@@ -14,7 +14,7 @@
  * The interface for a bounded element.
  * @namespace Blockly.IBoundedElement
  */
-goog.module('Blockly.IBoundedElement');
+goog.declareModuleId('Blockly.IBoundedElement');
 
 /* eslint-disable-next-line no-unused-vars */
 const {Rect} = goog.requireType('Blockly.utils.Rect');
@@ -42,4 +42,4 @@ IBoundedElement.prototype.getBoundingRectangle;
  */
 IBoundedElement.prototype.moveBy;
 
-exports.IBoundedElement = IBoundedElement;
+export {IBoundedElement};

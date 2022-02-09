@@ -9,7 +9,7 @@
  */
 'use strict';
 
-goog.module('Blockly.blocks.colour');
+goog.declareModuleId('Blockly.blocks.colour');
 
 /* eslint-disable-next-line no-unused-vars */
 const {BlockDefinition} = goog.requireType('Blockly.blocks');
@@ -113,7 +113,7 @@ const blocks = createBlockDefinitionsFromJsonArray([
     'tooltip': '%{BKY_COLOUR_BLEND_TOOLTIP}',
   },
 ]);
-exports.blocks = blocks;
+export {blocks};
 
 // Register provided blocks.
 defineBlocks(blocks);

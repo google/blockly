@@ -16,7 +16,7 @@
  * A div that floats on top of the workspace, for drop-down menus.
  * @class
  */
-goog.module('Blockly.DropDownDiv');
+goog.declareModuleId('Blockly.DropDownDiv');
 
 const common = goog.require('Blockly.common');
 const dom = goog.require('Blockly.utils.dom');
@@ -761,4 +761,4 @@ DropDownDiv.repositionForWindowResize = function() {
 
 DropDownDiv.TEST_ONLY = internal;
 
-exports.DropDownDiv = DropDownDiv;
+export {DropDownDiv};

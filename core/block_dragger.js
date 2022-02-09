@@ -13,7 +13,7 @@
  * Methods for dragging a block visually.
  * @class
  */
-goog.module('Blockly.BlockDragger');
+goog.declareModuleId('Blockly.BlockDragger');
 
 const blockAnimation = goog.require('Blockly.blockAnimations');
 const bumpObjects = goog.require('Blockly.bumpObjects');
@@ -478,4 +478,4 @@ const initIconData = function(block) {
 
 registry.register(registry.Type.BLOCK_DRAGGER, registry.DEFAULT, BlockDragger);
 
-exports.BlockDragger = BlockDragger;
+export {BlockDragger};

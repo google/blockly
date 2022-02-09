@@ -13,7 +13,7 @@
  * Object in charge of managing markers and the cursor.
  * @class
  */
-goog.module('Blockly.MarkerManager');
+goog.declareModuleId('Blockly.MarkerManager');
 
 /* eslint-disable-next-line no-unused-vars */
 const {Cursor} = goog.requireType('Blockly.Cursor');
@@ -210,4 +210,4 @@ class MarkerManager {
  */
 MarkerManager.LOCAL_MARKER = 'local_marker_1';
 
-exports.MarkerManager = MarkerManager;
+export {MarkerManager};

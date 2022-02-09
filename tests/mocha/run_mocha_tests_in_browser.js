@@ -40,11 +40,11 @@ async function runMochaTestsInBrowser() {
     // NVIDIA drivers older than v295.20. See 
     // https://github.com/google/blockly/issues/5345 for details.
     options.capabilities['goog:chromeOptions'] = {
-      args: ['--allow-file-access-from-files', '--disable-gpu']
+      args: ['--allow-file-access-from-files', '--disable-gpu', '--force-device-scale-factor=2']
     };
   }
 
-  var url = 'file://' + __dirname + '/index.html';
+  var url = 'http://localhost:8000/tests/mocha/index.html';
   console.log('Starting webdriverio...');
   const browser = await webdriverio.remote(options);
   console.log('Initialized.\nLoading url: ' + url);

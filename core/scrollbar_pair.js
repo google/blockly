@@ -13,7 +13,7 @@
  * Object representing a pair of scrollbars.
  * @class
  */
-goog.module('Blockly.ScrollbarPair');
+goog.declareModuleId('Blockly.ScrollbarPair');
 
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
@@ -326,4 +326,4 @@ const ScrollbarPair = class {
   }
 };
 
-exports.ScrollbarPair = ScrollbarPair;
+export {ScrollbarPair};

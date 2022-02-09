@@ -17,7 +17,7 @@
  * a JavaScript framework such as Closure.
  * @namespace Blockly.utils.xml
  */
-goog.module('Blockly.utils.xml');
+goog.declareModuleId('Blockly.utils.xml');
 
 const {globalThis} = goog.require('Blockly.utils.global');
 
@@ -27,7 +27,7 @@ const {globalThis} = goog.require('Blockly.utils.global');
  * @alias Blockly.utils.xml.NAME_SPACE
  */
 const NAME_SPACE = 'https://developers.google.com/blockly/xml';
-exports.NAME_SPACE = NAME_SPACE;
+export {NAME_SPACE};
 
 /**
  * The Document object to use.  By default this is just document, but
@@ -46,7 +46,7 @@ let xmlDocument = globalThis['document'];
 const getDocument = function() {
   return xmlDocument;
 };
-exports.getDocument = getDocument;
+export {getDocument};
 
 /**
  * Get the document object to use for XML serialization.
@@ -56,7 +56,7 @@ exports.getDocument = getDocument;
 const setDocument = function(document) {
   xmlDocument = document;
 };
-exports.setDocument = setDocument;
+export {setDocument};
 
 /**
  * Create DOM element for XML.
@@ -67,7 +67,7 @@ exports.setDocument = setDocument;
 const createElement = function(tagName) {
   return xmlDocument.createElementNS(NAME_SPACE, tagName);
 };
-exports.createElement = createElement;
+export {createElement};
 
 /**
  * Create text element for XML.
@@ -78,7 +78,7 @@ exports.createElement = createElement;
 const createTextNode = function(text) {
   return xmlDocument.createTextNode(text);
 };
-exports.createTextNode = createTextNode;
+export {createTextNode};
 
 /**
  * Converts an XML string into a DOM tree.
@@ -91,7 +91,7 @@ const textToDomDocument = function(text) {
   const oParser = new DOMParser();
   return oParser.parseFromString(text, 'text/xml');
 };
-exports.textToDomDocument = textToDomDocument;
+export {textToDomDocument};
 
 /**
  * Converts a DOM structure into plain text.
@@ -104,4 +104,4 @@ const domToText = function(dom) {
   const oSerializer = new XMLSerializer();
   return oSerializer.serializeToString(dom);
 };
-exports.domToText = domToText;
+export {domToText};

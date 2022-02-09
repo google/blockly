@@ -13,7 +13,7 @@
  * A toolbox category used to organize blocks in the toolbox.
  * @class
  */
-goog.module('Blockly.ToolboxCategory');
+goog.declareModuleId('Blockly.ToolboxCategory');
 
 const Css = goog.require('Blockly.Css');
 const aria = goog.require('Blockly.utils.aria');
@@ -23,6 +23,8 @@ const object = goog.require('Blockly.utils.object');
 const parsing = goog.require('Blockly.utils.parsing');
 const registry = goog.require('Blockly.registry');
 const toolbox = goog.require('Blockly.utils.toolbox');
+/* eslint-disable-next-line no-unused-vars */
+const {FlyoutItemInfoArray} = goog.requireType('Blockly.utils.toolbox');
 /* eslint-disable-next-line no-unused-vars */
 const {ICollapsibleToolboxItem} = goog.requireType('Blockly.ICollapsibleToolboxItem');
 /* eslint-disable-next-line no-unused-vars */
@@ -123,7 +125,7 @@ const ToolboxCategory = function(categoryDef, toolbox, opt_parent) {
 
   /**
    * The flyout items for this category.
-   * @type {string|!toolbox.FlyoutItemInfoArray}
+   * @type {string|!FlyoutItemInfoArray}
    * @protected
    */
   this.flyoutItems_ = [];
@@ -722,4 +724,4 @@ registry.register(
     registry.Type.TOOLBOX_ITEM, ToolboxCategory.registrationName,
     ToolboxCategory);
 
-exports.ToolboxCategory = ToolboxCategory;
+export {ToolboxCategory};

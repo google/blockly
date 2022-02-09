@@ -12,7 +12,7 @@
  * Class representing inputs with connections on a rendered block.
  * @class
  */
-goog.module('Blockly.blockRendering.InputConnection');
+goog.declareModuleId('Blockly.blockRendering.InputConnection');
 
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
@@ -72,4 +72,4 @@ class InputConnection extends Connection {
   }
 }
 
-exports.InputConnection = InputConnection;
+export {InputConnection};

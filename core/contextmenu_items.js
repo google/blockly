@@ -13,7 +13,7 @@
  * Registers default context menu items.
  * @namespace Blockly.ContextMenuItems
  */
-goog.module('Blockly.ContextMenuItems');
+goog.declareModuleId('Blockly.ContextMenuItems');
 
 const Events = goog.require('Blockly.Events');
 const clipboard = goog.require('Blockly.clipboard');
@@ -57,7 +57,7 @@ const registerUndo = function() {
   };
   ContextMenuRegistry.registry.register(undoOption);
 };
-exports.registerUndo = registerUndo;
+export {registerUndo};
 
 /**
  * Option to redo previous action.
@@ -86,7 +86,7 @@ const registerRedo = function() {
   };
   ContextMenuRegistry.registry.register(redoOption);
 };
-exports.registerRedo = registerRedo;
+export {registerRedo};
 
 /**
  * Option to clean up blocks.
@@ -118,7 +118,7 @@ const registerCleanup = function() {
   };
   ContextMenuRegistry.registry.register(cleanOption);
 };
-exports.registerCleanup = registerCleanup;
+export {registerCleanup};
 
 /**
  * Creates a callback to collapse or expand top blocks.
@@ -186,7 +186,7 @@ const registerCollapse = function() {
   };
   ContextMenuRegistry.registry.register(collapseOption);
 };
-exports.registerCollapse = registerCollapse;
+export {registerCollapse};
 
 /**
  * Option to expand all blocks.
@@ -225,7 +225,7 @@ const registerExpand = function() {
   };
   ContextMenuRegistry.registry.register(expandOption);
 };
-exports.registerExpand = registerExpand;
+export {registerExpand};
 
 /**
  * Adds a block and its children to a list of deletable blocks.
@@ -339,7 +339,7 @@ const registerDeleteAll = function() {
   };
   ContextMenuRegistry.registry.register(deleteOption);
 };
-exports.registerDeleteAll = registerDeleteAll;
+export {registerDeleteAll};
 
 /**
  * Registers all workspace-scoped context menu items.
@@ -387,7 +387,7 @@ const registerDuplicate = function() {
   };
   ContextMenuRegistry.registry.register(duplicateOption);
 };
-exports.registerDuplicate = registerDuplicate;
+export {registerDuplicate};
 
 /**
  * Option to add or remove block-level comment.
@@ -431,7 +431,7 @@ const registerComment = function() {
   };
   ContextMenuRegistry.registry.register(commentOption);
 };
-exports.registerComment = registerComment;
+export {registerComment};
 
 /**
  * Option to inline variables.
@@ -470,7 +470,7 @@ const registerInline = function() {
   };
   ContextMenuRegistry.registry.register(inlineOption);
 };
-exports.registerInline = registerInline;
+export {registerInline};
 
 /**
  * Option to collapse or expand a block.
@@ -503,7 +503,7 @@ const registerCollapseExpandBlock = function() {
   };
   ContextMenuRegistry.registry.register(collapseExpandOption);
 };
-exports.registerCollapseExpandBlock = registerCollapseExpandBlock;
+export {registerCollapseExpandBlock};
 
 /**
  * Option to disable or enable a block.
@@ -547,7 +547,7 @@ const registerDisable = function() {
   };
   ContextMenuRegistry.registry.register(disableOption);
 };
-exports.registerDisable = registerDisable;
+export {registerDisable};
 
 /**
  * Option to delete a block.
@@ -589,7 +589,7 @@ const registerDelete = function() {
   };
   ContextMenuRegistry.registry.register(deleteOption);
 };
-exports.registerDelete = registerDelete;
+export {registerDelete};
 
 /**
  * Option to open help for a block.
@@ -621,7 +621,7 @@ const registerHelp = function() {
   };
   ContextMenuRegistry.registry.register(helpOption);
 };
-exports.registerHelp = registerHelp;
+export {registerHelp};
 
 /**
  * Registers all block-scoped context menu items.
@@ -647,6 +647,6 @@ const registerDefaultOptions = function() {
   registerWorkspaceOptions_();
   registerBlockOptions_();
 };
-exports.registerDefaultOptions = registerDefaultOptions;
+export {registerDefaultOptions};
 
 registerDefaultOptions();

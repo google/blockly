@@ -15,7 +15,7 @@
  * key codes used to execute those shortcuts.
  * @class
  */
-goog.module('Blockly.ShortcutRegistry');
+goog.declareModuleId('Blockly.ShortcutRegistry');
 
 const object = goog.require('Blockly.utils.object');
 const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
@@ -354,4 +354,4 @@ ShortcutRegistry.prototype.createSerializedKey = function(keyCode, modifiers) {
 // Creates and assigns the singleton instance.
 new ShortcutRegistry();
 
-exports.ShortcutRegistry = ShortcutRegistry;
+export {ShortcutRegistry};

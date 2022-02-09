@@ -14,7 +14,7 @@
  * rendered block.
  * @class
  */
-goog.module('Blockly.zelos.RightConnectionShape');
+goog.declareModuleId('Blockly.zelos.RightConnectionShape');
 
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -43,4 +43,4 @@ class RightConnectionShape extends Measurable {
   }
 }
 
-exports.RightConnectionShape = RightConnectionShape;
+export {RightConnectionShape};

@@ -15,7 +15,6 @@
  */
 goog.module('Blockly.Events.VarBase');
 
-const object = goog.require('Blockly.utils.object');
 const {Abstract} = goog.require('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
 const {VariableModel} = goog.requireType('Blockly.VariableModel');
@@ -23,47 +22,49 @@ const {VariableModel} = goog.requireType('Blockly.VariableModel');
 
 /**
  * Abstract class for a variable event.
- * @param {!VariableModel=} opt_variable The variable this event
- *     corresponds to.  Undefined for a blank event.
  * @extends {Abstract}
- * @constructor
- * @alias Blockly.Events.VarBase
  */
-const VarBase = function(opt_variable) {
-  VarBase.superClass_.constructor.call(this);
-  this.isBlank = typeof opt_variable === 'undefined';
+class VarBase extends Abstract {
+  /**
+   * @param {!VariableModel=} opt_variable The variable this event
+   *     corresponds to.  Undefined for a blank event.
+   * @alias Blockly.Events.VarBase
+   */
+  constructor(opt_variable) {
+    super();
+    this.isBlank = typeof opt_variable === 'undefined';
+
+    /**
+     * The variable id for the variable this event pertains to.
+     * @type {string}
+     */
+    this.varId = this.isBlank ? '' : opt_variable.getId();
+
+    /**
+     * The workspace identifier for this event.
+     * @type {string}
+     */
+    this.workspaceId = this.isBlank ? '' : opt_variable.workspace.id;
+  }
 
   /**
-   * The variable id for the variable this event pertains to.
-   * @type {string}
+   * Encode the event as JSON.
+   * @return {!Object} JSON representation.
    */
-  this.varId = this.isBlank ? '' : opt_variable.getId();
+  toJson() {
+    const json = super.toJson();
+    json['varId'] = this.varId;
+    return json;
+  }
 
   /**
-   * The workspace identifier for this event.
-   * @type {string}
+   * Decode the JSON event.
+   * @param {!Object} json JSON representation.
    */
-  this.workspaceId = this.isBlank ? '' : opt_variable.workspace.id;
-};
-object.inherits(VarBase, Abstract);
-
-/**
- * Encode the event as JSON.
- * @return {!Object} JSON representation.
- */
-VarBase.prototype.toJson = function() {
-  const json = VarBase.superClass_.toJson.call(this);
-  json['varId'] = this.varId;
-  return json;
-};
-
-/**
- * Decode the JSON event.
- * @param {!Object} json JSON representation.
- */
-VarBase.prototype.fromJson = function(json) {
-  VarBase.superClass_.toJson.call(this);
-  this.varId = json['varId'];
-};
+  fromJson(json) {
+    super.fromJson(json);
+    this.varId = json['varId'];
+  }
+}
 
 exports.VarBase = VarBase;

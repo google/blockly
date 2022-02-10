@@ -187,6 +187,21 @@ const Options = function(options) {
    * @type {!Object<string, (function(new:?, ...?)|string)>}
    */
   this.plugins = plugins;
+
+  /**
+   * If set, sets the translation of the workspace to match the scrollbars.
+   * @type {undefined|function(!{x:number,y:number}):void} A function that sets
+   *     the translation of the workspace to match the scrollbars. The argument
+   *     Contains an x and/or y property which is a float between 0 and 1
+   *     specifying the degree of scrolling.
+   */
+  this.setMetrics = undefined;
+
+  /**
+   * @type {undefined|function():!Metrics} A function that returns a metrics
+   *     object that describes the current workspace.
+   */
+  this.getMetrics = undefined;
 };
 
 /**
@@ -232,20 +247,6 @@ Options.ScrollbarOptions;
  * }}
  */
 Options.ZoomOptions;
-
-/**
- * If set, sets the translation of the workspace to match the scrollbars.
- * @param {!{x:number,y:number}} xyRatio Contains an x and/or y property which
- *     is a float between 0 and 1 specifying the degree of scrolling.
- * @return {void}
- */
-Options.prototype.setMetrics;
-
-/**
- * Return an object with the metrics required to size the workspace.
- * @return {!Metrics} Contains size and position metrics.
- */
-Options.prototype.getMetrics;
 
 /**
  * Parse the user-specified move options, using reasonable defaults where

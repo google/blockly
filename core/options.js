@@ -340,7 +340,7 @@ class Options {
     return Theme.defineTheme(
         theme.name || ('builtin' + idGenerator.getNextUniqueId()), theme);
   }
-};
+}
 
 /**
  * Grid Options.

@@ -6,10 +6,11 @@
 
   <!-- This script loads uncompressed when on localhost and loads compressed when it is being hosted.
        Please add any other dependencies to playgrounds/load_all.js.-->
-<script src="playgrounds/load_all.js"></script>
-<script>
-'use strict';
+<script src="playgrounds/prepare.js"></script>
+<script type=module>
+import Blockly from './playgrounds/blockly.mjs';
 
+console.log("MAIN SCRIPT START");
 const IS_UNCOMPRESSED = !!document.getElementById('blockly-uncompressed-script');
 var workspace = null;
 
@@ -381,6 +382,13 @@ var spaghettiXml = [
     'next': { }
   });
 
+// Call start().  Because this <script> has type=module, it is
+// automatically deferred, so it will not be run until after the
+// document has been parsed, but before firing DOMContentLoaded.
+  
+start();
+
+console.log("MAIN SCRIPT END");
 </script>
 
 <style>
@@ -430,7 +438,7 @@ var spaghettiXml = [
   }
 </style>
 </head>
-<body onload="start()">
+<body>
 
   <div id="blocklyDiv"></div>
 

@@ -10,8 +10,7 @@
 <script type=module>
 import Blockly from './playgrounds/blockly.mjs';
 
-console.log("MAIN SCRIPT START");
-const IS_UNCOMPRESSED = !!document.getElementById('blockly-uncompressed-script');
+const IS_UNCOMPRESSED = Boolean(window.BlocklyLoader);  // See prepare.js
 var workspace = null;
 
 function start() {
@@ -388,7 +387,6 @@ var spaghettiXml = [
   
 start();
 
-console.log("MAIN SCRIPT END");
 </script>
 
 <style>

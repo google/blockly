@@ -7,6 +7,10 @@
 /**
  * @fileoverview Load this file in a <script> tag to prepare for
  *     importing Blockly into a web page.
+ *
+ *     You must use a <script> tag to load this script first, then
+ *     import blockly.mjs in a <script type=module> to obtain the
+ *     loaded value.
  */
 'use strict';
 
@@ -30,7 +34,7 @@
     // deps.js, run `npm run build:deps`.
     document.write('<script src="../../tests/deps.js"></script>');
 
-    // Msg loading hack.  This should go away once #5409 and/or
+    // Msg loading kludge.  This should go away once #5409 and/or
     // #1895 are fixed.
 
     // Load messages into a temporary Blockly.Msg object, deleting it
@@ -41,6 +45,27 @@
         <script>
           window.BlocklyMsg = window.Blockly.Msg;
           delete window.Blockly;
+        </script>`);
+
+    document.write(`
+        <script>
+          window.BlocklyLoader = new Promise((resolve, reject) => {
+            goog.bootstrap(
+                [
+                  'Blockly',
+                  'Blockly.blocks.all',
+                  'Blockly.Dart.all',
+                  'Blockly.JavaScript.all',
+                  'Blockly.Lua.all',
+                  'Blockly.PHP.all',
+                  'Blockly.Python.all',
+                ], resolve);
+          }).then(() => {
+            // Copy Messages from temporary Blockly.Msg object to the real one:
+            Object.assign(goog.module.get('Blockly').Msg, window.BlocklyMsg);
+          }).then(() => {
+            return goog.module.get('Blockly');
+          });
         </script>`);
   } else {
     // We need to load Blockly in compiled mode.

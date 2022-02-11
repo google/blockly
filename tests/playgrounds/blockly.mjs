@@ -32,11 +32,25 @@ if ('goog' in globalThis) {
   // (https://v8.dev/features/top-level-await) to block loading of
   // this module until goog.bootstrap()ping of Blockly is finished.
   await new Promise((resolve, reject) => {
+    goog.bootstrap(['Blockly'], resolve);
+  });
+  
+  // Retrieve loaded module.
+  Blockly = goog.module.get('Blockly');
+
+  // Copy Messages from temporary Blockly.Msg object to the real one:
+  Object.assign(Blockly.Msg, window.BlocklyMsg);
+
+  await new Promise((resolve, reject) => {
     goog.bootstrap(
-        ['Blockly', 'Blockly.blocks.all', 'Blockly.JavaScript.all'], () => {
-          Blockly = goog.module.get('Blockly');
-          resolve();
-        });
+        [
+          'Blockly.blocks.all',
+          'Blockly.Dart.all',
+          'Blockly.JavaScript.all',
+          'Blockly.Lua.all',
+          'Blockly.PHP.all',
+          'Blockly.Python.all',
+        ], resolve);
   });
 } else {
   // Compiled mode.  Retrieve the pre-installed Blockly global.

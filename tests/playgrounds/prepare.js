@@ -21,7 +21,7 @@
     // We can load Blockly in uncompiled mode.
 
     // Disable loading of closure/goog/deps.js (which doesn't exist).
-    globalThis.CLOSURE_NO_DEPS = true;
+    window.CLOSURE_NO_DEPS = true;
     // Load the Closure Library's base.js (the only part of the
     // libary we use, mainly for goog.require / goog.provide /
     // goog.module).
@@ -29,6 +29,19 @@
     // Load dependency graph info from test/deps.js.  To update
     // deps.js, run `npm run build:deps`.
     document.write('<script src="../../tests/deps.js"></script>');
+
+    // Msg loading hack.  This should go away once #5409 and/or
+    // #1895 are fixed.
+
+    // Load messages into a temporary Blockly.Msg object, deleting it
+    // afterwards (after saving the messages!)
+    window.Blockly = {Msg: Object.create(null)};
+    document.write('<script src="../../msg/messages.js"></script>');
+    document.write(`
+        <script>
+          window.BlocklyMsg = window.Blockly.Msg;
+          delete window.Blockly;
+        </script>`);
   } else {
     // We need to load Blockly in compiled mode.
 

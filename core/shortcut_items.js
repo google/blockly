@@ -148,6 +148,10 @@ const registerCopy = function() {
       // an error due to the lack of a selection.
       e.preventDefault();
       workspace.hideChaff();
+
+      const massOperations = workspace.getMassOperations()
+      if (massOperations) massOperations.cleanUpClipboard()
+
       clipboard.copy(/** @type {!ICopyable} */ (common.getSelected()));
       return true;
     },

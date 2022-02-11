@@ -347,7 +347,7 @@ BlockSvg.prototype.select = function() {
 
   if (common.getSelected() === this) return;
 
-  if (!this.InActiveModule()) return;
+  if (!this.inActiveModule()) return;
 
   let oldId = null;
   if (common.getSelected()) {
@@ -792,13 +792,12 @@ BlockSvg.prototype.tab = function(start, forward) {
  * @private
  */
 BlockSvg.prototype.onMouseDown_ = function(e) {
-  if (!this.workspace.isFlyout && e.ctrlKey) {
+  const massOperations = this.workspace.getMassOperations()
+  if (massOperations && e.ctrlKey && massOperations.checkBlockInSelectGroup(this)) {
     e.stopPropagation();
     e.preventDefault();
 
-    const massOperations = this.workspace.getMassOperations()
-    if (massOperations) massOperations.blockMouseDown(this, e)
-
+    massOperations.selectedBlockMouseDown(this, e)
     return;
   }
 
@@ -822,14 +821,6 @@ BlockSvg.prototype.onMouseDown_ = function(e) {
  * @private
  */
 BlockSvg.prototype.onMouseUp_ = function(e) {
-  if (!this.workspace.isFlyout && e.ctrlKey) {
-    e.stopPropagation();
-    e.preventDefault();
-
-    const massOperations = this.workspace.getMassOperations()
-    if (massOperations) massOperations.blockMouseUp(this, e)
-  }
-
   if (this.disableMovingToFront) this.disableMovingToFront = false
 }
 

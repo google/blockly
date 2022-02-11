@@ -2318,7 +2318,7 @@ WorkspaceSvg.prototype.centerOnBlock = function(id) {
   }
 
   // Skip center on block from another module
-  if (!block.InActiveModule()) {
+  if (!block.inActiveModule()) {
     return;
   }
 
@@ -2536,7 +2536,7 @@ WorkspaceSvg.prototype.getTopBlocks = function(ordered, inActiveModule) {
 WorkspaceSvg.prototype.addTopBlock = function(block) {
   WorkspaceSvg.superClass_.addTopBlock.call(this, block);
 
-  if (block.workspace.rendered && block.InActiveModule()) {
+  if (block.workspace.rendered && block.inActiveModule()) {
     this.addTopBoundedElement(/** @type {!BlockSvg} */ (block));
   }
 };
@@ -2557,7 +2557,7 @@ WorkspaceSvg.prototype.removeTopBlock = function(block) {
 WorkspaceSvg.prototype.addTopComment = function(comment) {
   WorkspaceSvg.superClass_.addTopComment.call(this, comment);
 
-  if (comment.workspace.rendered && comment.InActiveModule()) {
+  if (comment.workspace.rendered && comment.inActiveModule()) {
     this.addTopBoundedElement(/** @type {!WorkspaceCommentSvg} */ (comment));
   }
 };

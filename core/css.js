@@ -464,6 +464,7 @@ let content = (`
     width: 10px;
     background-color: #eee;
     z-index: 21;
+    box-shadow: -2px 0 5px #eee;
   }
 
   .blocklyScrollbarHorizontal,

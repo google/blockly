@@ -79,3 +79,13 @@ const duplicate = function(toDuplicate) {
   copyData = oldCopyData;
 };
 exports.duplicate = duplicate;
+
+/**
+ * Clear the clipboard
+ * @alias Blockly.clipboard.clear
+ * @package
+ */
+const clear = function() {
+  copyData = null
+};
+exports.clear = clear;

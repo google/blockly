@@ -479,12 +479,6 @@ Gesture.prototype.startDraggingBubble_ = function () {
  * @package
  */
 Gesture.prototype.doStart = function (e) {
-  if (e.button === 0 && e.ctrlKey && this.targetBlock_ && !this.startWorkspace_.isFlyout) {
-    // Click + CtrlKey is group selection
-    this.dispose()
-    return
-  }
-
   if (browserEvents.isTargetInput(e)) {
     this.cancel();
     return;
@@ -515,12 +509,6 @@ Gesture.prototype.doStart = function (e) {
   if (isRightButton && targetExist && this.targetBlock_.checkInGroupSelection()) {
     this.handleRightClick(e);
     return;
-  }
-
-  this.startWorkspace_.cleanUpMassOperations()
-
-  if (!browserEvents.isMiddleButton(e) && targetExist) {
-    this.targetBlock_.select();
   }
 
   if (isRightButton) {
@@ -562,9 +550,18 @@ Gesture.prototype.bindMouseEvents = function (e) {
  */
 Gesture.prototype.handleMove = function (e) {
   this.updateFromEvent_(e);
+
   if (this.isDraggingWorkspace_) {
     this.workspaceDragger_.drag(this.currentDragDeltaXY_);
   } else if (this.isDraggingBlock_) {
+    if (!browserEvents.isMiddleButton(e)) {
+      this.targetBlock_.select();
+    }
+
+    if (browserEvents.isLeftButton(e) && !e.ctrlKey) {
+      this.startWorkspace_.cleanUpMassOperations()
+    }
+
     this.blockDragger_.drag(this.mostRecentEvent_, this.currentDragDeltaXY_);
   } else if (this.isDraggingBubble_) {
     this.bubbleDragger_.dragBubble(
@@ -580,6 +577,10 @@ Gesture.prototype.handleMove = function (e) {
  * @package
  */
 Gesture.prototype.handleUp = function (e) {
+  if (e.button !== 0 || !e.ctrlKey) {
+    this.startWorkspace_.cleanUpMassOperations()
+  }
+
   this.updateFromEvent_(e);
   Touch.longStop();
 
@@ -776,6 +777,19 @@ Gesture.prototype.doBlockClick_ = function (e) {
       newBlock.scheduleSnapAndBump();
     }
   } else {
+    if (e.ctrlKey && e.button === 0) {
+      const massOperations = this.startWorkspace_.getMassOperations()
+
+      if (massOperations) {
+        eventUtils.setGroup(false);
+        massOperations.addBlockToSelected(this.targetBlock_)
+        return
+      }
+    }
+
+    if (!browserEvents.isMiddleButton(e) && this.targetBlock_) {
+      this.targetBlock_.select();
+    }
     // Clicks events are on the start block, even if it was a shadow.
 
     let event

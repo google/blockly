@@ -307,7 +307,7 @@ WorkspaceComment.prototype.getModuleOrder = function() {
  * @return string
  * @package
  */
-WorkspaceComment.prototype.InActiveModule = function() {
+WorkspaceComment.prototype.inActiveModule = function() {
   return this.moduleId_ === this.workspace.getModuleManager().getActiveModule().getId();
 };
 

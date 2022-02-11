@@ -22,6 +22,7 @@ const { Msg } = goog.require('Blockly.Msg');
 const { Coordinate } = goog.require('Blockly.utils.Coordinate');
 const { ContextMenuRegistry } = goog.require('Blockly.ContextMenuRegistry');
 const ContextMenu = goog.require('Blockly.ContextMenu');
+const clipboard = goog.require('Blockly.clipboard');
 const internalConstants = goog.require('Blockly.internalConstants');
 const registry = goog.require('Blockly.registry');
 const browserEvents = goog.require('Blockly.browserEvents');
@@ -90,7 +91,13 @@ const MassOperationsHandler = function (workspace) {
     preconditionFn: (workspace) => {
       return this.selectedBlocks_.length && !workspace.options.readOnly && !workspace.isFlyout;
     },
-    callback: (_, e) => {
+    callback: (workspace, e) => {
+      const gesture = workspace.getGesture(e)
+      if (gesture) gesture.dispose()
+
+      // Clear default clipboard
+      clipboard.clear()
+
       this.copySelected_()
 
       e.preventDefault()
@@ -110,7 +117,6 @@ const MassOperationsHandler = function (workspace) {
       return this.blocksCopyData_ && !workspace.options.readOnly && !workspace.isFlyout;
     },
     callback: (workspace, e) => {
-      this.cleanUp()
       e.preventDefault()
       e.stopPropagation()
 
@@ -134,7 +140,7 @@ const MassOperationsHandler = function (workspace) {
 
       e.preventDefault()
       e.stopPropagation()
-      this.cleanUp()
+
       this.pasteCopiedBlocks_()
       return true;
     },
@@ -147,7 +153,7 @@ const MassOperationsHandler = function (workspace) {
 
 /** Methods */
 
-MassOperationsHandler.prototype.blockMouseDown = function (block, e) {
+MassOperationsHandler.prototype.selectedBlockMouseDown = function (block, e) {
   this.lastMouseDownBlock_ = block
   this.mouseDownXY_ = new Coordinate(e.clientX, e.clientY);
   this.onMoveBlockWrapper_ = browserEvents.conditionalBind(document, 'mousemove', null, this.handleMove_.bind(this));
@@ -227,7 +233,11 @@ MassOperationsHandler.prototype.handleUp_ = function (e) {
     this.blockDraggers_ = null
   }
 
-  this.cleanUp()
+  // Cleanup all data except for selected blocks
+  this.cleanUpLastMouseDownData_()
+  this.cleanUpEventWrappers_()
+  this.currentDragDeltaXY_ = null
+  this.initBlockStartCoordinates = null;
 }
 
 MassOperationsHandler.prototype.addBlockToSelected = function (block) {
@@ -396,16 +406,28 @@ MassOperationsHandler.prototype.checkBlockInSelectGroup = function (block) {
 }
 
 MassOperationsHandler.prototype.cleanUp = function () {
+  this.cleanUpSelectedBlocks_()
+  this.cleanUpLastMouseDownData_()
+
+  this.currentDragDeltaXY_ = null
+  this.initBlockStartCoordinates = null;
+
+  this.cleanUpEventWrappers_()
+}
+
+MassOperationsHandler.prototype.cleanUpSelectedBlocks_ = function () {
   if (this.selectedBlocks_.length) {
     this.selectedBlocks_.forEach(block => block.removeSelectAsMassSelection());
     this.selectedBlocks_ = [];
   }
+}
 
+MassOperationsHandler.prototype.cleanUpLastMouseDownData_ = function () {
   this.lastMouseDownBlock_ = null;
   this.mouseDownXY_ = null;
-  this.currentDragDeltaXY_ = null
-  this.initBlockStartCoordinates = null;
+}
 
+MassOperationsHandler.prototype.cleanUpEventWrappers_ = function () {
   if (this.onMoveBlockWrapper_) {
     browserEvents.unbind(this.onMoveBlockWrapper_)
     this.onMoveBlockWrapper_ = null
@@ -415,6 +437,10 @@ MassOperationsHandler.prototype.cleanUp = function () {
     browserEvents.unbind(this.onMouseUpBlockWrapper_)
     this.onMouseUpBlockWrapper_ = null
   }
+}
+
+MassOperationsHandler.prototype.cleanUpClipboard = function () {
+  this.blocksCopyData_ = null
 }
 
 MassOperationsHandler.prototype.deleteAll = function () {
@@ -451,19 +477,22 @@ MassOperationsHandler.prototype.copySelected_ = function () {
 }
 
 MassOperationsHandler.prototype.pasteCopiedBlocks_ = function () {
-  eventUtils.setGroup(true);
+  this.cleanUp()
+
+  // All paste operations will be groped
+  eventUtils.setGroup(true)
 
   const pastedBlocks = []
 
   this.blocksCopyData_.forEach((copyData) => {
     const block = this.workspace_.paste(copyData.saveInfo, { dontSelectNewBLock: true })
-    if (block) pastedBlocks.push(block)
+    if (block) {
+      pastedBlocks.push(block)
+      this.addBlockToSelected(block)
+    }
   });
 
-  pastedBlocks.forEach((block) => this.addBlockToSelected(block))
-
   eventUtils.setGroup(false);
-  this.blocksCopyData_ = null;
 }
 
 /**

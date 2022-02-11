@@ -609,7 +609,8 @@ class Trashcan extends DeleteArea {
    * @private
    */
   onDelete_(event) {
-    if (this.workspace_.options.maxTrashcanContents <= 0 || event.type !== eventUtils.BLOCK_DELETE) {
+    if (this.workspace_.options.maxTrashcanContents <= 0 ||
+        event.type !== eventUtils.BLOCK_DELETE) {
       return;
     }
     const deleteEvent = /** @type {!BlockDelete} */ (event);

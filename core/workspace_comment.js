@@ -201,7 +201,8 @@ class WorkspaceComment {
    * @package
    */
   moveBy(dx, dy) {
-    const event = /** @type {!CommentMove} */(new (eventUtils.get(eventUtils.COMMENT_MOVE))(this));
+    const event = /** @type {!CommentMove} */ (
+        new (eventUtils.get(eventUtils.COMMENT_MOVE))(this));
     this.xy_.translate(dx, dy);
     event.recordNew();
     eventUtils.fire(event);

@@ -100,7 +100,8 @@ class Abstract {
 
   /**
    * Run an event.
-   * @param {boolean} _forward True if run forward, false if run backward (undo).
+   * @param {boolean} _forward True if run forward, false if run backward
+   *     (undo).
    */
   run(_forward) {
     // Defined by subclasses.

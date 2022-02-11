@@ -428,7 +428,8 @@ class WorkspaceCommentSvg extends WorkspaceComment {
    * @package
    */
   moveBy(dx, dy) {
-    const event = /** @type {!CommentMove} */(new (eventUtils.get(eventUtils.COMMENT_MOVE))(this));
+    const event = /** @type {!CommentMove} */ (
+        new (eventUtils.get(eventUtils.COMMENT_MOVE))(this));
     // TODO: Do I need to look up the relative to surface XY position here?
     const xy = this.getRelativeToSurfaceXY();
     this.translate(xy.x + dx, xy.y + dy);

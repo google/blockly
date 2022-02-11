@@ -405,7 +405,8 @@ class Mutator extends Icon {
    */
   workspaceChanged_(e) {
     if (!(e.isUiEvent ||
-          (e.type === eventUtils.CHANGE && /** @type {!BlockChange} */(e).element === 'disabled') ||
+          (e.type === eventUtils.CHANGE &&
+           /** @type {!BlockChange} */ (e).element === 'disabled') ||
           e.type === eventUtils.CREATE)) {
       this.updateWorkspace_();
     }

@@ -192,10 +192,10 @@ class Options {
 
     /**
      * If set, sets the translation of the workspace to match the scrollbars.
-     * @type {undefined|function(!{x:number,y:number}):void} A function that sets
-     *     the translation of the workspace to match the scrollbars. The argument
-     *     Contains an x and/or y property which is a float between 0 and 1
-     *     specifying the degree of scrolling.
+     * @type {undefined|function(!{x:number,y:number}):void} A function that
+     *     sets the translation of the workspace to match the scrollbars. The
+     *     argument Contains an x and/or y property which is a float between 0
+     *     and 1 specifying the degree of scrolling.
      */
     this.setMetrics = undefined;
 
@@ -217,7 +217,8 @@ class Options {
   static parseMoveOptions_(options, hasCategories) {
     const move = options['move'] || {};
     const moveOptions = {};
-    if (move['scrollbars'] === undefined && options['scrollbars'] === undefined) {
+    if (move['scrollbars'] === undefined &&
+        options['scrollbars'] === undefined) {
       moveOptions.scrollbars = hasCategories;
     } else if (typeof move['scrollbars'] === 'object') {
       moveOptions.scrollbars = {};
@@ -226,7 +227,8 @@ class Options {
       // Convert scrollbars object to boolean if they have the same value.
       // This allows us to easily check for whether any scrollbars exist using
       // !!moveOptions.scrollbars.
-      if (moveOptions.scrollbars.horizontal && moveOptions.scrollbars.vertical) {
+      if (moveOptions.scrollbars.horizontal &&
+          moveOptions.scrollbars.vertical) {
         moveOptions.scrollbars = true;
       } else if (
           !moveOptions.scrollbars.horizontal &&
@@ -323,8 +325,8 @@ class Options {
   }
 
   /**
-   * Parse the user-specified theme options, using the classic theme as a default.
-   *   https://developers.google.com/blockly/guides/configure/web/themes
+   * Parse the user-specified theme options, using the classic theme as a
+   * default. https://developers.google.com/blockly/guides/configure/web/themes
    * @param {!Object} options Dictionary of options.
    * @return {!Theme} A Blockly Theme.
    * @private

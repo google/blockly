@@ -143,7 +143,8 @@ class Generator {
   workspaceToCode(workspace) {
     if (!workspace) {
       // Backwards compatibility from before there could be multiple workspaces.
-      console.warn('No workspace specified in workspaceToCode call.  Guessing.');
+      console.warn(
+          'No workspace specified in workspaceToCode call.  Guessing.');
       workspace = common.getMainWorkspace();
     }
     let code = [];
@@ -220,7 +221,8 @@ class Generator {
    * Generate code for the specified block (and attached blocks).
    * The generator must be initialized before calling this function.
    * @param {Block} block The block to generate code for.
-   * @param {boolean=} opt_thisOnly True to generate code for only this statement.
+   * @param {boolean=} opt_thisOnly True to generate code for only this
+   *     statement.
    * @return {string|!Array} For statement blocks, the generated code.
    *     For value blocks, an array containing the generated code and an
    *     operator order value.  Returns '' if block is null.
@@ -251,7 +253,8 @@ class Generator {
     // First argument to func.call is the value of 'this' in the generator.
     // Prior to 24 September 2013 'this' was the only way to access the block.
     // The current preferred method of accessing the block is through the second
-    // argument to func.call, which becomes the first parameter to the generator.
+    // argument to func.call, which becomes the first parameter to the
+    // generator.
     let code = func.call(block, block);
     if (Array.isArray(code)) {
       // Value blocks return tuples of code and operator order.
@@ -278,8 +281,8 @@ class Generator {
    * Generate code representing the specified value input.
    * @param {!Block} block The block containing the input.
    * @param {string} name The name of the input.
-   * @param {number} outerOrder The maximum binding strength (minimum order value)
-   *     of any operators adjacent to "block".
+   * @param {number} outerOrder The maximum binding strength (minimum order
+   *     value) of any operators adjacent to "block".
    * @return {string} Generated code or '' if no blocks are connected or the
    *     specified input does not exist.
    */
@@ -421,10 +424,10 @@ class Generator {
 
   /**
    * Define a developer-defined function (not a user-defined procedure) to be
-   * included in the generated code.  Used for creating private helper functions.
-   * The first time this is called with a given desiredName, the code is
-   * saved and an actual name is generated.  Subsequent calls with the
-   * same desiredName have no effect but have the same return value.
+   * included in the generated code.  Used for creating private helper
+   * functions. The first time this is called with a given desiredName, the code
+   * is saved and an actual name is generated.  Subsequent calls with the same
+   * desiredName have no effect but have the same return value.
    *
    * It is up to the caller to make sure the same desiredName is not
    * used for different helper functions (e.g. use "colourRandom" and
@@ -485,9 +488,9 @@ class Generator {
   /**
    * Common tasks for generating code from blocks.  This is called from
    * blockToCode and is called on every block, not just top level blocks.
-   * Subclasses may override this, e.g. to generate code for statements following
-   * the block, or to handle comments for the specified block and any connected
-   * value blocks.
+   * Subclasses may override this, e.g. to generate code for statements
+   * following the block, or to handle comments for the specified block and any
+   * connected value blocks.
    * @param {!Block} _block The current block.
    * @param {string} code The code created for this block.
    * @param {boolean=} _opt_thisOnly True to generate code for only this
@@ -502,8 +505,8 @@ class Generator {
 
   /**
    * Hook for code to run at end of code generation.
-   * Subclasses may override this, e.g. to prepend the generated code with import
-   * statements or variable definitions.
+   * Subclasses may override this, e.g. to prepend the generated code with
+   * import statements or variable definitions.
    * @param {string} code Generated code.
    * @return {string} Completed code.
    */

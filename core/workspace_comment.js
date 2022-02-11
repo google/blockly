@@ -19,7 +19,7 @@ const eventUtils = goog.require('Blockly.Events.utils');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const xml = goog.require('Blockly.utils.xml');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
-/** @suppress {extraRequire} */
+/* eslint-disable-next-line no-unused-vars */
 const {CommentMove} = goog.require('Blockly.Events.CommentMove');
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');

@@ -530,7 +530,7 @@ class Generator {
     // Optionally override
     return line;
   }
-};
+}
 
 Object.defineProperties(Generator.prototype, {
   /**
@@ -559,6 +559,6 @@ Object.defineProperties(Generator.prototype, {
       this.nameDB_ = nameDb;
     },
   },
-})
+});
 
 exports.Generator = Generator;

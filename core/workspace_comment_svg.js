@@ -26,7 +26,6 @@ const svgMath = goog.require('Blockly.utils.svgMath');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockDragSurfaceSvg} = goog.requireType('Blockly.BlockDragSurfaceSvg');
 /* eslint-disable-next-line no-unused-vars */
-/** @suppress {extraRequire} */
 const {CommentMove} = goog.require('Blockly.Events.CommentMove');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */

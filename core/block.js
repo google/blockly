@@ -399,9 +399,10 @@ Block.COLLAPSED_FIELD_NAME = constants.COLLAPSED_FIELD_NAME;
  * @param {boolean} healStack If true, then try to heal any gap by connecting
  *     the next statement with the previous statement.  Otherwise, dispose of
  *     all children of this block.
+ * @param {boolean=} _animate If true, show a disposal animation and sound.
  * @suppress {checkTypes}
  */
-Block.prototype.dispose = function(healStack) {
+Block.prototype.dispose = function(healStack, _animate) {
   if (!this.workspace) {
     // Already deleted.
     return;

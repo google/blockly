@@ -25,6 +25,9 @@ const eventUtils = goog.require('Blockly.Events.utils');
 const svgMath = goog.require('Blockly.utils.svgMath');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockDragSurfaceSvg} = goog.requireType('Blockly.BlockDragSurfaceSvg');
+/* eslint-disable-next-line no-unused-vars */
+/** @suppress {extraRequire} */
+const {CommentMove} = goog.require('Blockly.Events.CommentMove');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
 const {IBoundedElement} = goog.require('Blockly.IBoundedElement');
@@ -41,8 +44,6 @@ const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 goog.require('Blockly.Events.CommentCreate');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.CommentDelete');
-/** @suppress {extraRequire} */
-goog.require('Blockly.Events.CommentMove');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.Selected');
 
@@ -427,7 +428,7 @@ class WorkspaceCommentSvg extends WorkspaceComment {
    * @package
    */
   moveBy(dx, dy) {
-    const event = new (eventUtils.get(eventUtils.COMMENT_MOVE))(this);
+    const event = /** @type {!CommentMove} */(new (eventUtils.get(eventUtils.COMMENT_MOVE))(this));
     // TODO: Do I need to look up the relative to surface XY position here?
     const xy = this.getRelativeToSurfaceXY();
     this.translate(xy.x + dx, xy.y + dy);

@@ -74,8 +74,8 @@ class ShortcutRegistry {
   }
 
   /**
-   * Unregisters a keyboard shortcut registered with the given key code. This will
-   * also remove any key mappings that reference this shortcut.
+   * Unregisters a keyboard shortcut registered with the given key code. This
+   * will also remove any key mappings that reference this shortcut.
    * @param {string} shortcutName The name of the shortcut to unregister.
    * @return {boolean} True if an item was unregistered, false otherwise.
    * @public
@@ -107,8 +107,7 @@ class ShortcutRegistry {
    * @throws {Error} if the given key code is already mapped to a shortcut.
    * @public
    */
-  addKeyMapping(
-      keyCode, shortcutName, opt_allowCollision) {
+  addKeyMapping(keyCode, shortcutName, opt_allowCollision) {
     keyCode = String(keyCode);
     const shortcutNames = this.keyMap_[keyCode];
     if (shortcutNames && !opt_allowCollision) {
@@ -134,8 +133,7 @@ class ShortcutRegistry {
    * @return {boolean} True if a key mapping was removed, false otherwise.
    * @public
    */
-  removeKeyMapping(
-      keyCode, shortcutName, opt_quiet) {
+  removeKeyMapping(keyCode, shortcutName, opt_quiet) {
     const shortcutNames = this.keyMap_[keyCode];
 
     if (!shortcutNames && !opt_quiet) {
@@ -163,10 +161,10 @@ class ShortcutRegistry {
 
   /**
    * Removes all the key mappings for a shortcut with the given name.
-   * Useful when changing the default key mappings and the key codes registered to
-   * the shortcut are unknown.
-   * @param {string} shortcutName The name of the shortcut to remove from the key
-   *     map.
+   * Useful when changing the default key mappings and the key codes registered
+   * to the shortcut are unknown.
+   * @param {string} shortcutName The name of the shortcut to remove from the
+   *     key map.
    * @public
    */
   removeAllKeyMappings(shortcutName) {
@@ -176,7 +174,8 @@ class ShortcutRegistry {
   }
 
   /**
-   * Sets the key map. Setting the key map will override any default key mappings.
+   * Sets the key map. Setting the key map will override any default key
+   * mappings.
    * @param {!Object<string, !Array<string>>} keyMap The object with key code to
    *     shortcut names.
    * @public
@@ -288,7 +287,8 @@ class ShortcutRegistry {
 
   /**
    * Checks whether any of the given modifiers are not valid.
-   * @param {!Array<string>} modifiers List of modifiers to be used with the key.
+   * @param {!Array<string>} modifiers List of modifiers to be used with the
+   *     key.
    * @throws {Error} if the modifier is not in the valid modifiers list.
    * @private
    */
@@ -304,8 +304,8 @@ class ShortcutRegistry {
   /**
    * Creates the serialized key code that will be used in the key map.
    * @param {number} keyCode Number code representing the key.
-   * @param {?Array<string>} modifiers List of modifier key codes to be used with
-   *     the key. All valid modifiers can be found in the
+   * @param {?Array<string>} modifiers List of modifier key codes to be used
+   *     with the key. All valid modifiers can be found in the
    *     ShortcutRegistry.modifierKeys.
    * @return {string} The serialized key code for the given modifiers and key.
    * @public

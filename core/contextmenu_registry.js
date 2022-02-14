@@ -73,7 +73,8 @@ class ContextMenuRegistry {
 
   /**
    * @param {string} id The ID of the RegistryItem to get.
-   * @return {?ContextMenuRegistry.RegistryItem} RegistryItem or null if not found
+   * @return {?ContextMenuRegistry.RegistryItem} RegistryItem or null if not
+   *     found
    */
   getItem(id) {
     return this.registry_[id] || null;
@@ -81,8 +82,8 @@ class ContextMenuRegistry {
 
   /**
    * Gets the valid context menu options for the given scope type (e.g. block or
-   * workspace) and scope. Blocks are only shown if the preconditionFn shows they
-   * should not be hidden.
+   * workspace) and scope. Blocks are only shown if the preconditionFn shows
+   * they should not be hidden.
    * @param {!ContextMenuRegistry.ScopeType} scopeType Type of scope where menu
    *     should be shown (e.g. on a block or on a workspace)
    * @param {!ContextMenuRegistry.Scope} scope Current scope of context menu
@@ -90,8 +91,7 @@ class ContextMenuRegistry {
    * @return {!Array<!ContextMenuRegistry.ContextMenuOption>} the list of
    *     ContextMenuOptions
    */
-  getContextMenuOptions(
-      scopeType, scope) {
+  getContextMenuOptions(scopeType, scope) {
     const menuOptions = [];
     const registry = this.registry_;
     Object.keys(registry).forEach(function(id) {

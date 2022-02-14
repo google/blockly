@@ -33,8 +33,6 @@ class ShortcutRegistry {
    * @alias Blockly.ShortcutRegistry
    */
   constructor() {
-    // Singleton instance should be registered once.
-    // ShortcutRegistry.registry = this;
     this.reset();
   }
 

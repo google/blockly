@@ -287,21 +287,21 @@ Extensions.register(
  *
  * // If using the Blockly npm package and es6 import syntax:
  * import {loopTypes} from 'blockly/blocks';
- * loopTypes.add('custom_loop');
+ * loopTypes.push('custom_loop');
  *
  * // Else if using Closure Compiler and goog.modules:
  * const {loopTypes} = goog.require('Blockly.blocks.loops');
- * loopTypes.add('custom_loop');
+ * loopTypes.push('custom_loop');
  *
- * @type {!Set<string>}
+ * @type {!Array<string>}
  */
-const loopTypes = new Set([
+const loopTypes = [
   'controls_repeat',
   'controls_repeat_ext',
   'controls_forEach',
   'controls_for',
   'controls_whileUntil',
-]);
+];
 exports.loopTypes = loopTypes;
 
 /**
@@ -321,7 +321,7 @@ const CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
   getSurroundLoop: function() {
     let block = this;
     do {
-      if (loopTypes.has(block.type)) {
+      if (loopTypes.includes(block.type)) {
         return block;
       }
       block = block.getSurroundParent();

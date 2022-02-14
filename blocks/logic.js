@@ -20,7 +20,7 @@ const xmlUtils = goog.require('Blockly.utils.xml');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
-const {BlockDefinition} = goog.requireType('Blockly.blocks');
+const {BlockDefinition} = goog.requireType('Blockly.Blocks');
 const {Msg} = goog.require('Blockly.Msg');
 const {Mutator} = goog.require('Blockly.Mutator');
 /* eslint-disable-next-line no-unused-vars */

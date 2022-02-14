@@ -1043,6 +1043,9 @@ const renamings = {
         },
       },
     },
+    'Blockly.blocks': {
+      module: 'Blockly.Blocks',
+     },
   },
 };
 

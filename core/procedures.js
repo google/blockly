@@ -21,7 +21,7 @@ const eventUtils = goog.require('Blockly.Events.utils');
 const utilsXml = goog.require('Blockly.utils.xml');
 /* eslint-disable-next-line no-unused-vars */
 const {Abstract} = goog.requireType('Blockly.Events.Abstract');
-const {Blocks} = goog.require('Blockly.blocks');
+const {Blocks} = goog.require('Blockly.Blocks');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */

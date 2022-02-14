@@ -23,7 +23,7 @@ const texts = goog.require('Blockly.blocks.texts');
 const variables = goog.require('Blockly.blocks.variables');
 const variablesDynamic = goog.require('Blockly.blocks.variablesDynamic');
 /* eslint-disable-next-line no-unused-vars */
-const {BlockDefinition} = goog.requireType('Blockly.blocks');
+const {BlockDefinition} = goog.requireType('Blockly.Blocks');
 
 
 exports.colour = colour;

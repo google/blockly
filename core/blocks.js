@@ -13,7 +13,7 @@
  * A mapping of block type names to block prototype objects.
  * @namespace Blockly.blocks
  */
-goog.module('Blockly.blocks');
+goog.module('Blockly.Blocks');
 
 
 /**

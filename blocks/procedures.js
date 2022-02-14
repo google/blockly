@@ -24,7 +24,7 @@ const {Align} = goog.require('Blockly.Input');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
-const {BlockDefinition} = goog.requireType('Blockly.blocks');
+const {BlockDefinition} = goog.requireType('Blockly.Blocks');
 const {config} = goog.require('Blockly.config');
 /* eslint-disable-next-line no-unused-vars */
 const {FieldCheckbox} = goog.require('Blockly.FieldCheckbox');

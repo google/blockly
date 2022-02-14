@@ -7,7 +7,7 @@
 goog.module('Blockly.test.blocks');
 
 const eventUtils = goog.require('Blockly.Events.utils');
-const {Blocks} = goog.require('Blockly.blocks');
+const {Blocks} = goog.require('Blockly.Blocks');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
 const {createDeprecationWarningStub, createRenderedBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
 

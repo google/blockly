@@ -20,7 +20,7 @@ const {Align} = goog.require('Blockly.Input');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
-const {BlockDefinition} = goog.requireType('Blockly.blocks');
+const {BlockDefinition} = goog.requireType('Blockly.Blocks');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
 const {FieldDropdown} = goog.require('Blockly.FieldDropdown');
 const {FieldImage} = goog.require('Blockly.FieldImage');

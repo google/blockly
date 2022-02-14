@@ -12,7 +12,7 @@
 goog.module('Blockly.blocks.colour');
 
 /* eslint-disable-next-line no-unused-vars */
-const {BlockDefinition} = goog.requireType('Blockly.blocks');
+const {BlockDefinition} = goog.requireType('Blockly.Blocks');
 const {createBlockDefinitionsFromJsonArray, defineBlocks} = goog.require('Blockly.common');
 /** @suppress {extraRequire} */
 goog.require('Blockly.FieldColour');

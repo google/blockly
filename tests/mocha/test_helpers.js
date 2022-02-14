@@ -8,7 +8,7 @@ goog.module('Blockly.test.helpers');
 
 const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
 const eventUtils = goog.require('Blockly.Events.utils');
-const {Blocks} = goog.require('Blockly.blocks');
+const {Blocks} = goog.require('Blockly.Blocks');
 
 
 /**

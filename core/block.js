@@ -31,7 +31,7 @@ const {Align, Input} = goog.require('Blockly.Input');
 const {ASTNode} = goog.require('Blockly.ASTNode');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockMove} = goog.requireType('Blockly.Events.BlockMove');
-const {Blocks} = goog.require('Blockly.blocks');
+const {Blocks} = goog.require('Blockly.Blocks');
 /* eslint-disable-next-line no-unused-vars */
 const {Comment} = goog.requireType('Blockly.Comment');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');

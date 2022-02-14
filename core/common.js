@@ -18,7 +18,7 @@
 goog.module('Blockly.common');
 
 /* eslint-disable-next-line no-unused-vars */
-const {BlockDefinition, Blocks} = goog.require('Blockly.blocks');
+const {BlockDefinition, Blocks} = goog.require('Blockly.Blocks');
 /* eslint-disable-next-line no-unused-vars */
 const {Connection} = goog.requireType('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */

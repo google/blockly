@@ -10,7 +10,7 @@
  */
 'use strict';
 
-goog.module('Blockly.blocks.all');
+goog.module('Blockly.blocks');
 goog.module.declareLegacyNamespace();
 
 const colour = goog.require('Blockly.blocks.colour');

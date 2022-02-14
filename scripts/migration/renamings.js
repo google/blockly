@@ -1046,6 +1046,9 @@ const renamings = {
     'Blockly.blocks': {
       module: 'Blockly.Blocks',
      },
+    'Blockly.blocks.all': {
+      module: 'Blockly.blocks',
+    },
   },
 };
 

@@ -37,7 +37,7 @@ if ((location.hostname === 'localhost' || location.hostname === '127.0.0.1' ||
                 goog.require('Blockly.PHP.all');
                 goog.require('Blockly.Python.all');
                 goog.require('Blockly.WorkspaceCommentSvg');
-                goog.require('Blockly.blocks.all');
+                goog.require('Blockly.blocks');
             </script>`);
 } else {
   document.write(

@@ -11,7 +11,7 @@ goog.require('Blockly');
 goog.require('Blockly.geras.Renderer');
 goog.require('Blockly.VerticalFlyout');
 // Blocks
-goog.require('Blockly.blocks.all');
+goog.require('Blockly.blocks');
 goog.require('Blockly.blocks.testBlocks');
 
 Main.init = function() {

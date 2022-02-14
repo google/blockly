@@ -107,8 +107,8 @@ const chunks = [
   },
   {
     name: 'blocks',
-    entry: 'blocks/all.js',
-    exports: 'Blockly.blocks.all',
+    entry: 'blocks/blocks.js',
+    exports: 'Blockly.blocks',
     importAs: 'BlocklyBlocks',
   },
   {

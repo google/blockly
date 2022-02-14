@@ -1113,6 +1113,9 @@ Blockly.Block.prototype.jsonInit = function(json) {
     var localizedValue = Blockly.utils.replaceMessageReferences(rawValue);
     this.setHelpUrl(localizedValue);
   }
+  if (json['commentText'] !== undefined) {
+    this.setCommentText(json['commentText']);
+  }
   if (goog.isString(json['extensions'])) {
     console.warn('JSON attribute \'extensions\' should be an array of ' +
       'strings. Found raw string in JSON for \'' + json['type'] + '\' block.');

@@ -37,6 +37,7 @@ goog.require('Blockly.Events.BlockChange');
 
 /**
  * Class for a variable's dropdown field.
+ * @extends {FieldDropdown}
  */
 class FieldVariable extends FieldDropdown {
   /**
@@ -53,7 +54,6 @@ class FieldVariable extends FieldDropdown {
    *    See the [field creation documentation]{@link
    *    https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/variable#creation}
    *    for a list of properties this parameter supports.
-   * @extends {FieldDropdown}
    * @alias Blockly.FieldVariable
    */
   constructor(
@@ -78,6 +78,20 @@ class FieldVariable extends FieldDropdown {
     this.defaultVariableName = typeof varName === 'string' ? varName : '';
 
     /**
+     * The type of the default variable for this field.
+     * @type {string}
+     * @private
+     */
+    this.defaultType_ = '';
+
+    /**
+     * All of the types of variables that will be available in this field's
+     * dropdown.
+     * @type {?Array<string>}
+     */
+    this.variableTypes = [];
+
+    /**
      * The size of the area rendered by the field.
      * @type {Size}
      * @protected
@@ -86,10 +100,16 @@ class FieldVariable extends FieldDropdown {
     this.size_ = new Size(0, 0);
 
     /**
+     * The variable model associated with this field.
+     * @type {?VariableModel}
+     * @private
+     */
+    this.variable_ = null;
+
+    /**
      * Serializable fields are saved by the serializer, non-serializable fields
      * are not. Editable fields should also be serializable.
      * @type {boolean}
-     * @const
      */
     this.SERIALIZABLE = true;
 
@@ -241,7 +261,7 @@ class FieldVariable extends FieldDropdown {
 
   /**
    * Get the variable's ID.
-   * @return {string} Current variable's ID.
+   * @return {?string} Current variable's ID.
    */
   getValue() {
     return this.variable_ ? this.variable_.getId() : null;
@@ -438,7 +458,9 @@ class FieldVariable extends FieldDropdown {
     if (this.sourceBlock_ && this.sourceBlock_.workspace) {
       if (id === internalConstants.RENAME_VARIABLE_ID) {
         // Rename variable.
-        Variables.renameVariable(this.sourceBlock_.workspace, this.variable_);
+        Variables.renameVariable(
+            this.sourceBlock_.workspace,
+            /** @type {!VariableModel} */ (this.variable_));
         return;
       } else if (id === internalConstants.DELETE_VARIABLE_ID) {
         // Delete variable.
@@ -469,6 +491,7 @@ class FieldVariable extends FieldDropdown {
    * @return {!FieldVariable} The new field instance.
    * @package
    * @nocollapse
+   * @override
    */
   static fromJson(options) {
     const varName = parsing.replaceMessageReferences(options['variable']);

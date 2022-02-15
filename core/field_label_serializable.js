@@ -37,7 +37,6 @@ class FieldLabelSerializable extends FieldLabel {
    *    See the [field creation documentation]{@link
    * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/label-serializable#creation}
    *    for a list of properties this parameter supports.
-   *
    * @alias Blockly.FieldLabelSerializable
    */
   constructor(opt_value, opt_class, opt_config) {

@@ -25,17 +25,18 @@ const {Field} = goog.require('Blockly.Field');
 
 /**
  * Class for a non-editable, non-serializable text field.
+ * @extends {Field}
  */
 class FieldLabel extends Field {
   /**
-   * @param {string=} opt_value The initial value of the field. Should cast to a
-   *    string. Defaults to an empty string if null or undefined.
+   * @param {(Object|string)=} opt_value The initial value of the field. Should
+   *    cast to a string. Defaults to an empty string if null or undefined.
+   *    Object is valid if passing Field.SENTINEL.
    * @param {string=} opt_class Optional CSS class for the field's text.
    * @param {Object=} opt_config A map of options used to configure the field.
    *    See the [field creation documentation]{@link
    * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/label#creation}
    *    for a list of properties this parameter supports.
-   * @extends {Field}
    * @alias Blockly.FieldLabel
    */
   constructor(opt_value, opt_class, opt_config) {

@@ -32,6 +32,7 @@ goog.require('Blockly.Events.BlockChange');
 
 /**
  * Class for a colour input field.
+ * @extends {Field}
  */
 class FieldColour extends Field {
   /**
@@ -46,7 +47,6 @@ class FieldColour extends Field {
    *    See the [field creation documentation]{@link
    *    https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/colour}
    *    for a list of properties this parameter supports.
-   * @extends {Field}
    * @alias Blockly.FieldColour
    */
   constructor(opt_value, opt_validator, opt_config) {
@@ -107,7 +107,6 @@ class FieldColour extends Field {
      * Serializable fields are saved by the serializer, non-serializable fields
      * are not. Editable fields should also be serializable.
      * @type {boolean}
-     * @const
      */
     this.SERIALIZABLE = true;
 

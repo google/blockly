@@ -35,12 +35,13 @@ const {Svg} = goog.require('Blockly.utils.Svg');
 
 /**
  * Class for an editable dropdown field.
+ * @extends {Field}
  */
 class FieldDropdown extends Field {
   /**
-   * @param {(!Array<!Array>|!Function)} menuGenerator A non-empty array of
-   *     options for a dropdown list, or a function which generates these
-   * options.
+   * @param {(!Array<!Array>|!Function|!Object)} menuGenerator A non-empty array
+   *     of options for a dropdown list, or a function which generates these
+   *     options. Object is valid if passing Field.SENTINEL.
    * @param {Function=} opt_validator A function that is called to validate
    *    changes to the field's value. Takes in a language-neutral dropdown
    *    option & returns a validated language-neutral dropdown option, or null
@@ -49,7 +50,6 @@ class FieldDropdown extends Field {
    *    See the [field creation documentation]{@link
    *    https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/dropdown#creation}
    *    for a list of properties this parameter supports.
-   * @extends {Field}
    * @throws {TypeError} If `menuGenerator` options are incorrectly structured.
    * @alias Blockly.FieldDropdown
    */
@@ -95,7 +95,6 @@ class FieldDropdown extends Field {
      * Serializable fields are saved by the serializer, non-serializable fields
      * are not. Editable fields should also be serializable.
      * @type {boolean}
-     * @const
      */
     this.SERIALIZABLE = true;
 

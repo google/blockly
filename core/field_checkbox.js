@@ -24,6 +24,7 @@ goog.require('Blockly.Events.BlockChange');
 
 /**
  * Class for a checkbox field.
+   * @extends {Field}
  */
 class FieldCheckbox extends Field {
   /**
@@ -37,7 +38,6 @@ class FieldCheckbox extends Field {
    *    See the [field creation documentation]{@link
    *    https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/checkbox#creation}
    *    for a list of properties this parameter supports.
-   * @extends {Field}
    * @alias Blockly.FieldCheckbox
    */
   constructor(opt_value, opt_validator, opt_config) {
@@ -58,7 +58,6 @@ class FieldCheckbox extends Field {
      * Serializable fields are saved by the serializer, non-serializable fields
      * are not. Editable fields should also be serializable.
      * @type {boolean}
-     * @const
      */
     this.SERIALIZABLE = true;
 

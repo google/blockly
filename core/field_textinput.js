@@ -42,8 +42,9 @@ goog.require('Blockly.Events.BlockChange');
  */
 class FieldTextInput extends Field {
   /**
-   * @param {string=} opt_value The initial value of the field. Should cast to a
-   *    string. Defaults to an empty string if null or undefined.
+   * @param {(string|Object)=} opt_value The initial value of the field. Should
+   *    cast to a string. Defaults to an empty string if null or undefined.
+   *    Object is valid if passing Field.SENTINEL.
    * @param {?Function=} opt_validator A function that is called to validate
    *    changes to the field's value. Takes in a string & returns a validated
    *    string, or null to abort the change.
@@ -51,7 +52,6 @@ class FieldTextInput extends Field {
    *    See the [field creation documentation]{@link
    * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/text-input#creation}
    *    for a list of properties this parameter supports.
-   * @extends {Field}
    * @alias Blockly.FieldTextInput
    */
   constructor(opt_value, opt_validator, opt_config) {
@@ -67,8 +67,23 @@ class FieldTextInput extends Field {
     /**
      * The HTML input element.
      * @type {HTMLElement}
+     * @protected
      */
     this.htmlInput_ = null;
+
+    /**
+     * True if the field's value is currently being edited via the UI.
+     * @type {boolean}
+     * @private
+     */
+    this.isBeingEdited_ = false;
+
+    /**
+     * True if the value currently displayed in the field's editory UI is valid.
+     * @type {boolean}
+     * @private
+     */
+    this.isTextValid_ = false;
 
     /**
      * Key down event data.
@@ -105,7 +120,6 @@ class FieldTextInput extends Field {
      * Serializable fields are saved by the serializer, non-serializable fields
      * are not. Editable fields should also be serializable.
      * @type {boolean}
-     * @const
      */
     this.SERIALIZABLE = true;
 
@@ -386,10 +400,7 @@ class FieldTextInput extends Field {
     this.isTextValid_ = true;
     // Make sure the field's node matches the field's internal value.
     this.forceRerender();
-    // TODO(#2496): Make this less of a hack.
-    if (this.onFinishEditing_) {
-      this.onFinishEditing_(this.value_);
-    }
+    this.onFinishEditing_(this.value_);
     eventUtils.setGroup(false);
 
     // Actual disposal.
@@ -403,6 +414,15 @@ class FieldTextInput extends Field {
     this.htmlInput_ = null;
 
     dom.removeClass(this.getClickTarget_(), 'editing');
+  }
+
+  /**
+   * A callback triggered when the user is done editing the field via the UI.
+   * @param {*} _value The new value of the field.
+   */
+  onFinishEditing_(_value) {
+    // NOP by default.
+    // TODO(#2496): Support people passing a func into the field.
   }
 
   /**

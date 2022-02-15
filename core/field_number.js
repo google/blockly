@@ -23,6 +23,7 @@ const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
 
 /**
  * Class for an editable number field.
+ * @extends {FieldTextInput}
  */
 class FieldNumber extends FieldTextInput {
   /**
@@ -39,7 +40,6 @@ class FieldNumber extends FieldTextInput {
    *    See the [field creation documentation]{@link
    * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/number#creation}
    *    for a list of properties this parameter supports.
-   * @extends {FieldTextInput}
    * @alias Blockly.FieldNumber
    */
   constructor(
@@ -83,7 +83,6 @@ class FieldNumber extends FieldTextInput {
      * Serializable fields are saved by the serializer, non-serializable fields
      * are not. Editable fields should also be serializable.
      * @type {boolean}
-     * @const
      */
     this.SERIALIZABLE = true;
 
@@ -315,6 +314,7 @@ class FieldNumber extends FieldTextInput {
    * @return {!FieldNumber} The new field instance.
    * @package
    * @nocollapse
+   * @override
    */
   static fromJson(options) {
     // `this` might be a subclass of FieldNumber if that class doesn't override

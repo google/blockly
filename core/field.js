@@ -226,6 +226,20 @@ class Field {
     this.clickTarget_ = null;
 
     /**
+     * The prefix field.
+     * @type {?string}
+     * @package
+     */
+    this.prefixField = null;
+
+    /**
+     * The suffix field.
+     * @type {?string}
+     * @package
+     */
+    this.suffixField = null;
+
+    /**
      * Editable fields usually show some sort of UI indicating they are
      * editable. They will also be saved by the serializer.
      * @type {boolean}

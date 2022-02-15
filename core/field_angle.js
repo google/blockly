@@ -31,6 +31,7 @@ const {Svg} = goog.require('Blockly.utils.Svg');
 
 /**
  * Class for an editable angle field.
+ * @extends {FieldTextInput}
  */
 class FieldAngle extends FieldTextInput {
   /**
@@ -44,7 +45,6 @@ class FieldAngle extends FieldTextInput {
    *    See the [field creation documentation]{@link
    * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/angle#creation}
    *    for a list of properties this parameter supports.
-   * @extends {FieldTextInput}
    * @alias Blockly.FieldAngle
    */
   constructor(opt_value, opt_validator, opt_config) {
@@ -131,7 +131,6 @@ class FieldAngle extends FieldTextInput {
      * Serializable fields are saved by the serializer, non-serializable fields
      * are not. Editable fields should also be serializable.
      * @type {boolean}
-     * @const
      */
     this.SERIALIZABLE = true;
 
@@ -492,6 +491,7 @@ class FieldAngle extends FieldTextInput {
    * @return {!FieldAngle} The new field instance.
    * @package
    * @nocollapse
+   * @override
    */
   static fromJson(options) {
     // `this` might be a subclass of FieldAngle if that class doesn't override

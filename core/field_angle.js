@@ -21,7 +21,6 @@ const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const math = goog.require('Blockly.utils.math');
-const object = goog.require('Blockly.utils.object');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
 const {Field} = goog.require('Blockly.Field');
@@ -33,7 +32,7 @@ const {Svg} = goog.require('Blockly.utils.Svg');
 /**
  * Class for an editable angle field.
  */
-var FieldAngle = class {
+class FieldAngle extends FieldTextInput {
   /**
    * @param {string|number=} opt_value The initial value of the field. Should cast
    *    to a number. Defaults to 0.
@@ -49,7 +48,7 @@ var FieldAngle = class {
    */
   constructor(opt_value, opt_validator, opt_config) {
     // Pass SENTINEL so that we can define properties before value validation.
-    FieldAngle.superClass_.constructor.call(this, Field.SENTINEL);
+    super(Field.SENTINEL);
 
     /**
      * Should the angle increase as the angle picker is moved clockwise (true)
@@ -149,7 +148,7 @@ var FieldAngle = class {
    * @override
    */
   configure_(config) {
-    FieldAngle.superClass_.configure_.call(this, config);
+    super.configure_(config);
 
     switch (config['mode']) {
       case 'compass':
@@ -429,7 +428,7 @@ var FieldAngle = class {
    * @override
    */
   onHtmlInputKeyDown_(e) {
-    FieldAngle.superClass_.onHtmlInputKeyDown_.call(this, e);
+    super.onHtmlInputKeyDown_(e);
 
     let multiplier;
     if (e.keyCode === KeyCodes.LEFT) {
@@ -497,8 +496,7 @@ var FieldAngle = class {
     // the static fromJson method.
     return new this(options['angle'], undefined, options);
   }
-};
-object.inherits(FieldAngle, FieldTextInput);
+}
 
 /**
  * The default amount to round angles to when using a mouse or keyboard nav

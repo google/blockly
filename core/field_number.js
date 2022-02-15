@@ -17,7 +17,6 @@ goog.module('Blockly.FieldNumber');
 
 const aria = goog.require('Blockly.utils.aria');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
-const object = goog.require('Blockly.utils.object');
 const {Field} = goog.require('Blockly.Field');
 const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
 
@@ -25,7 +24,7 @@ const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
 /**
  * Class for an editable number field.
  */
-var FieldNumber = class {
+class FieldNumber extends FieldTextInput {
   /**
    * @param {string|number=} opt_value The initial value of the field. Should cast
    *    to a number. Defaults to 0.
@@ -45,7 +44,7 @@ var FieldNumber = class {
   constructor(
       opt_value, opt_min, opt_max, opt_precision, opt_validator, opt_config) {
     // Pass SENTINEL so that we can define properties before value validation.
-    FieldNumber.superClass_.constructor.call(this, Field.SENTINEL);
+    super(Field.SENTINEL);
 
     /**
      * The minimum value this number field can contain.
@@ -105,7 +104,7 @@ var FieldNumber = class {
    * @override
    */
   configure_(config) {
-    FieldNumber.superClass_.configure_.call(this, config);
+    super.configure_(config);
     this.setMinInternal_(config['min']);
     this.setMaxInternal_(config['max']);
     this.setPrecisionInternal_(config['precision']);
@@ -294,7 +293,7 @@ var FieldNumber = class {
    * @override
    */
   widgetCreate_() {
-    const htmlInput = FieldNumber.superClass_.widgetCreate_.call(this);
+    const htmlInput = super.widgetCreate_();
 
     // Set the accessibility state
     if (this.min_ > -Infinity) {
@@ -320,8 +319,7 @@ var FieldNumber = class {
     return new this(
         options['value'], undefined, undefined, undefined, undefined, options);
   }
-};
-object.inherits(FieldNumber, FieldTextInput);
+}
 
 fieldRegistry.register('field_number', FieldNumber);
 

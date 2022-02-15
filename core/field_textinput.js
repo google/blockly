@@ -22,7 +22,6 @@ const dialog = goog.require('Blockly.dialog');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
-const object = goog.require('Blockly.utils.object');
 const parsing = goog.require('Blockly.utils.parsing');
 const userAgent = goog.require('Blockly.utils.userAgent');
 /* eslint-disable-next-line no-unused-vars */
@@ -41,7 +40,7 @@ goog.require('Blockly.Events.BlockChange');
 /**
  * Class for an editable text field.
  */
-var FieldTextInput = class {
+class FieldTextInput extends Field {
   /**
    * @param {string=} opt_value The initial value of the field. Should cast to a
    *    string. Defaults to an empty string if null or undefined.
@@ -56,7 +55,7 @@ var FieldTextInput = class {
    * @alias Blockly.FieldTextInput
    */
   constructor(opt_value, opt_validator, opt_config) {
-    FieldTextInput.superClass_.constructor.call(this);
+    super();
 
     /**
      * Allow browser to spellcheck this field.
@@ -128,7 +127,7 @@ var FieldTextInput = class {
    * @override
    */
   configure_(config) {
-    FieldTextInput.superClass_.configure_.call(this, config);
+    super.configure_(config);
     if (typeof config['spellcheck'] === 'boolean') {
       this.spellcheck_ = config['spellcheck'];
     }
@@ -244,7 +243,7 @@ var FieldTextInput = class {
    * @protected
    */
   render_() {
-    FieldTextInput.superClass_.render_.call(this);
+    super.render_();
     // This logic is done in render_ rather than doValueInvalid_ or
     // doValueUpdate_ so that the code is more centralized.
     if (this.isBeingEdited_) {
@@ -580,7 +579,7 @@ var FieldTextInput = class {
     // the static fromJson method.
     return new this(text, undefined, options);
   }
-};
+}
 
 /**
  * Pixel size of input border radius.

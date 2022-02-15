@@ -104,6 +104,13 @@ class FieldAngle extends FieldTextInput {
     this.line_ = null;
 
     /**
+     * The degree symbol for this field.
+     * @type {SVGTSpanElement}
+     * @protected
+     */
+    this.symbol_ = null;
+
+    /**
      * Wrapper click event data.
      * @type {?browserEvents.Data}
      * @private

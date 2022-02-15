@@ -24,6 +24,8 @@ goog.module('Blockly.Extensions');
 const parsing = goog.require('Blockly.utils.parsing');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const {FieldDropdown} = goog.requireType('Blockly.FieldDropdown');
 goog.requireType('Blockly.Mutator');
 
 
@@ -453,7 +455,7 @@ exports.buildTooltipForDropdown = buildTooltipForDropdown;
  */
 const checkDropdownOptionsInTable = function(block, dropdownName, lookupTable) {
   // Validate all dropdown options have values.
-  const dropdown = block.getField(dropdownName);
+  const dropdown = /** @type {FieldDropdown} */ (block.getField(dropdownName));
   if (!dropdown.isOptionListDynamic()) {
     const options = dropdown.getOptions();
     for (let i = 0; i < options.length; i++) {

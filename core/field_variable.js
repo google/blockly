@@ -438,6 +438,7 @@ class FieldVariable extends FieldDropdown {
    * Refreshes the name of the variable by grabbing the name of the model.
    * Used when a variable gets renamed, but the ID stays the same. Should only
    * be called by the block.
+   * @override
    * @package
    */
   refreshVariableName() {

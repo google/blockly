@@ -100,6 +100,7 @@ class FieldDropdown extends Field {
 
     /**
      * Mouse cursor style when over the hotspot that initiates the editor.
+     * @type {string}
      */
     this.CURSOR = 'default';
 
@@ -114,11 +115,11 @@ class FieldDropdown extends Field {
     /**
      * An array of options for a dropdown list,
      * or a function which generates these options.
-     * @type {(!Array<!Array>|
-     *    !function(this:FieldDropdown): !Array<!Array>)}
+     * @type {(!Array<!Array>|!function(this:FieldDropdown): !Array<!Array>)}
      * @protected
      */
-    this.menuGenerator_ = menuGenerator;
+    this.menuGenerator_ = /** @type {(!Array<!Array>|
+        !function(this:FieldDropdown): !Array<!Array>)} */ (menuGenerator);
 
     /**
      * A cache of the most recently generated options.

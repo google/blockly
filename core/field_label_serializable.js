@@ -30,7 +30,7 @@ const {FieldLabel} = goog.require('Blockly.FieldLabel');
  */
 class FieldLabelSerializable extends FieldLabel {
   /**
-   * @param {*} opt_value The initial value of the field. Should cast to a
+   * @param {string=} opt_value The initial value of the field. Should cast to a
    *    string. Defaults to an empty string if null or undefined.
    * @param {string=} opt_class Optional CSS class for the field's text.
    * @param {Object=} opt_config A map of options used to configure the field.

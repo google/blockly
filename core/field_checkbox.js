@@ -46,7 +46,7 @@ class FieldCheckbox extends Field {
     /**
      * Character for the check mark. Used to apply a different check mark
      * character to individual fields.
-     * @type {?string}
+     * @type {string}
      * @private
      */
     this.checkChar_ = FieldCheckbox.CHECK_CHAR;
@@ -64,7 +64,6 @@ class FieldCheckbox extends Field {
     /**
      * Mouse cursor style when over the hotspot that initiates editability.
      * @type {string}
-     * @const
      */
     this.CURSOR = 'default';
 
@@ -136,7 +135,7 @@ class FieldCheckbox extends Field {
    *    null to use the default.
    */
   setCheckCharacter(character) {
-    this.checkChar_ = character;
+    this.checkChar_ = character || FieldCheckbox.CHECK_CHAR;
     this.forceRerender();
   }
 

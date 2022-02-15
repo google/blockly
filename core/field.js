@@ -64,6 +64,11 @@ goog.require('Blockly.Gesture');
 
 /**
  * Abstract class for an editable field.
+ * @implements {IASTNodeLocationSvg}
+ * @implements {IASTNodeLocationWithBlock}
+ * @implements {IKeyboardAccessible}
+ * @implements {IRegistrable}
+ * @abstract
  */
 class Field {
   /**
@@ -74,11 +79,6 @@ class Field {
    * @param {Object=} opt_config A map of options used to configure the field.
    *    Refer to the individual field's documentation for a list of properties
    *    this parameter supports.
-   * @abstract
-   * @implements {IASTNodeLocationSvg}
-   * @implements {IASTNodeLocationWithBlock}
-   * @implements {IKeyboardAccessible}
-   * @implements {IRegistrable}
    * @alias Blockly.Field
    */
   constructor(value, opt_validator, opt_config) {
@@ -253,6 +253,12 @@ class Field {
      * @type {boolean}
      */
     this.SERIALIZABLE = false;
+
+    /**
+     * Mouse cursor style when over the hotspot that initiates the editor.
+     * @type {string}
+     */
+    this.CURSOR = '';
 
     if (value == Field.SENTINEL) return;
     if (opt_config) this.configure_(opt_config);
@@ -695,12 +701,12 @@ class Field {
    * An optional method that can be defined to show an editor when the field is
    *     clicked. Blockly will automatically set the field as clickable if this
    *     method is defined.
-   * @param {Event=} opt_e Optional mouse event that triggered the field to
+   * @param {Event=} _e Optional mouse event that triggered the field to
    *     open, or undefined if triggered programmatically.
    * @return {void}
    * @protected
    */
-  showEditor_() {
+  showEditor_(_e) {
     // NOP
   }
 
@@ -1124,6 +1130,15 @@ class Field {
    */
   referencesVariables() {
     return false;
+  }
+
+  /**
+   * Refresh the variable name referenced by this field if this field references
+   * variables.
+   * @package
+   */
+  refreshVariableName() {
+    // NOP
   }
 
   /**

@@ -126,7 +126,6 @@ class FieldTextInput extends Field {
     /**
      * Mouse cursor style when over the hotspot that initiates the editor.
      * @type {string}
-     * @const
      */
     this.CURSOR = 'text';
 

@@ -51,6 +51,8 @@ const FieldColour = function(opt_value, opt_validator, opt_config) {
   FieldColour.superClass_.constructor.call(
       this, opt_value, opt_validator, opt_config);
 
+  if (!this.value_) this.value_ = FieldColour.COLOURS[0];
+
   /**
    * The field's colour picker element.
    * @type {?Element}
@@ -99,6 +101,50 @@ const FieldColour = function(opt_value, opt_validator, opt_config) {
    * @private
    */
   this.onKeyDownWrapper_ = null;
+
+  /**
+   * Serializable fields are saved by the serializer, non-serializable fields
+   * are not. Editable fields should also be serializable.
+   * @type {boolean}
+   * @const
+   */
+  this.SERIALIZABLE = true;
+
+  /**
+   * Mouse cursor style when over the hotspot that initiates the editor.
+   */
+  this.CURSOR = 'default';
+  
+  /**
+   * Used to tell if the field needs to be rendered the next time the block is
+   * rendered. Colour fields are statically sized, and only need to be
+   * rendered at initialization.
+   * @type {boolean}
+   * @protected
+   */
+  this.isDirty_ = false;
+  
+  /**
+   * Array of colours used by this field.  If null, use the global list.
+   * @type {Array<string>}
+   * @private
+   */
+  this.colours_ = null;
+  
+  /**
+   * Array of colour tooltips used by this field.  If null, use the global list.
+   * @type {Array<string>}
+   * @private
+   */
+  this.titles_ = null;
+  
+  /**
+   * Number of colour columns used by this field.  If 0, use the global setting.
+   * By default use the global constants for columns.
+   * @type {number}
+   * @private
+   */
+  this.columns_ = 0;
 };
 object.inherits(FieldColour, Field);
 
@@ -114,49 +160,6 @@ FieldColour.fromJson = function(options) {
   // the static fromJson method.
   return new this(options['colour'], undefined, options);
 };
-
-/**
- * Serializable fields are saved by the XML renderer, non-serializable fields
- * are not. Editable fields should also be serializable.
- * @type {boolean}
- */
-FieldColour.prototype.SERIALIZABLE = true;
-
-/**
- * Mouse cursor style when over the hotspot that initiates the editor.
- */
-FieldColour.prototype.CURSOR = 'default';
-
-/**
- * Used to tell if the field needs to be rendered the next time the block is
- * rendered. Colour fields are statically sized, and only need to be
- * rendered at initialization.
- * @type {boolean}
- * @protected
- */
-FieldColour.prototype.isDirty_ = false;
-
-/**
- * Array of colours used by this field.  If null, use the global list.
- * @type {Array<string>}
- * @private
- */
-FieldColour.prototype.colours_ = null;
-
-/**
- * Array of colour tooltips used by this field.  If null, use the global list.
- * @type {Array<string>}
- * @private
- */
-FieldColour.prototype.titles_ = null;
-
-/**
- * Number of colour columns used by this field.  If 0, use the global setting.
- * By default use the global constants for columns.
- * @type {number}
- * @private
- */
-FieldColour.prototype.columns_ = 0;
 
 /**
  * Configure the field based on the given map of options.
@@ -335,13 +338,6 @@ FieldColour.COLOURS = [
   '#663366',
   '#330033',
 ];
-
-/**
- * The default value for this field.
- * @type {*}
- * @protected
- */
-FieldColour.prototype.DEFAULT_VALUE = FieldColour.COLOURS[0];
 
 /**
  * An array of tooltip strings for the palette.  If not the same length as

@@ -38,6 +38,10 @@ const {Field} = goog.require('Blockly.Field');
  * @alias Blockly.FieldLabel
  */
 const FieldLabel = function(opt_value, opt_class, opt_config) {
+  FieldLabel.superClass_.constructor.call(this, opt_value, null, opt_config);
+
+  if (!this.value_) this.value_ = '';
+
   /**
    * The html class name to use for this field.
    * @type {?string}
@@ -45,20 +49,18 @@ const FieldLabel = function(opt_value, opt_class, opt_config) {
    */
   this.class_ = null;
 
-  FieldLabel.superClass_.constructor.call(this, opt_value, null, opt_config);
+  /**
+   * Editable fields usually show some sort of UI indicating they are
+   * editable. This field should not.
+   * @type {boolean}
+   */
+  this.EDITABLE = false;
 
   if (!opt_config) {  // If the config was not passed use old configuration.
     this.class_ = opt_class || null;
   }
 };
 object.inherits(FieldLabel, Field);
-
-/**
- * The default value for this field.
- * @type {*}
- * @protected
- */
-FieldLabel.prototype.DEFAULT_VALUE = '';
 
 /**
  * Construct a FieldLabel from a JSON arg object,
@@ -74,13 +76,6 @@ FieldLabel.fromJson = function(options) {
   // the static fromJson method.
   return new this(text, undefined, options);
 };
-
-/**
- * Editable fields usually show some sort of UI indicating they are
- * editable. This field should not.
- * @type {boolean}
- */
-FieldLabel.prototype.EDITABLE = false;
 
 /**
  * @override

@@ -41,8 +41,7 @@ class FieldLabelSerializable extends FieldLabel {
    * @alias Blockly.FieldLabelSerializable
    */
   constructor(opt_value, opt_class, opt_config) {
-    const stringValue = opt_value == undefined ? '' : String(opt_value);
-    super(stringValue, opt_class, opt_config);
+    super(opt_value ? String(opt_value) : '', opt_class, opt_config);
 
     /**
      * Editable fields usually show some sort of UI indicating they are

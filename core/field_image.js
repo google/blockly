@@ -44,6 +44,8 @@ const {Svg} = goog.require('Blockly.utils.Svg');
  */
 const FieldImage = function(
     src, width, height, opt_alt, opt_onClick, opt_flipRtl, opt_config) {
+  FieldImage.superClass_.constructor.call(this);
+
   // Return early.
   if (!src) {
     throw Error('Src value of an image field is required');
@@ -62,29 +64,6 @@ const FieldImage = function(
         ' than 0.');
   }
 
-  // Initialize configurable properties.
-  /**
-   * Whether to flip this image in RTL.
-   * @type {boolean}
-   * @private
-   */
-  this.flipRtl_ = false;
-
-  /**
-   * Alt text of this image.
-   * @type {string}
-   * @private
-   */
-  this.altText_ = '';
-
-  FieldImage.superClass_.constructor.call(this, src, null, opt_config);
-
-  if (!opt_config) {  // If the config wasn't passed, do old configuration.
-    this.flipRtl_ = !!opt_flipRtl;
-    this.altText_ = parsing.replaceMessageReferences(opt_alt) || '';
-  }
-
-  // Initialize other properties.
   /**
    * The size of the area rendered by the field.
    * @type {Size}
@@ -117,15 +96,49 @@ const FieldImage = function(
    * @private
    */
   this.imageElement_ = null;
+
+  /**
+   * Editable fields usually show some sort of UI indicating they are
+   * editable. This field should not.
+   * @type {boolean}
+   * @const
+   */
+  this.EDITABLE = false;
+
+  /**
+   * Used to tell if the field needs to be rendered the next time the block is
+   * rendered. Image fields are statically sized, and only need to be
+   * rendered at initialization.
+   * @type {boolean}
+   * @protected
+   */
+  this.isDirty_ = false;
+
+  /**
+   * Whether to flip this image in RTL.
+   * @type {boolean}
+   * @private
+   */
+  this.flipRtl_ = false;
+
+  /**
+   * Alt text of this image.
+   * @type {string}
+   * @private
+   */
+  this.altText_ = '';
+
+  if (src == Field.SENTINEL) return;
+
+  if (opt_config) {
+    this.configure_(opt_config);
+  } else {
+    this.flipRtl_ = !!opt_flipRtl;
+    this.altText_ = parsing.replaceMessageReferences(opt_alt) || '';
+  }
+  this.setValue(src);
 };
 object.inherits(FieldImage, Field);
-
-/**
- * The default value for this field.
- * @type {*}
- * @protected
- */
-FieldImage.prototype.DEFAULT_VALUE = '';
 
 /**
  * Construct a FieldImage from a JSON arg object,
@@ -151,22 +164,6 @@ FieldImage.fromJson = function(options) {
  * @private
  */
 FieldImage.Y_PADDING = 1;
-
-/**
- * Editable fields usually show some sort of UI indicating they are
- * editable. This field should not.
- * @type {boolean}
- */
-FieldImage.prototype.EDITABLE = false;
-
-/**
- * Used to tell if the field needs to be rendered the next time the block is
- * rendered. Image fields are statically sized, and only need to be
- * rendered at initialization.
- * @type {boolean}
- * @protected
- */
-FieldImage.prototype.isDirty_ = false;
 
 /**
  * Configure the field based on the given map of options.

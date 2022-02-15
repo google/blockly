@@ -22,7 +22,6 @@ const colour = goog.require('Blockly.utils.colour');
 const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
-const object = goog.require('Blockly.utils.object');
 const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
 const {Field} = goog.require('Blockly.Field');
 const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
@@ -34,7 +33,7 @@ goog.require('Blockly.Events.BlockChange');
 /**
  * Class for a colour input field.
  */
-var FieldColour = class {
+class FieldColour extends Field {
   /**
    * @param {string=} opt_value The initial value of the field. Should be in
    *    '#rrggbb' format. Defaults to the first value in the default colour array.
@@ -50,8 +49,7 @@ var FieldColour = class {
    * @alias Blockly.FieldColour
    */
   constructor(opt_value, opt_validator, opt_config) {
-    FieldColour.superClass_.constructor.call(
-        this, opt_value, opt_validator, opt_config);
+    super(opt_value, opt_validator, opt_config);
 
     if (!this.value_) this.value_ = FieldColour.COLOURS[0];
 
@@ -156,7 +154,7 @@ var FieldColour = class {
    * @override
    */
   configure_(config) {
-    FieldColour.superClass_.configure_.call(this, config);
+    this.configure_(config);
     if (config['colourOptions']) {
       this.colours_ = config['colourOptions'];
       this.titles_ = config['colourTitles'];
@@ -557,8 +555,7 @@ var FieldColour = class {
     // the static fromJson method.
     return new this(options['colour'], undefined, options);
   }
-};
-object.inherits(FieldColour, Field);
+}
 
 /**
  * An array of colour strings for the palette.

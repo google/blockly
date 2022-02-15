@@ -17,7 +17,6 @@ goog.module('Blockly.FieldImage');
 
 const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
-const object = goog.require('Blockly.utils.object');
 const parsing = goog.require('Blockly.utils.parsing');
 const {Field} = goog.require('Blockly.Field');
 const {Size} = goog.require('Blockly.utils.Size');
@@ -27,7 +26,7 @@ const {Svg} = goog.require('Blockly.utils.Svg');
 /**
  * Class for an image on a block.
  */
-var FieldImage = class {
+class FieldImage extends Field {
   /**
    * @param {string} src The URL of the image.
    * @param {!(string|number)} width Width of the image.
@@ -46,7 +45,7 @@ var FieldImage = class {
    */
   constructor(
       src, width, height, opt_alt, opt_onClick, opt_flipRtl, opt_config) {
-    FieldImage.superClass_.constructor.call(this);
+    super(Field.SENTINEL);
 
     // Return early.
     if (!src) {
@@ -148,7 +147,7 @@ var FieldImage = class {
    * @override
    */
   configure_(config) {
-    FieldImage.superClass_.configure_.call(this, config);
+    this.configure_(config);
     this.flipRtl_ = !!config['flipRtl'];
     this.altText_ = parsing.replaceMessageReferences(config['alt']) || '';
   }
@@ -279,8 +278,7 @@ var FieldImage = class {
         options['src'], options['width'], options['height'], undefined, undefined,
         undefined, options);
   }
-};
-object.inherits(FieldImage, Field);
+}
 
 /**
  * Vertical padding below the image, which is included in the reported height of

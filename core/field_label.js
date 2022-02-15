@@ -27,7 +27,7 @@ const {Field} = goog.require('Blockly.Field');
 /**
  * Class for a non-editable, non-serializable text field.
  */
-var FieldLabel = class {
+class FieldLabel extends Field {
   /**
    * @param {string=} opt_value The initial value of the field. Should cast to a
    *    string. Defaults to an empty string if null or undefined.
@@ -40,7 +40,7 @@ var FieldLabel = class {
    * @alias Blockly.FieldLabel
    */
   constructor(opt_value, opt_class, opt_config) {
-    FieldLabel.superClass_.constructor.call(this, opt_value, null, opt_config);
+    super(opt_value, null, opt_config);
 
     if (!this.value_) this.value_ = '';
 
@@ -67,7 +67,7 @@ var FieldLabel = class {
    * @override
    */
   configure_(config) {
-    FieldLabel.superClass_.configure_.call(this, config);
+    super.configure_(config);
     this.class_ = config['class'];
   }
 
@@ -128,8 +128,7 @@ var FieldLabel = class {
     // the static fromJson method.
     return new this(text, undefined, options);
   }
-};
-object.inherits(FieldLabel, Field);
+}
 
 fieldRegistry.register('field_label', FieldLabel);
 

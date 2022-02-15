@@ -18,6 +18,7 @@ goog.module('Blockly.FieldNumber');
 const aria = goog.require('Blockly.utils.aria');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const object = goog.require('Blockly.utils.object');
+const {Field} = goog.require('Blockly.Field');
 const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
 
 
@@ -41,6 +42,9 @@ const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
  */
 const FieldNumber = function(
     opt_value, opt_min, opt_max, opt_precision, opt_validator, opt_config) {
+  // Pass SENTINEL so that we can define properties before value validation.
+  FieldNumber.superClass_.constructor.call(this, Field.SENTINEL);
+
   /**
    * The minimum value this number field can contain.
    * @type {number}
@@ -70,21 +74,28 @@ const FieldNumber = function(
    */
   this.decimalPlaces_ = null;
 
-  FieldNumber.superClass_.constructor.call(
-      this, opt_value, opt_validator, opt_config);
+  /** @override */
+  this.value_ = 0;
 
-  if (!opt_config) {  // Only do one kind of configuration or the other.
-    this.setConstraints(opt_min, opt_max, opt_precision);
+  /**
+   * Serializable fields are saved by the serializer, non-serializable fields
+   * are not. Editable fields should also be serializable.
+   * @type {boolean}
+   * @const
+   */
+  this.SERIALIZABLE = true;
+
+  if (opt_value != Field.SENTINEL) {
+    if (opt_config) {
+      this.configure_(opt_config);
+    } else {
+      this.setConstraints(opt_min, opt_max, opt_precision);
+    }
+    this.setValue(opt_value);
+    if (opt_validator) this.setValidator(opt_validator);
   }
 };
 object.inherits(FieldNumber, FieldTextInput);
-
-/**
- * The default value for this field.
- * @type {*}
- * @protected
- */
-FieldNumber.prototype.DEFAULT_VALUE = 0;
 
 /**
  * Construct a FieldNumber from a JSON arg object.
@@ -100,13 +111,6 @@ FieldNumber.fromJson = function(options) {
   return new this(
       options['value'], undefined, undefined, undefined, undefined, options);
 };
-
-/**
- * Serializable fields are saved by the XML renderer, non-serializable fields
- * are not. Editable fields should also be serializable.
- * @type {boolean}
- */
-FieldNumber.prototype.SERIALIZABLE = true;
 
 /**
  * Configure the field based on the given map of options.

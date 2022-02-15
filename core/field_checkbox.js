@@ -58,11 +58,14 @@ class FieldCheckbox extends Field {
      * Serializable fields are saved by the serializer, non-serializable fields
      * are not. Editable fields should also be serializable.
      * @type {boolean}
+     * @const
      */
     this.SERIALIZABLE = true;
 
     /**
      * Mouse cursor style when over the hotspot that initiates editability.
+     * @type {string}
+     * @const
      */
     this.CURSOR = 'default';
 

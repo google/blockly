@@ -24,6 +24,7 @@ const math = goog.require('Blockly.utils.math');
 const object = goog.require('Blockly.utils.object');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
+const {Field} = goog.require('Blockly.Field');
 const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
 const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
 const {Svg} = goog.require('Blockly.utils.Svg');
@@ -45,6 +46,9 @@ const {Svg} = goog.require('Blockly.utils.Svg');
  * @alias Blockly.FieldAngle
  */
 const FieldAngle = function(opt_value, opt_validator, opt_config) {
+  // Pass SENTINEL so that we can define properties before value validation.
+  FieldAngle.superClass_.constructor.call(this, Field.SENTINEL);
+
   /**
    * Should the angle increase as the angle picker is moved clockwise (true)
    * or counterclockwise (false)
@@ -77,9 +81,6 @@ const FieldAngle = function(opt_value, opt_validator, opt_config) {
    * @private
    */
   this.round_ = FieldAngle.ROUND;
-
-  FieldAngle.superClass_.constructor.call(
-      this, opt_value, opt_validator, opt_config);
 
   /**
    * The angle picker's SVG element.
@@ -120,16 +121,25 @@ const FieldAngle = function(opt_value, opt_validator, opt_config) {
    * @private
    */
   this.moveSurfaceWrapper_ = null;
+
+  /** @override */
+  this.value_ = 0;
+
+  /**
+   * Serializable fields are saved by the serializer, non-serializable fields
+   * are not. Editable fields should also be serializable.
+   * @type {boolean}
+   * @const
+   */
+  this.SERIALIZABLE = true;
+
+  if (opt_value != Field.SENTINEL) {
+    if (opt_config) this.configure_(opt_config);
+    this.setValue(opt_value);
+    if (opt_validator) this.setValidator(opt_validator);
+  }
 };
 object.inherits(FieldAngle, FieldTextInput);
-
-
-/**
- * The default value for this field.
- * @type {*}
- * @protected
- */
-FieldAngle.prototype.DEFAULT_VALUE = 0;
 
 /**
  * Construct a FieldAngle from a JSON arg object.
@@ -143,13 +153,6 @@ FieldAngle.fromJson = function(options) {
   // the static fromJson method.
   return new this(options['angle'], undefined, options);
 };
-
-/**
- * Serializable fields are saved by the XML renderer, non-serializable fields
- * are not. Editable fields should also be serializable.
- * @type {boolean}
- */
-FieldAngle.prototype.SERIALIZABLE = true;
 
 /**
  * The default amount to round angles to when using a mouse or keyboard nav

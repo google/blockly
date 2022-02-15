@@ -81,6 +81,7 @@ class Field {
      * @type {string|undefined}
      */
     this.name = undefined;
+
     /**
      * A generic value possessed by the field.
      * Should generally be non-null, only null when the field is created.
@@ -1200,7 +1201,11 @@ class Field {
  */
 Field.NBSP = '\u00A0';
 
+/**
+ * A value used to signal when a field's constructor should *not* set the
+ * field's value, and should allow a subclass to do that instead.
+ * @const
+ */
 Field.SENTINEL = {};
-
 
 exports.Field = Field;

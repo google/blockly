@@ -54,15 +54,14 @@ goog.require('Blockly.Events.BlockChange');
  * @alias Blockly.FieldTextInput
  */
 const FieldTextInput = function(opt_value, opt_validator, opt_config) {
+  FieldTextInput.superClass_.constructor.call(this);
+
   /**
    * Allow browser to spellcheck this field.
    * @type {boolean}
    * @protected
    */
   this.spellcheck_ = true;
-
-  FieldTextInput.superClass_.constructor.call(
-      this, opt_value, opt_validator, opt_config);
 
   /**
    * The HTML input element.
@@ -97,15 +96,31 @@ const FieldTextInput = function(opt_value, opt_validator, opt_config) {
    * @protected
    */
   this.workspace_ = null;
-};
-object.inherits(FieldTextInput, Field);
 
-/**
- * The default value for this field.
- * @type {*}
- * @protected
- */
-FieldTextInput.prototype.DEFAULT_VALUE = '';
+  /** @override */
+  this.value_ = '';
+
+  /**
+   * Serializable fields are saved by the serializer, non-serializable fields
+   * are not. Editable fields should also be serializable.
+   * @type {boolean}
+   * @const
+   */
+  this.SERIALIZABLE = true;
+
+  /**
+   * Mouse cursor style when over the hotspot that initiates the editor.
+   * @type {string}
+   * @const
+   */
+  this.CURSOR = 'text';
+
+  if (opt_value != Field.SENTINEL) {
+    if (opt_config) this.configure_(opt_config);
+    this.setValue(opt_value);
+    if (opt_validator) this.setValidator(opt_validator);
+  }
+};
 
 /**
  * Construct a FieldTextInput from a JSON arg object,
@@ -123,22 +138,10 @@ FieldTextInput.fromJson = function(options) {
 };
 
 /**
- * Serializable fields are saved by the XML renderer, non-serializable fields
- * are not. Editable fields should also be serializable.
- * @type {boolean}
- */
-FieldTextInput.prototype.SERIALIZABLE = true;
-
-/**
  * Pixel size of input border radius.
  * Should match blocklyText's border-radius in CSS.
  */
 FieldTextInput.BORDERRADIUS = 4;
-
-/**
- * Mouse cursor style when over the hotspot that initiates the editor.
- */
-FieldTextInput.prototype.CURSOR = 'text';
 
 /**
  * @override

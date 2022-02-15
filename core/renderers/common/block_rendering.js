@@ -15,6 +15,7 @@
  */
 goog.module('Blockly.blockRendering');
 
+const debug = goog.require('Blockly.blockRendering.debug');
 const registry = goog.require('Blockly.registry');
 const {BottomRow} = goog.require('Blockly.blockRendering.BottomRow');
 const {Connection} = goog.require('Blockly.blockRendering.Connection');
@@ -118,3 +119,4 @@ exports.SquareCorner = SquareCorner;
 exports.StatementInput = StatementInput;
 exports.TopRow = TopRow;
 exports.Types = Types;
+exports.debug = debug;

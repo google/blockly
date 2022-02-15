@@ -33,8 +33,8 @@ class FieldImage extends Field {
    * @param {!(string|number)} height Height of the image.
    * @param {string=} opt_alt Optional alt text for when block is collapsed.
    * @param {function(!FieldImage)=} opt_onClick Optional function to be
-   *     called when the image is clicked. If opt_onClick is defined, opt_alt must
-   *     also be defined.
+   *     called when the image is clicked. If opt_onClick is defined, opt_alt
+   * must also be defined.
    * @param {boolean=} opt_flipRtl Whether to flip the icon in RTL.
    * @param {Object=} opt_config A map of options used to configure the field.
    *    See the [field creation documentation]{@link
@@ -275,8 +275,8 @@ class FieldImage extends Field {
     // `this` might be a subclass of FieldImage if that class doesn't override
     // the static fromJson method.
     return new this(
-        options['src'], options['width'], options['height'], undefined, undefined,
-        undefined, options);
+        options['src'], options['width'], options['height'], undefined,
+        undefined, undefined, options);
   }
 }
 

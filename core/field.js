@@ -176,48 +176,48 @@ class Field {
      * @protected
      */
     this.constants_ = null;
-    
+
     /**
      * Has this field been disposed of?
      * @type {boolean}
      * @package
      */
     this.disposed = false;
-    
+
     /**
      * Maximum characters of text to display before adding an ellipsis.
      * @type {number}
      */
     this.maxDisplayLength = 50;
-    
+
     /**
      * Block this field is attached to.  Starts as null, then set in init.
      * @type {Block}
      * @protected
      */
     this.sourceBlock_ = null;
-    
+
     /**
      * Does this block need to be re-rendered?
      * @type {boolean}
      * @protected
      */
     this.isDirty_ = true;
-    
+
     /**
      * Is the field visible, or hidden due to the block being collapsed?
      * @type {boolean}
      * @protected
      */
     this.visible_ = true;
-    
+
     /**
      * Can the field value be changed using the editor on an editable block?
      * @type {boolean}
      * @protected
      */
     this.enabled_ = true;
-    
+
     /**
      * The element the click handler is bound to.
      * @type {Element}
@@ -226,12 +226,12 @@ class Field {
     this.clickTarget_ = null;
 
     /**
-     * Editable fields usually show some sort of UI indicating they are editable.
-     * They will also be saved by the serializer.
+     * Editable fields usually show some sort of UI indicating they are
+     * editable. They will also be saved by the serializer.
      * @type {boolean}
      */
     this.EDITABLE = true;
-    
+
     /**
      * Serializable fields are saved by the serializer, non-serializable fields
      * are not. Editable fields should also be serializable. This is not the
@@ -283,7 +283,8 @@ class Field {
   getConstants() {
     if (!this.constants_ && this.sourceBlock_ && this.sourceBlock_.workspace &&
         this.sourceBlock_.workspace.rendered) {
-      this.constants_ = this.sourceBlock_.workspace.getRenderer().getConstants();
+      this.constants_ =
+          this.sourceBlock_.workspace.getRenderer().getConstants();
     }
     return this.constants_;
   }
@@ -375,8 +376,8 @@ class Field {
   }
 
   /**
-   * Bind events to the field. Can be overridden by subclasses if they need to do
-   * custom input handling.
+   * Bind events to the field. Can be overridden by subclasses if they need to
+   * do custom input handling.
    * @protected
    */
   bindEvents_() {
@@ -386,8 +387,8 @@ class Field {
   }
 
   /**
-   * Sets the field's value based on the given XML element. Should only be called
-   *     by Blockly.Xml.
+   * Sets the field's value based on the given XML element. Should only be
+   * called by Blockly.Xml.
    * @param {!Element} fieldElement The element containing info about the
    *    field's state.
    * @package
@@ -409,8 +410,8 @@ class Field {
   }
 
   /**
-   * Saves this fields value as something which can be serialized to JSON. Should
-   * only be called by the serialization system.
+   * Saves this fields value as something which can be serialized to JSON.
+   * Should only be called by the serialization system.
    * @param {boolean=} _doFullSerialization If true, this signals to the field
    *     that if it normally just saves a reference to some state (eg variable
    *     fields) it should instead serialize the full state of the thing being
@@ -427,8 +428,8 @@ class Field {
   }
 
   /**
-   * Sets the field's state based on the given state value. Should only be called
-   * by the serialization system.
+   * Sets the field's state based on the given state value. Should only be
+   * called by the serialization system.
    * @param {*} state The state we want to apply to the field.
    * @package
    */
@@ -542,8 +543,7 @@ class Field {
    * @return {boolean} Whether this field is clickable.
    */
   isClickable() {
-    return this.enabled_ &&
-        !!this.sourceBlock_ &&
+    return this.enabled_ && !!this.sourceBlock_ &&
         this.sourceBlock_.isEditable() &&
         this.showEditor_ != Field.prototype.showEditor;
   }
@@ -667,8 +667,8 @@ class Field {
 
   /**
    * Show an editor when the field is clicked only if the field is clickable.
-   * @param {Event=} opt_e Optional mouse event that triggered the field to open,
-   *     or undefined if triggered programmatically.
+   * @param {Event=} opt_e Optional mouse event that triggered the field to
+   *     open, or undefined if triggered programmatically.
    * @package
    */
   showEditor(opt_e) {
@@ -681,8 +681,8 @@ class Field {
    * An optional method that can be defined to show an editor when the field is
    *     clicked. Blockly will automatically set the field as clickable if this
    *     method is defined.
-   * @param {Event=} opt_e Optional mouse event that triggered the field to open,
-   *     or undefined if triggered programmatically.
+   * @param {Event=} opt_e Optional mouse event that triggered the field to
+   *     open, or undefined if triggered programmatically.
    * @return {void}
    * @protected
    */
@@ -692,14 +692,16 @@ class Field {
 
   /**
    * Updates the size of the field based on the text.
-   * @param {number=} opt_margin margin to use when positioning the text element.
+   * @param {number=} opt_margin margin to use when positioning the text
+   *     element.
    * @protected
    */
   updateSize_(opt_margin) {
     const constants = this.getConstants();
     const xOffset = opt_margin !== undefined ?
         opt_margin :
-        (this.borderRect_ ? this.getConstants().FIELD_BORDER_RECT_X_PADDING : 0);
+        (this.borderRect_ ? this.getConstants().FIELD_BORDER_RECT_X_PADDING :
+                            0);
     let totalWidth = xOffset * 2;
     let totalHeight = constants.FIELD_TEXT_HEIGHT;
 
@@ -741,9 +743,10 @@ class Field {
                                 xOffset);
     this.textElement_.setAttribute(
         'y',
-        constants.FIELD_TEXT_BASELINE_CENTER ? halfHeight :
-                                               halfHeight -
-                constants.FIELD_TEXT_HEIGHT / 2 + constants.FIELD_TEXT_BASELINE);
+        constants.FIELD_TEXT_BASELINE_CENTER ?
+            halfHeight :
+            halfHeight - constants.FIELD_TEXT_HEIGHT / 2 +
+                constants.FIELD_TEXT_BASELINE);
   }
 
   /**
@@ -791,7 +794,8 @@ class Field {
    * Returns the bounding box of the rendered field, accounting for workspace
    * scaling.
    * @return {!Rect} An object with top, bottom, left, and right in
-   *     pixels relative to the top left corner of the page (window coordinates).
+   *     pixels relative to the top left corner of the page (window
+   * coordinates).
    * @package
    */
   getScaledBBox() {
@@ -866,14 +870,14 @@ class Field {
     return String(this.getValue());
   }
 
-    /**
-     * A developer hook to override the returned text of this field.
-     * Override if the text representation of the value of this field
-     * is not just a string cast of its value.
-     * Return null to resort to a string cast.
-     * @return {?string} Current text. Return null to resort to a string cast.
-     * @protected
-     */
+  /**
+   * A developer hook to override the returned text of this field.
+   * Override if the text representation of the value of this field
+   * is not just a string cast of its value.
+   * Return null to resort to a string cast.
+   * @return {?string} Current text. Return null to resort to a string cast.
+   * @protected
+   */
   getText_() {
     return null;
   }
@@ -931,7 +935,8 @@ class Field {
     const localValidator = this.getValidator();
     if (localValidator) {
       validatedValue = localValidator.call(this, newValue);
-      // Local validators might accidentally forget to return, we'll ignore that.
+      // Local validators might accidentally forget to return, we'll ignore
+      // that.
       newValue = this.processValidation_(newValue, validatedValue);
       if (newValue instanceof Error) {
         doLogging && console.log('invalid local validation, return');
@@ -1044,8 +1049,8 @@ class Field {
   /**
    * Sets the tooltip for this field.
    * @param {?Tooltip.TipInfo} newTip The
-   *     text for the tooltip, a function that returns the text for the tooltip, a
-   *     parent object whose tooltip will be used, or null to display the tooltip
+   *     text for the tooltip, a function that returns the text for the tooltip,
+   * a parent object whose tooltip will be used, or null to display the tooltip
    *     of the parent block. To not display a tooltip pass the empty string.
    */
   setTooltip(newTip) {
@@ -1097,9 +1102,9 @@ class Field {
   }
 
   /**
-   * Whether this field references any Blockly variables.  If true it may need to
-   * be handled differently during serialization and deserialization.  Subclasses
-   * may override this.
+   * Whether this field references any Blockly variables.  If true it may need
+   * to be handled differently during serialization and deserialization.
+   * Subclasses may override this.
    * @return {boolean} True if this field has any variable references.
    * @package
    */

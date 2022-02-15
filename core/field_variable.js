@@ -115,8 +115,8 @@ class FieldVariable extends FieldDropdown {
 
   /**
    * Initialize the model for this field if it has not already been initialized.
-   * If the value has not been set to a variable by the first render, we make up a
-   * variable rather than let the value be invalid.
+   * If the value has not been set to a variable by the first render, we make up
+   * a variable rather than let the value be invalid.
    * @package
    */
   initModel() {
@@ -212,7 +212,8 @@ class FieldVariable extends FieldDropdown {
 
   /**
    * Sets the field's value based on the given state.
-   * @param {*} state The state of the variable to assign to this variable field.
+   * @param {*} state The state of the variable to assign to this variable
+   *     field.
    * @override
    * @package
    */
@@ -305,7 +306,8 @@ class FieldVariable extends FieldDropdown {
     // Type Checks.
     const type = variable.type;
     if (!this.typeIsAllowed_(type)) {
-      console.warn('Variable type doesn\'t match this field!  Type was ' + type);
+      console.warn(
+          'Variable type doesn\'t match this field!  Type was ' + type);
       return null;
     }
     return newId;
@@ -370,19 +372,19 @@ class FieldVariable extends FieldDropdown {
   }
 
   /**
-   * Parse the optional arguments representing the allowed variable types and the
-   * default variable type.
+   * Parse the optional arguments representing the allowed variable types and
+   * the default variable type.
    * @param {Array<string>=} opt_variableTypes A list of the types of variables
-   *     to include in the dropdown.  If null or undefined, variables of all types
-   *     will be displayed in the dropdown.
+   *     to include in the dropdown.  If null or undefined, variables of all
+   * types will be displayed in the dropdown.
    * @param {string=} opt_defaultType The type of the variable to create if this
    *     field's value is not explicitly set.  Defaults to ''.
    * @private
    */
-  setTypes_(
-      opt_variableTypes, opt_defaultType) {
+  setTypes_(opt_variableTypes, opt_defaultType) {
     // If you expected that the default type would be the same as the only entry
-    // in the variable types array, tell the Blockly team by commenting on #1499.
+    // in the variable types array, tell the Blockly team by commenting on
+    // #1499.
     const defaultType = opt_defaultType || '';
     let variableTypes;
     // Set the allowable variable types.  Null means all types on the workspace.
@@ -449,7 +451,8 @@ class FieldVariable extends FieldDropdown {
   }
 
   /**
-   * Overrides referencesVariables(), indicating this field refers to a variable.
+   * Overrides referencesVariables(), indicating this field refers to a
+   * variable.
    * @return {boolean} True.
    * @package
    * @override
@@ -469,8 +472,8 @@ class FieldVariable extends FieldDropdown {
    */
   static fromJson(options) {
     const varName = parsing.replaceMessageReferences(options['variable']);
-    // `this` might be a subclass of FieldVariable if that class doesn't override
-    // the static fromJson method.
+    // `this` might be a subclass of FieldVariable if that class doesn't
+    // override the static fromJson method.
     return new this(varName, undefined, undefined, undefined, options);
   }
 
@@ -506,7 +509,8 @@ class FieldVariable extends FieldDropdown {
       // Set the UUID as the internal representation of the variable.
       options[i] = [variableModelList[i].name, variableModelList[i].getId()];
     }
-    options.push([Msg['RENAME_VARIABLE'], internalConstants.RENAME_VARIABLE_ID]);
+    options.push(
+        [Msg['RENAME_VARIABLE'], internalConstants.RENAME_VARIABLE_ID]);
     if (Msg['DELETE_VARIABLE']) {
       options.push([
         Msg['DELETE_VARIABLE'].replace('%1', name),

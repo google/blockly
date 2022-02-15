@@ -185,8 +185,8 @@ class FieldTextInput extends Field {
    * currently being edited it reverts value of the field to the previous
    * value while allowing the display text to be handled by the htmlInput_.
    * @param {*} _invalidValue The input value that was determined to be invalid.
-   *    This is not used by the text input because its display value is stored on
-   *    the htmlInput_.
+   *    This is not used by the text input because its display value is stored
+   * on the htmlInput_.
    * @protected
    */
   doValueInvalid_(_invalidValue) {
@@ -274,8 +274,8 @@ class FieldTextInput extends Field {
 
   /**
    * Show the inline free-text editor on top of the text.
-   * @param {Event=} _opt_e Optional mouse event that triggered the field to open,
-   *     or undefined if triggered programmatically.
+   * @param {Event=} _opt_e Optional mouse event that triggered the field to
+   *     open, or undefined if triggered programmatically.
    * @param {boolean=} opt_quietInput True if editor should be created without
    *     focus.  Defaults to false.
    * @protected
@@ -574,8 +574,8 @@ class FieldTextInput extends Field {
    */
   static fromJson(options) {
     const text = parsing.replaceMessageReferences(options['text']);
-    // `this` might be a subclass of FieldTextInput if that class doesn't override
-    // the static fromJson method.
+    // `this` might be a subclass of FieldTextInput if that class doesn't
+    // override the static fromJson method.
     return new this(text, undefined, options);
   }
 }

@@ -36,7 +36,8 @@ goog.require('Blockly.Events.BlockChange');
 class FieldColour extends Field {
   /**
    * @param {string=} opt_value The initial value of the field. Should be in
-   *    '#rrggbb' format. Defaults to the first value in the default colour array.
+   *    '#rrggbb' format. Defaults to the first value in the default colour
+   * array.
    * @param {Function=} opt_validator A function that is called to validate
    *    changes to the field's value. Takes in a colour string & returns a
    *    validated colour string ('#rrggbb' format), or null to abort the
@@ -114,7 +115,7 @@ class FieldColour extends Field {
      * Mouse cursor style when over the hotspot that initiates the editor.
      */
     this.CURSOR = 'default';
-  
+
     /**
      * Used to tell if the field needs to be rendered the next time the block is
      * rendered. Colour fields are statically sized, and only need to be
@@ -123,24 +124,25 @@ class FieldColour extends Field {
      * @protected
      */
     this.isDirty_ = false;
-  
+
     /**
      * Array of colours used by this field.  If null, use the global list.
      * @type {Array<string>}
      * @private
      */
     this.colours_ = null;
-  
+
     /**
-     * Array of colour tooltips used by this field.  If null, use the global list.
+     * Array of colour tooltips used by this field.  If null, use the global
+     * list.
      * @type {Array<string>}
      * @private
      */
     this.titles_ = null;
-  
+
     /**
-     * Number of colour columns used by this field.  If 0, use the global setting.
-     * By default use the global constants for columns.
+     * Number of colour columns used by this field.  If 0, use the global
+     * setting. By default use the global constants for columns.
      * @type {number}
      * @private
      */
@@ -189,7 +191,8 @@ class FieldColour extends Field {
         this.borderRect_.style.fill = /** @type {string} */ (this.getValue());
       }
     } else {
-      this.sourceBlock_.pathObject.svgPath.setAttribute('fill', this.getValue());
+      this.sourceBlock_.pathObject.svgPath.setAttribute(
+          'fill', this.getValue());
       this.sourceBlock_.pathObject.svgPath.setAttribute('stroke', '#fff');
     }
   }
@@ -500,8 +503,8 @@ class FieldColour extends Field {
     }
 
     // Configure event handler on the table to listen for any event in a cell.
-    this.onClickWrapper_ =
-        browserEvents.conditionalBind(table, 'click', this, this.onClick_, true);
+    this.onClickWrapper_ = browserEvents.conditionalBind(
+        table, 'click', this, this.onClick_, true);
     this.onMouseMoveWrapper_ = browserEvents.conditionalBind(
         table, 'mousemove', this, this.onMouseMove_, true);
     this.onMouseEnterWrapper_ = browserEvents.conditionalBind(

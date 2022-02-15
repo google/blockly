@@ -39,11 +39,12 @@ const {Svg} = goog.require('Blockly.utils.Svg');
 class FieldDropdown extends Field {
   /**
    * @param {(!Array<!Array>|!Function)} menuGenerator A non-empty array of
-   *     options for a dropdown list, or a function which generates these options.
+   *     options for a dropdown list, or a function which generates these
+   * options.
    * @param {Function=} opt_validator A function that is called to validate
    *    changes to the field's value. Takes in a language-neutral dropdown
-   *    option & returns a validated language-neutral dropdown option, or null to
-   *    abort the change.
+   *    option & returns a validated language-neutral dropdown option, or null
+   * to abort the change.
    * @param {Object=} opt_config A map of options used to configure the field.
    *    See the [field creation documentation]{@link
    *    https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/dropdown#creation}
@@ -259,8 +260,8 @@ class FieldDropdown extends Field {
 
   /**
    * Create a dropdown menu under the text.
-   * @param {Event=} opt_e Optional mouse event that triggered the field to open,
-   *     or undefined if triggered programmatically.
+   * @param {Event=} opt_e Optional mouse event that triggered the field to
+   *     open, or undefined if triggered programmatically.
    * @protected
    */
   showEditor_(opt_e) {
@@ -431,8 +432,8 @@ class FieldDropdown extends Field {
 
   /**
    * Return a list of the options for this dropdown.
-   * @param {boolean=} opt_useCache For dynamic options, whether or not to use the
-   *     cached options or to re-generate them.
+   * @param {boolean=} opt_useCache For dynamic options, whether or not to use
+   *     the cached options or to re-generate them.
    * @return {!Array<!Array>} A non-empty array of option tuples:
    *     (human-readable text or image, language-neutral name).
    * @throws {TypeError} If generated options are incorrectly structured.
@@ -546,7 +547,8 @@ class FieldDropdown extends Field {
    */
   renderSelectedImage_(imageJson) {
     this.imageElement_.style.display = '';
-    this.imageElement_.setAttributeNS(dom.XLINK_NS, 'xlink:href', imageJson.src);
+    this.imageElement_.setAttributeNS(
+        dom.XLINK_NS, 'xlink:href', imageJson.src);
     this.imageElement_.setAttribute('height', imageJson.height);
     this.imageElement_.setAttribute('width', imageJson.width);
 
@@ -672,8 +674,8 @@ class FieldDropdown extends Field {
    * @nocollapse
    */
   static fromJson(options) {
-    // `this` might be a subclass of FieldDropdown if that class doesn't override
-    // the static fromJson method.
+    // `this` might be a subclass of FieldDropdown if that class doesn't
+    // override the static fromJson method.
     return new this(options['options'], undefined, options);
   }
 

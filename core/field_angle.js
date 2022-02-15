@@ -34,7 +34,8 @@ const {Svg} = goog.require('Blockly.utils.Svg');
  */
 class FieldAngle extends FieldTextInput {
   /**
-   * @param {string|number=} opt_value The initial value of the field. Should cast
+   * @param {string|number=} opt_value The initial value of the field. Should
+   *     cast
    *    to a number. Defaults to 0.
    * @param {Function=} opt_validator A function that is called to validate
    *    changes to the field's value. Takes in a number & returns a
@@ -198,7 +199,8 @@ class FieldAngle extends FieldTextInput {
    */
   initView() {
     FieldAngle.superClass_.initView.call(this);
-    // Add the degree symbol to the left of the number, even in RTL (issue #2380)
+    // Add the degree symbol to the left of the number, even in RTL (issue
+    // #2380)
     this.symbol_ = dom.createSvgElement(Svg.TSPAN, {}, null);
     this.symbol_.appendChild(document.createTextNode('\u00B0'));
     this.textElement_.appendChild(this.symbol_);
@@ -216,8 +218,8 @@ class FieldAngle extends FieldTextInput {
 
   /**
    * Create and show the angle field's editor.
-   * @param {Event=} opt_e Optional mouse event that triggered the field to open,
-   *     or undefined if triggered programmatically.
+   * @param {Event=} opt_e Optional mouse event that triggered the field to
+   *     open, or undefined if triggered programmatically.
    * @protected
    */
   showEditor_(opt_e) {
@@ -276,8 +278,8 @@ class FieldAngle extends FieldTextInput {
           Svg.LINE, {
             'x1': FieldAngle.HALF + FieldAngle.RADIUS,
             'y1': FieldAngle.HALF,
-            'x2':
-                FieldAngle.HALF + FieldAngle.RADIUS - (angle % 45 === 0 ? 10 : 5),
+            'x2': FieldAngle.HALF + FieldAngle.RADIUS -
+                (angle % 45 === 0 ? 10 : 5),
             'y2': FieldAngle.HALF,
             'class': 'blocklyAngleMarks',
             'transform': 'rotate(' + angle + ',' + FieldAngle.HALF + ',' +
@@ -407,7 +409,8 @@ class FieldAngle extends FieldTextInput {
       x2 += Math.cos(angleRadians) * FieldAngle.RADIUS;
       y2 -= Math.sin(angleRadians) * FieldAngle.RADIUS;
       // Don't ask how the flag calculations work.  They just do.
-      let largeFlag = Math.abs(Math.floor((angleRadians - angle1) / Math.PI) % 2);
+      let largeFlag =
+          Math.abs(Math.floor((angleRadians - angle1) / Math.PI) % 2);
       if (clockwiseFlag) {
         largeFlag = 1 - largeFlag;
       }

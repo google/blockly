@@ -26,7 +26,8 @@ const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
  */
 class FieldNumber extends FieldTextInput {
   /**
-   * @param {string|number=} opt_value The initial value of the field. Should cast
+   * @param {string|number=} opt_value The initial value of the field. Should
+   *     cast
    *    to a number. Defaults to 0.
    * @param {?(string|number)=} opt_min Minimum value.
    * @param {?(string|number)=} opt_max Maximum value.
@@ -114,8 +115,9 @@ class FieldNumber extends FieldTextInput {
    * Any of these properties may be undefined or NaN to be disabled.
    * Setting precision (usually a power of 10) enforces a minimum step between
    * values. That is, the user's value will rounded to the closest multiple of
-   * precision. The least significant digit place is inferred from the precision.
-   * Integers values can be enforces by choosing an integer precision.
+   * precision. The least significant digit place is inferred from the
+   * precision. Integers values can be enforces by choosing an integer
+   * precision.
    * @param {?(number|string|undefined)} min Minimum value.
    * @param {?(number|string|undefined)} max Maximum value.
    * @param {?(number|string|undefined)} precision Precision for value.
@@ -128,7 +130,8 @@ class FieldNumber extends FieldTextInput {
   }
 
   /**
-   * Sets the minimum value this field can contain. Updates the value to reflect.
+   * Sets the minimum value this field can contain. Updates the value to
+   * reflect.
    * @param {?(number|string|undefined)} min Minimum value.
    */
   setMin(min) {
@@ -163,7 +166,8 @@ class FieldNumber extends FieldTextInput {
   }
 
   /**
-   * Sets the maximum value this field can contain. Updates the value to reflect.
+   * Sets the maximum value this field can contain. Updates the value to
+   * reflect.
    * @param {?(number|string|undefined)} max Maximum value.
    */
   setMax(max) {

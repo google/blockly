@@ -48,7 +48,8 @@ class FieldMultilineInput extends FieldTextInput {
    * @alias Blockly.FieldMultilineInput
    */
   constructor(opt_value, opt_validator, opt_config) {
-    super(opt_value ? String(opt_value) : '', opt_validator, opt_config);
+    super(opt_value, opt_validator, opt_config);
+    if (!this.value_) this.value_ = '';
 
     /**
      * The SVG group element that will contain a text element for each text row

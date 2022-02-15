@@ -41,7 +41,8 @@ class FieldLabelSerializable extends FieldLabel {
    * @alias Blockly.FieldLabelSerializable
    */
   constructor(opt_value, opt_class, opt_config) {
-    super(opt_value ? String(opt_value) : '', opt_class, opt_config);
+    super(opt_value, opt_class, opt_config);
+    if (!this.value_) this.value_ = '';
 
     /**
      * Editable fields usually show some sort of UI indicating they are

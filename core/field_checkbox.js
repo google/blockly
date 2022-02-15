@@ -41,7 +41,7 @@ class FieldCheckbox extends Field {
    * @alias Blockly.FieldCheckbox
    */
   constructor(opt_value, opt_validator, opt_config) {
-    super();
+    super(Field.SENTINEL);
 
     /**
      * Character for the check mark. Used to apply a different check mark
@@ -69,11 +69,10 @@ class FieldCheckbox extends Field {
      */
     this.CURSOR = 'default';
 
-    if (opt_value != Field.SENTINEL) {
-      if (opt_config) this.configure_(opt_config);
-      this.setValue(opt_value);
-      if (opt_validator) this.setValidator(opt_validator);
-    }
+    if (opt_value == Field.SENTINEL) return;
+    if (opt_config) this.configure_(opt_config);
+    this.setValue(opt_value);
+    if (opt_validator) this.setValidator(opt_validator);
   }
 
   /**

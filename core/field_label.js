@@ -19,7 +19,6 @@ goog.module('Blockly.FieldLabel');
 
 const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
-const object = goog.require('Blockly.utils.object');
 const parsing = goog.require('Blockly.utils.parsing');
 const {Field} = goog.require('Blockly.Field');
 

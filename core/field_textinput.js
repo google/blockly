@@ -55,7 +55,7 @@ class FieldTextInput extends Field {
    * @alias Blockly.FieldTextInput
    */
   constructor(opt_value, opt_validator, opt_config) {
-    super();
+    super(Field.SENTINEL);
 
     /**
      * Allow browser to spellcheck this field.
@@ -116,11 +116,10 @@ class FieldTextInput extends Field {
      */
     this.CURSOR = 'text';
 
-    if (opt_value != Field.SENTINEL) {
-      if (opt_config) this.configure_(opt_config);
-      this.setValue(opt_value);
-      if (opt_validator) this.setValidator(opt_validator);
-    }
+    if (opt_value == Field.SENTINEL) return;
+    if (opt_config) this.configure_(opt_config);
+    this.setValue(opt_value);
+    if (opt_validator) this.setValidator(opt_validator);
   }
 
   /**

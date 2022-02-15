@@ -53,7 +53,7 @@ class FieldDropdown extends Field {
    * @alias Blockly.FieldDropdown
    */
   constructor(menuGenerator, opt_validator, opt_config) {
-    super();
+    super(Field.SENTINEL);
 
     /**
      * A reference to the currently selected menu item.

@@ -86,15 +86,14 @@ class FieldNumber extends FieldTextInput {
      */
     this.SERIALIZABLE = true;
 
-    if (opt_value != Field.SENTINEL) {
-      if (opt_config) {
-        this.configure_(opt_config);
-      } else {
-        this.setConstraints(opt_min, opt_max, opt_precision);
-      }
-      this.setValue(opt_value);
-      if (opt_validator) this.setValidator(opt_validator);
+    if (opt_value == Field.SENTINEL) return;
+    if (opt_config) {
+      this.configure_(opt_config);
+    } else {
+      this.setConstraints(opt_min, opt_max, opt_precision);
     }
+    this.setValue(opt_value);
+    if (opt_validator) this.setValidator(opt_validator);
   }
 
   /**

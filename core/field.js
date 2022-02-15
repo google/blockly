@@ -67,6 +67,13 @@ goog.require('Blockly.Gesture');
  */
 class Field {
   /**
+   * @param {*} value The initial value of the field.
+   * @param {?Function=} opt_validator  A function that is called to validate
+   *    changes to the field's value. Takes in a value & returns a validated
+   *    value, or null to abort the change.
+   * @param {Object=} opt_config A map of options used to configure the field.
+   *    Refer to the individual field's documentation for a list of properties
+   *    this parameter supports.
    * @abstract
    * @implements {IASTNodeLocationSvg}
    * @implements {IASTNodeLocationWithBlock}
@@ -74,7 +81,7 @@ class Field {
    * @implements {IRegistrable}
    * @alias Blockly.Field
    */
-  constructor() {
+  constructor(value, opt_validator, opt_config) {
     /**
      * Name of field.  Unique within each block.
      * Static labels are usually unnamed.
@@ -232,6 +239,11 @@ class Field {
      * @type {boolean}
      */
     this.SERIALIZABLE = false;
+
+    if (value == Field.SENTINEL) return;
+    if (opt_config) this.configure_(opt_config);
+    this.setValue(value);
+    if (opt_validator) this.setValidator(opt_validator);
   }
 
   /**

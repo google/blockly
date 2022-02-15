@@ -22,7 +22,6 @@ goog.module('Blockly.FieldDropdown');
 const aria = goog.require('Blockly.utils.aria');
 const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
-const object = goog.require('Blockly.utils.object');
 const parsing = goog.require('Blockly.utils.parsing');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const utilsString = goog.require('Blockly.utils.string');
@@ -37,7 +36,7 @@ const {Svg} = goog.require('Blockly.utils.Svg');
 /**
  * Class for an editable dropdown field.
  */
-var FieldDropdown = class {
+class FieldDropdown extends Field {
   /**
    * @param {(!Array<!Array>|!Function)} menuGenerator A non-empty array of
    *     options for a dropdown list, or a function which generates these options.
@@ -54,8 +53,7 @@ var FieldDropdown = class {
    * @alias Blockly.FieldDropdown
    */
   constructor(menuGenerator, opt_validator, opt_config) {
-    FieldDropdown.superClass_.constructor.call(this, Field.SENTINEL);
-
+    super();
 
     /**
      * A reference to the currently selected menu item.
@@ -99,6 +97,12 @@ var FieldDropdown = class {
      * @const
      */
     this.SERIALIZABLE = true;
+
+    /**
+     * Mouse cursor style when over the hotspot that initiates the editor.
+     */
+    this.CURSOR = 'default';
+
 
     // If we pass sentinel, don't do *anything* with the menu generator.
     if (menuGenerator == Field.SENTINEL) return;
@@ -479,7 +483,7 @@ var FieldDropdown = class {
    * @protected
    */
   doValueUpdate_(newValue) {
-    FieldDropdown.superClass_.doValueUpdate_.call(this, newValue);
+    super.doValueUpdate_(newValue);
     const options = this.getOptions(true);
     for (let i = 0, option; (option = options[i]); i++) {
       if (option[1] === this.value_) {
@@ -693,8 +697,7 @@ var FieldDropdown = class {
     }
     return newOptions;
   }
-};
-object.inherits(FieldDropdown, Field);
+}
 
 /**
  * Dropdown image properties.
@@ -706,13 +709,6 @@ object.inherits(FieldDropdown, Field);
  *          }}
  */
 FieldDropdown.ImageProperties;
-
-/**
- * Serializable fields are saved by the XML renderer, non-serializable fields
- * are not. Editable fields should also be serializable.
- * @type {boolean}
- */
-FieldDropdown.prototype.SERIALIZABLE = true;
 
 /**
  * Horizontal distance that a checkmark overhangs the dropdown.
@@ -743,11 +739,6 @@ const IMAGE_Y_PADDING = IMAGE_Y_OFFSET * 2;
  * Android can't (in 2014) display "▾", so use "▼" instead.
  */
 FieldDropdown.ARROW_CHAR = userAgent.ANDROID ? '\u25BC' : '\u25BE';
-
-/**
- * Mouse cursor style when over the hotspot that initiates the editor.
- */
-FieldDropdown.prototype.CURSOR = 'default';
 
 /**
  * Validates the data structure to be processed as an options list.

@@ -19,7 +19,6 @@ const Variables = goog.require('Blockly.Variables');
 const Xml = goog.require('Blockly.Xml');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const internalConstants = goog.require('Blockly.internalConstants');
-const object = goog.require('Blockly.utils.object');
 const parsing = goog.require('Blockly.utils.parsing');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
@@ -39,7 +38,7 @@ goog.require('Blockly.Events.BlockChange');
 /**
  * Class for a variable's dropdown field.
  */
-var FieldVariable = class {
+class FieldVariable extends FieldDropdown {
   /**
    * @param {?string} varName The default name for the variable.  If null,
    *     a unique variable name will be generated.
@@ -59,7 +58,7 @@ var FieldVariable = class {
    */
   constructor(
       varName, opt_validator, opt_variableTypes, opt_defaultType, opt_config) {
-    FieldVariable.superClass_.constructor.call(this, Field.SENTINEL);
+    super(Field.SENTINEL);
 
     /**
      * An array of options for a dropdown list,
@@ -110,7 +109,7 @@ var FieldVariable = class {
    * @protected
    */
   configure_(config) {
-    FieldVariable.superClass_.configure_.call(this, config);
+    super.configure_(config);
     this.setTypes_(config['variableTypes'], config['defaultType']);
   }
 
@@ -136,7 +135,7 @@ var FieldVariable = class {
    * @override
    */
   shouldAddBorderRect_() {
-    return FieldVariable.superClass_.shouldAddBorderRect_.call(this) &&
+    return super.shouldAddBorderRect_() &&
         (!this.getConstants().FIELD_DROPDOWN_NO_BORDER_RECT_SHADOW ||
          this.sourceBlock_.type !== 'variables_get');
   }
@@ -236,7 +235,7 @@ var FieldVariable = class {
     if (block.isShadow()) {
       throw Error('Variable fields are not allowed to exist on shadow blocks.');
     }
-    FieldVariable.superClass_.setSourceBlock.call(this, block);
+    super.setSourceBlock(block);
   }
 
   /**
@@ -323,7 +322,7 @@ var FieldVariable = class {
   doValueUpdate_(newId) {
     this.variable_ = Variables.getVariable(
         this.sourceBlock_.workspace, /** @type {string} */ (newId));
-    FieldVariable.superClass_.doValueUpdate_.call(this, newId);
+    super.doValueUpdate_(newId);
   }
 
   /**
@@ -517,15 +516,7 @@ var FieldVariable = class {
 
     return options;
   }
-};
-object.inherits(FieldVariable, FieldDropdown);
-
-/**
- * Serializable fields are saved by the XML renderer, non-serializable fields
- * are not. Editable fields should also be serializable.
- * @type {boolean}
- */
-FieldVariable.prototype.SERIALIZABLE = true;
+}
 
 fieldRegistry.register('field_variable', FieldVariable);
 

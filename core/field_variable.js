@@ -23,6 +23,7 @@ const object = goog.require('Blockly.utils.object');
 const parsing = goog.require('Blockly.utils.parsing');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+const {Field} = goog.require('Blockly.Field');
 const {FieldDropdown} = goog.require('Blockly.FieldDropdown');
 /* eslint-disable-next-line no-unused-vars */
 const {MenuItem} = goog.requireType('Blockly.MenuItem');
@@ -56,9 +57,7 @@ goog.require('Blockly.Events.BlockChange');
  */
 const FieldVariable = function(
     varName, opt_validator, opt_variableTypes, opt_defaultType, opt_config) {
-  // The FieldDropdown constructor expects the field's initial value to be
-  // the first entry in the menu generator, which it may or may not be.
-  // Just do the relevant parts of the constructor.
+  FieldVariable.superClass_.constructor.call(this, Field.SENTINEL);
 
   /**
    * An array of options for a dropdown list,
@@ -85,12 +84,22 @@ const FieldVariable = function(
    */
   this.size_ = new Size(0, 0);
 
-  opt_config && this.configure_(opt_config);
-  opt_validator && this.setValidator(opt_validator);
+  /**
+   * Serializable fields are saved by the serializer, non-serializable fields
+   * are not. Editable fields should also be serializable.
+   * @type {boolean}
+   * @const
+   */
+  this.SERIALIZABLE = true;
 
-  if (!opt_config) {  // Only do one kind of configuration or the other.
+  if (varName == Field.SENTINEL) return;
+
+  if (opt_config) {
+    this.configure_(opt_config);
+  } else {
     this.setTypes_(opt_variableTypes, opt_defaultType);
   }
+  if (opt_validator) this.setValidator(opt_validator);
 };
 object.inherits(FieldVariable, FieldDropdown);
 

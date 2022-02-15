@@ -52,7 +52,56 @@ const {Svg} = goog.require('Blockly.utils.Svg');
  * @alias Blockly.FieldDropdown
  */
 const FieldDropdown = function(menuGenerator, opt_validator, opt_config) {
-  if (typeof menuGenerator !== 'function') {
+  FieldDropdown.superClass_.constructor.call(this, Field.SENTINEL);
+
+
+  /**
+   * A reference to the currently selected menu item.
+   * @type {?MenuItem}
+   * @private
+   */
+  this.selectedMenuItem_ = null;
+
+  /**
+   * The dropdown menu.
+   * @type {?Menu}
+   * @protected
+   */
+  this.menu_ = null;
+
+  /**
+   * SVG image element if currently selected option is an image, or null.
+   * @type {?SVGImageElement}
+   * @private
+   */
+  this.imageElement_ = null;
+
+  /**
+   * Tspan based arrow element.
+   * @type {?SVGTSpanElement}
+   * @private
+   */
+  this.arrow_ = null;
+
+  /**
+   * SVG based arrow element.
+   * @type {?SVGElement}
+   * @private
+   */
+  this.svgArrow_ = null;
+
+  /**
+   * Serializable fields are saved by the serializer, non-serializable fields
+   * are not. Editable fields should also be serializable.
+   * @type {boolean}
+   * @const
+   */
+  this.SERIALIZABLE = true;
+
+  // If we pass sentinel, don't do *anything* with the menu generator.
+  if (menuGenerator == Field.SENTINEL) return;
+
+  if (Array.isArray(menuGenerator)) {
     validateOptions(menuGenerator);
   }
 
@@ -96,44 +145,12 @@ const FieldDropdown = function(menuGenerator, opt_validator, opt_config) {
    */
   this.selectedOption_ = this.getOptions(false)[0];
 
-  // Call parent's constructor.
-  FieldDropdown.superClass_.constructor.call(
-      this, this.selectedOption_[1], opt_validator, opt_config);
+  /** @override */
+  this.value_ = this.selectedOption_[1];
 
-  /**
-   * A reference to the currently selected menu item.
-   * @type {?MenuItem}
-   * @private
-   */
-  this.selectedMenuItem_ = null;
-
-  /**
-   * The dropdown menu.
-   * @type {?Menu}
-   * @protected
-   */
-  this.menu_ = null;
-
-  /**
-   * SVG image element if currently selected option is an image, or null.
-   * @type {?SVGImageElement}
-   * @private
-   */
-  this.imageElement_ = null;
-
-  /**
-   * Tspan based arrow element.
-   * @type {?SVGTSpanElement}
-   * @private
-   */
-  this.arrow_ = null;
-
-  /**
-   * SVG based arrow element.
-   * @type {?SVGElement}
-   * @private
-   */
-  this.svgArrow_ = null;
+  if (opt_config) this.configure_(opt_config);
+  this.setValue(this.selectedOption_[1]);
+  if (opt_validator) this.setValidator(opt_validator);
 };
 object.inherits(FieldDropdown, Field);
 

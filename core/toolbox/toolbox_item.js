@@ -121,8 +121,9 @@ class ToolboxItem {
 
   /**
    * Gets the HTML element that is clickable.
-   * The parent toolbox element receives clicks. The parent toolbox will add an ID
-   * to this element so it can pass the onClick event to the correct toolboxItem.
+   * The parent toolbox element receives clicks. The parent toolbox will add an
+   * ID to this element so it can pass the onClick event to the correct
+   * toolboxItem.
    * @return {?Element} The HTML element that receives clicks, or null if this
    *     item should not receive clicks.
    * @public

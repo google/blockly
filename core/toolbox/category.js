@@ -155,8 +155,8 @@ class ToolboxCategory extends ToolboxItem {
   }
 
   /**
-   * Parses the contents array depending on if the category is a dynamic category,
-   * or if its contents are meant to be shown in the flyout.
+   * Parses the contents array depending on if the category is a dynamic
+   * category, or if its contents are meant to be shown in the flyout.
    * @param {!toolbox.CategoryInfo} categoryDef The information needed
    *     to create a category.
    * @protected
@@ -247,8 +247,8 @@ class ToolboxCategory extends ToolboxItem {
   }
 
   /**
-   * Creates the parent of the contents container. All clicks will happen on this
-   * div.
+   * Creates the parent of the contents container. All clicks will happen on
+   * this div.
    * @return {!Element} The div that holds the contents container.
    * @protected
    */
@@ -378,8 +378,9 @@ class ToolboxCategory extends ToolboxItem {
 
   /**
    * Gets the HTML element that is clickable.
-   * The parent toolbox element receives clicks. The parent toolbox will add an ID
-   * to this element so it can pass the onClick event to the correct toolboxItem.
+   * The parent toolbox element receives clicks. The parent toolbox will add an
+   * ID to this element so it can pass the onClick event to the correct
+   * toolboxItem.
    * @return {!Element} The HTML element that receives clicks.
    * @public
    */
@@ -389,8 +390,9 @@ class ToolboxCategory extends ToolboxItem {
 
   /**
    * Parses the colour on the category.
-   * @param {number|string} colourValue HSV hue value (0 to 360), #RRGGBB string,
-   *     or a message reference string pointing to one of those two values.
+   * @param {number|string} colourValue HSV hue value (0 to 360), #RRGGBB
+   *     string, or a message reference string pointing to one of those two
+   *     values.
    * @return {string} The hex colour for the category.
    * @private
    */
@@ -477,8 +479,8 @@ class ToolboxCategory extends ToolboxItem {
 
   /**
    * Whether the category is visible.
-   * A category is only visible if all of its ancestors are expanded and isHidden_
-   * is false.
+   * A category is only visible if all of its ancestors are expanded and
+   * isHidden_ is false.
    * @return {boolean} True if the category is visible, false otherwise.
    * @public
    */
@@ -536,7 +538,8 @@ class ToolboxCategory extends ToolboxItem {
       dom.removeClass(this.rowDiv_, this.cssConfig_['selected']);
     }
     aria.setState(
-        /** @type {!Element} */ (this.htmlDiv_), aria.State.SELECTED, isSelected);
+        /** @type {!Element} */ (this.htmlDiv_), aria.State.SELECTED,
+        isSelected);
   }
 
   /**
@@ -586,8 +589,8 @@ class ToolboxCategory extends ToolboxItem {
 
   /**
    * Updates the contents to be displayed in the flyout.
-   * If the flyout is open when the contents are updated, refreshSelection on the
-   * toolbox must also be called.
+   * If the flyout is open when the contents are updated, refreshSelection on
+   * the toolbox must also be called.
    * @param {!toolbox.FlyoutDefinition|string} contents The contents
    *     to be displayed in the flyout. A string can be supplied to create a
    *     dynamic category.

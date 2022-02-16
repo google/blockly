@@ -124,15 +124,16 @@ class CollapsibleToolboxCategory extends ToolboxCategory {
     let registryName = itemDef['kind'];
     const categoryDef = /** @type {!toolbox.CategoryInfo} */ (itemDef);
 
-    // Categories that are collapsible are created using a class registered under
-    // a different name.
+    // Categories that are collapsible are created using a class registered
+    // under a different name.
     if (registryName.toUpperCase() == 'CATEGORY' &&
         toolbox.isCategoryCollapsible(categoryDef)) {
       registryName = CollapsibleToolboxCategory.registrationName;
     }
     const ToolboxItemClass =
         registry.getClass(registry.Type.TOOLBOX_ITEM, registryName);
-    const toolboxItem = new ToolboxItemClass(itemDef, this.parentToolbox_, this);
+    const toolboxItem =
+        new ToolboxItemClass(itemDef, this.parentToolbox_, this);
     this.toolboxItems_.push(toolboxItem);
   }
 
@@ -181,8 +182,7 @@ class CollapsibleToolboxCategory extends ToolboxCategory {
    * @return {!Element} The div holding all the subcategories.
    * @protected
    */
-  createSubCategoriesDom_(
-      subcategories) {
+  createSubCategoriesDom_(subcategories) {
     const contentsContainer = document.createElement('div');
     dom.addClass(contentsContainer, this.cssConfig_['contents']);
 
@@ -216,7 +216,8 @@ class CollapsibleToolboxCategory extends ToolboxCategory {
       this.closeIcon_(this.iconDom_);
     }
     aria.setState(
-        /** @type {!Element} */ (this.htmlDiv_), aria.State.EXPANDED, isExpanded);
+        /** @type {!Element} */ (this.htmlDiv_), aria.State.EXPANDED,
+        isExpanded);
 
     this.parentToolbox_.handleToolboxItemResize();
   }

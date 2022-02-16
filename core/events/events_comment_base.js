@@ -18,7 +18,7 @@ goog.module('Blockly.Events.CommentBase');
 const Xml = goog.require('Blockly.Xml');
 const eventUtils = goog.require('Blockly.Events.utils');
 const utilsXml = goog.require('Blockly.utils.xml');
-const {Abstract} = goog.require('Blockly.Events.Abstract');
+const {Abstract: AbstractEvent} = goog.require('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
 const {CommentCreate} = goog.requireType('Blockly.Events.CommentCreate');
 /* eslint-disable-next-line no-unused-vars */
@@ -29,9 +29,9 @@ const {WorkspaceComment} = goog.requireType('Blockly.WorkspaceComment');
 
 /**
  * Abstract class for a comment event.
- * @extends {Abstract}
+ * @extends {AbstractEvent}
  */
-class CommentBase extends Abstract {
+class CommentBase extends AbstractEvent {
   /**
    * @param {!WorkspaceComment=} opt_comment The comment this event
    *     corresponds to.  Undefined for a blank event.

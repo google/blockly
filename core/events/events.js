@@ -17,7 +17,7 @@ goog.module('Blockly.Events');
 
 const deprecation = goog.require('Blockly.utils.deprecation');
 const eventUtils = goog.require('Blockly.Events.utils');
-const {Abstract} = goog.require('Blockly.Events.Abstract');
+const {Abstract: AbstractEvent} = goog.require('Blockly.Events.Abstract');
 const {BlockBase} = goog.require('Blockly.Events.BlockBase');
 const {BlockChange} = goog.require('Blockly.Events.BlockChange');
 const {BlockCreate} = goog.require('Blockly.Events.BlockCreate');
@@ -47,7 +47,7 @@ const {ViewportChange} = goog.require('Blockly.Events.ViewportChange');
 
 
 // Events.
-exports.Abstract = Abstract;
+exports.Abstract = AbstractEvent;
 exports.BubbleOpen = BubbleOpen;
 exports.BlockBase = BlockBase;
 exports.BlockChange = BlockChange;

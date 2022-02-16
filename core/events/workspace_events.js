@@ -17,7 +17,7 @@ goog.module('Blockly.Events.FinishedLoading');
 
 const eventUtils = goog.require('Blockly.Events.utils');
 const registry = goog.require('Blockly.registry');
-const {Abstract} = goog.require('Blockly.Events.Abstract');
+const {Abstract: AbstractEvent} = goog.require('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
 
@@ -27,9 +27,9 @@ const {Workspace} = goog.requireType('Blockly.Workspace');
  * Used to notify the developer when the workspace has finished loading (i.e
  * domToWorkspace).
  * Finished loading events do not record undo or redo.
- * @extends {Abstract}
+ * @extends {AbstractEvent}
  */
-class FinishedLoading extends Abstract {
+class FinishedLoading extends AbstractEvent {
   /**
    * @param {!Workspace=} opt_workspace The workspace that has finished
    *    loading.  Undefined for a blank event.

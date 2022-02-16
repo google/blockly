@@ -220,7 +220,7 @@ class Generator {
   /**
    * Generate code for the specified block (and attached blocks).
    * The generator must be initialized before calling this function.
-   * @param {Block} block The block to generate code for.
+   * @param {?Block} block The block to generate code for.
    * @param {boolean=} opt_thisOnly True to generate code for only this
    *     statement.
    * @return {string|!Array} For statement blocks, the generated code.

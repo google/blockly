@@ -327,7 +327,7 @@ const updateMutatorFlyout = function(workspace) {
  * @package
  */
 const mutatorOpenListener = function(e) {
-  if (e.type === eventUtils.BUBBLE_OPEN) {
+  if (e.type !== eventUtils.BUBBLE_OPEN) {
     return;
   }
   const bubbleEvent = /** @type {!BubbleOpen} */ (e);

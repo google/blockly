@@ -180,7 +180,7 @@ class Options {
      * The parent of the current workspace, or null if there is no parent
      * workspace.  We can assert that this is of type WorkspaceSvg as opposed to
      * Workspace as this is only used in a rendered workspace.
-     * @type {WorkspaceSvg}
+     * @type {?WorkspaceSvg}
      */
     this.parentWorkspace = options['parentWorkspace'];
 

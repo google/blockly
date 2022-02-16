@@ -17,7 +17,7 @@
  */
 goog.module('Blockly.Events.UiBase');
 
-const {Abstract} = goog.require('Blockly.Events.Abstract');
+const {Abstract: AbstractEvent} = goog.require('Blockly.Events.Abstract');
 
 
 /**
@@ -26,9 +26,9 @@ const {Abstract} = goog.require('Blockly.Events.Abstract');
  * editing to work (e.g. scrolling the workspace, zooming, opening toolbox
  * categories).
  * UI events do not undo or redo.
- * @extends {Abstract}
+ * @extends {AbstractEvent}
  */
-class UiBase extends Abstract {
+class UiBase extends AbstractEvent {
   /**
    * @param {string=} opt_workspaceId The workspace identifier for this event.
    *    Undefined for a blank event.

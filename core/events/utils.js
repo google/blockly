@@ -371,7 +371,7 @@ const filter = function(queueIn, forward) {
       // Treat all UI events as the same type in hash table.
       const eventType = event.isUiEvent ? UI : event.type;
       // TODO(#5927): Ceck whether `blockId` exists before accessing it.
-      const blockId = /** @type {BlockMove} */ (event).blockId;
+      const blockId = /** @type {*} */ (event).blockId;
       const key = [eventType, blockId, event.workspaceId].join(' ');
 
       const lastEntry = hash[key];

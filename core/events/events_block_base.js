@@ -15,16 +15,16 @@
  */
 goog.module('Blockly.Events.BlockBase');
 
-const {Abstract} = goog.require('Blockly.Events.Abstract');
+const {Abstract: AbstractEvent} = goog.require('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 
 
 /**
  * Abstract class for a block event.
- * @extends {Abstract}
+ * @extends {AbstractEvent}
  */
-class BlockBase extends Abstract {
+class BlockBase extends AbstractEvent {
   /**
    * @param {!Block=} opt_block The block this event corresponds to.
    *     Undefined for a blank event.

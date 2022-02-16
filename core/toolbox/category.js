@@ -39,8 +39,9 @@ const {ToolboxItem} = goog.require('Blockly.ToolboxItem');
  */
 class ToolboxCategory extends ToolboxItem {
   /**
-   * @param {!toolbox.CategoryInfo} categoryDef The information needed
-   *     to create a category in the toolbox.
+   * @param {!toolbox.CategoryInfo|!Object} categoryDef The information needed
+   *     to create a category in the toolbox, or ToolboxCategory.SENTINEL to
+   *     signal skipping parsing.
    * @param {!IToolbox} toolbox The parent toolbox for the category.
    * @param {ICollapsibleToolboxItem=} opt_parent The parent category or null if
    *     the category does not have a parent.
@@ -126,9 +127,11 @@ class ToolboxCategory extends ToolboxItem {
      */
     this.flyoutItems_ = [];
 
-    if (categoryDef === ToolboxCategory.SENTINEL) return;
-    this.parseCategoryDef_(categoryDef);
-    this.parseContents_(categoryDef);
+    if (categoryDef === ToolboxItem.SENTINEL) return;
+    const def = /** @type {toolbox.CategoryInfo} */ (categoryDef);
+    this.parseItemDef_(def);
+    this.parseCategoryDef_(def);
+    this.parseContents_(def);
   }
 
   /**
@@ -652,14 +655,6 @@ ToolboxCategory.borderWidth = 8;
  * @type {string}
  */
 ToolboxCategory.defaultBackgroundColour = '#57e';
-
-/**
- * A value used to signal when the toolbox category constructor should *not*
- * parse the content of teh category, and should allow the subclass to do that
- * instead.
- * @type {!Object}
- */
-ToolboxCategory.SENTINEL = {};
 
 /**
  * CSS for Toolbox.  See css.js for use.

@@ -34,8 +34,8 @@ const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
  */
 class ToolboxItem {
   /**
-   * @param {!toolbox.ToolboxItemInfo} toolboxItemDef The JSON defining the
-   *     toolbox item.
+   * @param {!toolbox.ToolboxItemInfo|Object} toolboxItemDef The JSON defining
+   *     the toolbox item.
    * @param {!IToolbox} toolbox The toolbox that holds the toolbox item.
    * @param {ICollapsibleToolboxItem=} opt_parent The parent toolbox item
    *     or null if the category does not have a parent.
@@ -47,7 +47,7 @@ class ToolboxItem {
      * @type {string}
      * @protected
      */
-    this.id_ = toolboxItemDef['toolboxitemid'] || idGenerator.getNextUniqueId();
+    this.id_ = idGenerator.getNextUniqueId();
 
     /**
      * The parent of the category.
@@ -65,10 +65,10 @@ class ToolboxItem {
 
     /**
      * The JSON definition of the toolbox item.
-     * @type {!toolbox.ToolboxItemInfo}
+     * @type {?toolbox.ToolboxItemInfo}
      * @protected
      */
-    this.toolboxItemDef_ = toolboxItemDef;
+    this.toolboxItemDef_ = null;
 
     /**
      * The toolbox this category belongs to.
@@ -83,6 +83,21 @@ class ToolboxItem {
      * @protected
      */
     this.workspace_ = this.parentToolbox_.getWorkspace();
+
+    if (toolboxItemDef === ToolboxItem.SENTINEL) return;
+    const def = /** @type {toolbox.ToolboxItemInfo} */ (toolboxItemDef);
+    this.parseItemDef_(def);
+  }
+
+  /**
+   * Parses the item definition.
+   * @param {!toolbox.ToolboxItemInfo} itemDef The information needed to create
+   *     an item.
+   * @protected
+   */
+  parseItemDef_(itemDef) {
+    if (itemDef['toolboxitemid']) this.id_ = itemDef['toolboxitemid'];
+    this.toolboxItemDef_ = itemDef;
   }
 
   /**
@@ -168,5 +183,12 @@ class ToolboxItem {
    */
   dispose() {}
 }
+
+/**
+ * A value used to signal when the toolbox item constructor should *not*
+ * parse the definition, and should allow the subclass to do that instead.
+ * @type {!Object}
+ */
+ToolboxItem.SENTINEL = {};
 
 exports.ToolboxItem = ToolboxItem;

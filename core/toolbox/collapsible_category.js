@@ -17,6 +17,8 @@ goog.module('Blockly.CollapsibleToolboxCategory');
 
 const aria = goog.require('Blockly.utils.aria');
 const dom = goog.require('Blockly.utils.dom');
+const object = goog.require('Blockly.utils.object');
+const parsing = goog.require('Blockly.utils.parsing');
 const registry = goog.require('Blockly.registry');
 const toolbox = goog.require('Blockly.utils.toolbox');
 /* eslint-disable-next-line no-unused-vars */
@@ -44,7 +46,7 @@ class CollapsibleToolboxCategory extends ToolboxCategory {
    * @alias Blockly.CollapsibleToolboxCategory
    */
   constructor(categoryDef, toolbox, opt_parent) {
-    super(categoryDef, toolbox, opt_parent);
+    super(ToolboxCategory.SENTINEL, toolbox, opt_parent);
 
     /**
      * Container for any child categories.
@@ -66,14 +68,17 @@ class CollapsibleToolboxCategory extends ToolboxCategory {
      * @protected
      */
     this.toolboxItems_ = [];
+
+    if (categoryDef === ToolboxCategory.SENTINEL) return;
+    this.parseCategoryDef_(categoryDef);
+    this.parseContents_(categoryDef);
   }
 
   /**
    * @override
    */
   makeDefaultCssConfig_() {
-    const cssConfig =
-        CollapsibleToolboxCategory.superClass_.makeDefaultCssConfig_.call(this);
+    const cssConfig = super.makeDefaultCssConfig_();
     cssConfig['contents'] = 'blocklyToolboxContents';
     return cssConfig;
   }
@@ -133,7 +138,7 @@ class CollapsibleToolboxCategory extends ToolboxCategory {
    * @override
    */
   init() {
-    CollapsibleToolboxCategory.superClass_.init.call(this);
+    super.init();
 
     this.setExpanded(
         this.toolboxItemDef_['expanded'] === 'true' ||
@@ -144,7 +149,7 @@ class CollapsibleToolboxCategory extends ToolboxCategory {
    * @override
    */
   createDom_() {
-    CollapsibleToolboxCategory.superClass_.createDom_.call(this);
+    super.createDom_();
 
     const subCategories = this.getChildToolboxItems();
     this.subcategoriesDiv_ = this.createSubCategoriesDom_(subCategories);

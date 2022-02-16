@@ -54,14 +54,14 @@ class ToolboxCategory extends ToolboxItem {
      * @type {string}
      * @protected
      */
-    this.name_ = parsing.replaceMessageReferences(categoryDef['name']);
+    this.name_ = '';
 
     /**
      * The colour of the category.
      * @type {string}
      * @protected
      */
-    this.colour_ = this.getColour_(categoryDef);
+    this.colour_ = '';
 
     /**
      * The html container for the category.
@@ -105,9 +105,6 @@ class ToolboxCategory extends ToolboxItem {
      */
     this.cssConfig_ = this.makeDefaultCssConfig_();
 
-    const cssConfig = categoryDef['cssconfig'] || categoryDef['cssConfig'];
-    object.mixin(this.cssConfig_, cssConfig);
-
     /**
      * True if the category is meant to be hidden, false otherwise.
      * @type {boolean}
@@ -129,6 +126,8 @@ class ToolboxCategory extends ToolboxItem {
      */
     this.flyoutItems_ = [];
 
+    if (categoryDef === ToolboxCategory.SENTINEL) return;
+    this.parseCategoryDef_(categoryDef);
     this.parseContents_(categoryDef);
   }
 
@@ -172,6 +171,19 @@ class ToolboxCategory extends ToolboxItem {
         this.flyoutItems_.push(flyoutItem);
       }
     }
+  }
+
+  /**
+   * Parses the non-contents parts of the category def.
+   * @param {!toolbox.CategoryInfo} categoryDef The information needed to create
+   *     a category.
+   * @protected
+   */
+  parseCategoryDef_(categoryDef) {
+    this.name_ = parsing.replaceMessageReferences(categoryDef['name']);
+    this.colour_ = this.getColour_(categoryDef);
+    object.mixin(
+        this.cssConfig_, categoryDef['cssconfig'] || categoryDef['cssConfig']);
   }
 
   /**
@@ -640,6 +652,14 @@ ToolboxCategory.borderWidth = 8;
  * @type {string}
  */
 ToolboxCategory.defaultBackgroundColour = '#57e';
+
+/**
+ * A value used to signal when the toolbox category constructor should *not*
+ * parse the content of teh category, and should allow the subclass to do that
+ * instead.
+ * @type {!Object}
+ */
+ToolboxCategory.SENTINEL = {};
 
 /**
  * CSS for Toolbox.  See css.js for use.

@@ -35,8 +35,7 @@ const {Svg} = goog.require('Blockly.utils.Svg');
 class FieldMultilineInput extends FieldTextInput {
   /**
    * @param {string=} opt_value The initial content of the field. Should cast to
-   *     a
-   *    string. Defaults to an empty string if null or undefined.
+   *     a string. Defaults to an empty string if null or undefined.
    * @param {Function=} opt_validator An optional function that is called
    *     to validate any constraints on what the user entered.  Takes the new
    *     text as an argument and returns either the accepted text, a replacement
@@ -48,8 +47,7 @@ class FieldMultilineInput extends FieldTextInput {
    * @alias Blockly.FieldMultilineInput
    */
   constructor(opt_value, opt_validator, opt_config) {
-    super(opt_value, opt_validator, opt_config);
-    if (!this.value_) this.value_ = '';
+    super(Field.SENTINEL);
 
     /**
      * The SVG group element that will contain a text element for each text row
@@ -73,17 +71,10 @@ class FieldMultilineInput extends FieldTextInput {
      */
     this.isOverflowedY_ = false;
 
-    /**
-     * @type {boolean}
-     * @private
-     */
-    this.isBeingEdited_ = false;
-
-    /**
-     * @type {boolean}
-     * @private
-     */
-    this.isTextValid_ = false;
+    if (opt_value == Field.SENTINEL) return;
+    if (opt_config) this.configure_(opt_config);
+    this.setValue(opt_value);
+    if (opt_validator) this.setValidator(opt_validator);
   }
 
   /**

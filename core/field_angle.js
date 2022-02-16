@@ -204,7 +204,7 @@ class FieldAngle extends FieldTextInput {
    * @package
    */
   initView() {
-    FieldAngle.superClass_.initView.call(this);
+    super.initView();
     // Add the degree symbol to the left of the number, even in RTL (issue
     // #2380)
     this.symbol_ = dom.createSvgElement(Svg.TSPAN, {}, null);
@@ -218,7 +218,7 @@ class FieldAngle extends FieldTextInput {
    * @override
    */
   render_() {
-    FieldAngle.superClass_.render_.call(this);
+    super.render_();
     this.updateGraph_();
   }
 
@@ -231,7 +231,7 @@ class FieldAngle extends FieldTextInput {
   showEditor_(opt_e) {
     // Mobile browsers have issues with in-line textareas (focus & keyboards).
     const noFocus = userAgent.MOBILE || userAgent.ANDROID || userAgent.IPAD;
-    FieldAngle.superClass_.showEditor_.call(this, opt_e, noFocus);
+    super.showEditor_(opt_e, noFocus);
 
     this.dropdownCreate_();
     DropDownDiv.getContentDiv().appendChild(this.editor_);

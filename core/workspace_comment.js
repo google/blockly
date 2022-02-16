@@ -20,6 +20,8 @@ const idGenerator = goog.require('Blockly.utils.idGenerator');
 const xml = goog.require('Blockly.utils.xml');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
+const {CommentMove} = goog.require('Blockly.Events.CommentMove');
+/* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.CommentChange');
@@ -27,8 +29,6 @@ goog.require('Blockly.Events.CommentChange');
 goog.require('Blockly.Events.CommentCreate');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.CommentDelete');
-/** @suppress {extraRequire} */
-goog.require('Blockly.Events.CommentMove');
 
 
 /**
@@ -201,7 +201,8 @@ class WorkspaceComment {
    * @package
    */
   moveBy(dx, dy) {
-    const event = new (eventUtils.get(eventUtils.COMMENT_MOVE))(this);
+    const event = /** @type {!CommentMove} */ (
+        new (eventUtils.get(eventUtils.COMMENT_MOVE))(this));
     this.xy_.translate(dx, dy);
     event.recordNew();
     eventUtils.fire(event);

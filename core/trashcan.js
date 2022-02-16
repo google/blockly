@@ -26,6 +26,8 @@ const uiPosition = goog.require('Blockly.uiPosition');
 /* eslint-disable-next-line no-unused-vars */
 const {Abstract} = goog.requireType('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
+const {BlockDelete} = goog.requireType('Blockly.Events.BlockDelete');
+/* eslint-disable-next-line no-unused-vars */
 const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
 const {ComponentManager} = goog.require('Blockly.ComponentManager');
 const {DeleteArea} = goog.require('Blockly.DeleteArea');
@@ -607,11 +609,13 @@ class Trashcan extends DeleteArea {
    * @private
    */
   onDelete_(event) {
-    if (this.workspace_.options.maxTrashcanContents <= 0) {
+    if (this.workspace_.options.maxTrashcanContents <= 0 ||
+        event.type !== eventUtils.BLOCK_DELETE) {
       return;
     }
-    if (event.type === eventUtils.BLOCK_DELETE && !event.wasShadow) {
-      const cleanedJson = this.cleanBlockJson_(event.oldJson);
+    const deleteEvent = /** @type {!BlockDelete} */ (event);
+    if (event.type === eventUtils.BLOCK_DELETE && !deleteEvent.wasShadow) {
+      const cleanedJson = this.cleanBlockJson_(deleteEvent.oldJson);
       if (this.contents_.indexOf(cleanedJson) !== -1) {
         return;
       }

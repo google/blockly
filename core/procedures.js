@@ -25,6 +25,8 @@ const {Blocks} = goog.require('Blockly.blocks');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
+const {BubbleOpen} = goog.requireType('Blockly.Events.BubbleOpen');
+/* eslint-disable-next-line no-unused-vars */
 const {Field} = goog.requireType('Blockly.Field');
 const {Msg} = goog.require('Blockly.Msg');
 const {Names} = goog.require('Blockly.Names');
@@ -325,12 +327,16 @@ const updateMutatorFlyout = function(workspace) {
  * @package
  */
 const mutatorOpenListener = function(e) {
-  if (!(e.type === eventUtils.BUBBLE_OPEN && e.bubbleType === 'mutator' &&
-        e.isOpen)) {
+  if (e.type !== eventUtils.BUBBLE_OPEN) {
     return;
   }
-  const workspaceId = /** @type {string} */ (e.workspaceId);
-  const block = Workspace.getById(workspaceId).getBlockById(e.blockId);
+  const bubbleEvent = /** @type {!BubbleOpen} */ (e);
+  if (!(bubbleEvent.bubbleType === 'mutator' && bubbleEvent.isOpen)) {
+    return;
+  }
+  const workspaceId = /** @type {string} */ (bubbleEvent.workspaceId);
+  const block =
+      Workspace.getById(workspaceId).getBlockById(bubbleEvent.blockId);
   const type = block.type;
   if (type !== 'procedures_defnoreturn' && type !== 'procedures_defreturn') {
     return;

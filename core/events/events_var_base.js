@@ -15,16 +15,16 @@
  */
 goog.module('Blockly.Events.VarBase');
 
-const {Abstract} = goog.require('Blockly.Events.Abstract');
+const {Abstract: AbstractEvent} = goog.require('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
 const {VariableModel} = goog.requireType('Blockly.VariableModel');
 
 
 /**
  * Abstract class for a variable event.
- * @extends {Abstract}
+ * @extends {AbstractEvent}
  */
-class VarBase extends Abstract {
+class VarBase extends AbstractEvent {
   /**
    * @param {!VariableModel=} opt_variable The variable this event
    *     corresponds to.  Undefined for a blank event.

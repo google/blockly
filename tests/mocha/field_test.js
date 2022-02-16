@@ -592,14 +592,15 @@ suite('Abstract Fields', function() {
 
   suite('Customization', function() {
     // All this field does is wrap the abstract field.
-    function CustomField(opt_config) {
-      CustomField.superClass_.constructor.call(
-          this, 'value', null, opt_config);
+    class CustomField extends Blockly.Field {
+      constructor(opt_config) {
+        super('value', null, opt_config);
+      }
+
+      static fromJson(options) {
+        return new CustomField(options);
+      }
     }
-    Blockly.utils.object.inherits(CustomField, Blockly.Field);
-    CustomField.fromJson = function(options) {
-      return new CustomField(options);
-    };
 
     suite('Tooltip', function() {
       test('JS Constructor', function() {

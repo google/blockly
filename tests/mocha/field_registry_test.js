@@ -10,13 +10,15 @@ const {createDeprecationWarningStub, sharedTestSetup, sharedTestTeardown} = goog
 
 
 suite('Field Registry', function() {
-  function CustomFieldType(value) {
-    CustomFieldType.superClass_.constructor.call(this, value);
+  class CustomFieldType extends Blockly.Field {
+    constructor(value) {
+      super(value);
+    }
+
+    static fromJson(options) {
+      return new CustomFieldType(options['value']);
+    }
   }
-  Blockly.utils.object.inherits(CustomFieldType, Blockly.Field);
-  CustomFieldType.fromJson = function(options) {
-    return new CustomFieldType(options['value']);
-  };
 
   setup(function() {
     sharedTestSetup.call(this);

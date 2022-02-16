@@ -565,7 +565,7 @@ class Field {
   isClickable() {
     return this.enabled_ && !!this.sourceBlock_ &&
         this.sourceBlock_.isEditable() &&
-        this.showEditor_ != Field.prototype.showEditor;
+        this.showEditor_ !== Field.prototype.showEditor_;
   }
 
   /**

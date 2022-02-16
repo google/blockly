@@ -42,10 +42,13 @@ class TabNavigateCursor extends BasicCursor {
    * @override
    */
   validNode_(node) {
+    console.log('called');
     let isValid = false;
     const type = node && node.getType();
     if (node) {
       const location = /** @type {Field} */ (node.getLocation());
+      console.log(location);
+      console.log(location.isTabNavigable());
       if (type === ASTNode.types.FIELD && location &&
           location.isTabNavigable() && location.isClickable()) {
         isValid = true;

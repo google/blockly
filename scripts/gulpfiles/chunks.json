@@ -253,7 +253,6 @@
     "./core/extensions.js",
     "./core/block.js",
     "./core/utils/string.js",
-    "./core/utils/object.js",
     "./core/dialog.js",
     "./core/events/events_var_base.js",
     "./core/events/events_var_create.js",

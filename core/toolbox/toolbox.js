@@ -483,7 +483,7 @@ class Toolbox extends DeleteArea {
       }
       // Adds the ID to the HTML element that can receive a click.
       // This is used in onClick_ to find the toolboxItem that was clicked.
-      if (toolboxItem.getClickTarget) {
+      if (toolboxItem.getClickTarget()) {
         toolboxItem.getClickTarget().setAttribute('id', toolboxItem.getId());
       }
     }

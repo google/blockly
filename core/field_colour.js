@@ -38,7 +38,7 @@ class FieldColour extends Field {
   /**
    * @param {string=} opt_value The initial value of the field. Should be in
    *    '#rrggbb' format. Defaults to the first value in the default colour
-   * array.
+   *    array.
    * @param {Function=} opt_validator A function that is called to validate
    *    changes to the field's value. Takes in a colour string & returns a
    *    validated colour string ('#rrggbb' format), or null to abort the
@@ -50,9 +50,10 @@ class FieldColour extends Field {
    * @alias Blockly.FieldColour
    */
   constructor(opt_value, opt_validator, opt_config) {
-    super(opt_value, opt_validator, opt_config);
+    super(Field.SENTINEL);
 
-    if (!this.value_) this.value_ = FieldColour.COLOURS[0];
+    /** @override */
+    this.value_ = FieldColour.COLOURS[0];
 
     /**
      * The field's colour picker element.
@@ -147,6 +148,11 @@ class FieldColour extends Field {
      * @private
      */
     this.columns_ = 0;
+
+    if (opt_value == Field.SENTINEL) return;
+    if (opt_config) this.configure_(opt_config);
+    this.setValue(opt_value);
+    if (opt_validator) this.setValidator(opt_validator);
   }
 
   /**
@@ -156,7 +162,7 @@ class FieldColour extends Field {
    * @override
    */
   configure_(config) {
-    this.configure_(config);
+    super.configure_(config);
     if (config['colourOptions']) {
       this.colours_ = config['colourOptions'];
       this.titles_ = config['colourTitles'];

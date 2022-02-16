@@ -19,30 +19,37 @@ suite('Abstract Fields', function() {
   });
 
   suite('Is Serializable', function() {
-    // Both EDITABLE and SERIALIZABLE are default.
-    function FieldDefault() {
-      this.name = 'NAME';
+    class FieldDefault extends Blockly.Field {
+      constructor() {
+        super();
+        this.name = 'NAME';
+      }
     }
-    FieldDefault.prototype = Object.create(Blockly.Field.prototype);
-    // EDITABLE is false and SERIALIZABLE is default.
-    function FieldFalseDefault() {
-      this.name = 'NAME';
+
+    class FieldFalseDefault extends Blockly.Field {
+      constructor() {
+        super();
+        this.name = 'NAME';
+        this.EDITABLE = false;
+      }
     }
-    FieldFalseDefault.prototype = Object.create(Blockly.Field.prototype);
-    FieldFalseDefault.prototype.EDITABLE = false;
-    // EDITABLE is default and SERIALIZABLE is true.
-    function FieldDefaultTrue() {
-      this.name = 'NAME';
+
+    class FieldDefaultTrue extends Blockly.Field {
+      constructor() {
+        super();
+        this.name = 'NAME';
+        this.SERIALIZABLE = true;
+      }
     }
-    FieldDefaultTrue.prototype = Object.create(Blockly.Field.prototype);
-    FieldDefaultTrue.prototype.SERIALIZABLE = true;
-    // EDITABLE is false and SERIALIZABLE is true.
-    function FieldFalseTrue() {
-      this.name = 'NAME';
+
+    class FieldFalseTrue extends Blockly.Field {
+      constructor() {
+        super();
+        this.name = 'NAME';
+        this.EDITABLE = false;
+        this.SERIALIZABLE = true;
+      }
     }
-    FieldFalseTrue.prototype = Object.create(Blockly.Field.prototype);
-    FieldFalseTrue.prototype.EDITABLE = false;
-    FieldFalseTrue.prototype.SERIALIZABLE = true;
 
     /* Test Backwards Compatibility */
     test('Editable Default(true), Serializable Default(false)', function() {

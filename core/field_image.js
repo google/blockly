@@ -147,7 +147,7 @@ class FieldImage extends Field {
    * @override
    */
   configure_(config) {
-    this.configure_(config);
+    super.configure_(config);
     this.flipRtl_ = !!config['flipRtl'];
     this.altText_ = parsing.replaceMessageReferences(config['alt']) || '';
   }

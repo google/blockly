@@ -40,9 +40,7 @@ class FieldLabel extends Field {
    * @alias Blockly.FieldLabel
    */
   constructor(opt_value, opt_class, opt_config) {
-    super(opt_value, null, opt_config);
-
-    if (!this.value_) this.value_ = '';
+    super(Field.SENTINEL);
 
     /**
      * The html class name to use for this field.
@@ -51,6 +49,9 @@ class FieldLabel extends Field {
      */
     this.class_ = null;
 
+    /** @override */
+    this.value_ = '';
+
     /**
      * Editable fields usually show some sort of UI indicating they are
      * editable. This field should not.
@@ -58,9 +59,13 @@ class FieldLabel extends Field {
      */
     this.EDITABLE = false;
 
-    if (!opt_config) {  // If the config was not passed use old configuration.
+    if (opt_value == Field.SENTINEL) return;
+    if (opt_config) {
+      this.configure_(opt_config);
+    } else {
       this.class_ = opt_class || null;
     }
+    this.setValue(opt_value);
   }
 
   /**

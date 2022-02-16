@@ -69,13 +69,15 @@ goog.require('Blockly.Events.BlockMove');
  *     type-specific functions for this block.
  * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
  *     create a new ID.
+ * @param {boolean=} opt_skipInit If true will not call init() on the block, so
+ *     that the subclass can do that instead.
  * @constructor
  * @implements {IASTNodeLocation}
  * @implements {IDeletable}
  * @throws When the prototypeName is not valid or not allowed.
  * @alias Blockly.Block
  */
-const Block = function(workspace, prototypeName, opt_id) {
+const Block = function(workspace, prototypeName, opt_id, opt_skipInit) {
   const {Generator} = goog.module.get('Blockly.Generator');
   if (Generator && typeof Generator.prototype[prototypeName] !== 'undefined') {
     // Occluding Generator class members is not allowed.
@@ -326,6 +328,43 @@ const Block = function(workspace, prototypeName, opt_id) {
   workspace.addTopBlock(this);
   workspace.addTypedBlock(this);
 
+  if (!opt_skipInit) this.doInit_();
+};
+
+/**
+ * @typedef {{
+ *            text:?string,
+ *            pinned:boolean,
+ *            size:Size
+ *          }}
+ */
+Block.CommentModel;
+
+/**
+ * An optional callback method to use whenever the block's parent workspace
+ * changes. This is usually only called from the constructor, the block type
+ * initializer function, or an extension initializer function.
+ * @type {undefined|?function(Abstract)}
+ */
+Block.prototype.onchange;
+
+/**
+ * The language-neutral ID given to the collapsed input.
+ * @const {string}
+ */
+Block.COLLAPSED_INPUT_NAME = constants.COLLAPSED_INPUT_NAME;
+
+/**
+ * The language-neutral ID given to the collapsed field.
+ * @const {string}
+ */
+Block.COLLAPSED_FIELD_NAME = constants.COLLAPSED_FIELD_NAME;
+
+/**
+ * Calls the init() function hand handles associated event firing, etc.
+ * @protected
+ */
+Block.prototype.doInit_ = function() {
   // All events fired should be part of the same group.
   // Any events fired during init should not be undoable,
   // so that block creation is atomic.
@@ -364,35 +403,6 @@ const Block = function(workspace, prototypeName, opt_id) {
     this.setOnChange(this.onchange);
   }
 };
-
-/**
- * @typedef {{
- *            text:?string,
- *            pinned:boolean,
- *            size:Size
- *          }}
- */
-Block.CommentModel;
-
-/**
- * An optional callback method to use whenever the block's parent workspace
- * changes. This is usually only called from the constructor, the block type
- * initializer function, or an extension initializer function.
- * @type {undefined|?function(Abstract)}
- */
-Block.prototype.onchange;
-
-/**
- * The language-neutral ID given to the collapsed input.
- * @const {string}
- */
-Block.COLLAPSED_INPUT_NAME = constants.COLLAPSED_INPUT_NAME;
-
-/**
- * The language-neutral ID given to the collapsed field.
- * @const {string}
- */
-Block.COLLAPSED_FIELD_NAME = constants.COLLAPSED_FIELD_NAME;
 
 /**
  * Dispose of this block.

@@ -120,7 +120,6 @@ class Comment extends Icon {
      */
     this.paragraphElement_ = null;
 
-
     this.createIcon();
   }
 

@@ -98,6 +98,8 @@ goog.require('Blockly.Touch');
  * @alias Blockly.BlockSvg
  */
 const BlockSvg = function(workspace, prototypeName, opt_id) {
+  BlockSvg.superClass_.constructor.call(
+      this, workspace, prototypeName, opt_id, true);
   /**
    * An optional method called when a mutator dialog is first opened.
    * This function must create and initialize a top-level block for the mutator
@@ -179,7 +181,6 @@ const BlockSvg = function(workspace, prototypeName, opt_id) {
    */
   this.warning = null;
 
-
   // Create core elements for the block.
   /**
    * @type {!SVGGElement}
@@ -220,14 +221,13 @@ const BlockSvg = function(workspace, prototypeName, opt_id) {
   this.eventsInit_ = false;
 
   /** @type {!WorkspaceSvg} */
-  this.workspace = workspace;
-
+  this.workspace;
   /** @type {RenderedConnection} */
-  this.outputConnection = null;
+  this.outputConnection;
   /** @type {RenderedConnection} */
-  this.nextConnection = null;
+  this.nextConnection;
   /** @type {RenderedConnection} */
-  this.previousConnection = null;
+  this.previousConnection;
 
   /**
    * Whether to move the block to the drag surface when it is dragged.
@@ -241,7 +241,6 @@ const BlockSvg = function(workspace, prototypeName, opt_id) {
   const svgPath = this.pathObject.svgPath;
   svgPath.tooltip = this;
   Tooltip.bindMouseEvents(svgPath);
-  BlockSvg.superClass_.constructor.call(this, workspace, prototypeName, opt_id);
 
   // Expose this block's ID on its top-level SVG group.
   if (this.svgGroup_.dataset) {
@@ -251,6 +250,8 @@ const BlockSvg = function(workspace, prototypeName, opt_id) {
     // can be set with setAttribute().
     this.svgGroup_.setAttribute('data-id', this.id);
   }
+
+  this.doInit_();
 };
 object.inherits(BlockSvg, Block);
 

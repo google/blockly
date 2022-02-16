@@ -118,8 +118,11 @@ class FieldDropdown extends Field {
      * @type {(!Array<!Array>|!function(this:FieldDropdown): !Array<!Array>)}
      * @protected
      */
-    this.menuGenerator_ = /** @type {(!Array<!Array>|
-        !function(this:FieldDropdown): !Array<!Array>)} */ (menuGenerator);
+    this.menuGenerator_ =
+        /**
+@type {(!Array<!Array>|
+!function(this:FieldDropdown): !Array<!Array>)}
+*/ (menuGenerator);
 
     /**
      * A cache of the most recently generated options.

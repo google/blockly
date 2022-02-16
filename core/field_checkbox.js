@@ -24,7 +24,7 @@ goog.require('Blockly.Events.BlockChange');
 
 /**
  * Class for a checkbox field.
-   * @extends {Field}
+ * @extends {Field}
  */
 class FieldCheckbox extends Field {
   /**

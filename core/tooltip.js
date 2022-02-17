@@ -410,6 +410,61 @@ const unblock = function() {
 exports.unblock = unblock;
 
 /**
+ * Renders the tooltip content into the tooltip div.
+ */
+const renderContent = function() {
+  let tip = getTooltipOfObject(element);
+  tip = blocklyString.wrap(tip, LIMIT);
+  // Create new text, line by line.
+  const lines = tip.split('\n');
+  for (let i = 0; i < lines.length; i++) {
+    const div = document.createElement('div');
+    div.appendChild(document.createTextNode(lines[i]));
+    DIV.appendChild(div);
+  }
+};
+
+/**
+ * Gets the coordinates for the tooltip div, taking into account the edges of the screen to
+ * prevent showing the tooltip offscreen.
+ * @param {boolean} rtl True if the tooltip should be in right-to-left layout.
+ * @returns {{x: number, y: number}} Coordinates at which the tooltip div should be placed.
+ */
+const getPosition = function(rtl) {
+  // Position the tooltip just below the cursor.
+  const windowWidth = document.documentElement.clientWidth;
+  const windowHeight = document.documentElement.clientHeight;
+
+  let anchorX = lastX;
+  if (rtl) {
+    anchorX -= OFFSET_X + DIV.offsetWidth;
+  } else {
+    anchorX += OFFSET_X;
+  }
+
+  let anchorY = lastY + OFFSET_Y;
+  if (anchorY + DIV.offsetHeight > windowHeight + window.scrollY) {
+    // Falling off the bottom of the screen; shift the tooltip up.
+    anchorY -= DIV.offsetHeight + 2 * OFFSET_Y;
+  }
+
+  if (rtl) {
+    // Prevent falling off left edge in RTL mode.
+    anchorX = Math.max(MARGINS - window.scrollX, anchorX);
+  } else {
+    if (anchorX + DIV.offsetWidth >
+        windowWidth + window.scrollX - 2 * MARGINS) {
+      // Falling off the right edge of the screen;
+      // clamp the tooltip on the edge.
+      anchorX = windowWidth - DIV.offsetWidth - 2 * MARGINS;
+    }
+  }
+
+  return {x: anchorX, y: anchorY};
+};
+
+
+/**
  * Create the tooltip and show it.
  */
 const show = function() {
@@ -423,46 +478,17 @@ const show = function() {
   }
   // Erase all existing text.
   DIV.textContent = '';
-  let tip = getTooltipOfObject(element);
-  tip = blocklyString.wrap(tip, LIMIT);
-  // Create new text, line by line.
-  const lines = tip.split('\n');
-  for (let i = 0; i < lines.length; i++) {
-    const div = document.createElement('div');
-    div.appendChild(document.createTextNode(lines[i]));
-    DIV.appendChild(div);
-  }
-  const rtl = /** @type {{RTL: boolean}} */ (element).RTL;
-  const windowWidth = document.documentElement.clientWidth;
-  const windowHeight = document.documentElement.clientHeight;
+
+  // Add new content.
+  renderContent();
+
   // Display the tooltip.
+  const rtl = /** @type {{RTL: boolean}} */ (element).RTL;
   DIV.style.direction = rtl ? 'rtl' : 'ltr';
   DIV.style.display = 'block';
   visible = true;
-  // Move the tooltip to just below the cursor.
-  let anchorX = lastX;
-  if (rtl) {
-    anchorX -= OFFSET_X + DIV.offsetWidth;
-  } else {
-    anchorX += OFFSET_X;
-  }
-  let anchorY = lastY + OFFSET_Y;
-
-  if (anchorY + DIV.offsetHeight > windowHeight + window.scrollY) {
-    // Falling off the bottom of the screen; shift the tooltip up.
-    anchorY -= DIV.offsetHeight + 2 * OFFSET_Y;
-  }
-  if (rtl) {
-    // Prevent falling off left edge in RTL mode.
-    anchorX = Math.max(MARGINS - window.scrollX, anchorX);
-  } else {
-    if (anchorX + DIV.offsetWidth >
-        windowWidth + window.scrollX - 2 * MARGINS) {
-      // Falling off the right edge of the screen;
-      // clamp the tooltip on the edge.
-      anchorX = windowWidth - DIV.offsetWidth - 2 * MARGINS;
-    }
-  }
-  DIV.style.top = anchorY + 'px';
-  DIV.style.left = anchorX + 'px';
+  
+  const {x, y} = getPosition(rtl);
+  DIV.style.left = x + 'px';
+  DIV.style.top = y + 'px';
 };

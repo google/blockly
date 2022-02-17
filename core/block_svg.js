@@ -92,7 +92,7 @@ goog.require('Blockly.Touch');
 class BlockSvg extends Block {
   /**
    * @param {!WorkspaceSvg} workspace The block's workspace.
-   * @param {?string} prototypeName Name of the language object containing
+   * @param {!string} prototypeName Name of the language object containing
    *     type-specific functions for this block.
    * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
    *     create a new ID.
@@ -390,7 +390,8 @@ class BlockSvg extends Block {
 
     const oldXY = this.getRelativeToSurfaceXY();
     if (newParent) {
-      newParent.getSvgRoot().appendChild(svgRoot);
+      ( /** @type {!BlockSvg} */ (newParent))
+          .getSvgRoot().appendChild(svgRoot);
       const newXY = this.getRelativeToSurfaceXY();
       // Move the connections to match the child's new position.
       this.moveConnections(newXY.x - oldXY.x, newXY.y - oldXY.y);
@@ -790,7 +791,8 @@ class BlockSvg extends Block {
 
     // Recurse through all blocks attached under this one.
     for (let i = 0; i < this.childBlocks_.length; i++) {
-      this.childBlocks_[i].moveConnections(dx, dy);
+      (/** @type {!BlockSvg} */ (this.childBlocks_[i]))
+          .moveConnections(dx, dy);
     }
   }
 
@@ -814,7 +816,7 @@ class BlockSvg extends Block {
     }
     // Recurse through all blocks attached under this one.
     for (let i = 0; i < this.childBlocks_.length; i++) {
-      this.childBlocks_[i].setDragging(adding);
+      (/** @type {!BlockSvg} */ (this.childBlocks_[i])).setDragging(adding);
     }
   }
 
@@ -998,7 +1000,8 @@ class BlockSvg extends Block {
    * @package
    */
   updateDisabled() {
-    const children = this.getChildren(false);
+    const children =
+        /** @type {!Array<!BlockSvg>} */ (this.getChildren(false));
     this.applyColour();
     if (this.isCollapsed()) {
       return;
@@ -1751,7 +1754,7 @@ class BlockSvg extends Block {
     let height = this.height;
     let width = this.width;
     // Recursively add size of subsequent blocks.
-    const nextBlock = this.getNextBlock();
+    const nextBlock = /** @type {!BlockSvg} */ (this.getNextBlock());
     if (nextBlock) {
       const nextHeightWidth = nextBlock.getHeightWidth();
       const workspace = /** @type {!WorkspaceSvg} */ (this.workspace);

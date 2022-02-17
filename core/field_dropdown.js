@@ -25,6 +25,8 @@ const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const parsing = goog.require('Blockly.utils.parsing');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const utilsString = goog.require('Blockly.utils.string');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
 const {Field} = goog.require('Blockly.Field');

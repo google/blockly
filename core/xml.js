@@ -21,6 +21,8 @@ const utilsXml = goog.require('Blockly.utils.xml');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
 const {Connection} = goog.requireType('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
 const {Field} = goog.requireType('Blockly.Field');
@@ -599,10 +601,11 @@ const domToBlock = function(xmlBlock, workspace) {
   try {
     topBlock = domToBlockHeadless(xmlBlock, workspace);
     // Generate list of all blocks.
-    const blocks = topBlock.getDescendants(false);
     if (workspace.rendered) {
-      // Wait to track connections to speed up assembly.
-      topBlock.setConnectionTracking(false);
+      const topBlockSvg = /** @type {!BlockSvg} */ (topBlock);
+      const blocks = /** @type {!Array<!BlockSvg>} */
+          (topBlock.getDescendants(false));
+      topBlockSvg.setConnectionTracking(false);
       // Render each block.
       for (let i = blocks.length - 1; i >= 0; i--) {
         blocks[i].initSvg();
@@ -613,15 +616,16 @@ const domToBlock = function(xmlBlock, workspace) {
       // Populating the connection database may be deferred until after the
       // blocks have rendered.
       setTimeout(function() {
-        if (!topBlock.disposed) {
-          topBlock.setConnectionTracking(true);
+        if (!topBlockSvg.disposed) {
+          topBlockSvg.setConnectionTracking(true);
         }
       }, 1);
-      topBlock.updateDisabled();
+      topBlockSvg.updateDisabled();
       // Allow the scrollbars to resize and move based on the new contents.
       // TODO(@picklesrus): #387. Remove when domToBlock avoids resizing.
       workspace.resizeContents();
     } else {
+      const blocks = topBlock.getDescendants(false);
       for (let i = blocks.length - 1; i >= 0; i--) {
         blocks[i].initModel();
       }
@@ -778,8 +782,9 @@ const applyCommentTagNodes = function(xmlChildren, block) {
     }
 
     if (pinned && block.getCommentIcon && !block.isInFlyout) {
+      const blockSvg = /** @type {BlockSvg} */ (block);
       setTimeout(function() {
-        block.getCommentIcon().setVisible(true);
+        blockSvg.getCommentIcon().setVisible(true);
       }, 1);
     }
   }
@@ -953,8 +958,11 @@ const domToBlockHeadless = function(
   applyNextTagNodes(xmlChildNameMap.next, workspace, block);
 
   if (shouldCallInitSvg) {
-    // InitSvg needs to be called after variable fields are loaded.
-    block.initSvg();
+    // This shouldn't even be called here
+    // (ref: https://github.com/google/blockly/pull/4296#issuecomment-884226021
+    // But the XML serializer/deserializer is iceboxed so I'm not going to fix
+    // it.
+    (/** @type {!BlockSvg} */ (block)).initSvg();
   }
 
   const inline = xmlBlock.getAttribute('inline');

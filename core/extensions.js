@@ -513,11 +513,11 @@ exports.buildTooltipWithFieldText = buildTooltipWithFieldText;
  * @this {Block}
  */
 const extensionParentTooltip = function() {
-  this.tooltipWhenNotConnected = this.tooltip;
+  const tooltipWhenNotConnected = this.tooltip;
   this.setTooltip(function() {
     const parent = this.getParent();
     return (parent && parent.getInputsInline() && parent.tooltip) ||
-        this.tooltipWhenNotConnected;
+        tooltipWhenNotConnected;
   }.bind(this));
 };
 register('parent_tooltip_when_inline', extensionParentTooltip);

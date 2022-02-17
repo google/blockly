@@ -344,7 +344,8 @@ class Mutator extends Icon {
       }
 
       this.rootBlock_ = this.block_.decompose(this.workspace_);
-      const blocks = this.rootBlock_.getDescendants(false);
+      const blocks = /** @type {!Array<!BlockSvg>} */
+          (this.rootBlock_.getDescendants(false));
       for (let i = 0, child; (child = blocks[i]); i++) {
         child.render();
       }
@@ -367,11 +368,9 @@ class Mutator extends Icon {
       // Save the initial connections, then listen for further changes.
       if (this.block_.saveConnections) {
         const thisRootBlock = this.rootBlock_;
-        const mutatorBlock =
-            /** @type {{saveConnections: function(!Block)}} */ (this.block_);
-        mutatorBlock.saveConnections(this.rootBlock_);
+        this.block_.saveConnections(thisRootBlock);
         this.sourceListener_ = function() {
-          mutatorBlock.saveConnections(thisRootBlock);
+          this.block_.saveConnections(thisRootBlock);
         };
         this.block_.workspace.addChangeListener(this.sourceListener_);
       }

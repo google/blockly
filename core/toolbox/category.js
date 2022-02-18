@@ -40,7 +40,7 @@ const {ToolboxItem} = goog.require('Blockly.ToolboxItem');
 class ToolboxCategory extends ToolboxItem {
   /**
    * @param {!toolbox.CategoryInfo} categoryDef The information needed
-   *     to create a category in the toolbox
+   *     to create a category in the toolbox.
    * @param {!IToolbox} toolbox The parent toolbox for the category.
    * @param {ICollapsibleToolboxItem=} opt_parent The parent category or null if
    *     the category does not have a parent.

@@ -66,6 +66,7 @@
 	"LEAPHY_BUZZ_HERTZ": "Buzz Herz",
 	"LEAPHY_BUZZ_MS": "Buzz ms",
 	"LEAPHY_SERIAL_PRINT": "Print print",
+	"LEAPHY_DISPLAY_PRINT": "Print display",
 	"LEAPHY_SITUATION_CATEGORY": "Sitation Category Title",
 	"LEAPHY_NUMBERS_CATEGORY": "Numbers Category Title",
 	"LEAPHY_VARIABLES_CATEGORY": "Variables Category Title",

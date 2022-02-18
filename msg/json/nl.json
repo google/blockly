@@ -67,6 +67,7 @@
 	"LEAPHY_VARIABLES_CATEGORY": "Variabelen",
 	"LEAPHY_FUNCTIONS_CATEGORY": "Eigen blokken",
 	"LEAPHY_SERIAL_PRINT": "Toon op scherm",
+	"LEAPHY_DISPLAY_PRINT": "Toon op display",
 	"ARD_SERVO_WRITE": "Servo",
 	"ARD_SERVO_WRITE_TO": "op",
 	"ARD_SERVO_WRITE_DEG_180": "°",

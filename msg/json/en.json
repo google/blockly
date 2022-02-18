@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2022-02-18 10:58:57.973642",
+		"lastupdated": "2022-02-18 16:21:02.635947",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -72,6 +72,7 @@
 	"LEAPHY_BUZZ_HERTZ": "Hertz",
 	"LEAPHY_BUZZ_MS": "ms",
 	"LEAPHY_SERIAL_PRINT": "Show on screen",
+	"LEAPHY_DISPLAY_PRINT": "Show on display",
 	"LEAPHY_SITUATION_CATEGORY": "Thinkflow",
 	"LEAPHY_NUMBERS_CATEGORY": "Numbers",
 	"LEAPHY_VARIABLES_CATEGORY": "Variables",

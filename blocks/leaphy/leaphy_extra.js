@@ -309,3 +309,39 @@ Blockly.Blocks['leaphy_sonar_read'] = {
         this, 'TRIG_PIN', 'digitalPins');
   }
 };
+
+Blockly.Blocks['leaphy_display_print_line'] = {
+  /**
+     * Block for printing line to OLED display
+     * @this Blockly.Block
+     */
+  init: function() {
+    this.appendDummyInput()
+        .appendField(Blockly.Msg.LEAPHY_DISPLAY_PRINT);
+    this.appendValueInput('VALUE');
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setStyle('leaphy_blocks');
+  },
+};
+
+Blockly.Blocks['leaphy_display_print_value'] = {
+  /**
+     * Block for printing value to OLED display
+     * @this Blockly.Block
+     */
+  init: function() {
+    this.appendDummyInput()
+        .appendField(Blockly.Msg.LEAPHY_DISPLAY_PRINT);
+    this.appendValueInput('NAME');
+    this.appendDummyInput()
+        .appendField("=");
+    this.appendValueInput('VALUE');
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setStyle('leaphy_blocks');
+  },
+};
+

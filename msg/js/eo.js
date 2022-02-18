@@ -3,7 +3,7 @@
 'use strict';
 
 Blockly.Msg["ADD_COMMENT"] = "Aldoni komenton";
-Blockly.Msg["ARD_ANALOGWRITE"] = "Set analog pin";  // untranslated
+Blockly.Msg["ARD_ANALOGWRITE"] = "Set PWM pin";  // untranslated
 Blockly.Msg["ARD_DIGITALWRITE"] = "Set digital pin";  // untranslated
 Blockly.Msg["ARD_PIN_WARN1"] = "Pin %1 is needed for %2 as pin %3. Already in use as %4.";  // untranslated
 Blockly.Msg["ARD_SERVO_READ"] = "Read servo pin";  // untranslated
@@ -107,6 +107,7 @@ Blockly.Msg["LEAPHY_BUZZ_HERTZ"] = "Hertz";  // untranslated
 Blockly.Msg["LEAPHY_BUZZ_MS"] = "ms";  // untranslated
 Blockly.Msg["LEAPHY_CLICK_CATEGORY"] = "Leaphy Click";  // untranslated
 Blockly.Msg["LEAPHY_DIGITAL_READ"] = "Read digipin";  // untranslated
+Blockly.Msg["LEAPHY_DISPLAY_PRINT"] = "Show on display";  // untranslated
 Blockly.Msg["LEAPHY_EXTRA_CATEGORY"] = "Leaphy Extra";  // untranslated
 Blockly.Msg["LEAPHY_FLITZ_CATEGORY"] = "Leaphy Flitz";  // untranslated
 Blockly.Msg["LEAPHY_FLITZ_LED"] = "Set LED";  // untranslated

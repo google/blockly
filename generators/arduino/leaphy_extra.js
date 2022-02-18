@@ -197,3 +197,20 @@ Blockly.Arduino['leaphy_sonar_read'] = function (block) {
     return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
+Blockly.Arduino['leaphy_display_print_line'] = function(block) {
+    Blockly.Arduino.addInclude('include_display', '#include "OLED_Display.h"');
+    Blockly.Arduino.definitions_['define_display'] = 'OLEDDISPLAY display;';
+    var value = Blockly.Arduino.valueToCode(this, 'VALUE', Blockly.Arduino.ORDER_ATOMIC) || '0';
+    var code = 'display.println(' + value + ');\n';
+    return code;
+};
+
+Blockly.Arduino['leaphy_display_print_value'] = function(block) {
+    Blockly.Arduino.addInclude('include_display', '#include "OLED_Display.h"');
+    Blockly.Arduino.definitions_['define_display'] = 'OLEDDISPLAY display;';
+    var name = Blockly.Arduino.valueToCode(this, 'NAME', Blockly.Arduino.ORDER_ATOMIC) || '0';
+    var value = Blockly.Arduino.valueToCode(this, 'VALUE', Blockly.Arduino.ORDER_ATOMIC) || '0';
+    var code = 'display.print(' + name + ');\ndisplay.print(" = ");\ndisplay.println(' + value + ');\n';
+    return code;
+};
+

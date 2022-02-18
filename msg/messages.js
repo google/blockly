@@ -234,6 +234,9 @@ Blockly.Msg.LEAPHY_BUZZ_MS = 'ms';
 /** @type {string} */
 /// Print print
 Blockly.Msg.LEAPHY_SERIAL_PRINT = 'Show on screen';
+/** @type {string} */
+/// Print display
+Blockly.Msg.LEAPHY_DISPLAY_PRINT = 'Show on display';
 
 /** @type {string} */
 /// Sitation Category Title

@@ -475,8 +475,8 @@ class Toolbox extends DeleteArea {
         registry.Type.TOOLBOX_ITEM, registryName.toLowerCase());
     if (ToolboxItemClass) {
       const toolboxItem = new ToolboxItemClass(toolboxItemDef, this);
-      this.addToolboxItem_(toolboxItem);
       toolboxItem.init();
+      this.addToolboxItem_(toolboxItem);
       const toolboxItemDom = toolboxItem.getDiv();
       if (toolboxItemDom) {
         fragment.appendChild(toolboxItemDom);

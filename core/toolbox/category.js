@@ -39,9 +39,8 @@ const {ToolboxItem} = goog.require('Blockly.ToolboxItem');
  */
 class ToolboxCategory extends ToolboxItem {
   /**
-   * @param {!toolbox.CategoryInfo|!Object} categoryDef The information needed
-   *     to create a category in the toolbox, or ToolboxCategory.SENTINEL to
-   *     signal skipping parsing.
+   * @param {!toolbox.CategoryInfo} categoryDef The information needed
+   *     to create a category in the toolbox
    * @param {!IToolbox} toolbox The parent toolbox for the category.
    * @param {ICollapsibleToolboxItem=} opt_parent The parent category or null if
    *     the category does not have a parent.
@@ -49,6 +48,9 @@ class ToolboxCategory extends ToolboxItem {
    */
   constructor(categoryDef, toolbox, opt_parent) {
     super(categoryDef, toolbox, opt_parent);
+
+    /** @type {!toolbox.CategoryInfo} */
+    this.toolboxItemDef_;
 
     /**
      * The name that will be displayed on the category.
@@ -126,12 +128,6 @@ class ToolboxCategory extends ToolboxItem {
      * @protected
      */
     this.flyoutItems_ = [];
-
-    if (categoryDef === ToolboxItem.SENTINEL) return;
-    const def = /** @type {toolbox.CategoryInfo} */ (categoryDef);
-    this.parseItemDef_(def);
-    this.parseCategoryDef_(def);
-    this.parseContents_(def);
   }
 
   /**
@@ -193,6 +189,8 @@ class ToolboxCategory extends ToolboxItem {
    * @override
    */
   init() {
+    this.parseCategoryDef_(this.toolboxItemDef_);
+    this.parseContents_(this.toolboxItemDef_);
     this.createDom_();
     if (this.toolboxItemDef_['hidden'] === 'true') {
       this.hide();

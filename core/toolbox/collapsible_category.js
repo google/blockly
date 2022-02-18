@@ -26,7 +26,6 @@ const {IToolboxItem} = goog.requireType('Blockly.IToolboxItem');
 /* eslint-disable-next-line no-unused-vars */
 const {IToolbox} = goog.requireType('Blockly.IToolbox');
 const {ToolboxCategory} = goog.require('Blockly.ToolboxCategory');
-const {ToolboxItem} = goog.require('Blockly.ToolboxItem');
 const {ToolboxSeparator} = goog.require('Blockly.ToolboxSeparator');
 
 
@@ -38,15 +37,14 @@ const {ToolboxSeparator} = goog.require('Blockly.ToolboxSeparator');
 class CollapsibleToolboxCategory extends ToolboxCategory {
   /**
    * @param {!toolbox.CategoryInfo} categoryDef The information needed
-   *     to create a category in the toolbox, or ToolboxCategory.SENTINEL to
-   *     signal skipping parsing.
+   *     to create a category in the toolbox.
    * @param {!IToolbox} toolbox The parent toolbox for the category.
    * @param {ICollapsibleToolboxItem=} opt_parent The parent category or null if
    *     the category does not have a parent.
    * @alias Blockly.CollapsibleToolboxCategory
    */
   constructor(categoryDef, toolbox, opt_parent) {
-    super(ToolboxItem.SENTINEL, toolbox, opt_parent);
+    super(categoryDef, toolbox, opt_parent);
 
     /**
      * Container for any child categories.
@@ -68,12 +66,6 @@ class CollapsibleToolboxCategory extends ToolboxCategory {
      * @protected
      */
     this.toolboxItems_ = [];
-
-    if (categoryDef === ToolboxItem.SENTINEL) return;
-    const def = /** @type {toolbox.CategoryInfo} */ (categoryDef);
-    this.parseItemDef_(def);
-    this.parseCategoryDef_(def);
-    this.parseContents_(def);
   }
 
   /**

@@ -12,7 +12,8 @@ const {createKeyDownEvent, sharedTestSetup, sharedTestTeardown} = goog.require('
 suite('Keyboard Shortcut Registry Test', function() {
   setup(function() {
     sharedTestSetup.call(this);
-    this.registry = new Blockly.ShortcutRegistry();
+    this.registry = Blockly.ShortcutRegistry.registry;
+    this.registry.reset();
     Blockly.ShortcutItems.registerDefaultShortcuts();
   });
   teardown(function() {

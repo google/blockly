@@ -17,10 +17,9 @@ suite('Context Menu Items', function() {
     const toolbox = document.getElementById('toolbox-categories');
     this.workspace = Blockly.inject('blocklyDiv', {toolbox: toolbox});
 
-    // Declare a new registry to ensure default options are called.
-    new Blockly.ContextMenuRegistry();
-    Blockly.ContextMenuItems.registerDefaultOptions();
     this.registry = Blockly.ContextMenuRegistry.registry;
+    this.registry.reset();
+    Blockly.ContextMenuItems.registerDefaultOptions();
   });
 
   teardown(function() {

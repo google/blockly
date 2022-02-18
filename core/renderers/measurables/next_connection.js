@@ -16,7 +16,6 @@
  */
 goog.module('Blockly.blockRendering.NextConnection');
 
-const object = goog.require('Blockly.utils.object');
 const {Connection} = goog.require('Blockly.blockRendering.Connection');
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -28,21 +27,24 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
 /**
  * An object containing information about the space a next connection takes
  * up during rendering.
- * @param {!ConstantProvider} constants The rendering
- *   constants provider.
- * @param {RenderedConnection} connectionModel The connection object on
- *     the block that this represents.
- * @package
- * @constructor
  * @extends {Connection}
- * @alias Blockly.blockRendering.NextConnection
+ * @struct
  */
-const NextConnection = function(constants, connectionModel) {
-  NextConnection.superClass_.constructor.call(this, constants, connectionModel);
-  this.type |= Types.NEXT_CONNECTION;
-  this.height = this.shape.height;
-  this.width = this.shape.width;
-};
-object.inherits(NextConnection, Connection);
+class NextConnection extends Connection {
+  /**
+   * @param {!ConstantProvider} constants The rendering
+   *   constants provider.
+   * @param {!RenderedConnection} connectionModel The connection object on
+   *     the block that this represents.
+   * @package
+   * @alias Blockly.blockRendering.NextConnection
+   */
+  constructor(constants, connectionModel) {
+    super(constants, connectionModel);
+    this.type |= Types.NEXT_CONNECTION;
+    this.height = this.shape.height;
+    this.width = this.shape.width;
+  }
+}
 
 exports.NextConnection = NextConnection;

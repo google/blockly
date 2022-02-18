@@ -28,6 +28,7 @@ const registry = goog.require('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 const {BubbleDragger} = goog.require('Blockly.BubbleDragger');
+const {config} = goog.require('Blockly.config');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
 const {Field} = goog.requireType('Blockly.Field');
@@ -307,8 +308,8 @@ class Gesture {
       const currentDragDelta = Coordinate.magnitude(this.currentDragDeltaXY_);
 
       // The flyout has a different drag radius from the rest of Blockly.
-      const limitRadius = this.flyout_ ? internalConstants.FLYOUT_DRAG_RADIUS :
-                                         internalConstants.DRAG_RADIUS;
+      const limitRadius =
+          this.flyout_ ? config.flyoutDragRadius : config.dragRadius;
 
       this.hasExceededDragRadius_ = currentDragDelta > limitRadius;
       return this.hasExceededDragRadius_;

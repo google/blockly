@@ -18,7 +18,7 @@
 goog.module('Blockly.registry');
 
 /* eslint-disable-next-line no-unused-vars */
-const Abstract = goog.requireType('Blockly.Events.Abstract');
+const {Abstract} = goog.requireType('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
 const {Cursor} = goog.requireType('Blockly.Cursor');
 /* eslint-disable-next-line no-unused-vars */
@@ -73,28 +73,31 @@ exports.DEFAULT = DEFAULT;
 
 /**
  * A name with the type of the element stored in the generic.
- * @param {string} name The name of the registry type.
- * @constructor
  * @template T
- * @alias Blockly.registry.Type
  */
-const Type = function(name) {
+class Type {
   /**
-   * @type {string}
-   * @private
+   * @param {string} name The name of the registry type.
+   * @alias Blockly.registry.Type
    */
-  this.name_ = name;
-};
+  constructor(name) {
+    /**
+     * @type {string}
+     * @private
+     */
+    this.name_ = name;
+  }
+
+  /**
+   * Returns the name of the type.
+   * @return {string} The name.
+   */
+  toString() {
+    return this.name_;
+  }
+}
 exports.Type = Type;
 
-/**
- * Returns the name of the type.
- * @return {string} The name.
- * @override
- */
-Type.prototype.toString = function() {
-  return this.name_;
-};
 
 /** @type {!Type<IConnectionChecker>} */
 Type.CONNECTION_CHECKER = new Type('connectionChecker');

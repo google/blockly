@@ -17,10 +17,12 @@
  */
 goog.module('Blockly.Events.utils');
 
-/* eslint-disable-next-line no-unused-vars */
-const Abstract = goog.requireType('Blockly.Events.Abstract');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const registry = goog.require('Blockly.registry');
+/* eslint-disable-next-line no-unused-vars */
+const {Abstract} = goog.requireType('Blockly.Events.Abstract');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockChange} = goog.requireType('Blockly.Events.BlockChange');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockCreate} = goog.requireType('Blockly.Events.BlockCreate');
 /* eslint-disable-next-line no-unused-vars */
@@ -31,6 +33,8 @@ const {Block} = goog.requireType('Blockly.Block');
 const {CommentCreate} = goog.requireType('Blockly.Events.CommentCreate');
 /* eslint-disable-next-line no-unused-vars */
 const {CommentMove} = goog.requireType('Blockly.Events.CommentMove');
+/* eslint-disable-next-line no-unused-vars */
+const {ViewportChange} = goog.requireType('Blockly.Events.ViewportChange');
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
 
@@ -307,6 +311,7 @@ exports.BUMP_EVENTS = BUMP_EVENTS;
 
 /**
  * List of events queued for firing.
+ * @type {!Array<!Abstract>}
  */
 const FIRE_QUEUE = [];
 
@@ -365,7 +370,9 @@ const filter = function(queueIn, forward) {
     if (!event.isNull()) {
       // Treat all UI events as the same type in hash table.
       const eventType = event.isUiEvent ? UI : event.type;
-      const key = [eventType, event.blockId, event.workspaceId].join(' ');
+      // TODO(#5927): Ceck whether `blockId` exists before accessing it.
+      const blockId = /** @type {*} */ (event).blockId;
+      const key = [eventType, blockId, event.workspaceId].join(' ');
 
       const lastEntry = hash[key];
       const lastEvent = lastEntry ? lastEntry.event : null;
@@ -376,22 +383,25 @@ const filter = function(queueIn, forward) {
         hash[key] = {event: event, index: i};
         mergedQueue.push(event);
       } else if (event.type === MOVE && lastEntry.index === i - 1) {
+        const moveEvent = /** @type {!BlockMove} */ (event);
         // Merge move events.
-        lastEvent.newParentId = event.newParentId;
-        lastEvent.newInputName = event.newInputName;
-        lastEvent.newCoordinate = event.newCoordinate;
+        lastEvent.newParentId = moveEvent.newParentId;
+        lastEvent.newInputName = moveEvent.newInputName;
+        lastEvent.newCoordinate = moveEvent.newCoordinate;
         lastEntry.index = i;
       } else if (
           event.type === CHANGE && event.element === lastEvent.element &&
           event.name === lastEvent.name) {
+        const changeEvent = /** @type {!BlockChange} */ (event);
         // Merge change events.
-        lastEvent.newValue = event.newValue;
+        lastEvent.newValue = changeEvent.newValue;
       } else if (event.type === VIEWPORT_CHANGE) {
+        const viewportEvent = /** @type {!ViewportChange} */ (event);
         // Merge viewport change events.
-        lastEvent.viewTop = event.viewTop;
-        lastEvent.viewLeft = event.viewLeft;
-        lastEvent.scale = event.scale;
-        lastEvent.oldScale = event.oldScale;
+        lastEvent.viewTop = viewportEvent.viewTop;
+        lastEvent.viewLeft = viewportEvent.viewLeft;
+        lastEvent.scale = viewportEvent.scale;
+        lastEvent.oldScale = viewportEvent.oldScale;
       } else if (event.type === CLICK && lastEvent.type === BUBBLE_OPEN) {
         // Drop click events caused by opening/closing bubbles.
       } else {
@@ -546,12 +556,13 @@ exports.get = get;
  */
 const disableOrphans = function(event) {
   if (event.type === MOVE || event.type === CREATE) {
-    if (!event.workspaceId) {
+    const blockEvent = /** @type {!BlockMove|!BlockCreate} */ (event);
+    if (!blockEvent.workspaceId) {
       return;
     }
     const {Workspace} = goog.module.get('Blockly.Workspace');
-    const eventWorkspace = Workspace.getById(event.workspaceId);
-    let block = eventWorkspace.getBlockById(event.blockId);
+    const eventWorkspace = Workspace.getById(blockEvent.workspaceId);
+    let block = eventWorkspace.getBlockById(blockEvent.blockId);
     if (block) {
       // Changing blocks as part of this event shouldn't be undoable.
       const initialUndoFlag = recordUndo;

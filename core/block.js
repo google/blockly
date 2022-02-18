@@ -15,8 +15,6 @@
  */
 goog.module('Blockly.Block');
 
-/* eslint-disable-next-line no-unused-vars */
-const Abstract = goog.requireType('Blockly.Events.Abstract');
 const Extensions = goog.require('Blockly.Extensions');
 const Tooltip = goog.require('Blockly.Tooltip');
 const arrayUtils = goog.require('Blockly.utils.array');
@@ -27,8 +25,12 @@ const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const object = goog.require('Blockly.utils.object');
 const parsing = goog.require('Blockly.utils.parsing');
+/* eslint-disable-next-line no-unused-vars */
+const {Abstract} = goog.requireType('Blockly.Events.Abstract');
 const {Align, Input} = goog.require('Blockly.Input');
 const {ASTNode} = goog.require('Blockly.ASTNode');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockMove} = goog.requireType('Blockly.Events.BlockMove');
 const {Blocks} = goog.require('Blockly.blocks');
 /* eslint-disable-next-line no-unused-vars */
 const {Comment} = goog.requireType('Blockly.Comment');
@@ -316,7 +318,7 @@ const Block = function(workspace, prototypeName, opt_id) {
     this.type = prototypeName;
     const prototype = Blocks[prototypeName];
     if (!prototype || typeof prototype !== 'object') {
-      throw TypeError('Unknown block type: ' + prototypeName);
+      throw TypeError('Invalid block definition for type: ' + prototypeName);
     }
     object.mixin(this, prototype);
   }
@@ -397,9 +399,10 @@ Block.COLLAPSED_FIELD_NAME = constants.COLLAPSED_FIELD_NAME;
  * @param {boolean} healStack If true, then try to heal any gap by connecting
  *     the next statement with the previous statement.  Otherwise, dispose of
  *     all children of this block.
+ * @param {boolean=} _animate If true, show a disposal animation and sound.
  * @suppress {checkTypes}
  */
-Block.prototype.dispose = function(healStack) {
+Block.prototype.dispose = function(healStack, _animate) {
   if (!this.workspace) {
     // Already deleted.
     return;
@@ -2098,7 +2101,8 @@ Block.prototype.moveBy = function(dx, dy) {
   if (this.parentBlock_) {
     throw Error('Block has parent.');
   }
-  const event = new (eventUtils.get(eventUtils.BLOCK_MOVE))(this);
+  const event = /** @type {!BlockMove} */ (
+      new (eventUtils.get(eventUtils.BLOCK_MOVE))(this));
   this.xy_.translate(dx, dy);
   event.recordNew();
   eventUtils.fire(event);

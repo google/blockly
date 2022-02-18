@@ -58,7 +58,7 @@ Dart['lists_indexOf'] = function(block) {
   // Find an item in the list.
   const operator =
       block.getFieldValue('END') === 'FIRST' ? 'indexOf' : 'lastIndexOf';
-  const item = Dart.valueToCode(block, 'FIND', Dart.ORDER_NONE) || '\'\'';
+  const item = Dart.valueToCode(block, 'FIND', Dart.ORDER_NONE) || "''";
   const list =
       Dart.valueToCode(block, 'VALUE', Dart.ORDER_UNARY_POSTFIX) || '[]';
   const code = list + '.' + operator + '(' + item + ')';
@@ -112,21 +112,23 @@ Dart['lists_getIndex'] = function(block) {
       } else if (mode === 'GET') {
         const at = Dart.getAdjusted(block, 'AT', 1);
         // We need to create a procedure to avoid reevaluating values.
-        const functionName = Dart.provideFunction_('lists_get_from_end', [
-          'dynamic ' + Dart.FUNCTION_NAME_PLACEHOLDER_ +
-              '(List my_list, num x) {',
-          '  x = my_list.length - x;', '  return my_list[x];', '}'
-        ]);
+        const functionName = Dart.provideFunction_('lists_get_from_end', `
+dynamic ${Dart.FUNCTION_NAME_PLACEHOLDER_}(List my_list, num x) {
+  x = my_list.length - x;
+  return my_list[x];
+}
+`);
         const code = functionName + '(' + list + ', ' + at + ')';
         return [code, Dart.ORDER_UNARY_POSTFIX];
       } else if (mode === 'GET_REMOVE') {
         const at = Dart.getAdjusted(block, 'AT', 1);
         // We need to create a procedure to avoid reevaluating values.
-        const functionName = Dart.provideFunction_('lists_remove_from_end', [
-          'dynamic ' + Dart.FUNCTION_NAME_PLACEHOLDER_ +
-              '(List my_list, num x) {',
-          '  x = my_list.length - x;', '  return my_list.removeAt(x);', '}'
-        ]);
+        const functionName = Dart.provideFunction_('lists_remove_from_end', `
+dynamic ${Dart.FUNCTION_NAME_PLACEHOLDER_}(List my_list, num x) {
+  x = my_list.length - x;
+  return my_list.removeAt(x);
+}
+`);
         const code = functionName + '(' + list + ', ' + at + ')';
         return [code, Dart.ORDER_UNARY_POSTFIX];
       }
@@ -195,21 +197,22 @@ Dart['lists_getIndex'] = function(block) {
           code += list + '.removeAt(' + xVar + ');\n';
           return code;
         } else if (mode === 'GET') {
-          const functionName = Dart.provideFunction_('lists_get_random_item', [
-            'dynamic ' + Dart.FUNCTION_NAME_PLACEHOLDER_ + '(List my_list) {',
-            '  int x = new Math.Random().nextInt(my_list.length);',
-            '  return my_list[x];', '}'
-          ]);
+          const functionName = Dart.provideFunction_('lists_get_random_item', `
+dynamic ${Dart.FUNCTION_NAME_PLACEHOLDER_}(List my_list) {
+  int x = new Math.Random().nextInt(my_list.length);
+  return my_list[x];
+}
+`);
           const code = functionName + '(' + list + ')';
           return [code, Dart.ORDER_UNARY_POSTFIX];
         } else if (mode === 'GET_REMOVE') {
           const functionName =
-              Dart.provideFunction_('lists_remove_random_item', [
-                'dynamic ' + Dart.FUNCTION_NAME_PLACEHOLDER_ +
-                    '(List my_list) {',
-                '  int x = new Math.Random().nextInt(my_list.length);',
-                '  return my_list.removeAt(x);', '}'
-              ]);
+              Dart.provideFunction_('lists_remove_random_item', `
+dynamic ${Dart.FUNCTION_NAME_PLACEHOLDER_}(List my_list) {
+  int x = new Math.Random().nextInt(my_list.length);
+  return my_list.removeAt(x);
+}
+`);
           const code = functionName + '(' + list + ')';
           return [code, Dart.ORDER_UNARY_POSTFIX];
         }
@@ -344,18 +347,25 @@ Dart['lists_getSublist'] = function(block) {
   } else {
     const at1 = Dart.getAdjusted(block, 'AT1');
     const at2 = Dart.getAdjusted(block, 'AT2');
-    const functionName = Dart.provideFunction_('lists_get_sublist', [
-      'List ' + Dart.FUNCTION_NAME_PLACEHOLDER_ +
-          '(List list, String where1, num at1, String where2, num at2) {',
-      '  int getAt(String where, num at) {', '    if (where == \'FROM_END\') {',
-      '      at = list.length - 1 - at;',
-      '    } else if (where == \'FIRST\') {', '      at = 0;',
-      '    } else if (where == \'LAST\') {', '      at = list.length - 1;',
-      '    } else if (where != \'FROM_START\') {',
-      '      throw \'Unhandled option (lists_getSublist).\';', '    }',
-      '    return at;', '  }', '  at1 = getAt(where1, at1);',
-      '  at2 = getAt(where2, at2) + 1;', '  return list.sublist(at1, at2);', '}'
-    ]);
+    const functionName = Dart.provideFunction_('lists_get_sublist', `
+List ${Dart.FUNCTION_NAME_PLACEHOLDER_}(List list, String where1, num at1, String where2, num at2) {
+  int getAt(String where, num at) {
+    if (where == 'FROM_END') {
+      at = list.length - 1 - at;
+    } else if (where == 'FIRST') {
+      at = 0;
+    } else if (where == 'LAST') {
+      at = list.length - 1;
+    } else if (where != 'FROM_START') {
+      throw 'Unhandled option (lists_getSublist).';
+    }
+    return at;
+  }
+  at1 = getAt(where1, at1);
+  at2 = getAt(where2, at2) + 1;
+  return list.sublist(at1, at2);
+}
+`);
     code = functionName + '(' + list + ', \'' + where1 + '\', ' + at1 + ', \'' +
         where2 + '\', ' + at2 + ')';
   }
@@ -367,20 +377,21 @@ Dart['lists_sort'] = function(block) {
   const list = Dart.valueToCode(block, 'LIST', Dart.ORDER_NONE) || '[]';
   const direction = block.getFieldValue('DIRECTION') === '1' ? 1 : -1;
   const type = block.getFieldValue('TYPE');
-  const sortFunctionName = Dart.provideFunction_('lists_sort', [
-    'List ' + Dart.FUNCTION_NAME_PLACEHOLDER_ +
-        '(List list, String type, int direction) {',
-    '  var compareFuncs = {',
-    '    "NUMERIC": (a, b) => (direction * a.compareTo(b)).toInt(),',
-    '    "TEXT": (a, b) => direction * ' +
-        'a.toString().compareTo(b.toString()),',
-    '    "IGNORE_CASE": ', '       (a, b) => direction * ',
-    '      a.toString().toLowerCase().compareTo(b.toString().toLowerCase())',
-    '  };',
-    '  list = new List.from(list);',  // Clone the list.
-    '  var compare = compareFuncs[type];', '  list.sort(compare);',
-    '  return list;', '}'
-  ]);
+  const sortFunctionName = Dart.provideFunction_('lists_sort', `
+List ${Dart.FUNCTION_NAME_PLACEHOLDER_}(List list, String type, int direction) {
+  var compareFuncs = {
+    'NUMERIC': (a, b) => (direction * a.compareTo(b)).toInt(),
+    'TEXT': (a, b) => direction * a.toString().compareTo(b.toString()),
+    'IGNORE_CASE':
+      (a, b) => direction *
+      a.toString().toLowerCase().compareTo(b.toString().toLowerCase())
+  };
+  list = new List.from(list);
+  var compare = compareFuncs[type];
+  list.sort(compare);
+  return list;
+}
+`);
   return [
     sortFunctionName + '(' + list + ', ' +
         '"' + type + '", ' + direction + ')',
@@ -391,12 +402,12 @@ Dart['lists_sort'] = function(block) {
 Dart['lists_split'] = function(block) {
   // Block for splitting text into a list, or joining a list into text.
   let input = Dart.valueToCode(block, 'INPUT', Dart.ORDER_UNARY_POSTFIX);
-  const delimiter = Dart.valueToCode(block, 'DELIM', Dart.ORDER_NONE) || '\'\'';
+  const delimiter = Dart.valueToCode(block, 'DELIM', Dart.ORDER_NONE) || "''";
   const mode = block.getFieldValue('MODE');
   let functionName;
   if (mode === 'SPLIT') {
     if (!input) {
-      input = '\'\'';
+      input = "''";
     }
     functionName = 'split';
   } else if (mode === 'JOIN') {

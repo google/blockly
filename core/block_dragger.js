@@ -22,6 +22,8 @@ const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
 const registry = goog.require('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */
+const {BlockMove} = goog.requireType('Blockly.Events.BlockMove');
+/* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
@@ -376,8 +378,8 @@ const BlockDragger = class {
    * @protected
    */
   fireMoveEvent_() {
-    const event =
-        new (eventUtils.get(eventUtils.BLOCK_MOVE))(this.draggingBlock_);
+    const event = /** @type {!BlockMove} */
+        (new (eventUtils.get(eventUtils.BLOCK_MOVE))(this.draggingBlock_));
     event.oldCoordinate = this.startXY_;
     event.recordNew();
     eventUtils.fire(event);

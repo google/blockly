@@ -19,12 +19,13 @@ const Events = goog.require('Blockly.Events');
 const Procedures = goog.require('Blockly.Procedures');
 const Variables = goog.require('Blockly.Variables');
 const Xml = goog.require('Blockly.Xml');
-const internalConstants = goog.require('Blockly.internalConstants');
 const xmlUtils = goog.require('Blockly.utils.xml');
 const {Align} = goog.require('Blockly.Input');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
-const {Blocks} = goog.require('Blockly.blocks');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockDefinition} = goog.requireType('Blockly.blocks');
+const {config} = goog.require('Blockly.config');
 /* eslint-disable-next-line no-unused-vars */
 const {FieldCheckbox} = goog.require('Blockly.FieldCheckbox');
 const {FieldLabel} = goog.require('Blockly.FieldLabel');
@@ -36,11 +37,19 @@ const {Names} = goog.require('Blockly.Names');
 const {VariableModel} = goog.requireType('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
+const {defineBlocks} = goog.require('Blockly.common');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Comment');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Warning');
 
+
+/**
+ * A dictionary of the block definitions provided by this module.
+ * @type {!Object<string, !BlockDefinition>}
+ */
+const blocks = {};
+exports.blocks = blocks;
 
 /**
  * Common properties for the procedure_defnoreturn and
@@ -437,7 +446,7 @@ const PROCEDURE_DEF_COMMON = {
   callType_: 'procedures_callnoreturn',
 };
 
-Blocks['procedures_defnoreturn'] = {
+blocks['procedures_defnoreturn'] = {
   ...PROCEDURE_DEF_COMMON,
   /**
    * Block for defining a procedure with no return value.
@@ -479,7 +488,7 @@ Blocks['procedures_defnoreturn'] = {
   },
 };
 
-Blocks['procedures_defreturn'] = {
+blocks['procedures_defreturn'] = {
   ...PROCEDURE_DEF_COMMON,
   /**
    * Block for defining a procedure with a return value.
@@ -524,7 +533,7 @@ Blocks['procedures_defreturn'] = {
   },
 };
 
-Blocks['procedures_mutatorcontainer'] = {
+blocks['procedures_mutatorcontainer'] = {
   /**
    * Mutator block for procedure container.
    * @this {Block}
@@ -542,7 +551,7 @@ Blocks['procedures_mutatorcontainer'] = {
   },
 };
 
-Blocks['procedures_mutatorarg'] = {
+blocks['procedures_mutatorarg'] = {
   /**
    * Mutator block for procedure argument.
    * @this {Block}
@@ -950,8 +959,8 @@ const PROCEDURE_CALL_COMMON = {
         const block = xmlUtils.createElement('block');
         block.setAttribute('type', this.defType_);
         const xy = this.getRelativeToSurfaceXY();
-        const x = xy.x + internalConstants.SNAP_RADIUS * (this.RTL ? -1 : 1);
-        const y = xy.y + internalConstants.SNAP_RADIUS * 2;
+        const x = xy.x + config.snapRadius * (this.RTL ? -1 : 1);
+        const y = xy.y + config.snapRadius * 2;
         block.setAttribute('x', x);
         block.setAttribute('y', y);
         const mutation = this.mutationToDom();
@@ -1033,7 +1042,7 @@ const PROCEDURE_CALL_COMMON = {
   },
 };
 
-Blocks['procedures_callnoreturn'] = {
+blocks['procedures_callnoreturn'] = {
   ...PROCEDURE_CALL_COMMON,
   /**
    * Block for calling a procedure with no return value.
@@ -1056,7 +1065,7 @@ Blocks['procedures_callnoreturn'] = {
   defType_: 'procedures_defnoreturn',
 };
 
-Blocks['procedures_callreturn'] = {
+blocks['procedures_callreturn'] = {
   ...PROCEDURE_CALL_COMMON,
   /**
    * Block for calling a procedure with a return value.
@@ -1078,7 +1087,7 @@ Blocks['procedures_callreturn'] = {
   defType_: 'procedures_defreturn',
 };
 
-Blocks['procedures_ifreturn'] = {
+blocks['procedures_ifreturn'] = {
   /**
    * Block for conditionally returning a value from a procedure.
    * @this {Block}
@@ -1179,3 +1188,6 @@ Blocks['procedures_ifreturn'] = {
    */
   FUNCTION_TYPES: ['procedures_defnoreturn', 'procedures_defreturn'],
 };
+
+// Register provided blocks.
+defineBlocks(blocks);

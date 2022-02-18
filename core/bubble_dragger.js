@@ -19,6 +19,8 @@ const eventUtils = goog.require('Blockly.Events.utils');
 const svgMath = goog.require('Blockly.utils.svgMath');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockDragSurfaceSvg} = goog.requireType('Blockly.BlockDragSurfaceSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {CommentMove} = goog.requireType('Blockly.Events.CommentMove');
 const {ComponentManager} = goog.require('Blockly.ComponentManager');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
@@ -244,8 +246,9 @@ const BubbleDragger = class {
     if (this.draggingBubble_.isComment) {
       // TODO (adodson): Resolve build errors when requiring
       // WorkspaceCommentSvg.
-      const event = new (eventUtils.get(eventUtils.COMMENT_MOVE))(
-          /** @type {!WorkspaceCommentSvg} */ (this.draggingBubble_));
+      const event = /** @type {!CommentMove} */
+          (new (eventUtils.get(eventUtils.COMMENT_MOVE))(
+              /** @type {!WorkspaceCommentSvg} */ (this.draggingBubble_)));
       event.setOldCoordinate(this.startXY_);
       event.recordNew();
       eventUtils.fire(event);

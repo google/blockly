@@ -26,6 +26,11 @@ const {PathObject} = goog.requireType('Blockly.zelos.PathObject');
 const {RenderInfo} = goog.requireType('Blockly.zelos.RenderInfo');
 /* eslint-disable-next-line no-unused-vars */
 const {Row} = goog.requireType('Blockly.blockRendering.Row');
+/* eslint-disable-next-line no-unused-vars */
+const {SpacerRow} = goog.requireType('Blockly.blockRendering.SpacerRow');
+/* eslint-disable-next-line no-unused-vars */
+const {StatementInput} = goog.requireType('Blockly.zelos.StatementInput');
+const {Types} = goog.require('Blockly.blockRendering.Types');
 
 
 /**
@@ -42,6 +47,11 @@ class Drawer extends BaseDrawer {
    */
   constructor(block, info) {
     super(block, info);
+
+    /**
+     * @type {!RenderInfo}
+     */
+    this.info_;
   }
 
   /**
@@ -111,21 +121,26 @@ class Drawer extends BaseDrawer {
     if (row.height <= 0) {
       return;
     }
-    if (row.precedesStatement || row.followsStatement) {
-      const cornerHeight = this.constants_.INSIDE_CORNERS.rightHeight;
-      const remainingHeight =
-          row.height - (row.precedesStatement ? cornerHeight : 0);
-      this.outlinePath_ += (row.followsStatement ?
-                                this.constants_.INSIDE_CORNERS.pathBottomRight :
-                                '') +
-          (remainingHeight > 0 ?
-               svgPaths.lineOnAxis('V', row.yPos + remainingHeight) :
-               '') +
-          (row.precedesStatement ? this.constants_.INSIDE_CORNERS.pathTopRight :
-                                   '');
-    } else {
-      this.outlinePath_ += svgPaths.lineOnAxis('V', row.yPos + row.height);
+    if (Types.isSpacer(row)) {
+      const spacerRow = /** @type {!SpacerRow} */ (row);
+      if (spacerRow.precedesStatement || spacerRow.followsStatement) {
+        const cornerHeight = this.constants_.INSIDE_CORNERS.rightHeight;
+        const remainingHeight =
+            spacerRow.height - (spacerRow.precedesStatement ? cornerHeight : 0);
+        this.outlinePath_ +=
+            (spacerRow.followsStatement ?
+                 this.constants_.INSIDE_CORNERS.pathBottomRight :
+                 '') +
+            (remainingHeight > 0 ?
+                 svgPaths.lineOnAxis('V', spacerRow.yPos + remainingHeight) :
+                 '') +
+            (spacerRow.precedesStatement ?
+                 this.constants_.INSIDE_CORNERS.pathTopRight :
+                 '');
+        return;
+      }
     }
+    this.outlinePath_ += svgPaths.lineOnAxis('V', row.yPos + row.height);
   }
 
   /**
@@ -207,7 +222,7 @@ class Drawer extends BaseDrawer {
    * @override
    */
   drawStatementInput_(row) {
-    const input = row.getLastInput();
+    const input = /** @type {!StatementInput} */ (row.getLastInput());
     // Where to start drawing the notch, which is on the right side in LTR.
     const x = input.xPos + input.notchOffset + input.shape.width;
 

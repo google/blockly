@@ -17,8 +17,7 @@
  */
 goog.module('Blockly.Events.UiBase');
 
-const Abstract = goog.require('Blockly.Events.Abstract');
-const object = goog.require('Blockly.utils.object');
+const {Abstract: AbstractEvent} = goog.require('Blockly.Events.Abstract');
 
 
 /**
@@ -27,36 +26,38 @@ const object = goog.require('Blockly.utils.object');
  * editing to work (e.g. scrolling the workspace, zooming, opening toolbox
  * categories).
  * UI events do not undo or redo.
- * @param {string=} opt_workspaceId The workspace identifier for this event.
- *    Undefined for a blank event.
- * @extends {Abstract}
- * @constructor
- * @alias Blockly.Events.UiBase
+ * @extends {AbstractEvent}
  */
-const UiBase = function(opt_workspaceId) {
-  UiBase.superClass_.constructor.call(this);
-
+class UiBase extends AbstractEvent {
   /**
-   * Whether or not the event is blank (to be populated by fromJson).
-   * @type {boolean}
+   * @param {string=} opt_workspaceId The workspace identifier for this event.
+   *    Undefined for a blank event.
+   * @alias Blockly.Events.UiBase
    */
-  this.isBlank = typeof opt_workspaceId === 'undefined';
+  constructor(opt_workspaceId) {
+    super();
 
-  /**
-   * The workspace identifier for this event.
-   * @type {string}
-   */
-  this.workspaceId = opt_workspaceId ? opt_workspaceId : '';
+    /**
+     * Whether or not the event is blank (to be populated by fromJson).
+     * @type {boolean}
+     */
+    this.isBlank = typeof opt_workspaceId === 'undefined';
 
-  // UI events do not undo or redo.
-  this.recordUndo = false;
+    /**
+     * The workspace identifier for this event.
+     * @type {string}
+     */
+    this.workspaceId = opt_workspaceId ? opt_workspaceId : '';
 
-  /**
-   * Whether or not the event is a UI event.
-   * @type {boolean}
-   */
-  this.isUiEvent = true;
-};
-object.inherits(UiBase, Abstract);
+    // UI events do not undo or redo.
+    this.recordUndo = false;
+
+    /**
+     * Whether or not the event is a UI event.
+     * @type {boolean}
+     */
+    this.isUiEvent = true;
+  }
+}
 
 exports.UiBase = UiBase;

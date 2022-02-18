@@ -71,6 +71,7 @@ const {Bubble} = goog.require('Blockly.Bubble');
 const {CollapsibleToolboxCategory} = goog.require('Blockly.CollapsibleToolboxCategory');
 const {Comment} = goog.require('Blockly.Comment');
 const {ComponentManager} = goog.require('Blockly.ComponentManager');
+const {config} = goog.require('Blockly.config');
 const {ConnectionChecker} = goog.require('Blockly.ConnectionChecker');
 const {ConnectionDB} = goog.require('Blockly.ConnectionDB');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
@@ -655,20 +656,8 @@ const bindEventWithChecks_ = function(
 exports.bindEventWithChecks_ = bindEventWithChecks_;
 
 // Aliases to allow external code to access these values for legacy reasons.
-exports.DRAG_RADIUS = internalConstants.DRAG_RADIUS;
-exports.FLYOUT_DRAG_RADIUS = internalConstants.FLYOUT_DRAG_RADIUS;
-exports.SNAP_RADIUS = internalConstants.SNAP_RADIUS;
-exports.CONNECTING_SNAP_RADIUS = internalConstants.CONNECTING_SNAP_RADIUS;
-exports.CURRENT_CONNECTION_PREFERENCE =
-    internalConstants.CURRENT_CONNECTION_PREFERENCE;
-exports.BUMP_DELAY = internalConstants.BUMP_DELAY;
 exports.COLLAPSE_CHARS = internalConstants.COLLAPSE_CHARS;
 exports.DRAG_STACK = internalConstants.DRAG_STACK;
-exports.SPRITE = internalConstants.SPRITE;
-exports.DRAG_NONE = internalConstants.DRAG_NONE;
-exports.DRAG_STICKY = internalConstants.DRAG_STICKY;
-exports.DRAG_BEGIN = internalConstants.DRAG_BEGIN;
-exports.DRAG_FREE = internalConstants.DRAG_FREE;
 exports.OPPOSITE_TYPE = internalConstants.OPPOSITE_TYPE;
 exports.RENAME_VARIABLE_ID = internalConstants.RENAME_VARIABLE_ID;
 exports.DELETE_VARIABLE_ID = internalConstants.DELETE_VARIABLE_ID;
@@ -828,6 +817,7 @@ exports.browserEvents = browserEvents;
 exports.bumpObjects = bumpObjects;
 exports.clipboard = clipboard;
 exports.common = common;
+exports.config = config;
 /** @deprecated Use Blockly.ConnectionType instead. */
 exports.connectionTypes = ConnectionType;
 exports.constants = constants;

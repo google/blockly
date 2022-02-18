@@ -174,5 +174,4 @@ ContextMenuRegistry.ContextMenuOption;
  */
 ContextMenuRegistry.registry = new ContextMenuRegistry();
 
-exports.contextMenuRegistry = ContextMenuRegistry.registry;
 exports.ContextMenuRegistry = ContextMenuRegistry;

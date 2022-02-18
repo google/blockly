@@ -362,5 +362,4 @@ ShortcutRegistry.KeyboardShortcut;
 const registry = new ShortcutRegistry();
 ShortcutRegistry.registry = registry;
 
-exports.shortcutRegistry = registry;
 exports.ShortcutRegistry = ShortcutRegistry;

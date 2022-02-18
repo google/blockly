@@ -215,7 +215,7 @@ Blockly.Msg.ARD_WRITE_TO = 'To'
 Blockly.Msg.ARD_PIN_WARN1 = 'Pin %1 is needed for %2 as pin %3. Already in use as %4.'
 /** @type {string} */
 /// leaphy write analog pin
-Blockly.Msg.ARD_ANALOGWRITE = 'Set analog pin'
+Blockly.Msg.ARD_ANALOGWRITE = 'Set PWM pin'
 /** @type {string} */
 /// Trig pin
 Blockly.Msg.LEAPHY_SONAR_READ_TRIG = 'Sonar Trig';

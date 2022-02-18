@@ -7,7 +7,13 @@ If you don't want this, use `yarn build:not:langfiles`. Look at package.json for
 
 ## Publishing a new version of the leaphy-blockly package to npm
 
-In a python-enabled terminal, run `yarn run publish`. Enter a version number that does not exist yet. Wait. You will be prompted for npm credentials. You will get an error that the version already exists. But it will be deployed to npm. 
+In a python-enabled terminal, run `yarn run publish`. Edit the package.json with a version number that does not exist yet. Wait. You will be prompted for npm credentials. 
+You may get an error that the version already exists. But it will be deployed to npm. 
+
+## Updating translations
+
+Values in Blockly.Msg will default to those defined in messages.js. You can set overrides per language using the <lang_code>.json file. Doing a build will recreate the <lang_code>.js files that are used during runtime.
+The only exception is en.json, which is recreated one-on-one from whatever is in messages.js. This is because English is defined as the default language.
 
 
 # Blockly [![Build Status]( https://travis-ci.org/google/blockly.svg?branch=master)](https://travis-ci.org/google/blockly)

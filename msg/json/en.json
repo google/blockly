@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2021-09-03 16:51:18.874749",
+		"lastupdated": "2022-02-18 10:58:57.973642",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -65,7 +65,7 @@
 	"ARD_DIGITALWRITE": "Set digital pin",
 	"ARD_WRITE_TO": "To",
 	"ARD_PIN_WARN1": "Pin %1 is needed for %2 as pin %3. Already in use as %4.",
-	"ARD_ANALOGWRITE": "Set analog pin",
+	"ARD_ANALOGWRITE": "Set PWM pin",
 	"LEAPHY_SONAR_READ_TRIG": "Sonar Trig",
 	"LEAPHY_SONAR_READ_ECHO": "Echo",
 	"LEAPHY_BUZZ_BUZZ": "Buzz",

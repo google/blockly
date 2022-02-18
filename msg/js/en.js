@@ -3,7 +3,7 @@
 'use strict';
 
 Blockly.Msg["ADD_COMMENT"] = "Add Comment";
-Blockly.Msg["ARD_ANALOGWRITE"] = "Set analog pin";
+Blockly.Msg["ARD_ANALOGWRITE"] = "Set PWM pin";
 Blockly.Msg["ARD_DIGITALWRITE"] = "Set digital pin";
 Blockly.Msg["ARD_PIN_WARN1"] = "Pin %1 is needed for %2 as pin %3. Already in use as %4.";
 Blockly.Msg["ARD_SERVO_READ"] = "Read servo pin";

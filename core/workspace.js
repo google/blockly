@@ -40,7 +40,7 @@ const {VariableMap} = goog.require('Blockly.VariableMap');
 const {VariableModel} = goog.requireType('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceComment} = goog.requireType('Blockly.WorkspaceComment');
-const {ModuleManager} = goog.require('Blockly.ModuleManager')
+const {ModuleManager} = goog.require('Blockly.ModuleManager');
 /** @suppress {extraRequire} */
 goog.require('Blockly.ConnectionChecker');
 
@@ -213,8 +213,8 @@ Workspace.SCAN_ANGLE = 3;
 Workspace.prototype.sortObjects_ = function(a, b) {
   // Order by module
   if (a.getModuleOrder && b.getModuleOrder) {
-    var aOrder = a.getModuleOrder();
-    var bOrder = b.getModuleOrder();
+    const aOrder = a.getModuleOrder();
+    const bOrder = b.getModuleOrder();
 
     if (aOrder !== bOrder) {
       return aOrder - bOrder;

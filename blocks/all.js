@@ -18,6 +18,7 @@ goog.require('Blockly.blocks.logic');
 goog.require('Blockly.blocks.loops');
 goog.require('Blockly.blocks.math');
 goog.require('Blockly.blocks.procedures');
+goog.require('Blockly.blocks.proceduresLocalArg');
 goog.require('Blockly.blocks.texts');
 goog.require('Blockly.blocks.variables');
 goog.require('Blockly.blocks.variablesDynamic');

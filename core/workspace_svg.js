@@ -17,7 +17,6 @@ goog.module('Blockly.WorkspaceSvg');
 
 const ContextMenu = goog.require('Blockly.ContextMenu');
 /* eslint-disable-next-line no-unused-vars */
-const Procedures = goog.requireType('Blockly.Procedures');
 const Tooltip = goog.require('Blockly.Tooltip');
 /* eslint-disable-next-line no-unused-vars */
 const Variables = goog.requireType('Blockly.Variables');
@@ -238,10 +237,21 @@ const WorkspaceSvg = function(
   }
 
   const Procedures = goog.module.get('Blockly.Procedures');
-  if (Procedures && Procedures.flyoutCategory) {
-    this.registerToolboxCategoryCallback(
-        Procedures.CATEGORY_NAME, Procedures.flyoutCategory);
+  const ProceduresLocalArg = goog.module.get('Blockly.ProceduresLocalArg');
+
+  const ProceduresCallback = function(workspace) {
+    const ProcedureXmlList = Procedures.flyoutCategory(workspace);
+    const ProceduresLocalXmlList = ProceduresLocalArg.flyoutCategory(workspace);
+    return [...ProcedureXmlList, ...ProceduresLocalXmlList];
+  };
+
+  if (Procedures &&
+      Procedures.flyoutCategory &&
+      ProceduresLocalArg &&
+      ProceduresLocalArg.flyoutCategory) {
+    this.registerToolboxCategoryCallback(Procedures.CATEGORY_NAME, ProceduresCallback);
     this.addChangeListener(Procedures.mutatorOpenListener);
+    this.addChangeListener(ProceduresLocalArg.mutatorOpenListener);
   }
 
   /**
@@ -2345,7 +2355,7 @@ WorkspaceSvg.prototype.setScale = function(newScale) {
   this.scale = newScale;
 
   // Record active module scale
-  var activeModule = this.getModuleManager().getActiveModule();
+  const activeModule = this.getModuleManager().getActiveModule();
   if (activeModule) {
     activeModule.scale = newScale;
   }
@@ -2424,7 +2434,7 @@ WorkspaceSvg.prototype.scroll = function(x, y) {
   this.scrollY = y;
 
   // Record active module workspace coordinates
-  var activeModule = this.getModuleManager().getActiveModule();
+  const activeModule = this.getModuleManager().getActiveModule();
   if (activeModule) {
     activeModule.scrollX = x;
     activeModule.scrollY = y;

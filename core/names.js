@@ -23,6 +23,7 @@ const {VariableMap} = goog.requireType('Blockly.VariableMap');
 const {Workspace} = goog.requireType('Blockly.Workspace');
 /** @suppress {extraRequire} */
 goog.requireType('Blockly.Procedures');
+goog.requireType('Blockly.ProceduresLocalArg');
 
 
 /**
@@ -134,6 +135,10 @@ Names.prototype.populateVariables = function(workspace) {
 Names.prototype.populateProcedures = function(workspace) {
   let procedures =
       goog.module.get('Blockly.Procedures').allProcedures(workspace);
+  const proceduresLocalArg =
+      goog.module.get('Blockly.ProceduresLocalArg').allProcedures(workspace);
+
+  procedures = [...procedures, ...proceduresLocalArg];
   // Flatten the return vs no-return procedure lists.
   procedures = procedures[0].concat(procedures[1]);
   for (let i = 0; i < procedures.length; i++) {

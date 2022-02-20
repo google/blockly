@@ -1104,29 +1104,6 @@ Gesture.prototype.duplicateOnDrag_ = function() {
 
 // todo: move it out of here
 /**
- * Whitelist of blocks whose shadow blocks duplicate on drag
- */
-Gesture._duplicateOnDragWhitelist = null;
-
-/**
- * Measure some text using a canvas in-memory.
- * Does not exist in Blockly, but needed in scratch-blocks
- * @param {string} fontSize E.g., '10pt'
- * @param {string} fontFamily E.g., 'Arial'
- * @param {string} fontWeight E.g., '600'
- * @param {string} text The actual text to measure
- * @return {number} Width of the text in px.
- * @package
- */
-Gesture.measureText = function(fontSize, fontFamily,
-                                               fontWeight, text) {
-  const canvas = document.createElement('canvas');
-  const context = canvas.getContext('2d');
-  context.font = fontWeight + ' ' + fontSize + ' ' + fontFamily;
-  return context.measureText(text).width;
-};
-
-/**
  * Whether a block is both a shadow block and an argument reporter.  These
  * blocks have special behaviour in scratch-blocks: they're duplicated when
  * dragged, and they are rendered slightly differently from normal shadow
@@ -1138,12 +1115,7 @@ Gesture.measureText = function(fontSize, fontFamily,
  */
 Gesture.isShadowArgumentReporter = function(block) {
   return block.isShadow() &&
-      (block.type === 'variables_get_reporter' ||
-          block.type === 'argument_reporter_boolean' ||
-          block.type === 'argument_reporter_number' ||
-          block.type === 'argument_reporter_string' ||
-          block.type === 'argument_reporter_array' ||
-          block.type === 'argument_reporter_custom' ||
+      (block.type === 'argument_local' ||
           (Gesture._duplicateOnDragWhitelist &&
               Gesture._duplicateOnDragWhitelist.indexOf(block.type) !== -1));
 };
@@ -1155,11 +1127,7 @@ Gesture.isShadowArgumentReporter = function(block) {
  * @return {boolean} True if the block is a function argument reporter.
  */
 Gesture.isFunctionArgumentReporter = function(block) {
-  return block.type == 'argument_reporter_boolean' ||
-      block.type == 'argument_reporter_number' ||
-      block.type == 'argument_reporter_string' ||
-      block.type == 'argument_reporter_array' ||
-      block.type == 'argument_reporter_custom';
+  return block.type == 'argument_local';
 };
 
 /**

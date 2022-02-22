@@ -73,6 +73,9 @@ goog.require('Blockly.Gesture');
 class Field {
   /**
    * @param {*} value The initial value of the field.
+   *     Also accepts Field.SKIP_SETUP if you wish to skip setup (only used by
+   *     subclasses that want to handle configuration and setting the field
+   *     value after their own constructors have run).
    * @param {?Function=} opt_validator  A function that is called to validate
    *    changes to the field's value. Takes in a value & returns a validated
    *    value, or null to abort the change.
@@ -260,7 +263,7 @@ class Field {
      */
     this.CURSOR = '';
 
-    if (value == Field.SENTINEL) return;
+    if (value === Field.SKIP_SETUP) return;
     if (opt_config) this.configure_(opt_config);
     this.setValue(value);
     if (opt_validator) this.setValidator(opt_validator);
@@ -1255,10 +1258,16 @@ Field.prototype.DEFAULT_VALUE = null;
 Field.NBSP = '\u00A0';
 
 /**
+ * A class used to provide a type for SKIP_SETUP.
+ */
+Field.Sentinel = class {};
+
+/**
  * A value used to signal when a field's constructor should *not* set the
- * field's value, and should allow a subclass to do that instead.
+ * field's value or run configure_, and should allow a subclass to do that
+ * instead.
  * @const
  */
-Field.SENTINEL = {};
+Field.SKIP_SETUP = new Field.Sentinel();
 
 exports.Field = Field;

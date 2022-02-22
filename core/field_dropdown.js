@@ -39,22 +39,25 @@ const {Svg} = goog.require('Blockly.utils.Svg');
  */
 class FieldDropdown extends Field {
   /**
-   * @param {(!Array<!Array>|!Function|!Object)} menuGenerator A non-empty array
-   *     of options for a dropdown list, or a function which generates these
-   *     options. Object is valid if passing Field.SENTINEL.
+   * @param {(!Array<!Array>|!Function|!Field.Sentinel)} menuGenerator
+   *     A non-empty array of options for a dropdown list, or a function which
+   *     generates these options.
+   *     Also accepts Field.SKIP_SETUP if you wish to skip setup (only used by
+   *     subclasses that want to handle configuration and setting the field
+   *     value after their own constructors have run).
    * @param {Function=} opt_validator A function that is called to validate
-   *    changes to the field's value. Takes in a language-neutral dropdown
-   *    option & returns a validated language-neutral dropdown option, or null
-   * to abort the change.
+   *     changes to the field's value. Takes in a language-neutral dropdown
+   *     option & returns a validated language-neutral dropdown option, or null
+   *     to abort the change.
    * @param {Object=} opt_config A map of options used to configure the field.
-   *    See the [field creation documentation]{@link
-   *    https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/dropdown#creation}
-   *    for a list of properties this parameter supports.
+   *     See the [field creation documentation]{@link
+   *     https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/dropdown#creation}
+   *     for a list of properties this parameter supports.
    * @throws {TypeError} If `menuGenerator` options are incorrectly structured.
    * @alias Blockly.FieldDropdown
    */
   constructor(menuGenerator, opt_validator, opt_config) {
-    super(Field.SENTINEL);
+    super(Field.SKIP_SETUP);
 
     /**
      * A reference to the currently selected menu item.
@@ -106,7 +109,7 @@ class FieldDropdown extends Field {
 
 
     // If we pass sentinel, don't do *anything* with the menu generator.
-    if (menuGenerator == Field.SENTINEL) return;
+    if (menuGenerator === Field.SKIP_SETUP) return;
 
     if (Array.isArray(menuGenerator)) {
       validateOptions(menuGenerator);

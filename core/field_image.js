@@ -29,23 +29,26 @@ const {Svg} = goog.require('Blockly.utils.Svg');
  */
 class FieldImage extends Field {
   /**
-   * @param {string} src The URL of the image.
+   * @param {string|!Field.Sentinel} src The URL of the image.
+   *     Also accepts Field.SKIP_SETUP if you wish to skip setup (only used by
+   *     subclasses that want to handle configuration and setting the field
+   *     value after their own constructors have run).
    * @param {!(string|number)} width Width of the image.
    * @param {!(string|number)} height Height of the image.
    * @param {string=} opt_alt Optional alt text for when block is collapsed.
    * @param {function(!FieldImage)=} opt_onClick Optional function to be
    *     called when the image is clicked. If opt_onClick is defined, opt_alt
-   * must also be defined.
+   *     must also be defined.
    * @param {boolean=} opt_flipRtl Whether to flip the icon in RTL.
    * @param {Object=} opt_config A map of options used to configure the field.
-   *    See the [field creation documentation]{@link
-   * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/image#creation}
-   *    for a list of properties this parameter supports.
+   *     See the [field creation documentation]{@link
+   *     https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/image#creation}
+   *     for a list of properties this parameter supports.
    * @alias Blockly.FieldImage
    */
   constructor(
       src, width, height, opt_alt, opt_onClick, opt_flipRtl, opt_config) {
-    super(Field.SENTINEL);
+    super(Field.SKIP_SETUP);
 
     // Return early.
     if (!src) {
@@ -129,7 +132,7 @@ class FieldImage extends Field {
      */
     this.altText_ = '';
 
-    if (src == Field.SENTINEL) return;
+    if (src === Field.SKIP_SETUP) return;
 
     if (opt_config) {
       this.configure_(opt_config);

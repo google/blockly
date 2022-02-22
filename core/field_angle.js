@@ -35,9 +35,11 @@ const {Svg} = goog.require('Blockly.utils.Svg');
  */
 class FieldAngle extends FieldTextInput {
   /**
-   * @param {string|number=} opt_value The initial value of the field. Should
-   *     cast
-   *    to a number. Defaults to 0.
+   * @param {(string|number|!Field.Sentinel)=} opt_value The initial value of
+   *     the field. Should cast to a number. Defaults to 0.
+   *     Also accepts Field.SKIP_SETUP if you wish to skip setup (only used by
+   *     subclasses that want to handle configuration and setting the field
+   *     value after their own constructors have run).
    * @param {Function=} opt_validator A function that is called to validate
    *    changes to the field's value. Takes in a number & returns a
    *    validated number, or null to abort the change.
@@ -49,7 +51,7 @@ class FieldAngle extends FieldTextInput {
    */
   constructor(opt_value, opt_validator, opt_config) {
     // Pass SENTINEL so that we can define properties before value validation.
-    super(Field.SENTINEL);
+    super(Field.SKIP_SETUP);
 
     /**
      * Should the angle increase as the angle picker is moved clockwise (true)
@@ -138,7 +140,7 @@ class FieldAngle extends FieldTextInput {
      */
     this.SERIALIZABLE = true;
 
-    if (opt_value == Field.SENTINEL) return;
+    if (opt_value === Field.SKIP_SETUP) return;
     if (opt_config) this.configure_(opt_config);
     this.setValue(opt_value);
     if (opt_validator) this.setValidator(opt_validator);

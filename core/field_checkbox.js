@@ -28,20 +28,24 @@ goog.require('Blockly.Events.BlockChange');
  */
 class FieldCheckbox extends Field {
   /**
-   * @param {string|boolean=} opt_value The initial value of the field. Should
-   *    either be 'TRUE', 'FALSE' or a boolean. Defaults to 'FALSE'.
+   * @param {(string|boolean|!Field.Sentinel)=} opt_value The initial value of
+   *     the field. Should either be 'TRUE', 'FALSE' or a boolean. Defaults to
+   *     'FALSE'.
+   *     Also accepts Field.SKIP_SETUP if you wish to skip setup (only used by
+   *     subclasses that want to handle configuration and setting the field
+   *     value after their own constructors have run).
    * @param {Function=} opt_validator  A function that is called to validate
-   *    changes to the field's value. Takes in a value ('TRUE' or 'FALSE') &
-   *    returns a validated value ('TRUE' or 'FALSE'), or null to abort the
-   *    change.
+   *     changes to the field's value. Takes in a value ('TRUE' or 'FALSE') &
+   *     returns a validated value ('TRUE' or 'FALSE'), or null to abort the
+   *     change.
    * @param {Object=} opt_config A map of options used to configure the field.
-   *    See the [field creation documentation]{@link
-   *    https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/checkbox#creation}
-   *    for a list of properties this parameter supports.
+   *     See the [field creation documentation]{@link
+   *     https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/checkbox#creation}
+   *     for a list of properties this parameter supports.
    * @alias Blockly.FieldCheckbox
    */
   constructor(opt_value, opt_validator, opt_config) {
-    super(Field.SENTINEL);
+    super(Field.SKIP_SETUP);
 
     /**
      * Character for the check mark. Used to apply a different check mark
@@ -64,7 +68,7 @@ class FieldCheckbox extends Field {
      */
     this.CURSOR = 'default';
 
-    if (opt_value == Field.SENTINEL) return;
+    if (opt_value === Field.SKIP_SETUP) return;
     if (opt_config) this.configure_(opt_config);
     this.setValue(opt_value);
     if (opt_validator) this.setValidator(opt_validator);

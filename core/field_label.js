@@ -29,9 +29,12 @@ const {Field} = goog.require('Blockly.Field');
  */
 class FieldLabel extends Field {
   /**
-   * @param {(Object|string)=} opt_value The initial value of the field. Should
-   *    cast to a string. Defaults to an empty string if null or undefined.
-   *    Object is valid if passing Field.SENTINEL.
+   * @param {(string|!Field.Sentinel)=} opt_value The initial value of the
+   *     field. Should cast to a string. Defaults to an empty string if null or
+   *     undefined.
+   *     Also accepts Field.SKIP_SETUP if you wish to skip setup (only used by
+   *     subclasses that want to handle configuration and setting the field
+   *     value after their own constructors have run).
    * @param {string=} opt_class Optional CSS class for the field's text.
    * @param {Object=} opt_config A map of options used to configure the field.
    *    See the [field creation documentation]{@link
@@ -40,7 +43,7 @@ class FieldLabel extends Field {
    * @alias Blockly.FieldLabel
    */
   constructor(opt_value, opt_class, opt_config) {
-    super(Field.SENTINEL);
+    super(Field.SKIP_SETUP);
 
     /**
      * The html class name to use for this field.
@@ -56,7 +59,7 @@ class FieldLabel extends Field {
      */
     this.EDITABLE = false;
 
-    if (opt_value == Field.SENTINEL) return;
+    if (opt_value === Field.SKIP_SETUP) return;
     if (opt_config) {
       this.configure_(opt_config);
     } else {

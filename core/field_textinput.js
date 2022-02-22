@@ -42,20 +42,23 @@ goog.require('Blockly.Events.BlockChange');
  */
 class FieldTextInput extends Field {
   /**
-   * @param {(string|Object)=} opt_value The initial value of the field. Should
-   *    cast to a string. Defaults to an empty string if null or undefined.
-   *    Object is valid if passing Field.SENTINEL.
+   * @param {(string|!Field.Sentinel)=} opt_value The initial value of the
+   *     field. Should cast to a string. Defaults to an empty string if null or
+   *     undefined.
+   *     Also accepts Field.SKIP_SETUP if you wish to skip setup (only used by
+   *     subclasses that want to handle configuration and setting the field
+   *     value after their own constructors have run).
    * @param {?Function=} opt_validator A function that is called to validate
-   *    changes to the field's value. Takes in a string & returns a validated
-   *    string, or null to abort the change.
+   *     changes to the field's value. Takes in a string & returns a validated
+   *     string, or null to abort the change.
    * @param {Object=} opt_config A map of options used to configure the field.
-   *    See the [field creation documentation]{@link
+   *     See the [field creation documentation]{@link
    * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/text-input#creation}
-   *    for a list of properties this parameter supports.
+   *     for a list of properties this parameter supports.
    * @alias Blockly.FieldTextInput
    */
   constructor(opt_value, opt_validator, opt_config) {
-    super(Field.SENTINEL);
+    super(Field.SKIP_SETUP);
 
     /**
      * Allow browser to spellcheck this field.
@@ -126,7 +129,7 @@ class FieldTextInput extends Field {
      */
     this.CURSOR = 'text';
 
-    if (opt_value == Field.SENTINEL) return;
+    if (opt_value === Field.SKIP_SETUP) return;
     if (opt_config) this.configure_(opt_config);
     this.setValue(opt_value);
     if (opt_validator) this.setValidator(opt_validator);

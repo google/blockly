@@ -36,21 +36,24 @@ goog.require('Blockly.Events.BlockChange');
  */
 class FieldColour extends Field {
   /**
-   * @param {string=} opt_value The initial value of the field. Should be in
-   *    '#rrggbb' format. Defaults to the first value in the default colour
-   *    array.
+   * @param {(string|!Field.Sentinel)=} opt_value The initial value of the
+   *     field. Should be in '#rrggbb' format. Defaults to the first value in
+   *     the default colour array.
+   *     Also accepts Field.SKIP_SETUP if you wish to skip setup (only used by
+   *     subclasses that want to handle configuration and setting the field
+   *     value after their own constructors have run).
    * @param {Function=} opt_validator A function that is called to validate
-   *    changes to the field's value. Takes in a colour string & returns a
-   *    validated colour string ('#rrggbb' format), or null to abort the
-   *    change.Blockly.
+   *     changes to the field's value. Takes in a colour string & returns a
+   *     validated colour string ('#rrggbb' format), or null to abort the
+   *     change.Blockly.
    * @param {Object=} opt_config A map of options used to configure the field.
-   *    See the [field creation documentation]{@link
-   *    https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/colour}
-   *    for a list of properties this parameter supports.
+   *     See the [field creation documentation]{@link
+   *     https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/colour}
+   *     for a list of properties this parameter supports.
    * @alias Blockly.FieldColour
    */
   constructor(opt_value, opt_validator, opt_config) {
-    super(Field.SENTINEL);
+    super(Field.SKIP_SETUP);
 
     /**
      * The field's colour picker element.
@@ -146,7 +149,7 @@ class FieldColour extends Field {
      */
     this.columns_ = 0;
 
-    if (opt_value == Field.SENTINEL) return;
+    if (opt_value === Field.SKIP_SETUP) return;
     if (opt_config) this.configure_(opt_config);
     this.setValue(opt_value);
     if (opt_validator) this.setValidator(opt_validator);

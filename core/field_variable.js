@@ -41,8 +41,11 @@ goog.require('Blockly.Events.BlockChange');
  */
 class FieldVariable extends FieldDropdown {
   /**
-   * @param {?string} varName The default name for the variable.  If null,
-   *     a unique variable name will be generated.
+   * @param {?string|!Field.Sentinel} varName The default name for the variable.
+   *     If null, a unique variable name will be generated.
+   *     Also accepts Field.SKIP_SETUP if you wish to skip setup (only used by
+   *     subclasses that want to handle configuration and setting the field
+   *     value after their own constructors have run).
    * @param {Function=} opt_validator A function that is called to validate
    *    changes to the field's value. Takes in a variable ID  & returns a
    *    validated variable ID, or null to abort the change.
@@ -58,7 +61,7 @@ class FieldVariable extends FieldDropdown {
    */
   constructor(
       varName, opt_validator, opt_variableTypes, opt_defaultType, opt_config) {
-    super(Field.SENTINEL);
+    super(Field.SKIP_SETUP);
 
     /**
      * An array of options for a dropdown list,
@@ -113,7 +116,7 @@ class FieldVariable extends FieldDropdown {
      */
     this.SERIALIZABLE = true;
 
-    if (varName == Field.SENTINEL) return;
+    if (varName === Field.SKIP_SETUP) return;
 
     if (opt_config) {
       this.configure_(opt_config);

@@ -34,20 +34,24 @@ const {Svg} = goog.require('Blockly.utils.Svg');
  */
 class FieldMultilineInput extends FieldTextInput {
   /**
-   * @param {string=} opt_value The initial content of the field. Should cast to
-   *     a string. Defaults to an empty string if null or undefined.
+   * @param {(string|!Field.Sentinel)=} opt_value The initial content of the
+   *     field. Should cast to a string. Defaults to an empty string if null or
+   *     undefined.
+   *     Also accepts Field.SKIP_SETUP if you wish to skip setup (only used by
+   *     subclasses that want to handle configuration and setting the field
+   *     value after their own constructors have run).
    * @param {Function=} opt_validator An optional function that is called
    *     to validate any constraints on what the user entered.  Takes the new
    *     text as an argument and returns either the accepted text, a replacement
    *     text, or null to abort the change.
    * @param {Object=} opt_config A map of options used to configure the field.
-   *    See the [field creation documentation]{@link
-   * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/multiline-text-input#creation}
-   *    for a list of properties this parameter supports.
+   *     See the [field creation documentation]{@link
+   *     https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/multiline-text-input#creation}
+   *     for a list of properties this parameter supports.
    * @alias Blockly.FieldMultilineInput
    */
   constructor(opt_value, opt_validator, opt_config) {
-    super(Field.SENTINEL);
+    super(Field.SKIP_SETUP);
 
     /**
      * The SVG group element that will contain a text element for each text row
@@ -71,7 +75,7 @@ class FieldMultilineInput extends FieldTextInput {
      */
     this.isOverflowedY_ = false;
 
-    if (opt_value == Field.SENTINEL) return;
+    if (opt_value === Field.SKIP_SETUP) return;
     if (opt_config) this.configure_(opt_config);
     this.setValue(opt_value);
     if (opt_validator) this.setValidator(opt_validator);

@@ -32,9 +32,12 @@ class FieldNumber extends FieldTextInput {
    *     Also accepts Field.SKIP_SETUP if you wish to skip setup (only used by
    *     subclasses that want to handle configuration and setting the field
    *     value after their own constructors have run).
-   * @param {?(string|number)=} opt_min Minimum value.
-   * @param {?(string|number)=} opt_max Maximum value.
-   * @param {?(string|number)=} opt_precision Precision for value.
+   * @param {?(string|number)=} opt_min Minimum value. Will only be used if
+   *     opt_config is not provided.
+   * @param {?(string|number)=} opt_max Maximum value. Will only be used if
+   *     opt_config is not provided.
+   * @param {?(string|number)=} opt_precision Precision for value. Will only be
+   *     used if opt_config is not provided.
    * @param {?Function=} opt_validator A function that is called to validate
    *     changes to the field's value. Takes in a number & returns a validated
    *     number, or null to abort the change.

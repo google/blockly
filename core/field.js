@@ -689,7 +689,8 @@ class Field {
   }
 
   /**
-   * Show an editor when the field is clicked only if the field is clickable.
+   * Calls showEditor_ when the field is clicked if the field is clickable.
+   * Do not override.
    * @param {Event=} opt_e Optional mouse event that triggered the field to
    *     open, or undefined if triggered programmatically.
    * @package
@@ -701,9 +702,8 @@ class Field {
   }
 
   /**
-   * An optional method that can be defined to show an editor when the field is
-   *     clicked. Blockly will automatically set the field as clickable if this
-   *     method is defined.
+   * A developer hook to create an editor for the field. This is no-op by
+   * default, and must be overriden to create an editor.
    * @param {Event=} _e Optional mouse event that triggered the field to
    *     open, or undefined if triggered programmatically.
    * @return {void}
@@ -884,11 +884,14 @@ class Field {
 
   /**
    * Get the text from this field.
+   * Override getText_ to provide a different behavior than simply casting the
+   * value to a string.
    * @return {string} Current text.
    */
   getText() {
-    // this.getText_ was intended so that devs don't have to call super (#2910)
-    const text = this.getText_.call(this);
+    // this.getText_ was intended so that devs don't have to remember to call
+    // super when overriding how the text of the field is generated. (#2910)
+    const text = this.getText_();
     if (text !== null) return String(text);
     return String(this.getValue());
   }
@@ -898,7 +901,7 @@ class Field {
    * Override if the text representation of the value of this field
    * is not just a string cast of its value.
    * Return null to resort to a string cast.
-   * @return {?string} Current text. Return null to resort to a string cast.
+   * @return {?string} Current text or null.
    * @protected
    */
   getText_() {

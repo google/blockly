@@ -50,9 +50,11 @@ class FieldVariable extends FieldDropdown {
    *    changes to the field's value. Takes in a variable ID  & returns a
    *    validated variable ID, or null to abort the change.
    * @param {Array<string>=} opt_variableTypes A list of the types of variables
-   *     to include in the dropdown.
+   *     to include in the dropdown. Will only be used if opt_config is not
+   *     provided.
    * @param {string=} opt_defaultType The type of variable to create if this
-   *     field's value is not explicitly set.  Defaults to ''.
+   *     field's value is not explicitly set.  Defaults to ''. Will only be used
+   *     if opt_config is not provided.
    * @param {Object=} opt_config A map of options used to configure the field.
    *    See the [field creation documentation]{@link
    *    https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/variable#creation}

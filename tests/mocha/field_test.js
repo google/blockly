@@ -19,6 +19,7 @@ suite('Abstract Fields', function() {
   });
 
   suite('Is Serializable', function() {
+    // Both EDITABLE and SERIALIZABLE are default.
     class FieldDefault extends Blockly.Field {
       constructor() {
         super();
@@ -26,6 +27,7 @@ suite('Abstract Fields', function() {
       }
     }
 
+    // EDITABLE is false and SERIALIZABLE is default.
     class FieldFalseDefault extends Blockly.Field {
       constructor() {
         super();
@@ -34,6 +36,7 @@ suite('Abstract Fields', function() {
       }
     }
 
+    // EDITABLE is default and SERIALIZABLE is true.
     class FieldDefaultTrue extends Blockly.Field {
       constructor() {
         super();
@@ -42,6 +45,7 @@ suite('Abstract Fields', function() {
       }
     }
 
+    // EDITABLE is false and SERIALIZABLE is true.
     class FieldFalseTrue extends Blockly.Field {
       constructor() {
         super();

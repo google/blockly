@@ -1690,7 +1690,7 @@ class Block {
     if (!opt_disableCheck) {
       const overwrites = [];
       for (const key in mixinObj) {
-        if (key in this) {
+        if (this[key] !== undefined) {
           overwrites.push(key);
         }
       }

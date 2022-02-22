@@ -76,9 +76,6 @@ class FieldNumber extends FieldTextInput {
      */
     this.decimalPlaces_ = null;
 
-    /** @override */
-    this.value_ = 0;
-
     /**
      * Serializable fields are saved by the serializer, non-serializable fields
      * are not. Editable fields should also be serializable.
@@ -323,6 +320,13 @@ class FieldNumber extends FieldTextInput {
         options['value'], undefined, undefined, undefined, undefined, options);
   }
 }
+
+/**
+ * The default value for this field.
+ * @type {*}
+ * @protected
+ */
+FieldNumber.prototype.DEFAULT_VALUE = 0;
 
 fieldRegistry.register('field_number', FieldNumber);
 

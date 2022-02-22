@@ -52,9 +52,6 @@ class FieldColour extends Field {
   constructor(opt_value, opt_validator, opt_config) {
     super(Field.SENTINEL);
 
-    /** @override */
-    this.value_ = FieldColour.COLOURS[0];
-
     /**
      * The field's colour picker element.
      * @type {?Element}
@@ -654,6 +651,13 @@ FieldColour.COLOURS = [
   '#663366',
   '#330033',
 ];
+
+/**
+ * The default value for this field.
+ * @type {*}
+ * @protected
+ */
+FieldColour.prototype.DEFAULT_VALUE = FieldColour.COLOURS[0];
 
 /**
  * An array of tooltip strings for the palette.  If not the same length as

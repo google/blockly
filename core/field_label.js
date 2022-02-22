@@ -49,9 +49,6 @@ class FieldLabel extends Field {
      */
     this.class_ = null;
 
-    /** @override */
-    this.value_ = '';
-
     /**
      * Editable fields usually show some sort of UI indicating they are
      * editable. This field should not.
@@ -134,6 +131,13 @@ class FieldLabel extends Field {
     return new this(text, undefined, options);
   }
 }
+
+/**
+ * The default value for this field.
+ * @type {*}
+ * @protected
+ */
+FieldLabel.prototype.DEFAULT_VALUE = '';
 
 fieldRegistry.register('field_label', FieldLabel);
 

@@ -281,6 +281,13 @@ class FieldImage extends Field {
 }
 
 /**
+ * The default value for this field.
+ * @type {*}
+ * @protected
+ */
+FieldImage.prototype.DEFAULT_VALUE = '';
+
+/**
  * Vertical padding below the image, which is included in the reported height of
  * the field.
  * @type {number}

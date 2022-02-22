@@ -131,9 +131,6 @@ class FieldAngle extends FieldTextInput {
      */
     this.moveSurfaceWrapper_ = null;
 
-    /** @override */
-    this.value_ = 0;
-
     /**
      * Serializable fields are saved by the serializer, non-serializable fields
      * are not. Editable fields should also be serializable.
@@ -506,6 +503,13 @@ class FieldAngle extends FieldTextInput {
     return new this(options['angle'], undefined, options);
   }
 }
+
+/**
+ * The default value for this field.
+ * @type {*}
+ * @protected
+ */
+FieldAngle.prototype.DEFAULT_VALUE = 0;
 
 /**
  * The default amount to round angles to when using a mouse or keyboard nav

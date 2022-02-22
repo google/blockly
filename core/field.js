@@ -95,7 +95,7 @@ class Field {
      * @type {*}
      * @protected
      */
-    this.value_ = null;
+    this.value_ = new.target.prototype.DEFAULT_VALUE;
 
     /**
      * Validation function called when user edits an editable field.
@@ -1240,6 +1240,13 @@ class Field {
     }
   }
 }
+
+/**
+ * The default value for this field.
+ * @type {*}
+ * @protected
+ */
+Field.prototype.DEFAULT_VALUE = null;
 
 /**
  * Non-breaking space.

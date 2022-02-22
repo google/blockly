@@ -113,9 +113,6 @@ class FieldTextInput extends Field {
      */
     this.workspace_ = null;
 
-    /** @override */
-    this.value_ = '';
-
     /**
      * Serializable fields are saved by the serializer, non-serializable fields
      * are not. Editable fields should also be serializable.
@@ -598,6 +595,13 @@ class FieldTextInput extends Field {
     return new this(text, undefined, options);
   }
 }
+
+/**
+ * The default value for this field.
+ * @type {*}
+ * @protected
+ */
+FieldTextInput.prototype.DEFAULT_VALUE = '';
 
 /**
  * Pixel size of input border radius.

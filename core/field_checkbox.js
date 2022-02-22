@@ -51,9 +51,6 @@ class FieldCheckbox extends Field {
      */
     this.checkChar_ = FieldCheckbox.CHECK_CHAR;
 
-    /** @override */
-    this.value_ = false;
-
     /**
      * Serializable fields are saved by the serializer, non-serializable fields
      * are not. Editable fields should also be serializable.
@@ -232,6 +229,13 @@ class FieldCheckbox extends Field {
     return new this(options['checked'], undefined, options);
   }
 }
+
+/**
+ * The default value for this field.
+ * @type {*}
+ * @protected
+ */
+FieldCheckbox.prototype.DEFAULT_VALUE = false;
 
 /**
  * Default character for the checkmark.

@@ -34,7 +34,6 @@ const {ToolboxItem} = goog.require('Blockly.ToolboxItem');
 
 /**
  * Class for a category in a toolbox.
- * @extends {ToolboxItem}
  * @implements {ISelectableToolboxItem}
  */
 class ToolboxCategory extends ToolboxItem {
@@ -131,6 +130,24 @@ class ToolboxCategory extends ToolboxItem {
   }
 
   /**
+   * Initializes the toolbox item.
+   * This includes creating the DOM and updating the state of any items based
+   * on the info object.
+   * Init should be called immediately after the construction of the toolbox
+   * item, to ensure that the category contents are properly parsed.
+   * @override
+   */
+  init() {
+    this.parseCategoryDef_(this.toolboxItemDef_);
+    this.parseContents_(this.toolboxItemDef_);
+    this.createDom_();
+    if (this.toolboxItemDef_['hidden'] === 'true') {
+      this.hide();
+    }
+  }
+
+
+  /**
    * Creates an object holding the default classes for a category.
    * @return {!ToolboxCategory.CssConfig} The configuration object holding
    *    all the CSS classes for a category.
@@ -183,18 +200,6 @@ class ToolboxCategory extends ToolboxItem {
     this.colour_ = this.getColour_(categoryDef);
     object.mixin(
         this.cssConfig_, categoryDef['cssconfig'] || categoryDef['cssConfig']);
-  }
-
-  /**
-   * @override
-   */
-  init() {
-    this.parseCategoryDef_(this.toolboxItemDef_);
-    this.parseContents_(this.toolboxItemDef_);
-    this.createDom_();
-    if (this.toolboxItemDef_['hidden'] === 'true') {
-      this.hide();
-    }
   }
 
   /**

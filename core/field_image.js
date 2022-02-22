@@ -54,7 +54,6 @@ class FieldImage extends Field {
     if (!src) {
       throw Error('Src value of an image field is required');
     }
-    src = parsing.replaceMessageReferences(src);
     const imageHeight = Number(parsing.replaceMessageReferences(height));
     const imageWidth = Number(parsing.replaceMessageReferences(width));
     if (isNaN(imageHeight) || isNaN(imageWidth)) {
@@ -140,7 +139,7 @@ class FieldImage extends Field {
       this.flipRtl_ = !!opt_flipRtl;
       this.altText_ = parsing.replaceMessageReferences(opt_alt) || '';
     }
-    this.setValue(src);
+    this.setValue(parsing.replaceMessageReferences(src));
   }
 
   /**

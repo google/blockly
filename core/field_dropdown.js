@@ -122,10 +122,8 @@ class FieldDropdown extends Field {
      * @protected
      */
     this.menuGenerator_ =
-        /**
-@type {(!Array<!Array>|
-!function(this:FieldDropdown): !Array<!Array>)}
-*/ (menuGenerator);
+        /** @type {(!Array<!Array>|
+            !function(this:FieldDropdown):!Array<!Array>)} */ (menuGenerator);
 
     /**
      * A cache of the most recently generated options.
@@ -157,9 +155,6 @@ class FieldDropdown extends Field {
      * @private
      */
     this.selectedOption_ = this.getOptions(false)[0];
-
-    /** @override */
-    this.value_ = this.selectedOption_[1];
 
     if (opt_config) this.configure_(opt_config);
     this.setValue(this.selectedOption_[1]);

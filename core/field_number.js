@@ -27,8 +27,8 @@ const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
  */
 class FieldNumber extends FieldTextInput {
   /**
-   * @param {string|number=} opt_value The initial value of the field. Should
-   *     cast to a number. Defaults to 0.
+   * @param {(string|number|!Field.Sentinel)=} opt_value The initial value of
+   *     the field. Should cast to a number. Defaults to 0.
    *     Also accepts Field.SKIP_SETUP if you wish to skip setup (only used by
    *     subclasses that want to handle configuration and setting the field
    *     value after their own constructors have run).

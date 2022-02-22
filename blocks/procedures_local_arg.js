@@ -161,47 +161,70 @@
     field.textContent = name;
 
     block.appendChild(field);
-
     return block;
   };
+  /**
+   * Create inputs in def block
+   */
   Blockly.ProceduresLocalArgUtils.createInputs_ = function() {
-    const argumentsModels = this.argumentModels_;
     this.argumentModels_ = [];
-    console.log('call createInputs_ argumentsModels', JSON.stringify(argumentsModels), 'this.argumentNewModels_', JSON.stringify(this.argumentNewModels_));
+    for (let i = 0, argument; (argument = this.updatedArguments_[i]); i++) {
+      // const argId = this.updatedArguments_[argument].id;
+      const argumentBlock = this.buildArgumentBlock_(argument.name, argument.id);
+      console.log('argumentBlock', argumentBlock);
 
-    for (let i = 0; i < this.arguments_.length; i++) {
-      let argId = idGenerator.genUid();
-
-      const existArgument = argumentsModels.find((a) => a.name === this.arguments_[i]);
-      if (existArgument) {
-        argId = existArgument.id;
-      }
-
-      const argumentBlock = this.buildArgumentBlock_(this.arguments_[i], argId);
-
-      this.argumentModels_.push({id: argId, name: this.arguments_[i]});
-      this.appendValueInput(argId)
-        .setCheck(argId)
+      this.argumentModels_.push({id: argument.id, name: argument.name});
+      this.appendValueInput(argument.id)
+        .setCheck(argument.id)
         .setAlign(Align.RIGHT)
         .setShadowDom(argumentBlock);
-      this.moveInputBefore(argId, 'PARAMS');
+      this.moveInputBefore(argument.id, 'PARAMS');
     }
   };
+
+  // Blockly.ProceduresLocalArgUtils.createInputs_ = function() {
+  //   console.log('this.updatedArguments_', this.updatedArguments_);
+  //   const argumentsModels = this.argumentModels_;
+  //   this.argumentModels_ = [];
+
+  //   for (let i = 0; i < this.arguments_.length; i++) {
+  //     let argId = idGenerator.genUid();
+
+  //     const existArgument = argumentsModels.find((a) => a.name === this.arguments_[i]);
+  //     if (existArgument) {
+  //       argId = existArgument.id;
+  //     }
+
+  //     const argumentBlock = this.buildArgumentBlock_(this.arguments_[i], argId);
+
+  //     this.argumentModels_.push({id: argId, name: this.arguments_[i]});
+  //     this.appendValueInput(argId)
+  //       .setCheck(argId)
+  //       .setAlign(Align.RIGHT)
+  //       .setShadowDom(argumentBlock);
+  //     this.moveInputBefore(argId, 'PARAMS');
+  //   }
+  // };
   /**
   * Remove unused arguments in procedures.
   * @private
   */
   Blockly.ProceduresLocalArgUtils.removeArguments_ = function() {
-    console.log('call removeArguments_ this.argumentModels_', JSON.stringify({'this.argumentModels_': this.argumentModels_}), JSON.stringify({'this.arguments_': this.arguments_}));
     if (!this.argumentModels_.length) {
       return;
     }
-    const difference = this.argumentModels_.filter((x) => !this.arguments_.includes(x.name));
 
-    if (!difference.length) {
-      return;
-    }
+    const updatesArgumentsId = this.updatedArguments_.map((a) => a.id);
 
+    const shouldRemove = this.argumentModels_.filter((a) => !updatesArgumentsId.includes(a.id));
+
+    const shouldRename = this.updatedArguments_.map((arg) => {
+      const existArgument = this.argumentModels_.find((a) => a.id === arg.id);
+      if (existArgument && arg.name !== existArgument.name) {
+        return arg;
+      }
+    });
+    
     const allBlocks = this.getDescendants();
     const argumentBlocks = allBlocks.filter((block) => block.type === 'argument_local' && !block.isShadow());
 
@@ -210,10 +233,15 @@
     }
 
     for (let i = 0; i < argumentBlocks.length; i++) {
-      const xmlBlock = Xml.blockToDom(argumentBlocks[i]);
-      const argName = xmlBlock.textContent;
+      // const xmlBlock = Xml.blockToDom(argumentBlocks[i]);
+      // const argName = argumentBlocks[i].getFieldValue('NAME');
+      // const argId = argumentBlocks[i].getData();
 
-      if (difference.find((f) => f.name === argName)) {
+      if (shouldRename.find((a) => a.id === argumentBlocks[i].id)) {
+        argumentBlocks[i].setFieldValue(this.updatedArguments_[argumentBlocks[i].id].name, 'NAME');
+      }
+
+      if (shouldRemove.find((f) => f.id === argumentBlocks[i].id)) {
         argumentBlocks[i].dispose();
       }
     }
@@ -269,10 +297,9 @@
     * @this {Block}
     */
   Blockly.ProceduresLocalArgUtils.domToMutation = function(xmlElement) {
-    console.log('call domToMutation', JSON.stringify({'this.arguments_': this.arguments_}));
     this.arguments_ = [];
     this.argumentModels_ = [];
-    this.argumentNewModels_ = [];
+    this.updatedArguments_ = [];
     for (let i = 0, childNode; (childNode = xmlElement.childNodes[i]); i++) {
       if (childNode.nodeName.toLowerCase() === 'arg') {
         const varName = childNode.getAttribute('name');
@@ -280,6 +307,7 @@
         if (varName !== null && varId !== null) {
           this.arguments_.push(varName);
           this.argumentModels_.push({id: varId, name: varName});
+          this.updatedArguments_.push({id: varId, name: varName});
         } else {
           console.log(
             'Failed to create a variable with name ' + varName +
@@ -300,7 +328,6 @@
     *     parameters and statements.
     */
   Blockly.ProceduresLocalArgUtils.saveExtraState = function() {
-    console.log('call saveExtraState', JSON.stringify(this.argumentModels_));
     if (!this.argumentModels_.length && this.hasStatements_) {
       return null;
     }
@@ -328,11 +355,13 @@
     console.log('call loadExtraState');
     this.arguments_ = [];
     this.argumentModels_ = [];
+    this.updatedArguments_ = [];
     if (state.params) {
       for (let i = 0; i < state.params.length; i++) {
         const param = state.params[i];
         this.arguments_.push(param.name);
         this.argumentModels_.push({id: param.id, name: param.name});
+        this.updatedArguments_.push({id: param.id, name: param.name});
       }
     }
     this.updateParams_();
@@ -352,6 +381,7 @@
       * <block type="procedures_local_mutatorcontainer">
       *   <statement name="STACK">
       *     <block type="procedures_local_mutatorarg">
+      *       <data>arg1_id</data>
       *       <field name="NAME">arg1_name</field>
       *       <next>etc...</next>
       *     </block>
@@ -368,6 +398,12 @@
     let node = statementNode;
     for (let i = 0; i < this.argumentModels_.length; i++) {
       const argBlockNode = xmlUtils.createElement('block');
+
+      console.log('create data', this.argumentModels_[i].id);
+      const data = xmlUtils.createElement('data');
+      data.appendChild(xmlUtils.createTextNode(this.argumentModels_[i].id));
+      argBlockNode.appendChild(data);
+
       argBlockNode.setAttribute('type', 'procedures_local_mutatorarg');
       const fieldNode = xmlUtils.createElement('field');
       fieldNode.setAttribute('name', 'NAME');
@@ -399,20 +435,23 @@
     * @this {Block}
     */
   Blockly.ProceduresLocalArgUtils.compose = function(containerBlock) {
-    console.log('call compose', JSON.stringify({'this.arguments_': this.arguments_}));
+    console.log('call compose');
     // Parameter list.
     this.arguments_ = [];
+    this.updatedArguments_ = [];
     let paramBlock = containerBlock.getInputTargetBlock('STACK');
-
+    
     while (paramBlock && !paramBlock.isInsertionMarker()) {
-      console.log('paramBlock', paramBlock);
       const argumentName = paramBlock.getFieldValue('NAME');
+      const argumentId = paramBlock.getData();
+      console.log('call compose', {argumentName, argumentId});
+      this.updatedArguments_.push({id: argumentId, name: argumentName});
       this.arguments_.push(argumentName);
-
+      
       paramBlock =
-           paramBlock.nextConnection && paramBlock.nextConnection.targetBlock();
+      paramBlock.nextConnection && paramBlock.nextConnection.targetBlock();
     }
-
+    
     this.updateParams_();
     ProceduresLocalArg.mutateCallers(this);
 
@@ -445,7 +484,7 @@
     * @return {!Array<string>} List of variable names.
     * @this {Block}
     */
-  Blockly.ProceduresLocalArgUtils.getVars = function() {
+  Blockly.ProceduresLocalArgUtils.getArguments = function() {
     return this.arguments_;
   };
   /**
@@ -516,7 +555,7 @@ Blocks['procedures_local_defnoreturn'] = {
     this.setHelpUrl(Msg.PROCEDURES_DEFNORETURN_HELPURL);
     this.arguments_ = [];
     this.argumentModels_ = [];
-    this.argumentNewModels_ = [];
+    this.updatedArguments_ = [];
     this.setStatements_(true);
     this.statementConnection_ = null;
   },
@@ -535,7 +574,7 @@ Blocks['procedures_local_defnoreturn'] = {
   loadExtraState: Blockly.ProceduresLocalArgUtils.loadExtraState,
   decompose: Blockly.ProceduresLocalArgUtils.decompose,
   compose: Blockly.ProceduresLocalArgUtils.compose,
-  getVars: Blockly.ProceduresLocalArgUtils.getVars,
+  getArguments: Blockly.ProceduresLocalArgUtils.getArguments,
   customContextMenu: Blockly.ProceduresLocalArgUtils.customContextMenu,
   getProcedureDef: Blockly.ProceduresLocalArgUtils.getProcedureDef,
   callType_: Blockly.ProceduresLocalArgUtils.callType_,
@@ -570,7 +609,7 @@ Blocks['procedures_local_defreturn'] = {
     this.setHelpUrl(Msg.PROCEDURES_DEFRETURN_HELPURL);
     this.arguments_ = [];
     this.argumentModels_ = [];
-    this.argumentNewModels_ = [];
+    this.updatedArguments_ = [];
     this.setStatements_(true);
     this.statementConnection_ = null;
   },
@@ -589,7 +628,7 @@ Blocks['procedures_local_defreturn'] = {
   loadExtraState: Blockly.ProceduresLocalArgUtils.loadExtraState,
   decompose: Blockly.ProceduresLocalArgUtils.decompose,
   compose: Blockly.ProceduresLocalArgUtils.compose,
-  getVars: Blockly.ProceduresLocalArgUtils.getVars,
+  getArguments: Blockly.ProceduresLocalArgUtils.getArguments,
   customContextMenu: Blockly.ProceduresLocalArgUtils.customContextMenu,
   getProcedureDef: Blockly.ProceduresLocalArgUtils.getProcedureDef,
   callType_: Blockly.ProceduresLocalArgUtils.callType_,
@@ -620,18 +659,6 @@ Blocks['procedures_local_mutatorarg'] = {
     */
   init: function() {
     const field = new FieldTextInput(ProceduresLocalArg.DEFAULT_ARG, this.validator_);
-    // Hack: override showEditor to do just a little bit more work.
-    // We don't have a good place to hook into the start of a text edit.
-    field.oldShowEditorFn_ = field.showEditor_;
-    /**
-      * @this {FieldTextInput}
-      */
-    const newShowEditorFn = function() {
-      console.log('newShowEditorFn');
-      this.createdVariables_ = [];
-      this.oldShowEditorFn_();
-    };
-    field.showEditor_ = newShowEditorFn;
 
     this.appendDummyInput()
       .appendField(Msg.PROCEDURES_MUTATORARG_TITLE)
@@ -641,14 +668,7 @@ Blocks['procedures_local_mutatorarg'] = {
     this.setStyle('procedure_blocks');
     this.setTooltip(Msg.PROCEDURES_MUTATORARG_TOOLTIP);
     this.contextMenu = false;
-
-    // Create the default variable when we drag the block in from the flyout.
-    // Have to do this after installing the field on the block.
-    field.onFinishEditing_ = this.deleteIntermediateVars_;
-    // Create an empty list so onFinishEditing_ has something to look at, even
-    // though the editor was never opened.
-    field.createdVariables_ = [];
-    field.onFinishEditing_('x');
+    this.argumentId_ = null;
   },
 
   /**
@@ -663,13 +683,10 @@ Blocks['procedures_local_mutatorarg'] = {
     */
   validator_: function(argumentName) {
     const sourceBlock = this.getSourceBlock();
-    console.log('validator_ sourceBlock', {sourceBlock});
     argumentName = argumentName.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
     if (!argumentName) {
       return null;
     }
-
-    sourceBlock.argumentId_ = sourceBlock.argumentId_ || idGenerator.genUid();
 
     // Prevents duplicate parameter names in functions
     const workspace =
@@ -681,11 +698,13 @@ Blocks['procedures_local_mutatorarg'] = {
       return argumentName;
     }
 
-    console.log('validator_ blocks', blocks);
-
     const existArgumentsName = blocks
       .filter((b) => b.getFieldValue('NAME'))
       .map((block) => block.getFieldValue('NAME'));
+
+    if (!sourceBlock.getData()) {
+      sourceBlock.setData(idGenerator.genUid());
+    }
 
     if (!existArgumentsName.includes(argumentName)) {
       return argumentName;
@@ -697,33 +716,12 @@ Blocks['procedures_local_mutatorarg'] = {
     return newArgumentName;
   },
 
-  /**
-    * Called when focusing away from the text field.
-    * Deletes all variables that were created as the user typed their intended
-    * variable name.
-    * @param {string} newText The new variable name.
-    * @private
-    * @this {FieldTextInput}
-    */
-  deleteIntermediateVars_: function(newText) {
-    const outerWs = Mutator.findParentWs(this.getSourceBlock().workspace);
-    if (!outerWs) {
-      return;
-    }
-    for (let i = 0; i < this.createdVariables_.length; i++) {
-      const model = this.createdVariables_[i];
-      if (model.name !== newText) {
-        outerWs.deleteVariableById(model.getId());
-      }
-    }
+  getData: function() {
+    return this.data;
   },
 
-  getArgumentId: function() {
-    return this.argumentId_;
-  },
-
-  setArgumentId: function(id) {
-    this.argumentId_ = id;
+  setData: function(id) {
+    this.data = id;
   },
 };
 
@@ -963,7 +961,7 @@ const PROCEDURE_CALL_COMMON = {
     * @return {!Array<string>} List of variable names.
     * @this {Block}
     */
-  getVars: function() {
+  getArguments: function() {
     return this.arguments_;
   },
   /**
@@ -990,7 +988,7 @@ const PROCEDURE_CALL_COMMON = {
       let def = ProceduresLocalArg.getDefinition(name, this.workspace);
       if (def &&
            (def.type !== this.defType_ ||
-            JSON.stringify(def.getVars()) !== JSON.stringify(this.arguments_))) {
+            JSON.stringify(def.getArguments()) !== JSON.stringify(this.arguments_))) {
         // The signatures don't match.
         def = null;
       }

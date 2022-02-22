@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2021 Google LLC
+ * Copyright 2022 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
@@ -17,6 +17,8 @@
  *     You must use a <script> tag to load prepare.js first, before
  *     importing this module in a <script type=module> to obtain the
  *     loaded value.
+ *
+ *     See tests/playground.html for example usage.
  */
 
 let Blockly;

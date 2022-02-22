@@ -11,6 +11,8 @@
  *     You must use a <script> tag to load this script first, then
  *     import blockly.mjs in a <script type=module> to obtain the
  *     loaded value.
+ *
+ *     See tests/playground.html for example usage.
  */
 'use strict';
 

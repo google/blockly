@@ -75,14 +75,15 @@ class Block {
    *     type-specific functions for this block.
    * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
    *     create a new ID.
-   * @param {boolean=} opt_skipInit If true will not call init() on the block, so
-   *     that the subclass can do that instead.
+   * @param {boolean=} opt_skipInit If true will not call init() on the block,
+   *     so that the subclass can do that instead.
    * @throws When the prototypeName is not valid or not allowed.
    * @alias Blockly.Block
    */
   constructor(workspace, prototypeName, opt_id, opt_skipInit) {
     const {Generator} = goog.module.get('Blockly.Generator');
-    if (Generator && typeof Generator.prototype[prototypeName] !== 'undefined') {
+    if (Generator &&
+        typeof Generator.prototype[prototypeName] !== 'undefined') {
       // Occluding Generator class members is not allowed.
       throw Error(
           'Block prototypeName "' + prototypeName +
@@ -133,7 +134,8 @@ class Block {
 
     /**
      * An optional serialization method for defining how to serialize the
-     * mutation state to XML. This must be coupled with defining `domToMutation`.
+     * mutation state to XML. This must be coupled with defining
+     * `domToMutation`.
      * @type {undefined|?function(...):!Element}
      */
     this.mutationToDom = undefined;
@@ -147,9 +149,9 @@ class Block {
     this.domToMutation = undefined;
 
     /**
-     * An optional serialization method for defining how to serialize the block's
-     * extra state (eg mutation state) to something JSON compatible. This must be
-     * coupled with defining `loadExtraState`.
+     * An optional serialization method for defining how to serialize the
+     * block's extra state (eg mutation state) to something JSON compatible.
+     * This must be coupled with defining `loadExtraState`.
      * @type {undefined|?function(): *}
      */
     this.saveExtraState = undefined;
@@ -197,15 +199,17 @@ class Block {
 
     /**
      * An optional property for declaring developer variables.  Return a list of
-     * variable names for use by generators.  Developer variables are never shown
-     * to the user, but are declared as global variables in the generated code.
+     * variable names for use by generators.  Developer variables are never
+     * shown to the user, but are declared as global variables in the generated
+     * code.
      * @type {undefined|?function():!Array<string>}
      */
     this.getDeveloperVariables = undefined;
 
     /** @type {string} */
-    this.id = (opt_id && !workspace.getBlockById(opt_id)) ? opt_id :
-                                                            idGenerator.genUid();
+    this.id = (opt_id && !workspace.getBlockById(opt_id)) ?
+        opt_id :
+        idGenerator.genUid();
     workspace.setBlockById(this.id, this);
     /** @type {Connection} */
     this.outputConnection = null;
@@ -471,8 +475,8 @@ class Block {
   /**
    * Call initModel on all fields on the block.
    * May be called more than once.
-   * Either initModel or initSvg must be called after creating a block and before
-   * the first interaction with it.  Interactions include UI actions
+   * Either initModel or initSvg must be called after creating a block and
+   * before the first interaction with it.  Interactions include UI actions
    * (e.g. clicking and dragging) and firing events (e.g. create, delete, and
    * change).
    * @public
@@ -543,9 +547,9 @@ class Block {
   }
 
   /**
-   * Returns the connection on the value input that is connected to another block.
-   * When an insertion marker is connected to a connection with a block already
-   * attached, the connected block is attached to the insertion marker.
+   * Returns the connection on the value input that is connected to another
+   * block. When an insertion marker is connected to a connection with a block
+   * already attached, the connected block is attached to the insertion marker.
    * Since only one block can be displaced and attached to the insertion marker
    * this should only ever return one connection.
    *
@@ -556,7 +560,8 @@ class Block {
     let connection = null;
     for (let i = 0; i < this.inputList.length; i++) {
       const thisConnection = this.inputList[i].connection;
-      if (thisConnection && thisConnection.type === ConnectionType.INPUT_VALUE &&
+      if (thisConnection &&
+          thisConnection.type === ConnectionType.INPUT_VALUE &&
           thisConnection.targetConnection) {
         if (connection) {
           return null;  // More than one value input found.
@@ -622,7 +627,8 @@ class Block {
   }
 
   /**
-   * Walks down a stack of blocks and finds the last next connection on the stack.
+   * Walks down a stack of blocks and finds the last next connection on the
+   * stack.
    * @param {boolean} ignoreShadows If true,the last connection on a non-shadow
    *     block will be returned. If false, this will follow shadows to find the
    *     last connection.
@@ -650,10 +656,10 @@ class Block {
   }
 
   /**
-   * Return the parent block or null if this block is at the top level. The parent
-   * block is either the block connected to the previous connection (for a
-   * statement block) or the block connected to the output connection (for a value
-   * block).
+   * Return the parent block or null if this block is at the top level. The
+   * parent block is either the block connected to the previous connection (for
+   * a statement block) or the block connected to the output connection (for a
+   * value block).
    * @return {?Block} The block (if any) that holds the current block.
    */
   getParent() {
@@ -678,7 +684,8 @@ class Block {
   /**
    * Return the parent block that surrounds the current block, or null if this
    * block has no surrounding block.  A parent block might just be the previous
-   * statement, whereas the surrounding block is an if statement, while loop, etc.
+   * statement, whereas the surrounding block is an if statement, while loop,
+   * etc.
    * @return {?Block} The block (if any) that surrounds the current block.
    */
   getSurroundParent() {
@@ -713,8 +720,8 @@ class Block {
   }
 
   /**
-   * Return the connection on the first statement input on this block, or null if
-   * there are none.
+   * Return the connection on the first statement input on this block, or null
+   * if there are none.
    * @return {?Connection} The first statement connection or null.
    * @package
    */
@@ -755,7 +762,8 @@ class Block {
     let previous;
     do {
       previous = block.getPreviousBlock();
-    } while (previous && previous.getNextBlock() === block && (block = previous));
+    } while (previous && previous.getNextBlock() === block &&
+             (block = previous));
     return block;
   }
 
@@ -818,7 +826,8 @@ class Block {
       // Remove this block from the old parent's child list.
       arrayUtils.removeElem(this.parentBlock_.childBlocks_, this);
 
-      // This block hasn't actually moved on-screen, so there's no need to update
+      // This block hasn't actually moved on-screen, so there's no need to
+      // update
       //     its connection locations.
     } else {
       // New parent must be non-null so remove this block from the workspace's
@@ -942,7 +951,8 @@ class Block {
    * @return {boolean} True if editable.
    */
   isEditable() {
-    return this.editable_ && !(this.workspace && this.workspace.options.readOnly);
+    return this.editable_ &&
+        !(this.workspace && this.workspace.options.readOnly);
   }
 
   /**
@@ -1165,8 +1175,8 @@ class Block {
    * Notification that a variable is renaming.
    * If the ID matches one of this block's variables, rename it.
    * @param {string} oldId ID of variable to rename.
-   * @param {string} newId ID of new variable.  May be the same as oldId, but with
-   *     an updated name.
+   * @param {string} newId ID of new variable.  May be the same as oldId, but
+   *     with an updated name.
    */
   renameVarById(oldId, newId) {
     for (let i = 0, input; (input = this.inputList[i]); i++) {
@@ -1208,7 +1218,8 @@ class Block {
    * Set whether this block can chain onto the bottom of another block.
    * @param {boolean} newBoolean True if there can be a previous statement.
    * @param {(string|Array<string>|null)=} opt_check Statement type or
-   *     list of statement types.  Null/undefined if any type could be connected.
+   *     list of statement types.  Null/undefined if any type could be
+   * connected.
    */
   setPreviousStatement(newBoolean, opt_check) {
     if (newBoolean) {
@@ -1237,7 +1248,8 @@ class Block {
    * Set whether another block can chain onto the bottom of this block.
    * @param {boolean} newBoolean True if there can be a next statement.
    * @param {(string|Array<string>|null)=} opt_check Statement type or
-   *     list of statement types.  Null/undefined if any type could be connected.
+   *     list of statement types.  Null/undefined if any type could be
+   * connected.
    */
   setNextStatement(newBoolean, opt_check) {
     if (newBoolean) {
@@ -1245,7 +1257,8 @@ class Block {
         opt_check = null;
       }
       if (!this.nextConnection) {
-        this.nextConnection = this.makeConnection_(ConnectionType.NEXT_STATEMENT);
+        this.nextConnection =
+            this.makeConnection_(ConnectionType.NEXT_STATEMENT);
       }
       this.nextConnection.setCheck(opt_check);
     } else {
@@ -1274,13 +1287,15 @@ class Block {
         opt_check = null;
       }
       if (!this.outputConnection) {
-        this.outputConnection = this.makeConnection_(ConnectionType.OUTPUT_VALUE);
+        this.outputConnection =
+            this.makeConnection_(ConnectionType.OUTPUT_VALUE);
       }
       this.outputConnection.setCheck(opt_check);
     } else {
       if (this.outputConnection) {
         if (this.outputConnection.isConnected()) {
-          throw Error('Must disconnect output value before removing connection.');
+          throw Error(
+              'Must disconnect output value before removing connection.');
         }
         this.outputConnection.dispose();
         this.outputConnection = null;
@@ -1501,13 +1516,14 @@ class Block {
 
     // Join the text array, removing spaces around added parentheses.
     text = text.reduce(function(acc, value) {
-      return acc + ((acc.substr(-1) === '(' || value === ')') ? '' : ' ') + value;
+      return acc + ((acc.substr(-1) === '(' || value === ')') ? '' : ' ') +
+          value;
     }, '');
     text = text.trim() || '???';
     if (opt_maxLength) {
-      // TODO: Improve truncation so that text from this block is given priority.
-      // E.g. "1+2+3+4+5+6+7+8+9=0" should be "...6+7+8+9=0", not "1+2+3+4+5...".
-      // E.g. "1+2+3+4+5=6+7+8+9+0" should be "...4+5=6+7...".
+      // TODO: Improve truncation so that text from this block is given
+      // priority. E.g. "1+2+3+4+5+6+7+8+9=0" should be "...6+7+8+9=0", not
+      // "1+2+3+4+5...". E.g. "1+2+3+4+5=6+7+8+9+0" should be "...4+5=6+7...".
       if (text.length > opt_maxLength) {
         text = text.substring(0, opt_maxLength - 3) + '...';
       }
@@ -1517,8 +1533,8 @@ class Block {
 
   /**
    * Shortcut for appending a value input row.
-   * @param {string} name Language-neutral identifier which may used to find this
-   *     input again.  Should be unique to this block.
+   * @param {string} name Language-neutral identifier which may used to find
+   *     this input again.  Should be unique to this block.
    * @return {!Input} The input object created.
    */
   appendValueInput(name) {
@@ -1527,8 +1543,8 @@ class Block {
 
   /**
    * Shortcut for appending a statement input row.
-   * @param {string} name Language-neutral identifier which may used to find this
-   *     input again.  Should be unique to this block.
+   * @param {string} name Language-neutral identifier which may used to find
+   *     this input again.  Should be unique to this block.
    * @return {!Input} The input object created.
    */
   appendStatementInput(name) {
@@ -1537,8 +1553,8 @@ class Block {
 
   /**
    * Shortcut for appending a dummy input row.
-   * @param {string=} opt_name Language-neutral identifier which may used to find
-   *     this input again.  Should be unique to this block.
+   * @param {string=} opt_name Language-neutral identifier which may used to
+   *     find this input again.  Should be unique to this block.
    * @return {!Input} The input object created.
    */
   appendDummyInput(opt_name) {
@@ -1564,7 +1580,8 @@ class Block {
     // Makes styles backward compatible with old way of defining hat style.
     if (json['style'] && json['style'].hat) {
       this.hat = json['style'].hat;
-      // Must set to null so it doesn't error when checking for style and colour.
+      // Must set to null so it doesn't error when checking for style and
+      // colour.
       json['style'] = null;
     }
 
@@ -1580,8 +1597,8 @@ class Block {
     let i = 0;
     while (json['message' + i] !== undefined) {
       this.interpolate_(
-          json['message' + i], json['args' + i] || [], json['lastDummyAlign' + i],
-          warningPrefix);
+          json['message' + i], json['args' + i] || [],
+          json['lastDummyAlign' + i], warningPrefix);
       i++;
     }
 
@@ -1619,7 +1636,8 @@ class Block {
     }
     if (typeof json['extensions'] === 'string') {
       console.warn(
-          warningPrefix + 'JSON attribute \'extensions\' should be an array of' +
+          warningPrefix +
+          'JSON attribute \'extensions\' should be an array of' +
           ' strings. Found raw string in JSON for \'' + json['type'] +
           '\' block.');
       json['extensions'] = [json['extensions']];  // Correct and continue.
@@ -1684,7 +1702,8 @@ class Block {
    * @param {boolean=} opt_disableCheck Option flag to disable overwrite checks.
    */
   mixin(mixinObj, opt_disableCheck) {
-    if (opt_disableCheck !== undefined && typeof opt_disableCheck !== 'boolean') {
+    if (opt_disableCheck !== undefined &&
+        typeof opt_disableCheck !== 'boolean') {
       throw Error('opt_disableCheck must be a boolean if provided');
     }
     if (!opt_disableCheck) {
@@ -1696,7 +1715,8 @@ class Block {
       }
       if (overwrites.length) {
         throw Error(
-            'Mixin will overwrite block members: ' + JSON.stringify(overwrites));
+            'Mixin will overwrite block members: ' +
+            JSON.stringify(overwrites));
       }
     }
     object.mixin(this, mixinObj);
@@ -1712,8 +1732,7 @@ class Block {
    * @param {string} warningPrefix Warning prefix string identifying block.
    * @private
    */
-  interpolate_(
-      message, args, lastDummyAlign, warningPrefix) {
+  interpolate_(message, args, lastDummyAlign, warningPrefix) {
     const tokens = parsing.tokenizeInterpolation(message);
     this.validateTokens_(tokens, args.length);
     const elements = this.interpolateArguments_(tokens, args, lastDummyAlign);
@@ -1731,7 +1750,8 @@ class Block {
           fieldStack.length = 0;
         }
       } else {
-        // All other types, including ones starting with 'input_' get routed here.
+        // All other types, including ones starting with 'input_' get routed
+        // here.
         const field = this.fieldFromJson_(element);
         if (field) {
           fieldStack.push([field, element['name']]);
@@ -1741,9 +1761,9 @@ class Block {
   }
 
   /**
-   * Validates that the tokens are within the correct bounds, with no duplicates,
-   * and that all of the arguments are referred to. Throws errors if any of these
-   * things are not true.
+   * Validates that the tokens are within the correct bounds, with no
+   * duplicates, and that all of the arguments are referred to. Throws errors if
+   * any of these things are not true.
    * @param {!Array<string|number>} tokens An array of tokens to validate
    * @param {number} argsCount The number of args that need to be referred to.
    * @private
@@ -1777,13 +1797,13 @@ class Block {
   }
 
   /**
-   * Inserts args in place of numerical tokens. String args are converted to JSON
-   * that defines a label field. If necessary an extra dummy input is added to
-   * the end of the elements.
+   * Inserts args in place of numerical tokens. String args are converted to
+   * JSON that defines a label field. If necessary an extra dummy input is added
+   * to the end of the elements.
    * @param {!Array<!string|number>} tokens The tokens to interpolate
    * @param {!Array<!Object|string>} args The arguments to insert.
-   * @param {string|undefined} lastDummyAlign The alignment the added dummy input
-   *     should have, if we are required to add one.
+   * @param {string|undefined} lastDummyAlign The alignment the added dummy
+   *     input should have, if we are required to add one.
    * @return {!Array<!Object>} The JSON definitions of field and inputs to add
    *     to the block.
    * @private
@@ -1840,8 +1860,8 @@ class Block {
   }
 
   /**
-   * Creates an input from the JSON definition of an input. Sets the input's check
-   * and alignment if they are provided.
+   * Creates an input from the JSON definition of an input. Sets the input's
+   * check and alignment if they are provided.
    * @param {!Object} element The JSON to turn into an input.
    * @param {string} warningPrefix The prefix to add to warnings to help the
    *     developer debug.
@@ -1891,8 +1911,8 @@ class Block {
   /**
    * Returns true if the given string matches one of the input keywords.
    * @param {string} str The string to check.
-   * @return {boolean} True if the given string matches one of the input keywords,
-   *     false otherwise.
+   * @return {boolean} True if the given string matches one of the input
+   *     keywords, false otherwise.
    * @private
    */
   isInputKeyword_(str) {
@@ -1903,7 +1923,8 @@ class Block {
   /**
    * Turns a string into the JSON definition of a label field. If the string
    * becomes an empty string when trimmed, this returns null.
-   * @param {string} str String to turn into the JSON definition of a label field.
+   * @param {string} str String to turn into the JSON definition of a label
+   *     field.
    * @return {?{text: string, type: string}} The JSON definition or null.
    * @private
    */
@@ -1921,8 +1942,8 @@ class Block {
   /**
    * Add a value input, statement input or local variable to this block.
    * @param {number} type One of Blockly.inputTypes.
-   * @param {string} name Language-neutral identifier which may used to find this
-   *     input again.  Should be unique to this block.
+   * @param {string} name Language-neutral identifier which may used to find
+   *     this input again.  Should be unique to this block.
    * @return {!Input} The input object created.
    * @protected
    */
@@ -1943,7 +1964,8 @@ class Block {
   /**
    * Move a named input to a different location on this block.
    * @param {string} name The name of the input to move.
-   * @param {?string} refName Name of input that should be after the moved input,
+   * @param {?string} refName Name of input that should be after the moved
+   *     input,
    *   or null to be the input at the end.
    */
   moveInputBefore(name, refName) {
@@ -1978,7 +2000,8 @@ class Block {
   /**
    * Move a numbered input to a different location on this block.
    * @param {number} inputIndex Index of the input to move.
-   * @param {number} refIndex Index of input that should be after the moved input.
+   * @param {number} refIndex Index of input that should be after the moved
+   *     input.
    */
   moveNumberedInputBefore(inputIndex, refIndex) {
     // Validate arguments.
@@ -2004,7 +2027,8 @@ class Block {
   /**
    * Remove an input from this block.
    * @param {string} name The name of the input.
-   * @param {boolean=} opt_quiet True to prevent an error if input is not present.
+   * @param {boolean=} opt_quiet True to prevent an error if input is not
+   *     present.
    * @return {boolean} True if operation succeeds, false if input is not present
    *     and opt_quiet is true.
    * @throws {Error} if the input is not present and opt_quiet is not true.
@@ -2131,8 +2155,9 @@ class Block {
   /**
    * Recursively checks whether all statement and value inputs are filled with
    * blocks. Also checks all following statement blocks in this stack.
-   * @param {boolean=} opt_shadowBlocksAreFilled An optional argument controlling
-   *     whether shadow blocks are counted as filled. Defaults to true.
+   * @param {boolean=} opt_shadowBlocksAreFilled An optional argument
+   *     controlling whether shadow blocks are counted as filled. Defaults to
+   *     true.
    * @return {boolean} True if all inputs are filled, false otherwise.
    */
   allInputsFilled(opt_shadowBlocksAreFilled) {
@@ -2168,9 +2193,9 @@ class Block {
    * This method returns a string describing this Block in developer terms (type
    * name and ID; English only).
    *
-   * Intended to on be used in console logs and errors. If you need a string that
-   * uses the user's native language (including block text, field values, and
-   * child blocks), use [toString()]{@link Block#toString}.
+   * Intended to on be used in console logs and errors. If you need a string
+   * that uses the user's native language (including block text, field values,
+   * and child blocks), use [toString()]{@link Block#toString}.
    * @return {string} The description.
    */
   toDevString() {

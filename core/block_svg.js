@@ -103,11 +103,11 @@ class BlockSvg extends Block {
 
     /**
      * An optional method called when a mutator dialog is first opened.
-     * This function must create and initialize a top-level block for the mutator
-     * dialog, and return it. This function should also populate this top-level
-     * block with any sub-blocks which are appropriate. This method must also be
-     * coupled with defining a `compose` method for the default mutation dialog
-     * button and UI to appear.
+     * This function must create and initialize a top-level block for the
+     * mutator dialog, and return it. This function should also populate this
+     * top-level block with any sub-blocks which are appropriate. This method
+     * must also be coupled with defining a `compose` method for the default
+     * mutation dialog button and UI to appear.
      * @type {undefined|?function(WorkspaceSvg):!BlockSvg}
      */
     this.decompose = undefined;
@@ -331,8 +331,8 @@ class BlockSvg extends Block {
   }
 
   /**
-   * Unselects this block. Unhighlights the block and fires a select (false) event
-   * if the block is currently selected.
+   * Unselects this block. Unhighlights the block and fires a select (false)
+   * event if the block is currently selected.
    */
   unselect() {
     if (common.getSelected() !== this) {
@@ -390,8 +390,7 @@ class BlockSvg extends Block {
 
     const oldXY = this.getRelativeToSurfaceXY();
     if (newParent) {
-      ( /** @type {!BlockSvg} */ (newParent))
-          .getSvgRoot().appendChild(svgRoot);
+      (/** @type {!BlockSvg} */ (newParent)).getSvgRoot().appendChild(svgRoot);
       const newXY = this.getRelativeToSurfaceXY();
       // Move the connections to match the child's new position.
       this.moveConnections(newXY.x - oldXY.x, newXY.y - oldXY.y);
@@ -432,7 +431,8 @@ class BlockSvg extends Block {
         // If this element is the current element on the drag surface, include
         // the translation of the drag surface itself.
         if (this.useDragSurface_ &&
-            this.workspace.getBlockDragSurface().getCurrentBlock() === element) {
+            this.workspace.getBlockDragSurface().getCurrentBlock() ===
+                element) {
           const surfaceTranslation =
               this.workspace.getBlockDragSurface().getSurfaceTranslation();
           x += surfaceTranslation.x;
@@ -477,13 +477,14 @@ class BlockSvg extends Block {
    * @param {number} y The y coordinate of the translation in workspace units.
    */
   translate(x, y) {
-    this.getSvgRoot().setAttribute('transform', 'translate(' + x + ',' + y + ')');
+    this.getSvgRoot().setAttribute(
+        'transform', 'translate(' + x + ',' + y + ')');
   }
 
   /**
-   * Move this block to its workspace's drag surface, accounting for positioning.
-   * Generally should be called at the same time as setDragging_(true).
-   * Does nothing if useDragSurface_ is false.
+   * Move this block to its workspace's drag surface, accounting for
+   * positioning. Generally should be called at the same time as
+   * setDragging_(true). Does nothing if useDragSurface_ is false.
    * @package
    */
   moveToDragSurface() {
@@ -527,7 +528,8 @@ class BlockSvg extends Block {
     }
     // Translate to current position, turning off 3d.
     this.translate(newXY.x, newXY.y);
-    this.workspace.getBlockDragSurface().clearAndHide(this.workspace.getCanvas());
+    this.workspace.getBlockDragSurface().clearAndHide(
+        this.workspace.getCanvas());
   }
 
   /**
@@ -542,7 +544,8 @@ class BlockSvg extends Block {
     if (this.useDragSurface_) {
       this.workspace.getBlockDragSurface().translateSurface(newLoc.x, newLoc.y);
     } else {
-      this.svgGroup_.translate_ = 'translate(' + newLoc.x + ',' + newLoc.y + ')';
+      this.svgGroup_.translate_ =
+          'translate(' + newLoc.x + ',' + newLoc.y + ')';
       this.svgGroup_.setAttribute(
           'transform', this.svgGroup_.translate_ + this.svgGroup_.skew_);
     }
@@ -791,13 +794,13 @@ class BlockSvg extends Block {
 
     // Recurse through all blocks attached under this one.
     for (let i = 0; i < this.childBlocks_.length; i++) {
-      (/** @type {!BlockSvg} */ (this.childBlocks_[i]))
-          .moveConnections(dx, dy);
+      (/** @type {!BlockSvg} */ (this.childBlocks_[i])).moveConnections(dx, dy);
     }
   }
 
   /**
-   * Recursively adds or removes the dragging class to this node and its children.
+   * Recursively adds or removes the dragging class to this node and its
+   * children.
    * @param {boolean} adding True if adding, false if removing.
    * @package
    */
@@ -935,11 +938,11 @@ class BlockSvg extends Block {
   }
 
   /**
-   * Delete a block and hide chaff when doing so. The block will not be deleted if
-   * it's in a flyout. This is called from the context menu and keyboard shortcuts
-   * as the full delete action. If you are disposing of a block from the workspace
-   * and don't need to perform flyout checks, handle event grouping, or hide
-   * chaff, then use `block.dispose()` directly.
+   * Delete a block and hide chaff when doing so. The block will not be deleted
+   * if it's in a flyout. This is called from the context menu and keyboard
+   * shortcuts as the full delete action. If you are disposing of a block from
+   * the workspace and don't need to perform flyout checks, handle event
+   * grouping, or hide chaff, then use `block.dispose()` directly.
    */
   checkAndDelete() {
     if (this.workspace.isFlyout) {
@@ -1254,7 +1257,8 @@ class BlockSvg extends Block {
    */
   setStyle(blockStyleName) {
     const blockStyle =
-        this.workspace.getRenderer().getConstants().getBlockStyle(blockStyleName);
+        this.workspace.getRenderer().getConstants().getBlockStyle(
+            blockStyleName);
     this.styleName_ = blockStyleName;
 
     if (blockStyle) {
@@ -1295,7 +1299,8 @@ class BlockSvg extends Block {
    * Set whether this block can chain onto the bottom of another block.
    * @param {boolean} newBoolean True if there can be a previous statement.
    * @param {(string|Array<string>|null)=} opt_check Statement type or
-   *     list of statement types.  Null/undefined if any type could be connected.
+   *     list of statement types.  Null/undefined if any type could be
+   * connected.
    */
   setPreviousStatement(newBoolean, opt_check) {
     super.setPreviousStatement(newBoolean, opt_check);
@@ -1310,7 +1315,8 @@ class BlockSvg extends Block {
    * Set whether another block can chain onto the bottom of this block.
    * @param {boolean} newBoolean True if there can be a next statement.
    * @param {(string|Array<string>|null)=} opt_check Statement type or
-   *     list of statement types.  Null/undefined if any type could be connected.
+   *     list of statement types.  Null/undefined if any type could be
+   * connected.
    */
   setNextStatement(newBoolean, opt_check) {
     super.setNextStatement(newBoolean, opt_check);
@@ -1373,7 +1379,8 @@ class BlockSvg extends Block {
   /**
    * Move a numbered input to a different location on this block.
    * @param {number} inputIndex Index of the input to move.
-   * @param {number} refIndex Index of input that should be after the moved input.
+   * @param {number} refIndex Index of input that should be after the moved
+   *     input.
    */
   moveNumberedInputBefore(inputIndex, refIndex) {
     super.moveNumberedInputBefore(inputIndex, refIndex);
@@ -1388,8 +1395,8 @@ class BlockSvg extends Block {
   /**
    * Add a value input, statement input or local variable to this block.
    * @param {number} type One of Blockly.inputTypes.
-   * @param {string} name Language-neutral identifier which may used to find this
-   *     input again.  Should be unique to this block.
+   * @param {string} name Language-neutral identifier which may used to find
+   *     this input again.  Should be unique to this block.
    * @return {!Input} The input object created.
    * @protected
    * @override
@@ -1424,9 +1431,11 @@ class BlockSvg extends Block {
           .setTracking(track);
     }
     if (this.nextConnection) {
-      /** @type {!RenderedConnection} */ (this.nextConnection).setTracking(track);
+      /** @type {!RenderedConnection} */ (this.nextConnection)
+          .setTracking(track);
       const child =
-          /** @type {!RenderedConnection} */ (this.nextConnection).targetBlock();
+          /** @type {!RenderedConnection} */ (this.nextConnection)
+              .targetBlock();
       if (child) {
         child.setConnectionTracking(track);
       }
@@ -1486,7 +1495,8 @@ class BlockSvg extends Block {
   }
 
   /**
-   * Walks down a stack of blocks and finds the last next connection on the stack.
+   * Walks down a stack of blocks and finds the last next connection on the
+   * stack.
    * @param {boolean} ignoreShadows If true,the last connection on a non-shadow
    *     block will be returned. If false, this will follow shadows to find the
    *     last connection.
@@ -1596,16 +1606,15 @@ class BlockSvg extends Block {
 
   /**
    * Position a block so that it doesn't move the target block when connected.
-   * The block to position is usually either the first block in a dragged stack or
-   * an insertion marker.
+   * The block to position is usually either the first block in a dragged stack
+   * or an insertion marker.
    * @param {!RenderedConnection} sourceConnection The connection on the
    *     moving block's stack.
    * @param {!RenderedConnection} targetConnection The connection that
    *     should stay stationary as this block is positioned.
    * @package
    */
-  positionNearConnection(
-      sourceConnection, targetConnection) {
+  positionNearConnection(sourceConnection, targetConnection) {
     // We only need to position the new block if it's before the existing one,
     // otherwise its position is set by the previous block.
     if (sourceConnection.type === ConnectionType.NEXT_STATEMENT ||
@@ -1688,9 +1697,9 @@ class BlockSvg extends Block {
   }
 
   /**
-   * Update all of the connections on this block with the new locations calculated
-   * during rendering.  Also move all of the connected blocks based on the new
-   * connection locations.
+   * Update all of the connections on this block with the new locations
+   * calculated during rendering.  Also move all of the connected blocks based
+   * on the new connection locations.
    * @private
    */
   updateConnectionLocations_() {
@@ -1766,8 +1775,9 @@ class BlockSvg extends Block {
   }
 
   /**
-   * Visual effect to show that if the dragging block is dropped, this block will
-   * be replaced.  If a shadow block, it will disappear.  Otherwise it will bump.
+   * Visual effect to show that if the dragging block is dropped, this block
+   * will be replaced.  If a shadow block, it will disappear.  Otherwise it will
+   * bump.
    * @param {boolean} add True if highlighting should be added.
    * @package
    */

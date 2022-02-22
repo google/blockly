@@ -2425,12 +2425,12 @@ class WorkspaceSvg extends Workspace {
     return /** @type {BlockSvg} */ (super.getBlockById(id));
   }
 
-/**
- * Find all blocks in workspace.  Blocks are optionally sorted
- * by position; top to bottom (with slight LTR or RTL bias).
- * @param {boolean} ordered Sort the list if true.
- * @return {!Array<!BlockSvg>} Array of blocks.
- */
+  /**
+   * Find all blocks in workspace.  Blocks are optionally sorted
+   * by position; top to bottom (with slight LTR or RTL bias).
+   * @param {boolean} ordered Sort the list if true.
+   * @return {!Array<!BlockSvg>} Array of blocks.
+   */
   getAllBlocks(ordered) {
     return /** @type {!Array<!BlockSvg>} */ (super.getAllBlocks(ordered));
   }

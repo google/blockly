@@ -75,12 +75,10 @@ class Block {
    *     type-specific functions for this block.
    * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
    *     create a new ID.
-   * @param {boolean=} opt_skipInit If true will not call init() on the block,
-   *     so that the subclass can do that instead.
    * @throws When the prototypeName is not valid or not allowed.
    * @alias Blockly.Block
    */
-  constructor(workspace, prototypeName, opt_id, opt_skipInit) {
+  constructor(workspace, prototypeName, opt_id) {
     const {Generator} = goog.module.get('Blockly.Generator');
     if (Generator &&
         typeof Generator.prototype[prototypeName] !== 'undefined') {
@@ -361,7 +359,7 @@ class Block {
     workspace.addTopBlock(this);
     workspace.addTypedBlock(this);
 
-    if (!opt_skipInit) this.doInit_();
+    if (new.target === Block) this.doInit_();
   }
 
   /**

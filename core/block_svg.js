@@ -99,7 +99,7 @@ class BlockSvg extends Block {
    * @alias Blockly.BlockSvg
    */
   constructor(workspace, prototypeName, opt_id) {
-    super(workspace, prototypeName, opt_id, true);
+    super(workspace, prototypeName, opt_id);
 
     /**
      * An optional method called when a mutator dialog is first opened.

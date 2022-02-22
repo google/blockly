@@ -13,7 +13,7 @@
  goog.module('Blockly.blocks.proceduresLocalArg');
 
  Blockly.ProceduresLocalArgUtils = {};
- 
+
  /* eslint-disable-next-line no-unused-vars */
  const AbstractEvent = goog.requireType('Blockly.Events.Abstract');
  const ContextMenu = goog.require('Blockly.ContextMenu');
@@ -167,6 +167,7 @@
   Blockly.ProceduresLocalArgUtils.createInputs_ = function() {
     const argumentsModels = this.argumentModels_;
     this.argumentModels_ = [];
+    console.log('call createInputs_ argumentsModels', JSON.stringify(argumentsModels), 'this.argumentNewModels_', JSON.stringify(this.argumentNewModels_));
 
     for (let i = 0; i < this.arguments_.length; i++) {
       let argId = idGenerator.genUid();
@@ -191,6 +192,7 @@
   * @private
   */
   Blockly.ProceduresLocalArgUtils.removeArguments_ = function() {
+    console.log('call removeArguments_ this.argumentModels_', JSON.stringify({'this.argumentModels_': this.argumentModels_}), JSON.stringify({'this.arguments_': this.arguments_}));
     if (!this.argumentModels_.length) {
       return;
     }
@@ -251,9 +253,6 @@
       const argModel = this.argumentModels_[i];
       parameter.setAttribute('name', argModel.name);
       parameter.setAttribute('varid', argModel.id);
-      if (optParamIds && this.paramIds_) {
-        parameter.setAttribute('paramId', this.paramIds_[i]);
-      }
       container.appendChild(parameter);
     }
 
@@ -270,8 +269,10 @@
     * @this {Block}
     */
   Blockly.ProceduresLocalArgUtils.domToMutation = function(xmlElement) {
+    console.log('call domToMutation', JSON.stringify({'this.arguments_': this.arguments_}));
     this.arguments_ = [];
     this.argumentModels_ = [];
+    this.argumentNewModels_ = [];
     for (let i = 0, childNode; (childNode = xmlElement.childNodes[i]); i++) {
       if (childNode.nodeName.toLowerCase() === 'arg') {
         const varName = childNode.getAttribute('name');
@@ -299,6 +300,7 @@
     *     parameters and statements.
     */
   Blockly.ProceduresLocalArgUtils.saveExtraState = function() {
+    console.log('call saveExtraState', JSON.stringify(this.argumentModels_));
     if (!this.argumentModels_.length && this.hasStatements_) {
       return null;
     }
@@ -307,8 +309,6 @@
       state.params = [];
       for (let i = 0; i < this.argumentModels_.length; i++) {
         state.params.push({
-          // We don't need to serialize the name, but just in case we decide
-          // to separate params from variables.
           'name': this.argumentModels_[i].name,
           'id': this.argumentModels_[i].id,
         });
@@ -325,13 +325,12 @@
     *     statements.
     */
   Blockly.ProceduresLocalArgUtils.loadExtraState = function(state) {
+    console.log('call loadExtraState');
     this.arguments_ = [];
     this.argumentModels_ = [];
     if (state.params) {
       for (let i = 0; i < state.params.length; i++) {
         const param = state.params[i];
-        // const variable = Blockly.Variables.getOrCreateVariablePackage(
-        //   this.workspace, param.id, param.name, '')
         this.arguments_.push(param.name);
         this.argumentModels_.push({id: param.id, name: param.name});
       }
@@ -347,6 +346,7 @@
     * @this {Block}
     */
   Blockly.ProceduresLocalArgUtils.decompose = function(workspace) {
+    console.log('call decompose');
     /*
       * Creates the following XML:
       * <block type="procedures_local_mutatorcontainer">
@@ -366,12 +366,12 @@
     containerBlockNode.appendChild(statementNode);
 
     let node = statementNode;
-    for (let i = 0; i < this.arguments_.length; i++) {
+    for (let i = 0; i < this.argumentModels_.length; i++) {
       const argBlockNode = xmlUtils.createElement('block');
       argBlockNode.setAttribute('type', 'procedures_local_mutatorarg');
       const fieldNode = xmlUtils.createElement('field');
       fieldNode.setAttribute('name', 'NAME');
-      const argumentName = xmlUtils.createTextNode(this.arguments_[i]);
+      const argumentName = xmlUtils.createTextNode(this.argumentModels_[i].name);
       fieldNode.appendChild(argumentName);
       argBlockNode.appendChild(fieldNode);
       const nextNode = xmlUtils.createElement('next');
@@ -399,17 +399,16 @@
     * @this {Block}
     */
   Blockly.ProceduresLocalArgUtils.compose = function(containerBlock) {
+    console.log('call compose', JSON.stringify({'this.arguments_': this.arguments_}));
     // Parameter list.
     this.arguments_ = [];
-    this.paramIds_ = [];
-    // this.argumentModels_ = []
     let paramBlock = containerBlock.getInputTargetBlock('STACK');
 
     while (paramBlock && !paramBlock.isInsertionMarker()) {
-      const varName = paramBlock.getFieldValue('NAME');
-      this.arguments_.push(varName);
+      console.log('paramBlock', paramBlock);
+      const argumentName = paramBlock.getFieldValue('NAME');
+      this.arguments_.push(argumentName);
 
-      this.paramIds_.push(paramBlock.id);
       paramBlock =
            paramBlock.nextConnection && paramBlock.nextConnection.targetBlock();
     }
@@ -448,82 +447,6 @@
     */
   Blockly.ProceduresLocalArgUtils.getVars = function() {
     return this.arguments_;
-  };
-  /**
-    * Notification that a variable is renaming.
-    * If the ID matches one of this block's variables, rename it.
-    * @param {string} oldId ID of variable to rename.
-    * @param {string} newId ID of new variable.  May be the same as oldId, but
-    *     with an updated name.  Guaranteed to be the same type as the old
-    *     variable.
-    * @override
-    * @this {Block}
-    */
-  Blockly.ProceduresLocalArgUtils.renameVarById = function(oldId, newId) {
-    const oldVariable = this.workspace.getVariableById(oldId);
-    if (oldVariable.type !== '') {
-      // Procedure arguments always have the empty type.
-      return;
-    }
-    const oldName = oldVariable.name;
-    const newVar = this.workspace.getVariableById(newId);
-
-    let change = false;
-    for (let i = 0; i < this.argumentModels_.length; i++) {
-      if (this.argumentModels_[i].id === oldId) {
-        this.arguments_[i] = newVar.name;
-        this.argumentModels_[i] = newVar;
-        change = true;
-      }
-    }
-    if (change) {
-      this.displayRenamedVar_(oldName, newVar.name);
-      ProceduresLocalArg.mutateCallers(this);
-    }
-  };
-  /**
-    * Notification that a variable is renaming but keeping the same ID.  If the
-    * variable is in use on this block, rerender to show the new name.
-    * @param {!VariableModel} variable The variable being renamed.
-    * @package
-    * @override
-    * @this {Block}
-    */
-  Blockly.ProceduresLocalArgUtils.updateVarName = function(variable) {
-    const newName = variable.name;
-    let change = false;
-    let oldName;
-    for (let i = 0; i < this.argumentModels_.length; i++) {
-      if (this.argumentModels_[i].id === variable.id) {
-        oldName = this.arguments_[i];
-        this.arguments_[i] = newName;
-        change = true;
-      }
-    }
-    if (change) {
-      this.displayRenamedVar_(oldName, newName);
-      ProceduresLocalArg.mutateCallers(this);
-    }
-  };
-  /**
-    * Update the display to reflect a newly renamed argument.
-    * @param {string} oldName The old display name of the argument.
-    * @param {string} newName The new display name of the argument.
-    * @private
-    * @this {Block}
-    */
-  Blockly.ProceduresLocalArgUtils.displayRenamedVar_ = function(oldName, newName) {
-    this.updateParams_();
-    // Update the mutator's variables if the mutator is open.
-    if (this.mutator && this.mutator.isVisible()) {
-      const blocks = this.mutator.workspace_.getAllBlocks(false);
-      for (let i = 0, block; (block = blocks[i]); i++) {
-        if (block.type === 'procedures_local_mutatorarg' &&
-             Names.equals(oldName, block.getFieldValue('NAME'))) {
-          block.setFieldValue(newName, 'NAME');
-        }
-      }
-    }
   };
   /**
     * Add custom menu options to this block's context menu.
@@ -593,6 +516,7 @@ Blocks['procedures_local_defnoreturn'] = {
     this.setHelpUrl(Msg.PROCEDURES_DEFNORETURN_HELPURL);
     this.arguments_ = [];
     this.argumentModels_ = [];
+    this.argumentNewModels_ = [];
     this.setStatements_(true);
     this.statementConnection_ = null;
   },
@@ -612,9 +536,6 @@ Blocks['procedures_local_defnoreturn'] = {
   decompose: Blockly.ProceduresLocalArgUtils.decompose,
   compose: Blockly.ProceduresLocalArgUtils.compose,
   getVars: Blockly.ProceduresLocalArgUtils.getVars,
-  renameVarById: Blockly.ProceduresLocalArgUtils.renameVarById,
-  updateVarName: Blockly.ProceduresLocalArgUtils.updateVarName,
-  displayRenamedVar_: Blockly.ProceduresLocalArgUtils.displayRenamedVar_,
   customContextMenu: Blockly.ProceduresLocalArgUtils.customContextMenu,
   getProcedureDef: Blockly.ProceduresLocalArgUtils.getProcedureDef,
   callType_: Blockly.ProceduresLocalArgUtils.callType_,
@@ -649,6 +570,7 @@ Blocks['procedures_local_defreturn'] = {
     this.setHelpUrl(Msg.PROCEDURES_DEFRETURN_HELPURL);
     this.arguments_ = [];
     this.argumentModels_ = [];
+    this.argumentNewModels_ = [];
     this.setStatements_(true);
     this.statementConnection_ = null;
   },
@@ -668,9 +590,6 @@ Blocks['procedures_local_defreturn'] = {
   decompose: Blockly.ProceduresLocalArgUtils.decompose,
   compose: Blockly.ProceduresLocalArgUtils.compose,
   getVars: Blockly.ProceduresLocalArgUtils.getVars,
-  renameVarById: Blockly.ProceduresLocalArgUtils.renameVarById,
-  updateVarName: Blockly.ProceduresLocalArgUtils.updateVarName,
-  displayRenamedVar_: Blockly.ProceduresLocalArgUtils.displayRenamedVar_,
   customContextMenu: Blockly.ProceduresLocalArgUtils.customContextMenu,
   getProcedureDef: Blockly.ProceduresLocalArgUtils.getProcedureDef,
   callType_: Blockly.ProceduresLocalArgUtils.callType_,
@@ -708,6 +627,7 @@ Blocks['procedures_local_mutatorarg'] = {
       * @this {FieldTextInput}
       */
     const newShowEditorFn = function() {
+      console.log('newShowEditorFn');
       this.createdVariables_ = [];
       this.oldShowEditorFn_();
     };
@@ -736,17 +656,20 @@ Blocks['procedures_local_mutatorarg'] = {
     * necessary.
     * Merge runs of whitespace.  Strip leading and trailing whitespace.
     * Beyond this, all names are legal.
-    * @param {string} varName User-supplied name.
+    * @param {string} argumentName User-supplied name.
     * @return {?string} Valid name, or null if a name was not specified.
     * @private
     * @this {FieldTextInput}
     */
-  validator_: function(varName) {
+  validator_: function(argumentName) {
     const sourceBlock = this.getSourceBlock();
-    varName = varName.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
-    if (!varName) {
+    console.log('validator_ sourceBlock', {sourceBlock});
+    argumentName = argumentName.replace(/[\s\xa0]+/g, ' ').replace(/^ | $/g, '');
+    if (!argumentName) {
       return null;
     }
+
+    sourceBlock.argumentId_ = sourceBlock.argumentId_ || idGenerator.genUid();
 
     // Prevents duplicate parameter names in functions
     const workspace =
@@ -755,14 +678,23 @@ Blocks['procedures_local_mutatorarg'] = {
          workspace.getAllBlocks(false).filter((block) => block.id !== this.getSourceBlock().id);
 
     if (sourceBlock.isInFlyout) {
-      return varName;
+      return argumentName;
     }
-    const argNames = blocks
+
+    console.log('validator_ blocks', blocks);
+
+    const existArgumentsName = blocks
       .filter((b) => b.getFieldValue('NAME'))
       .map((block) => block.getFieldValue('NAME'));
 
-    return Variables.generateUniqueNameFromOptions(
-      ProceduresLocalArg.DEFAULT_ARG, argNames);
+    if (!existArgumentsName.includes(argumentName)) {
+      return argumentName;
+    }
+
+    const newArgumentName = Variables.generateUniqueNameFromOptions(
+      ProceduresLocalArg.DEFAULT_ARG, existArgumentsName);
+
+    return newArgumentName;
   },
 
   /**
@@ -784,6 +716,14 @@ Blocks['procedures_local_mutatorarg'] = {
         outerWs.deleteVariableById(model.getId());
       }
     }
+  },
+
+  getArgumentId: function() {
+    return this.argumentId_;
+  },
+
+  setArgumentId: function(id) {
+    this.argumentId_ = id;
   },
 };
 
@@ -1244,7 +1184,7 @@ Blocks['argument_local'] = {
       const argumentName = xmlBlock.textContent;
       enable = false;
       do {
-        if (block.type === 'procedures_local_defnoreturn' && block.arguments_.includes(argumentName)) {
+        if ((block.type === 'procedures_local_defnoreturn' || block.type === 'procedures_local_defreturn') && block.arguments_.includes(argumentName)) {
           enable = true;
           break;
         }

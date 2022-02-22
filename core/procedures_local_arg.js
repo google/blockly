@@ -14,7 +14,7 @@
   * @namespace Blockly.ProceduresLocalArg
   */
  goog.module('Blockly.ProceduresLocalArg');
- 
+
  /* eslint-disable-next-line no-unused-vars */
  const Abstract = goog.requireType('Blockly.Events.Abstract');
  const Variables = goog.require('Blockly.Variables');
@@ -33,8 +33,8 @@
  const {Workspace} = goog.require('Blockly.Workspace');
  /** @suppress {extraRequire} */
  goog.require('Blockly.Events.BlockChange');
- 
- 
+
+
  /**
   * String for use in the "custom" attribute of a category in toolbox XML.
   * This string indicates that the category should be dynamically populated with
@@ -46,7 +46,7 @@
   */
  const CATEGORY_NAME = 'PROCEDURE';
  exports.CATEGORY_NAME = CATEGORY_NAME;
- 
+
  /**
   * The default argument for a procedures_local_mutatorarg block.
   * @type {string}
@@ -54,7 +54,7 @@
   */
  const DEFAULT_ARG = 'x';
  exports.DEFAULT_ARG = DEFAULT_ARG;
- 
+
  /**
   * Procedure block type.
   * @typedef {{
@@ -66,7 +66,7 @@
   */
  let ProcedureBlock;
  exports.ProcedureBlock = ProcedureBlock;
- 
+
  /**
   * Find all user-created procedure definitions in a workspace.
   * @param {!Workspace} root Root workspace.
@@ -90,7 +90,7 @@
    return [proceduresLocalNoReturn, proceduresLocalReturn];
  };
  exports.allProcedures = allProcedures;
- 
+
  /**
   * Comparison function for case-insensitive sorting of the first element of
   * a tuple.
@@ -101,7 +101,7 @@
  const procTupleComparator = function(ta, tb) {
    return ta[0].localeCompare(tb[0], undefined, {sensitivity: 'base'});
  };
- 
+
  /**
   * Ensure two identically-named procedures don't exist.
   * Take the proposed procedure name, and return a legal name i.e. one that
@@ -129,7 +129,7 @@
    return name;
  };
  exports.findLegalName = findLegalName;
- 
+
  /**
   * Does this procedure have a legal name?  Illegal names include names of
   * procedures already defined.
@@ -142,7 +142,7 @@
  const isLegalName = function(name, workspace, opt_exclude) {
    return !isNameUsed(name, workspace, opt_exclude);
  };
- 
+
  /**
   * Return if the given name is already a procedure name.
   * @param {string} name The questionable name.
@@ -170,7 +170,7 @@
    return false;
  };
  exports.isNameUsed = isNameUsed;
- 
+
  /**
   * Rename a procedure.  Called by the editable field.
   * @param {string} name The proposed new name.
@@ -181,7 +181,7 @@
  const rename = function(name) {
    // Strip leading and trailing whitespace.  Beyond this, all names are legal.
    name = name.trim();
- 
+
    const legalName = findLegalName(
        name,
        /** @type {!Block} */ (this.getSourceBlock()));
@@ -200,7 +200,7 @@
    return legalName;
  };
  exports.rename = rename;
- 
+
  /**
   * Construct the blocks required by the flyout for the procedure category.
   * @param {!Workspace} workspace The workspace containing procedures.
@@ -241,7 +241,7 @@
      // Add slightly larger gap between system blocks and user calls.
      xmlList[xmlList.length - 1].setAttribute('gap', 24);
    }
- 
+
    /**
     * Add items to xmlList for each listed procedure.
     * @param {!Array<!Array>} procedureList A list of procedures, each of which
@@ -272,14 +272,14 @@
        xmlList.push(block);
      }
    }
- 
+
    const tuple = allProcedures(workspace);
    populateProcedures(tuple[0], 'procedures_local_callnoreturn');
    populateProcedures(tuple[1], 'procedures_local_callreturn');
    return xmlList;
  };
  exports.flyoutCategory = flyoutCategory;
- 
+
  /**
   * Updates the procedure mutator's flyout so that the arg block is not a
   * duplicate of another arg.
@@ -292,7 +292,7 @@
    for (let i = 0, block; (block = blocks[i]); i++) {
      usedNames.push(block.getFieldValue('NAME'));
    }
- 
+
    const xmlElement = utilsXml.createElement('xml');
    const argBlock = utilsXml.createElement('block');
    argBlock.setAttribute('type', 'procedures_local_mutatorarg');
@@ -301,14 +301,14 @@
    const argValue =
        Variables.generateUniqueNameFromOptions(DEFAULT_ARG, usedNames);
    const fieldContent = utilsXml.createTextNode(argValue);
- 
+
    nameField.appendChild(fieldContent);
    argBlock.appendChild(nameField);
    xmlElement.appendChild(argBlock);
- 
+
    workspace.updateToolbox(xmlElement);
  };
- 
+
  /**
   * Listens for when a procedure mutator is opened. Then it triggers a flyout
   * update and adds a mutator change listener to the mutator workspace.
@@ -332,7 +332,7 @@
    workspace.addChangeListener(mutatorChangeListener);
  };
  exports.mutatorOpenListener = mutatorOpenListener;
- 
+
  /**
   * Listens for changes in a procedure mutator and triggers flyout updates when
   * necessary.
@@ -349,7 +349,7 @@
        (Workspace.getById(workspaceId));
    updateMutatorFlyout(workspace);
  };
- 
+
  /**
   * Find all the callers of a named procedure.
   * @param {string} name Name of procedure.
@@ -374,7 +374,7 @@
    return callers;
  };
  exports.getCallers = getCallers;
- 
+
  /**
   * When a procedure definition changes its parameters, find and edit all its
   * callers.
@@ -405,7 +405,7 @@
    }
  };
  exports.mutateCallers = mutateCallers;
- 
+
  /**
   * Find the definition block for the named procedure.
   * @param {string} name Name of procedure.

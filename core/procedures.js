@@ -340,7 +340,7 @@ const mutatorOpenListener = function(e) {
   }
   const workspaceId = /** @type {string} */ (bubbleEvent.workspaceId);
   const block = /** @type {!BlockSvg} */
-      (Workspace.getById(workspaceId).getBlockById(e.blockId));
+      (Workspace.getById(workspaceId).getBlockById(bubbleEvent.blockId));
   const type = block.type;
   if (type !== 'procedures_defnoreturn' && type !== 'procedures_defreturn') {
     return;

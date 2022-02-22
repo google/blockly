@@ -348,8 +348,8 @@ function chunkWrapper(chunk) {
   } else if (typeof exports === 'object') { // Node.js
     module.exports = factory(${cjsDeps});
   } else { // Browser
-    var exports = factory(${browserDeps});
-    root.${chunk.exports} = exports;
+    var factoryExports = factory(${browserDeps});
+    root.${chunk.exports} = factoryExports;
   }
 }(this, function(${factoryParams}) {
 ${chunk.factoryPreamble || FACTORY_PREAMBLE}

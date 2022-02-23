@@ -40,16 +40,12 @@ const {Theme} = goog.requireType('Blockly.Theme');
  * @alias Blockly.geras.PathObject
  */
 const PathObject = function(root, style, constants) {
+  PathObject.superClass_.constructor.call(this, root, style, constants);
   /**
    * The renderer's constant provider.
    * @type {!ConstantProvider}
    */
   this.constants = constants;
-
-  this.svgRoot = root;
-
-  // The order of creation for these next three matters, because that
-  // effectively sets their z-indices.
 
   /**
    * The dark path of the block.
@@ -57,16 +53,9 @@ const PathObject = function(root, style, constants) {
    * @package
    */
   this.svgPathDark = dom.createSvgElement(
-      Svg.PATH, {'class': 'blocklyPathDark', 'transform': 'translate(1,1)'},
-      this.svgRoot);
+      Svg.PATH, {'class': 'blocklyPathDark', 'transform': 'translate(1,1)'});
 
-  /**
-   * The primary path of the block.
-   * @type {!SVGElement}
-   * @package
-   */
-  this.svgPath =
-      dom.createSvgElement(Svg.PATH, {'class': 'blocklyPath'}, this.svgRoot);
+  this.svgRoot.insertBefore(this.svgPathDark, this.svgPath);
 
   /**
    * The light path of the block.
@@ -82,13 +71,6 @@ const PathObject = function(root, style, constants) {
    * @package
    */
   this.colourDark = '#000000';
-
-  /**
-   * The style object to use when colouring block paths.
-   * @type {!Theme.BlockStyle}
-   * @package
-   */
-  this.style = style;
 };
 object.inherits(PathObject, BasePathObject);
 

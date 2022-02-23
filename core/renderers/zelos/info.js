@@ -473,10 +473,6 @@ class RenderInfo extends BaseRenderInfo {
         const row = this.rows[i];
         if (Types.isTopOrBottomRow(row)) {
           row.elements[1].width -= totalNegativeSpacing;
-          // TODO: I can't find any row elements that have this property, but
-          // I am also unable to test with the debug renderer and zelos at the
-          // same time. MUST FIX BEFORE MERGE!
-          // row.elements[1].widthWithConnectedBlocks -= totalNegativeSpacing;
         }
         row.width -= totalNegativeSpacing;
         row.widthWithConnectedBlocks -= totalNegativeSpacing;

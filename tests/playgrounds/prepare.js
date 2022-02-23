@@ -55,7 +55,7 @@
             goog.bootstrap(
                 [
                   'Blockly',
-                  'Blockly.blocks.all',
+                  'Blockly.libraryBlocks',
                   'Blockly.Dart.all',
                   'Blockly.JavaScript.all',
                   'Blockly.Lua.all',
@@ -74,12 +74,12 @@
 
     // Load blockly_compressed.js et al. using <script> tags.
     document.write('<script src="../../blockly_compressed.js"></script>');
+    document.write('<script src="../../msg/messages.js"></script>');
+    document.write('<script src="../../blocks_compressed.js"></script>');
     document.write('<script src="../../dart_compressed.js"></script>');
     document.write('<script src="../../javascript_compressed.js"></script>');
     document.write('<script src="../../lua_compressed.js"></script>');
     document.write('<script src="../../php_compressed.js"></script>');
     document.write('<script src="../../python_compressed.js"></script>');
-    document.write('<script src="../../blocks_compressed.js"></script>');
-    document.write('<script src="../../msg/messages.js"></script>');
   }
 })();

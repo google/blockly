@@ -10,7 +10,7 @@
  */
 'use strict';
 
-goog.module('Blockly.blocks.math');
+goog.module('Blockly.libraryBlocks.math');
 
 const Extensions = goog.require('Blockly.Extensions');
 // N.B.: Blockly.FieldDropdown needed for type AND side-effects.

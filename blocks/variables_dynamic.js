@@ -10,7 +10,7 @@
  */
 'use strict';
 
-goog.module('Blockly.blocks.variablesDynamic');
+goog.module('Blockly.libraryBlocks.variablesDynamic');
 
 /* eslint-disable-next-line no-unused-vars */
 const AbstractEvent = goog.requireType('Blockly.Events.Abstract');

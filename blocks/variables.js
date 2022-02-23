@@ -10,7 +10,7 @@
  */
 'use strict';
 
-goog.module('Blockly.blocks.variables');
+goog.module('Blockly.libraryBlocks.variables');
 
 const ContextMenu = goog.require('Blockly.ContextMenu');
 const Extensions = goog.require('Blockly.Extensions');

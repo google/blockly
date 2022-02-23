@@ -33,6 +33,7 @@ const {Theme} = goog.requireType('Blockly.Theme');
 /**
  * An object that handles creating and setting each of the SVG elements
  * used by the renderer.
+ * @implements {IPathObject}
  */
 class PathObject {
   /**
@@ -41,7 +42,6 @@ class PathObject {
    *     colouring.
    * @param {!ConstantProvider} constants The renderer's
    *     constants.
-   * @implements {IPathObject}
    * @package
    * @alias Blockly.blockRendering.PathObject
    */

@@ -18,7 +18,6 @@ goog.module('Blockly.geras.PathObject');
 
 const colour = goog.require('Blockly.utils.colour');
 const dom = goog.require('Blockly.utils.dom');
-const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.geras.ConstantProvider');
 const {PathObject: BasePathObject} = goog.require('Blockly.blockRendering.PathObject');

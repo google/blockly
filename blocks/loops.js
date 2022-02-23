@@ -10,7 +10,7 @@
  */
 'use strict';
 
-goog.module('Blockly.blocks.loops');
+goog.module('Blockly.libraryBlocks.loops');
 
 /* eslint-disable-next-line no-unused-vars */
 const AbstractEvent = goog.requireType('Blockly.Events.Abstract');
@@ -297,8 +297,11 @@ Extensions.register(
  * loopTypes.add('custom_loop');
  *
  * // Else if using Closure Compiler and goog.modules:
- * const {loopTypes} = goog.require('Blockly.blocks.loops');
+ * const {loopTypes} = goog.require('Blockly.libraryBlocks.loops');
  * loopTypes.add('custom_loop');
+ *
+ * // Else if using blockly_compressed + blockss_compressed.js in browser:
+ * Blockly.libraryBlocks.loopTypes.add('custom_loop');
  *
  * @type {!Set<string>}
  */

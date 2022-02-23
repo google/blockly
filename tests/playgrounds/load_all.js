@@ -31,23 +31,23 @@ if ((location.hostname === 'localhost' || location.hostname === '127.0.0.1' ||
       `<script src="../node_modules/@blockly/block-test/dist/index.js"></script>`);
   document.write(`<script>
                 // Custom requires for the playground.
+                goog.require('Blockly.libraryBlocks');
                 goog.require('Blockly.Dart.all');
                 goog.require('Blockly.JavaScript.all');
                 goog.require('Blockly.Lua.all');
                 goog.require('Blockly.PHP.all');
                 goog.require('Blockly.Python.all');
                 goog.require('Blockly.WorkspaceCommentSvg');
-                goog.require('Blockly.blocks.all');
             </script>`);
 } else {
   document.write(
       `<script src="../blockly_compressed.js" id="blockly-compressed-script"></script>`);
+  document.write(`<script src="../blocks_compressed.js"></script>`);
   document.write(`<script src="../dart_compressed.js"></script>`);
   document.write(`<script src="../javascript_compressed.js"></script>`);
   document.write(`<script src="../lua_compressed.js"></script>`);
   document.write(`<script src="../php_compressed.js"></script>`);
   document.write(`<script src="../python_compressed.js"></script>`);
-  document.write(`<script src="../blocks_compressed.js"></script>`);
   document.write(`<script src="../msg/messages.js"></script>`);
 }
 })();

@@ -475,15 +475,15 @@ class Toolbox extends DeleteArea {
         registry.Type.TOOLBOX_ITEM, registryName.toLowerCase());
     if (ToolboxItemClass) {
       const toolboxItem = new ToolboxItemClass(toolboxItemDef, this);
-      this.addToolboxItem_(toolboxItem);
       toolboxItem.init();
+      this.addToolboxItem_(toolboxItem);
       const toolboxItemDom = toolboxItem.getDiv();
       if (toolboxItemDom) {
         fragment.appendChild(toolboxItemDom);
       }
       // Adds the ID to the HTML element that can receive a click.
       // This is used in onClick_ to find the toolboxItem that was clicked.
-      if (toolboxItem.getClickTarget) {
+      if (toolboxItem.getClickTarget()) {
         toolboxItem.getClickTarget().setAttribute('id', toolboxItem.getId());
       }
     }

@@ -1,12 +1,12 @@
 {
   "chunk": [
     "blockly:259",
-    "all:10:blockly",
+    "blocks:10:blockly",
+    "all:11:blockly",
     "all1:11:blockly",
     "all2:11:blockly",
     "all3:11:blockly",
-    "all4:11:blockly",
-    "all5:11:blockly"
+    "all4:11:blockly"
   ],
   "js": [
     "./core/inject.js",
@@ -277,7 +277,7 @@
     "./blocks/logic.js",
     "./blocks/lists.js",
     "./blocks/colour.js",
-    "./blocks/all.js",
+    "./blocks/blocks.js",
     "./generators/javascript/variables_dynamic.js",
     "./generators/javascript/variables.js",
     "./generators/javascript/text.js",

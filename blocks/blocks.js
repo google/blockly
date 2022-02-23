@@ -10,18 +10,18 @@
  */
 'use strict';
 
-goog.module('Blockly.blocks.all');
+goog.module('Blockly.libraryBlocks');
 goog.module.declareLegacyNamespace();
 
-const colour = goog.require('Blockly.blocks.colour');
-const lists = goog.require('Blockly.blocks.lists');
-const logic = goog.require('Blockly.blocks.logic');
-const loops = goog.require('Blockly.blocks.loops');
-const math = goog.require('Blockly.blocks.math');
-const procedures = goog.require('Blockly.blocks.procedures');
-const texts = goog.require('Blockly.blocks.texts');
-const variables = goog.require('Blockly.blocks.variables');
-const variablesDynamic = goog.require('Blockly.blocks.variablesDynamic');
+const colour = goog.require('Blockly.libraryBlocks.colour');
+const lists = goog.require('Blockly.libraryBlocks.lists');
+const logic = goog.require('Blockly.libraryBlocks.logic');
+const loops = goog.require('Blockly.libraryBlocks.loops');
+const math = goog.require('Blockly.libraryBlocks.math');
+const procedures = goog.require('Blockly.libraryBlocks.procedures');
+const texts = goog.require('Blockly.libraryBlocks.texts');
+const variables = goog.require('Blockly.libraryBlocks.variables');
+const variablesDynamic = goog.require('Blockly.libraryBlocks.variablesDynamic');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockDefinition} = goog.requireType('Blockly.blocks');
 
@@ -38,7 +38,7 @@ exports.variablesDynamic = variablesDynamic;
 
 /**
  * A dictionary of the block definitions provided by all the
- * Blockly.blocks.* modules.
+ * Blockly.libraryBlocks.* modules.
  * @type {!Object<string, !BlockDefinition>}
  */
 const blocks = Object.assign(

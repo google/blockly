@@ -28,7 +28,6 @@ const {Theme} = goog.requireType('Blockly.Theme');
 /**
  * An object that handles creating and setting each of the SVG elements
  * used by the renderer.
- * @extends {BasePathObject}
  */
 class PathObject extends BasePathObject {
   /**

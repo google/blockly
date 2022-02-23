@@ -31,18 +31,17 @@ const {Theme} = goog.requireType('Blockly.Theme');
  * An object that handles creating and setting each of the SVG elements
  * used by the renderer.
  */
-var PathObject = class {
+class PathObject extends BasePathObject {
   /**
    * @param {!SVGElement} root The root SVG element.
    * @param {!Theme.BlockStyle} style The style object to use for
    *     colouring.
    * @param {!ConstantProvider} constants The renderer's constants.
-   * @extends {BasePathObject}
-   * @package
    * @alias Blockly.geras.PathObject
+   * @package
    */
   constructor(root, style, constants) {
-    PathObject.superClass_.constructor.call(this, root, style, constants);
+    super(root, style, constants);
     /**
      * The renderer's constant provider.
      * @type {!ConstantProvider}
@@ -111,7 +110,7 @@ var PathObject = class {
     this.svgPathLight.setAttribute('stroke', this.style.colourTertiary);
     this.svgPathDark.setAttribute('fill', this.colourDark);
 
-    PathObject.superClass_.applyColour.call(this, block);
+    super.applyColour(block);
 
     this.svgPath.setAttribute('stroke', 'none');
   }
@@ -155,12 +154,11 @@ var PathObject = class {
    * @override
    */
   updateDisabled_(disabled) {
-    PathObject.superClass_.updateDisabled_.call(this, disabled);
+    super.updateDisabled_(disabled);
     if (disabled) {
       this.svgPath.setAttribute('stroke', 'none');
     }
   }
-};
-object.inherits(PathObject, BasePathObject);
+}
 
 exports.PathObject = PathObject;

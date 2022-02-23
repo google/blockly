@@ -34,7 +34,7 @@ const {Theme} = goog.requireType('Blockly.Theme');
  * An object that handles creating and setting each of the SVG elements
  * used by the renderer.
  */
-var PathObject = class {
+class PathObject {
   /**
    * @param {!SVGElement} root The root SVG element.
    * @param {!Theme.BlockStyle} style The style object to use for
@@ -278,6 +278,6 @@ var PathObject = class {
   updateShapeForInputHighlight(_conn, _enable) {
     // NOP
   }
-};
+}
 
 exports.PathObject = PathObject;

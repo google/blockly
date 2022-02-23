@@ -25,6 +25,8 @@ const {ConstantProvider} = goog.requireType('Blockly.zelos.ConstantProvider');
 const {FieldImage} = goog.require('Blockly.FieldImage');
 const {FieldLabel} = goog.require('Blockly.FieldLabel');
 const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
+/* eslint-disable-next-line no-unused-vars */
+const {Input} = goog.requireType('Blockly.Input');
 const {InRowSpacer} = goog.require('Blockly.blockRendering.InRowSpacer');
 /* eslint-disable-next-line no-unused-vars */
 const {Measurable} = goog.requireType('Blockly.blockRendering.Measurable');
@@ -32,6 +34,8 @@ const {RenderInfo: BaseRenderInfo} = goog.require('Blockly.blockRendering.Render
 /* eslint-disable-next-line no-unused-vars */
 const {Renderer} = goog.requireType('Blockly.zelos.Renderer');
 const {RightConnectionShape} = goog.require('Blockly.zelos.RightConnectionShape');
+/* eslint-disable-next-line no-unused-vars */
+const {Row} = goog.require('Blockly.blockRendering.Row');
 /* eslint-disable-next-line no-unused-vars */
 const {SpacerRow} = goog.requireType('Blockly.blockRendering.SpacerRow');
 const {StatementInput} = goog.require('Blockly.zelos.StatementInput');
@@ -100,6 +104,14 @@ class RenderInfo extends BaseRenderInfo {
     this.rightSide = this.outputConnection ?
         new RightConnectionShape(this.constants_) :
         null;
+
+    /**
+     * A map of rows to right aligned dummy inputs within those rows. Used to
+     * add padding between left and right aligned inputs.
+     * @type {!WeakMap<!Row, !Input>}
+     * @private
+     */
+    this.rightAlignedDummyInputs_ = new WeakMap();
   }
 
   /**
@@ -273,7 +285,7 @@ class RenderInfo extends BaseRenderInfo {
     // padding later.
     if (input.type === inputTypes.DUMMY && activeRow.hasDummyInput &&
         activeRow.align === Align.LEFT && input.align === Align.RIGHT) {
-      activeRow.rightAlignedDummyInput = input;
+      this.rightAlignedDummyInputs_.set(activeRow, input);
     } else if (input.type === inputTypes.STATEMENT) {
       // Handle statements without next connections correctly.
       activeRow.elements.push(new StatementInput(this.constants_, input));
@@ -291,7 +303,7 @@ class RenderInfo extends BaseRenderInfo {
    * @override
    */
   addAlignmentPadding_(row, missingSpace) {
-    if (row.rightAlignedDummyInput) {
+    if (this.rightAlignedDummyInputs_.get(row)) {
       let alignmentDivider;
       for (let i = 0; i < row.elements.length; i++) {
         const elem = row.elements[i];
@@ -299,7 +311,7 @@ class RenderInfo extends BaseRenderInfo {
           alignmentDivider = elem;
         }
         if (Types.isField(elem) &&
-            elem.parentInput === row.rightAlignedDummyInput) {
+            elem.parentInput === this.rightAlignedDummyInputs_.get(row)) {
           break;
         }
       }

@@ -55,6 +55,9 @@ class PathObject extends BasePathObject {
     this.svgPathDark = dom.createSvgElement(
         Svg.PATH, {'class': 'blocklyPathDark', 'transform': 'translate(1,1)'});
 
+    // SVG draw order is based on the order of elements (top most = back most)
+    // So we need to insert the dark path before the base path to make sure it
+    // gets drawn first.
     this.svgRoot.insertBefore(this.svgPathDark, this.svgPath);
 
     /**

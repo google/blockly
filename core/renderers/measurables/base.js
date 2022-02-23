@@ -26,7 +26,7 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  * rendering.  The constructor for each non-spacer Measurable records the size
  * of the block element (e.g. field, statement input).
  */
-var Measurable = class {
+class Measurable {
   /**
    * @param {!ConstantProvider} constants The rendering
    *   constants provider.
@@ -59,6 +59,6 @@ var Measurable = class {
     /** @type {number} */
     this.notchOffset = this.constants_.NOTCH_OFFSET_LEFT;
   }
-};
+}
 
 exports.Measurable = Measurable;

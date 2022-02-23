@@ -29,7 +29,7 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  * An object representing a single row on a rendered block and all of its
  * subcomponents.
  */
-var Row = class {
+class Row {
   /**
    * @param {!ConstantProvider} constants The rendering
    *   constants provider.
@@ -164,9 +164,8 @@ var Row = class {
    *     or null.
    * @package
    */
-
-  // TODO: Consider moving this to InputRow, if possible.
   getLastInput() {
+    // TODO: Consider moving this to InputRow, if possible.
     for (let i = this.elements.length - 1; i >= 0; i--) {
       const elem = this.elements[i];
       if (Types.isInput(elem)) {
@@ -233,6 +232,6 @@ var Row = class {
     }
     return null;
   }
-};
+}
 
 exports.Row = Row;

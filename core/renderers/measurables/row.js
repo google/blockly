@@ -74,8 +74,8 @@ class Row {
     this.minHeight = 0;
 
     /**
-     * The minimum width of the row, from the left edge of the block to the right.
-     * Does not include child blocks unless they are inline.
+     * The minimum width of the row, from the left edge of the block to the
+     * right. Does not include child blocks unless they are inline.
      * @package
      * @type {number}
      */
@@ -90,14 +90,16 @@ class Row {
     this.widthWithConnectedBlocks = 0;
 
     /**
-     * The Y position of the row relative to the origin of the block's svg group.
+     * The Y position of the row relative to the origin of the block's svg
+     * group.
      * @package
      * @type {number}
      */
     this.yPos = 0;
 
     /**
-     * The X position of the row relative to the origin of the block's svg group.
+     * The X position of the row relative to the origin of the block's svg
+     * group.
      * @package
      * @type {number}
      */

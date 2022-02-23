@@ -365,8 +365,7 @@ class RenderInfo extends BaseRenderInfo {
           }
           if (prevInRowSpacer && (Types.isField(elem) || Types.isInput(elem))) {
             if (xCursor < minXPos &&
-                !(Types.isField(elem) &&
-                  elem instanceof Field &&
+                !(Types.isField(elem) && elem instanceof Field &&
                   (elem.field instanceof FieldLabel ||
                    elem.field instanceof FieldImage))) {
               const difference = minXPos - xCursor;
@@ -592,10 +591,8 @@ class RenderInfo extends BaseRenderInfo {
           const minVerticalTightNestingHeight = 40;
           for (let j = 0; j < row.elements.length; j++) {
             const elem = row.elements[j];
-            if (elem instanceof InputConnection &&
-                Types.isInlineInput(elem) &&
-                elem.connectedBlock &&
-                !elem.connectedBlock.isShadow() &&
+            if (elem instanceof InputConnection && Types.isInlineInput(elem) &&
+                elem.connectedBlock && !elem.connectedBlock.isShadow() &&
                 elem.connectedBlock.getHeightWidth().height >=
                     minVerticalTightNestingHeight) {
               hasNonShadowConnectedBlocks = true;

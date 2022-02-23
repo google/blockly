@@ -150,8 +150,8 @@ class Drawer {
         this.outlinePath_ += this.constants_.OUTSIDE_CORNERS.topLeft;
       } else if (Types.isRightRoundedCorner(elem)) {
         this.outlinePath_ += this.constants_.OUTSIDE_CORNERS.topRight;
-      } else if (Types.isPreviousConnection(elem) &&
-          elem instanceof Connection) {
+      } else if (
+          Types.isPreviousConnection(elem) && elem instanceof Connection) {
         this.outlinePath_ += elem.shape.pathLeft;
       } else if (Types.isHat(elem)) {
         this.outlinePath_ += this.constants_.START_HAT.path;

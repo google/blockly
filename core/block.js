@@ -16,7 +16,6 @@
 goog.module('Blockly.Block');
 
 const Extensions = goog.require('Blockly.Extensions');
-const Tooltip = goog.require('Blockly.Tooltip');
 const arrayUtils = goog.require('Blockly.utils.array');
 const common = goog.require('Blockly.common');
 const constants = goog.require('Blockly.constants');
@@ -51,6 +50,8 @@ const {VariableModel} = goog.requireType('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
 const {inputTypes} = goog.require('Blockly.inputTypes');
+/* eslint-disable-next-line no-unused-vars */
+const {tooltipManager, TipInfo} = goog.require('Blockly.Tooltip');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 /** @suppress {extraRequire} */
@@ -191,7 +192,7 @@ const Block = function(workspace, prototypeName, opt_id) {
    * @private
    */
   this.disabled = false;
-  /** @type {!Tooltip.TipInfo} */
+  /** @type {!TipInfo} */
   this.tooltip = '';
   /** @type {boolean} */
   this.contextMenu = true;
@@ -990,7 +991,7 @@ Block.prototype.setHelpUrl = function(url) {
 
 /**
  * Sets the tooltip for this block.
- * @param {!Tooltip.TipInfo} newTip The text for the tooltip, a function
+ * @param {!TipInfo} newTip The text for the tooltip, a function
  *     that returns the text for the tooltip, or a parent object whose tooltip
  *     will be used. To not display a tooltip pass the empty string.
  */
@@ -1003,7 +1004,7 @@ Block.prototype.setTooltip = function(newTip) {
  * @return {!string} The tooltip text for this block.
  */
 Block.prototype.getTooltip = function() {
-  return Tooltip.getTooltipOfObject(this);
+  return tooltipManager.getTooltipOfObject(this);
 };
 
 /**

@@ -17,7 +17,6 @@
  */
 goog.module('Blockly.Gesture');
 
-const Tooltip = goog.require('Blockly.Tooltip');
 const Touch = goog.require('Blockly.Touch');
 const blockAnimations = goog.require('Blockly.blockAnimations');
 const browserEvents = goog.require('Blockly.browserEvents');
@@ -42,6 +41,7 @@ const {WorkspaceDragger} = goog.require('Blockly.WorkspaceDragger');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 const {Workspace} = goog.require('Blockly.Workspace');
+const {tooltipManager} = goog.require('Blockly.Tooltip');
 /** @suppress {extraRequire} */
 goog.require('Blockly.BlockDragger');
 /** @suppress {extraRequire} */
@@ -253,7 +253,7 @@ class Gesture {
    */
   dispose() {
     Touch.clearTouchIdentifier();
-    Tooltip.unblock();
+    tooltipManager.unblock();
     // Clear the owner's reference to this gesture.
     this.creatorWorkspace_.clearGesture();
 
@@ -508,7 +508,7 @@ class Gesture {
     this.startWorkspace_.markFocused();
     this.mostRecentEvent_ = e;
 
-    Tooltip.block();
+    tooltipManager.block();
 
     if (this.targetBlock_) {
       this.targetBlock_.select();

@@ -24,7 +24,6 @@ const Extensions = goog.require('Blockly.Extensions');
 const Procedures = goog.require('Blockly.Procedures');
 const ShortcutItems = goog.require('Blockly.ShortcutItems');
 const Themes = goog.require('Blockly.Themes');
-const Tooltip = goog.require('Blockly.Tooltip');
 const Touch = goog.require('Blockly.Touch');
 const Variables = goog.require('Blockly.Variables');
 const VariablesDynamic = goog.require('Blockly.VariablesDynamic');
@@ -151,6 +150,7 @@ const {ToolboxCategory} = goog.require('Blockly.ToolboxCategory');
 const {ToolboxItem} = goog.require('Blockly.ToolboxItem');
 const {ToolboxSeparator} = goog.require('Blockly.ToolboxSeparator');
 const {Toolbox} = goog.require('Blockly.Toolbox');
+const {Tooltip, tooltipManager} = goog.require('Blockly.Tooltip');
 const {TouchGesture} = goog.require('Blockly.TouchGesture');
 const {Trashcan} = goog.require('Blockly.Trashcan');
 const {VariableMap} = goog.require('Blockly.VariableMap');
@@ -838,6 +838,7 @@ exports.serialization = {
   ISerializer: ISerializer,
 };
 exports.thrasos = thrasos;
+exports.tooltipManager = tooltipManager;
 exports.uiPosition = uiPosition;
 exports.utils = utils;
 exports.zelos = zelos;

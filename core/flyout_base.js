@@ -15,7 +15,6 @@
  */
 goog.module('Blockly.Flyout');
 
-const Tooltip = goog.require('Blockly.Tooltip');
 const Variables = goog.require('Blockly.Variables');
 const Xml = goog.require('Blockly.Xml');
 const blocks = goog.require('Blockly.serialization.blocks');
@@ -44,6 +43,7 @@ const {Rect} = goog.require('Blockly.utils.Rect');
 const {ScrollbarPair} = goog.require('Blockly.ScrollbarPair');
 const {Svg} = goog.require('Blockly.utils.Svg');
 const {WorkspaceSvg} = goog.require('Blockly.WorkspaceSvg');
+const {tooltipManager} = goog.require('Blockly.Tooltip');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
 /** @suppress {extraRequire} */
@@ -836,7 +836,7 @@ class Flyout extends DeleteArea {
     for (let j = 0; j < this.mats_.length; j++) {
       const rect = this.mats_[j];
       if (rect) {
-        Tooltip.unbindMouseEvents(rect);
+        tooltipManager.unbindMouseEvents(rect);
         dom.removeNode(rect);
       }
     }
@@ -1041,7 +1041,7 @@ class Flyout extends DeleteArea {
         },
         null);
     rect.tooltip = block;
-    Tooltip.bindMouseEvents(rect);
+    tooltipManager.bindMouseEvents(rect);
     // Add the rectangles under the blocks, so that the blocks' tooltips work.
     this.workspace_.getCanvas().insertBefore(rect, block.getSvgRoot());
 

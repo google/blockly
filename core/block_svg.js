@@ -16,7 +16,6 @@
 goog.module('Blockly.BlockSvg');
 
 const ContextMenu = goog.require('Blockly.ContextMenu');
-const Tooltip = goog.require('Blockly.Tooltip');
 const blockAnimations = goog.require('Blockly.blockAnimations');
 const blocks = goog.require('Blockly.serialization.blocks');
 const browserEvents = goog.require('Blockly.browserEvents');
@@ -73,6 +72,7 @@ const {Theme} = goog.requireType('Blockly.Theme');
 const {Warning} = goog.requireType('Blockly.Warning');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
+const {tooltipManager} = goog.require('Blockly.Tooltip');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockMove');
 /** @suppress {extraRequire} */
@@ -240,7 +240,7 @@ const BlockSvg = function(workspace, prototypeName, opt_id) {
 
   const svgPath = this.pathObject.svgPath;
   svgPath.tooltip = this;
-  Tooltip.bindMouseEvents(svgPath);
+  tooltipManager.bindMouseEvents(svgPath);
   BlockSvg.superClass_.constructor.call(this, workspace, prototypeName, opt_id);
 
   // Expose this block's ID on its top-level SVG group.
@@ -903,8 +903,8 @@ BlockSvg.prototype.dispose = function(healStack, animate) {
     // The block has already been deleted.
     return;
   }
-  Tooltip.dispose();
-  Tooltip.unbindMouseEvents(this.pathObject.svgPath);
+  tooltipManager.dispose();
+  tooltipManager.unbindMouseEvents(this.pathObject.svgPath);
   dom.startTextWidthCache();
   // Save the block's workspace temporarily so we can resize the
   // contents once the block is disposed.

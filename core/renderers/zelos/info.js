@@ -22,11 +22,13 @@ const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 const {BottomRow} = goog.require('Blockly.zelos.BottomRow');
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.zelos.ConstantProvider');
+const {Field} = goog.require('Blockly.blockRendering.Field');
 const {FieldImage} = goog.require('Blockly.FieldImage');
 const {FieldLabel} = goog.require('Blockly.FieldLabel');
 const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
 /* eslint-disable-next-line no-unused-vars */
 const {Input} = goog.requireType('Blockly.Input');
+const {InputConnection} = goog.require('Blockly.blockRendering.InputConnection');
 const {InRowSpacer} = goog.require('Blockly.blockRendering.InRowSpacer');
 /* eslint-disable-next-line no-unused-vars */
 const {Measurable} = goog.requireType('Blockly.blockRendering.Measurable');
@@ -266,7 +268,7 @@ class RenderInfo extends BaseRenderInfo {
         !Types.isStatementInput(elem)) {
       return row.yPos + this.constants_.EMPTY_STATEMENT_INPUT_HEIGHT / 2;
     }
-    if (Types.isInlineInput(elem)) {
+    if (Types.isInlineInput(elem) && elem instanceof InputConnection) {
       const connectedBlock = elem.connectedBlock;
       if (connectedBlock && connectedBlock.outputConnection &&
           connectedBlock.nextConnection) {
@@ -310,7 +312,7 @@ class RenderInfo extends BaseRenderInfo {
         if (Types.isSpacer(elem)) {
           alignmentDivider = elem;
         }
-        if (Types.isField(elem) &&
+        if (Types.isField(elem) && elem instanceof Field &&
             elem.parentInput === this.rightAlignedDummyInputs_.get(row)) {
           break;
         }
@@ -364,6 +366,7 @@ class RenderInfo extends BaseRenderInfo {
           if (prevInRowSpacer && (Types.isField(elem) || Types.isInput(elem))) {
             if (xCursor < minXPos &&
                 !(Types.isField(elem) &&
+                  elem instanceof Field &&
                   (elem.field instanceof FieldLabel ||
                    elem.field instanceof FieldImage))) {
               const difference = minXPos - xCursor;
@@ -471,7 +474,10 @@ class RenderInfo extends BaseRenderInfo {
         const row = this.rows[i];
         if (Types.isTopOrBottomRow(row)) {
           row.elements[1].width -= totalNegativeSpacing;
-          row.elements[1].widthWithConnectedBlocks -= totalNegativeSpacing;
+          // TODO: I can't find any row elements that have this property, but
+          // I am also unable to test with the debug renderer and zelos at the
+          // same time. MUST FIX BEFORE MERGE!
+          // row.elements[1].widthWithConnectedBlocks -= totalNegativeSpacing;
         }
         row.width -= totalNegativeSpacing;
         row.widthWithConnectedBlocks -= totalNegativeSpacing;
@@ -510,7 +516,7 @@ class RenderInfo extends BaseRenderInfo {
           return 0;
       }
     }
-    if (Types.isInlineInput(elem)) {
+    if (Types.isInlineInput(elem) && elem instanceof InputConnection) {
       const connectedBlock = elem.connectedBlock;
       const innerShape = connectedBlock ?
           connectedBlock.pathObject.outputShapeType :
@@ -528,7 +534,7 @@ class RenderInfo extends BaseRenderInfo {
       }
       return connectionWidth -
           this.constants_.SHAPE_IN_SHAPE_PADDING[outerShape][innerShape];
-    } else if (Types.isField(elem)) {
+    } else if (Types.isField(elem) && elem instanceof Field) {
       // Special case for text inputs.
       if (outerShape === constants.SHAPES.ROUND &&
           elem.field instanceof FieldTextInput) {
@@ -567,9 +573,11 @@ class RenderInfo extends BaseRenderInfo {
           !!nextSpacer.precedesStatement;
 
       if (hasPrevNotch) {
+        const elem = row.elements[1];
         const hasSingleTextOrImageField = row.elements.length === 3 &&
-            (row.elements[1].field instanceof FieldLabel ||
-             row.elements[1].field instanceof FieldImage);
+            elem instanceof Field &&
+            (elem.field instanceof FieldLabel ||
+             elem.field instanceof FieldImage);
         if (!firstRow && hasSingleTextOrImageField) {
           // Remove some padding if we have a single image or text field.
           prevSpacer.height -= this.constants_.SMALL_PADDING;
@@ -584,7 +592,9 @@ class RenderInfo extends BaseRenderInfo {
           const minVerticalTightNestingHeight = 40;
           for (let j = 0; j < row.elements.length; j++) {
             const elem = row.elements[j];
-            if (Types.isInlineInput(elem) && elem.connectedBlock &&
+            if (elem instanceof InputConnection &&
+                Types.isInlineInput(elem) &&
+                elem.connectedBlock &&
                 !elem.connectedBlock.isShadow() &&
                 elem.connectedBlock.getHeightWidth().height >=
                     minVerticalTightNestingHeight) {

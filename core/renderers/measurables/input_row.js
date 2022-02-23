@@ -18,7 +18,10 @@ goog.module('Blockly.blockRendering.InputRow');
 
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {InputConnection} = goog.require('Blockly.blockRendering.InputConnection');
+const {ExternalValueInput} = goog.require('Blockly.blockRendering.ExternalValueInput');
 const {Row} = goog.require('Blockly.blockRendering.Row');
+const {StatementInput} = goog.require('Blockly.blockRendering.StatementInput');
 const {Types} = goog.require('Blockly.blockRendering.Types');
 
 
@@ -57,11 +60,12 @@ class InputRow extends Row {
     for (let i = 0; i < this.elements.length; i++) {
       const elem = this.elements[i];
       this.width += elem.width;
-      if (Types.isInput(elem)) {
-        if (Types.isStatementInput(elem)) {
+      if (Types.isInput(elem) && elem instanceof InputConnection) {
+        if (Types.isStatementInput(elem) && elem instanceof StatementInput) {
           connectedBlockWidths += elem.connectedBlockWidth;
         } else if (
-            Types.isExternalInput(elem) && elem.connectedBlockWidth !== 0) {
+            Types.isExternalInput(elem) && elem instanceof ExternalValueInput &&
+            elem.connectedBlockWidth !== 0) {
           connectedBlockWidths +=
               (elem.connectedBlockWidth - elem.connectionWidth);
         }

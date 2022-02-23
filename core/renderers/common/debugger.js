@@ -9,6 +9,7 @@
  */
 'use strict';
 
+
 /**
  * Methods for rendering debug graphics.
  * @class
@@ -21,7 +22,9 @@ const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {Field} = goog.require('Blockly.blockRendering.Field');
 const {FieldLabel} = goog.require('Blockly.FieldLabel');
+const {InputConnection} = goog.require('Blockly.blockRendering.InputConnection');
 /* eslint-disable-next-line no-unused-vars */
 const {InRowSpacer} = goog.requireType('Blockly.blockRendering.InRowSpacer');
 /* eslint-disable-next-line no-unused-vars */
@@ -184,7 +187,8 @@ class Debug {
           },
           this.svgRoot_));
 
-      if (Types.isField(elem) && elem.field instanceof FieldLabel) {
+      if (Types.isField(elem) && elem instanceof Field &&
+          elem.field instanceof FieldLabel) {
         const baseline = this.constants_.FIELD_TEXT_BASELINE;
         this.debugElements_.push(dom.createSvgElement(
             Svg.RECT, {
@@ -202,7 +206,8 @@ class Debug {
     }
 
 
-    if (Types.isInput(elem) && Debug.config.connections) {
+    if (Types.isInput(elem) && elem instanceof InputConnection &&
+        Debug.config.connections) {
       this.drawConnection(elem.connectionModel);
     }
   }

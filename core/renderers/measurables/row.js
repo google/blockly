@@ -118,6 +118,12 @@ class Row {
     this.hasStatement = false;
 
     /**
+     * TODO: Do not know what this does! FIX BEFORE MERGE.
+     * @type {number}
+     */
+    this.statementEdge = 0;
+
+    /**
      * Whether the row has any inline inputs.
      * @package
      * @type {boolean}

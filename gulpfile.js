@@ -8,16 +8,17 @@
  * @fileoverview Gulp script to build Blockly for Node & NPM.
  * Run this script by calling "npm install" in this directory.
  */
+/* eslint-env node */
 
-var gulp = require('gulp');
+const gulp = require('gulp');
 
-var buildTasks = require('./scripts/gulpfiles/build_tasks');
-var packageTasks = require('./scripts/gulpfiles/package_tasks');
-var gitTasks = require('./scripts/gulpfiles/git_tasks');
-var licenseTasks = require('./scripts/gulpfiles/license_tasks');
-var appengineTasks = require('./scripts/gulpfiles/appengine_tasks');
-var releaseTasks = require('./scripts/gulpfiles/release_tasks');
-var cleanupTasks = require('./scripts/gulpfiles/cleanup_tasks');
+const buildTasks = require('./scripts/gulpfiles/build_tasks');
+const packageTasks = require('./scripts/gulpfiles/package_tasks');
+const gitTasks = require('./scripts/gulpfiles/git_tasks');
+const licenseTasks = require('./scripts/gulpfiles/license_tasks');
+const appengineTasks = require('./scripts/gulpfiles/appengine_tasks');
+const releaseTasks = require('./scripts/gulpfiles/release_tasks');
+const cleanupTasks = require('./scripts/gulpfiles/cleanup_tasks');
 
 module.exports = {
   deployDemos: appengineTasks.deployDemos,

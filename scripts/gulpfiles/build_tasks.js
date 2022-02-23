@@ -80,7 +80,7 @@ const NAMESPACE_OBJECT = '$';
  * - .importAs: the name that this chunk's exports object will be
  *   given when passed to the factory function of other chunks that
  *   depend on it.  (Needs to be distinct from .exports since (e.g.)
- *   "Blockly.blocks.all" is not a valid variable name.)
+ *   "Blockly.libraryBlocks" is not a valid variable name.)
  * - .factoryPreamble: code to override the default wrapper factory
  *   function preamble.
  * - .factoryPostamble: code to override the default wrapper factory
@@ -107,9 +107,9 @@ const chunks = [
   },
   {
     name: 'blocks',
-    entry: 'blocks/all.js',
-    exports: 'Blockly.blocks.all',
-    importAs: 'BlocklyBlocks',
+    entry: 'blocks/blocks.js',
+    exports: 'Blockly.libraryBlocks',
+    importAs: 'libraryBlocks',
   },
   {
     name: 'javascript',

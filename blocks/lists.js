@@ -10,7 +10,7 @@
  */
 'use strict';
 
-goog.module('Blockly.blocks.lists');
+goog.module('Blockly.libraryBlocks.lists');
 
 const xmlUtils = goog.require('Blockly.utils.xml');
 const {Align} = goog.require('Blockly.Input');

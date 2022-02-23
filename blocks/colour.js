@@ -9,7 +9,7 @@
  */
 'use strict';
 
-goog.module('Blockly.blocks.colour');
+goog.module('Blockly.libraryBlocks.colour');
 
 /* eslint-disable-next-line no-unused-vars */
 const {BlockDefinition} = goog.requireType('Blockly.blocks');

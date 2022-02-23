@@ -10,7 +10,7 @@
  */
 'use strict';
 
-goog.module('Blockly.blocks.texts');
+goog.module('Blockly.libraryBlocks.texts');
 
 const Extensions = goog.require('Blockly.Extensions');
 const {Msg} = goog.require('Blockly.Msg');

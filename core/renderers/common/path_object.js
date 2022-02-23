@@ -258,9 +258,9 @@ class PathObject {
   }
 
   /**
-   * Add or remove styling that shows that if the dragging block is dropped, this
-   * block will be replaced.  If a shadow block, it will disappear.  Otherwise it
-   * will bump.
+   * Add or remove styling that shows that if the dragging block is dropped,
+   * this block will be replaced.  If a shadow block, it will disappear.
+   * Otherwise it will bump.
    * @param {boolean} enable True if styling should be added.
    * @package
    */
@@ -269,8 +269,8 @@ class PathObject {
   }
 
   /**
-   * Add or remove styling that shows that if the dragging block is dropped, this
-   * block will be connected to the input.
+   * Add or remove styling that shows that if the dragging block is dropped,
+   * this block will be connected to the input.
    * @param {Connection} _conn The connection on the input to highlight.
    * @param {boolean} _enable True if styling should be added.
    * @package

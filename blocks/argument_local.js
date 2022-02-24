@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Procedure blocks for Blockly.
+ * @fileoverview Argument local block for Blockly.
  * @suppress {checkTypes|visibility}
  */
 

@@ -458,7 +458,6 @@ Gesture.prototype.updateIsDragging_ = function(e) {
  * @private
  */
 Gesture.prototype.startDraggingBlock_ = function() {
-  // pxt-blockly
   if (this.shouldDuplicateOnDrag_) {
     this.duplicateOnDrag_();
   }
@@ -1024,26 +1023,6 @@ Gesture.inProgress = function() {
   return false;
 };
 
-/* Scratch-specific */
-
-/**
- * Don't even think about using this function before talking to rachel-fenichel.
- *
- * Force a drag to start without clicking and dragging the block itself.  Used
- * to attach duplicated blocks to the mouse pointer.
- * @param {!Object} fakeEvent An object with the properties needed to start a
- *     drag, including clientX and clientY.
- * @param {!Blockly.BlockSvg} block The block to start dragging.
- * @package
- */
-Gesture.prototype.forceStartBlockDrag = function(fakeEvent, block) {
-  this.handleBlockStart(fakeEvent, block);
-  this.handleWsStart(fakeEvent, block.workspace);
-  this.isDraggingBlock_ = true;
-  this.hasExceededDragRadius_ = true;
-  this.startDraggingBlock_();
-};
-
 /**
  * Duplicate the target block and start dragging the duplicated block.
  * This should be done once we are sure that it is a block drag, and no earlier.
@@ -1054,27 +1033,9 @@ Gesture.prototype.duplicateOnDrag_ = function() {
   let newBlock = null;
   Blockly.Events.disable();
   try {
-    // Note: targetBlock_ should have no children.  If it has children we would
-    // need to update shadow block IDs to avoid problems in the VM.
-    // Resizes will be reenabled at the end of the drag.
+    // Note: targetBlock_ should have no children.
     this.startWorkspace_.setResizesEnabled(false);
-    let xmlBlock = Blockly.Xml.blockToDom(this.targetBlock_);
-    if (xmlBlock.getAttribute('type') == 'variables_get_reporter') {
-      // pxtblockly: special case, convert into a variable_get block with the same id
-      const xmlBlockField = xmlBlock.firstChild;
-      if (!xmlBlockField) {
-        throw "unable to create a variable_get block from a variables_get_reporter" +
-        " block, block has no VAR field";
-      }
-      const newVariableBlock = document.createElement('block');
-      newVariableBlock.setAttribute('type', 'variables_get');
-      const newVariableField = document.createElement('field');
-      newVariableField.setAttribute('name', xmlBlockField.getAttribute('name'));
-      newVariableField.setAttribute('id', xmlBlockField.getAttribute('id'));
-      newVariableField.textContent = xmlBlockField.textContent;
-      newVariableBlock.appendChild(newVariableField);
-      xmlBlock = newVariableBlock;
-    }
+    const xmlBlock = Blockly.Xml.blockToDom(this.targetBlock_);
     if (this.targetBlock_.inputList[0] &&
         this.targetBlock_.inputList[0].fieldRow[0] &&
         this.targetBlock_.inputList[0].fieldRow[0].clearHover) {

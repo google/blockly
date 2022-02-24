@@ -27,7 +27,7 @@ const {Blocks} = goog.require('Blockly.blocks');
           'text': '',
         },
       ],
-      'colour': '#a57f0f',
+      'colour': '#8cb3ff',
       'inputsInline': true,
       'output': null,
     });

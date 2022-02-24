@@ -249,12 +249,10 @@ ConnectionChecker.prototype.doDragChecks = function(a, b, distance) {
       }
 
       // don't allow connecting a block to an argument local
-      // shadow.
       if (b && b.targetBlock()) {
         const targetBlock = b.targetBlock();
-        if (targetBlock.isShadow() &&
-          isArgumentLocal(targetBlock)) {
-        return false;
+        if (isArgumentLocal(targetBlock)) {
+          return false;
         }
       }
 

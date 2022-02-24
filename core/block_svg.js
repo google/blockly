@@ -839,10 +839,9 @@ BlockSvg.prototype.generateContextMenu = function() {
  * @package
  */
 BlockSvg.prototype.showContextMenu = function(e) {
-  // pxt-blockly: display parent context menu for shadow block
+  // display parent context menu for argument local
   const block = this;
-  if (this.parentBlock_ && (this.isShadow_ &&
-      !isArgumentLocal(block))) {
+  if (this.parentBlock_ && !isArgumentLocal(block)) {
     this.parentBlock_.showContextMenu_(e);
     return;
   }

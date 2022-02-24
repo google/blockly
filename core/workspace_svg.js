@@ -17,6 +17,7 @@ goog.module('Blockly.WorkspaceSvg');
 
 const ContextMenu = goog.require('Blockly.ContextMenu');
 /* eslint-disable-next-line no-unused-vars */
+const Procedures = goog.requireType('Blockly.Procedures');
 const Tooltip = goog.require('Blockly.Tooltip');
 /* eslint-disable-next-line no-unused-vars */
 const Variables = goog.requireType('Blockly.Variables');
@@ -237,14 +238,9 @@ const WorkspaceSvg = function(
   }
 
   const Procedures = goog.module.get('Blockly.Procedures');
-
-  const ProceduresCallback = function(workspace) {
-    return Procedures.flyoutCategory(workspace);
-  };
-
-  if (Procedures &&
-      Procedures.flyoutCategory) {
-    this.registerToolboxCategoryCallback(Procedures.CATEGORY_NAME, ProceduresCallback);
+  if (Procedures && Procedures.flyoutCategory) {
+    this.registerToolboxCategoryCallback(
+        Procedures.CATEGORY_NAME, Procedures.flyoutCategory);
     this.addChangeListener(Procedures.mutatorOpenListener);
   }
 

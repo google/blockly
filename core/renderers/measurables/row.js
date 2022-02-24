@@ -120,7 +120,9 @@ class Row {
     this.hasStatement = false;
 
     /**
-     * TODO: Do not know what this does! FIX BEFORE MERGE.
+     * Where the left edge of all of the statement inputs on the block should
+     * be. This makes sure that statement inputs which are proceded by fields
+     * of varius widths are all aligned.
      * @type {number}
      */
     this.statementEdge = 0;

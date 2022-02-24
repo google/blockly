@@ -171,7 +171,6 @@
     for (let i = 0, argument; (argument = this.updatedArguments_[i]); i++) {
       // const argId = this.updatedArguments_[argument].id;
       const argumentBlock = this.buildArgumentBlock_(argument.name, argument.id);
-      console.log('argumentBlock', argumentBlock);
 
       this.argumentModels_.push({id: argument.id, name: argument.name});
       this.appendValueInput(argument.id)
@@ -224,7 +223,7 @@
         return arg;
       }
     });
-    
+
     const allBlocks = this.getDescendants();
     const argumentBlocks = allBlocks.filter((block) => block.type === 'argument_local' && !block.isShadow());
 
@@ -352,7 +351,6 @@
     *     statements.
     */
   Blockly.ProceduresLocalArgUtils.loadExtraState = function(state) {
-    console.log('call loadExtraState');
     this.arguments_ = [];
     this.argumentModels_ = [];
     this.updatedArguments_ = [];
@@ -375,7 +373,6 @@
     * @this {Block}
     */
   Blockly.ProceduresLocalArgUtils.decompose = function(workspace) {
-    console.log('call decompose');
     /*
       * Creates the following XML:
       * <block type="procedures_local_mutatorcontainer">
@@ -399,7 +396,6 @@
     for (let i = 0; i < this.argumentModels_.length; i++) {
       const argBlockNode = xmlUtils.createElement('block');
 
-      console.log('create data', this.argumentModels_[i].id);
       const data = xmlUtils.createElement('data');
       data.appendChild(xmlUtils.createTextNode(this.argumentModels_[i].id));
       argBlockNode.appendChild(data);
@@ -435,23 +431,21 @@
     * @this {Block}
     */
   Blockly.ProceduresLocalArgUtils.compose = function(containerBlock) {
-    console.log('call compose');
     // Parameter list.
     this.arguments_ = [];
     this.updatedArguments_ = [];
     let paramBlock = containerBlock.getInputTargetBlock('STACK');
-    
+
     while (paramBlock && !paramBlock.isInsertionMarker()) {
       const argumentName = paramBlock.getFieldValue('NAME');
       const argumentId = paramBlock.getData();
-      console.log('call compose', {argumentName, argumentId});
       this.updatedArguments_.push({id: argumentId, name: argumentName});
       this.arguments_.push(argumentName);
-      
+
       paramBlock =
       paramBlock.nextConnection && paramBlock.nextConnection.targetBlock();
     }
-    
+
     this.updateParams_();
     ProceduresLocalArg.mutateCallers(this);
 

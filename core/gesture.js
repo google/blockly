@@ -29,7 +29,7 @@ const registry = goog.require('Blockly.registry');
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 const {BubbleDragger} = goog.require('Blockly.BubbleDragger');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
-const {isShadowArgumentLocal} = goog.require('Blockly.utils.argumentLocal');
+const {isArgumentLocal} = goog.require('Blockly.utils.argumentLocal');
 /* eslint-disable-next-line no-unused-vars */
 const {Field} = goog.requireType('Blockly.Field');
 /* eslint-disable-next-line no-unused-vars */
@@ -852,7 +852,7 @@ Gesture.prototype.setStartBlock = function(block) {
   if (!this.startBlock_ && !this.startBubble_) {
     this.startBlock_ = block;
     this.shouldDuplicateOnDrag_ = !block.disabled && !block.getInheritedDisabled() &&
-        !block.isInFlyout && isShadowArgumentLocal(block);
+        !block.isInFlyout && isArgumentLocal(block);
     if (block.isInFlyout && block != block.getRootBlock()) {
       this.setTargetBlock_(block.getRootBlock());
     } else {

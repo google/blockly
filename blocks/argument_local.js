@@ -17,11 +17,9 @@ const Events = goog.require('Blockly.Events');
 const {Blocks} = goog.require('Blockly.blocks');
 
  Blocks['argument_local'] = {
-
-
   init: function() {
     this.jsonInit({
-      'message0': '%1 %2',
+      'message0': '%1',
       'args0': [
         {
           'type': 'field_label_hover',
@@ -29,12 +27,11 @@ const {Blocks} = goog.require('Blockly.blocks');
           'text': '',
         },
       ],
-      'colour': '#ffbf00',
+      'colour': '#a57f0f',
       'inputsInline': true,
       'output': null,
     });
   },
-
 
   onchange: function(event) {
     if (event.type !== Events.BLOCK_MOVE) {

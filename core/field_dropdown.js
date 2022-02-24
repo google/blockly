@@ -123,8 +123,8 @@ class FieldDropdown extends Field {
      */
     this.menuGenerator_ =
         /**
-           @type {(!Array<!Array>|
-            !function(this:FieldDropdown):!Array<!Array>)}
+         * @type {(!Array<!Array>|
+         *    !function(this:FieldDropdown):!Array<!Array>)}
          */
         (menuGenerator);
 
@@ -154,7 +154,7 @@ class FieldDropdown extends Field {
     /**
      * The currently selected option. The field is initialized with the
      * first option selected.
-     * @type {!Object}
+     * @type {!Array<string|!FieldDropdown.ImageProperties>}
      * @private
      */
     this.selectedOption_ = this.getOptions(false)[0];

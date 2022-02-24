@@ -98,7 +98,8 @@ class Field {
      * @type {*}
      * @protected
      */
-    this.value_ = /** @type {typeof Field} */(new.target).prototype.DEFAULT_VALUE;
+    this.value_ =
+        /** @type {typeof Field} */ (new.target).prototype.DEFAULT_VALUE;
 
     /**
      * Validation function called when user edits an editable field.
@@ -324,6 +325,7 @@ class Field {
    * Initialize everything to render this field. Override
    * methods initModel and initView rather than this method.
    * @package
+   * @final
    */
   init() {
     if (this.fieldGroup_) {
@@ -694,6 +696,7 @@ class Field {
    * @param {Event=} opt_e Optional mouse event that triggered the field to
    *     open, or undefined if triggered programmatically.
    * @package
+   * @final
    */
   showEditor(opt_e) {
     if (this.isClickable()) {
@@ -887,6 +890,7 @@ class Field {
    * Override getText_ to provide a different behavior than simply casting the
    * value to a string.
    * @return {string} Current text.
+   * @final
    */
   getText() {
     // this.getText_ was intended so that devs don't have to remember to call
@@ -941,6 +945,7 @@ class Field {
    * Subclasses should override doClassValidation_ and doValueUpdate_ rather
    * than this method.
    * @param {*} newValue New value.
+   * @final
    */
   setValue(newValue) {
     const doLogging = false;

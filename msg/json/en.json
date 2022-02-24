@@ -5,6 +5,9 @@
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
+	"DELETE_ALL_SELECTED": "Delete all selected blocks",
+	"MOVE_SELECTED_BLOCKS_TO_MODULE": "Move blocks to module %1",
+	"SELECT_ALL": "Select all blocks",
 	"VARIABLES_DEFAULT_NAME": "item",
 	"UNNAMED_KEY": "unnamed",
 	"TODAY": "Today",

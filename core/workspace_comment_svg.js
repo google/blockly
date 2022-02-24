@@ -622,7 +622,7 @@ WorkspaceCommentSvg.fromXml = function (xmlComment, workspace, opt_wsWidth) {
 
     comment.moduleId_ = info.module;
 
-    if (workspace.rendered && comment.InActiveModule()) {
+    if (workspace.rendered && comment.inActiveModule()) {
       comment.initSvg(true);
       comment.render();
     }

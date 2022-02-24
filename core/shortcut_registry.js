@@ -233,9 +233,11 @@ ShortcutRegistry.prototype.getRegistry = function() {
 ShortcutRegistry.prototype.onKeyDown = function(workspace, e) {
   const key = this.serializeKeyEvent_(e);
   const shortcutNames = this.getShortcutNamesByKeyCode(key);
+
   if (!shortcutNames) {
     return false;
   }
+
   for (let i = 0, shortcutName; (shortcutName = shortcutNames[i]); i++) {
     const shortcut = this.registry_[shortcutName];
     if (!shortcut.preconditionFn || shortcut.preconditionFn(workspace)) {
@@ -269,9 +271,11 @@ ShortcutRegistry.prototype.getShortcutNamesByKeyCode = function(keyCode) {
  */
 ShortcutRegistry.prototype.getKeyCodesByShortcutName = function(shortcutName) {
   const keys = [];
+
   for (const keyCode in this.keyMap_) {
     const shortcuts = this.keyMap_[keyCode];
     const shortcutIdx = shortcuts.indexOf(shortcutName);
+
     if (shortcutIdx > -1) {
       keys.push(keyCode);
     }
@@ -287,6 +291,7 @@ ShortcutRegistry.prototype.getKeyCodesByShortcutName = function(shortcutName) {
  */
 ShortcutRegistry.prototype.serializeKeyEvent_ = function(e) {
   let serializedKey = '';
+
   for (const modifier in ShortcutRegistry.modifierKeys) {
     if (e.getModifierState(modifier)) {
       if (serializedKey !== '') {
@@ -295,11 +300,13 @@ ShortcutRegistry.prototype.serializeKeyEvent_ = function(e) {
       serializedKey += modifier;
     }
   }
+
   if (serializedKey !== '' && e.keyCode) {
     serializedKey = serializedKey + '+' + e.keyCode;
   } else if (e.keyCode) {
     serializedKey = e.keyCode.toString();
   }
+
   return serializedKey;
 };
 
@@ -311,6 +318,7 @@ ShortcutRegistry.prototype.serializeKeyEvent_ = function(e) {
  */
 ShortcutRegistry.prototype.checkModifiers_ = function(modifiers) {
   const validModifiers = object.values(ShortcutRegistry.modifierKeys);
+
   for (let i = 0, modifier; (modifier = modifiers[i]); i++) {
     if (validModifiers.indexOf(modifier) < 0) {
       throw new Error(modifier + ' is not a valid modifier key.');

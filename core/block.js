@@ -609,7 +609,7 @@ Block.prototype.getModuleOrder = function() {
  * @return string
  * @package
  */
-Block.prototype.InActiveModule = function() {
+Block.prototype.inActiveModule = function() {
   return this.moduleId_ === this.workspace.getModuleManager().getActiveModule().getId();
 };
 

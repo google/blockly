@@ -257,7 +257,7 @@ Workspace.prototype.getTopBlocks = function(ordered, inActiveModule) {
 
   if (inActiveModule) {
     for (var i = 0, block; (block = this.topBlocks_[i]); i++) {
-      if (block.InActiveModule()) {
+      if (block.inActiveModule()) {
         blocks.push(block);
       }
     }

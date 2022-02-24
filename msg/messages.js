@@ -106,6 +106,8 @@ Blockly.Msg.BLOCK_MOVE_TO_MODULE = 'Move to "%1"';
 /// confirmation prompt - Question the user if they really wanted to permanently delete all %1 blocks.\n\nParameters:\n* %1 - an integer greater than 1.
 Blockly.Msg.DELETE_ALL_BLOCKS = 'Delete all %1 blocks?';
 /** @type {string} */
+Blockly.Msg.DELETE_ALL_SELECTED = "Delete all selected blocks";
+/** @type {string} */
 /// context menu - Reposition all the blocks so that they form a neat line.
 Blockly.Msg.CLEAN_UP = 'Clean up Blocks';
 /** @type {string} */
@@ -156,6 +158,9 @@ Blockly.Msg.NEW_MODULE = 'Create';
 /** @type {string} */
 /// prompt - Prompts the user to enter the name for a new module.
 Blockly.Msg.NEW_MODULE_TITLE = 'Name:';
+
+/** @type {string} */
+Blockly.Msg.SELECT_ALL = 'Select all blocks'
 
 // Module deletion.
 /** @type {string} */
@@ -569,7 +574,6 @@ Blockly.Msg.MATH_SINGLE_OP_ABSOLUTE = 'absolute';
 /** @type {string} */
 /// tooltip - Please use the same term as in the previous message.
 Blockly.Msg.MATH_SINGLE_TOOLTIP_ABS = 'Return the absolute value of a number.';
-
 /** @type {string} */
 /// tooltip - Calculates '''0-n''', where '''n''' is the single numeric input.
 Blockly.Msg.MATH_SINGLE_TOOLTIP_NEG = 'Return the negation of a number.';
@@ -598,6 +602,8 @@ Blockly.Msg.MATH_TRIG_TOOLTIP_COS = 'Return the cosine of a degree (not radian).
 /** @type {string} */
 /// tooltip - Return the [https://en.wikipedia.org/wiki/Trigonometric_functions#Sine.2C_cosine_and_tangent tangent] of an [https://en.wikipedia.org/wiki/Degree_(angle) angle in degrees], not radians.
 Blockly.Msg.MATH_TRIG_TOOLTIP_TAN = 'Return the tangent of a degree (not radian).';
+/** @type {string} */
+Blockly.Msg.MOVE_SELECTED_BLOCKS_TO_MODULE = "Move blocks to module %1";
 /** @type {string} */
 /// tooltip - The [https://en.wikipedia.org/wiki/Inverse_trigonometric_functions inverse] of the [https://en.wikipedia.org/wiki/Cosine#Sine.2C_cosine_and_tangent sine function], using [https://en.wikipedia.org/wiki/Degree_(angle) degrees], not radians.
 Blockly.Msg.MATH_TRIG_TOOLTIP_ASIN = 'Return the arcsine of a number.';

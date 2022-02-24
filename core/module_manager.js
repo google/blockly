@@ -253,6 +253,48 @@ ModuleManager.prototype.moveBlockToModule = function (block, module) {
 }
 
 /**
+ * Move blocks to module.
+ * @param {Blockly.BlockSvg} block
+ * @param {ModuleModel} module
+ */
+ModuleManager.prototype.moveBlocksToModule = function (blocks, module, massOperations) {
+  var newModuleId = module.getId();
+  var previousModuleId = blocks[0].getModuleId();
+
+  if (newModuleId === previousModuleId) {
+    return
+  }
+
+  var existingGroup = Blockly.Events.getGroup();
+  if (!existingGroup) {
+    Blockly.Events.setGroup(true);
+  }
+
+  try {
+    blocks.forEach((block) => {
+      block.getDescendants(false).forEach(function (descendant) {
+        descendant.setModuleId(module.getId())
+      });
+
+      block.unplug()
+      block.removeRender()
+    })
+
+    massOperations.cleanUp()
+
+    Blockly.Events.disable();
+    this.activateModule(module);
+    Blockly.Events.enable();
+
+    blocks.forEach(b => massOperations.addBlockToSelected(b))
+  } finally {
+    if (!existingGroup) {
+      Blockly.Events.setGroup(false);
+    }
+  }
+}
+
+/**
  * Fire a delete event for module.
  * @param {Blockly.Block} block The moved block.
  *     Null for a blank event.

@@ -683,7 +683,7 @@ const domToBlock = function(xmlBlock, workspace) {
     // Generate list of all blocks.
     const blocks = topBlock.getDescendants(false);
 
-    if (workspace.rendered && topBlock.InActiveModule() && (!workspace.isFlyout || (!topBlock.isObsolete() && !topBlock.isRemoved()))) {
+    if (workspace.rendered && topBlock.inActiveModule() && (!workspace.isFlyout || (!topBlock.isObsolete() && !topBlock.isRemoved()))) {
       // Wait to track connections to speed up assembly.
       topBlock.setConnectionTracking(false);
       // Render each block.
@@ -861,7 +861,7 @@ const applyMutationTagNodes = function(xmlChildren, block) {
     // Custom data for an advanced block.
     if (block.domToMutation) {
       block.domToMutation(xmlChild);
-      if (block.initSvg && block.workspace.rendered && block.InActiveModule()) {
+      if (block.initSvg && block.workspace.rendered && block.inActiveModule()) {
         // Mutation may have added some elements that need initializing.
         shouldCallInitSvg = true;
       }
@@ -889,7 +889,7 @@ const applyCommentTagNodes = function(xmlChildren, block) {
       block.commentModel.size = new Size(width, height);
     }
 
-    if (pinned && block.getCommentIcon && !block.isInFlyout && block.workspace.rendered && block.InActiveModule()) {
+    if (pinned && block.getCommentIcon && !block.isInFlyout && block.workspace.rendered && block.inActiveModule()) {
       setTimeout(function() {
         block.getCommentIcon().setVisible(true);
       }, 1);

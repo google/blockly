@@ -29,7 +29,6 @@ const {Msg} = goog.require('Blockly.Msg');
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 const {inputTypes} = goog.require('Blockly.inputTypes');
 
-
 /**
  * Option to undo previous action.
  * @alias Blockly.ContextMenuItems.registerUndo
@@ -43,9 +42,9 @@ const registerUndo = function() {
     preconditionFn: function(/** @type {!ContextMenuRegistry.Scope} */
                              scope) {
       if (scope.workspace.getUndoStack().length > 0) {
-        return 'enabled';
+        return ContextMenuRegistry.ItemCondition.ENABLED;
       }
-      return 'disabled';
+      return ContextMenuRegistry.ItemCondition.DISABLED;
     },
     callback: function(/** @type {!ContextMenuRegistry.Scope} */
                        scope) {
@@ -72,9 +71,9 @@ const registerRedo = function() {
     preconditionFn: function(/** @type {!ContextMenuRegistry.Scope} */
                              scope) {
       if (scope.workspace.getRedoStack().length > 0) {
-        return 'enabled';
+        return ContextMenuRegistry.ItemCondition.ENABLED;
       }
-      return 'disabled';
+      return ContextMenuRegistry.ItemCondition.DISABLED;
     },
     callback: function(/** @type {!ContextMenuRegistry.Scope} */
                        scope) {
@@ -102,11 +101,11 @@ const registerCleanup = function() {
                              scope) {
       if (scope.workspace.isMovable()) {
         if (scope.workspace.getTopBlocks(false).length > 1) {
-          return 'enabled';
+          return ContextMenuRegistry.ItemCondition.ENABLED;
         }
-        return 'disabled';
+        return ContextMenuRegistry.ItemCondition.DISABLED;
       }
-      return 'hidden';
+      return ContextMenuRegistry.ItemCondition.HIDDEN;
     },
     callback: function(/** @type {!ContextMenuRegistry.Scope} */
                        scope) {
@@ -167,14 +166,14 @@ const registerCollapse = function() {
           let block = topBlocks[i];
           while (block) {
             if (!block.isCollapsed()) {
-              return 'enabled';
+              return ContextMenuRegistry.ItemCondition.ENABLED;
             }
             block = block.getNextBlock();
           }
         }
-        return 'disabled';
+        return ContextMenuRegistry.ItemCondition.DISABLED;
       }
-      return 'hidden';
+      return ContextMenuRegistry.ItemCondition.HIDDEN;
     },
     callback: function(/** @type {!ContextMenuRegistry.Scope} */
                        scope) {
@@ -206,14 +205,14 @@ const registerExpand = function() {
           let block = topBlocks[i];
           while (block) {
             if (block.isCollapsed()) {
-              return 'enabled';
+              return ContextMenuRegistry.ItemCondition.ENABLED;
             }
             block = block.getNextBlock();
           }
         }
-        return 'disabled';
+        return ContextMenuRegistry.ItemCondition.DISABLED;
       }
-      return 'hidden';
+      return ContextMenuRegistry.ItemCondition.HIDDEN;
     },
     callback: function(/** @type {!ContextMenuRegistry.Scope} */
                        scope) {
@@ -310,7 +309,7 @@ const registerDeleteAll = function() {
         return;
       }
       const deletableBlocksLength = getDeletableBlocks_(scope.workspace).length;
-      return deletableBlocksLength > 0 ? 'enabled' : 'disabled';
+      return deletableBlocksLength > 0 ? ContextMenuRegistry.ItemCondition.ENABLED : ContextMenuRegistry.ItemCondition.DISABLED;
     },
     callback: function(/** @type {!ContextMenuRegistry.Scope} */
                        scope) {
@@ -342,6 +341,31 @@ const registerDeleteAll = function() {
 exports.registerDeleteAll = registerDeleteAll;
 
 /**
+ * Option to select all blocks on the workspace.
+ * @alias Blockly.ContextMenuItems.registerDelete
+ */
+const registerSelectAll = function() {
+  /** @type {!ContextMenuRegistry.RegistryItem} */
+  const selectAllOption = {
+    displayText: function() {
+      return Msg['SELECT_ALL']
+    },
+    preconditionFn: function(/** @type {!ContextMenuRegistry.Scope} */{ workspace }) {
+      return !workspace.isFlyout && !!workspace.getMassOperations() ?
+        ContextMenuRegistry.ItemCondition.ENABLED : ContextMenuRegistry.ItemCondition.HIDDEN
+    },
+    callback: function(/** @type {!ContextMenuRegistry.Scope} */{ workspace }) {
+      workspace.getMassOperations().selectAll()
+    },
+    scopeType: ContextMenuRegistry.ScopeType.WORKSPACE,
+    id: 'workspaceSelectAll',
+    weight: 6,
+  };
+  ContextMenuRegistry.registry.register(selectAllOption);
+};
+exports.registerSelectAll = registerSelectAll;
+
+/**
  * Registers all workspace-scoped context menu items.
  * @private
  */
@@ -352,6 +376,7 @@ const registerWorkspaceOptions_ = function() {
   registerCollapse();
   registerExpand();
   registerDeleteAll();
+  registerSelectAll();
 };
 
 /**
@@ -369,11 +394,11 @@ const registerDuplicate = function() {
       const block = scope.block;
       if (!block.isInFlyout && block.isDeletable() && block.isMovable()) {
         if (block.isDuplicatable()) {
-          return 'enabled';
+          return ContextMenuRegistry.ItemCondition.ENABLED;
         }
-        return 'disabled';
+        return ContextMenuRegistry.ItemCondition.DISABLED;
       }
-      return 'hidden';
+      return ContextMenuRegistry.ItemCondition.HIDDEN;
     },
     callback: function(/** @type {!ContextMenuRegistry.Scope} */
                        scope) {
@@ -412,9 +437,9 @@ const registerComment = function() {
       if (!userAgent.IE && !block.isInFlyout &&
           block.workspace.options.comments && !block.isCollapsed() &&
           block.isEditable()) {
-        return 'enabled';
+        return ContextMenuRegistry.ItemCondition.ENABLED;
       }
-      return 'hidden';
+      return ContextMenuRegistry.ItemCondition.HIDDEN;
     },
     callback: function(/** @type {!ContextMenuRegistry.Scope} */
                        scope) {
@@ -454,11 +479,11 @@ const registerInline = function() {
           // next to each other.
           if (block.inputList[i - 1].type !== inputTypes.STATEMENT &&
               block.inputList[i].type !== inputTypes.STATEMENT) {
-            return 'enabled';
+            return ContextMenuRegistry.ItemCondition.ENABLED;
           }
         }
       }
-      return 'hidden';
+      return ContextMenuRegistry.ItemCondition.HIDDEN;
     },
     callback: function(/** @type {!ContextMenuRegistry.Scope} */
                        scope) {
@@ -489,9 +514,9 @@ const registerCollapseExpandBlock = function() {
       const block = scope.block;
       if (!block.isInFlyout && block.isMovable() &&
           block.workspace.options.collapse) {
-        return 'enabled';
+        return ContextMenuRegistry.ItemCondition.ENABLED;
       }
-      return 'hidden';
+      return ContextMenuRegistry.ItemCondition.HIDDEN;
     },
     callback: function(/** @type {!ContextMenuRegistry.Scope} */
                        scope) {
@@ -523,11 +548,11 @@ const registerDisable = function() {
       if (!block.isInFlyout && block.workspace.options.disable &&
           block.isEditable()) {
         if (block.getInheritedDisabled()) {
-          return 'disabled';
+          return ContextMenuRegistry.ItemCondition.DISABLED;
         }
-        return 'enabled';
+        return ContextMenuRegistry.ItemCondition.ENABLED;
       }
-      return 'hidden';
+      return ContextMenuRegistry.ItemCondition.HIDDEN;
     },
     callback: function(/** @type {!ContextMenuRegistry.Scope} */
                        scope) {
@@ -573,9 +598,9 @@ const registerDelete = function() {
     preconditionFn: function(/** @type {!ContextMenuRegistry.Scope} */
                              scope) {
       if (!scope.block.isInFlyout && scope.block.isDeletable()) {
-        return 'enabled';
+        return ContextMenuRegistry.ItemCondition.ENABLED;
       }
-      return 'hidden';
+      return ContextMenuRegistry.ItemCondition.HIDDEN;
     },
     callback: function(/** @type {!ContextMenuRegistry.Scope} */
                        scope) {
@@ -607,9 +632,9 @@ const registerHelp = function() {
       const url = (typeof block.helpUrl === 'function') ? block.helpUrl() :
                                                           block.helpUrl;
       if (url) {
-        return 'enabled';
+        return ContextMenuRegistry.ItemCondition.ENABLED;
       }
-      return 'hidden';
+      return ContextMenuRegistry.ItemCondition.HIDDEN;
     },
     callback: function(/** @type {!ContextMenuRegistry.Scope} */
                        scope) {

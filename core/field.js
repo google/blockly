@@ -1044,6 +1044,11 @@ Field.prototype.onMouseDown_ = function(e) {
   if (!this.sourceBlock_ || !this.sourceBlock_.workspace) {
     return;
   }
+
+  if (e.ctrlKey && !this.sourceBlock_.workspace.isFlyout) {
+    return;
+  }
+
   const gesture = this.sourceBlock_.workspace.getGesture(e);
   if (gesture) {
     gesture.setStartField(this);

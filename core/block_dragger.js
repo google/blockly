@@ -41,12 +41,13 @@ goog.require('Blockly.Events.BlockMove');
  * Class for a block dragger.  It moves blocks around the workspace when they
  * are being dragged by a mouse or touch.
  * @param {!BlockSvg} block The block to drag.
- * @param {!WorkspaceSvg} workspace The workspace to drag on.
+ * @param {!WorkspaceSvg} workspace The workspace to drag
+ * @param {Boolean} offConnectionManager need for avoid checking connection when dragging block
  * @constructor
  * @implements {IBlockDragger}
  * @alias Blockly.BlockDragger
  */
-const BlockDragger = function(block, workspace) {
+const BlockDragger = function(block, workspace, offConnectionManager = false) {
   /**
    * The top block in the stack that is being dragged.
    * @type {!BlockSvg}
@@ -66,8 +67,11 @@ const BlockDragger = function(block, workspace) {
    * @type {!InsertionMarkerManager}
    * @protected
    */
-  this.draggedConnectionManager_ =
-      new InsertionMarkerManager(this.draggingBlock_);
+  this.draggedConnectionManager_ = null
+
+  if (!offConnectionManager) {
+    this.draggedConnectionManager_ = new InsertionMarkerManager(this.draggingBlock_);
+  }
 
   /**
    * Which drag area the mouse pointer is over, if any.
@@ -147,9 +151,10 @@ const initIconData = function(block) {
  *     moved from the position at mouse down, in pixel units.
  * @param {boolean} healStack Whether or not to heal the stack after
  *     disconnecting.
+ * @param {Coordinate} positionOnDragSurface Offset on drag surface.
  * @public
  */
-BlockDragger.prototype.startDrag = function(currentDragDeltaXY, healStack) {
+BlockDragger.prototype.startDrag = function(currentDragDeltaXY, healStack, positionOnDragSurface) {
   if (!eventUtils.getGroup()) {
     eventUtils.setGroup(true);
   }
@@ -172,11 +177,12 @@ BlockDragger.prototype.startDrag = function(currentDragDeltaXY, healStack) {
   if (this.shouldDisconnect_(healStack)) {
     this.disconnectBlock_(healStack, currentDragDeltaXY);
   }
+
   this.draggingBlock_.setDragging(true);
   // For future consideration: we may be able to put moveToDragSurface inside
   // the block dragger, which would also let the block not track the block drag
   // surface.
-  this.draggingBlock_.moveToDragSurface();
+  this.draggingBlock_.moveToDragSurface(positionOnDragSurface);
 };
 
 /**
@@ -201,15 +207,14 @@ BlockDragger.prototype.shouldDisconnect_ = function(healStack) {
  *     moved from the position at mouse down, in pixel units.
  * @protected
  */
-BlockDragger.prototype.disconnectBlock_ = function(
-    healStack, currentDragDeltaXY) {
+BlockDragger.prototype.disconnectBlock_ = function(healStack, currentDragDeltaXY) {
   this.draggingBlock_.unplug(healStack);
   const delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
   const newLoc = Coordinate.sum(this.startXY_, delta);
 
   this.draggingBlock_.translate(newLoc.x, newLoc.y);
   blockAnimation.disconnectUiEffect(this.draggingBlock_);
-  this.draggedConnectionManager_.updateAvailableConnections();
+  if (this.draggedConnectionManager_) this.draggedConnectionManager_.updateAvailableConnections();
 };
 
 /**
@@ -228,20 +233,26 @@ BlockDragger.prototype.fireDragStartEvent_ = function() {
  * @param {!Event} e The most recent move event.
  * @param {!Coordinate} currentDragDeltaXY How far the pointer has
  *     moved from the position at the start of the drag, in pixel units.
+ * @param {Coordinate} customStartXY Custom startXY when you want change dragging position
  * @public
  */
-BlockDragger.prototype.drag = function(e, currentDragDeltaXY) {
+BlockDragger.prototype.drag = function(e, currentDragDeltaXY, customStartXY) {
   const delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
-  const newLoc = Coordinate.sum(this.startXY_, delta);
+  const newLoc = Coordinate.sum(customStartXY || this.startXY_, delta);
+
   this.draggingBlock_.moveDuringDrag(newLoc);
   this.dragIcons_(delta);
+
+  if (!this.draggedConnectionManager_) return
 
   const oldDragTarget = this.dragTarget_;
   this.dragTarget_ = this.workspace_.getDragTarget(e);
 
   this.draggedConnectionManager_.update(delta, this.dragTarget_);
+
   const oldWouldDeleteBlock = this.wouldDeleteBlock_;
   this.wouldDeleteBlock_ = this.draggedConnectionManager_.wouldDeleteBlock();
+
   if (oldWouldDeleteBlock !== this.wouldDeleteBlock_) {
     // Prevent unnecessary add/remove class calls.
     this.updateCursorDuringBlockDrag_();
@@ -356,7 +367,7 @@ BlockDragger.prototype.maybeDeleteBlock_ = function() {
 BlockDragger.prototype.updateBlockAfterMove_ = function(delta) {
   this.draggingBlock_.moveConnections(delta.x, delta.y);
   this.fireMoveEvent_();
-  if (this.draggedConnectionManager_.wouldConnectBlock()) {
+  if (this.draggedConnectionManager_ && this.draggedConnectionManager_.wouldConnectBlock()) {
     // Applying connections also rerenders the relevant blocks.
     this.draggedConnectionManager_.applyConnections();
   } else {

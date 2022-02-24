@@ -42,14 +42,22 @@ const ContextMenuRegistry = function() {
 };
 
 /**
- * Where this menu item should be rendered. If the menu item should be rendered
- * in multiple scopes, e.g. on both a block and a workspace, it should be
- * registered for each scope.
+ * Condition of menu item
+ * @enum {string}
+ */
+ContextMenuRegistry.ItemCondition = {
+  ENABLED: 'enabled',
+  HIDDEN: 'hidden',
+  DISABLED: 'disabled',
+};
+
+/**
  * @enum {string}
  */
 ContextMenuRegistry.ScopeType = {
   BLOCK: 'block',
   WORKSPACE: 'workspace',
+  GROUP: 'group'
 };
 
 /**
@@ -138,18 +146,19 @@ ContextMenuRegistry.prototype.getItem = function(id) {
  * @return {!Array<!ContextMenuRegistry.ContextMenuOption>} the list of
  *     ContextMenuOptions
  */
-ContextMenuRegistry.prototype.getContextMenuOptions = function(
-    scopeType, scope) {
+ContextMenuRegistry.prototype.getContextMenuOptions = function(scopeType, scope) {
   const menuOptions = [];
   const registry = this.registry_;
+
   Object.keys(registry).forEach(function(id) {
     const item = registry[id];
+
     if (scopeType === item.scopeType) {
       const precondition = item.preconditionFn(scope);
+
       if (precondition !== 'hidden') {
-        const displayText = typeof item.displayText === 'function' ?
-            item.displayText(scope) :
-            item.displayText;
+        const displayText = typeof item.displayText === 'function' ? item.displayText(scope) : item.displayText;
+
         /** @type {!ContextMenuRegistry.ContextMenuOption} */
         const menuOption = {
           text: displayText,
@@ -162,9 +171,11 @@ ContextMenuRegistry.prototype.getContextMenuOptions = function(
       }
     }
   });
+
   menuOptions.sort(function(a, b) {
     return a.weight - b.weight;
   });
+
   return menuOptions;
 };
 

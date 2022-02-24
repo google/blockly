@@ -98,7 +98,7 @@ class Field {
      * @type {*}
      * @protected
      */
-    this.value_ = new.target.prototype.DEFAULT_VALUE;
+    this.value_ = /** @type {typeof Field} */(new.target).prototype.DEFAULT_VALUE;
 
     /**
      * Validation function called when user edits an editable field.

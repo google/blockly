@@ -19,6 +19,8 @@ const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const parsing = goog.require('Blockly.utils.parsing');
 const {Field} = goog.require('Blockly.Field');
+/* eslint-disable-next-line no-unused-vars */
+const {Sentinel} = goog.requireType('Blockly.utils.Sentinel');
 const {Size} = goog.require('Blockly.utils.Size');
 const {Svg} = goog.require('Blockly.utils.Svg');
 
@@ -29,7 +31,7 @@ const {Svg} = goog.require('Blockly.utils.Svg');
  */
 class FieldImage extends Field {
   /**
-   * @param {string|!Field.Sentinel} src The URL of the image.
+   * @param {string|!Sentinel} src The URL of the image.
    *     Also accepts Field.SKIP_SETUP if you wish to skip setup (only used by
    *     subclasses that want to handle configuration and setting the field
    *     value after their own constructors have run).

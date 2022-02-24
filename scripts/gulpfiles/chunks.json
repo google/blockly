@@ -1,6 +1,6 @@
 {
   "chunk": [
-    "blockly:259",
+    "blockly:260",
     "blocks:10:blockly",
     "all:11:blockly",
     "all1:11:blockly",
@@ -197,6 +197,7 @@
     "./core/renderers/measurables/external_value_input.js",
     "./core/renderers/common/info.js",
     "./core/renderers/common/debugger.js",
+    "./core/utils/sentinel.js",
     "./core/field_label.js",
     "./core/input_types.js",
     "./core/input.js",

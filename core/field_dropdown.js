@@ -30,6 +30,8 @@ const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
 const {Field} = goog.require('Blockly.Field');
 const {MenuItem} = goog.require('Blockly.MenuItem');
 const {Menu} = goog.require('Blockly.Menu');
+/* eslint-disable-next-line no-unused-vars */
+const {Sentinel} = goog.requireType('Blockly.utils.Sentinel');
 const {Svg} = goog.require('Blockly.utils.Svg');
 
 
@@ -39,7 +41,7 @@ const {Svg} = goog.require('Blockly.utils.Svg');
  */
 class FieldDropdown extends Field {
   /**
-   * @param {(!Array<!Array>|!Function|!Field.Sentinel)} menuGenerator
+   * @param {(!Array<!Array>|!Function|!Sentinel)} menuGenerator
    *     A non-empty array of options for a dropdown list, or a function which
    *     generates these options.
    *     Also accepts Field.SKIP_SETUP if you wish to skip setup (only used by
@@ -108,7 +110,7 @@ class FieldDropdown extends Field {
     this.CURSOR = 'default';
 
 
-    // If we pass sentinel, don't do *anything* with the menu generator.
+    // If we pass SKIP_SETUP, don't do *anything* with the menu generator.
     if (menuGenerator === Field.SKIP_SETUP) return;
 
     if (Array.isArray(menuGenerator)) {

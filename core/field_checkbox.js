@@ -18,6 +18,8 @@ goog.module('Blockly.FieldCheckbox');
 const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const {Field} = goog.require('Blockly.Field');
+/* eslint-disable-next-line no-unused-vars */
+const {Sentinel} = goog.requireType('Blockly.utils.Sentinel');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
 
@@ -28,7 +30,7 @@ goog.require('Blockly.Events.BlockChange');
  */
 class FieldCheckbox extends Field {
   /**
-   * @param {(string|boolean|!Field.Sentinel)=} opt_value The initial value of
+   * @param {(string|boolean|!Sentinel)=} opt_value The initial value of
    *     the field. Should either be 'TRUE', 'FALSE' or a boolean. Defaults to
    *     'FALSE'.
    *     Also accepts Field.SKIP_SETUP if you wish to skip setup (only used by

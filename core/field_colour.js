@@ -25,6 +25,8 @@ const idGenerator = goog.require('Blockly.utils.idGenerator');
 const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
 const {Field} = goog.require('Blockly.Field');
 const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
+/* eslint-disable-next-line no-unused-vars */
+const {Sentinel} = goog.requireType('Blockly.utils.Sentinel');
 const {Size} = goog.require('Blockly.utils.Size');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
@@ -36,7 +38,7 @@ goog.require('Blockly.Events.BlockChange');
  */
 class FieldColour extends Field {
   /**
-   * @param {(string|!Field.Sentinel)=} opt_value The initial value of the
+   * @param {(string|!Sentinel)=} opt_value The initial value of the
    *     field. Should be in '#rrggbb' format. Defaults to the first value in
    *     the default colour array.
    *     Also accepts Field.SKIP_SETUP if you wish to skip setup (only used by

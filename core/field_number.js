@@ -19,6 +19,8 @@ const aria = goog.require('Blockly.utils.aria');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const {Field} = goog.require('Blockly.Field');
 const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
+/* eslint-disable-next-line no-unused-vars */
+const {Sentinel} = goog.requireType('Blockly.utils.Sentinel');
 
 
 /**
@@ -27,7 +29,7 @@ const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
  */
 class FieldNumber extends FieldTextInput {
   /**
-   * @param {(string|number|!Field.Sentinel)=} opt_value The initial value of
+   * @param {(string|number|!Sentinel)=} opt_value The initial value of
    *     the field. Should cast to a number. Defaults to 0.
    *     Also accepts Field.SKIP_SETUP if you wish to skip setup (only used by
    *     subclasses that want to handle configuration and setting the field

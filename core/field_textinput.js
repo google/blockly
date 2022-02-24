@@ -32,6 +32,8 @@ const {Field} = goog.require('Blockly.Field');
 const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
 const {Msg} = goog.require('Blockly.Msg');
 /* eslint-disable-next-line no-unused-vars */
+const {Sentinel} = goog.requireType('Blockly.utils.Sentinel');
+/* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockChange');
@@ -42,7 +44,7 @@ goog.require('Blockly.Events.BlockChange');
  */
 class FieldTextInput extends Field {
   /**
-   * @param {(string|!Field.Sentinel)=} opt_value The initial value of the
+   * @param {(string|!Sentinel)=} opt_value The initial value of the
    *     field. Should cast to a string. Defaults to an empty string if null or
    *     undefined.
    *     Also accepts Field.SKIP_SETUP if you wish to skip setup (only used by

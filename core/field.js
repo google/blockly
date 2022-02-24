@@ -50,6 +50,7 @@ const {IRegistrable} = goog.require('Blockly.IRegistrable');
 const {Input} = goog.requireType('Blockly.Input');
 const {MarkerManager} = goog.require('Blockly.MarkerManager');
 const {Rect} = goog.require('Blockly.utils.Rect');
+const {Sentinel} = goog.require('Blockly.utils.Sentinel');
 /* eslint-disable-next-line no-unused-vars */
 const {ShortcutRegistry} = goog.requireType('Blockly.ShortcutRegistry');
 const {Size} = goog.require('Blockly.utils.Size');
@@ -1266,16 +1267,11 @@ Field.prototype.DEFAULT_VALUE = null;
 Field.NBSP = '\u00A0';
 
 /**
- * A class used to provide a type for SKIP_SETUP.
- */
-Field.Sentinel = class {};
-
-/**
  * A value used to signal when a field's constructor should *not* set the
  * field's value or run configure_, and should allow a subclass to do that
  * instead.
  * @const
  */
-Field.SKIP_SETUP = new Field.Sentinel();
+Field.SKIP_SETUP = new Sentinel();
 
 exports.Field = Field;

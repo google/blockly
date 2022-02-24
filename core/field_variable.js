@@ -29,6 +29,8 @@ const {MenuItem} = goog.requireType('Blockly.MenuItem');
 /* eslint-disable-next-line no-unused-vars */
 const {Menu} = goog.requireType('Blockly.Menu');
 const {Msg} = goog.require('Blockly.Msg');
+/* eslint-disable-next-line no-unused-vars */
+const {Sentinel} = goog.requireType('Blockly.utils.Sentinel');
 const {Size} = goog.require('Blockly.utils.Size');
 const {VariableModel} = goog.require('Blockly.VariableModel');
 /** @suppress {extraRequire} */
@@ -41,7 +43,7 @@ goog.require('Blockly.Events.BlockChange');
  */
 class FieldVariable extends FieldDropdown {
   /**
-   * @param {?string|!Field.Sentinel} varName The default name for the variable.
+   * @param {?string|!Sentinel} varName The default name for the variable.
    *     If null, a unique variable name will be generated.
    *     Also accepts Field.SKIP_SETUP if you wish to skip setup (only used by
    *     subclasses that want to handle configuration and setting the field

@@ -26,6 +26,8 @@ const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
 const {Field} = goog.require('Blockly.Field');
 const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
 const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
+/* eslint-disable-next-line no-unused-vars */
+const {Sentinel} = goog.requireType('Blockly.utils.Sentinel');
 const {Svg} = goog.require('Blockly.utils.Svg');
 
 
@@ -35,7 +37,7 @@ const {Svg} = goog.require('Blockly.utils.Svg');
  */
 class FieldAngle extends FieldTextInput {
   /**
-   * @param {(string|number|!Field.Sentinel)=} opt_value The initial value of
+   * @param {(string|number|!Sentinel)=} opt_value The initial value of
    *     the field. Should cast to a number. Defaults to 0.
    *     Also accepts Field.SKIP_SETUP if you wish to skip setup (only used by
    *     subclasses that want to handle configuration and setting the field
@@ -50,7 +52,6 @@ class FieldAngle extends FieldTextInput {
    * @alias Blockly.FieldAngle
    */
   constructor(opt_value, opt_validator, opt_config) {
-    // Pass SENTINEL so that we can define properties before value validation.
     super(Field.SKIP_SETUP);
 
     /**

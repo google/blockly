@@ -21,6 +21,8 @@ const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const parsing = goog.require('Blockly.utils.parsing');
 const {Field} = goog.require('Blockly.Field');
+/* eslint-disable-next-line no-unused-vars */
+const {Sentinel} = goog.requireType('Blockly.utils.Sentinel');
 
 
 /**
@@ -29,7 +31,7 @@ const {Field} = goog.require('Blockly.Field');
  */
 class FieldLabel extends Field {
   /**
-   * @param {(string|!Field.Sentinel)=} opt_value The initial value of the
+   * @param {(string|!Sentinel)=} opt_value The initial value of the
    *     field. Should cast to a string. Defaults to an empty string if null or
    *     undefined.
    *     Also accepts Field.SKIP_SETUP if you wish to skip setup (only used by

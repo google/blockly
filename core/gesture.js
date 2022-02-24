@@ -29,6 +29,7 @@ const registry = goog.require('Blockly.registry');
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 const {BubbleDragger} = goog.require('Blockly.BubbleDragger');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+const {isShadowArgumentLocal} = goog.require('Blockly.utils.argumentLocal');
 /* eslint-disable-next-line no-unused-vars */
 const {Field} = goog.requireType('Blockly.Field');
 /* eslint-disable-next-line no-unused-vars */
@@ -851,7 +852,7 @@ Gesture.prototype.setStartBlock = function(block) {
   if (!this.startBlock_ && !this.startBubble_) {
     this.startBlock_ = block;
     this.shouldDuplicateOnDrag_ = !block.disabled && !block.getInheritedDisabled() &&
-        !block.isInFlyout && Gesture.isShadowArgumentReporter(block);
+        !block.isInFlyout && isShadowArgumentLocal(block);
     if (block.isInFlyout && block != block.getRootBlock()) {
       this.setTargetBlock_(block.getRootBlock());
     } else {
@@ -1099,72 +1100,6 @@ Gesture.prototype.duplicateOnDrag_ = function() {
   }
   newBlock.select();
   this.targetBlock_ = newBlock;
-};
-
-
-// todo: move it out of here
-/**
- * Whether a block is both a shadow block and an argument reporter.  These
- * blocks have special behaviour in scratch-blocks: they're duplicated when
- * dragged, and they are rendered slightly differently from normal shadow
- * blocks.
- * @param {!Blockly.BlockSvg} block The block that should be used to make this
- *     decision.
- * @return {boolean} True if the block should be duplicated on drag.
- * @package
- */
-Gesture.isShadowArgumentReporter = function(block) {
-  return block.isShadow() &&
-      (block.type === 'argument_local' ||
-          (Gesture._duplicateOnDragWhitelist &&
-              Gesture._duplicateOnDragWhitelist.indexOf(block.type) !== -1));
-};
-
-/**
- * Whether a block is a function argument reporter.
- * @param {!Blockly.BlockSvg} block The block that should be used to make this
- *     decision.
- * @return {boolean} True if the block is a function argument reporter.
- */
-Gesture.isFunctionArgumentReporter = function(block) {
-  return block.type == 'argument_local';
-};
-
-/**
- * Sets a whitelist of blocks whose shadow blocks duplicate on drag (in addition
- * to argument reporter blocks).
- * @param {Array<string>} blockTypes a list of block
- * @package
- */
-Gesture.whitelistDraggableBlockTypes = function(blockTypes) {
-  Gesture._duplicateOnDragWhitelist = blockTypes.slice();
-};
-
-/**
- * Finds and returns an argument reporter of the given name, argument type
- * name, and reporter type on the given block, or null if none match.
- * @param {!Blockly.Block} targetBlock The block to search.
- * @param {!Blockly.Block} reporter The reporter to try to match.
- * @return {boolean} Whether there is a matching reporter or not.
- */
-Gesture.hasMatchingArgumentReporter = function(targetBlock, reporter) {
-  const argName = reporter.getFieldValue('VALUE');
-  const argTypeName = reporter.getTypeName();
-  for (let i = 0; i < targetBlock.inputList.length; ++i) {
-    const input = targetBlock.inputList[i];
-    if (input.type == Blockly.INPUT_VALUE) {
-      const potentialMatch = input.connection.targetBlock();
-      if (!potentialMatch || potentialMatch.type != reporter.type) {
-        continue;
-      }
-      const n = potentialMatch.getFieldValue('VALUE');
-      const tn = potentialMatch.getTypeName();
-      if (n == argName && argTypeName == tn) {
-        return true;
-      }
-    }
-  }
-  return false;
 };
 
 exports.Gesture = Gesture;

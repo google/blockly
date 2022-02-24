@@ -28,6 +28,7 @@ const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
 const svgMath = goog.require('Blockly.utils.svgMath');
 const userAgent = goog.require('Blockly.utils.userAgent');
+const {isShadowArgumentLocal} = goog.require('Blockly.utils.argumentLocal');
 const {ASTNode} = goog.require('Blockly.ASTNode');
 const {Block} = goog.require('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
@@ -841,7 +842,7 @@ BlockSvg.prototype.showContextMenu = function(e) {
   // pxt-blockly: display parent context menu for shadow block
   const block = this;
   if (this.parentBlock_ && (this.isShadow_ &&
-      !Blockly.Gesture.isShadowArgumentReporter(block))) {
+      !isShadowArgumentLocal(block))) {
     this.parentBlock_.showContextMenu_(e);
     return;
   }

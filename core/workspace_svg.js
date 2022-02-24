@@ -237,21 +237,15 @@ const WorkspaceSvg = function(
   }
 
   const Procedures = goog.module.get('Blockly.Procedures');
-  const ProceduresLocalArg = goog.module.get('Blockly.ProceduresLocalArg');
 
   const ProceduresCallback = function(workspace) {
-    const ProcedureXmlList = Procedures.flyoutCategory(workspace);
-    const ProceduresLocalXmlList = ProceduresLocalArg.flyoutCategory(workspace);
-    return [...ProcedureXmlList, ...ProceduresLocalXmlList];
+    return Procedures.flyoutCategory(workspace);
   };
 
   if (Procedures &&
-      Procedures.flyoutCategory &&
-      ProceduresLocalArg &&
-      ProceduresLocalArg.flyoutCategory) {
+      Procedures.flyoutCategory) {
     this.registerToolboxCategoryCallback(Procedures.CATEGORY_NAME, ProceduresCallback);
     this.addChangeListener(Procedures.mutatorOpenListener);
-    this.addChangeListener(ProceduresLocalArg.mutatorOpenListener);
   }
 
   /**

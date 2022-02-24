@@ -237,11 +237,11 @@
       // const argName = argumentBlocks[i].getFieldValue('NAME');
       // const argId = argumentBlocks[i].getData();
 
-      if (shouldRename.find((a) => a.id === argumentBlocks[i].id)) {
+      if (shouldRename.length && shouldRename.find((a) => a.id === argumentBlocks[i].id)) {
         argumentBlocks[i].setFieldValue(this.updatedArguments_[argumentBlocks[i].id].name, 'NAME');
       }
 
-      if (shouldRemove.find((f) => f.id === argumentBlocks[i].id)) {
+      if (shouldRemove.length && shouldRemove.find((f) => f.id === argumentBlocks[i].id)) {
         argumentBlocks[i].dispose();
       }
     }
@@ -1141,65 +1141,4 @@ Blocks.procedures_local_callreturn = {
   },
 
   defType_: 'procedures_local_defreturn',
-};
-
-Blocks['argument_local'] = {
-  init: function() {
-    this.jsonInit({
-      'message0': ' %1',
-      'args0': [
-        {
-          'type': 'field_label_hover',
-          'name': 'VALUE',
-          'text': '',
-        },
-      ],
-      'colour': '201',
-      'inputsInline': true,
-      'output': null,
-    });
-    this.onlyInParent = true;
-  },
-  onchange: function(event) {
-    if (event.type !== Events.BLOCK_MOVE) {
-      return;
-    }
-
-    if (!this.workspace.isDragging || this.workspace.isDragging()) {
-      return; // Don't change state at the start of a drag.
-    }
-    let block = this;
-
-    // Is the block disabled manual user
-    if (block.disabled && !block.warning) {
-      return;
-    }
-
-    let enable = true;
-    // local_argument_
-    if (Gesture.isFunctionArgumentReporter(block) && block.onlyInParent && !block.isShadow()) {
-      const xmlBlock = Xml.blockToDom(block);
-      const argumentName = xmlBlock.textContent;
-      enable = false;
-      do {
-        if ((block.type === 'procedures_local_defnoreturn' || block.type === 'procedures_local_defreturn') && block.arguments_.includes(argumentName)) {
-          enable = true;
-          break;
-        }
-        block = block.getSurroundParent();
-      } while (block);
-
-      Events.disable();
-      if (enable) {
-        this.setWarningText(null);
-        this.setEnabled(true);
-      } else {
-        this.setWarningText(Msg.COROUTINE_USAGE_WARNING);
-        if (!this.isInFlyout && !this.getInheritedDisabled()) {
-          this.setEnabled(false);
-        }
-      }
-      Events.enable();
-    }
-  },
 };

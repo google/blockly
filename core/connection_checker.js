@@ -22,6 +22,7 @@ const internalConstants = goog.require('Blockly.internalConstants');
 const registry = goog.require('Blockly.registry');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
 const {Connection} = goog.require('Blockly.Connection');
+const {isShadowArgumentLocal} = goog.require('Blockly.utils.argumentLocal');
 /* eslint-disable-next-line no-unused-vars */
 const {IConnectionChecker} = goog.require('Blockly.IConnectionChecker');
 /* eslint-disable-next-line no-unused-vars */
@@ -246,6 +247,17 @@ ConnectionChecker.prototype.doDragChecks = function(a, b, distance) {
           !b.targetBlock().isShadow()) {
         return false;
       }
+
+      // don't allow connecting a block to an argument local
+      // shadow.
+      if (b && b.targetBlock()) {
+        const targetBlock = b.targetBlock();
+        if (targetBlock.isShadow() &&
+          isShadowArgumentLocal(targetBlock)) {
+        return false;
+        }
+      }
+        
       break;
     }
     case ConnectionType.NEXT_STATEMENT: {

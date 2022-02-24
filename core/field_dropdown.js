@@ -156,7 +156,7 @@ class FieldDropdown extends Field {
     /**
      * The currently selected option. The field is initialized with the
      * first option selected.
-     * @type {!Array<string|!FieldDropdown.ImageProperties>}
+     * @type {!Array<string|!ImageProperties>}
      * @private
      */
     this.selectedOption_ = this.getOptions(false)[0];
@@ -537,7 +537,7 @@ class FieldDropdown extends Field {
     const option = this.selectedOption_ && this.selectedOption_[0];
     if (option && typeof option === 'object') {
       this.renderSelectedImage_(
-          /** @type {!FieldDropdown.ImageProperties} */ (option));
+          /** @type {!ImageProperties} */ (option));
     } else {
       this.renderSelectedText_();
     }
@@ -547,7 +547,7 @@ class FieldDropdown extends Field {
 
   /**
    * Renders the selected option, which must be an image.
-   * @param {!FieldDropdown.ImageProperties} imageJson Selected
+   * @param {!ImageProperties} imageJson Selected
    *   option that must be an image.
    * @private
    */
@@ -716,7 +716,7 @@ class FieldDropdown extends Field {
  *            height:number
  *          }}
  */
-FieldDropdown.ImageProperties;
+let ImageProperties;  // eslint-disable-line no-unused-vars
 
 /**
  * Horizontal distance that a checkmark overhangs the dropdown.

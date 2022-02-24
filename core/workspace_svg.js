@@ -2376,7 +2376,7 @@ WorkspaceSvg.prototype.setScale = function(newScale) {
   this.scale = newScale;
 
   // Record active module scale
-  var activeModule = this.getModuleManager().getActiveModule();
+  const activeModule = this.getModuleManager().getActiveModule();
   if (activeModule) {
     activeModule.scale = newScale;
   }
@@ -2455,7 +2455,7 @@ WorkspaceSvg.prototype.scroll = function(x, y) {
   this.scrollY = y;
 
   // Record active module workspace coordinates
-  var activeModule = this.getModuleManager().getActiveModule();
+  const activeModule = this.getModuleManager().getActiveModule();
   if (activeModule) {
     activeModule.scrollX = x;
     activeModule.scrollY = y;

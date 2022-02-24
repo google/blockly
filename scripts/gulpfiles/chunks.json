@@ -1,7 +1,7 @@
 {
   "chunk": [
     "blockly:271",
-    "all:10:blockly",
+    "all:11:blockly",
     "all1:11:blockly"
   ],
   "js": [
@@ -16,6 +16,7 @@
     ".\\core\\field_variable.js",
     ".\\core\\field_number.js",
     ".\\core\\field_multilineinput.js",
+    ".\\core\\field_label_hover.js",
     ".\\core\\field_label_serializable.js",
     ".\\core\\field_dropdown.js",
     ".\\core\\field_colour.js",
@@ -143,6 +144,7 @@
     ".\\core\\contextmenu_registry.js",
     ".\\core\\theme\\classic.js",
     ".\\core\\blockly_options.js",
+    ".\\core\\utils\\argument_local.js",
     ".\\core\\utils.js",
     ".\\core\\renderers\\measurables\\top_row.js",
     ".\\core\\renderers\\measurables\\statement_input.js",
@@ -276,6 +278,7 @@
     ".\\core\\common.js",
     ".\\closure\\goog\\base_minimal.js",
     ".\\core\\blockly.js",
+    ".\\blocks\\argument_local.js",
     ".\\blocks\\variables_dynamic.js",
     ".\\blocks\\variables.js",
     ".\\blocks\\text.js",

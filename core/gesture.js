@@ -29,6 +29,7 @@ const registry = goog.require('Blockly.registry');
 const { BlockSvg } = goog.requireType('Blockly.BlockSvg');
 const { BubbleDragger } = goog.require('Blockly.BubbleDragger');
 const { Coordinate } = goog.require('Blockly.utils.Coordinate');
+const { isArgumentLocal } = goog.require('Blockly.utils.argumentLocal');
 /* eslint-disable-next-line no-unused-vars */
 const { Field } = goog.requireType('Blockly.Field');
 /* eslint-disable-next-line no-unused-vars */
@@ -235,6 +236,14 @@ const Gesture = function (e, creatorWorkspace) {
   this.isEnding_ = false;
 
   /**
+   * True if dragging from the target block should duplicate the target block
+   * and drag the duplicate instead.  This has a lot of side effects.
+   * @type {boolean}
+   * @private
+   */
+  this.shouldDuplicateOnDrag_ = false;
+
+  /**
    * Boolean used to indicate whether or not to heal the stack after
    * disconnecting a block.
    * @type {boolean}
@@ -383,7 +392,7 @@ Gesture.prototype.updateIsDraggingBlock_ = function () {
 
   if (this.flyout_) {
     this.isDraggingBlock_ = this.updateIsDraggingFromFlyout_();
-  } else if (this.targetBlock_.isMovable()) {
+  } else if (this.targetBlock_.isMovable() || this.shouldDuplicateOnDrag_) {
     this.isDraggingBlock_ = true;
   }
 
@@ -448,7 +457,10 @@ Gesture.prototype.updateIsDragging_ = function (e) {
  * Create a block dragger and start dragging the selected block.
  * @private
  */
-Gesture.prototype.startDraggingBlock_ = function () {
+Gesture.prototype.startDraggingBlock_ = function() {
+  if (this.shouldDuplicateOnDrag_) {
+    this.duplicateOnDrag_();
+  }
   const BlockDraggerClass = registry.getClassFromOptions(
     registry.Type.BLOCK_DRAGGER, this.creatorWorkspace_.options, true);
 
@@ -876,7 +888,9 @@ Gesture.prototype.setStartBlock = function (block) {
   // If the gesture already went through a bubble, don't set the start block.
   if (!this.startBlock_ && !this.startBubble_) {
     this.startBlock_ = block;
-    if (block.isInFlyout && block !== block.getRootBlock()) {
+    this.shouldDuplicateOnDrag_ = !block.disabled && !block.getInheritedDisabled() &&
+        !block.isInFlyout && isArgumentLocal(block);
+    if (block.isInFlyout && block != block.getRootBlock()) {
       this.setTargetBlock_(block.getRootBlock());
     } else {
       this.setTargetBlock_(block);
@@ -891,8 +905,8 @@ Gesture.prototype.setStartBlock = function (block) {
  * @param {BlockSvg} block The block the gesture targets.
  * @private
  */
-Gesture.prototype.setTargetBlock_ = function (block) {
-  if (block.isShadow()) {
+Gesture.prototype.setTargetBlock_ = function(block) {
+  if (block.isShadow() && !this.shouldDuplicateOnDrag_) {
     this.setTargetBlock_(block.getParent());
   } else {
     this.targetBlock_ = block;
@@ -1045,6 +1059,46 @@ Gesture.inProgress = function () {
     }
   }
   return false;
+};
+
+/**
+ * Duplicate the target block and start dragging the duplicated block.
+ * This should be done once we are sure that it is a block drag, and no earlier.
+ * Specifically for argument reporters in custom block defintions.
+ * @private
+ */
+Gesture.prototype.duplicateOnDrag_ = function() {
+  let newBlock = null;
+  Blockly.Events.disable();
+  try {
+    // Note: targetBlock_ should have no children.
+    this.startWorkspace_.setResizesEnabled(false);
+    const xmlBlock = Blockly.Xml.blockToDom(this.targetBlock_);
+    if (this.targetBlock_.inputList[0] &&
+        this.targetBlock_.inputList[0].fieldRow[0] &&
+        this.targetBlock_.inputList[0].fieldRow[0].clearHover) {
+      this.targetBlock_.inputList[0].fieldRow[0].clearHover();
+    }
+    newBlock = Blockly.Xml.domToBlock(xmlBlock, this.startWorkspace_);
+
+    // Move the duplicate to original position.
+    const xy = this.targetBlock_.getRelativeToSurfaceXY();
+    newBlock.moveBy(xy.x, xy.y);
+    newBlock.setShadow(false);
+    newBlock.setMovable(true);
+  } finally {
+    Blockly.Events.enable();
+  }
+  if (!newBlock) {
+    // Something went wrong.
+    console.error('Something went wrong while duplicating a block.');
+    return;
+  }
+  if (Blockly.Events.isEnabled()) {
+    Blockly.Events.fire(new Blockly.Events.BlockCreate(newBlock));
+  }
+  newBlock.select();
+  this.targetBlock_ = newBlock;
 };
 
 exports.Gesture = Gesture;

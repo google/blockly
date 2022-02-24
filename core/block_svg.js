@@ -28,6 +28,7 @@ const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
 const svgMath = goog.require('Blockly.utils.svgMath');
 const userAgent = goog.require('Blockly.utils.userAgent');
+const {isArgumentLocal} = goog.require('Blockly.utils.argumentLocal');
 const {ASTNode} = goog.require('Blockly.ASTNode');
 const {Block} = goog.require('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
@@ -168,54 +169,54 @@ const BlockSvg = function(workspace, prototypeName, opt_id, moduleId) {
    * @type {boolean}
    * @private
    */
-  this.isInFrontOfWorkspace = false
+  this.isInFrontOfWorkspace = false;
 
   /**
    * Temporary div for place block svg on front of the Flyout
    * @type {Element}
    * @private
    */
-  this.tempRootDiv = null
+  this.tempRootDiv = null;
 
   /**
    * Save the previous parent element to bring the block back when it becomes inactive
    * @type {Element}
    * @private
    */
-  this.previousParent = null
+  this.previousParent = null;
 
   /**
    * Save the previous next sibling element to bring the block back when it becomes inactive
    * @type {Element}
    * @private
    */
-  this.previousNextSibling = null
+  this.previousNextSibling = null;
 
   /**
    * Save the previous transform style
    * @type {Element}
    * @private
    */
-  this.previousSvgRootTransform = null
+  this.previousSvgRootTransform = null;
 
   /**
    * while the Drag&Drop of the block is running, we block the block from moving to the position before the flyout
    * @type {Boolean}
    * @private
    */
-  this.disableMovingToFront = false
+  this.disableMovingToFront = false;
 
   /**
    * @type {Boolean}
    * @private
    */
-  this.selected_ = false
+  this.selected_ = false;
 
   /**
    * @type {Boolean}
    * @private
    */
-  this.selectedAsGroup_ = false
+  this.selectedAsGroup_ = false;
 };
 object.inherits(BlockSvg, Block);
 
@@ -802,11 +803,11 @@ BlockSvg.prototype.onMouseDown_ = function(e) {
   }
 
   if (this.isInFrontOfWorkspace) {
-    this.disableMovingToFront = true
-    this.previousParent.insertBefore(this.getSvgRoot(), this.previousNextSibling)
-    this.getSvgRoot().setAttribute('transform', this.previousSvgRootTransform)
-    this.tempRootDiv.remove()
-    this.isInFrontOfWorkspace = false
+    this.disableMovingToFront = true;
+    this.previousParent.insertBefore(this.getSvgRoot(), this.previousNextSibling);
+    this.getSvgRoot().setAttribute('transform', this.previousSvgRootTransform);
+    this.tempRootDiv.remove();
+    this.isInFrontOfWorkspace = false;
   }
 
   const gesture = this.workspace && this.workspace.getGesture(e);
@@ -849,9 +850,9 @@ BlockSvg.prototype.generateContextMenu = function() {
       ContextMenuRegistry.ScopeType.BLOCK, {block: this});
 
   if (this.workspace.options.showModuleBar && this.isMovable() && this.workspace.getModuleManager().getAllModules().length > 1) {
-    var block = this
+    const block = this;
 
-    this.workspace.getModuleManager().getAllModules().forEach(function (module) {
+    this.workspace.getModuleManager().getAllModules().forEach(function(module) {
       if (block.getModuleId() !== module.getId()) {
         menuOptions.push(ContextMenu.blockMoveToModuleOption(block, module));
       }
@@ -872,9 +873,16 @@ BlockSvg.prototype.generateContextMenu = function() {
  * @package
  */
 BlockSvg.prototype.showContextMenu = function(e) {
+  // display parent context menu for argument local
+  const block = this;
+  if (this.parentBlock_ && !isArgumentLocal(block)) {
+    this.parentBlock_.showContextMenu_(e);
+    return;
+  }
+  
   if (this.checkInGroupSelection()) {
-    this.workspace.getMassOperations().showContextMenu(e, this)
-    return
+    this.workspace.getMassOperations().showContextMenu(e, this);
+    return;
   }
 
   const menuOptions = this.generateContextMenu();
@@ -1028,7 +1036,7 @@ BlockSvg.prototype.removeRender = function() {
     ContextMenu.hide();
   }
 
-  var icons = this.getIcons();
+  const icons = this.getIcons();
   for (var i = 0, icon; (icon = icons[i]); i++) {
     icon.setVisible(false);
   }
@@ -1038,7 +1046,7 @@ BlockSvg.prototype.removeRender = function() {
 
   // Clear pending warnings.
   if (this.warningTextDb_) {
-    for (var n in this.warningTextDb_) {
+    for (const n in this.warningTextDb_) {
       clearTimeout(this.warningTextDb_[n]);
     }
     this.warningTextDb_ = null;
@@ -1379,82 +1387,82 @@ BlockSvg.prototype.setHighlighted = function(highlighted) {
  */
 BlockSvg.prototype.addSelect = function() {
   this.pathObject.updateSelected(true);
-  this.selected_ = true
-  this.selectedAsGroup_ = false
+  this.selected_ = true;
+  this.selectedAsGroup_ = false;
 
   if (this.isInFlyout) {
-    this.placeToFront()
+    this.placeToFront();
   }
 };
 
 BlockSvg.prototype.addSelectAsMassSelection = function() {
   this.pathObject.updateMassSelected(true);
-  this.selected_ = true
-  this.selectedAsGroup_ = true
+  this.selected_ = true;
+  this.selectedAsGroup_ = true;
 };
 
 /**
  * Create a temporary div and move the svg of the block in front of
  * the entire flyout to display the block in its entirety
  */
-BlockSvg.prototype.placeToFront = function () {
-  if (this.isInFrontOfWorkspace || this.disableMovingToFront) return
+BlockSvg.prototype.placeToFront = function() {
+  if (this.isInFrontOfWorkspace || this.disableMovingToFront) return;
 
   setTimeout(() => {
-    if (this.isInFrontOfWorkspace || !this.selected_) return
+    if (this.isInFrontOfWorkspace || !this.selected_) return;
 
-    const flyoutSVG = this.workspace.getParentSvg()
-    let flyoutWidth = flyoutSVG.style.width
-    if (!flyoutWidth) return
+    const flyoutSVG = this.workspace.getParentSvg();
+    let flyoutWidth = flyoutSVG.style.width;
+    if (!flyoutWidth) return;
 
-    flyoutWidth = parseInt(flyoutWidth.slice(0, flyoutWidth.length - 2)) // '100px' -> 100
-    if (!flyoutWidth) return
+    flyoutWidth = parseInt(flyoutWidth.slice(0, flyoutWidth.length - 2)); // '100px' -> 100
+    if (!flyoutWidth) return;
 
-    const blockWidth = this.svgGroup_.getBBox().width
+    const blockWidth = this.svgGroup_.getBBox().width;
 
-    if (blockWidth < flyoutWidth) return
+    if (blockWidth < flyoutWidth) return;
 
-    const blockClientRect = this.getSvgRoot().getBoundingClientRect()
-    const flyoutClientRect = flyoutSVG.getBoundingClientRect()
-    const workspaceClientRect = this.workspace.getInjectionDiv().getBoundingClientRect()
+    const blockClientRect = this.getSvgRoot().getBoundingClientRect();
+    const flyoutClientRect = flyoutSVG.getBoundingClientRect();
+    const workspaceClientRect = this.workspace.getInjectionDiv().getBoundingClientRect();
 
-    this.tempRootDiv = document.createElement('div')
-    this.tempRootDiv.style.zIndex = '31' // > flyout scrollbar z-index == 30
-    this.tempRootDiv.style.position = 'absolute'
-    this.tempRootDiv.style.top = `${blockClientRect.top - flyoutClientRect.top}px`
-    this.tempRootDiv.style.left = `${blockClientRect.left - workspaceClientRect.left}px`
-    this.tempRootDiv.style.background = '#ccc'
-    this.tempRootDiv.style.boxShadow = '0 0 5px #ccc'
+    this.tempRootDiv = document.createElement('div');
+    this.tempRootDiv.style.zIndex = '31'; // > flyout scrollbar z-index == 30
+    this.tempRootDiv.style.position = 'absolute';
+    this.tempRootDiv.style.top = `${blockClientRect.top - flyoutClientRect.top}px`;
+    this.tempRootDiv.style.left = `${blockClientRect.left - workspaceClientRect.left}px`;
+    this.tempRootDiv.style.background = '#ccc';
+    this.tempRootDiv.style.boxShadow = '0 0 5px #ccc';
 
-    const tempSVGRoot = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
-    tempSVGRoot.setAttribute('width', `${blockClientRect.width}px`)
-    tempSVGRoot.setAttribute('height', `${blockClientRect.height}px`)
-    this.tempRootDiv.appendChild(tempSVGRoot)
+    const tempSVGRoot = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    tempSVGRoot.setAttribute('width', `${blockClientRect.width}px`);
+    tempSVGRoot.setAttribute('height', `${blockClientRect.height}px`);
+    this.tempRootDiv.appendChild(tempSVGRoot);
 
-    this.previousSvgRootTransform = this.getSvgRoot().getAttribute('transform')
-    this.getSvgRoot().removeAttribute('transform')
+    this.previousSvgRootTransform = this.getSvgRoot().getAttribute('transform');
+    this.getSvgRoot().removeAttribute('transform');
 
-    this.previousParent = this.getSvgRoot().parentElement
-    this.previousNextSibling = this.getSvgRoot().nextSibling
-    tempSVGRoot.appendChild(this.getSvgRoot())
+    this.previousParent = this.getSvgRoot().parentElement;
+    this.previousNextSibling = this.getSvgRoot().nextSibling;
+    tempSVGRoot.appendChild(this.getSvgRoot());
 
     this.tempRootDiv.onmouseleave = () => {
-      this.previousParent.insertBefore(this.getSvgRoot(), this.previousNextSibling)
-      this.getSvgRoot().setAttribute('transform', this.previousSvgRootTransform)
+      this.previousParent.insertBefore(this.getSvgRoot(), this.previousNextSibling);
+      this.getSvgRoot().setAttribute('transform', this.previousSvgRootTransform);
 
-      this.tempRootDiv.remove()
-      this.tempRootDiv = null
-      this.previousSvgRootTransform = null
-      this.previousParent = null
-      this.previousNextSibling = null
-      this.isInFrontOfWorkspace = false
-      this.removeSelect()
-    }
+      this.tempRootDiv.remove();
+      this.tempRootDiv = null;
+      this.previousSvgRootTransform = null;
+      this.previousParent = null;
+      this.previousNextSibling = null;
+      this.isInFrontOfWorkspace = false;
+      this.removeSelect();
+    };
 
-    this.isInFrontOfWorkspace = true
-    this.workspace.getParentSvg().parentElement.appendChild(this.tempRootDiv)
-  }, 100) // This is enough to eliminate glitches when scrolling.
-}
+    this.isInFrontOfWorkspace = true;
+    this.workspace.getParentSvg().parentElement.appendChild(this.tempRootDiv);
+  }, 100); // This is enough to eliminate glitches when scrolling.
+};
 
 /**
  * Removes the visual "select" effect from the block, but does not actually
@@ -1462,17 +1470,16 @@ BlockSvg.prototype.placeToFront = function () {
  * @see BlockSvg#unselect
  */
 BlockSvg.prototype.removeSelect = function() {
-  if (this.isInFrontOfWorkspace) return
-
-  this.pathObject.updateSelected(false)
-  this.selectedAsGroup_ = false
-  this.selected_ = false
+  if (this.isInFrontOfWorkspace) return;
+  this.pathObject.updateSelected(false);
+  this.selectedAsGroup_ = false;
+  this.selected_ = false;
 };
 
 BlockSvg.prototype.removeSelectAsMassSelection = function() {
   this.pathObject.updateMassSelected(false);
-  this.selectedAsGroup_ = false
-  this.selected_ = false
+  this.selectedAsGroup_ = false;
+  this.selected_ = false;
 };
 
 /**

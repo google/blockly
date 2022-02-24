@@ -826,6 +826,10 @@ const renamings = {
       export: 'FieldLabelSerializable',
       path: 'Blockly.FieldLabelSerializable',
     },
+    'Blockly.FieldLabelHover': {
+      export: 'FieldLabelHover',
+      path: 'Blockly.FieldLabelHover',
+    },
     'Blockly.FieldMultilineInput': {
       export: 'FieldMultilineInput',
       path: 'Blockly.FieldMultilineInput',

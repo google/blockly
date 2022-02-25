@@ -364,8 +364,7 @@ class RenderedConnection extends Connection {
   stopTrackingAll() {
     this.setTracking(false);
     if (this.targetConnection) {
-      const blocks = /** @type {!Array<!BlockSvg>} */
-          (this.targetBlock().getDescendants(false));
+      const blocks = this.targetBlock().getDescendants(false);
       for (let i = 0; i < blocks.length; i++) {
         const block = blocks[i];
         // Stop tracking connections of all children.

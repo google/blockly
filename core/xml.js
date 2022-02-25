@@ -603,8 +603,7 @@ const domToBlock = function(xmlBlock, workspace) {
     // Generate list of all blocks.
     if (workspace.rendered) {
       const topBlockSvg = /** @type {!BlockSvg} */ (topBlock);
-      const blocks = /** @type {!Array<!BlockSvg>} */
-          (topBlock.getDescendants(false));
+      const blocks = topBlock.getDescendants(false);
       topBlockSvg.setConnectionTracking(false);
       // Render each block.
       for (let i = blocks.length - 1; i >= 0; i--) {

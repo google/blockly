@@ -344,8 +344,7 @@ class Mutator extends Icon {
       }
 
       this.rootBlock_ = this.block_.decompose(this.workspace_);
-      const blocks = /** @type {!Array<!BlockSvg>} */
-          (this.rootBlock_.getDescendants(false));
+      const blocks = this.rootBlock_.getDescendants(false);
       for (let i = 0, child; (child = blocks[i]); i++) {
         child.render();
       }

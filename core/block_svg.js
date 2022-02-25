@@ -92,7 +92,7 @@ goog.require('Blockly.Touch');
 class BlockSvg extends Block {
   /**
    * @param {!WorkspaceSvg} workspace The block's workspace.
-   * @param {!string} prototypeName Name of the language object containing
+   * @param {string} prototypeName Name of the language object containing
    *     type-specific functions for this block.
    * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
    *     create a new ID.

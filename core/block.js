@@ -363,7 +363,7 @@ class Block {
   }
 
   /**
-   * Calls the init() function hand handles associated event firing, etc.
+   * Calls the init() function and handles associated event firing, etc.
    * @protected
    */
   doInit_() {

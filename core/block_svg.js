@@ -28,7 +28,7 @@ const internalConstants = goog.require('Blockly.internalConstants');
 const object = goog.require('Blockly.utils.object');
 const svgMath = goog.require('Blockly.utils.svgMath');
 const userAgent = goog.require('Blockly.utils.userAgent');
-const {isArgumentLocal} = goog.require('Blockly.utils.argumentLocal');
+const {isShadowArgumentLocal} = goog.require('Blockly.utils.argumentLocal');
 const {ASTNode} = goog.require('Blockly.ASTNode');
 const {Block} = goog.require('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
@@ -559,7 +559,7 @@ BlockSvg.prototype.moveToDragSurface = function(positionOnDragSurface) {
   // is equal to the current relative-to-surface position,
   // to keep the position in sync as it move on/off the surface.
   // This is in workspace coordinates.
-  let xy = this.getRelativeToSurfaceXY();
+  const xy = this.getRelativeToSurfaceXY();
 
   if (positionOnDragSurface) {
     this.replaceTransformAttributes_(positionOnDragSurface);
@@ -793,12 +793,12 @@ BlockSvg.prototype.tab = function(start, forward) {
  * @private
  */
 BlockSvg.prototype.onMouseDown_ = function(e) {
-  const massOperations = this.workspace.getMassOperations()
+  const massOperations = this.workspace.getMassOperations();
   if (massOperations && e.ctrlKey && massOperations.checkBlockInSelectGroup(this)) {
     e.stopPropagation();
     e.preventDefault();
 
-    massOperations.selectedBlockMouseDown(this, e)
+    massOperations.selectedBlockMouseDown(this, e);
     return;
   }
 
@@ -822,8 +822,8 @@ BlockSvg.prototype.onMouseDown_ = function(e) {
  * @private
  */
 BlockSvg.prototype.onMouseUp_ = function(e) {
-  if (this.disableMovingToFront) this.disableMovingToFront = false
-}
+  if (this.disableMovingToFront) this.disableMovingToFront = false;
+};
 
 /**
  * Load the block's help page in a new window.
@@ -875,11 +875,11 @@ BlockSvg.prototype.generateContextMenu = function() {
 BlockSvg.prototype.showContextMenu = function(e) {
   // display parent context menu for argument local
   const block = this;
-  if (this.parentBlock_ && !isArgumentLocal(block)) {
+  if (this.parentBlock_ && (this.isShadow_ && !isShadowArgumentLocal(block))) {
     this.parentBlock_.showContextMenu_(e);
     return;
   }
-  
+
   if (this.checkInGroupSelection()) {
     this.workspace.getMassOperations().showContextMenu(e, this);
     return;
@@ -893,14 +893,14 @@ BlockSvg.prototype.showContextMenu = function(e) {
   }
 };
 
-BlockSvg.prototype.checkInGroupSelection = function () {
-  if (this.selectedAsGroup_) return true
+BlockSvg.prototype.checkInGroupSelection = function() {
+  if (this.selectedAsGroup_) return true;
 
-  const massOperations = this.workspace.getMassOperations()
-  if (massOperations) return massOperations.checkBlockInSelectGroup(this)
+  const massOperations = this.workspace.getMassOperations();
+  if (massOperations) return massOperations.checkBlockInSelectGroup(this);
 
-  return false
-}
+  return false;
+};
 
 /**
  * Move the connections for this block and all blocks attached under it.

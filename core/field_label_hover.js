@@ -165,6 +165,14 @@ const {FieldLabel} = goog.require('Blockly.FieldLabel');
    this.variableMap_ = null;
  };
 
+ /**
+ * Updates text field to match the colour/style of the block.
+ * @package
+ */
+  FieldLabelHover.prototype.applyColour = function() {
+  this.sourceBlock_.pathObject.svgPath.setAttribute('fill', this.sourceBlock_.style.colourPrimary);
+};
+
  fieldRegistry.register('field_label_hover', FieldLabelHover);
 
  exports.FieldLabelHover = FieldLabelHover;

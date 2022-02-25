@@ -568,7 +568,7 @@ class RenderInfo {
    * Modify the given row to add the given amount of padding around its fields.
    * The exact location of the padding is based on the alignment property of the
    * last input in the field.
-   * @param {Row} row The row to add padding to.
+   * @param {!Row} row The row to add padding to.
    * @param {number} missingSpace How much padding to add.
    * @protected
    */

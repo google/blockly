@@ -32,6 +32,7 @@ const {RenderInfo} = goog.requireType('Blockly.geras.RenderInfo');
 const {Renderer} = goog.requireType('Blockly.geras.Renderer');
 /* eslint-disable-next-line no-unused-vars */
 const {Row} = goog.requireType('Blockly.blockRendering.Row');
+const {SpacerRow} = goog.require('Blockly.blockRendering.SpacerRow');
 /* eslint-disable-next-line no-unused-vars */
 const {TopRow} = goog.require('Blockly.blockRendering.TopRow');
 const {Types} = goog.require('Blockly.blockRendering.Types');
@@ -193,7 +194,7 @@ class Highlighter {
    */
   drawRightSideRow(row) {
     const rightEdge = row.xPos + row.width - this.highlightOffset_;
-    if (row.followsStatement) {
+    if (row instanceof SpacerRow && row.followsStatement) {
       this.steps_ += svgPaths.lineOnAxis('H', rightEdge);
     }
     if (this.RTL_) {

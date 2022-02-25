@@ -19,6 +19,7 @@ const debug = goog.require('Blockly.blockRendering.debug');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {Connection} = goog.require('Blockly.blockRendering.Connection');
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 /* eslint-disable-next-line no-unused-vars */
@@ -149,7 +150,8 @@ class Drawer {
         this.outlinePath_ += this.constants_.OUTSIDE_CORNERS.topLeft;
       } else if (Types.isRightRoundedCorner(elem)) {
         this.outlinePath_ += this.constants_.OUTSIDE_CORNERS.topRight;
-      } else if (Types.isPreviousConnection(elem)) {
+      } else if (
+          Types.isPreviousConnection(elem) && elem instanceof Connection) {
         this.outlinePath_ += elem.shape.pathLeft;
       } else if (Types.isHat(elem)) {
         this.outlinePath_ += this.constants_.START_HAT.path;
@@ -241,7 +243,7 @@ class Drawer {
     let rightCornerYOffset = 0;
     let outlinePath = '';
     for (let i = elems.length - 1, elem; (elem = elems[i]); i--) {
-      if (Types.isNextConnection(elem)) {
+      if (Types.isNextConnection(elem) && elem instanceof Connection) {
         outlinePath += elem.shape.pathRight;
       } else if (Types.isLeftSquareCorner(elem)) {
         outlinePath += svgPaths.lineOnAxis('H', bottomRow.xPos);

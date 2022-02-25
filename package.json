@@ -1,6 +1,6 @@
 {
   "name": "varwin-blockly",
-  "version": "7.20211209.15",
+  "version": "7.20211209.16",
   "description": "Varwin Blockly it is a fork of Google Blockly for Varwin XRMS",
   "keywords": [
     "blockly",

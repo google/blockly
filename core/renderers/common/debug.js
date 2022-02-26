@@ -28,7 +28,6 @@ let useDebugger = false;
  * @return {boolean} Whether the debugger is turned on.
  * @alias Blockly.blockRendering.debug.isDebuggerEnabled
  * @package
- * @deprecated
  */
 const isDebuggerEnabled = function() {
   deprecation.warn(
@@ -44,7 +43,6 @@ exports.isDebuggerEnabled = isDebuggerEnabled;
  * Turn on the blocks debugger.
  * @package
  * @alias Blockly.blockRendering.debug.startDebugger
- * @deprecated
  */
 const startDebugger = function() {
   deprecation.warn(
@@ -59,7 +57,6 @@ exports.startDebugger = startDebugger;
  * Turn off the blocks debugger.
  * @package
  * @alias Blockly.blockRendering.debug.stopDebugger
- * @deprecated
  */
 const stopDebugger = function() {
   deprecation.warn(

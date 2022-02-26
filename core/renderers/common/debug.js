@@ -32,8 +32,9 @@ let useDebugger = false;
  */
 const isDebuggerEnabled = function() {
   deprecation.warn(
-    'Blockly.blockRendering.debug.isDebuggerEnabled()', 'February 2022',
-    'September 2022', 'the debug renderer in @blockly/dev-tools (See https://www.npmjs.com/package/@blockly/dev-tools.)');
+      'Blockly.blockRendering.debug.isDebuggerEnabled()', 'February 2022',
+      'September 2022',
+      'the debug renderer in @blockly/dev-tools (See https://www.npmjs.com/package/@blockly/dev-tools.)');
 
   return useDebugger;
 };
@@ -47,8 +48,9 @@ exports.isDebuggerEnabled = isDebuggerEnabled;
  */
 const startDebugger = function() {
   deprecation.warn(
-    'Blockly.blockRendering.debug.startDebugger()', 'February 2022',
-    'September 2022', 'the debug renderer in @blockly/dev-tools (See https://www.npmjs.com/package/@blockly/dev-tools.)');
+      'Blockly.blockRendering.debug.startDebugger()', 'February 2022',
+      'September 2022',
+      'the debug renderer in @blockly/dev-tools (See https://www.npmjs.com/package/@blockly/dev-tools.)');
   useDebugger = true;
 };
 exports.startDebugger = startDebugger;
@@ -61,8 +63,9 @@ exports.startDebugger = startDebugger;
  */
 const stopDebugger = function() {
   deprecation.warn(
-    'Blockly.blockRendering.debug.stopDebugger()', 'February 2022',
-    'September 2022', 'the debug renderer in @blockly/dev-tools (See https://www.npmjs.com/package/@blockly/dev-tools.)');
+      'Blockly.blockRendering.debug.stopDebugger()', 'February 2022',
+      'September 2022',
+      'the debug renderer in @blockly/dev-tools (See https://www.npmjs.com/package/@blockly/dev-tools.)');
   useDebugger = false;
 };
 exports.stopDebugger = stopDebugger;

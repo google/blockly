@@ -61,7 +61,8 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
 const isDebuggerEnabled = function() {
   deprecation.warn(
       'Blockly.blockRendering.isDebuggerEnabled()', 'September 2021',
-      'September 2022', 'the debug renderer in @blockly/dev-tools (See https://www.npmjs.com/package/@blockly/dev-tools.)');
+      'September 2022',
+      'the debug renderer in @blockly/dev-tools (See https://www.npmjs.com/package/@blockly/dev-tools.)');
   return debug.isDebuggerEnabled();
 };
 exports.isDebuggerEnabled = isDebuggerEnabled;
@@ -97,7 +98,8 @@ exports.unregister = unregister;
 const startDebugger = function() {
   deprecation.warn(
       'Blockly.blockRendering.startDebugger()', 'September 2021',
-      'September 2022', 'the debug renderer in @blockly/dev-tools (See https://www.npmjs.com/package/@blockly/dev-tools.)');
+      'September 2022',
+      'the debug renderer in @blockly/dev-tools (See https://www.npmjs.com/package/@blockly/dev-tools.)');
   debug.startDebugger();
 };
 exports.startDebugger = startDebugger;
@@ -111,7 +113,8 @@ exports.startDebugger = startDebugger;
 const stopDebugger = function() {
   deprecation.warn(
       'Blockly.blockRendering.stopDebugger()', 'September 2021',
-      'September 2022', 'the debug renderer in @blockly/dev-tools (See https://www.npmjs.com/package/@blockly/dev-tools.)');
+      'September 2022',
+      'the debug renderer in @blockly/dev-tools (See https://www.npmjs.com/package/@blockly/dev-tools.)');
   debug.stopDebugger();
 };
 exports.stopDebugger = stopDebugger;

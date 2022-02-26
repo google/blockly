@@ -56,11 +56,12 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  * @return {boolean} Whether the debugger is turned on.
  * @alias Blockly.blockRendering.isDebuggerEnabled
  * @package
+ * @deprecated
  */
 const isDebuggerEnabled = function() {
   deprecation.warn(
       'Blockly.blockRendering.isDebuggerEnabled()', 'September 2021',
-      'September 2022', 'Blockly.blockRendering.debug.isDebuggerEnabled()');
+      'September 2022', 'the debug renderer in @blockly/dev-tools (See https://www.npmjs.com/package/@blockly/dev-tools.)');
   return debug.isDebuggerEnabled();
 };
 exports.isDebuggerEnabled = isDebuggerEnabled;
@@ -91,11 +92,12 @@ exports.unregister = unregister;
  * Turn on the blocks debugger.
  * @package
  * @alias Blockly.blockRendering.startDebugger
+ * @deprecated
  */
 const startDebugger = function() {
   deprecation.warn(
       'Blockly.blockRendering.startDebugger()', 'September 2021',
-      'September 2022', 'Blockly.blockRendering.debug.startDebugger()');
+      'September 2022', 'the debug renderer in @blockly/dev-tools (See https://www.npmjs.com/package/@blockly/dev-tools.)');
   debug.startDebugger();
 };
 exports.startDebugger = startDebugger;
@@ -104,11 +106,12 @@ exports.startDebugger = startDebugger;
  * Turn off the blocks debugger.
  * @package
  * @alias Blockly.blockRendering.stopDebugger
+ * @deprecated
  */
 const stopDebugger = function() {
   deprecation.warn(
       'Blockly.blockRendering.stopDebugger()', 'September 2021',
-      'September 2022', 'Blockly.blockRendering.debug.stopDebugger()');
+      'September 2022', 'the debug renderer in @blockly/dev-tools (See https://www.npmjs.com/package/@blockly/dev-tools.)');
   debug.stopDebugger();
 };
 exports.stopDebugger = stopDebugger;

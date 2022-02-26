@@ -15,13 +15,10 @@
  */
 goog.module('Blockly.blockRendering');
 
-const debug = goog.require('Blockly.blockRendering.debug');
-const deprecation = goog.require('Blockly.utils.deprecation');
 const registry = goog.require('Blockly.registry');
 const {BottomRow} = goog.require('Blockly.blockRendering.BottomRow');
 const {Connection} = goog.require('Blockly.blockRendering.Connection');
 const {ConstantProvider} = goog.require('Blockly.blockRendering.ConstantProvider');
-const {Debug} = goog.require('Blockly.blockRendering.Debug');
 const {Drawer} = goog.require('Blockly.blockRendering.Drawer');
 const {ExternalValueInput} = goog.require('Blockly.blockRendering.ExternalValueInput');
 const {Field} = goog.require('Blockly.blockRendering.Field');
@@ -51,19 +48,6 @@ const {Theme} = goog.requireType('Blockly.Theme');
 const {TopRow} = goog.require('Blockly.blockRendering.TopRow');
 const {Types} = goog.require('Blockly.blockRendering.Types');
 
-/**
- * Returns whether the debugger is turned on.
- * @return {boolean} Whether the debugger is turned on.
- * @alias Blockly.blockRendering.isDebuggerEnabled
- * @package
- */
-const isDebuggerEnabled = function() {
-  deprecation.warn(
-      'Blockly.blockRendering.isDebuggerEnabled()', 'September 2021',
-      'September 2022', 'Blockly.blockRendering.debug.isDebuggerEnabled()');
-  return debug.isDebuggerEnabled();
-};
-exports.isDebuggerEnabled = isDebuggerEnabled;
 
 /**
  * Registers a new renderer.
@@ -88,32 +72,6 @@ const unregister = function(name) {
 exports.unregister = unregister;
 
 /**
- * Turn on the blocks debugger.
- * @package
- * @alias Blockly.blockRendering.startDebugger
- */
-const startDebugger = function() {
-  deprecation.warn(
-      'Blockly.blockRendering.startDebugger()', 'September 2021',
-      'September 2022', 'Blockly.blockRendering.debug.startDebugger()');
-  debug.startDebugger();
-};
-exports.startDebugger = startDebugger;
-
-/**
- * Turn off the blocks debugger.
- * @package
- * @alias Blockly.blockRendering.stopDebugger
- */
-const stopDebugger = function() {
-  deprecation.warn(
-      'Blockly.blockRendering.stopDebugger()', 'September 2021',
-      'September 2022', 'Blockly.blockRendering.debug.stopDebugger()');
-  debug.stopDebugger();
-};
-exports.stopDebugger = stopDebugger;
-
-/**
  * Initialize anything needed for rendering (constants, etc).
  * @param {!string} name Name of the renderer to initialize.
  * @param {!Theme} theme The workspace theme object.
@@ -134,7 +92,6 @@ exports.init = init;
 exports.BottomRow = BottomRow;
 exports.Connection = Connection;
 exports.ConstantProvider = ConstantProvider;
-exports.Debug = Debug;
 exports.Drawer = Drawer;
 exports.ExternalValueInput = ExternalValueInput;
 exports.Field = Field;
@@ -161,4 +118,3 @@ exports.SquareCorner = SquareCorner;
 exports.StatementInput = StatementInput;
 exports.TopRow = TopRow;
 exports.Types = Types;
-exports.debug = debug;

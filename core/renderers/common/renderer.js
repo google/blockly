@@ -23,8 +23,6 @@ const {Block} = goog.requireType('Blockly.Block');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
 const {Connection} = goog.require('Blockly.Connection');
 const {ConstantProvider} = goog.require('Blockly.blockRendering.ConstantProvider');
-/* eslint-disable-next-line no-unused-vars */
-const {Debug} = goog.requireType('Blockly.blockRendering.Debug');
 const {Drawer} = goog.require('Blockly.blockRendering.Drawer');
 /* eslint-disable-next-line no-unused-vars */
 const {IPathObject} = goog.requireType('Blockly.blockRendering.IPathObject');
@@ -172,20 +170,6 @@ Renderer.prototype.makeRenderInfo_ = function(block) {
  */
 Renderer.prototype.makeDrawer_ = function(block, info) {
   return new Drawer(block, info);
-};
-
-/**
- * Create a new instance of the renderer's debugger.
- * @return {!Debug} The renderer debugger.
- * @suppress {strictModuleDepCheck} Debug renderer only included in playground.
- * @protected
- */
-Renderer.prototype.makeDebugger_ = function() {
-  const {Debug} = goog.module.get('Blockly.blockRendering.Debug');
-  if (!Debug) {
-    throw Error('Missing require for Blockly.blockRendering.Debug');
-  }
-  return new Debug(this.getConstants());
 };
 
 /**

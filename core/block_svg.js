@@ -40,8 +40,6 @@ const {ConnectionType} = goog.require('Blockly.ConnectionType');
 const {Connection} = goog.requireType('Blockly.Connection');
 const {ContextMenuRegistry} = goog.require('Blockly.ContextMenuRegistry');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
-/* eslint-disable-next-line no-unused-vars */
-const {Debug: BlockRenderingDebug} = goog.requireType('Blockly.blockRendering.Debug');
 const {FieldLabel} = goog.require('Blockly.FieldLabel');
 /* eslint-disable-next-line no-unused-vars */
 const {Field} = goog.requireType('Blockly.Field');
@@ -123,13 +121,6 @@ const BlockSvg = function(workspace, prototypeName, opt_id) {
    * @type {undefined|?function(!Array<!Object>)}
    */
   this.customContextMenu = undefined;
-
-  /**
-   * An property used internally to reference the block's rendering debugger.
-   * @type {?BlockRenderingDebug}
-   * @package
-   */
-  this.renderingDebugger = null;
 
   /**
    * Height of this block, not including any statement blocks above or below.

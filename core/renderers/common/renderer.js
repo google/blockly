@@ -15,7 +15,6 @@
  */
 goog.module('Blockly.blockRendering.Renderer');
 
-const debug = goog.require('Blockly.blockRendering.debug');
 const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
@@ -292,9 +291,6 @@ Renderer.prototype.getConnectionPreviewMethod = function(
  * @package
  */
 Renderer.prototype.render = function(block) {
-  if (debug.isDebuggerEnabled() && !block.renderingDebugger) {
-    block.renderingDebugger = this.makeDebugger_();
-  }
   const info = this.makeRenderInfo_(block);
   info.measure();
   this.makeDrawer_(block, info).draw();

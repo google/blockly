@@ -15,7 +15,6 @@
  */
 goog.module('Blockly.blockRendering.Drawer');
 
-const debug = goog.require('Blockly.blockRendering.debug');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
@@ -81,9 +80,6 @@ class Drawer {
     this.block_.pathObject.setPath(this.outlinePath_ + '\n' + this.inlinePath_);
     if (this.info_.RTL) {
       this.block_.pathObject.flipRTL();
-    }
-    if (debug.isDebuggerEnabled()) {
-      this.block_.renderingDebugger.drawDebug(this.block_, this.info_);
     }
     this.recordSizeOnBlock_();
   }

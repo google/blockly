@@ -15,7 +15,6 @@
  */
 goog.module('Blockly.geras.Drawer');
 
-const debug = goog.require('Blockly.blockRendering.debug');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
@@ -66,9 +65,6 @@ class Drawer extends BaseDrawer {
     pathObject.setHighlightPath(this.highlighter_.getPath());
     if (this.info_.RTL) {
       pathObject.flipRTL();
-    }
-    if (debug.isDebuggerEnabled()) {
-      this.block_.renderingDebugger.drawDebug(this.block_, this.info_);
     }
     this.recordSizeOnBlock_();
   }

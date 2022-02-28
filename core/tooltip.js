@@ -90,25 +90,6 @@ const isVisible = function() {
 };
 export {isVisible};
 
-Object.defineProperties(exports, {
-  /**
-   * Is a tooltip currently showing?
-   * @name Blockly.Tooltip.visible
-   * @type {boolean}
-   * @deprecated Use Blockly.Tooltip.isVisible() instead.  (September
-   *     2021)
-   * @suppress {checkTypes}
-   */
-  visible: {
-    get: function() {
-      deprecation.warn(
-          'Blockly.Tooltip.visible', 'September 2021', 'September 2022',
-          'Blockly.Tooltip.isVisible()');
-      return isVisible();
-    },
-  },
-});
-
 /**
  * Is someone else blocking the tooltip from being shown?
  * @type {boolean}
@@ -205,25 +186,6 @@ const getDiv = function() {
   return DIV;
 };
 export {getDiv};
-
-Object.defineProperties(exports, {
-  /**
-   * The HTML container.  Set once by createDom.
-   * @name Blockly.Tooltip.DIV
-   * @type {HTMLDivElement}
-   * @deprecated Use Blockly.Tooltip.getDiv() and .setDiv().
-   *     (September 2021)
-   * @suppress {checkTypes}
-   */
-  DIV: {
-    get: function() {
-      deprecation.warn(
-          'Blockly.Tooltip.DIV', 'September 2021', 'September 2022',
-          'Blockly.Tooltip.getDiv()');
-      return getDiv();
-    },
-  },
-});
 
 /**
  * Returns the tooltip text for the given element.

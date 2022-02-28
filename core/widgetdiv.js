@@ -81,25 +81,6 @@ const testOnly_setDiv = function(newDiv) {
 };
 export {testOnly_setDiv};
 
-Object.defineProperties(exports, {
-  /**
-   * The HTML container for popup overlays (e.g. editor widgets).
-   * @name Blockly.WidgetDiv.DIV
-   * @type {?Element}
-   * @deprecated Use Blockly.WidgetDiv.getDiv() and .setDiv().
-   *     (September 2021)
-   * @suppress {checkTypes}
-   */
-  DIV: {
-    get: function() {
-      deprecation.warn(
-          'Blockly.WidgetDiv.DIV', 'September 2021', 'September 2022',
-          'Blockly.WidgetDiv.getDiv()');
-      return getDiv();
-    },
-  },
-});
-
 /**
  * Create the widget div and inject it onto the page.
  * @alias Blockly.WidgetDiv.createDom

@@ -123,28 +123,3 @@ export var isEnabled = eventUtils.isEnabled;
 export var setGroup = eventUtils.setGroup;
 export var setRecordUndo = eventUtils.setRecordUndo;
 export var disableOrphans = eventUtils.disableOrphans;
-
-Object.defineProperties(exports, {
-  /**
-   * Sets whether the next event should be added to the undo stack.
-   * @name Blockly.Evenents.recordUndo
-   * @type {boolean}
-   * @deprecated Use Blockly.Events.getRecordUndo() and
-   *     .setRecordUndo().  (September 2021)
-   * @suppress {checkTypes}
-   */
-  recordUndo: {
-    get: function() {
-      deprecation.warn(
-          'Blockly.Events.recordUndo', 'September 2021', 'September 2022',
-          'Blockly.Events.getRecordUndo()');
-      return eventUtils.getRecordUndo();
-    },
-    set: function(record) {
-      deprecation.warn(
-          'Blockly.Events.recordUndo', 'September 2021', 'September 2022',
-          'Blockly.Events.setRecordUndo()');
-      eventUtils.setRecordUndo(record);
-    },
-  },
-});

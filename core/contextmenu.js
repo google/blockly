@@ -76,6 +76,11 @@ export {setCurrentBlock};
 let menu_ = null;
 
 /**
+ * Dummy object to act as the owner of the WidgetDiv singleton.
+ */
+const widgetDivOwner = {};
+
+/**
  * Construct the menu based on the list of options and show the menu.
  * @param {!Event} e Mouse event.
  * @param {!Array<!Object>} options Array of menu options.
@@ -83,7 +88,7 @@ let menu_ = null;
  * @alias Blockly.ContextMenu.show
  */
 const show = function(e, options, rtl) {
-  WidgetDiv.show(exports, rtl, dispose);
+  WidgetDiv.show(widgetDivOwner, rtl, dispose);
   if (!options.length) {
     hide();
     return;
@@ -208,7 +213,7 @@ const haltPropagation = function(e) {
  * @alias Blockly.ContextMenu.hide
  */
 const hide = function() {
-  WidgetDiv.hideIfOwner(exports);
+  WidgetDiv.hideIfOwner(widgetDivOwner);
   currentBlock = null;
 };
 export {hide};

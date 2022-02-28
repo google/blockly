@@ -534,7 +534,7 @@ const createVariable = function(workspace, id, opt_name, opt_type) {
                 /** @type {!WorkspaceSvg} */ (workspace).targetWorkspace :
                 workspace);
     // Must call version on exports to allow for mocking in tests. See #5321
-    opt_name = exports.generateUniqueName(ws);
+    opt_name = generateUniqueName(ws);
   }
 
   // Create a potential variable if in the flyout.

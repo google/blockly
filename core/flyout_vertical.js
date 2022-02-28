@@ -350,8 +350,8 @@ class VerticalFlyout extends Flyout {
           }
           block.moveBy(newX - oldX, 0);
         }
-        if (block.flyoutRect_) {
-          this.moveRectToBlock_(block.flyoutRect_, block);
+        if (this.rectMap_.has(block)) {
+          this.moveRectToBlock_(this.rectMap_.get(block), block);
         }
       }
       if (this.RTL) {

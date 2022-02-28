@@ -18,7 +18,7 @@ goog.module('Blockly.blockRendering.PathObject');
 
 const dom = goog.require('Blockly.utils.dom');
 /* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {Connection} = goog.requireType('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
@@ -144,7 +144,7 @@ class PathObject {
   /**
    * Apply the stored colours to the block's path, taking into account whether
    * the paths belong to a shadow block.
-   * @param {!Block} block The source block.
+   * @param {!BlockSvg} block The source block.
    * @package
    */
   applyColour(block) {

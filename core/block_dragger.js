@@ -460,7 +460,8 @@ const BlockDragger = class {
 const initIconData = function(block) {
   // Build a list of icons that need to be moved and where they started.
   const dragIconData = [];
-  const descendants = block.getDescendants(false);
+  const descendants =
+      /** @type {!Array<!BlockSvg>} */ (block.getDescendants(false));
 
   for (let i = 0, descendant; (descendant = descendants[i]); i++) {
     const icons = descendant.getIcons();

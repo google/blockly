@@ -23,6 +23,8 @@ const serializationRegistry = goog.require('Blockly.serialization.registry');
 const {BadConnectionCheck, MissingBlockType, MissingConnection, RealChildOfShadow} = goog.require('Blockly.serialization.exceptions');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 // eslint-disable-next-line no-unused-vars
 const {Connection} = goog.requireType('Blockly.Connection');
 // eslint-disable-next-line no-unused-vars
@@ -350,9 +352,10 @@ const appendInternal = function(state, workspace, {
   // Adding connections to the connection db is expensive. This defers that
   // operation to decrease load time.
   if (workspace.rendered) {
+    const blockSvg = /** @type {!BlockSvg} */ (block);
     setTimeout(() => {
-      if (!block.disposed) {
-        block.setConnectionTracking(true);
+      if (!blockSvg.disposed) {
+        blockSvg.setConnectionTracking(true);
       }
     }, 1);
   }
@@ -513,9 +516,10 @@ const loadIcons = function(block, state) {
     block.setCommentText(comment['text']);
     block.commentModel.pinned = comment['pinned'];
     block.commentModel.size = new Size(comment['width'], comment['height']);
-    if (comment['pinned'] && block.getCommentIcon && !block.isInFlyout) {
+    if (comment['pinned'] && block.rendered && !block.isInFlyout) {
       // Give the block a chance to be positioned and rendered before showing.
-      setTimeout(() => block.getCommentIcon().setVisible(true), 1);
+      const blockSvg = /** @type {!BlockSvg} */ (block);
+      setTimeout(() => blockSvg.getCommentIcon().setVisible(true), 1);
     }
   }
 };
@@ -607,12 +611,13 @@ const loadConnection = function(connection, connectionState) {
  */
 const initBlock = function(block, rendered) {
   if (rendered) {
+    const blockSvg = /** @type {!BlockSvg} */ (block);
     // Adding connections to the connection db is expensive. This defers that
     // operation to decrease load time.
-    block.setConnectionTracking(false);
+    blockSvg.setConnectionTracking(false);
 
-    block.initSvg();
-    block.render(false);
+    blockSvg.initSvg();
+    blockSvg.render(false);
   } else {
     block.initModel();
   }

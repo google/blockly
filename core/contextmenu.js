@@ -27,6 +27,8 @@ const userAgent = goog.require('Blockly.utils.userAgent');
 const svgMath = goog.require('Blockly.utils.svgMath');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 const {config} = goog.require('Blockly.config');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 const {MenuItem} = goog.require('Blockly.MenuItem');
@@ -262,7 +264,8 @@ const callbackFactory = function(block, xml) {
     eventUtils.disable();
     let newBlock;
     try {
-      newBlock = Xml.domToBlock(xml, block.workspace);
+      newBlock =
+          /** @type {!BlockSvg} */ (Xml.domToBlock(xml, block.workspace));
       // Move the new block next to the old block.
       const xy = block.getRelativeToSurfaceXY();
       if (block.RTL) {

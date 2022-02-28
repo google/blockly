@@ -207,6 +207,14 @@ class Flyout extends DeleteArea {
     this.containerVisible_ = true;
 
     /**
+     * A map from blocks to the rects which are beneath them to act as input
+     * targets.
+     * @type {!WeakMap<!BlockSvg, !SVGElement>}
+     * @private
+     */
+    this.rectMap_ = new WeakMap();
+
+    /**
      * Corner radius of the flyout background.
      * @type {number}
      * @const
@@ -1045,7 +1053,7 @@ class Flyout extends DeleteArea {
     // Add the rectangles under the blocks, so that the blocks' tooltips work.
     this.workspace_.getCanvas().insertBefore(rect, block.getSvgRoot());
 
-    block.flyoutRect_ = rect;
+    this.rectMap_.set(block, rect);
     this.mats_[index] = rect;
     return rect;
   }

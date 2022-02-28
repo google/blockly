@@ -53,6 +53,9 @@ class RenderedConnection extends Connection {
   constructor(source, type) {
     super(source, type);
 
+    /** @type {!BlockSvg} */
+    this.sourceBlock_;
+
     /**
      * Connection database for connections of this type on the current
      * workspace.
@@ -139,7 +142,7 @@ class RenderedConnection extends Connection {
   /**
    * Move the block(s) belonging to the connection to a point where they don't
    * visually interfere with the specified connection.
-   * @param {!Connection} staticConnection The connection to move away
+   * @param {!RenderedConnection} staticConnection The connection to move away
    *     from.
    * @package
    */
@@ -436,7 +439,8 @@ class RenderedConnection extends Connection {
       setTimeout(function() {
         if (!block.isDisposed() && !block.getParent()) {
           eventUtils.setGroup(group);
-          this.bumpAwayFrom(otherConnection);
+          this.bumpAwayFrom(
+              /** @type {!RenderedConnection} */ (otherConnection));
           eventUtils.setGroup(false);
         }
       }.bind(this), config.bumpDelay);
@@ -452,15 +456,18 @@ class RenderedConnection extends Connection {
    */
   disconnectInternal_(parentBlock, childBlock) {
     super.disconnectInternal_(parentBlock, childBlock);
+    const renderedParent = /** @type {!BlockSvg} */ (parentBlock);
+    const renderedChild = /** @type {!BlockSvg} */ (childBlock);
+
     // Rerender the parent so that it may reflow.
-    if (parentBlock.rendered) {
-      parentBlock.render();
+    if (renderedParent.rendered) {
+      renderedParent.render();
     }
-    if (childBlock.rendered) {
-      childBlock.updateDisabled();
-      childBlock.render();
+    if (renderedChild.rendered) {
+      renderedChild.updateDisabled();
+      renderedChild.render();
       // Reset visibility, since the child is now a top block.
-      childBlock.getSvgRoot().style.display = 'block';
+      renderedChild.getSvgRoot().style.display = 'block';
     }
   }
 
@@ -506,9 +513,12 @@ class RenderedConnection extends Connection {
   connect_(childConnection) {
     super.connect_(childConnection);
 
+    const renderedChildConnection = /** @type {!RenderedConnection} */
+        (childConnection);
+
     const parentConnection = this;
     const parentBlock = parentConnection.getSourceBlock();
-    const childBlock = childConnection.getSourceBlock();
+    const childBlock = renderedChildConnection.getSourceBlock();
     const parentRendered = parentBlock.rendered;
     const childRendered = childBlock.rendered;
 

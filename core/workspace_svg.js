@@ -1563,14 +1563,14 @@ class WorkspaceSvg extends Workspace {
       let blockX = 0;
       let blockY = 0;
       if (xmlBlock) {
-        block = Xml.domToBlock(xmlBlock, this);
+        block = /** @type {!BlockSvg} */ (Xml.domToBlock(xmlBlock, this));
         blockX = parseInt(xmlBlock.getAttribute('x'), 10);
         if (this.RTL) {
           blockX = -blockX;
         }
         blockY = parseInt(xmlBlock.getAttribute('y'), 10);
       } else if (jsonBlock) {
-        block = blocks.append(jsonBlock, this);
+        block = /** @type {!BlockSvg} */ (blocks.append(jsonBlock, this));
         blockX = jsonBlock['x'] || 10;
         if (this.RTL) {
           blockX = this.getWidth() - blockX;
@@ -2423,6 +2423,16 @@ class WorkspaceSvg extends Workspace {
    */
   getBlockById(id) {
     return /** @type {BlockSvg} */ (super.getBlockById(id));
+  }
+
+  /**
+   * Find all blocks in workspace.  Blocks are optionally sorted
+   * by position; top to bottom (with slight LTR or RTL bias).
+   * @param {boolean} ordered Sort the list if true.
+   * @return {!Array<!BlockSvg>} Array of blocks.
+   */
+  getAllBlocks(ordered) {
+    return /** @type {!Array<!BlockSvg>} */ (super.getAllBlocks(ordered));
   }
 
   /**

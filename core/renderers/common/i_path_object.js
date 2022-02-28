@@ -19,7 +19,7 @@
 goog.module('Blockly.blockRendering.IPathObject');
 
 /* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 /* eslint-disable-next-line no-unused-vars */
@@ -78,7 +78,7 @@ IPathObject.prototype.setPath;
 /**
  * Apply the stored colours to the block's path, taking into account whether
  * the paths belong to a shadow block.
- * @param {!Block} block The source block.
+ * @param {!BlockSvg} block The source block.
  * @package
  */
 IPathObject.prototype.applyColour;

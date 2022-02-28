@@ -103,9 +103,12 @@ class BlockChange extends BlockBase {
       console.warn('Can\'t change non-existent block: ' + this.blockId);
       return;
     }
-    if (block.mutator) {
+
+    // Assume the block is rendered so that then we can check.
+    const blockSvg = /** @type {!BlockSvg} */ (block);
+    if (blockSvg.mutator) {
       // Close the mutator (if open) since we don't want to update it.
-      block.mutator.setVisible(false);
+      blockSvg.mutator.setVisible(false);
     }
     const value = forward ? this.newValue : this.oldValue;
     switch (this.element) {

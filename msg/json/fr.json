@@ -289,7 +289,7 @@
 	"LISTS_GET_INDEX_FROM_END": "n° depuis la fin",
 	"LISTS_GET_INDEX_FIRST": "premier",
 	"LISTS_GET_INDEX_LAST": "dernier",
-	"LISTS_GET_INDEX_RANDOM": "aléatoire",
+	"LISTS_GET_INDEX_RANDOM": "au hasard",
 	"LISTS_INDEX_FROM_START_TOOLTIP": "%1 est le premier élément.",
 	"LISTS_INDEX_FROM_END_TOOLTIP": "%1 est le dernier élément.",
 	"LISTS_GET_INDEX_TOOLTIP_GET_FROM": "Renvoie l’élément à la position indiquée dans une liste.",

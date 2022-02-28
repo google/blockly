@@ -32,6 +32,7 @@ const object = goog.require('Blockly.utils.object');
 const parsing = goog.require('Blockly.utils.parsing');
 const dom = goog.require('Blockly.utils.dom');
 const {FieldLabel} = goog.require('Blockly.FieldLabel');
+const Xml = goog.require('Blockly.Xml');
 
  /**
   * Class for a variable getter field.
@@ -136,6 +137,14 @@ const {FieldLabel} = goog.require('Blockly.FieldLabel');
  };
 
  /**
+ * Get the text from this field, which is the selected name.
+ * @return {string} The selected name, or value.
+ */
+FieldLabelHover.prototype.getText = function() {
+  return this.name_ || this.getValue();
+};
+
+ /**
   * Handle a mouse out event on a input field.
   * @param {!Event} e Mouse out event.
   * @private
@@ -146,6 +155,37 @@ const {FieldLabel} = goog.require('Blockly.FieldLabel');
    if (gesture && gesture.isDragging()) return;
    this.clearHover();
  };
+
+ /**
+ * Serialize this field to XML.
+ * @param {!Element} fieldElement The element to populate with info about the
+ *    field's state.
+ * @return {!Element} The element containing info about the field's state.
+ */
+  FieldLabelHover.prototype.toXml = function(fieldElement) {
+  const value = this.getValue();
+  fieldElement.setAttribute('value', value);
+  fieldElement.textContent = this.name_;
+  return fieldElement;
+};
+
+/**
+ * Initialize this field based on the given XML.
+ * @param {!Element} fieldElement The element containing information about the
+ *    field's state.
+ */
+ FieldLabelHover.prototype.fromXml = function(fieldElement) {
+   const value = fieldElement.getAttribute('value');
+   const name = fieldElement.textContent;
+
+  // This should never happen :)
+  if (!value) {
+    throw Error('Serialized value is not set.' + Xml.domToText(fieldElement) + '.');
+  }
+
+  this.name_ = name;
+  this.setValue(value);
+};
 
  /**
   * Dispose of this field.
@@ -162,7 +202,6 @@ const {FieldLabel} = goog.require('Blockly.FieldLabel');
    }
    FieldLabelHover.superClass_.dispose.call(this);
    this.workspace_ = null;
-   this.variableMap_ = null;
  };
 
  /**

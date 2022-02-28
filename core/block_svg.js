@@ -1636,33 +1636,33 @@ class BlockSvg extends Block {
   }
 
   /**
-   * @override
    * @return {?BlockSvg} The block (if any) that surrounds the current block.
+   * @override
    */
   getSurroundParent() {
     return /** @type {?BlockSvg} */ (super.getSurroundParent());
   }
 
   /**
-   * @override
    * @return {?BlockSvg} The next statement block or null.
+   * @override
    */
   getNextBlock() {
     return /** @type {?BlockSvg} */ (super.getNextBlock());
   }
 
   /**
-   * @override
    * @return {?BlockSvg} The previou statement block or null.
+   * @override
    */
   getPreviousBlock() {
     return /** @type {?BlockSvg} */ (super.getPreviousBlock());
   }
 
   /**
-   * @override
    * @return {?RenderedConnection} The first statement connection or null.
    * @package
+   * @override
    */
   getFirstStatementConnection() {
     return /** @type {?RenderedConnection} */ (
@@ -1670,36 +1670,36 @@ class BlockSvg extends Block {
   }
 
   /**
-   * @override
    * @return {!BlockSvg} The top block in a stack.
+   * @override
    */
   getTopStackBlock() {
     return /** @type {!BlockSvg} */ (super.getTopStackBlock());
   }
 
   /**
-   * @override
    * @param {boolean} ordered Sort the list if true.
    * @return {!Array<!BlockSvg>} Children of this block.
+   * @override
    */
   getChildren(ordered) {
     return /** @type {!Array<!BlockSvg>} */ (super.getChildren(ordered));
   }
 
   /**
-   * @override
    * @param {boolean} ordered Sort the list if true.
    * @return {!Array<!BlockSvg>} Descendants of this block.
+   * @override
    */
   getDescendants(ordered) {
     return /** @type {!Array<!BlockSvg>} */ (super.getDescendants(ordered));
   }
 
   /**
-   * @override
    * @param {string} name The name of the input.
    * @return {?BlockSvg} The attached value block, or null if the input is
    *     either disconnected or if the input does not exist.
+   * @override
    */
   getInputTargetBlock(name) {
     return /** @type {?BlockSvg} */ (super.getInputTargetBlock(name));

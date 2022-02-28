@@ -13,7 +13,7 @@
  * Class for a block delete event.
  * @class
  */
-goog.module('Blockly.Events.BlockDelete');
+goog.declareModuleId('Blockly.Events.BlockDelete');
 
 const Xml = goog.require('Blockly.Xml');
 const blocks = goog.require('Blockly.serialization.blocks');
@@ -136,4 +136,4 @@ class BlockDelete extends BlockBase {
 
 registry.register(registry.Type.EVENT, eventUtils.DELETE, BlockDelete);
 
-exports.BlockDelete = BlockDelete;
+export {BlockDelete};

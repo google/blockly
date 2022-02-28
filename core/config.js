@@ -17,7 +17,7 @@
  * generally recommended.
  * @namespace Blockly.config
  */
-goog.module('Blockly.config');
+goog.declareModuleId('Blockly.config');
 
 
 /**
@@ -84,4 +84,4 @@ const config = {
   bumpDelay: 250,
 };
 
-exports.config = config;
+export {config};

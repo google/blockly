@@ -13,7 +13,7 @@
  * Generators for unique IDs.
  * @namespace Blockly.utils.idGenerator
  */
-goog.module('Blockly.utils.idGenerator');
+goog.declareModuleId('Blockly.utils.idGenerator');
 
 
 /**
@@ -22,7 +22,7 @@ goog.module('Blockly.utils.idGenerator');
  * @ignore
  */
 const internal = {};
-exports.TEST_ONLY = internal;
+export {internal as TEST_ONLY};
 
 /**
  * Next unique ID to use.
@@ -44,7 +44,7 @@ let nextId = 0;
 const getNextUniqueId = function() {
   return 'blockly-' + (nextId++).toString(36);
 };
-exports.getNextUniqueId = getNextUniqueId;
+export {getNextUniqueId};
 
 /**
  * Legal characters for the universally unique IDs.  Should be all on
@@ -80,4 +80,4 @@ internal.genUid = function() {
 const genUid = function() {
   return internal.genUid();
 };
-exports.genUid = genUid;
+export {genUid};

@@ -13,7 +13,7 @@
  * XML reader and writer.
  * @namespace Blockly.Xml
  */
-goog.module('Blockly.Xml');
+goog.declareModuleId('Blockly.Xml');
 
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
@@ -66,7 +66,7 @@ const workspaceToDom = function(workspace, opt_noId) {
   }
   return treeXml;
 };
-exports.workspaceToDom = workspaceToDom;
+export {workspaceToDom};
 
 /**
  * Encode a list of variables as XML.
@@ -89,7 +89,7 @@ const variablesToDom = function(variableList) {
   }
   return variables;
 };
-exports.variablesToDom = variablesToDom;
+export {variablesToDom};
 
 /**
  * Encode a block subtree as XML with XY coordinates.
@@ -120,7 +120,7 @@ const blockToDomWithXY = function(block, opt_noId) {
   element.setAttribute('y', Math.round(xy.y));
   return element;
 };
-exports.blockToDomWithXY = blockToDomWithXY;
+export {blockToDomWithXY};
 
 /**
  * Encode a field as XML.
@@ -282,7 +282,7 @@ const blockToDom = function(block, opt_noId) {
 
   return element;
 };
-exports.blockToDom = blockToDom;
+export {blockToDom};
 
 /**
  * Deeply clone the shadow's DOM so that changes don't back-wash to the block.
@@ -341,7 +341,7 @@ const domToText = function(dom) {
   // <block name="foo"/> -> <block name="foo"></block>
   return text.replace(/<(\w+)([^<]*)\/>/g, '<$1$2></$1>');
 };
-exports.domToText = domToText;
+export {domToText};
 
 /**
  * Converts a DOM structure into properly indented text.
@@ -374,7 +374,7 @@ const domToPrettyText = function(dom) {
   // Trim leading blank line.
   return text.replace(/^\n/, '');
 };
-exports.domToPrettyText = domToPrettyText;
+export {domToPrettyText};
 
 /**
  * Converts an XML string into a DOM structure.
@@ -392,7 +392,7 @@ const textToDom = function(text) {
   }
   return doc.documentElement;
 };
-exports.textToDom = textToDom;
+export {textToDom};
 
 /**
  * Clear the given workspace then decode an XML DOM and
@@ -409,7 +409,7 @@ const clearWorkspaceAndLoadFromXml = function(xml, workspace) {
   workspace.setResizesEnabled(true);
   return blockIds;
 };
-exports.clearWorkspaceAndLoadFromXml = clearWorkspaceAndLoadFromXml;
+export {clearWorkspaceAndLoadFromXml};
 
 /**
  * Decode an XML DOM and create blocks on the workspace.
@@ -522,7 +522,7 @@ const domToWorkspace = function(xml, workspace) {
   eventUtils.fire(new (eventUtils.get(eventUtils.FINISHED_LOADING))(workspace));
   return newBlockIds;
 };
-exports.domToWorkspace = domToWorkspace;
+export {domToWorkspace};
 
 /**
  * Decode an XML DOM and create blocks on the workspace. Position the new
@@ -575,7 +575,7 @@ const appendDomToWorkspace = function(xml, workspace) {
   }
   return newBlockIds;
 };
-exports.appendDomToWorkspace = appendDomToWorkspace;
+export {appendDomToWorkspace};
 
 /**
  * Decode an XML block tag and create a block (and possibly sub blocks) on the
@@ -651,7 +651,7 @@ const domToBlock = function(xmlBlock, workspace) {
   }
   return topBlock;
 };
-exports.domToBlock = domToBlock;
+export {domToBlock};
 
 /**
  * Decode an XML list of variables and add the variables to the workspace.
@@ -673,7 +673,7 @@ const domToVariables = function(xmlVariables, workspace) {
     workspace.createVariable(name, type, id);
   }
 };
-exports.domToVariables = domToVariables;
+export {domToVariables};
 
 /**
  * A mapping of nodeName to node for child nodes of xmlBlock.
@@ -1040,4 +1040,4 @@ const deleteNext = function(xmlBlock) {
     }
   }
 };
-exports.deleteNext = deleteNext;
+export {deleteNext};

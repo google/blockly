@@ -13,7 +13,7 @@
  * Object representing a map of variables and their types.
  * @class
  */
-goog.module('Blockly.VariableMap');
+goog.declareModuleId('Blockly.VariableMap');
 
 const arrayUtils = goog.require('Blockly.utils.array');
 const dialog = goog.require('Blockly.dialog');
@@ -407,4 +407,4 @@ class VariableMap {
   }
 }
 
-exports.VariableMap = VariableMap;
+export {VariableMap};

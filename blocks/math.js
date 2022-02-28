@@ -10,7 +10,7 @@
  */
 'use strict';
 
-goog.module('Blockly.libraryBlocks.math');
+goog.declareModuleId('Blockly.libraryBlocks.math');
 
 const Extensions = goog.require('Blockly.Extensions');
 // N.B.: Blockly.FieldDropdown needed for type AND side-effects.
@@ -389,7 +389,7 @@ const blocks = createBlockDefinitionsFromJsonArray([
     'helpUrl': '%{BKY_MATH_ATAN2_HELPURL}',
   },
 ]);
-exports.blocks = blocks;
+export {blocks};
 
 /**
  * Mapping of math block OP value to tooltip message for blocks

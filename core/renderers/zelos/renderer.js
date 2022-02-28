@@ -13,7 +13,7 @@
  * Zelos renderer.
  * @class
  */
-goog.module('Blockly.zelos.Renderer');
+goog.declareModuleId('Blockly.zelos.Renderer');
 
 const blockRendering = goog.require('Blockly.blockRendering');
 /* eslint-disable-next-line no-unused-vars */
@@ -144,4 +144,4 @@ class Renderer extends BaseRenderer {
 
 blockRendering.register('zelos', Renderer);
 
-exports.Renderer = Renderer;
+export {Renderer};

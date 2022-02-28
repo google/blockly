@@ -13,7 +13,7 @@
  * Block rendering debugging functionality.
  * @namespace Blockly.blockRendering.debug
  */
-goog.module('Blockly.blockRendering.debug');
+goog.declareModuleId('Blockly.blockRendering.debug');
 
 const deprecation = goog.require('Blockly.utils.deprecation');
 
@@ -32,7 +32,7 @@ let useDebugger = false;
 const isDebuggerEnabled = function() {
   return useDebugger;
 };
-exports.isDebuggerEnabled = isDebuggerEnabled;
+export {isDebuggerEnabled};
 
 /**
  * Turn on the blocks debugger.
@@ -48,7 +48,7 @@ const startDebugger = function() {
       'the debug renderer in @blockly/dev-tools (See https://www.npmjs.com/package/@blockly/dev-tools.)');
   useDebugger = true;
 };
-exports.startDebugger = startDebugger;
+export {startDebugger};
 
 /**
  * Turn off the blocks debugger.
@@ -64,4 +64,4 @@ const stopDebugger = function() {
       'the debug renderer in @blockly/dev-tools (See https://www.npmjs.com/package/@blockly/dev-tools.)');
   useDebugger = false;
 };
-exports.stopDebugger = stopDebugger;
+export {stopDebugger};

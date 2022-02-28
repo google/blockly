@@ -16,7 +16,7 @@
  * block.
  * @namespace Blockly.IASTNodeLocationWithBlock
  */
-goog.module('Blockly.IASTNodeLocationWithBlock');
+goog.declareModuleId('Blockly.IASTNodeLocationWithBlock');
 
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
@@ -38,4 +38,4 @@ const IASTNodeLocationWithBlock = function() {};
  */
 IASTNodeLocationWithBlock.prototype.getSourceBlock;
 
-exports.IASTNodeLocationWithBlock = IASTNodeLocationWithBlock;
+export {IASTNodeLocationWithBlock};

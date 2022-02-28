@@ -14,7 +14,7 @@
  * The interface for a metrics manager.
  * @namespace Blockly.IMetricsManager
  */
-goog.module('Blockly.IMetricsManager');
+goog.declareModuleId('Blockly.IMetricsManager');
 
 /* eslint-disable-next-line no-unused-vars */
 const {MetricsManager} = goog.requireType('Blockly.MetricsManager');
@@ -151,4 +151,4 @@ IMetricsManager.prototype.getContentMetrics;
  */
 IMetricsManager.prototype.getMetrics;
 
-exports.IMetricsManager = IMetricsManager;
+export {IMetricsManager};

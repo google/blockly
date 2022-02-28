@@ -13,7 +13,7 @@
  * Object that controls settings for the workspace.
  * @class
  */
-goog.module('Blockly.Options');
+goog.declareModuleId('Blockly.Options');
 
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const registry = goog.require('Blockly.registry');
@@ -388,4 +388,4 @@ Options.ScrollbarOptions;
  */
 Options.ZoomOptions;
 
-exports.Options = Options;
+export {Options};

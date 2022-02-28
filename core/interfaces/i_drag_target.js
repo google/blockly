@@ -16,7 +16,7 @@
  * block is dropped on top of it.
  * @namespace Blockly.IDragTarget
  */
-goog.module('Blockly.IDragTarget');
+goog.declareModuleId('Blockly.IDragTarget');
 
 /* eslint-disable-next-line no-unused-vars */
 const {IComponent} = goog.require('Blockly.IComponent');
@@ -85,4 +85,4 @@ IDragTarget.prototype.onDrop;
  */
 IDragTarget.prototype.shouldPreventMove;
 
-exports.IDragTarget = IDragTarget;
+export {IDragTarget};

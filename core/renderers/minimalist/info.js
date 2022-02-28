@@ -13,7 +13,7 @@
  * Minimalist render info object.
  * @class
  */
-goog.module('Blockly.minimalist.RenderInfo');
+goog.declareModuleId('Blockly.minimalist.RenderInfo');
 
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
@@ -51,4 +51,4 @@ class RenderInfo extends BaseRenderInfo {
   }
 }
 
-exports.RenderInfo = RenderInfo;
+export {RenderInfo};

@@ -13,7 +13,7 @@
  * Methods for graphically rendering a block as SVG.
  * @class
  */
-goog.module('Blockly.blockRendering.Drawer');
+goog.declareModuleId('Blockly.blockRendering.Drawer');
 
 const debug = goog.require('Blockly.blockRendering.debug');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
@@ -472,4 +472,4 @@ class Drawer {
   }
 }
 
-exports.Drawer = Drawer;
+export {Drawer};

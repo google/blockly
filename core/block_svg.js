@@ -13,7 +13,7 @@
  * Methods for graphically rendering a block as SVG.
  * @class
  */
-goog.module('Blockly.BlockSvg');
+goog.declareModuleId('Blockly.BlockSvg');
 
 const ContextMenu = goog.require('Blockly.ContextMenu');
 const Tooltip = goog.require('Blockly.Tooltip');
@@ -90,7 +90,7 @@ goog.require('Blockly.Touch');
  * @implements {IDraggable}
  * @alias Blockly.BlockSvg
  */
-class BlockSvg extends Block {
+export class BlockSvg extends Block {
   /**
    * @param {!WorkspaceSvg} workspace The block's workspace.
    * @param {string} prototypeName Name of the language object containing
@@ -1890,5 +1890,3 @@ BlockSvg.INLINE = -1;
  * @const
  */
 BlockSvg.COLLAPSED_WARNING_ID = 'TEMP_COLLAPSED_WARNING_';
-
-exports.BlockSvg = BlockSvg;

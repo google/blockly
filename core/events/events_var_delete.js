@@ -13,7 +13,7 @@
  * Classes for all types of variable events.
  * @class
  */
-goog.module('Blockly.Events.VarDelete');
+goog.declareModuleId('Blockly.Events.VarDelete');
 
 const eventUtils = goog.require('Blockly.Events.utils');
 const registry = goog.require('Blockly.registry');
@@ -86,4 +86,4 @@ class VarDelete extends VarBase {
 
 registry.register(registry.Type.EVENT, eventUtils.VAR_DELETE, VarDelete);
 
-exports.VarDelete = VarDelete;
+export {VarDelete};

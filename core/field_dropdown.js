@@ -17,7 +17,7 @@
  * properties with the context menu.
  * @class
  */
-goog.module('Blockly.FieldDropdown');
+goog.declareModuleId('Blockly.FieldDropdown');
 
 const aria = goog.require('Blockly.utils.aria');
 const dom = goog.require('Blockly.utils.dom');
@@ -792,4 +792,4 @@ const validateOptions = function(options) {
 
 fieldRegistry.register('field_dropdown', FieldDropdown);
 
-exports.FieldDropdown = FieldDropdown;
+export {FieldDropdown};

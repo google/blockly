@@ -13,7 +13,7 @@
  * Object representing an icon on a block.
  * @class
  */
-goog.module('Blockly.Icon');
+goog.declareModuleId('Blockly.Icon');
 
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
@@ -222,4 +222,4 @@ class Icon {
   }
 }
 
-exports.Icon = Icon;
+export {Icon};

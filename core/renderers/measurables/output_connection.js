@@ -15,7 +15,7 @@
  * during rendering.
  * @class
  */
-goog.module('Blockly.blockRendering.OutputConnection');
+goog.declareModuleId('Blockly.blockRendering.OutputConnection');
 
 const {Connection} = goog.require('Blockly.blockRendering.Connection');
 /* eslint-disable-next-line no-unused-vars */
@@ -58,4 +58,4 @@ class OutputConnection extends Connection {
   }
 }
 
-exports.OutputConnection = OutputConnection;
+export {OutputConnection};

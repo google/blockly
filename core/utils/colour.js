@@ -13,7 +13,7 @@
  * Utility methods for colour manipulation.
  * @namespace Blockly.utils.colour
  */
-goog.module('Blockly.utils.colour');
+goog.declareModuleId('Blockly.utils.colour');
 
 /**
  * The richness of block colours, regardless of the hue.
@@ -32,7 +32,7 @@ let hsvSaturation = 0.45;
 const getHsvSaturation = function() {
   return hsvSaturation;
 };
-exports.getHsvSaturation = getHsvSaturation;
+export {getHsvSaturation};
 
 /**
  * Set the richness of block colours, regardless of the hue.
@@ -44,7 +44,7 @@ exports.getHsvSaturation = getHsvSaturation;
 const setHsvSaturation = function(newSaturation) {
   hsvSaturation = newSaturation;
 };
-exports.setHsvSaturation = setHsvSaturation;
+export {setHsvSaturation};
 
 /**
  * The intensity of block colours, regardless of the hue.
@@ -63,7 +63,7 @@ let hsvValue = 0.65;
 const getHsvValue = function() {
   return hsvValue;
 };
-exports.getHsvValue = getHsvValue;
+export {getHsvValue};
 
 /**
  * Set the intensity of block colours, regardless of the hue.
@@ -75,7 +75,7 @@ exports.getHsvValue = getHsvValue;
 const setHsvValue = function(newValue) {
   hsvValue = newValue;
 };
-exports.setHsvValue = setHsvValue;
+export {setHsvValue};
 
 /**
  * Parses a colour from a string.
@@ -118,7 +118,7 @@ const parse = function(str) {
   }
   return null;
 };
-exports.parse = parse;
+export {parse};
 
 /**
  * Converts a colour from RGB to hex representation.
@@ -135,7 +135,7 @@ const rgbToHex = function(r, g, b) {
   }
   return '#' + rgb.toString(16);
 };
-exports.rgbToHex = rgbToHex;
+export {rgbToHex};
 
 /**
  * Converts a colour to RGB.
@@ -157,7 +157,7 @@ const hexToRgb = function(colour) {
 
   return [r, g, b];
 };
-exports.hexToRgb = hexToRgb;
+export {hexToRgb};
 
 /**
  * Converts an HSV triplet to hex representation.
@@ -217,7 +217,7 @@ const hsvToHex = function(h, s, v) {
   }
   return rgbToHex(Math.floor(red), Math.floor(green), Math.floor(blue));
 };
-exports.hsvToHex = hsvToHex;
+export {hsvToHex};
 
 /**
  * Blend two colours together, using the specified factor to indicate the
@@ -245,7 +245,7 @@ const blend = function(colour1, colour2, factor) {
   const b = Math.round(rgb2[2] + factor * (rgb1[2] - rgb2[2]));
   return rgbToHex(r, g, b);
 };
-exports.blend = blend;
+export {blend};
 
 /**
  * A map that contains the 16 basic colour keywords as defined by W3C:
@@ -274,7 +274,7 @@ const names = {
   'white': '#ffffff',
   'yellow': '#ffff00',
 };
-exports.names = names;
+export {names};
 
 /**
  * Convert a hue (HSV model) into an RGB hex triplet.
@@ -285,4 +285,4 @@ exports.names = names;
 const hueToHex = function(hue) {
   return hsvToHex(hue, hsvSaturation, hsvValue * 255);
 };
-exports.hueToHex = hueToHex;
+export {hueToHex};

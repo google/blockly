@@ -13,7 +13,7 @@
  * Layout code for a vertical variant of the flyout.
  * @class
  */
-goog.module('Blockly.VerticalFlyout');
+goog.declareModuleId('Blockly.VerticalFlyout');
 
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const browserEvents = goog.require('Blockly.browserEvents');
@@ -392,4 +392,4 @@ VerticalFlyout.registryName = 'verticalFlyout';
 registry.register(
     registry.Type.FLYOUTS_VERTICAL_TOOLBOX, registry.DEFAULT, VerticalFlyout);
 
-exports.VerticalFlyout = VerticalFlyout;
+export {VerticalFlyout};

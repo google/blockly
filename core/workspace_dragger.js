@@ -13,7 +13,7 @@
  * Methods for dragging a workspace visually.
  * @class
  */
-goog.module('Blockly.WorkspaceDragger');
+goog.declareModuleId('Blockly.WorkspaceDragger');
 
 const common = goog.require('Blockly.common');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
@@ -112,4 +112,4 @@ class WorkspaceDragger {
   }
 }
 
-exports.WorkspaceDragger = WorkspaceDragger;
+export {WorkspaceDragger};

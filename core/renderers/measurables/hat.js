@@ -14,7 +14,7 @@
  * block.
  * @class
  */
-goog.module('Blockly.blockRendering.Hat');
+goog.declareModuleId('Blockly.blockRendering.Hat');
 
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -47,4 +47,4 @@ class Hat extends Measurable {
   }
 }
 
-exports.Hat = Hat;
+export {Hat};

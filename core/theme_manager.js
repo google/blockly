@@ -15,7 +15,7 @@
  *     and UI components.
  * @class
  */
-goog.module('Blockly.ThemeManager');
+goog.declareModuleId('Blockly.ThemeManager');
 
 const arrayUtils = goog.require('Blockly.utils.array');
 const dom = goog.require('Blockly.utils.dom');
@@ -208,4 +208,4 @@ class ThemeManager {
  */
 ThemeManager.Component;
 
-exports.ThemeManager = ThemeManager;
+export {ThemeManager};

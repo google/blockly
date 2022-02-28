@@ -14,7 +14,7 @@
  * The interface for a block dragger.
  * @namespace Blockly.IBlockDragger
  */
-goog.module('Blockly.IBlockDragger');
+goog.declareModuleId('Blockly.IBlockDragger');
 
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
@@ -63,4 +63,4 @@ IBlockDragger.prototype.endDrag;
  */
 IBlockDragger.prototype.getInsertionMarkers;
 
-exports.IBlockDragger = IBlockDragger;
+export {IBlockDragger};

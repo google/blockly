@@ -13,7 +13,7 @@
  * Utility functions for positioning UI elements.
  * @namespace Blockly.uiPosition
  */
-goog.module('Blockly.uiPosition');
+goog.declareModuleId('Blockly.uiPosition');
 
 const toolbox = goog.require('Blockly.utils.toolbox');
 /* eslint-disable-next-line no-unused-vars */
@@ -36,7 +36,7 @@ const verticalPosition = {
   TOP: 0,
   BOTTOM: 1,
 };
-exports.verticalPosition = verticalPosition;
+export {verticalPosition};
 
 /**
  * Enum for horizontal positioning.
@@ -48,7 +48,7 @@ const horizontalPosition = {
   LEFT: 0,
   RIGHT: 1,
 };
-exports.horizontalPosition = horizontalPosition;
+export {horizontalPosition};
 
 /**
  * An object defining a horizontal and vertical positioning.
@@ -60,7 +60,7 @@ exports.horizontalPosition = horizontalPosition;
  * @package
  */
 let Position;
-exports.Position = Position;
+export {Position};
 
 /**
  * Enum for bump rules to use for dealing with collisions.
@@ -72,7 +72,7 @@ const bumpDirection = {
   UP: 0,
   DOWN: 1,
 };
-exports.bumpDirection = bumpDirection;
+export {bumpDirection};
 
 /**
  * Returns a rectangle representing reasonable position for where to place a UI
@@ -123,7 +123,7 @@ const getStartPositionRect = function(
   }
   return new Rect(top, top + size.height, left, left + size.width);
 };
-exports.getStartPositionRect = getStartPositionRect;
+export {getStartPositionRect};
 
 /**
  * Returns a corner position that is on the opposite side of the workspace from
@@ -146,7 +146,7 @@ const getCornerOppositeToolbox = function(workspace, metrics) {
   const vPosition = topCorner ? verticalPosition.TOP : verticalPosition.BOTTOM;
   return {horizontal: hPosition, vertical: vPosition};
 };
-exports.getCornerOppositeToolbox = getCornerOppositeToolbox;
+export {getCornerOppositeToolbox};
 
 /**
  * Returns a position Rect based on a starting position that is bumped
@@ -185,4 +185,4 @@ const bumpPositionRect = function(startRect, margin, bumpDir, savedPositions) {
   }
   return boundingRect;
 };
-exports.bumpPositionRect = bumpPositionRect;
+export {bumpPositionRect};

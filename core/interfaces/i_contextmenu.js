@@ -14,7 +14,7 @@
  * The interface for an object that supports a right-click.
  * @namespace Blockly.IContextMenu
  */
-goog.module('Blockly.IContextMenu');
+goog.declareModuleId('Blockly.IContextMenu');
 
 
 /**
@@ -29,4 +29,4 @@ const IContextMenu = function() {};
  */
 IContextMenu.prototype.showContextMenu;
 
-exports.IContextMenu = IContextMenu;
+export {IContextMenu};

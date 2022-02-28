@@ -15,7 +15,7 @@
  * key codes used to execute those shortcuts.
  * @class
  */
-goog.module('Blockly.ShortcutRegistry');
+goog.declareModuleId('Blockly.ShortcutRegistry');
 
 const object = goog.require('Blockly.utils.object');
 const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
@@ -363,4 +363,4 @@ ShortcutRegistry.KeyboardShortcut;
 const registry = new ShortcutRegistry();
 ShortcutRegistry.registry = registry;
 
-exports.ShortcutRegistry = ShortcutRegistry;
+export {ShortcutRegistry};

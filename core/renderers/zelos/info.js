@@ -14,7 +14,7 @@
  * Makecode/scratch-style renderer.
  * @class
  */
-goog.module('Blockly.zelos.RenderInfo');
+goog.declareModuleId('Blockly.zelos.RenderInfo');
 
 const {Align} = goog.require('Blockly.Input');
 /* eslint-disable-next-line no-unused-vars */
@@ -621,4 +621,4 @@ class RenderInfo extends BaseRenderInfo {
   }
 }
 
-exports.RenderInfo = RenderInfo;
+export {RenderInfo};

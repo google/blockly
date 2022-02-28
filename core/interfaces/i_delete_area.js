@@ -16,7 +16,7 @@
  * that is dropped on top of it.
  * @namespace Blockly.IDeleteArea
  */
-goog.module('Blockly.IDeleteArea');
+goog.declareModuleId('Blockly.IDeleteArea');
 
 /* eslint-disable-next-line no-unused-vars */
 const {IDragTarget} = goog.require('Blockly.IDragTarget');
@@ -47,4 +47,4 @@ const IDeleteArea = function() {};
  */
 IDeleteArea.prototype.wouldDelete;
 
-exports.IDeleteArea = IDeleteArea;
+export {IDeleteArea};

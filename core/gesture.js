@@ -15,7 +15,7 @@
  * or a tap.
  * @class
  */
-goog.module('Blockly.Gesture');
+goog.declareModuleId('Blockly.Gesture');
 
 const Tooltip = goog.require('Blockly.Tooltip');
 const Touch = goog.require('Blockly.Touch');
@@ -1023,4 +1023,4 @@ class Gesture {
   }
 }
 
-exports.Gesture = Gesture;
+export {Gesture};

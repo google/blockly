@@ -15,7 +15,7 @@
  * mode.
  * @class
  */
-goog.module('Blockly.geras.ConstantProvider');
+goog.declareModuleId('Blockly.geras.ConstantProvider');
 
 const {ConstantProvider: BaseConstantProvider} = goog.require('Blockly.blockRendering.ConstantProvider');
 
@@ -70,4 +70,4 @@ class ConstantProvider extends BaseConstantProvider {
   }
 }
 
-exports.ConstantProvider = ConstantProvider;
+export {ConstantProvider};

@@ -15,7 +15,7 @@
  * mode.
  * @class
  */
-goog.module('Blockly.zelos.ConstantProvider');
+goog.declareModuleId('Blockly.zelos.ConstantProvider');
 
 const dom = goog.require('Blockly.utils.dom');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
@@ -1002,4 +1002,4 @@ class ConstantProvider extends BaseConstantProvider {
   }
 }
 
-exports.ConstantProvider = ConstantProvider;
+export {ConstantProvider};

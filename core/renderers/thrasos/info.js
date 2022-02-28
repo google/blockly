@@ -15,7 +15,7 @@
  * Thrasos: spirit of boldness.
  * @class
  */
-goog.module('Blockly.thrasos.RenderInfo');
+goog.declareModuleId('Blockly.thrasos.RenderInfo');
 
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
@@ -336,4 +336,4 @@ class RenderInfo extends BaseRenderInfo {
   }
 }
 
-exports.RenderInfo = RenderInfo;
+export {RenderInfo};

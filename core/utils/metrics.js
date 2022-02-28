@@ -13,7 +13,7 @@
  * Workspace metrics definitions.
  * @namespace Blockly.utils.Metrics
  */
-goog.module('Blockly.utils.Metrics');
+goog.declareModuleId('Blockly.utils.Metrics');
 
 
 /**
@@ -151,4 +151,4 @@ Metrics.prototype.flyoutWidth;
  */
 Metrics.prototype.flyoutHeight;
 
-exports.Metrics = Metrics;
+export {Metrics};

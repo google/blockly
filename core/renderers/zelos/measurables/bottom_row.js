@@ -13,7 +13,7 @@
  * An object representing the bottom row of a rendered block.
  * @class
  */
-goog.module('Blockly.zelos.BottomRow');
+goog.declareModuleId('Blockly.zelos.BottomRow');
 
 const {BottomRow: BaseBottomRow} = goog.require('Blockly.blockRendering.BottomRow');
 /* eslint-disable-next-line no-unused-vars */
@@ -63,4 +63,4 @@ class BottomRow extends BaseBottomRow {
   }
 }
 
-exports.BottomRow = BottomRow;
+export {BottomRow};

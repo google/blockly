@@ -13,7 +13,7 @@
  * Number input field
  * @class
  */
-goog.module('Blockly.FieldNumber');
+goog.declareModuleId('Blockly.FieldNumber');
 
 const aria = goog.require('Blockly.utils.aria');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
@@ -337,4 +337,4 @@ FieldNumber.prototype.DEFAULT_VALUE = 0;
 
 fieldRegistry.register('field_number', FieldNumber);
 
-exports.FieldNumber = FieldNumber;
+export {FieldNumber};

@@ -15,7 +15,7 @@
  * potential connection is safe and valid.
  * @class
  */
-goog.module('Blockly.ConnectionChecker');
+goog.declareModuleId('Blockly.ConnectionChecker');
 
 const common = goog.require('Blockly.common');
 const internalConstants = goog.require('Blockly.internalConstants');
@@ -309,4 +309,4 @@ class ConnectionChecker {
 registry.register(
     registry.Type.CONNECTION_CHECKER, registry.DEFAULT, ConnectionChecker);
 
-exports.ConnectionChecker = ConnectionChecker;
+export {ConnectionChecker};

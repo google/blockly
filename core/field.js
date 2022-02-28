@@ -17,7 +17,7 @@
  * instances would be FieldTextInput, FieldDropdown, etc.
  * @class
  */
-goog.module('Blockly.Field');
+goog.declareModuleId('Blockly.Field');
 
 const Tooltip = goog.require('Blockly.Tooltip');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
@@ -1279,4 +1279,4 @@ Field.NBSP = '\u00A0';
  */
 Field.SKIP_SETUP = new Sentinel();
 
-exports.Field = Field;
+export {Field};

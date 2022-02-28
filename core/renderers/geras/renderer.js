@@ -13,7 +13,7 @@
  * Geras renderer.
  * @class
  */
-goog.module('Blockly.geras.Renderer');
+goog.declareModuleId('Blockly.geras.Renderer');
 
 const blockRendering = goog.require('Blockly.blockRendering');
 /* eslint-disable-next-line no-unused-vars */
@@ -146,4 +146,4 @@ class Renderer extends BaseRenderer {
 
 blockRendering.register('geras', Renderer);
 
-exports.Renderer = Renderer;
+export {Renderer};

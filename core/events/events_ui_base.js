@@ -15,7 +15,7 @@
  * Blockly's editor.
  * @class
  */
-goog.module('Blockly.Events.UiBase');
+goog.declareModuleId('Blockly.Events.UiBase');
 
 const {Abstract: AbstractEvent} = goog.require('Blockly.Events.Abstract');
 
@@ -60,4 +60,4 @@ class UiBase extends AbstractEvent {
   }
 }
 
-exports.UiBase = UiBase;
+export {UiBase};

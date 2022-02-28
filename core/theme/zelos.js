@@ -13,7 +13,7 @@
  * Zelos theme.
  * @namespace Blockly.Themes.Zelos
  */
-goog.module('Blockly.Themes.Zelos');
+goog.declareModuleId('Blockly.Themes.Zelos');
 
 const {Theme} = goog.require('Blockly.Theme');
 
@@ -91,4 +91,4 @@ const categoryStyles = {
  */
 const Zelos = new Theme('zelos', defaultBlockStyles, categoryStyles);
 
-exports.Zelos = Zelos;
+export {Zelos};

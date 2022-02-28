@@ -13,7 +13,7 @@
  * Utility functions for the toolbox and flyout.
  * @namespace Blockly.utils.toolbox
  */
-goog.module('Blockly.utils.toolbox');
+goog.declareModuleId('Blockly.utils.toolbox');
 
 const Xml = goog.require('Blockly.Xml');
 const userAgent = goog.require('Blockly.utils.userAgent');
@@ -49,7 +49,7 @@ const {ToolboxSeparator} = goog.requireType('Blockly.ToolboxSeparator');
  * @alias Blockly.utils.toolbox.BlockInfo
  */
 let BlockInfo;
-exports.BlockInfo = BlockInfo;
+export {BlockInfo};
 
 /**
  * The information needed to create a separator in the toolbox.
@@ -62,7 +62,7 @@ exports.BlockInfo = BlockInfo;
  * @alias Blockly.utils.toolbox.SeparatorInfo
  */
 let SeparatorInfo;
-exports.SeparatorInfo = SeparatorInfo;
+export {SeparatorInfo};
 
 /**
  * The information needed to create a button in the toolbox.
@@ -74,7 +74,7 @@ exports.SeparatorInfo = SeparatorInfo;
  * @alias Blockly.utils.toolbox.ButtonInfo
  */
 let ButtonInfo;
-exports.ButtonInfo = ButtonInfo;
+export {ButtonInfo};
 
 /**
  * The information needed to create a label in the toolbox.
@@ -86,7 +86,7 @@ exports.ButtonInfo = ButtonInfo;
  * @alias Blockly.utils.toolbox.LabelInfo
  */
 let LabelInfo;
-exports.LabelInfo = LabelInfo;
+export {LabelInfo};
 
 /**
  * The information needed to create either a button or a label in the flyout.
@@ -95,7 +95,7 @@ exports.LabelInfo = LabelInfo;
  * @alias Blockly.utils.toolbox.ButtonOrLabelInfo
  */
 let ButtonOrLabelInfo;
-exports.ButtonOrLabelInfo = ButtonOrLabelInfo;
+export {ButtonOrLabelInfo};
 
 /**
  * The information needed to create a category in the toolbox.
@@ -112,7 +112,7 @@ exports.ButtonOrLabelInfo = ButtonOrLabelInfo;
  * @alias Blockly.utils.toolbox.StaticCategoryInfo
  */
 let StaticCategoryInfo;
-exports.StaticCategoryInfo = StaticCategoryInfo;
+export {StaticCategoryInfo};
 
 /**
  * The information needed to create a custom category.
@@ -128,7 +128,7 @@ exports.StaticCategoryInfo = StaticCategoryInfo;
  * @alias Blockly.utils.toolbox.DynamicCategoryInfo
  */
 let DynamicCategoryInfo;
-exports.DynamicCategoryInfo = DynamicCategoryInfo;
+export {DynamicCategoryInfo};
 
 /**
  * The information needed to create either a dynamic or static category.
@@ -137,7 +137,7 @@ exports.DynamicCategoryInfo = DynamicCategoryInfo;
  * @alias Blockly.utils.toolbox.CategoryInfo
  */
 let CategoryInfo;
-exports.CategoryInfo = CategoryInfo;
+export {CategoryInfo};
 
 /**
  * Any information that can be used to create an item in the toolbox.
@@ -146,7 +146,7 @@ exports.CategoryInfo = CategoryInfo;
  * @alias Blockly.utils.toolbox.ToolboxItemInfo
  */
 let ToolboxItemInfo;
-exports.ToolboxItemInfo = ToolboxItemInfo;
+export {ToolboxItemInfo};
 
 /**
  * All the different types that can be displayed in a flyout.
@@ -158,7 +158,7 @@ exports.ToolboxItemInfo = ToolboxItemInfo;
  * @alias Blockly.utils.toolbox.FlyoutItemInfo
  */
 let FlyoutItemInfo;
-exports.FlyoutItemInfo = FlyoutItemInfo;
+export {FlyoutItemInfo};
 
 /**
  * The JSON definition of a toolbox.
@@ -169,7 +169,7 @@ exports.FlyoutItemInfo = FlyoutItemInfo;
  * @alias Blockly.utils.toolbox.ToolboxInfo
  */
 let ToolboxInfo;
-exports.ToolboxInfo = ToolboxInfo;
+export {ToolboxInfo};
 
 /**
  * An array holding flyout items.
@@ -179,7 +179,7 @@ exports.ToolboxInfo = ToolboxInfo;
  * @alias Blockly.utils.toolbox.FlyoutItemInfoArray
  */
 let FlyoutItemInfoArray;
-exports.FlyoutItemInfoArray = FlyoutItemInfoArray;
+export {FlyoutItemInfoArray};
 
 /**
  * All of the different types that can create a toolbox.
@@ -189,7 +189,7 @@ exports.FlyoutItemInfoArray = FlyoutItemInfoArray;
  * @alias Blockly.utils.toolbox.ToolboxDefinition
  */
 let ToolboxDefinition;
-exports.ToolboxDefinition = ToolboxDefinition;
+export {ToolboxDefinition};
 
 /**
  * All of the different types that can be used to show items in a flyout.
@@ -200,7 +200,7 @@ exports.ToolboxDefinition = ToolboxDefinition;
  * @alias Blockly.utils.toolbox.FlyoutDefinition
  */
 let FlyoutDefinition;
-exports.FlyoutDefinition = FlyoutDefinition;
+export {FlyoutDefinition};
 
 /**
  * The name used to identify a toolbox that has category like items.
@@ -229,7 +229,7 @@ const Position = {
   LEFT: 2,
   RIGHT: 3,
 };
-exports.Position = Position;
+export {Position};
 
 /**
  * Converts the toolbox definition into toolbox JSON.
@@ -254,7 +254,7 @@ const convertToolboxDefToJson = function(toolboxDef) {
   validateToolbox(toolboxJson);
   return toolboxJson;
 };
-exports.convertToolboxDefToJson = convertToolboxDefToJson;
+export {convertToolboxDefToJson};
 
 /**
  * Validates the toolbox JSON fields have been set correctly.
@@ -305,7 +305,7 @@ const convertFlyoutDefToJsonArray = function(flyoutDef) {
 
   return xmlToJsonArray(/** @type {!Array<Node>|!NodeList} */ (flyoutDef));
 };
-exports.convertFlyoutDefToJsonArray = convertFlyoutDefToJsonArray;
+export {convertFlyoutDefToJsonArray};
 
 /**
  * Whether or not the toolbox definition has categories.
@@ -330,7 +330,7 @@ const hasCategories = function(toolboxJson) {
   });
   return !!categories.length;
 };
-exports.hasCategories = hasCategories;
+export {hasCategories};
 
 /**
  * Whether or not the category is collapsible.
@@ -350,7 +350,7 @@ const isCategoryCollapsible = function(categoryInfo) {
   });
   return !!categories.length;
 };
-exports.isCategoryCollapsible = isCategoryCollapsible;
+export {isCategoryCollapsible};
 
 /**
  * Parses the provided toolbox definition into a consistent format.
@@ -456,4 +456,4 @@ const parseToolboxTree = function(toolboxDef) {
   }
   return toolboxDef;
 };
-exports.parseToolboxTree = parseToolboxTree;
+export {parseToolboxTree};

@@ -13,7 +13,7 @@
  * Events fired as a result of actions in Blockly's editor.
  * @namespace Blockly.Events
  */
-goog.module('Blockly.Events');
+goog.declareModuleId('Blockly.Events');
 
 const deprecation = goog.require('Blockly.utils.deprecation');
 const eventUtils = goog.require('Blockly.Events.utils');
@@ -47,79 +47,82 @@ const {ViewportChange} = goog.require('Blockly.Events.ViewportChange');
 
 
 // Events.
-exports.Abstract = AbstractEvent;
-exports.BubbleOpen = BubbleOpen;
-exports.BlockBase = BlockBase;
-exports.BlockChange = BlockChange;
-exports.BlockCreate = BlockCreate;
-exports.BlockDelete = BlockDelete;
-exports.BlockDrag = BlockDrag;
-exports.BlockMove = BlockMove;
-exports.Click = Click;
-exports.CommentBase = CommentBase;
-exports.CommentChange = CommentChange;
-exports.CommentCreate = CommentCreate;
-exports.CommentDelete = CommentDelete;
-exports.CommentMove = CommentMove;
-exports.FinishedLoading = FinishedLoading;
-exports.MarkerMove = MarkerMove;
-exports.Selected = Selected;
-exports.ThemeChange = ThemeChange;
-exports.ToolboxItemSelect = ToolboxItemSelect;
-exports.TrashcanOpen = TrashcanOpen;
-exports.Ui = Ui;
-exports.UiBase = UiBase;
-exports.VarBase = VarBase;
-exports.VarCreate = VarCreate;
-exports.VarDelete = VarDelete;
-exports.VarRename = VarRename;
-exports.ViewportChange = ViewportChange;
+export {AbstractEvent as Abstract};
+
+export {BubbleOpen};
+export {BlockBase};
+export {BlockChange};
+export {BlockCreate};
+export {BlockDelete};
+export {BlockDrag};
+export {BlockMove};
+export {Click};
+export {CommentBase};
+export {CommentChange};
+export {CommentCreate};
+export {CommentDelete};
+export {CommentMove};
+export {FinishedLoading};
+export {MarkerMove};
+export {Selected};
+export {ThemeChange};
+export {ToolboxItemSelect};
+export {TrashcanOpen};
+export {Ui};
+export {UiBase};
+export {VarBase};
+export {VarCreate};
+export {VarDelete};
+export {VarRename};
+export {ViewportChange};
 
 // Event types.
-exports.BLOCK_CHANGE = eventUtils.BLOCK_CHANGE;
-exports.BLOCK_CREATE = eventUtils.BLOCK_CREATE;
-exports.BLOCK_DELETE = eventUtils.BLOCK_DELETE;
-exports.BLOCK_DRAG = eventUtils.BLOCK_DRAG;
-exports.BLOCK_MOVE = eventUtils.BLOCK_MOVE;
-exports.BUBBLE_OPEN = eventUtils.BUBBLE_OPEN;
-exports.BumpEvent = eventUtils.BumpEvent;
-exports.BUMP_EVENTS = eventUtils.BUMP_EVENTS;
-exports.CHANGE = eventUtils.CHANGE;
-exports.CLICK = eventUtils.CLICK;
-exports.COMMENT_CHANGE = eventUtils.COMMENT_CHANGE;
-exports.COMMENT_CREATE = eventUtils.COMMENT_CREATE;
-exports.COMMENT_DELETE = eventUtils.COMMENT_DELETE;
-exports.COMMENT_MOVE = eventUtils.COMMENT_MOVE;
-exports.CREATE = eventUtils.CREATE;
-exports.DELETE = eventUtils.DELETE;
-exports.FINISHED_LOADING = eventUtils.FINISHED_LOADING;
-exports.MARKER_MOVE = eventUtils.MARKER_MOVE;
-exports.MOVE = eventUtils.MOVE;
-exports.SELECTED = eventUtils.SELECTED;
-exports.THEME_CHANGE = eventUtils.THEME_CHANGE;
-exports.TOOLBOX_ITEM_SELECT = eventUtils.TOOLBOX_ITEM_SELECT;
-exports.TRASHCAN_OPEN = eventUtils.TRASHCAN_OPEN;
-exports.UI = eventUtils.UI;
-exports.VAR_CREATE = eventUtils.VAR_CREATE;
-exports.VAR_DELETE = eventUtils.VAR_DELETE;
-exports.VAR_RENAME = eventUtils.VAR_RENAME;
-exports.VIEWPORT_CHANGE = eventUtils.VIEWPORT_CHANGE;
+export var BLOCK_CHANGE = eventUtils.BLOCK_CHANGE;
+
+export var BLOCK_CREATE = eventUtils.BLOCK_CREATE;
+export var BLOCK_DELETE = eventUtils.BLOCK_DELETE;
+export var BLOCK_DRAG = eventUtils.BLOCK_DRAG;
+export var BLOCK_MOVE = eventUtils.BLOCK_MOVE;
+export var BUBBLE_OPEN = eventUtils.BUBBLE_OPEN;
+export var BumpEvent = eventUtils.BumpEvent;
+export var BUMP_EVENTS = eventUtils.BUMP_EVENTS;
+export var CHANGE = eventUtils.CHANGE;
+export var CLICK = eventUtils.CLICK;
+export var COMMENT_CHANGE = eventUtils.COMMENT_CHANGE;
+export var COMMENT_CREATE = eventUtils.COMMENT_CREATE;
+export var COMMENT_DELETE = eventUtils.COMMENT_DELETE;
+export var COMMENT_MOVE = eventUtils.COMMENT_MOVE;
+export var CREATE = eventUtils.CREATE;
+export var DELETE = eventUtils.DELETE;
+export var FINISHED_LOADING = eventUtils.FINISHED_LOADING;
+export var MARKER_MOVE = eventUtils.MARKER_MOVE;
+export var MOVE = eventUtils.MOVE;
+export var SELECTED = eventUtils.SELECTED;
+export var THEME_CHANGE = eventUtils.THEME_CHANGE;
+export var TOOLBOX_ITEM_SELECT = eventUtils.TOOLBOX_ITEM_SELECT;
+export var TRASHCAN_OPEN = eventUtils.TRASHCAN_OPEN;
+export var UI = eventUtils.UI;
+export var VAR_CREATE = eventUtils.VAR_CREATE;
+export var VAR_DELETE = eventUtils.VAR_DELETE;
+export var VAR_RENAME = eventUtils.VAR_RENAME;
+export var VIEWPORT_CHANGE = eventUtils.VIEWPORT_CHANGE;
 
 // Event utils.
-exports.clearPendingUndo = eventUtils.clearPendingUndo;
-exports.disable = eventUtils.disable;
-exports.enable = eventUtils.enable;
-exports.filter = eventUtils.filter;
-exports.fire = eventUtils.fire;
-exports.fromJson = eventUtils.fromJson;
-exports.getDescendantIds = eventUtils.getDescendantIds;
-exports.get = eventUtils.get;
-exports.getGroup = eventUtils.getGroup;
-exports.getRecordUndo = eventUtils.getRecordUndo;
-exports.isEnabled = eventUtils.isEnabled;
-exports.setGroup = eventUtils.setGroup;
-exports.setRecordUndo = eventUtils.setRecordUndo;
-exports.disableOrphans = eventUtils.disableOrphans;
+export var clearPendingUndo = eventUtils.clearPendingUndo;
+
+export var disable = eventUtils.disable;
+export var enable = eventUtils.enable;
+export var filter = eventUtils.filter;
+export var fire = eventUtils.fire;
+export var fromJson = eventUtils.fromJson;
+export var getDescendantIds = eventUtils.getDescendantIds;
+export var get = eventUtils.get;
+export var getGroup = eventUtils.getGroup;
+export var getRecordUndo = eventUtils.getRecordUndo;
+export var isEnabled = eventUtils.isEnabled;
+export var setGroup = eventUtils.setGroup;
+export var setRecordUndo = eventUtils.setRecordUndo;
+export var disableOrphans = eventUtils.disableOrphans;
 
 Object.defineProperties(exports, {
   /**

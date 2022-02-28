@@ -13,7 +13,7 @@
  * Class for a variable rename event.
  * @class
  */
-goog.module('Blockly.Events.VarRename');
+goog.declareModuleId('Blockly.Events.VarRename');
 
 const eventUtils = goog.require('Blockly.Events.utils');
 const registry = goog.require('Blockly.registry');
@@ -87,4 +87,4 @@ class VarRename extends VarBase {
 
 registry.register(registry.Type.EVENT, eventUtils.VAR_RENAME, VarRename);
 
-exports.VarRename = VarRename;
+export {VarRename};

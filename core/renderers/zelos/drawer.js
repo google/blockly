@@ -13,7 +13,7 @@
  * Zelos renderer.
  * @class
  */
-goog.module('Blockly.zelos.Drawer');
+goog.declareModuleId('Blockly.zelos.Drawer');
 
 const debug = goog.require('Blockly.blockRendering.debug');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
@@ -247,4 +247,4 @@ class Drawer extends BaseDrawer {
   }
 }
 
-exports.Drawer = Drawer;
+export {Drawer};

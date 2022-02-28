@@ -17,7 +17,7 @@
  * a JavaScript framework such as Closure.
  * @namespace Blockly.utils.KeyCodes
  */
-goog.module('Blockly.utils.KeyCodes');
+goog.declareModuleId('Blockly.utils.KeyCodes');
 
 
 /**
@@ -169,4 +169,4 @@ const KeyCodes = {
   PHANTOM: 255,
 };
 
-exports.KeyCodes = KeyCodes;
+export {KeyCodes};

@@ -17,7 +17,7 @@
  * a JavaScript framework such as Closure.
  * @class
  */
-goog.module('Blockly.utils.Rect');
+goog.declareModuleId('Blockly.utils.Rect');
 
 
 /**
@@ -72,4 +72,4 @@ const Rect = class {
   }
 };
 
-exports.Rect = Rect;
+export {Rect};

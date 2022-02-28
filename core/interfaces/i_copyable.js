@@ -14,7 +14,7 @@
  * The interface for an object that is copyable.
  * @namespace Blockly.ICopyable
  */
-goog.module('Blockly.ICopyable');
+goog.declareModuleId('Blockly.ICopyable');
 
 /* eslint-disable-next-line no-unused-vars */
 const {ISelectable} = goog.require('Blockly.ISelectable');
@@ -46,4 +46,4 @@ ICopyable.prototype.toCopyData;
  */
 ICopyable.CopyData;
 
-exports.ICopyable = ICopyable;
+export {ICopyable};

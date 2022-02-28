@@ -13,7 +13,7 @@
  * Calculates and reports workspace metrics.
  * @class
  */
-goog.module('Blockly.MetricsManager');
+goog.declareModuleId('Blockly.MetricsManager');
 
 const registry = goog.require('Blockly.registry');
 const toolboxUtils = goog.require('Blockly.utils.toolbox');
@@ -492,4 +492,4 @@ MetricsManager.UiMetrics;
 registry.register(
     registry.Type.METRICS_MANAGER, registry.DEFAULT, MetricsManager);
 
-exports.MetricsManager = MetricsManager;
+export {MetricsManager};

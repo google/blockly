@@ -14,7 +14,7 @@
  * The interface for an AST node location SVG.
  * @namespace Blockly.IASTNodeLocationSvg
  */
-goog.module('Blockly.IASTNodeLocationSvg');
+goog.declareModuleId('Blockly.IASTNodeLocationSvg');
 
 /* eslint-disable-next-line no-unused-vars */
 const {IASTNodeLocation} = goog.require('Blockly.IASTNodeLocation');
@@ -42,4 +42,4 @@ IASTNodeLocationSvg.prototype.setMarkerSvg;
  */
 IASTNodeLocationSvg.prototype.setCursorSvg;
 
-exports.IASTNodeLocationSvg = IASTNodeLocationSvg;
+export {IASTNodeLocationSvg};

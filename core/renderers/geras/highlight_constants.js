@@ -13,7 +13,7 @@
  * Objects for rendering highlights on blocks.
  * @class
  */
-goog.module('Blockly.geras.HighlightConstantProvider');
+goog.declareModuleId('Blockly.geras.HighlightConstantProvider');
 
 const svgPaths = goog.require('Blockly.utils.svgPaths');
 /* eslint-disable-next-line no-unused-vars */
@@ -296,4 +296,4 @@ class HighlightConstantProvider {
   }
 }
 
-exports.HighlightConstantProvider = HighlightConstantProvider;
+export {HighlightConstantProvider};

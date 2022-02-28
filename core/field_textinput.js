@@ -13,7 +13,7 @@
  * Text input field.
  * @class
  */
-goog.module('Blockly.FieldTextInput');
+goog.declareModuleId('Blockly.FieldTextInput');
 
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const aria = goog.require('Blockly.utils.aria');
@@ -616,4 +616,4 @@ FieldTextInput.BORDERRADIUS = 4;
 
 fieldRegistry.register('field_input', FieldTextInput);
 
-exports.FieldTextInput = FieldTextInput;
+export {FieldTextInput};

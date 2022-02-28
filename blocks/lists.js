@@ -10,7 +10,7 @@
  */
 'use strict';
 
-goog.module('Blockly.libraryBlocks.lists');
+goog.declareModuleId('Blockly.libraryBlocks.lists');
 
 const xmlUtils = goog.require('Blockly.utils.xml');
 const {Align} = goog.require('Blockly.Input');
@@ -117,7 +117,7 @@ const blocks = createBlockDefinitionsFromJsonArray([
     'helpUrl': '%{BKY_LISTS_LENGTH_HELPURL}',
   },
 ]);
-exports.blocks = blocks;
+export {blocks};
 
 blocks['lists_create_with'] = {
   /**

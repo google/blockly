@@ -13,7 +13,7 @@
  * Class for a finished loading workspace event.
  * @class
  */
-goog.module('Blockly.Events.FinishedLoading');
+goog.declareModuleId('Blockly.Events.FinishedLoading');
 
 const eventUtils = goog.require('Blockly.Events.utils');
 const registry = goog.require('Blockly.registry');
@@ -90,4 +90,4 @@ class FinishedLoading extends AbstractEvent {
 registry.register(
     registry.Type.EVENT, eventUtils.FINISHED_LOADING, FinishedLoading);
 
-exports.FinishedLoading = FinishedLoading;
+export {FinishedLoading};

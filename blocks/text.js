@@ -10,7 +10,7 @@
  */
 'use strict';
 
-goog.module('Blockly.libraryBlocks.texts');
+goog.declareModuleId('Blockly.libraryBlocks.texts');
 
 const Extensions = goog.require('Blockly.Extensions');
 const {Msg} = goog.require('Blockly.Msg');
@@ -243,7 +243,7 @@ const blocks = createBlockDefinitionsFromJsonArray([
     'mutator': 'text_charAt_mutator',
   },
 ]);
-exports.blocks = blocks;
+export {blocks};
 
 blocks['text_getSubstring'] = {
   /**

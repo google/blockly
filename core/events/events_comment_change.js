@@ -13,7 +13,7 @@
  * Class for comment change event.
  * @class
  */
-goog.module('Blockly.Events.CommentChange');
+goog.declareModuleId('Blockly.Events.CommentChange');
 
 const eventUtils = goog.require('Blockly.Events.utils');
 const registry = goog.require('Blockly.registry');
@@ -102,4 +102,4 @@ class CommentChange extends CommentBase {
 registry.register(
     registry.Type.EVENT, eventUtils.COMMENT_CHANGE, CommentChange);
 
-exports.CommentChange = CommentChange;
+export {CommentChange};

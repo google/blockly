@@ -14,7 +14,7 @@
  * The interface for a selectable toolbox item.
  * @namespace Blockly.ISelectableToolboxItem
  */
-goog.module('Blockly.ISelectableToolboxItem');
+goog.declareModuleId('Blockly.ISelectableToolboxItem');
 
 /* eslint-disable-next-line no-unused-vars */
 const toolbox = goog.requireType('Blockly.utils.toolbox');
@@ -70,4 +70,4 @@ ISelectableToolboxItem.prototype.getClickTarget;
  */
 ISelectableToolboxItem.prototype.onClick;
 
-exports.ISelectableToolboxItem = ISelectableToolboxItem;
+export {ISelectableToolboxItem};

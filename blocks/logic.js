@@ -10,7 +10,7 @@
  */
 'use strict';
 
-goog.module('Blockly.libraryBlocks.logic');
+goog.declareModuleId('Blockly.libraryBlocks.logic');
 
 /* eslint-disable-next-line no-unused-vars */
 const AbstractEvent = goog.requireType('Blockly.Events.Abstract');
@@ -264,7 +264,7 @@ const blocks = createBlockDefinitionsFromJsonArray([
     'tooltip': '%{BKY_CONTROLS_IF_ELSE_TOOLTIP}',
   },
 ]);
-exports.blocks = blocks;
+export {blocks};
 
 /**
  * Tooltip text, keyed by block OP value. Used by logic_compare and

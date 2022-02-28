@@ -10,7 +10,7 @@
  */
 'use strict';
 
-goog.module('Blockly.libraryBlocks.variablesDynamic');
+goog.declareModuleId('Blockly.libraryBlocks.variablesDynamic');
 
 /* eslint-disable-next-line no-unused-vars */
 const AbstractEvent = goog.requireType('Blockly.Events.Abstract');
@@ -73,7 +73,7 @@ const blocks = createBlockDefinitionsFromJsonArray([
     'extensions': ['contextMenu_variableDynamicSetterGetter'],
   },
 ]);
-exports.blocks = blocks;
+export {blocks};
 
 /**
  * Mixin to add context menu items to create getter/setter blocks for this

@@ -15,7 +15,7 @@
  *    for registering and unregistering different types of classes.
  * @namespace Blockly.registry
  */
-goog.module('Blockly.registry');
+goog.declareModuleId('Blockly.registry');
 
 /* eslint-disable-next-line no-unused-vars */
 const {Abstract} = goog.requireType('Blockly.Events.Abstract');
@@ -53,7 +53,7 @@ const {ToolboxItem} = goog.requireType('Blockly.ToolboxItem');
  * @type {!Object<string, !Object<string, (function(new:?)|!Object)>>}
  */
 const typeMap = Object.create(null);
-exports.TEST_ONLY = {typeMap};
+export var TEST_ONLY = {typeMap};
 
 /**
  * A map of maps. With the keys being the type and caseless name of the class we
@@ -69,7 +69,7 @@ const nameMap = Object.create(null);
  * @alias Blockly.registry.DEFAULT
  */
 const DEFAULT = 'default';
-exports.DEFAULT = DEFAULT;
+export {DEFAULT};
 
 /**
  * A name with the type of the element stored in the generic.
@@ -96,7 +96,7 @@ class Type {
     return this.name_;
   }
 }
-exports.Type = Type;
+export {Type};
 
 
 /** @type {!Type<IConnectionChecker>} */
@@ -194,7 +194,7 @@ const register = function(type, name, registryItem, opt_allowOverrides) {
   typeRegistry[caselessName] = registryItem;
   nameRegistry[caselessName] = name;
 };
-exports.register = register;
+export {register};
 
 /**
  * Checks the given registry item for properties that are required based on the
@@ -234,7 +234,7 @@ const unregister = function(type, name) {
   delete typeMap[type][name];
   delete nameMap[type][name];
 };
-exports.unregister = unregister;
+export {unregister};
 
 /**
  * Gets the registry item for the given name and type. This can be either a
@@ -285,7 +285,7 @@ const hasItem = function(type, name) {
   }
   return !!(typeRegistry[name]);
 };
-exports.hasItem = hasItem;
+export {hasItem};
 
 /**
  * Gets the class for the given name and type.
@@ -303,7 +303,7 @@ const getClass = function(type, name, opt_throwIfMissing) {
   return /** @type {?function(new:T, ...?)} */ (
       getItem(type, name, opt_throwIfMissing));
 };
-exports.getClass = getClass;
+export {getClass};
 
 /**
  * Gets the object for the given name and type.
@@ -319,7 +319,7 @@ exports.getClass = getClass;
 const getObject = function(type, name, opt_throwIfMissing) {
   return /** @type {T} */ (getItem(type, name, opt_throwIfMissing));
 };
-exports.getObject = getObject;
+export {getObject};
 
 /**
  * Returns a map of items registered with the given type.
@@ -357,7 +357,7 @@ const getAllItems = function(type, opt_cased, opt_throwIfMissing) {
   }
   return casedRegistry;
 };
-exports.getAllItems = getAllItems;
+export {getAllItems};
 
 /**
  * Gets the class from Blockly options for the given type.
@@ -381,4 +381,4 @@ const getClassFromOptions = function(type, options, opt_throwIfMissing) {
   }
   return getClass(type, plugin, opt_throwIfMissing);
 };
-exports.getClassFromOptions = getClassFromOptions;
+export {getClassFromOptions};

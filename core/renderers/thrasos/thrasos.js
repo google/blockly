@@ -13,10 +13,10 @@
  * Re-exports of Blockly.thrasos.* modules.
  * @namespace Blockly.thrasos
  */
-goog.module('Blockly.thrasos');
+goog.declareModuleId('Blockly.thrasos');
 
 const {RenderInfo} = goog.require('Blockly.thrasos.RenderInfo');
 const {Renderer} = goog.require('Blockly.thrasos.Renderer');
 
-exports.RenderInfo = RenderInfo;
-exports.Renderer = Renderer;
+export {RenderInfo};
+export {Renderer};

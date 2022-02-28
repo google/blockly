@@ -13,7 +13,7 @@
  * Object representing a workspace.
  * @class
  */
-goog.module('Blockly.Workspace');
+goog.declareModuleId('Blockly.Workspace');
 
 const arrayUtils = goog.require('Blockly.utils.array');
 const eventUtils = goog.require('Blockly.Events.utils');
@@ -56,7 +56,7 @@ const WorkspaceDB_ = Object.create(null);
  * @implements {IASTNodeLocation}
  * @alias Blockly.Workspace
  */
-class Workspace {
+export class Workspace {
   /**
    * @param {!Options=} opt_options Dictionary of options.
    */
@@ -832,5 +832,3 @@ class Workspace {
  * See: https://tvtropes.org/pmwiki/pmwiki.php/Main/DiagonalBilling
  */
 Workspace.SCAN_ANGLE = 3;
-
-exports.Workspace = Workspace;

@@ -13,7 +13,7 @@
  * Functions for injecting Blockly into a web page.
  * @namespace Blockly.inject
  */
-goog.module('Blockly.inject');
+goog.declareModuleId('Blockly.inject');
 
 const Css = goog.require('Blockly.Css');
 const Tooltip = goog.require('Blockly.Tooltip');
@@ -386,4 +386,4 @@ const loadSounds = function(pathToMedia, workspace) {
       document, 'touchstart', null, unbindSounds, true));
 };
 
-exports.inject = inject;
+export {inject};

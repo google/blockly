@@ -15,7 +15,7 @@
  * This method is not specific to Blockly.
  * @namespace Blockly.utils.deprecation
  */
-goog.module('Blockly.utils.deprecation');
+goog.declareModuleId('Blockly.utils.deprecation');
 
 
 /**
@@ -38,4 +38,4 @@ const warn = function(name, deprecationDate, deletionDate, opt_use) {
   }
   console.warn(msg);
 };
-exports.warn = warn;
+export {warn};

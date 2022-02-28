@@ -13,7 +13,7 @@
  * Base class for all types of block events.
  * @class
  */
-goog.module('Blockly.Events.BlockBase');
+goog.declareModuleId('Blockly.Events.BlockBase');
 
 const {Abstract: AbstractEvent} = goog.require('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
@@ -67,4 +67,4 @@ class BlockBase extends AbstractEvent {
   }
 }
 
-exports.BlockBase = BlockBase;
+export {BlockBase};

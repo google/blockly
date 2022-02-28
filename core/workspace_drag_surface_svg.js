@@ -20,7 +20,7 @@
  * blocks are never repainted during drag improving performance.
  * @class
  */
-goog.module('Blockly.WorkspaceDragSurfaceSvg');
+goog.declareModuleId('Blockly.WorkspaceDragSurfaceSvg');
 
 const dom = goog.require('Blockly.utils.dom');
 const svgMath = goog.require('Blockly.utils.svgMath');
@@ -191,4 +191,4 @@ class WorkspaceDragSurfaceSvg {
   }
 }
 
-exports.WorkspaceDragSurfaceSvg = WorkspaceDragSurfaceSvg;
+export {WorkspaceDragSurfaceSvg};

@@ -13,7 +13,7 @@
  * An item in the toolbox.
  * @class
  */
-goog.module('Blockly.ToolboxItem');
+goog.declareModuleId('Blockly.ToolboxItem');
 
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 /* eslint-disable-next-line no-unused-vars */
@@ -170,4 +170,4 @@ class ToolboxItem {
   dispose() {}
 }
 
-exports.ToolboxItem = ToolboxItem;
+export {ToolboxItem};

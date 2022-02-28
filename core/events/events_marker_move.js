@@ -13,7 +13,7 @@
  * Events fired as a result of a marker move.
  * @class
  */
-goog.module('Blockly.Events.MarkerMove');
+goog.declareModuleId('Blockly.Events.MarkerMove');
 
 const eventUtils = goog.require('Blockly.Events.utils');
 const registry = goog.require('Blockly.registry');
@@ -107,4 +107,4 @@ class MarkerMove extends UiBase {
 
 registry.register(registry.Type.EVENT, eventUtils.MARKER_MOVE, MarkerMove);
 
-exports.MarkerMove = MarkerMove;
+export {MarkerMove};

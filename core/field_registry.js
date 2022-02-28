@@ -17,7 +17,7 @@
  *    fields based on JSON.
  * @namespace Blockly.fieldRegistry
  */
-goog.module('Blockly.fieldRegistry');
+goog.declareModuleId('Blockly.fieldRegistry');
 
 const registry = goog.require('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */
@@ -41,7 +41,7 @@ const {IRegistrableField} = goog.requireType('Blockly.IRegistrableField');
 const register = function(type, fieldClass) {
   registry.register(registry.Type.FIELD, type, fieldClass);
 };
-exports.register = register;
+export {register};
 
 /**
  * Unregisters the field registered with the given type.
@@ -51,7 +51,7 @@ exports.register = register;
 const unregister = function(type) {
   registry.unregister(registry.Type.FIELD, type);
 };
-exports.unregister = unregister;
+export {unregister};
 
 /**
  * Construct a Field from a JSON arg object.
@@ -77,4 +77,4 @@ const fromJson = function(options) {
   }
   return fieldObject.fromJson(options);
 };
-exports.fromJson = fromJson;
+export {fromJson};

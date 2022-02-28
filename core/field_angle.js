@@ -13,7 +13,7 @@
  * Angle input field.
  * @class
  */
-goog.module('Blockly.FieldAngle');
+goog.declareModuleId('Blockly.FieldAngle');
 
 const Css = goog.require('Blockly.Css');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
@@ -588,4 +588,4 @@ Css.register(`
 
 fieldRegistry.register('field_angle', FieldAngle);
 
-exports.FieldAngle = FieldAngle;
+export {FieldAngle};

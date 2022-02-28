@@ -17,7 +17,7 @@
  * a JavaScript framework such as Closure.
  * @class
  */
-goog.module('Blockly.utils.Size');
+goog.declareModuleId('Blockly.utils.Size');
 
 
 /**
@@ -62,4 +62,4 @@ const Size = class {
   }
 };
 
-exports.Size = Size;
+export {Size};

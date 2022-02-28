@@ -15,7 +15,7 @@
  * objects.
  * @namespace Blockly.serialization.workspaces
  */
-goog.module('Blockly.serialization.workspaces');
+goog.declareModuleId('Blockly.serialization.workspaces');
 
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
@@ -42,7 +42,7 @@ const save = function(workspace) {
   }
   return state;
 };
-exports.save = save;
+export {save};
 
 /**
  * Loads the variable represented by the given state into the given workspace.
@@ -100,4 +100,4 @@ const load = function(state, workspace, {recordUndo = false} = {}) {
   eventUtils.setGroup(existingGroup);
   eventUtils.setRecordUndo(prevRecordUndo);
 };
-exports.load = load;
+export {load};

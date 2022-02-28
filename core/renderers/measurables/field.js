@@ -14,7 +14,7 @@
  * block.
  * @class
  */
-goog.module('Blockly.blockRendering.Field');
+goog.declareModuleId('Blockly.blockRendering.Field');
 
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -68,4 +68,4 @@ class Field extends Measurable {
   }
 }
 
-exports.Field = Field;
+export {Field};

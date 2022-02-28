@@ -15,7 +15,7 @@
  * Wrapper functions around JS functions for showing alert/confirmation dialogs.
  * @namespace Blockly.dialog
  */
-goog.module('Blockly.dialog');
+goog.declareModuleId('Blockly.dialog');
 
 let alertImplementation = function(message, opt_callback) {
   window.alert(message);
@@ -42,7 +42,7 @@ let promptImplementation = function(message, defaultValue, callback) {
 const alert = function(message, opt_callback) {
   alertImplementation(message, opt_callback);
 };
-exports.alert = alert;
+export {alert};
 
 /**
  * Sets the function to be run when Blockly.dialog.alert() is called.
@@ -53,7 +53,7 @@ exports.alert = alert;
 const setAlert = function(alertFunction) {
   alertImplementation = alertFunction;
 };
-exports.setAlert = setAlert;
+export {setAlert};
 
 /**
  * Wrapper to window.confirm() that app developers may override via setConfirm
@@ -65,7 +65,7 @@ exports.setAlert = setAlert;
 const confirm = function(message, callback) {
   confirmImplementation(message, callback);
 };
-exports.confirm = confirm;
+export {confirm};
 
 /**
  * Sets the function to be run when Blockly.dialog.confirm() is called.
@@ -77,7 +77,7 @@ exports.confirm = confirm;
 const setConfirm = function(confirmFunction) {
   confirmImplementation = confirmFunction;
 };
-exports.setConfirm = setConfirm;
+export {setConfirm};
 
 /**
  * Wrapper to window.prompt() that app developers may override via setPrompt to
@@ -92,7 +92,7 @@ exports.setConfirm = setConfirm;
 const prompt = function(message, defaultValue, callback) {
   promptImplementation(message, defaultValue, callback);
 };
-exports.prompt = prompt;
+export {prompt};
 
 /**
  * Sets the function to be run when Blockly.dialog.prompt() is called.
@@ -104,4 +104,4 @@ exports.prompt = prompt;
 const setPrompt = function(promptFunction) {
   promptImplementation = promptFunction;
 };
-exports.setPrompt = setPrompt;
+export {setPrompt};

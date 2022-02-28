@@ -15,7 +15,7 @@
  * etc).
  * @namespace Blockly.serialization.registry
  */
-goog.module('Blockly.serialization.registry');
+goog.declareModuleId('Blockly.serialization.registry');
 
 const registry = goog.require('Blockly.registry');
 // eslint-disable-next-line no-unused-vars
@@ -32,7 +32,7 @@ const {ISerializer} = goog.requireType('Blockly.serialization.ISerializer');
 const register = function(name, serializer) {
   registry.register(registry.Type.SERIALIZER, name, serializer);
 };
-exports.register = register;
+export {register};
 
 /**
  * Unregisters the serializer associated with the given name.
@@ -42,4 +42,4 @@ exports.register = register;
 const unregister = function(name) {
   registry.unregister(registry.Type.SERIALIZER, name);
 };
-exports.unregister = unregister;
+export {unregister};

@@ -13,7 +13,7 @@
  * Events fired as a result of a theme update.
  * @class
  */
-goog.module('Blockly.Events.ThemeChange');
+goog.declareModuleId('Blockly.Events.ThemeChange');
 
 const eventUtils = goog.require('Blockly.Events.utils');
 const registry = goog.require('Blockly.registry');
@@ -69,4 +69,4 @@ class ThemeChange extends UiBase {
 
 registry.register(registry.Type.EVENT, eventUtils.THEME_CHANGE, ThemeChange);
 
-exports.ThemeChange = ThemeChange;
+export {ThemeChange};

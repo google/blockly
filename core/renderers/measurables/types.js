@@ -14,7 +14,7 @@
  * Measurable types.
  * @namespace Blockly.blockRendering.Types
  */
-goog.module('Blockly.blockRendering.Types');
+goog.declareModuleId('Blockly.blockRendering.Types');
 
 /* eslint-disable-next-line no-unused-vars */
 const {Measurable} = goog.requireType('Blockly.blockRendering.Measurable');
@@ -350,4 +350,4 @@ Types.isInputRow = function(row) {
   return row.type & Types.INPUT_ROW;
 };
 
-exports.Types = Types;
+export {Types};

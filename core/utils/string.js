@@ -17,7 +17,7 @@
  * a JavaScript framework such as Closure.
  * @namespace Blockly.utils.string
  */
-goog.module('Blockly.utils.string');
+goog.declareModuleId('Blockly.utils.string');
 
 
 /**
@@ -31,7 +31,7 @@ goog.module('Blockly.utils.string');
 const startsWith = function(str, prefix) {
   return str.lastIndexOf(prefix, 0) === 0;
 };
-exports.startsWith = startsWith;
+export {startsWith};
 
 /**
  * Given an array of strings, return the length of the shortest one.
@@ -49,7 +49,7 @@ const shortestStringLength = function(array) {
       })
       .length;
 };
-exports.shortestStringLength = shortestStringLength;
+export {shortestStringLength};
 
 /**
  * Given an array of strings, return the length of the common prefix.
@@ -87,7 +87,7 @@ const commonWordPrefix = function(array, opt_shortest) {
   }
   return max;
 };
-exports.commonWordPrefix = commonWordPrefix;
+export {commonWordPrefix};
 
 /**
  * Given an array of strings, return the length of the common suffix.
@@ -125,7 +125,7 @@ const commonWordSuffix = function(array, opt_shortest) {
   }
   return max;
 };
-exports.commonWordSuffix = commonWordSuffix;
+export {commonWordSuffix};
 
 /**
  * Wrap text to the specified width.
@@ -141,7 +141,7 @@ const wrap = function(text, limit) {
   }
   return lines.join('\n');
 };
-exports.wrap = wrap;
+export {wrap};
 
 /**
  * Wrap single line of text to the specified width.
@@ -302,4 +302,4 @@ const wrapToText = function(words, wordBreaks) {
 const isNumber = function(str) {
   return /^\s*-?\d+(\.\d+)?\s*$/.test(str);
 };
-exports.isNumber = isNumber;
+export {isNumber};

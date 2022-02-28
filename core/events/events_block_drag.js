@@ -13,7 +13,7 @@
  * Events fired as a block drag.
  * @class
  */
-goog.module('Blockly.Events.BlockDrag');
+goog.declareModuleId('Blockly.Events.BlockDrag');
 
 const eventUtils = goog.require('Blockly.Events.utils');
 const registry = goog.require('Blockly.registry');
@@ -86,4 +86,4 @@ class BlockDrag extends UiBase {
 
 registry.register(registry.Type.EVENT, eventUtils.BLOCK_DRAG, BlockDrag);
 
-exports.BlockDrag = BlockDrag;
+export {BlockDrag};

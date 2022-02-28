@@ -13,7 +13,7 @@
  * Empty name space for the Message singleton.
  * @namespace Blockly.Msg
  */
-goog.module('Blockly.Msg');
+goog.declareModuleId('Blockly.Msg');
 
 
 /**
@@ -21,4 +21,4 @@ goog.module('Blockly.Msg');
  * @type {!Object<string>}
  */
 const Msg = Object.create(null);
-exports.Msg = Msg;
+export {Msg};

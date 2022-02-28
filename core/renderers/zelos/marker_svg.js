@@ -13,7 +13,7 @@
  * Methods for graphically rendering a marker as SVG.
  * @class
  */
-goog.module('Blockly.zelos.MarkerSvg');
+goog.declareModuleId('Blockly.zelos.MarkerSvg');
 
 const dom = goog.require('Blockly.utils.dom');
 /* eslint-disable-next-line no-unused-vars */
@@ -176,4 +176,4 @@ class MarkerSvg extends BaseMarkerSvg {
   }
 }
 
-exports.MarkerSvg = MarkerSvg;
+export {MarkerSvg};

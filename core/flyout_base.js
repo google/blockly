@@ -13,7 +13,7 @@
  * Flyout tray containing blocks which may be created.
  * @class
  */
-goog.module('Blockly.Flyout');
+goog.declareModuleId('Blockly.Flyout');
 
 const Tooltip = goog.require('Blockly.Tooltip');
 const Variables = goog.require('Blockly.Variables');
@@ -1251,4 +1251,4 @@ Flyout.prototype.getX;
  */
 Flyout.prototype.getY;
 
-exports.Flyout = Flyout;
+export {Flyout};

@@ -14,7 +14,7 @@
  * block.
  * @class
  */
-goog.module('Blockly.blockRendering.InRowSpacer');
+goog.declareModuleId('Blockly.blockRendering.InRowSpacer');
 
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -44,4 +44,4 @@ class InRowSpacer extends Measurable {
   }
 }
 
-exports.InRowSpacer = InRowSpacer;
+export {InRowSpacer};

@@ -13,7 +13,7 @@
  * Components for the variable model.
  * @class
  */
-goog.module('Blockly.VariableModel');
+goog.declareModuleId('Blockly.VariableModel');
 
 const eventUtils = goog.require('Blockly.Events.utils');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
@@ -93,4 +93,4 @@ class VariableModel {
   }
 }
 
-exports.VariableModel = VariableModel;
+export {VariableModel};

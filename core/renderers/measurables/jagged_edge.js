@@ -14,7 +14,7 @@
  * block.
  * @class
  */
-goog.module('Blockly.blockRendering.JaggedEdge');
+goog.declareModuleId('Blockly.blockRendering.JaggedEdge');
 
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -43,4 +43,4 @@ class JaggedEdge extends Measurable {
   }
 }
 
-exports.JaggedEdge = JaggedEdge;
+export {JaggedEdge};

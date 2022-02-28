@@ -13,7 +13,7 @@
  * Renderer that preserves the look and feel of Blockly pre-2019.
  * @class
  */
-goog.module('Blockly.geras.Drawer');
+goog.declareModuleId('Blockly.geras.Drawer');
 
 const debug = goog.require('Blockly.blockRendering.debug');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
@@ -217,4 +217,4 @@ class Drawer extends BaseDrawer {
   }
 }
 
-exports.Drawer = Drawer;
+export {Drawer};

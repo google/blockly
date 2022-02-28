@@ -14,7 +14,7 @@
  * An object that owns a block's rendering SVG elements.
  * @class
  */
-goog.module('Blockly.blockRendering.PathObject');
+goog.declareModuleId('Blockly.blockRendering.PathObject');
 
 const dom = goog.require('Blockly.utils.dom');
 /* eslint-disable-next-line no-unused-vars */
@@ -280,4 +280,4 @@ class PathObject {
   }
 }
 
-exports.PathObject = PathObject;
+export {PathObject};

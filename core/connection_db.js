@@ -17,7 +17,7 @@
  *    Sorted by y coordinate.
  * @class
  */
-goog.module('Blockly.ConnectionDB');
+goog.declareModuleId('Blockly.ConnectionDB');
 
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
 /* eslint-disable-next-line no-unused-vars */
@@ -311,4 +311,4 @@ class ConnectionDB {
   }
 }
 
-exports.ConnectionDB = ConnectionDB;
+export {ConnectionDB};

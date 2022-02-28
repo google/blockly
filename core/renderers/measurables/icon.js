@@ -14,7 +14,7 @@
  * block.
  * @class
  */
-goog.module('Blockly.blockRendering.Icon');
+goog.declareModuleId('Blockly.blockRendering.Icon');
 
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -55,4 +55,4 @@ class Icon extends Measurable {
     this.width = size.width;
   }
 }
-exports.Icon = Icon;
+export {Icon};

@@ -16,7 +16,7 @@
  * use these constants outside of the core library.
  * @namespace Blockly.internalConstants
  */
-goog.module('Blockly.internalConstants');
+goog.declareModuleId('Blockly.internalConstants');
 
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
 
@@ -26,7 +26,7 @@ const {ConnectionType} = goog.require('Blockly.ConnectionType');
  * @alias Blockly.internalConstants.COLLAPSE_CHARS
  */
 const COLLAPSE_CHARS = 30;
-exports.COLLAPSE_CHARS = COLLAPSE_CHARS;
+export {COLLAPSE_CHARS};
 
 /**
  * When dragging a block out of a stack, split the stack in two (true), or drag
@@ -34,7 +34,7 @@ exports.COLLAPSE_CHARS = COLLAPSE_CHARS;
  * @alias Blockly.internalConstants.DRAG_STACK
  */
 const DRAG_STACK = true;
-exports.DRAG_STACK = DRAG_STACK;
+export {DRAG_STACK};
 
 /**
  * Lookup table for determining the opposite type of a connection.
@@ -49,7 +49,7 @@ OPPOSITE_TYPE[ConnectionType.NEXT_STATEMENT] =
 OPPOSITE_TYPE[ConnectionType.PREVIOUS_STATEMENT] =
     ConnectionType.NEXT_STATEMENT;
 
-exports.OPPOSITE_TYPE = OPPOSITE_TYPE;
+export {OPPOSITE_TYPE};
 
 /**
  * String for use in the dropdown created in field_variable.
@@ -59,7 +59,7 @@ exports.OPPOSITE_TYPE = OPPOSITE_TYPE;
  * @alias Blockly.internalConstants.RENAME_VARIABLE_ID
  */
 const RENAME_VARIABLE_ID = 'RENAME_VARIABLE_ID';
-exports.RENAME_VARIABLE_ID = RENAME_VARIABLE_ID;
+export {RENAME_VARIABLE_ID};
 
 /**
  * String for use in the dropdown created in field_variable.
@@ -69,4 +69,4 @@ exports.RENAME_VARIABLE_ID = RENAME_VARIABLE_ID;
  * @alias Blockly.internalConstants.DELETE_VARIABLE_ID
  */
 const DELETE_VARIABLE_ID = 'DELETE_VARIABLE_ID';
-exports.DELETE_VARIABLE_ID = DELETE_VARIABLE_ID;
+export {DELETE_VARIABLE_ID};

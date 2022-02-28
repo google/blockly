@@ -14,7 +14,7 @@
  * The interface for a toolbox item.
  * @namespace Blockly.IToolboxItem
  */
-goog.module('Blockly.IToolboxItem');
+goog.declareModuleId('Blockly.IToolboxItem');
 
 
 /**
@@ -82,4 +82,4 @@ IToolboxItem.prototype.isCollapsible;
  */
 IToolboxItem.prototype.dispose;
 
-exports.IToolboxItem = IToolboxItem;
+export {IToolboxItem};

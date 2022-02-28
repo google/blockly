@@ -13,7 +13,7 @@
  * The top level namespace used to access the Blockly library.
  * @namespace Blockly
  */
-goog.module('Blockly');
+goog.declareModuleId('Blockly');
 goog.module.declareLegacyNamespace();
 
 const ContextMenu = goog.require('Blockly.ContextMenu');
@@ -190,7 +190,7 @@ goog.require('Blockly.Events.VarCreate');
  * @define {string}
  * @alias Blockly.VERSION
  */
-exports.VERSION = 'uncompiled';
+export var VERSION = 'uncompiled';
 
 /*
  * Top-level functions and properties on the Blockly namespace.
@@ -208,19 +208,19 @@ exports.VERSION = 'uncompiled';
  * @see Blockly.Input.Align.LEFT
  * @alias Blockly.ALIGN_LEFT
  */
-exports.ALIGN_LEFT = Align.LEFT;
+export var ALIGN_LEFT = Align.LEFT;
 
 /**
  * @see Blockly.Input.Align.CENTRE
  * @alias Blockly.ALIGN_CENTRE
  */
-exports.ALIGN_CENTRE = Align.CENTRE;
+export var ALIGN_CENTRE = Align.CENTRE;
 
 /**
  * @see Blockly.Input.Align.RIGHT
  * @alias Blockly.ALIGN_RIGHT
  */
-exports.ALIGN_RIGHT = Align.RIGHT;
+export var ALIGN_RIGHT = Align.RIGHT;
 
 /*
  * Aliases for constants used for connection and input types.
@@ -230,31 +230,31 @@ exports.ALIGN_RIGHT = Align.RIGHT;
  * @see ConnectionType.INPUT_VALUE
  * @alias Blockly.INPUT_VALUE
  */
-exports.INPUT_VALUE = ConnectionType.INPUT_VALUE;
+export var INPUT_VALUE = ConnectionType.INPUT_VALUE;
 
 /**
  * @see ConnectionType.OUTPUT_VALUE
  * @alias Blockly.OUTPUT_VALUE
  */
-exports.OUTPUT_VALUE = ConnectionType.OUTPUT_VALUE;
+export var OUTPUT_VALUE = ConnectionType.OUTPUT_VALUE;
 
 /**
  * @see ConnectionType.NEXT_STATEMENT
  * @alias Blockly.NEXT_STATEMENT
  */
-exports.NEXT_STATEMENT = ConnectionType.NEXT_STATEMENT;
+export var NEXT_STATEMENT = ConnectionType.NEXT_STATEMENT;
 
 /**
  * @see ConnectionType.PREVIOUS_STATEMENT
  * @alias Blockly.PREVIOUS_STATEMENT
  */
-exports.PREVIOUS_STATEMENT = ConnectionType.PREVIOUS_STATEMENT;
+export var PREVIOUS_STATEMENT = ConnectionType.PREVIOUS_STATEMENT;
 
 /**
  * @see inputTypes.DUMMY_INPUT
  * @alias Blockly.DUMMY_INPUT
  */
-exports.DUMMY_INPUT = inputTypes.DUMMY;
+export var DUMMY_INPUT = inputTypes.DUMMY;
 
 /**
  * Aliases for toolbox positions.
@@ -264,25 +264,25 @@ exports.DUMMY_INPUT = inputTypes.DUMMY;
  * @see toolbox.Position.TOP
  * @alias Blockly.TOOLBOX_AT_TOP
  */
-exports.TOOLBOX_AT_TOP = toolbox.Position.TOP;
+export var TOOLBOX_AT_TOP = toolbox.Position.TOP;
 
 /**
  * @see toolbox.Position.BOTTOM
  * @alias Blockly.TOOLBOX_AT_BOTTOM
  */
-exports.TOOLBOX_AT_BOTTOM = toolbox.Position.BOTTOM;
+export var TOOLBOX_AT_BOTTOM = toolbox.Position.BOTTOM;
 
 /**
  * @see toolbox.Position.LEFT
  * @alias Blockly.TOOLBOX_AT_LEFT
  */
-exports.TOOLBOX_AT_LEFT = toolbox.Position.LEFT;
+export var TOOLBOX_AT_LEFT = toolbox.Position.LEFT;
 
 /**
  * @see toolbox.Position.RIGHT
  * @alias Blockly.TOOLBOX_AT_RIGHT
  */
-exports.TOOLBOX_AT_RIGHT = toolbox.Position.RIGHT;
+export var TOOLBOX_AT_RIGHT = toolbox.Position.RIGHT;
 
 /*
  * Other aliased functions.
@@ -298,7 +298,7 @@ exports.TOOLBOX_AT_RIGHT = toolbox.Position.RIGHT;
  * @see Blockly.common.svgResize
  * @alias Blockly.svgResize
  */
-exports.svgResize = common.svgResize;
+export var svgResize = common.svgResize;
 
 /**
  * Close tooltips, context menus, dropdown selections, etc.
@@ -310,7 +310,7 @@ const hideChaff = function(opt_onlyClosePopups) {
   /** @type {!WorkspaceSvg} */ (common.getMainWorkspace())
       .hideChaff(opt_onlyClosePopups);
 };
-exports.hideChaff = hideChaff;
+export {hideChaff};
 
 /**
  * Returns the main workspace.  Returns the last used main workspace (based on
@@ -320,7 +320,7 @@ exports.hideChaff = hideChaff;
  * @see Blockly.common.getMainWorkspace
  * @alias Blockly.getMainWorkspace
  */
-exports.getMainWorkspace = common.getMainWorkspace;
+export var getMainWorkspace = common.getMainWorkspace;
 
 /**
  * Define blocks from an array of JSON block definitions, as might be generated
@@ -329,7 +329,7 @@ exports.getMainWorkspace = common.getMainWorkspace;
  * @see Blockly.common.defineBlocksWithJsonArray
  * @alias Blockly.defineBlocksWithJsonArray
  */
-exports.defineBlocksWithJsonArray = common.defineBlocksWithJsonArray;
+export var defineBlocksWithJsonArray = common.defineBlocksWithJsonArray;
 
 /**
  * Set the parent container.  This is the container element that the WidgetDiv,
@@ -340,7 +340,7 @@ exports.defineBlocksWithJsonArray = common.defineBlocksWithJsonArray;
  * @see Blockly.common.setParentContainer
  * @alias Blockly.setParentContainer
  */
-exports.setParentContainer = common.setParentContainer;
+export var setParentContainer = common.setParentContainer;
 
 /*
  * Aliased functions and properties that used to be on the Blockly namespace.
@@ -486,7 +486,7 @@ Object.defineProperties(exports, {
  * @see Blockly.WorkspaceSvg.setCachedParentSvgSize
  * @alias Blockly.svgSize
  */
-exports.svgSize = svgMath.svgSize;
+export var svgSize = svgMath.svgSize;
 
 /**
  * Size the workspace when the contents change.  This also updates
@@ -502,7 +502,7 @@ const resizeSvgContentsLocal = function(workspace) {
       'Blockly.WorkspaceSvg.resizeSvgContents');
   resizeSvgContents(workspace);
 };
-exports.resizeSvgContents = resizeSvgContentsLocal;
+export {resizeSvgContentsLocal as resizeSvgContents};
 
 /**
  * Copy a block or workspace comment onto the local clipboard.
@@ -517,7 +517,7 @@ const copy = function(toCopy) {
       'Blockly.clipboard.copy');
   clipboard.copy(toCopy);
 };
-exports.copy = copy;
+export {copy};
 
 /**
  * Paste a block or workspace comment on to the main workspace.
@@ -532,7 +532,7 @@ const paste = function() {
       'Blockly.clipboard.paste');
   return !!clipboard.paste();
 };
-exports.paste = paste;
+export {paste};
 
 /**
  * Duplicate this block and its children, or a workspace comment.
@@ -548,7 +548,7 @@ const duplicate = function(toDuplicate) {
       'Blockly.clipboard.duplicate');
   clipboard.duplicate(toDuplicate);
 };
-exports.duplicate = duplicate;
+export {duplicate};
 
 /**
  * Is the given string a number (includes negative and decimals).
@@ -564,7 +564,7 @@ const isNumber = function(str) {
       'Blockly.utils.string.isNumber');
   return utils.string.isNumber(str);
 };
-exports.isNumber = isNumber;
+export {isNumber};
 
 /**
  * Convert a hue (HSV model) into an RGB hex triplet.
@@ -580,7 +580,7 @@ const hueToHex = function(hue) {
       'Blockly.utils.colour.hueToHex');
   return colour.hueToHex(hue);
 };
-exports.hueToHex = hueToHex;
+export {hueToHex};
 
 /**
  * Bind an event handler that should be called regardless of whether it is part
@@ -603,7 +603,7 @@ const bindEvent_ = function(node, name, thisObject, func) {
       'Blockly.browserEvents.bind');
   return browserEvents.bind(node, name, thisObject, func);
 };
-exports.bindEvent_ = bindEvent_;
+export {bindEvent_};
 
 /**
  * Unbind one or more events event from a function call.
@@ -620,7 +620,7 @@ const unbindEvent_ = function(bindData) {
       'Blockly.browserEvents.unbind');
   return browserEvents.unbind(bindData);
 };
-exports.unbindEvent_ = unbindEvent_;
+export {unbindEvent_};
 
 /**
  * Bind an event handler that can be ignored if it is not part of the active
@@ -654,16 +654,17 @@ const bindEventWithChecks_ = function(
       node, name, thisObject, func, opt_noCaptureIdentifier,
       opt_noPreventDefault);
 };
-exports.bindEventWithChecks_ = bindEventWithChecks_;
+export {bindEventWithChecks_};
 
 // Aliases to allow external code to access these values for legacy reasons.
-exports.COLLAPSE_CHARS = internalConstants.COLLAPSE_CHARS;
-exports.DRAG_STACK = internalConstants.DRAG_STACK;
-exports.OPPOSITE_TYPE = internalConstants.OPPOSITE_TYPE;
-exports.RENAME_VARIABLE_ID = internalConstants.RENAME_VARIABLE_ID;
-exports.DELETE_VARIABLE_ID = internalConstants.DELETE_VARIABLE_ID;
-exports.COLLAPSED_INPUT_NAME = constants.COLLAPSED_INPUT_NAME;
-exports.COLLAPSED_FIELD_NAME = constants.COLLAPSED_FIELD_NAME;
+export var COLLAPSE_CHARS = internalConstants.COLLAPSE_CHARS;
+
+export var DRAG_STACK = internalConstants.DRAG_STACK;
+export var OPPOSITE_TYPE = internalConstants.OPPOSITE_TYPE;
+export var RENAME_VARIABLE_ID = internalConstants.RENAME_VARIABLE_ID;
+export var DELETE_VARIABLE_ID = internalConstants.DELETE_VARIABLE_ID;
+export var COLLAPSED_INPUT_NAME = constants.COLLAPSED_INPUT_NAME;
+export var COLLAPSED_FIELD_NAME = constants.COLLAPSED_FIELD_NAME;
 
 /**
  * String for use in the "custom" attribute of a category in toolbox XML.
@@ -672,7 +673,7 @@ exports.COLLAPSED_FIELD_NAME = constants.COLLAPSED_FIELD_NAME;
  * @const {string}
  * @alias Blockly.VARIABLE_CATEGORY_NAME
  */
-exports.VARIABLE_CATEGORY_NAME = Variables.CATEGORY_NAME;
+export var VARIABLE_CATEGORY_NAME = Variables.CATEGORY_NAME;
 
 /**
  * String for use in the "custom" attribute of a category in toolbox XML.
@@ -681,7 +682,8 @@ exports.VARIABLE_CATEGORY_NAME = Variables.CATEGORY_NAME;
  * @const {string}
  * @alias Blockly.VARIABLE_DYNAMIC_CATEGORY_NAME
  */
-exports.VARIABLE_DYNAMIC_CATEGORY_NAME = VariablesDynamic.CATEGORY_NAME;
+export var VARIABLE_DYNAMIC_CATEGORY_NAME = VariablesDynamic.CATEGORY_NAME;
+
 /**
  * String for use in the "custom" attribute of a category in toolbox XML.
  * This string indicates that the category should be dynamically populated with
@@ -689,147 +691,147 @@ exports.VARIABLE_DYNAMIC_CATEGORY_NAME = VariablesDynamic.CATEGORY_NAME;
  * @const {string}
  * @alias Blockly.PROCEDURE_CATEGORY_NAME
  */
-exports.PROCEDURE_CATEGORY_NAME = Procedures.CATEGORY_NAME;
+export var PROCEDURE_CATEGORY_NAME = Procedures.CATEGORY_NAME;
 
-// Re-export submodules that no longer declareLegacyNamespace.
-exports.ASTNode = ASTNode;
-exports.BasicCursor = BasicCursor;
-exports.Block = Block;
-exports.BlocklyOptions = BlocklyOptions;
-exports.BlockDragger = BlockDragger;
-exports.BlockDragSurfaceSvg = BlockDragSurfaceSvg;
-exports.BlockSvg = BlockSvg;
-exports.Blocks = Blocks;
-exports.Bubble = Bubble;
-exports.BubbleDragger = BubbleDragger;
-exports.CollapsibleToolboxCategory = CollapsibleToolboxCategory;
-exports.Comment = Comment;
-exports.ComponentManager = ComponentManager;
-exports.Connection = Connection;
-exports.ConnectionType = ConnectionType;
-exports.ConnectionChecker = ConnectionChecker;
-exports.ConnectionDB = ConnectionDB;
-exports.ContextMenu = ContextMenu;
-exports.ContextMenuItems = ContextMenuItems;
-exports.ContextMenuRegistry = ContextMenuRegistry;
-exports.Css = Css;
-exports.Cursor = Cursor;
-exports.DeleteArea = DeleteArea;
-exports.DragTarget = DragTarget;
-exports.DropDownDiv = dropDownDiv;
-exports.Events = Events;
-exports.Extensions = Extensions;
-exports.Field = Field;
-exports.FieldAngle = FieldAngle;
-exports.FieldCheckbox = FieldCheckbox;
-exports.FieldColour = FieldColour;
-exports.FieldDropdown = FieldDropdown;
-exports.FieldImage = FieldImage;
-exports.FieldLabel = FieldLabel;
-exports.FieldLabelSerializable = FieldLabelSerializable;
-exports.FieldMultilineInput = FieldMultilineInput;
-exports.FieldNumber = FieldNumber;
-exports.FieldTextInput = FieldTextInput;
-exports.FieldVariable = FieldVariable;
-exports.Flyout = Flyout;
-exports.FlyoutButton = FlyoutButton;
-exports.FlyoutMetricsManager = FlyoutMetricsManager;
-exports.Generator = Generator;
-exports.Gesture = Gesture;
-exports.Grid = Grid;
-exports.HorizontalFlyout = HorizontalFlyout;
-exports.IASTNodeLocation = IASTNodeLocation;
-exports.IASTNodeLocationSvg = IASTNodeLocationSvg;
-exports.IASTNodeLocationWithBlock = IASTNodeLocationWithBlock;
-exports.IAutoHideable = IAutoHideable;
-exports.IBlockDragger = IBlockDragger;
-exports.IBoundedElement = IBoundedElement;
-exports.IBubble = IBubble;
-exports.ICollapsibleToolboxItem = ICollapsibleToolboxItem;
-exports.IComponent = IComponent;
-exports.IConnectionChecker = IConnectionChecker;
-exports.IContextMenu = IContextMenu;
-exports.Icon = Icon;
-exports.ICopyable = ICopyable;
-exports.IDeletable = IDeletable;
-exports.IDeleteArea = IDeleteArea;
-exports.IDragTarget = IDragTarget;
-exports.IDraggable = IDraggable;
-exports.IFlyout = IFlyout;
-exports.IKeyboardAccessible = IKeyboardAccessible;
-exports.IMetricsManager = IMetricsManager;
-exports.IMovable = IMovable;
-exports.Input = Input;
-exports.InsertionMarkerManager = InsertionMarkerManager;
-exports.IPositionable = IPositionable;
-exports.IRegistrable = IRegistrable;
-exports.IRegistrableField = IRegistrableField;
-exports.ISelectable = ISelectable;
-exports.ISelectableToolboxItem = ISelectableToolboxItem;
-exports.IStyleable = IStyleable;
-exports.IToolbox = IToolbox;
-exports.IToolboxItem = IToolboxItem;
-exports.Marker = Marker;
-exports.MarkerManager = MarkerManager;
-exports.Menu = Menu;
-exports.MenuItem = MenuItem;
-exports.MetricsManager = MetricsManager;
-exports.Mutator = Mutator;
-exports.Msg = Msg;
-exports.Names = Names;
-exports.Options = Options;
-exports.Procedures = Procedures;
-exports.RenderedConnection = RenderedConnection;
-exports.Scrollbar = Scrollbar;
-exports.ScrollbarPair = ScrollbarPair;
-exports.ShortcutItems = ShortcutItems;
-exports.ShortcutRegistry = ShortcutRegistry;
-exports.TabNavigateCursor = TabNavigateCursor;
-exports.Theme = Theme;
-exports.Themes = Themes;
-exports.ThemeManager = ThemeManager;
-exports.Toolbox = Toolbox;
-exports.ToolboxCategory = ToolboxCategory;
-exports.ToolboxItem = ToolboxItem;
-exports.ToolboxSeparator = ToolboxSeparator;
-exports.Tooltip = Tooltip;
-exports.Touch = Touch;
-exports.TouchGesture = TouchGesture;
-exports.Trashcan = Trashcan;
-exports.VariableMap = VariableMap;
-exports.VariableModel = VariableModel;
-exports.Variables = Variables;
-exports.VariablesDynamic = VariablesDynamic;
-exports.VerticalFlyout = VerticalFlyout;
-exports.Warning = Warning;
-exports.WidgetDiv = WidgetDiv;
-exports.Workspace = Workspace;
-exports.WorkspaceAudio = WorkspaceAudio;
-exports.WorkspaceComment = WorkspaceComment;
-exports.WorkspaceCommentSvg = WorkspaceCommentSvg;
-exports.WorkspaceDragSurfaceSvg = WorkspaceDragSurfaceSvg;
-exports.WorkspaceDragger = WorkspaceDragger;
-exports.WorkspaceSvg = WorkspaceSvg;
-exports.Xml = Xml;
-exports.ZoomControls = ZoomControls;
-exports.blockAnimations = blockAnimations;
-exports.blockRendering = blockRendering;
-exports.browserEvents = browserEvents;
-exports.bumpObjects = bumpObjects;
-exports.clipboard = clipboard;
-exports.common = common;
-exports.config = config;
+export {ASTNode};
+export {BasicCursor};
+export {Block};
+export {BlocklyOptions};
+export {BlockDragger};
+export {BlockDragSurfaceSvg};
+export {BlockSvg};
+export {Blocks};
+export {Bubble};
+export {BubbleDragger};
+export {CollapsibleToolboxCategory};
+export {Comment};
+export {ComponentManager};
+export {Connection};
+export {ConnectionType};
+export {ConnectionChecker};
+export {ConnectionDB};
+export {ContextMenu};
+export {ContextMenuItems};
+export {ContextMenuRegistry};
+export {Css};
+export {Cursor};
+export {DeleteArea};
+export {DragTarget};
+export {dropDownDiv as DropDownDiv};
+export {Events};
+export {Extensions};
+export {Field};
+export {FieldAngle};
+export {FieldCheckbox};
+export {FieldColour};
+export {FieldDropdown};
+export {FieldImage};
+export {FieldLabel};
+export {FieldLabelSerializable};
+export {FieldMultilineInput};
+export {FieldNumber};
+export {FieldTextInput};
+export {FieldVariable};
+export {Flyout};
+export {FlyoutButton};
+export {FlyoutMetricsManager};
+export {Generator};
+export {Gesture};
+export {Grid};
+export {HorizontalFlyout};
+export {IASTNodeLocation};
+export {IASTNodeLocationSvg};
+export {IASTNodeLocationWithBlock};
+export {IAutoHideable};
+export {IBlockDragger};
+export {IBoundedElement};
+export {IBubble};
+export {ICollapsibleToolboxItem};
+export {IComponent};
+export {IConnectionChecker};
+export {IContextMenu};
+export {Icon};
+export {ICopyable};
+export {IDeletable};
+export {IDeleteArea};
+export {IDragTarget};
+export {IDraggable};
+export {IFlyout};
+export {IKeyboardAccessible};
+export {IMetricsManager};
+export {IMovable};
+export {Input};
+export {InsertionMarkerManager};
+export {IPositionable};
+export {IRegistrable};
+export {IRegistrableField};
+export {ISelectable};
+export {ISelectableToolboxItem};
+export {IStyleable};
+export {IToolbox};
+export {IToolboxItem};
+export {Marker};
+export {MarkerManager};
+export {Menu};
+export {MenuItem};
+export {MetricsManager};
+export {Mutator};
+export {Msg};
+export {Names};
+export {Options};
+export {Procedures};
+export {RenderedConnection};
+export {Scrollbar};
+export {ScrollbarPair};
+export {ShortcutItems};
+export {ShortcutRegistry};
+export {TabNavigateCursor};
+export {Theme};
+export {Themes};
+export {ThemeManager};
+export {Toolbox};
+export {ToolboxCategory};
+export {ToolboxItem};
+export {ToolboxSeparator};
+export {Tooltip};
+export {Touch};
+export {TouchGesture};
+export {Trashcan};
+export {VariableMap};
+export {VariableModel};
+export {Variables};
+export {VariablesDynamic};
+export {VerticalFlyout};
+export {Warning};
+export {WidgetDiv};
+export {Workspace};
+export {WorkspaceAudio};
+export {WorkspaceComment};
+export {WorkspaceCommentSvg};
+export {WorkspaceDragSurfaceSvg};
+export {WorkspaceDragger};
+export {WorkspaceSvg};
+export {Xml};
+export {ZoomControls};
+export {blockAnimations};
+export {blockRendering};
+export {browserEvents};
+export {bumpObjects};
+export {clipboard};
+export {common};
+export {config};
 /** @deprecated Use Blockly.ConnectionType instead. */
-exports.connectionTypes = ConnectionType;
-exports.constants = constants;
-exports.dialog = dialog;
-exports.fieldRegistry = fieldRegistry;
-exports.geras = geras;
-exports.inject = inject;
-exports.inputTypes = inputTypes;
-exports.minimalist = minimalist;
-exports.registry = registry;
-exports.serialization = {
+export {ConnectionType as connectionTypes};
+export {constants};
+export {dialog};
+export {fieldRegistry};
+export {geras};
+export {inject};
+export {inputTypes};
+export {minimalist};
+export {registry};
+
+export var serialization = {
   blocks: serializationBlocks,
   exceptions: serializationExceptions,
   priorities: serializationPriorities,
@@ -838,10 +840,11 @@ exports.serialization = {
   workspaces: serializationWorkspaces,
   ISerializer: ISerializer,
 };
-exports.thrasos = thrasos;
-exports.uiPosition = uiPosition;
-exports.utils = utils;
-exports.zelos = zelos;
+
+export {thrasos};
+export {uiPosition};
+export {utils};
+export {zelos};
 
 // If Blockly is compiled with ADVANCED_COMPILATION and/or loaded as a
 // CJS or ES module there will not be a Blockly global variable

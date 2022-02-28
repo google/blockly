@@ -13,7 +13,7 @@
  * Abstract class for a variable event.
  * @class
  */
-goog.module('Blockly.Events.VarBase');
+goog.declareModuleId('Blockly.Events.VarBase');
 
 const {Abstract: AbstractEvent} = goog.require('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
@@ -67,4 +67,4 @@ class VarBase extends AbstractEvent {
   }
 }
 
-exports.VarBase = VarBase;
+export {VarBase};

@@ -13,7 +13,7 @@
  * Events fired as a result of bubble open.
  * @class
  */
-goog.module('Blockly.Events.BubbleOpen');
+goog.declareModuleId('Blockly.Events.BubbleOpen');
 
 const eventUtils = goog.require('Blockly.Events.utils');
 const registry = goog.require('Blockly.registry');
@@ -87,4 +87,4 @@ class BubbleOpen extends UiBase {
 
 registry.register(registry.Type.EVENT, eventUtils.BUBBLE_OPEN, BubbleOpen);
 
-exports.BubbleOpen = BubbleOpen;
+export {BubbleOpen};

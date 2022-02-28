@@ -15,7 +15,7 @@
  * Used primarily for keyboard navigation.
  * @class
  */
-goog.module('Blockly.Cursor');
+goog.declareModuleId('Blockly.Cursor');
 
 const registry = goog.require('Blockly.registry');
 const {ASTNode} = goog.require('Blockly.ASTNode');
@@ -141,4 +141,4 @@ class Cursor extends Marker {
 
 registry.register(registry.Type.CURSOR, registry.DEFAULT, Cursor);
 
-exports.Cursor = Cursor;
+export {Cursor};

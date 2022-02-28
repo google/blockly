@@ -14,7 +14,7 @@
  * block.
  * @class
  */
-goog.module('Blockly.blockRendering.RoundCorner');
+goog.declareModuleId('Blockly.blockRendering.RoundCorner');
 
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -49,4 +49,4 @@ class RoundCorner extends Measurable {
   }
 }
 
-exports.RoundCorner = RoundCorner;
+export {RoundCorner};

@@ -17,7 +17,7 @@
  * a JavaScript framework such as Closure.
  * @namespace Blockly.utils.style
  */
-goog.module('Blockly.utils.style');
+goog.declareModuleId('Blockly.utils.style');
 
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 const {Size} = goog.require('Blockly.utils.Size');
@@ -54,7 +54,7 @@ const getSize = function(element) {
 
   return new Size(offsetWidth, offsetHeight);
 };
-exports.getSize = getSize;
+export {getSize};
 
 /**
  * Gets the height and width of an element when the display is not none.
@@ -110,7 +110,7 @@ const getComputedStyle = function(element, property) {
 
   return '';
 };
-exports.getComputedStyle = getComputedStyle;
+export {getComputedStyle};
 
 /**
  * Gets the cascaded style value of a node, or null if the value cannot be
@@ -127,7 +127,7 @@ const getCascadedStyle = function(element, style) {
   return /** @type {string} */ (
       element.currentStyle ? element.currentStyle[style] : null);
 };
-exports.getCascadedStyle = getCascadedStyle;
+export {getCascadedStyle};
 
 /**
  * Returns a Coordinate object relative to the top-left of the HTML document.
@@ -151,7 +151,7 @@ const getPageOffset = function(el) {
 
   return pos;
 };
-exports.getPageOffset = getPageOffset;
+export {getPageOffset};
 
 /**
  * Calculates the viewport coordinates relative to the document.
@@ -166,7 +166,7 @@ const getViewportPageOffset = function() {
   const scrollTop = body.scrollTop || documentElement.scrollTop;
   return new Coordinate(scrollLeft, scrollTop);
 };
-exports.getViewportPageOffset = getViewportPageOffset;
+export {getViewportPageOffset};
 
 /**
  * Shows or hides an element from the page. Hiding the element is done by
@@ -184,7 +184,7 @@ exports.getViewportPageOffset = getViewportPageOffset;
 const setElementShown = function(el, isShown) {
   el.style.display = isShown ? '' : 'none';
 };
-exports.setElementShown = setElementShown;
+export {setElementShown};
 
 /**
  * Returns true if the element is using right to left (RTL) direction.
@@ -197,7 +197,7 @@ exports.setElementShown = setElementShown;
 const isRightToLeft = function(el) {
   return 'rtl' === getStyle(el, 'direction');
 };
-exports.isRightToLeft = isRightToLeft;
+export {isRightToLeft};
 
 /**
  * Gets the computed border widths (on all sides) in pixels
@@ -219,7 +219,7 @@ const getBorderBox = function(element) {
     left: parseFloat(left),
   };
 };
-exports.getBorderBox = getBorderBox;
+export {getBorderBox};
 
 /**
  * Changes the scroll position of `container` with the minimum amount so
@@ -240,7 +240,7 @@ const scrollIntoContainerView = function(element, container, opt_center) {
   container.scrollLeft = offset.x;
   container.scrollTop = offset.y;
 };
-exports.scrollIntoContainerView = scrollIntoContainerView;
+export {scrollIntoContainerView};
 
 /**
  * Calculate the scroll position of `container` with the minimum amount so
@@ -293,4 +293,4 @@ const getContainerOffsetToScrollInto = function(
   }
   return new Coordinate(scrollLeft, scrollTop);
 };
-exports.getContainerOffsetToScrollInto = getContainerOffsetToScrollInto;
+export {getContainerOffsetToScrollInto};

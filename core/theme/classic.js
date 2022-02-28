@@ -15,7 +15,7 @@
  * Contains multi-coloured border to create shadow effect.
  * @namespace Blockly.Themes.Classic
  */
-goog.module('Blockly.Themes.Classic');
+goog.declareModuleId('Blockly.Themes.Classic');
 
 const {Theme} = goog.require('Blockly.Theme');
 
@@ -53,4 +53,4 @@ const categoryStyles = {
  */
 const Classic = new Theme('classic', defaultBlockStyles, categoryStyles);
 
-exports.Classic = Classic;
+export {Classic};

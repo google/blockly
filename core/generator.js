@@ -15,7 +15,7 @@
  * Blockly code.
  * @class
  */
-goog.module('Blockly.Generator');
+goog.declareModuleId('Blockly.Generator');
 
 const common = goog.require('Blockly.common');
 const deprecation = goog.require('Blockly.utils.deprecation');
@@ -561,4 +561,4 @@ Object.defineProperties(Generator.prototype, {
   },
 });
 
-exports.Generator = Generator;
+export {Generator};

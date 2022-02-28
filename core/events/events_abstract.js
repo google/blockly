@@ -15,7 +15,7 @@
  * Blockly's editor.
  * @class
  */
-goog.module('Blockly.Events.Abstract');
+goog.declareModuleId('Blockly.Events.Abstract');
 
 const eventUtils = goog.require('Blockly.Events.utils');
 /* eslint-disable-next-line no-unused-vars */
@@ -130,4 +130,4 @@ class Abstract {
   }
 }
 
-exports.Abstract = Abstract;
+export {Abstract};

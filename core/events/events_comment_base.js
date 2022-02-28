@@ -13,7 +13,7 @@
  * Base class for comment events.
  * @class
  */
-goog.module('Blockly.Events.CommentBase');
+goog.declareModuleId('Blockly.Events.CommentBase');
 
 const Xml = goog.require('Blockly.Xml');
 const eventUtils = goog.require('Blockly.Events.utils');
@@ -118,4 +118,4 @@ class CommentBase extends AbstractEvent {
   }
 }
 
-exports.CommentBase = CommentBase;
+export {CommentBase};

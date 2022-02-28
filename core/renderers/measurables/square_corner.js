@@ -14,7 +14,7 @@
  * block.
  * @class
  */
-goog.module('Blockly.blockRendering.SquareCorner');
+goog.declareModuleId('Blockly.blockRendering.SquareCorner');
 
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -47,4 +47,4 @@ class SquareCorner extends Measurable {
   }
 }
 
-exports.SquareCorner = SquareCorner;
+export {SquareCorner};

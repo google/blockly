@@ -13,7 +13,7 @@
  * Registers default keyboard shortcuts.
  * @namespace Blockly.ShortcutItems
  */
-goog.module('Blockly.ShortcutItems');
+goog.declareModuleId('Blockly.ShortcutItems');
 
 const clipboard = goog.require('Blockly.clipboard');
 const common = goog.require('Blockly.common');
@@ -40,7 +40,7 @@ const names = {
   UNDO: 'undo',
   REDO: 'redo',
 };
-exports.names = names;
+export {names};
 
 /**
  * Keyboard shortcut to hide chaff on escape.
@@ -61,7 +61,7 @@ const registerEscape = function() {
   ShortcutRegistry.registry.register(escapeAction);
   ShortcutRegistry.registry.addKeyMapping(KeyCodes.ESC, escapeAction.name);
 };
-exports.registerEscape = registerEscape;
+export {registerEscape};
 
 /**
  * Keyboard shortcut to delete a block on delete or backspace
@@ -94,7 +94,7 @@ const registerDelete = function() {
   ShortcutRegistry.registry.addKeyMapping(
       KeyCodes.BACKSPACE, deleteShortcut.name);
 };
-exports.registerDelete = registerDelete;
+export {registerDelete};
 
 /**
  * Keyboard shortcut to copy a block on ctrl+c, cmd+c, or alt+c.
@@ -132,7 +132,7 @@ const registerCopy = function() {
       KeyCodes.C, [KeyCodes.META]);
   ShortcutRegistry.registry.addKeyMapping(metaC, copyShortcut.name);
 };
-exports.registerCopy = registerCopy;
+export {registerCopy};
 
 /**
  * Keyboard shortcut to copy and delete a block on ctrl+x, cmd+x, or alt+x.
@@ -174,7 +174,7 @@ const registerCut = function() {
       KeyCodes.X, [KeyCodes.META]);
   ShortcutRegistry.registry.addKeyMapping(metaX, cutShortcut.name);
 };
-exports.registerCut = registerCut;
+export {registerCut};
 
 /**
  * Keyboard shortcut to paste a block on ctrl+v, cmd+v, or alt+v.
@@ -206,7 +206,7 @@ const registerPaste = function() {
       KeyCodes.V, [KeyCodes.META]);
   ShortcutRegistry.registry.addKeyMapping(metaV, pasteShortcut.name);
 };
-exports.registerPaste = registerPaste;
+export {registerPaste};
 
 /**
  * Keyboard shortcut to undo the previous action on ctrl+z, cmd+z, or alt+z.
@@ -240,7 +240,7 @@ const registerUndo = function() {
       KeyCodes.Z, [KeyCodes.META]);
   ShortcutRegistry.registry.addKeyMapping(metaZ, undoShortcut.name);
 };
-exports.registerUndo = registerUndo;
+export {registerUndo};
 
 /**
  * Keyboard shortcut to redo the previous action on ctrl+shift+z, cmd+shift+z,
@@ -280,7 +280,7 @@ const registerRedo = function() {
       KeyCodes.Y, [KeyCodes.CTRL]);
   ShortcutRegistry.registry.addKeyMapping(ctrlY, redoShortcut.name);
 };
-exports.registerRedo = registerRedo;
+export {registerRedo};
 
 /**
  * Registers all default keyboard shortcut item. This should be called once per
@@ -297,6 +297,6 @@ const registerDefaultShortcuts = function() {
   registerUndo();
   registerRedo();
 };
-exports.registerDefaultShortcuts = registerDefaultShortcuts;
+export {registerDefaultShortcuts};
 
 registerDefaultShortcuts();

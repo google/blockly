@@ -13,7 +13,7 @@
  * The class representing one block.
  * @class
  */
-goog.module('Blockly.Block');
+goog.declareModuleId('Blockly.Block');
 
 const Extensions = goog.require('Blockly.Extensions');
 const Tooltip = goog.require('Blockly.Tooltip');
@@ -69,7 +69,7 @@ goog.require('Blockly.Events.BlockMove');
  * @unrestricted
  * @alias Blockly.Block
  */
-class Block {
+export class Block {
   /**
    * @param {!Workspace} workspace The block's workspace.
    * @param {!string} prototypeName Name of the language object containing
@@ -2208,5 +2208,3 @@ Block.COLLAPSED_INPUT_NAME = constants.COLLAPSED_INPUT_NAME;
  * @const {string}
  */
 Block.COLLAPSED_FIELD_NAME = constants.COLLAPSED_FIELD_NAME;
-
-exports.Block = Block;

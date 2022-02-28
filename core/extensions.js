@@ -19,7 +19,7 @@
  *      array attribute.
  * @namespace Blockly.Extensions
  */
-goog.module('Blockly.Extensions');
+goog.declareModuleId('Blockly.Extensions');
 
 const parsing = goog.require('Blockly.utils.parsing');
 /* eslint-disable-next-line no-unused-vars */
@@ -33,7 +33,7 @@ goog.requireType('Blockly.Mutator');
  * @private
  */
 const allExtensions = Object.create(null);
-exports.TEST_ONLY = {allExtensions};
+export var TEST_ONLY = {allExtensions};
 
 /**
  * Registers a new extension function. Extensions are functions that help
@@ -58,7 +58,7 @@ const register = function(name, initFn) {
   }
   allExtensions[name] = initFn;
 };
-exports.register = register;
+export {register};
 
 /**
  * Registers a new extension function that adds all key/value of mixinObj.
@@ -79,7 +79,7 @@ const registerMixin = function(name, mixinObj) {
         this.mixin(mixinObj);
       });
 };
-exports.registerMixin = registerMixin;
+export {registerMixin};
 
 /**
  * Registers a new extension function that adds a mutator to the block.
@@ -125,7 +125,7 @@ const registerMutator = function(name, mixinObj, opt_helperFn, opt_blockList) {
         }
       });
 };
-exports.registerMutator = registerMutator;
+export {registerMutator};
 
 /**
  * Unregisters the extension registered with the given name.
@@ -140,7 +140,7 @@ const unregister = function(name) {
         'No extension mapping for name "' + name + '" found to unregister');
   }
 };
-exports.unregister = unregister;
+export {unregister};
 
 /**
  * Returns whether an extension is registered with the given name.
@@ -152,7 +152,7 @@ exports.unregister = unregister;
 const isRegistered = function(name) {
   return !!allExtensions[name];
 };
-exports.isRegistered = isRegistered;
+export {isRegistered};
 
 /**
  * Applies an extension method to a block. This should only be called during
@@ -191,7 +191,7 @@ const apply = function(name, block, isMutator) {
     }
   }
 };
-exports.apply = apply;
+export {apply};
 
 /**
  * Check that the given block does not have any of the four mutator properties
@@ -373,7 +373,7 @@ const runAfterPageLoad = function(fn) {
     }, 10);
   }
 };
-exports.runAfterPageLoad = runAfterPageLoad;
+export {runAfterPageLoad};
 
 /**
  * Builds an extension function that will map a dropdown value to a tooltip
@@ -443,7 +443,7 @@ const buildTooltipForDropdown = function(dropdownName, lookupTable) {
   };
   return extensionFn;
 };
-exports.buildTooltipForDropdown = buildTooltipForDropdown;
+export {buildTooltipForDropdown};
 
 /**
  * Checks all options keys are present in the provided string lookup table.
@@ -503,7 +503,7 @@ const buildTooltipWithFieldText = function(msgTemplate, fieldName) {
   };
   return extensionFn;
 };
-exports.buildTooltipWithFieldText = buildTooltipWithFieldText;
+export {buildTooltipWithFieldText};
 
 /**
  * Configures the tooltip to mimic the parent block when connected. Otherwise,

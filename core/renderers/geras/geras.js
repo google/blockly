@@ -13,7 +13,7 @@
  * Re-exports of Blockly.geras.* modules.
  * @namespace Blockly.geras
  */
-goog.module('Blockly.geras');
+goog.declareModuleId('Blockly.geras');
 
 const {ConstantProvider} = goog.require('Blockly.geras.ConstantProvider');
 const {Drawer} = goog.require('Blockly.geras.Drawer');
@@ -25,12 +25,12 @@ const {RenderInfo} = goog.require('Blockly.geras.RenderInfo');
 const {Renderer} = goog.require('Blockly.geras.Renderer');
 const {StatementInput} = goog.require('Blockly.geras.StatementInput');
 
-exports.ConstantProvider = ConstantProvider;
-exports.Drawer = Drawer;
-exports.HighlightConstantProvider = HighlightConstantProvider;
-exports.Highlighter = Highlighter;
-exports.InlineInput = InlineInput;
-exports.PathObject = PathObject;
-exports.RenderInfo = RenderInfo;
-exports.Renderer = Renderer;
-exports.StatementInput = StatementInput;
+export {ConstantProvider};
+export {Drawer};
+export {HighlightConstantProvider};
+export {Highlighter};
+export {InlineInput};
+export {PathObject};
+export {RenderInfo};
+export {Renderer};
+export {StatementInput};

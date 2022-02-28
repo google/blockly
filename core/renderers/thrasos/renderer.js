@@ -13,7 +13,7 @@
  * Thrasos renderer.
  * @class
  */
-goog.module('Blockly.thrasos.Renderer');
+goog.declareModuleId('Blockly.thrasos.Renderer');
 
 const blockRendering = goog.require('Blockly.blockRendering');
 /* eslint-disable-next-line no-unused-vars */
@@ -50,4 +50,4 @@ class Renderer extends BaseRenderer {
 
 blockRendering.register('thrasos', Renderer);
 
-exports.Renderer = Renderer;
+export {Renderer};

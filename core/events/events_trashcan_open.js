@@ -13,7 +13,7 @@
  * Events fired as a result of trashcan flyout open and close.
  * @class
  */
-goog.module('Blockly.Events.TrashcanOpen');
+goog.declareModuleId('Blockly.Events.TrashcanOpen');
 
 const eventUtils = goog.require('Blockly.Events.utils');
 const registry = goog.require('Blockly.registry');
@@ -70,4 +70,4 @@ class TrashcanOpen extends UiBase {
 
 registry.register(registry.Type.EVENT, eventUtils.TRASHCAN_OPEN, TrashcanOpen);
 
-exports.TrashcanOpen = TrashcanOpen;
+export {TrashcanOpen};

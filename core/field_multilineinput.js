@@ -13,7 +13,7 @@
  * Text Area field.
  * @class
  */
-goog.module('Blockly.FieldMultilineInput');
+goog.declareModuleId('Blockly.FieldMultilineInput');
 
 const Css = goog.require('Blockly.Css');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
@@ -460,4 +460,4 @@ Css.register(`
 
 fieldRegistry.register('field_multilinetext', FieldMultilineInput);
 
-exports.FieldMultilineInput = FieldMultilineInput;
+export {FieldMultilineInput};

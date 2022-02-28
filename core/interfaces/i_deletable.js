@@ -14,7 +14,7 @@
  * The interface for an object that is deletable.
  * @namespace Blockly.IDeletable
  */
-goog.module('Blockly.IDeletable');
+goog.declareModuleId('Blockly.IDeletable');
 
 
 /**
@@ -30,4 +30,4 @@ const IDeletable = function() {};
  */
 IDeletable.prototype.isDeletable;
 
-exports.IDeletable = IDeletable;
+export {IDeletable};

@@ -13,7 +13,7 @@
  * Class for a button in the flyout.
  * @class
  */
-goog.module('Blockly.FlyoutButton');
+goog.declareModuleId('Blockly.FlyoutButton');
 
 const Css = goog.require('Blockly.Css');
 const browserEvents = goog.require('Blockly.browserEvents');
@@ -353,4 +353,4 @@ Css.register(`
 }
 `);
 
-exports.FlyoutButton = FlyoutButton;
+export {FlyoutButton};

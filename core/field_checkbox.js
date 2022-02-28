@@ -13,7 +13,7 @@
  * Checkbox field.  Checked or not checked.
  * @class
  */
-goog.module('Blockly.FieldCheckbox');
+goog.declareModuleId('Blockly.FieldCheckbox');
 
 const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
@@ -252,4 +252,4 @@ FieldCheckbox.CHECK_CHAR = '\u2713';
 
 fieldRegistry.register('field_checkbox', FieldCheckbox);
 
-exports.FieldCheckbox = FieldCheckbox;
+export {FieldCheckbox};

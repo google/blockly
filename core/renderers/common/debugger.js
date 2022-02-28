@@ -14,7 +14,7 @@
  * Methods for rendering debug graphics.
  * @class
  */
-goog.module('Blockly.blockRendering.Debug');
+goog.declareModuleId('Blockly.blockRendering.Debug');
 
 const dom = goog.require('Blockly.utils.dom');
 /* eslint-disable-next-line no-unused-vars */
@@ -454,4 +454,4 @@ Debug.config = {
   render: true,
 };
 
-exports.Debug = Debug;
+export {Debug};

@@ -15,7 +15,7 @@
  *     workspace.
  * @class
  */
-goog.module('Blockly.WorkspaceAudio');
+goog.declareModuleId('Blockly.WorkspaceAudio');
 
 const userAgent = goog.require('Blockly.utils.userAgent');
 /* eslint-disable-next-line no-unused-vars */
@@ -166,4 +166,4 @@ class WorkspaceAudio {
   }
 }
 
-exports.WorkspaceAudio = WorkspaceAudio;
+export {WorkspaceAudio};

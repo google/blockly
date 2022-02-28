@@ -14,7 +14,7 @@
  * Methods for creating parts of SVG path strings.  See
  * @namespace Blockly.utils.svgPaths
  */
-goog.module('Blockly.utils.svgPaths');
+goog.declareModuleId('Blockly.utils.svgPaths');
 
 
 /**
@@ -30,7 +30,7 @@ goog.module('Blockly.utils.svgPaths');
 const point = function(x, y) {
   return ' ' + x + ',' + y + ' ';
 };
-exports.point = point;
+export {point};
 
 /**
  * Draw a cubic or quadratic curve.  See
@@ -48,7 +48,7 @@ exports.point = point;
 const curve = function(command, points) {
   return ' ' + command + points.join('');
 };
-exports.curve = curve;
+export {curve};
 
 /**
  * Move the cursor to the given position without drawing a line.
@@ -63,7 +63,7 @@ exports.curve = curve;
 const moveTo = function(x, y) {
   return ' M ' + x + ',' + y + ' ';
 };
-exports.moveTo = moveTo;
+export {moveTo};
 
 /**
  * Move the cursor to the given position without drawing a line.
@@ -78,7 +78,7 @@ exports.moveTo = moveTo;
 const moveBy = function(dx, dy) {
   return ' m ' + dx + ',' + dy + ' ';
 };
-exports.moveBy = moveBy;
+export {moveBy};
 
 /**
  * Draw a line from the current point to the end point, which is the current
@@ -93,7 +93,7 @@ exports.moveBy = moveBy;
 const lineTo = function(dx, dy) {
   return ' l ' + dx + ',' + dy + ' ';
 };
-exports.lineTo = lineTo;
+export {lineTo};
 
 /**
  * Draw multiple lines connecting all of the given points in order.  This is
@@ -109,7 +109,7 @@ exports.lineTo = lineTo;
 const line = function(points) {
   return ' l' + points.join('');
 };
-exports.line = line;
+export {line};
 
 /**
  * Draw a horizontal or vertical line.
@@ -127,7 +127,7 @@ exports.line = line;
 const lineOnAxis = function(command, val) {
   return ' ' + command + ' ' + val + ' ';
 };
-exports.lineOnAxis = lineOnAxis;
+export {lineOnAxis};
 
 /**
  * Draw an elliptical arc curve.
@@ -146,4 +146,4 @@ exports.lineOnAxis = lineOnAxis;
 const arc = function(command, flags, radius, point) {
   return command + ' ' + radius + ' ' + radius + ' ' + flags + point;
 };
-exports.arc = arc;
+export {arc};

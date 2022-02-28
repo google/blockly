@@ -14,7 +14,7 @@
  * The interface for a flyout.
  * @namespace Blockly.IFlyout
  */
-goog.module('Blockly.IFlyout');
+goog.declareModuleId('Blockly.IFlyout');
 
 /* eslint-disable-next-line no-unused-vars */
 const toolbox = goog.requireType('Blockly.utils.toolbox');
@@ -198,4 +198,4 @@ IFlyout.prototype.position;
  */
 IFlyout.prototype.isDragTowardWorkspace;
 
-exports.IFlyout = IFlyout;
+export {IFlyout};

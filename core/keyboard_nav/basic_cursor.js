@@ -15,7 +15,7 @@
  * Used to demo switching between different cursors.
  * @class
  */
-goog.module('Blockly.BasicCursor');
+goog.declareModuleId('Blockly.BasicCursor');
 
 const registry = goog.require('Blockly.registry');
 const {ASTNode} = goog.require('Blockly.ASTNode');
@@ -222,4 +222,4 @@ BasicCursor.registrationName = 'basicCursor';
 registry.register(
     registry.Type.CURSOR, BasicCursor.registrationName, BasicCursor);
 
-exports.BasicCursor = BasicCursor;
+export {BasicCursor};

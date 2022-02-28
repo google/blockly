@@ -13,7 +13,7 @@
  * Events fired as a result of a viewport change.
  * @class
  */
-goog.module('Blockly.Events.ViewportChange');
+goog.declareModuleId('Blockly.Events.ViewportChange');
 
 const eventUtils = goog.require('Blockly.Events.utils');
 const registry = goog.require('Blockly.registry');
@@ -104,4 +104,4 @@ class ViewportChange extends UiBase {
 registry.register(
     registry.Type.EVENT, eventUtils.VIEWPORT_CHANGE, ViewportChange);
 
-exports.ViewportChange = ViewportChange;
+export {ViewportChange};

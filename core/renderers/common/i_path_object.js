@@ -16,7 +16,7 @@
  * elements.
  * @namespace Blockly.blockRendering.IPathObject
  */
-goog.module('Blockly.blockRendering.IPathObject');
+goog.declareModuleId('Blockly.blockRendering.IPathObject');
 
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
@@ -159,4 +159,4 @@ IPathObject.prototype.updateMovable;
  */
 IPathObject.prototype.updateReplacementFade;
 
-exports.IPathObject = IPathObject;
+export {IPathObject};

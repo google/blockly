@@ -17,7 +17,7 @@
  * a JavaScript framework such as Closure.
  * @namespace Blockly.utils.userAgent
  */
-goog.module('Blockly.utils.userAgent');
+goog.declareModuleId('Blockly.utils.userAgent');
 
 const {globalThis} = goog.require('Blockly.utils.global');
 
@@ -116,82 +116,82 @@ isMobile = !isTablet && (isIPod || isIPhone || isAndroid || has('IEMobile'));
  * @const {string}
  * @alias Blockly.utils.userAgent.raw
  */
-exports.raw = rawUserAgent;
+export {rawUserAgent as raw};
 
 /**
  * @const {boolean}
  * @alias Blockly.utils.userAgent.IE
  */
-exports.IE = isIe;
+export {isIe as IE};
 
 /**
  * @const {boolean}
  * @alias Blockly.utils.userAgent.EDGE
  */
-exports.EDGE = isEdge;
+export {isEdge as EDGE};
 
 /**
  * @const {boolean}
  * @alias Blockly.utils.userAgent.JavaFx
  */
-exports.JavaFx = isJavaFx;
+export {isJavaFx as JavaFx};
 
 /**
  * @const {boolean}
  * @alias Blockly.utils.userAgent.CHROME
  */
-exports.CHROME = isChrome;
+export {isChrome as CHROME};
 
 /**
  * @const {boolean}
  * @alias Blockly.utils.userAgent.WEBKIT
  */
-exports.WEBKIT = isWebKit;
+export {isWebKit as WEBKIT};
 
 /**
  * @const {boolean}
  * @alias Blockly.utils.userAgent.GECKO
  */
-exports.GECKO = isGecko;
+export {isGecko as GECKO};
 
 /**
  * @const {boolean}
  * @alias Blockly.utils.userAgent.ANDROID
  */
-exports.ANDROID = isAndroid;
+export {isAndroid as ANDROID};
 
 /**
  * @const {boolean}
  * @alias Blockly.utils.userAgent.IPAD
  */
-exports.IPAD = isIPad;
+export {isIPad as IPAD};
 
 /**
  * @const {boolean}
  * @alias Blockly.utils.userAgent.IPOD
  */
-exports.IPOD = isIPod;
+export {isIPod as IPOD};
 
 /**
  * @const {boolean}
  * @alias Blockly.utils.userAgent.IPHONE
  */
-exports.IPHONE = isIPhone;
+export {isIPhone as IPHONE};
 
 /**
  * @const {boolean}
  * @alias Blockly.utils.userAgent.MAC
  */
-exports.MAC = isMac;
+export {isMac as MAC};
 
 /**
  * @const {boolean}
  * @alias Blockly.utils.userAgent.TABLET
  */
-exports.TABLET = isTablet;
+export {isTablet as TABLET};
 
 /**
  * @const {boolean}
  * @alias Blockly.utils.userAgent.MOBILE
  */
-exports.MOBILE = isMobile;
+export {isMobile as MOBILE};

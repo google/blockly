@@ -13,7 +13,7 @@
  * Utility methods for objects.
  * @namespace Blockly.utils.object
  */
-goog.module('Blockly.utils.object');
+goog.declareModuleId('Blockly.utils.object');
 
 
 /**
@@ -39,7 +39,7 @@ const inherits = function(childCtor, parentCtor) {
   // Alternatively, one could use this instead:
   // Object.setPrototypeOf(childCtor.prototype, parentCtor.prototype);
 };
-exports.inherits = inherits;
+export {inherits};
 
 /**
  * Copies all the members of a source object to a target object.
@@ -52,7 +52,7 @@ const mixin = function(target, source) {
     target[x] = source[x];
   }
 };
-exports.mixin = mixin;
+export {mixin};
 
 /**
  * Complete a deep merge of all members of a source object with a target object.
@@ -71,7 +71,7 @@ const deepMerge = function(target, source) {
   }
   return target;
 };
-exports.deepMerge = deepMerge;
+export {deepMerge};
 
 /**
  * Returns an array of a given object's own enumerable property values.
@@ -88,4 +88,4 @@ const values = function(obj) {
     return obj[e];
   });
 };
-exports.values = values;
+export {values};

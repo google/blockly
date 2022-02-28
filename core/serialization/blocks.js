@@ -14,7 +14,7 @@
  * Handles serializing blocks to plain JavaScript objects only containing state.
  * @namespace Blockly.serialization.blocks
  */
-goog.module('Blockly.serialization.blocks');
+goog.declareModuleId('Blockly.serialization.blocks');
 
 const Xml = goog.require('Blockly.Xml');
 const eventUtils = goog.require('Blockly.Events.utils');
@@ -47,7 +47,7 @@ const {inputTypes} = goog.require('Blockly.inputTypes');
  * @alias Blockly.serialization.blocks.ConnectionState
  */
 let ConnectionState;
-exports.ConnectionState = ConnectionState;
+export {ConnectionState};
 
 /**
  * Represents the state of a given block.
@@ -69,7 +69,7 @@ exports.ConnectionState = ConnectionState;
  * @alias Blockly.serialization.blocks.State
  */
 let State;
-exports.State = State;
+export {State};
 
 /**
  * Returns the state of the given block as a plain JavaScript object.
@@ -123,7 +123,7 @@ const save = function(block, {
 
   return state;
 };
-exports.save = save;
+export {save};
 
 /**
  * Adds attributes to the given state object based on the state of the block.
@@ -307,7 +307,7 @@ const saveConnection = function(connection, doFullSerialization) {
 const append = function(state, workspace, {recordUndo = false} = {}) {
   return appendInternal(state, workspace, {recordUndo});
 };
-exports.append = append;
+export {append};
 
 /**
  * Loads the block represented by the given state into the given workspace.
@@ -362,7 +362,7 @@ const appendInternal = function(state, workspace, {
 
   return block;
 };
-exports.appendInternal = appendInternal;
+export {appendInternal};
 
 /**
  * Loads the block represented by the given state into the given workspace.

@@ -16,7 +16,7 @@
  *    (Ex. Toolbox, Fields, Renderers)
  * @namespace Blockly.IRegistrable
  */
-goog.module('Blockly.IRegistrable');
+goog.declareModuleId('Blockly.IRegistrable');
 
 
 /**
@@ -26,4 +26,4 @@ goog.module('Blockly.IRegistrable');
  */
 const IRegistrable = function() {};
 
-exports.IRegistrable = IRegistrable;
+export {IRegistrable};

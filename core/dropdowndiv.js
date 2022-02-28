@@ -16,7 +16,7 @@
  * A div that floats on top of the workspace, for drop-down menus.
  * @class
  */
-goog.module('Blockly.dropDownDiv');
+goog.declareModuleId('Blockly.dropDownDiv');
 
 const common = goog.require('Blockly.common');
 const dom = goog.require('Blockly.utils.dom');
@@ -40,7 +40,7 @@ const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
  * @const
  */
 const ARROW_SIZE = 16;
-exports.ARROW_SIZE = ARROW_SIZE;
+export {ARROW_SIZE};
 
 /**
  * Drop-down border size in px. Should match the value in CSS (need to position
@@ -49,7 +49,7 @@ exports.ARROW_SIZE = ARROW_SIZE;
  * @const
  */
 const BORDER_SIZE = 1;
-exports.BORDER_SIZE = BORDER_SIZE;
+export {BORDER_SIZE};
 
 /**
  * Amount the arrow must be kept away from the edges of the main drop-down div,
@@ -58,7 +58,7 @@ exports.BORDER_SIZE = BORDER_SIZE;
  * @const
  */
 const ARROW_HORIZONTAL_PADDING = 12;
-exports.ARROW_HORIZONTAL_PADDING = ARROW_HORIZONTAL_PADDING;
+export {ARROW_HORIZONTAL_PADDING};
 
 /**
  * Amount drop-downs should be padded away from the source, in px.
@@ -66,7 +66,7 @@ exports.ARROW_HORIZONTAL_PADDING = ARROW_HORIZONTAL_PADDING;
  * @const
  */
 const PADDING_Y = 16;
-exports.PADDING_Y = PADDING_Y;
+export {PADDING_Y};
 
 /**
  * Length of animations in seconds.
@@ -74,7 +74,7 @@ exports.PADDING_Y = PADDING_Y;
  * @const
  */
 const ANIMATION_TIME = 0.25;
-exports.ANIMATION_TIME = ANIMATION_TIME;
+export {ANIMATION_TIME};
 
 /**
  * Timer for animation out, to be cleared if we need to immediately hide
@@ -151,7 +151,7 @@ let positionToField = null;
  * }}
  */
 let BoundsInfo;
-exports.BoundsInfo = BoundsInfo;
+export {BoundsInfo};
 
 /**
  * Dropdown position metrics.
@@ -167,7 +167,7 @@ exports.BoundsInfo = BoundsInfo;
  * }}
  */
 let PositionMetrics;
-exports.PositionMetrics = PositionMetrics;
+export {PositionMetrics};
 
 /**
  * Create and insert the DOM element for this div.
@@ -205,7 +205,7 @@ const createDom = function() {
     dom.removeClass(div, 'blocklyFocused');
   });
 };
-exports.createDom = createDom;
+export {createDom};
 
 /**
  * Set an element to maintain bounds within. Drop-downs will appear
@@ -215,7 +215,7 @@ exports.createDom = createDom;
 const setBoundsElement = function(boundsElem) {
   boundsElement = boundsElem;
 };
-exports.setBoundsElement = setBoundsElement;
+export {setBoundsElement};
 
 /**
  * Provide the div for inserting content into the drop-down.
@@ -224,7 +224,7 @@ exports.setBoundsElement = setBoundsElement;
 const getContentDiv = function() {
   return content;
 };
-exports.getContentDiv = getContentDiv;
+export {getContentDiv};
 
 /**
  * Clear the content of the drop-down.
@@ -233,7 +233,7 @@ const clearContent = function() {
   content.textContent = '';
   content.style.width = '';
 };
-exports.clearContent = clearContent;
+export {clearContent};
 
 /**
  * Set the colour for the drop-down.
@@ -244,7 +244,7 @@ const setColour = function(backgroundColour, borderColour) {
   div.style.backgroundColor = backgroundColour;
   div.style.borderColor = borderColour;
 };
-exports.setColour = setColour;
+export {setColour};
 
 /**
  * Shortcut to show and place the drop-down with positioning determined
@@ -264,7 +264,7 @@ const showPositionedByBlock = function(
   return showPositionedByRect(
       getScaledBboxOfBlock(block), field, opt_onHide, opt_secondaryYOffset);
 };
-exports.showPositionedByBlock = showPositionedByBlock;
+export {showPositionedByBlock};
 
 /**
  * Shortcut to show and place the drop-down with positioning determined
@@ -284,7 +284,7 @@ const showPositionedByField = function(
   return showPositionedByRect(
       getScaledBboxOfField(field), field, opt_onHide, opt_secondaryYOffset);
 };
-exports.showPositionedByField = showPositionedByField;
+export {showPositionedByField};
 
 /**
  * Get the scaled bounding box of a block.
@@ -395,7 +395,7 @@ const show = function(
 
   return positionInternal(primaryX, primaryY, secondaryX, secondaryY);
 };
-exports.show = show;
+export {show};
 
 const internal = {};
 
@@ -583,7 +583,7 @@ const getPositionX = function(sourceX, boundsLeft, boundsRight, divWidth) {
 
   return {arrowX: relativeArrowX, divX: divX};
 };
-exports.getPositionX = getPositionX;
+export {getPositionX};
 
 /**
  * Is the container visible?
@@ -592,7 +592,7 @@ exports.getPositionX = getPositionX;
 const isVisible = function() {
   return !!owner;
 };
-exports.isVisible = isVisible;
+export {isVisible};
 
 /**
  * Hide the menu only if it is owned by the provided object.
@@ -612,7 +612,7 @@ const hideIfOwner = function(divOwner, opt_withoutAnimation) {
   }
   return false;
 };
-exports.hideIfOwner = hideIfOwner;
+export {hideIfOwner};
 
 /**
  * Hide the menu, triggering animation.
@@ -631,7 +631,7 @@ const hide = function() {
     onHide = null;
   }
 };
-exports.hide = hide;
+export {hide};
 
 /**
  * Hide the menu, without animation.
@@ -671,7 +671,7 @@ const hideWithoutAnimation = function() {
   }
   (/** @type {!WorkspaceSvg} */ (common.getMainWorkspace())).markFocused();
 };
-exports.hideWithoutAnimation = hideWithoutAnimation;
+export {hideWithoutAnimation};
 
 /**
  * Set the dropdown div's position.
@@ -749,6 +749,7 @@ const repositionForWindowResize = function() {
     hide();
   }
 };
-exports.repositionForWindowResize = repositionForWindowResize;
+export {repositionForWindowResize};
 
-exports.TEST_ONLY = internal;
+
+export {internal as TEST_ONLY};

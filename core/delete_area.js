@@ -16,7 +16,7 @@
  * bubble that is dropped on top of it.
  * @class
  */
-goog.module('Blockly.DeleteArea');
+goog.declareModuleId('Blockly.DeleteArea');
 
 const {BlockSvg} = goog.require('Blockly.BlockSvg');
 const {DragTarget} = goog.require('Blockly.DragTarget');
@@ -84,4 +84,4 @@ class DeleteArea extends DragTarget {
   }
 }
 
-exports.DeleteArea = DeleteArea;
+export {DeleteArea};

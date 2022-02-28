@@ -14,7 +14,7 @@
  * An object that owns a block's rendering SVG elements.
  * @class
  */
-goog.module('Blockly.zelos.PathObject');
+goog.declareModuleId('Blockly.zelos.PathObject');
 
 const dom = goog.require('Blockly.utils.dom');
 /* eslint-disable-next-line no-unused-vars */
@@ -244,4 +244,4 @@ class PathObject extends BasePathObject {
   }
 }
 
-exports.PathObject = PathObject;
+export {PathObject};

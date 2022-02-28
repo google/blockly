@@ -15,7 +15,7 @@
  * user to change the shape of a block using a nested blocks editor.
  * @class
  */
-goog.module('Blockly.Mutator');
+goog.declareModuleId('Blockly.Mutator');
 
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
@@ -572,4 +572,4 @@ class Mutator extends Icon {
   }
 }
 
-exports.Mutator = Mutator;
+export {Mutator};

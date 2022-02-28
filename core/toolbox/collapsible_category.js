@@ -13,7 +13,7 @@
  * A toolbox category used to organize blocks in the toolbox.
  * @class
  */
-goog.module('Blockly.CollapsibleToolboxCategory');
+goog.declareModuleId('Blockly.CollapsibleToolboxCategory');
 
 const aria = goog.require('Blockly.utils.aria');
 const dom = goog.require('Blockly.utils.dom');
@@ -308,4 +308,4 @@ registry.register(
     registry.Type.TOOLBOX_ITEM, CollapsibleToolboxCategory.registrationName,
     CollapsibleToolboxCategory);
 
-exports.CollapsibleToolboxCategory = CollapsibleToolboxCategory;
+export {CollapsibleToolboxCategory};

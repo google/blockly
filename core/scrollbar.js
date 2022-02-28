@@ -13,7 +13,7 @@
  * Object representing a scrollbar.
  * @class
  */
-goog.module('Blockly.Scrollbar');
+goog.declareModuleId('Blockly.Scrollbar');
 
 const Touch = goog.require('Blockly.Touch');
 const browserEvents = goog.require('Blockly.browserEvents');
@@ -888,4 +888,4 @@ if (Touch.TOUCH_ENABLED) {
  */
 Scrollbar.DEFAULT_SCROLLBAR_MARGIN = 0.5;
 
-exports.Scrollbar = Scrollbar;
+export {Scrollbar};

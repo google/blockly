@@ -13,7 +13,7 @@
  * A toolbox category used to organize blocks in the toolbox.
  * @class
  */
-goog.module('Blockly.ToolboxCategory');
+goog.declareModuleId('Blockly.ToolboxCategory');
 
 const Css = goog.require('Blockly.Css');
 const aria = goog.require('Blockly.utils.aria');
@@ -748,4 +748,4 @@ registry.register(
     registry.Type.TOOLBOX_ITEM, ToolboxCategory.registrationName,
     ToolboxCategory);
 
-exports.ToolboxCategory = ToolboxCategory;
+export {ToolboxCategory};

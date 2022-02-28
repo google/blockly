@@ -10,7 +10,7 @@
  */
 'use strict';
 
-goog.module('Blockly.libraryBlocks');
+goog.declareModuleId('Blockly.libraryBlocks');
 goog.module.declareLegacyNamespace();
 
 const colour = goog.require('Blockly.libraryBlocks.colour');
@@ -26,15 +26,15 @@ const variablesDynamic = goog.require('Blockly.libraryBlocks.variablesDynamic');
 const {BlockDefinition} = goog.requireType('Blockly.blocks');
 
 
-exports.colour = colour;
-exports.lists = lists;
-exports.logic = logic;
-exports.loops = loops;
-exports.math = math;
-exports.procedures = procedures;
-exports.texts = texts;
-exports.variables = variables;
-exports.variablesDynamic = variablesDynamic;
+export {colour};
+export {lists};
+export {logic};
+export {loops};
+export {math};
+export {procedures};
+export {texts};
+export {variables};
+export {variablesDynamic};
 
 /**
  * A dictionary of the block definitions provided by all the
@@ -44,4 +44,4 @@ exports.variablesDynamic = variablesDynamic;
 const blocks = Object.assign(
     {}, colour.blocks, lists.blocks, logic.blocks, loops.blocks, math.blocks,
     procedures.blocks, variables.blocks, variablesDynamic.blocks);
-exports.blocks = blocks;
+export {blocks};

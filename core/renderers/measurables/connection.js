@@ -14,7 +14,7 @@
  * rendering.
  * @class
  */
-goog.module('Blockly.blockRendering.Connection');
+goog.declareModuleId('Blockly.blockRendering.Connection');
 
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
@@ -53,4 +53,4 @@ class Connection extends Measurable {
   }
 }
 
-exports.Connection = Connection;
+export {Connection};

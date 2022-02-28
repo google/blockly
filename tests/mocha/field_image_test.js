@@ -6,6 +6,7 @@
 
 goog.module('Blockly.test.fieldImage');
 
+const {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSetValueTests} = goog.require('Blockly.test.fieldHelpers');
 const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
 
 
@@ -56,14 +57,14 @@ suite('Image Fields', function() {
    * @param {!FieldValueTestCase} testCase The test case.
    */
   const validTestCaseAssertField = function(field, testCase) {
-    testHelpers.assertFieldValue(field, testCase.expectedValue, testCase.expectedText);
+    assertFieldValue(field, testCase.expectedValue, testCase.expectedText);
   };
 
-  testHelpers.runConstructorSuiteTests(
+  runConstructorSuiteTests(
       Blockly.FieldImage, validValueCreationTestCases, invalidValueTestCases,
       validTestCaseAssertField);
 
-  testHelpers.runFromJsonSuiteTests(
+  runFromJsonSuiteTests(
       Blockly.FieldImage, validValueCreationTestCases, invalidValueTestCases,
       validTestCaseAssertField);
 
@@ -80,7 +81,7 @@ suite('Image Fields', function() {
     setup(function() {
       this.field = new Blockly.FieldImage('src', 1, 1, 'alt');
     });
-    testHelpers.runSetValueTests(
+    runSetValueTests(
         validValueSetValueTestCases, invalidValueTestCases, 'src', 'alt');
   });
 
@@ -126,15 +127,15 @@ suite('Image Fields', function() {
         });
         test('Null', function() {
           this.imageField.setAlt(null);
-          testHelpers.assertFieldValue(this.imageField, 'src', '');
+          assertFieldValue(this.imageField, 'src', '');
         });
         test('Empty String', function() {
           this.imageField.setAlt('');
-          testHelpers.assertFieldValue(this.imageField, 'src', '');
+          assertFieldValue(this.imageField, 'src', '');
         });
         test('Good Alt', function() {
           this.imageField.setAlt('newAlt');
-          testHelpers.assertFieldValue(this.imageField, 'src', 'newAlt');
+          assertFieldValue(this.imageField, 'src', 'newAlt');
         });
       });
       test('JS Configuration - Simple', function() {

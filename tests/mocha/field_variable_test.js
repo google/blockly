@@ -6,6 +6,7 @@
 
 goog.module('Blockly.test.fieldVariable');
 
+const {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSetValueTests} = goog.require('Blockly.test.fieldHelpers');
 const {createGenUidStubWithReturns, createTestBlock, defineRowBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
 
 
@@ -83,7 +84,7 @@ suite('Variable Fields', function() {
    * @param {!Blockly.FieldVariable} field The field to check.
    */
   const assertFieldDefault = function(field) {
-    testHelpers.assertFieldValue(field, FAKE_ID, defaultFieldName);
+    assertFieldValue(field, FAKE_ID, defaultFieldName);
   };
   /**
    * Asserts that the field properties are correct based on the test case.
@@ -91,15 +92,15 @@ suite('Variable Fields', function() {
    * @param {!FieldValueTestCase} testCase The test case.
    */
   const validTestCaseAssertField = function(field, testCase) {
-    testHelpers.assertFieldValue(field, FAKE_ID, testCase.expectedText);
+    assertFieldValue(field, FAKE_ID, testCase.expectedText);
   };
 
-  testHelpers.runConstructorSuiteTests(
+  runConstructorSuiteTests(
       Blockly.FieldVariable, validValueCreationTestCases,
       invalidValueCreationTestCases,
       validTestCaseAssertField, assertFieldDefault, customCreateWithJs);
 
-  testHelpers.runFromJsonSuiteTests(
+  runFromJsonSuiteTests(
       Blockly.FieldVariable, validValueCreationTestCases,
       invalidValueCreationTestCases,
       validTestCaseAssertField, assertFieldDefault, customCreateWithJson);
@@ -149,7 +150,7 @@ suite('Variable Fields', function() {
     teardown(function() {
       console.warn = this.nativeConsoleWarn;
     });
-    testHelpers.runSetValueTests(validValueTestCases, invalidValueTestCases,
+    runSetValueTests(validValueTestCases, invalidValueTestCases,
         FAKE_ID, defaultFieldName);
   });
 
@@ -215,7 +216,7 @@ suite('Variable Fields', function() {
       });
       test('New Value', function() {
         this.variableField.setValue('id2');
-        testHelpers.assertFieldValue(this.variableField, 'id1', 'name1');
+        assertFieldValue(this.variableField, 'id1', 'name1');
       });
     });
     suite('Force \'id\' ID Validator', function() {
@@ -228,7 +229,7 @@ suite('Variable Fields', function() {
         // Must create the var so that the field doesn't throw an error.
         this.workspace.createVariable('thing2', null, 'other2');
         this.variableField.setValue('other2');
-        testHelpers.assertFieldValue(this.variableField, 'id2', 'name2');
+        assertFieldValue(this.variableField, 'id2', 'name2');
       });
     });
     suite('Returns Undefined Validator', function() {
@@ -237,7 +238,7 @@ suite('Variable Fields', function() {
       });
       test('New Value', function() {
         this.variableField.setValue('id2');
-        testHelpers.assertFieldValue(this.variableField, 'id2', 'name2');
+        assertFieldValue(this.variableField, 'id2', 'name2');
       });
     });
   });

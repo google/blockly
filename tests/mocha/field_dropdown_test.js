@@ -6,6 +6,7 @@
 
 goog.module('Blockly.test.fieldDropdown');
 
+const {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSetValueTests} = goog.require('Blockly.test.fieldHelpers');
 const {createTestBlock, defineRowBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
 
 
@@ -74,14 +75,14 @@ suite('Dropdown Fields', function() {
    * @param {!FieldValueTestCase} testCase The test case.
    */
   const validTestCaseAssertField = function(field, testCase) {
-    testHelpers.assertFieldValue(field, testCase.expectedValue, testCase.expectedText);
+    assertFieldValue(field, testCase.expectedValue, testCase.expectedText);
   };
 
-  testHelpers.runConstructorSuiteTests(
+  runConstructorSuiteTests(
       Blockly.FieldDropdown, validValueCreationTestCases,
       invalidValueCreationTestCases, validTestCaseAssertField);
 
-  testHelpers.runFromJsonSuiteTests(
+  runFromJsonSuiteTests(
       Blockly.FieldDropdown, validValueCreationTestCases,
       invalidValueCreationTestCases, validTestCaseAssertField);
 
@@ -107,12 +108,12 @@ suite('Dropdown Fields', function() {
       this.field = new Blockly.FieldDropdown(
           [['a', 'A'], ['b', 'B'], ['c', 'C']]);
     });
-    testHelpers.runSetValueTests(
+    runSetValueTests(
         validValueSetValueTestCases, invalidValueSetValueTestCases, 'A', 'a');
     test('With source block', function() {
       this.field.setSourceBlock(createTestBlock());
       this.field.setValue('B');
-      testHelpers.assertFieldValue(this.field, 'B', 'b');
+      assertFieldValue(this.field, 'B', 'b');
     });
   });
 
@@ -133,7 +134,7 @@ suite('Dropdown Fields', function() {
       });
       test('New Value', function() {
         this.dropdownField.setValue('1B');
-        testHelpers.assertFieldValue(this.dropdownField, '1A', '1a');
+        assertFieldValue(this.dropdownField, '1A', '1a');
       });
     });
     suite('Force 1s Validator', function() {
@@ -144,7 +145,7 @@ suite('Dropdown Fields', function() {
       });
       test('New Value', function() {
         this.dropdownField.setValue('2B');
-        testHelpers.assertFieldValue(this.dropdownField, '1B', '1b');
+        assertFieldValue(this.dropdownField, '1B', '1b');
       });
     });
     suite('Returns Undefined Validator', function() {
@@ -153,7 +154,7 @@ suite('Dropdown Fields', function() {
       });
       test('New Value', function() {
         this.dropdownField.setValue('1B');
-        testHelpers.assertFieldValue(this.dropdownField, '1B', '1b');
+        assertFieldValue(this.dropdownField, '1B', '1b');
       });
     });
   });

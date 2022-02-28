@@ -6,6 +6,7 @@
 
 goog.module('Blockly.test.fieldColour');
 
+const {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSetValueTests} = goog.require('Blockly.test.fieldHelpers');
 const {createTestBlock, defineRowBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
 
 
@@ -87,7 +88,7 @@ suite('Colour Fields', function() {
    * @param {FieldTemplate} field The field to check.
    */
   const assertFieldDefault = function(field) {
-    testHelpers.assertFieldValue(field, defaultFieldValue, defaultTextValue);
+    assertFieldValue(field, defaultFieldValue, defaultTextValue);
   };
   /**
    * Asserts that the field properties are correct based on the test case.
@@ -95,15 +96,15 @@ suite('Colour Fields', function() {
    * @param {!FieldValueTestCase} testCase The test case.
    */
   const validTestCaseAssertField = function(field, testCase) {
-    testHelpers.assertFieldValue(
+    assertFieldValue(
         field, testCase.expectedValue, testCase.expectedText);
   };
 
-  testHelpers.runConstructorSuiteTests(
+  runConstructorSuiteTests(
       Blockly.FieldColour, validValueTestCases, invalidValueTestCases,
       validTestCaseAssertField, assertFieldDefault);
 
-  testHelpers.runFromJsonSuiteTests(
+  runFromJsonSuiteTests(
       Blockly.FieldColour, validValueTestCases, invalidValueTestCases,
       validTestCaseAssertField, assertFieldDefault);
 
@@ -112,25 +113,25 @@ suite('Colour Fields', function() {
       setup(function() {
         this.field = new Blockly.FieldColour();
       });
-      testHelpers.runSetValueTests(
+      runSetValueTests(
           validValueTestCases, invalidValueTestCases, defaultFieldValue,
           defaultTextValue);
       test('With source block', function() {
         this.field.setSourceBlock(createTestBlock());
         this.field.setValue('#bcbcbc');
-        testHelpers.assertFieldValue(this.field, '#bcbcbc', '#bcbcbc');
+        assertFieldValue(this.field, '#bcbcbc', '#bcbcbc');
       });
     });
     suite('Value -> New Value', function() {
       setup(function() {
         this.field = new Blockly.FieldColour('#aaaaaa');
       });
-      testHelpers.runSetValueTests(
+      runSetValueTests(
           validValueTestCases, invalidValueTestCases, '#aaaaaa', '#aaa');
       test('With source block', function() {
         this.field.setSourceBlock(createTestBlock());
         this.field.setValue('#bcbcbc');
-        testHelpers.assertFieldValue(this.field, '#bcbcbc', '#bcbcbc');
+        assertFieldValue(this.field, '#bcbcbc', '#bcbcbc');
       });
     });
   });
@@ -161,7 +162,7 @@ suite('Colour Fields', function() {
         });
         test('New Value', function() {
           this.field.setValue(suiteInfo.value);
-          testHelpers.assertFieldValue(
+          assertFieldValue(
               this.field, suiteInfo.expectedValue, suiteInfo.expectedText);
         });
       });

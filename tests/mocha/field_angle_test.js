@@ -6,6 +6,7 @@
 
 goog.module('Blockly.test.fieldAngle');
 
+const {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSetValueTests} = goog.require('Blockly.test.fieldHelpers');
 const {createTestBlock, defineRowBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
 
 
@@ -60,7 +61,7 @@ suite('Angle Fields', function() {
    * @param {FieldTemplate} field The field to check.
    */
   const assertFieldDefault = function(field) {
-    testHelpers.assertFieldValue(field, defaultFieldValue);
+    assertFieldValue(field, defaultFieldValue);
   };
   /**
    * Asserts that the field properties are correct based on the test case.
@@ -68,14 +69,14 @@ suite('Angle Fields', function() {
    * @param {!FieldValueTestCase} testCase The test case.
    */
   const validTestCaseAssertField = function(field, testCase) {
-    testHelpers.assertFieldValue(field, testCase.expectedValue);
+    assertFieldValue(field, testCase.expectedValue);
   };
 
-  testHelpers.runConstructorSuiteTests(
+  runConstructorSuiteTests(
       Blockly.FieldAngle, validValueTestCases, invalidValueTestCases,
       validTestCaseAssertField, assertFieldDefault);
 
-  testHelpers.runFromJsonSuiteTests(
+  runFromJsonSuiteTests(
       Blockly.FieldAngle, validValueTestCases, invalidValueTestCases,
       validTestCaseAssertField, assertFieldDefault);
 
@@ -84,12 +85,12 @@ suite('Angle Fields', function() {
       setup(function() {
         this.field = new Blockly.FieldAngle();
       });
-      testHelpers.runSetValueTests(
+      runSetValueTests(
           validValueTestCases, invalidValueTestCases, defaultFieldValue);
       test('With source block', function() {
         this.field.setSourceBlock(createTestBlock());
         this.field.setValue(2.5);
-        testHelpers.assertFieldValue(this.field, 2.5);
+        assertFieldValue(this.field, 2.5);
       });
     });
     suite('Value -> New Value', function() {
@@ -97,12 +98,12 @@ suite('Angle Fields', function() {
       setup(function() {
         this.field = new Blockly.FieldAngle(initialValue);
       });
-      testHelpers.runSetValueTests(
+      runSetValueTests(
           validValueTestCases, invalidValueTestCases, initialValue);
       test('With source block', function() {
         this.field.setSourceBlock(createTestBlock());
         this.field.setValue(2.5);
-        testHelpers.assertFieldValue(this.field, 2.5);
+        assertFieldValue(this.field, 2.5);
       });
     });
   });
@@ -142,12 +143,12 @@ suite('Angle Fields', function() {
           this.field.isBeingEdited_ = true;
           this.field.htmlInput_.value = String(suiteInfo.value);
           this.field.onHtmlInputChange_(null);
-          testHelpers.assertFieldValue(
+          assertFieldValue(
               this.field, suiteInfo.expectedValue, String(suiteInfo.value));
         });
         test('When Not Editing', function() {
           this.field.setValue(suiteInfo.value);
-          testHelpers.assertFieldValue(this.field, suiteInfo.expectedValue);
+          assertFieldValue(this.field, suiteInfo.expectedValue);
         });
       });
     });

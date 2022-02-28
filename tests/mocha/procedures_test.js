@@ -8,8 +8,9 @@ goog.module('Blockly.test.procedures');
 
 goog.require('Blockly');
 goog.require('Blockly.Msg');
-const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
 const {assertCallBlockStructure, assertDefBlockStructure, createProcDefBlock, createProcCallBlock} = goog.require('Blockly.test.procedureHelpers');
+const {runSerializationTestSuite} = goog.require('Blockly.test.blockHelpers');
+const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
 
 
 suite('Procedures', function() {
@@ -1203,7 +1204,7 @@ suite('Procedures', function() {
               },
         },
       ];
-      testHelpers.runSerializationTestSuite(testCases);
+      runSerializationTestSuite(testCases);
     });
   });
 });

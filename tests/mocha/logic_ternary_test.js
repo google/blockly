@@ -6,8 +6,9 @@
 
 goog.module('Blockly.test.logicTernary');
 
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
 const eventUtils = goog.require('Blockly.Events.utils');
+const {runSerializationTestSuite} = goog.require('Blockly.test.blockHelpers');
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
 
 
 suite('Logic ternary', function() {
@@ -73,7 +74,7 @@ suite('Logic ternary', function() {
           },
     },
   ];
-  testHelpers.runSerializationTestSuite(testCases);
+  runSerializationTestSuite(testCases);
 
   suite('Connections', function() {
     function connectParentAndCheckConnections(

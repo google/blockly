@@ -6,6 +6,7 @@
 
 goog.module('Blockly.test.helpers');
 
+const {captureWarnings} = goog.require('Blockly.test.commonHelpers');
 const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
 const eventUtils = goog.require('Blockly.Events.utils');
 const {Blocks} = goog.require('Blockly.blocks');
@@ -38,7 +39,7 @@ function assertWarnings(innerFunc, messages) {
   if (!Array.isArray(messages)) {
     messages = [messages];
   }
-  const warnings = testHelpers.captureWarnings(innerFunc);
+  const warnings = captureWarnings(innerFunc);
   chai.assert.lengthOf(warnings, messages.length);
   messages.forEach((message, i) => {
     chai.assert.match(warnings[i], message);

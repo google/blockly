@@ -137,9 +137,8 @@ const Xml = goog.require('Blockly.Xml');
  };
 
  /**
- * Get the text from this field, which is the selected argument name.
- * @return {string} The selected argument name, or the empty string if no
- *     variable is selected.
+ * Get the text from this field, which is the selected name.
+ * @return {string} The selected name, or value.
  */
 FieldLabelHover.prototype.getText = function() {
   return this.name_ || this.getValue();
@@ -173,7 +172,7 @@ FieldLabelHover.prototype.getText = function() {
 /**
  * Initialize this field based on the given XML.
  * @param {!Element} fieldElement The element containing information about the
- *    variable field's state.
+ *    field's state.
  */
  FieldLabelHover.prototype.fromXml = function(fieldElement) {
    const value = fieldElement.getAttribute('value');
@@ -203,7 +202,6 @@ FieldLabelHover.prototype.getText = function() {
    }
    FieldLabelHover.superClass_.dispose.call(this);
    this.workspace_ = null;
-   this.variableMap_ = null;
  };
 
  /**

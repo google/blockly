@@ -173,6 +173,13 @@ Blockly.Msg.NOT_EMPTY_MODULE_DELETE_RESTRICTION = 'Can\'t delete not empty modul
 /// button hint - Hint on the button used to launch the module deletion.
 Blockly.Msg.DELETE_MODULE = 'Delete';
 
+/** @type {string} */
+/// dropdown choice - When the user clicks on a argument shadow block, this is one of the dropdown menu choices.  It is used to rename the current argument.
+Blockly.Msg.RENAME_ARGUMENT = 'Rename argument...';
+/** @type {string} */
+/// prompt - Prompts the user to enter the new name for the selected argument. \n\nParameters:\n* %1 - the name of the argument to be renamed.
+Blockly.Msg.RENAME_ARGUMENT_TITLE = 'Rename argument "%1" to:';
+
 // Variable renaming.
 /** @type {string} */
 /// prompt - This message is only seen in the Opera browser.  With most browsers, users can edit numeric values in blocks by just clicking and typing.  Opera does not allows this, so we have to open a new window and prompt users with this message to chanage a value.

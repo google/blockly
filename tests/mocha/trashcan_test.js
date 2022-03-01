@@ -6,7 +6,8 @@
 
 goog.module('Blockly.test.trashcan');
 
-const {assertEventFired, assertEventNotFired, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+const {assertEventFired, assertEventNotFired} = goog.require('Blockly.test.helpers.events');
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
 const {defineBasicBlockWithField, defineMutatorBlocks, defineRowBlock, defineStackBlock, defineStatementBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
 const eventUtils = goog.require('Blockly.Events.utils');
 const {simulateClick} = goog.require('Blockly.test.helpers.userInput');

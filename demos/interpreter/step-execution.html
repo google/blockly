@@ -29,8 +29,7 @@
   where <code>%1</code> is the block id. The call to <code>highlightBlock()</code> will highlight the identified block
   and set the variable <code>highlightPause</code> to <code>true</code>.</p>
 
-  <p>"Parse JavaScript" will generate the code and load it into the interpreter. Then, each press of the
-  "Step JavaScript" button will run the interpreter one step until the <code>highlightPause</code> is true.
+  <p>Each press of the "Step JavaScript" button will run the interpreter one step until the <code>highlightPause</code> is true.
   That is, until <code>highlightBlock()</code> has highlighted the block that will be executed on the next step.</p>
 
   <p>&rarr; <a href="https://developers.google.com/blockly/guides/configure-blockly/web/running-javascript#js_interpreter">More info on running code with JS Interpreter</a></p>
@@ -151,15 +150,16 @@
 
     function initApi(interpreter, globalObject) {
       // Add an API function for the alert() block, generated for "text_print" blocks.
-      interpreter.setProperty(globalObject, 'alert',
-          interpreter.createNativeFunction(function(text) {
+      var wrapper = function alert(text) {
         text = arguments.length ? text : '';
         outputArea.value += '\n' + text;
-      }));
+      };
+      interpreter.setProperty(globalObject, 'alert',
+          interpreter.createNativeFunction(wrapper));
 
       // Add an API function for the prompt() block.
-      var wrapper = function(text) {
-        return interpreter.createPrimitive(prompt(text));
+      var wrapper = function prompt(text) {
+        return window.prompt(text);
       };
       interpreter.setProperty(globalObject, 'prompt',
           interpreter.createNativeFunction(wrapper));
@@ -167,7 +167,7 @@
       // Add an API function for highlighting blocks.
       var wrapper = function(id) {
         id = String(id || '');
-        return interpreter.createPrimitive(highlightBlock(id));
+        return highlightBlock(id);
       };
       interpreter.setProperty(globalObject, 'highlightBlock',
           interpreter.createNativeFunction(wrapper));
@@ -209,7 +209,7 @@
         // In a timeout to allow the outputArea.value to reset first.
         setTimeout(function() {
           alert('Ready to execute the following code\n' +
-            '===================================\n' + latestCode);
+              '===================================\n' + latestCode);
           highlightPause = true;
           stepCode();
         }, 1);

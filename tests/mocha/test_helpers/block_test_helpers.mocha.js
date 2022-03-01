@@ -126,11 +126,11 @@ const createCodeGenerationTestFn_ = (generator) => {
         }
       }
       const assertFunc = (typeof testCase.expectedCode === 'string') ?
-          assert.equal : assert.match;
+          chai.assert.equal : chai.assert.match;
       assertFunc(code, testCase.expectedCode);
       if (!testCase.useWorkspaceToCode &&
           testCase.expectedInnerOrder !== undefined) {
-        assert.equal(innerOrder, testCase.expectedInnerOrder);
+        chai.assert.equal(innerOrder, testCase.expectedInnerOrder);
       }
     };
   };
@@ -190,7 +190,7 @@ const runSerializationTestSuite = (testCases) => {
             testCase.json, this.workspace);
         const generatedJson = Blockly.serialization.blocks.save(block);
         const expectedJson = testCase.expectedJson || testCase.json;
-        assert.deepEqual(generatedJson, expectedJson);
+        chai.assert.deepEqual(generatedJson, expectedJson);
       } else {
         const block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
             testCase.xml), this.workspace);
@@ -198,7 +198,7 @@ const runSerializationTestSuite = (testCases) => {
             Blockly.Xml.domToPrettyText(
                 Blockly.Xml.blockToDom(block));
         const expectedXml = testCase.expectedXml || testCase.xml;
-        assert.equal(generatedXml, expectedXml);
+        chai.assert.equal(generatedXml, expectedXml);
       }
     };
   };

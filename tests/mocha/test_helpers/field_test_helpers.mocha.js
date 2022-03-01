@@ -75,9 +75,10 @@ function assertFieldValue(field, expectedValue, expectedText = undefined) {
   if (expectedText === undefined) {
     expectedText = String(expectedValue);
   }
-  assert.equal(actualValue, expectedValue, 'Value');
-  assert.equal(actualText, expectedText, 'Text');
+  chai.assert.equal(actualValue, expectedValue, 'Value');
+  chai.assert.equal(actualText, expectedText, 'Text');
 }
+exports.assertFieldValue = assertFieldValue;
 
 /**
  * Runs provided creation test cases.
@@ -120,7 +121,7 @@ function runCreationTestsAssertThrows_(testCases, creation) {
    */
   const createTestFn = (testCase) => {
     return function() {
-      assert.throws(function() {
+      chai.assert.throws(function() {
         creation.call(this, testCase);
       }, testCase.errMsgMatcher);
     };
@@ -156,7 +157,7 @@ function runConstructorSuiteTests(TestedField, validValueTestCases,
       });
     } else {
       test('Empty', function() {
-        assert.throws(function() {
+        chai.assert.throws(function() {
           customCreateWithJs ? customCreateWithJs.call(this) :
               new TestedField();
         });
@@ -211,7 +212,7 @@ function runFromJsonSuiteTests(TestedField, validValueTestCases,
       });
     } else {
       test('Empty', function() {
-        assert.throws(function() {
+        chai.assert.throws(function() {
           customCreateWithJson ? customCreateWithJson.call(this) :
               TestedField.fromJson({});
         });

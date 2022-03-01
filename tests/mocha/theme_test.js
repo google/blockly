@@ -6,8 +6,8 @@
 
 goog.module('Blockly.test.theme');
 
-const eventUtils = goog.require('Blockly.Events.utils');
 const {assertEventFired} = goog.require('Blockly.test.helpers.events');
+const eventUtils = goog.require('Blockly.Events.utils');
 const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
 
 

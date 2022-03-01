@@ -11,23 +11,6 @@ const {Blocks} = goog.require('Blockly.blocks');
 
 
 /**
- * Check if a variable with the given values exists.
- * @param {Blockly.Workspace|Blockly.VariableMap} container The workspace  or
- *     variableMap the checked variable belongs to.
- * @param {!string} name The expected name of the variable.
- * @param {!string} type The expected type of the variable.
- * @param {!string} id The expected id of the variable.
- */
-function assertVariableValues(container, name, type, id) {
-  const variable = container.getVariableById(id);
-  chai.assert.isDefined(variable);
-  chai.assert.equal(variable.name, name);
-  chai.assert.equal(variable.type, type);
-  chai.assert.equal(variable.getId(), id);
-}
-exports.assertVariableValues = assertVariableValues;
-
-/**
  * Safely disposes of Blockly workspace, logging any errors.
  * Assumes that sharedTestSetup has also been called. This should be called
  * using workspaceTeardown.call(this).

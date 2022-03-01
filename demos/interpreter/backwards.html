@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Blockly Demo: Backwards Stepping with JS-Interpreter</title>
+  <link href="style.css" rel="stylesheet" type="text/css">
+  <script src="acorn.js"></script>
+  <script src="interpreter.js"></script>
+  <script src="serialize.js"></script>
+  <script src="diff_match_patch.js"></script>
+  <script src="../../blockly_compressed.js"></script>
+  <script src="../../blocks_compressed.js"></script>
+  <script src="../../javascript_compressed.js"></script>
+  <script src="../../msg/js/en.js"></script>
+  <style>
+    body {
+      background-color: #fff;
+      font-family: sans-serif;
+    }
+    h1 {
+      font-weight: normal;
+      font-size: 140%;
+    }
+  </style>
+</head>
+<body>
+  <h1><a href="https://developers.google.com/blockly/">Blockly</a> &gt;
+    <a href="../index.html">Demos</a> &gt; Backwards Stepping with JS-Interpreter</h1>
+
+  <p>This is a demo of executing code step-by-step with a sandboxed JavaScript
+  interpreter -- both forwards and backwards.</p>
+
+  <p>Each step forwards saves the current state to a stack.  Each state
+  backwards restores to the previous state on the stack.  Compression is used
+  to keep only the deltas between stack frames.  Note that because serialization
+  reaches deep beyond the public API for the JS-Interpreter, the uncompiled
+  acorn.js and interpreter.js must be used in place of acorn_interpreter.js.</p>
+
+  <p>&rarr; <a href="https://developers.google.com/blockly/guides/configure-blockly/web/running-javascript#js_interpreter">More info on running code with JS-Interpreter</a></p>
+
+  <p>
+    <button onclick="stepBackwards()" id="stepBackwardsButton" disabled="disabled">Step &larr;</button>
+    <button onclick="stepForwards()" id="stepForwardsButton">Step &rarr;</button>
+  </p>
+
+  <div style="width: 100%">
+    <div id="blocklyDiv"
+        style="display: inline-block; height: 480px; width: 58%"></div>
+    <textarea id="output" disabled="disabled"
+        style="display: inline-block; height: 480px; width: 38%;">
+    </textarea>
+  </div>
+
+  <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
+    <category name="Logic" colour="%{BKY_LOGIC_HUE}">
+      <block type="controls_if"></block>
+      <block type="logic_compare"></block>
+      <block type="logic_operation"></block>
+      <block type="logic_negate"></block>
+      <block type="logic_boolean"></block>
+    </category>
+    <category name="Loops" colour="%{BKY_LOOPS_HUE}">
+      <block type="controls_repeat_ext">
+        <value name="TIMES">
+          <block type="math_number">
+            <field name="NUM">10</field>
+          </block>
+        </value>
+      </block>
+      <block type="controls_whileUntil"></block>
+    </category>
+    <category name="Math" colour="%{BKY_MATH_HUE}">
+      <block type="math_number">
+        <field name="NUM">123</field>
+      </block>
+      <block type="math_arithmetic"></block>
+      <block type="math_single"></block>
+    </category>
+    <category name="Text" colour="%{BKY_TEXTS_HUE}">
+      <block type="text"></block>
+      <block type="text_length"></block>
+      <block type="text_print"></block>
+      <block type="text_prompt_ext">
+        <value name="TEXT">
+          <block type="text"></block>
+        </value>
+      </block>
+    </category>
+    <sep></sep>
+    <category name="Variables" custom="VARIABLE" colour="%{BKY_VARIABLES_HUE}">
+    </category>
+    <category name="Functions" custom="PROCEDURE" colour="%{BKY_PROCEDURES_HUE}">
+    </category>
+  </xml>
+
+  <xml xmlns="https://developers.google.com/blockly/xml" id="startBlocks" style="display: none">
+    <block type="variables_set" id="set_n_initial" inline="true" x="20" y="20">
+      <field name="VAR">n</field>
+      <value name="VALUE">
+        <block type="math_number">
+          <field name="NUM">1</field>
+        </block>
+      </value>
+      <next>
+        <block type="controls_repeat_ext" id="repeat" inline="true">
+          <value name="TIMES">
+            <block type="math_number">
+              <field name="NUM">4</field>
+            </block>
+          </value>
+          <statement name="DO">
+            <block type="variables_set" id="set_n_update" inline="true">
+              <field name="VAR">n</field>
+              <value name="VALUE">
+                <block type="math_arithmetic" inline="true">
+                  <field name="OP">MULTIPLY</field>
+                  <value name="A">
+                    <block type="variables_get">
+                      <field name="VAR">n</field>
+                    </block>
+                  </value>
+                  <value name="B">
+                    <block type="math_number">
+                      <field name="NUM">2</field>
+                    </block>
+                  </value>
+                </block>
+              </value>
+              <next>
+                <block type="text_print" id="print">
+                  <value name="TEXT">
+                    <block type="variables_get">
+                      <field name="VAR">n</field>
+                    </block>
+                  </value>
+                </block>
+              </next>
+            </block>
+          </statement>
+        </block>
+      </next>
+    </block>
+  </xml>
+
+  <script>
+    var demoWorkspace = Blockly.inject('blocklyDiv',
+        {media: '../../media/',
+         toolbox: document.getElementById('toolbox')});
+    Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
+    Blockly.JavaScript.addReservedWords('highlightBlock');
+    Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'),
+                               demoWorkspace);
+
+    var outputArea = document.getElementById('output');
+    var myInterpreter = null;
+
+    // Stack of serializations.  Each object contains three properties:
+    //   .json: A full serialization of the interpreter's state.
+    //   .delta: Instead of a full serialization, a delta from the next sate.
+    //   .highlight: The ID of the block highlighted in this state.
+    var serializationStack = [];
+
+    // Global variable to keep track of the currently highlighted block.
+    var highlightedBlockId = '';
+
+    // The forward step button disables for 2s after program completion, then
+    // re-enables.  If the backwards step button is pressed during this time
+    // then cancel the scheduled re-enabling.
+    var disablePid = 0;
+
+    // Optionally, use the Diff Match Patch library to compress the stack.
+    var dmp;
+    if (typeof diff_match_patch === 'function') {
+      dmp = new diff_match_patch();
+      console.log('Using DMP for compression.');
+    } else {
+      console.warn('DMP not available, each step will cost ~300 KB.');
+    }
+
+    function initApi(interpreter, globalObject) {
+      // Add an API function for the alert() block, generated for "text_print" blocks.
+      var wrapper = function alert(text) {
+        text = arguments.length ? text : '';
+        outputArea.value += '\n' + text;
+      };
+      interpreter.setProperty(globalObject, 'alert',
+          interpreter.createNativeFunction(wrapper));
+
+      // Add an API function for the prompt() block.
+      var wrapper = function prompt(text) {
+        return window.prompt(text);
+      };
+      interpreter.setProperty(globalObject, 'prompt',
+          interpreter.createNativeFunction(wrapper));
+
+      // Add an API function for highlighting blocks.
+      var wrapper = function(id) {
+        id = String(id || '');
+        highlightedBlockId = id;
+        return highlightBlock(id);
+      };
+      interpreter.setProperty(globalObject, 'highlightBlock',
+          interpreter.createNativeFunction(wrapper));
+    }
+
+    var highlightPause = false;
+
+    function highlightBlock(id) {
+      demoWorkspace.highlightBlock(id);
+      highlightPause = true;
+    }
+
+    function resetStepUi(clearOutput) {
+      demoWorkspace.highlightBlock(null);
+      highlightPause = false;
+
+      if (clearOutput) {
+        outputArea.value = 'Program output:\n=================';
+      }
+      myInterpreter = null;
+    }
+
+    function stepBackwards() {
+      var serialization = serializationStack.pop();
+      if (!serializationStack.length) {
+        document.getElementById('stepBackwardsButton').disabled = 'disabled';
+      }
+      if (!serialization) {
+        return;  // Should never happen.
+      }
+      highlightedBlockId = serialization.highlight;
+      highlightBlock(highlightedBlockId);
+      var json = serialization.json;
+      if (dmp && serializationStack.length) {
+        // Uncompress the previous serialization.
+        var previousStack = serializationStack[serializationStack.length - 1];
+        var previousDiff = dmp.diff_fromDelta(json, previousStack.delta);
+        previousStack.delta = null;
+        previousStack.json = dmp.diff_text2(previousDiff);
+      }
+      json = JSON.parse(json);
+      // Create a clean interpreter with the same initialization functions.
+      myInterpreter = new Interpreter('', initApi);
+      deserialize(json, myInterpreter);
+
+      if (disablePid) {
+        clearTimeout(disablePid);
+        disablePid = 0;
+        document.getElementById('stepForwardsButton').disabled = '';
+      }
+    }
+
+    function stepForwards() {
+      if (!myInterpreter) {
+        // First statement of this code.
+        // Clear the program output.
+        resetStepUi(true);
+        var latestCode = Blockly.JavaScript.workspaceToCode(demoWorkspace);
+        serializationStack.length = 0;
+        document.getElementById('stepBackwardsButton').disabled = 'disabled';
+        myInterpreter = new Interpreter(latestCode, initApi);
+
+        // And then show generated code in an alert.
+        // In a timeout to allow the outputArea.value to reset first.
+        setTimeout(function() {
+          alert('Ready to execute the following code\n' +
+              '===================================\n' + latestCode);
+          highlightPause = true;
+          stepForwards();
+        }, 1);
+        return;
+      }
+      highlightPause = false;
+
+      var json = JSON.stringify(serialize(myInterpreter));
+      if (dmp && serializationStack.length) {
+        // Compress the previous serialization as a delta of the current one.
+        var previousStack = serializationStack[serializationStack.length - 1];
+        var diffs = dmp.diff_main(json, previousStack.json);
+        dmp.diff_cleanupEfficiency(diffs);
+        previousStack.json = null;
+        previousStack.delta = dmp.diff_toDelta(diffs);
+      }
+      serializationStack.push({json: json, delta: null, highlight: highlightedBlockId});
+      document.getElementById('stepBackwardsButton').disabled = '';
+
+      do {
+        try {
+          var hasMoreCode = myInterpreter.step();
+        } finally {
+          if (!hasMoreCode) {
+            // Program complete, no more code to execute.
+            outputArea.value += '\n\n<< Program complete >>';
+
+            resetStepUi(false);
+
+            // Cool down, to discourage accidentally restarting the program.
+            document.getElementById('stepForwardsButton').disabled = 'disabled';
+            disablePid = setTimeout(function() {
+              document.getElementById('stepForwardsButton').disabled = '';
+              document.getElementById('stepBackwardsButton').disabled = 'disabled';
+              disablePid = 0;
+            }, 2000);
+
+            return;
+          }
+        }
+        // Keep executing until a highlight statement is reached,
+        // or the code completes or errors.
+      } while (hasMoreCode && !highlightPause);
+    }
+
+    demoWorkspace.addChangeListener(function(event) {
+      if (!event.isUiEvent) {
+        // Something changed.  Interpreter needs to be reloaded.
+        resetStepUi(true);
+      }
+    });
+  </script>
+</body>
+</html>

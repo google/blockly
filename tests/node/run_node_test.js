@@ -38,7 +38,7 @@ suite('Test Node.js', function() {
     const headlessXml = Blockly.Xml.workspaceToDom(workspace, true);
     const headlessText = Blockly.Xml.domToPrettyText(headlessXml);
 
-    chai.assert.equal(headlessText, xmlText, 'equal');
+    assert.equal(headlessText, xmlText, 'equal');
   });
   test('Generate Code', function() {
     const xml = Blockly.Xml.textToDom(xmlText);
@@ -51,7 +51,7 @@ suite('Test Node.js', function() {
     const code = Blockly.JavaScript.workspaceToCode(workspace);
 
     // Check output
-    chai.assert.equal('window.alert(\'Hello from Blockly!\');', code.trim(), 'equal');
+    assert.equal('window.alert(\'Hello from Blockly!\');', code.trim(), 'equal');
   });
 });
 

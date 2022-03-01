@@ -6,7 +6,8 @@
 
 goog.module('Blockly.test.jsoSerialization');
 
-const {defineStackBlock, defineRowBlock, defineStatementBlock, createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+const {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+const {defineRowBlock, defineStackBlock, defineStatementBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
 
 
 suite('JSO Serialization', function() {

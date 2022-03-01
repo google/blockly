@@ -7,7 +7,8 @@
 goog.module('Blockly.test.fieldNumber');
 
 const {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSetValueTests} = goog.require('Blockly.test.helpers.fields');
-const {defineRowBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+const {defineRowBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
+const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
 const {runTestCases} = goog.require('Blockly.test.helpers.common');
 
 

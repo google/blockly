@@ -7,7 +7,8 @@
 goog.module('Blockly.test.fieldLabelSerialization');
 
 const {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSetValueTests} = goog.require('Blockly.test.helpers.fields');
-const {createTestBlock, defineRowBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+const {createTestBlock, defineRowBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
 
 
 suite('Label Serializable Fields', function() {

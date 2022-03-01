@@ -6,8 +6,8 @@
 
 goog.module('Blockly.test.gesture');
 
-const eventUtils = goog.require('Blockly.Events.utils');
-const {assertEventFired, assertEventNotFired, defineBasicBlockWithField, dispatchPointerEvent, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+const {assertEventFired, assertEventNotFired, dispatchPointerEvent, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+const {defineBasicBlockWithField} = goog.require('Blockly.test.helpers.blockDefinitions');
 
 
 suite('Gesture', function() {

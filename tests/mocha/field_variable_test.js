@@ -7,7 +7,8 @@
 goog.module('Blockly.test.fieldVariable');
 
 const {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSetValueTests} = goog.require('Blockly.test.helpers.fields');
-const {createGenUidStubWithReturns, createTestBlock, defineRowBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+const {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+const {createTestBlock, defineRowBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
 
 
 suite('Variable Fields', function() {

@@ -7,7 +7,8 @@
 goog.module('Blockly.test.fieldCheckbox');
 
 const {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSetValueTests} = goog.require('Blockly.test.helpers.fields');
-const {defineRowBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+const {defineRowBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
 
 
 suite('Checkbox Fields', function() {

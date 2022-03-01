@@ -7,7 +7,8 @@
 goog.module('Blockly.test.fieldTextInput');
 
 const {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSetValueTests} = goog.require('Blockly.test.helpers.fields');
-const {createTestBlock, defineRowBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+const {createTestBlock, defineRowBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
+const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
 
 
 suite('Text Input Fields', function() {

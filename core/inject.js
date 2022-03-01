@@ -16,6 +16,7 @@
 goog.module('Blockly.inject');
 
 const Css = goog.require('Blockly.Css');
+const Tooltip = goog.require('Blockly.Tooltip');
 const Touch = goog.require('Blockly.Touch');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const aria = goog.require('Blockly.utils.aria');
@@ -37,7 +38,6 @@ const {Svg} = goog.require('Blockly.utils.Svg');
 const {WorkspaceDragSurfaceSvg} = goog.require('Blockly.WorkspaceDragSurfaceSvg');
 const {WorkspaceSvg} = goog.require('Blockly.WorkspaceSvg');
 const {Workspace} = goog.require('Blockly.Workspace');
-const {tooltipManager} = goog.require('Blockly.Tooltip');
 
 
 /**
@@ -193,7 +193,7 @@ const createMainWorkspace = function(
   common.svgResize(mainWorkspace);
   WidgetDiv.createDom();
   DropDownDiv.createDom();
-  tooltipManager.createDom();
+  Tooltip.createDom();
   return mainWorkspace;
 };
 

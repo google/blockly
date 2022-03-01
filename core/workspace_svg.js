@@ -18,6 +18,7 @@ goog.module('Blockly.WorkspaceSvg');
 const ContextMenu = goog.require('Blockly.ContextMenu');
 /* eslint-disable-next-line no-unused-vars */
 const Procedures = goog.requireType('Blockly.Procedures');
+const Tooltip = goog.require('Blockly.Tooltip');
 /* eslint-disable-next-line no-unused-vars */
 const Variables = goog.requireType('Blockly.Variables');
 /* eslint-disable-next-line no-unused-vars */
@@ -101,7 +102,6 @@ const {WorkspaceDragSurfaceSvg} = goog.requireType('Blockly.WorkspaceDragSurface
 const {Workspace} = goog.require('Blockly.Workspace');
 /* eslint-disable-next-line no-unused-vars */
 const {ZoomControls} = goog.requireType('Blockly.ZoomControls');
-const {tooltipManager} = goog.require('Blockly.Tooltip');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
 /** @suppress {extraRequire} */
@@ -2673,7 +2673,7 @@ class WorkspaceSvg extends Workspace {
    * @param {boolean=} opt_onlyClosePopups Whether only popups should be closed.
    */
   hideChaff(opt_onlyClosePopups) {
-    tooltipManager.hide();
+    Tooltip.hide();
     WidgetDiv.hide();
     DropDownDiv.hideWithoutAnimation();
 

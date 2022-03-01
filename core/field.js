@@ -19,6 +19,7 @@
  */
 goog.module('Blockly.Field');
 
+const Tooltip = goog.require('Blockly.Tooltip');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const Xml = goog.require('Blockly.Xml');
 const browserEvents = goog.require('Blockly.browserEvents');
@@ -53,8 +54,6 @@ const {Rect} = goog.require('Blockly.utils.Rect');
 const {ShortcutRegistry} = goog.requireType('Blockly.ShortcutRegistry');
 const {Size} = goog.require('Blockly.utils.Size');
 const {Svg} = goog.require('Blockly.utils.Svg');
-/* eslint-disable-next-line no-unused-vars */
-const {TipInfo, tooltipManager} = goog.require('Blockly.Tooltip');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */
@@ -99,7 +98,7 @@ const Field = function(value, opt_validator, opt_config) {
   /**
    * Used to cache the field's tooltip value if setTooltip is called when the
    * field is not yet initialized. Is *not* guaranteed to be accurate.
-   * @type {?TipInfo}
+   * @type {?Tooltip.TipInfo}
    * @private
    */
   this.tooltip_ = null;
@@ -412,7 +411,7 @@ Field.prototype.createTextElement_ = function() {
  * @protected
  */
 Field.prototype.bindEvents_ = function() {
-  tooltipManager.bindMouseEvents(this.getClickTarget_());
+  Tooltip.bindMouseEvents(this.getClickTarget_());
   this.mouseDownWrapper_ = browserEvents.conditionalBind(
       this.getClickTarget_(), 'mousedown', this, this.onMouseDown_);
 };
@@ -520,7 +519,7 @@ Field.prototype.loadLegacyState = function(callingClass, state) {
 Field.prototype.dispose = function() {
   DropDownDiv.hideIfOwner(this);
   WidgetDiv.hideIfOwner(this);
-  tooltipManager.unbindMouseEvents(this.getClickTarget_());
+  Tooltip.unbindMouseEvents(this.getClickTarget_());
 
   if (this.mouseDownWrapper_) {
     browserEvents.unbind(this.mouseDownWrapper_);
@@ -1053,7 +1052,7 @@ Field.prototype.onMouseDown_ = function(e) {
 
 /**
  * Sets the tooltip for this field.
- * @param {?TipInfo} newTip The
+ * @param {?Tooltip.TipInfo} newTip The
  *     text for the tooltip, a function that returns the text for the tooltip, a
  *     parent object whose tooltip will be used, or null to display the tooltip
  *     of the parent block. To not display a tooltip pass the empty string.
@@ -1078,10 +1077,10 @@ Field.prototype.setTooltip = function(newTip) {
 Field.prototype.getTooltip = function() {
   const clickTarget = this.getClickTarget_();
   if (clickTarget) {
-    return tooltipManager.getTooltipOfObject(clickTarget);
+    return Tooltip.getTooltipOfObject(clickTarget);
   }
   // Field has not been initialized yet. Return stashed this.tooltip_ value.
-  return tooltipManager.getTooltipOfObject({tooltip: this.tooltip_});
+  return Tooltip.getTooltipOfObject({tooltip: this.tooltip_});
 };
 
 /**

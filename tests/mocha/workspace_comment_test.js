@@ -7,7 +7,7 @@
 goog.module('Blockly.test.workspaceComment');
 
 goog.require('Blockly.WorkspaceComment');
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
 
 
 suite('Workspace comment', function() {

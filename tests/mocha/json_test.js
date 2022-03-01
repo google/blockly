@@ -6,7 +6,7 @@
 
 goog.module('Blockly.test.json');
 
-const {addMessageToCleanup, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+const {addMessageToCleanup, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
 const {assertNoWarnings, assertWarnings} = goog.require('Blockly.test.helpers.warnings');
 
 

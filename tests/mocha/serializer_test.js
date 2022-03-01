@@ -7,7 +7,7 @@
 goog.module('Blockly.test.serialization');
 
 const {TestCase, TestSuite, runTestCases, runTestSuites} = goog.require('Blockly.test.helpers.common');
-const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
 
 
 // TODO: Move this into samples as part of the dev-tools package.

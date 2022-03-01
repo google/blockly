@@ -7,7 +7,7 @@
 goog.module('Blockly.test.registry');
 
 const {assertWarnings} = goog.require('Blockly.test.helpers.warnings');
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
 
 
 suite('Registry', function() {

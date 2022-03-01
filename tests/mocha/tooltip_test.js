@@ -6,7 +6,7 @@
 
 goog.module('Blockly.test.tooltip');
 
-const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
 
 
 suite('Tooltip', function() {

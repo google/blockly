@@ -7,7 +7,7 @@
 goog.module('Blockly.test.workspace');
 
 const {assertVariableValues} = goog.require('Blockly.test.helpers.variables');
-const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
 const {testAWorkspace} = goog.require('Blockly.test.helpers.workspace');
 
 

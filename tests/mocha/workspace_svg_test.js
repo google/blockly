@@ -9,7 +9,7 @@ goog.module('Blockly.test.workspaceSvg');
 const {assertEventFired, assertEventNotFired, createFireChangeListenerSpy} = goog.require('Blockly.test.helpers.events');
 const {assertVariableValues} = goog.require('Blockly.test.helpers.variables');
 const {defineStackBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
-const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
 const {testAWorkspace} = goog.require('Blockly.test.helpers.workspace');
 
 

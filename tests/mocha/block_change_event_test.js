@@ -6,7 +6,7 @@
 
 goog.module('Blockly.test.blockChangeEvent');
 
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
 const {defineMutatorBlocks} = goog.require('Blockly.test.helpers.blockDefinitions');
 
 

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.workspaceHelpers');
+goog.module('Blockly.test.helpers.workspace');
 
 const {assertVariableValues, assertWarnings, workspaceTeardown} = goog.require('Blockly.test.helpers');
 const eventUtils = goog.require('Blockly.Events.utils');

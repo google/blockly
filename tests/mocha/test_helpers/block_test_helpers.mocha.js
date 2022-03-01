@@ -6,7 +6,7 @@
 
 goog.module('Blockly.test.blockHelpers');
 
-const {runTestCases, runTestSuites, TestCase, TestSuite} = goog.require('Blockly.test.commonHelpers');
+const {runTestCases, runTestSuites, TestCase, TestSuite} = goog.require('Blockly.test.helpers.common');
 
 
 /**

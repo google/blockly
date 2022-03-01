@@ -6,7 +6,7 @@
 
 goog.module('Blockly.test.helpers');
 
-const {captureWarnings} = goog.require('Blockly.test.commonHelpers');
+const {captureWarnings} = goog.require('Blockly.test.helpers.common');
 const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
 const eventUtils = goog.require('Blockly.Events.utils');
 const {Blocks} = goog.require('Blockly.blocks');

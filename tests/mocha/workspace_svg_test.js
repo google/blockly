@@ -6,9 +6,9 @@
 
 goog.module('Blockly.test.workspaceSvg');
 
-const eventUtils = goog.require('Blockly.Events.utils');
 const {assertEventFired, assertEventNotFired, assertVariableValues, createFireChangeListenerSpy, defineStackBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
-const {testAWorkspace} = goog.require('Blockly.test.workspaceHelpers');
+const eventUtils = goog.require('Blockly.Events.utils');
+const {testAWorkspace} = goog.require('Blockly.test.helpers.workspace');
 
 
 suite('WorkspaceSvg', function() {

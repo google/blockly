@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.commonHelpers');
+goog.module('Blockly.test.helpers.common');
 
 /**
  * Test case configuration.

@@ -6,7 +6,7 @@
 
 goog.module('Blockly.test.fieldImage');
 
-const {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSetValueTests} = goog.require('Blockly.test.fieldHelpers');
+const {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSetValueTests} = goog.require('Blockly.test.helpers.fields');
 const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
 
 

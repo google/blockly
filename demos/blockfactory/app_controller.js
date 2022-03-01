@@ -181,7 +181,6 @@ AppController.prototype.formatBlockLibraryForImport_ = function(xmlText) {
 
     blockXmlTextMap[blockType] = xmlText;
   }
-
   return blockXmlTextMap;
 };
 

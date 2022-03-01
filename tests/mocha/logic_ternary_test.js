@@ -7,7 +7,7 @@
 goog.module('Blockly.test.logicTernary');
 
 const eventUtils = goog.require('Blockly.Events.utils');
-const {runSerializationTestSuite} = goog.require('Blockly.test.blockHelpers');
+const {runSerializationTestSuite} = goog.require('Blockly.test.helpers.serialization');
 const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
 
 

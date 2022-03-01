@@ -8,7 +8,7 @@ goog.module('Blockly.test.fieldMultiline');
 
 const {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSetValueTests} = goog.require('Blockly.test.helpers.fields');
 const {createTestBlock, defineRowBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
-const {runCodeGenerationTestSuites} = goog.require('Blockly.test.blockHelpers');
+const {runCodeGenerationTestSuites} = goog.require('Blockly.test.helpers.codeGeneration');
 
 
 suite('Multiline Input Fields', function() {

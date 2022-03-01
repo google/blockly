@@ -25,6 +25,8 @@ const userAgent = goog.require('Blockly.utils.userAgent');
 const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
 const {Field} = goog.require('Blockly.Field');
 const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
+/* eslint-disable-next-line no-unused-vars */
+const {Sentinel} = goog.requireType('Blockly.utils.Sentinel');
 const {Svg} = goog.require('Blockly.utils.Svg');
 
 
@@ -34,22 +36,24 @@ const {Svg} = goog.require('Blockly.utils.Svg');
  */
 class FieldMultilineInput extends FieldTextInput {
   /**
-   * @param {string=} opt_value The initial content of the field. Should cast to
-   *     a
-   *    string. Defaults to an empty string if null or undefined.
+   * @param {(string|!Sentinel)=} opt_value The initial content of the
+   *     field. Should cast to a string. Defaults to an empty string if null or
+   *     undefined.
+   *     Also accepts Field.SKIP_SETUP if you wish to skip setup (only used by
+   *     subclasses that want to handle configuration and setting the field
+   *     value after their own constructors have run).
    * @param {Function=} opt_validator An optional function that is called
    *     to validate any constraints on what the user entered.  Takes the new
    *     text as an argument and returns either the accepted text, a replacement
    *     text, or null to abort the change.
    * @param {Object=} opt_config A map of options used to configure the field.
-   *    See the [field creation documentation]{@link
-   * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/multiline-text-input#creation}
-   *    for a list of properties this parameter supports.
+   *     See the [field creation documentation]{@link
+   *     https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/multiline-text-input#creation}
+   *     for a list of properties this parameter supports.
    * @alias Blockly.FieldMultilineInput
    */
   constructor(opt_value, opt_validator, opt_config) {
-    const stringValue = opt_value == undefined ? '' : String(opt_value);
-    super(stringValue, opt_validator, opt_config);
+    super(Field.SKIP_SETUP);
 
     /**
      * The SVG group element that will contain a text element for each text row
@@ -73,17 +77,10 @@ class FieldMultilineInput extends FieldTextInput {
      */
     this.isOverflowedY_ = false;
 
-    /**
-     * @type {boolean}
-     * @private
-     */
-    this.isBeingEdited_ = false;
-
-    /**
-     * @type {boolean}
-     * @private
-     */
-    this.isTextValid_ = false;
+    if (opt_value === Field.SKIP_SETUP) return;
+    if (opt_config) this.configure_(opt_config);
+    this.setValue(opt_value);
+    if (opt_validator) this.setValidator(opt_validator);
   }
 
   /**

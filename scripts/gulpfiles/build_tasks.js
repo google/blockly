@@ -168,11 +168,20 @@ function stripApacheLicense() {
 }
 
 /**
- * Closure compiler warning groups used to treat warnings as errors.
- * For a full list of closure compiler groups, consult:
- * https://github.com/google/closure-compiler/blob/master/src/com/google/javascript/jscomp/DiagnosticGroups.java#L113
+ * Closure compiler diagnostic groups we want to be treated as errors.
+ * These are effected when the --debug or --strict flags are passed.
+ * For a full list of closure compiler groups, consult the output of
+ * google-closure-compiler --help or look in the source  here:
+ * https://github.com/google/closure-compiler/blob/master/src/com/google/javascript/jscomp/DiagnosticGroups.java#L117
+ * 
+ * The list in JSCOMP_ERROR contains all the diagnostic groups we know
+ * about, but some are commented out if we don't want them, and may
+ * appear in JSCOMP_WARNING or JSCOMP_OFF instead.  Items not
+ * appearing on any list will default to setting provided by the
+ * compiler, which may vary depending on compilation level.
  */
 var JSCOMP_ERROR = [
+  // 'accessControls',  // Deprecated; means same as visibility.
   'checkPrototypalTypes',
   'checkRegExp',
   'checkTypes',
@@ -185,27 +194,29 @@ var JSCOMP_ERROR = [
   'duplicateMessage',
   'es5Strict',
   'externsValidation',
-  'extraRequire',
+  'extraRequire',  // Undocumented but valid.
   'functionParams',
   'globalThis',
   'invalidCasts',
   'misplacedTypeAnnotation',
-  // 'missingOverride',
+  // 'missingOverride',  // There are many of these, which should be fixed.
   'missingPolyfill',
   'missingProperties',
   'missingProvide',
   'missingRequire',
   'missingReturn',
-  // 'missingSourcesWarnings',
+  // 'missingSourcesWarnings',  // Group of several other options.
   'moduleLoad',
   'msgDescriptions',
   'nonStandardJsDocs',
-  // 'polymer',
-  // 'reportUnknownTypes',
-  // 'strictCheckTypes',
-  // 'strictMissingProperties',
+  'partialAlias',
+  // 'polymer',  // Not applicable.
+  // 'reportUnknownTypes',  // VERY verbose.
+  // 'strictCheckTypes',  // Use --strict to enable.
+  // 'strictMissingProperties',  // Part of strictCheckTypes.
+  'strictModuleChecks',  // Undocumented but valid.
   'strictModuleDepCheck',
-  // 'strictPrimitiveOperators',
+  // 'strictPrimitiveOperators',  // Part of strictCheckTypes.
   'suspiciousCode',
   'typeInvalidation',
   'undefinedVars',
@@ -215,19 +226,38 @@ var JSCOMP_ERROR = [
   'unusedPrivateMembers',
   'uselessCode',
   'untranspilableFeatures',
-  /* In order to transition to ES modules, modules will need to import one
-   * another by relative paths. This means that the existing practice of moving
-   * all source files into the same directory for compilation (see docs for
-   * flattenCorePaths) would break imports. Not flattening files in this way
-   * breaks our usage of @package however; files were flattened so that all
-   * Blockly source files are in the same directory and can use @package to mark
-   * methods that are only allowed for use by Blockly, while still allowing
-   * access between e.g. core/events/* and core/utils/*. For now, we're
-   * downgrading access control violations (including @private) to warnings.
-   * Once ES module migration is complete, they will be re-enabled and an
-   * alternative to @package will be established.
+  // 'visibility',  // Disabled; see note in JSCOMP_OFF.
+];
+
+/**
+ * Closure compiler diagnostic groups we want to be treated as warnings.
+ * These are effected when the --debug or --strict flags are passed.
+ */
+var JSCOMP_WARNING = [
+];
+
+/**
+ * Closure compiler diagnostic groups we want to be ignored.
+ * These suppressions are always effected by default.
+ */
+var JSCOMP_OFF = [
+  /* In order to transition to ES modules, modules will need to import
+   * one another by relative paths. This means that the existing
+   * practice of moving all source files into the same directory for
+   * compilation (see docs for flattenCorePaths) would break
+   * imports. Not flattening files in this way breaks our usage
+   * of @package however; files were flattened so that all Blockly
+   * source files are in the same directory and can use @package to
+   * mark methods that are only allowed for use by Blockly, while
+   * still allowing access between e.g. core/events/* and
+   * core/utils/*. We were downgrading access control violations
+   * (including @private) to warnings, but this ends up being so
+   * spammy that it makes the compiler output nearly useless.
+   * 
+   * Once ES module migration is complete, they will be re-enabled and
+   * an alternative to @package will be established.
    */
-  // 'visibility'
+  'visibility',
 ];
 
 /**
@@ -514,6 +544,7 @@ function compile(options) {
     warning_level: argv.verbose ? 'VERBOSE' : 'DEFAULT',
     language_in: 'ECMASCRIPT_2020',
     language_out: 'ECMASCRIPT5_STRICT',
+    jscomp_off: [...JSCOMP_OFF],
     rewrite_polyfills: true,
     hide_warnings_for: 'node_modules',
     define: ['COMPILED=true'],
@@ -521,6 +552,7 @@ function compile(options) {
   };
   if (argv.debug || argv.strict) {
     defaultOptions.jscomp_error = [...JSCOMP_ERROR];
+    defaultOptions.jscomp_warning = [...JSCOMP_WARNING];
     if (argv.strict) {
       defaultOptions.jscomp_error.push('strictCheckTypes');
     }
@@ -586,7 +618,6 @@ function buildAdvancedCompilationTest() {
     compilation_level: 'ADVANCED_OPTIMIZATIONS',
     entry_point: './tests/compile/main.js',
     js_output_file: 'main_compressed.js',
-    jscomp_warning: ['visibility'],
   };
   return gulp.src(srcs, {base: './'})
       .pipe(stripApacheLicense())

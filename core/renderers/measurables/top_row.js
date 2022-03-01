@@ -18,6 +18,7 @@ goog.module('Blockly.blockRendering.TopRow');
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {Hat} = goog.require('Blockly.blockRendering.Hat');
 /* eslint-disable-next-line no-unused-vars */
 const {PreviousConnection} = goog.requireType('Blockly.blockRendering.PreviousConnection');
 const {Row} = goog.require('Blockly.blockRendering.Row');
@@ -110,7 +111,7 @@ class TopRow extends Row {
       const elem = this.elements[i];
       width += elem.width;
       if (!(Types.isSpacer(elem))) {
-        if (Types.isHat(elem)) {
+        if (Types.isHat(elem) && elem instanceof Hat) {
           ascenderHeight = Math.max(ascenderHeight, elem.ascenderHeight);
         } else {
           height = Math.max(height, elem.height);

@@ -360,8 +360,8 @@ class HorizontalFlyout extends Flyout {
 
     if (this.height_ !== flyoutHeight) {
       for (let i = 0, block; (block = blocks[i]); i++) {
-        if (block.flyoutRect_) {
-          this.moveRectToBlock_(block.flyoutRect_, block);
+        if (this.rectMap_.has(block)) {
+          this.moveRectToBlock_(this.rectMap_.get(block), block);
         }
       }
 

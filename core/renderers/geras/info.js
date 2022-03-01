@@ -386,9 +386,10 @@ class RenderInfo extends BaseRenderInfo {
     // Walk backgrounds through rows on the block, keeping track of the right
     // input edge.
     let nextRightEdge = 0;
+    const rowNextRightEdges = new WeakMap();
     let prevInput = null;
     for (let i = this.rows.length - 1, row; (row = this.rows[i]); i--) {
-      row.nextRightEdge = nextRightEdge;
+      rowNextRightEdges.set(row, nextRightEdge);
       if (Types.isInputRow(row)) {
         if (row.hasStatement) {
           this.alignStatementRow_(
@@ -396,7 +397,7 @@ class RenderInfo extends BaseRenderInfo {
         }
         if (prevInput && prevInput.hasStatement &&
             row.width < prevInput.width) {
-          row.nextRightEdge = prevInput.width;
+          rowNextRightEdges.set(row, prevInput.width);
         } else {
           nextRightEdge = row.width;
         }
@@ -411,10 +412,11 @@ class RenderInfo extends BaseRenderInfo {
         prevRightEdge = this.getDesiredRowWidth_(row);
       } else if (Types.isSpacer(row)) {
         // Set the spacer row to the max of the prev or next input width.
-        row.width = Math.max(prevRightEdge, row.nextRightEdge);
+        row.width = Math.max(prevRightEdge, rowNextRightEdges.get(row));
       } else {
         const currentWidth = row.width;
-        const desiredWidth = Math.max(prevRightEdge, row.nextRightEdge);
+        const desiredWidth =
+            Math.max(prevRightEdge, rowNextRightEdges.get(row));
         const missingSpace = desiredWidth - currentWidth;
         if (missingSpace > 0) {
           this.addAlignmentPadding_(row, missingSpace);

@@ -16,6 +16,8 @@
 goog.module('Blockly.utils.global');
 
 
+/* eslint-disable no-undef, no-invalid-this */
+
 /**
  * Reference to the global object.
  *

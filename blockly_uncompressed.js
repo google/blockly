@@ -10,13 +10,15 @@
 'use strict';
 
 
+/* eslint-disable no-var */
+
 /**
  * Blockly uncompiled-mode startup code.  If running in a browser
  * loads closure/goog/base.js and tests/deps.js, then (in any case)
  * requires Blockly.requires.
  */
 (function(globalThis) {
-  /* eslint-disable no-undef */
+  /* eslint-disable-next-line no-undef */
   var IS_NODE_JS = !!(typeof module !== 'undefined' && module.exports);
 
   if (IS_NODE_JS) {
@@ -52,4 +54,5 @@
     // Load the rest of Blockly.
     document.write('<script>goog.require(\'Blockly\');</script>');
   }
+  /* eslint-disable-next-line no-invalid-this */
 })(this);

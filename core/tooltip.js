@@ -4,23 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Library to create tooltips for Blockly.
- * First, call init() after onload.
- * Second, set the 'tooltip' property on any SVG element that needs a tooltip.
- * If the tooltip is a string, then that message will be displayed.
- * If the tooltip is an SVG element, then that object's tooltip will be used.
- * Third, call bindMouseEvents(e) passing the SVG element.
- */
 'use strict';
 
 /**
  * Library to create tooltips for Blockly.
- * First, call init() after onload.
+ * First, call createDom() after onload.
  * Second, set the 'tooltip' property on any SVG element that needs a tooltip.
- * If the tooltip is a string, then that message will be displayed.
- * If the tooltip is an SVG element, then that object's tooltip will be used.
- * Third, call bindMouseEvents(e) passing the SVG element.
+ * If the tooltip is a string, or a function that returns a string, that message
+ * will be displayed. If the tooltip is an SVG element, then that object's
+ * tooltip will be used. Third, call bindMouseEvents(e) passing the SVG element.
  * @namespace Blockly.Tooltip
  */
 goog.module('Blockly.Tooltip');
@@ -41,6 +33,46 @@ const deprecation = goog.require('Blockly.utils.deprecation');
  */
 let TipInfo;
 exports.TipInfo = TipInfo;
+
+/**
+ * A function that renders custom tooltip UI.
+ * 1st parameter: the div element to render content into.
+ * 2nd parameter: the element being moused over (i.e., the element for which the
+ * tooltip should be shown).
+ * @typedef {function(!Element, !Element)}
+ * @alias Blockly.Tooltip.CustomTooltip
+ */
+let CustomTooltip;
+exports.CustomTooltip = CustomTooltip;
+
+/**
+ * An optional function that renders custom tooltips into the provided DIV. If
+ * this is defined, the function will be called instead of rendering the default
+ * tooltip UI.
+ * @type {!CustomTooltip|undefined}
+ */
+let customTooltip = undefined;
+
+/**
+ * Sets a custom function that will be called if present instead of the default
+ * tooltip UI.
+ * @param {!CustomTooltip} customFn A custom tooltip used to render an alternate
+ *     tooltip UI.
+ * @alias Blockly.Tooltip.setCustomTooltip
+ */
+const setCustomTooltip = function(customFn) {
+  customTooltip = customFn;
+};
+exports.setCustomTooltip = setCustomTooltip;
+
+/**
+ * Gets the custom tooltip function.
+ * @returns {!CustomTooltip|undefined} The custom tooltip function, if defined.
+ */
+const getCustomTooltip = function() {
+  return customTooltip;
+};
+exports.getCustomTooltip = getCustomTooltip;
 
 /**
  * Is a tooltip currently showing?
@@ -413,6 +445,17 @@ exports.unblock = unblock;
  * Renders the tooltip content into the tooltip div.
  */
 const renderContent = function() {
+  if (typeof customTooltip === 'function') {
+    customTooltip(DIV, element);
+  } else {
+    renderDefaultContent();
+  }
+};
+
+/**
+ * Renders the default tooltip UI.
+ */
+const renderDefaultContent = function() {
   let tip = getTooltipOfObject(element);
   tip = blocklyString.wrap(tip, LIMIT);
   // Create new text, line by line.
@@ -425,10 +468,11 @@ const renderContent = function() {
 };
 
 /**
- * Gets the coordinates for the tooltip div, taking into account the edges of the screen to
- * prevent showing the tooltip offscreen.
+ * Gets the coordinates for the tooltip div, taking into account the edges of
+ * the screen to prevent showing the tooltip offscreen.
  * @param {boolean} rtl True if the tooltip should be in right-to-left layout.
- * @returns {{x: number, y: number}} Coordinates at which the tooltip div should be placed.
+ * @returns {{x: number, y: number}} Coordinates at which the tooltip div should
+ *     be placed.
  */
 const getPosition = function(rtl) {
   // Position the tooltip just below the cursor.
@@ -487,7 +531,7 @@ const show = function() {
   DIV.style.direction = rtl ? 'rtl' : 'ltr';
   DIV.style.display = 'block';
   visible = true;
-  
+
   const {x, y} = getPosition(rtl);
   DIV.style.left = x + 'px';
   DIV.style.top = y + 'px';

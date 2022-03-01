@@ -1231,6 +1231,19 @@ Block.prototype.setFieldValue = function(newValue, name) {
 };
 
 /**
+ * Sets the text of the given field for this block.
+ * @param {*} newValue The text to set.
+ * @param {string} name The name of the field to set the value of.
+ */
+ Block.prototype.setFieldText = function(newValue, name) {
+  const field = this.getField(name);
+  if (!field) {
+    throw Error('Field "' + name + '" not found.');
+  }
+  field.setText(newValue);
+};
+
+/**
  * Set whether this block can chain onto the bottom of another block.
  * @param {boolean} newBoolean True if there can be a previous statement.
  * @param {(string|Array<string>|null)=} opt_check Statement type or

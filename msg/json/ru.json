@@ -56,6 +56,8 @@
     "DELETE_MODULE": "Удалить",
     "BLOCK_MOVE_TO_MODULE": "Переместить в '%1'",
 	"CHANGE_VALUE_TITLE": "Измените значение:",
+  "RENAME_ARGUMENT": "Переименовать аргумент…",
+	"RENAME_ARGUMENT_TITLE": "Переименовать аргумент '%1' в:",
 	"RENAME_VARIABLE": "Переименовать переменную…",
 	"RENAME_VARIABLE_TITLE": "Переименовать все переменные '%1' в:",
 	"NEW_VARIABLE": "Создать переменную…",

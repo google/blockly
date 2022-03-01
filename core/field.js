@@ -915,6 +915,11 @@ Field.prototype.forceRerender = function() {
   }
 };
 
+Field.prototype.setText = function(newText) {
+  this.textContent_ = newText;
+  this.forceRerender();
+};
+
 /**
  * Used to change the value of the field. Handles validation and events.
  * Subclasses should override doClassValidation_ and doValueUpdate_ rather

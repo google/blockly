@@ -42,6 +42,8 @@
 	"NOT_EMPTY_MODULE_DELETE_RESTRICTION": "Can't delete not empty module. Delete all module blocks first.",
 	"DELETE_MODULE": "Delete",
 	"CHANGE_VALUE_TITLE": "Change value:",
+  "RENAME_ARGUMENT": "Rename argument...",
+	"RENAME_ARGUMENT_TITLE": "Rename argument '%1' to:",
 	"RENAME_VARIABLE": "Rename variable...",
 	"RENAME_VARIABLE_TITLE": "Rename all '%1' variables to:",
 	"NEW_VARIABLE": "Create variable...",

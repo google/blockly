@@ -145,6 +145,18 @@ FieldLabelHover.prototype.getText = function() {
 };
 
  /**
+ * Set the new text on field, which is the selected name.
+ * @param {string} text New text.
+ */
+  FieldLabelHover.prototype.setText = function(text) {
+    if (typeof text !== 'string') {
+      return;
+    }
+    this.name_ = text;
+    this.render_();
+  };
+
+ /**
   * Handle a mouse out event on a input field.
   * @param {!Event} e Mouse out event.
   * @private
@@ -165,7 +177,7 @@ FieldLabelHover.prototype.getText = function() {
   FieldLabelHover.prototype.toXml = function(fieldElement) {
   const value = this.getValue();
   fieldElement.setAttribute('value', value);
-  fieldElement.textContent = this.name_;
+  fieldElement.textContent = this.getText();
   return fieldElement;
 };
 

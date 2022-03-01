@@ -122,7 +122,6 @@ exports.assertEventEquals = assertEventEquals;
 function assertEventFired(spy, instanceType, expectedProperties,
     expectedWorkspaceId, expectedBlockId) {
   expectedProperties = Object.assign({
-    type: instanceType.prototype.type,
     workspaceId: expectedWorkspaceId,
     blockId: expectedBlockId,
   }, expectedProperties);

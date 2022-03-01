@@ -6,10 +6,11 @@
 
 goog.module('Blockly.test.gesture');
 
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
 const {assertEventFired, assertEventNotFired} = goog.require('Blockly.test.helpers.events');
 const {defineBasicBlockWithField} = goog.require('Blockly.test.helpers.blockDefinitions');
 const {dispatchPointerEvent} = goog.require('Blockly.test.helpers.userInput');
+const eventUtils = goog.require('Blockly.Events.utils');
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
 
 
 suite('Gesture', function() {

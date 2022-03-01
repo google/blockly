@@ -1,3 +1,4 @@
+/* eslint-disable valid-jsdoc */
 /**
  * @license
  * Copyright 2020 Google LLC

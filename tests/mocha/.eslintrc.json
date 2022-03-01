@@ -5,7 +5,7 @@
     },
     "globals": {
         "chai": false,
-        "sinon": false,
+        "sinon": false
     },
     "rules": {
         "no-unused-vars": ["off"],

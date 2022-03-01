@@ -6,8 +6,9 @@
 
 goog.module('Blockly.test.keydown');
 
-const {createKeyDownEvent, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+const {createKeyDownEvent} = goog.require('Blockly.test.helpers.userInput');
 const {defineStackBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
 
 
 suite('Key Down', function() {

@@ -30,7 +30,7 @@ const {Msg} = goog.require('Blockly.Msg');
           'text': '',
         },
       ],
-      'colour': '#8cb3ff',
+      'style': 'argument_local_blocks',
       'inputsInline': true,
       'output': null,
       'extensions': ['contextMenu'],

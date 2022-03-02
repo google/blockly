@@ -6,7 +6,8 @@
 
 goog.module('Blockly.test.fieldTest');
 
-const {addBlockTypeToCleanup, addMessageToCleanup, createDeprecationWarningStub, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+const {addBlockTypeToCleanup, addMessageToCleanup, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+const {createDeprecationWarningStub} = goog.require('Blockly.test.helpers.warnings');
 
 
 suite('Abstract Fields', function() {

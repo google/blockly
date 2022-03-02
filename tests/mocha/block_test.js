@@ -6,11 +6,12 @@
 
 goog.module('Blockly.test.blocks');
 
-const eventUtils = goog.require('Blockly.Events.utils');
 const {Blocks} = goog.require('Blockly.blocks');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
-const {createDeprecationWarningStub, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+const {createDeprecationWarningStub} = goog.require('Blockly.test.helpers.warnings');
 const {createRenderedBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
+const eventUtils = goog.require('Blockly.Events.utils');
+const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
 
 
 suite('Blocks', function() {

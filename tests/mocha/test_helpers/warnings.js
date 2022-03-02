@@ -6,11 +6,27 @@
 
 goog.module('Blockly.test.helpers.warnings');
 
-const {captureWarnings} = goog.require('Blockly.test.helpers.common');
-const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
-const eventUtils = goog.require('Blockly.Events.utils');
-const {Blocks} = goog.require('Blockly.blocks');
 
+/**
+ * Captures the strings sent to console.warn() when calling a function.
+ * Copies from core.
+ * @param {Function} innerFunc The function where warnings may called.
+ * @return {Array<string>} The warning messages (only the first arguments).
+ */
+function captureWarnings(innerFunc) {
+  const msgs = [];
+  const nativeConsoleWarn = console.warn;
+  try {
+    console.warn = function(msg) {
+      msgs.push(msg);
+    };
+    innerFunc();
+  } finally {
+    console.warn = nativeConsoleWarn;
+  }
+  return msgs;
+}
+exports.captureWarnings = captureWarnings;
 
 /**
  * Asserts that the given function logs the provided warning messages.

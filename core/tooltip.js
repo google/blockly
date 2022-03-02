@@ -445,6 +445,10 @@ exports.unblock = unblock;
  * Renders the tooltip content into the tooltip div.
  */
 const renderContent = function() {
+  if (!DIV || !element) {
+    // This shouldn't happen, but if it does, we can't render
+    return;
+  }
   if (typeof customTooltip === 'function') {
     customTooltip(DIV, element);
   } else {

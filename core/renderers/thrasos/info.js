@@ -84,7 +84,11 @@ RenderInfo.prototype.addElemSpacing_ = function() {
       const spacing = this.getInRowSpacing_(oldElems[e], oldElems[e + 1]);
       row.elements.push(new InRowSpacer(this.constants_, spacing));
     }
-    row.elements.push(oldElems[oldElems.length - 1]);
+
+    if (oldElems.length) {
+      row.elements.push(oldElems[oldElems.length - 1]);
+    }
+
     if (row.endsWithElemSpacer()) {
       let spacing = this.getInRowSpacing_(oldElems[oldElems.length - 1], null);
       if (hasExternalInputs && row.hasDummyInput) {

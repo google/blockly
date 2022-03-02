@@ -222,6 +222,9 @@ FieldLabelHover.prototype.getText = function() {
  */
   FieldLabelHover.prototype.applyColour = function() {
   this.sourceBlock_.pathObject.svgPath.setAttribute('fill', this.sourceBlock_.style.colourPrimary);
+  this.sourceBlock_.pathObject.svgPathLight.setAttribute('stroke', this.sourceBlock_.style.colourTertiary);
+  this.sourceBlock_.pathObject.svgPathDark.setAttribute('fill', this.sourceBlock_.style.colourTertiary);
+  this.sourceBlock_.pathObject.svgPathLight.style.display = 'inline';
 };
 
  fieldRegistry.register('field_label_hover', FieldLabelHover);

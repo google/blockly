@@ -446,7 +446,7 @@ exports.unblock = unblock;
  */
 const renderContent = function() {
   if (!DIV || !element) {
-    // This shouldn't happen, but if it does, we can't render
+    // This shouldn't happen, but if it does, we can't render.
     return;
   }
   if (typeof customTooltip === 'function') {
@@ -510,7 +510,6 @@ const getPosition = function(rtl) {
 
   return {x: anchorX, y: anchorY};
 };
-
 
 /**
  * Create the tooltip and show it.

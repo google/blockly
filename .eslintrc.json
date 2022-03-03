@@ -1,4 +1,7 @@
 {
+    "parserOptions": {
+        "sourceType": "module",
+    },    
     "rules": {
         "curly": ["error"],
         "eol-last": ["error"],

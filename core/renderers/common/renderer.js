@@ -180,7 +180,8 @@ class Renderer {
   /**
    * Create a new instance of the renderer's debugger.
    * @return {!Debug} The renderer debugger.
-   * @suppress {strictModuleDepCheck} Debug renderer only included in playground.
+   * @suppress {strictModuleDepCheck} Debug renderer only included in
+   * playground.
    * @protected
    */
   makeDebugger_() {
@@ -250,8 +251,7 @@ class Renderer {
    * @return {boolean} Whether there is a home for the orphan or not.
    * @package
    */
-  orphanCanConnectAtEnd(
-      topBlock, orphanBlock, localType) {
+  orphanCanConnectAtEnd(topBlock, orphanBlock, localType) {
     const orphanConnection =
         (localType === ConnectionType.OUTPUT_VALUE ?
              orphanBlock.outputConnection :
@@ -272,8 +272,7 @@ class Renderer {
    *     to display.
    * @package
    */
-  getConnectionPreviewMethod(
-      closest, local, topBlock) {
+  getConnectionPreviewMethod(closest, local, topBlock) {
     if (local.type === ConnectionType.OUTPUT_VALUE ||
         local.type === ConnectionType.PREVIOUS_STATEMENT) {
       if (!closest.isConnected() ||

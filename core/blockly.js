@@ -40,6 +40,7 @@ const common = goog.require('Blockly.common');
 const constants = goog.require('Blockly.constants');
 const deprecation = goog.require('Blockly.utils.deprecation');
 const dialog = goog.require('Blockly.dialog');
+const dropDownDiv = goog.require('Blockly.dropDownDiv');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const geras = goog.require('Blockly.geras');
 const internalConstants = goog.require('Blockly.internalConstants');
@@ -80,7 +81,6 @@ const {ContextMenuRegistry} = goog.require('Blockly.ContextMenuRegistry');
 const {Cursor} = goog.require('Blockly.Cursor');
 const {DeleteArea} = goog.require('Blockly.DeleteArea');
 const {DragTarget} = goog.require('Blockly.DragTarget');
-const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
 const {FieldAngle} = goog.require('Blockly.FieldAngle');
 const {FieldCheckbox} = goog.require('Blockly.FieldCheckbox');
 const {FieldColour} = goog.require('Blockly.FieldColour');
@@ -332,7 +332,7 @@ exports.defineBlocksWithJsonArray = common.defineBlocksWithJsonArray;
 
 /**
  * Set the parent container.  This is the container element that the WidgetDiv,
- * DropDownDiv, and Tooltip are rendered into the first time `Blockly.inject`
+ * dropDownDiv, and Tooltip are rendered into the first time `Blockly.inject`
  * is called.
  * This method is a NOP if called after the first ``Blockly.inject``.
  * @param {!Element} container The container element.
@@ -715,7 +715,7 @@ exports.Css = Css;
 exports.Cursor = Cursor;
 exports.DeleteArea = DeleteArea;
 exports.DragTarget = DragTarget;
-exports.DropDownDiv = DropDownDiv;
+exports.DropDownDiv = dropDownDiv;
 exports.Events = Events;
 exports.Extensions = Extensions;
 exports.Field = Field;

@@ -11,6 +11,7 @@ const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('B
 
 
 suite('ASTNode', function() {
+  console.log('1/a');
   setup(function() {
     sharedTestSetup.call(this);
     Blockly.defineBlocksWithJsonArray([{
@@ -100,7 +101,9 @@ suite('ASTNode', function() {
   });
 
   suite('HelperFunctions', function() {
+    console.log('2');
     test('findNextForInput_', function() {
+      console.log('3');
       const input = this.blocks.statementInput1.inputList[0];
       const input2 = this.blocks.statementInput1.inputList[1];
       const connection = input.connection;
@@ -169,6 +172,7 @@ suite('ASTNode', function() {
   });
 
   suite('NavigationFunctions', function() {
+    console.log('b');
     setup(function() {
       Blockly.defineBlocksWithJsonArray([{
         "type": "top_connection",
@@ -319,7 +323,9 @@ suite('ASTNode', function() {
         workspaceTeardown.call(this, this.singleBlockWorkspace);
       });
 
+      console.log('c');
       test('fromPreviousToBlock', function() {
+        console.log('d');
         const prevConnection = this.blocks.statementInput1.previousConnection;
         const node = ASTNode.createConnectionNode(prevConnection);
         const nextNode = node.next();

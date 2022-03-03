@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.helpers.events');
+goog.declareModuleId('Blockly.test.helpers.events');
 
 
 /**
@@ -13,10 +13,9 @@ goog.module('Blockly.test.helpers.events');
  *    calls on.
  * @return {!SinonSpy} The created spy.
  */
-function createFireChangeListenerSpy(workspace) {
+export function createFireChangeListenerSpy(workspace) {
   return sinon.spy(workspace, 'fireChangeListener');
 }
-exports.createFireChangeListenerSpy = createFireChangeListenerSpy;
 
 /**
  * Asserts whether the given xml property has the expected property.
@@ -75,7 +74,7 @@ function isXmlProperty_(key) {
  * @param {boolean=} [isUiEvent=false] Whether the event is a UI event.
  * @param {string=} message Optional message to prepend assert messages.
  */
-function assertEventEquals(event, expectedType,
+export function assertEventEquals(event, expectedType,
     expectedWorkspaceId, expectedBlockId, expectedProperties, isUiEvent = false, message) {
   let prependMessage = message ? message + ' ' : '';
   prependMessage += 'Event fired ';
@@ -107,7 +106,6 @@ function assertEventEquals(event, expectedType,
     chai.assert.isFalse(event.isUiEvent);
   }
 }
-exports.assertEventEquals = assertEventEquals;
 
 /**
  * Asserts that an event with the given values was fired.
@@ -119,7 +117,7 @@ exports.assertEventEquals = assertEventEquals;
  * @param {string} expectedWorkspaceId Expected workspace id of event fired.
  * @param {?string=} expectedBlockId Expected block id of event fired.
  */
-function assertEventFired(spy, instanceType, expectedProperties,
+export function assertEventFired(spy, instanceType, expectedProperties,
     expectedWorkspaceId, expectedBlockId) {
   expectedProperties = Object.assign({
     workspaceId: expectedWorkspaceId,
@@ -129,7 +127,6 @@ function assertEventFired(spy, instanceType, expectedProperties,
       sinon.match.instanceOf(instanceType).and(sinon.match(expectedProperties));
   sinon.assert.calledWith(spy, expectedEvent);
 }
-exports.assertEventFired = assertEventFired;
 
 /**
  * Asserts that an event with the given values was not fired.
@@ -141,7 +138,7 @@ exports.assertEventFired = assertEventFired;
  * @param {string=} expectedWorkspaceId Expected workspace id of event fired.
  * @param {?string=} expectedBlockId Expected block id of event fired.
  */
-function assertEventNotFired(spy, instanceType, expectedProperties,
+export function assertEventNotFired(spy, instanceType, expectedProperties,
     expectedWorkspaceId, expectedBlockId) {
   expectedProperties.type = instanceType.prototype.type;
   if (expectedWorkspaceId !== undefined) {
@@ -154,7 +151,6 @@ function assertEventNotFired(spy, instanceType, expectedProperties,
       sinon.match.instanceOf(instanceType).and(sinon.match(expectedProperties));
   sinon.assert.neverCalledWith(spy, expectedEvent);
 }
-exports.assertEventNotFired = assertEventNotFired;
 
 /**
  * Filters out xml properties from given object based on key.
@@ -189,7 +185,7 @@ function splitByXmlProperties_(properties) {
  * @param {string} expectedWorkspaceId Expected workspace id of event fired.
  * @param {?string=} expectedBlockId Expected block id of event fired.
  */
-function assertNthCallEventArgEquals(spy, n, instanceType, expectedProperties,
+export function assertNthCallEventArgEquals(spy, n, instanceType, expectedProperties,
     expectedWorkspaceId, expectedBlockId) {
   const nthCall = spy.getCall(n);
   const splitProperties = splitByXmlProperties_(expectedProperties);
@@ -201,4 +197,3 @@ function assertNthCallEventArgEquals(spy, n, instanceType, expectedProperties,
   const eventArg = nthCall.firstArg;
   assertXmlProperties_(eventArg, xmlProperties);
 }
-exports.assertNthCallEventArgEquals = assertNthCallEventArgEquals;

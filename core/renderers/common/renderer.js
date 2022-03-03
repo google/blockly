@@ -47,12 +47,12 @@ const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 /**
  * The base class for a block renderer.
+ * @implements {IRegistrable}
  */
-var Renderer = class {
+class Renderer {
   /**
    * @param {string} name The renderer name.
    * @package
-   * @implements {IRegistrable}
    * @alias Blockly.blockRendering.Renderer
    */
   constructor(name) {
@@ -301,6 +301,6 @@ var Renderer = class {
     info.measure();
     this.makeDrawer_(block, info).draw();
   }
-};
+}
 
 exports.Renderer = Renderer;

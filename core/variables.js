@@ -23,6 +23,8 @@ const {Msg} = goog.require('Blockly.Msg');
 const {VariableModel} = goog.require('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 /**
  * String for use in the "custom" attribute of a category in toolbox XML.
@@ -118,7 +120,7 @@ exports.allDeveloperVariables = allDeveloperVariables;
 /**
  * Construct the elements (blocks and button) required by the flyout for the
  * variable category.
- * @param {!Workspace} workspace The workspace containing variables.
+ * @param {!WorkspaceSvg} workspace The workspace containing variables.
  * @return {!Array<!Element>} Array of XML elements.
  * @alias Blockly.Variables.flyoutCategory
  */
@@ -526,8 +528,11 @@ const createVariable = function(workspace, id, opt_name, opt_type) {
   const potentialVariableMap = workspace.getPotentialVariableMap();
   // Variables without names get uniquely named for this workspace.
   if (!opt_name) {
-    const ws = workspace.isFlyout ? workspace.targetWorkspace : workspace;
-    opt_name = exports.generateUniqueName(ws);
+    const ws =
+        /** @type {!Workspace} */ (workspace.isFlyout ?
+            /** @type {!WorkspaceSvg} */(workspace).targetWorkspace :
+                workspace);
+    opt_name = generateUniqueName(ws);
   }
 
   // Create a potential variable if in the flyout.

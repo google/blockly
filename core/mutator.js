@@ -40,8 +40,6 @@ const {Icon} = goog.require('Blockly.Icon');
 const {Options} = goog.require('Blockly.Options');
 const {Svg} = goog.require('Blockly.utils.Svg');
 const {WorkspaceSvg} = goog.require('Blockly.WorkspaceSvg');
-/* eslint-disable-next-line no-unused-vars */
-const {Workspace} = goog.requireType('Blockly.Workspace');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BubbleOpen');
 
@@ -550,8 +548,8 @@ class Mutator extends Icon {
   /**
    * Get the parent workspace of a workspace that is inside a mutator, taking
    * into account whether it is a flyout.
-   * @param {Workspace} workspace The workspace that is inside a mutator.
-   * @return {?Workspace} The mutator's parent workspace or null.
+   * @param {WorkspaceSvg} workspace The workspace that is inside a mutator.
+   * @return {?WorkspaceSvg} The mutator's parent workspace or null.
    * @public
    */
   static findParentWs(workspace) {

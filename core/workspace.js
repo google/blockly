@@ -81,6 +81,19 @@ class Workspace {
     this.rendered = false;
 
     /**
+     * Is this workspace the surface for a flyout?
+     * @type {boolean}
+     */
+    this.isFlyout = false;
+
+    /**
+     * Is this workspace the surface for a mutator?
+     * @type {boolean}
+     * @package
+     */
+    this.isMutator = false;
+
+    /**
      * Returns `true` if the workspace is currently in the process of a bulk
      * clear.
      * @type {boolean}

@@ -209,7 +209,7 @@ goog.addDependency('../../core/serialization/exceptions.js', ['Blockly.serializa
 goog.addDependency('../../core/serialization/priorities.js', ['Blockly.serialization.priorities'], [], {'module': 'goog'});
 goog.addDependency('../../core/serialization/registry.js', ['Blockly.serialization.registry'], ['Blockly.registry'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/serialization/variables.js', ['Blockly.serialization.variables'], ['Blockly.serialization.ISerializer', 'Blockly.serialization.priorities', 'Blockly.serialization.registry'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../core/serialization/workspaces.js', ['Blockly.serialization.workspaces'], ['Blockly.Events.utils', 'Blockly.Workspace', 'Blockly.registry', 'Blockly.utils.dom'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('../../core/serialization/workspaces.js', ['Blockly.serialization.workspaces'], ['Blockly.Events.utils', 'Blockly.Workspace', 'Blockly.WorkspaceSvg', 'Blockly.registry', 'Blockly.utils.dom'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/shortcut_items.js', ['Blockly.ShortcutItems'], ['Blockly.Gesture', 'Blockly.ShortcutRegistry', 'Blockly.clipboard', 'Blockly.common', 'Blockly.utils.KeyCodes'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/shortcut_registry.js', ['Blockly.ShortcutRegistry'], ['Blockly.utils.KeyCodes', 'Blockly.utils.object'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/sprites.js', ['Blockly.sprite'], [], {'lang': 'es6', 'module': 'goog'});

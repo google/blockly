@@ -309,7 +309,8 @@ class Field {
     if (!this.constants_ && this.sourceBlock_ && this.sourceBlock_.workspace &&
         this.sourceBlock_.workspace.rendered) {
       this.constants_ =
-          this.sourceBlock_.workspace.getRenderer().getConstants();
+          /** @type {!WorkspaceSvg} */(this.sourceBlock_.workspace)
+              .getRenderer().getConstants();
     }
     return this.constants_;
   }
@@ -834,7 +835,8 @@ class Field {
       // - Webkit / Blink: fill-box / object bounding box
       // - Gecko / Triden / EdgeHTML: stroke-box
       const bBox = this.sourceBlock_.getHeightWidth();
-      const scale = this.sourceBlock_.workspace.scale;
+      const scale =
+          /** @type {!WorkspaceSvg} */(this.sourceBlock_.workspace).scale;
       xy = this.getAbsoluteXY_();
       scaledWidth = bBox.width * scale;
       scaledHeight = bBox.height * scale;
@@ -1072,7 +1074,8 @@ class Field {
     if (!this.sourceBlock_ || !this.sourceBlock_.workspace) {
       return;
     }
-    const gesture = this.sourceBlock_.workspace.getGesture(e);
+    const gesture =
+        /** @type {!WorkspaceSvg} */(this.sourceBlock_.workspace).getGesture(e);
     if (gesture) {
       gesture.setStartField(this);
     }

@@ -443,7 +443,6 @@ const PROCEDURE_DEF_COMMON = {
       }
     }
   },
-  callType_: 'procedures_callnoreturn',
 };
 
 blocks['procedures_defnoreturn'] = {
@@ -486,6 +485,7 @@ blocks['procedures_defnoreturn'] = {
   getProcedureDef: function() {
     return [this.getFieldValue('NAME'), this.arguments_, false];
   },
+  callType_: 'procedures_callnoreturn',
 };
 
 blocks['procedures_defreturn'] = {
@@ -531,6 +531,7 @@ blocks['procedures_defreturn'] = {
   getProcedureDef: function() {
     return [this.getFieldValue('NAME'), this.arguments_, true];
   },
+  callType_: 'procedures_callreturn',
 };
 
 blocks['procedures_mutatorcontainer'] = {

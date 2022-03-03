@@ -162,37 +162,6 @@ class Block {
      */
     this.loadExtraState = undefined;
 
-    /**
-     * An optional method called by the default mutator UI which allows the
-     * block to "explode" itself into smaller sub blocks. This function should
-     * return a "top block" which is the main block in the mutator workspace
-     * that sub-blocks connect to.
-     * @type {undefined|?function():!Block}
-     */
-    this.decompose = undefined;
-
-    /**
-     * An optional method called by the deafult mutator UI which allows the
-     * block to configure itself based on the configuration of sub-blocks in
-     * the mutator workspace. This function should accept the "top block" which
-     * was returned by `decompose` as a paramter.
-     * @type {undefined|?function(!Block)}
-     */
-    this.compose = undefined;
-
-    /**
-     * An optional method called by the default mutator UI which gives the block
-     * a chance to save information about what child blocks are connected to
-     * what mutated connections.
-     * @type {undefined|?function(!Block)}
-     */
-    this.saveConnections = undefined;
-
-    /**
-     * An optional method for defining custom block context menu items.
-     * @type {undefined|?function(!Array<!Object>)}
-     */
-    this.customContextMenu = undefined;
 
     /**
      * An optional property for suppressing adding STATEMENT_PREFIX and

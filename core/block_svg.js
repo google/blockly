@@ -110,7 +110,7 @@ class BlockSvg extends Block {
      * mutation dialog button and UI to appear.
      * @type {undefined|?function(WorkspaceSvg):!BlockSvg}
      */
-    this.decompose = undefined;
+    this.decompose;
 
     /**
      * An optional method called when a mutator dialog saves its content.
@@ -119,13 +119,7 @@ class BlockSvg extends Block {
      * method for the default mutation dialog button and UI to appear.
      * @type {undefined|?function(!BlockSvg)}
      */
-    this.compose = undefined;
-
-    /**
-     * An optional method for defining custom block context menu items.
-     * @type {undefined|?function(!Array<!Object>)}
-     */
-    this.customContextMenu = undefined;
+    this.compose;
 
     /**
      * An property used internally to reference the block's rendering debugger.

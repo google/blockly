@@ -189,6 +189,12 @@ class Block {
     this.saveConnections = undefined;
 
     /**
+     * An optional method for defining custom block context menu items.
+     * @type {undefined|?function(!Array<!Object>)}
+     */
+    this.customContextMenu = undefined;
+
+    /**
      * An optional property for suppressing adding STATEMENT_PREFIX and
      * STATEMENT_SUFFIX to generated code.
      * @type {?boolean}

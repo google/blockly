@@ -11,7 +11,6 @@
 'use strict';
 
 goog.declareModuleId('Blockly.libraryBlocks');
-goog.module.declareLegacyNamespace();
 
 const colour = goog.require('Blockly.libraryBlocks.colour');
 const lists = goog.require('Blockly.libraryBlocks.lists');

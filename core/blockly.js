@@ -14,7 +14,6 @@
  * @namespace Blockly
  */
 goog.declareModuleId('Blockly');
-goog.module.declareLegacyNamespace();
 
 const ContextMenu = goog.require('Blockly.ContextMenu');
 const ContextMenuItems = goog.require('Blockly.ContextMenuItems');

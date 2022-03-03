@@ -15,50 +15,50 @@
  */
 goog.declareModuleId('Blockly.Block');
 
-const Extensions = goog.require('Blockly.Extensions');
-const Tooltip = goog.require('Blockly.Tooltip');
-const arrayUtils = goog.require('Blockly.utils.array');
-const common = goog.require('Blockly.common');
-const constants = goog.require('Blockly.constants');
-const eventUtils = goog.require('Blockly.Events.utils');
-const fieldRegistry = goog.require('Blockly.fieldRegistry');
-const idGenerator = goog.require('Blockly.utils.idGenerator');
-const object = goog.require('Blockly.utils.object');
-const parsing = goog.require('Blockly.utils.parsing');
+import * as Extensions from './extensions.js';
+import * as Tooltip from './tooltip.js';
+import * as arrayUtils from './utils/array.js';
+import * as common from './common.js';
+import * as constants from './constants.js';
+import * as eventUtils from './events/utils.js';
+import * as fieldRegistry from './field_registry.js';
+import * as idGenerator from './utils/idgenerator.js';
+import * as object from './utils/object.js';
+import * as parsing from './utils/parsing.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Abstract} = goog.requireType('Blockly.Events.Abstract');
-const {Align, Input} = goog.require('Blockly.Input');
-const {ASTNode} = goog.require('Blockly.ASTNode');
+import {Align, Input} from './input.js';
+import {ASTNode} from './keyboard_nav/ast_node.js';
 /* eslint-disable-next-line no-unused-vars */
 const {BlockMove} = goog.requireType('Blockly.Events.BlockMove');
-const {Blocks} = goog.require('Blockly.blocks');
+import {Blocks} from './blocks.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Comment} = goog.requireType('Blockly.Comment');
-const {ConnectionType} = goog.require('Blockly.ConnectionType');
-const {Connection} = goog.require('Blockly.Connection');
-const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+import {ConnectionType} from './connection_type.js';
+import {Connection} from './connection.js';
+import {Coordinate} from './utils/coordinate.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Field} = goog.requireType('Blockly.Field');
 /* eslint-disable-next-line no-unused-vars */
-const {IASTNodeLocation} = goog.require('Blockly.IASTNodeLocation');
+import {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IDeletable} = goog.require('Blockly.IDeletable');
+import {IDeletable} from './interfaces/i_deletable.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Mutator} = goog.requireType('Blockly.Mutator');
-const {Size} = goog.require('Blockly.utils.Size');
+import {Size} from './utils/size.js';
 /* eslint-disable-next-line no-unused-vars */
 const {VariableModel} = goog.requireType('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
-const {inputTypes} = goog.require('Blockly.inputTypes');
+import {inputTypes} from './input_types.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.Events.BlockChange');
+import './events/events_block_change.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.Events.BlockCreate');
+import './events/events_block_create.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.Events.BlockDelete');
+import './events/events_block_delete.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.Events.BlockMove');
+import './events/events_block_move.js';
 
 
 /**

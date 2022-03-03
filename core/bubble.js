@@ -15,27 +15,27 @@
  */
 goog.declareModuleId('Blockly.Bubble');
 
-const Touch = goog.require('Blockly.Touch');
-const browserEvents = goog.require('Blockly.browserEvents');
-const dom = goog.require('Blockly.utils.dom');
-const math = goog.require('Blockly.utils.math');
-const userAgent = goog.require('Blockly.utils.userAgent');
+import * as Touch from './touch.js';
+import * as browserEvents from './browser_events.js';
+import * as dom from './utils/dom.js';
+import * as math from './utils/math.js';
+import * as userAgent from './utils/useragent.js';
 /* eslint-disable-next-line no-unused-vars */
 const {BlockDragSurfaceSvg} = goog.requireType('Blockly.BlockDragSurfaceSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+import {Coordinate} from './utils/coordinate.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IBubble} = goog.require('Blockly.IBubble');
+import {IBubble} from './interfaces/i_bubble.js';
 /* eslint-disable-next-line no-unused-vars */
 const {MetricsManager} = goog.requireType('Blockly.MetricsManager');
-const {Scrollbar} = goog.require('Blockly.Scrollbar');
-const {Size} = goog.require('Blockly.utils.Size');
-const {Svg} = goog.require('Blockly.utils.Svg');
+import {Scrollbar} from './scrollbar.js';
+import {Size} from './utils/size.js';
+import {Svg} from './utils/svg.js';
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */
-goog.require('Blockly.Workspace');
+import './workspace.js';
 
 
 /**

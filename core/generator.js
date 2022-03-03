@@ -17,12 +17,12 @@
  */
 goog.declareModuleId('Blockly.Generator');
 
-const common = goog.require('Blockly.common');
-const deprecation = goog.require('Blockly.utils.deprecation');
+import * as common from './common.js';
+import * as deprecation from './utils/deprecation.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
-const {Names, NameType} = goog.require('Blockly.Names');
+import {Names, NameType} from './names.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
 

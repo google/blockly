@@ -18,8 +18,8 @@ goog.declareModuleId('Blockly.blockRendering.SquareCorner');
 
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const {Measurable} = goog.require('Blockly.blockRendering.Measurable');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+import {Measurable} from './base.js';
+import {Types} from './types.js';
 
 
 /**

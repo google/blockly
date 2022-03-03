@@ -15,9 +15,9 @@
  */
 goog.declareModuleId('Blockly.Events.VarDelete');
 
-const eventUtils = goog.require('Blockly.Events.utils');
-const registry = goog.require('Blockly.registry');
-const {VarBase} = goog.require('Blockly.Events.VarBase');
+import * as eventUtils from './utils.js';
+import * as registry from '../registry.js';
+import {VarBase} from './events_var_base.js';
 /* eslint-disable-next-line no-unused-vars */
 const {VariableModel} = goog.requireType('Blockly.VariableModel');
 

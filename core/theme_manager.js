@@ -17,8 +17,8 @@
  */
 goog.declareModuleId('Blockly.ThemeManager');
 
-const arrayUtils = goog.require('Blockly.utils.array');
-const dom = goog.require('Blockly.utils.dom');
+import * as arrayUtils from './utils/array.js';
+import * as dom from './utils/dom.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Theme} = goog.requireType('Blockly.Theme');
 /* eslint-disable-next-line no-unused-vars */

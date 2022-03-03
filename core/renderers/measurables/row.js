@@ -22,7 +22,7 @@ const {InRowSpacer} = goog.requireType('Blockly.blockRendering.InRowSpacer');
 const {InputConnection} = goog.requireType('Blockly.blockRendering.InputConnection');
 /* eslint-disable-next-line no-unused-vars */
 const {Measurable} = goog.requireType('Blockly.blockRendering.Measurable');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+import {Types} from './types.js';
 
 
 /**

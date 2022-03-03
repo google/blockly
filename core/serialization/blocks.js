@@ -16,11 +16,11 @@
  */
 goog.declareModuleId('Blockly.serialization.blocks');
 
-const Xml = goog.require('Blockly.Xml');
-const eventUtils = goog.require('Blockly.Events.utils');
-const priorities = goog.require('Blockly.serialization.priorities');
-const serializationRegistry = goog.require('Blockly.serialization.registry');
-const {BadConnectionCheck, MissingBlockType, MissingConnection, RealChildOfShadow} = goog.require('Blockly.serialization.exceptions');
+import * as Xml from '../xml.js';
+import * as eventUtils from '../events/utils.js';
+import * as priorities from './priorities.js';
+import * as serializationRegistry from './registry.js';
+import {BadConnectionCheck, MissingBlockType, MissingConnection, RealChildOfShadow} from './exceptions.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
@@ -28,11 +28,11 @@ const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 // eslint-disable-next-line no-unused-vars
 const {Connection} = goog.requireType('Blockly.Connection');
 // eslint-disable-next-line no-unused-vars
-const {ISerializer} = goog.require('Blockly.serialization.ISerializer');
-const {Size} = goog.require('Blockly.utils.Size');
+import {ISerializer} from '../interfaces/i_serializer.js';
+import {Size} from '../utils/size.js';
 // eslint-disable-next-line no-unused-vars
 const {Workspace} = goog.requireType('Blockly.Workspace');
-const {inputTypes} = goog.require('Blockly.inputTypes');
+import {inputTypes} from '../input_types.js';
 
 
 // TODO(#5160): Remove this once lint is fixed.

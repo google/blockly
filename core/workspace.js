@@ -15,11 +15,11 @@
  */
 goog.declareModuleId('Blockly.Workspace');
 
-const arrayUtils = goog.require('Blockly.utils.array');
-const eventUtils = goog.require('Blockly.Events.utils');
-const idGenerator = goog.require('Blockly.utils.idGenerator');
-const math = goog.require('Blockly.utils.math');
-const registry = goog.require('Blockly.registry');
+import * as arrayUtils from './utils/array.js';
+import * as eventUtils from './events/utils.js';
+import * as idGenerator from './utils/idgenerator.js';
+import * as math from './utils/math.js';
+import * as registry from './registry.js';
 /* eslint-disable-next-line no-unused-vars */
 const toolbox = goog.requireType('Blockly.utils.toolbox');
 /* eslint-disable-next-line no-unused-vars */
@@ -31,17 +31,17 @@ const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const {ConnectionDB} = goog.requireType('Blockly.ConnectionDB');
 /* eslint-disable-next-line no-unused-vars */
-const {IASTNodeLocation} = goog.require('Blockly.IASTNodeLocation');
+import {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
 /* eslint-disable-next-line no-unused-vars */
 const {IConnectionChecker} = goog.requireType('Blockly.IConnectionChecker');
-const {Options} = goog.require('Blockly.Options');
-const {VariableMap} = goog.require('Blockly.VariableMap');
+import {Options} from './options.js';
+import {VariableMap} from './variable_map.js';
 /* eslint-disable-next-line no-unused-vars */
 const {VariableModel} = goog.requireType('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceComment} = goog.requireType('Blockly.WorkspaceComment');
 /** @suppress {extraRequire} */
-goog.require('Blockly.ConnectionChecker');
+import './connection_checker.js';
 
 
 /**

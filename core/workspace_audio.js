@@ -17,10 +17,10 @@
  */
 goog.declareModuleId('Blockly.WorkspaceAudio');
 
-const userAgent = goog.require('Blockly.utils.userAgent');
+import * as userAgent from './utils/useragent.js';
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
-const {globalThis} = goog.require('Blockly.utils.global');
+import {globalThis} from './utils/global.js';
 
 
 /**

@@ -18,11 +18,11 @@ goog.declareModuleId('Blockly.blockRendering.InputRow');
 
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const {InputConnection} = goog.require('Blockly.blockRendering.InputConnection');
-const {ExternalValueInput} = goog.require('Blockly.blockRendering.ExternalValueInput');
-const {Row} = goog.require('Blockly.blockRendering.Row');
-const {StatementInput} = goog.require('Blockly.blockRendering.StatementInput');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+import {InputConnection} from './input_connection.js';
+import {ExternalValueInput} from './external_value_input.js';
+import {Row} from './row.js';
+import {StatementInput} from './statement_input.js';
+import {Types} from './types.js';
 
 
 /**

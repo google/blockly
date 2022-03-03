@@ -17,7 +17,7 @@
 goog.declareModuleId('Blockly.ICopyable');
 
 /* eslint-disable-next-line no-unused-vars */
-const {ISelectable} = goog.require('Blockly.ISelectable');
+import {ISelectable} from './i_selectable.js';
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 

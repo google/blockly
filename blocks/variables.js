@@ -12,20 +12,20 @@
 
 goog.declareModuleId('Blockly.libraryBlocks.variables');
 
-const ContextMenu = goog.require('Blockly.ContextMenu');
-const Extensions = goog.require('Blockly.Extensions');
-const Variables = goog.require('Blockly.Variables');
-const xmlUtils = goog.require('Blockly.utils.xml');
+import * as ContextMenu from '../core/contextmenu.js';
+import * as Extensions from '../core/extensions.js';
+import * as Variables from '../core/variables.js';
+import * as xmlUtils from '../core/utils/xml.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockDefinition} = goog.requireType('Blockly.blocks');
-const {Msg} = goog.require('Blockly.Msg');
-const {createBlockDefinitionsFromJsonArray, defineBlocks} = goog.require('Blockly.common');
+import {Msg} from '../core/msg.js';
+import {createBlockDefinitionsFromJsonArray, defineBlocks} from '../core/common.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.FieldLabel');
+import '../core/field_label.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.FieldVariable');
+import '../core/field_variable.js';
 
 
 /**

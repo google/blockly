@@ -15,15 +15,15 @@
  */
 goog.declareModuleId('Blockly.ShortcutItems');
 
-const clipboard = goog.require('Blockly.clipboard');
-const common = goog.require('Blockly.common');
+import * as clipboard from './clipboard.js';
+import * as common from './common.js';
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-const {Gesture} = goog.require('Blockly.Gesture');
+import {Gesture} from './gesture.js';
 /* eslint-disable-next-line no-unused-vars */
 const {ICopyable} = goog.requireType('Blockly.ICopyable');
-const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
-const {ShortcutRegistry} = goog.require('Blockly.ShortcutRegistry');
+import {KeyCodes} from './utils/keycodes.js';
+import {ShortcutRegistry} from './shortcut_registry.js';
 
 
 /**

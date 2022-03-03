@@ -13,13 +13,11 @@
  * A type used to create flag values.
  * @class
  */
-goog.module('Blockly.utils.Sentinel');
+goog.declareModuleId('Blockly.utils.Sentinel');
 
 
 /**
  * A type used to create flag values.
  * @alias Blockly.utils.Sentinel
  */
-class Sentinel {}
-
-exports.Sentinel = Sentinel;
+export class Sentinel {}

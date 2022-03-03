@@ -15,8 +15,8 @@
  */
 goog.declareModuleId('Blockly.WorkspaceDragger');
 
-const common = goog.require('Blockly.common');
-const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+import * as common from './common.js';
+import {Coordinate} from './utils/coordinate.js';
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 

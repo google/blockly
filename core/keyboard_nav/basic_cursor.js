@@ -17,9 +17,9 @@
  */
 goog.declareModuleId('Blockly.BasicCursor');
 
-const registry = goog.require('Blockly.registry');
-const {ASTNode} = goog.require('Blockly.ASTNode');
-const {Cursor} = goog.require('Blockly.Cursor');
+import * as registry from '../registry.js';
+import {ASTNode} from './ast_node.js';
+import {Cursor} from './cursor.js';
 
 
 /**

@@ -15,11 +15,11 @@
  */
 goog.declareModuleId('Blockly.Events.BubbleOpen');
 
-const eventUtils = goog.require('Blockly.Events.utils');
-const registry = goog.require('Blockly.registry');
+import * as eventUtils from './utils.js';
+import * as registry from '../registry.js';
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-const {UiBase} = goog.require('Blockly.Events.UiBase');
+import {UiBase} from './events_ui_base.js';
 
 
 /**

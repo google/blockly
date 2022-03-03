@@ -15,10 +15,10 @@
  */
 goog.declareModuleId('Blockly.Events.CommentBase');
 
-const Xml = goog.require('Blockly.Xml');
-const eventUtils = goog.require('Blockly.Events.utils');
-const utilsXml = goog.require('Blockly.utils.xml');
-const {Abstract: AbstractEvent} = goog.require('Blockly.Events.Abstract');
+import * as Xml from '../xml.js';
+import * as eventUtils from './utils.js';
+import * as utilsXml from '../utils/xml.js';
+import {Abstract as AbstractEvent} from './events_abstract.js';
 /* eslint-disable-next-line no-unused-vars */
 const {CommentCreate} = goog.requireType('Blockly.Events.CommentCreate');
 /* eslint-disable-next-line no-unused-vars */

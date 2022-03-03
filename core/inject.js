@@ -15,29 +15,29 @@
  */
 goog.declareModuleId('Blockly.inject');
 
-const Css = goog.require('Blockly.Css');
-const Tooltip = goog.require('Blockly.Tooltip');
-const Touch = goog.require('Blockly.Touch');
-const WidgetDiv = goog.require('Blockly.WidgetDiv');
-const aria = goog.require('Blockly.utils.aria');
-const browserEvents = goog.require('Blockly.browserEvents');
-const bumpObjects = goog.require('Blockly.bumpObjects');
-const common = goog.require('Blockly.common');
-const dom = goog.require('Blockly.utils.dom');
-const dropDownDiv = goog.require('Blockly.dropDownDiv');
-const userAgent = goog.require('Blockly.utils.userAgent');
-const {BlockDragSurfaceSvg} = goog.require('Blockly.BlockDragSurfaceSvg');
+import * as Css from './css.js';
+import * as Tooltip from './tooltip.js';
+import * as Touch from './touch.js';
+import * as WidgetDiv from './widgetdiv.js';
+import * as aria from './utils/aria.js';
+import * as browserEvents from './browser_events.js';
+import * as bumpObjects from './bump_objects.js';
+import * as common from './common.js';
+import * as dom from './utils/dom.js';
+import * as dropDownDiv from './dropdowndiv.js';
+import * as userAgent from './utils/useragent.js';
+import {BlockDragSurfaceSvg} from './block_drag_surface.js';
 /* eslint-disable-next-line no-unused-vars */
 const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
-const {Grid} = goog.require('Blockly.Grid');
-const {Msg} = goog.require('Blockly.Msg');
-const {Options} = goog.require('Blockly.Options');
-const {ScrollbarPair} = goog.require('Blockly.ScrollbarPair');
-const {ShortcutRegistry} = goog.require('Blockly.ShortcutRegistry');
-const {Svg} = goog.require('Blockly.utils.Svg');
-const {WorkspaceDragSurfaceSvg} = goog.require('Blockly.WorkspaceDragSurfaceSvg');
-const {WorkspaceSvg} = goog.require('Blockly.WorkspaceSvg');
-const {Workspace} = goog.require('Blockly.Workspace');
+import {Grid} from './grid.js';
+import {Msg} from './msg.js';
+import {Options} from './options.js';
+import {ScrollbarPair} from './scrollbar_pair.js';
+import {ShortcutRegistry} from './shortcut_registry.js';
+import {Svg} from './utils/svg.js';
+import {WorkspaceDragSurfaceSvg} from './workspace_drag_surface_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
+import {Workspace} from './workspace.js';
 
 
 /**

@@ -17,7 +17,7 @@ goog.declareModuleId('Blockly.minimalist.RenderInfo');
 
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-const {RenderInfo: BaseRenderInfo} = goog.require('Blockly.blockRendering.RenderInfo');
+import {RenderInfo as BaseRenderInfo} from '../common/info.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Renderer} = goog.requireType('Blockly.minimalist.Renderer');
 

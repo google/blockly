@@ -22,8 +22,8 @@ const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 /* eslint-disable-next-line no-unused-vars */
 const {NextConnection} = goog.requireType('Blockly.blockRendering.NextConnection');
-const {Row} = goog.require('Blockly.blockRendering.Row');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+import {Row} from './row.js';
+import {Types} from './types.js';
 
 
 /**

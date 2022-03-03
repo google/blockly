@@ -23,21 +23,21 @@ const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 const {BottomRow} = goog.requireType('Blockly.blockRendering.BottomRow');
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.geras.ConstantProvider');
-const {ExternalValueInput} = goog.require('Blockly.blockRendering.ExternalValueInput');
+import {ExternalValueInput} from '../measurables/external_value_input.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Field} = goog.requireType('Blockly.blockRendering.Field');
-const {InRowSpacer} = goog.require('Blockly.blockRendering.InRowSpacer');
-const {InlineInput} = goog.require('Blockly.geras.InlineInput');
+import {InRowSpacer} from '../measurables/in_row_spacer.js';
+import {InlineInput} from './measurables/inline_input.js';
 /* eslint-disable-next-line no-unused-vars */
 const {InputRow} = goog.requireType('Blockly.blockRendering.InputRow');
-const {RenderInfo: BaseRenderInfo} = goog.require('Blockly.blockRendering.RenderInfo');
+import {RenderInfo as BaseRenderInfo} from '../common/info.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Renderer} = goog.requireType('Blockly.geras.Renderer');
-const {StatementInput} = goog.require('Blockly.geras.StatementInput');
+import {StatementInput} from './measurables/statement_input.js';
 /* eslint-disable-next-line no-unused-vars */
 const {TopRow} = goog.requireType('Blockly.blockRendering.TopRow');
-const {Types} = goog.require('Blockly.blockRendering.Types');
-const {inputTypes} = goog.require('Blockly.inputTypes');
+import {Types} from '../measurables/types.js';
+import {inputTypes} from '../../input_types.js';
 
 
 /**

@@ -19,7 +19,7 @@
  */
 goog.declareModuleId('Blockly.utils.dom');
 
-const userAgent = goog.require('Blockly.utils.userAgent');
+import * as userAgent from './useragent.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Svg} = goog.requireType('Blockly.utils.Svg');
 

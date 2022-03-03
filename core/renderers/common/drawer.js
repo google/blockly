@@ -15,11 +15,11 @@
  */
 goog.declareModuleId('Blockly.blockRendering.Drawer');
 
-const debug = goog.require('Blockly.blockRendering.debug');
-const svgPaths = goog.require('Blockly.utils.svgPaths');
+import * as debug from './debug.js';
+import * as svgPaths from '../../utils/svg_paths.js';
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-const {Connection} = goog.require('Blockly.blockRendering.Connection');
+import {Connection} from '../measurables/connection.js';
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 /* eslint-disable-next-line no-unused-vars */
@@ -34,7 +34,7 @@ const {InlineInput} = goog.requireType('Blockly.blockRendering.InlineInput');
 const {RenderInfo} = goog.requireType('Blockly.blockRendering.RenderInfo');
 /* eslint-disable-next-line no-unused-vars */
 const {Row} = goog.requireType('Blockly.blockRendering.Row');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+import {Types} from '../measurables/types.js';
 
 
 /**

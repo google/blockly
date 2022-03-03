@@ -15,8 +15,8 @@
  */
 goog.declareModuleId('Blockly.Themes');
 
-const {Classic} = goog.require('Blockly.Themes.Classic');
-const {Zelos} = goog.require('Blockly.Themes.Zelos');
+import {Classic} from './classic.js';
+import {Zelos} from './zelos.js';
 
 
 export {Classic};

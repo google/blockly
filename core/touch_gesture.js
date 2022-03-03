@@ -17,10 +17,10 @@
  */
 goog.declareModuleId('Blockly.TouchGesture');
 
-const Touch = goog.require('Blockly.Touch');
-const browserEvents = goog.require('Blockly.browserEvents');
-const {Coordinate} = goog.require('Blockly.utils.Coordinate');
-const {Gesture} = goog.require('Blockly.Gesture');
+import * as Touch from './touch.js';
+import * as browserEvents from './browser_events.js';
+import {Coordinate} from './utils/coordinate.js';
+import {Gesture} from './gesture.js';
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 

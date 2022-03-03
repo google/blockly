@@ -19,10 +19,10 @@ goog.declareModuleId('Blockly.ASTNode');
 
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
-const {ConnectionType} = goog.require('Blockly.ConnectionType');
+import {ConnectionType} from '../connection_type.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Connection} = goog.requireType('Blockly.Connection');
-const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+import {Coordinate} from '../utils/coordinate.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Field} = goog.requireType('Blockly.Field');
 /* eslint-disable-next-line no-unused-vars */

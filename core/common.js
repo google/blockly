@@ -18,7 +18,7 @@
 goog.declareModuleId('Blockly.common');
 
 /* eslint-disable-next-line no-unused-vars */
-const {BlockDefinition, Blocks} = goog.require('Blockly.blocks');
+import {BlockDefinition, Blocks} from './blocks.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Connection} = goog.requireType('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */

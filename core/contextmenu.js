@@ -15,32 +15,32 @@
  */
 goog.declareModuleId('Blockly.ContextMenu');
 
-const WidgetDiv = goog.require('Blockly.WidgetDiv');
-const Xml = goog.require('Blockly.Xml');
-const aria = goog.require('Blockly.utils.aria');
-const browserEvents = goog.require('Blockly.browserEvents');
-const clipboard = goog.require('Blockly.clipboard');
-const deprecation = goog.require('Blockly.utils.deprecation');
-const dom = goog.require('Blockly.utils.dom');
-const eventUtils = goog.require('Blockly.Events.utils');
-const userAgent = goog.require('Blockly.utils.userAgent');
-const svgMath = goog.require('Blockly.utils.svgMath');
+import * as WidgetDiv from './widgetdiv.js';
+import * as Xml from './xml.js';
+import * as aria from './utils/aria.js';
+import * as browserEvents from './browser_events.js';
+import * as clipboard from './clipboard.js';
+import * as deprecation from './utils/deprecation.js';
+import * as dom from './utils/dom.js';
+import * as eventUtils from './events/utils.js';
+import * as userAgent from './utils/useragent.js';
+import * as svgMath from './utils/svg_math.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-const {config} = goog.require('Blockly.config');
-const {Coordinate} = goog.require('Blockly.utils.Coordinate');
-const {MenuItem} = goog.require('Blockly.MenuItem');
-const {Menu} = goog.require('Blockly.Menu');
-const {Msg} = goog.require('Blockly.Msg');
-const {Rect} = goog.require('Blockly.utils.Rect');
+import {config} from './config.js';
+import {Coordinate} from './utils/coordinate.js';
+import {MenuItem} from './menuitem.js';
+import {Menu} from './menu.js';
+import {Msg} from './msg.js';
+import {Rect} from './utils/rect.js';
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceCommentSvg} = goog.requireType('Blockly.WorkspaceCommentSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */
-goog.require('Blockly.Events.BlockCreate');
+import './events/events_block_create.js';
 
 
 /**

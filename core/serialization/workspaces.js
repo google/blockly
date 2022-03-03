@@ -17,12 +17,11 @@
  */
 goog.declareModuleId('Blockly.serialization.workspaces');
 
-const dom = goog.require('Blockly.utils.dom');
-const eventUtils = goog.require('Blockly.Events.utils');
-const registry = goog.require('Blockly.registry');
-// eslint-disable-next-line no-unused-vars
-const {Workspace} = goog.require('Blockly.Workspace');
-const {WorkspaceSvg} = goog.require('Blockly.WorkspaceSvg');
+import * as dom from '../utils/dom.js';
+import * as eventUtils from '../events/utils.js';
+import * as registry from '../registry.js';
+import {Workspace} from '../workspace.js';
+import {WorkspaceSvg} from '../workspace_svg.js';
 
 
 /**

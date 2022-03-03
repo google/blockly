@@ -15,18 +15,18 @@
  */
 goog.declareModuleId('Blockly.CollapsibleToolboxCategory');
 
-const aria = goog.require('Blockly.utils.aria');
-const dom = goog.require('Blockly.utils.dom');
-const registry = goog.require('Blockly.registry');
-const toolbox = goog.require('Blockly.utils.toolbox');
+import * as aria from '../utils/aria.js';
+import * as dom from '../utils/dom.js';
+import * as registry from '../registry.js';
+import * as toolbox from '../utils/toolbox.js';
 /* eslint-disable-next-line no-unused-vars */
-const {ICollapsibleToolboxItem} = goog.require('Blockly.ICollapsibleToolboxItem');
+import {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_item.js';
 /* eslint-disable-next-line no-unused-vars */
 const {IToolboxItem} = goog.requireType('Blockly.IToolboxItem');
 /* eslint-disable-next-line no-unused-vars */
 const {IToolbox} = goog.requireType('Blockly.IToolbox');
-const {ToolboxCategory} = goog.require('Blockly.ToolboxCategory');
-const {ToolboxSeparator} = goog.require('Blockly.ToolboxSeparator');
+import {ToolboxCategory} from './category.js';
+import {ToolboxSeparator} from './separator.js';
 
 
 /**

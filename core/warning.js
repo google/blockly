@@ -15,17 +15,17 @@
  */
 goog.declareModuleId('Blockly.Warning');
 
-const dom = goog.require('Blockly.utils.dom');
-const eventUtils = goog.require('Blockly.Events.utils');
+import * as dom from './utils/dom.js';
+import * as eventUtils from './events/utils.js';
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-const {Bubble} = goog.require('Blockly.Bubble');
+import {Bubble} from './bubble.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
-const {Icon} = goog.require('Blockly.Icon');
-const {Svg} = goog.require('Blockly.utils.Svg');
+import {Icon} from './icon.js';
+import {Svg} from './utils/svg.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.Events.BubbleOpen');
+import './events/events_bubble_open.js';
 
 
 /**

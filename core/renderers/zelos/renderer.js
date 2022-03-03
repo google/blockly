@@ -15,21 +15,21 @@
  */
 goog.declareModuleId('Blockly.zelos.Renderer');
 
-const blockRendering = goog.require('Blockly.blockRendering');
+import * as blockRendering from '../common/block_rendering.js';
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-const {ConnectionType} = goog.require('Blockly.ConnectionType');
-const {ConstantProvider} = goog.require('Blockly.zelos.ConstantProvider');
-const {Drawer} = goog.require('Blockly.zelos.Drawer');
-const {InsertionMarkerManager} = goog.require('Blockly.InsertionMarkerManager');
-const {MarkerSvg} = goog.require('Blockly.zelos.MarkerSvg');
+import {ConnectionType} from '../../connection_type.js';
+import {ConstantProvider} from './constants.js';
+import {Drawer} from './drawer.js';
+import {InsertionMarkerManager} from '../../insertion_marker_manager.js';
+import {MarkerSvg} from './marker_svg.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Marker} = goog.requireType('Blockly.Marker');
-const {PathObject} = goog.require('Blockly.zelos.PathObject');
+import {PathObject} from './path_object.js';
 /* eslint-disable-next-line no-unused-vars */
 const {RenderInfo: BaseRenderInfo} = goog.requireType('Blockly.blockRendering.RenderInfo');
-const {RenderInfo} = goog.require('Blockly.zelos.RenderInfo');
-const {Renderer: BaseRenderer} = goog.require('Blockly.blockRendering.Renderer');
+import {RenderInfo} from './info.js';
+import {Renderer as BaseRenderer} from '../common/renderer.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Theme} = goog.requireType('Blockly.Theme');
 /* eslint-disable-next-line no-unused-vars */

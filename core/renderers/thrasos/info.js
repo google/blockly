@@ -23,13 +23,13 @@ const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 const {BottomRow} = goog.requireType('Blockly.blockRendering.BottomRow');
 /* eslint-disable-next-line no-unused-vars */
 const {Field} = goog.requireType('Blockly.blockRendering.Field');
-const {InRowSpacer} = goog.require('Blockly.blockRendering.InRowSpacer');
-const {RenderInfo: BaseRenderInfo} = goog.require('Blockly.blockRendering.RenderInfo');
+import {InRowSpacer} from '../measurables/in_row_spacer.js';
+import {RenderInfo as BaseRenderInfo} from '../common/info.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Renderer} = goog.requireType('Blockly.thrasos.Renderer');
 /* eslint-disable-next-line no-unused-vars */
 const {TopRow} = goog.requireType('Blockly.blockRendering.TopRow');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+import {Types} from '../measurables/types.js';
 
 
 /**

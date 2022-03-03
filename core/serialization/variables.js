@@ -17,10 +17,10 @@
  */
 goog.declareModuleId('Blockly.serialization.variables');
 
-const priorities = goog.require('Blockly.serialization.priorities');
-const serializationRegistry = goog.require('Blockly.serialization.registry');
+import * as priorities from './priorities.js';
+import * as serializationRegistry from './registry.js';
 // eslint-disable-next-line no-unused-vars
-const {ISerializer} = goog.require('Blockly.serialization.ISerializer');
+import {ISerializer} from '../interfaces/i_serializer.js';
 // eslint-disable-next-line no-unused-vars
 const {Workspace} = goog.requireType('Blockly.Workspace');
 

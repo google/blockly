@@ -15,24 +15,24 @@
  */
 goog.declareModuleId('Blockly.Connection');
 
-const Xml = goog.require('Blockly.Xml');
-const blocks = goog.require('Blockly.serialization.blocks');
-const eventUtils = goog.require('Blockly.Events.utils');
+import * as Xml from './xml.js';
+import * as blocks from './serialization/blocks.js';
+import * as eventUtils from './events/utils.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockMove} = goog.requireType('Blockly.Events.BlockMove');
-const {ConnectionType} = goog.require('Blockly.ConnectionType');
+import {ConnectionType} from './connection_type.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IASTNodeLocationWithBlock} = goog.require('Blockly.IASTNodeLocationWithBlock');
+import {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_with_block.js';
 /* eslint-disable-next-line no-unused-vars */
 const {IConnectionChecker} = goog.requireType('Blockly.IConnectionChecker');
 /* eslint-disable-next-line no-unused-vars */
 const {Input} = goog.requireType('Blockly.Input');
 /** @suppress {extraRequire} */
-goog.require('Blockly.Events.BlockMove');
+import './events/events_block_move.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.constants');
+import './constants.js';
 
 
 /**

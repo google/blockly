@@ -21,7 +21,7 @@ const toolbox = goog.requireType('Blockly.utils.toolbox');
 /* eslint-disable-next-line no-unused-vars */
 const {IFlyout} = goog.requireType('Blockly.IFlyout');
 /* eslint-disable-next-line no-unused-vars */
-const {IRegistrable} = goog.require('Blockly.IRegistrable');
+import {IRegistrable} from './i_registrable.js';
 /* eslint-disable-next-line no-unused-vars */
 const {IToolboxItem} = goog.requireType('Blockly.IToolboxItem');
 /* eslint-disable-next-line no-unused-vars */

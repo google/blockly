@@ -17,7 +17,7 @@
  */
 goog.declareModuleId('Blockly.geras.ConstantProvider');
 
-const {ConstantProvider: BaseConstantProvider} = goog.require('Blockly.blockRendering.ConstantProvider');
+import {ConstantProvider as BaseConstantProvider} from '../common/constants.js';
 
 
 /**

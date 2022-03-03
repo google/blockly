@@ -17,19 +17,19 @@
  */
 goog.declareModuleId('Blockly.Gesture');
 
-const Tooltip = goog.require('Blockly.Tooltip');
-const Touch = goog.require('Blockly.Touch');
-const blockAnimations = goog.require('Blockly.blockAnimations');
-const browserEvents = goog.require('Blockly.browserEvents');
-const common = goog.require('Blockly.common');
-const eventUtils = goog.require('Blockly.Events.utils');
-const internalConstants = goog.require('Blockly.internalConstants');
-const registry = goog.require('Blockly.registry');
+import * as Tooltip from './tooltip.js';
+import * as Touch from './touch.js';
+import * as blockAnimations from './block_animations.js';
+import * as browserEvents from './browser_events.js';
+import * as common from './common.js';
+import * as eventUtils from './events/utils.js';
+import * as internalConstants from './internal_constants.js';
+import * as registry from './registry.js';
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-const {BubbleDragger} = goog.require('Blockly.BubbleDragger');
-const {config} = goog.require('Blockly.config');
-const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+import {BubbleDragger} from './bubble_dragger.js';
+import {config} from './config.js';
+import {Coordinate} from './utils/coordinate.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Field} = goog.requireType('Blockly.Field');
 /* eslint-disable-next-line no-unused-vars */
@@ -38,14 +38,14 @@ const {IBlockDragger} = goog.requireType('Blockly.IBlockDragger');
 const {IBubble} = goog.requireType('Blockly.IBubble');
 /* eslint-disable-next-line no-unused-vars */
 const {IFlyout} = goog.requireType('Blockly.IFlyout');
-const {WorkspaceDragger} = goog.require('Blockly.WorkspaceDragger');
+import {WorkspaceDragger} from './workspace_dragger.js';
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
-const {Workspace} = goog.require('Blockly.Workspace');
+import {Workspace} from './workspace.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.BlockDragger');
+import './block_dragger.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.Events.Click');
+import './events/events_click.js';
 
 
 /**

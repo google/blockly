@@ -16,9 +16,9 @@ goog.declareModuleId('Blockly.blockRendering.SpacerRow');
 
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const {InRowSpacer} = goog.require('Blockly.blockRendering.InRowSpacer');
-const {Row} = goog.require('Blockly.blockRendering.Row');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+import {InRowSpacer} from './in_row_spacer.js';
+import {Row} from './row.js';
+import {Types} from './types.js';
 
 
 /**

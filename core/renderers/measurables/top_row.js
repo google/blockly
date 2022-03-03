@@ -18,11 +18,11 @@ goog.declareModuleId('Blockly.blockRendering.TopRow');
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const {Hat} = goog.require('Blockly.blockRendering.Hat');
+import {Hat} from './hat.js';
 /* eslint-disable-next-line no-unused-vars */
 const {PreviousConnection} = goog.requireType('Blockly.blockRendering.PreviousConnection');
-const {Row} = goog.require('Blockly.blockRendering.Row');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+import {Row} from './row.js';
+import {Types} from './types.js';
 
 
 /**

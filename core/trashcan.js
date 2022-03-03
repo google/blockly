@@ -17,39 +17,39 @@ goog.declareModuleId('Blockly.Trashcan');
 
 /* eslint-disable-next-line no-unused-vars */
 const blocks = goog.requireType('Blockly.serialization.blocks');
-const browserEvents = goog.require('Blockly.browserEvents');
-const dom = goog.require('Blockly.utils.dom');
-const eventUtils = goog.require('Blockly.Events.utils');
-const registry = goog.require('Blockly.registry');
-const toolbox = goog.require('Blockly.utils.toolbox');
-const uiPosition = goog.require('Blockly.uiPosition');
+import * as browserEvents from './browser_events.js';
+import * as dom from './utils/dom.js';
+import * as eventUtils from './events/utils.js';
+import * as registry from './registry.js';
+import * as toolbox from './utils/toolbox.js';
+import * as uiPosition from './positionable_helpers.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Abstract} = goog.requireType('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockDelete} = goog.requireType('Blockly.Events.BlockDelete');
 /* eslint-disable-next-line no-unused-vars */
 const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
-const {ComponentManager} = goog.require('Blockly.ComponentManager');
-const {DeleteArea} = goog.require('Blockly.DeleteArea');
+import {ComponentManager} from './component_manager.js';
+import {DeleteArea} from './delete_area.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IAutoHideable} = goog.require('Blockly.IAutoHideable');
+import {IAutoHideable} from './interfaces/i_autohideable.js';
 /* eslint-disable-next-line no-unused-vars */
 const {IDraggable} = goog.requireType('Blockly.IDraggable');
 /* eslint-disable-next-line no-unused-vars */
 const {IFlyout} = goog.requireType('Blockly.IFlyout');
 /* eslint-disable-next-line no-unused-vars */
-const {IPositionable} = goog.require('Blockly.IPositionable');
+import {IPositionable} from './interfaces/i_positionable.js';
 /* eslint-disable-next-line no-unused-vars */
 const {MetricsManager} = goog.requireType('Blockly.MetricsManager');
-const {Options} = goog.require('Blockly.Options');
-const {Rect} = goog.require('Blockly.utils.Rect');
-const {Size} = goog.require('Blockly.utils.Size');
-const {SPRITE} = goog.require('Blockly.sprite');
-const {Svg} = goog.require('Blockly.utils.Svg');
+import {Options} from './options.js';
+import {Rect} from './utils/rect.js';
+import {Size} from './utils/size.js';
+import {SPRITE} from './sprites.js';
+import {Svg} from './utils/svg.js';
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */
-goog.require('Blockly.Events.TrashcanOpen');
+import './events/events_trashcan_open.js';
 
 
 /**

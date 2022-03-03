@@ -17,9 +17,9 @@
  */
 goog.declareModuleId('Blockly.Cursor');
 
-const registry = goog.require('Blockly.registry');
-const {ASTNode} = goog.require('Blockly.ASTNode');
-const {Marker} = goog.require('Blockly.Marker');
+import * as registry from '../registry.js';
+import {ASTNode} from './ast_node.js';
+import {Marker} from './marker.js';
 
 /**
  * Class for a cursor.

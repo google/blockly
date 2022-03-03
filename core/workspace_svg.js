@@ -15,50 +15,50 @@
  */
 goog.declareModuleId('Blockly.WorkspaceSvg');
 
-const ContextMenu = goog.require('Blockly.ContextMenu');
+import * as ContextMenu from './contextmenu.js';
 /* eslint-disable-next-line no-unused-vars */
 const Procedures = goog.requireType('Blockly.Procedures');
-const Tooltip = goog.require('Blockly.Tooltip');
+import * as Tooltip from './tooltip.js';
 /* eslint-disable-next-line no-unused-vars */
 const Variables = goog.requireType('Blockly.Variables');
 /* eslint-disable-next-line no-unused-vars */
 const VariablesDynamic = goog.requireType('Blockly.VariablesDynamic');
-const WidgetDiv = goog.require('Blockly.WidgetDiv');
-const Xml = goog.require('Blockly.Xml');
-const arrayUtils = goog.require('Blockly.utils.array');
-const blockRendering = goog.require('Blockly.blockRendering');
-const blocks = goog.require('Blockly.serialization.blocks');
-const browserEvents = goog.require('Blockly.browserEvents');
-const common = goog.require('Blockly.common');
-const dom = goog.require('Blockly.utils.dom');
-const dropDownDiv = goog.require('Blockly.dropDownDiv');
-const eventUtils = goog.require('Blockly.Events.utils');
-const registry = goog.require('Blockly.registry');
-const svgMath = goog.require('Blockly.utils.svgMath');
-const toolbox = goog.require('Blockly.utils.toolbox');
-const userAgent = goog.require('Blockly.utils.userAgent');
-const utils = goog.require('Blockly.utils');
+import * as WidgetDiv from './widgetdiv.js';
+import * as Xml from './xml.js';
+import * as arrayUtils from './utils/array.js';
+import * as blockRendering from './renderers/common/block_rendering.js';
+import * as blocks from './serialization/blocks.js';
+import * as browserEvents from './browser_events.js';
+import * as common from './common.js';
+import * as dom from './utils/dom.js';
+import * as dropDownDiv from './dropdowndiv.js';
+import * as eventUtils from './events/utils.js';
+import * as registry from './registry.js';
+import * as svgMath from './utils/svg_math.js';
+import * as toolbox from './utils/toolbox.js';
+import * as userAgent from './utils/useragent.js';
+import * as utils from './utils.js';
 /* eslint-disable-next-line no-unused-vars */
 const {BlockDragSurfaceSvg} = goog.requireType('Blockly.BlockDragSurfaceSvg');
-const {BlockSvg} = goog.require('Blockly.BlockSvg');
+import {BlockSvg} from './block_svg.js';
 /* eslint-disable-next-line no-unused-vars */
 const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
-const {Classic} = goog.require('Blockly.Themes.Classic');
-const {ComponentManager} = goog.require('Blockly.ComponentManager');
-const {config} = goog.require('Blockly.config');
-const {ConnectionDB} = goog.require('Blockly.ConnectionDB');
-const {ContextMenuRegistry} = goog.require('Blockly.ContextMenuRegistry');
-const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+import {Classic} from './theme/classic.js';
+import {ComponentManager} from './component_manager.js';
+import {config} from './config.js';
+import {ConnectionDB} from './connection_db.js';
+import {ContextMenuRegistry} from './contextmenu_registry.js';
+import {Coordinate} from './utils/coordinate.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Cursor} = goog.requireType('Blockly.Cursor');
 /* eslint-disable-next-line no-unused-vars */
 const {FlyoutButton} = goog.requireType('Blockly.FlyoutButton');
-const {Gesture} = goog.require('Blockly.Gesture');
-const {Grid} = goog.require('Blockly.Grid');
+import {Gesture} from './gesture.js';
+import {Grid} from './grid.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IASTNodeLocationSvg} = goog.require('Blockly.IASTNodeLocationSvg');
+import {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 /* eslint-disable-next-line no-unused-vars */
 const {IBoundedElement} = goog.requireType('Blockly.IBoundedElement');
 /* eslint-disable-next-line no-unused-vars */
@@ -71,49 +71,49 @@ const {IFlyout} = goog.requireType('Blockly.IFlyout');
 const {IMetricsManager} = goog.requireType('Blockly.IMetricsManager');
 /* eslint-disable-next-line no-unused-vars */
 const {IToolbox} = goog.requireType('Blockly.IToolbox');
-const {MarkerManager} = goog.require('Blockly.MarkerManager');
+import {MarkerManager} from './marker_manager.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Marker} = goog.requireType('Blockly.Marker');
 /* eslint-disable-next-line no-unused-vars */
 const {Metrics} = goog.requireType('Blockly.utils.Metrics');
-const {Options} = goog.require('Blockly.Options');
-const {Rect} = goog.require('Blockly.utils.Rect');
+import {Options} from './options.js';
+import {Rect} from './utils/rect.js';
 /* eslint-disable-next-line no-unused-vars */
 const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
 /* eslint-disable-next-line no-unused-vars */
 const {Renderer} = goog.requireType('Blockly.blockRendering.Renderer');
 /* eslint-disable-next-line no-unused-vars */
 const {ScrollbarPair} = goog.requireType('Blockly.ScrollbarPair');
-const {Size} = goog.require('Blockly.utils.Size');
-const {Svg} = goog.require('Blockly.utils.Svg');
-const {ThemeManager} = goog.require('Blockly.ThemeManager');
+import {Size} from './utils/size.js';
+import {Svg} from './utils/svg.js';
+import {ThemeManager} from './theme_manager.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Theme} = goog.requireType('Blockly.Theme');
-const {TouchGesture} = goog.require('Blockly.TouchGesture');
+import {TouchGesture} from './touch_gesture.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Trashcan} = goog.requireType('Blockly.Trashcan');
 /* eslint-disable-next-line no-unused-vars */
 const {VariableModel} = goog.requireType('Blockly.VariableModel');
-const {WorkspaceAudio} = goog.require('Blockly.WorkspaceAudio');
+import {WorkspaceAudio} from './workspace_audio.js';
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceCommentSvg} = goog.requireType('Blockly.WorkspaceCommentSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceComment} = goog.requireType('Blockly.WorkspaceComment');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceDragSurfaceSvg} = goog.requireType('Blockly.WorkspaceDragSurfaceSvg');
-const {Workspace} = goog.require('Blockly.Workspace');
+import {Workspace} from './workspace.js';
 /* eslint-disable-next-line no-unused-vars */
 const {ZoomControls} = goog.requireType('Blockly.ZoomControls');
 /** @suppress {extraRequire} */
-goog.require('Blockly.Events.BlockCreate');
+import './events/events_block_create.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.Events.ThemeChange');
+import './events/events_theme_change.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.Events.ViewportChange');
+import './events/events_viewport.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.MetricsManager');
+import './metrics_manager.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.Msg');
+import './msg.js';
 
 
 /**

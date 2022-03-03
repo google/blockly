@@ -15,19 +15,19 @@
  */
 goog.declareModuleId('Blockly.ContextMenuItems');
 
-const Events = goog.require('Blockly.Events');
-const clipboard = goog.require('Blockly.clipboard');
-const dialog = goog.require('Blockly.dialog');
-const eventUtils = goog.require('Blockly.Events.utils');
-const idGenerator = goog.require('Blockly.utils.idGenerator');
-const userAgent = goog.require('Blockly.utils.userAgent');
+import * as Events from './events/events.js';
+import * as clipboard from './clipboard.js';
+import * as dialog from './dialog.js';
+import * as eventUtils from './events/utils.js';
+import * as idGenerator from './utils/idgenerator.js';
+import * as userAgent from './utils/useragent.js';
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-const {ContextMenuRegistry} = goog.require('Blockly.ContextMenuRegistry');
-const {Msg} = goog.require('Blockly.Msg');
+import {ContextMenuRegistry} from './contextmenu_registry.js';
+import {Msg} from './msg.js';
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
-const {inputTypes} = goog.require('Blockly.inputTypes');
+import {inputTypes} from './input_types.js';
 
 
 /**

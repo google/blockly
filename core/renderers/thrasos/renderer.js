@@ -15,11 +15,11 @@
  */
 goog.declareModuleId('Blockly.thrasos.Renderer');
 
-const blockRendering = goog.require('Blockly.blockRendering');
+import * as blockRendering from '../common/block_rendering.js';
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-const {RenderInfo} = goog.require('Blockly.thrasos.RenderInfo');
-const {Renderer: BaseRenderer} = goog.require('Blockly.blockRendering.Renderer');
+import {RenderInfo} from './info.js';
+import {Renderer as BaseRenderer} from '../common/renderer.js';
 
 
 /**

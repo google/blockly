@@ -17,10 +17,10 @@
  */
 goog.declareModuleId('Blockly.Tooltip');
 
-const blocklyString = goog.require('Blockly.utils.string');
-const browserEvents = goog.require('Blockly.browserEvents');
-const common = goog.require('Blockly.common');
-const deprecation = goog.require('Blockly.utils.deprecation');
+import * as blocklyString from './utils/string.js';
+import * as browserEvents from './browser_events.js';
+import * as common from './common.js';
+import * as deprecation from './utils/deprecation.js';
 
 
 /**

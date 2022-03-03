@@ -12,15 +12,15 @@
 
 goog.declareModuleId('Blockly.libraryBlocks');
 
-const colour = goog.require('Blockly.libraryBlocks.colour');
-const lists = goog.require('Blockly.libraryBlocks.lists');
-const logic = goog.require('Blockly.libraryBlocks.logic');
-const loops = goog.require('Blockly.libraryBlocks.loops');
-const math = goog.require('Blockly.libraryBlocks.math');
-const procedures = goog.require('Blockly.libraryBlocks.procedures');
-const texts = goog.require('Blockly.libraryBlocks.texts');
-const variables = goog.require('Blockly.libraryBlocks.variables');
-const variablesDynamic = goog.require('Blockly.libraryBlocks.variablesDynamic');
+import * as colour from './colour.js';
+import * as lists from './lists.js';
+import * as logic from './logic.js';
+import * as loops from './loops.js';
+import * as math from './math.js';
+import * as procedures from './procedures.js';
+import * as texts from './text.js';
+import * as variables from './variables.js';
+import * as variablesDynamic from './variables_dynamic.js';
 /* eslint-disable-next-line no-unused-vars */
 const {BlockDefinition} = goog.requireType('Blockly.blocks');
 

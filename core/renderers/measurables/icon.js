@@ -20,8 +20,8 @@ goog.declareModuleId('Blockly.blockRendering.Icon');
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 /* eslint-disable-next-line no-unused-vars */
 const {Icon: BlocklyIcon} = goog.requireType('Blockly.Icon');
-const {Measurable} = goog.require('Blockly.blockRendering.Measurable');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+import {Measurable} from './base.js';
+import {Types} from './types.js';
 
 
 /**

@@ -23,7 +23,7 @@ const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
-const {IRegistrable} = goog.require('Blockly.IRegistrable');
+import {IRegistrable} from './i_registrable.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Svg} = goog.requireType('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */

@@ -15,9 +15,9 @@
  */
 goog.declareModuleId('Blockly.Events.FinishedLoading');
 
-const eventUtils = goog.require('Blockly.Events.utils');
-const registry = goog.require('Blockly.registry');
-const {Abstract: AbstractEvent} = goog.require('Blockly.Events.Abstract');
+import * as eventUtils from './utils.js';
+import * as registry from '../registry.js';
+import {Abstract as AbstractEvent} from './events_abstract.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
 

@@ -26,10 +26,10 @@
  */
 goog.declareModuleId('Blockly.BlockDragSurfaceSvg');
 
-const dom = goog.require('Blockly.utils.dom');
-const svgMath = goog.require('Blockly.utils.svgMath');
-const {Coordinate} = goog.require('Blockly.utils.Coordinate');
-const {Svg} = goog.require('Blockly.utils.Svg');
+import * as dom from './utils/dom.js';
+import * as svgMath from './utils/svg_math.js';
+import {Coordinate} from './utils/coordinate.js';
+import {Svg} from './utils/svg.js';
 
 
 /**

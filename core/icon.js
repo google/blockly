@@ -15,16 +15,16 @@
  */
 goog.declareModuleId('Blockly.Icon');
 
-const browserEvents = goog.require('Blockly.browserEvents');
-const dom = goog.require('Blockly.utils.dom');
-const svgMath = goog.require('Blockly.utils.svgMath');
+import * as browserEvents from './browser_events.js';
+import * as dom from './utils/dom.js';
+import * as svgMath from './utils/svg_math.js';
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {Bubble} = goog.requireType('Blockly.Bubble');
-const {Coordinate} = goog.require('Blockly.utils.Coordinate');
-const {Size} = goog.require('Blockly.utils.Size');
-const {Svg} = goog.require('Blockly.utils.Svg');
+import {Coordinate} from './utils/coordinate.js';
+import {Size} from './utils/size.js';
+import {Svg} from './utils/svg.js';
 
 
 /**

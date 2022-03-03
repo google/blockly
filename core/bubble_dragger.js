@@ -15,14 +15,14 @@
  */
 goog.declareModuleId('Blockly.BubbleDragger');
 
-const eventUtils = goog.require('Blockly.Events.utils');
-const svgMath = goog.require('Blockly.utils.svgMath');
+import * as eventUtils from './events/utils.js';
+import * as svgMath from './utils/svg_math.js';
 /* eslint-disable-next-line no-unused-vars */
 const {BlockDragSurfaceSvg} = goog.requireType('Blockly.BlockDragSurfaceSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {CommentMove} = goog.requireType('Blockly.Events.CommentMove');
-const {ComponentManager} = goog.require('Blockly.ComponentManager');
-const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+import {ComponentManager} from './component_manager.js';
+import {Coordinate} from './utils/coordinate.js';
 /* eslint-disable-next-line no-unused-vars */
 const {IBubble} = goog.requireType('Blockly.IBubble');
 /* eslint-disable-next-line no-unused-vars */
@@ -34,11 +34,11 @@ const {WorkspaceCommentSvg} = goog.requireType('Blockly.WorkspaceCommentSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */
-goog.require('Blockly.Bubble');
+import './bubble.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.Events.CommentMove');
+import './events/events_comment_move.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.constants');
+import './constants.js';
 
 
 /**

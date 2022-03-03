@@ -15,15 +15,15 @@
  */
 goog.declareModuleId('Blockly.InsertionMarkerManager');
 
-const blockAnimations = goog.require('Blockly.blockAnimations');
-const common = goog.require('Blockly.common');
-const constants = goog.require('Blockly.constants');
-const eventUtils = goog.require('Blockly.Events.utils');
+import * as blockAnimations from './block_animations.js';
+import * as common from './common.js';
+import * as constants from './constants.js';
+import * as eventUtils from './events/utils.js';
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-const {ComponentManager} = goog.require('Blockly.ComponentManager');
-const {config} = goog.require('Blockly.config');
-const {ConnectionType} = goog.require('Blockly.ConnectionType');
+import {ComponentManager} from './component_manager.js';
+import {config} from './config.js';
+import {ConnectionType} from './connection_type.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */

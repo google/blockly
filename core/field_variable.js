@@ -15,26 +15,26 @@
  */
 goog.declareModuleId('Blockly.FieldVariable');
 
-const Variables = goog.require('Blockly.Variables');
-const Xml = goog.require('Blockly.Xml');
-const fieldRegistry = goog.require('Blockly.fieldRegistry');
-const internalConstants = goog.require('Blockly.internalConstants');
-const parsing = goog.require('Blockly.utils.parsing');
+import * as Variables from './variables.js';
+import * as Xml from './xml.js';
+import * as fieldRegistry from './field_registry.js';
+import * as internalConstants from './internal_constants.js';
+import * as parsing from './utils/parsing.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
-const {Field} = goog.require('Blockly.Field');
-const {FieldDropdown} = goog.require('Blockly.FieldDropdown');
+import {Field} from './field.js';
+import {FieldDropdown} from './field_dropdown.js';
 /* eslint-disable-next-line no-unused-vars */
 const {MenuItem} = goog.requireType('Blockly.MenuItem');
 /* eslint-disable-next-line no-unused-vars */
 const {Menu} = goog.requireType('Blockly.Menu');
-const {Msg} = goog.require('Blockly.Msg');
+import {Msg} from './msg.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Sentinel} = goog.requireType('Blockly.utils.Sentinel');
-const {Size} = goog.require('Blockly.utils.Size');
-const {VariableModel} = goog.require('Blockly.VariableModel');
+import {Size} from './utils/size.js';
+import {VariableModel} from './variable_model.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.Events.BlockChange');
+import './events/events_block_change.js';
 
 
 /**

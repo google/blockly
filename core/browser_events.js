@@ -15,9 +15,9 @@
  */
 goog.declareModuleId('Blockly.browserEvents');
 
-const Touch = goog.require('Blockly.Touch');
-const userAgent = goog.require('Blockly.utils.userAgent');
-const {globalThis} = goog.require('Blockly.utils.global');
+import * as Touch from './touch.js';
+import * as userAgent from './utils/useragent.js';
+import {globalThis} from './utils/global.js';
 
 
 /**

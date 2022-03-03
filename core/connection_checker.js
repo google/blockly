@@ -17,13 +17,13 @@
  */
 goog.declareModuleId('Blockly.ConnectionChecker');
 
-const common = goog.require('Blockly.common');
-const internalConstants = goog.require('Blockly.internalConstants');
-const registry = goog.require('Blockly.registry');
-const {ConnectionType} = goog.require('Blockly.ConnectionType');
-const {Connection} = goog.require('Blockly.Connection');
+import * as common from './common.js';
+import * as internalConstants from './internal_constants.js';
+import * as registry from './registry.js';
+import {ConnectionType} from './connection_type.js';
+import {Connection} from './connection.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IConnectionChecker} = goog.require('Blockly.IConnectionChecker');
+import {IConnectionChecker} from './interfaces/i_connection_checker.js';
 /* eslint-disable-next-line no-unused-vars */
 const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
 

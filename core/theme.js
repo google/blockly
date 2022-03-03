@@ -15,8 +15,8 @@
  */
 goog.declareModuleId('Blockly.Theme');
 
-const object = goog.require('Blockly.utils.object');
-const registry = goog.require('Blockly.registry');
+import * as object from './utils/object.js';
+import * as registry from './registry.js';
 
 
 /**

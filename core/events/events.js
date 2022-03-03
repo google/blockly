@@ -15,35 +15,35 @@
  */
 goog.declareModuleId('Blockly.Events');
 
-const deprecation = goog.require('Blockly.utils.deprecation');
-const eventUtils = goog.require('Blockly.Events.utils');
-const {Abstract: AbstractEvent} = goog.require('Blockly.Events.Abstract');
-const {BlockBase} = goog.require('Blockly.Events.BlockBase');
-const {BlockChange} = goog.require('Blockly.Events.BlockChange');
-const {BlockCreate} = goog.require('Blockly.Events.BlockCreate');
-const {BlockDelete} = goog.require('Blockly.Events.BlockDelete');
-const {BlockDrag} = goog.require('Blockly.Events.BlockDrag');
-const {BlockMove} = goog.require('Blockly.Events.BlockMove');
-const {BubbleOpen} = goog.require('Blockly.Events.BubbleOpen');
-const {Click} = goog.require('Blockly.Events.Click');
-const {CommentBase} = goog.require('Blockly.Events.CommentBase');
-const {CommentChange} = goog.require('Blockly.Events.CommentChange');
-const {CommentCreate} = goog.require('Blockly.Events.CommentCreate');
-const {CommentDelete} = goog.require('Blockly.Events.CommentDelete');
-const {CommentMove} = goog.require('Blockly.Events.CommentMove');
-const {FinishedLoading} = goog.require('Blockly.Events.FinishedLoading');
-const {MarkerMove} = goog.require('Blockly.Events.MarkerMove');
-const {Selected} = goog.require('Blockly.Events.Selected');
-const {ThemeChange} = goog.require('Blockly.Events.ThemeChange');
-const {ToolboxItemSelect} = goog.require('Blockly.Events.ToolboxItemSelect');
-const {TrashcanOpen} = goog.require('Blockly.Events.TrashcanOpen');
-const {UiBase} = goog.require('Blockly.Events.UiBase');
-const {Ui} = goog.require('Blockly.Events.Ui');
-const {VarBase} = goog.require('Blockly.Events.VarBase');
-const {VarCreate} = goog.require('Blockly.Events.VarCreate');
-const {VarDelete} = goog.require('Blockly.Events.VarDelete');
-const {VarRename} = goog.require('Blockly.Events.VarRename');
-const {ViewportChange} = goog.require('Blockly.Events.ViewportChange');
+import * as deprecation from '../utils/deprecation.js';
+import * as eventUtils from './utils.js';
+import {Abstract as AbstractEvent} from './events_abstract.js';
+import {BlockBase} from './events_block_base.js';
+import {BlockChange} from './events_block_change.js';
+import {BlockCreate} from './events_block_create.js';
+import {BlockDelete} from './events_block_delete.js';
+import {BlockDrag} from './events_block_drag.js';
+import {BlockMove} from './events_block_move.js';
+import {BubbleOpen} from './events_bubble_open.js';
+import {Click} from './events_click.js';
+import {CommentBase} from './events_comment_base.js';
+import {CommentChange} from './events_comment_change.js';
+import {CommentCreate} from './events_comment_create.js';
+import {CommentDelete} from './events_comment_delete.js';
+import {CommentMove} from './events_comment_move.js';
+import {FinishedLoading} from './workspace_events.js';
+import {MarkerMove} from './events_marker_move.js';
+import {Selected} from './events_selected.js';
+import {ThemeChange} from './events_theme_change.js';
+import {ToolboxItemSelect} from './events_toolbox_item_select.js';
+import {TrashcanOpen} from './events_trashcan_open.js';
+import {UiBase} from './events_ui_base.js';
+import {Ui} from './events_ui.js';
+import {VarBase} from './events_var_base.js';
+import {VarCreate} from './events_var_create.js';
+import {VarDelete} from './events_var_delete.js';
+import {VarRename} from './events_var_rename.js';
+import {ViewportChange} from './events_viewport.js';
 
 
 // Events.

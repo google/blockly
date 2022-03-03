@@ -14,34 +14,34 @@ goog.declareModuleId('Blockly.libraryBlocks.procedures');
 
 /* eslint-disable-next-line no-unused-vars */
 const AbstractEvent = goog.requireType('Blockly.Events.Abstract');
-const ContextMenu = goog.require('Blockly.ContextMenu');
-const Events = goog.require('Blockly.Events');
-const Procedures = goog.require('Blockly.Procedures');
-const Variables = goog.require('Blockly.Variables');
-const Xml = goog.require('Blockly.Xml');
-const xmlUtils = goog.require('Blockly.utils.xml');
-const {Align} = goog.require('Blockly.Input');
+import * as ContextMenu from '../core/contextmenu.js';
+import * as Events from '../core/events/events.js';
+import * as Procedures from '../core/procedures.js';
+import * as Variables from '../core/variables.js';
+import * as Xml from '../core/xml.js';
+import * as xmlUtils from '../core/utils/xml.js';
+import {Align} from '../core/input.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockDefinition} = goog.requireType('Blockly.blocks');
-const {config} = goog.require('Blockly.config');
+import {config} from '../core/config.js';
 /* eslint-disable-next-line no-unused-vars */
-const {FieldCheckbox} = goog.require('Blockly.FieldCheckbox');
-const {FieldLabel} = goog.require('Blockly.FieldLabel');
-const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
-const {Msg} = goog.require('Blockly.Msg');
-const {Mutator} = goog.require('Blockly.Mutator');
-const {Names} = goog.require('Blockly.Names');
+import {FieldCheckbox} from '../core/field_checkbox.js';
+import {FieldLabel} from '../core/field_label.js';
+import {FieldTextInput} from '../core/field_textinput.js';
+import {Msg} from '../core/msg.js';
+import {Mutator} from '../core/mutator.js';
+import {Names} from '../core/names.js';
 /* eslint-disable-next-line no-unused-vars */
 const {VariableModel} = goog.requireType('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
-const {defineBlocks} = goog.require('Blockly.common');
+import {defineBlocks} from '../core/common.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.Comment');
+import '../core/comment.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.Warning');
+import '../core/warning.js';
 
 
 /**

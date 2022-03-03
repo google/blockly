@@ -14,9 +14,9 @@
  */
 goog.declareModuleId('Blockly.utils.parsing');
 
-const colourUtils = goog.require('Blockly.utils.colour');
-const stringUtils = goog.require('Blockly.utils.string');
-const {Msg} = goog.require('Blockly.Msg');
+import * as colourUtils from './colour.js';
+import * as stringUtils from './string.js';
+import {Msg} from '../msg.js';
 
 
 /**

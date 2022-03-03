@@ -15,12 +15,12 @@
  */
 goog.declareModuleId('Blockly.Events.MarkerMove');
 
-const eventUtils = goog.require('Blockly.Events.utils');
-const registry = goog.require('Blockly.registry');
-const {ASTNode} = goog.require('Blockly.ASTNode');
+import * as eventUtils from './utils.js';
+import * as registry from '../registry.js';
+import {ASTNode} from '../keyboard_nav/ast_node.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
-const {UiBase} = goog.require('Blockly.Events.UiBase');
+import {UiBase} from './events_ui_base.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
 

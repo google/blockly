@@ -17,7 +17,7 @@ goog.declareModuleId('Blockly.FlyoutMetricsManager');
 
 /* eslint-disable-next-line no-unused-vars */
 const {IFlyout} = goog.requireType('Blockly.IFlyout');
-const {MetricsManager} = goog.require('Blockly.MetricsManager');
+import {MetricsManager} from './metrics_manager.js';
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 

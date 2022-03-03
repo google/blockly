@@ -15,15 +15,15 @@
  */
 goog.declareModuleId('Blockly.Options');
 
-const idGenerator = goog.require('Blockly.utils.idGenerator');
-const registry = goog.require('Blockly.registry');
-const toolbox = goog.require('Blockly.utils.toolbox');
+import * as idGenerator from './utils/idgenerator.js';
+import * as registry from './registry.js';
+import * as toolbox from './utils/toolbox.js';
 /* eslint-disable-next-line no-unused-vars */
 const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
-const {Classic} = goog.require('Blockly.Themes.Classic');
+import {Classic} from './theme/classic.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Metrics} = goog.requireType('Blockly.utils.Metrics');
-const {Theme} = goog.require('Blockly.Theme');
+import {Theme} from './theme.js';
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 

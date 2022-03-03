@@ -15,36 +15,36 @@
  */
 goog.declareModuleId('Blockly.WorkspaceCommentSvg');
 
-const ContextMenu = goog.require('Blockly.ContextMenu');
-const Css = goog.require('Blockly.Css');
-const Touch = goog.require('Blockly.Touch');
-const browserEvents = goog.require('Blockly.browserEvents');
-const common = goog.require('Blockly.common');
-const dom = goog.require('Blockly.utils.dom');
-const eventUtils = goog.require('Blockly.Events.utils');
-const svgMath = goog.require('Blockly.utils.svgMath');
+import * as ContextMenu from './contextmenu.js';
+import * as Css from './css.js';
+import * as Touch from './touch.js';
+import * as browserEvents from './browser_events.js';
+import * as common from './common.js';
+import * as dom from './utils/dom.js';
+import * as eventUtils from './events/utils.js';
+import * as svgMath from './utils/svg_math.js';
 /* eslint-disable-next-line no-unused-vars */
 const {BlockDragSurfaceSvg} = goog.requireType('Blockly.BlockDragSurfaceSvg');
 /* eslint-disable-next-line no-unused-vars */
-const {CommentMove} = goog.require('Blockly.Events.CommentMove');
-const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+import {CommentMove} from './events/events_comment_move.js';
+import {Coordinate} from './utils/coordinate.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IBoundedElement} = goog.require('Blockly.IBoundedElement');
+import {IBoundedElement} from './interfaces/i_bounded_element.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IBubble} = goog.require('Blockly.IBubble');
+import {IBubble} from './interfaces/i_bubble.js';
 /* eslint-disable-next-line no-unused-vars */
-const {ICopyable} = goog.require('Blockly.ICopyable');
-const {Rect} = goog.require('Blockly.utils.Rect');
-const {Svg} = goog.require('Blockly.utils.Svg');
-const {WorkspaceComment} = goog.require('Blockly.WorkspaceComment');
+import {ICopyable} from './interfaces/i_copyable.js';
+import {Rect} from './utils/rect.js';
+import {Svg} from './utils/svg.js';
+import {WorkspaceComment} from './workspace_comment.js';
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */
-goog.require('Blockly.Events.CommentCreate');
+import './events/events_comment_create.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.Events.CommentDelete');
+import './events/events_comment_delete.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.Events.Selected');
+import './events/events_selected.js';
 
 
 /**

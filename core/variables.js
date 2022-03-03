@@ -15,12 +15,12 @@
  */
 goog.declareModuleId('Blockly.Variables');
 
-const Xml = goog.require('Blockly.Xml');
-const dialog = goog.require('Blockly.dialog');
-const utilsXml = goog.require('Blockly.utils.xml');
-const {Blocks} = goog.require('Blockly.blocks');
-const {Msg} = goog.require('Blockly.Msg');
-const {VariableModel} = goog.require('Blockly.VariableModel');
+import * as Xml from './xml.js';
+import * as dialog from './dialog.js';
+import * as utilsXml from './utils/xml.js';
+import {Blocks} from './blocks.js';
+import {Msg} from './msg.js';
+import {VariableModel} from './variable_model.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
 /* eslint-disable-next-line no-unused-vars */

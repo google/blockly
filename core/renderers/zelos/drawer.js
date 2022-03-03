@@ -15,11 +15,11 @@
  */
 goog.declareModuleId('Blockly.zelos.Drawer');
 
-const debug = goog.require('Blockly.blockRendering.debug');
-const svgPaths = goog.require('Blockly.utils.svgPaths');
+import * as debug from '../common/debug.js';
+import * as svgPaths from '../../utils/svg_paths.js';
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-const {Drawer: BaseDrawer} = goog.require('Blockly.blockRendering.Drawer');
+import {Drawer as BaseDrawer} from '../common/drawer.js';
 /* eslint-disable-next-line no-unused-vars */
 const {PathObject} = goog.requireType('Blockly.zelos.PathObject');
 /* eslint-disable-next-line no-unused-vars */
@@ -30,7 +30,7 @@ const {Row} = goog.requireType('Blockly.blockRendering.Row');
 const {SpacerRow} = goog.requireType('Blockly.blockRendering.SpacerRow');
 /* eslint-disable-next-line no-unused-vars */
 const {StatementInput} = goog.requireType('Blockly.zelos.StatementInput');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+import {Types} from '../measurables/types.js';
 
 
 /**

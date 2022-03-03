@@ -15,19 +15,19 @@
  */
 goog.declareModuleId('Blockly.FieldMultilineInput');
 
-const Css = goog.require('Blockly.Css');
-const WidgetDiv = goog.require('Blockly.WidgetDiv');
-const aria = goog.require('Blockly.utils.aria');
-const dom = goog.require('Blockly.utils.dom');
-const fieldRegistry = goog.require('Blockly.fieldRegistry');
-const parsing = goog.require('Blockly.utils.parsing');
-const userAgent = goog.require('Blockly.utils.userAgent');
-const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
-const {Field} = goog.require('Blockly.Field');
-const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
+import * as Css from './css.js';
+import * as WidgetDiv from './widgetdiv.js';
+import * as aria from './utils/aria.js';
+import * as dom from './utils/dom.js';
+import * as fieldRegistry from './field_registry.js';
+import * as parsing from './utils/parsing.js';
+import * as userAgent from './utils/useragent.js';
+import {FieldTextInput} from './field_textinput.js';
+import {Field} from './field.js';
+import {KeyCodes} from './utils/keycodes.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Sentinel} = goog.requireType('Blockly.utils.Sentinel');
-const {Svg} = goog.require('Blockly.utils.Svg');
+import {Svg} from './utils/svg.js';
 
 
 /**

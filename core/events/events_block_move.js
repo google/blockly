@@ -15,13 +15,13 @@
  */
 goog.declareModuleId('Blockly.Events.BlockMove');
 
-const eventUtils = goog.require('Blockly.Events.utils');
-const registry = goog.require('Blockly.registry');
-const {BlockBase} = goog.require('Blockly.Events.BlockBase');
+import * as eventUtils from './utils.js';
+import * as registry from '../registry.js';
+import {BlockBase} from './events_block_base.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
-const {ConnectionType} = goog.require('Blockly.ConnectionType');
-const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+import {ConnectionType} from '../connection_type.js';
+import {Coordinate} from '../utils/coordinate.js';
 
 
 /**

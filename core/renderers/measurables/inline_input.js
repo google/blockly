@@ -18,10 +18,10 @@ goog.declareModuleId('Blockly.blockRendering.InlineInput');
 
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const {InputConnection} = goog.require('Blockly.blockRendering.InputConnection');
+import {InputConnection} from './input_connection.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Input} = goog.requireType('Blockly.Input');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+import {Types} from './types.js';
 
 
 /**

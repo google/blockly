@@ -19,7 +19,7 @@ goog.declareModuleId('Blockly.ISelectableToolboxItem');
 /* eslint-disable-next-line no-unused-vars */
 const toolbox = goog.requireType('Blockly.utils.toolbox');
 /* eslint-disable-next-line no-unused-vars */
-const {IToolboxItem} = goog.require('Blockly.IToolboxItem');
+import {IToolboxItem} from './i_toolbox_item.js';
 
 
 /**

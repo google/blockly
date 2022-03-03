@@ -15,14 +15,14 @@
  */
 goog.declareModuleId('Blockly.Scrollbar');
 
-const Touch = goog.require('Blockly.Touch');
-const browserEvents = goog.require('Blockly.browserEvents');
-const dom = goog.require('Blockly.utils.dom');
-const svgMath = goog.require('Blockly.utils.svgMath');
-const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+import * as Touch from './touch.js';
+import * as browserEvents from './browser_events.js';
+import * as dom from './utils/dom.js';
+import * as svgMath from './utils/svg_math.js';
+import {Coordinate} from './utils/coordinate.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Metrics} = goog.requireType('Blockly.utils.Metrics');
-const {Svg} = goog.require('Blockly.utils.Svg');
+import {Svg} from './utils/svg.js';
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 

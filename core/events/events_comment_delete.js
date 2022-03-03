@@ -15,9 +15,9 @@
  */
 goog.declareModuleId('Blockly.Events.CommentDelete');
 
-const eventUtils = goog.require('Blockly.Events.utils');
-const registry = goog.require('Blockly.registry');
-const {CommentBase} = goog.require('Blockly.Events.CommentBase');
+import * as eventUtils from './utils.js';
+import * as registry from '../registry.js';
+import {CommentBase} from './events_comment_base.js';
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceComment} = goog.requireType('Blockly.WorkspaceComment');
 

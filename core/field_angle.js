@@ -15,21 +15,20 @@
  */
 goog.declareModuleId('Blockly.FieldAngle');
 
-const Css = goog.require('Blockly.Css');
-const WidgetDiv = goog.require('Blockly.WidgetDiv');
-const browserEvents = goog.require('Blockly.browserEvents');
-const dom = goog.require('Blockly.utils.dom');
-const dropDownDiv = goog.require('Blockly.dropDownDiv');
-const fieldRegistry = goog.require('Blockly.fieldRegistry');
-const math = goog.require('Blockly.utils.math');
-const userAgent = goog.require('Blockly.utils.userAgent');
-const {Field} = goog.require('Blockly.Field');
-const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
-const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
+import * as Css from './css.js';
+import * as WidgetDiv from './widgetdiv.js';
+import * as browserEvents from './browser_events.js';
+import * as dom from './utils/dom.js';
+import * as dropDownDiv from './dropdowndiv.js';
+import * as fieldRegistry from './field_registry.js';
+import * as math from './utils/math.js';
+import * as userAgent from './utils/useragent.js';
+import {Field} from './field.js';
+import {FieldTextInput} from './field_textinput.js';
+import {KeyCodes} from './utils/keycodes.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Sentinel} = goog.requireType('Blockly.utils.Sentinel');
-const {Svg} = goog.require('Blockly.utils.Svg');
-
+import {Svg} from './utils/svg.js';
 
 /**
  * Class for an editable angle field.

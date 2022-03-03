@@ -12,22 +12,22 @@
 
 goog.declareModuleId('Blockly.libraryBlocks.math');
 
-const Extensions = goog.require('Blockly.Extensions');
+import * as Extensions from '../core/extensions.js';
 // N.B.: Blockly.FieldDropdown needed for type AND side-effects.
 /* eslint-disable-next-line no-unused-vars */
-const FieldDropdown = goog.require('Blockly.FieldDropdown');
-const xmlUtils = goog.require('Blockly.utils.xml');
+import * as FieldDropdown from '../core/field_dropdown.js';
+import * as xmlUtils from '../core/utils/xml.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockDefinition} = goog.requireType('Blockly.blocks');
-const {createBlockDefinitionsFromJsonArray, defineBlocks} = goog.require('Blockly.common');
+import {createBlockDefinitionsFromJsonArray, defineBlocks} from '../core/common.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.FieldLabel');
+import '../core/field_label.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.FieldNumber');
+import '../core/field_number.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.FieldVariable');
+import '../core/field_variable.js';
 
 
 /**

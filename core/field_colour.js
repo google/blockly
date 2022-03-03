@@ -15,21 +15,21 @@
  */
 goog.declareModuleId('Blockly.FieldColour');
 
-const Css = goog.require('Blockly.Css');
-const aria = goog.require('Blockly.utils.aria');
-const browserEvents = goog.require('Blockly.browserEvents');
-const colour = goog.require('Blockly.utils.colour');
-const dom = goog.require('Blockly.utils.dom');
-const dropDownDiv = goog.require('Blockly.dropDownDiv');
-const fieldRegistry = goog.require('Blockly.fieldRegistry');
-const idGenerator = goog.require('Blockly.utils.idGenerator');
-const {Field} = goog.require('Blockly.Field');
-const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
+import * as Css from './css.js';
+import * as aria from './utils/aria.js';
+import * as browserEvents from './browser_events.js';
+import * as colour from './utils/colour.js';
+import * as dom from './utils/dom.js';
+import * as dropDownDiv from './dropdowndiv.js';
+import * as fieldRegistry from './field_registry.js';
+import * as idGenerator from './utils/idgenerator.js';
+import {Field} from './field.js';
+import {KeyCodes} from './utils/keycodes.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Sentinel} = goog.requireType('Blockly.utils.Sentinel');
-const {Size} = goog.require('Blockly.utils.Size');
+import {Size} from './utils/size.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.Events.BlockChange');
+import './events/events_block_change.js';
 
 
 /**

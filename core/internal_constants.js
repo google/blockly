@@ -18,7 +18,7 @@
  */
 goog.declareModuleId('Blockly.internalConstants');
 
-const {ConnectionType} = goog.require('Blockly.ConnectionType');
+import {ConnectionType} from './connection_type.js';
 
 
 /**

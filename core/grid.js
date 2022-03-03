@@ -17,9 +17,9 @@
  */
 goog.declareModuleId('Blockly.Grid');
 
-const dom = goog.require('Blockly.utils.dom');
-const userAgent = goog.require('Blockly.utils.userAgent');
-const {Svg} = goog.require('Blockly.utils.Svg');
+import * as dom from './utils/dom.js';
+import * as userAgent from './utils/useragent.js';
+import {Svg} from './utils/svg.js';
 
 
 /**

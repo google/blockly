@@ -17,31 +17,33 @@
  */
 goog.declareModuleId('Blockly.Mutator');
 
-const dom = goog.require('Blockly.utils.dom');
-const eventUtils = goog.require('Blockly.Events.utils');
-const toolbox = goog.require('Blockly.utils.toolbox');
-const xml = goog.require('Blockly.utils.xml');
+import * as dom from './utils/dom.js';
+import * as eventUtils from './events/utils.js';
+import * as toolbox from './utils/toolbox.js';
+import * as xml from './utils/xml.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Abstract} = goog.requireType('Blockly.Events.Abstract');
-const {BlockChange} = goog.require('Blockly.Events.BlockChange');
+import {BlockChange} from './events/events_block_change.js';
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
-const {Bubble} = goog.require('Blockly.Bubble');
-const {config} = goog.require('Blockly.config');
+import {Bubble} from './bubble.js';
+import {config} from './config.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Connection} = goog.requireType('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
 const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
-const {Icon} = goog.require('Blockly.Icon');
-const {Options} = goog.require('Blockly.Options');
-const {Svg} = goog.require('Blockly.utils.Svg');
-const {WorkspaceSvg} = goog.require('Blockly.WorkspaceSvg');
+import {Icon} from './icon.js';
+import {Options} from './options.js';
+import {Svg} from './utils/svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
+/* eslint-disable-next-line no-unused-vars */
+const {Workspace} = goog.requireType('Blockly.Workspace');
 /** @suppress {extraRequire} */
-goog.require('Blockly.Events.BubbleOpen');
+import './events/events_bubble_open.js';
 
 
 /**

@@ -15,12 +15,12 @@
  */
 goog.declareModuleId('Blockly.VariableModel');
 
-const eventUtils = goog.require('Blockly.Events.utils');
-const idGenerator = goog.require('Blockly.utils.idGenerator');
+import * as eventUtils from './events/utils.js';
+import * as idGenerator from './utils/idgenerator.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
 /** @suppress {extraRequire} */
-goog.require('Blockly.Events.VarCreate');
+import './events/events_var_create.js';
 
 
 /**

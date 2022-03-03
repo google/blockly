@@ -15,10 +15,10 @@
  */
 goog.declareModuleId('Blockly.FieldNumber');
 
-const aria = goog.require('Blockly.utils.aria');
-const fieldRegistry = goog.require('Blockly.fieldRegistry');
-const {Field} = goog.require('Blockly.Field');
-const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
+import * as aria from './utils/aria.js';
+import * as fieldRegistry from './field_registry.js';
+import {Field} from './field.js';
+import {FieldTextInput} from './field_textinput.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Sentinel} = goog.requireType('Blockly.utils.Sentinel');
 

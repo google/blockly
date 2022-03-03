@@ -17,7 +17,7 @@ goog.declareModuleId('Blockly.zelos.TopRow');
 
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const {TopRow: BaseTopRow} = goog.require('Blockly.blockRendering.TopRow');
+import {TopRow as BaseTopRow} from '../../measurables/top_row.js';
 
 
 /**

@@ -16,7 +16,7 @@
  */
 goog.declareModuleId('Blockly.ComponentManager');
 
-const arrayUtils = goog.require('Blockly.utils.array');
+import * as arrayUtils from './utils/array.js';
 /* eslint-disable-next-line no-unused-vars */
 const {IAutoHideable} = goog.requireType('Blockly.IAutoHideable');
 /* eslint-disable-next-line no-unused-vars */

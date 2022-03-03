@@ -19,7 +19,7 @@
 goog.declareModuleId('Blockly.IDragTarget');
 
 /* eslint-disable-next-line no-unused-vars */
-const {IComponent} = goog.require('Blockly.IComponent');
+import {IComponent} from './i_component.js';
 /* eslint-disable-next-line no-unused-vars */
 const {IDraggable} = goog.requireType('Blockly.IDraggable');
 /* eslint-disable-next-line no-unused-vars */

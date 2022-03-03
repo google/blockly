@@ -15,17 +15,17 @@
  */
 goog.declareModuleId('Blockly.MetricsManager');
 
-const registry = goog.require('Blockly.registry');
-const toolboxUtils = goog.require('Blockly.utils.toolbox');
+import * as registry from './registry.js';
+import * as toolboxUtils from './utils/toolbox.js';
 /* eslint-disable-next-line no-unused-vars */
 const {IFlyout} = goog.requireType('Blockly.IFlyout');
 /* eslint-disable-next-line no-unused-vars */
-const {IMetricsManager} = goog.require('Blockly.IMetricsManager');
+import {IMetricsManager} from './interfaces/i_metrics_manager.js';
 /* eslint-disable-next-line no-unused-vars */
 const {IToolbox} = goog.requireType('Blockly.IToolbox');
 /* eslint-disable-next-line no-unused-vars */
 const {Metrics} = goog.requireType('Blockly.utils.Metrics');
-const {Size} = goog.require('Blockly.utils.Size');
+import {Size} from './utils/size.js';
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 

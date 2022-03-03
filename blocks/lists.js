@@ -12,21 +12,21 @@
 
 goog.declareModuleId('Blockly.libraryBlocks.lists');
 
-const xmlUtils = goog.require('Blockly.utils.xml');
-const {Align} = goog.require('Blockly.Input');
+import * as xmlUtils from '../core/utils/xml.js';
+import {Align} from '../core/input.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockDefinition} = goog.requireType('Blockly.blocks');
-const {ConnectionType} = goog.require('Blockly.ConnectionType');
-const {FieldDropdown} = goog.require('Blockly.FieldDropdown');
-const {Msg} = goog.require('Blockly.Msg');
-const {Mutator} = goog.require('Blockly.Mutator');
+import {ConnectionType} from '../core/connection_type.js';
+import {FieldDropdown} from '../core/field_dropdown.js';
+import {Msg} from '../core/msg.js';
+import {Mutator} from '../core/mutator.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
-const {createBlockDefinitionsFromJsonArray, defineBlocks} = goog.require('Blockly.common');
+import {createBlockDefinitionsFromJsonArray, defineBlocks} from '../core/common.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.FieldDropdown');
+import '../core/field_dropdown.js';
 
 
 /**

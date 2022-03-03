@@ -19,7 +19,7 @@
  */
 goog.declareModuleId('Blockly.fieldRegistry');
 
-const registry = goog.require('Blockly.registry');
+import * as registry from './registry.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Field} = goog.requireType('Blockly.Field');
 /* eslint-disable-next-line no-unused-vars */

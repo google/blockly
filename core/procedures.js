@@ -15,13 +15,13 @@
  */
 goog.declareModuleId('Blockly.Procedures');
 
-const Variables = goog.require('Blockly.Variables');
-const Xml = goog.require('Blockly.Xml');
-const eventUtils = goog.require('Blockly.Events.utils');
-const utilsXml = goog.require('Blockly.utils.xml');
+import * as Variables from './variables.js';
+import * as Xml from './xml.js';
+import * as eventUtils from './events/utils.js';
+import * as utilsXml from './utils/xml.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Abstract} = goog.requireType('Blockly.Events.Abstract');
-const {Blocks} = goog.require('Blockly.blocks');
+import {Blocks} from './blocks.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
@@ -30,13 +30,13 @@ const {BubbleOpen} = goog.requireType('Blockly.Events.BubbleOpen');
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {Field} = goog.requireType('Blockly.Field');
-const {Msg} = goog.require('Blockly.Msg');
-const {Names} = goog.require('Blockly.Names');
+import {Msg} from './msg.js';
+import {Names} from './names.js';
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
-const {Workspace} = goog.require('Blockly.Workspace');
+import {Workspace} from './workspace.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.Events.BlockChange');
+import './events/events_block_change.js';
 
 
 /**

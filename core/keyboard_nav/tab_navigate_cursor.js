@@ -17,8 +17,8 @@
  */
 goog.declareModuleId('Blockly.TabNavigateCursor');
 
-const {ASTNode} = goog.require('Blockly.ASTNode');
-const {BasicCursor} = goog.require('Blockly.BasicCursor');
+import {ASTNode} from './ast_node.js';
+import {BasicCursor} from './basic_cursor.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Field} = goog.requireType('Blockly.Field');
 

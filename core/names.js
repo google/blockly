@@ -15,8 +15,8 @@
  */
 goog.declareModuleId('Blockly.Names');
 
-const Variables = goog.require('Blockly.Variables');
-const {Msg} = goog.require('Blockly.Msg');
+import * as Variables from './variables.js';
+import {Msg} from './msg.js';
 /* eslint-disable-next-line no-unused-vars */
 const {VariableMap} = goog.requireType('Blockly.VariableMap');
 /* eslint-disable-next-line no-unused-vars */

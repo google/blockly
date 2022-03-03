@@ -19,20 +19,20 @@
  */
 goog.declareModuleId('Blockly.FieldDropdown');
 
-const aria = goog.require('Blockly.utils.aria');
-const dom = goog.require('Blockly.utils.dom');
-const dropDownDiv = goog.require('Blockly.dropDownDiv');
-const fieldRegistry = goog.require('Blockly.fieldRegistry');
-const parsing = goog.require('Blockly.utils.parsing');
-const userAgent = goog.require('Blockly.utils.userAgent');
-const utilsString = goog.require('Blockly.utils.string');
-const {Coordinate} = goog.require('Blockly.utils.Coordinate');
-const {Field} = goog.require('Blockly.Field');
-const {MenuItem} = goog.require('Blockly.MenuItem');
-const {Menu} = goog.require('Blockly.Menu');
+import * as aria from './utils/aria.js';
+import * as dom from './utils/dom.js';
+import * as dropDownDiv from './dropdowndiv.js';
+import * as fieldRegistry from './field_registry.js';
+import * as parsing from './utils/parsing.js';
+import * as userAgent from './utils/useragent.js';
+import * as utilsString from './utils/string.js';
+import {Coordinate} from './utils/coordinate.js';
+import {Field} from './field.js';
+import {MenuItem} from './menuitem.js';
+import {Menu} from './menu.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Sentinel} = goog.requireType('Blockly.utils.Sentinel');
-const {Svg} = goog.require('Blockly.utils.Svg');
+import {Svg} from './utils/svg.js';
 
 
 /**

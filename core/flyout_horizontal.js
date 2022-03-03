@@ -15,18 +15,18 @@
  */
 goog.declareModuleId('Blockly.HorizontalFlyout');
 
-const WidgetDiv = goog.require('Blockly.WidgetDiv');
-const browserEvents = goog.require('Blockly.browserEvents');
-const dropDownDiv = goog.require('Blockly.dropDownDiv');
-const registry = goog.require('Blockly.registry');
-const toolbox = goog.require('Blockly.utils.toolbox');
+import * as WidgetDiv from './widgetdiv.js';
+import * as browserEvents from './browser_events.js';
+import * as dropDownDiv from './dropdowndiv.js';
+import * as registry from './registry.js';
+import * as toolbox from './utils/toolbox.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
-const {Flyout} = goog.require('Blockly.Flyout');
+import {Flyout} from './flyout_base.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Options} = goog.requireType('Blockly.Options');
-const {Rect} = goog.require('Blockly.utils.Rect');
-const {Scrollbar} = goog.require('Blockly.Scrollbar');
+import {Rect} from './utils/rect.js';
+import {Scrollbar} from './scrollbar.js';
 
 
 /**

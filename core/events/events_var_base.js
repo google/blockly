@@ -15,7 +15,7 @@
  */
 goog.declareModuleId('Blockly.Events.VarBase');
 
-const {Abstract: AbstractEvent} = goog.require('Blockly.Events.Abstract');
+import {Abstract as AbstractEvent} from './events_abstract.js';
 /* eslint-disable-next-line no-unused-vars */
 const {VariableModel} = goog.requireType('Blockly.VariableModel');
 

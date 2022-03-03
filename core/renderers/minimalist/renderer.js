@@ -15,15 +15,15 @@
  */
 goog.declareModuleId('Blockly.minimalist.Renderer');
 
-const blockRendering = goog.require('Blockly.blockRendering');
+import * as blockRendering from '../common/block_rendering.js';
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-const {ConstantProvider} = goog.require('Blockly.minimalist.ConstantProvider');
-const {Drawer} = goog.require('Blockly.minimalist.Drawer');
+import {ConstantProvider} from './constants.js';
+import {Drawer} from './drawer.js';
 /* eslint-disable-next-line no-unused-vars */
 const {RenderInfo: BaseRenderInfo} = goog.requireType('Blockly.blockRendering.RenderInfo');
-const {RenderInfo} = goog.require('Blockly.minimalist.RenderInfo');
-const {Renderer: BaseRenderer} = goog.require('Blockly.blockRendering.Renderer');
+import {RenderInfo} from './info.js';
+import {Renderer as BaseRenderer} from '../common/renderer.js';
 
 
 /**

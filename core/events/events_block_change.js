@@ -15,10 +15,10 @@
  */
 goog.declareModuleId('Blockly.Events.BlockChange');
 
-const Xml = goog.require('Blockly.Xml');
-const eventUtils = goog.require('Blockly.Events.utils');
-const registry = goog.require('Blockly.registry');
-const {BlockBase} = goog.require('Blockly.Events.BlockBase');
+import * as Xml from '../xml.js';
+import * as eventUtils from './utils.js';
+import * as registry from '../registry.js';
+import {BlockBase} from './events_block_base.js';
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */

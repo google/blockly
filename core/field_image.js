@@ -15,14 +15,14 @@
  */
 goog.declareModuleId('Blockly.FieldImage');
 
-const dom = goog.require('Blockly.utils.dom');
-const fieldRegistry = goog.require('Blockly.fieldRegistry');
-const parsing = goog.require('Blockly.utils.parsing');
-const {Field} = goog.require('Blockly.Field');
+import * as dom from './utils/dom.js';
+import * as fieldRegistry from './field_registry.js';
+import * as parsing from './utils/parsing.js';
+import {Field} from './field.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Sentinel} = goog.requireType('Blockly.utils.Sentinel');
-const {Size} = goog.require('Blockly.utils.Size');
-const {Svg} = goog.require('Blockly.utils.Svg');
+import {Size} from './utils/size.js';
+import {Svg} from './utils/svg.js';
 
 
 /**

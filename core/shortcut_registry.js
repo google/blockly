@@ -17,8 +17,8 @@
  */
 goog.declareModuleId('Blockly.ShortcutRegistry');
 
-const object = goog.require('Blockly.utils.object');
-const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
+import * as object from './utils/object.js';
+import {KeyCodes} from './utils/keycodes.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
 

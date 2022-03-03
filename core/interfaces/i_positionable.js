@@ -17,7 +17,7 @@
 goog.declareModuleId('Blockly.IPositionable');
 
 /* eslint-disable-next-line no-unused-vars */
-const {IComponent} = goog.require('Blockly.IComponent');
+import {IComponent} from './i_component.js';
 /* eslint-disable-next-line no-unused-vars */
 const {MetricsManager} = goog.requireType('Blockly.MetricsManager');
 /* eslint-disable-next-line no-unused-vars */

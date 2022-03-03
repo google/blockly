@@ -15,28 +15,28 @@
  */
 goog.declareModuleId('Blockly.blockRendering.Renderer');
 
-const debug = goog.require('Blockly.blockRendering.debug');
-const object = goog.require('Blockly.utils.object');
+import * as debug from './debug.js';
+import * as object from '../../utils/object.js';
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
-const {ConnectionType} = goog.require('Blockly.ConnectionType');
-const {Connection} = goog.require('Blockly.Connection');
-const {ConstantProvider} = goog.require('Blockly.blockRendering.ConstantProvider');
+import {ConnectionType} from '../../connection_type.js';
+import {Connection} from '../../connection.js';
+import {ConstantProvider} from './constants.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Debug} = goog.requireType('Blockly.blockRendering.Debug');
-const {Drawer} = goog.require('Blockly.blockRendering.Drawer');
+import {Drawer} from './drawer.js';
 /* eslint-disable-next-line no-unused-vars */
 const {IPathObject} = goog.requireType('Blockly.blockRendering.IPathObject');
 /* eslint-disable-next-line no-unused-vars */
-const {IRegistrable} = goog.require('Blockly.IRegistrable');
-const {InsertionMarkerManager} = goog.require('Blockly.InsertionMarkerManager');
-const {MarkerSvg} = goog.require('Blockly.blockRendering.MarkerSvg');
+import {IRegistrable} from '../../interfaces/i_registrable.js';
+import {InsertionMarkerManager} from '../../insertion_marker_manager.js';
+import {MarkerSvg} from './marker_svg.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Marker} = goog.requireType('Blockly.Marker');
-const {PathObject} = goog.require('Blockly.blockRendering.PathObject');
-const {RenderInfo} = goog.require('Blockly.blockRendering.RenderInfo');
+import {PathObject} from './path_object.js';
+import {RenderInfo} from './info.js';
 /* eslint-disable-next-line no-unused-vars */
 const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
 /* eslint-disable-next-line no-unused-vars */

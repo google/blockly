@@ -15,34 +15,34 @@
  */
 goog.declareModuleId('Blockly.utils');
 
-const aria = goog.require('Blockly.utils.aria');
-const arrayUtils = goog.require('Blockly.utils.array');
-const browserEvents = goog.require('Blockly.browserEvents');
-const colourUtils = goog.require('Blockly.utils.colour');
-const common = goog.require('Blockly.common');
-const deprecation = goog.require('Blockly.utils.deprecation');
-const dom = goog.require('Blockly.utils.dom');
-const extensions = goog.require('Blockly.Extensions');
-const global = goog.require('Blockly.utils.global');
-const idGenerator = goog.require('Blockly.utils.idGenerator');
-const math = goog.require('Blockly.utils.math');
-const object = goog.require('Blockly.utils.object');
-const parsing = goog.require('Blockly.utils.parsing');
-const stringUtils = goog.require('Blockly.utils.string');
-const style = goog.require('Blockly.utils.style');
-const svgMath = goog.require('Blockly.utils.svgMath');
-const svgPaths = goog.require('Blockly.utils.svgPaths');
-const toolbox = goog.require('Blockly.utils.toolbox');
-const userAgent = goog.require('Blockly.utils.userAgent');
-const xmlUtils = goog.require('Blockly.utils.xml');
+import * as aria from './utils/aria.js';
+import * as arrayUtils from './utils/array.js';
+import * as browserEvents from './browser_events.js';
+import * as colourUtils from './utils/colour.js';
+import * as common from './common.js';
+import * as deprecation from './utils/deprecation.js';
+import * as dom from './utils/dom.js';
+import * as extensions from './extensions.js';
+import * as global from './utils/global.js';
+import * as idGenerator from './utils/idgenerator.js';
+import * as math from './utils/math.js';
+import * as object from './utils/object.js';
+import * as parsing from './utils/parsing.js';
+import * as stringUtils from './utils/string.js';
+import * as style from './utils/style.js';
+import * as svgMath from './utils/svg_math.js';
+import * as svgPaths from './utils/svg_paths.js';
+import * as toolbox from './utils/toolbox.js';
+import * as userAgent from './utils/useragent.js';
+import * as xmlUtils from './utils/xml.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
-const {Coordinate} = goog.require('Blockly.utils.Coordinate');
-const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
-const {Metrics} = goog.require('Blockly.utils.Metrics');
-const {Rect} = goog.require('Blockly.utils.Rect');
-const {Size} = goog.require('Blockly.utils.Size');
-const {Svg} = goog.require('Blockly.utils.Svg');
+import {Coordinate} from './utils/coordinate.js';
+import {KeyCodes} from './utils/keycodes.js';
+import {Metrics} from './utils/metrics.js';
+import {Rect} from './utils/rect.js';
+import {Size} from './utils/size.js';
+import {Svg} from './utils/svg.js';
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 

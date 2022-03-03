@@ -15,13 +15,13 @@
  */
 goog.declareModuleId('Blockly.utils.svgMath');
 
-const deprecation = goog.require('Blockly.utils.deprecation');
-const global = goog.require('Blockly.utils.global');
-const style = goog.require('Blockly.utils.style');
-const userAgent = goog.require('Blockly.utils.userAgent');
-const {Coordinate} = goog.require('Blockly.utils.Coordinate');
-const {Rect} = goog.require('Blockly.utils.Rect');
-const {Size} = goog.require('Blockly.utils.Size');
+import * as deprecation from './deprecation.js';
+import * as global from './global.js';
+import * as style from './style.js';
+import * as userAgent from './useragent.js';
+import {Coordinate} from './coordinate.js';
+import {Rect} from './rect.js';
+import {Size} from './size.js';
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 

@@ -15,22 +15,22 @@
  */
 goog.declareModuleId('Blockly.VariableMap');
 
-const arrayUtils = goog.require('Blockly.utils.array');
-const dialog = goog.require('Blockly.dialog');
-const eventUtils = goog.require('Blockly.Events.utils');
-const idGenerator = goog.require('Blockly.utils.idGenerator');
-const object = goog.require('Blockly.utils.object');
+import * as arrayUtils from './utils/array.js';
+import * as dialog from './dialog.js';
+import * as eventUtils from './events/utils.js';
+import * as idGenerator from './utils/idgenerator.js';
+import * as object from './utils/object.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
-const {Msg} = goog.require('Blockly.Msg');
-const {Names} = goog.require('Blockly.Names');
-const {VariableModel} = goog.require('Blockly.VariableModel');
+import {Msg} from './msg.js';
+import {Names} from './names.js';
+import {VariableModel} from './variable_model.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
 /** @suppress {extraRequire} */
-goog.require('Blockly.Events.VarDelete');
+import './events/events_var_delete.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.Events.VarRename');
+import './events/events_var_rename.js';
 
 
 /**

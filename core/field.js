@@ -19,17 +19,17 @@
  */
 goog.declareModuleId('Blockly.Field');
 
-const Tooltip = goog.require('Blockly.Tooltip');
-const WidgetDiv = goog.require('Blockly.WidgetDiv');
-const Xml = goog.require('Blockly.Xml');
-const browserEvents = goog.require('Blockly.browserEvents');
-const dom = goog.require('Blockly.utils.dom');
-const dropDownDiv = goog.require('Blockly.dropDownDiv');
-const eventUtils = goog.require('Blockly.Events.utils');
-const parsing = goog.require('Blockly.utils.parsing');
-const style = goog.require('Blockly.utils.style');
-const userAgent = goog.require('Blockly.utils.userAgent');
-const utilsXml = goog.require('Blockly.utils.xml');
+import * as Tooltip from './tooltip.js';
+import * as WidgetDiv from './widgetdiv.js';
+import * as Xml from './xml.js';
+import * as browserEvents from './browser_events.js';
+import * as dom from './utils/dom.js';
+import * as dropDownDiv from './dropdowndiv.js';
+import * as eventUtils from './events/utils.js';
+import * as parsing from './utils/parsing.js';
+import * as style from './utils/style.js';
+import * as userAgent from './utils/useragent.js';
+import * as utilsXml from './utils/xml.js';
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
@@ -39,28 +39,28 @@ const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProv
 /* eslint-disable-next-line no-unused-vars */
 const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
-const {IASTNodeLocationSvg} = goog.require('Blockly.IASTNodeLocationSvg');
+import {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IASTNodeLocationWithBlock} = goog.require('Blockly.IASTNodeLocationWithBlock');
+import {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_with_block.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IKeyboardAccessible} = goog.require('Blockly.IKeyboardAccessible');
+import {IKeyboardAccessible} from './interfaces/i_keyboard_accessible.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IRegistrable} = goog.require('Blockly.IRegistrable');
+import {IRegistrable} from './interfaces/i_registrable.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Input} = goog.requireType('Blockly.Input');
-const {MarkerManager} = goog.require('Blockly.MarkerManager');
-const {Rect} = goog.require('Blockly.utils.Rect');
-const {Sentinel} = goog.require('Blockly.utils.Sentinel');
+import {MarkerManager} from './marker_manager.js';
+import {Rect} from './utils/rect.js';
+import {Sentinel} from './utils/sentinel.js';
 /* eslint-disable-next-line no-unused-vars */
 const {ShortcutRegistry} = goog.requireType('Blockly.ShortcutRegistry');
-const {Size} = goog.require('Blockly.utils.Size');
-const {Svg} = goog.require('Blockly.utils.Svg');
+import {Size} from './utils/size.js';
+import {Svg} from './utils/svg.js';
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */
-goog.require('Blockly.Events.BlockChange');
+import './events/events_block_change.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.Gesture');
+import './gesture.js';
 
 
 /**

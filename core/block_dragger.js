@@ -15,28 +15,28 @@
  */
 goog.declareModuleId('Blockly.BlockDragger');
 
-const blockAnimation = goog.require('Blockly.blockAnimations');
-const bumpObjects = goog.require('Blockly.bumpObjects');
-const common = goog.require('Blockly.common');
-const dom = goog.require('Blockly.utils.dom');
-const eventUtils = goog.require('Blockly.Events.utils');
-const registry = goog.require('Blockly.registry');
+import * as blockAnimation from './block_animations.js';
+import * as bumpObjects from './bump_objects.js';
+import * as common from './common.js';
+import * as dom from './utils/dom.js';
+import * as eventUtils from './events/utils.js';
+import * as registry from './registry.js';
 /* eslint-disable-next-line no-unused-vars */
 const {BlockMove} = goog.requireType('Blockly.Events.BlockMove');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+import {Coordinate} from './utils/coordinate.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IBlockDragger} = goog.require('Blockly.IBlockDragger');
+import {IBlockDragger} from './interfaces/i_block_dragger.js';
 /* eslint-disable-next-line no-unused-vars */
 const {IDragTarget} = goog.requireType('Blockly.IDragTarget');
-const {InsertionMarkerManager} = goog.require('Blockly.InsertionMarkerManager');
+import {InsertionMarkerManager} from './insertion_marker_manager.js';
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */
-goog.require('Blockly.Events.BlockDrag');
+import './events/events_block_drag.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.Events.BlockMove');
+import './events/events_block_move.js';
 
 
 /**

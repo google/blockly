@@ -15,7 +15,7 @@
  */
 goog.declareModuleId('Blockly.Themes.Zelos');
 
-const {Theme} = goog.require('Blockly.Theme');
+import {Theme} from '../theme.js';
 
 
 const defaultBlockStyles = {

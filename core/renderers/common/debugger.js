@@ -16,15 +16,15 @@
  */
 goog.declareModuleId('Blockly.blockRendering.Debug');
 
-const dom = goog.require('Blockly.utils.dom');
+import * as dom from '../../utils/dom.js';
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-const {ConnectionType} = goog.require('Blockly.ConnectionType');
+import {ConnectionType} from '../../connection_type.js';
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const {Field} = goog.require('Blockly.blockRendering.Field');
-const {FieldLabel} = goog.require('Blockly.FieldLabel');
-const {InputConnection} = goog.require('Blockly.blockRendering.InputConnection');
+import {Field} from '../measurables/field.js';
+import {FieldLabel} from '../../field_label.js';
+import {InputConnection} from '../measurables/input_connection.js';
 /* eslint-disable-next-line no-unused-vars */
 const {InRowSpacer} = goog.requireType('Blockly.blockRendering.InRowSpacer');
 /* eslint-disable-next-line no-unused-vars */
@@ -37,8 +37,8 @@ const {RenderInfo: ZelosInfo} = goog.requireType('Blockly.zelos.RenderInfo');
 const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
 /* eslint-disable-next-line no-unused-vars */
 const {Row} = goog.requireType('Blockly.blockRendering.Row');
-const {Svg} = goog.require('Blockly.utils.Svg');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+import {Svg} from '../../utils/svg.js';
+import {Types} from '../measurables/types.js';
 
 
 /**

@@ -15,7 +15,7 @@
  */
 goog.declareModuleId('Blockly.Input');
 
-const fieldRegistry = goog.require('Blockly.fieldRegistry');
+import * as fieldRegistry from './field_registry.js';
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
@@ -26,9 +26,9 @@ const {Connection} = goog.requireType('Blockly.Connection');
 const {Field} = goog.requireType('Blockly.Field');
 /* eslint-disable-next-line no-unused-vars */
 const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
-const {inputTypes} = goog.require('Blockly.inputTypes');
+import {inputTypes} from './input_types.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.FieldLabel');
+import './field_label.js';
 
 
 /**

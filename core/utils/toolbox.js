@@ -15,8 +15,8 @@
  */
 goog.declareModuleId('Blockly.utils.toolbox');
 
-const Xml = goog.require('Blockly.Xml');
-const userAgent = goog.require('Blockly.utils.userAgent');
+import * as Xml from '../xml.js';
+import * as userAgent from './useragent.js';
 /* eslint-disable-next-line no-unused-vars */
 const {ConnectionState} = goog.requireType('Blockly.serialization.blocks');
 /* eslint-disable-next-line no-unused-vars */

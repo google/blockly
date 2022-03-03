@@ -16,34 +16,34 @@
  */
 goog.declareModuleId('Blockly.zelos.RenderInfo');
 
-const {Align} = goog.require('Blockly.Input');
+import {Align} from '../../input.js';
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-const {BottomRow} = goog.require('Blockly.zelos.BottomRow');
+import {BottomRow} from './measurables/bottom_row.js';
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.zelos.ConstantProvider');
-const {Field} = goog.require('Blockly.blockRendering.Field');
-const {FieldImage} = goog.require('Blockly.FieldImage');
-const {FieldLabel} = goog.require('Blockly.FieldLabel');
-const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
+import {Field} from '../measurables/field.js';
+import {FieldImage} from '../../field_image.js';
+import {FieldLabel} from '../../field_label.js';
+import {FieldTextInput} from '../../field_textinput.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Input} = goog.requireType('Blockly.Input');
-const {InputConnection} = goog.require('Blockly.blockRendering.InputConnection');
-const {InRowSpacer} = goog.require('Blockly.blockRendering.InRowSpacer');
+import {InputConnection} from '../measurables/input_connection.js';
+import {InRowSpacer} from '../measurables/in_row_spacer.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Measurable} = goog.requireType('Blockly.blockRendering.Measurable');
-const {RenderInfo: BaseRenderInfo} = goog.require('Blockly.blockRendering.RenderInfo');
+import {RenderInfo as BaseRenderInfo} from '../common/info.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Renderer} = goog.requireType('Blockly.zelos.Renderer');
-const {RightConnectionShape} = goog.require('Blockly.zelos.RightConnectionShape');
+import {RightConnectionShape} from './measurables/row_elements.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Row} = goog.require('Blockly.blockRendering.Row');
+import {Row} from '../measurables/row.js';
 /* eslint-disable-next-line no-unused-vars */
 const {SpacerRow} = goog.requireType('Blockly.blockRendering.SpacerRow');
-const {StatementInput} = goog.require('Blockly.zelos.StatementInput');
-const {TopRow} = goog.require('Blockly.zelos.TopRow');
-const {Types} = goog.require('Blockly.blockRendering.Types');
-const {inputTypes} = goog.require('Blockly.inputTypes');
+import {StatementInput} from './measurables/inputs.js';
+import {TopRow} from './measurables/top_row.js';
+import {Types} from '../measurables/types.js';
+import {inputTypes} from '../../input_types.js';
 
 
 /**

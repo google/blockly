@@ -19,7 +19,7 @@
  */
 goog.declareModuleId('Blockly.utils.xml');
 
-const {globalThis} = goog.require('Blockly.utils.global');
+import {globalThis} from './global.js';
 
 
 /**

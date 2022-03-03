@@ -15,7 +15,7 @@
  */
 goog.declareModuleId('Blockly.zelos.BottomRow');
 
-const {BottomRow: BaseBottomRow} = goog.require('Blockly.blockRendering.BottomRow');
+import {BottomRow as BaseBottomRow} from '../../measurables/bottom_row.js';
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 

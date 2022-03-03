@@ -15,8 +15,8 @@
  */
 goog.declareModuleId('Blockly.bumpObjects');
 
-const eventUtils = goog.require('Blockly.Events.utils');
-const mathUtils = goog.require('Blockly.utils.math');
+import * as eventUtils from './events/utils.js';
+import * as mathUtils from './utils/math.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Abstract} = goog.requireType('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */

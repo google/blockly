@@ -17,8 +17,8 @@
  */
 goog.declareModuleId('Blockly.Events.utils');
 
-const idGenerator = goog.require('Blockly.utils.idGenerator');
-const registry = goog.require('Blockly.registry');
+import * as idGenerator from '../utils/idgenerator.js';
+import * as registry from '../registry.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Abstract} = goog.requireType('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */

@@ -19,9 +19,9 @@
  */
 goog.declareModuleId('Blockly.FieldLabelSerializable');
 
-const fieldRegistry = goog.require('Blockly.fieldRegistry');
-const parsing = goog.require('Blockly.utils.parsing');
-const {FieldLabel} = goog.require('Blockly.FieldLabel');
+import * as fieldRegistry from './field_registry.js';
+import * as parsing from './utils/parsing.js';
+import {FieldLabel} from './field_label.js';
 
 
 /**

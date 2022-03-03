@@ -15,13 +15,13 @@
  */
 goog.declareModuleId('Blockly.FieldCheckbox');
 
-const dom = goog.require('Blockly.utils.dom');
-const fieldRegistry = goog.require('Blockly.fieldRegistry');
-const {Field} = goog.require('Blockly.Field');
+import * as dom from './utils/dom.js';
+import * as fieldRegistry from './field_registry.js';
+import {Field} from './field.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Sentinel} = goog.requireType('Blockly.utils.Sentinel');
 /** @suppress {extraRequire} */
-goog.require('Blockly.Events.BlockChange');
+import './events/events_block_change.js';
 
 
 /**

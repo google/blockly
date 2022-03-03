@@ -17,7 +17,7 @@
  */
 goog.declareModuleId('Blockly.serialization.registry');
 
-const registry = goog.require('Blockly.registry');
+import * as registry from '../registry.js';
 // eslint-disable-next-line no-unused-vars
 const {ISerializer} = goog.requireType('Blockly.serialization.ISerializer');
 

@@ -15,21 +15,21 @@
  */
 goog.declareModuleId('Blockly.ToolboxCategory');
 
-const Css = goog.require('Blockly.Css');
-const aria = goog.require('Blockly.utils.aria');
-const colourUtils = goog.require('Blockly.utils.colour');
-const dom = goog.require('Blockly.utils.dom');
-const object = goog.require('Blockly.utils.object');
-const parsing = goog.require('Blockly.utils.parsing');
-const registry = goog.require('Blockly.registry');
-const toolbox = goog.require('Blockly.utils.toolbox');
+import * as Css from '../css.js';
+import * as aria from '../utils/aria.js';
+import * as colourUtils from '../utils/colour.js';
+import * as dom from '../utils/dom.js';
+import * as object from '../utils/object.js';
+import * as parsing from '../utils/parsing.js';
+import * as registry from '../registry.js';
+import * as toolbox from '../utils/toolbox.js';
 /* eslint-disable-next-line no-unused-vars */
 const {ICollapsibleToolboxItem} = goog.requireType('Blockly.ICollapsibleToolboxItem');
 /* eslint-disable-next-line no-unused-vars */
-const {ISelectableToolboxItem} = goog.require('Blockly.ISelectableToolboxItem');
+import {ISelectableToolboxItem} from '../interfaces/i_selectable_toolbox_item.js';
 /* eslint-disable-next-line no-unused-vars */
 const {IToolbox} = goog.requireType('Blockly.IToolbox');
-const {ToolboxItem} = goog.require('Blockly.ToolboxItem');
+import {ToolboxItem} from './toolbox_item.js';
 
 
 /**

@@ -21,7 +21,7 @@ goog.declareModuleId('Blockly.IASTNodeLocationWithBlock');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
-const {IASTNodeLocation} = goog.require('Blockly.IASTNodeLocation');
+import {IASTNodeLocation} from './i_ast_node_location.js';
 
 
 /**

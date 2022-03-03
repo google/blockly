@@ -15,16 +15,16 @@
  */
 goog.declareModuleId('Blockly.zelos');
 
-const {BottomRow} = goog.require('Blockly.zelos.BottomRow');
-const {ConstantProvider} = goog.require('Blockly.zelos.ConstantProvider');
-const {Drawer} = goog.require('Blockly.zelos.Drawer');
-const {MarkerSvg} = goog.require('Blockly.zelos.MarkerSvg');
-const {PathObject} = goog.require('Blockly.zelos.PathObject');
-const {RenderInfo} = goog.require('Blockly.zelos.RenderInfo');
-const {Renderer} = goog.require('Blockly.zelos.Renderer');
-const {RightConnectionShape} = goog.require('Blockly.zelos.RightConnectionShape');
-const {StatementInput} = goog.require('Blockly.zelos.StatementInput');
-const {TopRow} = goog.require('Blockly.zelos.TopRow');
+import {BottomRow} from './measurables/bottom_row.js';
+import {ConstantProvider} from './constants.js';
+import {Drawer} from './drawer.js';
+import {MarkerSvg} from './marker_svg.js';
+import {PathObject} from './path_object.js';
+import {RenderInfo} from './info.js';
+import {Renderer} from './renderer.js';
+import {RightConnectionShape} from './measurables/row_elements.js';
+import {StatementInput} from './measurables/inputs.js';
+import {TopRow} from './measurables/top_row.js';
 
 export {BottomRow};
 export {ConstantProvider};

@@ -15,28 +15,28 @@
  */
 goog.declareModuleId('Blockly.FieldTextInput');
 
-const WidgetDiv = goog.require('Blockly.WidgetDiv');
-const aria = goog.require('Blockly.utils.aria');
-const browserEvents = goog.require('Blockly.browserEvents');
-const dialog = goog.require('Blockly.dialog');
-const dom = goog.require('Blockly.utils.dom');
-const dropDownDiv = goog.require('Blockly.dropDownDiv');
-const eventUtils = goog.require('Blockly.Events.utils');
-const fieldRegistry = goog.require('Blockly.fieldRegistry');
-const parsing = goog.require('Blockly.utils.parsing');
-const userAgent = goog.require('Blockly.utils.userAgent');
+import * as WidgetDiv from './widgetdiv.js';
+import * as aria from './utils/aria.js';
+import * as browserEvents from './browser_events.js';
+import * as dialog from './dialog.js';
+import * as dom from './utils/dom.js';
+import * as dropDownDiv from './dropdowndiv.js';
+import * as eventUtils from './events/utils.js';
+import * as fieldRegistry from './field_registry.js';
+import * as parsing from './utils/parsing.js';
+import * as userAgent from './utils/useragent.js';
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-const {Coordinate} = goog.require('Blockly.utils.Coordinate');
-const {Field} = goog.require('Blockly.Field');
-const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
-const {Msg} = goog.require('Blockly.Msg');
+import {Coordinate} from './utils/coordinate.js';
+import {Field} from './field.js';
+import {KeyCodes} from './utils/keycodes.js';
+import {Msg} from './msg.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Sentinel} = goog.requireType('Blockly.utils.Sentinel');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */
-goog.require('Blockly.Events.BlockChange');
+import './events/events_block_change.js';
 
 
 /**

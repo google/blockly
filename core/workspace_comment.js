@@ -15,20 +15,20 @@
  */
 goog.declareModuleId('Blockly.WorkspaceComment');
 
-const eventUtils = goog.require('Blockly.Events.utils');
-const idGenerator = goog.require('Blockly.utils.idGenerator');
-const xml = goog.require('Blockly.utils.xml');
-const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+import * as eventUtils from './events/utils.js';
+import * as idGenerator from './utils/idgenerator.js';
+import * as xml from './utils/xml.js';
+import {Coordinate} from './utils/coordinate.js';
 /* eslint-disable-next-line no-unused-vars */
-const {CommentMove} = goog.require('Blockly.Events.CommentMove');
+import {CommentMove} from './events/events_comment_move.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
 /** @suppress {extraRequire} */
-goog.require('Blockly.Events.CommentChange');
+import './events/events_comment_change.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.Events.CommentCreate');
+import './events/events_comment_create.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.Events.CommentDelete');
+import './events/events_comment_delete.js';
 
 
 /**

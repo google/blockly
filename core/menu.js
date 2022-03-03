@@ -15,12 +15,12 @@
  */
 goog.declareModuleId('Blockly.Menu');
 
-const aria = goog.require('Blockly.utils.aria');
-const browserEvents = goog.require('Blockly.browserEvents');
-const dom = goog.require('Blockly.utils.dom');
-const style = goog.require('Blockly.utils.style');
-const {Coordinate} = goog.require('Blockly.utils.Coordinate');
-const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
+import * as aria from './utils/aria.js';
+import * as browserEvents from './browser_events.js';
+import * as dom from './utils/dom.js';
+import * as style from './utils/style.js';
+import {Coordinate} from './utils/coordinate.js';
+import {KeyCodes} from './utils/keycodes.js';
 /* eslint-disable-next-line no-unused-vars */
 const {MenuItem} = goog.requireType('Blockly.MenuItem');
 /* eslint-disable-next-line no-unused-vars */

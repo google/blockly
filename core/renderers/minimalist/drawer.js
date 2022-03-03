@@ -17,7 +17,7 @@ goog.declareModuleId('Blockly.minimalist.Drawer');
 
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-const {Drawer: BaseDrawer} = goog.require('Blockly.blockRendering.Drawer');
+import {Drawer as BaseDrawer} from '../common/drawer.js';
 /* eslint-disable-next-line no-unused-vars */
 const {RenderInfo} = goog.requireType('Blockly.minimalist.RenderInfo');
 

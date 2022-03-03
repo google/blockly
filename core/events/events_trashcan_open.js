@@ -15,9 +15,9 @@
  */
 goog.declareModuleId('Blockly.Events.TrashcanOpen');
 
-const eventUtils = goog.require('Blockly.Events.utils');
-const registry = goog.require('Blockly.registry');
-const {UiBase} = goog.require('Blockly.Events.UiBase');
+import * as eventUtils from './utils.js';
+import * as registry from '../registry.js';
+import {UiBase} from './events_ui_base.js';
 
 
 /**

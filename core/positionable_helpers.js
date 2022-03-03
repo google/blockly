@@ -15,11 +15,11 @@
  */
 goog.declareModuleId('Blockly.uiPosition');
 
-const toolbox = goog.require('Blockly.utils.toolbox');
+import * as toolbox from './utils/toolbox.js';
 /* eslint-disable-next-line no-unused-vars */
 const {MetricsManager} = goog.requireType('Blockly.MetricsManager');
-const {Rect} = goog.require('Blockly.utils.Rect');
-const {Scrollbar} = goog.require('Blockly.Scrollbar');
+import {Rect} from './utils/rect.js';
+import {Scrollbar} from './scrollbar.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Size} = goog.requireType('Blockly.utils.Size');
 /* eslint-disable-next-line no-unused-vars */

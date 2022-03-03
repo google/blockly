@@ -15,41 +15,41 @@
  */
 goog.declareModuleId('Blockly.blockRendering');
 
-const debug = goog.require('Blockly.blockRendering.debug');
-const deprecation = goog.require('Blockly.utils.deprecation');
-const registry = goog.require('Blockly.registry');
-const {BottomRow} = goog.require('Blockly.blockRendering.BottomRow');
-const {Connection} = goog.require('Blockly.blockRendering.Connection');
-const {ConstantProvider} = goog.require('Blockly.blockRendering.ConstantProvider');
-const {Debug} = goog.require('Blockly.blockRendering.Debug');
-const {Drawer} = goog.require('Blockly.blockRendering.Drawer');
-const {ExternalValueInput} = goog.require('Blockly.blockRendering.ExternalValueInput');
-const {Field} = goog.require('Blockly.blockRendering.Field');
-const {Hat} = goog.require('Blockly.blockRendering.Hat');
-const {IPathObject} = goog.require('Blockly.blockRendering.IPathObject');
-const {Icon} = goog.require('Blockly.blockRendering.Icon');
-const {InRowSpacer} = goog.require('Blockly.blockRendering.InRowSpacer');
-const {InlineInput} = goog.require('Blockly.blockRendering.InlineInput');
-const {InputConnection} = goog.require('Blockly.blockRendering.InputConnection');
-const {InputRow} = goog.require('Blockly.blockRendering.InputRow');
-const {JaggedEdge} = goog.require('Blockly.blockRendering.JaggedEdge');
-const {MarkerSvg} = goog.require('Blockly.blockRendering.MarkerSvg');
-const {Measurable} = goog.require('Blockly.blockRendering.Measurable');
-const {NextConnection} = goog.require('Blockly.blockRendering.NextConnection');
-const {OutputConnection} = goog.require('Blockly.blockRendering.OutputConnection');
-const {PathObject} = goog.require('Blockly.blockRendering.PathObject');
-const {PreviousConnection} = goog.require('Blockly.blockRendering.PreviousConnection');
-const {RenderInfo} = goog.require('Blockly.blockRendering.RenderInfo');
-const {Renderer} = goog.require('Blockly.blockRendering.Renderer');
-const {RoundCorner} = goog.require('Blockly.blockRendering.RoundCorner');
-const {Row} = goog.require('Blockly.blockRendering.Row');
-const {SpacerRow} = goog.require('Blockly.blockRendering.SpacerRow');
-const {SquareCorner} = goog.require('Blockly.blockRendering.SquareCorner');
-const {StatementInput} = goog.require('Blockly.blockRendering.StatementInput');
+import * as debug from './debug.js';
+import * as deprecation from '../../utils/deprecation.js';
+import * as registry from '../../registry.js';
+import {BottomRow} from '../measurables/bottom_row.js';
+import {Connection} from '../measurables/connection.js';
+import {ConstantProvider} from './constants.js';
+import {Debug} from './debugger.js';
+import {Drawer} from './drawer.js';
+import {ExternalValueInput} from '../measurables/external_value_input.js';
+import {Field} from '../measurables/field.js';
+import {Hat} from '../measurables/hat.js';
+import {IPathObject} from './i_path_object.js';
+import {Icon} from '../measurables/icon.js';
+import {InRowSpacer} from '../measurables/in_row_spacer.js';
+import {InlineInput} from '../measurables/inline_input.js';
+import {InputConnection} from '../measurables/input_connection.js';
+import {InputRow} from '../measurables/input_row.js';
+import {JaggedEdge} from '../measurables/jagged_edge.js';
+import {MarkerSvg} from './marker_svg.js';
+import {Measurable} from '../measurables/base.js';
+import {NextConnection} from '../measurables/next_connection.js';
+import {OutputConnection} from '../measurables/output_connection.js';
+import {PathObject} from './path_object.js';
+import {PreviousConnection} from '../measurables/previous_connection.js';
+import {RenderInfo} from './info.js';
+import {Renderer} from './renderer.js';
+import {RoundCorner} from '../measurables/round_corner.js';
+import {Row} from '../measurables/row.js';
+import {SpacerRow} from '../measurables/spacer_row.js';
+import {SquareCorner} from '../measurables/square_corner.js';
+import {StatementInput} from '../measurables/statement_input.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Theme} = goog.requireType('Blockly.Theme');
-const {TopRow} = goog.require('Blockly.blockRendering.TopRow');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+import {TopRow} from '../measurables/top_row.js';
+import {Types} from '../measurables/types.js';
 
 /**
  * Returns whether the debugger is turned on.

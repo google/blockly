@@ -15,40 +15,40 @@
  */
 goog.declareModuleId('Blockly.blockRendering.RenderInfo');
 
-const {Align} = goog.require('Blockly.Input');
+import {Align} from '../../input.js';
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-const {BottomRow} = goog.require('Blockly.blockRendering.BottomRow');
+import {BottomRow} from '../measurables/bottom_row.js';
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const {ExternalValueInput} = goog.require('Blockly.blockRendering.ExternalValueInput');
-const {Field} = goog.require('Blockly.blockRendering.Field');
-const {Hat} = goog.require('Blockly.blockRendering.Hat');
-const {Icon} = goog.require('Blockly.blockRendering.Icon');
-const {InRowSpacer} = goog.require('Blockly.blockRendering.InRowSpacer');
-const {InlineInput} = goog.require('Blockly.blockRendering.InlineInput');
-const {InputRow} = goog.require('Blockly.blockRendering.InputRow');
+import {ExternalValueInput} from '../measurables/external_value_input.js';
+import {Field} from '../measurables/field.js';
+import {Hat} from '../measurables/hat.js';
+import {Icon} from '../measurables/icon.js';
+import {InRowSpacer} from '../measurables/in_row_spacer.js';
+import {InlineInput} from '../measurables/inline_input.js';
+import {InputRow} from '../measurables/input_row.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Input} = goog.requireType('Blockly.Input');
-const {JaggedEdge} = goog.require('Blockly.blockRendering.JaggedEdge');
+import {JaggedEdge} from '../measurables/jagged_edge.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Measurable} = goog.requireType('Blockly.blockRendering.Measurable');
-const {NextConnection} = goog.require('Blockly.blockRendering.NextConnection');
-const {OutputConnection} = goog.require('Blockly.blockRendering.OutputConnection');
-const {PreviousConnection} = goog.require('Blockly.blockRendering.PreviousConnection');
+import {NextConnection} from '../measurables/next_connection.js';
+import {OutputConnection} from '../measurables/output_connection.js';
+import {PreviousConnection} from '../measurables/previous_connection.js';
 /* eslint-disable-next-line no-unused-vars */
 const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
 /* eslint-disable-next-line no-unused-vars */
 const {Renderer} = goog.requireType('Blockly.blockRendering.Renderer');
-const {RoundCorner} = goog.require('Blockly.blockRendering.RoundCorner');
+import {RoundCorner} from '../measurables/round_corner.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Row} = goog.requireType('Blockly.blockRendering.Row');
-const {SpacerRow} = goog.require('Blockly.blockRendering.SpacerRow');
-const {SquareCorner} = goog.require('Blockly.blockRendering.SquareCorner');
-const {StatementInput} = goog.require('Blockly.blockRendering.StatementInput');
-const {TopRow} = goog.require('Blockly.blockRendering.TopRow');
-const {Types} = goog.require('Blockly.blockRendering.Types');
-const {inputTypes} = goog.require('Blockly.inputTypes');
+import {SpacerRow} from '../measurables/spacer_row.js';
+import {SquareCorner} from '../measurables/square_corner.js';
+import {StatementInput} from '../measurables/statement_input.js';
+import {TopRow} from '../measurables/top_row.js';
+import {Types} from '../measurables/types.js';
+import {inputTypes} from '../../input_types.js';
 
 
 /**

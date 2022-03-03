@@ -15,15 +15,15 @@
  */
 goog.declareModuleId('Blockly.ToolboxSeparator');
 
-const Css = goog.require('Blockly.Css');
-const dom = goog.require('Blockly.utils.dom');
-const object = goog.require('Blockly.utils.object');
-const registry = goog.require('Blockly.registry');
+import * as Css from '../css.js';
+import * as dom from '../utils/dom.js';
+import * as object from '../utils/object.js';
+import * as registry from '../registry.js';
 /* eslint-disable-next-line no-unused-vars */
 const toolbox = goog.requireType('Blockly.utils.toolbox');
 /* eslint-disable-next-line no-unused-vars */
 const {IToolbox} = goog.requireType('Blockly.IToolbox');
-const {ToolboxItem} = goog.require('Blockly.ToolboxItem');
+import {ToolboxItem} from './toolbox_item.js';
 
 
 /**

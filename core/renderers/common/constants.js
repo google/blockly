@@ -15,16 +15,16 @@
  */
 goog.declareModuleId('Blockly.blockRendering.ConstantProvider');
 
-const colour = goog.require('Blockly.utils.colour');
-const dom = goog.require('Blockly.utils.dom');
-const object = goog.require('Blockly.utils.object');
-const svgPaths = goog.require('Blockly.utils.svgPaths');
-const userAgent = goog.require('Blockly.utils.userAgent');
-const parsing = goog.require('Blockly.utils.parsing');
-const {ConnectionType} = goog.require('Blockly.ConnectionType');
+import * as colour from '../../utils/colour.js';
+import * as dom from '../../utils/dom.js';
+import * as object from '../../utils/object.js';
+import * as svgPaths from '../../utils/svg_paths.js';
+import * as userAgent from '../../utils/useragent.js';
+import * as parsing from '../../utils/parsing.js';
+import {ConnectionType} from '../../connection_type.js';
 /* eslint-disable-next-line no-unused-vars */
 const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
-const {Svg} = goog.require('Blockly.utils.Svg');
+import {Svg} from '../../utils/svg.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Theme} = goog.requireType('Blockly.Theme');
 

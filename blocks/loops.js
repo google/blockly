@@ -14,27 +14,27 @@ goog.declareModuleId('Blockly.libraryBlocks.loops');
 
 /* eslint-disable-next-line no-unused-vars */
 const AbstractEvent = goog.requireType('Blockly.Events.Abstract');
-const ContextMenu = goog.require('Blockly.ContextMenu');
-const Events = goog.require('Blockly.Events');
-const Extensions = goog.require('Blockly.Extensions');
-const Variables = goog.require('Blockly.Variables');
-const xmlUtils = goog.require('Blockly.utils.xml');
+import * as ContextMenu from '../core/contextmenu.js';
+import * as Events from '../core/events/events.js';
+import * as Extensions from '../core/extensions.js';
+import * as Variables from '../core/variables.js';
+import * as xmlUtils from '../core/utils/xml.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockDefinition} = goog.requireType('Blockly.blocks');
-const {Msg} = goog.require('Blockly.Msg');
-const {createBlockDefinitionsFromJsonArray, defineBlocks} = goog.require('Blockly.common');
+import {Msg} from '../core/msg.js';
+import {createBlockDefinitionsFromJsonArray, defineBlocks} from '../core/common.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.FieldDropdown');
+import '../core/field_dropdown.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.FieldLabel');
+import '../core/field_label.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.FieldNumber');
+import '../core/field_number.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.FieldVariable');
+import '../core/field_variable.js';
 /** @suppress {extraRequire} */
-goog.require('Blockly.Warning');
+import '../core/warning.js';
 
 
 /**
@@ -297,7 +297,7 @@ Extensions.register(
  * loopTypes.add('custom_loop');
  *
  * // Else if using Closure Compiler and goog.modules:
- * const {loopTypes} = goog.require('Blockly.libraryBlocks.loops');
+import {loopTypes} from './loops.js';
  * loopTypes.add('custom_loop');
  *
  * // Else if using blockly_compressed + blockss_compressed.js in browser:

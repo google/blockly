@@ -17,12 +17,12 @@
  */
 goog.declareModuleId('Blockly.zelos.ConstantProvider');
 
-const dom = goog.require('Blockly.utils.dom');
-const svgPaths = goog.require('Blockly.utils.svgPaths');
-const utilsColour = goog.require('Blockly.utils.colour');
-const {ConnectionType} = goog.require('Blockly.ConnectionType');
-const {ConstantProvider: BaseConstantProvider} = goog.require('Blockly.blockRendering.ConstantProvider');
-const {Svg} = goog.require('Blockly.utils.Svg');
+import * as dom from '../../utils/dom.js';
+import * as svgPaths from '../../utils/svg_paths.js';
+import * as utilsColour from '../../utils/colour.js';
+import {ConnectionType} from '../../connection_type.js';
+import {ConstantProvider as BaseConstantProvider} from '../common/constants.js';
+import {Svg} from '../../utils/svg.js';
 
 
 /**

@@ -22,8 +22,8 @@ const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProv
 const {Field: BlocklyField} = goog.requireType('Blockly.Field');
 /* eslint-disable-next-line no-unused-vars */
 const {Input} = goog.requireType('Blockly.Input');
-const {Measurable} = goog.require('Blockly.blockRendering.Measurable');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+import {Measurable} from './base.js';
+import {Types} from './types.js';
 
 
 /**

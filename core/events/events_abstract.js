@@ -17,7 +17,7 @@
  */
 goog.declareModuleId('Blockly.Events.Abstract');
 
-const eventUtils = goog.require('Blockly.Events.utils');
+import * as eventUtils from './utils.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
 

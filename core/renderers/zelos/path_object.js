@@ -16,11 +16,11 @@
  */
 goog.declareModuleId('Blockly.zelos.PathObject');
 
-const dom = goog.require('Blockly.utils.dom');
+import * as dom from '../../utils/dom.js';
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.zelos.ConstantProvider');
-const {PathObject: BasePathObject} = goog.require('Blockly.blockRendering.PathObject');
-const {Svg} = goog.require('Blockly.utils.Svg');
+import {PathObject as BasePathObject} from '../common/path_object.js';
+import {Svg} from '../../utils/svg.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Theme} = goog.requireType('Blockly.Theme');
 

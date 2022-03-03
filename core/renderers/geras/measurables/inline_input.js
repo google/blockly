@@ -21,7 +21,7 @@ goog.declareModuleId('Blockly.geras.InlineInput');
 const {ConstantProvider: BaseConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider: GerasConstantProvider} = goog.requireType('Blockly.geras.ConstantProvider');
-const {InlineInput: BaseInlineInput} = goog.require('Blockly.blockRendering.InlineInput');
+import {InlineInput as BaseInlineInput} from '../../measurables/inline_input.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Input} = goog.requireType('Blockly.Input');
 

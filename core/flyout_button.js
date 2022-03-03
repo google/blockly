@@ -15,15 +15,15 @@
  */
 goog.declareModuleId('Blockly.FlyoutButton');
 
-const Css = goog.require('Blockly.Css');
-const browserEvents = goog.require('Blockly.browserEvents');
-const dom = goog.require('Blockly.utils.dom');
-const style = goog.require('Blockly.utils.style');
+import * as Css from './css.js';
+import * as browserEvents from './browser_events.js';
+import * as dom from './utils/dom.js';
+import * as style from './utils/style.js';
 /* eslint-disable-next-line no-unused-vars */
 const toolbox = goog.requireType('Blockly.utils.toolbox');
-const parsing = goog.require('Blockly.utils.parsing');
-const {Coordinate} = goog.require('Blockly.utils.Coordinate');
-const {Svg} = goog.require('Blockly.utils.Svg');
+import * as parsing from './utils/parsing.js';
+import {Coordinate} from './utils/coordinate.js';
+import {Svg} from './utils/svg.js';
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 

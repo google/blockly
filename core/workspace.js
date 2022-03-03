@@ -53,11 +53,11 @@ const WorkspaceDB_ = Object.create(null);
 /**
  * Class for a workspace.  This is a data structure that contains blocks.
  * There is no UI, and can be created headlessly.
+ * @implements {IASTNodeLocation}
  */
-var Workspace = class {
+class Workspace {
   /**
    * @param {!Options=} opt_options Dictionary of options.
-   * @implements {IASTNodeLocation}
    * @alias Blockly.Workspace
    */
   constructor(opt_options) {
@@ -452,9 +452,8 @@ var Workspace = class {
    *     defaults to the empty string, which is a specific type.
    * @return {?VariableModel} The variable with the given name.
    */
-
-  // TODO (#1559): Possibly delete this function after resolving #1559.
   getVariable(name, opt_type) {
+    // TODO (#1559): Possibly delete this function after resolving #1559.
     return this.variableMap_.getVariable(name, opt_type);
   }
 
@@ -808,7 +807,7 @@ var Workspace = class {
     }
     return workspaces;
   }
-};
+}
 
 /**
  * Angle away from the horizontal to sweep for blocks.  Order of execution is

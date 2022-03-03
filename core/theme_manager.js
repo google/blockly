@@ -97,7 +97,7 @@ class ThemeManager {
     // Refresh all subscribed workspaces.
     for (let i = 0, workspace; (workspace = this.subscribedWorkspaces_[i]);
          i++) {
-      /** @type {!WorkspaceSvg} */(workspace).refreshTheme();
+      /** @type {!WorkspaceSvg} */ (workspace).refreshTheme();
     }
 
     // Refresh all registered Blockly UI components.

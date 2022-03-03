@@ -564,7 +564,8 @@ const disableOrphans = function(event) {
     }
     const {Workspace} = goog.module.get('Blockly.Workspace');
     const eventWorkspace =
-        /** @type {!WorkspaceSvg} */(Workspace.getById(blockEvent.workspaceId));
+        /** @type {!WorkspaceSvg} */ (
+            Workspace.getById(blockEvent.workspaceId));
     let block = eventWorkspace.getBlockById(blockEvent.blockId);
     if (block) {
       // Changing blocks as part of this event shouldn't be undoable.

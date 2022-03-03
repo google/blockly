@@ -102,8 +102,8 @@ class Workspace {
     this.isClearing = false;
 
     /**
-     * Maximum number of undo events in stack. `0` turns off undo, `Infinity` sets
-     * it to unlimited.
+     * Maximum number of undo events in stack. `0` turns off undo, `Infinity`
+     * sets it to unlimited.
      * @type {number}
      */
     this.MAX_UNDO = 1024;
@@ -164,9 +164,9 @@ class Workspace {
     this.typedBlocksDB_ = Object.create(null);
 
     /**
-     * A map from variable type to list of variable names.  The lists contain all
-     * of the named variables in the workspace, including variables
-     * that are not currently in use.
+     * A map from variable type to list of variable names.  The lists contain
+     * all of the named variables in the workspace, including variables that are
+     * not currently in use.
      * @type {!VariableMap}
      * @private
      */
@@ -174,8 +174,8 @@ class Workspace {
 
     /**
      * Blocks in the flyout can refer to variables that don't exist in the main
-     * workspace.  For instance, the "get item in list" block refers to an "item"
-     * variable regardless of whether the variable has been created yet.
+     * workspace.  For instance, the "get item in list" block refers to an
+     * "item" variable regardless of whether the variable has been created yet.
      * A FieldVariable must always refer to a VariableModel.  We reconcile
      * these by tracking "potential" variables in the flyout.  These variables
      * become real when references to them are dragged into the main workspace.
@@ -204,7 +204,8 @@ class Workspace {
    *    compare.
    * @param {!Block | !WorkspaceComment} b The second object to
    *    compare.
-   * @return {number} The comparison value. This tells Array.sort() how to change
+   * @return {number} The comparison value. This tells Array.sort() how to
+   *     change
    *    object a's index.
    * @private
    */
@@ -307,8 +308,8 @@ class Workspace {
   addTopComment(comment) {
     this.topComments_.push(comment);
 
-    // Note: If the comment database starts to hold block comments, this may need
-    // to move to a separate function.
+    // Note: If the comment database starts to hold block comments, this may
+    // need to move to a separate function.
     if (this.commentDB_[comment.id]) {
       console.warn(
           'Overriding an existing comment on this workspace, with id "' +
@@ -328,8 +329,8 @@ class Workspace {
           'Comment not present in workspace\'s list of top-most ' +
           'comments.');
     }
-    // Note: If the comment database starts to hold block comments, this may need
-    // to move to a separate function.
+    // Note: If the comment database starts to hold block comments, this may
+    // need to move to a separate function.
     delete this.commentDB_[comment.id];
   }
 
@@ -376,8 +377,8 @@ class Workspace {
       }
     }
 
-    // Insertion markers exist on the workspace for rendering reasons, but aren't
-    // "real" blocks from a developer perspective.
+    // Insertion markers exist on the workspace for rendering reasons, but
+    // aren't "real" blocks from a developer perspective.
     const filtered = blocks.filter(function(block) {
       return !block.isInsertionMarker();
     });
@@ -430,10 +431,10 @@ class Workspace {
    * @param {string} name The name of the variable. This must be unique across
    *     variables and procedures.
    * @param {?string=} opt_type The type of the variable like 'int' or 'string'.
-   *     Does not need to be unique. Field_variable can filter variables based on
-   *     their type. This will default to '' which is a specific type.
-   * @param {?string=} opt_id The unique ID of the variable. This will default to
-   *     a UUID.
+   *     Does not need to be unique. Field_variable can filter variables based
+   * on their type. This will default to '' which is a specific type.
+   * @param {?string=} opt_id The unique ID of the variable. This will default
+   *     to a UUID.
    * @return {!VariableModel} The newly created variable.
    */
   createVariable(name, opt_type, opt_id) {
@@ -459,7 +460,8 @@ class Workspace {
   }
 
   /**
-   * Find the variable by the given name and return it. Return null if not found.
+   * Find the variable by the given name and return it. Return null if not
+   * found.
    * @param {string} name The name to check for.
    * @param {string=} opt_type The type of the variable.  If not provided it
    *     defaults to the empty string, which is a specific type.
@@ -573,10 +575,11 @@ class Workspace {
 
   /**
    * Check if there is remaining capacity for blocks of the given counts to be
-   *    created. If the total number of blocks represented by the map is more than
-   *    the total remaining capacity, it returns false. If a type count is more
-   *    than the remaining capacity for that type, it returns false.
-   * @param {!Object} typeCountsMap A map of types to counts (usually representing
+   *    created. If the total number of blocks represented by the map is more
+   * than the total remaining capacity, it returns false. If a type count is
+   * more than the remaining capacity for that type, it returns false.
+   * @param {!Object} typeCountsMap A map of types to counts (usually
+   *     representing
    *    blocks to be created).
    * @return {boolean} True if there is capacity for the given map,
    *    false otherwise.
@@ -750,8 +753,9 @@ class Workspace {
   /**
    * Checks whether all value and statement inputs in the workspace are filled
    * with blocks.
-   * @param {boolean=} opt_shadowBlocksAreFilled An optional argument controlling
-   *     whether shadow blocks are counted as filled. Defaults to true.
+   * @param {boolean=} opt_shadowBlocksAreFilled An optional argument
+   *     controlling whether shadow blocks are counted as filled. Defaults to
+   *     true.
    * @return {boolean} True if all inputs are filled, false otherwise.
    */
   allInputsFilled(opt_shadowBlocksAreFilled) {

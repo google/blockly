@@ -318,7 +318,7 @@ class Toolbox extends DeleteArea {
   onClick_(e) {
     if (browserEvents.isRightButton(e) || e.target === this.HtmlDiv) {
       // Close flyout.
-      /** @type {!WorkspaceSvg} */(common.getMainWorkspace()).hideChaff(false);
+      /** @type {!WorkspaceSvg} */ (common.getMainWorkspace()).hideChaff(false);
     } else {
       const targetElement = e.target;
       const itemId = targetElement.getAttribute('id');
@@ -330,7 +330,7 @@ class Toolbox extends DeleteArea {
         }
       }
       // Just close popups.
-      /** @type {!WorkspaceSvg} */(common.getMainWorkspace()).hideChaff(true);
+      /** @type {!WorkspaceSvg} */ (common.getMainWorkspace()).hideChaff(true);
     }
     Touch.clearTouchIdentifier();  // Don't block future drags.
   }

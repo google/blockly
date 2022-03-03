@@ -274,7 +274,8 @@ const init = function(mainWorkspace) {
 // TODO (https://github.com/google/blockly/issues/1998) handle cases where there
 // are multiple workspaces and non-main workspaces are able to accept input.
 const onKeyDown = function(e) {
-  const mainWorkspace = /** @type {!WorkspaceSvg} */(common.getMainWorkspace());
+  const mainWorkspace =
+      /** @type {!WorkspaceSvg} */ (common.getMainWorkspace());
   if (!mainWorkspace) {
     return;
   }

@@ -307,7 +307,7 @@ exports.svgResize = common.svgResize;
  * @alias Blockly.hideChaff
  */
 const hideChaff = function(opt_onlyClosePopups) {
-  /** @type {!WorkspaceSvg} */(common.getMainWorkspace())
+  /** @type {!WorkspaceSvg} */ (common.getMainWorkspace())
       .hideChaff(opt_onlyClosePopups);
 };
 exports.hideChaff = hideChaff;

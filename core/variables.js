@@ -529,8 +529,9 @@ const createVariable = function(workspace, id, opt_name, opt_type) {
   // Variables without names get uniquely named for this workspace.
   if (!opt_name) {
     const ws =
-        /** @type {!Workspace} */ (workspace.isFlyout ?
-            /** @type {!WorkspaceSvg} */(workspace).targetWorkspace :
+        /** @type {!Workspace} */ (
+            workspace.isFlyout ?
+                /** @type {!WorkspaceSvg} */ (workspace).targetWorkspace :
                 workspace);
     // Must call version on exports to allow for mocking in tests. See #5321
     opt_name = exports.generateUniqueName(ws);

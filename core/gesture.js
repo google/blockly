@@ -1015,7 +1015,7 @@ class Gesture {
       // Not actually necessarily a WorkspaceSvg, but it doesn't matter b/c
       // we're just checking if the property exists. Theoretically we would
       // want to use instanceof, but that causes a circular dependency.
-      if (/** @type {!WorkspaceSvg} */(workspace).currentGesture_) {
+      if (/** @type {!WorkspaceSvg} */ (workspace).currentGesture_) {
         return true;
       }
     }

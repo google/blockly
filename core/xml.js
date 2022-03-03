@@ -446,8 +446,8 @@ const domToWorkspace = function(xml, workspace) {
 
   // Disable workspace resizes as an optimization.
   // Assume it is rendered so we can check.
-  if (/** @type {!WorkspaceSvg} */(workspace).setResizesEnabled) {
-    /** @type {!WorkspaceSvg} */(workspace).setResizesEnabled(false);
+  if (/** @type {!WorkspaceSvg} */ (workspace).setResizesEnabled) {
+    /** @type {!WorkspaceSvg} */ (workspace).setResizesEnabled(false);
   }
   let variablesFirst = true;
   try {
@@ -516,8 +516,8 @@ const domToWorkspace = function(xml, workspace) {
     dom.stopTextWidthCache();
   }
   // Re-enable workspace resizing.
-  if (/** @type {!WorkspaceSvg} */(workspace).setResizesEnabled) {
-    /** @type {!WorkspaceSvg} */(workspace).setResizesEnabled(true);
+  if (/** @type {!WorkspaceSvg} */ (workspace).setResizesEnabled) {
+    /** @type {!WorkspaceSvg} */ (workspace).setResizesEnabled(true);
   }
   eventUtils.fire(new (eventUtils.get(eventUtils.FINISHED_LOADING))(workspace));
   return newBlockIds;
@@ -536,11 +536,11 @@ const appendDomToWorkspace = function(xml, workspace) {
   // First check if we have a WorkspaceSvg, otherwise the blocks have no shape
   // and the position does not matter.
   // Assume it is rendered so we can check.
-  if (!/** @type {!WorkspaceSvg} */(workspace).getBlocksBoundingBox) {
+  if (!/** @type {!WorkspaceSvg} */ (workspace).getBlocksBoundingBox) {
     return domToWorkspace(xml, workspace);
   }
 
-  const bbox = /** @type {!WorkspaceSvg} */(workspace).getBlocksBoundingBox();
+  const bbox = /** @type {!WorkspaceSvg} */ (workspace).getBlocksBoundingBox();
   // Load the new blocks into the workspace and get the IDs of the new blocks.
   const newBlockIds = domToWorkspace(xml, workspace);
   if (bbox && bbox.top !== bbox.bottom) {  // check if any previous block
@@ -625,7 +625,7 @@ const domToBlock = function(xmlBlock, workspace) {
       topBlockSvg.updateDisabled();
       // Allow the scrollbars to resize and move based on the new contents.
       // TODO(@picklesrus): #387. Remove when domToBlock avoids resizing.
-      /** @type {!WorkspaceSvg} */(workspace).resizeContents();
+      /** @type {!WorkspaceSvg} */ (workspace).resizeContents();
     } else {
       const blocks = topBlock.getDescendants(false);
       for (let i = blocks.length - 1; i >= 0; i--) {

@@ -146,7 +146,7 @@
       oldName: 'Blockly.blocks.variablesDynamic',
       newName: 'Blockly.libraryBlocks.variablesDynamic',
     },
-  ]
+  ],
 
   '7.20211209.0': [
     {

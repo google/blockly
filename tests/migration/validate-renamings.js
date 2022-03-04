@@ -11,6 +11,8 @@
  * (renamings-schema.json).
  */
 
+/* global require __dirname process */
+
 const JsonSchema = require('@hyperjump/json-schema');
 const JSON5 = require('json5');
 const fs = require('fs/promises');

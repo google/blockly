@@ -238,9 +238,17 @@ const WorkspaceSvg = function(options, opt_blockDragSurface, opt_wsDragSurface) 
   }
 
   const Procedures = goog.module.get('Blockly.Procedures');
+  const ProceduresLocalArgument = goog.module.get('Blockly.ProceduresLocalArgument');
+  const ProceduresCallback = function(workspace) {
+    const ProcedureXmlList = Procedures.flyoutCategory(workspace);
+    const ProceduresLocalXmlList = ProceduresLocalArgument.flyoutCategory(workspace);
+    return [...ProcedureXmlList, ...ProceduresLocalXmlList];
+  };
+
+
   if (Procedures && Procedures.flyoutCategory) {
     this.registerToolboxCategoryCallback(
-        Procedures.CATEGORY_NAME, Procedures.flyoutCategory);
+        Procedures.CATEGORY_NAME, ProceduresCallback);
     this.addChangeListener(Procedures.mutatorOpenListener);
   }
 
@@ -963,9 +971,9 @@ WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
  */
 WorkspaceSvg.prototype.initAfterAppendDOM = function() {
   if (!this.massOperationsHandler_) {
-    this.massOperationsHandler_ = new MassOperationsHandler(this)
+    this.massOperationsHandler_ = new MassOperationsHandler(this);
   }
-}
+};
 
 
 /**
@@ -1564,7 +1572,7 @@ WorkspaceSvg.prototype.paste = function(state, options = {}) {
     this.currentGesture_.cancel();  // Dragging while pasting?  No.
   }
 
-  let block
+  let block;
 
   // Checks if this is JSON. JSON has a type property, while elements don't.
   if (state['type']) {
@@ -1578,7 +1586,7 @@ WorkspaceSvg.prototype.paste = function(state, options = {}) {
     }
   }
 
-  return block
+  return block;
 };
 
 /**
@@ -1588,7 +1596,7 @@ WorkspaceSvg.prototype.paste = function(state, options = {}) {
  *     representation.
  * @private
  */
-WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock, jsonBlock, { dontSelectNewBLock } = {}) {
+WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock, jsonBlock, {dontSelectNewBLock} = {}) {
   eventUtils.disable();
 
   let block;
@@ -1601,9 +1609,9 @@ WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock, jsonBlock, { dontSelectN
       block = Xml.domToBlock(xmlBlock, this);
     } else if (jsonBlock) {
       if (jsonBlock.pasteOffset) {
-        blockX += jsonBlock.pasteOffset.x
-        blockY += jsonBlock.pasteOffset.y
-        delete jsonBlock.pasteOffset
+        blockX += jsonBlock.pasteOffset.x;
+        blockY += jsonBlock.pasteOffset.y;
+        delete jsonBlock.pasteOffset;
       }
       block = blocks.append(jsonBlock, this);
     }
@@ -1658,7 +1666,7 @@ WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock, jsonBlock, { dontSelectN
 
   if (!dontSelectNewBLock) block.select();
 
-  return block
+  return block;
 };
 
 /**
@@ -1807,17 +1815,17 @@ WorkspaceSvg.prototype.onMouseDown_ = function(e) {
 
 WorkspaceSvg.prototype.massOperationsHandler_ = null;
 
-WorkspaceSvg.prototype.cleanUpMassOperations = function () {
-  if (this.massOperationsHandler_) this.massOperationsHandler_.cleanUp()
-}
+WorkspaceSvg.prototype.cleanUpMassOperations = function() {
+  if (this.massOperationsHandler_) this.massOperationsHandler_.cleanUp();
+};
 
-WorkspaceSvg.prototype.getMassOperations = function () {
+WorkspaceSvg.prototype.getMassOperations = function() {
   if (this.massOperationsHandler_) {
-    return this.massOperationsHandler_
+    return this.massOperationsHandler_;
   } else if (this.svgGroup_) {
-    return new MassOperationsHandler(this)
+    return new MassOperationsHandler(this);
   }
-}
+};
 
 /**
  * Start tracking a drag of an object on this workspace.

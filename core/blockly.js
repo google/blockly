@@ -22,6 +22,7 @@ const Css = goog.require('Blockly.Css');
 const Events = goog.require('Blockly.Events');
 const Extensions = goog.require('Blockly.Extensions');
 const Procedures = goog.require('Blockly.Procedures');
+const ProceduresLocalArgument = goog.require('Blockly.ProceduresLocalArgument');
 const ShortcutItems = goog.require('Blockly.ShortcutItems');
 const Themes = goog.require('Blockly.Themes');
 const Tooltip = goog.require('Blockly.Tooltip');
@@ -647,7 +648,7 @@ const bindEventWithChecks_ = function(node, name, thisObject, func, opt_noCaptur
   deprecation.warn(
       'Blockly.bindEventWithChecks_', 'December 2021', 'December 2022',
       'Blockly.browserEvents.conditionalBind');
-  
+
   return browserEvents.conditionalBind(node, name, thisObject, func, opt_noCaptureIdentifier, opt_noPreventDefault);
 };
 
@@ -794,6 +795,7 @@ exports.Msg = Msg;
 exports.Names = Names;
 exports.Options = Options;
 exports.Procedures = Procedures;
+exports.ProceduresLocalArgument = ProceduresLocalArgument;
 exports.RenderedConnection = RenderedConnection;
 exports.Scrollbar = Scrollbar;
 exports.ScrollbarPair = ScrollbarPair;

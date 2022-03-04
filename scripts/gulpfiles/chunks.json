@@ -1,7 +1,7 @@
 {
   "chunk": [
-    "blockly:273",
-    "all:11:blockly",
+    "blockly:274",
+    "all:12:blockly",
     "all1:11:blockly"
   ],
   "js": [
@@ -195,6 +195,7 @@
     ".\\core\\renderers\\common\\debug.js",
     ".\\core\\renderers\\common\\block_rendering.js",
     ".\\core\\variables_dynamic.js",
+    ".\\core\\procedures_local_arguments.js",
     ".\\core\\events\\events_var_rename.js",
     ".\\core\\events\\events_var_delete.js",
     ".\\core\\variable_map.js",
@@ -282,6 +283,7 @@
     ".\\blocks\\variables_dynamic.js",
     ".\\blocks\\variables.js",
     ".\\blocks\\text.js",
+    ".\\blocks\\procedures_local_argument.js",
     ".\\blocks\\procedures.js",
     ".\\blocks\\math.js",
     ".\\blocks\\loops.js",

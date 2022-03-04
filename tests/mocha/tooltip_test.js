@@ -13,32 +13,63 @@ suite('Tooltip', function() {
   setup(function() {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
+
+    Blockly.defineBlocksWithJsonArray([
+      {
+        'type': 'test_block',
+        'message0': '%1',
+        'args0': [
+          {
+            'type': 'field_input',
+            'name': 'FIELD',
+          },
+        ],
+      },
+    ]);
   });
 
   teardown(function() {
+    delete Blockly.Blocks['test_block'];
     sharedTestTeardown.call(this);
   });
 
-  suite('set/getTooltip', function() {
+  suite('Custom Tooltip', function() {
     setup(function() {
-      Blockly.defineBlocksWithJsonArray([
-        {
-          "type": "test_block",
-          "message0": "%1",
-          "args0": [
-            {
-              "type": "field_input",
-              "name": "FIELD",
-            },
-          ],
-        },
-      ]);
+      this.renderedWorkspace = Blockly.inject('blocklyDiv', {});
     });
 
     teardown(function() {
-      delete Blockly.Blocks["test_block"];
+      workspaceTeardown.call(this, this.renderedWorkspace);
     });
 
+    test('Custom function is called', function() {
+      // Custom tooltip function is registered and should be called when mouse
+      // events are fired.
+      let wasCalled = false;
+      const customFn = function() {
+        wasCalled = true;
+      };
+      Blockly.Tooltip.setCustomTooltip(customFn);
+
+      this.block = this.renderedWorkspace.newBlock('test_block');
+      this.block.setTooltip('Test Tooltip');
+
+      // Fire pointer events directly on the relevant SVG.
+      // Note the 'pointerover', due to the events registered through
+      // Blockly.browserEvents.bind being registered as pointer events rather
+      // than mouse events. Mousemove event is registered directly on the
+      // element rather than through browserEvents.
+      this.block.pathObject.svgPath.dispatchEvent(
+          new MouseEvent('pointerover'));
+      this.block.pathObject.svgPath.dispatchEvent(new MouseEvent('mousemove'));
+      this.clock.runAll();
+
+      chai.assert.isTrue(
+          wasCalled, 'Expected custom tooltip function to have been called');
+    });
+  });
+
+  suite('set/getTooltip', function() {
     const tooltipText = 'testTooltip';
 
     function assertTooltip(obj) {
@@ -97,7 +128,8 @@ suite('Tooltip', function() {
 
       test('Function returning object', function() {
         setFunctionReturningObjectTooltip(this.block);
-        chai.assert.throws(this.block.getTooltip.bind(this.block),
+        chai.assert.throws(
+            this.block.getTooltip.bind(this.block),
             'Tooltip function must return a string.');
       });
 
@@ -136,7 +168,8 @@ suite('Tooltip', function() {
 
       test('Function returning object', function() {
         setFunctionReturningObjectTooltip(this.block);
-        chai.assert.throws(this.block.getTooltip.bind(this.block),
+        chai.assert.throws(
+            this.block.getTooltip.bind(this.block),
             'Tooltip function must return a string.');
       });
 
@@ -169,7 +202,8 @@ suite('Tooltip', function() {
 
       test('Function returning object', function() {
         setFunctionReturningObjectTooltip(this.field);
-        chai.assert.throws(this.field.getTooltip.bind(this.field),
+        chai.assert.throws(
+            this.field.getTooltip.bind(this.field),
             'Tooltip function must return a string.');
       });
 
@@ -215,7 +249,8 @@ suite('Tooltip', function() {
 
       test('Function returning object', function() {
         setFunctionReturningObjectTooltip(this.field);
-        chai.assert.throws(this.field.getTooltip.bind(this.field),
+        chai.assert.throws(
+            this.field.getTooltip.bind(this.field),
             'Tooltip function must return a string.');
       });
 

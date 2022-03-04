@@ -737,7 +737,7 @@ const repositionForWindowResize = function() {
     const field = /** @type {!Field} */ (owner);
     const block = /** @type {!BlockSvg} */ (field.getSourceBlock());
     const bBox = positionToField ? getScaledBboxOfField(field) :
-                                    getScaledBboxOfBlock(block);
+                                   getScaledBboxOfBlock(block);
     // If we can fit it, render below the block.
     const primaryX = bBox.left + (bBox.right - bBox.left) / 2;
     const primaryY = bBox.bottom;

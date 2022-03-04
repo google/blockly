@@ -11,73 +11,68 @@
  * This file is in JSON5 format; see https://json5.org/.
  */
 
-/**
- * Map from Blockly core version number to table of renamings made
- * *since* that version was released (since we don't know for sure
- * what the version number of the release that will incorporate those
- * renamings will be yet).
- * @type {Object<string, ?>}
- */
+/* eslint-disable */
+
 {
   // Example entry:
-  '0.0.0': {
-    // These renaming were made after version 0.0.0 was published.
-    // Each entry is keyed by the original module name.
-    'module.name.Old': {
-      // If the module has been renamed, its new name will be listed.
-      module: 'module.name.new',
+  'version.that.includes.the.rename': [
+    // Each entry in the array is a module.
+    // All of the properties are optional.
+    {
+      // The name that the module had before this version.
+      oldName: 'old.module.name',
 
-      // Modules which had a default export that has been turned into
-      // a named export the new name will be given.
-      export: 'defaultName',
+      // The name that the module now has in this version.
+      newName: 'new.module.name',
 
-      // For backward-compatibility reasons, we may choose to continue
-      // to reexport default exports in the same place in the Blockly
-      // tree that they were previously (or nearby).  If so, the full
-      // path to the former default export will be listed.  This path
-      // is only relevant to code that accesses the export via the
-      // namespace tree rather than by a named import.
-      //
-      // The given example implies that:
-      //     module.name.Old ===
-      //         goog.require('module.name.new').defaultExport
-      // which may not be what what one expects but is very handy.
-      path: 'module.name.Old',
-      // If path is not given explicitly then it can be assumed to be
-      // `${module}.${export}`.
+      // If a module had a default export and nowhas a named export, the name
+      // of the named export can be given here.
+      newExport: 'new-name-for-default-export',
 
-      // Modules which already had named exports can instead list
-      // information about exports which have been renamed or moved in
-      // the exports subsection, which is a map from old export name
-      // to object with info about the new export name.
+      // The old location of this module on the Blockly tree (the mega-object
+      // that people access if they are importing all of Blockly). Usually this
+      // is the same as the old module name, and doesn't need to be provided.
+      oldPath: 'old.path.on.Blockly.tree',
+
+      // The new location of this module on the Blockly tree. To be backwards
+      // compatible with people accessing the Blockly tree, this should be the
+      // same as the oldPath.
+      // If this is not provided, the newPath is assumed to be the newName.
+      newPath: 'new.path.on.Blockly.tree',
+
+      // Each entry in this object is the old name of a named export.
       exports: {
-        oldExportName: {
-          // No need to quote this.
+        // The name that the export had before this version.
+        // All of the properties on this object are optional.
+        'old-export-name': {
+          // The new module that the export is in in this version.
+          // If this is not provided, the newModule is assumed to be the parent
+          // module's newName.
+          newModule: 'new.module.name',
 
-          // If the export has been moved to a different module, that
-          // module is listed.
-          module: 'module.name.other',
+          // The name that the export now has in this version.
+          newExport: 'new-export-name',
 
-          // If the export has been given a new name, that is listed.
-          export: 'newExportName',
+          // The old location of this module on the Blockly tree.
+          oldPath: 'old.path.on.Blockly.tree',
 
-          // As with default exports, if a named export has been
-          // reexported on the namespace tree somewhere other than at
-          // `${module}.${export}` then that can specified explicitly.
-          path: 'module.name.Old.oldExportName',
-          // This given example implies that code that previously
-          // accessed this export via module.name.Old.oldExportName
-          // can continue to do so; only code using named requires
-          // needs to update from
-          //      goog.require('module.name.Old').oldExportName
-          // to
-          //      goog.require('module.name.new').newExportName
-        },
-        // More individual exports in this module can be listed here.
-      },
-    },
-    // More modules with renamings can be listed here.
-  },
+          // The new location of this module onthe Blockly tree. To be backwards
+          // compatible with people accessing the Blockkly tree, this should be
+          // the same as the oldPath.
+          // If this is not provided, the newPath is assumed to be
+          // newModule.newExport
+          newPath: 'new.path.on.Blockly.tree',
+
+          // If a named export has been changed to a private variable with a get
+          // method, this is the name of the get method.
+          getMethod: 'get-method-name',
+
+          // If a named export has been changed to a private variable with a set
+          // method, this is the name of the set method.
+          setMethod: 'set-method-name'
+        }
+      }
+    }
 
   '4.20201217.0': {
     'Blockly': {

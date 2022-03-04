@@ -75,8 +75,9 @@
     }
   ],
 
-  '4.20201217.0': {
-    'Blockly': {
+  '4.20201217.0': [
+    {
+      oldName: 'Blockly',
       exports: {
         // bind/unbind events functions.  See PR #4642
         EventData: {newModule: 'Blockly.eventHandling', newExport: 'Data'},
@@ -87,10 +88,11 @@
           newExport: 'conditionalBind',
         },
       },
-    },
-  },
-  '6.20210701.0': {
-    'Blockly': {
+    }
+  ],
+  '6.20210701.0': [
+    {
+      oldName: 'Blockly',
       exports: {
         // Align.
         ALIGN_LEFT: {
@@ -164,38 +166,46 @@
         },
       },
     },
-    'Blockly.Blocks': {
+    {
+      oldName: 'Blockly.Blocks',
       newName: 'Blockly.blocks',
       newExport: 'Blocks',        // Previous default export now named.
       newPath: 'Blockly.Blocks',  // But still on tree with original name.
     },
-    'Blockly.ContextMenu': {
+    {
+      oldName: 'Blockly.ContextMenu',
       exports: {
         currentBlock: {getMethod: 'getCurrentBlock', setMethod: 'setCurrentBlock'},
       },
+
     },
-    'Blockly.Events': {
+    {
+      oldName: 'Blockly.Events',
       exports: {
         recordUndo: {getMethod: 'getRecordUndo', setMethod: 'setRecordUndo'},
       },
     },
-    'Blockly.Tooltip': {
+    {
+      oldName: 'Blockly.Tooltip',
       exports: {
         DIV: {getMethod: 'getDiv', setMethod: 'setDiv'},
         visible: {getMethod: 'isVisible'},
       },
     },
-    'Blockly.WidgetDiv': {
+    {
+      oldName: 'Blockly.WidgetDiv',
       exports: {
         DIV: {getMethod: 'getDiv'},
       },
     },
-    'Blockly.connectionTypes': {
+    {
+      oldName: 'Blockly.connectionTypes',
       newName: 'Blockly.ConnectionType',
       newExport: 'ConnectionType',        // Previous default export now named.
       newPath: 'Blockly.ConnectionType',  // Type reexported directly.
     },
-    'Blockly.utils': {
+    {
+      oldName: 'Blockly.utils',
       exports: {
         genUid: {newModule: 'Blockly.utils.idGenerator'},
         getScrollDelta: {newModule: 'Blockly.utils.browserEvents'},
@@ -204,32 +214,59 @@
         mouseToSvg: {newModule: 'Blockly.utils.browserEvents'},
       },
     },
-    'Blockly.utils.global': {
+    {
+      oldName: 'Blockly.utils.global',
       newExport: 'globalThis',          // Previous default export now named.
       newPath: 'Blockly.utils.global',  // But still exported under original name.
     },
-    'Blockly.utils.IdGenerator': {
+    {
+      oldName: 'Blockly.utils.IdGenerator',
       newName: 'Blockly.utils.idGenerator',
     },
-    'Blockly.utils.xml': {
+    {
+      oldName: 'Blockly.utils.xml',
       exports: {
         // document was a function before, too - not a static property
         // or get accessor.
         document: {newExport: 'getDocument'},
       },
     },
-  },
-  '7.20211209.0-beta.0': {
-    'Blockly.Blocks.colour': {newName: 'Blockly.blocks.colour'},
+  ],
+
+  '7.20211209.0-beta.0': [
+    {
+      oldName: 'Blockly.Blocks.colour',
+      newName: 'Blockly.blocks.colour'
+    },
     // Blockly.Blocks.lists not previously provided.
-    'Blockly.Blocks.logic': {newName: 'Blockly.blocks.logic'},
-    'Blockly.Blocks.loops': {newName: 'Blockly.blocks.loops'},
-    'Blockly.Blocks.math': {newName: 'Blockly.blocks.math'},
-    'Blockly.Blocks.procedures': {newName: 'Blockly.blocks.procedures'},
-    'Blockly.Blocks.texts': {newName: 'Blockly.blocks.texts'},
-    'Blockly.Blocks.variables': {newName: 'Blockly.blocks.variables'},
+    {
+      oldName: 'Blockly.Blocks.logic',
+      newName: 'Blockly.blocks.logic'
+    },
+    {
+      oldName: 'Blockly.Blocks.loops',
+      newName: 'Blockly.blocks.loops'
+    },
+    {
+      oldName: 'Blockly.Blocks.math',
+      newName: 'Blockly.blocks.math'
+    },
+    {
+      oldName: 'Blockly.Blocks.procedures',
+      newName: 'Blockly.blocks.procedures'
+    },
+    {
+      oldName: 'Blockly.Blocks.texts',
+      newName: 'Blockly.blocks.texts'
+    },
+    {
+      oldName: 'Blockly.Blocks.variables',
+      newName: 'Blockly.blocks.variables'
+    },
     // Blockly.Blocks.variablesDynamic not previously provided.
-    'Blockly.utils': {
+
+    {
+      oldName: 'Blockly.utils',
       exports: {
         screenToWsCoordinates: {newModule: 'Blockly.utils.svgMath'},
         getDocumentScroll: {newModule: 'Blockly.utils.svgMath'},
@@ -249,765 +286,955 @@
             {newModule: 'Blockly.Extensions', newExport: 'runAfterPageLoad'},
       },
     },
-    'Blockly.Events.Abstract': {
+    {
+      oldName: 'Blockly.Events.Abstract',
       newExport: 'Abstract',
       newPath: 'Blockly.Events.Abstract',
     },
-    'Blockly.Events.BlockBase': {
+    {
+      oldName: 'Blockly.Events.BlockBase',
       newExport: 'BlockBase',
       newPath: 'Blockly.Events.BlockBase',
     },
-    'Blockly.Events.BlockChange': {
+    {
+      oldName: 'Blockly.Events.BlockChange',
       newExport: 'BlockChange',
       newPath: 'Blockly.Events.BlockChange',
     },
-    'Blockly.Events.BlockCreate': {
+    {
+      oldName: 'Blockly.Events.BlockCreate',
       newExport: 'BlockCreate',
       newPath: 'Blockly.Events.BlockCreate',
     },
-    'Blockly.Events.BlockDelete': {
+    {
+      oldName: 'Blockly.Events.BlockDelete',
       newExport: 'BlockDelete',
       newPath: 'Blockly.Events.BlockDelete',
     },
-    'Blockly.Events.BlockDrag': {
+    {
+      oldName: 'Blockly.Events.BlockDrag',
       newExport: 'BlockDrag',
       newPath: 'Blockly.Events.BlockDrag',
     },
-    'Blockly.Events.BlockMove': {
+    {
+      oldName: 'Blockly.Events.BlockMove',
       newExport: 'BlockMove',
       newPath: 'Blockly.Events.BlockMove',
     },
-    'Blockly.Events.BubbleOpen': {
+    {
+      oldName: 'Blockly.Events.BubbleOpen',
       newExport: 'BubbleOpen',
       newPath: 'Blockly.Events.BubbleOpen',
     },
-    'Blockly.Events.Click': {
+    {
+      oldName: 'Blockly.Events.Click',
       newExport: 'Click',
       newPath: 'Blockly.Events.Click',
     },
-    'Blockly.Events.CommentBase': {
+    {
+      oldName: 'Blockly.Events.CommentBase',
       newExport: 'CommentBase',
       newPath: 'Blockly.Events.CommentBase',
     },
-    'Blockly.Events.CommentChange': {
+    {
+      oldName: 'Blockly.Events.CommentChange',
       newExport: 'CommentChange',
       newPath: 'Blockly.Events.CommentChange',
     },
-    'Blockly.Events.CommentCreate': {
+    {
+      oldName: 'Blockly.Events.CommentCreate',
       newExport: 'CommentCreate',
       newPath: 'Blockly.Events.CommentCreate',
     },
-    'Blockly.Events.CommentDelete': {
+    {
+      oldName: 'Blockly.Events.CommentDelete',
       newExport: 'CommentDelete',
       newPath: 'Blockly.Events.CommentDelete',
     },
-    'Blockly.Events.CommentMove': {
+    {
+      oldName: 'Blockly.Events.CommentMove',
       newExport: 'CommentMove',
       newPath: 'Blockly.Events.CommentMove',
     },
-    'Blockly.Events.MarkerMove': {
+    {
+      oldName: 'Blockly.Events.MarkerMove',
       newExport: 'MarkerMove',
       newPath: 'Blockly.Events.MarkerMove',
     },
-    'Blockly.Events.Selected': {
+    {
+      oldName: 'Blockly.Events.Selected',
       newExport: 'Selected',
       newPath: 'Blockly.Events.Selected',
     },
-    'Blockly.Events.ThemeChange': {
+    {
+      oldName: 'Blockly.Events.ThemeChange',
       newExport: 'ThemeChange',
       newPath: 'Blockly.Events.ThemeChange',
     },
-    'Blockly.Events.ToolboxItemSelect': {
+    {
+      oldName: 'Blockly.Events.ToolboxItemSelect',
       newExport: 'ToolboxItemSelect',
       newPath: 'Blockly.Events.ToolboxItemSelect',
     },
-    'Blockly.Events.TrashcanOpen': {
+    {
+      oldName: 'Blockly.Events.TrashcanOpen',
       newExport: 'TrashcanOpen',
       newPath: 'Blockly.Events.TrashcanOpen',
     },
-    'Blockly.Events.Ui': {
+    {
+      oldName: 'Blockly.Events.Ui',
       newExport: 'Ui',
       newPath: 'Blockly.Events.Ui',
     },
-    'Blockly.Events.UiBase': {
+    {
+      oldName: 'Blockly.Events.UiBase',
       newExport: 'UiBase',
       newPath: 'Blockly.Events.UiBase',
     },
-    'Blockly.Events.VarBase': {
+    {
+      oldName: 'Blockly.Events.VarBase',
       newExport: 'VarBase',
       newPath: 'Blockly.Events.VarBase',
     },
-    'Blockly.Events.VarCreate': {
+    {
+      oldName: 'Blockly.Events.VarCreate',
       newExport: 'VarCreate',
       newPath: 'Blockly.Events.VarCreate',
     },
-    'Blockly.Events.VarDelete': {
+    {
+      oldName: 'Blockly.Events.VarDelete',
       newExport: 'VarDelete',
       newPath: 'Blockly.Events.VarDelete',
     },
-    'Blockly.Events.VarRename': {
+    {
+      oldName: 'Blockly.Events.VarRename',
       newExport: 'VarRename',
       newPath: 'Blockly.Events.VarRename',
     },
-    'Blockly.Events.ViewportChange': {
+    {
+      oldName: 'Blockly.Events.ViewportChange',
       newExport: 'ViewportChange',
       newPath: 'Blockly.Events.ViewportChange',
     },
-    'Blockly.Events.FinishedLoading': {
+    {
+      oldName: 'Blockly.Events.FinishedLoading',
       newExport: 'FinishedLoading',
       newPath: 'Blockly.Events.FinishedLoading',
     },
-    'Blockly.IASTNodeLocation': {
+    {
+      oldName: 'Blockly.IASTNodeLocation',
       newExport: 'IASTNodeLocation',
       newPath: 'Blockly.IASTNodeLocation',
     },
-    'Blockly.IASTNodeLocationSvg': {
+    {
+      oldName: 'Blockly.IASTNodeLocationSvg',
       newExport: 'IASTNodeLocationSvg',
       newPath: 'Blockly.IASTNodeLocationSvg',
     },
-    'Blockly.IASTNodeLocationWithBlock': {
+    {
+      oldName: 'Blockly.IASTNodeLocationWithBlock',
       newExport: 'IASTNodeLocationWithBlock',
       newPath: 'Blockly.IASTNodeLocationWithBlock',
     },
-    'Blockly.IAutoHideable': {
+    {
+      oldName: 'Blockly.IAutoHideable',
       newExport: 'IAutoHideable',
       newPath: 'Blockly.IAutoHideable',
     },
-    'Blockly.IBlockDragger': {
+    {
+      oldName: 'Blockly.IBlockDragger',
       newExport: 'IBlockDragger',
       newPath: 'Blockly.IBlockDragger',
     },
-    'Blockly.IBoundedElement': {
+    {
+      oldName: 'Blockly.IBoundedElement',
       newExport: 'IBoundedElement',
       newPath: 'Blockly.IBoundedElement',
     },
-    'Blockly.IBubble': {
+    {
+      oldName: 'Blockly.IBubble',
       newExport: 'IBubble',
       newPath: 'Blockly.IBubble',
     },
-    'Blockly.ICollapsibleToolboxItem': {
+    {
+      oldName: 'Blockly.ICollapsibleToolboxItem',
       newExport: 'ICollapsibleToolboxItem',
       newPath: 'Blockly.ICollapsibleToolboxItem',
     },
-    'Blockly.IComponent': {
+    {
+      oldName: 'Blockly.IComponent',
       newExport: 'IComponent',
       newPath: 'Blockly.IComponent',
     },
-    'Blockly.IConnectionChecker': {
+    {
+      oldName: 'Blockly.IConnectionChecker',
       newExport: 'IConnectionChecker',
       newPath: 'Blockly.IConnectionChecker',
     },
-    'Blockly.IContextMenu': {
+    {
+      oldName: 'Blockly.IContextMenu',
       newExport: 'IContextMenu',
       newPath: 'Blockly.IContextMenu',
     },
-    'Blockly.ICopyable': {
+    {
+      oldName: 'Blockly.ICopyable',
       newExport: 'ICopyable',
       newPath: 'Blockly.ICopyable',
     },
-    'Blockly.IDeletable': {
+    {
+      oldName: 'Blockly.IDeletable',
       newExport: 'IDeletable',
       newPath: 'Blockly.IDeletable',
     },
-    'Blockly.IDeleteArea': {
+    {
+      oldName: 'Blockly.IDeleteArea',
       newExport: 'IDeleteArea',
       newPath: 'Blockly.IDeleteArea',
     },
-    'Blockly.IDragTarget': {
+    {
+      oldName: 'Blockly.IDragTarget',
       newExport: 'IDragTarget',
       newPath: 'Blockly.IDragTarget',
     },
-    'Blockly.IDraggable': {
+    {
+      oldName: 'Blockly.IDraggable',
       newExport: 'IDraggable',
       newPath: 'Blockly.IDraggable',
     },
-    'Blockly.IFlyout': {
+    {
+      oldName: 'Blockly.IFlyout',
       newExport: 'IFlyout',
       newPath: 'Blockly.IFlyout',
     },
-    'Blockly.IKeyboardAccessible': {
+    {
+      oldName: 'Blockly.IKeyboardAccessible',
       newExport: 'IKeyboardAccessible',
       newPath: 'Blockly.IKeyboardAccessible',
     },
-    'Blockly.IMetricsManager': {
+    {
+      oldName: 'Blockly.IMetricsManager',
       newExport: 'IMetricsManager',
       newPath: 'Blockly.IMetricsManager',
     },
-    'Blockly.IMovable': {
+    {
+      oldName: 'Blockly.IMovable',
       newExport: 'IMovable',
       newPath: 'Blockly.IMovable',
     },
-    'Blockly.IPositionable': {
+    {
+      oldName: 'Blockly.IPositionable',
       newExport: 'IPositionable',
       newPath: 'Blockly.IPositionable',
     },
-    'Blockly.IRegistrable': {
+    {
+      oldName: 'Blockly.IRegistrable',
       newExport: 'IRegistrable',
       newPath: 'Blockly.IRegistrable',
     },
-    'Blockly.IRegistrableField': {
+    {
+      oldName: 'Blockly.IRegistrableField',
       newExport: 'IRegistrableField',
       newPath: 'Blockly.IRegistrableField',
     },
-    'Blockly.ISelectable': {
+    {
+      oldName: 'Blockly.ISelectable',
       newExport: 'ISelectable',
       newPath: 'Blockly.ISelectable',
     },
-    'Blockly.ISelectableToolboxItem': {
+    {
+      oldName: 'Blockly.ISelectableToolboxItem',
       newExport: 'ISelectableToolboxItem',
       newPath: 'Blockly.ISelectableToolboxItem',
     },
-    'Blockly.IStyleable': {
+    {
+      oldName: 'Blockly.IStyleable',
       newExport: 'IStyleable',
       newPath: 'Blockly.IStyleable',
     },
-    'Blockly.IToolbox': {
+    {
+      oldName: 'Blockly.IToolbox',
       newExport: 'IToolbox',
       newPath: 'Blockly.IToolbox',
     },
-    'Blockly.IToolboxItem': {
+    {
+      oldName: 'Blockly.IToolboxItem',
       newExport: 'IToolboxItem',
       newPath: 'Blockly.IToolboxItem',
     },
-    'Blockly.blockRendering.ConstantProvider': {
+    {
+      oldName: 'Blockly.blockRendering.ConstantProvider',
       newExport: 'ConstantProvider',
       newPath: 'Blockly.blockRendering.ConstantProvider',
     },
-    'Blockly.blockRendering.Debug': {
+    {
+      oldName: 'Blockly.blockRendering.Debug',
       newExport: 'Debug',
       newPath: 'Blockly.blockRendering.Debug',
     },
-    'Blockly.blockRendering.Drawer': {
+    {
+      oldName: 'Blockly.blockRendering.Drawer',
       newExport: 'Drawer',
       newPath: 'Blockly.blockRendering.Drawer',
     },
-    'Blockly.blockRendering.IPathObject': {
+    {
+      oldName: 'Blockly.blockRendering.IPathObject',
       newExport: 'IPathObject',
       newPath: 'Blockly.blockRendering.IPathObject',
     },
-    'Blockly.blockRendering.RenderInfo': {
+    {
+      oldName: 'Blockly.blockRendering.RenderInfo',
       newExport: 'RenderInfo',
       newPath: 'Blockly.blockRendering.RenderInfo',
     },
-    'Blockly.blockRendering.MarkerSvg': {
+    {
+      oldName: 'Blockly.blockRendering.MarkerSvg',
       newExport: 'MarkerSvg',
       newPath: 'Blockly.blockRendering.MarkerSvg',
     },
-    'Blockly.blockRendering.PathObject': {
+    {
+      oldName: 'Blockly.blockRendering.PathObject',
       newExport: 'PathObject',
       newPath: 'Blockly.blockRendering.PathObject',
     },
-    'Blockly.blockRendering.Renderer': {
+    {
+      oldName: 'Blockly.blockRendering.Renderer',
       newExport: 'Renderer',
       newPath: 'Blockly.blockRendering.Renderer',
     },
-    'Blockly.geras.InlineInput': {
+    {
+      oldName: 'Blockly.geras.InlineInput',
       newExport: 'InlineInput',
       newPath: 'Blockly.geras.InlineInput',
     },
-    'Blockly.geras.StatementInput': {
+    {
+      oldName: 'Blockly.geras.StatementInput',
       newExport: 'StatementInput',
       newPath: 'Blockly.geras.StatementInput',
     },
-    'Blockly.geras.ConstantProvider': {
+    {
+      oldName: 'Blockly.geras.ConstantProvider',
       newExport: 'ConstantProvider',
       newPath: 'Blockly.geras.ConstantProvider',
     },
-    'Blockly.geras.Drawer': {
+    {
+      oldName: 'Blockly.geras.Drawer',
       newExport: 'Drawer',
       newPath: 'Blockly.geras.Drawer',
     },
-    'Blockly.geras.HighlightConstantProvider': {
+    {
+      oldName: 'Blockly.geras.HighlightConstantProvider',
       newExport: 'HighlightConstantProvider',
       newPath: 'Blockly.geras.HighlightConstantProvider',
     },
-    'Blockly.geras.Highlighter': {
+    {
+      oldName: 'Blockly.geras.Highlighter',
       newExport: 'Highlighter',
       newPath: 'Blockly.geras.Highlighter',
     },
-    'Blockly.geras.RenderInfo': {
+    {
+      oldName: 'Blockly.geras.RenderInfo',
       newExport: 'RenderInfo',
       newPath: 'Blockly.geras.RenderInfo',
     },
-    'Blockly.geras.PathObject': {
+    {
+      oldName: 'Blockly.geras.PathObject',
       newExport: 'PathObject',
       newPath: 'Blockly.geras.PathObject',
     },
-    'Blockly.geras.Renderer': {
+    {
+      oldName: 'Blockly.geras.Renderer',
       newExport: 'Renderer',
       newPath: 'Blockly.geras.Renderer',
     },
-    'Blockly.blockRendering.Measurable': {
+    {
+      oldName: 'Blockly.blockRendering.Measurable',
       newExport: 'Measurable',
       newPath: 'Blockly.blockRendering.Measurable',
     },
-    'Blockly.blockRendering.BottomRow': {
+    {
+      oldName: 'Blockly.blockRendering.BottomRow',
       newExport: 'BottomRow',
       newPath: 'Blockly.blockRendering.BottomRow',
     },
-    'Blockly.blockRendering.Connection': {
+    {
+      oldName: 'Blockly.blockRendering.Connection',
       newExport: 'Connection',
       newPath: 'Blockly.blockRendering.Connection',
     },
-    'Blockly.blockRendering.ExternalValueInput': {
+    {
+      oldName: 'Blockly.blockRendering.ExternalValueInput',
       newExport: 'ExternalValueInput',
       newPath: 'Blockly.blockRendering.ExternalValueInput',
     },
-    'Blockly.blockRendering.Field': {
+    {
+      oldName: 'Blockly.blockRendering.Field',
       newExport: 'Field',
       newPath: 'Blockly.blockRendering.Field',
     },
-    'Blockly.blockRendering.Hat': {
+    {
+      oldName: 'Blockly.blockRendering.Hat',
       newExport: 'Hat',
       newPath: 'Blockly.blockRendering.Hat',
     },
-    'Blockly.blockRendering.Icon': {
+    {
+      oldName: 'Blockly.blockRendering.Icon',
       newExport: 'Icon',
       newPath: 'Blockly.blockRendering.Icon',
     },
-    'Blockly.blockRendering.InRowSpacer': {
+    {
+      oldName: 'Blockly.blockRendering.InRowSpacer',
       newExport: 'InRowSpacer',
       newPath: 'Blockly.blockRendering.InRowSpacer',
     },
-    'Blockly.blockRendering.InlineInput': {
+    {
+      oldName: 'Blockly.blockRendering.InlineInput',
       newExport: 'InlineInput',
       newPath: 'Blockly.blockRendering.InlineInput',
     },
-    'Blockly.blockRendering.InputConnection': {
+    {
+      oldName: 'Blockly.blockRendering.InputConnection',
       newExport: 'InputConnection',
       newPath: 'Blockly.blockRendering.InputConnection',
     },
-    'Blockly.blockRendering.InputRow': {
+    {
+      oldName: 'Blockly.blockRendering.InputRow',
       newExport: 'InputRow',
       newPath: 'Blockly.blockRendering.InputRow',
     },
-    'Blockly.blockRendering.JaggedEdge': {
+    {
+      oldName: 'Blockly.blockRendering.JaggedEdge',
       newExport: 'JaggedEdge',
       newPath: 'Blockly.blockRendering.JaggedEdge',
     },
-    'Blockly.blockRendering.NextConnection': {
+    {
+      oldName: 'Blockly.blockRendering.NextConnection',
       newExport: 'NextConnection',
       newPath: 'Blockly.blockRendering.NextConnection',
     },
-    'Blockly.blockRendering.OutputConnection': {
+    {
+      oldName: 'Blockly.blockRendering.OutputConnection',
       newExport: 'OutputConnection',
       newPath: 'Blockly.blockRendering.OutputConnection',
     },
-    'Blockly.blockRendering.PreviousConnection': {
+    {
+      oldName: 'Blockly.blockRendering.PreviousConnection',
       newExport: 'PreviousConnection',
       newPath: 'Blockly.blockRendering.PreviousConnection',
     },
-    'Blockly.blockRendering.RoundCorner': {
+    {
+      oldName: 'Blockly.blockRendering.RoundCorner',
       newExport: 'RoundCorner',
       newPath: 'Blockly.blockRendering.RoundCorner',
     },
-    'Blockly.blockRendering.Row': {
+    {
+      oldName: 'Blockly.blockRendering.Row',
       newExport: 'Row',
       newPath: 'Blockly.blockRendering.Row',
     },
-    'Blockly.blockRendering.SpacerRow': {
+    {
+      oldName: 'Blockly.blockRendering.SpacerRow',
       newExport: 'SpacerRow',
       newPath: 'Blockly.blockRendering.SpacerRow',
     },
-    'Blockly.blockRendering.SquareCorner': {
+    {
+      oldName: 'Blockly.blockRendering.SquareCorner',
       newExport: 'SquareCorner',
       newPath: 'Blockly.blockRendering.SquareCorner',
     },
-    'Blockly.blockRendering.StatementInput': {
+    {
+      oldName: 'Blockly.blockRendering.StatementInput',
       newExport: 'StatementInput',
       newPath: 'Blockly.blockRendering.StatementInput',
     },
-    'Blockly.blockRendering.TopRow': {
+    {
+      oldName: 'Blockly.blockRendering.TopRow',
       newExport: 'TopRow',
       newPath: 'Blockly.blockRendering.TopRow',
     },
-    'Blockly.blockRendering.Types': {
+    {
+      oldName: 'Blockly.blockRendering.Types',
       newExport: 'Types',
       newPath: 'Blockly.blockRendering.Types',
     },
-    'Blockly.minimalist.ConstantProvider': {
+    {
+      oldName: 'Blockly.minimalist.ConstantProvider',
       newExport: 'ConstantProvider',
       newPath: 'Blockly.minimalist.ConstantProvider',
     },
-    'Blockly.minimalist.Drawer': {
+    {
+      oldName: 'Blockly.minimalist.Drawer',
       newExport: 'Drawer',
       newPath: 'Blockly.minimalist.Drawer',
     },
-    'Blockly.minimalist.RenderInfo': {
+    {
+      oldName: 'Blockly.minimalist.RenderInfo',
       newExport: 'RenderInfo',
       newPath: 'Blockly.minimalist.RenderInfo',
     },
-    'Blockly.minimalist.Renderer': {
+    {
+      oldName: 'Blockly.minimalist.Renderer',
       newExport: 'Renderer',
       newPath: 'Blockly.minimalist.Renderer',
     },
-    'Blockly.thrasos.RenderInfo': {
+    {
+      oldName: 'Blockly.thrasos.RenderInfo',
       newExport: 'RenderInfo',
       newPath: 'Blockly.thrasos.RenderInfo',
     },
-    'Blockly.thrasos.Renderer': {
+    {
+      oldName: 'Blockly.thrasos.Renderer',
       newExport: 'Renderer',
       newPath: 'Blockly.thrasos.Renderer',
     },
-    'Blockly.zelos.BottomRow': {
+    {
+      oldName: 'Blockly.zelos.BottomRow',
       newExport: 'BottomRow',
       newPath: 'Blockly.zelos.BottomRow',
     },
-    'Blockly.zelos.StatementInput': {
+    {
+      oldName: 'Blockly.zelos.StatementInput',
       newExport: 'StatementInput',
       newPath: 'Blockly.zelos.StatementInput',
     },
-    'Blockly.zelos.RightConnectionShape': {
+    {
+      oldName: 'Blockly.zelos.RightConnectionShape',
       newExport: 'RightConnectionShape',
       newPath: 'Blockly.zelos.RightConnectionShape',
     },
-    'Blockly.zelos.TopRow': {
+    {
+      oldName: 'Blockly.zelos.TopRow',
       newExport: 'TopRow',
       newPath: 'Blockly.zelos.TopRow',
     },
-    'Blockly.zelos.ConstantProvider': {
+    {
+      oldName: 'Blockly.zelos.ConstantProvider',
       newExport: 'ConstantProvider',
       newPath: 'Blockly.zelos.ConstantProvider',
     },
-    'Blockly.zelos.Drawer': {
+    {
+      oldName: 'Blockly.zelos.Drawer',
       newExport: 'Drawer',
       newPath: 'Blockly.zelos.Drawer',
     },
-    'Blockly.zelos.RenderInfo': {
+    {
+      oldName: 'Blockly.zelos.RenderInfo',
       newExport: 'RenderInfo',
       newPath: 'Blockly.zelos.RenderInfo',
     },
-    'Blockly.zelos.MarkerSvg': {
+    {
+      oldName: 'Blockly.zelos.MarkerSvg',
       newExport: 'MarkerSvg',
       newPath: 'Blockly.zelos.MarkerSvg',
     },
-    'Blockly.zelos.PathObject': {
+    {
+      oldName: 'Blockly.zelos.PathObject',
       newExport: 'PathObject',
       newPath: 'Blockly.zelos.PathObject',
     },
-    'Blockly.zelos.Renderer': {
+    {
+      oldName: 'Blockly.zelos.Renderer',
       newExport: 'Renderer',
       newPath: 'Blockly.zelos.Renderer',
     },
-    'Blockly.Themes.Classic': {
+    {
+      oldName: 'Blockly.Themes.Classic',
       newExport: 'Classic',
       newPath: 'Blockly.Themes.Classic',
     },
-    'Blockly.Themes.Zelos': {
+    {
+      oldName: 'Blockly.Themes.Zelos',
       newExport: 'Zelos',
       newPath: 'Blockly.Themes.Zelos',
     },
-    'Blockly.ToolboxCategory': {
+    {
+      oldName: 'Blockly.ToolboxCategory',
       newExport: 'ToolboxCategory',
       newPath: 'Blockly.ToolboxCategory',
     },
-    'Blockly.CollapsibleToolboxCategory': {
+    {
+      oldName: 'Blockly.CollapsibleToolboxCategory',
       newExport: 'CollapsibleToolboxCategory',
       newPath: 'Blockly.CollapsibleToolboxCategory',
     },
-    'Blockly.ToolboxSeparator': {
+    {
+      oldName: 'Blockly.ToolboxSeparator',
       newExport: 'ToolboxSeparator',
       newPath: 'Blockly.ToolboxSeparator',
     },
-    'Blockly.Toolbox': {
+    {
+      oldName: 'Blockly.Toolbox',
       newExport: 'Toolbox',
       newPath: 'Blockly.Toolbox',
     },
-    'Blockly.ToolboxItem': {
+    {
+      oldName: 'Blockly.ToolboxItem',
       newExport: 'ToolboxItem',
       newPath: 'Blockly.ToolboxItem',
     },
-    'Blockly.utils.Coordinate': {
+    {
+      oldName: 'Blockly.utils.Coordinate',
       newExport: 'Coordinate',
       newPath: 'Blockly.utils.Coordinate',
     },
-    'Blockly.utils.KeyCodes': {
+    {
+      oldName: 'Blockly.utils.KeyCodes',
       newExport: 'KeyCodes',
       newPath: 'Blockly.utils.KeyCodes',
     },
-    'Blockly.utils.Metrics': {
+    {
+      oldName: 'Blockly.utils.Metrics',
       newExport: 'Metrics',
       newPath: 'Blockly.utils.Metrics',
     },
-    'Blockly.utils.Rect': {
+    {
+      oldName: 'Blockly.utils.Rect',
       newExport: 'Rect',
       newPath: 'Blockly.utils.Rect',
     },
-    'Blockly.utils.Size': {
+    {
+      oldName: 'Blockly.utils.Size',
       newExport: 'Size',
       newPath: 'Blockly.utils.Size',
     },
-    'Blockly.utils.Svg': {
+    {
+      oldName: 'Blockly.utils.Svg',
       newExport: 'Svg',
       newPath: 'Blockly.utils.Svg',
     },
-    'Blockly.BlocklyOptions': {
+    {
+      oldName: 'Blockly.BlocklyOptions',
       newExport: 'BlocklyOptions',
       newPath: 'Blockly.BlocklyOptions',
     },
-    'Blockly.Bubble': {
+    {
+      oldName: 'Blockly.Bubble',
       newExport: 'Bubble',
       newPath: 'Blockly.Bubble',
     },
-    'Blockly.BubbleDragger': {
+    {
+      oldName: 'Blockly.BubbleDragger',
       newExport: 'BubbleDragger',
       newPath: 'Blockly.BubbleDragger',
     },
-    'Blockly.Comment': {
+    {
+      oldName: 'Blockly.Comment',
       newExport: 'Comment',
       newPath: 'Blockly.Comment',
     },
-    'Blockly.ComponentManager': {
+    {
+      oldName: 'Blockly.ComponentManager',
       newExport: 'ComponentManager',
       newPath: 'Blockly.ComponentManager',
     },
-    'Blockly.Connection': {
+    {
+      oldName: 'Blockly.Connection',
       newExport: 'Connection',
       newPath: 'Blockly.Connection',
     },
-    'Blockly.ConnectionChecker': {
+    {
+      oldName: 'Blockly.ConnectionChecker',
       newExport: 'ConnectionChecker',
       newPath: 'Blockly.ConnectionChecker',
     },
-    'Blockly.ConnectionDB': {
+    {
+      oldName: 'Blockly.ConnectionDB',
       newExport: 'ConnectionDB',
       newPath: 'Blockly.ConnectionDB',
     },
-    'Blockly.ContextMenuRegistry': {
+    {
+      oldName: 'Blockly.ContextMenuRegistry',
       newExport: 'ContextMenuRegistry',
       newPath: 'Blockly.ContextMenuRegistry',
     },
-    'Blockly.DeleteArea': {
+    {
+      oldName: 'Blockly.DeleteArea',
       newExport: 'DeleteArea',
       newPath: 'Blockly.DeleteArea',
     },
-    'Blockly.DragTarget': {
+    {
+      oldName: 'Blockly.DragTarget',
       newExport: 'DragTarget',
       newPath: 'Blockly.DragTarget',
     },
-    'Blockly.DropDownDiv': {
+    {
+      oldName: 'Blockly.DropDownDiv',
       newExport: 'DropDownDiv',
       newPath: 'Blockly.DropDownDiv',
     },
-    'Blockly.Field': {
+    {
+      oldName: 'Blockly.Field',
       newExport: 'Field',
       newPath: 'Blockly.Field',
     },
-    'Blockly.FieldAngle': {
+    {
+      oldName: 'Blockly.FieldAngle',
       newExport: 'FieldAngle',
       newPath: 'Blockly.FieldAngle',
     },
-    'Blockly.FieldCheckbox': {
+    {
+      oldName: 'Blockly.FieldCheckbox',
       newExport: 'FieldCheckbox',
       newPath: 'Blockly.FieldCheckbox',
     },
-    'Blockly.FieldColour': {
+    {
+      oldName: 'Blockly.FieldColour',
       newExport: 'FieldColour',
       newPath: 'Blockly.FieldColour',
     },
-    'Blockly.FieldDropdown': {
+    {
+      oldName: 'Blockly.FieldDropdown',
       newExport: 'FieldDropdown',
       newPath: 'Blockly.FieldDropdown',
     },
-    'Blockly.FieldImage': {
+    {
+      oldName: 'Blockly.FieldImage',
       newExport: 'FieldImage',
       newPath: 'Blockly.FieldImage',
     },
-    'Blockly.FieldLabel': {
+    {
+      oldName: 'Blockly.FieldLabel',
       newExport: 'FieldLabel',
       newPath: 'Blockly.FieldLabel',
     },
-    'Blockly.FieldLabelSerializable': {
+    {
+      oldName: 'Blockly.FieldLabelSerializable',
       newExport: 'FieldLabelSerializable',
       newPath: 'Blockly.FieldLabelSerializable',
     },
-    'Blockly.FieldMultilineInput': {
+    {
+      oldName: 'Blockly.FieldMultilineInput',
       newExport: 'FieldMultilineInput',
       newPath: 'Blockly.FieldMultilineInput',
     },
-    'Blockly.FieldNumber': {
+    {
+      oldName: 'Blockly.FieldNumber',
       newExport: 'FieldNumber',
       newPath: 'Blockly.FieldNumber',
     },
-    'Blockly.FieldTextInput': {
+    {
+      oldName: 'Blockly.FieldTextInput',
       newExport: 'FieldTextInput',
       newPath: 'Blockly.FieldTextInput',
     },
-    'Blockly.FieldVariable': {
+    {
+      oldName: 'Blockly.FieldVariable',
       newExport: 'FieldVariable',
       newPath: 'Blockly.FieldVariable',
     },
-    'Blockly.Flyout': {
+    {
+      oldName: 'Blockly.Flyout',
       newExport: 'Flyout',
       newPath: 'Blockly.Flyout',
     },
-    'Blockly.FlyoutButton': {
+    {
+      oldName: 'Blockly.FlyoutButton',
       newExport: 'FlyoutButton',
       newPath: 'Blockly.FlyoutButton',
     },
-    'Blockly.HorizontalFlyout': {
+    {
+      oldName: 'Blockly.HorizontalFlyout',
       newExport: 'HorizontalFlyout',
       newPath: 'Blockly.HorizontalFlyout',
     },
-    'Blockly.FlyoutMetricsManager': {
+    {
+      oldName: 'Blockly.FlyoutMetricsManager',
       newExport: 'FlyoutMetricsManager',
       newPath: 'Blockly.FlyoutMetricsManager',
     },
-    'Blockly.VerticalFlyout': {
+    {
+      oldName: 'Blockly.VerticalFlyout',
       newExport: 'VerticalFlyout',
       newPath: 'Blockly.VerticalFlyout',
     },
-    'Blockly.Generator': {
+    {
+      oldName: 'Blockly.Generator',
       newExport: 'Generator',
       newPath: 'Blockly.Generator',
     },
-    'Blockly.Gesture': {
+    {
+      oldName: 'Blockly.Gesture',
       newExport: 'Gesture',
       newPath: 'Blockly.Gesture',
     },
-    'Blockly.Grid': {
+    {
+      oldName: 'Blockly.Grid',
       newExport: 'Grid',
       newPath: 'Blockly.Grid',
     },
-    'Blockly.Icon': {
+    {
+      oldName: 'Blockly.Icon',
       newExport: 'Icon',
       newPath: 'Blockly.Icon',
     },
-    'Blockly.inject': {
+    {
+      oldName: 'Blockly.inject',
       newExport: 'inject',
       newPath: 'Blockly.inject',
     },
-    'Blockly.Input': {
+    {
+      oldName: 'Blockly.Input',
       newExport: 'Input',
       newPath: 'Blockly.Input',
     },
-    'Blockly.inputTypes': {
+    {
+      oldName: 'Blockly.inputTypes',
       newExport: 'inputTypes',
       newPath: 'Blockly.inputTypes',
     },
-    'Blockly.InsertionMarkerManager': {
+    {
+      oldName: 'Blockly.InsertionMarkerManager',
       newExport: 'InsertionMarkerManager',
       newPath: 'Blockly.InsertionMarkerManager',
     },
-    'Blockly.MarkerManager': {
+    {
+      oldName: 'Blockly.MarkerManager',
       newExport: 'MarkerManager',
       newPath: 'Blockly.MarkerManager',
     },
-    'Blockly.Menu': {
+    {
+      oldName: 'Blockly.Menu',
       newExport: 'Menu',
       newPath: 'Blockly.Menu',
     },
-    'Blockly.MenuItem': {
+    {
+      oldName: 'Blockly.MenuItem',
       newExport: 'MenuItem',
       newPath: 'Blockly.MenuItem',
     },
-    'Blockly.MetricsManager': {
+    {
+      oldName: 'Blockly.MetricsManager',
       newExport: 'MetricsManager',
       newPath: 'Blockly.MetricsManager',
     },
-    'Blockly.Msg': {
+    {
+      oldName: 'Blockly.Msg',
       newExport: 'Msg',
       newPath: 'Blockly.Msg',
     },
-    'Blockly.Mutator': {
+    {
+      oldName: 'Blockly.Mutator',
       newExport: 'Mutator',
       newPath: 'Blockly.Mutator',
     },
-    'Blockly.Names': {
+    {
+      oldName: 'Blockly.Names',
       newExport: 'Names',
       newPath: 'Blockly.Names',
     },
-    'Blockly.Options': {
+    {
+      oldName: 'Blockly.Options',
       newExport: 'Options',
       newPath: 'Blockly.Options',
     },
-    'Blockly.RenderedConnection': {
+    {
+      oldName: 'Blockly.RenderedConnection',
       newExport: 'RenderedConnection',
       newPath: 'Blockly.RenderedConnection',
     },
-    'Blockly.Scrollbar': {
+    {
+      oldName: 'Blockly.Scrollbar',
       newExport: 'Scrollbar',
       newPath: 'Blockly.Scrollbar',
     },
-    'Blockly.ScrollbarPair': {
+    {
+      oldName: 'Blockly.ScrollbarPair',
       newExport: 'ScrollbarPair',
       newPath: 'Blockly.ScrollbarPair',
     },
-    'Blockly.ShortcutRegistry': {
+    {
+      oldName: 'Blockly.ShortcutRegistry',
       newExport: 'ShortcutRegistry',
       newPath: 'Blockly.ShortcutRegistry',
     },
-    'Blockly.Theme': {
+    {
+      oldName: 'Blockly.Theme',
       newExport: 'Theme',
       newPath: 'Blockly.Theme',
     },
-    'Blockly.ThemeManager': {
+    {
+      oldName: 'Blockly.ThemeManager',
       newExport: 'ThemeManager',
       newPath: 'Blockly.ThemeManager',
     },
-    'Blockly.TouchGesture': {
+    {
+      oldName: 'Blockly.TouchGesture',
       newExport: 'TouchGesture',
       newPath: 'Blockly.TouchGesture',
     },
-    'Blockly.Trashcan': {
+    {
+      oldName: 'Blockly.Trashcan',
       newExport: 'Trashcan',
       newPath: 'Blockly.Trashcan',
     },
-    'Blockly.VariableMap': {
+    {
+      oldName: 'Blockly.VariableMap',
       newExport: 'VariableMap',
       newPath: 'Blockly.VariableMap',
     },
-    'Blockly.VariableModel': {
+    {
+      oldName: 'Blockly.VariableModel',
       newExport: 'VariableModel',
       newPath: 'Blockly.VariableModel',
     },
-    'Blockly.Warning': {
+    {
+      oldName: 'Blockly.Warning',
       newExport: 'Warning',
       newPath: 'Blockly.Warning',
     },
-    'Blockly.Workspace': {
+    {
+      oldName: 'Blockly.Workspace',
       newExport: 'Workspace',
       newPath: 'Blockly.Workspace',
     },
-    'Blockly.WorkspaceAudio': {
+    {
+      oldName: 'Blockly.WorkspaceAudio',
       newExport: 'WorkspaceAudio',
       newPath: 'Blockly.WorkspaceAudio',
     },
-    'Blockly.WorkspaceComment': {
+    {
+      oldName: 'Blockly.WorkspaceComment',
       newExport: 'WorkspaceComment',
       newPath: 'Blockly.WorkspaceComment',
     },
-    'Blockly.WorkspaceCommentSvg': {
+    {
+      oldName: 'Blockly.WorkspaceCommentSvg',
       newExport: 'WorkspaceCommentSvg',
       newPath: 'Blockly.WorkspaceCommentSvg',
     },
-    'Blockly.WorkspaceDragSurfaceSvg': {
+    {
+      oldName: 'Blockly.WorkspaceDragSurfaceSvg',
       newExport: 'WorkspaceDragSurfaceSvg',
       newPath: 'Blockly.WorkspaceDragSurfaceSvg',
     },
-    'Blockly.WorkspaceDragger': {
+    {
+      oldName: 'Blockly.WorkspaceDragger',
       newExport: 'WorkspaceDragger',
       newPath: 'Blockly.WorkspaceDragger',
     },
-    'Blockly.WorkspaceSvg': {
+    {
+      oldName: 'Blockly.WorkspaceSvg',
       newExport: 'WorkspaceSvg',
       newPath: 'Blockly.WorkspaceSvg',
     },
-    'Blockly.ZoomControls': {
+    {
+      oldName: 'Blockly.ZoomControls',
       newExport: 'ZoomControls',
       newPath: 'Blockly.ZoomControls',
     },
-    'Blockly': {
+    {
+      oldName: 'Blockly',
       exports: {
         svgSize: {newModule: 'Blockly.utils.svgMath'},
         resizeSvgContents: {newModule: 'Blockly.WorkspaecSvg'},
         defineBlocksWithJsonArray: {newModule: 'Blockly.common'},
         isNumber: {newModule: 'Blockly.utils.string'},
       },
-    },
-  },
-  '7.20211209.0': {
-    'Blockly': {
+    } ,
+  ],
+
+  '7.20211209.0': [
+    {
+      oldName: 'Blockly',
       exports: {
         DRAG_RADIUS: {
           newModule: 'Blockly.config',
@@ -1038,35 +1265,45 @@
         },
       },
     },
-    'Blockly.blocks.all': {
+    {
+      oldName: 'Blockly.blocks.all',
       newName: 'Blockly.libraryBlocks',
     },
-    'Blockly.blocks.colour': {
+    {
+      oldName: 'Blockly.blocks.colour',
       newName: 'Blockly.libraryBlocks.colour',
     },
-    'Blockly.blocks.lists': {
+    {
+      oldName: 'Blockly.blocks.lists',
       newName: 'Blockly.libraryBlocks.lists',
     },
-    'Blockly.blocks.logic': {
+    {
+      oldName: 'Blockly.blocks.logic',
       newName: 'Blockly.libraryBlocks.logic',
     },
-    'Blockly.blocks.loops': {
+    {
+      oldName: 'Blockly.blocks.loops',
       newName: 'Blockly.libraryBlocks.loops',
     },
-    'Blockly.blocks.math': {
+    {
+      oldName: 'Blockly.blocks.math',
       newName: 'Blockly.libraryBlocks.math',
     },
-    'Blockly.blocks.procedures': {
+    {
+      oldName: 'Blockly.blocks.procedures',
       newName: 'Blockly.libraryBlocks.procedures',
     },
-    'Blockly.blocks.text': {
+    {
+      oldName: 'Blockly.blocks.text',
       newName: 'Blockly.libraryBlocks.text',
     },
-    'Blockly.blocks.variables': {
+    {
+      oldName: 'Blockly.blocks.variables',
       newName: 'Blockly.libraryBlocks.variables',
     },
-    'Blockly.blocks.variablesDynamic': {
+    {
+      oldName: 'Blockly.blocks.variablesDynamic',
       newName: 'Blockly.libraryBlocks.variablesDynamic',
     },
-  },
+  ],
 }

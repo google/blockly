@@ -14,7 +14,8 @@
         "no-unused-vars": ["off"],
         // Allow uncommented helper functions in tests.
         "require-jsdoc": ["off"],
-        "prefer-rest-params": ["off"]
+        "prefer-rest-params": ["off"],
+        "no-invalid-this": ["off"]
     },
     "extends": "../../.eslintrc.json"
 }

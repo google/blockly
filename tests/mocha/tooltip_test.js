@@ -66,7 +66,6 @@ suite('Tooltip', function() {
 
       chai.assert.isTrue(
           wasCalled, 'Expected custom tooltip function to have been called');
-      workspaceTeardown.call(this, this.workspace);
     });
   });
 

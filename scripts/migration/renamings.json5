@@ -8,9 +8,8 @@
  * @fileoverview Collected information about modules and module
  * exports that have been renamed between versions.
  *
- * For now this is a node module, not a goog.module.
+ * This file is in JSON5 format; see https://json5.org/.
  */
-'use strict';
 
 /**
  * Map from Blockly core version number to table of renamings made
@@ -19,7 +18,7 @@
  * renamings will be yet).
  * @type {Object<string, ?>}
  */
-const renamings = {
+{
   // Example entry:
   '0.0.0': {
     // These renaming were made after version 0.0.0 was published.
@@ -1074,6 +1073,4 @@ const renamings = {
       module: 'Blockly.libraryBlocks.variablesDynamic',
     },
   },
-};
-
-exports.renamings = renamings;
+}

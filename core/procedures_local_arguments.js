@@ -82,7 +82,7 @@
          return /** @type {!ProcedureBlock} */ (block).getProcedureDef();
        });
    const proceduresLocalReturn =
-       root.getBlocksByType('procedures_local_defreturn', false).map(function(block) {
+       root.getBlocksByType('procedures_with_argument_defreturn', false).map(function(block) {
          return /** @type {!ProcedureBlock} */ (block).getProcedureDef();
        });
    proceduresLocalNoReturn.sort(procTupleComparator);
@@ -210,7 +210,7 @@
  const flyoutCategory = function(workspace) {
    const xmlList = [];
    if (Blocks['procedures_with_argument_defnoreturn']) {
-     // <block type="procedures_defnoreturn" gap="16">
+     // <block type="procedures_with_argument_defnoreturn" gap="16">
      //     <field name="NAME">do something</field>
      // </block>
      const block = utilsXml.createElement('block');
@@ -223,12 +223,12 @@
      block.appendChild(nameField);
      xmlList.push(block);
    }
-   if (Blocks['procedures_local_defreturn']) {
-    // <block type="procedures_defnoreturn" gap="16">
+   if (Blocks['procedures_with_argument_defreturn']) {
+    // <block type="procedures_with_argument_defreturn" gap="16">
     //     <field name="NAME">do something</field>
     // </block>
     const block = utilsXml.createElement('block');
-    block.setAttribute('type', 'procedures_local_defreturn');
+    block.setAttribute('type', 'procedures_with_argument_defreturn');
     block.setAttribute('gap', 16);
     const nameField = utilsXml.createElement('field');
     nameField.setAttribute('name', 'NAME');
@@ -324,7 +324,7 @@
    const workspaceId = /** @type {string} */ (e.workspaceId);
    const block = Workspace.getById(workspaceId).getBlockById(e.blockId);
    const type = block.type;
-   if (type !== 'procedures_with_argument_defnoreturn' && type !== 'procedures_local_defreturn') {
+   if (type !== 'procedures_with_argument_defnoreturn' && type !== 'procedures_with_argument_defreturn') {
      return;
    }
    const workspace = block.mutator.getWorkspace();

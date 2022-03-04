@@ -37,8 +37,6 @@
  const {Mutator} = goog.require('Blockly.Mutator');
  const {Names} = goog.require('Blockly.Names');
  /* eslint-disable-next-line no-unused-vars */
- const {VariableModel} = goog.requireType('Blockly.VariableModel');
- /* eslint-disable-next-line no-unused-vars */
  const {Workspace} = goog.requireType('Blockly.Workspace');
  /** @suppress {extraRequire} */
  goog.require('Blockly.Comment');
@@ -391,7 +389,7 @@
 
     const containerBlock = Xml.domToBlock(containerBlockNode, workspace);
 
-    if (this.type === 'procedures_local_defreturn') {
+    if (this.type === 'procedures_with_argument_defreturn') {
       containerBlock.setFieldValue(this.hasStatements_, 'STATEMENTS');
     } else {
       containerBlock.removeInput('STATEMENT_INPUT');
@@ -550,7 +548,7 @@ Blocks['procedures_with_argument_defnoreturn'] = {
   callType_: Blockly.ProceduresLocalArgumentUtils.callType_,
 };
 
-Blocks['procedures_local_defreturn'] = {
+Blocks['procedures_with_argument_defreturn'] = {
   /**
     * Block for defining a procedure with a return value.
     * @this {Block}
@@ -967,7 +965,7 @@ const PROCEDURE_CALL_COMMON = {
         /**
           * Create matching definition block.
           * <xml xmlns="https://developers.google.com/blockly/xml">
-          *   <block type="procedures_local_defreturn" x="10" y="20">
+          *   <block type="procedures_with_argument_defreturn" x="10" y="20">
           *     <mutation name="test">
           *       <arg name="x"></arg>
           *     </mutation>
@@ -1110,5 +1108,5 @@ Blocks.procedures_local_callreturn = {
     this.previousEnabledState_ = true;
   },
 
-  defType_: 'procedures_local_defreturn',
+  defType_: 'procedures_with_argument_defreturn',
 };

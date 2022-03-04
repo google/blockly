@@ -73,148 +73,80 @@
     }
   ],
 
-  '5.20210325.0': [
+  'develop': [
     {
       oldName: 'Blockly',
       exports: {
-        // bind/unbind events functions.  See PR #4642
-        EventData: {newModule: 'Blockly.eventHandling', newExport: 'Data'},
-        bindEvent_: {newModule: 'Blockly.browserEvents', newExport: 'bind'},
-        unbindEvent_: {newModule: 'Blockly.browserEvents', newExport: 'unbind'},
-        bindEventWithChecks_: {
-          newModule: 'Blockly.browserEvents',
-          newExport: 'conditionalBind',
+        DRAG_RADIUS: {
+          newModule: 'Blockly.config',
+          newExport: 'config.dragRadius',
+        },
+        FLYOUT_DRAG_RADIUS: {
+          newModule: 'Blockly.config',
+          newExport: 'config.flyoutDragRadius',
+        },
+        SNAP_RADIUS: {
+          newModule: 'Blockly.config',
+          newExport: 'config.snapRadius',
+        },
+        CONNECTING_SNAP_RADIUS: {
+          newModule: 'Blockly.config',
+          newExport: 'config.connectingSnapRadius',
+        },
+        CURRENT_CONNECTION_PREFERENCE: {
+          newModule: 'Blockly.config',
+          newExport: 'config.currentConnectionPreference',
+        },
+        BUMP_DELAY: {
+          newModule: 'Blockly.config',
+          newExport: 'config.bumpDelay',
+        },
+        SPRITE: {
+          newModule: 'Blockly.constants',
         },
       },
-    }
-  ],
-
-  '7.20211209.0-beta.0': [
-    {
-      oldName: 'Blockly',
-      exports: {
-        // Clipboard.  See PR #5237.
-        clipboardXml_: {newModule: 'Blockly.clipboard', newExport: 'xml'},
-        clipboardSource_: {newModule: 'Blockly.clipboard', newExport: 'source'},
-        clipboardTypeCounts_: {
-          newModule: 'Blockly.clipboard',
-          newExport: 'typeCounts',
-        },
-        copy: {newModule: 'Blockly.clipboard'},
-        paste: {newModule: 'Blockly.clipboard'},
-        duplicate: {newModule: 'Blockly.clipboard'},
-
-        // mainWorkspace.  See PR #5244.
-        mainWorkspace: {
-          newModule: 'Blockly.common',
-          getMethod: 'getMainWorkspace',
-          setMethod: 'setMainWorkspace',
-        },
-        getMainWorkspace: {newModule: 'Blockly.common'},
-
-        // parentContainer, draggingConnections.  See PR #5262.
-        parentContainer: {
-          newModule: 'Blockly.common',
-          getMethod: 'getParentContainer',
-          setMethod: 'setParentContainer',
-        },
-        setParentContainer: {newModule: 'Blockly.common'},
-        draggingConnections: {newModule: 'Blockly.common'},
-
-        // Dialogs.  See PR #5457.
-        alert: {
-          newModule: 'Blockly.dialog',
-          newExport: 'alert',
-          setMethod: 'setAlert',
-        },
-        confirm: {
-          newModule: 'Blockly.dialog',
-          newExport: 'confirm',
-          setMethod: 'setConfirm',
-        },
-        prompt: {
-          newModule: 'Blockly.dialog',
-          newExport: 'prompt',
-          setMethod: 'setPrompt',
-        },
-        // hueToHex.  See PR #5462.
-        hueToHex: {newModule: 'Blockly.utils.colour'},
-        // Blockly.hideChaff() became
-        // Blockly.common.getMainWorkspace().hideChaff().  See PR #5460.
-
-        // selected.  See PR #5489.
-        selected: {
-          newModule: 'Blockly.common',
-          getMethod: 'getSelected',
-          setMethod: 'setSelected',
-        },
-      }
     },
     {
-      oldName: 'Blockly.Blocks',
-      newName: 'Blockly.blocks',
-      newExport: 'Blocks',        // Previous default export now named.
-      newPath: 'Blockly.Blocks',  // But still on tree with original name.
+      oldName: 'Blockly.blocks.all',
+      newName: 'Blockly.libraryBlocks',
     },
     {
-      oldName: 'Blockly.ContextMenu',
-      exports: {
-        currentBlock: {getMethod: 'getCurrentBlock', setMethod: 'setCurrentBlock'},
-      },
+      oldName: 'Blockly.blocks.colour',
+      newName: 'Blockly.libraryBlocks.colour',
     },
     {
-      oldName: 'Blockly.Events',
-      exports: {
-        recordUndo: {getMethod: 'getRecordUndo', setMethod: 'setRecordUndo'},
-      },
+      oldName: 'Blockly.blocks.lists',
+      newName: 'Blockly.libraryBlocks.lists',
     },
     {
-      oldName: 'Blockly.Tooltip',
-      exports: {
-        DIV: {getMethod: 'getDiv', setMethod: 'setDiv'},
-        visible: {getMethod: 'isVisible'},
-      },
+      oldName: 'Blockly.blocks.logic',
+      newName: 'Blockly.libraryBlocks.logic',
     },
     {
-      oldName: 'Blockly.WidgetDiv',
-      exports: {
-        DIV: {getMethod: 'getDiv'},
-      },
+      oldName: 'Blockly.blocks.loops',
+      newName: 'Blockly.libraryBlocks.loops',
     },
     {
-      oldName: 'Blockly.connectionTypes',
-      newName: 'Blockly.ConnectionType',
-      newExport: 'ConnectionType',        // Previous default export now named.
-      newPath: 'Blockly.ConnectionType',  // Type reexported directly.
+      oldName: 'Blockly.blocks.math',
+      newName: 'Blockly.libraryBlocks.math',
     },
     {
-      oldName: 'Blockly.utils',
-      exports: {
-        genUid: {newModule: 'Blockly.utils.idGenerator'},
-        getScrollDelta: {newModule: 'Blockly.utils.browserEvents'},
-        isTargetInput: {newModule: 'Blockly.utils.browserEvents'},
-        isRightButton: {newModule: 'Blockly.utils.browserEvents'},
-        mouseToSvg: {newModule: 'Blockly.utils.browserEvents'},
-      },
+      oldName: 'Blockly.blocks.procedures',
+      newName: 'Blockly.libraryBlocks.procedures',
     },
     {
-      oldName: 'Blockly.utils.global',
-      newExport: 'globalThis',          // Previous default export now named.
-      newPath: 'Blockly.utils.global',  // But still exported under original name.
+      oldName: 'Blockly.blocks.text',
+      newName: 'Blockly.libraryBlocks.text',
     },
     {
-      oldName: 'Blockly.utils.IdGenerator',
-      newName: 'Blockly.utils.idGenerator',
+      oldName: 'Blockly.blocks.variables',
+      newName: 'Blockly.libraryBlocks.variables',
     },
     {
-      oldName: 'Blockly.utils.xml',
-      exports: {
-        // document was a function before, too - not a static property
-        // or get accessor.
-        document: {newExport: 'getDocument'},
-      },
+      oldName: 'Blockly.blocks.variablesDynamic',
+      newName: 'Blockly.libraryBlocks.variablesDynamic',
     },
-  ],
+  ]
 
   '7.20211209.0': [
     {
@@ -1235,78 +1167,146 @@
     },
   ],
 
-  'develop': [
+  '7.20211209.0-beta.0': [
     {
       oldName: 'Blockly',
       exports: {
-        DRAG_RADIUS: {
-          newModule: 'Blockly.config',
-          newExport: 'config.dragRadius',
+        // Clipboard.  See PR #5237.
+        clipboardXml_: {newModule: 'Blockly.clipboard', newExport: 'xml'},
+        clipboardSource_: {newModule: 'Blockly.clipboard', newExport: 'source'},
+        clipboardTypeCounts_: {
+          newModule: 'Blockly.clipboard',
+          newExport: 'typeCounts',
         },
-        FLYOUT_DRAG_RADIUS: {
-          newModule: 'Blockly.config',
-          newExport: 'config.flyoutDragRadius',
+        copy: {newModule: 'Blockly.clipboard'},
+        paste: {newModule: 'Blockly.clipboard'},
+        duplicate: {newModule: 'Blockly.clipboard'},
+
+        // mainWorkspace.  See PR #5244.
+        mainWorkspace: {
+          newModule: 'Blockly.common',
+          getMethod: 'getMainWorkspace',
+          setMethod: 'setMainWorkspace',
         },
-        SNAP_RADIUS: {
-          newModule: 'Blockly.config',
-          newExport: 'config.snapRadius',
+        getMainWorkspace: {newModule: 'Blockly.common'},
+
+        // parentContainer, draggingConnections.  See PR #5262.
+        parentContainer: {
+          newModule: 'Blockly.common',
+          getMethod: 'getParentContainer',
+          setMethod: 'setParentContainer',
         },
-        CONNECTING_SNAP_RADIUS: {
-          newModule: 'Blockly.config',
-          newExport: 'config.connectingSnapRadius',
+        setParentContainer: {newModule: 'Blockly.common'},
+        draggingConnections: {newModule: 'Blockly.common'},
+
+        // Dialogs.  See PR #5457.
+        alert: {
+          newModule: 'Blockly.dialog',
+          newExport: 'alert',
+          setMethod: 'setAlert',
         },
-        CURRENT_CONNECTION_PREFERENCE: {
-          newModule: 'Blockly.config',
-          newExport: 'config.currentConnectionPreference',
+        confirm: {
+          newModule: 'Blockly.dialog',
+          newExport: 'confirm',
+          setMethod: 'setConfirm',
         },
-        BUMP_DELAY: {
-          newModule: 'Blockly.config',
-          newExport: 'config.bumpDelay',
+        prompt: {
+          newModule: 'Blockly.dialog',
+          newExport: 'prompt',
+          setMethod: 'setPrompt',
         },
-        SPRITE: {
-          newModule: 'Blockly.constants',
+        // hueToHex.  See PR #5462.
+        hueToHex: {newModule: 'Blockly.utils.colour'},
+        // Blockly.hideChaff() became
+        // Blockly.common.getMainWorkspace().hideChaff().  See PR #5460.
+
+        // selected.  See PR #5489.
+        selected: {
+          newModule: 'Blockly.common',
+          getMethod: 'getSelected',
+          setMethod: 'setSelected',
         },
+      }
+    },
+    {
+      oldName: 'Blockly.Blocks',
+      newName: 'Blockly.blocks',
+      newExport: 'Blocks',        // Previous default export now named.
+      newPath: 'Blockly.Blocks',  // But still on tree with original name.
+    },
+    {
+      oldName: 'Blockly.ContextMenu',
+      exports: {
+        currentBlock: {getMethod: 'getCurrentBlock', setMethod: 'setCurrentBlock'},
       },
     },
     {
-      oldName: 'Blockly.blocks.all',
-      newName: 'Blockly.libraryBlocks',
+      oldName: 'Blockly.Events',
+      exports: {
+        recordUndo: {getMethod: 'getRecordUndo', setMethod: 'setRecordUndo'},
+      },
     },
     {
-      oldName: 'Blockly.blocks.colour',
-      newName: 'Blockly.libraryBlocks.colour',
+      oldName: 'Blockly.Tooltip',
+      exports: {
+        DIV: {getMethod: 'getDiv', setMethod: 'setDiv'},
+        visible: {getMethod: 'isVisible'},
+      },
     },
     {
-      oldName: 'Blockly.blocks.lists',
-      newName: 'Blockly.libraryBlocks.lists',
+      oldName: 'Blockly.WidgetDiv',
+      exports: {
+        DIV: {getMethod: 'getDiv'},
+      },
     },
     {
-      oldName: 'Blockly.blocks.logic',
-      newName: 'Blockly.libraryBlocks.logic',
+      oldName: 'Blockly.connectionTypes',
+      newName: 'Blockly.ConnectionType',
+      newExport: 'ConnectionType',        // Previous default export now named.
+      newPath: 'Blockly.ConnectionType',  // Type reexported directly.
     },
     {
-      oldName: 'Blockly.blocks.loops',
-      newName: 'Blockly.libraryBlocks.loops',
+      oldName: 'Blockly.utils',
+      exports: {
+        genUid: {newModule: 'Blockly.utils.idGenerator'},
+        getScrollDelta: {newModule: 'Blockly.utils.browserEvents'},
+        isTargetInput: {newModule: 'Blockly.utils.browserEvents'},
+        isRightButton: {newModule: 'Blockly.utils.browserEvents'},
+        mouseToSvg: {newModule: 'Blockly.utils.browserEvents'},
+      },
     },
     {
-      oldName: 'Blockly.blocks.math',
-      newName: 'Blockly.libraryBlocks.math',
+      oldName: 'Blockly.utils.global',
+      newExport: 'globalThis',          // Previous default export now named.
+      newPath: 'Blockly.utils.global',  // But still exported under original name.
     },
     {
-      oldName: 'Blockly.blocks.procedures',
-      newName: 'Blockly.libraryBlocks.procedures',
+      oldName: 'Blockly.utils.IdGenerator',
+      newName: 'Blockly.utils.idGenerator',
     },
     {
-      oldName: 'Blockly.blocks.text',
-      newName: 'Blockly.libraryBlocks.text',
+      oldName: 'Blockly.utils.xml',
+      exports: {
+        // document was a function before, too - not a static property
+        // or get accessor.
+        document: {newExport: 'getDocument'},
+      },
     },
+  ],
+
+  '5.20210325.0': [
     {
-      oldName: 'Blockly.blocks.variables',
-      newName: 'Blockly.libraryBlocks.variables',
-    },
-    {
-      oldName: 'Blockly.blocks.variablesDynamic',
-      newName: 'Blockly.libraryBlocks.variablesDynamic',
-    },
-  ]
+      oldName: 'Blockly',
+      exports: {
+        // bind/unbind events functions.  See PR #4642
+        EventData: {newModule: 'Blockly.eventHandling', newExport: 'Data'},
+        bindEvent_: {newModule: 'Blockly.browserEvents', newExport: 'bind'},
+        unbindEvent_: {newModule: 'Blockly.browserEvents', newExport: 'unbind'},
+        bindEventWithChecks_: {
+          newModule: 'Blockly.browserEvents',
+          newExport: 'conditionalBind',
+        },
+      },
+    }
+  ],
 }

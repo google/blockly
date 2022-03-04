@@ -210,34 +210,6 @@ exports.rename = rename;
  */
 const flyoutCategory = function(workspace) {
   const xmlList = [];
-  if (Blocks['procedures_defnoreturn']) {
-    // <block type="procedures_defnoreturn" gap="16">
-    //     <field name="NAME">do something</field>
-    // </block>
-    const block = utilsXml.createElement('block');
-    block.setAttribute('type', 'procedures_defnoreturn');
-    block.setAttribute('gap', 16);
-    const nameField = utilsXml.createElement('field');
-    nameField.setAttribute('name', 'NAME');
-    nameField.appendChild(
-        utilsXml.createTextNode(Msg['PROCEDURES_DEFNORETURN_PROCEDURE']));
-    block.appendChild(nameField);
-    xmlList.push(block);
-  }
-  if (Blocks['procedures_defreturn']) {
-    // <block type="procedures_defreturn" gap="16">
-    //     <field name="NAME">do something</field>
-    // </block>
-    const block = utilsXml.createElement('block');
-    block.setAttribute('type', 'procedures_defreturn');
-    block.setAttribute('gap', 16);
-    const nameField = utilsXml.createElement('field');
-    nameField.setAttribute('name', 'NAME');
-    nameField.appendChild(
-        utilsXml.createTextNode(Msg['PROCEDURES_DEFRETURN_PROCEDURE']));
-    block.appendChild(nameField);
-    xmlList.push(block);
-  }
   if (Blocks['procedures_ifreturn']) {
     // <block type="procedures_ifreturn" gap="16"></block>
     const block = utilsXml.createElement('block');

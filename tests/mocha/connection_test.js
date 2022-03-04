@@ -6,7 +6,8 @@
 
 goog.module('Blockly.test.connection');
 
-const {assertSingleDeprecationWarningCall, createDeprecationWarningStub, createGenUidStubWithReturns, defineRowBlock, defineStatementBlock, defineStackBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+const {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+const {defineRowBlock, defineStatementBlock, defineStackBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
 
 
 suite('Connection', function() {

@@ -6,7 +6,8 @@
 
 goog.module('Blockly.test.serialization');
 
-const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+const {TestCase, TestSuite, runTestCases, runTestSuites} = goog.require('Blockly.test.helpers.common');
+const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
 
 
 // TODO: Move this into samples as part of the dev-tools package.
@@ -23,7 +24,7 @@ function SerializerTestCase(title, xml) {
   this.title = title;
   this.xml = xml;
 }
-SerializerTestCase.prototype = new testHelpers.TestCase();
+SerializerTestCase.prototype = new TestCase();
 
 /**
  * The XML we want to ensure round-trips through the serializer.
@@ -39,7 +40,7 @@ SerializerTestCase.prototype.xml = '';
 function SerializerTestSuite(title) {
   this.title = title;
 }
-SerializerTestSuite.prototype = new testHelpers.TestSuite();
+SerializerTestSuite.prototype = new TestSuite();
 
 const Serializer = new SerializerTestSuite('Serializer');
 
@@ -166,6 +167,7 @@ Serializer.Attributes.testSuites = [
 ];
 
 Serializer.Fields = new SerializerTestSuite('Fields');
+Serializer.Fields.skip = true;
 
 Serializer.Fields.Angle = new SerializerTestSuite('Angle');
 Serializer.Fields.Angle.Simple = new SerializerTestCase('Simple',
@@ -1818,9 +1820,9 @@ const runSerializerTestSuite = (serializer, deserializer, testSuite) => {
       sharedTestTeardown.call(this);
     });
 
-    testHelpers.runTestSuites(
+    runTestSuites(
         testSuite.testSuites, createTestCaseFunction);
-    testHelpers.runTestCases(testSuite.testCases, createTestFunction);
+    runTestCases(testSuite.testCases, createTestFunction);
   });
 };
 

@@ -6,7 +6,8 @@
 
 goog.module('Blockly.test.fieldRegistry');
 
-const {createDeprecationWarningStub, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+const {createDeprecationWarningStub} = goog.require('Blockly.test.helpers.warnings');
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
 
 
 suite('Field Registry', function() {

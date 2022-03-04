@@ -13,7 +13,7 @@
 
 {
   // Example entry:
-  'version.that.includes.the.rename': [
+  '0.0.0': [ // Version that includes the rename.
     // Each entry in the array is a module.
     // All of the properties are optional.
     {
@@ -25,7 +25,7 @@
 
       // If a module had a default export and nowhas a named export, the name
       // of the named export can be given here.
-      newExport: 'new-name-for-default-export',
+      newExport: 'newNameForDefaultExport',
 
       // The old location of this module on the Blockly tree (the mega-object
       // that people access if they are importing all of Blockly). Usually this
@@ -49,7 +49,7 @@
           newModule: 'new.module.name',
 
           // The name that the export now has in this version.
-          newExport: 'new-export-name',
+          newExport: 'newExportName',
 
           // The old location of this module on the Blockly tree.
           oldPath: 'old.path.on.Blockly.tree',
@@ -63,11 +63,11 @@
 
           // If a named export has been changed to a private variable with a get
           // method, this is the name of the get method.
-          getMethod: 'get-method-name',
+          getMethod: 'getMethodName',
 
           // If a named export has been changed to a private variable with a set
           // method, this is the name of the set method.
-          setMethod: 'set-method-name'
+          setMethod: 'setMethodName'
         }
       }
     }
@@ -149,7 +149,7 @@
           setMethod: 'setSelected',
         },
       }
-    }
+    },
     {
       oldName: 'Blockly.Blocks',
       newName: 'Blockly.blocks',
@@ -242,7 +242,7 @@
         defineBlocksWithJsonArray: {newModule: 'Blockly.common'},
         isNumber: {newModule: 'Blockly.utils.string'},
       }
-    }
+    },
 
     {
       oldName: 'Blockly.Blocks.colour',
@@ -1233,7 +1233,7 @@
       newExport: 'ZoomControls',
       newPath: 'Blockly.ZoomControls',
     },
-  ]
+  ],
 
   'develop': [
     {

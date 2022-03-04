@@ -357,7 +357,7 @@ const showPositionedByRect = function(
  * will point there, and the container will be positioned below it.
  * If we can't maintain the container bounds at the primary point, fall-back to
  * the secondary point and position above.
- * @param {?Object} owner The object showing the drop-down
+ * @param {?Object} newOwner The object showing the drop-down
  * @param {boolean} rtl Right-to-left (true) or left-to-right (false).
  * @param {number} primaryX Desired origin point x, in absolute px.
  * @param {number} primaryY Desired origin point y, in absolute px.
@@ -371,8 +371,8 @@ const showPositionedByRect = function(
  * @package
  */
 const show = function(
-    owner, rtl, primaryX, primaryY, secondaryX, secondaryY, opt_onHide) {
-  owner = owner;
+    newOwner, rtl, primaryX, primaryY, secondaryX, secondaryY, opt_onHide) {
+  owner = newOwner;
   onHide = opt_onHide || null;
   // Set direction.
   div.style.direction = rtl ? 'rtl' : 'ltr';

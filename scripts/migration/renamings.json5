@@ -11,8 +11,6 @@
  * This file is in JSON5 format; see https://json5.org/.
  */
 
-/* eslint-disable */
-
 {
   // Example entry:
   'version.that.includes.the.rename': [
@@ -122,38 +120,7 @@
         },
         setParentContainer: {newModule: 'Blockly.common'},
         draggingConnections: {newModule: 'Blockly.common'},
-      }
-    }
-  ],
 
-  '7.20211209.0': [
-    {
-      oldName: 'Blockly',
-      exports: {
-        // Align.
-        ALIGN_LEFT: {
-          newModule: 'Blockly.Input',
-          newExport: 'Align.LEFT',
-          newPath: 'Blockly.ALIGN_LEFT',
-        },
-        ALIGN_CENTRE: {
-          newModule: 'Blockly.Input',
-          newExport: 'Align.CENTRE',
-          newPath: 'Blockly.ALIGN_CENTRE',
-        },
-        ALIGN_RIGHT: {
-          newModule: 'Blockly.Input',
-          newExport: 'Align.RIGHT',
-          newPath: 'Blockly.ALIGN_RIGHT',
-        },
-      }
-    }
-  ]
-
-  '6.20210701.0': [
-    {
-      oldName: 'Blockly',
-      exports: {
         // Dialogs.  See PR #5457.
         alert: {
           newModule: 'Blockly.dialog',
@@ -181,8 +148,8 @@
           getMethod: 'getSelected',
           setMethod: 'setSelected',
         },
-      },
-    },
+      }
+    }
     {
       oldName: 'Blockly.Blocks',
       newName: 'Blockly.blocks',
@@ -194,7 +161,6 @@
       exports: {
         currentBlock: {getMethod: 'getCurrentBlock', setMethod: 'setCurrentBlock'},
       },
-
     },
     {
       oldName: 'Blockly.Events',
@@ -250,7 +216,34 @@
     },
   ],
 
-  '7.20211209.0-beta.0': [
+  '7.20211209.0': [
+    {
+      oldName: 'Blockly',
+      exports: {
+        // Align.
+        ALIGN_LEFT: {
+          newModule: 'Blockly.Input',
+          newExport: 'Align.LEFT',
+          newPath: 'Blockly.ALIGN_LEFT',
+        },
+        ALIGN_CENTRE: {
+          newModule: 'Blockly.Input',
+          newExport: 'Align.CENTRE',
+          newPath: 'Blockly.ALIGN_CENTRE',
+        },
+        ALIGN_RIGHT: {
+          newModule: 'Blockly.Input',
+          newExport: 'Align.RIGHT',
+          newPath: 'Blockly.ALIGN_RIGHT',
+        },
+
+        svgSize: {newModule: 'Blockly.utils.svgMath'},
+        resizeSvgContents: {newModule: 'Blockly.WorkspaecSvg'},
+        defineBlocksWithJsonArray: {newModule: 'Blockly.common'},
+        isNumber: {newModule: 'Blockly.utils.string'},
+      }
+    }
+
     {
       oldName: 'Blockly.Blocks.colour',
       newName: 'Blockly.blocks.colour'
@@ -303,6 +296,8 @@
             {newModule: 'Blockly.Extensions', newExport: 'runAfterPageLoad'},
       },
     },
+
+    // Default exports to named exports.
     {
       oldName: 'Blockly.Events.Abstract',
       newExport: 'Abstract',
@@ -1238,18 +1233,9 @@
       newExport: 'ZoomControls',
       newPath: 'Blockly.ZoomControls',
     },
-    {
-      oldName: 'Blockly',
-      exports: {
-        svgSize: {newModule: 'Blockly.utils.svgMath'},
-        resizeSvgContents: {newModule: 'Blockly.WorkspaecSvg'},
-        defineBlocksWithJsonArray: {newModule: 'Blockly.common'},
-        isNumber: {newModule: 'Blockly.utils.string'},
-      },
-    } ,
-  ],
+  ]
 
-  '7.20211209.0': [
+  'develop': [
     {
       oldName: 'Blockly',
       exports: {
@@ -1322,5 +1308,5 @@
       oldName: 'Blockly.blocks.variablesDynamic',
       newName: 'Blockly.libraryBlocks.variablesDynamic',
     },
-  ],
+  ]
 }

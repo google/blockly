@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.declareModuleId('Blockly.test.helpers.common');
+goog.module('Blockly.test.helpers.common');
 
 /**
  * Test case configuration.
  * @record
  */
-export class TestCase {
+class TestCase {
   /**
    * Class for a test case configuration.
    */
@@ -31,6 +31,7 @@ export class TestCase {
     this.only;
   }
 }
+exports.TestCase = TestCase;
 
 /**
  * Test suite configuration.
@@ -38,7 +39,7 @@ export class TestCase {
  * @template {TestCase} T
  * @template {TestSuite} U
  */
-export class TestSuite {
+class TestSuite {
   /**
    * Class for a test suite configuration.
    */
@@ -67,6 +68,7 @@ export class TestSuite {
     this.only;
   }
 }
+exports.TestSuite = TestSuite;
 
 /**
  * Runs provided test cases.
@@ -75,13 +77,14 @@ export class TestSuite {
  * @param {function(T):Function} createTestCallback Creates test
  *    callback using given test case.
  */
-export function runTestCases(testCases, createTestCallback) {
+function runTestCases(testCases, createTestCallback) {
   testCases.forEach((testCase) => {
     let testCall = (testCase.skip ? test.skip : test);
     testCall = (testCase.only ? test.only : testCall);
     testCall(testCase.title, createTestCallback(testCase));
   });
 }
+exports.runTestCases = runTestCases;
 
 /**
  * Runs provided test suite.
@@ -92,7 +95,7 @@ export function runTestCases(testCases, createTestCallback) {
  *    } createTestCaseCallback Creates test case callback using given test
  *    suite.
  */
-export function runTestSuites(testSuites, createTestCaseCallback) {
+function runTestSuites(testSuites, createTestCaseCallback) {
   testSuites.forEach((testSuite) => {
     let suiteCall = (testSuite.skip ? suite.skip : suite);
     suiteCall = (testSuite.only ? suite.only : suiteCall);
@@ -106,3 +109,4 @@ export function runTestSuites(testSuites, createTestCaseCallback) {
     });
   });
 }
+exports.runTestSuites = runTestSuites;

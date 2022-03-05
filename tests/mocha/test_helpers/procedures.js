@@ -3,7 +3,7 @@
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
-goog.declareModuleId('Blockly.test.helpers.procedures');
+goog.module('Blockly.test.helpers.procedures');
 
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
 
@@ -55,7 +55,7 @@ function assertCallBlockArgsStructure(callBlock, args) {
  * @param {boolean=} hasStatements If we expect the procedure def to have a
  *     statement input or not.
  */
-export function assertDefBlockStructure(defBlock, hasReturn = false,
+function assertDefBlockStructure(defBlock, hasReturn = false,
     args = [], varIds = [], hasStatements = true) {
   if (hasStatements) {
     chai.assert.isNotNull(defBlock.getInput('STACK'),
@@ -82,6 +82,7 @@ export function assertDefBlockStructure(defBlock, hasReturn = false,
   chai.assert.sameOrderedMembers(defBlock.getVars(), args);
   assertBlockVarModels(defBlock, varIds);
 }
+exports.assertDefBlockStructure = assertDefBlockStructure;
 
 /**
  * Asserts that the procedure definition block has the expected inputs and
@@ -90,7 +91,7 @@ export function assertDefBlockStructure(defBlock, hasReturn = false,
  * @param {Array<string>=} args An array of argument names.
  * @param {Array<string>=} varIds An array of variable ids.
  */
-export function assertCallBlockStructure(callBlock, args = [], varIds = []) {
+function assertCallBlockStructure(callBlock, args = [], varIds = []) {
   if (args.length) {
     chai.assert.include(callBlock.toString(), 'with');
   } else {
@@ -100,6 +101,7 @@ export function assertCallBlockStructure(callBlock, args = [], varIds = []) {
   assertCallBlockArgsStructure(callBlock, args);
   assertBlockVarModels(callBlock, varIds);
 }
+exports.assertCallBlockStructure = assertCallBlockStructure;
 
 /**
  * Creates procedure definition block using domToBlock call.
@@ -109,7 +111,7 @@ export function assertCallBlockStructure(callBlock, args = [], varIds = []) {
  * @param {Array<string>=} args An array of argument names.
  * @return {Blockly.Block} The created block.
  */
-export function createProcDefBlock(
+function createProcDefBlock(
     workspace, hasReturn = false, args = []) {
   const type = hasReturn ?
       'procedures_defreturn' : 'procedures_defnoreturn';
@@ -123,6 +125,7 @@ export function createProcDefBlock(
       '</block>';
   return Blockly.Xml.domToBlock(Blockly.Xml.textToDom(xml), workspace);
 }
+exports.createProcDefBlock = createProcDefBlock;
 
 /**
  * Creates procedure call block using domToBlock call.
@@ -131,7 +134,7 @@ export function createProcDefBlock(
  *    has return.
  * @return {Blockly.Block} The created block.
  */
-export function createProcCallBlock(
+function createProcCallBlock(
     workspace, hasReturn = false) {
   const type = hasReturn ?
       'procedures_callreturn' : 'procedures_callnoreturn';
@@ -141,3 +144,4 @@ export function createProcCallBlock(
       '</block>'
   ), workspace);
 }
+exports.createProcCallBlock = createProcCallBlock;

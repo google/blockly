@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.declareModuleId('Blockly.test.helpers.setupTeardown');
+goog.module('Blockly.test.helpers.setupTeardown');
 
 const eventUtils = goog.require('Blockly.Events.utils');
 const {Blocks} = goog.require('Blockly.blocks');
@@ -16,7 +16,7 @@ const {Blocks} = goog.require('Blockly.blocks');
  * using workspaceTeardown.call(this).
  * @param {!Blockly.Workspace} workspace The workspace to dispose.
  */
-export function workspaceTeardown(workspace) {
+function workspaceTeardown(workspace) {
   try {
     this.clock.runAll();  // Run all queued setTimeout calls.
     workspace.dispose();
@@ -26,6 +26,7 @@ export function workspaceTeardown(workspace) {
     console.error(testRef.fullTitle() + '\n', e);
   }
 }
+exports.workspaceTeardown = workspaceTeardown;
 
 /**
  * Creates stub for Blockly.Events.fire that advances the clock forward after
@@ -52,9 +53,10 @@ function createEventsFireStubFireImmediately_(clock) {
  *    sharedTestSetup.
  * @param {string} message The message to add to shared cleanup object.
  */
-export function addMessageToCleanup(sharedCleanupObj, message) {
+function addMessageToCleanup(sharedCleanupObj, message) {
   sharedCleanupObj.messagesCleanup_.push(message);
 }
+exports.addMessageToCleanup = addMessageToCleanup;
 
 /**
  * Adds block type to shared cleanup object so that it is cleaned from
@@ -63,9 +65,10 @@ export function addMessageToCleanup(sharedCleanupObj, message) {
  *    sharedTestSetup.
  * @param {string} blockType The block type to add to shared cleanup object.
  */
-export function addBlockTypeToCleanup(sharedCleanupObj, blockType) {
+function addBlockTypeToCleanup(sharedCleanupObj, blockType) {
   sharedCleanupObj.blockTypesCleanup_.push(blockType);
 }
+exports.addBlockTypeToCleanup = addBlockTypeToCleanup;
 
 /**
  * Wraps Blockly.defineBlocksWithJsonArray using stub in order to keep track of
@@ -108,7 +111,7 @@ function wrapDefineBlocksWithJsonArrayWithCleanup_(sharedCleanupObj) {
  * @param {Object<string, boolean>} options Options to enable/disable setup
  *    of certain stubs.
  */
-export function sharedTestSetup(options = {}) {
+function sharedTestSetup(options = {}) {
   this.sharedSetupCalled_ = true;
   // Sandbox created for greater control when certain stubs are cleared.
   this.sharedSetupSandbox_ = sinon.createSandbox();
@@ -125,13 +128,14 @@ export function sharedTestSetup(options = {}) {
   this.messagesCleanup_ = this.sharedCleanup.messagesCleanup_;
   wrapDefineBlocksWithJsonArrayWithCleanup_(this.sharedCleanup);
 }
+exports.sharedTestSetup = sharedTestSetup;
 
 /**
  * Shared cleanup method that clears up pending setTimeout calls, disposes of
  * workspace, and resets global variables. Should be called in setup of
  * outermost suite using sharedTestTeardown.call(this).
  */
-export function sharedTestTeardown() {
+function sharedTestTeardown() {
   const testRef = this.currentTest || this.test;
   if (!this.sharedSetupCalled_) {
     console.error('"' + testRef.fullTitle() + '" did not call sharedTestSetup');
@@ -179,6 +183,7 @@ export function sharedTestTeardown() {
     Blockly.WidgetDiv.testOnly_setDiv(null);
   }
 }
+exports.sharedTestTeardown = sharedTestTeardown;
 
 /**
  * Creates stub for Blockly.utils.genUid that returns the provided id or ids.
@@ -189,7 +194,7 @@ export function sharedTestTeardown() {
  *    that value.
  * @return {!SinonStub} The created stub.
  */
-export function createGenUidStubWithReturns(returnIds) {
+function createGenUidStubWithReturns(returnIds) {
   const stub = sinon.stub(Blockly.utils.idGenerator.TEST_ONLY, "genUid");
   if (Array.isArray(returnIds)) {
     for (let i = 0; i < returnIds.length; i++) {
@@ -200,3 +205,4 @@ export function createGenUidStubWithReturns(returnIds) {
   }
   return stub;
 }
+exports.createGenUidStubWithReturns = createGenUidStubWithReturns;

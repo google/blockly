@@ -235,10 +235,10 @@ Blockly.Msg.LEAPHY_BUZZ_MS = 'ms';
 /// Print print
 Blockly.Msg.LEAPHY_SERIAL_PRINT = 'Show on screen';
 /** @type {string} */
-/// Print display
+/// Clear display
 Blockly.Msg.LEAPHY_DISPLAY_CLEAR = 'Clear display';
 /** @type {string} */
-/// Print display
+/// Set display
 Blockly.Msg.LEAPHY_DISPLAY_PRINT = 'Display - Set ln.';
 /** @type {string} */
 /// Print display

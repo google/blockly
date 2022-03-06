@@ -236,7 +236,13 @@ Blockly.Msg.LEAPHY_BUZZ_MS = 'ms';
 Blockly.Msg.LEAPHY_SERIAL_PRINT = 'Show on screen';
 /** @type {string} */
 /// Print display
-Blockly.Msg.LEAPHY_DISPLAY_PRINT = 'Show on display';
+Blockly.Msg.LEAPHY_DISPLAY_CLEAR = 'Clear display';
+/** @type {string} */
+/// Print display
+Blockly.Msg.LEAPHY_DISPLAY_PRINT = 'Display - Set ln.';
+/** @type {string} */
+/// Print display
+Blockly.Msg.LEAPHY_DISPLAY_DISPLAY = 'Show on display';
 
 /** @type {string} */
 /// Sitation Category Title

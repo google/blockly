@@ -37,60 +37,60 @@ var colorTypes = [["%{BKY_LEAPHY_RGB_COLOR_RED}", "0"], ["%{BKY_LEAPHY_RGB_COLOR
 var colorTypesRaw = [["%{BKY_LEAPHY_RGB_RAW_COLOR_RED}", "0"], ["%{BKY_LEAPHY_RGB_RAW_COLOR_GREEN}", "1"], ["%{BKY_LEAPHY_RGB_RAW_COLOR_BLUE}", "2"]];
 
 Blockly.Blocks["leaphy_rgb_color"] = {
-  init: function(){
+  init: function () {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldDropdown(colorTypes), "COLOR_TYPE");
+      .appendField(new Blockly.FieldDropdown(colorTypes), "COLOR_TYPE");
     this.setOutput(true, 'Number');
     this.setStyle('leaphy_blocks');
   }
 };
 
 Blockly.Blocks["leaphy_rgb_color_raw"] = {
-  init: function(){
+  init: function () {
     this.appendDummyInput()
-        .appendField(new Blockly.FieldDropdown(colorTypesRaw), "COLOR_TYPE_RAW");
+      .appendField(new Blockly.FieldDropdown(colorTypesRaw), "COLOR_TYPE_RAW");
     this.setOutput(true, 'Number');
     this.setStyle('leaphy_blocks');
   }
 };
 
 Blockly.Blocks["leaphy_rgb_raw_color_red"] = {
-  init: function(){
+  init: function () {
     this.appendDummyInput()
-        .appendField(Blockly.Msg.LEAPHY_RGB_RAW_COLOR_RED);
+      .appendField(Blockly.Msg.LEAPHY_RGB_RAW_COLOR_RED);
     this.setOutput(true, 'Number');
     this.setStyle('leaphy_blocks');
   }
 };
 
 Blockly.Blocks["leaphy_rgb_raw_color_green"] = {
-  init: function(){
+  init: function () {
     this.appendDummyInput()
-        .appendField(Blockly.Msg.LEAPHY_RGB_RAW_COLOR_GREEN);
+      .appendField(Blockly.Msg.LEAPHY_RGB_RAW_COLOR_GREEN);
     this.setOutput(true, 'Number');
     this.setStyle('leaphy_blocks');
   }
 };
 
 Blockly.Blocks["leaphy_rgb_raw_color_blue"] = {
-  init: function(){
+  init: function () {
     this.appendDummyInput()
-        .appendField(Blockly.Msg.LEAPHY_RGB_RAW_COLOR_BLUE);
+      .appendField(Blockly.Msg.LEAPHY_RGB_RAW_COLOR_BLUE);
     this.setOutput(true, 'Number');
     this.setStyle('leaphy_blocks');
   }
 };
 
 Blockly.Blocks["leaphy_led_set_strip"] = {
-  init: function(){
+  init: function () {
     this.appendDummyInput()
-        .appendField(Blockly.Msg.LEAPHY_LED_SET_STRIP);
+      .appendField(Blockly.Msg.LEAPHY_LED_SET_STRIP);
     this.appendValueInput("LED_SET_PIN", 'Number')
-        .appendField(Blockly.Msg.LEAPHY_LED_SET_PIN)
-        .setCheck('Number');
+      .appendField(Blockly.Msg.LEAPHY_LED_SET_PIN)
+      .setCheck('Number');
     this.appendValueInput("LED_SET_LEDS", 'Number')
-        .appendField(Blockly.Msg.LEAPHY_LED_SET_LEDS)
-        .setCheck('Number');
+      .appendField(Blockly.Msg.LEAPHY_LED_SET_LEDS)
+      .setCheck('Number');
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -99,21 +99,21 @@ Blockly.Blocks["leaphy_led_set_strip"] = {
 };
 
 Blockly.Blocks["leaphy_led_set_basic"] = {
-  init: function(){
+  init: function () {
     this.appendDummyInput()
-        .appendField(Blockly.Msg.LEAPHY_LED_SET_BASIC);
+      .appendField(Blockly.Msg.LEAPHY_LED_SET_BASIC);
     this.appendValueInput("LED_SET_LED", 'Number')
-        .appendField(Blockly.Msg.LEAPHY_LED_BASIC_LED)
-        .setCheck('Number');
+      .appendField(Blockly.Msg.LEAPHY_LED_BASIC_LED)
+      .setCheck('Number');
     this.appendValueInput("LED_BASIC_RED", 'Number')
-        .appendField(Blockly.Msg.LEAPHY_LED_BASIC_RED)
-        .setCheck('Number');
+      .appendField(Blockly.Msg.LEAPHY_LED_BASIC_RED)
+      .setCheck('Number');
     this.appendValueInput("LED_BASIC_GREEN", 'Number')
-        .appendField(Blockly.Msg.LEAPHY_LED_BASIC_GREEN)
-        .setCheck('Number');
+      .appendField(Blockly.Msg.LEAPHY_LED_BASIC_GREEN)
+      .setCheck('Number');
     this.appendValueInput("LED_BASIC_BLUE", 'Number')
-        .appendField(Blockly.Msg.LEAPHY_LED_BASIC_BLUE)
-        .setCheck('Number');
+      .appendField(Blockly.Msg.LEAPHY_LED_BASIC_BLUE)
+      .setCheck('Number');
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -122,12 +122,12 @@ Blockly.Blocks["leaphy_led_set_basic"] = {
 };
 
 Blockly.Blocks["leaphy_led_set_speed"] = {
-  init: function(){
+  init: function () {
     this.appendDummyInput()
-        .appendField(Blockly.Msg.LEAPHY_LED_SET_SPEED);
+      .appendField(Blockly.Msg.LEAPHY_LED_SET_SPEED);
     this.appendValueInput("LED_SET_SPEEDVALUE", 'Number')
-        .appendField(Blockly.Msg.LEAPHY_LED_SET_SPEEDVALUE)
-        .setCheck('Number');
+      .appendField(Blockly.Msg.LEAPHY_LED_SET_SPEEDVALUE)
+      .setCheck('Number');
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -136,19 +136,19 @@ Blockly.Blocks["leaphy_led_set_speed"] = {
 };
 
 Blockly.Blocks["leaphy_led_strip_demo"] = {
-  init: function(){
+  init: function () {
     this.appendDummyInput()
-        .appendField(Blockly.Msg.LEAPHY_LED_STRIP_DEMO)
-        .appendField(new Blockly.FieldDropdown(ledstripDemoOptions), "DEMO_TYPE");
+      .appendField(Blockly.Msg.LEAPHY_LED_STRIP_DEMO)
+      .appendField(new Blockly.FieldDropdown(ledstripDemoOptions), "DEMO_TYPE");
     this.appendValueInput("LED_STRIP_DEMO_RED", 'Number')
-        .appendField(Blockly.Msg.LEAPHY_LED_STRIP_DEMO_RED)
-        .setCheck('Number');
+      .appendField(Blockly.Msg.LEAPHY_LED_STRIP_DEMO_RED)
+      .setCheck('Number');
     this.appendValueInput("LED_STRIP_DEMO_GREEN", 'Number')
-        .appendField(Blockly.Msg.LEAPHY_LED_STRIP_DEMO_GREEN)
-        .setCheck('Number');
+      .appendField(Blockly.Msg.LEAPHY_LED_STRIP_DEMO_GREEN)
+      .setCheck('Number');
     this.appendValueInput("LED_STRIP_DEMO_BLUE", 'Number')
-        .appendField(Blockly.Msg.LEAPHY_LED_STRIP_DEMO_BLUE)
-        .setCheck('Number');
+      .appendField(Blockly.Msg.LEAPHY_LED_STRIP_DEMO_BLUE)
+      .setCheck('Number');
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -161,18 +161,18 @@ Blockly.Blocks['leaphy_servo_write'] = {
      * Block for writing an angle value into a servo pin.
      * @this Blockly.Block
      */
-  init: function() {
+  init: function () {
     this.setHelpUrl('http://arduino.cc/en/Reference/ServoWrite');
     this.setColour(Blockly.Blocks.servo.HUE);
     this.appendDummyInput()
-        .appendField(Blockly.Msg.ARD_SERVO_WRITE)
-        .appendField(new Blockly.FieldDropdown(digitalPinOptions), 'SERVO_PIN');
+      .appendField(Blockly.Msg.ARD_SERVO_WRITE)
+      .appendField(new Blockly.FieldDropdown(digitalPinOptions), 'SERVO_PIN');
     this.setInputsInline(false);
     this.appendValueInput('SERVO_ANGLE')
-        .setCheck(Blockly.Types.NUMBER.checkList)
-        .appendField(Blockly.Msg.ARD_SERVO_WRITE_TO);
+      .setCheck(Blockly.Types.NUMBER.checkList)
+      .appendField(Blockly.Msg.ARD_SERVO_WRITE_TO);
     this.appendDummyInput()
-        .appendField(Blockly.Msg.ARD_SERVO_WRITE_DEG_180);
+      .appendField(Blockly.Msg.ARD_SERVO_WRITE_DEG_180);
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -183,39 +183,39 @@ Blockly.Blocks['leaphy_servo_write'] = {
      * Updates the content of the the pin related fields.
      * @this Blockly.Block
      */
-  updateFields: function() {
+  updateFields: function () {
     Blockly.Arduino.Boards.refreshBlockFieldDropdown(
-        this, 'SERVO_PIN', 'digitalPins');
+      this, 'SERVO_PIN', 'digitalPins');
   }
 };
-  
+
 Blockly.Blocks['leaphy_servo_read'] = {
   /**
      * Block for reading an angle value of a servo pin.
      * @this Blockly.Block
      */
-  init: function() {
+  init: function () {
     this.setHelpUrl('http://arduino.cc/en/Reference/ServoRead');
     this.setColour(Blockly.Blocks.servo.HUE);
     this.appendDummyInput()
-        .appendField(Blockly.Msg.ARD_SERVO_READ)
-        .appendField(new Blockly.FieldDropdown(
-            Blockly.Arduino.Boards.selected.digitalPins), 'SERVO_PIN');
+      .appendField(Blockly.Msg.ARD_SERVO_READ)
+      .appendField(new Blockly.FieldDropdown(
+        Blockly.Arduino.Boards.selected.digitalPins), 'SERVO_PIN');
     this.setOutput(true, Blockly.Types.NUMBER.output);
     this.setTooltip(Blockly.Msg.ARD_SERVO_READ_TIP);
     this.setStyle('leaphy_blocks');
   },
   /** @return {string} The type of     return value for the block, an integer. */
-  getBlockType: function() {
+  getBlockType: function () {
     return Blockly.Types.NUMBER;
   },
   /**
      * Updates the content of the the pin related fields.
      * @this Blockly.Block
      */
-  updateFields: function() {
+  updateFields: function () {
     Blockly.Arduino.Boards.refreshBlockFieldDropdown(
-        this, 'SERVO_PIN', 'digitalPins');
+      this, 'SERVO_PIN', 'digitalPins');
   }
 };
 
@@ -224,14 +224,14 @@ Blockly.Blocks['leaphy_io_digitalwrite'] = {
      * Block for creating a 'set pin' to a state.
      * @this Blockly.Block
      */
-  init: function() {
+  init: function () {
     this.setHelpUrl('http://arduino.cc/en/Reference/DigitalWrite');
     this.setColour(Blockly.Blocks.io.HUE);
     this.appendValueInput('STATE')
-        .appendField(Blockly.Msg.ARD_DIGITALWRITE)
-        .appendField(new Blockly.FieldDropdown(digitalPinOptions), 'PIN')
-        .appendField(Blockly.Msg.ARD_WRITE_TO)
-        .setCheck(Blockly.Types.BOOLEAN.checkList);
+      .appendField(Blockly.Msg.ARD_DIGITALWRITE)
+      .appendField(new Blockly.FieldDropdown(digitalPinOptions), 'PIN')
+      .appendField(Blockly.Msg.ARD_WRITE_TO)
+      .setCheck(Blockly.Types.BOOLEAN.checkList);
     this.setInputsInline(false);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -242,9 +242,9 @@ Blockly.Blocks['leaphy_io_digitalwrite'] = {
      * Updates the content of the the pin related fields.
      * @this Blockly.Block
      */
-  updateFields: function() {
+  updateFields: function () {
     Blockly.Arduino.Boards.refreshBlockFieldDropdown(
-        this, 'PIN', 'digitalPins');
+      this, 'PIN', 'digitalPins');
   }
 };
 
@@ -253,15 +253,15 @@ Blockly.Blocks['leaphy_io_analogwrite'] = {
      * Block for creating a 'set pin' to an analogue value.
      * @this Blockly.Block
      */
-  init: function() {
+  init: function () {
     this.setHelpUrl('http://arduino.cc/en/Reference/AnalogWrite');
     this.setColour(Blockly.Blocks.io.HUE);
     this.appendValueInput('NUM')
-        .appendField(Blockly.Msg.ARD_ANALOGWRITE)
-        .appendField(new Blockly.FieldDropdown(
-            Blockly.Arduino.Boards.selected.pwmPins), 'PIN')
-        .appendField(Blockly.Msg.ARD_WRITE_TO)
-        .setCheck(Blockly.Types.NUMBER.output);
+      .appendField(Blockly.Msg.ARD_ANALOGWRITE)
+      .appendField(new Blockly.FieldDropdown(
+        Blockly.Arduino.Boards.selected.pwmPins), 'PIN')
+      .appendField(Blockly.Msg.ARD_WRITE_TO)
+      .setCheck(Blockly.Types.NUMBER.output);
     this.setInputsInline(false);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -272,11 +272,11 @@ Blockly.Blocks['leaphy_io_analogwrite'] = {
    * Updates the content of the the pin related fields.
    * @this Blockly.Block
    */
-  updateFields: function() {
+  updateFields: function () {
     Blockly.Arduino.Boards.refreshBlockFieldDropdown(this, 'PIN', 'pwmPins');
   },
   /** @return {!string} The type of input value for the block, an integer. */
-  getBlockType: function() {
+  getBlockType: function () {
     return Blockly.Types.NUMBER;
   },
 };
@@ -286,44 +286,77 @@ Blockly.Blocks['leaphy_sonar_read'] = {
      * Block for reading sonar value.
      * @this Blockly.Block
      */
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField(Blockly.Msg.LEAPHY_SONAR_READ_TRIG)
-        .appendField(new Blockly.FieldDropdown(digitalPinOptions), 'TRIG_PIN')
-        .appendField(Blockly.Msg.LEAPHY_SONAR_READ_ECHO)
-        .appendField(new Blockly.FieldDropdown(digitalPinOptions), 'ECHO_PIN');
+      .appendField(Blockly.Msg.LEAPHY_SONAR_READ_TRIG)
+      .appendField(new Blockly.FieldDropdown(digitalPinOptions), 'TRIG_PIN')
+      .appendField(Blockly.Msg.LEAPHY_SONAR_READ_ECHO)
+      .appendField(new Blockly.FieldDropdown(digitalPinOptions), 'ECHO_PIN');
     this.setOutput(true, Blockly.Types.NUMBER.output);
     this.setTooltip(Blockly.Msg.LEAPHY_SONAR_READ_TIP);
     this.setStyle('leaphy_blocks');
   },
   /** @return {string} The type of return value for the block, an integer. */
-  getBlockType: function() {
+  getBlockType: function () {
     return Blockly.Types.NUMBER;
   },
   /**
      * Updates the content of the the pin related fields.
      * @this Blockly.Block
      */
-  updateFields: function() {
+  updateFields: function () {
     Blockly.Arduino.Boards.refreshBlockFieldDropdown(
-        this, 'TRIG_PIN', 'digitalPins');
+      this, 'TRIG_PIN', 'digitalPins');
   }
 };
+
+Blockly.Blocks["leaphy_display_clear"] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.LEAPHY_DISPLAY_CLEAR);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setStyle('leaphy_blocks');
+  }
+};
+
+Blockly.Blocks["leaphy_display_display"] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.LEAPHY_DISPLAY_DISPLAY);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setStyle('leaphy_blocks');
+  }
+};
+
+var displayRowOptions = [["1", "0"], ["2", "1"], ["3", "2"]];
 
 Blockly.Blocks['leaphy_display_print_line'] = {
   /**
      * Block for printing line to OLED display
      * @this Blockly.Block
      */
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField(Blockly.Msg.LEAPHY_DISPLAY_PRINT);
+      .appendField(Blockly.Msg.LEAPHY_DISPLAY_PRINT);
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.LEAPHY_DISPLAY_ROW)
+      .appendField(new Blockly.FieldDropdown(displayRowOptions), 'DISPLAY_ROW');
     this.appendValueInput('VALUE');
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setStyle('leaphy_blocks');
   },
+  /**
+     * Updates the content of the the row related fields.
+     * @this Blockly.Block
+     */
+   updateFields: function () {
+    Blockly.Arduino.Boards.refreshBlockFieldDropdown(
+      this, 'DISPLAY_ROW', 'displayRows');
+  }
 };
 
 Blockly.Blocks['leaphy_display_print_value'] = {
@@ -331,17 +364,27 @@ Blockly.Blocks['leaphy_display_print_value'] = {
      * Block for printing value to OLED display
      * @this Blockly.Block
      */
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField(Blockly.Msg.LEAPHY_DISPLAY_PRINT);
+      .appendField(Blockly.Msg.LEAPHY_DISPLAY_PRINT);
+    this.appendDummyInput()
+      .appendField(Blockly.Msg.LEAPHY_DISPLAY_ROW)
+      .appendField(new Blockly.FieldDropdown(displayRowOptions), 'DISPLAY_ROW');
     this.appendValueInput('NAME');
     this.appendDummyInput()
-        .appendField("=");
+      .appendField("=");
     this.appendValueInput('VALUE');
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setStyle('leaphy_blocks');
   },
+  /**
+     * Updates the content of the the row related fields.
+     * @this Blockly.Block
+     */
+   updateFields: function () {
+    Blockly.Arduino.Boards.refreshBlockFieldDropdown(
+      this, 'DISPLAY_ROW', 'displayRows');
+  }
 };
-

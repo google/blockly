@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2022-02-25 16:27:23.274051",
+		"lastupdated": "2022-03-06 10:36:42.597428",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -72,7 +72,9 @@
 	"LEAPHY_BUZZ_HERTZ": "Hertz",
 	"LEAPHY_BUZZ_MS": "ms",
 	"LEAPHY_SERIAL_PRINT": "Show on screen",
-	"LEAPHY_DISPLAY_PRINT": "Show on display",
+	"LEAPHY_DISPLAY_CLEAR": "Clear display",
+	"LEAPHY_DISPLAY_PRINT": "Display - Set ln.",
+	"LEAPHY_DISPLAY_DISPLAY": "Show on display",
 	"LEAPHY_SITUATION_CATEGORY": "Thinkflow",
 	"LEAPHY_NUMBERS_CATEGORY": "Numbers",
 	"LEAPHY_VARIABLES_CATEGORY": "Variables",

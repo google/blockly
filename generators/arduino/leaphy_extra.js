@@ -197,26 +197,48 @@ Blockly.Arduino['leaphy_sonar_read'] = function (block) {
     return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
+var displayInclude = '#include "OLED_Display.h"';
+var displayDefinition = 'OLEDDISPLAY display;';
+var displaySetup = 'if(!display.begin())\n  {\n    Serial.println(F("Contact with the display failed: Check the connections"));\n  }\n';
+var displaySerialSetup = 'Serial.begin(115200);';
+
+var addDisplaySetupCode = function(){
+    Blockly.Arduino.addInclude('include_display', displayInclude);
+    Blockly.Arduino.definitions_['define_display'] = displayDefinition;
+    Blockly.Arduino.addSetup('serial', displaySerialSetup, false);
+    Blockly.Arduino.addSetup('oled', displaySetup, false);
+}
+
+Blockly.Arduino['leaphy_display_clear'] = function(block) {
+    addDisplaySetupCode();
+    var code = 'display.clearDisplay();\n';
+    return code;
+};
+
 Blockly.Arduino['leaphy_display_print_line'] = function(block) {
-    Blockly.Arduino.addInclude('include_display', '#include "OLED_Display.h"');
-    Blockly.Arduino.definitions_['define_display'] = 'OLEDDISPLAY display;';
-    Blockly.Arduino.addSetup('serial', 'Serial.begin(115200);', false);
-    Blockly.Arduino.addSetup('oled', 'if(!display.begin())\n  {\n    Serial.println(F("OLED Initialization failed"));\n  }\n', false);
+    addDisplaySetupCode();
 
     var value = Blockly.Arduino.valueToCode(this, 'VALUE', Blockly.Arduino.ORDER_ATOMIC) || '0';
-    var code = 'display.clearDisplay();\ndisplay.setCursor(0,0);\ndisplay.println(' + value + ');\ndisplay.display();\n';
+    var row = Blockly.Arduino.valueToCode(this, 'DISPLAY_ROW', Blockly.Arduino.ORDER_ATOMIC) || '0';
+    var row = block.getFieldValue('DISPLAY_ROW');
+    var cursorHeight = row * 12;
+    var code = 'display.setCursor(0,' + cursorHeight + ');\ndisplay.println(' + value + ');\n';
     return code;
 };
 
 Blockly.Arduino['leaphy_display_print_value'] = function(block) {
-    Blockly.Arduino.addInclude('include_display', '#include "OLED_Display.h"');
-    Blockly.Arduino.definitions_['define_display'] = 'OLEDDISPLAY display;';
-    Blockly.Arduino.addSetup('serial', 'Serial.begin(115200);', false);
-    Blockly.Arduino.addSetup('oled', 'if(!display.begin())\n  {\n    Serial.println(F("OLED Initialization failed"));\n  }\n', false);
+    addDisplaySetupCode();
 
     var name = Blockly.Arduino.valueToCode(this, 'NAME', Blockly.Arduino.ORDER_ATOMIC) || '0';
     var value = Blockly.Arduino.valueToCode(this, 'VALUE', Blockly.Arduino.ORDER_ATOMIC) || '0';
-    var code = 'display.clearDisplay();\ndisplay.setCursor(0,0);\ndisplay.print(' + name + ');\ndisplay.print(" = ");\ndisplay.println(' + value + ');\ndisplay.display();\n';
+    var row = block.getFieldValue('DISPLAY_ROW');
+    var cursorHeight = row * 12;
+    var code = 'display.setCursor(0,' + cursorHeight + ');\ndisplay.print(' + name + ');\ndisplay.print(" = ");\ndisplay.println(' + value + ');\n';
     return code;
 };
 
+Blockly.Arduino['leaphy_display_display'] = function(block) {
+    addDisplaySetupCode();
+    var code = 'display.display();\n';
+    return code;
+};

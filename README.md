@@ -7,7 +7,11 @@ If you don't want this, use `yarn build:not:langfiles`. Look at package.json for
 
 ## Publishing a new version of the leaphy-blockly package to npm
 
-Make sure you build successfully first. Change the version in the package.json to something not yet published. In a python-enabled terminal, run `yarn run publish`. **Note**: this is not equivalent to running `yarn publish` which will not lead to a succesfull package publication. You will be prompted for npm credentials and a One Time Password which will be emailed. After that your npm package is published!
+Make sure you build successfully first. Change the version in the package.json to something not yet published. In a python-enabled terminal, run `yarn run publish`. 
+**Note**: this is not equivalent to running `yarn publish` which will *not* lead to a succesfull package publication. 
+You will be prompted for npm credentials and a One Time Password which will be emailed. After that your npm package is published!
+
+Commit the change to the package.json to master and you're done. 
 
 ## Updating translations
 

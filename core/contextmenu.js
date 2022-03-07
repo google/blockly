@@ -39,7 +39,7 @@ import {Rect} from './utils/rect.js';
 const {WorkspaceCommentSvg} = goog.requireType('Blockly.WorkspaceCommentSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
-/** @suppress {extraRequire} */
+
 import './events/events_block_create.js';
 
 

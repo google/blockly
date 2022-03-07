@@ -51,13 +51,13 @@ const {VariableModel} = goog.requireType('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
 import {inputTypes} from './input_types.js';
-/** @suppress {extraRequire} */
+
 import './events/events_block_change.js';
-/** @suppress {extraRequire} */
+
 import './events/events_block_create.js';
-/** @suppress {extraRequire} */
+
 import './events/events_block_delete.js';
-/** @suppress {extraRequire} */
+
 import './events/events_block_move.js';
 
 

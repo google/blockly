@@ -39,11 +39,11 @@ import {Svg} from './utils/svg.js';
 import {WorkspaceComment} from './workspace_comment.js';
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
-/** @suppress {extraRequire} */
+
 import './events/events_comment_create.js';
-/** @suppress {extraRequire} */
+
 import './events/events_comment_delete.js';
-/** @suppress {extraRequire} */
+
 import './events/events_selected.js';
 
 

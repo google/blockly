@@ -21,7 +21,7 @@ import {Msg} from './msg.js';
 const {VariableMap} = goog.requireType('Blockly.VariableMap');
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
-/** @suppress {extraRequire} */
+
 goog.requireType('Blockly.Procedures');
 
 

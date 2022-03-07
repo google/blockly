@@ -55,7 +55,7 @@ import {Rect} from '../utils/rect.js';
 const {ShortcutRegistry} = goog.requireType('Blockly.ShortcutRegistry');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
-/** @suppress {extraRequire} */
+
 import '../events/events_toolbox_item_select.js';
 
 

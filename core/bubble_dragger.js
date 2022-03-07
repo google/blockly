@@ -33,11 +33,11 @@ const {IDragTarget} = goog.requireType('Blockly.IDragTarget');
 const {WorkspaceCommentSvg} = goog.requireType('Blockly.WorkspaceCommentSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
-/** @suppress {extraRequire} */
+
 import './bubble.js';
-/** @suppress {extraRequire} */
+
 import './events/events_comment_move.js';
-/** @suppress {extraRequire} */
+
 import './constants.js';
 
 

@@ -104,15 +104,15 @@ const {WorkspaceDragSurfaceSvg} = goog.requireType('Blockly.WorkspaceDragSurface
 import {Workspace} from './workspace.js';
 /* eslint-disable-next-line no-unused-vars */
 const {ZoomControls} = goog.requireType('Blockly.ZoomControls');
-/** @suppress {extraRequire} */
+
 import './events/events_block_create.js';
-/** @suppress {extraRequire} */
+
 import './events/events_theme_change.js';
-/** @suppress {extraRequire} */
+
 import './events/events_viewport.js';
-/** @suppress {extraRequire} */
+
 import './metrics_manager.js';
-/** @suppress {extraRequire} */
+
 import './msg.js';
 
 

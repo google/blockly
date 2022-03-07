@@ -44,15 +44,15 @@ import {Rect} from './utils/rect.js';
 import {ScrollbarPair} from './scrollbar_pair.js';
 import {Svg} from './utils/svg.js';
 import {WorkspaceSvg} from './workspace_svg.js';
-/** @suppress {extraRequire} */
+
 import './events/events_block_create.js';
-/** @suppress {extraRequire} */
+
 import './events/events_var_create.js';
-/** @suppress {extraRequire} */
+
 import './gesture.js';
-/** @suppress {extraRequire} */
+
 import './touch.js';
-/** @suppress {extraRequire} */
+
 import './renderers/common/block_rendering.js';
 
 

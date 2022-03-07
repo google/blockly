@@ -22,11 +22,11 @@ const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockDefinition} = goog.requireType('Blockly.blocks');
 import {createBlockDefinitionsFromJsonArray, defineBlocks} from '../core/common.js';
-/** @suppress {extraRequire} */
+
 import '../core/field_label.js';
-/** @suppress {extraRequire} */
+
 import '../core/field_number.js';
-/** @suppress {extraRequire} */
+
 import '../core/field_variable.js';
 
 

@@ -29,9 +29,9 @@ import {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_with_b
 const {IConnectionChecker} = goog.requireType('Blockly.IConnectionChecker');
 /* eslint-disable-next-line no-unused-vars */
 const {Input} = goog.requireType('Blockly.Input');
-/** @suppress {extraRequire} */
+
 import './events/events_block_move.js';
-/** @suppress {extraRequire} */
+
 import './constants.js';
 
 

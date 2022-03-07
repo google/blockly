@@ -33,7 +33,7 @@ import {Msg} from './msg.js';
 const {Sentinel} = goog.requireType('Blockly.utils.Sentinel');
 import {Size} from './utils/size.js';
 import {VariableModel} from './variable_model.js';
-/** @suppress {extraRequire} */
+
 import './events/events_block_change.js';
 
 

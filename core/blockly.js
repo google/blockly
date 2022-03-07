@@ -168,15 +168,15 @@ import {ZoomControls} from './zoom_controls.js';
 import {globalThis} from './utils/global.js';
 import {inject} from './inject.js';
 import {inputTypes} from './input_types.js';
-/** @suppress {extraRequire} */
+
 import './events/events_block_create.js';
-/** @suppress {extraRequire} */
+
 import './events/workspace_events.js';
-/** @suppress {extraRequire} */
+
 import './events/events_ui.js';
-/** @suppress {extraRequire} */
+
 import './events/events_ui_base.js';
-/** @suppress {extraRequire} */
+
 import './events/events_var_create.js';
 
 

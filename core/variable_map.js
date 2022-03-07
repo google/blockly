@@ -27,9 +27,9 @@ import {Names} from './names.js';
 import {VariableModel} from './variable_model.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
-/** @suppress {extraRequire} */
+
 import './events/events_var_delete.js';
-/** @suppress {extraRequire} */
+
 import './events/events_var_rename.js';
 
 

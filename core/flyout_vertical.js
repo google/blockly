@@ -27,9 +27,9 @@ import {Flyout} from './flyout_base.js';
 const {Options} = goog.requireType('Blockly.Options');
 import {Rect} from './utils/rect.js';
 import {Scrollbar} from './scrollbar.js';
-/** @suppress {extraRequire} */
+
 import './block.js';
-/** @suppress {extraRequire} */
+
 import './constants.js';
 
 

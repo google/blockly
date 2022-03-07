@@ -28,7 +28,7 @@ import {KeyCodes} from './utils/keycodes.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Sentinel} = goog.requireType('Blockly.utils.Sentinel');
 import {Size} from './utils/size.js';
-/** @suppress {extraRequire} */
+
 import './events/events_block_change.js';
 
 

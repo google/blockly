@@ -28,9 +28,9 @@ const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
 import {createBlockDefinitionsFromJsonArray, defineBlocks} from '../core/common.js';
-/** @suppress {extraRequire} */
+
 import '../core/field_dropdown.js';
-/** @suppress {extraRequire} */
+
 import '../core/field_label.js';
 
 

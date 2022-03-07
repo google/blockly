@@ -24,9 +24,9 @@ const {Block} = goog.requireType('Blockly.Block');
 const {BlockDefinition} = goog.requireType('Blockly.blocks');
 import {Msg} from '../core/msg.js';
 import {createBlockDefinitionsFromJsonArray, defineBlocks} from '../core/common.js';
-/** @suppress {extraRequire} */
+
 import '../core/field_label.js';
-/** @suppress {extraRequire} */
+
 import '../core/field_variable.js';
 
 

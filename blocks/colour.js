@@ -14,7 +14,7 @@ goog.declareModuleId('Blockly.libraryBlocks.colour');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockDefinition} = goog.requireType('Blockly.blocks');
 import {createBlockDefinitionsFromJsonArray, defineBlocks} from '../core/common.js';
-/** @suppress {extraRequire} */
+
 import '../core/field_colour.js';
 
 

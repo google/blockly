@@ -40,7 +40,7 @@ import {VariableMap} from './variable_map.js';
 const {VariableModel} = goog.requireType('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceComment} = goog.requireType('Blockly.WorkspaceComment');
-/** @suppress {extraRequire} */
+
 import './connection_checker.js';
 
 

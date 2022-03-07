@@ -42,7 +42,7 @@ import {Svg} from './utils/svg.js';
 import {WorkspaceSvg} from './workspace_svg.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
-/** @suppress {extraRequire} */
+
 import './events/events_bubble_open.js';
 
 

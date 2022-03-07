@@ -27,7 +27,7 @@ const {Field} = goog.requireType('Blockly.Field');
 /* eslint-disable-next-line no-unused-vars */
 const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
 import {inputTypes} from './input_types.js';
-/** @suppress {extraRequire} */
+
 import './field_label.js';
 
 

@@ -24,6 +24,7 @@ const {ICollapsibleToolboxItem} = goog.requireType('Blockly.ICollapsibleToolboxI
 import {IToolboxItem} from '../interfaces/i_toolbox_item.js';
 /* eslint-disable-next-line no-unused-vars */
 const {IToolbox} = goog.requireType('Blockly.IToolbox');
+const {ToolboxItemInfo} = goog.requireType('Blockly.utils.toolbox');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
@@ -35,7 +36,7 @@ const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
  */
 class ToolboxItem {
   /**
-   * @param {!toolbox.ToolboxItemInfo} toolboxItemDef The JSON defining
+   * @param {!ToolboxItemInfo} toolboxItemDef The JSON defining
    *     the toolbox item.
    * @param {!IToolbox} toolbox The toolbox that holds the toolbox item.
    * @param {ICollapsibleToolboxItem=} opt_parent The parent toolbox item
@@ -65,7 +66,7 @@ class ToolboxItem {
 
     /**
      * The JSON definition of the toolbox item.
-     * @type {?toolbox.ToolboxItemInfo}
+     * @type {?ToolboxItemInfo}
      * @protected
      */
     this.toolboxItemDef_ = toolboxItemDef;

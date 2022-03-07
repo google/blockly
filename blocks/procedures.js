@@ -38,9 +38,9 @@ const {VariableModel} = goog.requireType('Blockly.VariableModel');
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
 import {defineBlocks} from '../core/common.js';
-/** @suppress {extraRequire} */
+
 import '../core/comment.js';
-/** @suppress {extraRequire} */
+
 import '../core/warning.js';
 
 

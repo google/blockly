@@ -35,7 +35,7 @@ import {Msg} from './msg.js';
 const {Sentinel} = goog.requireType('Blockly.utils.Sentinel');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
-/** @suppress {extraRequire} */
+
 import './events/events_block_change.js';
 
 

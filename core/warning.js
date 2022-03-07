@@ -24,7 +24,7 @@ import {Bubble} from './bubble.js';
 const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
 import {Icon} from './icon.js';
 import {Svg} from './utils/svg.js';
-/** @suppress {extraRequire} */
+
 import './events/events_bubble_open.js';
 
 

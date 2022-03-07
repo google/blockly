@@ -35,7 +35,7 @@ import {Names} from './names.js';
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 import {Workspace} from './workspace.js';
-/** @suppress {extraRequire} */
+
 import './events/events_block_change.js';
 
 

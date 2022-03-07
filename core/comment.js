@@ -33,11 +33,11 @@ const {Size} = goog.requireType('Blockly.utils.Size');
 import {Svg} from './utils/svg.js';
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
-/** @suppress {extraRequire} */
+
 import './events/events_block_change.js';
-/** @suppress {extraRequire} */
+
 import './events/events_bubble_open.js';
-/** @suppress {extraRequire} */
+
 import './warning.js';
 
 

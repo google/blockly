@@ -19,7 +19,7 @@ import * as eventUtils from './events/utils.js';
 import * as idGenerator from './utils/idgenerator.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
-/** @suppress {extraRequire} */
+
 import './events/events_var_create.js';
 
 

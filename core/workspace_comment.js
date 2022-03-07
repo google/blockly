@@ -23,11 +23,11 @@ import {Coordinate} from './utils/coordinate.js';
 import {CommentMove} from './events/events_comment_move.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
-/** @suppress {extraRequire} */
+
 import './events/events_comment_change.js';
-/** @suppress {extraRequire} */
+
 import './events/events_comment_create.js';
-/** @suppress {extraRequire} */
+
 import './events/events_comment_delete.js';
 
 

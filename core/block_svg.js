@@ -72,11 +72,11 @@ const {Theme} = goog.requireType('Blockly.Theme');
 const {Warning} = goog.requireType('Blockly.Warning');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
-/** @suppress {extraRequire} */
+
 import './events/events_block_move.js';
-/** @suppress {extraRequire} */
+
 import './events/events_selected.js';
-/** @suppress {extraRequire} */
+
 import './touch.js';
 
 

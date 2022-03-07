@@ -23,6 +23,7 @@ import * as object from '../utils/object.js';
 import * as parsing from '../utils/parsing.js';
 import * as registry from '../registry.js';
 import * as toolbox from '../utils/toolbox.js';
+const {CategoryInfo, FlyoutDefinition, FlyoutItemInfo, FlyoutItemInfoArray} = goog.requireType('Blockly.utils.toolbox');
 /* eslint-disable-next-line no-unused-vars */
 const {ICollapsibleToolboxItem} = goog.requireType('Blockly.ICollapsibleToolboxItem');
 /* eslint-disable-next-line no-unused-vars */
@@ -39,7 +40,7 @@ import {ToolboxItem} from './toolbox_item.js';
  */
 class ToolboxCategory extends ToolboxItem {
   /**
-   * @param {!toolbox.CategoryInfo} categoryDef The information needed
+   * @param {!CategoryInfo} categoryDef The information needed
    *     to create a category in the toolbox.
    * @param {!IToolbox} toolbox The parent toolbox for the category.
    * @param {ICollapsibleToolboxItem=} opt_parent The parent category or null if
@@ -48,7 +49,7 @@ class ToolboxCategory extends ToolboxItem {
   constructor(categoryDef, toolbox, opt_parent) {
     super(categoryDef, toolbox, opt_parent);
 
-    /** @type {!toolbox.CategoryInfo} */
+    /** @type {!CategoryInfo} */
     this.toolboxItemDef_;
 
     /**
@@ -123,7 +124,7 @@ class ToolboxCategory extends ToolboxItem {
 
     /**
      * The flyout items for this category.
-     * @type {string|!toolbox.FlyoutItemInfoArray}
+     * @type {string|!FlyoutItemInfoArray}
      * @protected
      */
     this.flyoutItems_ = [];
@@ -170,7 +171,7 @@ class ToolboxCategory extends ToolboxItem {
   /**
    * Parses the contents array depending on if the category is a dynamic
    * category, or if its contents are meant to be shown in the flyout.
-   * @param {!toolbox.CategoryInfo} categoryDef The information needed
+   * @param {!CategoryInfo} categoryDef The information needed
    *     to create a category.
    * @protected
    */
@@ -183,7 +184,7 @@ class ToolboxCategory extends ToolboxItem {
       for (let i = 0; i < contents.length; i++) {
         const itemDef = contents[i];
         const flyoutItem =
-            /** @type {toolbox.FlyoutItemInfo} */ (itemDef);
+            /** @type {FlyoutItemInfo} */ (itemDef);
         this.flyoutItems_.push(flyoutItem);
       }
     }
@@ -191,7 +192,7 @@ class ToolboxCategory extends ToolboxItem {
 
   /**
    * Parses the non-contents parts of the category def.
-   * @param {!toolbox.CategoryInfo} categoryDef The information needed to create
+   * @param {!CategoryInfo} categoryDef The information needed to create
    *     a category.
    * @protected
    */
@@ -317,7 +318,7 @@ class ToolboxCategory extends ToolboxItem {
    * @public
    */
   refreshTheme() {
-    this.colour_ = this.getColour_(/** @type {toolbox.CategoryInfo} **/
+    this.colour_ = this.getColour_(/** @type {CategoryInfo} **/
                                    (this.toolboxItemDef_));
     this.addColourBorder_(this.colour_);
   }
@@ -341,7 +342,7 @@ class ToolboxCategory extends ToolboxItem {
 
   /**
    * Gets either the colour or the style for a category.
-   * @param {!toolbox.CategoryInfo} categoryDef The object holding
+   * @param {!CategoryInfo} categoryDef The object holding
    *    information on the category.
    * @return {string} The hex colour for the category.
    * @protected
@@ -587,7 +588,7 @@ class ToolboxCategory extends ToolboxItem {
   /**
    * Gets the contents of the category. These are items that are meant to be
    * displayed in the flyout.
-   * @return {!toolbox.FlyoutItemInfoArray|string} The definition
+   * @return {!FlyoutItemInfoArray|string} The definition
    *     of items to be displayed in the flyout.
    * @public
    */
@@ -599,7 +600,7 @@ class ToolboxCategory extends ToolboxItem {
    * Updates the contents to be displayed in the flyout.
    * If the flyout is open when the contents are updated, refreshSelection on
    * the toolbox must also be called.
-   * @param {!toolbox.FlyoutDefinition|string} contents The contents
+   * @param {!FlyoutDefinition|string} contents The contents
    *     to be displayed in the flyout. A string can be supplied to create a
    *     dynamic category.
    * @public
@@ -616,7 +617,7 @@ class ToolboxCategory extends ToolboxItem {
           toolbox.convertFlyoutDefToJsonArray(contents);
     }
     this.parseContents_(
-        /** @type {toolbox.CategoryInfo} */ (this.toolboxItemDef_));
+        /** @type {CategoryInfo} */ (this.toolboxItemDef_));
   }
 
   /**

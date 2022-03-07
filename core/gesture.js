@@ -42,9 +42,9 @@ import {WorkspaceDragger} from './workspace_dragger.js';
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 import {Workspace} from './workspace.js';
-/** @suppress {extraRequire} */
+
 import './block_dragger.js';
-/** @suppress {extraRequire} */
+
 import './events/events_click.js';
 
 

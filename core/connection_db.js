@@ -26,7 +26,7 @@ const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
 const {IConnectionChecker} = goog.requireType('Blockly.IConnectionChecker');
 /* eslint-disable-next-line no-unused-vars */
 const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
-/** @suppress {extraRequire} */
+
 import './constants.js';
 
 

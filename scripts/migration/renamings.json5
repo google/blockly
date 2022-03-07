@@ -1330,5 +1330,10 @@
       oldName: 'Blockly.blocks.variablesDynamic',
       newName: 'Blockly.libraryBlocks.variablesDynamic',
     },
+    {
+      oldName: 'Blockly.DropDownDiv',
+      newName: 'Blockly.dropDownDiv',
+      newPath: 'Blockly.DropDownDiv',
+    },
   ]
 }

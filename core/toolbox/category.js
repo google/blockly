@@ -244,7 +244,7 @@ class ToolboxCategory extends ToolboxItem {
    * @protected
    */
   createContainer_() {
-    const container = document.createElement('div');
+    const container = /** @type {!HTMLDivElement} */ (document.createElement('div'));
     dom.addClass(container, this.cssConfig_['container']);
     return container;
   }
@@ -256,7 +256,7 @@ class ToolboxCategory extends ToolboxItem {
    * @protected
    */
   createRowContainer_() {
-    const rowDiv = document.createElement('div');
+    const rowDiv = /** @type {!HTMLDivElement} */ (document.createElement('div'));
     dom.addClass(rowDiv, this.cssConfig_['row']);
     let nestedPadding = ToolboxCategory.nestedPadding * this.getLevel();
     nestedPadding = nestedPadding.toString() + 'px';
@@ -272,7 +272,7 @@ class ToolboxCategory extends ToolboxItem {
    * @protected
    */
   createRowContentsContainer_() {
-    const contentsContainer = document.createElement('div');
+    const contentsContainer = /** @type {!HTMLDivElement} */ (document.createElement('div'));
     dom.addClass(contentsContainer, this.cssConfig_['rowcontentcontainer']);
     return contentsContainer;
   }

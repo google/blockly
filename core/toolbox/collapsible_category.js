@@ -174,7 +174,7 @@ class CollapsibleToolboxCategory extends ToolboxCategory {
    * @protected
    */
   createSubCategoriesDom_(subcategories) {
-    const contentsContainer = document.createElement('div');
+    const contentsContainer = /** @type {!HTMLDivElement} */ (document.createElement('div'));
     dom.addClass(contentsContainer, this.cssConfig_['contents']);
 
     for (let i = 0; i < subcategories.length; i++) {

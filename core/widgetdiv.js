@@ -109,7 +109,7 @@ const createDom = function() {
     return;  // Already created.
   }
 
-  DIV = document.createElement('div');
+  DIV = /** @type {!HTMLDivElement} */ (document.createElement('div'));
   DIV.className = 'blocklyWidgetDiv';
   const container = common.getParentContainer() || document.body;
   container.appendChild(DIV);

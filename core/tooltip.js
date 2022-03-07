@@ -274,7 +274,7 @@ const createDom = function() {
     return;  // Already created.
   }
   // Create an HTML container for popup overlays (e.g. editor widgets).
-  DIV = document.createElement('div');
+  DIV = /** @type {!HTMLDivElement} */ (document.createElement('div'));
   DIV.className = 'blocklyTooltipDiv';
   const container = common.getParentContainer() || document.body;
   container.appendChild(DIV);
@@ -465,7 +465,7 @@ const renderDefaultContent = function() {
   // Create new text, line by line.
   const lines = tip.split('\n');
   for (let i = 0; i < lines.length; i++) {
-    const div = document.createElement('div');
+    const div = /** @type {!HTMLDivElement} */ (document.createElement('div'));
     div.appendChild(document.createTextNode(lines[i]));
     DIV.appendChild(div);
   }

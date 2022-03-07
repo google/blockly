@@ -41,7 +41,8 @@
                 },
                 "additionalProperties": false
               }
-            }
+            },
+            "additionalProperties": false
           }
         },
         "required": ["oldName"],

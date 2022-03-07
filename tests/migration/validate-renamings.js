@@ -44,13 +44,34 @@ const RENAMINGS_FILENAME =
   const output =
       await JsonSchema.validate(schema, renamings, JsonSchema.DETAILED);
 
-  if (output.valid) {
-    console.log('Renamings file is valid');
-    process.exit(0);
-  } else {
+  if (!output.valid) {
     console.log('Renamings file is invalid.');
     console.log('Maybe this validator output will help you find the problem:');
     console.log(JSON5.stringify(output, undefined, '  '));
     process.exit(1);
   }
+
+  // File passed schema validation.  Do some additional checks.
+  let ok = true;
+  Object.entries(renamings).forEach(([version, modules]) => {
+    if (!Array.isArray(modules)) {
+      console.log(modules);
+    }
+    // Scan through modules and check for duplicates.
+    const seen = new Set();
+    for (const {oldName} of modules) {
+      if (seen.has(oldName)) {
+        console.log(`Duplicate entry for module ${oldName} ` +
+            `in version ${version}.`);
+        ok = false;
+      }
+      seen.add(oldName);
+    }
+  });
+  if (!ok) {
+    console.log('Renamings file is invalid.');
+    process.exit(1);
+  }
+  console.log('Renamings file is valid.');
+  process.exit(0);
 })();

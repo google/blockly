@@ -24,11 +24,11 @@ const browserEvents = goog.require('Blockly.browserEvents');
 const bumpObjects = goog.require('Blockly.bumpObjects');
 const common = goog.require('Blockly.common');
 const dom = goog.require('Blockly.utils.dom');
+const dropDownDiv = goog.require('Blockly.dropDownDiv');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const {BlockDragSurfaceSvg} = goog.require('Blockly.BlockDragSurfaceSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
-const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
 const {Grid} = goog.require('Blockly.Grid');
 const {Msg} = goog.require('Blockly.Msg');
 const {Options} = goog.require('Blockly.Options');
@@ -192,7 +192,7 @@ const createMainWorkspace = function(
   // The SVG is now fully assembled.
   common.svgResize(mainWorkspace);
   WidgetDiv.createDom();
-  DropDownDiv.createDom();
+  dropDownDiv.createDom();
   Tooltip.createDom();
   return mainWorkspace;
 };

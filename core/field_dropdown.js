@@ -21,12 +21,12 @@ goog.module('Blockly.FieldDropdown');
 
 const aria = goog.require('Blockly.utils.aria');
 const dom = goog.require('Blockly.utils.dom');
+const dropDownDiv = goog.require('Blockly.dropDownDiv');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const parsing = goog.require('Blockly.utils.parsing');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const utilsString = goog.require('Blockly.utils.string');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
-const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
 const {Field} = goog.require('Blockly.Field');
 const {MenuItem} = goog.require('Blockly.MenuItem');
 const {Menu} = goog.require('Blockly.Menu');
@@ -279,9 +279,9 @@ class FieldDropdown extends Field {
     }
 
     // Remove any pre-existing elements in the dropdown.
-    DropDownDiv.clearContent();
+    dropDownDiv.clearContent();
     // Element gets created in render.
-    this.menu_.render(DropDownDiv.getContentDiv());
+    this.menu_.render(dropDownDiv.getContentDiv());
     const menuElement = /** @type {!Element} */ (this.menu_.getElement());
     dom.addClass(menuElement, 'blocklyDropdownMenu');
 
@@ -292,10 +292,10 @@ class FieldDropdown extends Field {
       const borderColour = (this.sourceBlock_.isShadow()) ?
           this.sourceBlock_.getParent().style.colourTertiary :
           this.sourceBlock_.style.colourTertiary;
-      DropDownDiv.setColour(primaryColour, borderColour);
+      dropDownDiv.setColour(primaryColour, borderColour);
     }
 
-    DropDownDiv.showPositionedByField(this, this.dropdownDispose_.bind(this));
+    dropDownDiv.showPositionedByField(this, this.dropdownDispose_.bind(this));
 
     // Focusing needs to be handled after the menu is rendered and positioned.
     // Otherwise it will cause a page scroll to get the misplaced menu in
@@ -362,7 +362,7 @@ class FieldDropdown extends Field {
    * @private
    */
   handleMenuActionEvent_(menuItem) {
-    DropDownDiv.hideIfOwner(this, true);
+    dropDownDiv.hideIfOwner(this, true);
     this.onItemSelected_(/** @type {!Menu} */ (this.menu_), menuItem);
   }
 

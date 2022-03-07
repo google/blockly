@@ -1073,6 +1073,10 @@ const renamings = {
     'Blockly.blocks.variablesDynamic': {
       module: 'Blockly.libraryBlocks.variablesDynamic',
     },
+    'Blockly.DropDownDiv': {
+      module: 'Blockly.dropDownDiv',
+      path: 'Blockly.DropDownDiv',
+    },
   },
 };
 

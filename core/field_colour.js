@@ -20,9 +20,9 @@ const aria = goog.require('Blockly.utils.aria');
 const browserEvents = goog.require('Blockly.browserEvents');
 const colour = goog.require('Blockly.utils.colour');
 const dom = goog.require('Blockly.utils.dom');
+const dropDownDiv = goog.require('Blockly.dropDownDiv');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
-const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
 const {Field} = goog.require('Blockly.Field');
 const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
 /* eslint-disable-next-line no-unused-vars */
@@ -280,9 +280,9 @@ class FieldColour extends Field {
    */
   showEditor_() {
     this.dropdownCreate_();
-    DropDownDiv.getContentDiv().appendChild(this.picker_);
+    dropDownDiv.getContentDiv().appendChild(this.picker_);
 
-    DropDownDiv.showPositionedByField(this, this.dropdownDispose_.bind(this));
+    dropDownDiv.showPositionedByField(this, this.dropdownDispose_.bind(this));
 
     // Focus so we can start receiving keyboard events.
     this.picker_.focus({preventScroll: true});
@@ -298,7 +298,7 @@ class FieldColour extends Field {
     const colour = cell && cell.label;
     if (colour !== null) {
       this.setValue(colour);
-      DropDownDiv.hideIfOwner(this);
+      dropDownDiv.hideIfOwner(this);
     }
   }
 
@@ -331,7 +331,7 @@ class FieldColour extends Field {
           this.setValue(colour);
         }
       }
-      DropDownDiv.hideWithoutAnimation();
+      dropDownDiv.hideWithoutAnimation();
       handled = true;
     }
     if (handled) {

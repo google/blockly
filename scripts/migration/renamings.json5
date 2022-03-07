@@ -23,54 +23,68 @@
       // The name that the module now has in this version.
       newName: 'new.module.name',
 
-      // If a module had a default export and nowhas a named export, the name
-      // of the named export can be given here.
+      // If a module had a default export and nowhas a named export,
+      // the name of the named export can be given here.
       newExport: 'newNameForDefaultExport',
 
-      // The old location of this module on the Blockly tree (the mega-object
-      // that people access if they are importing all of Blockly). Usually this
-      // is the same as the old module name, and doesn't need to be provided.
+      // The old location of this module on the Blockly tree (the
+      // mega-object that people access if they are importing all of
+      // Blockly). Usually this is the same as the oldName and can be
+      // omitted.
       oldPath: 'old.path.on.Blockly.tree',
 
-      // The new location of this module on the Blockly tree. To be backwards
-      // compatible with people accessing the Blockly tree, this should be the
-      // same as the oldPath.
-      // If this is not provided, the newPath is assumed to be the newName.
+      // The new location of this module on the Blockly tree. To be
+      // backwards compatible with people accessing the Blockly tree,
+      // this should be the same as the oldPath.  If omitted, newPath
+      // is assumed to be the same newName.
       newPath: 'new.path.on.Blockly.tree',
 
-      // Each entry in this object is the old name of a named export.
+      // Each entry in this map is the old name of a named export.
       exports: {
         // The name that the export had before this version.
         // All of the properties on this object are optional.
         'oldExportName': {
-          // The new module that the export is in in this version.
-          // If this is not provided, the newModule is assumed to be the parent
-          // module's newName.
+          // The new module that the export is in in this version.  If
+          // this is not provided, the newModule is assumed to be the
+          // parent module's newPath.
           newModule: 'new.module.name',
 
           // The name that the export now has in this version.
           newExport: 'newExportName',
 
           // The old location of this module on the Blockly tree.
+          // If omitted, oldPath defaults to
+          // <enclosing module's.oldPath>.<old export name>.
           oldPath: 'old.path.on.Blockly.tree',
 
-          // The new location of this module onthe Blockly tree. To be backwards
-          // compatible with people accessing the Blockkly tree, this should be
-          // the same as the oldPath.
-          // If this is not provided, the newPath is assumed to be
-          // newModule.newExport
+          // The new location of this module onthe Blockly tree. To be
+          // backwards compatible with people accessing the Blockkly
+          // tree, this should be the same as the oldPath.
+          // Defaults to `${newModule}.${newExport}`.
           newPath: 'new.path.on.Blockly.tree',
 
-          // If a named export has been changed to a private variable with a get
-          // method, this is the name of the get method.
+          // If a named export has been changed to a private variable
+          // with a get method, this is the name of the get method.
           getMethod: 'getMethodName',
 
-          // If a named export has been changed to a private variable with a set
-          // method, this is the name of the set method.
-          setMethod: 'setMethodName'
-        }
-      }
-    }
+          // If a named export has been changed to a private variable
+          // with a set method, this is the name of the set method.
+          setMethod: 'setMethodName',
+        },
+
+        // This file can also document the renaming of a property or
+        // sub-property of an (object-valued) named export.
+        'exportExport.oldProperty': {
+          newExport: 'newExport.newProperty',
+          // Additional options as above.
+        },
+
+        // Or promotion of property to named export, etc.
+        'exportExport.oldProperty': {
+          newExport: 'newTopLevelExport',
+        },
+      },
+    },
   ],
 
   '5.20210325.0': [
@@ -159,7 +173,10 @@
     {
       oldName: 'Blockly.ContextMenu',
       exports: {
-        currentBlock: {getMethod: 'getCurrentBlock', setMethod: 'setCurrentBlock'},
+        currentBlock: {
+          getMethod: 'getCurrentBlock',
+          setMethod: 'setCurrentBlock'
+        },
       },
     },
     {
@@ -199,8 +216,8 @@
     },
     {
       oldName: 'Blockly.utils.global',
-      newExport: 'globalThis',          // Previous default export now named.
-      newPath: 'Blockly.utils.global',  // But still exported under original name.
+      newExport: 'globalThis',
+      newPath: 'Blockly.utils.global',
     },
     {
       oldName: 'Blockly.utils.IdGenerator',
@@ -283,13 +300,18 @@
         getViewportBBox: {newModule: 'Blockly.utils.svgMath'},
         is3dSupported: {newModule: 'Blockly.utils.svgMath'},
         getRelativeXY: {newModule: 'Blockly.utils.svgMath'},
-        getInjectionDivXY_:
-            {newModule: 'Blockly.utils.svgMath', newExport: 'getInjectionDivXY'},
+        getInjectionDivXY_: {
+          newModule: 'Blockly.utils.svgMath',
+          newExport: 'getInjectionDivXY'
+        },
         parseBlockColour: {newModule: 'Blockly.utils.parsing'},
         checkMessageReferences: {newModule: 'Blockly.utils.parsing'},
         replaceMessageReferences: {newModule: 'Blockly.utils.parsing'},
         tokenizeInterpolation: {newModule: 'Blockly.utils.parsing'},
-        arrayRemove: {newModule: 'Blockly.utils.array', newExport: 'removeElem'},
+        arrayRemove: {
+          newModule: 'Blockly.utils.array',
+          newExport: 'removeElem'
+        },
         getBlockTypeCounts:
             {newModule: 'Blockly.common', newExport: 'getBlockTypeCounts'},
         runAfterPageLoad:

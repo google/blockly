@@ -209,7 +209,7 @@ var JSCOMP_ERROR = [
   'moduleLoad',
   'msgDescriptions',
   'nonStandardJsDocs',
-  'partialAlias',
+  // 'partialAlias',  // Don't want this to be an error yet; only warning.
   // 'polymer',  // Not applicable.
   // 'reportUnknownTypes',  // VERY verbose.
   // 'strictCheckTypes',  // Use --strict to enable.

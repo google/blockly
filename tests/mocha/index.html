@@ -18,9 +18,9 @@
     }
   </style>
   <body>
-
     <div id="mocha"></div>
     <div id="failureCount" style="display:none" tests_failed="unset"></div>
+    <div id="failureMessages" style="display:none"></div>
     <script src="../../node_modules/chai/chai.js"></script>
     <script src="../../node_modules/mocha/mocha.js"></script>
     <script src="../../node_modules/sinon/pkg/sinon.js"></script>
@@ -174,9 +174,15 @@
     </xml>
 
     <script type="module">
-      mocha.run(function(failures) {
+      let runner = mocha.run(function(failures) {
         var failureDiv = document.getElementById('failureCount');
         failureDiv.setAttribute('tests_failed', failures);
+      });
+      runner.on('fail', function(test, err) {
+        const msg = document.createElement('p');
+        msg.textContent = `"${test.fullTitle()}" failed: ${err.message}`;
+        const div = document.getElementById('failureMessages');
+        div.appendChild(msg);
       });
     </script>
   </body>

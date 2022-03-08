@@ -17,11 +17,11 @@ goog.module('Blockly.HorizontalFlyout');
 
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const browserEvents = goog.require('Blockly.browserEvents');
+const dropDownDiv = goog.require('Blockly.dropDownDiv');
 const registry = goog.require('Blockly.registry');
 const toolbox = goog.require('Blockly.utils.toolbox');
 /* eslint-disable-next-line no-unused-vars */
 const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
-const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
 const {Flyout} = goog.require('Blockly.Flyout');
 /* eslint-disable-next-line no-unused-vars */
 const {Options} = goog.requireType('Blockly.Options');
@@ -224,9 +224,9 @@ class HorizontalFlyout extends Flyout {
       const pos = (viewMetrics.left - scrollMetrics.left) + delta;
       this.workspace_.scrollbar.setX(pos);
       // When the flyout moves from a wheel event, hide WidgetDiv and
-      // DropDownDiv.
+      // dropDownDiv.
       WidgetDiv.hide();
-      DropDownDiv.hideWithoutAnimation();
+      dropDownDiv.hideWithoutAnimation();
     }
 
     // Don't scroll the page.

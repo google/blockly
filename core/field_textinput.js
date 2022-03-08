@@ -20,6 +20,7 @@ const aria = goog.require('Blockly.utils.aria');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dialog = goog.require('Blockly.dialog');
 const dom = goog.require('Blockly.utils.dom');
+const dropDownDiv = goog.require('Blockly.dropDownDiv');
 const eventUtils = goog.require('Blockly.Events.utils');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const parsing = goog.require('Blockly.utils.parsing');
@@ -27,7 +28,6 @@ const userAgent = goog.require('Blockly.utils.userAgent');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
-const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
 const {Field} = goog.require('Blockly.Field');
 const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
 const {Msg} = goog.require('Blockly.Msg');
@@ -464,14 +464,14 @@ class FieldTextInput extends Field {
   onHtmlInputKeyDown_(e) {
     if (e.keyCode === KeyCodes.ENTER) {
       WidgetDiv.hide();
-      DropDownDiv.hideWithoutAnimation();
+      dropDownDiv.hideWithoutAnimation();
     } else if (e.keyCode === KeyCodes.ESC) {
       this.setValue(this.htmlInput_.untypedDefaultValue_);
       WidgetDiv.hide();
-      DropDownDiv.hideWithoutAnimation();
+      dropDownDiv.hideWithoutAnimation();
     } else if (e.keyCode === KeyCodes.TAB) {
       WidgetDiv.hide();
-      DropDownDiv.hideWithoutAnimation();
+      dropDownDiv.hideWithoutAnimation();
       this.sourceBlock_.tab(this, !e.shiftKey);
       e.preventDefault();
     }

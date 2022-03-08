@@ -6,8 +6,10 @@
 
 goog.module('Blockly.test.zoomControls');
 
+const {assertEventFired, assertEventNotFired} = goog.require('Blockly.test.helpers.events');
 const eventUtils = goog.require('Blockly.Events.utils');
-const {assertEventFired, assertEventNotFired, sharedTestSetup, sharedTestTeardown, simulateClick} = goog.require('Blockly.test.helpers');
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+const {simulateClick} = goog.require('Blockly.test.helpers.userInput');
 
 
 suite("Zoom Controls", function() {

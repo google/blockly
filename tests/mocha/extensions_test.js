@@ -6,7 +6,7 @@
 
 goog.module('Blockly.test.extensions');
 
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
 
 
 suite('Extensions', function() {

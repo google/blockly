@@ -24,6 +24,7 @@ const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const Xml = goog.require('Blockly.Xml');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
+const dropDownDiv = goog.require('Blockly.dropDownDiv');
 const eventUtils = goog.require('Blockly.Events.utils');
 const parsing = goog.require('Blockly.utils.parsing');
 const style = goog.require('Blockly.utils.style');
@@ -37,7 +38,6 @@ const {Block} = goog.requireType('Blockly.Block');
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 /* eslint-disable-next-line no-unused-vars */
 const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
-const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
 /* eslint-disable-next-line no-unused-vars */
 const {IASTNodeLocationSvg} = goog.require('Blockly.IASTNodeLocationSvg');
 /* eslint-disable-next-line no-unused-vars */
@@ -513,7 +513,7 @@ class Field {
    * @package
    */
   dispose() {
-    DropDownDiv.hideIfOwner(this);
+    dropDownDiv.hideIfOwner(this);
     WidgetDiv.hideIfOwner(this);
     Tooltip.unbindMouseEvents(this.getClickTarget_());
 

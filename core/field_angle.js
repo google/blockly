@@ -19,10 +19,10 @@ const Css = goog.require('Blockly.Css');
 const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
+const dropDownDiv = goog.require('Blockly.dropDownDiv');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const math = goog.require('Blockly.utils.math');
 const userAgent = goog.require('Blockly.utils.userAgent');
-const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
 const {Field} = goog.require('Blockly.Field');
 const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
 const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
@@ -234,13 +234,13 @@ class FieldAngle extends FieldTextInput {
     super.showEditor_(opt_e, noFocus);
 
     this.dropdownCreate_();
-    DropDownDiv.getContentDiv().appendChild(this.editor_);
+    dropDownDiv.getContentDiv().appendChild(this.editor_);
 
-    DropDownDiv.setColour(
+    dropDownDiv.setColour(
         this.sourceBlock_.style.colourPrimary,
         this.sourceBlock_.style.colourTertiary);
 
-    DropDownDiv.showPositionedByField(this, this.dropdownDispose_.bind(this));
+    dropDownDiv.showPositionedByField(this, this.dropdownDispose_.bind(this));
 
     this.updateGraph_();
   }
@@ -335,7 +335,7 @@ class FieldAngle extends FieldTextInput {
    * @private
    */
   hide_() {
-    DropDownDiv.hideIfOwner(this);
+    dropDownDiv.hideIfOwner(this);
     WidgetDiv.hide();
   }
 

@@ -31,6 +31,7 @@ const blocks = goog.require('Blockly.serialization.blocks');
 const browserEvents = goog.require('Blockly.browserEvents');
 const common = goog.require('Blockly.common');
 const dom = goog.require('Blockly.utils.dom');
+const dropDownDiv = goog.require('Blockly.dropDownDiv');
 const eventUtils = goog.require('Blockly.Events.utils');
 const registry = goog.require('Blockly.registry');
 const svgMath = goog.require('Blockly.utils.svgMath');
@@ -52,7 +53,6 @@ const {ContextMenuRegistry} = goog.require('Blockly.ContextMenuRegistry');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
 const {Cursor} = goog.requireType('Blockly.Cursor');
-const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
 /* eslint-disable-next-line no-unused-vars */
 const {FlyoutButton} = goog.requireType('Blockly.FlyoutButton');
 const {Gesture} = goog.require('Blockly.Gesture');
@@ -2685,7 +2685,7 @@ class WorkspaceSvg extends Workspace {
   hideChaff(opt_onlyClosePopups) {
     Tooltip.hide();
     WidgetDiv.hide();
-    DropDownDiv.hideWithoutAnimation();
+    dropDownDiv.hideWithoutAnimation();
 
     const onlyClosePopups = !!opt_onlyClosePopups;
     const autoHideables = this.getComponentManager().getComponents(

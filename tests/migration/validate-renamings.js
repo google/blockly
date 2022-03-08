@@ -15,7 +15,7 @@
 
 const JsonSchema = require('@hyperjump/json-schema');
 const JSON5 = require('json5');
-const fs = require('fs/promises');
+const fs = require('fs');
 const path = require('path');
 
 
@@ -38,7 +38,7 @@ const RENAMINGS_FILENAME =
   const schemaUrl = 'file://' + path.resolve(SCHEMA_FILENAME);
   const schema = await JsonSchema.get(schemaUrl);
 
-  const renamingsJson5 = await fs.readFile(RENAMINGS_FILENAME);
+  const renamingsJson5 = fs.readFileSync(RENAMINGS_FILENAME);
   const renamings = JSON5.parse(renamingsJson5);
 
   const output =
@@ -72,6 +72,5 @@ const RENAMINGS_FILENAME =
     console.log('Renamings file is invalid.');
     process.exit(1);
   }
-  console.log('Renamings file is valid.');
-  process.exit(0);
+  // Default is a successful exit 0.
 })();

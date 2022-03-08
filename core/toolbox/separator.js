@@ -70,7 +70,8 @@ class ToolboxSeparator extends ToolboxItem {
    * @protected
    */
   createDom_() {
-    const container = /** @type {!HTMLDivElement} */ (document.createElement('div'));
+    const container =
+        /** @type {!HTMLDivElement} */ (document.createElement('div'));
     dom.addClass(container, this.cssConfig_['container']);
     this.htmlDiv_ = container;
     return container;

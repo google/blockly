@@ -107,7 +107,8 @@ const MenuItem = class {
    * @return {!Element} Completed DOM.
    */
   createDom() {
-    const element = /** @type {!HTMLDivElement} */ (document.createElement('div'));
+    const element =
+        /** @type {!HTMLDivElement} */ (document.createElement('div'));
     element.id = idGenerator.getNextUniqueId();
     this.element_ = element;
 
@@ -121,11 +122,13 @@ const MenuItem = class {
                            '') +
         (this.rightToLeft_ ? 'blocklyMenuItemRtl goog-menuitem-rtl ' : '');
 
-    const content = /** @type {!HTMLDivElement} */ (document.createElement('div'));
+    const content =
+        /** @type {!HTMLDivElement} */ (document.createElement('div'));
     content.className = 'blocklyMenuItemContent goog-menuitem-content';
     // Add a checkbox for checkable menu items.
     if (this.checkable_) {
-      const checkbox = /** @type {!HTMLDivElement} */ (document.createElement('div'));
+      const checkbox =
+          /** @type {!HTMLDivElement} */ (document.createElement('div'));
       checkbox.className = 'blocklyMenuItemCheckbox goog-menuitem-checkbox';
       content.appendChild(checkbox);
     }

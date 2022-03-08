@@ -266,7 +266,8 @@ class Toolbox extends DeleteArea {
    * @protected
    */
   createContainer_() {
-    const toolboxContainer = /** @type {!HTMLDivElement} */ (document.createElement('div'));
+    const toolboxContainer =
+        /** @type {!HTMLDivElement} */ (document.createElement('div'));
     toolboxContainer.setAttribute('layout', this.isHorizontal() ? 'h' : 'v');
     dom.addClass(toolboxContainer, 'blocklyToolboxDiv');
     dom.addClass(toolboxContainer, 'blocklyNonSelectable');
@@ -280,7 +281,8 @@ class Toolbox extends DeleteArea {
    * @protected
    */
   createContentsContainer_() {
-    const contentsContainer = /** @type {!HTMLDivElement} */ (document.createElement('div'));
+    const contentsContainer =
+        /** @type {!HTMLDivElement} */ (document.createElement('div'));
     dom.addClass(contentsContainer, 'blocklyToolboxContents');
     if (this.isHorizontal()) {
       contentsContainer.style.flexDirection = 'row';

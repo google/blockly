@@ -1097,10 +1097,8 @@ suite('Blocks', function() {
         chai.assert.notEqual(event.type, eventUtils.BLOCK_CHANGE);
       }
       setup(function() {
-        this.eventsFireSpy = sinon.spy(eventUtils, 'fire');
-      });
-      teardown(function() {
-        this.eventsFireSpy.restore();
+        this.eventsFireSpy = sinon.spy();
+        eventUtils.TEST_ONLY.setFireStub(this.eventsFireSpy);
       });
       suite('Headless', function() {
         setup(function() {

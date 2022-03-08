@@ -6,6 +6,7 @@
 
 goog.module('Blockly.test.insertionMarker');
 
+const JavaScript = goog.require('Blockly.JavaScript');
 const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
 
 
@@ -49,17 +50,17 @@ suite('InsertionMarkers', function() {
   });
   suite('Code Generation', function() {
     setup(function() {
-      Blockly.JavaScript['stack_block'] = function(block) {
+      JavaScript['stack_block'] = function(block) {
         return 'stack[' + block.id + '];\n';
       };
-      Blockly.JavaScript['row_block'] = function(block) {
-        const value = Blockly.JavaScript
-            .valueToCode(block, 'INPUT', Blockly.JavaScript.ORDER_NONE);
+      JavaScript['row_block'] = function(block) {
+        const value = JavaScript
+            .valueToCode(block, 'INPUT', JavaScript.ORDER_NONE);
         const code = 'row[' + block.id + '](' + value + ')';
-        return [code, Blockly.JavaScript.ORDER_NONE];
+        return [code, JavaScript.ORDER_NONE];
       };
-      Blockly.JavaScript['statement_block'] = function(block) {
-        return 'statement[' + block.id + ']{\n' + Blockly.JavaScript
+      JavaScript['statement_block'] = function(block) {
+        return 'statement[' + block.id + ']{\n' + JavaScript
             .statementToCode(block, 'STATEMENT') + '};\n';
       };
 
@@ -67,14 +68,14 @@ suite('InsertionMarkers', function() {
         Blockly.Xml.domToWorkspace(xml, this.workspace);
         const block = this.workspace.getBlockById('insertion');
         block.isInsertionMarker_ = true;
-        const code = Blockly.JavaScript.workspaceToCode(this.workspace);
+        const code = JavaScript.workspaceToCode(this.workspace);
         chai.assert.equal(code, expectedCode);
       };
     });
     teardown(function() {
-      delete Blockly.JavaScript['stack_block'];
-      delete Blockly.JavaScript['row_block'];
-      delete Blockly.JavaScript['statement_block'];
+      delete JavaScript['stack_block'];
+      delete JavaScript['row_block'];
+      delete JavaScript['statement_block'];
     });
     test('Marker Surrounds', function() {
       const xml = Blockly.Xml.textToDom(

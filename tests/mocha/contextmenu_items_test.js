@@ -259,38 +259,58 @@ suite('Context Menu Items', function() {
 
       test('Deletes all blocks after confirming', function() {
         // Mocks the confirmation dialog and calls the callback with 'true' simulating ok.
-        const confirmStub = sinon.stub(
-          Blockly.dialog, 'confirm').callsArgWith(1, true);
+        var confirmCalled = false;
+        const originalConfirm = Blockly.dialog.confirm;
+        Blockly.dialog.setConfirm((message, callback) => {
+          confirmCalled = true;
+          callback(true);
+        });
 
         this.workspace.newBlock('text');
         this.workspace.newBlock('text');
         this.deleteOption.callback(this.scope);
         this.clock.runAll();
-        sinon.assert.calledOnce(confirmStub);
+        chai.assert.isTrue(confirmCalled);
         chai.assert.equal(this.workspace.getTopBlocks(false).length, 0);
+
+        Blockly.dialog.setConfirm(originalConfirm);
       });
 
       test('Does not delete blocks if not confirmed', function() {
         // Mocks the confirmation dialog and calls the callback with 'false' simulating cancel.
-        const confirmStub = sinon.stub(
-          Blockly.dialog, 'confirm').callsArgWith(1, false);
+        var confirmCalled = false;
+        const originalConfirm = Blockly.dialog.confirm;
+        Blockly.dialog.setConfirm((message, callback) => {
+          confirmCalled = true;
+          callback(false);
+        });
 
         this.workspace.newBlock('text');
         this.workspace.newBlock('text');
         this.deleteOption.callback(this.scope);
         this.clock.runAll();
-        sinon.assert.calledOnce(confirmStub);
+        chai.assert.isTrue(confirmCalled);
         chai.assert.equal(this.workspace.getTopBlocks(false).length, 2);
+
+        Blockly.dialog.setConfirm(originalConfirm);
       });
 
       test('No dialog for single block', function() {
-        const confirmStub = sinon.stub(Blockly.dialog, 'confirm');
+        var confirmCalled = false;
+        const originalConfirm = Blockly.dialog.confirm;
+        Blockly.dialog.setConfirm((message, callback) => {
+          confirmCalled = true;
+          callback(false);
+        });
+
         this.workspace.newBlock('text');
         this.deleteOption.callback(this.scope);
         this.clock.runAll();
 
-        sinon.assert.notCalled(confirmStub);
+        chai.assert.isFalse(confirmCalled);
         chai.assert.equal(this.workspace.getTopBlocks(false).length, 0);
+
+        Blockly.dialog.setConfirm(originalConfirm);
       });
 
       test('Has correct label for multiple blocks', function() {
@@ -334,12 +354,9 @@ suite('Context Menu Items', function() {
       });
 
       test('Calls duplicate', function() {
-        const spy = sinon.spy(Blockly.clipboard, 'duplicate');
-
+        chai.assert.equal(1, this.workspace.getTopBlocks().length);
         this.duplicateOption.callback(this.scope);
-
-        sinon.assert.calledOnce(spy);
-        sinon.assert.calledWith(spy, this.block);
+        chai.assert.equal(2, this.workspace.getTopBlocks().length);
       });
 
       test('Has correct label', function() {

@@ -131,10 +131,6 @@ suite('Theme', function() {
           sinon.stub(workspace, 'refreshToolboxSelection');
       blockA.styleName_ = 'styleOne';
 
-      // Stubs are cleaned up in sharedTestTeardown
-      sinon.stub(Blockly, "getMainWorkspace").returns(workspace);
-      sinon.stub(Blockly, "hideChaff");
-
       workspace.setTheme(theme);
 
       // Checks that the theme was set correctly on Blockly namespace

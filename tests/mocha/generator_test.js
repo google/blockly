@@ -6,11 +6,11 @@
 
 goog.module('Blockly.test.generator');
 
-goog.require('Blockly.Dart');
-goog.require('Blockly.JavaScript');
-goog.require('Blockly.Lua');
-goog.require('Blockly.PHP');
-goog.require('Blockly.Python');
+const Dart = goog.require('Blockly.Dart');
+const JavaScript = goog.require('Blockly.JavaScript');
+const Lua = goog.require('Blockly.Lua');
+const PHP = goog.require('Blockly.PHP');
+const Python = goog.require('Blockly.Python');
 const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
 
 
@@ -83,11 +83,11 @@ suite('Generator', function() {
     });
 
     const testCase = [
-      [Blockly.Dart, 'Dart'],
-      [Blockly.JavaScript, 'JavaScript'],
-      [Blockly.Lua, 'Lua'],
-      [Blockly.PHP, 'PHP'],
-      [Blockly.Python, 'Python']];
+      [Dart, 'Dart'],
+      [JavaScript, 'JavaScript'],
+      [Lua, 'Lua'],
+      [PHP, 'PHP'],
+      [Python, 'Python']];
 
     suite('Trivial', function() {
       testCase.forEach(function(testCase) {

@@ -13,6 +13,7 @@ suite('DropDownDiv', function() {
   suite('Positioning', function() {
     setup(function() {
       sharedTestSetup.call(this);
+      Blockly.DropDownDiv.createDom();
       this.boundsStub = sinon.stub(Blockly.DropDownDiv.TEST_ONLY, 'getBoundsInfo')
           .returns({
             left: 0,
@@ -22,11 +23,9 @@ suite('DropDownDiv', function() {
             width: 100,
             height: 100,
           });
-      this.sizeStub = sinon.stub(Blockly.utils.style, 'getSize')
-          .returns({
-            width: 60,
-            height: 60,
-          });
+      const content = Blockly.DropDownDiv.getContentDiv();
+      content.style.width = '60px';
+      content.style.height = '60px';
       this.clientHeightStub = sinon.stub(document.documentElement, 'clientHeight')
           .get(function() {return 1000;});
       this.clientTopStub = sinon.stub(document.documentElement, 'clientTop')

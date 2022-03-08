@@ -656,14 +656,13 @@ suite('ASTNode', function() {
         chai.assert.equal(outNode.getLocation(), this.blocks.statementInput1);
       });
       test('fromStackToWorkspace', function() {
-        const stub = sinon.stub(this.blocks.statementInput4,
-            "getRelativeToSurfaceXY").returns({x: 10, y: 10});
+        const position = this.blocks.statementInput4.getRelativeToSurfaceXY();
+        this.blocks.statementInput4.moveBy(10 - position.x, 10 - position.y);
         const node = ASTNode.createStackNode(this.blocks.statementInput4);
         const outNode = node.out();
         chai.assert.equal(outNode.getType(), ASTNode.types.WORKSPACE);
         chai.assert.equal(outNode.wsCoordinate_.x, 10);
         chai.assert.equal(outNode.wsCoordinate_.y, -10);
-        stub.restore();
       });
       test('fromPreviousToInput', function() {
         const previous = this.blocks.statementInput3.previousConnection;

@@ -288,22 +288,25 @@ suite('Block JSON initialization', function() {
   });
 
   suite('fieldFromJson_', function() {
+    let originalFieldTypes;
+    const fieldTypes = [
+      'field_label', 
+      'field_number', 
+      'no_field_prefix_field', 
+      'input_prefix_field',
+    ];
+
     setup(function() {
-      this.stub = sinon.stub(Blockly.fieldRegistry, 'fromJson')
-          .callsFake(function(elem) {
-            switch (elem['type']) {
-              case 'field_label':
-                return 'field_label';
-              case 'field_number':
-                return 'field_number';
-              case 'no_field_prefix_field':
-                return 'no_field_prefix_field';
-              case 'input_prefix_field':
-                return 'input_prefix_field';
-              default:
-                return null;
-            }
-          });
+      if (!originalFieldTypes) {
+        originalFieldTypes = Blockly.registry.getAllItems(
+          Blockly.registry.Type.FIELD, true);
+      }
+      for (const fieldType of fieldTypes) {
+        Blockly.fieldRegistry.unregister(fieldType);
+        Blockly.fieldRegistry.register(fieldType, {
+          fromJson: options => options.type,
+        });
+      }
 
       this.assertField = function(json, expectedType) {
         const block = {
@@ -316,7 +319,15 @@ suite('Block JSON initialization', function() {
     });
 
     teardown(function() {
-      this.stub.restore();
+      for (const fieldType of fieldTypes) {
+        Blockly.fieldRegistry.unregister(fieldType);
+      }
+      const keys = Object.getOwnPropertyNames(originalFieldTypes);
+      for (const key of keys) {
+        if (!Blockly.registry.hasItem(Blockly.registry.Type.FIELD, key)) {
+          Blockly.fieldRegistry.register(key, originalFieldTypes[key]);
+        }
+      }
     });
 
     test('Simple field', function() {

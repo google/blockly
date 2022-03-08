@@ -62,7 +62,6 @@ function testAWorkspace() {
 
   suite('clear', function() {
     test('Trivial', function() {
-      sinon.stub(eventUtils, "setGroup").returns(null);
       this.workspace.createVariable('name1', 'type1', 'id1');
       this.workspace.createVariable('name2', 'type2', 'id2');
       this.workspace.newBlock('');
@@ -75,7 +74,6 @@ function testAWorkspace() {
     });
 
     test('No variables', function() {
-      sinon.stub(eventUtils, "setGroup").returns(null);
       this.workspace.newBlock('');
 
       this.workspace.clear();
@@ -97,42 +95,60 @@ function testAWorkspace() {
 
     test('deleteVariableById(id2) one usage', function() {
       // Deleting variable one usage should not trigger confirm dialog.
-      const stub =
-          sinon.stub(Blockly.dialog, "confirm").callsArgWith(1, true);
+      const originalConfirm = Blockly.dialog.confirm;
+      let confirmCalled = false;
+      Blockly.dialog.setConfirm((message, callback) => {
+        confirmCalled = true;
+        callback(true);
+      });
       this.workspace.deleteVariableById('id2');
 
-      sinon.assert.notCalled(stub);
+      chai.assert.isFalse(confirmCalled);
       const variable = this.workspace.getVariableById('id2');
       chai.assert.isNull(variable);
       assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
       assertBlockVarModelName(this.workspace, 0, 'name1');
+
+      Blockly.dialog.setConfirm(originalConfirm);
     });
 
     test('deleteVariableById(id1) multiple usages confirm', function() {
       // Deleting variable with multiple usages triggers confirm dialog.
-      const stub =
-          sinon.stub(Blockly.dialog, "confirm").callsArgWith(1, true);
+      const originalConfirm = Blockly.dialog.confirm;
+      let confirmCalled = false;
+      Blockly.dialog.setConfirm((message, callback) => {
+        confirmCalled = true;
+        callback(true);
+      });          
       this.workspace.deleteVariableById('id1');
 
-      sinon.assert.calledOnce(stub);
+      chai.assert.isTrue(confirmCalled);
       const variable = this.workspace.getVariableById('id1');
       chai.assert.isNull(variable);
       assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
       assertBlockVarModelName(this.workspace, 0, 'name2');
+
+      Blockly.dialog.setConfirm(originalConfirm);      
     });
 
     test('deleteVariableById(id1) multiple usages cancel', function() {
       // Deleting variable with multiple usages triggers confirm dialog.
-      const stub =
-          sinon.stub(Blockly.dialog, "confirm").callsArgWith(1, false);
+      const originalConfirm = Blockly.dialog.confirm;
+      let confirmCalled = false;
+      Blockly.dialog.setConfirm((message, callback) => {
+        confirmCalled = true;
+        callback(false);
+      });                    
       this.workspace.deleteVariableById('id1');
 
-      sinon.assert.calledOnce(stub);
+      chai.assert.isTrue(confirmCalled);
       assertVariableValues(this.workspace, 'name1', 'type1', 'id1');
       assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
       assertBlockVarModelName(this.workspace, 0, 'name1');
       assertBlockVarModelName(this.workspace, 1, 'name1');
       assertBlockVarModelName(this.workspace, 2, 'name2');
+
+      Blockly.dialog.setConfirm(originalConfirm);          
     });
   });
 

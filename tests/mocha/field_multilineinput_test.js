@@ -6,6 +6,11 @@
 
 goog.module('Blockly.test.fieldMultiline');
 
+const Dart = goog.require('Blockly.Dart');
+const JavaScript = goog.require('Blockly.JavaScript');
+const Lua = goog.require('Blockly.Lua');
+const PHP = goog.require('Blockly.PHP');
+const Python = goog.require('Blockly.Python');
 const {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSetValueTests} = goog.require('Blockly.test.helpers.fields');
 const {createTestBlock, defineRowBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
 const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
@@ -123,35 +128,35 @@ suite('Multiline Input Fields', function() {
      * @type {Array<CodeGenerationTestSuite>}
      */
     const testSuites = [
-      {title: 'Dart', generator: Blockly.Dart,
+      {title: 'Dart', generator: Dart,
         testCases: [
           {title: 'Empty string', expectedCode: '\'\'',
             createBlock: createBlockFn('')},
           {title: 'String with newline', expectedCode: '\'bark bark\' + \'\\n\' + \n\' bark bark bark\' + \'\\n\' + \n\' bark bar bark bark\' + \'\\n\' + \n\'\'',
             createBlock: createBlockFn('bark bark\n bark bark bark\n bark bar bark bark\n')},
         ]},
-      {title: 'JavaScript', generator: Blockly.JavaScript,
+      {title: 'JavaScript', generator: JavaScript,
         testCases: [
           {title: 'Empty string', expectedCode: '\'\'',
             createBlock: createBlockFn('')},
           {title: 'String with newline', expectedCode: '\'bark bark\' + \'\\n\' +\n\' bark bark bark\' + \'\\n\' +\n\' bark bar bark bark\' + \'\\n\' +\n\'\'',
             createBlock: createBlockFn('bark bark\n bark bark bark\n bark bar bark bark\n')},
         ]},
-      {title: 'Lua', generator: Blockly.Lua,
+      {title: 'Lua', generator: Lua,
         testCases: [
           {title: 'Empty string', expectedCode: '\'\'',
             createBlock: createBlockFn('')},
           {title: 'String with newline', expectedCode: '\'bark bark\' .. \'\\n\' ..\n\' bark bark bark\' .. \'\\n\' ..\n\' bark bar bark bark\' .. \'\\n\' ..\n\'\'',
             createBlock: createBlockFn('bark bark\n bark bark bark\n bark bar bark bark\n')},
         ]},
-      {title: 'PHP', generator: Blockly.PHP,
+      {title: 'PHP', generator: PHP,
         testCases: [
           {title: 'Empty string', expectedCode: '\'\'',
             createBlock: createBlockFn('')},
           {title: 'String with newline', expectedCode: '\'bark bark\' . "\\n" .\n\' bark bark bark\' . "\\n" .\n\' bark bar bark bark\' . "\\n" .\n\'\'',
             createBlock: createBlockFn('bark bark\n bark bark bark\n bark bar bark bark\n')},
         ]},
-      {title: 'Python', generator: Blockly.Python,
+      {title: 'Python', generator: Python,
         testCases: [
           {title: 'Empty string', expectedCode: '\'\'',
             createBlock: createBlockFn('')},

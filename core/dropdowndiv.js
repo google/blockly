@@ -103,19 +103,19 @@ let themeClassName = '';
 
 /**
  * The content element.
- * @type {!Element}
+ * @type {!HTMLDivElement}
  */
 let div;
 
 /**
  * The content element.
- * @type {!Element}
+ * @type {!HTMLDivElement}
  */
 let content;
 
 /**
  * The arrow element.
- * @type {!Element}
+ * @type {!HTMLDivElement}
  */
 let arrow;
 

@@ -54,7 +54,7 @@ const MenuItem = class {
 
     /**
      * The DOM element for the menu item.
-     * @type {?Element}
+     * @type {?HTMLDivElement}
      * @private
      */
     this.element_ = null;

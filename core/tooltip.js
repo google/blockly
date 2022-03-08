@@ -192,13 +192,13 @@ exports.MARGINS = MARGINS;
 
 /**
  * The HTML container.  Set once by createDom.
- * @type {Element}
+ * @type {?HTMLDivElement}
  */
 let DIV = null;
 
 /**
  * Returns the HTML tooltip container.
- * @returns {Element} The HTML tooltip container.
+ * @returns {?HTMLDivElement} The HTML tooltip container.
  * @alias Blockly.Tooltip.getDiv
  */
 const getDiv = function() {
@@ -210,7 +210,7 @@ Object.defineProperties(exports, {
   /**
    * The HTML container.  Set once by createDom.
    * @name Blockly.Tooltip.DIV
-   * @type {Element}
+   * @type {HTMLDivElement}
    * @deprecated Use Blockly.Tooltip.getDiv() and .setDiv().
    *     (September 2021)
    * @suppress {checkTypes}

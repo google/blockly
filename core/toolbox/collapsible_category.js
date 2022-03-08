@@ -47,7 +47,7 @@ class CollapsibleToolboxCategory extends ToolboxCategory {
 
     /**
      * Container for any child categories.
-     * @type {?Element}
+     * @type {?HTMLDivElement}
      * @protected
      */
     this.subcategoriesDiv_ = null;
@@ -170,7 +170,7 @@ class CollapsibleToolboxCategory extends ToolboxCategory {
   /**
    * Create the DOM for all subcategories.
    * @param {!Array<!IToolboxItem>} subcategories The subcategories.
-   * @return {!Element} The div holding all the subcategories.
+   * @return {!HTMLDivElement} The div holding all the subcategories.
    * @protected
    */
   createSubCategoriesDom_(subcategories) {
@@ -207,7 +207,7 @@ class CollapsibleToolboxCategory extends ToolboxCategory {
       this.closeIcon_(this.iconDom_);
     }
     aria.setState(
-        /** @type {!Element} */ (this.htmlDiv_), aria.State.EXPANDED,
+        /** @type {!HTMLDivElement} */ (this.htmlDiv_), aria.State.EXPANDED,
         isExpanded);
 
     this.parentToolbox_.handleToolboxItemResize();

@@ -54,9 +54,6 @@ const RENAMINGS_FILENAME =
   // File passed schema validation.  Do some additional checks.
   let ok = true;
   Object.entries(renamings).forEach(([version, modules]) => {
-    if (!Array.isArray(modules)) {
-      console.log(modules);
-    }
     // Scan through modules and check for duplicates.
     const seen = new Set();
     for (const {oldName} of modules) {

@@ -23,7 +23,7 @@
       // The name that the module now has in this version.
       newName: 'new.module.name',
 
-      // If a module had a default export and nowhas a named export,
+      // If a module had a default export and now has a named export,
       // the name of the named export can be given here.
       newExport: 'newNameForDefaultExport',
 
@@ -57,9 +57,9 @@
           // <enclosing module's.oldPath>.<old export name>.
           oldPath: 'old.path.on.Blockly.tree',
 
-          // The new location of this module onthe Blockly tree. To be
-          // backwards compatible with people accessing the Blockkly
-          // tree, this should be the same as the oldPath.
+          // The new location of this module on the Blockly tree. To
+          // be backwards compatible with people accessing the
+          // Blockkly tree, this should be the same as the oldPath.
           // Defaults to `${newModule}.${newExport}`.
           newPath: 'new.path.on.Blockly.tree',
 

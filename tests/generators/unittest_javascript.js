@@ -9,13 +9,15 @@
  */
 'use strict';
 
-Blockly.JavaScript['unittest_main'] = function(block) {
+import {JavaScript} from '../../generators/javascript.js';
+
+JavaScript['unittest_main'] = function(block) {
   // Container for unit tests.
-  var resultsVar = Blockly.JavaScript.nameDB_.getName('unittestResults',
+  var resultsVar = JavaScript.nameDB_.getName('unittestResults',
       Blockly.Names.DEVELOPER_VARIABLE_TYPE);
-  var functionName = Blockly.JavaScript.provideFunction_(
+  var functionName = JavaScript.provideFunction_(
       'unittest_report',
-      [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '() {',
+      [ 'function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '() {',
         '  // Create test report.',
         '  var report = [];',
         '  var summary = [];',
@@ -51,7 +53,7 @@ Blockly.JavaScript['unittest_main'] = function(block) {
       block.getFieldValue('SUITE_NAME') +
        '\')\n';
   // Run tests (unindented).
-  code += Blockly.JavaScript.statementToCode(block, 'DO')
+  code += JavaScript.statementToCode(block, 'DO')
       .replace(/^  /, '').replace(/\n  /g, '\n');
   // Send the report to the console (that's where errors will go anyway).
   code += 'console.log(' + functionName + '());\n';
@@ -60,12 +62,12 @@ Blockly.JavaScript['unittest_main'] = function(block) {
   return code;
 };
 
-Blockly.JavaScript['unittest_main'].defineAssert_ = function(block) {
-  var resultsVar = Blockly.JavaScript.nameDB_.getName('unittestResults',
+JavaScript['unittest_main'].defineAssert_ = function(block) {
+  var resultsVar = JavaScript.nameDB_.getName('unittestResults',
       Blockly.Names.DEVELOPER_VARIABLE_TYPE);
-  var functionName = Blockly.JavaScript.provideFunction_(
+  var functionName = JavaScript.provideFunction_(
       'assertEquals',
-      [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+      [ 'function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
           '(actual, expected, message) {',
         '  // Asserts that a value equals another value.',
         '  if (!' + resultsVar + ') {',
@@ -100,24 +102,24 @@ Blockly.JavaScript['unittest_main'].defineAssert_ = function(block) {
   return functionName;
 };
 
-Blockly.JavaScript['unittest_assertequals'] = function(block) {
+JavaScript['unittest_assertequals'] = function(block) {
   // Asserts that a value equals another value.
-  var message = Blockly.JavaScript.valueToCode(block, 'MESSAGE',
-      Blockly.JavaScript.ORDER_NONE) || '';
-  var actual = Blockly.JavaScript.valueToCode(block, 'ACTUAL',
-      Blockly.JavaScript.ORDER_NONE) || 'null';
-  var expected = Blockly.JavaScript.valueToCode(block, 'EXPECTED',
-      Blockly.JavaScript.ORDER_NONE) || 'null';
-  return Blockly.JavaScript['unittest_main'].defineAssert_() +
+  var message = JavaScript.valueToCode(block, 'MESSAGE',
+      JavaScript.ORDER_NONE) || '';
+  var actual = JavaScript.valueToCode(block, 'ACTUAL',
+      JavaScript.ORDER_NONE) || 'null';
+  var expected = JavaScript.valueToCode(block, 'EXPECTED',
+      JavaScript.ORDER_NONE) || 'null';
+  return JavaScript['unittest_main'].defineAssert_() +
       '(' + actual + ', ' + expected + ', ' + message + ');\n';
 };
 
-Blockly.JavaScript['unittest_assertvalue'] = function(block) {
+JavaScript['unittest_assertvalue'] = function(block) {
   // Asserts that a value is true, false, or null.
-  var message = Blockly.JavaScript.valueToCode(block, 'MESSAGE',
-      Blockly.JavaScript.ORDER_NONE) || '';
-  var actual = Blockly.JavaScript.valueToCode(block, 'ACTUAL',
-      Blockly.JavaScript.ORDER_NONE) || 'null';
+  var message = JavaScript.valueToCode(block, 'MESSAGE',
+      JavaScript.ORDER_NONE) || '';
+  var actual = JavaScript.valueToCode(block, 'ACTUAL',
+      JavaScript.ORDER_NONE) || 'null';
   var expected = block.getFieldValue('EXPECTED');
   if (expected === 'TRUE') {
     expected = 'true';
@@ -126,18 +128,18 @@ Blockly.JavaScript['unittest_assertvalue'] = function(block) {
   } else if (expected === 'NULL') {
     expected = 'null';
   }
-  return Blockly.JavaScript['unittest_main'].defineAssert_() +
+  return JavaScript['unittest_main'].defineAssert_() +
       '(' + actual + ', ' + expected + ', ' + message + ');\n';
 };
 
-Blockly.JavaScript['unittest_fail'] = function(block) {
+JavaScript['unittest_fail'] = function(block) {
   // Always assert an error.
-  var resultsVar = Blockly.JavaScript.nameDB_.getName('unittestResults',
+  var resultsVar = JavaScript.nameDB_.getName('unittestResults',
       Blockly.Names.DEVELOPER_VARIABLE_TYPE);
-  var message = Blockly.JavaScript.quote_(block.getFieldValue('MESSAGE'));
-  var functionName = Blockly.JavaScript.provideFunction_(
+  var message = JavaScript.quote_(block.getFieldValue('MESSAGE'));
+  var functionName = JavaScript.provideFunction_(
       'unittest_fail',
-      [ 'function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+      [ 'function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
           '(message) {',
         '  // Always assert an error.',
         '  if (!' + resultsVar + ') {',
@@ -148,20 +150,20 @@ Blockly.JavaScript['unittest_fail'] = function(block) {
   return functionName + '(' + message + ');\n';
 };
 
-Blockly.JavaScript['unittest_adjustindex'] = function(block) {
-  var index = Blockly.JavaScript.valueToCode(block, 'INDEX',
-      Blockly.JavaScript.ORDER_ADDITION) || '0';
+JavaScript['unittest_adjustindex'] = function(block) {
+  var index = JavaScript.valueToCode(block, 'INDEX',
+      JavaScript.ORDER_ADDITION) || '0';
   // Adjust index if using one-based indexing.
   if (block.workspace.options.oneBasedIndex) {
     if (Blockly.isNumber(index)) {
       // If the index is a naked number, adjust it right now.
-      return [Number(index) + 1, Blockly.JavaScript.ORDER_ATOMIC];
+      return [Number(index) + 1, JavaScript.ORDER_ATOMIC];
     } else {
       // If the index is dynamic, adjust it in code.
       index = index + ' + 1';
     }
   } else if (Blockly.isNumber(index)) {
-    return [index, Blockly.JavaScript.ORDER_ATOMIC];
+    return [index, JavaScript.ORDER_ATOMIC];
   }
-  return [index, Blockly.JavaScript.ORDER_ADDITION];
+  return [index, JavaScript.ORDER_ADDITION];
 };

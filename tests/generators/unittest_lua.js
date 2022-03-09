@@ -9,13 +9,15 @@
  */
 'use strict';
 
-Blockly.Lua['unittest_main'] = function(block) {
+import {Lua} from '../../generators/lua.js';
+
+Lua['unittest_main'] = function(block) {
   // Container for unit tests.
-  var resultsVar = Blockly.Lua.nameDB_.getName('unittestResults',
+  var resultsVar = Lua.nameDB_.getName('unittestResults',
       Blockly.Names.DEVELOPER_VARIABLE_TYPE);
-  var functionName = Blockly.Lua.provideFunction_(
+  var functionName = Lua.provideFunction_(
       'unittest_report',
-      ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ + '()',
+      ['function ' + Lua.FUNCTION_NAME_PLACEHOLDER_ + '()',
        '  -- Create test report.',
        '  local report = {}',
        '  local summary = {}',
@@ -49,7 +51,7 @@ Blockly.Lua['unittest_main'] = function(block) {
       block.getFieldValue('SUITE_NAME') +
        '\')\n';
   // Run tests (unindented).
-  code += Blockly.Lua.statementToCode(block, 'DO')
+  code += Lua.statementToCode(block, 'DO')
       .replace(/^  /, '').replace(/\n  /g, '\n');
   // Print the report.
   code += 'print(' + functionName + '())\n';
@@ -58,12 +60,12 @@ Blockly.Lua['unittest_main'] = function(block) {
   return code;
 };
 
-Blockly.Lua['unittest_main'].defineAssert_ = function(block) {
-  var resultsVar = Blockly.Lua.nameDB_.getName('unittestResults',
+Lua['unittest_main'].defineAssert_ = function(block) {
+  var resultsVar = Lua.nameDB_.getName('unittestResults',
       Blockly.Names.DEVELOPER_VARIABLE_TYPE);
-  var functionName = Blockly.Lua.provideFunction_(
+  var functionName = Lua.provideFunction_(
       'assertEquals',
-      ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ +
+      ['function ' + Lua.FUNCTION_NAME_PLACEHOLDER_ +
            '(actual, expected, message)',
        '  -- Asserts that a value equals another value.',
        '  assert(' + resultsVar + ' ~= nil, ' +
@@ -106,24 +108,24 @@ Blockly.Lua['unittest_main'].defineAssert_ = function(block) {
   return functionName;
 };
 
-Blockly.Lua['unittest_assertequals'] = function(block) {
+Lua['unittest_assertequals'] = function(block) {
   // Asserts that a value equals another value.
-  var message = Blockly.Lua.valueToCode(block, 'MESSAGE',
-      Blockly.Lua.ORDER_NONE) || '';
-  var actual = Blockly.Lua.valueToCode(block, 'ACTUAL',
-      Blockly.Lua.ORDER_NONE) || 'nil';
-  var expected = Blockly.Lua.valueToCode(block, 'EXPECTED',
-      Blockly.Lua.ORDER_NONE) || 'nil';
-  return Blockly.Lua['unittest_main'].defineAssert_() +
+  var message = Lua.valueToCode(block, 'MESSAGE',
+      Lua.ORDER_NONE) || '';
+  var actual = Lua.valueToCode(block, 'ACTUAL',
+      Lua.ORDER_NONE) || 'nil';
+  var expected = Lua.valueToCode(block, 'EXPECTED',
+      Lua.ORDER_NONE) || 'nil';
+  return Lua['unittest_main'].defineAssert_() +
       '(' + actual + ', ' + expected + ', ' + message + ')\n';
 };
 
-Blockly.Lua['unittest_assertvalue'] = function(block) {
+Lua['unittest_assertvalue'] = function(block) {
   // Asserts that a value is true, false, or null.
-  var message = Blockly.Lua.valueToCode(block, 'MESSAGE',
-      Blockly.Lua.ORDER_NONE) || '';
-  var actual = Blockly.Lua.valueToCode(block, 'ACTUAL',
-      Blockly.Lua.ORDER_NONE) || 'nil';
+  var message = Lua.valueToCode(block, 'MESSAGE',
+      Lua.ORDER_NONE) || '';
+  var actual = Lua.valueToCode(block, 'ACTUAL',
+      Lua.ORDER_NONE) || 'nil';
   var expected = block.getFieldValue('EXPECTED');
   if (expected == 'TRUE') {
     expected = 'true';
@@ -132,18 +134,18 @@ Blockly.Lua['unittest_assertvalue'] = function(block) {
   } else if (expected == 'NULL') {
     expected = 'nil';
   }
-  return Blockly.Lua.unittest_main.defineAssert_() +
+  return Lua.unittest_main.defineAssert_() +
       '(' + actual + ', ' + expected + ', ' + message + ')\n';
 };
 
-Blockly.Lua['unittest_fail'] = function(block) {
+Lua['unittest_fail'] = function(block) {
   // Always assert an error.
-  var resultsVar = Blockly.Lua.nameDB_.getName('unittestResults',
+  var resultsVar = Lua.nameDB_.getName('unittestResults',
       Blockly.Names.DEVELOPER_VARIABLE_TYPE);
-  var message = Blockly.Lua.quote_(block.getFieldValue('MESSAGE'));
-  var functionName = Blockly.Lua.provideFunction_(
+  var message = Lua.quote_(block.getFieldValue('MESSAGE'));
+  var functionName = Lua.provideFunction_(
       'unittest_fail',
-      ['function ' + Blockly.Lua.FUNCTION_NAME_PLACEHOLDER_ + '(message)',
+      ['function ' + Lua.FUNCTION_NAME_PLACEHOLDER_ + '(message)',
        '  -- Always assert an error.',
        '  assert(' + resultsVar +
            ' ~= nil, "Orphaned assert fail: " .. message)',
@@ -153,13 +155,13 @@ Blockly.Lua['unittest_fail'] = function(block) {
   return functionName + '(' + message + ')\n';
 };
 
-Blockly.Lua['unittest_adjustindex'] = function(block) {
-  var index = Blockly.Lua.valueToCode(block, 'INDEX',
-      Blockly.Lua.ORDER_ADDITIVE) || '0';
+Lua['unittest_adjustindex'] = function(block) {
+  var index = Lua.valueToCode(block, 'INDEX',
+      Lua.ORDER_ADDITIVE) || '0';
   if (Blockly.isNumber(index)) {
     // If the index is a naked number, adjust it right now.
-    return [Number(index) + 1, Blockly.Lua.ORDER_ATOMIC];
+    return [Number(index) + 1, Lua.ORDER_ATOMIC];
   }
   // If the index is dynamic, adjust it in code.
-  return [index + ' + 1', Blockly.Lua.ORDER_ADDITIVE];
+  return [index + ' + 1', Lua.ORDER_ADDITIVE];
 };

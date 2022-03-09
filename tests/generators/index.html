@@ -4,7 +4,11 @@
 <meta charset="utf-8">
 <title>Blockly Generator Tests</title>
 <script src="../../blockly_uncompressed.js"></script>
-<script src="../../msg/messages.js"></script>
+<script type="module">
+  import * as Blockly from '../../core/blockly.js';
+  window.Blockly = Blockly;
+</script>    
+<script type="module" src="../../msg/messages.js" defer></script>
 
 <script>
 // Require optional modules needed by tests.
@@ -15,14 +19,20 @@ goog.require('Blockly.PHP.all');
 goog.require('Blockly.Python.all');
 goog.require('Blockly.libraryBlocks');
 </script>
-<script src="unittest_javascript.js"></script>
-<script src="unittest_python.js"></script>
-<script src="unittest_php.js"></script>
-<script src="unittest_lua.js"></script>
-<script src="unittest_dart.js"></script>
-<script src="unittest.js"></script>
-<script>
+<script src="unittest_javascript.js" type="module"></script>
+<script src="unittest_python.js" type="module"></script>
+<script src="unittest_php.js" type="module"></script>
+<script src="unittest_lua.js" type="module"></script>
+<script src="unittest_dart.js" type="module"></script>
+<script src="unittest.js" type="module"></script>
+<script type="module">
 'use strict';
+import * as Blockly from '../../core/blockly.js';
+import {Dart} from '../../generators/dart.js';
+import {JavaScript} from '../../generators/javascript.js';
+import {Lua} from '../../generators/lua.js';
+import {PHP} from '../../generators/php.js';
+import {Python} from '../../generators/python.js';
 
 var demoWorkspace = null;
 var outputCode = '';
@@ -77,6 +87,7 @@ function loadSelected() {
   output.style.background = '';
   loadingElem.textContent = 'done';
 }
+window.loadSelected = loadSelected;
 
 /**
  * Ask the user for a file name, then load that file's contents.
@@ -91,6 +102,7 @@ function loadOther() {
     fromXml(url, xmlText);
   }
 }
+window.loadOther = loadOther;
 
 function fetchFile(xmlUrl) {
   try {
@@ -111,6 +123,7 @@ function fetchFile(xmlUrl) {
   }
   return xmlHttp.responseText;
 }
+window.fetchFile = fetchFile;
 
 /**
  * @param {string} filename The URL (or other name) of the XML, for reporting.
@@ -143,6 +156,7 @@ function fromXml(filename, xmlText, opt_append) {
     return;
   }
 }
+window.fromXml = fromXml;
 
 function checkAll() {
   var boxList = document.getElementsByClassName('suite_checkbox');
@@ -150,6 +164,7 @@ function checkAll() {
     boxList[i].checked = true;
   }
 }
+window.checkAll = checkAll;
 
 function uncheckAll() {
   var boxList = document.getElementsByClassName('suite_checkbox');
@@ -157,6 +172,7 @@ function uncheckAll() {
     boxList[i].checked = false;
   }
 }
+window.uncheckAll = uncheckAll;
 
 function setOutput(text) {
   var output = document.getElementById('importExport');
@@ -164,6 +180,7 @@ function setOutput(text) {
   output.focus();
   output.select();
 }
+window.setOutput = setOutput;
 
 function toXml() {
   var xmlDom = Blockly.Xml.workspaceToDom(demoWorkspace,
@@ -172,43 +189,51 @@ function toXml() {
   xmlText = xmlText.replace(/ id="\d+"/g, '');
   setOutput(xmlText);
 }
+window.toXml = toXml;
 
 function toJavaScript() {
   var code = '\'use strict\';\n\n'
-  code += Blockly.JavaScript.workspaceToCode(demoWorkspace);
+  code += JavaScript.workspaceToCode(demoWorkspace);
   setOutput(code);
   outputCode = code;
 }
+window.toJavaScript = toJavaScript;
 
 function toPython() {
-  var code = Blockly.Python.workspaceToCode(demoWorkspace);
+  var code = Python.workspaceToCode(demoWorkspace);
   setOutput(code);
   outputCode = code;
 }
+window.toPython = toPython;
 
 function toPhp() {
-  var code = Blockly.PHP.workspaceToCode(demoWorkspace);
+  var code = PHP.workspaceToCode(demoWorkspace);
   setOutput(code);
   outputCode = code;
 }
+window.toPhp = toPhp;
 
 function toLua() {
-  var code = Blockly.Lua.workspaceToCode(demoWorkspace);
+  var code = Lua.workspaceToCode(demoWorkspace);
   setOutput(code);
   outputCode = code;
 }
+window.toLua = toLua;
 
 function toDart() {
-  var code = Blockly.Dart.workspaceToCode(demoWorkspace);
+  var code = Dart.workspaceToCode(demoWorkspace);
   setOutput(code);
   outputCode = code;
 }
+window.toDart = toDart;
 
 function changeIndex() {
   var oneBasedIndex = document.getElementById('indexing').checked;
   demoWorkspace.options.oneBasedIndex = oneBasedIndex;
   demoWorkspace.getToolbox().flyout_.workspace_.options.oneBasedIndex = oneBasedIndex;
 }
+window.changeIndex = changeIndex;
+start();
 </script>
 
 <style>
@@ -240,7 +265,7 @@ h1 {
 }
 </style>
 </head>
-<body onload="start()">
+<body>
 
   <div id="blocklyDiv"></div>
 

@@ -9,9 +9,9 @@
  */
 'use strict';
 
-goog.module('Blockly.PHP.colour');
+goog.declareModuleId('Blockly.PHP.colour');
 
-const PHP = goog.require('Blockly.PHP');
+import {PHP} from '../php.js';
 
 
 PHP['colour_picker'] = function(block) {

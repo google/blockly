@@ -9,9 +9,9 @@
  */
 'use strict';
 
-goog.module('Blockly.Dart.logic');
+goog.declareModuleId('Blockly.Dart.logic');
 
-const Dart = goog.require('Blockly.Dart');
+import {Dart} from '../dart.js';
 
 
 Dart['controls_if'] = function(block) {

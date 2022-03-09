@@ -9,10 +9,10 @@
  */
 'use strict';
 
-goog.module('Blockly.Dart.variables');
+goog.declareModuleId('Blockly.Dart.variables');
 
-const Dart = goog.require('Blockly.Dart');
-const {NameType} = goog.require('Blockly.Names');
+import {Dart} from '../dart.js';
+import {NameType} from '../../core/names.js';
 
 
 Dart['variables_get'] = function(block) {

@@ -11,15 +11,16 @@
  */
 'use strict';
 
-goog.module('Blockly.Lua.all');
+goog.declareModuleId('Blockly.Lua.all');
 
-goog.require('Blockly.Lua.colour');
-goog.require('Blockly.Lua.lists');
-goog.require('Blockly.Lua.logic');
-goog.require('Blockly.Lua.loops');
-goog.require('Blockly.Lua.math');
-goog.require('Blockly.Lua.procedures');
-goog.require('Blockly.Lua.texts');
-goog.require('Blockly.Lua.variables');
-goog.require('Blockly.Lua.variablesDynamic');
+import './colour.js';
+import './lists.js';
+import './logic.js';
+import './loops.js';
+import './math.js';
+import './procedures.js';
+import './text.js';
+import './variables.js';
+import './variables_dynamic.js';
+
 

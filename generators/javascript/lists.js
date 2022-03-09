@@ -10,10 +10,10 @@
  */
 'use strict';
 
-goog.module('Blockly.JavaScript.lists');
+goog.declareModuleId('Blockly.JavaScript.lists');
 
-const JavaScript = goog.require('Blockly.JavaScript');
-const {NameType} = goog.require('Blockly.Names');
+import {JavaScript} from '../javascript.js';
+import {NameType} from '../../core/names.js';
 
 
 JavaScript['lists_create_empty'] = function(block) {

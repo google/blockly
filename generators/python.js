@@ -10,15 +10,15 @@
  */
 'use strict';
 
-goog.module('Blockly.Python');
-goog.module.declareLegacyNamespace();
+goog.declareModuleId('Blockly.Python');
 
-const stringUtils = goog.require('Blockly.utils.string');
-const Variables = goog.require('Blockly.Variables');
+
+import * as stringUtils from '../core/utils/string.js';
+import * as Variables from '../core/variables.js';
 const {Block} = goog.requireType('Blockly.Block');
-const {Generator} = goog.require('Blockly.Generator');
-const {inputTypes} = goog.require('Blockly.inputTypes');
-const {Names, NameType} = goog.require('Blockly.Names');
+import {Generator} from '../core/generator.js';
+import {inputTypes} from '../core/input_types.js';
+import {Names, NameType} from '../core/names.js';
 const {Workspace} = goog.requireType('Blockly.Workspace');
 
 
@@ -331,4 +331,4 @@ Python.getAdjustedInt = function(block, atId, opt_delta, opt_negate) {
   return at;
 };
 
-exports = Python;
+export {Python};

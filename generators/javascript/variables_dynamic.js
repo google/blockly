@@ -9,11 +9,10 @@
  */
 'use strict';
 
-goog.module('Blockly.JavaScript.variablesDynamic');
+goog.declareModuleId('Blockly.JavaScript.variablesDynamic');
 
-const JavaScript = goog.require('Blockly.JavaScript');
-/** @suppress {extraRequire} */
-goog.require('Blockly.JavaScript.variables');
+import {JavaScript} from '../javascript.js';
+import './variables.js';
 
 
 // JavaScript is dynamically typed.

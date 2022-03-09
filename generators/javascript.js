@@ -10,17 +10,17 @@
  */
 'use strict';
 
-goog.module('Blockly.JavaScript');
-goog.module.declareLegacyNamespace();
+goog.declareModuleId('Blockly.JavaScript');
 
-const Variables = goog.require('Blockly.Variables');
-const objectUtils = goog.require('Blockly.utils.object');
-const stringUtils = goog.require('Blockly.utils.string');
+
+import * as Variables from '../core/variables.js';
+import * as objectUtils from '../core/utils/object.js';
+import * as stringUtils from '../core/utils/string.js';
 const {Block} = goog.requireType('Blockly.Block');
-const {Generator} = goog.require('Blockly.Generator');
-const {globalThis} = goog.require('Blockly.utils.global');
-const {inputTypes} = goog.require('Blockly.inputTypes');
-const {Names, NameType} = goog.require('Blockly.Names');
+import {Generator} from '../core/generator.js';
+import {globalThis} from '../core/utils/global.js';
+import {inputTypes} from '../core/input_types.js';
+import {Names, NameType} from '../core/names.js';
 const {Workspace} = goog.requireType('Blockly.Workspace');
 
 
@@ -321,4 +321,4 @@ JavaScript.getAdjusted = function(
   return at;
 };
 
-exports = JavaScript;
+export {JavaScript};

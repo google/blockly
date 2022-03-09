@@ -9,10 +9,10 @@
  */
 'use strict';
 
-goog.module('Blockly.Python.variables');
+goog.declareModuleId('Blockly.Python.variables');
 
-const Python = goog.require('Blockly.Python');
-const {NameType} = goog.require('Blockly.Names');
+import {Python} from '../python.js';
+import {NameType} from '../../core/names.js';
 
 
 Python['variables_get'] = function(block) {

@@ -9,9 +9,9 @@
  */
 'use strict';
 
-goog.module('Blockly.Lua.logic');
+goog.declareModuleId('Blockly.Lua.logic');
 
-const Lua = goog.require('Blockly.Lua');
+import {Lua} from '../lua.js';
 
 
 Lua['controls_if'] = function(block) {

@@ -10,15 +10,15 @@
  */
 'use strict';
 
-goog.module('Blockly.PHP');
-goog.module.declareLegacyNamespace();
+goog.declareModuleId('Blockly.PHP');
 
-const objectUtils = goog.require('Blockly.utils.object');
-const stringUtils = goog.require('Blockly.utils.string');
+
+import * as objectUtils from '../core/utils/object.js';
+import * as stringUtils from '../core/utils/string.js';
 const {Block} = goog.requireType('Blockly.Block');
-const {Generator} = goog.require('Blockly.Generator');
-const {inputTypes} = goog.require('Blockly.inputTypes');
-const {Names} = goog.require('Blockly.Names');
+import {Generator} from '../core/generator.js';
+import {inputTypes} from '../core/input_types.js';
+import {Names} from '../core/names.js';
 const {Workspace} = goog.requireType('Blockly.Workspace');
 
 
@@ -301,4 +301,4 @@ PHP.getAdjusted = function(block, atId, opt_delta, opt_negate, opt_order) {
   return at;
 };
 
-exports = PHP;
+export {PHP};

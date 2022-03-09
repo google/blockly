@@ -9,11 +9,10 @@
  */
 'use strict';
 
-goog.module('Blockly.Lua.variablesDynamic');
+goog.declareModuleId('Blockly.Lua.variablesDynamic');
 
-const Lua = goog.require('Blockly.Lua');
-/** @suppress {extraRequire} */
-goog.require('Blockly.Lua.variables');
+import {Lua} from '../lua.js';
+import './variables.js';
 
 
 // Lua is dynamically typed.

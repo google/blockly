@@ -9,9 +9,9 @@
  */
 'use strict';
 
-goog.module('Blockly.JavaScript.colour');
+goog.declareModuleId('Blockly.JavaScript.colour');
 
-const JavaScript = goog.require('Blockly.JavaScript');
+import {JavaScript} from '../javascript.js';
 
 
 JavaScript['colour_picker'] = function(block) {

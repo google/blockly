@@ -9,11 +9,11 @@
  */
 'use strict';
 
-goog.module('Blockly.JavaScript.loops');
+goog.declareModuleId('Blockly.JavaScript.loops');
 
-const stringUtils = goog.require('Blockly.utils.string');
-const JavaScript = goog.require('Blockly.JavaScript');
-const {NameType} = goog.require('Blockly.Names');
+import * as stringUtils from '../../core/utils/string.js';
+import {JavaScript} from '../javascript.js';
+import {NameType} from '../../core/names.js';
 
 
 JavaScript['controls_repeat_ext'] = function(block) {

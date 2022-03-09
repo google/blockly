@@ -9,9 +9,9 @@
  */
 'use strict';
 
-goog.module('Blockly.Python.logic');
+goog.declareModuleId('Blockly.Python.logic');
 
-const Python = goog.require('Blockly.Python');
+import {Python} from '../python.js';
 
 
 Python['controls_if'] = function(block) {

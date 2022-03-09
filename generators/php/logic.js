@@ -9,9 +9,9 @@
  */
 'use strict';
 
-goog.module('Blockly.PHP.logic');
+goog.declareModuleId('Blockly.PHP.logic');
 
-const PHP = goog.require('Blockly.PHP');
+import {PHP} from '../php.js';
 
 
 PHP['controls_if'] = function(block) {

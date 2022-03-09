@@ -9,10 +9,10 @@
  */
 'use strict';
 
-goog.module('Blockly.PHP.variables');
+goog.declareModuleId('Blockly.PHP.variables');
 
-const PHP = goog.require('Blockly.PHP');
-const {NameType} = goog.require('Blockly.Names');
+import {PHP} from '../php.js';
+import {NameType} from '../../core/names.js';
 
 
 PHP['variables_get'] = function(block) {

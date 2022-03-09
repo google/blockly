@@ -9,10 +9,10 @@
  */
 'use strict';
 
-goog.module('Blockly.Lua.texts');
+goog.declareModuleId('Blockly.Lua.texts');
 
-const Lua = goog.require('Blockly.Lua');
-const {NameType} = goog.require('Blockly.Names');
+import {Lua} from '../lua.js';
+import {NameType} from '../../core/names.js';
 
 
 Lua['text'] = function(block) {

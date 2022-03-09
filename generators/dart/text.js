@@ -9,10 +9,10 @@
  */
 'use strict';
 
-goog.module('Blockly.Dart.texts');
+goog.declareModuleId('Blockly.Dart.texts');
 
-const Dart = goog.require('Blockly.Dart');
-const {NameType} = goog.require('Blockly.Names');
+import {Dart} from '../dart.js';
+import {NameType} from '../../core/names.js';
 
 
 Dart.addReservedWords('Html,Math');

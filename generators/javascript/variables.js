@@ -9,10 +9,10 @@
  */
 'use strict';
 
-goog.module('Blockly.JavaScript.variables');
+goog.declareModuleId('Blockly.JavaScript.variables');
 
-const JavaScript = goog.require('Blockly.JavaScript');
-const {NameType} = goog.require('Blockly.Names');
+import {JavaScript} from '../javascript.js';
+import {NameType} from '../../core/names.js';
 
 
 JavaScript['variables_get'] = function(block) {

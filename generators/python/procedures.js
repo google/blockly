@@ -9,11 +9,11 @@
  */
 'use strict';
 
-goog.module('Blockly.Python.procedures');
+goog.declareModuleId('Blockly.Python.procedures');
 
-const Python = goog.require('Blockly.Python');
-const Variables = goog.require('Blockly.Variables');
-const {NameType} = goog.require('Blockly.Names');
+import {Python} from '../python.js';
+import * as Variables from '../../core/variables.js';
+import {NameType} from '../../core/names.js';
 
 
 Python['procedures_defreturn'] = function(block) {

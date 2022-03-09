@@ -9,10 +9,10 @@
  */
 'use strict';
 
-goog.module('Blockly.PHP.math');
+goog.declareModuleId('Blockly.PHP.math');
 
-const PHP = goog.require('Blockly.PHP');
-const {NameType} = goog.require('Blockly.Names');
+import {PHP} from '../php.js';
+import {NameType} from '../../core/names.js';
 
 
 PHP['math_number'] = function(block) {

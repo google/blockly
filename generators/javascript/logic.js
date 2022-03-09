@@ -9,9 +9,9 @@
  */
 'use strict';
 
-goog.module('Blockly.JavaScript.logic');
+goog.declareModuleId('Blockly.JavaScript.logic');
 
-const JavaScript = goog.require('Blockly.JavaScript');
+import {JavaScript} from '../javascript.js';
 
 
 JavaScript['controls_if'] = function(block) {

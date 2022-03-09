@@ -10,16 +10,16 @@
  */
 'use strict';
 
-goog.module('Blockly.Dart');
-goog.module.declareLegacyNamespace();
+goog.declareModuleId('Blockly.Dart');
 
-const Variables = goog.require('Blockly.Variables');
-const stringUtils = goog.require('Blockly.utils.string');
+
+import * as Variables from '../core/variables.js';
+import * as stringUtils from '../core/utils/string.js';
 const {Block} = goog.requireType('Blockly.Block');
-const {Generator} = goog.require('Blockly.Generator');
-const {Names, NameType} = goog.require('Blockly.Names');
+import {Generator} from '../core/generator.js';
+import {Names, NameType} from '../core/names.js';
 const {Workspace} = goog.requireType('Blockly.Workspace');
-const {inputTypes} = goog.require('Blockly.inputTypes');
+import {inputTypes} from '../core/input_types.js';
 
 
 /**
@@ -301,4 +301,4 @@ Dart.getAdjusted = function(block, atId, opt_delta, opt_negate,
   return at;
 };
 
-exports = Dart;
+export {Dart};

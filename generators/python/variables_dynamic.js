@@ -9,11 +9,10 @@
  */
 'use strict';
 
-goog.module('Blockly.Python.variablesDynamic');
+goog.declareModuleId('Blockly.Python.variablesDynamic');
 
-const Python = goog.require('Blockly.Python');
-/** @suppress {extraRequire} */
-goog.require('Blockly.Python.variables');
+import {Python} from '../python.js';
+import './variables.js';
 
 
 // Python is dynamically typed.

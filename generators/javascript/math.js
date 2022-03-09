@@ -10,10 +10,10 @@
  */
 'use strict';
 
-goog.module('Blockly.JavaScript.math');
+goog.declareModuleId('Blockly.JavaScript.math');
 
-const JavaScript = goog.require('Blockly.JavaScript');
-const {NameType} = goog.require('Blockly.Names');
+import {JavaScript} from '../javascript.js';
+import {NameType} from '../../core/names.js';
 
 
 JavaScript['math_number'] = function(block) {

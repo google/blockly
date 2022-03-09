@@ -9,9 +9,9 @@
  */
 'use strict';
 
-goog.module('Blockly.Lua.colour');
+goog.declareModuleId('Blockly.Lua.colour');
 
-const Lua = goog.require('Blockly.Lua');
+import {Lua} from '../lua.js';
 
 
 Lua['colour_picker'] = function(block) {

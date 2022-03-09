@@ -9,11 +9,11 @@
  */
 'use strict';
 
-goog.module('Blockly.Dart.loops');
+goog.declareModuleId('Blockly.Dart.loops');
 
-const Dart = goog.require('Blockly.Dart');
-const stringUtils = goog.require('Blockly.utils.string');
-const {NameType} = goog.require('Blockly.Names');
+import {Dart} from '../dart.js';
+import * as stringUtils from '../../core/utils/string.js';
+import {NameType} from '../../core/names.js';
 
 
 Dart['controls_repeat_ext'] = function(block) {

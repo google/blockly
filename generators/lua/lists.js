@@ -9,10 +9,10 @@
  */
 'use strict';
 
-goog.module('Blockly.Lua.lists');
+goog.declareModuleId('Blockly.Lua.lists');
 
-const Lua = goog.require('Blockly.Lua');
-const {NameType} = goog.require('Blockly.Names');
+import {Lua} from '../lua.js';
+import {NameType} from '../../core/names.js';
 
 
 Lua['lists_create_empty'] = function(block) {

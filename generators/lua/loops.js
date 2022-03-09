@@ -9,11 +9,11 @@
  */
 'use strict';
 
-goog.module('Blockly.Lua.loops');
+goog.declareModuleId('Blockly.Lua.loops');
 
-const Lua = goog.require('Blockly.Lua');
-const stringUtils = goog.require('Blockly.utils.string');
-const {NameType} = goog.require('Blockly.Names');
+import {Lua} from '../lua.js';
+import * as stringUtils from '../../core/utils/string.js';
+import {NameType} from '../../core/names.js';
 
 
 /**

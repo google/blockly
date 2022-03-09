@@ -9,11 +9,11 @@
  */
 'use strict';
 
-goog.module('Blockly.PHP.loops');
+goog.declareModuleId('Blockly.PHP.loops');
 
-const PHP = goog.require('Blockly.PHP');
-const stringUtils = goog.require('Blockly.utils.string');
-const {NameType} = goog.require('Blockly.Names');
+import {PHP} from '../php.js';
+import * as stringUtils from '../../core/utils/string.js';
+import {NameType} from '../../core/names.js';
 
 
 PHP['controls_repeat_ext'] = function(block) {

@@ -9,10 +9,10 @@
  */
 'use strict';
 
-goog.module('Blockly.Python.math');
+goog.declareModuleId('Blockly.Python.math');
 
-const Python = goog.require('Blockly.Python');
-const {NameType} = goog.require('Blockly.Names');
+import {Python} from '../python.js';
+import {NameType} from '../../core/names.js';
 
 
 // If any new block imports any library, add that library name here.

@@ -9,11 +9,10 @@
  */
 'use strict';
 
-goog.module('Blockly.PHP.variablesDynamic');
+goog.declareModuleId('Blockly.PHP.variablesDynamic');
 
-const PHP = goog.require('Blockly.PHP');
-/** @suppress {extraRequire} */
-goog.require('Blockly.PHP.variables');
+import {PHP} from '../php.js';
+import './variables.js';
 
 
 // PHP is dynamically typed.

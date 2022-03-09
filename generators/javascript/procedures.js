@@ -9,10 +9,10 @@
  */
 'use strict';
 
-goog.module('Blockly.JavaScript.procedures');
+goog.declareModuleId('Blockly.JavaScript.procedures');
 
-const JavaScript = goog.require('Blockly.JavaScript');
-const {NameType} = goog.require('Blockly.Names');
+import {JavaScript} from '../javascript.js';
+import {NameType} from '../../core/names.js';
 
 
 JavaScript['procedures_defreturn'] = function(block) {

@@ -9,11 +9,10 @@
  */
 'use strict';
 
-goog.module('Blockly.Dart.variablesDynamic');
+goog.declareModuleId('Blockly.Dart.variablesDynamic');
 
-const Dart = goog.require('Blockly.Dart');
-/** @suppress {extraRequire} */
-goog.require('Blockly.Dart.variables');
+import {Dart} from '../dart.js';
+import './variables.js';
 
 
 // Dart is dynamically typed.

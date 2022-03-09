@@ -9,10 +9,10 @@
  */
 'use strict';
 
-goog.module('Blockly.Lua.procedures');
+goog.declareModuleId('Blockly.Lua.procedures');
 
-const Lua = goog.require('Blockly.Lua');
-const {NameType} = goog.require('Blockly.Names');
+import {Lua} from '../lua.js';
+import {NameType} from '../../core/names.js';
 
 
 Lua['procedures_defreturn'] = function(block) {

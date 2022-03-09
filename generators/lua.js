@@ -11,15 +11,15 @@
  */
 'use strict';
 
-goog.module('Blockly.Lua');
-goog.module.declareLegacyNamespace();
+goog.declareModuleId('Blockly.Lua');
 
-const objectUtils = goog.require('Blockly.utils.object');
-const stringUtils = goog.require('Blockly.utils.string');
+
+import * as objectUtils from '../core/utils/object.js';
+import * as stringUtils from '../core/utils/string.js';
 const {Block} = goog.requireType('Blockly.Block');
-const {Generator} = goog.require('Blockly.Generator');
-const {inputTypes} = goog.require('Blockly.inputTypes');
-const {Names} = goog.require('Blockly.Names');
+import {Generator} from '../core/generator.js';
+import {inputTypes} from '../core/input_types.js';
+import {Names} from '../core/names.js';
 const {Workspace} = goog.requireType('Blockly.Workspace');
 
 
@@ -204,4 +204,4 @@ Lua.scrub_ = function(block, code, opt_thisOnly) {
   return commentCode + code + nextCode;
 };
 
-exports = Lua;
+export {Lua};

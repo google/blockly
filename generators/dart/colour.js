@@ -9,9 +9,9 @@
  */
 'use strict';
 
-goog.module('Blockly.Dart.colour');
+goog.declareModuleId('Blockly.Dart.colour');
 
-const Dart = goog.require('Blockly.Dart');
+import {Dart} from '../dart.js';
 
 
 Dart.addReservedWords('Math');

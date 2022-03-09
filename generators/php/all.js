@@ -11,15 +11,16 @@
  */
 'use strict';
 
-goog.module('Blockly.PHP.all');
+goog.declareModuleId('Blockly.PHP.all');
 
-goog.require('Blockly.PHP.colour');
-goog.require('Blockly.PHP.lists');
-goog.require('Blockly.PHP.logic');
-goog.require('Blockly.PHP.loops');
-goog.require('Blockly.PHP.math');
-goog.require('Blockly.PHP.procedures');
-goog.require('Blockly.PHP.texts');
-goog.require('Blockly.PHP.variables');
-goog.require('Blockly.PHP.variablesDynamic');
+import './colour.js';
+import './lists.js';
+import './logic.js';
+import './loops.js';
+import './math.js';
+import './procedures.js';
+import './text.js';
+import './variables.js';
+import './variables_dynamic.js';
+
 

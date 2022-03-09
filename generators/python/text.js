@@ -9,11 +9,11 @@
  */
 'use strict';
 
-goog.module('Blockly.Python.texts');
+goog.declareModuleId('Blockly.Python.texts');
 
-const Python = goog.require('Blockly.Python');
-const stringUtils = goog.require('Blockly.utils.string');
-const {NameType} = goog.require('Blockly.Names');
+import {Python} from '../python.js';
+import * as stringUtils from '../../core/utils/string.js';
+import {NameType} from '../../core/names.js';
 
 
 Python['text'] = function(block) {

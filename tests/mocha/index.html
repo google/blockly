@@ -5,7 +5,6 @@
     <title>Mocha Tests for Blockly</title>
 
     <link href="../../node_modules/mocha/mocha.css" rel="stylesheet" />
-    <script src="../../blockly_uncompressed.js"></script>
     <script src="../deps.mocha.js"></script>
     <script src="../../msg/messages.js"></script>
   </head>
@@ -54,64 +53,64 @@
       goog.require('Blockly.libraryBlocks.variablesDynamic');
 
       // Run tests.
-      goog.require('Blockly.test.astNode');
-      goog.require('Blockly.test.blockChangeEvent');
-      goog.require('Blockly.test.blockCreateEvent');
-      goog.require('Blockly.test.blockJson');
-      goog.require('Blockly.test.blocks');
-      goog.require('Blockly.test.comments');
-      goog.require('Blockly.test.connectionChecker');
-      goog.require('Blockly.test.connectionDb');
-      goog.require('Blockly.test.connection');
-      goog.require('Blockly.test.contextMenuItem');
-      goog.require('Blockly.test.cursor');
-      goog.require('Blockly.test.dropdown');
-      goog.require('Blockly.test.event');
-      goog.require('Blockly.test.extensions');
-      goog.require('Blockly.test.fieldAngle');
-      goog.require('Blockly.test.fieldCheckbox');
-      goog.require('Blockly.test.fieldColour');
-      goog.require('Blockly.test.fieldDropdown');
-      goog.require('Blockly.test.fieldImage');
-      goog.require('Blockly.test.fieldLabelSerialization');
-      goog.require('Blockly.test.fieldLabel');
-      goog.require('Blockly.test.fieldMultiline');
-      goog.require('Blockly.test.fieldNumber');
-      goog.require('Blockly.test.fieldRegistry');
-      goog.require('Blockly.test.fieldTest');
-      goog.require('Blockly.test.fieldTextInput');
-      goog.require('Blockly.test.fieldVariable');
-      goog.require('Blockly.test.flyout');
-      goog.require('Blockly.test.generator');
-      goog.require('Blockly.test.gesture');
-      goog.require('Blockly.test.input');
-      goog.require('Blockly.test.insertionMarker');
-      goog.require('Blockly.test.jsoDeserialization');
-      goog.require('Blockly.test.jsoSerialization');
-      goog.require('Blockly.test.json');
-      goog.require('Blockly.test.keydown');
-      goog.require('Blockly.test.logicTernary');
-      goog.require('Blockly.test.metrics');
-      goog.require('Blockly.test.mutator');
-      goog.require('Blockly.test.names');
-      goog.require('Blockly.test.procedures');
-      goog.require('Blockly.test.registry');
-      goog.require('Blockly.test.serialization');
-      goog.require('Blockly.test.shortcutRegistry');
-      goog.require('Blockly.test.theme');
-      goog.require('Blockly.test.toolbox');
-      goog.require('Blockly.test.tooltip');
-      goog.require('Blockly.test.trashcan');
-      goog.require('Blockly.test.utils');
-      goog.require('Blockly.test.variableMap');
-      goog.require('Blockly.test.variableModel');
-      goog.require('Blockly.test.variables');
-      goog.require('Blockly.test.widgetDiv');
-      goog.require('Blockly.test.workspaceComment');
-      goog.require('Blockly.test.workspaceSvg');
-      goog.require('Blockly.test.workspace');
-      goog.require('Blockly.test.xml');
-      goog.require('Blockly.test.zoomControls');
+      // goog.require('Blockly.test.astNode');
+      // goog.require('Blockly.test.blockChangeEvent');
+      // goog.require('Blockly.test.blockCreateEvent');
+      // goog.require('Blockly.test.blockJson');
+      // goog.require('Blockly.test.blocks');
+      // goog.require('Blockly.test.comments');
+      // goog.require('Blockly.test.connectionChecker');
+      // goog.require('Blockly.test.connectionDb');
+      // goog.require('Blockly.test.connection');
+      // goog.require('Blockly.test.contextMenuItem');
+      // goog.require('Blockly.test.cursor');
+      // goog.require('Blockly.test.dropdown');
+      // goog.require('Blockly.test.event');
+      // goog.require('Blockly.test.extensions');
+      // goog.require('Blockly.test.fieldAngle');
+      // goog.require('Blockly.test.fieldCheckbox');
+      // goog.require('Blockly.test.fieldColour');
+      // goog.require('Blockly.test.fieldDropdown');
+      // goog.require('Blockly.test.fieldImage');
+      // goog.require('Blockly.test.fieldLabelSerialization');
+      // goog.require('Blockly.test.fieldLabel');
+      // goog.require('Blockly.test.fieldMultiline');
+      // goog.require('Blockly.test.fieldNumber');
+      // goog.require('Blockly.test.fieldRegistry');
+      // goog.require('Blockly.test.fieldTest');
+      // goog.require('Blockly.test.fieldTextInput');
+      // goog.require('Blockly.test.fieldVariable');
+      // goog.require('Blockly.test.flyout');
+      // goog.require('Blockly.test.generator');
+      // goog.require('Blockly.test.gesture');
+      // goog.require('Blockly.test.input');
+      // goog.require('Blockly.test.insertionMarker');
+      // goog.require('Blockly.test.jsoDeserialization');
+      // goog.require('Blockly.test.jsoSerialization');
+      // goog.require('Blockly.test.json');
+      // goog.require('Blockly.test.keydown');
+      // goog.require('Blockly.test.logicTernary');
+      // goog.require('Blockly.test.metrics');
+      // goog.require('Blockly.test.mutator');
+      // goog.require('Blockly.test.names');
+      // goog.require('Blockly.test.procedures');
+      // goog.require('Blockly.test.registry');
+      // goog.require('Blockly.test.serialization');
+      // goog.require('Blockly.test.shortcutRegistry');
+      // goog.require('Blockly.test.theme');
+      // goog.require('Blockly.test.toolbox');
+      // goog.require('Blockly.test.tooltip');
+      // goog.require('Blockly.test.trashcan');
+      // goog.require('Blockly.test.utils');
+      // goog.require('Blockly.test.variableMap');
+      // goog.require('Blockly.test.variableModel');
+      // goog.require('Blockly.test.variables');
+      // goog.require('Blockly.test.widgetDiv');
+      // goog.require('Blockly.test.workspaceComment');
+      // goog.require('Blockly.test.workspaceSvg');
+      // goog.require('Blockly.test.workspace');
+      // goog.require('Blockly.test.xml');
+      // goog.require('Blockly.test.zoomControls');
     </script>
 
     <div id="blocklyDiv"></div>
@@ -184,6 +183,12 @@
         const div = document.getElementById('failureMessages');
         div.appendChild(msg);
       });
+      {
+        const msg = document.createElement('p');
+        msg.textContent = `navigator.appVersion: ${navigator.appVersion}`;
+        const div = document.getElementById('failureMessages');
+        div.appendChild(msg);
+      }
     </script>
   </body>
 </html>

@@ -67,7 +67,7 @@ async function runMochaTestsInBrowser() {
     if (!failureMessagesEls.length) {
       console.log('There is at least one test failure, but no messages reported. Mocha may be failing because no tests are being run.');
     }
-    for (let el of failureMessagesEls) {
+    for (const el of failureMessagesEls) {
       console.log(await el.getText());
     }
   }

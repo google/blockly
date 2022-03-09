@@ -19,7 +19,8 @@ module.exports = runMochaTestsInBrowser;
  * @return {number} 0 on success, 1 on failure.
  */
 async function runMochaTestsInBrowser() {
-  const server = httpserver.createServer({root: '../../'});
+  const server = httpserver.createServer({root: './'});
+  server.listen(8080);
   var options = {
     capabilities: {
       browserName: 'chrome'

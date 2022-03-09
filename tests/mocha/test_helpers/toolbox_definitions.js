@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.declareModuleId('Blockly.test.helpers.toolboxDefinitions');
+goog.module('Blockly.test.helpers.toolboxDefinitions');
 
 
 /**
@@ -12,7 +12,7 @@ goog.declareModuleId('Blockly.test.helpers.toolboxDefinitions');
  * @return {Blockly.utils.toolbox.ToolboxJson} The array holding information
  *    for a toolbox.
  */
-export function getCategoryJSON() {
+function getCategoryJSON() {
   return {"contents": [
     {
       "kind": "CATEGORY",
@@ -42,13 +42,14 @@ export function getCategoryJSON() {
       "name": "Second",
     }]};
 }
+exports.getCategoryJSON = getCategoryJSON;
 
 /**
  * Get JSON for a simple toolbox.
  * @return {Blockly.utils.toolbox.ToolboxJson} The array holding information
  *    for a simple toolbox.
  */
-export function getSimpleJson() {
+function getSimpleJson() {
   return {"contents": [
     {
       "kind": "BLOCK",
@@ -82,8 +83,9 @@ export function getSimpleJson() {
     },
   ]};
 }
+exports.getSimpleJson = getSimpleJson;
 
-export function getProperSimpleJson() {
+function getProperSimpleJson() {
   return {
     "contents": [
       {
@@ -126,13 +128,14 @@ export function getProperSimpleJson() {
       },
     ]};
 }
+exports.getProperSimpleJson = getProperSimpleJson;
 
 /**
  * Get JSON for a toolbox that contains categories that contain categories.
  * @return {Blockly.utils.toolbox.ToolboxJson} The array holding information
  *    for a toolbox.
  */
-export function getDeeplyNestedJSON() {
+function getDeeplyNestedJSON() {
   return {"contents": [
     {
       "kind": "CATEGORY",
@@ -170,12 +173,13 @@ export function getDeeplyNestedJSON() {
       "name": "Second",
     }]};
 }
+exports.getDeeplyNestedJSON = getDeeplyNestedJSON;
 
 /**
  * Get an array filled with xml elements.
  * @return {Array<Node>} Array holding xml elements for a toolbox.
  */
-export function getXmlArray() {
+function getXmlArray() {
   const block = Blockly.Xml.textToDom(
       `<block type="logic_compare">
         <field name="OP">NEQ</field>
@@ -195,8 +199,9 @@ export function getXmlArray() {
   const label = Blockly.Xml.textToDom('<label text="tooltips"></label>');
   return [block, separator, button, label];
 }
+exports.getXmlArray = getXmlArray;
 
-export function getInjectedToolbox() {
+function getInjectedToolbox() {
   /**
    * Category: First
    *   sep
@@ -216,16 +221,18 @@ export function getInjectedToolbox() {
       });
   return workspace.getToolbox();
 }
+exports.getInjectedToolbox = getInjectedToolbox;
 
-export function getBasicToolbox() {
+function getBasicToolbox() {
   const workspace = new Blockly.WorkspaceSvg(new Blockly.Options({}));
   const toolbox = new Blockly.Toolbox(workspace);
   toolbox.HtmlDiv = document.createElement('div');
   toolbox.flyout_ = sinon.createStubInstance(Blockly.VerticalFlyout);
   return toolbox;
 }
+exports.getBasicToolbox = getBasicToolbox;
 
-export function getCollapsibleItem(toolbox) {
+function getCollapsibleItem(toolbox) {
   const contents = toolbox.contents_;
   for (let i = 0; i < contents.length; i++) {
     const item = contents[i];
@@ -234,8 +241,9 @@ export function getCollapsibleItem(toolbox) {
     }
   }
 }
+exports.getCollapsibleItem = getCollapsibleItem;
 
-export function getNonCollapsibleItem(toolbox) {
+function getNonCollapsibleItem(toolbox) {
   const contents = toolbox.contents_;
   for (let i = 0; i < contents.length; i++) {
     const item = contents[i];
@@ -244,11 +252,14 @@ export function getNonCollapsibleItem(toolbox) {
     }
   }
 }
+exports.getNonCollapsibleItem = getNonCollapsibleItem;
 
-export function getChildItem(toolbox) {
+function getChildItem(toolbox) {
   return toolbox.getToolboxItemById('nestedCategory');
 }
+exports.getChildItem = getChildItem;
 
-export function getSeparator(toolbox) {
+function getSeparator(toolbox) {
   return toolbox.getToolboxItemById('separator');
 }
+exports.getSeparator = getSeparator;

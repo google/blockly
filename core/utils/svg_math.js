@@ -261,7 +261,7 @@ const svgSize = function(svg) {
 };
 export {svgSize};
 
-export var TEST_ONLY = {
+export const TEST_ONLY = {
   XY_REGEX,
   XY_STYLE_REGEX,
 };

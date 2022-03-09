@@ -1,6 +1,6 @@
 {
     "parserOptions": {
-        "sourceType": "module",
+        "sourceType": "module"
     },    
     "rules": {
         "curly": ["error"],

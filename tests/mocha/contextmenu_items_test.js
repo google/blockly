@@ -259,7 +259,7 @@ suite('Context Menu Items', function() {
 
       test('Deletes all blocks after confirming', function() {
         // Mocks the confirmation dialog and calls the callback with 'true' simulating ok.
-        var confirmCalled = false;
+        let confirmCalled = false;
         const originalConfirm = Blockly.dialog.confirm;
         Blockly.dialog.setConfirm((message, callback) => {
           confirmCalled = true;
@@ -278,7 +278,7 @@ suite('Context Menu Items', function() {
 
       test('Does not delete blocks if not confirmed', function() {
         // Mocks the confirmation dialog and calls the callback with 'false' simulating cancel.
-        var confirmCalled = false;
+        let confirmCalled = false;
         const originalConfirm = Blockly.dialog.confirm;
         Blockly.dialog.setConfirm((message, callback) => {
           confirmCalled = true;
@@ -296,7 +296,7 @@ suite('Context Menu Items', function() {
       });
 
       test('No dialog for single block', function() {
-        var confirmCalled = false;
+        let confirmCalled = false;
         const originalConfirm = Blockly.dialog.confirm;
         Blockly.dialog.setConfirm((message, callback) => {
           confirmCalled = true;

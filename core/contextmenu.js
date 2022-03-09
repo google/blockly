@@ -20,7 +20,6 @@ import * as Xml from './xml.js';
 import * as aria from './utils/aria.js';
 import * as browserEvents from './browser_events.js';
 import * as clipboard from './clipboard.js';
-import * as deprecation from './utils/deprecation.js';
 import * as dom from './utils/dom.js';
 import * as eventUtils from './events/utils.js';
 import * as userAgent from './utils/useragent.js';

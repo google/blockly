@@ -20,7 +20,6 @@
 goog.declareModuleId('Blockly.WidgetDiv');
 
 import * as common from './common.js';
-import * as deprecation from './utils/deprecation.js';
 import * as dom from './utils/dom.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Rect} = goog.requireType('Blockly.utils.Rect');

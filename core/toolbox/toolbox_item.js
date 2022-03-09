@@ -24,6 +24,7 @@ const {ICollapsibleToolboxItem} = goog.requireType('Blockly.ICollapsibleToolboxI
 import {IToolboxItem} from '../interfaces/i_toolbox_item.js';
 /* eslint-disable-next-line no-unused-vars */
 const {IToolbox} = goog.requireType('Blockly.IToolbox');
+/* eslint-disable-next-line no-unused-vars */
 const {ToolboxItemInfo} = goog.requireType('Blockly.utils.toolbox');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');

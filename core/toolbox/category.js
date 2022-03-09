@@ -23,6 +23,7 @@ import * as object from '../utils/object.js';
 import * as parsing from '../utils/parsing.js';
 import * as registry from '../registry.js';
 import * as toolbox from '../utils/toolbox.js';
+/* eslint-disable-next-line no-unused-vars */
 const {CategoryInfo, FlyoutDefinition, FlyoutItemInfo, FlyoutItemInfoArray} = goog.requireType('Blockly.utils.toolbox');
 /* eslint-disable-next-line no-unused-vars */
 const {ICollapsibleToolboxItem} = goog.requireType('Blockly.ICollapsibleToolboxItem');

@@ -119,7 +119,7 @@ function testAWorkspace() {
       Blockly.dialog.setConfirm((message, callback) => {
         confirmCalled = true;
         callback(true);
-      });          
+      });
       this.workspace.deleteVariableById('id1');
 
       chai.assert.isTrue(confirmCalled);
@@ -128,7 +128,7 @@ function testAWorkspace() {
       assertVariableValues(this.workspace, 'name2', 'type2', 'id2');
       assertBlockVarModelName(this.workspace, 0, 'name2');
 
-      Blockly.dialog.setConfirm(originalConfirm);      
+      Blockly.dialog.setConfirm(originalConfirm);
     });
 
     test('deleteVariableById(id1) multiple usages cancel', function() {
@@ -138,7 +138,7 @@ function testAWorkspace() {
       Blockly.dialog.setConfirm((message, callback) => {
         confirmCalled = true;
         callback(false);
-      });                    
+      });
       this.workspace.deleteVariableById('id1');
 
       chai.assert.isTrue(confirmCalled);
@@ -148,7 +148,7 @@ function testAWorkspace() {
       assertBlockVarModelName(this.workspace, 1, 'name1');
       assertBlockVarModelName(this.workspace, 2, 'name2');
 
-      Blockly.dialog.setConfirm(originalConfirm);          
+      Blockly.dialog.setConfirm(originalConfirm);
     });
   });
 

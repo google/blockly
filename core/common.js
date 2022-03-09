@@ -158,7 +158,7 @@ export {svgResize};
  * All of the connections on blocks that are currently being dragged.
  * @type {!Array<!Connection>}
  */
-export var draggingConnections = [];
+export const draggingConnections = [];
 
 /**
  * Get a map of all the block's descendants mapping their type to the number of

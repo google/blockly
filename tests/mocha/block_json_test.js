@@ -290,9 +290,9 @@ suite('Block JSON initialization', function() {
   suite('fieldFromJson_', function() {
     let originalFieldTypes;
     const fieldTypes = [
-      'field_label', 
-      'field_number', 
-      'no_field_prefix_field', 
+      'field_label',
+      'field_number',
+      'no_field_prefix_field',
       'input_prefix_field',
     ];
 
@@ -304,7 +304,7 @@ suite('Block JSON initialization', function() {
       for (const fieldType of fieldTypes) {
         Blockly.fieldRegistry.unregister(fieldType);
         Blockly.fieldRegistry.register(fieldType, {
-          fromJson: options => options.type,
+          fromJson: (options) => options.type,
         });
       }
 

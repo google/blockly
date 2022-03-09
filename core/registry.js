@@ -53,7 +53,7 @@ const {ToolboxItem} = goog.requireType('Blockly.ToolboxItem');
  * @type {!Object<string, !Object<string, (function(new:?)|!Object)>>}
  */
 const typeMap = Object.create(null);
-export var TEST_ONLY = {typeMap};
+export const TEST_ONLY = {typeMap};
 
 /**
  * A map of maps. With the keys being the type and caseless name of the class we

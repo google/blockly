@@ -190,7 +190,7 @@ import './events/events_var_create.js';
  * @define {string}
  * @alias Blockly.VERSION
  */
-export var VERSION = 'uncompiled';
+export const VERSION = goog.define('Blockly.VERSION', 'uncompiled');
 
 /*
  * Top-level functions and properties on the Blockly namespace.
@@ -208,19 +208,19 @@ export var VERSION = 'uncompiled';
  * @see Blockly.Input.Align.LEFT
  * @alias Blockly.ALIGN_LEFT
  */
-export var ALIGN_LEFT = Align.LEFT;
+export const ALIGN_LEFT = Align.LEFT;
 
 /**
  * @see Blockly.Input.Align.CENTRE
  * @alias Blockly.ALIGN_CENTRE
  */
-export var ALIGN_CENTRE = Align.CENTRE;
+export const ALIGN_CENTRE = Align.CENTRE;
 
 /**
  * @see Blockly.Input.Align.RIGHT
  * @alias Blockly.ALIGN_RIGHT
  */
-export var ALIGN_RIGHT = Align.RIGHT;
+export const ALIGN_RIGHT = Align.RIGHT;
 
 /*
  * Aliases for constants used for connection and input types.
@@ -230,31 +230,31 @@ export var ALIGN_RIGHT = Align.RIGHT;
  * @see ConnectionType.INPUT_VALUE
  * @alias Blockly.INPUT_VALUE
  */
-export var INPUT_VALUE = ConnectionType.INPUT_VALUE;
+export const INPUT_VALUE = ConnectionType.INPUT_VALUE;
 
 /**
  * @see ConnectionType.OUTPUT_VALUE
  * @alias Blockly.OUTPUT_VALUE
  */
-export var OUTPUT_VALUE = ConnectionType.OUTPUT_VALUE;
+export const OUTPUT_VALUE = ConnectionType.OUTPUT_VALUE;
 
 /**
  * @see ConnectionType.NEXT_STATEMENT
  * @alias Blockly.NEXT_STATEMENT
  */
-export var NEXT_STATEMENT = ConnectionType.NEXT_STATEMENT;
+export const NEXT_STATEMENT = ConnectionType.NEXT_STATEMENT;
 
 /**
  * @see ConnectionType.PREVIOUS_STATEMENT
  * @alias Blockly.PREVIOUS_STATEMENT
  */
-export var PREVIOUS_STATEMENT = ConnectionType.PREVIOUS_STATEMENT;
+export const PREVIOUS_STATEMENT = ConnectionType.PREVIOUS_STATEMENT;
 
 /**
  * @see inputTypes.DUMMY_INPUT
  * @alias Blockly.DUMMY_INPUT
  */
-export var DUMMY_INPUT = inputTypes.DUMMY;
+export const DUMMY_INPUT = inputTypes.DUMMY;
 
 /**
  * Aliases for toolbox positions.
@@ -264,25 +264,25 @@ export var DUMMY_INPUT = inputTypes.DUMMY;
  * @see toolbox.Position.TOP
  * @alias Blockly.TOOLBOX_AT_TOP
  */
-export var TOOLBOX_AT_TOP = toolbox.Position.TOP;
+export const TOOLBOX_AT_TOP = toolbox.Position.TOP;
 
 /**
  * @see toolbox.Position.BOTTOM
  * @alias Blockly.TOOLBOX_AT_BOTTOM
  */
-export var TOOLBOX_AT_BOTTOM = toolbox.Position.BOTTOM;
+export const TOOLBOX_AT_BOTTOM = toolbox.Position.BOTTOM;
 
 /**
  * @see toolbox.Position.LEFT
  * @alias Blockly.TOOLBOX_AT_LEFT
  */
-export var TOOLBOX_AT_LEFT = toolbox.Position.LEFT;
+export const TOOLBOX_AT_LEFT = toolbox.Position.LEFT;
 
 /**
  * @see toolbox.Position.RIGHT
  * @alias Blockly.TOOLBOX_AT_RIGHT
  */
-export var TOOLBOX_AT_RIGHT = toolbox.Position.RIGHT;
+export const TOOLBOX_AT_RIGHT = toolbox.Position.RIGHT;
 
 /*
  * Other aliased functions.
@@ -298,7 +298,7 @@ export var TOOLBOX_AT_RIGHT = toolbox.Position.RIGHT;
  * @see Blockly.common.svgResize
  * @alias Blockly.svgResize
  */
-export var svgResize = common.svgResize;
+export const svgResize = common.svgResize;
 
 /**
  * Close tooltips, context menus, dropdown selections, etc.
@@ -320,7 +320,7 @@ export {hideChaff};
  * @see Blockly.common.getMainWorkspace
  * @alias Blockly.getMainWorkspace
  */
-export var getMainWorkspace = common.getMainWorkspace;
+export const getMainWorkspace = common.getMainWorkspace;
 
 /**
  * Define blocks from an array of JSON block definitions, as might be generated
@@ -329,7 +329,7 @@ export var getMainWorkspace = common.getMainWorkspace;
  * @see Blockly.common.defineBlocksWithJsonArray
  * @alias Blockly.defineBlocksWithJsonArray
  */
-export var defineBlocksWithJsonArray = common.defineBlocksWithJsonArray;
+export const defineBlocksWithJsonArray = common.defineBlocksWithJsonArray;
 
 /**
  * Set the parent container.  This is the container element that the WidgetDiv,
@@ -340,7 +340,7 @@ export var defineBlocksWithJsonArray = common.defineBlocksWithJsonArray;
  * @see Blockly.common.setParentContainer
  * @alias Blockly.setParentContainer
  */
-export var setParentContainer = common.setParentContainer;
+export const setParentContainer = common.setParentContainer;
 
 /**
  * Returns the dimensions of the specified SVG image.
@@ -350,7 +350,7 @@ export var setParentContainer = common.setParentContainer;
  * @see Blockly.WorkspaceSvg.setCachedParentSvgSize
  * @alias Blockly.svgSize
  */
-export var svgSize = svgMath.svgSize;
+export const svgSize = svgMath.svgSize;
 
 /**
  * Size the workspace when the contents change.  This also updates
@@ -521,14 +521,14 @@ const bindEventWithChecks_ = function(
 export {bindEventWithChecks_};
 
 // Aliases to allow external code to access these values for legacy reasons.
-export var COLLAPSE_CHARS = internalConstants.COLLAPSE_CHARS;
+export const COLLAPSE_CHARS = internalConstants.COLLAPSE_CHARS;
 
-export var DRAG_STACK = internalConstants.DRAG_STACK;
-export var OPPOSITE_TYPE = internalConstants.OPPOSITE_TYPE;
-export var RENAME_VARIABLE_ID = internalConstants.RENAME_VARIABLE_ID;
-export var DELETE_VARIABLE_ID = internalConstants.DELETE_VARIABLE_ID;
-export var COLLAPSED_INPUT_NAME = constants.COLLAPSED_INPUT_NAME;
-export var COLLAPSED_FIELD_NAME = constants.COLLAPSED_FIELD_NAME;
+export const DRAG_STACK = internalConstants.DRAG_STACK;
+export const OPPOSITE_TYPE = internalConstants.OPPOSITE_TYPE;
+export const RENAME_VARIABLE_ID = internalConstants.RENAME_VARIABLE_ID;
+export const DELETE_VARIABLE_ID = internalConstants.DELETE_VARIABLE_ID;
+export const COLLAPSED_INPUT_NAME = constants.COLLAPSED_INPUT_NAME;
+export const COLLAPSED_FIELD_NAME = constants.COLLAPSED_FIELD_NAME;
 
 /**
  * String for use in the "custom" attribute of a category in toolbox XML.
@@ -537,7 +537,7 @@ export var COLLAPSED_FIELD_NAME = constants.COLLAPSED_FIELD_NAME;
  * @const {string}
  * @alias Blockly.VARIABLE_CATEGORY_NAME
  */
-export var VARIABLE_CATEGORY_NAME = Variables.CATEGORY_NAME;
+export const VARIABLE_CATEGORY_NAME = Variables.CATEGORY_NAME;
 
 /**
  * String for use in the "custom" attribute of a category in toolbox XML.
@@ -546,7 +546,7 @@ export var VARIABLE_CATEGORY_NAME = Variables.CATEGORY_NAME;
  * @const {string}
  * @alias Blockly.VARIABLE_DYNAMIC_CATEGORY_NAME
  */
-export var VARIABLE_DYNAMIC_CATEGORY_NAME = VariablesDynamic.CATEGORY_NAME;
+export const VARIABLE_DYNAMIC_CATEGORY_NAME = VariablesDynamic.CATEGORY_NAME;
 
 /**
  * String for use in the "custom" attribute of a category in toolbox XML.
@@ -555,7 +555,7 @@ export var VARIABLE_DYNAMIC_CATEGORY_NAME = VariablesDynamic.CATEGORY_NAME;
  * @const {string}
  * @alias Blockly.PROCEDURE_CATEGORY_NAME
  */
-export var PROCEDURE_CATEGORY_NAME = Procedures.CATEGORY_NAME;
+export const PROCEDURE_CATEGORY_NAME = Procedures.CATEGORY_NAME;
 
 export {ASTNode};
 export {BasicCursor};
@@ -695,7 +695,7 @@ export {inputTypes};
 export {minimalist};
 export {registry};
 
-export var serialization = {
+export const serialization = {
   blocks: serializationBlocks,
   exceptions: serializationExceptions,
   priorities: serializationPriorities,

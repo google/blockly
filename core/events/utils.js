@@ -317,7 +317,7 @@ export {BUMP_EVENTS};
  */
 const FIRE_QUEUE = [];
 
-var fireStub;
+let fireStub;
 
 /**
  * Create a custom event and fire it.
@@ -601,9 +601,9 @@ export {disableOrphans};
 
 const setFireStub = function(stub) {
   fireStub = stub;
-}
+};
 
-export var TEST_ONLY = {
+export const TEST_ONLY = {
   FIRE_QUEUE,
   fireNow,
   setFireStub,

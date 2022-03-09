@@ -18,7 +18,6 @@
 goog.declareModuleId('Blockly.Generator');
 
 import * as common from './common.js';
-import * as deprecation from './utils/deprecation.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */

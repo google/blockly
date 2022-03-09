@@ -33,7 +33,7 @@ goog.requireType('Blockly.Mutator');
  * @private
  */
 const allExtensions = Object.create(null);
-export var TEST_ONLY = {allExtensions};
+export const TEST_ONLY = {allExtensions};
 
 /**
  * Registers a new extension function. Extensions are functions that help

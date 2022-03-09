@@ -44,18 +44,21 @@ const stringButtonClickHandler = function(button) {
   Variables.createVariableButtonHandler(
       button.getTargetWorkspace(), undefined, 'String');
 };
+/* eslint-disable-next-line camelcase */
 export {stringButtonClickHandler as onCreateVariableButtonClick_String};
 
 const numberButtonClickHandler = function(button) {
   Variables.createVariableButtonHandler(
       button.getTargetWorkspace(), undefined, 'Number');
 };
+/* eslint-disable-next-line camelcase */
 export {numberButtonClickHandler as onCreateVariableButtonClick_Number};
 
 const colourButtonClickHandler = function(button) {
   Variables.createVariableButtonHandler(
       button.getTargetWorkspace(), undefined, 'Colour');
 };
+/* eslint-disable-next-line camelcase */
 export {colourButtonClickHandler as onCreateVariableButtonClick_Colour};
 
 /**

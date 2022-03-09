@@ -39,6 +39,8 @@ goog.require('Blockly.BlockDragger');
  * @alias Blockly.MassOperations.Handler
  */
 const MassOperationsHandler = function (workspace) {
+  if (workspace.isFlyout) return
+
   this.workspace_ = workspace;
   this.selectedBlocks_ = [];
   this.lastMouseDownBlock_ = null;
@@ -48,6 +50,8 @@ const MassOperationsHandler = function (workspace) {
   this.onMouseUpBlockWrapper_ = null;
   this.blocksCopyData_ = null
   this.currentDragDeltaXY_ = new Coordinate(0, 0);
+
+  workspace.addChangeListener(this.changeListener.bind(this))
 
   // Add "deleteAll" method to shortcut registry with ctrl+D key
   const deleteAllShortcut = {
@@ -153,6 +157,18 @@ const MassOperationsHandler = function (workspace) {
 
 /** Methods */
 
+MassOperationsHandler.prototype.changeListener = function (event) {
+  switch (event.type) {
+    case eventUtils.MODULE_ACTIVATE: {
+      if (this.moveBlocksToAnotherModule) {
+        this.moveBlocksToAnotherModule = false
+      } else {
+        this.cleanUp()
+      }
+    }
+  }
+}
+
 MassOperationsHandler.prototype.selectedBlockMouseDown = function (block, e) {
   this.lastMouseDownBlock_ = block
   this.mouseDownXY_ = new Coordinate(e.clientX, e.clientY);
@@ -241,8 +257,7 @@ MassOperationsHandler.prototype.handleUp_ = function (e) {
 }
 
 MassOperationsHandler.prototype.addBlockToSelected = function (block) {
-  const gesture = this.workspace && this.workspace.getGesture(e);
-  if (gesture) gesture.dispose();
+  if (!this.workspace_) return
 
   const selected = common.getSelected();
   if (selected) selected.unselect();
@@ -396,6 +411,7 @@ MassOperationsHandler.prototype.getFirstParentByIds_ = function (block, ids, tar
  * @returns {boolean|*}
  */
 MassOperationsHandler.prototype.checkBlockInSelectGroup = function (block) {
+  if (!this.workspace_) return false;
   if (!this.selectedBlocks_.length) return false;
   if (this.selectedBlocks_.find(b => b.id === block.id)) return true
 
@@ -411,6 +427,7 @@ MassOperationsHandler.prototype.cleanUp = function () {
 
   this.currentDragDeltaXY_ = null
   this.initBlockStartCoordinates = null;
+  this.moveBlocksToAnotherModule = null;
 
   this.cleanUpEventWrappers_()
 }
@@ -453,8 +470,6 @@ MassOperationsHandler.prototype.deleteAll = function () {
 }
 
 MassOperationsHandler.prototype.selectAll = function () {
-  const gesture = this.workspace && this.workspace.getGesture(e);
-  if (gesture) gesture.dispose();
 
   const selected = common.getSelected();
   if (selected) selected.unselect();
@@ -545,6 +560,7 @@ MassOperationsHandler.prototype.generateContextMenu = function() {
           text: Msg['MOVE_SELECTED_BLOCKS_TO_MODULE'].replace('%1', module.name),
           enabled: true,
           callback: () => {
+            this.moveBlocksToAnotherModule = true
             moduleManager.moveBlocksToModule(this.selectedBlocks_, module, this)
           }
         });

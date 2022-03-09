@@ -59,7 +59,8 @@ const inject = function(container, opt_options) {
   }
   const options =
       new Options(opt_options || (/** @type {!BlocklyOptions} */ ({})));
-  const subContainer = document.createElement('div');
+  const subContainer =
+      /** @type {!HTMLDivElement} */ (document.createElement('div'));
   subContainer.className = 'injectionDiv';
   subContainer.tabIndex = 0;
   aria.setState(subContainer, aria.State.LABEL, Msg['WORKSPACE_ARIA_LABEL']);

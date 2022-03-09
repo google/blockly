@@ -67,21 +67,21 @@ class ToolboxCategory extends ToolboxItem {
 
     /**
      * The html container for the category.
-     * @type {?Element}
+     * @type {?HTMLDivElement}
      * @protected
      */
     this.htmlDiv_ = null;
 
     /**
      * The html element for the category row.
-     * @type {?Element}
+     * @type {?HTMLDivElement}
      * @protected
      */
     this.rowDiv_ = null;
 
     /**
      * The html element that holds children elements of the category row.
-     * @type {?Element}
+     * @type {?HTMLDivElement}
      * @protected
      */
     this.rowContents_ = null;
@@ -204,16 +204,18 @@ class ToolboxCategory extends ToolboxItem {
 
   /**
    * Creates the DOM for the category.
-   * @return {!Element} The parent element for the category.
+   * @return {!HTMLDivElement} The parent element for the category.
    * @protected
    */
   createDom_() {
     this.htmlDiv_ = this.createContainer_();
     aria.setRole(this.htmlDiv_, aria.Role.TREEITEM);
     aria.setState(
-        /** @type {!Element} */ (this.htmlDiv_), aria.State.SELECTED, false);
+        /** @type {!HTMLDivElement} */ (this.htmlDiv_), aria.State.SELECTED,
+        false);
     aria.setState(
-        /** @type {!Element} */ (this.htmlDiv_), aria.State.LEVEL, this.level_);
+        /** @type {!HTMLDivElement} */ (this.htmlDiv_), aria.State.LEVEL,
+        this.level_);
 
     this.rowDiv_ = this.createRowContainer_();
     this.rowDiv_.style.pointerEvents = 'auto';
@@ -240,11 +242,12 @@ class ToolboxCategory extends ToolboxItem {
 
   /**
    * Creates the container that holds the row and any subcategories.
-   * @return {!Element} The div that holds the icon and the label.
+   * @return {!HTMLDivElement} The div that holds the icon and the label.
    * @protected
    */
   createContainer_() {
-    const container = document.createElement('div');
+    const container =
+        /** @type {!HTMLDivElement} */ (document.createElement('div'));
     dom.addClass(container, this.cssConfig_['container']);
     return container;
   }
@@ -252,11 +255,12 @@ class ToolboxCategory extends ToolboxItem {
   /**
    * Creates the parent of the contents container. All clicks will happen on
    * this div.
-   * @return {!Element} The div that holds the contents container.
+   * @return {!HTMLDivElement} The div that holds the contents container.
    * @protected
    */
   createRowContainer_() {
-    const rowDiv = document.createElement('div');
+    const rowDiv =
+        /** @type {!HTMLDivElement} */ (document.createElement('div'));
     dom.addClass(rowDiv, this.cssConfig_['row']);
     let nestedPadding = ToolboxCategory.nestedPadding * this.getLevel();
     nestedPadding = nestedPadding.toString() + 'px';
@@ -268,11 +272,12 @@ class ToolboxCategory extends ToolboxItem {
   /**
    * Creates the container for the label and icon.
    * This is necessary so we can set all subcategory pointer events to none.
-   * @return {!Element} The div that holds the icon and the label.
+   * @return {!HTMLDivElement} The div that holds the icon and the label.
    * @protected
    */
   createRowContentsContainer_() {
-    const contentsContainer = document.createElement('div');
+    const contentsContainer =
+        /** @type {!HTMLDivElement} */ (document.createElement('div'));
     dom.addClass(contentsContainer, this.cssConfig_['rowcontentcontainer']);
     return contentsContainer;
   }

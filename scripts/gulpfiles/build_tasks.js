@@ -548,7 +548,6 @@ function compile(options) {
     rewrite_polyfills: true,
     hide_warnings_for: 'node_modules',
     define: ['COMPILED=true'],
-    externs: ['./externs/svg-externs.js'],
   };
   if (argv.debug || argv.strict) {
     defaultOptions.jscomp_error = [...JSCOMP_ERROR];

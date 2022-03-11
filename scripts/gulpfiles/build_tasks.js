@@ -92,8 +92,6 @@ const NAMESPACE_PROPERTY = '__namespace__';
  *   "Blockly.libraryBlocks" is not a valid variable name.)
  * - .factoryPreamble: code to override the default wrapper factory
  *   function preamble.
- * - .factoryPostamble: code to override the default wrapper factory
- *   function postabmle.
  *
  * The function getChunkOptions will, after running
  * closure-calculate-chunks, update each chunk to add the following
@@ -111,8 +109,6 @@ const chunks = [
     exports: 'Blockly',
     importAs: 'Blockly',
     factoryPreamble: `const ${NAMESPACE_VARIABLE}={};`,
-    factoryPostamble: `${NAMESPACE_VARIABLE}.Blockly.${NAMESPACE_PROPERTY}=` +
-        `${NAMESPACE_VARIABLE};`,
   },
   {
     name: 'blocks',
@@ -152,11 +148,6 @@ const chunks = [
  */
 const FACTORY_PREAMBLE =
     `const ${NAMESPACE_VARIABLE}=Blockly.${NAMESPACE_PROPERTY};`;
-
-/**
- * The default factory function postamble.
- */
-const FACTORY_POSTAMBLE = '';
 
 const licenseRegex = `\\/\\*\\*
  \\* @license
@@ -373,6 +364,9 @@ function chunkWrapper(chunk) {
   const browserDeps =
       chunk.dependencies.map(d => `root.${d.exports}`).join(', ');
   const factoryParams = chunk.dependencies.map(d => d.importAs).join(', ');
+  // Expression that evaluates the the value of the exports object
+  // for the specified chunk.
+  const exportsExpression = `${NAMESPACE_VARIABLE}.${chunk.exports}`;
 
   // Note that when loading in a browser the base of the exported path
   // (e.g. Blockly.blocks.all - see issue #5932) might not exist
@@ -394,8 +388,8 @@ function chunkWrapper(chunk) {
 }(this, function(${factoryParams}) {
 ${chunk.factoryPreamble || FACTORY_PREAMBLE}
 %output%
-${chunk.factoryPostamble || FACTORY_POSTAMBLE}
-return ${NAMESPACE_VARIABLE}.${chunk.exports};
+${exportsExpression}.${NAMESPACE_PROPERTY}=${NAMESPACE_VARIABLE};
+return ${exportsExpression};
 }));
 `;
 };

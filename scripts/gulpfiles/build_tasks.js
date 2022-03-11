@@ -61,7 +61,16 @@ const CHUNK_CACHE_FILE = 'scripts/gulpfiles/chunks.json'
  * wrapper argument, but as it will appear many times in the compiled
  * output it is preferable that it be short.
  */
-const NAMESPACE_OBJECT = '$';
+const NAMESPACE_VARIABLE = '$';
+
+/**
+ * Property that will be used to store the value of the namespace
+ * object on each chunk's exported object.  This is so that dependent
+ * chunks can retrieve the namespace object and thereby access modules
+ * defined in the parent chunk (or it's parent, etc.).  This should be
+ * chosen so as to not collide with any exported name.
+ */
+const NAMESPACE_PROPERTY = '__namespace__';
 
 /**
  * A list of chunks.  Order matters: later chunks can depend on
@@ -74,9 +83,9 @@ const NAMESPACE_OBJECT = '$';
  * - .entry: the source .js file which is the entrypoint for the
  *   chunk.
  * - .exports: a variable or property that will (prefixed with
- *   NAMESPACE_OBJECT) be returned from the factory function and which
- *   (sans prefix) will be set in the global scope to that returned
- *   value if the module is loaded in a browser.
+ *   NAMESPACE_VARIABLE) be returned from the factory function and
+ *   which (sans prefix) will be set in the global scope to that
+ *   returned value if the module is loaded in a browser.
  * - .importAs: the name that this chunk's exports object will be
  *   given when passed to the factory function of other chunks that
  *   depend on it.  (Needs to be distinct from .exports since (e.g.)
@@ -101,9 +110,9 @@ const chunks = [
     entry: 'core/blockly.js',
     exports: 'Blockly',
     importAs: 'Blockly',
-    factoryPreamble: `const ${NAMESPACE_OBJECT}={};`,
-    factoryPostamble:
-        `${NAMESPACE_OBJECT}.Blockly.internal_=${NAMESPACE_OBJECT};`,
+    factoryPreamble: `const ${NAMESPACE_VARIABLE}={};`,
+    factoryPostamble: `${NAMESPACE_VARIABLE}.Blockly.${NAMESPACE_PROPERTY}=` +
+        `${NAMESPACE_VARIABLE};`,
   },
   {
     name: 'blocks',
@@ -141,7 +150,8 @@ const chunks = [
 /**
  * The default factory function premable.
  */
-const FACTORY_PREAMBLE = `const ${NAMESPACE_OBJECT}=Blockly.internal_;`;
+const FACTORY_PREAMBLE =
+    `const ${NAMESPACE_VARIABLE}=Blockly.${NAMESPACE_PROPERTY};`;
 
 /**
  * The default factory function postamble.
@@ -385,7 +395,7 @@ function chunkWrapper(chunk) {
 ${chunk.factoryPreamble || FACTORY_PREAMBLE}
 %output%
 ${chunk.factoryPostamble || FACTORY_POSTAMBLE}
-return ${NAMESPACE_OBJECT}.${chunk.exports};
+return ${NAMESPACE_VARIABLE}.${chunk.exports};
 }));
 `;
 };
@@ -588,7 +598,7 @@ function buildCompiled() {
     define: 'Blockly.VERSION="' + packageJson.version + '"',
     chunk: chunkOptions.chunk,
     chunk_wrapper: chunkOptions.chunk_wrapper,
-    rename_prefix_namespace: NAMESPACE_OBJECT,
+    rename_prefix_namespace: NAMESPACE_VARIABLE,
     // Don't supply the list of source files in chunkOptions.js as an
     // option to Closure Compiler; instead feed them as input via gulp.src.
   };

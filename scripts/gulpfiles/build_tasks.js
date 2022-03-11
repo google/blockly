@@ -90,15 +90,14 @@ const NAMESPACE_PROPERTY = '__namespace__';
  *   given when passed to the factory function of other chunks that
  *   depend on it.  (Needs to be distinct from .exports since (e.g.)
  *   "Blockly.libraryBlocks" is not a valid variable name.)
- * - .factoryPreamble: code to override the default wrapper factory
- *   function preamble.
  *
  * The function getChunkOptions will, after running
  * closure-calculate-chunks, update each chunk to add the following
  * properties:
  *
- * - .dependencies: a list of the chunks the chunk depends upon.
- * - .wrapper: the chunk wrapper.
+ * - .parent: the parent chunk of the given chunk.  Typically
+ *    chunks[0], except for chunk[0].parent which will be null.
+ * - .wrapper: the generated chunk wrapper.
  *
  * Output files will be named <chunk.name><COMPILED_SUFFIX>.js.
  */
@@ -108,7 +107,6 @@ const chunks = [
     entry: 'core/blockly.js',
     exports: 'Blockly',
     importAs: 'Blockly',
-    factoryPreamble: `const ${NAMESPACE_VARIABLE}={};`,
   },
   {
     name: 'blocks',
@@ -142,12 +140,6 @@ const chunks = [
     exports: 'Blockly.Dart',
   }
 ];
-
-/**
- * The default factory function premable.
- */
-const FACTORY_PREAMBLE =
-    `const ${NAMESPACE_VARIABLE}=Blockly.${NAMESPACE_PROPERTY};`;
 
 const licenseRegex = `\\/\\*\\*
  \\* @license
@@ -357,13 +349,30 @@ function buildLangfiles(done) {
  * Definition.
  */
 function chunkWrapper(chunk) {
-  const fileNames = chunk.dependencies.map(
-      d => JSON.stringify(`./${d.name}${COMPILED_SUFFIX}.js`));
-  const amdDeps = fileNames.join(', ');
-  const cjsDeps = fileNames.map(f => `require(${f})`).join(', ');
-  const browserDeps =
-      chunk.dependencies.map(d => `root.${d.exports}`).join(', ');
-  const factoryParams = chunk.dependencies.map(d => d.importAs).join(', ');
+  // Each chunk can have only a single dependency, which is its parent
+  // chunk.  It is used only to retrieve the namespace object, which
+  // is saved on to the exports object for the chunk so that any child
+  // chunk(s) can obtain it.
+
+  // JavaScript expressions for the amd, cjs and browser dependencies.
+  let amdDepsExpr = '';
+  let cjsDepsExpr = '';
+  let browserDepsExpr = '';
+  // Arguments for the factory function.
+  let factoryArgs = '';
+  // Expression to get or create the namespace object.
+  let namespaceExpr = `{}`;
+
+  if (chunk.parent) {
+    const parentFilename =
+        JSON.stringify(`./${chunk.parent.name}${COMPILED_SUFFIX}.js`);
+    amdDepsExpr = parentFilename;
+    cjsDepsExpr = `require(${parentFilename})`;
+    browserDepsExpr = `root.${chunk.parent.exports}`;
+    factoryArgs = '__parent__';
+    namespaceExpr = `${factoryArgs}.${NAMESPACE_PROPERTY}`;
+  }    
+
   // Expression that evaluates the the value of the exports object
   // for the specified chunk.
   const exportsExpression = `${NAMESPACE_VARIABLE}.${chunk.exports}`;
@@ -378,15 +387,15 @@ function chunkWrapper(chunk) {
 /* eslint-disable */
 ;(function(root, factory) {
   if (typeof define === 'function' && define.amd) { // AMD
-    define([${amdDeps}], factory);
+    define([${amdDepsExpr}], factory);
   } else if (typeof exports === 'object') { // Node.js
-    module.exports = factory(${cjsDeps});
+    module.exports = factory(${cjsDepsExpr});
   } else { // Browser
-    var factoryExports = factory(${browserDeps});
+    var factoryExports = factory(${browserDepsExpr});
     root.${chunk.exports} = factoryExports;
   }
-}(this, function(${factoryParams}) {
-${chunk.factoryPreamble || FACTORY_PREAMBLE}
+}(this, function(${factoryArgs}) {
+var ${NAMESPACE_VARIABLE}=${namespaceExpr};
 %output%
 ${exportsExpression}.${NAMESPACE_PROPERTY}=${NAMESPACE_VARIABLE};
 return ${exportsExpression};
@@ -471,7 +480,7 @@ function getChunkOptions() {
   const chunkByNickname = Object.create(null);
   const jsFiles = rawOptions.js.slice();  // Will be modified via .splice!
   const chunkList = rawOptions.chunk.map((element) => {
-    const [nickname, numJsFiles, dependencyNicks] = element.split(':');
+    const [nickname, numJsFiles, parentNick] = element.split(':');
 
     // Get array of files for just this chunk.
     const chunkFiles = jsFiles.splice(0, numJsFiles);
@@ -482,17 +491,14 @@ function getChunkOptions() {
         chunk => chunkFiles.find(f => f.endsWith('/' + chunk.entry)));
     if (!chunk) throw new Error('Unable to identify chunk');
 
-    // Replace nicknames with our names.
+    // Replace nicknames with the names we chose.
     chunkByNickname[nickname] = chunk;
-    if (!dependencyNicks) {  // Chunk has no dependencies.
-      chunk.dependencies = [];
+    if (!parentNick) {  // Chunk has no parent.
+      chunk.parent = null;
       return `${chunk.name}:${numJsFiles}`;
     }
-    chunk.dependencies =
-        dependencyNicks.split(',').map(nick => chunkByNickname[nick]);
-    const dependencyNames =
-        chunk.dependencies.map(dependency => dependency.name).join(',');
-    return `${chunk.name}:${numJsFiles}:${dependencyNames}`;
+    chunk.parent = chunkByNickname[parentNick];
+    return `${chunk.name}:${numJsFiles}:${chunk.parent.name}`;
   });
 
   // Generate a chunk wrapper for each chunk.

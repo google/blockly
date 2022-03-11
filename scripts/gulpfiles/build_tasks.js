@@ -82,14 +82,8 @@ const NAMESPACE_PROPERTY = '__namespace__';
  *   will be written to.
  * - .entry: the source .js file which is the entrypoint for the
  *   chunk.
- * - .exports: a variable or property that will (prefixed with
- *   NAMESPACE_VARIABLE) be returned from the factory function and
- *   which (sans prefix) will be set in the global scope to that
- *   returned value if the module is loaded in a browser.
- * - .importAs: the name that this chunk's exports object will be
- *   given when passed to the factory function of other chunks that
- *   depend on it.  (Needs to be distinct from .exports since (e.g.)
- *   "Blockly.libraryBlocks" is not a valid variable name.)
+ * - .reexport: if running in a browser, save the chunk's exports
+ *   object at this location in the global namespace.
  *
  * The function getChunkOptions will, after running
  * closure-calculate-chunks, update each chunk to add the following
@@ -105,39 +99,37 @@ const chunks = [
   {
     name: 'blockly',
     entry: 'core/blockly.js',
-    exports: 'Blockly',
-    importAs: 'Blockly',
+    reexport: 'Blockly',
   },
   {
     name: 'blocks',
     entry: 'blocks/blocks.js',
-    exports: 'Blockly.libraryBlocks',
-    importAs: 'libraryBlocks',
+    reexport: 'Blockly.libraryBlocks',
   },
   {
     name: 'javascript',
     entry: 'generators/javascript/all.js',
-    exports: 'Blockly.JavaScript',
+    reexport: 'Blockly.JavaScript',
   },
   {
     name: 'python',
     entry: 'generators/python/all.js',
-    exports: 'Blockly.Python',
+    reexport: 'Blockly.Python',
   },
   {
     name: 'php',
     entry: 'generators/php/all.js',
-    exports: 'Blockly.PHP',
+    reexport: 'Blockly.PHP',
   },
   {
     name: 'lua',
     entry: 'generators/lua/all.js',
-    exports: 'Blockly.Lua',
+    reexport: 'Blockly.Lua',
   },
   {
     name: 'dart',
     entry: 'generators/dart/all.js',
-    exports: 'Blockly.Dart',
+    reexports: 'Blockly.Dart',
   }
 ];
 
@@ -368,14 +360,21 @@ function chunkWrapper(chunk) {
         JSON.stringify(`./${chunk.parent.name}${COMPILED_SUFFIX}.js`);
     amdDepsExpr = parentFilename;
     cjsDepsExpr = `require(${parentFilename})`;
-    browserDepsExpr = `root.${chunk.parent.exports}`;
+    browserDepsExpr = `root.${chunk.parent.reexport}`;
     factoryArgs = '__parent__';
     namespaceExpr = `${factoryArgs}.${NAMESPACE_PROPERTY}`;
   }    
 
-  // Expression that evaluates the the value of the exports object
-  // for the specified chunk.
-  const exportsExpression = `${NAMESPACE_VARIABLE}.${chunk.exports}`;
+  // Expression that evaluates the the value of the exports object for
+  // the specified chunk.  For now we guess the name that is created
+  // by the module's goog.module.delcareLegacyNamespace call based on
+  // chunk.reexport.
+  const exportsExpression = `${NAMESPACE_VARIABLE}.${chunk.reexport}`;
+  // In near future we might try to guess the internally-generated
+  // name for the ES module's exports object.
+  // const exportsExpression =
+  //     'module$' + chunk.entry.replace(/\.m?js$/, '').replace(/\//g, '$');
+  
 
   // Note that when loading in a browser the base of the exported path
   // (e.g. Blockly.blocks.all - see issue #5932) might not exist
@@ -392,7 +391,7 @@ function chunkWrapper(chunk) {
     module.exports = factory(${cjsDepsExpr});
   } else { // Browser
     var factoryExports = factory(${browserDepsExpr});
-    root.${chunk.exports} = factoryExports;
+    root.${chunk.reexport} = factoryExports;
   }
 }(this, function(${factoryArgs}) {
 var ${NAMESPACE_VARIABLE}=${namespaceExpr};

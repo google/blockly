@@ -459,14 +459,24 @@ function getChunkOptions() {
   // This is designed to be passed directly as-is as the options
   // object to the Closure Compiler node API, but we want to replace
   // the unhelpful entry-point based chunk names (let's call these
-  // "nicknames") with the ones from chunks.  Luckily they will be in
-  // the same order that the entry points were supplied in - i.e.,
-  // they correspond 1:1 with the entries in chunks.
+  // "nicknames") with the ones from chunks.  Unforutnately there's no
+  // guarnatee they will be in the same order that the entry points
+  // were supplied in (though it happens to work out that way if no
+  // chunk depends on any chunk but the first), so we look for
+  // one of the entrypoints amongst the files in each chunk.
   const chunkByNickname = Object.create(null);
-  let jsFiles = rawOptions.js;
-  const chunkList = rawOptions.chunk.map((element, index) => {
+  const jsFiles = rawOptions.js.slice();  // Will be modified via .splice!
+  const chunkList = rawOptions.chunk.map((element) => {
     const [nickname, numJsFiles, dependencyNicks] = element.split(':');
-    const chunk = chunks[index];
+
+    // Get array of files for just this chunk.
+    const chunkFiles = jsFiles.splice(0, numJsFiles);
+
+    // Figure out which chunk this is by looking for one of the
+    // known chunk entrypoints in chunkFiles.  N.B.: O(n*m).  :-(
+    const chunk = chunks.find(
+        chunk => chunkFiles.find(f => f.endsWith('/' + chunk.entry)));
+    if (!chunk) throw new Error('Unable to identify chunk');
 
     // Replace nicknames with our names.
     chunkByNickname[nickname] = chunk;

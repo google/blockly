@@ -16,7 +16,11 @@
 goog.module('Blockly.clipboard');
 
 /* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
 const {ICopyable} = goog.requireType('Blockly.ICopyable');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceCommentSvg} = goog.requireType('Blockly.WorkspaceCommentSvg');
 
 
 /**

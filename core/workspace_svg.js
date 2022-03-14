@@ -1520,10 +1520,12 @@ class WorkspaceSvg extends Workspace {
    * should be done before calling this method.
    * @param {!Object|!Element|!DocumentFragment} state The representation of the
    *     thing to paste.
+   * @return {!BlockSvg|!WorkspaceCommentSvg|null} The pasted thing, or null if
+   *     the paste was not successful.
    */
   paste(state) {
     if (!this.rendered || !state['type'] && !state.tagName) {
-      return;
+      return null;
     }
     if (this.currentGesture_) {
       this.currentGesture_.cancel();  // Dragging while pasting?  No.
@@ -1534,19 +1536,22 @@ class WorkspaceSvg extends Workspace {
       eventUtils.setGroup(true);
     }
 
+    let pastedThing;
     // Checks if this is JSON. JSON has a type property, while elements don't.
     if (state['type']) {
-      this.pasteBlock_(null, /** @type {!blocks.State} */ (state));
+      pastedThing = this.pasteBlock_(
+          null, /** @type {!blocks.State} */ (state));
     } else {
       const xmlBlock = /** @type {!Element} */ (state);
       if (xmlBlock.tagName.toLowerCase() === 'comment') {
-        this.pasteWorkspaceComment_(xmlBlock);
+        pastedThing = this.pasteWorkspaceComment_(xmlBlock);
       } else {
-        this.pasteBlock_(xmlBlock, null);
+        pastedThing = this.pasteBlock_(xmlBlock, null);
       }
     }
 
     eventUtils.setGroup(existingGroup);
+    return pastedThing;
   }
 
   /**
@@ -1554,6 +1559,7 @@ class WorkspaceSvg extends Workspace {
    * @param {?Element} xmlBlock XML block element.
    * @param {?blocks.State} jsonBlock JSON block
    *     representation.
+   * @return {!BlockSvg} The pasted block.
    * @private
    */
   pasteBlock_(xmlBlock, jsonBlock) {
@@ -1626,11 +1632,13 @@ class WorkspaceSvg extends Workspace {
       eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(block));
     }
     block.select();
+    return block;
   }
 
   /**
    * Paste the provided comment onto the workspace.
    * @param {!Element} xmlComment XML workspace comment element.
+   * @return {!WorkspaceCommentSvg} The pasted workspace comment.
    * @private
    * @suppress {checkTypes} Suppress checks while workspace comments are not
    *     bundled in.
@@ -1662,6 +1670,7 @@ class WorkspaceSvg extends Workspace {
       goog.module.get('Blockly.WorkspaceComment').fireCreateEvent(comment);
     }
     comment.select();
+    return comment;
   }
 
   /**

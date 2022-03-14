@@ -1539,8 +1539,8 @@ class WorkspaceSvg extends Workspace {
     let pastedThing;
     // Checks if this is JSON. JSON has a type property, while elements don't.
     if (state['type']) {
-      pastedThing = this.pasteBlock_(
-          null, /** @type {!blocks.State} */ (state));
+      pastedThing =
+          this.pasteBlock_(null, /** @type {!blocks.State} */ (state));
     } else {
       const xmlBlock = /** @type {!Element} */ (state);
       if (xmlBlock.tagName.toLowerCase() === 'comment') {

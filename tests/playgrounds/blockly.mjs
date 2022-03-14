@@ -27,7 +27,8 @@ if (window.BlocklyLoader) {
   // Uncompiled mode.  Use top-level await
   // (https://v8.dev/features/top-level-await) to block loading of
   // this module until goog.bootstrap()ping of Blockly is finished.
-  Blockly = await window.BlocklyLoader;
+  await window.BlocklyLoader;
+  Blockly = globalThis.Blockly;
 } else if (window.Blockly) {
   // Compiled mode.  Retrieve the pre-installed Blockly global.
   Blockly = globalThis.Blockly;

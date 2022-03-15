@@ -28,8 +28,6 @@ let useDebugger = false;
  * @return {boolean} Whether the debugger is turned on.
  * @alias Blockly.blockRendering.debug.isDebuggerEnabled
  * @package
- * @deprecated September 2022. Use the rendering debugger in @blockly/dev-tools.
- * See https://www.npmjs.com/package/@blockly/dev-tools for more information.
  */
 const isDebuggerEnabled = function() {
   return useDebugger;

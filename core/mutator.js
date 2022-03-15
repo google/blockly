@@ -367,16 +367,13 @@ class Mutator extends Icon {
       // Save the initial connections, then listen for further changes.
       if (this.block_.saveConnections) {
         const thisRootBlock = this.rootBlock_;
-        // const mutatorBlock =
-        //     /** @type {{saveConnections: function(!Block)}} */ (this.block_);
         this.block_.saveConnections(this.rootBlock_);
-        this.sourceListener_ = function() {
+        this.sourceListener_ = () => {
           if (this.block_) {
             this.block_.saveConnections(thisRootBlock);
           }
         };
-        this.block_.workspace.addChangeListener(
-            this.sourceListener_.bind(this));
+        this.block_.workspace.addChangeListener(this.sourceListener_);
       }
       this.resizeBubble_();
       // When the mutator's workspace changes, update the source block.

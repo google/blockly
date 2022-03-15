@@ -38,13 +38,14 @@ exports.copy = copy;
 
 /**
  * Paste a block or workspace comment on to the main workspace.
- * @return {boolean} True if the paste was successful, false otherwise.
+ * @return {!ICopyable|null} The pasted thing if the paste
+ *     was successful, null otherwise.
  * @alias Blockly.clipboard.paste
  * @package
  */
 const paste = function() {
   if (!copyData) {
-    return false;
+    return null;
   }
   // Pasting always pastes to the main workspace, even if the copy
   // started in a flyout workspace.
@@ -54,10 +55,9 @@ const paste = function() {
   }
   if (copyData.typeCounts &&
       workspace.isCapacityAvailable(copyData.typeCounts)) {
-    workspace.paste(copyData.saveInfo);
-    return true;
+    return workspace.paste(copyData.saveInfo);
   }
-  return false;
+  return null;
 };
 exports.paste = paste;
 
@@ -65,13 +65,16 @@ exports.paste = paste;
  * Duplicate this block and its children, or a workspace comment.
  * @param {!ICopyable} toDuplicate Block or Workspace Comment to be
  *     duplicated.
+ * @return {!ICopyable|null} The block or workspace comment that was duplicated,
+ *     or null if the duplication failed.
  * @alias Blockly.clipboard.duplicate
  * @package
  */
 const duplicate = function(toDuplicate) {
   const oldCopyData = copyData;
   copy(toDuplicate);
-  toDuplicate.workspace.paste(copyData.saveInfo);
+  const pastedThing = toDuplicate.workspace.paste(copyData.saveInfo);
   copyData = oldCopyData;
+  return pastedThing;
 };
 exports.duplicate = duplicate;

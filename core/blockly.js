@@ -529,7 +529,7 @@ const paste = function() {
   deprecation.warn(
       'Blockly.paste', 'December 2021', 'December 2022',
       'Blockly.clipboard.paste');
-  return clipboard.paste();
+  return !!clipboard.paste();
 };
 exports.paste = paste;
 

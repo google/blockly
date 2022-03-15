@@ -62,6 +62,8 @@ const {IASTNodeLocationSvg} = goog.require('Blockly.IASTNodeLocationSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {IBoundedElement} = goog.requireType('Blockly.IBoundedElement');
 /* eslint-disable-next-line no-unused-vars */
+const {ICopyable} = goog.requireType('Blockly.ICopyable');
+/* eslint-disable-next-line no-unused-vars */
 const {IDragTarget} = goog.requireType('Blockly.IDragTarget');
 /* eslint-disable-next-line no-unused-vars */
 const {IFlyout} = goog.requireType('Blockly.IFlyout');
@@ -1520,7 +1522,7 @@ class WorkspaceSvg extends Workspace {
    * should be done before calling this method.
    * @param {!Object|!Element|!DocumentFragment} state The representation of the
    *     thing to paste.
-   * @return {!BlockSvg|!WorkspaceCommentSvg|null} The pasted thing, or null if
+   * @return {!ICopyable|null} The pasted thing, or null if
    *     the paste was not successful.
    */
   paste(state) {

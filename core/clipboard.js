@@ -16,11 +16,7 @@
 goog.module('Blockly.clipboard');
 
 /* eslint-disable-next-line no-unused-vars */
-const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-/* eslint-disable-next-line no-unused-vars */
 const {ICopyable} = goog.requireType('Blockly.ICopyable');
-/* eslint-disable-next-line no-unused-vars */
-const {WorkspaceCommentSvg} = goog.requireType('Blockly.WorkspaceCommentSvg');
 
 
 /**
@@ -42,7 +38,7 @@ exports.copy = copy;
 
 /**
  * Paste a block or workspace comment on to the main workspace.
- * @return {!BlockSvg|!WorkspaceCommentSvg|null} The pasted thing if the paste
+ * @return {!ICopyable|null} The pasted thing if the paste
  *     was successful, null otherwise.
  * @alias Blockly.clipboard.paste
  * @package

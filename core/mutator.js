@@ -371,7 +371,7 @@ class Mutator extends Icon {
         this.sourceListener_ = function() {
           this.block_.saveConnections(thisRootBlock);
         };
-        this.block_.workspace.addChangeListener(this.sourceListener_);
+        this.block_.workspace.addChangeListener(this.sourceListener_.bind(this));
       }
       this.resizeBubble_();
       // When the mutator's workspace changes, update the source block.

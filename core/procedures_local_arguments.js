@@ -27,7 +27,7 @@
  /* eslint-disable-next-line no-unused-vars */
  const {Field} = goog.requireType('Blockly.Field');
  const {Msg} = goog.require('Blockly.Msg');
- const {Names} = goog.require('Blockly.Names');
+ const {Names, NameType} = goog.require('Blockly.Names');
  /* eslint-disable-next-line no-unused-vars */
  const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
  const {Workspace} = goog.require('Blockly.Workspace');
@@ -332,6 +332,32 @@
    workspace.addChangeListener(mutatorChangeListener);
  };
  exports.mutatorOpenListener = mutatorOpenListener;
+
+ const updateFlyout = function(e) {
+  if (e.type === eventUtils.BUBBLE_OPEN) {
+    return;
+  }
+  if (e.type !== eventUtils.BLOCK_DELETE &&
+      e.type !== eventUtils.BLOCK_CREATE &&
+      e.type !== eventUtils.BLOCK_CHANGE) {
+    return;
+  }
+
+  const workspaceId = /** @type {string} */ (e.workspaceId);
+  const workspace = /** @type {!WorkspaceSvg} */
+      (Workspace.getById(workspaceId));
+
+  if (!workspace || !workspace.toolbox_) {
+    return;
+  }
+
+  const toolboxCategory = workspace.toolbox_.getSelectedItem();
+  const flyoutItems = toolboxCategory.getContents();
+  if (flyoutItems === NameType.PROCEDURE) {
+    workspace.toolbox_.refreshSelection();
+  }
+ };
+ exports.updateFlyout = updateFlyout;
 
  /**
   * Listens for changes in a procedure mutator and triggers flyout updates when

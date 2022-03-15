@@ -1244,13 +1244,13 @@ class WorkspaceSvg extends Workspace {
    */
   setCachedParentSvgSize(width, height) {
     const svg = this.getParentSvg();
-    if (width) {
+    if (width != null) {
       this.cachedParentSvgSize_.width = width;
       // This is set to support the public (but deprecated) Blockly.svgSize
       // method.
       svg.cachedWidth_ = width;
     }
-    if (height) {
+    if (height != null) {
       this.cachedParentSvgSize_.height = height;
       // This is set to support the public (but deprecated) Blockly.svgSize
       // method.

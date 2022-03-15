@@ -69,13 +69,16 @@ exports.paste = paste;
  * Duplicate this block and its children, or a workspace comment.
  * @param {!ICopyable} toDuplicate Block or Workspace Comment to be
  *     duplicated.
+ * @return {!ICopyable|null} The block or workspace comment that was duplicated,
+ *     or null if the duplication failed.
  * @alias Blockly.clipboard.duplicate
  * @package
  */
 const duplicate = function(toDuplicate) {
   const oldCopyData = copyData;
   copy(toDuplicate);
-  toDuplicate.workspace.paste(copyData.saveInfo);
+  const pastedThing = toDuplicate.workspace.paste(copyData.saveInfo);
   copyData = oldCopyData;
+  return pastedThing;
 };
 exports.duplicate = duplicate;

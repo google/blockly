@@ -38,7 +38,7 @@ exports.isDebuggerEnabled = isDebuggerEnabled;
  * Turn on the blocks debugger.
  * @package
  * @alias Blockly.blockRendering.debug.startDebugger
- * @deprecated September 2022. Use the rendering debugger in @blockly/dev-tools.
+ * @deprecated March 2022. Use the rendering debugger in @blockly/dev-tools.
  * See https://www.npmjs.com/package/@blockly/dev-tools for more information.
  */
 const startDebugger = function() {
@@ -54,7 +54,7 @@ exports.startDebugger = startDebugger;
  * Turn off the blocks debugger.
  * @package
  * @alias Blockly.blockRendering.debug.stopDebugger
- * @deprecated September 2022. Use the rendering debugger in @blockly/dev-tools.
+ * @deprecated March 2022. Use the rendering debugger in @blockly/dev-tools.
  * See https://www.npmjs.com/package/@blockly/dev-tools for more information.
  */
 const stopDebugger = function() {

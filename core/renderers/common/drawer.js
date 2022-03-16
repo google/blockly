@@ -39,6 +39,7 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
 
 /**
  * An object that draws a block based on the given rendering information.
+ * @alias Blockly.blockRendering.Drawer
  */
 class Drawer {
   /**
@@ -46,7 +47,6 @@ class Drawer {
    * @param {!RenderInfo} info An object containing all
    *   information needed to render this block.
    * @package
-   * @alias Blockly.blockRendering.Drawer
    */
   constructor(block, info) {
     this.block_ = block;

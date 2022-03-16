@@ -25,10 +25,11 @@ const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
  * Class for the registry of context menu items. This is intended to be a
  * singleton. You should not create a new instance, and only access this class
  * from ContextMenuRegistry.registry.
+ * @alias Blockly.ContextMenuRegistry
  */
 class ContextMenuRegistry {
   /**
-   * @alias Blockly.ContextMenuRegistry
+   * Resets the existing singleton instance of ContextMenuRegistry.
    */
   constructor() {
     this.reset();

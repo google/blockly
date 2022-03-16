@@ -25,6 +25,7 @@ const {UiBase} = goog.require('Blockly.Events.UiBase');
 /**
  * Class for a block drag event.
  * @extends {UiBase}
+ * @alias Blockly.Events.BlockDrag
  */
 class BlockDrag extends UiBase {
   /**
@@ -34,7 +35,6 @@ class BlockDrag extends UiBase {
    *    Undefined for a blank event.
    * @param {!Array<!Block>=} opt_blocks The blocks affected by this
    *    drag. Undefined for a blank event.
-   * @alias Blockly.Events.BlockDrag
    */
   constructor(opt_block, opt_isStart, opt_blocks) {
     const workspaceId = opt_block ? opt_block.workspace.id : undefined;

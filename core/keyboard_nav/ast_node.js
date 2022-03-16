@@ -39,6 +39,7 @@ const {Workspace} = goog.requireType('Blockly.Workspace');
  * Class for an AST node.
  * It is recommended that you use one of the createNode methods instead of
  * creating a node directly.
+ * @alias Blockly.ASTNode
  */
 class ASTNode {
   /**

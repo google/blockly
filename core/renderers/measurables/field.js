@@ -31,6 +31,7 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  * rendering
  * @struct
  * @extends {Measurable}
+ * @alias Blockly.blockRendering.Field
  */
 class Field extends Measurable {
   /**
@@ -40,7 +41,6 @@ class Field extends Measurable {
    *     for.
    * @param {!Input} parentInput The parent input for the field.
    * @package
-   * @alias Blockly.blockRendering.Field
    */
   constructor(constants, field, parentInput) {
     super(constants);

@@ -45,12 +45,12 @@ goog.require('Blockly.constants');
  * Class for a bubble dragger.  It moves things on the bubble canvas around the
  * workspace when they are being dragged by a mouse or touch.  These can be
  * block comments, mutators, warnings, or workspace comments.
+ * @alias Blockly.BubbleDragger
  */
 const BubbleDragger = class {
   /**
    * @param {!IBubble} bubble The item on the bubble canvas to drag.
    * @param {!WorkspaceSvg} workspace The workspace to drag on.
-   * @alias Blockly.BubbleDragger
    */
   constructor(bubble, workspace) {
     /**

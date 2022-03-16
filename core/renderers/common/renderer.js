@@ -48,12 +48,12 @@ const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /**
  * The base class for a block renderer.
  * @implements {IRegistrable}
+ * @alias Blockly.blockRendering.Renderer
  */
 class Renderer {
   /**
    * @param {string} name The renderer name.
    * @package
-   * @alias Blockly.blockRendering.Renderer
    */
   constructor(name) {
     /**

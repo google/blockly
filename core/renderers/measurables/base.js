@@ -25,13 +25,13 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  * The base class to represent a part of a block that takes up space during
  * rendering.  The constructor for each non-spacer Measurable records the size
  * of the block element (e.g. field, statement input).
+ * @alias Blockly.blockRendering.Measurable
  */
 class Measurable {
   /**
    * @param {!ConstantProvider} constants The rendering
    *   constants provider.
    * @package
-   * @alias Blockly.blockRendering.Measurable
    */
   constructor(constants) {
     /** @type {number} */

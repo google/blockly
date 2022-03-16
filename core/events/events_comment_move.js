@@ -26,12 +26,12 @@ const {WorkspaceComment} = goog.requireType('Blockly.WorkspaceComment');
 /**
  * Class for a comment move event.  Created before the move.
  * @extends {CommentBase}
+ * @alias Blockly.Events.CommentMove
  */
 class CommentMove extends CommentBase {
   /**
    * @param {!WorkspaceComment=} opt_comment The comment that is being
    *     moved.  Undefined for a blank event.
-   * @alias Blockly.Events.CommentMove
    */
   constructor(opt_comment) {
     super(opt_comment);

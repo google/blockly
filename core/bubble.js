@@ -41,6 +41,7 @@ goog.require('Blockly.Workspace');
 /**
  * Class for UI bubble.
  * @implements {IBubble}
+ * @alias Blockly.Bubble
  */
 const Bubble = class {
   /**
@@ -53,7 +54,6 @@ const Bubble = class {
    * @param {?number} bubbleWidth Width of bubble, or null if not resizable.
    * @param {?number} bubbleHeight Height of bubble, or null if not resizable.
    * @struct
-   * @alias Blockly.Bubble
    */
   constructor(workspace, content, shape, anchorXY, bubbleWidth, bubbleHeight) {
     this.workspace_ = workspace;

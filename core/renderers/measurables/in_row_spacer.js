@@ -27,6 +27,7 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  * row.
  * @extends {Measurable}
  * @struct
+ * @alias Blockly.blockRendering.InRowSpacer
  */
 class InRowSpacer extends Measurable {
   /**
@@ -34,7 +35,6 @@ class InRowSpacer extends Measurable {
    *   constants provider.
    * @param {number} width The width of the spacer.
    * @package
-   * @alias Blockly.blockRendering.InRowSpacer
    */
   constructor(constants, width) {
     super(constants);

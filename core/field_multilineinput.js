@@ -33,6 +33,7 @@ const {Svg} = goog.require('Blockly.utils.Svg');
 /**
  * Class for an editable text area field.
  * @extends {FieldTextInput}
+ * @alias Blockly.FieldMultilineInput
  */
 class FieldMultilineInput extends FieldTextInput {
   /**
@@ -50,7 +51,6 @@ class FieldMultilineInput extends FieldTextInput {
    *     See the [field creation documentation]{@link
    *     https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/multiline-text-input#creation}
    *     for a list of properties this parameter supports.
-   * @alias Blockly.FieldMultilineInput
    */
   constructor(opt_value, opt_validator, opt_config) {
     super(Field.SKIP_SETUP);

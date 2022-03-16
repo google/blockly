@@ -27,6 +27,7 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  * during rendering.
  * @extends {Measurable}
  * @struct
+ * @alias Blockly.blockRendering.RoundCorner
  */
 class RoundCorner extends Measurable {
   /**
@@ -34,7 +35,6 @@ class RoundCorner extends Measurable {
    *   constants provider.
    * @param {string=} opt_position The position of this corner.
    * @package
-   * @alias Blockly.blockRendering.RoundCorner
    */
   constructor(constants, opt_position) {
     super(constants);

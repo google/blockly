@@ -70,6 +70,7 @@ goog.require('Blockly.Gesture');
  * @implements {IKeyboardAccessible}
  * @implements {IRegistrable}
  * @abstract
+ * @alias Blockly.Field
  */
 class Field {
   /**
@@ -83,7 +84,6 @@ class Field {
    * @param {Object=} opt_config A map of options used to configure the field.
    *    Refer to the individual field's documentation for a list of properties
    *    this parameter supports.
-   * @alias Blockly.Field
    */
   constructor(value, opt_validator, opt_config) {
     /**

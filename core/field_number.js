@@ -26,6 +26,7 @@ const {Sentinel} = goog.requireType('Blockly.utils.Sentinel');
 /**
  * Class for an editable number field.
  * @extends {FieldTextInput}
+ * @alias Blockly.FieldNumber
  */
 class FieldNumber extends FieldTextInput {
   /**
@@ -47,7 +48,6 @@ class FieldNumber extends FieldTextInput {
    *     See the [field creation documentation]{@link
    *     https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/number#creation}
    *     for a list of properties this parameter supports.
-   * @alias Blockly.FieldNumber
    */
   constructor(
       opt_value, opt_min, opt_max, opt_precision, opt_validator, opt_config) {

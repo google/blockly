@@ -57,13 +57,13 @@ const {inputTypes} = goog.require('Blockly.inputTypes');
  * This measure pass does not propagate changes to the block (although fields
  * may choose to rerender when getSize() is called).  However, calling it
  * repeatedly may be expensive.
+ * @alias Blockly.blockRendering.RenderInfo
  */
 class RenderInfo {
   /**
    * @param {!Renderer} renderer The renderer in use.
    * @param {!BlockSvg} block The block to measure.
    * @package
-   * @alias Blockly.blockRendering.RenderInfo
    */
   constructor(renderer, block) {
     this.block_ = block;

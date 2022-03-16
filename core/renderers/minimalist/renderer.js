@@ -29,12 +29,12 @@ const {Renderer: BaseRenderer} = goog.require('Blockly.blockRendering.Renderer')
 /**
  * The minimalist renderer.
  * @extends {BaseRenderer}
+ * @alias Blockly.minimalist.Renderer
  */
 class Renderer extends BaseRenderer {
   /**
    * @param {string} name The renderer name.
    * @package
-   * @alias Blockly.minimalist.Renderer
    */
   constructor(name) {
     super(name);

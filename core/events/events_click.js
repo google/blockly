@@ -25,6 +25,7 @@ const {UiBase} = goog.require('Blockly.Events.UiBase');
 /**
  * Class for a click event.
  * @extends {UiBase}
+ * @alias Blockly.Events.Click
  */
 class Click extends UiBase {
   /**
@@ -35,7 +36,6 @@ class Click extends UiBase {
    *    Not used if block is passed. Undefined for a blank event.
    * @param {string=} opt_targetType The type of element targeted by this click
    *    event. Undefined for a blank event.
-   * @alias Blockly.Events.Click
    */
   constructor(opt_block, opt_workspaceId, opt_targetType) {
     let workspaceId = opt_block ? opt_block.workspace.id : opt_workspaceId;

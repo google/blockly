@@ -34,13 +34,13 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  * elements it needs.
  * @extends {Row}
  * @struct
+ * @alias Blockly.blockRendering.TopRow
  */
 class TopRow extends Row {
   /**
    * @param {!ConstantProvider} constants The rendering
    *   constants provider.
    * @package
-   * @alias Blockly.blockRendering.TopRow
    */
   constructor(constants) {
     super(constants);

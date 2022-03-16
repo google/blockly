@@ -29,6 +29,7 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  * takes up during rendering
  * @struct
  * @extends {InputConnection}
+ * @alias Blockly.blockRendering.ExternalValueInput
  */
 class ExternalValueInput extends InputConnection {
   /**
@@ -37,7 +38,6 @@ class ExternalValueInput extends InputConnection {
    * @param {!Input} input The external value input to measure and store
    *     information for.
    * @package
-   * @alias Blockly.blockRendering.ExternalValueInput
    */
   constructor(constants, input) {
     super(constants, input);

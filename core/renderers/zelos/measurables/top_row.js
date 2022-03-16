@@ -28,13 +28,13 @@ const {TopRow: BaseTopRow} = goog.require('Blockly.blockRendering.TopRow');
  * After this constructor is called, the row will contain all non-spacer
  * elements it needs.
  * @extends {BaseTopRow}
+ * @alias Blockly.zelos.TopRow
  */
 class TopRow extends BaseTopRow {
   /**
    * @param {!ConstantProvider} constants The rendering
    *   constants provider.
    * @package
-   * @alias Blockly.zelos.TopRow
    */
   constructor(constants) {
     super(constants);

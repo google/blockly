@@ -23,6 +23,7 @@ const {UiBase} = goog.require('Blockly.Events.UiBase');
 /**
  * Class for a viewport change event.
  * @extends {UiBase}
+ * @alias Blockly.Events.ViewportChange
  */
 class ViewportChange extends UiBase {
   /**
@@ -37,7 +38,6 @@ class ViewportChange extends UiBase {
    *    Undefined for a blank event.
    * @param {number=} opt_oldScale The old scale of the workspace. Undefined for
    *     a blank event.
-   * @alias Blockly.Events.ViewportChange
    */
   constructor(opt_top, opt_left, opt_scale, opt_workspaceId, opt_oldScale) {
     super(opt_workspaceId);

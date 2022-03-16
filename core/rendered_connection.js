@@ -43,12 +43,12 @@ const BUMP_RANDOMNESS = 10;
 /**
  * Class for a connection between blocks that may be rendered on screen.
  * @extends {Connection}
+ * @alias Blockly.RenderedConnection
  */
 class RenderedConnection extends Connection {
   /**
    * @param {!BlockSvg} source The block establishing this connection.
    * @param {number} type The type of the connection.
-   * @alias Blockly.RenderedConnection
    */
   constructor(source, type) {
     super(source, type);

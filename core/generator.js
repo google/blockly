@@ -30,11 +30,11 @@ const {Workspace} = goog.requireType('Blockly.Workspace');
 /**
  * Class for a code generator that translates the blocks into a language.
  * @unrestricted
+ * @alias Blockly.Generator
  */
 class Generator {
   /**
    * @param {string} name Language name of this generator.
-   * @alias Blockly.Generator
    */
   constructor(name) {
     this.name_ = name;

@@ -27,6 +27,7 @@ const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 /**
  * Class for a pair of scrollbars.  Horizontal and vertical.
+ * @alias Blockly.ScrollbarPair
  */
 const ScrollbarPair = class {
   /**
@@ -37,7 +38,6 @@ const ScrollbarPair = class {
    *    to true.
    * @param {string=} opt_class A class to be applied to these scrollbars.
    * @param {number=} opt_margin The margin to apply to these scrollbars.
-   * @alias Blockly.ScrollbarPair
    */
   constructor(workspace, addHorizontal, addVertical, opt_class, opt_margin) {
     /**

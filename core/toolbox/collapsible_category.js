@@ -32,6 +32,7 @@ const {ToolboxSeparator} = goog.require('Blockly.ToolboxSeparator');
 /**
  * Class for a category in a toolbox that can be collapsed.
  * @implements {ICollapsibleToolboxItem}
+ * @alias Blockly.CollapsibleToolboxCategory
  */
 class CollapsibleToolboxCategory extends ToolboxCategory {
   /**
@@ -40,7 +41,6 @@ class CollapsibleToolboxCategory extends ToolboxCategory {
    * @param {!IToolbox} toolbox The parent toolbox for the category.
    * @param {ICollapsibleToolboxItem=} opt_parent The parent category or null if
    *     the category does not have a parent.
-   * @alias Blockly.CollapsibleToolboxCategory
    */
   constructor(categoryDef, toolbox, opt_parent) {
     super(categoryDef, toolbox, opt_parent);

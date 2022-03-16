@@ -27,13 +27,13 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  * rendering.
  * @struct
  * @extends {Measurable}
+ * @alias Blockly.blockRendering.Hat
  */
 class Hat extends Measurable {
   /**
    * @param {!ConstantProvider} constants The rendering
    *   constants provider.
    * @package
-   * @alias Blockly.blockRendering.Hat
    */
   constructor(constants) {
     super(constants);

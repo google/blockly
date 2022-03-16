@@ -40,6 +40,7 @@ goog.require('Blockly.Events.BlockChange');
 /**
  * Class for a variable's dropdown field.
  * @extends {FieldDropdown}
+ * @alias Blockly.FieldVariable
  */
 class FieldVariable extends FieldDropdown {
   /**
@@ -61,7 +62,6 @@ class FieldVariable extends FieldDropdown {
    *    See the [field creation documentation]{@link
    *    https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/variable#creation}
    *    for a list of properties this parameter supports.
-   * @alias Blockly.FieldVariable
    */
   constructor(
       varName, opt_validator, opt_variableTypes, opt_defaultType, opt_config) {

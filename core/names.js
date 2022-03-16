@@ -27,6 +27,7 @@ goog.requireType('Blockly.Procedures');
 
 /**
  * Class for a database of entity names (variables, procedures, etc).
+ * @alias Blockly.Names
  */
 const Names = class {
   /**
@@ -34,7 +35,6 @@ const Names = class {
    *     illegal for use as names in a language (e.g. 'new,if,this,...').
    * @param {string=} opt_variablePrefix Some languages need a '$' or a
    *     namespace before all variable names (but not procedure names).
-   * @alias Blockly.Names
    */
   constructor(reservedWords, opt_variablePrefix) {
     /**

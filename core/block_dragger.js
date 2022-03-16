@@ -43,12 +43,12 @@ goog.require('Blockly.Events.BlockMove');
  * Class for a block dragger.  It moves blocks around the workspace when they
  * are being dragged by a mouse or touch.
  * @implements {IBlockDragger}
+ * @alias Blockly.BlockDragger
  */
 const BlockDragger = class {
   /**
    * @param {!BlockSvg} block The block to drag.
    * @param {!WorkspaceSvg} workspace The workspace to drag on.
-   * @alias Blockly.BlockDragger
    */
   constructor(block, workspace) {
     /**

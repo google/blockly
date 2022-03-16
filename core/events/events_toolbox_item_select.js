@@ -23,6 +23,7 @@ const {UiBase} = goog.require('Blockly.Events.UiBase');
 /**
  * Class for a toolbox item select event.
  * @extends {UiBase}
+ * @alias Blockly.Events.ToolboxItemSelect
  */
 class ToolboxItemSelect extends UiBase {
   /**
@@ -32,7 +33,6 @@ class ToolboxItemSelect extends UiBase {
    *     for a blank event.
    * @param {string=} opt_workspaceId The workspace identifier for this event.
    *    Undefined for a blank event.
-   * @alias Blockly.Events.ToolboxItemSelect
    */
   constructor(opt_oldItem, opt_newItem, opt_workspaceId) {
     super(opt_workspaceId);

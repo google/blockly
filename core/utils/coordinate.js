@@ -21,12 +21,12 @@ goog.module('Blockly.utils.Coordinate');
 
 /**
  * Class for representing coordinates and positions.
+ * @alias Blockly.utils.Coordinate
  */
 const Coordinate = class {
   /**
    * @param {number} x Left.
    * @param {number} y Top.
-   * @alias Blockly.utils.Coordinate
    */
   constructor(x, y) {
     /**

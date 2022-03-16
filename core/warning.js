@@ -31,11 +31,11 @@ goog.require('Blockly.Events.BubbleOpen');
 /**
  * Class for a warning.
  * @extends {Icon}
+ * @alias Blockly.Warning
  */
 class Warning extends Icon {
   /**
    * @param {!BlockSvg} block The block associated with this warning.
-   * @alias Blockly.Warning
    */
   constructor(block) {
     super(block);

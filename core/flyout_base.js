@@ -61,12 +61,12 @@ goog.require('Blockly.blockRendering');
  * @abstract
  * @implements {IFlyout}
  * @extends {DeleteArea}
+ * @alias Blockly.Flyout
  */
 class Flyout extends DeleteArea {
   /**
    * @param {!Options} workspaceOptions Dictionary of options for the
    *     workspace.
-   * @alias Blockly.Flyout
    */
   constructor(workspaceOptions) {
     super();

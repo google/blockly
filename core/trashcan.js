@@ -57,11 +57,11 @@ goog.require('Blockly.Events.TrashcanOpen');
  * @implements {IAutoHideable}
  * @implements {IPositionable}
  * @extends {DeleteArea}
+ * @alias Blockly.Trashcan
  */
 class Trashcan extends DeleteArea {
   /**
    * @param {!WorkspaceSvg} workspace The workspace to sit in.
-   * @alias Blockly.Trashcan
    */
   constructor(workspace) {
     super();

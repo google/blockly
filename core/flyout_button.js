@@ -30,6 +30,7 @@ const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 /**
  * Class for a button or label in the flyout.
+ * @alias Blockly.FlyoutButton
  */
 class FlyoutButton {
   /**
@@ -40,7 +41,6 @@ class FlyoutButton {
    *    The JSON specifying the label/button.
    * @param {boolean} isLabel Whether this button should be styled as a label.
    * @package
-   * @alias Blockly.FlyoutButton
    */
   constructor(workspace, targetWorkspace, json, isLabel) {
     /**

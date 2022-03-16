@@ -47,11 +47,11 @@ goog.require('Blockly.Events.BubbleOpen');
 /**
  * Class for a mutator dialog.
  * @extends {Icon}
+ * @alias Blockly.Mutator
  */
 class Mutator extends Icon {
   /**
    * @param {!Array<string>} quarkNames List of names of sub-blocks for flyout.
-   * @alias Blockly.Mutator
    */
   constructor(quarkNames) {
     super(null);

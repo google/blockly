@@ -22,13 +22,13 @@ goog.module('Blockly.utils.Size');
 
 /**
  * Class for representing sizes consisting of a width and height.
+ * @alias Blockly.utils.Size
  */
 const Size = class {
   /**
    * @param {number} width Width.
    * @param {number} height Height.
    * @struct
-   * @alias Blockly.utils.Size
    */
   constructor(width, height) {
     /**

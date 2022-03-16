@@ -35,11 +35,11 @@ const {Svg} = goog.require('Blockly.utils.Svg');
 /**
  * Class for a drag surface for the currently dragged block. This is a separate
  * SVG that contains only the currently moving block, or nothing.
+ * @alias Blockly.BlockDragSurfaceSvg
  */
 const BlockDragSurfaceSvg = class {
   /**
    * @param {!Element} container Containing element.
-   * @alias Blockly.BlockDragSurfaceSvg
    */
   constructor(container) {
     /**

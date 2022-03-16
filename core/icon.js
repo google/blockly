@@ -30,11 +30,11 @@ const {Svg} = goog.require('Blockly.utils.Svg');
 /**
  * Class for an icon.
  * @abstract
+ * @alias Blockly.Icon
  */
 class Icon {
   /**
    * @param {BlockSvg} block The block associated with this icon.
-   * @alias Blockly.Icon
    */
   constructor(block) {
     /**

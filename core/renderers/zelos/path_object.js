@@ -28,6 +28,7 @@ const {Theme} = goog.requireType('Blockly.Theme');
 /**
  * An object that handles creating and setting each of the SVG elements
  * used by the renderer.
+ * @alias Blockly.zelos.PathObject
  */
 class PathObject extends BasePathObject {
   /**
@@ -36,7 +37,6 @@ class PathObject extends BasePathObject {
    *     colouring.
    * @param {!ConstantProvider} constants The renderer's constants.
    * @package
-   * @alias Blockly.zelos.PathObject
    */
   constructor(root, style, constants) {
     super(root, style, constants);

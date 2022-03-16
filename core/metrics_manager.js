@@ -33,12 +33,12 @@ const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /**
  * The manager for all workspace metrics calculations.
  * @implements {IMetricsManager}
+ * @alias Blockly.MetricsManager
  */
 class MetricsManager {
   /**
    * @param {!WorkspaceSvg} workspace The workspace to calculate metrics
    *     for.
-   * @alias Blockly.MetricsManager
    */
   constructor(workspace) {
     /**

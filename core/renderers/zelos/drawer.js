@@ -36,6 +36,7 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
 /**
  * An object that draws a block based on the given rendering information.
  * @extends {BaseDrawer}
+ * @alias Blockly.zelos.Drawer
  */
 class Drawer extends BaseDrawer {
   /**
@@ -43,7 +44,6 @@ class Drawer extends BaseDrawer {
    * @param {!RenderInfo} info An object containing all
    *   information needed to render this block.
    * @package
-   * @alias Blockly.zelos.Drawer
    */
   constructor(block, info) {
     super(block, info);

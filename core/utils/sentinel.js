@@ -18,6 +18,7 @@ goog.module('Blockly.utils.Sentinel');
 
 /**
  * A type used to create flag values.
+ * @alias Blockly.utils.Sentinel
  */
 class Sentinel {}
 

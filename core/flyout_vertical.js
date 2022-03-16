@@ -36,12 +36,12 @@ goog.require('Blockly.constants');
 /**
  * Class for a flyout.
  * @extends {Flyout}
+ * @alias Blockly.VerticalFlyout
  */
 class VerticalFlyout extends Flyout {
   /**
    * @param {!Options} workspaceOptions Dictionary of options for the
    *     workspace.
-   * @alias Blockly.VerticalFlyout
    */
   constructor(workspaceOptions) {
     super(workspaceOptions);

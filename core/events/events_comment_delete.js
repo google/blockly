@@ -25,12 +25,12 @@ const {WorkspaceComment} = goog.requireType('Blockly.WorkspaceComment');
 /**
  * Class for a comment deletion event.
  * @extends {CommentBase}
+ * @alias Blockly.Events.CommentDelete
  */
 class CommentDelete extends CommentBase {
   /**
    * @param {!WorkspaceComment=} opt_comment The deleted comment.
    *     Undefined for a blank event.
-   * @alias Blockly.Events.CommentDelete
    */
   constructor(opt_comment) {
     super(opt_comment);

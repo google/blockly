@@ -29,6 +29,7 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  * during rendering
  * @struct
  * @extends {InputConnection}
+ * @alias Blockly.blockRendering.StatementInput
  */
 class StatementInput extends InputConnection {
   /**
@@ -37,7 +38,6 @@ class StatementInput extends InputConnection {
    * @param {!Input} input The statement input to measure and store
    *     information for.
    * @package
-   * @alias Blockly.blockRendering.StatementInput
    */
   constructor(constants, input) {
     super(constants, input);

@@ -22,6 +22,7 @@ goog.module('Blockly.utils.Rect');
 
 /**
  * Class for representing rectangular regions.
+ * @alias Blockly.utils.Rect
  */
 const Rect = class {
   /**
@@ -30,7 +31,6 @@ const Rect = class {
    * @param {number} left Left.
    * @param {number} right Right.
    * @struct
-   * @alias Blockly.utils.Rect
    */
   constructor(top, bottom, left, right) {
     /** @type {number} */

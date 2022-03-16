@@ -25,11 +25,11 @@ const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 /**
  * Class to manage the multiple markers and the cursor on a workspace.
+ * @alias Blockly.MarkerManager
  */
 class MarkerManager {
   /**
    * @param {!WorkspaceSvg} workspace The workspace for the marker manager.
-   * @alias Blockly.MarkerManager
    * @package
    */
   constructor(workspace) {

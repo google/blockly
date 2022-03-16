@@ -27,12 +27,12 @@ const {Block} = goog.requireType('Blockly.Block');
 /**
  * Class for a block deletion event.
  * @extends {BlockBase}
+ * @alias Blockly.Events.BlockDelete
  */
 class BlockDelete extends BlockBase {
   /**
    * @param {!Block=} opt_block The deleted block.  Undefined for a blank
    *     event.
-   * @alias Blockly.Events.BlockDelete
    */
   constructor(opt_block) {
     super(opt_block);

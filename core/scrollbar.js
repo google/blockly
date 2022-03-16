@@ -36,6 +36,7 @@ const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
  * Class for a pure SVG scrollbar.
  * This technique offers a scrollbar that is guaranteed to work, but may not
  * look or behave like the system's scrollbars.
+ * @alias Blockly.Scrollbar
  */
 class Scrollbar {
   /**
@@ -44,7 +45,6 @@ class Scrollbar {
    * @param {boolean=} opt_pair True if scrollbar is part of a horiz/vert pair.
    * @param {string=} opt_class A class to be applied to this scrollbar.
    * @param {number=} opt_margin The margin to apply to this scrollbar.
-   * @alias Blockly.Scrollbar
    */
   constructor(workspace, horizontal, opt_pair, opt_class, opt_margin) {
     /**

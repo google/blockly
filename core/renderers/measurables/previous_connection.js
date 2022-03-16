@@ -29,6 +29,7 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  * up during rendering.
  * @extends {Connection}
  * @struct
+ * @alias Blockly.blockRendering.PreviousConnection
  */
 class PreviousConnection extends Connection {
   /**
@@ -37,7 +38,6 @@ class PreviousConnection extends Connection {
    * @param {!RenderedConnection} connectionModel The connection object on
    *     the block that this represents.
    * @package
-   * @alias Blockly.blockRendering.PreviousConnection
    */
   constructor(constants, connectionModel) {
     super(constants, connectionModel);

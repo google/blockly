@@ -35,12 +35,12 @@ const {Theme} = goog.requireType('Blockly.Theme');
 /**
  * The geras renderer.
  * @extends {BaseRenderer}
+ * @alias Blockly.geras.Renderer
  */
 class Renderer extends BaseRenderer {
   /**
    * @param {string} name The renderer name.
    * @package
-   * @alias Blockly.geras.Renderer
    */
   constructor(name) {
     super(name);

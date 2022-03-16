@@ -23,11 +23,11 @@ const {ConstantProvider: BaseConstantProvider} = goog.require('Blockly.blockRend
 /**
  * An object that provides constants for rendering blocks in Geras mode.
  * @extends {BaseConstantProvider}
+ * @alias Blockly.geras.ConstantProvider
  */
 class ConstantProvider extends BaseConstantProvider {
   /**
    * @package
-   * @alias Blockly.geras.ConstantProvider
    */
   constructor() {
     super();

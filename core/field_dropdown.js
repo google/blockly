@@ -38,6 +38,7 @@ const {Svg} = goog.require('Blockly.utils.Svg');
 /**
  * Class for an editable dropdown field.
  * @extends {Field}
+ * @alias Blockly.FieldDropdown
  */
 class FieldDropdown extends Field {
   /**
@@ -56,7 +57,6 @@ class FieldDropdown extends Field {
    *     https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/dropdown#creation}
    *     for a list of properties this parameter supports.
    * @throws {TypeError} If `menuGenerator` options are incorrectly structured.
-   * @alias Blockly.FieldDropdown
    */
   constructor(menuGenerator, opt_validator, opt_config) {
     super(Field.SKIP_SETUP);

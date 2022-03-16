@@ -48,13 +48,13 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  * position of each part of the block.  The resulting paths are not continuous
  * or closed paths.  The highlights for tabs and notches are loosely based on
  * tab and notch shapes, but are not exactly the same.
+ * @alias Blockly.geras.Highlighter
  */
 class Highlighter {
   /**
    * @param {!RenderInfo} info An object containing all
    *     information needed to render this block.
    * @package
-   * @alias Blockly.geras.Highlighter
    */
   constructor(info) {
     this.info_ = info;

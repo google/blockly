@@ -54,11 +54,11 @@ const WorkspaceDB_ = Object.create(null);
  * Class for a workspace.  This is a data structure that contains blocks.
  * There is no UI, and can be created headlessly.
  * @implements {IASTNodeLocation}
+ * @alias Blockly.Workspace
  */
 class Workspace {
   /**
    * @param {!Options=} opt_options Dictionary of options.
-   * @alias Blockly.Workspace
    */
   constructor(opt_options) {
     /** @type {string} */

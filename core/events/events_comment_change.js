@@ -25,6 +25,7 @@ const {WorkspaceComment} = goog.requireType('Blockly.WorkspaceComment');
 /**
  * Class for a comment change event.
  * @extends {CommentBase}
+ * @alias Blockly.Events.CommentChange
  */
 class CommentChange extends CommentBase {
   /**
@@ -32,7 +33,6 @@ class CommentChange extends CommentBase {
    *     changed.  Undefined for a blank event.
    * @param {string=} opt_oldContents Previous contents of the comment.
    * @param {string=} opt_newContents New contents of the comment.
-   * @alias Blockly.Events.CommentChange
    */
   constructor(opt_comment, opt_oldContents, opt_newContents) {
     super(opt_comment);

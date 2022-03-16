@@ -45,6 +45,7 @@ exports.Align = Align;
 
 /**
  * Class for an input with an optional field.
+ * @alias Blockly.Input
  */
 class Input {
   /**
@@ -53,7 +54,6 @@ class Input {
    *     this input again.
    * @param {!Block} block The block containing this input.
    * @param {Connection} connection Optional connection for this input.
-   * @alias Blockly.Input
    */
   constructor(type, name, block, connection) {
     if (type !== inputTypes.DUMMY && !name) {

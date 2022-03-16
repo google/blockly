@@ -29,13 +29,13 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  * An object containing information about a row that holds one or more inputs.
  * @extends {Row}
  * @struct
+ * @alias Blockly.blockRendering.InputRow
  */
 class InputRow extends Row {
   /**
    * @param {!ConstantProvider} constants The rendering
    *   constants provider.
    * @package
-   * @alias Blockly.blockRendering.InputRow
    */
   constructor(constants) {
     super(constants);

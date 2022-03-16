@@ -30,13 +30,9 @@ const {Rect} = goog.requireType('Blockly.utils.Rect');
  * Abstract class for a component with custom behaviour when a block or bubble
  * is dragged over or dropped on top of it.
  * @implements {IDragTarget}
+ * @alias Blockly.DragTarget
  */
 class DragTarget {
-  /**
-   * @alias Blockly.DragTarget
-   */
-  constructor() {}
-
   /**
    * Handles when a cursor with a block or bubble enters this drag target.
    * @param {!IDraggable} _dragElement The block or bubble currently being

@@ -27,6 +27,7 @@ goog.require('Blockly.Events.BlockChange');
 /**
  * Class for a checkbox field.
  * @extends {Field}
+ * @alias Blockly.FieldCheckbox
  */
 class FieldCheckbox extends Field {
   /**
@@ -44,7 +45,6 @@ class FieldCheckbox extends Field {
    *     See the [field creation documentation]{@link
    *     https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/checkbox#creation}
    *     for a list of properties this parameter supports.
-   * @alias Blockly.FieldCheckbox
    */
   constructor(opt_value, opt_validator, opt_config) {
     super(Field.SKIP_SETUP);

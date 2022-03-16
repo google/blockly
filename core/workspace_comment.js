@@ -33,6 +33,7 @@ goog.require('Blockly.Events.CommentDelete');
 
 /**
  * Class for a workspace comment.
+ * @alias Blockly.WorkspaceComment
  */
 class WorkspaceComment {
   /**
@@ -42,7 +43,6 @@ class WorkspaceComment {
    * @param {number} width Width of the comment.
    * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
    *     create a new ID.
-   * @alias Blockly.WorkspaceComment
    */
   constructor(workspace, content, height, width, opt_id) {
     /** @type {string} */

@@ -29,6 +29,9 @@ const {MarkerSvg} = goog.requireType('Blockly.blockRendering.MarkerSvg');
  * @alias Blockly.Marker
  */
 class Marker {
+  /**
+   * Constructs a new Marker instance.
+   */
   constructor() {
     /**
      * The colour of the marker.

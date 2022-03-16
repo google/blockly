@@ -32,6 +32,9 @@ const {Size} = goog.requireType('Blockly.utils.Size');
  * @alias Blockly.Menu
  */
 const Menu = class {
+  /**
+   * Constructs a new Menu instance.
+   */
   constructor() {
     /**
      * Array of menu items.

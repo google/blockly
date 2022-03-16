@@ -33,8 +33,6 @@ const {Rect} = goog.requireType('Blockly.utils.Rect');
  * @alias Blockly.DragTarget
  */
 class DragTarget {
-  constructor() {}
-
   /**
    * Handles when a cursor with a block or bubble enters this drag target.
    * @param {!IDraggable} _dragElement The block or bubble currently being

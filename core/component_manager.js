@@ -34,6 +34,9 @@ const {IPositionable} = goog.requireType('Blockly.IPositionable');
  * @alias Blockly.ComponentManager
  */
 class ComponentManager {
+  /**
+   * Creates a new ComponentManager instance.
+   */
   constructor() {
     /**
      * A map of the components registered with the workspace, mapped to id.

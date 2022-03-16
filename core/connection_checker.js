@@ -34,8 +34,6 @@ const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
  * @alias Blockly.ConnectionChecker
  */
 class ConnectionChecker {
-  constructor() {}
-
   /**
    * Check whether the current connection can connect with the target
    * connection.

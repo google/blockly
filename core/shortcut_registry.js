@@ -30,6 +30,9 @@ const {Workspace} = goog.requireType('Blockly.Workspace');
  * @alias Blockly.ShortcutRegistry
  */
 class ShortcutRegistry {
+  /**
+   * Resets the existing ShortcutRegistry singleton.
+   */
   constructor() {
     this.reset();
   }

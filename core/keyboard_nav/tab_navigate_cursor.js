@@ -29,10 +29,6 @@ const {Field} = goog.requireType('Blockly.Field');
  * @alias Blockly.TabNavigateCursor
  */
 class TabNavigateCursor extends BasicCursor {
-  constructor() {
-    super();
-  }
-
   /**
    * Skip all nodes except for tab navigable fields.
    * @param {?ASTNode} node The AST node to check whether it is valid.

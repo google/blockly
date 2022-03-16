@@ -31,13 +31,13 @@ const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /**
  * Parse the user-specified options, using reasonable defaults where behaviour
  * is unspecified.
+ * @alias Blockly.Options
  */
 class Options {
   /**
    * @param {!BlocklyOptions} options Dictionary of options.
    *     Specification:
    * https://developers.google.com/blockly/guides/get-started/web#configuration
-   * @alias Blockly.Options
    */
   constructor(options) {
     let toolboxJsonDef = null;

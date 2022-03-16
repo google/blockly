@@ -31,11 +31,11 @@ const {Theme} = goog.requireType('Blockly.Theme');
 
 /**
  * An object that provides constants for rendering blocks.
+ * @alias Blockly.blockRendering.ConstantProvider
  */
 class ConstantProvider {
   /**
    * @package
-   * @alias Blockly.blockRendering.ConstantProvider
    */
   constructor() {
     /**

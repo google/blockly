@@ -28,6 +28,7 @@ const {Svg} = goog.require('Blockly.utils.Svg');
 /**
  * Class for an image on a block.
  * @extends {Field}
+ * @alias Blockly.FieldImage
  */
 class FieldImage extends Field {
   /**
@@ -46,7 +47,6 @@ class FieldImage extends Field {
    *     See the [field creation documentation]{@link
    *     https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/image#creation}
    *     for a list of properties this parameter supports.
-   * @alias Blockly.FieldImage
    */
   constructor(
       src, width, height, opt_alt, opt_onClick, opt_flipRtl, opt_config) {

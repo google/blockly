@@ -27,6 +27,7 @@ const {Cursor} = goog.require('Blockly.Cursor');
  * This will allow the user to get to all nodes in the AST by hitting next or
  * previous.
  * @extends {Cursor}
+ * @alias Blockly.BasicCursor
  */
 class BasicCursor extends Cursor {
   /**

@@ -23,12 +23,12 @@ const {Block} = goog.requireType('Blockly.Block');
 /**
  * Abstract class for a block event.
  * @extends {AbstractEvent}
+ * @alias Blockly.Events.BlockBase
  */
 class BlockBase extends AbstractEvent {
   /**
    * @param {!Block=} opt_block The block this event corresponds to.
    *     Undefined for a blank event.
-   * @alias Blockly.Events.BlockBase
    */
   constructor(opt_block) {
     super();

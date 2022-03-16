@@ -25,6 +25,7 @@ const {Marker} = goog.require('Blockly.Marker');
  * Class for a cursor.
  * A cursor controls how a user navigates the Blockly AST.
  * @extends {Marker}
+ * @alias Blockly.Cursor
  */
 class Cursor extends Marker {
   /**

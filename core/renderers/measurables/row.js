@@ -28,13 +28,13 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
 /**
  * An object representing a single row on a rendered block and all of its
  * subcomponents.
+ * @alias Blockly.blockRendering.Row
  */
 class Row {
   /**
    * @param {!ConstantProvider} constants The rendering
    *   constants provider.
    * @package
-   * @alias Blockly.blockRendering.Row
    */
   constructor(constants) {
     /**

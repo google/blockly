@@ -25,6 +25,7 @@ const {UiBase} = goog.require('Blockly.Events.UiBase');
 /**
  * Class for a bubble open event.
  * @extends {UiBase}
+ * @alias Blockly.Events.BubbleOpen
  */
 class BubbleOpen extends UiBase {
   /**
@@ -35,7 +36,6 @@ class BubbleOpen extends UiBase {
    * @param {string=} opt_bubbleType The type of bubble. One of 'mutator',
    *     'comment'
    *    or 'warning'. Undefined for a blank event.
-   * @alias Blockly.Events.BubbleOpen
    */
   constructor(opt_block, opt_isOpen, opt_bubbleType) {
     const workspaceId = opt_block ? opt_block.workspace.id : undefined;

@@ -25,6 +25,7 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  * An object containing information about a spacer between two rows.
  * @extends {Row}
  * @struct
+ * @alias Blockly.blockRendering.SpacerRow
  */
 class SpacerRow extends Row {
   /**
@@ -33,7 +34,6 @@ class SpacerRow extends Row {
    * @param {number} height The height of the spacer.
    * @param {number} width The width of the spacer.
    * @package
-   * @alias Blockly.blockRendering.SpacerRow
    */
   constructor(constants, height, width) {
     super(constants);

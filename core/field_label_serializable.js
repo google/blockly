@@ -27,6 +27,7 @@ const {FieldLabel} = goog.require('Blockly.FieldLabel');
 /**
  * Class for a non-editable, serializable text field.
  * @extends {FieldLabel}
+ * @alias Blockly.FieldLabelSerializable
  */
 class FieldLabelSerializable extends FieldLabel {
   /**
@@ -37,7 +38,6 @@ class FieldLabelSerializable extends FieldLabel {
    *    See the [field creation documentation]{@link
    * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/label-serializable#creation}
    *    for a list of properties this parameter supports.
-   * @alias Blockly.FieldLabelSerializable
    */
   constructor(opt_value, opt_class, opt_config) {
     super(String(opt_value ?? ''), opt_class, opt_config);

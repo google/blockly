@@ -31,13 +31,13 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  * during rendering
  * @package
  * @extends {Connection}
+ * @alias Blockly.blockRendering.InputConnection
  */
 class InputConnection extends Connection {
   /**
    * @param {!ConstantProvider} constants The rendering
    *   constants provider.
    * @param {!Input} input The input to measure and store information for.
-   * @alias Blockly.blockRendering.InputConnection
    */
   constructor(constants, input) {
     super(constants, /** @type {!RenderedConnection} */ (input.connection));

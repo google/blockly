@@ -34,6 +34,7 @@ const {Svg} = goog.require('Blockly.utils.Svg');
 /**
  * Class for an editable angle field.
  * @extends {FieldTextInput}
+ * @alias Blockly.FieldAngle
  */
 class FieldAngle extends FieldTextInput {
   /**
@@ -49,7 +50,6 @@ class FieldAngle extends FieldTextInput {
    *     See the [field creation documentation]{@link
    *     https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/angle#creation}
    *     for a list of properties this parameter supports.
-   * @alias Blockly.FieldAngle
    */
   constructor(opt_value, opt_validator, opt_config) {
     super(Field.SKIP_SETUP);

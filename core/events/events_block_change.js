@@ -28,6 +28,7 @@ const {Block} = goog.requireType('Blockly.Block');
 /**
  * Class for a block change event.
  * @extends {BlockBase}
+ * @alias Blockly.Events.BlockChange
  */
 class BlockChange extends BlockBase {
   /**
@@ -37,7 +38,6 @@ class BlockChange extends BlockBase {
    * @param {?string=} opt_name Name of input or field affected, or null.
    * @param {*=} opt_oldValue Previous value of element.
    * @param {*=} opt_newValue New value of element.
-   * @alias Blockly.Events.BlockChange
    */
   constructor(opt_block, opt_element, opt_name, opt_oldValue, opt_newValue) {
     super(opt_block);

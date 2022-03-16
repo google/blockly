@@ -35,6 +35,7 @@ goog.require('Blockly.Events.BlockChange');
 /**
  * Class for a colour input field.
  * @extends {Field}
+ * @alias Blockly.FieldColour
  */
 class FieldColour extends Field {
   /**
@@ -52,7 +53,6 @@ class FieldColour extends Field {
    *     See the [field creation documentation]{@link
    *     https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/colour}
    *     for a list of properties this parameter supports.
-   * @alias Blockly.FieldColour
    */
   constructor(opt_value, opt_validator, opt_config) {
     super(Field.SKIP_SETUP);

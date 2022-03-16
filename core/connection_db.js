@@ -34,13 +34,13 @@ goog.require('Blockly.constants');
  * Database of connections.
  * Connections are stored in order of their vertical component.  This way
  * connections in an area may be looked up quickly using a binary search.
+ * @alias Blockly.ConnectionDB
  */
 class ConnectionDB {
   /**
    * @param {!IConnectionChecker} checker The workspace's
    *     connection type checker, used to decide if connections are valid during
    * a drag.
-   * @alias Blockly.ConnectionDB
    */
   constructor(checker) {
     /**

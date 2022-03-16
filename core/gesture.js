@@ -56,13 +56,13 @@ goog.require('Blockly.Events.Click');
 
 /**
  * Class for one gesture.
+ * @alias Blockly.Gesture
  */
 class Gesture {
   /**
    * @param {!Event} e The event that kicked off this gesture.
    * @param {!WorkspaceSvg} creatorWorkspace The workspace that created
    *     this gesture and has a reference to it.
-   * @alias Blockly.Gesture
    */
   constructor(e, creatorWorkspace) {
     /**

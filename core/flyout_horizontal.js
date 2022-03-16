@@ -32,12 +32,12 @@ const {Scrollbar} = goog.require('Blockly.Scrollbar');
 /**
  * Class for a flyout.
  * @extends {Flyout}
+ * @alias Blockly.HorizontalFlyout
  */
 class HorizontalFlyout extends Flyout {
   /**
    * @param {!Options} workspaceOptions Dictionary of options for the
    *     workspace.
-   * @alias Blockly.HorizontalFlyout
    */
   constructor(workspaceOptions) {
     super(workspaceOptions);

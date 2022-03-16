@@ -26,11 +26,9 @@ const {MarkerSvg} = goog.requireType('Blockly.blockRendering.MarkerSvg');
 /**
  * Class for a marker.
  * This is used in keyboard navigation to save a location in the Blockly AST.
+ * @alias Blockly.Marker
  */
 class Marker {
-  /**
-   * @alias Blockly.Marker
-   */
   constructor() {
     /**
      * The colour of the marker.

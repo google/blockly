@@ -67,6 +67,7 @@ goog.require('Blockly.Events.BlockMove');
  * @implements {IASTNodeLocation}
  * @implements {IDeletable}
  * @unrestricted
+ * @alias Blockly.Block
  */
 class Block {
   /**
@@ -76,7 +77,6 @@ class Block {
    * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
    *     create a new ID.
    * @throws When the prototypeName is not valid or not allowed.
-   * @alias Blockly.Block
    */
   constructor(workspace, prototypeName, opt_id) {
     const {Generator} = goog.module.get('Blockly.Generator');

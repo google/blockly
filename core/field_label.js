@@ -28,6 +28,7 @@ const {Sentinel} = goog.requireType('Blockly.utils.Sentinel');
 /**
  * Class for a non-editable, non-serializable text field.
  * @extends {Field}
+ * @alias Blockly.FieldLabel
  */
 class FieldLabel extends Field {
   /**
@@ -42,7 +43,6 @@ class FieldLabel extends Field {
    *    See the [field creation documentation]{@link
    * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/label#creation}
    *    for a list of properties this parameter supports.
-   * @alias Blockly.FieldLabel
    */
   constructor(opt_value, opt_class, opt_config) {
     super(Field.SKIP_SETUP);

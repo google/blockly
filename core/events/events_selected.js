@@ -23,6 +23,7 @@ const {UiBase} = goog.require('Blockly.Events.UiBase');
 /**
  * Class for a selected event.
  * @extends {UiBase}
+ * @alias Blockly.Events.Selected
  */
 class Selected extends UiBase {
   /**
@@ -32,7 +33,6 @@ class Selected extends UiBase {
    *     no element currently selected (deselect). Undefined for a blank event.
    * @param {string=} opt_workspaceId The workspace identifier for this event.
    *    Null if no element previously selected. Undefined for a blank event.
-   * @alias Blockly.Events.Selected
    */
   constructor(opt_oldElementId, opt_newElementId, opt_workspaceId) {
     super(opt_workspaceId);

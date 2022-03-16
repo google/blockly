@@ -25,6 +25,7 @@ const {Workspace} = goog.requireType('Blockly.Workspace');
 /**
  * Abstract class for an event.
  * @abstract
+ * @alias Blockly.Events.Abstract
  */
 class Abstract {
   /**

@@ -38,12 +38,12 @@ goog.require('Blockly.constants');
 /**
  * Class for a connection between blocks.
  * @implements {IASTNodeLocationWithBlock}
+ * @alias Blockly.Connection
  */
 class Connection {
   /**
    * @param {!Block} source The block establishing this connection.
    * @param {number} type The type of the connection.
-   * @alias Blockly.Connection
    */
   constructor(source, type) {
     /**

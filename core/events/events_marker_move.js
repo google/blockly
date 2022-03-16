@@ -28,6 +28,7 @@ const {Workspace} = goog.requireType('Blockly.Workspace');
 /**
  * Class for a marker move event.
  * @extends {UiBase}
+ * @alias Blockly.Events.MarkerMove
  */
 class MarkerMove extends UiBase {
   /**
@@ -39,7 +40,6 @@ class MarkerMove extends UiBase {
    *    Undefined for a blank event.
    * @param {!ASTNode=} opt_newNode The new node the marker is now on.
    *    Undefined for a blank event.
-   * @alias Blockly.Events.MarkerMove
    */
   constructor(opt_block, isCursor, opt_oldNode, opt_newNode) {
     let workspaceId = opt_block ? opt_block.workspace.id : undefined;

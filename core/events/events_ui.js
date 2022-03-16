@@ -28,6 +28,7 @@ const {UiBase} = goog.require('Blockly.Events.UiBase');
  * Class for a UI event.
  * @extends {UiBase}
  * @deprecated December 2020. Instead use a more specific UI event.
+ * @alias Blockly.Events.Ui
  */
 class Ui extends UiBase {
   /**
@@ -37,7 +38,6 @@ class Ui extends UiBase {
    *     etc.
    * @param {*=} opt_oldValue Previous value of element.
    * @param {*=} opt_newValue New value of element.
-   * @alias Blockly.Events.Ui
    */
   constructor(opt_block, opt_element, opt_oldValue, opt_newValue) {
     const workspaceId = opt_block ? opt_block.workspace.id : undefined;

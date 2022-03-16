@@ -21,12 +21,12 @@ goog.module('Blockly.utils.Svg');
 /**
  * A name with the type of the SVG element stored in the generic.
  * @template T
+ * @alias Blockly.utils.Svg
  */
 class Svg {
   /**
    * @param {string} tagName The SVG element tag name.
    * @package
-   * @alias Blockly.utils.Svg
    */
   constructor(tagName) {
     /**

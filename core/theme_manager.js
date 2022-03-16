@@ -29,13 +29,13 @@ const {Workspace} = goog.requireType('Blockly.Workspace');
 
 /**
  * Class for storing and updating a workspace's theme and UI components.
+ * @alias Blockly.ThemeManager
  */
 class ThemeManager {
   /**
    * @param {!WorkspaceSvg} workspace The main workspace.
    * @param {!Theme} theme The workspace theme.
    * @package
-   * @alias Blockly.ThemeManager
    */
   constructor(workspace, theme) {
     /**

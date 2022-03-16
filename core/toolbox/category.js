@@ -35,6 +35,7 @@ const {ToolboxItem} = goog.require('Blockly.ToolboxItem');
 /**
  * Class for a category in a toolbox.
  * @implements {ISelectableToolboxItem}
+ * @alias Blockly.ToolboxCategory
  */
 class ToolboxCategory extends ToolboxItem {
   /**
@@ -43,7 +44,6 @@ class ToolboxCategory extends ToolboxItem {
    * @param {!IToolbox} toolbox The parent toolbox for the category.
    * @param {ICollapsibleToolboxItem=} opt_parent The parent category or null if
    *     the category does not have a parent.
-   * @alias Blockly.ToolboxCategory
    */
   constructor(categoryDef, toolbox, opt_parent) {
     super(categoryDef, toolbox, opt_parent);

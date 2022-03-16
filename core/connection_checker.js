@@ -31,11 +31,9 @@ const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
 /**
  * Class for connection type checking logic.
  * @implements {IConnectionChecker}
+ * @alias Blockly.ConnectionChecker
  */
 class ConnectionChecker {
-  /**
-   * @alias Blockly.ConnectionChecker
-   */
   constructor() {}
 
   /**

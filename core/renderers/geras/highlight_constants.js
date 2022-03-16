@@ -25,13 +25,13 @@ const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProv
  * Some highlights are simple offsets of the parent paths and can be generated
  * programmatically.  Others, especially on curves, are just made out of piles
  * of constants and are hard to tweak.
+ * @alias Blockly.geras.HighlightConstantProvider
  */
 class HighlightConstantProvider {
   /**
    * @param {!ConstantProvider} constants The rendering
    *   constants provider.
    * @package
-   * @alias Blockly.geras.HighlightConstantProvider
    */
   constructor(constants) {
     /**

@@ -27,12 +27,12 @@ const {Abstract: AbstractEvent} = goog.require('Blockly.Events.Abstract');
  * categories).
  * UI events do not undo or redo.
  * @extends {AbstractEvent}
+ * @alias Blockly.Events.UiBase
  */
 class UiBase extends AbstractEvent {
   /**
    * @param {string=} opt_workspaceId The workspace identifier for this event.
    *    Undefined for a blank event.
-   * @alias Blockly.Events.UiBase
    */
   constructor(opt_workspaceId) {
     super();

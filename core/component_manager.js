@@ -31,11 +31,9 @@ const {IPositionable} = goog.requireType('Blockly.IPositionable');
 
 /**
  * Manager for all items registered with the workspace.
+ * @alias Blockly.ComponentManager
  */
 class ComponentManager {
-  /**
-   * @alias Blockly.ComponentManager
-   */
   constructor() {
     /**
      * A map of the components registered with the workspace, mapped to id.
@@ -219,6 +217,7 @@ ComponentManager.ComponentDatum;
 /**
  * A name with the capability of the element stored in the generic.
  * @template T
+ * @alias Blockly.ComponentManager.Capability
  */
 ComponentManager.Capability = class {
   /**

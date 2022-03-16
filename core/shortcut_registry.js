@@ -27,11 +27,9 @@ const {Workspace} = goog.requireType('Blockly.Workspace');
  * Class for the registry of keyboard shortcuts. This is intended to be a
  * singleton. You should not create a new instance, and only access this class
  * from ShortcutRegistry.registry.
+ * @alias Blockly.ShortcutRegistry
  */
 class ShortcutRegistry {
-  /**
-   * @alias Blockly.ShortcutRegistry
-   */
   constructor() {
     this.reset();
   }

@@ -23,13 +23,13 @@ const {UiBase} = goog.require('Blockly.Events.UiBase');
 /**
  * Class for a theme change event.
  * @extends {UiBase}
+ * @alias Blockly.Events.ThemeChange
  */
 class ThemeChange extends UiBase {
   /**
    * @param {string=} opt_themeName The theme name. Undefined for a blank event.
    * @param {string=} opt_workspaceId The workspace identifier for this event.
    *    event. Undefined for a blank event.
-   * @alias Blockly.Events.ThemeChange
    */
   constructor(opt_themeName, opt_workspaceId) {
     super(opt_workspaceId);

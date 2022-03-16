@@ -121,6 +121,7 @@ goog.require('Blockly.Msg');
  * scrollbars, bubbles, and dragging.
  * @extends {Workspace}
  * @implements {IASTNodeLocationSvg}
+ * @alias Blockly.WorkspaceSvg
  */
 class WorkspaceSvg extends Workspace {
   /**
@@ -129,7 +130,6 @@ class WorkspaceSvg extends Workspace {
    *     blocks.
    * @param {WorkspaceDragSurfaceSvg=} opt_wsDragSurface Drag surface for
    *     the workspace.
-   * @alias Blockly.WorkspaceSvg
    */
   constructor(options, opt_blockDragSurface, opt_wsDragSurface) {
     super(options);

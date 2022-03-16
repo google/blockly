@@ -39,7 +39,6 @@ class Icon extends Measurable {
    *   constants provider.
    * @param {!BlocklyIcon} icon The icon to measure and store information for.
    * @package
-   * @alias Blockly.blockRendering.Icon
    */
   constructor(constants, icon) {
     super(constants);

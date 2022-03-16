@@ -46,13 +46,13 @@ const ZOOM_OUT_MULTIPLIER = 6;
 /**
  * Class for one gesture.
  * @extends {Gesture}
+ * @alias Blockly.TouchGesture
  */
 class TouchGesture extends Gesture {
   /**
    * @param {!Event} e The event that kicked off this gesture.
    * @param {!WorkspaceSvg} creatorWorkspace The workspace that created
    *     this gesture and has a reference to it.
-   * @alias Blockly.TouchGesture
    */
   constructor(e, creatorWorkspace) {
     super(e, creatorWorkspace);

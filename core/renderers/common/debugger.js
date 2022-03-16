@@ -43,13 +43,13 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
 
 /**
  * An object that renders rectangles and dots for debugging rendering code.
+ * @alias Blockly.blockRendering.Debug
  */
 class Debug {
   /**
    * @param {!ConstantProvider} constants The renderer's
    *     constants.
    * @package
-   * @alias Blockly.blockRendering.Debug
    */
   constructor(constants) {
     /**

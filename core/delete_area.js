@@ -31,11 +31,9 @@ const {IDraggable} = goog.requireType('Blockly.IDraggable');
  * dropped on top of it.
  * @extends {DragTarget}
  * @implements {IDeleteArea}
+ * @alias Blockly.DeleteArea
  */
 class DeleteArea extends DragTarget {
-  /**
-   * @alias Blockly.DeleteArea
-   */
   constructor() {
     super();
 

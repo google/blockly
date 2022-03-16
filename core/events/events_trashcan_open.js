@@ -23,6 +23,7 @@ const {UiBase} = goog.require('Blockly.Events.UiBase');
 /**
  * Class for a trashcan open event.
  * @extends {UiBase}
+ * @alias Blockly.Events.TrashcanOpen
  */
 class TrashcanOpen extends UiBase {
   /**
@@ -30,7 +31,6 @@ class TrashcanOpen extends UiBase {
    *     if opening). Undefined for a blank event.
    * @param {string=} opt_workspaceId The workspace identifier for this event.
    *    Undefined for a blank event.
-   * @alias Blockly.Events.TrashcanOpen
    */
   constructor(opt_isOpen, opt_workspaceId) {
     super(opt_workspaceId);

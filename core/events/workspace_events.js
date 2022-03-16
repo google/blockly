@@ -28,12 +28,12 @@ const {Workspace} = goog.requireType('Blockly.Workspace');
  * domToWorkspace).
  * Finished loading events do not record undo or redo.
  * @extends {AbstractEvent}
+ * @alias Blockly.Events.FinishedLoading
  */
 class FinishedLoading extends AbstractEvent {
   /**
    * @param {!Workspace=} opt_workspace The workspace that has finished
    *    loading.  Undefined for a blank event.
-   * @alias Blockly.Events.FinishedLoading
    */
   constructor(opt_workspace) {
     super();

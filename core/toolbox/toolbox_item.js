@@ -31,6 +31,7 @@ const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /**
  * Class for an item in the toolbox.
  * @implements {IToolboxItem}
+ * @alias Blockly.ToolboxItem
  */
 class ToolboxItem {
   /**
@@ -39,7 +40,6 @@ class ToolboxItem {
    * @param {!IToolbox} toolbox The toolbox that holds the toolbox item.
    * @param {ICollapsibleToolboxItem=} opt_parent The parent toolbox item
    *     or null if the category does not have a parent.
-   * @alias Blockly.ToolboxItem
    */
   constructor(toolboxItemDef, toolbox, opt_parent) {
     /**

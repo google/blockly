@@ -30,6 +30,7 @@ const {Input} = goog.requireType('Blockly.Input');
  * An object containing information about the space an inline input takes up
  * during rendering.
  * @extends {BaseInlineInput}
+ * @alias Blockly.geras.InlineInput
  */
 class InlineInput extends BaseInlineInput {
   /**
@@ -38,7 +39,6 @@ class InlineInput extends BaseInlineInput {
    * @param {!Input} input The inline input to measure and store
    *     information for.
    * @package
-   * @alias Blockly.geras.InlineInput
    */
   constructor(constants, input) {
     super(constants, input);

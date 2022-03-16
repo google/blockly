@@ -24,6 +24,7 @@ const {Svg} = goog.require('Blockly.utils.Svg');
 
 /**
  * Class for a workspace's grid.
+ * @alias Blockly.Grid
  */
 class Grid {
   /**
@@ -32,7 +33,6 @@ class Grid {
    * @param {!Object} options A dictionary of normalized options for the grid.
    *     See grid documentation:
    *     https://developers.google.com/blockly/guides/configure/web/grid
-   * @alias Blockly.Grid
    */
   constructor(pattern, options) {
     /**

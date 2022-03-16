@@ -41,6 +41,7 @@ goog.require('Blockly.Events.BlockChange');
 
 /**
  * Class for an editable text field.
+ * @alias Blockly.FieldTextInput
  */
 class FieldTextInput extends Field {
   /**
@@ -57,7 +58,6 @@ class FieldTextInput extends Field {
    *     See the [field creation documentation]{@link
    * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/text-input#creation}
    *     for a list of properties this parameter supports.
-   * @alias Blockly.FieldTextInput
    */
   constructor(opt_value, opt_validator, opt_config) {
     super(Field.SKIP_SETUP);

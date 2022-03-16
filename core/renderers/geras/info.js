@@ -47,13 +47,13 @@ const {inputTypes} = goog.require('Blockly.inputTypes');
  * may choose to rerender when getSize() is called).  However, calling it
  * repeatedly may be expensive.
  * @extends {BaseRenderInfo}
+ * @alias Blockly.geras.RenderInfo
  */
 class RenderInfo extends BaseRenderInfo {
   /**
    * @param {!Renderer} renderer The renderer in use.
    * @param {!BlockSvg} block The block to measure.
    * @package
-   * @alias Blockly.geras.RenderInfo
    */
   constructor(renderer, block) {
     super(renderer, block);

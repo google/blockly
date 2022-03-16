@@ -37,6 +37,7 @@ const {ConstantProvider: ZelosConstantProvider} = goog.requireType('Blockly.zelo
 /**
  * Class to draw a marker.
  * @extends {BaseMarkerSvg}
+ * @alias Blockly.zelos.MarkerSvg
  */
 class MarkerSvg extends BaseMarkerSvg {
   /**
@@ -44,7 +45,6 @@ class MarkerSvg extends BaseMarkerSvg {
    * @param {!BaseConstantProvider} constants The constants for
    *     the renderer.
    * @param {!Marker} marker The marker to draw.
-   * @alias Blockly.zelos.MarkerSvg
    */
   constructor(workspace, constants, marker) {
     super(workspace, constants, marker);

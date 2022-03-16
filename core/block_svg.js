@@ -88,6 +88,7 @@ goog.require('Blockly.Touch');
  * @implements {IBoundedElement}
  * @implements {ICopyable}
  * @implements {IDraggable}
+ * @alias Blockly.BlockSvg
  */
 class BlockSvg extends Block {
   /**
@@ -96,7 +97,6 @@ class BlockSvg extends Block {
    *     type-specific functions for this block.
    * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
    *     create a new ID.
-   * @alias Blockly.BlockSvg
    */
   constructor(workspace, prototypeName, opt_id) {
     super(workspace, prototypeName, opt_id);

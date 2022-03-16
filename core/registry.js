@@ -74,11 +74,11 @@ exports.DEFAULT = DEFAULT;
 /**
  * A name with the type of the element stored in the generic.
  * @template T
+ * @alias Blockly.registry.Type
  */
 class Type {
   /**
    * @param {string} name The name of the registry type.
-   * @alias Blockly.registry.Type
    */
   constructor(name) {
     /**

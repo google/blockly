@@ -44,11 +44,11 @@ goog.require('Blockly.Warning');
 /**
  * Class for a comment.
  * @extends {Icon}
+ * @alias Blockly.Comment
  */
 class Comment extends Icon {
   /**
    * @param {!BlockSvg} block The block associated with this comment.
-   * @alias Blockly.Comment
    */
   constructor(block) {
     super(block);

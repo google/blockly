@@ -33,13 +33,13 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  * connections.
  * @extends {Row}
  * @struct
+ * @alias Blockly.blockRendering.BottomRow
  */
 class BottomRow extends Row {
   /**
    * @param {!ConstantProvider} constants The rendering
    *   constants provider.
    * @package
-   * @alias Blockly.blockRendering.BottomRow
    */
   constructor(constants) {
     super(constants);

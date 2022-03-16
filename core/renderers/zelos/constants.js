@@ -28,11 +28,11 @@ const {Svg} = goog.require('Blockly.utils.Svg');
 /**
  * An object that provides constants for rendering blocks in Zelos mode.
  * @extends {BaseConstantProvider}
+ * @alias Blockly.zelos.ConstantProvider
  */
 class ConstantProvider extends BaseConstantProvider {
   /**
    * @package
-   * @alias Blockly.zelos.ConstantProvider
    */
   constructor() {
     super();

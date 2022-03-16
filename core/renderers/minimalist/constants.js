@@ -23,11 +23,11 @@ const {ConstantProvider: BaseConstantProvider} = goog.require('Blockly.blockRend
 /**
  * An object that provides constants for rendering blocks in the sample.
  * @extends {BaseConstantProvider}
+ * @alias Blockly.minimalist.ConstantProvider
  */
 class ConstantProvider extends BaseConstantProvider {
   /**
    * @package
-   * @alias Blockly.minimalist.ConstantProvider
    */
   constructor() {
     super();

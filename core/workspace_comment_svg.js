@@ -74,6 +74,7 @@ const TEXTAREA_OFFSET = 2;
  * @implements {IBoundedElement}
  * @implements {IBubble}
  * @implements {ICopyable}
+ * @alias Blockly.WorkspaceCommentSvg
  */
 class WorkspaceCommentSvg extends WorkspaceComment {
   /**
@@ -83,7 +84,6 @@ class WorkspaceCommentSvg extends WorkspaceComment {
    * @param {number} width Width of the comment.
    * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
    *     create a new ID.
-   * @alias Blockly.WorkspaceCommentSvg
    */
   constructor(workspace, content, height, width, opt_id) {
     super(workspace, content, height, width, opt_id);

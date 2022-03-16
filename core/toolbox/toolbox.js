@@ -67,12 +67,12 @@ goog.require('Blockly.Events.ToolboxItemSelect');
  * @implements {IStyleable}
  * @implements {IToolbox}
  * @extends {DeleteArea}
+ * @alias Blockly.Toolbox
  */
 class Toolbox extends DeleteArea {
   /**
    * @param {!WorkspaceSvg} workspace The workspace in which to create new
    *     blocks.
-   * @alias Blockly.Toolbox
    */
   constructor(workspace) {
     super();

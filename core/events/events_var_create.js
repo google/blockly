@@ -25,12 +25,12 @@ const {VariableModel} = goog.requireType('Blockly.VariableModel');
 /**
  * Class for a variable creation event.
  * @extends {VarBase}
+ * @alias Blockly.Events.VarCreate
  */
 class VarCreate extends VarBase {
   /**
    * @param {!VariableModel=} opt_variable The created variable. Undefined
    *     for a blank event.
-   * @alias Blockly.Events.VarCreate
    */
   constructor(opt_variable) {
     super(opt_variable);

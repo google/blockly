@@ -30,11 +30,6 @@ let useDebugger = false;
  * @package
  */
 const isDebuggerEnabled = function() {
-  deprecation.warn(
-      'Blockly.blockRendering.debug.isDebuggerEnabled()', 'February 2022',
-      'September 2022',
-      'the debug renderer in @blockly/dev-tools (See https://www.npmjs.com/package/@blockly/dev-tools.)');
-
   return useDebugger;
 };
 exports.isDebuggerEnabled = isDebuggerEnabled;
@@ -43,6 +38,8 @@ exports.isDebuggerEnabled = isDebuggerEnabled;
  * Turn on the blocks debugger.
  * @package
  * @alias Blockly.blockRendering.debug.startDebugger
+ * @deprecated March 2022. Use the rendering debugger in @blockly/dev-tools.
+ * See https://www.npmjs.com/package/@blockly/dev-tools for more information.
  */
 const startDebugger = function() {
   deprecation.warn(
@@ -57,6 +54,8 @@ exports.startDebugger = startDebugger;
  * Turn off the blocks debugger.
  * @package
  * @alias Blockly.blockRendering.debug.stopDebugger
+ * @deprecated March 2022. Use the rendering debugger in @blockly/dev-tools.
+ * See https://www.npmjs.com/package/@blockly/dev-tools for more information.
  */
 const stopDebugger = function() {
   deprecation.warn(

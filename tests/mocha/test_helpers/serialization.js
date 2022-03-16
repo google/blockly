@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.declareModuleId('Blockly.test.helpers.serialization');
+goog.module('Blockly.test.helpers.serialization');
 
 const {runTestCases} = goog.require('Blockly.test.helpers.common');
 
@@ -13,7 +13,7 @@ const {runTestCases} = goog.require('Blockly.test.helpers.common');
  * @implements {TestCase}
  * @record
  */
-export class SerializationTestCase {
+class SerializationTestCase {
   /**
    * Class for a block serialization test case.
    */
@@ -45,12 +45,13 @@ export class SerializationTestCase {
    */
   assertBlockStructure(block) {}
 }
+exports.SerializationTestCase = SerializationTestCase;
 
 /**
  * Runs serialization test suite.
  * @param {!Array<!SerializationTestCase>} testCases The test cases to run.
  */
-export const runSerializationTestSuite = (testCases) => {
+const runSerializationTestSuite = (testCases) => {
   /**
    * Creates test callback for xmlToBlock test.
    * @param {!SerializationTestCase} testCase The test case information.
@@ -128,3 +129,4 @@ export const runSerializationTestSuite = (testCases) => {
     });
   });
 };
+exports.runSerializationTestSuite = runSerializationTestSuite;

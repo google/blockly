@@ -210,7 +210,7 @@ exports.rename = rename;
 
 /**
  * Construct the blocks required by the flyout for the procedure category.
- * @param {!Workspace} workspace The workspace containing procedures.
+ * @param {!WorkspaceSvg} workspace The workspace containing procedures.
  * @return {!Array<!Element>} Array of XML block elements.
  * @alias Blockly.Procedures.flyoutCategory
  */
@@ -297,7 +297,7 @@ exports.flyoutCategory = flyoutCategory;
 /**
  * Updates the procedure mutator's flyout so that the arg block is not a
  * duplicate of another arg.
- * @param {!Workspace} workspace The procedure mutator's workspace. This
+ * @param {!WorkspaceSvg} workspace The procedure mutator's workspace. This
  *     workspace's flyout is what is being updated.
  */
 const updateMutatorFlyout = function(workspace) {

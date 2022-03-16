@@ -403,11 +403,11 @@ const measureFontMetrics = function(text, fontSize, fontWeight, fontFamily) {
   span.style.font = fontWeight + ' ' + fontSize + ' ' + fontFamily;
   span.textContent = text;
 
-  const block = document.createElement('div');
+  const block = /** @type {!HTMLDivElement} */ (document.createElement('div'));
   block.style.width = '1px';
   block.style.height = 0;
 
-  const div = document.createElement('div');
+  const div = /** @type {!HTMLDivElement} */ (document.createElement('div'));
   div.setAttribute('style', 'position: fixed; top: 0; left: 0; display: flex;');
   div.appendChild(span);
   div.appendChild(block);

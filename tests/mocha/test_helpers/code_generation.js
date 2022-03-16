@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.declareModuleId('Blockly.test.helpers.codeGeneration');
+goog.module('Blockly.test.helpers.codeGeneration');
 
 const {runTestSuites} = goog.require('Blockly.test.helpers.common');
 
@@ -15,7 +15,7 @@ const {runTestSuites} = goog.require('Blockly.test.helpers.common');
  * @implements {TestCase}
  * @record
  */
-export class CodeGenerationTestCase {
+class CodeGenerationTestCase {
   /**
    * Class for a code generation test case.
    */
@@ -43,13 +43,14 @@ export class CodeGenerationTestCase {
    */
   createBlock(workspace) {}
 }
+exports.CodeGenerationTestCase = CodeGenerationTestCase;
 
 /**
  * Code generation test suite.
  * @extends {TestSuite<CodeGenerationTestCase, CodeGenerationTestSuite>}
  * @record
  */
-export class CodeGenerationTestSuite {
+class CodeGenerationTestSuite {
   /**
    * Class for a code generation test suite.
    */
@@ -60,6 +61,7 @@ export class CodeGenerationTestSuite {
     this.generator;
   }
 }
+exports.CodeGenerationTestSuite = CodeGenerationTestSuite;
 
 /**
  * Returns mocha test callback for code generation based on provided
@@ -100,7 +102,7 @@ const createCodeGenerationTestFn_ = (generator) => {
  * Runs blockToCode test suites.
  * @param {!Array<!CodeGenerationTestSuite>} testSuites The test suites to run.
  */
-export const runCodeGenerationTestSuites = (testSuites) => {
+const runCodeGenerationTestSuites = (testSuites) => {
   /**
    * Creates function used to generate mocha test callback.
    * @param {!CodeGenerationTestSuite} suiteInfo The test suite information.
@@ -113,3 +115,4 @@ export const runCodeGenerationTestSuites = (testSuites) => {
 
   runTestSuites(testSuites, createTestFn);
 };
+exports.runCodeGenerationTestSuites = runCodeGenerationTestSuites;

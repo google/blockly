@@ -98,7 +98,7 @@ const Menu = class {
 
     /**
      * The menu's root DOM element.
-     * @type {?Element}
+     * @type {?HTMLDivElement}
      * @private
      */
     this.element_ = null;

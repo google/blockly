@@ -48,7 +48,7 @@ class ToolboxSeparator extends ToolboxItem {
     this.cssConfig_ = {'container': 'blocklyTreeSeparator'};
 
     /**
-     * @type {?Element}
+     * @type {?HTMLDivElement}
      * @private
      */
     this.htmlDiv_ = null;
@@ -66,11 +66,12 @@ class ToolboxSeparator extends ToolboxItem {
 
   /**
    * Creates the DOM for a separator.
-   * @return {!Element} The parent element for the separator.
+   * @return {!HTMLDivElement} The parent element for the separator.
    * @protected
    */
   createDom_() {
-    const container = document.createElement('div');
+    const container =
+        /** @type {!HTMLDivElement} */ (document.createElement('div'));
     dom.addClass(container, this.cssConfig_['container']);
     this.htmlDiv_ = container;
     return container;
@@ -80,14 +81,14 @@ class ToolboxSeparator extends ToolboxItem {
    * @override
    */
   getDiv() {
-    return /** @type {!Element} */ (this.htmlDiv_);
+    return /** @type {!HTMLDivElement} */ (this.htmlDiv_);
   }
 
   /**
    * @override
    */
   dispose() {
-    dom.removeNode(/** @type {!Element} */ (this.htmlDiv_));
+    dom.removeNode(/** @type {!HTMLDivElement} */ (this.htmlDiv_));
   }
 }
 

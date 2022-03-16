@@ -62,6 +62,8 @@ const {IASTNodeLocationSvg} = goog.require('Blockly.IASTNodeLocationSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {IBoundedElement} = goog.requireType('Blockly.IBoundedElement');
 /* eslint-disable-next-line no-unused-vars */
+const {ICopyable} = goog.requireType('Blockly.ICopyable');
+/* eslint-disable-next-line no-unused-vars */
 const {IDragTarget} = goog.requireType('Blockly.IDragTarget');
 /* eslint-disable-next-line no-unused-vars */
 const {IFlyout} = goog.requireType('Blockly.IFlyout');
@@ -155,19 +157,6 @@ class WorkspaceSvg extends Workspace {
      * @private
      */
     this.isVisible_ = true;
-
-    /**
-     * Is this workspace the surface for a flyout?
-     * @type {boolean}
-     */
-    this.isFlyout = false;
-
-    /**
-     * Is this workspace the surface for a mutator?
-     * @type {boolean}
-     * @package
-     */
-    this.isMutator = false;
 
     /**
      * Whether this workspace has resizes enabled.
@@ -321,7 +310,7 @@ class WorkspaceSvg extends Workspace {
     /**
      * The current gesture in progress on this workspace, if any.
      * @type {TouchGesture}
-     * @private
+     * @package
      */
     this.currentGesture_ = null;
 
@@ -484,7 +473,7 @@ class WorkspaceSvg extends Workspace {
     /**
      * Map from function names to callbacks, for deciding what to do when a
      * custom toolbox category is opened.
-     * @type {!Object<string, ?function(!Workspace):
+     * @type {!Object<string, ?function(!WorkspaceSvg):
      *     !toolbox.FlyoutDefinition>}
      * @private
      */
@@ -1244,13 +1233,13 @@ class WorkspaceSvg extends Workspace {
    */
   setCachedParentSvgSize(width, height) {
     const svg = this.getParentSvg();
-    if (width) {
+    if (width != null) {
       this.cachedParentSvgSize_.width = width;
       // This is set to support the public (but deprecated) Blockly.svgSize
       // method.
       svg.cachedWidth_ = width;
     }
-    if (height) {
+    if (height != null) {
       this.cachedParentSvgSize_.height = height;
       // This is set to support the public (but deprecated) Blockly.svgSize
       // method.
@@ -1520,10 +1509,12 @@ class WorkspaceSvg extends Workspace {
    * should be done before calling this method.
    * @param {!Object|!Element|!DocumentFragment} state The representation of the
    *     thing to paste.
+   * @return {!ICopyable|null} The pasted thing, or null if
+   *     the paste was not successful.
    */
   paste(state) {
     if (!this.rendered || !state['type'] && !state.tagName) {
-      return;
+      return null;
     }
     if (this.currentGesture_) {
       this.currentGesture_.cancel();  // Dragging while pasting?  No.
@@ -1534,19 +1525,22 @@ class WorkspaceSvg extends Workspace {
       eventUtils.setGroup(true);
     }
 
+    let pastedThing;
     // Checks if this is JSON. JSON has a type property, while elements don't.
     if (state['type']) {
-      this.pasteBlock_(null, /** @type {!blocks.State} */ (state));
+      pastedThing =
+          this.pasteBlock_(null, /** @type {!blocks.State} */ (state));
     } else {
       const xmlBlock = /** @type {!Element} */ (state);
       if (xmlBlock.tagName.toLowerCase() === 'comment') {
-        this.pasteWorkspaceComment_(xmlBlock);
+        pastedThing = this.pasteWorkspaceComment_(xmlBlock);
       } else {
-        this.pasteBlock_(xmlBlock, null);
+        pastedThing = this.pasteBlock_(xmlBlock, null);
       }
     }
 
     eventUtils.setGroup(existingGroup);
+    return pastedThing;
   }
 
   /**
@@ -1554,6 +1548,7 @@ class WorkspaceSvg extends Workspace {
    * @param {?Element} xmlBlock XML block element.
    * @param {?blocks.State} jsonBlock JSON block
    *     representation.
+   * @return {!BlockSvg} The pasted block.
    * @private
    */
   pasteBlock_(xmlBlock, jsonBlock) {
@@ -1626,11 +1621,13 @@ class WorkspaceSvg extends Workspace {
       eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(block));
     }
     block.select();
+    return block;
   }
 
   /**
    * Paste the provided comment onto the workspace.
    * @param {!Element} xmlComment XML workspace comment element.
+   * @return {!WorkspaceCommentSvg} The pasted workspace comment.
    * @private
    * @suppress {checkTypes} Suppress checks while workspace comments are not
    *     bundled in.
@@ -1662,6 +1659,7 @@ class WorkspaceSvg extends Workspace {
       goog.module.get('Blockly.WorkspaceComment').fireCreateEvent(comment);
     }
     comment.select();
+    return comment;
   }
 
   /**
@@ -2578,8 +2576,8 @@ class WorkspaceSvg extends Workspace {
    * custom toolbox categories in this workspace.  See the variable and
    * procedure categories as an example.
    * @param {string} key The name to use to look up this function.
-   * @param {function(!Workspace): !toolbox.FlyoutDefinition} func The function
-   *     to call when the given toolbox category is opened.
+   * @param {function(!WorkspaceSvg): !toolbox.FlyoutDefinition} func The
+   *     function to call when the given toolbox category is opened.
    */
   registerToolboxCategoryCallback(key, func) {
     if (typeof func !== 'function') {
@@ -2592,7 +2590,7 @@ class WorkspaceSvg extends Workspace {
    * Get the callback function associated with a given key, for populating
    * custom toolbox categories in this workspace.
    * @param {string} key The name to use to look up the function.
-   * @return {?function(!Workspace): !toolbox.FlyoutDefinition} The function
+   * @return {?function(!WorkspaceSvg): !toolbox.FlyoutDefinition} The function
    *     corresponding to the given key for this workspace, or null if no
    * function is registered.
    */

@@ -97,7 +97,7 @@ class ThemeManager {
     // Refresh all subscribed workspaces.
     for (let i = 0, workspace; (workspace = this.subscribedWorkspaces_[i]);
          i++) {
-      workspace.refreshTheme();
+      /** @type {!WorkspaceSvg} */ (workspace).refreshTheme();
     }
 
     // Refresh all registered Blockly UI components.
@@ -112,7 +112,7 @@ class ThemeManager {
     }
 
     for (const workspace of this.subscribedWorkspaces_) {
-      workspace.hideChaff();
+      /** @type {!WorkspaceSvg} */ (workspace).hideChaff();
     }
   }
 

@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.declareModuleId('Blockly.test.helpers.blockDefinitions');
+goog.module('Blockly.test.helpers.blockDefinitions');
 
 
-export function defineStackBlock(name = 'stack_block') {
+function defineStackBlock(name = 'stack_block') {
   Blockly.defineBlocksWithJsonArray([{
     "type": name,
     "message0": "",
@@ -15,8 +15,9 @@ export function defineStackBlock(name = 'stack_block') {
     "nextStatement": null,
   }]);
 }
+exports.defineStackBlock = defineStackBlock;
 
-export function defineRowBlock(name = 'row_block') {
+function defineRowBlock(name = 'row_block') {
   Blockly.defineBlocksWithJsonArray([{
     "type": name,
     "message0": "%1",
@@ -29,8 +30,9 @@ export function defineRowBlock(name = 'row_block') {
     "output": null,
   }]);
 }
+exports.defineRowBlock = defineRowBlock;
 
-export function defineStatementBlock(name = 'statement_block') {
+function defineStatementBlock(name = 'statement_block') {
   Blockly.defineBlocksWithJsonArray([{
     "type": name,
     "message0": "%1",
@@ -47,8 +49,9 @@ export function defineStatementBlock(name = 'statement_block') {
     "helpUrl": "",
   }]);
 }
+exports.defineStatementBlock = defineStatementBlock;
 
-export function defineBasicBlockWithField(name = 'test_field_block') {
+function defineBasicBlockWithField(name = 'test_field_block') {
   Blockly.defineBlocksWithJsonArray([{
     "type": name,
     "message0": "%1",
@@ -61,8 +64,9 @@ export function defineBasicBlockWithField(name = 'test_field_block') {
     "output": null,
   }]);
 }
+exports.defineBasicBlockWithField = defineBasicBlockWithField;
 
-export function defineMutatorBlocks() {
+function defineMutatorBlocks() {
   Blockly.defineBlocksWithJsonArray([
     {
       'type': 'xml_block',
@@ -154,8 +158,9 @@ export function defineMutatorBlocks() {
   };
   Blockly.Extensions.registerMutator('jso_mutator', jsoMutator);
 }
+exports.defineMutatorBlocks = defineMutatorBlocks;
 
-export function createTestBlock() {
+function createTestBlock() {
   return {
     'id': 'test',
     'rendered': false,
@@ -169,10 +174,12 @@ export function createTestBlock() {
     'updateVarName': Blockly.Block.prototype.updateVarName,
   };
 }
+exports.createTestBlock = createTestBlock;
 
-export function createRenderedBlock(workspaceSvg, type) {
+function createRenderedBlock(workspaceSvg, type) {
   const block = workspaceSvg.newBlock(type);
   block.initSvg();
   block.render();
   return block;
 }
+exports.createRenderedBlock = createRenderedBlock;

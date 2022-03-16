@@ -37,6 +37,8 @@ const {CommentMove} = goog.requireType('Blockly.Events.CommentMove');
 const {ViewportChange} = goog.requireType('Blockly.Events.ViewportChange');
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
@@ -561,7 +563,9 @@ const disableOrphans = function(event) {
       return;
     }
     const {Workspace} = goog.module.get('Blockly.Workspace');
-    const eventWorkspace = Workspace.getById(blockEvent.workspaceId);
+    const eventWorkspace =
+        /** @type {!WorkspaceSvg} */ (
+            Workspace.getById(blockEvent.workspaceId));
     let block = eventWorkspace.getBlockById(blockEvent.blockId);
     if (block) {
       // Changing blocks as part of this event shouldn't be undoable.

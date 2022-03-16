@@ -103,19 +103,19 @@ let themeClassName = '';
 
 /**
  * The content element.
- * @type {!Element}
+ * @type {!HTMLDivElement}
  */
 let div;
 
 /**
  * The content element.
- * @type {!Element}
+ * @type {!HTMLDivElement}
  */
 let content;
 
 /**
  * The arrow element.
- * @type {!Element}
+ * @type {!HTMLDivElement}
  */
 let arrow;
 
@@ -177,16 +177,16 @@ const createDom = function() {
   if (div) {
     return;  // Already created.
   }
-  div = document.createElement('div');
+  div = /** @type {!HTMLDivElement} */ (document.createElement('div'));
   div.className = 'blocklyDropDownDiv';
   const parentDiv = common.getParentContainer() || document.body;
   parentDiv.appendChild(div);
 
-  content = document.createElement('div');
+  content = /** @type {!HTMLDivElement} */ (document.createElement('div'));
   content.className = 'blocklyDropDownContent';
   div.appendChild(content);
 
-  arrow = document.createElement('div');
+  arrow = /** @type {!HTMLDivElement} */ (document.createElement('div'));
   arrow.className = 'blocklyDropDownArrow';
   div.appendChild(arrow);
 

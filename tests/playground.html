@@ -84,6 +84,8 @@ function start() {
   if (autoimport) {
     load();
   }
+
+  addClickHandlers();
 }
 
 function setBackgroundColour() {
@@ -384,6 +386,35 @@ var spaghettiXml = [
 // Call start().  Because this <script> has type=module, it is
 // automatically deferred, so it will not be run until after the
 // document has been parsed, but before firing DOMContentLoaded.
+
+function addClickHandlers() {
+  document.getElementById('save-json').addEventListener('click', saveJson);
+  document.getElementById('save-xml').addEventListener('click', saveXml);
+  document.getElementById('import').addEventListener('click', load);
+
+  document.getElementById('to-code-js')
+      .addEventListener('click', () => toCode('JavaScript'));
+  document.getElementById('to-code-py')
+      .addEventListener('click', () => toCode('Python'));
+  document.getElementById('to-code-php')
+      .addEventListener('click', () => toCode('PHP'));
+  document.getElementById('to-code-lua')
+      .addEventListener('click', () => toCode('Lua'));
+  document.getElementById('to-code-dart')
+      .addEventListener('click', () => toCode('Dart'));
+
+  document.getElementById('airstrike')
+      .addEventListener('click', () => airstrike(100));
+  document.getElementById('spaghetti-xml')
+      .addEventListener('click', () => spaghetti(8));
+  document.getElementById('spaghetti-js')
+      .addEventListener('click', () => jsoSpaghetti(8));
+
+  document.getElementById('logCheck')
+      .addEventListener('click', function() { logEvents(this.checked) });
+  document.getElementById('logFlyoutCheck')
+      .addEventListener('click', function() { logFlyoutEvents(this.checked) });
+}
   
 start();
 
@@ -427,10 +458,6 @@ start();
     margin-top: 1em;
   }
 
-  .blockRenderDebug {
-    display: none;
-  }
-
   .zelos-renderer .blocklyFlyoutButton .blocklyText {
     font-size: 1.5rem;
   }
@@ -459,15 +486,15 @@ start();
     </select>
   </form>
   <p>
-    <input type="button" value="Save JSON" onclick="saveJson()">
-    <input type="button" value="Save XML" onclick="saveXml()">
-    <input type="button" value="Load" onclick="load()" id="import">
+    <input id="save-json" type="button" value="Save JSON">
+    <input id="save-xml" type="button" value="Save XML">
+    <input type="button" value="Load" id="import">
     <br>
-    <input type="button" value="To JavaScript" onclick="toCode('JavaScript')">
-    <input type="button" value="To Python" onclick="toCode('Python')">
-    <input type="button" value="To PHP" onclick="toCode('PHP')">
-    <input type="button" value="To Lua" onclick="toCode('Lua')">
-    <input type="button" value="To Dart" onclick="toCode('Dart')">
+    <input id="to-code-js" type="button" value="To JavaScript">
+    <input id="to-code-py" type="button" value="To Python">
+    <input id="to-code-php" type="button" value="To PHP">
+    <input id="to-code-lua" type="button" value="To Lua">
+    <input id="to-code-dart" type="button" value="To Dart">
     <br>
     <textarea id="importExport" style="width: 26%; height: 12em"
       onchange="taChange();" onkeyup="taChange()"></textarea>
@@ -475,18 +502,18 @@ start();
 
   <p>
     Stress test: &nbsp;
-    <input type="button" value="Airstrike!" onclick="airstrike(100)">
-    <input type="button" value="Spaghetti!" onclick="spaghetti(8)">
-    <input type="button" value="JS Spaghetti!" onclick="jsoSpaghetti(8)">
+    <input id="airstrike" type="button" value="Airstrike!">
+    <input id="spaghetti-xml" type="button" value="Spaghetti!">
+    <input id="spaghetti-js" type="button" value="JS Spaghetti!">
   </p>
   <ul class="playgroundToggleOptions">
     <li>
       <label for="logCheck">Log main workspace events:</label>
-      <input type="checkbox" onclick="logEvents(this.checked)" id="logCheck">
+      <input type="checkbox" id="logCheck">
     </li>
     <li>
     <label for="logFlyoutCheck">Log flyout events:</label>
-    <input type="checkbox" onclick="logFlyoutEvents(this.checked)" id="logFlyoutCheck">
+    <input type="checkbox" id="logFlyoutCheck">
   </li>
   </ul>
 

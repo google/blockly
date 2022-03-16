@@ -209,7 +209,7 @@ var JSCOMP_ERROR = [
   'moduleLoad',
   'msgDescriptions',
   'nonStandardJsDocs',
-  'partialAlias',
+  // 'partialAlias',  // Don't want this to be an error yet; only warning.
   // 'polymer',  // Not applicable.
   // 'reportUnknownTypes',  // VERY verbose.
   // 'strictCheckTypes',  // Use --strict to enable.
@@ -548,7 +548,6 @@ function compile(options) {
     rewrite_polyfills: true,
     hide_warnings_for: 'node_modules',
     define: ['COMPILED=true'],
-    externs: ['./externs/svg-externs.js'],
   };
   if (argv.debug || argv.strict) {
     defaultOptions.jscomp_error = [...JSCOMP_ERROR];

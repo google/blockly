@@ -107,13 +107,13 @@ class Toolbox extends DeleteArea {
 
     /**
      * The html container for the toolbox.
-     * @type {?Element}
+     * @type {?HTMLDivElement}
      */
     this.HtmlDiv = null;
 
     /**
      * The html container for the contents of a toolbox.
-     * @type {?Element}
+     * @type {?HTMLDivElement}
      * @protected
      */
     this.contentsDiv_ = null;
@@ -241,7 +241,7 @@ class Toolbox extends DeleteArea {
   /**
    * Creates the DOM for the toolbox.
    * @param {!WorkspaceSvg} workspace The workspace this toolbox is on.
-   * @return {!Element} The HTML container for the toolbox.
+   * @return {!HTMLDivElement} The HTML container for the toolbox.
    * @protected
    */
   createDom_(workspace) {
@@ -262,11 +262,12 @@ class Toolbox extends DeleteArea {
 
   /**
    * Creates the container div for the toolbox.
-   * @return {!Element} The HTML container for the toolbox.
+   * @return {!HTMLDivElement} The HTML container for the toolbox.
    * @protected
    */
   createContainer_() {
-    const toolboxContainer = document.createElement('div');
+    const toolboxContainer =
+        /** @type {!HTMLDivElement} */ (document.createElement('div'));
     toolboxContainer.setAttribute('layout', this.isHorizontal() ? 'h' : 'v');
     dom.addClass(toolboxContainer, 'blocklyToolboxDiv');
     dom.addClass(toolboxContainer, 'blocklyNonSelectable');
@@ -276,11 +277,12 @@ class Toolbox extends DeleteArea {
 
   /**
    * Creates the container for all the contents in the toolbox.
-   * @return {!Element} The HTML container for the toolbox contents.
+   * @return {!HTMLDivElement} The HTML container for the toolbox contents.
    * @protected
    */
   createContentsContainer_() {
-    const contentsContainer = document.createElement('div');
+    const contentsContainer =
+        /** @type {!HTMLDivElement} */ (document.createElement('div'));
     dom.addClass(contentsContainer, 'blocklyToolboxContents');
     if (this.isHorizontal()) {
       contentsContainer.style.flexDirection = 'row';
@@ -290,9 +292,9 @@ class Toolbox extends DeleteArea {
 
   /**
    * Adds event listeners to the toolbox container div.
-   * @param {!Element} container The HTML container for the toolbox.
-   * @param {!Element} contentsContainer The HTML container for the contents
-   *     of the toolbox.
+   * @param {!HTMLDivElement} container The HTML container for the toolbox.
+   * @param {!HTMLDivElement} contentsContainer The HTML container for the
+   *     contents of the toolbox.
    * @protected
    */
   attachEvents_(container, contentsContainer) {
@@ -318,7 +320,7 @@ class Toolbox extends DeleteArea {
   onClick_(e) {
     if (browserEvents.isRightButton(e) || e.target === this.HtmlDiv) {
       // Close flyout.
-      common.getMainWorkspace().hideChaff(false);
+      /** @type {!WorkspaceSvg} */ (common.getMainWorkspace()).hideChaff(false);
     } else {
       const targetElement = e.target;
       const itemId = targetElement.getAttribute('id');
@@ -330,7 +332,7 @@ class Toolbox extends DeleteArea {
         }
       }
       // Just close popups.
-      common.getMainWorkspace().hideChaff(true);
+      /** @type {!WorkspaceSvg} */ (common.getMainWorkspace()).hideChaff(true);
     }
     Touch.clearTouchIdentifier();  // Don't block future drags.
   }

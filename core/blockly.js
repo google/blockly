@@ -307,7 +307,8 @@ exports.svgResize = common.svgResize;
  * @alias Blockly.hideChaff
  */
 const hideChaff = function(opt_onlyClosePopups) {
-  common.getMainWorkspace().hideChaff(opt_onlyClosePopups);
+  /** @type {!WorkspaceSvg} */ (common.getMainWorkspace())
+      .hideChaff(opt_onlyClosePopups);
 };
 exports.hideChaff = hideChaff;
 
@@ -529,7 +530,7 @@ const paste = function() {
   deprecation.warn(
       'Blockly.paste', 'December 2021', 'December 2022',
       'Blockly.clipboard.paste');
-  return clipboard.paste();
+  return !!clipboard.paste();
 };
 exports.paste = paste;
 

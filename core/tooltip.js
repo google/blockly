@@ -192,13 +192,13 @@ exports.MARGINS = MARGINS;
 
 /**
  * The HTML container.  Set once by createDom.
- * @type {Element}
+ * @type {?HTMLDivElement}
  */
 let DIV = null;
 
 /**
  * Returns the HTML tooltip container.
- * @returns {Element} The HTML tooltip container.
+ * @returns {?HTMLDivElement} The HTML tooltip container.
  * @alias Blockly.Tooltip.getDiv
  */
 const getDiv = function() {
@@ -210,7 +210,7 @@ Object.defineProperties(exports, {
   /**
    * The HTML container.  Set once by createDom.
    * @name Blockly.Tooltip.DIV
-   * @type {Element}
+   * @type {HTMLDivElement}
    * @deprecated Use Blockly.Tooltip.getDiv() and .setDiv().
    *     (September 2021)
    * @suppress {checkTypes}
@@ -274,7 +274,7 @@ const createDom = function() {
     return;  // Already created.
   }
   // Create an HTML container for popup overlays (e.g. editor widgets).
-  DIV = document.createElement('div');
+  DIV = /** @type {!HTMLDivElement} */ (document.createElement('div'));
   DIV.className = 'blocklyTooltipDiv';
   const container = common.getParentContainer() || document.body;
   container.appendChild(DIV);
@@ -465,7 +465,7 @@ const renderDefaultContent = function() {
   // Create new text, line by line.
   const lines = tip.split('\n');
   for (let i = 0; i < lines.length; i++) {
-    const div = document.createElement('div');
+    const div = /** @type {!HTMLDivElement} */ (document.createElement('div'));
     div.appendChild(document.createTextNode(lines[i]));
     DIV.appendChild(div);
   }

@@ -22,6 +22,7 @@ const eventUtils = goog.require('Blockly.Events.utils');
 const registry = goog.require('Blockly.registry');
 // eslint-disable-next-line no-unused-vars
 const {Workspace} = goog.require('Blockly.Workspace');
+const {WorkspaceSvg} = goog.require('Blockly.WorkspaceSvg');
 
 
 /**
@@ -70,7 +71,7 @@ const load = function(state, workspace, {recordUndo = false} = {}) {
   }
 
   dom.startTextWidthCache();
-  if (workspace.setResizesEnabled) {
+  if (workspace instanceof WorkspaceSvg) {
     workspace.setResizesEnabled(false);
   }
 
@@ -89,7 +90,7 @@ const load = function(state, workspace, {recordUndo = false} = {}) {
     }
   }
 
-  if (workspace.setResizesEnabled) {
+  if (workspace instanceof WorkspaceSvg) {
     workspace.setResizesEnabled(true);
   }
   dom.stopTextWidthCache();

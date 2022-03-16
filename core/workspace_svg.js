@@ -159,19 +159,6 @@ class WorkspaceSvg extends Workspace {
     this.isVisible_ = true;
 
     /**
-     * Is this workspace the surface for a flyout?
-     * @type {boolean}
-     */
-    this.isFlyout = false;
-
-    /**
-     * Is this workspace the surface for a mutator?
-     * @type {boolean}
-     * @package
-     */
-    this.isMutator = false;
-
-    /**
      * Whether this workspace has resizes enabled.
      * Disable during batch operations for a performance improvement.
      * @type {boolean}
@@ -323,7 +310,7 @@ class WorkspaceSvg extends Workspace {
     /**
      * The current gesture in progress on this workspace, if any.
      * @type {TouchGesture}
-     * @private
+     * @package
      */
     this.currentGesture_ = null;
 
@@ -486,7 +473,7 @@ class WorkspaceSvg extends Workspace {
     /**
      * Map from function names to callbacks, for deciding what to do when a
      * custom toolbox category is opened.
-     * @type {!Object<string, ?function(!Workspace):
+     * @type {!Object<string, ?function(!WorkspaceSvg):
      *     !toolbox.FlyoutDefinition>}
      * @private
      */
@@ -2589,8 +2576,8 @@ class WorkspaceSvg extends Workspace {
    * custom toolbox categories in this workspace.  See the variable and
    * procedure categories as an example.
    * @param {string} key The name to use to look up this function.
-   * @param {function(!Workspace): !toolbox.FlyoutDefinition} func The function
-   *     to call when the given toolbox category is opened.
+   * @param {function(!WorkspaceSvg): !toolbox.FlyoutDefinition} func The
+   *     function to call when the given toolbox category is opened.
    */
   registerToolboxCategoryCallback(key, func) {
     if (typeof func !== 'function') {
@@ -2603,7 +2590,7 @@ class WorkspaceSvg extends Workspace {
    * Get the callback function associated with a given key, for populating
    * custom toolbox categories in this workspace.
    * @param {string} key The name to use to look up the function.
-   * @return {?function(!Workspace): !toolbox.FlyoutDefinition} The function
+   * @return {?function(!WorkspaceSvg): !toolbox.FlyoutDefinition} The function
    *     corresponding to the given key for this workspace, or null if no
    * function is registered.
    */

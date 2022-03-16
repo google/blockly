@@ -275,7 +275,8 @@ const init = function(mainWorkspace) {
 // TODO (https://github.com/google/blockly/issues/1998) handle cases where there
 // are multiple workspaces and non-main workspaces are able to accept input.
 const onKeyDown = function(e) {
-  const mainWorkspace = common.getMainWorkspace();
+  const mainWorkspace =
+      /** @type {!WorkspaceSvg} */ (common.getMainWorkspace());
   if (!mainWorkspace) {
     return;
   }
@@ -338,7 +339,7 @@ const bindDocumentEvents = function() {
 /**
  * Load sounds for the given workspace.
  * @param {string} pathToMedia The path to the media directory.
- * @param {!Workspace} workspace The workspace to load sounds for.
+ * @param {!WorkspaceSvg} workspace The workspace to load sounds for.
  */
 const loadSounds = function(pathToMedia, workspace) {
   const audioMgr = workspace.getAudioManager();

@@ -205,8 +205,7 @@ class Workspace {
    * @param {!Block | !WorkspaceComment} b The second object to
    *    compare.
    * @return {number} The comparison value. This tells Array.sort() how to
-   *     change
-   *    object a's index.
+   *    change object a's index.
    * @private
    */
   sortObjects_(a, b) {

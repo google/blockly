@@ -43,6 +43,7 @@
 	"VARIABLE_ALREADY_EXISTS": "Yew vırnayış be namey '%1' xora est.",
 	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Vurnaye be nameyê '%1' ra be babetê bini ra esto: '%2'",
 	"DELETE_VARIABLE_CONFIRMATION": "%1 ke vırnayışê '%2'i gırweneno, besteriyo?",
+	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Vurniyaye '%1' nêşeno besteriyo, çıke parçeyê şınasnayışiyê fonksiyonê '%2'yo",
 	"DELETE_VARIABLE": "Şıma vırnaoğê '%1'i besterê",
 	"COLOUR_PICKER_HELPURL": "https://diq.wikipedia.org/wiki/Reng",
 	"COLOUR_PICKER_TOOLTIP": "Şıma palet ra yew reng weçinê.",

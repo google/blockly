@@ -9,6 +9,7 @@ goog.module('Blockly.test.comments');
 const {assertEventFired} = goog.require('Blockly.test.helpers.events');
 const eventUtils = goog.require('Blockly.Events.utils');
 const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+const {simulateClick} = goog.require('Blockly.test.helpers.userInput');
 
 
 suite('Comments', function() {
@@ -21,9 +22,21 @@ suite('Comments', function() {
         "args0": [],
       },
     ]);
+    const toolboxXml = `
+    <xml>
+      <category name="test">
+        <block type="empty_block">
+          <comment pinned="true" h="80" w="160">test toolbox text</comment>
+        </block>
+      </category>
+    </xml>
+    `;
     this.workspace = Blockly.inject('blocklyDiv', {
       comments: true,
       scrollbars: true,
+      trashcan: true,
+      maxTrashcanContents: Infinity,
+      toolbox: Blockly.Xml.textToDom(toolboxXml),
     });
     this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
         '<block type="empty_block"/>'
@@ -131,6 +144,73 @@ suite('Comments', function() {
 
       this.comment.setVisible(true);
       assertBubbleSize(this.comment, 100, 100);
+    });
+  });
+  suite('Restore Comment', function() {
+    setup(function() {
+      this.blockCount = this.workspace.getAllBlocks().length;
+      this.tempBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
+        '<block type="empty_block"/>'
+      ), this.workspace);
+      this.tempBlock.setCommentText('test temp text');
+    });
+    function assertComment(workspace, text) {
+      const count = workspace.getAllBlocks().length;
+      // show comment
+      const tempBlock = workspace.getAllBlocks()[count - 1];
+      tempBlock.comment.setVisible(true);
+      // check comment bubble size
+      const comment = tempBlock.getCommentIcon();
+      const bubbleSize = comment.getBubbleSize();
+      chai.assert.isNotNaN(bubbleSize.width);
+      chai.assert.isNotNaN(bubbleSize.height);
+      chai.assert.equal(comment.textarea_.value, text);
+    }
+    test('Trashcan', function() {
+      // delete block
+      this.tempBlock.checkAndDelete();
+      chai.assert.equal(this.workspace.getAllBlocks().length, this.blockCount);
+      // open trashcan
+      simulateClick(this.workspace.trashcan.svgGroup_);
+      // place from trashcan
+      simulateClick(this.workspace.trashcan.flyout.svgGroup_.querySelector('.blocklyDraggable'));
+      chai.assert.equal(this.workspace.getAllBlocks().length, this.blockCount + 1);
+      // check comment
+      assertComment(this.workspace, 'test temp text');
+    });
+    test('Undo', function() {
+      // delete block
+      this.tempBlock.checkAndDelete();
+      chai.assert.equal(this.workspace.getAllBlocks().length, this.blockCount);
+      // undo
+      this.workspace.undo(false);
+      chai.assert.equal(this.workspace.getAllBlocks().length, this.blockCount + 1);
+      // check comment
+      assertComment(this.workspace, 'test temp text');
+    });
+    test('Redo', function() {
+      // undo & undo
+      this.workspace.undo(false);
+      this.workspace.undo(false);
+      chai.assert.equal(this.workspace.getAllBlocks().length, this.blockCount);
+      // redo & redo
+      this.workspace.undo(true);
+      this.workspace.undo(true);
+      chai.assert.equal(this.workspace.getAllBlocks().length, this.blockCount + 1);
+      // check comment
+      assertComment(this.workspace, 'test temp text');
+    });
+    test('Toolbox', function() {
+      // delete temp block
+      this.tempBlock.checkAndDelete();
+      chai.assert.equal(this.workspace.getAllBlocks().length, this.blockCount);
+      // place from toolbox
+      const toolbox = this.workspace.getToolbox();
+      simulateClick(toolbox.HtmlDiv.querySelector('.blocklyTreeRow'));
+      simulateClick(toolbox.getFlyout().svgGroup_.querySelector('.blocklyDraggable'));
+      chai.assert.equal(this.workspace.getAllBlocks().length, this.blockCount + 1);
+      // check comment
+      assertComment(this.workspace, 'test toolbox text');
     });
   });
 });

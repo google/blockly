@@ -156,10 +156,10 @@ suite('Comments', function() {
     });
     function assertComment(workspace, text) {
       const count = workspace.getAllBlocks().length;
-      // show comment
+      // Show comment.
       const tempBlock = workspace.getAllBlocks()[count - 1];
       tempBlock.comment.setVisible(true);
-      // check comment bubble size
+      // Check comment bubble size.
       const comment = tempBlock.getCommentIcon();
       const bubbleSize = comment.getBubbleSize();
       chai.assert.isNotNaN(bubbleSize.width);
@@ -167,49 +167,49 @@ suite('Comments', function() {
       chai.assert.equal(comment.textarea_.value, text);
     }
     test('Trashcan', function() {
-      // delete block
+      // Delete block.
       this.tempBlock.checkAndDelete();
       chai.assert.equal(this.workspace.getAllBlocks().length, this.blockCount);
-      // open trashcan
+      // Open trashcan.
       simulateClick(this.workspace.trashcan.svgGroup_);
-      // place from trashcan
+      // Place from trashcan.
       simulateClick(this.workspace.trashcan.flyout.svgGroup_.querySelector('.blocklyDraggable'));
       chai.assert.equal(this.workspace.getAllBlocks().length, this.blockCount + 1);
-      // check comment
+      // Check comment.
       assertComment(this.workspace, 'test temp text');
     });
     test('Undo', function() {
-      // delete block
+      // Delete block.
       this.tempBlock.checkAndDelete();
       chai.assert.equal(this.workspace.getAllBlocks().length, this.blockCount);
-      // undo
+      // Undo.
       this.workspace.undo(false);
       chai.assert.equal(this.workspace.getAllBlocks().length, this.blockCount + 1);
-      // check comment
+      // Check comment.
       assertComment(this.workspace, 'test temp text');
     });
     test('Redo', function() {
-      // undo & undo
+      // Undo & undo.
       this.workspace.undo(false);
       this.workspace.undo(false);
       chai.assert.equal(this.workspace.getAllBlocks().length, this.blockCount);
-      // redo & redo
+      // Redo & redo.
       this.workspace.undo(true);
       this.workspace.undo(true);
       chai.assert.equal(this.workspace.getAllBlocks().length, this.blockCount + 1);
-      // check comment
+      // Check comment.
       assertComment(this.workspace, 'test temp text');
     });
     test('Toolbox', function() {
-      // delete temp block
+      // Delete temp block.
       this.tempBlock.checkAndDelete();
       chai.assert.equal(this.workspace.getAllBlocks().length, this.blockCount);
-      // place from toolbox
+      // Place from toolbox.
       const toolbox = this.workspace.getToolbox();
       simulateClick(toolbox.HtmlDiv.querySelector('.blocklyTreeRow'));
       simulateClick(toolbox.getFlyout().svgGroup_.querySelector('.blocklyDraggable'));
       chai.assert.equal(this.workspace.getAllBlocks().length, this.blockCount + 1);
-      // check comment
+      // Check comment.
       assertComment(this.workspace, 'test toolbox text');
     });
   });

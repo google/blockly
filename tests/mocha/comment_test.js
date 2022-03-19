@@ -9,7 +9,6 @@ goog.module('Blockly.test.comments');
 const {assertEventFired} = goog.require('Blockly.test.helpers.events');
 const eventUtils = goog.require('Blockly.Events.utils');
 const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
-const {simulateClick} = goog.require('Blockly.test.helpers.userInput');
 
 
 suite('Comments', function() {
@@ -22,21 +21,9 @@ suite('Comments', function() {
         "args0": [],
       },
     ]);
-    const toolboxXml = `
-    <xml>
-      <category name="test">
-        <block type="empty_block">
-          <comment pinned="true" h="80" w="160">test toolbox text</comment>
-        </block>
-      </category>
-    </xml>
-    `;
     this.workspace = Blockly.inject('blocklyDiv', {
       comments: true,
       scrollbars: true,
-      trashcan: true,
-      maxTrashcanContents: Infinity,
-      toolbox: Blockly.Xml.textToDom(toolboxXml),
     });
     this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
         '<block type="empty_block"/>'
@@ -144,73 +131,6 @@ suite('Comments', function() {
 
       this.comment.setVisible(true);
       assertBubbleSize(this.comment, 100, 100);
-    });
-  });
-  suite('Restore Comment', function() {
-    setup(function() {
-      this.blockCount = this.workspace.getAllBlocks().length;
-      this.tempBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
-        '<block type="empty_block"/>'
-      ), this.workspace);
-      this.tempBlock.setCommentText('test temp text');
-    });
-    function assertComment(workspace, text) {
-      const count = workspace.getAllBlocks().length;
-      // Show comment.
-      const tempBlock = workspace.getAllBlocks()[count - 1];
-      tempBlock.comment.setVisible(true);
-      // Check comment bubble size.
-      const comment = tempBlock.getCommentIcon();
-      const bubbleSize = comment.getBubbleSize();
-      chai.assert.isNotNaN(bubbleSize.width);
-      chai.assert.isNotNaN(bubbleSize.height);
-      chai.assert.equal(comment.textarea_.value, text);
-    }
-    test('Trashcan', function() {
-      // Delete block.
-      this.tempBlock.checkAndDelete();
-      chai.assert.equal(this.workspace.getAllBlocks().length, this.blockCount);
-      // Open trashcan.
-      simulateClick(this.workspace.trashcan.svgGroup_);
-      // Place from trashcan.
-      simulateClick(this.workspace.trashcan.flyout.svgGroup_.querySelector('.blocklyDraggable'));
-      chai.assert.equal(this.workspace.getAllBlocks().length, this.blockCount + 1);
-      // Check comment.
-      assertComment(this.workspace, 'test temp text');
-    });
-    test('Undo', function() {
-      // Delete block.
-      this.tempBlock.checkAndDelete();
-      chai.assert.equal(this.workspace.getAllBlocks().length, this.blockCount);
-      // Undo.
-      this.workspace.undo(false);
-      chai.assert.equal(this.workspace.getAllBlocks().length, this.blockCount + 1);
-      // Check comment.
-      assertComment(this.workspace, 'test temp text');
-    });
-    test('Redo', function() {
-      // Undo & undo.
-      this.workspace.undo(false);
-      this.workspace.undo(false);
-      chai.assert.equal(this.workspace.getAllBlocks().length, this.blockCount);
-      // Redo & redo.
-      this.workspace.undo(true);
-      this.workspace.undo(true);
-      chai.assert.equal(this.workspace.getAllBlocks().length, this.blockCount + 1);
-      // Check comment.
-      assertComment(this.workspace, 'test temp text');
-    });
-    test('Toolbox', function() {
-      // Delete temp block.
-      this.tempBlock.checkAndDelete();
-      chai.assert.equal(this.workspace.getAllBlocks().length, this.blockCount);
-      // Place from toolbox.
-      const toolbox = this.workspace.getToolbox();
-      simulateClick(toolbox.HtmlDiv.querySelector('.blocklyTreeRow'));
-      simulateClick(toolbox.getFlyout().svgGroup_.querySelector('.blocklyDraggable'));
-      chai.assert.equal(this.workspace.getAllBlocks().length, this.blockCount + 1);
-      // Check comment.
-      assertComment(this.workspace, 'test toolbox text');
     });
   });
 });

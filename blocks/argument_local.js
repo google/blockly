@@ -74,19 +74,22 @@ const {Msg} = goog.require('Blockly.Msg');
  */
  const CUSTOM_CONTEXT_MENU = {
   /**
-   * Add menu option to rename argument.
+   * Add menu option to rename argument and delete option
+   * to disable block.
    * @param {!Array} options List of menu options to add to.
    * @this {Block}
    */
   customContextMenu: function(options) {
-    if (!this.isInFlyout) {
-      const option = {
-        enabled: true,
-        text: Msg['RENAME_ARGUMENT'],
-        callback: renameOptionCallbackFactory(this),
-      };
-      options.unshift(option);
+    if (this.isInFlyout) {
+      return;
     }
+    options.pop();
+    const option = {
+      enabled: true,
+      text: Msg['RENAME_ARGUMENT'],
+      callback: renameOptionCallbackFactory(this),
+    };
+    options.unshift(option);
   },
 };
 

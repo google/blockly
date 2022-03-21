@@ -605,8 +605,10 @@ Flyout.prototype.positionAt_ = function(width, height, x, y) {
     this.svgGroup_.setAttribute('transform', transform);
   }
 
-  this.createCloseButton_();
-  this.createFlyoutEndShadow_();
+  if (!this.workspace_.isVisible_) {
+    this.createCloseButton_();
+    this.createFlyoutEndShadow_();
+  }
 
   // Update the scrollbar (if one exists).
   const scrollbar = this.workspace_.scrollbar;

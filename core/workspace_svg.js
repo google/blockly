@@ -245,11 +245,12 @@ const WorkspaceSvg = function(options, opt_blockDragSurface, opt_wsDragSurface) 
     return [...ProcedureXmlList, ...ProceduresLocalXmlList];
   };
 
-
   if (Procedures && Procedures.flyoutCategory) {
     this.registerToolboxCategoryCallback(
         Procedures.CATEGORY_NAME, ProceduresCallback);
     this.addChangeListener(Procedures.mutatorOpenListener);
+    this.addChangeListener(ProceduresLocalArgument.mutatorOpenListener);
+    this.addChangeListener(ProceduresLocalArgument.updateFlyout);
   }
 
   /**

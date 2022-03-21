@@ -968,11 +968,10 @@ const PROCEDURE_CALL_COMMON = {
         block.appendChild(mutation);
         const field = xmlUtils.createElement('field');
         field.setAttribute('name', 'NAME');
-        let callName = this.getProcedureCall();
-        if (!callName) {
-          // Rename if name is empty string.
-          callName = Procedures.findLegalName('', this);
-          this.renameProcedure('', callName);
+        const callName = this.getProcedureCall();
+        const newName = Procedures.findLegalName(callName, this);
+        if (callName !== newName) {
+          this.renameProcedure(callName, newName);
         }
         field.appendChild(xmlUtils.createTextNode(callName));
         block.appendChild(field);

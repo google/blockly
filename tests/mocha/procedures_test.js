@@ -300,7 +300,6 @@ suite('Procedures', function() {
       });
 
       test('callreturn with missing args', function() {
-        // TODO: How do we want it to behave in this situation?
         const defBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
             <block type="procedures_defreturn">
               <field name="NAME">do something</field>
@@ -318,7 +317,6 @@ suite('Procedures', function() {
         assertCallBlockStructure(callBlock, [], [], 'do something2');
       });
       test('callreturn with bad args', function() {
-        // TODO: How do we want it to behave in this situation?
         const defBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
             <block type="procedures_defreturn">
               <field name="NAME">do something</field>
@@ -339,7 +337,6 @@ suite('Procedures', function() {
             callBlock, ['y'], [this.TEST_VAR_ID], 'do something2');
       });
       test('callnoreturn with missing args', function() {
-        // TODO: How do we want it to behave in this situation?
         const defBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
             <block type="procedures_defnoreturn">
               <field name="NAME">do something</field>
@@ -357,7 +354,6 @@ suite('Procedures', function() {
         assertCallBlockStructure(callBlock, [], [], 'do something2');
       });
       test('callnoreturn with bad args', function() {
-        // TODO: How do we want it to behave in this situation?
         const defBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
             <block type="procedures_defnoreturn">
               <field name="NAME">do something</field>

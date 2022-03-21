@@ -85,13 +85,15 @@ function assertDefBlockStructure(defBlock, hasReturn = false,
 exports.assertDefBlockStructure = assertDefBlockStructure;
 
 /**
- * Asserts that the procedure definition block has the expected inputs and
+ * Asserts that the procedure call block has the expected inputs and
  *    fields.
  * @param {!Blockly.Block} callBlock The procedure call block.
  * @param {Array<string>=} args An array of argument names.
  * @param {Array<string>=} varIds An array of variable ids.
+ * @param {string=} name The name we expect the caller to have.
  */
-function assertCallBlockStructure(callBlock, args = [], varIds = []) {
+function assertCallBlockStructure(
+  callBlock, args = [], varIds = [], name = undefined) {
   if (args.length) {
     chai.assert.include(callBlock.toString(), 'with');
   } else {
@@ -100,6 +102,9 @@ function assertCallBlockStructure(callBlock, args = [], varIds = []) {
 
   assertCallBlockArgsStructure(callBlock, args);
   assertBlockVarModels(callBlock, varIds);
+  if (name !== undefined) {
+    chai.assert(callBlock.getFieldValue('NAME'), name);
+  }
 }
 exports.assertCallBlockStructure = assertCallBlockStructure;
 

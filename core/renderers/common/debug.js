@@ -15,7 +15,7 @@
  */
 goog.declareModuleId('Blockly.blockRendering.debug');
 
-const deprecation = goog.require('Blockly.utils.deprecation');
+import * as deprecation from '../../utils/deprecation.js';
 
 
 /**

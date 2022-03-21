@@ -20,7 +20,8 @@ goog.declareModuleId('Blockly.serialization.workspaces');
 import * as dom from '../utils/dom.js';
 import * as eventUtils from '../events/utils.js';
 import * as registry from '../registry.js';
-import {Workspace} from '../workspace.js';
+/* eslint-disable-next-line no-unused-vars */
+const {Workspace} = goog.requireType('Blockly.Workspace');
 import {WorkspaceSvg} from '../workspace_svg.js';
 
 

@@ -24,7 +24,7 @@ goog.declareModuleId('Blockly.Extensions');
 import * as parsing from './utils/parsing.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
-const {FieldDropdown} = goog.require('Blockly.FieldDropdown');
+import {FieldDropdown} from './field_dropdown.js';
 goog.requireType('Blockly.Mutator');
 
 

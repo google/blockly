@@ -42,7 +42,7 @@ export {TipInfo};
  * @alias Blockly.Tooltip.CustomTooltip
  */
 let CustomTooltip;
-exports.CustomTooltip = CustomTooltip;
+export {CustomTooltip};
 
 /**
  * An optional function that renders custom tooltips into the provided DIV. If
@@ -62,7 +62,7 @@ let customTooltip = undefined;
 const setCustomTooltip = function(customFn) {
   customTooltip = customFn;
 };
-exports.setCustomTooltip = setCustomTooltip;
+export {setCustomTooltip};
 
 /**
  * Gets the custom tooltip function.
@@ -71,7 +71,7 @@ exports.setCustomTooltip = setCustomTooltip;
 const getCustomTooltip = function() {
   return customTooltip;
 };
-exports.getCustomTooltip = getCustomTooltip;
+export {getCustomTooltip};
 
 /**
  * Is a tooltip currently showing?

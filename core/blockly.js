@@ -80,7 +80,6 @@ import {ContextMenuRegistry} from './contextmenu_registry.js';
 import {Cursor} from './keyboard_nav/cursor.js';
 import {DeleteArea} from './delete_area.js';
 import {DragTarget} from './drag_target.js';
-import {DropDownDiv} from './dropdowndiv.js';
 import {FieldAngle} from './field_angle.js';
 import {FieldCheckbox} from './field_checkbox.js';
 import {FieldColour} from './field_colour.js';

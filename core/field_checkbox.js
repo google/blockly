@@ -20,7 +20,6 @@ import * as fieldRegistry from './field_registry.js';
 import {Field} from './field.js';
 /* eslint-disable-next-line no-unused-vars */
 const {Sentinel} = goog.requireType('Blockly.utils.Sentinel');
-/** @suppress {extraRequire} */
 import './events/events_block_change.js';
 
 

@@ -36,13 +36,11 @@ exports.workspaceTeardown = workspaceTeardown;
  * @private
  */
 function createEventsFireStubFireImmediately_(clock) {
-  const stub = sinon.stub(eventUtils, 'fire');
-  stub.callsFake(function(event) {
-    // Call original method.
-    stub.wrappedMethod.call(this, ...arguments);
-    // Advance clock forward to run any queued events.
+  const stub = sinon.stub();
+  stub.callsFake(function(...args) {
     clock.runAll();
   });
+  eventUtils.TEST_ONLY.setFireStub(stub);
   return stub;
 }
 
@@ -69,29 +67,6 @@ function addBlockTypeToCleanup(sharedCleanupObj, blockType) {
   sharedCleanupObj.blockTypesCleanup_.push(blockType);
 }
 exports.addBlockTypeToCleanup = addBlockTypeToCleanup;
-
-/**
- * Wraps Blockly.defineBlocksWithJsonArray using stub in order to keep track of
- * block types passed in to method on shared cleanup object so they are cleaned
- * from Blockly.Blocks global in sharedTestTeardown.
- * @param {!Object} sharedCleanupObj The shared cleanup object created in
- *    sharedTestSetup.
- * @private
- */
-function wrapDefineBlocksWithJsonArrayWithCleanup_(sharedCleanupObj) {
-  const stub = sinon.stub(Blockly, 'defineBlocksWithJsonArray');
-  stub.callsFake(function(jsonArray) {
-    if (jsonArray) {
-      jsonArray.forEach((jsonBlock) => {
-        if (jsonBlock) {
-          addBlockTypeToCleanup(sharedCleanupObj, jsonBlock['type']);
-        }
-      });
-    }
-    // Calls original method.
-    stub.wrappedMethod.call(this, ...arguments);
-  });
-}
 
 /**
  * Shared setup method that sets up fake timer for clock so that pending
@@ -126,7 +101,6 @@ function sharedTestSetup(options = {}) {
   };
   this.blockTypesCleanup_ = this.sharedCleanup.blockTypesCleanup_;
   this.messagesCleanup_ = this.sharedCleanup.messagesCleanup_;
-  wrapDefineBlocksWithJsonArrayWithCleanup_(this.sharedCleanup);
 }
 exports.sharedTestSetup = sharedTestSetup;
 

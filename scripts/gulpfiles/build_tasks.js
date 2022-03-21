@@ -129,7 +129,7 @@ const chunks = [
   {
     name: 'dart',
     entry: 'generators/dart/all.js',
-    reexports: 'Blockly.Dart',
+    reexport: 'Blockly.Dart',
   }
 ];
 

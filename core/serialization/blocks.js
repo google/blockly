@@ -514,8 +514,13 @@ const loadIcons = function(block, state) {
   const comment = state['icons']['comment'];
   if (comment) {
     block.setCommentText(comment['text']);
-    block.commentModel.pinned = comment['pinned'];
-    block.commentModel.size = new Size(comment['width'], comment['height']);
+    // Load if saved. (Cleaned unnecessary attributes when in the trashcan.)
+    if ('pinned' in comment) {
+      block.commentModel.pinned = comment['pinned'];
+    }
+    if ('width' in comment && 'height' in comment) {
+      block.commentModel.size = new Size(comment['width'], comment['height']);
+    }
     if (comment['pinned'] && block.rendered && !block.isInFlyout) {
       // Give the block a chance to be positioned and rendered before showing.
       const blockSvg = /** @type {!BlockSvg} */ (block);

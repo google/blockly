@@ -1139,7 +1139,7 @@ blocks['procedures_ifreturn'] = {
   /**
    * Called whenever anything on the workspace changes.
    * Add warning if this flow block is not nested inside a loop.
-   * @param {!AbstractEvent} e Change event.
+   * @param {!AbstractEvent} e Move event.
    * @this {Block}
    */
   onchange: function(e) {

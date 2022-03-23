@@ -9,25 +9,6 @@
 <script src="../../node_modules/@blockly/dev-tools/dist/index.js"></script>
 <script src="../../node_modules/@blockly/theme-modern/dist/index.js"></script>
 
-<script>
-const IS_UNCOMPRESSED = Boolean(window.BlocklyLoader);  // See prepare.js
-
-if (IS_UNCOMPRESSED) {
-  // Custom requires for the playground.
-  // Rendering.
-  goog.require('Blockly.minimalist.Renderer');
-  goog.require('Blockly.Themes.Zelos');
-
-  // Other.
-  goog.require('Blockly.WorkspaceCommentSvg');
-  goog.require('Blockly.libraryBlocks');
-  goog.require('Blockly.Dart.all');
-  goog.require('Blockly.JavaScript.all');
-  goog.require('Blockly.Lua.all');
-  goog.require('Blockly.PHP.all');
-  goog.require('Blockly.Python.all');
-}
-</script>
 <script type="module">
 import Blockly from './blockly.mjs';
 'use strict';

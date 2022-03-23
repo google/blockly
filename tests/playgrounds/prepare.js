@@ -75,7 +75,7 @@
     //   advanced_playground the and regular playground are in different folders.
     // - We need to get the root directory for blockly because it is
     //   different for github.io, appspot and local.
-    const filePaths = [
+    const files = [
       'blockly_compressed.js',
       'msg/messages.js',
       'blocks_compressed.js',
@@ -88,17 +88,12 @@
 
     // We need to load Blockly in compiled mode.
     const hostName = window.location.host.replaceAll('.', '\\.');
-    const re = new RegExp(hostName + '\\/(.*)tests');
-    const matches = re.exec(window.location.href);
-    let root = '';
-    if (matches && matches[1]) {
-      // This should either be 'static/' or 'blockly/'
-      root = matches[1];
-    }
+    const matches = new RegExp(hostName + '\\/(.*)tests').exec(window.location.href);
+    const root = matches && matches[1] ? matches[1] : '';
 
     // Load blockly_compressed.js et al. using <script> tags.
-    for (let i = 0; i < filePaths.length; i++) {
-      document.write('<script src="/' + root + filePaths[i] + '"></script>');
+    for (let i = 0; i < files.length; i++) {
+      document.write('<script src="/' + root + files[i] + '"></script>');
     }
   }
 })();

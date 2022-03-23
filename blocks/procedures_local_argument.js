@@ -545,7 +545,7 @@ Blocks['procedures_with_argument_defnoreturn'] = {
   getArguments: Blockly.ProceduresLocalArgumentUtils.getArguments,
   customContextMenu: Blockly.ProceduresLocalArgumentUtils.customContextMenu,
   getProcedureDef: Blockly.ProceduresLocalArgumentUtils.getProcedureDef,
-  callType_: Blockly.ProceduresLocalArgumentUtils.callType_,
+  callType_: 'procedures_with_argument_callnoreturn',
 };
 
 Blocks['procedures_with_argument_defreturn'] = {
@@ -599,7 +599,7 @@ Blocks['procedures_with_argument_defreturn'] = {
   getArguments: Blockly.ProceduresLocalArgumentUtils.getArguments,
   customContextMenu: Blockly.ProceduresLocalArgumentUtils.customContextMenu,
   getProcedureDef: Blockly.ProceduresLocalArgumentUtils.getProcedureDef,
-  callType_: Blockly.ProceduresLocalArgumentUtils.callType_,
+  callType_: 'procedures_with_argument_callreturn',
 };
 
 Blocks['procedures_local_mutatorcontainer'] = {
@@ -1089,7 +1089,7 @@ Blocks.procedures_with_argument_callnoreturn = {
   defType_: 'procedures_with_argument_defnoreturn',
 };
 
-Blocks.procedures_local_callreturn = {
+Blocks.procedures_with_argument_callreturn = {
   ...PROCEDURE_CALL_COMMON,
   /**
     * Block for calling a procedure with a return value.

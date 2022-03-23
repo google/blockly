@@ -83,7 +83,18 @@ const {Msg} = goog.require('Blockly.Msg');
     if (this.isInFlyout) {
       return;
     }
+    // Remove option disable block
     options.pop();
+
+    // Disable rename variable with context menu for procedures block.
+    const block = this;
+    const parentBlock = block.getParent();
+    if (parentBlock &&
+       (parentBlock.type === 'procedures_with_argument_defnoreturn' ||
+        parentBlock.type === 'procedures_with_argument_defreturn')) {
+      return;
+    }
+
     const option = {
       enabled: true,
       text: Msg['RENAME_ARGUMENT'],
@@ -99,11 +110,13 @@ const {Msg} = goog.require('Blockly.Msg');
  * @return {!function()} A function that renames the argument.
  */
  const renameOptionCallbackFactory = function(block) {
-   const argumentValue = block.getFieldValue('VALUE');
+  const argumentValue = block.getFieldValue('VALUE');
   return function() {
     const callback = (newName) => {
       block.setFieldValue(newName, 'VALUE');
       block.setFieldText(newName, 'VALUE');
+      const field = block.getField('VALUE');
+      field.forceRerender();
     };
     const msg = Msg['RENAME_ARGUMENT_TITLE'].replace('%1', argumentValue);
     dialog.prompt(msg, 'default', callback);

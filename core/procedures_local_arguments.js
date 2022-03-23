@@ -275,7 +275,7 @@
 
    const tuple = allProcedures(workspace);
    populateProcedures(tuple[0], 'procedures_with_argument_callnoreturn');
-   populateProcedures(tuple[1], 'procedures_local_callreturn');
+   populateProcedures(tuple[1], 'procedures_with_argument_callreturn');
    return xmlList;
  };
  exports.flyoutCategory = flyoutCategory;

@@ -70,16 +70,30 @@
           });
         </script>`);
   } else {
+    // The below code is necessary for a few reasons:
+    // - We need an absolute path instead of relative path because the
+    //   advanced_playground the and regular playground are in different folders.
+    // - We need to get the root directory for blockly because it is
+    //   different for github.io, appspot and local.
+    const files = [
+      'blockly_compressed.js',
+      'msg/messages.js',
+      'blocks_compressed.js',
+      'dart_compressed.js',
+      'javascript_compressed.js',
+      'lua_compressed.js',
+      'php_compressed.js',
+      'python_compressed.js',
+    ];
+
     // We need to load Blockly in compiled mode.
+    const hostName = window.location.host.replaceAll('.', '\\.');
+    const matches = new RegExp(hostName + '\\/(.*)tests').exec(window.location.href);
+    const root = matches && matches[1] ? matches[1] : '';
 
     // Load blockly_compressed.js et al. using <script> tags.
-    document.write('<script src="../../blockly_compressed.js"></script>');
-    document.write('<script src="../../msg/messages.js"></script>');
-    document.write('<script src="../../blocks_compressed.js"></script>');
-    document.write('<script src="../../dart_compressed.js"></script>');
-    document.write('<script src="../../javascript_compressed.js"></script>');
-    document.write('<script src="../../lua_compressed.js"></script>');
-    document.write('<script src="../../php_compressed.js"></script>');
-    document.write('<script src="../../python_compressed.js"></script>');
+    for (let i = 0; i < files.length; i++) {
+      document.write('<script src="/' + root + files[i] + '"></script>');
+    }
   }
 })();

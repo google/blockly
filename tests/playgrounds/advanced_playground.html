@@ -3,29 +3,14 @@
 <head>
 <meta charset="utf-8">
 <title>Advanced Blockly Playground</title>
-<script src="../../blockly_uncompressed.js"></script>
-<script src="../../msg/messages.js"></script>
-<script src="../themes/test_themes.js"></script>
+<script src="prepare.js"></script>
 <script src="./screenshot.js"></script>
+<script src="../themes/test_themes.js"></script>
 <script src="../../node_modules/@blockly/dev-tools/dist/index.js"></script>
 <script src="../../node_modules/@blockly/theme-modern/dist/index.js"></script>
 
-<script>
-// Custom requires for the playground.
-// Rendering.
-goog.require('Blockly.minimalist.Renderer');
-goog.require('Blockly.Themes.Zelos');
-
-// Other.
-goog.require('Blockly.WorkspaceCommentSvg');
-goog.require('Blockly.libraryBlocks');
-goog.require('Blockly.Dart.all');
-goog.require('Blockly.JavaScript.all');
-goog.require('Blockly.Lua.all');
-goog.require('Blockly.PHP.all');
-goog.require('Blockly.Python.all');
-</script>
-<script>
+<script type="module">
+import Blockly from './blockly.mjs';
 'use strict';
 
 function start() {
@@ -144,7 +129,7 @@ function configureContextMenu(menuOptions, e) {
   // Adds a default-sized workspace comment to the workspace.
   menuOptions.push(Blockly.ContextMenu.workspaceCommentOption(workspace, e));
 }
-
+start();
 </script>
 
 <style>
@@ -169,7 +154,7 @@ function configureContextMenu(menuOptions, e) {
   }
 </style>
 </head>
-<body onload="start()">
+<body>
   <div id="root"></div>
 </body>
 </html>

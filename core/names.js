@@ -277,6 +277,10 @@ const NameType = {
 };
 exports.NameType = NameType;
 
+// We have to export NameType here so that it is accessible under the old name
+// `Blockly.Names.NameType`
+Names.NameType = NameType;
+
 /**
  * Constant to separate developer variable names from user-defined variable
  * names when running generators.

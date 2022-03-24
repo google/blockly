@@ -32,18 +32,6 @@ goog.require('Blockly.FieldLabel');
 
 
 /**
- * Enum for alignment of inputs.
- * @enum {number}
- * @alias Blockly.Input.Align
- */
-const Align = {
-  LEFT: -1,
-  CENTRE: 0,
-  RIGHT: 1,
-};
-exports.Align = Align;
-
-/**
  * Class for an input with an optional field.
  * @alias Blockly.Input
  */
@@ -328,5 +316,20 @@ class Input {
     this.sourceBlock_ = null;
   }
 }
+
+/**
+ * Enum for alignment of inputs.
+ * @enum {number}
+ * @alias Blockly.Input.Align
+ */
+const Align = {
+  LEFT: -1,
+  CENTRE: 0,
+  RIGHT: 1,
+};
+exports.Align = Align;
+
+// Add Align to Input so that `Blockly.Input.Align` is publicly accessible.
+Input.Align = Align;
 
 exports.Input = Input;

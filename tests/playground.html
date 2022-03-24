@@ -7,6 +7,7 @@
   <!-- This script loads uncompressed when on localhost and loads compressed when it is being hosted.
        Please add any other dependencies to playgrounds/prepare.js.-->
 <script src="playgrounds/prepare.js"></script>
+<script src="../node_modules/@blockly/dev-tools/dist/index.js"></script>
 <script type=module>
 import Blockly from './playgrounds/blockly.mjs';
 
@@ -85,7 +86,7 @@ function start() {
     load();
   }
 
-  addClickHandlers();
+  addEventHandlers();
 }
 
 function setBackgroundColour() {
@@ -387,7 +388,7 @@ var spaghettiXml = [
 // automatically deferred, so it will not be run until after the
 // document has been parsed, but before firing DOMContentLoaded.
 
-function addClickHandlers() {
+function addEventHandlers() {
   document.getElementById('save-json').addEventListener('click', saveJson);
   document.getElementById('save-xml').addEventListener('click', saveXml);
   document.getElementById('import').addEventListener('click', load);
@@ -414,6 +415,14 @@ function addClickHandlers() {
       .addEventListener('click', function() { logEvents(this.checked) });
   document.getElementById('logFlyoutCheck')
       .addEventListener('click', function() { logFlyoutEvents(this.checked) });
+
+  document.getElementById('importExport').addEventListener('change', taChange);
+  document.getElementById('importExport').addEventListener('keyup', taChange);
+
+  document.getElementById('show')
+      .addEventListener('click', function() { workspace.setVisible(true); });
+  document.getElementById('hide')
+      .addEventListener('click', function() { workspace.setVisible(false); });
 }
   
 start();
@@ -469,9 +478,11 @@ start();
 
   <h1>Blockly Playground</h1>
 
-  <p><a href="javascript:void(workspace.setVisible(true))">Show</a>
-   - <a href="javascript:void(workspace.setVisible(false))">Hide</a>
-   - <a href="playgrounds/advanced_playground.html">Advanced</a></p>
+  <p>
+    <input id="show" type="button" value="Show"></input> -
+    <input id="hide" type="button" value="Hide"></input> -
+    <a href="playgrounds/advanced_playground.html">Advanced</a>
+  </p>
 
   <form id="options">
     <select name="dir" onchange="document.forms.options.submit()">
@@ -496,8 +507,7 @@ start();
     <input id="to-code-lua" type="button" value="To Lua">
     <input id="to-code-dart" type="button" value="To Dart">
     <br>
-    <textarea id="importExport" style="width: 26%; height: 12em"
-      onchange="taChange();" onkeyup="taChange()"></textarea>
+    <textarea id="importExport" style="width: 26%; height: 12em"></textarea>
   </p>
 
   <p>

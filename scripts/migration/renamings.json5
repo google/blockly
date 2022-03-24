@@ -92,7 +92,7 @@
       oldName: 'Blockly',
       exports: {
         // bind/unbind events functions.  See PR #4642
-        EventData: {newModule: 'Blockly.eventHandling', newExport: 'Data'},
+        EventData: {newModule: 'Blockly.browserEvents', newExport: 'Data'},
         bindEvent_: {newModule: 'Blockly.browserEvents', newExport: 'bind'},
         unbindEvent_: {newModule: 'Blockly.browserEvents', newExport: 'unbind'},
         bindEventWithChecks_: {

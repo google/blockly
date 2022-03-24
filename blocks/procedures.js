@@ -968,11 +968,10 @@ const PROCEDURE_CALL_COMMON = {
         block.appendChild(mutation);
         const field = xmlUtils.createElement('field');
         field.setAttribute('name', 'NAME');
-        let callName = this.getProcedureCall();
-        if (!callName) {
-          // Rename if name is empty string.
-          callName = Procedures.findLegalName('', this);
-          this.renameProcedure('', callName);
+        const callName = this.getProcedureCall();
+        const newName = Procedures.findLegalName(callName, this);
+        if (callName !== newName) {
+          this.renameProcedure(callName, newName);
         }
         field.appendChild(xmlUtils.createTextNode(callName));
         block.appendChild(field);
@@ -1140,11 +1139,12 @@ blocks['procedures_ifreturn'] = {
   /**
    * Called whenever anything on the workspace changes.
    * Add warning if this flow block is not nested inside a loop.
-   * @param {!AbstractEvent} _e Change event.
+   * @param {!AbstractEvent} e Move event.
    * @this {Block}
    */
-  onchange: function(_e) {
-    if (this.workspace.isDragging && this.workspace.isDragging()) {
+  onchange: function(e) {
+    if (this.workspace.isDragging && this.workspace.isDragging() ||
+        e.type !== Events.BLOCK_MOVE) {
       return;  // Don't change state at the start of a drag.
     }
     let legal = false;
@@ -1172,14 +1172,15 @@ blocks['procedures_ifreturn'] = {
         this.hasReturnValue_ = true;
       }
       this.setWarningText(null);
-      if (!this.isInFlyout) {
-        this.setEnabled(true);
-      }
     } else {
       this.setWarningText(Msg['PROCEDURES_IFRETURN_WARNING']);
-      if (!this.isInFlyout && !this.getInheritedDisabled()) {
-        this.setEnabled(false);
-      }
+    }
+    if (!this.isInFlyout) {
+      const group = Events.getGroup();
+      // Makes it so the move and the disable event get undone together.
+      Events.setGroup(e.group);
+      this.setEnabled(legal);
+      Events.setGroup(group);
     }
   },
   /**

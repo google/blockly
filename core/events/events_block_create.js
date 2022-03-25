@@ -55,12 +55,6 @@ class BlockCreate extends BlockBase {
     this.ids = eventUtils.getDescendantIds(opt_block);
 
     /**
-     * Play UI effects (sound and animation)?
-     * @type {boolean}
-     */
-    this.ui = true;
-
-    /**
      * JSON representation of the block that was just created.
      * @type {!blocks.State}
      */
@@ -77,7 +71,6 @@ class BlockCreate extends BlockBase {
     json['xml'] = Xml.domToText(this.xml);
     json['ids'] = this.ids;
     json['json'] = this.json;
-    json['ui'] = this.ui;
     if (!this.recordUndo) {
       json['recordUndo'] = this.recordUndo;
     }
@@ -93,7 +86,6 @@ class BlockCreate extends BlockBase {
     this.xml = Xml.textToDom(json['xml']);
     this.ids = json['ids'];
     this.json = /** @type {!blocks.State} */ (json['json']);
-    this.ui = !!json['ui'];
     if (json['recordUndo'] !== undefined) {
       this.recordUndo = json['recordUndo'];
     }
@@ -112,7 +104,7 @@ class BlockCreate extends BlockBase {
         const id = this.ids[i];
         const block = workspace.getBlockById(id);
         if (block) {
-          block.dispose(false, this.ui);
+          block.dispose(false);
         } else if (id === this.blockId) {
           // Only complain about root-level block.
           console.warn('Can\'t uncreate non-existent block: ' + id);

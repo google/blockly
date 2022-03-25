@@ -471,7 +471,6 @@ suite('Events', function() {
             'x': 0,
             'y': 0,
           },
-          ui: true,
         }),
       },
       {
@@ -491,7 +490,6 @@ suite('Events', function() {
             'x': 0,
             'y': 0,
           },
-          ui: true,
           recordUndo: false,
         }),
       },
@@ -513,7 +511,6 @@ suite('Events', function() {
             'x': 0,
             'y': 0,
           },
-          ui: true,
         }),
       },
       {
@@ -534,7 +531,6 @@ suite('Events', function() {
             'x': 0,
             'y': 0,
           },
-          ui: true,
           recordUndo: false,
         }),
       },

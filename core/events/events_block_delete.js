@@ -64,12 +64,6 @@ class BlockDelete extends BlockBase {
     this.wasShadow = opt_block.isShadow();
 
     /**
-     * Play UI effects (sound and animation)?
-     * @type {boolean}
-     */
-    this.ui = true;
-
-    /**
      * JSON representation of the block that was just deleted.
      * @type {!blocks.State}
      */
@@ -87,7 +81,6 @@ class BlockDelete extends BlockBase {
     json['ids'] = this.ids;
     json['wasShadow'] = this.wasShadow;
     json['oldJson'] = this.oldJson;
-    json['ui'] = this.ui;
     if (!this.recordUndo) {
       json['recordUndo'] = this.recordUndo;
     }
@@ -105,7 +98,6 @@ class BlockDelete extends BlockBase {
     this.wasShadow =
         json['wasShadow'] || this.oldXml.tagName.toLowerCase() === 'shadow';
     this.oldJson = /** @type {!blocks.State} */ (json['oldJson']);
-    this.ui = !!json['ui'];
     if (json['recordUndo'] !== undefined) {
       this.recordUndo = json['recordUndo'];
     }
@@ -122,7 +114,7 @@ class BlockDelete extends BlockBase {
         const id = this.ids[i];
         const block = workspace.getBlockById(id);
         if (block) {
-          block.dispose(false, this.ui);
+          block.dispose(false);
         } else if (id === this.blockId) {
           // Only complain about root-level block.
           console.warn('Can\'t delete non-existent block: ' + id);

@@ -73,7 +73,7 @@
       // block will respawn instantly, and we'd have to remove it when we remove
       // the input.
       input.connection.setShadowDom(null, true);
-      if (input.connection.targetConnection) {
+      if (input.connection.targetConnection && input.name !== 'RETURN') {
         input.connection.disconnect();
       }
     }

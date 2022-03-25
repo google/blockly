@@ -352,6 +352,10 @@
   }
 
   const toolboxCategory = workspace.toolbox_.getSelectedItem();
+  if (!toolboxCategory) {
+    return;
+  }
+
   const flyoutItems = toolboxCategory.getContents();
   if (flyoutItems === NameType.PROCEDURE) {
     workspace.toolbox_.refreshSelection();

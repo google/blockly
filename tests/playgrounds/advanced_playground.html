@@ -121,7 +121,7 @@ function configureContextMenu(menuOptions, e) {
     text: 'Download Screenshot',
     enabled: workspace.getTopBlocks().length,
     callback: function() {
-      Blockly.downloadScreenshot(workspace);
+      downloadScreenshot(workspace);
     }
   };
   menuOptions.push(screenshotOption);

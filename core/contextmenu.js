@@ -342,7 +342,7 @@ exports.commentDuplicateOption = commentDuplicateOption;
  * @alias Blockly.ContextMenu.workspaceCommentOption
  */
 const workspaceCommentOption = function(ws, e) {
-  const WorkspaceCommentSvg = goog.module.get('Blockly.WorkspaceCommentSvg');
+  const {WorkspaceCommentSvg} = goog.module.get('Blockly.WorkspaceCommentSvg');
   if (!WorkspaceCommentSvg) {
     throw Error('Missing require for Blockly.WorkspaceCommentSvg');
   }

@@ -563,6 +563,11 @@ class WorkspaceSvg extends Workspace {
      * @private
      */
     this.cachedParentSvgSize_ = new Size(0, 0);
+
+    /**
+     * Margin around the top/bottom/left/right after a zoomToFit call.
+     */
+    this.zoomToFitMargin = 20;
   }
 
   /**
@@ -2168,8 +2173,9 @@ class WorkspaceSvg extends Workspace {
     let workspaceWidth = metrics.viewWidth;
     let workspaceHeight = metrics.viewHeight;
     const blocksBox = this.getBlocksBoundingBox();
-    let blocksWidth = blocksBox.right - blocksBox.left;
-    let blocksHeight = blocksBox.bottom - blocksBox.top;
+    const doubleMargin = this.zoomToFitMargin * 2;
+    let blocksWidth = blocksBox.right - blocksBox.left + doubleMargin;
+    let blocksHeight = blocksBox.bottom - blocksBox.top + doubleMargin;
     if (!blocksWidth) {
       return;  // Prevents zooming to infinity.
     }

@@ -317,14 +317,14 @@ exports.commentDeleteOption = commentDeleteOption;
  */
 const blockMoveToModuleOption = function(block, module) {
   return {
-    text: Blockly.Msg['BLOCK_MOVE_TO_MODULE'].replace('%1', module.name),
+    text: Blockly.Msg['BLOCK_MOVE_TO_MODULE'].replace('%1', Blockly.Msg[module.name] || module.name),
     enabled: block.isMovable(),
     callback: function() {
       block.workspace.getModuleManager().moveBlockToModule(block, module);
-    }
+    },
   };
 };
-exports.blockMoveToModuleOption = blockMoveToModuleOption
+exports.blockMoveToModuleOption = blockMoveToModuleOption;
 
 /**
  * Make a context menu option for duplicating the current workspace comment.

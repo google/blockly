@@ -386,10 +386,9 @@ class Block {
    * @param {boolean} healStack If true, then try to heal any gap by connecting
    *     the next statement with the previous statement.  Otherwise, dispose of
    *     all children of this block.
-   * @param {boolean=} _animate If true, show a disposal animation and sound.
    * @suppress {checkTypes}
    */
-  dispose(healStack, _animate) {
+  dispose(healStack) {
     if (!this.workspace) {
       // Already deleted.
       return;

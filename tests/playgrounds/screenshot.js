@@ -105,4 +105,4 @@ function downloadScreenshot(workspace) {
     a.click();
     a.parentNode.removeChild(a);
   });
-};
+}

@@ -73,7 +73,7 @@
       // block will respawn instantly, and we'd have to remove it when we remove
       // the input.
       input.connection.setShadowDom(null, true);
-      if (input.connection.targetConnection) {
+      if (input.connection.targetConnection && input.name !== 'RETURN') {
         input.connection.disconnect();
       }
     }
@@ -153,10 +153,13 @@
     const block = xmlUtils.createElement('shadow');
     block.setAttribute('type', 'argument_local');
 
+    const data = xmlUtils.createElement('data');
+    data.appendChild(xmlUtils.createTextNode(argId));
+    block.appendChild(data);
+
     const field = xmlUtils.createElement('field');
     field.setAttribute('name', 'VALUE');
     field.setAttribute('value', name);
-    field.setAttribute('id', argId);
     field.textContent = name;
 
     block.appendChild(field);
@@ -168,7 +171,6 @@
   Blockly.ProceduresLocalArgumentUtils.createInputs_ = function() {
     this.argumentModels_ = [];
     for (let i = 0, argument; (argument = this.updatedArguments_[i]); i++) {
-      // const argId = this.updatedArguments_[argument].id;
       const argumentBlock = this.buildArgumentBlock_(argument.name, argument.id);
 
       this.argumentModels_.push({id: argument.id, name: argument.name});
@@ -193,27 +195,27 @@
 
     const shouldRemove = this.argumentModels_.filter((a) => !updatesArgumentsId.includes(a.id));
 
-    const shouldRename = this.updatedArguments_.map((arg) => {
+    const shouldRename = this.updatedArguments_.filter((arg) => {
       const existArgument = this.argumentModels_.find((a) => a.id === arg.id);
-      if (existArgument && arg.name !== existArgument.name) {
-        return arg;
-      }
+      return existArgument && arg.name !== existArgument.name;
     });
 
     const allBlocks = this.getDescendants();
-    const argumentBlocks = allBlocks.filter((block) => block.type === 'argument_local' && !block.isShadow());
+    const argumentsInProcedures = allBlocks.filter((block) => block.type === 'argument_local' && !block.isShadow());
 
-    if (!argumentBlocks.length) {
+    if (!argumentsInProcedures.length) {
       return;
     }
 
-    for (let i = 0; i < argumentBlocks.length; i++) {
-      if (shouldRename.length && shouldRename.find((a) => a.id === argumentBlocks[i].id)) {
-        argumentBlocks[i].setFieldValue(this.updatedArguments_[argumentBlocks[i].id].name, 'NAME');
+    for (let i = 0, argumentBlock; (argumentBlock = argumentsInProcedures[i]); i++) {
+      const argumentShouldRename = shouldRename.find((a) => a.id === argumentBlock.data);
+      if (shouldRename.length && argumentShouldRename) {
+        argumentBlock.changeArgumentName.call(argumentBlock, argumentShouldRename.name);
       }
 
-      if (shouldRemove.length && shouldRemove.find((f) => f.id === argumentBlocks[i].id)) {
-        argumentBlocks[i].dispose();
+      const argumentShouldRemove = shouldRemove.find((f) => f.id === argumentBlock.data);
+      if (shouldRemove.length && argumentShouldRemove) {
+        argumentBlock.dispose();
       }
     }
   };

@@ -62,6 +62,13 @@ const {Msg} = goog.require('Blockly.Msg');
     }
     Events.enable();
   },
+
+  changeArgumentName: function(newName) {
+    this.setFieldValue(newName, 'VALUE');
+    this.setFieldText(newName, 'VALUE');
+    const field = this.getField('VALUE');
+    field.forceRerender();
+  },
 };
 
 /**
@@ -113,10 +120,7 @@ const {Msg} = goog.require('Blockly.Msg');
   const argumentValue = block.getFieldValue('VALUE');
   return function() {
     const callback = (newName) => {
-      block.setFieldValue(newName, 'VALUE');
-      block.setFieldText(newName, 'VALUE');
-      const field = block.getField('VALUE');
-      field.forceRerender();
+      block.changeArgumentName.call(block, newName);
     };
     const msg = Msg['RENAME_ARGUMENT_TITLE'].replace('%1', argumentValue);
     dialog.prompt(msg, 'default', callback);

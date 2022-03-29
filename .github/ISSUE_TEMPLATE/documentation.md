@@ -1,7 +1,7 @@
 ---
 name: Documentation
 about: Report an issue with our documentation
-labels: 'type: documentation, triage'
+labels: 'type: documentation, issue: triage'
 assignees: ''
 
 ---
@@ -21,10 +21,10 @@ assignees: ''
 
 **What**
 
-<!-- What kind of content is it? 
-  -  Check a box with an 'x' between the brackets: [x] 
+<!-- What kind of content is it?
+  -  Check a box with an 'x' between the brackets: [x]
   -->
-  
+
 - [ ] Text
 - [ ] Image or Gif
 - [ ] Other
@@ -39,6 +39,6 @@ assignees: ''
 
 **Additional context**
 
-<!-- Add any other context about the problem here. 
+<!-- Add any other context about the problem here.
   -  If this is related to a specific pull request, link to it.
   -->

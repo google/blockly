@@ -91,7 +91,14 @@ goog.global.CLOSURE_UNCOMPILED_DEFINES;
  *   var CLOSURE_DEFINES = {'goog.DEBUG': false} ;
  * </pre>
  *
- * @type {Object<string, (string|number|boolean)>|undefined}
+ * Currently the Closure Compiler will only recognize very simple definitions of
+ * this value when looking for values to apply to compiled code and ignore all
+ * other references.  Specifically, it looks the value defined at the variable
+ * declaration, as with the example above.
+ *
+ * TODO(user): Improve the recognized definitions.
+ *
+ * @type {!Object<string, (string|number|boolean)>|null|undefined}
  */
 goog.global.CLOSURE_DEFINES;
 
@@ -3175,23 +3182,10 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
         scriptEl.nonce = nonce;
       }
 
-      if (goog.DebugLoader_.IS_OLD_IE_) {
-        // Execution order is not guaranteed on old IE, halt loading and write
-        // these scripts one at a time, after each loads.
-        controller.pause();
-        scriptEl.onreadystatechange = function() {
-          if (scriptEl.readyState == 'loaded' ||
-              scriptEl.readyState == 'complete') {
-            controller.loaded();
-            controller.resume();
-          }
-        };
-      } else {
-        scriptEl.onload = function() {
-          scriptEl.onload = null;
-          controller.loaded();
-        };
-      }
+      scriptEl.onload = function() {
+        scriptEl.onload = null;
+        controller.loaded();
+      };
 
       scriptEl.src = goog.TRUSTED_TYPES_POLICY_ ?
           goog.TRUSTED_TYPES_POLICY_.createScriptURL(this.path) :
@@ -3502,13 +3496,6 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
     // If one thing is pending it is this.
     var anythingElsePending = controller.pending().length > 1;
 
-    // If anything else is loading we need to lazy load due to bugs in old IE.
-    // Specifically script tags with src and script tags with contents could
-    // execute out of order if document.write is used, so we cannot use
-    // document.write. Do not pause here; it breaks old IE as well.
-    var useOldIeWorkAround =
-        anythingElsePending && goog.DebugLoader_.IS_OLD_IE_;
-
     // Additionally if we are meant to defer scripts but the page is still
     // loading (e.g. an ES6 module is loading) then also defer. Or if we are
     // meant to defer and anything else is pending then defer (those may be
@@ -3517,7 +3504,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
     var needsAsyncLoading = goog.Dependency.defer_ &&
         (anythingElsePending || goog.isDocumentLoading_());
 
-    if (useOldIeWorkAround || needsAsyncLoading) {
+    if (needsAsyncLoading) {
       // Note that we only defer when we have to rather than 100% of the time.
       // Always defering would work, but then in theory the order of
       // goog.require calls would then matter. We want to enforce that most of
@@ -3561,8 +3548,7 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
       };
     } else {
       // Always eval on old IE.
-      if (goog.DebugLoader_.IS_OLD_IE_ || !goog.inHtmlDocument_() ||
-          !goog.isDocumentLoading_()) {
+      if (!goog.inHtmlDocument_() || !goog.isDocumentLoading_()) {
         load();
       } else {
         fetchInOwnScriptThenLoad();
@@ -3704,15 +3690,6 @@ if (!COMPILED && goog.DEPENDENCIES_ENABLED) {
           ');';
     }
   };
-
-
-  /**
-   * Whether the browser is IE9 or earlier, which needs special handling
-   * for deferred modules.
-   * @const @private {boolean}
-   */
-  goog.DebugLoader_.IS_OLD_IE_ = !!(
-      !goog.global.atob && goog.global.document && goog.global.document['all']);
 
 
   /**

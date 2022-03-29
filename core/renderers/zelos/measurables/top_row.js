@@ -15,7 +15,6 @@
  */
 goog.module('Blockly.zelos.TopRow');
 
-const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 const {TopRow: BaseTopRow} = goog.require('Blockly.blockRendering.TopRow');
@@ -28,43 +27,45 @@ const {TopRow: BaseTopRow} = goog.require('Blockly.blockRendering.TopRow');
  * connections.
  * After this constructor is called, the row will contain all non-spacer
  * elements it needs.
- * @param {!ConstantProvider} constants The rendering
- *   constants provider.
- * @package
- * @constructor
  * @extends {BaseTopRow}
  * @alias Blockly.zelos.TopRow
  */
-const TopRow = function(constants) {
-  TopRow.superClass_.constructor.call(this, constants);
-};
-object.inherits(TopRow, BaseTopRow);
+class TopRow extends BaseTopRow {
+  /**
+   * @param {!ConstantProvider} constants The rendering
+   *   constants provider.
+   * @package
+   */
+  constructor(constants) {
+    super(constants);
+  }
 
-/**
- * @override
- */
-TopRow.prototype.endsWithElemSpacer = function() {
-  return false;
-};
+  /**
+   * @override
+   */
+  endsWithElemSpacer() {
+    return false;
+  }
 
-/**
- * Render a round corner unless the block has an output connection.
- * @override
- */
-TopRow.prototype.hasLeftSquareCorner = function(block) {
-  const hasHat =
-      (block.hat ? block.hat === 'cap' : this.constants_.ADD_START_HATS) &&
-      !block.outputConnection && !block.previousConnection;
-  return !!block.outputConnection || hasHat;
-};
+  /**
+   * Render a round corner unless the block has an output connection.
+   * @override
+   */
+  hasLeftSquareCorner(block) {
+    const hasHat =
+        (block.hat ? block.hat === 'cap' : this.constants_.ADD_START_HATS) &&
+        !block.outputConnection && !block.previousConnection;
+    return !!block.outputConnection || hasHat;
+  }
 
-/**
- * Render a round corner unless the block has an output connection.
- * @override
- */
-TopRow.prototype.hasRightSquareCorner = function(block) {
-  return !!block.outputConnection && !block.statementInputCount &&
-      !block.nextConnection;
-};
+  /**
+   * Render a round corner unless the block has an output connection.
+   * @override
+   */
+  hasRightSquareCorner(block) {
+    return !!block.outputConnection && !block.statementInputCount &&
+        !block.nextConnection;
+  }
+}
 
 exports.TopRow = TopRow;

@@ -16,7 +16,6 @@
 goog.module('Blockly.browserEvents');
 
 const Touch = goog.require('Blockly.Touch');
-const internalConstants = goog.require('Blockly.internalConstants');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const {globalThis} = goog.require('Blockly.utils.global');
 
@@ -29,6 +28,24 @@ const {globalThis} = goog.require('Blockly.utils.global');
  */
 let Data;
 exports.Data = Data;
+
+/**
+ * The multiplier for scroll wheel deltas using the line delta mode.
+ * See https://developer.mozilla.org/en-US/docs/Web/API/WheelEvent/deltaMode
+ * for more information on deltaMode.
+ * @type {number}
+ * @const
+ */
+const LINE_MODE_MULTIPLIER = 40;
+
+/**
+ * The multiplier for scroll wheel deltas using the page delta mode.
+ * See https://developer.mozilla.org/en-US/docs/Web/API/WheelEvent/deltaMode
+ * for more information on deltaMode.
+ * @type {number}
+ * @const
+ */
+const PAGE_MODE_MULTIPLIER = 125;
 
 /**
  * Bind an event handler that can be ignored if it is not part of the active
@@ -254,13 +271,13 @@ const getScrollDeltaPixels = function(e) {
       return {x: e.deltaX, y: e.deltaY};
     case 0x01:  // Line mode.
       return {
-        x: e.deltaX * internalConstants.LINE_MODE_MULTIPLIER,
-        y: e.deltaY * internalConstants.LINE_MODE_MULTIPLIER,
+        x: e.deltaX * LINE_MODE_MULTIPLIER,
+        y: e.deltaY * LINE_MODE_MULTIPLIER,
       };
     case 0x02:  // Page mode.
       return {
-        x: e.deltaX * internalConstants.PAGE_MODE_MULTIPLIER,
-        y: e.deltaY * internalConstants.PAGE_MODE_MULTIPLIER,
+        x: e.deltaX * PAGE_MODE_MULTIPLIER,
+        y: e.deltaY * PAGE_MODE_MULTIPLIER,
       };
   }
 };

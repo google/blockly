@@ -6,7 +6,7 @@
 
 goog.module('Blockly.test.input');
 
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
 
 
 suite('Inputs', function() {

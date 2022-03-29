@@ -17,9 +17,10 @@
  */
 goog.module('Blockly.geras.StatementInput');
 
-const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {ConstantProvider: BaseConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider: GerasConstantProvider} = goog.requireType('Blockly.geras.ConstantProvider');
 /* eslint-disable-next-line no-unused-vars */
 const {Input} = goog.requireType('Blockly.Input');
 const {StatementInput: BaseStatementInput} = goog.require('Blockly.blockRendering.StatementInput');
@@ -27,25 +28,30 @@ const {StatementInput: BaseStatementInput} = goog.require('Blockly.blockRenderin
 
 /**
  * An object containing information about the space a statement input takes up
- * during rendering
- * @param {!ConstantProvider} constants The rendering
- *   constants provider.
- * @param {!Input} input The statement input to measure and store
- *     information for.
- * @package
- * @constructor
+ * during rendering.
  * @extends {BaseStatementInput}
  * @alias Blockly.geras.StatementInput
  */
-const StatementInput = function(constants, input) {
-  StatementInput.superClass_.constructor.call(this, constants, input);
+class StatementInput extends BaseStatementInput {
+  /**
+   * @param {!BaseConstantProvider} constants The rendering
+   *   constants provider.
+   * @param {!Input} input The statement input to measure and store
+   *     information for.
+   * @package
+   */
+  constructor(constants, input) {
+    super(constants, input);
 
-  if (this.connectedBlock) {
-    // We allow the dark path to show on the parent block so that the child
-    // block looks embossed.  This takes up an extra pixel in both x and y.
-    this.height += this.constants_.DARK_PATH_OFFSET;
+    /** @type {!GerasConstantProvider} */
+    this.constants_;
+
+    if (this.connectedBlock) {
+      // We allow the dark path to show on the parent block so that the child
+      // block looks embossed.  This takes up an extra pixel in both x and y.
+      this.height += this.constants_.DARK_PATH_OFFSET;
+    }
   }
-};
-object.inherits(StatementInput, BaseStatementInput);
+}
 
 exports.StatementInput = StatementInput;

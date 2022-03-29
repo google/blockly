@@ -32,11 +32,15 @@ Lua['lists_create_with'] = function(block) {
 
 Lua['lists_repeat'] = function(block) {
   // Create a list with one element repeated.
-  const functionName = Lua.provideFunction_('create_list_repeated', [
-    'function ' + Lua.FUNCTION_NAME_PLACEHOLDER_ + '(item, count)',
-    '  local t = {}', '  for i = 1, count do', '    table.insert(t, item)',
-    '  end', '  return t', 'end'
-  ]);
+  const functionName = Lua.provideFunction_('create_list_repeated', `
+function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(item, count)
+  local t = {}
+  for i = 1, count do
+    table.insert(t, item)
+  end
+  return t
+end
+  `);
   const element = Lua.valueToCode(block, 'ITEM', Lua.ORDER_NONE) || 'None';
   const repeatCount = Lua.valueToCode(block, 'NUM', Lua.ORDER_NONE) || '0';
   const code = functionName + '(' + element + ', ' + repeatCount + ')';
@@ -58,21 +62,31 @@ Lua['lists_isEmpty'] = function(block) {
 
 Lua['lists_indexOf'] = function(block) {
   // Find an item in the list.
-  const item = Lua.valueToCode(block, 'FIND', Lua.ORDER_NONE) || '\'\'';
+  const item = Lua.valueToCode(block, 'FIND', Lua.ORDER_NONE) || "''";
   const list = Lua.valueToCode(block, 'VALUE', Lua.ORDER_NONE) || '{}';
   let functionName;
   if (block.getFieldValue('END') === 'FIRST') {
-    functionName = Lua.provideFunction_('first_index', [
-      'function ' + Lua.FUNCTION_NAME_PLACEHOLDER_ + '(t, elem)',
-      '  for k, v in ipairs(t) do', '    if v == elem then', '      return k',
-      '    end', '  end', '  return 0', 'end'
-    ]);
+    functionName = Lua.provideFunction_('first_index', `
+function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(t, elem)
+  for k, v in ipairs(t) do
+    if v == elem then
+      return k
+    end
+  end
+  return 0
+end
+`);
   } else {
-    functionName = Lua.provideFunction_('last_index', [
-      'function ' + Lua.FUNCTION_NAME_PLACEHOLDER_ + '(t, elem)',
-      '  for i = #t, 1, -1 do', '    if t[i] == elem then', '      return i',
-      '    end', '  end', '  return 0', 'end'
-    ]);
+    functionName = Lua.provideFunction_('last_index', `
+function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(t, elem)
+  for i = #t, 1, -1 do
+    if t[i] == elem then
+      return i
+    end
+  end
+  return 0
+end
+`);
   }
   const code = functionName + '(' + list + ', ' + item + ')';
   return [code, Lua.ORDER_HIGH];
@@ -217,22 +231,24 @@ Lua['lists_getSublist'] = function(block) {
   const at1 = Lua.valueToCode(block, 'AT1', Lua.ORDER_NONE) || '1';
   const at2 = Lua.valueToCode(block, 'AT2', Lua.ORDER_NONE) || '1';
 
+  // The value for 'FROM_END' and'FROM_START' depends on `at` so
+  // we add it as a parameter.
+  const at1Param =
+      (where1 === 'FROM_END' || where1 === 'FROM_START') ? ', at1' : '';
+  const at2Param =
+      (where2 === 'FROM_END' || where2 === 'FROM_START') ? ', at2' : '';
   const functionName = Lua.provideFunction_(
-      'list_sublist_' + where1.toLowerCase() + '_' + where2.toLowerCase(), [
-        'function ' + Lua.FUNCTION_NAME_PLACEHOLDER_ + '(source' +
-            // The value for 'FROM_END' and'FROM_START' depends on `at` so
-            // we add it as a parameter.
-            ((where1 === 'FROM_END' || where1 === 'FROM_START') ? ', at1' :
-                                                                  '') +
-            ((where2 === 'FROM_END' || where2 === 'FROM_START') ? ', at2' :
-                                                                  '') +
-            ')',
-        '  local t = {}',
-        '  local start = ' + getListIndex('source', where1, 'at1'),
-        '  local finish = ' + getListIndex('source', where2, 'at2'),
-        '  for i = start, finish do', '    table.insert(t, source[i])', '  end',
-        '  return t', 'end'
-      ]);
+      'list_sublist_' + where1.toLowerCase() + '_' + where2.toLowerCase(), `
+function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(source${at1Param}${at2Param})
+  local t = {}
+  local start = ${getListIndex('source', where1, 'at1')}
+  local finish = ${getListIndex('source', where2, 'at2')}
+  for i = start, finish do
+    table.insert(t, source[i])
+  end
+  return t
+end
+`);
   const code = functionName + '(' + list +
       // The value for 'FROM_END' and 'FROM_START' depends on `at` so we
       // pass it.
@@ -248,28 +264,28 @@ Lua['lists_sort'] = function(block) {
   const direction = block.getFieldValue('DIRECTION') === '1' ? 1 : -1;
   const type = block.getFieldValue('TYPE');
 
-  const functionName = Lua.provideFunction_('list_sort', [
-    'function ' + Lua.FUNCTION_NAME_PLACEHOLDER_ + '(list, typev, direction)',
-    '  local t = {}',
-    '  for n,v in pairs(list) do table.insert(t, v) end',  // Shallow-copy.
-    '  local compareFuncs = {',
-    '    NUMERIC = function(a, b)',
-    '      return (tonumber(tostring(a)) or 0)',
-    '          < (tonumber(tostring(b)) or 0) end,',
-    '    TEXT = function(a, b)',
-    '      return tostring(a) < tostring(b) end,',
-    '    IGNORE_CASE = function(a, b)',
-    '      return string.lower(tostring(a)) < string.lower(tostring(b)) end',
-    '  }',
-    '  local compareTemp = compareFuncs[typev]',
-    '  local compare = compareTemp',
-    '  if direction == -1',
-    '  then compare = function(a, b) return compareTemp(b, a) end',
-    '  end',
-    '  table.sort(t, compare)',
-    '  return t',
-    'end'
-  ]);
+  const functionName = Lua.provideFunction_('list_sort', `
+function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(list, typev, direction)
+  local t = {}
+  for n,v in pairs(list) do table.insert(t, v) end
+  local compareFuncs = {
+    NUMERIC = function(a, b)
+      return (tonumber(tostring(a)) or 0)
+          < (tonumber(tostring(b)) or 0) end,
+    TEXT = function(a, b)
+      return tostring(a) < tostring(b) end,
+    IGNORE_CASE = function(a, b)
+      return string.lower(tostring(a)) < string.lower(tostring(b)) end
+  }
+  local compareTemp = compareFuncs[typev]
+  local compare = compareTemp
+  if direction == -1
+  then compare = function(a, b) return compareTemp(b, a) end
+  end
+  table.sort(t, compare)
+  return t
+end
+`);
 
   const code =
       functionName + '(' + list + ',"' + type + '", ' + direction + ')';
@@ -279,22 +295,30 @@ Lua['lists_sort'] = function(block) {
 Lua['lists_split'] = function(block) {
   // Block for splitting text into a list, or joining a list into text.
   let input = Lua.valueToCode(block, 'INPUT', Lua.ORDER_NONE);
-  const delimiter = Lua.valueToCode(block, 'DELIM', Lua.ORDER_NONE) || '\'\'';
+  const delimiter = Lua.valueToCode(block, 'DELIM', Lua.ORDER_NONE) || "''";
   const mode = block.getFieldValue('MODE');
   let functionName;
   if (mode === 'SPLIT') {
     if (!input) {
-      input = '\'\'';
+      input = "''";
     }
-    functionName = Lua.provideFunction_('list_string_split', [
-      'function ' + Lua.FUNCTION_NAME_PLACEHOLDER_ + '(input, delim)',
-      '  local t = {}', '  local pos = 1', '  while true do',
-      '    next_delim = string.find(input, delim, pos)',
-      '    if next_delim == nil then',
-      '      table.insert(t, string.sub(input, pos))', '      break',
-      '    else', '      table.insert(t, string.sub(input, pos, next_delim-1))',
-      '      pos = next_delim + #delim', '    end', '  end', '  return t', 'end'
-    ]);
+    functionName = Lua.provideFunction_('list_string_split', `
+function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(input, delim)
+  local t = {}
+  local pos = 1
+  while true do
+    next_delim = string.find(input, delim, pos)
+    if next_delim == nil then
+      table.insert(t, string.sub(input, pos))
+      break
+    else
+      table.insert(t, string.sub(input, pos, next_delim-1))
+      pos = next_delim + #delim
+    end
+  end
+  return t
+end
+`);
   } else if (mode === 'JOIN') {
     if (!input) {
       input = '{}';
@@ -310,11 +334,15 @@ Lua['lists_split'] = function(block) {
 Lua['lists_reverse'] = function(block) {
   // Block for reversing a list.
   const list = Lua.valueToCode(block, 'LIST', Lua.ORDER_NONE) || '{}';
-  const functionName = Lua.provideFunction_('list_reverse', [
-    'function ' + Lua.FUNCTION_NAME_PLACEHOLDER_ + '(input)',
-    '  local reversed = {}', '  for i = #input, 1, -1 do',
-    '    table.insert(reversed, input[i])', '  end', '  return reversed', 'end'
-  ]);
+  const functionName = Lua.provideFunction_('list_reverse', `
+function ${Lua.FUNCTION_NAME_PLACEHOLDER_}(input)
+  local reversed = {}
+  for i = #input, 1, -1 do
+    table.insert(reversed, input[i])
+  end
+  return reversed
+end
+`);
   const code = functionName + '(' + list + ')';
   return [code, Lua.ORDER_HIGH];
 };

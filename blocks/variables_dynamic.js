@@ -10,7 +10,7 @@
  */
 'use strict';
 
-goog.module('Blockly.blocks.variablesDynamic');
+goog.module('Blockly.libraryBlocks.variablesDynamic');
 
 /* eslint-disable-next-line no-unused-vars */
 const AbstractEvent = goog.requireType('Blockly.Events.Abstract');
@@ -20,15 +20,21 @@ const Variables = goog.require('Blockly.Variables');
 const xml = goog.require('Blockly.utils.xml');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockDefinition} = goog.requireType('Blockly.blocks');
 const {Msg} = goog.require('Blockly.Msg');
-const {defineBlocksWithJsonArray} = goog.require('Blockly.common');
+const {createBlockDefinitionsFromJsonArray, defineBlocks} = goog.require('Blockly.common');
 /** @suppress {extraRequire} */
 goog.require('Blockly.FieldLabel');
 /** @suppress {extraRequire} */
 goog.require('Blockly.FieldVariable');
 
 
-defineBlocksWithJsonArray([
+/**
+ * A dictionary of the block definitions provided by this module.
+ * @type {!Object<string, !BlockDefinition>}
+ */
+const blocks = createBlockDefinitionsFromJsonArray([
   // Block for variable getter.
   {
     'type': 'variables_get_dynamic',
@@ -67,6 +73,7 @@ defineBlocksWithJsonArray([
     'extensions': ['contextMenu_variableDynamicSetterGetter'],
   },
 ]);
+exports.blocks = blocks;
 
 /**
  * Mixin to add context menu items to create getter/setter blocks for this
@@ -178,3 +185,6 @@ const deleteOptionCallbackFactory = function(block) {
 Extensions.registerMixin(
     'contextMenu_variableDynamicSetterGetter',
     CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN);
+
+// Register provided blocks.
+defineBlocks(blocks);

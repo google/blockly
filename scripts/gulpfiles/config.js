@@ -15,7 +15,7 @@ var path = require('path');
 //
 // TODO(#5007): If you modify these values, you must also modify the
 // corresponding values in the following files:
-// 
+//
 // - tests/scripts/compile_typings.sh
 // - tests/scripts/check_metadata.sh
 module.exports = {
@@ -28,4 +28,8 @@ module.exports = {
 
   // Directory to write typings output to.
   TYPINGS_BUILD_DIR: path.join('build', 'typings'),
+
+  // Directory where typescript compiler output can be found.
+  // Matches the value in tsconfig.json: outDir
+  TSC_OUTPUT_DIR: path.join('build', 'ts'),
 };

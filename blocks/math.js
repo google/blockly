@@ -10,7 +10,7 @@
  */
 'use strict';
 
-goog.module('Blockly.blocks.math');
+goog.module('Blockly.libraryBlocks.math');
 
 const Extensions = goog.require('Blockly.Extensions');
 // N.B.: Blockly.FieldDropdown needed for type AND side-effects.
@@ -20,7 +20,8 @@ const xmlUtils = goog.require('Blockly.utils.xml');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
-const {defineBlocksWithJsonArray} = goog.require('Blockly.common');
+const {BlockDefinition} = goog.requireType('Blockly.blocks');
+const {createBlockDefinitionsFromJsonArray, defineBlocks} = goog.require('Blockly.common');
 /** @suppress {extraRequire} */
 goog.require('Blockly.FieldLabel');
 /** @suppress {extraRequire} */
@@ -29,7 +30,11 @@ goog.require('Blockly.FieldNumber');
 goog.require('Blockly.FieldVariable');
 
 
-defineBlocksWithJsonArray([
+/**
+ * A dictionary of the block definitions provided by this module.
+ * @type {!Object<string, !BlockDefinition>}
+ */
+const blocks = createBlockDefinitionsFromJsonArray([
   // Block for numeric value.
   {
     'type': 'math_number',
@@ -384,6 +389,7 @@ defineBlocksWithJsonArray([
     'helpUrl': '%{BKY_MATH_ATAN2_HELPURL}',
   },
 ]);
+exports.blocks = blocks;
 
 /**
  * Mapping of math block OP value to tooltip message for blocks
@@ -581,3 +587,6 @@ const LIST_MODES_MUTATOR_EXTENSION = function() {
 Extensions.registerMutator(
     'math_modes_of_list_mutator', LIST_MODES_MUTATOR_MIXIN,
     LIST_MODES_MUTATOR_EXTENSION);
+
+// Register provided blocks.
+defineBlocks(blocks);

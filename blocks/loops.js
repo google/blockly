@@ -10,7 +10,7 @@
  */
 'use strict';
 
-goog.module('Blockly.blocks.loops');
+goog.module('Blockly.libraryBlocks.loops');
 
 /* eslint-disable-next-line no-unused-vars */
 const AbstractEvent = goog.requireType('Blockly.Events.Abstract');
@@ -18,11 +18,13 @@ const ContextMenu = goog.require('Blockly.ContextMenu');
 const Events = goog.require('Blockly.Events');
 const Extensions = goog.require('Blockly.Extensions');
 const Variables = goog.require('Blockly.Variables');
-const common = goog.require('Blockly.common');
 const xmlUtils = goog.require('Blockly.utils.xml');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockDefinition} = goog.requireType('Blockly.blocks');
 const {Msg} = goog.require('Blockly.Msg');
+const {createBlockDefinitionsFromJsonArray, defineBlocks} = goog.require('Blockly.common');
 /** @suppress {extraRequire} */
 goog.require('Blockly.FieldDropdown');
 /** @suppress {extraRequire} */
@@ -35,7 +37,11 @@ goog.require('Blockly.FieldVariable');
 goog.require('Blockly.Warning');
 
 
-common.defineBlocksWithJsonArray([
+/**
+ * A dictionary of the block definitions provided by this module.
+ * @type {!Object<string, !BlockDefinition>}
+ */
+const blocks = createBlockDefinitionsFromJsonArray([
   // Block for repeat n times (external number).
   {
     'type': 'controls_repeat_ext',
@@ -205,6 +211,7 @@ common.defineBlocksWithJsonArray([
     ],
   },
 ]);
+exports.blocks = blocks;
 
 /**
  * Tooltips for the 'controls_whileUntil' block, keyed by MODE value.
@@ -287,21 +294,24 @@ Extensions.register(
  *
  * // If using the Blockly npm package and es6 import syntax:
  * import {loopTypes} from 'blockly/blocks';
- * loopTypes.push('custom_loop');
+ * loopTypes.add('custom_loop');
  *
  * // Else if using Closure Compiler and goog.modules:
- * const {loopTypes} = goog.require('Blockly.blocks.loops');
- * loopTypes.push('custom_loop');
+ * const {loopTypes} = goog.require('Blockly.libraryBlocks.loops');
+ * loopTypes.add('custom_loop');
  *
- * @type {!Array<string>}
+ * // Else if using blockly_compressed + blockss_compressed.js in browser:
+ * Blockly.libraryBlocks.loopTypes.add('custom_loop');
+ *
+ * @type {!Set<string>}
  */
-const loopTypes = [
+const loopTypes = new Set([
   'controls_repeat',
   'controls_repeat_ext',
   'controls_forEach',
   'controls_for',
   'controls_whileUntil',
-];
+]);
 exports.loopTypes = loopTypes;
 
 /**
@@ -321,7 +331,7 @@ const CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
   getSurroundLoop: function() {
     let block = this;
     do {
-      if (loopTypes.includes(block.type)) {
+      if (loopTypes.has(block.type)) {
         return block;
       }
       block = block.getSurroundParent();
@@ -332,7 +342,7 @@ const CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
   /**
    * Called whenever anything on the workspace changes.
    * Add warning if this flow block is not nested inside a loop.
-   * @param {!AbstractEvent} e Change event.
+   * @param {!AbstractEvent} e Move event.
    * @this {Block}
    */
   onchange: function(e) {
@@ -358,3 +368,6 @@ const CONTROL_FLOW_IN_LOOP_CHECK_MIXIN = {
 
 Extensions.registerMixin(
     'controls_flow_in_loop_check', CONTROL_FLOW_IN_LOOP_CHECK_MIXIN);
+
+// Register provided blocks.
+defineBlocks(blocks);

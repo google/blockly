@@ -1036,6 +1036,63 @@ declare module "serialization/exceptions" {
     }
     import { Block } from "block";
 }
+
+declare module "serialization/variables" {
+    /**
+     * Represents the state of a given variable.
+     */
+    export type State = {
+        name: string;
+        id: string;
+        type: (string | undefined);
+    };
+    /**
+     * Represents the state of a given variable.
+     * @typedef {{
+     *   name: string,
+     *   id: string,
+     *   type: (string|undefined)
+     * }}
+     * @alias Blockly.serialization.variables.State
+     */
+    export let State: any;
+}
+declare module "serialization/workspaces" {
+    /**
+     * Returns the state of the workspace as a plain JavaScript object.
+     * @param {!Workspace} workspace The workspace to serialize.
+     * @return {!Object<string, *>} The serialized state of the workspace.
+     * @alias Blockly.serialization.workspaces.save
+     */
+    export function save(workspace: Workspace): {
+        [x: string]: any;
+    };
+    /**
+     * Loads the variable represented by the given state into the given workspace.
+     * @param {!Object<string, *>} state The state of the workspace to deserialize
+     *     into the workspace.
+     * @param {!Workspace} workspace The workspace to add the new state to.
+     * @param {{recordUndo: (boolean|undefined)}=} param1
+     *     recordUndo: If true, events triggered by this function will be undo-able
+     *       by the user. False by default.
+     * @alias Blockly.serialization.workspaces.load
+     */
+    export function load(state: {
+        [x: string]: any;
+    }, workspace: Workspace, { recordUndo }?: {
+        recordUndo: (boolean | undefined);
+    } | undefined): void;
+    import { Workspace } from "workspace";
+}
+declare module "serialization" {
+    import * as blocks from "serialization/blocks";
+    import * as exceptions from "serialization/exceptions";
+    import * as priorities from "serialization/priorities";
+    import * as registry from "serialization/registry";
+    import * as variables from "serialization/variables";
+    import * as workspaces from "serialization/workspaces";
+    export {blocks, exceptions, priorities, registry, variables, workspaces};
+}
 declare module "utils/size" {
     /**
      * @license
@@ -25497,6 +25554,7 @@ declare module "blockly" {
     import { RenderedConnection } from "rendered_connection";
     import { Scrollbar } from "scrollbar";
     import { ScrollbarPair } from "scrollbar_pair";
+    import * as serialization from "serialization";
     import * as ShortcutItems from "shortcut_items";
     import { ShortcutRegistry } from "shortcut_registry";
     import { TabNavigateCursor } from "keyboard_nav/tab_navigate_cursor";
@@ -25542,54 +25600,7 @@ declare module "blockly" {
     import * as thrasos from "renderers/thrasos/thrasos";
     import * as uiPosition from "positionable_helpers";
     import * as zelos from "renderers/zelos/zelos";
-    export { resizeSvgContentsLocal as resizeSvgContents, ASTNode, BasicCursor, Block, BlocklyOptions, BlockDragger, BlockDragSurfaceSvg, BlockSvg, Blocks, Bubble, BubbleDragger, CollapsibleToolboxCategory, Comment, ComponentManager, Connection, ConnectionType, ConnectionChecker, ConnectionDB, ContextMenu, ContextMenuItems, ContextMenuRegistry, Css, Cursor, DeleteArea, DragTarget, DropDownDiv, Events, Extensions, Field, FieldAngle, FieldCheckbox, FieldColour, FieldDropdown, FieldImage, FieldLabel, FieldLabelSerializable, FieldMultilineInput, FieldNumber, FieldTextInput, FieldVariable, Flyout, FlyoutButton, FlyoutMetricsManager, Generator, Gesture, Grid, HorizontalFlyout, IASTNodeLocation, IASTNodeLocationSvg, IASTNodeLocationWithBlock, IAutoHideable, IBlockDragger, IBoundedElement, IBubble, ICollapsibleToolboxItem, IComponent, IConnectionChecker, IContextMenu, Icon, ICopyable, IDeletable, IDeleteArea, IDragTarget, IDraggable, IFlyout, IKeyboardAccessible, IMetricsManager, IMovable, Input, InsertionMarkerManager, IPositionable, IRegistrable, IRegistrableField, ISelectable, ISelectableToolboxItem, IStyleable, IToolbox, IToolboxItem, Marker, MarkerManager, Menu, MenuItem, MetricsManager, Mutator, Names, Options, Procedures, RenderedConnection, Scrollbar, ScrollbarPair, ShortcutItems, ShortcutRegistry, TabNavigateCursor, Theme, Themes, ThemeManager, Toolbox, ToolboxCategory, ToolboxItem, ToolboxSeparator, Tooltip, Touch, TouchGesture, Trashcan, VariableMap, VariableModel, Variables, VariablesDynamic, VerticalFlyout, Warning, WidgetDiv, Workspace, WorkspaceAudio, WorkspaceComment, WorkspaceCommentSvg, WorkspaceDragSurfaceSvg, WorkspaceDragger, WorkspaceSvg, Xml, ZoomControls, blockAnimations, blockRendering, browserEvents, bumpObjects, clipboard, common, ConnectionType as connectionTypes, constants, dialog, fieldRegistry, geras, inject, inputTypes, minimalist, registry, thrasos, uiPosition, utils, zelos };
-}
-declare module "serialization/variables" {
-    /**
-     * Represents the state of a given variable.
-     */
-    export type State = {
-        name: string;
-        id: string;
-        type: (string | undefined);
-    };
-    /**
-     * Represents the state of a given variable.
-     * @typedef {{
-     *   name: string,
-     *   id: string,
-     *   type: (string|undefined)
-     * }}
-     * @alias Blockly.serialization.variables.State
-     */
-    export let State: any;
-}
-declare module "serialization/workspaces" {
-    /**
-     * Returns the state of the workspace as a plain JavaScript object.
-     * @param {!Workspace} workspace The workspace to serialize.
-     * @return {!Object<string, *>} The serialized state of the workspace.
-     * @alias Blockly.serialization.workspaces.save
-     */
-    export function save(workspace: Workspace): {
-        [x: string]: any;
-    };
-    /**
-     * Loads the variable represented by the given state into the given workspace.
-     * @param {!Object<string, *>} state The state of the workspace to deserialize
-     *     into the workspace.
-     * @param {!Workspace} workspace The workspace to add the new state to.
-     * @param {{recordUndo: (boolean|undefined)}=} param1
-     *     recordUndo: If true, events triggered by this function will be undo-able
-     *       by the user. False by default.
-     * @alias Blockly.serialization.workspaces.load
-     */
-    export function load(state: {
-        [x: string]: any;
-    }, workspace: Workspace, { recordUndo }?: {
-        recordUndo: (boolean | undefined);
-    } | undefined): void;
-    import { Workspace } from "workspace";
+    export { resizeSvgContentsLocal as resizeSvgContents, ASTNode, BasicCursor, Block, BlocklyOptions, BlockDragger, BlockDragSurfaceSvg, BlockSvg, Blocks, Bubble, BubbleDragger, CollapsibleToolboxCategory, Comment, ComponentManager, Connection, ConnectionType, ConnectionChecker, ConnectionDB, ContextMenu, ContextMenuItems, ContextMenuRegistry, Css, Cursor, DeleteArea, DragTarget, DropDownDiv, Events, Extensions, Field, FieldAngle, FieldCheckbox, FieldColour, FieldDropdown, FieldImage, FieldLabel, FieldLabelSerializable, FieldMultilineInput, FieldNumber, FieldTextInput, FieldVariable, Flyout, FlyoutButton, FlyoutMetricsManager, Generator, Gesture, Grid, HorizontalFlyout, IASTNodeLocation, IASTNodeLocationSvg, IASTNodeLocationWithBlock, IAutoHideable, IBlockDragger, IBoundedElement, IBubble, ICollapsibleToolboxItem, IComponent, IConnectionChecker, IContextMenu, Icon, ICopyable, IDeletable, IDeleteArea, IDragTarget, IDraggable, IFlyout, IKeyboardAccessible, IMetricsManager, IMovable, Input, InsertionMarkerManager, IPositionable, IRegistrable, IRegistrableField, ISelectable, ISelectableToolboxItem, IStyleable, IToolbox, IToolboxItem, Marker, MarkerManager, Menu, MenuItem, MetricsManager, Mutator, Names, Options, Procedures, RenderedConnection, Scrollbar, ScrollbarPair, serialization, ShortcutItems, ShortcutRegistry, TabNavigateCursor, Theme, Themes, ThemeManager, Toolbox, ToolboxCategory, ToolboxItem, ToolboxSeparator, Tooltip, Touch, TouchGesture, Trashcan, VariableMap, VariableModel, Variables, VariablesDynamic, VerticalFlyout, Warning, WidgetDiv, Workspace, WorkspaceAudio, WorkspaceComment, WorkspaceCommentSvg, WorkspaceDragSurfaceSvg, WorkspaceDragger, WorkspaceSvg, Xml, ZoomControls, blockAnimations, blockRendering, browserEvents, bumpObjects, clipboard, common, ConnectionType as connectionTypes, constants, dialog, fieldRegistry, geras, inject, inputTypes, minimalist, registry, thrasos, uiPosition, utils, zelos };
 }
 declare module "requires" {
     export {};

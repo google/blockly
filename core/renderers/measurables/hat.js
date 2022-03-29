@@ -16,7 +16,6 @@
  */
 goog.module('Blockly.blockRendering.Hat');
 
-const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 const {Measurable} = goog.require('Blockly.blockRendering.Measurable');
@@ -26,20 +25,26 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
 /**
  * An object containing information about the space a hat takes up during
  * rendering.
- * @param {!ConstantProvider} constants The rendering
- *   constants provider.
- * @package
- * @constructor
+ * @struct
  * @extends {Measurable}
  * @alias Blockly.blockRendering.Hat
  */
-const Hat = function(constants) {
-  Hat.superClass_.constructor.call(this, constants);
-  this.type |= Types.HAT;
-  this.height = this.constants_.START_HAT.height;
-  this.width = this.constants_.START_HAT.width;
-  this.ascenderHeight = this.height;
-};
-object.inherits(Hat, Measurable);
+class Hat extends Measurable {
+  /**
+   * @param {!ConstantProvider} constants The rendering
+   *   constants provider.
+   * @package
+   */
+  constructor(constants) {
+    super(constants);
+    this.type |= Types.HAT;
+
+    this.height = this.constants_.START_HAT.height;
+    this.width = this.constants_.START_HAT.width;
+
+    /** @type {number} */
+    this.ascenderHeight = this.height;
+  }
+}
 
 exports.Hat = Hat;

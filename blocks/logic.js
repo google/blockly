@@ -394,7 +394,11 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
     const valueConnections = [null];
     const statementConnections = [null];
     let elseStatementConnection = null;
-    while (clauseBlock && !clauseBlock.isInsertionMarker()) {
+    while (clauseBlock) {
+      if (clauseBlock.isInsertionMarker()) {
+        clauseBlock = clauseBlock.getNextBlock();
+        continue;
+      }
       switch (clauseBlock.type) {
         case 'controls_if_elseif':
           this.elseifCount_++;
@@ -408,8 +412,7 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
         default:
           throw TypeError('Unknown block type: ' + clauseBlock.type);
       }
-      clauseBlock = clauseBlock.nextConnection &&
-          clauseBlock.nextConnection.targetBlock();
+      clauseBlock = clauseBlock.getNextBlock();
     }
     this.updateShape_();
     // Reconnect any child blocks.
@@ -425,6 +428,10 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
     let clauseBlock = containerBlock.nextConnection.targetBlock();
     let i = 1;
     while (clauseBlock) {
+      if (clauseBlock.isInsertionMarker()) {
+        clauseBlock = clauseBlock.getNextBlock();
+        continue;
+      }
       switch (clauseBlock.type) {
         case 'controls_if_elseif': {
           const inputIf = this.getInput('IF' + i);
@@ -445,8 +452,7 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
         default:
           throw TypeError('Unknown block type: ' + clauseBlock.type);
       }
-      clauseBlock = clauseBlock.nextConnection &&
-          clauseBlock.nextConnection.targetBlock();
+      clauseBlock = clauseBlock.getNextBlock();
     }
   },
   /**

@@ -218,7 +218,7 @@ exports.rename = rename;
  */
 const flyoutCategory = function(workspace) {
   deprecation.warn(
-    'Blockly.Procedures.flyoutCategory', 'June 2022', 'June 2023');
+      'Blockly.Procedures.flyoutCategory', 'June 2022', 'June 2023');
   const xmlList = [];
   if (Blocks['procedures_defnoreturn']) {
     // <block type="procedures_defnoreturn" gap="16">

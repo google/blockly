@@ -128,7 +128,7 @@ exports.allDeveloperVariables = allDeveloperVariables;
  */
 const flyoutCategory = function(workspace) {
   deprecation.warn(
-    'Blockly.Variables.flyoutCategory', 'June 2022', 'June 2023');
+      'Blockly.Variables.flyoutCategory', 'June 2022', 'June 2023');
   let xmlList = [];
   const button = document.createElement('button');
   button.setAttribute('text', '%{BKY_NEW_VARIABLE}');
@@ -155,7 +155,7 @@ exports.flyoutCategory = flyoutCategory;
  */
 const flyoutCategoryBlocks = function(workspace) {
   deprecation.warn(
-    'Blockly.Variables.flyoutCategoryBlocks', 'June 2022', 'June 2023');
+      'Blockly.Variables.flyoutCategoryBlocks', 'June 2022', 'June 2023');
   const variableModelList = workspace.getVariablesOfType('');
 
   const xmlList = [];
@@ -209,7 +209,7 @@ exports.flyoutCategoryBlocks = flyoutCategoryBlocks;
  */
 const generateVariableFieldDom = function(variableModel) {
   deprecation.warn(
-    'Blockly.Variables.generateVariableFieldDom', 'June 2022', 'June 2023');
+      'Blockly.Variables.generateVariableFieldDom', 'June 2022', 'June 2023');
   /* Generates the following XML:
    * <field name="VAR" id="goKTKmYJ8DhVHpruv" variabletype="int">foo</field>
    */

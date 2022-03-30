@@ -69,7 +69,7 @@ exports.onCreateVariableButtonClick_Colour = colourButtonClickHandler;
  */
 const flyoutCategory = function(workspace) {
   deprecation.warn(
-    'Blockly.VariablesDynamic.flyoutCategory', 'June 2022', 'June 2023');
+      'Blockly.VariablesDynamic.flyoutCategory', 'June 2022', 'June 2023');
   let xmlList = [];
   let button = document.createElement('button');
   button.setAttribute('text', Msg['NEW_STRING_VARIABLE']);
@@ -107,7 +107,8 @@ exports.flyoutCategory = flyoutCategory;
  */
 const flyoutCategoryBlocks = function(workspace) {
   deprecation.warn(
-    'Blockly.VariablesDynamic.flyoutCategoryBlocks', 'June 2022', 'June 2023');
+      'Blockly.VariablesDynamic.flyoutCategoryBlocks', 'June 2022',
+      'June 2023');
   const variableModelList = workspace.getAllVariables();
 
   const xmlList = [];

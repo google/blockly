@@ -489,8 +489,10 @@ class WorkspaceSvg extends Workspace {
 
     const Variables = goog.module.get('Blockly.Variables');
     if (Variables) {
-      this.registerButtonCallback('CREATE_VARIABLE', (button) =>
-        Variables.createVariableButtonHandler(button.getTargetWorkspace()));
+      this.registerButtonCallback(
+          'CREATE_VARIABLE',
+          (button) => Variables.createVariableButtonHandler(
+              button.getTargetWorkspace()));
       this.registerToolboxCategoryCallback(
           Variables.CATEGORY_NAME, Variables.flyoutCategoryJson);
     }

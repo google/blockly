@@ -18,6 +18,7 @@
 goog.module('Blockly.VariablesDynamic');
 
 const Variables = goog.require('Blockly.Variables');
+const deprecation = goog.require('Blockly.utils.deprecation');
 const xml = goog.require('Blockly.utils.xml');
 const {Blocks} = goog.require('Blockly.blocks');
 const {Msg} = goog.require('Blockly.Msg');
@@ -63,9 +64,12 @@ exports.onCreateVariableButtonClick_Colour = colourButtonClickHandler;
  * variable category.
  * @param {!WorkspaceSvg} workspace The workspace containing variables.
  * @return {!Array<!Element>} Array of XML elements.
+ * @deprecated
  * @alias Blockly.VariablesDynamic.flyoutCategory
  */
 const flyoutCategory = function(workspace) {
+  deprecation.warn(
+    'Blockly.VariablesDynamic.flyoutCategory', 'June 2022', 'June 2023');
   let xmlList = [];
   let button = document.createElement('button');
   button.setAttribute('text', Msg['NEW_STRING_VARIABLE']);
@@ -98,9 +102,12 @@ exports.flyoutCategory = flyoutCategory;
  * Construct the blocks required by the flyout for the variable category.
  * @param {!Workspace} workspace The workspace containing variables.
  * @return {!Array<!Element>} Array of XML block elements.
+ * @deprecated
  * @alias Blockly.VariablesDynamic.flyoutCategoryBlocks
  */
 const flyoutCategoryBlocks = function(workspace) {
+  deprecation.warn(
+    'Blockly.VariablesDynamic.flyoutCategoryBlocks', 'June 2022', 'June 2023');
   const variableModelList = workspace.getAllVariables();
 
   const xmlList = [];

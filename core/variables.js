@@ -16,6 +16,7 @@
 goog.module('Blockly.Variables');
 
 const Xml = goog.require('Blockly.Xml');
+const deprecation = goog.require('Blockly.utils.deprecation');
 const dialog = goog.require('Blockly.dialog');
 const utilsXml = goog.require('Blockly.utils.xml');
 const {Blocks} = goog.require('Blockly.blocks');
@@ -122,9 +123,12 @@ exports.allDeveloperVariables = allDeveloperVariables;
  * variable category.
  * @param {!WorkspaceSvg} workspace The workspace containing variables.
  * @return {!Array<!Element>} Array of XML elements.
+ * @deprecated
  * @alias Blockly.Variables.flyoutCategory
  */
 const flyoutCategory = function(workspace) {
+  deprecation.warn(
+    'Blockly.Variables.flyoutCategory', 'June 2022', 'June 2023');
   let xmlList = [];
   const button = document.createElement('button');
   button.setAttribute('text', '%{BKY_NEW_VARIABLE}');
@@ -146,9 +150,12 @@ exports.flyoutCategory = flyoutCategory;
  * Construct the blocks required by the flyout for the variable category.
  * @param {!Workspace} workspace The workspace containing variables.
  * @return {!Array<!Element>} Array of XML block elements.
+ * @deprecated
  * @alias Blockly.Variables.flyoutCategoryBlocks
  */
 const flyoutCategoryBlocks = function(workspace) {
+  deprecation.warn(
+    'Blockly.Variables.flyoutCategoryBlocks', 'June 2022', 'June 2023');
   const variableModelList = workspace.getVariablesOfType('');
 
   const xmlList = [];
@@ -197,9 +204,12 @@ exports.flyoutCategoryBlocks = flyoutCategoryBlocks;
  * @param {!VariableModel} variableModel The variable model to
  *     represent.
  * @return {?Element} The generated DOM.
+ * @deprecated
  * @alias Blockly.Variables.generateVariableFieldDom
  */
 const generateVariableFieldDom = function(variableModel) {
+  deprecation.warn(
+    'Blockly.Variables.generateVariableFieldDom', 'June 2022', 'June 2023');
   /* Generates the following XML:
    * <field name="VAR" id="goKTKmYJ8DhVHpruv" variabletype="int">foo</field>
    */

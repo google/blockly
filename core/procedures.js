@@ -17,6 +17,7 @@ goog.module('Blockly.Procedures');
 
 const Variables = goog.require('Blockly.Variables');
 const Xml = goog.require('Blockly.Xml');
+const deprecation = goog.require('Blockly.utils.deprecation');
 const eventUtils = goog.require('Blockly.Events.utils');
 const utilsXml = goog.require('Blockly.utils.xml');
 /* eslint-disable-next-line no-unused-vars */
@@ -212,9 +213,12 @@ exports.rename = rename;
  * Construct the blocks required by the flyout for the procedure category.
  * @param {!WorkspaceSvg} workspace The workspace containing procedures.
  * @return {!Array<!Element>} Array of XML block elements.
+ * @deprecated
  * @alias Blockly.Procedures.flyoutCategory
  */
 const flyoutCategory = function(workspace) {
+  deprecation.warn(
+    'Blockly.Procedures.flyoutCategory', 'June 2022', 'June 2023');
   const xmlList = [];
   if (Blocks['procedures_defnoreturn']) {
     // <block type="procedures_defnoreturn" gap="16">

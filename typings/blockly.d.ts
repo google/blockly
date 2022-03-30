@@ -2584,7 +2584,7 @@ declare module "core/interfaces/i_autohideable" {
      * @interface
      * @alias Blockly.IAutoHideable
      */
-    export function IAutoHideable(): void;
+    export class IAutoHideable {}
 }
 declare module "core/interfaces/i_deletable" {
     /**
@@ -2592,7 +2592,7 @@ declare module "core/interfaces/i_deletable" {
      * @interface
      * @alias Blockly.IDeletable
      */
-    export function IDeletable(): void;
+    export class IDeletable {}
 }
 declare module "core/interfaces/i_draggable" {
     /**
@@ -2601,7 +2601,7 @@ declare module "core/interfaces/i_draggable" {
      * @interface
      * @alias Blockly.IDraggable
      */
-    export function IDraggable(): void;
+    export class IDraggable {}
 }
 declare module "core/interfaces/i_drag_target" {
     /**
@@ -2611,7 +2611,7 @@ declare module "core/interfaces/i_drag_target" {
      * @interface
      * @alias Blockly.IDragTarget
      */
-    export function IDragTarget(): void;
+    export class IDragTarget {}
 }
 declare module "core/interfaces/i_delete_area" {
     /**
@@ -2621,7 +2621,7 @@ declare module "core/interfaces/i_delete_area" {
      * @interface
      * @alias Blockly.IDeleteArea
      */
-    export function IDeleteArea(): void;
+    export class IDeleteArea {}
 }
 declare module "core/interfaces/i_registrable" {
     /**
@@ -2629,7 +2629,7 @@ declare module "core/interfaces/i_registrable" {
      * @interface
      * @alias Blockly.IRegistrable
      */
-    export function IRegistrable(): void;
+    export class IRegistrable {}
 }
 declare module "core/interfaces/i_flyout" {
     export class IFlyout {
@@ -2790,7 +2790,7 @@ declare module "core/interfaces/i_metrics_manager" {
      * @interface
      * @alias Blockly.IMetricsManager
      */
-    export function IMetricsManager(): void;
+    export class IMetricsManager {}
 }
 declare module "core/interfaces/i_toolbox_item" {
     /**
@@ -2798,7 +2798,7 @@ declare module "core/interfaces/i_toolbox_item" {
      * @interface
      * @alias Blockly.IToolboxItem
      */
-    export function IToolboxItem(): void;
+    export class IToolboxItem {}
 }
 declare module "core/interfaces/i_toolbox" {
     /**
@@ -2807,7 +2807,7 @@ declare module "core/interfaces/i_toolbox" {
      * @interface
      * @alias Blockly.IToolbox
      */
-    export function IToolbox(): void;
+    export class IToolbox {}
 }
 declare module "core/metrics_manager" {
     /**
@@ -3053,7 +3053,7 @@ declare module "core/interfaces/i_positionable" {
      * @interface
      * @alias Blockly.IPositionable
      */
-    export function IPositionable(): void;
+    export class IPositionable {}
 }
 declare module "core/component_manager" {
     /**
@@ -3229,7 +3229,7 @@ declare module "core/interfaces/i_contextmenu" {
      * @interface
      * @alias Blockly.IContextMenu
      */
-    export function IContextMenu(): void;
+    export class IContextMenu {}
 }
 declare module "core/interfaces/i_bubble" {
     /**
@@ -3239,7 +3239,7 @@ declare module "core/interfaces/i_bubble" {
      * @extends {IContextMenu}
      * @alias Blockly.IBubble
      */
-    export function IBubble(): void;
+    export class IBubble {}
 }
 declare module "core/css" {
     /**
@@ -3274,7 +3274,7 @@ declare module "core/interfaces/i_bounded_element" {
      * @interface
      * @alias Blockly.IBoundedElement
      */
-    export function IBoundedElement(): void;
+    export class IBoundedElement {}
 }
 declare module "core/interfaces/i_movable" {
     /**
@@ -3282,7 +3282,7 @@ declare module "core/interfaces/i_movable" {
      * @interface
      * @alias Blockly.IMovable
      */
-    export function IMovable(): void;
+    export class IMovable {}
 }
 declare module "core/interfaces/i_selectable" {
     export class ISelectable {
@@ -3298,7 +3298,7 @@ declare module "core/interfaces/i_copyable" {
      * @interface
      * @alias Blockly.ICopyable
      */
-    export function ICopyable(): void;
+    export class ICopyable {}
     export namespace ICopyable {
         /**
          * Copy Metadata.
@@ -5521,7 +5521,7 @@ declare module "core/interfaces/i_connection_checker" {
      * @interface
      * @alias Blockly.IConnectionChecker
      */
-    export function IConnectionChecker(): void;
+    export class IConnectionChecker {}
 }
 declare module "core/connection_db" {
     /**
@@ -8157,7 +8157,7 @@ declare module "core/interfaces/i_ast_node_location" {
      * @interface
      * @alias Blockly.IASTNodeLocation
      */
-    export function IASTNodeLocation(): void;
+    export class IASTNodeLocation {}
 }
 declare module "core/interfaces/i_ast_node_location_svg" {
     /**
@@ -8166,7 +8166,7 @@ declare module "core/interfaces/i_ast_node_location_svg" {
      * @extends {IASTNodeLocation}
      * @alias Blockly.IASTNodeLocationSvg
      */
-    export function IASTNodeLocationSvg(): void;
+    export class IASTNodeLocationSvg {}
 }
 declare module "core/interfaces/i_ast_node_location_with_block" {
     /**
@@ -8175,7 +8175,7 @@ declare module "core/interfaces/i_ast_node_location_with_block" {
      * @extends {IASTNodeLocation}
      * @alias Blockly.IASTNodeLocationWithBlock
      */
-    export function IASTNodeLocationWithBlock(): void;
+    export class IASTNodeLocationWithBlock {}
 }
 declare module "core/utils/keycodes" {
     /**
@@ -8495,7 +8495,7 @@ declare module "core/interfaces/i_keyboard_accessible" {
      * @interface
      * @alias Blockly.IKeyboardAccessible
      */
-    export function IKeyboardAccessible(): void;
+    export class IKeyboardAccessible {}
 }
 declare module "core/interfaces/i_registrable_field" {
     /**
@@ -13854,7 +13854,7 @@ declare module "core/blockly_options" {
      * @interface
      * @alias Blockly.BlocklyOptions
      */
-    export function BlocklyOptions(): void;
+    export class BlocklyOptions {}
 }
 declare module "core/theme/classic" {
     /**
@@ -16788,6 +16788,7 @@ declare module "core/workspace_svg" {
     import { MarkerManager } from "core/marker_manager";
     import { ComponentManager } from "core/component_manager";
     import { Marker } from "core/keyboard_nav/marker";
+    import { Metrics } from "core/utils/metrics";
     import { Cursor } from "core/keyboard_nav/cursor";
     import { Renderer } from "core/renderers/common/renderer";
     import { Theme } from "core/theme";
@@ -18489,7 +18490,7 @@ declare module "core/interfaces/i_selectable_toolbox_item" {
      * @interface
      * @alias Blockly.ISelectableToolboxItem
      */
-    export function ISelectableToolboxItem(): void;
+    export class ISelectableToolboxItem {}
 }
 declare module "core/interfaces/i_collapsible_toolbox_item" {
     /**
@@ -18498,7 +18499,7 @@ declare module "core/interfaces/i_collapsible_toolbox_item" {
      * @interface
      * @alias Blockly.ICollapsibleToolboxItem
      */
-    export function ICollapsibleToolboxItem(): void;
+    export class ICollapsibleToolboxItem {}
 }
 declare module "core/toolbox/toolbox_item" {
     /**
@@ -25158,7 +25159,7 @@ declare module "core/interfaces/i_styleable" {
      * @interface
      * @alias Blockly.IStyleable
      */
-    export function IStyleable(): void;
+    export class IStyleable {}
 }
 declare module "core/toolbox/toolbox" {
     /**

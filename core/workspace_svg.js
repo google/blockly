@@ -500,9 +500,9 @@ class WorkspaceSvg extends Workspace {
     }
 
     const Procedures = goog.module.get('Blockly.Procedures');
-    if (Procedures && Procedures.flyoutCategory) {
+    if (Procedures && Procedures.flyoutCategoryJson) {
       this.registerToolboxCategoryCallback(
-          Procedures.CATEGORY_NAME, Procedures.flyoutCategory);
+          Procedures.CATEGORY_NAME, Procedures.flyoutCategoryJson);
       this.addChangeListener(Procedures.mutatorOpenListener);
     }
 

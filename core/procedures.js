@@ -295,6 +295,67 @@ const flyoutCategory = function(workspace) {
 exports.flyoutCategory = flyoutCategory;
 
 /**
+ * Construct the blocks required by the flyout for the procedure category.
+ * @param {!WorkspaceSvg} workspace The workspace containing procedures.
+ * @return {!Array<!Object>} Array of objects defining the contents of the
+ *     category.
+ */
+const flyoutCategoryJson = function(workspace) {
+  const categoryList = [];
+  if (Blocks['procedures_defnoreturn']) {
+    categoryList.push({
+      'kind': 'block',
+      'type': 'procedures_defnoreturn',
+      'gap': 16,
+      'fields': {
+        'NAME': Msg['PROCEDURES_DEFNORETURN_PROCEDURE'],
+      },
+    });
+  }
+  if (Blocks['procedures_defreturn']) {
+    categoryList.push({
+      'kind': 'block',
+      'type': 'procedures_defreturn',
+      'gap': 16,
+      'fields': {
+        'NAME': Msg['PROCEDURES_DEFRETURN_PROCEDURE'],
+      },
+    });
+  }
+  if (Blocks['procedures_ifreturn']) {
+    categoryList.push({
+      'kind': 'block',
+      'type': 'procedures_ifreturn',
+      'gap': 16,
+    });
+  }
+  if (categoryList.length) {
+    categoryList[categoryList.length - 1]['gap'] = 24;
+  }
+
+  const addCallBlocks = (procedureInfos, blockType) => {
+    for (const [name, args] of procedureInfos) {
+      categoryList.push({
+        'kind': 'block',
+        'type': blockType,
+        'gap': 16,
+        'extraState': {
+          'name': name,
+          'params': args,
+        },
+      });
+    }
+  };
+
+  const [noReturnInfo, returnInfo] = allProcedures(workspace);
+  addCallBlocks(noReturnInfo, 'procedures_callnoreturn');
+  addCallBlocks(returnInfo, 'procedures_callreturn');
+
+  return categoryList;
+};
+exports.flyoutCategoryJson = flyoutCategoryJson;
+
+/**
  * Updates the procedure mutator's flyout so that the arg block is not a
  * duplicate of another arg.
  * @param {!WorkspaceSvg} workspace The procedure mutator's workspace. This

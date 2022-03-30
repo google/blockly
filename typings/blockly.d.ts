@@ -7194,7 +7194,7 @@ declare module "core/tooltip" {
      * eventually unwinds to a string.
      */
     export type TipInfo = string | {
-        tooltip;
+        tooltip: any;
     } | (() => (string | Function));
     /**
      * A type which can define a tooltip.

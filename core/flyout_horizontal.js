@@ -28,7 +28,6 @@ const {Options} = goog.requireType('Blockly.Options');
 const {Rect} = goog.require('Blockly.utils.Rect');
 const {Scrollbar} = goog.require('Blockly.Scrollbar');
 
-
 /**
  * Class for a flyout.
  * @extends {Flyout}
@@ -42,6 +41,12 @@ class HorizontalFlyout extends Flyout {
   constructor(workspaceOptions) {
     super(workspaceOptions);
     this.horizontalLayout = true;
+    this.contentWidth_ = 0;
+    window.addEventListener('resize', () => {
+      if (this.RTL) {
+        this.reflowInternal_();
+      }
+    });
   }
 
   /**
@@ -283,6 +288,7 @@ class HorizontalFlyout extends Flyout {
         cursorX += (item.button.width + gaps[i]);
       }
     }
+    this.contentWidth_ = cursorX - (gaps.length ? gaps[gaps.length - 1] : 0);
   }
 
   /**
@@ -345,26 +351,55 @@ class HorizontalFlyout extends Flyout {
    */
   reflowInternal_() {
     this.workspace_.scale = this.getFlyoutScale();
-    let flyoutHeight = 0;
     const blocks = this.workspace_.getTopBlocks(false);
-    for (let i = 0, block; (block = blocks[i]); i++) {
-      flyoutHeight = Math.max(flyoutHeight, block.getHeightWidth().height);
-    }
     const buttons = this.buttons_;
-    for (let i = 0, button; (button = buttons[i]); i++) {
-      flyoutHeight = Math.max(flyoutHeight, button.height);
-    }
-    flyoutHeight += this.MARGIN * 1.5;
-    flyoutHeight *= this.workspace_.scale;
-    flyoutHeight += Scrollbar.scrollbarThickness;
 
-    if (this.height_ !== flyoutHeight) {
-      for (let i = 0, block; (block = blocks[i]); i++) {
+    let deltaX = 0;
+    if (this.contentWidth_ && this.RTL) {
+      const workspaceWidth =
+          this.targetWorkspace.getMetricsManager().getViewMetrics().width;
+      // Because RTL reverses the order of content, the first block/button is
+      // actually the last one in the list.
+      const firstBlock = blocks.length ? blocks[blocks.length - 1] : null;
+      let contentStart = firstBlock ? firstBlock.getBoundingRectangle().left :
+                                      Number.MAX_SAFE_INTEGER;
+      const firstButton = buttons.length ? buttons[buttons.length - 1] : null;
+      contentStart = Math.min(
+          contentStart,
+          firstButton ? firstButton.getPosition().x : Number.MAX_SAFE_INTEGER);
+
+      const xOffset = workspaceWidth - this.contentWidth_;
+      if (this.contentWidth_ < workspaceWidth) {
+        deltaX = Math.floor(xOffset - contentStart + this.MARGIN) - 1;
+      } else {
+        deltaX = this.contentWidth_ - workspaceWidth - contentStart + xOffset +
+            this.MARGIN;
+      }
+    }
+
+    let flyoutHeight = 0;
+    for (const block of blocks) {
+      flyoutHeight = Math.max(flyoutHeight, block.getHeightWidth().height);
+      if (deltaX) {
+        block.moveBy(deltaX, 0);
         if (this.rectMap_.has(block)) {
           this.moveRectToBlock_(this.rectMap_.get(block), block);
         }
       }
+    }
 
+    for (const button of buttons) {
+      flyoutHeight = Math.max(flyoutHeight, button.height);
+      if (deltaX) {
+        button.moveTo(button.getPosition().x + deltaX, button.getPosition().y);
+      }
+    }
+
+    flyoutHeight += this.MARGIN * 1.5;
+    flyoutHeight *= this.workspace_.scale;
+    flyoutHeight += Scrollbar.scrollbarThickness;
+
+    if (this.height_ != flyoutHeight) {
       if (this.targetWorkspace.toolboxPosition === this.toolboxPosition_ &&
           this.toolboxPosition_ === toolbox.Position.TOP &&
           !this.targetWorkspace.getToolbox()) {

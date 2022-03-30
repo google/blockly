@@ -243,7 +243,7 @@ exports.flyoutCategoryJson = flyoutCategoryJson;
  * @return {!Array<!Object>} Array of JSON block elements.
  */
 const flyoutCategoryBlocksJson = function(workspace) {
-  let variableModels = workspace.getVariablesOfType('');
+  const variableModels = workspace.getVariablesOfType('');
   if (!variableModels.length) return [];
 
   const categoryList = [];
@@ -279,7 +279,7 @@ const flyoutCategoryBlocksJson = function(workspace) {
     });
   }
   if (Blocks['variables_get']) {
-    variableModels = variableModels.sort(VariableModel.compareByName);
+    variableModels.sort(VariableModel.compareByName);
     for (const model of variableModels) {
       categoryList.push({
         'kind': 'block',

@@ -233,7 +233,8 @@ const flyoutCategoryJson = function(workspace) {
       'text': '%{BKY_NEW_VARIABLE}',
       'callbackKey': 'CREATE_VARIABLE',
     },
-    ...flyoutCategoryBlocksJson(workspace)];
+    ...flyoutCategoryBlocksJson(workspace),
+  ];
 };
 exports.flyoutCategoryJson = flyoutCategoryJson;
 

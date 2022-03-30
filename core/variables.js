@@ -232,11 +232,6 @@ exports.generateVariableFieldDom = generateVariableFieldDom;
  * @package
  */
 const flyoutCategoryJson = function(workspace) {
-  // TODO: Do we need to register this every time flyoutCategory is called?
-  workspace.registerButtonCallback('CREATE_VARIABLE', function(button) {
-    createVariableButtonHandler(button.getTargetWorkspace());
-  });
-
   return [
     {
       'kind': 'button',

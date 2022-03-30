@@ -488,19 +488,30 @@ class WorkspaceSvg extends Workspace {
     this.flyoutButtonCallbacks_ = Object.create(null);
 
     const Variables = goog.module.get('Blockly.Variables');
-    if (Variables && Variables.flyoutCategoryJson) {
+    if (Variables) {
+      this.registerButtonCallback('CREATE_VARIABLE', (button) =>
+        Variables.createVariableButtonHandler(button.getTargetWorkspace()));
       this.registerToolboxCategoryCallback(
           Variables.CATEGORY_NAME, Variables.flyoutCategoryJson);
     }
 
     const VariablesDynamic = goog.module.get('Blockly.VariablesDynamic');
-    if (VariablesDynamic && VariablesDynamic.flyoutCategoryJson) {
+    if (VariablesDynamic) {
+      this.registerButtonCallback(
+          'CREATE_VARIABLE_STRING',
+          VariablesDynamic.onCreateVariableButtonClick_String);
+      this.registerButtonCallback(
+          'CREATE_VARIABLE_NUMBER',
+          VariablesDynamic.onCreateVariableButtonClick_Number);
+      this.registerButtonCallback(
+          'CREATE_VARIABLE_COLOUR',
+          VariablesDynamic.onCreateVariableButtonClick_Colour);
       this.registerToolboxCategoryCallback(
           VariablesDynamic.CATEGORY_NAME, VariablesDynamic.flyoutCategoryJson);
     }
 
     const Procedures = goog.module.get('Blockly.Procedures');
-    if (Procedures && Procedures.flyoutCategoryJson) {
+    if (Procedures) {
       this.registerToolboxCategoryCallback(
           Procedures.CATEGORY_NAME, Procedures.flyoutCategoryJson);
       this.addChangeListener(Procedures.mutatorOpenListener);

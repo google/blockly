@@ -144,14 +144,6 @@ exports.flyoutCategoryBlocks = flyoutCategoryBlocks;
  * @package
  */
 const flyoutCategoryJson = function(workspace) {
-  // TODO: Again, do we need to register these every time?
-  workspace.registerButtonCallback(
-      'CREATE_VARIABLE_STRING', stringButtonClickHandler);
-  workspace.registerButtonCallback(
-      'CREATE_VARIABLE_NUMBER', numberButtonClickHandler);
-  workspace.registerButtonCallback(
-      'CREATE_VARIABLE_COLOUR', colourButtonClickHandler);
-
   return [
     {
       'kind': 'button',

@@ -364,10 +364,11 @@ class Mutator extends Icon {
       this.rootBlock_.moveBy(x, margin);
       // Save the initial connections, then listen for further changes.
       if (this.block_.saveConnections) {
-        this.block_.saveConnections(this.rootBlock_);
+        const thisRootBlock = this.rootBlock_;
+        this.block_.saveConnections(thisRootBlock);
         this.sourceListener_ = () => {
           if (this.block_) {
-            this.block_.saveConnections(this.rootBlock_);
+            this.block_.saveConnections(thisRootBlock);
           }
         };
         this.block_.workspace.addChangeListener(this.sourceListener_);

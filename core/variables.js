@@ -193,6 +193,27 @@ const flyoutCategoryBlocks = function(workspace) {
 exports.flyoutCategoryBlocks = flyoutCategoryBlocks;
 
 /**
+ * Generate DOM objects representing a variable field.
+ * @param {!VariableModel} variableModel The variable model to
+ *     represent.
+ * @return {?Element} The generated DOM.
+ * @alias Blockly.Variables.generateVariableFieldDom
+ */
+const generateVariableFieldDom = function(variableModel) {
+  /* Generates the following XML:
+   * <field name="VAR" id="goKTKmYJ8DhVHpruv" variabletype="int">foo</field>
+   */
+  const field = utilsXml.createElement('field');
+  field.setAttribute('name', 'VAR');
+  field.setAttribute('id', variableModel.getId());
+  field.setAttribute('variabletype', variableModel.type);
+  const name = utilsXml.createTextNode(variableModel.name);
+  field.appendChild(name);
+  return field;
+};
+exports.generateVariableFieldDom = generateVariableFieldDom;
+
+/**
  * @alias Blockly.Variables.VAR_LETTER_OPTIONS
  */
 const VAR_LETTER_OPTIONS = 'ijkmnopqrstuvwxyzabcdefgh';  // No 'l'.
@@ -425,27 +446,6 @@ const nameUsedWithAnyType = function(name, workspace) {
   return null;
 };
 exports.nameUsedWithAnyType = nameUsedWithAnyType;
-
-/**
- * Generate DOM objects representing a variable field.
- * @param {!VariableModel} variableModel The variable model to
- *     represent.
- * @return {?Element} The generated DOM.
- * @alias Blockly.Variables.generateVariableFieldDom
- */
-const generateVariableFieldDom = function(variableModel) {
-  /* Generates the following XML:
-   * <field name="VAR" id="goKTKmYJ8DhVHpruv" variabletype="int">foo</field>
-   */
-  const field = utilsXml.createElement('field');
-  field.setAttribute('name', 'VAR');
-  field.setAttribute('id', variableModel.getId());
-  field.setAttribute('variabletype', variableModel.type);
-  const name = utilsXml.createTextNode(variableModel.name);
-  field.appendChild(name);
-  return field;
-};
-exports.generateVariableFieldDom = generateVariableFieldDom;
 
 /**
  * Helper function to look up or create a variable on the given workspace.

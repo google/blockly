@@ -214,6 +214,101 @@ const generateVariableFieldDom = function(variableModel) {
 exports.generateVariableFieldDom = generateVariableFieldDom;
 
 /**
+ * Construct the elements (blocks and button) required by the flyout for the
+ * variable category.
+ * @param {!WorkspaceSvg} workspace The workspace containing variables.
+ * @return {!Array<!Object>} Array of objects defining the contents of the
+ *     category.
+ * @package
+ */
+const flyoutCategoryJson = function(workspace) {
+  // TODO: Do we need to register this every time flyoutCategory is called?
+  workspace.registerButtonCallback('CREATE_VARIABLE', function(button) {
+    createVariableButtonHandler(button.getTargetWorkspace());
+  });
+
+  return [
+    {
+      'kind': 'button',
+      'text': '%{BKY_NEW_VARIABLE}',
+      'callbackKey': 'CREATE_VARIABLE',
+    },
+    ...flyoutCategoryBlocksJson(workspace)];
+};
+exports.flyoutCategoryJson = flyoutCategoryJson;
+
+/**
+ * Construct the blocks required by the flyout for the variable category.
+ * @param {!Workspace} workspace The workspace containing variables.
+ * @return {!Array<!Object>} Array of JSON block elements.
+ */
+const flyoutCategoryBlocksJson = function(workspace) {
+  let variableModels = workspace.getVariablesOfType('');
+  if (!variableModels.length) return [];
+
+  const categoryList = [];
+  const latestVar = variableModels[variableModels.length - 1];
+  if (Blocks['variables_set']) {
+    categoryList.push({
+      'kind': 'block',
+      'type': 'variables_set',
+      'gap': Blocks['math_change'] ? 8 : 24,
+      'fields': {
+        'VAR': generateVariableFieldJson(latestVar),
+      },
+    });
+  }
+  if (Blocks['math_change']) {
+    categoryList.push({
+      'kind': 'block',
+      'type': 'math_change',
+      'gap': Blocks['variables_get'] ? 20 : 8,
+      'inputs': {
+        'DELTA': {
+          'shadow': {
+            'type': 'math_number',
+            'fields': {
+              'NUM': 1,
+            },
+          },
+        },
+      },
+      'fields': {
+        'VAR': generateVariableFieldJson(latestVar),
+      },
+    });
+  }
+  if (Blocks['variables_get']) {
+    variableModels = variableModels.sort(VariableModel.compareByName);
+    for (const model of variableModels) {
+      categoryList.push({
+        'kind': 'block',
+        'type': 'variables_get',
+        'gap': 8,
+        'fields': {
+          'VAR': generateVariableFieldJson(model),
+        },
+      });
+    }
+  }
+  return categoryList;
+};
+
+/**
+ * Generate objects representing a variable field.
+ * @param {!VariableModel} variableModel The variable model to
+ *     represent.
+ * @return {!Object} The generated object.
+ */
+const generateVariableFieldJson = function(variableModel) {
+  return {
+    'id': variableModel.getId(),
+    'variabletype': variableModel.type,
+    'name': variableModel.name,
+  };
+};
+
+/**
  * @alias Blockly.Variables.VAR_LETTER_OPTIONS
  */
 const VAR_LETTER_OPTIONS = 'ijkmnopqrstuvwxyzabcdefgh';  // No 'l'.

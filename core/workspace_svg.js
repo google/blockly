@@ -488,9 +488,9 @@ class WorkspaceSvg extends Workspace {
     this.flyoutButtonCallbacks_ = Object.create(null);
 
     const Variables = goog.module.get('Blockly.Variables');
-    if (Variables && Variables.flyoutCategory) {
+    if (Variables && Variables.flyoutCategoryJson) {
       this.registerToolboxCategoryCallback(
-          Variables.CATEGORY_NAME, Variables.flyoutCategory);
+          Variables.CATEGORY_NAME, Variables.flyoutCategoryJson);
     }
 
     const VariablesDynamic = goog.module.get('Blockly.VariablesDynamic');

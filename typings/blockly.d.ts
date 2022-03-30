@@ -3220,7 +3220,7 @@ declare module "core/component_manager" {
          * @return {string} The name.
          * @override
          */
-        override toString(): string;
+        toString(): string;
     }
     export {};
 }

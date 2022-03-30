@@ -127,3 +127,78 @@ const flyoutCategoryBlocks = function(workspace) {
   return xmlList;
 };
 exports.flyoutCategoryBlocks = flyoutCategoryBlocks;
+
+/**
+ * Construct the elements (blocks and button) required by the flyout for the
+ * variable category.
+ * @param {!WorkspaceSvg} workspace The workspace containing variables.
+ * @return {!Array<!Object>} Array of objects defining the contents of the
+ *     category.
+ * @package
+ */
+const flyoutCategoryJson = function(workspace) {
+  // TODO: Again, do we need to register these every time?
+  workspace.registerButtonCallback(
+      'CREATE_VARIABLE_STRING', stringButtonClickHandler);
+  workspace.registerButtonCallback(
+      'CREATE_VARIABLE_NUMBER', numberButtonClickHandler);
+  workspace.registerButtonCallback(
+      'CREATE_VARIABLE_COLOUR', colourButtonClickHandler);
+
+  return [
+    {
+      'kind': 'button',
+      'text': '%{BKY_NEW_STRING_VARIABLE}',
+      'callbackKey': 'CREATE_VARIABLE_STRING',
+    },
+    {
+      'kind': 'button',
+      'text': '%{BKY_NEW_NUMBER_VARIABLE}',
+      'callbackKey': 'CREATE_VARIABLE_NUMBER',
+    },
+    {
+      'kind': 'button',
+      'text': '%{BKY_NEW_COLOUR_VARIABLE}',
+      'callbackKey': 'CREATE_VARIABLE_COLOUR',
+    },
+    ...flyoutCategoryBlocksJson(workspace),
+  ];
+};
+exports.flyoutCategoryJson = flyoutCategoryJson;
+
+/**
+ * Construct the blocks required by the flyout for the variable category.
+ * @param {!Workspace} workspace The workspace containing variables.
+ * @return {!Array<!Element>} Array of XML block elements.
+ */
+const flyoutCategoryBlocksJson = function(workspace) {
+  const variableModels = workspace.getAllVariables();
+  if (!variableModels.length) return [];
+
+  const categoryList = [];
+  if (Blocks['variables_set_dynamic']) {
+    const latestVar = variableModels[variableModels.length - 1];
+    categoryList.push({
+      'kind': 'block',
+      'type': 'variables_set_dynamic',
+      'gap': 24,
+      'fields': {
+        'VAR': Variables.generateVariableFieldJson(latestVar),
+      },
+    });
+  }
+  if (Blocks['variables_get_dynamic']) {
+    variableModels.sort(VariableModel.compareByName);
+    for (const model of variableModels) {
+      categoryList.push({
+        'kind': 'block',
+        'type': 'variables_get_dynamic',
+        'gap': 8,
+        'fields': {
+          'VAR': Variables.generateVariableFieldJson(model),
+        },
+      });
+    }
+  }
+  return categoryList;
+};

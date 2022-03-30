@@ -494,9 +494,9 @@ class WorkspaceSvg extends Workspace {
     }
 
     const VariablesDynamic = goog.module.get('Blockly.VariablesDynamic');
-    if (VariablesDynamic && VariablesDynamic.flyoutCategory) {
+    if (VariablesDynamic && VariablesDynamic.flyoutCategoryJson) {
       this.registerToolboxCategoryCallback(
-          VariablesDynamic.CATEGORY_NAME, VariablesDynamic.flyoutCategory);
+          VariablesDynamic.CATEGORY_NAME, VariablesDynamic.flyoutCategoryJson);
     }
 
     const Procedures = goog.module.get('Blockly.Procedures');

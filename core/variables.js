@@ -299,6 +299,7 @@ const flyoutCategoryBlocksJson = function(workspace) {
  * @param {!VariableModel} variableModel The variable model to
  *     represent.
  * @return {!Object} The generated object.
+ * @package
  */
 const generateVariableFieldJson = function(variableModel) {
   return {
@@ -307,6 +308,7 @@ const generateVariableFieldJson = function(variableModel) {
     'name': variableModel.name,
   };
 };
+exports.generateVariableFieldJson = generateVariableFieldJson;
 
 /**
  * @alias Blockly.Variables.VAR_LETTER_OPTIONS

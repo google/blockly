@@ -18361,14 +18361,13 @@ declare module "core/block_svg" {
 }
 declare module "core/serialization/blocks" {
     /**
-     * -state: (*|undefined),
-     *     icons: (!Object<string, *>|undefined),
-     *     fields: (!Object<string, *>|undefined),
-     *     inputs: (!Object<string, !ConnectionState>|undefined),
-     *     next: (!ConnectionState|undefined)
-     * }}
+     * Represents the state of a connection.
      */
-    export type extra = {
+    export type ConnectionState = {
+        shadow: (any | undefined);
+        block: (any | undefined);
+    };
+    export type State = {
         type: string;
         id: (string | undefined);
         x: (number | undefined);
@@ -18377,23 +18376,18 @@ declare module "core/serialization/blocks" {
         enabled: (boolean | undefined);
         inline: (boolean | undefined);
         data: (string | undefined);
+        'extra-state': (any | undefined);
+        icons: ({
+            [x: string]: any;
+        } | undefined);
+        fields: ({
+            [x: string]: any;
+        } | undefined);
+        inputs: ({
+            [x: string]: ConnectionState;
+        } | undefined);
+        next: (ConnectionState | undefined);
     };
-    /**
-     * Represents the state of a connection.
-     */
-    export type ConnectionState = {
-        shadow: (any | undefined);
-        block: (any | undefined);
-    };
-    /**
-     * Represents the state of a connection.
-     * @typedef {{
-     *   shadow: (!State|undefined),
-     *   block: (!State|undefined)
-     * }}
-     * @alias Blockly.serialization.blocks.ConnectionState
-     */
-    export let ConnectionState: any;
     /**
      * Represents the state of a given block.
      * @typedef {{
@@ -18405,7 +18399,7 @@ declare module "core/serialization/blocks" {
      *     enabled: (boolean|undefined),
      *     inline: (boolean|undefined),
      *     data: (string|undefined),
-     *     extra-state: (*|undefined),
+     *     'extra-state': (*|undefined),
      *     icons: (!Object<string, *>|undefined),
      *     fields: (!Object<string, *>|undefined),
      *     inputs: (!Object<string, !ConnectionState>|undefined),
@@ -18440,7 +18434,7 @@ declare module "core/serialization/blocks" {
         addInputBlocks: (boolean | undefined);
         addNextBlocks: (boolean | undefined);
         doFullSerialization: (boolean | undefined);
-    } | undefined): any | null;
+    } | undefined): State | null;
     /**
      * Loads the block represented by the given state into the given workspace.
      * @param {!State} state The state of a block to deserialize into the workspace.
@@ -18451,7 +18445,7 @@ declare module "core/serialization/blocks" {
      * @return {!Block} The block that was just loaded.
      * @alias Blockly.serialization.blocks.append
      */
-    export function append(state: any, workspace: Workspace, { recordUndo }?: {
+    export function append(state: State, workspace: Workspace, { recordUndo }?: {
         recordUndo: (boolean | undefined);
     } | undefined): Block;
     /**
@@ -18474,7 +18468,7 @@ declare module "core/serialization/blocks" {
      * @alias Blockly.serialization.blocks.appendInternal
      * @package
      */
-    export function appendInternal(state: any, workspace: Workspace, { parentConnection, isShadow, recordUndo, }?: {
+    export function appendInternal(state: State, workspace: Workspace, { parentConnection, isShadow, recordUndo, }?: {
         parentConnection: (Connection | undefined);
         isShadow: (boolean | undefined);
         recordUndo: (boolean | undefined);
@@ -18951,14 +18945,10 @@ declare module "core/toolbox/separator" {
 }
 declare module "core/utils/toolbox" {
     /**
-     * -state: (*|undefined),
-     *            icons: (!Object<string, *>|undefined),
-     *            fields: (!Object<string, *>|undefined),
-     *            inputs: (!Object<string, !ConnectionState>|undefined),
-     *            next: (!ConnectionState|undefined)
-     *          }}
+     * The information needed to create a block in the toolbox.
+     * Note that disabled has a different type for backwards compatibility.
      */
-    export type extra = {
+     export type BlockInfo = {
         kind: string;
         blockxml: (string | Node | undefined);
         type: (string | undefined);
@@ -18971,6 +18961,17 @@ declare module "core/utils/toolbox" {
         collapsed: (boolean | undefined);
         inline: (boolean | undefined);
         data: (string | undefined);
+        'extra-state': (any | undefined);
+        icons: ({
+            [x: string]: any;
+        } | undefined);
+        fields: ({
+            [x: string]: any;
+        } | undefined);
+        inputs: ({
+            [x: string]: ConnectionState;
+        } | undefined);
+        next: (ConnectionState | undefined);
     };
     /**
      * The information needed to create a block in the toolbox.
@@ -18988,7 +18989,7 @@ declare module "core/utils/toolbox" {
      *            collapsed: (boolean|undefined),
      *            inline: (boolean|undefined),
      *            data: (string|undefined),
-     *            extra-state: (*|undefined),
+     *            'extra-state': (*|undefined),
      *            icons: (!Object<string, *>|undefined),
      *            fields: (!Object<string, *>|undefined),
      *            inputs: (!Object<string, !ConnectionState>|undefined),
@@ -19143,7 +19144,7 @@ declare module "core/utils/toolbox" {
     /**
      * All the different types that can be displayed in a flyout.
      */
-    export type FlyoutItemInfo = any | SeparatorInfo | ButtonInfo | LabelInfo | DynamicCategoryInfo;
+    export type FlyoutItemInfo = BlockInfo | SeparatorInfo | ButtonInfo | LabelInfo | DynamicCategoryInfo;
     /**
      * All the different types that can be displayed in a flyout.
      * @typedef {BlockInfo|
@@ -19258,6 +19259,7 @@ declare module "core/utils/toolbox" {
      * @alias Blockly.utils.toolbox.parseToolboxTree
      */
     export function parseToolboxTree(toolboxDef: (Node | (string | null)) | null): Node | null;
+    import { ConnectionState } from "core/serialization/blocks";
     import { ToolboxSeparator } from "core/toolbox/separator";
     import { ToolboxCategory } from "core/toolbox/category";
 }

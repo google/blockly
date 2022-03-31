@@ -18973,11 +18973,6 @@ declare module "core/utils/toolbox" {
         data: (string | undefined);
     };
     /**
-     * <!FlyoutItemInfo>
-     *          }
-     */
-    export type Array = any;
-    /**
      * The information needed to create a block in the toolbox.
      * Note that disabled has a different type for backwards compatibility.
      * @typedef {{

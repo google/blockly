@@ -16,7 +16,6 @@
 goog.module('Blockly.geras.Renderer');
 
 const blockRendering = goog.require('Blockly.blockRendering');
-const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
@@ -35,116 +34,115 @@ const {Theme} = goog.requireType('Blockly.Theme');
 
 /**
  * The geras renderer.
- * @param {string} name The renderer name.
- * @package
- * @constructor
  * @extends {BaseRenderer}
  * @alias Blockly.geras.Renderer
  */
-const Renderer = function(name) {
-  Renderer.superClass_.constructor.call(this, name);
+class Renderer extends BaseRenderer {
+  /**
+   * @param {string} name The renderer name.
+   * @package
+   */
+  constructor(name) {
+    super(name);
+
+    /**
+     * The renderer's highlight constant provider.
+     * @type {HighlightConstantProvider}
+     * @private
+     */
+    this.highlightConstants_ = null;
+  }
 
   /**
-   * The renderer's highlight constant provider.
-   * @type {HighlightConstantProvider}
-   * @private
+   * Initialize the renderer.  Geras has a highlight provider in addition to
+   * the normal constant provider.
+   * @package
+   * @override
    */
-  this.highlightConstants_ = null;
-};
-object.inherits(Renderer, BaseRenderer);
+  init(theme, opt_rendererOverrides) {
+    super.init(theme, opt_rendererOverrides);
+    this.highlightConstants_ = this.makeHighlightConstants_();
+    this.highlightConstants_.init();
+  }
 
-/**
- * Initialize the renderer.  Geras has a highlight provider in addition to
- * the normal constant provider.
- * @package
- * @override
- */
-Renderer.prototype.init = function(theme, opt_rendererOverrides) {
-  Renderer.superClass_.init.call(this, theme, opt_rendererOverrides);
-  this.highlightConstants_ = this.makeHighlightConstants_();
-  this.highlightConstants_.init();
-};
+  /**
+   * @override
+   */
+  refreshDom(svg, theme) {
+    super.refreshDom(svg, theme);
+    this.getHighlightConstants().init();
+  }
 
-/**
- * @override
- */
-Renderer.prototype.refreshDom = function(svg, theme) {
-  Renderer.superClass_.refreshDom.call(this, svg, theme);
-  this.getHighlightConstants().init();
-};
+  /**
+   * @override
+   */
+  makeConstants_() {
+    return new ConstantProvider();
+  }
 
-/**
- * @override
- */
-Renderer.prototype.makeConstants_ = function() {
-  return new ConstantProvider();
-};
+  /**
+   * Create a new instance of the renderer's render info object.
+   * @param {!BlockSvg} block The block to measure.
+   * @return {!RenderInfo} The render info object.
+   * @protected
+   * @override
+   */
+  makeRenderInfo_(block) {
+    return new RenderInfo(this, block);
+  }
 
-/**
- * Create a new instance of the renderer's render info object.
- * @param {!BlockSvg} block The block to measure.
- * @return {!RenderInfo} The render info object.
- * @protected
- * @override
- */
-Renderer.prototype.makeRenderInfo_ = function(block) {
-  return new RenderInfo(this, block);
-};
+  /**
+   * Create a new instance of the renderer's drawer.
+   * @param {!BlockSvg} block The block to render.
+   * @param {!BaseRenderInfo} info An object containing all information needed
+   *     to render this block.
+   * @return {!Drawer} The drawer.
+   * @protected
+   * @override
+   */
+  makeDrawer_(block, info) {
+    return new Drawer(
+        block,
+        /** @type {!RenderInfo} */ (info));
+  }
 
-/**
- * Create a new instance of the renderer's drawer.
- * @param {!BlockSvg} block The block to render.
- * @param {!BaseRenderInfo} info An object containing all
- *   information needed to render this block.
- * @return {!Drawer} The drawer.
- * @protected
- * @override
- */
-Renderer.prototype.makeDrawer_ = function(block, info) {
-  return new Drawer(
-      block,
-      /** @type {!RenderInfo} */ (info));
-};
+  /**
+   * Create a new instance of a renderer path object.
+   * @param {!SVGElement} root The root SVG element.
+   * @param {!Theme.BlockStyle} style The style object to use for colouring.
+   * @return {!PathObject} The renderer path object.
+   * @package
+   * @override
+   */
+  makePathObject(root, style) {
+    return new PathObject(
+        root, style,
+        /** @type {!ConstantProvider} */ (this.getConstants()));
+  }
 
-/**
- * Create a new instance of a renderer path object.
- * @param {!SVGElement} root The root SVG element.
- * @param {!Theme.BlockStyle} style The style object to use for
- *     colouring.
- * @return {!PathObject} The renderer path object.
- * @package
- * @override
- */
-Renderer.prototype.makePathObject = function(root, style) {
-  return new PathObject(
-      root, style,
-      /** @type {!ConstantProvider} */ (this.getConstants()));
-};
+  /**
+   * Create a new instance of the renderer's highlight constant provider.
+   * @return {!HighlightConstantProvider} The highlight constant provider.
+   * @protected
+   */
+  makeHighlightConstants_() {
+    return new HighlightConstantProvider(
+        /** @type {!BaseConstantProvider} */
+        (this.getConstants()));
+  }
 
-/**
- * Create a new instance of the renderer's highlight constant provider.
- * @return {!HighlightConstantProvider} The highlight constant
- *     provider.
- * @protected
- */
-Renderer.prototype.makeHighlightConstants_ = function() {
-  return new HighlightConstantProvider(
-      /** @type {!BaseConstantProvider} */
-      (this.getConstants()));
-};
-
-/**
- * Get the renderer's highlight constant provider.  We assume that when this is
- * called, the renderer has already been initialized.
- * @return {!HighlightConstantProvider} The highlight constant
- *     provider.
- * @package
- */
-Renderer.prototype.getHighlightConstants = function() {
-  return (
-      /** @type {!HighlightConstantProvider} */
-      (this.highlightConstants_));
-};
+  /**
+   * Get the renderer's highlight constant provider.  We assume that when this
+   * is called, the renderer has already been initialized.
+   * @return {!HighlightConstantProvider} The highlight constant provider.
+   * @package
+   */
+  getHighlightConstants() {
+    return (
+        /** @type {!HighlightConstantProvider} */
+        (this.highlightConstants_));
+  }
+}
 
 blockRendering.register('geras', Renderer);
 

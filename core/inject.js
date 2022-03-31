@@ -24,11 +24,11 @@ const browserEvents = goog.require('Blockly.browserEvents');
 const bumpObjects = goog.require('Blockly.bumpObjects');
 const common = goog.require('Blockly.common');
 const dom = goog.require('Blockly.utils.dom');
+const dropDownDiv = goog.require('Blockly.dropDownDiv');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const {BlockDragSurfaceSvg} = goog.require('Blockly.BlockDragSurfaceSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
-const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
 const {Grid} = goog.require('Blockly.Grid');
 const {Msg} = goog.require('Blockly.Msg');
 const {Options} = goog.require('Blockly.Options');
@@ -59,7 +59,8 @@ const inject = function(container, opt_options) {
   }
   const options =
       new Options(opt_options || (/** @type {!BlocklyOptions} */ ({})));
-  const subContainer = document.createElement('div');
+  const subContainer =
+      /** @type {!HTMLDivElement} */ (document.createElement('div'));
   subContainer.className = 'injectionDiv';
   subContainer.tabIndex = 0;
   aria.setState(subContainer, aria.State.LABEL, Msg['WORKSPACE_ARIA_LABEL']);
@@ -192,7 +193,7 @@ const createMainWorkspace = function(
   // The SVG is now fully assembled.
   common.svgResize(mainWorkspace);
   WidgetDiv.createDom();
-  DropDownDiv.createDom();
+  dropDownDiv.createDom();
   Tooltip.createDom();
   return mainWorkspace;
 };
@@ -274,7 +275,8 @@ const init = function(mainWorkspace) {
 // TODO (https://github.com/google/blockly/issues/1998) handle cases where there
 // are multiple workspaces and non-main workspaces are able to accept input.
 const onKeyDown = function(e) {
-  const mainWorkspace = common.getMainWorkspace();
+  const mainWorkspace =
+      /** @type {!WorkspaceSvg} */ (common.getMainWorkspace());
   if (!mainWorkspace) {
     return;
   }
@@ -337,7 +339,7 @@ const bindDocumentEvents = function() {
 /**
  * Load sounds for the given workspace.
  * @param {string} pathToMedia The path to the media directory.
- * @param {!Workspace} workspace The workspace to load sounds for.
+ * @param {!WorkspaceSvg} workspace The workspace to load sounds for.
  */
 const loadSounds = function(pathToMedia, workspace) {
   const audioMgr = workspace.getAudioManager();

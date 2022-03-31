@@ -6,7 +6,10 @@
 
 goog.module('Blockly.test.fieldNumber');
 
-const {defineRowBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+const {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSetValueTests} = goog.require('Blockly.test.helpers.fields');
+const {defineRowBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
+const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+const {runTestCases} = goog.require('Blockly.test.helpers.common');
 
 
 suite('Number Fields', function() {
@@ -64,7 +67,7 @@ suite('Number Fields', function() {
    */
   function assertNumberField(field, expectedMin, expectedMax,
       expectedPrecision, expectedValue) {
-    testHelpers.assertFieldValue(field, expectedValue);
+    assertFieldValue(field, expectedValue);
     chai.assert.equal(field.getMin(), expectedMin, 'Min');
     chai.assert.equal(field.getMax(), expectedMax, 'Max');
     chai.assert.equal(
@@ -88,11 +91,11 @@ suite('Number Fields', function() {
         testCase.expectedValue, testCase.expectedValue);
   };
 
-  testHelpers.runConstructorSuiteTests(
+  runConstructorSuiteTests(
       Blockly.FieldNumber, validValueTestCases, invalidValueTestCases,
       validTestCaseAssertField, assertFieldDefault);
 
-  testHelpers.runFromJsonSuiteTests(
+  runFromJsonSuiteTests(
       Blockly.FieldNumber, validValueTestCases, invalidValueTestCases,
       validTestCaseAssertField, assertFieldDefault);
 
@@ -101,7 +104,7 @@ suite('Number Fields', function() {
       setup(function() {
         this.field = new Blockly.FieldNumber();
       });
-      testHelpers.runSetValueTests(
+      runSetValueTests(
           validValueTestCases, invalidValueTestCases, defaultFieldValue);
     });
     suite('Value -> New Value', function() {
@@ -109,7 +112,7 @@ suite('Number Fields', function() {
       setup(function() {
         this.field = new Blockly.FieldNumber(initialValue);
       });
-      testHelpers.runSetValueTests(
+      runSetValueTests(
           validValueTestCases, invalidValueTestCases, initialValue);
     });
     suite('Constraints', function() {
@@ -127,11 +130,11 @@ suite('Number Fields', function() {
           expectedValue: 123},
       ];
       suite('Precision', function() {
-        testHelpers.runTestCases(testCases, function(testCase) {
+        runTestCases(testCases, function(testCase) {
           return function() {
             const field = Blockly.FieldNumber.fromJson(testCase.json);
             field.setValue(testCase.value);
-            testHelpers.assertFieldValue(field, testCase.expectedValue);
+            assertFieldValue(field, testCase.expectedValue);
           };
         });
         test('Null', function() {
@@ -144,7 +147,7 @@ suite('Number Fields', function() {
           const field = Blockly.FieldNumber.fromJson(testCase.json);
           testCase.values.forEach(function(value, i) {
             field.setValue(value);
-            testHelpers.assertFieldValue(
+            assertFieldValue(
                 field, testCase.expectedValues[i]);
           });
         };
@@ -158,7 +161,7 @@ suite('Number Fields', function() {
           {title: '+10', json: {min: 10}, values: [-20, 0, 20],
             expectedValues: [10, 10, 20]},
         ];
-        testHelpers.runTestCases(testCases, setValueBoundsTestFn);
+        runTestCases(testCases, setValueBoundsTestFn);
         test('Null', function() {
           const field = Blockly.FieldNumber.fromJson({min: null});
           chai.assert.equal(field.getMin(), -Infinity);
@@ -173,7 +176,7 @@ suite('Number Fields', function() {
           {title: '+10', json: {max: 10}, values: [-20, 0, 20],
             expectedValues: [-20, 0, 10]},
         ];
-        testHelpers.runTestCases(testCases, setValueBoundsTestFn);
+        runTestCases(testCases, setValueBoundsTestFn);
         test('Null', function() {
           const field = Blockly.FieldNumber.fromJson({max: null});
           chai.assert.equal(field.getMax(), Infinity);
@@ -217,12 +220,12 @@ suite('Number Fields', function() {
           this.field.isBeingEdited_ = true;
           this.field.htmlInput_.value = String(suiteInfo.value);
           this.field.onHtmlInputChange_(null);
-          testHelpers.assertFieldValue(
+          assertFieldValue(
               this.field, suiteInfo.expectedValue, String(suiteInfo.value));
         });
         test('When Not Editing', function() {
           this.field.setValue(suiteInfo.value);
-          testHelpers.assertFieldValue(this.field, suiteInfo.expectedValue);
+          assertFieldValue(this.field, suiteInfo.expectedValue);
         });
       });
     });

@@ -3,7 +3,7 @@
 'use strict';
 
 Blockly.Msg["ADD_COMMENT"] = "Tefsir cı ke";
-Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Can't delete the variable '%1' because it's part of the definition of the function '%2'";  // untranslated
+Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Vurniyaye '%1' nêşeno besteriyo, çıke parçeyê şınasnayışiyê fonksiyonê '%2'yo";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Erci bıvurne:";
 Blockly.Msg["CLEAN_UP"] = "Blokan pak ke";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated

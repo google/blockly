@@ -21,6 +21,8 @@ const utilsXml = goog.require('Blockly.utils.xml');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
 const {Connection} = goog.requireType('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
 const {Field} = goog.requireType('Blockly.Field');
@@ -396,7 +398,7 @@ exports.textToDom = textToDom;
  * Clear the given workspace then decode an XML DOM and
  * create blocks on the workspace.
  * @param {!Element} xml XML DOM.
- * @param {!Workspace} workspace The workspace.
+ * @param {!WorkspaceSvg} workspace The workspace.
  * @return {!Array<string>} An array containing new block IDs.
  * @alias Blockly.Xml.clearWorkspaceAndLoadFromXml
  */
@@ -443,8 +445,9 @@ const domToWorkspace = function(xml, workspace) {
   }
 
   // Disable workspace resizes as an optimization.
-  if (workspace.setResizesEnabled) {
-    workspace.setResizesEnabled(false);
+  // Assume it is rendered so we can check.
+  if (/** @type {!WorkspaceSvg} */ (workspace).setResizesEnabled) {
+    /** @type {!WorkspaceSvg} */ (workspace).setResizesEnabled(false);
   }
   let variablesFirst = true;
   try {
@@ -479,7 +482,7 @@ const domToWorkspace = function(xml, workspace) {
                 'Missing require for Blockly.WorkspaceCommentSvg, ' +
                 'ignoring workspace comment.');
           } else {
-            WorkspaceCommentSvg.fromXml(
+            WorkspaceCommentSvg.fromXmlRendered(
                 xmlChildElement,
                 /** @type {!WorkspaceSvg} */ (workspace), width);
           }
@@ -513,8 +516,8 @@ const domToWorkspace = function(xml, workspace) {
     dom.stopTextWidthCache();
   }
   // Re-enable workspace resizing.
-  if (workspace.setResizesEnabled) {
-    workspace.setResizesEnabled(true);
+  if (/** @type {!WorkspaceSvg} */ (workspace).setResizesEnabled) {
+    /** @type {!WorkspaceSvg} */ (workspace).setResizesEnabled(true);
   }
   eventUtils.fire(new (eventUtils.get(eventUtils.FINISHED_LOADING))(workspace));
   return newBlockIds;
@@ -530,12 +533,14 @@ exports.domToWorkspace = domToWorkspace;
  * @alias Blockly.Xml.appendDomToWorkspace
  */
 const appendDomToWorkspace = function(xml, workspace) {
-  let bbox;  // Bounding box of the current blocks.
-  // First check if we have a workspaceSvg, otherwise the blocks have no shape
+  // First check if we have a WorkspaceSvg, otherwise the blocks have no shape
   // and the position does not matter.
-  if (Object.prototype.hasOwnProperty.call(workspace, 'scale')) {
-    bbox = workspace.getBlocksBoundingBox();
+  // Assume it is rendered so we can check.
+  if (!/** @type {!WorkspaceSvg} */ (workspace).getBlocksBoundingBox) {
+    return domToWorkspace(xml, workspace);
   }
+
+  const bbox = /** @type {!WorkspaceSvg} */ (workspace).getBlocksBoundingBox();
   // Load the new blocks into the workspace and get the IDs of the new blocks.
   const newBlockIds = domToWorkspace(xml, workspace);
   if (bbox && bbox.top !== bbox.bottom) {  // check if any previous block
@@ -599,10 +604,10 @@ const domToBlock = function(xmlBlock, workspace) {
   try {
     topBlock = domToBlockHeadless(xmlBlock, workspace);
     // Generate list of all blocks.
-    const blocks = topBlock.getDescendants(false);
     if (workspace.rendered) {
-      // Wait to track connections to speed up assembly.
-      topBlock.setConnectionTracking(false);
+      const topBlockSvg = /** @type {!BlockSvg} */ (topBlock);
+      const blocks = topBlock.getDescendants(false);
+      topBlockSvg.setConnectionTracking(false);
       // Render each block.
       for (let i = blocks.length - 1; i >= 0; i--) {
         blocks[i].initSvg();
@@ -613,15 +618,16 @@ const domToBlock = function(xmlBlock, workspace) {
       // Populating the connection database may be deferred until after the
       // blocks have rendered.
       setTimeout(function() {
-        if (!topBlock.disposed) {
-          topBlock.setConnectionTracking(true);
+        if (!topBlockSvg.disposed) {
+          topBlockSvg.setConnectionTracking(true);
         }
       }, 1);
-      topBlock.updateDisabled();
+      topBlockSvg.updateDisabled();
       // Allow the scrollbars to resize and move based on the new contents.
       // TODO(@picklesrus): #387. Remove when domToBlock avoids resizing.
-      workspace.resizeContents();
+      /** @type {!WorkspaceSvg} */ (workspace).resizeContents();
     } else {
+      const blocks = topBlock.getDescendants(false);
       for (let i = blocks.length - 1; i >= 0; i--) {
         blocks[i].initModel();
       }
@@ -778,8 +784,9 @@ const applyCommentTagNodes = function(xmlChildren, block) {
     }
 
     if (pinned && block.getCommentIcon && !block.isInFlyout) {
+      const blockSvg = /** @type {BlockSvg} */ (block);
       setTimeout(function() {
-        block.getCommentIcon().setVisible(true);
+        blockSvg.getCommentIcon().setVisible(true);
       }, 1);
     }
   }
@@ -953,8 +960,11 @@ const domToBlockHeadless = function(
   applyNextTagNodes(xmlChildNameMap.next, workspace, block);
 
   if (shouldCallInitSvg) {
-    // InitSvg needs to be called after variable fields are loaded.
-    block.initSvg();
+    // This shouldn't even be called here
+    // (ref: https://github.com/google/blockly/pull/4296#issuecomment-884226021
+    // But the XML serializer/deserializer is iceboxed so I'm not going to fix
+    // it.
+    (/** @type {!BlockSvg} */ (block)).initSvg();
   }
 
   const inline = xmlBlock.getAttribute('inline');

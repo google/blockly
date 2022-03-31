@@ -25,7 +25,7 @@ var closureDeps = require('google-closure-deps');
 var argv = require('yargs').argv;
 var rimraf = require('rimraf');
 
-var {BUILD_DIR} = require('./config');
+var {BUILD_DIR, TSC_OUTPUT_DIR} = require('./config');
 var {getPackageJson} = require('./helper_tasks');
 
 ////////////////////////////////////////////////////////////
@@ -61,7 +61,16 @@ const CHUNK_CACHE_FILE = 'scripts/gulpfiles/chunks.json'
  * wrapper argument, but as it will appear many times in the compiled
  * output it is preferable that it be short.
  */
-const NAMESPACE_OBJECT = '$';
+const NAMESPACE_VARIABLE = '$';
+
+/**
+ * Property that will be used to store the value of the namespace
+ * object on each chunk's exported object.  This is so that dependent
+ * chunks can retrieve the namespace object and thereby access modules
+ * defined in the parent chunk (or it's parent, etc.).  This should be
+ * chosen so as to not collide with any exported name.
+ */
+const NAMESPACE_PROPERTY = '__namespace__';
 
 /**
  * A list of chunks.  Order matters: later chunks can depend on
@@ -73,25 +82,16 @@ const NAMESPACE_OBJECT = '$';
  *   will be written to.
  * - .entry: the source .js file which is the entrypoint for the
  *   chunk.
- * - .exports: a variable or property that will (prefixed with
- *   NAMESPACE_OBJECT) be returned from the factory function and which
- *   (sans prefix) will be set in the global scope to that returned
- *   value if the module is loaded in a browser.
- * - .importAs: the name that this chunk's exports object will be
- *   given when passed to the factory function of other chunks that
- *   depend on it.  (Needs to be distinct from .exports since (e.g.)
- *   "Blockly.blocks.all" is not a valid variable name.)
- * - .factoryPreamble: code to override the default wrapper factory
- *   function preamble.
- * - .factoryPostamble: code to override the default wrapper factory
- *   function postabmle.
+ * - .reexport: if running in a browser, save the chunk's exports
+ *   object at this location in the global namespace.
  *
  * The function getChunkOptions will, after running
  * closure-calculate-chunks, update each chunk to add the following
  * properties:
- * 
- * - .dependencies: a list of the chunks the chunk depends upon.
- * - .wrapper: the chunk wrapper.
+ *
+ * - .parent: the parent chunk of the given chunk.  Typically
+ *    chunks[0], except for chunk[0].parent which will be null.
+ * - .wrapper: the generated chunk wrapper.
  *
  * Output files will be named <chunk.name><COMPILED_SUFFIX>.js.
  */
@@ -99,48 +99,39 @@ const chunks = [
   {
     name: 'blockly',
     entry: 'core/blockly.js',
-    exports: 'Blockly',
-    importAs: 'Blockly',
-    factoryPreamble: `const ${NAMESPACE_OBJECT}={};`,
-    factoryPostamble:
-        `${NAMESPACE_OBJECT}.Blockly.internal_=${NAMESPACE_OBJECT};`,
-  }, {
+    reexport: 'Blockly',
+  },
+  {
     name: 'blocks',
-    entry: 'blocks/all.js',
-    exports: 'Blockly.Blocks',
-    importAs: 'BlocklyBlocks',
-  }, {
+    entry: 'blocks/blocks.js',
+    reexport: 'Blockly.libraryBlocks',
+  },
+  {
     name: 'javascript',
     entry: 'generators/javascript/all.js',
-    exports: 'Blockly.JavaScript',
-  }, {
+    reexport: 'Blockly.JavaScript',
+  },
+  {
     name: 'python',
     entry: 'generators/python/all.js',
-    exports: 'Blockly.Python',
-  }, {
+    reexport: 'Blockly.Python',
+  },
+  {
     name: 'php',
     entry: 'generators/php/all.js',
-    exports: 'Blockly.PHP',
-  }, {
+    reexport: 'Blockly.PHP',
+  },
+  {
     name: 'lua',
     entry: 'generators/lua/all.js',
-    exports: 'Blockly.Lua',
-  }, {
+    reexport: 'Blockly.Lua',
+  },
+  {
     name: 'dart',
     entry: 'generators/dart/all.js',
-    exports: 'Blockly.Dart',
+    reexport: 'Blockly.Dart',
   }
 ];
-
-/**
- * The default factory function premable.
- */
-const FACTORY_PREAMBLE = `const ${NAMESPACE_OBJECT}=Blockly.internal_;`;
-
-/**
- * The default factory function postamble.
- */
-const FACTORY_POSTAMBLE = '';
 
 const licenseRegex = `\\/\\*\\*
  \\* @license
@@ -162,12 +153,20 @@ function stripApacheLicense() {
 }
 
 /**
- * Closure compiler warning groups used to treat warnings as errors.
- * For a full list of closure compiler groups, consult:
- * https://github.com/google/closure-compiler/blob/master/src/com/google/javascript/jscomp/DiagnosticGroups.java#L113
+ * Closure compiler diagnostic groups we want to be treated as errors.
+ * These are effected when the --debug or --strict flags are passed.
+ * For a full list of closure compiler groups, consult the output of
+ * google-closure-compiler --help or look in the source  here:
+ * https://github.com/google/closure-compiler/blob/master/src/com/google/javascript/jscomp/DiagnosticGroups.java#L117
+ * 
+ * The list in JSCOMP_ERROR contains all the diagnostic groups we know
+ * about, but some are commented out if we don't want them, and may
+ * appear in JSCOMP_WARNING or JSCOMP_OFF instead.  Items not
+ * appearing on any list will default to setting provided by the
+ * compiler, which may vary depending on compilation level.
  */
 var JSCOMP_ERROR = [
-  'accessControls',
+  // 'accessControls',  // Deprecated; means same as visibility.
   'checkPrototypalTypes',
   'checkRegExp',
   'checkTypes',
@@ -180,27 +179,29 @@ var JSCOMP_ERROR = [
   'duplicateMessage',
   'es5Strict',
   'externsValidation',
-  'extraRequire',
+  'extraRequire',  // Undocumented but valid.
   'functionParams',
   'globalThis',
   'invalidCasts',
   'misplacedTypeAnnotation',
-  // 'missingOverride',
+  // 'missingOverride',  // There are many of these, which should be fixed.
   'missingPolyfill',
   'missingProperties',
   'missingProvide',
   'missingRequire',
   'missingReturn',
-  // 'missingSourcesWarnings',
+  // 'missingSourcesWarnings',  // Group of several other options.
   'moduleLoad',
   'msgDescriptions',
   'nonStandardJsDocs',
-  // 'polymer',
-  // 'reportUnknownTypes',
-  // 'strictCheckTypes',
-  // 'strictMissingProperties',
+  // 'partialAlias',  // Don't want this to be an error yet; only warning.
+  // 'polymer',  // Not applicable.
+  // 'reportUnknownTypes',  // VERY verbose.
+  // 'strictCheckTypes',  // Use --strict to enable.
+  // 'strictMissingProperties',  // Part of strictCheckTypes.
+  'strictModuleChecks',  // Undocumented but valid.
   'strictModuleDepCheck',
-  // 'strictPrimitiveOperators',
+  // 'strictPrimitiveOperators',  // Part of strictCheckTypes.
   'suspiciousCode',
   'typeInvalidation',
   'undefinedVars',
@@ -210,7 +211,38 @@ var JSCOMP_ERROR = [
   'unusedPrivateMembers',
   'uselessCode',
   'untranspilableFeatures',
-  'visibility'
+  // 'visibility',  // Disabled; see note in JSCOMP_OFF.
+];
+
+/**
+ * Closure compiler diagnostic groups we want to be treated as warnings.
+ * These are effected when the --debug or --strict flags are passed.
+ */
+var JSCOMP_WARNING = [
+];
+
+/**
+ * Closure compiler diagnostic groups we want to be ignored.
+ * These suppressions are always effected by default.
+ */
+var JSCOMP_OFF = [
+  /* In order to transition to ES modules, modules will need to import
+   * one another by relative paths. This means that the existing
+   * practice of moving all source files into the same directory for
+   * compilation (see docs for flattenCorePaths) would break
+   * imports. Not flattening files in this way breaks our usage
+   * of @package however; files were flattened so that all Blockly
+   * source files are in the same directory and can use @package to
+   * mark methods that are only allowed for use by Blockly, while
+   * still allowing access between e.g. core/events/* and
+   * core/utils/*. We were downgrading access control violations
+   * (including @private) to warnings, but this ends up being so
+   * spammy that it makes the compiler output nearly useless.
+   * 
+   * Once ES module migration is complete, they will be re-enabled and
+   * an alternative to @package will be established.
+   */
+  'visibility',
 ];
 
 /**
@@ -224,9 +256,10 @@ function buildDeps(done) {
       'node_modules/google-closure-library/closure/goog' :
       'closure/goog';
 
+  const coreDir = argv.compileTs ? path.join(TSC_OUTPUT_DIR, 'core') : 'core';
   const roots = [
     closurePath,
-    'core',
+    coreDir,
     'blocks',
     'generators',
   ];
@@ -308,29 +341,63 @@ function buildLangfiles(done) {
  * Definition.
  */
 function chunkWrapper(chunk) {
-  const fileNames = chunk.dependencies.map(
-      d => JSON.stringify(`./${d.name}${COMPILED_SUFFIX}.js`));
-  const amdDeps = fileNames.join(', ');
-  const cjsDeps = fileNames.map(f => `require(${f})`).join(', ');
-  const browserDeps =
-      chunk.dependencies.map(d => `root.${d.exports}`).join(', ');
-  const imports = chunk.dependencies.map(d => d.importAs).join(', ');
+  // Each chunk can have only a single dependency, which is its parent
+  // chunk.  It is used only to retrieve the namespace object, which
+  // is saved on to the exports object for the chunk so that any child
+  // chunk(s) can obtain it.
+
+  // JavaScript expressions for the amd, cjs and browser dependencies.
+  let amdDepsExpr = '';
+  let cjsDepsExpr = '';
+  let browserDepsExpr = '';
+  // Arguments for the factory function.
+  let factoryArgs = '';
+  // Expression to get or create the namespace object.
+  let namespaceExpr = `{}`;
+
+  if (chunk.parent) {
+    const parentFilename =
+        JSON.stringify(`./${chunk.parent.name}${COMPILED_SUFFIX}.js`);
+    amdDepsExpr = parentFilename;
+    cjsDepsExpr = `require(${parentFilename})`;
+    browserDepsExpr = `root.${chunk.parent.reexport}`;
+    factoryArgs = '__parent__';
+    namespaceExpr = `${factoryArgs}.${NAMESPACE_PROPERTY}`;
+  }    
+
+  // Expression that evaluates the the value of the exports object for
+  // the specified chunk.  For now we guess the name that is created
+  // by the module's goog.module.delcareLegacyNamespace call based on
+  // chunk.reexport.
+  const exportsExpression = `${NAMESPACE_VARIABLE}.${chunk.reexport}`;
+  // In near future we might try to guess the internally-generated
+  // name for the ES module's exports object.
+  // const exportsExpression =
+  //     'module$' + chunk.entry.replace(/\.m?js$/, '').replace(/\//g, '$');
+  
+
+  // Note that when loading in a browser the base of the exported path
+  // (e.g. Blockly.blocks.all - see issue #5932) might not exist
+  // before factory has been executed, so calling factory() and
+  // assigning the result are done in separate statements to ensure
+  // they are sequenced correctly.
   return `// Do not edit this file; automatically generated.
 
 /* eslint-disable */
 ;(function(root, factory) {
   if (typeof define === 'function' && define.amd) { // AMD
-    define([${amdDeps}], factory);
+    define([${amdDepsExpr}], factory);
   } else if (typeof exports === 'object') { // Node.js
-    module.exports = factory(${cjsDeps});
+    module.exports = factory(${cjsDepsExpr});
   } else { // Browser
-    root.${chunk.exports} = factory(${browserDeps});
+    var factoryExports = factory(${browserDepsExpr});
+    root.${chunk.reexport} = factoryExports;
   }
-}(this, function(${imports}) {
-${chunk.factoryPreamble || FACTORY_PREAMBLE}
+}(this, function(${factoryArgs}) {
+var ${NAMESPACE_VARIABLE}=${namespaceExpr};
 %output%
-${chunk.factoryPostamble || FACTORY_POSTAMBLE}
-return ${NAMESPACE_OBJECT}.${chunk.exports};
+${exportsExpression}.${NAMESPACE_PROPERTY}=${NAMESPACE_VARIABLE};
+return ${exportsExpression};
 }));
 `;
 };
@@ -350,6 +417,9 @@ return ${NAMESPACE_OBJECT}.${chunk.exports};
  * TODO(cpcallen): maybeAddClosureLibrary?  Or maybe remove base.js?
  */
 function getChunkOptions() {
+  if (argv.compileTs) {
+    chunks[0].entry = path.join(TSC_OUTPUT_DIR, chunks[0].entry);
+  }
   const cccArgs = [
     '--closure-library-base-js-path ./closure/goog/base_minimal.js',
     '--deps-file ./tests/deps.js',
@@ -401,26 +471,33 @@ function getChunkOptions() {
   // This is designed to be passed directly as-is as the options
   // object to the Closure Compiler node API, but we want to replace
   // the unhelpful entry-point based chunk names (let's call these
-  // "nicknames") with the ones from chunks.  Luckily they will be in
-  // the same order that the entry points were supplied in - i.e.,
-  // they correspond 1:1 with the entries in chunks.
+  // "nicknames") with the ones from chunks.  Unforutnately there's no
+  // guarnatee they will be in the same order that the entry points
+  // were supplied in (though it happens to work out that way if no
+  // chunk depends on any chunk but the first), so we look for
+  // one of the entrypoints amongst the files in each chunk.
   const chunkByNickname = Object.create(null);
-  let jsFiles = rawOptions.js;
-  const chunkList = rawOptions.chunk.map((element, index) => {
-    const [nickname, numJsFiles, dependencyNicks] = element.split(':');
-    const chunk = chunks[index];
+  const jsFiles = rawOptions.js.slice();  // Will be modified via .splice!
+  const chunkList = rawOptions.chunk.map((element) => {
+    const [nickname, numJsFiles, parentNick] = element.split(':');
 
-    // Replace nicknames with our names.
+    // Get array of files for just this chunk.
+    const chunkFiles = jsFiles.splice(0, numJsFiles);
+
+    // Figure out which chunk this is by looking for one of the
+    // known chunk entrypoints in chunkFiles.  N.B.: O(n*m).  :-(
+    const chunk = chunks.find(
+        chunk => chunkFiles.find(f => f.endsWith('/' + chunk.entry)));
+    if (!chunk) throw new Error('Unable to identify chunk');
+
+    // Replace nicknames with the names we chose.
     chunkByNickname[nickname] = chunk;
-    if (!dependencyNicks) {  // Chunk has no dependencies.
-      chunk.dependencies = [];
+    if (!parentNick) {  // Chunk has no parent.
+      chunk.parent = null;
       return `${chunk.name}:${numJsFiles}`;
     }
-    chunk.dependencies =
-        dependencyNicks.split(',').map(nick => chunkByNickname[nick]);
-    const dependencyNames =
-        chunk.dependencies.map(dependency => dependency.name).join(',');
-    return `${chunk.name}:${numJsFiles}:${dependencyNames}`;
+    chunk.parent = chunkByNickname[parentNick];
+    return `${chunk.name}:${numJsFiles}:${chunk.parent.name}`;
   });
 
   // Generate a chunk wrapper for each chunk.
@@ -432,12 +509,12 @@ function getChunkOptions() {
   return {chunk: chunkList, js: rawOptions.js, chunk_wrapper: chunkWrappers};
 }
 
-/** 
+/**
  * RegExp that globally matches path.sep (i.e., "/" or "\").
  */
 const pathSepRegExp = new RegExp(path.sep.replace(/\\/, '\\\\'), "g");
 
-/** 
+/**
  * Modify the supplied gulp.rename path object to relax @package
  * restrictions in core/.
  *
@@ -457,10 +534,11 @@ const pathSepRegExp = new RegExp(path.sep.replace(/\\/, '\\\\'), "g");
  */
 function flattenCorePaths(pathObject) {
   const dirs = pathObject.dirname.split(path.sep);
-  if (dirs[0] === 'core') {
-    pathObject.dirname = dirs[0];
+  const coreIndex = argv.compileTs ? 2 : 0;
+  if (dirs[coreIndex] === 'core') {
+    pathObject.dirname = path.join(...dirs.slice(0, coreIndex + 1));
     pathObject.basename =
-        dirs.slice(1).concat(pathObject.basename).join('-slash-');
+        dirs.slice(coreIndex + 1).concat(pathObject.basename).join('-slash-');
   }
 }
 
@@ -485,13 +563,14 @@ function compile(options) {
     warning_level: argv.verbose ? 'VERBOSE' : 'DEFAULT',
     language_in: 'ECMASCRIPT_2020',
     language_out: 'ECMASCRIPT5_STRICT',
+    jscomp_off: [...JSCOMP_OFF],
     rewrite_polyfills: true,
     hide_warnings_for: 'node_modules',
     define: ['COMPILED=true'],
-    externs: ['./externs/svg-externs.js'],
   };
   if (argv.debug || argv.strict) {
     defaultOptions.jscomp_error = [...JSCOMP_ERROR];
+    defaultOptions.jscomp_warning = [...JSCOMP_WARNING];
     if (argv.strict) {
       defaultOptions.jscomp_error.push('strictCheckTypes');
     }
@@ -503,7 +582,7 @@ function compile(options) {
 }
 
 /**
- * This task compiles the core library, blocks and generators, creating 
+ * This task compiles the core library, blocks and generators, creating
  * blockly_compressed.js, blocks_compressed.js, etc.
  *
  * The deps.js file must be up-to-date.
@@ -517,7 +596,7 @@ function buildCompiled() {
     define: 'Blockly.VERSION="' + packageJson.version + '"',
     chunk: chunkOptions.chunk,
     chunk_wrapper: chunkOptions.chunk_wrapper,
-    rename_prefix_namespace: NAMESPACE_OBJECT,
+    rename_prefix_namespace: NAMESPACE_VARIABLE,
     // Don't supply the list of source files in chunkOptions.js as an
     // option to Closure Compiler; instead feed them as input via gulp.src.
   };
@@ -526,10 +605,10 @@ function buildCompiled() {
   return gulp.src(chunkOptions.js, {base: './'})
       .pipe(stripApacheLicense())
       .pipe(gulp.sourcemaps.init())
-      .pipe(gulp.rename(flattenCorePaths))
+      // .pipe(gulp.rename(flattenCorePaths))
       .pipe(compile(options))
       .pipe(gulp.rename({suffix: COMPILED_SUFFIX}))
-      .pipe(gulp.sourcemaps.mapSources(unflattenCorePaths))
+      // .pipe(gulp.sourcemaps.mapSources(unflattenCorePaths))
       .pipe(
           gulp.sourcemaps.write('.', {includeContent: false, sourceRoot: './'}))
       .pipe(gulp.dest(BUILD_DIR));
@@ -540,10 +619,15 @@ function buildCompiled() {
  * closure compiler's ADVANCED_COMPILATION mode.
  */
 function buildAdvancedCompilationTest() {
+  const coreSrcs = argv.compileTs ?
+      TSC_OUTPUT_DIR + '/core/**/*.js' : 'core/**/*.js';
   const srcs = [
     'closure/goog/base_minimal.js',
-    'core/**/*.js', 'blocks/**/*.js', 'generators/**/*.js',
-    'tests/compile/main.js', 'tests/compile/test_blocks.js',
+    coreSrcs,
+    'blocks/**/*.js',
+    'generators/**/*.js',
+    'tests/compile/main.js',
+    'tests/compile/test_blocks.js',
   ];
 
   // Closure Compiler options.
@@ -556,9 +640,9 @@ function buildAdvancedCompilationTest() {
   return gulp.src(srcs, {base: './'})
       .pipe(stripApacheLicense())
       .pipe(gulp.sourcemaps.init())
-      .pipe(gulp.rename(flattenCorePaths))
+      // .pipe(gulp.rename(flattenCorePaths))
       .pipe(compile(options))
-      .pipe(gulp.sourcemaps.mapSources(unflattenCorePaths))
+      // .pipe(gulp.sourcemaps.mapSources(unflattenCorePaths))
       .pipe(gulp.sourcemaps.write(
           '.', {includeContent: false, sourceRoot: '../../'}))
       .pipe(gulp.dest('./tests/compile/'));
@@ -610,10 +694,15 @@ function cleanBuildDir(done) {
  * Runs clang format on all files in the core directory.
  */
 function format() {
-  return gulp.src(['core/**/*.js'], {base: '.'})
+  return gulp.src(['core/**/*.js', 'blocks/**/*.js'], {base: '.'})
       .pipe(clangFormatter.format('file', clangFormat))
       .pipe(gulp.dest('.'));
 };
+
+function buildTypescript(done) {
+  execSync('npx tsc', {stdio: 'inherit'});
+  done();
+}
 
 module.exports = {
   build: build,
@@ -625,4 +714,5 @@ module.exports = {
   checkinBuilt: checkinBuilt,
   cleanBuildDir: cleanBuildDir,
   advancedCompilationTest: buildAdvancedCompilationTest,
+  buildTypescript: buildTypescript
 }

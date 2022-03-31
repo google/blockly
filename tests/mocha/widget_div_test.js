@@ -6,7 +6,7 @@
 
 goog.module('Blockly.test.widgetDiv');
 
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
 
 
 suite('WidgetDiv', function() {

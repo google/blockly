@@ -6,7 +6,10 @@
 
 goog.module('Blockly.test.fieldMultiline');
 
-const {createTestBlock, defineRowBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+const {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSetValueTests} = goog.require('Blockly.test.helpers.fields');
+const {createTestBlock, defineRowBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
+const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+const {runCodeGenerationTestSuites} = goog.require('Blockly.test.helpers.codeGeneration');
 
 
 suite('Multiline Input Fields', function() {
@@ -55,7 +58,7 @@ suite('Multiline Input Fields', function() {
    * @param {!Blockly.FieldMultilineInput} field The field to check.
    */
   const assertFieldDefault = function(field) {
-    testHelpers.assertFieldValue(field, defaultFieldValue);
+    assertFieldValue(field, defaultFieldValue);
   };
   /**
    * Asserts that the field properties are correct based on the test case.
@@ -63,14 +66,14 @@ suite('Multiline Input Fields', function() {
    * @param {!FieldValueTestCase} testCase The test case.
    */
   const validTestCaseAssertField = function(field, testCase) {
-    testHelpers.assertFieldValue(field, testCase.expectedValue);
+    assertFieldValue(field, testCase.expectedValue);
   };
 
-  testHelpers.runConstructorSuiteTests(
+  runConstructorSuiteTests(
       Blockly.FieldMultilineInput, validValueTestCases, invalidValueTestCases,
       validTestCaseAssertField, assertFieldDefault);
 
-  testHelpers.runFromJsonSuiteTests(
+  runFromJsonSuiteTests(
       Blockly.FieldMultilineInput, validValueTestCases, invalidValueTestCases,
       validTestCaseAssertField, assertFieldDefault);
 
@@ -79,12 +82,12 @@ suite('Multiline Input Fields', function() {
       setup(function() {
         this.field = new Blockly.FieldMultilineInput();
       });
-      testHelpers.runSetValueTests(
+      runSetValueTests(
           validValueTestCases, invalidValueTestCases, defaultFieldValue);
       test('With source block', function() {
         this.field.setSourceBlock(createTestBlock());
         this.field.setValue('value');
-        testHelpers.assertFieldValue(this.field, 'value');
+        assertFieldValue(this.field, 'value');
       });
     });
     suite('Value -> New Value', function() {
@@ -92,12 +95,12 @@ suite('Multiline Input Fields', function() {
       setup(function() {
         this.field = new Blockly.FieldMultilineInput(initialValue);
       });
-      testHelpers.runSetValueTests(
+      runSetValueTests(
           validValueTestCases, invalidValueTestCases, initialValue);
       test('With source block', function() {
         this.field.setSourceBlock(createTestBlock());
         this.field.setValue('value');
-        testHelpers.assertFieldValue(this.field, 'value');
+        assertFieldValue(this.field, 'value');
       });
     });
   });
@@ -156,7 +159,7 @@ suite('Multiline Input Fields', function() {
             createBlock: createBlockFn('bark bark\n bark bark bark\n bark bar bark bark\n')},
         ]},
     ];
-    testHelpers.runCodeGenerationTestSuites(testSuites);
+    runCodeGenerationTestSuites(testSuites);
   });
 
   suite('Serialization', function() {

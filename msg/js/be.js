@@ -3,7 +3,7 @@
 'use strict';
 
 Blockly.Msg["ADD_COMMENT"] = "Дадаць каментарый";
-Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Немагчыма выдаліць пераменную '%1', паколькі яна з'яўляецца часткай вызначэння функцыі '%2'";
+Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Немагчыма выдаліць пераменную '%1', паколькі яна з’яўляецца часткай вызначэння функцыі '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Змяніць значэння:";
 Blockly.Msg["CLEAN_UP"] = "Выраўнаваць блокі";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Collapsed blocks contain warnings.";  // untranslated
@@ -48,7 +48,7 @@ Blockly.Msg["CONTROLS_IF_MSG_IF"] = "калі";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_1"] = "Калі значэнне ісцінае, то выканаць пэўныя дзеянні.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_2"] = "Калі значэнне ісцінае, то выконваецца першы блок аператараў. У адваротным выпадку выконваецца другі блок аператараў.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_3"] = "Калі першае значэнне ісцінае, то выконваецца першы блок аператараў. У адваротным выпадку, калі другое значэнне ісцінае, то выконваецца другі блок аператараў.";
-Blockly.Msg["CONTROLS_IF_TOOLTIP_4"] = "Калі першае значэнне ісцінае, то выконваецца першы блок аператараў. У адваротным выпадку, калі другое значэнне ісцінае, то выконваецца другі блок аператараў. Калі ні адно з значэнняў не з'яўляецца ісціным, то выконваецца апошні блок аператараў.";
+Blockly.Msg["CONTROLS_IF_TOOLTIP_4"] = "Калі першае значэнне ісцінае, то выконваецца першы блок аператараў. У адваротным выпадку, калі другое значэнне ісцінае, то выконваецца другі блок аператараў. Калі ні адно з значэнняў не з’яўляецца ісціным, то выконваецца апошні блок аператараў.";
 Blockly.Msg["CONTROLS_REPEAT_HELPURL"] = "https://be.wikipedia.org/wiki/Цыкл_(праграмаванне)";
 Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"] = "выканаць";
 Blockly.Msg["CONTROLS_REPEAT_TITLE"] = "паўтарыць %1 разоў";
@@ -210,7 +210,7 @@ Blockly.Msg["MATH_IS_NEGATIVE"] = "адмоўнае";
 Blockly.Msg["MATH_IS_ODD"] = "няцотнае";
 Blockly.Msg["MATH_IS_POSITIVE"] = "станоўчае";
 Blockly.Msg["MATH_IS_PRIME"] = "простае";
-Blockly.Msg["MATH_IS_TOOLTIP"] = "Правярае, ці з'яўляецца лік цотным, няцотным, простым, цэлым, станоўчым, адмоўным ці яно кратнае пэўнаму ліку. Вяртае значэнне ісціна або хлусня.";
+Blockly.Msg["MATH_IS_TOOLTIP"] = "Правярае, ці з’яўляецца лік цотным, няцотным, простым, цэлым, станоўчым, адмоўным ці яно кратнае пэўнаму ліку. Вяртае значэнне ісціна або хлусня.";
 Blockly.Msg["MATH_IS_WHOLE"] = "цэлае";
 Blockly.Msg["MATH_MODULO_HELPURL"] = "https://be.wikipedia.org/wiki/Дзяленне_з_астаткам";
 Blockly.Msg["MATH_MODULO_TITLE"] = "астатак ад %1 ÷ %2";
@@ -327,7 +327,7 @@ Blockly.Msg["TEXT_CHARAT_TITLE"] = "у тэксце %1 %2";
 Blockly.Msg["TEXT_CHARAT_TOOLTIP"] = "Вяртае літару ў названай пазіцыі.";
 Blockly.Msg["TEXT_COUNT_HELPURL"] = "https://github.com/google/blockly/wiki/Text#counting-substrings";  // untranslated
 Blockly.Msg["TEXT_COUNT_MESSAGE0"] = "падлічыць колькасць %1 у %2";
-Blockly.Msg["TEXT_COUNT_TOOLTIP"] = "Падлічыць колькі разоў урывак тэксту з'яўляецца ў іншым тэксце.";
+Blockly.Msg["TEXT_COUNT_TOOLTIP"] = "Падлічыць, колькі разоў урывак тэксту з’яўляецца ў іншым тэксце.";
 Blockly.Msg["TEXT_CREATE_JOIN_ITEM_TOOLTIP"] = "Дадаць элемент да тэксту.";
 Blockly.Msg["TEXT_CREATE_JOIN_TITLE_JOIN"] = "спалучыць";
 Blockly.Msg["TEXT_CREATE_JOIN_TOOLTIP"] = "Дадайце, выдаліце, перастаўце фрагменты для пераробкі тэкставага блока.";

@@ -40,6 +40,7 @@ const common = goog.require('Blockly.common');
 const constants = goog.require('Blockly.constants');
 const deprecation = goog.require('Blockly.utils.deprecation');
 const dialog = goog.require('Blockly.dialog');
+const dropDownDiv = goog.require('Blockly.dropDownDiv');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const geras = goog.require('Blockly.geras');
 const internalConstants = goog.require('Blockly.internalConstants');
@@ -71,6 +72,7 @@ const {Bubble} = goog.require('Blockly.Bubble');
 const {CollapsibleToolboxCategory} = goog.require('Blockly.CollapsibleToolboxCategory');
 const {Comment} = goog.require('Blockly.Comment');
 const {ComponentManager} = goog.require('Blockly.ComponentManager');
+const {config} = goog.require('Blockly.config');
 const {ConnectionChecker} = goog.require('Blockly.ConnectionChecker');
 const {ConnectionDB} = goog.require('Blockly.ConnectionDB');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
@@ -79,7 +81,6 @@ const {ContextMenuRegistry} = goog.require('Blockly.ContextMenuRegistry');
 const {Cursor} = goog.require('Blockly.Cursor');
 const {DeleteArea} = goog.require('Blockly.DeleteArea');
 const {DragTarget} = goog.require('Blockly.DragTarget');
-const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
 const {FieldAngle} = goog.require('Blockly.FieldAngle');
 const {FieldCheckbox} = goog.require('Blockly.FieldCheckbox');
 const {FieldColour} = goog.require('Blockly.FieldColour');
@@ -306,7 +307,8 @@ exports.svgResize = common.svgResize;
  * @alias Blockly.hideChaff
  */
 const hideChaff = function(opt_onlyClosePopups) {
-  common.getMainWorkspace().hideChaff(opt_onlyClosePopups);
+  /** @type {!WorkspaceSvg} */ (common.getMainWorkspace())
+      .hideChaff(opt_onlyClosePopups);
 };
 exports.hideChaff = hideChaff;
 
@@ -331,7 +333,7 @@ exports.defineBlocksWithJsonArray = common.defineBlocksWithJsonArray;
 
 /**
  * Set the parent container.  This is the container element that the WidgetDiv,
- * DropDownDiv, and Tooltip are rendered into the first time `Blockly.inject`
+ * dropDownDiv, and Tooltip are rendered into the first time `Blockly.inject`
  * is called.
  * This method is a NOP if called after the first ``Blockly.inject``.
  * @param {!Element} container The container element.
@@ -528,7 +530,7 @@ const paste = function() {
   deprecation.warn(
       'Blockly.paste', 'December 2021', 'December 2022',
       'Blockly.clipboard.paste');
-  return clipboard.paste();
+  return !!clipboard.paste();
 };
 exports.paste = paste;
 
@@ -655,25 +657,8 @@ const bindEventWithChecks_ = function(
 exports.bindEventWithChecks_ = bindEventWithChecks_;
 
 // Aliases to allow external code to access these values for legacy reasons.
-exports.LINE_MODE_MULTIPLIER = internalConstants.LINE_MODE_MULTIPLIER;
-exports.PAGE_MODE_MULTIPLIER = internalConstants.PAGE_MODE_MULTIPLIER;
-exports.DRAG_RADIUS = internalConstants.DRAG_RADIUS;
-exports.FLYOUT_DRAG_RADIUS = internalConstants.FLYOUT_DRAG_RADIUS;
-exports.SNAP_RADIUS = internalConstants.SNAP_RADIUS;
-exports.CONNECTING_SNAP_RADIUS = internalConstants.CONNECTING_SNAP_RADIUS;
-exports.CURRENT_CONNECTION_PREFERENCE =
-    internalConstants.CURRENT_CONNECTION_PREFERENCE;
-exports.BUMP_DELAY = internalConstants.BUMP_DELAY;
-exports.BUMP_RANDOMNESS = internalConstants.BUMP_RANDOMNESS;
 exports.COLLAPSE_CHARS = internalConstants.COLLAPSE_CHARS;
-exports.LONGPRESS = internalConstants.LONGPRESS;
-exports.SOUND_LIMIT = internalConstants.SOUND_LIMIT;
 exports.DRAG_STACK = internalConstants.DRAG_STACK;
-exports.SPRITE = internalConstants.SPRITE;
-exports.DRAG_NONE = internalConstants.DRAG_NONE;
-exports.DRAG_STICKY = internalConstants.DRAG_STICKY;
-exports.DRAG_BEGIN = internalConstants.DRAG_BEGIN;
-exports.DRAG_FREE = internalConstants.DRAG_FREE;
 exports.OPPOSITE_TYPE = internalConstants.OPPOSITE_TYPE;
 exports.RENAME_VARIABLE_ID = internalConstants.RENAME_VARIABLE_ID;
 exports.DELETE_VARIABLE_ID = internalConstants.DELETE_VARIABLE_ID;
@@ -731,7 +716,7 @@ exports.Css = Css;
 exports.Cursor = Cursor;
 exports.DeleteArea = DeleteArea;
 exports.DragTarget = DragTarget;
-exports.DropDownDiv = DropDownDiv;
+exports.DropDownDiv = dropDownDiv;
 exports.Events = Events;
 exports.Extensions = Extensions;
 exports.Field = Field;
@@ -833,6 +818,7 @@ exports.browserEvents = browserEvents;
 exports.bumpObjects = bumpObjects;
 exports.clipboard = clipboard;
 exports.common = common;
+exports.config = config;
 /** @deprecated Use Blockly.ConnectionType instead. */
 exports.connectionTypes = ConnectionType;
 exports.constants = constants;

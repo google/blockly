@@ -11,7 +11,7 @@ goog.require('Blockly.JavaScript');
 goog.require('Blockly.Lua');
 goog.require('Blockly.PHP');
 goog.require('Blockly.Python');
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
 
 
 suite('Generator', function() {

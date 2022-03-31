@@ -7,7 +7,7 @@
 goog.module('Blockly.test.connectionDb');
 
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
 
 
 suite('Connection Database', function() {

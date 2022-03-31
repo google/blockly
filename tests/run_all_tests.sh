@@ -62,6 +62,9 @@ run_test_command "build-debug" "npm run build-debug"
 # TODO(5621): Re-enable this test once typings generation is fixed.
 # run_test_command "typings" "npm run typings"
 
+# Run renaming validation test.
+run_test_command "renamings" "tests/migration/validate-renamings.js"
+
 # Check the sizes of built files for unexpected growth.
 run_test_command "metadata" "tests/scripts/check_metadata.sh"
 
@@ -79,7 +82,6 @@ run_test_command "node" "./node_modules/.bin/mocha tests/node --config tests/nod
 
 # Attempt advanced compilation of a Blockly app.
 run_test_command "advanced_compile" "npm run test:compile:advanced"
-
 
 # End of tests.
 popd

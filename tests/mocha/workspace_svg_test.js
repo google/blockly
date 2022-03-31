@@ -6,8 +6,12 @@
 
 goog.module('Blockly.test.workspaceSvg');
 
-const {assertEventFired, assertEventNotFired, assertVariableValues, createFireChangeListenerSpy, defineStackBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
-const {testAWorkspace} = goog.require('Blockly.test.workspaceHelpers');
+const {assertEventFired, assertEventNotFired, createFireChangeListenerSpy} = goog.require('Blockly.test.helpers.events');
+const {assertVariableValues} = goog.require('Blockly.test.helpers.variables');
+const {defineStackBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
+const eventUtils = goog.require('Blockly.Events.utils');
+const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+const {testAWorkspace} = goog.require('Blockly.test.helpers.workspace');
 
 
 suite('WorkspaceSvg', function() {
@@ -182,6 +186,7 @@ suite('WorkspaceSvg', function() {
         oldScale: 1,
         viewTop: metrics.viewTop,
         viewLeft: metrics.viewLeft,
+        type: eventUtils.VIEWPORT_CHANGE,
       };
       assertSpyFiredViewportEvent(
           eventsFireStub, workspace, expectedProperties);
@@ -294,9 +299,10 @@ suite('WorkspaceSvg', function() {
             '<block type="controls_if" x="188" y="163"></block>'), this.workspace);
         this.clock.runAll();
         assertEventNotFired(
-            this.eventsFireStub, Blockly.Events.ViewportChange, {});
+            this.eventsFireStub, Blockly.Events.ViewportChange, {type: eventUtils.VIEWPORT_CHANGE});
         assertEventNotFired(
-            this.changeListenerSpy, Blockly.Events.ViewportChange, {});
+            this.changeListenerSpy, Blockly.Events.ViewportChange,
+            {type: eventUtils.VIEWPORT_CHANGE});
       });
       test('domToWorkspace at 0,0 that doesn\'t trigger scroll', function() {
         // 4 blocks with space in center.
@@ -317,9 +323,11 @@ suite('WorkspaceSvg', function() {
         Blockly.Xml.domToWorkspace(xmlDom, this.workspace);
         this.clock.runAll();
         assertEventNotFired(
-            this.eventsFireStub, Blockly.Events.ViewportChange, {});
+            this.eventsFireStub, Blockly.Events.ViewportChange,
+            {type: eventUtils.VIEWPORT_CHANGE});
         assertEventNotFired(
-            this.changeListenerSpy, Blockly.Events.ViewportChange, {});
+            this.changeListenerSpy, Blockly.Events.ViewportChange,
+            {type: eventUtils.VIEWPORT_CHANGE});
       });
       test.skip('domToWorkspace multiple blocks triggers one viewport event', function() {
         // TODO: Un-skip after adding filtering for consecutive viewport events.

@@ -239,8 +239,7 @@ const addDeletableBlocks_ = function(block, deleteList) {
   if (block.isDeletable()) {
     Array.prototype.push.apply(deleteList, block.getDescendants(false));
   } else {
-    const children = /* eslint-disable-next-line indent */
-        /** @type {!Array<!BlockSvg>} */ (block.getChildren(false));
+    const children = block.getChildren(false);
     for (let i = 0; i < children.length; i++) {
       addDeletableBlocks_(children[i], deleteList);
     }

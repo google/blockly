@@ -17,9 +17,10 @@
  */
 goog.module('Blockly.geras.InlineInput');
 
-const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {ConstantProvider: BaseConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider: GerasConstantProvider} = goog.requireType('Blockly.geras.ConstantProvider');
 const {InlineInput: BaseInlineInput} = goog.require('Blockly.blockRendering.InlineInput');
 /* eslint-disable-next-line no-unused-vars */
 const {Input} = goog.requireType('Blockly.Input');
@@ -27,26 +28,31 @@ const {Input} = goog.requireType('Blockly.Input');
 
 /**
  * An object containing information about the space an inline input takes up
- * during rendering
- * @param {!ConstantProvider} constants The rendering
- *   constants provider.
- * @param {!Input} input The inline input to measure and store
- *     information for.
- * @package
- * @constructor
+ * during rendering.
  * @extends {BaseInlineInput}
  * @alias Blockly.geras.InlineInput
  */
-const InlineInput = function(constants, input) {
-  InlineInput.superClass_.constructor.call(this, constants, input);
+class InlineInput extends BaseInlineInput {
+  /**
+   * @param {!BaseConstantProvider} constants The rendering
+   *   constants provider.
+   * @param {!Input} input The inline input to measure and store
+   *     information for.
+   * @package
+   */
+  constructor(constants, input) {
+    super(constants, input);
 
-  if (this.connectedBlock) {
-    // We allow the dark path to show on the parent block so that the child
-    // block looks embossed.  This takes up an extra pixel in both x and y.
-    this.width += this.constants_.DARK_PATH_OFFSET;
-    this.height += this.constants_.DARK_PATH_OFFSET;
+    /** @type {!GerasConstantProvider} */
+    this.constants_;
+
+    if (this.connectedBlock) {
+      // We allow the dark path to show on the parent block so that the child
+      // block looks embossed.  This takes up an extra pixel in both x and y.
+      this.width += this.constants_.DARK_PATH_OFFSET;
+      this.height += this.constants_.DARK_PATH_OFFSET;
+    }
   }
-};
-object.inherits(InlineInput, BaseInlineInput);
+}
 
 exports.InlineInput = InlineInput;

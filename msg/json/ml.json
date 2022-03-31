@@ -31,11 +31,5 @@
 	"CONTROLS_REPEAT_TITLE": "%1 തവണ ആവർത്തിക്കുക",
 	"CONTROLS_REPEAT_TOOLTIP": "ചില വരികൾ കൂടുതൽ തവണ ചെയ്യുക.",
 	"CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK": "കുരുക്കിന് പുറത്തുകടക്കുക",
-	"IOS_OK": "ശരി",
-	"IOS_CANCEL": "റദ്ദാക്കുക",
-	"IOS_ERROR": "പിഴവ്",
-	"IOS_VARIABLES_ADD_VARIABLE": "+ ചരം ചേർക്കുക",
-	"IOS_VARIABLES_ADD_BUTTON": "ചേർക്കുക",
-	"IOS_VARIABLES_RENAME_BUTTON": "പേരുമാറ്റുക",
 	"DIALOG_OK": "ശരി"
 }

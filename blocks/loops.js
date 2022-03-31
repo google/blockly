@@ -293,8 +293,8 @@ Extensions.register(
  * To add a new loop type add this to your code:
  *
  * // If using the Blockly npm package and es6 import syntax:
- * import {loopTypes} from 'blockly/blocks';
- * loopTypes.add('custom_loop');
+ * import {loops} from 'blockly/blocks';
+ * loops.loopTypes.add('custom_loop');
  *
  * // Else if using Closure Compiler and goog.modules:
  * const {loopTypes} = goog.require('Blockly.libraryBlocks.loops');

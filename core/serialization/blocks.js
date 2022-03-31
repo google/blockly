@@ -60,7 +60,7 @@ exports.ConnectionState = ConnectionState;
  *     enabled: (boolean|undefined),
  *     inline: (boolean|undefined),
  *     data: (string|undefined),
- *     extra-state: (*|undefined),
+ *     'extra-state': (*|undefined),
  *     icons: (!Object<string, *>|undefined),
  *     fields: (!Object<string, *>|undefined),
  *     inputs: (!Object<string, !ConnectionState>|undefined),

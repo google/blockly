@@ -16456,7 +16456,7 @@ declare module "core/workspace_svg" {
          */
         paste(state: Object | Element | DocumentFragment): {
             (): void;
-            CopyData: typeof ICopyable.CopyData;
+            CopyData: ICopyable.CopyData;
         } | null;
         /**
          * Paste the provided block onto the workspace.
@@ -16893,7 +16893,7 @@ declare module "core/clipboard" {
      */
     export function copy(toCopy: {
         (): void;
-        CopyData: typeof ICopyable.CopyData;
+        CopyData: ICopyable.CopyData;
     }): void;
     /**
      * Paste a block or workspace comment on to the main workspace.
@@ -16904,7 +16904,7 @@ declare module "core/clipboard" {
      */
     export function paste(): {
         (): void;
-        CopyData: typeof ICopyable.CopyData;
+        CopyData: ICopyable.CopyData;
     } | null;
     /**
      * Duplicate this block and its children, or a workspace comment.
@@ -16917,10 +16917,10 @@ declare module "core/clipboard" {
      */
     export function duplicate(toDuplicate: {
         (): void;
-        CopyData: typeof ICopyable.CopyData;
+        CopyData: ICopyable.CopyData;
     }): {
         (): void;
-        CopyData: typeof ICopyable.CopyData;
+        CopyData: ICopyable.CopyData;
     } | null;
     import { ICopyable } from "core/interfaces/i_copyable";
 }
@@ -20745,7 +20745,7 @@ declare module "core/common" {
      */
     export function getSelected(): {
         (): void;
-        CopyData: typeof ICopyable.CopyData;
+        CopyData: ICopyable.CopyData;
     } | null;
     /**
      * Sets the currently selected block. This function does not visually mark the
@@ -20757,7 +20757,7 @@ declare module "core/common" {
      */
     export function setSelected(newSelection: {
         (): void;
-        CopyData: typeof ICopyable.CopyData;
+        CopyData: ICopyable.CopyData;
     } | null): void;
     /**
      * Get the container element in which to render the WidgetDiv, DropDownDiv and\
@@ -25888,7 +25888,7 @@ declare module "core/blockly" {
      */
     export function copy(toCopy: {
         (): void;
-        CopyData: typeof ICopyable.CopyData;
+        CopyData: ICopyable.CopyData;
     }): void;
     /**
      * Paste a block or workspace comment on to the main workspace.
@@ -25908,7 +25908,7 @@ declare module "core/blockly" {
      */
     export function duplicate(toDuplicate: {
         (): void;
-        CopyData: typeof ICopyable.CopyData;
+        CopyData: ICopyable.CopyData;
     }): void;
     /**
      * Is the given string a number (includes negative and decimals).

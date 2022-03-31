@@ -95,7 +95,6 @@ function workspaceToSvg_(workspace, callback, customCss) {
 /**
  * Download a screenshot of the blocks on a Blockly workspace.
  * @param {!Blockly.WorkspaceSvg} workspace The Blockly workspace.
- *
  */
 function downloadScreenshot(workspace) {
   workspaceToSvg_(workspace, function(datauri) {

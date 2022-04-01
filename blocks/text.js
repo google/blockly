@@ -781,10 +781,13 @@ const TEXT_JOIN_MUTATOR_MIXIN = {
     let itemBlock = containerBlock.getInputTargetBlock('STACK');
     // Count number of inputs.
     const connections = [];
-    while (itemBlock && !itemBlock.isInsertionMarker()) {
+    while (itemBlock) {
+      if (itemBlock.isInsertionMarker()) {
+        itemBlock = itemBlock.getNextBlock();
+        continue;
+      }
       connections.push(itemBlock.valueConnection_);
-      itemBlock =
-          itemBlock.nextConnection && itemBlock.nextConnection.targetBlock();
+      itemBlock = itemBlock.getNextBlock();
     }
     // Disconnect any children that don't belong.
     for (let i = 0; i < this.itemCount_; i++) {
@@ -809,10 +812,13 @@ const TEXT_JOIN_MUTATOR_MIXIN = {
     let itemBlock = containerBlock.getInputTargetBlock('STACK');
     let i = 0;
     while (itemBlock) {
+      if (itemBlock.isInsertionMarker()) {
+        itemBlock = itemBlock.getNextBlock();
+        continue;
+      }
       const input = this.getInput('ADD' + i);
       itemBlock.valueConnection_ = input && input.connection.targetConnection;
-      itemBlock =
-          itemBlock.nextConnection && itemBlock.nextConnection.targetBlock();
+      itemBlock = itemBlock.getNextBlock();
       i++;
     }
   },

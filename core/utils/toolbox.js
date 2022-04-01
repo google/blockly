@@ -40,7 +40,7 @@ const {ToolboxSeparator} = goog.requireType('Blockly.ToolboxSeparator');
  *            collapsed: (boolean|undefined),
  *            inline: (boolean|undefined),
  *            data: (string|undefined),
- *            extra-state: (*|undefined),
+ *            extraState: (*|undefined),
  *            icons: (!Object<string, *>|undefined),
  *            fields: (!Object<string, *>|undefined),
  *            inputs: (!Object<string, !ConnectionState>|undefined),

@@ -123,7 +123,7 @@ exports.allDeveloperVariables = allDeveloperVariables;
  * variable category.
  * @param {!WorkspaceSvg} workspace The workspace containing variables.
  * @return {!Array<!Element>} Array of XML elements.
- * @deprecated
+ * @deprecated Use flyoutCategoryJson instead.
  * @alias Blockly.Variables.flyoutCategory
  */
 const flyoutCategory = function(workspace) {
@@ -150,7 +150,7 @@ exports.flyoutCategory = flyoutCategory;
  * Construct the blocks required by the flyout for the variable category.
  * @param {!Workspace} workspace The workspace containing variables.
  * @return {!Array<!Element>} Array of XML block elements.
- * @deprecated
+ * @deprecated Use flyoutCategoryBlocksJson instead.
  * @alias Blockly.Variables.flyoutCategoryBlocks
  */
 const flyoutCategoryBlocks = function(workspace) {
@@ -204,7 +204,7 @@ exports.flyoutCategoryBlocks = flyoutCategoryBlocks;
  * @param {!VariableModel} variableModel The variable model to
  *     represent.
  * @return {?Element} The generated DOM.
- * @deprecated
+ * @deprecated use generateVariableFieldJson instead.
  * @alias Blockly.Variables.generateVariableFieldDom
  */
 const generateVariableFieldDom = function(variableModel) {

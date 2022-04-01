@@ -404,6 +404,7 @@ const PROCEDURE_DEF_COMMON = {
    * Add custom menu options to this block's context menu.
    * @param {!Array} options List of menu options to add to.
    * @this {Block}
+   * @suppress {deprecated}
    */
   customContextMenu: function(options) {
     if (this.isInFlyout) {

@@ -213,7 +213,7 @@ exports.rename = rename;
  * Construct the blocks required by the flyout for the procedure category.
  * @param {!WorkspaceSvg} workspace The workspace containing procedures.
  * @return {!Array<!Element>} Array of XML block elements.
- * @deprecated
+ * @deprecated Use flyoutCategoryJson instead.
  * @alias Blockly.Procedures.flyoutCategory
  */
 const flyoutCategory = function(workspace) {
@@ -337,6 +337,14 @@ const flyoutCategoryJson = function(workspace) {
     categoryList[categoryList.length - 1]['gap'] = 24;
   }
 
+  /**
+   * Adds a caller block with the given blockType to the categoryList for each
+   * procedureInfo.
+   * @param {!Array<!Array<*>>} procedureInfos A list of info about procedures.
+   *     Each info array contains the name of the procedure, and array of its
+   *     args, and a boolean defining whether it has a return value or not.
+   * @param {string} blockType The call block type to add to the categoryList.
+   */
   const addCallBlocks = (procedureInfos, blockType) => {
     for (const [name, args] of procedureInfos) {
       categoryList.push({

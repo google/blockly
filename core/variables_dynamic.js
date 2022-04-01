@@ -64,7 +64,7 @@ exports.onCreateVariableButtonClick_Colour = colourButtonClickHandler;
  * variable category.
  * @param {!WorkspaceSvg} workspace The workspace containing variables.
  * @return {!Array<!Element>} Array of XML elements.
- * @deprecated
+ * @deprecated Use flyoutCategoryJson instead.
  * @alias Blockly.VariablesDynamic.flyoutCategory
  */
 const flyoutCategory = function(workspace) {
@@ -102,7 +102,7 @@ exports.flyoutCategory = flyoutCategory;
  * Construct the blocks required by the flyout for the variable category.
  * @param {!Workspace} workspace The workspace containing variables.
  * @return {!Array<!Element>} Array of XML block elements.
- * @deprecated
+ * @deprecated Use flyoutCategoryBlocksJson instead.
  * @alias Blockly.VariablesDynamic.flyoutCategoryBlocks
  */
 const flyoutCategoryBlocks = function(workspace) {

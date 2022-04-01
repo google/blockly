@@ -255,6 +255,7 @@ const CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN = {
    * (customContextMenu support limited to web BlockSvg.)
    * @param {!Array} options List of menu options to add to.
    * @this {Block}
+   * @suppress {deprecated}
    */
   customContextMenu: function(options) {
     if (this.isInFlyout) {

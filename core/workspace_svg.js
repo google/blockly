@@ -120,9 +120,9 @@ goog.require('Blockly.Msg');
  * Margin around the top/bottom/left/right after a zoomToFit call.
  * @const
  */
- const ZOOM_TO_FIT_MARGIN = 20;
+const ZOOM_TO_FIT_MARGIN = 20;
 
- /**
+/**
  * Class for a workspace.  This is an onscreen area with optional trashcan,
  * scrollbars, bubbles, and dragging.
  * @extends {Workspace}

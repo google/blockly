@@ -117,6 +117,12 @@ goog.require('Blockly.Msg');
 
 
 /**
+ * Margin around the top/bottom/left/right after a zoomToFit call.
+ * @const
+ */
+ const ZOOM_TO_FIT_MARGIN = 20;
+
+ /**
  * Class for a workspace.  This is an onscreen area with optional trashcan,
  * scrollbars, bubbles, and dragging.
  * @extends {Workspace}
@@ -563,11 +569,6 @@ class WorkspaceSvg extends Workspace {
      * @private
      */
     this.cachedParentSvgSize_ = new Size(0, 0);
-
-    /**
-     * Margin around the top/bottom/left/right after a zoomToFit call.
-     */
-    this.zoomToFitMargin = 20;
   }
 
   /**
@@ -2173,7 +2174,7 @@ class WorkspaceSvg extends Workspace {
     let workspaceWidth = metrics.viewWidth;
     let workspaceHeight = metrics.viewHeight;
     const blocksBox = this.getBlocksBoundingBox();
-    const doubleMargin = this.zoomToFitMargin * 2;
+    const doubleMargin = ZOOM_TO_FIT_MARGIN * 2;
     let blocksWidth = blocksBox.right - blocksBox.left + doubleMargin;
     let blocksHeight = blocksBox.bottom - blocksBox.top + doubleMargin;
     if (!blocksWidth) {

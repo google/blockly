@@ -1257,7 +1257,7 @@
     },
   ],
 
-  'develop': [
+  '8.0.0': [
     {
       oldName: 'Blockly',
       exports: {
@@ -1335,5 +1335,7 @@
       newName: 'Blockly.dropDownDiv',
       newPath: 'Blockly.DropDownDiv',
     },
-  ]
+  ],
+
+  'develop': [ ],
 }

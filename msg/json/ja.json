@@ -220,7 +220,7 @@
 	"TEXT_TEXT_HELPURL": "https://ja.wikipedia.org/wiki/文字列",
 	"TEXT_TEXT_TOOLTIP": "文字、単語、または行のテキスト。",
 	"TEXT_JOIN_HELPURL": "https://github.com/google/blockly/wiki/Text#text-creation",
-	"TEXT_JOIN_TITLE_CREATEWITH": "テキストの作成：",
+	"TEXT_JOIN_TITLE_CREATEWITH": "テキストを結合して作成：",
 	"TEXT_JOIN_TOOLTIP": "任意の数の項目一部を一緒に接合してテキストを作成。",
 	"TEXT_CREATE_JOIN_TITLE_JOIN": "結合",
 	"TEXT_CREATE_JOIN_TOOLTIP": "セクションを追加、削除、または順序変更して、ブロックを再構成。",

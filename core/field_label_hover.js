@@ -221,10 +221,13 @@ FieldLabelHover.prototype.getText = function() {
  * @package
  */
   FieldLabelHover.prototype.applyColour = function() {
+  const renderer = this.sourceBlock_.workspace.getRenderer();
   this.sourceBlock_.pathObject.svgPath.setAttribute('fill', this.sourceBlock_.style.colourPrimary);
-  this.sourceBlock_.pathObject.svgPathLight.setAttribute('stroke', this.sourceBlock_.style.colourTertiary);
-  this.sourceBlock_.pathObject.svgPathDark.setAttribute('fill', this.sourceBlock_.style.colourTertiary);
-  this.sourceBlock_.pathObject.svgPathLight.style.display = 'inline';
+  if (renderer.name === 'geras') {
+    this.sourceBlock_.pathObject.svgPathLight.setAttribute('stroke', this.sourceBlock_.style.colourTertiary);
+    this.sourceBlock_.pathObject.svgPathDark.setAttribute('fill', this.sourceBlock_.style.colourTertiary);
+    this.sourceBlock_.pathObject.svgPathLight.style.display = 'inline';
+  }
 };
 
  fieldRegistry.register('field_label_hover', FieldLabelHover);

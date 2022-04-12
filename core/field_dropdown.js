@@ -26,6 +26,8 @@ const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const parsing = goog.require('Blockly.utils.parsing');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const utilsString = goog.require('Blockly.utils.string');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 const {Field} = goog.require('Blockly.Field');
 const {MenuItem} = goog.require('Blockly.MenuItem');
@@ -204,7 +206,8 @@ class FieldDropdown extends Field {
     if (this.shouldAddBorderRect_()) {
       this.createBorderRect_();
     } else {
-      this.clickTarget_ = this.sourceBlock_.getSvgRoot();
+      this.clickTarget_ =
+          (/** @type {!BlockSvg} */ (this.sourceBlock_)).getSvgRoot();
     }
     this.createTextElement_();
 
@@ -290,8 +293,9 @@ class FieldDropdown extends Field {
           this.sourceBlock_.getParent().getColour() :
           this.sourceBlock_.getColour();
       const borderColour = (this.sourceBlock_.isShadow()) ?
-          this.sourceBlock_.getParent().style.colourTertiary :
-          this.sourceBlock_.style.colourTertiary;
+          (/** @type {!BlockSvg} */ (this.sourceBlock_.getParent()))
+              .style.colourTertiary :
+          (/** @type {!BlockSvg} */ (this.sourceBlock_)).style.colourTertiary;
       dropDownDiv.setColour(primaryColour, borderColour);
     }
 
@@ -506,10 +510,13 @@ class FieldDropdown extends Field {
   applyColour() {
     if (this.borderRect_) {
       this.borderRect_.setAttribute(
-          'stroke', this.sourceBlock_.style.colourTertiary);
+          'stroke',
+          (/** @type {!BlockSvg} */ (this.sourceBlock_)).style.colourTertiary);
       if (this.menu_) {
         this.borderRect_.setAttribute(
-            'fill', this.sourceBlock_.style.colourTertiary);
+            'fill',
+            (/** @type {!BlockSvg} */ (this.sourceBlock_))
+                .style.colourTertiary);
       } else {
         this.borderRect_.setAttribute('fill', 'transparent');
       }
@@ -517,9 +524,13 @@ class FieldDropdown extends Field {
     // Update arrow's colour.
     if (this.sourceBlock_ && this.arrow_) {
       if (this.sourceBlock_.isShadow()) {
-        this.arrow_.style.fill = this.sourceBlock_.style.colourSecondary;
+        this.arrow_.style.fill =
+            (
+                /** @type {!BlockSvg} */ (this.sourceBlock_))
+                .style.colourSecondary;
       } else {
-        this.arrow_.style.fill = this.sourceBlock_.style.colourPrimary;
+        this.arrow_.style.fill =
+            (/** @type {!BlockSvg} */ (this.sourceBlock_)).style.colourPrimary;
       }
     }
   }

@@ -30,6 +30,8 @@ const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 const {IBlockDragger} = goog.require('Blockly.IBlockDragger');
 /* eslint-disable-next-line no-unused-vars */
 const {IDragTarget} = goog.requireType('Blockly.IDragTarget');
+/* eslint-disable-next-line no-unused-vars */
+const {Icon} = goog.requireType('Blockly.Icon');
 const {InsertionMarkerManager} = goog.require('Blockly.InsertionMarkerManager');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
@@ -99,7 +101,7 @@ const BlockDragger = class {
      * A list of all of the icons (comment, warning, and mutator) that are
      * on this block and its descendants.  Moving an icon moves the bubble that
      * extends from it if that bubble is open.
-     * @type {Array<!Object>}
+     * @type {Array<!IconData>}
      * @protected
      */
     this.dragIconData_ = initIconData(block);
@@ -451,11 +453,21 @@ const BlockDragger = class {
 };
 
 /**
+ * Data about the position of a given icon.
+ * @typedef {{
+ *        location:!Coordinate,
+ *        icon:!Icon,
+ * }}
+ */
+let IconData;
+exports.IconData = IconData;
+
+/**
  * Make a list of all of the icons (comment, warning, and mutator) that are
  * on this block and its descendants.  Moving an icon moves the bubble that
  * extends from it if that bubble is open.
  * @param {!BlockSvg} block The root block that is being dragged.
- * @return {!Array<!Object>} The list of all icons and their locations.
+ * @return {!Array<!IconData>} The list of all icons and their locations.
  */
 const initIconData = function(block) {
   // Build a list of icons that need to be moved and where they started.

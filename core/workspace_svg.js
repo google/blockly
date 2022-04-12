@@ -743,7 +743,7 @@ class WorkspaceSvg extends Workspace {
     if (this.inverseScreenCTMDirty_) {
       const ctm = this.getParentSvg().getScreenCTM();
       if (ctm) {
-        this.inverseScreenCTM_ = ctm.inverse();
+        this.inverseScreenCTM_ = (/** @type {SVGMatrix} */ (ctm)).inverse();
         this.inverseScreenCTMDirty_ = false;
       }
     }
@@ -1237,13 +1237,13 @@ class WorkspaceSvg extends Workspace {
       this.cachedParentSvgSize_.width = width;
       // This is set to support the public (but deprecated) Blockly.svgSize
       // method.
-      svg.cachedWidth_ = width;
+      svg.setAttribute('data-cached-width', width);
     }
     if (height != null) {
       this.cachedParentSvgSize_.height = height;
       // This is set to support the public (but deprecated) Blockly.svgSize
       // method.
-      svg.cachedHeight_ = height;
+      svg.setAttribute('data-cached-height', height);
     }
   }
 
@@ -1259,7 +1259,7 @@ class WorkspaceSvg extends Workspace {
    * Get the SVG element that contains this workspace.
    * Note: We assume this is only called after the workspace has been injected
    * into the DOM.
-   * @return {!SVGElement} SVG element.
+   * @return {!SVGSVGElement} SVG element.
    */
   getParentSvg() {
     if (!this.cachedParentSvg_) {
@@ -1269,10 +1269,10 @@ class WorkspaceSvg extends Workspace {
           this.cachedParentSvg_ = element;
           break;
         }
-        element = /** @type {!SVGElement} */ (element.parentNode);
+        element = /** @type {!SVGSVGElement} */ (element.parentNode);
       }
     }
-    return /** @type {!SVGElement} */ (this.cachedParentSvg_);
+    return /** @type {!SVGSVGElement} */ (this.cachedParentSvg_);
   }
 
   /**
@@ -1859,7 +1859,7 @@ class WorkspaceSvg extends Workspace {
 
   /**
    * Handle a mouse-wheel on SVG drawing surface.
-   * @param {!Event} e Mouse wheel event.
+   * @param {!WheelEvent} e Mouse wheel event.
    * @private
    */
   onMouseWheel_(e) {
@@ -2068,11 +2068,11 @@ class WorkspaceSvg extends Workspace {
       try {
         // In IE11, use setActive (which is IE only) so the page doesn't scroll
         // to the workspace gaining focus.
-        this.getParentSvg().parentNode.setActive();
+        (/** @type {?} */ (this.getParentSvg().parentElement)).setActive();
       } catch (e) {
         // setActive support was discontinued in Edge so when that fails, call
         // focus instead.
-        this.getParentSvg().parentNode.focus({preventScroll: true});
+        this.getParentSvg().parentElement.focus({preventScroll: true});
       }
     }
   }
@@ -2109,7 +2109,8 @@ class WorkspaceSvg extends Workspace {
     // canvas' space, so that they are in workspace units relative to the top
     // left of the visible portion of the workspace.
     let matrix = this.getCanvas().getCTM();
-    let center = this.getParentSvg().createSVGPoint();
+    let center =
+        (/** @type {SVGSVGElement} */ (this.getParentSvg())).createSVGPoint();
     center.x = x;
     center.y = y;
     center = center.matrixTransform(matrix.inverse());

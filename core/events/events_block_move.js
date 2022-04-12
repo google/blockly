@@ -23,6 +23,14 @@ const {Block} = goog.requireType('Blockly.Block');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 
+/**
+ * @typedef {{
+ *   parentId: string,
+ *   inputName: string,
+ *   coordinate: ?Coordinate,
+ * }}
+ */
+let BlockLocation;  // eslint-disable-line no-unused-vars
 
 /**
  * Class for a block move event.  Created before the move.
@@ -113,7 +121,7 @@ class BlockMove extends BlockBase {
   /**
    * Returns the parentId and input if the block is connected,
    *   or the XY location if disconnected.
-   * @return {!Object} Collection of location info.
+   * @return {!BlockLocation} Collection of location info.
    * @private
    */
   currentLocation_() {

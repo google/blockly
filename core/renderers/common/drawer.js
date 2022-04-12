@@ -21,7 +21,7 @@ const svgPaths = goog.require('Blockly.utils.svgPaths');
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 const {Connection} = goog.require('Blockly.blockRendering.Connection');
 /* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {ConstantProvider, Notch, PuzzleTab} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 /* eslint-disable-next-line no-unused-vars */
 const {ExternalValueInput} = goog.requireType('Blockly.blockRendering.ExternalValueInput');
 /* eslint-disable-next-line no-unused-vars */
@@ -30,6 +30,8 @@ const {Field} = goog.requireType('Blockly.blockRendering.Field');
 const {Icon} = goog.requireType('Blockly.blockRendering.Icon');
 /* eslint-disable-next-line no-unused-vars */
 const {InlineInput} = goog.requireType('Blockly.blockRendering.InlineInput');
+/* eslint-disable-next-line no-unused-vars */
+const {PreviousConnection} = goog.requireType('Blockly.blockRendering.PreviousConnection');
 /* eslint-disable-next-line no-unused-vars */
 const {RenderInfo} = goog.requireType('Blockly.blockRendering.RenderInfo');
 /* eslint-disable-next-line no-unused-vars */
@@ -152,7 +154,10 @@ class Drawer {
         this.outlinePath_ += this.constants_.OUTSIDE_CORNERS.topRight;
       } else if (
           Types.isPreviousConnection(elem) && elem instanceof Connection) {
-        this.outlinePath_ += elem.shape.pathLeft;
+        this.outlinePath_ +=
+            (/** @type {Notch} */ (
+                 (/** @type {PreviousConnection} */ (elem)).shape))
+                .pathLeft;
       } else if (Types.isHat(elem)) {
         this.outlinePath_ += this.constants_.START_HAT.path;
       } else if (Types.isSpacer(elem)) {
@@ -186,7 +191,7 @@ class Drawer {
     this.positionExternalValueConnection_(row);
 
     const pathDown = (typeof input.shape.pathDown === 'function') ?
-        input.shape.pathDown(input.height) :
+        (/** @type {function(number)} */ (input.shape.pathDown))(input.height) :
         input.shape.pathDown;
 
     this.outlinePath_ += svgPaths.lineOnAxis('H', input.xPos + input.width) +
@@ -204,7 +209,7 @@ class Drawer {
     // Where to start drawing the notch, which is on the right side in LTR.
     const x = input.xPos + input.notchOffset + input.shape.width;
 
-    const innerTopLeftCorner = input.shape.pathRight +
+    const innerTopLeftCorner = (/** @type {Notch} */ (input.shape)).pathRight +
         svgPaths.lineOnAxis(
             'h', -(input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
         this.constants_.INSIDE_CORNERS.pathTop;
@@ -244,7 +249,7 @@ class Drawer {
     let outlinePath = '';
     for (let i = elems.length - 1, elem; (elem = elems[i]); i--) {
       if (Types.isNextConnection(elem) && elem instanceof Connection) {
-        outlinePath += elem.shape.pathRight;
+        outlinePath += (/** @type {Notch} */ (elem.shape)).pathRight;
       } else if (Types.isLeftSquareCorner(elem)) {
         outlinePath += svgPaths.lineOnAxis('H', bottomRow.xPos);
       } else if (Types.isLeftRoundedCorner(elem)) {
@@ -275,7 +280,8 @@ class Drawer {
       const tabBottom =
           outputConnection.connectionOffsetY + outputConnection.height;
       const pathUp = (typeof outputConnection.shape.pathUp === 'function') ?
-          outputConnection.shape.pathUp(outputConnection.height) :
+          (/** @type {function(number)} */ (outputConnection.shape.pathUp))(
+              outputConnection.height) :
           outputConnection.shape.pathUp;
 
       // Draw a line up to the bottom of the tab.
@@ -363,7 +369,8 @@ class Drawer {
     const connectionRight = input.xPos + input.connectionWidth;
 
     this.inlinePath_ += svgPaths.moveTo(connectionRight, yPos) +
-        svgPaths.lineOnAxis('v', connectionTop) + input.shape.pathDown +
+        svgPaths.lineOnAxis('v', connectionTop) +
+        (/** @type {PuzzleTab} */ (input.shape)).pathDown +
         svgPaths.lineOnAxis('v', height - connectionBottom) +
         svgPaths.lineOnAxis('h', width - input.connectionWidth) +
         svgPaths.lineOnAxis('v', -height) + 'z';

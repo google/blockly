@@ -55,7 +55,6 @@ goog.require('Blockly.Touch');
 /** @suppress {extraRequire} */
 goog.require('Blockly.blockRendering');
 
-
 /**
  * Class for a flyout.
  * @abstract
@@ -586,8 +585,10 @@ class Flyout extends DeleteArea {
     // Parse the Array, Node or NodeList into a a list of flyout items.
     const parsedContent = toolbox.convertFlyoutDefToJsonArray(flyoutDef);
     const flyoutInfo =
-        /** @type {{contents:!Array<!Object>, gaps:!Array<number>}} */ (
-            this.createFlyoutInfo_(parsedContent));
+        /**
+           @type {{contents:!Array<!Flyout.FlyoutItem>, gaps:!Array<number>}}
+             */
+        (this.createFlyoutInfo_(parsedContent));
 
     this.layout_(flyoutInfo.contents, flyoutInfo.gaps);
 
@@ -629,8 +630,8 @@ class Flyout extends DeleteArea {
    * the flyout.
    * @param {!toolbox.FlyoutItemInfoArray} parsedContent The array
    *     of objects to show in the flyout.
-   * @return {{contents:Array<Object>, gaps:Array<number>}} The list of contents
-   *     and gaps needed to lay out the flyout.
+   * @return {{contents:Array<!Flyout.FlyoutItem>, gaps:Array<number>}} The list
+   *     of contents and gaps needed to lay out the flyout.
    * @private
    */
   createFlyoutInfo_(parsedContent) {
@@ -1218,7 +1219,8 @@ Flyout.prototype.setMetrics_;
 
 /**
  * Lay out the blocks in the flyout.
- * @param {!Array<!Object>} contents The blocks and buttons to lay out.
+ * @param {!Array<!Flyout.FlyoutItem>} contents The blocks and buttons to lay
+ *     out.
  * @param {!Array<number>} gaps The visible gaps between blocks.
  * @protected
  */
@@ -1226,7 +1228,7 @@ Flyout.prototype.layout_;
 
 /**
  * Scroll the flyout.
- * @param {!Event} e Mouse wheel scroll event.
+ * @param {!WheelEvent} e Mouse wheel scroll event.
  * @protected
  */
 Flyout.prototype.wheel_;
@@ -1250,5 +1252,30 @@ Flyout.prototype.getX;
  * @return {number} Y coordinate.
  */
 Flyout.prototype.getY;
+
+/**
+ * Scroll the flyout to the beginning of its contents.
+ */
+Flyout.prototype.scrollToStart;
+
+/**
+ * The type of a flyout content item.
+ * @enum {string}
+ */
+Flyout.FlyoutItemType = {
+  BLOCK: 'block',
+  BUTTON: 'button',
+};
+
+/**
+ * A flyout content item.
+ * @typedef {{
+ *    type: !Flyout.FlyoutItemType,
+ *    button: !FlyoutButton,
+ *    block: !BlockSvg,
+ * }}
+ */
+Flyout.FlyoutItem;
+
 
 exports.Flyout = Flyout;

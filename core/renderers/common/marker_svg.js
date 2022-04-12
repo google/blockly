@@ -26,7 +26,7 @@ const {ConnectionType} = goog.require('Blockly.ConnectionType');
 /* eslint-disable-next-line no-unused-vars */
 const {Connection} = goog.requireType('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {ConstantProvider, Notch, PuzzleTab} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 /* eslint-disable-next-line no-unused-vars */
 const {Field} = goog.requireType('Blockly.Field');
 /* eslint-disable-next-line no-unused-vars */
@@ -240,7 +240,7 @@ class MarkerSvg {
     // Ensures the marker will be visible immediately after the move.
     const animate = this.currentMarkerSvg.childNodes[0];
     if (animate !== undefined) {
-      animate.beginElement && animate.beginElement();
+      animate instanceof SVGAnimationElement && animate.beginElement();
     }
   }
 
@@ -291,11 +291,13 @@ class MarkerSvg {
 
     if (block.previousConnection) {
       const connectionShape =
-          this.constants_.shapeFor(block.previousConnection);
+          /** @type {!Notch|!PuzzleTab} */ (
+              this.constants_.shapeFor(block.previousConnection));
       this.positionPrevious_(
           width, markerOffset, markerHeight, connectionShape);
     } else if (block.outputConnection) {
-      const connectionShape = this.constants_.shapeFor(block.outputConnection);
+      const connectionShape = /** @type {!Notch|!PuzzleTab} */ (
+          this.constants_.shapeFor(block.outputConnection));
       this.positionOutput_(width, height, connectionShape);
     } else {
       this.positionBlock_(width, markerOffset, markerHeight);
@@ -482,8 +484,9 @@ class MarkerSvg {
     const x = connection.getOffsetInBlock().x;
     const y = connection.getOffsetInBlock().y;
 
-    const path =
-        svgPaths.moveTo(0, 0) + this.constants_.shapeFor(connection).pathDown;
+    const path = svgPaths.moveTo(0, 0) +
+        (/** @type {PuzzleTab} */ (this.constants_.shapeFor(connection)))
+            .pathDown;
 
     this.markerInput_.setAttribute('d', path);
     this.markerInput_.setAttribute(
@@ -513,7 +516,8 @@ class MarkerSvg {
    * Displays a puzzle outline and the top and bottom path.
    * @param {number} width The width of the block.
    * @param {number} height The height of the block.
-   * @param {!Object} connectionShape The shape object for the connection.
+   * @param {!Notch|!PuzzleTab} connectionShape The shape object for the
+   *     connection.
    * @protected
    */
   positionOutput_(width, height, connectionShape) {
@@ -537,7 +541,8 @@ class MarkerSvg {
    * @param {number} markerOffset The offset of the marker from around the
    *     block.
    * @param {number} markerHeight The height of the marker.
-   * @param {!Object} connectionShape The shape object for the connection.
+   * @param {!Notch|!PuzzleTab} connectionShape The shape object for the
+   *     connection.
    * @protected
    */
   positionPrevious_(width, markerOffset, markerHeight, connectionShape) {
@@ -702,9 +707,9 @@ class MarkerSvg {
 
     if (this.isCursor()) {
       const values = this.colour_ + ';transparent;transparent;';
-      this.markerSvgLine_.firstChild.setAttribute('values', values);
-      this.markerInput_.firstChild.setAttribute('values', values);
-      this.markerBlock_.firstChild.setAttribute('values', values);
+      this.markerSvgLine_.firstElementChild.setAttribute('values', values);
+      this.markerInput_.firstElementChild.setAttribute('values', values);
+      this.markerBlock_.firstElementChild.setAttribute('values', values);
     }
   }
 

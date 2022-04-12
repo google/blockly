@@ -257,7 +257,9 @@ const svgSize = function(svg) {
       'Blockly.svgSize', 'March 2021', 'March 2022',
       'workspace.getCachedParentSvgSize');
   svg = /** @type {?} */ (svg);
-  return new Size(svg.cachedWidth_, svg.cachedHeight_);
+  return new Size(
+      Number(svg.getAttribute('data-cached-width')),
+      Number(svg.getAttribute('data-cached-height')));
 };
 exports.svgSize = svgSize;
 

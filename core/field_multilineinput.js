@@ -88,7 +88,7 @@ class FieldMultilineInput extends FieldTextInput {
    */
   configure_(config) {
     super.configure_(config);
-    config.maxLines && this.setMaxLines(config.maxLines);
+    config['maxLines'] && this.setMaxLines(config['maxLines']);
   }
 
   /**
@@ -103,7 +103,8 @@ class FieldMultilineInput extends FieldTextInput {
     // needed so the plain-text representation of the XML produced by
     // `Blockly.Xml.domToText` will appear on a single line (this is a
     // limitation of the plain-text format).
-    fieldElement.textContent = this.getValue().replace(/\n/g, '&#10;');
+    fieldElement.textContent =
+        (/** @type {string} */ (this.getValue())).replace(/\n/g, '&#10;');
     return fieldElement;
   }
 
@@ -282,7 +283,7 @@ class FieldMultilineInput extends FieldTextInput {
     let totalWidth = 0;
     let totalHeight = 0;
     for (let i = 0; i < nodes.length; i++) {
-      const tspan = /** @type {!Element} */ (nodes[i]);
+      const tspan = /** @type {!SVGTextElement} */ (nodes[i]);
       const textWidth = dom.getTextWidth(tspan);
       if (textWidth > totalWidth) {
         totalWidth = textWidth;
@@ -377,8 +378,8 @@ class FieldMultilineInput extends FieldTextInput {
     div.appendChild(htmlInput);
 
     htmlInput.value = htmlInput.defaultValue = this.getEditorText_(this.value_);
-    htmlInput.untypedDefaultValue_ = this.value_;
-    htmlInput.oldValue_ = null;
+    htmlInput.setAttribute('data-untyped-default-value', this.value_);
+    htmlInput.setAttribute('data-old-value', '');
     if (userAgent.GECKO) {
       // In FF, ensure the browser reflows before resizing to avoid issue #2777.
       setTimeout(this.resizeEditor_.bind(this), 0);

@@ -114,7 +114,7 @@ class WorkspaceCommentSvg extends WorkspaceComment {
     this.eventsInit_ = false;
 
     /**
-     * @type {?Element}
+     * @type {?HTMLTextAreaElement}
      * @private
      */
     this.textarea_ = null;
@@ -174,7 +174,7 @@ class WorkspaceCommentSvg extends WorkspaceComment {
      */
     this.svgGroup_ =
         dom.createSvgElement(Svg.G, {'class': 'blocklyComment'}, null);
-    this.svgGroup_.translate_ = '';
+    this.svgGroup_.setAttribute('data-translate', '');
 
     this.svgRect_ = dom.createSvgElement(Svg.RECT, {
       'class': 'blocklyCommentRect',
@@ -485,10 +485,12 @@ class WorkspaceCommentSvg extends WorkspaceComment {
     if (dragSurface) {
       dragSurface.translateSurface(newLoc.x, newLoc.y);
     } else {
-      this.svgGroup_.translate_ =
-          'translate(' + newLoc.x + ',' + newLoc.y + ')';
       this.svgGroup_.setAttribute(
-          'transform', this.svgGroup_.translate_ + this.svgGroup_.skew_);
+          'data-translate', 'translate(' + newLoc.x + ',' + newLoc.y + ')');
+      this.svgGroup_.setAttribute(
+          'transform',
+          this.svgGroup_.getAttribute('data-translate') +
+              this.svgGroup_.getAttribute('data-skew'));
     }
   }
 
@@ -583,8 +585,8 @@ class WorkspaceCommentSvg extends WorkspaceComment {
   setDragging(adding) {
     if (adding) {
       const group = this.getSvgRoot();
-      group.translate_ = '';
-      group.skew_ = '';
+      group.setAttribute('data-translate', '');
+      group.setAttribute('data-skew', '');
       dom.addClass(
           /** @type {!Element} */ (this.svgGroup_), 'blocklyDragging');
     } else {
@@ -658,7 +660,7 @@ class WorkspaceCommentSvg extends WorkspaceComment {
    * @package
    */
   toXmlWithXY(opt_noId) {
-    let width;  // Not used in LTR.
+    let width = 0;  // Not used in LTR.
     if (this.workspace.RTL) {
       // Here be performance dragons: This calls getMetrics().
       width = this.workspace.getWidth();
@@ -781,7 +783,8 @@ class WorkspaceCommentSvg extends WorkspaceComment {
     const body = document.createElementNS(dom.HTML_NS, 'body');
     body.setAttribute('xmlns', dom.HTML_NS);
     body.className = 'blocklyMinimalBody';
-    const textarea = document.createElementNS(dom.HTML_NS, 'textarea');
+    const textarea = /** @type {HTMLTextAreaElement} */ (
+        document.createElementNS(dom.HTML_NS, 'textarea'));
     textarea.className = 'blocklyCommentTextarea';
     textarea.setAttribute('dir', this.RTL ? 'RTL' : 'LTR');
     textarea.readOnly = !this.isEditable();

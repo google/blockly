@@ -73,7 +73,7 @@ exports.paste = paste;
 const duplicate = function(toDuplicate) {
   const oldCopyData = copyData;
   copy(toDuplicate);
-  const pastedThing = toDuplicate.workspace.paste(copyData.saveInfo);
+  const pastedThing = copyData.source.paste(copyData.saveInfo);
   copyData = oldCopyData;
   return pastedThing;
 };

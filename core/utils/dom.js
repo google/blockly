@@ -280,7 +280,7 @@ exports.stopTextWidthCache = stopTextWidthCache;
 
 /**
  * Gets the width of a text element, caching it in the process.
- * @param {!Element} textElement An SVG 'text' element.
+ * @param {!SVGTextElement} textElement An SVG 'text' element.
  * @return {number} Width of element.
  * @alias Blockly.utils.dom.getTextWidth
  */
@@ -366,14 +366,16 @@ const getFastTextWidthWithSizeString = function(
 
   if (!canvasContext) {
     // Inject the canvas element used for computing text widths.
-    const computeCanvas = document.createElement('canvas');
+    const computeCanvas =
+        /** @type {HTMLCanvasElement} */ (document.createElement('canvas'));
     computeCanvas.className = 'blocklyComputeCanvas';
     document.body.appendChild(computeCanvas);
 
     // Initialize the HTML canvas context and set the font.
     // The context font must match blocklyText's fontsize and font-family
     // set in CSS.
-    canvasContext = computeCanvas.getContext('2d');
+    canvasContext = /** @type {CanvasRenderingContext2D} */ (
+        computeCanvas.getContext('2d'));
   }
   // Set the desired font size and family.
   canvasContext.font = fontWeight + ' ' + fontSize + ' ' + fontFamily;
@@ -399,7 +401,7 @@ exports.getFastTextWidthWithSizeString = getFastTextWidthWithSizeString;
  * @alias Blockly.utils.dom.measureFontMetrics
  */
 const measureFontMetrics = function(text, fontSize, fontWeight, fontFamily) {
-  const span = document.createElement('span');
+  const span = /** @type {!HTMLSpanElement} */ (document.createElement('span'));
   span.style.font = fontWeight + ' ' + fontSize + ' ' + fontFamily;
   span.textContent = text;
 

@@ -96,7 +96,7 @@ class Field {
     /**
      * A generic value possessed by the field.
      * Should generally be non-null, only null when the field is created.
-     * @type {*}
+     * @type {?}
      * @protected
      */
     this.value_ =
@@ -472,7 +472,7 @@ class Field {
    * Returns a stringified version of the XML state, if it should be used.
    * Otherwise this returns null, to signal the field should use its own
    * serialization.
-   * @param {*} callingClass The class calling this method.
+   * @param {?} callingClass The class calling this method.
    *     Used to see if `this` has overridden any relevant hooks.
    * @return {?string} The stringified version of the XML state, or null.
    * @protected
@@ -492,9 +492,9 @@ class Field {
   }
 
   /**
-   * Loads the given state using either the old XML hoooks, if they should be
+   * Loads the given state using either the old XML hooks, if they should be
    * used. Returns true to indicate loading has been handled, false otherwise.
-   * @param {*} callingClass The class calling this method.
+   * @param {?} callingClass The class calling this method.
    *     Used to see if `this` has overridden any relevant hooks.
    * @param {*} state The state to apply to the field.
    * @return {boolean} Whether the state was applied or not.
@@ -835,7 +835,8 @@ class Field {
       // Browsers are inconsistent in what they return for a bounding box.
       // - Webkit / Blink: fill-box / object bounding box
       // - Gecko / Triden / EdgeHTML: stroke-box
-      const bBox = this.sourceBlock_.getHeightWidth();
+      const bBox =
+          (/** @type {!BlockSvg} */ (this.sourceBlock_)).getHeightWidth();
       const scale =
           /** @type {!WorkspaceSvg} */ (this.sourceBlock_.workspace).scale;
       xy = this.getAbsoluteXY_();
@@ -938,8 +939,8 @@ class Field {
   forceRerender() {
     this.isDirty_ = true;
     if (this.sourceBlock_ && this.sourceBlock_.rendered) {
-      this.sourceBlock_.render();
-      this.sourceBlock_.bumpNeighbours();
+      (/** @type {!BlockSvg} */ (this.sourceBlock_)).render();
+      (/** @type {!BlockSvg} */ (this.sourceBlock_)).bumpNeighbours();
       this.updateMarkers_();
     }
   }

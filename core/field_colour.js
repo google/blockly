@@ -23,6 +23,8 @@ const dom = goog.require('Blockly.utils.dom');
 const dropDownDiv = goog.require('Blockly.dropDownDiv');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 const {Field} = goog.require('Blockly.Field');
 const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
 /* eslint-disable-next-line no-unused-vars */
@@ -186,7 +188,8 @@ class FieldColour extends Field {
       this.createBorderRect_();
       this.borderRect_.style['fillOpacity'] = '1';
     } else {
-      this.clickTarget_ = this.sourceBlock_.getSvgRoot();
+      this.clickTarget_ =
+          (/** @type {!BlockSvg} */ (this.sourceBlock_)).getSvgRoot();
     }
   }
 
@@ -199,9 +202,11 @@ class FieldColour extends Field {
         this.borderRect_.style.fill = /** @type {string} */ (this.getValue());
       }
     } else {
-      this.sourceBlock_.pathObject.svgPath.setAttribute(
-          'fill', this.getValue());
-      this.sourceBlock_.pathObject.svgPath.setAttribute('stroke', '#fff');
+      (/** @type {!BlockSvg} */ (this.sourceBlock_))
+          .pathObject.svgPath.setAttribute(
+              'fill', /** @type {string} */ (this.getValue()));
+      (/** @type {!BlockSvg} */ (this.sourceBlock_))
+          .pathObject.svgPath.setAttribute('stroke', '#fff');
     }
   }
 
@@ -229,8 +234,11 @@ class FieldColour extends Field {
     if (this.borderRect_) {
       this.borderRect_.style.fill = /** @type {string} */ (newValue);
     } else if (this.sourceBlock_ && this.sourceBlock_.rendered) {
-      this.sourceBlock_.pathObject.svgPath.setAttribute('fill', newValue);
-      this.sourceBlock_.pathObject.svgPath.setAttribute('stroke', '#fff');
+      (/** @type {!BlockSvg} */ (this.sourceBlock_))
+          .pathObject.svgPath.setAttribute(
+              'fill', /** @type {string} */ (newValue));
+      (/** @type {!BlockSvg} */ (this.sourceBlock_))
+          .pathObject.svgPath.setAttribute('stroke', '#fff');
     }
   }
 
@@ -295,7 +303,7 @@ class FieldColour extends Field {
    */
   onClick_(e) {
     const cell = /** @type {!Element} */ (e.target);
-    const colour = cell && cell.label;
+    const colour = cell && cell.getAttribute('data-colour');
     if (colour !== null) {
       this.setValue(colour);
       dropDownDiv.hideIfOwner(this);
@@ -326,7 +334,7 @@ class FieldColour extends Field {
       // Select the highlighted colour.
       const highlighted = this.getHighlighted_();
       if (highlighted) {
-        const colour = highlighted && highlighted.label;
+        const colour = highlighted && highlighted.getAttribute('data-colour');
         if (colour !== null) {
           this.setValue(colour);
         }
@@ -346,6 +354,10 @@ class FieldColour extends Field {
    * @private
    */
   moveHighlightBy_(dx, dy) {
+    if (!this.highlightedIndex_) {
+      return;
+    }
+
     const colours = this.colours_ || FieldColour.COLOURS;
     const columns = this.columns_ || FieldColour.COLUMNS;
 
@@ -434,6 +446,10 @@ class FieldColour extends Field {
    * @private
    */
   getHighlighted_() {
+    if (!this.highlightedIndex_) {
+      return null;
+    }
+
     const columns = this.columns_ || FieldColour.COLUMNS;
     const x = this.highlightedIndex_ % columns;
     const y = Math.floor(this.highlightedIndex_ / columns);
@@ -478,7 +494,8 @@ class FieldColour extends Field {
     const titles = this.titles_ || FieldColour.TITLES;
     const selectedColour = this.getValue();
     // Create the palette.
-    const table = document.createElement('table');
+    const table =
+        /** @type {HTMLTableElement} */ (document.createElement('table'));
     table.className = 'blocklyColourTable';
     table.tabIndex = 0;
     table.dir = 'ltr';
@@ -494,9 +511,11 @@ class FieldColour extends Field {
         aria.setRole(row, aria.Role.ROW);
         table.appendChild(row);
       }
-      const cell = document.createElement('td');
+      const cell =
+          /** @type {HTMLTableCellElement} */ (document.createElement('td'));
       row.appendChild(cell);
-      cell.label = colours[i];  // This becomes the value, if clicked.
+      cell.setAttribute(
+          'data-colour', colours[i]);  // This becomes the value, if clicked.
       cell.title = titles[i] || colours[i];
       cell.id = idGenerator.getNextUniqueId();
       cell.setAttribute('data-index', i);

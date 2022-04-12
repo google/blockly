@@ -144,7 +144,8 @@ class WorkspaceAudio {
     if (sound) {
       // Don't play one sound on top of another.
       const now = new Date;
-      if (this.lastSound_ !== null && now - this.lastSound_ < SOUND_LIMIT) {
+      if (this.lastSound_ !== null &&
+          now.getTime() - this.lastSound_.getTime() < SOUND_LIMIT) {
         return;
       }
       this.lastSound_ = now;

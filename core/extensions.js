@@ -224,7 +224,8 @@ const checkNoMutatorProperties = function(mutationName, block) {
  */
 const checkXmlHooks = function(object, errorPrefix) {
   return checkHasFunctionPair(
-      object.mutationToDom, object.domToMutation,
+      (/** @type {?} */ (object)).mutationToDom,
+      (/** @type {?} */ (object)).domToMutation,
       errorPrefix + ' mutationToDom/domToMutation');
 };
 
@@ -240,7 +241,8 @@ const checkXmlHooks = function(object, errorPrefix) {
  */
 const checkJsonHooks = function(object, errorPrefix) {
   return checkHasFunctionPair(
-      object.saveExtraState, object.loadExtraState,
+      (/** @type {?} */ (object)).saveExtraState,
+      (/** @type {?} */ (object)).loadExtraState,
       errorPrefix + ' saveExtraState/loadExtraState');
 };
 
@@ -255,7 +257,9 @@ const checkJsonHooks = function(object, errorPrefix) {
  */
 const checkMutatorDialog = function(object, errorPrefix) {
   return checkHasFunctionPair(
-      object.compose, object.decompose, errorPrefix + ' compose/decompose');
+      (/** @type {?} */ (object)).compose,
+      (/** @type {?} */ (object)).decompose,
+      errorPrefix + ' compose/decompose');
 };
 
 /**

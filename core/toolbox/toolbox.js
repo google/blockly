@@ -323,12 +323,13 @@ class Toolbox extends DeleteArea {
       /** @type {!WorkspaceSvg} */ (common.getMainWorkspace()).hideChaff(false);
     } else {
       const targetElement = e.target;
-      const itemId = targetElement.getAttribute('id');
+      const itemId =
+          (/** @type {Element} */ (targetElement)).getAttribute('id');
       if (itemId) {
         const item = this.getToolboxItemById(itemId);
         if (item.isSelectable()) {
           this.setSelectedItem(item);
-          item.onClick(e);
+          (/** @type {ISelectableToolboxItem} */ (item)).onClick(e);
         }
       }
       // Just close popups.
@@ -1012,10 +1013,12 @@ class Toolbox extends DeleteArea {
       return false;
     }
 
-    if (this.selectedItem_.isCollapsible() && this.selectedItem_.isExpanded()) {
+    if (this.selectedItem_.isCollapsible() &&
+        (/** @type {!ICollapsibleToolboxItem} */ (this.selectedItem_))
+            .isExpanded()) {
       const collapsibleItem =
           /** @type {!ICollapsibleToolboxItem} */ (this.selectedItem_);
-      collapsibleItem.setExpanded(false);
+      collapsibleItem.toggleExpanded();
       return true;
     } else if (
         this.selectedItem_.getParent() &&
@@ -1039,7 +1042,7 @@ class Toolbox extends DeleteArea {
     const collapsibleItem = /** @type {ICollapsibleToolboxItem} */
         (this.selectedItem_);
     if (!collapsibleItem.isExpanded()) {
-      collapsibleItem.setExpanded(true);
+      collapsibleItem.toggleExpanded();
       return true;
     } else {
       this.selectNext_();

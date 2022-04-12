@@ -195,7 +195,7 @@ class VerticalFlyout extends Flyout {
 
   /**
    * Scroll the flyout.
-   * @param {!Event} e Mouse wheel scroll event.
+   * @param {!WheelEvent} e Mouse wheel scroll event.
    * @protected
    */
   wheel_(e) {
@@ -222,7 +222,8 @@ class VerticalFlyout extends Flyout {
 
   /**
    * Lay out the blocks in the flyout.
-   * @param {!Array<!Object>} contents The blocks and buttons to lay out.
+   * @param {!Array<!Flyout.FlyoutItem>} contents The blocks and buttons to lay
+   *     out.
    * @param {!Array<number>} gaps The visible gaps between blocks.
    * @protected
    */

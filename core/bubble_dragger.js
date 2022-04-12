@@ -29,8 +29,7 @@ const {IBubble} = goog.requireType('Blockly.IBubble');
 const {IDeleteArea} = goog.requireType('Blockly.IDeleteArea');
 /* eslint-disable-next-line no-unused-vars */
 const {IDragTarget} = goog.requireType('Blockly.IDragTarget');
-/* eslint-disable-next-line no-unused-vars */
-const {WorkspaceCommentSvg} = goog.requireType('Blockly.WorkspaceCommentSvg');
+const {WorkspaceCommentSvg} = goog.require('Blockly.WorkspaceCommentSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */
@@ -243,9 +242,7 @@ const BubbleDragger = class {
    * @private
    */
   fireMoveEvent_() {
-    if (this.draggingBubble_.isComment) {
-      // TODO (adodson): Resolve build errors when requiring
-      // WorkspaceCommentSvg.
+    if (this.draggingBubble_ instanceof WorkspaceCommentSvg) {
       const event = /** @type {!CommentMove} */
           (new (eventUtils.get(eventUtils.COMMENT_MOVE))(
               /** @type {!WorkspaceCommentSvg} */ (this.draggingBubble_)));

@@ -108,7 +108,7 @@ const blockToDomWithXY = function(block, opt_noId) {
     }
   }
 
-  let width;  // Not used in LTR.
+  let width = 0;  // Not used in LTR.
   if (block.workspace.RTL) {
     width = block.workspace.getWidth();
   }
@@ -299,7 +299,7 @@ const cloneShadow = function(shadow, opt_noId) {
     if (opt_noId && node.nodeName === 'shadow') {
       // Strip off IDs from shadow blocks.  There should never be a 'block' as
       // a child of a 'shadow', so no need to check that.
-      node.removeAttribute('id');
+      (/** @type {Element} */ (node)).removeAttribute('id');
     }
     if (node.firstChild) {
       node = node.firstChild;
@@ -308,7 +308,8 @@ const cloneShadow = function(shadow, opt_noId) {
         textNode = node;
         node = node.parentNode;
         if (textNode.nodeType === dom.NodeType.TEXT_NODE &&
-            textNode.data.trim() === '' && node.firstChild !== textNode) {
+            (/** @type {Text} */ (textNode)).data.trim() === '' &&
+            node.firstChild !== textNode) {
           // Prune whitespace after a tag.
           dom.removeNode(textNode);
         }
@@ -317,7 +318,7 @@ const cloneShadow = function(shadow, opt_noId) {
         textNode = node;
         node = node.nextSibling;
         if (textNode.nodeType === dom.NodeType.TEXT_NODE &&
-            textNode.data.trim() === '') {
+            (/** @type {Text} */ (textNode)).data.trim() === '') {
           // Prune whitespace before a tag.
           dom.removeNode(textNode);
         }
@@ -433,7 +434,7 @@ const domToWorkspace = function(xml, workspace) {
         'swap the arguments.');
   }
 
-  let width;  // Not used in LTR.
+  let width = 0;  // Not used in LTR.
   if (workspace.RTL) {
     width = workspace.getWidth();
   }
@@ -610,10 +611,10 @@ const domToBlock = function(xmlBlock, workspace) {
       topBlockSvg.setConnectionTracking(false);
       // Render each block.
       for (let i = blocks.length - 1; i >= 0; i--) {
-        blocks[i].initSvg();
+        (/** @type {!BlockSvg} */ (blocks[i])).initSvg();
       }
       for (let i = blocks.length - 1; i >= 0; i--) {
-        blocks[i].render(false);
+        (/** @type {!BlockSvg} */ (blocks[i])).render(false);
       }
       // Populating the connection database may be deferred until after the
       // blocks have rendered.
@@ -666,8 +667,8 @@ const domToVariables = function(xmlVariables, workspace) {
     if (xmlChild.nodeType !== dom.NodeType.ELEMENT_NODE) {
       continue;  // Skip text nodes.
     }
-    const type = xmlChild.getAttribute('type');
-    const id = xmlChild.getAttribute('id');
+    const type = (/** @type {Element} */ (xmlChild)).getAttribute('type');
+    const id = (/** @type {Element} */ (xmlChild)).getAttribute('id');
     const name = xmlChild.textContent;
 
     workspace.createVariable(name, type, id);

@@ -23,6 +23,8 @@ const dropDownDiv = goog.require('Blockly.dropDownDiv');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const math = goog.require('Blockly.utils.math');
 const userAgent = goog.require('Blockly.utils.userAgent');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 const {Field} = goog.require('Blockly.Field');
 const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
 const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
@@ -237,8 +239,8 @@ class FieldAngle extends FieldTextInput {
     dropDownDiv.getContentDiv().appendChild(this.editor_);
 
     dropDownDiv.setColour(
-        this.sourceBlock_.style.colourPrimary,
-        this.sourceBlock_.style.colourTertiary);
+        (/** @type {!BlockSvg} */ (this.sourceBlock_)).style.colourPrimary,
+        (/** @type {!BlockSvg} */ (this.sourceBlock_)).style.colourTertiary);
 
     dropDownDiv.showPositionedByField(this, this.dropdownDispose_.bind(this));
 

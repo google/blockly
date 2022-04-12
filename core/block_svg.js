@@ -26,7 +26,6 @@ const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
 const internalConstants = goog.require('Blockly.internalConstants');
 const svgMath = goog.require('Blockly.utils.svgMath');
-const userAgent = goog.require('Blockly.utils.userAgent');
 const {ASTNode} = goog.require('Blockly.ASTNode');
 const {Block} = goog.require('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
@@ -131,7 +130,7 @@ class BlockSvg extends Block {
 
     /**
      * An optional method for defining custom block context menu items.
-     * @type {undefined|?function(!Array<!Object>)}
+     * @type {undefined|?function(!Array<!ContextMenuRegistry.ContextMenuOption>)}
      */
     this.customContextMenu = this.customContextMenu;
 
@@ -196,7 +195,7 @@ class BlockSvg extends Block {
      * @private
      */
     this.svgGroup_ = dom.createSvgElement(Svg.G, {}, null);
-    this.svgGroup_.translate_ = '';
+    this.svgGroup_.setAttribute('data-translate', '');
 
     /**
      * A block style object.
@@ -252,13 +251,7 @@ class BlockSvg extends Block {
     Tooltip.bindMouseEvents(svgPath);
 
     // Expose this block's ID on its top-level SVG group.
-    if (this.svgGroup_.dataset) {
-      this.svgGroup_.dataset['id'] = this.id;
-    } else if (userAgent.IE) {
-      // SVGElement.dataset is not available on IE11, but data-* properties
-      // can be set with setAttribute().
-      this.svgGroup_.setAttribute('data-id', this.id);
-    }
+    this.svgGroup_.setAttribute('data-id', this.id);
 
     this.doInit_();
   }
@@ -552,10 +545,12 @@ class BlockSvg extends Block {
     if (this.useDragSurface_) {
       this.workspace.getBlockDragSurface().translateSurface(newLoc.x, newLoc.y);
     } else {
-      this.svgGroup_.translate_ =
-          'translate(' + newLoc.x + ',' + newLoc.y + ')';
       this.svgGroup_.setAttribute(
-          'transform', this.svgGroup_.translate_ + this.svgGroup_.skew_);
+          'data-translate', 'translate(' + newLoc.x + ',' + newLoc.y + ')');
+      this.svgGroup_.setAttribute(
+          'transform',
+          this.svgGroup_.getAttribute('data-translate') +
+              this.svgGroup_.getAttribute('data-skew'));
     }
   }
 
@@ -744,7 +739,9 @@ class BlockSvg extends Block {
 
   /**
    * Generate the context menu for this block.
-   * @return {?Array<!Object>} Context menu options or null if no menu.
+   * @return {?Array<!ContextMenuRegistry.ContextMenuOption>} Context menu
+   *     options or null if no
+   *    menu.
    * @protected
    */
   generateContextMenu() {
@@ -815,8 +812,8 @@ class BlockSvg extends Block {
   setDragging(adding) {
     if (adding) {
       const group = this.getSvgRoot();
-      group.translate_ = '';
-      group.skew_ = '';
+      group.setAttribute('data-translate', '');
+      group.setAttribute('data-skew', '');
       common.draggingConnections.push(...this.getConnections_(true));
       dom.addClass(
           /** @type {!Element} */ (this.svgGroup_), 'blocklyDragging');

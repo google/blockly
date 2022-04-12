@@ -28,6 +28,108 @@ const {Svg} = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
 const {Theme} = goog.requireType('Blockly.Theme');
 
+/**
+ * An object containing sizing and path information about outside corners.
+ * @typedef {{
+ *   topLeft: string,
+ *   topRight: string,
+ *   bottomRight: string,
+ *   bottomLeft: string,
+ *   rightHeight: number
+ * }}
+ */
+let OutsideCorners;
+exports.OutsideCorners = OutsideCorners;
+
+/**
+ * An object containing sizing and path information about inside corners.
+ * @typedef {{
+ *   width: number,
+ *   height: number,
+ *   pathTop: string,
+ *   pathBottom: string
+ * }}
+ */
+let InsideCorners;
+exports.InsideCorners = InsideCorners;
+
+/**
+ * An object containing sizing and path information about a start hat.
+ * @typedef {{
+ *   height: number,
+ *   width: number,
+ *   path: string
+ * }}
+ */
+let StartHat;
+exports.StartHat = StartHat;
+
+/**
+ * An object containing sizing and path information about a notch.
+ * @typedef {{
+ *   type: number,
+ *   width: number,
+ *   height: number,
+ *   pathLeft: string,
+ *   pathRight: string
+ * }}
+ */
+let Notch;
+exports.Notch = Notch;
+
+/**
+ * An object containing sizing and path information about a puzzle tab.
+ * @typedef {{
+ *   type: number,
+ *   width: number,
+ *   height: number,
+ *   pathDown: (string|function(number)),
+ *   pathUp: (string|function(number))
+ * }}
+ */
+let PuzzleTab;
+exports.PuzzleTab = PuzzleTab;
+
+/**
+ * An object containing sizing and path information about collapsed block
+ * indicators.
+ * @typedef {{
+ *   height: number,
+ *   width: number,
+ *   path: string
+ * }}
+ */
+let JaggedTeeth;
+exports.JaggedTeeth = JaggedTeeth;
+
+/**
+ * An object containing sizing and type information about a shape.
+ * @typedef {{
+ *   type: number,
+ *   width: number,
+ *   height: number
+ * }}
+ */
+let Shape;
+exports.Shape = Shape;
+
+/**
+ * An object containing sizing and type information about a dynamic shape.
+ * @typedef {{
+ *   type: number,
+ *   width: (function(number)),
+ *   height: (function(number)),
+ *   isDynamic: boolean,
+ *   connectionOffsetY: (function(number)),
+ *   connectionOffsetX: (function(number)),
+ *   pathDown: (function(number)),
+ *   pathUp: (function(number)),
+ *   pathRightDown: (function(number)),
+ *   pathRightUp: (function(number)),
+ * }}
+ */
+let DynamicShape;
+exports.DynamicShape = DynamicShape;
 
 /**
  * An object that provides constants for rendering blocks.
@@ -550,37 +652,37 @@ class ConstantProvider {
     /**
      * An object containing sizing and path information about collapsed block
      * indicators.
-     * @type {!Object}
+     * @type {!JaggedTeeth}
      */
     this.JAGGED_TEETH = this.makeJaggedTeeth();
 
     /**
      * An object containing sizing and path information about notches.
-     * @type {!Object}
+     * @type {!Notch}
      */
     this.NOTCH = this.makeNotch();
 
     /**
      * An object containing sizing and path information about start hats
-     * @type {!Object}
+     * @type {!StartHat}
      */
     this.START_HAT = this.makeStartHat();
 
     /**
      * An object containing sizing and path information about puzzle tabs.
-     * @type {!Object}
+     * @type {!PuzzleTab}
      */
     this.PUZZLE_TAB = this.makePuzzleTab();
 
     /**
      * An object containing sizing and path information about inside corners
-     * @type {!Object}
+     * @type {!InsideCorners}
      */
     this.INSIDE_CORNERS = this.makeInsideCorners();
 
     /**
      * An object containing sizing and path information about outside corners.
-     * @type {!Object}
+     * @type {!OutsideCorners}
      */
     this.OUTSIDE_CORNERS = this.makeOutsideCorners();
   }
@@ -777,8 +879,8 @@ class ConstantProvider {
   }
 
   /**
-   * @return {!Object} An object containing sizing and path information about
-   *     collapsed block indicators.
+   * @return {!JaggedTeeth} An object containing sizing and path information
+   *     about collapsed block indicators.
    * @package
    */
   makeJaggedTeeth() {
@@ -794,7 +896,7 @@ class ConstantProvider {
   }
 
   /**
-   * @return {!Object} An object containing sizing and path information about
+   * @return {!StartHat} An object containing sizing and path information about
    *     start hats.
    * @package
    */
@@ -811,7 +913,7 @@ class ConstantProvider {
   }
 
   /**
-   * @return {!Object} An object containing sizing and path information about
+   * @return {!PuzzleTab} An object containing sizing and path information about
    *     puzzle tabs.
    * @package
    */
@@ -868,7 +970,7 @@ class ConstantProvider {
   }
 
   /**
-   * @return {!Object} An object containing sizing and path information about
+   * @return {!Notch} An object containing sizing and path information about
    *     notches.
    * @package
    */
@@ -904,8 +1006,8 @@ class ConstantProvider {
   }
 
   /**
-   * @return {!Object} An object containing sizing and path information about
-   *     inside corners.
+   * @return {!InsideCorners} An object containing sizing and path information
+   *     about inside corners.
    * @package
    */
   makeInsideCorners() {
@@ -926,8 +1028,8 @@ class ConstantProvider {
   }
 
   /**
-   * @return {!Object} An object containing sizing and path information about
-   *     outside corners.
+   * @return {!OutsideCorners} An object containing sizing and path information
+   *     about outside corners.
    * @package
    */
   makeOutsideCorners() {
@@ -974,7 +1076,7 @@ class ConstantProvider {
    * type of the connection.
    * @param {!RenderedConnection} connection The connection to find a
    *     shape object for
-   * @return {!Object} The shape object for the connection.
+   * @return {!Shape} The shape object for the connection.
    * @package
    */
   shapeFor(connection) {

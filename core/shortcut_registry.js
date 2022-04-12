@@ -209,7 +209,7 @@ class ShortcutRegistry {
    * Handles key down events.
    * @param {!Workspace} workspace The main workspace where the event was
    *     captured.
-   * @param {!Event} e The key down event.
+   * @param {!KeyboardEvent} e The key down event.
    * @return {boolean} True if the event was handled, false otherwise.
    * @public
    */
@@ -264,7 +264,7 @@ class ShortcutRegistry {
 
   /**
    * Serializes a key event.
-   * @param {!Event} e A key down event.
+   * @param {!KeyboardEvent} e A key down event.
    * @return {string} The serialized key code for the given event.
    * @private
    */

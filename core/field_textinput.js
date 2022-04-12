@@ -71,7 +71,7 @@ class FieldTextInput extends Field {
 
     /**
      * The HTML input element.
-     * @type {HTMLElement}
+     * @type {HTMLInputElement}
      * @protected
      */
     this.htmlInput_ = null;
@@ -175,7 +175,8 @@ class FieldTextInput extends Field {
     }
 
     if (this.fullBlockClickTarget_) {
-      this.clickTarget_ = this.sourceBlock_.getSvgRoot();
+      this.clickTarget_ =
+          (/** @type {!BlockSvg} */ (this.sourceBlock_)).getSvgRoot();
     } else {
       this.createBorderRect_();
     }
@@ -209,7 +210,7 @@ class FieldTextInput extends Field {
       this.isTextValid_ = false;
       const oldValue = this.value_;
       // Revert value when the text becomes invalid.
-      this.value_ = this.htmlInput_.untypedDefaultValue_;
+      this.value_ = this.htmlInput_.getAttribute('data-untyped-default-value');
       if (this.sourceBlock_ && eventUtils.isEnabled()) {
         eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
             this.sourceBlock_, 'field', this.name || null, oldValue,
@@ -243,10 +244,13 @@ class FieldTextInput extends Field {
     if (this.sourceBlock_ && this.getConstants().FULL_BLOCK_FIELDS) {
       if (this.borderRect_) {
         this.borderRect_.setAttribute(
-            'stroke', this.sourceBlock_.style.colourTertiary);
+            'stroke',
+            (/** @type {!BlockSvg} */ (this.sourceBlock_))
+                .style.colourTertiary);
       } else {
-        this.sourceBlock_.pathObject.svgPath.setAttribute(
-            'fill', this.getConstants().FIELD_BORDER_RECT_COLOUR);
+        (/** @type {!BlockSvg} */ (this.sourceBlock_))
+            .pathObject.svgPath.setAttribute(
+                'fill', this.getConstants().FIELD_BORDER_RECT_COLOUR);
       }
     }
   }
@@ -328,11 +332,13 @@ class FieldTextInput extends Field {
    */
   showInlineEditor_(quietInput) {
     WidgetDiv.show(this, this.sourceBlock_.RTL, this.widgetDispose_.bind(this));
-    this.htmlInput_ = this.widgetCreate_();
+    this.htmlInput_ = /** @type {!HTMLInputElement} */ (this.widgetCreate_());
     this.isBeingEdited_ = true;
 
     if (!quietInput) {
-      this.htmlInput_.focus({preventScroll: true});
+      (/** @type {!HTMLElement} */ (this.htmlInput_)).focus({
+        preventScroll: true,
+      });
       this.htmlInput_.select();
     }
   }
@@ -365,8 +371,9 @@ class FieldTextInput extends Field {
       borderRadius = (bBox.bottom - bBox.top) / 2 + 'px';
       // Pull stroke colour from the existing shadow block
       const strokeColour = this.sourceBlock_.getParent() ?
-          this.sourceBlock_.getParent().style.colourTertiary :
-          this.sourceBlock_.style.colourTertiary;
+          (/** @type {!BlockSvg} */ (this.sourceBlock_.getParent()))
+              .style.colourTertiary :
+          (/** @type {!BlockSvg} */ (this.sourceBlock_)).style.colourTertiary;
       htmlInput.style.border = (1 * scale) + 'px solid ' + strokeColour;
       div.style.borderRadius = borderRadius;
       div.style.transition = 'box-shadow 0.25s ease 0s';
@@ -380,8 +387,8 @@ class FieldTextInput extends Field {
     div.appendChild(htmlInput);
 
     htmlInput.value = htmlInput.defaultValue = this.getEditorText_(this.value_);
-    htmlInput.untypedDefaultValue_ = this.value_;
-    htmlInput.oldValue_ = null;
+    htmlInput.setAttribute('data-untyped-default-value', this.value_);
+    htmlInput.setAttribute('data-old-value', '');
 
     this.resizeEditor_();
 
@@ -466,13 +473,13 @@ class FieldTextInput extends Field {
       WidgetDiv.hide();
       dropDownDiv.hideWithoutAnimation();
     } else if (e.keyCode === KeyCodes.ESC) {
-      this.setValue(this.htmlInput_.untypedDefaultValue_);
+      this.setValue(this.htmlInput_.getAttribute('data-untyped-default-value'));
       WidgetDiv.hide();
       dropDownDiv.hideWithoutAnimation();
     } else if (e.keyCode === KeyCodes.TAB) {
       WidgetDiv.hide();
       dropDownDiv.hideWithoutAnimation();
-      this.sourceBlock_.tab(this, !e.shiftKey);
+      (/** @type {!BlockSvg} */ (this.sourceBlock_)).tab(this, !e.shiftKey);
       e.preventDefault();
     }
   }
@@ -484,8 +491,8 @@ class FieldTextInput extends Field {
    */
   onHtmlInputChange_(_e) {
     const text = this.htmlInput_.value;
-    if (text !== this.htmlInput_.oldValue_) {
-      this.htmlInput_.oldValue_ = text;
+    if (text !== this.htmlInput_.getAttribute('data-old-value')) {
+      this.htmlInput_.setAttribute('data-old-value', text);
 
       const value = this.getValueFromEditorText_(text);
       this.setValue(value);

@@ -366,8 +366,9 @@ class WorkspaceComment {
   /**
    * Decode an XML comment tag and return the results in an object.
    * @param {!Element} xml XML comment element.
-   * @return {{w: number, h: number, x: number, y: number, content: string}} An
-   *     object containing the id, size, position, and comment string.
+   * @return {{id: string, w: number, h: number, x: number, y: number, content:
+   *     string}} An object containing the id, size, position, and comment
+   *     string.
    * @package
    */
   static parseAttributes(xml) {

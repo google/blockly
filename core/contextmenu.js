@@ -30,6 +30,8 @@ const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 const {config} = goog.require('Blockly.config');
+/* eslint-disable-next-line no-unused-vars */
+const {ContextMenuRegistry} = goog.requireType('Blockly.ContextMenuRegistry');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 const {MenuItem} = goog.require('Blockly.MenuItem');
 const {Menu} = goog.require('Blockly.Menu');
@@ -104,7 +106,8 @@ let menu_ = null;
 /**
  * Construct the menu based on the list of options and show the menu.
  * @param {!Event} e Mouse event.
- * @param {!Array<!Object>} options Array of menu options.
+ * @param {!Array<!ContextMenuRegistry.ContextMenuOption>} options Array of menu
+ *     options.
  * @param {boolean} rtl True if RTL, false if LTR.
  * @alias Blockly.ContextMenu.show
  */
@@ -129,7 +132,8 @@ exports.show = show;
 
 /**
  * Create the context menu object and populate it with the given options.
- * @param {!Array<!Object>} options Array of menu options.
+ * @param {!Array<!ContextMenuRegistry.ContextMenuOption>} options Array of menu
+ *     options.
  * @param {boolean} rtl True if RTL, false if LTR.
  * @return {!Menu} The menu that will be shown on right click.
  * @private
@@ -300,6 +304,7 @@ const commentDeleteOption = function(comment) {
   const deleteOption = {
     text: Msg['REMOVE_COMMENT'],
     enabled: true,
+    scope: 'workspace',
     callback: function() {
       eventUtils.setGroup(true);
       comment.dispose();
@@ -322,6 +327,7 @@ const commentDuplicateOption = function(comment) {
   const duplicateOption = {
     text: Msg['DUPLICATE_COMMENT'],
     enabled: true,
+    scope: 'workspace',
     callback: function() {
       clipboard.duplicate(comment);
     },

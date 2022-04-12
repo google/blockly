@@ -47,8 +47,8 @@ const Bubble = class {
   /**
    * @param {!WorkspaceSvg} workspace The workspace on which to draw the
    *     bubble.
-   * @param {!Element} content SVG content for the bubble.
-   * @param {!Element} shape SVG element to avoid eclipsing.
+   * @param {!SVGElement} content SVG content for the bubble.
+   * @param {!SVGElement} shape SVG element to avoid eclipsing.
    * @param {!Coordinate} anchorXY Absolute position of bubble's
    *     anchor point.
    * @param {?number} bubbleWidth Width of bubble, or null if not resizable.
@@ -227,7 +227,7 @@ const Bubble = class {
       'filter': 'url(#' +
           this.workspace_.getRenderer().getConstants().embossFilterId + ')',
     };
-    if (userAgent.JAVA_FX) {
+    if (userAgent.JavaFx) {
       // Multiple reports that JavaFX can't handle filters.
       // https://github.com/google/blockly/issues/99
       filter = {};
@@ -302,9 +302,7 @@ const Bubble = class {
    * @param {string} id ID of block.
    */
   setSvgId(id) {
-    if (this.bubbleGroup_.dataset) {
-      this.bubbleGroup_.dataset['blockId'] = id;
-    }
+    this.bubbleGroup_.setAttribute('data-block-id', id);
   }
 
   /**
@@ -443,7 +441,7 @@ const Bubble = class {
 
     const optimalLeft = this.getOptimalRelativeLeft_(viewMetrics);
     const optimalTop = this.getOptimalRelativeTop_(viewMetrics);
-    const bbox = this.shape_.getBBox();
+    const bbox = (/** @type {SVGGraphicsElement} */ (this.shape_)).getBBox();
 
     const topPosition = {
       x: optimalLeft,

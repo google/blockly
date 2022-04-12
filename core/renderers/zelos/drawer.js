@@ -30,6 +30,10 @@ const {Row} = goog.requireType('Blockly.blockRendering.Row');
 const {SpacerRow} = goog.requireType('Blockly.blockRendering.SpacerRow');
 /* eslint-disable-next-line no-unused-vars */
 const {StatementInput} = goog.requireType('Blockly.zelos.StatementInput');
+/* eslint-disable-next-line no-unused-vars */
+const {InsideCorners} = goog.requireType('Blockly.zelos.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const {DynamicShape, Notch} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 const {Types} = goog.require('Blockly.blockRendering.Types');
 
 
@@ -124,18 +128,22 @@ class Drawer extends BaseDrawer {
     if (Types.isSpacer(row)) {
       const spacerRow = /** @type {!SpacerRow} */ (row);
       if (spacerRow.precedesStatement || spacerRow.followsStatement) {
-        const cornerHeight = this.constants_.INSIDE_CORNERS.rightHeight;
+        const cornerHeight =
+            (/** @type {InsideCorners} */ (this.constants_.INSIDE_CORNERS))
+                .rightHeight;
         const remainingHeight =
             spacerRow.height - (spacerRow.precedesStatement ? cornerHeight : 0);
         this.outlinePath_ +=
             (spacerRow.followsStatement ?
-                 this.constants_.INSIDE_CORNERS.pathBottomRight :
+                 (/** @type {InsideCorners} */ (this.constants_.INSIDE_CORNERS))
+                     .pathBottomRight :
                  '') +
             (remainingHeight > 0 ?
                  svgPaths.lineOnAxis('V', spacerRow.yPos + remainingHeight) :
                  '') +
             (spacerRow.precedesStatement ?
-                 this.constants_.INSIDE_CORNERS.pathTopRight :
+                 (/** @type {InsideCorners} */ (this.constants_.INSIDE_CORNERS))
+                     .pathTopRight :
                  '');
         return;
       }
@@ -148,8 +156,9 @@ class Drawer extends BaseDrawer {
    * @protected
    */
   drawRightDynamicConnection_() {
-    this.outlinePath_ += this.info_.outputConnection.shape.pathRightDown(
-        this.info_.outputConnection.height);
+    this.outlinePath_ +=
+        (/** @type {DynamicShape} */ (this.info_.outputConnection.shape))
+            .pathRightDown(this.info_.outputConnection.height);
   }
 
   /**
@@ -159,8 +168,9 @@ class Drawer extends BaseDrawer {
   drawLeftDynamicConnection_() {
     this.positionOutputConnection_();
 
-    this.outlinePath_ += this.info_.outputConnection.shape.pathUp(
-        this.info_.outputConnection.height);
+    this.outlinePath_ +=
+        (/** @type {DynamicShape} */ (this.info_.outputConnection.shape))
+            .pathUp(this.info_.outputConnection.height);
 
     // Close off the path.  This draws a vertical line up to the start of the
     // block's path, which may be either a rounded or a sharp corner.
@@ -212,9 +222,10 @@ class Drawer extends BaseDrawer {
 
     const outlinePath = svgPaths.moveTo(connectionRight, yPos) +
         svgPaths.lineOnAxis('h', width) +
-        input.shape.pathRightDown(input.height) +
-        svgPaths.lineOnAxis('h', -width) + input.shape.pathUp(input.height) +
-        'z';
+        (/** @type {DynamicShape} */ (input.shape))
+            .pathRightDown(input.height) +
+        svgPaths.lineOnAxis('h', -width) +
+        (/** @type {DynamicShape} */ (input.shape)).pathUp(input.height) + 'z';
     this.block_.pathObject.setOutlinePath(inputName, outlinePath);
   }
 
@@ -226,7 +237,7 @@ class Drawer extends BaseDrawer {
     // Where to start drawing the notch, which is on the right side in LTR.
     const x = input.xPos + input.notchOffset + input.shape.width;
 
-    const innerTopLeftCorner = input.shape.pathRight +
+    const innerTopLeftCorner = (/** @type {Notch} */ (input.shape)).pathRight +
         svgPaths.lineOnAxis(
             'h', -(input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
         this.constants_.INSIDE_CORNERS.pathTop;
@@ -237,7 +248,9 @@ class Drawer extends BaseDrawer {
     const innerBottomLeftCorner = this.constants_.INSIDE_CORNERS.pathBottom +
         svgPaths.lineOnAxis(
             'h', (input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
-        (input.connectedBottomNextConnection ? '' : input.shape.pathLeft);
+        (input.connectedBottomNextConnection ?
+             '' :
+             (/** @type {Notch} */ (input.shape)).pathLeft);
 
     this.outlinePath_ += svgPaths.lineOnAxis('H', x) + innerTopLeftCorner +
         svgPaths.lineOnAxis('v', innerHeight) + innerBottomLeftCorner +

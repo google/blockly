@@ -484,11 +484,11 @@ suite('Procedures', function() {
         });
         test('Simple, Input', function() {
           const defInput = this.defBlock.getField('NAME');
-          defInput.htmlInput_ = Object.create(null);
-          defInput.htmlInput_.oldValue_ = 'proc name';
-          defInput.htmlInput_.untypedDefaultValue_ = 'proc name';
+          defInput.htmlInput_ = document.createElement('input');
+          defInput.htmlInput_.setAttribute('data-old-value', 'proc name');
+          defInput.htmlInput_.setAttribute('data-untyped-default-value', 'proc name');
 
-          defInput.htmlInput_.value = defInput.htmlInput_.oldValue_ + '2';
+          defInput.htmlInput_.value = defInput.htmlInput_.getAttribute('data-old-value') + '2';
           defInput.onHtmlInputChange_(null);
           chai.assert.equal(
               this.defBlock.getFieldValue('NAME'), 'proc name2');
@@ -497,9 +497,9 @@ suite('Procedures', function() {
         });
         test('lower -> CAPS', function() {
           const defInput = this.defBlock.getField('NAME');
-          defInput.htmlInput_ = Object.create(null);
-          defInput.htmlInput_.oldValue_ = 'proc name';
-          defInput.htmlInput_.untypedDefaultValue_ = 'proc name';
+          defInput.htmlInput_ = document.createElement('input');
+          defInput.htmlInput_.setAttribute('data-old-value', 'proc name');
+          defInput.htmlInput_.setAttribute('data-untyped-default-value', 'proc name');
 
           defInput.htmlInput_.value = 'PROC NAME';
           defInput.onHtmlInputChange_(null);
@@ -512,9 +512,9 @@ suite('Procedures', function() {
           this.defBlock.setFieldValue('PROC NAME', 'NAME');
           this.callBlock.setFieldValue('PROC NAME', 'NAME');
           const defInput = this.defBlock.getField('NAME');
-          defInput.htmlInput_ = Object.create(null);
-          defInput.htmlInput_.oldValue_ = 'PROC NAME';
-          defInput.htmlInput_.untypedDefaultValue_ = 'PROC NAME';
+          defInput.htmlInput_ = document.createElement('input');
+          defInput.htmlInput_.setAttribute('data-old-value', 'PROC NAME');
+          defInput.htmlInput_.setAttribute('data-untyped-default-value', 'PROC NAME');
 
           defInput.htmlInput_.value = 'proc name';
           defInput.onHtmlInputChange_(null);
@@ -525,11 +525,11 @@ suite('Procedures', function() {
         });
         test('Whitespace', function() {
           const defInput = this.defBlock.getField('NAME');
-          defInput.htmlInput_ = Object.create(null);
-          defInput.htmlInput_.oldValue_ = 'proc name';
-          defInput.htmlInput_.untypedDefaultValue_ = 'proc name';
+          defInput.htmlInput_ = document.createElement('input');
+          defInput.htmlInput_.setAttribute('data-old-value', 'proc name');
+          defInput.htmlInput_.setAttribute('data-untyped-default-value', 'proc name');
 
-          defInput.htmlInput_.value = defInput.htmlInput_.oldValue_ + ' ';
+          defInput.htmlInput_.value = defInput.htmlInput_.getAttribute('data-old-value') + ' ';
           defInput.onHtmlInputChange_(null);
           chai.assert.equal(
               this.defBlock.getFieldValue('NAME'), 'proc name');
@@ -538,13 +538,13 @@ suite('Procedures', function() {
         });
         test('Whitespace then Text', function() {
           const defInput = this.defBlock.getField('NAME');
-          defInput.htmlInput_ = Object.create(null);
-          defInput.htmlInput_.oldValue_ = 'proc name';
-          defInput.htmlInput_.untypedDefaultValue_ = 'proc name';
+          defInput.htmlInput_ = document.createElement('input');
+          defInput.htmlInput_.setAttribute('data-old-value', 'proc name');
+          defInput.htmlInput_.setAttribute('data-untyped-default-value', 'proc name');
 
-          defInput.htmlInput_.value = defInput.htmlInput_.oldValue_ + ' ';
+          defInput.htmlInput_.value = defInput.htmlInput_.getAttribute('data-old-value') + ' ';
           defInput.onHtmlInputChange_(null);
-          defInput.htmlInput_.value = defInput.htmlInput_.oldValue_ + '2';
+          defInput.htmlInput_.value = defInput.htmlInput_.getAttribute('data-old-value') + '2';
           defInput.onHtmlInputChange_(null);
           chai.assert.equal(
               this.defBlock.getFieldValue('NAME'), 'proc name 2');
@@ -553,9 +553,9 @@ suite('Procedures', function() {
         });
         test('Set Empty', function() {
           const defInput = this.defBlock.getField('NAME');
-          defInput.htmlInput_ = Object.create(null);
-          defInput.htmlInput_.oldValue_ = 'proc name';
-          defInput.htmlInput_.untypedDefaultValue_ = 'proc name';
+          defInput.htmlInput_ = document.createElement('input');
+          defInput.htmlInput_.setAttribute('data-old-value', 'proc name');
+          defInput.htmlInput_.setAttribute('data-untyped-default-value', 'proc name');
 
           defInput.htmlInput_.value = '';
           defInput.onHtmlInputChange_(null);
@@ -568,9 +568,9 @@ suite('Procedures', function() {
         });
         test('Set Empty, and Create New', function() {
           const defInput = this.defBlock.getField('NAME');
-          defInput.htmlInput_ = Object.create(null);
-          defInput.htmlInput_.oldValue_ = 'proc name';
-          defInput.htmlInput_.untypedDefaultValue_ = 'proc name';
+          defInput.htmlInput_ = document.createElement('input');
+          defInput.htmlInput_.setAttribute('data-old-value', 'proc name');
+          defInput.htmlInput_.setAttribute('data-untyped-default-value', 'proc name');
 
           defInput.htmlInput_.value = '';
           defInput.onHtmlInputChange_(null);

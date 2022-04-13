@@ -743,7 +743,7 @@ class WorkspaceSvg extends Workspace {
     if (this.inverseScreenCTMDirty_) {
       const ctm = this.getParentSvg().getScreenCTM();
       if (ctm) {
-        this.inverseScreenCTM_ = (/** @type {SVGMatrix} */ (ctm)).inverse();
+        this.inverseScreenCTM_ = (/** @type {!SVGMatrix} */ (ctm)).inverse();
         this.inverseScreenCTMDirty_ = false;
       }
     }

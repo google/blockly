@@ -23,8 +23,7 @@ const dom = goog.require('Blockly.utils.dom');
 const dropDownDiv = goog.require('Blockly.dropDownDiv');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
-/* eslint-disable-next-line no-unused-vars */
-const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {BlockSvg} = goog.require('Blockly.BlockSvg');
 const {Field} = goog.require('Blockly.Field');
 const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
 /* eslint-disable-next-line no-unused-vars */
@@ -187,9 +186,8 @@ class FieldColour extends Field {
     if (!this.getConstants().FIELD_COLOUR_FULL_BLOCK) {
       this.createBorderRect_();
       this.borderRect_.style['fillOpacity'] = '1';
-    } else {
-      this.clickTarget_ =
-          (/** @type {!BlockSvg} */ (this.sourceBlock_)).getSvgRoot();
+    } else if (this.sourceBlock_ instanceof BlockSvg) {
+      this.clickTarget_ = this.sourceBlock_.getSvgRoot();
     }
   }
 
@@ -201,12 +199,10 @@ class FieldColour extends Field {
       if (this.borderRect_) {
         this.borderRect_.style.fill = /** @type {string} */ (this.getValue());
       }
-    } else {
-      (/** @type {!BlockSvg} */ (this.sourceBlock_))
-          .pathObject.svgPath.setAttribute(
-              'fill', /** @type {string} */ (this.getValue()));
-      (/** @type {!BlockSvg} */ (this.sourceBlock_))
-          .pathObject.svgPath.setAttribute('stroke', '#fff');
+    } else if (this.sourceBlock_ instanceof BlockSvg) {
+      this.sourceBlock_.pathObject.svgPath.setAttribute(
+          'fill', /** @type {string} */ (this.getValue()));
+      this.sourceBlock_.pathObject.svgPath.setAttribute('stroke', '#fff');
     }
   }
 
@@ -233,12 +229,12 @@ class FieldColour extends Field {
     this.value_ = newValue;
     if (this.borderRect_) {
       this.borderRect_.style.fill = /** @type {string} */ (newValue);
-    } else if (this.sourceBlock_ && this.sourceBlock_.rendered) {
-      (/** @type {!BlockSvg} */ (this.sourceBlock_))
-          .pathObject.svgPath.setAttribute(
-              'fill', /** @type {string} */ (newValue));
-      (/** @type {!BlockSvg} */ (this.sourceBlock_))
-          .pathObject.svgPath.setAttribute('stroke', '#fff');
+    } else if (
+        this.sourceBlock_ && this.sourceBlock_.rendered &&
+        this.sourceBlock_ instanceof BlockSvg) {
+      this.sourceBlock_.pathObject.svgPath.setAttribute(
+          'fill', /** @type {string} */ (newValue));
+      this.sourceBlock_.pathObject.svgPath.setAttribute('stroke', '#fff');
     }
   }
 
@@ -495,7 +491,7 @@ class FieldColour extends Field {
     const selectedColour = this.getValue();
     // Create the palette.
     const table =
-        /** @type {HTMLTableElement} */ (document.createElement('table'));
+        /** @type {!HTMLTableElement} */ (document.createElement('table'));
     table.className = 'blocklyColourTable';
     table.tabIndex = 0;
     table.dir = 'ltr';
@@ -512,7 +508,7 @@ class FieldColour extends Field {
         table.appendChild(row);
       }
       const cell =
-          /** @type {HTMLTableCellElement} */ (document.createElement('td'));
+          /** @type {!HTMLTableCellElement} */ (document.createElement('td'));
       row.appendChild(cell);
       cell.setAttribute(
           'data-colour', colours[i]);  // This becomes the value, if clicked.

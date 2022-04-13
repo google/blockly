@@ -212,14 +212,13 @@ exports.unbind = unbind;
  */
 const isTargetInput = function(e) {
   if (e.target instanceof HTMLElement) {
-    if (/** @type {!HTMLElement} */ (e.target).isContentEditable ||
-        /** @type {!HTMLElement} */
-        (e.target).getAttribute('data-is-text-input') === 'true') {
+    if (e.target.isContentEditable ||
+        e.target.getAttribute('data-is-text-input') === 'true') {
       return true;
     }
 
     if (e.target instanceof HTMLInputElement) {
-      const target = /** @type {!HTMLInputElement} */ (e.target);
+      const target = e.target;
       return target.type === 'textarea' || target.type === 'text' ||
           target.type === 'number' || target.type === 'email' ||
           target.type === 'password' || target.type === 'search' ||

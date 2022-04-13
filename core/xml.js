@@ -299,7 +299,7 @@ const cloneShadow = function(shadow, opt_noId) {
     if (opt_noId && node.nodeName === 'shadow') {
       // Strip off IDs from shadow blocks.  There should never be a 'block' as
       // a child of a 'shadow', so no need to check that.
-      (/** @type {Element} */ (node)).removeAttribute('id');
+      (/** @type {!Element} */ (node)).removeAttribute('id');
     }
     if (node.firstChild) {
       node = node.firstChild;
@@ -308,7 +308,7 @@ const cloneShadow = function(shadow, opt_noId) {
         textNode = node;
         node = node.parentNode;
         if (textNode.nodeType === dom.NodeType.TEXT_NODE &&
-            (/** @type {Text} */ (textNode)).data.trim() === '' &&
+            (/** @type {!Text} */ (textNode)).data.trim() === '' &&
             node.firstChild !== textNode) {
           // Prune whitespace after a tag.
           dom.removeNode(textNode);
@@ -318,7 +318,7 @@ const cloneShadow = function(shadow, opt_noId) {
         textNode = node;
         node = node.nextSibling;
         if (textNode.nodeType === dom.NodeType.TEXT_NODE &&
-            (/** @type {Text} */ (textNode)).data.trim() === '') {
+            (/** @type {!Text} */ (textNode)).data.trim() === '') {
           // Prune whitespace before a tag.
           dom.removeNode(textNode);
         }
@@ -662,13 +662,10 @@ exports.domToBlock = domToBlock;
  * @alias Blockly.Xml.domToVariables
  */
 const domToVariables = function(xmlVariables, workspace) {
-  for (let i = 0; i < xmlVariables.childNodes.length; i++) {
-    const xmlChild = xmlVariables.childNodes[i];
-    if (xmlChild.nodeType !== dom.NodeType.ELEMENT_NODE) {
-      continue;  // Skip text nodes.
-    }
-    const type = (/** @type {Element} */ (xmlChild)).getAttribute('type');
-    const id = (/** @type {Element} */ (xmlChild)).getAttribute('id');
+  for (let i = 0; i < xmlVariables.children.length; i++) {
+    const xmlChild = xmlVariables.children[i];
+    const type = xmlChild.getAttribute('type');
+    const id = xmlChild.getAttribute('id');
     const name = xmlChild.textContent;
 
     workspace.createVariable(name, type, id);

@@ -37,7 +37,7 @@ const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
- * A bounding box for a cloned block.
+ * Represents a nearby valid connection.
  * @typedef {{
  *    closest: ?RenderedConnection,
  *    local: ?RenderedConnection,

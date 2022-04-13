@@ -181,7 +181,7 @@ class Comment extends Icon {
     body.setAttribute('xmlns', dom.HTML_NS);
     body.className = 'blocklyMinimalBody';
 
-    this.textarea_ = /** @type {HTMLTextAreaElement} */ (
+    this.textarea_ = /** @type {!HTMLTextAreaElement} */ (
         document.createElementNS(dom.HTML_NS, 'textarea'));
     const textarea = this.textarea_;
     textarea.className = 'blocklyCommentTextarea';

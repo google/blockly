@@ -324,12 +324,12 @@ class Toolbox extends DeleteArea {
     } else {
       const targetElement = e.target;
       const itemId =
-          (/** @type {Element} */ (targetElement)).getAttribute('id');
+          (/** @type {!Element} */ (targetElement)).getAttribute('id');
       if (itemId) {
         const item = this.getToolboxItemById(itemId);
         if (item.isSelectable()) {
           this.setSelectedItem(item);
-          (/** @type {ISelectableToolboxItem} */ (item)).onClick(e);
+          (/** @type {!ISelectableToolboxItem} */ (item)).onClick(e);
         }
       }
       // Just close popups.

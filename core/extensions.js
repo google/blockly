@@ -215,7 +215,7 @@ const checkNoMutatorProperties = function(mutationName, block) {
 /**
  * Checks if the given object has both the 'mutationToDom' and 'domToMutation'
  * functions.
- * @param {!Object} object The object to check.
+ * @param {?} object The object to check.
  * @param {string} errorPrefix The string to prepend to any error message.
  * @return {boolean} True if the object has both functions.  False if it has
  *     neither function.
@@ -224,15 +224,14 @@ const checkNoMutatorProperties = function(mutationName, block) {
  */
 const checkXmlHooks = function(object, errorPrefix) {
   return checkHasFunctionPair(
-      (/** @type {?} */ (object)).mutationToDom,
-      (/** @type {?} */ (object)).domToMutation,
+      object.mutationToDom, object.domToMutation,
       errorPrefix + ' mutationToDom/domToMutation');
 };
 
 /**
  * Checks if the given object has both the 'saveExtraState' and 'loadExtraState'
  * functions.
- * @param {!Object} object The object to check.
+ * @param {?} object The object to check.
  * @param {string} errorPrefix The string to prepend to any error message.
  * @return {boolean} True if the object has both functions.  False if it has
  *     neither function.
@@ -241,14 +240,13 @@ const checkXmlHooks = function(object, errorPrefix) {
  */
 const checkJsonHooks = function(object, errorPrefix) {
   return checkHasFunctionPair(
-      (/** @type {?} */ (object)).saveExtraState,
-      (/** @type {?} */ (object)).loadExtraState,
+      object.saveExtraState, object.loadExtraState,
       errorPrefix + ' saveExtraState/loadExtraState');
 };
 
 /**
  * Checks if the given object has both the 'compose' and 'decompose' functions.
- * @param {!Object} object The object to check.
+ * @param {?} object The object to check.
  * @param {string} errorPrefix The string to prepend to any error message.
  * @return {boolean} True if the object has both functions.  False if it has
  *     neither function.
@@ -257,9 +255,7 @@ const checkJsonHooks = function(object, errorPrefix) {
  */
 const checkMutatorDialog = function(object, errorPrefix) {
   return checkHasFunctionPair(
-      (/** @type {?} */ (object)).compose,
-      (/** @type {?} */ (object)).decompose,
-      errorPrefix + ' compose/decompose');
+      object.compose, object.decompose, errorPrefix + ' compose/decompose');
 };
 
 /**

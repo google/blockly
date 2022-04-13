@@ -29,9 +29,7 @@ const {Svg} = goog.require('Blockly.utils.Svg');
  *    height: number
  * }}
  */
-let CloneRect;
-exports.CloneRect = CloneRect;
-
+let CloneRect;  // eslint-disable-line no-unused-vars
 
 /**
  * PID of disconnect UI animation.  There can only be one at a time.

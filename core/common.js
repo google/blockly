@@ -136,12 +136,13 @@ const svgResize = function(workspace) {
   const svg = mainWorkspace.getParentSvg();
   const cachedSize = mainWorkspace.getCachedParentSvgSize();
   const div = svg.parentElement;
-  if (!div) {
+  if (!(div instanceof HTMLElement)) {
     // Workspace deleted, or something.
     return;
   }
-  const width = (/** @type {HTMLElement} */ (div)).offsetWidth;
-  const height = (/** @type {HTMLElement} */ (div)).offsetHeight;
+
+  const width = div.offsetWidth;
+  const height = div.offsetHeight;
   if (cachedSize.width !== width) {
     svg.setAttribute('width', width + 'px');
     mainWorkspace.setCachedParentSvgSize(width, null);

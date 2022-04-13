@@ -508,15 +508,11 @@ class FieldDropdown extends Field {
    * @package
    */
   applyColour() {
+    const style = (/** @type {!BlockSvg} */ (this.sourceBlock_)).style;
     if (this.borderRect_) {
-      this.borderRect_.setAttribute(
-          'stroke',
-          (/** @type {!BlockSvg} */ (this.sourceBlock_)).style.colourTertiary);
+      this.borderRect_.setAttribute('stroke', style.colourTertiary);
       if (this.menu_) {
-        this.borderRect_.setAttribute(
-            'fill',
-            (/** @type {!BlockSvg} */ (this.sourceBlock_))
-                .style.colourTertiary);
+        this.borderRect_.setAttribute('fill', style.colourTertiary);
       } else {
         this.borderRect_.setAttribute('fill', 'transparent');
       }
@@ -524,13 +520,9 @@ class FieldDropdown extends Field {
     // Update arrow's colour.
     if (this.sourceBlock_ && this.arrow_) {
       if (this.sourceBlock_.isShadow()) {
-        this.arrow_.style.fill =
-            (
-                /** @type {!BlockSvg} */ (this.sourceBlock_))
-                .style.colourSecondary;
+        this.arrow_.style.fill = style.colourSecondary;
       } else {
-        this.arrow_.style.fill =
-            (/** @type {!BlockSvg} */ (this.sourceBlock_)).style.colourPrimary;
+        this.arrow_.style.fill = style.colourPrimary;
       }
     }
   }

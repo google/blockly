@@ -71,7 +71,7 @@ class FieldTextInput extends Field {
 
     /**
      * The HTML input element.
-     * @type {HTMLInputElement}
+     * @type {?HTMLInputElement}
      * @protected
      */
     this.htmlInput_ = null;

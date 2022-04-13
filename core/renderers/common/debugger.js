@@ -441,16 +441,7 @@ class Debug {
 /**
  * Configuration object containing booleans to enable and disable debug
  * rendering of specific rendering components.
- * @typedef {{
- *   rowSpacers: boolean,
- *   elemSpacers: boolean,
- *   rows: boolean,
- *   elems: boolean,
- *   connections: boolean,
- *   blockBounds: boolean,
- *   connectedBlockBounds: boolean,
- *   render: boolean,
- * }}
+ * @struct
  */
 Debug.config = {
   rowSpacers: true,

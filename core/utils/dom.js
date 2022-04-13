@@ -367,14 +367,14 @@ const getFastTextWidthWithSizeString = function(
   if (!canvasContext) {
     // Inject the canvas element used for computing text widths.
     const computeCanvas =
-        /** @type {HTMLCanvasElement} */ (document.createElement('canvas'));
+        /** @type {!HTMLCanvasElement} */ (document.createElement('canvas'));
     computeCanvas.className = 'blocklyComputeCanvas';
     document.body.appendChild(computeCanvas);
 
     // Initialize the HTML canvas context and set the font.
     // The context font must match blocklyText's fontsize and font-family
     // set in CSS.
-    canvasContext = /** @type {CanvasRenderingContext2D} */ (
+    canvasContext = /** @type {!CanvasRenderingContext2D} */ (
         computeCanvas.getContext('2d'));
   }
   // Set the desired font size and family.

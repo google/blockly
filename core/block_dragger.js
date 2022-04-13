@@ -101,7 +101,7 @@ const BlockDragger = class {
      * A list of all of the icons (comment, warning, and mutator) that are
      * on this block and its descendants.  Moving an icon moves the bubble that
      * extends from it if that bubble is open.
-     * @type {Array<!IconData>}
+     * @type {Array<!IconPositionData>}
      * @protected
      */
     this.dragIconData_ = initIconData(block);
@@ -459,15 +459,16 @@ const BlockDragger = class {
  *        icon:!Icon,
  * }}
  */
-let IconData;
-exports.IconData = IconData;
+let IconPositionData;
+exports.IconPositionData = IconPositionData;
 
 /**
  * Make a list of all of the icons (comment, warning, and mutator) that are
  * on this block and its descendants.  Moving an icon moves the bubble that
  * extends from it if that bubble is open.
  * @param {!BlockSvg} block The root block that is being dragged.
- * @return {!Array<!IconData>} The list of all icons and their locations.
+ * @return {!Array<!IconPositionData>} The list of all icons and their
+ *     locations.
  */
 const initIconData = function(block) {
   // Build a list of icons that need to be moved and where they started.

@@ -441,7 +441,7 @@ const Bubble = class {
 
     const optimalLeft = this.getOptimalRelativeLeft_(viewMetrics);
     const optimalTop = this.getOptimalRelativeTop_(viewMetrics);
-    const bbox = (/** @type {SVGGraphicsElement} */ (this.shape_)).getBBox();
+    const bbox = (/** @type {!SVGGraphicsElement} */ (this.shape_)).getBBox();
 
     const topPosition = {
       x: optimalLeft,

@@ -584,11 +584,7 @@ class Flyout extends DeleteArea {
 
     // Parse the Array, Node or NodeList into a a list of flyout items.
     const parsedContent = toolbox.convertFlyoutDefToJsonArray(flyoutDef);
-    const flyoutInfo =
-        /**
-           @type {{contents:!Array<!Flyout.FlyoutItem>, gaps:!Array<number>}}
-             */
-        (this.createFlyoutInfo_(parsedContent));
+    const flyoutInfo = this.createFlyoutInfo_(parsedContent);
 
     this.layout_(flyoutInfo.contents, flyoutInfo.gaps);
 
@@ -630,8 +626,8 @@ class Flyout extends DeleteArea {
    * the flyout.
    * @param {!toolbox.FlyoutItemInfoArray} parsedContent The array
    *     of objects to show in the flyout.
-   * @return {{contents:Array<!Flyout.FlyoutItem>, gaps:Array<number>}} The list
-   *     of contents and gaps needed to lay out the flyout.
+   * @return {{contents:!Array<!Flyout.FlyoutItem>, gaps:!Array<number>}} The
+   *     list of contents and gaps needed to lay out the flyout.
    * @private
    */
   createFlyoutInfo_(parsedContent) {
@@ -1271,8 +1267,8 @@ Flyout.FlyoutItemType = {
  * A flyout content item.
  * @typedef {{
  *    type: !Flyout.FlyoutItemType,
- *    button: !FlyoutButton,
- *    block: !BlockSvg,
+ *    button: (!FlyoutButton|undefined),
+ *    block: (!BlockSvg|undefined),
  * }}
  */
 Flyout.FlyoutItem;

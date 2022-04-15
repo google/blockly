@@ -31,10 +31,23 @@ const {ConnectionDB} = goog.requireType('Blockly.ConnectionDB');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
 const {Connection} = goog.require('Blockly.Connection');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
-/* eslint-disable-next-line no-unused-vars */
-const {Notch, PuzzleTab} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 const {Svg} = goog.require('Blockly.utils.Svg');
 
+/**
+ * A shape that has a pathDown property.
+ * @typedef {{
+ *   pathDown: string,
+ * }}
+ */
+let PathDownShape;  // eslint-disable-line no-unused-vars
+
+/**
+ * A shape that has a pathLeft property.
+ * @typedef {{
+ *   pathLeft: string,
+ * }}
+ */
+let PathLeftShape;  // eslint-disable-line no-unused-vars
 
 /**
  * Maximum randomness in workspace units for bumping a block.
@@ -298,14 +311,14 @@ class RenderedConnection extends Connection {
       // Vertical line, puzzle tab, vertical line.
       const yLen = renderConstants.TAB_OFFSET_FROM_TOP;
       steps = svgPaths.moveBy(0, -yLen) + svgPaths.lineOnAxis('v', yLen) +
-          (/** @type {PuzzleTab} */ (shape)).pathDown +
+          (/** @type {!PathDownShape} */ (shape)).pathDown +
           svgPaths.lineOnAxis('v', yLen);
     } else {
       const xLen =
           renderConstants.NOTCH_OFFSET_LEFT - renderConstants.CORNER_RADIUS;
       // Horizontal line, notch, horizontal line.
       steps = svgPaths.moveBy(-xLen, 0) + svgPaths.lineOnAxis('h', xLen) +
-          (/** @type {Notch} */ (shape)).pathLeft +
+          (/** @type {!PathLeftShape} */ (shape)).pathLeft +
           svgPaths.lineOnAxis('h', xLen);
     }
     const xy = this.sourceBlock_.getRelativeToSurfaceXY();

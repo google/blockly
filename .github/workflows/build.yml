@@ -5,6 +5,9 @@ name: Node.js CI
 
 on: [pull_request]
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}

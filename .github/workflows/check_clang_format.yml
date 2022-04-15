@@ -4,6 +4,9 @@ name: Check clang format
 # submitted branch.
 on: [pull_request]
 
+permissions:
+  contents: read
+
 jobs:
   clang-formatter:
     runs-on: ubuntu-latest

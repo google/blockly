@@ -195,7 +195,7 @@ class BlockSvg extends Block {
      * @private
      */
     this.svgGroup_ = dom.createSvgElement(Svg.G, {}, null);
-    this.svgGroup_.setAttribute('data-translate', '');
+    (/** @type {?} */ (this.svgGroup_)).translate_ = '';
 
     /**
      * A block style object.
@@ -545,12 +545,13 @@ class BlockSvg extends Block {
     if (this.useDragSurface_) {
       this.workspace.getBlockDragSurface().translateSurface(newLoc.x, newLoc.y);
     } else {
-      this.svgGroup_.setAttribute(
-          'data-translate', 'translate(' + newLoc.x + ',' + newLoc.y + ')');
-      this.svgGroup_.setAttribute(
-          'transform',
-          this.svgGroup_.getAttribute('data-translate') +
-              this.svgGroup_.getAttribute('data-skew'));
+      (/** @type {?} */ (this.svgGroup_)).translate_ =
+          'translate(' + newLoc.x + ',' + newLoc.y + ')';
+      (/** @type {?} */ (this.svgGroup_))
+          .setAttribute(
+              'transform',
+              (/** @type {?} */ (this.svgGroup_)).translate_ +
+                  (/** @type {?} */ (this.svgGroup_)).skew_);
     }
   }
 
@@ -812,8 +813,8 @@ class BlockSvg extends Block {
   setDragging(adding) {
     if (adding) {
       const group = this.getSvgRoot();
-      group.setAttribute('data-translate', '');
-      group.setAttribute('data-skew', '');
+      (/** @type {?} */ (group)).translate_ = '';
+      (/** @type {?} */ (group)).skew_ = '';
       common.draggingConnections.push(...this.getConnections_(true));
       dom.addClass(
           /** @type {!Element} */ (this.svgGroup_), 'blocklyDragging');

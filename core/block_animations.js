@@ -189,17 +189,17 @@ const disconnectUiStep = function(group, magnitude, start) {
   const percent = ms / DURATION;
 
   if (percent > 1) {
-    group.setAttribute('data-skew', '');
+    (/** @type {?} */ (group)).skew_ = '';
   } else {
     const skew = Math.round(
         Math.sin(percent * Math.PI * WIGGLES) * (1 - percent) * magnitude);
-    group.setAttribute('data-skew', 'skewX(' + skew + ')');
+    (/** @type {?} */ (group)).skew_ = 'skewX(' + skew + ')';
     disconnectGroup = group;
     disconnectPid = setTimeout(disconnectUiStep, 10, group, magnitude, start);
   }
   group.setAttribute(
       'transform',
-      group.getAttribute('data-translate') + group.getAttribute('data-skew'));
+      (/** @type {?} */ (group)).translate_ + (/** @type {?} */ (group)).skew_);
 };
 
 /**
@@ -211,8 +211,8 @@ const disconnectUiStop = function() {
   if (disconnectGroup) {
     clearTimeout(disconnectPid);
     const group = disconnectGroup;
-    group.setAttribute('data-skew', '');
-    group.setAttribute('transform', group.getAttribute('data-translate'));
+    (/** @type {?} */ (group)).skew_ = '';
+    group.setAttribute('transform', (/** @type {?} */ (group)).translate_);
     disconnectGroup = null;
   }
 };

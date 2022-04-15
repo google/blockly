@@ -50,7 +50,7 @@ const ModuleManager = function(workspace) {
    * @private
    * @type {ModuleModel}
    */
-  this.defaultModule_ =  new ModuleModel(workspace, 'DEFAULT_MODULE_NAME', 'general');
+  this.defaultModule_ = new ModuleModel(workspace, 'DEFAULT_MODULE_NAME', 'general');
 
   /**
    * A map from module type to list of module names.  The lists contain all
@@ -78,7 +78,7 @@ const ModuleManager = function(workspace) {
  * Clear the module map.
  */
 ModuleManager.prototype.clear = function() {
-  var deletedModules = this.moduleMap_;
+  const deletedModules = this.moduleMap_;
   this.moduleMap_ = [];
   this.activeModuleId_ = null;
 
@@ -86,13 +86,13 @@ ModuleManager.prototype.clear = function() {
     this.workspace.getModuleBar().render();
   }
 
-  var existingGroup = Blockly.Events.getGroup();
+  const existingGroup = Blockly.Events.getGroup();
   if (!existingGroup) {
     Blockly.Events.setGroup(true);
   }
 
   try {
-    for (var i = 0; i < deletedModules.length; i++) {
+    for (let i = 0; i < deletedModules.length; i++) {
       this.fireDeleteEvent_(deletedModules[i]);
     }
   } finally {
@@ -141,9 +141,9 @@ ModuleManager.prototype.renameModule = function(module, newName) {
  * @param {int} newOrder New module order.
  */
 ModuleManager.prototype.moveModule = function(module, newOrder) {
-  var previousOrder = this.getModuleOrder(module.getId());
+  const previousOrder = this.getModuleOrder(module.getId());
 
-  this.moduleMap_.splice(newOrder,0,this.moduleMap_.splice(previousOrder, 1)[0]);
+  this.moduleMap_.splice(newOrder, 0, this.moduleMap_.splice(previousOrder, 1)[0]);
 
   if (this.workspace instanceof Blockly.WorkspaceSvg && this.workspace.getModuleBar()) {
     this.workspace.getModuleBar().render();
@@ -174,7 +174,7 @@ ModuleManager.prototype.createModule = function(name, opt_id, scrollX, scrollY, 
   module.scrollY = scrollY || 0;
 
   if (scale) {
-    module.scale = scale
+    module.scale = scale;
   }
 
   this.moduleMap_.push(module);
@@ -195,7 +195,7 @@ ModuleManager.prototype.createModule = function(name, opt_id, scrollX, scrollY, 
  */
 ModuleManager.prototype.fireCreateEvent_ = function(module) {
   if (Blockly.Events.isEnabled()) {
-    var existingGroup = Blockly.Events.getGroup();
+    const existingGroup = Blockly.Events.getGroup();
     if (!existingGroup) {
       Blockly.Events.setGroup(true);
     }
@@ -215,22 +215,22 @@ ModuleManager.prototype.fireCreateEvent_ = function(module) {
  * @param {Blockly.BlockSvg} block
  * @param {ModuleModel} module
  */
-ModuleManager.prototype.moveBlockToModule = function (block, module) {
-  var newModuleId = module.getId();
-  var previousModuleId = block.getModuleId();
+ModuleManager.prototype.moveBlockToModule = function(block, module) {
+  const newModuleId = module.getId();
+  const previousModuleId = block.getModuleId();
 
   if (newModuleId === previousModuleId) {
-    return
+    return;
   }
 
-  var existingGroup = Blockly.Events.getGroup();
+  const existingGroup = Blockly.Events.getGroup();
   if (!existingGroup) {
     Blockly.Events.setGroup(true);
   }
 
   try {
-    block.getDescendants(false).forEach(function (descendant) {
-      descendant.setModuleId(module.getId())
+    block.getDescendants(false).forEach(function(descendant) {
+      descendant.setModuleId(module.getId());
     });
     block.unplug();
     block.removeRender();
@@ -249,50 +249,49 @@ ModuleManager.prototype.moveBlockToModule = function (block, module) {
       Blockly.Events.setGroup(false);
     }
   }
-
-}
+};
 
 /**
  * Move blocks to module.
  * @param {Blockly.BlockSvg} block
  * @param {ModuleModel} module
  */
-ModuleManager.prototype.moveBlocksToModule = function (blocks, module, massOperations) {
-  var newModuleId = module.getId();
-  var previousModuleId = blocks[0].getModuleId();
+ModuleManager.prototype.moveBlocksToModule = function(blocks, module, massOperations) {
+  const newModuleId = module.getId();
+  const previousModuleId = blocks[0].getModuleId();
 
   if (newModuleId === previousModuleId) {
-    return
+    return;
   }
 
-  var existingGroup = Blockly.Events.getGroup();
+  const existingGroup = Blockly.Events.getGroup();
   if (!existingGroup) {
     Blockly.Events.setGroup(true);
   }
 
   try {
     blocks.forEach((block) => {
-      block.getDescendants(false).forEach(function (descendant) {
-        descendant.setModuleId(module.getId())
+      block.getDescendants(false).forEach(function(descendant) {
+        descendant.setModuleId(module.getId());
       });
 
-      block.unplug()
-      block.removeRender()
-    })
+      block.unplug();
+      block.removeRender();
+    });
 
-    massOperations.cleanUp()
+    massOperations.cleanUp();
 
     Blockly.Events.disable();
     this.activateModule(module);
     Blockly.Events.enable();
 
-    blocks.forEach(b => massOperations.addBlockToSelected(b))
+    blocks.forEach((b) => massOperations.addBlockToSelected(b));
   } finally {
     if (!existingGroup) {
       Blockly.Events.setGroup(false);
     }
   }
-}
+};
 
 /**
  * Fire a delete event for module.
@@ -305,7 +304,7 @@ ModuleManager.prototype.moveBlocksToModule = function (blocks, module, massOpera
  */
 ModuleManager.prototype.fireMoveBlockToModule_ = function(block, newModuleId, previousModuleId) {
   if (Blockly.Events.isEnabled()) {
-    var existingGroup = Blockly.Events.getGroup();
+    const existingGroup = Blockly.Events.getGroup();
     if (!existingGroup) {
       Blockly.Events.setGroup(true);
     }
@@ -317,7 +316,7 @@ ModuleManager.prototype.fireMoveBlockToModule_ = function(block, newModuleId, pr
       }
     }
   }
-}
+};
 
 /**
  * Delete a module and all its top blocks.
@@ -403,9 +402,9 @@ ModuleManager.prototype.activateModule = function(module) {
         this.workspace.setResizesEnabled(false);
       }
 
-      const topBlocks = this.workspace.getTopBlocks(false, true)
+      const topBlocks = this.workspace.getTopBlocks(false, true);
 
-      for (var i = 0; i < topBlocks.length; i++) {
+      for (let i = 0; i < topBlocks.length; i++) {
         topBlocks[i].removeRender();
       }
     }
@@ -414,31 +413,28 @@ ModuleManager.prototype.activateModule = function(module) {
     this.setActiveModuleId(module.getId());
 
     if (this.workspace.rendered) {
-      var topBlocks = this.workspace.getTopBlocks(false, true)
+      const topBlocks = this.workspace.getTopBlocks(false, true);
 
-      const enableConnectionTracking = function (block) {
-        setTimeout(function () {
+      const enableConnectionTracking = function(block) {
+        setTimeout(function() {
           if (!block.disposed) {
             block.setConnectionTracking(true);
           }
         }, 1);
-      }
+      };
 
-      for (var i = 0; i < topBlocks.length; i++) {
-        var topBlock = topBlocks[i]
-        var blocks = topBlock.getDescendants(false);
+      for (let i = 0; i < topBlocks.length; i++) {
+        const topBlock = topBlocks[i];
+        const blocks = topBlock.getDescendants(false);
 
         // Wait to track connections to speed up assembly.
         topBlock.setConnectionTracking(false);
 
         // Render each block.
-        for (var j = blocks.length - 1; j >= 0; j--) {
+        for (let j = blocks.length - 1; j >= 0; j--) {
           blocks[j].initSvg();
         }
-        for (var j = blocks.length - 1; j >= 0; j--) {
-          blocks[j].render(false);
-        }
-        for (var j = blocks.length - 1; j >= 0; j--) {
+        for (let j = blocks.length - 1; j >= 0; j--) {
           blocks[j].render(false);
         }
 
@@ -459,8 +455,8 @@ ModuleManager.prototype.activateModule = function(module) {
       this.workspace.resizeContents();
 
       // store scroll positions before scale
-      var scrollX = module.scrollX;
-      var scrollY = module.scrollY;
+      const scrollX = module.scrollX;
+      const scrollY = module.scrollY;
       if (this.workspace.scale !== module.scale) {
         this.workspace.setScale(module.scale);
       }
@@ -508,7 +504,7 @@ ModuleManager.prototype.getModuleById = function(id) {
   if (!id) {
     return null;
   }
-  for (var i = 0; i < this.moduleMap_.length; i++) {
+  for (let i = 0; i < this.moduleMap_.length; i++) {
     if (this.moduleMap_[i].getId() === id) {
       return this.moduleMap_[i];
     }
@@ -522,7 +518,7 @@ ModuleManager.prototype.getModuleById = function(id) {
  * @return {int} The module order.
  */
 ModuleManager.prototype.getModuleOrder = function(id) {
-  for (var i = 0; i < this.moduleMap_.length; i++) {
+  for (let i = 0; i < this.moduleMap_.length; i++) {
     if (this.moduleMap_[i].getId() === id) {
       return i;
     }
@@ -538,4 +534,4 @@ ModuleManager.prototype.getAllModules = function() {
   return this.moduleMap_;
 };
 
-exports.ModuleManager = ModuleManager
+exports.ModuleManager = ModuleManager;

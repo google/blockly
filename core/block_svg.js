@@ -1032,12 +1032,12 @@ BlockSvg.prototype.removeRender = function() {
     this.workspace.cancelCurrentGesture();
   }
   // If this block has a context menu open, close it.
-  if (ContextMenu.currentBlock === this) {
+  if (ContextMenu.getCurrentBlock() === this) {
     ContextMenu.hide();
   }
 
   const icons = this.getIcons();
-  for (var i = 0, icon; (icon = icons[i]); i++) {
+  for (let i = 0, icon; (icon = icons[i]); i++) {
     icon.setVisible(false);
   }
 
@@ -1062,7 +1062,7 @@ BlockSvg.prototype.removeRender = function() {
   Blockly.utils.dom.stopTextWidthCache();
 
   // Remove render of all my children.
-  for (var i = this.childBlocks_.length - 1; i >= 0; i--) {
+  for (let i = this.childBlocks_.length - 1; i >= 0; i--) {
     this.childBlocks_[i].removeRender();
   }
 };

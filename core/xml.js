@@ -100,14 +100,14 @@ exports.variablesToDom = variablesToDom;
  * @param {!Blockly.Workspace} workspace The workspace containing blocks.
  * @return {!Element} Tree of XML elements.
  */
-modulesToDom = function(workspace) {
-  var modules = Blockly.utils.xml.createElement('modules');
+const modulesToDom = function(workspace) {
+  const modules = Blockly.utils.xml.createElement('modules');
 
-  var moduleList = workspace.getModuleManager().getAllModules();
+  const moduleList = workspace.getModuleManager().getAllModules();
   modules.setAttribute('active', workspace.getModuleManager().getActiveModule().getId());
 
-  for (var i = 0, module; (module = moduleList[i]); i++) {
-    var element = Blockly.utils.xml.createElement('module');
+  for (let i = 0, module; (module = moduleList[i]); i++) {
+    const element = Blockly.utils.xml.createElement('module');
     element.appendChild(Blockly.utils.xml.createTextNode(module.name));
     element.id = module.getId();
     element.setAttribute('scroll-x', module.scrollX.toString());
@@ -504,18 +504,9 @@ const domToWorkspace = function(xml, workspace) {
 
     for (let i = 0, xmlChild; (xmlChild = xml.childNodes[i]); i++) {
       const name = xmlChild.nodeName.toLowerCase();
-      let xmlChildElement = /** @type {!Element} */ (xmlChild);
+      const xmlChildElement = /** @type {!Element} */ (xmlChild);
 
       if (name === 'block' || (name === 'shadow' && !eventUtils.getRecordUndo())) {
-        // first load modules
-        for (let i = 0, xmlChild; (xmlChild = xml.childNodes[i]); i++) {
-          if (xmlChild.nodeName.toLowerCase() === 'modules') {
-            domToModules(xmlChild, workspace);
-          }
-        }
-
-        workspace.getModuleManager().createDefaultModuleIfNeed();
-
         // Allow top-level shadow blocks if recordUndo is disabled since
         // that means an undo is in progress.  Such a block is expected
         // to be moved to a nested destination in the next operation.
@@ -575,11 +566,11 @@ const domToWorkspace = function(xml, workspace) {
       workspace.getModuleBar().render();
     }
 
-    var activeModule = workspace.getModuleManager().getActiveModule();
+    const activeModule = workspace.getModuleManager().getActiveModule();
     if (activeModule) {
       // store scroll positions before scale
-      var scrollX = activeModule.scrollX;
-      var scrollY = activeModule.scrollY;
+      const scrollX = activeModule.scrollX;
+      const scrollY = activeModule.scrollY;
       if (workspace.scale !== activeModule.scale) {
         workspace.setScale(activeModule.scale);
       }
@@ -594,7 +585,7 @@ const domToWorkspace = function(xml, workspace) {
   }
 
   eventUtils.fire(new (eventUtils.get(eventUtils.FINISHED_LOADING))(workspace));
-  
+
   return newBlockIds;
 };
 exports.domToWorkspace = domToWorkspace;
@@ -759,8 +750,8 @@ exports.domToVariables = domToVariables;
  * @param {!Blockly.Workspace} workspace The workspace to which the variable
  *     should be added.
  */
-domToModules = function(xmlModules, workspace) {
-  for (var i = 0, xmlChild; (xmlChild = xmlModules.childNodes[i]); i++) {
+const domToModules = function(xmlModules, workspace) {
+  for (let i = 0, xmlChild; (xmlChild = xmlModules.childNodes[i]); i++) {
     if (xmlChild.nodeType !== Blockly.utils.dom.NodeType.ELEMENT_NODE) {
       continue;  // Skip text nodes.
     }
@@ -774,12 +765,12 @@ domToModules = function(xmlModules, workspace) {
     );
   }
 
-  var activeId = xmlModules.getAttribute('active');
+  const activeId = xmlModules.getAttribute('active');
   if (activeId) {
     workspace.getModuleManager().setActiveModuleId(activeId);
   }
 };
-exports.domToModules = domToModules
+exports.domToModules = domToModules;
 
 /**
  * A mapping of nodeName to node for child nodes of xmlBlock.
@@ -1042,8 +1033,7 @@ const domToBlockHeadless = function(
   // Preprocess childNodes so tags can be processed in a consistent order.
   const xmlChildNameMap = mapSupportedXmlTags(xmlBlock);
 
-  const shouldCallInitSvg =
-      applyMutationTagNodes(xmlChildNameMap.mutation, block);
+  const shouldCallInitSvg = applyMutationTagNodes(xmlChildNameMap.mutation, block);
   applyCommentTagNodes(xmlChildNameMap.comment, block);
   applyDataTagNodes(xmlChildNameMap.data, block);
 

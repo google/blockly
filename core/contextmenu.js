@@ -106,8 +106,9 @@ let menu_ = null;
 /**
  * Construct the menu based on the list of options and show the menu.
  * @param {!Event} e Mouse event.
- * @param {!Array<!ContextMenuRegistry.ContextMenuOption>} options Array of menu
- *     options.
+ * @param {!Array<!ContextMenuRegistry.ContextMenuOption|
+ *                !ContextMenuRegistry.LegacyContextMenuOption>}
+ *     options Array of menu options.
  * @param {boolean} rtl True if RTL, false if LTR.
  * @alias Blockly.ContextMenu.show
  */
@@ -132,8 +133,9 @@ exports.show = show;
 
 /**
  * Create the context menu object and populate it with the given options.
- * @param {!Array<!ContextMenuRegistry.ContextMenuOption>} options Array of menu
- *     options.
+ * @param {!Array<!ContextMenuRegistry.ContextMenuOption|
+ *                !ContextMenuRegistry.LegacyContextMenuOption>}
+ *     options Array of menu options.
  * @param {boolean} rtl True if RTL, false if LTR.
  * @return {!Menu} The menu that will be shown on right click.
  * @private
@@ -296,7 +298,8 @@ exports.callbackFactory = callbackFactory;
  * Make a context menu option for deleting the current workspace comment.
  * @param {!WorkspaceCommentSvg} comment The workspace comment where the
  *     right-click originated.
- * @return {!Object} A menu option, containing text, enabled, and a callback.
+ * @return {!ContextMenuRegistry.LegacyContextMenuOption} A menu option,
+ *     containing text, enabled, and a callback.
  * @alias Blockly.ContextMenu.commentDeleteOption
  * @package
  */
@@ -304,7 +307,6 @@ const commentDeleteOption = function(comment) {
   const deleteOption = {
     text: Msg['REMOVE_COMMENT'],
     enabled: true,
-    scope: 'workspace',
     callback: function() {
       eventUtils.setGroup(true);
       comment.dispose();
@@ -319,7 +321,8 @@ exports.commentDeleteOption = commentDeleteOption;
  * Make a context menu option for duplicating the current workspace comment.
  * @param {!WorkspaceCommentSvg} comment The workspace comment where the
  *     right-click originated.
- * @return {!Object} A menu option, containing text, enabled, and a callback.
+ * @return {!ContextMenuRegistry.LegacyContextMenuOption} A menu option,
+ *     containing text, enabled, and a callback.
  * @alias Blockly.ContextMenu.commentDuplicateOption
  * @package
  */
@@ -327,7 +330,6 @@ const commentDuplicateOption = function(comment) {
   const duplicateOption = {
     text: Msg['DUPLICATE_COMMENT'],
     enabled: true,
-    scope: 'workspace',
     callback: function() {
       clipboard.duplicate(comment);
     },

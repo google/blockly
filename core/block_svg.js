@@ -130,7 +130,8 @@ class BlockSvg extends Block {
 
     /**
      * An optional method for defining custom block context menu items.
-     * @type {undefined|?function(!Array<!ContextMenuRegistry.ContextMenuOption>)}
+     * @type {undefined|?function(!Array<!ContextMenuRegistry.ContextMenuOption|
+     *                                   !ContextMenuRegistry.LegacyContextMenuOption>)}
      */
     this.customContextMenu = this.customContextMenu;
 
@@ -740,9 +741,9 @@ class BlockSvg extends Block {
 
   /**
    * Generate the context menu for this block.
-   * @return {?Array<!ContextMenuRegistry.ContextMenuOption>} Context menu
-   *     options or null if no
-   *    menu.
+   * @return {?Array<!ContextMenuRegistry.ContextMenuOption|
+   *                 !ContextMenuRegistry.LegacyContextMenuOption>}
+   *     Context menu options or null if no menu.
    * @protected
    */
   generateContextMenu() {

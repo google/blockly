@@ -169,6 +169,17 @@ ContextMenuRegistry.RegistryItem;
 ContextMenuRegistry.ContextMenuOption;
 
 /**
+ * A subset of ContextMenuOption corresponding to what was publicly documented.
+ * ContextMenuOption should be preferred for new code.
+ * @typedef {{
+ *    text: string,
+ *    enabled: boolean,
+ *    callback: function(!ContextMenuRegistry.Scope),
+ * }}
+ */
+ContextMenuRegistry.LegacyContextMenuOption;
+
+/**
  * Singleton instance of this class. All interactions with this class should be
  * done on this object.
  * @type {!ContextMenuRegistry}

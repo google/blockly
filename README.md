@@ -1,6 +1,6 @@
 # Varwin Blockly
 
-This is a fork of Google Blockly with modifications for [Varwin](https://varwin.com/).  
+This is a fork of Google Blockly with modifications for [Varwin](https://varwin.com/).
 The main feature of Varwin Blockly: "Modules" (`/core/module.*`)
 
 ## Algorithm for updating the repository
@@ -24,9 +24,8 @@ Note that the path must be relative to the root of the Varwin Blockly repository
 Those.
 
 1. Making edits in Varwin Blockly
-2. Run ```npm run build```
-3. Run ```gulp buildCompiled --output "~/node_modules/blockly/"```
-4. Run the RMS build (or hot reload will pull up node_modules by itself)
+2. Run ```npm run build && gulp buildCompiled --output "~/node_modules/blockly/"```
+3. Run the RMS build (or hot reload will pull up node_modules by itself)
 
 ## Frequent problems
 

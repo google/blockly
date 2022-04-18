@@ -476,7 +476,7 @@ ZoomControls.prototype.resetZoom_ = function(e) {
   const amount = Math.log(targetScale / currentScale) / Math.log(speed);
   this.workspace_.beginCanvasTransition();
   this.workspace_.zoomCenter(amount);
-  this.workspace_.scrollCenter();
+  this.workspace_.zoomToFit();
 
   setTimeout(this.workspace_.endCanvasTransition.bind(this.workspace_), 500);
   this.fireZoomEvent_();

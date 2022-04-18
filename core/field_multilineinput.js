@@ -218,6 +218,9 @@ FieldMultilineInput.prototype.doValueUpdate_ = function(newValue) {
  */
 FieldMultilineInput.prototype.render_ = function() {
   // Remove all text group children.
+  if (!this.textGroup_) {
+    return;
+  }
   let currentChild;
   while ((currentChild = this.textGroup_.firstChild)) {
     this.textGroup_.removeChild(currentChild);

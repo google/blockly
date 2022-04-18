@@ -21,3 +21,13 @@ updates:
     labels:
       - "PR: chore"
       - "PR: dependencies"
+  - package-ecosystem: "github-actions" # See documentation for possible values
+    directory: "/" 
+    target-branch: "develop"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "chore(deps)"
+    labels:
+      - "PR: chore"
+      - "PR: dependencies"

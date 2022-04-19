@@ -155,8 +155,8 @@ class Drawer {
       } else if (
           Types.isPreviousConnection(elem) && elem instanceof Connection) {
         this.outlinePath_ +=
-            (/** @type {Notch} */ (
-                 (/** @type {PreviousConnection} */ (elem)).shape))
+            (/** @type {!Notch} */ (
+                 (/** @type {!PreviousConnection} */ (elem)).shape))
                 .pathLeft;
       } else if (Types.isHat(elem)) {
         this.outlinePath_ += this.constants_.START_HAT.path;
@@ -187,7 +187,7 @@ class Drawer {
    */
   drawValueInput_(row) {
     const input =
-        /** @type {ExternalValueInput|InlineInput} */ (row.getLastInput());
+        /** @type {!ExternalValueInput|!InlineInput} */ (row.getLastInput());
     this.positionExternalValueConnection_(row);
 
     const pathDown = (typeof input.shape.pathDown === 'function') ?
@@ -209,7 +209,7 @@ class Drawer {
     // Where to start drawing the notch, which is on the right side in LTR.
     const x = input.xPos + input.notchOffset + input.shape.width;
 
-    const innerTopLeftCorner = (/** @type {Notch} */ (input.shape)).pathRight +
+    const innerTopLeftCorner = (/** @type {!Notch} */ (input.shape)).pathRight +
         svgPaths.lineOnAxis(
             'h', -(input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
         this.constants_.INSIDE_CORNERS.pathTop;
@@ -249,7 +249,7 @@ class Drawer {
     let outlinePath = '';
     for (let i = elems.length - 1, elem; (elem = elems[i]); i--) {
       if (Types.isNextConnection(elem) && elem instanceof Connection) {
-        outlinePath += (/** @type {Notch} */ (elem.shape)).pathRight;
+        outlinePath += (/** @type {!Notch} */ (elem.shape)).pathRight;
       } else if (Types.isLeftSquareCorner(elem)) {
         outlinePath += svgPaths.lineOnAxis('H', bottomRow.xPos);
       } else if (Types.isLeftRoundedCorner(elem)) {
@@ -370,7 +370,7 @@ class Drawer {
 
     this.inlinePath_ += svgPaths.moveTo(connectionRight, yPos) +
         svgPaths.lineOnAxis('v', connectionTop) +
-        (/** @type {PuzzleTab} */ (input.shape)).pathDown +
+        (/** @type {!PuzzleTab} */ (input.shape)).pathDown +
         svgPaths.lineOnAxis('v', height - connectionBottom) +
         svgPaths.lineOnAxis('h', width - input.connectionWidth) +
         svgPaths.lineOnAxis('v', -height) + 'z';

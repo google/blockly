@@ -56,25 +56,25 @@ class InlineInput extends InputConnection {
     /** @type {number} */
     this.connectionHeight = !this.isDynamicShape ?
         this.shape.height :
-        (/** @type {DynamicShape} */ (this.shape)).height(this.height);
+        (/** @type {!DynamicShape} */ (this.shape)).height(this.height);
 
     /** @type {number} */
     this.connectionWidth = !this.isDynamicShape ?
         this.shape.width :
-        (/** @type {DynamicShape} */ (this.shape)).width(this.height);
+        (/** @type {!DynamicShape} */ (this.shape)).width(this.height);
     if (!this.connectedBlock) {
       this.width += this.connectionWidth * (this.isDynamicShape ? 2 : 1);
     }
 
     /** @type {number} */
     this.connectionOffsetY = this.isDynamicShape ?
-        (/** @type {DynamicShape} */ (this.shape))
+        (/** @type {!DynamicShape} */ (this.shape))
             .connectionOffsetY(this.connectionHeight) :
         this.constants_.TAB_OFFSET_FROM_TOP;
 
     /** @type {number} */
     this.connectionOffsetX = this.isDynamicShape ?
-        (/** @type {DynamicShape} */ (this.shape))
+        (/** @type {!DynamicShape} */ (this.shape))
             .connectionOffsetX(this.connectionWidth) :
         0;
   }

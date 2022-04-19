@@ -129,20 +129,20 @@ class Drawer extends BaseDrawer {
       const spacerRow = /** @type {!SpacerRow} */ (row);
       if (spacerRow.precedesStatement || spacerRow.followsStatement) {
         const cornerHeight =
-            (/** @type {InsideCorners} */ (this.constants_.INSIDE_CORNERS))
+            (/** @type {!InsideCorners} */ (this.constants_.INSIDE_CORNERS))
                 .rightHeight;
         const remainingHeight =
             spacerRow.height - (spacerRow.precedesStatement ? cornerHeight : 0);
         this.outlinePath_ +=
             (spacerRow.followsStatement ?
-                 (/** @type {InsideCorners} */ (this.constants_.INSIDE_CORNERS))
+                 (/** @type {!InsideCorners} */ (this.constants_.INSIDE_CORNERS))
                      .pathBottomRight :
                  '') +
             (remainingHeight > 0 ?
                  svgPaths.lineOnAxis('V', spacerRow.yPos + remainingHeight) :
                  '') +
             (spacerRow.precedesStatement ?
-                 (/** @type {InsideCorners} */ (this.constants_.INSIDE_CORNERS))
+                 (/** @type {!InsideCorners} */ (this.constants_.INSIDE_CORNERS))
                      .pathTopRight :
                  '');
         return;
@@ -157,7 +157,7 @@ class Drawer extends BaseDrawer {
    */
   drawRightDynamicConnection_() {
     this.outlinePath_ +=
-        (/** @type {DynamicShape} */ (this.info_.outputConnection.shape))
+        (/** @type {!DynamicShape} */ (this.info_.outputConnection.shape))
             .pathRightDown(this.info_.outputConnection.height);
   }
 
@@ -169,7 +169,7 @@ class Drawer extends BaseDrawer {
     this.positionOutputConnection_();
 
     this.outlinePath_ +=
-        (/** @type {DynamicShape} */ (this.info_.outputConnection.shape))
+        (/** @type {!DynamicShape} */ (this.info_.outputConnection.shape))
             .pathUp(this.info_.outputConnection.height);
 
     // Close off the path.  This draws a vertical line up to the start of the
@@ -222,10 +222,10 @@ class Drawer extends BaseDrawer {
 
     const outlinePath = svgPaths.moveTo(connectionRight, yPos) +
         svgPaths.lineOnAxis('h', width) +
-        (/** @type {DynamicShape} */ (input.shape))
+        (/** @type {!DynamicShape} */ (input.shape))
             .pathRightDown(input.height) +
         svgPaths.lineOnAxis('h', -width) +
-        (/** @type {DynamicShape} */ (input.shape)).pathUp(input.height) + 'z';
+        (/** @type {!DynamicShape} */ (input.shape)).pathUp(input.height) + 'z';
     this.block_.pathObject.setOutlinePath(inputName, outlinePath);
   }
 
@@ -237,7 +237,7 @@ class Drawer extends BaseDrawer {
     // Where to start drawing the notch, which is on the right side in LTR.
     const x = input.xPos + input.notchOffset + input.shape.width;
 
-    const innerTopLeftCorner = (/** @type {Notch} */ (input.shape)).pathRight +
+    const innerTopLeftCorner = (/** @type {!Notch} */ (input.shape)).pathRight +
         svgPaths.lineOnAxis(
             'h', -(input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
         this.constants_.INSIDE_CORNERS.pathTop;
@@ -250,7 +250,7 @@ class Drawer extends BaseDrawer {
             'h', (input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
         (input.connectedBottomNextConnection ?
              '' :
-             (/** @type {Notch} */ (input.shape)).pathLeft);
+             (/** @type {!Notch} */ (input.shape)).pathLeft);
 
     this.outlinePath_ += svgPaths.lineOnAxis('H', x) + innerTopLeftCorner +
         svgPaths.lineOnAxis('v', innerHeight) + innerBottomLeftCorner +

@@ -90,21 +90,21 @@ class MarkerSvg {
     /**
      * The workspace, field, or block that the marker SVG element should be
      * attached to.
-     * @type {IASTNodeLocationSvg}
+     * @type {?IASTNodeLocationSvg}
      * @private
      */
     this.parent_ = null;
 
     /**
      * The constants necessary to draw the marker.
-     * @type {ConstantProvider}
+     * @type {!ConstantProvider}
      * @protected
      */
     this.constants_ = constants;
 
     /**
      * The current SVG element for the marker.
-     * @type {Element}
+     * @type {?Element}
      */
     this.currentMarkerSvg = null;
 
@@ -119,7 +119,7 @@ class MarkerSvg {
 
     /**
      * The root SVG group containing the marker.
-     * @type {SVGGElement}
+     * @type {?SVGGElement}
      * @protected
      */
     this.markerSvg_ = null;
@@ -360,7 +360,7 @@ class MarkerSvg {
    * @protected
    */
   showWithField_(curNode) {
-    const field = /** @type {Field} */ (curNode.getLocation());
+    const field = /** @type {!Field} */ (curNode.getLocation());
     const width = field.getSize().width;
     const height = field.getSize().height;
 
@@ -376,7 +376,7 @@ class MarkerSvg {
    * @protected
    */
   showWithInput_(curNode) {
-    const connection = /** @type {RenderedConnection} */
+    const connection = /** @type {!RenderedConnection} */
         (curNode.getLocation());
     const sourceBlock = /** @type {!BlockSvg} */ (connection.getSourceBlock());
 
@@ -395,7 +395,7 @@ class MarkerSvg {
     const connection =
         /** @type {!RenderedConnection} */ (curNode.getLocation());
     const targetBlock =
-        /** @type {BlockSvg} */ (connection.getSourceBlock());
+        /** @type {!BlockSvg} */ (connection.getSourceBlock());
     let x = 0;
     const y = connection.getOffsetInBlock().y;
     const width = targetBlock.getHeightWidth().width;
@@ -414,7 +414,7 @@ class MarkerSvg {
    * @protected
    */
   showWithStack_(curNode) {
-    const block = /** @type {BlockSvg} */ (curNode.getLocation());
+    const block = /** @type {!BlockSvg} */ (curNode.getLocation());
 
     // Gets the height and width of entire stack.
     const heightWidth = block.getHeightWidth();
@@ -485,7 +485,7 @@ class MarkerSvg {
     const y = connection.getOffsetInBlock().y;
 
     const path = svgPaths.moveTo(0, 0) +
-        (/** @type {PuzzleTab} */ (this.constants_.shapeFor(connection)))
+        (/** @type {!PuzzleTab} */ (this.constants_.shapeFor(connection)))
             .pathDown;
 
     this.markerInput_.setAttribute('d', path);

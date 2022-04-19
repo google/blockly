@@ -103,7 +103,7 @@ class RenderInfo extends BaseRenderInfo {
 
     /**
      * An object with rendering information about the right connection shape.
-     * @type {RightConnectionShape}
+     * @type {?RightConnectionShape}
      */
     this.rightSide = this.outputConnection ?
         new RightConnectionShape(this.constants_) :
@@ -168,7 +168,7 @@ class RenderInfo extends BaseRenderInfo {
   getDesiredRowWidth_(row) {
     if (row.hasStatement) {
       const rightCornerWidth =
-          (/** @type {InsideCorners} */ (this.constants_.INSIDE_CORNERS))
+          (/** @type {!InsideCorners} */ (this.constants_.INSIDE_CORNERS))
               .rightWidth ||
           0;
       return this.width - this.startX - rightCornerWidth;
@@ -219,7 +219,7 @@ class RenderInfo extends BaseRenderInfo {
     const precedesStatement = Types.isInputRow(next) && next.hasStatement;
     if (precedesStatement || followsStatement) {
       const cornerHeight =
-          (/** @type {InsideCorners} */ (this.constants_.INSIDE_CORNERS))
+          (/** @type {!InsideCorners} */ (this.constants_.INSIDE_CORNERS))
               .rightHeight ||
           0;
       const height = Math.max(this.constants_.NOTCH_HEIGHT, cornerHeight);
@@ -412,20 +412,20 @@ class RenderInfo extends BaseRenderInfo {
         this.height - this.bottomRow.descenderHeight :
         this.height;
     const connectionHeight =
-        (/** @type {DynamicShape} */ (this.outputConnection.shape))
+        (/** @type {!DynamicShape} */ (this.outputConnection.shape))
             .height(blockHeight);
     const connectionWidth =
-        (/** @type {DynamicShape} */ (this.outputConnection.shape))
+        (/** @type {!DynamicShape} */ (this.outputConnection.shape))
             .width(blockHeight);
 
     this.outputConnection.height = connectionHeight;
     this.outputConnection.width = connectionWidth;
     this.outputConnection.startX = connectionWidth;
     this.outputConnection.connectionOffsetY =
-        (/** @type {DynamicShape} */ (this.outputConnection.shape))
+        (/** @type {!DynamicShape} */ (this.outputConnection.shape))
             .connectionOffsetY(connectionHeight);
     this.outputConnection.connectionOffsetX =
-        (/** @type {DynamicShape} */ (this.outputConnection.shape))
+        (/** @type {!DynamicShape} */ (this.outputConnection.shape))
             .connectionOffsetX(connectionWidth);
 
     // Add the right connection measurable.

@@ -134,17 +134,17 @@ class Drawer extends BaseDrawer {
         const remainingHeight =
             spacerRow.height - (spacerRow.precedesStatement ? cornerHeight : 0);
         this.outlinePath_ +=
-            (spacerRow.followsStatement ?
-                 (/** @type {!InsideCorners} */ (this.constants_.INSIDE_CORNERS))
-                     .pathBottomRight :
-                 '') +
+            (spacerRow.followsStatement ? (/** @type {!InsideCorners} */ (
+                                               this.constants_.INSIDE_CORNERS))
+                                              .pathBottomRight :
+                                          '') +
             (remainingHeight > 0 ?
                  svgPaths.lineOnAxis('V', spacerRow.yPos + remainingHeight) :
                  '') +
-            (spacerRow.precedesStatement ?
-                 (/** @type {!InsideCorners} */ (this.constants_.INSIDE_CORNERS))
-                     .pathTopRight :
-                 '');
+            (spacerRow.precedesStatement ? (/** @type {!InsideCorners} */ (
+                                                this.constants_.INSIDE_CORNERS))
+                                               .pathTopRight :
+                                           '');
         return;
       }
     }

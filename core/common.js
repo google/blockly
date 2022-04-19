@@ -135,11 +135,12 @@ const svgResize = function(workspace) {
   }
   const svg = mainWorkspace.getParentSvg();
   const cachedSize = mainWorkspace.getCachedParentSvgSize();
-  const div = svg.parentNode;
-  if (!div) {
+  const div = svg.parentElement;
+  if (!(div instanceof HTMLElement)) {
     // Workspace deleted, or something.
     return;
   }
+
   const width = div.offsetWidth;
   const height = div.offsetHeight;
   if (cachedSize.width !== width) {
@@ -231,7 +232,7 @@ const createBlockDefinitionsFromJsonArray = function(jsonArray) {
       console.warn(`Block definition #${i} in JSON array is ${elem}. Skipping`);
       continue;
     }
-    const type = elem.type;
+    const type = elem['type'];
     if (!type) {
       console.warn(
           `Block definition #${i} in JSON array is missing a type attribute. ` +

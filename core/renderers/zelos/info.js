@@ -21,7 +21,9 @@ const {Align} = goog.require('Blockly.Input');
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 const {BottomRow} = goog.require('Blockly.zelos.BottomRow');
 /* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider} = goog.requireType('Blockly.zelos.ConstantProvider');
+const {ConstantProvider, InsideCorners} = goog.requireType('Blockly.zelos.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const {DynamicShape} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 const {Field} = goog.require('Blockly.blockRendering.Field');
 const {FieldImage} = goog.require('Blockly.FieldImage');
 const {FieldLabel} = goog.require('Blockly.FieldLabel');
@@ -101,7 +103,7 @@ class RenderInfo extends BaseRenderInfo {
 
     /**
      * An object with rendering information about the right connection shape.
-     * @type {RightConnectionShape}
+     * @type {?RightConnectionShape}
      */
     this.rightSide = this.outputConnection ?
         new RightConnectionShape(this.constants_) :
@@ -165,7 +167,10 @@ class RenderInfo extends BaseRenderInfo {
    */
   getDesiredRowWidth_(row) {
     if (row.hasStatement) {
-      const rightCornerWidth = this.constants_.INSIDE_CORNERS.rightWidth || 0;
+      const rightCornerWidth =
+          (/** @type {!InsideCorners} */ (this.constants_.INSIDE_CORNERS))
+              .rightWidth ||
+          0;
       return this.width - this.startX - rightCornerWidth;
     }
     return super.getDesiredRowWidth_(row);
@@ -213,7 +218,10 @@ class RenderInfo extends BaseRenderInfo {
     const followsStatement = Types.isInputRow(prev) && prev.hasStatement;
     const precedesStatement = Types.isInputRow(next) && next.hasStatement;
     if (precedesStatement || followsStatement) {
-      const cornerHeight = this.constants_.INSIDE_CORNERS.rightHeight || 0;
+      const cornerHeight =
+          (/** @type {!InsideCorners} */ (this.constants_.INSIDE_CORNERS))
+              .rightHeight ||
+          0;
       const height = Math.max(this.constants_.NOTCH_HEIGHT, cornerHeight);
       return precedesStatement && followsStatement ?
           Math.max(height, this.constants_.DUMMY_INPUT_MIN_HEIGHT) :
@@ -403,16 +411,22 @@ class RenderInfo extends BaseRenderInfo {
     const blockHeight = this.bottomRow.hasNextConnection ?
         this.height - this.bottomRow.descenderHeight :
         this.height;
-    const connectionHeight = this.outputConnection.shape.height(blockHeight);
-    const connectionWidth = this.outputConnection.shape.width(blockHeight);
+    const connectionHeight =
+        (/** @type {!DynamicShape} */ (this.outputConnection.shape))
+            .height(blockHeight);
+    const connectionWidth =
+        (/** @type {!DynamicShape} */ (this.outputConnection.shape))
+            .width(blockHeight);
 
     this.outputConnection.height = connectionHeight;
     this.outputConnection.width = connectionWidth;
     this.outputConnection.startX = connectionWidth;
     this.outputConnection.connectionOffsetY =
-        this.outputConnection.shape.connectionOffsetY(connectionHeight);
+        (/** @type {!DynamicShape} */ (this.outputConnection.shape))
+            .connectionOffsetY(connectionHeight);
     this.outputConnection.connectionOffsetX =
-        this.outputConnection.shape.connectionOffsetX(connectionWidth);
+        (/** @type {!DynamicShape} */ (this.outputConnection.shape))
+            .connectionOffsetX(connectionWidth);
 
     // Add the right connection measurable.
     // Don't add it if we have a value-to-statement or a value-to-stack block.

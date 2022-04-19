@@ -37,6 +37,16 @@ const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
+ * Represents a nearby valid connection.
+ * @typedef {{
+ *    closest: ?RenderedConnection,
+ *    local: ?RenderedConnection,
+ *    radius: number,
+ * }}
+ */
+let CandidateConnection;  // eslint-disable-line no-unused-vars
+
+/**
  * An error message to throw if the block created by createMarkerBlock_ is
  * missing any components.
  * @type {string}
@@ -359,8 +369,9 @@ class InsertionMarkerManager {
   /**
    * Whether the previews (insertion marker and replacement marker) should be
    * updated based on the closest candidate and the current drag distance.
-   * @param {!Object} candidate An object containing a local connection, a
-   *     closest connection, and a radius.  Returned by getCandidate_.
+   * @param {!CandidateConnection} candidate An object containing a local
+   *     connection, a closest connection, and a radius.  Returned by
+   *     getCandidate_.
    * @param {!Coordinate} dxy Position relative to drag start,
    *     in workspace units.
    * @return {boolean} Whether the preview should be updated.
@@ -412,8 +423,8 @@ class InsertionMarkerManager {
    * closest connection.
    * @param {!Coordinate} dxy Position relative to drag start,
    *     in workspace units.
-   * @return {!Object} An object containing a local connection, a closest
-   *     connection, and a radius.
+   * @return {!CandidateConnection} An object containing a local connection, a
+   *     closest connection, and a radius.
    * @private
    */
   getCandidate_(dxy) {
@@ -465,9 +476,8 @@ class InsertionMarkerManager {
 
   /**
    * Whether ending the drag would delete the block.
-   * @param {!Object} candidate An object containing a local connection, a
-   *     closest
-   *    connection, and a radius.
+   * @param {!CandidateConnection} candidate An object containing a local
+   *     connection, a closest connection, and a radius.
    * @param {?IDragTarget} dragTarget The drag target that the block is
    *     currently over.
    * @return {boolean} Whether dropping the block immediately would delete the
@@ -493,8 +503,8 @@ class InsertionMarkerManager {
    * needed.
    * At the beginning of this function, this.localConnection_ and
    * this.closestConnection_ should both be null.
-   * @param {!Object} candidate An object containing a local connection, a
-   *     closest connection, and a radius.
+   * @param {!CandidateConnection} candidate An object containing a local
+   *     connection, a closest connection, and a radius.
    * @private
    */
   maybeShowPreview_(candidate) {
@@ -560,8 +570,8 @@ class InsertionMarkerManager {
    * needed.
    * At the end of this function, this.localConnection_ and
    * this.closestConnection_ should both be null.
-   * @param {!Object} candidate An object containing a local connection, a
-   *     closest connection, and a radius.
+   * @param {!CandidateConnection} candidate An object containing a local
+   *     connection, a closest connection, and a radius.
    * @private
    */
   maybeHidePreview_(candidate) {

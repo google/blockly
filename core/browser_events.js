@@ -211,12 +211,22 @@ exports.unbind = unbind;
  * @alias Blockly.browserEvents.isTargetInput
  */
 const isTargetInput = function(e) {
-  return e.target.type === 'textarea' || e.target.type === 'text' ||
-      e.target.type === 'number' || e.target.type === 'email' ||
-      e.target.type === 'password' || e.target.type === 'search' ||
-      e.target.type === 'tel' || e.target.type === 'url' ||
-      e.target.isContentEditable ||
-      (e.target.dataset && e.target.dataset.isTextInput === 'true');
+  if (e.target instanceof HTMLElement) {
+    if (e.target.isContentEditable ||
+        e.target.getAttribute('data-is-text-input') === 'true') {
+      return true;
+    }
+
+    if (e.target instanceof HTMLInputElement) {
+      const target = e.target;
+      return target.type === 'textarea' || target.type === 'text' ||
+          target.type === 'number' || target.type === 'email' ||
+          target.type === 'password' || target.type === 'search' ||
+          target.type === 'tel' || target.type === 'url';
+    }
+  }
+
+  return false;
 };
 exports.isTargetInput = isTargetInput;
 
@@ -240,7 +250,7 @@ exports.isRightButton = isRightButton;
  * Returns the converted coordinates of the given mouse event.
  * The origin (0,0) is the top-left corner of the Blockly SVG.
  * @param {!Event} e Mouse event.
- * @param {!Element} svg SVG element.
+ * @param {!SVGSVGElement} svg SVG element.
  * @param {?SVGMatrix} matrix Inverted screen CTM to use.
  * @return {!SVGPoint} Object with .x and .y properties.
  * @alias Blockly.browserEvents.mouseToSvg
@@ -259,7 +269,7 @@ exports.mouseToSvg = mouseToSvg;
 
 /**
  * Returns the scroll delta of a mouse event in pixel units.
- * @param {!Event} e Mouse event.
+ * @param {!WheelEvent} e Mouse event.
  * @return {{x: number, y: number}} Scroll delta object with .x and .y
  *    properties.
  * @alias Blockly.browserEvents.getScrollDeltaPixels

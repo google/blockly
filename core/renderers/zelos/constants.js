@@ -21,8 +21,25 @@ const dom = goog.require('Blockly.utils.dom');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
 const utilsColour = goog.require('Blockly.utils.colour');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
-const {ConstantProvider: BaseConstantProvider} = goog.require('Blockly.blockRendering.ConstantProvider');
+/* eslint-disable-next-line no-unused-vars */
+const {ConstantProvider: BaseConstantProvider, DynamicShape, Shape} = goog.require('Blockly.blockRendering.ConstantProvider');
 const {Svg} = goog.require('Blockly.utils.Svg');
+
+/**
+ * An object containing sizing and path information about inside corners.
+ * @typedef {{
+ *   width: number,
+ *   height: number,
+ *   pathTop: string,
+ *   pathBottom: string,
+ *   rightWidth: number,
+ *   rightHeight: number,
+ *   pathTopRight: string,
+ *   pathBottomRight: string
+ * }}
+ */
+let InsideCorners;
+exports.InsideCorners = InsideCorners;
 
 
 /**
@@ -389,21 +406,21 @@ class ConstantProvider extends BaseConstantProvider {
     /**
      * The object containing information about the hexagon used for a boolean
      * reporter block. Null before init is called.
-     * @type {Object}
+     * @type {?DynamicShape}
      */
     this.HEXAGONAL = null;
 
     /**
      * The object containing information about the hexagon used for a number or
      * string reporter block. Null before init is called.
-     * @type {Object}
+     * @type {?DynamicShape}
      */
     this.ROUNDED = null;
 
     /**
      * The object containing information about the hexagon used for a
      * rectangular reporter block. Null before init is called.
-     * @type {Object}
+     * @type {?DynamicShape}
      */
     this.SQUARED = null;
   }
@@ -428,8 +445,8 @@ class ConstantProvider extends BaseConstantProvider {
     this.ROUNDED = this.makeRounded();
     this.SQUARED = this.makeSquared();
 
-    this.STATEMENT_INPUT_NOTCH_OFFSET =
-        this.NOTCH_OFFSET_LEFT + this.INSIDE_CORNERS.rightWidth;
+    this.STATEMENT_INPUT_NOTCH_OFFSET = this.NOTCH_OFFSET_LEFT +
+        (/** @type {InsideCorners} */ (this.INSIDE_CORNERS)).rightWidth;
   }
 
   /**
@@ -486,8 +503,8 @@ class ConstantProvider extends BaseConstantProvider {
 
   /**
    * Create sizing and path information about a hexagonal shape.
-   * @return {!Object} An object containing sizing and path information about
-   *     a hexagonal shape for connections.
+   * @return {!DynamicShape} An object containing sizing and path information
+   *     about a hexagonal shape for connections.
    * @package
    */
   makeHexagonal() {
@@ -549,8 +566,8 @@ class ConstantProvider extends BaseConstantProvider {
 
   /**
    * Create sizing and path information about a rounded shape.
-   * @return {!Object} An object containing sizing and path information about
-   *     a rounded shape for connections.
+   * @return {!DynamicShape} An object containing sizing and path information
+   *     about a rounded shape for connections.
    * @package
    */
   makeRounded() {
@@ -620,8 +637,8 @@ class ConstantProvider extends BaseConstantProvider {
 
   /**
    * Create sizing and path information about a squared shape.
-   * @return {!Object} An object containing sizing and path information about
-   *     a squared shape for connections.
+   * @return {!DynamicShape} An object containing sizing and path information
+   *     about a squared shape for connections.
    * @package
    */
   makeSquared() {
@@ -700,24 +717,24 @@ class ConstantProvider extends BaseConstantProvider {
         if (outputShape !== null) {
           switch (outputShape) {
             case this.SHAPES.HEXAGONAL:
-              return /** @type {!Object} */ (this.HEXAGONAL);
+              return /** @type {!Shape} */ (this.HEXAGONAL);
             case this.SHAPES.ROUND:
-              return /** @type {!Object} */ (this.ROUNDED);
+              return /** @type {!Shape} */ (this.ROUNDED);
             case this.SHAPES.SQUARE:
-              return /** @type {!Object} */ (this.SQUARED);
+              return /** @type {!Shape} */ (this.SQUARED);
           }
         }
         // Includes doesn't work in IE.
         if (checks && checks.indexOf('Boolean') !== -1) {
-          return /** @type {!Object} */ (this.HEXAGONAL);
+          return /** @type {!Shape} */ (this.HEXAGONAL);
         }
         if (checks && checks.indexOf('Number') !== -1) {
-          return /** @type {!Object} */ (this.ROUNDED);
+          return /** @type {!Shape} */ (this.ROUNDED);
         }
         if (checks && checks.indexOf('String') !== -1) {
-          return /** @type {!Object} */ (this.ROUNDED);
+          return /** @type {!Shape} */ (this.ROUNDED);
         }
-        return /** @type {!Object} */ (this.ROUNDED);
+        return /** @type {!Shape} */ (this.ROUNDED);
       case ConnectionType.PREVIOUS_STATEMENT:
       case ConnectionType.NEXT_STATEMENT:
         return this.NOTCH;

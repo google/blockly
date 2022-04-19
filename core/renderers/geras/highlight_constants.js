@@ -19,6 +19,70 @@ const svgPaths = goog.require('Blockly.utils.svgPaths');
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 
+/**
+ * An object containing sizing and path information about an outside corner.
+ * @typedef {{
+ *   height: number,
+ *   topLeft: (function(boolean)),
+ *   bottomLeft: (function()),
+ * }}
+ */
+let OutsideCorner;
+exports.OutsideCorner = OutsideCorner;
+
+/**
+ * An object containing sizing and path information about an inside corner.
+ * @typedef {{
+ *   width: number,
+ *   height: number,
+ *   pathTop: (function(boolean)),
+ *   pathBottom: (function(boolean))
+ * }}
+ */
+let InsideCorner;
+exports.InsideCorner = InsideCorner;
+
+/**
+ * An object containing sizing and path information about a start hat.
+ * @typedef {{
+ *   path: (function(boolean))
+ * }}
+ */
+let StartHat;
+exports.StartHat = StartHat;
+
+/**
+ * An object containing sizing and path information about a notch.
+ * @typedef {{
+ *   pathLeft: string
+ * }}
+ */
+let Notch;
+exports.Notch = Notch;
+
+/**
+ * An object containing sizing and path information about a puzzle tab.
+ * @typedef {{
+ *   width: number,
+ *   height: number,
+ *   pathDown: (function(boolean)),
+ *   pathUp: (function(boolean))
+ * }}
+ */
+let PuzzleTab;
+exports.PuzzleTab = PuzzleTab;
+
+/**
+ * An object containing sizing and path information about collapsed block
+ * indicators.
+ * @typedef {{
+ *   height: number,
+ *   width: number,
+ *   pathLeft: string
+ * }}
+ */
+let JaggedTeeth;
+exports.JaggedTeeth = JaggedTeeth;
 
 /**
  * An object that provides constants for rendering highlights on blocks.
@@ -62,48 +126,48 @@ class HighlightConstantProvider {
     /**
      * An object containing sizing and path information about inside corner
      * highlights.
-     * @type {!Object}
+     * @type {!InsideCorner}
      */
     this.INSIDE_CORNER = this.makeInsideCorner();
 
     /**
      * An object containing sizing and path information about outside corner
      * highlights.
-     * @type {!Object}
+     * @type {!OutsideCorner}
      */
     this.OUTSIDE_CORNER = this.makeOutsideCorner();
 
     /**
      * An object containing sizing and path information about puzzle tab
      * highlights.
-     * @type {!Object}
+     * @type {!PuzzleTab}
      */
     this.PUZZLE_TAB = this.makePuzzleTab();
 
     /**
      * An object containing sizing and path information about notch highlights.
-     * @type {!Object}
+     * @type {!Notch}
      */
     this.NOTCH = this.makeNotch();
 
     /**
      * An object containing sizing and path information about highlights for
      * collapsed block indicators.
-     * @type {!Object}
+     * @type {!JaggedTeeth}
      */
     this.JAGGED_TEETH = this.makeJaggedTeeth();
 
     /**
      * An object containing sizing and path information about start hat
      * highlights.
-     * @type {!Object}
+     * @type {!StartHat}
      */
     this.START_HAT = this.makeStartHat();
   }
 
   /**
-   * @return {!Object} An object containing sizing and path information about
-   *     inside corner highlights.
+   * @return {!InsideCorner} An object containing sizing and path information
+   *     about inside corner highlights.
    * @package
    */
   makeInsideCorner() {
@@ -147,8 +211,8 @@ class HighlightConstantProvider {
   }
 
   /**
-   * @return {!Object} An object containing sizing and path information about
-   *     outside corner highlights.
+   * @return {!OutsideCorner} An object containing sizing and path information
+   *     about outside corner highlights.
    * @package
    */
   makeOutsideCorner() {
@@ -198,7 +262,7 @@ class HighlightConstantProvider {
   }
 
   /**
-   * @return {!Object} An object containing sizing and path information about
+   * @return {!PuzzleTab} An object containing sizing and path information about
    *     puzzle tab highlights.
    * @package
    */
@@ -248,7 +312,7 @@ class HighlightConstantProvider {
   }
 
   /**
-   * @return {!Object} An object containing sizing and path information about
+   * @return {!Notch} An object containing sizing and path information about
    *     notch highlights.
    * @package
    */
@@ -260,8 +324,8 @@ class HighlightConstantProvider {
   }
 
   /**
-   * @return {!Object} An object containing sizing and path information about
-   *     collapsed block edge highlights.
+   * @return {!JaggedTeeth} An object containing sizing and path information
+   *     about collapsed block edge highlights.
    * @package
    */
   makeJaggedTeeth() {
@@ -271,7 +335,7 @@ class HighlightConstantProvider {
   }
 
   /**
-   * @return {!Object} An object containing sizing and path information about
+   * @return {!StartHat} An object containing sizing and path information about
    *     start highlights.
    * @package
    */

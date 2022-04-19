@@ -128,7 +128,7 @@ class ToolboxItem {
 
   /**
    * Gets the parent if the toolbox item is nested.
-   * @return {?IToolboxItem} The parent toolbox item, or null if
+   * @return {?ICollapsibleToolboxItem} The parent toolbox item, or null if
    *     this toolbox item is not nested.
    * @public
    */

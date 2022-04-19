@@ -506,7 +506,7 @@ class ToolboxCategory extends ToolboxItem {
     let category = this;
     while (category.getParent()) {
       category = category.getParent();
-      if (!category.isExpanded()) {
+      if (!(/** @type {ICollapsibleToolboxItem} */ (category)).isExpanded()) {
         return false;
       }
     }

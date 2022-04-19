@@ -441,7 +441,7 @@ class Debug {
 /**
  * Configuration object containing booleans to enable and disable debug
  * rendering of specific rendering components.
- * @type {!Object<string, boolean>}
+ * @struct
  */
 Debug.config = {
   rowSpacers: true,

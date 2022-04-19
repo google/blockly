@@ -427,9 +427,10 @@ const addAttributes = function(node, obj) {
 
 /**
  * Parse the provided toolbox tree into a consistent DOM format.
- * @param {?Node|?string} toolboxDef DOM tree of blocks, or text representation
+ * @param {?Element|?string} toolboxDef DOM tree of blocks, or text
+ *     representation
  *    of same.
- * @return {?Node} DOM tree of blocks, or null.
+ * @return {?Element} DOM tree of blocks, or null.
  * @alias Blockly.utils.toolbox.parseToolboxTree
  */
 const parseToolboxTree = function(toolboxDef) {

@@ -171,7 +171,7 @@ class MarkerSvg extends BaseMarkerSvg {
 
     if (this.isCursor()) {
       const values = this.colour_ + ';transparent;transparent;';
-      this.markerCircle_.firstChild.setAttribute('values', values);
+      this.markerCircle_.firstElementChild.setAttribute('values', values);
     }
   }
 }

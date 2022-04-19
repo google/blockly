@@ -187,9 +187,9 @@ suite('Number Fields', function() {
   suite('Validators', function() {
     setup(function() {
       this.field = new Blockly.FieldNumber(1);
-      this.field.htmlInput_ = Object.create(null);
-      this.field.htmlInput_.oldValue_ = '1';
-      this.field.htmlInput_.untypedDefaultValue_ = 1;
+      this.field.htmlInput_ = document.createElement('input');
+      this.field.htmlInput_.setAttribute('data-old-value', '1');
+      this.field.htmlInput_.setAttribute('data-untyped-default-value', '1');
       this.stub = sinon.stub(this.field, 'resizeEditor_');
     });
     teardown(function() {

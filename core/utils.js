@@ -152,7 +152,7 @@ exports.isRightButton = isRightButton;
  * Returns the converted coordinates of the given mouse event.
  * The origin (0,0) is the top-left corner of the Blockly SVG.
  * @param {!Event} e Mouse event.
- * @param {!Element} svg SVG element.
+ * @param {!SVGSVGElement} svg SVG element.
  * @param {?SVGMatrix} matrix Inverted screen CTM to use.
  * @return {!SVGPoint} Object with .x and .y properties.
  * @deprecated Use Blockly.browserEvents.mouseToSvg instead;
@@ -168,7 +168,7 @@ exports.mouseToSvg = mouseToSvg;
 
 /**
  * Returns the scroll delta of a mouse event in pixel units.
- * @param {!Event} e Mouse event.
+ * @param {!WheelEvent} e Mouse event.
  * @return {{x: number, y: number}} Scroll delta object with .x and .y
  *    properties.
  * @deprecated Use Blockly.browserEvents.getScrollDeltaPixels instead.

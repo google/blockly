@@ -83,10 +83,10 @@ class Scrollbar {
     this.oldHostMetrics_ = null;
     /**
      * The ratio of handle position offset to workspace content displacement.
-     * @type {?number}
+     * @type {number}
      * @package
      */
-    this.ratio = null;
+    this.ratio = 1;
 
     /**
      * The location of the origin of the workspace that the scrollbar is in,

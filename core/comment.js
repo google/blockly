@@ -108,7 +108,7 @@ class Comment extends Icon {
 
     /**
      * The editable text area, or null if not created.
-     * @type {?Element}
+     * @type {?HTMLTextAreaElement}
      * @private
      */
     this.textarea_ = null;
@@ -181,7 +181,8 @@ class Comment extends Icon {
     body.setAttribute('xmlns', dom.HTML_NS);
     body.className = 'blocklyMinimalBody';
 
-    this.textarea_ = document.createElementNS(dom.HTML_NS, 'textarea');
+    this.textarea_ = /** @type {!HTMLTextAreaElement} */ (
+        document.createElementNS(dom.HTML_NS, 'textarea'));
     const textarea = this.textarea_;
     textarea.className = 'blocklyCommentTextarea';
     textarea.setAttribute('dir', this.block_.RTL ? 'RTL' : 'LTR');

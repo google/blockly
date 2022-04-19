@@ -514,7 +514,7 @@ class Mutator extends Icon {
 
       const flyout = ws.getFlyout();
       if (flyout) {
-        const flyoutBlocks = flyout.workspace_.getAllBlocks(false);
+        const flyoutBlocks = flyout.getWorkspace().getAllBlocks(false);
         for (let i = 0, block; (block = flyoutBlocks[i]); i++) {
           block.setStyle(block.getStyleName());
         }

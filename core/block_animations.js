@@ -20,6 +20,16 @@ const dom = goog.require('Blockly.utils.dom');
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 const {Svg} = goog.require('Blockly.utils.Svg');
 
+/**
+ * A bounding box for a cloned block.
+ * @typedef {{
+ *    x: number,
+ *    y: number,
+ *    width: number,
+ *    height: number
+ * }}
+ */
+let CloneRect;  // eslint-disable-line no-unused-vars
 
 /**
  * PID of disconnect UI animation.  There can only be one at a time.
@@ -47,13 +57,13 @@ const disposeUiEffect = function(block) {
   const xy = workspace.getSvgXY(svgGroup);
   // Deeply clone the current block.
   const clone = svgGroup.cloneNode(true);
-  clone.translateX_ = xy.x;
-  clone.translateY_ = xy.y;
   clone.setAttribute('transform', 'translate(' + xy.x + ',' + xy.y + ')');
   workspace.getParentSvg().appendChild(clone);
-  clone.bBox_ = clone.getBBox();
+  const bBox = clone.getBBox();
+  const cloneRect =
+      {'x': xy.x, 'y': xy.y, 'width': bBox.width, 'height': bBox.height};
   // Start the animation.
-  disposeUiStep(clone, workspace.RTL, new Date, workspace.scale);
+  disposeUiStep(clone, cloneRect, workspace.RTL, new Date, workspace.scale);
 };
 exports.disposeUiEffect = disposeUiEffect;
 
@@ -62,25 +72,26 @@ exports.disposeUiEffect = disposeUiEffect;
  * This is a class method, not an instance method since the original block has
  * been destroyed and is no longer accessible.
  * @param {!Element} clone SVG element to animate and dispose of.
+ * @param {!CloneRect} rect Starting rect of the clone.
  * @param {boolean} rtl True if RTL, false if LTR.
  * @param {!Date} start Date of animation's start.
  * @param {number} workspaceScale Scale of workspace.
  */
-const disposeUiStep = function(clone, rtl, start, workspaceScale) {
-  const ms = new Date - start;
+const disposeUiStep = function(clone, rect, rtl, start, workspaceScale) {
+  const ms = (new Date).getTime() - start.getTime();
   const percent = ms / 150;
   if (percent > 1) {
     dom.removeNode(clone);
   } else {
-    const x = clone.translateX_ +
-        (rtl ? -1 : 1) * clone.bBox_.width * workspaceScale / 2 * percent;
-    const y = clone.translateY_ + clone.bBox_.height * workspaceScale * percent;
+    const x =
+        rect.x + (rtl ? -1 : 1) * rect.width * workspaceScale / 2 * percent;
+    const y = rect.y + rect.height * workspaceScale * percent;
     const scale = (1 - percent) * workspaceScale;
     clone.setAttribute(
         'transform',
         'translate(' + x + ',' + y + ')' +
             ' scale(' + scale + ')');
-    setTimeout(disposeUiStep, 10, clone, rtl, start, workspaceScale);
+    setTimeout(disposeUiStep, 10, clone, rect, rtl, start, workspaceScale);
   }
 };
 
@@ -129,7 +140,7 @@ exports.connectionUiEffect = connectionUiEffect;
  * @param {number} scale Scale of workspace.
  */
 const connectionUiStep = function(ripple, start, scale) {
-  const ms = new Date - start;
+  const ms = (new Date).getTime() - start.getTime();
   const percent = ms / 150;
   if (percent > 1) {
     dom.removeNode(ripple);
@@ -174,19 +185,21 @@ const disconnectUiStep = function(group, magnitude, start) {
   const DURATION = 200;  // Milliseconds.
   const WIGGLES = 3;     // Half oscillations.
 
-  const ms = new Date - start;
+  const ms = (new Date).getTime() - start.getTime();
   const percent = ms / DURATION;
 
   if (percent > 1) {
-    group.skew_ = '';
+    (/** @type {?} */ (group)).skew_ = '';
   } else {
     const skew = Math.round(
         Math.sin(percent * Math.PI * WIGGLES) * (1 - percent) * magnitude);
-    group.skew_ = 'skewX(' + skew + ')';
+    (/** @type {?} */ (group)).skew_ = 'skewX(' + skew + ')';
     disconnectGroup = group;
     disconnectPid = setTimeout(disconnectUiStep, 10, group, magnitude, start);
   }
-  group.setAttribute('transform', group.translate_ + group.skew_);
+  group.setAttribute(
+      'transform',
+      (/** @type {?} */ (group)).translate_ + (/** @type {?} */ (group)).skew_);
 };
 
 /**
@@ -198,8 +211,8 @@ const disconnectUiStop = function() {
   if (disconnectGroup) {
     clearTimeout(disconnectPid);
     const group = disconnectGroup;
-    group.skew_ = '';
-    group.setAttribute('transform', group.translate_);
+    (/** @type {?} */ (group)).skew_ = '';
+    group.setAttribute('transform', (/** @type {?} */ (group)).translate_);
     disconnectGroup = null;
   }
 };

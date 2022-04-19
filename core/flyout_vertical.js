@@ -24,6 +24,10 @@ const toolbox = goog.require('Blockly.utils.toolbox');
 const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
 const {Flyout} = goog.require('Blockly.Flyout');
 /* eslint-disable-next-line no-unused-vars */
+const {FlyoutItem} = goog.requireType('Blockly.Flyout');
+/* eslint-disable-next-line no-unused-vars */
+const {FlyoutButton} = goog.requireType('Blockly.FlyoutButton');
+/* eslint-disable-next-line no-unused-vars */
 const {Options} = goog.requireType('Blockly.Options');
 const {Rect} = goog.require('Blockly.utils.Rect');
 const {Scrollbar} = goog.require('Blockly.Scrollbar');
@@ -195,7 +199,7 @@ class VerticalFlyout extends Flyout {
 
   /**
    * Scroll the flyout.
-   * @param {!Event} e Mouse wheel scroll event.
+   * @param {!WheelEvent} e Mouse wheel scroll event.
    * @protected
    */
   wheel_(e) {
@@ -222,7 +226,8 @@ class VerticalFlyout extends Flyout {
 
   /**
    * Lay out the blocks in the flyout.
-   * @param {!Array<!Object>} contents The blocks and buttons to lay out.
+   * @param {!Array<!FlyoutItem>} contents The blocks and buttons to lay
+   *     out.
    * @param {!Array<number>} gaps The visible gaps between blocks.
    * @protected
    */
@@ -257,8 +262,9 @@ class VerticalFlyout extends Flyout {
 
         cursorY += blockHW.height + gaps[i];
       } else if (item.type === 'button') {
-        this.initFlyoutButton_(item.button, cursorX, cursorY);
-        cursorY += item.button.height + gaps[i];
+        const button = /** @type {!FlyoutButton} */ (item.button);
+        this.initFlyoutButton_(button, cursorX, cursorY);
+        cursorY += button.height + gaps[i];
       }
     }
   }

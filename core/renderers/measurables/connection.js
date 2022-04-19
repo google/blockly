@@ -17,12 +17,11 @@
 goog.module('Blockly.blockRendering.Connection');
 
 /* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {ConstantProvider, Shape} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 const {Measurable} = goog.require('Blockly.blockRendering.Measurable');
 /* eslint-disable-next-line no-unused-vars */
 const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
 const {Types} = goog.require('Blockly.blockRendering.Types');
-
 
 /**
  * The base class to represent a connection and the space that it takes up on
@@ -44,7 +43,7 @@ class Connection extends Measurable {
     /** @type {!RenderedConnection} */
     this.connectionModel = connectionModel;
 
-    /** @type {!Object} */
+    /** @type {!Shape} */
     this.shape = this.constants_.shapeFor(connectionModel);
 
     /** @type {boolean} */

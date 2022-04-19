@@ -20,7 +20,6 @@ goog.module('Blockly.sprite');
 /**
  * Contains the path to a single png tat holds the images for the trashcan
  * as well as the zoom controls.
- * @const {!Object}
  * @alias Blockly.sprite.SPRITE
  */
 const SPRITE = {

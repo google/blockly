@@ -151,4 +151,10 @@ IMetricsManager.prototype.getContentMetrics;
  */
 IMetricsManager.prototype.getMetrics;
 
+/**
+ * Returns common metrics used by UI elements.
+ * @return {!MetricsManager.UiMetrics} The UI metrics.
+ */
+IMetricsManager.prototype.getUiMetrics;
+
 exports.IMetricsManager = IMetricsManager;

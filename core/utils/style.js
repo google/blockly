@@ -20,6 +20,7 @@
 goog.module('Blockly.utils.style');
 
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+const {Rect} = goog.require('Blockly.utils.Rect');
 const {Size} = goog.require('Blockly.utils.Size');
 
 
@@ -203,21 +204,16 @@ exports.isRightToLeft = isRightToLeft;
  * Gets the computed border widths (on all sides) in pixels
  * Copied from Closure's goog.style.getBorderBox
  * @param {!Element} element  The element to get the border widths for.
- * @return {!Object} The computed border widths.
+ * @return {!Rect} The computed border widths.
  * @alias Blockly.utils.style.getBorderBox
  */
 const getBorderBox = function(element) {
-  const left = getComputedStyle(element, 'borderLeftWidth');
-  const right = getComputedStyle(element, 'borderRightWidth');
-  const top = getComputedStyle(element, 'borderTopWidth');
-  const bottom = getComputedStyle(element, 'borderBottomWidth');
+  const left = parseFloat(getComputedStyle(element, 'borderLeftWidth'));
+  const right = parseFloat(getComputedStyle(element, 'borderRightWidth'));
+  const top = parseFloat(getComputedStyle(element, 'borderTopWidth'));
+  const bottom = parseFloat(getComputedStyle(element, 'borderBottomWidth'));
 
-  return {
-    top: parseFloat(top),
-    right: parseFloat(right),
-    bottom: parseFloat(bottom),
-    left: parseFloat(left),
-  };
+  return new Rect(top, bottom, left, right);
 };
 exports.getBorderBox = getBorderBox;
 

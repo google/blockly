@@ -33,6 +33,21 @@ const {Connection} = goog.require('Blockly.Connection');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 const {Svg} = goog.require('Blockly.utils.Svg');
 
+/**
+ * A shape that has a pathDown property.
+ * @typedef {{
+ *   pathDown: string,
+ * }}
+ */
+let PathDownShape;  // eslint-disable-line no-unused-vars
+
+/**
+ * A shape that has a pathLeft property.
+ * @typedef {{
+ *   pathLeft: string,
+ * }}
+ */
+let PathLeftShape;  // eslint-disable-line no-unused-vars
 
 /**
  * Maximum randomness in workspace units for bumping a block.
@@ -274,7 +289,7 @@ class RenderedConnection extends Connection {
    * @param {number} maxLimit The maximum radius to another connection.
    * @param {!Coordinate} dxy Offset between this connection's location
    *     in the database and the current location (as a result of dragging).
-   * @return {!{connection: ?Connection, radius: number}} Contains two
+   * @return {!{connection: ?RenderedConnection, radius: number}} Contains two
    *     properties: 'connection' which is either another connection or null,
    *     and 'radius' which is the distance.
    */
@@ -296,13 +311,15 @@ class RenderedConnection extends Connection {
       // Vertical line, puzzle tab, vertical line.
       const yLen = renderConstants.TAB_OFFSET_FROM_TOP;
       steps = svgPaths.moveBy(0, -yLen) + svgPaths.lineOnAxis('v', yLen) +
-          shape.pathDown + svgPaths.lineOnAxis('v', yLen);
+          (/** @type {!PathDownShape} */ (shape)).pathDown +
+          svgPaths.lineOnAxis('v', yLen);
     } else {
       const xLen =
           renderConstants.NOTCH_OFFSET_LEFT - renderConstants.CORNER_RADIUS;
       // Horizontal line, notch, horizontal line.
       steps = svgPaths.moveBy(-xLen, 0) + svgPaths.lineOnAxis('h', xLen) +
-          shape.pathLeft + svgPaths.lineOnAxis('h', xLen);
+          (/** @type {!PathLeftShape} */ (shape)).pathLeft +
+          svgPaths.lineOnAxis('h', xLen);
     }
     const xy = this.sourceBlock_.getRelativeToSurfaceXY();
     const x = this.x - xy.x;

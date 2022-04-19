@@ -626,7 +626,7 @@ class Flyout extends DeleteArea {
    * the flyout.
    * @param {!toolbox.FlyoutItemInfoArray} parsedContent The array
    *     of objects to show in the flyout.
-   * @return {{contents:!Array<!Flyout.FlyoutItem>, gaps:!Array<number>}} The
+   * @return {{contents:!Array<!FlyoutItem>, gaps:!Array<number>}} The
    *     list of contents and gaps needed to lay out the flyout.
    * @private
    */
@@ -1215,7 +1215,7 @@ Flyout.prototype.setMetrics_;
 
 /**
  * Lay out the blocks in the flyout.
- * @param {!Array<!Flyout.FlyoutItem>} contents The blocks and buttons to lay
+ * @param {!Array<!FlyoutItem>} contents The blocks and buttons to lay
  *     out.
  * @param {!Array<number>} gaps The visible gaps between blocks.
  * @protected
@@ -1271,7 +1271,8 @@ Flyout.FlyoutItemType = {
  *    block: (!BlockSvg|undefined),
  * }}
  */
-Flyout.FlyoutItem;
+let FlyoutItem;
+exports.FlyoutItem = FlyoutItem;
 
 
 exports.Flyout = Flyout;

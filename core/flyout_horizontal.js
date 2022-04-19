@@ -24,6 +24,8 @@ const toolbox = goog.require('Blockly.utils.toolbox');
 const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
 const {Flyout} = goog.require('Blockly.Flyout');
 /* eslint-disable-next-line no-unused-vars */
+const {FlyoutItem} = goog.requireType('Blockly.Flyout');
+/* eslint-disable-next-line no-unused-vars */
 const {FlyoutButton} = goog.requireType('Blockly.FlyoutButton');
 /* eslint-disable-next-line no-unused-vars */
 const {Options} = goog.requireType('Blockly.Options');
@@ -239,7 +241,7 @@ class HorizontalFlyout extends Flyout {
 
   /**
    * Lay out the blocks in the flyout.
-   * @param {!Array<!Flyout.FlyoutItem>} contents The blocks and buttons to lay
+   * @param {!Array<!FlyoutItem>} contents The blocks and buttons to lay
    *     out.
    * @param {!Array<number>} gaps The visible gaps between blocks.
    * @protected

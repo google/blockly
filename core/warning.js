@@ -60,7 +60,7 @@ Warning.prototype.drawIcon_ = function(group) {
   // Triangle with rounded corners.
   dom.createSvgElement(
       Svg.PATH, {
-        'class': 'blocklyIconShape',
+        'class': 'blocklyWarningIconShape',
         'd': 'M2,15Q-1,15 0.5,12L6.5,1.7Q8,-1 9.5,1.7L15.5,12Q17,15 14,15z',
       },
       group);

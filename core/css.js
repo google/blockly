@@ -37,7 +37,7 @@ let chunks = [];
  * @type {Array<string>>}
  * @private
  */
-let chunksNames = [];
+const chunksNames = [];
 
 /**
  * Add some CSS to the blob that will be injected later.  Allows optional
@@ -62,7 +62,7 @@ const register = function(cssContent, moduleName) {
     chunks.push(cssContent);
   }
 
-  chunksNames.push(moduleName)
+  chunksNames.push(moduleName);
 };
 exports.register = register;
 
@@ -89,14 +89,14 @@ const inject = function(hasCss, pathToMedia) {
   // Strip off any trailing slash (either Unix or Windows).
   const mediaPath = pathToMedia.replace(/[\\/]$/, '');
   const cssContent = content.replace(/<<<PATH>>>/g, mediaPath);
-  chunks = chunks.map(chunk => chunk.replace(/<<<PATH>>>/g, mediaPath));
+  chunks = chunks.map((chunk) => chunk.replace(/<<<PATH>>>/g, mediaPath));
   // Cleanup the collected css content after injecting it to the DOM.
   content = '';
 
   // Inject common styles at start of head.
   const cssNode = document.createElement('style');
   cssNode.id = 'blockly-common-style';
-  cssNode.setAttribute('type', 'text/css')
+  cssNode.setAttribute('type', 'text/css');
   const cssTextNode = document.createTextNode(cssContent);
   cssNode.appendChild(cssTextNode);
   document.head.insertBefore(cssNode, document.head.firstChild);
@@ -105,11 +105,11 @@ const inject = function(hasCss, pathToMedia) {
   chunks.forEach((chunk, index) => {
     const cssNode = document.createElement('style');
     cssNode.id = `blockly-style-chunk-${chunksNames[index] || index}`;
-    cssNode.setAttribute('type', 'text/css')
+    cssNode.setAttribute('type', 'text/css');
     const cssTextNode = document.createTextNode(chunk);
     cssNode.appendChild(cssTextNode);
     document.head.appendChild(cssNode);
-  })
+  });
 };
 exports.inject = inject;
 
@@ -398,6 +398,12 @@ let content = (`
     stroke-width: 1px;
   }
 
+  .blocklyWarningIconShape {
+    fill: #ff8100;
+    stroke: #fff;
+    stroke-width: 1px;
+  }
+
   .blocklyIconSymbol {
     fill: #fff;
   }
@@ -449,7 +455,7 @@ let content = (`
   .blocklyFlyoutScrollbar {
     z-index: 30;
   }
-  
+
   .blocklyFlyoutCloseButton {
     position: absolute;
     z-index: 20;
@@ -457,7 +463,7 @@ let content = (`
     height: 40px;
     cursor: pointer;
   }
-  
+
   .blocklyFlyoutEndShadow {
     display: block;
     position: absolute;
@@ -608,7 +614,7 @@ let content = (`
     margin-left: -24px;
     position: static;  /* Scroll with the menu. */
   }
-  
+
   .blocklyMenuItemText {
     margin-left: 5px;
   }

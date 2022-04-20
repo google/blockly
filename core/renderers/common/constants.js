@@ -434,13 +434,6 @@ const ConstantProvider = function() {
   this.disabledPatternId = '';
 
   /**
-   * The ID of the obsolete pattern, or the empty string if no pattern is set.
-   * @type {string}
-   * @package
-   */
-  this.obsoletePatternId = '';
-
-  /**
    * The ID of the removed pattern, or the empty string if no pattern is set.
    * @type {string}
    * @package
@@ -453,13 +446,6 @@ const ConstantProvider = function() {
    * @private
    */
   this.disabledPattern_ = null;
-
-  /**
-   * The <pattern> element to use for obsolete blocks, or null if not set.
-   * @type {SVGElement}
-   * @private
-   */
-  this.obsoletePattern_ = null;
 
   /**
    * The <pattern> element to use for removed blocks, or null if not set.
@@ -797,9 +783,6 @@ ConstantProvider.prototype.dispose = function() {
   if (this.disabledPattern_) {
     dom.removeNode(this.disabledPattern_);
   }
-  if (this.obsoletePattern_) {
-    Blockly.utils.dom.removeNode(this.obsoletePattern_);
-  }
   if (this.removedPattern_) {
     Blockly.utils.dom.removeNode(this.removedPattern_);
   }
@@ -1119,39 +1102,18 @@ ConstantProvider.prototype.createDom = function(svg, tagName, selector) {
   this.disabledPattern_ = disabledPattern;
 
   /*
-   <pattern id="blocklyObsoletePattern837493" patternUnits="userSpaceOnUse"
-            width="10" height="10">
-     <rect width="10" height="10" fill="#aaa" />
-     <path d="M 0 0 L 10 10 M 10 0 L 0 10" stroke="#cc0" />
-   </pattern>
- */
-  var obsoletePattern = Blockly.utils.dom.createSvgElement('pattern',
-    {
-      'id': 'blocklyObsoletePattern' + this.randomIdentifier,
-      'patternUnits': 'userSpaceOnUse',
-      'width': 10,
-      'height': 10
-    }, this.defs_);
-  Blockly.utils.dom.createSvgElement('rect',
-    {'width': 10, 'height': 10, 'fill': '#aaaaaa', 'opacity': 0.5}, obsoletePattern);
-  Blockly.utils.dom.createSvgElement('path',
-    {'d': 'M 0 0 L 10 10 M 10 0 L 0 10', 'stroke': '#cc0', 'opacity': 0.5}, obsoletePattern);
-  this.obsoletePatternId = obsoletePattern.id;
-  this.obsoletePattern_ = obsoletePattern;
-
-  /*
  <pattern id="blocklyRemovedPattern837493" patternUnits="userSpaceOnUse"
           width="10" height="10">
    <rect width="10" height="10" fill="#aaa" />
    <path d="M 0 0 L 10 10 M 10 0 L 0 10" stroke="#cc0" />
  </pattern>
 */
-  var removedPattern = Blockly.utils.dom.createSvgElement('pattern',
+  const removedPattern = Blockly.utils.dom.createSvgElement('pattern',
     {
       'id': 'blocklyRemovedPattern' + this.randomIdentifier,
       'patternUnits': 'userSpaceOnUse',
       'width': 10,
-      'height': 10
+      'height': 10,
     }, this.defs_);
   Blockly.utils.dom.createSvgElement('rect',
     {'width': 10, 'height': 10, 'fill': '#aaaaaa', 'opacity': 0.5}, removedPattern);

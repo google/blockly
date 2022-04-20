@@ -18,16 +18,16 @@ goog.module('Blockly.blockRendering.PathObject');
 
 const dom = goog.require('Blockly.utils.dom');
 /* eslint-disable-next-line no-unused-vars */
-const { Block } = goog.requireType('Blockly.Block');
+const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
-const { Connection } = goog.requireType('Blockly.Connection');
+const {Connection} = goog.requireType('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
-const { ConstantProvider } = goog.requireType('Blockly.blockRendering.ConstantProvider');
+const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 /* eslint-disable-next-line no-unused-vars */
-const { IPathObject } = goog.require('Blockly.blockRendering.IPathObject');
-const { Svg } = goog.require('Blockly.utils.Svg');
+const {IPathObject} = goog.require('Blockly.blockRendering.IPathObject');
+const {Svg} = goog.require('Blockly.utils.Svg');
 /* eslint-disable-next-line no-unused-vars */
-const { Theme } = goog.requireType('Blockly.Theme');
+const {Theme} = goog.requireType('Blockly.Theme');
 
 
 /**
@@ -43,7 +43,7 @@ const { Theme } = goog.requireType('Blockly.Theme');
  * @package
  * @alias Blockly.blockRendering.PathObject
  */
-const PathObject = function (root, style, constants) {
+const PathObject = function(root, style, constants) {
   /**
    * The renderer's constant provider.
    * @type {!ConstantProvider}
@@ -59,7 +59,7 @@ const PathObject = function (root, style, constants) {
    * @package
    */
   this.svgPath =
-    dom.createSvgElement(Svg.PATH, { 'class': 'blocklyPath' }, this.svgRoot);
+    dom.createSvgElement(Svg.PATH, {'class': 'blocklyPath'}, this.svgRoot);
 
   /**
    * The style object to use when colouring block paths.
@@ -90,7 +90,7 @@ const PathObject = function (root, style, constants) {
  * @param {string} pathString The path.
  * @package
  */
-PathObject.prototype.setPath = function (pathString) {
+PathObject.prototype.setPath = function(pathString) {
   this.svgPath.setAttribute('d', pathString);
 };
 
@@ -98,7 +98,7 @@ PathObject.prototype.setPath = function (pathString) {
  * Flip the SVG paths in RTL.
  * @package
  */
-PathObject.prototype.flipRTL = function () {
+PathObject.prototype.flipRTL = function() {
   // Mirror the block's path.
   this.svgPath.setAttribute('transform', 'scale(-1 1)');
 };
@@ -109,7 +109,7 @@ PathObject.prototype.flipRTL = function () {
  *     block SVG group.
  * @package
  */
-PathObject.prototype.setCursorSvg = function (cursorSvg) {
+PathObject.prototype.setCursorSvg = function(cursorSvg) {
   if (!cursorSvg) {
     this.cursorSvg = null;
     return;
@@ -125,7 +125,7 @@ PathObject.prototype.setCursorSvg = function (cursorSvg) {
  *     block SVG group.
  * @package
  */
-PathObject.prototype.setMarkerSvg = function (markerSvg) {
+PathObject.prototype.setMarkerSvg = function(markerSvg) {
   if (!markerSvg) {
     this.markerSvg = null;
     return;
@@ -145,13 +145,12 @@ PathObject.prototype.setMarkerSvg = function (markerSvg) {
  * @param {!Block} block The source block.
  * @package
  */
-PathObject.prototype.applyColour = function (block) {
+PathObject.prototype.applyColour = function(block) {
   this.svgPath.setAttribute('stroke', this.style.colourTertiary);
   this.svgPath.setAttribute('fill', this.style.colourPrimary);
 
   this.updateShadow_(block.isShadow());
   this.updateDisabled_(!block.isEnabled() || block.getInheritedDisabled());
-  this.updateObsolete_(block.isObsolete());
   this.updateRemoved_(block.isRemoved());
 };
 
@@ -160,7 +159,7 @@ PathObject.prototype.applyColour = function (block) {
  * @param {!Theme.BlockStyle} blockStyle The block style to use.
  * @package
  */
-PathObject.prototype.setStyle = function (blockStyle) {
+PathObject.prototype.setStyle = function(blockStyle) {
   this.style = blockStyle;
 };
 
@@ -171,7 +170,7 @@ PathObject.prototype.setStyle = function (blockStyle) {
  *     be removed.
  * @protected
  */
-PathObject.prototype.setClass_ = function (className, add) {
+PathObject.prototype.setClass_ = function(className, add) {
   if (add) {
     dom.addClass(/** @type {!Element} */(this.svgRoot), className);
   } else {
@@ -185,7 +184,7 @@ PathObject.prototype.setClass_ = function (className, add) {
  * @param {boolean} enable True if highlighted.
  * @package
  */
-PathObject.prototype.updateHighlighted = function (enable) {
+PathObject.prototype.updateHighlighted = function(enable) {
   if (enable) {
     this.svgPath.setAttribute(
       'filter', 'url(#' + this.constants.embossFilterId + ')');
@@ -199,7 +198,7 @@ PathObject.prototype.updateHighlighted = function (enable) {
  * @param {boolean} shadow True if the block is a shadow block.
  * @protected
  */
-PathObject.prototype.updateShadow_ = function (shadow) {
+PathObject.prototype.updateShadow_ = function(shadow) {
   if (shadow) {
     this.svgPath.setAttribute('stroke', 'none');
     this.svgPath.setAttribute('fill', this.style.colourSecondary);
@@ -211,7 +210,7 @@ PathObject.prototype.updateShadow_ = function (shadow) {
  * @param {boolean} disabled True if disabled.
  * @protected
  */
-PathObject.prototype.updateDisabled_ = function (disabled) {
+PathObject.prototype.updateDisabled_ = function(disabled) {
   this.setClass_('blocklyDisabled', disabled);
   if (disabled) {
     this.svgPath.setAttribute(
@@ -221,24 +220,10 @@ PathObject.prototype.updateDisabled_ = function (disabled) {
 
 /**
  * Updates the look of the block to reflect a disabled state.
- * @param {boolean} obsolete True if obsolete.
- * @protected
- */
-PathObject.prototype.updateObsolete_ = function (
-  obsolete) {
-  this.setClass_('blocklyObsolete', obsolete);
-  if (obsolete) {
-    this.svgPath.setAttribute('fill',
-      'url(#' + this.constants.obsoletePatternId + ')');
-  }
-};
-
-/**
- * Updates the look of the block to reflect a disabled state.
  * @param {boolean} removed True if removed.
  * @protected
  */
-PathObject.prototype.updateRemoved_ = function (
+PathObject.prototype.updateRemoved_ = function(
   removed) {
   this.setClass_('blocklyRemoved', removed);
   if (removed) {
@@ -252,13 +237,13 @@ PathObject.prototype.updateRemoved_ = function (
  * @param {boolean} enable True if selection is enabled, false otherwise.
  * @package
  */
-PathObject.prototype.updateSelected = function (enable) {
+PathObject.prototype.updateSelected = function(enable) {
   this.setClass_('blocklySelected', enable);
 };
 
-PathObject.prototype.updateMassSelected = function (enable) {
-  this.setClass_('blocklyMassSelected', enable)
-}
+PathObject.prototype.updateMassSelected = function(enable) {
+  this.setClass_('blocklyMassSelected', enable);
+};
 
 /**
  * Add or remove styling showing that a block is dragged over a delete area.
@@ -266,7 +251,7 @@ PathObject.prototype.updateMassSelected = function (enable) {
  *     area, false otherwise.
  * @package
  */
-PathObject.prototype.updateDraggingDelete = function (enable) {
+PathObject.prototype.updateDraggingDelete = function(enable) {
   this.setClass_('blocklyDraggingDelete', enable);
 };
 
@@ -276,7 +261,7 @@ PathObject.prototype.updateDraggingDelete = function (enable) {
  *     otherwise.
  * @package
  */
-PathObject.prototype.updateInsertionMarker = function (enable) {
+PathObject.prototype.updateInsertionMarker = function(enable) {
   this.setClass_('blocklyInsertionMarker', enable);
 };
 
@@ -285,7 +270,7 @@ PathObject.prototype.updateInsertionMarker = function (enable) {
  * @param {boolean} enable True if the block is movable, false otherwise.
  * @package
  */
-PathObject.prototype.updateMovable = function (enable) {
+PathObject.prototype.updateMovable = function(enable) {
   this.setClass_('blocklyDraggable', enable);
 };
 
@@ -296,7 +281,7 @@ PathObject.prototype.updateMovable = function (enable) {
  * @param {boolean} enable True if styling should be added.
  * @package
  */
-PathObject.prototype.updateReplacementFade = function (enable) {
+PathObject.prototype.updateReplacementFade = function(enable) {
   this.setClass_('blocklyReplaceable', enable);
 };
 
@@ -307,7 +292,7 @@ PathObject.prototype.updateReplacementFade = function (enable) {
  * @param {boolean} _enable True if styling should be added.
  * @package
  */
-PathObject.prototype.updateShapeForInputHighlight = function (_conn, _enable) {
+PathObject.prototype.updateShapeForInputHighlight = function(_conn, _enable) {
   // NOP
 };
 

@@ -931,7 +931,9 @@ const Bubble = class {
       // This cannot be done until the bubble is rendered on screen.
       const maxWidth = paragraphElement.getBBox().width;
       for (let i = 0, textElement;
-           (textElement = paragraphElement.childNodes[i]); i++) {
+           (textElement = /** @type {!SVGTSpanElement} */ (
+                paragraphElement.childNodes[i]));
+           i++) {
         textElement.setAttribute('text-anchor', 'end');
         textElement.setAttribute('x', maxWidth + Bubble.BORDER_WIDTH);
       }

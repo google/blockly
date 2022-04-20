@@ -219,10 +219,14 @@ const isTargetInput = function(e) {
 
     if (e.target instanceof HTMLInputElement) {
       const target = e.target;
-      return target.type === 'textarea' || target.type === 'text' ||
-          target.type === 'number' || target.type === 'email' ||
-          target.type === 'password' || target.type === 'search' ||
-          target.type === 'tel' || target.type === 'url';
+      return target.type === 'text' || target.type === 'number' ||
+          target.type === 'email' || target.type === 'password' ||
+          target.type === 'search' || target.type === 'tel' ||
+          target.type === 'url';
+    }
+
+    if (e.target instanceof HTMLTextAreaElement) {
+      return true;
     }
   }
 

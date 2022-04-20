@@ -429,7 +429,11 @@ const BlockDragger = class {
     // Moving icons moves their associated bubbles.
     for (let i = 0; i < this.dragIconData_.length; i++) {
       const data = this.dragIconData_[i];
-      data.icon.setIconLocation(Coordinate.sum(data.location, dxy));
+      // Don't move hidden Icons as they can have not been initialized.
+      // fixes #6076
+      if (!this.draggingBlock_.isCollapsed() || !data.icon.collapseHidden) {
+        data.icon.setIconLocation(Coordinate.sum(data.location, dxy));
+      }
     }
   }
 

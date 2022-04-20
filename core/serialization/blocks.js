@@ -527,6 +527,12 @@ const loadIcons = function(block, state) {
       setTimeout(() => blockSvg.getCommentIcon().setVisible(true), 1);
     }
   }
+  // fixes #6076 JSO deserialization doesn't
+  // set .iconXY_ property so here it will be set
+  const icons = block.getIcons();
+  for (let i = 0; i < icons.length; i++) {
+    icons[i].computeIconLocation();
+  }
 };
 
 /**

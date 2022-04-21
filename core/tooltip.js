@@ -363,7 +363,7 @@ const onMouseOut = function(_e) {
  * @param {!Event} e Mouse event.
  */
 const onMouseMove = function(e) {
-  if (!element || !element.tooltip) {
+  if (!element || !(/** @type {?} */ (element)).tooltip) {
     // No tooltip here to show.
     return;
   } else if (blocked) {

@@ -288,6 +288,13 @@ Flyout.prototype.height_ = 0;
 Flyout.prototype.dragAngleRange_ = 70;
 
 /**
+ * Disable mouse events above flyout. It's needed for prevent bugs when user
+ * dragging resizer or move some block above flyout
+ * @type {boolean}
+ */
+Flyout.prototype.disableBlocksMouseEvents = false;
+
+/**
  * Creates the flyout's DOM.  Only needs to be called once.  The flyout can
  * either exist as its own SVG element or be a g element nested inside a
  * separate SVG element.
@@ -374,20 +381,24 @@ Flyout.prototype.dispose = function() {
   this.hide();
   this.workspace_.getComponentManager().removeComponent(this.id);
   browserEvents.unbind(this.eventWrappers_);
+
   if (this.filterWrapper_) {
     this.targetWorkspace.removeChangeListener(this.filterWrapper_);
     this.filterWrapper_ = null;
   }
+
   if (this.workspace_) {
     this.workspace_.getThemeManager().unsubscribe(this.svgBackground_);
     this.workspace_.targetWorkspace = null;
     this.workspace_.dispose();
     this.workspace_ = null;
   }
+
   if (this.svgGroup_) {
     dom.removeNode(this.svgGroup_);
     this.svgGroup_ = null;
   }
+
   this.svgBackground_ = null;
   this.targetWorkspace = null;
 };
@@ -552,8 +563,8 @@ Flyout.prototype.removeCloseButton_ = function() {
 Flyout.prototype.createFlyoutEndShadow_ = function() {
   this.removeFlyoutEndShadow_();
 
-  this.flyoutEndShadowDiw_ = document.createElement('div');
-  this.flyoutEndShadowDiw_.classList.add('blocklyFlyoutEndShadow');
+  this.flyoutEndShadowDiv_ = document.createElement('div');
+  this.flyoutEndShadowDiv_.classList.add('blocklyFlyoutEndShadow');
 
   const flyoutSVG = this.workspace_.getParentSvg();
   const flyoutParentEl = flyoutSVG.parentElement;
@@ -567,17 +578,17 @@ Flyout.prototype.createFlyoutEndShadow_ = function() {
   const diffFlyoutAndParentBottom = flyoutClientRect.bottom - flyoutParentClientRect.bottom;
   const height = diffFlyoutAndParentBottom === 0 ? flyoutSVG.getBBox().height : diffFlyoutAndParentBottom;
 
-  this.flyoutEndShadowDiw_.style.top = `${top}px`;
-  this.flyoutEndShadowDiw_.style.left = `${left}px`;
-  this.flyoutEndShadowDiw_.style.height = `${height}px`;
+  this.flyoutEndShadowDiv_.style.top = `${top}px`;
+  this.flyoutEndShadowDiv_.style.left = `${left}px`;
+  this.flyoutEndShadowDiv_.style.height = `${height}px`;
 
   // insert close button after the flyout svg
-  flyoutParentEl.insertBefore(this.flyoutEndShadowDiw_, flyoutSVG.nextSibling);
+  flyoutParentEl.insertBefore(this.flyoutEndShadowDiv_, flyoutSVG.nextSibling);
 };
 
 Flyout.prototype.removeFlyoutEndShadow_ = function() {
-  if (this.flyoutEndShadowDiw_) {
-    this.flyoutEndShadowDiw_.remove();
+  if (this.flyoutEndShadowDiv_) {
+    this.flyoutEndShadowDiv_.remove();
   }
 };
 
@@ -662,7 +673,7 @@ Flyout.prototype.hide = function(isButton = false) {
  *     in the flyout. This is either an array of Nodes, a NodeList, a
  *     toolbox definition, or a string with the name of the dynamic category.
  */
-Flyout.prototype.show = function(flyoutDef, {dontFireShowEvent}) {
+Flyout.prototype.show = function(flyoutDef) {
   this.workspace_.setResizesEnabled(false);
   this.hide();
   this.clearOldBlocks_();
@@ -995,13 +1006,25 @@ Flyout.prototype.addBlockListeners_ = function(root, block, rect) {
   this.listeners_.push(browserEvents.conditionalBind(
       rect, 'mousedown', null, this.blockMouseDown_(block)));
   this.listeners_.push(
-      browserEvents.bind(root, 'mouseenter', block, block.addSelect));
+      browserEvents.bind(root, 'mouseenter', this, () => this.blockMouseEnter_(block)));
   this.listeners_.push(
-      browserEvents.bind(root, 'mouseleave', block, block.removeSelect));
+      browserEvents.bind(root, 'mouseleave', this, () => this.blockMouseLeave_(block)));
   this.listeners_.push(
-      browserEvents.bind(rect, 'mouseenter', block, block.addSelect));
+      browserEvents.bind(rect, 'mouseenter', this, () => this.blockMouseEnter_(block)));
   this.listeners_.push(
-      browserEvents.bind(rect, 'mouseleave', block, block.removeSelect));
+      browserEvents.bind(rect, 'mouseleave', this, () => this.blockMouseLeave_(block)));
+};
+
+Flyout.prototype.blockMouseEnter_ = function(block) {
+  if (this.disableBlocksMouseEvents) return;
+
+  block.addSelect();
+};
+
+Flyout.prototype.blockMouseLeave_ = function(block) {
+  if (this.disableBlocksMouseEvents) return;
+
+  block.removeSelect();
 };
 
 /**

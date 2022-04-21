@@ -231,7 +231,9 @@ const Block = function(workspace, prototypeName, opt_id, moduleId) {
     this.type = prototypeName;
     const prototype = Blocks[prototypeName];
     if (!prototype || typeof prototype !== 'object') {
-      throw TypeError('Unknown block type: ' + prototypeName);
+      const errorMessage = `${Blockly.Msg['UNKNOWN_BLOCK_TYPE']}: "${prototypeName}"`;
+      eventUtils.fire(new (eventUtils.get(eventUtils.LOADING_ERROR))(this.workspace, errorMessage), true);
+      throw TypeError();
     }
     object.mixin(this, prototype);
   }

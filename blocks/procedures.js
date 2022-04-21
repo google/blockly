@@ -1028,7 +1028,7 @@ const PROCEDURE_CALL_COMMON = {
       let def = Procedures.getDefinition(name, workspace);
 
       if (def) {
-        if (!def.InActiveModule()) {
+        if (!def.inActiveModule()) {
           workspace.getModuleManager().activateModule(workspace.getModuleManager().getModuleById(def.getModuleId()));
           def = workspace.getBlockById(def.id);
         }

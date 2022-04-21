@@ -289,6 +289,13 @@ const FINISHED_LOADING = 'finished_loading';
 exports.FINISHED_LOADING = FINISHED_LOADING;
 
 /**
+ * Name of event that records a workspace loading error.
+ * @alias Blockly.Events.utils.LOADING_ERROR
+ */
+ const LOADING_ERROR = 'loading_error';
+ exports.LOADING_ERROR = LOADING_ERROR;
+
+/**
  * Name of event that fired after show flyout
  * @alias Blockly.Events.utils.FLYOUT_SHOW
  */
@@ -377,12 +384,14 @@ const FIRE_QUEUE = [];
 /**
  * Create a custom event and fire it.
  * @param {!Abstract} event Custom data for event.
+ * @param {Boolean} force Force fire while events disabled.
  * @alias Blockly.Events.utils.fire
  */
-const fire = function(event) {
-  if (!isEnabled()) {
+const fire = function(event, force) {
+  if (!force && !isEnabled()) {
     return;
   }
+
   if (!FIRE_QUEUE.length) {
     // First event added; schedule a firing of the event queue.
     setTimeout(fireNow, 0);

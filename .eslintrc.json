@@ -7,7 +7,7 @@
         "max-len": [
             "error",
             {
-                "code": 100,
+                "code": 160,
                 "tabWidth": 4,
                 "ignoreStrings": true,
                 "ignoreRegExpLiterals": true,
@@ -39,7 +39,7 @@
         "strict": ["off"],
         // Closure style allows redeclarations.
         "no-redeclare": ["off"],
-        "valid-jsdoc": ["error", {"requireReturn": false}],
+        "valid-jsdoc": ["warn", {"requireReturn": false}],
         "no-console": ["off"],
         "no-multi-spaces": ["error", { "ignoreEOLComments": true }],
         "operator-linebreak": ["error", "after"],

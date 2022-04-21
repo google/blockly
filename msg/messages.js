@@ -159,6 +159,12 @@ Blockly.Msg.NEW_MODULE = 'Create';
 /// prompt - Prompts the user to enter the name for a new module.
 Blockly.Msg.NEW_MODULE_TITLE = 'Name:';
 
+// Errors messages
+/** @type {string} */
+Blockly.Msg.LOADING_ERROR = 'Error loading workspace';
+/** @type {string} */
+Blockly.Msg.UNKNOWN_BLOCK_TYPE = 'Unknown block type';
+
 /** @type {string} */
 Blockly.Msg.SELECT_ALL = 'Select all blocks'
 

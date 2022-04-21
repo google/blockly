@@ -1045,7 +1045,7 @@ class Flyout extends DeleteArea {
           'width': blockHW.width,
         },
         null);
-    rect.tooltip = block;
+    (/** @type {?} */ (rect)).tooltip = block;
     Tooltip.bindMouseEvents(rect);
     // Add the rectangles under the blocks, so that the blocks' tooltips work.
     this.workspace_.getCanvas().insertBefore(rect, block.getSvgRoot());

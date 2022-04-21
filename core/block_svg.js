@@ -248,7 +248,7 @@ class BlockSvg extends Block {
         svgMath.is3dSupported() && !!workspace.getBlockDragSurface();
 
     const svgPath = this.pathObject.svgPath;
-    svgPath.tooltip = this;
+    (/** @type {?} */ (svgPath)).tooltip = this;
     Tooltip.bindMouseEvents(svgPath);
 
     // Expose this block's ID on its top-level SVG group.

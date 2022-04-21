@@ -1097,7 +1097,7 @@ class Field {
     }
     const clickTarget = this.getClickTarget_();
     if (clickTarget) {
-      clickTarget.tooltip = newTip;
+      (/** @type {?} */ (clickTarget)).tooltip = newTip;
     } else {
       // Field has not been initialized yet.
       this.tooltip_ = newTip;

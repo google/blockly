@@ -611,8 +611,14 @@ const initBlock = function(block, rendered) {
     // operation to decrease load time.
     block.setConnectionTracking(false);
 
-    block.initSvg();
-    block.render(false);
+    blockSvg.initSvg();
+    blockSvg.render(false);
+    // fixes #6076 JSO deserialization doesn't
+    // set .iconXY_ property so here it will be set
+    const icons = block.getIcons();
+    for (let i = 0; i < icons.length; i++) {
+      icons[i].computeIconLocation();
+    }
   } else {
     block.initModel();
   }

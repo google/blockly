@@ -22,6 +22,19 @@ const {globalThis} = goog.require('Blockly.utils.global');
 
 
 /**
+ * A mock event, created from either a mouse or touch event,
+ * with no more than one entry in the changedTouches array.
+ * @typedef {{
+ *  type: string,
+ *  changedTouches: Array<Touch>,
+ *  target: Element,
+ *  stopPropagation: function():void,
+ *  preventDefault: function():void
+ * }}
+ */
+let PseudoEvent;  // eslint-disable-line no-unused-vars
+
+/**
  * Length in ms for a touch to become a long press.
  * @const
  */
@@ -95,17 +108,20 @@ let longPid_ = 0;
 const longStart = function(e, gesture) {
   longStop();
   // Punt on multitouch events.
-  if (e.changedTouches && e.changedTouches.length !== 1) {
+  if (e instanceof TouchEvent && e.changedTouches &&
+      e.changedTouches.length !== 1) {
     return;
   }
   longPid_ = setTimeout(function() {
+    // TODO(#6097): Make types accurate, possibly by refactoring touch handling.
+    const typelessEvent = /** @type {?} */ (e);
     // Additional check to distinguish between touch events and pointer events
-    if (e.changedTouches) {
+    if (typelessEvent.changedTouches) {
       // TouchEvent
-      e.button = 2;  // Simulate a right button click.
+      typelessEvent.button = 2;  // Simulate a right button click.
       // e was a touch event.  It needs to pretend to be a mouse event.
-      e.clientX = e.changedTouches[0].clientX;
-      e.clientY = e.changedTouches[0].clientY;
+      typelessEvent.clientX = typelessEvent.changedTouches[0].clientX;
+      typelessEvent.clientY = typelessEvent.changedTouches[0].clientY;
     }
 
     // Let the gesture route the right-click correctly.
@@ -145,7 +161,7 @@ exports.clearTouchIdentifier = clearTouchIdentifier;
  * Decide whether Blockly should handle or ignore this event.
  * Mouse and touch events require special checks because we only want to deal
  * with one touch stream at a time.  All other events should always be handled.
- * @param {!Event} e The event to check.
+ * @param {!(Event|PseudoEvent)} e The event to check.
  * @return {boolean} True if this event should be passed through to the
  *     registered handler; false if it should be blocked.
  * @alias Blockly.Touch.shouldHandleEvent
@@ -158,18 +174,31 @@ exports.shouldHandleEvent = shouldHandleEvent;
 /**
  * Get the touch identifier from the given event.  If it was a mouse event, the
  * identifier is the string 'mouse'.
- * @param {!Event} e Mouse event or touch event.
+ * @param {!(Event|PseudoEvent)} e Mouse event or touch event.
  * @return {string} The touch identifier from the first changed touch, if
  *     defined.  Otherwise 'mouse'.
  * @alias Blockly.Touch.getTouchIdentifierFromEvent
  */
 const getTouchIdentifierFromEvent = function(e) {
-  return e.pointerId !== undefined ? e.pointerId :
-      (e.changedTouches && e.changedTouches[0] &&
-       e.changedTouches[0].identifier !== undefined &&
-       e.changedTouches[0].identifier !== null) ?
-                                     e.changedTouches[0].identifier :
-                                     'mouse';
+  if (e instanceof MouseEvent) {
+    return 'mouse';
+  }
+
+  if (e instanceof PointerEvent) {
+    return String(e.pointerId);
+  }
+
+  /**
+   * TODO(#6097): Fix types. This is a catch-all for everything but mouse
+   * and pointer events.
+   */
+  const pseudoEvent = /** {!PseudoEvent} */ (e);
+
+  return (pseudoEvent.changedTouches && pseudoEvent.changedTouches[0] &&
+          pseudoEvent.changedTouches[0].identifier !== undefined &&
+          pseudoEvent.changedTouches[0].identifier !== null) ?
+      String(pseudoEvent.changedTouches[0].identifier) :
+      'mouse';
 };
 exports.getTouchIdentifierFromEvent = getTouchIdentifierFromEvent;
 
@@ -181,7 +210,7 @@ exports.getTouchIdentifierFromEvent = getTouchIdentifierFromEvent;
  * If the current identifier was unset, save the identifier from the
  * event.  This starts a drag/gesture, during which touch events with other
  * identifiers will be silently ignored.
- * @param {!Event} e Mouse event or touch event.
+ * @param {!(Event|PseudoEvent)} e Mouse event or touch event.
  * @return {boolean} Whether the identifier on the event matches the current
  *     saved identifier.
  * @alias Blockly.Touch.checkTouchIdentifier
@@ -213,7 +242,7 @@ exports.checkTouchIdentifier = checkTouchIdentifier;
 /**
  * Set an event's clientX and clientY from its first changed touch.  Use this to
  * make a touch event work in a mouse event handler.
- * @param {!Event} e A touch event.
+ * @param {!(Event|PseudoEvent)} e A touch event.
  * @alias Blockly.Touch.setClientFromTouch
  */
 const setClientFromTouch = function(e) {
@@ -227,9 +256,10 @@ const setClientFromTouch = function(e) {
 exports.setClientFromTouch = setClientFromTouch;
 
 /**
- * Check whether a given event is a mouse or touch event.
- * @param {!Event} e An event.
- * @return {boolean} True if it is a mouse or touch event; false otherwise.
+ * Check whether a given event is a mouse, touch, or pointer event.
+ * @param {!(Event|PseudoEvent)} e An event.
+ * @return {boolean} True if it is a mouse, touch, or pointer event; false
+ *     otherwise.
  * @alias Blockly.Touch.isMouseOrTouchEvent
  */
 const isMouseOrTouchEvent = function(e) {
@@ -241,8 +271,8 @@ exports.isMouseOrTouchEvent = isMouseOrTouchEvent;
 
 /**
  * Check whether a given event is a touch event or a pointer event.
- * @param {!Event} e An event.
- * @return {boolean} True if it is a touch event; false otherwise.
+ * @param {!(Event|PseudoEvent)} e An event.
+ * @return {boolean} True if it is a touch or pointer event; false otherwise.
  * @alias Blockly.Touch.isTouchEvent
  */
 const isTouchEvent = function(e) {
@@ -251,18 +281,20 @@ const isTouchEvent = function(e) {
 };
 exports.isTouchEvent = isTouchEvent;
 
+
 /**
  * Split an event into an array of events, one per changed touch or mouse
  * point.
  * @param {!Event} e A mouse event or a touch event with one or more changed
  * touches.
- * @return {!Array<!Event>} An array of mouse or touch events.  Each touch
- *     event will have exactly one changed touch.
+ * @return {!Array<!(Event|PseudoEvent)>} An array of events or pseudo events.
+ *     Each pseudo-touch event will have exactly one changed touch and there
+ *     will be no real touch events.
  * @alias Blockly.Touch.splitEventByTouches
  */
 const splitEventByTouches = function(e) {
   const events = [];
-  if (e.changedTouches) {
+  if (e instanceof TouchEvent) {
     for (let i = 0; i < e.changedTouches.length; i++) {
       const newEvent = {
         type: e.type,

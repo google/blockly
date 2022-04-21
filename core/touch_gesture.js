@@ -324,9 +324,13 @@ class TouchGesture extends Gesture {
     if (!this.startWorkspace_) {
       return null;
     }
+    // TODO(#6097): Make types accurate, possibly by refactoring touch handling.
+    const typelessEvent = /** @type {?} */ (e);
     return new Coordinate(
-        (e.changedTouches ? e.changedTouches[0].pageX : e.pageX),
-        (e.changedTouches ? e.changedTouches[0].pageY : e.pageY));
+        (typelessEvent.changedTouches ? typelessEvent.changedTouches[0].pageX :
+                                        typelessEvent.pageX),
+        (typelessEvent.changedTouches ? typelessEvent.changedTouches[0].pageY :
+                                        typelessEvent.pageY));
   }
 }
 

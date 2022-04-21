@@ -519,10 +519,12 @@ class Gesture {
       return;
     }
 
+    // TODO(#6097): Make types accurate, possibly by refactoring touch handling.
+    const typelessEvent = /** @type {?} */ (e);
     if ((e.type.toLowerCase() === 'touchstart' ||
          e.type.toLowerCase() === 'pointerdown') &&
-        e.pointerType !== 'mouse') {
-      Touch.longStart(e, this);
+        typelessEvent.pointerType !== 'mouse') {
+      Touch.longStart(typelessEvent, this);
     }
 
     this.mouseDownXY_ = new Coordinate(e.clientX, e.clientY);

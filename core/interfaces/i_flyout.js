@@ -208,4 +208,9 @@ IFlyout.prototype.isDragTowardWorkspace;
  */
 IFlyout.prototype.isBlockCreatable;
 
+/**
+ * Scroll the flyout to the beginning of its contents.
+ */
+IFlyout.prototype.scrollToStart;
+
 exports.IFlyout = IFlyout;

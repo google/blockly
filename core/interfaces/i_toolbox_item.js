@@ -82,4 +82,11 @@ IToolboxItem.prototype.isCollapsible;
  */
 IToolboxItem.prototype.dispose;
 
+/**
+ * Gets the HTML element that is clickable.
+ * @return {?Element} The HTML element that receives clicks.
+ * @public
+ */
+IToolboxItem.prototype.getClickTarget;
+
 exports.IToolboxItem = IToolboxItem;

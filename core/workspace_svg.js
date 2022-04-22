@@ -1519,7 +1519,7 @@ class WorkspaceSvg extends Workspace {
    *     the paste was not successful.
    */
   paste(state) {
-    if (!this.rendered || !state['type'] && !state.tagName) {
+    if (!this.rendered || !state['type'] && !state['tagName']) {
       return null;
     }
     if (this.currentGesture_) {

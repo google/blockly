@@ -54,6 +54,8 @@ const {Rect} = goog.require('Blockly.utils.Rect');
 /* eslint-disable-next-line no-unused-vars */
 const {ShortcutRegistry} = goog.requireType('Blockly.ShortcutRegistry');
 /* eslint-disable-next-line no-unused-vars */
+const {ToolboxCategory} = goog.requireType('Blockly.ToolboxCategory');
+/* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.ToolboxItemSelect');
@@ -371,8 +373,13 @@ class Toolbox extends DeleteArea {
         handled = false;
         break;
     }
-    if (!handled && this.selectedItem_ && this.selectedItem_.onKeyDown) {
-      handled = this.selectedItem_.onKeyDown(e);
+    if (!handled && this.selectedItem_) {
+      // TODO(#6097): Figure out who implements onKeyDown and which interface it
+      // should be part of.
+      const untypedItem = /** @type {?} */ (this.selectedItem_);
+      if (untypedItem.onKeyDown) {
+        handled = untypedItem.onKeyDown(e);
+      }
     }
 
     if (handled) {
@@ -816,8 +823,10 @@ class Toolbox extends DeleteArea {
   refreshTheme() {
     for (let i = 0; i < this.contents_.length; i++) {
       const child = this.contents_[i];
-      if (child.refreshTheme) {
-        child.refreshTheme();
+      // TODO(#6097): Fix types or add refreshTheme to IToolboxItem.
+      const childAsCategory = /** @type {ToolboxCategory} */ (child);
+      if (childAsCategory.refreshTheme) {
+        childAsCategory.refreshTheme();
       }
     }
   }

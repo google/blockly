@@ -332,7 +332,7 @@ class Gesture {
     if (!this.targetBlock_) {
       return false;
     }
-    if (!this.flyout_.isBlockCreatable_(this.targetBlock_)) {
+    if (!this.flyout_.isBlockCreatable(this.targetBlock_)) {
       return false;
     }
     if (!this.flyout_.isScrollable() ||

@@ -63,4 +63,9 @@ IBlockDragger.prototype.endDrag;
  */
 IBlockDragger.prototype.getInsertionMarkers;
 
+/**
+ * Sever all links from this object and do any necessary cleanup.
+ */
+IBlockDragger.prototype.dispose;
+
 exports.IBlockDragger = IBlockDragger;

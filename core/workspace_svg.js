@@ -1938,7 +1938,7 @@ class WorkspaceSvg extends Workspace {
     // Start at 1 since the 0th block was used for initialization.
     for (let i = 1; i < topElements.length; i++) {
       const topElement = topElements[i];
-      if (topElement.isInsertionMarker && topElement.isInsertionMarker()) {
+      if (topElement instanceof BlockSvg && topElement.isInsertionMarker()) {
         continue;
       }
       const blockBoundary = topElement.getBoundingRectangle();

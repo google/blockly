@@ -49,6 +49,13 @@ class DeleteArea extends DragTarget {
      * @protected
      */
     this.wouldDelete_ = false;
+
+    /**
+     * The unique id for this component that is used to register with the
+     * ComponentManager.
+     * @type {string}
+     */
+    this.id;
   }
 
   /**

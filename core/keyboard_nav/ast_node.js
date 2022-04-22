@@ -271,14 +271,20 @@ class ASTNode {
    */
   navigateBetweenStacks_(forward) {
     let curLocation = this.getLocation();
-    if (curLocation.getSourceBlock) {
+    // TODO(#6097): Use instanceof checks to exit early for values of
+    // curLocation that don't make sense.
+    if ((/** @type {!IASTNodeLocationWithBlock} */ (curLocation))
+            .getSourceBlock) {
       curLocation = /** @type {!IASTNodeLocationWithBlock} */ (curLocation)
                         .getSourceBlock();
     }
-    if (!curLocation || !curLocation.workspace) {
+    // TODO(#6097): Use instanceof checks to exit early for values of
+    // curLocation that don't make sense.
+    const curLocationAsBlock = /** @type {!Block} */ (curLocation);
+    if (!curLocationAsBlock || !curLocationAsBlock.workspace) {
       return null;
     }
-    const curRoot = curLocation.getRootBlock();
+    const curRoot = curLocationAsBlock.getRootBlock();
     const topBlocks = curRoot.workspace.getTopBlocks(true);
     for (let i = 0; i < topBlocks.length; i++) {
       const topBlock = topBlocks[i];

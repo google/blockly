@@ -89,4 +89,12 @@ IToolboxItem.prototype.dispose;
  */
 IToolboxItem.prototype.getClickTarget;
 
+/**
+ * Sets whether the category is visible or not.
+ * For a category to be visible its parent category must also be expanded.
+ * @param {boolean} isVisible True if category should be visible.
+ * @protected
+ */
+IToolboxItem.prototype.setVisible_;
+
 exports.IToolboxItem = IToolboxItem;

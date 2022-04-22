@@ -168,6 +168,16 @@ class ToolboxItem {
    * @public
    */
   dispose() {}
+
+  /**
+   * Sets whether the category is visible or not.
+   * For a category to be visible its parent category must also be expanded.
+   * @param {boolean} _isVisible True if category should be visible.
+   * @protected
+   */
+  setVisible_(_isVisible) {
+    // nop by default
+  }
 }
 
 exports.ToolboxItem = ToolboxItem;

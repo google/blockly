@@ -625,7 +625,7 @@ const initBlock = function(block, rendered) {
     blockSvg.render(false);
     // fixes #6076 JSO deserialization doesn't
     // set .iconXY_ property so here it will be set
-    const icons = block.getIcons();
+    const icons = blockSvg.getIcons();
     for (let i = 0; i < icons.length; i++) {
       icons[i].computeIconLocation();
     }

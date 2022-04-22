@@ -287,9 +287,10 @@ exports.createDom = createDom;
  * @alias Blockly.Tooltip.bindMouseEvents
  */
 const bindMouseEvents = function(element) {
-  element.mouseOverWrapper_ =
+  // TODO (#6097): Don't stash wrapper info on the DOM.
+  (/** @type {?} */ (element)).mouseOverWrapper_ =
       browserEvents.bind(element, 'mouseover', null, onMouseOver);
-  element.mouseOutWrapper_ =
+  (/** @type {?} */ (element)).mouseOutWrapper_ =
       browserEvents.bind(element, 'mouseout', null, onMouseOut);
 
   // Don't use bindEvent_ for mousemove since that would create a
@@ -308,8 +309,9 @@ const unbindMouseEvents = function(element) {
   if (!element) {
     return;
   }
-  browserEvents.unbind(element.mouseOverWrapper_);
-  browserEvents.unbind(element.mouseOutWrapper_);
+  // TODO (#6097): Don't stash wrapper info on the DOM.
+  browserEvents.unbind((/** @type {?} */ (element)).mouseOverWrapper_);
+  browserEvents.unbind((/** @type {?} */ (element)).mouseOutWrapper_);
   element.removeEventListener('mousemove', onMouseMove);
 };
 exports.unbindMouseEvents = unbindMouseEvents;

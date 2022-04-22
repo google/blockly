@@ -951,7 +951,7 @@ class Flyout extends DeleteArea {
    *    otherwise.
    * @package
    */
-  isBlockCreatable_(block) {
+  isBlockCreatable(block) {
     return block.isEnabled();
   }
 

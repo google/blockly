@@ -179,6 +179,20 @@ class Block {
      */
     this.getDeveloperVariables = undefined;
 
+    /**
+     * An optional function that reconfigures the block based on the contents of
+     * the mutator dialog.
+     * @type {undefined|?function(!Block):void}
+     */
+    this.compose = undefined;
+
+    /**
+     * An optional function that populates the mutator's dialog with
+     * this block's components.
+     * @type {undefined|?function(!Workspace):!Block}
+     */
+    this.decompose = undefined;
+
     /** @type {string} */
     this.id = (opt_id && !workspace.getBlockById(opt_id)) ?
         opt_id :

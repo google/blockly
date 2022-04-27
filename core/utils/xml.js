@@ -19,8 +19,6 @@
  */
 goog.module('Blockly.utils.xml');
 
-const {globalThis} = goog.require('Blockly.utils.global');
-
 
 /**
  * Namespace for Blockly's XML.

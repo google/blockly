@@ -17,7 +17,6 @@ goog.module('Blockly.Touch');
 
 /* eslint-disable-next-line no-unused-vars */
 const {Gesture} = goog.requireType('Blockly.Gesture');
-const {globalThis} = goog.require('Blockly.utils.global');
 
 
 /**

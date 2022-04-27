@@ -1,6 +1,6 @@
 {
   "chunk": [
-    "blockly:260",
+    "blockly:259",
     "blocks:10:blockly",
     "all:11:blockly",
     "all1:11:blockly",
@@ -57,7 +57,6 @@
     "./core/widgetdiv.js",
     "./core/clipboard.js",
     "./core/contextmenu.js",
-    "./core/utils/global.js",
     "./core/utils/useragent.js",
     "./core/utils/svg.js",
     "./core/utils/dom.js",
@@ -229,7 +228,6 @@
     "./core/events/events_bubble_open.js",
     "./core/procedures.js",
     "./core/workspace_svg.js",
-    "./core/utils/deprecation.js",
     "./core/utils/svg_math.js",
     "./core/bubble_dragger.js",
     "./core/connection_type.js",
@@ -252,6 +250,7 @@
     "./core/utils/parsing.js",
     "./core/extensions.js",
     "./core/block.js",
+    "./core/utils/deprecation.js",
     "./core/utils/string.js",
     "./core/dialog.js",
     "./core/utils/xml.js",

@@ -20,7 +20,6 @@ goog.module('Blockly.WorkspaceAudio');
 const userAgent = goog.require('Blockly.utils.userAgent');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
-const {globalThis} = goog.require('Blockly.utils.global');
 
 
 /**

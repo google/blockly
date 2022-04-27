@@ -56,11 +56,13 @@ const XY_STYLE_REGEX =
 const getRelativeXY = function(element) {
   const xy = new Coordinate(0, 0);
   // First, check for x and y attributes.
-  const x = element.getAttribute('x');
+  // Checking for the existence of x/y properties is faster than getAttribute.
+  // However, x/y contains an SVGAnimatedLength object, not a number.
+  const x = element.x && element.getAttribute('x');
+  const y = element.y && element.getAttribute('y');
   if (x) {
     xy.x = parseInt(x, 10);
   }
-  const y = element.getAttribute('y');
   if (y) {
     xy.y = parseInt(y, 10);
   }

@@ -59,6 +59,19 @@ suite('Keyboard Shortcut Registry Test', function() {
           chai.assert.doesNotThrow(shouldNotThrow);
           chai.assert.exists(registry.registry_['test_shortcut'].callback);
         });
+
+    test('Registering a shortcut with keycodes', function() {
+      const shiftA = this.registry.createSerializedKey(
+          '65', [Blockly.ShortcutRegistry.modifierKeys.Shift]);
+      const testShortcut = {
+        'name': 'test_shortcut',
+        'keyCodes': ['65', 66, shiftA],
+      };
+      this.registry.register(testShortcut, true);
+      chai.assert.lengthOf(this.registry.keyMap_[shiftA], 1);
+      chai.assert.lengthOf(this.registry.keyMap_['65'], 1);
+      chai.assert.lengthOf(this.registry.keyMap_['66'], 1);
+    });
   });
 
   suite('Unregistering', function() {

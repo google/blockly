@@ -72,6 +72,13 @@ class ShortcutRegistry {
           'Shortcut with name "' + shortcut.name + '" already exists.');
     }
     this.registry_[shortcut.name] = shortcut;
+
+    const keyCodes = shortcut.keyCodes;
+    if (keyCodes && keyCodes.length > 0) {
+      for (let i = 0; i < keyCodes.length; i++) {
+        this.addKeyMapping(keyCodes[i], shortcut.name, false);
+      }
+    }
   }
 
   /**
@@ -354,7 +361,8 @@ ShortcutRegistry.modifierKeys = {
  * !ShortcutRegistry.KeyboardShortcut):boolean)|undefined),
  *    name: string,
  *    preconditionFn: ((function(!Workspace):boolean)|undefined),
- *    metadata: (Object|undefined)
+ *    metadata: (Object|undefined),
+ *    keyCodes: Array<string|number>
  * }}
  */
 ShortcutRegistry.KeyboardShortcut;

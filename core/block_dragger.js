@@ -353,29 +353,6 @@ const BlockDragger = class {
   }
 
   /**
-   * Adds or removes the style of the cursor for the toolbox.
-   * This is what changes the cursor to display an x when a deletable block is
-   * held over the toolbox.
-   * @param {boolean} isEnd True if we are at the end of a drag, false
-   *     otherwise.
-   * @protected
-   */
-  updateToolboxStyle_(isEnd) {
-    const toolbox = this.workspace_.getToolbox();
-
-    if (toolbox) {
-      const style = this.draggingBlock_.isDeletable() ? 'blocklyToolboxDelete' :
-                                                        'blocklyToolboxGrab';
-
-      if (isEnd && typeof toolbox.removeStyle === 'function') {
-        toolbox.removeStyle(style);
-      } else if (!isEnd && typeof toolbox.addStyle === 'function') {
-        toolbox.addStyle(style);
-      }
-    }
-  }
-
-  /**
    * Fire a move event at the end of a block drag.
    * @protected
    */

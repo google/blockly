@@ -364,13 +364,6 @@ suite('Utils', function() {
   });
 
   suite('String', function() {
-    test('starts with', function() {
-      chai.assert.isFalse(Blockly.utils.string.startsWith('123', '2'), 'Does not start with');
-      chai.assert.isTrue(Blockly.utils.string.startsWith('123', '12'), 'Start with');
-      chai.assert.isTrue(Blockly.utils.string.startsWith('123', ''), 'Start with empty string 1');
-      chai.assert.isTrue(Blockly.utils.string.startsWith('', ''), 'Start with empty string 12');
-    });
-
     test('shortest string length', function() {
       let len = Blockly.utils.string.shortestStringLength('one,two,three,four,five'.split(','));
       chai.assert.equal(len, 3, 'Length of "one"');

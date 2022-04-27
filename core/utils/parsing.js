@@ -15,7 +15,6 @@
 goog.module('Blockly.utils.parsing');
 
 const colourUtils = goog.require('Blockly.utils.colour');
-const stringUtils = goog.require('Blockly.utils.string');
 const {Msg} = goog.require('Blockly.Msg');
 
 
@@ -97,7 +96,7 @@ const tokenizeInterpolationInternal = function(
           // BKY_ is the prefix used to namespace the strings used in Blockly
           // core files and the predefined blocks in ../blocks/.
           // These strings are defined in ../msgs/ files.
-          const bklyKey = stringUtils.startsWith(keyUpper, 'BKY_') ?
+          const bklyKey = keyUpper.startsWith('BKY_') ?
               keyUpper.substring(4) :
               null;
           if (bklyKey && bklyKey in Msg) {

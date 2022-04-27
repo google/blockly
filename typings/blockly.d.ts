@@ -101,15 +101,6 @@ declare module "core/utils/colour" {
 }
 declare module "core/utils/string" {
     /**
-     * Fast prefix-checker.
-     * Copied from Closure's goog.string.startsWith.
-     * @param {string} str The string to check.
-     * @param {string} prefix A string to look for at the start of `str`.
-     * @return {boolean} True if `str` begins with `prefix`.
-     * @alias Blockly.utils.string.startsWith
-     */
-    export function startsWith(str: string, prefix: string): boolean;
-    /**
      * Given an array of strings, return the length of the shortest one.
      * @param {!Array<string>} array Array of strings.
      * @return {number} Length of shortest string.
@@ -8041,7 +8032,7 @@ declare module "core/renderers/common/constants" {
          *     colourTertiary:(string|undefined),
          *     hat:(string|undefined)
          * }} blockStyle A full or partial block style object.
-      
+
          * @return {!Theme.BlockStyle} A full block style object, with all
          *     required properties populated.
          * @protected

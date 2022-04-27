@@ -27,9 +27,14 @@ goog.module('Blockly.utils.string');
  * @param {string} prefix A string to look for at the start of `str`.
  * @return {boolean} True if `str` begins with `prefix`.
  * @alias Blockly.utils.string.startsWith
+ * @deprecated April 2022. Use built-in string.startsWith.
  */
 const startsWith = function(str, prefix) {
-  return str.lastIndexOf(prefix, 0) === 0;
+  deprecation.warn(
+    'Blockly.utils.string.startsWith()', 'April 2022',
+    'April 2023',
+    'Use built-in string.startsWith)');
+  return str.startsWith(prefix);
 };
 exports.startsWith = startsWith;
 

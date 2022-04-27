@@ -23,8 +23,7 @@ const deprecation = goog.require('Blockly.utils.deprecation');
 
 
 /**
- * Fast prefix-checker.
- * Copied from Closure's goog.string.startsWith.
+ * Obsolete prefix-checker.
  * @param {string} str The string to check.
  * @param {string} prefix A string to look for at the start of `str`.
  * @return {boolean} True if `str` begins with `prefix`.
@@ -33,9 +32,8 @@ const deprecation = goog.require('Blockly.utils.deprecation');
  */
 const startsWith = function(str, prefix) {
   deprecation.warn(
-      'Blockly.utils.string.startsWith()', 'April 2022',
-      'April 2023',
-      'Use built-in string.startsWith)');
+      'Blockly.utils.string.startsWith()', 'April 2022', 'April 2023',
+      'Use built-in string.startsWith');
   return str.startsWith(prefix);
 };
 exports.startsWith = startsWith;

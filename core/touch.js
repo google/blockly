@@ -262,8 +262,7 @@ exports.setClientFromTouch = setClientFromTouch;
  * @alias Blockly.Touch.isMouseOrTouchEvent
  */
 const isMouseOrTouchEvent = function(e) {
-  return e.type.startsWith('touch') ||
-      e.type.startsWith('mouse') ||
+  return e.type.startsWith('touch') || e.type.startsWith('mouse') ||
       e.type.startsWith('pointer');
 };
 exports.isMouseOrTouchEvent = isMouseOrTouchEvent;

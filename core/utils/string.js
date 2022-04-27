@@ -19,6 +19,8 @@
  */
 goog.module('Blockly.utils.string');
 
+const deprecation = goog.require('Blockly.utils.deprecation');
+
 
 /**
  * Fast prefix-checker.

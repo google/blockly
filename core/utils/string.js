@@ -31,9 +31,9 @@ goog.module('Blockly.utils.string');
  */
 const startsWith = function(str, prefix) {
   deprecation.warn(
-    'Blockly.utils.string.startsWith()', 'April 2022',
-    'April 2023',
-    'Use built-in string.startsWith)');
+      'Blockly.utils.string.startsWith()', 'April 2022',
+      'April 2023',
+      'Use built-in string.startsWith)');
   return str.startsWith(prefix);
 };
 exports.startsWith = startsWith;

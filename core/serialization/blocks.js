@@ -390,8 +390,8 @@ const appendPrivate = function(state, workspace, {
   const block = workspace.newBlock(state['type'], state['id']);
   block.setShadow(isShadow);
   loadCoords(block, state);
-  loadExtraState(block, state);
   loadAttributes(block, state);
+  loadExtraState(block, state);
   tryToConnectParent(parentConnection, block, state);
   loadIcons(block, state);
   loadFields(block, state);

@@ -721,10 +721,10 @@ const PROCEDURE_CALL_COMMON = {
     if (!mutatorOpen) {
       this.quarkConnections_ = {};
       this.quarkIds_ = null;
-    }
-    if (!paramIds) {
-      // Reset the quarks (a mutator is about to open).
-      return;
+    } else {
+      // fix #6091 - this call could cause an error when outside if-else
+      // expanding block while mutating prevents another error (ancient fix)
+      this.setCollapsed(false);
     }
     // Test arguments (arrays of strings) for changes. '\n' is not a valid
     // argument name character, so it is a valid delimiter here.
@@ -736,7 +736,6 @@ const PROCEDURE_CALL_COMMON = {
     if (paramIds.length !== paramNames.length) {
       throw RangeError('paramNames and paramIds must be the same length.');
     }
-    this.setCollapsed(false);
     if (!this.quarkIds_) {
       // Initialize tracking for this block.
       this.quarkConnections_ = {};

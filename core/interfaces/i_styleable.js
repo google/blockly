@@ -25,13 +25,13 @@ goog.module('Blockly.IStyleable');
 const IStyleable = function() {};
 
 /**
- * Adds a style on the toolbox. Usually used to change the cursor.
+ * Adds a style on an object. Usually used to change the cursor.
  * @param {string} style The name of the class to add.
  */
 IStyleable.prototype.addStyle;
 
 /**
- * Removes a style from the toolbox. Usually used to change the cursor.
+ * Removes a style from an object. Usually used to change the cursor.
  * @param {string} style The name of the class to remove.
  */
 IStyleable.prototype.removeStyle;

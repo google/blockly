@@ -106,7 +106,7 @@ class ShortcutRegistry {
 
   /**
    * Adds a mapping between a keycode and a keyboard shortcut.
-   * @param {string|KeyCodes} keyCode The key code for the keyboard
+   * @param {string|number|KeyCodes} keyCode The key code for the keyboard
    *     shortcut. If registering a key code with a modifier (ex: ctrl+c) use
    *     ShortcutRegistry.registry.createSerializedKey;
    * @param {string} shortcutName The name of the shortcut to execute when the
@@ -363,8 +363,8 @@ ShortcutRegistry.modifierKeys = {
  *    name: string,
  *    preconditionFn: ((function(!Workspace):boolean)|undefined),
  *    metadata: (Object|undefined),
- *    keyCodes: Array<string|number>,
- *    allowCollision: boolean
+ *    keyCodes: (Array<string|number>|undefined),
+ *    allowCollision: (boolean|undefined)
  * }}
  */
 ShortcutRegistry.KeyboardShortcut;

@@ -293,10 +293,9 @@ exports.showPositionedByField = showPositionedByField;
  */
 const getScaledBboxOfBlock = function(block) {
   const blockSvg = block.getSvgRoot();
-  const bBox = blockSvg.getBBox();
   const scale = block.workspace.scale;
-  const scaledHeight = bBox.height * scale;
-  const scaledWidth = bBox.width * scale;
+  const scaledHeight = block.height * scale;
+  const scaledWidth = block.width * scale;
   const xy = style.getPageOffset(blockSvg);
   return new Rect(xy.y, xy.y + scaledHeight, xy.x, xy.x + scaledWidth);
 };

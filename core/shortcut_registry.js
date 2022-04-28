@@ -76,7 +76,8 @@ class ShortcutRegistry {
     const keyCodes = shortcut.keyCodes;
     if (keyCodes && keyCodes.length > 0) {
       for (let i = 0; i < keyCodes.length; i++) {
-        this.addKeyMapping(keyCodes[i], shortcut.name, !!shortcut.allowCollision);
+        this.addKeyMapping(
+            keyCodes[i], shortcut.name, !!shortcut.allowCollision);
       }
     }
   }

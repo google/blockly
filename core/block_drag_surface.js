@@ -137,17 +137,14 @@ const BlockDragSurfaceSvg = class {
    */
   translateAndScaleGroup(x, y, scale) {
     this.scale_ = scale;
-    // This is a work-around to prevent a the blocks from rendering
-    // fuzzy while they are being dragged on the drag surface.
-    const fixedX = x.toFixed(0);
-    const fixedY = y.toFixed(0);
-
-    this.childSurfaceXY_.x = parseInt(fixedX, 10);
-    this.childSurfaceXY_.y = parseInt(fixedY, 10);
-
+    // Make sure the svg exists on a pixel boundary so that it is not fuzzy.
+    const roundX = Math.round(x);
+    const roundY = Math.round(y);
+    this.childSurfaceXY_.x = roundX;
+    this.childSurfaceXY_.y = roundY;
     this.dragGroup_.setAttribute(
         'transform',
-        'translate(' + fixedX + ',' + fixedY + ') scale(' + scale + ')');
+        'translate(' + roundX + ',' + roundY + ') scale(' + scale + ')');
   }
 
   /**
@@ -157,10 +154,9 @@ const BlockDragSurfaceSvg = class {
   translateSurfaceInternal_() {
     let x = this.surfaceXY_.x;
     let y = this.surfaceXY_.y;
-    // This is a work-around to prevent a the blocks from rendering
-    // fuzzy while they are being dragged on the drag surface.
-    x = x.toFixed(0);
-    y = y.toFixed(0);
+    // Make sure the svg exists on a pixel boundary so that it is not fuzzy.
+    x = Math.round(x);
+    y = Math.round(y);
     this.SVG_.style.display = 'block';
 
     dom.setCssTransform(this.SVG_, 'translate3d(' + x + 'px, ' + y + 'px, 0)');

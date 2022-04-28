@@ -875,6 +875,9 @@ const PROCEDURE_CALL_COMMON = {
     for (let i = 0; i < this.arguments_.length; i++) {
       const parameter = xmlUtils.createElement('arg');
       parameter.setAttribute('name', this.arguments_[i]);
+      if (this.quarkIds_ && this.quarkIds_[i]) {
+        parameter.setAttribute('varid', this.quarkIds_[i]);
+      }
       container.appendChild(parameter);
     }
     return container;
@@ -893,7 +896,7 @@ const PROCEDURE_CALL_COMMON = {
     for (let i = 0, childNode; (childNode = xmlElement.childNodes[i]); i++) {
       if (childNode.nodeName.toLowerCase() === 'arg') {
         args.push(childNode.getAttribute('name'));
-        paramIds.push(childNode.getAttribute('paramId'));
+        paramIds.push(childNode.getAttribute('varid'));
       }
     }
     this.setProcedureParameters_(args, paramIds);

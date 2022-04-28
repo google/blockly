@@ -59,7 +59,6 @@ suite('Keyboard Shortcut Registry Test', function() {
           chai.assert.doesNotThrow(shouldNotThrow);
           chai.assert.exists(registry.registry_['test_shortcut'].callback);
         });
-
     test('Registering a shortcut with keycodes', function() {
       const shiftA = this.registry.createSerializedKey(
           '65', [Blockly.ShortcutRegistry.modifierKeys.Shift]);
@@ -71,6 +70,23 @@ suite('Keyboard Shortcut Registry Test', function() {
       chai.assert.lengthOf(this.registry.keyMap_[shiftA], 1);
       chai.assert.lengthOf(this.registry.keyMap_['65'], 1);
       chai.assert.lengthOf(this.registry.keyMap_['66'], 1);
+    });
+    test('Registering a shortcut with allowCollision', function() {
+      const testShortcut = {
+        'name': 'test_shortcut',
+        'keyCodes': ['65'],
+      };
+      const duplicateShortcut = {
+        'name': 'duplicate_shortcut',
+        'keyCodes': ['65'],
+        'allowCollision': true,
+      };
+      this.registry.register(testShortcut);
+      const registry = this.registry;
+      const shouldNotThrow = function() {
+        registry.register(duplicateShortcut);
+      };
+      chai.assert.doesNotThrow(shouldNotThrow);
     });
   });
 

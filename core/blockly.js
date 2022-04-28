@@ -165,7 +165,6 @@ const {WorkspaceDragger} = goog.require('Blockly.WorkspaceDragger');
 const {WorkspaceSvg, resizeSvgContents} = goog.require('Blockly.WorkspaceSvg');
 const {Workspace} = goog.require('Blockly.Workspace');
 const {ZoomControls} = goog.require('Blockly.ZoomControls');
-const {globalThis} = goog.require('Blockly.utils.global');
 const {inject} = goog.require('Blockly.inject');
 const {inputTypes} = goog.require('Blockly.inputTypes');
 /** @suppress {extraRequire} */

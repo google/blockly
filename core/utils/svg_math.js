@@ -16,7 +16,6 @@
 goog.module('Blockly.utils.svgMath');
 
 const deprecation = goog.require('Blockly.utils.deprecation');
-const global = goog.require('Blockly.utils.global');
 const style = goog.require('Blockly.utils.style');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
@@ -130,7 +129,7 @@ const is3dSupported = function() {
   }
   // CC-BY-SA Lorenzo Polidori
   // stackoverflow.com/questions/5661671/detecting-transform-translate3d-support
-  if (!global.globalThis['getComputedStyle']) {
+  if (!globalThis['getComputedStyle']) {
     return false;
   }
 
@@ -150,7 +149,7 @@ const is3dSupported = function() {
   for (const t in transforms) {
     if (el.style[t] !== undefined) {
       el.style[t] = 'translate3d(1px,1px,1px)';
-      const computedStyle = global.globalThis['getComputedStyle'](el);
+      const computedStyle = globalThis['getComputedStyle'](el);
       if (!computedStyle) {
         // getComputedStyle in Firefox returns null when Blockly is loaded
         // inside an iframe with display: none.  Returning false and not

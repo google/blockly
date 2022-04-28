@@ -19,8 +19,6 @@
  */
 goog.module('Blockly.utils.userAgent');
 
-const {globalThis} = goog.require('Blockly.utils.global');
-
 
 /**
  * The raw useragent string.

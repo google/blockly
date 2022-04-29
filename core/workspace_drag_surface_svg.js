@@ -101,11 +101,9 @@ class WorkspaceDragSurfaceSvg {
    * @package
    */
   translateSurface(x, y) {
-    // This is a work-around to prevent a the blocks from rendering
-    // fuzzy while they are being moved on the drag surface.
-    const fixedX = x.toFixed(0);
-    const fixedY = y.toFixed(0);
-
+    // Make sure the svg exists on a pixel boundary so that it is not fuzzy.
+    const fixedX = Math.round(x);
+    const fixedY = Math.round(y);
     this.SVG_.style.display = 'block';
     dom.setCssTransform(
         this.SVG_, 'translate3d(' + fixedX + 'px, ' + fixedY + 'px, 0)');

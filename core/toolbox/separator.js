@@ -17,7 +17,6 @@ goog.module('Blockly.ToolboxSeparator');
 
 const Css = goog.require('Blockly.Css');
 const dom = goog.require('Blockly.utils.dom');
-const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 /* eslint-disable-next-line no-unused-vars */
 const toolbox = goog.requireType('Blockly.utils.toolbox');
@@ -54,7 +53,7 @@ class ToolboxSeparator extends ToolboxItem {
     this.htmlDiv_ = null;
 
     const cssConfig = separatorDef['cssconfig'] || separatorDef['cssConfig'];
-    object.mixin(this.cssConfig_, cssConfig);
+    Object.assign(this.cssConfig_, cssConfig);
   }
 
   /**

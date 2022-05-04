@@ -16,7 +16,6 @@
 goog.module('Blockly.blockRendering.Renderer');
 
 const debug = goog.require('Blockly.blockRendering.debug');
-const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
@@ -97,7 +96,7 @@ class Renderer {
     this.constants_ = this.makeConstants_();
     if (opt_rendererOverrides) {
       this.overrides = opt_rendererOverrides;
-      object.mixin(this.constants_, opt_rendererOverrides);
+      Object.assign(this.constants_, opt_rendererOverrides);
     }
     this.constants_.setTheme(theme);
     this.constants_.init();
@@ -126,7 +125,7 @@ class Renderer {
     previousConstants.dispose();
     this.constants_ = this.makeConstants_();
     if (this.overrides) {
-      object.mixin(this.constants_, this.overrides);
+      Object.assign(this.constants_, this.overrides);
     }
     // Ensure the constant provider's random identifier does not change.
     this.constants_.randomIdentifier = previousConstants.randomIdentifier;

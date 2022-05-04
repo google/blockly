@@ -19,7 +19,6 @@ const Css = goog.require('Blockly.Css');
 const aria = goog.require('Blockly.utils.aria');
 const colourUtils = goog.require('Blockly.utils.colour');
 const dom = goog.require('Blockly.utils.dom');
-const object = goog.require('Blockly.utils.object');
 const parsing = goog.require('Blockly.utils.parsing');
 const registry = goog.require('Blockly.registry');
 const toolbox = goog.require('Blockly.utils.toolbox');
@@ -198,7 +197,7 @@ class ToolboxCategory extends ToolboxItem {
   parseCategoryDef_(categoryDef) {
     this.name_ = parsing.replaceMessageReferences(categoryDef['name']);
     this.colour_ = this.getColour_(categoryDef);
-    object.mixin(
+    Object.assign(
         this.cssConfig_, categoryDef['cssconfig'] || categoryDef['cssConfig']);
   }
 

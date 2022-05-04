@@ -15,6 +15,7 @@
  */
 goog.module('Blockly.utils.object');
 
+const deprecation = goog.require('Blockly.utils.deprecation');
 
 /**
  * Inherit the prototype methods from one constructor into another.
@@ -43,11 +44,14 @@ exports.inherits = inherits;
 
 /**
  * Copies all the members of a source object to a target object.
+ * @deprecated Use Object.assign. (2022 May)
  * @param {!Object} target Target.
  * @param {!Object} source Source.
  * @alias Blockly.utils.object.mixin
  */
 const mixin = function(target, source) {
+  deprecation.warn(
+      'Blockly.utils.object.mixin', 'May 2022', 'May 2023', 'Object.assign');
   for (const x in source) {
     target[x] = source[x];
   }

@@ -327,9 +327,10 @@ ModuleManager.prototype.deleteModule = function(module) {
   for (let i = 0; i < this.moduleMap_.length; i++) {
     if (this.moduleMap_[i].getId() === module.getId()) {
       this.moduleMap_.splice(i, 1);
+      let existingGroup = null;
 
       try {
-        const existingGroup = Blockly.Events.getGroup();
+        existingGroup = Blockly.Events.getGroup();
 
         if (!existingGroup) {
           Blockly.Events.setGroup(true);
@@ -345,7 +346,6 @@ ModuleManager.prototype.deleteModule = function(module) {
           Blockly.Events.setGroup(false);
         }
       }
-
       return this.moduleMap_[i - 1] || this.moduleMap_[0];
     }
   }

@@ -201,22 +201,22 @@ ModuleBar.prototype.attachEvents_ = function() {
  */
 ModuleBar.prototype.detachEvents_ = function() {
   if (this.onClickWrapper_) {
-    Blockly.unbindEvent_(this.onClickWrapper_);
+    Blockly.browserEvents.unbind(this.onClickWrapper_);
     this.onClickWrapper_ = null;
   }
 
   if (this.onMouseDownWrapper_) {
-    Blockly.unbindEvent_(this.onMouseDownWrapper_);
+    Blockly.browserEvents.unbind(this.onMouseDownWrapper_);
     this.onMouseDownWrapper_ = null;
   }
 
   if (this.onMouseUpWrapper_) {
-    Blockly.unbindEvent_(this.onMouseUpWrapper_);
+    Blockly.browserEvents.unbind(this.onMouseUpWrapper_);
     this.onMouseUpWrapper_ = null;
   }
 
   if (this.onMouseMoveWrapper_) {
-    Blockly.unbindEvent_(this.onMouseMoveWrapper_);
+    Blockly.browserEvents.unbind(this.onMouseMoveWrapper_);
     this.onMouseMoveWrapper_ = null;
   }
 };
@@ -478,12 +478,12 @@ ModuleBar.prototype.handleDeleteModule_ = function() {
   const activeModule = workspace.getModuleManager().getActiveModule();
 
   if (workspace.getModuleManager().getAllModules().length <= 1) {
-    Blockly.alert(Blockly.Msg['LAST_MODULE_DELETE_RESTRICTION']);
+    Blockly.dialog.alert(Blockly.Msg['LAST_MODULE_DELETE_RESTRICTION']);
     return;
   }
 
   if (workspace.getTopBlocks(false, true).length > 0) {
-    Blockly.alert(Blockly.Msg['NOT_EMPTY_MODULE_DELETE_RESTRICTION']);
+    Blockly.dialog.alert(Blockly.Msg['NOT_EMPTY_MODULE_DELETE_RESTRICTION']);
     return;
   }
 

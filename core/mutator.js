@@ -101,6 +101,13 @@ class Mutator extends Icon {
      * @private
      */
     this.sourceListener_ = null;
+
+    /**
+     * The PID associated with the updateWorkpace_ timeout, or 0 if no timeout
+     * is currently running.
+     * @type {number}
+     */
+    this.updateWorkspacePid_ = 0;
   }
 
   /**
@@ -402,12 +409,25 @@ class Mutator extends Icon {
    * @private
    */
   workspaceChanged_(e) {
-    if (!(e.isUiEvent ||
-          (e.type === eventUtils.CHANGE &&
-           /** @type {!BlockChange} */ (e).element === 'disabled') ||
-          e.type === eventUtils.CREATE)) {
-      this.updateWorkspace_();
+    if (!this.shouldIgnoreMutatorEvent_(e) && !this.updateWorkspacePid_) {
+      this.updateWorkspacePid_ = setTimeout(() => {
+        this.updateWorkspacePid_ = 0;
+        this.updateWorkspace_();
+      }, 0);
     }
+  }
+
+  /**
+   * Returns whether the given event in the mutator workspace should be ignored
+   * when deciding whether to update the workspace and compose the block or not.
+   * @param {!Abstract} e The event.
+   * @return {boolean} Whether to ignore the event or not.
+   */
+  shouldIgnoreMutatorEvent_(e) {
+    return e.isUiEvent ||
+        e.type === eventUtils.CREATE ||
+        e.type === eventUtils.CHANGE &&
+            /** @type {!BlockChange} */ (e).element === 'disabled';
   }
 
   /**
@@ -485,7 +505,7 @@ class Mutator extends Icon {
       // Don't update the bubble until the drag has ended, to avoid moving
       // blocks under the cursor.
       if (!this.workspace_.isDragging()) {
-        this.resizeBubble_();
+        setTimeout(() => this.resizeBubble_(), 0);
       }
       eventUtils.setGroup(existingGroup);
     }

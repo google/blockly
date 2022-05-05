@@ -803,12 +803,13 @@ BlockSvg.prototype.onMouseDown_ = function(e) {
   }
 
   if (this.isInFrontOfWorkspace) {
-    this.disableMovingToFront = true;
     this.previousParent.insertBefore(this.getSvgRoot(), this.previousNextSibling);
     this.getSvgRoot().setAttribute('transform', this.previousSvgRootTransform);
     this.tempRootDiv.remove();
     this.isInFrontOfWorkspace = false;
   }
+
+  this.disableMovingToFront = true;
 
   const gesture = this.workspace && this.workspace.getGesture(e);
   if (gesture) {
@@ -1391,6 +1392,7 @@ BlockSvg.prototype.addSelect = function() {
   this.selectedAsGroup_ = false;
 
   if (this.isInFlyout) {
+    this.disableMovingToFront = false;
     this.placeToFront();
   }
 };
@@ -1409,7 +1411,7 @@ BlockSvg.prototype.placeToFront = function() {
   if (this.isInFrontOfWorkspace || this.disableMovingToFront) return;
 
   setTimeout(() => {
-    if (this.isInFrontOfWorkspace || !this.selected_) return;
+    if (this.isInFrontOfWorkspace || this.disableMovingToFront || !this.selected_) return;
 
     const flyoutSVG = this.workspace.getParentSvg();
     let flyoutWidth = flyoutSVG.style.width;
@@ -1461,7 +1463,7 @@ BlockSvg.prototype.placeToFront = function() {
 
     this.isInFrontOfWorkspace = true;
     this.workspace.getParentSvg().parentElement.appendChild(this.tempRootDiv);
-  }, 100); // This is enough to eliminate glitches when scrolling.
+  }, 800); // This is enough to eliminate glitches when scrolling.
 };
 
 /**

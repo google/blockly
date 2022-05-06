@@ -219,8 +219,7 @@ const init = function(mainWorkspace) {
       browserEvents.conditionalBind(window, 'resize', null, function() {
         mainWorkspace.hideChaff(true);
         common.svgResize(mainWorkspace);
-        goog.module.get('Blockly.bumpObjects')
-            .bumpTopObjectsIntoBounds(mainWorkspace);
+        bumpObjects.bumpTopObjectsIntoBounds(mainWorkspace);
       });
   mainWorkspace.setResizeHandlerWrapper(workspaceResizeHandler);
 

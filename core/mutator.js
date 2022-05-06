@@ -424,10 +424,9 @@ class Mutator extends Icon {
    * @return {boolean} Whether to ignore the event or not.
    */
   shouldIgnoreMutatorEvent_(e) {
-    return e.isUiEvent ||
-        e.type === eventUtils.CREATE ||
+    return e.isUiEvent || e.type === eventUtils.CREATE ||
         e.type === eventUtils.CHANGE &&
-            /** @type {!BlockChange} */ (e).element === 'disabled';
+        /** @type {!BlockChange} */ (e).element === 'disabled';
   }
 
   /**

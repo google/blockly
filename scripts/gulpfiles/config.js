@@ -18,18 +18,17 @@ var path = require('path');
 //
 // - tests/scripts/compile_typings.sh
 // - tests/scripts/check_metadata.sh
-module.exports = {
-  // Directory to write compiled output to.
-  BUILD_DIR: 'build',
 
-  // Directory in which to assemble (and from which to publish) the
-  // blockly npm package.
-  RELEASE_DIR: 'dist',
+// Directory to write compiled output to.
+exports.BUILD_DIR = 'build';
 
-  // Directory to write typings output to.
-  TYPINGS_BUILD_DIR: path.join('build', 'typings'),
+// Directory in which to assemble (and from which to publish) the
+// blockly npm package.
+exports.RELEASE_DIR = 'dist';
 
-  // Directory where typescript compiler output can be found.
-  // Matches the value in tsconfig.json: outDir
-  TSC_OUTPUT_DIR: path.join('build', 'ts'),
-};
+// Directory to write typings output to.
+exports.TYPINGS_BUILD_DIR = path.join(exports.BUILD_DIR, 'typings');
+
+// Directory where typescript compiler output can be found.
+// Matches the value in tsconfig.json: outDir
+exports.TSC_OUTPUT_DIR = path.join(exports.BUILD_DIR, 'ts');

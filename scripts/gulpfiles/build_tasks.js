@@ -726,7 +726,7 @@ function format() {
 
 module.exports = {
   build: build,
-  buildJavaScript: buildJavaScript,
+  javaScript: buildJavaScript,
   deps: buildDeps,
   generateLangfiles: generateLangfiles,
   langfiles: buildLangfiles,

@@ -30,7 +30,7 @@ module.exports = {
   buildLangfiles: buildTasks.langfiles,
   buildCompiled: buildTasks.compiled,
   buildAdvancedCompilationTest: buildTasks.advancedCompilationTest,
-  buildTs: buildTasks.buildTypescript,
+  buildJavaScript: buildTasks.buildJavaScript,
   // TODO(5621): Re-enable once typings generation is fixed.
   // checkin: gulp.parallel(buildTasks.checkinBuilt, typings.checkinTypings),
   checkin: gulp.parallel(buildTasks.checkinBuilt),

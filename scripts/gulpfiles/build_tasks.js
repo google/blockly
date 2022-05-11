@@ -33,6 +33,11 @@ var {getPackageJson} = require('./helper_tasks');
 ////////////////////////////////////////////////////////////
 
 /**
+ * Directory in which core/ can be found after passing through tsc.
+ */
+const CORE_DIR = path.join(TSC_OUTPUT_DIR, 'core');
+
+/**
  * Suffix to add to compiled output files.
  */
 const COMPILED_SUFFIX = '_compressed';
@@ -98,7 +103,7 @@ const NAMESPACE_PROPERTY = '__namespace__';
 const chunks = [
   {
     name: 'blockly',
-    entry: 'core/blockly.js',
+    entry: path.join(CORE_DIR, 'blockly.js'),
     reexport: 'Blockly',
   },
   {
@@ -246,6 +251,16 @@ var JSCOMP_OFF = [
 ];
 
 /**
+ * Builds Blockly as a JS program, by running tsc on all the files in
+ * the core directory.  This must be run before buildDeps or
+ * buildCompiled.
+ */
+function buildJavaScript(done) {
+  execSync(`tsc -outDir "${TSC_OUTPUT_DIR}"`, {stdio: 'inherit'});
+  done();
+}
+
+/**
  * This task updates DEPS_FILE (deps.js), used by
  * blockly_uncompressed.js when loading Blockly in uncompiled mode.
  *
@@ -257,10 +272,9 @@ function buildDeps(done) {
       'node_modules/google-closure-library/closure/goog' :
       'closure/goog';
 
-  const coreDir = argv.compileTs ? path.join(TSC_OUTPUT_DIR, 'core') : 'core';
   const roots = [
     closurePath,
-    coreDir,
+    TSC_OUTPUT_DIR,
     'blocks',
     'generators',
   ];
@@ -464,8 +478,8 @@ function getChunkOptions() {
   //     /* ... remaining handful of chunks */
   //   ],
   //   js: [
-  //     './core/serialization/workspaces.js',
-  //     './core/serialization/variables.js',
+  //     './build/ts/core/serialization/workspaces.js',
+  //     './build/ts/core/serialization/variables.js',
   //     /* ... remaining several hundred files */
   //   ],
   // }
@@ -535,6 +549,15 @@ const pathSepRegExp = new RegExp(path.sep.replace(/\\/, '\\\\'), "g");
  *     callback.  Modified in place.
  */
 function flattenCorePaths(pathObject) {
+  if (pathObject.dirname.startsWith(CORE_PATH)) {
+    pathObject.dirname = CORE_PATH;
+    bathObject.basename =
+        CORE_PATH.split(path.sep).concat(pathObject.basename).join('-slash-');
+    console.log(pathObject);
+  }
+
+  return;
+  
   const dirs = pathObject.dirname.split(path.sep);
   const coreIndex = argv.compileTs ? 2 : 0;
   if (dirs[coreIndex] === 'core') {
@@ -664,7 +687,7 @@ function buildAdvancedCompilationTest() {
  *     test/deps*.js
  */
 const build = gulp.parallel(
-    gulp.series(buildDeps, buildCompiled),
+    gulp.series(buildJavaScript, buildDeps, buildCompiled),
     buildLangfiles,
     );
 
@@ -701,13 +724,9 @@ function format() {
       .pipe(gulp.dest('.'));
 };
 
-function buildTypescript(done) {
-  execSync('npx tsc', {stdio: 'inherit'});
-  done();
-}
-
 module.exports = {
   build: build,
+  buildJavaScript: buildJavaScript,
   deps: buildDeps,
   generateLangfiles: generateLangfiles,
   langfiles: buildLangfiles,
@@ -716,5 +735,4 @@ module.exports = {
   checkinBuilt: checkinBuilt,
   cleanBuildDir: cleanBuildDir,
   advancedCompilationTest: buildAdvancedCompilationTest,
-  buildTypescript: buildTypescript
 }

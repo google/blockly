@@ -14,7 +14,7 @@
 
 /**
  * Blockly uncompiled-mode startup code.  If running in a browser
- * loads closure/goog/base.js and tests/deps.js, then (in any case)
+ * loads closure/goog/base.js and build/deps.js, then (in any case)
  * requires Blockly.requires.
  */
 (function(globalThis) {
@@ -47,10 +47,10 @@
     // mainly for goog.require / goog.provide / goog.module).
     document.write(
         '<script src="' + BLOCKLY_DIR + '/closure/goog/base.js"></script>');
-    // Load dependency graph info from test/deps.js.  To update
+    // Load dependency graph info from build/deps.js.  To update
     // deps.js, run `npm run build:deps`.
     document.write(
-        '<script src="' + BLOCKLY_DIR + '/tests/deps.js"></script>');
+        '<script src="' + BLOCKLY_DIR + '/build/deps.js"></script>');
     // Load the rest of Blockly.
     document.write('<script>goog.require(\'Blockly\');</script>');
   }

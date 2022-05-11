@@ -32,9 +32,9 @@
     // libary we use, mainly for goog.require / goog.provide /
     // goog.module).
     document.write('<script src="../../closure/goog/base.js"></script>');
-    // Load dependency graph info from test/deps.js.  To update
+    // Load dependency graph info from build/deps.js.  To update
     // deps.js, run `npm run build:deps`.
-    document.write('<script src="../../tests/deps.js"></script>');
+    document.write('<script src="../../build/deps.js"></script>');
 
     // Msg loading kludge.  This should go away once #5409 and/or
     // #1895 are fixed.

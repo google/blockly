@@ -25,7 +25,7 @@ var closureDeps = require('google-closure-deps');
 var argv = require('yargs').argv;
 var rimraf = require('rimraf');
 
-var {BUILD_DIR, TSC_OUTPUT_DIR} = require('./config');
+var {BUILD_DIR, DEPS_FILE, TEST_DEPS_FILE, TSC_OUTPUT_DIR} = require('./config');
 var {getPackageJson} = require('./helper_tasks');
 
 ////////////////////////////////////////////////////////////
@@ -246,10 +246,11 @@ var JSCOMP_OFF = [
 ];
 
 /**
- * This task updates tests/deps.js, used by blockly_uncompressed.js
- * when loading Blockly in uncompiled mode.
+ * This task updates DEPS_FILE (deps.js), used by
+ * blockly_uncompressed.js when loading Blockly in uncompiled mode.
  *
- * Also updates tests/deps.mocha.js, used by the mocha test suite.
+ * Also updates TEST_DEPS_FILE (deps.mocha.js), used by the mocha test
+ * suite.
  */
 function buildDeps(done) {
   const closurePath = argv.closureLibrary ?
@@ -270,12 +271,13 @@ function buildDeps(done) {
   ];
 
   const args = roots.map(root => `--root '${root}' `).join('');
-  execSync(`closure-make-deps ${args} > tests/deps.js`, {stdio: 'inherit'});
+  execSync(`closure-make-deps ${args} > ${DEPS_FILE}`,
+           {stdio: 'inherit'});
 
   // Use grep to filter out the entries that are already in deps.js.
   const testArgs = testRoots.map(root => `--root '${root}' `).join('');
-  execSync(`closure-make-deps ${testArgs} | grep 'tests/mocha'` +
-      ' > tests/deps.mocha.js', {stdio: 'inherit'});
+  execSync(`closure-make-deps ${testArgs} | grep 'tests/mocha' ` +
+      `> '${TEST_DEPS_FILE}'`, {stdio: 'inherit'});
   done();
 };
 
@@ -422,7 +424,7 @@ function getChunkOptions() {
   }
   const cccArgs = [
     '--closure-library-base-js-path ./closure/goog/base_minimal.js',
-    '--deps-file ./tests/deps.js',
+    `--deps-file './${DEPS_FILE}'`,
     ...(chunks.map(chunk => `--entrypoint '${chunk.entry}'`)),
   ];
   const cccCommand = `closure-calculate-chunks ${cccArgs.join(' ')}`;

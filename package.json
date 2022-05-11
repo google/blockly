@@ -42,6 +42,7 @@
     "license": "gulp checkLicenses",
     "lint": "eslint .",
     "package": "gulp package",
+    "prepare": "gulp buildDeps",
     "prepareDemos": "gulp prepareDemos",
     "publish": "gulp publish",
     "publish:beta": "gulp publishBeta",

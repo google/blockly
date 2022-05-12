@@ -356,7 +356,7 @@ JavaScript['text_replace'] = function(block) {
 function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(haystack, needle, replacement) {
   needle = needle.replace(/([-()\\[\\]{}+?*.$\\^|,:#<!\\\\])/g, '\\\\$1')
                  .replace(/\\x08/g, '\\\\x08');
-  return haystack.replace(new RegExp(needle, \'g\'), replacement);
+  return haystack.replace(new RegExp(needle, 'g'), replacement);
 }
 `);
   const code = functionName + '(' + text + ', ' + from + ', ' + to + ')';

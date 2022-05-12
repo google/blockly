@@ -250,7 +250,7 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(myList) {
       // mathMedian([null,null,1,3]) === 2.0.
       const functionName = JavaScript.provideFunction_('mathMedian', `
 function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(myList) {
-  var localList = myList.filter(function (x) {return typeof x === \'number\';});
+  var localList = myList.filter(function (x) {return typeof x === 'number';});
   if (!localList.length) return null;
   localList.sort(function(a, b) {return b - a;});
   if (localList.length % 2 === 0) {

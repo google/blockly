@@ -529,7 +529,7 @@ exports.domToWorkspace = domToWorkspace;
  * Decode an XML DOM and create blocks on the workspace. Position the new
  * blocks immediately below prior blocks, aligned by their starting edge.
  * @param {!Element} xml The XML DOM.
- * @param {!Workspace} workspace The workspace to add to.
+ * @param {!WorkspaceSvg} workspace The workspace to add to.
  * @return {!Array<string>} An array containing new block IDs.
  * @alias Blockly.Xml.appendDomToWorkspace
  */

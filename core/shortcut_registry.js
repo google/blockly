@@ -72,6 +72,14 @@ class ShortcutRegistry {
           'Shortcut with name "' + shortcut.name + '" already exists.');
     }
     this.registry_[shortcut.name] = shortcut;
+
+    const keyCodes = shortcut.keyCodes;
+    if (keyCodes && keyCodes.length > 0) {
+      for (let i = 0; i < keyCodes.length; i++) {
+        this.addKeyMapping(
+            keyCodes[i], shortcut.name, !!shortcut.allowCollision);
+      }
+    }
   }
 
   /**
@@ -98,7 +106,7 @@ class ShortcutRegistry {
 
   /**
    * Adds a mapping between a keycode and a keyboard shortcut.
-   * @param {string|KeyCodes} keyCode The key code for the keyboard
+   * @param {string|number|KeyCodes} keyCode The key code for the keyboard
    *     shortcut. If registering a key code with a modifier (ex: ctrl+c) use
    *     ShortcutRegistry.registry.createSerializedKey;
    * @param {string} shortcutName The name of the shortcut to execute when the
@@ -354,7 +362,9 @@ ShortcutRegistry.modifierKeys = {
  * !ShortcutRegistry.KeyboardShortcut):boolean)|undefined),
  *    name: string,
  *    preconditionFn: ((function(!Workspace):boolean)|undefined),
- *    metadata: (Object|undefined)
+ *    metadata: (Object|undefined),
+ *    keyCodes: (Array<string|number>|undefined),
+ *    allowCollision: (boolean|undefined)
  * }}
  */
 ShortcutRegistry.KeyboardShortcut;

@@ -56,9 +56,9 @@ const registerEscape = function() {
       workspace.hideChaff();
       return true;
     },
+    keyCodes: [KeyCodes.ESC],
   };
   ShortcutRegistry.registry.register(escapeAction);
-  ShortcutRegistry.registry.addKeyMapping(KeyCodes.ESC, escapeAction.name);
 };
 exports.registerEscape = registerEscape;
 
@@ -87,11 +87,9 @@ const registerDelete = function() {
       (/** @type {!BlockSvg} */ (common.getSelected())).checkAndDelete();
       return true;
     },
+    keyCodes: [KeyCodes.DELETE, KeyCodes.BACKSPACE],
   };
   ShortcutRegistry.registry.register(deleteShortcut);
-  ShortcutRegistry.registry.addKeyMapping(KeyCodes.DELETE, deleteShortcut.name);
-  ShortcutRegistry.registry.addKeyMapping(
-      KeyCodes.BACKSPACE, deleteShortcut.name);
 };
 exports.registerDelete = registerDelete;
 
@@ -100,6 +98,13 @@ exports.registerDelete = registerDelete;
  * @alias Blockly.ShortcutItems.registerCopy
  */
 const registerCopy = function() {
+  const ctrlC = ShortcutRegistry.registry.createSerializedKey(
+      KeyCodes.C, [KeyCodes.CTRL]);
+  const altC =
+      ShortcutRegistry.registry.createSerializedKey(KeyCodes.C, [KeyCodes.ALT]);
+  const metaC = ShortcutRegistry.registry.createSerializedKey(
+      KeyCodes.C, [KeyCodes.META]);
+
   /** @type {!ShortcutRegistry.KeyboardShortcut} */
   const copyShortcut = {
     name: names.COPY,
@@ -116,20 +121,9 @@ const registerCopy = function() {
       clipboard.copy(/** @type {!ICopyable} */ (common.getSelected()));
       return true;
     },
+    keyCodes: [ctrlC, altC, metaC],
   };
   ShortcutRegistry.registry.register(copyShortcut);
-
-  const ctrlC = ShortcutRegistry.registry.createSerializedKey(
-      KeyCodes.C, [KeyCodes.CTRL]);
-  ShortcutRegistry.registry.addKeyMapping(ctrlC, copyShortcut.name);
-
-  const altC =
-      ShortcutRegistry.registry.createSerializedKey(KeyCodes.C, [KeyCodes.ALT]);
-  ShortcutRegistry.registry.addKeyMapping(altC, copyShortcut.name);
-
-  const metaC = ShortcutRegistry.registry.createSerializedKey(
-      KeyCodes.C, [KeyCodes.META]);
-  ShortcutRegistry.registry.addKeyMapping(metaC, copyShortcut.name);
 };
 exports.registerCopy = registerCopy;
 
@@ -138,6 +132,13 @@ exports.registerCopy = registerCopy;
  * @alias Blockly.ShortcutItems.registerCut
  */
 const registerCut = function() {
+  const ctrlX = ShortcutRegistry.registry.createSerializedKey(
+      KeyCodes.X, [KeyCodes.CTRL]);
+  const altX =
+      ShortcutRegistry.registry.createSerializedKey(KeyCodes.X, [KeyCodes.ALT]);
+  const metaX = ShortcutRegistry.registry.createSerializedKey(
+      KeyCodes.X, [KeyCodes.META]);
+
   /** @type {!ShortcutRegistry.KeyboardShortcut} */
   const cutShortcut = {
     name: names.CUT,
@@ -157,21 +158,10 @@ const registerCut = function() {
       (/** @type {!BlockSvg} */ (selected)).checkAndDelete();
       return true;
     },
+    keyCodes: [ctrlX, altX, metaX],
   };
 
   ShortcutRegistry.registry.register(cutShortcut);
-
-  const ctrlX = ShortcutRegistry.registry.createSerializedKey(
-      KeyCodes.X, [KeyCodes.CTRL]);
-  ShortcutRegistry.registry.addKeyMapping(ctrlX, cutShortcut.name);
-
-  const altX =
-      ShortcutRegistry.registry.createSerializedKey(KeyCodes.X, [KeyCodes.ALT]);
-  ShortcutRegistry.registry.addKeyMapping(altX, cutShortcut.name);
-
-  const metaX = ShortcutRegistry.registry.createSerializedKey(
-      KeyCodes.X, [KeyCodes.META]);
-  ShortcutRegistry.registry.addKeyMapping(metaX, cutShortcut.name);
 };
 exports.registerCut = registerCut;
 
@@ -180,6 +170,13 @@ exports.registerCut = registerCut;
  * @alias Blockly.ShortcutItems.registerPaste
  */
 const registerPaste = function() {
+  const ctrlV = ShortcutRegistry.registry.createSerializedKey(
+      KeyCodes.V, [KeyCodes.CTRL]);
+  const altV =
+      ShortcutRegistry.registry.createSerializedKey(KeyCodes.V, [KeyCodes.ALT]);
+  const metaV = ShortcutRegistry.registry.createSerializedKey(
+      KeyCodes.V, [KeyCodes.META]);
+
   /** @type {!ShortcutRegistry.KeyboardShortcut} */
   const pasteShortcut = {
     name: names.PASTE,
@@ -189,21 +186,10 @@ const registerPaste = function() {
     callback: function() {
       return clipboard.paste();
     },
+    keyCodes: [ctrlV, altV, metaV],
   };
 
   ShortcutRegistry.registry.register(pasteShortcut);
-
-  const ctrlV = ShortcutRegistry.registry.createSerializedKey(
-      KeyCodes.V, [KeyCodes.CTRL]);
-  ShortcutRegistry.registry.addKeyMapping(ctrlV, pasteShortcut.name);
-
-  const altV =
-      ShortcutRegistry.registry.createSerializedKey(KeyCodes.V, [KeyCodes.ALT]);
-  ShortcutRegistry.registry.addKeyMapping(altV, pasteShortcut.name);
-
-  const metaV = ShortcutRegistry.registry.createSerializedKey(
-      KeyCodes.V, [KeyCodes.META]);
-  ShortcutRegistry.registry.addKeyMapping(metaV, pasteShortcut.name);
 };
 exports.registerPaste = registerPaste;
 
@@ -212,6 +198,13 @@ exports.registerPaste = registerPaste;
  * @alias Blockly.ShortcutItems.registerUndo
  */
 const registerUndo = function() {
+  const ctrlZ = ShortcutRegistry.registry.createSerializedKey(
+      KeyCodes.Z, [KeyCodes.CTRL]);
+  const altZ =
+      ShortcutRegistry.registry.createSerializedKey(KeyCodes.Z, [KeyCodes.ALT]);
+  const metaZ = ShortcutRegistry.registry.createSerializedKey(
+      KeyCodes.Z, [KeyCodes.META]);
+
   /** @type {!ShortcutRegistry.KeyboardShortcut} */
   const undoShortcut = {
     name: names.UNDO,
@@ -224,20 +217,9 @@ const registerUndo = function() {
       workspace.undo(false);
       return true;
     },
+    keyCodes: [ctrlZ, altZ, metaZ],
   };
   ShortcutRegistry.registry.register(undoShortcut);
-
-  const ctrlZ = ShortcutRegistry.registry.createSerializedKey(
-      KeyCodes.Z, [KeyCodes.CTRL]);
-  ShortcutRegistry.registry.addKeyMapping(ctrlZ, undoShortcut.name);
-
-  const altZ =
-      ShortcutRegistry.registry.createSerializedKey(KeyCodes.Z, [KeyCodes.ALT]);
-  ShortcutRegistry.registry.addKeyMapping(altZ, undoShortcut.name);
-
-  const metaZ = ShortcutRegistry.registry.createSerializedKey(
-      KeyCodes.Z, [KeyCodes.META]);
-  ShortcutRegistry.registry.addKeyMapping(metaZ, undoShortcut.name);
 };
 exports.registerUndo = registerUndo;
 
@@ -247,6 +229,16 @@ exports.registerUndo = registerUndo;
  * @alias Blockly.ShortcutItems.registerRedo
  */
 const registerRedo = function() {
+  const ctrlShiftZ = ShortcutRegistry.registry.createSerializedKey(
+      KeyCodes.Z, [KeyCodes.SHIFT, KeyCodes.CTRL]);
+  const altShiftZ = ShortcutRegistry.registry.createSerializedKey(
+      KeyCodes.Z, [KeyCodes.SHIFT, KeyCodes.ALT]);
+  const metaShiftZ = ShortcutRegistry.registry.createSerializedKey(
+      KeyCodes.Z, [KeyCodes.SHIFT, KeyCodes.META]);
+  // Ctrl-y is redo in Windows.  Command-y is never valid on Macs.
+  const ctrlY = ShortcutRegistry.registry.createSerializedKey(
+      KeyCodes.Y, [KeyCodes.CTRL]);
+
   /** @type {!ShortcutRegistry.KeyboardShortcut} */
   const redoShortcut = {
     name: names.REDO,
@@ -259,25 +251,9 @@ const registerRedo = function() {
       workspace.undo(true);
       return true;
     },
+    keyCodes: [ctrlShiftZ, altShiftZ, metaShiftZ, ctrlY],
   };
   ShortcutRegistry.registry.register(redoShortcut);
-
-  const ctrlShiftZ = ShortcutRegistry.registry.createSerializedKey(
-      KeyCodes.Z, [KeyCodes.SHIFT, KeyCodes.CTRL]);
-  ShortcutRegistry.registry.addKeyMapping(ctrlShiftZ, redoShortcut.name);
-
-  const altShiftZ = ShortcutRegistry.registry.createSerializedKey(
-      KeyCodes.Z, [KeyCodes.SHIFT, KeyCodes.ALT]);
-  ShortcutRegistry.registry.addKeyMapping(altShiftZ, redoShortcut.name);
-
-  const metaShiftZ = ShortcutRegistry.registry.createSerializedKey(
-      KeyCodes.Z, [KeyCodes.SHIFT, KeyCodes.META]);
-  ShortcutRegistry.registry.addKeyMapping(metaShiftZ, redoShortcut.name);
-
-  // Ctrl-y is redo in Windows.  Command-y is never valid on Macs.
-  const ctrlY = ShortcutRegistry.registry.createSerializedKey(
-      KeyCodes.Y, [KeyCodes.CTRL]);
-  ShortcutRegistry.registry.addKeyMapping(ctrlY, redoShortcut.name);
 };
 exports.registerRedo = registerRedo;
 

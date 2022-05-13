@@ -38,6 +38,8 @@ const {IBlockDragger} = goog.requireType('Blockly.IBlockDragger');
 const {IBubble} = goog.requireType('Blockly.IBubble');
 /* eslint-disable-next-line no-unused-vars */
 const {IFlyout} = goog.requireType('Blockly.IFlyout');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceCommentSvg} = goog.require('Blockly.WorkspaceCommentSvg');
 const {WorkspaceDragger} = goog.require('Blockly.WorkspaceDragger');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
@@ -332,7 +334,7 @@ class Gesture {
     if (!this.targetBlock_) {
       return false;
     }
-    if (!this.flyout_.isBlockCreatable_(this.targetBlock_)) {
+    if (!this.flyout_.isBlockCreatable(this.targetBlock_)) {
       return false;
     }
     if (!this.flyout_.isScrollable() ||
@@ -743,8 +745,10 @@ class Gesture {
    */
   doBubbleClick_() {
     // TODO (#1673): Consistent handling of single clicks.
-    this.startBubble_.setFocus && this.startBubble_.setFocus();
-    this.startBubble_.select && this.startBubble_.select();
+    if (this.startBubble_ instanceof WorkspaceCommentSvg) {
+      this.startBubble_.setFocus();
+      this.startBubble_.select();
+    }
   }
 
   /**

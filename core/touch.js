@@ -15,10 +15,8 @@
  */
 goog.module('Blockly.Touch');
 
-const utilsString = goog.require('Blockly.utils.string');
 /* eslint-disable-next-line no-unused-vars */
 const {Gesture} = goog.requireType('Blockly.Gesture');
-const {globalThis} = goog.require('Blockly.utils.global');
 
 
 /**
@@ -246,7 +244,7 @@ exports.checkTouchIdentifier = checkTouchIdentifier;
  * @alias Blockly.Touch.setClientFromTouch
  */
 const setClientFromTouch = function(e) {
-  if (utilsString.startsWith(e.type, 'touch') && e.changedTouches) {
+  if (e.type.startsWith('touch') && e.changedTouches) {
     // Map the touch event's properties to the event.
     const touchPoint = e.changedTouches[0];
     e.clientX = touchPoint.clientX;
@@ -263,9 +261,8 @@ exports.setClientFromTouch = setClientFromTouch;
  * @alias Blockly.Touch.isMouseOrTouchEvent
  */
 const isMouseOrTouchEvent = function(e) {
-  return utilsString.startsWith(e.type, 'touch') ||
-      utilsString.startsWith(e.type, 'mouse') ||
-      utilsString.startsWith(e.type, 'pointer');
+  return e.type.startsWith('touch') || e.type.startsWith('mouse') ||
+      e.type.startsWith('pointer');
 };
 exports.isMouseOrTouchEvent = isMouseOrTouchEvent;
 
@@ -276,8 +273,7 @@ exports.isMouseOrTouchEvent = isMouseOrTouchEvent;
  * @alias Blockly.Touch.isTouchEvent
  */
 const isTouchEvent = function(e) {
-  return utilsString.startsWith(e.type, 'touch') ||
-      utilsString.startsWith(e.type, 'pointer');
+  return e.type.startsWith('touch') || e.type.startsWith('pointer');
 };
 exports.isTouchEvent = isTouchEvent;
 

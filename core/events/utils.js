@@ -372,8 +372,8 @@ const filter = function(queueIn, forward) {
     if (!event.isNull()) {
       // Treat all UI events as the same type in hash table.
       const eventType = event.isUiEvent ? UI : event.type;
-      // TODO(#5927): Ceck whether `blockId` exists before accessing it.
-      const blockId = /** @type {*} */ (event).blockId;
+      // TODO(#5927): Check whether `blockId` exists before accessing it.
+      const blockId = /** @type {?} */ (event).blockId;
       const key = [eventType, blockId, event.workspaceId].join(' ');
 
       const lastEntry = hash[key];
@@ -525,7 +525,7 @@ exports.getDescendantIds = getDescendantIds;
  * @alias Blockly.Events.utils.fromJson
  */
 const fromJson = function(json, workspace) {
-  const eventClass = get(json.type);
+  const eventClass = get(json['type']);
   if (!eventClass) {
     throw Error('Unknown event type.');
   }

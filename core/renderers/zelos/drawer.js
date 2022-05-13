@@ -226,7 +226,8 @@ class Drawer extends BaseDrawer {
             .pathRightDown(input.height) +
         svgPaths.lineOnAxis('h', -width) +
         (/** @type {!DynamicShape} */ (input.shape)).pathUp(input.height) + 'z';
-    this.block_.pathObject.setOutlinePath(inputName, outlinePath);
+    const pathObject = /** @type {!PathObject} */ (this.block_.pathObject);
+    pathObject.setOutlinePath(inputName, outlinePath);
   }
 
   /**

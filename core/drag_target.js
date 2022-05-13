@@ -34,6 +34,19 @@ const {Rect} = goog.requireType('Blockly.utils.Rect');
  */
 class DragTarget {
   /**
+   * Constructor for DragTarget. It exists to add the id property and should not
+   * be called directly, only by a subclass.
+   */
+  constructor() {
+    /**
+     * The unique id for this component that is used to register with the
+     * ComponentManager.
+     * @type {string}
+     */
+    this.id;
+  }
+
+  /**
    * Handles when a cursor with a block or bubble enters this drag target.
    * @param {!IDraggable} _dragElement The block or bubble currently being
    *   dragged.

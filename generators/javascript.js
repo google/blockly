@@ -18,7 +18,6 @@ const objectUtils = goog.require('Blockly.utils.object');
 const stringUtils = goog.require('Blockly.utils.string');
 const {Block} = goog.requireType('Blockly.Block');
 const {Generator} = goog.require('Blockly.Generator');
-const {globalThis} = goog.require('Blockly.utils.global');
 const {inputTypes} = goog.require('Blockly.inputTypes');
 const {Names, NameType} = goog.require('Blockly.Names');
 const {Workspace} = goog.requireType('Blockly.Workspace');

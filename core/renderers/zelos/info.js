@@ -34,6 +34,8 @@ const {InputConnection} = goog.require('Blockly.blockRendering.InputConnection')
 const {InRowSpacer} = goog.require('Blockly.blockRendering.InRowSpacer');
 /* eslint-disable-next-line no-unused-vars */
 const {Measurable} = goog.requireType('Blockly.blockRendering.Measurable');
+/* eslint-disable-next-line no-unused-vars */
+const {PathObject} = goog.requireType('Blockly.zelos.PathObject');
 const {RenderInfo: BaseRenderInfo} = goog.require('Blockly.blockRendering.RenderInfo');
 /* eslint-disable-next-line no-unused-vars */
 const {Renderer} = goog.requireType('Blockly.zelos.Renderer');
@@ -528,8 +530,12 @@ class RenderInfo extends BaseRenderInfo {
     if (Types.isInlineInput(elem) && elem instanceof InputConnection) {
       const connectedBlock = elem.connectedBlock;
       const innerShape = connectedBlock ?
-          connectedBlock.pathObject.outputShapeType :
+          /** @type {!PathObject} */ (connectedBlock.pathObject)
+              .outputShapeType :
           elem.shape.type;
+      if (innerShape == null) {
+        return 0;
+      }
       // Special case for value to stack / value to statement blocks.
       if (connectedBlock && connectedBlock.outputConnection &&
           (connectedBlock.statementInputCount ||

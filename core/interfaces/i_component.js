@@ -32,6 +32,6 @@ const IComponent = function() {};
  * ComponentManager.
  * @type {string}
  */
-IComponent.id;
+IComponent.prototype.id;
 
 exports.IComponent = IComponent;

@@ -17,8 +17,7 @@ goog.module('Blockly.ShortcutItems');
 
 const clipboard = goog.require('Blockly.clipboard');
 const common = goog.require('Blockly.common');
-/* eslint-disable-next-line no-unused-vars */
-const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {BlockSvg} = goog.require('Blockly.BlockSvg');
 const {Gesture} = goog.require('Blockly.Gesture');
 /* eslint-disable-next-line no-unused-vars */
 const {ICopyable} = goog.requireType('Blockly.ICopyable');
@@ -146,8 +145,8 @@ const registerCut = function() {
     preconditionFn: function(workspace) {
       const selected = common.getSelected();
       return !workspace.options.readOnly && !Gesture.inProgress() && selected &&
-          selected.isDeletable() && selected.isMovable() &&
-          !selected.workspace.isFlyout;
+          selected instanceof BlockSvg && selected.isDeletable() &&
+          selected.isMovable() && !selected.workspace.isFlyout;
     },
     callback: function() {
       const selected = common.getSelected();

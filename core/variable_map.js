@@ -19,7 +19,6 @@ const arrayUtils = goog.require('Blockly.utils.array');
 const dialog = goog.require('Blockly.dialog');
 const eventUtils = goog.require('Blockly.Events.utils');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
-const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 const {Msg} = goog.require('Blockly.Msg');
@@ -343,9 +342,9 @@ class VariableMap {
    */
   getVariableTypes(ws) {
     const variableMap = {};
-    object.mixin(variableMap, this.variableMap_);
+    Object.assign(variableMap, this.variableMap_);
     if (ws && ws.getPotentialVariableMap()) {
-      object.mixin(variableMap, ws.getPotentialVariableMap().variableMap_);
+      Object.assign(variableMap, ws.getPotentialVariableMap().variableMap_);
     }
     const types = Object.keys(variableMap);
     let hasEmpty = false;

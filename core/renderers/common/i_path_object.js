@@ -21,6 +21,8 @@ goog.module('Blockly.blockRendering.IPathObject');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
+const {Connection} = goog.requireType('Blockly.Connection');
+/* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 /* eslint-disable-next-line no-unused-vars */
 const {Theme} = goog.requireType('Blockly.Theme');
@@ -158,5 +160,15 @@ IPathObject.prototype.updateMovable;
  * @package
  */
 IPathObject.prototype.updateReplacementFade;
+
+
+/**
+ * Add or remove styling that shows that if the dragging block is dropped,
+ * this block will be connected to the input.
+ * @param {Connection} conn The connection on the input to highlight.
+ * @param {boolean} enable True if styling should be added.
+ * @package
+ */
+IPathObject.prototype.updateShapeForInputHighlight;
 
 exports.IPathObject = IPathObject;

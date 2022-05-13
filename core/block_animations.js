@@ -59,9 +59,8 @@ const disposeUiEffect = function(block) {
   const clone = svgGroup.cloneNode(true);
   clone.setAttribute('transform', 'translate(' + xy.x + ',' + xy.y + ')');
   workspace.getParentSvg().appendChild(clone);
-  const bBox = clone.getBBox();
   const cloneRect =
-      {'x': xy.x, 'y': xy.y, 'width': bBox.width, 'height': bBox.height};
+      {'x': xy.x, 'y': xy.y, 'width': block.width, 'height': block.height};
   // Start the animation.
   disposeUiStep(clone, cloneRect, workspace.RTL, new Date, workspace.scale);
 };

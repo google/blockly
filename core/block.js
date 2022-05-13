@@ -23,7 +23,6 @@ const constants = goog.require('Blockly.constants');
 const eventUtils = goog.require('Blockly.Events.utils');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
-const object = goog.require('Blockly.utils.object');
 const parsing = goog.require('Blockly.utils.parsing');
 /* eslint-disable-next-line no-unused-vars */
 const {Abstract} = goog.requireType('Blockly.Events.Abstract');
@@ -179,6 +178,20 @@ class Block {
      */
     this.getDeveloperVariables = undefined;
 
+    /**
+     * An optional function that reconfigures the block based on the contents of
+     * the mutator dialog.
+     * @type {undefined|?function(!Block):void}
+     */
+    this.compose = undefined;
+
+    /**
+     * An optional function that populates the mutator's dialog with
+     * this block's components.
+     * @type {undefined|?function(!Workspace):!Block}
+     */
+    this.decompose = undefined;
+
     /** @type {string} */
     this.id = (opt_id && !workspace.getBlockById(opt_id)) ?
         opt_id :
@@ -328,7 +341,7 @@ class Block {
       if (!prototype || typeof prototype !== 'object') {
         throw TypeError('Invalid block definition for type: ' + prototypeName);
       }
-      object.mixin(this, prototype);
+      Object.assign(this, prototype);
     }
 
     workspace.addTopBlock(this);
@@ -1691,7 +1704,7 @@ class Block {
             JSON.stringify(overwrites));
       }
     }
-    object.mixin(this, mixinObj);
+    Object.assign(this, mixinObj);
   }
 
   /**

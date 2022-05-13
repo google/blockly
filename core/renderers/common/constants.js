@@ -17,7 +17,6 @@ goog.module('Blockly.blockRendering.ConstantProvider');
 
 const colour = goog.require('Blockly.utils.colour');
 const dom = goog.require('Blockly.utils.dom');
-const object = goog.require('Blockly.utils.object');
 const svgPaths = goog.require('Blockly.utils.svgPaths');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const parsing = goog.require('Blockly.utils.parsing');
@@ -823,7 +822,7 @@ class ConstantProvider {
     // Make a new object with all of the same properties.
     const valid = /** @type {!Theme.BlockStyle} */ ({});
     if (blockStyle) {
-      object.mixin(valid, blockStyle);
+      Object.assign(valid, blockStyle);
     }
     // Validate required properties.
     const parsedColour =

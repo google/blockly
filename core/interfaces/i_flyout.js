@@ -198,4 +198,19 @@ IFlyout.prototype.position;
  */
 IFlyout.prototype.isDragTowardWorkspace;
 
+/**
+ * Does this flyout allow you to create a new instance of the given block?
+ * Used for deciding if a block can be "dragged out of" the flyout.
+ * @param {!BlockSvg} block The block to copy from the flyout.
+ * @return {boolean} True if you can create a new instance of the block, false
+ *    otherwise.
+ * @package
+ */
+IFlyout.prototype.isBlockCreatable;
+
+/**
+ * Scroll the flyout to the beginning of its contents.
+ */
+IFlyout.prototype.scrollToStart;
+
 exports.IFlyout = IFlyout;

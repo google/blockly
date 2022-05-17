@@ -1156,13 +1156,13 @@ Blocks['procedures_ifreturn'] = {
     } while (block);
     if (legal) {
       // If needed, toggle whether this block has a return value.
-      if (block.type === 'procedures_defnoreturn' && this.hasReturnValue_) {
+      if ((block.type === 'procedures_defnoreturn' || block.type === 'procedures_with_argument_defnoreturn') && this.hasReturnValue_) {
         this.removeInput('VALUE');
         this.appendDummyInput('VALUE').appendField(
             Msg['PROCEDURES_DEFRETURN_RETURN']);
         this.hasReturnValue_ = false;
       } else if (
-          block.type === 'procedures_defreturn' && !this.hasReturnValue_) {
+          (block.type === 'procedures_defreturn' || block.type === 'procedures_with_argument_defreturn') && !this.hasReturnValue_) {
         this.removeInput('VALUE');
         this.appendValueInput('VALUE').appendField(
             Msg['PROCEDURES_DEFRETURN_RETURN']);
@@ -1184,5 +1184,5 @@ Blocks['procedures_ifreturn'] = {
    * To add a new function type add this to your code:
    * Blocks['procedures_ifreturn'].FUNCTION_TYPES.push('custom_func');
    */
-  FUNCTION_TYPES: ['procedures_defnoreturn', 'procedures_defreturn'],
+  FUNCTION_TYPES: ['procedures_defnoreturn', 'procedures_defreturn', 'procedures_with_argument_defnoreturn', 'procedures_with_argument_defreturn'],
 };

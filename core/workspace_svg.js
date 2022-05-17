@@ -1562,8 +1562,9 @@ WorkspaceSvg.prototype.highlightBlock = function(id, opt_state) {
  * Pastes the provided block or workspace comment onto the workspace.
  * Does not check whether there is remaining capacity for the object, that
  * should be done before calling this method.
- * @param {!Object|!Element|!DocumentFragment} state The representation of the
- *     thing to paste.
+ * @param {!Object|!Element|!DocumentFragment} state The representation of the thing to paste.
+ * @param {?Object} options The options for mass operation.
+ * @return {Element} Block.
  */
 WorkspaceSvg.prototype.paste = function(state, options = {}) {
   if (!this.rendered || !state['type'] && !state.tagName) {
@@ -1593,8 +1594,9 @@ WorkspaceSvg.prototype.paste = function(state, options = {}) {
 /**
  * Paste the provided block onto the workspace.
  * @param {?Element} xmlBlock XML block element.
- * @param {?blocks.State} jsonBlock JSON block
- *     representation.
+ * @param {?blocks.State} jsonBlock JSON block representation.
+ * @param {?Object} options The options for mass operation.
+ * @return {Element} Block.
  * @private
  */
 WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock, jsonBlock, {dontSelectNewBLock} = {}) {
@@ -1603,8 +1605,10 @@ WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock, jsonBlock, {dontSelectNe
   let block;
   try {
     const metrics = this.getMetrics();
-    let blockX = metrics.viewWidth / 2 + metrics.viewLeft;
-    let blockY = metrics.viewHeight / 2 + metrics.viewTop;
+    const scale = this.getScale();
+    let blockX = (metrics.viewWidth / 2 + metrics.viewLeft) / scale;
+    let blockY = (metrics.viewHeight / 2 + metrics.viewTop) / scale;
+
 
     if (xmlBlock) {
       block = Xml.domToBlock(xmlBlock, this);

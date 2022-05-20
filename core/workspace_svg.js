@@ -2388,12 +2388,16 @@ WorkspaceSvg.prototype.setScale = function(newScale) {
   }
   this.scale = newScale;
 
+  if (this.isFlyout && !this.isVisible()) {
+    return;
+  }
+  
   // Record active module scale
   const activeModule = this.getModuleManager().getActiveModule();
   if (activeModule) {
     activeModule.scale = newScale;
   }
-
+  
   this.hideChaff(false);
   // Get the flyout, if any, whether our own or owned by the toolbox.
   const flyout = this.getFlyout(false);

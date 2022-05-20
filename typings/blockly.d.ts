@@ -3648,6 +3648,7 @@ declare module "options" {
             scaleSpeed: number;
             startScale: number;
             wheel: boolean;
+            flyoutScale: number;
         };
     }
     import * as toolbox from "utils/toolbox";

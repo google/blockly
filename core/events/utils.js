@@ -310,6 +310,14 @@ const FLYOUT_HIDE = 'flyout_hide';
 exports.FLYOUT_HIDE = FLYOUT_HIDE;
 
 /**
+ * Name of event that fired after zoom flyout
+ * @alias Blockly.Events.utils.FLYOUT_ZOOM
+ */
+const FLYOUT_ZOOM = 'flyout_zoom';
+exports.FLYOUT_ZOOM = FLYOUT_ZOOM;
+
+
+/**
  * Name of event that create new module.
  * @alias Blockly.Events.utils.MODULE_CREATE
  */

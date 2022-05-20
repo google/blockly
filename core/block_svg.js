@@ -804,6 +804,7 @@ BlockSvg.prototype.onMouseDown_ = function(e) {
 
   if (this.isInFrontOfWorkspace) {
     this.previousParent.insertBefore(this.getSvgRoot(), this.previousNextSibling);
+    this.getSvgRoot().style.transform = '';
     this.getSvgRoot().setAttribute('transform', this.previousSvgRootTransform);
     this.tempRootDiv.remove();
     this.isInFrontOfWorkspace = false;
@@ -1420,7 +1421,7 @@ BlockSvg.prototype.placeToFront = function() {
     flyoutWidth = parseInt(flyoutWidth.slice(0, flyoutWidth.length - 2)); // '100px' -> 100
     if (!flyoutWidth) return;
 
-    const blockWidth = this.svgGroup_.getBBox().width;
+    const blockWidth = this.svgGroup_.getBoundingClientRect().width;
 
     if (blockWidth < flyoutWidth) return;
 
@@ -1429,12 +1430,10 @@ BlockSvg.prototype.placeToFront = function() {
     const workspaceClientRect = this.workspace.getInjectionDiv().getBoundingClientRect();
 
     this.tempRootDiv = document.createElement('div');
-    this.tempRootDiv.style.zIndex = '31'; // > flyout scrollbar z-index == 30
-    this.tempRootDiv.style.position = 'absolute';
+    this.tempRootDiv.classList.add('blocklyTempBlockRoot');
     this.tempRootDiv.style.top = `${blockClientRect.top - flyoutClientRect.top}px`;
     this.tempRootDiv.style.left = `${blockClientRect.left - workspaceClientRect.left}px`;
-    this.tempRootDiv.style.background = '#ccc';
-    this.tempRootDiv.style.boxShadow = '0 0 5px #ccc';
+    
 
     const tempSVGRoot = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     tempSVGRoot.setAttribute('width', `${blockClientRect.width}px`);
@@ -1443,6 +1442,7 @@ BlockSvg.prototype.placeToFront = function() {
 
     this.previousSvgRootTransform = this.getSvgRoot().getAttribute('transform');
     this.getSvgRoot().removeAttribute('transform');
+    this.getSvgRoot().style.transform = `scale(${this.workspace.scale})`;
 
     this.previousParent = this.getSvgRoot().parentElement;
     this.previousNextSibling = this.getSvgRoot().nextSibling;
@@ -1450,6 +1450,7 @@ BlockSvg.prototype.placeToFront = function() {
 
     this.tempRootDiv.onmouseleave = () => {
       this.previousParent.insertBefore(this.getSvgRoot(), this.previousNextSibling);
+      this.getSvgRoot().style.transform = '';
       this.getSvgRoot().setAttribute('transform', this.previousSvgRootTransform);
 
       this.tempRootDiv.remove();

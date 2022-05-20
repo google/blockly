@@ -473,6 +473,26 @@ let content = (`
     box-shadow: -2px 0 5px #eee;
   }
 
+  .blocklyFlyoutZoomControlContainer {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    user-select: none;
+    height: 28px;
+    padding: 4px;
+    background-color: #eee;
+    z-index: 21;
+  }
+
+  .blocklyFlyoutZoomControl {
+    fill: lightgrey;
+  }
+
+  .blocklyFlyoutZoomControl:hover {
+    fill: grey;
+    cursor: pointer
+  }
+
   .blocklyScrollbarHorizontal,
   .blocklyScrollbarVertical {
     position: absolute;
@@ -622,6 +642,15 @@ let content = (`
   .blocklyMenuItemRtl .blocklyMenuItemCheckbox {
     float: right;
     margin-right: -24px;
+  }
+
+  .blocklyTempBlockRoot {
+    position: absolute;
+    background: #eee;
+    box-shadow: 0 0 5px #ccc;
+    transform-origin: 0 0;
+    user-select: none;
+    z-index: 31;
   }
 `);
 exports.content = content;

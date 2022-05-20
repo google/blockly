@@ -225,6 +225,13 @@ Flyout.prototype.CORNER_RADIUS = 0;
  */
 Flyout.prototype.MARGIN = 8;
 
+/**
+ * Margin before first block or button in flyout
+ * @type {number}
+ * @const
+ */
+ Flyout.prototype.START_MARGIN = 52;
+
 // TODO: Move GAP_X and GAP_Y to their appropriate files.
 
 /**
@@ -393,6 +400,8 @@ Flyout.prototype.dispose = function() {
     this.workspace_.dispose();
     this.workspace_ = null;
   }
+  
+  this.removeZoomControls_();
 
   if (this.svgGroup_) {
     dom.removeNode(this.svgGroup_);
@@ -592,6 +601,113 @@ Flyout.prototype.removeFlyoutEndShadow_ = function() {
   }
 };
 
+Flyout.prototype.createZoomControls_ = function() {
+  if (this.flyoutTopPanel_) return;
+
+  const flyoutSVG = this.workspace_.getParentSvg();
+  const flyoutParentEl = flyoutSVG.parentElement;
+
+  const flyoutClientRect = flyoutSVG.getBoundingClientRect();
+  const flyoutParentClientRect = flyoutParentEl.getBoundingClientRect();
+
+  const top = flyoutClientRect.top - flyoutParentClientRect.top;
+  const left = flyoutClientRect.left - flyoutParentClientRect.left;
+
+  this.flyoutTopPanel_ = document.createElement('div');
+  this.flyoutTopPanel_.classList.add('blocklyFlyoutZoomControlContainer');
+  this.flyoutTopPanel_.style.top = `${top}px`;
+  this.flyoutTopPanel_.style.left = `${left}px`;
+  this.flyoutTopPanel_.style.width = `${this.width_}px`;
+
+  // insert close button after the flyout svg
+  flyoutParentEl.insertBefore(this.flyoutTopPanel_, flyoutSVG.nextSibling);
+
+  this.zoomButtonsGroup_ = dom.createSvgElement(Svg.SVG, {
+    'width': '42px',
+  }, this.flyoutTopPanel_);
+
+  this.zoomInButtonSvg_ = dom.createSvgElement(Svg.SVG, {
+    'class': 'blocklyFlyoutZoomControl',
+    'viewBox': "0 0 512 512",
+    'width': '18px',
+    'x': '24',
+  }, this.zoomButtonsGroup_);
+
+  dom.createSvgElement(
+    Svg.PATH, {
+      'd': 'M500.3 443.7l-119.7-119.7c27.22-40.41 40.65-90.9 33.46-144.7c-12.23-91.55-87.28-166-178.9-177.6c-136.2-17.24-250.7 97.28-233.4 233.4c11.6 91.64 86.07 166.7 177.6 178.9c53.81 7.191 104.3-6.235 144.7-33.46l119.7 119.7c15.62 15.62 40.95 15.62 56.57 .0003C515.9 484.7 515.9 459.3 500.3 443.7zM288 232H231.1V288c0 13.26-10.74 24-23.1 24C194.7 312 184 301.3 184 288V232H127.1C114.7 232 104 221.3 104 208s10.74-24 23.1-24H184V128c0-13.26 10.74-24 23.1-24S231.1 114.7 231.1 128v56h56C301.3 184 312 194.7 312 208S301.3 232 288 232z',
+    }, this.zoomInButtonSvg_
+  );
+
+  dom.createSvgElement(
+    Svg.RECT, {
+      'width': '512',
+      'height': '512',
+      'fill': 'transparent',
+    }, this.zoomInButtonSvg_
+  );
+
+  this.zoomOutButtonSvg_ = dom.createSvgElement(Svg.SVG, {
+    'class': 'blocklyFlyoutZoomControl',
+    'viewBox': "0 0 512 512",
+    'width': '18px',
+  }, this.zoomButtonsGroup_);
+
+  dom.createSvgElement(
+    Svg.PATH, {
+      'd': 'M500.3 443.7l-119.7-119.7c27.22-40.41 40.65-90.9 33.46-144.7c-12.23-91.55-87.28-166-178.9-177.6c-136.2-17.24-250.7 97.28-233.4 233.4c11.6 91.64 86.07 166.7 177.6 178.9c53.81 7.191 104.3-6.235 144.7-33.46l119.7 119.7c15.62 15.62 40.95 15.62 56.57 .0003C515.9 484.7 515.9 459.3 500.3 443.7zM288 232H127.1C114.7 232 104 221.3 104 208s10.74-24 23.1-24h160C301.3 184 312 194.7 312 208S301.3 232 288 232z',
+    }, this.zoomOutButtonSvg_
+  );
+
+  dom.createSvgElement(
+    Svg.RECT, {
+      'width': '512',
+      'height': '512',
+      'fill': 'transparent',
+    }, this.zoomOutButtonSvg_
+  );
+
+  this.zoomInButtonSvg_.addEventListener('click', this.zoomIn_.bind(this));
+  this.zoomOutButtonSvg_.addEventListener('click', this.zoomOut_.bind(this));
+  this.zoomInButtonSvg_.addEventListener('dblclick', (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+  });
+  this.zoomOutButtonSvg_.addEventListener('dblclick', (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+  });
+};
+
+Flyout.prototype.zoomIn_ = function(e) {
+  e.stopPropagation();
+  e.preventDefault();
+  const scale = this.workspace_.scale + 0.1;
+
+  this.workspace_.setScale(scale);
+  this.position();
+  eventUtils.fire(new (eventUtils.get(eventUtils.FLYOUT_ZOOM))(this.getWorkspace().id, scale));
+};
+
+Flyout.prototype.zoomOut_ = function(e) {
+  e.stopPropagation();
+  e.preventDefault();
+  const scale = this.workspace_.scale - 0.1;
+
+  this.workspace_.setScale(scale);
+  this.position();
+  eventUtils.fire(new (eventUtils.get(eventUtils.FLYOUT_ZOOM))(this.getWorkspace().id, scale));
+};
+
+Flyout.prototype.removeZoomControls_ = function() {
+  if (this.flyoutTopPanel_) {
+    this.zoomInButtonSvg_.removeEventListener('click', this.zoomIn_);
+    this.zoomOutButtonSvg_.removeEventListener('click', this.zoomOut_);
+    this.flyoutTopPanel_.remove();
+    this.flyoutTopPanel_ = null;
+  }
+};
+
 
 /**
  * Update the view based on coordinates calculated in position().
@@ -619,6 +735,7 @@ Flyout.prototype.positionAt_ = function(width, height, x, y) {
   if (!this.workspace_.isVisible_) {
     this.createCloseButton_();
     this.createFlyoutEndShadow_();
+    this.createZoomControls_();
   }
 
   // Update the scrollbar (if one exists).
@@ -650,6 +767,7 @@ Flyout.prototype.hide = function(isButton = false) {
 
   this.removeCloseButton_();
   this.removeFlyoutEndShadow_();
+  this.removeZoomControls_();
 
   eventUtils.fire(new (eventUtils.get(eventUtils.FLYOUT_HIDE))(this.getWorkspace().id, isButton));
   // Delete all the event listeners.
@@ -1006,17 +1124,18 @@ Flyout.prototype.addBlockListeners_ = function(root, block, rect) {
   this.listeners_.push(browserEvents.conditionalBind(
       rect, 'mousedown', null, this.blockMouseDown_(block)));
   this.listeners_.push(
-      browserEvents.bind(root, 'mouseenter', this, () => this.blockMouseEnter_(block)));
+      browserEvents.bind(root, 'mouseenter', this, (e) => this.blockMouseEnter_(e, block)));
   this.listeners_.push(
       browserEvents.bind(root, 'mouseleave', this, () => this.blockMouseLeave_(block)));
   this.listeners_.push(
-      browserEvents.bind(rect, 'mouseenter', this, () => this.blockMouseEnter_(block)));
+      browserEvents.bind(rect, 'mouseenter', this, (e) => this.blockMouseEnter_(e, block)));
   this.listeners_.push(
       browserEvents.bind(rect, 'mouseleave', this, () => this.blockMouseLeave_(block)));
 };
 
-Flyout.prototype.blockMouseEnter_ = function(block) {
+Flyout.prototype.blockMouseEnter_ = function(e, block) {
   if (this.disableBlocksMouseEvents) return;
+  if (e.buttons) return;
 
   block.addSelect();
 };

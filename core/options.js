@@ -318,41 +318,55 @@ Options.parseMoveOptions_ = function(options, hasCategories) {
 Options.parseZoomOptions_ = function(options) {
   const zoom = options['zoom'] || {};
   const zoomOptions = {};
+
   if (zoom['controls'] === undefined) {
     zoomOptions.controls = false;
   } else {
     zoomOptions.controls = !!zoom['controls'];
   }
+
   if (zoom['wheel'] === undefined) {
     zoomOptions.wheel = false;
   } else {
     zoomOptions.wheel = !!zoom['wheel'];
   }
+
   if (zoom['startScale'] === undefined) {
     zoomOptions.startScale = 1;
   } else {
     zoomOptions.startScale = Number(zoom['startScale']);
   }
+
   if (zoom['maxScale'] === undefined) {
-    zoomOptions.maxScale = 3;
+    zoomOptions.maxScale = 2;
   } else {
     zoomOptions.maxScale = Number(zoom['maxScale']);
   }
+
   if (zoom['minScale'] === undefined) {
-    zoomOptions.minScale = 0.3;
+    zoomOptions.minScale = 0.5;
   } else {
     zoomOptions.minScale = Number(zoom['minScale']);
   }
+
   if (zoom['scaleSpeed'] === undefined) {
     zoomOptions.scaleSpeed = 1.2;
   } else {
     zoomOptions.scaleSpeed = Number(zoom['scaleSpeed']);
   }
+
   if (zoom['pinch'] === undefined) {
     zoomOptions.pinch = zoomOptions.wheel || zoomOptions.controls;
   } else {
     zoomOptions.pinch = !!zoom['pinch'];
   }
+
+  if (zoom['flyoutScale'] === undefined) {
+    zoomOptions.flyoutScale = 1;
+  } else {
+    zoomOptions.flyoutScale = Number(zoom['flyoutScale']);
+  }
+
   return zoomOptions;
 };
 

@@ -441,6 +441,9 @@ const loadAttributes = function(block, state) {
 /**
  * Applies any extra state information available on the state object to the
  * block.
+ * For json serialised blocks with a loadExtraState method, if the extraState
+ * is an xml mutation (not an object), domToMutation will be called instead for
+ * backward compatibility.
  * @param {!Block} block The block to set the extra state of.
  * @param {!State} state The state object to reference.
  */
@@ -448,7 +451,7 @@ const loadExtraState = function(block, state) {
   if (!state['extraState']) {
     return;
   }
-  if (block.loadExtraState) {
+  if (block.loadExtraState && typeof state['extraState'] === 'object') {
     block.loadExtraState(state['extraState']);
   } else {
     block.domToMutation(Xml.textToDom(state['extraState']));

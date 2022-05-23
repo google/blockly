@@ -2,9 +2,12 @@
 	"@metadata": {
 		"authors": [
 			"Otogi",
+			"StarrySky",
 			"Გიო ოქრო"
 		]
 	},
+	"TODAY": "დღეს",
+	"DUPLICATE_BLOCK": "დუბლიკატი",
 	"ENABLE_BLOCK": "ბლოკის ჩართვა",
 	"MATH_ONLIST_OPERATOR_SUM": "სიის ჯამი",
 	"DIALOG_OK": "კარგი"

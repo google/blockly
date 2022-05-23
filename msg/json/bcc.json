@@ -2,10 +2,13 @@
 	"@metadata": {
 		"authors": [
 			"Baloch Afghanistan",
+			"StarrySky",
 			"Sultanselim baloch"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "مورد",
+	"UNNAMED_KEY": "بدون نام",
+	"TODAY": "مرۏچی",
 	"DUPLICATE_BLOCK": "تکراری",
 	"ADD_COMMENT": "افزودن نظر",
 	"REMOVE_COMMENT": "حذف نظر",

@@ -1,17 +1,13 @@
 /**
  * @license
- * Copyright 2020 Google LLC
+ * Copyright 2022 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
 goog.module('Blockly.test.lists');
 
-const {runSerializationTestSuite} = goog.require(
-  'Blockly.test.helpers.serialization'
-);
-const {sharedTestSetup, sharedTestTeardown} = goog.require(
-  'Blockly.test.helpers.setupTeardown'
-);
+const {runSerializationTestSuite} = goog.require('Blockly.test.helpers.serialization');
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
 const {defineStatementBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
 

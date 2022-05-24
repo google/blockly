@@ -451,7 +451,7 @@ const loadExtraState = function(block, state) {
   if (!state['extraState']) {
     return;
   }
-  if (block.loadExtraState && typeof state['extraState'] === 'object') {
+  if (block.loadExtraState) {
     block.loadExtraState(state['extraState']);
   } else {
     block.domToMutation(Xml.textToDom(state['extraState']));

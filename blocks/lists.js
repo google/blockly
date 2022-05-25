@@ -13,6 +13,7 @@
 goog.module('Blockly.libraryBlocks.lists');
 
 const xmlUtils = goog.require('Blockly.utils.xml');
+const Xml = goog.require('Blockly.Xml');
 const {Align} = goog.require('Blockly.Input');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
@@ -452,10 +453,34 @@ blocks['lists_getIndex'] = {
     this.updateAt_(isAt);
   },
 
-  // This block does not need JSO serialization hooks (saveExtraState and
-  // loadExtraState) because the state of this object is already encoded in the
-  // dropdown values.
-  // XML hooks are kept for backwards compatibility.
+  /**
+   * Returns the state of this block as a JSON serializable object.
+   * Returns null for efficiency if no state is needed (not a statement)
+   * @return {?{isStatement: boolean}} The state of this block, ie whether it's
+   *     a statement.
+   */
+  saveExtraState: function() {
+    if (!this.outputConnection) {
+      return {
+        'isStatement': true,
+      };
+    }
+    return null;
+  },
+
+  /**
+   * Applies the given state to this block.
+   * @param {*} state The state to apply to this block, ie whether it's a
+   *     statement.
+   */
+  loadExtraState: function(state) {
+    if (state['isStatement']) {
+      this.updateStatement_(true);
+    } else if (typeof state === 'string') {
+      // backward compatible for json serialised mutations
+      this.domToMutation(Xml.textToDom(state));
+    }
+  },
 
   /**
    * Switch between a value block and a statement block.

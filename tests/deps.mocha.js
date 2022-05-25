@@ -4,6 +4,10 @@ goog.addDependency('../../tests/mocha/block_change_event_test.js', ['Blockly.tes
 goog.addDependency('../../tests/mocha/block_create_event_test.js', ['Blockly.test.blockCreateEvent'], ['Blockly.Events.utils', 'Blockly.test.helpers.events', 'Blockly.test.helpers.setupTeardown'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../tests/mocha/block_json_test.js', ['Blockly.test.blockJson'], ['Blockly.Input'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../tests/mocha/block_test.js', ['Blockly.test.blocks'], ['Blockly.ConnectionType', 'Blockly.Events.utils', 'Blockly.blocks', 'Blockly.test.helpers.blockDefinitions', 'Blockly.test.helpers.setupTeardown', 'Blockly.test.helpers.warnings'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('../../tests/mocha/blocks/lists_test.js', ['Blockly.test.lists'], ['Blockly.ConnectionType', 'Blockly.test.helpers.blockDefinitions', 'Blockly.test.helpers.serialization', 'Blockly.test.helpers.setupTeardown'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('../../tests/mocha/blocks/logic_ternary_test.js', ['Blockly.test.logicTernary'], ['Blockly.Events.utils', 'Blockly.test.helpers.serialization', 'Blockly.test.helpers.setupTeardown'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('../../tests/mocha/blocks/procedures_test.js', ['Blockly.test.procedures'], ['Blockly', 'Blockly.Msg', 'Blockly.test.helpers.procedures', 'Blockly.test.helpers.serialization', 'Blockly.test.helpers.setupTeardown'], {'lang': 'es6', 'module': 'goog'});
+goog.addDependency('../../tests/mocha/blocks/variables_test.js', ['Blockly.test.variables'], ['Blockly.test.helpers.setupTeardown'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../tests/mocha/comment_deserialization_test.js', ['Blockly.test.commentDeserialization'], ['Blockly.test.helpers.setupTeardown', 'Blockly.test.helpers.userInput'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../tests/mocha/comment_test.js', ['Blockly.test.comments'], ['Blockly.Events.utils', 'Blockly.test.helpers.events', 'Blockly.test.helpers.setupTeardown'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../tests/mocha/connection_checker_test.js', ['Blockly.test.connectionChecker'], ['Blockly.ConnectionType', 'Blockly.test.helpers.setupTeardown'], {'lang': 'es6', 'module': 'goog'});
@@ -36,12 +40,9 @@ goog.addDependency('../../tests/mocha/jso_deserialization_test.js', ['Blockly.te
 goog.addDependency('../../tests/mocha/jso_serialization_test.js', ['Blockly.test.jsoSerialization'], ['Blockly.test.helpers.blockDefinitions', 'Blockly.test.helpers.setupTeardown'], {'lang': 'es8', 'module': 'goog'});
 goog.addDependency('../../tests/mocha/json_test.js', ['Blockly.test.json'], ['Blockly.test.helpers.setupTeardown', 'Blockly.test.helpers.warnings'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../tests/mocha/keydown_test.js', ['Blockly.test.keydown'], ['Blockly.test.helpers.blockDefinitions', 'Blockly.test.helpers.setupTeardown', 'Blockly.test.helpers.userInput'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../tests/mocha/lists_test.js', ['Blockly.test.lists'], ['Blockly.ConnectionType', 'Blockly.test.helpers.serialization', 'Blockly.test.helpers.setupTeardown'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../tests/mocha/logic_ternary_test.js', ['Blockly.test.logicTernary'], ['Blockly.Events.utils', 'Blockly.test.helpers.serialization', 'Blockly.test.helpers.setupTeardown'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../tests/mocha/metrics_test.js', ['Blockly.test.metrics'], ['Blockly.test.helpers.setupTeardown'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../tests/mocha/mutator_test.js', ['Blockly.test.mutator'], ['Blockly.test.helpers.blockDefinitions', 'Blockly.test.helpers.setupTeardown'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../tests/mocha/names_test.js', ['Blockly.test.names'], ['Blockly.test.helpers.setupTeardown'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../tests/mocha/procedures_test.js', ['Blockly.test.procedures'], ['Blockly', 'Blockly.Msg', 'Blockly.test.helpers.procedures', 'Blockly.test.helpers.serialization', 'Blockly.test.helpers.setupTeardown'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../tests/mocha/registry_test.js', ['Blockly.test.registry'], ['Blockly.test.helpers.setupTeardown', 'Blockly.test.helpers.warnings'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../tests/mocha/run_mocha_tests_in_browser.js', [], [], {'lang': 'es8'});
 goog.addDependency('../../tests/mocha/serializer_test.js', ['Blockly.test.serialization'], ['Blockly.test.helpers.common', 'Blockly.test.helpers.setupTeardown'], {'lang': 'es6', 'module': 'goog'});
@@ -66,7 +67,6 @@ goog.addDependency('../../tests/mocha/trashcan_test.js', ['Blockly.test.trashcan
 goog.addDependency('../../tests/mocha/utils_test.js', ['Blockly.test.utils'], ['Blockly.test.helpers.setupTeardown'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../tests/mocha/variable_map_test.js', ['Blockly.test.variableMap'], ['Blockly.test.helpers.setupTeardown', 'Blockly.test.helpers.variables'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../tests/mocha/variable_model_test.js', ['Blockly.test.variableModel'], ['Blockly.test.helpers.setupTeardown'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../tests/mocha/variables_test.js', ['Blockly.test.variables'], ['Blockly.test.helpers.setupTeardown'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../tests/mocha/widget_div_test.js', ['Blockly.test.widgetDiv'], ['Blockly.test.helpers.setupTeardown'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../tests/mocha/workspace_comment_test.js', ['Blockly.test.workspaceComment'], ['Blockly.WorkspaceComment', 'Blockly.test.helpers.setupTeardown'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../tests/mocha/workspace_svg_test.js', ['Blockly.test.workspaceSvg'], ['Blockly.Events.utils', 'Blockly.test.helpers.blockDefinitions', 'Blockly.test.helpers.events', 'Blockly.test.helpers.setupTeardown', 'Blockly.test.helpers.variables', 'Blockly.test.helpers.workspace'], {'lang': 'es6', 'module': 'goog'});

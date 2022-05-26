@@ -5,25 +5,51 @@
  */
 
 /**
- * @fileoverview Load this file in a <script> tag to prepare for
- *     importing Blockly into a web page.
+ * @fileoverview Bootstrap code to load Blockly, typically in
+ *     uncompiled mode.
+ *
+ *     Load this file in a <script> tag in a web page to use the
+ *     Closure Library debug module loader to load Blockly in
+ *     uncompiled mode.
  *
  *     You must use a <script> tag to load this script first, then
  *     import blockly.mjs in a <script type=module> to obtain the
- *     loaded value.
+ *     loaded module.
  *
  *     See tests/playground.html for example usage.
+ *
+ *     Exception: for speed and compatibility reasons, if this is
+ *     script is loaded in Internet Explorer or from a host other than
+ *     localhost, blockly_compressed.js (et al.) will be loaded
+ *     instead.  IE 11 doesn't understand modern JavaScript, and
+ *     because of the sequential module loading carried out by the
+ *
+ *     (Note also that this file eschews certain modern JS constructs,
+ *     like template literals, for compatibility with IE 11.)
+ *
+ *     The bootstrap code will consult a BLOCKLY_BOOTSTRAP_OPTIONS
+ *     global variable to determine what to load.  See further
+ *     documentation inline.
+ *
  */
 'use strict';
 
 (function() {
-  // Decide whether we can load Blockly uncompiled, or must load the
-  // compiled version.  Please see issue #5557 for more information.
   const isIe = navigator.userAgent.indexOf('MSIE') !== -1 ||
       navigator.appVersion.indexOf('Trident/') > -1;
   const localhosts = ['localhost', '127.0.0.1', '[::1]'];
 
-  if (localhosts.includes(location.hostname) && !isIe) {
+  // Default bootstrap options.
+  const options = {
+    // Decide whether to use compmiled mode or not.  Please see issue
+    // #5557 for more information.
+    loadCompiled: isIe || !localhosts.includes(location.hostname),
+  };
+  if (typeof window.BLOCKLY_BOOTSTRAP_OPTIONS === 'object') {
+    Object.assign(options, window.BLOCKLY_BOOTSTRAP_OPTIONS);
+  }
+
+  if (!options.loadCompiled) {
     // We can load Blockly in uncompiled mode.
 
     // Disable loading of closure/goog/deps.js (which doesn't exist).

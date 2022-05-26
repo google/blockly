@@ -54,6 +54,15 @@
     Object.assign(options, window.BLOCKLY_BOOTSTRAP_OPTIONS);
   }
 
+  /* eslint-disable-next-line no-undef */
+  if (typeof module === 'object' && typeof module.exports === 'object') {
+    // Running in node.js.  Maybe we wish to support this.
+    // blockly_uncompiled formerly did, though it appears that the
+    // code had not been working for some time (at least since PR
+    // #5718 back in December 2021.  For now just throw an error.
+    throw new Error('Bootstrapping in node.js not implemented.');
+  }
+
   if (!options.loadCompiled) {
     // We can load Blockly in uncompiled mode.  Note that this section
     // needs to parse in IE11 (mostly ES5.1, but allowing e.g. const),

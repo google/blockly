@@ -20,7 +20,7 @@ var path = require('path');
 // - tests/scripts/check_metadata.sh
 // - tests/scripts/update_metadata.sh
 // - blockly_uncompressed.js (for location of deps.js)
-// - tests/playgrounds/prepare.js (for location of deps.js)
+// - tests/bootstrap.js (for location of deps.js)
 // - tests/mocha/index.html (for location of deps.mocha.js)
 
 // Directory to write compiled output to.

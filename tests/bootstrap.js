@@ -35,6 +35,7 @@
 'use strict';
 
 (function() {
+  // Values usedd to compute default bootstrap options.
   const isIe = navigator.userAgent.indexOf('MSIE') !== -1 ||
       navigator.appVersion.indexOf('Trident/') > -1;
   const localhosts = ['localhost', '127.0.0.1', '[::1]'];
@@ -44,6 +45,10 @@
     // Decide whether to use compmiled mode or not.  Please see issue
     // #5557 for more information.
     loadCompiled: isIe || !localhosts.includes(location.hostname),
+
+    // URL of the blockly repository.  Default value will work so long
+    // as top-level page is loaded from somewhere in tests/.
+    root: window.location.href.replace(/\/tests\/.*$/, '/'),
   };
   if (typeof window.BLOCKLY_BOOTSTRAP_OPTIONS === 'object') {
     Object.assign(options, window.BLOCKLY_BOOTSTRAP_OPTIONS);
@@ -57,10 +62,12 @@
     // Load the Closure Library's base.js (the only part of the
     // libary we use, mainly for goog.require / goog.provide /
     // goog.module).
-    document.write('<script src="../../closure/goog/base.js"></script>');
+    document.write(
+        '<script src="' + options.root + '/closure/goog/base.js"></script>');
     // Load dependency graph info from build/deps.js.  To update
     // deps.js, run `npm run build:deps`.
-    document.write('<script src="../../build/deps.js"></script>');
+    document.write(
+        '<script src="' + options.root + '/build/deps.js"></script>');
 
     // Msg loading kludge.  This should go away once #5409 and/or
     // #1895 are fixed.
@@ -68,7 +75,8 @@
     // Load messages into a temporary Blockly.Msg object, deleting it
     // afterwards (after saving the messages!)
     window.Blockly = {Msg: Object.create(null)};
-    document.write('<script src="../../msg/messages.js"></script>');
+    document.write(
+        '<script src="' + options.root + 'msg/messages.js"></script>');
     document.write(`
         <script>
           window.BlocklyMsg = window.Blockly.Msg;
@@ -113,13 +121,9 @@
     ];
 
     // We need to load Blockly in compiled mode.
-    const hostName = window.location.host.replaceAll('.', '\\.');
-    const matches = new RegExp(hostName + '\\/(.*)tests').exec(window.location.href);
-    const root = matches && matches[1] ? matches[1] : '';
-
     // Load blockly_compressed.js et al. using <script> tags.
     for (let i = 0; i < files.length; i++) {
-      document.write('<script src="/' + root + files[i] + '"></script>');
+      document.write('<script src="' + options.root + files[i] + '"></script>');
     }
   }
 })();

@@ -55,7 +55,10 @@
   }
 
   if (!options.loadCompiled) {
-    // We can load Blockly in uncompiled mode.
+    // We can load Blockly in uncompiled mode.  Note that this section
+    // needs to parse in IE11 (mostly ES5.1, but allowing e.g. const),
+    // but it does not need to be _executable_ in IE11 - it is safe to
+    // use ES6 builtins.
 
     // Disable loading of closure/goog/deps.js (which doesn't exist).
     window.CLOSURE_NO_DEPS = true;
@@ -77,32 +80,31 @@
     window.Blockly = {Msg: Object.create(null)};
     document.write(
         '<script src="' + options.root + 'msg/messages.js"></script>');
-    document.write(`
-        <script>
-          window.BlocklyMsg = window.Blockly.Msg;
-          delete window.Blockly;
-        </script>`);
-
-    document.write(`
-        <script>
-          window.BlocklyLoader = new Promise((resolve, reject) => {
-            goog.bootstrap(
-                [
-                  'Blockly',
-                  'Blockly.libraryBlocks',
-                  'Blockly.Dart.all',
-                  'Blockly.JavaScript.all',
-                  'Blockly.Lua.all',
-                  'Blockly.PHP.all',
-                  'Blockly.Python.all',
-                ], resolve);
-          }).then(() => {
-            // Copy Messages from temporary Blockly.Msg object to the real one:
-            Object.assign(goog.module.get('Blockly').Msg, window.BlocklyMsg);
-          }).then(() => {
-            return goog.module.get('Blockly');
-          });
-        </script>`);
+    document.write(
+        '<script>\n' +
+        '  window.BlocklyMsg = window.Blockly.Msg;\n' +
+        '  delete window.Blockly;\n' +
+        '</script>\n');
+    document.write(
+        '<script>\n' +
+        '  window.BlocklyLoader = new Promise((resolve, reject) => {\n' +
+        '    goog.bootstrap([\n' +
+        '        \'Blockly\',\n' +
+        '        \'Blockly.libraryBlocks\',\n' +
+        '        \'Blockly.Dart.all\',\n' +
+        '        \'Blockly.JavaScript.all\',\n' +
+        '        \'Blockly.Lua.all\',\n' +
+        '        \'Blockly.PHP.all\',\n' +
+        '        \'Blockly.Python.all\',\n' +
+        '    ], resolve);\n' +
+        '  }).then(() => {\n' +
+        '    // Copy Messages from temp Blockly.Msg object to the real one:\n' +
+        '    Object.assign(goog.module.get(\'Blockly\').Msg,\n' +
+        '                  window.BlocklyMsg);\n' +
+        '  }).then(() => {\n' +
+        '    return goog.module.get(\'Blockly\');\n' +
+        '  });\n' +
+        '</script>\n');
   } else {
     // The below code is necessary for a few reasons:
     // - We need an absolute path instead of relative path because the

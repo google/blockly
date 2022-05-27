@@ -106,4 +106,89 @@ suite('Lists', function() {
     ];
     runSerializationTestSuite(testCases);
   });
+
+  /**
+   * Test cases for serialization where JSON hooks should have null
+   * implementation to avoid serializing xml mutations in json.
+   * @param {!Object} serializedJson basic serialized json
+   * @param {!string} xmlMutation xml mutation that should be ignored/not reserialized in round trip
+   * @return {Array<SerializationTestCase>} test cases
+   */
+  function makeTestCasesForBlockNotNeedingExtraState_(serializedJson, xmlMutation) {
+    return [
+      {
+        title: 'JSON not requiring mutations',
+        json: serializedJson,
+        assertBlockStructure: (block) => {
+          chai.assert.equal(block.type, serializedJson.type);
+        },
+      },
+      {
+        title:
+          'JSON with XML extra state',
+        json: {
+          ...serializedJson,
+          "extraState": xmlMutation,
+        },
+        expectedJson: serializedJson,
+        assertBlockStructure: (block) => {},
+      },
+    ];
+  }
+
+  suite('ListsSetIndex', function() {
+    /**
+     * Test cases for serialization tests.
+     * @type {Array<SerializationTestCase>}
+     */
+    const testCases = makeTestCasesForBlockNotNeedingExtraState_(
+      {
+        "type": "lists_setIndex",
+        "id": "1",
+        "fields": {
+          "MODE": "SET",
+          "WHERE": "FROM_START",
+        },
+      },
+      "<mutation at=\"true\"></mutation>"
+    );
+    runSerializationTestSuite(testCases);
+  });
+
+  suite('ListsGetSubList', function() {
+    /**
+     * Test cases for serialization tests.
+     * @type {Array<SerializationTestCase>}
+     */
+     const testCases = makeTestCasesForBlockNotNeedingExtraState_(
+      {
+        "type": "lists_getSublist",
+        "id": "1",
+        "fields": {
+          "WHERE1": "FROM_START",
+          "WHERE2": "FROM_START",
+        },
+      },
+      "<mutation at1=\"true\" at2=\"true\"></mutation>"
+    );
+    runSerializationTestSuite(testCases);
+  });
+
+  suite('ListsSplit', function() {
+    /**
+     * Test cases for serialization tests.
+     * @type {Array<SerializationTestCase>}
+     */
+    const testCases = makeTestCasesForBlockNotNeedingExtraState_(
+      {
+        "type": "lists_split",
+        "id": "1",
+        "fields": {
+          "MODE": "SPLIT",
+        },
+      },
+      "<mutation mode=\"SPLIT\"></mutation>"
+    );
+    runSerializationTestSuite(testCases);
+  });
 });

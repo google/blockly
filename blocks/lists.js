@@ -649,10 +649,23 @@ blocks['lists_setIndex'] = {
     this.updateAt_(isAt);
   },
 
-  // This block does not need JSO serialization hooks (saveExtraState and
-  // loadExtraState) because the state of this object is already encoded in the
-  // dropdown values.
-  // XML hooks are kept for backwards compatibility.
+  /**
+   * Returns the state of this block as a JSON serializable object.
+   * This block does not need to serialize any specific state as it is already
+   * encoded in the dropdown values, but must have an implementation to avoid
+   * the backward compatible XML mutations being serialized.
+   * @return {null} The state of this block.
+   */
+  saveExtraState: function() {
+    return null;
+  },
+
+  /**
+   * Applies the given state to this block.
+   * No extra state is needed or expected as it is already encoded in the
+   * dropdown values.
+   */
+  loadExtraState: function() {},
 
   /**
    * Create or delete an input for the numeric index.
@@ -761,10 +774,23 @@ blocks['lists_getSublist'] = {
     this.updateAt_(2, isAt2);
   },
 
-  // This block does not need JSO serialization hooks (saveExtraState and
-  // loadExtraState) because the state of this object is already encoded in the
-  // dropdown values.
-  // XML hooks are kept for backwards compatibility.
+  /**
+   * Returns the state of this block as a JSON serializable object.
+   * This block does not need to serialize any specific state as it is already
+   * encoded in the dropdown values, but must have an implementation to avoid
+   * the backward compatible XML mutations being serialized.
+   * @return {null} The state of this block.
+   */
+  saveExtraState: function() {
+    return null;
+  },
+
+  /**
+   * Applies the given state to this block.
+   * No extra state is needed or expected as it is already encoded in the
+   * dropdown values.
+   */
+  loadExtraState: function() {},
 
   /**
    * Create or delete an input for a numeric index.
@@ -945,10 +971,23 @@ blocks['lists_split'] = {
     this.updateType_(xmlElement.getAttribute('mode'));
   },
 
-  // This block does not need JSO serialization hooks (saveExtraState and
-  // loadExtraState) because the state of this object is already encoded in the
-  // dropdown values.
-  // XML hooks are kept for backwards compatibility.
+  /**
+   * Returns the state of this block as a JSON serializable object.
+   * This block does not need to serialize any specific state as it is already
+   * encoded in the dropdown values, but must have an implementation to avoid
+   * the backward compatible XML mutations being serialized.
+   * @return {null} The state of this block.
+   */
+  saveExtraState: function() {
+    return null;
+  },
+
+  /**
+   * Applies the given state to this block.
+   * No extra state is needed or expected as it is already encoded in the
+   * dropdown values.
+   */
+  loadExtraState: function() {},
 };
 
 // Register provided blocks.

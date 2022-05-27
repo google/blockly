@@ -16,6 +16,6 @@
 
 import { Generator } from 'core/blockly';
 export * from './core';
-export * from './blocks';
+export * as libraryBlocks from './blocks';
 export const JavaScript: Generator;
 import './msg/msg';

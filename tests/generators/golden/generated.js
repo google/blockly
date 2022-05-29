@@ -476,7 +476,7 @@ function test_change() {
 }
 
 function mathMean(myList) {
-  return myList.reduce(function(x, y) {return x + y;}) / myList.length;
+  return myList.reduce(function(x, y) {return x + y;}, 0) / myList.length;
 }
 
 function mathMedian(myList) {
@@ -538,7 +538,7 @@ function mathRandomList(list) {
 
 // Tests the "list operation" blocks.
 function test_operations_on_list() {
-  assertEquals([3, 4, 5].reduce(function(x, y) {return x + y;}), 12, 'sum');
+  assertEquals([3, 4, 5].reduce(function(x, y) {return x + y;}, 0), 12, 'sum');
   assertEquals(Math.min.apply(null, [3, 4, 5]), 3, 'min');
   assertEquals(Math.max.apply(null, [3, 4, 5]), 5, 'max');
   assertEquals(mathMean([3, 4, 5]), 4, 'average');

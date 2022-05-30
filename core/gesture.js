@@ -597,7 +597,7 @@ Gesture.prototype.handleUp = function(e) {
   Touch.longStop();
 
   if (this.isEnding_) {
-    console.log('Trying to end a gesture recursively.');
+    console.info('Trying to end a gesture recursively.');
     return;
   }
   this.isEnding_ = true;

@@ -114,7 +114,7 @@ const MassOperationsHandler = function(workspace) {
   const ctrlC = ShortcutRegistry.registry.createSerializedKey(KeyCodes.C, [KeyCodes.CTRL]);
   ShortcutRegistry.registry.addKeyMapping(ctrlC, copyShortcut.name, true);
 
-  // Add "pasteShortcut" method to shortcut registry with ctrl+C key
+  // Add "pasteShortcut" method to shortcut registry with ctrl+V key
   const pasteShortcut = {
     name: 'massOperationPaste',
     preconditionFn: (workspace) => {

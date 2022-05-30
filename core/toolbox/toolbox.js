@@ -435,12 +435,16 @@ Toolbox.prototype.createFlyout_ = function() {
 
 /**
  * Function listener event on flyout workspace.
- * @param {*} event
+ * @param {Event} event Flyout event
  * @private
  */
 Toolbox.prototype.flyoutEventsListener_ = function(event) {
   if (event.type === Events.FLYOUT_HIDE && event.isButtonClose) {
     this.clearSelection();
+  }
+
+  if (event.type === Events.FLYOUT_HIDE || event.type === Events.FLYOUT_SHOW) {
+    eventUtils.fire(new (eventUtils.get(event.type))(this.getWorkspace().id));
   }
 };
 

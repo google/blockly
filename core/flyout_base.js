@@ -602,7 +602,10 @@ Flyout.prototype.removeFlyoutEndShadow_ = function() {
 };
 
 Flyout.prototype.createZoomControls_ = function() {
-  if (this.flyoutTopPanel_) return;
+  if (this.flyoutTopPanel_) {
+    this.resizeZoomControls_();
+    return;
+  }
 
   const flyoutSVG = this.workspace_.getParentSvg();
   const flyoutParentEl = flyoutSVG.parentElement;
@@ -677,6 +680,12 @@ Flyout.prototype.createZoomControls_ = function() {
     e.stopPropagation();
     e.preventDefault();
   });
+};
+
+Flyout.prototype.resizeZoomControls_ = function() {
+  if (!this.flyoutTopPanel_) return;
+
+  this.flyoutTopPanel_.style.width = `${this.width_}px`;
 };
 
 Flyout.prototype.zoomIn_ = function(e) {

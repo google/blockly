@@ -512,7 +512,7 @@ InsertionMarkerManager.prototype.maybeShowPreview_ = function(candidate) {
   // Something went wrong and we're trying to connect to an invalid connection.
   if (closest === this.closestConnection_ ||
       closest.getSourceBlock().isInsertionMarker()) {
-    console.log('Trying to connect to an insertion marker');
+    console.info('Trying to connect to an insertion marker');
     return;
   }
   // Add an insertion marker or replacement marker.
@@ -651,7 +651,7 @@ InsertionMarkerManager.prototype.showInsertionMarker_ = function() {
  */
 InsertionMarkerManager.prototype.hideInsertionMarker_ = function() {
   if (!this.markerConnection_) {
-    console.log('No insertion marker connection to disconnect');
+    console.info('No insertion marker connection to disconnect');
     return;
   }
 

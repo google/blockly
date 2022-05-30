@@ -336,8 +336,9 @@ Scrollbar.prototype.setPosition = function(x, y) {
  * @param {Metrics=} opt_metrics A data structure of from the
  *     describing all the required dimensions.  If not provided, it will be
  *     fetched from the host object.
+ * @param {Boolean} keepCenter Keep center of view after resize
  */
-Scrollbar.prototype.resize = function(opt_metrics) {
+Scrollbar.prototype.resize = function(opt_metrics, keepCenter) {
   // Determine the location, height and width of the host element.
   let hostMetrics = opt_metrics;
   if (!hostMetrics) {
@@ -348,18 +349,21 @@ Scrollbar.prototype.resize = function(opt_metrics) {
     }
   }
 
-  if (this.oldHostMetrics_ &&
-      Scrollbar.metricsAreEquivalent_(hostMetrics, this.oldHostMetrics_)) {
+  if (this.oldHostMetrics_ && Scrollbar.metricsAreEquivalent_(hostMetrics, this.oldHostMetrics_)) {
     return;
   }
 
   if (this.horizontal_) {
-    this.resizeHorizontal_(hostMetrics);
+    this.resizeHorizontal_(hostMetrics, keepCenter);
   } else {
-    this.resizeVertical_(hostMetrics);
+    this.resizeVertical_(hostMetrics, keepCenter);
   }
 
-  this.oldHostMetrics_ = hostMetrics;
+
+  if (!keepCenter) {
+    this.oldHostMetrics_ = hostMetrics;
+  }
+
 
   // Resizing may have caused some scrolling.
   this.updateMetrics_();
@@ -377,6 +381,7 @@ Scrollbar.prototype.requiresViewResize_ = function(hostMetrics) {
   if (!this.oldHostMetrics_) {
     return true;
   }
+
   return this.oldHostMetrics_.viewWidth !== hostMetrics.viewWidth ||
       this.oldHostMetrics_.viewHeight !== hostMetrics.viewHeight ||
       this.oldHostMetrics_.absoluteLeft !== hostMetrics.absoluteLeft ||
@@ -387,13 +392,14 @@ Scrollbar.prototype.requiresViewResize_ = function(hostMetrics) {
  * Recalculate a horizontal scrollbar's location and length.
  * @param {!Metrics} hostMetrics A data structure describing all
  *     the required dimensions, possibly fetched from the host object.
+ * @param {Boolean} keepCenter Keep center of view after resize
  * @private
  */
-Scrollbar.prototype.resizeHorizontal_ = function(hostMetrics) {
+Scrollbar.prototype.resizeHorizontal_ = function(hostMetrics, keepCenter) {
   if (this.requiresViewResize_(hostMetrics)) {
-    this.resizeViewHorizontal(hostMetrics);
+    this.resizeViewHorizontal(hostMetrics, keepCenter);
   } else {
-    this.resizeContentHorizontal(hostMetrics);
+    this.resizeContentHorizontal(hostMetrics, keepCenter);
   }
 };
 
@@ -402,8 +408,9 @@ Scrollbar.prototype.resizeHorizontal_ = function(hostMetrics) {
  * This should be called when the layout or size of the window has changed.
  * @param {!Metrics} hostMetrics A data structure describing all
  *     the required dimensions, possibly fetched from the host object.
+ * @param {Boolean} keepCenter Keep center of view after resize
  */
-Scrollbar.prototype.resizeViewHorizontal = function(hostMetrics) {
+Scrollbar.prototype.resizeViewHorizontal = function(hostMetrics, keepCenter) {
   let viewSize = hostMetrics.viewWidth - this.margin_ * 2;
   if (this.pair_) {
     // Shorten the scrollbar to make room for the corner square.
@@ -417,13 +424,12 @@ Scrollbar.prototype.resizeViewHorizontal = function(hostMetrics) {
   }
 
   // Horizontal toolbar should always be just above the bottom of the workspace.
-  const yCoordinate = hostMetrics.absoluteTop + hostMetrics.viewHeight -
-      Scrollbar.scrollbarThickness - this.margin_;
+  const yCoordinate = hostMetrics.absoluteTop + hostMetrics.viewHeight - Scrollbar.scrollbarThickness - this.margin_;
   this.setPosition(xCoordinate, yCoordinate);
 
   // If the view has been resized, a content resize will also be necessary.
   // The reverse is not true.
-  this.resizeContentHorizontal(hostMetrics);
+  this.resizeContentHorizontal(hostMetrics, keepCenter);
 };
 
 /**
@@ -431,8 +437,9 @@ Scrollbar.prototype.resizeViewHorizontal = function(hostMetrics) {
  * This should be called when the contents of the workspace have changed.
  * @param {!Metrics} hostMetrics A data structure describing all
  *     the required dimensions, possibly fetched from the host object.
+ * @param {Boolean} keepCenter Keep center of view after resize
  */
-Scrollbar.prototype.resizeContentHorizontal = function(hostMetrics) {
+Scrollbar.prototype.resizeContentHorizontal = function(hostMetrics, keepCenter) {
   if (hostMetrics.viewWidth >= hostMetrics.scrollWidth) {
     // viewWidth is often greater than scrollWidth in flyouts and
     // non-scrollable workspaces.
@@ -451,8 +458,7 @@ Scrollbar.prototype.resizeContentHorizontal = function(hostMetrics) {
   }
 
   // Resize the handle.
-  let handleLength =
-      this.scrollbarLength_ * hostMetrics.viewWidth / hostMetrics.scrollWidth;
+  let handleLength = this.scrollbarLength_ * hostMetrics.viewWidth / hostMetrics.scrollWidth;
   handleLength = this.constrainHandleLength_(handleLength);
   this.setHandleLength_(handleLength);
 
@@ -465,10 +471,19 @@ Scrollbar.prototype.resizeContentHorizontal = function(hostMetrics) {
   //     then viewLeft = scrollLeft + scrollWidth - viewWidth
   //     then the offset should be max offset
 
-  const maxScrollDistance = hostMetrics.scrollWidth - hostMetrics.viewWidth;
-  const contentDisplacement = hostMetrics.viewLeft - hostMetrics.scrollLeft;
   // Percent of content to the left of our current position.
-  const offsetRatio = contentDisplacement / maxScrollDistance;
+  let offsetRatio;
+
+  if (keepCenter && this.previousOffsetRatio) {
+    offsetRatio = this.previousOffsetRatio;
+  } else {
+    const maxScrollDistance = hostMetrics.scrollWidth - hostMetrics.viewWidth;
+    const contentDisplacement = hostMetrics.viewLeft - hostMetrics.scrollLeft;
+    offsetRatio = contentDisplacement / maxScrollDistance;
+  }
+
+  this.previousOffsetRatio = offsetRatio;
+
   // Area available to scroll * percent to the left
   const maxHandleOffset = this.scrollbarLength_ - this.handleLength_;
   let handleOffset = maxHandleOffset * offsetRatio;
@@ -476,7 +491,7 @@ Scrollbar.prototype.resizeContentHorizontal = function(hostMetrics) {
   this.setHandlePosition(handleOffset);
 
   // Compute ratio (for use with set calls, which pass in content displacement).
-  this.ratio = maxHandleOffset / maxScrollDistance;
+  this.ratio = maxHandleOffset / (hostMetrics.scrollWidth - hostMetrics.viewWidth);
 };
 
 /**

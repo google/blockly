@@ -29,6 +29,7 @@ const arrayUtils = goog.require('Blockly.utils.array');
 const blockRendering = goog.require('Blockly.blockRendering');
 const blocks = goog.require('Blockly.serialization.blocks');
 const browserEvents = goog.require('Blockly.browserEvents');
+const Events = goog.require('Blockly.Events');
 const common = goog.require('Blockly.common');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
@@ -950,6 +951,10 @@ WorkspaceSvg.prototype.createDom = function(opt_backgroundClass) {
     this.toolbox_ = new ToolboxClass(this);
   }
 
+  if (this.toolbox_ && !this.isFlyout) {
+    this.addChangeListener(this.flyoutListener.bind(this));
+  }
+
   if (this.options.showModuleBar) {
     this.moduleBar_ = new ModuleBar(this);
   }
@@ -1169,10 +1174,30 @@ WorkspaceSvg.prototype.getFlyout = function(opt_own) {
   if (this.flyout_ || opt_own) {
     return this.flyout_;
   }
+  
   if (this.toolbox_) {
     return this.toolbox_.getFlyout();
   }
+
   return null;
+};
+
+Workspace.prototype.flyoutListener = function(event) {
+  switch (event.type) {
+    case Events.FLYOUT_SHOW: {
+      this.resize(true);
+      break;
+    }
+
+    case Events.FLYOUT_HIDE: {
+      this.resize(true);
+      break;
+    }
+    
+    default: {
+      return;
+    }
+  }
 };
 
 /**
@@ -1213,9 +1238,11 @@ WorkspaceSvg.prototype.resizeContents = function() {
   if (!this.resizesEnabled_ || !this.rendered) {
     return;
   }
+
   if (this.scrollbar) {
     this.scrollbar.resize();
   }
+
   this.updateInverseScreenCTM();
 };
 
@@ -1225,8 +1252,9 @@ WorkspaceSvg.prototype.resizeContents = function() {
  * This should be called when something changes that
  * requires recalculating dimensions and positions of the
  * trash, zoom, toolbox, etc. (e.g. window resize).
+ * @param {Boolean} keepCenter keep center of view after resize
  */
-WorkspaceSvg.prototype.resize = function() {
+WorkspaceSvg.prototype.resize = function(keepCenter) {
   if (this.toolbox_) {
     this.toolbox_.position();
   }
@@ -1234,12 +1262,14 @@ WorkspaceSvg.prototype.resize = function() {
     this.flyout_.position();
   }
 
-  const positionables = this.componentManager_.getComponents(
-      ComponentManager.Capability.POSITIONABLE, true);
+  const positionables = this.componentManager_.getComponents(ComponentManager.Capability.POSITIONABLE, true);
   const metrics = this.getMetricsManager().getUiMetrics();
+  
   const savedPositions = [];
+
   for (let i = 0, positionable; (positionable = positionables[i]); i++) {
     positionable.position(metrics, savedPositions);
+
     const boundingRect = positionable.getBoundingRectangle();
     if (boundingRect) {
       savedPositions.push(boundingRect);
@@ -1247,8 +1277,9 @@ WorkspaceSvg.prototype.resize = function() {
   }
 
   if (this.scrollbar) {
-    this.scrollbar.resize();
+    this.scrollbar.resize(undefined, keepCenter);
   }
+
   this.updateScreenCalculations_();
 };
 
@@ -1453,8 +1484,9 @@ WorkspaceSvg.prototype.getBlockDragSurface = function() {
  * @return {number} Width.
  */
 WorkspaceSvg.prototype.getWidth = function() {
-  const metrics = this.getMetrics();
-  return metrics ? metrics.viewWidth / this.scale : 0;
+  const metrics = this.getMetricsManager().getViewMetrics();
+
+  return metrics ? metrics.width / this.scale : 0;
 };
 
 /**
@@ -2506,14 +2538,11 @@ WorkspaceSvg.setTopLevelWorkspaceMetrics_ = function(xyRatio) {
   const metrics = this.getMetrics();
 
   if (typeof xyRatio.x === 'number') {
-    this.scrollX =
-        -(metrics.scrollLeft +
-          (metrics.scrollWidth - metrics.viewWidth) * xyRatio.x);
+    this.scrollX = -(metrics.scrollLeft + (metrics.scrollWidth - metrics.viewWidth) * xyRatio.x);
   }
+
   if (typeof xyRatio.y === 'number') {
-    this.scrollY =
-        -(metrics.scrollTop +
-          (metrics.scrollHeight - metrics.viewHeight) * xyRatio.y);
+    this.scrollY = -(metrics.scrollTop + (metrics.scrollHeight - metrics.viewHeight) * xyRatio.y);
   }
   // We have to shift the translation so that when the canvas is at 0, 0 the
   // workspace origin is not underneath the toolbox.

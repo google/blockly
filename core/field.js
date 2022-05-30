@@ -929,7 +929,7 @@ Field.prototype.setText = function(newText) {
 Field.prototype.setValue = function(newValue) {
   const doLogging = false;
   if (newValue === null) {
-    doLogging && console.log('null, return');
+    doLogging && console.info('null, return');
     // Not a valid value to check.
     return;
   }
@@ -938,7 +938,7 @@ Field.prototype.setValue = function(newValue) {
   // Class validators might accidentally forget to return, we'll ignore that.
   newValue = this.processValidation_(newValue, validatedValue);
   if (newValue instanceof Error) {
-    doLogging && console.log('invalid class validation, return');
+    doLogging && console.info('invalid class validation, return');
     return;
   }
 
@@ -948,18 +948,18 @@ Field.prototype.setValue = function(newValue) {
     // Local validators might accidentally forget to return, we'll ignore that.
     newValue = this.processValidation_(newValue, validatedValue);
     if (newValue instanceof Error) {
-      doLogging && console.log('invalid local validation, return');
+      doLogging && console.info('invalid local validation, return');
       return;
     }
   }
   const source = this.sourceBlock_;
   if (source && source.disposed) {
-    doLogging && console.log('source disposed, return');
+    doLogging && console.info('source disposed, return');
     return;
   }
   const oldValue = this.getValue();
   if (oldValue === newValue) {
-    doLogging && console.log('same, doValueUpdate_, return');
+    doLogging && console.info('same, doValueUpdate_, return');
     this.doValueUpdate_(newValue);
     return;
   }
@@ -972,7 +972,7 @@ Field.prototype.setValue = function(newValue) {
   if (this.isDirty_) {
     this.forceRerender();
   }
-  doLogging && console.log(this.value_);
+  doLogging && console.info(this.value_);
 };
 
 /**

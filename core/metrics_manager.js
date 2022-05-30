@@ -29,7 +29,6 @@ const {Size} = goog.require('Blockly.utils.Size');
 /* eslint-disable-next-line no-unused-vars */
 const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
-
 /**
  * The manager for all workspace metrics calculations.
  * @param {!WorkspaceSvg} workspace The workspace to calculate metrics
@@ -45,6 +44,11 @@ const MetricsManager = function(workspace) {
    * @protected
    */
   this.workspace_ = workspace;
+
+  /**
+   * Flyout gap for better UI near of flyout's controls
+   */
+  this.flyoutWidthGap = 25;
 };
 
 /**
@@ -122,9 +126,15 @@ MetricsManager.prototype.getDimensionsPx_ = function(elem) {
  *     flyout.
  * @public
  */
-MetricsManager.prototype.getFlyoutMetrics = function(opt_own) {
-  const flyoutDimensions =
-      this.getDimensionsPx_(this.workspace_.getFlyout(opt_own));
+MetricsManager.prototype.getFlyoutMetrics = function() {
+  const flyout = this.workspace_.getFlyout();
+  const providedFlyout = flyout && flyout.isVisible() ? flyout : undefined;
+  const flyoutDimensions = this.getDimensionsPx_(providedFlyout);
+
+  if (flyoutDimensions.width) {
+    flyoutDimensions.width += this.flyoutWidthGap;
+  }
+
   return {
     width: flyoutDimensions.width,
     height: flyoutDimensions.height,
@@ -172,19 +182,23 @@ MetricsManager.prototype.getSvgMetrics = function() {
 MetricsManager.prototype.getAbsoluteMetrics = function() {
   let absoluteLeft = 0;
   const toolboxMetrics = this.getToolboxMetrics();
-  const flyoutMetrics = this.getFlyoutMetrics(true);
+  const flyoutMetrics = this.getFlyoutMetrics();
   const doesToolboxExist = !!this.workspace_.getToolbox();
-  const doesFlyoutExist = !!this.workspace_.getFlyout(true);
-  const toolboxPosition =
-      doesToolboxExist ? toolboxMetrics.position : flyoutMetrics.position;
-
+  const flyout = this.workspace_.getFlyout();
+  const doesFlyoutExist = !!flyout;
+  const toolboxPosition = doesToolboxExist ? toolboxMetrics.position : flyoutMetrics.position;
   const atLeft = toolboxPosition === toolboxUtils.Position.LEFT;
   const atTop = toolboxPosition === toolboxUtils.Position.TOP;
+  
+
   if (doesToolboxExist && atLeft) {
     absoluteLeft = toolboxMetrics.width;
-  } else if (doesFlyoutExist && atLeft) {
-    absoluteLeft = flyoutMetrics.width;
   }
+  
+  if (doesFlyoutExist && atLeft && flyout.isVisible()) {
+    absoluteLeft += flyoutMetrics.width;
+  }
+
   let absoluteTop = 0;
   if (doesToolboxExist && atTop) {
     absoluteTop = toolboxMetrics.height;
@@ -208,35 +222,31 @@ MetricsManager.prototype.getAbsoluteMetrics = function() {
  *     coordinates.
  * @public
  */
-MetricsManager.prototype.getViewMetrics = function(
-    opt_getWorkspaceCoordinates) {
+MetricsManager.prototype.getViewMetrics = function(opt_getWorkspaceCoordinates) {
   const scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
   const svgMetrics = this.getSvgMetrics();
   const toolboxMetrics = this.getToolboxMetrics();
-  const flyoutMetrics = this.getFlyoutMetrics(true);
+  const flyoutMetrics = this.getFlyoutMetrics();
   const doesToolboxExist = !!this.workspace_.getToolbox();
-  const toolboxPosition =
-      doesToolboxExist ? toolboxMetrics.position : flyoutMetrics.position;
+  const toolboxPosition = doesToolboxExist ? toolboxMetrics.position : flyoutMetrics.position;
+  const flyout = this.workspace_.getFlyout();
 
   if (this.workspace_.getToolbox()) {
-    if (toolboxPosition === toolboxUtils.Position.TOP ||
-        toolboxPosition === toolboxUtils.Position.BOTTOM) {
+    if (toolboxPosition === toolboxUtils.Position.TOP || toolboxPosition === toolboxUtils.Position.BOTTOM) {
       svgMetrics.height -= toolboxMetrics.height;
-    } else if (
-        toolboxPosition === toolboxUtils.Position.LEFT ||
-        toolboxPosition === toolboxUtils.Position.RIGHT) {
+    } else if ( toolboxPosition === toolboxUtils.Position.LEFT || toolboxPosition === toolboxUtils.Position.RIGHT) {
       svgMetrics.width -= toolboxMetrics.width;
     }
-  } else if (this.workspace_.getFlyout(true)) {
-    if (toolboxPosition === toolboxUtils.Position.TOP ||
-        toolboxPosition === toolboxUtils.Position.BOTTOM) {
+  }
+  
+  if (flyout && flyout.isVisible()) {
+    if (toolboxPosition === toolboxUtils.Position.TOP || toolboxPosition === toolboxUtils.Position.BOTTOM) {
       svgMetrics.height -= flyoutMetrics.height;
-    } else if (
-        toolboxPosition === toolboxUtils.Position.LEFT ||
-        toolboxPosition === toolboxUtils.Position.RIGHT) {
+    } else if (toolboxPosition === toolboxUtils.Position.LEFT || toolboxPosition === toolboxUtils.Position.RIGHT) {
       svgMetrics.width -= flyoutMetrics.width;
     }
   }
+
   return {
     height: svgMetrics.height / scale,
     width: svgMetrics.width / scale,
@@ -360,10 +370,9 @@ MetricsManager.prototype.getPaddedContent_ = function(
  * @return {!MetricsManager.ContainerRegion} The metrics for the scroll
  *    container.
  */
-MetricsManager.prototype.getScrollMetrics = function(
-    opt_getWorkspaceCoordinates, opt_viewMetrics, opt_contentMetrics) {
+MetricsManager.prototype.getScrollMetrics = function(opt_getWorkspaceCoordinates, opt_viewMetrics, opt_contentMetrics) {
   const scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
-  const viewMetrics = opt_viewMetrics || this.getViewMetrics(false);
+  const viewMetrics = opt_viewMetrics || this.getViewMetrics();
   const contentMetrics = opt_contentMetrics || this.getContentMetrics();
   const fixedEdges = this.getComputedFixedEdges_(viewMetrics);
 
@@ -372,12 +381,9 @@ MetricsManager.prototype.getScrollMetrics = function(
 
   // Use combination of fixed bounds and padded content to make scroll area.
   const top = fixedEdges.top !== undefined ? fixedEdges.top : paddedContent.top;
-  const left =
-      fixedEdges.left !== undefined ? fixedEdges.left : paddedContent.left;
-  const bottom = fixedEdges.bottom !== undefined ? fixedEdges.bottom :
-                                                   paddedContent.bottom;
-  const right =
-      fixedEdges.right !== undefined ? fixedEdges.right : paddedContent.right;
+  const left = fixedEdges.left !== undefined ? fixedEdges.left : paddedContent.left;
+  const bottom = fixedEdges.bottom !== undefined ? fixedEdges.bottom : paddedContent.bottom;
+  const right = fixedEdges.right !== undefined ? fixedEdges.right : paddedContent.right;
 
   return {
     top: top / scale,
@@ -437,13 +443,12 @@ MetricsManager.prototype.getUiMetrics = function() {
  */
 MetricsManager.prototype.getMetrics = function() {
   const toolboxMetrics = this.getToolboxMetrics();
-  const flyoutMetrics = this.getFlyoutMetrics(true);
+  const flyoutMetrics = this.getFlyoutMetrics();
   const svgMetrics = this.getSvgMetrics();
   const absoluteMetrics = this.getAbsoluteMetrics();
   const viewMetrics = this.getViewMetrics();
   const contentMetrics = this.getContentMetrics();
-  const scrollMetrics =
-      this.getScrollMetrics(false, viewMetrics, contentMetrics);
+  const scrollMetrics = this.getScrollMetrics(false, viewMetrics, contentMetrics);
 
   return {
     contentHeight: contentMetrics.height,
@@ -476,7 +481,6 @@ MetricsManager.prototype.getMetrics = function() {
   };
 };
 
-registry.register(
-    registry.Type.METRICS_MANAGER, registry.DEFAULT, MetricsManager);
+registry.register(registry.Type.METRICS_MANAGER, registry.DEFAULT, MetricsManager);
 
 exports.MetricsManager = MetricsManager;

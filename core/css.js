@@ -475,22 +475,26 @@ let content = (`
 
   .blocklyFlyoutZoomControlContainer {
     display: flex;
-    align-items: center;
     position: absolute;
+    align-items: center;
+    justify-content: flex-end;
     user-select: none;
     height: 28px;
     padding: 4px;
+    padding-right: 22px;
     background-color: #eee;
     z-index: 21;
   }
 
   .blocklyFlyoutZoomControl {
     fill: lightgrey;
+    opacity: 0.45;
   }
 
   .blocklyFlyoutZoomControl:hover {
     fill: grey;
-    cursor: pointer
+    cursor: pointer;
+    opacity: 1;
   }
 
   .blocklyScrollbarHorizontal,

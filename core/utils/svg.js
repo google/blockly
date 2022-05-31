@@ -56,6 +56,12 @@ Svg.ANIMATE = new Svg('animate');
 Svg.CIRCLE = new Svg('circle');
 
 /**
+ * @type {!Svg<!SVGCircleElement>}
+ * @package
+ */
+ Svg.ELLIPSE = new Svg('ellipse');
+
+/**
  * @type {!Svg<!SVGClipPathElement>}
  * @package
  */

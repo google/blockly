@@ -39,35 +39,7 @@
   -    * Create unit tests, and explain here how they cover your changes.
   -    * List steps you used for manual testing, and explain how they cover
   -      your changes.
-  -      For each system you manually tested, uncomment it below.
   -->
-
-<!-- I created tests for ... -->
-
-<!-- Steps you used to test:
-  -   1. Go to '...'
-  -   2. Click on '...'
-  -   3. Scroll down to '...'
-  -   4. See error
-  -->
-
-
-<!-- Tested on: -->
-<!-- * Desktop Chrome -->
-<!-- * Desktop Firefox -->
-<!-- * Desktop Safari -->
-<!-- * Desktop Opera -->
-<!-- * Windows Internet Explorer 10 -->
-<!-- * Windows Internet Explorer 11 -->
-<!-- * Windows Edge -->
-
-<!--
-* Smartphone/Tablet/Chromebook (please complete the following information):
-  * Device: [e.g. iPhone6]
-  * OS: [e.g. iOS8.1]
-  * Browser [e.g. stock browser, safari]
-  * Version [e.g. 22]
--->
 
 ### Documentation
 

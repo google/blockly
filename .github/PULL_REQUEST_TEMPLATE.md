@@ -35,10 +35,22 @@
 
 ### Test Coverage
 
-<!-- TODO: Please show how you have added tests to cover your changes,
-  -        or tell us how you tested it. For each systems you tested,
-  -        uncomment the systems in the list below.
+<!-- TODO: Please do one of the following:
+  -    * Create unit tests, and explain here how they cover your changes.
+  -    * List steps you used for manual testing, and explain how they cover
+  -      your changes.
+  -      For each system you manually tested, uncomment it below.
   -->
+
+<!-- I created tests for ... -->
+
+<!-- Steps you used to test:
+  -   1. Go to '...'
+  -   2. Click on '...'
+  -   3. Scroll down to '...'
+  -   4. See error
+  -->
+
 
 <!-- Tested on: -->
 <!-- * Desktop Chrome -->

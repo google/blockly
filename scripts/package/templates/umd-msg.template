@@ -1,0 +1,13 @@
+/* eslint-disable */
+;(function(root, factory) {
+  if (typeof define === 'function' && define.amd) { // AMD
+    define(<%= amd %>, factory);
+  } else if (typeof exports === 'object') { // Node.js
+    module.exports = factory();
+  } else { // Browser
+    Object.assign(root.<%= namespace %>, factory());
+  }
+}(this, function() {
+<%= contents %>
+return <%= exports %>;
+})); 

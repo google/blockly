@@ -14,9 +14,8 @@
 /// <reference path="javascript.d.ts" />
 /// <reference path="msg/msg.d.ts" />
 
-import * as Blockly from './core';
-import './blocks';
-import './javascript';
+import { Generator } from 'core/blockly';
+export * from './core';
+export * as libraryBlocks from './blocks';
+export const JavaScript: Generator;
 import './msg/msg';
-
-export = Blockly;

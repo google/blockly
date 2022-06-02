@@ -321,11 +321,8 @@ function packageLocales() {
   // Remove references to goog.provide and goog.require.
   return gulp.src(`${BUILD_DIR}/msg/js/*.js`)
       .pipe(gulp.replace(/goog\.[^\n]+/g, ''))
-      // Create a new object so that (for example)
-      // require('blockly/msg/es) != require('blockly/msg/fr')
-      .pipe(gulp.insert.prepend('\nvar Blockly = {};Blockly.Msg={};\n'))
       .pipe(packageUMD(
-        'Blockly.Msg',
+        'messages',
         [{
           name: 'Blockly',
           amd: '../core',

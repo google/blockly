@@ -552,8 +552,16 @@ let content = (`
     max-height: 100%;
   }
 
+  .blockly-dropdown-search-input input {
+    width: 100%;
+    padding: 0px 6px;
+    border: 2px solid #dddddd;
+    border-radius: 3px;
+    background-color: #f6f6f6;
+  }
+
   .blocklyDropdownMenu {
-    max-height: 300px;
+    max-height: 265px;
     overflow-y: auto;
     overflow-x: hidden;
     border-radius: 2px;
@@ -598,6 +606,11 @@ let content = (`
     outline: none;
     position: relative;  /* Compatibility with gapi, reset from goog-menu */
     z-index: 20000;  /* Arbitrary, but some apps depend on it... */
+    margin-top: 5px;
+  }
+
+  .blocklyDropDownDiv .blocklyMenu:empty {
+    margin: 0;
   }
 
   /* State: resting. */

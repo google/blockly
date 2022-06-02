@@ -114,13 +114,6 @@ const Menu = function() {
    * @private
    */
   this.searchText_ = '';
-
-  /**
-   * Delayed timer id for search in menu list.
-   * @type {TimeoutId}
-   * @private
-   */
-  this.searchTimeout_ = null;
 };
 
 
@@ -239,6 +232,7 @@ Menu.prototype.dispose = function() {
   for (let i = 0, menuItem; (menuItem = this.menuItems_[i]); i++) {
     menuItem.dispose();
   }
+  this.element_.remove();
   this.element_ = null;
 };
 
@@ -331,35 +325,6 @@ Menu.prototype.highlightFirst_ = function() {
  */
 Menu.prototype.highlightLast_ = function() {
   this.highlightHelper_(this.menuItems_.length, -1);
-};
-
-/**
- * Highlights the item if it contains user's keyboard input value.
- * @param {String} searchKey that received from keyboard event.
- * @private
- */
-Menu.prototype.highlightSuggestedItem_ = function(searchKey) {
-  if (this.searchTimeout_) {
-    this.searchTimeout_ = clearTimeout(this.searchTimeout_);
-  }
-
-  this.searchText_ += searchKey;
-  var that = this;
-  this.searchTimeout_ = setTimeout(function(){
-    that.searchText_ = '';
-  }, 1000);
-
-  var suggestedItem = null;
-  for (var i = 0; i < this.menuItems_.length; i++) {
-    if (this.menuItems_[i].content_.toLowerCase().indexOf(this.searchText_) > -1) {
-      suggestedItem = this.menuItems_[i];
-      break;
-    }
-  }
-
-  if (suggestedItem) {
-    this.setHighlighted(suggestedItem);
-  }
 };
 
 /**
@@ -495,15 +460,8 @@ Menu.prototype.handleKeyEvent_ = function(e) {
       break;
 
     default:
-      if (!e.key) {
         return;
-      }
-
-      this.highlightSuggestedItem_(e.key);
   }
-  // The menu used this key, don't let it have secondary effects.
-  e.preventDefault();
-  e.stopPropagation();
 };
 
 /**

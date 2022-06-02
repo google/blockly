@@ -348,14 +348,14 @@ const registerSelectAll = function() {
   /** @type {!ContextMenuRegistry.RegistryItem} */
   const selectAllOption = {
     displayText: function() {
-      return Msg['SELECT_ALL']
+      return Msg['SELECT_ALL'];
     },
-    preconditionFn: function(/** @type {!ContextMenuRegistry.Scope} */{ workspace }) {
+    preconditionFn: function(/** @type {!ContextMenuRegistry.Scope} */{workspace}) {
       return !workspace.isFlyout && !!workspace.getMassOperations() ?
-        ContextMenuRegistry.ItemCondition.ENABLED : ContextMenuRegistry.ItemCondition.HIDDEN
+        ContextMenuRegistry.ItemCondition.ENABLED : ContextMenuRegistry.ItemCondition.HIDDEN;
     },
-    callback: function(/** @type {!ContextMenuRegistry.Scope} */{ workspace }) {
-      workspace.getMassOperations().selectAll()
+    callback: function(/** @type {!ContextMenuRegistry.Scope} */{workspace}) {
+      workspace.getMassOperations().selectAll();
     },
     scopeType: ContextMenuRegistry.ScopeType.WORKSPACE,
     id: 'workspaceSelectAll',
@@ -434,9 +434,13 @@ const registerComment = function() {
                              scope) {
       const block = scope.block;
       // IE doesn't support necessary features for comment editing.
-      if (!userAgent.IE && !block.isInFlyout &&
-          block.workspace.options.comments && !block.isCollapsed() &&
-          block.isEditable()) {
+      // Hide comment for argument_local block. TODO add comment.
+      if (!userAgent.IE &&
+          !block.isInFlyout &&
+          block.workspace.options.comments &&
+          !block.isCollapsed() &&
+          block.isEditable() &&
+          block.type !== 'argument_local') {
         return ContextMenuRegistry.ItemCondition.ENABLED;
       }
       return ContextMenuRegistry.ItemCondition.HIDDEN;
@@ -545,8 +549,10 @@ const registerDisable = function() {
     preconditionFn: function(/** @type {!ContextMenuRegistry.Scope} */
                              scope) {
       const block = scope.block;
-      if (!block.isInFlyout && block.workspace.options.disable &&
-          block.isEditable()) {
+      if (!block.isInFlyout &&
+          block.workspace.options.disable &&
+          block.isEditable() &&
+          block.type !== 'argument_local') {
         if (block.getInheritedDisabled()) {
           return ContextMenuRegistry.ItemCondition.DISABLED;
         }

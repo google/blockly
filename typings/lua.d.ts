@@ -12,5 +12,5 @@
 /// <reference path="core.d.ts" />
 
 import * as Blockly from './core';
-declare const lua: Blockly.Generator;
+declare const lua: any;
 export = lua;

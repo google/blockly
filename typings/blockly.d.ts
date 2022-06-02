@@ -522,13 +522,13 @@ declare module "core/blocks" {
      * A block definition.  For now this very lose, but it can potentially
      * be refined e.g. by replacing this typedef with a class definition.
      */
-    export type BlockDefinition = Object;
+    export type BlockDefinition = any;
     /**
      * A block definition.  For now this very lose, but it can potentially
      * be refined e.g. by replacing this typedef with a class definition.
      * @typedef {!Object}
      */
-    export let BlockDefinition: any;
+    // export let BlockDefinition: any;
     /**
      * A mapping of block type names to block prototype objects.
      * @type {!Object<string,!BlockDefinition>}

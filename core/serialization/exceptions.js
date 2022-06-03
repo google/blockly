@@ -1,3 +1,26 @@
+/** @fileoverview Contains custom errors thrown by the serialization system. */
+
+
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2018 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 
 /**
  * @license
@@ -5,117 +28,72 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Contains custom errors thrown by the serialization system.
- */
-'use strict';
 
 /**
  * Contains custom errors thrown by the serialization system.
  * @namespace Blockly.serialization.exceptions
  */
-goog.module('Blockly.serialization.exceptions');
 
 /* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
+import { Block } from '../block';
+
 // eslint-disable-next-line no-unused-vars
-const {State} = goog.requireType('Blockly.serialization.blocks');
+import { State } from './blocks';
 
 
-/**
- * @alias Blockly.serialization.exceptions.DeserializationError
- */
-class DeserializationError extends Error {}
-exports.DeserializationError = DeserializationError;
+/** @alias Blockly.serialization.exceptions.DeserializationError */
+export class DeserializationError extends Error {}
 
 /**
  * Represents an error where the serialized state is expected to provide a
  * block type, but it is not provided.
  * @alias Blockly.serialization.exceptions.MissingBlockType
  */
-class MissingBlockType extends DeserializationError {
-  /**
-   * @param {!State} state The state object which is missing the block type.
-   * @package
-   */
-  constructor(state) {
+export class MissingBlockType extends DeserializationError {
+  /** @param state The state object which is missing the block type. */
+  constructor(public state: State) {
     super(`Expected to find a 'type' property, defining the block type`);
-
-    /**
-     * The state object containing the bad name.
-     * @type {!State}
-     */
-    this.state = state;
   }
 }
-exports.MissingBlockType = MissingBlockType;
 
 /**
  * Represents an error where deserialization encountered a block that did
  * not have a connection that was defined in the serialized state.
  * @alias Blockly.serialization.exceptions.MissingConnection
  */
-class MissingConnection extends DeserializationError {
+export class MissingConnection extends DeserializationError {
   /**
-   * @param {string} connection The name of the connection that is missing. E.g.
+   * @param connection The name of the connection that is missing. E.g.
    *     'IF0', or 'next'.
-   * @param {!Block} block The block missing the connection.
-   * @param {!State} state The state object containing the bad connection.
-   * @package
+   * @param block The block missing the connection.
+   * @param state The state object containing the bad connection.
    */
-  constructor(connection, block, state) {
+  constructor(connection: string, public block: Block, public state: State) {
     super(`The block ${block.toDevString()} is missing a(n) ${connection}
 connection`);
-
-    /**
-     * The block missing the connection.
-     * @type {!Block}
-     */
-    this.block = block;
-
-    /**
-     * The state object containing the bad name.
-     * @type {!State}
-     */
-    this.state = state;
   }
 }
-exports.MissingConnection = MissingConnection;
 
 /**
  * Represents an error where deserialization tried to connect two connections
  * that were not compatible.
  * @alias Blockly.serialization.exceptions.BadConnectionCheck
  */
-class BadConnectionCheck extends DeserializationError {
+export class BadConnectionCheck extends DeserializationError {
   /**
-   * @param {string} reason The reason the connections were not compatible.
-   * @param {string} childConnection The name of the incompatible child
-   *     connection. E.g. 'output' or 'previous'.
-   * @param {!Block} childBlock The child block that could not connect
-   *     to its parent.
-   * @param {!State} childState The state object representing the child block.
-   * @package
+   * @param reason The reason the connections were not compatible.
+   * @param childConnection The name of the incompatible child connection. E.g.
+   *     'output' or 'previous'.
+   * @param childBlock The child block that could not connect to its parent.
+   * @param childState The state object representing the child block.
    */
-  constructor(reason, childConnection, childBlock, childState) {
+  constructor(
+    reason: string, childConnection: string, public childBlock: Block,
+    public childState: State) {
     super(`The block ${childBlock.toDevString()} could not connect its
 ${childConnection} to its parent, because: ${reason}`);
-
-    /**
-     * The block that could not connect to its parent.
-     * @type {!Block}
-     */
-    this.childBlock = childBlock;
-
-    /**
-     * The state object representing the block that could not connect to its
-     * parent.
-     * @type {!State}
-     */
-    this.childState = childState;
   }
 }
-exports.BadConnectionCheck = BadConnectionCheck;
 
 /**
  * Represents an error where deserialization encountered a real block as it
@@ -124,21 +102,11 @@ exports.BadConnectionCheck = BadConnectionCheck;
  * do not have real children.
  * @alias Blockly.serialization.exceptions.RealChildOfShadow
  */
-class RealChildOfShadow extends DeserializationError {
-  /**
-   * @param {!State} state The state object representing the real block.
-   * @package
-   */
-  constructor(state) {
+export class RealChildOfShadow extends DeserializationError {
+  /** @param state The state object representing the real block. */
+  constructor(public state: State) {
     super(`Encountered a real block which is defined as a child of a shadow
 block. It is an invariant of Blockly that shadow blocks only have shadow
 children`);
-
-    /**
-     * The state object representing the real block.
-     * @type {!State}
-     */
-    this.state = state;
   }
 }
-exports.RealChildOfShadow = RealChildOfShadow;

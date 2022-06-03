@@ -1,69 +1,86 @@
+/** @fileoverview Zelos renderer. */
+
+
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2018 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Zelos renderer.
- */
-'use strict';
 
 /**
  * Zelos renderer.
  * @class
  */
-goog.module('Blockly.zelos.Drawer');
 
-const debug = goog.require('Blockly.blockRendering.debug');
-const svgPaths = goog.require('Blockly.utils.svgPaths');
 /* eslint-disable-next-line no-unused-vars */
-const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-const {Drawer: BaseDrawer} = goog.require('Blockly.blockRendering.Drawer');
+import { BlockSvg } from 'google3/third_party/javascript/blockly/core/block_svg';
+import * as svgPaths from 'google3/third_party/javascript/blockly/core/utils/svg_paths';
+
 /* eslint-disable-next-line no-unused-vars */
-const {PathObject} = goog.requireType('Blockly.zelos.PathObject');
+import { BaseShape, DynamicShape, Notch } from '../common/constants';
+import * as debug from '../common/debug';
+import { Drawer as BaseDrawer } from '../common/drawer';
+import { InlineInput } from '../measurables/inline_input';
 /* eslint-disable-next-line no-unused-vars */
-const {RenderInfo} = goog.requireType('Blockly.zelos.RenderInfo');
+import { Row } from '../measurables/row';
 /* eslint-disable-next-line no-unused-vars */
-const {Row} = goog.requireType('Blockly.blockRendering.Row');
+import { SpacerRow } from '../measurables/spacer_row';
+import { Types } from '../measurables/types';
+
 /* eslint-disable-next-line no-unused-vars */
-const {SpacerRow} = goog.requireType('Blockly.blockRendering.SpacerRow');
+import { InsideCorners } from './constants';
 /* eslint-disable-next-line no-unused-vars */
-const {StatementInput} = goog.requireType('Blockly.zelos.StatementInput');
+import { RenderInfo } from './info';
 /* eslint-disable-next-line no-unused-vars */
-const {InsideCorners} = goog.requireType('Blockly.zelos.ConstantProvider');
+import { StatementInput } from './measurables/inputs';
 /* eslint-disable-next-line no-unused-vars */
-const {DynamicShape, Notch} = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+import { PathObject } from './path_object';
 
 
 /**
  * An object that draws a block based on the given rendering information.
- * @extends {BaseDrawer}
  * @alias Blockly.zelos.Drawer
  */
-class Drawer extends BaseDrawer {
-  /**
-   * @param {!BlockSvg} block The block to render.
-   * @param {!RenderInfo} info An object containing all
-   *   information needed to render this block.
-   * @package
-   */
-  constructor(block, info) {
-    super(block, info);
+export class Drawer extends BaseDrawer {
+  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
+  override info_!: RenderInfo;
 
-    /**
-     * @type {!RenderInfo}
-     */
-    this.info_;
+  /**
+   * @param block The block to render.
+   * @param info An object containing all information needed to render this
+   *     block.
+   */
+  constructor(block: BlockSvg, info: RenderInfo) {
+    // AnyDuringMigration because:  Argument of type
+    // 'import("/google/src/cloud/adodson/blockly-ts/google3/third_party/javascript/blockly/core/renderers/zelos/info").RenderInfo'
+    // is not assignable to parameter of type
+    // 'import("/google/src/cloud/adodson/bloc...
+    super(block, info as AnyDuringMigration);
   }
 
-  /**
-   * @override
-   */
-  draw() {
-    const pathObject =
-        /** @type {!PathObject} */ (this.block_.pathObject);
+  override draw() {
+    const pathObject = this.block_.pathObject as PathObject;
     pathObject.beginDrawing();
     this.hideHiddenIcons_();
     this.drawOutline_();
@@ -80,19 +97,19 @@ class Drawer extends BaseDrawer {
     if (this.info_.outputConnection) {
       // Store the output connection shape type for parent blocks to use during
       // rendering.
-      pathObject.outputShapeType = this.info_.outputConnection.shape.type;
+      // AnyDuringMigration because:  Type 'number' is not assignable to type
+      // 'null'.
+      pathObject.outputShapeType =
+        this.info_.outputConnection.shape.type as AnyDuringMigration;
     }
     pathObject.endDrawing();
   }
 
-  /**
-   * @override
-   */
-  drawOutline_() {
+  override drawOutline_() {
     if (this.info_.outputConnection &&
-        this.info_.outputConnection.isDynamicShape &&
-        !this.info_.hasStatementInput &&
-        !this.info_.bottomRow.hasNextConnection) {
+      this.info_.outputConnection.isDynamicShape &&
+      !this.info_.hasStatementInput &&
+      !this.info_.bottomRow.hasNextConnection) {
       this.drawFlatTop_();
       this.drawRightDynamicConnection_();
       this.drawFlatBottom_();
@@ -102,12 +119,9 @@ class Drawer extends BaseDrawer {
     }
   }
 
-  /**
-   * @override
-   */
-  drawLeft_() {
+  override drawLeft_() {
     if (this.info_.outputConnection &&
-        this.info_.outputConnection.isDynamicShape) {
+      this.info_.outputConnection.isDynamicShape) {
       this.drawLeftDynamicConnection_();
     } else {
       super.drawLeft_();
@@ -117,34 +131,31 @@ class Drawer extends BaseDrawer {
   /**
    * Add steps for the right side of a row that does not have value or
    * statement input connections.
-   * @param {!Row} row The row to draw the
-   *     side of.
-   * @protected
+   * @param row The row to draw the side of.
    */
-  drawRightSideRow_(row) {
+  protected override drawRightSideRow_(row: Row) {
     if (row.height <= 0) {
       return;
     }
     if (Types.isSpacer(row)) {
-      const spacerRow = /** @type {!SpacerRow} */ (row);
+      const spacerRow = row as SpacerRow;
       if (spacerRow.precedesStatement || spacerRow.followsStatement) {
         const cornerHeight =
-            (/** @type {!InsideCorners} */ (this.constants_.INSIDE_CORNERS))
-                .rightHeight;
+          (this.constants_.INSIDE_CORNERS as InsideCorners).rightHeight;
         const remainingHeight =
-            spacerRow.height - (spacerRow.precedesStatement ? cornerHeight : 0);
+          spacerRow.height - (spacerRow.precedesStatement ? cornerHeight : 0);
         this.outlinePath_ +=
-            (spacerRow.followsStatement ? (/** @type {!InsideCorners} */ (
-                                               this.constants_.INSIDE_CORNERS))
-                                              .pathBottomRight :
-                                          '') +
-            (remainingHeight > 0 ?
-                 svgPaths.lineOnAxis('V', spacerRow.yPos + remainingHeight) :
-                 '') +
-            (spacerRow.precedesStatement ? (/** @type {!InsideCorners} */ (
-                                                this.constants_.INSIDE_CORNERS))
-                                               .pathTopRight :
-                                           '');
+          (spacerRow.followsStatement ?
+            (this.constants_.INSIDE_CORNERS as InsideCorners)
+              .pathBottomRight :
+            '') +
+          (remainingHeight > 0 ?
+            svgPaths.lineOnAxis('V', spacerRow.yPos + remainingHeight) :
+            '') +
+          (spacerRow.precedesStatement ?
+            (this.constants_.INSIDE_CORNERS as InsideCorners)
+              .pathTopRight :
+            '');
         return;
       }
     }
@@ -153,35 +164,28 @@ class Drawer extends BaseDrawer {
 
   /**
    * Add steps to draw the right side of an output with a dynamic connection.
-   * @protected
    */
-  drawRightDynamicConnection_() {
-    this.outlinePath_ +=
-        (/** @type {!DynamicShape} */ (this.info_.outputConnection.shape))
-            .pathRightDown(this.info_.outputConnection.height);
+  protected drawRightDynamicConnection_() {
+    this.outlinePath_ += (this.info_.outputConnection.shape as DynamicShape)
+      .pathRightDown(this.info_.outputConnection.height);
   }
 
   /**
    * Add steps to draw the left side of an output with a dynamic connection.
-   * @protected
    */
-  drawLeftDynamicConnection_() {
+  protected drawLeftDynamicConnection_() {
     this.positionOutputConnection_();
 
-    this.outlinePath_ +=
-        (/** @type {!DynamicShape} */ (this.info_.outputConnection.shape))
-            .pathUp(this.info_.outputConnection.height);
+    this.outlinePath_ += (this.info_.outputConnection.shape as DynamicShape)
+      .pathUp(this.info_.outputConnection.height);
 
     // Close off the path.  This draws a vertical line up to the start of the
     // block's path, which may be either a rounded or a sharp corner.
     this.outlinePath_ += 'z';
   }
 
-  /**
-   * Add steps to draw a flat top row.
-   * @protected
-   */
-  drawFlatTop_() {
+  /** Add steps to draw a flat top row. */
+  protected drawFlatTop_() {
     const topRow = this.info_.topRow;
     this.positionPreviousConnection_();
 
@@ -190,11 +194,8 @@ class Drawer extends BaseDrawer {
     this.outlinePath_ += svgPaths.lineOnAxis('h', topRow.width);
   }
 
-  /**
-   * Add steps to draw a flat bottom row.
-   * @protected
-   */
-  drawFlatBottom_() {
+  /** Add steps to draw a flat bottom row. */
+  protected drawFlatBottom_() {
     const bottomRow = this.info_.bottomRow;
     this.positionNextConnection_();
 
@@ -203,10 +204,7 @@ class Drawer extends BaseDrawer {
     this.outlinePath_ += svgPaths.lineOnAxis('h', -bottomRow.width);
   }
 
-  /**
-   * @override
-   */
-  drawInlineInput_(input) {
+  override drawInlineInput_(input: InlineInput) {
     this.positionInlineInputConnection_(input);
 
     const inputName = input.input.name;
@@ -214,51 +212,43 @@ class Drawer extends BaseDrawer {
       return;
     }
 
-    const width = input.width - (input.connectionWidth * 2);
+    const width = input.width - input.connectionWidth * 2;
     const height = input.height;
     const yPos = input.centerline - height / 2;
 
     const connectionRight = input.xPos + input.connectionWidth;
 
     const outlinePath = svgPaths.moveTo(connectionRight, yPos) +
-        svgPaths.lineOnAxis('h', width) +
-        (/** @type {!DynamicShape} */ (input.shape))
-            .pathRightDown(input.height) +
-        svgPaths.lineOnAxis('h', -width) +
-        (/** @type {!DynamicShape} */ (input.shape)).pathUp(input.height) + 'z';
-    const pathObject = /** @type {!PathObject} */ (this.block_.pathObject);
+      svgPaths.lineOnAxis('h', width) +
+      (input.shape as DynamicShape).pathRightDown(input.height) +
+      svgPaths.lineOnAxis('h', -width) +
+      (input.shape as DynamicShape).pathUp(input.height) + 'z';
+    const pathObject = this.block_.pathObject as PathObject;
     pathObject.setOutlinePath(inputName, outlinePath);
   }
 
-  /**
-   * @override
-   */
-  drawStatementInput_(row) {
-    const input = /** @type {!StatementInput} */ (row.getLastInput());
+  override drawStatementInput_(row: Row) {
+    const input = row.getLastInput() as StatementInput;
     // Where to start drawing the notch, which is on the right side in LTR.
-    const x = input.xPos + input.notchOffset + input.shape.width;
+    const x = input.xPos + input.notchOffset + (input.shape as BaseShape).width;
 
-    const innerTopLeftCorner = (/** @type {!Notch} */ (input.shape)).pathRight +
-        svgPaths.lineOnAxis(
-            'h', -(input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
-        this.constants_.INSIDE_CORNERS.pathTop;
+    const innerTopLeftCorner = (input.shape as Notch).pathRight +
+      svgPaths.lineOnAxis(
+        'h', -(input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
+      this.constants_.INSIDE_CORNERS.pathTop;
 
-    const innerHeight =
-        row.height - (2 * this.constants_.INSIDE_CORNERS.height);
+    const innerHeight = row.height - 2 * this.constants_.INSIDE_CORNERS.height;
 
     const innerBottomLeftCorner = this.constants_.INSIDE_CORNERS.pathBottom +
-        svgPaths.lineOnAxis(
-            'h', (input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
-        (input.connectedBottomNextConnection ?
-             '' :
-             (/** @type {!Notch} */ (input.shape)).pathLeft);
+      svgPaths.lineOnAxis(
+        'h', input.notchOffset - this.constants_.INSIDE_CORNERS.width) +
+      (input.connectedBottomNextConnection ? '' :
+        (input.shape as Notch).pathLeft);
 
     this.outlinePath_ += svgPaths.lineOnAxis('H', x) + innerTopLeftCorner +
-        svgPaths.lineOnAxis('v', innerHeight) + innerBottomLeftCorner +
-        svgPaths.lineOnAxis('H', row.xPos + row.width);
+      svgPaths.lineOnAxis('v', innerHeight) + innerBottomLeftCorner +
+      svgPaths.lineOnAxis('H', row.xPos + row.width);
 
     this.positionStatementInputConnection_(row);
   }
 }
-
-exports.Drawer = Drawer;

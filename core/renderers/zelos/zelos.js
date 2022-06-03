@@ -1,38 +1,58 @@
+/** @fileoverview Re-exports of Blockly.zelos.* modules. */
+
+
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2018 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /**
  * @license
  * Copyright 2021 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Re-exports of Blockly.zelos.* modules.
- */
-'use strict';
 
 /**
  * Re-exports of Blockly.zelos.* modules.
  * @namespace Blockly.zelos
  */
-goog.module('Blockly.zelos');
 
-const {BottomRow} = goog.require('Blockly.zelos.BottomRow');
-const {ConstantProvider} = goog.require('Blockly.zelos.ConstantProvider');
-const {Drawer} = goog.require('Blockly.zelos.Drawer');
-const {MarkerSvg} = goog.require('Blockly.zelos.MarkerSvg');
-const {PathObject} = goog.require('Blockly.zelos.PathObject');
-const {RenderInfo} = goog.require('Blockly.zelos.RenderInfo');
-const {Renderer} = goog.require('Blockly.zelos.Renderer');
-const {RightConnectionShape} = goog.require('Blockly.zelos.RightConnectionShape');
-const {StatementInput} = goog.require('Blockly.zelos.StatementInput');
-const {TopRow} = goog.require('Blockly.zelos.TopRow');
+import { ConstantProvider } from './constants';
+import { Drawer } from './drawer';
+import { RenderInfo } from './info';
+import { MarkerSvg } from './marker_svg';
+import { BottomRow } from './measurables/bottom_row';
+import { StatementInput } from './measurables/inputs';
+import { RightConnectionShape } from './measurables/row_elements';
+import { TopRow } from './measurables/top_row';
+import { PathObject } from './path_object';
+import { Renderer } from './renderer';
 
-exports.BottomRow = BottomRow;
-exports.ConstantProvider = ConstantProvider;
-exports.Drawer = Drawer;
-exports.MarkerSvg = MarkerSvg;
-exports.PathObject = PathObject;
-exports.RenderInfo = RenderInfo;
-exports.Renderer = Renderer;
-exports.RightConnectionShape = RightConnectionShape;
-exports.StatementInput = StatementInput;
-exports.TopRow = TopRow;
+export {
+  BottomRow,
+  ConstantProvider,
+  Drawer,
+  MarkerSvg,
+  PathObject,
+  Renderer,
+  RenderInfo,
+  RightConnectionShape,
+  StatementInput,
+  TopRow
+};

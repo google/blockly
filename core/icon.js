@@ -1,143 +1,136 @@
+/** @fileoverview Object representing an icon on a block. */
+
+
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2018 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /**
  * @license
  * Copyright 2013 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Object representing an icon on a block.
- */
-'use strict';
 
 /**
  * Object representing an icon on a block.
  * @class
  */
-goog.module('Blockly.Icon');
 
-const browserEvents = goog.require('Blockly.browserEvents');
-const dom = goog.require('Blockly.utils.dom');
-const svgMath = goog.require('Blockly.utils.svgMath');
 /* eslint-disable-next-line no-unused-vars */
-const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+import { BlockSvg } from './block_svg';
+import * as browserEvents from './browser_events';
 /* eslint-disable-next-line no-unused-vars */
-const {Bubble} = goog.requireType('Blockly.Bubble');
-const {Coordinate} = goog.require('Blockly.utils.Coordinate');
-const {Size} = goog.require('Blockly.utils.Size');
-const {Svg} = goog.require('Blockly.utils.Svg');
+import { Bubble } from './bubble';
+import { Coordinate } from './utils/coordinate';
+import * as dom from './utils/dom';
+import { Size } from './utils/size';
+import { Svg } from './utils/svg';
+import * as svgMath from './utils/svg_math';
 
 
 /**
  * Class for an icon.
- * @abstract
  * @alias Blockly.Icon
  */
-class Icon {
-  /**
-   * @param {BlockSvg} block The block associated with this icon.
-   */
-  constructor(block) {
-    /**
-     * The block this icon is attached to.
-     * @type {BlockSvg}
-     * @protected
-     */
+export abstract class Icon {
+  protected block_: BlockSvg;
+  /** The icon SVG group. */
+  iconGroup_: SVGGElement | null = null;
+
+  /** Whether this icon gets hidden when the block is collapsed. */
+  collapseHidden = true;
+
+  /** Height and width of icons. */
+  readonly SIZE = 17;
+
+  /** Bubble UI (if visible). */
+  protected bubble_: Bubble | null = null;
+
+  /** Absolute coordinate of icon's center. */
+  protected iconXY_: Coordinate | null = null;
+
+  /** @param block The block associated with this icon. */
+  constructor(block: BlockSvg) {
     this.block_ = block;
-
-    /**
-     * The icon SVG group.
-     * @type {?SVGGElement}
-     */
-    this.iconGroup_ = null;
-
-    /**
-     * Whether this icon gets hidden when the block is collapsed.
-     * @type {boolean}
-     */
-    this.collapseHidden = true;
-
-    /**
-     * Height and width of icons.
-     * @const
-     */
-    this.SIZE = 17;
-
-    /**
-     * Bubble UI (if visible).
-     * @type {?Bubble}
-     * @protected
-     */
-    this.bubble_ = null;
-
-    /**
-     * Absolute coordinate of icon's center.
-     * @type {?Coordinate}
-     * @protected
-     */
-    this.iconXY_ = null;
   }
 
-  /**
-   * Create the icon on the block.
-   */
+  /** Create the icon on the block. */
   createIcon() {
     if (this.iconGroup_) {
       // Icon already exists.
       return;
     }
     /* Here's the markup that will be generated:
-    <g class="blocklyIconGroup">
-      ...
-    </g>
-    */
+        <g class="blocklyIconGroup">
+          ...
+        </g>
+        */
     this.iconGroup_ =
-        dom.createSvgElement(Svg.G, {'class': 'blocklyIconGroup'}, null);
+      dom.createSvgElement(Svg.G, { 'class': 'blocklyIconGroup' });
     if (this.block_.isInFlyout) {
-      dom.addClass(
-          /** @type {!Element} */ (this.iconGroup_),
-          'blocklyIconGroupReadonly');
+      dom.addClass(this.iconGroup_ as Element, 'blocklyIconGroupReadonly');
     }
-    this.drawIcon_(this.iconGroup_);
+    // AnyDuringMigration because:  Argument of type 'SVGGElement | null' is not
+    // assignable to parameter of type 'Element'.
+    this.drawIcon_(this.iconGroup_ as AnyDuringMigration);
 
-    this.block_.getSvgRoot().appendChild(this.iconGroup_);
+    // AnyDuringMigration because:  Argument of type 'SVGGElement | null' is not
+    // assignable to parameter of type 'Node'.
+    this.block_.getSvgRoot().appendChild(this.iconGroup_ as AnyDuringMigration);
+    // AnyDuringMigration because:  Argument of type 'SVGGElement | null' is not
+    // assignable to parameter of type 'EventTarget'.
     browserEvents.conditionalBind(
-        this.iconGroup_, 'mouseup', this, this.iconClick_);
+      this.iconGroup_ as AnyDuringMigration, 'mouseup', this,
+      this.iconClick_);
     this.updateEditable();
   }
 
-  /**
-   * Dispose of this icon.
-   */
+  /** Dispose of this icon. */
   dispose() {
     // Dispose of and unlink the icon.
     dom.removeNode(this.iconGroup_);
     this.iconGroup_ = null;
     // Dispose of and unlink the bubble.
     this.setVisible(false);
-    this.block_ = null;
+    // AnyDuringMigration because:  Type 'null' is not assignable to type
+    // 'BlockSvg'.
+    this.block_ = null as AnyDuringMigration;
   }
 
-  /**
-   * Add or remove the UI indicating if this icon may be clicked or not.
-   */
-  updateEditable() {
-    // No-op on the base class.
-  }
+  /** Add or remove the UI indicating if this icon may be clicked or not. */
+  updateEditable() {}
+  // No-op on the base class.
 
   /**
    * Is the associated bubble visible?
-   * @return {boolean} True if the bubble is visible.
+   * @return True if the bubble is visible.
    */
-  isVisible() {
+  isVisible(): boolean {
     return !!this.bubble_;
   }
 
   /**
    * Clicking on the icon toggles if the bubble is visible.
-   * @param {!Event} e Mouse click event.
-   * @protected
+   * @param e Mouse click event.
    */
-  iconClick_(e) {
+  protected iconClick_(e: Event) {
     if (this.block_.workspace.isDragging()) {
       // Drag operation is concluding.  Don't open the editor.
       return;
@@ -147,23 +140,21 @@ class Icon {
     }
   }
 
-  /**
-   * Change the colour of the associated bubble to match its block.
-   */
+  /** Change the colour of the associated bubble to match its block. */
   applyColour() {
     if (this.isVisible()) {
-      this.bubble_.setColour(this.block_.style.colourPrimary);
+      this.bubble_!.setColour(this.block_.style.colourPrimary);
     }
   }
 
   /**
    * Notification that the icon has moved.  Update the arrow accordingly.
-   * @param {!Coordinate} xy Absolute location in workspace coordinates.
+   * @param xy Absolute location in workspace coordinates.
    */
-  setIconLocation(xy) {
+  setIconLocation(xy: Coordinate) {
     this.iconXY_ = xy;
     if (this.isVisible()) {
-      this.bubble_.setAnchorLocation(xy);
+      this.bubble_!.setAnchorLocation(xy);
     }
   }
 
@@ -174,11 +165,10 @@ class Icon {
   computeIconLocation() {
     // Find coordinates for the centre of the icon and update the arrow.
     const blockXY = this.block_.getRelativeToSurfaceXY();
-    const iconXY = svgMath.getRelativeXY(
-        /** @type {!SVGElement} */ (this.iconGroup_));
+    const iconXY = svgMath.getRelativeXY(this.iconGroup_ as SVGElement);
     const newXY = new Coordinate(
-        blockXY.x + iconXY.x + this.SIZE / 2,
-        blockXY.y + iconXY.y + this.SIZE / 2);
+      blockXY.x + iconXY.x + this.SIZE / 2,
+      blockXY.y + iconXY.y + this.SIZE / 2);
     if (!Coordinate.equals(this.getIconLocation(), newXY)) {
       this.setIconLocation(newXY);
     }
@@ -186,10 +176,9 @@ class Icon {
 
   /**
    * Returns the center of the block's icon relative to the surface.
-   * @return {?Coordinate} Object with x and y properties in
-   *     workspace coordinates.
+   * @return Object with x and y properties in workspace coordinates.
    */
-  getIconLocation() {
+  getIconLocation(): Coordinate | null {
     return this.iconXY_;
   }
 
@@ -197,29 +186,24 @@ class Icon {
    * Get the size of the icon as used for rendering.
    * This differs from the actual size of the icon, because it bulges slightly
    * out of its row rather than increasing the height of its row.
-   * @return {!Size} Height and width.
+   * @return Height and width.
    */
-  getCorrectedSize() {
+  getCorrectedSize(): Size {
     // TODO (#2562): Remove getCorrectedSize.
     return new Size(this.SIZE, this.SIZE - 2);
   }
 
   /**
    * Draw the icon.
-   * @param {!Element} _group The icon group.
-   * @protected
+   * @param _group The icon group.
    */
-  drawIcon_(_group) {
-    // No-op on base class.
-  }
+  protected drawIcon_(_group: Element) {}
+  // No-op on base class.
 
   /**
    * Show or hide the icon.
-   * @param {boolean} _visible True if the icon should be visible.
+   * @param _visible True if the icon should be visible.
    */
-  setVisible(_visible) {
-    // No-op on base class
-  }
+  setVisible(_visible: boolean) {}
 }
-
-exports.Icon = Icon;
+// No-op on base class

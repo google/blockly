@@ -1,21 +1,39 @@
+/** @fileoverview Zelos theme. */
+
+
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2018 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /**
  * @license
  * Copyright 2018 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Zelos theme.
- */
-'use strict';
 
 /**
  * Zelos theme.
  * @namespace Blockly.Themes.Zelos
  */
-goog.module('Blockly.Themes.Zelos');
 
-const {Theme} = goog.require('Blockly.Theme');
+import { Theme } from '../theme';
 
 
 const defaultBlockStyles = {
@@ -73,22 +91,19 @@ const defaultBlockStyles = {
 };
 
 const categoryStyles = {
-  'colour_category': {'colour': '#CF63CF'},
-  'list_category': {'colour': '#9966FF'},
-  'logic_category': {'colour': '#4C97FF'},
-  'loop_category': {'colour': '#0fBD8C'},
-  'math_category': {'colour': '#59C059'},
-  'procedure_category': {'colour': '#FF6680'},
-  'text_category': {'colour': '#FFBF00'},
-  'variable_category': {'colour': '#FF8C1A'},
-  'variable_dynamic_category': {'colour': '#FF8C1A'},
+  'colour_category': { 'colour': '#CF63CF' },
+  'list_category': { 'colour': '#9966FF' },
+  'logic_category': { 'colour': '#4C97FF' },
+  'loop_category': { 'colour': '#0fBD8C' },
+  'math_category': { 'colour': '#59C059' },
+  'procedure_category': { 'colour': '#FF6680' },
+  'text_category': { 'colour': '#FFBF00' },
+  'variable_category': { 'colour': '#FF8C1A' },
+  'variable_dynamic_category': { 'colour': '#FF8C1A' },
 };
 
 /**
  * Zelos theme.
- * @type {Theme}
  * @alias Blockly.Themes.Zelos
  */
-const Zelos = new Theme('zelos', defaultBlockStyles, categoryStyles);
-
-exports.Zelos = Zelos;
+export const Zelos = new Theme('zelos', defaultBlockStyles, categoryStyles);

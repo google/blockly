@@ -1,100 +1,54 @@
+/** @fileoverview The interface for an object that a style can be added to. */
+
+
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2018 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /**
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview The interface for a toolbox item.
- */
-
-'use strict';
-
-/**
- * The interface for a toolbox item.
- * @namespace Blockly.IToolboxItem
- */
-goog.module('Blockly.IToolboxItem');
 
 
 /**
- * Interface for an item in the toolbox.
- * @interface
- * @alias Blockly.IToolboxItem
+ * The interface for an object that a style can be added to.
+ * @namespace Blockly.IStyleable
  */
-const IToolboxItem = function() {};
+
 
 /**
- * Initializes the toolbox item.
- * This includes creating the DOM and updating the state of any items based
- * on the info object.
- * @return {void}
- * @public
+ * Interface for an object that a style can be added to.
+ * @alias Blockly.IStyleable
  */
-IToolboxItem.prototype.init;
+export interface IStyleable {
+  /**
+   * Adds a style on the toolbox. Usually used to change the cursor.
+   * @param style The name of the class to add.
+   */
+  addStyle: AnyDuringMigration;
 
-/**
- * Gets the div for the toolbox item.
- * @return {?Element} The div for the toolbox item.
- * @public
- */
-IToolboxItem.prototype.getDiv;
-
-/**
- * Gets a unique identifier for this toolbox item.
- * @return {string} The ID for the toolbox item.
- * @public
- */
-IToolboxItem.prototype.getId;
-
-/**
- * Gets the parent if the toolbox item is nested.
- * @return {?IToolboxItem} The parent toolbox item, or null if
- *     this toolbox item is not nested.
- * @public
- */
-IToolboxItem.prototype.getParent;
-
-/**
- * Gets the nested level of the category.
- * @return {number} The nested level of the category.
- * @package
- */
-IToolboxItem.prototype.getLevel;
-
-/**
- * Whether the toolbox item is selectable.
- * @return {boolean} True if the toolbox item can be selected.
- * @public
- */
-IToolboxItem.prototype.isSelectable;
-
-/**
- * Whether the toolbox item is collapsible.
- * @return {boolean} True if the toolbox item is collapsible.
- * @public
- */
-IToolboxItem.prototype.isCollapsible;
-
-/**
- * Dispose of this toolbox item. No-op by default.
- * @public
- */
-IToolboxItem.prototype.dispose;
-
-/**
- * Gets the HTML element that is clickable.
- * @return {?Element} The HTML element that receives clicks.
- * @public
- */
-IToolboxItem.prototype.getClickTarget;
-
-/**
- * Sets whether the category is visible or not.
- * For a category to be visible its parent category must also be expanded.
- * @param {boolean} isVisible True if category should be visible.
- * @protected
- */
-IToolboxItem.prototype.setVisible_;
-
-exports.IToolboxItem = IToolboxItem;
+  /**
+   * Removes a style from the toolbox. Usually used to change the cursor.
+   * @param style The name of the class to remove.
+   */
+  removeStyle: AnyDuringMigration;
+}

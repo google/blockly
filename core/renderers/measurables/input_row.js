@@ -1,59 +1,70 @@
 /**
+ * @fileoverview Object representing a row that holds one or more inputs on a
+ * rendered block.
+ */
+
+
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2018 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Object representing a row that holds one or more inputs on a
- * rendered block.
- */
 
 /**
  * Object representing a row that holds one or more inputs on a
  * rendered block.
  * @class
  */
-goog.module('Blockly.blockRendering.InputRow');
-
 /* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const {InputConnection} = goog.require('Blockly.blockRendering.InputConnection');
-const {ExternalValueInput} = goog.require('Blockly.blockRendering.ExternalValueInput');
-const {Row} = goog.require('Blockly.blockRendering.Row');
-const {StatementInput} = goog.require('Blockly.blockRendering.StatementInput');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+import { ConstantProvider } from '../common/constants';
+
+import { ExternalValueInput } from './external_value_input';
+import { InputConnection } from './input_connection';
+import { Row } from './row';
+import { StatementInput } from './statement_input';
+import { Types } from './types';
 
 
 /**
  * An object containing information about a row that holds one or more inputs.
- * @extends {Row}
  * @struct
  * @alias Blockly.blockRendering.InputRow
  */
-class InputRow extends Row {
-  /**
-   * @param {!ConstantProvider} constants The rendering
-   *   constants provider.
-   * @package
-   */
-  constructor(constants) {
+export class InputRow extends Row {
+  /** The total width of all blocks connected to this row. */
+  connectedBlockWidths = 0;
+
+  /** @param constants The rendering constants provider. */
+  constructor(constants: ConstantProvider) {
     super(constants);
     this.type |= Types.INPUT_ROW;
-
-    /**
-     * The total width of all blocks connected to this row.
-     * @type {number}
-     * @package
-     */
-    this.connectedBlockWidths = 0;
   }
 
   /**
    * Inspect all subcomponents and populate all size properties on the row.
-   * @package
    */
-  measure() {
+  override measure() {
     this.width = this.minWidth;
     this.height = this.minHeight;
     let connectedBlockWidths = 0;
@@ -64,13 +75,13 @@ class InputRow extends Row {
         if (Types.isStatementInput(elem) && elem instanceof StatementInput) {
           connectedBlockWidths += elem.connectedBlockWidth;
         } else if (
-            Types.isExternalInput(elem) && elem instanceof ExternalValueInput &&
-            elem.connectedBlockWidth !== 0) {
+          Types.isExternalInput(elem) && elem instanceof ExternalValueInput &&
+          elem.connectedBlockWidth !== 0) {
           connectedBlockWidths +=
-              (elem.connectedBlockWidth - elem.connectionWidth);
+            elem.connectedBlockWidth - elem.connectionWidth;
         }
       }
-      if (!(Types.isSpacer(elem))) {
+      if (!Types.isSpacer(elem)) {
         this.height = Math.max(this.height, elem.height);
       }
     }
@@ -78,12 +89,7 @@ class InputRow extends Row {
     this.widthWithConnectedBlocks = this.width + connectedBlockWidths;
   }
 
-  /**
-   * @override
-   */
-  endsWithElemSpacer() {
+  override endsWithElemSpacer() {
     return !this.hasExternalInput && !this.hasStatement;
   }
 }
-
-exports.InputRow = InputRow;

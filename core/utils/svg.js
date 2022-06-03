@@ -1,186 +1,82 @@
 /**
+ * @fileoverview Defines the Svg class. Its constants enumerate
+ * all SVG tag names used by Blockly.
+ */
+
+
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2018 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Defines the Svg class. Its constants enumerate
- * all SVG tag names used by Blockly.
- */
-'use strict';
 
 /**
  * Defines the Svg class. Its constants enumerate
  * all SVG tag names used by Blockly.
  * @class
  */
-goog.module('Blockly.utils.Svg');
 
 
 /**
  * A name with the type of the SVG element stored in the generic.
- * @template T
  * @alias Blockly.utils.Svg
  */
-class Svg {
-  /**
-   * @param {string} tagName The SVG element tag name.
-   * @package
-   */
-  constructor(tagName) {
-    /**
-     * @type {string}
-     * @private
-     */
-    this.tagName_ = tagName;
-  }
+export class Svg<T> {
+  static ANIMATE = new Svg < SVGAnimateElement > ('animate');
+  static CIRCLE = new Svg < SVGCircleElement > ('circle');
+  static CLIPPATH = new Svg < SVGClipPathElement > ('clipPath');
+  static DEFS = new Svg < SVGDefsElement > ('defs');
+  static FECOMPOSITE = new Svg < SVGFECompositeElement > ('feComposite');
+  static FECOMPONENTTRANSFER =
+    new Svg < SVGFEComponentTransferElement > ('feComponentTransfer');
+  static FEFLOOD = new Svg < SVGFEFloodElement > ('feFlood');
+  static FEFUNCA = new Svg < SVGFEFuncAElement > ('feFuncA');
+  static FEGAUSSIANBLUR = new Svg < SVGFEGaussianBlurElement > ('feGaussianBlur');
+  static FEPOINTLIGHT = new Svg < SVGFEPointLightElement > ('fePointLight');
+  static FESPECULARLIGHTING =
+    new Svg < SVGFESpecularLightingElement > ('feSpecularLighting');
+  static FILTER = new Svg < SVGFilterElement > ('filter');
+  static FOREIGNOBJECT = new Svg < SVGForeignObjectElement > ('foreignObject');
+  static G = new Svg < SVGGElement > ('g');
+  static IMAGE = new Svg < SVGImageElement > ('image');
+  static LINE = new Svg < SVGLineElement > ('line');
+  static PATH = new Svg < SVGPathElement > ('path');
+  static PATTERN = new Svg < SVGPatternElement > ('pattern');
+  static POLYGON = new Svg < SVGPolygonElement > ('polygon');
+  static RECT = new Svg < SVGRectElement > ('rect');
+  static SVG = new Svg < SVGSVGElement > ('svg');
+  static TEXT = new Svg < SVGTextElement > ('text');
+  static TSPAN = new Svg < SVGTSpanElement > ('tspan');
+
+  /** @param tagName The SVG element tag name. */
+  constructor(private readonly tagName: string) {}
 
   /**
    * Returns the SVG element tag name.
-   * @return {string} The name.
+   * @return The name.
    */
-  toString() {
-    return this.tagName_;
+  toString(): string {
+    return this.tagName;
   }
 }
-
-/**
- * @type {!Svg<!SVGAnimateElement>}
- * @package
- */
-Svg.ANIMATE = new Svg('animate');
-
-/**
- * @type {!Svg<!SVGCircleElement>}
- * @package
- */
-Svg.CIRCLE = new Svg('circle');
-
-/**
- * @type {!Svg<!SVGClipPathElement>}
- * @package
- */
-Svg.CLIPPATH = new Svg('clipPath');
-
-/**
- * @type {!Svg<!SVGDefsElement>}
- * @package
- */
-Svg.DEFS = new Svg('defs');
-
-/**
- * @type {!Svg<!SVGFECompositeElement>}
- * @package
- */
-Svg.FECOMPOSITE = new Svg('feComposite');
-
-/**
- * @type {!Svg<!SVGFEComponentTransferElement>}
- * @package
- */
-Svg.FECOMPONENTTRANSFER = new Svg('feComponentTransfer');
-
-/**
- * @type {!Svg<!SVGFEFloodElement>}
- * @package
- */
-Svg.FEFLOOD = new Svg('feFlood');
-
-/**
- * @type {!Svg<!SVGFEFuncAElement>}
- * @package
- */
-Svg.FEFUNCA = new Svg('feFuncA');
-
-/**
- * @type {!Svg<!SVGFEGaussianBlurElement>}
- * @package
- */
-Svg.FEGAUSSIANBLUR = new Svg('feGaussianBlur');
-
-/**
- * @type {!Svg<!SVGFEPointLightElement>}
- * @package
- */
-Svg.FEPOINTLIGHT = new Svg('fePointLight');
-
-/**
- * @type {!Svg<!SVGFESpecularLightingElement>}
- * @package
- */
-Svg.FESPECULARLIGHTING = new Svg('feSpecularLighting');
-
-/**
- * @type {!Svg<!SVGFilterElement>}
- * @package
- */
-Svg.FILTER = new Svg('filter');
-
-/**
- * @type {!Svg<!SVGForeignObjectElement>}
- * @package
- */
-Svg.FOREIGNOBJECT = new Svg('foreignObject');
-
-/**
- * @type {!Svg<!SVGGElement>}
- * @package
- */
-Svg.G = new Svg('g');
-
-/**
- * @type {!Svg<!SVGImageElement>}
- * @package
- */
-Svg.IMAGE = new Svg('image');
-
-/**
- * @type {!Svg<!SVGLineElement>}
- * @package
- */
-Svg.LINE = new Svg('line');
-
-/**
- * @type {!Svg<!SVGPathElement>}
- * @package
- */
-Svg.PATH = new Svg('path');
-
-/**
- * @type {!Svg<!SVGPatternElement>}
- * @package
- */
-Svg.PATTERN = new Svg('pattern');
-
-/**
- * @type {!Svg<!SVGPolygonElement>}
- * @package
- */
-Svg.POLYGON = new Svg('polygon');
-
-/**
- * @type {!Svg<!SVGRectElement>}
- * @package
- */
-Svg.RECT = new Svg('rect');
-
-/**
- * @type {!Svg<!SVGSVGElement>}
- * @package
- */
-Svg.SVG = new Svg('svg');
-
-/**
- * @type {!Svg<!SVGTextElement>}
- * @package
- */
-Svg.TEXT = new Svg('text');
-
-/**
- * @type {!Svg<!SVGTSpanElement>}
- * @package
- */
-Svg.TSPAN = new Svg('tspan');
-
-exports.Svg = Svg;

@@ -1,114 +1,108 @@
+/** @fileoverview Components for creating connections between blocks. */
+
+
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2018 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /**
  * @license
  * Copyright 2011 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Components for creating connections between blocks.
- */
-'use strict';
 
 /**
  * Components for creating connections between blocks.
  * @class
  */
-goog.module('Blockly.Connection');
 
-const Xml = goog.require('Blockly.Xml');
-const blocks = goog.require('Blockly.serialization.blocks');
-const eventUtils = goog.require('Blockly.Events.utils');
+// Unused import preserved for side-effects. Remove if unneeded.
+import './constants';
+
 /* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
+import { Block } from './block';
+import { ConnectionType } from './connection_type';
 /* eslint-disable-next-line no-unused-vars */
-const {BlockMove} = goog.requireType('Blockly.Events.BlockMove');
-const {ConnectionType} = goog.require('Blockly.ConnectionType');
+import { BlockMove } from './events/events_block_move';
+import * as eventUtils from './events/utils';
 /* eslint-disable-next-line no-unused-vars */
-const {IASTNodeLocationWithBlock} = goog.require('Blockly.IASTNodeLocationWithBlock');
+import { Input } from './input';
 /* eslint-disable-next-line no-unused-vars */
-const {IConnectionChecker} = goog.requireType('Blockly.IConnectionChecker');
+import { IASTNodeLocationWithBlock } from './interfaces/i_ast_node_location_with_block';
 /* eslint-disable-next-line no-unused-vars */
-const {Input} = goog.requireType('Blockly.Input');
-/** @suppress {extraRequire} */
-goog.require('Blockly.Events.BlockMove');
-/** @suppress {extraRequire} */
-goog.require('Blockly.constants');
+import { IConnectionChecker } from './interfaces/i_connection_checker';
+import * as blocks from './serialization/blocks';
+import * as Xml from './xml';
 
 
 /**
  * Class for a connection between blocks.
- * @implements {IASTNodeLocationWithBlock}
  * @alias Blockly.Connection
  */
-class Connection {
+export class Connection implements IASTNodeLocationWithBlock {
+  /** Constants for checking whether two connections are compatible. */
+  static CAN_CONNECT = 0;
+  static REASON_SELF_CONNECTION = 1;
+  static REASON_WRONG_TYPE = 2;
+  static REASON_TARGET_NULL = 3;
+  static REASON_CHECKS_FAILED = 4;
+  static REASON_DIFFERENT_WORKSPACES = 5;
+  static REASON_SHADOW_PARENT = 6;
+  static REASON_DRAG_CHECKS_FAILED = 7;
+  static REASON_PREVIOUS_AND_OUTPUT = 8;
+
+  /** Connection this connection connects to.  Null if not connected. */
+  targetConnection: Connection | null = null;
+
+  /** Has this connection been disposed of? */
+  disposed = false;
+
+  /** List of compatible value types.  Null if all types are compatible. */
+  // AnyDuringMigration because:  Type 'null' is not assignable to type 'any[]'.
+  private check_: AnyDuringMigration[] = null as AnyDuringMigration;
+
+  /** DOM representation of a shadow block, or null if none. */
+  // AnyDuringMigration because:  Type 'null' is not assignable to type
+  // 'Element'.
+  private shadowDom_: Element = null as AnyDuringMigration;
+
+  /** Horizontal location of this connection. */
+  x = 0;
+
+  /** Vertical location of this connection. */
+  y = 0;
+
+  private shadowState_: blocks.State | null = null;
+
   /**
-   * @param {!Block} source The block establishing this connection.
-   * @param {number} type The type of the connection.
+   * @param source The block establishing this connection.
+   * @param type The type of the connection.
    */
-  constructor(source, type) {
-    /**
-     * @type {!Block}
-     * @protected
-     */
-    this.sourceBlock_ = source;
-    /** @type {number} */
-    this.type = type;
-
-    /**
-     * Connection this connection connects to.  Null if not connected.
-     * @type {Connection}
-     */
-    this.targetConnection = null;
-
-    /**
-     * Has this connection been disposed of?
-     * @type {boolean}
-     * @package
-     */
-    this.disposed = false;
-
-    /**
-     * List of compatible value types.  Null if all types are compatible.
-     * @type {Array}
-     * @private
-     */
-    this.check_ = null;
-
-    /**
-     * DOM representation of a shadow block, or null if none.
-     * @type {Element}
-     * @private
-     */
-    this.shadowDom_ = null;
-
-    /**
-     * Horizontal location of this connection.
-     * @type {number}
-     * @package
-     */
-    this.x = 0;
-
-    /**
-     * Vertical location of this connection.
-     * @type {number}
-     * @package
-     */
-    this.y = 0;
-
-    /**
-     * @type {?blocks.State}
-     * @private
-     */
-    this.shadowState_ = null;
-  }
+  constructor(private readonly source: Block, public type: number) {}
 
   /**
    * Connect two connections together.  This is the connection on the superior
    * block.
-   * @param {!Connection} childConnection Connection on inferior block.
-   * @protected
+   * @param childConnection Connection on inferior block.
    */
-  connect_(childConnection) {
+  protected connect_(childConnection: Connection) {
     const INPUT = ConnectionType.INPUT_VALUE;
     const parentConnection = this;
     const parentBlock = parentConnection.getSourceBlock();
@@ -124,8 +118,8 @@ class Connection {
     if (parentConnection.isConnected()) {
       const shadowState = parentConnection.stashShadowState_();
       const target = parentConnection.targetBlock();
-      if (target.isShadow()) {
-        target.dispose(false);
+      if (target!.isShadow()) {
+        target!.dispose(false);
       } else {
         parentConnection.disconnect();
         orphan = target;
@@ -136,8 +130,8 @@ class Connection {
     // Connect the new connection to the parent.
     let event;
     if (eventUtils.isEnabled()) {
-      event = /** @type {!BlockMove} */
-          (new (eventUtils.get(eventUtils.BLOCK_MOVE))(childBlock));
+      event =
+        new (eventUtils.get(eventUtils.BLOCK_MOVE))!(childBlock) as BlockMove;
     }
     connectReciprocally(parentConnection, childConnection);
     childBlock.setParent(parentBlock);
@@ -149,10 +143,10 @@ class Connection {
     // Deal with the orphan if it exists.
     if (orphan) {
       const orphanConnection = parentConnection.type === INPUT ?
-          orphan.outputConnection :
-          orphan.previousConnection;
+        orphan.outputConnection :
+        orphan.previousConnection;
       const connection = Connection.getConnectionForOrphanedConnection(
-          childBlock, /** @type {!Connection} */ (orphanConnection));
+        childBlock, (orphanConnection));
       if (connection) {
         orphanConnection.connect(connection);
       } else {
@@ -161,10 +155,7 @@ class Connection {
     }
   }
 
-  /**
-   * Dispose of this connection and deal with connected blocks.
-   * @package
-   */
+  /** Dispose of this connection and deal with connected blocks. */
   dispose() {
     // isConnected returns true for shadows and non-shadows.
     if (this.isConnected()) {
@@ -183,57 +174,53 @@ class Connection {
 
   /**
    * Get the source block for this connection.
-   * @return {!Block} The source block.
+   * @return The source block.
    */
-  getSourceBlock() {
-    return this.sourceBlock_;
+  getSourceBlock(): Block {
+    return this.source;
   }
 
   /**
    * Does the connection belong to a superior block (higher in the source
    * stack)?
-   * @return {boolean} True if connection faces down or right.
+   * @return True if connection faces down or right.
    */
-  isSuperior() {
+  isSuperior(): boolean {
     return this.type === ConnectionType.INPUT_VALUE ||
-        this.type === ConnectionType.NEXT_STATEMENT;
+      this.type === ConnectionType.NEXT_STATEMENT;
   }
 
   /**
    * Is the connection connected?
-   * @return {boolean} True if connection is connected to another connection.
+   * @return True if connection is connected to another connection.
    */
-  isConnected() {
+  isConnected(): boolean {
     return !!this.targetConnection;
   }
 
   /**
    * Get the workspace's connection type checker object.
-   * @return {!IConnectionChecker} The connection type checker for the
-   *     source block's workspace.
-   * @package
+   * @return The connection type checker for the source block's workspace.
    */
-  getConnectionChecker() {
-    return this.sourceBlock_.workspace.connectionChecker;
+  getConnectionChecker(): IConnectionChecker {
+    return this.source.workspace.connectionChecker;
   }
 
   /**
    * Called when an attempted connection fails. NOP by default (i.e. for
    * headless workspaces).
-   * @param {!Connection} _otherConnection Connection that this connection
-   *     failed to connect to.
-   * @package
+   * @param _otherConnection Connection that this connection failed to connect
+   *     to.
    */
-  onFailedConnect(_otherConnection) {
-    // NOP
-  }
+  onFailedConnect(_otherConnection: Connection) {}
+  // NOP
 
   /**
    * Connect this connection to another connection.
-   * @param {!Connection} otherConnection Connection to connect to.
-   * @return {boolean} Whether the the blocks are now connected or not.
+   * @param otherConnection Connection to connect to.
+   * @return Whether the the blocks are now connected or not.
    */
-  connect(otherConnection) {
+  connect(otherConnection: Connection): boolean {
     if (this.targetConnection === otherConnection) {
       // Already connected together.  NOP.
       return true;
@@ -261,9 +248,7 @@ class Connection {
     return this.isConnected();
   }
 
-  /**
-   * Disconnect this connection.
-   */
+  /** Disconnect this connection. */
   disconnect() {
     const otherConnection = this.targetConnection;
     if (!otherConnection) {
@@ -277,13 +262,13 @@ class Connection {
     let parentConnection;
     if (this.isSuperior()) {
       // Superior block.
-      parentBlock = this.sourceBlock_;
+      parentBlock = this.source;
       childBlock = otherConnection.getSourceBlock();
       parentConnection = this;
     } else {
       // Inferior block.
       parentBlock = otherConnection.getSourceBlock();
-      childBlock = this.sourceBlock_;
+      childBlock = this.source;
       parentConnection = otherConnection;
     }
 
@@ -303,18 +288,19 @@ class Connection {
 
   /**
    * Disconnect two blocks that are connected by this connection.
-   * @param {!Block} parentBlock The superior block.
-   * @param {!Block} childBlock The inferior block.
-   * @protected
+   * @param parentBlock The superior block.
+   * @param childBlock The inferior block.
    */
-  disconnectInternal_(parentBlock, childBlock) {
+  protected disconnectInternal_(parentBlock: Block, childBlock: Block) {
     let event;
     if (eventUtils.isEnabled()) {
-      event = /** @type {!BlockMove} */
-          (new (eventUtils.get(eventUtils.BLOCK_MOVE))(childBlock));
+      event =
+        new (eventUtils.get(eventUtils.BLOCK_MOVE))!(childBlock) as BlockMove;
     }
     const otherConnection = this.targetConnection;
-    otherConnection.targetConnection = null;
+    if (otherConnection) {
+      otherConnection.targetConnection = null;
+    }
     this.targetConnection = null;
     childBlock.setParent(null);
     if (event) {
@@ -325,47 +311,44 @@ class Connection {
 
   /**
    * Respawn the shadow block if there was one connected to the this connection.
-   * @protected
    */
-  respawnShadow_() {
+  protected respawnShadow_() {
     // Have to keep respawnShadow_ for backwards compatibility.
     this.createShadowBlock_(true);
   }
 
   /**
    * Returns the block that this connection connects to.
-   * @return {?Block} The connected block or null if none is connected.
+   * @return The connected block or null if none is connected.
    */
-  targetBlock() {
+  targetBlock(): Block | null {
     if (this.isConnected()) {
-      return this.targetConnection.getSourceBlock();
+      return this.targetConnection?.getSourceBlock() ?? null;
     }
     return null;
   }
 
   /**
    * Function to be called when this connection's compatible types have changed.
-   * @protected
    */
-  onCheckChanged_() {
+  protected onCheckChanged_() {
     // The new value type may not be compatible with the existing connection.
     if (this.isConnected() &&
-        (!this.targetConnection ||
-         !this.getConnectionChecker().canConnect(
-             this, this.targetConnection, false))) {
-      const child = this.isSuperior() ? this.targetBlock() : this.sourceBlock_;
-      child.unplug();
+      (!this.targetConnection ||
+        !this.getConnectionChecker().canConnect(
+          this, this.targetConnection, false))) {
+      const child = this.isSuperior() ? this.targetBlock() : this.source;
+      child!.unplug();
     }
   }
 
   /**
    * Change a connection's compatibility.
-   * @param {?(string|!Array<string>)} check Compatible value type or list of
-   *     value types. Null if all types are compatible.
-   * @return {!Connection} The connection being modified
-   *     (to allow chaining).
+   * @param check Compatible value type or list of value types. Null if all
+   *     types are compatible.
+   * @return The connection being modified (to allow chaining).
    */
-  setCheck(check) {
+  setCheck(check: string | string[] | null): Connection {
     if (check) {
       // Ensure that check is in an array.
       if (!Array.isArray(check)) {
@@ -374,66 +357,64 @@ class Connection {
       this.check_ = check;
       this.onCheckChanged_();
     } else {
-      this.check_ = null;
+      // AnyDuringMigration because:  Type 'null' is not assignable to type
+      // 'any[]'.
+      this.check_ = null as AnyDuringMigration;
     }
     return this;
   }
 
   /**
    * Get a connection's compatibility.
-   * @return {?Array} List of compatible value types.
+   * @return List of compatible value types.
    *     Null if all types are compatible.
-   * @public
    */
-  getCheck() {
+  getCheck(): AnyDuringMigration[] | null {
     return this.check_;
   }
 
   /**
    * Changes the connection's shadow block.
-   * @param {?Element} shadowDom DOM representation of a block or null.
+   * @param shadowDom DOM representation of a block or null.
    */
-  setShadowDom(shadowDom) {
-    this.setShadowStateInternal_({shadowDom: shadowDom});
+  setShadowDom(shadowDom: Element | null) {
+    this.setShadowStateInternal_({ shadowDom });
   }
 
   /**
    * Returns the xml representation of the connection's shadow block.
-   * @param {boolean=} returnCurrent If true, and the shadow block is currently
-   *     attached to this connection, this serializes the state of that block
-   *     and returns it (so that field values are correct). Otherwise the saved
-   *     shadowDom is just returned.
-   * @return {?Element} Shadow DOM representation of a block or null.
+   * @param returnCurrent If true, and the shadow block is currently attached to
+   *     this connection, this serializes the state of that block and returns it
+   *     (so that field values are correct). Otherwise the saved shadowDom is
+   *     just returned.
+   * @return Shadow DOM representation of a block or null.
    */
-  getShadowDom(returnCurrent) {
-    return (returnCurrent && this.targetBlock().isShadow()) ?
-        /** @type {!Element} */ (Xml.blockToDom(
-            /** @type {!Block} */ (this.targetBlock()))) :
-        this.shadowDom_;
+  getShadowDom(returnCurrent?: boolean): Element | null {
+    return returnCurrent && this.targetBlock()!.isShadow() ?
+      Xml.blockToDom((this.targetBlock() as Block)) as Element :
+      this.shadowDom_;
   }
 
   /**
    * Changes the connection's shadow block.
-   * @param {?blocks.State} shadowState An state represetation of the block or
-   *     null.
+   * @param shadowState An state represetation of the block or null.
    */
-  setShadowState(shadowState) {
-    this.setShadowStateInternal_({shadowState: shadowState});
+  setShadowState(shadowState: blocks.State | null) {
+    this.setShadowStateInternal_({ shadowState });
   }
 
   /**
    * Returns the serialized object representation of the connection's shadow
    * block.
-   * @param {boolean=} returnCurrent If true, and the shadow block is currently
-   *     attached to this connection, this serializes the state of that block
-   *     and returns it (so that field values are correct). Otherwise the saved
-   *     state is just returned.
-   * @return {?blocks.State} Serialized object representation of the block, or
-   *     null.
+   * @param returnCurrent If true, and the shadow block is currently attached to
+   *     this connection, this serializes the state of that block and returns it
+   *     (so that field values are correct). Otherwise the saved state is just
+   *     returned.
+   * @return Serialized object representation of the block, or null.
    */
-  getShadowState(returnCurrent) {
-    if (returnCurrent && this.targetBlock() && this.targetBlock().isShadow()) {
-      return blocks.save(/** @type {!Block} */ (this.targetBlock()));
+  getShadowState(returnCurrent?: boolean): blocks.State | null {
+    if (returnCurrent && this.targetBlock() && this.targetBlock()!.isShadow()) {
+      return blocks.save(this.targetBlock() as Block);
     }
     return this.shadowState_;
   }
@@ -446,23 +427,21 @@ class Connection {
    * and always return an empty list (the default).
    * {@link Blockly.RenderedConnection} overrides this behavior with a list
    * computed from the rendered positioning.
-   * @param {number} _maxLimit The maximum radius to another connection.
-   * @return {!Array<!Connection>} List of connections.
-   * @package
+   * @param _maxLimit The maximum radius to another connection.
+   * @return List of connections.
    */
-  neighbours(_maxLimit) {
+  neighbours(_maxLimit: number): Connection[] {
     return [];
   }
 
   /**
    * Get the parent input of a connection.
-   * @return {?Input} The input that the connection belongs to or null if
-   *     no parent exists.
-   * @package
+   * @return The input that the connection belongs to or null if no parent
+   *     exists.
    */
-  getParentInput() {
+  getParentInput(): Input | null {
     let parentInput = null;
-    const inputs = this.sourceBlock_.inputList;
+    const inputs = this.source.inputList;
     for (let i = 0; i < inputs.length; i++) {
       if (inputs[i].connection === this) {
         parentInput = inputs[i];
@@ -475,10 +454,10 @@ class Connection {
   /**
    * This method returns a string describing this Connection in developer terms
    * (English only). Intended to on be used in console logs and errors.
-   * @return {string} The description.
+   * @return The description.
    */
-  toString() {
-    const block = this.sourceBlock_;
+  toString(): string {
+    const block = this.source;
     if (!block) {
       return 'Orphan Connection';
     }
@@ -491,7 +470,7 @@ class Connection {
       msg = 'Next Connection of ';
     } else {
       let parentInput = null;
-      for (let i = 0, input; (input = block.inputList[i]); i++) {
+      for (let i = 0, input; input = block.inputList[i]; i++) {
         if (input.connection === this) {
           parentInput = input;
           break;
@@ -510,53 +489,59 @@ class Connection {
   /**
    * Returns the state of the shadowDom_ and shadowState_ properties, then
    * temporarily sets those properties to null so no shadow respawns.
-   * @return {{shadowDom: ?Element, shadowState: ?blocks.State}} The state of
-   *     both the shadowDom_ and shadowState_ properties.
-   * @private
+   * @return The state of both the shadowDom_ and shadowState_ properties.
    */
-  stashShadowState_() {
+  private stashShadowState_(): { shadowDom: Element | null, shadowState: blocks.State | null } {
     const shadowDom = this.getShadowDom(true);
     const shadowState = this.getShadowState(true);
     // Set to null so it doesn't respawn.
-    this.shadowDom_ = null;
+    // AnyDuringMigration because:  Type 'null' is not assignable to type
+    // 'Element'.
+    this.shadowDom_ = null as AnyDuringMigration;
     this.shadowState_ = null;
-    return {shadowDom, shadowState};
+    return { shadowDom, shadowState };
   }
 
   /**
    * Reapplies the stashed state of the shadowDom_ and shadowState_ properties.
-   * @param {{shadowDom: ?Element, shadowState: ?blocks.State}} param0 The state
-   *     to reapply to the shadowDom_ and shadowState_ properties.
-   * @private
+   * @param param0 The state to reapply to the shadowDom_ and shadowState_
+   *     properties.
    */
-  applyShadowState_({shadowDom, shadowState}) {
-    this.shadowDom_ = shadowDom;
+  private applyShadowState_({ shadowDom, shadowState }: {
+    shadowDom: Element | null,
+    shadowState: blocks.State | null
+  }) {
+    // AnyDuringMigration because:  Type 'Element | null' is not assignable to
+    // type 'Element'.
+    this.shadowDom_ = shadowDom as AnyDuringMigration;
     this.shadowState_ = shadowState;
   }
 
   /**
    * Sets the state of the shadow of this connection.
-   * @param {{shadowDom: (?Element|undefined), shadowState:
-   *     (?blocks.State|undefined)}=} param0 The state to set the shadow of this
-   *     connection to.
-   * @private
+   * @param param0 The state to set the shadow of this connection to.
    */
-  setShadowStateInternal_({shadowDom = null, shadowState = null} = {}) {
+  private setShadowStateInternal_({ shadowDom = null, shadowState = null }: {
+    shadowDom?: Element | null,
+    shadowState?: blocks.State | null
+  } = {}) {
     // One or both of these should always be null.
     // If neither is null, the shadowState will get priority.
-    this.shadowDom_ = shadowDom;
+    // AnyDuringMigration because:  Type 'Element | null' is not assignable to
+    // type 'Element'.
+    this.shadowDom_ = shadowDom as AnyDuringMigration;
     this.shadowState_ = shadowState;
 
     const target = this.targetBlock();
     if (!target) {
       this.respawnShadow_();
-      if (this.targetBlock() && this.targetBlock().isShadow()) {
+      if (this.targetBlock() && this.targetBlock()!.isShadow()) {
         this.serializeShadow_(this.targetBlock());
       }
     } else if (target.isShadow()) {
       target.dispose(false);
       this.respawnShadow_();
-      if (this.targetBlock() && this.targetBlock().isShadow()) {
+      if (this.targetBlock() && this.targetBlock()!.isShadow()) {
         this.serializeShadow_(this.targetBlock());
       }
     } else {
@@ -571,17 +556,16 @@ class Connection {
   /**
    * Creates a shadow block based on the current shadowState_ or shadowDom_.
    * shadowState_ gets priority.
-   * @param {boolean} attemptToConnect Whether to try to connect the shadow
-   *     block to this connection or not.
-   * @return {?Block} The shadow block that was created, or null if both the
-   *     shadowState_ and shadowDom_ are null.
-   * @private
+   * @param attemptToConnect Whether to try to connect the shadow block to this
+   *     connection or not.
+   * @return The shadow block that was created, or null if both the shadowState_
+   *     and shadowDom_ are null.
    */
-  createShadowBlock_(attemptToConnect) {
+  private createShadowBlock_(attemptToConnect: boolean): Block | null {
     const parentBlock = this.getSourceBlock();
     const shadowState = this.getShadowState();
     const shadowDom = this.getShadowDom();
-    if (!parentBlock.workspace || (!shadowState && !shadowDom)) {
+    if (!parentBlock.workspace || !shadowState && !shadowDom) {
       return null;
     }
 
@@ -614,7 +598,7 @@ class Connection {
           }
         } else {
           throw new Error(
-              'Cannot connect a shadow block to a previous/output connection');
+            'Cannot connect a shadow block to a previous/output connection');
         }
       }
       return blockShadow;
@@ -625,14 +609,13 @@ class Connection {
   /**
    * Saves the given shadow block to both the shadowDom_ and shadowState_
    * properties, in their respective serialized forms.
-   * @param {?Block} shadow The shadow to serialize, or null.
-   * @private
+   * @param shadow The shadow to serialize, or null.
    */
-  serializeShadow_(shadow) {
+  private serializeShadow_(shadow: Block | null) {
     if (!shadow) {
       return;
     }
-    this.shadowDom_ = /** @type {!Element} */ (Xml.blockToDom(shadow));
+    this.shadowDom_ = Xml.blockToDom(shadow) as Element;
     this.shadowState_ = blocks.save(shadow);
   }
 
@@ -640,16 +623,15 @@ class Connection {
    * Returns the connection (starting at the startBlock) which will accept
    * the given connection. This includes compatible connection types and
    * connection checks.
-   * @param {!Block} startBlock The block on which to start the search.
-   * @param {!Connection} orphanConnection The connection that is looking
-   *     for a home.
-   * @return {?Connection} The suitable connection point on the chain of
-   *     blocks, or null.
+   * @param startBlock The block on which to start the search.
+   * @param orphanConnection The connection that is looking for a home.
+   * @return The suitable connection point on the chain of blocks, or null.
    */
-  static getConnectionForOrphanedConnection(startBlock, orphanConnection) {
+  static getConnectionForOrphanedConnection(
+    startBlock: Block, orphanConnection: Connection): Connection | null {
     if (orphanConnection.type === ConnectionType.OUTPUT_VALUE) {
       return getConnectionForOrphanedOutput(
-          startBlock, orphanConnection.getSourceBlock());
+        startBlock, orphanConnection.getSourceBlock());
     }
     // Otherwise we're dealing with a stack.
     const connection = startBlock.lastConnectionInStack(true);
@@ -662,57 +644,44 @@ class Connection {
 }
 
 /**
- * Constants for checking whether two connections are compatible.
- */
-Connection.CAN_CONNECT = 0;
-Connection.REASON_SELF_CONNECTION = 1;
-Connection.REASON_WRONG_TYPE = 2;
-Connection.REASON_TARGET_NULL = 3;
-Connection.REASON_CHECKS_FAILED = 4;
-Connection.REASON_DIFFERENT_WORKSPACES = 5;
-Connection.REASON_SHADOW_PARENT = 6;
-Connection.REASON_DRAG_CHECKS_FAILED = 7;
-Connection.REASON_PREVIOUS_AND_OUTPUT = 8;
-
-/**
  * Update two connections to target each other.
- * @param {Connection} first The first connection to update.
- * @param {Connection} second The second connection to update.
+ * @param first The first connection to update.
+ * @param second The second connection to update.
  */
-const connectReciprocally = function(first, second) {
+function connectReciprocally(first: Connection, second: Connection) {
   if (!first || !second) {
     throw Error('Cannot connect null connections.');
   }
   first.targetConnection = second;
   second.targetConnection = first;
-};
-
+}
 /**
  * Returns the single connection on the block that will accept the orphaned
  * block, if one can be found. If the block has multiple compatible connections
  * (even if they are filled) this returns null. If the block has no compatible
  * connections, this returns null.
- * @param {!Block} block The superior block.
- * @param {!Block} orphanBlock The inferior block.
- * @return {?Connection} The suitable connection point on 'block',
- *     or null.
+ * @param block The superior block.
+ * @param orphanBlock The inferior block.
+ * @return The suitable connection point on 'block', or null.
  */
-const getSingleConnection = function(block, orphanBlock) {
+function getSingleConnection(block: Block, orphanBlock: Block): Connection |
+  null {
   let foundConnection = null;
   const output = orphanBlock.outputConnection;
   const typeChecker = output.getConnectionChecker();
 
-  for (let i = 0, input; (input = block.inputList[i]); i++) {
+  for (let i = 0, input; input = block.inputList[i]; i++) {
     const connection = input.connection;
     if (connection && typeChecker.canConnect(output, connection, false)) {
       if (foundConnection) {
-        return null;  // More than one connection.
+        return null;
       }
+      // More than one connection.
       foundConnection = connection;
     }
   }
   return foundConnection;
-};
+}
 
 /**
  * Walks down a row a blocks, at each stage checking if there are any
@@ -720,23 +689,21 @@ const getSingleConnection = function(block, orphanBlock) {
  * are zero or multiple eligible connections, returns null.  Otherwise
  * returns the only input on the last block in the chain.
  * Terminates early for shadow blocks.
- * @param {!Block} startBlock The block on which to start the search.
- * @param {!Block} orphanBlock The block that is looking for a home.
- * @return {?Connection} The suitable connection point on the chain
- *     of blocks, or null.
+ * @param startBlock The block on which to start the search.
+ * @param orphanBlock The block that is looking for a home.
+ * @return The suitable connection point on the chain of blocks, or null.
  */
-const getConnectionForOrphanedOutput = function(startBlock, orphanBlock) {
+function getConnectionForOrphanedOutput(
+  startBlock: Block, orphanBlock: Block): Connection | null {
   let newBlock = startBlock;
   let connection;
-  while (
-      (connection = getSingleConnection(
-           /** @type {!Block} */ (newBlock), orphanBlock))) {
-    newBlock = connection.targetBlock();
+  while (connection = getSingleConnection((newBlock), orphanBlock)) {
+    // AnyDuringMigration because:  Type 'Block | null' is not assignable to
+    // type 'Block'.
+    newBlock = connection.targetBlock() as AnyDuringMigration;
     if (!newBlock || newBlock.isShadow()) {
       return connection;
     }
   }
   return null;
-};
-
-exports.Connection = Connection;
+}

@@ -1,39 +1,53 @@
+/** @fileoverview Browser event handling. */
+
+
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2018 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /**
  * @license
  * Copyright 2021 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Browser event handling.
- */
-'use strict';
 
 /**
  * Browser event handling.
  * @namespace Blockly.browserEvents
  */
-goog.module('Blockly.browserEvents');
 
-const Touch = goog.require('Blockly.Touch');
-const userAgent = goog.require('Blockly.utils.userAgent');
+import * as Touch from './touch';
+import * as userAgent from './utils/useragent';
 
 
 /**
  * Blockly opaque event data used to unbind events when using
  * `bind` and `conditionalBind`.
- * @typedef {!Array<!Array>}
  * @alias Blockly.browserEvents.Data
  */
-let Data;
-exports.Data = Data;
+export type Data = AnyDuringMigration[][];
 
 /**
  * The multiplier for scroll wheel deltas using the line delta mode.
  * See https://developer.mozilla.org/en-US/docs/Web/API/WheelEvent/deltaMode
  * for more information on deltaMode.
- * @type {number}
- * @const
  */
 const LINE_MODE_MULTIPLIER = 40;
 
@@ -41,8 +55,6 @@ const LINE_MODE_MULTIPLIER = 40;
  * The multiplier for scroll wheel deltas using the page delta mode.
  * See https://developer.mozilla.org/en-US/docs/Web/API/WheelEvent/deltaMode
  * for more information on deltaMode.
- * @type {number}
- * @const
  */
 const PAGE_MODE_MULTIPLIER = 125;
 
@@ -51,26 +63,25 @@ const PAGE_MODE_MULTIPLIER = 125;
  * touch stream.
  * Use this for events that either start or continue a multi-part gesture (e.g.
  * mousedown or mousemove, which may be part of a drag or click).
- * @param {!EventTarget} node Node upon which to listen.
- * @param {string} name Event name to listen to (e.g. 'mousedown').
- * @param {?Object} thisObject The value of 'this' in the function.
- * @param {!Function} func Function to call when event is triggered.
- * @param {boolean=} opt_noCaptureIdentifier True if triggering on this event
- *     should not block execution of other event handlers on this touch or
- *     other simultaneous touches.  False by default.
- * @param {boolean=} opt_noPreventDefault True if triggering on this event
- *     should prevent the default handler.  False by default.  If
- *     opt_noPreventDefault is provided, opt_noCaptureIdentifier must also be
- *     provided.
- * @return {!Data} Opaque data that can be passed to
- *     unbindEvent_.
+ * @param node Node upon which to listen.
+ * @param name Event name to listen to (e.g. 'mousedown').
+ * @param thisObject The value of 'this' in the function.
+ * @param func Function to call when event is triggered.
+ * @param opt_noCaptureIdentifier True if triggering on this event should not
+ *     block execution of other event handlers on this touch or other
+ *     simultaneous touches.  False by default.
+ * @param opt_noPreventDefault True if triggering on this event should prevent
+ *     the default handler.  False by default.  If opt_noPreventDefault is
+ *     provided, opt_noCaptureIdentifier must also be provided.
+ * @return Opaque data that can be passed to unbindEvent_.
  * @alias Blockly.browserEvents.conditionalBind
  */
-const conditionalBind = function(
-    node, name, thisObject, func, opt_noCaptureIdentifier,
-    opt_noPreventDefault) {
+export function conditionalBind(
+  node: EventTarget, name: string, thisObject: AnyDuringMigration | null,
+  func: Function, opt_noCaptureIdentifier?: boolean,
+  opt_noPreventDefault?: boolean): Data {
   let handled = false;
-  const wrapFunc = function(e) {
+  function wrapFunc(e: AnyDuringMigration) {
     const captureIdentifier = !opt_noCaptureIdentifier;
     // Handle each touch point separately.  If the event was a mouse event, this
     // will hand back an array with one element, which we're fine handling.
@@ -88,10 +99,10 @@ const conditionalBind = function(
       }
       handled = true;
     }
-  };
+  }
 
   const bindData = [];
-  if (globalThis['PointerEvent'] && (name in Touch.TOUCH_MAP)) {
+  if (globalThis['PointerEvent'] && name in Touch.TOUCH_MAP) {
     for (let i = 0; i < Touch.TOUCH_MAP[name].length; i++) {
       const type = Touch.TOUCH_MAP[name][i];
       node.addEventListener(type, wrapFunc, false);
@@ -103,7 +114,7 @@ const conditionalBind = function(
 
     // Add equivalent touch event.
     if (name in Touch.TOUCH_MAP) {
-      const touchWrapFunc = function(e) {
+      const touchWrapFunc = (e: AnyDuringMigration) => {
         wrapFunc(e);
         // Calling preventDefault stops the browser from scrolling/zooming the
         // page.
@@ -120,8 +131,7 @@ const conditionalBind = function(
     }
   }
   return bindData;
-};
-exports.conditionalBind = conditionalBind;
+}
 
 
 /**
@@ -129,25 +139,26 @@ exports.conditionalBind = conditionalBind;
  * of the active touch stream.
  * Use this for events that are not part of a multi-part gesture (e.g.
  * mouseover for tooltips).
- * @param {!EventTarget} node Node upon which to listen.
- * @param {string} name Event name to listen to (e.g. 'mousedown').
- * @param {?Object} thisObject The value of 'this' in the function.
- * @param {!Function} func Function to call when event is triggered.
- * @return {!Data} Opaque data that can be passed to
- *     unbindEvent_.
+ * @param node Node upon which to listen.
+ * @param name Event name to listen to (e.g. 'mousedown').
+ * @param thisObject The value of 'this' in the function.
+ * @param func Function to call when event is triggered.
+ * @return Opaque data that can be passed to unbindEvent_.
  * @alias Blockly.browserEvents.bind
  */
-const bind = function(node, name, thisObject, func) {
-  const wrapFunc = function(e) {
+export function bind(
+  node: EventTarget, name: string, thisObject: AnyDuringMigration | null,
+  func: Function): Data {
+  function wrapFunc(e: AnyDuringMigration) {
     if (thisObject) {
       func.call(thisObject, e);
     } else {
       func(e);
     }
-  };
+  }
 
   const bindData = [];
-  if (globalThis['PointerEvent'] && (name in Touch.TOUCH_MAP)) {
+  if (globalThis['PointerEvent'] && name in Touch.TOUCH_MAP) {
     for (let i = 0; i < Touch.TOUCH_MAP[name].length; i++) {
       const type = Touch.TOUCH_MAP[name][i];
       node.addEventListener(type, wrapFunc, false);
@@ -159,7 +170,7 @@ const bind = function(node, name, thisObject, func) {
 
     // Add equivalent touch event.
     if (name in Touch.TOUCH_MAP) {
-      const touchWrapFunc = function(e) {
+      const touchWrapFunc = (e: AnyDuringMigration) => {
         // Punt on multitouch events.
         if (e.changedTouches && e.changedTouches.length === 1) {
           // Map the touch event's properties to the event.
@@ -180,48 +191,46 @@ const bind = function(node, name, thisObject, func) {
     }
   }
   return bindData;
-};
-exports.bind = bind;
+}
 
 /**
  * Unbind one or more events event from a function call.
- * @param {!Data} bindData Opaque data from bindEvent_.
+ * @param bindData Opaque data from bindEvent_.
  *     This list is emptied during the course of calling this function.
- * @return {!Function} The function call.
+ * @return The function call.
  * @alias Blockly.browserEvents.unbind
  */
-const unbind = function(bindData) {
+export function unbind(bindData: Data): Function {
   let func;
   while (bindData.length) {
     const bindDatum = bindData.pop();
-    const node = bindDatum[0];
-    const name = bindDatum[1];
-    func = bindDatum[2];
+    const node = bindDatum![0];
+    const name = bindDatum![1];
+    func = bindDatum![2];
     node.removeEventListener(name, func, false);
   }
   return func;
-};
-exports.unbind = unbind;
+}
 
 /**
  * Returns true if this event is targeting a text input widget?
- * @param {!Event} e An event.
- * @return {boolean} True if text input.
+ * @param e An event.
+ * @return True if text input.
  * @alias Blockly.browserEvents.isTargetInput
  */
-const isTargetInput = function(e) {
+export function isTargetInput(e: Event): boolean {
   if (e.target instanceof HTMLElement) {
     if (e.target.isContentEditable ||
-        e.target.getAttribute('data-is-text-input') === 'true') {
+      e.target.getAttribute('data-is-text-input') === 'true') {
       return true;
     }
 
     if (e.target instanceof HTMLInputElement) {
       const target = e.target;
       return target.type === 'text' || target.type === 'number' ||
-          target.type === 'email' || target.type === 'password' ||
-          target.type === 'search' || target.type === 'tel' ||
-          target.type === 'url';
+        target.type === 'email' || target.type === 'password' ||
+        target.type === 'search' || target.type === 'tel' ||
+        target.type === 'url';
     }
 
     if (e.target instanceof HTMLTextAreaElement) {
@@ -230,68 +239,75 @@ const isTargetInput = function(e) {
   }
 
   return false;
-};
-exports.isTargetInput = isTargetInput;
+}
 
 /**
  * Returns true this event is a right-click.
- * @param {!Event} e Mouse event.
- * @return {boolean} True if right-click.
+ * @param e Mouse event.
+ * @return True if right-click.
  * @alias Blockly.browserEvents.isRightButton
  */
-const isRightButton = function(e) {
-  if (e.ctrlKey && userAgent.MAC) {
+export function isRightButton(e: Event): boolean {
+  // AnyDuringMigration because:  Property 'ctrlKey' does not exist on type
+  // 'Event'.
+  if ((e as AnyDuringMigration).ctrlKey && userAgent.MAC) {
     // Control-clicking on Mac OS X is treated as a right-click.
     // WebKit on Mac OS X fails to change button to 2 (but Gecko does).
     return true;
   }
-  return e.button === 2;
-};
-exports.isRightButton = isRightButton;
+  // AnyDuringMigration because:  Property 'button' does not exist on type
+  // 'Event'.
+  return (e as AnyDuringMigration).button === 2;
+}
 
 /**
  * Returns the converted coordinates of the given mouse event.
  * The origin (0,0) is the top-left corner of the Blockly SVG.
- * @param {!Event} e Mouse event.
- * @param {!SVGSVGElement} svg SVG element.
- * @param {?SVGMatrix} matrix Inverted screen CTM to use.
- * @return {!SVGPoint} Object with .x and .y properties.
+ * @param e Mouse event.
+ * @param svg SVG element.
+ * @param matrix Inverted screen CTM to use.
+ * @return Object with .x and .y properties.
  * @alias Blockly.browserEvents.mouseToSvg
  */
-const mouseToSvg = function(e, svg, matrix) {
+export function mouseToSvg(
+  e: Event, svg: SVGSVGElement, matrix: SVGMatrix | null): SVGPoint {
   const svgPoint = svg.createSVGPoint();
-  svgPoint.x = e.clientX;
-  svgPoint.y = e.clientY;
+  // AnyDuringMigration because:  Property 'clientX' does not exist on type
+  // 'Event'.
+  svgPoint.x = (e as AnyDuringMigration).clientX;
+  // AnyDuringMigration because:  Property 'clientY' does not exist on type
+  // 'Event'.
+  svgPoint.y = (e as AnyDuringMigration).clientY;
 
   if (!matrix) {
-    matrix = svg.getScreenCTM().inverse();
+    matrix = svg.getScreenCTM()!.inverse();
   }
   return svgPoint.matrixTransform(matrix);
-};
-exports.mouseToSvg = mouseToSvg;
+}
 
 /**
  * Returns the scroll delta of a mouse event in pixel units.
- * @param {!WheelEvent} e Mouse event.
- * @return {{x: number, y: number}} Scroll delta object with .x and .y
- *    properties.
+ * @param e Mouse event.
+ * @return Scroll delta object with .x and .y properties.
  * @alias Blockly.browserEvents.getScrollDeltaPixels
  */
-const getScrollDeltaPixels = function(e) {
+export function getScrollDeltaPixels(e: WheelEvent): { x: number, y: number } {
   switch (e.deltaMode) {
-    case 0x00:  // Pixel mode.
+    case 0x00:
+    // Pixel mode.
     default:
-      return {x: e.deltaX, y: e.deltaY};
-    case 0x01:  // Line mode.
+      return { x: e.deltaX, y: e.deltaY };
+    case 0x01:
+      // Line mode.
       return {
         x: e.deltaX * LINE_MODE_MULTIPLIER,
         y: e.deltaY * LINE_MODE_MULTIPLIER,
       };
-    case 0x02:  // Page mode.
+    case 0x02:
+      // Page mode.
       return {
         x: e.deltaX * PAGE_MODE_MULTIPLIER,
         y: e.deltaY * PAGE_MODE_MULTIPLIER,
       };
   }
-};
-exports.getScrollDeltaPixels = getScrollDeltaPixels;
+}

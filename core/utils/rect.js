@@ -1,15 +1,36 @@
 /**
+ * @fileoverview Utility methods for rectangle manipulation.
+ * These methods are not specific to Blockly, and could be factored out into
+ * a JavaScript framework such as Closure.
+ */
+
+
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2018 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Utility methods for rectangle manipulation.
- * These methods are not specific to Blockly, and could be factored out into
- * a JavaScript framework such as Closure.
- */
-'use strict';
 
 /**
  * Utility methods for rectangle manipulation.
@@ -17,59 +38,45 @@
  * a JavaScript framework such as Closure.
  * @class
  */
-goog.module('Blockly.utils.Rect');
 
 
 /**
  * Class for representing rectangular regions.
  * @alias Blockly.utils.Rect
  */
-const Rect = class {
+export class Rect {
   /**
-   * @param {number} top Top.
-   * @param {number} bottom Bottom.
-   * @param {number} left Left.
-   * @param {number} right Right.
+   * @param top Top.
+   * @param bottom Bottom.
+   * @param left Left.
+   * @param right Right.
    * @struct
    */
-  constructor(top, bottom, left, right) {
-    /** @type {number} */
-    this.top = top;
-
-    /** @type {number} */
-    this.bottom = bottom;
-
-    /** @type {number} */
-    this.left = left;
-
-    /** @type {number} */
-    this.right = right;
-  }
+  constructor(
+    public top: number, public bottom: number, public left: number,
+    public right: number) {}
 
   /**
    * Tests whether this rectangle contains a x/y coordinate.
    *
-   * @param {number} x The x coordinate to test for containment.
-   * @param {number} y The y coordinate to test for containment.
-   * @return {boolean} Whether this rectangle contains given coordinate.
+   * @param x The x coordinate to test for containment.
+   * @param y The y coordinate to test for containment.
+   * @return Whether this rectangle contains given coordinate.
    */
-  contains(x, y) {
+  contains(x: number, y: number): boolean {
     return x >= this.left && x <= this.right && y >= this.top &&
-        y <= this.bottom;
+      y <= this.bottom;
   }
 
   /**
    * Tests whether this rectangle intersects the provided rectangle.
    * Assumes that the coordinate system increases going down and left.
-   * @param {!Rect} other The other rectangle to check for
-   *    intersection with.
-   * @return {boolean} Whether this rectangle intersects the provided rectangle.
+   * @param other The other rectangle to check for intersection with.
+   * @return Whether this rectangle intersects the provided rectangle.
    */
-  intersects(other) {
+  intersects(other: Rect): boolean {
     return !(
-        this.left > other.right || this.right < other.left ||
-        this.top > other.bottom || this.bottom < other.top);
+      this.left > other.right || this.right < other.left ||
+      this.top > other.bottom || this.bottom < other.top);
   }
-};
-
-exports.Rect = Rect;
+}

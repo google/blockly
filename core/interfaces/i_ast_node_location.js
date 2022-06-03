@@ -1,26 +1,41 @@
+/** @fileoverview The interface for an AST node location. */
+
+
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2018 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /**
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview The interface for an AST node location.
- */
 
-'use strict';
 
 /**
  * The interface for an AST node location.
  * @namespace Blockly.IASTNodeLocation
  */
-goog.module('Blockly.IASTNodeLocation');
 
 /**
  * An AST node location interface.
- * @interface
  * @alias Blockly.IASTNodeLocation
  */
-const IASTNodeLocation = function() {};
-
-exports.IASTNodeLocation = IASTNodeLocation;
+export interface IASTNodeLocation {}

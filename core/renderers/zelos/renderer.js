@@ -1,131 +1,145 @@
+/** @fileoverview Zelos renderer. */
+
+
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2018 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Zelos renderer.
- */
-'use strict';
 
 /**
  * Zelos renderer.
  * @class
  */
-goog.module('Blockly.zelos.Renderer');
+/* eslint-disable-next-line no-unused-vars */
+// Unused import preserved for side-effects. Remove if unneeded.
+import 'google3/third_party/javascript/blockly/core/theme';
 
-const blockRendering = goog.require('Blockly.blockRendering');
 /* eslint-disable-next-line no-unused-vars */
-const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-const {ConnectionType} = goog.require('Blockly.ConnectionType');
-const {ConstantProvider} = goog.require('Blockly.zelos.ConstantProvider');
-const {Drawer} = goog.require('Blockly.zelos.Drawer');
-const {InsertionMarkerManager} = goog.require('Blockly.InsertionMarkerManager');
-const {MarkerSvg} = goog.require('Blockly.zelos.MarkerSvg');
+import { BlockSvg } from 'google3/third_party/javascript/blockly/core/block_svg';
+import { Connection } from 'google3/third_party/javascript/blockly/core/connection';
+import { ConnectionType } from 'google3/third_party/javascript/blockly/core/connection_type';
+import { InsertionMarkerManager } from 'google3/third_party/javascript/blockly/core/insertion_marker_manager';
 /* eslint-disable-next-line no-unused-vars */
-const {Marker} = goog.requireType('Blockly.Marker');
-const {PathObject} = goog.require('Blockly.zelos.PathObject');
+import { Marker } from 'google3/third_party/javascript/blockly/core/keyboard_nav/marker';
+import { RenderedConnection } from 'google3/third_party/javascript/blockly/core/rendered_connection';
+import { BlockStyle } from 'google3/third_party/javascript/blockly/core/theme';
 /* eslint-disable-next-line no-unused-vars */
-const {RenderInfo: BaseRenderInfo} = goog.requireType('Blockly.blockRendering.RenderInfo');
-const {RenderInfo} = goog.require('Blockly.zelos.RenderInfo');
-const {Renderer: BaseRenderer} = goog.require('Blockly.blockRendering.Renderer');
+import { WorkspaceSvg } from 'google3/third_party/javascript/blockly/core/workspace_svg';
+
+import * as blockRendering from '../common/block_rendering';
 /* eslint-disable-next-line no-unused-vars */
-const {Theme} = goog.requireType('Blockly.Theme');
-/* eslint-disable-next-line no-unused-vars */
-const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
+import { RenderInfo as BaseRenderInfo } from '../common/info';
+import { Renderer as BaseRenderer } from '../common/renderer';
+
+import { ConstantProvider } from './constants';
+import { Drawer } from './drawer';
+import { RenderInfo } from './info';
+import { MarkerSvg } from './marker_svg';
+import { PathObject } from './path_object';
 
 
 /**
  * The zelos renderer.
- * @extends {BaseRenderer}
  * @alias Blockly.zelos.Renderer
  */
-class Renderer extends BaseRenderer {
-  /**
-   * @param {string} name The renderer name.
-   * @package
-   */
-  constructor(name) {
+export class Renderer extends BaseRenderer {
+  protected override constants_!: ConstantProvider;
+
+  /** @param name The renderer name. */
+  constructor(name: string) {
     super(name);
   }
 
   /**
    * Create a new instance of the renderer's constant provider.
-   * @return {!ConstantProvider} The constant provider.
-   * @protected
-   * @override
+   * @return The constant provider.
    */
-  makeConstants_() {
+  protected override makeConstants_(): ConstantProvider {
     return new ConstantProvider();
   }
 
   /**
    * Create a new instance of the renderer's render info object.
-   * @param {!BlockSvg} block The block to measure.
-   * @return {!RenderInfo} The render info object.
-   * @protected
-   * @override
+   * @param block The block to measure.
+   * @return The render info object.
    */
-  makeRenderInfo_(block) {
+  protected override makeRenderInfo_(block: BlockSvg): RenderInfo {
     return new RenderInfo(this, block);
   }
 
   /**
    * Create a new instance of the renderer's drawer.
-   * @param {!BlockSvg} block The block to render.
-   * @param {!BaseRenderInfo} info An object containing all
-   *   information needed to render this block.
-   * @return {!Drawer} The drawer.
-   * @protected
-   * @override
+   * @param block The block to render.
+   * @param info An object containing all information needed to render this
+   *     block.
+   * @return The drawer.
    */
-  makeDrawer_(block, info) {
-    return new Drawer(
-        block,
-        /** @type {!RenderInfo} */ (info));
+  protected override makeDrawer_(block: BlockSvg, info: BaseRenderInfo):
+    Drawer {
+    return new Drawer(block, (info as RenderInfo));
   }
 
   /**
    * Create a new instance of the renderer's cursor drawer.
-   * @param {!WorkspaceSvg} workspace The workspace the cursor belongs to.
-   * @param {!Marker} marker The marker.
-   * @return {!MarkerSvg} The object in charge of drawing
-   *     the marker.
-   * @package
-   * @override
+   * @param workspace The workspace the cursor belongs to.
+   * @param marker The marker.
+   * @return The object in charge of drawing the marker.
    */
-  makeMarkerDrawer(workspace, marker) {
+  override makeMarkerDrawer(workspace: WorkspaceSvg, marker: Marker):
+    MarkerSvg {
     return new MarkerSvg(workspace, this.getConstants(), marker);
   }
 
   /**
    * Create a new instance of a renderer path object.
-   * @param {!SVGElement} root The root SVG element.
-   * @param {!Theme.BlockStyle} style The style object to use for
-   *     colouring.
-   * @return {!PathObject} The renderer path object.
-   * @package
-   * @override
+   * @param root The root SVG element.
+   * @param style The style object to use for colouring.
+   * @return The renderer path object.
    */
-  makePathObject(root, style) {
+  override makePathObject(root: SVGElement, style: BlockStyle): PathObject {
     return new PathObject(
-        root, style,
-        /** @type {!ConstantProvider} */ (this.getConstants()));
+      root, style, (this.getConstants() as ConstantProvider));
   }
 
   /**
-   * @override
-   */
-  shouldHighlightConnection(conn) {
+  * Get the current renderer's constant provider.  We assume that when this is
+  * called, the renderer has already been initialized.
+  * @return The constant provider.
+  */
+  override getConstants(): ConstantProvider {
+    return this.constants_;
+  }
+
+  override shouldHighlightConnection(conn: Connection) {
     return conn.type !== ConnectionType.INPUT_VALUE &&
-        conn.type !== ConnectionType.OUTPUT_VALUE;
+      conn.type !== ConnectionType.OUTPUT_VALUE;
   }
 
-  /**
-   * @override
-   */
-  getConnectionPreviewMethod(closest, local, topBlock) {
+  override getConnectionPreviewMethod(
+    closest: RenderedConnection, local: RenderedConnection,
+    topBlock: BlockSvg) {
     if (local.type === ConnectionType.OUTPUT_VALUE) {
       if (!closest.isConnected()) {
         return InsertionMarkerManager.PREVIEW_TYPE.INPUT_OUTLINE;
@@ -143,5 +157,3 @@ class Renderer extends BaseRenderer {
 }
 
 blockRendering.register('zelos', Renderer);
-
-exports.Renderer = Renderer;

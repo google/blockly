@@ -1,216 +1,204 @@
+/** @fileoverview The interface for a flyout. */
+
+
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2018 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /**
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview The interface for a flyout.
- */
 
-'use strict';
 
 /**
  * The interface for a flyout.
  * @namespace Blockly.IFlyout
  */
-goog.module('Blockly.IFlyout');
 
 /* eslint-disable-next-line no-unused-vars */
-const toolbox = goog.requireType('Blockly.utils.toolbox');
+// Unused import preserved for side-effects. Remove if unneeded.
+import '../utils/toolbox';
 /* eslint-disable-next-line no-unused-vars */
-const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+// Unused import preserved for side-effects. Remove if unneeded.
+import '../block_svg';
 /* eslint-disable-next-line no-unused-vars */
-const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
+// Unused import preserved for side-effects. Remove if unneeded.
+import '../utils/coordinate';
 /* eslint-disable-next-line no-unused-vars */
-const {IRegistrable} = goog.require('Blockly.IRegistrable');
+// Unused import preserved for side-effects. Remove if unneeded.
+import '../utils/svg';
+
 /* eslint-disable-next-line no-unused-vars */
-const {Svg} = goog.requireType('Blockly.utils.Svg');
+import { WorkspaceSvg } from '../workspace_svg';
+
 /* eslint-disable-next-line no-unused-vars */
-const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
+import { IRegistrable } from './i_registrable';
 
 
 /**
  * Interface for a flyout.
- * @extends {IRegistrable}
- * @interface
  * @alias Blockly.IFlyout
  */
-const IFlyout = function() {};
+export interface IFlyout extends IRegistrable {
+  /** Whether the flyout is laid out horizontally or not. */
+  horizontalLayout: boolean;
 
-/**
- * Whether the flyout is laid out horizontally or not.
- * @type {boolean}
- */
-IFlyout.prototype.horizontalLayout;
+  /** Is RTL vs LTR. */
+  RTL: boolean;
 
-/**
- * Is RTL vs LTR.
- * @type {boolean}
- */
-IFlyout.prototype.RTL;
+  /** The target workspace */
+  targetWorkspace: WorkspaceSvg | null;
 
-/**
- * The target workspace
- * @type {?WorkspaceSvg}
- */
-IFlyout.prototype.targetWorkspace;
+  /** Margin around the edges of the blocks in the flyout. */
+  readonly MARGIN: number;
 
-/**
- * Margin around the edges of the blocks in the flyout.
- * @type {number}
- * @const
- */
-IFlyout.prototype.MARGIN;
+  /** Does the flyout automatically close when a block is created? */
+  autoClose: boolean;
 
-/**
- * Does the flyout automatically close when a block is created?
- * @type {boolean}
- */
-IFlyout.prototype.autoClose;
+  /** Corner radius of the flyout background. */
+  readonly CORNER_RADIUS: number;
 
-/**
- * Corner radius of the flyout background.
- * @type {number}
- * @const
- */
-IFlyout.prototype.CORNER_RADIUS;
+  /**
+   * Creates the flyout's DOM.  Only needs to be called once.  The flyout can
+   * either exist as its own svg element or be a g element nested inside a
+   * separate svg element.
+   * @param tagName The type of tag to put the flyout in. This should be <svg>
+   *     or <g>.
+   * @return The flyout's SVG group.
+   */
+  createDom: AnyDuringMigration;
 
-/**
- * Creates the flyout's DOM.  Only needs to be called once.  The flyout can
- * either exist as its own svg element or be a g element nested inside a
- * separate svg element.
- * @param {string|
- * !Svg<!SVGSVGElement>|
- * !Svg<!SVGGElement>} tagName The type of tag to
- *     put the flyout in. This should be <svg> or <g>.
- * @return {!SVGElement} The flyout's SVG group.
- */
-IFlyout.prototype.createDom;
+  /**
+   * Initializes the flyout.
+   * @param targetWorkspace The workspace in which to create new blocks.
+   */
+  init: AnyDuringMigration;
 
-/**
- * Initializes the flyout.
- * @param {!WorkspaceSvg} targetWorkspace The workspace in which to
- *     create new blocks.
- */
-IFlyout.prototype.init;
+  /**
+   * Dispose of this flyout.
+   * Unlink from all DOM elements to prevent memory leaks.
+   */
+  dispose: () => void;
 
-/**
- * Dispose of this flyout.
- * Unlink from all DOM elements to prevent memory leaks.
- */
-IFlyout.prototype.dispose;
+  /**
+   * Get the width of the flyout.
+   * @return The width of the flyout.
+   */
+  getWidth: AnyDuringMigration;
 
-/**
- * Get the width of the flyout.
- * @return {number} The width of the flyout.
- */
-IFlyout.prototype.getWidth;
+  /**
+   * Get the height of the flyout.
+   * @return The width of the flyout.
+   */
+  getHeight: AnyDuringMigration;
 
-/**
- * Get the height of the flyout.
- * @return {number} The width of the flyout.
- */
-IFlyout.prototype.getHeight;
+  /**
+   * Get the workspace inside the flyout.
+   * @return The workspace inside the flyout.
+   */
+  getWorkspace: AnyDuringMigration;
 
-/**
- * Get the workspace inside the flyout.
- * @return {!WorkspaceSvg} The workspace inside the flyout.
- */
-IFlyout.prototype.getWorkspace;
+  /**
+   * Is the flyout visible?
+   * @return True if visible.
+   */
+  isVisible: AnyDuringMigration;
 
-/**
- * Is the flyout visible?
- * @return {boolean} True if visible.
- */
-IFlyout.prototype.isVisible;
+  /**
+   * Set whether the flyout is visible. A value of true does not necessarily
+   * mean that the flyout is shown. It could be hidden because its container is
+   * hidden.
+   * @param visible True if visible.
+   */
+  setVisible: AnyDuringMigration;
 
-/**
- * Set whether the flyout is visible. A value of true does not necessarily mean
- * that the flyout is shown. It could be hidden because its container is hidden.
- * @param {boolean} visible True if visible.
- */
-IFlyout.prototype.setVisible;
+  /**
+   * Set whether this flyout's container is visible.
+   * @param visible Whether the container is visible.
+   */
+  setContainerVisible: AnyDuringMigration;
 
-/**
- * Set whether this flyout's container is visible.
- * @param {boolean} visible Whether the container is visible.
- */
-IFlyout.prototype.setContainerVisible;
+  /** Hide and empty the flyout. */
+  hide: () => void;
 
-/**
- * Hide and empty the flyout.
- */
-IFlyout.prototype.hide;
+  /**
+   * Show and populate the flyout.
+   * @param flyoutDef Contents to display in the flyout. This is either an array
+   *     of Nodes, a NodeList, a toolbox definition, or a string with the name
+   *     of the dynamic category.
+   */
+  show: AnyDuringMigration;
 
-/**
- * Show and populate the flyout.
- * @param {!toolbox.FlyoutDefinition|string} flyoutDef Contents to
- *     display in the flyout. This is either an array of Nodes, a NodeList, a
- *     toolbox definition, or a string with the name of the dynamic category.
- */
-IFlyout.prototype.show;
+  /**
+   * Create a copy of this block on the workspace.
+   * @param originalBlock The block to copy from the flyout.
+   * @return The newly created block.
+   * @throws {Error} if something went wrong with deserialization.
+   */
+  createBlock: AnyDuringMigration;
 
-/**
- * Create a copy of this block on the workspace.
- * @param {!BlockSvg} originalBlock The block to copy from the flyout.
- * @return {!BlockSvg} The newly created block.
- * @throws {Error} if something went wrong with deserialization.
- */
-IFlyout.prototype.createBlock;
+  /** Reflow blocks and their mats. */
+  reflow: () => void;
 
-/**
- * Reflow blocks and their mats.
- */
-IFlyout.prototype.reflow;
+  /**
+   * @return True if this flyout may be scrolled with a scrollbar or by
+   *     dragging.
+   */
+  isScrollable: AnyDuringMigration;
 
-/**
- * @return {boolean} True if this flyout may be scrolled with a scrollbar or by
- *     dragging.
- */
-IFlyout.prototype.isScrollable;
+  /**
+   * Calculates the x coordinate for the flyout position.
+   * @return X coordinate.
+   */
+  getX: AnyDuringMigration;
 
-/**
- * Calculates the x coordinate for the flyout position.
- * @return {number} X coordinate.
- */
-IFlyout.prototype.getX;
+  /**
+   * Calculates the y coordinate for the flyout position.
+   * @return Y coordinate.
+   */
+  getY: AnyDuringMigration;
 
-/**
- * Calculates the y coordinate for the flyout position.
- * @return {number} Y coordinate.
- */
-IFlyout.prototype.getY;
+  /** Position the flyout. */
+  position: AnyDuringMigration;
 
-/**
- * Position the flyout.
- * @return {void}
- */
-IFlyout.prototype.position;
+  /**
+   * Determine if a drag delta is toward the workspace, based on the position
+   * and orientation of the flyout. This is used in determineDragIntention_ to
+   * determine if a new block should be created or if the flyout should scroll.
+   * @param currentDragDeltaXY How far the pointer has moved from the position
+   *     at mouse down, in pixel units.
+   * @return True if the drag is toward the workspace.
+   */
+  isDragTowardWorkspace: AnyDuringMigration;
 
-/**
- * Determine if a drag delta is toward the workspace, based on the position
- * and orientation of the flyout. This is used in determineDragIntention_ to
- * determine if a new block should be created or if the flyout should scroll.
- * @param {!Coordinate} currentDragDeltaXY How far the pointer has
- *     moved from the position at mouse down, in pixel units.
- * @return {boolean} True if the drag is toward the workspace.
- */
-IFlyout.prototype.isDragTowardWorkspace;
+  /**
+   * Does this flyout allow you to create a new instance of the given block?
+   * Used for deciding if a block can be "dragged out of" the flyout.
+   * @param block The block to copy from the flyout.
+   * @return True if you can create a new instance of the block, false
+   *     otherwise.
+   */
+  isBlockCreatable: AnyDuringMigration;
 
-/**
- * Does this flyout allow you to create a new instance of the given block?
- * Used for deciding if a block can be "dragged out of" the flyout.
- * @param {!BlockSvg} block The block to copy from the flyout.
- * @return {boolean} True if you can create a new instance of the block, false
- *    otherwise.
- * @package
- */
-IFlyout.prototype.isBlockCreatable;
-
-/**
- * Scroll the flyout to the beginning of its contents.
- */
-IFlyout.prototype.scrollToStart;
-
-exports.IFlyout = IFlyout;
+  /** Scroll the flyout to the beginning of its contents. */
+  scrollToStart: () => void;
+}

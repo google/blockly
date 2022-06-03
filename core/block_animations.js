@@ -1,55 +1,64 @@
+/** @fileoverview Methods animating a block on connection and disconnection. */
+
+
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2018 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /**
  * @license
  * Copyright 2018 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Methods animating a block on connection and disconnection.
- */
-'use strict';
 
 /**
  * Methods animating a block on connection and disconnection.
  * @namespace Blockly.blockAnimations
  */
-goog.module('Blockly.blockAnimations');
 
-const dom = goog.require('Blockly.utils.dom');
 /* eslint-disable-next-line no-unused-vars */
-const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-const {Svg} = goog.require('Blockly.utils.Svg');
+import { BlockSvg } from './block_svg';
+import * as dom from './utils/dom';
+import { Svg } from './utils/svg';
 
-/**
- * A bounding box for a cloned block.
- * @typedef {{
- *    x: number,
- *    y: number,
- *    width: number,
- *    height: number
- * }}
- */
-let CloneRect;  // eslint-disable-line no-unused-vars
+/** A bounding box for a cloned block. */
+interface CloneRect {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}  // eslint-disable-line no-unused-vars
 
-/**
- * PID of disconnect UI animation.  There can only be one at a time.
- * @type {number}
- */
+/** PID of disconnect UI animation.  There can only be one at a time. */
 let disconnectPid = 0;
 
-/**
- * SVG group of wobbling block.  There can only be one at a time.
- * @type {Element}
- */
-let disconnectGroup = null;
+/** SVG group of wobbling block.  There can only be one at a time. */
+// AnyDuringMigration because:  Type 'null' is not assignable to type 'Element'.
+let disconnectGroup: Element = null as AnyDuringMigration;
 
 /**
  * Play some UI effects (sound, animation) when disposing of a block.
- * @param {!BlockSvg} block The block being disposed of.
+ * @param block The block being disposed of.
  * @alias Blockly.blockAnimations.disposeUiEffect
- * @package
  */
-const disposeUiEffect = function(block) {
+export function disposeUiEffect(block: BlockSvg) {
   const workspace = block.workspace;
   const svgGroup = block.getSvgRoot();
   workspace.getAudioManager().play('delete');
@@ -57,56 +66,66 @@ const disposeUiEffect = function(block) {
   const xy = workspace.getSvgXY(svgGroup);
   // Deeply clone the current block.
   const clone = svgGroup.cloneNode(true);
-  clone.setAttribute('transform', 'translate(' + xy.x + ',' + xy.y + ')');
+  // AnyDuringMigration because:  Property 'setAttribute' does not exist on type
+  // 'Node'.
+  (clone as AnyDuringMigration)
+    .setAttribute('transform', 'translate(' + xy.x + ',' + xy.y + ')');
   workspace.getParentSvg().appendChild(clone);
+  // AnyDuringMigration because:  Property 'getBBox' does not exist on type
+  // 'Node'.
+  const bBox = (clone as AnyDuringMigration).getBBox();
   const cloneRect =
-      {'x': xy.x, 'y': xy.y, 'width': block.width, 'height': block.height};
+    { 'x': xy.x, 'y': xy.y, 'width': bBox.width, 'height': bBox.height };
   // Start the animation.
-  disposeUiStep(clone, cloneRect, workspace.RTL, new Date, workspace.scale);
-};
-exports.disposeUiEffect = disposeUiEffect;
-
+  // AnyDuringMigration because:  Argument of type 'Node' is not assignable to
+  // parameter of type 'Element'.
+  disposeUiStep(
+    clone as AnyDuringMigration, cloneRect, workspace.RTL, new Date(),
+    workspace.scale);
+}
 /**
  * Animate a cloned block and eventually dispose of it.
  * This is a class method, not an instance method since the original block has
  * been destroyed and is no longer accessible.
- * @param {!Element} clone SVG element to animate and dispose of.
- * @param {!CloneRect} rect Starting rect of the clone.
- * @param {boolean} rtl True if RTL, false if LTR.
- * @param {!Date} start Date of animation's start.
- * @param {number} workspaceScale Scale of workspace.
+ * @param clone SVG element to animate and dispose of.
+ * @param rect Starting rect of the clone.
+ * @param rtl True if RTL, false if LTR.
+ * @param start Date of animation's start.
+ * @param workspaceScale Scale of workspace.
  */
-const disposeUiStep = function(clone, rect, rtl, start, workspaceScale) {
-  const ms = (new Date).getTime() - start.getTime();
+function disposeUiStep(
+  clone: Element, rect: CloneRect, rtl: boolean, start: Date,
+  workspaceScale: number) {
+  const ms = new Date().getTime() - start.getTime();
   const percent = ms / 150;
   if (percent > 1) {
     dom.removeNode(clone);
   } else {
     const x =
-        rect.x + (rtl ? -1 : 1) * rect.width * workspaceScale / 2 * percent;
+      rect.x + (rtl ? -1 : 1) * rect.width * workspaceScale / 2 * percent;
     const y = rect.y + rect.height * workspaceScale * percent;
     const scale = (1 - percent) * workspaceScale;
     clone.setAttribute(
-        'transform',
-        'translate(' + x + ',' + y + ')' +
-            ' scale(' + scale + ')');
+      'transform',
+      'translate(' + x + ',' + y + ')' +
+      ' scale(' + scale + ')');
     setTimeout(disposeUiStep, 10, clone, rect, rtl, start, workspaceScale);
   }
-};
+}
 
 /**
  * Play some UI effects (sound, ripple) after a connection has been established.
- * @param {!BlockSvg} block The block being connected.
+ * @param block The block being connected.
  * @alias Blockly.blockAnimations.connectionUiEffect
- * @package
  */
-const connectionUiEffect = function(block) {
+export function connectionUiEffect(block: BlockSvg) {
   const workspace = block.workspace;
   const scale = workspace.scale;
   workspace.getAudioManager().play('click');
   if (scale < 1) {
-    return;  // Too small to care about visual effects.
+    return;
   }
+  // Too small to care about visual effects.
   // Determine the absolute coordinates of the inferior block.
   const xy = workspace.getSvgXY(block.getSvgRoot());
   // Offset the coordinates based on the two connection types, fix scale.
@@ -118,49 +137,50 @@ const connectionUiEffect = function(block) {
     xy.y += 3 * scale;
   }
   const ripple = dom.createSvgElement(
-      Svg.CIRCLE, {
-        'cx': xy.x,
-        'cy': xy.y,
-        'r': 0,
-        'fill': 'none',
-        'stroke': '#888',
-        'stroke-width': 10,
-      },
-      workspace.getParentSvg());
+    Svg.CIRCLE, {
+    'cx': xy.x,
+    'cy': xy.y,
+    'r': 0,
+    'fill': 'none',
+    'stroke': '#888',
+    'stroke-width': 10,
+  },
+    workspace.getParentSvg());
   // Start the animation.
-  connectionUiStep(ripple, new Date, scale);
-};
-exports.connectionUiEffect = connectionUiEffect;
+  connectionUiStep(ripple, new Date(), scale);
+}
 
 /**
  * Expand a ripple around a connection.
- * @param {!SVGElement} ripple Element to animate.
- * @param {!Date} start Date of animation's start.
- * @param {number} scale Scale of workspace.
+ * @param ripple Element to animate.
+ * @param start Date of animation's start.
+ * @param scale Scale of workspace.
  */
-const connectionUiStep = function(ripple, start, scale) {
-  const ms = (new Date).getTime() - start.getTime();
+function connectionUiStep(ripple: SVGElement, start: Date, scale: number) {
+  const ms = new Date().getTime() - start.getTime();
   const percent = ms / 150;
   if (percent > 1) {
     dom.removeNode(ripple);
   } else {
-    ripple.setAttribute('r', percent * 25 * scale);
-    ripple.style.opacity = 1 - percent;
+    ripple.setAttribute('r', (percent * 25 * scale).toString());
+    // AnyDuringMigration because:  Type 'number' is not assignable to type
+    // 'string'.
+    ripple.style.opacity = (1 - percent) as AnyDuringMigration;
     disconnectPid = setTimeout(connectionUiStep, 10, ripple, start, scale);
   }
-};
+}
 
 /**
  * Play some UI effects (sound, animation) when disconnecting a block.
- * @param {!BlockSvg} block The block being disconnected.
+ * @param block The block being disconnected.
  * @alias Blockly.blockAnimations.disconnectUiEffect
- * @package
  */
-const disconnectUiEffect = function(block) {
+export function disconnectUiEffect(block: BlockSvg) {
   block.workspace.getAudioManager().play('disconnect');
   if (block.workspace.scale < 1) {
-    return;  // Too small to care about visual effects.
+    return;
   }
+  // Too small to care about visual effects.
   // Horizontal distance for bottom of block to wiggle.
   const DISPLACEMENT = 10;
   // Scale magnitude of skew to height of block.
@@ -170,49 +190,51 @@ const disconnectUiEffect = function(block) {
     magnitude *= -1;
   }
   // Start the animation.
-  disconnectUiStep(block.getSvgRoot(), magnitude, new Date);
-};
-exports.disconnectUiEffect = disconnectUiEffect;
+  disconnectUiStep(block.getSvgRoot(), magnitude, new Date());
+}
 
 /**
  * Animate a brief wiggle of a disconnected block.
- * @param {!SVGElement} group SVG element to animate.
- * @param {number} magnitude Maximum degrees skew (reversed for RTL).
- * @param {!Date} start Date of animation's start.
+ * @param group SVG element to animate.
+ * @param magnitude Maximum degrees skew (reversed for RTL).
+ * @param start Date of animation's start.
  */
-const disconnectUiStep = function(group, magnitude, start) {
-  const DURATION = 200;  // Milliseconds.
-  const WIGGLES = 3;     // Half oscillations.
+function disconnectUiStep(group: SVGElement, magnitude: number, start: Date) {
+  const DURATION = 200;
+  // Milliseconds.
+  const WIGGLES = 3;
+  // Half oscillations.
 
-  const ms = (new Date).getTime() - start.getTime();
+  const ms = new Date().getTime() - start.getTime();
   const percent = ms / DURATION;
 
   if (percent > 1) {
-    (/** @type {?} */ (group)).skew_ = '';
+    (group as AnyDuringMigration).skew_ = '';
   } else {
     const skew = Math.round(
-        Math.sin(percent * Math.PI * WIGGLES) * (1 - percent) * magnitude);
-    (/** @type {?} */ (group)).skew_ = 'skewX(' + skew + ')';
+      Math.sin(percent * Math.PI * WIGGLES) * (1 - percent) * magnitude);
+    (group as AnyDuringMigration).skew_ = 'skewX(' + skew + ')';
     disconnectGroup = group;
     disconnectPid = setTimeout(disconnectUiStep, 10, group, magnitude, start);
   }
   group.setAttribute(
-      'transform',
-      (/** @type {?} */ (group)).translate_ + (/** @type {?} */ (group)).skew_);
-};
+    'transform',
+    (group as AnyDuringMigration).translate_ +
+    (group as AnyDuringMigration).skew_);
+}
 
 /**
  * Stop the disconnect UI animation immediately.
  * @alias Blockly.blockAnimations.disconnectUiStop
- * @package
  */
-const disconnectUiStop = function() {
+export function disconnectUiStop() {
   if (disconnectGroup) {
     clearTimeout(disconnectPid);
     const group = disconnectGroup;
-    (/** @type {?} */ (group)).skew_ = '';
-    group.setAttribute('transform', (/** @type {?} */ (group)).translate_);
-    disconnectGroup = null;
+    (group as AnyDuringMigration).skew_ = '';
+    group.setAttribute('transform', (group as AnyDuringMigration).translate_);
+    // AnyDuringMigration because:  Type 'null' is not assignable to type
+    // 'Element'.
+    disconnectGroup = null as AnyDuringMigration;
   }
-};
-exports.disconnectUiStop = disconnectUiStop;
+}

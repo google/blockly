@@ -1,88 +1,84 @@
+/** @fileoverview Objects for rendering highlights on blocks. */
+
+
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2018 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Objects for rendering highlights on blocks.
- */
-'use strict';
 
 /**
  * Objects for rendering highlights on blocks.
  * @class
  */
-goog.module('Blockly.geras.HighlightConstantProvider');
+import * as svgPaths from 'google3/third_party/javascript/blockly/core/utils/svg_paths';
 
-const svgPaths = goog.require('Blockly.utils.svgPaths');
 /* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+import { ConstantProvider } from '../common/constants';
 
-/**
- * An object containing sizing and path information about an outside corner.
- * @typedef {{
- *   height: number,
- *   topLeft: (function(boolean)),
- *   bottomLeft: (function()),
- * }}
- */
-let OutsideCorner;
-exports.OutsideCorner = OutsideCorner;
+/** An object containing sizing and path information about an outside corner. */
+export interface OutsideCorner {
+  height: number;
+  topLeft: (p1: boolean) => string;
+  bottomLeft: () => string;
+}
 
-/**
- * An object containing sizing and path information about an inside corner.
- * @typedef {{
- *   width: number,
- *   height: number,
- *   pathTop: (function(boolean)),
- *   pathBottom: (function(boolean))
- * }}
- */
-let InsideCorner;
-exports.InsideCorner = InsideCorner;
+/** An object containing sizing and path information about an inside corner. */
+export interface InsideCorner {
+  width: number;
+  height: number;
+  pathTop: (p1: boolean) => string;
+  pathBottom: (p1: boolean) => string;
+}
 
-/**
- * An object containing sizing and path information about a start hat.
- * @typedef {{
- *   path: (function(boolean))
- * }}
- */
-let StartHat;
-exports.StartHat = StartHat;
+/** An object containing sizing and path information about a start hat. */
+export interface StartHat {
+  path: (p1: boolean) => string;
+}
 
-/**
- * An object containing sizing and path information about a notch.
- * @typedef {{
- *   pathLeft: string
- * }}
- */
-let Notch;
-exports.Notch = Notch;
+/** An object containing sizing and path information about a notch. */
+export interface Notch {
+  pathLeft: string;
+}
 
-/**
- * An object containing sizing and path information about a puzzle tab.
- * @typedef {{
- *   width: number,
- *   height: number,
- *   pathDown: (function(boolean)),
- *   pathUp: (function(boolean))
- * }}
- */
-let PuzzleTab;
-exports.PuzzleTab = PuzzleTab;
+/** An object containing sizing and path information about a puzzle tab. */
+export interface PuzzleTab {
+  width: number;
+  height: number;
+  pathDown: (p1: boolean) => string;
+  pathUp: (p1: boolean) => string;
+}
 
 /**
  * An object containing sizing and path information about collapsed block
  * indicators.
- * @typedef {{
- *   height: number,
- *   width: number,
- *   pathLeft: string
- * }}
  */
-let JaggedTeeth;
-exports.JaggedTeeth = JaggedTeeth;
+export interface JaggedTeeth {
+  height: number;
+  width: number;
+  pathLeft: string;
+}
 
 /**
  * An object that provides constants for rendering highlights on blocks.
@@ -91,182 +87,172 @@ exports.JaggedTeeth = JaggedTeeth;
  * of constants and are hard to tweak.
  * @alias Blockly.geras.HighlightConstantProvider
  */
-class HighlightConstantProvider {
-  /**
-   * @param {!ConstantProvider} constants The rendering
-   *   constants provider.
-   * @package
-   */
-  constructor(constants) {
-    /**
-     * The renderer's constant provider.
-     * @type {!ConstantProvider}
-     */
+export class HighlightConstantProvider {
+  constantProvider: ConstantProvider;
+
+  /** The offset between the block's main path and highlight path. */
+  OFFSET = 0.5;
+  START_POINT: string;
+  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
+  INSIDE_CORNER!: InsideCorner;
+  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
+  OUTSIDE_CORNER!: OutsideCorner;
+  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
+  PUZZLE_TAB!: PuzzleTab;
+  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
+  NOTCH!: Notch;
+  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
+  JAGGED_TEETH!: JaggedTeeth;
+  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
+  START_HAT!: StartHat;
+
+  /** @param constants The rendering constants provider. */
+  constructor(constants: ConstantProvider) {
+    /** The renderer's constant provider. */
     this.constantProvider = constants;
 
     /**
-     * The offset between the block's main path and highlight path.
-     * @type {number}
-     * @package
-     */
-    this.OFFSET = 0.5;
-
-    /**
      * The start point, which is offset in both X and Y, as an SVG path chunk.
-     * @type {string}
      */
     this.START_POINT = svgPaths.moveBy(this.OFFSET, this.OFFSET);
   }
 
   /**
    * Initialize shape objects based on the constants set in the constructor.
-   * @package
    */
   init() {
     /**
      * An object containing sizing and path information about inside corner
      * highlights.
-     * @type {!InsideCorner}
      */
     this.INSIDE_CORNER = this.makeInsideCorner();
 
     /**
      * An object containing sizing and path information about outside corner
      * highlights.
-     * @type {!OutsideCorner}
      */
     this.OUTSIDE_CORNER = this.makeOutsideCorner();
 
     /**
      * An object containing sizing and path information about puzzle tab
      * highlights.
-     * @type {!PuzzleTab}
      */
     this.PUZZLE_TAB = this.makePuzzleTab();
 
     /**
      * An object containing sizing and path information about notch highlights.
-     * @type {!Notch}
      */
     this.NOTCH = this.makeNotch();
 
     /**
      * An object containing sizing and path information about highlights for
      * collapsed block indicators.
-     * @type {!JaggedTeeth}
      */
     this.JAGGED_TEETH = this.makeJaggedTeeth();
 
     /**
      * An object containing sizing and path information about start hat
      * highlights.
-     * @type {!StartHat}
      */
     this.START_HAT = this.makeStartHat();
   }
 
   /**
-   * @return {!InsideCorner} An object containing sizing and path information
-   *     about inside corner highlights.
-   * @package
+   * @return An object containing sizing and path information about inside
+   *     corner highlights.
    */
-  makeInsideCorner() {
+  makeInsideCorner(): InsideCorner {
     const radius = this.constantProvider.CORNER_RADIUS;
     const offset = this.OFFSET;
 
     /**
      * Distance from shape edge to intersect with a curved corner at 45 degrees.
      * Applies to highlighting on around the outside of a curve.
-     * @const
      */
     const distance45outside = (1 - Math.SQRT1_2) * (radius + offset) - offset;
 
     const pathTopRtl = svgPaths.moveBy(distance45outside, distance45outside) +
-        svgPaths.arc(
-            'a', '0 0,0', radius,
-            svgPaths.point(
-                -distance45outside - offset, radius - distance45outside));
+      svgPaths.arc(
+        'a', '0 0,0', radius,
+        svgPaths.point(
+          -distance45outside - offset, radius - distance45outside));
 
     const pathBottomRtl = svgPaths.arc(
-        'a', '0 0,0', radius + offset,
-        svgPaths.point(radius + offset, radius + offset));
+      'a', '0 0,0', radius + offset,
+      svgPaths.point(radius + offset, radius + offset));
 
     const pathBottomLtr =
-        svgPaths.moveBy(distance45outside, -distance45outside) +
-        svgPaths.arc(
-            'a', '0 0,0', radius + offset,
-            svgPaths.point(
-                radius - distance45outside, distance45outside + offset));
+      svgPaths.moveBy(distance45outside, -distance45outside) +
+      svgPaths.arc(
+        'a', '0 0,0', radius + offset,
+        svgPaths.point(
+          radius - distance45outside, distance45outside + offset));
 
     return {
       width: radius + offset,
       height: radius,
-      pathTop: function(rtl) {
+      pathTop(rtl) {
         return rtl ? pathTopRtl : '';
       },
-      pathBottom: function(rtl) {
+      pathBottom(rtl) {
         return rtl ? pathBottomRtl : pathBottomLtr;
       },
     };
   }
 
   /**
-   * @return {!OutsideCorner} An object containing sizing and path information
-   *     about outside corner highlights.
-   * @package
+   * @return An object containing sizing and path information about outside
+   *     corner highlights.
    */
-  makeOutsideCorner() {
+  makeOutsideCorner(): OutsideCorner {
     const radius = this.constantProvider.CORNER_RADIUS;
     const offset = this.OFFSET;
 
     /**
      * Distance from shape edge to intersect with a curved corner at 45 degrees.
      * Applies to highlighting on around the inside of a curve.
-     * @const
      */
     const distance45inside = (1 - Math.SQRT1_2) * (radius - offset) + offset;
 
     const topLeftStartX = distance45inside;
     const topLeftStartY = distance45inside;
     const topLeftCornerHighlightRtl =
-        svgPaths.moveBy(topLeftStartX, topLeftStartY) +
-        svgPaths.arc(
-            'a', '0 0,1', radius - offset,
-            svgPaths.point(radius - topLeftStartX, -topLeftStartY + offset));
+      svgPaths.moveBy(topLeftStartX, topLeftStartY) +
+      svgPaths.arc(
+        'a', '0 0,1', radius - offset,
+        svgPaths.point(radius - topLeftStartX, -topLeftStartY + offset));
     /**
      * SVG path for drawing the highlight on the rounded top-left corner.
-     * @const
      */
     const topLeftCornerHighlightLtr = svgPaths.moveBy(offset, radius) +
-        svgPaths.arc(
-            'a', '0 0,1', radius - offset,
-            svgPaths.point(radius, -radius + offset));
+      svgPaths.arc(
+        'a', '0 0,1', radius - offset,
+        svgPaths.point(radius, -radius + offset));
 
     const bottomLeftStartX = distance45inside;
     const bottomLeftStartY = -distance45inside;
     const bottomLeftPath = svgPaths.moveBy(bottomLeftStartX, bottomLeftStartY) +
-        svgPaths.arc(
-            'a', '0 0,1', radius - offset,
-            svgPaths.point(
-                -bottomLeftStartX + offset, -bottomLeftStartY - radius));
+      svgPaths.arc(
+        'a', '0 0,1', radius - offset,
+        svgPaths.point(
+          -bottomLeftStartX + offset, -bottomLeftStartY - radius));
 
     return {
       height: radius,
-      topLeft: function(rtl) {
+      topLeft(rtl) {
         return rtl ? topLeftCornerHighlightRtl : topLeftCornerHighlightLtr;
       },
-      bottomLeft: function() {
+      bottomLeft() {
         return bottomLeftPath;
       },
     };
   }
 
   /**
-   * @return {!PuzzleTab} An object containing sizing and path information about
-   *     puzzle tab highlights.
-   * @package
+   * @return An object containing sizing and path information about puzzle tab
+   *     highlights.
    */
-  makePuzzleTab() {
+  makePuzzleTab(): PuzzleTab {
     const width = this.constantProvider.TAB_WIDTH;
     const height = this.constantProvider.TAB_HEIGHT;
 
@@ -275,71 +261,68 @@ class HighlightConstantProvider {
     const verticalOverlap = 2.5;
 
     const highlightRtlUp =
-        svgPaths.moveBy(-2, -height + verticalOverlap + 0.9) +
-        svgPaths.lineTo(width * -0.45, -2.1);
+      svgPaths.moveBy(-2, -height + verticalOverlap + 0.9) +
+      svgPaths.lineTo(width * -0.45, -2.1);
 
     const highlightRtlDown = svgPaths.lineOnAxis('v', verticalOverlap) +
-        svgPaths.moveBy(-width * 0.97, 2.5) +
-        svgPaths.curve(
-            'q',
-            [
-              svgPaths.point(-width * 0.05, 10),
-              svgPaths.point(width * 0.3, 9.5),
-            ]) +
-        svgPaths.moveBy(width * 0.67, -1.9) +
-        svgPaths.lineOnAxis('v', verticalOverlap);
+      svgPaths.moveBy(-width * 0.97, 2.5) +
+      svgPaths.curve(
+        'q',
+        [
+          svgPaths.point(-width * 0.05, 10),
+          svgPaths.point(width * 0.3, 9.5),
+        ]) +
+      svgPaths.moveBy(width * 0.67, -1.9) +
+      svgPaths.lineOnAxis('v', verticalOverlap);
 
     const highlightLtrUp = svgPaths.lineOnAxis('v', -1.5) +
-        svgPaths.moveBy(width * -0.92, -0.5) +
-        svgPaths.curve(
-            'q',
-            [svgPaths.point(width * -0.19, -5.5), svgPaths.point(0, -11)]) +
-        svgPaths.moveBy(width * 0.92, 1);
+      svgPaths.moveBy(width * -0.92, -0.5) +
+      svgPaths.curve(
+        'q',
+        [svgPaths.point(width * -0.19, -5.5), svgPaths.point(0, -11)]) +
+      svgPaths.moveBy(width * 0.92, 1);
 
     const highlightLtrDown =
-        svgPaths.moveBy(-5, height - 0.7) + svgPaths.lineTo(width * 0.46, -2.1);
+      svgPaths.moveBy(-5, height - 0.7) + svgPaths.lineTo(width * 0.46, -2.1);
 
     return {
-      width: width,
-      height: height,
-      pathUp: function(rtl) {
+      width,
+      height,
+      pathUp(rtl) {
         return rtl ? highlightRtlUp : highlightLtrUp;
       },
-      pathDown: function(rtl) {
+      pathDown(rtl) {
         return rtl ? highlightRtlDown : highlightLtrDown;
       },
     };
   }
 
   /**
-   * @return {!Notch} An object containing sizing and path information about
-   *     notch highlights.
-   * @package
+   * @return An object containing sizing and path information about notch
+   *     highlights.
    */
-  makeNotch() {
+  makeNotch(): Notch {
     // This is only for the previous connection.
     const pathLeft = svgPaths.lineOnAxis('h', this.OFFSET) +
-        this.constantProvider.NOTCH.pathLeft;
-    return {pathLeft: pathLeft};
+      this.constantProvider.NOTCH.pathLeft;
+    return { pathLeft };
   }
 
   /**
-   * @return {!JaggedTeeth} An object containing sizing and path information
-   *     about collapsed block edge highlights.
-   * @package
+   * @return An object containing sizing and path information about collapsed
+   *     block edge highlights.
    */
-  makeJaggedTeeth() {
+  makeJaggedTeeth(): JaggedTeeth {
     const pathLeft = svgPaths.lineTo(5.1, 2.6) + svgPaths.moveBy(-10.2, 6.8) +
-        svgPaths.lineTo(5.1, 2.6);
-    return {pathLeft: pathLeft, height: 12, width: 10.2};
+      svgPaths.lineTo(5.1, 2.6);
+    return { pathLeft, height: 12, width: 10.2 };
   }
 
   /**
-   * @return {!StartHat} An object containing sizing and path information about
-   *     start highlights.
-   * @package
+   * @return An object containing sizing and path information about start
+   *     highlights.
    */
-  makeStartHat() {
+  makeStartHat(): StartHat {
     const hatHeight = this.constantProvider.START_HAT.height;
     const pathRtl = svgPaths.moveBy(25, -8.7) + svgPaths.curve('c', [
       svgPaths.point(29.7, -6.2),
@@ -353,11 +336,9 @@ class HighlightConstantProvider {
       svgPaths.point(75, -8.7),
     ]) + svgPaths.moveTo(100.5, hatHeight + 0.5);
     return {
-      path: function(rtl) {
+      path(rtl) {
         return rtl ? pathRtl : pathLtr;
       },
     };
   }
 }
-
-exports.HighlightConstantProvider = HighlightConstantProvider;

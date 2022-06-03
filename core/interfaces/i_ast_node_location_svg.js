@@ -1,45 +1,56 @@
+/** @fileoverview The interface for an AST node location SVG. */
+
+
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2018 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /**
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview The interface for an AST node location SVG.
- */
 
-'use strict';
 
 /**
  * The interface for an AST node location SVG.
  * @namespace Blockly.IASTNodeLocationSvg
  */
-goog.module('Blockly.IASTNodeLocationSvg');
-
 /* eslint-disable-next-line no-unused-vars */
-const {IASTNodeLocation} = goog.require('Blockly.IASTNodeLocation');
+import { IASTNodeLocation } from './i_ast_node_location';
 
 
 /**
  * An AST node location SVG interface.
- * @interface
- * @extends {IASTNodeLocation}
  * @alias Blockly.IASTNodeLocationSvg
  */
-const IASTNodeLocationSvg = function() {};
+export interface IASTNodeLocationSvg extends IASTNodeLocation {
+  /**
+   * Add the marker SVG to this node's SVG group.
+   * @param markerSvg The SVG root of the marker to be added to the SVG group.
+   */
+  setMarkerSvg: AnyDuringMigration;
 
-/**
- * Add the marker SVG to this node's SVG group.
- * @param {SVGElement} markerSvg The SVG root of the marker to be added to the
- *     SVG group.
- */
-IASTNodeLocationSvg.prototype.setMarkerSvg;
-
-/**
- * Add the cursor SVG to this node's SVG group.
- * @param {SVGElement} cursorSvg The SVG root of the cursor to be added to the
- *     SVG group.
- */
-IASTNodeLocationSvg.prototype.setCursorSvg;
-
-exports.IASTNodeLocationSvg = IASTNodeLocationSvg;
+  /**
+   * Add the cursor SVG to this node's SVG group.
+   * @param cursorSvg The SVG root of the cursor to be added to the SVG group.
+   */
+  setCursorSvg: AnyDuringMigration;
+}

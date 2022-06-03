@@ -1,41 +1,59 @@
 /**
+ * @fileoverview The interface for an AST node location that has an associated
+ * block.
+ */
+
+
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2018 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview The interface for an AST node location that has an associated
- * block.
- */
 
-'use strict';
 
 /**
  * The interface for an AST node location that has an associated
  * block.
  * @namespace Blockly.IASTNodeLocationWithBlock
  */
-goog.module('Blockly.IASTNodeLocationWithBlock');
 
 /* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
+// Unused import preserved for side-effects. Remove if unneeded.
+import '../block';
+
 /* eslint-disable-next-line no-unused-vars */
-const {IASTNodeLocation} = goog.require('Blockly.IASTNodeLocation');
+import { IASTNodeLocation } from './i_ast_node_location';
 
 
 /**
  * An AST node location that has an associated block.
- * @interface
- * @extends {IASTNodeLocation}
  * @alias Blockly.IASTNodeLocationWithBlock
  */
-const IASTNodeLocationWithBlock = function() {};
-
-/**
- * Get the source block associated with this node.
- * @return {Block} The source block.
- */
-IASTNodeLocationWithBlock.prototype.getSourceBlock;
-
-exports.IASTNodeLocationWithBlock = IASTNodeLocationWithBlock;
+export interface IASTNodeLocationWithBlock extends IASTNodeLocation {
+  /**
+   * Get the source block associated with this node.
+   * @return The source block.
+   */
+  getSourceBlock: AnyDuringMigration;
+}

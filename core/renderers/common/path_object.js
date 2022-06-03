@@ -1,105 +1,105 @@
+/** @fileoverview An object that owns a block's rendering SVG elements. */
+
+
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2018 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview An object that owns a block's rendering SVG elements.
- */
 
-'use strict';
 
 /**
  * An object that owns a block's rendering SVG elements.
  * @class
  */
-goog.module('Blockly.blockRendering.PathObject');
+/* eslint-disable-next-line no-unused-vars */
+// Unused import preserved for side-effects. Remove if unneeded.
+import 'google3/third_party/javascript/blockly/core/theme';
 
-const dom = goog.require('Blockly.utils.dom');
 /* eslint-disable-next-line no-unused-vars */
-const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+import { BlockSvg } from 'google3/third_party/javascript/blockly/core/block_svg';
 /* eslint-disable-next-line no-unused-vars */
-const {Connection} = goog.requireType('Blockly.Connection');
+import { Connection } from 'google3/third_party/javascript/blockly/core/connection';
+import { BlockStyle } from 'google3/third_party/javascript/blockly/core/theme';
+import * as dom from 'google3/third_party/javascript/blockly/core/utils/dom';
+import { Svg } from 'google3/third_party/javascript/blockly/core/utils/svg';
+
 /* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+import { ConstantProvider } from './constants';
 /* eslint-disable-next-line no-unused-vars */
-const {IPathObject} = goog.require('Blockly.blockRendering.IPathObject');
-const {Svg} = goog.require('Blockly.utils.Svg');
-/* eslint-disable-next-line no-unused-vars */
-const {Theme} = goog.requireType('Blockly.Theme');
+import { IPathObject } from './i_path_object';
 
 
 /**
  * An object that handles creating and setting each of the SVG elements
  * used by the renderer.
- * @implements {IPathObject}
  * @alias Blockly.blockRendering.PathObject
  */
-class PathObject {
-  /**
-   * @param {!SVGElement} root The root SVG element.
-   * @param {!Theme.BlockStyle} style The style object to use for
-   *     colouring.
-   * @param {!ConstantProvider} constants The renderer's
-   *     constants.
-   * @package
-   */
-  constructor(root, style, constants) {
-    /**
-     * The renderer's constant provider.
-     * @type {!ConstantProvider}
-     * @package
-     */
-    this.constants = constants;
+export class PathObject implements IPathObject {
+  svgRoot: AnyDuringMigration;
+  svgPath: SVGElement;
 
+  /**
+   * Holds the cursors svg element when the cursor is attached to the block.
+   * This is null if there is no cursor on the block.
+   */
+  // AnyDuringMigration because:  Type 'null' is not assignable to type
+  // 'SVGElement'.
+  cursorSvg: SVGElement = null as AnyDuringMigration;
+
+  /**
+   * Holds the markers svg element when the marker is attached to the block.
+   * This is null if there is no marker on the block.
+   */
+  // AnyDuringMigration because:  Type 'null' is not assignable to type
+  // 'SVGElement'.
+  markerSvg: SVGElement = null as AnyDuringMigration;
+
+  /**
+   * @param root The root SVG element.
+   * @param style The style object to use for colouring.
+   * @param constants The renderer's constants.
+   */
+  constructor(
+    root: SVGElement, public style: BlockStyle,
+    public constants: ConstantProvider) {
     this.svgRoot = root;
 
-    /**
-     * The primary path of the block.
-     * @type {!SVGElement}
-     * @package
-     */
+    /** The primary path of the block. */
     this.svgPath =
-        dom.createSvgElement(Svg.PATH, {'class': 'blocklyPath'}, this.svgRoot);
-
-    /**
-     * The style object to use when colouring block paths.
-     * @type {!Theme.BlockStyle}
-     * @package
-     */
-    this.style = style;
-
-    /**
-     * Holds the cursors svg element when the cursor is attached to the block.
-     * This is null if there is no cursor on the block.
-     * @type {SVGElement}
-     * @package
-     */
-    this.cursorSvg = null;
-
-    /**
-     * Holds the markers svg element when the marker is attached to the block.
-     * This is null if there is no marker on the block.
-     * @type {SVGElement}
-     * @package
-     */
-    this.markerSvg = null;
+      dom.createSvgElement(Svg.PATH, { 'class': 'blocklyPath' }, this.svgRoot);
   }
 
   /**
    * Set the path generated by the renderer onto the respective SVG element.
-   * @param {string} pathString The path.
-   * @package
+   * @param pathString The path.
    */
-  setPath(pathString) {
+  setPath(pathString: string) {
     this.svgPath.setAttribute('d', pathString);
   }
 
-  /**
-   * Flip the SVG paths in RTL.
-   * @package
-   */
+  /** Flip the SVG paths in RTL. */
   flipRTL() {
     // Mirror the block's path.
     this.svgPath.setAttribute('transform', 'scale(-1 1)');
@@ -107,13 +107,14 @@ class PathObject {
 
   /**
    * Add the cursor SVG to this block's SVG group.
-   * @param {SVGElement} cursorSvg The SVG root of the cursor to be added to the
-   *     block SVG group.
-   * @package
+   * @param cursorSvg The SVG root of the cursor to be added to the block SVG
+   *     group.
    */
-  setCursorSvg(cursorSvg) {
+  setCursorSvg(cursorSvg: SVGElement) {
     if (!cursorSvg) {
-      this.cursorSvg = null;
+      // AnyDuringMigration because:  Type 'null' is not assignable to type
+      // 'SVGElement'.
+      this.cursorSvg = null as AnyDuringMigration;
       return;
     }
 
@@ -123,13 +124,14 @@ class PathObject {
 
   /**
    * Add the marker SVG to this block's SVG group.
-   * @param {SVGElement} markerSvg The SVG root of the marker to be added to the
-   *     block SVG group.
-   * @package
+   * @param markerSvg The SVG root of the marker to be added to the block SVG
+   *     group.
    */
-  setMarkerSvg(markerSvg) {
+  setMarkerSvg(markerSvg: SVGElement) {
     if (!markerSvg) {
-      this.markerSvg = null;
+      // AnyDuringMigration because:  Type 'null' is not assignable to type
+      // 'SVGElement'.
+      this.markerSvg = null as AnyDuringMigration;
       return;
     }
 
@@ -144,10 +146,9 @@ class PathObject {
   /**
    * Apply the stored colours to the block's path, taking into account whether
    * the paths belong to a shadow block.
-   * @param {!BlockSvg} block The source block.
-   * @package
+   * @param block The source block.
    */
-  applyColour(block) {
+  applyColour(block: BlockSvg) {
     this.svgPath.setAttribute('stroke', this.style.colourTertiary);
     this.svgPath.setAttribute('fill', this.style.colourPrimary);
 
@@ -157,38 +158,35 @@ class PathObject {
 
   /**
    * Set the style.
-   * @param {!Theme.BlockStyle} blockStyle The block style to use.
-   * @package
+   * @param blockStyle The block style to use.
    */
-  setStyle(blockStyle) {
+  setStyle(blockStyle: BlockStyle) {
     this.style = blockStyle;
   }
 
   /**
    * Add or remove the given CSS class on the path object's root SVG element.
-   * @param {string} className The name of the class to add or remove
-   * @param {boolean} add True if the class should be added.  False if it should
-   *     be removed.
-   * @protected
+   * @param className The name of the class to add or remove
+   * @param add True if the class should be added.  False if it should be
+   *     removed.
    */
-  setClass_(className, add) {
+  protected setClass_(className: string, add: boolean) {
     if (add) {
-      dom.addClass(/** @type {!Element} */ (this.svgRoot), className);
+      dom.addClass(this.svgRoot as Element, className);
     } else {
-      dom.removeClass(/** @type {!Element} */ (this.svgRoot), className);
+      dom.removeClass(this.svgRoot as Element, className);
     }
   }
 
   /**
    * Set whether the block shows a highlight or not.  Block highlighting is
    * often used to visually mark blocks currently being executed.
-   * @param {boolean} enable True if highlighted.
-   * @package
+   * @param enable True if highlighted.
    */
-  updateHighlighted(enable) {
+  updateHighlighted(enable: boolean) {
     if (enable) {
       this.svgPath.setAttribute(
-          'filter', 'url(#' + this.constants.embossFilterId + ')');
+        'filter', 'url(#' + this.constants.embossFilterId + ')');
     } else {
       this.svgPath.setAttribute('filter', 'none');
     }
@@ -196,10 +194,9 @@ class PathObject {
 
   /**
    * Updates the look of the block to reflect a shadow state.
-   * @param {boolean} shadow True if the block is a shadow block.
-   * @protected
+   * @param shadow True if the block is a shadow block.
    */
-  updateShadow_(shadow) {
+  protected updateShadow_(shadow: boolean) {
     if (shadow) {
       this.svgPath.setAttribute('stroke', 'none');
       this.svgPath.setAttribute('fill', this.style.colourSecondary);
@@ -208,52 +205,46 @@ class PathObject {
 
   /**
    * Updates the look of the block to reflect a disabled state.
-   * @param {boolean} disabled True if disabled.
-   * @protected
+   * @param disabled True if disabled.
    */
-  updateDisabled_(disabled) {
+  protected updateDisabled_(disabled: boolean) {
     this.setClass_('blocklyDisabled', disabled);
     if (disabled) {
       this.svgPath.setAttribute(
-          'fill', 'url(#' + this.constants.disabledPatternId + ')');
+        'fill', 'url(#' + this.constants.disabledPatternId + ')');
     }
   }
 
   /**
    * Add or remove styling showing that a block is selected.
-   * @param {boolean} enable True if selection is enabled, false otherwise.
-   * @package
+   * @param enable True if selection is enabled, false otherwise.
    */
-  updateSelected(enable) {
+  updateSelected(enable: boolean) {
     this.setClass_('blocklySelected', enable);
   }
 
   /**
    * Add or remove styling showing that a block is dragged over a delete area.
-   * @param {boolean} enable True if the block is being dragged over a delete
-   *     area, false otherwise.
-   * @package
+   * @param enable True if the block is being dragged over a delete area, false
+   *     otherwise.
    */
-  updateDraggingDelete(enable) {
+  updateDraggingDelete(enable: boolean) {
     this.setClass_('blocklyDraggingDelete', enable);
   }
 
   /**
    * Add or remove styling showing that a block is an insertion marker.
-   * @param {boolean} enable True if the block is an insertion marker, false
-   *     otherwise.
-   * @package
+   * @param enable True if the block is an insertion marker, false otherwise.
    */
-  updateInsertionMarker(enable) {
+  updateInsertionMarker(enable: boolean) {
     this.setClass_('blocklyInsertionMarker', enable);
   }
 
   /**
    * Add or remove styling showing that a block is movable.
-   * @param {boolean} enable True if the block is movable, false otherwise.
-   * @package
+   * @param enable True if the block is movable, false otherwise.
    */
-  updateMovable(enable) {
+  updateMovable(enable: boolean) {
     this.setClass_('blocklyDraggable', enable);
   }
 
@@ -261,23 +252,18 @@ class PathObject {
    * Add or remove styling that shows that if the dragging block is dropped,
    * this block will be replaced.  If a shadow block, it will disappear.
    * Otherwise it will bump.
-   * @param {boolean} enable True if styling should be added.
-   * @package
+   * @param enable True if styling should be added.
    */
-  updateReplacementFade(enable) {
+  updateReplacementFade(enable: boolean) {
     this.setClass_('blocklyReplaceable', enable);
   }
 
   /**
    * Add or remove styling that shows that if the dragging block is dropped,
    * this block will be connected to the input.
-   * @param {Connection} _conn The connection on the input to highlight.
-   * @param {boolean} _enable True if styling should be added.
-   * @package
+   * @param _conn The connection on the input to highlight.
+   * @param _enable True if styling should be added.
    */
-  updateShapeForInputHighlight(_conn, _enable) {
-    // NOP
-  }
+  updateShapeForInputHighlight(_conn: Connection, _enable: boolean) {}
 }
-
-exports.PathObject = PathObject;
+// NOP

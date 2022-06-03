@@ -1,182 +1,199 @@
+/** @fileoverview The top level namespace used to access the Blockly library. */
+
+
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2018 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /**
  * @license
  * Copyright 2011 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview The top level namespace used to access the Blockly library.
- */
-'use strict';
 
 /**
  * The top level namespace used to access the Blockly library.
  * @namespace Blockly
  */
-goog.module('Blockly');
-goog.module.declareLegacyNamespace();
+// Unused import preserved for side-effects. Remove if unneeded.
+import './events/events_block_create';
+// Unused import preserved for side-effects. Remove if unneeded.
+import './events/workspace_events';
+// Unused import preserved for side-effects. Remove if unneeded.
+import './events/events_ui';
+// Unused import preserved for side-effects. Remove if unneeded.
+import './events/events_ui_base';
+// Unused import preserved for side-effects. Remove if unneeded.
+import './events/events_var_create';
 
-const ContextMenu = goog.require('Blockly.ContextMenu');
-const ContextMenuItems = goog.require('Blockly.ContextMenuItems');
-const Css = goog.require('Blockly.Css');
-const Events = goog.require('Blockly.Events');
-const Extensions = goog.require('Blockly.Extensions');
-const Procedures = goog.require('Blockly.Procedures');
-const ShortcutItems = goog.require('Blockly.ShortcutItems');
-const Themes = goog.require('Blockly.Themes');
-const Tooltip = goog.require('Blockly.Tooltip');
-const Touch = goog.require('Blockly.Touch');
-const Variables = goog.require('Blockly.Variables');
-const VariablesDynamic = goog.require('Blockly.VariablesDynamic');
-const WidgetDiv = goog.require('Blockly.WidgetDiv');
-const Xml = goog.require('Blockly.Xml');
-const blockAnimations = goog.require('Blockly.blockAnimations');
-const blockRendering = goog.require('Blockly.blockRendering');
-const browserEvents = goog.require('Blockly.browserEvents');
-const bumpObjects = goog.require('Blockly.bumpObjects');
-const clipboard = goog.require('Blockly.clipboard');
-const colour = goog.require('Blockly.utils.colour');
-const common = goog.require('Blockly.common');
-const constants = goog.require('Blockly.constants');
-const deprecation = goog.require('Blockly.utils.deprecation');
-const dialog = goog.require('Blockly.dialog');
-const dropDownDiv = goog.require('Blockly.dropDownDiv');
-const fieldRegistry = goog.require('Blockly.fieldRegistry');
-const geras = goog.require('Blockly.geras');
-const internalConstants = goog.require('Blockly.internalConstants');
-const minimalist = goog.require('Blockly.minimalist');
-const registry = goog.require('Blockly.registry');
-const serializationBlocks = goog.require('Blockly.serialization.blocks');
-const serializationExceptions = goog.require('Blockly.serialization.exceptions');
-const serializationPriorities = goog.require('Blockly.serialization.priorities');
-const serializationRegistry = goog.require('Blockly.serialization.registry');
-const serializationVariables = goog.require('Blockly.serialization.variables');
-const serializationWorkspaces = goog.require('Blockly.serialization.workspaces');
-const svgMath = goog.require('Blockly.utils.svgMath');
-const thrasos = goog.require('Blockly.thrasos');
-const toolbox = goog.require('Blockly.utils.toolbox');
-const uiPosition = goog.require('Blockly.uiPosition');
-const utils = goog.require('Blockly.utils');
-const zelos = goog.require('Blockly.zelos');
-const {Align, Input} = goog.require('Blockly.Input');
-const {ASTNode} = goog.require('Blockly.ASTNode');
-const {BasicCursor} = goog.require('Blockly.BasicCursor');
-const {BlockDragSurfaceSvg} = goog.require('Blockly.BlockDragSurfaceSvg');
-const {BlockDragger} = goog.require('Blockly.BlockDragger');
-const {BlockSvg} = goog.require('Blockly.BlockSvg');
-const {BlocklyOptions} = goog.require('Blockly.BlocklyOptions');
-const {Blocks} = goog.require('Blockly.blocks');
-const {Block} = goog.require('Blockly.Block');
-const {BubbleDragger} = goog.require('Blockly.BubbleDragger');
-const {Bubble} = goog.require('Blockly.Bubble');
-const {CollapsibleToolboxCategory} = goog.require('Blockly.CollapsibleToolboxCategory');
-const {Comment} = goog.require('Blockly.Comment');
-const {ComponentManager} = goog.require('Blockly.ComponentManager');
-const {config} = goog.require('Blockly.config');
-const {ConnectionChecker} = goog.require('Blockly.ConnectionChecker');
-const {ConnectionDB} = goog.require('Blockly.ConnectionDB');
-const {ConnectionType} = goog.require('Blockly.ConnectionType');
-const {Connection} = goog.require('Blockly.Connection');
-const {ContextMenuRegistry} = goog.require('Blockly.ContextMenuRegistry');
-const {Cursor} = goog.require('Blockly.Cursor');
-const {DeleteArea} = goog.require('Blockly.DeleteArea');
-const {DragTarget} = goog.require('Blockly.DragTarget');
-const {FieldAngle} = goog.require('Blockly.FieldAngle');
-const {FieldCheckbox} = goog.require('Blockly.FieldCheckbox');
-const {FieldColour} = goog.require('Blockly.FieldColour');
-const {FieldDropdown} = goog.require('Blockly.FieldDropdown');
-const {FieldImage} = goog.require('Blockly.FieldImage');
-const {FieldLabelSerializable} = goog.require('Blockly.FieldLabelSerializable');
-const {FieldLabel} = goog.require('Blockly.FieldLabel');
-const {FieldMultilineInput} = goog.require('Blockly.FieldMultilineInput');
-const {FieldNumber} = goog.require('Blockly.FieldNumber');
-const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
-const {FieldVariable} = goog.require('Blockly.FieldVariable');
-const {Field} = goog.require('Blockly.Field');
-const {FlyoutButton} = goog.require('Blockly.FlyoutButton');
-const {FlyoutMetricsManager} = goog.require('Blockly.FlyoutMetricsManager');
-const {Flyout} = goog.require('Blockly.Flyout');
-const {Generator} = goog.require('Blockly.Generator');
-const {Gesture} = goog.require('Blockly.Gesture');
-const {Grid} = goog.require('Blockly.Grid');
-const {HorizontalFlyout} = goog.require('Blockly.HorizontalFlyout');
-const {IASTNodeLocationSvg} = goog.require('Blockly.IASTNodeLocationSvg');
-const {IASTNodeLocationWithBlock} = goog.require('Blockly.IASTNodeLocationWithBlock');
-const {IASTNodeLocation} = goog.require('Blockly.IASTNodeLocation');
-const {IAutoHideable} = goog.require('Blockly.IAutoHideable');
-const {IBlockDragger} = goog.require('Blockly.IBlockDragger');
-const {IBoundedElement} = goog.require('Blockly.IBoundedElement');
-const {IBubble} = goog.require('Blockly.IBubble');
-const {ICollapsibleToolboxItem} = goog.require('Blockly.ICollapsibleToolboxItem');
-const {IComponent} = goog.require('Blockly.IComponent');
-const {IConnectionChecker} = goog.require('Blockly.IConnectionChecker');
-const {IContextMenu} = goog.require('Blockly.IContextMenu');
-const {ICopyable} = goog.require('Blockly.ICopyable');
-const {IDeletable} = goog.require('Blockly.IDeletable');
-const {IDeleteArea} = goog.require('Blockly.IDeleteArea');
-const {IDragTarget} = goog.require('Blockly.IDragTarget');
-const {IDraggable} = goog.require('Blockly.IDraggable');
-const {IFlyout} = goog.require('Blockly.IFlyout');
-const {IKeyboardAccessible} = goog.require('Blockly.IKeyboardAccessible');
-const {IMetricsManager} = goog.require('Blockly.IMetricsManager');
-const {IMovable} = goog.require('Blockly.IMovable');
-const {IPositionable} = goog.require('Blockly.IPositionable');
-const {IRegistrableField} = goog.require('Blockly.IRegistrableField');
-const {IRegistrable} = goog.require('Blockly.IRegistrable');
-const {ISelectableToolboxItem} = goog.require('Blockly.ISelectableToolboxItem');
-const {ISelectable} = goog.require('Blockly.ISelectable');
-const {ISerializer} = goog.require('Blockly.serialization.ISerializer');
-const {IStyleable} = goog.require('Blockly.IStyleable');
-const {IToolboxItem} = goog.require('Blockly.IToolboxItem');
-const {IToolbox} = goog.require('Blockly.IToolbox');
-const {Icon} = goog.require('Blockly.Icon');
-const {InsertionMarkerManager} = goog.require('Blockly.InsertionMarkerManager');
-const {Marker} = goog.require('Blockly.Marker');
-const {MarkerManager} = goog.require('Blockly.MarkerManager');
-const {MenuItem} = goog.require('Blockly.MenuItem');
-const {Menu} = goog.require('Blockly.Menu');
-const {MetricsManager} = goog.require('Blockly.MetricsManager');
-const {Mutator} = goog.require('Blockly.Mutator');
-const {Msg} = goog.require('Blockly.Msg');
-const {Names} = goog.require('Blockly.Names');
-const {Options} = goog.require('Blockly.Options');
-const {RenderedConnection} = goog.require('Blockly.RenderedConnection');
-const {ScrollbarPair} = goog.require('Blockly.ScrollbarPair');
-const {Scrollbar} = goog.require('Blockly.Scrollbar');
-const {ShortcutRegistry} = goog.require('Blockly.ShortcutRegistry');
-const {TabNavigateCursor} = goog.require('Blockly.TabNavigateCursor');
-const {ThemeManager} = goog.require('Blockly.ThemeManager');
-const {Theme} = goog.require('Blockly.Theme');
-const {ToolboxCategory} = goog.require('Blockly.ToolboxCategory');
-const {ToolboxItem} = goog.require('Blockly.ToolboxItem');
-const {ToolboxSeparator} = goog.require('Blockly.ToolboxSeparator');
-const {Toolbox} = goog.require('Blockly.Toolbox');
-const {TouchGesture} = goog.require('Blockly.TouchGesture');
-const {Trashcan} = goog.require('Blockly.Trashcan');
-const {VariableMap} = goog.require('Blockly.VariableMap');
-const {VariableModel} = goog.require('Blockly.VariableModel');
-const {VerticalFlyout} = goog.require('Blockly.VerticalFlyout');
-const {Warning} = goog.require('Blockly.Warning');
-const {WorkspaceAudio} = goog.require('Blockly.WorkspaceAudio');
-const {WorkspaceCommentSvg} = goog.require('Blockly.WorkspaceCommentSvg');
-const {WorkspaceComment} = goog.require('Blockly.WorkspaceComment');
-const {WorkspaceDragSurfaceSvg} = goog.require('Blockly.WorkspaceDragSurfaceSvg');
-const {WorkspaceDragger} = goog.require('Blockly.WorkspaceDragger');
-const {WorkspaceSvg, resizeSvgContents} = goog.require('Blockly.WorkspaceSvg');
-const {Workspace} = goog.require('Blockly.Workspace');
-const {ZoomControls} = goog.require('Blockly.ZoomControls');
-const {inject} = goog.require('Blockly.inject');
-const {inputTypes} = goog.require('Blockly.inputTypes');
-/** @suppress {extraRequire} */
-goog.require('Blockly.Events.BlockCreate');
-/** @suppress {extraRequire} */
-goog.require('Blockly.Events.FinishedLoading');
-/** @suppress {extraRequire} */
-goog.require('Blockly.Events.Ui');
-/** @suppress {extraRequire} */
-goog.require('Blockly.Events.UiBase');
-/** @suppress {extraRequire} */
-goog.require('Blockly.Events.VarCreate');
+import { Block } from './block';
+import * as blockAnimations from './block_animations';
+import { BlockDragSurfaceSvg } from './block_drag_surface';
+import { BlockDragger } from './block_dragger';
+import { BlockSvg } from './block_svg';
+import { BlocklyOptions } from './blockly_options';
+import { Blocks } from './blocks';
+import * as browserEvents from './browser_events';
+import { Bubble } from './bubble';
+import { BubbleDragger } from './bubble_dragger';
+import * as bumpObjects from './bump_objects';
+import * as clipboard from './clipboard';
+import { Comment } from './comment';
+import * as common from './common';
+import { ComponentManager } from './component_manager';
+import { config } from './config';
+import { Connection } from './connection';
+import { ConnectionChecker } from './connection_checker';
+import { ConnectionDB } from './connection_db';
+import { ConnectionType } from './connection_type';
+import * as ContextMenu from './contextmenu';
+import * as ContextMenuItems from './contextmenu_items';
+import { ContextMenuRegistry } from './contextmenu_registry';
+import * as Css from './css';
+import { DeleteArea } from './delete_area';
+import * as dialog from './dialog';
+import { DragTarget } from './drag_target';
+import * as dropDownDiv from './dropdowndiv';
+import * as Events from './events/events';
+import * as Extensions from './extensions';
+import { Field } from './field';
+import { FieldAngle } from './field_angle';
+import { FieldCheckbox } from './field_checkbox';
+import { FieldColour } from './field_colour';
+import { FieldDropdown } from './field_dropdown';
+import { FieldImage } from './field_image';
+import { FieldLabel } from './field_label';
+import { FieldLabelSerializable } from './field_label_serializable';
+import { FieldMultilineInput } from './field_multilineinput';
+import { FieldNumber } from './field_number';
+import * as fieldRegistry from './field_registry';
+import { FieldTextInput } from './field_textinput';
+import { FieldVariable } from './field_variable';
+import { Flyout } from './flyout_base';
+import { FlyoutButton } from './flyout_button';
+import { HorizontalFlyout } from './flyout_horizontal';
+import { FlyoutMetricsManager } from './flyout_metrics_manager';
+import { VerticalFlyout } from './flyout_vertical';
+import { Generator } from './generator';
+import { Gesture } from './gesture';
+import { Grid } from './grid';
+import { Icon } from './icon';
+import { inject } from './inject';
+import { Align, Input } from './input';
+import { inputTypes } from './input_types';
+import { InsertionMarkerManager } from './insertion_marker_manager';
+import { IASTNodeLocation } from './interfaces/i_ast_node_location';
+import { IASTNodeLocationSvg } from './interfaces/i_ast_node_location_svg';
+import { IASTNodeLocationWithBlock } from './interfaces/i_ast_node_location_with_block';
+import { IAutoHideable } from './interfaces/i_autohideable';
+import { IBlockDragger } from './interfaces/i_block_dragger';
+import { IBoundedElement } from './interfaces/i_bounded_element';
+import { IBubble } from './interfaces/i_bubble';
+import { ICollapsibleToolboxItem } from './interfaces/i_collapsible_toolbox_item';
+import { IComponent } from './interfaces/i_component';
+import { IConnectionChecker } from './interfaces/i_connection_checker';
+import { IContextMenu } from './interfaces/i_contextmenu';
+import { ICopyable } from './interfaces/i_copyable';
+import { IDeletable } from './interfaces/i_deletable';
+import { IDeleteArea } from './interfaces/i_delete_area';
+import { IDragTarget } from './interfaces/i_drag_target';
+import { IDraggable } from './interfaces/i_draggable';
+import { IFlyout } from './interfaces/i_flyout';
+import { IKeyboardAccessible } from './interfaces/i_keyboard_accessible';
+import { IMetricsManager } from './interfaces/i_metrics_manager';
+import { IMovable } from './interfaces/i_movable';
+import { IPositionable } from './interfaces/i_positionable';
+import { IRegistrable } from './interfaces/i_registrable';
+import { IRegistrableField } from './interfaces/i_registrable_field';
+import { ISelectable } from './interfaces/i_selectable';
+import { ISelectableToolboxItem } from './interfaces/i_selectable_toolbox_item';
+import { ISerializer as SerializerInterface } from './interfaces/i_serializer';
+import { IStyleable } from './interfaces/i_styleable';
+import { IToolbox } from './interfaces/i_toolbox';
+import { IToolboxItem } from './interfaces/i_toolbox_item';
+import * as internalConstants from './internal_constants';
+import { ASTNode } from './keyboard_nav/ast_node';
+import { BasicCursor } from './keyboard_nav/basic_cursor';
+import { Cursor } from './keyboard_nav/cursor';
+import { Marker } from './keyboard_nav/marker';
+import { TabNavigateCursor } from './keyboard_nav/tab_navigate_cursor';
+import { MarkerManager } from './marker_manager';
+import { Menu } from './menu';
+import { MenuItem } from './menuitem';
+import { MetricsManager } from './metrics_manager';
+import { Msg } from './msg';
+import { Mutator } from './mutator';
+import { Names } from './names';
+import { Options } from './options';
+import * as uiPosition from './positionable_helpers';
+import * as Procedures from './procedures';
+import * as registry from './registry';
+import { RenderedConnection } from './rendered_connection';
+import * as blockRendering from './renderers/common/block_rendering';
+import * as constants from './renderers/common/constants';
+import * as geras from './renderers/geras/geras';
+import * as minimalist from './renderers/minimalist/minimalist';
+import * as thrasos from './renderers/thrasos/thrasos';
+import * as zelos from './renderers/zelos/zelos';
+import { Scrollbar } from './scrollbar';
+import { ScrollbarPair } from './scrollbar_pair';
+import * as serializationBlocks from './serialization/blocks';
+import * as serializationExceptions from './serialization/exceptions';
+import * as serializationPriorities from './serialization/priorities';
+import * as serializationRegistry from './serialization/registry';
+import * as serializationVariables from './serialization/variables';
+import * as serializationWorkspaces from './serialization/workspaces';
+import * as ShortcutItems from './shortcut_items';
+import { ShortcutRegistry } from './shortcut_registry';
+import { Theme } from './theme';
+import * as Themes from './theme/themes';
+import { ThemeManager } from './theme_manager';
+import { ToolboxCategory } from './toolbox/category';
+import { CollapsibleToolboxCategory } from './toolbox/collapsible_category';
+import { ToolboxSeparator } from './toolbox/separator';
+import { Toolbox } from './toolbox/toolbox';
+import { ToolboxItem } from './toolbox/toolbox_item';
+import * as Tooltip from './tooltip';
+import * as Touch from './touch';
+import { TouchGesture } from './touch_gesture';
+import { Trashcan } from './trashcan';
+import * as utils from './utils';
+import * as colour from './utils/colour';
+import * as deprecation from './utils/deprecation';
+import * as svgMath from './utils/svg_math';
+import * as toolbox from './utils/toolbox';
+import { VariableMap } from './variable_map';
+import { VariableModel } from './variable_model';
+import * as Variables from './variables';
+import * as VariablesDynamic from './variables_dynamic';
+import { Warning } from './warning';
+import * as WidgetDiv from './widgetdiv';
+import { Workspace } from './workspace';
+import { WorkspaceAudio } from './workspace_audio';
+import { WorkspaceComment } from './workspace_comment';
+import { WorkspaceCommentSvg } from './workspace_comment_svg';
+import { WorkspaceDragSurfaceSvg } from './workspace_drag_surface_svg';
+import { WorkspaceDragger } from './workspace_dragger';
+import { resizeSvgContents as realResizeSvgContents, WorkspaceSvg } from './workspace_svg';
+import * as Xml from './xml';
+import { ZoomControls } from './zoom_controls';
 
 
 /**
@@ -189,7 +206,7 @@ goog.require('Blockly.Events.VarCreate');
  * @define {string}
  * @alias Blockly.VERSION
  */
-exports.VERSION = 'uncompiled';
+export const VERSION = 'uncompiled';
 
 /*
  * Top-level functions and properties on the Blockly namespace.
@@ -207,20 +224,19 @@ exports.VERSION = 'uncompiled';
  * @see Blockly.Input.Align.LEFT
  * @alias Blockly.ALIGN_LEFT
  */
-exports.ALIGN_LEFT = Align.LEFT;
+export const ALIGN_LEFT = Align.LEFT;
 
 /**
  * @see Blockly.Input.Align.CENTRE
  * @alias Blockly.ALIGN_CENTRE
  */
-exports.ALIGN_CENTRE = Align.CENTRE;
+export const ALIGN_CENTRE = Align.CENTRE;
 
 /**
  * @see Blockly.Input.Align.RIGHT
  * @alias Blockly.ALIGN_RIGHT
  */
-exports.ALIGN_RIGHT = Align.RIGHT;
-
+export const ALIGN_RIGHT = Align.RIGHT;
 /*
  * Aliases for constants used for connection and input types.
  */
@@ -229,59 +245,57 @@ exports.ALIGN_RIGHT = Align.RIGHT;
  * @see ConnectionType.INPUT_VALUE
  * @alias Blockly.INPUT_VALUE
  */
-exports.INPUT_VALUE = ConnectionType.INPUT_VALUE;
+export const INPUT_VALUE = ConnectionType.INPUT_VALUE;
 
 /**
  * @see ConnectionType.OUTPUT_VALUE
  * @alias Blockly.OUTPUT_VALUE
  */
-exports.OUTPUT_VALUE = ConnectionType.OUTPUT_VALUE;
+export const OUTPUT_VALUE = ConnectionType.OUTPUT_VALUE;
 
 /**
  * @see ConnectionType.NEXT_STATEMENT
  * @alias Blockly.NEXT_STATEMENT
  */
-exports.NEXT_STATEMENT = ConnectionType.NEXT_STATEMENT;
+export const NEXT_STATEMENT = ConnectionType.NEXT_STATEMENT;
 
 /**
  * @see ConnectionType.PREVIOUS_STATEMENT
  * @alias Blockly.PREVIOUS_STATEMENT
  */
-exports.PREVIOUS_STATEMENT = ConnectionType.PREVIOUS_STATEMENT;
+export const PREVIOUS_STATEMENT = ConnectionType.PREVIOUS_STATEMENT;
 
 /**
  * @see inputTypes.DUMMY_INPUT
  * @alias Blockly.DUMMY_INPUT
  */
-exports.DUMMY_INPUT = inputTypes.DUMMY;
+export const DUMMY_INPUT = inputTypes.DUMMY;
 
-/**
- * Aliases for toolbox positions.
- */
+/** Aliases for toolbox positions. */
 
 /**
  * @see toolbox.Position.TOP
  * @alias Blockly.TOOLBOX_AT_TOP
  */
-exports.TOOLBOX_AT_TOP = toolbox.Position.TOP;
+export const TOOLBOX_AT_TOP = toolbox.Position.TOP;
 
 /**
  * @see toolbox.Position.BOTTOM
  * @alias Blockly.TOOLBOX_AT_BOTTOM
  */
-exports.TOOLBOX_AT_BOTTOM = toolbox.Position.BOTTOM;
+export const TOOLBOX_AT_BOTTOM = toolbox.Position.BOTTOM;
 
 /**
  * @see toolbox.Position.LEFT
  * @alias Blockly.TOOLBOX_AT_LEFT
  */
-exports.TOOLBOX_AT_LEFT = toolbox.Position.LEFT;
+export const TOOLBOX_AT_LEFT = toolbox.Position.LEFT;
 
 /**
  * @see toolbox.Position.RIGHT
  * @alias Blockly.TOOLBOX_AT_RIGHT
  */
-exports.TOOLBOX_AT_RIGHT = toolbox.Position.RIGHT;
+export const TOOLBOX_AT_RIGHT = toolbox.Position.RIGHT;
 
 /*
  * Other aliased functions.
@@ -293,597 +307,450 @@ exports.TOOLBOX_AT_RIGHT = toolbox.Position.RIGHT;
  * See workspace.resizeContents to resize the workspace when the contents
  * change (e.g. when a block is added or removed).
  * Record the height/width of the SVG image.
- * @param {!WorkspaceSvg} workspace Any workspace in the SVG.
+ * @param workspace Any workspace in the SVG.
  * @see Blockly.common.svgResize
  * @alias Blockly.svgResize
  */
-exports.svgResize = common.svgResize;
+// AnyDuringMigration because:  Property 'svgResize' does not exist on type
+// 'void'.
+export const svgResize = (common as AnyDuringMigration).svgResize;
 
 /**
  * Close tooltips, context menus, dropdown selections, etc.
- * @param {boolean=} opt_onlyClosePopups Whether only popups should be closed.
+ * @param opt_onlyClosePopups Whether only popups should be closed.
  * @see Blockly.WorkspaceSvg.hideChaff
  * @alias Blockly.hideChaff
  */
-const hideChaff = function(opt_onlyClosePopups) {
-  /** @type {!WorkspaceSvg} */ (common.getMainWorkspace())
-      .hideChaff(opt_onlyClosePopups);
-};
-exports.hideChaff = hideChaff;
+export function hideChaff(opt_onlyClosePopups?: boolean) {
+  // AnyDuringMigration because:  Property 'getMainWorkspace' does not exist on
+  // type 'void'.
+  ((common as AnyDuringMigration).getMainWorkspace() as WorkspaceSvg)
+    .hideChaff(opt_onlyClosePopups);
+}
 
 /**
  * Returns the main workspace.  Returns the last used main workspace (based on
  * focus).  Try not to use this function, particularly if there are multiple
  * Blockly instances on a page.
- * @return {!Workspace} The main workspace.
+ * @return The main workspace.
  * @see Blockly.common.getMainWorkspace
  * @alias Blockly.getMainWorkspace
  */
-exports.getMainWorkspace = common.getMainWorkspace;
+// AnyDuringMigration because:  Property 'getMainWorkspace' does not exist on
+// type 'void'.
+export const getMainWorkspace = (common as AnyDuringMigration).getMainWorkspace;
 
 /**
  * Define blocks from an array of JSON block definitions, as might be generated
  * by the Blockly Developer Tools.
- * @param {!Array<!Object>} jsonArray An array of JSON block definitions.
+ * @param jsonArray An array of JSON block definitions.
  * @see Blockly.common.defineBlocksWithJsonArray
  * @alias Blockly.defineBlocksWithJsonArray
  */
-exports.defineBlocksWithJsonArray = common.defineBlocksWithJsonArray;
-
+// AnyDuringMigration because:  Property 'defineBlocksWithJsonArray' does not
+// exist on type 'void'.
+export const defineBlocksWithJsonArray =
+  (common as AnyDuringMigration).defineBlocksWithJsonArray;
 /**
  * Set the parent container.  This is the container element that the WidgetDiv,
  * dropDownDiv, and Tooltip are rendered into the first time `Blockly.inject`
  * is called.
  * This method is a NOP if called after the first ``Blockly.inject``.
- * @param {!Element} container The container element.
+ * @param container The container element.
  * @see Blockly.common.setParentContainer
  * @alias Blockly.setParentContainer
  */
-exports.setParentContainer = common.setParentContainer;
+// AnyDuringMigration because:  Property 'setParentContainer' does not exist on
+// type 'void'.
+export const setParentContainer =
+  (common as AnyDuringMigration).setParentContainer;
 
-/*
- * Aliased functions and properties that used to be on the Blockly namespace.
- * Everything in this section is deprecated. Both external and internal code
- * should avoid using these functions and use the designated replacements.
- * Anything in this section may be removed in a future version of Blockly.
- */
-
-// Add accessors for properties on Blockly that have now been deprecated.
-Object.defineProperties(exports, {
-  /**
-   * Wrapper to window.alert() that app developers may override to
-   * provide alternatives to the modal browser window.
-   * @name Blockly.alert
-   * @type {!function(string, function()=)}
-   * @deprecated Use Blockly.dialog.alert / .setAlert() instead.
-   *     (December 2021)
-   * @suppress {checkTypes}
-   */
-  alert: {
-    set: function(newAlert) {
-      deprecation.warn('Blockly.alert', 'December 2021', 'December 2022');
-      dialog.setAlert(newAlert);
-    },
-    get: function() {
-      deprecation.warn(
-          'Blockly.alert', 'December 2021', 'December 2022',
-          'Blockly.dialog.alert()');
-      return dialog.alert;
-    },
-  },
-  /**
-   * Wrapper to window.confirm() that app developers may override to
-   * provide alternatives to the modal browser window.
-   * @name Blockly.confirm
-   * @type {!function(string, function()=)}
-   * @deprecated Use Blockly.dialog.confirm / .setConfirm() instead.
-   *     (December 2021)
-   * @suppress {checkTypes}
-   */
-  confirm: {
-    set: function(newConfirm) {
-      deprecation.warn('Blockly.confirm', 'December 2021', 'December 2022');
-      dialog.setConfirm(newConfirm);
-    },
-    get: function() {
-      deprecation.warn(
-          'Blockly.confirm', 'December 2021', 'December 2022',
-          'Blockly.dialog.confirm()');
-      return dialog.confirm;
-    },
-  },
-  /**
-   * The main workspace most recently used.
-   * Set by Blockly.WorkspaceSvg.prototype.markFocused
-   * @name Blockly.mainWorkspace
-   * @type {Workspace}
-   * @suppress {checkTypes}
-   */
-  mainWorkspace: {
-    set: function(x) {
-      common.setMainWorkspace(x);
-    },
-    get: function() {
-      return common.getMainWorkspace();
-    },
-  },
-  /**
-   * Wrapper to window.prompt() that app developers may override to
-   * provide alternatives to the modal browser window. Built-in
-   * browser prompts are often used for better text input experience
-   * on mobile device. We strongly recommend testing mobile when
-   * overriding this.
-   * @name Blockly.prompt
-   * @type {!function(string, string, function()=)}
-   * @deprecated Use Blockly.dialog.prompt / .setPrompt() instead.
-   *     (December 2021)
-   * @suppress {checkTypes}
-   */
-  prompt: {
-    set: function(newPrompt) {
-      deprecation.warn('Blockly.prompt', 'December 2021', 'December 2022');
-      dialog.setPrompt(newPrompt);
-    },
-    get: function() {
-      deprecation.warn(
-          'Blockly.prompt', 'December 2021', 'December 2022',
-          'Blockly.dialog.prompt()');
-      return dialog.prompt;
-    },
-  },
-  /**
-   * Currently selected block.
-   * @name Blockly.selected
-   * @type {?ICopyable}
-   * @suppress {checkTypes}
-   */
-  selected: {
-    get: function() {
-      return common.getSelected();
-    },
-    set: function(newSelection) {
-      common.setSelected(newSelection);
-    },
-  },
-  /**
-   * The richness of block colours, regardless of the hue.
-   * Must be in the range of 0 (inclusive) to 1 (exclusive).
-   * @name Blockly.HSV_SATURATION
-   * @type {number}
-   * @suppress {checkTypes}
-   */
-  HSV_SATURATION: {
-    get: function() {
-      return utils.colour.getHsvSaturation();
-    },
-    set: function(newValue) {
-      utils.colour.setHsvSaturation(newValue);
-    },
-  },
-  /**
-   * The intensity of block colours, regardless of the hue.
-   * Must be in the range of 0 (inclusive) to 1 (exclusive).
-   * @name Blockly.HSV_VALUE
-   * @type {number}
-   * @suppress {checkTypes}
-   */
-  HSV_VALUE: {
-    get: function() {
-      return utils.colour.getHsvValue();
-    },
-    set: function(newValue) {
-      utils.colour.setHsvValue(newValue);
-    },
-  },
-});
 
 /**
  * Returns the dimensions of the specified SVG image.
- * @param {!SVGElement} svg SVG image.
- * @return {!Size} Contains width and height properties.
+ * @param svg SVG image.
+ * @return Contains width and height properties.
  * @deprecated Use workspace.setCachedParentSvgSize. (2021 March 5)
  * @see Blockly.WorkspaceSvg.setCachedParentSvgSize
  * @alias Blockly.svgSize
  */
-exports.svgSize = svgMath.svgSize;
+export const svgSize = svgMath.svgSize;
 
 /**
  * Size the workspace when the contents change.  This also updates
  * scrollbars accordingly.
- * @param {!WorkspaceSvg} workspace The workspace to resize.
+ * @param workspace The workspace to resize.
  * @deprecated Use workspace.resizeContents. (2021 December)
  * @see Blockly.WorkspaceSvg.resizeContents
  * @alias Blockly.resizeSvgContents
  */
-const resizeSvgContentsLocal = function(workspace) {
+function resizeSvgContentsLocal(workspace: WorkspaceSvg) {
   deprecation.warn(
-      'Blockly.resizeSvgContents', 'December 2021', 'December 2022',
-      'Blockly.WorkspaceSvg.resizeSvgContents');
-  resizeSvgContents(workspace);
-};
-exports.resizeSvgContents = resizeSvgContentsLocal;
+    'Blockly.resizeSvgContents', 'December 2021', 'December 2022',
+    'Blockly.WorkspaceSvg.resizeSvgContents');
+  realResizeSvgContents(workspace);
+}
+export const resizeSvgContents = resizeSvgContentsLocal;
 
 /**
  * Copy a block or workspace comment onto the local clipboard.
- * @param {!ICopyable} toCopy Block or Workspace Comment to be copied.
+ * @param toCopy Block or Workspace Comment to be copied.
  * @deprecated Use Blockly.clipboard.copy(). (2021 December)
  * @see Blockly.clipboard.copy
  * @alias Blockly.copy
  */
-const copy = function(toCopy) {
+export function copy(toCopy: ICopyable) {
   deprecation.warn(
-      'Blockly.copy', 'December 2021', 'December 2022',
-      'Blockly.clipboard.copy');
-  clipboard.copy(toCopy);
-};
-exports.copy = copy;
+    'Blockly.copy', 'December 2021', 'December 2022',
+    'Blockly.clipboard.copy');
+  // AnyDuringMigration because:  Property 'copy' does not exist on type 'void'.
+  (clipboard as AnyDuringMigration).copy(toCopy);
+}
 
 /**
  * Paste a block or workspace comment on to the main workspace.
- * @return {boolean} True if the paste was successful, false otherwise.
+ * @return True if the paste was successful, false otherwise.
  * @deprecated Use Blockly.clipboard.paste(). (2021 December)
  * @see Blockly.clipboard.paste
  * @alias Blockly.paste
  */
-const paste = function() {
+export function paste(): boolean {
   deprecation.warn(
-      'Blockly.paste', 'December 2021', 'December 2022',
-      'Blockly.clipboard.paste');
-  return !!clipboard.paste();
-};
-exports.paste = paste;
+    'Blockly.paste', 'December 2021', 'December 2022',
+    'Blockly.clipboard.paste');
+  // AnyDuringMigration because:  Property 'paste' does not exist on type
+  // 'void'.
+  return !!(clipboard as AnyDuringMigration).paste();
+}
 
 /**
  * Duplicate this block and its children, or a workspace comment.
- * @param {!ICopyable} toDuplicate Block or Workspace Comment to be
- *     copied.
+ * @param toDuplicate Block or Workspace Comment to be copied.
  * @deprecated Use Blockly.clipboard.duplicate(). (2021 December)
  * @see Blockly.clipboard.duplicate
  * @alias Blockly.duplicate
  */
-const duplicate = function(toDuplicate) {
+export function duplicate(toDuplicate: ICopyable) {
   deprecation.warn(
-      'Blockly.duplicate', 'December 2021', 'December 2022',
-      'Blockly.clipboard.duplicate');
-  clipboard.duplicate(toDuplicate);
-};
-exports.duplicate = duplicate;
+    'Blockly.duplicate', 'December 2021', 'December 2022',
+    'Blockly.clipboard.duplicate');
+  // AnyDuringMigration because:  Property 'duplicate' does not exist on type
+  // 'void'.
+  (clipboard as AnyDuringMigration).duplicate(toDuplicate);
+}
 
 /**
  * Is the given string a number (includes negative and decimals).
- * @param {string} str Input string.
- * @return {boolean} True if number, false otherwise.
+ * @param str Input string.
+ * @return True if number, false otherwise.
  * @deprecated Use Blockly.utils.string.isNumber(str). (2021 December)
  * @see Blockly.utils.string.isNumber
  * @alias Blockly.isNumber
  */
-const isNumber = function(str) {
+export function isNumber(str: string): boolean {
   deprecation.warn(
-      'Blockly.isNumber', 'December 2021', 'December 2022',
-      'Blockly.utils.string.isNumber');
-  return utils.string.isNumber(str);
-};
-exports.isNumber = isNumber;
+    'Blockly.isNumber', 'December 2021', 'December 2022',
+    'Blockly.utils.string.isNumber');
+  // AnyDuringMigration because:  Property 'string' does not exist on type
+  // 'void'.
+  return (utils as AnyDuringMigration).string.isNumber(str);
+}
 
 /**
  * Convert a hue (HSV model) into an RGB hex triplet.
- * @param {number} hue Hue on a colour wheel (0-360).
- * @return {string} RGB code, e.g. '#5ba65b'.
+ * @param hue Hue on a colour wheel (0-360).
+ * @return RGB code, e.g. '#5ba65b'.
  * @deprecated Use Blockly.utils.colour.hueToHex(). (2021 December)
  * @see Blockly.utils.colour.hueToHex
  * @alias Blockly.hueToHex
  */
-const hueToHex = function(hue) {
+export function hueToHex(hue: number): string {
   deprecation.warn(
-      'Blockly.hueToHex', 'December 2021', 'December 2022',
-      'Blockly.utils.colour.hueToHex');
+    'Blockly.hueToHex', 'December 2021', 'December 2022',
+    'Blockly.utils.colour.hueToHex');
   return colour.hueToHex(hue);
-};
-exports.hueToHex = hueToHex;
+}
 
 /**
  * Bind an event handler that should be called regardless of whether it is part
  * of the active touch stream.
  * Use this for events that are not part of a multi-part gesture (e.g.
  * mouseover for tooltips).
- * @param {!EventTarget} node Node upon which to listen.
- * @param {string} name Event name to listen to (e.g. 'mousedown').
- * @param {?Object} thisObject The value of 'this' in the function.
- * @param {!Function} func Function to call when event is triggered.
- * @return {!browserEvents.Data} Opaque data that can be passed to
- *     unbindEvent_.
+ * @param node Node upon which to listen.
+ * @param name Event name to listen to (e.g. 'mousedown').
+ * @param thisObject The value of 'this' in the function.
+ * @param func Function to call when event is triggered.
+ * @return Opaque data that can be passed to unbindEvent_.
  * @deprecated Use Blockly.browserEvents.bind(). (December 2021)
  * @see Blockly.browserEvents.bind
  * @alias Blockly.bindEvent_
  */
-const bindEvent_ = function(node, name, thisObject, func) {
+export function bindEvent_(
+  node: EventTarget, name: string, thisObject: AnyDuringMigration | null,
+  func: Function): browserEvents.Data {
   deprecation.warn(
-      'Blockly.bindEvent_', 'December 2021', 'December 2022',
-      'Blockly.browserEvents.bind');
+    'Blockly.bindEvent_', 'December 2021', 'December 2022',
+    'Blockly.browserEvents.bind');
   return browserEvents.bind(node, name, thisObject, func);
-};
-exports.bindEvent_ = bindEvent_;
+}
 
 /**
  * Unbind one or more events event from a function call.
- * @param {!browserEvents.Data} bindData Opaque data from bindEvent_.
+ * @param bindData Opaque data from bindEvent_.
  *     This list is emptied during the course of calling this function.
- * @return {!Function} The function call.
+ * @return The function call.
  * @deprecated Use Blockly.browserEvents.unbind(). (December 2021)
  * @see browserEvents.unbind
  * @alias Blockly.unbindEvent_
  */
-const unbindEvent_ = function(bindData) {
+export function unbindEvent_(bindData: browserEvents.Data): Function {
   deprecation.warn(
-      'Blockly.unbindEvent_', 'December 2021', 'December 2022',
-      'Blockly.browserEvents.unbind');
+    'Blockly.unbindEvent_', 'December 2021', 'December 2022',
+    'Blockly.browserEvents.unbind');
   return browserEvents.unbind(bindData);
-};
-exports.unbindEvent_ = unbindEvent_;
+}
 
 /**
  * Bind an event handler that can be ignored if it is not part of the active
  * touch stream.
  * Use this for events that either start or continue a multi-part gesture (e.g.
  * mousedown or mousemove, which may be part of a drag or click).
- * @param {!EventTarget} node Node upon which to listen.
- * @param {string} name Event name to listen to (e.g. 'mousedown').
- * @param {?Object} thisObject The value of 'this' in the function.
- * @param {!Function} func Function to call when event is triggered.
- * @param {boolean=} opt_noCaptureIdentifier True if triggering on this event
- *     should not block execution of other event handlers on this touch or
- *     other simultaneous touches.  False by default.
- * @param {boolean=} opt_noPreventDefault True if triggering on this event
- *     should prevent the default handler.  False by default.  If
- *     opt_noPreventDefault is provided, opt_noCaptureIdentifier must also be
- *     provided.
- * @return {!browserEvents.Data} Opaque data that can be passed to
- *     unbindEvent_.
+ * @param node Node upon which to listen.
+ * @param name Event name to listen to (e.g. 'mousedown').
+ * @param thisObject The value of 'this' in the function.
+ * @param func Function to call when event is triggered.
+ * @param opt_noCaptureIdentifier True if triggering on this event should not
+ *     block execution of other event handlers on this touch or other
+ *     simultaneous touches.  False by default.
+ * @param opt_noPreventDefault True if triggering on this event should prevent
+ *     the default handler.  False by default.  If opt_noPreventDefault is
+ *     provided, opt_noCaptureIdentifier must also be provided.
+ * @return Opaque data that can be passed to unbindEvent_.
  * @deprecated Use Blockly.browserEvents.conditionalBind(). (December 2021)
  * @see browserEvents.conditionalBind
  * @alias Blockly.bindEventWithChecks_
  */
-const bindEventWithChecks_ = function(
-    node, name, thisObject, func, opt_noCaptureIdentifier,
-    opt_noPreventDefault) {
+export function bindEventWithChecks_(
+  node: EventTarget, name: string, thisObject: AnyDuringMigration | null,
+  func: Function, opt_noCaptureIdentifier?: boolean,
+  opt_noPreventDefault?: boolean): browserEvents.Data {
   deprecation.warn(
-      'Blockly.bindEventWithChecks_', 'December 2021', 'December 2022',
-      'Blockly.browserEvents.conditionalBind');
+    'Blockly.bindEventWithChecks_', 'December 2021', 'December 2022',
+    'Blockly.browserEvents.conditionalBind');
   return browserEvents.conditionalBind(
-      node, name, thisObject, func, opt_noCaptureIdentifier,
-      opt_noPreventDefault);
-};
-exports.bindEventWithChecks_ = bindEventWithChecks_;
+    node, name, thisObject, func, opt_noCaptureIdentifier,
+    opt_noPreventDefault);
+}
 
 // Aliases to allow external code to access these values for legacy reasons.
-exports.COLLAPSE_CHARS = internalConstants.COLLAPSE_CHARS;
-exports.DRAG_STACK = internalConstants.DRAG_STACK;
-exports.OPPOSITE_TYPE = internalConstants.OPPOSITE_TYPE;
-exports.RENAME_VARIABLE_ID = internalConstants.RENAME_VARIABLE_ID;
-exports.DELETE_VARIABLE_ID = internalConstants.DELETE_VARIABLE_ID;
-exports.COLLAPSED_INPUT_NAME = constants.COLLAPSED_INPUT_NAME;
-exports.COLLAPSED_FIELD_NAME = constants.COLLAPSED_FIELD_NAME;
+export const COLLAPSE_CHARS = internalConstants.COLLAPSE_CHARS;
+export const DRAG_STACK = internalConstants.DRAG_STACK;
+export const OPPOSITE_TYPE = internalConstants.OPPOSITE_TYPE;
+export const RENAME_VARIABLE_ID = internalConstants.RENAME_VARIABLE_ID;
+export const DELETE_VARIABLE_ID = internalConstants.DELETE_VARIABLE_ID;
+// AnyDuringMigration because:  Property 'COLLAPSED_INPUT_NAME' does not exist
+// on type 'void'.
+export const COLLAPSED_INPUT_NAME =
+  (constants as AnyDuringMigration).COLLAPSED_INPUT_NAME;
+// AnyDuringMigration because:  Property 'COLLAPSED_FIELD_NAME' does not exist
+// on type 'void'.
+export const COLLAPSED_FIELD_NAME =
+  (constants as AnyDuringMigration).COLLAPSED_FIELD_NAME;
 
 /**
  * String for use in the "custom" attribute of a category in toolbox XML.
  * This string indicates that the category should be dynamically populated with
  * variable blocks.
- * @const {string}
  * @alias Blockly.VARIABLE_CATEGORY_NAME
  */
-exports.VARIABLE_CATEGORY_NAME = Variables.CATEGORY_NAME;
+// AnyDuringMigration because:  Property 'CATEGORY_NAME' does not exist on type
+// 'void'.
+export const VARIABLE_CATEGORY_NAME: string =
+  (Variables as AnyDuringMigration).CATEGORY_NAME;
 
 /**
  * String for use in the "custom" attribute of a category in toolbox XML.
  * This string indicates that the category should be dynamically populated with
  * variable blocks.
- * @const {string}
  * @alias Blockly.VARIABLE_DYNAMIC_CATEGORY_NAME
  */
-exports.VARIABLE_DYNAMIC_CATEGORY_NAME = VariablesDynamic.CATEGORY_NAME;
+// AnyDuringMigration because:  Property 'CATEGORY_NAME' does not exist on type
+// 'void'.
+export const VARIABLE_DYNAMIC_CATEGORY_NAME: string =
+  (VariablesDynamic as AnyDuringMigration).CATEGORY_NAME;
 /**
  * String for use in the "custom" attribute of a category in toolbox XML.
  * This string indicates that the category should be dynamically populated with
  * procedure blocks.
- * @const {string}
  * @alias Blockly.PROCEDURE_CATEGORY_NAME
  */
-exports.PROCEDURE_CATEGORY_NAME = Procedures.CATEGORY_NAME;
+// AnyDuringMigration because:  Property 'CATEGORY_NAME' does not exist on type
+// 'void'.
+export const PROCEDURE_CATEGORY_NAME: string =
+  (Procedures as AnyDuringMigration).CATEGORY_NAME;
 
 // Re-export submodules that no longer declareLegacyNamespace.
-exports.ASTNode = ASTNode;
-exports.BasicCursor = BasicCursor;
-exports.Block = Block;
-exports.BlocklyOptions = BlocklyOptions;
-exports.BlockDragger = BlockDragger;
-exports.BlockDragSurfaceSvg = BlockDragSurfaceSvg;
-exports.BlockSvg = BlockSvg;
-exports.Blocks = Blocks;
-exports.Bubble = Bubble;
-exports.BubbleDragger = BubbleDragger;
-exports.CollapsibleToolboxCategory = CollapsibleToolboxCategory;
-exports.Comment = Comment;
-exports.ComponentManager = ComponentManager;
-exports.Connection = Connection;
-exports.ConnectionType = ConnectionType;
-exports.ConnectionChecker = ConnectionChecker;
-exports.ConnectionDB = ConnectionDB;
-exports.ContextMenu = ContextMenu;
-exports.ContextMenuItems = ContextMenuItems;
-exports.ContextMenuRegistry = ContextMenuRegistry;
-exports.Css = Css;
-exports.Cursor = Cursor;
-exports.DeleteArea = DeleteArea;
-exports.DragTarget = DragTarget;
-exports.DropDownDiv = dropDownDiv;
-exports.Events = Events;
-exports.Extensions = Extensions;
-exports.Field = Field;
-exports.FieldAngle = FieldAngle;
-exports.FieldCheckbox = FieldCheckbox;
-exports.FieldColour = FieldColour;
-exports.FieldDropdown = FieldDropdown;
-exports.FieldImage = FieldImage;
-exports.FieldLabel = FieldLabel;
-exports.FieldLabelSerializable = FieldLabelSerializable;
-exports.FieldMultilineInput = FieldMultilineInput;
-exports.FieldNumber = FieldNumber;
-exports.FieldTextInput = FieldTextInput;
-exports.FieldVariable = FieldVariable;
-exports.Flyout = Flyout;
-exports.FlyoutButton = FlyoutButton;
-exports.FlyoutMetricsManager = FlyoutMetricsManager;
-exports.Generator = Generator;
-exports.Gesture = Gesture;
-exports.Grid = Grid;
-exports.HorizontalFlyout = HorizontalFlyout;
-exports.IASTNodeLocation = IASTNodeLocation;
-exports.IASTNodeLocationSvg = IASTNodeLocationSvg;
-exports.IASTNodeLocationWithBlock = IASTNodeLocationWithBlock;
-exports.IAutoHideable = IAutoHideable;
-exports.IBlockDragger = IBlockDragger;
-exports.IBoundedElement = IBoundedElement;
-exports.IBubble = IBubble;
-exports.ICollapsibleToolboxItem = ICollapsibleToolboxItem;
-exports.IComponent = IComponent;
-exports.IConnectionChecker = IConnectionChecker;
-exports.IContextMenu = IContextMenu;
-exports.Icon = Icon;
-exports.ICopyable = ICopyable;
-exports.IDeletable = IDeletable;
-exports.IDeleteArea = IDeleteArea;
-exports.IDragTarget = IDragTarget;
-exports.IDraggable = IDraggable;
-exports.IFlyout = IFlyout;
-exports.IKeyboardAccessible = IKeyboardAccessible;
-exports.IMetricsManager = IMetricsManager;
-exports.IMovable = IMovable;
-exports.Input = Input;
-exports.InsertionMarkerManager = InsertionMarkerManager;
-exports.IPositionable = IPositionable;
-exports.IRegistrable = IRegistrable;
-exports.IRegistrableField = IRegistrableField;
-exports.ISelectable = ISelectable;
-exports.ISelectableToolboxItem = ISelectableToolboxItem;
-exports.IStyleable = IStyleable;
-exports.IToolbox = IToolbox;
-exports.IToolboxItem = IToolboxItem;
-exports.Marker = Marker;
-exports.MarkerManager = MarkerManager;
-exports.Menu = Menu;
-exports.MenuItem = MenuItem;
-exports.MetricsManager = MetricsManager;
-exports.Mutator = Mutator;
-exports.Msg = Msg;
-exports.Names = Names;
-exports.Options = Options;
-exports.Procedures = Procedures;
-exports.RenderedConnection = RenderedConnection;
-exports.Scrollbar = Scrollbar;
-exports.ScrollbarPair = ScrollbarPair;
-exports.ShortcutItems = ShortcutItems;
-exports.ShortcutRegistry = ShortcutRegistry;
-exports.TabNavigateCursor = TabNavigateCursor;
-exports.Theme = Theme;
-exports.Themes = Themes;
-exports.ThemeManager = ThemeManager;
-exports.Toolbox = Toolbox;
-exports.ToolboxCategory = ToolboxCategory;
-exports.ToolboxItem = ToolboxItem;
-exports.ToolboxSeparator = ToolboxSeparator;
-exports.Tooltip = Tooltip;
-exports.Touch = Touch;
-exports.TouchGesture = TouchGesture;
-exports.Trashcan = Trashcan;
-exports.VariableMap = VariableMap;
-exports.VariableModel = VariableModel;
-exports.Variables = Variables;
-exports.VariablesDynamic = VariablesDynamic;
-exports.VerticalFlyout = VerticalFlyout;
-exports.Warning = Warning;
-exports.WidgetDiv = WidgetDiv;
-exports.Workspace = Workspace;
-exports.WorkspaceAudio = WorkspaceAudio;
-exports.WorkspaceComment = WorkspaceComment;
-exports.WorkspaceCommentSvg = WorkspaceCommentSvg;
-exports.WorkspaceDragSurfaceSvg = WorkspaceDragSurfaceSvg;
-exports.WorkspaceDragger = WorkspaceDragger;
-exports.WorkspaceSvg = WorkspaceSvg;
-exports.Xml = Xml;
-exports.ZoomControls = ZoomControls;
-exports.blockAnimations = blockAnimations;
-exports.blockRendering = blockRendering;
-exports.browserEvents = browserEvents;
-exports.bumpObjects = bumpObjects;
-exports.clipboard = clipboard;
-exports.common = common;
-exports.config = config;
+export { browserEvents };
+export { ContextMenu };
+export { ContextMenuItems };
+export { Css };
+export { Events };
+export { Extensions };
+export { Procedures };
+export { ShortcutItems };
+export { Themes };
+export { Tooltip };
+export { Touch };
+export { Variables };
+export { VariablesDynamic };
+export { WidgetDiv };
+export { Xml };
+export { blockAnimations };
+export { blockRendering };
+export { bumpObjects };
+export { clipboard };
+export { common };
+export { constants };
+export { dialog };
+export { fieldRegistry };
+export { geras };
+export { minimalist };
+export { registry };
+export { thrasos };
+export { uiPosition };
+export { utils };
+export { zelos };
+export { ASTNode };
+export { BasicCursor };
+export { Block };
+export { BlocklyOptions };
+export { BlockDragger };
+export { BlockDragSurfaceSvg };
+export { BlockSvg };
+export { Blocks };
+export { Bubble };
+export { BubbleDragger };
+export { CollapsibleToolboxCategory };
+export { Comment };
+export { ComponentManager };
+export { Connection };
+export { ConnectionType };
+export { ConnectionChecker };
+export { ConnectionDB };
+export { ContextMenuRegistry };
+export { Cursor };
+export { DeleteArea };
+export { DragTarget };
+export const DropDownDiv = dropDownDiv;
+export { Field };
+export { FieldAngle };
+export { FieldCheckbox };
+export { FieldColour };
+export { FieldDropdown };
+export { FieldImage };
+export { FieldLabel };
+export { FieldLabelSerializable };
+export { FieldMultilineInput };
+export { FieldNumber };
+export { FieldTextInput };
+export { FieldVariable };
+export { Flyout };
+export { FlyoutButton };
+export { FlyoutMetricsManager };
+export { Generator };
+export { Gesture };
+export { Grid };
+export { HorizontalFlyout };
+export { IASTNodeLocation };
+export { IASTNodeLocationSvg };
+export { IASTNodeLocationWithBlock };
+export { IAutoHideable };
+export { IBlockDragger };
+export { IBoundedElement };
+export { IBubble };
+export { ICollapsibleToolboxItem };
+export { IComponent };
+export { IConnectionChecker };
+export { IContextMenu };
+export { Icon };
+export { ICopyable };
+export { IDeletable };
+export { IDeleteArea };
+export { IDragTarget };
+export { IDraggable };
+export { IFlyout };
+export { IKeyboardAccessible };
+export { IMetricsManager };
+export { IMovable };
+export { Input };
+export { InsertionMarkerManager };
+export { IPositionable };
+export { IRegistrable };
+export { IRegistrableField };
+export { ISelectable };
+export { ISelectableToolboxItem };
+export { IStyleable };
+export { IToolbox };
+export { IToolboxItem };
+export { Marker };
+export { MarkerManager };
+export { Menu };
+export { MenuItem };
+export { MetricsManager };
+export { Mutator };
+export { Msg };
+export { Names };
+export { Options };
+export { RenderedConnection };
+export { Scrollbar };
+export { ScrollbarPair };
+export { ShortcutRegistry };
+export { TabNavigateCursor };
+export { Theme };
+export { ThemeManager };
+export { Toolbox };
+export { ToolboxCategory };
+export { ToolboxItem };
+export { ToolboxSeparator };
+export { TouchGesture };
+export { Trashcan };
+export { VariableMap };
+export { VariableModel };
+export { VerticalFlyout };
+export { Warning };
+export { Workspace };
+export { WorkspaceAudio };
+export { WorkspaceComment };
+export { WorkspaceCommentSvg };
+export { WorkspaceDragSurfaceSvg };
+export { WorkspaceDragger };
+export { WorkspaceSvg };
+export { ZoomControls };
+export { config };
 /** @deprecated Use Blockly.ConnectionType instead. */
-exports.connectionTypes = ConnectionType;
-exports.constants = constants;
-exports.dialog = dialog;
-exports.fieldRegistry = fieldRegistry;
-exports.geras = geras;
-exports.inject = inject;
-exports.inputTypes = inputTypes;
-exports.minimalist = minimalist;
-exports.registry = registry;
-exports.serialization = {
-  blocks: serializationBlocks,
-  exceptions: serializationExceptions,
-  priorities: serializationPriorities,
-  registry: serializationRegistry,
-  variables: serializationVariables,
-  workspaces: serializationWorkspaces,
-  ISerializer: ISerializer,
+export const connectionTypes = ConnectionType;
+export { inject };
+export { inputTypes };
+export namespace serialization {
+  export const blocks = serializationBlocks;
+  export const exceptions = serializationExceptions;
+  export const priorities = serializationPriorities;
+  export const registry = serializationRegistry;
+  export const variables = serializationVariables;
+  export const workspaces = serializationWorkspaces;
+  export type ISerializer = SerializerInterface;
 };
-exports.thrasos = thrasos;
-exports.uiPosition = uiPosition;
-exports.utils = utils;
-exports.zelos = zelos;
 
 // If Blockly is compiled with ADVANCED_COMPILATION and/or loaded as a
 // CJS or ES module there will not be a Blockly global variable
 // created.  This can cause problems because a very common way of
 // loading translations is to use a <script> tag to load one of
 // msg/js/*.js, which consists of lines like:
-//
 // Blockly.Msg["ADD_COMMENT"] = "Add Comment";
 // Blockly.Msg["CLEAN_UP"] = "Clean up Blocks";
-//
 // This obviously only works if Blockly.Msg is the Msg export from the
 // Blockly.Msg module - so make sure it is, but only if there is not
 // yet a Blockly global variable.
 if (!('Blockly' in globalThis)) {
-  globalThis['Blockly'] = {'Msg': Msg};
-}
-
-// Temporary hack to copy accessor properties from exports to the
-// global Blockly object as the routine to copy exports in
-// goog.exportPath_ (see closure/goog/base.js) invoked by
-// declareLegacyNamespace only copies normal data properties, not
-// accessors.  This can be removed once all remaining calls to
-// declareLegacyNamspace have been removed.
-//
-// This is only needed in uncompiled mode (see
-// google/blockly-samples#902); in compiled mode the exports object is
-// already the value of globalThis['Blockly'].
-//
-// Note that this code will still attempt to redefine accessors on a
-// previously-imported copy of the Blockly library if both are
-// imported in uncompiled mode.  This will fail with TypeError as the
-// accessors are nonconfigurable (which is good, as otherwise one
-// accessors on one copy would call get/set functions on the other
-// copy!)
-/* eslint-disable-next-line no-undef */
-if (!COMPILED && typeof globalThis['Blockly'] === 'object' &&
-    globalThis['Blockly'] !== exports) {
-  const descriptors = Object.getOwnPropertyDescriptors(exports);
-  const accessors = {};
-  for (const key in descriptors) {
-    if (descriptors[key].get || descriptors[key].set) {
-      accessors[key] = descriptors[key];
-    }
-  }
-  Object.defineProperties(globalThis['Blockly'], accessors);
+  (globalThis as AnyDuringMigration)['Blockly'] = { 'Msg': Msg };
 }

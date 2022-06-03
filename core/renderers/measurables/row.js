@@ -1,28 +1,48 @@
+/** @fileoverview Object representing a single row on a rendered block. */
+
+
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2018 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Object representing a single row on a rendered block.
- */
 
 /**
  * Object representing a single row on a rendered block.
  * @class
  */
-goog.module('Blockly.blockRendering.Row');
 
 /* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+import { ConstantProvider } from '../common/constants';
+
 /* eslint-disable-next-line no-unused-vars */
-const {InRowSpacer} = goog.requireType('Blockly.blockRendering.InRowSpacer');
+import { Measurable } from './base';
 /* eslint-disable-next-line no-unused-vars */
-const {InputConnection} = goog.requireType('Blockly.blockRendering.InputConnection');
+import { InRowSpacer } from './in_row_spacer';
 /* eslint-disable-next-line no-unused-vars */
-const {Measurable} = goog.requireType('Blockly.blockRendering.Measurable');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+import { InputConnection } from './input_connection';
+import { Types } from './types';
 
 
 /**
@@ -30,164 +50,101 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  * subcomponents.
  * @alias Blockly.blockRendering.Row
  */
-class Row {
+export class Row {
+  type: number;
+
+  /** An array of elements contained in this row. */
+  elements: Measurable[] = [];
+
+  /** The height of the row. */
+  height = 0;
+
   /**
-   * @param {!ConstantProvider} constants The rendering
-   *   constants provider.
-   * @package
+   * The width of the row, from the left edge of the block to the right.
+   * Does not include child blocks unless they are inline.
    */
-  constructor(constants) {
-    /**
-     * The type of this rendering object.
-     * @package
-     * @type {number}
-     */
+  width = 0;
+
+  /** The minimum height of the row. */
+  minHeight = 0;
+
+  /**
+   * The minimum width of the row, from the left edge of the block to the
+   * right. Does not include child blocks unless they are inline.
+   */
+  minWidth = 0;
+
+  /**
+   * The width of the row, from the left edge of the block to the edge of the
+   * block or any connected child blocks.
+   */
+  widthWithConnectedBlocks = 0;
+
+  /**
+   * The Y position of the row relative to the origin of the block's svg
+   * group.
+   */
+  yPos = 0;
+
+  /**
+   * The X position of the row relative to the origin of the block's svg
+   * group.
+   */
+  xPos = 0;
+
+  /** Whether the row has any external inputs. */
+  hasExternalInput = false;
+
+  /** Whether the row has any statement inputs. */
+  hasStatement = false;
+
+  /**
+   * Where the left edge of all of the statement inputs on the block should
+   * be. This makes sure that statement inputs which are proceded by fields
+   * of varius widths are all aligned.
+   */
+  statementEdge = 0;
+
+  /** Whether the row has any inline inputs. */
+  hasInlineInput = false;
+
+  /** Whether the row has any dummy inputs. */
+  hasDummyInput = false;
+
+  /** Whether the row has a jagged edge. */
+  hasJaggedEdge = false;
+  notchOffset: number;
+
+  /** Alignment of the row. */
+  align: number | null = null;
+
+  /** @param constants The rendering constants provider. */
+  constructor(protected readonly constants: ConstantProvider) {
+    /** The type of this rendering object. */
     this.type = Types.ROW;
 
-    /**
-     * An array of elements contained in this row.
-     * @package
-     * @type {!Array<!Measurable>}
-     */
-    this.elements = [];
-
-    /**
-     * The height of the row.
-     * @package
-     * @type {number}
-     */
-    this.height = 0;
-
-    /**
-     * The width of the row, from the left edge of the block to the right.
-     * Does not include child blocks unless they are inline.
-     * @package
-     * @type {number}
-     */
-    this.width = 0;
-
-    /**
-     * The minimum height of the row.
-     * @package
-     * @type {number}
-     */
-    this.minHeight = 0;
-
-    /**
-     * The minimum width of the row, from the left edge of the block to the
-     * right. Does not include child blocks unless they are inline.
-     * @package
-     * @type {number}
-     */
-    this.minWidth = 0;
-
-    /**
-     * The width of the row, from the left edge of the block to the edge of the
-     * block or any connected child blocks.
-     * @package
-     * @type {number}
-     */
-    this.widthWithConnectedBlocks = 0;
-
-    /**
-     * The Y position of the row relative to the origin of the block's svg
-     * group.
-     * @package
-     * @type {number}
-     */
-    this.yPos = 0;
-
-    /**
-     * The X position of the row relative to the origin of the block's svg
-     * group.
-     * @package
-     * @type {number}
-     */
-    this.xPos = 0;
-
-    /**
-     * Whether the row has any external inputs.
-     * @package
-     * @type {boolean}
-     */
-    this.hasExternalInput = false;
-
-    /**
-     * Whether the row has any statement inputs.
-     * @package
-     * @type {boolean}
-     */
-    this.hasStatement = false;
-
-    /**
-     * Where the left edge of all of the statement inputs on the block should
-     * be. This makes sure that statement inputs which are proceded by fields
-     * of varius widths are all aligned.
-     * @type {number}
-     */
-    this.statementEdge = 0;
-
-    /**
-     * Whether the row has any inline inputs.
-     * @package
-     * @type {boolean}
-     */
-    this.hasInlineInput = false;
-
-    /**
-     * Whether the row has any dummy inputs.
-     * @package
-     * @type {boolean}
-     */
-    this.hasDummyInput = false;
-
-    /**
-     * Whether the row has a jagged edge.
-     * @package
-     * @type {boolean}
-     */
-    this.hasJaggedEdge = false;
-
-    /**
-     * The renderer's constant provider.
-     * @type {!ConstantProvider}
-     * @protected
-     */
-    this.constants_ = constants;
-
-    /**
-     * @type {number}
-     */
-    this.notchOffset = this.constants_.NOTCH_OFFSET_LEFT;
-
-    /**
-     * Alignment of the row.
-     * @package
-     * @type {?number}
-     */
-    this.align = null;
+    this.notchOffset = this.constants.NOTCH_OFFSET_LEFT;
   }
 
   /**
    * Get the last input on this row, if it has one.
-   * @return {InputConnection} The last input on the row,
-   *     or null.
-   * @package
+   * @return The last input on the row, or null.
    */
-  getLastInput() {
+  getLastInput(): InputConnection {
     // TODO: Consider moving this to InputRow, if possible.
     for (let i = this.elements.length - 1; i >= 0; i--) {
       const elem = this.elements[i];
       if (Types.isInput(elem)) {
-        return /** @type {InputConnection} */ (elem);
+        return elem as InputConnection;
       }
     }
-    return null;
+    // AnyDuringMigration because:  Type 'null' is not assignable to type
+    // 'InputConnection'.
+    return null as AnyDuringMigration;
   }
 
   /**
    * Inspect all subcomponents and populate all size properties on the row.
-   * @package
    */
   measure() {
     throw Error('Unexpected attempt to measure a base Row.');
@@ -195,53 +152,49 @@ class Row {
 
   /**
    * Determines whether this row should start with an element spacer.
-   * @return {boolean} Whether the row should start with a spacer.
-   * @package
+   * @return Whether the row should start with a spacer.
    */
-  startsWithElemSpacer() {
+  startsWithElemSpacer(): boolean {
     return true;
   }
 
   /**
    * Determines whether this row should end with an element spacer.
-   * @return {boolean} Whether the row should end with a spacer.
-   * @package
+   * @return Whether the row should end with a spacer.
    */
-  endsWithElemSpacer() {
+  endsWithElemSpacer(): boolean {
     return true;
   }
 
   /**
    * Convenience method to get the first spacer element on this row.
-   * @return {InRowSpacer} The first spacer element on
-   *   this row.
-   * @package
+   * @return The first spacer element on this row.
    */
-  getFirstSpacer() {
+  getFirstSpacer(): InRowSpacer {
     for (let i = 0; i < this.elements.length; i++) {
       const elem = this.elements[i];
       if (Types.isSpacer(elem)) {
-        return /** @type {InRowSpacer} */ (elem);
+        return elem as InRowSpacer;
       }
     }
-    return null;
+    // AnyDuringMigration because:  Type 'null' is not assignable to type
+    // 'InRowSpacer'.
+    return null as AnyDuringMigration;
   }
 
   /**
    * Convenience method to get the last spacer element on this row.
-   * @return {InRowSpacer} The last spacer element on
-   *   this row.
-   * @package
+   * @return The last spacer element on this row.
    */
-  getLastSpacer() {
+  getLastSpacer(): InRowSpacer {
     for (let i = this.elements.length - 1; i >= 0; i--) {
       const elem = this.elements[i];
       if (Types.isSpacer(elem)) {
-        return /** @type {InRowSpacer} */ (elem);
+        return elem as InRowSpacer;
       }
     }
-    return null;
+    // AnyDuringMigration because:  Type 'null' is not assignable to type
+    // 'InRowSpacer'.
+    return null as AnyDuringMigration;
   }
 }
-
-exports.Row = Row;

@@ -1,81 +1,96 @@
+/** @fileoverview Class for comment deletion event. */
+
+
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2018 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /**
  * @license
  * Copyright 2018 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Class for comment deletion event.
- */
-'use strict';
 
 /**
  * Class for comment deletion event.
  * @class
  */
-goog.module('Blockly.Events.CommentDelete');
 
-const eventUtils = goog.require('Blockly.Events.utils');
-const registry = goog.require('Blockly.registry');
-const {CommentBase} = goog.require('Blockly.Events.CommentBase');
+import * as registry from '../registry';
 /* eslint-disable-next-line no-unused-vars */
-const {WorkspaceComment} = goog.requireType('Blockly.WorkspaceComment');
+import { WorkspaceComment } from '../workspace_comment';
+
+import { CommentBase } from './events_comment_base';
+import * as eventUtils from './utils';
 
 
 /**
  * Class for a comment deletion event.
- * @extends {CommentBase}
  * @alias Blockly.Events.CommentDelete
  */
-class CommentDelete extends CommentBase {
+export class CommentDelete extends CommentBase {
+  override type: string;
+  xml: AnyDuringMigration;
+
   /**
-   * @param {!WorkspaceComment=} opt_comment The deleted comment.
+   * @param opt_comment The deleted comment.
    *     Undefined for a blank event.
    */
-  constructor(opt_comment) {
+  constructor(opt_comment?: WorkspaceComment) {
     super(opt_comment);
 
-    /**
-     * Type of this event.
-     * @type {string}
-     */
+    /** Type of this event. */
     this.type = eventUtils.COMMENT_DELETE;
 
     if (!opt_comment) {
-      return;  // Blank event to be populated by fromJson.
+      return;
     }
-
+    // Blank event to be populated by fromJson.
     this.xml = opt_comment.toXmlWithXY();
   }
-
   // TODO (#1266): "Full" and "minimal" serialization.
   /**
    * Encode the event as JSON.
-   * @return {!Object} JSON representation.
+   * @return JSON representation.
    */
-  toJson() {
+  override toJson(): AnyDuringMigration {
     const json = super.toJson();
     return json;
   }
 
   /**
    * Decode the JSON event.
-   * @param {!Object} json JSON representation.
+   * @param json JSON representation.
    */
-  fromJson(json) {
+  override fromJson(json: AnyDuringMigration) {
     super.fromJson(json);
   }
 
   /**
    * Run a creation event.
-   * @param {boolean} forward True if run forward, false if run backward (undo).
+   * @param forward True if run forward, false if run backward (undo).
    */
-  run(forward) {
+  override run(forward: boolean) {
     CommentBase.CommentCreateDeleteHelper(this, !forward);
   }
 }
 
 registry.register(
-    registry.Type.EVENT, eventUtils.COMMENT_DELETE, CommentDelete);
-
-exports.CommentDelete = CommentDelete;
+  registry.Type.EVENT, eventUtils.COMMENT_DELETE, CommentDelete);

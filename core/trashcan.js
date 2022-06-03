@@ -1,266 +1,238 @@
+/** @fileoverview Object representing a trash can icon. */
+
+
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2018 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /**
  * @license
  * Copyright 2011 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Object representing a trash can icon.
- */
-'use strict';
 
 /**
  * Object representing a trash can icon.
  * @class
  */
-goog.module('Blockly.Trashcan');
+/* eslint-disable-next-line no-unused-vars */
+// Unused import preserved for side-effects. Remove if unneeded.
+import './metrics_manager';
+// Unused import preserved for side-effects. Remove if unneeded.
+import './events/events_trashcan_open';
 
 /* eslint-disable-next-line no-unused-vars */
-const blocks = goog.requireType('Blockly.serialization.blocks');
-const browserEvents = goog.require('Blockly.browserEvents');
-const dom = goog.require('Blockly.utils.dom');
-const eventUtils = goog.require('Blockly.Events.utils');
-const registry = goog.require('Blockly.registry');
-const toolbox = goog.require('Blockly.utils.toolbox');
-const uiPosition = goog.require('Blockly.uiPosition');
+import { BlocklyOptions } from './blockly_options';
+import * as browserEvents from './browser_events';
+import { ComponentManager } from './component_manager';
+import { DeleteArea } from './delete_area';
 /* eslint-disable-next-line no-unused-vars */
-const {Abstract} = goog.requireType('Blockly.Events.Abstract');
+import { Abstract } from './events/events_abstract';
 /* eslint-disable-next-line no-unused-vars */
-const {BlockDelete} = goog.requireType('Blockly.Events.BlockDelete');
+import { BlockDelete } from './events/events_block_delete';
+import * as eventUtils from './events/utils';
 /* eslint-disable-next-line no-unused-vars */
-const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
-const {ComponentManager} = goog.require('Blockly.ComponentManager');
-const {DeleteArea} = goog.require('Blockly.DeleteArea');
+import { IAutoHideable } from './interfaces/i_autohideable';
 /* eslint-disable-next-line no-unused-vars */
-const {IAutoHideable} = goog.require('Blockly.IAutoHideable');
+import { IDraggable } from './interfaces/i_draggable';
 /* eslint-disable-next-line no-unused-vars */
-const {IDraggable} = goog.requireType('Blockly.IDraggable');
+import { IFlyout } from './interfaces/i_flyout';
 /* eslint-disable-next-line no-unused-vars */
-const {IFlyout} = goog.requireType('Blockly.IFlyout');
+import { IPositionable } from './interfaces/i_positionable';
+import { UiMetrics } from './metrics_manager';
+import { Options } from './options';
+import * as uiPosition from './positionable_helpers';
+import * as registry from './registry';
 /* eslint-disable-next-line no-unused-vars */
-const {IPositionable} = goog.require('Blockly.IPositionable');
+import * as blocks from './serialization/blocks';
+import { SPRITE } from './sprites';
+import * as dom from './utils/dom';
+import { Rect } from './utils/rect';
+import { Size } from './utils/size';
+import { Svg } from './utils/svg';
+import * as toolbox from './utils/toolbox';
 /* eslint-disable-next-line no-unused-vars */
-const {MetricsManager} = goog.requireType('Blockly.MetricsManager');
-const {Options} = goog.require('Blockly.Options');
-const {Rect} = goog.require('Blockly.utils.Rect');
-const {Size} = goog.require('Blockly.utils.Size');
-const {SPRITE} = goog.require('Blockly.sprite');
-const {Svg} = goog.require('Blockly.utils.Svg');
-/* eslint-disable-next-line no-unused-vars */
-const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
-/** @suppress {extraRequire} */
-goog.require('Blockly.Events.TrashcanOpen');
+import { WorkspaceSvg } from './workspace_svg';
 
 
 /**
  * Class for a trash can.
- * @implements {IAutoHideable}
- * @implements {IPositionable}
- * @extends {DeleteArea}
  * @alias Blockly.Trashcan
  */
-class Trashcan extends DeleteArea {
+export class Trashcan extends DeleteArea implements IAutoHideable,
+  IPositionable {
   /**
-   * @param {!WorkspaceSvg} workspace The workspace to sit in.
+   * The unique id for this component that is used to register with the
+   * ComponentManager.
    */
-  constructor(workspace) {
+  override id = 'trashcan';
+
+  /**
+   * A list of JSON (stored as strings) representing blocks in the trashcan.
+   */
+  private readonly contents_: string[] = [];
+
+  /** The trashcan flyout. */
+  // AnyDuringMigration because:  Type 'null' is not assignable to type
+  // 'IFlyout'.
+  flyout: IFlyout = null as AnyDuringMigration;
+
+  /** Current open/close state of the lid. */
+  isLidOpen = false;
+
+  /**
+   * The minimum openness of the lid. Used to indicate if the trashcan
+   * contains blocks.
+   */
+  private minOpenness_ = 0;
+
+  /** The SVG group containing the trash can. */
+  // AnyDuringMigration because:  Type 'null' is not assignable to type
+  // 'SVGElement'.
+  private svgGroup_: SVGElement = null as AnyDuringMigration;
+
+  /** The SVG image element of the trash can lid. */
+  // AnyDuringMigration because:  Type 'null' is not assignable to type
+  // 'SVGElement'.
+  private svgLid_: SVGElement = null as AnyDuringMigration;
+
+  /** Task ID of opening/closing animation. */
+  private lidTask_ = 0;
+
+  /** Current state of lid opening (0.0 = closed, 1.0 = open). */
+  private lidOpen_ = 0;
+
+  /** Left coordinate of the trash can. */
+  private left_ = 0;
+
+  /** Top coordinate of the trash can. */
+  private top_ = 0;
+
+  /** Whether this trash can has been initialized. */
+  private initialized_ = false;
+
+  /** @param workspace The workspace to sit in. */
+  constructor(private workspace: WorkspaceSvg) {
     super();
-    /**
-     * The workspace the trashcan sits in.
-     * @type {!WorkspaceSvg}
-     * @private
-     */
-    this.workspace_ = workspace;
 
-    /**
-     * The unique id for this component that is used to register with the
-     * ComponentManager.
-     * @type {string}
-     */
-    this.id = 'trashcan';
-
-    /**
-     * A list of JSON (stored as strings) representing blocks in the trashcan.
-     * @type {!Array<string>}
-     * @private
-     */
-    this.contents_ = [];
-
-    /**
-     * The trashcan flyout.
-     * @type {IFlyout}
-     * @package
-     */
-    this.flyout = null;
-
-    if (this.workspace_.options.maxTrashcanContents <= 0) {
+    if (this.workspace.options.maxTrashcanContents <= 0) {
       return;
     }
 
-    /**
-     * Current open/close state of the lid.
-     * @type {boolean}
-     */
-    this.isLidOpen = false;
-
-    /**
-     * The minimum openness of the lid. Used to indicate if the trashcan
-     * contains blocks.
-     * @type {number}
-     * @private
-     */
-    this.minOpenness_ = 0;
-
-    /**
-     * The SVG group containing the trash can.
-     * @type {SVGElement}
-     * @private
-     */
-    this.svgGroup_ = null;
-
-    /**
-     * The SVG image element of the trash can lid.
-     * @type {SVGElement}
-     * @private
-     */
-    this.svgLid_ = null;
-
-    /**
-     * Task ID of opening/closing animation.
-     * @type {number}
-     * @private
-     */
-    this.lidTask_ = 0;
-
-    /**
-     * Current state of lid opening (0.0 = closed, 1.0 = open).
-     * @type {number}
-     * @private
-     */
-    this.lidOpen_ = 0;
-
-    /**
-     * Left coordinate of the trash can.
-     * @type {number}
-     * @private
-     */
-    this.left_ = 0;
-
-    /**
-     * Top coordinate of the trash can.
-     * @type {number}
-     * @private
-     */
-    this.top_ = 0;
-
-    /**
-     * Whether this trash can has been initialized.
-     * @type {boolean}
-     * @private
-     */
-    this.initialized_ = false;
-
     // Create flyout options.
-    const flyoutWorkspaceOptions = new Options(
-        /** @type {!BlocklyOptions} */
-        ({
-          'scrollbars': true,
-          'parentWorkspace': this.workspace_,
-          'rtl': this.workspace_.RTL,
-          'oneBasedIndex': this.workspace_.options.oneBasedIndex,
-          'renderer': this.workspace_.options.renderer,
-          'rendererOverrides': this.workspace_.options.rendererOverrides,
-          'move': {
-            'scrollbars': true,
-          },
-        }));
+    const flyoutWorkspaceOptions = new Options(({
+      'scrollbars': true,
+      'parentWorkspace': this.workspace,
+      'rtl': this.workspace.RTL,
+      'oneBasedIndex': this.workspace.options.oneBasedIndex,
+      'renderer': this.workspace.options.renderer,
+      'rendererOverrides': this.workspace.options.rendererOverrides,
+      'move': {
+        'scrollbars': true,
+      },
+    } as BlocklyOptions));
     // Create vertical or horizontal flyout.
-    if (this.workspace_.horizontalLayout) {
+    if (this.workspace.horizontalLayout) {
       flyoutWorkspaceOptions.toolboxPosition =
-          this.workspace_.toolboxPosition === toolbox.Position.TOP ?
+        this.workspace.toolboxPosition === toolbox.Position.TOP ?
           toolbox.Position.BOTTOM :
           toolbox.Position.TOP;
       const HorizontalFlyout = registry.getClassFromOptions(
-          registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX, this.workspace_.options,
-          true);
-      this.flyout = new HorizontalFlyout(flyoutWorkspaceOptions);
+        registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX, this.workspace.options,
+        true);
+      this.flyout = new HorizontalFlyout!(flyoutWorkspaceOptions);
     } else {
       flyoutWorkspaceOptions.toolboxPosition =
-          this.workspace_.toolboxPosition === toolbox.Position.RIGHT ?
+        this.workspace.toolboxPosition === toolbox.Position.RIGHT ?
           toolbox.Position.LEFT :
           toolbox.Position.RIGHT;
       const VerticalFlyout = registry.getClassFromOptions(
-          registry.Type.FLYOUTS_VERTICAL_TOOLBOX, this.workspace_.options,
-          true);
-      this.flyout = new VerticalFlyout(flyoutWorkspaceOptions);
+        registry.Type.FLYOUTS_VERTICAL_TOOLBOX, this.workspace.options, true);
+      this.flyout = new VerticalFlyout!(flyoutWorkspaceOptions);
     }
-    this.workspace_.addChangeListener(this.onDelete_.bind(this));
+    this.workspace.addChangeListener(this.onDelete_.bind(this));
   }
 
   /**
    * Create the trash can elements.
-   * @return {!SVGElement} The trash can's SVG group.
+   * @return The trash can's SVG group.
    */
-  createDom() {
+  createDom(): SVGElement {
     /* Here's the markup that will be generated:
-    <g class="blocklyTrash">
-      <clippath id="blocklyTrashBodyClipPath837493">
-        <rect width="47" height="45" y="15"></rect>
-      </clippath>
-      <image width="64" height="92" y="-32" xlink:href="media/sprites.png"
-          clip-path="url(#blocklyTrashBodyClipPath837493)"></image>
-      <clippath id="blocklyTrashLidClipPath837493">
-        <rect width="47" height="15"></rect>
-      </clippath>
-      <image width="84" height="92" y="-32" xlink:href="media/sprites.png"
-          clip-path="url(#blocklyTrashLidClipPath837493)"></image>
-    </g>
-    */
-    this.svgGroup_ =
-        dom.createSvgElement(Svg.G, {'class': 'blocklyTrash'}, null);
+        <g class="blocklyTrash">
+          <clippath id="blocklyTrashBodyClipPath837493">
+            <rect width="47" height="45" y="15"></rect>
+          </clippath>
+          <image width="64" height="92" y="-32" xlink:href="media/sprites.png"
+              clip-path="url(#blocklyTrashBodyClipPath837493)"></image>
+          <clippath id="blocklyTrashLidClipPath837493">
+            <rect width="47" height="15"></rect>
+          </clippath>
+          <image width="84" height="92" y="-32" xlink:href="media/sprites.png"
+              clip-path="url(#blocklyTrashLidClipPath837493)"></image>
+        </g>
+        */
+    this.svgGroup_ = dom.createSvgElement(Svg.G, { 'class': 'blocklyTrash' });
     let clip;
     const rnd = String(Math.random()).substring(2);
     clip = dom.createSvgElement(
-        Svg.CLIPPATH, {'id': 'blocklyTrashBodyClipPath' + rnd}, this.svgGroup_);
+      Svg.CLIPPATH, { 'id': 'blocklyTrashBodyClipPath' + rnd }, this.svgGroup_);
     dom.createSvgElement(
-        Svg.RECT, {'width': WIDTH, 'height': BODY_HEIGHT, 'y': LID_HEIGHT},
-        clip);
+      Svg.RECT, { 'width': WIDTH, 'height': BODY_HEIGHT, 'y': LID_HEIGHT },
+      clip);
     const body = dom.createSvgElement(
-        Svg.IMAGE, {
-          'width': SPRITE.width,
-          'x': -SPRITE_LEFT,
-          'height': SPRITE.height,
-          'y': -SPRITE_TOP,
-          'clip-path': 'url(#blocklyTrashBodyClipPath' + rnd + ')',
-        },
-        this.svgGroup_);
+      Svg.IMAGE, {
+      'width': SPRITE.width,
+      'x': -SPRITE_LEFT,
+      'height': SPRITE.height,
+      'y': -SPRITE_TOP,
+      'clip-path': 'url(#blocklyTrashBodyClipPath' + rnd + ')',
+    },
+      this.svgGroup_);
     body.setAttributeNS(
-        dom.XLINK_NS, 'xlink:href',
-        this.workspace_.options.pathToMedia + SPRITE.url);
+      dom.XLINK_NS, 'xlink:href',
+      this.workspace.options.pathToMedia + SPRITE.url);
 
     clip = dom.createSvgElement(
-        Svg.CLIPPATH, {'id': 'blocklyTrashLidClipPath' + rnd}, this.svgGroup_);
+      Svg.CLIPPATH, { 'id': 'blocklyTrashLidClipPath' + rnd }, this.svgGroup_);
     dom.createSvgElement(
-        Svg.RECT, {'width': WIDTH, 'height': LID_HEIGHT}, clip);
+      Svg.RECT, { 'width': WIDTH, 'height': LID_HEIGHT }, clip);
     this.svgLid_ = dom.createSvgElement(
-        Svg.IMAGE, {
-          'width': SPRITE.width,
-          'x': -SPRITE_LEFT,
-          'height': SPRITE.height,
-          'y': -SPRITE_TOP,
-          'clip-path': 'url(#blocklyTrashLidClipPath' + rnd + ')',
-        },
-        this.svgGroup_);
+      Svg.IMAGE, {
+      'width': SPRITE.width,
+      'x': -SPRITE_LEFT,
+      'height': SPRITE.height,
+      'y': -SPRITE_TOP,
+      'clip-path': 'url(#blocklyTrashLidClipPath' + rnd + ')',
+    },
+      this.svgGroup_);
     this.svgLid_.setAttributeNS(
-        dom.XLINK_NS, 'xlink:href',
-        this.workspace_.options.pathToMedia + SPRITE.url);
+      dom.XLINK_NS, 'xlink:href',
+      this.workspace.options.pathToMedia + SPRITE.url);
 
     // bindEventWithChecks_ quashes events too aggressively. See:
     // https://groups.google.com/forum/#!topic/blockly/QF4yB9Wx00s
     // Using bindEventWithChecks_ for blocking mousedown causes issue in mobile.
     // See #4303
     browserEvents.bind(
-        this.svgGroup_, 'mousedown', this, this.blockMouseDownWhenOpenable_);
+      this.svgGroup_, 'mousedown', this, this.blockMouseDownWhenOpenable_);
     browserEvents.bind(this.svgGroup_, 'mouseup', this, this.click);
     // Bind to body instead of this.svgGroup_ so that we don't get lid jitters
     browserEvents.bind(body, 'mouseover', this, this.mouseOver_);
@@ -269,16 +241,14 @@ class Trashcan extends DeleteArea {
     return this.svgGroup_;
   }
 
-  /**
-   * Initializes the trash can.
-   */
+  /** Initializes the trash can. */
   init() {
-    if (this.workspace_.options.maxTrashcanContents > 0) {
+    if (this.workspace.options.maxTrashcanContents > 0) {
       dom.insertAfter(
-          this.flyout.createDom(Svg.SVG), this.workspace_.getParentSvg());
-      this.flyout.init(this.workspace_);
+        this.flyout.createDom(Svg.SVG), this.workspace.getParentSvg());
+      this.flyout.init(this.workspace);
     }
-    this.workspace_.getComponentManager().addComponent({
+    this.workspace.getComponentManager().addComponent({
       component: this,
       weight: 1,
       capabilities: [
@@ -298,65 +268,68 @@ class Trashcan extends DeleteArea {
    * @suppress {checkTypes}
    */
   dispose() {
-    this.workspace_.getComponentManager().removeComponent('trashcan');
+    this.workspace.getComponentManager().removeComponent('trashcan');
     if (this.svgGroup_) {
       dom.removeNode(this.svgGroup_);
-      this.svgGroup_ = null;
+      // AnyDuringMigration because:  Type 'null' is not assignable to type
+      // 'SVGElement'.
+      this.svgGroup_ = null as AnyDuringMigration;
     }
-    this.svgLid_ = null;
-    this.workspace_ = null;
+    // AnyDuringMigration because:  Type 'null' is not assignable to type
+    // 'SVGElement'.
+    this.svgLid_ = null as AnyDuringMigration;
+    // AnyDuringMigration because:  Type 'null' is not assignable to type
+    // 'WorkspaceSvg'.
+    this.workspace = null as AnyDuringMigration;
     clearTimeout(this.lidTask_);
   }
 
   /**
    * Whether the trashcan has contents.
-   * @return {boolean} True if the trashcan has contents.
-   * @private
+   * @return True if the trashcan has contents.
    */
-  hasContents_() {
+  private hasContents_(): boolean {
     return !!this.contents_.length;
   }
 
   /**
    * Returns true if the trashcan contents-flyout is currently open.
-   * @return {boolean} True if the trashcan contents-flyout is currently open.
+   * @return True if the trashcan contents-flyout is currently open.
    */
-  contentsIsOpen() {
+  contentsIsOpen(): boolean {
     return !!this.flyout && this.flyout.isVisible();
   }
 
-  /**
-   * Opens the trashcan flyout.
-   */
+  /** Opens the trashcan flyout. */
   openFlyout() {
     if (this.contentsIsOpen()) {
       return;
     }
-    const contents = this.contents_.map(function(string) {
+    const contents = this.contents_.map(function (string) {
       return JSON.parse(string);
     });
     this.flyout.show(contents);
     this.fireUiEvent_(true);
   }
 
-  /**
-   * Closes the trashcan flyout.
-   */
+  /** Closes the trashcan flyout. */
   closeFlyout() {
     if (!this.contentsIsOpen()) {
       return;
     }
-    this.flyout.hide();
+    if (this.flyout) {
+      this.flyout.hide();
+    }
     this.fireUiEvent_(false);
-    this.workspace_.recordDragTargets();
+    this.workspace.recordDragTargets();
   }
 
   /**
    * Hides the component. Called in WorkspaceSvg.hideChaff.
-   * @param {boolean} onlyClosePopups Whether only popups should be closed.
+   * @param onlyClosePopups Whether only popups should be closed.
    *     Flyouts should not be closed if this is true.
    */
-  autoHide(onlyClosePopups) {
+  autoHide(onlyClosePopups: boolean) {
     // For now the trashcan flyout always autocloses because it overlays the
     // trashcan UI (no trashcan to click to close it).
     if (!onlyClosePopups && this.flyout) {
@@ -381,44 +354,43 @@ class Trashcan extends DeleteArea {
    * Positions the trashcan.
    * It is positioned in the opposite corner to the corner the
    * categories/toolbox starts at.
-   * @param {!MetricsManager.UiMetrics} metrics The workspace metrics.
-   * @param {!Array<!Rect>} savedPositions List of rectangles that
-   *     are already on the workspace.
+   * @param metrics The workspace metrics.
+   * @param savedPositions List of rectangles that are already on the workspace.
    */
-  position(metrics, savedPositions) {
+  position(metrics: UiMetrics, savedPositions: Rect[]) {
     // Not yet initialized.
     if (!this.initialized_) {
       return;
     }
 
     const cornerPosition =
-        uiPosition.getCornerOppositeToolbox(this.workspace_, metrics);
+      uiPosition.getCornerOppositeToolbox(this.workspace, metrics);
 
     const height = BODY_HEIGHT + LID_HEIGHT;
     const startRect = uiPosition.getStartPositionRect(
-        cornerPosition, new Size(WIDTH, height), MARGIN_HORIZONTAL,
-        MARGIN_VERTICAL, metrics, this.workspace_);
+      cornerPosition, new Size(WIDTH, height), MARGIN_HORIZONTAL,
+      MARGIN_VERTICAL, metrics, this.workspace);
 
     const verticalPosition = cornerPosition.vertical;
     const bumpDirection = verticalPosition === uiPosition.verticalPosition.TOP ?
-        uiPosition.bumpDirection.DOWN :
-        uiPosition.bumpDirection.UP;
+      uiPosition.bumpDirection.DOWN :
+      uiPosition.bumpDirection.UP;
     const positionRect = uiPosition.bumpPositionRect(
-        startRect, MARGIN_VERTICAL, bumpDirection, savedPositions);
+      startRect, MARGIN_VERTICAL, bumpDirection, savedPositions);
 
     this.top_ = positionRect.top;
     this.left_ = positionRect.left;
     this.svgGroup_.setAttribute(
-        'transform', 'translate(' + this.left_ + ',' + this.top_ + ')');
+      'transform', 'translate(' + this.left_ + ',' + this.top_ + ')');
   }
 
   /**
    * Returns the bounding rectangle of the UI element in pixel units relative to
    * the Blockly injection div.
-   * @return {?Rect} The UI elements's bounding box. Null if
-   *   bounding box should be ignored by other UI elements.
+   * @return The UI elements's bounding box. Null if bounding box should be
+   *     ignored by other UI elements.
    */
-  getBoundingRectangle() {
+  getBoundingRectangle(): Rect | null {
     const bottom = this.top_ + BODY_HEIGHT + LID_HEIGHT;
     const right = this.left_ + WIDTH;
     return new Rect(this.top_, bottom, this.left_, right);
@@ -427,10 +399,10 @@ class Trashcan extends DeleteArea {
   /**
    * Returns the bounding rectangle of the drag target area in pixel units
    * relative to viewport.
-   * @return {?Rect} The component's bounding box. Null if drag
-   *   target area should be ignored.
+   * @return The component's bounding box. Null if drag target area should be
+   *     ignored.
    */
-  getClientRect() {
+  override getClientRect(): Rect | null {
     if (!this.svgGroup_) {
       return null;
     }
@@ -446,41 +418,34 @@ class Trashcan extends DeleteArea {
   /**
    * Handles when a cursor with a block or bubble is dragged over this drag
    * target.
-   * @param {!IDraggable} _dragElement The block or bubble currently being
-   *   dragged.
-   * @override
+   * @param _dragElement The block or bubble currently being dragged.
    */
-  onDragOver(_dragElement) {
+  override onDragOver(_dragElement: IDraggable) {
     this.setLidOpen(this.wouldDelete_);
   }
 
   /**
    * Handles when a cursor with a block or bubble exits this drag target.
-   * @param {!IDraggable} _dragElement The block or bubble currently being
-   *   dragged.
-   * @override
+   * @param _dragElement The block or bubble currently being dragged.
    */
-  onDragExit(_dragElement) {
+  override onDragExit(_dragElement: IDraggable) {
     this.setLidOpen(false);
   }
 
   /**
    * Handles when a block or bubble is dropped on this component.
    * Should not handle delete here.
-   * @param {!IDraggable} _dragElement The block or bubble currently being
-   *   dragged.
-   * @override
+   * @param _dragElement The block or bubble currently being dragged.
    */
-  onDrop(_dragElement) {
+  override onDrop(_dragElement: IDraggable) {
     setTimeout(this.setLidOpen.bind(this, false), 100);
   }
 
   /**
    * Flip the lid open or shut.
-   * @param {boolean} state True if open.
-   * @package
+   * @param state True if open.
    */
-  setLidOpen(state) {
+  setLidOpen(state: boolean) {
     if (this.isLidOpen === state) {
       return;
     }
@@ -489,11 +454,8 @@ class Trashcan extends DeleteArea {
     this.animateLid_();
   }
 
-  /**
-   * Rotate the lid open or closed by one step.  Then wait and recurse.
-   * @private
-   */
-  animateLid_() {
+  /** Rotate the lid open or closed by one step.  Then wait and recurse. */
+  private animateLid_() {
     const frames = ANIMATION_FRAMES;
 
     const delta = 1 / (frames + 1);
@@ -504,37 +466,37 @@ class Trashcan extends DeleteArea {
 
     // Linear interpolation between min and max.
     const opacity = OPACITY_MIN + this.lidOpen_ * (OPACITY_MAX - OPACITY_MIN);
-    this.svgGroup_.style.opacity = opacity;
+    // AnyDuringMigration because:  Type 'number' is not assignable to type
+    // 'string'.
+    this.svgGroup_.style.opacity = opacity as AnyDuringMigration;
 
     if (this.lidOpen_ > this.minOpenness_ && this.lidOpen_ < 1) {
       this.lidTask_ =
-          setTimeout(this.animateLid_.bind(this), ANIMATION_LENGTH / frames);
+        setTimeout(this.animateLid_.bind(this), ANIMATION_LENGTH / frames);
     }
   }
 
   /**
    * Set the angle of the trashcan's lid.
-   * @param {number} lidAngle The angle at which to set the lid.
-   * @private
+   * @param lidAngle The angle at which to set the lid.
    */
-  setLidAngle_(lidAngle) {
+  private setLidAngle_(lidAngle: number) {
     const openAtRight =
-        this.workspace_.toolboxPosition === toolbox.Position.RIGHT ||
-        (this.workspace_.horizontalLayout && this.workspace_.RTL);
+      this.workspace.toolboxPosition === toolbox.Position.RIGHT ||
+      this.workspace.horizontalLayout && this.workspace.RTL;
     this.svgLid_.setAttribute(
-        'transform',
-        'rotate(' + (openAtRight ? -lidAngle : lidAngle) + ',' +
-            (openAtRight ? 4 : WIDTH - 4) + ',' + (LID_HEIGHT - 2) + ')');
+      'transform',
+      'rotate(' + (openAtRight ? -lidAngle : lidAngle) + ',' +
+      (openAtRight ? 4 : WIDTH - 4) + ',' + (LID_HEIGHT - 2) + ')');
   }
 
   /**
    * Sets the minimum openness of the trashcan lid. If the lid is currently
    * closed, this will update lid's position.
-   * @param {number} newMin The new minimum openness of the lid. Should be
-   *     between 0 and 1.
-   * @private
+   * @param newMin The new minimum openness of the lid. Should be between 0
+   *     and 1.
    */
-  setMinOpenness_(newMin) {
+  private setMinOpenness_(newMin: number) {
     this.minOpenness_ = newMin;
     if (!this.isLidOpen) {
       this.setLidAngle_(newMin * MAX_LID_ANGLE);
@@ -549,9 +511,7 @@ class Trashcan extends DeleteArea {
     this.setLidOpen(false);
   }
 
-  /**
-   * Inspect the contents of the trash.
-   */
+  /** Inspect the contents of the trash. */
   click() {
     if (!this.hasContents_()) {
       return;
@@ -561,31 +521,29 @@ class Trashcan extends DeleteArea {
 
   /**
    * Fires a UI event for trashcan flyout open or close.
-   * @param {boolean} trashcanOpen Whether the flyout is opening.
-   * @private
+   * @param trashcanOpen Whether the flyout is opening.
    */
-  fireUiEvent_(trashcanOpen) {
-    const uiEvent = new (eventUtils.get(eventUtils.TRASHCAN_OPEN))(
-        trashcanOpen, this.workspace_.id);
+  private fireUiEvent_(trashcanOpen: boolean) {
+    const uiEvent = new (eventUtils.get(eventUtils.TRASHCAN_OPEN))!
+      (trashcanOpen, this.workspace.id);
     eventUtils.fire(uiEvent);
   }
 
   /**
    * Prevents a workspace scroll and click event if the trashcan has blocks.
-   * @param {!Event} e A mouse down event.
-   * @private
+   * @param e A mouse down event.
    */
-  blockMouseDownWhenOpenable_(e) {
+  private blockMouseDownWhenOpenable_(e: Event) {
     if (!this.contentsIsOpen() && this.hasContents_()) {
-      e.stopPropagation();  // Don't start a workspace scroll.
+      // Don't start a workspace scroll.
+      e.stopPropagation();
     }
   }
 
   /**
    * Indicate that the trashcan can be clicked (by opening it) if it has blocks.
-   * @private
    */
-  mouseOver_() {
+  private mouseOver_() {
     if (this.hasContents_()) {
       this.setLidOpen(true);
     }
@@ -594,9 +552,8 @@ class Trashcan extends DeleteArea {
   /**
    * Close the lid of the trashcan if it was open (Vis. it was indicating it had
    *    blocks).
-   * @private
    */
-  mouseOut_() {
+  private mouseOut_() {
     // No need to do a .hasBlocks check here because if it doesn't the trashcan
     // won't be open in the first place, and setOpen won't run.
     this.setLidOpen(false);
@@ -605,15 +562,14 @@ class Trashcan extends DeleteArea {
   /**
    * Handle a BLOCK_DELETE event. Adds deleted blocks oldXml to the content
    * array.
-   * @param {!Abstract} event Workspace event.
-   * @private
+   * @param event Workspace event.
    */
-  onDelete_(event) {
-    if (this.workspace_.options.maxTrashcanContents <= 0 ||
-        event.type !== eventUtils.BLOCK_DELETE) {
+  private onDelete_(event: Abstract) {
+    if (this.workspace.options.maxTrashcanContents <= 0 ||
+      event.type !== eventUtils.BLOCK_DELETE) {
       return;
     }
-    const deleteEvent = /** @type {!BlockDelete} */ (event);
+    const deleteEvent = event as BlockDelete;
     if (event.type === eventUtils.BLOCK_DELETE && !deleteEvent.wasShadow) {
       const cleanedJson = this.cleanBlockJson_(deleteEvent.oldJson);
       if (this.contents_.indexOf(cleanedJson) !== -1) {
@@ -621,7 +577,7 @@ class Trashcan extends DeleteArea {
       }
       this.contents_.unshift(cleanedJson);
       while (this.contents_.length >
-             this.workspace_.options.maxTrashcanContents) {
+        this.workspace.options.maxTrashcanContents) {
         this.contents_.pop();
       }
 
@@ -632,21 +588,18 @@ class Trashcan extends DeleteArea {
   /**
    * Converts JSON representing a block into text that can be stored in the
    * content array.
-   * @param {!blocks.State} json A JSON representation of
-   *     a block's state.
-   * @return {string} Text representing the JSON, cleaned of all unnecessary
-   *     attributes.
-   * @private
+   * @param json A JSON representation of a block's state.
+   * @return Text representing the JSON, cleaned of all unnecessary attributes.
    */
-  cleanBlockJson_(json) {
+  private cleanBlockJson_(json: blocks.State): string {
     // Create a deep copy.
-    json = /** @type {!blocks.State} */ (JSON.parse(JSON.stringify(json)));
+    json = JSON.parse(JSON.stringify(json)) as blocks.State;
 
     /**
      * Reshape JSON into a nicer format.
-     * @param {!blocks.State} json The JSON to clean.
+     * @param json The JSON to clean.
      */
-    function cleanRec(json) {
+    function cleanRec(json: blocks.State) {
       if (!json) {
         return;
       }
@@ -666,60 +619,52 @@ class Trashcan extends DeleteArea {
       const inputs = json['inputs'];
       for (const name in inputs) {
         const input = inputs[name];
-        cleanRec(input['block']);
-        cleanRec(input['shadow']);
+        // AnyDuringMigration because:  Argument of type 'State | undefined' is
+        // not assignable to parameter of type 'State'.
+        cleanRec((input as AnyDuringMigration)['block']);
+        // AnyDuringMigration because:  Argument of type 'State | undefined' is
+        // not assignable to parameter of type 'State'.
+        cleanRec((input as AnyDuringMigration)['shadow']);
       }
       if (json['next']) {
         const next = json['next'];
-        cleanRec(next['block']);
-        cleanRec(next['shadow']);
+        // AnyDuringMigration because:  Argument of type 'State | undefined' is
+        // not assignable to parameter of type 'State'.
+        cleanRec((next as AnyDuringMigration)['block']);
+        // AnyDuringMigration because:  Argument of type 'State | undefined' is
+        // not assignable to parameter of type 'State'.
+        cleanRec((next as AnyDuringMigration)['shadow']);
       }
     }
 
     cleanRec(json);
-    json['kind'] = 'BLOCK';
+    (json as AnyDuringMigration)['kind'] = 'BLOCK';
     return JSON.stringify(json);
   }
 }
 
-/**
- * Width of both the trash can and lid images.
- */
+/** Width of both the trash can and lid images. */
 const WIDTH = 47;
 
-/**
- * Height of the trashcan image (minus lid).
- */
+/** Height of the trashcan image (minus lid). */
 const BODY_HEIGHT = 44;
 
-/**
- * Height of the lid image.
- */
+/** Height of the lid image. */
 const LID_HEIGHT = 16;
 
-/**
- * Distance between trashcan and bottom or top edge of workspace.
- */
+/** Distance between trashcan and bottom or top edge of workspace. */
 const MARGIN_VERTICAL = 20;
 
-/**
- * Distance between trashcan and right or left edge of workspace.
- */
+/** Distance between trashcan and right or left edge of workspace. */
 const MARGIN_HORIZONTAL = 20;
 
-/**
- * Extent of hotspot on all sides beyond the size of the image.
- */
+/** Extent of hotspot on all sides beyond the size of the image. */
 const MARGIN_HOTSPOT = 10;
 
-/**
- * Location of trashcan in sprite image.
- */
+/** Location of trashcan in sprite image. */
 const SPRITE_LEFT = 0;
 
-/**
- * Location of trashcan in sprite image.
- */
+/** Location of trashcan in sprite image. */
 const SPRITE_TOP = 32;
 
 /**
@@ -728,24 +673,16 @@ const SPRITE_TOP = 32;
  */
 const HAS_BLOCKS_LID_ANGLE = 0.1;
 
-/**
- * The length of the lid open/close animation in milliseconds.
- */
+/** The length of the lid open/close animation in milliseconds. */
 const ANIMATION_LENGTH = 80;
 
-/**
- * The number of frames in the animation.
- */
+/** The number of frames in the animation. */
 const ANIMATION_FRAMES = 4;
 
-/**
- * The minimum (resting) opacity of the trashcan and lid.
- */
+/** The minimum (resting) opacity of the trashcan and lid. */
 const OPACITY_MIN = 0.4;
 
-/**
- * The maximum (hovered) opacity of the trashcan and lid.
- */
+/** The maximum (hovered) opacity of the trashcan and lid. */
 const OPACITY_MAX = 0.8;
 
 /**
@@ -753,5 +690,3 @@ const OPACITY_MAX = 0.8;
  * animation the lid will be open to this angle.
  */
 const MAX_LID_ANGLE = 45;
-
-exports.Trashcan = Trashcan;

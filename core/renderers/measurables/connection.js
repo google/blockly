@@ -1,55 +1,72 @@
 /**
+ * @fileoverview Base class representing the space a connection takes up during
+ * rendering.
+ */
+
+
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2018 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Base class representing the space a connection takes up during
- * rendering.
- */
 
 /**
  * Base class representing the space a connection takes up during
  * rendering.
  * @class
  */
-goog.module('Blockly.blockRendering.Connection');
 
 /* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider, Shape} = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const {Measurable} = goog.require('Blockly.blockRendering.Measurable');
 /* eslint-disable-next-line no-unused-vars */
-const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+import { RenderedConnection } from 'google3/third_party/javascript/blockly/core/rendered_connection';
+
+import { ConstantProvider, Shape } from '../common/constants';
+
+import { Measurable } from './base';
+import { Types } from './types';
 
 /**
  * The base class to represent a connection and the space that it takes up on
  * the block.
- * @extends {Measurable}
  * @alias Blockly.blockRendering.Connection
  */
-class Connection extends Measurable {
+export class Connection extends Measurable {
+  shape: Shape;
+  isDynamicShape: boolean;
+
   /**
-   * @param {!ConstantProvider} constants The rendering
-   *   constants provider.
-   * @param {!RenderedConnection} connectionModel The connection object on
-   *     the block that this represents.
-   * @package
+   * @param constants The rendering constants provider.
+   * @param connectionModel The connection object on the block that this
+   *     represents.
    */
-  constructor(constants, connectionModel) {
+  constructor(
+    constants: ConstantProvider, public connectionModel: RenderedConnection) {
     super(constants);
 
-    /** @type {!RenderedConnection} */
-    this.connectionModel = connectionModel;
+    this.shape = this.constants.shapeFor(connectionModel);
 
-    /** @type {!Shape} */
-    this.shape = this.constants_.shapeFor(connectionModel);
-
-    /** @type {boolean} */
-    this.isDynamicShape = !!this.shape['isDynamic'];
+    this.isDynamicShape = 'isDynamic' in this.shape && this.shape.isDynamic;
     this.type |= Types.CONNECTION;
   }
 }
-
-exports.Connection = Connection;

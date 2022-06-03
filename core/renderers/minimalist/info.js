@@ -1,25 +1,45 @@
+/** @fileoverview Minimalist render info object. */
+
+
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2018 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Minimalist render info object.
- */
-'use strict';
 
 /**
  * Minimalist render info object.
  * @class
  */
-goog.module('Blockly.minimalist.RenderInfo');
 
 /* eslint-disable-next-line no-unused-vars */
-const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-const {RenderInfo: BaseRenderInfo} = goog.require('Blockly.blockRendering.RenderInfo');
+import { BlockSvg } from 'google3/third_party/javascript/blockly/core/block_svg';
+
+import { RenderInfo as BaseRenderInfo } from '../common/info';
+
 /* eslint-disable-next-line no-unused-vars */
-const {Renderer} = goog.requireType('Blockly.minimalist.Renderer');
+import { Renderer } from './renderer';
 
 
 /**
@@ -28,27 +48,24 @@ const {Renderer} = goog.requireType('Blockly.minimalist.Renderer');
  * This measure pass does not propagate changes to the block (although fields
  * may choose to rerender when getSize() is called).  However, calling it
  * repeatedly may be expensive.
- * @extends {BaseRenderInfo}
  * @alias Blockly.minimalist.RenderInfo
  */
-class RenderInfo extends BaseRenderInfo {
+export class RenderInfo extends BaseRenderInfo {
   /**
-   * @param {!Renderer} renderer The renderer in use.
-   * @param {!BlockSvg} block The block to measure.
-   * @package
+   * @param renderer The renderer in use.
+   * @param block The block to measure.
    */
-  constructor(renderer, block) {
+  constructor(renderer: Renderer, block: BlockSvg) {
     super(renderer, block);
   }
 
   /**
    * Get the block renderer in use.
-   * @return {!Renderer} The block renderer in use.
-   * @package
+   * @return The block renderer in use.
    */
-  getRenderer() {
-    return /** @type {!Renderer} */ (this.renderer_);
+  override getRenderer(): Renderer {
+    // AnyDuringMigration because:  Property 'renderer_' does not exist on type
+    // 'RenderInfo'.
+    return (this as AnyDuringMigration).renderer_ as Renderer;
   }
 }
-
-exports.RenderInfo = RenderInfo;

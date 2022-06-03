@@ -1,24 +1,42 @@
+/** @fileoverview Methods for graphically rendering a block as SVG. */
+
+
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2018 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Methods for graphically rendering a block as SVG.
- */
 
-'use strict';
 
 /**
  * Methods for graphically rendering a block as SVG.
  * @class
  */
-goog.module('Blockly.blockRendering.Measurable');
-
 /* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+import { ConstantProvider } from '../common/constants';
+
+import { Types } from './types';
 
 
 /**
@@ -27,38 +45,20 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  * of the block element (e.g. field, statement input).
  * @alias Blockly.blockRendering.Measurable
  */
-class Measurable {
-  /**
-   * @param {!ConstantProvider} constants The rendering
-   *   constants provider.
-   * @package
-   */
-  constructor(constants) {
-    /** @type {number} */
-    this.width = 0;
+export class Measurable {
+  width: number = 0;
 
-    /** @type {number} */
-    this.height = 0;
+  height: number = 0;
+  type: number;
+  xPos = 0;
 
-    /** @type {number} */
+  centerline = 0;
+  notchOffset: number;
+
+  /** @param constants The rendering constants provider. */
+  constructor(protected readonly constants: ConstantProvider) {
     this.type = Types.NONE;
 
-    /** @type {number} */
-    this.xPos = 0;
-
-    /** @type {number} */
-    this.centerline = 0;
-
-    /**
-     * The renderer's constant provider.
-     * @type {!ConstantProvider}
-     * @protected
-     */
-    this.constants_ = constants;
-
-    /** @type {number} */
-    this.notchOffset = this.constants_.NOTCH_OFFSET_LEFT;
+    this.notchOffset = this.constants.NOTCH_OFFSET_LEFT;
   }
 }
-
-exports.Measurable = Measurable;

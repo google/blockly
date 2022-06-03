@@ -1,112 +1,120 @@
+/** @fileoverview Number input field */
+
+
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2018 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /**
  * @license
  * Copyright 2016 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Number input field
- */
-'use strict';
 
 /**
  * Number input field
  * @class
  */
-goog.module('Blockly.FieldNumber');
 
-const aria = goog.require('Blockly.utils.aria');
-const fieldRegistry = goog.require('Blockly.fieldRegistry');
-const {Field} = goog.require('Blockly.Field');
-const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
+import { Field } from './field';
+import * as fieldRegistry from './field_registry';
+import { FieldTextInput } from './field_textinput';
+import * as aria from './utils/aria';
 /* eslint-disable-next-line no-unused-vars */
-const {Sentinel} = goog.requireType('Blockly.utils.Sentinel');
+import { Sentinel } from './utils/sentinel';
 
 
 /**
  * Class for an editable number field.
- * @extends {FieldTextInput}
  * @alias Blockly.FieldNumber
  */
-class FieldNumber extends FieldTextInput {
+export class FieldNumber extends FieldTextInput {
+  /** The default value for this field. */
+  protected override DEFAULT_VALUE = 0;
+
+  /** The minimum value this number field can contain. */
+  protected min_: number = -Infinity;
+
+  /** The maximum value this number field can contain. */
+  protected max_: number = Infinity;
+
+  /** The multiple to which this fields value is rounded. */
+  protected precision_ = 0;
+
   /**
-   * @param {(string|number|!Sentinel)=} opt_value The initial value of
-   *     the field. Should cast to a number. Defaults to 0.
-   *     Also accepts Field.SKIP_SETUP if you wish to skip setup (only used by
-   *     subclasses that want to handle configuration and setting the field
-   *     value after their own constructors have run).
-   * @param {?(string|number)=} opt_min Minimum value. Will only be used if
-   *     opt_config is not provided.
-   * @param {?(string|number)=} opt_max Maximum value. Will only be used if
-   *     opt_config is not provided.
-   * @param {?(string|number)=} opt_precision Precision for value. Will only be
-   *     used if opt_config is not provided.
-   * @param {?Function=} opt_validator A function that is called to validate
-   *     changes to the field's value. Takes in a number & returns a validated
-   *     number, or null to abort the change.
-   * @param {Object=} opt_config A map of options used to configure the field.
+   * The number of decimal places to allow, or null to allow any number of
+   * decimal digits.
+   */
+  private decimalPlaces_: number | null = null;
+
+  /**
+   * Serializable fields are saved by the serializer, non-serializable fields
+   * are not. Editable fields should also be serializable.
+   */
+  override SERIALIZABLE = true;
+
+  /**
+   * @param opt_value The initial value of the field. Should cast to a number.
+   *     Defaults to 0. Also accepts Field.SKIP_SETUP if you wish to skip setup
+   *     (only used by subclasses that want to handle configuration and setting
+   *     the field value after their own constructors have run).
+   * @param opt_min Minimum value. Will only be used if opt_config is not
+   *     provided.
+   * @param opt_max Maximum value. Will only be used if opt_config is not
+   *     provided.
+   * @param opt_precision Precision for value. Will only be used if opt_config
+   *     is not provided.
+   * @param opt_validator A function that is called to validate changes to the
+   *     field's value. Takes in a number & returns a validated number, or null
+   *     to abort the change.
+   * @param opt_config A map of options used to configure the field.
    *     See the [field creation documentation]{@link
-   *     https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/number#creation}
-   *     for a list of properties this parameter supports.
+   * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/number#creation}
+   * for a list of properties this parameter supports.
    */
   constructor(
-      opt_value, opt_min, opt_max, opt_precision, opt_validator, opt_config) {
+    opt_value?: string | number | Sentinel, opt_min?: string | number | null,
+    opt_max?: string | number | null, opt_precision?: string | number | null,
+    opt_validator?: Function | null, opt_config?: AnyDuringMigration) {
     // Pass SENTINEL so that we can define properties before value validation.
     super(Field.SKIP_SETUP);
 
-    /**
-     * The minimum value this number field can contain.
-     * @type {number}
-     * @protected
-     */
-    this.min_ = -Infinity;
-
-    /**
-     * The maximum value this number field can contain.
-     * @type {number}
-     * @protected
-     */
-    this.max_ = Infinity;
-
-    /**
-     * The multiple to which this fields value is rounded.
-     * @type {number}
-     * @protected
-     */
-    this.precision_ = 0;
-
-    /**
-     * The number of decimal places to allow, or null to allow any number of
-     * decimal digits.
-     * @type {?number}
-     * @private
-     */
-    this.decimalPlaces_ = null;
-
-    /**
-     * Serializable fields are saved by the serializer, non-serializable fields
-     * are not. Editable fields should also be serializable.
-     * @type {boolean}
-     */
-    this.SERIALIZABLE = true;
-
-    if (opt_value === Field.SKIP_SETUP) return;
+    if (opt_value === Field.SKIP_SETUP) {
+      return;
+    }
     if (opt_config) {
       this.configure_(opt_config);
     } else {
       this.setConstraints(opt_min, opt_max, opt_precision);
     }
     this.setValue(opt_value);
-    if (opt_validator) this.setValidator(opt_validator);
+    if (opt_validator) {
+      this.setValidator(opt_validator);
+    }
   }
 
   /**
    * Configure the field based on the given map of options.
-   * @param {!Object} config A map of options to configure the field based on.
-   * @protected
-   * @override
+   * @param config A map of options to configure the field based on.
    */
-  configure_(config) {
+  override configure_(config: AnyDuringMigration) {
     super.configure_(config);
     this.setMinInternal_(config['min']);
     this.setMaxInternal_(config['max']);
@@ -121,11 +129,13 @@ class FieldNumber extends FieldTextInput {
    * precision. The least significant digit place is inferred from the
    * precision. Integers values can be enforces by choosing an integer
    * precision.
-   * @param {?(number|string|undefined)} min Minimum value.
-   * @param {?(number|string|undefined)} max Maximum value.
-   * @param {?(number|string|undefined)} precision Precision for value.
+   * @param min Minimum value.
+   * @param max Maximum value.
+   * @param precision Precision for value.
    */
-  setConstraints(min, max, precision) {
+  setConstraints(
+    min: number | string | undefined | null, max: number | string | undefined | null,
+    precision: number | string | undefined | null) {
     this.setMinInternal_(min);
     this.setMaxInternal_(max);
     this.setPrecisionInternal_(precision);
@@ -135,9 +145,9 @@ class FieldNumber extends FieldTextInput {
   /**
    * Sets the minimum value this field can contain. Updates the value to
    * reflect.
-   * @param {?(number|string|undefined)} min Minimum value.
+   * @param min Minimum value.
    */
-  setMin(min) {
+  setMin(min: number | string | undefined | null) {
     this.setMinInternal_(min);
     this.setValue(this.getValue());
   }
@@ -145,10 +155,9 @@ class FieldNumber extends FieldTextInput {
   /**
    * Sets the minimum value this field can contain. Called internally to avoid
    * value updates.
-   * @param {?(number|string|undefined)} min Minimum value.
-   * @private
+   * @param min Minimum value.
    */
-  setMinInternal_(min) {
+  private setMinInternal_(min: number | string | undefined | null) {
     if (min == null) {
       this.min_ = -Infinity;
     } else {
@@ -162,18 +171,18 @@ class FieldNumber extends FieldTextInput {
   /**
    * Returns the current minimum value this field can contain. Default is
    * -Infinity.
-   * @return {number} The current minimum value this field can contain.
+   * @return The current minimum value this field can contain.
    */
-  getMin() {
+  getMin(): number {
     return this.min_;
   }
 
   /**
    * Sets the maximum value this field can contain. Updates the value to
    * reflect.
-   * @param {?(number|string|undefined)} max Maximum value.
+   * @param max Maximum value.
    */
-  setMax(max) {
+  setMax(max: number | string | undefined | null) {
     this.setMaxInternal_(max);
     this.setValue(this.getValue());
   }
@@ -181,10 +190,9 @@ class FieldNumber extends FieldTextInput {
   /**
    * Sets the maximum value this field can contain. Called internally to avoid
    * value updates.
-   * @param {?(number|string|undefined)} max Maximum value.
-   * @private
+   * @param max Maximum value.
    */
-  setMaxInternal_(max) {
+  private setMaxInternal_(max: number | string | undefined | null) {
     if (max == null) {
       this.max_ = Infinity;
     } else {
@@ -198,19 +206,18 @@ class FieldNumber extends FieldTextInput {
   /**
    * Returns the current maximum value this field can contain. Default is
    * Infinity.
-   * @return {number} The current maximum value this field can contain.
+   * @return The current maximum value this field can contain.
    */
-  getMax() {
+  getMax(): number {
     return this.max_;
   }
 
   /**
    * Sets the precision of this field's value, i.e. the number to which the
    * value is rounded. Updates the field to reflect.
-   * @param {?(number|string|undefined)} precision The number to which the
-   *    field's value is rounded.
+   * @param precision The number to which the field's value is rounded.
    */
-  setPrecision(precision) {
+  setPrecision(precision: number | string | undefined | null) {
     this.setPrecisionInternal_(precision);
     this.setValue(this.getValue());
   }
@@ -218,18 +225,16 @@ class FieldNumber extends FieldTextInput {
   /**
    * Sets the precision of this field's value. Called internally to avoid
    * value updates.
-   * @param {?(number|string|undefined)} precision The number to which the
-   *    field's value is rounded.
-   * @private
+   * @param precision The number to which the field's value is rounded.
    */
-  setPrecisionInternal_(precision) {
+  private setPrecisionInternal_(precision: number | string | undefined | null) {
     this.precision_ = Number(precision) || 0;
     let precisionString = String(this.precision_);
     if (precisionString.indexOf('e') !== -1) {
       // String() is fast.  But it turns .0000001 into '1e-7'.
       // Use the much slower toLocaleString to access all the digits.
       precisionString =
-          this.precision_.toLocaleString('en-US', {maximumFractionDigits: 20});
+        this.precision_.toLocaleString('en-US', { maximumFractionDigits: 20 });
     }
     const decimalIndex = precisionString.indexOf('.');
     if (decimalIndex === -1) {
@@ -245,21 +250,20 @@ class FieldNumber extends FieldTextInput {
    * Returns the current precision of this field. The precision being the
    * number to which the field's value is rounded. A precision of 0 means that
    * the value is not rounded.
-   * @return {number} The number to which this field's value is rounded.
+   * @return The number to which this field's value is rounded.
    */
-  getPrecision() {
+  getPrecision(): number {
     return this.precision_;
   }
 
   /**
    * Ensure that the input value is a valid number (must fulfill the
    * constraints placed on the field).
-   * @param {*=} opt_newValue The input value.
-   * @return {?number} A valid number, or null if invalid.
-   * @protected
-   * @override
+   * @param opt_newValue The input value.
+   * @return A valid number, or null if invalid.
    */
-  doClassValidation_(opt_newValue) {
+  protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
+    number | null {
     if (opt_newValue === null) {
       return null;
     }
@@ -294,11 +298,9 @@ class FieldNumber extends FieldTextInput {
 
   /**
    * Create the number input editor widget.
-   * @return {!HTMLElement} The newly created number input editor.
-   * @protected
-   * @override
+   * @return The newly created number input editor.
    */
-  widgetCreate_() {
+  protected override widgetCreate_(): HTMLElement {
     const htmlInput = super.widgetCreate_();
 
     // Set the accessibility state
@@ -313,28 +315,16 @@ class FieldNumber extends FieldTextInput {
 
   /**
    * Construct a FieldNumber from a JSON arg object.
-   * @param {!Object} options A JSON object with options (value, min, max, and
-   *                          precision).
-   * @return {!FieldNumber} The new field instance.
-   * @package
+   * @param options A JSON object with options (value, min, max, and precision).
+   * @return The new field instance.
    * @nocollapse
-   * @override
    */
-  static fromJson(options) {
+  static override fromJson(options: AnyDuringMigration): FieldNumber {
     // `this` might be a subclass of FieldNumber if that class doesn't override
     // the static fromJson method.
     return new this(
-        options['value'], undefined, undefined, undefined, undefined, options);
+      options['value'], undefined, undefined, undefined, undefined, options);
   }
 }
 
-/**
- * The default value for this field.
- * @type {*}
- * @protected
- */
-FieldNumber.prototype.DEFAULT_VALUE = 0;
-
 fieldRegistry.register('field_number', FieldNumber);
-
-exports.FieldNumber = FieldNumber;

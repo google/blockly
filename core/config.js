@@ -1,15 +1,36 @@
 /**
+ * @fileoverview All the values that we expect developers to be able to change
+ * before injecting Blockly. Changing these values during run time is not
+ * generally recommended.
+ */
+
+
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2018 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
  * @license
  * Copyright 2022 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview All the values that we expect developers to be able to change
- * before injecting Blockly. Changing these values during run time is not
- * generally recommended.
- */
-'use strict';
 
 /**
  * All the values that we expect developers to be able to change
@@ -17,35 +38,27 @@
  * generally recommended.
  * @namespace Blockly.config
  */
-goog.module('Blockly.config');
-
-
 /**
  * All the values that we expect developers to be able to change
  * before injecting Blockly.
- * @typedef {{
- *      dragRadius: number,
- *      flyoutDragRadius: number,
- *      snapRadius: number,
- *      currentConnectionPreference: number,
- *      bumpDelay: number,
- *      connectingSnapRadius: number
- *    }}
  */
-let Config;  // eslint-disable-line no-unused-vars
+interface Config {
+  dragRadius: number;
+  flyoutDragRadius: number;
+  snapRadius: number;
+  currentConnectionPreference: number;
+  bumpDelay: number;
+  connectingSnapRadius: number;
+}  // eslint-disable-line no-unused-vars
 
-/**
- * Default snap radius.
- * @type {number}
- */
+/** Default snap radius. */
 const DEFAULT_SNAP_RADIUS = 28;
 
 /**
  * Object holding all the values on Blockly that we expect developers to be
  * able to change.
- * @type {Config}
  */
-const config = {
+export const config: Config = {
   /**
    * Number of pixels the mouse must move before a drag starts.
    * @alias Blockly.config.dragRadius
@@ -83,5 +96,3 @@ const config = {
    */
   bumpDelay: 250,
 };
-
-exports.config = config;

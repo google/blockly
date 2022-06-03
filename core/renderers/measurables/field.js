@@ -1,71 +1,85 @@
 /**
+ * @fileoverview Objects representing a field in a row of a rendered
+ * block.
+ */
+
+
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2018 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Objects representing a field in a row of a rendered
- * block.
- */
 
 /**
  * Objects representing a field in a row of a rendered
  * block.
  * @class
  */
-goog.module('Blockly.blockRendering.Field');
 
 /* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 /* eslint-disable-next-line no-unused-vars */
-const {Field: BlocklyField} = goog.requireType('Blockly.Field');
+import { Field as BlocklyField } from 'google3/third_party/javascript/blockly/core/field';
 /* eslint-disable-next-line no-unused-vars */
-const {Input} = goog.requireType('Blockly.Input');
-const {Measurable} = goog.require('Blockly.blockRendering.Measurable');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+import { Input } from 'google3/third_party/javascript/blockly/core/input';
+
+import { ConstantProvider } from '../common/constants';
+
+import { Measurable } from './base';
+import { Types } from './types';
 
 
 /**
  * An object containing information about the space a field takes up during
  * rendering
  * @struct
- * @extends {Measurable}
  * @alias Blockly.blockRendering.Field
  */
-class Field extends Measurable {
+export class Field extends Measurable {
+  isEditable: boolean;
+  flipRtl: boolean;
+  override height: number;
+  override width: number;
+
   /**
-   * @param {!ConstantProvider} constants The rendering
-   *   constants provider.
-   * @param {!BlocklyField} field The field to measure and store information
-   *     for.
-   * @param {!Input} parentInput The parent input for the field.
-   * @package
+   * @param constants The rendering constants provider.
+   * @param field The field to measure and store information for.
+   * @param parentInput The parent input for the field.
    */
-  constructor(constants, field, parentInput) {
+  constructor(
+    constants: ConstantProvider, public field: BlocklyField,
+    public parentInput: Input) {
     super(constants);
 
-    /** @type {!BlocklyField} */
-    this.field = field;
-
-    /** @type {boolean} */
     this.isEditable = field.EDITABLE;
 
-    /** @type {boolean} */
     this.flipRtl = field.getFlipRtl();
     this.type |= Types.FIELD;
 
     const size = this.field.getSize();
 
-    /** @type {number} */
     this.height = size.height;
 
-    /** @type {number} */
     this.width = size.width;
-
-    /** @type {!Input} */
-    this.parentInput = parentInput;
   }
 }
-
-exports.Field = Field;

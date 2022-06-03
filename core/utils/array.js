@@ -1,34 +1,49 @@
+/** @fileoverview Utility methods related to arrays. */
+
+
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2018 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /**
  * @license
  * Copyright 2021 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Utility methods related to arrays.
- */
-'use strict';
 
-/**
- * @namespace Blockly.utils.array
- */
-goog.module('Blockly.utils.array');
+/** @namespace Blockly.utils.array */
 
 
 /**
  * Removes the first occurrence of a particular value from an array.
- * @param {!Array} arr Array from which to remove value.
- * @param {*} value Value to remove.
- * @return {boolean} True if an element was removed.
+ * @param arr Array from which to remove value.
+ * @param value Value to remove.
+ * @return True if an element was removed.
  * @alias Blockly.array.removeElem
- * @package
  */
-const removeElem = function(arr, value) {
+export function removeElem(
+  arr: AnyDuringMigration[], value: AnyDuringMigration): boolean {
   const i = arr.indexOf(value);
   if (i === -1) {
     return false;
   }
   arr.splice(i, 1);
   return true;
-};
-exports.removeElem = removeElem;
+}

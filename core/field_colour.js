@@ -1,170 +1,200 @@
+/** @fileoverview Colour input field. */
+
+
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2018 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /**
  * @license
  * Copyright 2012 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Colour input field.
- */
-'use strict';
 
 /**
  * Colour input field.
  * @class
  */
-goog.module('Blockly.FieldColour');
 
-const Css = goog.require('Blockly.Css');
-const aria = goog.require('Blockly.utils.aria');
-const browserEvents = goog.require('Blockly.browserEvents');
-const colour = goog.require('Blockly.utils.colour');
-const dom = goog.require('Blockly.utils.dom');
-const dropDownDiv = goog.require('Blockly.dropDownDiv');
-const fieldRegistry = goog.require('Blockly.fieldRegistry');
-const idGenerator = goog.require('Blockly.utils.idGenerator');
-const {BlockSvg} = goog.require('Blockly.BlockSvg');
-const {Field} = goog.require('Blockly.Field');
-const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
+// Unused import preserved for side-effects. Remove if unneeded.
+import './events/events_block_change';
+
+import { BlockSvg } from './block_svg';
+import * as browserEvents from './browser_events';
+import * as Css from './css';
+import * as dropDownDiv from './dropdowndiv';
+import { Field } from './field';
+import * as fieldRegistry from './field_registry';
+import * as aria from './utils/aria';
+import * as colour from './utils/colour';
+import * as dom from './utils/dom';
+import * as idGenerator from './utils/idgenerator';
+import { KeyCodes } from './utils/keycodes';
 /* eslint-disable-next-line no-unused-vars */
-const {Sentinel} = goog.requireType('Blockly.utils.Sentinel');
-const {Size} = goog.require('Blockly.utils.Size');
-/** @suppress {extraRequire} */
-goog.require('Blockly.Events.BlockChange');
+import { Sentinel } from './utils/sentinel';
+import { Size } from './utils/size';
 
 
 /**
  * Class for a colour input field.
- * @extends {Field}
  * @alias Blockly.FieldColour
  */
-class FieldColour extends Field {
+export class FieldColour extends Field {
   /**
-   * @param {(string|!Sentinel)=} opt_value The initial value of the
-   *     field. Should be in '#rrggbb' format. Defaults to the first value in
-   *     the default colour array.
-   *     Also accepts Field.SKIP_SETUP if you wish to skip setup (only used by
+   * An array of colour strings for the palette.
+   * Copied from goog.ui.ColorPicker.SIMPLE_GRID_COLORS
+   * All colour pickers use this unless overridden with setColours.
+   */
+  static COLOURS: string[] = [
+    // grays
+    '#ffffff', '#cccccc', '#c0c0c0', '#999999',
+    '#666666', '#333333', '#000000',  // reds
+    '#ffcccc', '#ff6666', '#ff0000', '#cc0000',
+    '#990000', '#660000', '#330000',  // oranges
+    '#ffcc99', '#ff9966', '#ff9900', '#ff6600',
+    '#cc6600', '#993300', '#663300',  // yellows
+    '#ffff99', '#ffff66', '#ffcc66', '#ffcc33',
+    '#cc9933', '#996633', '#663333',  // olives
+    '#ffffcc', '#ffff33', '#ffff00', '#ffcc00',
+    '#999900', '#666600', '#333300',  // greens
+    '#99ff99', '#66ff99', '#33ff33', '#33cc00',
+    '#009900', '#006600', '#003300',  // turquoises
+    '#99ffff', '#33ffff', '#66cccc', '#00cccc',
+    '#339999', '#336666', '#003333',  // blues
+    '#ccffff', '#66ffff', '#33ccff', '#3366ff',
+    '#3333ff', '#000099', '#000066',  // purples
+    '#ccccff', '#9999ff', '#6666cc', '#6633ff',
+    '#6600cc', '#333399', '#330099',  // violets
+    '#ffccff', '#ff99ff', '#cc66cc', '#cc33cc',
+    '#993399', '#663366', '#330033',
+  ];
+  protected override DEFAULT_VALUE: AnyDuringMigration;
+
+  /**
+   * An array of tooltip strings for the palette.  If not the same length as
+   * COLOURS, the colour's hex code will be used for any missing titles.
+   * All colour pickers use this unless overridden with setColours.
+   */
+  static TITLES: string[] = [];
+
+  /**
+   * Number of columns in the palette.
+   * All colour pickers use this unless overridden with setColumns.
+   */
+  static COLUMNS = 7;
+
+  /** The field's colour picker element. */
+  private picker_: Element | null = null;
+
+  /** Index of the currently highlighted element. */
+  private highlightedIndex_: number | null = null;
+
+  /** Mouse click event data. */
+  private onClickWrapper_: browserEvents.Data | null = null;
+
+  /** Mouse move event data. */
+  private onMouseMoveWrapper_: browserEvents.Data | null = null;
+
+  /** Mouse enter event data. */
+  private onMouseEnterWrapper_: browserEvents.Data | null = null;
+
+  /** Mouse leave event data. */
+  private onMouseLeaveWrapper_: browserEvents.Data | null = null;
+
+  /** Key down event data. */
+  private onKeyDownWrapper_: browserEvents.Data | null = null;
+
+  /**
+   * Serializable fields are saved by the serializer, non-serializable fields
+   * are not. Editable fields should also be serializable.
+   */
+  override SERIALIZABLE = true;
+
+  /** Mouse cursor style when over the hotspot that initiates the editor. */
+  override CURSOR = 'default';
+
+  /**
+   * Used to tell if the field needs to be rendered the next time the block is
+   * rendered. Colour fields are statically sized, and only need to be
+   * rendered at initialization.
+   */
+  protected override isDirty_ = false;
+
+  /** Array of colours used by this field.  If null, use the global list. */
+  // AnyDuringMigration because:  Type 'null' is not assignable to type
+  // 'string[]'.
+  private colours_: string[] = null as AnyDuringMigration;
+
+  /**
+   * Array of colour tooltips used by this field.  If null, use the global
+   * list.
+   */
+  // AnyDuringMigration because:  Type 'null' is not assignable to type
+  // 'string[]'.
+  private titles_: string[] = null as AnyDuringMigration;
+
+  /**
+   * Number of colour columns used by this field.  If 0, use the global
+   * setting. By default use the global constants for columns.
+   */
+  private columns_ = 0;
+  override size_: AnyDuringMigration;
+  override clickTarget_: AnyDuringMigration;
+  override value_: AnyDuringMigration;
+
+  /**
+   * @param opt_value The initial value of the field. Should be in '#rrggbb'
+   *     format. Defaults to the first value in the default colour array. Also
+   *     accepts Field.SKIP_SETUP if you wish to skip setup (only used by
    *     subclasses that want to handle configuration and setting the field
    *     value after their own constructors have run).
-   * @param {Function=} opt_validator A function that is called to validate
-   *     changes to the field's value. Takes in a colour string & returns a
-   *     validated colour string ('#rrggbb' format), or null to abort the
-   *     change.Blockly.
-   * @param {Object=} opt_config A map of options used to configure the field.
+   * @param opt_validator A function that is called to validate changes to the
+   *     field's value. Takes in a colour string & returns a validated colour
+   *     string ('#rrggbb' format), or null to abort the change.Blockly.
+   * @param opt_config A map of options used to configure the field.
    *     See the [field creation documentation]{@link
-   *     https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/colour}
-   *     for a list of properties this parameter supports.
+   * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/colour}
+   * for a list of properties this parameter supports.
    */
-  constructor(opt_value, opt_validator, opt_config) {
+  constructor(
+    opt_value?: string | Sentinel, opt_validator?: Function,
+    opt_config?: AnyDuringMigration) {
     super(Field.SKIP_SETUP);
 
-    /**
-     * The field's colour picker element.
-     * @type {?Element}
-     * @private
-     */
-    this.picker_ = null;
-
-    /**
-     * Index of the currently highlighted element.
-     * @type {?number}
-     * @private
-     */
-    this.highlightedIndex_ = null;
-
-    /**
-     * Mouse click event data.
-     * @type {?browserEvents.Data}
-     * @private
-     */
-    this.onClickWrapper_ = null;
-
-    /**
-     * Mouse move event data.
-     * @type {?browserEvents.Data}
-     * @private
-     */
-    this.onMouseMoveWrapper_ = null;
-
-    /**
-     * Mouse enter event data.
-     * @type {?browserEvents.Data}
-     * @private
-     */
-    this.onMouseEnterWrapper_ = null;
-
-    /**
-     * Mouse leave event data.
-     * @type {?browserEvents.Data}
-     * @private
-     */
-    this.onMouseLeaveWrapper_ = null;
-
-    /**
-     * Key down event data.
-     * @type {?browserEvents.Data}
-     * @private
-     */
-    this.onKeyDownWrapper_ = null;
-
-    /**
-     * Serializable fields are saved by the serializer, non-serializable fields
-     * are not. Editable fields should also be serializable.
-     * @type {boolean}
-     */
-    this.SERIALIZABLE = true;
-
-    /**
-     * Mouse cursor style when over the hotspot that initiates the editor.
-     * @type {string}
-     */
-    this.CURSOR = 'default';
-
-    /**
-     * Used to tell if the field needs to be rendered the next time the block is
-     * rendered. Colour fields are statically sized, and only need to be
-     * rendered at initialization.
-     * @type {boolean}
-     * @protected
-     */
-    this.isDirty_ = false;
-
-    /**
-     * Array of colours used by this field.  If null, use the global list.
-     * @type {Array<string>}
-     * @private
-     */
-    this.colours_ = null;
-
-    /**
-     * Array of colour tooltips used by this field.  If null, use the global
-     * list.
-     * @type {Array<string>}
-     * @private
-     */
-    this.titles_ = null;
-
-    /**
-     * Number of colour columns used by this field.  If 0, use the global
-     * setting. By default use the global constants for columns.
-     * @type {number}
-     * @private
-     */
-    this.columns_ = 0;
-
-    if (opt_value === Field.SKIP_SETUP) return;
-    if (opt_config) this.configure_(opt_config);
+    if (opt_value === Field.SKIP_SETUP) {
+      return;
+    }
+    if (opt_config) {
+      this.configure_(opt_config);
+    }
     this.setValue(opt_value);
-    if (opt_validator) this.setValidator(opt_validator);
+    if (opt_validator) {
+      this.setValidator(opt_validator);
+    }
   }
 
   /**
    * Configure the field based on the given map of options.
-   * @param {!Object} config A map of options to configure the field based on.
-   * @protected
-   * @override
+   * @param config A map of options to configure the field based on.
    */
-  configure_(config) {
+  protected override configure_(config: AnyDuringMigration) {
     super.configure_(config);
     if (config['colourOptions']) {
       this.colours_ = config['colourOptions'];
@@ -175,15 +205,12 @@ class FieldColour extends Field {
     }
   }
 
-  /**
-   * Create the block UI for this colour field.
-   * @package
-   */
-  initView() {
+  /** Create the block UI for this colour field. */
+  override initView() {
     this.size_ = new Size(
-        this.getConstants().FIELD_COLOUR_DEFAULT_WIDTH,
-        this.getConstants().FIELD_COLOUR_DEFAULT_HEIGHT);
-    if (!this.getConstants().FIELD_COLOUR_FULL_BLOCK) {
+      this.getConstants()!.FIELD_COLOUR_DEFAULT_WIDTH,
+      this.getConstants()!.FIELD_COLOUR_DEFAULT_HEIGHT);
+    if (!this.getConstants()!.FIELD_COLOUR_FULL_BLOCK) {
       this.createBorderRect_();
       this.borderRect_.style['fillOpacity'] = '1';
     } else if (this.sourceBlock_ instanceof BlockSvg) {
@@ -191,28 +218,25 @@ class FieldColour extends Field {
     }
   }
 
-  /**
-   * @override
-   */
-  applyColour() {
-    if (!this.getConstants().FIELD_COLOUR_FULL_BLOCK) {
+  override applyColour() {
+    if (!this.getConstants()!.FIELD_COLOUR_FULL_BLOCK) {
       if (this.borderRect_) {
-        this.borderRect_.style.fill = /** @type {string} */ (this.getValue());
+        this.borderRect_.style.fill = this.getValue() as string;
       }
     } else if (this.sourceBlock_ instanceof BlockSvg) {
       this.sourceBlock_.pathObject.svgPath.setAttribute(
-          'fill', /** @type {string} */ (this.getValue()));
+        'fill', this.getValue() as string);
       this.sourceBlock_.pathObject.svgPath.setAttribute('stroke', '#fff');
     }
   }
 
   /**
    * Ensure that the input value is a valid colour.
-   * @param {*=} opt_newValue The input value.
-   * @return {?string} A valid colour, or null if invalid.
-   * @protected
+   * @param opt_newValue The input value.
+   * @return A valid colour, or null if invalid.
    */
-  doClassValidation_(opt_newValue) {
+  protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
+    string | null {
     if (typeof opt_newValue !== 'string') {
       return null;
     }
@@ -221,29 +245,28 @@ class FieldColour extends Field {
 
   /**
    * Update the value of this colour field, and update the displayed colour.
-   * @param {*} newValue The value to be saved. The default validator guarantees
-   * that this is a colour in '#rrggbb' format.
-   * @protected
+   * @param newValue The value to be saved. The default validator guarantees
+   *     that this is a colour in '#rrggbb' format.
    */
-  doValueUpdate_(newValue) {
+  protected override doValueUpdate_(newValue: AnyDuringMigration) {
     this.value_ = newValue;
     if (this.borderRect_) {
-      this.borderRect_.style.fill = /** @type {string} */ (newValue);
+      this.borderRect_.style.fill = newValue as string;
     } else if (
-        this.sourceBlock_ && this.sourceBlock_.rendered &&
-        this.sourceBlock_ instanceof BlockSvg) {
+      this.sourceBlock_ && this.sourceBlock_.rendered &&
+      this.sourceBlock_ instanceof BlockSvg) {
       this.sourceBlock_.pathObject.svgPath.setAttribute(
-          'fill', /** @type {string} */ (newValue));
+        'fill', newValue as string);
       this.sourceBlock_.pathObject.svgPath.setAttribute('stroke', '#fff');
     }
   }
 
   /**
    * Get the text for this field.  Used when the block is collapsed.
-   * @return {string} Text representing the value of this field.
+   * @return Text representing the value of this field.
    */
-  getText() {
-    let colour = /** @type {string} */ (this.value_);
+  override getText(): string {
+    let colour = this.value_ as string;
     // Try to use #rgb format if possible, rather than #rrggbb.
     if (/^#(.)\1(.)\2(.)\3$/.test(colour)) {
       colour = '#' + colour[1] + colour[3] + colour[5];
@@ -253,13 +276,13 @@ class FieldColour extends Field {
 
   /**
    * Set a custom colour grid for this field.
-   * @param {Array<string>} colours Array of colours for this block,
-   *     or null to use default (FieldColour.COLOURS).
-   * @param {Array<string>=} opt_titles Optional array of colour tooltips,
-   *     or null to use default (FieldColour.TITLES).
-   * @return {!FieldColour} Returns itself (for method chaining).
+   * @param colours Array of colours for this block, or null to use default
+   *     (FieldColour.COLOURS).
+   * @param opt_titles Optional array of colour tooltips, or null to use default
+   *     (FieldColour.TITLES).
+   * @return Returns itself (for method chaining).
    */
-  setColours(colours, opt_titles) {
+  setColours(colours: string[], opt_titles?: string[]): FieldColour {
     this.colours_ = colours;
     if (opt_titles) {
       this.titles_ = opt_titles;
@@ -269,36 +292,36 @@ class FieldColour extends Field {
 
   /**
    * Set a custom grid size for this field.
-   * @param {number} columns Number of columns for this block,
-   *     or 0 to use default (FieldColour.COLUMNS).
-   * @return {!FieldColour} Returns itself (for method chaining).
+   * @param columns Number of columns for this block, or 0 to use default
+   *     (FieldColour.COLUMNS).
+   * @return Returns itself (for method chaining).
    */
-  setColumns(columns) {
+  setColumns(columns: number): FieldColour {
     this.columns_ = columns;
     return this;
   }
 
-  /**
-   * Create and show the colour field's editor.
-   * @protected
-   */
-  showEditor_() {
+  /** Create and show the colour field's editor. */
+  protected override showEditor_() {
     this.dropdownCreate_();
-    dropDownDiv.getContentDiv().appendChild(this.picker_);
+    // AnyDuringMigration because:  Argument of type 'Element | null' is not
+    // assignable to parameter of type 'Node'.
+    dropDownDiv.getContentDiv().appendChild(this.picker_ as AnyDuringMigration);
 
     dropDownDiv.showPositionedByField(this, this.dropdownDispose_.bind(this));
 
     // Focus so we can start receiving keyboard events.
-    this.picker_.focus({preventScroll: true});
+    // AnyDuringMigration because:  Property 'focus' does not exist on type
+    // 'Element'.
+    (this.picker_ as AnyDuringMigration)!.focus({ preventScroll: true });
   }
 
   /**
    * Handle a click on a colour cell.
-   * @param {!MouseEvent} e Mouse event.
-   * @private
+   * @param e Mouse event.
    */
-  onClick_(e) {
-    const cell = /** @type {!Element} */ (e.target);
+  private onClick_(e: MouseEvent) {
+    const cell = e.target as Element;
     const colour = cell && cell.getAttribute('data-colour');
     if (colour !== null) {
       this.setValue(colour);
@@ -309,10 +332,9 @@ class FieldColour extends Field {
   /**
    * Handle a key down event. Navigate around the grid with the
    * arrow keys. Enter selects the highlighted colour.
-   * @param {!KeyboardEvent} e Keyboard event.
-   * @private
+   * @param e Keyboard event.
    */
-  onKeyDown_(e) {
+  private onKeyDown_(e: KeyboardEvent) {
     let handled = false;
     if (e.keyCode === KeyCodes.UP) {
       this.moveHighlightBy_(0, -1);
@@ -345,11 +367,10 @@ class FieldColour extends Field {
 
   /**
    * Move the currently highlighted position by dx and dy.
-   * @param {number} dx Change of x
-   * @param {number} dy Change of y
-   * @private
+   * @param dx Change of x
+   * @param dy Change of y
    */
-  moveHighlightBy_(dx, dy) {
+  private moveHighlightBy_(dx: number, dy: number) {
     if (!this.highlightedIndex_) {
       return;
     }
@@ -396,40 +417,38 @@ class FieldColour extends Field {
     }
 
     // Move the highlight to the new coordinates.
-    const cell =
-        /** @type {!Element} */ (this.picker_.childNodes[y].childNodes[x]);
-    const index = (y * columns) + x;
+    const cell = this.picker_!.childNodes[y].childNodes[x] as Element;
+    const index = y * columns + x;
     this.setHighlightedCell_(cell, index);
   }
 
   /**
    * Handle a mouse move event. Highlight the hovered colour.
-   * @param {!MouseEvent} e Mouse event.
-   * @private
+   * @param e Mouse event.
    */
-  onMouseMove_(e) {
-    const cell = /** @type {!Element} */ (e.target);
+  private onMouseMove_(e: MouseEvent) {
+    const cell = e.target as Element;
     const index = cell && Number(cell.getAttribute('data-index'));
     if (index !== null && index !== this.highlightedIndex_) {
       this.setHighlightedCell_(cell, index);
     }
   }
 
-  /**
-   * Handle a mouse enter event. Focus the picker.
-   * @private
-   */
-  onMouseEnter_() {
-    this.picker_.focus({preventScroll: true});
+  /** Handle a mouse enter event. Focus the picker. */
+  private onMouseEnter_() {
+    // AnyDuringMigration because:  Property 'focus' does not exist on type
+    // 'Element'.
+    (this.picker_ as AnyDuringMigration)!.focus({ preventScroll: true });
   }
 
   /**
    * Handle a mouse leave event. Blur the picker and unhighlight
    * the currently highlighted colour.
-   * @private
    */
-  onMouseLeave_() {
-    this.picker_.blur();
+  private onMouseLeave_() {
+    // AnyDuringMigration because:  Property 'blur' does not exist on type
+    // 'Element'.
+    (this.picker_ as AnyDuringMigration)!.blur();
     const highlighted = this.getHighlighted_();
     if (highlighted) {
       dom.removeClass(highlighted, 'blocklyColourHighlighted');
@@ -438,10 +457,9 @@ class FieldColour extends Field {
 
   /**
    * Returns the currently highlighted item (if any).
-   * @return {?HTMLElement} Highlighted item (null if none).
-   * @private
+   * @return Highlighted item (null if none).
    */
-  getHighlighted_() {
+  private getHighlighted_(): HTMLElement | null {
     if (!this.highlightedIndex_) {
       return null;
     }
@@ -449,21 +467,20 @@ class FieldColour extends Field {
     const columns = this.columns_ || FieldColour.COLUMNS;
     const x = this.highlightedIndex_ % columns;
     const y = Math.floor(this.highlightedIndex_ / columns);
-    const row = this.picker_.childNodes[y];
+    const row = this.picker_!.childNodes[y];
     if (!row) {
       return null;
     }
-    const col = /** @type {HTMLElement} */ (row.childNodes[x]);
+    const col = row.childNodes[x] as HTMLElement;
     return col;
   }
 
   /**
    * Update the currently highlighted cell.
-   * @param {!Element} cell the new cell to highlight
-   * @param {number} index the index of the new cell
-   * @private
+   * @param cell the new cell to highlight
+   * @param index the index of the new cell
    */
-  setHighlightedCell_(cell, index) {
+  private setHighlightedCell_(cell: Element, index: number) {
     // Unhighlight the current item.
     const highlighted = this.getHighlighted_();
     if (highlighted) {
@@ -475,46 +492,45 @@ class FieldColour extends Field {
     this.highlightedIndex_ = index;
 
     // Update accessibility roles.
+    // AnyDuringMigration because:  Argument of type 'string | null' is not
+    // assignable to parameter of type 'string | number | boolean | string[]'.
     aria.setState(
-        /** @type {!Element} */ (this.picker_), aria.State.ACTIVEDESCENDANT,
-        cell.getAttribute('id'));
+      this.picker_ as Element, aria.State.ACTIVEDESCENDANT,
+      cell.getAttribute('id') as AnyDuringMigration);
   }
 
-  /**
-   * Create a colour picker dropdown editor.
-   * @private
-   */
-  dropdownCreate_() {
+  /** Create a colour picker dropdown editor. */
+  private dropdownCreate_() {
     const columns = this.columns_ || FieldColour.COLUMNS;
     const colours = this.colours_ || FieldColour.COLOURS;
     const titles = this.titles_ || FieldColour.TITLES;
     const selectedColour = this.getValue();
     // Create the palette.
-    const table =
-        /** @type {!HTMLTableElement} */ (document.createElement('table'));
+    const table = (document.createElement('table'));
     table.className = 'blocklyColourTable';
     table.tabIndex = 0;
     table.dir = 'ltr';
     aria.setRole(table, aria.Role.GRID);
     aria.setState(table, aria.State.EXPANDED, true);
     aria.setState(
-        table, aria.State.ROWCOUNT, Math.floor(colours.length / columns));
+      table, aria.State.ROWCOUNT, Math.floor(colours.length / columns));
     aria.setState(table, aria.State.COLCOUNT, columns);
-    let row;
+    let row: Element;
     for (let i = 0; i < colours.length; i++) {
       if (i % columns === 0) {
         row = document.createElement('tr');
         aria.setRole(row, aria.Role.ROW);
         table.appendChild(row);
       }
-      const cell =
-          /** @type {!HTMLTableCellElement} */ (document.createElement('td'));
-      row.appendChild(cell);
-      cell.setAttribute(
-          'data-colour', colours[i]);  // This becomes the value, if clicked.
+      const cell = (document.createElement('td'));
+      row!.appendChild(cell);
+      cell.setAttribute('data-colour', colours[i]);
+      // This becomes the value, if clicked.
       cell.title = titles[i] || colours[i];
       cell.id = idGenerator.getNextUniqueId();
-      cell.setAttribute('data-index', i);
+      // AnyDuringMigration because:  Argument of type 'number' is not
+      // assignable to parameter of type 'string'.
+      cell.setAttribute('data-index', i as AnyDuringMigration);
       aria.setRole(cell, aria.Role.GRIDCELL);
       aria.setState(cell, aria.State.LABEL, colours[i]);
       aria.setState(cell, aria.State.SELECTED, colours[i] === selectedColour);
@@ -527,24 +543,21 @@ class FieldColour extends Field {
 
     // Configure event handler on the table to listen for any event in a cell.
     this.onClickWrapper_ = browserEvents.conditionalBind(
-        table, 'click', this, this.onClick_, true);
+      table, 'click', this, this.onClick_, true);
     this.onMouseMoveWrapper_ = browserEvents.conditionalBind(
-        table, 'mousemove', this, this.onMouseMove_, true);
+      table, 'mousemove', this, this.onMouseMove_, true);
     this.onMouseEnterWrapper_ = browserEvents.conditionalBind(
-        table, 'mouseenter', this, this.onMouseEnter_, true);
+      table, 'mouseenter', this, this.onMouseEnter_, true);
     this.onMouseLeaveWrapper_ = browserEvents.conditionalBind(
-        table, 'mouseleave', this, this.onMouseLeave_, true);
+      table, 'mouseleave', this, this.onMouseLeave_, true);
     this.onKeyDownWrapper_ =
-        browserEvents.conditionalBind(table, 'keydown', this, this.onKeyDown_);
+      browserEvents.conditionalBind(table, 'keydown', this, this.onKeyDown_);
 
     this.picker_ = table;
   }
 
-  /**
-   * Disposes of events and DOM-references belonging to the colour editor.
-   * @private
-   */
-  dropdownDispose_() {
+  /** Disposes of events and DOM-references belonging to the colour editor. */
+  private dropdownDispose_() {
     if (this.onClickWrapper_) {
       browserEvents.unbind(this.onClickWrapper_);
       this.onClickWrapper_ = null;
@@ -571,131 +584,24 @@ class FieldColour extends Field {
 
   /**
    * Construct a FieldColour from a JSON arg object.
-   * @param {!Object} options A JSON object with options (colour).
-   * @return {!FieldColour} The new field instance.
-   * @package
+   * @param options A JSON object with options (colour).
+   * @return The new field instance.
    * @nocollapse
    */
-  static fromJson(options) {
+  static fromJson(options: AnyDuringMigration): FieldColour {
     // `this` might be a subclass of FieldColour if that class doesn't override
     // the static fromJson method.
     return new this(options['colour'], undefined, options);
   }
 }
 
-/**
- * An array of colour strings for the palette.
- * Copied from goog.ui.ColorPicker.SIMPLE_GRID_COLORS
- * All colour pickers use this unless overridden with setColours.
- * @type {!Array<string>}
- */
-FieldColour.COLOURS = [
-  // grays
-  '#ffffff',
-  '#cccccc',
-  '#c0c0c0',
-  '#999999',
-  '#666666',
-  '#333333',
-  '#000000',
-  // reds
-  '#ffcccc',
-  '#ff6666',
-  '#ff0000',
-  '#cc0000',
-  '#990000',
-  '#660000',
-  '#330000',
-  // oranges
-  '#ffcc99',
-  '#ff9966',
-  '#ff9900',
-  '#ff6600',
-  '#cc6600',
-  '#993300',
-  '#663300',
-  // yellows
-  '#ffff99',
-  '#ffff66',
-  '#ffcc66',
-  '#ffcc33',
-  '#cc9933',
-  '#996633',
-  '#663333',
-  // olives
-  '#ffffcc',
-  '#ffff33',
-  '#ffff00',
-  '#ffcc00',
-  '#999900',
-  '#666600',
-  '#333300',
-  // greens
-  '#99ff99',
-  '#66ff99',
-  '#33ff33',
-  '#33cc00',
-  '#009900',
-  '#006600',
-  '#003300',
-  // turquoises
-  '#99ffff',
-  '#33ffff',
-  '#66cccc',
-  '#00cccc',
-  '#339999',
-  '#336666',
-  '#003333',
-  // blues
-  '#ccffff',
-  '#66ffff',
-  '#33ccff',
-  '#3366ff',
-  '#3333ff',
-  '#000099',
-  '#000066',
-  // purples
-  '#ccccff',
-  '#9999ff',
-  '#6666cc',
-  '#6633ff',
-  '#6600cc',
-  '#333399',
-  '#330099',
-  // violets
-  '#ffccff',
-  '#ff99ff',
-  '#cc66cc',
-  '#cc33cc',
-  '#993399',
-  '#663366',
-  '#330033',
-];
+/** The default value for this field. */
+// AnyDuringMigration because:  Property 'DEFAULT_VALUE' is protected and only
+// accessible within class 'FieldColour' and its subclasses.
+(FieldColour.prototype as AnyDuringMigration).DEFAULT_VALUE =
+  FieldColour.COLOURS[0];
 
-/**
- * The default value for this field.
- * @type {*}
- * @protected
- */
-FieldColour.prototype.DEFAULT_VALUE = FieldColour.COLOURS[0];
-
-/**
- * An array of tooltip strings for the palette.  If not the same length as
- * COLOURS, the colour's hex code will be used for any missing titles.
- * All colour pickers use this unless overridden with setColours.
- * @type {!Array<string>}
- */
-FieldColour.TITLES = [];
-
-/**
- * Number of columns in the palette.
- * All colour pickers use this unless overridden with setColumns.
- */
-FieldColour.COLUMNS = 7;
-
-/**
- * CSS for colour picker.  See css.js for use.
- */
+/** CSS for colour picker.  See css.js for use. */
 Css.register(`
 .blocklyColourTable {
   border-collapse: collapse;
@@ -728,5 +634,3 @@ Css.register(`
 `);
 
 fieldRegistry.register('field_colour', FieldColour);
-
-exports.FieldColour = FieldColour;

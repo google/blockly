@@ -1,72 +1,107 @@
+/** @fileoverview Manager for all items registered with the workspace. */
+
+
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2018 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /**
  * @license
  * Copyright 2021 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Manager for all items registered with the workspace.
- */
 
-'use strict';
 
 /**
  * Manager for all items registered with the workspace.
  * @class
  */
-goog.module('Blockly.ComponentManager');
 
-const arrayUtils = goog.require('Blockly.utils.array');
 /* eslint-disable-next-line no-unused-vars */
-const {IAutoHideable} = goog.requireType('Blockly.IAutoHideable');
+import { IAutoHideable } from './interfaces/i_autohideable';
 /* eslint-disable-next-line no-unused-vars */
-const {IComponent} = goog.requireType('Blockly.IComponent');
+import { IComponent } from './interfaces/i_component';
 /* eslint-disable-next-line no-unused-vars */
-const {IDeleteArea} = goog.requireType('Blockly.IDeleteArea');
+import { IDeleteArea } from './interfaces/i_delete_area';
 /* eslint-disable-next-line no-unused-vars */
-const {IDragTarget} = goog.requireType('Blockly.IDragTarget');
+import { IDragTarget } from './interfaces/i_drag_target';
 /* eslint-disable-next-line no-unused-vars */
-const {IPositionable} = goog.requireType('Blockly.IPositionable');
+import { IPositionable } from './interfaces/i_positionable';
+import * as arrayUtils from './utils/array';
 
+
+class Capability<T> {
+  static POSITIONABLE = new Capability < IPositionable > ('positionable');
+  static DRAG_TARGET = new Capability < IDragTarget > ('drag_target');
+  static DELETE_AREA = new Capability < IDeleteArea > ('delete_area');
+  static AUTOHIDEABLE = new Capability < IAutoHideable > ('autohideable');
+  private readonly name_: string;
+  /** @param name The name of the component capability. */
+  constructor(name: string) {
+    this.name_ = name;
+  }
+
+  /**
+   * Returns the name of the capability.
+   * @return The name.
+   */
+  toString(): string {
+    return this.name_;
+  }
+}
 
 /**
  * Manager for all items registered with the workspace.
  * @alias Blockly.ComponentManager
  */
-class ComponentManager {
-  /**
-   * Creates a new ComponentManager instance.
-   */
+export class ComponentManager {
+  static Capability = Capability;
+
+  // static Capability: AnyDuringMigration;
+  private readonly componentData_: { [key: string]: ComponentDatum };
+  private readonly capabilityToComponentIds_: { [key: string]: string[] };
+
+  /** Creates a new ComponentManager instance. */
   constructor() {
     /**
      * A map of the components registered with the workspace, mapped to id.
-     * @type {!Object<string, !ComponentManager.ComponentDatum>}
-     * @private
      */
     this.componentData_ = Object.create(null);
 
-    /**
-     * A map of capabilities to component IDs.
-     * @type {!Object<string, !Array<string>>}
-     * @private
-     */
+    /** A map of capabilities to component IDs. */
     this.capabilityToComponentIds_ = Object.create(null);
   }
 
   /**
    * Adds a component.
-   * @param {!ComponentManager.ComponentDatum} componentInfo The data for
-   *   the component to register.
-   * @param {boolean=} opt_allowOverrides True to prevent an error when
-   *     overriding an already registered item.
+   * @param componentInfo The data for the component to register.
+   * @param opt_allowOverrides True to prevent an error when overriding an
+   *     already registered item.
    */
-  addComponent(componentInfo, opt_allowOverrides) {
+  addComponent(componentInfo: ComponentDatum, opt_allowOverrides?: boolean) {
     // Don't throw an error if opt_allowOverrides is true.
     const id = componentInfo.component.id;
     if (!opt_allowOverrides && this.componentData_[id]) {
       throw Error(
-          'Plugin "' + id + '" with capabilities "' +
-          this.componentData_[id].capabilities + '" already added.');
+        'Plugin "' + id + '" with capabilities "' +
+        this.componentData_[id].capabilities + '" already added.');
     }
     this.componentData_[id] = componentInfo;
     const stringCapabilities = [];
@@ -84,9 +119,9 @@ class ComponentManager {
 
   /**
    * Removes a component.
-   * @param {string} id The ID of the component to remove.
+   * @param id The ID of the component to remove.
    */
-  removeComponent(id) {
+  removeComponent(id: string) {
     const componentInfo = this.componentData_[id];
     if (!componentInfo) {
       return;
@@ -100,20 +135,18 @@ class ComponentManager {
 
   /**
    * Adds a capability to a existing registered component.
-   * @param {string} id The ID of the component to add the capability to.
-   * @param {string|!ComponentManager.Capability<T>} capability The
-   *     capability to add.
-   * @template T
+   * @param id The ID of the component to add the capability to.
+   * @param capability The capability to add.
    */
-  addCapability(id, capability) {
+  addCapability<T>(id: string, capability: string | Capability<T>) {
     if (!this.getComponent(id)) {
       throw Error(
-          'Cannot add capability, "' + capability + '". Plugin "' + id +
-          '" has not been added to the ComponentManager');
+        'Cannot add capability, "' + capability + '". Plugin "' + id +
+        '" has not been added to the ComponentManager');
     }
     if (this.hasCapability(id, capability)) {
       console.warn(
-          'Plugin "' + id + 'already has capability "' + capability + '"');
+        'Plugin "' + id + 'already has capability "' + capability + '"');
       return;
     }
     capability = String(capability).toLowerCase();
@@ -123,21 +156,19 @@ class ComponentManager {
 
   /**
    * Removes a capability from an existing registered component.
-   * @param {string} id The ID of the component to remove the capability from.
-   * @param {string|!ComponentManager.Capability<T>} capability The
-   *     capability to remove.
-   * @template T
+   * @param id The ID of the component to remove the capability from.
+   * @param capability The capability to remove.
    */
-  removeCapability(id, capability) {
+  removeCapability<T>(id: string, capability: string | Capability<T>) {
     if (!this.getComponent(id)) {
       throw Error(
-          'Cannot remove capability, "' + capability + '". Plugin "' + id +
-          '" has not been added to the ComponentManager');
+        'Cannot remove capability, "' + capability + '". Plugin "' + id +
+        '" has not been added to the ComponentManager');
     }
     if (!this.hasCapability(id, capability)) {
       console.warn(
-          'Plugin "' + id + 'doesn\'t have capability "' + capability +
-          '" to remove');
+        'Plugin "' + id + 'doesn\'t have capability "' + capability +
+        '" to remove');
       return;
     }
     capability = String(capability).toLowerCase();
@@ -147,117 +178,60 @@ class ComponentManager {
 
   /**
    * Returns whether the component with this id has the specified capability.
-   * @param {string} id The ID of the component to check.
-   * @param {string|!ComponentManager.Capability<T>} capability The
-   *     capability to check for.
-   * @return {boolean} Whether the component has the capability.
-   * @template T
+   * @param id The ID of the component to check.
+   * @param capability The capability to check for.
+   * @return Whether the component has the capability.
    */
-  hasCapability(id, capability) {
+  hasCapability<T>(id: string, capability: string | Capability<T>): boolean {
     capability = String(capability).toLowerCase();
     return this.componentData_[id].capabilities.indexOf(capability) !== -1;
   }
 
   /**
    * Gets the component with the given ID.
-   * @param {string} id The ID of the component to get.
-   * @return {!IComponent|undefined} The component with the given name
-   *    or undefined if not found.
+   * @param id The ID of the component to get.
+   * @return The component with the given name or undefined if not found.
    */
-  getComponent(id) {
+  getComponent(id: string): IComponent | undefined {
     return this.componentData_[id] && this.componentData_[id].component;
   }
 
   /**
    * Gets all the components with the specified capability.
-   * @param {string|!ComponentManager.Capability<T>
-   *   } capability The capability of the component.
-   * @param {boolean} sorted Whether to return list ordered by weights.
-   * @return {!Array<T>} The components that match the specified capability.
-   * @template T
+   * @param capability The capability of the component.
+   * @param sorted Whether to return list ordered by weights.
+   * @return The components that match the specified capability.
    */
-  getComponents(capability, sorted) {
+  getComponents<T>(capability: string | Capability<T>, sorted: boolean): T[] {
     capability = String(capability).toLowerCase();
     const componentIds = this.capabilityToComponentIds_[capability];
     if (!componentIds) {
       return [];
     }
-    const components = [];
+    const components: AnyDuringMigration[] = [];
     if (sorted) {
-      const componentDataList = [];
+      const componentDataList: AnyDuringMigration[] = [];
       const componentData = this.componentData_;
-      componentIds.forEach(function(id) {
+      componentIds.forEach(function (id) {
         componentDataList.push(componentData[id]);
       });
-      componentDataList.sort(function(a, b) {
+      componentDataList.sort(function (a, b) {
         return a.weight - b.weight;
       });
-      componentDataList.forEach(function(ComponentDatum) {
+      componentDataList.forEach(function (ComponentDatum) {
         components.push(ComponentDatum.component);
       });
     } else {
       const componentData = this.componentData_;
-      componentIds.forEach(function(id) {
+      componentIds.forEach(function (id) {
         components.push(componentData[id].component);
       });
     }
     return components;
   }
 }
-
-/**
- * An object storing component information.
- * @typedef {{
- *    component: !IComponent,
- *    capabilities: (
- *     !Array<string|!ComponentManager.Capability<!IComponent>>
- *       ),
- *    weight: number
- *  }}
- */
-ComponentManager.ComponentDatum;
-
-/**
- * A name with the capability of the element stored in the generic.
- * @template T
- * @alias Blockly.ComponentManager.Capability
- */
-ComponentManager.Capability = class {
-  /**
-   * @param {string} name The name of the component capability.
-   */
-  constructor(name) {
-    /**
-     * @type {string}
-     * @private
-     */
-    this.name_ = name;
-  }
-
-  /**
-   * Returns the name of the capability.
-   * @return {string} The name.
-   * @override
-   */
-  toString() {
-    return this.name_;
-  }
-};
-
-/** @type {!ComponentManager.Capability<!IPositionable>} */
-ComponentManager.Capability.POSITIONABLE =
-    new ComponentManager.Capability('positionable');
-
-/** @type {!ComponentManager.Capability<!IDragTarget>} */
-ComponentManager.Capability.DRAG_TARGET =
-    new ComponentManager.Capability('drag_target');
-
-/** @type {!ComponentManager.Capability<!IDeleteArea>} */
-ComponentManager.Capability.DELETE_AREA =
-    new ComponentManager.Capability('delete_area');
-
-/** @type {!ComponentManager.Capability<!IAutoHideable>} */
-ComponentManager.Capability.AUTOHIDEABLE =
-    new ComponentManager.Capability('autohideable');
-
-exports.ComponentManager = ComponentManager;
+export interface ComponentDatum {
+  component: IComponent;
+  capabilities: Array<string | Capability<IComponent>>;
+  weight: number;
+}

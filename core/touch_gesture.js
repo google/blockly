@@ -1,28 +1,48 @@
 /**
+ * @fileoverview The class extends Gesture to support pinch to zoom
+ * for both pointer and touch events.
+ */
+
+
+/**
+ * @license
+ * Visual Blocks Editor
+ *
+ * Copyright 2018 Google Inc.
+ * https://developers.google.com/blockly/
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview The class extends Gesture to support pinch to zoom
- * for both pointer and touch events.
- */
-'use strict';
 
 /**
  * The class extends Gesture to support pinch to zoom
  * for both pointer and touch events.
  * @class
  */
-goog.module('Blockly.TouchGesture');
 
-const Touch = goog.require('Blockly.Touch');
-const browserEvents = goog.require('Blockly.browserEvents');
-const {Coordinate} = goog.require('Blockly.utils.Coordinate');
-const {Gesture} = goog.require('Blockly.Gesture');
+import * as browserEvents from './browser_events';
+import { Gesture } from './gesture';
+import * as Touch from './touch';
+import { Coordinate } from './utils/coordinate';
 /* eslint-disable-next-line no-unused-vars */
-const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
+import { WorkspaceSvg } from './workspace_svg';
 
 
 /*
@@ -31,89 +51,64 @@ const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
  */
 
 
-/**
- * A multiplier used to convert the gesture scale to a zoom in delta.
- * @const
- */
+/** A multiplier used to convert the gesture scale to a zoom in delta. */
 const ZOOM_IN_MULTIPLIER = 5;
 
-/**
- * A multiplier used to convert the gesture scale to a zoom out delta.
- * @const
- */
+/** A multiplier used to convert the gesture scale to a zoom out delta. */
 const ZOOM_OUT_MULTIPLIER = 6;
 
 /**
  * Class for one gesture.
- * @extends {Gesture}
  * @alias Blockly.TouchGesture
  */
-class TouchGesture extends Gesture {
+export class TouchGesture extends Gesture {
+  /** Boolean for whether or not this gesture is a multi-touch gesture. */
+  private isMultiTouch_ = false;
+  private cachedPoints_: { [key: string]: Coordinate };
+
   /**
-   * @param {!Event} e The event that kicked off this gesture.
-   * @param {!WorkspaceSvg} creatorWorkspace The workspace that created
-   *     this gesture and has a reference to it.
+   * This is the ratio between the starting distance between the touch points
+   * and the most recent distance between the touch points.
+   * Scales between 0 and 1 mean the most recent zoom was a zoom out.
+   * Scales above 1.0 mean the most recent zoom was a zoom in.
    */
-  constructor(e, creatorWorkspace) {
+  private previousScale_ = 0;
+
+  /** The starting distance between two touch points. */
+  private startDistance_ = 0;
+
+  /**
+   * A handle to use to unbind the second touch start or pointer down listener
+   * at the end of a drag.
+   * Opaque data returned from Blockly.bindEventWithChecks_.
+   */
+  private onStartWrapper_: browserEvents.Data | null = null;
+
+  /** Boolean for whether or not the workspace supports pinch-zoom. */
+  private isPinchZoomEnabled_: boolean | null = null;
+  override onMoveWrapper_: AnyDuringMigration;
+  override onUpWrapper_: AnyDuringMigration;
+
+  /**
+   * @param e The event that kicked off this gesture.
+   * @param creatorWorkspace The workspace that created this gesture and has a
+   *     reference to it.
+   */
+  constructor(e: Event, creatorWorkspace: WorkspaceSvg) {
     super(e, creatorWorkspace);
 
-    /**
-     * Boolean for whether or not this gesture is a multi-touch gesture.
-     * @type {boolean}
-     * @private
-     */
-    this.isMultiTouch_ = false;
-
-    /**
-     * A map of cached points used for tracking multi-touch gestures.
-     * @type {!Object<number|string, Coordinate>}
-     * @private
-     */
+    /** A map of cached points used for tracking multi-touch gestures. */
     this.cachedPoints_ = Object.create(null);
-
-    /**
-     * This is the ratio between the starting distance between the touch points
-     * and the most recent distance between the touch points.
-     * Scales between 0 and 1 mean the most recent zoom was a zoom out.
-     * Scales above 1.0 mean the most recent zoom was a zoom in.
-     * @type {number}
-     * @private
-     */
-    this.previousScale_ = 0;
-
-    /**
-     * The starting distance between two touch points.
-     * @type {number}
-     * @private
-     */
-    this.startDistance_ = 0;
-
-    /**
-     * A handle to use to unbind the second touch start or pointer down listener
-     * at the end of a drag.
-     * Opaque data returned from Blockly.bindEventWithChecks_.
-     * @type {?browserEvents.Data}
-     * @private
-     */
-    this.onStartWrapper_ = null;
-
-    /**
-     * Boolean for whether or not the workspace supports pinch-zoom.
-     * @type {?boolean}
-     * @private
-     */
-    this.isPinchZoomEnabled_ = null;
   }
 
   /**
    * Start a gesture: update the workspace to indicate that a gesture is in
    * progress and bind mousemove and mouseup handlers.
-   * @param {!Event} e A mouse down, touch start or pointer down event.
-   * @package
+   * @param e A mouse down, touch start or pointer down event.
    */
-  doStart(e) {
+  override doStart(e: Event) {
     this.isPinchZoomEnabled_ = this.startWorkspace_.options.zoomOptions &&
-        this.startWorkspace_.options.zoomOptions.pinch;
+      this.startWorkspace_.options.zoomOptions.pinch;
     super.doStart(e);
     if (!this.isEnding_ && Touch.isTouchEvent(e)) {
       this.handleTouchStart(e);
@@ -127,18 +122,17 @@ class TouchGesture extends Gesture {
    * opt_noCaptureIdentifier.
    * In addition, binding a second mouse down event to detect multi-touch
    * events.
-   * @param {!Event} e A mouse down or touch start event.
-   * @package
+   * @param e A mouse down or touch start event.
    */
-  bindMouseEvents(e) {
+  override bindMouseEvents(e: Event) {
     this.onStartWrapper_ = browserEvents.conditionalBind(
-        document, 'mousedown', null, this.handleStart.bind(this),
+      document, 'mousedown', null, this.handleStart.bind(this),
         /* opt_noCaptureIdentifier */ true);
     this.onMoveWrapper_ = browserEvents.conditionalBind(
-        document, 'mousemove', null, this.handleMove.bind(this),
+      document, 'mousemove', null, this.handleMove.bind(this),
         /* opt_noCaptureIdentifier */ true);
     this.onUpWrapper_ = browserEvents.conditionalBind(
-        document, 'mouseup', null, this.handleUp.bind(this),
+      document, 'mouseup', null, this.handleUp.bind(this),
         /* opt_noCaptureIdentifier */ true);
 
     e.preventDefault();
@@ -147,10 +141,9 @@ class TouchGesture extends Gesture {
 
   /**
    * Handle a mouse down, touch start, or pointer down event.
-   * @param {!Event} e A mouse down, touch start, or pointer down event.
-   * @package
+   * @param e A mouse down, touch start, or pointer down event.
    */
-  handleStart(e) {
+  handleStart(e: Event) {
     if (this.isDragging()) {
       // A drag has already started, so this can no longer be a pinch-zoom.
       return;
@@ -166,10 +159,9 @@ class TouchGesture extends Gesture {
 
   /**
    * Handle a mouse move, touch move, or pointer move event.
-   * @param {!Event} e A mouse move, touch move, or pointer move event.
-   * @package
+   * @param e A mouse move, touch move, or pointer move event.
    */
-  handleMove(e) {
+  override handleMove(e: Event) {
     if (this.isDragging()) {
       // We are in the middle of a drag, only handle the relevant events
       if (Touch.shouldHandleEvent(e)) {
@@ -189,10 +181,9 @@ class TouchGesture extends Gesture {
 
   /**
    * Handle a mouse up, touch end, or pointer up event.
-   * @param {!Event} e A mouse up, touch end, or pointer up event.
-   * @package
+   * @param e A mouse up, touch end, or pointer up event.
    */
-  handleUp(e) {
+  override handleUp(e: Event) {
     if (Touch.isTouchEvent(e) && !this.isDragging()) {
       this.handleTouchEnd(e);
     }
@@ -211,18 +202,14 @@ class TouchGesture extends Gesture {
 
   /**
    * Whether this gesture is part of a multi-touch gesture.
-   * @return {boolean} Whether this gesture is part of a multi-touch gesture.
-   * @package
+   * @return Whether this gesture is part of a multi-touch gesture.
    */
-  isMultiTouch() {
+  isMultiTouch(): boolean {
     return this.isMultiTouch_;
   }
 
-  /**
-   * Sever all links from this object.
-   * @package
-   */
-  dispose() {
+  /** Sever all links from this object. */
+  override dispose() {
     super.dispose();
 
     if (this.onStartWrapper_) {
@@ -233,20 +220,19 @@ class TouchGesture extends Gesture {
   /**
    * Handle a touch start or pointer down event and keep track of current
    * pointers.
-   * @param {!Event} e A touch start, or pointer down event.
-   * @package
+   * @param e A touch start, or pointer down event.
    */
-  handleTouchStart(e) {
+  handleTouchStart(e: Event) {
     const pointerId = Touch.getTouchIdentifierFromEvent(e);
     // store the pointerId in the current list of pointers
-    this.cachedPoints_[pointerId] = this.getTouchPoint(e);
+    // AnyDuringMigration because:  Type 'Coordinate | null' is not assignable
+    // to type 'Coordinate'.
+    this.cachedPoints_[pointerId] = this.getTouchPoint(e) as AnyDuringMigration;
     const pointers = Object.keys(this.cachedPoints_);
     // If two pointers are down, store info
     if (pointers.length === 2) {
-      const point0 =
-          /** @type {!Coordinate} */ (this.cachedPoints_[pointers[0]]);
-      const point1 =
-          /** @type {!Coordinate} */ (this.cachedPoints_[pointers[1]]);
+      const point0 = (this.cachedPoints_[pointers[0]]);
+      const point1 = (this.cachedPoints_[pointers[1]]);
       this.startDistance_ = Coordinate.distance(point0, point1);
       this.isMultiTouch_ = true;
       e.preventDefault();
@@ -256,13 +242,14 @@ class TouchGesture extends Gesture {
   /**
    * Handle a touch move or pointer move event and zoom in/out if two pointers
    * are on the screen.
-   * @param {!Event} e A touch move, or pointer move event.
-   * @package
+   * @param e A touch move, or pointer move event.
    */
-  handleTouchMove(e) {
+  handleTouchMove(e: Event) {
     const pointerId = Touch.getTouchIdentifierFromEvent(e);
     // Update the cache
-    this.cachedPoints_[pointerId] = this.getTouchPoint(e);
+    // AnyDuringMigration because:  Type 'Coordinate | null' is not assignable
+    // to type 'Coordinate'.
+    this.cachedPoints_[pointerId] = this.getTouchPoint(e) as AnyDuringMigration;
 
     const pointers = Object.keys(this.cachedPoints_);
     if (this.isPinchZoomEnabled_ && pointers.length === 2) {
@@ -274,24 +261,23 @@ class TouchGesture extends Gesture {
 
   /**
    * Handle pinch zoom gesture.
-   * @param {!Event} e A touch move, or pointer move event.
-   * @private
+   * @param e A touch move, or pointer move event.
    */
-  handlePinch_(e) {
+  private handlePinch_(e: Event) {
     const pointers = Object.keys(this.cachedPoints_);
     // Calculate the distance between the two pointers
-    const point0 = /** @type {!Coordinate} */ (this.cachedPoints_[pointers[0]]);
-    const point1 = /** @type {!Coordinate} */ (this.cachedPoints_[pointers[1]]);
+    const point0 = (this.cachedPoints_[pointers[0]]);
+    const point1 = (this.cachedPoints_[pointers[1]]);
     const moveDistance = Coordinate.distance(point0, point1);
     const scale = moveDistance / this.startDistance_;
 
     if (this.previousScale_ > 0 && this.previousScale_ < Infinity) {
       const gestureScale = scale - this.previousScale_;
       const delta = gestureScale > 0 ? gestureScale * ZOOM_IN_MULTIPLIER :
-                                       gestureScale * ZOOM_OUT_MULTIPLIER;
+        gestureScale * ZOOM_OUT_MULTIPLIER;
       const workspace = this.startWorkspace_;
       const position = browserEvents.mouseToSvg(
-          e, workspace.getParentSvg(), workspace.getInverseScreenCTM());
+        e, workspace.getParentSvg(), workspace.getInverseScreenCTM());
       workspace.zoom(position.x, position.y, delta);
     }
     this.previousScale_ = scale;
@@ -300,10 +286,9 @@ class TouchGesture extends Gesture {
 
   /**
    * Handle a touch end or pointer end event and end the gesture.
-   * @param {!Event} e A touch end, or pointer end event.
-   * @package
+   * @param e A touch end, or pointer end event.
    */
-  handleTouchEnd(e) {
+  handleTouchEnd(e: Event) {
     const pointerId = Touch.getTouchIdentifierFromEvent(e);
     if (this.cachedPoints_[pointerId]) {
       delete this.cachedPoints_[pointerId];
@@ -316,22 +301,19 @@ class TouchGesture extends Gesture {
 
   /**
    * Helper function returning the current touch point coordinate.
-   * @param {!Event} e A touch or pointer event.
-   * @return {?Coordinate} The current touch point coordinate
-   * @package
+   * @param e A touch or pointer event.
+   * @return The current touch point coordinate
    */
-  getTouchPoint(e) {
+  getTouchPoint(e: Event): Coordinate | null {
     if (!this.startWorkspace_) {
       return null;
     }
     // TODO(#6097): Make types accurate, possibly by refactoring touch handling.
-    const typelessEvent = /** @type {?} */ (e);
+    const typelessEvent = e as AnyDuringMigration;
     return new Coordinate(
-        (typelessEvent.changedTouches ? typelessEvent.changedTouches[0].pageX :
-                                        typelessEvent.pageX),
-        (typelessEvent.changedTouches ? typelessEvent.changedTouches[0].pageY :
-                                        typelessEvent.pageY));
+      typelessEvent.changedTouches ? typelessEvent.changedTouches[0].pageX :
+        typelessEvent.pageX,
+      typelessEvent.changedTouches ? typelessEvent.changedTouches[0].pageY :
+        typelessEvent.pageY);
   }
 }
-
-exports.TouchGesture = TouchGesture;

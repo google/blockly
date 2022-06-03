@@ -12,5 +12,5 @@
 /// <reference path="core.d.ts" />
 
 import * as Blockly from './core';
-declare const dart: Blockly.Generator;
+declare const dart: any;
 export = dart;

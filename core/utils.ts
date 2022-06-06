@@ -43,32 +43,30 @@ import { Svg } from './utils/svg';
 import { WorkspaceSvg } from './workspace_svg';
 
 
-export {
-  aria,
-  arrayUtils as array,
-  browserEvents,
-  colour,
-  deprecation,
-  dom,
-  extensions,
-  idGenerator,
-  math,
-  object,
-  parsing,
-  stringUtils as string,
-  style,
-  svgMath,
-  svgPaths,
-  toolbox,
-  userAgent,
-  xml,
-  Coordinate,
-  KeyCodes,
-  Metrics,
-  Rect,
-  Size,
-  Svg
-}
+export { aria };
+export { arrayUtils as array };
+export { browserEvents };
+export { colour };
+export { deprecation };
+export { dom };
+export { extensions };
+export { idGenerator };
+export { math };
+export { object };
+export { parsing };
+export { stringUtils as string };
+export { style };
+export { svgMath };
+export { svgPaths };
+export { toolbox };
+export { userAgent };
+export { xml };
+export { Coordinate };
+export { KeyCodes };
+export { Metrics };
+export { Rect };
+export { Size };
+export { Svg };
 
 /**
  * Halts the propagation of the event without doing anything else.

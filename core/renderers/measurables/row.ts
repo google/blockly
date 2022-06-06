@@ -97,8 +97,8 @@ export class Row {
   /** Alignment of the row. */
   align: number | null = null;
 
-  /** @param constants The rendering constants provider. */
-  constructor(protected readonly constants: ConstantProvider) {
+  /** @param constants_ The rendering constants provider. */
+  constructor(protected readonly constants_: ConstantProvider) {
     /** The type of this rendering object. */
     this.type = Types.ROW;
 

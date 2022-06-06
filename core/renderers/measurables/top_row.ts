@@ -66,11 +66,9 @@ export class TopRow extends Row {
    * @return Whether or not the top row has a left square corner.
    */
   hasLeftSquareCorner(block: BlockSvg): boolean {
-    // AnyDuringMigration because:  Property 'constants_' does not exist on type
-    // 'TopRow'.
     const hasHat =
       (block.hat ? block.hat === 'cap' :
-        (this as AnyDuringMigration).constants_.ADD_START_HATS) &&
+        this.constants_.ADD_START_HATS) &&
       !block.outputConnection && !block.previousConnection;
     const prevBlock = block.getPreviousBlock();
 

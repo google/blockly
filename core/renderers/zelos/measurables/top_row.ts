@@ -39,11 +39,9 @@ export class TopRow extends BaseTopRow {
 
   /** Render a round corner unless the block has an output connection. */
   override hasLeftSquareCorner(block: BlockSvg) {
-    // AnyDuringMigration because:  Property 'constants_' does not exist on type
-    // 'TopRow'.
     const hasHat =
       (block.hat ? block.hat === 'cap' :
-        (this as AnyDuringMigration).constants_.ADD_START_HATS) &&
+        this.constants_.ADD_START_HATS) &&
       !block.outputConnection && !block.previousConnection;
     return !!block.outputConnection || hasHat;
   }

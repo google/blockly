@@ -1,4 +1,8 @@
-/** @fileoverview Image field.  Used for pictures, icons, etc. */
+/**
+ * @fileoverview Non-editable, serializable text field. Behaves like a
+ *    normal label but is serialized to XML. It may only be
+ *    edited programmatically.
+ */
 
 
 /**
@@ -23,256 +27,69 @@
 
 /**
  * @license
- * Copyright 2012 Google LLC
+ * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
 
 /**
- * Image field.  Used for pictures, icons, etc.
+ * Non-editable, serializable text field. Behaves like a
+ *    normal label but is serialized to XML. It may only be
+ *    edited programmatically.
  * @class
  */
 
-import { Field } from './field';
+import { FieldLabel } from './field_label';
 import * as fieldRegistry from './field_registry';
-import * as dom from './utils/dom';
 import * as parsing from './utils/parsing';
-/* eslint-disable-next-line no-unused-vars */
-import { Sentinel } from './utils/sentinel';
-import { Size } from './utils/size';
-import { Svg } from './utils/svg';
 
 
 /**
- * Class for an image on a block.
- * @alias Blockly.FieldImage
+ * Class for a non-editable, serializable text field.
+ * @alias Blockly.FieldLabelSerializable
  */
-export class FieldImage extends Field {
-  /** The default value for this field. */
-  protected override DEFAULT_VALUE = '';
-
-  /**
-   * Vertical padding below the image, which is included in the reported height
-   * of the field.
-   */
-  private static readonly Y_PADDING = 1;
-  protected override size_: Size;
-  private readonly imageHeight_: number;
-
-  /** The function to be called when this field is clicked. */
-  private clickHandler_: ((p1: FieldImage) => AnyDuringMigration) | null = null;
-
-  /** The rendered field's image element. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'SVGImageElement'.
-  private imageElement_: SVGImageElement = null as AnyDuringMigration;
-
+export class FieldLabelSerializable extends FieldLabel {
   /**
    * Editable fields usually show some sort of UI indicating they are
    * editable. This field should not.
    */
-  override readonly EDITABLE = false;
+  override EDITABLE = false;
 
   /**
-   * Used to tell if the field needs to be rendered the next time the block is
-   * rendered. Image fields are statically sized, and only need to be
-   * rendered at initialization.
+   * Serializable fields are saved by the XML renderer, non-serializable
+   * fields are not.  This field should be serialized, but only edited
+   * programmatically.
    */
-  protected override isDirty_ = false;
-
-  /** Whether to flip this image in RTL. */
-  private flipRtl_ = false;
-
-  /** Alt text of this image. */
-  private altText_ = '';
-  override value_: AnyDuringMigration;
+  override SERIALIZABLE = true;
 
   /**
-   * @param src The URL of the image.
-   *     Also accepts Field.SKIP_SETUP if you wish to skip setup (only used by
-   * subclasses that want to handle configuration and setting the field value
-   * after their own constructors have run).
-   * @param width Width of the image.
-   * @param height Height of the image.
-   * @param opt_alt Optional alt text for when block is collapsed.
-   * @param opt_onClick Optional function to be called when the image is
-   *     clicked. If opt_onClick is defined, opt_alt must also be defined.
-   * @param opt_flipRtl Whether to flip the icon in RTL.
+   * @param opt_value The initial value of the field. Should cast to a string.
+   *     Defaults to an empty string if null or undefined.
+   * @param opt_class Optional CSS class for the field's text.
    * @param opt_config A map of options used to configure the field.
-   *     See the [field creation documentation]{@link
-   * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/image#creation}
+   *    See the [field creation documentation]{@link
+   * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/label-serializable#creation}
    * for a list of properties this parameter supports.
    */
   constructor(
-    src: string | Sentinel, width: string | number, height: string | number,
-    opt_alt?: string, opt_onClick?: (p1: FieldImage) => AnyDuringMigration,
-    opt_flipRtl?: boolean, opt_config?: AnyDuringMigration) {
-    super(Field.SKIP_SETUP);
-
-    // Return early.
-    if (!src) {
-      throw Error('Src value of an image field is required');
-    }
-    const imageHeight = Number(parsing.replaceMessageReferences(height));
-    const imageWidth = Number(parsing.replaceMessageReferences(width));
-    if (isNaN(imageHeight) || isNaN(imageWidth)) {
-      throw Error(
-        'Height and width values of an image field must cast to' +
-        ' numbers.');
-    }
-    if (imageHeight <= 0 || imageWidth <= 0) {
-      throw Error(
-        'Height and width values of an image field must be greater' +
-        ' than 0.');
-    }
-
-    /** The size of the area rendered by the field. */
-    this.size_ = new Size(imageWidth, imageHeight + FieldImage.Y_PADDING);
-
-    /**
-     * Store the image height, since it is different from the field height.
-     */
-    this.imageHeight_ = imageHeight;
-
-    if (typeof opt_onClick === 'function') {
-      this.clickHandler_ = opt_onClick;
-    }
-
-    if (src === Field.SKIP_SETUP) {
-      return;
-    }
-
-    if (opt_config) {
-      this.configure_(opt_config);
-    } else {
-      this.flipRtl_ = !!opt_flipRtl;
-      this.altText_ = parsing.replaceMessageReferences(opt_alt) || '';
-    }
-    this.setValue(parsing.replaceMessageReferences(src));
+    opt_value?: string, opt_class?: string, opt_config?: AnyDuringMigration) {
+    super(String(opt_value ?? ''), opt_class, opt_config);
   }
 
   /**
-   * Configure the field based on the given map of options.
-   * @param config A map of options to configure the field based on.
-   */
-  protected override configure_(config: AnyDuringMigration) {
-    super.configure_(config);
-    this.flipRtl_ = !!config['flipRtl'];
-    this.altText_ = parsing.replaceMessageReferences(config['alt']) || '';
-  }
-
-  /** Create the block UI for this image. */
-  override initView() {
-    this.imageElement_ = dom.createSvgElement(
-      Svg.IMAGE, {
-      'height': this.imageHeight_ + 'px',
-      'width': this.size_.width + 'px',
-      'alt': this.altText_,
-    },
-      this.fieldGroup_);
-    this.imageElement_.setAttributeNS(
-      dom.XLINK_NS, 'xlink:href', this.value_ as string);
-
-    if (this.clickHandler_) {
-      this.imageElement_.style.cursor = 'pointer';
-    }
-  }
-
-  override updateSize_() {}
-  // NOP
-
-  /**
-   * Ensure that the input value (the source URL) is a string.
-   * @param opt_newValue The input value.
-   * @return A string, or null if invalid.
-   */
-  protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
-    string | null {
-    if (typeof opt_newValue !== 'string') {
-      return null;
-    }
-    return opt_newValue;
-  }
-
-  /**
-   * Update the value of this image field, and update the displayed image.
-   * @param newValue The value to be saved. The default validator guarantees
-   *     that this is a string.
-   */
-  protected override doValueUpdate_(newValue: AnyDuringMigration) {
-    this.value_ = newValue;
-    if (this.imageElement_) {
-      this.imageElement_.setAttributeNS(
-        dom.XLINK_NS, 'xlink:href', String(this.value_));
-    }
-  }
-
-  /**
-   * Get whether to flip this image in RTL
-   * @return True if we should flip in RTL.
-   */
-  override getFlipRtl(): boolean {
-    return this.flipRtl_;
-  }
-
-  /**
-   * Set the alt text of this image.
-   * @param alt New alt text.
-   */
-  setAlt(alt: string | null) {
-    if (alt === this.altText_) {
-      return;
-    }
-    this.altText_ = alt || '';
-    if (this.imageElement_) {
-      this.imageElement_.setAttribute('alt', this.altText_);
-    }
-  }
-
-  /**
-   * If field click is called, and click handler defined,
-   * call the handler.
-   */
-  protected override showEditor_() {
-    if (this.clickHandler_) {
-      this.clickHandler_(this);
-    }
-  }
-
-  /**
-   * Set the function that is called when this image  is clicked.
-   * @param func The function that is called when the image is clicked, or null
-   *     to remove.
-   */
-  setOnClickHandler(func: ((p1: FieldImage) => AnyDuringMigration) | null) {
-    this.clickHandler_ = func;
-  }
-
-  /**
-   * Use the `getText_` developer hook to override the field's text
-   * representation.
-   * Return the image alt text instead.
-   * @return The image alt text.
-   */
-  protected override getText_(): string | null {
-    return this.altText_;
-  }
-
-  /**
-   * Construct a FieldImage from a JSON arg object,
+   * Construct a FieldLabelSerializable from a JSON arg object,
    * dereferencing any string table references.
-   * @param options A JSON object with options (src, width, height, alt, and
-   *     flipRtl).
+   * @param options A JSON object with options (text, and class).
    * @return The new field instance.
    * @nocollapse
    */
-  static fromJson(options: AnyDuringMigration): FieldImage {
-    // `this` might be a subclass of FieldImage if that class doesn't override
-    // the static fromJson method.
-    return new this(
-      options['src'], options['width'], options['height'], undefined,
-      undefined, undefined, options);
+  static override fromJson(options: AnyDuringMigration):
+    FieldLabelSerializable {
+    const text = parsing.replaceMessageReferences(options['text']);
+    // `this` might be a subclass of FieldLabelSerializable if that class
+    // doesn't override the static fromJson method.
+    return new this(text, undefined, options);
   }
 }
 
-fieldRegistry.register('field_image', FieldImage);
+fieldRegistry.register('field_label_serializable', FieldLabelSerializable);

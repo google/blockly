@@ -33,25 +33,25 @@
  * @namespace Blockly.utils
  */
 
-export const aria = goog.require('Blockly.utils.aria');
+import * as aria from './utils/aria';
 import * as arrayUtils from './utils/array';
 import * as browserEvents from './browser_events';
-import * as colourUtils from './utils/colour';
+import * as colour from './utils/colour';
 import * as common from './common';
-export const deprecation = goog.require('Blockly.utils.deprecation');
-export const dom = goog.require('Blockly.utils.dom');
+import * as deprecation from './utils/deprecation';
+import * as dom from './utils/dom';
 import * as extensions from './extensions';
-export const idGenerator = goog.require('Blockly.utils.idGenerator');
-export const math = goog.require('Blockly.utils.math');
-export const object = goog.require('Blockly.utils.object');
-export const parsing = goog.require('Blockly.utils.parsing');
+import * as idGenerator from './utils/idgenerator';
+import * as math from './utils/math';
+import * as object from './utils/object';
+import * as parsing from './utils/parsing';
 import * as stringUtils from './utils/string';
-export const style = goog.require('Blockly.utils.style');
-export const svgMath = goog.require('Blockly.utils.svgMath');
-export const svgPaths = goog.require('Blockly.utils.svgPaths');
-export const toolbox = goog.require('Blockly.utils.toolbox');
-export const userAgent = goog.require('Blockly.utils.userAgent');
-import * as xmlUtils from './utils/xml';
+import * as style from './utils/style';
+import * as svgMath from './utils/svg_math';
+import * as svgPaths from './utils/svg_paths';
+import * as toolbox from './utils/toolbox';
+import * as userAgent from './utils/useragent';
+import * as xml from './utils/xml';
 /* eslint-disable-next-line no-unused-vars */
 import { Block } from './block';
 import { Coordinate } from './utils/coordinate';
@@ -62,15 +62,34 @@ import { Size } from './utils/size';
 import { Svg } from './utils/svg';
 /* eslint-disable-next-line no-unused-vars */
 import { WorkspaceSvg } from './workspace_svg';
-export const colour = colourUtils;
-export { Coordinate };
-export { KeyCodes };
-export { Metrics };
-export { Rect };
-export { Size };
-export const string = stringUtils;
-export { Svg };
-export const xml = xmlUtils;
+
+
+export {
+  aria,
+  arrayUtils as array,
+  browserEvents,
+  colour,
+  deprecation,
+  dom,
+  extensions,
+  idGenerator,
+  math,
+  object,
+  parsing,
+  stringUtils as string,
+  style,
+  svgMath,
+  svgPaths,
+  toolbox,
+  userAgent,
+  xml,
+  Coordinate,
+  KeyCodes,
+  Metrics,
+  Rect,
+  Size,
+  Svg
+}
 
 /**
  * Halts the propagation of the event without doing anything else.

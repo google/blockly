@@ -37,12 +37,12 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from 'google3/third_party/javascript/blockly/core/block_svg';
-import { FieldImage } from 'google3/third_party/javascript/blockly/core/field_image';
-import { FieldLabel } from 'google3/third_party/javascript/blockly/core/field_label';
-import { FieldTextInput } from 'google3/third_party/javascript/blockly/core/field_textinput';
-import { Align, Input } from 'google3/third_party/javascript/blockly/core/input';
-import { inputTypes } from 'google3/third_party/javascript/blockly/core/input_types';
+import { BlockSvg } from '../../block_svg';
+import { FieldImage } from '../../field_image';
+import { FieldLabel } from '../../field_label';
+import { FieldTextInput } from '../../field_textinput';
+import { Align, Input } from '../../input';
+import { inputTypes } from '../../input_types';
 
 /* eslint-disable-next-line no-unused-vars */
 import { RenderInfo as BaseRenderInfo } from '../common/info';

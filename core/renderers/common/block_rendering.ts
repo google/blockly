@@ -33,10 +33,10 @@
  * @namespace Blockly.blockRendering
  */
 
-import * as registry from 'google3/third_party/javascript/blockly/core/registry';
+import * as registry from '../../registry';
 /* eslint-disable-next-line no-unused-vars */
-import { Theme } from 'google3/third_party/javascript/blockly/core/theme';
-import * as deprecation from 'google3/third_party/javascript/blockly/core/utils/deprecation';
+import { Theme } from '../../theme';
+import * as deprecation from '../../utils/deprecation';
 
 import { Measurable } from '../measurables/base';
 import { BottomRow } from '../measurables/bottom_row';

@@ -4,8 +4,6 @@
  * a JavaScript framework such as Closure.
  */
 
-// taze: THREE from //third_party/javascript/typings/threejs
-
 
 /**
  * @license

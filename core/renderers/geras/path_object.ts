@@ -35,13 +35,13 @@
  */
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import 'google3/third_party/javascript/blockly/core/theme';
+import '../../theme';
 
-import { BlockStyle } from 'google3/third_party/javascript/blockly/core/theme';
-import * as colour from 'google3/third_party/javascript/blockly/core/utils/colour';
-import * as dom from 'google3/third_party/javascript/blockly/core/utils/dom';
-import { Svg } from 'google3/third_party/javascript/blockly/core/utils/svg';
-import { BlockSvg } from 'google3/third_party/javascript/blockly/core/block_svg';
+import { BlockStyle } from '../../theme';
+import * as colour from '../../utils/colour';
+import * as dom from '../../utils/dom';
+import { Svg } from '../../utils/svg';
+import { BlockSvg } from '../../block_svg';
 
 import { PathObject as BasePathObject } from '../common/path_object';
 

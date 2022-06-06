@@ -39,9 +39,9 @@
 
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */
-import { Field as BlocklyField } from 'google3/third_party/javascript/blockly/core/field';
+import { Field as BlocklyField } from '../../field';
 /* eslint-disable-next-line no-unused-vars */
-import { Input } from 'google3/third_party/javascript/blockly/core/input';
+import { Input } from '../../input';
 
 import { ConstantProvider } from '../common/constants';
 

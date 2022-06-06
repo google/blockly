@@ -32,7 +32,7 @@
  * Objects for rendering highlights on blocks.
  * @class
  */
-import * as svgPaths from 'google3/third_party/javascript/blockly/core/utils/svg_paths';
+import * as svgPaths from '../../utils/svg_paths';
 
 /* eslint-disable-next-line no-unused-vars */
 import { ConstantProvider } from '../common/constants';

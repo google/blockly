@@ -33,7 +33,7 @@
  * @namespace Blockly.blockRendering.debug
  */
 
-import * as deprecation from 'google3/third_party/javascript/blockly/core/utils/deprecation';
+import * as deprecation from '../../utils/deprecation';
 
 
 /** Whether or not the debugger is turned on. */

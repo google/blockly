@@ -34,9 +34,9 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from 'google3/third_party/javascript/blockly/core/block_svg';
-import { ConstantProvider } from 'google3/third_party/javascript/blockly/core/renderers/common/constants';
-import { TopRow as BaseTopRow } from 'google3/third_party/javascript/blockly/core/renderers/measurables/top_row';
+import { BlockSvg } from '../../../block_svg';
+import { ConstantProvider } from '../../../renderers/common/constants';
+import { TopRow as BaseTopRow } from '../../../renderers/measurables/top_row';
 
 
 /**

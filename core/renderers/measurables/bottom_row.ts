@@ -38,7 +38,7 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from 'google3/third_party/javascript/blockly/core/block_svg';
+import { BlockSvg } from '../../block_svg';
 
 /* eslint-disable-next-line no-unused-vars */
 import { ConstantProvider } from '../common/constants';

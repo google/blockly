@@ -34,8 +34,8 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from 'google3/third_party/javascript/blockly/core/block_svg';
-import * as svgPaths from 'google3/third_party/javascript/blockly/core/utils/svg_paths';
+import { BlockSvg } from '../../block_svg';
+import * as svgPaths from '../../utils/svg_paths';
 
 /* eslint-disable-next-line no-unused-vars */
 import { BaseShape, DynamicShape, Notch } from '../common/constants';
@@ -73,7 +73,7 @@ export class Drawer extends BaseDrawer {
    */
   constructor(block: BlockSvg, info: RenderInfo) {
     // AnyDuringMigration because:  Argument of type
-    // 'import("/google/src/cloud/adodson/blockly-ts/google3/third_party/javascript/blockly/core/renderers/zelos/info").RenderInfo'
+    // 'import("/google/src/cloud/adodson/blockly-ts/../../renderers/zelos/info").RenderInfo'
     // is not assignable to parameter of type
     // 'import("/google/src/cloud/adodson/bloc...
     super(block, info as AnyDuringMigration);

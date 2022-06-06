@@ -34,19 +34,19 @@
  */
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import 'google3/third_party/javascript/blockly/core/theme';
+import '../../theme';
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from 'google3/third_party/javascript/blockly/core/block_svg';
-import { Connection } from 'google3/third_party/javascript/blockly/core/connection';
-import { ConnectionType } from 'google3/third_party/javascript/blockly/core/connection_type';
-import { InsertionMarkerManager } from 'google3/third_party/javascript/blockly/core/insertion_marker_manager';
+import { BlockSvg } from '../../block_svg';
+import { Connection } from '../../connection';
+import { ConnectionType } from '../../connection_type';
+import { InsertionMarkerManager } from '../../insertion_marker_manager';
 /* eslint-disable-next-line no-unused-vars */
-import { Marker } from 'google3/third_party/javascript/blockly/core/keyboard_nav/marker';
-import { RenderedConnection } from 'google3/third_party/javascript/blockly/core/rendered_connection';
-import { BlockStyle } from 'google3/third_party/javascript/blockly/core/theme';
+import { Marker } from '../../keyboard_nav/marker';
+import { RenderedConnection } from '../../rendered_connection';
+import { BlockStyle } from '../../theme';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from 'google3/third_party/javascript/blockly/core/workspace_svg';
+import { WorkspaceSvg } from '../../workspace_svg';
 
 import * as blockRendering from '../common/block_rendering';
 /* eslint-disable-next-line no-unused-vars */

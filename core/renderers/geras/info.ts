@@ -38,9 +38,9 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from 'google3/third_party/javascript/blockly/core/block_svg';
-import { Input } from 'google3/third_party/javascript/blockly/core/input';
-import { inputTypes } from 'google3/third_party/javascript/blockly/core/input_types';
+import { BlockSvg } from '../../block_svg';
+import { Input } from '../../input';
+import { inputTypes } from '../../input_types';
 
 import { RenderInfo as BaseRenderInfo } from '../common/info';
 import { Measurable } from '../measurables/base';

@@ -36,13 +36,13 @@
  * mode.
  * @class
  */
-import { ConnectionType } from 'google3/third_party/javascript/blockly/core/connection_type';
-import { RenderedConnection } from 'google3/third_party/javascript/blockly/core/rendered_connection';
-import { Theme } from 'google3/third_party/javascript/blockly/core/theme';
-import * as utilsColour from 'google3/third_party/javascript/blockly/core/utils/colour';
-import * as dom from 'google3/third_party/javascript/blockly/core/utils/dom';
-import { Svg } from 'google3/third_party/javascript/blockly/core/utils/svg';
-import * as svgPaths from 'google3/third_party/javascript/blockly/core/utils/svg_paths';
+import { ConnectionType } from '../../connection_type';
+import { RenderedConnection } from '../../rendered_connection';
+import { Theme } from '../../theme';
+import * as utilsColour from '../../utils/colour';
+import * as dom from '../../utils/dom';
+import { Svg } from '../../utils/svg';
+import * as svgPaths from '../../utils/svg_paths';
 
 /* eslint-disable-next-line no-unused-vars */
 import { ConstantProvider as BaseConstantProvider, Shape } from '../common/constants';

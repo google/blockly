@@ -32,17 +32,17 @@
  * An object that provides constants for rendering blocks.
  * @class
  */
-import { ConnectionType } from 'google3/third_party/javascript/blockly/core/connection_type';
+import { ConnectionType } from '../../connection_type';
 /* eslint-disable-next-line no-unused-vars */
-import { RenderedConnection } from 'google3/third_party/javascript/blockly/core/rendered_connection';
-import { BlockStyle, Theme } from 'google3/third_party/javascript/blockly/core/theme';
-import * as colour from 'google3/third_party/javascript/blockly/core/utils/colour';
-import * as dom from 'google3/third_party/javascript/blockly/core/utils/dom';
-import * as object from 'google3/third_party/javascript/blockly/core/utils/object';
-import * as parsing from 'google3/third_party/javascript/blockly/core/utils/parsing';
-import { Svg } from 'google3/third_party/javascript/blockly/core/utils/svg';
-import * as svgPaths from 'google3/third_party/javascript/blockly/core/utils/svg_paths';
-import * as userAgent from 'google3/third_party/javascript/blockly/core/utils/useragent';
+import { RenderedConnection } from '../../rendered_connection';
+import { BlockStyle, Theme } from '../../theme';
+import * as colour from '../../utils/colour';
+import * as dom from '../../utils/dom';
+import * as object from '../../utils/object';
+import * as parsing from '../../utils/parsing';
+import { Svg } from '../../utils/svg';
+import * as svgPaths from '../../utils/svg_paths';
+import * as userAgent from '../../utils/useragent';
 
 /** An object containing sizing and path information about outside corners. */
 export interface OutsideCorners {

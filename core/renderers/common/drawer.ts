@@ -34,8 +34,8 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from 'google3/third_party/javascript/blockly/core/block_svg';
-import * as svgPaths from 'google3/third_party/javascript/blockly/core/utils/svg_paths';
+import { BlockSvg } from '../../block_svg';
+import * as svgPaths from '../../utils/svg_paths';
 
 import { Connection } from '../measurables/connection';
 /* eslint-disable-next-line no-unused-vars */

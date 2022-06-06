@@ -39,15 +39,15 @@
  */
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import 'google3/third_party/javascript/blockly/core/block_svg';
+import '../../block_svg';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import 'google3/third_party/javascript/blockly/core/connection';
+import '../../connection';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import 'google3/third_party/javascript/blockly/core/theme';
+import '../../theme';
 
-import { BlockStyle } from 'google3/third_party/javascript/blockly/core/theme';
+import { BlockStyle } from '../../theme';
 
 /* eslint-disable-next-line no-unused-vars */
 import { ConstantProvider } from './constants';

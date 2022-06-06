@@ -39,7 +39,7 @@
 
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */
-import { RenderedConnection } from 'google3/third_party/javascript/blockly/core/rendered_connection';
+import { RenderedConnection } from '../../rendered_connection';
 
 import { ConstantProvider, Shape } from '../common/constants';
 

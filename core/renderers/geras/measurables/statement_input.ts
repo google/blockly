@@ -39,9 +39,9 @@
 
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */
-import { Input } from 'google3/third_party/javascript/blockly/core/input';
-import { ConstantProvider as BaseConstantProvider } from 'google3/third_party/javascript/blockly/core/renderers/common/constants';
-import { StatementInput as BaseStatementInput } from 'google3/third_party/javascript/blockly/core/renderers/measurables/statement_input';
+import { Input } from '../../../input';
+import { ConstantProvider as BaseConstantProvider } from '../../../renderers/common/constants';
+import { StatementInput as BaseStatementInput } from '../../../renderers/measurables/statement_input';
 
 /* eslint-disable-next-line no-unused-vars */
 import { ConstantProvider as GerasConstantProvider } from '../constants';

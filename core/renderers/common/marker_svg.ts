@@ -35,28 +35,28 @@
  */
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import 'google3/third_party/javascript/blockly/core/events/events_marker_move';
+import '../../events/events_marker_move';
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from 'google3/third_party/javascript/blockly/core/block_svg';
+import { BlockSvg } from '../../block_svg';
 /* eslint-disable-next-line no-unused-vars */
-import { Connection } from 'google3/third_party/javascript/blockly/core/connection';
-import { ConnectionType } from 'google3/third_party/javascript/blockly/core/connection_type';
-import * as eventUtils from 'google3/third_party/javascript/blockly/core/events/utils';
+import { Connection } from '../../connection';
+import { ConnectionType } from '../../connection_type';
+import * as eventUtils from '../../events/utils';
 /* eslint-disable-next-line no-unused-vars */
-import { Field } from 'google3/third_party/javascript/blockly/core/field';
+import { Field } from '../../field';
 /* eslint-disable-next-line no-unused-vars */
-import { IASTNodeLocationSvg } from 'google3/third_party/javascript/blockly/core/interfaces/i_ast_node_location_svg';
-import { ASTNode } from 'google3/third_party/javascript/blockly/core/keyboard_nav/ast_node';
+import { IASTNodeLocationSvg } from '../../interfaces/i_ast_node_location_svg';
+import { ASTNode } from '../../keyboard_nav/ast_node';
 /* eslint-disable-next-line no-unused-vars */
-import { Marker } from 'google3/third_party/javascript/blockly/core/keyboard_nav/marker';
+import { Marker } from '../../keyboard_nav/marker';
 /* eslint-disable-next-line no-unused-vars */
-import { RenderedConnection } from 'google3/third_party/javascript/blockly/core/rendered_connection';
-import * as dom from 'google3/third_party/javascript/blockly/core/utils/dom';
-import { Svg } from 'google3/third_party/javascript/blockly/core/utils/svg';
-import * as svgPaths from 'google3/third_party/javascript/blockly/core/utils/svg_paths';
+import { RenderedConnection } from '../../rendered_connection';
+import * as dom from '../../utils/dom';
+import { Svg } from '../../utils/svg';
+import * as svgPaths from '../../utils/svg_paths';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from 'google3/third_party/javascript/blockly/core/workspace_svg';
+import { WorkspaceSvg } from '../../workspace_svg';
 
 /* eslint-disable-next-line no-unused-vars */
 import { ConstantProvider, Notch, PuzzleTab } from './constants';

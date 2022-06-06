@@ -35,15 +35,15 @@
  */
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import 'google3/third_party/javascript/blockly/core/theme';
+import '../../theme';
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from 'google3/third_party/javascript/blockly/core/block_svg';
+import { BlockSvg } from '../../block_svg';
 /* eslint-disable-next-line no-unused-vars */
-import { Connection } from 'google3/third_party/javascript/blockly/core/connection';
-import { BlockStyle } from 'google3/third_party/javascript/blockly/core/theme';
-import * as dom from 'google3/third_party/javascript/blockly/core/utils/dom';
-import { Svg } from 'google3/third_party/javascript/blockly/core/utils/svg';
+import { Connection } from '../../connection';
+import { BlockStyle } from '../../theme';
+import * as dom from '../../utils/dom';
+import { Svg } from '../../utils/svg';
 
 /* eslint-disable-next-line no-unused-vars */
 import { ConstantProvider } from './constants';

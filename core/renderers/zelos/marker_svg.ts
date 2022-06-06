@@ -34,17 +34,17 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from 'google3/third_party/javascript/blockly/core/block_svg';
+import { BlockSvg } from '../../block_svg';
 /* eslint-disable-next-line no-unused-vars */
-import { ASTNode } from 'google3/third_party/javascript/blockly/core/keyboard_nav/ast_node';
+import { ASTNode } from '../../keyboard_nav/ast_node';
 /* eslint-disable-next-line no-unused-vars */
-import { Marker } from 'google3/third_party/javascript/blockly/core/keyboard_nav/marker';
+import { Marker } from '../../keyboard_nav/marker';
 /* eslint-disable-next-line no-unused-vars */
-import { RenderedConnection } from 'google3/third_party/javascript/blockly/core/rendered_connection';
-import * as dom from 'google3/third_party/javascript/blockly/core/utils/dom';
-import { Svg } from 'google3/third_party/javascript/blockly/core/utils/svg';
+import { RenderedConnection } from '../../rendered_connection';
+import * as dom from '../../utils/dom';
+import { Svg } from '../../utils/svg';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from 'google3/third_party/javascript/blockly/core/workspace_svg';
+import { WorkspaceSvg } from '../../workspace_svg';
 
 /* eslint-disable-next-line no-unused-vars */
 import { ConstantProvider as BaseConstantProvider } from '../common/constants';

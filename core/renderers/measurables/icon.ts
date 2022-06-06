@@ -39,7 +39,7 @@
 
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */
-import { Icon as BlocklyIcon } from 'google3/third_party/javascript/blockly/core/icon';
+import { Icon as BlocklyIcon } from '../../icon';
 
 import { ConstantProvider } from '../common/constants';
 

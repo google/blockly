@@ -38,9 +38,9 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { ConstantProvider } from 'google3/third_party/javascript/blockly/core/renderers/common/constants';
-import { Measurable } from 'google3/third_party/javascript/blockly/core/renderers/measurables/base';
-import { Types } from 'google3/third_party/javascript/blockly/core/renderers/measurables/types';
+import { ConstantProvider } from '../../../renderers/common/constants';
+import { Measurable } from '../../../renderers/measurables/base';
+import { Types } from '../../../renderers/measurables/types';
 
 
 /**

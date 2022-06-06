@@ -35,13 +35,13 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from 'google3/third_party/javascript/blockly/core/block_svg';
-import { ConnectionType } from 'google3/third_party/javascript/blockly/core/connection_type';
-import { FieldLabel } from 'google3/third_party/javascript/blockly/core/field_label';
+import { BlockSvg } from '../../block_svg';
+import { ConnectionType } from '../../connection_type';
+import { FieldLabel } from '../../field_label';
 /* eslint-disable-next-line no-unused-vars */
-import { RenderedConnection } from 'google3/third_party/javascript/blockly/core/rendered_connection';
-import * as dom from 'google3/third_party/javascript/blockly/core/utils/dom';
-import { Svg } from 'google3/third_party/javascript/blockly/core/utils/svg';
+import { RenderedConnection } from '../../rendered_connection';
+import * as dom from '../../utils/dom';
+import { Svg } from '../../utils/svg';
 
 /* eslint-disable-next-line no-unused-vars */
 import { Measurable } from '../measurables/base';

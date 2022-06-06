@@ -36,11 +36,11 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from 'google3/third_party/javascript/blockly/core/block_svg';
+import { BlockSvg } from '../../block_svg';
 /* eslint-disable-next-line no-unused-vars */
-import { Input } from 'google3/third_party/javascript/blockly/core/input';
+import { Input } from '../../input';
 /* eslint-disable-next-line no-unused-vars */
-import { RenderedConnection } from 'google3/third_party/javascript/blockly/core/rendered_connection';
+import { RenderedConnection } from '../../rendered_connection';
 
 /* eslint-disable-next-line no-unused-vars */
 import { ConstantProvider } from '../common/constants';

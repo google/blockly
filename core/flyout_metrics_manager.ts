@@ -1,76 +1,61 @@
+/** @fileoverview Calculates and reports flyout workspace metrics. */
+
 /**
  * @license
  * Copyright 2021 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Calculates and reports flyout workspace metrics.
- */
-'use strict';
 
 /**
  * Calculates and reports flyout workspace metrics.
  * @class
  */
-goog.module('Blockly.FlyoutMetricsManager');
 
 /* eslint-disable-next-line no-unused-vars */
-const {IFlyout} = goog.requireType('Blockly.IFlyout');
-const {MetricsManager} = goog.require('Blockly.MetricsManager');
+import { IFlyout } from './interfaces/i_flyout.js';
+import { ContainerRegion, MetricsManager } from './metrics_manager.js';
 /* eslint-disable-next-line no-unused-vars */
-const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
+import { WorkspaceSvg } from './workspace_svg.js';
 
 
 /**
  * Calculates metrics for a flyout's workspace.
  * The metrics are mainly used to size scrollbars for the flyout.
- * @extends {MetricsManager}
  * @alias Blockly.FlyoutMetricsManager
  */
-class FlyoutMetricsManager extends MetricsManager {
+export class FlyoutMetricsManager extends MetricsManager {
   /**
-   * @param {!WorkspaceSvg} workspace The flyout's workspace.
-   * @param {!IFlyout} flyout The flyout.
+   * @param workspace The flyout's workspace.
+   * @param flyout The flyout.
    */
-  constructor(workspace, flyout) {
+  constructor(workspace: WorkspaceSvg, private readonly flyout: IFlyout) {
     super(workspace);
-
-    /**
-     * The flyout that owns the workspace to calculate metrics for.
-     * @type {!IFlyout}
-     * @protected
-     */
-    this.flyout_ = flyout;
   }
 
   /**
    * Gets the bounding box of the blocks on the flyout's workspace.
    * This is in workspace coordinates.
-   * @return {!SVGRect|{height: number, y: number, width: number, x: number}}
-   *     The bounding box of the blocks on the workspace.
-   * @private
+   * @return The bounding box of the blocks on the workspace.
    */
-  getBoundingBox_() {
+  private getBoundingBox_(): SVGRect |
+  { height: number, y: number, width: number, x: number } {
     let blockBoundingBox;
     try {
-      blockBoundingBox = this.workspace_.getCanvas().getBBox();
+      blockBoundingBox = this.workspace.getCanvas().getBBox();
     } catch (e) {
       // Firefox has trouble with hidden elements (Bug 528969).
       // 2021 Update: It looks like this was fixed around Firefox 77 released in
       // 2020.
-      blockBoundingBox = {height: 0, y: 0, width: 0, x: 0};
+      blockBoundingBox = { height: 0, y: 0, width: 0, x: 0 };
     }
     return blockBoundingBox;
   }
 
-  /**
-   * @override
-   */
-  getContentMetrics(opt_getWorkspaceCoordinates) {
+  override getContentMetrics(opt_getWorkspaceCoordinates: boolean) {
     // The bounding box is in workspace coordinates.
     const blockBoundingBox = this.getBoundingBox_();
-    const scale = opt_getWorkspaceCoordinates ? 1 : this.workspace_.scale;
+    const scale = opt_getWorkspaceCoordinates ? 1 : this.workspace.scale;
 
     return {
       height: blockBoundingBox.height * scale,
@@ -80,14 +65,14 @@ class FlyoutMetricsManager extends MetricsManager {
     };
   }
 
-  /**
-   * @override
-   */
-  getScrollMetrics(
-      opt_getWorkspaceCoordinates, opt_viewMetrics, opt_contentMetrics) {
-    const contentMetrics = opt_contentMetrics || this.getContentMetrics();
-    const margin = this.flyout_.MARGIN * this.workspace_.scale;
-    const scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
+  override getScrollMetrics(
+    opt_getWorkspaceCoordinates: boolean, opt_viewMetrics: ContainerRegion,
+    opt_contentMetrics: ContainerRegion) {
+    // AnyDuringMigration because:  Expected 1 arguments, but got 0.
+    const contentMetrics =
+      opt_contentMetrics || (this.getContentMetrics as AnyDuringMigration)();
+    const margin = this.flyout.MARGIN * this.workspace.scale;
+    const scale = opt_getWorkspaceCoordinates ? this.workspace.scale : 1;
 
     // The left padding isn't just the margin. Some blocks are also offset by
     // tabWidth so that value and statement blocks line up.
@@ -102,5 +87,3 @@ class FlyoutMetricsManager extends MetricsManager {
     };
   }
 }
-
-exports.FlyoutMetricsManager = FlyoutMetricsManager;

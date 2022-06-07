@@ -1,80 +1,68 @@
+/** @fileoverview Minimalist renderer. */
+
 /**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Minimalist renderer.
- */
-'use strict';
 
 /**
  * Minimalist renderer.
  * @class
  */
-goog.module('Blockly.minimalist.Renderer');
 
-const blockRendering = goog.require('Blockly.blockRendering');
 /* eslint-disable-next-line no-unused-vars */
-const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-const {ConstantProvider} = goog.require('Blockly.minimalist.ConstantProvider');
-const {Drawer} = goog.require('Blockly.minimalist.Drawer');
+import { BlockSvg } from '../../block_svg.js';
+
+import * as blockRendering from '../common/block_rendering.js';
 /* eslint-disable-next-line no-unused-vars */
-const {RenderInfo: BaseRenderInfo} = goog.requireType('Blockly.blockRendering.RenderInfo');
-const {RenderInfo} = goog.require('Blockly.minimalist.RenderInfo');
-const {Renderer: BaseRenderer} = goog.require('Blockly.blockRendering.Renderer');
+import { RenderInfo as BaseRenderInfo } from '../common/info.js';
+import { Renderer as BaseRenderer } from '../common/renderer.js';
+
+import { ConstantProvider } from './constants.js';
+import { Drawer } from './drawer.js';
+import { RenderInfo } from './info.js';
 
 
 /**
  * The minimalist renderer.
- * @extends {BaseRenderer}
  * @alias Blockly.minimalist.Renderer
  */
-class Renderer extends BaseRenderer {
-  /**
-   * @param {string} name The renderer name.
-   * @package
-   */
-  constructor(name) {
+export class Renderer extends BaseRenderer {
+  /** @param name The renderer name. */
+  constructor(name: string) {
     super(name);
   }
 
   /**
    * Create a new instance of the renderer's constant provider.
-   * @return {!ConstantProvider} The constant provider.
-   * @protected
-   * @override
+   * @return The constant provider.
    */
-  makeConstants_() {
+  protected override makeConstants_(): ConstantProvider {
     return new ConstantProvider();
   }
 
   /**
    * Create a new instance of the renderer's render info object.
-   * @param {!BlockSvg} block The block to measure.
-   * @return {!RenderInfo} The render info object.
-   * @protected
-   * @override
+   * @param block The block to measure.
+   * @return The render info object.
    */
-  makeRenderInfo_(block) {
+  protected override makeRenderInfo_(block: BlockSvg): RenderInfo {
     return new RenderInfo(this, block);
   }
 
   /**
    * Create a new instance of the renderer's drawer.
-   * @param {!BlockSvg} block The block to render.
-   * @param {!BaseRenderInfo} info An object containing all
-   *   information needed to render this block.
-   * @return {!Drawer} The drawer.
-   * @protected
-   * @override
+   * @param block The block to render.
+   * @param info An object containing all information needed to render this
+   *     block.
+   * @return The drawer.
    */
-  makeDrawer_(block, info) {
-    return new Drawer(block, /** @type {!RenderInfo} */ (info));
+  protected override makeDrawer_(block: BlockSvg, info: BaseRenderInfo):
+    Drawer {
+    return new Drawer(block, (info as RenderInfo));
   }
 }
 
 blockRendering.register('minimalist', Renderer);
-
-exports.Renderer = Renderer;

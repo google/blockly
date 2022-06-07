@@ -1,23 +1,20 @@
 /**
+ * @fileoverview Helper function for warning developers about deprecations.
+ * This method is not specific to Blockly.
+ */
+
+/**
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Helper function for warning developers about deprecations.
- * This method is not specific to Blockly.
- */
-'use strict';
 
 /**
  * Helper function for warning developers about deprecations.
  * This method is not specific to Blockly.
  * @namespace Blockly.utils.deprecation
  */
-import * as goog from '../../closure/goog/goog.js';
-
-goog.declareModuleId('Blockly.utils.deprecation');
 
 
 /**
@@ -35,7 +32,7 @@ export function warn(
     name: string, deprecationDate: string, deletionDate: string,
     opt_use?: string) {
   let msg = name + ' was deprecated on ' + deprecationDate +
-      ' and will be deleted on ' + deletionDate + '.';
+    ' and will be deleted on ' + deletionDate + '.';
   if (opt_use) {
     msg += '\nUse ' + opt_use + ' instead.';
   }

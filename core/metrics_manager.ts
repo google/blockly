@@ -1,64 +1,48 @@
+/** @fileoverview Calculates and reports workspace metrics. */
+
 /**
  * @license
  * Copyright 2021 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Calculates and reports workspace metrics.
- */
-'use strict';
 
 /**
  * Calculates and reports workspace metrics.
  * @class
  */
-goog.module('Blockly.MetricsManager');
 
-const registry = goog.require('Blockly.registry');
-const toolboxUtils = goog.require('Blockly.utils.toolbox');
 /* eslint-disable-next-line no-unused-vars */
-const {IFlyout} = goog.requireType('Blockly.IFlyout');
+import { IFlyout } from './interfaces/i_flyout.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IMetricsManager} = goog.require('Blockly.IMetricsManager');
+import { IMetricsManager } from './interfaces/i_metrics_manager.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IToolbox} = goog.requireType('Blockly.IToolbox');
+import { IToolbox } from './interfaces/i_toolbox.js';
+import * as registry from './registry.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Metrics} = goog.requireType('Blockly.utils.Metrics');
-const {Size} = goog.require('Blockly.utils.Size');
+import { Metrics } from './utils/metrics.js';
+import { Size } from './utils/size.js';
+import * as toolboxUtils from './utils/toolbox.js';
 /* eslint-disable-next-line no-unused-vars */
-const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
+import { WorkspaceSvg } from './workspace_svg.js';
 
 
 /**
  * The manager for all workspace metrics calculations.
- * @implements {IMetricsManager}
  * @alias Blockly.MetricsManager
  */
-class MetricsManager {
-  /**
-   * @param {!WorkspaceSvg} workspace The workspace to calculate metrics
-   *     for.
-   */
-  constructor(workspace) {
-    /**
-     * The workspace to calculate metrics for.
-     * @type {!WorkspaceSvg}
-     * @protected
-     */
-    this.workspace_ = workspace;
-  }
+export class MetricsManager implements IMetricsManager {
+  /** @param workspace The workspace to calculate metrics for. */
+  constructor(protected readonly workspace: WorkspaceSvg) {}
 
   /**
    * Gets the dimensions of the given workspace component, in pixel coordinates.
-   * @param {?IToolbox|?IFlyout} elem The element to get the
-   *     dimensions of, or null.  It should be a toolbox or flyout, and should
-   *     implement getWidth() and getHeight().
-   * @return {!Size} An object containing width and height
-   *     attributes, which will both be zero if elem did not exist.
-   * @protected
+   * @param elem The element to get the dimensions of, or null.  It should be a
+   *     toolbox or flyout, and should implement getWidth() and getHeight().
+   * @return An object containing width and height attributes, which will both
+   *     be zero if elem did not exist.
    */
-  getDimensionsPx_(elem) {
+  protected getDimensionsPx_(elem: IToolbox | null | IFlyout): Size {
     let width = 0;
     let height = 0;
     if (elem) {
@@ -72,19 +56,16 @@ class MetricsManager {
    * Gets the width and the height of the flyout on the workspace in pixel
    * coordinates. Returns 0 for the width and height if the workspace has a
    * category toolbox instead of a simple toolbox.
-   * @param {boolean=} opt_own Whether to only return the workspace's own
-   *     flyout.
-   * @return {!MetricsManager.ToolboxMetrics} The width and height of the
-   *     flyout.
-   * @public
+   * @param opt_own Whether to only return the workspace's own flyout.
+   * @return The width and height of the flyout.
    */
-  getFlyoutMetrics(opt_own) {
+  getFlyoutMetrics(opt_own?: boolean): ToolboxMetrics {
     const flyoutDimensions =
-        this.getDimensionsPx_(this.workspace_.getFlyout(opt_own));
+      this.getDimensionsPx_(this.workspace.getFlyout(opt_own));
     return {
       width: flyoutDimensions.width,
       height: flyoutDimensions.height,
-      position: this.workspace_.toolboxPosition,
+      position: this.workspace.toolboxPosition,
     };
   }
 
@@ -94,48 +75,42 @@ class MetricsManager {
    * a simple toolbox instead of a category toolbox. To get the width and height
    * of a
    * simple toolbox @see {@link getFlyoutMetrics}.
-   * @return {!MetricsManager.ToolboxMetrics} The object with the width,
-   *     height and position of the toolbox.
-   * @public
+   * @return The object with the width, height and position of the toolbox.
    */
-  getToolboxMetrics() {
+  getToolboxMetrics(): ToolboxMetrics {
     const toolboxDimensions =
-        this.getDimensionsPx_(this.workspace_.getToolbox());
+      this.getDimensionsPx_(this.workspace.getToolbox());
 
     return {
       width: toolboxDimensions.width,
       height: toolboxDimensions.height,
-      position: this.workspace_.toolboxPosition,
+      position: this.workspace.toolboxPosition,
     };
   }
 
   /**
    * Gets the width and height of the workspace's parent SVG element in pixel
    * coordinates. This area includes the toolbox and the visible workspace area.
-   * @return {!Size} The width and height of the workspace's parent
-   *     SVG element.
-   * @public
+   * @return The width and height of the workspace's parent SVG element.
    */
-  getSvgMetrics() {
-    return this.workspace_.getCachedParentSvgSize();
+  getSvgMetrics(): Size {
+    return this.workspace.getCachedParentSvgSize();
   }
 
   /**
    * Gets the absolute left and absolute top in pixel coordinates.
    * This is where the visible workspace starts in relation to the SVG
    * container.
-   * @return {!MetricsManager.AbsoluteMetrics} The absolute metrics for
-   *     the workspace.
-   * @public
+   * @return The absolute metrics for the workspace.
    */
-  getAbsoluteMetrics() {
+  getAbsoluteMetrics(): AbsoluteMetrics {
     let absoluteLeft = 0;
     const toolboxMetrics = this.getToolboxMetrics();
     const flyoutMetrics = this.getFlyoutMetrics(true);
-    const doesToolboxExist = !!this.workspace_.getToolbox();
-    const doesFlyoutExist = !!this.workspace_.getFlyout(true);
+    const doesToolboxExist = !!this.workspace.getToolbox();
+    const doesFlyoutExist = !!this.workspace.getFlyout(true);
     const toolboxPosition =
-        doesToolboxExist ? toolboxMetrics.position : flyoutMetrics.position;
+      doesToolboxExist ? toolboxMetrics.position : flyoutMetrics.position;
 
     const atLeft = toolboxPosition === toolboxUtils.Position.LEFT;
     const atTop = toolboxPosition === toolboxUtils.Position.TOP;
@@ -160,46 +135,44 @@ class MetricsManager {
   /**
    * Gets the metrics for the visible workspace in either pixel or workspace
    * coordinates. The visible workspace does not include the toolbox or flyout.
-   * @param {boolean=} opt_getWorkspaceCoordinates True to get the view metrics
-   *     in workspace coordinates, false to get them in pixel coordinates.
-   * @return {!MetricsManager.ContainerRegion} The width, height, top and
-   *     left of the viewport in either workspace coordinates or pixel
-   *     coordinates.
-   * @public
+   * @param opt_getWorkspaceCoordinates True to get the view metrics in
+   *     workspace coordinates, false to get them in pixel coordinates.
+   * @return The width, height, top and left of the viewport in either workspace
+   *     coordinates or pixel coordinates.
    */
-  getViewMetrics(opt_getWorkspaceCoordinates) {
-    const scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
+  getViewMetrics(opt_getWorkspaceCoordinates?: boolean): ContainerRegion {
+    const scale = opt_getWorkspaceCoordinates ? this.workspace.scale : 1;
     const svgMetrics = this.getSvgMetrics();
     const toolboxMetrics = this.getToolboxMetrics();
     const flyoutMetrics = this.getFlyoutMetrics(true);
-    const doesToolboxExist = !!this.workspace_.getToolbox();
+    const doesToolboxExist = !!this.workspace.getToolbox();
     const toolboxPosition =
-        doesToolboxExist ? toolboxMetrics.position : flyoutMetrics.position;
+      doesToolboxExist ? toolboxMetrics.position : flyoutMetrics.position;
 
-    if (this.workspace_.getToolbox()) {
+    if (this.workspace.getToolbox()) {
       if (toolboxPosition === toolboxUtils.Position.TOP ||
-          toolboxPosition === toolboxUtils.Position.BOTTOM) {
+        toolboxPosition === toolboxUtils.Position.BOTTOM) {
         svgMetrics.height -= toolboxMetrics.height;
       } else if (
-          toolboxPosition === toolboxUtils.Position.LEFT ||
-          toolboxPosition === toolboxUtils.Position.RIGHT) {
+        toolboxPosition === toolboxUtils.Position.LEFT ||
+        toolboxPosition === toolboxUtils.Position.RIGHT) {
         svgMetrics.width -= toolboxMetrics.width;
       }
-    } else if (this.workspace_.getFlyout(true)) {
+    } else if (this.workspace.getFlyout(true)) {
       if (toolboxPosition === toolboxUtils.Position.TOP ||
-          toolboxPosition === toolboxUtils.Position.BOTTOM) {
+        toolboxPosition === toolboxUtils.Position.BOTTOM) {
         svgMetrics.height -= flyoutMetrics.height;
       } else if (
-          toolboxPosition === toolboxUtils.Position.LEFT ||
-          toolboxPosition === toolboxUtils.Position.RIGHT) {
+        toolboxPosition === toolboxUtils.Position.LEFT ||
+        toolboxPosition === toolboxUtils.Position.RIGHT) {
         svgMetrics.width -= flyoutMetrics.width;
       }
     }
     return {
       height: svgMetrics.height / scale,
       width: svgMetrics.width / scale,
-      top: -this.workspace_.scrollY / scale,
-      left: -this.workspace_.scrollX / scale,
+      top: -this.workspace.scrollY / scale,
+      left: -this.workspace.scrollX / scale,
     };
   }
 
@@ -207,18 +180,14 @@ class MetricsManager {
    * Gets content metrics in either pixel or workspace coordinates.
    * The content area is a rectangle around all the top bounded elements on the
    * workspace (workspace comments and blocks).
-   * @param {boolean=} opt_getWorkspaceCoordinates True to get the content
-   *     metrics in workspace coordinates, false to get them in pixel
-   *     coordinates.
-   * @return {!MetricsManager.ContainerRegion} The
-   *     metrics for the content container.
-   * @public
+   * @param opt_getWorkspaceCoordinates True to get the content metrics in
+   *     workspace coordinates, false to get them in pixel coordinates.
+   * @return The metrics for the content container.
    */
-  getContentMetrics(opt_getWorkspaceCoordinates) {
-    const scale = opt_getWorkspaceCoordinates ? 1 : this.workspace_.scale;
-
+  getContentMetrics(opt_getWorkspaceCoordinates?: boolean): ContainerRegion {
+    const scale = opt_getWorkspaceCoordinates ? 1 : this.workspace.scale;
     // Block bounding box is in workspace coordinates.
-    const blockBox = this.workspace_.getBlocksBoundingBox();
+    const blockBox = this.workspace.getBlocksBoundingBox();
 
     return {
       height: (blockBox.bottom - blockBox.top) * scale,
@@ -230,36 +199,34 @@ class MetricsManager {
 
   /**
    * Returns whether the scroll area has fixed edges.
-   * @return {boolean} Whether the scroll area has fixed edges.
-   * @package
+   * @return Whether the scroll area has fixed edges.
    */
-  hasFixedEdges() {
+  hasFixedEdges(): boolean {
     // This exists for optimization of bump logic.
-    return !this.workspace_.isMovableHorizontally() ||
-        !this.workspace_.isMovableVertically();
+    return !this.workspace.isMovableHorizontally() ||
+      !this.workspace.isMovableVertically();
   }
 
   /**
    * Computes the fixed edges of the scroll area.
-   * @param {!MetricsManager.ContainerRegion=} opt_viewMetrics The view
-   *     metrics if they have been previously computed. Passing in null may
-   * cause the view metrics to be computed again, if it is needed.
-   * @return {!MetricsManager.FixedEdges} The fixed edges of the scroll
-   *     area.
-   * @protected
+   * @param opt_viewMetrics The view metrics if they have been previously
+   *     computed. Passing in null may cause the view metrics to be computed
+   *     again, if it is needed.
+   * @return The fixed edges of the scroll area.
    */
-  getComputedFixedEdges_(opt_viewMetrics) {
+  protected getComputedFixedEdges_(opt_viewMetrics?: ContainerRegion):
+    FixedEdges {
     if (!this.hasFixedEdges()) {
       // Return early if there are no edges.
       return {};
     }
 
-    const hScrollEnabled = this.workspace_.isMovableHorizontally();
-    const vScrollEnabled = this.workspace_.isMovableVertically();
+    const hScrollEnabled = this.workspace.isMovableHorizontally();
+    const vScrollEnabled = this.workspace.isMovableVertically();
 
     const viewMetrics = opt_viewMetrics || this.getViewMetrics(false);
 
-    const edges = {};
+    const edges = {} as FixedEdges;
     if (!vScrollEnabled) {
       edges.top = viewMetrics.top;
       edges.bottom = viewMetrics.top + viewMetrics.height;
@@ -273,15 +240,12 @@ class MetricsManager {
 
   /**
    * Returns the content area with added padding.
-   * @param {!MetricsManager.ContainerRegion} viewMetrics The view
-   *     metrics.
-   * @param {!MetricsManager.ContainerRegion} contentMetrics The content
-   *     metrics.
-   * @return {{top: number, bottom: number, left: number, right: number}} The
-   *     padded content area.
-   * @protected
+   * @param viewMetrics The view metrics.
+   * @param contentMetrics The content metrics.
+   * @return The padded content area.
    */
-  getPaddedContent_(viewMetrics, contentMetrics) {
+  protected getPaddedContent_(
+    viewMetrics: ContainerRegion, contentMetrics: ContainerRegion): { top: number, bottom: number, left: number, right: number } {
     const contentBottom = contentMetrics.top + contentMetrics.height;
     const contentRight = contentMetrics.left + contentMetrics.width;
 
@@ -293,34 +257,33 @@ class MetricsManager {
     // Add a padding around the content that is at least half a screen wide.
     // Ensure padding is wide enough that blocks can scroll over entire screen.
     const top =
-        Math.min(contentMetrics.top - halfHeight, contentBottom - viewHeight);
+      Math.min(contentMetrics.top - halfHeight, contentBottom - viewHeight);
     const left =
-        Math.min(contentMetrics.left - halfWidth, contentRight - viewWidth);
+      Math.min(contentMetrics.left - halfWidth, contentRight - viewWidth);
     const bottom =
-        Math.max(contentBottom + halfHeight, contentMetrics.top + viewHeight);
+      Math.max(contentBottom + halfHeight, contentMetrics.top + viewHeight);
     const right =
-        Math.max(contentRight + halfWidth, contentMetrics.left + viewWidth);
+      Math.max(contentRight + halfWidth, contentMetrics.left + viewWidth);
 
-    return {top: top, bottom: bottom, left: left, right: right};
+    return { top, bottom, left, right };
   }
 
   /**
    * Returns the metrics for the scroll area of the workspace.
-   * @param {boolean=} opt_getWorkspaceCoordinates True to get the scroll
-   *     metrics in workspace coordinates, false to get them in pixel
-   *     coordinates.
-   * @param {!MetricsManager.ContainerRegion=} opt_viewMetrics The view
-   *     metrics if they have been previously computed. Passing in null may
-   * cause the view metrics to be computed again, if it is needed.
-   * @param {!MetricsManager.ContainerRegion=} opt_contentMetrics The
-   *     content metrics if they have been previously computed. Passing in null
-   *     may cause the content metrics to be computed again, if it is needed.
-   * @return {!MetricsManager.ContainerRegion} The metrics for the scroll
-   *    container.
+   * @param opt_getWorkspaceCoordinates True to get the scroll metrics in
+   *     workspace coordinates, false to get them in pixel coordinates.
+   * @param opt_viewMetrics The view metrics if they have been previously
+   *     computed. Passing in null may cause the view metrics to be computed
+   *     again, if it is needed.
+   * @param opt_contentMetrics The content metrics if they have been previously
+   *     computed. Passing in null may cause the content metrics to be computed
+   *     again, if it is needed.
+   * @return The metrics for the scroll container.
    */
   getScrollMetrics(
-      opt_getWorkspaceCoordinates, opt_viewMetrics, opt_contentMetrics) {
-    const scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
+    opt_getWorkspaceCoordinates?: boolean, opt_viewMetrics?: ContainerRegion,
+    opt_contentMetrics?: ContainerRegion): ContainerRegion {
+    const scale = opt_getWorkspaceCoordinates ? this.workspace.scale : 1;
     const viewMetrics = opt_viewMetrics || this.getViewMetrics(false);
     const contentMetrics = opt_contentMetrics || this.getContentMetrics();
     const fixedEdges = this.getComputedFixedEdges_(viewMetrics);
@@ -330,13 +293,13 @@ class MetricsManager {
 
     // Use combination of fixed bounds and padded content to make scroll area.
     const top =
-        fixedEdges.top !== undefined ? fixedEdges.top : paddedContent.top;
+      fixedEdges.top !== undefined ? fixedEdges.top : paddedContent.top;
     const left =
-        fixedEdges.left !== undefined ? fixedEdges.left : paddedContent.left;
+      fixedEdges.left !== undefined ? fixedEdges.left : paddedContent.left;
     const bottom = fixedEdges.bottom !== undefined ? fixedEdges.bottom :
-                                                     paddedContent.bottom;
+      paddedContent.bottom;
     const right =
-        fixedEdges.right !== undefined ? fixedEdges.right : paddedContent.right;
+      fixedEdges.right !== undefined ? fixedEdges.right : paddedContent.right;
 
     return {
       top: top / scale,
@@ -348,9 +311,9 @@ class MetricsManager {
 
   /**
    * Returns common metrics used by UI elements.
-   * @return {!MetricsManager.UiMetrics} The UI metrics.
+   * @return The UI metrics.
    */
-  getUiMetrics() {
+  getUiMetrics(): UiMetrics {
     return {
       viewMetrics: this.getViewMetrics(),
       absoluteMetrics: this.getAbsoluteMetrics(),
@@ -390,11 +353,9 @@ class MetricsManager {
    * .flyoutHeight: Height of the flyout if it is always open.  Otherwise zero.
    * .toolboxPosition: Top, bottom, left or right. Use TOOLBOX_AT constants to
    *     compare.
-   * @return {!Metrics} Contains size and position metrics of a top
-   *     level workspace.
-   * @public
+   * @return Contains size and position metrics of a top level workspace.
    */
-  getMetrics() {
+  getMetrics(): Metrics {
     const toolboxMetrics = this.getToolboxMetrics();
     const flyoutMetrics = this.getFlyoutMetrics(true);
     const svgMetrics = this.getSvgMetrics();
@@ -402,7 +363,7 @@ class MetricsManager {
     const viewMetrics = this.getViewMetrics();
     const contentMetrics = this.getContentMetrics();
     const scrollMetrics =
-        this.getScrollMetrics(false, viewMetrics, contentMetrics);
+      this.getScrollMetrics(false, viewMetrics, contentMetrics);
 
     return {
       contentHeight: contentMetrics.height,
@@ -435,61 +396,32 @@ class MetricsManager {
     };
   }
 }
-
-/**
- * Describes the width, height and location of the toolbox on the main
- * workspace.
- * @typedef {{
- *            width: number,
- *            height: number,
- *            position: !toolboxUtils.Position
- *          }}
- */
-MetricsManager.ToolboxMetrics;
-
-/**
- * Describes where the viewport starts in relation to the workspace SVG.
- * @typedef {{
- *            left: number,
- *            top: number
- *          }}
- */
-MetricsManager.AbsoluteMetrics;
-
-/**
- * All the measurements needed to describe the size and location of a
- * container.
- * @typedef {{
- *            height: number,
- *            width: number,
- *            top: number,
- *            left: number
- *          }}
- */
-MetricsManager.ContainerRegion;
-
-/**
- * Describes fixed edges of the workspace.
- * @typedef {{
- *            top: (number|undefined),
- *            bottom: (number|undefined),
- *            left: (number|undefined),
- *            right: (number|undefined)
- *          }}
- */
-MetricsManager.FixedEdges;
-
-/**
- * Common metrics used for UI elements.
- * @typedef {{
- *            viewMetrics: !MetricsManager.ContainerRegion,
- *            absoluteMetrics: !MetricsManager.AbsoluteMetrics,
- *            toolboxMetrics: !MetricsManager.ToolboxMetrics
- *          }}
- */
-MetricsManager.UiMetrics;
+export interface ToolboxMetrics {
+  width: number;
+  height: number;
+  position: toolboxUtils.Position;
+}
+export interface AbsoluteMetrics {
+  left: number;
+  top: number;
+}
+export interface ContainerRegion {
+  height: number;
+  width: number;
+  top: number;
+  left: number;
+}
+export interface FixedEdges {
+  top?: number;
+  bottom?: number;
+  left?: number;
+  right?: number;
+}
+export interface UiMetrics {
+  viewMetrics: ContainerRegion;
+  absoluteMetrics: AbsoluteMetrics;
+  toolboxMetrics: ToolboxMetrics;
+}
 
 registry.register(
-    registry.Type.METRICS_MANAGER, registry.DEFAULT, MetricsManager);
-
-exports.MetricsManager = MetricsManager;
+  registry.Type.METRICS_MANAGER, registry.DEFAULT, MetricsManager);

@@ -1,81 +1,76 @@
+/** @fileoverview Class for a block delete event. */
+
 /**
  * @license
  * Copyright 2018 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Class for a block delete event.
- */
-'use strict';
 
 /**
  * Class for a block delete event.
  * @class
  */
-goog.module('Blockly.Events.BlockDelete');
 
-const Xml = goog.require('Blockly.Xml');
-const blocks = goog.require('Blockly.serialization.blocks');
-const eventUtils = goog.require('Blockly.Events.utils');
-const registry = goog.require('Blockly.registry');
-const {BlockBase} = goog.require('Blockly.Events.BlockBase');
 /* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
+import { Block } from '../block.js';
+import * as registry from '../registry.js';
+import * as blocks from '../serialization/blocks.js';
+import * as Xml from '../xml.js';
+
+import { BlockBase } from './events_block_base.js';
+import * as eventUtils from './utils.js';
 
 
 /**
  * Class for a block deletion event.
- * @extends {BlockBase}
  * @alias Blockly.Events.BlockDelete
  */
-class BlockDelete extends BlockBase {
-  /**
-   * @param {!Block=} opt_block The deleted block.  Undefined for a blank
-   *     event.
-   */
-  constructor(opt_block) {
+export class BlockDelete extends BlockBase {
+  override type: string;
+  // Respawning shadow blocks is handled via disconnection.
+  override recordUndo = false;
+  oldXml: AnyDuringMigration;
+  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
+  ids!: string[];
+  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
+  wasShadow!: boolean;
+  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
+  oldJson!: blocks.State;
+
+  /** @param opt_block The deleted block.  Undefined for a blank event. */
+  constructor(opt_block?: Block) {
     super(opt_block);
 
-    /**
-     * Type of this event.
-     * @type {string}
-     */
+    /** Type of this event. */
     this.type = eventUtils.BLOCK_DELETE;
 
     if (!opt_block) {
-      return;  // Blank event to be populated by fromJson.
+      return;
     }
+    // Blank event to be populated by fromJson.
     if (opt_block.getParent()) {
       throw Error('Connected blocks cannot be deleted.');
     }
     if (opt_block.isShadow()) {
-      // Respawning shadow blocks is handled via disconnection.
-      this.recordUndo = false;
     }
 
     this.oldXml = Xml.blockToDomWithXY(opt_block);
     this.ids = eventUtils.getDescendantIds(opt_block);
 
-    /**
-     * Was the block that was just deleted a shadow?
-     * @type {boolean}
-     */
+    /** Was the block that was just deleted a shadow? */
     this.wasShadow = opt_block.isShadow();
 
-    /**
-     * JSON representation of the block that was just deleted.
-     * @type {!blocks.State}
-     */
-    this.oldJson = /** @type {!blocks.State} */ (
-        blocks.save(opt_block, {addCoordinates: true}));
+    /** JSON representation of the block that was just deleted. */
+    this.oldJson =
+      blocks.save(opt_block, { addCoordinates: true }) as blocks.State;
   }
 
   /**
    * Encode the event as JSON.
-   * @return {!Object} JSON representation.
+   * @return JSON representation.
    */
-  toJson() {
+  override toJson(): AnyDuringMigration {
     const json = super.toJson();
     json['oldXml'] = Xml.domToText(this.oldXml);
     json['ids'] = this.ids;
@@ -89,15 +84,15 @@ class BlockDelete extends BlockBase {
 
   /**
    * Decode the JSON event.
-   * @param {!Object} json JSON representation.
+   * @param json JSON representation.
    */
-  fromJson(json) {
+  override fromJson(json: AnyDuringMigration) {
     super.fromJson(json);
     this.oldXml = Xml.textToDom(json['oldXml']);
     this.ids = json['ids'];
     this.wasShadow =
-        json['wasShadow'] || this.oldXml.tagName.toLowerCase() === 'shadow';
-    this.oldJson = /** @type {!blocks.State} */ (json['oldJson']);
+      json['wasShadow'] || this.oldXml.tagName.toLowerCase() === 'shadow';
+    this.oldJson = json['oldJson'] as blocks.State;
     if (json['recordUndo'] !== undefined) {
       this.recordUndo = json['recordUndo'];
     }
@@ -105,9 +100,9 @@ class BlockDelete extends BlockBase {
 
   /**
    * Run a deletion event.
-   * @param {boolean} forward True if run forward, false if run backward (undo).
+   * @param forward True if run forward, false if run backward (undo).
    */
-  run(forward) {
+  override run(forward: boolean) {
     const workspace = this.getEventWorkspace_();
     if (forward) {
       for (let i = 0; i < this.ids.length; i++) {
@@ -127,5 +122,3 @@ class BlockDelete extends BlockBase {
 }
 
 registry.register(registry.Type.EVENT, eventUtils.DELETE, BlockDelete);
-
-exports.BlockDelete = BlockDelete;

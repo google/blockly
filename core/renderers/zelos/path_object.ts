@@ -1,28 +1,31 @@
+/** @fileoverview An object that owns a block's rendering SVG elements. */
+
 /**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview An object that owns a block's rendering SVG elements.
- */
 
-'use strict';
 
 /**
  * An object that owns a block's rendering SVG elements.
  * @class
  */
-goog.module('Blockly.zelos.PathObject');
+/* eslint-disable-next-line no-unused-vars */
+// Unused import preserved for side-effects. Remove if unneeded.
+import '../../theme';
 
-const dom = goog.require('Blockly.utils.dom');
+import { BlockSvg } from '../../block_svg.js';
+import { Connection } from '../../connection.js';
+import { BlockStyle } from '../../theme.js';
+import * as dom from '../../utils/dom.js';
+import { Svg } from '../../utils/svg.js';
+
+import { PathObject as BasePathObject } from '../common/path_object.js';
+
 /* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider} = goog.requireType('Blockly.zelos.ConstantProvider');
-const {PathObject: BasePathObject} = goog.require('Blockly.blockRendering.PathObject');
-const {Svg} = goog.require('Blockly.utils.Svg');
-/* eslint-disable-next-line no-unused-vars */
-const {Theme} = goog.requireType('Blockly.Theme');
+import { ConstantProvider } from './constants.js';
 
 
 /**
@@ -30,74 +33,55 @@ const {Theme} = goog.requireType('Blockly.Theme');
  * used by the renderer.
  * @alias Blockly.zelos.PathObject
  */
-class PathObject extends BasePathObject {
+export class PathObject extends BasePathObject {
+  /** The selected path of the block. */
+  private svgPathSelected_: SVGElement | null = null;
+  private readonly outlines_: { [key: string]: SVGElement };
+
   /**
-   * @param {!SVGElement} root The root SVG element.
-   * @param {!Theme.BlockStyle} style The style object to use for
-   *     colouring.
-   * @param {!ConstantProvider} constants The renderer's constants.
-   * @package
+   * A set used to determine which outlines were used during a draw pass.  The
+   * set is initialized with a reference to all the outlines in
+   * `this.outlines_`. Every time we use an outline during the draw pass, the
+   * reference is removed from this set.
    */
-  constructor(root, style, constants) {
+  // AnyDuringMigration because:  Type 'null' is not assignable to type '{ [key:
+  // string]: number; }'.
+  private remainingOutlines_: { [key: string]: number } =
+    null as AnyDuringMigration;
+
+  /**
+   * The type of block's output connection shape.  This is set when a block
+   * with an output connection is drawn.
+   */
+  outputShapeType = null;
+
+  /**
+   * @param root The root SVG element.
+   * @param style The style object to use for colouring.
+   * @param constants The renderer's constants.
+   */
+  constructor(
+    root: SVGElement, style: BlockStyle,
+    public override constants: ConstantProvider) {
     super(root, style, constants);
 
-    /**
-     * The renderer's constant provider.
-     * @type {!ConstantProvider}
-     */
-    this.constants = constants;
-
-    /**
-     * The selected path of the block.
-     * @type {?SVGElement}
-     * @private
-     */
-    this.svgPathSelected_ = null;
-
-    /**
-     * The outline paths on the block.
-     * @type {!Object<string, !SVGElement>}
-     * @private
-     */
+    /** The outline paths on the block. */
     this.outlines_ = Object.create(null);
-
-    /**
-     * A set used to determine which outlines were used during a draw pass.  The
-     * set is initialized with a reference to all the outlines in
-     * `this.outlines_`. Every time we use an outline during the draw pass, the
-     * reference is removed from this set.
-     * @type {Object<string, number>}
-     * @private
-     */
-    this.remainingOutlines_ = null;
-
-    /**
-     * The type of block's output connection shape.  This is set when a block
-     * with an output connection is drawn.
-     * @package
-     */
-    this.outputShapeType = null;
   }
 
-  /**
-   * @override
-   */
-  setPath(pathString) {
+  override setPath(pathString: string) {
     super.setPath(pathString);
     if (this.svgPathSelected_) {
       this.svgPathSelected_.setAttribute('d', pathString);
     }
   }
 
-  /**
-   * @override
-   */
-  applyColour(block) {
+  override applyColour(block: BlockSvg) {
     super.applyColour(block);
     // Set shadow stroke colour.
-    if (block.isShadow() && block.getParent()) {
-      this.svgPath.setAttribute(
-          'stroke', block.getParent().style.colourTertiary);
+    const parent = block.getParent();
+    if (block.isShadow() && parent) {
+      this.svgPath.setAttribute('stroke', parent.style.colourTertiary);
     }
 
     // Apply colour to outlines.
@@ -106,10 +90,7 @@ class PathObject extends BasePathObject {
     }
   }
 
-  /**
-   * @override
-   */
-  flipRTL() {
+  override flipRTL() {
     super.flipRTL();
     // Mirror each input outline path.
     for (const key in this.outlines_) {
@@ -117,18 +98,14 @@ class PathObject extends BasePathObject {
     }
   }
 
-  /**
-   * @override
-   */
-  updateSelected(enable) {
+  override updateSelected(enable: boolean) {
     this.setClass_('blocklySelected', enable);
     if (enable) {
       if (!this.svgPathSelected_) {
-        this.svgPathSelected_ =
-            /** @type {!SVGElement} */ (this.svgPath.cloneNode(true));
+        this.svgPathSelected_ = this.svgPath.cloneNode(true) as SVGElement;
         this.svgPathSelected_.setAttribute('fill', 'none');
         this.svgPathSelected_.setAttribute(
-            'filter', 'url(#' + this.constants.selectedGlowFilterId + ')');
+          'filter', 'url(#' + this.constants.selectedGlowFilterId + ')');
         this.svgRoot.appendChild(this.svgPathSelected_);
       }
     } else {
@@ -139,40 +116,31 @@ class PathObject extends BasePathObject {
     }
   }
 
-  /**
-   * @override
-   */
-  updateReplacementFade(enable) {
+  override updateReplacementFade(enable: boolean) {
     this.setClass_('blocklyReplaceable', enable);
     if (enable) {
       this.svgPath.setAttribute(
-          'filter', 'url(#' + this.constants.replacementGlowFilterId + ')');
+        'filter', 'url(#' + this.constants.replacementGlowFilterId + ')');
     } else {
       this.svgPath.removeAttribute('filter');
     }
   }
 
-  /**
-   * @override
-   */
-  updateShapeForInputHighlight(conn, enable) {
-    const name = conn.getParentInput().name;
+  override updateShapeForInputHighlight(conn: Connection, enable: boolean) {
+    const name = conn.getParentInput()!.name;
     const outlinePath = this.getOutlinePath_(name);
     if (!outlinePath) {
       return;
     }
     if (enable) {
       outlinePath.setAttribute(
-          'filter', 'url(#' + this.constants.replacementGlowFilterId + ')');
+        'filter', 'url(#' + this.constants.replacementGlowFilterId + ')');
     } else {
       outlinePath.removeAttribute('filter');
     }
   }
 
-  /**
-   * Method that's called when the drawer is about to draw the block.
-   * @package
-   */
+  /** Method that's called when the drawer is about to draw the block. */
   beginDrawing() {
     this.remainingOutlines_ = Object.create(null);
     for (const key in this.outlines_) {
@@ -182,10 +150,7 @@ class PathObject extends BasePathObject {
     }
   }
 
-  /**
-   * Method that's called when the drawer is done drawing.
-   * @package
-   */
+  /** Method that's called when the drawer is done drawing. */
   endDrawing() {
     // Go through all remaining outlines that were not used this draw pass, and
     // remove them.
@@ -194,17 +159,18 @@ class PathObject extends BasePathObject {
         this.removeOutlinePath_(key);
       }
     }
-    this.remainingOutlines_ = null;
+    // AnyDuringMigration because:  Type 'null' is not assignable to type '{
+    // [key: string]: number; }'.
+    this.remainingOutlines_ = null as AnyDuringMigration;
   }
 
   /**
    * Set the path generated by the renderer for an outline path on the
    * respective outline path SVG element.
-   * @param {string} name The input name.
-   * @param {string} pathString The path.
-   * @package
+   * @param name The input name.
+   * @param pathString The path.
    */
-  setOutlinePath(name, pathString) {
+  setOutlinePath(name: string, pathString: string) {
     const outline = this.getOutlinePath_(name);
     outline.setAttribute('d', pathString);
     outline.setAttribute('fill', this.style.colourTertiary);
@@ -212,20 +178,19 @@ class PathObject extends BasePathObject {
 
   /**
    * Create's an outline path for the specified input.
-   * @param {string} name The input name.
-   * @return {!SVGElement} The SVG outline path.
-   * @private
+   * @param name The input name.
+   * @return The SVG outline path.
    */
-  getOutlinePath_(name) {
+  private getOutlinePath_(name: string): SVGElement {
     if (!this.outlines_[name]) {
       this.outlines_[name] = dom.createSvgElement(
-          Svg.PATH, {
-            'class': 'blocklyOutlinePath',
-            // IE doesn't like paths without the data definition, set empty
-            // default
-            'd': '',
-          },
-          this.svgRoot);
+        Svg.PATH, {
+        'class': 'blocklyOutlinePath',  // IE doesn't like paths without the
+        // data definition, set empty
+        // default
+        'd': '',
+      },
+        this.svgRoot);
     }
     if (this.remainingOutlines_) {
       delete this.remainingOutlines_[name];
@@ -235,13 +200,10 @@ class PathObject extends BasePathObject {
 
   /**
    * Remove an outline path that is associated with the specified input.
-   * @param {string} name The input name.
-   * @private
+   * @param name The input name.
    */
-  removeOutlinePath_(name) {
-    this.outlines_[name].parentNode.removeChild(this.outlines_[name]);
+  private removeOutlinePath_(name: string) {
+    this.outlines_[name].parentNode!.removeChild(this.outlines_[name]);
     delete this.outlines_[name];
   }
 }
-
-exports.PathObject = PathObject;

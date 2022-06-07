@@ -1,54 +1,51 @@
+/** @fileoverview Methods for graphically rendering a block as SVG. */
+
 /**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Methods for graphically rendering a block as SVG.
- */
-'use strict';
 
 /**
  * Methods for graphically rendering a block as SVG.
  * @class
  */
-goog.module('Blockly.blockRendering.RenderInfo');
 
-const {Align} = goog.require('Blockly.Input');
 /* eslint-disable-next-line no-unused-vars */
-const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-const {BottomRow} = goog.require('Blockly.blockRendering.BottomRow');
+import { BlockSvg } from '../../block_svg.js';
+import { Align, Input } from '../../input.js';
+import { inputTypes } from '../../input_types.js';
 /* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const {ExternalValueInput} = goog.require('Blockly.blockRendering.ExternalValueInput');
-const {Field} = goog.require('Blockly.blockRendering.Field');
-const {Hat} = goog.require('Blockly.blockRendering.Hat');
-const {Icon} = goog.require('Blockly.blockRendering.Icon');
-const {InRowSpacer} = goog.require('Blockly.blockRendering.InRowSpacer');
-const {InlineInput} = goog.require('Blockly.blockRendering.InlineInput');
-const {InputRow} = goog.require('Blockly.blockRendering.InputRow');
+import { RenderedConnection } from '../../rendered_connection.js';
+
 /* eslint-disable-next-line no-unused-vars */
-const {Input} = goog.requireType('Blockly.Input');
-const {JaggedEdge} = goog.require('Blockly.blockRendering.JaggedEdge');
+import { Measurable } from '../measurables/base.js';
+import { BottomRow } from '../measurables/bottom_row.js';
+import { ExternalValueInput } from '../measurables/external_value_input.js';
+import { Field } from '../measurables/field.js';
+import { Hat } from '../measurables/hat.js';
+import { Icon } from '../measurables/icon.js';
+import { InRowSpacer } from '../measurables/in_row_spacer.js';
+import { InlineInput } from '../measurables/inline_input.js';
+import { InputRow } from '../measurables/input_row.js';
+import { JaggedEdge } from '../measurables/jagged_edge.js';
+import { NextConnection } from '../measurables/next_connection.js';
+import { OutputConnection } from '../measurables/output_connection.js';
+import { PreviousConnection } from '../measurables/previous_connection.js';
+import { RoundCorner } from '../measurables/round_corner.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Measurable} = goog.requireType('Blockly.blockRendering.Measurable');
-const {NextConnection} = goog.require('Blockly.blockRendering.NextConnection');
-const {OutputConnection} = goog.require('Blockly.blockRendering.OutputConnection');
-const {PreviousConnection} = goog.require('Blockly.blockRendering.PreviousConnection');
+import { Row } from '../measurables/row.js';
+import { SpacerRow } from '../measurables/spacer_row.js';
+import { SquareCorner } from '../measurables/square_corner.js';
+import { StatementInput } from '../measurables/statement_input.js';
+import { TopRow } from '../measurables/top_row.js';
+import { Types } from '../measurables/types.js';
+
 /* eslint-disable-next-line no-unused-vars */
-const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
+import { ConstantProvider } from './constants.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Renderer} = goog.requireType('Blockly.blockRendering.Renderer');
-const {RoundCorner} = goog.require('Blockly.blockRendering.RoundCorner');
-/* eslint-disable-next-line no-unused-vars */
-const {Row} = goog.requireType('Blockly.blockRendering.Row');
-const {SpacerRow} = goog.require('Blockly.blockRendering.SpacerRow');
-const {SquareCorner} = goog.require('Blockly.blockRendering.SquareCorner');
-const {StatementInput} = goog.require('Blockly.blockRendering.StatementInput');
-const {TopRow} = goog.require('Blockly.blockRendering.TopRow');
-const {Types} = goog.require('Blockly.blockRendering.Types');
-const {inputTypes} = goog.require('Blockly.inputTypes');
+import { Renderer } from './renderer.js';
 
 
 /**
@@ -59,134 +56,101 @@ const {inputTypes} = goog.require('Blockly.inputTypes');
  * repeatedly may be expensive.
  * @alias Blockly.blockRendering.RenderInfo
  */
-class RenderInfo {
+export class RenderInfo {
+  block_: AnyDuringMigration;
+  protected constants_: ConstantProvider;
+  outputConnection: OutputConnection;
+  isInline: boolean;
+  isCollapsed: boolean;
+  isInsertionMarker: boolean;
+  RTL: boolean;
+
+  /** The height of the rendered block, including child blocks. */
+  height = 0;
+
+  /** The width of the rendered block, including child blocks. */
+  widthWithChildren = 0;
+
   /**
-   * @param {!Renderer} renderer The renderer in use.
-   * @param {!BlockSvg} block The block to measure.
-   * @package
+   * The width of the rendered block, excluding child blocks.  This is the
+   * right edge of the block when rendered LTR.
    */
-  constructor(renderer, block) {
+  width = 0;
+  statementEdge = 0;
+
+  /** An array of Row objects containing sizing information. */
+  rows: Row[] = [];
+
+  /** An array of input rows on the block. */
+  inputRows: InputRow[] = [];
+
+  /** An array of measurable objects containing hidden icons. */
+  hiddenIcons: Icon[] = [];
+  topRow: TopRow;
+  bottomRow: BottomRow;
+
+  // The position of the start point for drawing, relative to the block's
+  // location.
+  startX = 0;
+  startY = 0;
+
+  /**
+   * @param renderer The renderer in use.
+   * @param block The block to measure.
+   */
+  constructor(protected readonly renderer: Renderer, block: BlockSvg) {
     this.block_ = block;
 
-    /**
-     * The block renderer in use.
-     * @type {!Renderer}
-     * @protected
-     */
-    this.renderer_ = renderer;
-
-    /**
-     * The renderer's constant provider.
-     * @type {!ConstantProvider}
-     * @protected
-     */
-    this.constants_ = this.renderer_.getConstants();
+    /** The renderer's constant provider. */
+    this.constants_ = this.renderer.getConstants();
 
     /**
      * A measurable representing the output connection if the block has one.
      * Otherwise null.
-     * @type {OutputConnection}
      */
-    this.outputConnection = !block.outputConnection ?
+    // AnyDuringMigration because:  Type 'OutputConnection | null' is not
+    // assignable to type 'OutputConnection'.
+    this.outputConnection =
+      (!block.outputConnection ?
         null :
-        new OutputConnection(
-            this.constants_,
-            /** @type {!RenderedConnection} */ (block.outputConnection));
+        new OutputConnection(this.constants_, (block.outputConnection))) as
+      AnyDuringMigration;
 
     /**
      * Whether the block should be rendered as a single line, either because
      * it's inline or because it has been collapsed.
-     * @type {boolean}
      */
     this.isInline = block.getInputsInline() && !block.isCollapsed();
 
-    /**
-     * Whether the block is collapsed.
-     * @type {boolean}
-     */
+    /** Whether the block is collapsed. */
     this.isCollapsed = block.isCollapsed();
 
     /**
      * Whether the block is an insertion marker.  Insertion markers are the same
      * shape as normal blocks, but don't show fields.
-     * @type {boolean}
      */
     this.isInsertionMarker = block.isInsertionMarker();
 
-    /**
-     * True if the block should be rendered right-to-left.
-     * @type {boolean}
-     */
+    /** True if the block should be rendered right-to-left. */
     this.RTL = block.RTL;
 
     /**
-     * The height of the rendered block, including child blocks.
-     * @type {number}
-     */
-    this.height = 0;
-
-    /**
-     * The width of the rendered block, including child blocks.
-     * @type {number}
-     */
-    this.widthWithChildren = 0;
-
-    /**
-     * The width of the rendered block, excluding child blocks.  This is the
-     * right edge of the block when rendered LTR.
-     * @type {number}
-     */
-    this.width = 0;
-
-    /**
-     *
-     * @type {number}
-     */
-    this.statementEdge = 0;
-
-    /**
-     * An array of Row objects containing sizing information.
-     * @type {!Array<!Row>}
-     */
-    this.rows = [];
-
-    /**
-     * An array of input rows on the block.
-     * @type {!Array<!InputRow>}
-     */
-    this.inputRows = [];
-
-    /**
-     * An array of measurable objects containing hidden icons.
-     * @type {!Array<!Icon>}
-     */
-    this.hiddenIcons = [];
-
-    /**
      * An object with rendering information about the top row of the block.
-     * @type {!TopRow}
      */
     this.topRow = new TopRow(this.constants_);
 
     /**
      * An object with rendering information about the bottom row of the block.
-     * @type {!BottomRow}
      */
     this.bottomRow = new BottomRow(this.constants_);
-
-    // The position of the start point for drawing, relative to the block's
-    // location.
-    this.startX = 0;
-    this.startY = 0;
   }
 
   /**
    * Get the block renderer in use.
-   * @return {!Renderer} The block renderer in use.
-   * @package
+   * @return The block renderer in use.
    */
-  getRenderer() {
-    return this.renderer_;
+  getRenderer(): Renderer {
+    return this.renderer;
   }
 
   /**
@@ -196,8 +160,6 @@ class RenderInfo {
    * This measure pass does not propagate changes to the block (although fields
    * may choose to rerender when getSize() is called).  However, calling it
    * repeatedly may be expensive.
-   *
-   * @package
    */
   measure() {
     this.createRows_();
@@ -211,9 +173,8 @@ class RenderInfo {
   /**
    * Create rows of Measurable objects representing all renderable parts of the
    * block.
-   * @protected
    */
-  createRows_() {
+  protected createRows_() {
     this.populateTopRow_();
     this.rows.push(this.topRow);
     let activeRow = new InputRow(this.constants_);
@@ -221,7 +182,7 @@ class RenderInfo {
 
     // Icons always go on the first row, before anything else.
     const icons = this.block_.getIcons();
-    for (let i = 0, icon; (icon = icons[i]); i++) {
+    for (let i = 0, icon; icon = icons[i]; i++) {
       const iconInfo = new Icon(this.constants_, icon);
       if (this.isCollapsed && icon.collapseHidden) {
         this.hiddenIcons.push(iconInfo);
@@ -233,7 +194,7 @@ class RenderInfo {
     let lastInput = null;
     // Loop across all of the inputs on the block, creating objects for anything
     // that needs to be rendered and breaking the block up into visual rows.
-    for (let i = 0, input; (input = this.block_.inputList[i]); i++) {
+    for (let i = 0, input; input = this.block_.inputList[i]; i++) {
       if (!input.isVisible()) {
         continue;
       }
@@ -245,7 +206,7 @@ class RenderInfo {
       }
 
       // All of the fields in an input go on the same row.
-      for (let j = 0, field; (field = input.fieldRow[j]); j++) {
+      for (let j = 0, field; field = input.fieldRow[j]; j++) {
         activeRow.elements.push(new Field(this.constants_, field, input));
       }
       this.addInput_(input, activeRow);
@@ -264,19 +225,16 @@ class RenderInfo {
     this.rows.push(this.bottomRow);
   }
 
-  /**
-   * Create all non-spacer elements that belong on the top row.
-   * @package
-   */
+  /** Create all non-spacer elements that belong on the top row. */
   populateTopRow_() {
     const hasPrevious = !!this.block_.previousConnection;
     const hasHat = (this.block_.hat ? this.block_.hat === 'cap' :
-                                      this.constants_.ADD_START_HATS) &&
-        !this.outputConnection && !hasPrevious;
+      this.constants_.ADD_START_HATS) &&
+      !this.outputConnection && !hasPrevious;
 
     let cornerClass = this.topRow.hasLeftSquareCorner(this.block_) ?
-        SquareCorner :
-        RoundCorner;
+      SquareCorner :
+      RoundCorner;
     this.topRow.elements.push(new cornerClass(this.constants_));
 
     if (hasHat) {
@@ -286,45 +244,41 @@ class RenderInfo {
     } else if (hasPrevious) {
       this.topRow.hasPreviousConnection = true;
       this.topRow.connection = new PreviousConnection(
-          this.constants_,
-          /** @type {!RenderedConnection} */
-          (this.block_.previousConnection));
+        this.constants_,
+        (this.block_.previousConnection as RenderedConnection));
       this.topRow.elements.push(this.topRow.connection);
     }
 
     const precedesStatement = this.block_.inputList.length &&
-        this.block_.inputList[0].type === inputTypes.STATEMENT;
+      this.block_.inputList[0].type === inputTypes.STATEMENT;
 
     // This is the minimum height for the row. If one of its elements has a
     // greater height it will be overwritten in the compute pass.
     if (precedesStatement && !this.block_.isCollapsed()) {
       this.topRow.minHeight =
-          this.constants_.TOP_ROW_PRECEDES_STATEMENT_MIN_HEIGHT;
+        this.constants_.TOP_ROW_PRECEDES_STATEMENT_MIN_HEIGHT;
     } else {
       this.topRow.minHeight = this.constants_.TOP_ROW_MIN_HEIGHT;
     }
 
     cornerClass = this.topRow.hasRightSquareCorner(this.block_) ? SquareCorner :
-                                                                  RoundCorner;
+      RoundCorner;
     this.topRow.elements.push(new cornerClass(this.constants_, 'right'));
   }
 
-  /**
-   * Create all non-spacer elements that belong on the bottom row.
-   * @package
-   */
+  /** Create all non-spacer elements that belong on the bottom row. */
   populateBottomRow_() {
     this.bottomRow.hasNextConnection = !!this.block_.nextConnection;
 
     const followsStatement = this.block_.inputList.length &&
-        this.block_.inputList[this.block_.inputList.length - 1].type ===
-            inputTypes.STATEMENT;
+      this.block_.inputList[this.block_.inputList.length - 1].type ===
+      inputTypes.STATEMENT;
 
     // This is the minimum height for the row. If one of its elements has a
     // greater height it will be overwritten in the compute pass.
     if (followsStatement) {
       this.bottomRow.minHeight =
-          this.constants_.BOTTOM_ROW_AFTER_STATEMENT_MIN_HEIGHT;
+        this.constants_.BOTTOM_ROW_AFTER_STATEMENT_MIN_HEIGHT;
     } else {
       this.bottomRow.minHeight = this.constants_.BOTTOM_ROW_MIN_HEIGHT;
     }
@@ -339,8 +293,7 @@ class RenderInfo {
 
     if (this.bottomRow.hasNextConnection) {
       this.bottomRow.connection = new NextConnection(
-          this.constants_,
-          /** @type {!RenderedConnection} */ (this.block_.nextConnection));
+        this.constants_, (this.block_.nextConnection as RenderedConnection));
       this.bottomRow.elements.push(this.bottomRow.connection);
     }
 
@@ -356,12 +309,10 @@ class RenderInfo {
   /**
    * Add an input element to the active row, if needed, and record the type of
    * the input on the row.
-   * @param {!Input} input The input to record information about.
-   * @param {!Row} activeRow The row that is currently being
-   *     populated.
-   * @protected
+   * @param input The input to record information about.
+   * @param activeRow The row that is currently being populated.
    */
-  addInput_(input, activeRow) {
+  protected addInput_(input: Input, activeRow: Row) {
     // Non-dummy inputs have visual representations onscreen.
     if (this.isInline && input.type === inputTypes.VALUE) {
       activeRow.elements.push(new InlineInput(this.constants_, input));
@@ -376,10 +327,10 @@ class RenderInfo {
       // Dummy inputs have no visual representation, but the information is
       // still important.
       activeRow.minHeight = Math.max(
-          activeRow.minHeight,
-          input.getSourceBlock() && input.getSourceBlock().isShadow() ?
-              this.constants_.DUMMY_INPUT_SHADOW_MIN_HEIGHT :
-              this.constants_.DUMMY_INPUT_MIN_HEIGHT);
+        activeRow.minHeight,
+        input.getSourceBlock() && input.getSourceBlock()!.isShadow() ?
+          this.constants_.DUMMY_INPUT_SHADOW_MIN_HEIGHT :
+          this.constants_.DUMMY_INPUT_MIN_HEIGHT);
       activeRow.hasDummyInput = true;
     }
     if (activeRow.align === null) {
@@ -389,12 +340,11 @@ class RenderInfo {
 
   /**
    * Decide whether to start a new row between the two Blockly.Inputs.
-   * @param {!Input} input The first input to consider
-   * @param {Input} lastInput The input that follows.
-   * @return {boolean} True if the next input should be rendered on a new row.
-   * @protected
+   * @param input The first input to consider
+   * @param lastInput The input that follows.
+   * @return True if the next input should be rendered on a new row.
    */
-  shouldStartNewRow_(input, lastInput) {
+  protected shouldStartNewRow_(input: Input, lastInput: Input): boolean {
     // If this is the first input, just add to the existing row.
     // That row is either empty or has some icons in it.
     if (!lastInput) {
@@ -402,7 +352,7 @@ class RenderInfo {
     }
     // A statement input or an input following one always gets a new row.
     if (input.type === inputTypes.STATEMENT ||
-        lastInput.type === inputTypes.STATEMENT) {
+      lastInput.type === inputTypes.STATEMENT) {
       return true;
     }
     // Value and dummy inputs get new row if inputs are not inlined.
@@ -412,19 +362,16 @@ class RenderInfo {
     return false;
   }
 
-  /**
-   * Add horizontal spacing between and around elements within each row.
-   * @protected
-   */
-  addElemSpacing_() {
-    for (let i = 0, row; (row = this.rows[i]); i++) {
+  /** Add horizontal spacing between and around elements within each row. */
+  protected addElemSpacing_() {
+    for (let i = 0, row; row = this.rows[i]; i++) {
       const oldElems = row.elements;
       row.elements = [];
       // No spacing needed before the corner on the top row or the bottom row.
       if (row.startsWithElemSpacer()) {
         // There's a spacer before the first element in the row.
         row.elements.push(new InRowSpacer(
-            this.constants_, this.getInRowSpacing_(null, oldElems[0])));
+          this.constants_, this.getInRowSpacing_(null, oldElems[0])));
       }
       if (!oldElems.length) {
         continue;
@@ -438,8 +385,8 @@ class RenderInfo {
       if (row.endsWithElemSpacer()) {
         // There's a spacer after the last element in the row.
         row.elements.push(new InRowSpacer(
-            this.constants_,
-            this.getInRowSpacing_(oldElems[oldElems.length - 1], null)));
+          this.constants_,
+          this.getInRowSpacing_(oldElems[oldElems.length - 1], null)));
       }
     }
   }
@@ -448,13 +395,12 @@ class RenderInfo {
    * Calculate the width of a spacer element in a row based on the previous and
    * next elements in that row.  For instance, extra padding is added between
    * two editable fields.
-   * @param {Measurable} prev The element before the
-   *     spacer.
-   * @param {Measurable} next The element after the spacer.
-   * @return {number} The size of the spacing between the two elements.
-   * @protected
+   * @param prev The element before the spacer.
+   * @param next The element after the spacer.
+   * @return The size of the spacing between the two elements.
    */
-  getInRowSpacing_(prev, next) {
+  protected getInRowSpacing_(prev: Measurable | null, next: Measurable | null):
+    number {
     if (!prev) {
       // Statement input padding.
       if (next && Types.isStatementInput(next)) {
@@ -463,7 +409,9 @@ class RenderInfo {
     }
     // Between inputs and the end of the row.
     if (prev && Types.isInput(prev) && !next) {
-      if (Types.isExternalInput(prev)) {
+      // AnyDuringMigration because:  Property 'isExternalInput' does not exist
+      // on type 'typeof Types'.
+      if ((Types as AnyDuringMigration).isExternalInput(prev)) {
         return this.constants_.NO_PADDING;
       } else if (Types.isInlineInput(prev)) {
         return this.constants_.LARGE_PADDING;
@@ -492,29 +440,28 @@ class RenderInfo {
   /**
    * Figure out where the right edge of the block and right edge of statement
    * inputs should be placed.
-   * @protected
    */
-  computeBounds_() {
+  protected computeBounds_() {
     let widestStatementRowFields = 0;
     let blockWidth = 0;
     let widestRowWithConnectedBlocks = 0;
-    for (let i = 0, row; (row = this.rows[i]); i++) {
+    for (let i = 0, row; row = this.rows[i]; i++) {
       row.measure();
       blockWidth = Math.max(blockWidth, row.width);
       if (row.hasStatement) {
         const statementInput = row.getLastInput();
         const innerWidth = row.width - statementInput.width;
         widestStatementRowFields =
-            Math.max(widestStatementRowFields, innerWidth);
+          Math.max(widestStatementRowFields, innerWidth);
       }
       widestRowWithConnectedBlocks =
-          Math.max(widestRowWithConnectedBlocks, row.widthWithConnectedBlocks);
+        Math.max(widestRowWithConnectedBlocks, row.widthWithConnectedBlocks);
     }
 
     this.statementEdge = widestStatementRowFields;
     this.width = blockWidth;
 
-    for (let i = 0, row; (row = this.rows[i]); i++) {
+    for (let i = 0, row; row = this.rows[i]; i++) {
       if (row.hasStatement) {
         row.statementEdge = this.statementEdge;
       }
@@ -533,13 +480,11 @@ class RenderInfo {
    * Extra spacing may be necessary to make sure that the right sides of all
    * rows line up.  This can only be calculated after a first pass to calculate
    * the sizes of all rows.
-   * @protected
    */
-  alignRowElements_() {
-    for (let i = 0, row; (row = this.rows[i]); i++) {
+  protected alignRowElements_() {
+    for (let i = 0, row; row = this.rows[i]; i++) {
       if (row.hasStatement) {
-        this.alignStatementRow_(
-            /** @type {!InputRow} */ (row));
+        this.alignStatementRow_(row as InputRow);
       } else {
         const currentWidth = row.width;
         const desiredWidth = this.getDesiredRowWidth_(row);
@@ -547,7 +492,9 @@ class RenderInfo {
         if (missingSpace > 0) {
           this.addAlignmentPadding_(row, missingSpace);
         }
-        if (Types.isTopOrBottomRow(row)) {
+        // AnyDuringMigration because:  Property 'isTopOrBottomRow' does not
+        // exist on type 'typeof Types'.
+        if ((Types as AnyDuringMigration).isTopOrBottomRow(row)) {
           row.widthWithConnectedBlocks = row.width;
         }
       }
@@ -556,11 +503,10 @@ class RenderInfo {
 
   /**
    * Calculate the desired width of an input row.
-   * @param {!Row} _row The input row.
-   * @return {number} The desired width of the input row.
-   * @protected
+   * @param _row The input row.
+   * @return The desired width of the input row.
    */
-  getDesiredRowWidth_(_row) {
+  protected getDesiredRowWidth_(_row: Row): number {
     return this.width - this.startX;
   }
 
@@ -568,11 +514,10 @@ class RenderInfo {
    * Modify the given row to add the given amount of padding around its fields.
    * The exact location of the padding is based on the alignment property of the
    * last input in the field.
-   * @param {!Row} row The row to add padding to.
-   * @param {number} missingSpace How much padding to add.
-   * @protected
+   * @param row The row to add padding to.
+   * @param missingSpace How much padding to add.
    */
-  addAlignmentPadding_(row, missingSpace) {
+  protected addAlignmentPadding_(row: Row, missingSpace: number) {
     const firstSpacer = row.getFirstSpacer();
     const lastSpacer = row.getLastSpacer();
     if (row.hasExternalInput || row.hasStatement) {
@@ -600,10 +545,9 @@ class RenderInfo {
   /**
    * Align the elements of a statement row based on computed bounds.
    * Unlike other types of rows, statement rows add space in multiple places.
-   * @param {!InputRow} row The statement row to resize.
-   * @protected
+   * @param row The statement row to resize.
    */
-  alignStatementRow_(row) {
+  protected alignStatementRow_(row: InputRow) {
     const statementInput = row.getLastInput();
     let currentWidth = row.width - statementInput.width;
     let desiredWidth = this.statementEdge;
@@ -616,18 +560,15 @@ class RenderInfo {
     // block. Note that this does not add padding.
     currentWidth = row.width;
     desiredWidth = this.getDesiredRowWidth_(row);
-    statementInput.width += (desiredWidth - currentWidth);
+    statementInput.width += desiredWidth - currentWidth;
     statementInput.height = Math.max(statementInput.height, row.height);
-    row.width += (desiredWidth - currentWidth);
+    row.width += desiredWidth - currentWidth;
     row.widthWithConnectedBlocks =
-        Math.max(row.width, this.statementEdge + row.connectedBlockWidths);
+      Math.max(row.width, this.statementEdge + row.connectedBlockWidths);
   }
 
-  /**
-   * Add spacers between rows and set their sizes.
-   * @protected
-   */
-  addRowSpacing_() {
+  /** Add spacers between rows and set their sizes. */
+  protected addRowSpacing_() {
     const oldRows = this.rows;
     this.rows = [];
 
@@ -641,12 +582,11 @@ class RenderInfo {
 
   /**
    * Create a spacer row to go between prev and next, and set its size.
-   * @param {!Row} prev The previous row.
-   * @param {!Row} next The next row.
-   * @return {!SpacerRow} The newly created spacer row.
-   * @protected
+   * @param prev The previous row.
+   * @param next The next row.
+   * @return The newly created spacer row.
    */
-  makeSpacerRow_(prev, next) {
+  protected makeSpacerRow_(prev: Row, next: Row): SpacerRow {
     const height = this.getSpacerRowHeight_(prev, next);
     const width = this.getSpacerRowWidth_(prev, next);
     const spacer = new SpacerRow(this.constants_, height, width);
@@ -661,25 +601,21 @@ class RenderInfo {
 
   /**
    * Calculate the width of a spacer row.
-   * @param {!Row} _prev The row before the spacer.
-   * @param {!Row} _next The row after the spacer.
-   * @return {number} The desired width of the spacer row between these two
-   *     rows.
-   * @protected
+   * @param _prev The row before the spacer.
+   * @param _next The row after the spacer.
+   * @return The desired width of the spacer row between these two rows.
    */
-  getSpacerRowWidth_(_prev, _next) {
+  protected getSpacerRowWidth_(_prev: Row, _next: Row): number {
     return this.width - this.startX;
   }
 
   /**
    * Calculate the height of a spacer row.
-   * @param {!Row} _prev The row before the spacer.
-   * @param {!Row} _next The row after the spacer.
-   * @return {number} The desired height of the spacer row between these two
-   *     rows.
-   * @protected
+   * @param _prev The row before the spacer.
+   * @param _next The row after the spacer.
+   * @return The desired height of the spacer row between these two rows.
    */
-  getSpacerRowHeight_(_prev, _next) {
+  protected getSpacerRowHeight_(_prev: Row, _next: Row): number {
     return this.constants_.MEDIUM_PADDING;
   }
 
@@ -688,28 +624,29 @@ class RenderInfo {
    * This base implementation puts the centerline at the middle of the row
    * vertically, with no special cases.  You will likely need extra logic to
    * handle (at minimum) top and bottom rows.
-   * @param {!Row} row The row containing the element.
-   * @param {!Measurable} elem The element to place.
-   * @return {number} The desired centerline of the given element, as an offset
-   *     from the top left of the block.
-   * @protected
+   * @param row The row containing the element.
+   * @param elem The element to place.
+   * @return The desired centerline of the given element, as an offset from the
+   *     top left of the block.
    */
-  getElemCenterline_(row, elem) {
+  protected getElemCenterline_(row: Row, elem: Measurable): number {
     if (Types.isSpacer(elem)) {
       return row.yPos + elem.height / 2;
     }
     if (Types.isBottomRow(row)) {
-      const bottomRow = /** @type {!BottomRow} */ (row);
+      const bottomRow = row as BottomRow;
       const baseline =
-          bottomRow.yPos + bottomRow.height - bottomRow.descenderHeight;
+        bottomRow.yPos + bottomRow.height - bottomRow.descenderHeight;
       if (Types.isNextConnection(elem)) {
         return baseline + elem.height / 2;
       }
       return baseline - elem.height / 2;
     }
     if (Types.isTopRow(row)) {
-      const topRow = /** @type {!TopRow} */ (row);
-      if (Types.isHat(elem)) {
+      const topRow = row as TopRow;
+      // AnyDuringMigration because:  Property 'isHat' does not exist on type
+      // 'typeof Types'.
+      if ((Types as AnyDuringMigration).isHat(elem)) {
         return topRow.capline - elem.height / 2;
       }
       return topRow.capline + elem.height / 2;
@@ -720,12 +657,11 @@ class RenderInfo {
   /**
    * Record final position information on elements on the given row, for use in
    * drawing.  At minimum this records xPos and centerline on each element.
-   * @param {!Row} row The row containing the elements.
-   * @protected
+   * @param row The row containing the elements.
    */
-  recordElemPositions_(row) {
+  protected recordElemPositions_(row: Row) {
     let xCursor = row.xPos;
-    for (let j = 0, elem; (elem = row.elements[j]); j++) {
+    for (let j = 0, elem; elem = row.elements[j]; j++) {
       // Now that row heights are finalized, make spacers use the row height.
       if (Types.isSpacer(elem)) {
         elem.height = row.height;
@@ -739,29 +675,28 @@ class RenderInfo {
   /**
    * Make any final changes to the rendering information object.  In particular,
    * store the y position of each row, and record the height of the full block.
-   * @protected
    */
-  finalize_() {
+  protected finalize_() {
     // Performance note: this could be combined with the draw pass, if the time
     // that this takes is excessive.  But it shouldn't be, because it only
     // accesses and sets properties that already exist on the objects.
     let widestRowWithConnectedBlocks = 0;
     let yCursor = 0;
-    for (let i = 0, row; (row = this.rows[i]); i++) {
+    for (let i = 0, row; row = this.rows[i]; i++) {
       row.yPos = yCursor;
       row.xPos = this.startX;
       yCursor += row.height;
 
       widestRowWithConnectedBlocks =
-          Math.max(widestRowWithConnectedBlocks, row.widthWithConnectedBlocks);
+        Math.max(widestRowWithConnectedBlocks, row.widthWithConnectedBlocks);
       this.recordElemPositions_(row);
     }
     if (this.outputConnection && this.block_.nextConnection &&
-        this.block_.nextConnection.isConnected()) {
+      this.block_.nextConnection.isConnected()) {
       // Include width of connected block in value to stack width measurement.
       widestRowWithConnectedBlocks = Math.max(
-          widestRowWithConnectedBlocks,
-          this.block_.nextConnection.targetBlock().getHeightWidth().width);
+        widestRowWithConnectedBlocks,
+        this.block_.nextConnection.targetBlock().getHeightWidth().width);
     }
 
     this.widthWithChildren = widestRowWithConnectedBlocks + this.startX;
@@ -771,5 +706,3 @@ class RenderInfo {
     this.bottomRow.baseline = yCursor - this.bottomRow.descenderHeight;
   }
 }
-
-exports.RenderInfo = RenderInfo;

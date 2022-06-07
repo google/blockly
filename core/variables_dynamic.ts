@@ -1,31 +1,27 @@
+/** @fileoverview Utility functions for handling typed variables. */
+
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Utility functions for handling typed variables.
- *
- */
-'use strict';
 
 /**
  * Utility functions for handling typed variables.
  *
  * @namespace Blockly.VariablesDynamic
  */
-goog.module('Blockly.VariablesDynamic');
 
-const Variables = goog.require('Blockly.Variables');
-const xml = goog.require('Blockly.utils.xml');
-const {Blocks} = goog.require('Blockly.blocks');
-const {Msg} = goog.require('Blockly.Msg');
-const {VariableModel} = goog.require('Blockly.VariableModel');
+import { Blocks } from './blocks.js';
+import { Msg } from './msg.js';
+import * as xml from './utils/xml.js';
+import { VariableModel } from './variable_model.js';
+import * as Variables from './variables.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Workspace} = goog.requireType('Blockly.Workspace');
+import { Workspace } from './workspace.js';
 /* eslint-disable-next-line no-unused-vars */
-const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
+import { WorkspaceSvg } from './workspace_svg.js';
 
 
 /**
@@ -34,39 +30,36 @@ const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
  * variable blocks.
  * See also Blockly.Variables.CATEGORY_NAME and
  * Blockly.Procedures.CATEGORY_NAME.
- * @const {string}
  * @alias Blockly.VariablesDynamic.CATEGORY_NAME
  */
-const CATEGORY_NAME = 'VARIABLE_DYNAMIC';
-exports.CATEGORY_NAME = CATEGORY_NAME;
+export const CATEGORY_NAME = 'VARIABLE_DYNAMIC';
 
-const stringButtonClickHandler = function(button) {
+function stringButtonClickHandler(button: AnyDuringMigration) {
   Variables.createVariableButtonHandler(
-      button.getTargetWorkspace(), undefined, 'String');
-};
-exports.onCreateVariableButtonClick_String = stringButtonClickHandler;
+    button.getTargetWorkspace(), undefined, 'String');
+}
+export const onCreateVariableButtonClick_String = stringButtonClickHandler;
+function numberButtonClickHandler(button: AnyDuringMigration) {
+  Variables.createVariableButtonHandler(
+    button.getTargetWorkspace(), undefined, 'Number');
+}
+export const onCreateVariableButtonClick_Number = numberButtonClickHandler;
 
-const numberButtonClickHandler = function(button) {
+function colourButtonClickHandler(button: AnyDuringMigration) {
   Variables.createVariableButtonHandler(
-      button.getTargetWorkspace(), undefined, 'Number');
-};
-exports.onCreateVariableButtonClick_Number = numberButtonClickHandler;
-
-const colourButtonClickHandler = function(button) {
-  Variables.createVariableButtonHandler(
-      button.getTargetWorkspace(), undefined, 'Colour');
-};
-exports.onCreateVariableButtonClick_Colour = colourButtonClickHandler;
+    button.getTargetWorkspace(), undefined, 'Colour');
+}
+export const onCreateVariableButtonClick_Colour = colourButtonClickHandler;
 
 /**
  * Construct the elements (blocks and button) required by the flyout for the
  * variable category.
- * @param {!WorkspaceSvg} workspace The workspace containing variables.
- * @return {!Array<!Element>} Array of XML elements.
+ * @param workspace The workspace containing variables.
+ * @return Array of XML elements.
  * @alias Blockly.VariablesDynamic.flyoutCategory
  */
-const flyoutCategory = function(workspace) {
-  let xmlList = [];
+export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
+  let xmlList = new Array < Element > ();
   let button = document.createElement('button');
   button.setAttribute('text', Msg['NEW_STRING_VARIABLE']);
   button.setAttribute('callbackKey', 'CREATE_VARIABLE_STRING');
@@ -81,26 +74,27 @@ const flyoutCategory = function(workspace) {
   xmlList.push(button);
 
   workspace.registerButtonCallback(
-      'CREATE_VARIABLE_STRING', stringButtonClickHandler);
+    'CREATE_VARIABLE_STRING', stringButtonClickHandler);
   workspace.registerButtonCallback(
-      'CREATE_VARIABLE_NUMBER', numberButtonClickHandler);
+    'CREATE_VARIABLE_NUMBER', numberButtonClickHandler);
   workspace.registerButtonCallback(
-      'CREATE_VARIABLE_COLOUR', colourButtonClickHandler);
+    'CREATE_VARIABLE_COLOUR', colourButtonClickHandler);
 
 
-  const blockList = flyoutCategoryBlocks(workspace);
+  // AnyDuringMigration because:  Argument of type 'WorkspaceSvg' is not
+  // assignable to parameter of type 'Workspace'.
+  const blockList = flyoutCategoryBlocks(workspace as AnyDuringMigration);
   xmlList = xmlList.concat(blockList);
   return xmlList;
-};
-exports.flyoutCategory = flyoutCategory;
+}
 
 /**
  * Construct the blocks required by the flyout for the variable category.
- * @param {!Workspace} workspace The workspace containing variables.
- * @return {!Array<!Element>} Array of XML block elements.
+ * @param workspace The workspace containing variables.
+ * @return Array of XML block elements.
  * @alias Blockly.VariablesDynamic.flyoutCategoryBlocks
  */
-const flyoutCategoryBlocks = function(workspace) {
+export function flyoutCategoryBlocks(workspace: Workspace): Element[] {
   const variableModelList = workspace.getAllVariables();
 
   const xmlList = [];
@@ -109,21 +103,31 @@ const flyoutCategoryBlocks = function(workspace) {
       const firstVariable = variableModelList[variableModelList.length - 1];
       const block = xml.createElement('block');
       block.setAttribute('type', 'variables_set_dynamic');
-      block.setAttribute('gap', 24);
-      block.appendChild(Variables.generateVariableFieldDom(firstVariable));
+      // AnyDuringMigration because:  Argument of type 'number' is not
+      // assignable to parameter of type 'string'.
+      block.setAttribute('gap', 24 as AnyDuringMigration);
+      // AnyDuringMigration because:  Argument of type 'Element | null' is not
+      // assignable to parameter of type 'Node'.
+      block.appendChild(
+        Variables.generateVariableFieldDom(firstVariable) as
+        AnyDuringMigration);
       xmlList.push(block);
     }
     if (Blocks['variables_get_dynamic']) {
       variableModelList.sort(VariableModel.compareByName);
-      for (let i = 0, variable; (variable = variableModelList[i]); i++) {
+      for (let i = 0, variable; variable = variableModelList[i]; i++) {
         const block = xml.createElement('block');
         block.setAttribute('type', 'variables_get_dynamic');
-        block.setAttribute('gap', 8);
-        block.appendChild(Variables.generateVariableFieldDom(variable));
+        // AnyDuringMigration because:  Argument of type 'number' is not
+        // assignable to parameter of type 'string'.
+        block.setAttribute('gap', 8 as AnyDuringMigration);
+        // AnyDuringMigration because:  Argument of type 'Element | null' is not
+        // assignable to parameter of type 'Node'.
+        block.appendChild(
+          Variables.generateVariableFieldDom(variable) as AnyDuringMigration);
         xmlList.push(block);
       }
     }
   }
   return xmlList;
-};
-exports.flyoutCategoryBlocks = flyoutCategoryBlocks;
+}

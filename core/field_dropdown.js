@@ -20,6 +20,7 @@
 goog.module('Blockly.FieldDropdown');
 
 const aria = goog.require('Blockly.utils.aria');
+const browserEvents = goog.require('Blockly.browserEvents');
 const dom = goog.require('Blockly.utils.dom');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const object = goog.require('Blockly.utils.object');
@@ -32,6 +33,7 @@ const {Field} = goog.require('Blockly.Field');
 const {MenuItem} = goog.require('Blockly.MenuItem');
 const {Menu} = goog.require('Blockly.Menu');
 const {Svg} = goog.require('Blockly.utils.Svg');
+const {Msg} = goog.require('Blockly.Msg');
 
 
 /**
@@ -79,6 +81,13 @@ const FieldDropdown = function(menuGenerator, opt_validator, opt_config) {
   this.generatedOptions_ = null;
 
   /**
+   * List of the options for this dropdown.
+   * @type {Array<!Array>}
+   * @private
+   */
+  this.options_ = [];
+
+  /**
    * The prefix field label, of common words set after options are trimmed.
    * @type {?string}
    * @package
@@ -114,6 +123,20 @@ const FieldDropdown = function(menuGenerator, opt_validator, opt_config) {
   this.selectedMenuItem_ = null;
 
   /**
+   * On search input event data.
+   * @type {?browserEvents.Data}
+   * @private
+   */
+  this.onInputHandler_ = null;
+
+  /**
+   * Constant max count option menu for add search
+   * @type {number}
+   * @private
+   */
+  this.maxOptionForAddSearch = 10;
+
+  /**
    * The dropdown menu.
    * @type {?Menu}
    * @protected
@@ -140,6 +163,13 @@ const FieldDropdown = function(menuGenerator, opt_validator, opt_config) {
    * @private
    */
   this.svgArrow_ = null;
+
+  /**
+   * Div element for menu.
+   * @type {?HTMLElement}
+   * @private
+   */
+  this.container_ = null;
 };
 object.inherits(FieldDropdown, Field);
 
@@ -303,6 +333,36 @@ FieldDropdown.prototype.createTextArrow_ = function() {
 };
 
 /**
+ * Creates the text input for the search bar.
+ * @return {!HTMLInputElement} A text input for the search bar.
+ * @protected
+ */
+FieldDropdown.prototype.createSearchInput_ = function() {
+  const textInput = document.createElement('input');
+  textInput.type = 'search';
+  textInput.setAttribute('placeholder', Msg['SEARCH']);
+  return textInput;
+};
+
+
+FieldDropdown.prototype.onInput_ = function(e) {
+  const seacrhText = e.target.value.toLowerCase();
+  const suggestedItems = [];
+
+  for (let i = 0; i < this.options_.length; i++) {
+    if (this.options_[i][0].toLowerCase().indexOf(seacrhText) > -1) {
+      suggestedItems.push(this.options_[i]);
+    }
+  }
+
+  this.clearDropdown_();
+  this.dropdownCreate_(suggestedItems);
+  this.menu_.render(this.container_);
+  const menuElement = /** @type {!Element} */ (this.menu_.getElement());
+  dom.addClass(menuElement, 'blocklyDropdownMenu');
+};
+
+/**
  * Create an SVG based arrow.
  * @protected
  */
@@ -318,6 +378,18 @@ FieldDropdown.prototype.createSVGArrow_ = function() {
       this.getConstants().FIELD_DROPDOWN_SVG_ARROW_DATAURI);
 };
 
+FieldDropdown.prototype.createSearch_ = function() {
+  const inputElement = this.createSearchInput_();
+  const inputWrapper = document.createElement('div');
+  dom.addClass(inputWrapper, 'blockly-dropdown-search-input');
+  inputWrapper.appendChild(inputElement);
+
+  this.onInputHandler_ = browserEvents.conditionalBind(
+  inputElement, 'input', this, this.onInput_, 300);
+
+  return inputWrapper;
+};
+
 /**
  * Create a dropdown menu under the text.
  * @param {Event=} opt_e Optional mouse event that triggered the field to open,
@@ -325,7 +397,9 @@ FieldDropdown.prototype.createSVGArrow_ = function() {
  * @protected
  */
 FieldDropdown.prototype.showEditor_ = function(opt_e) {
-  this.dropdownCreate_();
+  this.container_ = DropDownDiv.getContentDiv();
+  this.options_ = this.getOptions(false);
+  this.dropdownCreate_(this.options_);
   if (opt_e && typeof opt_e.clientX === 'number') {
     this.menu_.openingCoords = new Coordinate(opt_e.clientX, opt_e.clientY);
   } else {
@@ -334,8 +408,14 @@ FieldDropdown.prototype.showEditor_ = function(opt_e) {
 
   // Remove any pre-existing elements in the dropdown.
   DropDownDiv.clearContent();
+
+  const addSearchInput = this.options_.length > this.maxOptionForAddSearch;
+  if (addSearchInput) {
+    this.container_.appendChild(this.createSearch_());
+  }
+  
   // Element gets created in render.
-  this.menu_.render(DropDownDiv.getContentDiv());
+  this.menu_.render(this.container_);
   const menuElement = /** @type {!Element} */ (this.menu_.getElement());
   dom.addClass(menuElement, 'blocklyDropdownMenu');
 
@@ -360,19 +440,24 @@ FieldDropdown.prototype.showEditor_ = function(opt_e) {
     this.menu_.setHighlighted(this.selectedMenuItem_);
   }
 
+  // Workaround to prevent dropdown menus from collapsing, when search elements.
+  if (addSearchInput) {
+    this.container_.style.width = this.container_.offsetWidth + 'px';
+  }
   this.applyColour();
 };
 
 /**
  * Create the dropdown editor.
  * @private
+ * @param {!Array<!Array<string>>} options A non-empty array of option tuples:
+ * (human-readable text or image, language-neutral name).
  */
-FieldDropdown.prototype.dropdownCreate_ = function() {
+FieldDropdown.prototype.dropdownCreate_ = function(options) {
   const menu = new Menu();
   menu.setRole(aria.Role.LISTBOX);
   this.menu_ = menu;
 
-  const options = this.getOptions(false);
   this.selectedMenuItem_ = null;
 
   for (let i = 0; i < options.length; i++) {
@@ -389,16 +474,16 @@ FieldDropdown.prototype.dropdownCreate_ = function() {
       container.appendChild(image);
 
       if (content['text']) {
-        var span = document.createElement('span');
+        const span = document.createElement('span');
         span.classList.add('blocklyMenuItemText');
 
         if (typeof content['text'] === 'string') {
           span.innerText = content['text'];
         } else {
-          var bElement = document.createElement('b');
+          const bElement = document.createElement('b');
           bElement.innerText = content['text']['title'] + ': ';
 
-          var descriptionSpan = document.createElement('span');
+          const descriptionSpan = document.createElement('span');
           descriptionSpan.innerText = content['text']['description'];
 
           span.appendChild(bElement);
@@ -428,13 +513,27 @@ FieldDropdown.prototype.dropdownCreate_ = function() {
  * Disposes of events and DOM-references belonging to the dropdown editor.
  * @private
  */
-FieldDropdown.prototype.dropdownDispose_ = function() {
+ FieldDropdown.prototype.clearDropdown_ = function() {
   if (this.menu_) {
     this.menu_.dispose();
   }
+
   this.menu_ = null;
   this.selectedMenuItem_ = null;
   this.applyColour();
+};
+
+/**
+ * Disposes of events and DOM-references belonging to the dropdown editor.
+ * @private
+ */
+FieldDropdown.prototype.dropdownDispose_ = function() {
+  this.clearDropdown_();
+
+  if (this.onInputHandler_) {
+    browserEvents.unbind(this.onInputHandler_);
+    this.onInputHandler_ = null;
+  }
 };
 
 /**

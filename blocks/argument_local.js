@@ -90,8 +90,6 @@ const {Msg} = goog.require('Blockly.Msg');
     if (this.isInFlyout) {
       return;
     }
-    // Remove option disable block
-    options.pop();
 
     // Disable rename variable with context menu for procedures block.
     const block = this;

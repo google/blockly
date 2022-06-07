@@ -1,130 +1,121 @@
+/** @fileoverview Text Area field. */
+
 /**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Text Area field.
- */
-'use strict';
 
 /**
  * Text Area field.
  * @class
  */
-goog.module('Blockly.FieldMultilineInput');
 
-const Css = goog.require('Blockly.Css');
-const WidgetDiv = goog.require('Blockly.WidgetDiv');
-const aria = goog.require('Blockly.utils.aria');
-const dom = goog.require('Blockly.utils.dom');
-const fieldRegistry = goog.require('Blockly.fieldRegistry');
-const parsing = goog.require('Blockly.utils.parsing');
-const userAgent = goog.require('Blockly.utils.userAgent');
-const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
-const {Field} = goog.require('Blockly.Field');
-const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
+import * as Css from './css.js';
+import { Field } from './field.js';
+import * as fieldRegistry from './field_registry.js';
+import { FieldTextInput } from './field_textinput.js';
+import * as aria from './utils/aria.js';
+import * as dom from './utils/dom.js';
+import { KeyCodes } from './utils/keycodes.js';
+import * as parsing from './utils/parsing.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Sentinel} = goog.requireType('Blockly.utils.Sentinel');
-const {Svg} = goog.require('Blockly.utils.Svg');
+import { Sentinel } from './utils/sentinel.js';
+import { Svg } from './utils/svg.js';
+import * as userAgent from './utils/useragent.js';
+import * as WidgetDiv from './widgetdiv.js';
 
 
 /**
  * Class for an editable text area field.
- * @extends {FieldTextInput}
  * @alias Blockly.FieldMultilineInput
  */
-class FieldMultilineInput extends FieldTextInput {
+export class FieldMultilineInput extends FieldTextInput {
   /**
-   * @param {(string|!Sentinel)=} opt_value The initial content of the
-   *     field. Should cast to a string. Defaults to an empty string if null or
-   *     undefined.
-   *     Also accepts Field.SKIP_SETUP if you wish to skip setup (only used by
-   *     subclasses that want to handle configuration and setting the field
-   *     value after their own constructors have run).
-   * @param {Function=} opt_validator An optional function that is called
-   *     to validate any constraints on what the user entered.  Takes the new
-   *     text as an argument and returns either the accepted text, a replacement
-   *     text, or null to abort the change.
-   * @param {Object=} opt_config A map of options used to configure the field.
-   *     See the [field creation documentation]{@link
-   *     https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/multiline-text-input#creation}
-   *     for a list of properties this parameter supports.
+   * The SVG group element that will contain a text element for each text row
+   *     when initialized.
    */
-  constructor(opt_value, opt_validator, opt_config) {
+  // AnyDuringMigration because:  Type 'null' is not assignable to type
+  // 'SVGGElement'.
+  textGroup_: SVGGElement = null as AnyDuringMigration;
+
+  /**
+   * Defines the maximum number of lines of field.
+   * If exceeded, scrolling functionality is enabled.
+   */
+  protected maxLines_: number = Infinity;
+
+  /** Whether Y overflow is currently occurring. */
+  protected isOverflowedY_ = false;
+
+  /**
+   * @param opt_value The initial content of the field. Should cast to a string.
+   *     Defaults to an empty string if null or undefined. Also accepts
+   *     Field.SKIP_SETUP if you wish to skip setup (only used by subclasses
+   *     that want to handle configuration and setting the field value after
+   *     their own constructors have run).
+   * @param opt_validator An optional function that is called to validate any
+   *     constraints on what the user entered.  Takes the new text as an
+   *     argument and returns either the accepted text, a replacement text, or
+   *     null to abort the change.
+   * @param opt_config A map of options used to configure the field.
+   *     See the [field creation documentation]{@link
+   * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/multiline-text-input#creation}
+   * for a list of properties this parameter supports.
+   */
+  constructor(
+    opt_value?: string | Sentinel, opt_validator?: Function,
+    opt_config?: AnyDuringMigration) {
     super(Field.SKIP_SETUP);
 
-    /**
-     * The SVG group element that will contain a text element for each text row
-     *     when initialized.
-     * @type {SVGGElement}
-     */
-    this.textGroup_ = null;
-
-    /**
-     * Defines the maximum number of lines of field.
-     * If exceeded, scrolling functionality is enabled.
-     * @type {number}
-     * @protected
-     */
-    this.maxLines_ = Infinity;
-
-    /**
-     * Whether Y overflow is currently occurring.
-     * @type {boolean}
-     * @protected
-     */
-    this.isOverflowedY_ = false;
-
-    if (opt_value === Field.SKIP_SETUP) return;
-    if (opt_config) this.configure_(opt_config);
+    if (opt_value === Field.SKIP_SETUP) {
+      return;
+    }
+    if (opt_config) {
+      this.configure_(opt_config);
+    }
     this.setValue(opt_value);
-    if (opt_validator) this.setValidator(opt_validator);
+    if (opt_validator) {
+      this.setValidator(opt_validator);
+    }
   }
 
-  /**
-   * @override
-   */
-  configure_(config) {
+  override configure_(config: AnyDuringMigration) {
     super.configure_(config);
     config['maxLines'] && this.setMaxLines(config['maxLines']);
   }
 
   /**
    * Serializes this field's value to XML. Should only be called by Blockly.Xml.
-   * @param {!Element} fieldElement The element to populate with info about the
-   *    field's state.
-   * @return {!Element} The element containing info about the field's state.
-   * @package
+   * @param fieldElement The element to populate with info about the field's
+   *     state.
+   * @return The element containing info about the field's state.
    */
-  toXml(fieldElement) {
+  override toXml(fieldElement: Element): Element {
     // Replace '\n' characters with HTML-escaped equivalent '&#10'. This is
     // needed so the plain-text representation of the XML produced by
     // `Blockly.Xml.domToText` will appear on a single line (this is a
     // limitation of the plain-text format).
     fieldElement.textContent =
-        (/** @type {string} */ (this.getValue())).replace(/\n/g, '&#10;');
+      (this.getValue() as string).replace(/\n/g, '&#10;');
     return fieldElement;
   }
 
   /**
    * Sets the field's value based on the given XML element. Should only be
    * called by Blockly.Xml.
-   * @param {!Element} fieldElement The element containing info about the
-   *    field's state.
-   * @package
+   * @param fieldElement The element containing info about the field's state.
    */
-  fromXml(fieldElement) {
-    this.setValue(fieldElement.textContent.replace(/&#10;/g, '\n'));
+  override fromXml(fieldElement: Element) {
+    this.setValue(fieldElement.textContent!.replace(/&#10;/g, '\n'));
   }
 
   /**
    * Saves this field's value.
-   * @return {*} The state of this field.
-   * @package
+   * @return The state of this field.
    */
-  saveState() {
+  override saveState(): AnyDuringMigration {
     const legacyState = this.saveLegacyState(FieldMultilineInput);
     if (legacyState !== null) {
       return legacyState;
@@ -134,39 +125,31 @@ class FieldMultilineInput extends FieldTextInput {
 
   /**
    * Sets the field's value based on the given state.
-   * @param {*} state The state of the variable to assign to this variable
-   *     field.
-   * @override
-   * @package
+   * @param state The state of the variable to assign to this variable field.
    */
-  loadState(state) {
+  override loadState(state: AnyDuringMigration) {
     if (this.loadLegacyState(Field, state)) {
       return;
     }
     this.setValue(state);
   }
 
-  /**
-   * Create the block UI for this field.
-   * @package
-   */
-  initView() {
+  /** Create the block UI for this field. */
+  override initView() {
     this.createBorderRect_();
     this.textGroup_ = dom.createSvgElement(
-        Svg.G, {
-          'class': 'blocklyEditableText',
-        },
-        this.fieldGroup_);
+      Svg.G, {
+      'class': 'blocklyEditableText',
+    },
+      this.fieldGroup_);
   }
 
   /**
    * Get the text from this field as displayed on screen.  May differ from
    * getText due to ellipsis, and other formatting.
-   * @return {string} Currently displayed text.
-   * @protected
-   * @override
+   * @return Currently displayed text.
    */
-  getDisplayText_() {
+  protected override getDisplayText_(): string {
     let textLines = this.getText();
     if (!textLines) {
       // Prevent the field from disappearing if empty.
@@ -175,7 +158,7 @@ class FieldMultilineInput extends FieldTextInput {
     const lines = textLines.split('\n');
     textLines = '';
     const displayLinesNumber =
-        this.isOverflowedY_ ? this.maxLines_ : lines.length;
+      this.isOverflowedY_ ? this.maxLines_ : lines.length;
     for (let i = 0; i < displayLinesNumber; i++) {
       let text = lines[i];
       if (text.length > this.maxDisplayLength) {
@@ -205,23 +188,19 @@ class FieldMultilineInput extends FieldTextInput {
    * field, and updates the text of the field if it is not currently being
    * edited (i.e. handled by the htmlInput_). Is being redefined here to update
    * overflow state of the field.
-   * @param {*} newValue The value to be saved. The default validator guarantees
-   * that this is a string.
-   * @protected
+   * @param newValue The value to be saved. The default validator guarantees
+   *     that this is a string.
    */
-  doValueUpdate_(newValue) {
+  protected override doValueUpdate_(newValue: AnyDuringMigration) {
     super.doValueUpdate_(newValue);
     this.isOverflowedY_ = this.value_.split('\n').length > this.maxLines_;
   }
 
-  /**
-   * Updates the text of the textElement.
-   * @protected
-   */
-  render_() {
+  /** Updates the text of the textElement. */
+  protected override render_() {
     // Remove all text group children.
     let currentChild;
-    while ((currentChild = this.textGroup_.firstChild)) {
+    while (currentChild = this.textGroup_.firstChild) {
       this.textGroup_.removeChild(currentChild);
     }
 
@@ -229,22 +208,22 @@ class FieldMultilineInput extends FieldTextInput {
     const lines = this.getDisplayText_().split('\n');
     let y = 0;
     for (let i = 0; i < lines.length; i++) {
-      const lineHeight = this.getConstants().FIELD_TEXT_HEIGHT +
-          this.getConstants().FIELD_BORDER_RECT_Y_PADDING;
+      const lineHeight = this.getConstants()!.FIELD_TEXT_HEIGHT +
+        this.getConstants()!.FIELD_BORDER_RECT_Y_PADDING;
       const span = dom.createSvgElement(
-          Svg.TEXT, {
-            'class': 'blocklyText blocklyMultilineText',
-            'x': this.getConstants().FIELD_BORDER_RECT_X_PADDING,
-            'y': y + this.getConstants().FIELD_BORDER_RECT_Y_PADDING,
-            'dy': this.getConstants().FIELD_TEXT_BASELINE,
-          },
-          this.textGroup_);
+        Svg.TEXT, {
+        'class': 'blocklyText blocklyMultilineText',
+        'x': this.getConstants()!.FIELD_BORDER_RECT_X_PADDING,
+        'y': y + this.getConstants()!.FIELD_BORDER_RECT_Y_PADDING,
+        'dy': this.getConstants()!.FIELD_TEXT_BASELINE,
+      },
+        this.textGroup_);
       span.appendChild(document.createTextNode(lines[i]));
       y += lineHeight;
     }
 
     if (this.isBeingEdited_) {
-      const htmlInput = /** @type {!HTMLElement} */ (this.htmlInput_);
+      const htmlInput = this.htmlInput_ as HTMLElement;
       if (this.isOverflowedY_) {
         dom.addClass(htmlInput, 'blocklyHtmlTextAreaInputOverflowedY');
       } else {
@@ -263,7 +242,7 @@ class FieldMultilineInput extends FieldTextInput {
       } else {
         this.resizeEditor_();
       }
-      const htmlInput = /** @type {!HTMLElement} */ (this.htmlInput_);
+      const htmlInput = this.htmlInput_ as HTMLElement;
       if (!this.isTextValid_) {
         dom.addClass(htmlInput, 'blocklyInvalidInput');
         aria.setState(htmlInput, aria.State.INVALID, true);
@@ -274,22 +253,19 @@ class FieldMultilineInput extends FieldTextInput {
     }
   }
 
-  /**
-   * Updates the size of the field based on the text.
-   * @protected
-   */
-  updateSize_() {
+  /** Updates the size of the field based on the text. */
+  protected override updateSize_() {
     const nodes = this.textGroup_.childNodes;
     let totalWidth = 0;
     let totalHeight = 0;
     for (let i = 0; i < nodes.length; i++) {
-      const tspan = /** @type {!SVGTextElement} */ (nodes[i]);
+      const tspan = nodes[i] as SVGTextElement;
       const textWidth = dom.getTextWidth(tspan);
       if (textWidth > totalWidth) {
         totalWidth = textWidth;
       }
-      totalHeight += this.getConstants().FIELD_TEXT_HEIGHT +
-          (i > 0 ? this.getConstants().FIELD_BORDER_RECT_Y_PADDING : 0);
+      totalHeight += this.getConstants()!.FIELD_TEXT_HEIGHT +
+        (i > 0 ? this.getConstants()!.FIELD_BORDER_RECT_Y_PADDING : 0);
     }
     if (this.isBeingEdited_) {
       // The default width is based on the longest line in the display text,
@@ -299,33 +275,38 @@ class FieldMultilineInput extends FieldTextInput {
       // lines than this.maxLines_.
       const actualEditorLines = this.value_.split('\n');
       const dummyTextElement = dom.createSvgElement(
-          Svg.TEXT, {'class': 'blocklyText blocklyMultilineText'});
-      const fontSize = this.getConstants().FIELD_TEXT_FONTSIZE;
-      const fontWeight = this.getConstants().FIELD_TEXT_FONTWEIGHT;
-      const fontFamily = this.getConstants().FIELD_TEXT_FONTFAMILY;
+        Svg.TEXT, { 'class': 'blocklyText blocklyMultilineText' });
+      const fontSize = this.getConstants()!.FIELD_TEXT_FONTSIZE;
+      const fontWeight = this.getConstants()!.FIELD_TEXT_FONTWEIGHT;
+      const fontFamily = this.getConstants()!.FIELD_TEXT_FONTFAMILY;
 
       for (let i = 0; i < actualEditorLines.length; i++) {
         if (actualEditorLines[i].length > this.maxDisplayLength) {
           actualEditorLines[i] =
-              actualEditorLines[i].substring(0, this.maxDisplayLength);
+            actualEditorLines[i].substring(0, this.maxDisplayLength);
         }
         dummyTextElement.textContent = actualEditorLines[i];
         const lineWidth = dom.getFastTextWidth(
-            dummyTextElement, fontSize, fontWeight, fontFamily);
+          dummyTextElement, fontSize, fontWeight, fontFamily);
         if (lineWidth > totalWidth) {
           totalWidth = lineWidth;
         }
       }
 
       const scrollbarWidth =
-          this.htmlInput_.offsetWidth - this.htmlInput_.clientWidth;
+        this.htmlInput_!.offsetWidth - this.htmlInput_!.clientWidth;
       totalWidth += scrollbarWidth;
     }
     if (this.borderRect_) {
-      totalHeight += this.getConstants().FIELD_BORDER_RECT_Y_PADDING * 2;
-      totalWidth += this.getConstants().FIELD_BORDER_RECT_X_PADDING * 2;
-      this.borderRect_.setAttribute('width', totalWidth);
-      this.borderRect_.setAttribute('height', totalHeight);
+      totalHeight += this.getConstants()!.FIELD_BORDER_RECT_Y_PADDING * 2;
+      totalWidth += this.getConstants()!.FIELD_BORDER_RECT_X_PADDING * 2;
+      // AnyDuringMigration because:  Argument of type 'number' is not
+      // assignable to parameter of type 'string'.
+      this.borderRect_.setAttribute('width', totalWidth as AnyDuringMigration);
+      // AnyDuringMigration because:  Argument of type 'number' is not
+      // assignable to parameter of type 'string'.
+      this.borderRect_.setAttribute(
+        'height', totalHeight as AnyDuringMigration);
     }
     this.size_.width = totalWidth;
     this.size_.height = totalHeight;
@@ -337,45 +318,45 @@ class FieldMultilineInput extends FieldTextInput {
    * Show the inline free-text editor on top of the text.
    * Overrides the default behaviour to force rerender in order to
    * correct block size, based on editor text.
-   * @param {Event=} _opt_e Optional mouse event that triggered the field to
-   *     open, or undefined if triggered programmatically.
-   * @param {boolean=} opt_quietInput True if editor should be created without
-   *     focus.  Defaults to false.
-   * @override
+   * @param _opt_e Optional mouse event that triggered the field to open, or
+   *     undefined if triggered programmatically.
+   * @param opt_quietInput True if editor should be created without focus.
+   *     Defaults to false.
    */
-  showEditor_(_opt_e, opt_quietInput) {
+  override showEditor_(_opt_e?: Event, opt_quietInput?: boolean) {
     super.showEditor_(_opt_e, opt_quietInput);
     this.forceRerender();
   }
 
   /**
    * Create the text input editor widget.
-   * @return {!HTMLTextAreaElement} The newly created text input editor.
-   * @protected
+   * @return The newly created text input editor.
    */
-  widgetCreate_() {
+  protected override widgetCreate_(): HTMLTextAreaElement {
     const div = WidgetDiv.getDiv();
-    const scale = this.workspace_.getScale();
+    const scale = this.workspace_!.getScale();
 
-    const htmlInput =
-        /** @type {HTMLTextAreaElement} */ (document.createElement('textarea'));
+    const htmlInput = (document.createElement('textarea'));
     htmlInput.className = 'blocklyHtmlInput blocklyHtmlTextAreaInput';
-    htmlInput.setAttribute('spellcheck', this.spellcheck_);
-    const fontSize = (this.getConstants().FIELD_TEXT_FONTSIZE * scale) + 'pt';
-    div.style.fontSize = fontSize;
+    // AnyDuringMigration because:  Argument of type 'boolean' is not assignable
+    // to parameter of type 'string'.
+    htmlInput.setAttribute(
+      'spellcheck', this.spellcheck_ as AnyDuringMigration);
+    const fontSize = this.getConstants()!.FIELD_TEXT_FONTSIZE * scale + 'pt';
+    div!.style.fontSize = fontSize;
     htmlInput.style.fontSize = fontSize;
-    const borderRadius = (FieldTextInput.BORDERRADIUS * scale) + 'px';
+    const borderRadius = FieldTextInput.BORDERRADIUS * scale + 'px';
     htmlInput.style.borderRadius = borderRadius;
-    const paddingX = this.getConstants().FIELD_BORDER_RECT_X_PADDING * scale;
+    const paddingX = this.getConstants()!.FIELD_BORDER_RECT_X_PADDING * scale;
     const paddingY =
-        this.getConstants().FIELD_BORDER_RECT_Y_PADDING * scale / 2;
+      this.getConstants()!.FIELD_BORDER_RECT_Y_PADDING * scale / 2;
     htmlInput.style.padding = paddingY + 'px ' + paddingX + 'px ' + paddingY +
-        'px ' + paddingX + 'px';
-    const lineHeight = this.getConstants().FIELD_TEXT_HEIGHT +
-        this.getConstants().FIELD_BORDER_RECT_Y_PADDING;
-    htmlInput.style.lineHeight = (lineHeight * scale) + 'px';
+      'px ' + paddingX + 'px';
+    const lineHeight = this.getConstants()!.FIELD_TEXT_HEIGHT +
+      this.getConstants()!.FIELD_BORDER_RECT_Y_PADDING;
+    htmlInput.style.lineHeight = lineHeight * scale + 'px';
 
-    div.appendChild(htmlInput);
+    div!.appendChild(htmlInput);
 
     htmlInput.value = htmlInput.defaultValue = this.getEditorText_(this.value_);
     htmlInput.setAttribute('data-untyped-default-value', this.value_);
@@ -394,12 +375,12 @@ class FieldMultilineInput extends FieldTextInput {
 
   /**
    * Sets the maxLines config for this field.
-   * @param {number} maxLines Defines the maximum number of lines allowed,
-   *     before scrolling functionality is enabled.
+   * @param maxLines Defines the maximum number of lines allowed, before
+   *     scrolling functionality is enabled.
    */
-  setMaxLines(maxLines) {
+  setMaxLines(maxLines: number) {
     if (typeof maxLines === 'number' && maxLines > 0 &&
-        maxLines !== this.maxLines_) {
+      maxLines !== this.maxLines_) {
       this.maxLines_ = maxLines;
       this.forceRerender();
     }
@@ -407,20 +388,21 @@ class FieldMultilineInput extends FieldTextInput {
 
   /**
    * Returns the maxLines config of this field.
-   * @return {number} The maxLines config value.
+   * @return The maxLines config value.
    */
-  getMaxLines() {
+  getMaxLines(): number {
     return this.maxLines_;
   }
 
   /**
    * Handle key down to the editor. Override the text input definition of this
    * so as to not close the editor when enter is typed in.
-   * @param {!Event} e Keyboard event.
-   * @protected
+   * @param e Keyboard event.
    */
-  onHtmlInputKeyDown_(e) {
-    if (e.keyCode !== KeyCodes.ENTER) {
+  protected override onHtmlInputKeyDown_(e: Event) {
+    // AnyDuringMigration because:  Property 'keyCode' does not exist on type
+    // 'Event'.
+    if ((e as AnyDuringMigration).keyCode !== KeyCodes.ENTER) {
       super.onHtmlInputKeyDown_(e);
     }
   }
@@ -428,13 +410,11 @@ class FieldMultilineInput extends FieldTextInput {
   /**
    * Construct a FieldMultilineInput from a JSON arg object,
    * dereferencing any string table references.
-   * @param {!Object} options A JSON object with options (text, and spellcheck).
-   * @return {!FieldMultilineInput} The new field instance.
-   * @package
+   * @param options A JSON object with options (text, and spellcheck).
+   * @return The new field instance.
    * @nocollapse
-   * @override
    */
-  static fromJson(options) {
+  static override fromJson(options: AnyDuringMigration): FieldMultilineInput {
     const text = parsing.replaceMessageReferences(options['text']);
     // `this` might be a subclass of FieldMultilineInput if that class doesn't
     // override the static fromJson method.
@@ -442,9 +422,7 @@ class FieldMultilineInput extends FieldTextInput {
   }
 }
 
-/**
- * CSS for multiline field.  See css.js for use.
- */
+/** CSS for multiline field.  See css.js for use. */
 Css.register(`
 .blocklyHtmlTextAreaInput {
   font-family: monospace;
@@ -460,5 +438,3 @@ Css.register(`
 `);
 
 fieldRegistry.register('field_multilinetext', FieldMultilineInput);
-
-exports.FieldMultilineInput = FieldMultilineInput;

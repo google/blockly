@@ -1,104 +1,176 @@
+/** @fileoverview Methods for graphically rendering a block as SVG. */
+
 /**
  * @license
  * Copyright 2012 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Methods for graphically rendering a block as SVG.
- */
-'use strict';
 
 /**
  * Methods for graphically rendering a block as SVG.
  * @class
  */
-goog.module('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
+// Unused import preserved for side-effects. Remove if unneeded.
+import './theme';
+// Unused import preserved for side-effects. Remove if unneeded.
+import './events/events_selected';
+// Unused import preserved for side-effects. Remove if unneeded.
+import './touch';
 
-const ContextMenu = goog.require('Blockly.ContextMenu');
-const Tooltip = goog.require('Blockly.Tooltip');
-const blockAnimations = goog.require('Blockly.blockAnimations');
-const blocks = goog.require('Blockly.serialization.blocks');
-const browserEvents = goog.require('Blockly.browserEvents');
-const common = goog.require('Blockly.common');
-const constants = goog.require('Blockly.constants');
-const dom = goog.require('Blockly.utils.dom');
-const eventUtils = goog.require('Blockly.Events.utils');
-const internalConstants = goog.require('Blockly.internalConstants');
-const svgMath = goog.require('Blockly.utils.svgMath');
-const {ASTNode} = goog.require('Blockly.ASTNode');
-const {Block} = goog.require('Blockly.Block');
+import { Block } from './block.js';
+import * as blockAnimations from './block_animations.js';
+import * as browserEvents from './browser_events.js';
 /* eslint-disable-next-line no-unused-vars */
-const {BlockMove} = goog.requireType('Blockly.Events.BlockMove');
+import { Comment } from './comment.js';
+import * as common from './common.js';
+import { config } from './config.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Comment} = goog.requireType('Blockly.Comment');
-const {config} = goog.require('Blockly.config');
-const {ConnectionType} = goog.require('Blockly.ConnectionType');
+import { Connection } from './connection.js';
+import { ConnectionType } from './connection_type.js';
+import * as constants from './constants.js';
+import * as ContextMenu from './contextmenu.js';
+import { ContextMenuOption, ContextMenuRegistry, LegacyContextMenuOption } from './contextmenu_registry.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Connection} = goog.requireType('Blockly.Connection');
-const {ContextMenuRegistry} = goog.require('Blockly.ContextMenuRegistry');
-const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+import { BlockMove } from './events/events_block_move.js';
+import * as eventUtils from './events/utils.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Debug: BlockRenderingDebug} = goog.requireType('Blockly.blockRendering.Debug');
-const {FieldLabel} = goog.require('Blockly.FieldLabel');
+import { Field } from './field.js';
+import { FieldLabel } from './field_label.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Field} = goog.requireType('Blockly.Field');
+import { Icon } from './icon.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IASTNodeLocationSvg} = goog.require('Blockly.IASTNodeLocationSvg');
+import { Input } from './input.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IBoundedElement} = goog.require('Blockly.IBoundedElement');
+import { IASTNodeLocationSvg } from './interfaces/i_ast_node_location_svg.js';
 /* eslint-disable-next-line no-unused-vars */
-const {ICopyable} = goog.require('Blockly.ICopyable');
+import { IBoundedElement } from './interfaces/i_bounded_element.js';
+import { CopyData, ICopyable } from './interfaces/i_copyable.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IDraggable} = goog.require('Blockly.IDraggable');
+import { IDraggable } from './interfaces/i_draggable.js';
+import * as internalConstants from './internal_constants.js';
+import { ASTNode } from './keyboard_nav/ast_node.js';
+import { TabNavigateCursor } from './keyboard_nav/tab_navigate_cursor.js';
+import { MarkerManager } from './marker_manager.js';
+import { Msg } from './msg.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IPathObject} = goog.requireType('Blockly.blockRendering.IPathObject');
+import { Mutator } from './mutator.js';
+import { RenderedConnection } from './rendered_connection.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Icon} = goog.requireType('Blockly.Icon');
+import { Debug as BlockRenderingDebug } from './renderers/common/debugger.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Input} = goog.requireType('Blockly.Input');
-const {MarkerManager} = goog.require('Blockly.MarkerManager');
-const {Msg} = goog.require('Blockly.Msg');
+import { IPathObject } from './renderers/common/i_path_object.js';
+import * as blocks from './serialization/blocks.js';
+import { BlockStyle } from './theme.js';
+import * as Tooltip from './tooltip.js';
+import { Coordinate } from './utils/coordinate.js';
+import * as dom from './utils/dom.js';
+import { Rect } from './utils/rect.js';
+import { Svg } from './utils/svg.js';
+import * as svgMath from './utils/svg_math.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Mutator} = goog.requireType('Blockly.Mutator');
-const {Rect} = goog.require('Blockly.utils.Rect');
-const {RenderedConnection} = goog.require('Blockly.RenderedConnection');
-const {Svg} = goog.require('Blockly.utils.Svg');
-const {TabNavigateCursor} = goog.require('Blockly.TabNavigateCursor');
+import { Warning } from './warning.js';
+import { Workspace } from './workspace.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Theme} = goog.requireType('Blockly.Theme');
-/* eslint-disable-next-line no-unused-vars */
-const {Warning} = goog.requireType('Blockly.Warning');
-/* eslint-disable-next-line no-unused-vars */
-const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
-/** @suppress {extraRequire} */
-goog.require('Blockly.Events.BlockMove');
-/** @suppress {extraRequire} */
-goog.require('Blockly.Events.Selected');
-/** @suppress {extraRequire} */
-goog.require('Blockly.Touch');
+import { WorkspaceSvg } from './workspace_svg.js';
 
 
 /**
  * Class for a block's SVG representation.
  * Not normally called directly, workspace.newBlock() is preferred.
- * @extends {Block}
- * @implements {IASTNodeLocationSvg}
- * @implements {IBoundedElement}
- * @implements {ICopyable}
- * @implements {IDraggable}
  * @alias Blockly.BlockSvg
  */
-class BlockSvg extends Block {
+export class BlockSvg extends Block implements IASTNodeLocationSvg,
+  IBoundedElement, ICopyable,
+  IDraggable {
   /**
-   * @param {!WorkspaceSvg} workspace The block's workspace.
-   * @param {string} prototypeName Name of the language object containing
-   *     type-specific functions for this block.
-   * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
-   *     create a new ID.
+   * Constant for identifying rows that are to be rendered inline.
+   * Don't collide with Blockly.inputTypes.
    */
-  constructor(workspace, prototypeName, opt_id) {
+  static readonly INLINE = -1;
+
+  /**
+   * ID to give the "collapsed warnings" warning. Allows us to remove the
+   * "collapsed warnings" warning without removing any warnings that belong to
+   * the block.
+   */
+  static readonly COLLAPSED_WARNING_ID = 'TEMP_COLLAPSED_WARNING_';
+  override decompose?: ((p1: Workspace) => BlockSvg) | null;
+  // override compose?: ((p1: BlockSvg) => void)|null;
+  saveConnections?: ((p1: BlockSvg) => AnyDuringMigration) | null;
+  customContextMenu?:
+    ((p1: Array<ContextMenuOption | LegacyContextMenuOption>) =>
+      AnyDuringMigration) | null;
+
+  /**
+   * An property used internally to reference the block's rendering debugger.
+   */
+  renderingDebugger: BlockRenderingDebug | null = null;
+
+  /**
+   * Height of this block, not including any statement blocks above or below.
+   * Height is in workspace units.
+   */
+  height = 0;
+
+  /**
+   * Width of this block, including any connected value blocks.
+   * Width is in workspace units.
+   */
+  width = 0;
+
+  /**
+   * Map from IDs for warnings text to PIDs of functions to apply them.
+   * Used to be able to maintain multiple warnings.
+   */
+  // AnyDuringMigration because:  Type 'null' is not assignable to type '{ [key:
+  // string]: number; }'.
+  private warningTextDb_: { [key: string]: number } = null as AnyDuringMigration;
+
+  /** Block's mutator icon (if any). */
+  mutator: Mutator | null = null;
+
+  /** Block's comment icon (if any). */
+  private commentIcon_: Comment | null = null;
+
+  /** Block's warning icon (if any). */
+  warning: Warning | null = null;
+
+  // Create core elements for the block.
+  private svgGroup_: SVGGElement;
+  style: BlockStyle;
+  pathObject: IPathObject;
+  override rendered = false;
+
+  /**
+   * Is this block currently rendering? Used to stop recursive render calls
+   * from actually triggering a re-render.
+   */
+  private renderIsInProgress_ = false;
+
+  /** Whether mousedown events have been bound yet. */
+  private eventsInit_ = false;
+
+  override workspace: WorkspaceSvg;
+  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
+  override outputConnection!: RenderedConnection;
+  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
+  override nextConnection!: RenderedConnection;
+  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
+  override previousConnection!: RenderedConnection;
+  private readonly useDragSurface_: boolean;
+
+  /**
+   * @param workspace The block's workspace.
+   * @param prototypeName Name of the language object containing type-specific
+   *     functions for this block.
+   * @param opt_id Optional ID.  Use this ID if provided, otherwise create a new
+   *     ID.
+   */
+  constructor(workspace: WorkspaceSvg, prototypeName: string, opt_id?: string) {
     super(workspace, prototypeName, opt_id);
+    this.workspace = workspace;
 
     /**
      * An optional method called when a mutator dialog is first opened.
@@ -107,7 +179,6 @@ class BlockSvg extends Block {
      * top-level block with any sub-blocks which are appropriate. This method
      * must also be coupled with defining a `compose` method for the default
      * mutation dialog button and UI to appear.
-     * @type {undefined|?function(WorkspaceSvg):!BlockSvg}
      */
     this.decompose = this.decompose;
 
@@ -116,7 +187,6 @@ class BlockSvg extends Block {
      * This function is called to modify the original block according to new
      * settings. This method must also be coupled with defining a `decompose`
      * method for the default mutation dialog button and UI to appear.
-     * @type {undefined|?function(!BlockSvg)}
      */
     this.compose = this.compose;
 
@@ -124,131 +194,30 @@ class BlockSvg extends Block {
      * An optional method called by the default mutator UI which gives the block
      * a chance to save information about what child blocks are connected to
      * what mutated connections.
-     * @type {undefined|?function(!BlockSvg)}
      */
     this.saveConnections = this.saveConnections;
 
-    /**
-     * An optional method for defining custom block context menu items.
-     * @type {undefined|?function(!Array<!ContextMenuRegistry.ContextMenuOption|
-     *                                   !ContextMenuRegistry.LegacyContextMenuOption>)}
-     */
+    /** An optional method for defining custom block context menu items. */
     this.customContextMenu = this.customContextMenu;
+    this.svgGroup_ = dom.createSvgElement(Svg.G, {});
+    (this.svgGroup_ as AnyDuringMigration).translate_ = '';
 
-    /**
-     * An property used internally to reference the block's rendering debugger.
-     * @type {?BlockRenderingDebug}
-     * @package
-     */
-    this.renderingDebugger = null;
-
-    /**
-     * Height of this block, not including any statement blocks above or below.
-     * Height is in workspace units.
-     * @type {number}
-     */
-    this.height = 0;
-
-    /**
-     * Width of this block, including any connected value blocks.
-     * Width is in workspace units.
-     * @type {number}
-     */
-    this.width = 0;
-
-    /**
-     * Map from IDs for warnings text to PIDs of functions to apply them.
-     * Used to be able to maintain multiple warnings.
-     * @type {Object<string, number>}
-     * @private
-     */
-    this.warningTextDb_ = null;
-
-    /**
-     * Block's mutator icon (if any).
-     * @type {?Mutator}
-     */
-    this.mutator = null;
-
-    /**
-     * Block's comment icon (if any).
-     * @type {?Comment}
-     * @deprecated August 2019. Use getCommentIcon instead.
-     */
-    this.comment = null;
-
-    /**
-     * Block's comment icon (if any).
-     * @type {?Comment}
-     * @private
-     */
-    this.commentIcon_ = null;
-
-    /**
-     * Block's warning icon (if any).
-     * @type {?Warning}
-     */
-    this.warning = null;
-
-    // Create core elements for the block.
-    /**
-     * @type {!SVGGElement}
-     * @private
-     */
-    this.svgGroup_ = dom.createSvgElement(Svg.G, {}, null);
-    (/** @type {?} */ (this.svgGroup_)).translate_ = '';
-
-    /**
-     * A block style object.
-     * @type {!Theme.BlockStyle}
-     */
+    /** A block style object. */
     this.style = workspace.getRenderer().getConstants().getBlockStyle(null);
 
-    /**
-     * The renderer's path object.
-     * @type {IPathObject}
-     * @package
-     */
+    /** The renderer's path object. */
     this.pathObject =
-        workspace.getRenderer().makePathObject(this.svgGroup_, this.style);
-
-    /** @type {boolean} */
-    this.rendered = false;
-    /**
-     * Is this block currently rendering? Used to stop recursive render calls
-     * from actually triggering a re-render.
-     * @type {boolean}
-     * @private
-     */
-    this.renderIsInProgress_ = false;
-
-    /**
-     * Whether mousedown events have been bound yet.
-     * @type {boolean}
-     * @private
-     */
-    this.eventsInit_ = false;
-
-    /** @type {!WorkspaceSvg} */
-    this.workspace;
-    /** @type {RenderedConnection} */
-    this.outputConnection;
-    /** @type {RenderedConnection} */
-    this.nextConnection;
-    /** @type {RenderedConnection} */
-    this.previousConnection;
+      workspace.getRenderer().makePathObject(this.svgGroup_, this.style);
 
     /**
      * Whether to move the block to the drag surface when it is dragged.
      * True if it should move, false if it should be translated directly.
-     * @type {boolean}
-     * @private
      */
     this.useDragSurface_ =
-        svgMath.is3dSupported() && !!workspace.getBlockDragSurface();
+      svgMath.is3dSupported() && !!workspace.getBlockDragSurface();
 
     const svgPath = this.pathObject.svgPath;
-    (/** @type {?} */ (svgPath)).tooltip = this;
+    (svgPath as AnyDuringMigration).tooltip = this;
     Tooltip.bindMouseEvents(svgPath);
 
     // Expose this block's ID on its top-level SVG group.
@@ -265,7 +234,7 @@ class BlockSvg extends Block {
     if (!this.workspace.rendered) {
       throw TypeError('Workspace is headless.');
     }
-    for (let i = 0, input; (input = this.inputList[i]); i++) {
+    for (let i = 0, input; input = this.inputList[i]; i++) {
       input.init();
     }
     const icons = this.getIcons();
@@ -287,17 +256,17 @@ class BlockSvg extends Block {
 
   /**
    * Get the secondary colour of a block.
-   * @return {?string} #RRGGBB string.
+   * @return #RRGGBB string.
    */
-  getColourSecondary() {
+  getColourSecondary(): string | null {
     return this.style.colourSecondary;
   }
 
   /**
    * Get the tertiary colour of a block.
-   * @return {?string} #RRGGBB string.
+   * @return #RRGGBB string.
    */
-  getColourTertiary() {
+  getColourTertiary(): string | null {
     return this.style.colourTertiary;
   }
 
@@ -308,7 +277,7 @@ class BlockSvg extends Block {
   select() {
     if (this.isShadow() && this.getParent()) {
       // Shadow blocks should not be selected.
-      this.getParent().select();
+      this.getParent()!.select();
       return;
     }
     if (common.getSelected() === this) {
@@ -316,17 +285,17 @@ class BlockSvg extends Block {
     }
     let oldId = null;
     if (common.getSelected()) {
-      oldId = common.getSelected().id;
+      oldId = common.getSelected()!.id;
       // Unselect any previously selected block.
       eventUtils.disable();
       try {
-        common.getSelected().unselect();
+        common.getSelected()!.unselect();
       } finally {
         eventUtils.enable();
       }
     }
-    const event = new (eventUtils.get(eventUtils.SELECTED))(
-        oldId, this.id, this.workspace.id);
+    const event = new (eventUtils.get(eventUtils.SELECTED))!
+      (oldId, this.id, this.workspace.id);
     eventUtils.fire(event);
     common.setSelected(this);
     this.addSelect();
@@ -340,8 +309,8 @@ class BlockSvg extends Block {
     if (common.getSelected() !== this) {
       return;
     }
-    const event = new (eventUtils.get(eventUtils.SELECTED))(
-        this.id, null, this.workspace.id);
+    const event = new (eventUtils.get(eventUtils.SELECTED))!
+      (this.id, null, this.workspace.id);
     event.workspaceId = this.workspace.id;
     eventUtils.fire(event);
     common.setSelected(null);
@@ -350,9 +319,9 @@ class BlockSvg extends Block {
 
   /**
    * Returns a list of mutator, comment, and warning icons.
-   * @return {!Array<!Icon>} List of icons.
+   * @return List of icons.
    */
-  getIcons() {
+  getIcons(): Icon[] {
     const icons = [];
     if (this.mutator) {
       icons.push(this.mutator);
@@ -368,18 +337,18 @@ class BlockSvg extends Block {
 
   /**
    * Sets the parent of this block to be a new block or null.
-   * @param {?Block} newParent New parent block.
-   * @package
-   * @override
+   * @param newParent New parent block.
    */
-  setParent(newParent) {
+  override setParent(newParent: this | null) {
     const oldParent = this.parentBlock_;
     if (newParent === oldParent) {
       return;
     }
 
     dom.startTextWidthCache();
-    super.setParent(newParent);
+    // AnyDuringMigration because:  Argument of type 'Block | null' is not
+    // assignable to parameter of type 'Block'.
+    super.setParent(newParent as AnyDuringMigration);
     dom.stopTextWidthCache();
 
     const svgRoot = this.getSvgRoot();
@@ -392,7 +361,7 @@ class BlockSvg extends Block {
 
     const oldXY = this.getRelativeToSurfaceXY();
     if (newParent) {
-      (/** @type {!BlockSvg} */ (newParent)).getSvgRoot().appendChild(svgRoot);
+      (newParent as BlockSvg).getSvgRoot().appendChild(svgRoot);
       const newXY = this.getRelativeToSurfaceXY();
       // Move the connections to match the child's new position.
       this.moveConnections(newXY.x - oldXY.x, newXY.y - oldXY.y);
@@ -412,18 +381,17 @@ class BlockSvg extends Block {
    * If the block is on the workspace, (0, 0) is the origin of the workspace
    * coordinate system.
    * This does not change with workspace scale.
-   * @return {!Coordinate} Object with .x and .y properties in
-   *     workspace coordinates.
+   * @return Object with .x and .y properties in workspace coordinates.
    */
-  getRelativeToSurfaceXY() {
+  override getRelativeToSurfaceXY(): Coordinate {
     let x = 0;
     let y = 0;
 
     const dragSurfaceGroup = this.useDragSurface_ ?
-        this.workspace.getBlockDragSurface().getGroup() :
-        null;
+      this.workspace.getBlockDragSurface()!.getGroup() :
+      null;
 
-    let element = this.getSvgRoot();
+    let element: SVGElement = this.getSvgRoot();
     if (element) {
       do {
         // Loop through this block and every parent.
@@ -433,40 +401,39 @@ class BlockSvg extends Block {
         // If this element is the current element on the drag surface, include
         // the translation of the drag surface itself.
         if (this.useDragSurface_ &&
-            this.workspace.getBlockDragSurface().getCurrentBlock() ===
-                element) {
+          this.workspace.getBlockDragSurface()!.getCurrentBlock() ===
+          element) {
           const surfaceTranslation =
-              this.workspace.getBlockDragSurface().getSurfaceTranslation();
+            this.workspace.getBlockDragSurface()!.getSurfaceTranslation();
           x += surfaceTranslation.x;
           y += surfaceTranslation.y;
         }
-        element = /** @type {!SVGElement} */ (element.parentNode);
+        element = element.parentNode as SVGElement;
       } while (element && element !== this.workspace.getCanvas() &&
-               element !== dragSurfaceGroup);
+        element !== dragSurfaceGroup);
     }
     return new Coordinate(x, y);
   }
 
   /**
    * Move a block by a relative offset.
-   * @param {number} dx Horizontal offset in workspace units.
-   * @param {number} dy Vertical offset in workspace units.
+   * @param dx Horizontal offset in workspace units.
+   * @param dy Vertical offset in workspace units.
    */
-  moveBy(dx, dy) {
+  override moveBy(dx: number, dy: number) {
     if (this.parentBlock_) {
       throw Error('Block has parent.');
     }
     const eventsEnabled = eventUtils.isEnabled();
-    let event;
+    let event: BlockMove | null = null;
     if (eventsEnabled) {
-      event = /** @type {!BlockMove} */
-          (new (eventUtils.get(eventUtils.BLOCK_MOVE))(this));
+      event = new (eventUtils.get(eventUtils.BLOCK_MOVE))!(this) as BlockMove;
     }
     const xy = this.getRelativeToSurfaceXY();
     this.translate(xy.x + dx, xy.y + dy);
     this.moveConnections(dx, dy);
-    if (eventsEnabled) {
-      event.recordNew();
+    if (eventsEnabled && event) {
+      event!.recordNew();
       eventUtils.fire(event);
     }
     this.workspace.resizeContents();
@@ -475,19 +442,18 @@ class BlockSvg extends Block {
   /**
    * Transforms a block by setting the translation on the transform attribute
    * of the block's SVG.
-   * @param {number} x The x coordinate of the translation in workspace units.
-   * @param {number} y The y coordinate of the translation in workspace units.
+   * @param x The x coordinate of the translation in workspace units.
+   * @param y The y coordinate of the translation in workspace units.
    */
-  translate(x, y) {
+  translate(x: number, y: number) {
     this.getSvgRoot().setAttribute(
-        'transform', 'translate(' + x + ',' + y + ')');
+      'transform', 'translate(' + x + ',' + y + ')');
   }
 
   /**
    * Move this block to its workspace's drag surface, accounting for
    * positioning. Generally should be called at the same time as
    * setDragging_(true). Does nothing if useDragSurface_ is false.
-   * @package
    */
   moveToDragSurface() {
     if (!this.useDragSurface_) {
@@ -499,19 +465,19 @@ class BlockSvg extends Block {
     // This is in workspace coordinates.
     const xy = this.getRelativeToSurfaceXY();
     this.clearTransformAttributes_();
-    this.workspace.getBlockDragSurface().translateSurface(xy.x, xy.y);
+    this.workspace.getBlockDragSurface()!.translateSurface(xy.x, xy.y);
     // Execute the move on the top-level SVG component
     const svg = this.getSvgRoot();
     if (svg) {
-      this.workspace.getBlockDragSurface().setBlocksAndShow(svg);
+      this.workspace.getBlockDragSurface()!.setBlocksAndShow(svg);
     }
   }
 
   /**
    * Move a block to a position.
-   * @param {Coordinate} xy The position to move to in workspace units.
+   * @param xy The position to move to in workspace units.
    */
-  moveTo(xy) {
+  moveTo(xy: Coordinate) {
     const curXY = this.getRelativeToSurfaceXY();
     this.moveBy(xy.x - curXY.x, xy.y - curXY.y);
   }
@@ -520,78 +486,78 @@ class BlockSvg extends Block {
    * Move this block back to the workspace block canvas.
    * Generally should be called at the same time as setDragging_(false).
    * Does nothing if useDragSurface_ is false.
-   * @param {!Coordinate} newXY The position the block should take on
-   *     on the workspace canvas, in workspace coordinates.
-   * @package
+   * @param newXY The position the block should take on on the workspace canvas,
+   *     in workspace coordinates.
    */
-  moveOffDragSurface(newXY) {
+  moveOffDragSurface(newXY: Coordinate) {
     if (!this.useDragSurface_) {
       return;
     }
     // Translate to current position, turning off 3d.
     this.translate(newXY.x, newXY.y);
-    this.workspace.getBlockDragSurface().clearAndHide(
-        this.workspace.getCanvas());
+    this.workspace.getBlockDragSurface()!.clearAndHide(
+      this.workspace.getCanvas());
   }
 
   /**
    * Move this block during a drag, taking into account whether we are using a
    * drag surface to translate blocks.
    * This block must be a top-level block.
-   * @param {!Coordinate} newLoc The location to translate to, in
-   *     workspace coordinates.
-   * @package
+   * @param newLoc The location to translate to, in workspace coordinates.
    */
-  moveDuringDrag(newLoc) {
+  moveDuringDrag(newLoc: Coordinate) {
     if (this.useDragSurface_) {
-      this.workspace.getBlockDragSurface().translateSurface(newLoc.x, newLoc.y);
+      this.workspace.getBlockDragSurface()!.translateSurface(
+        newLoc.x, newLoc.y);
     } else {
-      (/** @type {?} */ (this.svgGroup_)).translate_ =
-          'translate(' + newLoc.x + ',' + newLoc.y + ')';
-      (/** @type {?} */ (this.svgGroup_))
-          .setAttribute(
-              'transform',
-              (/** @type {?} */ (this.svgGroup_)).translate_ +
-                  (/** @type {?} */ (this.svgGroup_)).skew_);
+      (this.svgGroup_ as AnyDuringMigration).translate_ =
+        'translate(' + newLoc.x + ',' + newLoc.y + ')';
+      (this.svgGroup_ as AnyDuringMigration)
+        .setAttribute(
+          'transform',
+          (this.svgGroup_ as AnyDuringMigration).translate_ +
+          (this.svgGroup_ as AnyDuringMigration).skew_);
     }
   }
 
   /**
    * Clear the block of transform="..." attributes.
    * Used when the block is switching from 3d to 2d transform or vice versa.
-   * @private
    */
-  clearTransformAttributes_() {
+  private clearTransformAttributes_() {
     this.getSvgRoot().removeAttribute('transform');
   }
 
-  /**
-   * Snap this block to the nearest grid point.
-   */
+  /** Snap this block to the nearest grid point. */
   snapToGrid() {
     if (!this.workspace) {
-      return;  // Deleted block.
+      return;
     }
+    // Deleted block.
     if (this.workspace.isDragging()) {
-      return;  // Don't bump blocks during a drag.
+      return;
     }
+    // Don't bump blocks during a drag.
     if (this.getParent()) {
-      return;  // Only snap top-level blocks.
+      return;
     }
+    // Only snap top-level blocks.
     if (this.isInFlyout) {
-      return;  // Don't move blocks around in a flyout.
+      return;
     }
+    // Don't move blocks around in a flyout.
     const grid = this.workspace.getGrid();
     if (!grid || !grid.shouldSnap()) {
-      return;  // Config says no snapping.
+      return;
     }
+    // Config says no snapping.
     const spacing = grid.getSpacing();
     const half = spacing / 2;
     const xy = this.getRelativeToSurfaceXY();
     const dx =
-        Math.round(Math.round((xy.x - half) / spacing) * spacing + half - xy.x);
+      Math.round(Math.round((xy.x - half) / spacing) * spacing + half - xy.x);
     const dy =
-        Math.round(Math.round((xy.y - half) / spacing) * spacing + half - xy.y);
+      Math.round(Math.round((xy.y - half) / spacing) * spacing + half - xy.y);
     if (dx || dy) {
       this.moveBy(dx, dy);
     }
@@ -601,9 +567,9 @@ class BlockSvg extends Block {
    * Returns the coordinates of a bounding box describing the dimensions of this
    * block and any blocks stacked below it.
    * Coordinate system: workspace coordinates.
-   * @return {!Rect} Object with coordinates of the bounding box.
+   * @return Object with coordinates of the bounding box.
    */
-  getBoundingRectangle() {
+  getBoundingRectangle(): Rect {
     const blockXY = this.getRelativeToSurfaceXY();
     const blockBounds = this.getHeightWidth();
     let left;
@@ -623,19 +589,17 @@ class BlockSvg extends Block {
    * A dirty field is a field that needs to be re-rendered.
    */
   markDirty() {
-    this.pathObject.constants = (/** @type {!WorkspaceSvg} */ (this.workspace))
-                                    .getRenderer()
-                                    .getConstants();
-    for (let i = 0, input; (input = this.inputList[i]); i++) {
+    this.pathObject.constants = (this.workspace).getRenderer().getConstants();
+    for (let i = 0, input; input = this.inputList[i]; i++) {
       input.markDirty();
     }
   }
 
   /**
    * Set whether the block is collapsed or not.
-   * @param {boolean} collapsed True if collapsed.
+   * @param collapsed True if collapsed.
    */
-  setCollapsed(collapsed) {
+  override setCollapsed(collapsed: boolean) {
     if (this.collapsed_ === collapsed) {
       return;
     }
@@ -644,22 +608,21 @@ class BlockSvg extends Block {
       this.updateCollapsed_();
     } else if (this.rendered) {
       this.render();
-      // Don't bump neighbours. Users like to store collapsed functions together
-      // and bumping makes them go out of alignment.
     }
   }
+  // Don't bump neighbours. Users like to store collapsed functions together
+  // and bumping makes them go out of alignment.
 
   /**
    * Makes sure that when the block is collapsed, it is rendered correctly
    * for that state.
-   * @private
    */
-  updateCollapsed_() {
+  private updateCollapsed_() {
     const collapsed = this.isCollapsed();
     const collapsedInputName = constants.COLLAPSED_INPUT_NAME;
     const collapsedFieldName = constants.COLLAPSED_FIELD_NAME;
 
-    for (let i = 0, input; (input = this.inputList[i]); i++) {
+    for (let i = 0, input; input = this.inputList[i]; i++) {
       if (input.name !== collapsedInputName) {
         input.setVisible(!collapsed);
       }
@@ -672,7 +635,7 @@ class BlockSvg extends Block {
     }
 
     const icons = this.getIcons();
-    for (let i = 0, icon; (icon = icons[i]); i++) {
+    for (let i = 0, icon; icon = icons[i]; i++) {
       icon.setVisible(false);
     }
 
@@ -683,18 +646,21 @@ class BlockSvg extends Block {
       return;
     }
     const input = this.getInput(collapsedInputName) ||
-        this.appendDummyInput(collapsedInputName);
-    input.appendField(new FieldLabel(text), collapsedFieldName);
+      this.appendDummyInput(collapsedInputName);
+    // AnyDuringMigration because:  Argument of type 'FieldLabel' is not
+    // assignable to parameter of type 'string | Field'.
+    input.appendField(
+      new FieldLabel(text) as AnyDuringMigration, collapsedFieldName);
   }
 
   /**
    * Open the next (or previous) FieldTextInput.
-   * @param {!Field} start Current field.
-   * @param {boolean} forward If true go forward, otherwise backward.
+   * @param start Current field.
+   * @param forward If true go forward, otherwise backward.
    */
-  tab(start, forward) {
+  tab(start: Field, forward: boolean) {
     const tabCursor = new TabNavigateCursor();
-    tabCursor.setCurNode(ASTNode.createFieldNode(start));
+    tabCursor.setCurNode(ASTNode.createFieldNode(start)!);
     const currentNode = tabCursor.getCurNode();
 
     if (forward) {
@@ -705,35 +671,31 @@ class BlockSvg extends Block {
 
     const nextNode = tabCursor.getCurNode();
     if (nextNode && nextNode !== currentNode) {
-      const nextField = /** @type {!Field} */ (nextNode.getLocation());
+      const nextField = nextNode.getLocation() as Field;
       nextField.showEditor();
 
       // Also move the cursor if we're in keyboard nav mode.
       if (this.workspace.keyboardAccessibilityMode) {
-        this.workspace.getCursor().setCurNode(nextNode);
+        this.workspace.getCursor()!.setCurNode(nextNode);
       }
     }
   }
 
   /**
    * Handle a mouse-down on an SVG block.
-   * @param {!Event} e Mouse down event or touch start event.
-   * @private
+   * @param e Mouse down event or touch start event.
    */
-  onMouseDown_(e) {
+  private onMouseDown_(e: Event) {
     const gesture = this.workspace && this.workspace.getGesture(e);
     if (gesture) {
       gesture.handleBlockStart(e, this);
     }
   }
 
-  /**
-   * Load the block's help page in a new window.
-   * @package
-   */
+  /** Load the block's help page in a new window. */
   showHelp() {
     const url =
-        (typeof this.helpUrl === 'function') ? this.helpUrl() : this.helpUrl;
+      typeof this.helpUrl === 'function' ? this.helpUrl() : this.helpUrl;
     if (url) {
       window.open(url);
     }
@@ -741,17 +703,18 @@ class BlockSvg extends Block {
 
   /**
    * Generate the context menu for this block.
-   * @return {?Array<!ContextMenuRegistry.ContextMenuOption|
-   *                 !ContextMenuRegistry.LegacyContextMenuOption>}
-   *     Context menu options or null if no menu.
-   * @protected
+   * @return Context menu options or null if no menu.
    */
-  generateContextMenu() {
+  protected generateContextMenu():
+    Array<ContextMenuOption | LegacyContextMenuOption> | null {
     if (this.workspace.options.readOnly || !this.contextMenu) {
       return null;
     }
+    // AnyDuringMigration because:  Argument of type '{ block: this; }' is not
+    // assignable to parameter of type 'Scope'.
     const menuOptions = ContextMenuRegistry.registry.getContextMenuOptions(
-        ContextMenuRegistry.ScopeType.BLOCK, {block: this});
+      ContextMenuRegistry.ScopeType.BLOCK,
+      { block: this } as AnyDuringMigration);
 
     // Allow the block to add or modify menuOptions.
     if (this.customContextMenu) {
@@ -763,28 +726,26 @@ class BlockSvg extends Block {
 
   /**
    * Show the context menu for this block.
-   * @param {!Event} e Mouse event.
-   * @package
+   * @param e Mouse event.
    */
-  showContextMenu(e) {
+  showContextMenu(e: Event) {
     const menuOptions = this.generateContextMenu();
 
     if (menuOptions && menuOptions.length) {
       ContextMenu.show(e, menuOptions, this.RTL);
-      ContextMenu.setCurrentBlock(this);
+      // AnyDuringMigration because:  Argument of type 'this' is not assignable
+      // to parameter of type 'Block | null'.
+      ContextMenu.setCurrentBlock(this as AnyDuringMigration);
     }
   }
 
   /**
    * Move the connections for this block and all blocks attached under it.
    * Also update any attached bubbles.
-   * @param {number} dx Horizontal offset from current location, in workspace
-   *     units.
-   * @param {number} dy Vertical offset from current location, in workspace
-   *     units.
-   * @package
+   * @param dx Horizontal offset from current location, in workspace units.
+   * @param dy Vertical offset from current location, in workspace units.
    */
-  moveConnections(dx, dy) {
+  moveConnections(dx: number, dy: number) {
     if (!this.rendered) {
       // Rendering is required to lay out the blocks.
       // This is probably an invisible block attached to a collapsed block.
@@ -801,49 +762,46 @@ class BlockSvg extends Block {
 
     // Recurse through all blocks attached under this one.
     for (let i = 0; i < this.childBlocks_.length; i++) {
-      (/** @type {!BlockSvg} */ (this.childBlocks_[i])).moveConnections(dx, dy);
+      (this.childBlocks_[i] as BlockSvg).moveConnections(dx, dy);
     }
   }
 
   /**
    * Recursively adds or removes the dragging class to this node and its
    * children.
-   * @param {boolean} adding True if adding, false if removing.
-   * @package
+   * @param adding True if adding, false if removing.
    */
-  setDragging(adding) {
+  setDragging(adding: boolean) {
     if (adding) {
       const group = this.getSvgRoot();
-      (/** @type {?} */ (group)).translate_ = '';
-      (/** @type {?} */ (group)).skew_ = '';
+      (group as AnyDuringMigration).translate_ = '';
+      (group as AnyDuringMigration).skew_ = '';
       common.draggingConnections.push(...this.getConnections_(true));
-      dom.addClass(
-          /** @type {!Element} */ (this.svgGroup_), 'blocklyDragging');
+      dom.addClass(this.svgGroup_ as Element, 'blocklyDragging');
     } else {
       common.draggingConnections.length = 0;
-      dom.removeClass(
-          /** @type {!Element} */ (this.svgGroup_), 'blocklyDragging');
+      dom.removeClass(this.svgGroup_ as Element, 'blocklyDragging');
     }
     // Recurse through all blocks attached under this one.
     for (let i = 0; i < this.childBlocks_.length; i++) {
-      (/** @type {!BlockSvg} */ (this.childBlocks_[i])).setDragging(adding);
+      (this.childBlocks_[i] as BlockSvg).setDragging(adding);
     }
   }
 
   /**
    * Set whether this block is movable or not.
-   * @param {boolean} movable True if movable.
+   * @param movable True if movable.
    */
-  setMovable(movable) {
+  override setMovable(movable: boolean) {
     super.setMovable(movable);
     this.pathObject.updateMovable(movable);
   }
 
   /**
    * Set whether this block is editable or not.
-   * @param {boolean} editable True if editable.
+   * @param editable True if editable.
    */
-  setEditable(editable) {
+  override setEditable(editable: boolean) {
     super.setEditable(editable);
     const icons = this.getIcons();
     for (let i = 0; i < icons.length; i++) {
@@ -853,10 +811,9 @@ class BlockSvg extends Block {
 
   /**
    * Sets whether this block is a shadow block or not.
-   * @param {boolean} shadow True if a shadow.
-   * @package
+   * @param shadow True if a shadow.
    */
-  setShadow(shadow) {
+  override setShadow(shadow: boolean) {
     super.setShadow(shadow);
     this.applyColour();
   }
@@ -864,38 +821,38 @@ class BlockSvg extends Block {
   /**
    * Set whether this block is an insertion marker block or not.
    * Once set this cannot be unset.
-   * @param {boolean} insertionMarker True if an insertion marker.
-   * @package
+   * @param insertionMarker True if an insertion marker.
    */
-  setInsertionMarker(insertionMarker) {
+  override setInsertionMarker(insertionMarker: boolean) {
     if (this.isInsertionMarker_ === insertionMarker) {
-      return;  // No change.
+      return;
     }
+    // No change.
     this.isInsertionMarker_ = insertionMarker;
     if (this.isInsertionMarker_) {
       this.setColour(
-          this.workspace.getRenderer().getConstants().INSERTION_MARKER_COLOUR);
+        this.workspace.getRenderer().getConstants().INSERTION_MARKER_COLOUR);
       this.pathObject.updateInsertionMarker(true);
     }
   }
 
   /**
    * Return the root node of the SVG or null if none exists.
-   * @return {!SVGGElement} The root SVG node (probably a group).
+   * @return The root SVG node (probably a group).
    */
-  getSvgRoot() {
+  getSvgRoot(): SVGGElement {
     return this.svgGroup_;
   }
 
   /**
    * Dispose of this block.
-   * @param {boolean=} healStack If true, then try to heal any gap by connecting
-   *     the next statement with the previous statement.  Otherwise, dispose of
-   *     all children of this block.
-   * @param {boolean=} animate If true, show a disposal animation and sound.
+   * @param healStack If true, then try to heal any gap by connecting the next
+   *     statement with the previous statement.  Otherwise, dispose of all
+   *     children of this block.
+   * @param animate If true, show a disposal animation and sound.
    * @suppress {checkTypes}
    */
-  dispose(healStack, animate) {
+  override dispose(healStack?: boolean, animate?: boolean) {
     if (!this.workspace) {
       // The block has already been deleted.
       return;
@@ -928,19 +885,31 @@ class BlockSvg extends Block {
       for (const n in this.warningTextDb_) {
         clearTimeout(this.warningTextDb_[n]);
       }
-      this.warningTextDb_ = null;
+      // AnyDuringMigration because:  Type 'null' is not assignable to type '{
+      // [key: string]: number; }'.
+      this.warningTextDb_ = null as AnyDuringMigration;
     }
 
     const icons = this.getIcons();
     for (let i = 0; i < icons.length; i++) {
       icons[i].dispose();
     }
+
+    // Just deleting this block from the DOM would result in a memory leak as
+    // well as corruption of the connection database.  Therefore we must
+    // methodically step through the blocks and carefully disassemble them.
+    if (common.getSelected() === this) {
+      common.setSelected(null);
+    }
+
     super.dispose(!!healStack);
 
     dom.removeNode(this.svgGroup_);
     blockWorkspace.resizeContents();
     // Sever JavaScript to DOM connections.
-    this.svgGroup_ = null;
+    // AnyDuringMigration because:  Type 'null' is not assignable to type
+    // 'SVGGElement'.
+    this.svgGroup_ = null as AnyDuringMigration;
     dom.stopTextWidthCache();
   }
 
@@ -962,33 +931,34 @@ class BlockSvg extends Block {
       // (https://github.com/google/blockly/issues/4832)
       this.dispose(false, true);
     } else {
-      this.dispose(/* heal */ true, true);
+      this.dispose(/* heal */
+        true, true);
     }
     eventUtils.setGroup(false);
   }
 
   /**
    * Encode a block for copying.
-   * @return {?ICopyable.CopyData} Copy metadata, or null if the block is
-   *     an insertion marker.
-   * @package
+   * @return Copy metadata, or null if the block is an insertion marker.
    */
-  toCopyData() {
+  toCopyData(): CopyData | null {
     if (this.isInsertionMarker_) {
       return null;
     }
+    // AnyDuringMigration because:  Argument of type 'this' is not assignable to
+    // parameter of type 'Block'. AnyDuringMigration because:  Argument of type
+    // 'this' is not assignable to parameter of type 'Block'.
     return {
-      saveInfo: /** @type {!blocks.State} */ (
-          blocks.save(this, {addCoordinates: true, addNextBlocks: false})),
+      saveInfo: blocks.save(
+        this as AnyDuringMigration,
+        { addCoordinates: true, addNextBlocks: false }) as
+        blocks.State,
       source: this.workspace,
-      typeCounts: common.getBlockTypeCounts(this, true),
+      typeCounts: common.getBlockTypeCounts(this as AnyDuringMigration, true),
     };
   }
 
-  /**
-   * Updates the colour of the block to match the block's state.
-   * @package
-   */
+  /** Updates the colour of the block to match the block's state. */
   applyColour() {
     this.pathObject.applyColour(this);
 
@@ -997,8 +967,8 @@ class BlockSvg extends Block {
       icons[i].applyColour();
     }
 
-    for (let x = 0, input; (input = this.inputList[x]); x++) {
-      for (let y = 0, field; (field = input.fieldRow[y]); y++) {
+    for (let x = 0, input; input = this.inputList[x]; x++) {
+      for (let y = 0, field; field = input.fieldRow[y]; y++) {
         field.applyColour();
       }
     }
@@ -1007,16 +977,14 @@ class BlockSvg extends Block {
   /**
    * Updates the color of the block (and children) to match the current disabled
    * state.
-   * @package
    */
   updateDisabled() {
-    const children =
-        /** @type {!Array<!BlockSvg>} */ (this.getChildren(false));
+    const children = (this.getChildren(false));
     this.applyColour();
     if (this.isCollapsed()) {
       return;
     }
-    for (let i = 0, child; (child = children[i]); i++) {
+    for (let i = 0, child; child = children[i]; i++) {
       if (child.rendered) {
         child.updateDisabled();
       }
@@ -1026,21 +994,19 @@ class BlockSvg extends Block {
   /**
    * Get the comment icon attached to this block, or null if the block has no
    * comment.
-   * @return {?Comment} The comment icon attached to this block, or null.
+   * @return The comment icon attached to this block, or null.
    */
-  getCommentIcon() {
+  getCommentIcon(): Comment | null {
     return this.commentIcon_;
   }
 
   /**
    * Set this block's comment text.
-   * @param {?string} text The text, or null to delete.
+   * @param text The text, or null to delete.
    */
-  setCommentText(text) {
-    const {Comment} = goog.module.get('Blockly.Comment');
-    if (!Comment) {
-      throw Error('Missing require for Blockly.Comment');
-    }
+  override setCommentText(text: string | null) {
+    // AnyDuringMigration because:  Property 'get' does not exist on type
+    // '(name: string) => void'.
     if (this.commentModel.text === text) {
       return;
     }
@@ -1050,17 +1016,20 @@ class BlockSvg extends Block {
     if (!!this.commentIcon_ === shouldHaveComment) {
       // If the comment's state of existence is correct, but the text is new
       // that means we're just updating a comment.
-      this.commentIcon_.updateText();
+      this.commentIcon_!.updateText();
       return;
     }
+    // For backwards compatibility.
     if (shouldHaveComment) {
       this.commentIcon_ = new Comment(this);
-      this.comment = this.commentIcon_;  // For backwards compatibility.
-    } else {
-      this.commentIcon_.dispose();
+      this.comment = this.commentIcon_;
+    } else  // For backwards compatibility.
+    {
+      this.commentIcon_!.dispose();
       this.commentIcon_ = null;
-      this.comment = null;  // For backwards compatibility.
+      this.comment = null;
     }
+    // For backwards compatibility.
     if (this.rendered) {
       this.render();
       // Adding or removing a comment icon will cause the block to change shape.
@@ -1070,15 +1039,11 @@ class BlockSvg extends Block {
 
   /**
    * Set this block's warning text.
-   * @param {?string} text The text, or null to delete.
-   * @param {string=} opt_id An optional ID for the warning text to be able to
-   *     maintain multiple warnings.
+   * @param text The text, or null to delete.
+   * @param opt_id An optional ID for the warning text to be able to maintain
+   *     multiple warnings.
    */
-  setWarningText(text, opt_id) {
-    const {Warning} = goog.module.get('Blockly.Warning');
-    if (!Warning) {
-      throw Error('Missing require for Blockly.Warning');
-    }
+  override setWarningText(text: string | null, opt_id?: string) {
     if (!this.warningTextDb_) {
       // Create a database of warning PIDs.
       // Only runs once per block (and only those with warnings).
@@ -1100,8 +1065,9 @@ class BlockSvg extends Block {
       // Don't change the warning text during a drag.
       // Wait until the drag finishes.
       const thisBlock = this;
-      this.warningTextDb_[id] = setTimeout(function() {
-        if (thisBlock.workspace) {  // Check block wasn't deleted.
+      this.warningTextDb_[id] = setTimeout(function () {
+        if (thisBlock.workspace) {
+          // Check block wasn't deleted.
           delete thisBlock.warningTextDb_[id];
           thisBlock.setWarningText(text, id);
         }
@@ -1125,14 +1091,14 @@ class BlockSvg extends Block {
       }
       if (collapsedParent) {
         collapsedParent.setWarningText(
-            Msg['COLLAPSED_WARNINGS_WARNING'], BlockSvg.COLLAPSED_WARNING_ID);
+          Msg['COLLAPSED_WARNINGS_WARNING'], BlockSvg.COLLAPSED_WARNING_ID);
       }
 
       if (!this.warning) {
         this.warning = new Warning(this);
         changedState = true;
       }
-      this.warning.setText(/** @type {string} */ (text), id);
+      this.warning!.setText((text), id);
     } else {
       // Dispose all warnings if no ID is given.
       if (this.warning && !id) {
@@ -1157,9 +1123,9 @@ class BlockSvg extends Block {
 
   /**
    * Give this block a mutator dialog.
-   * @param {?Mutator} mutator A mutator dialog instance or null to remove.
+   * @param mutator A mutator dialog instance or null to remove.
    */
-  setMutator(mutator) {
+  override setMutator(mutator: Mutator | null) {
     if (this.mutator && this.mutator !== mutator) {
       this.mutator.dispose();
     }
@@ -1177,9 +1143,9 @@ class BlockSvg extends Block {
 
   /**
    * Set whether the block is enabled or not.
-   * @param {boolean} enabled True if enabled.
+   * @param enabled True if enabled.
    */
-  setEnabled(enabled) {
+  override setEnabled(enabled: boolean) {
     if (this.isEnabled() !== enabled) {
       super.setEnabled(enabled);
       if (this.rendered && !this.getInheritedDisabled()) {
@@ -1191,9 +1157,9 @@ class BlockSvg extends Block {
   /**
    * Set whether the block is highlighted or not.  Block highlighting is
    * often used to visually mark blocks currently being executed.
-   * @param {boolean} highlighted True if highlighted.
+   * @param highlighted True if highlighted.
    */
-  setHighlighted(highlighted) {
+  setHighlighted(highlighted: boolean) {
     if (!this.rendered) {
       return;
     }
@@ -1220,11 +1186,9 @@ class BlockSvg extends Block {
 
   /**
    * Update the cursor over this block by adding or removing a class.
-   * @param {boolean} enable True if the delete cursor should be shown, false
-   *     otherwise.
-   * @package
+   * @param enable True if the delete cursor should be shown, false otherwise.
    */
-  setDeleteStyle(enable) {
+  setDeleteStyle(enable: boolean) {
     this.pathObject.updateDraggingDelete(enable);
   }
 
@@ -1234,21 +1198,21 @@ class BlockSvg extends Block {
 
   /**
    * Get the colour of a block.
-   * @return {string} #RRGGBB string.
+   * @return #RRGGBB string.
    */
-  getColour() {
+  override getColour(): string {
     return this.style.colourPrimary;
   }
 
   /**
    * Change the colour of a block.
-   * @param {number|string} colour HSV hue value, or #RRGGBB string.
+   * @param colour HSV hue value, or #RRGGBB string.
    */
-  setColour(colour) {
+  override setColour(colour: number | string) {
     super.setColour(colour);
     const styleObj =
-        this.workspace.getRenderer().getConstants().getBlockStyleForColour(
-            this.colour_);
+      this.workspace.getRenderer().getConstants().getBlockStyleForColour(
+        this.colour_);
 
     this.pathObject.setStyle(styleObj.style);
     this.style = styleObj.style;
@@ -1259,13 +1223,13 @@ class BlockSvg extends Block {
 
   /**
    * Set the style and colour values of a block.
-   * @param {string} blockStyleName Name of the block style.
+   * @param blockStyleName Name of the block style.
    * @throws {Error} if the block style does not exist.
    */
-  setStyle(blockStyleName) {
+  override setStyle(blockStyleName: string) {
     const blockStyle =
-        this.workspace.getRenderer().getConstants().getBlockStyle(
-            blockStyleName);
+      this.workspace.getRenderer().getConstants().getBlockStyle(
+        blockStyleName);
     this.styleName_ = blockStyleName;
 
     if (blockStyle) {
@@ -1286,30 +1250,31 @@ class BlockSvg extends Block {
    * <g> tags do not respect z-index so SVG renders them in the
    * order that they are in the DOM.  By placing this block first within the
    * block group's <g>, it will render on top of any other blocks.
-   * @package
    */
   bringToFront() {
     let block = this;
     do {
       const root = block.getSvgRoot();
       const parent = root.parentNode;
-      const childNodes = parent.childNodes;
+      const childNodes = parent!.childNodes;
       // Avoid moving the block if it's already at the bottom.
       if (childNodes[childNodes.length - 1] !== root) {
-        parent.appendChild(root);
+        parent!.appendChild(root);
       }
-      block = block.getParent();
+      // AnyDuringMigration because:  Type 'BlockSvg | null' is not assignable
+      // to type 'this'.
+      block = block.getParent() as AnyDuringMigration;
     } while (block);
   }
 
   /**
    * Set whether this block can chain onto the bottom of another block.
-   * @param {boolean} newBoolean True if there can be a previous statement.
-   * @param {(string|Array<string>|null)=} opt_check Statement type or
-   *     list of statement types.  Null/undefined if any type could be
-   * connected.
+   * @param newBoolean True if there can be a previous statement.
+   * @param opt_check Statement type or list of statement types.  Null/undefined
+   *     if any type could be connected.
    */
-  setPreviousStatement(newBoolean, opt_check) {
+  override setPreviousStatement(
+    newBoolean: boolean, opt_check?: string | string[] | null) {
     super.setPreviousStatement(newBoolean, opt_check);
 
     if (this.rendered) {
@@ -1320,12 +1285,12 @@ class BlockSvg extends Block {
 
   /**
    * Set whether another block can chain onto the bottom of this block.
-   * @param {boolean} newBoolean True if there can be a next statement.
-   * @param {(string|Array<string>|null)=} opt_check Statement type or
-   *     list of statement types.  Null/undefined if any type could be
-   * connected.
+   * @param newBoolean True if there can be a next statement.
+   * @param opt_check Statement type or list of statement types.  Null/undefined
+   *     if any type could be connected.
    */
-  setNextStatement(newBoolean, opt_check) {
+  override setNextStatement(
+    newBoolean: boolean, opt_check?: string | string[] | null) {
     super.setNextStatement(newBoolean, opt_check);
 
     if (this.rendered) {
@@ -1336,12 +1301,11 @@ class BlockSvg extends Block {
 
   /**
    * Set whether this block returns a value.
-   * @param {boolean} newBoolean True if there is an output.
-   * @param {(string|Array<string>|null)=} opt_check Returned type or list
-   *     of returned types.  Null or undefined if any type could be returned
-   *     (e.g. variable get).
+   * @param newBoolean True if there is an output.
+   * @param opt_check Returned type or list of returned types.  Null or
+   *     undefined if any type could be returned (e.g. variable get).
    */
-  setOutput(newBoolean, opt_check) {
+  override setOutput(newBoolean: boolean, opt_check?: string | string[] | null) {
     super.setOutput(newBoolean, opt_check);
 
     if (this.rendered) {
@@ -1352,9 +1316,9 @@ class BlockSvg extends Block {
 
   /**
    * Set whether value inputs are arranged horizontally or vertically.
-   * @param {boolean} newBoolean True if inputs are horizontal.
+   * @param newBoolean True if inputs are horizontal.
    */
-  setInputsInline(newBoolean) {
+  override setInputsInline(newBoolean: boolean) {
     super.setInputsInline(newBoolean);
 
     if (this.rendered) {
@@ -1365,13 +1329,13 @@ class BlockSvg extends Block {
 
   /**
    * Remove an input from this block.
-   * @param {string} name The name of the input.
-   * @param {boolean=} opt_quiet True to prevent error if input is not present.
-   * @return {boolean} True if operation succeeds, false if input is not present
-   *     and opt_quiet is true
+   * @param name The name of the input.
+   * @param opt_quiet True to prevent error if input is not present.
+   * @return True if operation succeeds, false if input is not present and
+   *     opt_quiet is true
    * @throws {Error} if the input is not present and opt_quiet is not true.
    */
-  removeInput(name, opt_quiet) {
+  override removeInput(name: string, opt_quiet?: boolean): boolean {
     const removed = super.removeInput(name, opt_quiet);
 
     if (this.rendered) {
@@ -1385,11 +1349,10 @@ class BlockSvg extends Block {
 
   /**
    * Move a numbered input to a different location on this block.
-   * @param {number} inputIndex Index of the input to move.
-   * @param {number} refIndex Index of input that should be after the moved
-   *     input.
+   * @param inputIndex Index of the input to move.
+   * @param refIndex Index of input that should be after the moved input.
    */
-  moveNumberedInputBefore(inputIndex, refIndex) {
+  override moveNumberedInputBefore(inputIndex: number, refIndex: number) {
     super.moveNumberedInputBefore(inputIndex, refIndex);
 
     if (this.rendered) {
@@ -1401,14 +1364,12 @@ class BlockSvg extends Block {
 
   /**
    * Add a value input, statement input or local variable to this block.
-   * @param {number} type One of Blockly.inputTypes.
-   * @param {string} name Language-neutral identifier which may used to find
-   *     this input again.  Should be unique to this block.
-   * @return {!Input} The input object created.
-   * @protected
-   * @override
+   * @param type One of Blockly.inputTypes.
+   * @param name Language-neutral identifier which may used to find this input
+   *     again.  Should be unique to this block.
+   * @return The input object created.
    */
-  appendInput_(type, name) {
+  protected override appendInput_(type: number, name: string): Input {
     const input = super.appendInput_(type, name);
 
     if (this.rendered) {
@@ -1425,24 +1386,18 @@ class BlockSvg extends Block {
    * Used by the deserializer to be more efficient. Setting a connection's
    * tracked_ value to false keeps it from adding itself to the db when it
    * gets its first moveTo call, saving expensive ops for later.
-   * @param {boolean} track If true, start tracking. If false, stop tracking.
-   * @package
+   * @param track If true, start tracking. If false, stop tracking.
    */
-  setConnectionTracking(track) {
+  setConnectionTracking(track: boolean) {
     if (this.previousConnection) {
-      /** @type {!RenderedConnection} */ (this.previousConnection)
-          .setTracking(track);
+      (this.previousConnection).setTracking(track);
     }
     if (this.outputConnection) {
-      /** @type {!RenderedConnection} */ (this.outputConnection)
-          .setTracking(track);
+      (this.outputConnection).setTracking(track);
     }
     if (this.nextConnection) {
-      /** @type {!RenderedConnection} */ (this.nextConnection)
-          .setTracking(track);
-      const child =
-          /** @type {!RenderedConnection} */ (this.nextConnection)
-              .targetBlock();
+      (this.nextConnection).setTracking(track);
+      const child = (this.nextConnection).targetBlock();
       if (child) {
         child.setConnectionTracking(track);
       }
@@ -1456,8 +1411,7 @@ class BlockSvg extends Block {
     }
 
     for (let i = 0; i < this.inputList.length; i++) {
-      const conn =
-          /** @type {!RenderedConnection} */ (this.inputList[i].connection);
+      const conn = this.inputList[i].connection as RenderedConnection;
       if (conn) {
         conn.setTracking(track);
 
@@ -1472,13 +1426,12 @@ class BlockSvg extends Block {
 
   /**
    * Returns connections originating from this block.
-   * @param {boolean} all If true, return all connections even hidden ones.
+   * @param all If true, return all connections even hidden ones.
    *     Otherwise, for a non-rendered block return an empty list, and for a
-   *     collapsed block don't return inputs connections.
-   * @return {!Array<!RenderedConnection>} Array of connections.
-   * @package
+   * collapsed block don't return inputs connections.
+   * @return Array of connections.
    */
-  getConnections_(all) {
+  override getConnections_(all: boolean): RenderedConnection[] {
     const myConnections = [];
     if (all || this.rendered) {
       if (this.outputConnection) {
@@ -1491,9 +1444,9 @@ class BlockSvg extends Block {
         myConnections.push(this.nextConnection);
       }
       if (all || !this.collapsed_) {
-        for (let i = 0, input; (input = this.inputList[i]); i++) {
+        for (let i = 0, input; input = this.inputList[i]; i++) {
           if (input.connection) {
-            myConnections.push(input.connection);
+            myConnections.push(input.connection as RenderedConnection);
           }
         }
       }
@@ -1504,73 +1457,84 @@ class BlockSvg extends Block {
   /**
    * Walks down a stack of blocks and finds the last next connection on the
    * stack.
-   * @param {boolean} ignoreShadows If true,the last connection on a non-shadow
-   *     block will be returned. If false, this will follow shadows to find the
-   *     last connection.
-   * @return {?RenderedConnection} The last next connection on the stack,
-   *     or null.
-   * @package
-   * @override
+   * @param ignoreShadows If true,the last connection on a non-shadow block will
+   *     be returned. If false, this will follow shadows to find the last
+   *     connection.
+   * @return The last next connection on the stack, or null.
    */
-  lastConnectionInStack(ignoreShadows) {
-    return /** @type {RenderedConnection} */ (
-        super.lastConnectionInStack(ignoreShadows));
+  override lastConnectionInStack(ignoreShadows: boolean): RenderedConnection
+    | null {
+    return super.lastConnectionInStack(ignoreShadows) as RenderedConnection;
   }
 
   /**
    * Find the connection on this block that corresponds to the given connection
    * on the other block.
    * Used to match connections between a block and its insertion marker.
-   * @param {!Block} otherBlock The other block to match against.
-   * @param {!Connection} conn The other connection to match.
-   * @return {?RenderedConnection} The matching connection on this block,
-   *     or null.
-   * @package
-   * @override
+   * @param otherBlock The other block to match against.
+   * @param conn The other connection to match.
+   * @return The matching connection on this block, or null.
    */
-  getMatchingConnection(otherBlock, conn) {
-    return /** @type {RenderedConnection} */ (
-        super.getMatchingConnection(otherBlock, conn));
+  override getMatchingConnection(otherBlock: Block, conn: Connection):
+    RenderedConnection | null {
+    return super.getMatchingConnection(otherBlock, conn) as RenderedConnection;
   }
 
   /**
    * Create a connection of the specified type.
-   * @param {number} type The type of the connection to create.
-   * @return {!RenderedConnection} A new connection of the specified type.
-   * @protected
+   * @param type The type of the connection to create.
+   * @return A new connection of the specified type.
    */
-  makeConnection_(type) {
+  protected override makeConnection_(type: number): RenderedConnection {
     return new RenderedConnection(this, type);
+  }
+
+  /**
+   * Return the next statement block directly connected to this block.
+   * @return The next statement block or null.
+   */
+  override getNextBlock(): BlockSvg | null {
+    return super.getNextBlock() as BlockSvg;
+  }
+
+  /**
+   * Returns the block connected to the previous connection.
+   * @return The previous statement block or null.
+   */
+  override getPreviousBlock(): BlockSvg | null {
+    return super.getPreviousBlock() as BlockSvg;
   }
 
   /**
    * Bump unconnected blocks out of alignment.  Two blocks which aren't actually
    * connected should not coincidentally line up on screen.
    */
-  bumpNeighbours() {
+  override bumpNeighbours() {
     if (!this.workspace) {
-      return;  // Deleted block.
+      return;
     }
+    // Deleted block.
     if (this.workspace.isDragging()) {
-      return;  // Don't bump blocks during a drag.
+      return;
     }
+    // Don't bump blocks during a drag.
     const rootBlock = this.getRootBlock();
     if (rootBlock.isInFlyout) {
-      return;  // Don't move blocks around in a flyout.
+      return;
     }
+    // Don't move blocks around in a flyout.
     // Loop through every connection on this block.
     const myConnections = this.getConnections_(false);
-    for (let i = 0, connection; (connection = myConnections[i]); i++) {
-      const renderedConn = /** @type {!RenderedConnection} */ (connection);
+    for (let i = 0, connection; connection = myConnections[i]; i++) {
+      const renderedConn = (connection);
       // Spider down from this block bumping all sub-blocks.
       if (renderedConn.isConnected() && renderedConn.isSuperior()) {
-        renderedConn.targetBlock().bumpNeighbours();
+        renderedConn.targetBlock()!.bumpNeighbours();
       }
 
       const neighbours = connection.neighbours(config.snapRadius);
-      for (let j = 0, otherConnection; (otherConnection = neighbours[j]); j++) {
-        const renderedOther =
-            /** @type {!RenderedConnection} */ (otherConnection);
+      for (let j = 0, otherConnection; otherConnection = neighbours[j]; j++) {
+        const renderedOther = otherConnection as RenderedConnection;
         // If both connections are connected, that's probably fine.  But if
         // either one of them is unconnected, then there could be confusion.
         if (!renderedConn.isConnected() || !renderedOther.isConnected()) {
@@ -1591,20 +1555,19 @@ class BlockSvg extends Block {
   /**
    * Schedule snapping to grid and bumping neighbours to occur after a brief
    * delay.
-   * @package
    */
   scheduleSnapAndBump() {
     const block = this;
     // Ensure that any snap and bump are part of this move's event group.
     const group = eventUtils.getGroup();
 
-    setTimeout(function() {
+    setTimeout(function () {
       eventUtils.setGroup(group);
       block.snapToGrid();
       eventUtils.setGroup(false);
     }, config.bumpDelay / 2);
 
-    setTimeout(function() {
+    setTimeout(function () {
       eventUtils.setGroup(group);
       block.bumpNeighbours();
       eventUtils.setGroup(false);
@@ -1615,17 +1578,17 @@ class BlockSvg extends Block {
    * Position a block so that it doesn't move the target block when connected.
    * The block to position is usually either the first block in a dragged stack
    * or an insertion marker.
-   * @param {!RenderedConnection} sourceConnection The connection on the
-   *     moving block's stack.
-   * @param {!RenderedConnection} targetConnection The connection that
-   *     should stay stationary as this block is positioned.
-   * @package
+   * @param sourceConnection The connection on the moving block's stack.
+   * @param targetConnection The connection that should stay stationary as this
+   *     block is positioned.
    */
-  positionNearConnection(sourceConnection, targetConnection) {
+  positionNearConnection(
+    sourceConnection: RenderedConnection,
+    targetConnection: RenderedConnection) {
     // We only need to position the new block if it's before the existing one,
     // otherwise its position is set by the previous block.
     if (sourceConnection.type === ConnectionType.NEXT_STATEMENT ||
-        sourceConnection.type === ConnectionType.INPUT_VALUE) {
+      sourceConnection.type === ConnectionType.INPUT_VALUE) {
       const dx = targetConnection.x - sourceConnection.x;
       const dy = targetConnection.y - sourceConnection.y;
 
@@ -1633,104 +1596,33 @@ class BlockSvg extends Block {
     }
   }
 
-  /**
-   * Return the parent block or null if this block is at the top level.
-   * @return {?BlockSvg} The block (if any) that holds the current block.
-   * @override
-   */
-  getParent() {
-    return /** @type {?BlockSvg} */ (super.getParent());
+  /** @return The first statement connection or null. */
+  override getFirstStatementConnection(): RenderedConnection | null {
+    return super.getFirstStatementConnection() as RenderedConnection | null;
   }
 
   /**
-   * @return {?BlockSvg} The block (if any) that surrounds the current block.
-   * @override
+   * Find all the blocks that are directly nested inside this one.
+   * Includes value and statement inputs, as well as any following statement.
+   * Excludes any connection on an output tab or any preceding statement.
+   * Blocks are optionally sorted by position; top to bottom.
+   * @param ordered Sort the list if true.
+   * @return Array of blocks.
    */
-  getSurroundParent() {
-    return /** @type {?BlockSvg} */ (super.getSurroundParent());
-  }
-
-  /**
-   * @return {?BlockSvg} The next statement block or null.
-   * @override
-   */
-  getNextBlock() {
-    return /** @type {?BlockSvg} */ (super.getNextBlock());
-  }
-
-  /**
-   * @return {?BlockSvg} The previou statement block or null.
-   * @override
-   */
-  getPreviousBlock() {
-    return /** @type {?BlockSvg} */ (super.getPreviousBlock());
-  }
-
-  /**
-   * @return {?RenderedConnection} The first statement connection or null.
-   * @package
-   * @override
-   */
-  getFirstStatementConnection() {
-    return /** @type {?RenderedConnection} */ (
-        super.getFirstStatementConnection());
-  }
-
-  /**
-   * @return {!BlockSvg} The top block in a stack.
-   * @override
-   */
-  getTopStackBlock() {
-    return /** @type {!BlockSvg} */ (super.getTopStackBlock());
-  }
-
-  /**
-   * @param {boolean} ordered Sort the list if true.
-   * @return {!Array<!BlockSvg>} Children of this block.
-   * @override
-   */
-  getChildren(ordered) {
-    return /** @type {!Array<!BlockSvg>} */ (super.getChildren(ordered));
-  }
-
-  /**
-   * @param {boolean} ordered Sort the list if true.
-   * @return {!Array<!BlockSvg>} Descendants of this block.
-   * @override
-   */
-  getDescendants(ordered) {
-    return /** @type {!Array<!BlockSvg>} */ (super.getDescendants(ordered));
-  }
-
-  /**
-   * @param {string} name The name of the input.
-   * @return {?BlockSvg} The attached value block, or null if the input is
-   *     either disconnected or if the input does not exist.
-   * @override
-   */
-  getInputTargetBlock(name) {
-    return /** @type {?BlockSvg} */ (super.getInputTargetBlock(name));
-  }
-
-  /**
-   * Return the top-most block in this block's tree.
-   * This will return itself if this block is at the top level.
-   * @return {!BlockSvg} The root block.
-   * @override
-   */
-  getRootBlock() {
-    return /** @type {!BlockSvg} */ (super.getRootBlock());
+  override getChildren(ordered: boolean): BlockSvg[] {
+    return super.getChildren(ordered) as BlockSvg[];
   }
 
   /**
    * Lays out and reflows a block based on its contents and settings.
-   * @param {boolean=} opt_bubble If false, just render this block.
+   * @param opt_bubble If false, just render this block.
    *   If true, also render block's parent, grandparent, etc.  Defaults to true.
    */
-  render(opt_bubble) {
+  render(opt_bubble?: boolean) {
     if (this.renderIsInProgress_) {
-      return;  // Don't allow recursive renders.
+      return;
     }
+    // Don't allow recursive renders.
     this.renderIsInProgress_ = true;
     try {
       this.rendered = true;
@@ -1759,17 +1651,14 @@ class BlockSvg extends Block {
     }
   }
 
-  /**
-   * Redraw any attached marker or cursor svgs if needed.
-   * @protected
-   */
-  updateMarkers_() {
+  /** Redraw any attached marker or cursor svgs if needed. */
+  protected updateMarkers_() {
     if (this.workspace.keyboardAccessibilityMode && this.pathObject.cursorSvg) {
-      this.workspace.getCursor().draw();
+      this.workspace.getCursor()!.draw();
     }
     if (this.workspace.keyboardAccessibilityMode && this.pathObject.markerSvg) {
       // TODO(#4592): Update all markers on the block.
-      this.workspace.getMarker(MarkerManager.LOCAL_MARKER).draw();
+      this.workspace.getMarker(MarkerManager.LOCAL_MARKER)!.draw();
     }
   }
 
@@ -1777,9 +1666,8 @@ class BlockSvg extends Block {
    * Update all of the connections on this block with the new locations
    * calculated during rendering.  Also move all of the connected blocks based
    * on the new connection locations.
-   * @private
    */
-  updateConnectionLocations_() {
+  private updateConnectionLocations_() {
     const blockTL = this.getRelativeToSurfaceXY();
     // Don't tighten previous or output connections because they are inferior
     // connections.
@@ -1791,8 +1679,7 @@ class BlockSvg extends Block {
     }
 
     for (let i = 0; i < this.inputList.length; i++) {
-      const conn =
-          /** @type {!RenderedConnection} */ (this.inputList[i].connection);
+      const conn = this.inputList[i].connection as RenderedConnection;
       if (conn) {
         conn.moveToOffset(blockTL);
         if (conn.isConnected()) {
@@ -1811,83 +1698,59 @@ class BlockSvg extends Block {
 
   /**
    * Add the cursor SVG to this block's SVG group.
-   * @param {SVGElement} cursorSvg The SVG root of the cursor to be added to the
-   *     block SVG group.
-   * @package
+   * @param cursorSvg The SVG root of the cursor to be added to the block SVG
+   *     group.
    */
-  setCursorSvg(cursorSvg) {
+  setCursorSvg(cursorSvg: SVGElement) {
     this.pathObject.setCursorSvg(cursorSvg);
   }
 
   /**
    * Add the marker SVG to this block's SVG group.
-   * @param {SVGElement} markerSvg The SVG root of the marker to be added to the
-   *     block SVG group.
-   * @package
+   * @param markerSvg The SVG root of the marker to be added to the block SVG
+   *     group.
    */
-  setMarkerSvg(markerSvg) {
+  setMarkerSvg(markerSvg: SVGElement) {
     this.pathObject.setMarkerSvg(markerSvg);
   }
 
   /**
    * Returns a bounding box describing the dimensions of this block
    * and any blocks stacked below it.
-   * @return {!{height: number, width: number}} Object with height and width
-   *    properties in workspace units.
-   * @package
+   * @return Object with height and width properties in workspace units.
    */
-  getHeightWidth() {
+  getHeightWidth(): { height: number, width: number } {
     let height = this.height;
     let width = this.width;
     // Recursively add size of subsequent blocks.
     const nextBlock = this.getNextBlock();
     if (nextBlock) {
       const nextHeightWidth = nextBlock.getHeightWidth();
-      const workspace = /** @type {!WorkspaceSvg} */ (this.workspace);
+      const workspace = (this.workspace);
       const tabHeight = workspace.getRenderer().getConstants().NOTCH_HEIGHT;
       height += nextHeightWidth.height - tabHeight;
       width = Math.max(width, nextHeightWidth.width);
     }
-    return {height: height, width: width};
+    return { height, width };
   }
 
   /**
    * Visual effect to show that if the dragging block is dropped, this block
    * will be replaced.  If a shadow block, it will disappear.  Otherwise it will
    * bump.
-   * @param {boolean} add True if highlighting should be added.
-   * @package
+   * @param add True if highlighting should be added.
    */
-  fadeForReplacement(add) {
+  fadeForReplacement(add: boolean) {
     this.pathObject.updateReplacementFade(add);
   }
 
   /**
    * Visual effect to show that if the dragging block is dropped it will connect
    * to this input.
-   * @param {Connection} conn The connection on the input to highlight.
-   * @param {boolean} add True if highlighting should be added.
-   * @package
+   * @param conn The connection on the input to highlight.
+   * @param add True if highlighting should be added.
    */
-  highlightShapeForInput(conn, add) {
+  highlightShapeForInput(conn: Connection, add: boolean) {
     this.pathObject.updateShapeForInputHighlight(conn, add);
   }
 }
-
-/**
- * Constant for identifying rows that are to be rendered inline.
- * Don't collide with Blockly.inputTypes.
- * @const
- */
-BlockSvg.INLINE = -1;
-
-/**
- * ID to give the "collapsed warnings" warning. Allows us to remove the
- * "collapsed warnings" warning without removing any warnings that belong to
- * the block.
- * @type {string}
- * @const
- */
-BlockSvg.COLLAPSED_WARNING_ID = 'TEMP_COLLAPSED_WARNING_';
-
-exports.BlockSvg = BlockSvg;

@@ -1,50 +1,48 @@
 /**
+ * @fileoverview Class representing the space a previous connection takes up
+ * during rendering.
+ */
+
+/**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Class representing the space a previous connection takes up
- * during rendering.
- */
 
 /**
  * Class representing the space a previous connection takes up
  * during rendering.
  * @class
  */
-goog.module('Blockly.blockRendering.PreviousConnection');
 
-const {Connection} = goog.require('Blockly.blockRendering.Connection');
 /* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
+import { RenderedConnection } from '../../rendered_connection.js';
+
 /* eslint-disable-next-line no-unused-vars */
-const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+import { ConstantProvider } from '../common/constants.js';
+
+import { Connection } from './connection.js';
+import { Types } from './types.js';
 
 
 /**
  * An object containing information about the space a previous connection takes
  * up during rendering.
- * @extends {Connection}
  * @struct
  * @alias Blockly.blockRendering.PreviousConnection
  */
-class PreviousConnection extends Connection {
+export class PreviousConnection extends Connection {
   /**
-   * @param {!ConstantProvider} constants The rendering
-   *   constants provider.
-   * @param {!RenderedConnection} connectionModel The connection object on
-   *     the block that this represents.
-   * @package
+   * @param constants The rendering constants provider.
+   * @param connectionModel The connection object on the block that this
+   *     represents.
    */
-  constructor(constants, connectionModel) {
+  constructor(
+    constants: ConstantProvider, connectionModel: RenderedConnection) {
     super(constants, connectionModel);
     this.type |= Types.PREVIOUS_CONNECTION;
-    this.height = this.shape.height;
-    this.width = this.shape.width;
+    this.height = this.shape.height as number;
+    this.width = this.shape.width as number;
   }
 }
-
-exports.PreviousConnection = PreviousConnection;

@@ -1,53 +1,44 @@
+/** @fileoverview Inject Blockly's CSS synchronously. */
+
 /**
  * @license
  * Copyright 2013 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Inject Blockly's CSS synchronously.
- */
-'use strict';
 
 /**
  * Inject Blockly's CSS synchronously.
  * @namespace Blockly.Css
  */
-goog.module('Blockly.Css');
 
-const deprecation = goog.require('Blockly.utils.deprecation');
+import * as deprecation from './utils/deprecation.js';
 
 
-/**
- * Has CSS already been injected?
- * @type {boolean}
- * @private
- */
+/** Has CSS already been injected? */
 let injected = false;
 
 /**
  * Add some CSS to the blob that will be injected later.  Allows optional
  * components such as fields and the toolbox to store separate CSS.
- * @param {string|!Array<string>} cssContent Multiline CSS string or an array of
- *    single lines of CSS.
+ * @param cssContent Multiline CSS string or an array of single lines of CSS.
  * @alias Blockly.Css.register
  */
-const register = function(cssContent) {
+export function register(cssContent: string | string[]) {
   if (injected) {
     throw Error('CSS already injected');
   }
 
   if (Array.isArray(cssContent)) {
     deprecation.warn(
-        'Registering CSS by passing an array of strings', 'September 2021',
-        'September 2022', 'css.register passing a multiline string');
-    content += ('\n' + cssContent.join('\n'));
+      'Registering CSS by passing an array of strings', 'September 2021',
+      'September 2022', 'css.register passing a multiline string');
+    content += '\n' + cssContent.join('\n');
   } else {
     // Add new cssContent in the global content.
-    content += ('\n' + cssContent);
+    content += '\n' + cssContent;
   }
-};
-exports.register = register;
+}
 
 /**
  * Inject the CSS into the DOM.  This is preferable over using a regular CSS
@@ -55,12 +46,12 @@ exports.register = register;
  * a) It loads synchronously and doesn't force a redraw later.
  * b) It speeds up loading by not blocking on a separate HTTP transfer.
  * c) The CSS content may be made dynamic depending on init options.
- * @param {boolean} hasCss If false, don't inject CSS
- *     (providing CSS becomes the document's responsibility).
- * @param {string} pathToMedia Path from page to the Blockly media directory.
+ * @param hasCss If false, don't inject CSS (providing CSS becomes the
+ *     document's responsibility).
+ * @param pathToMedia Path from page to the Blockly media directory.
  * @alias Blockly.Css.inject
  */
-const inject = function(hasCss, pathToMedia) {
+export function inject(hasCss: boolean, pathToMedia: string) {
   // Only inject the CSS once.
   if (injected) {
     return;
@@ -81,14 +72,13 @@ const inject = function(hasCss, pathToMedia) {
   const cssTextNode = document.createTextNode(cssContent);
   cssNode.appendChild(cssTextNode);
   document.head.insertBefore(cssNode, document.head.firstChild);
-};
-exports.inject = inject;
+}
 
 /**
  * The CSS content for Blockly.
  * @alias Blockly.Css.content
  */
-let content = (`
+let content = `
 .blocklySvg {
   background-color: #fff;
   outline: none;
@@ -564,5 +554,4 @@ let content = (`
   float: right;
   margin-right: -24px;
 }
-`);
-exports.content = content;
+`;

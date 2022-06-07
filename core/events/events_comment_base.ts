@@ -1,82 +1,70 @@
+/** @fileoverview Base class for comment events. */
+
 /**
  * @license
  * Copyright 2018 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Base class for comment events.
- */
-'use strict';
 
 /**
  * Base class for comment events.
  * @class
  */
-goog.module('Blockly.Events.CommentBase');
 
-const Xml = goog.require('Blockly.Xml');
-const eventUtils = goog.require('Blockly.Events.utils');
-const utilsXml = goog.require('Blockly.utils.xml');
-const {Abstract: AbstractEvent} = goog.require('Blockly.Events.Abstract');
+import * as utilsXml from '../utils/xml.js';
 /* eslint-disable-next-line no-unused-vars */
-const {CommentCreate} = goog.requireType('Blockly.Events.CommentCreate');
+import { WorkspaceComment } from '../workspace_comment.js';
+import * as Xml from '../xml.js';
+
+import { Abstract as AbstractEvent } from './events_abstract.js';
 /* eslint-disable-next-line no-unused-vars */
-const {CommentDelete} = goog.requireType('Blockly.Events.CommentDelete');
+import { CommentCreate } from './events_comment_create.js';
 /* eslint-disable-next-line no-unused-vars */
-const {WorkspaceComment} = goog.requireType('Blockly.WorkspaceComment');
+import { CommentDelete } from './events_comment_delete.js';
+import * as eventUtils from './utils.js';
 
 
 /**
  * Abstract class for a comment event.
- * @extends {AbstractEvent}
  * @alias Blockly.Events.CommentBase
  */
-class CommentBase extends AbstractEvent {
+export class CommentBase extends AbstractEvent {
+  override isBlank: boolean;
+  commentId: string;
+  override workspaceId: string;
+
   /**
-   * @param {!WorkspaceComment=} opt_comment The comment this event
-   *     corresponds to.  Undefined for a blank event.
+   * @param opt_comment The comment this event corresponds to.  Undefined for a
+   *     blank event.
    */
-  constructor(opt_comment) {
+  constructor(opt_comment?: WorkspaceComment) {
     super();
-    /**
-     * Whether or not an event is blank.
-     * @type {boolean}
-     */
+    /** Whether or not an event is blank. */
     this.isBlank = typeof opt_comment === 'undefined';
 
-    /**
-     * The ID of the comment this event pertains to.
-     * @type {string}
-     */
-    this.commentId = this.isBlank ? '' : opt_comment.id;
+    /** The ID of the comment this event pertains to. */
+    this.commentId = this.isBlank ? '' : opt_comment!.id;
 
-    /**
-     * The workspace identifier for this event.
-     * @type {string}
-     */
-    this.workspaceId = this.isBlank ? '' : opt_comment.workspace.id;
+    /** The workspace identifier for this event. */
+    this.workspaceId = this.isBlank ? '' : opt_comment!.workspace.id;
 
     /**
      * The event group id for the group this event belongs to. Groups define
      * events that should be treated as an single action from the user's
      * perspective, and should be undone together.
-     * @type {string}
      */
     this.group = eventUtils.getGroup();
 
-    /**
-     * Sets whether the event should be added to the undo stack.
-     * @type {boolean}
-     */
+    /** Sets whether the event should be added to the undo stack. */
     this.recordUndo = eventUtils.getRecordUndo();
   }
 
   /**
    * Encode the event as JSON.
-   * @return {!Object} JSON representation.
+   * @return JSON representation.
    */
-  toJson() {
+  override toJson(): AnyDuringMigration {
     const json = super.toJson();
     if (this.commentId) {
       json['commentId'] = this.commentId;
@@ -86,20 +74,20 @@ class CommentBase extends AbstractEvent {
 
   /**
    * Decode the JSON event.
-   * @param {!Object} json JSON representation.
+   * @param json JSON representation.
    */
-  fromJson(json) {
+  override fromJson(json: AnyDuringMigration) {
     super.fromJson(json);
     this.commentId = json['commentId'];
   }
 
   /**
    * Helper function for Comment[Create|Delete]
-   * @param {!CommentCreate|!CommentDelete} event
-   *     The event to run.
-   * @param {boolean} create if True then Create, if False then Delete
+   * @param event The event to run.
+   * @param create if True then Create, if False then Delete
    */
-  static CommentCreateDeleteHelper(event, create) {
+  static CommentCreateDeleteHelper(
+    event: CommentCreate | CommentDelete, create: boolean) {
     const workspace = event.getEventWorkspace_();
     if (create) {
       const xmlElement = utilsXml.createElement('xml');
@@ -112,10 +100,8 @@ class CommentBase extends AbstractEvent {
       } else {
         // Only complain about root-level block.
         console.warn(
-            'Can\'t uncreate non-existent comment: ' + event.commentId);
+          'Can\'t uncreate non-existent comment: ' + event.commentId);
       }
     }
   }
 }
-
-exports.CommentBase = CommentBase;

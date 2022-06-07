@@ -1,79 +1,76 @@
+/** @fileoverview Class for a block move event. */
+
 /**
  * @license
  * Copyright 2018 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Class for a block move event.
- */
-'use strict';
 
 /**
  * Class for a block move event.
  * @class
  */
-goog.module('Blockly.Events.BlockMove');
 
-const eventUtils = goog.require('Blockly.Events.utils');
-const registry = goog.require('Blockly.registry');
-const {BlockBase} = goog.require('Blockly.Events.BlockBase');
 /* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
-const {ConnectionType} = goog.require('Blockly.ConnectionType');
-const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+import { Block } from '../block.js';
+import { ConnectionType } from '../connection_type.js';
+import * as registry from '../registry.js';
+import { Coordinate } from '../utils/coordinate.js';
 
-/**
- * @typedef {{
- *   parentId: string,
- *   inputName: string,
- *   coordinate: ?Coordinate,
- * }}
- */
-let BlockLocation;  // eslint-disable-line no-unused-vars
+import { BlockBase } from './events_block_base.js';
+import * as eventUtils from './utils.js';
+
+interface BlockLocation {
+  parentId: string;
+  inputName: string;
+  coordinate: Coordinate | null;
+}  // eslint-disable-line no-unused-vars
 
 /**
  * Class for a block move event.  Created before the move.
- * @extends {BlockBase}
  * @alias Blockly.Events.BlockMove
  */
-class BlockMove extends BlockBase {
-  /**
-   * @param {!Block=} opt_block The moved block.  Undefined for a blank
-   *     event.
-   */
-  constructor(opt_block) {
+export class BlockMove extends BlockBase {
+  override type: string;
+  // Moving shadow blocks is handled via disconnection.
+  override recordUndo = false;
+  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
+  oldParentId!: string;
+  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
+  oldInputName!: string;
+  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
+  oldCoordinate!: Coordinate | null;
+
+  newParentId: string | null = null;
+  newInputName: string | null = null;
+  newCoordinate: Coordinate | null = null;
+
+  /** @param opt_block The moved block.  Undefined for a blank event. */
+  constructor(opt_block?: Block) {
     super(opt_block);
 
-    /**
-     * Type of this event.
-     * @type {string}
-     */
+    /** Type of this event. */
     this.type = eventUtils.BLOCK_MOVE;
 
     if (!opt_block) {
-      return;  // Blank event to be populated by fromJson.
+      return;
     }
+    // Blank event to be populated by fromJson.
     if (opt_block.isShadow()) {
-      // Moving shadow blocks is handled via disconnection.
-      this.recordUndo = false;
     }
 
     const location = this.currentLocation_();
     this.oldParentId = location.parentId;
     this.oldInputName = location.inputName;
     this.oldCoordinate = location.coordinate;
-
-    this.newParentId = null;
-    this.newInputName = null;
-    this.newCoordinate = null;
   }
 
   /**
    * Encode the event as JSON.
-   * @return {!Object} JSON representation.
+   * @return JSON representation.
    */
-  toJson() {
+  override toJson(): AnyDuringMigration {
     const json = super.toJson();
     if (this.newParentId) {
       json['newParentId'] = this.newParentId;
@@ -83,7 +80,7 @@ class BlockMove extends BlockBase {
     }
     if (this.newCoordinate) {
       json['newCoordinate'] = Math.round(this.newCoordinate.x) + ',' +
-          Math.round(this.newCoordinate.y);
+        Math.round(this.newCoordinate.y);
     }
     if (!this.recordUndo) {
       json['recordUndo'] = this.recordUndo;
@@ -93,9 +90,9 @@ class BlockMove extends BlockBase {
 
   /**
    * Decode the JSON event.
-   * @param {!Object} json JSON representation.
+   * @param json JSON representation.
    */
-  fromJson(json) {
+  override fromJson(json: AnyDuringMigration) {
     super.fromJson(json);
     this.newParentId = json['newParentId'];
     this.newInputName = json['newInputName'];
@@ -108,9 +105,7 @@ class BlockMove extends BlockBase {
     }
   }
 
-  /**
-   * Record the block's new location.  Called after the move.
-   */
+  /** Record the block's new location.  Called after the move. */
   recordNew() {
     const location = this.currentLocation_();
     this.newParentId = location.parentId;
@@ -121,41 +116,42 @@ class BlockMove extends BlockBase {
   /**
    * Returns the parentId and input if the block is connected,
    *   or the XY location if disconnected.
-   * @return {!BlockLocation} Collection of location info.
-   * @private
+   * @return Collection of location info.
    */
-  currentLocation_() {
+  private currentLocation_(): BlockLocation {
     const workspace = this.getEventWorkspace_();
     const block = workspace.getBlockById(this.blockId);
-    const location = {};
-    const parent = block.getParent();
+    const location = {} as BlockLocation;
+    const parent = block!.getParent();
     if (parent) {
       location.parentId = parent.id;
-      const input = parent.getInputWithBlock(block);
+      // AnyDuringMigration because:  Argument of type 'Block | null' is not
+      // assignable to parameter of type 'Block'.
+      const input = parent.getInputWithBlock(block as AnyDuringMigration);
       if (input) {
         location.inputName = input.name;
       }
     } else {
-      location.coordinate = block.getRelativeToSurfaceXY();
+      location.coordinate = block!.getRelativeToSurfaceXY();
     }
     return location;
   }
 
   /**
    * Does this event record any change of state?
-   * @return {boolean} False if something changed.
+   * @return False if something changed.
    */
-  isNull() {
+  override isNull(): boolean {
     return this.oldParentId === this.newParentId &&
-        this.oldInputName === this.newInputName &&
-        Coordinate.equals(this.oldCoordinate, this.newCoordinate);
+      this.oldInputName === this.newInputName &&
+      Coordinate.equals(this.oldCoordinate, this.newCoordinate);
   }
 
   /**
    * Run a move event.
-   * @param {boolean} forward True if run forward, false if run backward (undo).
+   * @param forward True if run forward, false if run backward (undo).
    */
-  run(forward) {
+  override run(forward: boolean) {
     const workspace = this.getEventWorkspace_();
     const block = workspace.getBlockById(this.blockId);
     if (!block) {
@@ -165,7 +161,7 @@ class BlockMove extends BlockBase {
     const parentId = forward ? this.newParentId : this.oldParentId;
     const inputName = forward ? this.newInputName : this.oldInputName;
     const coordinate = forward ? this.newCoordinate : this.oldCoordinate;
-    let parentBlock;
+    let parentBlock: Block | null;
     if (parentId) {
       parentBlock = workspace.getBlockById(parentId);
       if (!parentBlock) {
@@ -182,19 +178,18 @@ class BlockMove extends BlockBase {
     } else {
       let blockConnection = block.outputConnection;
       if (!blockConnection ||
-          (block.previousConnection &&
-           block.previousConnection.isConnected())) {
+        block.previousConnection && block.previousConnection.isConnected()) {
         blockConnection = block.previousConnection;
       }
       let parentConnection;
       const connectionType = blockConnection.type;
       if (inputName) {
-        const input = parentBlock.getInput(inputName);
+        const input = parentBlock!.getInput(inputName);
         if (input) {
           parentConnection = input.connection;
         }
       } else if (connectionType === ConnectionType.PREVIOUS_STATEMENT) {
-        parentConnection = parentBlock.nextConnection;
+        parentConnection = parentBlock!.nextConnection;
       }
       if (parentConnection) {
         blockConnection.connect(parentConnection);
@@ -206,5 +201,3 @@ class BlockMove extends BlockBase {
 }
 
 registry.register(registry.Type.EVENT, eventUtils.MOVE, BlockMove);
-
-exports.BlockMove = BlockMove;

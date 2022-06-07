@@ -1,178 +1,151 @@
 /**
+ * @fileoverview Object in charge of storing and updating a workspace theme
+ *     and UI components.
+ */
+
+/**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Object in charge of storing and updating a workspace theme
- *     and UI components.
- */
-'use strict';
 
 /**
  * Object in charge of storing and updating a workspace theme
  *     and UI components.
  * @class
  */
-goog.module('Blockly.ThemeManager');
 
-const arrayUtils = goog.require('Blockly.utils.array');
-const dom = goog.require('Blockly.utils.dom');
 /* eslint-disable-next-line no-unused-vars */
-const {Theme} = goog.requireType('Blockly.Theme');
+import { Theme } from './theme.js';
+import * as arrayUtils from './utils/array.js';
+import * as dom from './utils/dom.js';
 /* eslint-disable-next-line no-unused-vars */
-const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
+import { Workspace } from './workspace.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Workspace} = goog.requireType('Blockly.Workspace');
+import { WorkspaceSvg } from './workspace_svg.js';
 
 
 /**
  * Class for storing and updating a workspace's theme and UI components.
  * @alias Blockly.ThemeManager
  */
-class ThemeManager {
+export class ThemeManager {
+  /** A list of workspaces that are subscribed to this theme. */
+  private subscribedWorkspaces_: Workspace[] = [];
+  private componentDB_: { [key: string]: Component[] };
+  owner_: AnyDuringMigration;
+
   /**
-   * @param {!WorkspaceSvg} workspace The main workspace.
-   * @param {!Theme} theme The workspace theme.
-   * @package
+   * @param workspace The main workspace.
+   * @param theme The workspace theme.
    */
-  constructor(workspace, theme) {
-    /**
-     * The main workspace.
-     * @type {!WorkspaceSvg}
-     * @private
-     */
-    this.workspace_ = workspace;
-
-    /**
-     * The Blockly theme to use.
-     * @type {!Theme}
-     * @private
-     */
-    this.theme_ = theme;
-
-    /**
-     * A list of workspaces that are subscribed to this theme.
-     * @type {!Array<Workspace>}
-     * @private
-     */
-    this.subscribedWorkspaces_ = [];
-
-    /**
-     * A map of subscribed UI components, keyed by component name.
-     * @type {!Object<string, !Array<!ThemeManager.Component>>}
-     * @private
-     */
+  constructor(private readonly workspace: WorkspaceSvg, private theme: Theme) {
+    /** A map of subscribed UI components, keyed by component name. */
     this.componentDB_ = Object.create(null);
   }
 
   /**
    * Get the workspace theme.
-   * @return {!Theme} The workspace theme.
-   * @package
+   * @return The workspace theme.
    */
-  getTheme() {
-    return this.theme_;
+  getTheme(): Theme {
+    return this.theme;
   }
 
   /**
    * Set the workspace theme, and refresh the workspace and all components.
-   * @param {!Theme} theme The workspace theme.
-   * @package
+   * @param theme The workspace theme.
    */
-  setTheme(theme) {
-    const prevTheme = this.theme_;
-    this.theme_ = theme;
-
+  setTheme(theme: Theme) {
+    const prevTheme = this.theme;
+    this.theme = theme;
     // Set the theme name onto the injection div.
-    const injectionDiv = this.workspace_.getInjectionDiv();
+    const injectionDiv = this.workspace.getInjectionDiv();
     if (injectionDiv) {
       if (prevTheme) {
         dom.removeClass(injectionDiv, prevTheme.getClassName());
       }
-      dom.addClass(injectionDiv, this.theme_.getClassName());
+      dom.addClass(injectionDiv, this.theme.getClassName());
     }
 
     // Refresh all subscribed workspaces.
-    for (let i = 0, workspace; (workspace = this.subscribedWorkspaces_[i]);
-         i++) {
-      /** @type {!WorkspaceSvg} */ (workspace).refreshTheme();
+    for (let i = 0, workspace; workspace = this.subscribedWorkspaces_[i]; i++) {
+      (workspace as WorkspaceSvg).refreshTheme();
     }
 
     // Refresh all registered Blockly UI components.
-    for (let i = 0, keys = Object.keys(this.componentDB_), key; (key = keys[i]);
-         i++) {
-      for (let j = 0, component; (component = this.componentDB_[key][j]); j++) {
+    for (let i = 0, keys = Object.keys(this.componentDB_), key; key = keys[i];
+      i++) {
+      for (let j = 0, component; component = this.componentDB_[key][j]; j++) {
         const element = component.element;
         const propertyName = component.propertyName;
-        const style = this.theme_ && this.theme_.getComponentStyle(key);
-        element.style[propertyName] = style || '';
+        const style = this.theme && this.theme.getComponentStyle(key);
+        // AnyDuringMigration because:  Property 'style' does not exist on type
+        // 'Element'.
+        (element as AnyDuringMigration).style[propertyName] = style || '';
       }
     }
 
     for (const workspace of this.subscribedWorkspaces_) {
-      /** @type {!WorkspaceSvg} */ (workspace).hideChaff();
+      (workspace as WorkspaceSvg).hideChaff();
     }
   }
 
   /**
    * Subscribe a workspace to changes to the selected theme.  If a new theme is
    * set, the workspace is called to refresh its blocks.
-   * @param {!Workspace} workspace The workspace to subscribe.
-   * @package
+   * @param workspace The workspace to subscribe.
    */
-  subscribeWorkspace(workspace) {
+  subscribeWorkspace(workspace: Workspace) {
     this.subscribedWorkspaces_.push(workspace);
   }
 
   /**
    * Unsubscribe a workspace to changes to the selected theme.
-   * @param {!Workspace} workspace The workspace to unsubscribe.
-   * @package
+   * @param workspace The workspace to unsubscribe.
    */
-  unsubscribeWorkspace(workspace) {
+  unsubscribeWorkspace(workspace: Workspace) {
     if (!arrayUtils.removeElem(this.subscribedWorkspaces_, workspace)) {
       throw Error(
-          'Cannot unsubscribe a workspace that hasn\'t been subscribed.');
+        'Cannot unsubscribe a workspace that hasn\'t been subscribed.');
     }
   }
 
   /**
    * Subscribe an element to changes to the selected theme.  If a new theme is
    * selected, the element's style is refreshed with the new theme's style.
-   * @param {!Element} element The element to subscribe.
-   * @param {string} componentName The name used to identify the component. This
-   *     must be the same name used to configure the style in the Theme object.
-   * @param {string} propertyName The inline style property name to update.
-   * @package
+   * @param element The element to subscribe.
+   * @param componentName The name used to identify the component. This must be
+   *     the same name used to configure the style in the Theme object.
+   * @param propertyName The inline style property name to update.
    */
-  subscribe(element, componentName, propertyName) {
+  subscribe(element: Element, componentName: string, propertyName: string) {
     if (!this.componentDB_[componentName]) {
       this.componentDB_[componentName] = [];
     }
 
     // Add the element to our component map.
-    this.componentDB_[componentName].push(
-        {element: element, propertyName: propertyName});
+    this.componentDB_[componentName].push({ element, propertyName });
 
     // Initialize the element with its corresponding theme style.
-    const style = this.theme_ && this.theme_.getComponentStyle(componentName);
-    element.style[propertyName] = style || '';
+    const style = this.theme && this.theme.getComponentStyle(componentName);
+    // AnyDuringMigration because:  Property 'style' does not exist on type
+    // 'Element'.
+    (element as AnyDuringMigration).style[propertyName] = style || '';
   }
 
   /**
    * Unsubscribe an element to changes to the selected theme.
-   * @param {Element} element The element to unsubscribe.
-   * @package
+   * @param element The element to unsubscribe.
    */
-  unsubscribe(element) {
+  unsubscribe(element: Element) {
     if (!element) {
       return;
     }
     // Go through all component, and remove any references to this element.
     const componentNames = Object.keys(this.componentDB_);
-    for (let c = 0, componentName; (componentName = componentNames[c]); c++) {
+    for (let c = 0, componentName; componentName = componentNames[c]; c++) {
       const elements = this.componentDB_[componentName];
       for (let i = elements.length - 1; i >= 0; i--) {
         if (elements[i].element === element) {
@@ -188,24 +161,22 @@ class ThemeManager {
 
   /**
    * Dispose of this theme manager.
-   * @package
    * @suppress {checkTypes}
    */
   dispose() {
     this.owner_ = null;
-    this.theme_ = null;
-    this.subscribedWorkspaces_ = null;
-    this.componentDB_ = null;
+    // AnyDuringMigration because:  Type 'null' is not assignable to type
+    // 'Theme'.
+    this.theme = null as AnyDuringMigration;
+    // AnyDuringMigration because:  Type 'null' is not assignable to type
+    // 'Workspace[]'.
+    this.subscribedWorkspaces_ = null as AnyDuringMigration;
+    // AnyDuringMigration because:  Type 'null' is not assignable to type '{
+    // [key: string]: Component[]; }'.
+    this.componentDB_ = null as AnyDuringMigration;
   }
 }
-
-/**
- * A Blockly UI component type.
- * @typedef {{
- *            element:!Element,
- *            propertyName:string
- *          }}
- */
-ThemeManager.Component;
-
-exports.ThemeManager = ThemeManager;
+export interface Component {
+  element: Element;
+  propertyName: string;
+}

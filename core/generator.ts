@@ -1,30 +1,29 @@
 /**
+ * @fileoverview Utility functions for generating executable code from
+ * Blockly code.
+ */
+
+/**
  * @license
  * Copyright 2012 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Utility functions for generating executable code from
- * Blockly code.
- */
-'use strict';
 
 /**
  * Utility functions for generating executable code from
  * Blockly code.
  * @class
  */
-goog.module('Blockly.Generator');
 
-const common = goog.require('Blockly.common');
-const deprecation = goog.require('Blockly.utils.deprecation');
 /* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
+import { Block } from './block.js';
+import * as common from './common.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Names, NameType} = goog.require('Blockly.Names');
+import { Names, NameType } from './names.js';
+import * as deprecation from './utils/deprecation.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Workspace} = goog.requireType('Blockly.Workspace');
+import { Workspace } from './workspace.js';
 
 
 /**
@@ -32,125 +31,101 @@ const {Workspace} = goog.requireType('Blockly.Workspace');
  * @unrestricted
  * @alias Blockly.Generator
  */
-class Generator {
+export class Generator {
+  name_: AnyDuringMigration;
+
   /**
-   * @param {string} name Language name of this generator.
+   * This is used as a placeholder in functions defined using
+   * Generator.provideFunction_.  It must not be legal code that could
+   * legitimately appear in a function definition (or comment), and it must
+   * not confuse the regular expression parser.
    */
-  constructor(name) {
+  protected FUNCTION_NAME_PLACEHOLDER_ = '{leCUI8hutHZI4480Dc}';
+  FUNCTION_NAME_PLACEHOLDER_REGEXP_: AnyDuringMigration;
+
+  /**
+   * Arbitrary code to inject into locations that risk causing infinite loops.
+   * Any instances of '%1' will be replaced by the block ID that failed.
+   * E.g. '  checkTimeout(%1);\n'
+   */
+  INFINITE_LOOP_TRAP: string | null = null;
+
+  /**
+   * Arbitrary code to inject before every statement.
+   * Any instances of '%1' will be replaced by the block ID of the statement.
+   * E.g. 'highlight(%1);\n'
+   */
+  STATEMENT_PREFIX: string | null = null;
+
+  /**
+   * Arbitrary code to inject after every statement.
+   * Any instances of '%1' will be replaced by the block ID of the statement.
+   * E.g. 'highlight(%1);\n'
+   */
+  STATEMENT_SUFFIX: string | null = null;
+
+  /**
+   * The method of indenting.  Defaults to two spaces, but language generators
+   * may override this to increase indent or change to tabs.
+   */
+  INDENT = '  ';
+
+  /**
+   * Maximum length for a comment before wrapping.  Does not account for
+   * indenting level.
+   */
+  COMMENT_WRAP = 60;
+
+  /** List of outer-inner pairings that do NOT require parentheses. */
+  ORDER_OVERRIDES: number[][] = [];
+
+  /**
+   * Whether the init method has been called.
+   * Generators that set this flag to false after creation and true in init
+   * will cause blockToCode to emit a warning if the generator has not been
+   * initialized. If this flag is untouched, it will have no effect.
+   */
+  isInitialized: boolean | null = null;
+
+  /** Comma-separated list of reserved words. */
+  protected RESERVED_WORDS_ = '';
+
+  /** A dictionary of definitions to be printed before the code. */
+  protected definitions_?: AnyDuringMigration = undefined;
+
+  /**
+   * A dictionary mapping desired function names in definitions_ to actual
+   * function names (to avoid collisions with user functions).
+   */
+  protected functionNames_?: AnyDuringMigration = undefined;
+
+  /** A database of variable and procedure names. */
+  protected nameDB_?: Names = undefined;
+
+  /** @param name Language name of this generator. */
+  constructor(name: string) {
     this.name_ = name;
 
-    /**
-     * This is used as a placeholder in functions defined using
-     * Generator.provideFunction_.  It must not be legal code that could
-     * legitimately appear in a function definition (or comment), and it must
-     * not confuse the regular expression parser.
-     * @type {string}
-     * @protected
-     */
-    this.FUNCTION_NAME_PLACEHOLDER_ = '{leCUI8hutHZI4480Dc}';
-
     this.FUNCTION_NAME_PLACEHOLDER_REGEXP_ =
-        new RegExp(this.FUNCTION_NAME_PLACEHOLDER_, 'g');
-
-    /**
-     * Arbitrary code to inject into locations that risk causing infinite loops.
-     * Any instances of '%1' will be replaced by the block ID that failed.
-     * E.g. '  checkTimeout(%1);\n'
-     * @type {?string}
-     */
-    this.INFINITE_LOOP_TRAP = null;
-
-    /**
-     * Arbitrary code to inject before every statement.
-     * Any instances of '%1' will be replaced by the block ID of the statement.
-     * E.g. 'highlight(%1);\n'
-     * @type {?string}
-     */
-    this.STATEMENT_PREFIX = null;
-
-    /**
-     * Arbitrary code to inject after every statement.
-     * Any instances of '%1' will be replaced by the block ID of the statement.
-     * E.g. 'highlight(%1);\n'
-     * @type {?string}
-     */
-    this.STATEMENT_SUFFIX = null;
-
-    /**
-     * The method of indenting.  Defaults to two spaces, but language generators
-     * may override this to increase indent or change to tabs.
-     * @type {string}
-     */
-    this.INDENT = '  ';
-
-    /**
-     * Maximum length for a comment before wrapping.  Does not account for
-     * indenting level.
-     * @type {number}
-     */
-    this.COMMENT_WRAP = 60;
-
-    /**
-     * List of outer-inner pairings that do NOT require parentheses.
-     * @type {!Array<!Array<number>>}
-     */
-    this.ORDER_OVERRIDES = [];
-
-    /**
-     * Whether the init method has been called.
-     * Generators that set this flag to false after creation and true in init
-     * will cause blockToCode to emit a warning if the generator has not been
-     * initialized. If this flag is untouched, it will have no effect.
-     * @type {?boolean}
-     */
-    this.isInitialized = null;
-
-    /**
-     * Comma-separated list of reserved words.
-     * @type {string}
-     * @protected
-     */
-    this.RESERVED_WORDS_ = '';
-
-    /**
-     * A dictionary of definitions to be printed before the code.
-     * @type {!Object|undefined}
-     * @protected
-     */
-    this.definitions_ = undefined;
-
-    /**
-     * A dictionary mapping desired function names in definitions_ to actual
-     * function names (to avoid collisions with user functions).
-     * @type {!Object|undefined}
-     * @protected
-     */
-    this.functionNames_ = undefined;
-
-    /**
-     * A database of variable and procedure names.
-     * @type {!Names|undefined}
-     * @protected
-     */
-    this.nameDB_ = undefined;
+      new RegExp(this.FUNCTION_NAME_PLACEHOLDER_, 'g');
   }
 
   /**
    * Generate code for all blocks in the workspace to the specified language.
-   * @param {!Workspace=} workspace Workspace to generate code from.
-   * @return {string} Generated code.
+   * @param workspace Workspace to generate code from.
+   * @return Generated code.
    */
-  workspaceToCode(workspace) {
+  workspaceToCode(workspace?: Workspace): string {
     if (!workspace) {
       // Backwards compatibility from before there could be multiple workspaces.
       console.warn(
-          'No workspace specified in workspaceToCode call.  Guessing.');
+        'No workspace specified in workspaceToCode call.  Guessing.');
       workspace = common.getMainWorkspace();
     }
     let code = [];
     this.init(workspace);
     const blocks = workspace.getTopBlocks(true);
-    for (let i = 0, block; (block = blocks[i]); i++) {
+    for (let i = 0, block; block = blocks[i]; i++) {
       let line = this.blockToCode(block);
       if (Array.isArray(line)) {
         // Value blocks return tuples of code and operator order.
@@ -161,7 +136,9 @@ class Generator {
         if (block.outputConnection) {
           // This block is a naked value.  Ask the language's code generator if
           // it wants to append a semicolon, or something.
-          line = this.scrubNakedValue(line);
+          // AnyDuringMigration because:  Argument of type 'string | any[]' is
+          // not assignable to parameter of type 'string'.
+          line = this.scrubNakedValue(line as AnyDuringMigration);
           if (this.STATEMENT_PREFIX && !block.suppressPrefixSuffix) {
             line = this.injectId(this.STATEMENT_PREFIX, block) + line;
           }
@@ -172,10 +149,18 @@ class Generator {
         code.push(line);
       }
     }
-    code = code.join('\n');  // Blank line between each section.
-    code = this.finish(code);
+    // AnyDuringMigration because:  Type 'string' is not assignable to type
+    // 'any[]'.
+    code = code.join('\n') as AnyDuringMigration;
+    // Blank line between each section.
+    // AnyDuringMigration because:  Argument of type 'any[]' is not assignable
+    // to parameter of type 'string'. AnyDuringMigration because:  Type 'string'
+    // is not assignable to type 'any[]'.
+    code = this.finish(code as AnyDuringMigration) as AnyDuringMigration;
     // Final scrubbing of whitespace.
-    code = code.replace(/^\s+\n/, '');
+    // AnyDuringMigration because:  Property 'replace' does not exist on type
+    // 'any[]'.
+    code = (code as AnyDuringMigration).replace(/^\s+\n/, '');
     code = code.replace(/\n\s+$/, '\n');
     code = code.replace(/[ \t]+\n/g, '\n');
     return code;
@@ -188,20 +173,20 @@ class Generator {
   /**
    * Prepend a common prefix onto each line of code.
    * Intended for indenting code or adding comment markers.
-   * @param {string} text The lines of code.
-   * @param {string} prefix The common prefix.
-   * @return {string} The prefixed lines of code.
+   * @param text The lines of code.
+   * @param prefix The common prefix.
+   * @return The prefixed lines of code.
    */
-  prefixLines(text, prefix) {
+  prefixLines(text: string, prefix: string): string {
     return prefix + text.replace(/(?!\n$)\n/g, '\n' + prefix);
   }
 
   /**
    * Recursively spider a tree of blocks, returning all their comments.
-   * @param {!Block} block The block from which to start spidering.
-   * @return {string} Concatenated list of comments.
+   * @param block The block from which to start spidering.
+   * @return Concatenated list of comments.
    */
-  allNestedComments(block) {
+  allNestedComments(block: Block): string {
     const comments = [];
     const blocks = block.getDescendants(true);
     for (let i = 0; i < blocks.length; i++) {
@@ -220,17 +205,17 @@ class Generator {
   /**
    * Generate code for the specified block (and attached blocks).
    * The generator must be initialized before calling this function.
-   * @param {?Block} block The block to generate code for.
-   * @param {boolean=} opt_thisOnly True to generate code for only this
-   *     statement.
-   * @return {string|!Array} For statement blocks, the generated code.
+   * @param block The block to generate code for.
+   * @param opt_thisOnly True to generate code for only this statement.
+   * @return For statement blocks, the generated code.
    *     For value blocks, an array containing the generated code and an
-   *     operator order value.  Returns '' if block is null.
+   * operator order value.  Returns '' if block is null.
    */
-  blockToCode(block, opt_thisOnly) {
+  blockToCode(block: Block | null, opt_thisOnly?: boolean): string
+    | AnyDuringMigration[] {
     if (this.isInitialized === false) {
       console.warn(
-          'Generator init was not called before blockToCode was called.');
+        'Generator init was not called before blockToCode was called.');
     }
     if (!block) {
       return '';
@@ -244,11 +229,11 @@ class Generator {
       return opt_thisOnly ? '' : this.blockToCode(block.getChildren(false)[0]);
     }
 
-    const func = this[block.type];
+    const func = (this as AnyDuringMigration)[block.type];
     if (typeof func !== 'function') {
       throw Error(
-          'Language "' + this.name_ + '" does not know how to generate ' +
-          'code for block type "' + block.type + '".');
+        'Language "' + this.name_ + '" does not know how to generate ' +
+        'code for block type "' + block.type + '".');
     }
     // First argument to func.call is the value of 'this' in the generator.
     // Prior to 24 September 2013 'this' was the only way to access the block.
@@ -279,14 +264,14 @@ class Generator {
 
   /**
    * Generate code representing the specified value input.
-   * @param {!Block} block The block containing the input.
-   * @param {string} name The name of the input.
-   * @param {number} outerOrder The maximum binding strength (minimum order
-   *     value) of any operators adjacent to "block".
-   * @return {string} Generated code or '' if no blocks are connected or the
-   *     specified input does not exist.
+   * @param block The block containing the input.
+   * @param name The name of the input.
+   * @param outerOrder The maximum binding strength (minimum order value) of any
+   *     operators adjacent to "block".
+   * @return Generated code or '' if no blocks are connected or the specified
+   *     input does not exist.
    */
-  valueToCode(block, name, outerOrder) {
+  valueToCode(block: Block, name: string, outerOrder: number): string {
     if (isNaN(outerOrder)) {
       throw TypeError('Expecting valid order from block: ' + block.type);
     }
@@ -308,7 +293,7 @@ class Generator {
     const innerOrder = tuple[1];
     if (isNaN(innerOrder)) {
       throw TypeError(
-          'Expecting valid order from value block: ' + targetBlock.type);
+        'Expecting valid order from value block: ' + targetBlock.type);
     }
     if (!code) {
       return '';
@@ -319,12 +304,12 @@ class Generator {
     const outerOrderClass = Math.floor(outerOrder);
     const innerOrderClass = Math.floor(innerOrder);
     if (outerOrderClass <= innerOrderClass) {
+      // Don't generate parens around NONE-NONE and ATOMIC-ATOMIC pairs.
+      // 0 is the atomic order, 99 is the none order.  No parentheses needed.
+      // In all known languages multiple such code blocks are not order
+      // sensitive.  In fact in Python ('a' 'b') 'c' would fail.
       if (outerOrderClass === innerOrderClass &&
-          (outerOrderClass === 0 || outerOrderClass === 99)) {
-        // Don't generate parens around NONE-NONE and ATOMIC-ATOMIC pairs.
-        // 0 is the atomic order, 99 is the none order.  No parentheses needed.
-        // In all known languages multiple such code blocks are not order
-        // sensitive.  In fact in Python ('a' 'b') 'c' would fail.
+        (outerOrderClass === 0 || outerOrderClass === 99)) {
       } else {
         // The operators outside this code are stronger than the operators
         // inside this code.  To prevent the code from being pulled apart,
@@ -333,7 +318,7 @@ class Generator {
         // Check for special exceptions.
         for (let i = 0; i < this.ORDER_OVERRIDES.length; i++) {
           if (this.ORDER_OVERRIDES[i][0] === outerOrder &&
-              this.ORDER_OVERRIDES[i][1] === innerOrder) {
+            this.ORDER_OVERRIDES[i][1] === innerOrder) {
             parensNeeded = false;
             break;
           }
@@ -353,22 +338,22 @@ class Generator {
    * statement input. Indent the code.
    * This is mainly used in generators. When trying to generate code to evaluate
    * look at using workspaceToCode or blockToCode.
-   * @param {!Block} block The block containing the input.
-   * @param {string} name The name of the input.
-   * @return {string} Generated code or '' if no blocks are connected.
+   * @param block The block containing the input.
+   * @param name The name of the input.
+   * @return Generated code or '' if no blocks are connected.
    */
-  statementToCode(block, name) {
+  statementToCode(block: Block, name: string): string {
     const targetBlock = block.getInputTargetBlock(name);
     let code = this.blockToCode(targetBlock);
     // Value blocks must return code and order of operations info.
     // Statement blocks must only return code.
     if (typeof code !== 'string') {
       throw TypeError(
-          'Expecting code from statement block: ' +
-          (targetBlock && targetBlock.type));
+        'Expecting code from statement block: ' +
+        (targetBlock && targetBlock.type));
     }
     if (code) {
-      code = this.prefixLines(/** @type {string} */ (code), this.INDENT);
+      code = this.prefixLines((code), this.INDENT);
     }
     return code;
   }
@@ -378,25 +363,25 @@ class Generator {
    * Add statement suffix at the start of the loop block (right after the loop
    * statement executes), and a statement prefix to the end of the loop block
    * (right before the loop statement executes).
-   * @param {string} branch Code for loop contents.
-   * @param {!Block} block Enclosing block.
-   * @return {string} Loop contents, with infinite loop trap added.
+   * @param branch Code for loop contents.
+   * @param block Enclosing block.
+   * @return Loop contents, with infinite loop trap added.
    */
-  addLoopTrap(branch, block) {
+  addLoopTrap(branch: string, block: Block): string {
     if (this.INFINITE_LOOP_TRAP) {
       branch = this.prefixLines(
-                   this.injectId(this.INFINITE_LOOP_TRAP, block), this.INDENT) +
-          branch;
+        this.injectId(this.INFINITE_LOOP_TRAP, block), this.INDENT) +
+        branch;
     }
     if (this.STATEMENT_SUFFIX && !block.suppressPrefixSuffix) {
       branch = this.prefixLines(
-                   this.injectId(this.STATEMENT_SUFFIX, block), this.INDENT) +
-          branch;
+        this.injectId(this.STATEMENT_SUFFIX, block), this.INDENT) +
+        branch;
     }
     if (this.STATEMENT_PREFIX && !block.suppressPrefixSuffix) {
       branch = branch +
-          this.prefixLines(
-              this.injectId(this.STATEMENT_PREFIX, block), this.INDENT);
+        this.prefixLines(
+          this.injectId(this.STATEMENT_PREFIX, block), this.INDENT);
     }
     return branch;
   }
@@ -404,21 +389,22 @@ class Generator {
   /**
    * Inject a block ID into a message to replace '%1'.
    * Used for STATEMENT_PREFIX, STATEMENT_SUFFIX, and INFINITE_LOOP_TRAP.
-   * @param {string} msg Code snippet with '%1'.
-   * @param {!Block} block Block which has an ID.
-   * @return {string} Code snippet with ID.
+   * @param msg Code snippet with '%1'.
+   * @param block Block which has an ID.
+   * @return Code snippet with ID.
    */
-  injectId(msg, block) {
-    const id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
+  injectId(msg: string, block: Block): string {
+    const id = block.id.replace(/\$/g, '$$$$');
+    // Issue 251.
     return msg.replace(/%1/g, '\'' + id + '\'');
   }
 
   /**
    * Add one or more words to the list of reserved words for this language.
-   * @param {string} words Comma-separated list of words to add to the list.
+   * @param words Comma-separated list of words to add to the list.
    *     No spaces.  Duplicates are ok.
    */
-  addReservedWords(words) {
+  addReservedWords(words: string) {
     this.RESERVED_WORDS_ += words + ',';
   }
 
@@ -436,24 +422,23 @@ class Generator {
    *
    * The code gets output when Generator.finish() is called.
    *
-   * @param {string} desiredName The desired name of the function
-   *     (e.g. mathIsPrime).
-   * @param {!Array<string>|string} code A list of statements or one multi-line
-   *     code string.  Use '  ' for indents (they will be replaced).
-   * @return {string} The actual name of the new function.  This may differ
-   *     from desiredName if the former has already been taken by the user.
-   * @protected
+   * @param desiredName The desired name of the function (e.g. mathIsPrime).
+   * @param code A list of statements or one multi-line code string.  Use '  '
+   *     for indents (they will be replaced).
+   * @return The actual name of the new function.  This may differ from
+   *     desiredName if the former has already been taken by the user.
    */
-  provideFunction_(desiredName, code) {
+  protected provideFunction_(desiredName: string, code: string[] | string):
+    string {
     if (!this.definitions_[desiredName]) {
       const functionName =
-          this.nameDB_.getDistinctName(desiredName, NameType.PROCEDURE);
+        this.nameDB_!.getDistinctName(desiredName, NameType.PROCEDURE);
       this.functionNames_[desiredName] = functionName;
       if (Array.isArray(code)) {
         code = code.join('\n');
       }
       let codeText = code.trim().replace(
-          this.FUNCTION_NAME_PLACEHOLDER_REGEXP_, functionName);
+        this.FUNCTION_NAME_PLACEHOLDER_REGEXP_, functionName);
       // Change all '  ' indents into the desired indent.
       // To avoid an infinite loop of replacements, change all indents to '\0'
       // character first, then replace them all with the indent.
@@ -473,9 +458,9 @@ class Generator {
    * Hook for code to run before code generation starts.
    * Subclasses may override this, e.g. to initialise the database of variable
    * names.
-   * @param {!Workspace} _workspace Workspace to generate code from.
+   * @param _workspace Workspace to generate code from.
    */
-  init(_workspace) {
+  init(_workspace: Workspace) {
     // Optionally override
     // Create a dictionary of definitions to be printed before the code.
     this.definitions_ = Object.create(null);
@@ -491,14 +476,13 @@ class Generator {
    * Subclasses may override this, e.g. to generate code for statements
    * following the block, or to handle comments for the specified block and any
    * connected value blocks.
-   * @param {!Block} _block The current block.
-   * @param {string} code The code created for this block.
-   * @param {boolean=} _opt_thisOnly True to generate code for only this
-   *     statement.
-   * @return {string} Code with comments and subsequent blocks added.
-   * @protected
+   * @param _block The current block.
+   * @param code The code created for this block.
+   * @param _opt_thisOnly True to generate code for only this statement.
+   * @return Code with comments and subsequent blocks added.
    */
-  scrub_(_block, code, _opt_thisOnly) {
+  protected scrub_(_block: Block, code: string, _opt_thisOnly?: boolean):
+    string {
     // Optionally override
     return code;
   }
@@ -507,10 +491,10 @@ class Generator {
    * Hook for code to run at end of code generation.
    * Subclasses may override this, e.g. to prepend the generated code with
    * import statements or variable definitions.
-   * @param {string} code Generated code.
-   * @return {string} Completed code.
+   * @param code Generated code.
+   * @return Completed code.
    */
-  finish(code) {
+  finish(code: string): string {
     // Optionally override
     // Clean up temporary data.
     delete this.definitions_;
@@ -523,10 +507,10 @@ class Generator {
    * anything.
    * Subclasses may override this, e.g. if their language does not allow
    * naked values.
-   * @param {string} line Line of generated code.
-   * @return {string} Legal line of code.
+   * @param line Line of generated code.
+   * @return Legal line of code.
    */
-  scrubNakedValue(line) {
+  scrubNakedValue(line: string): string {
     // Optionally override
     return line;
   }
@@ -536,29 +520,22 @@ Object.defineProperties(Generator.prototype, {
   /**
    * A database of variable names.
    * @name Blockly.Generator.prototype.variableDB_
-   * @type {!Names|undefined}
-   * @protected
    * @deprecated 'variableDB_' was renamed to 'nameDB_' (May 2021).
    * @suppress {checkTypes}
    */
-  variableDB_: {
-    /**
-     * @this {Generator}
-     * @return {!Names|undefined} Name database.
-     */
-    get: function() {
+  // AnyDuringMigration because:  Type 'Names | undefined' is not assignable to
+  // type 'PropertyDescriptor'.
+  variableDB_: ({
+    /** @return Name database. */
+    get(this: Generator): Names |
+      undefined {
       deprecation.warn('variableDB_', 'May 2021', 'May 2026', 'nameDB_');
       return this.nameDB_;
     },
-    /**
-     * @this {Generator}
-     * @param {!Names|undefined} nameDb New name database.
-     */
-    set: function(nameDb) {
+    /** @param nameDb New name database. */
+    set(this: Generator, nameDb: Names | undefined) {
       deprecation.warn('variableDB_', 'May 2021', 'May 2026', 'nameDB_');
       this.nameDB_ = nameDb;
     },
-  },
+  }),
 });
-
-exports.Generator = Generator;

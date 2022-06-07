@@ -1,225 +1,160 @@
+/** @fileoverview Toolbox from whence to create blocks. */
+
 /**
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Toolbox from whence to create blocks.
- */
-'use strict';
 
 /**
  * Toolbox from whence to create blocks.
  * @class
  */
-goog.module('Blockly.Toolbox');
+/* eslint-disable-next-line no-unused-vars */
+// Unused import preserved for side-effects. Remove if unneeded.
+import '../shortcut_registry';
+// Unused import preserved for side-effects. Remove if unneeded.
+import '../events/events_toolbox_item_select';
 
-const Css = goog.require('Blockly.Css');
-const Touch = goog.require('Blockly.Touch');
-const aria = goog.require('Blockly.utils.aria');
-const browserEvents = goog.require('Blockly.browserEvents');
-const common = goog.require('Blockly.common');
-const dom = goog.require('Blockly.utils.dom');
-const eventUtils = goog.require('Blockly.Events.utils');
-const registry = goog.require('Blockly.registry');
-const toolbox = goog.require('Blockly.utils.toolbox');
-const {BlockSvg} = goog.require('Blockly.BlockSvg');
+import { BlockSvg } from '../block_svg.js';
 /* eslint-disable-next-line no-unused-vars */
-const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
-const {CollapsibleToolboxCategory} = goog.require('Blockly.CollapsibleToolboxCategory');
-const {ComponentManager} = goog.require('Blockly.ComponentManager');
-const {DeleteArea} = goog.require('Blockly.DeleteArea');
+import { BlocklyOptions } from '../blockly_options.js';
+import * as browserEvents from '../browser_events.js';
+import * as common from '../common.js';
+import { ComponentManager } from '../component_manager.js';
+import * as Css from '../css.js';
+import { DeleteArea } from '../delete_area.js';
+import * as eventUtils from '../events/utils.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IAutoHideable} = goog.require('Blockly.IAutoHideable');
+import { IAutoHideable } from '../interfaces/i_autohideable.js';
 /* eslint-disable-next-line no-unused-vars */
-const {ICollapsibleToolboxItem} = goog.requireType('Blockly.ICollapsibleToolboxItem');
+import { ICollapsibleToolboxItem } from '../interfaces/i_collapsible_toolbox_item.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IDraggable} = goog.requireType('Blockly.IDraggable');
+import { IDraggable } from '../interfaces/i_draggable.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IFlyout} = goog.requireType('Blockly.IFlyout');
+import { IFlyout } from '../interfaces/i_flyout.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IKeyboardAccessible} = goog.require('Blockly.IKeyboardAccessible');
+import { IKeyboardAccessible } from '../interfaces/i_keyboard_accessible.js';
 /* eslint-disable-next-line no-unused-vars */
-const {ISelectableToolboxItem} = goog.requireType('Blockly.ISelectableToolboxItem');
+import { ISelectableToolboxItem } from '../interfaces/i_selectable_toolbox_item.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IStyleable} = goog.require('Blockly.IStyleable');
+import { IStyleable } from '../interfaces/i_styleable.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IToolboxItem} = goog.requireType('Blockly.IToolboxItem');
+import { IToolbox } from '../interfaces/i_toolbox.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IToolbox} = goog.require('Blockly.IToolbox');
-const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
-const {Options} = goog.require('Blockly.Options');
-const {Rect} = goog.require('Blockly.utils.Rect');
+import { IToolboxItem } from '../interfaces/i_toolbox_item.js';
+import { Options } from '../options.js';
+import * as registry from '../registry.js';
+import { KeyboardShortcut } from '../shortcut_registry.js';
+import * as Touch from '../touch.js';
+import * as aria from '../utils/aria.js';
+import * as dom from '../utils/dom.js';
+import { KeyCodes } from '../utils/keycodes.js';
+import { Rect } from '../utils/rect.js';
+import * as toolbox from '../utils/toolbox.js';
 /* eslint-disable-next-line no-unused-vars */
-const {ShortcutRegistry} = goog.requireType('Blockly.ShortcutRegistry');
+import { WorkspaceSvg } from '../workspace_svg.js';
+
 /* eslint-disable-next-line no-unused-vars */
-const {ToolboxCategory} = goog.requireType('Blockly.ToolboxCategory');
-/* eslint-disable-next-line no-unused-vars */
-const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
-/** @suppress {extraRequire} */
-goog.require('Blockly.Events.ToolboxItemSelect');
+import { ToolboxCategory } from './category.js';
+import { CollapsibleToolboxCategory } from './collapsible_category.js';
 
 
 /**
  * Class for a Toolbox.
  * Creates the toolbox's DOM.
- * @implements {IAutoHideable}
- * @implements {IKeyboardAccessible}
- * @implements {IStyleable}
- * @implements {IToolbox}
- * @extends {DeleteArea}
  * @alias Blockly.Toolbox
  */
-class Toolbox extends DeleteArea {
+export class Toolbox extends DeleteArea implements IAutoHideable,
+  IKeyboardAccessible,
+  IStyleable, IToolbox {
   /**
-   * @param {!WorkspaceSvg} workspace The workspace in which to create new
-   *     blocks.
+   * The unique id for this component that is used to register with the
+   * ComponentManager.
    */
-  constructor(workspace) {
+  override id = 'toolbox';
+  protected toolboxDef_: toolbox.ToolboxInfo;
+  private readonly horizontalLayout_: boolean;
+
+  /** The html container for the toolbox. */
+  HtmlDiv: HTMLDivElement | null = null;
+
+  /** The html container for the contents of a toolbox. */
+  protected contentsDiv_: HTMLDivElement | null = null;
+
+  /** Whether the Toolbox is visible. */
+  protected isVisible_ = false;
+
+  /** The list of items in the toolbox. */
+  protected contents_: IToolboxItem[] = [];
+
+  /** The width of the toolbox. */
+  protected width_ = 0;
+
+  /** The height of the toolbox. */
+  protected height_ = 0;
+  RTL: boolean;
+
+  /** The flyout for the toolbox. */
+  private flyout_: IFlyout | null = null;
+  protected contentMap_: { [key: string]: IToolboxItem };
+  toolboxPosition: toolbox.Position;
+
+  /** The currently selected item. */
+  protected selectedItem_: ISelectableToolboxItem | null = null;
+
+  /** The previously selected item. */
+  protected previouslySelectedItem_: ISelectableToolboxItem | null = null;
+
+  /**
+   * Array holding info needed to unbind event handlers.
+   * Used for disposing.
+   * Ex: [[node, name, func], [node, name, func]].
+   */
+  protected boundEvents_: browserEvents.Data[] = [];
+  override wouldDelete_: AnyDuringMigration;
+
+  /** @param workspace The workspace in which to create new blocks. */
+  constructor(private readonly workspace: WorkspaceSvg) {
     super();
 
-    /**
-     * The workspace this toolbox is on.
-     * @type {!WorkspaceSvg}
-     * @protected
-     */
-    this.workspace_ = workspace;
+    /** The JSON describing the contents of this toolbox. */
+    // AnyDuringMigration because:  Type 'ToolboxInfo | { contents: never[]; }'
+    // is not assignable to type 'ToolboxInfo'.
+    this.toolboxDef_ = (workspace.options.languageTree || { 'contents': [] }) as
+      AnyDuringMigration;
 
-    /**
-     * The unique id for this component that is used to register with the
-     * ComponentManager.
-     * @type {string}
-     */
-    this.id = 'toolbox';
-
-    /**
-     * The JSON describing the contents of this toolbox.
-     * @type {!toolbox.ToolboxInfo}
-     * @protected
-     */
-    this.toolboxDef_ = workspace.options.languageTree || {'contents': []};
-
-    /**
-     * Whether the toolbox should be laid out horizontally.
-     * @type {boolean}
-     * @private
-     */
+    /** Whether the toolbox should be laid out horizontally. */
     this.horizontalLayout_ = workspace.options.horizontalLayout;
 
-    /**
-     * The html container for the toolbox.
-     * @type {?HTMLDivElement}
-     */
-    this.HtmlDiv = null;
-
-    /**
-     * The html container for the contents of a toolbox.
-     * @type {?HTMLDivElement}
-     * @protected
-     */
-    this.contentsDiv_ = null;
-
-    /**
-     * Whether the Toolbox is visible.
-     * @type {boolean}
-     * @protected
-     */
-    this.isVisible_ = false;
-
-    /**
-     * The list of items in the toolbox.
-     * @type {!Array<!IToolboxItem>}
-     * @protected
-     */
-    this.contents_ = [];
-
-    /**
-     * The width of the toolbox.
-     * @type {number}
-     * @protected
-     */
-    this.width_ = 0;
-
-    /**
-     * The height of the toolbox.
-     * @type {number}
-     * @protected
-     */
-    this.height_ = 0;
-
-    /**
-     * Is RTL vs LTR.
-     * @type {boolean}
-     */
+    /** Is RTL vs LTR. */
     this.RTL = workspace.options.RTL;
 
-    /**
-     * The flyout for the toolbox.
-     * @type {?IFlyout}
-     * @private
-     */
-    this.flyout_ = null;
-
-    /**
-     * A map from toolbox item IDs to toolbox items.
-     * @type {!Object<string, !IToolboxItem>}
-     * @protected
-     */
+    /** A map from toolbox item IDs to toolbox items. */
     this.contentMap_ = Object.create(null);
 
-    /**
-     * Position of the toolbox and flyout relative to the workspace.
-     * @type {!toolbox.Position}
-     */
+    /** Position of the toolbox and flyout relative to the workspace. */
     this.toolboxPosition = workspace.options.toolboxPosition;
-
-    /**
-     * The currently selected item.
-     * @type {?ISelectableToolboxItem}
-     * @protected
-     */
-    this.selectedItem_ = null;
-
-    /**
-     * The previously selected item.
-     * @type {?ISelectableToolboxItem}
-     * @protected
-     */
-    this.previouslySelectedItem_ = null;
-
-    /**
-     * Array holding info needed to unbind event handlers.
-     * Used for disposing.
-     * Ex: [[node, name, func], [node, name, func]].
-     * @type {!Array<!browserEvents.Data>}
-     * @protected
-     */
-    this.boundEvents_ = [];
   }
 
   /**
    * Handles the given keyboard shortcut.
-   * @param {!ShortcutRegistry.KeyboardShortcut} _shortcut The shortcut to be
-   *     handled.
-   * @return {boolean} True if the shortcut has been handled, false otherwise.
-   * @public
+   * @param _shortcut The shortcut to be handled.
+   * @return True if the shortcut has been handled, false otherwise.
    */
-  onShortcut(_shortcut) {
+  onShortcut(_shortcut: KeyboardShortcut): boolean {
     return false;
   }
 
-  /**
-   * Initializes the toolbox
-   * @public
-   */
+  /** Initializes the toolbox */
   init() {
-    const workspace = this.workspace_;
+    const workspace = this.workspace;
     const svg = workspace.getParentSvg();
 
     this.flyout_ = this.createFlyout_();
 
-    this.HtmlDiv = this.createDom_(this.workspace_);
+    this.HtmlDiv = this.createDom_(this.workspace);
     dom.insertAfter(this.flyout_.createDom('svg'), svg);
     this.setVisible(true);
     this.flyout_.init(workspace);
@@ -227,9 +162,9 @@ class Toolbox extends DeleteArea {
     this.render(this.toolboxDef_);
     const themeManager = workspace.getThemeManager();
     themeManager.subscribe(
-        this.HtmlDiv, 'toolboxBackgroundColour', 'background-color');
+      this.HtmlDiv, 'toolboxBackgroundColour', 'background-color');
     themeManager.subscribe(this.HtmlDiv, 'toolboxForegroundColour', 'color');
-    this.workspace_.getComponentManager().addComponent({
+    this.workspace.getComponentManager().addComponent({
       component: this,
       weight: 1,
       capabilities: [
@@ -242,11 +177,10 @@ class Toolbox extends DeleteArea {
 
   /**
    * Creates the DOM for the toolbox.
-   * @param {!WorkspaceSvg} workspace The workspace this toolbox is on.
-   * @return {!HTMLDivElement} The HTML container for the toolbox.
-   * @protected
+   * @param workspace The workspace this toolbox is on.
+   * @return The HTML container for the toolbox.
    */
-  createDom_(workspace) {
+  protected createDom_(workspace: WorkspaceSvg): HTMLDivElement {
     const svg = workspace.getParentSvg();
 
     const container = this.createContainer_();
@@ -256,7 +190,7 @@ class Toolbox extends DeleteArea {
     aria.setRole(this.contentsDiv_, aria.Role.TREE);
     container.appendChild(this.contentsDiv_);
 
-    svg.parentNode.insertBefore(container, svg);
+    svg.parentNode!.insertBefore(container, svg);
 
     this.attachEvents_(container, this.contentsDiv_);
     return container;
@@ -264,12 +198,10 @@ class Toolbox extends DeleteArea {
 
   /**
    * Creates the container div for the toolbox.
-   * @return {!HTMLDivElement} The HTML container for the toolbox.
-   * @protected
+   * @return The HTML container for the toolbox.
    */
-  createContainer_() {
-    const toolboxContainer =
-        /** @type {!HTMLDivElement} */ (document.createElement('div'));
+  protected createContainer_(): HTMLDivElement {
+    const toolboxContainer = (document.createElement('div'));
     toolboxContainer.setAttribute('layout', this.isHorizontal() ? 'h' : 'v');
     dom.addClass(toolboxContainer, 'blocklyToolboxDiv');
     dom.addClass(toolboxContainer, 'blocklyNonSelectable');
@@ -279,12 +211,10 @@ class Toolbox extends DeleteArea {
 
   /**
    * Creates the container for all the contents in the toolbox.
-   * @return {!HTMLDivElement} The HTML container for the toolbox contents.
-   * @protected
+   * @return The HTML container for the toolbox contents.
    */
-  createContentsContainer_() {
-    const contentsContainer =
-        /** @type {!HTMLDivElement} */ (document.createElement('div'));
+  protected createContentsContainer_(): HTMLDivElement {
+    const contentsContainer = (document.createElement('div'));
     dom.addClass(contentsContainer, 'blocklyToolboxContents');
     if (this.isHorizontal()) {
       contentsContainer.style.flexDirection = 'row';
@@ -294,58 +224,53 @@ class Toolbox extends DeleteArea {
 
   /**
    * Adds event listeners to the toolbox container div.
-   * @param {!HTMLDivElement} container The HTML container for the toolbox.
-   * @param {!HTMLDivElement} contentsContainer The HTML container for the
-   *     contents of the toolbox.
-   * @protected
+   * @param container The HTML container for the toolbox.
+   * @param contentsContainer The HTML container for the contents of the
+   *     toolbox.
    */
-  attachEvents_(container, contentsContainer) {
+  protected attachEvents_(
+    container: HTMLDivElement, contentsContainer: HTMLDivElement) {
     // Clicking on toolbox closes popups.
     const clickEvent = browserEvents.conditionalBind(
-        container, 'click', this, this.onClick_,
-        /* opt_noCaptureIdentifier */ false,
-        /* opt_noPreventDefault */ true);
+      container, 'click', this, this.onClick_,
+        /* opt_noCaptureIdentifier */ false, /* opt_noPreventDefault */ true);
     this.boundEvents_.push(clickEvent);
 
     const keyDownEvent = browserEvents.conditionalBind(
-        contentsContainer, 'keydown', this, this.onKeyDown_,
-        /* opt_noCaptureIdentifier */ false,
-        /* opt_noPreventDefault */ true);
+      contentsContainer, 'keydown', this, this.onKeyDown_,
+        /* opt_noCaptureIdentifier */ false, /* opt_noPreventDefault */ true);
     this.boundEvents_.push(keyDownEvent);
   }
 
   /**
    * Handles on click events for when the toolbox or toolbox items are clicked.
-   * @param {!Event} e Click event to handle.
-   * @protected
+   * @param e Click event to handle.
    */
-  onClick_(e) {
+  protected onClick_(e: Event) {
     if (browserEvents.isRightButton(e) || e.target === this.HtmlDiv) {
       // Close flyout.
-      /** @type {!WorkspaceSvg} */ (common.getMainWorkspace()).hideChaff(false);
+      (common.getMainWorkspace() as WorkspaceSvg).hideChaff(false);
     } else {
       const targetElement = e.target;
-      const itemId =
-          (/** @type {!Element} */ (targetElement)).getAttribute('id');
+      const itemId = (targetElement as Element).getAttribute('id');
       if (itemId) {
         const item = this.getToolboxItemById(itemId);
-        if (item.isSelectable()) {
+        if (item!.isSelectable()) {
           this.setSelectedItem(item);
-          (/** @type {!ISelectableToolboxItem} */ (item)).onClick(e);
+          (item as ISelectableToolboxItem).onClick(e);
         }
       }
       // Just close popups.
-      /** @type {!WorkspaceSvg} */ (common.getMainWorkspace()).hideChaff(true);
+      (common.getMainWorkspace() as WorkspaceSvg).hideChaff(true);
     }
-    Touch.clearTouchIdentifier();  // Don't block future drags.
+    Touch.clearTouchIdentifier();
   }
 
   /**
    * Handles key down events for the toolbox.
-   * @param {!KeyboardEvent} e The key down event.
-   * @protected
+   * @param e The key down event.
    */
-  onKeyDown_(e) {
+  protected onKeyDown_(e: KeyboardEvent) {
     let handled = false;
     switch (e.keyCode) {
       case KeyCodes.DOWN:
@@ -363,8 +288,7 @@ class Toolbox extends DeleteArea {
       case KeyCodes.ENTER:
       case KeyCodes.SPACE:
         if (this.selectedItem_ && this.selectedItem_.isCollapsible()) {
-          const collapsibleItem =
-              /** @type {!ICollapsibleToolboxItem} */ (this.selectedItem_);
+          const collapsibleItem = this.selectedItem_ as ICollapsibleToolboxItem;
           collapsibleItem.toggleExpanded();
           handled = true;
         }
@@ -376,7 +300,7 @@ class Toolbox extends DeleteArea {
     if (!handled && this.selectedItem_) {
       // TODO(#6097): Figure out who implements onKeyDown and which interface it
       // should be part of.
-      const untypedItem = /** @type {?} */ (this.selectedItem_);
+      const untypedItem = this.selectedItem_ as AnyDuringMigration;
       if (untypedItem.onKeyDown) {
         handled = untypedItem.onKeyDown(e);
       }
@@ -389,48 +313,43 @@ class Toolbox extends DeleteArea {
 
   /**
    * Creates the flyout based on the toolbox layout.
-   * @return {!IFlyout} The flyout for the toolbox.
+   * @return The flyout for the toolbox.
    * @throws {Error} If missing a require for `Blockly.HorizontalFlyout`,
    *     `Blockly.VerticalFlyout`, and no flyout plugin is specified.
-   * @protected
    */
-  createFlyout_() {
-    const workspace = this.workspace_;
+  protected createFlyout_(): IFlyout {
+    const workspace = this.workspace;
     // TODO (#4247): Look into adding a makeFlyout method to Blockly Options.
-    const workspaceOptions = new Options(
-        /** @type {!BlocklyOptions} */
-        ({
-          'parentWorkspace': workspace,
-          'rtl': workspace.RTL,
-          'oneBasedIndex': workspace.options.oneBasedIndex,
-          'horizontalLayout': workspace.horizontalLayout,
-          'renderer': workspace.options.renderer,
-          'rendererOverrides': workspace.options.rendererOverrides,
-          'move': {
-            'scrollbars': true,
-          },
-        }));
+    const workspaceOptions = new Options(({
+      'parentWorkspace': workspace,
+      'rtl': workspace.RTL,
+      'oneBasedIndex': workspace.options.oneBasedIndex,
+      'horizontalLayout': workspace.horizontalLayout,
+      'renderer': workspace.options.renderer,
+      'rendererOverrides': workspace.options.rendererOverrides,
+      'move': {
+        'scrollbars': true,
+      },
+    } as BlocklyOptions));
     // Options takes in either 'end' or 'start'. This has already been parsed to
     // be either 0 or 1, so set it after.
     workspaceOptions.toolboxPosition = workspace.options.toolboxPosition;
     let FlyoutClass = null;
     if (workspace.horizontalLayout) {
       FlyoutClass = registry.getClassFromOptions(
-          registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX, workspace.options, true);
+        registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX, workspace.options, true);
     } else {
       FlyoutClass = registry.getClassFromOptions(
-          registry.Type.FLYOUTS_VERTICAL_TOOLBOX, workspace.options, true);
+        registry.Type.FLYOUTS_VERTICAL_TOOLBOX, workspace.options, true);
     }
-    return new FlyoutClass(workspaceOptions);
+    return new FlyoutClass!(workspaceOptions);
   }
 
   /**
    * Fills the toolbox with new toolbox items and removes any old contents.
-   * @param {!toolbox.ToolboxInfo} toolboxDef Object holding information
-   *     for creating a toolbox.
-   * @package
+   * @param toolboxDef Object holding information for creating a toolbox.
    */
-  render(toolboxDef) {
+  render(toolboxDef: toolbox.ToolboxInfo) {
     this.toolboxDef_ = toolboxDef;
     for (let i = 0; i < this.contents_.length; i++) {
       const toolboxItem = this.contents_[i];
@@ -447,11 +366,10 @@ class Toolbox extends DeleteArea {
 
   /**
    * Adds all the toolbox items to the toolbox.
-   * @param {!Array<!toolbox.ToolboxItemInfo>} toolboxDef Array
-   *     holding objects containing information on the contents of the toolbox.
-   * @protected
+   * @param toolboxDef Array holding objects containing information on the
+   *     contents of the toolbox.
    */
-  renderContents_(toolboxDef) {
+  protected renderContents_(toolboxDef: toolbox.ToolboxItemInfo[]) {
     // This is for performance reasons. By using document fragment we only have
     // to add to the DOM once.
     const fragment = document.createDocumentFragment();
@@ -459,30 +377,28 @@ class Toolbox extends DeleteArea {
       const toolboxItemDef = toolboxDef[i];
       this.createToolboxItem_(toolboxItemDef, fragment);
     }
-    this.contentsDiv_.appendChild(fragment);
+    this.contentsDiv_!.appendChild(fragment);
   }
 
   /**
    * Creates and renders the toolbox item.
-   * @param {!toolbox.ToolboxItemInfo} toolboxItemDef Any information
-   *    that can be used to create an item in the toolbox.
-   * @param {!DocumentFragment} fragment The document fragment to add the child
-   *     toolbox elements to.
-   * @private
+   * @param toolboxItemDef Any information that can be used to create an item in
+   *     the toolbox.
+   * @param fragment The document fragment to add the child toolbox elements to.
    */
-  createToolboxItem_(toolboxItemDef, fragment) {
+  private createToolboxItem_(
+    toolboxItemDef: toolbox.ToolboxItemInfo, fragment: DocumentFragment) {
     let registryName = toolboxItemDef['kind'];
 
     // Categories that are collapsible are created using a class registered
     // under a different name.
     if (registryName.toUpperCase() === 'CATEGORY' &&
-        toolbox.isCategoryCollapsible(
-            /** @type {!toolbox.CategoryInfo} */ (toolboxItemDef))) {
+      toolbox.isCategoryCollapsible(toolboxItemDef as toolbox.CategoryInfo)) {
       registryName = CollapsibleToolboxCategory.registrationName;
     }
 
     const ToolboxItemClass = registry.getClass(
-        registry.Type.TOOLBOX_ITEM, registryName.toLowerCase());
+      registry.Type.TOOLBOX_ITEM, registryName.toLowerCase());
     if (ToolboxItemClass) {
       const toolboxItem = new ToolboxItemClass(toolboxItemDef, this);
       toolboxItem.init();
@@ -494,22 +410,20 @@ class Toolbox extends DeleteArea {
       // Adds the ID to the HTML element that can receive a click.
       // This is used in onClick_ to find the toolboxItem that was clicked.
       if (toolboxItem.getClickTarget()) {
-        toolboxItem.getClickTarget().setAttribute('id', toolboxItem.getId());
+        toolboxItem.getClickTarget()!.setAttribute('id', toolboxItem.getId());
       }
     }
   }
 
   /**
    * Adds an item to the toolbox.
-   * @param {!IToolboxItem} toolboxItem The item in the toolbox.
-   * @protected
+   * @param toolboxItem The item in the toolbox.
    */
-  addToolboxItem_(toolboxItem) {
+  protected addToolboxItem_(toolboxItem: IToolboxItem) {
     this.contents_.push(toolboxItem);
     this.contentMap_[toolboxItem.getId()] = toolboxItem;
     if (toolboxItem.isCollapsible()) {
-      const collapsibleItem = /** @type {ICollapsibleToolboxItem} */
-          (toolboxItem);
+      const collapsibleItem = toolboxItem as ICollapsibleToolboxItem;
       const childToolboxItems = collapsibleItem.getChildToolboxItems();
       for (let i = 0; i < childToolboxItems.length; i++) {
         const child = childToolboxItems[i];
@@ -520,42 +434,38 @@ class Toolbox extends DeleteArea {
 
   /**
    * Gets the items in the toolbox.
-   * @return {!Array<!IToolboxItem>} The list of items in the toolbox.
-   * @public
+   * @return The list of items in the toolbox.
    */
-  getToolboxItems() {
+  getToolboxItems(): IToolboxItem[] {
     return this.contents_;
   }
 
   /**
    * Adds a style on the toolbox. Usually used to change the cursor.
-   * @param {string} style The name of the class to add.
-   * @package
+   * @param style The name of the class to add.
    */
-  addStyle(style) {
-    dom.addClass(/** @type {!Element} */ (this.HtmlDiv), style);
+  addStyle(style: string) {
+    dom.addClass(this.HtmlDiv as Element, style);
   }
 
   /**
    * Removes a style from the toolbox. Usually used to change the cursor.
-   * @param {string} style The name of the class to remove.
-   * @package
+   * @param style The name of the class to remove.
    */
-  removeStyle(style) {
-    dom.removeClass(/** @type {!Element} */ (this.HtmlDiv), style);
+  removeStyle(style: string) {
+    dom.removeClass(this.HtmlDiv as Element, style);
   }
 
   /**
    * Returns the bounding rectangle of the drag target area in pixel units
    * relative to viewport.
-   * @return {?Rect} The component's bounding box. Null if drag
-   *   target area should be ignored.
+   * @return The component's bounding box. Null if drag target area should be
+   *     ignored.
    */
-  getClientRect() {
+  override getClientRect(): Rect | null {
     if (!this.HtmlDiv || !this.isVisible_) {
       return null;
     }
-
     // BIG_NUM is offscreen padding so that blocks dragged beyond the toolbox
     // area are still deleted.  Must be smaller than Infinity, but larger than
     // the largest screen size.
@@ -575,7 +485,8 @@ class Toolbox extends DeleteArea {
       return new Rect(top, BIG_NUM, -BIG_NUM, BIG_NUM);
     } else if (this.toolboxPosition === toolbox.Position.LEFT) {
       return new Rect(-BIG_NUM, BIG_NUM, -BIG_NUM, right);
-    } else {  // Right
+    } else {
+      // Right
       return new Rect(-BIG_NUM, BIG_NUM, left, BIG_NUM);
     }
   }
@@ -585,17 +496,14 @@ class Toolbox extends DeleteArea {
    * this area.
    * This method should check if the element is deletable and is always called
    * before onDragEnter/onDragOver/onDragExit.
-   * @param {!IDraggable} element The block or bubble currently being
-   *   dragged.
-   * @param {boolean} _couldConnect Whether the element could could connect to
-   *     another.
-   * @return {boolean} Whether the element provided would be deleted if dropped
-   *     on this area.
-   * @override
+   * @param element The block or bubble currently being dragged.
+   * @param _couldConnect Whether the element could could connect to another.
+   * @return Whether the element provided would be deleted if dropped on this
+   *     area.
    */
-  wouldDelete(element, _couldConnect) {
+  override wouldDelete(element: IDraggable, _couldConnect: boolean): boolean {
     if (element instanceof BlockSvg) {
-      const block = /** @type {BlockSvg} */ (element);
+      const block = (element);
       // Prefer dragging to the toolbox over connecting to other blocks.
       this.updateWouldDelete_(!block.getParent() && block.isDeletable());
     } else {
@@ -606,42 +514,34 @@ class Toolbox extends DeleteArea {
 
   /**
    * Handles when a cursor with a block or bubble enters this drag target.
-   * @param {!IDraggable} _dragElement The block or bubble currently being
-   *   dragged.
-   * @override
+   * @param _dragElement The block or bubble currently being dragged.
    */
-  onDragEnter(_dragElement) {
+  override onDragEnter(_dragElement: IDraggable) {
     this.updateCursorDeleteStyle_(true);
   }
 
   /**
    * Handles when a cursor with a block or bubble exits this drag target.
-   * @param {!IDraggable} _dragElement The block or bubble currently being
-   *   dragged.
-   * @override
+   * @param _dragElement The block or bubble currently being dragged.
    */
-  onDragExit(_dragElement) {
+  override onDragExit(_dragElement: IDraggable) {
     this.updateCursorDeleteStyle_(false);
   }
 
   /**
    * Handles when a block or bubble is dropped on this component.
    * Should not handle delete here.
-   * @param {!IDraggable} _dragElement The block or bubble currently being
-   *   dragged.
-   * @override
+   * @param _dragElement The block or bubble currently being dragged.
    */
-  onDrop(_dragElement) {
+  override onDrop(_dragElement: IDraggable) {
     this.updateCursorDeleteStyle_(false);
   }
 
   /**
    * Updates the internal wouldDelete_ state.
-   * @param {boolean} wouldDelete The new value for the wouldDelete state.
-   * @protected
-   * @override
+   * @param wouldDelete The new value for the wouldDelete state.
    */
-  updateWouldDelete_(wouldDelete) {
+  protected override updateWouldDelete_(wouldDelete: boolean) {
     if (wouldDelete === this.wouldDelete_) {
       return;
     }
@@ -659,12 +559,11 @@ class Toolbox extends DeleteArea {
    * Adds or removes the CSS style of the cursor over the toolbox based whether
    * the block or bubble over it is expected to be deleted if dropped (using the
    * internal this.wouldDelete_ property).
-   * @param {boolean} addStyle Whether the style should be added or removed.
-   * @protected
+   * @param addStyle Whether the style should be added or removed.
    */
-  updateCursorDeleteStyle_(addStyle) {
+  protected updateCursorDeleteStyle_(addStyle: boolean) {
     const style =
-        this.wouldDelete_ ? 'blocklyToolboxDelete' : 'blocklyToolboxGrab';
+      this.wouldDelete_ ? 'blocklyToolboxDelete' : 'blocklyToolboxGrab';
     if (addStyle) {
       this.addStyle(style);
     } else {
@@ -674,88 +573,77 @@ class Toolbox extends DeleteArea {
 
   /**
    * Gets the toolbox item with the given ID.
-   * @param {string} id The ID of the toolbox item.
-   * @return {?IToolboxItem} The toolbox item with the given ID, or null
-   *     if no item exists.
-   * @public
+   * @param id The ID of the toolbox item.
+   * @return The toolbox item with the given ID, or null if no item exists.
    */
-  getToolboxItemById(id) {
+  getToolboxItemById(id: string): IToolboxItem | null {
     return this.contentMap_[id] || null;
   }
 
   /**
    * Gets the width of the toolbox.
-   * @return {number} The width of the toolbox.
-   * @public
+   * @return The width of the toolbox.
    */
-  getWidth() {
+  getWidth(): number {
     return this.width_;
   }
 
   /**
    * Gets the height of the toolbox.
-   * @return {number} The width of the toolbox.
-   * @public
+   * @return The width of the toolbox.
    */
-  getHeight() {
+  getHeight(): number {
     return this.height_;
   }
 
   /**
    * Gets the toolbox flyout.
-   * @return {?IFlyout} The toolbox flyout.
-   * @public
+   * @return The toolbox flyout.
    */
-  getFlyout() {
+  getFlyout(): IFlyout | null {
     return this.flyout_;
   }
 
   /**
    * Gets the workspace for the toolbox.
-   * @return {!WorkspaceSvg} The parent workspace for the toolbox.
-   * @public
+   * @return The parent workspace for the toolbox.
    */
-  getWorkspace() {
-    return this.workspace_;
+  getWorkspace(): WorkspaceSvg {
+    return this.workspace;
   }
 
   /**
    * Gets the selected item.
-   * @return {?ISelectableToolboxItem} The selected item, or null if no item is
-   *     currently selected.
-   * @public
+   * @return The selected item, or null if no item is currently selected.
    */
-  getSelectedItem() {
+  getSelectedItem(): ISelectableToolboxItem | null {
     return this.selectedItem_;
   }
 
   /**
    * Gets the previously selected item.
-   * @return {?ISelectableToolboxItem} The previously selected item, or null if
-   *     no item was previously selected.
-   * @public
+   * @return The previously selected item, or null if no item was previously
+   *     selected.
    */
-  getPreviouslySelectedItem() {
+  getPreviouslySelectedItem(): ISelectableToolboxItem | null {
     return this.previouslySelectedItem_;
   }
 
   /**
    * Gets whether or not the toolbox is horizontal.
-   * @return {boolean} True if the toolbox is horizontal, false if the toolbox
-   *     is vertical.
-   * @public
+   * @return True if the toolbox is horizontal, false if the toolbox is
+   *     vertical.
    */
-  isHorizontal() {
+  isHorizontal(): boolean {
     return this.horizontalLayout_;
   }
 
   /**
    * Positions the toolbox based on whether it is a horizontal toolbox and
    * whether the workspace is in rtl.
-   * @public
    */
   position() {
-    const workspaceMetrics = this.workspace_.getMetrics();
+    const workspaceMetrics = this.workspace.getMetrics();
     const toolboxDiv = this.HtmlDiv;
     if (!toolboxDiv) {
       // Not initialized yet.
@@ -770,37 +658,36 @@ class Toolbox extends DeleteArea {
       this.width_ = workspaceMetrics.viewWidth;
       if (this.toolboxPosition === toolbox.Position.TOP) {
         toolboxDiv.style.top = '0';
-      } else {  // Bottom
+      } else {
+        // Bottom
         toolboxDiv.style.bottom = '0';
       }
     } else {
       if (this.toolboxPosition === toolbox.Position.RIGHT) {
         toolboxDiv.style.right = '0';
-      } else {  // Left
+      } else {
+        // Left
         toolboxDiv.style.left = '0';
       }
       toolboxDiv.style.height = '100%';
       this.width_ = toolboxDiv.offsetWidth;
       this.height_ = workspaceMetrics.viewHeight;
     }
-    this.flyout_.position();
+    this.flyout_!.position();
   }
 
-  /**
-   * Handles resizing the toolbox when a toolbox item resizes.
-   * @package
-   */
+  /** Handles resizing the toolbox when a toolbox item resizes. */
   handleToolboxItemResize() {
     // Reposition the workspace so that (0,0) is in the correct position
     // relative to the new absolute edge (ie toolbox edge).
-    const workspace = this.workspace_;
-    const rect = this.HtmlDiv.getBoundingClientRect();
+    const workspace = this.workspace;
+    const rect = this.HtmlDiv!.getBoundingClientRect();
     const newX = this.toolboxPosition === toolbox.Position.LEFT ?
-        workspace.scrollX + rect.width :
-        workspace.scrollX;
+      workspace.scrollX + rect.width :
+      workspace.scrollX;
     const newY = this.toolboxPosition === toolbox.Position.TOP ?
-        workspace.scrollY + rect.height :
-        workspace.scrollY;
+      workspace.scrollY + rect.height :
+      workspace.scrollY;
     workspace.translate(newX, newY);
 
     // Even though the div hasn't changed size, the visible workspace
@@ -808,23 +695,19 @@ class Toolbox extends DeleteArea {
     common.svgResize(workspace);
   }
 
-  /**
-   * Unhighlights any previously selected item.
-   * @public
-   */
+  /** Unhighlights any previously selected item. */
   clearSelection() {
     this.setSelectedItem(null);
   }
 
   /**
    * Updates the category colours and background colour of selected categories.
-   * @package
    */
   refreshTheme() {
     for (let i = 0; i < this.contents_.length; i++) {
       const child = this.contents_[i];
       // TODO(#6097): Fix types or add refreshTheme to IToolboxItem.
-      const childAsCategory = /** @type {ToolboxCategory} */ (child);
+      const childAsCategory = child as ToolboxCategory;
       if (childAsCategory.refreshTheme) {
         childAsCategory.refreshTheme();
       }
@@ -835,38 +718,36 @@ class Toolbox extends DeleteArea {
    * Updates the flyout's content without closing it.  Should be used in
    * response to a change in one of the dynamic categories, such as variables or
    * procedures.
-   * @public
    */
   refreshSelection() {
     if (this.selectedItem_ && this.selectedItem_.isSelectable() &&
-        this.selectedItem_.getContents().length) {
-      this.flyout_.show(this.selectedItem_.getContents());
+      this.selectedItem_.getContents().length) {
+      this.flyout_!.show(this.selectedItem_.getContents());
     }
   }
 
   /**
    * Shows or hides the toolbox.
-   * @param {boolean} isVisible True if toolbox should be visible.
-   * @public
+   * @param isVisible True if toolbox should be visible.
    */
-  setVisible(isVisible) {
+  setVisible(isVisible: boolean) {
     if (this.isVisible_ === isVisible) {
       return;
     }
 
-    this.HtmlDiv.style.display = isVisible ? 'block' : 'none';
+    this.HtmlDiv!.style.display = isVisible ? 'block' : 'none';
     this.isVisible_ = isVisible;
     // Invisible toolbox is ignored as drag targets and must have the drag
     // target updated.
-    this.workspace_.recordDragTargets();
+    this.workspace.recordDragTargets();
   }
 
   /**
    * Hides the component. Called in WorkspaceSvg.hideChaff.
-   * @param {boolean} onlyClosePopups Whether only popups should be closed.
+   * @param onlyClosePopups Whether only popups should be closed.
    *     Flyouts should not be closed if this is true.
    */
-  autoHide(onlyClosePopups) {
+  autoHide(onlyClosePopups: boolean) {
     if (!onlyClosePopups && this.flyout_ && this.flyout_.autoClose) {
       this.clearSelection();
     }
@@ -875,98 +756,101 @@ class Toolbox extends DeleteArea {
   /**
    * Sets the given item as selected.
    * No-op if the item is not selectable.
-   * @param {?IToolboxItem} newItem The toolbox item to select.
-   * @public
+   * @param newItem The toolbox item to select.
    */
-  setSelectedItem(newItem) {
+  setSelectedItem(newItem: IToolboxItem | null) {
     const oldItem = this.selectedItem_;
 
-    if ((!newItem && !oldItem) || (newItem && !newItem.isSelectable())) {
+    if (!newItem && !oldItem || newItem && !newItem.isSelectable()) {
       return;
     }
-    newItem = /** @type {ISelectableToolboxItem} */ (newItem);
+    newItem = newItem as ISelectableToolboxItem;
 
-    if (this.shouldDeselectItem_(oldItem, newItem) && oldItem !== null) {
+    // AnyDuringMigration because:  Argument of type 'IToolboxItem' is not
+    // assignable to parameter of type 'ISelectableToolboxItem'.
+    if (this.shouldDeselectItem_(oldItem, newItem as AnyDuringMigration) &&
+      oldItem !== null) {
       this.deselectItem_(oldItem);
     }
 
-    if (this.shouldSelectItem_(oldItem, newItem) && newItem !== null) {
-      this.selectItem_(oldItem, newItem);
+    // AnyDuringMigration because:  Argument of type 'IToolboxItem' is not
+    // assignable to parameter of type 'ISelectableToolboxItem'.
+    if (this.shouldSelectItem_(oldItem, newItem as AnyDuringMigration) &&
+      newItem !== null) {
+      // AnyDuringMigration because:  Argument of type 'IToolboxItem' is not
+      // assignable to parameter of type 'ISelectableToolboxItem'.
+      this.selectItem_(oldItem, newItem as AnyDuringMigration);
     }
 
-    this.updateFlyout_(oldItem, newItem);
-    this.fireSelectEvent_(oldItem, newItem);
+    // AnyDuringMigration because:  Argument of type 'IToolboxItem' is not
+    // assignable to parameter of type 'ISelectableToolboxItem'.
+    this.updateFlyout_(oldItem, newItem as AnyDuringMigration);
+    // AnyDuringMigration because:  Argument of type 'IToolboxItem' is not
+    // assignable to parameter of type 'ISelectableToolboxItem'.
+    this.fireSelectEvent_(oldItem, newItem as AnyDuringMigration);
   }
 
   /**
    * Decides whether the old item should be deselected.
-   * @param {?ISelectableToolboxItem} oldItem The previously selected
-   *     toolbox item.
-   * @param {?ISelectableToolboxItem} newItem The newly selected toolbox
-   *     item.
-   * @return {boolean} True if the old item should be deselected, false
-   *     otherwise.
-   * @protected
+   * @param oldItem The previously selected toolbox item.
+   * @param newItem The newly selected toolbox item.
+   * @return True if the old item should be deselected, false otherwise.
    */
-  shouldDeselectItem_(oldItem, newItem) {
+  protected shouldDeselectItem_(
+    oldItem: ISelectableToolboxItem | null,
+    newItem: ISelectableToolboxItem | null): boolean {
     // Deselect the old item unless the old item is collapsible and has been
     // previously clicked on.
     return oldItem !== null &&
-        (!oldItem.isCollapsible() || oldItem !== newItem);
+      (!oldItem.isCollapsible() || oldItem !== newItem);
   }
 
   /**
    * Decides whether the new item should be selected.
-   * @param {?ISelectableToolboxItem} oldItem The previously selected
-   *     toolbox item.
-   * @param {?ISelectableToolboxItem} newItem The newly selected toolbox
-   *     item.
-   * @return {boolean} True if the new item should be selected, false otherwise.
-   * @protected
+   * @param oldItem The previously selected toolbox item.
+   * @param newItem The newly selected toolbox item.
+   * @return True if the new item should be selected, false otherwise.
    */
-  shouldSelectItem_(oldItem, newItem) {
+  protected shouldSelectItem_(
+    oldItem: ISelectableToolboxItem | null,
+    newItem: ISelectableToolboxItem | null): boolean {
     // Select the new item unless the old item equals the new item.
     return newItem !== null && newItem !== oldItem;
   }
 
   /**
    * Deselects the given item, marks it as unselected, and updates aria state.
-   * @param {!ISelectableToolboxItem} item The previously selected
-   *     toolbox item which should be deselected.
-   * @protected
+   * @param item The previously selected toolbox item which should be
+   *     deselected.
    */
-  deselectItem_(item) {
+  protected deselectItem_(item: ISelectableToolboxItem) {
     this.selectedItem_ = null;
     this.previouslySelectedItem_ = item;
     item.setSelected(false);
     aria.setState(
-        /** @type {!Element} */ (this.contentsDiv_),
-        aria.State.ACTIVEDESCENDANT, '');
+      this.contentsDiv_ as Element, aria.State.ACTIVEDESCENDANT, '');
   }
 
   /**
    * Selects the given item, marks it selected, and updates aria state.
-   * @param {?ISelectableToolboxItem} oldItem The previously selected
-   *     toolbox item.
-   * @param {!ISelectableToolboxItem} newItem The newly selected toolbox
-   *     item.
-   * @protected
+   * @param oldItem The previously selected toolbox item.
+   * @param newItem The newly selected toolbox item.
    */
-  selectItem_(oldItem, newItem) {
+  protected selectItem_(
+    oldItem: ISelectableToolboxItem | null, newItem: ISelectableToolboxItem) {
     this.selectedItem_ = newItem;
     this.previouslySelectedItem_ = oldItem;
     newItem.setSelected(true);
     aria.setState(
-        /** @type {!Element} */ (this.contentsDiv_),
-        aria.State.ACTIVEDESCENDANT, newItem.getId());
+      this.contentsDiv_ as Element, aria.State.ACTIVEDESCENDANT,
+      newItem.getId());
   }
 
   /**
    * Selects the toolbox item by its position in the list of toolbox items.
-   * @param {number} position The position of the item to select.
-   * @public
+   * @param position The position of the item to select.
    */
-  selectItemByPosition(position) {
+  selectItemByPosition(position: number) {
     if (position > -1 && position < this.contents_.length) {
       const item = this.contents_[position];
       if (item.isSelectable()) {
@@ -977,61 +861,57 @@ class Toolbox extends DeleteArea {
 
   /**
    * Decides whether to hide or show the flyout depending on the selected item.
-   * @param {?ISelectableToolboxItem} oldItem The previously selected toolbox
-   *     item.
-   * @param {?ISelectableToolboxItem} newItem The newly selected toolbox item.
-   * @protected
+   * @param oldItem The previously selected toolbox item.
+   * @param newItem The newly selected toolbox item.
    */
-  updateFlyout_(oldItem, newItem) {
-    if (!newItem || (oldItem === newItem && !newItem.isCollapsible()) ||
-        !newItem.getContents().length) {
-      this.flyout_.hide();
+  protected updateFlyout_(
+    oldItem: ISelectableToolboxItem | null,
+    newItem: ISelectableToolboxItem | null) {
+    if (!newItem || oldItem === newItem && !newItem.isCollapsible() ||
+      !newItem.getContents().length) {
+      this.flyout_!.hide();
     } else {
-      this.flyout_.show(newItem.getContents());
-      this.flyout_.scrollToStart();
+      this.flyout_!.show(newItem.getContents());
+      this.flyout_!.scrollToStart();
     }
   }
 
   /**
    * Emits an event when a new toolbox item is selected.
-   * @param {?ISelectableToolboxItem} oldItem The previously selected
-   *     toolbox item.
-   * @param {?ISelectableToolboxItem} newItem The newly selected toolbox
-   *     item.
-   * @private
+   * @param oldItem The previously selected toolbox item.
+   * @param newItem The newly selected toolbox item.
    */
-  fireSelectEvent_(oldItem, newItem) {
+  private fireSelectEvent_(
+    oldItem: ISelectableToolboxItem | null,
+    newItem: ISelectableToolboxItem | null) {
     const oldElement = oldItem && oldItem.getName();
     let newElement = newItem && newItem.getName();
     // In this case the toolbox closes, so the newElement should be null.
     if (oldItem === newItem) {
       newElement = null;
     }
-    const event = new (eventUtils.get(eventUtils.TOOLBOX_ITEM_SELECT))(
-        oldElement, newElement, this.workspace_.id);
+    const event = new (eventUtils.get(eventUtils.TOOLBOX_ITEM_SELECT))!
+      (oldElement, newElement, this.workspace.id);
     eventUtils.fire(event);
   }
 
   /**
    * Closes the current item if it is expanded, or selects the parent.
-   * @return {boolean} True if a parent category was selected, false otherwise.
-   * @private
+   * @return True if a parent category was selected, false otherwise.
    */
-  selectParent_() {
+  private selectParent_(): boolean {
     if (!this.selectedItem_) {
       return false;
     }
 
     if (this.selectedItem_.isCollapsible() &&
-        (/** @type {!ICollapsibleToolboxItem} */ (this.selectedItem_))
-            .isExpanded()) {
-      const collapsibleItem =
-          /** @type {!ICollapsibleToolboxItem} */ (this.selectedItem_);
+      (this.selectedItem_ as ICollapsibleToolboxItem).isExpanded()) {
+      const collapsibleItem = this.selectedItem_ as ICollapsibleToolboxItem;
       collapsibleItem.toggleExpanded();
       return true;
     } else if (
-        this.selectedItem_.getParent() &&
-        this.selectedItem_.getParent().isSelectable()) {
+      this.selectedItem_.getParent() &&
+      this.selectedItem_.getParent()!.isSelectable()) {
       this.setSelectedItem(this.selectedItem_.getParent());
       return true;
     }
@@ -1041,15 +921,13 @@ class Toolbox extends DeleteArea {
   /**
    * Selects the first child of the currently selected item, or nothing if the
    * toolbox item has no children.
-   * @return {boolean} True if a child category was selected, false otherwise.
-   * @private
+   * @return True if a child category was selected, false otherwise.
    */
-  selectChild_() {
+  private selectChild_(): boolean {
     if (!this.selectedItem_ || !this.selectedItem_.isCollapsible()) {
       return false;
     }
-    const collapsibleItem = /** @type {ICollapsibleToolboxItem} */
-        (this.selectedItem_);
+    const collapsibleItem = this.selectedItem_ as ICollapsibleToolboxItem;
     if (!collapsibleItem.isExpanded()) {
       collapsibleItem.toggleExpanded();
       return true;
@@ -1061,10 +939,9 @@ class Toolbox extends DeleteArea {
 
   /**
    * Selects the next visible toolbox item.
-   * @return {boolean} True if a next category was selected, false otherwise.
-   * @private
+   * @return True if a next category was selected, false otherwise.
    */
-  selectNext_() {
+  private selectNext_(): boolean {
     if (!this.selectedItem_) {
       return false;
     }
@@ -1085,11 +962,9 @@ class Toolbox extends DeleteArea {
 
   /**
    * Selects the previous visible toolbox item.
-   * @return {boolean} True if a previous category was selected, false
-   *     otherwise.
-   * @private
+   * @return True if a previous category was selected, false otherwise.
    */
-  selectPrevious_() {
+  private selectPrevious_(): boolean {
     if (!this.selectedItem_) {
       return false;
     }
@@ -1108,13 +983,10 @@ class Toolbox extends DeleteArea {
     return false;
   }
 
-  /**
-   * Disposes of this toolbox.
-   * @public
-   */
+  /** Disposes of this toolbox. */
   dispose() {
-    this.workspace_.getComponentManager().removeComponent('toolbox');
-    this.flyout_.dispose();
+    this.workspace.getComponentManager().removeComponent('toolbox');
+    this.flyout_!.dispose();
     for (let i = 0; i < this.contents_.length; i++) {
       const toolboxItem = this.contents_[i];
       toolboxItem.dispose();
@@ -1126,14 +998,15 @@ class Toolbox extends DeleteArea {
     this.boundEvents_ = [];
     this.contents_ = [];
 
-    this.workspace_.getThemeManager().unsubscribe(this.HtmlDiv);
+    // AnyDuringMigration because:  Argument of type 'HTMLDivElement | null' is
+    // not assignable to parameter of type 'Element'.
+    this.workspace.getThemeManager().unsubscribe(
+      this.HtmlDiv as AnyDuringMigration);
     dom.removeNode(this.HtmlDiv);
   }
 }
 
-/**
- * CSS for Toolbox.  See css.js for use.
- */
+/** CSS for Toolbox.  See css.js for use. */
 Css.register(`
 .blocklyToolboxDelete {
   cursor: url("<<<PATH>>>/handdelete.cur"), auto;
@@ -1168,5 +1041,3 @@ Css.register(`
 `);
 
 registry.register(registry.Type.TOOLBOX, registry.DEFAULT, Toolbox);
-
-exports.Toolbox = Toolbox;

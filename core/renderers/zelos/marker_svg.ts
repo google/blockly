@@ -1,73 +1,66 @@
+/** @fileoverview Methods for graphically rendering a marker as SVG. */
+
 /**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Methods for graphically rendering a marker as SVG.
- */
-'use strict';
 
 /**
  * Methods for graphically rendering a marker as SVG.
  * @class
  */
-goog.module('Blockly.zelos.MarkerSvg');
 
-const dom = goog.require('Blockly.utils.dom');
 /* eslint-disable-next-line no-unused-vars */
-const {ASTNode} = goog.requireType('Blockly.ASTNode');
+import { BlockSvg } from '../../block_svg.js';
 /* eslint-disable-next-line no-unused-vars */
-const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+import { ASTNode } from '../../keyboard_nav/ast_node.js';
 /* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider: BaseConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const {MarkerSvg: BaseMarkerSvg} = goog.require('Blockly.blockRendering.MarkerSvg');
+import { Marker } from '../../keyboard_nav/marker.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Marker} = goog.requireType('Blockly.Marker');
+import { RenderedConnection } from '../../rendered_connection.js';
+import * as dom from '../../utils/dom.js';
+import { Svg } from '../../utils/svg.js';
 /* eslint-disable-next-line no-unused-vars */
-const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
-const {Svg} = goog.require('Blockly.utils.Svg');
+import { WorkspaceSvg } from '../../workspace_svg.js';
+
 /* eslint-disable-next-line no-unused-vars */
-const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
+import { ConstantProvider as BaseConstantProvider } from '../common/constants.js';
+import { MarkerSvg as BaseMarkerSvg } from '../common/marker_svg.js';
+
 /* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider: ZelosConstantProvider} = goog.requireType('Blockly.zelos.ConstantProvider');
+import { ConstantProvider as ZelosConstantProvider } from './constants.js';
 
 
 /**
  * Class to draw a marker.
- * @extends {BaseMarkerSvg}
  * @alias Blockly.zelos.MarkerSvg
  */
-class MarkerSvg extends BaseMarkerSvg {
+export class MarkerSvg extends BaseMarkerSvg {
+  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
+  constants_!: ZelosConstantProvider;
+
+  private markerCircle_: SVGCircleElement | null = null;
+
   /**
-   * @param {!WorkspaceSvg} workspace The workspace the marker belongs to.
-   * @param {!BaseConstantProvider} constants The constants for
-   *     the renderer.
-   * @param {!Marker} marker The marker to draw.
+   * @param workspace The workspace the marker belongs to.
+   * @param constants The constants for the renderer.
+   * @param marker The marker to draw.
    */
-  constructor(workspace, constants, marker) {
+  constructor(
+    workspace: WorkspaceSvg, constants: BaseConstantProvider,
+    marker: Marker) {
     super(workspace, constants, marker);
-
-    /** @type {!ZelosConstantProvider} */
-    this.constants_;
-
-    /**
-     * @type {SVGCircleElement}
-     * @private
-     */
-    this.markerCircle_ = null;
   }
 
   /**
    * Position and display the marker for an input or an output connection.
-   * @param {!ASTNode} curNode The node to draw the marker for.
-   * @private
+   * @param curNode The node to draw the marker for.
    */
-  showWithInputOutput_(curNode) {
-    const block = /** @type {!BlockSvg} */ (curNode.getSourceBlock());
-    const connection =
-        /** @type {!RenderedConnection} */ (curNode.getLocation());
+  private showWithInputOutput_(curNode: ASTNode) {
+    const block = curNode.getSourceBlock() as BlockSvg;
+    const connection = curNode.getLocation() as RenderedConnection;
     const offsetInBlock = connection.getOffsetInBlock();
 
     this.positionCircle_(offsetInBlock.x, offsetInBlock.y);
@@ -75,30 +68,23 @@ class MarkerSvg extends BaseMarkerSvg {
     this.showCurrent_();
   }
 
-  /**
-   * @override
-   */
-  showWithOutput_(curNode) {
+  override showWithOutput_(curNode: ASTNode) {
     this.showWithInputOutput_(curNode);
   }
 
-  /**
-   * @override
-   */
-  showWithInput_(curNode) {
+  override showWithInput_(curNode: ASTNode) {
     this.showWithInputOutput_(curNode);
   }
 
   /**
    * Draw a rectangle around the block.
-   * @param {!ASTNode} curNode The current node of the marker.
+   * @param curNode The current node of the marker.
    */
-  showWithBlock_(curNode) {
-    const block = /** @type {!BlockSvg} */ (curNode.getLocation());
+  override showWithBlock_(curNode: ASTNode) {
+    const block = curNode.getLocation() as BlockSvg;
 
     // Gets the height and width of entire stack.
     const heightWidth = block.getHeightWidth();
-
     // Add padding so that being on a stack looks different than being on a
     // block.
     this.positionRect_(0, 0, heightWidth.width, heightWidth.height);
@@ -108,72 +94,63 @@ class MarkerSvg extends BaseMarkerSvg {
 
   /**
    * Position the circle we use for input and output connections.
-   * @param {number} x The x position of the circle.
-   * @param {number} y The y position of the circle.
-   * @private
+   * @param x The x position of the circle.
+   * @param y The y position of the circle.
    */
-  positionCircle_(x, y) {
-    this.markerCircle_.setAttribute('cx', x);
-    this.markerCircle_.setAttribute('cy', y);
+  private positionCircle_(x: number, y: number) {
+    this.markerCircle_?.setAttribute('cx', x.toString());
+    this.markerCircle_?.setAttribute('cy', y.toString());
     this.currentMarkerSvg = this.markerCircle_;
   }
 
-  /**
-   * @override
-   */
-  hide() {
+  override hide() {
     super.hide();
-    this.markerCircle_.style.display = 'none';
+    if (this.markerCircle_) {
+      this.markerCircle_.style.display = 'none';
+    }
   }
 
-  /**
-   * @override
-   */
-  createDomInternal_() {
+  override createDomInternal_() {
     /* clang-format off */
     /* This markup will be generated and added to the .svgGroup_:
-    <g>
-      <rect width="100" height="5">
-        <animate attributeType="XML" attributeName="fill" dur="1s"
-          values="transparent;transparent;#fff;transparent" repeatCount="indefinite" />
-      </rect>
-    </g>
-    */
+        <g>
+          <rect width="100" height="5">
+            <animate attributeType="XML" attributeName="fill" dur="1s"
+              values="transparent;transparent;#fff;transparent" repeatCount="indefinite" />
+          </rect>
+        </g>
+        */
     /* clang-format on */
-
     super.createDomInternal_();
 
+    // AnyDuringMigration because:  Argument of type 'SVGGElement | null' is not
+    // assignable to parameter of type 'Element | undefined'.
     this.markerCircle_ = dom.createSvgElement(
-        Svg.CIRCLE, {
-          'r': this.constants_.CURSOR_RADIUS,
-          'style': 'display: none',
-          'stroke-width': this.constants_.CURSOR_STROKE_WIDTH,
-        },
-        this.markerSvg_);
+      Svg.CIRCLE, {
+      'r': this.constants_.CURSOR_RADIUS,
+      'style': 'display: none',
+      'stroke-width': this.constants_.CURSOR_STROKE_WIDTH,
+    },
+      this.markerSvg_!);
 
     // Markers and stack cursors don't blink.
     if (this.isCursor()) {
       const blinkProperties = this.getBlinkProperties_();
-      dom.createSvgElement(Svg.ANIMATE, blinkProperties, this.markerCircle_);
+      dom.createSvgElement(Svg.ANIMATE, blinkProperties, this.markerCircle_!);
     }
 
-    return this.markerSvg_;
+    return this.markerSvg_!;
   }
 
-  /**
-   * @override
-   */
-  applyColour_(curNode) {
+  override applyColour_(curNode: ASTNode) {
     super.applyColour_(curNode);
 
-    this.markerCircle_.setAttribute('fill', this.colour_);
-    this.markerCircle_.setAttribute('stroke', this.colour_);
+    this.markerCircle_?.setAttribute('fill', this.colour_);
+    this.markerCircle_?.setAttribute('stroke', this.colour_);
 
     if (this.isCursor()) {
       const values = this.colour_ + ';transparent;transparent;';
-      this.markerCircle_.firstElementChild.setAttribute('values', values);
+      this.markerCircle_?.firstElementChild!.setAttribute('values', values);
     }
   }
 }
-
-exports.MarkerSvg = MarkerSvg;

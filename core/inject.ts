@@ -1,71 +1,75 @@
+/** @fileoverview Functions for injecting Blockly into a web page. */
+
 /**
  * @license
  * Copyright 2011 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Functions for injecting Blockly into a web page.
- */
-'use strict';
 
 /**
  * Functions for injecting Blockly into a web page.
  * @namespace Blockly.inject
  */
-goog.module('Blockly.inject');
 
-const Css = goog.require('Blockly.Css');
-const Tooltip = goog.require('Blockly.Tooltip');
-const Touch = goog.require('Blockly.Touch');
-const WidgetDiv = goog.require('Blockly.WidgetDiv');
-const aria = goog.require('Blockly.utils.aria');
-const browserEvents = goog.require('Blockly.browserEvents');
-const bumpObjects = goog.require('Blockly.bumpObjects');
-const common = goog.require('Blockly.common');
-const dom = goog.require('Blockly.utils.dom');
-const dropDownDiv = goog.require('Blockly.dropDownDiv');
-const userAgent = goog.require('Blockly.utils.userAgent');
-const {BlockDragSurfaceSvg} = goog.require('Blockly.BlockDragSurfaceSvg');
+import 'angular-mocks';
+
+import { BlockDragSurfaceSvg } from './block_drag_surface.js';
 /* eslint-disable-next-line no-unused-vars */
-const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
-const {Grid} = goog.require('Blockly.Grid');
-const {Msg} = goog.require('Blockly.Msg');
-const {Options} = goog.require('Blockly.Options');
-const {ScrollbarPair} = goog.require('Blockly.ScrollbarPair');
-const {ShortcutRegistry} = goog.require('Blockly.ShortcutRegistry');
-const {Svg} = goog.require('Blockly.utils.Svg');
-const {WorkspaceDragSurfaceSvg} = goog.require('Blockly.WorkspaceDragSurfaceSvg');
-const {WorkspaceSvg} = goog.require('Blockly.WorkspaceSvg');
-const {Workspace} = goog.require('Blockly.Workspace');
+import { BlocklyOptions } from './blockly_options.js';
+import * as browserEvents from './browser_events.js';
+import * as bumpObjects from './bump_objects.js';
+import * as common from './common.js';
+import * as Css from './css.js';
+import * as dropDownDiv from './dropdowndiv.js';
+import { Grid } from './grid.js';
+import { Msg } from './msg.js';
+import { Options } from './options.js';
+import { ScrollbarPair } from './scrollbar_pair.js';
+import { ShortcutRegistry } from './shortcut_registry.js';
+import * as Tooltip from './tooltip.js';
+import * as Touch from './touch.js';
+import * as aria from './utils/aria.js';
+import * as dom from './utils/dom.js';
+import { Svg } from './utils/svg.js';
+import * as userAgent from './utils/useragent.js';
+import * as WidgetDiv from './widgetdiv.js';
+import { Workspace } from './workspace.js';
+import { WorkspaceDragSurfaceSvg } from './workspace_drag_surface_svg.js';
+import { WorkspaceSvg } from './workspace_svg.js';
 
 
 /**
  * Inject a Blockly editor into the specified container element (usually a div).
- * @param {Element|string} container Containing element, or its ID,
- *     or a CSS selector.
- * @param {BlocklyOptions=} opt_options Optional dictionary of options.
- * @return {!WorkspaceSvg} Newly created main workspace.
+ * @param container Containing element, or its ID, or a CSS selector.
+ * @param opt_options Optional dictionary of options.
+ * @return Newly created main workspace.
  * @alias Blockly.inject
  */
-const inject = function(container, opt_options) {
+export function inject(
+  container: Element | string, opt_options?: BlocklyOptions): WorkspaceSvg {
   if (typeof container === 'string') {
-    container =
-        document.getElementById(container) || document.querySelector(container);
+    // AnyDuringMigration because:  Type 'Element | null' is not assignable to
+    // type 'string | Element'.
+    container = (document.getElementById(container) ||
+      document.querySelector(container)) as AnyDuringMigration;
   }
   // Verify that the container is in document.
-  if (!container || !dom.containsNode(document, container)) {
+  // AnyDuringMigration because:  Argument of type 'string | Element' is not
+  // assignable to parameter of type 'Node'.
+  if (!container ||
+    !dom.containsNode(document, container as AnyDuringMigration)) {
     throw Error('Error: container is not in current document.');
   }
-  const options =
-      new Options(opt_options || (/** @type {!BlocklyOptions} */ ({})));
-  const subContainer =
-      /** @type {!HTMLDivElement} */ (document.createElement('div'));
+  const options = new Options(opt_options || {} as BlocklyOptions);
+  const subContainer = (document.createElement('div'));
   subContainer.className = 'injectionDiv';
   subContainer.tabIndex = 0;
   aria.setState(subContainer, aria.State.LABEL, Msg['WORKSPACE_ARIA_LABEL']);
 
-  container.appendChild(subContainer);
+  // AnyDuringMigration because:  Property 'appendChild' does not exist on type
+  // 'string | Element'.
+  (container as AnyDuringMigration).appendChild(subContainer);
   const svg = createDom(subContainer, options);
 
   // Create surfaces for dragging things. These are optimizations
@@ -75,30 +79,34 @@ const inject = function(container, opt_options) {
   const workspaceDragSurface = new WorkspaceDragSurfaceSvg(subContainer);
 
   const workspace =
-      createMainWorkspace(svg, options, blockDragSurface, workspaceDragSurface);
+    createMainWorkspace(svg, options, blockDragSurface, workspaceDragSurface);
 
   init(workspace);
 
   // Keep focus on the first workspace so entering keyboard navigation looks
   // correct.
-  common.setMainWorkspace(workspace);
+  // AnyDuringMigration because:  Argument of type 'WorkspaceSvg' is not
+  // assignable to parameter of type 'Workspace'.
+  common.setMainWorkspace(workspace as AnyDuringMigration);
 
   common.svgResize(workspace);
 
-  subContainer.addEventListener('focusin', function() {
-    common.setMainWorkspace(workspace);
+  subContainer.addEventListener('focusin', function () {
+    // AnyDuringMigration because:  Argument of type 'WorkspaceSvg' is not
+    // assignable to parameter of type 'Workspace'.
+    common.setMainWorkspace(workspace as AnyDuringMigration);
   });
 
   return workspace;
-};
+}
 
 /**
  * Create the SVG image.
- * @param {!Element} container Containing element.
- * @param {!Options} options Dictionary of options.
- * @return {!Element} Newly created SVG image.
+ * @param container Containing element.
+ * @param options Dictionary of options.
+ * @return Newly created SVG image.
  */
-const createDom = function(container, options) {
+function createDom(container: Element, options: Options): Element {
   // Sadly browsers (Chrome vs Firefox) are currently inconsistent in laying
   // out content in RTL mode.  Therefore Blockly forces the use of LTR,
   // then manually positions content in RTL as needed.
@@ -109,30 +117,30 @@ const createDom = function(container, options) {
 
   // Build the SVG DOM.
   /*
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    xmlns:html="http://www.w3.org/1999/xhtml"
-    xmlns:xlink="http://www.w3.org/1999/xlink"
-    version="1.1"
-    class="blocklySvg">
-    ...
-  </svg>
-  */
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      version="1.1"
+      class="blocklySvg">
+      ...
+    </svg>
+    */
   const svg = dom.createSvgElement(
-      Svg.SVG, {
-        'xmlns': dom.SVG_NS,
-        'xmlns:html': dom.HTML_NS,
-        'xmlns:xlink': dom.XLINK_NS,
-        'version': '1.1',
-        'class': 'blocklySvg',
-        'tabindex': '0',
-      },
-      container);
+    Svg.SVG, {
+    'xmlns': dom.SVG_NS,
+    'xmlns:html': dom.HTML_NS,
+    'xmlns:xlink': dom.XLINK_NS,
+    'version': '1.1',
+    'class': 'blocklySvg',
+    'tabindex': '0',
+  },
+    container);
   /*
-  <defs>
-    ... filters go here ...
-  </defs>
-  */
+    <defs>
+      ... filters go here ...
+    </defs>
+    */
   const defs = dom.createSvgElement(Svg.DEFS, {}, svg);
   // Each filter/pattern needs a unique ID for the case of multiple Blockly
   // instances on a page.  Browser behaviour becomes undefined otherwise.
@@ -141,33 +149,32 @@ const createDom = function(container, options) {
 
   options.gridPattern = Grid.createDom(rnd, options.gridOptions, defs);
   return svg;
-};
+}
 
 /**
  * Create a main workspace and add it to the SVG.
- * @param {!Element} svg SVG element with pattern defined.
- * @param {!Options} options Dictionary of options.
- * @param {!BlockDragSurfaceSvg} blockDragSurface Drag surface SVG
- *     for the blocks.
- * @param {!WorkspaceDragSurfaceSvg} workspaceDragSurface Drag surface
- *     SVG for the workspace.
- * @return {!WorkspaceSvg} Newly created main workspace.
+ * @param svg SVG element with pattern defined.
+ * @param options Dictionary of options.
+ * @param blockDragSurface Drag surface SVG for the blocks.
+ * @param workspaceDragSurface Drag surface SVG for the workspace.
+ * @return Newly created main workspace.
  */
-const createMainWorkspace = function(
-    svg, options, blockDragSurface, workspaceDragSurface) {
+function createMainWorkspace(
+  svg: Element, options: Options, blockDragSurface: BlockDragSurfaceSvg,
+  workspaceDragSurface: WorkspaceDragSurfaceSvg): WorkspaceSvg {
   options.parentWorkspace = null;
   const mainWorkspace =
-      new WorkspaceSvg(options, blockDragSurface, workspaceDragSurface);
+    new WorkspaceSvg(options, blockDragSurface, workspaceDragSurface);
   const wsOptions = mainWorkspace.options;
   mainWorkspace.scale = wsOptions.zoomOptions.startScale;
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
 
   // Set the theme name and renderer name onto the injection div.
   dom.addClass(
-      mainWorkspace.getInjectionDiv(),
-      mainWorkspace.getRenderer().getClassName());
+    mainWorkspace.getInjectionDiv(),
+    mainWorkspace.getRenderer().getClassName());
   dom.addClass(
-      mainWorkspace.getInjectionDiv(), mainWorkspace.getTheme().getClassName());
+    mainWorkspace.getInjectionDiv(), mainWorkspace.getTheme().getClassName());
 
   if (!wsOptions.hasCategories && wsOptions.languageTree) {
     // Add flyout as an <svg> that is a sibling of the workspace SVG.
@@ -182,13 +189,13 @@ const createMainWorkspace = function(
   }
   // Register the workspace svg as a UI component.
   mainWorkspace.getThemeManager().subscribe(
-      svg, 'workspaceBackgroundColour', 'background-color');
+    svg, 'workspaceBackgroundColour', 'background-color');
 
   // A null translation will also apply the correct initial scale.
   mainWorkspace.translate(0, 0);
 
   mainWorkspace.addChangeListener(
-      bumpObjects.bumpIntoBoundsHandler(mainWorkspace));
+    bumpObjects.bumpIntoBoundsHandler(mainWorkspace));
 
   // The SVG is now fully assembled.
   common.svgResize(mainWorkspace);
@@ -196,31 +203,31 @@ const createMainWorkspace = function(
   dropDownDiv.createDom();
   Tooltip.createDom();
   return mainWorkspace;
-};
+}
 
 /**
  * Initialize Blockly with various handlers.
- * @param {!WorkspaceSvg} mainWorkspace Newly created main workspace.
+ * @param mainWorkspace Newly created main workspace.
  */
-const init = function(mainWorkspace) {
+function init(mainWorkspace: WorkspaceSvg) {
   const options = mainWorkspace.options;
   const svg = mainWorkspace.getParentSvg();
 
   // Suppress the browser's context menu.
   browserEvents.conditionalBind(
-      /** @type {!Element} */ (svg.parentNode), 'contextmenu', null,
-      function(e) {
-        if (!browserEvents.isTargetInput(e)) {
-          e.preventDefault();
-        }
-      });
+    svg.parentNode as Element, 'contextmenu', null,
+    function (e: AnyDuringMigration) {
+      if (!browserEvents.isTargetInput(e)) {
+        e.preventDefault();
+      }
+    });
 
   const workspaceResizeHandler =
-      browserEvents.conditionalBind(window, 'resize', null, function() {
-        mainWorkspace.hideChaff(true);
-        common.svgResize(mainWorkspace);
-        bumpObjects.bumpTopObjectsIntoBounds(mainWorkspace);
-      });
+    browserEvents.conditionalBind(window, 'resize', null, function () {
+      mainWorkspace.hideChaff(true);
+      common.svgResize(mainWorkspace);
+      bumpObjects.bumpTopObjectsIntoBounds(mainWorkspace);
+    });
   mainWorkspace.setResizeHandlerWrapper(workspaceResizeHandler);
 
   bindDocumentEvents();
@@ -249,51 +256,49 @@ const init = function(mainWorkspace) {
 
   if (options.moveOptions && options.moveOptions.scrollbars) {
     const horizontalScroll = options.moveOptions.scrollbars === true ||
-        !!options.moveOptions.scrollbars.horizontal;
+      !!options.moveOptions.scrollbars.horizontal;
     const verticalScroll = options.moveOptions.scrollbars === true ||
-        !!options.moveOptions.scrollbars.vertical;
+      !!options.moveOptions.scrollbars.vertical;
     mainWorkspace.scrollbar = new ScrollbarPair(
-        mainWorkspace, horizontalScroll, verticalScroll,
-        'blocklyMainWorkspaceScrollbar');
+      mainWorkspace, horizontalScroll, verticalScroll,
+      'blocklyMainWorkspaceScrollbar');
     mainWorkspace.scrollbar.resize();
   } else {
-    mainWorkspace.setMetrics({x: 0.5, y: 0.5});
+    mainWorkspace.setMetrics({ x: 0.5, y: 0.5 });
   }
 
   // Load the sounds.
   if (options.hasSounds) {
     loadSounds(options.pathToMedia, mainWorkspace);
   }
-};
+}
 
 /**
  * Handle a key-down on SVG drawing surface. Does nothing if the main workspace
  * is not visible.
- * @param {!KeyboardEvent} e Key down event.
+ * @param e Key down event.
  */
 // TODO (https://github.com/google/blockly/issues/1998) handle cases where there
 // are multiple workspaces and non-main workspaces are able to accept input.
-const onKeyDown = function(e) {
-  const mainWorkspace =
-      /** @type {!WorkspaceSvg} */ (common.getMainWorkspace());
+function onKeyDown(e: KeyboardEvent) {
+  const mainWorkspace = common.getMainWorkspace() as WorkspaceSvg;
   if (!mainWorkspace) {
     return;
   }
 
   if (browserEvents.isTargetInput(e) ||
-      (mainWorkspace.rendered && !mainWorkspace.isVisible())) {
+    mainWorkspace.rendered && !mainWorkspace.isVisible()) {
     // When focused on an HTML text input widget, don't trap any keys.
     // Ignore keypresses on rendered workspaces that have been explicitly
     // hidden.
     return;
   }
   ShortcutRegistry.registry.onKeyDown(mainWorkspace, e);
-};
+}
 
 /**
  * Whether event handlers have been bound. Document event handlers will only
  * be bound once, even if Blockly is destroyed and reinjected.
- * @type {boolean}
  */
 let documentEventsBound = false;
 
@@ -307,12 +312,12 @@ let documentEventsBound = false;
  * Also, 'keydown' has to be on the whole document since the browser doesn't
  * understand a concept of focus on the SVG image.
  */
-const bindDocumentEvents = function() {
+function bindDocumentEvents() {
   if (!documentEventsBound) {
-    browserEvents.conditionalBind(document, 'scroll', null, function() {
+    browserEvents.conditionalBind(document, 'scroll', null, function () {
       const workspaces = Workspace.getAll();
-      for (let i = 0, workspace; (workspace = workspaces[i]); i++) {
-        if (workspace.updateInverseScreenCTM) {
+      for (let i = 0, workspace; workspace = workspaces[i]; i++) {
+        if (workspace instanceof WorkspaceSvg) {
           workspace.updateInverseScreenCTM();
         }
       }
@@ -325,53 +330,52 @@ const bindDocumentEvents = function() {
     // Some iPad versions don't fire resize after portrait to landscape change.
     if (userAgent.IPAD) {
       browserEvents.conditionalBind(
-          window, 'orientationchange', document, function() {
-            // TODO (#397): Fix for multiple Blockly workspaces.
-            common.svgResize(/** @type {!WorkspaceSvg} */
-                             (common.getMainWorkspace()));
-          });
+        window, 'orientationchange', document, function () {
+          // TODO (#397): Fix for multiple Blockly workspaces.
+          common.svgResize(common.getMainWorkspace() as WorkspaceSvg);
+        });
     }
   }
   documentEventsBound = true;
-};
+}
 
 /**
  * Load sounds for the given workspace.
- * @param {string} pathToMedia The path to the media directory.
- * @param {!WorkspaceSvg} workspace The workspace to load sounds for.
+ * @param pathToMedia The path to the media directory.
+ * @param workspace The workspace to load sounds for.
  */
-const loadSounds = function(pathToMedia, workspace) {
+function loadSounds(pathToMedia: string, workspace: WorkspaceSvg) {
   const audioMgr = workspace.getAudioManager();
   audioMgr.load(
-      [
-        pathToMedia + 'click.mp3',
-        pathToMedia + 'click.wav',
-        pathToMedia + 'click.ogg',
-      ],
-      'click');
+    [
+      pathToMedia + 'click.mp3',
+      pathToMedia + 'click.wav',
+      pathToMedia + 'click.ogg',
+    ],
+    'click');
   audioMgr.load(
-      [
-        pathToMedia + 'disconnect.wav',
-        pathToMedia + 'disconnect.mp3',
-        pathToMedia + 'disconnect.ogg',
-      ],
-      'disconnect');
+    [
+      pathToMedia + 'disconnect.wav',
+      pathToMedia + 'disconnect.mp3',
+      pathToMedia + 'disconnect.ogg',
+    ],
+    'disconnect');
   audioMgr.load(
-      [
-        pathToMedia + 'delete.mp3',
-        pathToMedia + 'delete.ogg',
-        pathToMedia + 'delete.wav',
-      ],
-      'delete');
+    [
+      pathToMedia + 'delete.mp3',
+      pathToMedia + 'delete.ogg',
+      pathToMedia + 'delete.wav',
+    ],
+    'delete');
 
   // Bind temporary hooks that preload the sounds.
-  const soundBinds = [];
-  const unbindSounds = function() {
+  const soundBinds: AnyDuringMigration[] = [];
+  function unbindSounds() {
     while (soundBinds.length) {
       browserEvents.unbind(soundBinds.pop());
     }
     audioMgr.preload();
-  };
+  }
 
   // These are bound on mouse/touch events with
   // Blockly.browserEvents.conditionalBind, so they restrict the touch
@@ -380,9 +384,7 @@ const loadSounds = function(pathToMedia, workspace) {
 
   // Android ignores any sound not loaded as a result of a user action.
   soundBinds.push(browserEvents.conditionalBind(
-      document, 'mousemove', null, unbindSounds, true));
+    document, 'mousemove', null, unbindSounds, true));
   soundBinds.push(browserEvents.conditionalBind(
-      document, 'touchstart', null, unbindSounds, true));
-};
-
-exports.inject = inject;
+    document, 'touchstart', null, unbindSounds, true));
+}

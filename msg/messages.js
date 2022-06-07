@@ -71,9 +71,9 @@ Blockly.Msg.UNNAMED_KEY = 'unnamed';
 /// button text - Button that sets a calendar to today's date.\n{{Identical|Today}}
 Blockly.Msg.TODAY = 'Today';
 /// warning - The block is obsolete.
-Blockly.Msg.OBSOLETE_WARNING = 'Warning: This block is obsolete. Use a similar new one.';
+Blockly.Msg.OBSOLETE_WARNING = 'Warning: This block is obsolete but still usable. Recommended to replace with a new similar.';
 /// warning - The block is obsolete.
-Blockly.Msg.REMOVED_WARNING = 'Warning: This block is removed. Use a similar new one.';
+Blockly.Msg.REMOVED_WARNING = 'Error: This block is removed. Use a similar new one.';
 
 // Context menus.
 /** @type {string} */
@@ -159,14 +159,17 @@ Blockly.Msg.NEW_MODULE = 'Create';
 /// prompt - Prompts the user to enter the name for a new module.
 Blockly.Msg.NEW_MODULE_TITLE = 'Name:';
 
+/** @type {string} */
+Blockly.Msg.DELETE_ALL_SELECTED = 'Delete all selected blocks'
+/** @type {string} */
+Blockly.Msg.MOVE_SELECTED_BLOCKS_TO_MODULE = 'Move blocks to module %1'
+/** @type {string} */
+Blockly.Msg.SELECT_ALL = 'Select all blocks'
+
 // Errors messages
 /** @type {string} */
 Blockly.Msg.LOADING_ERROR = 'Error loading workspace';
-/** @type {string} */
-Blockly.Msg.UNKNOWN_BLOCK_TYPE = 'Unknown block type';
 
-/** @type {string} */
-Blockly.Msg.SELECT_ALL = 'Select all blocks'
 
 // Module deletion.
 /** @type {string} */
@@ -1513,6 +1516,8 @@ Blockly.Msg.VARIABLES_SET_TOOLTIP = 'Sets this variable to be equal to the input
 Blockly.Msg.VARIABLES_SET_CREATE_GET = 'Create "get %1"';
 
 // Procedures Blocks.
+/** @type {string} */
+Blockly.Msg.UNKNOWN_BLOCK_TYPE = 'Unknown block type';
 /** @type {string} */
 /// {{Optional}} url - Information about defining [https://en.wikipedia.org/wiki/Subroutine functions] that do not have return values.
 Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL = 'https://en.wikipedia.org/wiki/Subroutine';

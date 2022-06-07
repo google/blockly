@@ -58,7 +58,7 @@ def main():
   parser = argparse.ArgumentParser(description='Create translation files.')
   parser.add_argument(
       '--author',
-      default='Ellen Spertus <ellen.spertus@gmail.com>',
+      default='Varwin <devops@varwin.com>',
       help='name and email address of contact for translators')
   parser.add_argument('--lang', default='en',
                       help='ISO 639-1 source language code')

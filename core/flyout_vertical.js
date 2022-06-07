@@ -68,19 +68,23 @@ VerticalFlyout.prototype.setMetrics_ = function(xyRatio) {
   if (!this.isVisible()) {
     return;
   }
+
   const metricsManager = this.workspace_.getMetricsManager();
   const scrollMetrics = metricsManager.getScrollMetrics();
   const viewMetrics = metricsManager.getViewMetrics();
   const absoluteMetrics = metricsManager.getAbsoluteMetrics();
 
   if (typeof xyRatio.y === 'number') {
-    this.workspace_.scrollY =
-      -(scrollMetrics.top +
-        (scrollMetrics.height - viewMetrics.height) * xyRatio.y);
+    this.workspace_.scrollY = -(scrollMetrics.top + (scrollMetrics.height - viewMetrics.height) * xyRatio.y);
   }
+
   this.workspace_.translate(
     this.workspace_.scrollX + absoluteMetrics.left,
     this.workspace_.scrollY + absoluteMetrics.top);
+
+  if (this.flyoutBookmarks_) {
+    this.flyoutBookmarks_.updatePosition(xyRatio.y);
+  }
 };
 
 /**

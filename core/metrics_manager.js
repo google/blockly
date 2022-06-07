@@ -44,11 +44,6 @@ const MetricsManager = function(workspace) {
    * @protected
    */
   this.workspace_ = workspace;
-
-  /**
-   * Flyout gap for better UI near of flyout's controls
-   */
-  this.flyoutWidthGap = 25;
 };
 
 /**
@@ -130,10 +125,6 @@ MetricsManager.prototype.getFlyoutMetrics = function() {
   const flyout = this.workspace_.getFlyout();
   const providedFlyout = flyout && flyout.isVisible() ? flyout : undefined;
   const flyoutDimensions = this.getDimensionsPx_(providedFlyout);
-
-  if (flyoutDimensions.width) {
-    flyoutDimensions.width += this.flyoutWidthGap;
-  }
 
   return {
     width: flyoutDimensions.width,

@@ -1449,22 +1449,30 @@ BlockSvg.prototype.placeToFront = function() {
     tempSVGRoot.appendChild(this.getSvgRoot());
 
     this.tempRootDiv.onmouseleave = () => {
-      this.previousParent.insertBefore(this.getSvgRoot(), this.previousNextSibling);
-      this.getSvgRoot().style.transform = '';
-      this.getSvgRoot().setAttribute('transform', this.previousSvgRootTransform);
+      this.backToWorkspace();
+    };
 
-      this.tempRootDiv.remove();
-      this.tempRootDiv = null;
-      this.previousSvgRootTransform = null;
-      this.previousParent = null;
-      this.previousNextSibling = null;
-      this.isInFrontOfWorkspace = false;
-      this.removeSelect();
+    this.tempRootDiv.onwheel = () => {
+      this.backToWorkspace();
     };
 
     this.isInFrontOfWorkspace = true;
     this.workspace.getParentSvg().parentElement.appendChild(this.tempRootDiv);
   }, 800); // This is enough to eliminate glitches when scrolling.
+};
+
+Block.prototype.backToWorkspace = function() {
+  this.previousParent.insertBefore(this.getSvgRoot(), this.previousNextSibling);
+  this.getSvgRoot().style.transform = '';
+  this.getSvgRoot().setAttribute('transform', this.previousSvgRootTransform);
+
+  this.tempRootDiv.remove();
+  this.tempRootDiv = null;
+  this.previousSvgRootTransform = null;
+  this.previousParent = null;
+  this.previousNextSibling = null;
+  this.isInFrontOfWorkspace = false;
+  this.removeSelect();
 };
 
 /**

@@ -1185,12 +1185,12 @@ WorkspaceSvg.prototype.getFlyout = function(opt_own) {
 Workspace.prototype.flyoutListener = function(event) {
   switch (event.type) {
     case Events.FLYOUT_SHOW: {
-      this.resize(true);
+      this.resize();
       break;
     }
 
     case Events.FLYOUT_HIDE: {
-      this.resize(true);
+      this.resize();
       break;
     }
     

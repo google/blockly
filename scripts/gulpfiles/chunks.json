@@ -1,6 +1,6 @@
 {
   "chunk": [
-    "blockly:276",
+    "blockly:277",
     "all:12:blockly",
     "all1:11:blockly"
   ],
@@ -11,6 +11,7 @@
     ".\\core\\interfaces\\i_styleable.js",
     ".\\core\\flyout_horizontal.js",
     ".\\core\\generator.js",
+    ".\\core\\flyout_bookmarks.js",
     ".\\core\\flyout_base.js",
     ".\\core\\flyout_metrics_manager.js",
     ".\\core\\field_variable.js",

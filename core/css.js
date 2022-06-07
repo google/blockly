@@ -473,6 +473,45 @@ let content = (`
     box-shadow: -2px 0 5px #eee;
   }
 
+  .blocklyFlyoutBookmarks {
+    display: none;
+    color: white;
+    position: absolute;
+    width: 25px;
+    user-select: none;
+    z-index: 21;
+    overflow: visible;
+    flex-direction: column;
+  }
+  
+  .blocklyFlyoutBookmark {
+    padding: 4px 6px;
+    background-color: #eee;
+    overflow: hidden;
+  }
+
+  .blocklyFlyoutBookmark:last-child {
+    border-radius: 0 0 5px 0;
+  }
+
+  .blocklyFlyoutBookmarkActive {
+    border-left: 3px solid #eee;
+  }
+
+  .blocklyFlyoutBookmarkFullText {
+    color: transparent;
+  }
+
+  .blocklyFlyoutBookmark:hover {
+    cursor: pointer;
+    width: max-content;
+    border-radius: 0 5px 5px 0;
+  }
+
+  .blocklyFlyoutBookmark:hover .blocklyFlyoutBookmarkFullText {
+    color: inherit;
+  }
+
   .blocklyFlyoutZoomControlContainer {
     display: flex;
     position: absolute;

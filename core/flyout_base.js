@@ -35,6 +35,7 @@ const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 const {DeleteArea} = goog.require('Blockly.DeleteArea');
 /* eslint-disable-next-line no-unused-vars */
 const {FlyoutButton} = goog.requireType('Blockly.FlyoutButton');
+const {FlyoutBookmarks} = goog.require('Blockly.FlyoutBookmarks');
 const {FlyoutMetricsManager} = goog.require('Blockly.FlyoutMetricsManager');
 /* eslint-disable-next-line no-unused-vars */
 const {IFlyout} = goog.require('Blockly.IFlyout');
@@ -320,15 +321,14 @@ Flyout.prototype.createDom = function(tagName) {
   */
   // Setting style to display:none to start. The toolbox and flyout
   // hide/show code will set up proper visibility and size later.
-  this.svgGroup_ = dom.createSvgElement(
-      tagName, {'class': 'blocklyFlyout', 'style': 'display: none'}, null);
-  this.svgBackground_ = dom.createSvgElement(
-      Svg.PATH, {'class': 'blocklyFlyoutBackground'}, this.svgGroup_);
+  this.svgGroup_ = dom.createSvgElement(tagName, {'class': 'blocklyFlyout', 'style': 'display: none'}, null);
+  this.svgBackground_ = dom.createSvgElement(Svg.PATH, {'class': 'blocklyFlyoutBackground'}, this.svgGroup_);
   this.svgGroup_.appendChild(this.workspace_.createDom());
-  this.workspace_.getThemeManager().subscribe(
-      this.svgBackground_, 'flyoutBackgroundColour', 'fill');
-  this.workspace_.getThemeManager().subscribe(
-      this.svgBackground_, 'flyoutOpacity', 'fill-opacity');
+  this.workspace_.getThemeManager().subscribe(this.svgBackground_, 'flyoutBackgroundColour', 'fill');
+  this.workspace_.getThemeManager().subscribe(this.svgBackground_, 'flyoutOpacity', 'fill-opacity');
+  
+  this.flyoutBookmarks_ = new FlyoutBookmarks(this);
+
   return this.svgGroup_;
 };
 
@@ -584,12 +584,9 @@ Flyout.prototype.createFlyoutEndShadow_ = function() {
   const top = flyoutClientRect.top - flyoutParentClientRect.top;
   const left = flyoutClientRect.right - flyoutParentClientRect.left - 10; // 10px width of shadow, see css.js
 
-  const diffFlyoutAndParentBottom = flyoutClientRect.bottom - flyoutParentClientRect.bottom;
-  const height = diffFlyoutAndParentBottom === 0 ? flyoutSVG.getBBox().height : diffFlyoutAndParentBottom;
-
   this.flyoutEndShadowDiv_.style.top = `${top}px`;
   this.flyoutEndShadowDiv_.style.left = `${left}px`;
-  this.flyoutEndShadowDiv_.style.height = `${height}px`;
+  this.flyoutEndShadowDiv_.style.height = `${flyoutSVG.getBBox().height}px`;
 
   // insert close button after the flyout svg
   flyoutParentEl.insertBefore(this.flyoutEndShadowDiv_, flyoutSVG.nextSibling);
@@ -801,6 +798,7 @@ Flyout.prototype.positionAt_ = function(width, height, x, y) {
     this.createCloseButton_();
     this.createFlyoutEndShadow_();
     this.createZoomControls_();
+    this.flyoutBookmarks_.show();
   }
 
   // Update the scrollbar (if one exists).
@@ -833,6 +831,7 @@ Flyout.prototype.hide = function(isButton = false) {
   this.removeCloseButton_();
   this.removeFlyoutEndShadow_();
   this.removeZoomControls_();
+  this.flyoutBookmarks_.hide();
 
   eventUtils.fire(new (eventUtils.get(eventUtils.FLYOUT_HIDE))(this.getWorkspace().id, isButton));
   // Delete all the event listeners.
@@ -894,6 +893,7 @@ Flyout.prototype.show = function(flyoutDef) {
   } else {
     if (!this.width_) this.width_ = 0;
   }
+
   this.workspace_.setResizesEnabled(true);
   this.reflow();
 

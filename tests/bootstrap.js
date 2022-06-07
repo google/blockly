@@ -6,11 +6,11 @@
 
 /**
  * @fileoverview Bootstrap code to load Blockly, typically in
- *     uncompiled mode.
+ *     uncompressed mode.
  *
  *     Load this file in a <script> tag in a web page to use the
  *     Closure Library debug module loader to load Blockly in
- *     uncompiled mode.
+ *     uncompressed mode.
  *
  *     You must use a <script> tag to load this script first, then
  *     import blockly.mjs in a <script type=module> to obtain the
@@ -44,11 +44,42 @@
   const options = {
     // Decide whether to use compmiled mode or not.  Please see issue
     // #5557 for more information.
-    loadCompiled: isIe || !localhosts.includes(location.hostname),
+    loadCompressed: isIe || !localhosts.includes(location.hostname),
 
-    // URL of the blockly repository.  Default value will work so long
-    // as top-level page is loaded from somewhere in tests/.
+    // URL of the blockly repository.  This is needed for a few reasons:
+    //
+    // - We need an absolute path instead of relative path because the
+    //   advanced_playground the and regular playground are in
+    //   different folders.
+    // - We need to get the root directory for blockly because it is
+    //   different for github.io, appspot and local.
+    //
+    // Default value will work so long as top-level page is loaded
+    // from somewhere in tests/.
     root: window.location.href.replace(/\/tests\/.*$/, '/'),
+
+    // List of goog.modules to goog.require.
+    requires: [
+      'Blockly',
+      'Blockly.libraryBlocks',
+      'Blockly.Dart.all',
+      'Blockly.JavaScript.all',
+      'Blockly.Lua.all',
+      'Blockly.PHP.all',
+      'Blockly.Python.all',
+    ],
+
+    // List of scripts to load in compressed mode, instead of requires.
+    compressedScripts: [
+      'blockly_compressed.js',
+      'msg/messages.js',
+      'blocks_compressed.js',
+      'dart_compressed.js',
+      'javascript_compressed.js',
+      'lua_compressed.js',
+      'php_compressed.js',
+      'python_compressed.js',
+    ],
   };
   if (typeof window.BLOCKLY_BOOTSTRAP_OPTIONS === 'object') {
     Object.assign(options, window.BLOCKLY_BOOTSTRAP_OPTIONS);
@@ -57,14 +88,14 @@
   /* eslint-disable-next-line no-undef */
   if (typeof module === 'object' && typeof module.exports === 'object') {
     // Running in node.js.  Maybe we wish to support this.
-    // blockly_uncompiled formerly did, though it appears that the
+    // blockly_uncompressed formerly did, though it appears that the
     // code had not been working for some time (at least since PR
     // #5718 back in December 2021.  For now just throw an error.
     throw new Error('Bootstrapping in node.js not implemented.');
   }
 
-  if (!options.loadCompiled) {
-    // We can load Blockly in uncompiled mode.  Note that this section
+  if (!options.loadCompressed) {
+    // We can load Blockly in uncompressed mode.  Note that this section
     // needs to parse in IE11 (mostly ES5.1, but allowing e.g. const),
     // but it does not need to be _executable_ in IE11 - it is safe to
     // use ES6 builtins.
@@ -94,18 +125,11 @@
         '  window.BlocklyMsg = window.Blockly.Msg;\n' +
         '  delete window.Blockly;\n' +
         '</script>\n');
+    const requires = options.requires.map(r => '\'' + r + '\'').join();
     document.write(
         '<script>\n' +
         '  window.BlocklyLoader = new Promise((resolve, reject) => {\n' +
-        '    goog.bootstrap([\n' +
-        '        \'Blockly\',\n' +
-        '        \'Blockly.libraryBlocks\',\n' +
-        '        \'Blockly.Dart.all\',\n' +
-        '        \'Blockly.JavaScript.all\',\n' +
-        '        \'Blockly.Lua.all\',\n' +
-        '        \'Blockly.PHP.all\',\n' +
-        '        \'Blockly.Python.all\',\n' +
-        '    ], resolve);\n' +
+        '    goog.bootstrap([' + requires + '], resolve);\n' +
         '  }).then(() => {\n' +
         '    // Copy Messages from temp Blockly.Msg object to the real one:\n' +
         '    Object.assign(goog.module.get(\'Blockly\').Msg,\n' +
@@ -115,26 +139,12 @@
         '  });\n' +
         '</script>\n');
   } else {
-    // The below code is necessary for a few reasons:
-    // - We need an absolute path instead of relative path because the
-    //   advanced_playground the and regular playground are in different folders.
-    // - We need to get the root directory for blockly because it is
-    //   different for github.io, appspot and local.
-    const files = [
-      'blockly_compressed.js',
-      'msg/messages.js',
-      'blocks_compressed.js',
-      'dart_compressed.js',
-      'javascript_compressed.js',
-      'lua_compressed.js',
-      'php_compressed.js',
-      'python_compressed.js',
-    ];
-
-    // We need to load Blockly in compiled mode.
-    // Load blockly_compressed.js et al. using <script> tags.
-    for (let i = 0; i < files.length; i++) {
-      document.write('<script src="' + options.root + files[i] + '"></script>');
+    // We need to load Blockly in compressed mode.  Load
+    // blockly_compressed.js et al. using <script> tags.
+    const scripts = options.compressedScripts;
+    for (let i = 0; i < scripts.length; i++) {
+      document.write(
+          '<script src="' + options.root + scripts[i] + '"></script>');
     }
   }
 })();

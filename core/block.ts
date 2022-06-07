@@ -1,341 +1,257 @@
+/** @fileoverview The class representing one block. */
+
 /**
  * @license
  * Copyright 2011 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview The class representing one block.
- */
-'use strict';
 
 /**
  * The class representing one block.
  * @class
  */
-goog.module('Blockly.Block');
 
-const Extensions = goog.require('Blockly.Extensions');
-const Tooltip = goog.require('Blockly.Tooltip');
-const arrayUtils = goog.require('Blockly.utils.array');
-const common = goog.require('Blockly.common');
-const constants = goog.require('Blockly.constants');
-const eventUtils = goog.require('Blockly.Events.utils');
-const fieldRegistry = goog.require('Blockly.fieldRegistry');
-const idGenerator = goog.require('Blockly.utils.idGenerator');
-const parsing = goog.require('Blockly.utils.parsing');
+// Unused import preserved for side-effects. Remove if unneeded.
+import './events/events_block_change';
+// Unused import preserved for side-effects. Remove if unneeded.
+import './events/events_block_create';
+// Unused import preserved for side-effects. Remove if unneeded.
+import './events/events_block_delete';
+
+import { Blocks } from './blocks.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Abstract} = goog.requireType('Blockly.Events.Abstract');
-const {Align, Input} = goog.require('Blockly.Input');
-const {ASTNode} = goog.require('Blockly.ASTNode');
+import { Comment } from './comment.js';
+import * as common from './common.js';
+import { Connection } from './connection.js';
+import { ConnectionType } from './connection_type.js';
+import * as constants from './constants.js';
 /* eslint-disable-next-line no-unused-vars */
-const {BlockMove} = goog.requireType('Blockly.Events.BlockMove');
-const {Blocks} = goog.require('Blockly.blocks');
+import { Abstract } from './events/events_abstract.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Comment} = goog.requireType('Blockly.Comment');
-const {ConnectionType} = goog.require('Blockly.ConnectionType');
-const {Connection} = goog.require('Blockly.Connection');
-const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+import { BlockMove } from './events/events_block_move.js';
+import * as eventUtils from './events/utils.js';
+import * as Extensions from './extensions.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Field} = goog.requireType('Blockly.Field');
+import { Field } from './field.js';
+import * as fieldRegistry from './field_registry.js';
+import { Align, Input } from './input.js';
+import { inputTypes } from './input_types.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IASTNodeLocation} = goog.require('Blockly.IASTNodeLocation');
+import { IASTNodeLocation } from './interfaces/i_ast_node_location.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IDeletable} = goog.require('Blockly.IDeletable');
+import { IDeletable } from './interfaces/i_deletable.js';
+import { ASTNode } from './keyboard_nav/ast_node.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Mutator} = goog.requireType('Blockly.Mutator');
-const {Size} = goog.require('Blockly.utils.Size');
+import { Mutator } from './mutator.js';
+import * as Tooltip from './tooltip.js';
+import * as arrayUtils from './utils/array.js';
+import { Coordinate } from './utils/coordinate.js';
+import * as idGenerator from './utils/idgenerator.js';
+import * as parsing from './utils/parsing.js';
+import { Size } from './utils/size.js';
 /* eslint-disable-next-line no-unused-vars */
-const {VariableModel} = goog.requireType('Blockly.VariableModel');
+import { VariableModel } from './variable_model.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Workspace} = goog.requireType('Blockly.Workspace');
-const {inputTypes} = goog.require('Blockly.inputTypes');
-/** @suppress {extraRequire} */
-goog.require('Blockly.Events.BlockChange');
-/** @suppress {extraRequire} */
-goog.require('Blockly.Events.BlockCreate');
-/** @suppress {extraRequire} */
-goog.require('Blockly.Events.BlockDelete');
-/** @suppress {extraRequire} */
-goog.require('Blockly.Events.BlockMove');
+import { Workspace } from './workspace.js';
 
 
 /**
  * Class for one block.
  * Not normally called directly, workspace.newBlock() is preferred.
- * @implements {IASTNodeLocation}
- * @implements {IDeletable}
  * @unrestricted
  * @alias Blockly.Block
  */
-class Block {
+export class Block implements IASTNodeLocation, IDeletable {
   /**
-   * @param {!Workspace} workspace The block's workspace.
-   * @param {!string} prototypeName Name of the language object containing
-   *     type-specific functions for this block.
-   * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
-   *     create a new ID.
+   * An optional callback method to use whenever the block's parent workspace
+   * changes. This is usually only called from the constructor, the block type
+   * initializer function, or an extension initializer function.
+   */
+  onchange?: ((p1: Abstract) => AnyDuringMigration) | null;
+
+  /** The language-neutral ID given to the collapsed input. */
+  static readonly COLLAPSED_INPUT_NAME: string = constants.COLLAPSED_INPUT_NAME;
+
+  /** The language-neutral ID given to the collapsed field. */
+  static readonly COLLAPSED_FIELD_NAME: string = constants.COLLAPSED_FIELD_NAME;
+
+  /**
+   * Optional text data that round-trips between blocks and XML.
+   * Has no effect. May be used by 3rd parties for meta information.
+   */
+  data: string | null = null;
+
+  /** Has this block been disposed of? */
+  disposed = false;
+
+  /**
+   * Colour of the block as HSV hue value (0-360)
+   * This may be null if the block colour was not set via a hue number.
+   */
+  private hue_: number | null = null;
+
+  /** Colour of the block in '#RRGGBB' format. */
+  protected colour_ = '#000000';
+
+  /** Name of the block style. */
+  protected styleName_ = '';
+
+  /** An optional method called during initialization. */
+  init?: (() => AnyDuringMigration) | null = undefined;
+
+  /**
+   * An optional serialization method for defining how to serialize the
+   * mutation state to XML. This must be coupled with defining
+   * `domToMutation`.
+   */
+  mutationToDom?: ((...p1: AnyDuringMigration[]) => Element) | null = undefined;
+
+  /**
+   * An optional deserialization method for defining how to deserialize the
+   * mutation state from XML. This must be coupled with defining
+   * `mutationToDom`.
+   */
+  domToMutation?: ((p1: Element) => AnyDuringMigration) | null = undefined;
+
+  /**
+   * An optional serialization method for defining how to serialize the
+   * block's extra state (eg mutation state) to something JSON compatible.
+   * This must be coupled with defining `loadExtraState`.
+   */
+  saveExtraState?: (() => AnyDuringMigration) | null = undefined;
+
+  /**
+   * An optional serialization method for defining how to deserialize the
+   * block's extra state (eg mutation state) from something JSON compatible.
+   * This must be coupled with defining `saveExtraState`.
+   */
+  loadExtraState?:
+    ((p1: AnyDuringMigration) => AnyDuringMigration) | null = undefined;
+
+  /**
+   * An optional property for suppressing adding STATEMENT_PREFIX and
+   * STATEMENT_SUFFIX to generated code.
+   */
+  suppressPrefixSuffix: boolean | null = false;
+
+  /**
+   * An optional property for declaring developer variables.  Return a list of
+   * variable names for use by generators.  Developer variables are never
+   * shown to the user, but are declared as global variables in the generated
+   * code.
+   */
+  getDeveloperVariables?: (() => string[]) | null = undefined;
+
+  /**
+   * An optional function that reconfigures the block based on the contents of
+   * the mutator dialog.
+   */
+  compose?: ((p1: Block) => void) | null = null;
+
+  /**
+   * An optional function that populates the mutator's dialog with
+   * this block's components.
+   */
+  decompose?: ((p1: Workspace) => Block) | null = null;
+  id: string;
+  // AnyDuringMigration because:  Type 'null' is not assignable to type
+  // 'Connection'.
+  outputConnection: Connection = null as AnyDuringMigration;
+  // AnyDuringMigration because:  Type 'null' is not assignable to type
+  // 'Connection'.
+  nextConnection: Connection = null as AnyDuringMigration;
+  // AnyDuringMigration because:  Type 'null' is not assignable to type
+  // 'Connection'.
+  previousConnection: Connection = null as AnyDuringMigration;
+  inputList: Input[] = [];
+  inputsInline?: boolean = undefined;
+  private disabled = false;
+  tooltip: Tooltip.TipInfo = '';
+  contextMenu = true;
+
+  protected parentBlock_: this | null = null;
+
+  protected childBlocks_: this[] = [];
+
+  private deletable_ = true;
+
+  private movable_ = true;
+
+  private editable_ = true;
+
+  private isShadow_ = false;
+
+  protected collapsed_ = false;
+  protected outputShape_: number | null = null;
+
+  /**
+   * A string representing the comment attached to this block.
+   * @deprecated August 2019. Use getCommentText instead.
+   */
+  comment: string | Comment | null = null;
+  commentModel: CommentModel;
+  private readonly xy_: Coordinate;
+  isInFlyout: boolean;
+  isInMutator: boolean;
+  RTL: boolean;
+
+  /** True if this block is an insertion marker. */
+  protected isInsertionMarker_ = false;
+
+  /** Name of the type of hat. */
+  hat?: string = undefined;
+
+  rendered: boolean | null = null;
+
+  /**
+   * String for block help, or function that returns a URL. Null for no help.
+   */
+  // AnyDuringMigration because:  Type 'null' is not assignable to type 'string
+  // | Function'.
+  helpUrl: string | Function = null as AnyDuringMigration;
+
+  /** A bound callback function to use when the parent workspace changes. */
+  private onchangeWrapper_: ((p1: Abstract) => AnyDuringMigration) | null = null;
+
+  /** A count of statement inputs on the block. */
+  statementInputCount = 0;
+  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
+  type!: string;
+  // Record initial inline state.
+  inputsInlineDefault?: boolean;
+  workspace: Workspace;
+
+  /**
+   * @param workspace The block's workspace.
+   * @param prototypeName Name of the language object containing type-specific
+   *     functions for this block.
+   * @param opt_id Optional ID.  Use this ID if provided, otherwise create a new
+   *     ID.
    * @throws When the prototypeName is not valid or not allowed.
    */
-  constructor(workspace, prototypeName, opt_id) {
-    const {Generator} = goog.module.get('Blockly.Generator');
-    if (Generator &&
-        typeof Generator.prototype[prototypeName] !== 'undefined') {
-      // Occluding Generator class members is not allowed.
-      throw Error(
-          'Block prototypeName "' + prototypeName +
-          '" conflicts with Blockly.Generator members.');
-    }
+  constructor(workspace: Workspace, prototypeName: string, opt_id?: string) {
+    this.workspace = workspace;
 
-    /**
-     * Optional text data that round-trips between blocks and XML.
-     * Has no effect. May be used by 3rd parties for meta information.
-     * @type {?string}
-     */
-    this.data = null;
-
-    /**
-     * Has this block been disposed of?
-     * @type {boolean}
-     * @package
-     */
-    this.disposed = false;
-
-    /**
-     * Colour of the block as HSV hue value (0-360)
-     * This may be null if the block colour was not set via a hue number.
-     * @type {?number}
-     * @private
-     */
-    this.hue_ = null;
-
-    /**
-     * Colour of the block in '#RRGGBB' format.
-     * @type {string}
-     * @protected
-     */
-    this.colour_ = '#000000';
-
-    /**
-     * Name of the block style.
-     * @type {string}
-     * @protected
-     */
-    this.styleName_ = '';
-
-    /**
-     * An optional method called during initialization.
-     * @type {undefined|?function()}
-     */
-    this.init = undefined;
-
-    /**
-     * An optional serialization method for defining how to serialize the
-     * mutation state to XML. This must be coupled with defining
-     * `domToMutation`.
-     * @type {undefined|?function(...):!Element}
-     */
-    this.mutationToDom = undefined;
-
-    /**
-     * An optional deserialization method for defining how to deserialize the
-     * mutation state from XML. This must be coupled with defining
-     * `mutationToDom`.
-     * @type {undefined|?function(!Element)}
-     */
-    this.domToMutation = undefined;
-
-    /**
-     * An optional serialization method for defining how to serialize the
-     * block's extra state (eg mutation state) to something JSON compatible.
-     * This must be coupled with defining `loadExtraState`.
-     * @type {undefined|?function(): *}
-     */
-    this.saveExtraState = undefined;
-
-    /**
-     * An optional serialization method for defining how to deserialize the
-     * block's extra state (eg mutation state) from something JSON compatible.
-     * This must be coupled with defining `saveExtraState`.
-     * @type {undefined|?function(*)}
-     */
-    this.loadExtraState = undefined;
-
-
-    /**
-     * An optional property for suppressing adding STATEMENT_PREFIX and
-     * STATEMENT_SUFFIX to generated code.
-     * @type {?boolean}
-     */
-    this.suppressPrefixSuffix = false;
-
-    /**
-     * An optional property for declaring developer variables.  Return a list of
-     * variable names for use by generators.  Developer variables are never
-     * shown to the user, but are declared as global variables in the generated
-     * code.
-     * @type {undefined|?function():!Array<string>}
-     */
-    this.getDeveloperVariables = undefined;
-
-    /**
-     * An optional function that reconfigures the block based on the contents of
-     * the mutator dialog.
-     * @type {undefined|?function(!Block):void}
-     */
-    this.compose = undefined;
-
-    /**
-     * An optional function that populates the mutator's dialog with
-     * this block's components.
-     * @type {undefined|?function(!Workspace):!Block}
-     */
-    this.decompose = undefined;
-
-    /** @type {string} */
-    this.id = (opt_id && !workspace.getBlockById(opt_id)) ?
-        opt_id :
-        idGenerator.genUid();
+    this.id = opt_id && !workspace.getBlockById(opt_id) ? opt_id :
+      idGenerator.genUid();
     workspace.setBlockById(this.id, this);
-    /** @type {Connection} */
-    this.outputConnection = null;
-    /** @type {Connection} */
-    this.nextConnection = null;
-    /** @type {Connection} */
-    this.previousConnection = null;
-    /** @type {!Array<!Input>} */
-    this.inputList = [];
-    /** @type {boolean|undefined} */
-    this.inputsInline = undefined;
-    /**
-     * @type {boolean}
-     * @private
-     */
-    this.disabled = false;
-    /** @type {!Tooltip.TipInfo} */
-    this.tooltip = '';
-    /** @type {boolean} */
-    this.contextMenu = true;
 
-    /**
-     * @type {Block}
-     * @protected
-     */
-    this.parentBlock_ = null;
-
-    /**
-     * @type {!Array<!Block>}
-     * @protected
-     */
-    this.childBlocks_ = [];
-
-    /**
-     * @type {boolean}
-     * @private
-     */
-    this.deletable_ = true;
-
-    /**
-     * @type {boolean}
-     * @private
-     */
-    this.movable_ = true;
-
-    /**
-     * @type {boolean}
-     * @private
-     */
-    this.editable_ = true;
-
-    /**
-     * @type {boolean}
-     * @private
-     */
-    this.isShadow_ = false;
-
-    /**
-     * @type {boolean}
-     * @protected
-     */
-    this.collapsed_ = false;
-
-    /**
-     * @type {?number}
-     * @protected
-     */
-    this.outputShape_ = null;
-
-    /**
-     * A string representing the comment attached to this block.
-     * @type {string|Comment}
-     * @deprecated August 2019. Use getCommentText instead.
-     */
-    this.comment = null;
-
-    /**
-     * A model of the comment attached to this block.
-     * @type {!Block.CommentModel}
-     * @package
-     */
-    this.commentModel = {text: null, pinned: false, size: new Size(160, 80)};
+    /** A model of the comment attached to this block. */
+    this.commentModel = { text: null, pinned: false, size: new Size(160, 80) };
 
     /**
      * The block's position in workspace units.  (0, 0) is at the workspace's
      * origin; scale does not change this value.
-     * @type {!Coordinate}
-     * @private
      */
     this.xy_ = new Coordinate(0, 0);
-
-    /** @type {!Workspace} */
-    this.workspace = workspace;
-    /** @type {boolean} */
     this.isInFlyout = workspace.isFlyout;
-    /** @type {boolean} */
     this.isInMutator = workspace.isMutator;
 
-    /** @type {boolean} */
     this.RTL = workspace.RTL;
-
-    /**
-     * True if this block is an insertion marker.
-     * @type {boolean}
-     * @protected
-     */
-    this.isInsertionMarker_ = false;
-
-    /**
-     * Name of the type of hat.
-     * @type {string|undefined}
-     */
-    this.hat = undefined;
-
-    /** @type {?boolean} */
-    this.rendered = null;
-
-    /**
-     * String for block help, or function that returns a URL. Null for no help.
-     * @type {string|Function}
-     */
-    this.helpUrl = null;
-
-    /**
-     * A bound callback function to use when the parent workspace changes.
-     * @type {?function(Abstract)}
-     * @private
-     */
-    this.onchangeWrapper_ = null;
-
-    /**
-     * A count of statement inputs on the block.
-     * @type {number}
-     * @package
-     */
-    this.statementInputCount = 0;
 
     // Copy the type-specific functions and data from the prototype.
     if (prototypeName) {
-      /** @type {string} */
       this.type = prototypeName;
       const prototype = Blocks[prototypeName];
       if (!prototype || typeof prototype !== 'object') {
@@ -347,14 +263,13 @@ class Block {
     workspace.addTopBlock(this);
     workspace.addTypedBlock(this);
 
-    if (new.target === Block) this.doInit_();
+    if (new.target === Block) {
+      this.doInit_();
+    }
   }
 
-  /**
-   * Calls the init() function and handles associated event firing, etc.
-   * @protected
-   */
-  doInit_() {
+  /** Calls the init() function and handles associated event firing, etc. */
+  protected doInit_() {
     // All events fired should be part of the same group.
     // Any events fired during init should not be undoable,
     // so that block creation is atomic.
@@ -374,7 +289,7 @@ class Block {
 
       // Fire a create event.
       if (eventUtils.isEnabled()) {
-        eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(this));
+        eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))!(this));
       }
     } finally {
       if (!existingGroup) {
@@ -383,9 +298,6 @@ class Block {
       // In case init threw, recordUndo flag should still be reset.
       eventUtils.setRecordUndo(initialUndoFlag);
     }
-
-    // Record initial inline state.
-    /** @type {boolean|undefined} */
     this.inputsInlineDefault = this.inputsInline;
 
     // Bind an onchange function, if it exists.
@@ -396,12 +308,12 @@ class Block {
 
   /**
    * Dispose of this block.
-   * @param {boolean} healStack If true, then try to heal any gap by connecting
-   *     the next statement with the previous statement.  Otherwise, dispose of
-   *     all children of this block.
+   * @param healStack If true, then try to heal any gap by connecting the next
+   *     statement with the previous statement.  Otherwise, dispose of all
+   *     children of this block.
    * @suppress {checkTypes}
    */
-  dispose(healStack) {
+  dispose(healStack: boolean) {
     if (!this.workspace) {
       // Already deleted.
       return;
@@ -413,7 +325,7 @@ class Block {
 
     this.unplug(healStack);
     if (eventUtils.isEnabled()) {
-      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_DELETE))(this));
+      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_DELETE))!(this));
     }
     eventUtils.disable();
 
@@ -425,15 +337,6 @@ class Block {
         this.workspace.removeTypedBlock(this);
         // Remove from block database.
         this.workspace.removeBlockById(this.id);
-        this.workspace = null;
-      }
-
-      // Just deleting this block from the DOM would result in a memory leak as
-      // well as corruption of the connection database.  Therefore we must
-      // methodically step through the blocks and carefully disassemble them.
-
-      if (common.getSelected() === this) {
-        common.setSelected(null);
       }
 
       // First, dispose of all my children.
@@ -442,13 +345,13 @@ class Block {
       }
       // Then dispose of myself.
       // Dispose of all inputs and their fields.
-      for (let i = 0, input; (input = this.inputList[i]); i++) {
+      for (let i = 0, input; input = this.inputList[i]; i++) {
         input.dispose();
       }
       this.inputList.length = 0;
       // Dispose of any remaining connections (next/previous/output).
       const connections = this.getConnections_(true);
-      for (let i = 0, connection; (connection = connections[i]); i++) {
+      for (let i = 0, connection; connection = connections[i]; i++) {
         connection.dispose();
       }
     } finally {
@@ -464,11 +367,10 @@ class Block {
    * before the first interaction with it.  Interactions include UI actions
    * (e.g. clicking and dragging) and firing events (e.g. create, delete, and
    * change).
-   * @public
    */
   initModel() {
-    for (let i = 0, input; (input = this.inputList[i]); i++) {
-      for (let j = 0, field; (field = input.fieldRow[j]); j++) {
+    for (let i = 0, input; input = this.inputList[i]; i++) {
+      for (let j = 0, field; field = input.fieldRow[j]; j++) {
         if (field.initModel) {
           field.initModel();
         }
@@ -479,10 +381,10 @@ class Block {
   /**
    * Unplug this block from its superior block.  If this block is a statement,
    * optionally reconnect the block underneath with the block on top.
-   * @param {boolean=} opt_healStack Disconnect child statement and reconnect
-   *   stack.  Defaults to false.
+   * @param opt_healStack Disconnect child statement and reconnect stack.
+   *     Defaults to false.
    */
-  unplug(opt_healStack) {
+  unplug(opt_healStack?: boolean) {
     if (this.outputConnection) {
       this.unplugFromRow_(opt_healStack);
     }
@@ -494,11 +396,10 @@ class Block {
   /**
    * Unplug this block's output from an input on another block.  Optionally
    * reconnect the block's parent to the only child block, if possible.
-   * @param {boolean=} opt_healStack Disconnect right-side block and connect to
-   *     left-side block.  Defaults to false.
-   * @private
+   * @param opt_healStack Disconnect right-side block and connect to left-side
+   *     block.  Defaults to false.
    */
-  unplugFromRow_(opt_healStack) {
+  private unplugFromRow_(opt_healStack?: boolean) {
     let parentConnection = null;
     if (this.outputConnection.isConnected()) {
       parentConnection = this.outputConnection.targetConnection;
@@ -513,7 +414,7 @@ class Block {
 
     const thisConnection = this.getOnlyValueConnection_();
     if (!thisConnection || !thisConnection.isConnected() ||
-        thisConnection.targetBlock().isShadow()) {
+      thisConnection.targetBlock()!.isShadow()) {
       // Too many or too few possible connections on this block, or there's
       // nothing on the other side of this connection.
       return;
@@ -521,13 +422,13 @@ class Block {
 
     const childConnection = thisConnection.targetConnection;
     // Disconnect the child block.
-    childConnection.disconnect();
+    childConnection?.disconnect();
     // Connect child to the parent if possible, otherwise bump away.
     if (this.workspace.connectionChecker.canConnect(
-            childConnection, parentConnection, false)) {
-      parentConnection.connect(childConnection);
+      childConnection, parentConnection, false)) {
+      parentConnection.connect(childConnection!);
     } else {
-      childConnection.onFailedConnect(parentConnection);
+      childConnection?.onFailedConnect(parentConnection);
     }
   }
 
@@ -538,19 +439,19 @@ class Block {
    * Since only one block can be displaced and attached to the insertion marker
    * this should only ever return one connection.
    *
-   * @return {?Connection} The connection on the value input, or null.
-   * @private
+   * @return The connection on the value input, or null.
    */
-  getOnlyValueConnection_() {
+  private getOnlyValueConnection_(): Connection | null {
     let connection = null;
     for (let i = 0; i < this.inputList.length; i++) {
       const thisConnection = this.inputList[i].connection;
       if (thisConnection &&
-          thisConnection.type === ConnectionType.INPUT_VALUE &&
-          thisConnection.targetConnection) {
+        thisConnection.type === ConnectionType.INPUT_VALUE &&
+        thisConnection.targetConnection) {
         if (connection) {
-          return null;  // More than one value input found.
+          return null;
         }
+        // More than one value input found.
         connection = thisConnection;
       }
     }
@@ -560,11 +461,10 @@ class Block {
   /**
    * Unplug this statement block from its superior block.  Optionally reconnect
    * the block underneath with the block on top.
-   * @param {boolean=} opt_healStack Disconnect child statement and reconnect
-   *   stack.  Defaults to false.
-   * @private
+   * @param opt_healStack Disconnect child statement and reconnect stack.
+   *     Defaults to false.
    */
-  unplugFromStack_(opt_healStack) {
+  private unplugFromStack_(opt_healStack?: boolean) {
     let previousTarget = null;
     if (this.previousConnection.isConnected()) {
       // Remember the connection that any next statements need to connect to.
@@ -576,23 +476,22 @@ class Block {
     if (opt_healStack && nextBlock && !nextBlock.isShadow()) {
       // Disconnect the next statement.
       const nextTarget = this.nextConnection.targetConnection;
-      nextTarget.disconnect();
+      nextTarget?.disconnect();
       if (previousTarget &&
-          this.workspace.connectionChecker.canConnect(
-              previousTarget, nextTarget, false)) {
+        this.workspace.connectionChecker.canConnect(
+          previousTarget, nextTarget, false)) {
         // Attach the next statement to the previous statement.
-        previousTarget.connect(nextTarget);
+        previousTarget.connect(nextTarget!);
       }
     }
   }
 
   /**
    * Returns all connections originating from this block.
-   * @param {boolean} _all If true, return all connections even hidden ones.
-   * @return {!Array<!Connection>} Array of connections.
-   * @package
+   * @param _all If true, return all connections even hidden ones.
+   * @return Array of connections.
    */
-  getConnections_(_all) {
+  getConnections_(_all: boolean): Connection[] {
     const myConnections = [];
     if (this.outputConnection) {
       myConnections.push(this.outputConnection);
@@ -603,7 +502,7 @@ class Block {
     if (this.nextConnection) {
       myConnections.push(this.nextConnection);
     }
-    for (let i = 0, input; (input = this.inputList[i]); i++) {
+    for (let i = 0, input; input = this.inputList[i]; i++) {
       if (input.connection) {
         myConnections.push(input.connection);
       }
@@ -614,17 +513,16 @@ class Block {
   /**
    * Walks down a stack of blocks and finds the last next connection on the
    * stack.
-   * @param {boolean} ignoreShadows If true,the last connection on a non-shadow
-   *     block will be returned. If false, this will follow shadows to find the
-   *     last connection.
-   * @return {?Connection} The last next connection on the stack, or null.
-   * @package
+   * @param ignoreShadows If true,the last connection on a non-shadow block will
+   *     be returned. If false, this will follow shadows to find the last
+   *     connection.
+   * @return The last next connection on the stack, or null.
    */
-  lastConnectionInStack(ignoreShadows) {
+  lastConnectionInStack(ignoreShadows: boolean): Connection | null {
     let nextConnection = this.nextConnection;
     while (nextConnection) {
       const nextBlock = nextConnection.targetBlock();
-      if (!nextBlock || (ignoreShadows && nextBlock.isShadow())) {
+      if (!nextBlock || ignoreShadows && nextBlock.isShadow()) {
         return nextConnection;
       }
       nextConnection = nextBlock.nextConnection;
@@ -636,29 +534,27 @@ class Block {
    * Bump unconnected blocks out of alignment.  Two blocks which aren't actually
    * connected should not coincidentally line up on screen.
    */
-  bumpNeighbours() {
-    // noop.
-  }
+  bumpNeighbours() {}
+  // noop.
 
   /**
    * Return the parent block or null if this block is at the top level. The
    * parent block is either the block connected to the previous connection (for
    * a statement block) or the block connected to the output connection (for a
    * value block).
-   * @return {?Block} The block (if any) that holds the current block.
+   * @return The block (if any) that holds the current block.
    */
-  getParent() {
+  getParent(): this | null {
     return this.parentBlock_;
   }
 
   /**
    * Return the input that connects to the specified block.
-   * @param {!Block} block A block connected to an input on this block.
-   * @return {?Input} The input (if any) that connects to the specified
-   *     block.
+   * @param block A block connected to an input on this block.
+   * @return The input (if any) that connects to the specified block.
    */
-  getInputWithBlock(block) {
-    for (let i = 0, input; (input = this.inputList[i]); i++) {
+  getInputWithBlock(block: Block): Input | null {
+    for (let i = 0, input; input = this.inputList[i]; i++) {
       if (input.connection && input.connection.targetBlock() === block) {
         return input;
       }
@@ -671,14 +567,16 @@ class Block {
    * block has no surrounding block.  A parent block might just be the previous
    * statement, whereas the surrounding block is an if statement, while loop,
    * etc.
-   * @return {?Block} The block (if any) that surrounds the current block.
+   * @return The block (if any) that surrounds the current block.
    */
-  getSurroundParent() {
+  getSurroundParent(): this | null {
     let block = this;
     let prevBlock;
     do {
       prevBlock = block;
-      block = block.getParent();
+      // AnyDuringMigration because:  Type 'Block | null' is not assignable to
+      // type 'this'.
+      block = block.getParent() as AnyDuringMigration;
       if (!block) {
         // Ran off the top.
         return null;
@@ -690,30 +588,29 @@ class Block {
 
   /**
    * Return the next statement block directly connected to this block.
-   * @return {?Block} The next statement block or null.
+   * @return The next statement block or null.
    */
-  getNextBlock() {
+  getNextBlock(): Block | null {
     return this.nextConnection && this.nextConnection.targetBlock();
   }
 
   /**
    * Returns the block connected to the previous connection.
-   * @return {?Block} The previous statement block or null.
+   * @return The previous statement block or null.
    */
-  getPreviousBlock() {
+  getPreviousBlock(): Block | null {
     return this.previousConnection && this.previousConnection.targetBlock();
   }
 
   /**
    * Return the connection on the first statement input on this block, or null
    * if there are none.
-   * @return {?Connection} The first statement connection or null.
-   * @package
+   * @return The first statement connection or null.
    */
-  getFirstStatementConnection() {
-    for (let i = 0, input; (input = this.inputList[i]); i++) {
+  getFirstStatementConnection(): Connection | null {
+    for (let i = 0, input; input = this.inputList[i]; i++) {
       if (input.connection &&
-          input.connection.type === ConnectionType.NEXT_STATEMENT) {
+        input.connection.type === ConnectionType.NEXT_STATEMENT) {
         return input.connection;
       }
     }
@@ -723,11 +620,11 @@ class Block {
   /**
    * Return the top-most block in this block's tree.
    * This will return itself if this block is at the top level.
-   * @return {!Block} The root block.
+   * @return The root block.
    */
-  getRootBlock() {
-    let rootBlock;
-    let block = this;
+  getRootBlock(): this {
+    let rootBlock: this;
+    let block: this | null = this;
     do {
       rootBlock = block;
       block = rootBlock.parentBlock_;
@@ -739,16 +636,17 @@ class Block {
    * Walk up from the given block up through the stack of blocks to find
    * the top block of the sub stack. If we are nested in a statement input only
    * find the top-most nested block. Do not go all the way to the root block.
-   * @return {!Block} The top block in a stack.
-   * @package
+   * @return The top block in a stack.
    */
-  getTopStackBlock() {
+  getTopStackBlock(): this {
     let block = this;
     let previous;
     do {
       previous = block.getPreviousBlock();
+      // AnyDuringMigration because:  Type 'Block' is not assignable to type
+      // 'this'.
     } while (previous && previous.getNextBlock() === block &&
-             (block = previous));
+      (block = previous as AnyDuringMigration));
     return block;
   }
 
@@ -757,15 +655,15 @@ class Block {
    * Includes value and statement inputs, as well as any following statement.
    * Excludes any connection on an output tab or any preceding statement.
    * Blocks are optionally sorted by position; top to bottom.
-   * @param {boolean} ordered Sort the list if true.
-   * @return {!Array<!Block>} Array of blocks.
+   * @param ordered Sort the list if true.
+   * @return Array of blocks.
    */
-  getChildren(ordered) {
+  getChildren(ordered: boolean): Block[] {
     if (!ordered) {
       return this.childBlocks_;
     }
     const blocks = [];
-    for (let i = 0, input; (input = this.inputList[i]); i++) {
+    for (let i = 0, input; input = this.inputList[i]; i++) {
       if (input.connection) {
         const child = input.connection.targetBlock();
         if (child) {
@@ -782,10 +680,9 @@ class Block {
 
   /**
    * Set parent of this block to be a new block or null.
-   * @param {Block} newParent New parent block.
-   * @package
+   * @param newParent New parent block.
    */
-  setParent(newParent) {
+  setParent(newParent: this | null) {
     if (newParent === this.parentBlock_) {
       return;
     }
@@ -793,8 +690,8 @@ class Block {
     // Check that block is connected to new parent if new parent is not null and
     //    that block is not connected to superior one if new parent is null.
     const targetBlock =
-        (this.previousConnection && this.previousConnection.targetBlock()) ||
-        (this.outputConnection && this.outputConnection.targetBlock());
+      this.previousConnection && this.previousConnection.targetBlock() ||
+      this.outputConnection && this.outputConnection.targetBlock();
     const isConnected = !!targetBlock;
 
     if (isConnected && newParent && targetBlock !== newParent) {
@@ -803,17 +700,17 @@ class Block {
       throw Error('Block not connected to new parent.');
     } else if (isConnected && !newParent) {
       throw Error(
-          'Cannot set parent to null while block is still connected to' +
-          ' superior block.');
+        'Cannot set parent to null while block is still connected to' +
+        ' superior block.');
     }
 
+
+    // This block hasn't actually moved on-screen, so there's no need to
+    // update
+    //     its connection locations.
     if (this.parentBlock_) {
       // Remove this block from the old parent's child list.
       arrayUtils.removeElem(this.parentBlock_.childBlocks_, this);
-
-      // This block hasn't actually moved on-screen, so there's no need to
-      // update
-      //     its connection locations.
     } else {
       // New parent must be non-null so remove this block from the workspace's
       //     list of top-most blocks.
@@ -835,49 +732,52 @@ class Block {
    * Includes value and statement inputs, as well as any following statements.
    * Excludes any connection on an output tab or any preceding statements.
    * Blocks are optionally sorted by position; top to bottom.
-   * @param {boolean} ordered Sort the list if true.
-   * @return {!Array<!Block>} Flattened array of blocks.
+   * @param ordered Sort the list if true.
+   * @return Flattened array of blocks.
    */
-  getDescendants(ordered) {
+  getDescendants(ordered: boolean): this[] {
     const blocks = [this];
     const childBlocks = this.getChildren(ordered);
-    for (let child, i = 0; (child = childBlocks[i]); i++) {
-      blocks.push.apply(blocks, child.getDescendants(ordered));
+    for (let child, i = 0; child = childBlocks[i]; i++) {
+      // AnyDuringMigration because:  Argument of type 'Block[]' is not
+      // assignable to parameter of type 'this[]'.
+      blocks.push.apply(
+        blocks, child.getDescendants(ordered) as AnyDuringMigration);
     }
     return blocks;
   }
 
   /**
    * Get whether this block is deletable or not.
-   * @return {boolean} True if deletable.
+   * @return True if deletable.
    */
-  isDeletable() {
+  isDeletable(): boolean {
     return this.deletable_ && !this.isShadow_ &&
-        !(this.workspace && this.workspace.options.readOnly);
+      !(this.workspace && this.workspace.options.readOnly);
   }
 
   /**
    * Set whether this block is deletable or not.
-   * @param {boolean} deletable True if deletable.
+   * @param deletable True if deletable.
    */
-  setDeletable(deletable) {
+  setDeletable(deletable: boolean) {
     this.deletable_ = deletable;
   }
 
   /**
    * Get whether this block is movable or not.
-   * @return {boolean} True if movable.
+   * @return True if movable.
    */
-  isMovable() {
+  isMovable(): boolean {
     return this.movable_ && !this.isShadow_ &&
-        !(this.workspace && this.workspace.options.readOnly);
+      !(this.workspace && this.workspace.options.readOnly);
   }
 
   /**
    * Set whether this block is movable or not.
-   * @param {boolean} movable True if movable.
+   * @param movable True if movable.
    */
-  setMovable(movable) {
+  setMovable(movable: boolean) {
     this.movable_ = movable;
   }
 
@@ -886,68 +786,66 @@ class Block {
    * descendants will put this block over the workspace's capacity this block is
    * not duplicatable. If duplicating this block and descendants will put any
    * type over their maxInstances this block is not duplicatable.
-   * @return {boolean} True if duplicatable.
+   * @return True if duplicatable.
    */
-  isDuplicatable() {
+  isDuplicatable(): boolean {
     if (!this.workspace.hasBlockLimits()) {
       return true;
     }
     return this.workspace.isCapacityAvailable(
-        common.getBlockTypeCounts(this, true));
+      common.getBlockTypeCounts(this, true));
   }
 
   /**
    * Get whether this block is a shadow block or not.
-   * @return {boolean} True if a shadow.
+   * @return True if a shadow.
    */
-  isShadow() {
+  isShadow(): boolean {
     return this.isShadow_;
   }
 
   /**
    * Set whether this block is a shadow block or not.
-   * @param {boolean} shadow True if a shadow.
-   * @package
+   * @param shadow True if a shadow.
    */
-  setShadow(shadow) {
+  setShadow(shadow: boolean) {
     this.isShadow_ = shadow;
   }
 
   /**
    * Get whether this block is an insertion marker block or not.
-   * @return {boolean} True if an insertion marker.
+   * @return True if an insertion marker.
    */
-  isInsertionMarker() {
+  isInsertionMarker(): boolean {
     return this.isInsertionMarker_;
   }
 
   /**
    * Set whether this block is an insertion marker block or not.
    * Once set this cannot be unset.
-   * @param {boolean} insertionMarker True if an insertion marker.
-   * @package
+   * @param insertionMarker True if an insertion marker.
    */
-  setInsertionMarker(insertionMarker) {
+  setInsertionMarker(insertionMarker: boolean) {
     this.isInsertionMarker_ = insertionMarker;
   }
 
   /**
    * Get whether this block is editable or not.
-   * @return {boolean} True if editable.
+   * @return True if editable.
    */
-  isEditable() {
+  isEditable(): boolean {
     return this.editable_ &&
-        !(this.workspace && this.workspace.options.readOnly);
+      !(this.workspace && this.workspace.options.readOnly);
   }
 
   /**
    * Set whether this block is editable or not.
-   * @param {boolean} editable True if editable.
+   * @param editable True if editable.
    */
-  setEditable(editable) {
+  setEditable(editable: boolean) {
     this.editable_ = editable;
-    for (let i = 0, input; (input = this.inputList[i]); i++) {
-      for (let j = 0, field; (field = input.fieldRow[j]); j++) {
+    for (let i = 0, input; input = this.inputList[i]; i++) {
+      for (let j = 0, field; field = input.fieldRow[j]; j++) {
         field.updateEditable();
       }
     }
@@ -955,9 +853,9 @@ class Block {
 
   /**
    * Returns if this block has been disposed of / deleted.
-   * @return {boolean} True if this block has been disposed of / deleted.
+   * @return True if this block has been disposed of / deleted.
    */
-  isDisposed() {
+  isDisposed(): boolean {
     return this.disposed;
   }
 
@@ -965,12 +863,11 @@ class Block {
    * Find the connection on this block that corresponds to the given connection
    * on the other block.
    * Used to match connections between a block and its insertion marker.
-   * @param {!Block} otherBlock The other block to match against.
-   * @param {!Connection} conn The other connection to match.
-   * @return {?Connection} The matching connection on this block, or null.
-   * @package
+   * @param otherBlock The other block to match against.
+   * @param conn The other connection to match.
+   * @return The matching connection on this block, or null.
    */
-  getMatchingConnection(otherBlock, conn) {
+  getMatchingConnection(otherBlock: Block, conn: Connection): Connection | null {
     const connections = this.getConnections_(true);
     const otherConnections = otherBlock.getConnections_(true);
     if (connections.length !== otherConnections.length) {
@@ -986,61 +883,61 @@ class Block {
 
   /**
    * Set the URL of this block's help page.
-   * @param {string|Function} url URL string for block help, or function that
-   *     returns a URL.  Null for no help.
+   * @param url URL string for block help, or function that returns a URL.  Null
+   *     for no help.
    */
-  setHelpUrl(url) {
+  setHelpUrl(url: string | Function) {
     this.helpUrl = url;
   }
 
   /**
    * Sets the tooltip for this block.
-   * @param {!Tooltip.TipInfo} newTip The text for the tooltip, a function
-   *     that returns the text for the tooltip, or a parent object whose tooltip
-   *     will be used. To not display a tooltip pass the empty string.
+   * @param newTip The text for the tooltip, a function that returns the text
+   *     for the tooltip, or a parent object whose tooltip will be used. To not
+   *     display a tooltip pass the empty string.
    */
-  setTooltip(newTip) {
+  setTooltip(newTip: Tooltip.TipInfo) {
     this.tooltip = newTip;
   }
 
   /**
    * Returns the tooltip text for this block.
-   * @return {!string} The tooltip text for this block.
+   * @return The tooltip text for this block.
    */
-  getTooltip() {
+  getTooltip(): string {
     return Tooltip.getTooltipOfObject(this);
   }
 
   /**
    * Get the colour of a block.
-   * @return {string} #RRGGBB string.
+   * @return #RRGGBB string.
    */
-  getColour() {
+  getColour(): string {
     return this.colour_;
   }
 
   /**
    * Get the name of the block style.
-   * @return {string} Name of the block style.
+   * @return Name of the block style.
    */
-  getStyleName() {
+  getStyleName(): string {
     return this.styleName_;
   }
 
   /**
    * Get the HSV hue value of a block.  Null if hue not set.
-   * @return {?number} Hue value (0-360).
+   * @return Hue value (0-360).
    */
-  getHue() {
+  getHue(): number | null {
     return this.hue_;
   }
 
   /**
    * Change the colour of a block.
-   * @param {number|string} colour HSV hue value (0 to 360), #RRGGBB string,
-   *     or a message reference string pointing to one of those two values.
+   * @param colour HSV hue value (0 to 360), #RRGGBB string, or a message
+   *     reference string pointing to one of those two values.
    */
-  setColour(colour) {
+  setColour(colour: number | string) {
     const parsed = parsing.parseBlockColour(colour);
     this.hue_ = parsed.hue;
     this.colour_ = parsed.hex;
@@ -1048,9 +945,9 @@ class Block {
 
   /**
    * Set the style and colour values of a block.
-   * @param {string} blockStyleName Name of the block style.
+   * @param blockStyleName Name of the block style.
    */
-  setStyle(blockStyleName) {
+  setStyle(blockStyleName: string) {
     this.styleName_ = blockStyleName;
   }
 
@@ -1059,11 +956,10 @@ class Block {
    * changes, replacing any prior onchange handler. This is usually only called
    * from the constructor, the block type initializer function, or an extension
    * initializer function.
-   * @param {function(Abstract)} onchangeFn The callback to call
-   *     when the block's workspace changes.
+   * @param onchangeFn The callback to call when the block's workspace changes.
    * @throws {Error} if onchangeFn is not falsey and not a function.
    */
-  setOnChange(onchangeFn) {
+  setOnChange(onchangeFn: (p1: Abstract) => AnyDuringMigration) {
     if (onchangeFn && typeof onchangeFn !== 'function') {
       throw Error('onchange must be a function.');
     }
@@ -1071,27 +967,25 @@ class Block {
       this.workspace.removeChangeListener(this.onchangeWrapper_);
     }
     this.onchange = onchangeFn;
-    if (this.onchange) {
-      this.onchangeWrapper_ = onchangeFn.bind(this);
-      this.workspace.addChangeListener(this.onchangeWrapper_);
-    }
+    this.onchangeWrapper_ = onchangeFn.bind(this);
+    this.workspace.addChangeListener(this.onchangeWrapper_);
   }
 
   /**
    * Returns the named field from a block.
-   * @param {string} name The name of the field.
-   * @return {?Field} Named field, or null if field does not exist.
+   * @param name The name of the field.
+   * @return Named field, or null if field does not exist.
    */
-  getField(name) {
+  getField(name: string): Field | null {
     if (typeof name !== 'string') {
       throw TypeError(
-          'Block.prototype.getField expects a string ' +
-          'with the field name but received ' +
-          (name === undefined ? 'nothing' : name + ' of type ' + typeof name) +
-          ' instead');
+        'Block.prototype.getField expects a string ' +
+        'with the field name but received ' +
+        (name === undefined ? 'nothing' : name + ' of type ' + typeof name) +
+        ' instead');
     }
-    for (let i = 0, input; (input = this.inputList[i]); i++) {
-      for (let j = 0, field; (field = input.fieldRow[j]); j++) {
+    for (let i = 0, input; input = this.inputList[i]; i++) {
+      for (let j = 0, field; field = input.fieldRow[j]; j++) {
         if (field.name === name) {
           return field;
         }
@@ -1102,12 +996,12 @@ class Block {
 
   /**
    * Return all variables referenced by this block.
-   * @return {!Array<string>} List of variable ids.
+   * @return List of variable ids.
    */
-  getVars() {
+  getVars(): string[] {
     const vars = [];
-    for (let i = 0, input; (input = this.inputList[i]); i++) {
-      for (let j = 0, field; (field = input.fieldRow[j]); j++) {
+    for (let i = 0, input; input = this.inputList[i]; i++) {
+      for (let j = 0, field; field = input.fieldRow[j]; j++) {
         if (field.referencesVariables()) {
           vars.push(field.getValue());
         }
@@ -1118,16 +1012,15 @@ class Block {
 
   /**
    * Return all variables referenced by this block.
-   * @return {!Array<!VariableModel>} List of variable models.
-   * @package
+   * @return List of variable models.
    */
-  getVarModels() {
+  getVarModels(): VariableModel[] {
     const vars = [];
-    for (let i = 0, input; (input = this.inputList[i]); i++) {
-      for (let j = 0, field; (field = input.fieldRow[j]); j++) {
+    for (let i = 0, input; input = this.inputList[i]; i++) {
+      for (let j = 0, field; field = input.fieldRow[j]; j++) {
         if (field.referencesVariables()) {
-          const model = this.workspace.getVariableById(
-              /** @type {string} */ (field.getValue()));
+          const model =
+            this.workspace.getVariableById(field.getValue() as string);
           // Check if the variable actually exists (and isn't just a potential
           // variable).
           if (model) {
@@ -1142,14 +1035,13 @@ class Block {
   /**
    * Notification that a variable is renaming but keeping the same ID.  If the
    * variable is in use on this block, rerender to show the new name.
-   * @param {!VariableModel} variable The variable being renamed.
-   * @package
+   * @param variable The variable being renamed.
    */
-  updateVarName(variable) {
-    for (let i = 0, input; (input = this.inputList[i]); i++) {
-      for (let j = 0, field; (field = input.fieldRow[j]); j++) {
+  updateVarName(variable: VariableModel) {
+    for (let i = 0, input; input = this.inputList[i]; i++) {
+      for (let j = 0, field; field = input.fieldRow[j]; j++) {
         if (field.referencesVariables() &&
-            variable.getId() === field.getValue()) {
+          variable.getId() === field.getValue()) {
           field.refreshVariableName();
         }
       }
@@ -1159,13 +1051,13 @@ class Block {
   /**
    * Notification that a variable is renaming.
    * If the ID matches one of this block's variables, rename it.
-   * @param {string} oldId ID of variable to rename.
-   * @param {string} newId ID of new variable.  May be the same as oldId, but
-   *     with an updated name.
+   * @param oldId ID of variable to rename.
+   * @param newId ID of new variable.  May be the same as oldId, but with an
+   *     updated name.
    */
-  renameVarById(oldId, newId) {
-    for (let i = 0, input; (input = this.inputList[i]); i++) {
-      for (let j = 0, field; (field = input.fieldRow[j]); j++) {
+  renameVarById(oldId: string, newId: string) {
+    for (let i = 0, input; input = this.inputList[i]; i++) {
+      for (let j = 0, field; field = input.fieldRow[j]; j++) {
         if (field.referencesVariables() && oldId === field.getValue()) {
           field.setValue(newId);
         }
@@ -1175,10 +1067,10 @@ class Block {
 
   /**
    * Returns the language-neutral value of the given field.
-   * @param {string} name The name of the field.
-   * @return {*} Value of the field or null if field does not exist.
+   * @param name The name of the field.
+   * @return Value of the field or null if field does not exist.
    */
-  getFieldValue(name) {
+  getFieldValue(name: string): AnyDuringMigration {
     const field = this.getField(name);
     if (field) {
       return field.getValue();
@@ -1188,10 +1080,10 @@ class Block {
 
   /**
    * Sets the value of the given field for this block.
-   * @param {*} newValue The value to set.
-   * @param {string} name The name of the field to set the value of.
+   * @param newValue The value to set.
+   * @param name The name of the field to set the value of.
    */
-  setFieldValue(newValue, name) {
+  setFieldValue(newValue: AnyDuringMigration, name: string) {
     const field = this.getField(name);
     if (!field) {
       throw Error('Field "' + name + '" not found.');
@@ -1201,110 +1093,113 @@ class Block {
 
   /**
    * Set whether this block can chain onto the bottom of another block.
-   * @param {boolean} newBoolean True if there can be a previous statement.
-   * @param {(string|Array<string>|null)=} opt_check Statement type or
-   *     list of statement types.  Null/undefined if any type could be
-   * connected.
+   * @param newBoolean True if there can be a previous statement.
+   * @param opt_check Statement type or list of statement types.  Null/undefined
+   *     if any type could be connected.
    */
-  setPreviousStatement(newBoolean, opt_check) {
+  setPreviousStatement(newBoolean: boolean, opt_check?: string | string[] | null) {
     if (newBoolean) {
       if (opt_check === undefined) {
         opt_check = null;
       }
       if (!this.previousConnection) {
         this.previousConnection =
-            this.makeConnection_(ConnectionType.PREVIOUS_STATEMENT);
+          this.makeConnection_(ConnectionType.PREVIOUS_STATEMENT);
       }
       this.previousConnection.setCheck(opt_check);
     } else {
       if (this.previousConnection) {
         if (this.previousConnection.isConnected()) {
           throw Error(
-              'Must disconnect previous statement before removing ' +
-              'connection.');
+            'Must disconnect previous statement before removing ' +
+            'connection.');
         }
         this.previousConnection.dispose();
-        this.previousConnection = null;
+        // AnyDuringMigration because:  Type 'null' is not assignable to type
+        // 'Connection'.
+        this.previousConnection = null as AnyDuringMigration;
       }
     }
   }
 
   /**
    * Set whether another block can chain onto the bottom of this block.
-   * @param {boolean} newBoolean True if there can be a next statement.
-   * @param {(string|Array<string>|null)=} opt_check Statement type or
-   *     list of statement types.  Null/undefined if any type could be
-   * connected.
+   * @param newBoolean True if there can be a next statement.
+   * @param opt_check Statement type or list of statement types.  Null/undefined
+   *     if any type could be connected.
    */
-  setNextStatement(newBoolean, opt_check) {
+  setNextStatement(newBoolean: boolean, opt_check?: string | string[] | null) {
     if (newBoolean) {
       if (opt_check === undefined) {
         opt_check = null;
       }
       if (!this.nextConnection) {
         this.nextConnection =
-            this.makeConnection_(ConnectionType.NEXT_STATEMENT);
+          this.makeConnection_(ConnectionType.NEXT_STATEMENT);
       }
       this.nextConnection.setCheck(opt_check);
     } else {
       if (this.nextConnection) {
         if (this.nextConnection.isConnected()) {
           throw Error(
-              'Must disconnect next statement before removing ' +
-              'connection.');
+            'Must disconnect next statement before removing ' +
+            'connection.');
         }
         this.nextConnection.dispose();
-        this.nextConnection = null;
+        // AnyDuringMigration because:  Type 'null' is not assignable to type
+        // 'Connection'.
+        this.nextConnection = null as AnyDuringMigration;
       }
     }
   }
 
   /**
    * Set whether this block returns a value.
-   * @param {boolean} newBoolean True if there is an output.
-   * @param {(string|Array<string>|null)=} opt_check Returned type or list
-   *     of returned types.  Null or undefined if any type could be returned
-   *     (e.g. variable get).
+   * @param newBoolean True if there is an output.
+   * @param opt_check Returned type or list of returned types.  Null or
+   *     undefined if any type could be returned (e.g. variable get).
    */
-  setOutput(newBoolean, opt_check) {
+  setOutput(newBoolean: boolean, opt_check?: string | string[] | null) {
     if (newBoolean) {
       if (opt_check === undefined) {
         opt_check = null;
       }
       if (!this.outputConnection) {
         this.outputConnection =
-            this.makeConnection_(ConnectionType.OUTPUT_VALUE);
+          this.makeConnection_(ConnectionType.OUTPUT_VALUE);
       }
       this.outputConnection.setCheck(opt_check);
     } else {
       if (this.outputConnection) {
         if (this.outputConnection.isConnected()) {
           throw Error(
-              'Must disconnect output value before removing connection.');
+            'Must disconnect output value before removing connection.');
         }
         this.outputConnection.dispose();
-        this.outputConnection = null;
+        // AnyDuringMigration because:  Type 'null' is not assignable to type
+        // 'Connection'.
+        this.outputConnection = null as AnyDuringMigration;
       }
     }
   }
 
   /**
    * Set whether value inputs are arranged horizontally or vertically.
-   * @param {boolean} newBoolean True if inputs are horizontal.
+   * @param newBoolean True if inputs are horizontal.
    */
-  setInputsInline(newBoolean) {
+  setInputsInline(newBoolean: boolean) {
     if (this.inputsInline !== newBoolean) {
-      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
-          this, 'inline', null, this.inputsInline, newBoolean));
+      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))!
+        (this, 'inline', null, this.inputsInline, newBoolean));
       this.inputsInline = newBoolean;
     }
   }
 
   /**
    * Get whether value inputs are arranged horizontally or vertically.
-   * @return {boolean} True if inputs are horizontal.
+   * @return True if inputs are horizontal.
    */
-  getInputsInline() {
+  getInputsInline(): boolean {
     if (this.inputsInline !== undefined) {
       // Set explicitly.
       return this.inputsInline;
@@ -1312,14 +1207,14 @@ class Block {
     // Not defined explicitly.  Figure out what would look best.
     for (let i = 1; i < this.inputList.length; i++) {
       if (this.inputList[i - 1].type === inputTypes.DUMMY &&
-          this.inputList[i].type === inputTypes.DUMMY) {
+        this.inputList[i].type === inputTypes.DUMMY) {
         // Two dummy inputs in a row.  Don't inline them.
         return false;
       }
     }
     for (let i = 1; i < this.inputList.length; i++) {
       if (this.inputList[i - 1].type === inputTypes.VALUE &&
-          this.inputList[i].type === inputTypes.DUMMY) {
+        this.inputList[i].type === inputTypes.DUMMY) {
         // Dummy input after a value input.  Inline them.
         return true;
       }
@@ -1329,47 +1224,47 @@ class Block {
 
   /**
    * Set the block's output shape.
-   * @param {?number} outputShape Value representing an output shape.
+   * @param outputShape Value representing an output shape.
    */
-  setOutputShape(outputShape) {
+  setOutputShape(outputShape: number | null) {
     this.outputShape_ = outputShape;
   }
 
   /**
    * Get the block's output shape.
-   * @return {?number} Value representing output shape if one exists.
+   * @return Value representing output shape if one exists.
    */
-  getOutputShape() {
+  getOutputShape(): number | null {
     return this.outputShape_;
   }
 
   /**
    * Get whether this block is enabled or not.
-   * @return {boolean} True if enabled.
+   * @return True if enabled.
    */
-  isEnabled() {
+  isEnabled(): boolean {
     return !this.disabled;
   }
 
   /**
    * Set whether the block is enabled or not.
-   * @param {boolean} enabled True if enabled.
+   * @param enabled True if enabled.
    */
-  setEnabled(enabled) {
+  setEnabled(enabled: boolean) {
     if (this.isEnabled() !== enabled) {
       const oldValue = this.disabled;
       this.disabled = !enabled;
-      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
-          this, 'disabled', null, oldValue, !enabled));
+      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))!
+        (this, 'disabled', null, oldValue, !enabled));
     }
   }
 
   /**
    * Get whether the block is disabled or not due to parents.
    * The block's own disabled property is not considered.
-   * @return {boolean} True if disabled.
+   * @return True if disabled.
    */
-  getInheritedDisabled() {
+  getInheritedDisabled(): boolean {
     let ancestor = this.getSurroundParent();
     while (ancestor) {
       if (ancestor.disabled) {
@@ -1383,32 +1278,32 @@ class Block {
 
   /**
    * Get whether the block is collapsed or not.
-   * @return {boolean} True if collapsed.
+   * @return True if collapsed.
    */
-  isCollapsed() {
+  isCollapsed(): boolean {
     return this.collapsed_;
   }
 
   /**
    * Set whether the block is collapsed or not.
-   * @param {boolean} collapsed True if collapsed.
+   * @param collapsed True if collapsed.
    */
-  setCollapsed(collapsed) {
+  setCollapsed(collapsed: boolean) {
     if (this.collapsed_ !== collapsed) {
-      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
-          this, 'collapsed', null, this.collapsed_, collapsed));
+      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))!
+        (this, 'collapsed', null, this.collapsed_, collapsed));
       this.collapsed_ = collapsed;
     }
   }
 
   /**
    * Create a human-readable text representation of this block and any children.
-   * @param {number=} opt_maxLength Truncate the string to this length.
-   * @param {string=} opt_emptyToken The placeholder string used to denote an
-   *     empty field. If not specified, '?' is used.
-   * @return {string} Text of block.
+   * @param opt_maxLength Truncate the string to this length.
+   * @param opt_emptyToken The placeholder string used to denote an empty field.
+   *     If not specified, '?' is used.
+   * @return Text of block.
    */
-  toString(opt_maxLength, opt_emptyToken) {
+  toString(opt_maxLength?: number, opt_emptyToken?: string): string {
     let text = [];
     const emptyFieldPlaceholder = opt_emptyToken || '?';
 
@@ -1421,24 +1316,22 @@ class Block {
 
     /**
      * Whether or not to add parentheses around an input.
-     * @param {!Connection} connection The connection.
-     * @return {boolean} True if we should add parentheses around the input.
+     * @param connection The connection.
+     * @return True if we should add parentheses around the input.
      */
-    function shouldAddParentheses(connection) {
+    function shouldAddParentheses(connection: Connection): boolean {
       let checks = connection.getCheck();
       if (!checks && connection.targetConnection) {
         checks = connection.targetConnection.getCheck();
       }
       return !!checks &&
-          (checks.indexOf('Boolean') !== -1 || checks.indexOf('Number') !== -1);
+        (checks.indexOf('Boolean') !== -1 || checks.indexOf('Number') !== -1);
     }
 
-    /**
-     * Check that we haven't circled back to the original root node.
-     */
+    /** Check that we haven't circled back to the original root node. */
     function checkRoot() {
-      if (node && node.getType() === rootNode.getType() &&
-          node.getLocation() === rootNode.getLocation()) {
+      if (node && node.getType() === rootNode?.getType() &&
+        node.getLocation() === rootNode?.getLocation()) {
         node = null;
       }
     }
@@ -1447,7 +1340,7 @@ class Block {
     while (node) {
       switch (node.getType()) {
         case ASTNode.types.INPUT: {
-          const connection = /** @type {!Connection} */ (node.getLocation());
+          const connection = node.getLocation() as Connection;
           if (!node.in()) {
             text.push(emptyFieldPlaceholder);
           } else if (shouldAddParentheses(connection)) {
@@ -1456,7 +1349,7 @@ class Block {
           break;
         }
         case ASTNode.types.FIELD: {
-          const field = /** @type {Field} */ (node.getLocation());
+          const field = node.getLocation() as Field;
           if (field.name !== constants.COLLAPSED_FIELD_NAME) {
             text.push(field.getText());
           }
@@ -1475,8 +1368,7 @@ class Block {
           checkRoot();
           // If we hit an input on the way up, possibly close out parentheses.
           if (node && node.getType() === ASTNode.types.INPUT &&
-              shouldAddParentheses(
-                  /** @type {!Connection} */ (node.getLocation()))) {
+            shouldAddParentheses(node.getLocation() as Connection)) {
             text.push(')');
           }
         }
@@ -1500,17 +1392,23 @@ class Block {
     }
 
     // Join the text array, removing spaces around added parentheses.
-    text = text.reduce(function(acc, value) {
-      return acc + ((acc.substr(-1) === '(' || value === ')') ? '' : ' ') +
-          value;
-    }, '');
-    text = text.trim() || '???';
+    // AnyDuringMigration because:  Type 'string' is not assignable to type
+    // 'any[]'.
+    text = text.reduce(function (acc, value) {
+      return acc + (acc.substr(-1) === '(' || value === ')' ? '' : ' ') + value;
+    }, '') as AnyDuringMigration;
+    // AnyDuringMigration because:  Property 'trim' does not exist on type
+    // 'any[]'.
+    text = (text as AnyDuringMigration).trim() || '???';
     if (opt_maxLength) {
       // TODO: Improve truncation so that text from this block is given
       // priority. E.g. "1+2+3+4+5+6+7+8+9=0" should be "...6+7+8+9=0", not
       // "1+2+3+4+5...". E.g. "1+2+3+4+5=6+7+8+9+0" should be "...4+5=6+7...".
       if (text.length > opt_maxLength) {
-        text = text.substring(0, opt_maxLength - 3) + '...';
+        // AnyDuringMigration because:  Type 'string' is not assignable to type
+        // 'any[]'.
+        text = (text.substring(0, opt_maxLength - 3) + '...') as
+          AnyDuringMigration;
       }
     }
     return text;
@@ -1518,47 +1416,47 @@ class Block {
 
   /**
    * Shortcut for appending a value input row.
-   * @param {string} name Language-neutral identifier which may used to find
-   *     this input again.  Should be unique to this block.
-   * @return {!Input} The input object created.
+   * @param name Language-neutral identifier which may used to find this input
+   *     again.  Should be unique to this block.
+   * @return The input object created.
    */
-  appendValueInput(name) {
+  appendValueInput(name: string): Input {
     return this.appendInput_(inputTypes.VALUE, name);
   }
 
   /**
    * Shortcut for appending a statement input row.
-   * @param {string} name Language-neutral identifier which may used to find
-   *     this input again.  Should be unique to this block.
-   * @return {!Input} The input object created.
+   * @param name Language-neutral identifier which may used to find this input
+   *     again.  Should be unique to this block.
+   * @return The input object created.
    */
-  appendStatementInput(name) {
+  appendStatementInput(name: string): Input {
     return this.appendInput_(inputTypes.STATEMENT, name);
   }
 
   /**
    * Shortcut for appending a dummy input row.
-   * @param {string=} opt_name Language-neutral identifier which may used to
-   *     find this input again.  Should be unique to this block.
-   * @return {!Input} The input object created.
+   * @param opt_name Language-neutral identifier which may used to find this
+   *     input again.  Should be unique to this block.
+   * @return The input object created.
    */
-  appendDummyInput(opt_name) {
+  appendDummyInput(opt_name?: string): Input {
     return this.appendInput_(inputTypes.DUMMY, opt_name || '');
   }
 
   /**
    * Initialize this block using a cross-platform, internationalization-friendly
    * JSON description.
-   * @param {!Object} json Structured data describing the block.
+   * @param json Structured data describing the block.
    */
-  jsonInit(json) {
+  jsonInit(json: AnyDuringMigration) {
     const warningPrefix = json['type'] ? 'Block "' + json['type'] + '": ' : '';
 
     // Validate inputs.
     if (json['output'] && json['previousStatement']) {
       throw Error(
-          warningPrefix +
-          'Must not have both an output and a previousStatement.');
+        warningPrefix +
+        'Must not have both an output and a previousStatement.');
     }
 
     // Set basic properties of block.
@@ -1582,8 +1480,8 @@ class Block {
     let i = 0;
     while (json['message' + i] !== undefined) {
       this.interpolate_(
-          json['message' + i], json['args' + i] || [],
-          json['lastDummyAlign' + i], warningPrefix);
+        json['message' + i], json['args' + i] || [],
+        json['lastDummyAlign' + i], warningPrefix);
       i++;
     }
 
@@ -1621,12 +1519,13 @@ class Block {
     }
     if (typeof json['extensions'] === 'string') {
       console.warn(
-          warningPrefix +
-          'JSON attribute \'extensions\' should be an array of' +
-          ' strings. Found raw string in JSON for \'' + json['type'] +
-          '\' block.');
-      json['extensions'] = [json['extensions']];  // Correct and continue.
+        warningPrefix +
+        'JSON attribute \'extensions\' should be an array of' +
+        ' strings. Found raw string in JSON for \'' + json['type'] +
+        '\' block.');
+      json['extensions'] = [json['extensions']];
     }
+    // Correct and continue.
 
     // Add the mutator to the block.
     if (json['mutator'] !== undefined) {
@@ -1643,11 +1542,10 @@ class Block {
 
   /**
    * Initialize the colour of this block from the JSON description.
-   * @param {!Object} json Structured data describing the block.
-   * @param {string} warningPrefix Warning prefix string identifying block.
-   * @private
+   * @param json Structured data describing the block.
+   * @param warningPrefix Warning prefix string identifying block.
    */
-  jsonInitColour_(json, warningPrefix) {
+  private jsonInitColour_(json: AnyDuringMigration, warningPrefix: string) {
     if ('colour' in json) {
       if (json['colour'] === undefined) {
         console.warn(warningPrefix + 'Undefined colour value.');
@@ -1664,11 +1562,10 @@ class Block {
 
   /**
    * Initialize the style of this block from the JSON description.
-   * @param {!Object} json Structured data describing the block.
-   * @param {string} warningPrefix Warning prefix string identifying block.
-   * @private
+   * @param json Structured data describing the block.
+   * @param warningPrefix Warning prefix string identifying block.
    */
-  jsonInitStyle_(json, warningPrefix) {
+  private jsonInitStyle_(json: AnyDuringMigration, warningPrefix: string) {
     const blockStyleName = json['style'];
     try {
       this.setStyle(blockStyleName);
@@ -1683,25 +1580,25 @@ class Block {
    * the block, including prototype values. This provides some insurance against
    * mixin / extension incompatibilities with future block features. This check
    * can be disabled by passing true as the second argument.
-   * @param {!Object} mixinObj The key/values pairs to add to this block object.
-   * @param {boolean=} opt_disableCheck Option flag to disable overwrite checks.
+   * @param mixinObj The key/values pairs to add to this block object.
+   * @param opt_disableCheck Option flag to disable overwrite checks.
    */
-  mixin(mixinObj, opt_disableCheck) {
+  mixin(mixinObj: AnyDuringMigration, opt_disableCheck?: boolean) {
     if (opt_disableCheck !== undefined &&
-        typeof opt_disableCheck !== 'boolean') {
+      typeof opt_disableCheck !== 'boolean') {
       throw Error('opt_disableCheck must be a boolean if provided');
     }
     if (!opt_disableCheck) {
       const overwrites = [];
       for (const key in mixinObj) {
-        if (this[key] !== undefined) {
+        if ((this as AnyDuringMigration)[key] !== undefined) {
           overwrites.push(key);
         }
       }
       if (overwrites.length) {
         throw Error(
-            'Mixin will overwrite block members: ' +
-            JSON.stringify(overwrites));
+          'Mixin will overwrite block members: ' +
+          JSON.stringify(overwrites));
       }
     }
     Object.assign(this, mixinObj);
@@ -1709,27 +1606,28 @@ class Block {
 
   /**
    * Interpolate a message description onto the block.
-   * @param {string} message Text contains interpolation tokens (%1, %2, ...)
-   *     that match with fields or inputs defined in the args array.
-   * @param {!Array} args Array of arguments to be interpolated.
-   * @param {string|undefined} lastDummyAlign If a dummy input is added at the
-   *     end, how should it be aligned?
-   * @param {string} warningPrefix Warning prefix string identifying block.
-   * @private
+   * @param message Text contains interpolation tokens (%1, %2, ...) that match
+   *     with fields or inputs defined in the args array.
+   * @param args Array of arguments to be interpolated.
+   * @param lastDummyAlign If a dummy input is added at the end, how should it
+   *     be aligned?
+   * @param warningPrefix Warning prefix string identifying block.
    */
-  interpolate_(message, args, lastDummyAlign, warningPrefix) {
+  private interpolate_(
+    message: string, args: AnyDuringMigration[],
+    lastDummyAlign: string | undefined, warningPrefix: string) {
     const tokens = parsing.tokenizeInterpolation(message);
     this.validateTokens_(tokens, args.length);
     const elements = this.interpolateArguments_(tokens, args, lastDummyAlign);
 
     // An array of [field, fieldName] tuples.
     const fieldStack = [];
-    for (let i = 0, element; (element = elements[i]); i++) {
+    for (let i = 0, element; element = elements[i]; i++) {
       if (this.isInputKeyword_(element['type'])) {
         const input = this.inputFromJson_(element, warningPrefix);
         // Should never be null, but just in case.
         if (input) {
-          for (let j = 0, tuple; (tuple = fieldStack[j]); j++) {
+          for (let j = 0, tuple; tuple = fieldStack[j]; j++) {
             input.appendField(tuple[0], tuple[1]);
           }
           fieldStack.length = 0;
@@ -1749,11 +1647,10 @@ class Block {
    * Validates that the tokens are within the correct bounds, with no
    * duplicates, and that all of the arguments are referred to. Throws errors if
    * any of these things are not true.
-   * @param {!Array<string|number>} tokens An array of tokens to validate
-   * @param {number} argsCount The number of args that need to be referred to.
-   * @private
+   * @param tokens An array of tokens to validate
+   * @param argsCount The number of args that need to be referred to.
    */
-  validateTokens_(tokens, argsCount) {
+  private validateTokens_(tokens: Array<string | number>, argsCount: number) {
     const visitedArgsHash = [];
     let visitedArgsCount = 0;
     for (let i = 0; i < tokens.length; i++) {
@@ -1763,21 +1660,21 @@ class Block {
       }
       if (token < 1 || token > argsCount) {
         throw Error(
-            'Block "' + this.type + '": ' +
-            'Message index %' + token + ' out of range.');
+          'Block "' + this.type + '": ' +
+          'Message index %' + token + ' out of range.');
       }
       if (visitedArgsHash[token]) {
         throw Error(
-            'Block "' + this.type + '": ' +
-            'Message index %' + token + ' duplicated.');
+          'Block "' + this.type + '": ' +
+          'Message index %' + token + ' duplicated.');
       }
       visitedArgsHash[token] = true;
       visitedArgsCount++;
     }
     if (visitedArgsCount !== argsCount) {
       throw Error(
-          'Block "' + this.type + '": ' +
-          'Message does not reference all ' + argsCount + ' arg(s).');
+        'Block "' + this.type + '": ' +
+        'Message does not reference all ' + argsCount + ' arg(s).');
     }
   }
 
@@ -1785,15 +1682,15 @@ class Block {
    * Inserts args in place of numerical tokens. String args are converted to
    * JSON that defines a label field. If necessary an extra dummy input is added
    * to the end of the elements.
-   * @param {!Array<!string|number>} tokens The tokens to interpolate
-   * @param {!Array<!Object|string>} args The arguments to insert.
-   * @param {string|undefined} lastDummyAlign The alignment the added dummy
-   *     input should have, if we are required to add one.
-   * @return {!Array<!Object>} The JSON definitions of field and inputs to add
-   *     to the block.
-   * @private
+   * @param tokens The tokens to interpolate
+   * @param args The arguments to insert.
+   * @param lastDummyAlign The alignment the added dummy input should have, if
+   *     we are required to add one.
+   * @return The JSON definitions of field and inputs to add to the block.
    */
-  interpolateArguments_(tokens, args, lastDummyAlign) {
+  private interpolateArguments_(
+    tokens: Array<string | number>, args: Array<AnyDuringMigration | string>,
+    lastDummyAlign: string | undefined): AnyDuringMigration[] {
     const elements = [];
     for (let i = 0; i < tokens.length; i++) {
       let element = tokens[i];
@@ -1802,7 +1699,9 @@ class Block {
       }
       // Args can be strings, which is why this isn't elseif.
       if (typeof element === 'string') {
-        element = this.stringToFieldJson_(element);
+        // AnyDuringMigration because:  Type '{ text: string; type: string; } |
+        // null' is not assignable to type 'string | number'.
+        element = this.stringToFieldJson_(element) as AnyDuringMigration;
         if (!element) {
           continue;
         }
@@ -1811,10 +1710,12 @@ class Block {
     }
 
     const length = elements.length;
-    if (length && !this.isInputKeyword_(elements[length - 1]['type'])) {
-      const dummyInput = {'type': 'input_dummy'};
+    if (length &&
+      !this.isInputKeyword_(
+        (elements as AnyDuringMigration)[length - 1]['type'])) {
+      const dummyInput = { 'type': 'input_dummy' };
       if (lastDummyAlign) {
-        dummyInput['align'] = lastDummyAlign;
+        (dummyInput as AnyDuringMigration)['align'] = lastDummyAlign;
       }
       elements.push(dummyInput);
     }
@@ -1826,13 +1727,11 @@ class Block {
    * Creates a field from the JSON definition of a field. If a field with the
    * given type cannot be found, this attempts to create a different field using
    * the 'alt' property of the JSON definition (if it exists).
-   * @param {{alt:(string|undefined)}} element The element to try to turn into a
-   *     field.
-   * @return {?Field} The field defined by the JSON, or null if one
-   *     couldn't be created.
-   * @private
+   * @param element The element to try to turn into a field.
+   * @return The field defined by the JSON, or null if one couldn't be created.
    */
-  fieldFromJson_(element) {
+  private fieldFromJson_(element: { alt?: string, type?: string, text?: string }):
+    Field | null {
     const field = fieldRegistry.fromJson(element);
     if (!field && element['alt']) {
       if (typeof element['alt'] === 'string') {
@@ -1847,14 +1746,14 @@ class Block {
   /**
    * Creates an input from the JSON definition of an input. Sets the input's
    * check and alignment if they are provided.
-   * @param {!Object} element The JSON to turn into an input.
-   * @param {string} warningPrefix The prefix to add to warnings to help the
-   *     developer debug.
-   * @return {?Input} The input that has been created, or null if one
-   *     could not be created for some reason (should never happen).
-   * @private
+   * @param element The JSON to turn into an input.
+   * @param warningPrefix The prefix to add to warnings to help the developer
+   *     debug.
+   * @return The input that has been created, or null if one could not be
+   *     created for some reason (should never happen).
    */
-  inputFromJson_(element, warningPrefix) {
+  private inputFromJson_(element: AnyDuringMigration, warningPrefix: string):
+    Input | null {
     const alignmentLookup = {
       'LEFT': Align.LEFT,
       'RIGHT': Align.RIGHT,
@@ -1883,7 +1782,9 @@ class Block {
       input.setCheck(element['check']);
     }
     if (element['align']) {
-      const alignment = alignmentLookup[element['align'].toUpperCase()];
+      const alignment =
+        (alignmentLookup as
+          AnyDuringMigration)[element['align'].toUpperCase()];
       if (alignment === undefined) {
         console.warn(warningPrefix + 'Illegal align value: ', element['align']);
       } else {
@@ -1895,25 +1796,22 @@ class Block {
 
   /**
    * Returns true if the given string matches one of the input keywords.
-   * @param {string} str The string to check.
-   * @return {boolean} True if the given string matches one of the input
-   *     keywords, false otherwise.
-   * @private
+   * @param str The string to check.
+   * @return True if the given string matches one of the input keywords, false
+   *     otherwise.
    */
-  isInputKeyword_(str) {
+  private isInputKeyword_(str: string): boolean {
     return str === 'input_value' || str === 'input_statement' ||
-        str === 'input_dummy';
+      str === 'input_dummy';
   }
 
   /**
    * Turns a string into the JSON definition of a label field. If the string
    * becomes an empty string when trimmed, this returns null.
-   * @param {string} str String to turn into the JSON definition of a label
-   *     field.
-   * @return {?{text: string, type: string}} The JSON definition or null.
-   * @private
+   * @param str String to turn into the JSON definition of a label field.
+   * @return The JSON definition or null.
    */
-  stringToFieldJson_(str) {
+  private stringToFieldJson_(str: string): { text: string, type: string } | null {
     str = str.trim();
     if (str) {
       return {
@@ -1926,13 +1824,12 @@ class Block {
 
   /**
    * Add a value input, statement input or local variable to this block.
-   * @param {number} type One of Blockly.inputTypes.
-   * @param {string} name Language-neutral identifier which may used to find
-   *     this input again.  Should be unique to this block.
-   * @return {!Input} The input object created.
-   * @protected
+   * @param type One of Blockly.inputTypes.
+   * @param name Language-neutral identifier which may used to find this input
+   *     again.  Should be unique to this block.
+   * @return The input object created.
    */
-  appendInput_(type, name) {
+  protected appendInput_(type: number, name: string): Input {
     let connection = null;
     if (type === inputTypes.VALUE || type === inputTypes.STATEMENT) {
       connection = this.makeConnection_(type);
@@ -1940,7 +1837,10 @@ class Block {
     if (type === inputTypes.STATEMENT) {
       this.statementInputCount++;
     }
-    const input = new Input(type, name, this, connection);
+    // AnyDuringMigration because:  Argument of type 'Connection | null' is not
+    // assignable to parameter of type 'Connection'.
+    const input =
+      new Input(type, name, this, (connection as AnyDuringMigration));
     // Append input to list.
     this.inputList.push(input);
     return input;
@@ -1948,19 +1848,18 @@ class Block {
 
   /**
    * Move a named input to a different location on this block.
-   * @param {string} name The name of the input to move.
-   * @param {?string} refName Name of input that should be after the moved
-   *     input,
-   *   or null to be the input at the end.
+   * @param name The name of the input to move.
+   * @param refName Name of input that should be after the moved input, or null
+   *     to be the input at the end.
    */
-  moveInputBefore(name, refName) {
+  moveInputBefore(name: string, refName: string | null) {
     if (name === refName) {
       return;
     }
     // Find both inputs.
     let inputIndex = -1;
     let refIndex = refName ? -1 : this.inputList.length;
-    for (let i = 0, input; (input = this.inputList[i]); i++) {
+    for (let i = 0, input; input = this.inputList[i]; i++) {
       if (input.name === name) {
         inputIndex = i;
         if (refIndex !== -1) {
@@ -1984,11 +1883,10 @@ class Block {
 
   /**
    * Move a numbered input to a different location on this block.
-   * @param {number} inputIndex Index of the input to move.
-   * @param {number} refIndex Index of input that should be after the moved
-   *     input.
+   * @param inputIndex Index of the input to move.
+   * @param refIndex Index of input that should be after the moved input.
    */
-  moveNumberedInputBefore(inputIndex, refIndex) {
+  moveNumberedInputBefore(inputIndex: number, refIndex: number) {
     // Validate arguments.
     if (inputIndex === refIndex) {
       throw Error('Can\'t move input to itself.');
@@ -2011,15 +1909,14 @@ class Block {
 
   /**
    * Remove an input from this block.
-   * @param {string} name The name of the input.
-   * @param {boolean=} opt_quiet True to prevent an error if input is not
-   *     present.
-   * @return {boolean} True if operation succeeds, false if input is not present
-   *     and opt_quiet is true.
+   * @param name The name of the input.
+   * @param opt_quiet True to prevent an error if input is not present.
+   * @return True if operation succeeds, false if input is not present and
+   *     opt_quiet is true.
    * @throws {Error} if the input is not present and opt_quiet is not true.
    */
-  removeInput(name, opt_quiet) {
-    for (let i = 0, input; (input = this.inputList[i]); i++) {
+  removeInput(name: string, opt_quiet?: boolean): boolean {
+    for (let i = 0, input; input = this.inputList[i]; i++) {
       if (input.name === name) {
         if (input.type === inputTypes.STATEMENT) {
           this.statementInputCount--;
@@ -2037,11 +1934,11 @@ class Block {
 
   /**
    * Fetches the named input object.
-   * @param {string} name The name of the input.
-   * @return {?Input} The input object, or null if input does not exist.
+   * @param name The name of the input.
+   * @return The input object, or null if input does not exist.
    */
-  getInput(name) {
-    for (let i = 0, input; (input = this.inputList[i]); i++) {
+  getInput(name: string): Input | null {
+    for (let i = 0, input; input = this.inputList[i]; i++) {
       if (input.name === name) {
         return input;
       }
@@ -2052,76 +1949,76 @@ class Block {
 
   /**
    * Fetches the block attached to the named input.
-   * @param {string} name The name of the input.
-   * @return {?Block} The attached value block, or null if the input is
-   *     either disconnected or if the input does not exist.
+   * @param name The name of the input.
+   * @return The attached value block, or null if the input is either
+   *     disconnected or if the input does not exist.
    */
-  getInputTargetBlock(name) {
+  getInputTargetBlock(name: string): Block | null {
     const input = this.getInput(name);
     return input && input.connection && input.connection.targetBlock();
   }
 
   /**
    * Returns the comment on this block (or null if there is no comment).
-   * @return {?string} Block's comment.
+   * @return Block's comment.
    */
-  getCommentText() {
+  getCommentText(): string | null {
     return this.commentModel.text;
   }
 
   /**
    * Set this block's comment text.
-   * @param {?string} text The text, or null to delete.
+   * @param text The text, or null to delete.
    */
-  setCommentText(text) {
+  setCommentText(text: string | null) {
     if (this.commentModel.text === text) {
       return;
     }
-    eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
-        this, 'comment', null, this.commentModel.text, text));
+    eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))!
+      (this, 'comment', null, this.commentModel.text, text));
     this.commentModel.text = text;
-    this.comment = text;  // For backwards compatibility.
+    // AnyDuringMigration because:  Type 'string | null' is not assignable to
+    // type 'string | Comment'.
+    this.comment = text as AnyDuringMigration;
   }
+  // For backwards compatibility.
 
   /**
    * Set this block's warning text.
-   * @param {?string} _text The text, or null to delete.
-   * @param {string=} _opt_id An optional ID for the warning text to be able to
-   *     maintain multiple warnings.
+   * @param _text The text, or null to delete.
+   * @param _opt_id An optional ID for the warning text to be able to maintain
+   *     multiple warnings.
    */
-  setWarningText(_text, _opt_id) {
-    // NOP.
-  }
+  setWarningText(_text: string | null, _opt_id?: string) {}
+  // NOP.
 
   /**
    * Give this block a mutator dialog.
-   * @param {Mutator} _mutator A mutator dialog instance or null to
-   *     remove.
+   * @param _mutator A mutator dialog instance or null to remove.
    */
-  setMutator(_mutator) {
-    // NOP.
-  }
+  setMutator(_mutator: Mutator) {}
+  // NOP.
 
   /**
    * Return the coordinates of the top-left corner of this block relative to the
    * drawing surface's origin (0,0), in workspace units.
-   * @return {!Coordinate} Object with .x and .y properties.
+   * @return Object with .x and .y properties.
    */
-  getRelativeToSurfaceXY() {
+  getRelativeToSurfaceXY(): Coordinate {
     return this.xy_;
   }
 
   /**
    * Move a block by a relative offset.
-   * @param {number} dx Horizontal offset, in workspace units.
-   * @param {number} dy Vertical offset, in workspace units.
+   * @param dx Horizontal offset, in workspace units.
+   * @param dy Vertical offset, in workspace units.
    */
-  moveBy(dx, dy) {
+  moveBy(dx: number, dy: number) {
     if (this.parentBlock_) {
       throw Error('Block has parent.');
     }
-    const event = /** @type {!BlockMove} */ (
-        new (eventUtils.get(eventUtils.BLOCK_MOVE))(this));
+    const event =
+      new (eventUtils.get(eventUtils.BLOCK_MOVE))!(this) as BlockMove;
     this.xy_.translate(dx, dy);
     event.recordNew();
     eventUtils.fire(event);
@@ -2129,23 +2026,21 @@ class Block {
 
   /**
    * Create a connection of the specified type.
-   * @param {number} type The type of the connection to create.
-   * @return {!Connection} A new connection of the specified type.
-   * @protected
+   * @param type The type of the connection to create.
+   * @return A new connection of the specified type.
    */
-  makeConnection_(type) {
+  protected makeConnection_(type: number): Connection {
     return new Connection(this, type);
   }
 
   /**
    * Recursively checks whether all statement and value inputs are filled with
    * blocks. Also checks all following statement blocks in this stack.
-   * @param {boolean=} opt_shadowBlocksAreFilled An optional argument
-   *     controlling whether shadow blocks are counted as filled. Defaults to
-   *     true.
-   * @return {boolean} True if all inputs are filled, false otherwise.
+   * @param opt_shadowBlocksAreFilled An optional argument controlling whether
+   *     shadow blocks are counted as filled. Defaults to true.
+   * @return True if all inputs are filled, false otherwise.
    */
-  allInputsFilled(opt_shadowBlocksAreFilled) {
+  allInputsFilled(opt_shadowBlocksAreFilled?: boolean): boolean {
     // Account for the shadow block filledness toggle.
     if (opt_shadowBlocksAreFilled === undefined) {
       opt_shadowBlocksAreFilled = true;
@@ -2155,7 +2050,7 @@ class Block {
     }
 
     // Recursively check each input block of the current block.
-    for (let i = 0, input; (input = this.inputList[i]); i++) {
+    for (let i = 0, input; input = this.inputList[i]; i++) {
       if (!input.connection) {
         continue;
       }
@@ -2181,9 +2076,9 @@ class Block {
    * Intended to on be used in console logs and errors. If you need a string
    * that uses the user's native language (including block text, field values,
    * and child blocks), use [toString()]{@link Block#toString}.
-   * @return {string} The description.
+   * @return The description.
    */
-  toDevString() {
+  toDevString(): string {
     let msg = this.type ? '"' + this.type + '" block' : 'Block';
     if (this.id) {
       msg += ' (id="' + this.id + '")';
@@ -2191,34 +2086,8 @@ class Block {
     return msg;
   }
 }
-
-/**
- * @typedef {{
- *            text:?string,
- *            pinned:boolean,
- *            size:Size
- *          }}
- */
-Block.CommentModel;
-
-/**
- * An optional callback method to use whenever the block's parent workspace
- * changes. This is usually only called from the constructor, the block type
- * initializer function, or an extension initializer function.
- * @type {undefined|?function(Abstract)}
- */
-Block.prototype.onchange;
-
-/**
- * The language-neutral ID given to the collapsed input.
- * @const {string}
- */
-Block.COLLAPSED_INPUT_NAME = constants.COLLAPSED_INPUT_NAME;
-
-/**
- * The language-neutral ID given to the collapsed field.
- * @const {string}
- */
-Block.COLLAPSED_FIELD_NAME = constants.COLLAPSED_FIELD_NAME;
-
-exports.Block = Block;
+export interface CommentModel {
+  text: string | null;
+  pinned: boolean;
+  size: Size;
+}

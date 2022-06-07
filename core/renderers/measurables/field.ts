@@ -1,71 +1,64 @@
 /**
+ * @fileoverview Objects representing a field in a row of a rendered
+ * block.
+ */
+
+/**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Objects representing a field in a row of a rendered
- * block.
- */
 
 /**
  * Objects representing a field in a row of a rendered
  * block.
  * @class
  */
-goog.module('Blockly.blockRendering.Field');
 
 /* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 /* eslint-disable-next-line no-unused-vars */
-const {Field: BlocklyField} = goog.requireType('Blockly.Field');
+import { Field as BlocklyField } from '../../field.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Input} = goog.requireType('Blockly.Input');
-const {Measurable} = goog.require('Blockly.blockRendering.Measurable');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+import { Input } from '../../input.js';
+
+import { ConstantProvider } from '../common/constants.js';
+
+import { Measurable } from './base.js';
+import { Types } from './types.js';
 
 
 /**
  * An object containing information about the space a field takes up during
  * rendering
  * @struct
- * @extends {Measurable}
  * @alias Blockly.blockRendering.Field
  */
-class Field extends Measurable {
+export class Field extends Measurable {
+  isEditable: boolean;
+  flipRtl: boolean;
+  override height: number;
+  override width: number;
+
   /**
-   * @param {!ConstantProvider} constants The rendering
-   *   constants provider.
-   * @param {!BlocklyField} field The field to measure and store information
-   *     for.
-   * @param {!Input} parentInput The parent input for the field.
-   * @package
+   * @param constants The rendering constants provider.
+   * @param field The field to measure and store information for.
+   * @param parentInput The parent input for the field.
    */
-  constructor(constants, field, parentInput) {
+  constructor(
+    constants: ConstantProvider, public field: BlocklyField,
+    public parentInput: Input) {
     super(constants);
 
-    /** @type {!BlocklyField} */
-    this.field = field;
-
-    /** @type {boolean} */
     this.isEditable = field.EDITABLE;
 
-    /** @type {boolean} */
     this.flipRtl = field.getFlipRtl();
     this.type |= Types.FIELD;
 
     const size = this.field.getSize();
 
-    /** @type {number} */
     this.height = size.height;
 
-    /** @type {number} */
     this.width = size.width;
-
-    /** @type {!Input} */
-    this.parentInput = parentInput;
   }
 }
-
-exports.Field = Field;

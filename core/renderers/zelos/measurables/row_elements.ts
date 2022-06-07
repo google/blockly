@@ -1,46 +1,42 @@
 /**
+ * @fileoverview Zelos specific objects representing elements in a row of a
+ * rendered block.
+ */
+
+/**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Zelos specific objects representing elements in a row of a
- * rendered block.
- */
 
 /**
  * Zelos specific objects representing elements in a row of a
  * rendered block.
  * @class
  */
-goog.module('Blockly.zelos.RightConnectionShape');
 
 /* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const {Measurable} = goog.require('Blockly.blockRendering.Measurable');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+import { ConstantProvider } from '../../../renderers/common/constants.js';
+import { Measurable } from '../../../renderers/measurables/base.js';
+import { Types } from '../../../renderers/measurables/types.js';
 
 
 /**
  * An object containing information about the space a right connection shape
  * takes up during rendering.
- * @extends {Measurable}
  * @alias Blockly.zelos.RightConnectionShape
  */
-class RightConnectionShape extends Measurable {
-  /**
-   * @param {!ConstantProvider} constants The rendering
-   *   constants provider.
-   * @package
-   */
-  constructor(constants) {
+export class RightConnectionShape extends Measurable {
+  // Size is dynamic
+  override height = 0;
+  override width = 0;
+
+  /** @param constants The rendering constants provider. */
+  constructor(constants: ConstantProvider) {
     super(constants);
-    this.type |= Types.getType('RIGHT_CONNECTION');
-    // Size is dynamic
-    this.height = 0;
-    this.width = 0;
+    // AnyDuringMigration because:  Property 'getType' does not exist on type
+    // 'typeof Types'.
+    this.type |= (Types as AnyDuringMigration).getType('RIGHT_CONNECTION');
   }
 }
-
-exports.RightConnectionShape = RightConnectionShape;

@@ -1,20 +1,19 @@
 /**
+ * @fileoverview Holds constants that have to do with the sprites that create
+ * the trashcan and zoom controls.
+ */
+
+/**
  * @license
  * Copyright 2022 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Holds constants that have to do with the sprites that create
- * the trashcan and zoom controls.
- */
-'use strict';
 
 /**
  * Holds constants that have to do with the sprites that create the trashcan
  * and zoom controls.
  */
-goog.module('Blockly.sprite');
 
 
 /**
@@ -22,9 +21,8 @@ goog.module('Blockly.sprite');
  * as well as the zoom controls.
  * @alias Blockly.sprite.SPRITE
  */
-const SPRITE = {
+export const SPRITE = {
   width: 96,
   height: 124,
   url: 'sprites.png',
 };
-exports.SPRITE = SPRITE;

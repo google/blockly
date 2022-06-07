@@ -1,66 +1,60 @@
+/** @fileoverview Events fired as a result of element select action. */
+
 /**
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Events fired as a result of element select action.
- */
-'use strict';
 
 /**
  * Events fired as a result of element select action.
  * @class
  */
-goog.module('Blockly.Events.Selected');
 
-const eventUtils = goog.require('Blockly.Events.utils');
-const registry = goog.require('Blockly.registry');
-const {UiBase} = goog.require('Blockly.Events.UiBase');
+import * as registry from '../registry.js';
+
+import { UiBase } from './events_ui_base.js';
+import * as eventUtils from './utils.js';
 
 
 /**
  * Class for a selected event.
- * @extends {UiBase}
  * @alias Blockly.Events.Selected
  */
-class Selected extends UiBase {
+export class Selected extends UiBase {
+  oldElementId?: string | null;
+  newElementId?: string | null;
+  override type: string;
+
   /**
-   * @param {?string=} opt_oldElementId The ID of the previously selected
-   *    element. Null if no element last selected. Undefined for a blank event.
-   * @param {?string=} opt_newElementId The ID of the selected element. Null if
-   *     no element currently selected (deselect). Undefined for a blank event.
-   * @param {string=} opt_workspaceId The workspace identifier for this event.
+   * @param opt_oldElementId The ID of the previously selected element. Null if
+   *     no element last selected. Undefined for a blank event.
+   * @param opt_newElementId The ID of the selected element. Null if no element
+   *     currently selected (deselect). Undefined for a blank event.
+   * @param opt_workspaceId The workspace identifier for this event.
    *    Null if no element previously selected. Undefined for a blank event.
    */
-  constructor(opt_oldElementId, opt_newElementId, opt_workspaceId) {
+  constructor(
+    opt_oldElementId?: string | null, opt_newElementId?: string | null,
+    opt_workspaceId?: string) {
     super(opt_workspaceId);
 
-    /**
-     * The id of the last selected element.
-     * @type {?string|undefined}
-     */
+    /** The id of the last selected element. */
     this.oldElementId = opt_oldElementId;
 
-    /**
-     * The id of the selected element.
-     * @type {?string|undefined}
-     */
+    /** The id of the selected element. */
     this.newElementId = opt_newElementId;
 
-    /**
-     * Type of this event.
-     * @type {string}
-     */
+    /** Type of this event. */
     this.type = eventUtils.SELECTED;
   }
 
   /**
    * Encode the event as JSON.
-   * @return {!Object} JSON representation.
+   * @return JSON representation.
    */
-  toJson() {
+  override toJson(): AnyDuringMigration {
     const json = super.toJson();
     json['oldElementId'] = this.oldElementId;
     json['newElementId'] = this.newElementId;
@@ -69,9 +63,9 @@ class Selected extends UiBase {
 
   /**
    * Decode the JSON event.
-   * @param {!Object} json JSON representation.
+   * @param json JSON representation.
    */
-  fromJson(json) {
+  override fromJson(json: AnyDuringMigration) {
     super.fromJson(json);
     this.oldElementId = json['oldElementId'];
     this.newElementId = json['newElementId'];
@@ -79,5 +73,3 @@ class Selected extends UiBase {
 }
 
 registry.register(registry.Type.EVENT, eventUtils.SELECTED, Selected);
-
-exports.Selected = Selected;

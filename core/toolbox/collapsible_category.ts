@@ -1,100 +1,95 @@
+/** @fileoverview A toolbox category used to organize blocks in the toolbox. */
+
 /**
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview A toolbox category used to organize blocks in the toolbox.
- */
-'use strict';
 
 /**
  * A toolbox category used to organize blocks in the toolbox.
  * @class
  */
-goog.module('Blockly.CollapsibleToolboxCategory');
 
-const aria = goog.require('Blockly.utils.aria');
-const dom = goog.require('Blockly.utils.dom');
-const registry = goog.require('Blockly.registry');
-const toolbox = goog.require('Blockly.utils.toolbox');
 /* eslint-disable-next-line no-unused-vars */
-const {ICollapsibleToolboxItem} = goog.require('Blockly.ICollapsibleToolboxItem');
+import { ICollapsibleToolboxItem } from '../interfaces/i_collapsible_toolbox_item.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IToolboxItem} = goog.requireType('Blockly.IToolboxItem');
+import { IToolbox } from '../interfaces/i_toolbox.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IToolbox} = goog.requireType('Blockly.IToolbox');
-const {ToolboxCategory} = goog.require('Blockly.ToolboxCategory');
-const {ToolboxSeparator} = goog.require('Blockly.ToolboxSeparator');
+import { IToolboxItem } from '../interfaces/i_toolbox_item.js';
+import * as registry from '../registry.js';
+import * as aria from '../utils/aria.js';
+import * as dom from '../utils/dom.js';
+import * as toolbox from '../utils/toolbox.js';
+
+import { ToolboxCategory } from './category.js';
+import { ToolboxSeparator } from './separator.js';
 
 
 /**
  * Class for a category in a toolbox that can be collapsed.
- * @implements {ICollapsibleToolboxItem}
  * @alias Blockly.CollapsibleToolboxCategory
  */
-class CollapsibleToolboxCategory extends ToolboxCategory {
+export class CollapsibleToolboxCategory extends ToolboxCategory implements
+  ICollapsibleToolboxItem {
+  /** Name used for registering a collapsible toolbox category. */
+  static override registrationName = 'collapsibleCategory';
+
+  /** Container for any child categories. */
+  protected subcategoriesDiv_: HTMLDivElement | null = null;
+
+  /** Whether or not the category should display its subcategories. */
+  protected expanded_ = false;
+
+  /** The child toolbox items for this category. */
+  protected toolboxItems_: IToolboxItem[] = [];
+  override flyoutItems_: AnyDuringMigration;
+  override isHidden_: AnyDuringMigration;
+
   /**
-   * @param {!toolbox.CategoryInfo} categoryDef The information needed
-   *     to create a category in the toolbox.
-   * @param {!IToolbox} toolbox The parent toolbox for the category.
-   * @param {ICollapsibleToolboxItem=} opt_parent The parent category or null if
-   *     the category does not have a parent.
+   * @param categoryDef The information needed to create a category in the
+   *     toolbox.
+   * @param toolbox The parent toolbox for the category.
+   * @param opt_parent The parent category or null if the category does not have
+   *     a parent.
    */
-  constructor(categoryDef, toolbox, opt_parent) {
+  constructor(
+    categoryDef: toolbox.CategoryInfo, toolbox: IToolbox,
+    opt_parent?: ICollapsibleToolboxItem) {
     super(categoryDef, toolbox, opt_parent);
-
-    /**
-     * Container for any child categories.
-     * @type {?HTMLDivElement}
-     * @protected
-     */
-    this.subcategoriesDiv_ = null;
-
-    /**
-     * Whether or not the category should display its subcategories.
-     * @type {boolean}
-     * @protected
-     */
-    this.expanded_ = false;
-
-    /**
-     * The child toolbox items for this category.
-     * @type {!Array<!IToolboxItem>}
-     * @protected
-     */
-    this.toolboxItems_ = [];
   }
 
-  /**
-   * @override
-   */
-  makeDefaultCssConfig_() {
+  override makeDefaultCssConfig_() {
     const cssConfig = super.makeDefaultCssConfig_();
-    cssConfig['contents'] = 'blocklyToolboxContents';
+    (cssConfig as AnyDuringMigration)['contents'] = 'blocklyToolboxContents';
     return cssConfig;
   }
 
-  /**
-   * @override
-   */
-  parseContents_(categoryDef) {
-    const contents = categoryDef['contents'];
+  override parseContents_(categoryDef: toolbox.CategoryInfo) {
+    // AnyDuringMigration because:  Element implicitly has an 'any' type because
+    // expression of type '"contents"' can't be used to index type
+    // 'CategoryInfo'.
+    const contents = (categoryDef as AnyDuringMigration)['contents'];
     let prevIsFlyoutItem = true;
 
-    if (categoryDef['custom']) {
-      this.flyoutItems_ = categoryDef['custom'];
+    // AnyDuringMigration because:  Element implicitly has an 'any' type because
+    // expression of type '"custom"' can't be used to index type 'CategoryInfo'.
+    if ((categoryDef as AnyDuringMigration)['custom']) {
+      // AnyDuringMigration because:  Element implicitly has an 'any' type
+      // because expression of type '"custom"' can't be used to index type
+      // 'CategoryInfo'.
+      this.flyoutItems_ = (categoryDef as AnyDuringMigration)['custom'];
     } else if (contents) {
       for (let i = 0; i < contents.length; i++) {
         const itemDef = contents[i];
         // Separators can exist as either a flyout item or a toolbox item so
         // decide where it goes based on the type of the previous item.
         if (!registry.hasItem(registry.Type.TOOLBOX_ITEM, itemDef['kind']) ||
-            (itemDef['kind'].toLowerCase() ===
-                 ToolboxSeparator.registrationName &&
-             prevIsFlyoutItem)) {
-          const flyoutItem = /** @type {toolbox.FlyoutItemInfo} */ (itemDef);
+          itemDef['kind'].toLowerCase() ===
+          ToolboxSeparator.registrationName &&
+          prevIsFlyoutItem) {
+          const flyoutItem = itemDef as toolbox.FlyoutItemInfo;
           this.flyoutItems_.push(flyoutItem);
           prevIsFlyoutItem = true;
         } else {
@@ -107,59 +102,50 @@ class CollapsibleToolboxCategory extends ToolboxCategory {
 
   /**
    * Creates a toolbox item and adds it to the list of toolbox items.
-   * @param {!toolbox.ToolboxItemInfo} itemDef The information needed
-   *     to create a toolbox item.
-   * @private
+   * @param itemDef The information needed to create a toolbox item.
    */
-  createToolboxItem_(itemDef) {
+  private createToolboxItem_(itemDef: toolbox.ToolboxItemInfo) {
     let registryName = itemDef['kind'];
-    const categoryDef = /** @type {!toolbox.CategoryInfo} */ (itemDef);
-
+    const categoryDef = itemDef as toolbox.CategoryInfo;
     // Categories that are collapsible are created using a class registered
     // under a different name.
     if (registryName.toUpperCase() == 'CATEGORY' &&
-        toolbox.isCategoryCollapsible(categoryDef)) {
+      toolbox.isCategoryCollapsible(categoryDef)) {
       registryName = CollapsibleToolboxCategory.registrationName;
     }
     const ToolboxItemClass =
-        registry.getClass(registry.Type.TOOLBOX_ITEM, registryName);
+      registry.getClass(registry.Type.TOOLBOX_ITEM, registryName);
     const toolboxItem =
-        new ToolboxItemClass(itemDef, this.parentToolbox_, this);
+      new ToolboxItemClass!(itemDef, this.parentToolbox, this);
     this.toolboxItems_.push(toolboxItem);
   }
 
-  /**
-   * @override
-   */
-  init() {
+  override init() {
     super.init();
 
     this.setExpanded(
-        this.toolboxItemDef_['expanded'] === 'true' ||
-        this.toolboxItemDef_['expanded']);
+      (this.toolboxItemDef_ as AnyDuringMigration)['expanded'] === 'true' ||
+      (this.toolboxItemDef_ as AnyDuringMigration)['expanded']);
   }
 
-  /**
-   * @override
-   */
-  createDom_() {
+  override createDom_() {
     super.createDom_();
 
     const subCategories = this.getChildToolboxItems();
     this.subcategoriesDiv_ = this.createSubCategoriesDom_(subCategories);
     aria.setRole(this.subcategoriesDiv_, aria.Role.GROUP);
-    this.htmlDiv_.appendChild(this.subcategoriesDiv_);
+    this.htmlDiv_!.appendChild(this.subcategoriesDiv_);
 
-    return this.htmlDiv_;
+    return this.htmlDiv_!;
   }
 
-  /**
-   * @override
-   */
-  createIconDom_() {
+  override createIconDom_() {
     const toolboxIcon = document.createElement('span');
-    if (!this.parentToolbox_.isHorizontal()) {
-      dom.addClass(toolboxIcon, this.cssConfig_['icon']);
+    if (!this.parentToolbox.isHorizontal()) {
+      // AnyDuringMigration because:  Argument of type 'string | undefined' is
+      // not assignable to parameter of type 'string'.
+      dom.addClass(
+        toolboxIcon, (this.cssConfig_ as AnyDuringMigration)['icon']);
       toolboxIcon.style.visibility = 'visible';
     }
 
@@ -169,22 +155,22 @@ class CollapsibleToolboxCategory extends ToolboxCategory {
 
   /**
    * Create the DOM for all subcategories.
-   * @param {!Array<!IToolboxItem>} subcategories The subcategories.
-   * @return {!HTMLDivElement} The div holding all the subcategories.
-   * @protected
+   * @param subcategories The subcategories.
+   * @return The div holding all the subcategories.
    */
-  createSubCategoriesDom_(subcategories) {
-    const contentsContainer =
-        /** @type {!HTMLDivElement} */ (document.createElement('div'));
-    dom.addClass(contentsContainer, this.cssConfig_['contents']);
+  protected createSubCategoriesDom_(subcategories: IToolboxItem[]):
+    HTMLDivElement {
+    const contentsContainer = (document.createElement('div'));
+    dom.addClass(
+      contentsContainer, (this.cssConfig_ as AnyDuringMigration)['contents']);
 
     for (let i = 0; i < subcategories.length; i++) {
       const newCategory = subcategories[i];
       newCategory.init();
       const newCategoryDiv = newCategory.getDiv();
-      contentsContainer.appendChild(newCategoryDiv);
+      contentsContainer.appendChild(newCategoryDiv!);
       if (newCategory.getClickTarget) {
-        newCategory.getClickTarget().setAttribute('id', newCategory.getId());
+        newCategory.getClickTarget()?.setAttribute('id', newCategory.getId());
       }
     }
     return contentsContainer;
@@ -192,33 +178,28 @@ class CollapsibleToolboxCategory extends ToolboxCategory {
 
   /**
    * Opens or closes the current category.
-   * @param {boolean} isExpanded True to expand the category, false to close.
-   * @public
+   * @param isExpanded True to expand the category, false to close.
    */
-  setExpanded(isExpanded) {
+  setExpanded(isExpanded: boolean) {
     if (this.expanded_ === isExpanded) {
       return;
     }
     this.expanded_ = isExpanded;
     if (isExpanded) {
-      this.subcategoriesDiv_.style.display = 'block';
+      this.subcategoriesDiv_!.style.display = 'block';
       this.openIcon_(this.iconDom_);
     } else {
-      this.subcategoriesDiv_.style.display = 'none';
+      this.subcategoriesDiv_!.style.display = 'none';
       this.closeIcon_(this.iconDom_);
     }
     aria.setState(
-        /** @type {!HTMLDivElement} */ (this.htmlDiv_), aria.State.EXPANDED,
-        isExpanded);
+      this.htmlDiv_ as HTMLDivElement, aria.State.EXPANDED, isExpanded);
 
-    this.parentToolbox_.handleToolboxItemResize();
+    this.parentToolbox.handleToolboxItemResize();
   }
 
-  /**
-   * @override
-   */
-  setVisible_(isVisible) {
-    this.htmlDiv_.style.display = isVisible ? 'block' : 'none';
+  override setVisible_(isVisible: boolean) {
+    this.htmlDiv_!.style.display = isVisible ? 'block' : 'none';
     const childToolboxItems = this.getChildToolboxItems();
     for (let i = 0; i < childToolboxItems.length; i++) {
       const child = childToolboxItems[i];
@@ -226,86 +207,58 @@ class CollapsibleToolboxCategory extends ToolboxCategory {
     }
     this.isHidden_ = !isVisible;
 
-    if (this.parentToolbox_.getSelectedItem() === this) {
-      this.parentToolbox_.clearSelection();
+    if (this.parentToolbox.getSelectedItem() === this) {
+      this.parentToolbox.clearSelection();
     }
   }
 
   /**
    * Whether the category is expanded to show its child subcategories.
-   * @return {boolean} True if the toolbox item shows its children, false if it
-   *     is collapsed.
-   * @public
+   * @return True if the toolbox item shows its children, false if it is
+   *     collapsed.
    */
-  isExpanded() {
+  isExpanded(): boolean {
     return this.expanded_;
   }
 
-  /**
-   * @override
-   */
-  isCollapsible() {
+  override isCollapsible() {
     return true;
   }
 
-  /**
-   * @override
-   */
-  onClick(_e) {
+  override onClick(_e: Event) {
     this.toggleExpanded();
   }
 
-  /**
-   * Toggles whether or not the category is expanded.
-   * @public
-   */
+  /** Toggles whether or not the category is expanded. */
   toggleExpanded() {
     this.setExpanded(!this.expanded_);
   }
 
-  /**
-   * @override
-   */
-  getDiv() {
+  override getDiv() {
     return this.htmlDiv_;
   }
 
   /**
    * Gets any children toolbox items. (ex. Gets the subcategories)
-   * @return {!Array<!IToolboxItem>} The child toolbox items.
+   * @return The child toolbox items.
    */
-  getChildToolboxItems() {
+  getChildToolboxItems(): IToolboxItem[] {
     return this.toolboxItems_;
   }
 }
-
-/**
- * All the CSS class names that are used to create a collapsible
- * category. This is all the properties from the regular category plus contents.
- * @typedef {{
- *            container:?string,
- *            row:?string,
- *            rowcontentcontainer:?string,
- *            icon:?string,
- *            label:?string,
- *            selected:?string,
- *            openicon:?string,
- *            closedicon:?string,
- *            contents:?string
- *          }}
- */
-CollapsibleToolboxCategory.CssConfig;
-
-/**
- * Name used for registering a collapsible toolbox category.
- * @type {string}
- * @override
- */
-CollapsibleToolboxCategory.registrationName = 'collapsibleCategory';
+export interface CssConfig {
+  container: string | null;
+  row: string | null;
+  rowcontentcontainer: string | null;
+  icon: string | null;
+  label: string | null;
+  selected: string | null;
+  openicon: string | null;
+  closedicon: string | null;
+  contents: string | null;
+}
 
 
 registry.register(
-    registry.Type.TOOLBOX_ITEM, CollapsibleToolboxCategory.registrationName,
-    CollapsibleToolboxCategory);
-
-exports.CollapsibleToolboxCategory = CollapsibleToolboxCategory;
+  registry.Type.TOOLBOX_ITEM, CollapsibleToolboxCategory.registrationName,
+  CollapsibleToolboxCategory);

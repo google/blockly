@@ -1,174 +1,162 @@
 /**
+ * @fileoverview This file is a universal registry that provides generic methods
+ *    for registering and unregistering different types of classes.
+ */
+
+/**
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview This file is a universal registry that provides generic methods
- *    for registering and unregistering different types of classes.
- */
-'use strict';
 
 /**
  * This file is a universal registry that provides generic methods
  *    for registering and unregistering different types of classes.
  * @namespace Blockly.registry
  */
-goog.module('Blockly.registry');
 
 /* eslint-disable-next-line no-unused-vars */
-const {Abstract} = goog.requireType('Blockly.Events.Abstract');
+import { Abstract } from './events/events_abstract.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Cursor} = goog.requireType('Blockly.Cursor');
+import { Field } from './field.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Field} = goog.requireType('Blockly.Field');
+import { IBlockDragger } from './interfaces/i_block_dragger.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IBlockDragger} = goog.requireType('Blockly.IBlockDragger');
+import { IConnectionChecker } from './interfaces/i_connection_checker.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IConnectionChecker} = goog.requireType('Blockly.IConnectionChecker');
+import { IFlyout } from './interfaces/i_flyout.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IFlyout} = goog.requireType('Blockly.IFlyout');
+import { IMetricsManager } from './interfaces/i_metrics_manager.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IMetricsManager} = goog.requireType('Blockly.IMetricsManager');
+import { ISerializer } from './interfaces/i_serializer.js';
 /* eslint-disable-next-line no-unused-vars */
-const {ISerializer} = goog.requireType('Blockly.serialization.ISerializer');
+import { IToolbox } from './interfaces/i_toolbox.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IToolbox} = goog.requireType('Blockly.IToolbox');
+import { Cursor } from './keyboard_nav/cursor.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Options} = goog.requireType('Blockly.Options');
+import { Options } from './options.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Renderer} = goog.requireType('Blockly.blockRendering.Renderer');
+import { Renderer } from './renderers/common/renderer.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Theme} = goog.requireType('Blockly.Theme');
+import { Theme } from './theme.js';
 /* eslint-disable-next-line no-unused-vars */
-const {ToolboxItem} = goog.requireType('Blockly.ToolboxItem');
+import { ToolboxItem } from './toolbox/toolbox_item.js';
 
 
 /**
  * A map of maps. With the keys being the type and name of the class we are
  * registering and the value being the constructor function.
  * e.g. {'field': {'field_angle': Blockly.FieldAngle}}
- *
- * @type {!Object<string, !Object<string, (function(new:?)|!Object)>>}
  */
-const typeMap = Object.create(null);
-exports.TEST_ONLY = {typeMap};
+const typeMap: {
+  [key: string]:
+  { [key: string]: (new () => AnyDuringMigration) | AnyDuringMigration }
+} = Object.create(null);
+export const TEST_ONLY = { typeMap };
 
 /**
  * A map of maps. With the keys being the type and caseless name of the class we
  * are registring, and the value being the most recent cased name for that
  * registration.
- * @type {!Object<string, !Object<string, string>>}
  */
-const nameMap = Object.create(null);
+const nameMap: { [key: string]: { [key: string]: string } } = Object.create(null);
 
 /**
  * The string used to register the default class for a type of plugin.
- * @type {string}
  * @alias Blockly.registry.DEFAULT
  */
-const DEFAULT = 'default';
-exports.DEFAULT = DEFAULT;
+export const DEFAULT = 'default';
 
 /**
  * A name with the type of the element stored in the generic.
- * @template T
  * @alias Blockly.registry.Type
  */
-class Type {
-  /**
-   * @param {string} name The name of the registry type.
-   */
-  constructor(name) {
-    /**
-     * @type {string}
-     * @private
-     */
-    this.name_ = name;
-  }
+export class Type<T> {
+  static CONNECTION_CHECKER = new Type < IConnectionChecker > ('connectionChecker');
+  static CURSOR = new Type < Cursor > ('cursor');
+  static EVENT = new Type < Abstract > ('event');
+  static FIELD = new Type < Field > ('field');
+  static RENDERER = new Type < Renderer > ('renderer');
+  static TOOLBOX = new Type < IToolbox > ('toolbox');
+  static THEME = new Type < Theme > ('theme');
+  static TOOLBOX_ITEM = new Type < ToolboxItem > ('toolboxItem');
+  static FLYOUTS_VERTICAL_TOOLBOX = new Type < IFlyout > ('flyoutsVerticalToolbox');
+  static FLYOUTS_HORIZONTAL_TOOLBOX =
+    new Type < IFlyout > ('flyoutsHorizontalToolbox');
+  static METRICS_MANAGER = new Type < IMetricsManager > ('metricsManager');
+  static BLOCK_DRAGGER = new Type < IBlockDragger > ('blockDragger');
+  static SERIALIZER = new Type < ISerializer > ('serializer');
+
+  /** @param name The name of the registry type. */
+  constructor(private readonly name: string) {}
 
   /**
    * Returns the name of the type.
-   * @return {string} The name.
+   * @return The name.
    */
-  toString() {
-    return this.name_;
+  toString(): string {
+    return this.name;
   }
 }
-exports.Type = Type;
 
 
-/** @type {!Type<IConnectionChecker>} */
-Type.CONNECTION_CHECKER = new Type('connectionChecker');
+// Type.CONNECTION_CHECKER = new Type('connectionChecker');
 
-/** @type {!Type<Cursor>} */
-Type.CURSOR = new Type('cursor');
+// Type.CURSOR = new Type('cursor');
 
-/** @type {!Type<Abstract>} */
-Type.EVENT = new Type('event');
+// Type.EVENT = new Type('event');
 
-/** @type {!Type<Field>} */
-Type.FIELD = new Type('field');
+// Type.FIELD = new Type('field');
 
-/** @type {!Type<Renderer>} */
-Type.RENDERER = new Type('renderer');
+// Type.RENDERER = new Type('renderer');
 
-/** @type {!Type<IToolbox>} */
-Type.TOOLBOX = new Type('toolbox');
+// Type.TOOLBOX = new Type('toolbox');
 
-/** @type {!Type<Theme>} */
-Type.THEME = new Type('theme');
+// Type.THEME = new Type('theme');
 
-/** @type {!Type<ToolboxItem>} */
-Type.TOOLBOX_ITEM = new Type('toolboxItem');
+// Type.TOOLBOX_ITEM = new Type('toolboxItem');
 
-/** @type {!Type<IFlyout>} */
-Type.FLYOUTS_VERTICAL_TOOLBOX = new Type('flyoutsVerticalToolbox');
+// Type.FLYOUTS_VERTICAL_TOOLBOX = new Type('flyoutsVerticalToolbox');
 
-/** @type {!Type<IFlyout>} */
-Type.FLYOUTS_HORIZONTAL_TOOLBOX = new Type('flyoutsHorizontalToolbox');
+// Type.FLYOUTS_HORIZONTAL_TOOLBOX = new Type('flyoutsHorizontalToolbox');
 
-/** @type {!Type<IMetricsManager>} */
-Type.METRICS_MANAGER = new Type('metricsManager');
+// Type.METRICS_MANAGER = new Type('metricsManager');
 
-/** @type {!Type<IBlockDragger>} */
-Type.BLOCK_DRAGGER = new Type('blockDragger');
+// Type.BLOCK_DRAGGER = new Type('blockDragger');
 
-/**
- * @type {!Type<ISerializer>}
- * @package
- */
-Type.SERIALIZER = new Type('serializer');
+// Type.SERIALIZER = new Type('serializer');
 
 /**
  * Registers a class based on a type and name.
- * @param {string|!Type<T>} type The type of the plugin.
+ * @param type The type of the plugin.
  *     (e.g. Field, Renderer)
- * @param {string} name The plugin's name. (Ex. field_angle, geras)
- * @param {?function(new:T, ...?)|Object} registryItem The class or object to
- *     register.
- * @param {boolean=} opt_allowOverrides True to prevent an error when overriding
- *     an already registered item.
+ * @param name The plugin's name. (Ex. field_angle, geras)
+ * @param registryItem The class or object to register.
+ * @param opt_allowOverrides True to prevent an error when overriding an already
+ *     registered item.
  * @throws {Error} if the type or name is empty, a name with the given type has
  *     already been registered, or if the given class or object is not valid for
  *     its type.
- * @template T
  * @alias Blockly.registry.register
  */
-const register = function(type, name, registryItem, opt_allowOverrides) {
-  if ((!(type instanceof Type) && typeof type !== 'string') ||
-      String(type).trim() === '') {
+export function register<T>(
+  type: string | Type<T>, name: string,
+  registryItem: (new (...p1: AnyDuringMigration[]) => T) | null |
+    AnyDuringMigration,
+  opt_allowOverrides?: boolean): void {
+  if (!(type instanceof Type) && typeof type !== 'string' ||
+    String(type).trim() === '') {
     throw Error(
-        'Invalid type "' + type + '". The type must be a' +
-        ' non-empty string or a Blockly.registry.Type.');
+      'Invalid type "' + type + '". The type must be a' +
+      ' non-empty string or a Blockly.registry.Type.');
   }
   type = String(type).toLowerCase();
 
-  if ((typeof name !== 'string') || (name.trim() === '')) {
+  if (typeof name !== 'string' || name.trim() === '') {
     throw Error(
-        'Invalid name "' + name + '". The name must be a' +
-        ' non-empty string.');
+      'Invalid name "' + name + '". The name must be a' +
+      ' non-empty string.');
   }
   const caselessName = name.toLowerCase();
   if (!registryItem) {
@@ -188,22 +176,21 @@ const register = function(type, name, registryItem, opt_allowOverrides) {
   // Don't throw an error if opt_allowOverrides is true.
   if (!opt_allowOverrides && typeRegistry[caselessName]) {
     throw Error(
-        'Name "' + caselessName + '" with type "' + type +
-        '" already registered.');
+      'Name "' + caselessName + '" with type "' + type +
+      '" already registered.');
   }
   typeRegistry[caselessName] = registryItem;
   nameRegistry[caselessName] = name;
-};
-exports.register = register;
+}
 
 /**
  * Checks the given registry item for properties that are required based on the
  * type.
- * @param {string} type The type of the plugin. (e.g. Field, Renderer)
- * @param {Function|Object} registryItem A class or object that we are checking
- *     for the required properties.
+ * @param type The type of the plugin. (e.g. Field, Renderer)
+ * @param registryItem A class or object that we are checking for the required
+ *     properties.
  */
-const validate = function(type, registryItem) {
+function validate(type: string, registryItem: Function | AnyDuringMigration) {
   switch (type) {
     case String(Type.FIELD):
       if (typeof registryItem.fromJson !== 'function') {
@@ -211,44 +198,43 @@ const validate = function(type, registryItem) {
       }
       break;
   }
-};
+}
 
 /**
  * Unregisters the registry item with the given type and name.
- * @param {string|!Type<T>} type The type of the plugin.
+ * @param type The type of the plugin.
  *     (e.g. Field, Renderer)
- * @param {string} name The plugin's name. (Ex. field_angle, geras)
- * @template T
+ * @param name The plugin's name. (Ex. field_angle, geras)
  * @alias Blockly.registry.unregister
  */
-const unregister = function(type, name) {
+export function unregister<T>(type: string | Type<T>, name: string) {
   type = String(type).toLowerCase();
   name = name.toLowerCase();
   const typeRegistry = typeMap[type];
   if (!typeRegistry || !typeRegistry[name]) {
     console.warn(
-        'Unable to unregister [' + name + '][' + type + '] from the ' +
-        'registry.');
+      'Unable to unregister [' + name + '][' + type + '] from the ' +
+      'registry.');
     return;
   }
   delete typeMap[type][name];
   delete nameMap[type][name];
-};
-exports.unregister = unregister;
+}
 
 /**
  * Gets the registry item for the given name and type. This can be either a
  * class or an object.
- * @param {string|!Type<T>} type The type of the plugin.
+ * @param type The type of the plugin.
  *     (e.g. Field, Renderer)
- * @param {string} name The plugin's name. (Ex. field_angle, geras)
- * @param {boolean=} opt_throwIfMissing Whether or not to throw an error if we
- *     are unable to find the plugin.
- * @return {?function(new:T, ...?)|Object} The class or object with the given
- *     name and type or null if none exists.
- * @template T
+ * @param name The plugin's name. (Ex. field_angle, geras)
+ * @param opt_throwIfMissing Whether or not to throw an error if we are unable
+ *     to find the plugin.
+ * @return The class or object with the given name and type or null if none
+ *     exists.
  */
-const getItem = function(type, name, opt_throwIfMissing) {
+function getItem<T>(
+  type: string | Type<T>, name: string, opt_throwIfMissing?: boolean):
+  (new (...p1: AnyDuringMigration[]) => T) | null | AnyDuringMigration {
   type = String(type).toLowerCase();
   name = name.toLowerCase();
   const typeRegistry = typeMap[type];
@@ -256,84 +242,80 @@ const getItem = function(type, name, opt_throwIfMissing) {
     const msg = 'Unable to find [' + name + '][' + type + '] in the registry.';
     if (opt_throwIfMissing) {
       throw new Error(
-          msg + ' You must require or register a ' + type + ' plugin.');
+        msg + ' You must require or register a ' + type + ' plugin.');
     } else {
       console.warn(msg);
     }
     return null;
   }
   return typeRegistry[name];
-};
+}
 
 /**
  * Returns whether or not the registry contains an item with the given type and
  * name.
- * @param {string|!Type<T>} type The type of the plugin.
+ * @param type The type of the plugin.
  *     (e.g. Field, Renderer)
- * @param {string} name The plugin's name. (Ex. field_angle, geras)
- * @return {boolean} True if the registry has an item with the given type and
- *     name, false otherwise.
- * @template T
+ * @param name The plugin's name. (Ex. field_angle, geras)
+ * @return True if the registry has an item with the given type and name, false
+ *     otherwise.
  * @alias Blockly.registry.hasItem
  */
-const hasItem = function(type, name) {
+export function hasItem<T>(type: string | Type<T>, name: string): boolean {
   type = String(type).toLowerCase();
   name = name.toLowerCase();
   const typeRegistry = typeMap[type];
   if (!typeRegistry) {
     return false;
   }
-  return !!(typeRegistry[name]);
-};
-exports.hasItem = hasItem;
+  return !!typeRegistry[name];
+}
 
 /**
  * Gets the class for the given name and type.
- * @param {string|!Type<T>} type The type of the plugin.
+ * @param type The type of the plugin.
  *     (e.g. Field, Renderer)
- * @param {string} name The plugin's name. (Ex. field_angle, geras)
- * @param {boolean=} opt_throwIfMissing Whether or not to throw an error if we
- *     are unable to find the plugin.
- * @return {?function(new:T, ...?)} The class with the given name and type or
- *     null if none exists.
- * @template T
+ * @param name The plugin's name. (Ex. field_angle, geras)
+ * @param opt_throwIfMissing Whether or not to throw an error if we are unable
+ *     to find the plugin.
+ * @return The class with the given name and type or null if none exists.
  * @alias Blockly.registry.getClass
  */
-const getClass = function(type, name, opt_throwIfMissing) {
-  return /** @type {?function(new:T, ...?)} */ (
-      getItem(type, name, opt_throwIfMissing));
-};
-exports.getClass = getClass;
+export function getClass<T>(
+  type: string | Type<T>, name: string, opt_throwIfMissing?: boolean):
+  (new (...p1: AnyDuringMigration[]) => T) | null {
+  return getItem(type, name, opt_throwIfMissing) as (
+    new (...p1: AnyDuringMigration[]) => T) |
+    null;
+}
 
 /**
  * Gets the object for the given name and type.
- * @param {string|!Type<T>} type The type of the plugin.
+ * @param type The type of the plugin.
  *     (e.g. Category)
- * @param {string} name The plugin's name. (Ex. logic_category)
- * @param {boolean=} opt_throwIfMissing Whether or not to throw an error if we
- *     are unable to find the object.
- * @return {?T} The object with the given name and type or null if none exists.
- * @template T
+ * @param name The plugin's name. (Ex. logic_category)
+ * @param opt_throwIfMissing Whether or not to throw an error if we are unable
+ *     to find the object.
+ * @return The object with the given name and type or null if none exists.
  * @alias Blockly.registry.getObject
  */
-const getObject = function(type, name, opt_throwIfMissing) {
-  return /** @type {T} */ (getItem(type, name, opt_throwIfMissing));
-};
-exports.getObject = getObject;
+export function getObject<T>(
+  type: string | Type<T>, name: string, opt_throwIfMissing?: boolean): T | null {
+  return getItem(type, name, opt_throwIfMissing) as T;
+}
 
 /**
  * Returns a map of items registered with the given type.
- * @param {string|!Type<T>} type The type of the plugin. (e.g. Category)
- * @param {boolean} opt_cased Whether or not to return a map with cased keys
- *     (rather than caseless keys). False by default.
- * @param {boolean=} opt_throwIfMissing Whether or not to throw an error if we
- *     are unable to find the object. False by default.
- * @return {?Object<string, ?T|?function(new:T, ...?)>} A map of objects with
- *     the given type, or null if none exists.
- * @template T
+ * @param type The type of the plugin. (e.g. Category)
+ * @param opt_cased Whether or not to return a map with cased keys (rather than
+ *     caseless keys). False by default.
+ * @param opt_throwIfMissing Whether or not to throw an error if we are unable
+ *     to find the object. False by default.
+ * @return A map of objects with the given type, or null if none exists.
  * @alias Blockly.registry.getAllItems
  */
-const getAllItems = function(type, opt_cased, opt_throwIfMissing) {
+export function getAllItems<T>(
+  type: string | Type<T>, opt_cased: boolean, opt_throwIfMissing?: boolean): { [key: string]: T | null | (new (...p1: AnyDuringMigration[]) => T) } | null {
   type = String(type).toLowerCase();
   const typeRegistry = typeMap[type];
   if (!typeRegistry) {
@@ -356,22 +338,21 @@ const getAllItems = function(type, opt_cased, opt_throwIfMissing) {
     casedRegistry[nameRegistry[key]] = typeRegistry[key];
   }
   return casedRegistry;
-};
-exports.getAllItems = getAllItems;
+}
 
 /**
  * Gets the class from Blockly options for the given type.
  * This is used for plugins that override a built in feature. (e.g. Toolbox)
- * @param {!Type<T>} type The type of the plugin.
- * @param {!Options} options The option object to check for the given
- *     plugin.
- * @param {boolean=} opt_throwIfMissing Whether or not to throw an error if we
- *     are unable to find the plugin.
- * @return {?function(new:T, ...?)} The class for the plugin.
- * @template T
+ * @param type The type of the plugin.
+ * @param options The option object to check for the given plugin.
+ * @param opt_throwIfMissing Whether or not to throw an error if we are unable
+ *     to find the plugin.
+ * @return The class for the plugin.
  * @alias Blockly.registry.getClassFromOptions
  */
-const getClassFromOptions = function(type, options, opt_throwIfMissing) {
+export function getClassFromOptions<T>(
+  type: Type<T>, options: Options, opt_throwIfMissing?: boolean):
+  (new (...p1: AnyDuringMigration[]) => T) | null {
   const typeName = type.toString();
   const plugin = options.plugins[typeName] || DEFAULT;
 
@@ -380,5 +361,4 @@ const getClassFromOptions = function(type, options, opt_throwIfMissing) {
     return plugin;
   }
   return getClass(type, plugin, opt_throwIfMissing);
-};
-exports.getClassFromOptions = getClassFromOptions;
+}

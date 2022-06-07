@@ -1,57 +1,52 @@
+/** @fileoverview Base class for all types of block events. */
+
 /**
  * @license
  * Copyright 2018 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Base class for all types of block events.
- */
-'use strict';
 
 /**
  * Base class for all types of block events.
  * @class
  */
-goog.module('Blockly.Events.BlockBase');
 
-const {Abstract: AbstractEvent} = goog.require('Blockly.Events.Abstract');
 /* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
+import { Block } from '../block.js';
+
+import { Abstract as AbstractEvent } from './events_abstract.js';
 
 
 /**
  * Abstract class for a block event.
- * @extends {AbstractEvent}
  * @alias Blockly.Events.BlockBase
  */
-class BlockBase extends AbstractEvent {
+export class BlockBase extends AbstractEvent {
+  override isBlank: AnyDuringMigration;
+  blockId: string;
+  override workspaceId: string;
+
   /**
-   * @param {!Block=} opt_block The block this event corresponds to.
+   * @param opt_block The block this event corresponds to.
    *     Undefined for a blank event.
    */
-  constructor(opt_block) {
+  constructor(opt_block?: Block) {
     super();
     this.isBlank = typeof opt_block === 'undefined';
 
-    /**
-     * The block ID for the block this event pertains to
-     * @type {string}
-     */
-    this.blockId = this.isBlank ? '' : opt_block.id;
+    /** The block ID for the block this event pertains to */
+    this.blockId = this.isBlank ? '' : opt_block!.id;
 
-    /**
-     * The workspace identifier for this event.
-     * @type {string}
-     */
-    this.workspaceId = this.isBlank ? '' : opt_block.workspace.id;
+    /** The workspace identifier for this event. */
+    this.workspaceId = this.isBlank ? '' : opt_block!.workspace?.id ?? '';
   }
 
   /**
    * Encode the event as JSON.
-   * @return {!Object} JSON representation.
+   * @return JSON representation.
    */
-  toJson() {
+  override toJson(): AnyDuringMigration {
     const json = super.toJson();
     json['blockId'] = this.blockId;
     return json;
@@ -59,12 +54,10 @@ class BlockBase extends AbstractEvent {
 
   /**
    * Decode the JSON event.
-   * @param {!Object} json JSON representation.
+   * @param json JSON representation.
    */
-  fromJson(json) {
+  override fromJson(json: AnyDuringMigration) {
     super.fromJson(json);
     this.blockId = json['blockId'];
   }
 }
-
-exports.BlockBase = BlockBase;

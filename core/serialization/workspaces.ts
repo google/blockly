@@ -1,67 +1,68 @@
 /**
+ * @fileoverview Contains top-level functions for serializing workspaces to
+ * plain JavaScript objects.
+ */
+
+/**
  * @license
  * Copyright 2021 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Contains top-level functions for serializing workspaces to
- * plain JavaScript objects.
- */
-'use strict';
 
 /**
  * Contains top-level functions for serializing workspaces to plain JavaScript
  * objects.
  * @namespace Blockly.serialization.workspaces
  */
-goog.module('Blockly.serialization.workspaces');
 
-const dom = goog.require('Blockly.utils.dom');
-const eventUtils = goog.require('Blockly.Events.utils');
-const registry = goog.require('Blockly.registry');
+import * as eventUtils from '../events/utils.js';
+import { ISerializer } from '../interfaces/i_serializer.js';
+import * as registry from '../registry.js';
+import * as dom from '../utils/dom.js';
 // eslint-disable-next-line no-unused-vars
-const {Workspace} = goog.require('Blockly.Workspace');
-const {WorkspaceSvg} = goog.require('Blockly.WorkspaceSvg');
+import { Workspace } from '../workspace.js';
+import { WorkspaceSvg } from '../workspace_svg.js';
 
 
 /**
  * Returns the state of the workspace as a plain JavaScript object.
- * @param {!Workspace} workspace The workspace to serialize.
- * @return {!Object<string, *>} The serialized state of the workspace.
+ * @param workspace The workspace to serialize.
+ * @return The serialized state of the workspace.
  * @alias Blockly.serialization.workspaces.save
  */
-const save = function(workspace) {
+export function save(workspace: Workspace): { [key: string]: AnyDuringMigration } {
   const state = Object.create(null);
   const serializerMap = registry.getAllItems(registry.Type.SERIALIZER, true);
   for (const key in serializerMap) {
-    const save = serializerMap[key].save(workspace);
+    const save = (serializerMap[key] as ISerializer)?.save(workspace);
     if (save) {
       state[key] = save;
     }
   }
   return state;
-};
-exports.save = save;
+}
 
 /**
  * Loads the variable represented by the given state into the given workspace.
- * @param {!Object<string, *>} state The state of the workspace to deserialize
- *     into the workspace.
- * @param {!Workspace} workspace The workspace to add the new state to.
- * @param {{recordUndo: (boolean|undefined)}=} param1
- *     recordUndo: If true, events triggered by this function will be undo-able
- *       by the user. False by default.
+ * @param state The state of the workspace to deserialize into the workspace.
+ * @param workspace The workspace to add the new state to.
+ * @param param1 recordUndo: If true, events triggered by this function will be
+ *     undo-able by the user. False by default.
  * @alias Blockly.serialization.workspaces.load
  */
-const load = function(state, workspace, {recordUndo = false} = {}) {
+export function load(
+  state: { [key: string]: AnyDuringMigration }, workspace: Workspace,
+  { recordUndo = false }: { recordUndo?: boolean } = {}) {
   const serializerMap = registry.getAllItems(registry.Type.SERIALIZER, true);
   if (!serializerMap) {
     return;
   }
 
   const deserializers = Object.entries(serializerMap)
-                            .sort((a, b) => b[1].priority - a[1].priority);
+    .sort(
+      (a, b) => (b[1] as ISerializer)!.priority -
+        (a[1] as ISerializer)!.priority);
 
   const prevRecordUndo = eventUtils.getRecordUndo();
   eventUtils.setRecordUndo(recordUndo);
@@ -78,15 +79,15 @@ const load = function(state, workspace, {recordUndo = false} = {}) {
   // We want to trigger clearing in reverse priority order so plugins don't end
   // up missing dependencies.
   for (const [, deserializer] of deserializers.reverse()) {
-    deserializer.clear(workspace);
+    (deserializer as ISerializer)?.clear(workspace);
   }
 
   // reverse() is destructive, so we have to re-reverse to correct the order.
   for (let [name, deserializer] of deserializers.reverse()) {
-    name = /** @type {string} */ (name);
+    name = name;
     const pluginState = state[name];
     if (pluginState) {
-      deserializer.load(state[name], workspace);
+      (deserializer as ISerializer)?.load(state[name], workspace);
     }
   }
 
@@ -95,9 +96,9 @@ const load = function(state, workspace, {recordUndo = false} = {}) {
   }
   dom.stopTextWidthCache();
 
-  eventUtils.fire(new (eventUtils.get(eventUtils.FINISHED_LOADING))(workspace));
+  eventUtils.fire(new (eventUtils.get(eventUtils.FINISHED_LOADING))!
+    (workspace));
 
   eventUtils.setGroup(existingGroup);
   eventUtils.setRecordUndo(prevRecordUndo);
-};
-exports.load = load;
+}

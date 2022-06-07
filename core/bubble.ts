@@ -1,180 +1,165 @@
+/** @fileoverview Object representing a UI bubble. */
+
 /**
  * @license
  * Copyright 2012 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Object representing a UI bubble.
- */
-'use strict';
 
 /**
  * Object representing a UI bubble.
  * @class
  */
-goog.module('Blockly.Bubble');
+/* eslint-disable-next-line no-unused-vars */
+// Unused import preserved for side-effects. Remove if unneeded.
+import './metrics_manager';
+// Unused import preserved for side-effects. Remove if unneeded.
+import './workspace';
 
-const Touch = goog.require('Blockly.Touch');
-const browserEvents = goog.require('Blockly.browserEvents');
-const dom = goog.require('Blockly.utils.dom');
-const math = goog.require('Blockly.utils.math');
-const userAgent = goog.require('Blockly.utils.userAgent');
 /* eslint-disable-next-line no-unused-vars */
-const {BlockDragSurfaceSvg} = goog.requireType('Blockly.BlockDragSurfaceSvg');
+import { BlockDragSurfaceSvg } from './block_drag_surface.js';
 /* eslint-disable-next-line no-unused-vars */
-const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+import { BlockSvg } from './block_svg.js';
+import * as browserEvents from './browser_events.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IBubble} = goog.require('Blockly.IBubble');
+import { IBubble } from './interfaces/i_bubble.js';
+import { ContainerRegion } from './metrics_manager.js';
+import { Scrollbar } from './scrollbar.js';
+import * as Touch from './touch.js';
+import { Coordinate } from './utils/coordinate.js';
+import * as dom from './utils/dom.js';
+import * as math from './utils/math.js';
+import { Size } from './utils/size.js';
+import { Svg } from './utils/svg.js';
+import * as userAgent from './utils/useragent.js';
 /* eslint-disable-next-line no-unused-vars */
-const {MetricsManager} = goog.requireType('Blockly.MetricsManager');
-const {Scrollbar} = goog.require('Blockly.Scrollbar');
-const {Size} = goog.require('Blockly.utils.Size');
-const {Svg} = goog.require('Blockly.utils.Svg');
-/* eslint-disable-next-line no-unused-vars */
-const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
-/** @suppress {extraRequire} */
-goog.require('Blockly.Workspace');
+import { WorkspaceSvg } from './workspace_svg.js';
 
 
 /**
  * Class for UI bubble.
- * @implements {IBubble}
  * @alias Blockly.Bubble
  */
-const Bubble = class {
+export class Bubble implements IBubble {
+  /** Width of the border around the bubble. */
+  static BORDER_WIDTH = 6;
+
   /**
-   * @param {!WorkspaceSvg} workspace The workspace on which to draw the
-   *     bubble.
-   * @param {!SVGElement} content SVG content for the bubble.
-   * @param {!SVGElement} shape SVG element to avoid eclipsing.
-   * @param {!Coordinate} anchorXY Absolute position of bubble's
-   *     anchor point.
-   * @param {?number} bubbleWidth Width of bubble, or null if not resizable.
-   * @param {?number} bubbleHeight Height of bubble, or null if not resizable.
+   * Determines the thickness of the base of the arrow in relation to the size
+   * of the bubble.  Higher numbers result in thinner arrows.
+   */
+  static ARROW_THICKNESS = 5;
+
+  /** The number of degrees that the arrow bends counter-clockwise. */
+  static ARROW_ANGLE = 20;
+
+  /**
+   * The sharpness of the arrow's bend.  Higher numbers result in smoother
+   * arrows.
+   */
+  static ARROW_BEND = 4;
+
+  /** Distance between arrow point and anchor point. */
+  static ANCHOR_RADIUS = 8;
+
+  /** Mouse up event data. */
+  private static onMouseUpWrapper_: browserEvents.Data | null = null;
+
+  /** Mouse move event data. */
+  private static onMouseMoveWrapper_: browserEvents.Data | null = null;
+  workspace_: AnyDuringMigration;
+  content_: AnyDuringMigration;
+  shape_: AnyDuringMigration;
+
+  /** Flag to stop incremental rendering during construction. */
+  private readonly rendered_: boolean;
+
+  /** The SVG group containing all parts of the bubble. */
+  // AnyDuringMigration because:  Type 'null' is not assignable to type
+  // 'SVGGElement'.
+  private bubbleGroup_: SVGGElement = null as AnyDuringMigration;
+
+  /**
+   * The SVG path for the arrow from the bubble to the icon on the block.
+   */
+  // AnyDuringMigration because:  Type 'null' is not assignable to type
+  // 'SVGPathElement'.
+  private bubbleArrow_: SVGPathElement = null as AnyDuringMigration;
+
+  /** The SVG rect for the main body of the bubble. */
+  // AnyDuringMigration because:  Type 'null' is not assignable to type
+  // 'SVGRectElement'.
+  private bubbleBack_: SVGRectElement = null as AnyDuringMigration;
+
+  /** The SVG group for the resize hash marks on some bubbles. */
+  // AnyDuringMigration because:  Type 'null' is not assignable to type
+  // 'SVGGElement'.
+  private resizeGroup_: SVGGElement = null as AnyDuringMigration;
+
+  /** Absolute coordinate of anchor point, in workspace coordinates. */
+  // AnyDuringMigration because:  Type 'null' is not assignable to type
+  // 'Coordinate'.
+  private anchorXY_: Coordinate = null as AnyDuringMigration;
+
+  /**
+   * Relative X coordinate of bubble with respect to the anchor's centre,
+   * in workspace units.
+   * In RTL mode the initial value is negated.
+   */
+  private relativeLeft_ = 0;
+
+  /**
+   * Relative Y coordinate of bubble with respect to the anchor's centre, in
+   * workspace units.
+   */
+  private relativeTop_ = 0;
+
+  /** Width of bubble, in workspace units. */
+  private width_ = 0;
+
+  /** Height of bubble, in workspace units. */
+  private height_ = 0;
+
+  /** Automatically position and reposition the bubble. */
+  private autoLayout_ = true;
+
+  /** Method to call on resize of bubble. */
+  private resizeCallback_: (() => AnyDuringMigration) | null = null;
+
+  /** Method to call on move of bubble. */
+  private moveCallback_: (() => AnyDuringMigration) | null = null;
+
+  /** Mouse down on bubbleBack_ event data. */
+  private onMouseDownBubbleWrapper_: browserEvents.Data | null = null;
+
+  /** Mouse down on resizeGroup_ event data. */
+  private onMouseDownResizeWrapper_: browserEvents.Data | null = null;
+
+  /**
+   * Describes whether this bubble has been disposed of (nodes and event
+   * listeners removed from the page) or not.
+   */
+  disposed = false;
+  arrow_radians_: AnyDuringMigration;
+
+  /**
+   * @param workspace The workspace on which to draw the bubble.
+   * @param content SVG content for the bubble.
+   * @param shape SVG element to avoid eclipsing.
+   * @param anchorXY Absolute position of bubble's anchor point.
+   * @param bubbleWidth Width of bubble, or null if not resizable.
+   * @param bubbleHeight Height of bubble, or null if not resizable.
    * @struct
    */
-  constructor(workspace, content, shape, anchorXY, bubbleWidth, bubbleHeight) {
+  constructor(
+    workspace: WorkspaceSvg, content: SVGElement, shape: SVGElement,
+    anchorXY: Coordinate, bubbleWidth: number | null,
+    bubbleHeight: number | null) {
+    this.rendered_ = false;
     this.workspace_ = workspace;
     this.content_ = content;
     this.shape_ = shape;
-
-    /**
-     * Flag to stop incremental rendering during construction.
-     * @type {boolean}
-     * @private
-     */
-    this.rendered_ = false;
-
-    /**
-     * The SVG group containing all parts of the bubble.
-     * @type {SVGGElement}
-     * @private
-     */
-    this.bubbleGroup_ = null;
-
-    /**
-     * The SVG path for the arrow from the bubble to the icon on the block.
-     * @type {SVGPathElement}
-     * @private
-     */
-    this.bubbleArrow_ = null;
-
-    /**
-     * The SVG rect for the main body of the bubble.
-     * @type {SVGRectElement}
-     * @private
-     */
-    this.bubbleBack_ = null;
-
-    /**
-     * The SVG group for the resize hash marks on some bubbles.
-     * @type {SVGGElement}
-     * @private
-     */
-    this.resizeGroup_ = null;
-
-    /**
-     * Absolute coordinate of anchor point, in workspace coordinates.
-     * @type {Coordinate}
-     * @private
-     */
-    this.anchorXY_ = null;
-
-    /**
-     * Relative X coordinate of bubble with respect to the anchor's centre,
-     * in workspace units.
-     * In RTL mode the initial value is negated.
-     * @type {number}
-     * @private
-     */
-    this.relativeLeft_ = 0;
-
-    /**
-     * Relative Y coordinate of bubble with respect to the anchor's centre, in
-     * workspace units.
-     * @type {number}
-     * @private
-     */
-    this.relativeTop_ = 0;
-
-    /**
-     * Width of bubble, in workspace units.
-     * @type {number}
-     * @private
-     */
-    this.width_ = 0;
-
-    /**
-     * Height of bubble, in workspace units.
-     * @type {number}
-     * @private
-     */
-    this.height_ = 0;
-
-    /**
-     * Automatically position and reposition the bubble.
-     * @type {boolean}
-     * @private
-     */
-    this.autoLayout_ = true;
-
-    /**
-     * Method to call on resize of bubble.
-     * @type {?function()}
-     * @private
-     */
-    this.resizeCallback_ = null;
-
-    /**
-     * Method to call on move of bubble.
-     * @type {?function()}
-     * @private
-     */
-    this.moveCallback_ = null;
-
-    /**
-     * Mouse down on bubbleBack_ event data.
-     * @type {?browserEvents.Data}
-     * @private
-     */
-    this.onMouseDownBubbleWrapper_ = null;
-
-    /**
-     * Mouse down on resizeGroup_ event data.
-     * @type {?browserEvents.Data}
-     * @private
-     */
-    this.onMouseDownResizeWrapper_ = null;
-
-    /**
-     * Describes whether this bubble has been disposed of (nodes and event
-     * listeners removed from the page) or not.
-     * @type {boolean}
-     * @package
-     */
-    this.disposed = false;
 
     let angle = Bubble.ARROW_ANGLE;
     if (this.workspace_.RTL) {
@@ -184,11 +169,11 @@ const Bubble = class {
 
     const canvas = workspace.getBubbleCanvas();
     canvas.appendChild(
-        this.createDom_(content, !!(bubbleWidth && bubbleHeight)));
+      this.createDom_(content, !!(bubbleWidth && bubbleHeight)));
 
     this.setAnchorLocation(anchorXY);
     if (!bubbleWidth || !bubbleHeight) {
-      const bBox = /** @type {SVGLocatable} */ (this.content_).getBBox();
+      const bBox = (this.content_ as SVGGraphicsElement).getBBox();
       bubbleWidth = bBox.width + 2 * Bubble.BORDER_WIDTH;
       bubbleHeight = bBox.height + 2 * Bubble.BORDER_WIDTH;
     }
@@ -202,30 +187,30 @@ const Bubble = class {
 
   /**
    * Create the bubble's DOM.
-   * @param {!Element} content SVG content for the bubble.
-   * @param {boolean} hasResize Add diagonal resize gripper if true.
-   * @return {!SVGElement} The bubble's SVG group.
-   * @private
+   * @param content SVG content for the bubble.
+   * @param hasResize Add diagonal resize gripper if true.
+   * @return The bubble's SVG group.
    */
-  createDom_(content, hasResize) {
+  private createDom_(content: Element, hasResize: boolean): SVGElement {
     /* Create the bubble.  Here's the markup that will be generated:
-    <g>
-      <g filter="url(#blocklyEmbossFilter837493)">
-        <path d="... Z" />
-        <rect class="blocklyDraggable" rx="8" ry="8" width="180" height="180"/>
-      </g>
-      <g transform="translate(165, 165)" class="blocklyResizeSE">
-        <polygon points="0,15 15,15 15,0"/>
-        <line class="blocklyResizeLine" x1="5" y1="14" x2="14" y2="5"/>
-        <line class="blocklyResizeLine" x1="10" y1="14" x2="14" y2="10"/>
-      </g>
-      [...content goes here...]
-    </g>
-    */
-    this.bubbleGroup_ = dom.createSvgElement(Svg.G, {}, null);
-    let filter = {
+        <g>
+          <g filter="url(#blocklyEmbossFilter837493)">
+            <path d="... Z" />
+            <rect class="blocklyDraggable" rx="8" ry="8" width="180"
+       height="180"/>
+          </g>
+          <g transform="translate(165, 165)" class="blocklyResizeSE">
+            <polygon points="0,15 15,15 15,0"/>
+            <line class="blocklyResizeLine" x1="5" y1="14" x2="14" y2="5"/>
+            <line class="blocklyResizeLine" x1="10" y1="14" x2="14" y2="10"/>
+          </g>
+          [...content goes here...]
+        </g>
+        */
+    this.bubbleGroup_ = dom.createSvgElement(Svg.G, {});
+    let filter: { filter?: string } = {
       'filter': 'url(#' +
-          this.workspace_.getRenderer().getConstants().embossFilterId + ')',
+        this.workspace_.getRenderer().getConstants().embossFilterId + ')',
     };
     if (userAgent.JavaFx) {
       // Multiple reports that JavaFX can't handle filters.
@@ -235,54 +220,56 @@ const Bubble = class {
     const bubbleEmboss = dom.createSvgElement(Svg.G, filter, this.bubbleGroup_);
     this.bubbleArrow_ = dom.createSvgElement(Svg.PATH, {}, bubbleEmboss);
     this.bubbleBack_ = dom.createSvgElement(
-        Svg.RECT, {
-          'class': 'blocklyDraggable',
-          'x': 0,
-          'y': 0,
-          'rx': Bubble.BORDER_WIDTH,
-          'ry': Bubble.BORDER_WIDTH,
-        },
-        bubbleEmboss);
+      Svg.RECT, {
+      'class': 'blocklyDraggable',
+      'x': 0,
+      'y': 0,
+      'rx': Bubble.BORDER_WIDTH,
+      'ry': Bubble.BORDER_WIDTH,
+    },
+      bubbleEmboss);
     if (hasResize) {
       this.resizeGroup_ = dom.createSvgElement(
-          Svg.G, {
-            'class': this.workspace_.RTL ? 'blocklyResizeSW' :
-                                           'blocklyResizeSE',
-          },
-          this.bubbleGroup_);
+        Svg.G, {
+        'class': this.workspace_.RTL ? 'blocklyResizeSW' :
+          'blocklyResizeSE',
+      },
+        this.bubbleGroup_);
       const resizeSize = 2 * Bubble.BORDER_WIDTH;
       dom.createSvgElement(
-          Svg.POLYGON,
-          {'points': '0,x x,x x,0'.replace(/x/g, resizeSize.toString())},
-          this.resizeGroup_);
+        Svg.POLYGON,
+        { 'points': '0,x x,x x,0'.replace(/x/g, resizeSize.toString()) },
+        this.resizeGroup_);
       dom.createSvgElement(
-          Svg.LINE, {
-            'class': 'blocklyResizeLine',
-            'x1': resizeSize / 3,
-            'y1': resizeSize - 1,
-            'x2': resizeSize - 1,
-            'y2': resizeSize / 3,
-          },
-          this.resizeGroup_);
+        Svg.LINE, {
+        'class': 'blocklyResizeLine',
+        'x1': resizeSize / 3,
+        'y1': resizeSize - 1,
+        'x2': resizeSize - 1,
+        'y2': resizeSize / 3,
+      },
+        this.resizeGroup_);
       dom.createSvgElement(
-          Svg.LINE, {
-            'class': 'blocklyResizeLine',
-            'x1': resizeSize * 2 / 3,
-            'y1': resizeSize - 1,
-            'x2': resizeSize - 1,
-            'y2': resizeSize * 2 / 3,
-          },
-          this.resizeGroup_);
+        Svg.LINE, {
+        'class': 'blocklyResizeLine',
+        'x1': resizeSize * 2 / 3,
+        'y1': resizeSize - 1,
+        'x2': resizeSize - 1,
+        'y2': resizeSize * 2 / 3,
+      },
+        this.resizeGroup_);
     } else {
-      this.resizeGroup_ = null;
+      // AnyDuringMigration because:  Type 'null' is not assignable to type
+      // 'SVGGElement'.
+      this.resizeGroup_ = null as AnyDuringMigration;
     }
 
     if (!this.workspace_.options.readOnly) {
       this.onMouseDownBubbleWrapper_ = browserEvents.conditionalBind(
-          this.bubbleBack_, 'mousedown', this, this.bubbleMouseDown_);
+        this.bubbleBack_, 'mousedown', this, this.bubbleMouseDown_);
       if (this.resizeGroup_) {
         this.onMouseDownResizeWrapper_ = browserEvents.conditionalBind(
-            this.resizeGroup_, 'mousedown', this, this.resizeMouseDown_);
+          this.resizeGroup_, 'mousedown', this, this.resizeMouseDown_);
       }
     }
     this.bubbleGroup_.appendChild(content);
@@ -291,26 +278,25 @@ const Bubble = class {
 
   /**
    * Return the root node of the bubble's SVG group.
-   * @return {!SVGElement} The root SVG node of the bubble's group.
+   * @return The root SVG node of the bubble's group.
    */
-  getSvgRoot() {
-    return /** @type {!SVGElement} */ (this.bubbleGroup_);
+  getSvgRoot(): SVGElement {
+    return this.bubbleGroup_ as SVGElement;
   }
 
   /**
    * Expose the block's ID on the bubble's top-level SVG group.
-   * @param {string} id ID of block.
+   * @param id ID of block.
    */
-  setSvgId(id) {
+  setSvgId(id: string) {
     this.bubbleGroup_.setAttribute('data-block-id', id);
   }
 
   /**
    * Handle a mouse-down on bubble's border.
-   * @param {!Event} e Mouse down event.
-   * @private
+   * @param e Mouse down event.
    */
-  bubbleMouseDown_(e) {
+  private bubbleMouseDown_(e: Event) {
     const gesture = this.workspace_.getGesture(e);
     if (gesture) {
       gesture.handleBubbleStart(e, this);
@@ -319,38 +305,32 @@ const Bubble = class {
 
   /**
    * Show the context menu for this bubble.
-   * @param {!Event} _e Mouse event.
-   * @package
+   * @param _e Mouse event.
    */
-  showContextMenu(_e) {
-    // NOP on bubbles, but used by the bubble dragger to pass events to
-    // workspace comments.
-  }
+  showContextMenu(_e: Event) {}
+  // NOP on bubbles, but used by the bubble dragger to pass events to
+  // workspace comments.
 
   /**
    * Get whether this bubble is deletable or not.
-   * @return {boolean} True if deletable.
-   * @package
+   * @return True if deletable.
    */
-  isDeletable() {
+  isDeletable(): boolean {
     return false;
   }
 
   /**
    * Update the style of this bubble when it is dragged over a delete area.
-   * @param {boolean} _enable True if the bubble is about to be deleted, false
-   *     otherwise.
+   * @param _enable True if the bubble is about to be deleted, false otherwise.
    */
-  setDeleteStyle(_enable) {
-    // NOP if bubble is not deletable.
-  }
+  setDeleteStyle(_enable: boolean) {}
+  // NOP if bubble is not deletable.
 
   /**
    * Handle a mouse-down on bubble's resize corner.
-   * @param {!Event} e Mouse down event.
-   * @private
+   * @param e Mouse down event.
    */
-  resizeMouseDown_(e) {
+  private resizeMouseDown_(e: Event) {
     this.promote();
     Bubble.unbindDragEvents_();
     if (browserEvents.isRightButton(e)) {
@@ -360,14 +340,14 @@ const Bubble = class {
     }
     // Left-click (or middle click)
     this.workspace_.startDrag(
-        e,
-        new Coordinate(
-            this.workspace_.RTL ? -this.width_ : this.width_, this.height_));
+      e,
+      new Coordinate(
+        this.workspace_.RTL ? -this.width_ : this.width_, this.height_));
 
     Bubble.onMouseUpWrapper_ = browserEvents.conditionalBind(
-        document, 'mouseup', this, Bubble.bubbleMouseUp_);
+      document, 'mouseup', this, Bubble.bubbleMouseUp_);
     Bubble.onMouseMoveWrapper_ = browserEvents.conditionalBind(
-        document, 'mousemove', this, this.resizeMouseMove_);
+      document, 'mousemove', this, this.resizeMouseMove_);
     this.workspace_.hideChaff();
     // This event has been handled.  No need to bubble up to the document.
     e.stopPropagation();
@@ -375,10 +355,9 @@ const Bubble = class {
 
   /**
    * Resize this bubble to follow the mouse.
-   * @param {!Event} e Mouse move event.
-   * @private
+   * @param e Mouse move event.
    */
-  resizeMouseMove_(e) {
+  private resizeMouseMove_(e: Event) {
     this.autoLayout_ = false;
     const newXY = this.workspace_.moveDrag(e);
     this.setBubbleSize(this.workspace_.RTL ? -newXY.x : newXY.x, newXY.y);
@@ -390,29 +369,32 @@ const Bubble = class {
 
   /**
    * Register a function as a callback event for when the bubble is resized.
-   * @param {!Function} callback The function to call on resize.
+   * @param callback The function to call on resize.
    */
-  registerResizeEvent(callback) {
-    this.resizeCallback_ = callback;
+  registerResizeEvent(callback: Function) {
+    // AnyDuringMigration because:  Type 'Function' is not assignable to type
+    // '() => any'.
+    this.resizeCallback_ = callback as AnyDuringMigration;
   }
 
   /**
    * Register a function as a callback event for when the bubble is moved.
-   * @param {!Function} callback The function to call on move.
+   * @param callback The function to call on move.
    */
-  registerMoveEvent(callback) {
-    this.moveCallback_ = callback;
+  registerMoveEvent(callback: Function) {
+    // AnyDuringMigration because:  Type 'Function' is not assignable to type
+    // '() => any'.
+    this.moveCallback_ = callback as AnyDuringMigration;
   }
 
   /**
    * Move this bubble to the top of the stack.
-   * @return {boolean} Whether or not the bubble has been moved.
-   * @package
+   * @return Whether or not the bubble has been moved.
    */
-  promote() {
+  promote(): boolean {
     const svgGroup = this.bubbleGroup_.parentNode;
-    if (svgGroup.lastChild !== this.bubbleGroup_) {
-      svgGroup.appendChild(this.bubbleGroup_);
+    if (svgGroup!.lastChild !== this.bubbleGroup_) {
+      svgGroup!.appendChild(this.bubbleGroup_);
       return true;
     }
     return false;
@@ -421,53 +403,51 @@ const Bubble = class {
   /**
    * Notification that the anchor has moved.
    * Update the arrow and bubble accordingly.
-   * @param {!Coordinate} xy Absolute location.
+   * @param xy Absolute location.
    */
-  setAnchorLocation(xy) {
+  setAnchorLocation(xy: Coordinate) {
     this.anchorXY_ = xy;
     if (this.rendered_) {
       this.positionBubble_();
     }
   }
 
-  /**
-   * Position the bubble so that it does not fall off-screen.
-   * @private
-   */
-  layoutBubble_() {
+  /** Position the bubble so that it does not fall off-screen. */
+  private layoutBubble_() {
     // Get the metrics in workspace units.
     const viewMetrics =
-        this.workspace_.getMetricsManager().getViewMetrics(true);
+      this.workspace_.getMetricsManager().getViewMetrics(true);
 
     const optimalLeft = this.getOptimalRelativeLeft_(viewMetrics);
     const optimalTop = this.getOptimalRelativeTop_(viewMetrics);
-    const bbox = (/** @type {!SVGGraphicsElement} */ (this.shape_)).getBBox();
+    const bbox = (this.shape_ as SVGGraphicsElement).getBBox();
 
     const topPosition = {
       x: optimalLeft,
       y: -this.height_ -
-          this.workspace_.getRenderer().getConstants().MIN_BLOCK_HEIGHT,
+        this.workspace_.getRenderer().getConstants().MIN_BLOCK_HEIGHT as
+        number,
     };
-    const startPosition = {x: -this.width_ - 30, y: optimalTop};
-    const endPosition = {x: bbox.width, y: optimalTop};
-    const bottomPosition = {x: optimalLeft, y: bbox.height};
+    const startPosition = { x: -this.width_ - 30, y: optimalTop };
+    const endPosition = { x: bbox.width, y: optimalTop };
+    const bottomPosition = { x: optimalLeft, y: bbox.height };
 
     const closerPosition =
-        bbox.width < bbox.height ? endPosition : bottomPosition;
+      bbox.width < bbox.height ? endPosition : bottomPosition;
     const fartherPosition =
-        bbox.width < bbox.height ? bottomPosition : endPosition;
+      bbox.width < bbox.height ? bottomPosition : endPosition;
 
     const topPositionOverlap = this.getOverlap_(topPosition, viewMetrics);
     const startPositionOverlap = this.getOverlap_(startPosition, viewMetrics);
     const closerPositionOverlap = this.getOverlap_(closerPosition, viewMetrics);
     const fartherPositionOverlap =
-        this.getOverlap_(fartherPosition, viewMetrics);
+      this.getOverlap_(fartherPosition, viewMetrics);
 
     // Set the position to whichever position shows the most of the bubble,
     // with tiebreaks going in the order: top > start > close > far.
     const mostOverlap = Math.max(
-        topPositionOverlap, startPositionOverlap, closerPositionOverlap,
-        fartherPositionOverlap);
+      topPositionOverlap, startPositionOverlap, closerPositionOverlap,
+      fartherPositionOverlap);
     if (topPositionOverlap === mostOverlap) {
       this.relativeLeft_ = topPosition.x;
       this.relativeTop_ = topPosition.y;
@@ -493,19 +473,19 @@ const Bubble = class {
   /**
    * Calculate the what percentage of the bubble overlaps with the visible
    * workspace (what percentage of the bubble is visible).
-   * @param {!{x: number, y: number}} relativeMin The position of the top-left
-   *     corner of the bubble relative to the anchor point.
-   * @param {!MetricsManager.ContainerRegion} viewMetrics The view metrics
-   *     of the workspace the bubble will appear in.
-   * @return {number} The percentage of the bubble that is visible.
-   * @private
+   * @param relativeMin The position of the top-left corner of the bubble
+   *     relative to the anchor point.
+   * @param viewMetrics The view metrics of the workspace the bubble will appear
+   *     in.
+   * @return The percentage of the bubble that is visible.
    */
-  getOverlap_(relativeMin, viewMetrics) {
+  private getOverlap_(
+    relativeMin: { x: number, y: number },
+    viewMetrics: ContainerRegion): number {
     // The position of the top-left corner of the bubble in workspace units.
     const bubbleMin = {
-      x: this.workspace_.RTL ?
-          (this.anchorXY_.x - relativeMin.x - this.width_) :
-          (relativeMin.x + this.anchorXY_.x),
+      x: this.workspace_.RTL ? this.anchorXY_.x - relativeMin.x - this.width_ :
+        relativeMin.x + this.anchorXY_.x,
       y: relativeMin.y + this.anchorXY_.y,
     };
     // The position of the bottom-right corner of the bubble in workspace units.
@@ -520,7 +500,7 @@ const Bubble = class {
     // the calculation.
 
     // The position of the top-left corner of the workspace.
-    const workspaceMin = {x: viewMetrics.left, y: viewMetrics.top};
+    const workspaceMin = { x: viewMetrics.left, y: viewMetrics.top };
     // The position of the bottom-right corner of the workspace.
     const workspaceMax = {
       x: viewMetrics.left + viewMetrics.width,
@@ -528,26 +508,25 @@ const Bubble = class {
     };
 
     const overlapWidth = Math.min(bubbleMax.x, workspaceMax.x) -
-        Math.max(bubbleMin.x, workspaceMin.x);
+      Math.max(bubbleMin.x, workspaceMin.x);
     const overlapHeight = Math.min(bubbleMax.y, workspaceMax.y) -
-        Math.max(bubbleMin.y, workspaceMin.y);
+      Math.max(bubbleMin.y, workspaceMin.y);
     return Math.max(
-        0,
-        Math.min(
-            1, (overlapWidth * overlapHeight) / (this.width_ * this.height_)));
+      0,
+      Math.min(
+        1, overlapWidth * overlapHeight / (this.width_ * this.height_)));
   }
 
   /**
    * Calculate what the optimal horizontal position of the top-left corner of
    * the bubble is (relative to the anchor point) so that the most area of the
    * bubble is shown.
-   * @param {!MetricsManager.ContainerRegion} viewMetrics The view metrics
-   *     of the workspace the bubble will appear in.
-   * @return {number} The optimal horizontal position of the top-left corner
-   *     of the bubble.
-   * @private
+   * @param viewMetrics The view metrics of the workspace the bubble will appear
+   *     in.
+   * @return The optimal horizontal position of the top-left corner of the
+   *     bubble.
    */
-  getOptimalRelativeLeft_(viewMetrics) {
+  private getOptimalRelativeLeft_(viewMetrics: ContainerRegion): number {
     let relativeLeft = -this.width_ / 4;
 
     // No amount of sliding left or right will give us a better overlap.
@@ -561,9 +540,8 @@ const Bubble = class {
       const bubbleLeft = bubbleRight - this.width_;
 
       const workspaceRight = viewMetrics.left + viewMetrics.width;
-      const workspaceLeft = viewMetrics.left +
-          // Thickness in workspace units.
-          (Scrollbar.scrollbarThickness / this.workspace_.scale);
+      const workspaceLeft = viewMetrics.left +  // Thickness in workspace units.
+        Scrollbar.scrollbarThickness / this.workspace_.scale;
 
       if (bubbleLeft < workspaceLeft) {
         // Slide the bubble right until it is onscreen.
@@ -577,9 +555,9 @@ const Bubble = class {
       const bubbleRight = bubbleLeft + this.width_;
 
       const workspaceLeft = viewMetrics.left;
-      const workspaceRight = viewMetrics.left + viewMetrics.width -
-          // Thickness in workspace units.
-          (Scrollbar.scrollbarThickness / this.workspace_.scale);
+      const workspaceRight = viewMetrics.left +
+        viewMetrics.width -  // Thickness in workspace units.
+        Scrollbar.scrollbarThickness / this.workspace_.scale;
 
       if (bubbleLeft < workspaceLeft) {
         // Slide the bubble right until it is onscreen.
@@ -597,13 +575,11 @@ const Bubble = class {
    * Calculate what the optimal vertical position of the top-left corner of
    * the bubble is (relative to the anchor point) so that the most area of the
    * bubble is shown.
-   * @param {!MetricsManager.ContainerRegion} viewMetrics The view metrics
-   *     of the workspace the bubble will appear in.
-   * @return {number} The optimal vertical position of the top-left corner
-   *     of the bubble.
-   * @private
+   * @param viewMetrics The view metrics of the workspace the bubble will appear
+   *     in.
+   * @return The optimal vertical position of the top-left corner of the bubble.
    */
-  getOptimalRelativeTop_(viewMetrics) {
+  private getOptimalRelativeTop_(viewMetrics: ContainerRegion): number {
     let relativeTop = -this.height_ / 4;
 
     // No amount of sliding up or down will give us a better overlap.
@@ -614,9 +590,9 @@ const Bubble = class {
     const bubbleTop = this.anchorXY_.y + relativeTop;
     const bubbleBottom = bubbleTop + this.height_;
     const workspaceTop = viewMetrics.top;
-    const workspaceBottom = viewMetrics.top + viewMetrics.height -
-        // Thickness in workspace units.
-        (Scrollbar.scrollbarThickness / this.workspace_.scale);
+    const workspaceBottom = viewMetrics.top +
+      viewMetrics.height -  // Thickness in workspace units.
+      Scrollbar.scrollbarThickness / this.workspace_.scale;
 
     const anchorY = this.anchorXY_.y;
     if (bubbleTop < workspaceTop) {
@@ -630,11 +606,8 @@ const Bubble = class {
     return relativeTop;
   }
 
-  /**
-   * Move the bubble to a location relative to the anchor's centre.
-   * @private
-   */
-  positionBubble_() {
+  /** Move the bubble to a location relative to the anchor's centre. */
+  private positionBubble_() {
     let left = this.anchorXY_.x;
     if (this.workspace_.RTL) {
       left -= this.relativeLeft_ + this.width_;
@@ -647,21 +620,19 @@ const Bubble = class {
 
   /**
    * Move the bubble group to the specified location in workspace coordinates.
-   * @param {number} x The x position to move to.
-   * @param {number} y The y position to move to.
-   * @package
+   * @param x The x position to move to.
+   * @param y The y position to move to.
    */
-  moveTo(x, y) {
+  moveTo(x: number, y: number) {
     this.bubbleGroup_.setAttribute(
-        'transform', 'translate(' + x + ',' + y + ')');
+      'transform', 'translate(' + x + ',' + y + ')');
   }
 
   /**
    * Triggers a move callback if one exists at the end of a drag.
-   * @param {boolean} adding True if adding, false if removing.
-   * @package
+   * @param adding True if adding, false if removing.
    */
-  setDragging(adding) {
+  setDragging(adding: boolean) {
     if (!adding && this.moveCallback_) {
       this.moveCallback_();
     }
@@ -669,39 +640,43 @@ const Bubble = class {
 
   /**
    * Get the dimensions of this bubble.
-   * @return {!Size} The height and width of the bubble.
+   * @return The height and width of the bubble.
    */
-  getBubbleSize() {
+  getBubbleSize(): Size {
     return new Size(this.width_, this.height_);
   }
 
   /**
    * Size this bubble.
-   * @param {number} width Width of the bubble.
-   * @param {number} height Height of the bubble.
+   * @param width Width of the bubble.
+   * @param height Height of the bubble.
    */
-  setBubbleSize(width, height) {
+  setBubbleSize(width: number, height: number) {
     const doubleBorderWidth = 2 * Bubble.BORDER_WIDTH;
     // Minimum size of a bubble.
     width = Math.max(width, doubleBorderWidth + 45);
     height = Math.max(height, doubleBorderWidth + 20);
     this.width_ = width;
     this.height_ = height;
-    this.bubbleBack_.setAttribute('width', width);
-    this.bubbleBack_.setAttribute('height', height);
+    // AnyDuringMigration because:  Argument of type 'number' is not assignable
+    // to parameter of type 'string'.
+    this.bubbleBack_.setAttribute('width', width as AnyDuringMigration);
+    // AnyDuringMigration because:  Argument of type 'number' is not assignable
+    // to parameter of type 'string'.
+    this.bubbleBack_.setAttribute('height', height as AnyDuringMigration);
     if (this.resizeGroup_) {
       if (this.workspace_.RTL) {
         // Mirror the resize group.
         const resizeSize = 2 * Bubble.BORDER_WIDTH;
         this.resizeGroup_.setAttribute(
-            'transform',
-            'translate(' + resizeSize + ',' + (height - doubleBorderWidth) +
-                ') scale(-1 1)');
+          'transform',
+          'translate(' + resizeSize + ',' + (height - doubleBorderWidth) +
+          ') scale(-1 1)');
       } else {
         this.resizeGroup_.setAttribute(
-            'transform',
-            'translate(' + (width - doubleBorderWidth) + ',' +
-                (height - doubleBorderWidth) + ')');
+          'transform',
+          'translate(' + (width - doubleBorderWidth) + ',' +
+          (height - doubleBorderWidth) + ')');
       }
     }
     if (this.autoLayout_) {
@@ -716,11 +691,8 @@ const Bubble = class {
     }
   }
 
-  /**
-   * Draw the arrow between the bubble and the origin.
-   * @private
-   */
-  renderArrow_() {
+  /** Draw the arrow between the bubble and the origin. */
+  private renderArrow_() {
     const steps = [];
     // Find the relative coordinates of the center of the bubble.
     const relBubbleX = this.width_ / 2;
@@ -755,7 +727,7 @@ const Bubble = class {
       // Calculate the thickness of the base of the arrow.
       const bubbleSize = this.getBubbleSize();
       let thickness =
-          (bubbleSize.width + bubbleSize.height) / Bubble.ARROW_THICKNESS;
+        (bubbleSize.width + bubbleSize.height) / Bubble.ARROW_THICKNESS;
       thickness = Math.min(thickness, bubbleSize.width, bubbleSize.height) / 4;
 
       // Back the tip of the arrow off of the anchor.
@@ -779,11 +751,11 @@ const Bubble = class {
 
       steps.push('M' + baseX1 + ',' + baseY1);
       steps.push(
-          'C' + (baseX1 + swirlRun) + ',' + (baseY1 + swirlRise) + ' ' +
-          relAnchorX + ',' + relAnchorY + ' ' + relAnchorX + ',' + relAnchorY);
+        'C' + (baseX1 + swirlRun) + ',' + (baseY1 + swirlRise) + ' ' +
+        relAnchorX + ',' + relAnchorY + ' ' + relAnchorX + ',' + relAnchorY);
       steps.push(
-          'C' + relAnchorX + ',' + relAnchorY + ' ' + (baseX2 + swirlRun) +
-          ',' + (baseY2 + swirlRise) + ' ' + baseX2 + ',' + baseY2);
+        'C' + relAnchorX + ',' + relAnchorY + ' ' + (baseX2 + swirlRun) +
+        ',' + (baseY2 + swirlRise) + ' ' + baseX2 + ',' + baseY2);
     }
     steps.push('z');
     this.bubbleArrow_.setAttribute('d', steps.join(' '));
@@ -791,16 +763,14 @@ const Bubble = class {
 
   /**
    * Change the colour of a bubble.
-   * @param {string} hexColour Hex code of colour.
+   * @param hexColour Hex code of colour.
    */
-  setColour(hexColour) {
+  setColour(hexColour: string) {
     this.bubbleBack_.setAttribute('fill', hexColour);
     this.bubbleArrow_.setAttribute('fill', hexColour);
   }
 
-  /**
-   * Dispose of this bubble.
-   */
+  /** Dispose of this bubble. */
   dispose() {
     if (this.onMouseDownBubbleWrapper_) {
       browserEvents.unbind(this.onMouseDownBubbleWrapper_);
@@ -816,13 +786,11 @@ const Bubble = class {
   /**
    * Move this bubble during a drag, taking into account whether or not there is
    * a drag surface.
-   * @param {BlockDragSurfaceSvg} dragSurface The surface that carries
-   *     rendered items during a drag, or null if no drag surface is in use.
-   * @param {!Coordinate} newLoc The location to translate to, in
-   *     workspace coordinates.
-   * @package
+   * @param dragSurface The surface that carries rendered items during a drag,
+   *     or null if no drag surface is in use.
+   * @param newLoc The location to translate to, in workspace coordinates.
    */
-  moveDuringDrag(dragSurface, newLoc) {
+  moveDuringDrag(dragSurface: BlockDragSurfaceSvg, newLoc: Coordinate) {
     if (dragSurface) {
       dragSurface.translateSurface(newLoc.x, newLoc.y);
     } else {
@@ -840,33 +808,28 @@ const Bubble = class {
   /**
    * Return the coordinates of the top-left corner of this bubble's body
    * relative to the drawing surface's origin (0,0), in workspace units.
-   * @return {!Coordinate} Object with .x and .y properties.
+   * @return Object with .x and .y properties.
    */
-  getRelativeToSurfaceXY() {
+  getRelativeToSurfaceXY(): Coordinate {
     return new Coordinate(
-        this.workspace_.RTL ?
-            -this.relativeLeft_ + this.anchorXY_.x - this.width_ :
-            this.anchorXY_.x + this.relativeLeft_,
-        this.anchorXY_.y + this.relativeTop_);
+      this.workspace_.RTL ?
+        -this.relativeLeft_ + this.anchorXY_.x - this.width_ :
+        this.anchorXY_.x + this.relativeLeft_,
+      this.anchorXY_.y + this.relativeTop_);
   }
 
   /**
    * Set whether auto-layout of this bubble is enabled.  The first time a bubble
    * is shown it positions itself to not cover any blocks.  Once a user has
    * dragged it to reposition, it renders where the user put it.
-   * @param {boolean} enable True if auto-layout should be enabled, false
-   *     otherwise.
-   * @package
+   * @param enable True if auto-layout should be enabled, false otherwise.
    */
-  setAutoLayout(enable) {
+  setAutoLayout(enable: boolean) {
     this.autoLayout_ = enable;
   }
 
-  /**
-   * Stop binding to the global mouseup and mousemove events.
-   * @private
-   */
-  static unbindDragEvents_() {
+  /** Stop binding to the global mouseup and mousemove events. */
+  private static unbindDragEvents_() {
     if (Bubble.onMouseUpWrapper_) {
       browserEvents.unbind(Bubble.onMouseUpWrapper_);
       Bubble.onMouseUpWrapper_ = null;
@@ -879,31 +842,27 @@ const Bubble = class {
 
   /**
    * Handle a mouse-up event while dragging a bubble's border or resize handle.
-   * @param {!Event} _e Mouse up event.
-   * @private
+   * @param _e Mouse up event.
    */
-  static bubbleMouseUp_(_e) {
+  private static bubbleMouseUp_(_e: Event) {
     Touch.clearTouchIdentifier();
     Bubble.unbindDragEvents_();
   }
 
   /**
    * Create the text for a non editable bubble.
-   * @param {string} text The text to display.
-   * @return {!SVGTextElement} The top-level node of the text.
-   * @package
+   * @param text The text to display.
+   * @return The top-level node of the text.
    */
-  static textToDom(text) {
-    const paragraph = dom.createSvgElement(
-        Svg.TEXT, {
-          'class': 'blocklyText blocklyBubbleText blocklyNoPointerEvents',
-          'y': Bubble.BORDER_WIDTH,
-        },
-        null);
+  static textToDom(text: string): SVGTextElement {
+    const paragraph = dom.createSvgElement(Svg.TEXT, {
+      'class': 'blocklyText blocklyBubbleText blocklyNoPointerEvents',
+      'y': Bubble.BORDER_WIDTH,
+    });
     const lines = text.split('\n');
     for (let i = 0; i < lines.length; i++) {
       const tspanElement = dom.createSvgElement(
-          Svg.TSPAN, {'dy': '1em', 'x': Bubble.BORDER_WIDTH}, paragraph);
+        Svg.TSPAN, { 'dy': '1em', 'x': Bubble.BORDER_WIDTH }, paragraph);
       const textNode = document.createTextNode(lines[i]);
       tspanElement.appendChild(textNode);
     }
@@ -912,18 +871,17 @@ const Bubble = class {
 
   /**
    * Creates a bubble that can not be edited.
-   * @param {!SVGTextElement} paragraphElement The text element for the non
-   *     editable bubble.
-   * @param {!BlockSvg} block The block that the bubble is attached to.
-   * @param {!Coordinate} iconXY The coordinate of the icon.
-   * @return {!Bubble} The non editable bubble.
-   * @package
+   * @param paragraphElement The text element for the non editable bubble.
+   * @param block The block that the bubble is attached to.
+   * @param iconXY The coordinate of the icon.
+   * @return The non editable bubble.
    */
-  static createNonEditableBubble(paragraphElement, block, iconXY) {
+  static createNonEditableBubble(
+    paragraphElement: SVGTextElement, block: BlockSvg,
+    iconXY: Coordinate): Bubble {
     const bubble = new Bubble(
-        /** @type {!WorkspaceSvg} */ (block.workspace), paragraphElement,
-        block.pathObject.svgPath,
-        /** @type {!Coordinate} */ (iconXY), null, null);
+      (block.workspace), paragraphElement, block.pathObject.svgPath, (iconXY),
+      null, null);
     // Expose this bubble's block's ID on its top-level SVG group.
     bubble.setSvgId(block.id);
     if (block.RTL) {
@@ -931,55 +889,13 @@ const Bubble = class {
       // This cannot be done until the bubble is rendered on screen.
       const maxWidth = paragraphElement.getBBox().width;
       for (let i = 0, textElement;
-           (textElement = /** @type {!SVGTSpanElement} */ (
-                paragraphElement.childNodes[i]));
-           i++) {
+        textElement = paragraphElement.childNodes[i] as SVGTSpanElement;
+        i++) {
         textElement.setAttribute('text-anchor', 'end');
-        textElement.setAttribute('x', maxWidth + Bubble.BORDER_WIDTH);
+        textElement.setAttribute(
+          'x', (maxWidth + Bubble.BORDER_WIDTH).toString());
       }
     }
     return bubble;
   }
-};
-
-/**
- * Width of the border around the bubble.
- */
-Bubble.BORDER_WIDTH = 6;
-
-/**
- * Determines the thickness of the base of the arrow in relation to the size
- * of the bubble.  Higher numbers result in thinner arrows.
- */
-Bubble.ARROW_THICKNESS = 5;
-
-/**
- * The number of degrees that the arrow bends counter-clockwise.
- */
-Bubble.ARROW_ANGLE = 20;
-
-/**
- * The sharpness of the arrow's bend.  Higher numbers result in smoother arrows.
- */
-Bubble.ARROW_BEND = 4;
-
-/**
- * Distance between arrow point and anchor point.
- */
-Bubble.ANCHOR_RADIUS = 8;
-
-/**
- * Mouse up event data.
- * @type {?browserEvents.Data}
- * @private
- */
-Bubble.onMouseUpWrapper_ = null;
-
-/**
- * Mouse move event data.
- * @type {?browserEvents.Data}
- * @private
- */
-Bubble.onMouseMoveWrapper_ = null;
-
-exports.Bubble = Bubble;
+}

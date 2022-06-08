@@ -12,5 +12,5 @@
 /// <reference path="core.d.ts" />
 
 import * as Blockly from './core';
-declare const python: Blockly.Generator;
+declare const python: any;
 export = python;

@@ -1332,5 +1332,21 @@
     },
   ],
 
-  'develop': [ ],
+  'develop': [
+    {
+      oldName: 'Blockly',
+      exports: {
+        HSV_SATURATION: {
+          newModule: 'Blockly.utils.colour',
+          getMethod: 'getHsvSaturation',
+          setMethod: 'setHsvSaturation',
+        },
+        HSV_Value: {
+          newModule: 'Blockly.utils.colour',
+          getMethod: 'getHsvValue',
+          setMethod: 'setHsvValue',
+        },
+      }
+    },
+  ],
 }

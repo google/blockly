@@ -3,11 +3,19 @@
 <head>
 <meta charset="utf-8">
 <title>Advanced Blockly Playground</title>
+
+<script>
+  var BLOCKLY_BOOTSTRAP_OPTIONS = {
+    additionalScripts: [
+      'msg/messages.js',
+      'tests/playgrounds/screenshot.js',
+      'tests/themes/test_themes.js',
+      'node_modules/@blockly/dev-tools/dist/index.js',
+      'node_modules/@blockly/theme-modern/dist/index.js',
+    ],
+  }
+</script>
 <script src="../bootstrap.js"></script>
-<script src="./screenshot.js"></script>
-<script src="../themes/test_themes.js"></script>
-<script src="../../node_modules/@blockly/dev-tools/dist/index.js"></script>
-<script src="../../node_modules/@blockly/theme-modern/dist/index.js"></script>
 
 <script type="module">
 import Blockly from '../blockly.mjs';

@@ -7,9 +7,16 @@
   <!-- This script loads uncompressed when on localhost and loads
        compressed when it is being hosted.  Please add any other
        dependencies to bootstrap.js. -->
+<script>
+  var BLOCKLY_BOOTSTRAP_OPTIONS = {
+    additionalScripts: [
+      'msg/messages.js',
+      'tests/playgrounds/screenshot.js',
+      'node_modules/@blockly/dev-tools/dist/index.js',
+    ],
+  }
+</script>
 <script src="bootstrap.js"></script>
-<script src="playgrounds/screenshot.js"></script>
-<script src="../node_modules/@blockly/dev-tools/dist/index.js"></script>
 <script type=module>
 import Blockly from './blockly.mjs';
 

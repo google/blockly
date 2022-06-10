@@ -215,6 +215,11 @@
       },
     },
     {
+      oldName: 'Blockly.utils.global',
+      newExport: 'globalThis',
+      newPath: 'Blockly.utils.global',
+    },
+    {
       oldName: 'Blockly.utils.IdGenerator',
       newName: 'Blockly.utils.idGenerator',
     },
@@ -1332,5 +1337,10 @@
     },
   ],
 
-  'develop': [ ],
+  'develop': [
+    {
+      'oldName': 'Blockly.utils.global',
+      'newPath': 'globalThis',
+    }
+  ],
 }

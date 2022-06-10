@@ -218,7 +218,7 @@
       oldName: 'Blockly.utils.global',
       newExport: 'globalThis',
       newPath: 'Blockly.utils.global',
-    }
+    },
     {
       oldName: 'Blockly.utils.IdGenerator',
       newName: 'Blockly.utils.idGenerator',

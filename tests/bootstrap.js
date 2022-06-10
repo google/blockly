@@ -72,7 +72,6 @@
     // List of scripts to load in compressed mode, instead of requires.
     compressedScripts: [
       'blockly_compressed.js',
-      'msg/messages.js',
       'blocks_compressed.js',
       'dart_compressed.js',
       'javascript_compressed.js',
@@ -84,6 +83,7 @@
     // Additional scripts to be loaded after Blockly is loaded,
     // whether Blockly is loaded from compressed or uncompressed.
     additionalScripts: [
+      'msg/messages.js',
     ],
   };
   if (typeof window.BLOCKLY_BOOTSTRAP_OPTIONS === 'object') {
@@ -117,19 +117,6 @@
     document.write(
         '<script src="' + options.root + '/build/deps.js"></script>');
 
-    // Msg loading kludge.  This should go away once #5409 and/or
-    // #1895 are fixed.
-
-    // Load messages into a temporary Blockly.Msg object, deleting it
-    // afterwards (after saving the messages!)
-    window.Blockly = {Msg: Object.create(null)};
-    document.write(
-        '<script src="' + options.root + 'msg/messages.js"></script>');
-    document.write(
-        '<script>\n' +
-        '  window.BlocklyMsg = window.Blockly.Msg;\n' +
-        '  delete window.Blockly;\n' +
-        '</script>\n');
     const requiresString = options.requires.map(quote).join();
     const scriptsString = options.additionalScripts.map(quote).join();
     document.write(
@@ -145,10 +132,6 @@
         '  }\n' +
         '  window.BlocklyLoader = new Promise((resolve, reject) => {\n' +
         '    goog.bootstrap(requires, resolve);\n' +
-        '  }).then(() => {\n' +
-        '    // Copy Messages from temp Blockly.Msg object to the real one:\n' +
-        '    Object.assign(goog.module.get(\'Blockly\').Msg,\n' +
-        '                  window.BlocklyMsg);\n' +
         '  }).then(() => {\n' +
         '    return goog.module.get(\'Blockly\');\n' +
         '  });\n' +

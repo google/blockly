@@ -80,6 +80,11 @@
       'php_compressed.js',
       'python_compressed.js',
     ],
+
+    // Additional scripts to be loaded after Blockly is loaded,
+    // whether Blockly is loaded from compressed or uncompressed.
+    additionalScripts: [
+    ],
   };
   if (typeof window.BLOCKLY_BOOTSTRAP_OPTIONS === 'object') {
     Object.assign(options, window.BLOCKLY_BOOTSTRAP_OPTIONS);
@@ -125,11 +130,21 @@
         '  window.BlocklyMsg = window.Blockly.Msg;\n' +
         '  delete window.Blockly;\n' +
         '</script>\n');
-    const allRequires = options.requires.map(quote).join();
+    const requiresString = options.requires.map(quote).join();
+    const scriptsString = options.additionalScripts.map(quote).join();
     document.write(
         '<script>\n' +
+        '  let requires = [' + requiresString + '];\n' +
+        '  let scripts = [' + scriptsString + '];\n' +
+        '  for (const script of scripts) {\n' +
+        '    const fakeModuleName = \n' +
+        '        "script." + script.replace(/[./]/g, "-");\n' +
+        '    goog.addDependency("../../" + script, [fakeModuleName], \n' +
+        '        requires, {"lang": "es6"});\n' +
+        '    requires = [fakeModuleName];\n' +
+        '  }\n' +
         '  window.BlocklyLoader = new Promise((resolve, reject) => {\n' +
-        '    goog.bootstrap([' + allRequires + '], resolve);\n' +
+        '    goog.bootstrap(requires, resolve);\n' +
         '  }).then(() => {\n' +
         '    // Copy Messages from temp Blockly.Msg object to the real one:\n' +
         '    Object.assign(goog.module.get(\'Blockly\').Msg,\n' +
@@ -141,7 +156,8 @@
   } else {
     // We need to load Blockly in compressed mode.  Load
     // blockly_compressed.js et al. using <script> tags.
-    const scripts = options.compressedScripts;
+    const scripts =
+        options.compressedScripts.concat(options.additionalScripts);
     for (let i = 0; i < scripts.length; i++) {
       document.write(
           '<script src="' + options.root + scripts[i] + '"></script>');

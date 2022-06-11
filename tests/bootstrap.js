@@ -39,12 +39,14 @@
   const isIe = navigator.userAgent.indexOf('MSIE') !== -1 ||
       navigator.appVersion.indexOf('Trident/') > -1;
   const localhosts = ['localhost', '127.0.0.1', '[::1]'];
+  const isLocalhost = localhosts.includes(location.hostname);
+  const isFileUrl = location.origin === 'file://';
 
   // Default bootstrap options.
   const options = {
     // Decide whether to use compmiled mode or not.  Please see issue
     // #5557 for more information.
-    loadCompressed: isIe || !localhosts.includes(location.hostname),
+    loadCompressed: isIe || !(isLocalhost || isFileUrl),
 
     // URL of the blockly repository.  This is needed for a few reasons:
     //

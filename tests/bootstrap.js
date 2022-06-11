@@ -58,6 +58,11 @@
     // from somewhere in tests/.
     root: window.location.href.replace(/\/tests\/.*$/, '/'),
 
+    // List of deps files to load.  Paths relative to root.
+    depsFiles: [
+      'build/deps.js',
+    ],
+    
     // List of goog.modules to goog.require.
     requires: [
       'Blockly',
@@ -69,7 +74,8 @@
       'Blockly.Python.all',
     ],
 
-    // List of scripts to load in compressed mode, instead of requires.
+    // List of scripts to load in compressed mode, instead of
+    // requires.  Paths relative to root.
     compressedScripts: [
       'blockly_compressed.js',
       'blocks_compressed.js',
@@ -82,6 +88,7 @@
 
     // Additional scripts to be loaded after Blockly is loaded,
     // whether Blockly is loaded from compressed or uncompressed.
+    // Paths relative to root.
     additionalScripts: [
       'msg/messages.js',
     ],
@@ -112,10 +119,15 @@
     // goog.module).
     document.write(
         '<script src="' + options.root + '/closure/goog/base.js"></script>');
-    // Load dependency graph info from build/deps.js.  To update
-    // deps.js, run `npm run build:deps`.
-    document.write(
-        '<script src="' + options.root + '/build/deps.js"></script>');
+
+    // Load dependency graph info from the specified deps files -
+    // typically just build/deps.js.  To update deps after changing
+    // any module's goog.requires / imports, run `npm run build:deps`.
+    for (let i = 0; i < options.depsFiles.length; i++) {
+      document.write(
+          '<script src="' + options.root + options.depsFiles[i] + '">' +
+              '</script>');
+    }
 
     const requiresString = options.requires.map(quote).join();
     const scriptsString = options.additionalScripts.map(quote).join();

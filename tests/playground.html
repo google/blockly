@@ -4,9 +4,8 @@
 <meta charset="utf-8">
 <title>Blockly Playground</title>
 
-  <!-- This script loads uncompressed when on localhost and loads
-       compressed when it is being hosted.  Please add any other
-       dependencies to bootstrap.js. -->
+<!-- This script loads uncompressed when on localhost and loads
+     compressed when it is being hosted or on Internet Explorer.  -->
 <script>
   var BLOCKLY_BOOTSTRAP_OPTIONS = {
     additionalScripts: [
@@ -393,10 +392,6 @@ var spaghettiXml = [
     'next': { }
   });
 
-// Call start().  Because this <script> has type=module, it is
-// automatically deferred, so it will not be run until after the
-// document has been parsed, but before firing DOMContentLoaded.
-
 function addEventHandlers() {
   document.getElementById('save-json').addEventListener('click', saveJson);
   document.getElementById('save-xml').addEventListener('click', saveXml);
@@ -434,6 +429,9 @@ function addEventHandlers() {
       .addEventListener('click', function() { workspace.setVisible(false); });
 }
   
+// Call start().  Because this <script> has type=module, it is
+// automatically deferred, so it will not be run until after the
+// document has been parsed, but before firing DOMContentLoaded.
 start();
 
 </script>

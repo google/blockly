@@ -5,7 +5,10 @@
   } else if (typeof exports === 'object') { // Node.js
     module.exports = factory();
   } else { // Browser
-    root.Blockly.setLocale(root.<%= namespace %>, factory());
+    const messages = factory();
+    for (const key in messages) {
+      root.<%= namespace %>[key] = messages[key];
+    }
   }
 }(this, function() {
 <%= contents %>

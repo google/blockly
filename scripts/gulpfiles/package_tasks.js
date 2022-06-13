@@ -29,9 +29,7 @@ const TEMPLATE_DIR = 'scripts/package/templates';
  * @param {string} namespace The export namespace.
  * @param {Array<Object>} dependencies An array of dependencies to inject.
  */
-function packageUMD(
-    namespace, dependencies, template = 'umd.template'
-) {
+function packageUMD(namespace, dependencies, template = 'umd.template') {
   return gulp.umd({
     dependencies: function () { return dependencies; },
     namespace: function () { return namespace; },

@@ -5,8 +5,8 @@
   } else if (typeof exports === 'object') { // Node.js
     module.exports = factory();
   } else { // Browser
-    const messages = factory();
-    for (const key in messages) {
+    var messages = factory();
+    for (var key in messages) {
       root.<%= namespace %>[key] = messages[key];
     }
   }

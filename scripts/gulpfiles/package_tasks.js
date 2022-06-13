@@ -29,12 +29,12 @@ const TEMPLATE_DIR = 'scripts/package/templates';
  * @param {string} namespace The export namespace.
  * @param {Array<Object>} dependencies An array of dependencies to inject.
  */
-function packageUMD(namespace, dependencies) {
+function packageUMD(namespace, dependencies, template = 'umd.template') {
   return gulp.umd({
     dependencies: function () { return dependencies; },
     namespace: function () { return namespace; },
     exports: function () { return namespace; },
-    template: path.join(TEMPLATE_DIR, 'umd.template')
+    template: path.join(TEMPLATE_DIR, template)
   });
 };
 
@@ -321,13 +321,10 @@ function packageLocales() {
   // Remove references to goog.provide and goog.require.
   return gulp.src(`${BUILD_DIR}/msg/js/*.js`)
       .pipe(gulp.replace(/goog\.[^\n]+/g, ''))
-      .pipe(gulp.insert.prepend(`
-      var Blockly = {};Blockly.Msg={};`))
-      .pipe(packageUMD('Blockly.Msg', [{
-          name: 'Blockly',
-          amd: '../core',
-          cjs: '../core',
-        }]))
+      .pipe(packageUMD(
+        'Blockly.Msg',
+        [{name: 'Blockly'}],
+        'umd-msg.template'))
       .pipe(gulp.dest(`${RELEASE_DIR}/msg`));
 };
 

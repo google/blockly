@@ -131,21 +131,51 @@
               '</script>');
     }
 
-    const requiresString = options.requires.map(quote).join();
-    const scriptsString = options.additionalScripts.map(quote).join();
+    // Create a global variable to remember some stat that will be
+    // needed by later scripts.
+    window.BlocklyLoader = {
+      requires: options.requires,
+      done: null,
+    };
+
+    // Assemble a list of module targets to bootstrap.
+    //
+    // The first group of targets are those listed in
+    // options.requires.
+    //
+    // The next target is a fake one that will load
+    // bootstrap_helper.js.  For each we generate a call to
+    // goog.addDependency to tell the debug module loader that it can
+    // be loaded via a fake module name, and that it depends on all
+    // the targets in the first group (and indeed it will make a call
+    // to goog.require for each one).
+    //
+    // We then create another target for each of
+    // options.additionalScripts, again generating calls to
+    // goog.addDependency for each one making it dependent on the
+    // previous one.
+    let requires = options.requires.slice();
+    const scripts =
+        ['tests/bootstrap_helper.js'].concat(options.additionalScripts);
+    const scriptDeps = [];
+    for (let script, i = 0; script = scripts[i]; i++) {
+      const fakeModuleName = 'script.' + script.replace(/[./]/g, "-");
+      // requires.push(fakeModuleName);
+      scriptDeps.push('  goog.addDependency(' +
+          quote('../../' + script) + ', [' + quote(fakeModuleName) +
+          '], [' + requires.map(quote).join() + "], {'lang': 'es6'});\n");
+      requires = [fakeModuleName];
+    }
+
+    // Finally, write out a script containing the genrated
+    // goog.addDependency calls and a call to goog.bootstrap
+    // requesting the loading of the final target, which will cause
+    // all the previous ones to be loaded recursively.  Wrap this in a
+    // promise and save it so it can be awaited in blockly.mjs.
     document.write(
-        '<script>\n' +
-        '  let requires = [' + requiresString + '];\n' +
-        '  let scripts = [' + scriptsString + '];\n' +
-        '  for (const script of scripts) {\n' +
-        '    const fakeModuleName = \n' +
-        '        "script." + script.replace(/[./]/g, "-");\n' +
-        '    goog.addDependency("../../" + script, [fakeModuleName], \n' +
-        '        requires, {"lang": "es6"});\n' +
-        '    requires = [fakeModuleName];\n' +
-        '  }\n' +
-        '  window.BlocklyLoader = new Promise((resolve, reject) => {\n' +
-        '    goog.bootstrap(requires, resolve);\n' +
+        '<script>\n' + scriptDeps.join('') +
+        '  window.BlocklyLoader.done = new Promise((resolve, reject) => {\n' +
+        '    goog.bootstrap([' + requires.map(quote).join() + '], resolve);\n' +
         '  }).then(() => {\n' +
         '    return goog.module.get(\'Blockly\');\n' +
         '  });\n' +

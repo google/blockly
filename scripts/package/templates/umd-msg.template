@@ -5,9 +5,9 @@
   } else if (typeof exports === 'object') { // Node.js
     module.exports = factory();
   } else { // Browser
-    Object.assign(root.<%= namespace %>, factory());
+    root.Blockly.setLocale(root.<%= namespace %>, factory());
   }
 }(this, function() {
 <%= contents %>
-return <%= exports %>;
+return messages;
 })); 

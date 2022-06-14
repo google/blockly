@@ -49,20 +49,12 @@ export function disposeUiEffect(block: BlockSvg) {
 
   const xy = workspace.getSvgXY(svgGroup);
   // Deeply clone the current block.
-  const clone = svgGroup.cloneNode(true);
-  // AnyDuringMigration because:  Property 'setAttribute' does not exist on type
-  // 'Node'.
-  (clone as AnyDuringMigration)
-      .setAttribute('transform', 'translate(' + xy.x + ',' + xy.y + ')');
+  const clone: SVGGElement = svgGroup.cloneNode(true) as SVGGElement;
+  clone.setAttribute('transform', 'translate(' + xy.x + ',' + xy.y + ')');
   workspace.getParentSvg().appendChild(clone);
   const cloneRect =
       {'x': xy.x, 'y': xy.y, 'width': block.width, 'height': block.height};
-  // Start the animation.
-  // AnyDuringMigration because:  Argument of type 'Node' is not assignable to
-  // parameter of type 'Element'.
-  disposeUiStep(
-      clone as AnyDuringMigration, cloneRect, workspace.RTL, new Date(),
-      workspace.scale);
+  disposeUiStep(clone, cloneRect, workspace.RTL, new Date(), workspace.scale);
 }
 /**
  * Animate a cloned block and eventually dispose of it.
@@ -208,8 +200,6 @@ export function disconnectUiStop() {
   if (disconnectGroup) {
     clearTimeout(disconnectPid);
     disconnectGroup.setAttribute('transform', '');
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'Element'.
-    disconnectGroup = null as AnyDuringMigration;
+    disconnectGroup = null;
   }
 }

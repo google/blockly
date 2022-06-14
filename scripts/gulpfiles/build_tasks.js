@@ -285,7 +285,7 @@ function buildDeps(done) {
   ];
 
   const args = roots.map(root => `--root '${root}' `).join('');
-  execSync(`closure-make-deps ${args} > ${DEPS_FILE}`,
+  execSync(`closure-make-deps ${args} > '${DEPS_FILE}'`,
            {stdio: 'inherit'});
 
   // Use grep to filter out the entries that are already in deps.js.
@@ -688,11 +688,10 @@ const build = gulp.parallel(
  */
 function checkinBuilt() {
   return gulp.src([
-    `${BUILD_DIR}/**.js`,
-    `${BUILD_DIR}/**.js.map`,
-    `${BUILD_DIR}/**/**.js`,
-    `${BUILD_DIR}/**/**.js.map`,
-  ]).pipe(gulp.dest('.'));
+    `${BUILD_DIR}/*_compressed.js`,
+    `${BUILD_DIR}/*_compressed.js.map`,
+    `${BUILD_DIR}/msg/js/*.js`,
+  ], {base: BUILD_DIR}).pipe(gulp.dest('.'));
 };
 
 /**

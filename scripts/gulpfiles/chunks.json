@@ -266,7 +266,7 @@
     "./build/src/core/connection.js",
     "./build/src/core/common.js",
     "./build/src/core/blocks.js",
-    "./closure/goog/base_minimal.js",
+    "./build/src/closure/goog/base_minimal.js",
     "./build/src/core/blockly.js",
     "./blocks/variables_dynamic.js",
     "./blocks/variables.js",

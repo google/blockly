@@ -269,12 +269,8 @@ function buildJavaScript(done) {
  * suite.
  */
 function buildDeps(done) {
-  const closurePath = argv.closureLibrary ?
-      'node_modules/google-closure-library/closure/goog' :
-      'closure/goog';
-
   const roots = [
-    closurePath,
+    path.join(TSC_OUTPUT_DIR, 'closure', 'goog', 'base.js'),
     TSC_OUTPUT_DIR,
     'blocks',
     'generators',
@@ -430,15 +426,15 @@ return ${exportsExpression};
  * @return {{chunk: !Array<string>, js: !Array<string>}} The chunking
  *     information, in the same form as emitted by
  *     closure-calculate-chunks.
- *
- * TODO(cpcallen): maybeAddClosureLibrary?  Or maybe remove base.js?
  */
 function getChunkOptions() {
   if (argv.compileTs) {
     chunks[0].entry = path.join(TSC_OUTPUT_DIR, chunks[0].entry);
   }
+  const basePath =
+      path.join(TSC_OUTPUT_DIR, 'closure', 'goog', 'base_minimal.js');
   const cccArgs = [
-    '--closure-library-base-js-path ./closure/goog/base_minimal.js',
+    `--closure-library-base-js-path ./${basePath}`,
     `--deps-file './${DEPS_FILE}'`,
     ...(chunks.map(chunk => `--entrypoint '${chunk.entry}'`)),
   ];
@@ -545,7 +541,11 @@ function compile(options) {
     language_out: 'ECMASCRIPT5_STRICT',
     jscomp_off: [...JSCOMP_OFF],
     rewrite_polyfills: true,
-    hide_warnings_for: 'node_modules',
+    // N.B.: goog.js refers to lots of properties on goog that are not
+    // declared by base_minimal.js, while if you compile against
+    // base.js instead you will discover that it uses @deprecated
+    // inherits, forwardDeclare etc.
+    hide_warnings_for: ['node_modules', 'build/src/closure/goog/goog.js'],
     define: ['COMPILED=true'],
   };
   if (argv.debug || argv.strict) {

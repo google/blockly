@@ -85,13 +85,13 @@
     // List of scripts to load in compressed mode, instead of
     // requires.  Paths relative to root.
     compressedScripts: [
-      'blockly_compressed.js',
-      'blocks_compressed.js',
-      'dart_compressed.js',
-      'javascript_compressed.js',
-      'lua_compressed.js',
-      'php_compressed.js',
-      'python_compressed.js',
+      'build/blockly_compressed.js',
+      'build/blocks_compressed.js',
+      'build/dart_compressed.js',
+      'build/javascript_compressed.js',
+      'build/lua_compressed.js',
+      'build/php_compressed.js',
+      'build/python_compressed.js',
     ],
 
     // Additional scripts to be loaded after Blockly is loaded,

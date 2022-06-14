@@ -153,11 +153,13 @@ export function bind(
     if (name in Touch.TOUCH_MAP) {
       const touchWrapFunc = (e: Event) => {
         // Punt on multitouch events.
-        if (e.changedTouches && e.changedTouches.length === 1) {
+        if (e instanceof TouchEvent &&
+            e.changedTouches &&
+            e.changedTouches.length === 1) {
           // Map the touch event's properties to the event.
           const touchPoint = e.changedTouches[0];
-          e.clientX = touchPoint.clientX;
-          e.clientY = touchPoint.clientY;
+          (e as any).clientX = touchPoint.clientX;
+          (e as any).clientY = touchPoint.clientY;
         }
         wrapFunc(e);
 

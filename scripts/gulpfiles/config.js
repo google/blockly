@@ -18,18 +18,27 @@ var path = require('path');
 //
 // - tests/scripts/compile_typings.sh
 // - tests/scripts/check_metadata.sh
-module.exports = {
-  // Directory to write compiled output to.
-  BUILD_DIR: 'build',
+// - tests/scripts/update_metadata.sh
+// - blockly_uncompressed.js (for location of deps.js)
+// - tests/playgrounds/prepare.js (for location of deps.js)
+// - tests/mocha/index.html (for location of deps.mocha.js)
 
-  // Directory in which to assemble (and from which to publish) the
-  // blockly npm package.
-  RELEASE_DIR: 'dist',
+// Directory to write compiled output to.
+exports.BUILD_DIR = 'build';
 
-  // Directory to write typings output to.
-  TYPINGS_BUILD_DIR: path.join('build', 'typings'),
+// Dependencies file (for blockly_uncompressed.js):
+exports.DEPS_FILE = path.join(exports.BUILD_DIR, 'deps.js');
 
-  // Directory where typescript compiler output can be found.
-  // Matches the value in tsconfig.json: outDir
-  TSC_OUTPUT_DIR: path.join('build', 'ts'),
-};
+// Dependencies file (for blockly_uncompressed.js):
+exports.TEST_DEPS_FILE = path.join(exports.BUILD_DIR, 'deps.mocha.js');
+
+// Directory to write typings output to.
+exports.TYPINGS_BUILD_DIR = path.join(exports.BUILD_DIR, 'typings');
+
+// Directory where typescript compiler output can be found.
+// Matches the value in tsconfig.json: outDir
+exports.TSC_OUTPUT_DIR = path.join(exports.BUILD_DIR, 'src');
+
+// Directory in which to assemble (and from which to publish) the
+// blockly npm package.
+exports.RELEASE_DIR = 'dist';

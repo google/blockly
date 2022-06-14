@@ -25,12 +25,17 @@ var closureDeps = require('google-closure-deps');
 var argv = require('yargs').argv;
 var rimraf = require('rimraf');
 
-var {BUILD_DIR, TSC_OUTPUT_DIR} = require('./config');
+var {BUILD_DIR, DEPS_FILE, TEST_DEPS_FILE, TSC_OUTPUT_DIR} = require('./config');
 var {getPackageJson} = require('./helper_tasks');
 
 ////////////////////////////////////////////////////////////
 //                        Build                           //
 ////////////////////////////////////////////////////////////
+
+/**
+ * Directory in which core/ can be found after passing through tsc.
+ */
+const CORE_DIR = path.join(TSC_OUTPUT_DIR, 'core');
 
 /**
  * Suffix to add to compiled output files.
@@ -98,7 +103,7 @@ const NAMESPACE_PROPERTY = '__namespace__';
 const chunks = [
   {
     name: 'blockly',
-    entry: 'core/blockly.js',
+    entry: path.join(CORE_DIR, 'blockly.js'),
     reexport: 'Blockly',
   },
   {
@@ -246,20 +251,30 @@ var JSCOMP_OFF = [
 ];
 
 /**
- * This task updates tests/deps.js, used by blockly_uncompressed.js
- * when loading Blockly in uncompiled mode.
+ * Builds Blockly as a JS program, by running tsc on all the files in
+ * the core directory.  This must be run before buildDeps or
+ * buildCompiled.
+ */
+function buildJavaScript(done) {
+  execSync(`tsc -outDir "${TSC_OUTPUT_DIR}"`, {stdio: 'inherit'});
+  done();
+}
+
+/**
+ * This task updates DEPS_FILE (deps.js), used by
+ * blockly_uncompressed.js when loading Blockly in uncompiled mode.
  *
- * Also updates tests/deps.mocha.js, used by the mocha test suite.
+ * Also updates TEST_DEPS_FILE (deps.mocha.js), used by the mocha test
+ * suite.
  */
 function buildDeps(done) {
   const closurePath = argv.closureLibrary ?
       'node_modules/google-closure-library/closure/goog' :
       'closure/goog';
 
-  const coreDir = argv.compileTs ? path.join(TSC_OUTPUT_DIR, 'core') : 'core';
   const roots = [
     closurePath,
-    coreDir,
+    TSC_OUTPUT_DIR,
     'blocks',
     'generators',
   ];
@@ -270,12 +285,13 @@ function buildDeps(done) {
   ];
 
   const args = roots.map(root => `--root '${root}' `).join('');
-  execSync(`closure-make-deps ${args} > tests/deps.js`, {stdio: 'inherit'});
+  execSync(`closure-make-deps ${args} > '${DEPS_FILE}'`,
+           {stdio: 'inherit'});
 
   // Use grep to filter out the entries that are already in deps.js.
   const testArgs = testRoots.map(root => `--root '${root}' `).join('');
-  execSync(`closure-make-deps ${testArgs} | grep 'tests/mocha'` +
-      ' > tests/deps.mocha.js', {stdio: 'inherit'});
+  execSync(`closure-make-deps ${testArgs} | grep 'tests/mocha' ` +
+      `> '${TEST_DEPS_FILE}'`, {stdio: 'inherit'});
   done();
 };
 
@@ -422,7 +438,7 @@ function getChunkOptions() {
   }
   const cccArgs = [
     '--closure-library-base-js-path ./closure/goog/base_minimal.js',
-    '--deps-file ./tests/deps.js',
+    `--deps-file './${DEPS_FILE}'`,
     ...(chunks.map(chunk => `--entrypoint '${chunk.entry}'`)),
   ];
   const cccCommand = `closure-calculate-chunks ${cccArgs.join(' ')}`;
@@ -462,8 +478,8 @@ function getChunkOptions() {
   //     /* ... remaining handful of chunks */
   //   ],
   //   js: [
-  //     './core/serialization/workspaces.js',
-  //     './core/serialization/variables.js',
+  //     './build/ts/core/serialization/workspaces.js',
+  //     './build/ts/core/serialization/variables.js',
   //     /* ... remaining several hundred files */
   //   ],
   // }
@@ -533,12 +549,12 @@ const pathSepRegExp = new RegExp(path.sep.replace(/\\/, '\\\\'), "g");
  *     callback.  Modified in place.
  */
 function flattenCorePaths(pathObject) {
-  const dirs = pathObject.dirname.split(path.sep);
-  const coreIndex = argv.compileTs ? 2 : 0;
-  if (dirs[coreIndex] === 'core') {
-    pathObject.dirname = path.join(...dirs.slice(0, coreIndex + 1));
+  if (!pathObject.dirname.startsWith(CORE_DIR)) return;
+  const subdir = pathObject.dirname.slice(CORE_DIR.length + 1);
+  if (subdir) {
+    pathObject.dirname = CORE_DIR;
     pathObject.basename =
-        dirs.slice(coreIndex + 1).concat(pathObject.basename).join('-slash-');
+        (subdir + '/' + pathObject.basename).replace(/\//g, '-slash-');
   }
 }
 
@@ -662,7 +678,7 @@ function buildAdvancedCompilationTest() {
  *     test/deps*.js
  */
 const build = gulp.parallel(
-    gulp.series(buildDeps, buildCompiled),
+    gulp.series(buildJavaScript, buildDeps, buildCompiled),
     buildLangfiles,
     );
 
@@ -672,11 +688,10 @@ const build = gulp.parallel(
  */
 function checkinBuilt() {
   return gulp.src([
-    `${BUILD_DIR}/**.js`,
-    `${BUILD_DIR}/**.js.map`,
-    `${BUILD_DIR}/**/**.js`,
-    `${BUILD_DIR}/**/**.js.map`,
-  ]).pipe(gulp.dest('.'));
+    `${BUILD_DIR}/*_compressed.js`,
+    `${BUILD_DIR}/*_compressed.js.map`,
+    `${BUILD_DIR}/msg/js/*.js`,
+  ], {base: BUILD_DIR}).pipe(gulp.dest('.'));
 };
 
 /**
@@ -699,13 +714,9 @@ function format() {
       .pipe(gulp.dest('.'));
 };
 
-function buildTypescript(done) {
-  execSync('npx tsc', {stdio: 'inherit'});
-  done();
-}
-
 module.exports = {
   build: build,
+  javaScript: buildJavaScript,
   deps: buildDeps,
   generateLangfiles: generateLangfiles,
   langfiles: buildLangfiles,
@@ -714,5 +725,4 @@ module.exports = {
   checkinBuilt: checkinBuilt,
   cleanBuildDir: cleanBuildDir,
   advancedCompilationTest: buildAdvancedCompilationTest,
-  buildTypescript: buildTypescript
 }

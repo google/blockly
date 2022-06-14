@@ -1,7 +1,7 @@
 {
   "include": [
-    "core/**/*",
-    "closure/goog/base_minimal.js",
+    "core/**/*",  // N.B.: also pulls in closure/goog/goog.js if needed.
+    "closure/goog/goog.js",  // Just for ouptut directory structure.
   ],
   "compilerOptions": {
     // Tells TypeScript to read JS files, as
@@ -16,7 +16,6 @@
     // next to the .js files
     //"declarationDir": "build/ts/declarations",
 
-    "outDir": "build/ts",
     "module": "ES2015",
     "moduleResolution": "node",
     "target": "ES2020",

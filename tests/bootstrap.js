@@ -122,6 +122,9 @@
     document.write(
         '<script src="' + options.root + '/closure/goog/base.js"></script>');
 
+    // Prevent spurious transpilation warnings.
+    document.write('<script>goog.TRANSPILE = "never";</script>');
+
     // Load dependency graph info from the specified deps files -
     // typically just build/deps.js.  To update deps after changing
     // any module's goog.requires / imports, run `npm run build:deps`.

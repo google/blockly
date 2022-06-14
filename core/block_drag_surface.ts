@@ -38,13 +38,13 @@ import * as svgMath from './utils/svg_math.js';
  */
 export class BlockDragSurfaceSvg {
   /** The SVG drag surface. Set once by BlockDragSurfaceSvg.createDom. */
-  private SVG_: SVGElement|null = null;
+  private SVG_: SVGElement;
 
   /**
    * This is where blocks live while they are being dragged if the drag
    * surface is enabled.
    */
-  private dragGroup_: SVGElement|null = null;
+  private dragGroup_: SVGElement;
 
   /**
    * Cached value for the scale of the drag surface.
@@ -57,7 +57,7 @@ export class BlockDragSurfaceSvg {
    * This translation is in pixel units, because the scale is applied to the
    * drag group rather than the top-level SVG.
    */
-  private surfaceXY_: Coordinate|null = null;
+  private surfaceXY_: Coordinate = new Coordinate(0, 0);
   private readonly childSurfaceXY_: Coordinate;
 
   /** @param container Containing element. */
@@ -69,28 +69,23 @@ export class BlockDragSurfaceSvg {
      */
     this.childSurfaceXY_ = new Coordinate(0, 0);
 
-    this.createDom();
+    this.SVG_ = dom.createSvgElement(
+      Svg.SVG,
+      {
+        'xmlns': dom.SVG_NS,
+        'xmlns:html': dom.HTML_NS,
+        'xmlns:xlink': dom.XLINK_NS,
+        'version': '1.1',
+        'class': 'blocklyBlockDragSurface',
+      },
+      this.container);
+    this.dragGroup_ =
+      dom.createSvgElement(Svg.G, {}, this.SVG_ as SVGElement);
   }
 
   /** Create the drag surface and inject it into the container. */
   createDom() {
-    if (this.SVG_) {
-      return;
-    }
-    // Already created.
-    this.SVG_ = dom.createSvgElement(
-        Svg.SVG, {
-          'xmlns': dom.SVG_NS,
-          'xmlns:html': dom.HTML_NS,
-          'xmlns:xlink': dom.XLINK_NS,
-          'version': '1.1',
-          'class': 'blocklyBlockDragSurface',
-        },
-        this.container);
-    // AnyDuringMigration because:  Argument of type 'SVGElement | null' is not
-    // assignable to parameter of type 'Element | undefined'.
-    this.dragGroup_ =
-        dom.createSvgElement(Svg.G, {}, this.SVG_ as AnyDuringMigration);
+    // TODO: Add deprecation warning.
   }
 
   /**
@@ -99,12 +94,12 @@ export class BlockDragSurfaceSvg {
    * @param blocks Block or group of blocks to place on the drag surface.
    */
   setBlocksAndShow(blocks: SVGElement) {
-    if (this.dragGroup_!.childNodes.length) {
+    if (this.dragGroup_.childNodes.length) {
       throw Error('Already dragging a block.');
     }
     // appendChild removes the blocks from the previous parent
-    this.dragGroup_!.appendChild(blocks);
-    this.SVG_!.style.display = 'block';
+    this.dragGroup_.appendChild(blocks);
+    this.SVG_.style.display = 'block';
     this.surfaceXY_ = new Coordinate(0, 0);
   }
 
@@ -137,13 +132,8 @@ export class BlockDragSurfaceSvg {
     // Make sure the svg exists on a pixel boundary so that it is not fuzzy.
     x = Math.round(x);
     y = Math.round(y);
-    this.SVG_!.style.display = 'block';
-
-    // AnyDuringMigration because:  Argument of type 'SVGElement | null' is not
-    // assignable to parameter of type 'Element'.
-    dom.setCssTransform(
-        this.SVG_ as AnyDuringMigration,
-        'translate3d(' + x + 'px, ' + y + 'px, 0)');
+    this.SVG_.style.display = 'block';
+    dom.setCssTransform(this.SVG_, 'translate3d(' + x + 'px, ' + y + 'px, 0)');
   }
 
   /**
@@ -152,8 +142,8 @@ export class BlockDragSurfaceSvg {
    * @param deltaY Vertical offset in pixel units.
    */
   translateBy(deltaX: number, deltaY: number) {
-    const x = this.surfaceXY_!.x + deltaX;
-    const y = this.surfaceXY_!.y + deltaY;
+    const x = this.surfaceXY_.x + deltaX;
+    const y = this.surfaceXY_.y + deltaY;
     this.surfaceXY_ = new Coordinate(x, y);
     this.translateSurfaceInternal_();
   }
@@ -203,8 +193,8 @@ export class BlockDragSurfaceSvg {
    * for BlockSvg.getRelativeToSurfaceXY).
    * @return Drag surface block DOM element, or null if no blocks exist.
    */
-  getCurrentBlock(): Element|null {
-    return this.dragGroup_!.firstChild as Element;
+  getCurrentBlock(): Element | null {
+    return this.dragGroup_.firstChild as Element;
   }
 
   /**
@@ -234,13 +224,13 @@ export class BlockDragSurfaceSvg {
         // appendChild removes the node from this.dragGroup_
         opt_newSurface.appendChild(currentBlockElement);
       } else {
-        this.dragGroup_!.removeChild(currentBlockElement);
+        this.dragGroup_.removeChild(currentBlockElement);
       }
     }
-    this.SVG_!.style.display = 'none';
-    if (this.dragGroup_!.childNodes.length) {
+    this.SVG_.style.display = 'none';
+    if (this.dragGroup_.childNodes.length) {
       throw Error('Drag group was not cleared.');
     }
-    this.surfaceXY_ = null;
+    this.surfaceXY_ = new Coordinate(0, 0);
   }
 }

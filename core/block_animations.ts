@@ -32,7 +32,6 @@ interface CloneRect {
 let disconnectPid: AnyDuringMigration = 0;
 
 /** SVG group of wobbling block.  There can only be one at a time. */
-// AnyDuringMigration because:  Type 'null' is not assignable to type 'Element'.
 let disconnectGroup: SVGElement | null = null;
 
 
@@ -136,9 +135,7 @@ function connectionUiStep(ripple: SVGElement, start: Date, scale: number) {
     dom.removeNode(ripple);
   } else {
     ripple.setAttribute('r', (percent * 25 * scale).toString());
-    // AnyDuringMigration because:  Type 'number' is not assignable to type
-    // 'string'.
-    ripple.style.opacity = (1 - percent) as AnyDuringMigration;
+    ripple.style.opacity = (1 - percent) as unknown as string;
     disconnectPid = setTimeout(connectionUiStep, 10, ripple, start, scale);
   }
 }

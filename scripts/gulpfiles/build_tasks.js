@@ -549,21 +549,12 @@ const pathSepRegExp = new RegExp(path.sep.replace(/\\/, '\\\\'), "g");
  *     callback.  Modified in place.
  */
 function flattenCorePaths(pathObject) {
-  if (pathObject.dirname.startsWith(CORE_PATH)) {
-    pathObject.dirname = CORE_PATH;
-    bathObject.basename =
-        CORE_PATH.split(path.sep).concat(pathObject.basename).join('-slash-');
-    console.log(pathObject);
-  }
-
-  return;
-  
-  const dirs = pathObject.dirname.split(path.sep);
-  const coreIndex = argv.compileTs ? 2 : 0;
-  if (dirs[coreIndex] === 'core') {
-    pathObject.dirname = path.join(...dirs.slice(0, coreIndex + 1));
+  if (!pathObject.dirname.startsWith(CORE_DIR)) return;
+  const subdir = pathObject.dirname.slice(CORE_DIR.length + 1);
+  if (subdir) {
+    pathObject.dirname = CORE_DIR;
     pathObject.basename =
-        dirs.slice(coreIndex + 1).concat(pathObject.basename).join('-slash-');
+        (subdir + '/' + pathObject.basename).replace(/\//g, '-slash-');
   }
 }
 

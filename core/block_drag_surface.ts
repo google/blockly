@@ -25,7 +25,8 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.BlockDragSurfaceSvg');
 
-import {Coordinate} from './utils/coordinate.js';
+import { Coordinate } from './utils/coordinate.js';
+import * as deprecation from './utils/deprecation.js';
 import * as dom from './utils/dom.js';
 import {Svg} from './utils/svg.js';
 import * as svgMath from './utils/svg_math.js';
@@ -85,7 +86,10 @@ export class BlockDragSurfaceSvg {
 
   /** Create the drag surface and inject it into the container. */
   createDom() {
-    // TODO: Add deprecation warning.
+    // No alternative provided, because now the dom is just automatically
+    // created in the constructor now.
+    deprecation.warn(
+        'BlockDragSurfaceSvg createDom', 'June 2022', 'June 2023');
   }
 
   /**

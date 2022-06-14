@@ -38,7 +38,7 @@ import * as svgMath from './utils/svg_math.js';
  */
 export class BlockDragSurfaceSvg {
   /** The SVG drag surface. Set once by BlockDragSurfaceSvg.createDom. */
-  private SVG_: SVGElement;
+  private svg_: SVGElement;
 
   /**
    * This is where blocks live while they are being dragged if the drag
@@ -69,7 +69,7 @@ export class BlockDragSurfaceSvg {
      */
     this.childSurfaceXY_ = new Coordinate(0, 0);
 
-    this.SVG_ = dom.createSvgElement(
+    this.svg_ = dom.createSvgElement(
       Svg.SVG,
       {
         'xmlns': dom.SVG_NS,
@@ -80,7 +80,7 @@ export class BlockDragSurfaceSvg {
       },
       this.container);
     this.dragGroup_ =
-      dom.createSvgElement(Svg.G, {}, this.SVG_ as SVGElement);
+      dom.createSvgElement(Svg.G, {}, this.svg_ as SVGElement);
   }
 
   /** Create the drag surface and inject it into the container. */
@@ -99,7 +99,7 @@ export class BlockDragSurfaceSvg {
     }
     // appendChild removes the blocks from the previous parent
     this.dragGroup_.appendChild(blocks);
-    this.SVG_.style.display = 'block';
+    this.svg_.style.display = 'block';
     this.surfaceXY_ = new Coordinate(0, 0);
   }
 
@@ -132,8 +132,8 @@ export class BlockDragSurfaceSvg {
     // Make sure the svg exists on a pixel boundary so that it is not fuzzy.
     x = Math.round(x);
     y = Math.round(y);
-    this.SVG_.style.display = 'block';
-    dom.setCssTransform(this.SVG_, 'translate3d(' + x + 'px, ' + y + 'px, 0)');
+    this.svg_.style.display = 'block';
+    dom.setCssTransform(this.svg_, 'translate3d(' + x + 'px, ' + y + 'px, 0)');
   }
 
   /**
@@ -167,7 +167,7 @@ export class BlockDragSurfaceSvg {
    * @return Current translation of the surface.
    */
   getSurfaceTranslation(): Coordinate {
-    const xy = svgMath.getRelativeXY(this.SVG_ as SVGElement);
+    const xy = svgMath.getRelativeXY(this.svg_ as SVGElement);
     return new Coordinate(xy.x / this.scale_, xy.y / this.scale_);
   }
 
@@ -184,8 +184,8 @@ export class BlockDragSurfaceSvg {
    * Returns the SVG drag surface.
    * @returns The SVG drag surface.
    */
-  getSvgRoot(): SVGElement|null {
-    return this.SVG_;
+  getSvgRoot(): SVGElement | null {
+    return this.svg_;
   }
 
   /**
@@ -227,7 +227,7 @@ export class BlockDragSurfaceSvg {
         this.dragGroup_.removeChild(currentBlockElement);
       }
     }
-    this.SVG_.style.display = 'none';
+    this.svg_.style.display = 'none';
     if (this.dragGroup_.childNodes.length) {
       throw Error('Drag group was not cleared.');
     }

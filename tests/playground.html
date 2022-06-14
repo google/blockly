@@ -17,7 +17,8 @@
 </script>
 <script src="bootstrap.js"></script>
 <script type=module>
-import Blockly from './blockly.mjs';
+// Wait for Blockly to finish loading.
+import './bootstrap_done.mjs';
 
 const IS_UNCOMPRESSED = Boolean(window.BlocklyLoader);  // See bootstrap.js
 var workspace = null;

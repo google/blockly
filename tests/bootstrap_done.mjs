@@ -20,20 +20,17 @@
  *
  *     See tests/playground.html for example usage.
  */
-
-let Blockly;
-
 if (window.BlocklyLoader) {
-  // Uncompiled mode.  Use top-level await
+  // Uncompressed mode.  Use top-level await
   // (https://v8.dev/features/top-level-await) to block loading of
   // this module until goog.bootstrap()ping of Blockly is finished.
   await window.BlocklyLoader.done;
-  Blockly = globalThis.Blockly;
+  // Note that this module previously did an export default of the
+  // value returned by the BlocklyLoader.done promise.  This was
+  // changed in PR #5995 because library blocks and generators cannot
+  // be accessed via that the core/blockly.js exports object.
 } else if (window.Blockly) {
-  // Compiled mode.  Retrieve the pre-installed Blockly global.
-  Blockly = globalThis.Blockly;
+  // Compiled mode.  Nothing more to do.
 } else {
   throw new Error('neither window.Blockly nor window.BlocklyLoader found');
 }
-
-export default Blockly;

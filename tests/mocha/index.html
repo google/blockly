@@ -180,7 +180,7 @@
 
     <script type=module>
       // Wait for Blockly to finish loading before running tests.
-      import Blockly from "../blockly.mjs";
+      import '../bootstrap_done.mjs';
 
       let runner = mocha.run(function(failures) {
         var failureDiv = document.getElementById('failureCount');

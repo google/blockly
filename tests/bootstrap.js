@@ -13,8 +13,8 @@
  *     uncompressed mode.
  *
  *     You must use a <script> tag to load this script first, then
- *     import blockly.mjs in a <script type=module> to obtain the
- *     loaded module.
+ *     import bootstrap_done.mjs in a <script type=module> to wait for
+ *     bootstrapping to finish.
  *
  *     See tests/playground.html for example usage.
  *
@@ -174,13 +174,11 @@
     // goog.addDependency calls and a call to goog.bootstrap
     // requesting the loading of the final target, which will cause
     // all the previous ones to be loaded recursively.  Wrap this in a
-    // promise and save it so it can be awaited in blockly.mjs.
+    // promise and save it so it can be awaited in bootstrap_done.mjs.
     document.write(
         '<script>\n' + scriptDeps.join('') +
         '  window.BlocklyLoader.done = new Promise((resolve, reject) => {\n' +
         '    goog.bootstrap([' + requires.map(quote).join() + '], resolve);\n' +
-        '  }).then(() => {\n' +
-        '    return goog.module.get(\'Blockly\');\n' +
         '  });\n' +
         '</script>\n');
   } else {

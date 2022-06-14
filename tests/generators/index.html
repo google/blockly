@@ -206,8 +206,9 @@ function changeIndex() {
 }
 </script>
 <script type=module>
-// Wait for Blockly to finish loading.
-import Blockly from "../blockly.mjs";
+// Wait for Blockly to finish loading before running tests.
+import '../bootstrap_done.mjs';
+
 start();
 </script>
 

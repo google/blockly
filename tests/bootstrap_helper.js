@@ -15,6 +15,6 @@
  */
 
 /* eslint-disable-next-line no-undef */
-for (const require of BlocklyLoader.requires) {
+for (const require of blocklyLoader.requires) {
   goog.require(require);
 }

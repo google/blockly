@@ -20,7 +20,7 @@
 // Wait for Blockly to finish loading.
 import './bootstrap_done.mjs';
 
-const IS_UNCOMPRESSED = Boolean(window.BlocklyLoader);  // See bootstrap.js
+const IS_UNCOMPRESSED = !window.blocklyLoader.compressed;  // See bootstrap.js
 var workspace = null;
 
 function start() {

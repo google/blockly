@@ -108,6 +108,14 @@
     throw new Error('Bootstrapping in node.js not implemented.');
   }
 
+  // Create a global variable to remember some stat that will be
+  // needed by later scripts.
+  window.blocklyLoader = {
+    compressed: options.loadCompressed,
+    requires: null,
+    done: null,
+  };
+
   if (!options.loadCompressed) {
     // We can load Blockly in uncompressed mode.  Note that this section
     // needs to parse in IE11 (mostly ES5.1, but allowing e.g. const),
@@ -134,12 +142,8 @@
               '</script>');
     }
 
-    // Create a global variable to remember some stat that will be
-    // needed by later scripts.
-    window.BlocklyLoader = {
-      requires: options.requires,
-      done: null,
-    };
+    // Record require targets for bootstrap_helper.js.
+    window.blocklyLoader.requires = options.requires;
 
     // Assemble a list of module targets to bootstrap.
     //
@@ -177,7 +181,7 @@
     // promise and save it so it can be awaited in bootstrap_done.mjs.
     document.write(
         '<script>\n' + scriptDeps.join('') +
-        '  window.BlocklyLoader.done = new Promise((resolve, reject) => {\n' +
+        '  window.blocklyLoader.done = new Promise((resolve, reject) => {\n' +
         '    goog.bootstrap([' + requires.map(quote).join() + '], resolve);\n' +
         '  });\n' +
         '</script>\n');

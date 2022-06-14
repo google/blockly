@@ -59,6 +59,9 @@ class InputRow extends Row {
     let connectedBlockWidths = 0;
     for (let i = 0; i < this.elements.length; i++) {
       const elem = this.elements[i];
+      if (elem === undefined) {
+        continue;
+      }
       this.width += elem.width;
       if (Types.isInput(elem) && elem instanceof InputConnection) {
         if (Types.isStatementInput(elem) && elem instanceof StatementInput) {

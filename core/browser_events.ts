@@ -227,17 +227,13 @@ export function isTargetInput(e: Event): boolean {
  * @return True if right-click.
  * @alias Blockly.browserEvents.isRightButton
  */
-export function isRightButton(e: Event): boolean {
-  // AnyDuringMigration because:  Property 'ctrlKey' does not exist on type
-  // 'Event'.
-  if ((e as AnyDuringMigration).ctrlKey && userAgent.MAC) {
+export function isRightButton(e: MouseEvent): boolean {
+  if (e.ctrlKey && userAgent.MAC) {
     // Control-clicking on Mac OS X is treated as a right-click.
     // WebKit on Mac OS X fails to change button to 2 (but Gecko does).
     return true;
   }
-  // AnyDuringMigration because:  Property 'button' does not exist on type
-  // 'Event'.
-  return (e as AnyDuringMigration).button === 2;
+  return e.button === 2;
 }
 
 /**
@@ -250,14 +246,10 @@ export function isRightButton(e: Event): boolean {
  * @alias Blockly.browserEvents.mouseToSvg
  */
 export function mouseToSvg(
-    e: Event, svg: SVGSVGElement, matrix: SVGMatrix|null): SVGPoint {
+  e: MouseEvent, svg: SVGSVGElement, matrix: SVGMatrix | null): SVGPoint {
   const svgPoint = svg.createSVGPoint();
-  // AnyDuringMigration because:  Property 'clientX' does not exist on type
-  // 'Event'.
-  svgPoint.x = (e as AnyDuringMigration).clientX;
-  // AnyDuringMigration because:  Property 'clientY' does not exist on type
-  // 'Event'.
-  svgPoint.y = (e as AnyDuringMigration).clientY;
+  svgPoint.x = e.clientX;
+  svgPoint.y = e.clientY;
 
   if (!matrix) {
     matrix = svg.getScreenCTM()!.inverse();

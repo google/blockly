@@ -153,9 +153,7 @@ export class Comment extends Icon {
     const textarea = this.textarea_;
     textarea.className = 'blocklyCommentTextarea';
     textarea.setAttribute('dir', this.block_.RTL ? 'RTL' : 'LTR');
-    // AnyDuringMigration because:  Type 'string | null' is not assignable to
-    // type 'string'.
-    textarea.value = this.model_.text as AnyDuringMigration;
+    textarea.value = this.model_.text || '';
     this.resizeTextarea_();
 
     body.appendChild(textarea);
@@ -286,10 +284,7 @@ export class Comment extends Icon {
    */
   private createNonEditableBubble_() {
     // TODO (#2917): It would be great if the comment could support line breaks.
-    // AnyDuringMigration because:  Argument of type 'string | null' is not
-    // assignable to parameter of type 'string'.
-    this.paragraphElement_ =
-        Bubble.textToDom(this.block_.getCommentText() as AnyDuringMigration);
+    this.paragraphElement_ = Bubble.textToDom(this.model_.text ?? '');
     this.bubble_ = Bubble.createNonEditableBubble(
         this.paragraphElement_, (this.block_), this.iconXY_ as Coordinate);
     this.applyColour();
@@ -368,9 +363,7 @@ export class Comment extends Icon {
    */
   updateText() {
     if (this.textarea_) {
-      // AnyDuringMigration because:  Type 'string | null' is not assignable to
-      // type 'string'.
-      this.textarea_.value = this.model_.text as AnyDuringMigration;
+      this.textarea_.value = this.model_.text || '';
     } else if (this.paragraphElement_) {
       // Non-Editable mode.
       // TODO (#2917): If 2917 gets added this will probably need to be updated.

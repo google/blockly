@@ -33,7 +33,8 @@ let disconnectPid: AnyDuringMigration = 0;
 
 /** SVG group of wobbling block.  There can only be one at a time. */
 // AnyDuringMigration because:  Type 'null' is not assignable to type 'Element'.
-let disconnectGroup: Element = null as AnyDuringMigration;
+let disconnectGroup: SVGElement | null = null;
+
 
 /**
  * Play some UI effects (sound, animation) when disposing of a block.
@@ -157,6 +158,7 @@ function connectionUiStep(ripple: SVGElement, start: Date, scale: number) {
  * @internal
  */
 export function disconnectUiEffect(block: BlockSvg) {
+  disconnectUiStop();
   block.workspace.getAudioManager().play('disconnect');
   if (block.workspace.scale < 1) {
     return;  // Too small to care about visual effects.
@@ -170,7 +172,8 @@ export function disconnectUiEffect(block: BlockSvg) {
     magnitude *= -1;
   }
   // Start the animation.
-  disconnectUiStep(block.getSvgRoot(), magnitude, new Date());
+  disconnectGroup = block.getSvgRoot();
+  disconnectUiStep(disconnectGroup, magnitude, new Date());
 }
 
 /**
@@ -186,19 +189,14 @@ function disconnectUiStep(group: SVGElement, magnitude: number, start: Date) {
   const ms = new Date().getTime() - start.getTime();
   const percent = ms / DURATION;
 
-  if (percent > 1) {
-    (group as AnyDuringMigration).skew_ = '';
-  } else {
-    const skew = Math.round(
+  let skew = '';
+  if (percent <= 1) {
+    const val = Math.round(
         Math.sin(percent * Math.PI * WIGGLES) * (1 - percent) * magnitude);
-    (group as AnyDuringMigration).skew_ = 'skewX(' + skew + ')';
-    disconnectGroup = group;
+    skew = `skewX(${val})`;
     disconnectPid = setTimeout(disconnectUiStep, 10, group, magnitude, start);
   }
-  group.setAttribute(
-      'transform',
-      (group as AnyDuringMigration).translate_ +
-          (group as AnyDuringMigration).skew_);
+  group.setAttribute('transform', skew);
 }
 
 /**
@@ -209,9 +207,7 @@ function disconnectUiStep(group: SVGElement, magnitude: number, start: Date) {
 export function disconnectUiStop() {
   if (disconnectGroup) {
     clearTimeout(disconnectPid);
-    const group = disconnectGroup;
-    (group as AnyDuringMigration).skew_ = '';
-    group.setAttribute('transform', (group as AnyDuringMigration).translate_);
+    disconnectGroup.setAttribute('transform', '');
     // AnyDuringMigration because:  Type 'null' is not assignable to type
     // 'Element'.
     disconnectGroup = null as AnyDuringMigration;

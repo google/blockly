@@ -222,7 +222,7 @@ JavaScript['math_on_list'] = function(block) {
     case 'SUM':
       list = JavaScript.valueToCode(block, 'LIST',
           JavaScript.ORDER_MEMBER) || '[]';
-      code = list + '.reduce(function(x, y) {return x + y;})';
+      code = list + '.reduce(function(x, y) {return x + y;}, 0)';
       break;
     case 'MIN':
       list = JavaScript.valueToCode(block, 'LIST',
@@ -238,7 +238,7 @@ JavaScript['math_on_list'] = function(block) {
       // mathMean([null,null,1,3]) === 2.0.
       const functionName = JavaScript.provideFunction_('mathMean', `
 function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(myList) {
-  return myList.reduce(function(x, y) {return x + y;}) / myList.length;
+  return myList.reduce(function(x, y) {return x + y;}, 0) / myList.length;
 }
 `);
       list = JavaScript.valueToCode(block, 'LIST',

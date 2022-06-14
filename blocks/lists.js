@@ -13,6 +13,7 @@
 goog.module('Blockly.libraryBlocks.lists');
 
 const xmlUtils = goog.require('Blockly.utils.xml');
+const Xml = goog.require('Blockly.Xml');
 const {Align} = goog.require('Blockly.Input');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
@@ -452,10 +453,34 @@ blocks['lists_getIndex'] = {
     this.updateAt_(isAt);
   },
 
-  // This block does not need JSO serialization hooks (saveExtraState and
-  // loadExtraState) because the state of this object is already encoded in the
-  // dropdown values.
-  // XML hooks are kept for backwards compatibility.
+  /**
+   * Returns the state of this block as a JSON serializable object.
+   * Returns null for efficiency if no state is needed (not a statement)
+   * @return {?{isStatement: boolean}} The state of this block, ie whether it's
+   *     a statement.
+   */
+  saveExtraState: function() {
+    if (!this.outputConnection) {
+      return {
+        'isStatement': true,
+      };
+    }
+    return null;
+  },
+
+  /**
+   * Applies the given state to this block.
+   * @param {*} state The state to apply to this block, ie whether it's a
+   *     statement.
+   */
+  loadExtraState: function(state) {
+    if (state['isStatement']) {
+      this.updateStatement_(true);
+    } else if (typeof state === 'string') {
+      // backward compatible for json serialised mutations
+      this.domToMutation(Xml.textToDom(state));
+    }
+  },
 
   /**
    * Switch between a value block and a statement block.
@@ -624,10 +649,23 @@ blocks['lists_setIndex'] = {
     this.updateAt_(isAt);
   },
 
-  // This block does not need JSO serialization hooks (saveExtraState and
-  // loadExtraState) because the state of this object is already encoded in the
-  // dropdown values.
-  // XML hooks are kept for backwards compatibility.
+  /**
+   * Returns the state of this block as a JSON serializable object.
+   * This block does not need to serialize any specific state as it is already
+   * encoded in the dropdown values, but must have an implementation to avoid
+   * the backward compatible XML mutations being serialized.
+   * @return {null} The state of this block.
+   */
+  saveExtraState: function() {
+    return null;
+  },
+
+  /**
+   * Applies the given state to this block.
+   * No extra state is needed or expected as it is already encoded in the
+   * dropdown values.
+   */
+  loadExtraState: function() {},
 
   /**
    * Create or delete an input for the numeric index.
@@ -736,10 +774,23 @@ blocks['lists_getSublist'] = {
     this.updateAt_(2, isAt2);
   },
 
-  // This block does not need JSO serialization hooks (saveExtraState and
-  // loadExtraState) because the state of this object is already encoded in the
-  // dropdown values.
-  // XML hooks are kept for backwards compatibility.
+  /**
+   * Returns the state of this block as a JSON serializable object.
+   * This block does not need to serialize any specific state as it is already
+   * encoded in the dropdown values, but must have an implementation to avoid
+   * the backward compatible XML mutations being serialized.
+   * @return {null} The state of this block.
+   */
+  saveExtraState: function() {
+    return null;
+  },
+
+  /**
+   * Applies the given state to this block.
+   * No extra state is needed or expected as it is already encoded in the
+   * dropdown values.
+   */
+  loadExtraState: function() {},
 
   /**
    * Create or delete an input for a numeric index.
@@ -920,10 +971,23 @@ blocks['lists_split'] = {
     this.updateType_(xmlElement.getAttribute('mode'));
   },
 
-  // This block does not need JSO serialization hooks (saveExtraState and
-  // loadExtraState) because the state of this object is already encoded in the
-  // dropdown values.
-  // XML hooks are kept for backwards compatibility.
+  /**
+   * Returns the state of this block as a JSON serializable object.
+   * This block does not need to serialize any specific state as it is already
+   * encoded in the dropdown values, but must have an implementation to avoid
+   * the backward compatible XML mutations being serialized.
+   * @return {null} The state of this block.
+   */
+  saveExtraState: function() {
+    return null;
+  },
+
+  /**
+   * Applies the given state to this block.
+   * No extra state is needed or expected as it is already encoded in the
+   * dropdown values.
+   */
+  loadExtraState: function() {},
 };
 
 // Register provided blocks.

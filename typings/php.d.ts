@@ -12,5 +12,5 @@
 /// <reference path="core.d.ts" />
 
 import * as Blockly from './core';
-declare const php: Blockly.Generator;
+declare const php: any;
 export = php;

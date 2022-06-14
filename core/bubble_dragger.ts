@@ -76,17 +76,7 @@ export class BubbleDragger {
    * @suppress {checkTypes}
    * @internal
    */
-  dispose() {
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'IBubble'.
-    this.bubble = null as AnyDuringMigration;
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'WorkspaceSvg'.
-    this.workspace = null as AnyDuringMigration;
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'BlockDragSurfaceSvg'.
-    this.dragSurface_ = null as AnyDuringMigration;
-  }
+  dispose() { }
 
   /**
    * Start dragging a bubble.  This includes moving it to the drag surface.

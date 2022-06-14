@@ -24,7 +24,7 @@ import * as userAgent from './utils/useragent.js';
  * `bind` and `conditionalBind`.
  * @alias Blockly.browserEvents.Data
  */
-export type Data = AnyDuringMigration[][];
+export type Data = [EventTarget, string, (e: Event) => void][];
 
 /**
  * The multiplier for scroll wheel deltas using the line delta mode.
@@ -63,7 +63,7 @@ export function conditionalBind(
     func: Function, opt_noCaptureIdentifier?: boolean,
     opt_noPreventDefault?: boolean): Data {
   let handled = false;
-  function wrapFunc(e: AnyDuringMigration) {
+  function wrapFunc(e: Event) {
     const captureIdentifier = !opt_noCaptureIdentifier;
     // Handle each touch point separately.  If the event was a mouse event, this
     // will hand back an array with one element, which we're fine handling.
@@ -83,7 +83,7 @@ export function conditionalBind(
     }
   }
 
-  const bindData = [];
+  const bindData: Data = [];
   if (globalThis['PointerEvent'] && name in Touch.TOUCH_MAP) {
     for (let i = 0; i < Touch.TOUCH_MAP[name].length; i++) {
       const type = Touch.TOUCH_MAP[name][i];
@@ -96,7 +96,7 @@ export function conditionalBind(
 
     // Add equivalent touch event.
     if (name in Touch.TOUCH_MAP) {
-      const touchWrapFunc = (e: AnyDuringMigration) => {
+      const touchWrapFunc = (e: Event) => {
         wrapFunc(e);
         // Calling preventDefault stops the browser from scrolling/zooming the
         // page.
@@ -128,9 +128,9 @@ export function conditionalBind(
  * @alias Blockly.browserEvents.bind
  */
 export function bind(
-    node: EventTarget, name: string, thisObject: AnyDuringMigration|null,
-    func: Function): Data {
-  function wrapFunc(e: AnyDuringMigration) {
+  node: EventTarget, name: string, thisObject: AnyDuringMigration | null,
+  func: Function): Data {
+  function wrapFunc(e: Event) {
     if (thisObject) {
       func.call(thisObject, e);
     } else {
@@ -138,7 +138,7 @@ export function bind(
     }
   }
 
-  const bindData = [];
+  const bindData: Data = [];
   if (globalThis['PointerEvent'] && name in Touch.TOUCH_MAP) {
     for (let i = 0; i < Touch.TOUCH_MAP[name].length; i++) {
       const type = Touch.TOUCH_MAP[name][i];
@@ -151,7 +151,7 @@ export function bind(
 
     // Add equivalent touch event.
     if (name in Touch.TOUCH_MAP) {
-      const touchWrapFunc = (e: AnyDuringMigration) => {
+      const touchWrapFunc = (e: Event) => {
         // Punt on multitouch events.
         if (e.changedTouches && e.changedTouches.length === 1) {
           // Map the touch event's properties to the event.
@@ -181,16 +181,15 @@ export function bind(
  * @return The function call.
  * @alias Blockly.browserEvents.unbind
  */
-export function unbind(bindData: Data): Function {
-  let func;
+export function unbind(bindData: Data): (e: Event) => void {
   while (bindData.length) {
     const bindDatum = bindData.pop();
     const node = bindDatum![0];
     const name = bindDatum![1];
-    func = bindDatum![2];
+    const func = bindDatum![2];
     node.removeEventListener(name, func, false);
   }
-  return func;
+  return bindData[bindData.length - 1][2];
 }
 
 /**

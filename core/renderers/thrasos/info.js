@@ -82,6 +82,9 @@ class RenderInfo extends BaseRenderInfo {
         row.elements.push(new InRowSpacer(
             this.constants_, this.getInRowSpacing_(null, oldElems[0])));
       }
+      if (!oldElems.length) {
+        continue;
+      }
       for (let e = 0; e < oldElems.length - 1; e++) {
         row.elements.push(oldElems[e]);
         const spacing = this.getInRowSpacing_(oldElems[e], oldElems[e + 1]);

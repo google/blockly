@@ -262,7 +262,7 @@ function buildJavaScript(done) {
 
 /**
  * This task updates DEPS_FILE (deps.js), used by
- * blockly_uncompressed.js when loading Blockly in uncompiled mode.
+ * bootstrap.js when loading Blockly in uncompiled mode.
  *
  * Also updates TEST_DEPS_FILE (deps.mocha.js), used by the mocha test
  * suite.
@@ -673,7 +673,6 @@ function buildAdvancedCompilationTest() {
  *     php_compressed.js
  *     lua_compressed.js
  *     dart_compressed.js
- *     blockly_uncompressed.js
  *     msg/json/*.js
  *     test/deps*.js
  */

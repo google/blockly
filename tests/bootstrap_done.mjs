@@ -20,20 +20,20 @@
  *
  *     See tests/playground.html for example usage.
  */
-
-let Blockly;
-
-if (window.BlocklyLoader) {
-  // Uncompiled mode.  Use top-level await
-  // (https://v8.dev/features/top-level-await) to block loading of
-  // this module until goog.bootstrap()ping of Blockly is finished.
-  await window.BlocklyLoader;
-  Blockly = globalThis.Blockly;
-} else if (window.Blockly) {
-  // Compiled mode.  Retrieve the pre-installed Blockly global.
-  Blockly = globalThis.Blockly;
-} else {
-  throw new Error('neither window.Blockly nor window.BlocklyLoader found');
+if (!window.bootstrapInfo) {
+  throw new Error('window.bootstrapInfo not found.  ' +
+      'Make sure to load bootstrap.js before importing bootstrap_done.mjs.');
 }
 
-export default Blockly;
+if (window.bootstrapInfo.compressed) {
+  // Compiled mode.  Nothing more to do.
+} else {
+  // Uncompressed mode.  Use top-level await
+  // (https://v8.dev/features/top-level-await) to block loading of
+  // this module until goog.bootstrap()ping of Blockly is finished.
+  await window.bootstrapInfo.done;
+  // Note that this module previously did an export default of the
+  // value returned by the bootstrapInfo.done promise.  This was
+  // changed in PR #5995 because library blocks and generators cannot
+  // be accessed via that the core/blockly.js exports object.
+}

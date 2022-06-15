@@ -9,12 +9,12 @@
  *
  * This is loaded, via goog.bootstrap(), after the other top-level
  * Blockly modules.  It simply calls goog.require() for each of them,
- * to force the deubg module loader to finish loading them before any
+ * to force the debug module loader to finish loading them before any
  * non-module scripts (like msg/messages.js) that might have
  * undeclared dependencies on them.
  */
 
 /* eslint-disable-next-line no-undef */
-for (const require of blocklyLoader.requires) {
+for (const require of window.bootstrapInfo.requires) {
   goog.require(require);
 }

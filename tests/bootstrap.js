@@ -12,8 +12,10 @@
  *     Closure Library debug module loader to load Blockly in
  *     uncompressed mode.
  *
- *     You must use a <script> tag to load this script first, then
- *     import bootstrap_done.mjs in a <script type=module> to wait for
+ *     You must use a <script src=> tag to load this script first
+ *     (after setting BLOCKLY_BOOTSTRAP_OPTIONS in a preceeding
+ *     <script> tag, if desired - see below), then import
+ *     bootstrap_done.mjs in a <script type=module> to wait for
  *     bootstrapping to finish.
  *
  *     See tests/playground.html for example usage.
@@ -22,36 +24,40 @@
  *     script is loaded in Internet Explorer or from a host other than
  *     localhost, blockly_compressed.js (et al.) will be loaded
  *     instead.  IE 11 doesn't understand modern JavaScript, and
- *     because of the sequential module loading carried out by the
+ *     because of the sequential, non-parallel module loading carried
+ *     out by thedeubg module loader can be painfully tedious over a
+ *     slow network connection.  (This can be overridden by the page
+ *     if desired.)
  *
  *     (Note also that this file eschews certain modern JS constructs,
  *     like template literals, for compatibility with IE 11.)
  *
  *     The bootstrap code will consult a BLOCKLY_BOOTSTRAP_OPTIONS
- *     global variable to determine what to load.  See further
- *     documentation inline.
+ *     global variable to determine what to load.  This must be set
+ *     before loading this script.  See documentation inline below.
  *
  */
 'use strict';
 
 (function() {
-  // Values usedd to compute default bootstrap options.
+  // Values used to compute default bootstrap options.
   const isIe = navigator.userAgent.indexOf('MSIE') !== -1 ||
       navigator.appVersion.indexOf('Trident/') > -1;
   const localhosts = ['localhost', '127.0.0.1', '[::1]'];
   const isLocalhost = localhosts.includes(location.hostname);
   const isFileUrl = location.origin === 'file://';
 
-  // Default bootstrap options.
+  // Default bootstrap options.  These can be overridden by setting
+  // the same property on BLOCKLY_BOOTSTRAP_OPTIONS.
   const options = {
-    // Decide whether to use compmiled mode or not.  Please see issue
+    // Decide whether to use compressed mode or not.  Please see issue
     // #5557 for more information.
     loadCompressed: isIe || !(isLocalhost || isFileUrl),
 
     // URL of the blockly repository.  This is needed for a few reasons:
     //
     // - We need an absolute path instead of relative path because the
-    //   advanced_playground the and regular playground are in
+    //   advanced_playground and the regular playground are in
     //   different folders.
     // - We need to get the root directory for blockly because it is
     //   different for github.io, appspot and local.
@@ -108,12 +114,12 @@
     throw new Error('Bootstrapping in node.js not implemented.');
   }
 
-  // Create a global variable to remember some stat that will be
+  // Create a global variable to remember some state that will be
   // needed by later scripts.
-  window.blocklyLoader = {
-    compressed: options.loadCompressed,
-    requires: null,
-    done: null,
+  window.bootstrapInfo = {
+    /** boolean */ compressed: options.loadCompressed,
+    /** ?Array<string> */ requires: null,
+    /** ?Promise */ done: null,
   };
 
   if (!options.loadCompressed) {
@@ -143,7 +149,7 @@
     }
 
     // Record require targets for bootstrap_helper.js.
-    window.blocklyLoader.requires = options.requires;
+    window.bootstrapInfo.requires = options.requires;
 
     // Assemble a list of module targets to bootstrap.
     //
@@ -151,11 +157,11 @@
     // options.requires.
     //
     // The next target is a fake one that will load
-    // bootstrap_helper.js.  For each we generate a call to
-    // goog.addDependency to tell the debug module loader that it can
-    // be loaded via a fake module name, and that it depends on all
-    // the targets in the first group (and indeed it will make a call
-    // to goog.require for each one).
+    // bootstrap_helper.js.  We generate a call to goog.addDependency
+    // to tell the debug module loader that it can be loaded via a
+    // fake module name, and that it depends on all the targets in the
+    // first group (and indeed bootstrap_helper.js will make a call to
+    // goog.require for each one).
     //
     // We then create another target for each of
     // options.additionalScripts, again generating calls to
@@ -167,21 +173,20 @@
     const scriptDeps = [];
     for (let script, i = 0; script = scripts[i]; i++) {
       const fakeModuleName = 'script.' + script.replace(/[./]/g, "-");
-      // requires.push(fakeModuleName);
       scriptDeps.push('  goog.addDependency(' +
           quote('../../' + script) + ', [' + quote(fakeModuleName) +
           '], [' + requires.map(quote).join() + "], {'lang': 'es6'});\n");
       requires = [fakeModuleName];
     }
 
-    // Finally, write out a script containing the genrated
+    // Finally, write out a script containing the generated
     // goog.addDependency calls and a call to goog.bootstrap
     // requesting the loading of the final target, which will cause
     // all the previous ones to be loaded recursively.  Wrap this in a
     // promise and save it so it can be awaited in bootstrap_done.mjs.
     document.write(
         '<script>\n' + scriptDeps.join('') +
-        '  window.blocklyLoader.done = new Promise((resolve, reject) => {\n' +
+        '  window.bootstrapInfo.done = new Promise((resolve, reject) => {\n' +
         '    goog.bootstrap([' + requires.map(quote).join() + '], resolve);\n' +
         '  });\n' +
         '</script>\n');

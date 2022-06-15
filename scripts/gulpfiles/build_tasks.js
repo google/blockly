@@ -232,11 +232,12 @@ var JSCOMP_WARNING = [
  */
 var JSCOMP_OFF = [
   /* In order to transition to ES modules, modules will need to import
-   * one another by relative paths. This means that the existing
+   * one another by relative paths. This means that the previous
    * practice of moving all source files into the same directory for
-   * compilation (see docs for flattenCorePaths) would break
-   * imports. Not flattening files in this way breaks our usage
-   * of @package however; files were flattened so that all Blockly
+   * compilation would break imports.
+   *
+   * Not flattening files in this way breaks our usage
+   * of @package however: files were flattened so that all Blockly
    * source files are in the same directory and can use @package to
    * mark methods that are only allowed for use by Blockly, while
    * still allowing access between e.g. core/events/* and
@@ -531,43 +532,6 @@ function getChunkOptions() {
 const pathSepRegExp = new RegExp(path.sep.replace(/\\/, '\\\\'), "g");
 
 /**
- * Modify the supplied gulp.rename path object to relax @package
- * restrictions in core/.
- *
- * Background: subdirectories of core/ are used to group similar files
- * together but are not intended to limit access to names
- * marked @package; instead, that annotation is intended to mean only
- * that the annotated name not part of the public API.
- *
- * To make @package behave less strictly in core/, this function can
- * be used to as a gulp.rename filter, modifying the path object to
- * flatten all files in core/** so that they're in the same directory,
- * while ensuring that files with the same base name don't conflict.
- *
- * @param {{dirname: string, basename: string, extname: string}}
- *     pathObject The path argument supplied by gulp.rename to its
- *     callback.  Modified in place.
- */
-function flattenCorePaths(pathObject) {
-  if (!pathObject.dirname.startsWith(CORE_DIR)) return;
-  const subdir = pathObject.dirname.slice(CORE_DIR.length + 1);
-  if (subdir) {
-    pathObject.dirname = CORE_DIR;
-    pathObject.basename =
-        (subdir + '/' + pathObject.basename).replace(/\//g, '-slash-');
-  }
-}
-
-/**
- * Undo the effects of flattenCorePaths on a single path string.
- * @param string pathString The flattened path.
- * @return string  The path after unflattening.
- */
-function unflattenCorePaths(pathString) {
-  return pathString.replace(/-slash-/g, path.sep);
-}
-
-/**
  * Helper method for calling the Closure compiler, establishing
  * default options (that can be overridden by the caller).
  * @param {*} options Caller-supplied options that will override the
@@ -621,10 +585,8 @@ function buildCompiled() {
   return gulp.src(chunkOptions.js, {base: './'})
       .pipe(stripApacheLicense())
       .pipe(gulp.sourcemaps.init())
-      // .pipe(gulp.rename(flattenCorePaths))
       .pipe(compile(options))
       .pipe(gulp.rename({suffix: COMPILED_SUFFIX}))
-      // .pipe(gulp.sourcemaps.mapSources(unflattenCorePaths))
       .pipe(
           gulp.sourcemaps.write('.', {includeContent: false, sourceRoot: './'}))
       .pipe(gulp.dest(BUILD_DIR));
@@ -656,9 +618,7 @@ function buildAdvancedCompilationTest() {
   return gulp.src(srcs, {base: './'})
       .pipe(stripApacheLicense())
       .pipe(gulp.sourcemaps.init())
-      // .pipe(gulp.rename(flattenCorePaths))
       .pipe(compile(options))
-      // .pipe(gulp.sourcemaps.mapSources(unflattenCorePaths))
       .pipe(gulp.sourcemaps.write(
           '.', {includeContent: false, sourceRoot: '../../'}))
       .pipe(gulp.dest('./tests/compile/'));

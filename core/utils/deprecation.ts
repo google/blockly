@@ -31,10 +31,10 @@ goog.declareModuleId('Blockly.utils.deprecation');
  * @alias Blockly.utils.deprecation.warn
  */
 export function warn(
-  name: string, deprecationDate: string, deletionDate: string,
-  opt_use?: string) {
+    name: string, deprecationDate: string, deletionDate: string,
+    opt_use?: string) {
   let msg = name + ' was deprecated on ' + deprecationDate +
-    ' and will be deleted on ' + deletionDate + '.';
+      ' and will be deleted on ' + deletionDate + '.';
   if (opt_use) {
     msg += '\nUse ' + opt_use + ' instead.';
   }

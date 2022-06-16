@@ -671,7 +671,10 @@ function cleanBuildDir(done) {
  * Runs clang format on all files in the core directory.
  */
 function format() {
-  return gulp.src(['core/**/*.js', 'blocks/**/*.js'], {base: '.'})
+  return gulp.src([
+    'core/**/*.js', 'core/**/*.ts',
+    'blocks/**/*.js', 'blocks/**/*.ts'
+  ], {base: '.'})
       .pipe(clangFormatter.format('file', clangFormat))
       .pipe(gulp.dest('.'));
 };

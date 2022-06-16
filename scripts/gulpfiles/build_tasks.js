@@ -222,6 +222,9 @@ var JSCOMP_ERROR = [
 /**
  * Closure compiler diagnostic groups we want to be treated as warnings.
  * These are effected when the --debug or --strict flags are passed.
+ *
+ * For most (all?) diagnostic groups this is the default level, so
+ * it's generally sufficient to remove them from JSCOMP_ERROR.
  */
 var JSCOMP_WARNING = [
 ];

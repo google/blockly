@@ -600,11 +600,10 @@ function buildCompiled() {
  * closure compiler's ADVANCED_COMPILATION mode.
  */
 function buildAdvancedCompilationTest() {
-  const coreSrcs = argv.compileTs ?
-      TSC_OUTPUT_DIR + '/core/**/*.js' : 'core/**/*.js';
   const srcs = [
-    'closure/goog/base_minimal.js',
-    coreSrcs,
+    TSC_OUTPUT_DIR + '/closure/goog/base_minimal.js',
+    TSC_OUTPUT_DIR + '/closure/goog/goog.js',
+    TSC_OUTPUT_DIR + '/core/**/*.js',
     'blocks/**/*.js',
     'generators/**/*.js',
     'tests/compile/main.js',

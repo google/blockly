@@ -15,7 +15,9 @@
  * This method is not specific to Blockly.
  * @namespace Blockly.utils.deprecation
  */
-goog.module('Blockly.utils.deprecation');
+import * as goog from '../../closure/goog/goog.js';
+
+goog.declareModuleId('Blockly.utils.deprecation');
 
 
 /**
@@ -30,7 +32,7 @@ goog.module('Blockly.utils.deprecation');
  * @alias Blockly.utils.deprecation.warn
  * @package
  */
-const warn = function(name, deprecationDate, deletionDate, opt_use) {
+const warn = function(name: string, deprecationDate: string, deletionDate: string, opt_use?: string) {
   let msg = name + ' was deprecated on ' + deprecationDate +
       ' and will be deleted on ' + deletionDate + '.';
   if (opt_use) {
@@ -38,4 +40,4 @@ const warn = function(name, deprecationDate, deletionDate, opt_use) {
   }
   console.warn(msg);
 };
-exports.warn = warn;
+export {warn};

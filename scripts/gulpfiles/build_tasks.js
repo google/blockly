@@ -198,7 +198,7 @@ var JSCOMP_ERROR = [
   // 'missingSourcesWarnings',  // Group of several other options.
   'moduleLoad',
   'msgDescriptions',
-  'nonStandardJsDocs',
+  // 'nonStandardJsDocs',  // Disabled; see note in JSCOMP_OFF.
   // 'partialAlias',  // Don't want this to be an error yet; only warning.
   // 'polymer',  // Not applicable.
   // 'reportUnknownTypes',  // VERY verbose.
@@ -250,8 +250,8 @@ var JSCOMP_OFF = [
    * DiagnosticGroup.
    */
   'checkTypes',
-  
-   
+  'nonStandardJsDocs',  // Due to @internal
+
   /* In order to transition to ES modules, modules will need to import
    * one another by relative paths. This means that the previous
    * practice of moving all source files into the same directory for

@@ -29,6 +29,7 @@ goog.declareModuleId('Blockly.utils.deprecation');
  *     deprecation date.
  * @param opt_use The name of a function or property to use instead, if any.
  * @alias Blockly.utils.deprecation.warn
+ * @internal
  */
 export function warn(
     name: string, deprecationDate: string, deletionDate: string,

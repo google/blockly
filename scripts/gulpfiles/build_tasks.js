@@ -174,7 +174,7 @@ var JSCOMP_ERROR = [
   // 'accessControls',  // Deprecated; means same as visibility.
   'checkPrototypalTypes',
   'checkRegExp',
-  'checkTypes',
+  // 'checkTypes',  // Disabled; see note in JSCOMP_OFF.
   'checkVars',
   'conformanceViolations',
   'const',
@@ -230,10 +230,28 @@ var JSCOMP_WARNING = [
 ];
 
 /**
- * Closure compiler diagnostic groups we want to be ignored.
- * These suppressions are always effected by default.
+ * Closure compiler diagnostic groups we want to be ignored.  These
+ * suppressions are always effected by default.
+ *
+ * Make sure that anything added here is commented out of JSCOMP_ERROR
+ * above, as that takes precedence.)
  */
 var JSCOMP_OFF = [
+  /* The removal of Closure type system types from our JSDoc
+   * annotations means that the closure compiler now generates certain
+   * diagnostics because it no longer has enough information to be
+   * sure that the input code is correct.  The following diagnostic
+   * groups are turned off to suppress such errors.
+   *
+   * When adding additional items to this list it may be helpful to
+   * search the compiler source code
+   * (https://github.com/google/closure-compiler/) for the JSC_*
+   * disagnostic name (omitting the JSC_ prefix) to find the corresponding
+   * DiagnosticGroup.
+   */
+  'checkTypes',
+  
+   
   /* In order to transition to ES modules, modules will need to import
    * one another by relative paths. This means that the previous
    * practice of moving all source files into the same directory for

@@ -1,6 +1,6 @@
 {
   "chunk": [
-    "blockly:259",
+    "blockly:260",
     "blocks:10:blockly",
     "all:11:blockly",
     "all1:11:blockly",
@@ -250,6 +250,7 @@
     "./build/src/core/utils/parsing.js",
     "./build/src/core/extensions.js",
     "./build/src/core/block.js",
+    "./build/src/closure/goog/goog.js",
     "./build/src/core/utils/deprecation.js",
     "./build/src/core/utils/string.js",
     "./build/src/core/dialog.js",
@@ -266,7 +267,7 @@
     "./build/src/core/connection.js",
     "./build/src/core/common.js",
     "./build/src/core/blocks.js",
-    "./closure/goog/base_minimal.js",
+    "./build/src/closure/goog/base_minimal.js",
     "./build/src/core/blockly.js",
     "./blocks/variables_dynamic.js",
     "./blocks/variables.js",

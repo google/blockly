@@ -174,7 +174,7 @@ var JSCOMP_ERROR = [
   // 'accessControls',  // Deprecated; means same as visibility.
   'checkPrototypalTypes',
   'checkRegExp',
-  'checkTypes',
+  // 'checkTypes',  // Disabled; see note in JSCOMP_OFF.
   'checkVars',
   'conformanceViolations',
   'const',
@@ -198,7 +198,7 @@ var JSCOMP_ERROR = [
   // 'missingSourcesWarnings',  // Group of several other options.
   'moduleLoad',
   'msgDescriptions',
-  'nonStandardJsDocs',
+  // 'nonStandardJsDocs',  // Disabled; see note in JSCOMP_OFF.
   // 'partialAlias',  // Don't want this to be an error yet; only warning.
   // 'polymer',  // Not applicable.
   // 'reportUnknownTypes',  // VERY verbose.
@@ -222,15 +222,36 @@ var JSCOMP_ERROR = [
 /**
  * Closure compiler diagnostic groups we want to be treated as warnings.
  * These are effected when the --debug or --strict flags are passed.
+ *
+ * For most (all?) diagnostic groups this is the default level, so
+ * it's generally sufficient to remove them from JSCOMP_ERROR.
  */
 var JSCOMP_WARNING = [
 ];
 
 /**
- * Closure compiler diagnostic groups we want to be ignored.
- * These suppressions are always effected by default.
+ * Closure compiler diagnostic groups we want to be ignored.  These
+ * suppressions are always effected by default.
+ *
+ * Make sure that anything added here is commented out of JSCOMP_ERROR
+ * above, as that takes precedence.)
  */
 var JSCOMP_OFF = [
+  /* The removal of Closure type system types from our JSDoc
+   * annotations means that the closure compiler now generates certain
+   * diagnostics because it no longer has enough information to be
+   * sure that the input code is correct.  The following diagnostic
+   * groups are turned off to suppress such errors.
+   *
+   * When adding additional items to this list it may be helpful to
+   * search the compiler source code
+   * (https://github.com/google/closure-compiler/) for the JSC_*
+   * disagnostic name (omitting the JSC_ prefix) to find the corresponding
+   * DiagnosticGroup.
+   */
+  'checkTypes',
+  'nonStandardJsDocs',  // Due to @internal
+
   /* In order to transition to ES modules, modules will need to import
    * one another by relative paths. This means that the previous
    * practice of moving all source files into the same directory for
@@ -269,12 +290,8 @@ function buildJavaScript(done) {
  * suite.
  */
 function buildDeps(done) {
-  const closurePath = argv.closureLibrary ?
-      'node_modules/google-closure-library/closure/goog' :
-      'closure/goog';
-
   const roots = [
-    closurePath,
+    path.join(TSC_OUTPUT_DIR, 'closure', 'goog', 'base.js'),
     TSC_OUTPUT_DIR,
     'blocks',
     'generators',
@@ -430,15 +447,15 @@ return ${exportsExpression};
  * @return {{chunk: !Array<string>, js: !Array<string>}} The chunking
  *     information, in the same form as emitted by
  *     closure-calculate-chunks.
- *
- * TODO(cpcallen): maybeAddClosureLibrary?  Or maybe remove base.js?
  */
 function getChunkOptions() {
   if (argv.compileTs) {
     chunks[0].entry = path.join(TSC_OUTPUT_DIR, chunks[0].entry);
   }
+  const basePath =
+      path.join(TSC_OUTPUT_DIR, 'closure', 'goog', 'base_minimal.js');
   const cccArgs = [
-    '--closure-library-base-js-path ./closure/goog/base_minimal.js',
+    `--closure-library-base-js-path ./${basePath}`,
     `--deps-file './${DEPS_FILE}'`,
     ...(chunks.map(chunk => `--entrypoint '${chunk.entry}'`)),
   ];
@@ -545,7 +562,11 @@ function compile(options) {
     language_out: 'ECMASCRIPT5_STRICT',
     jscomp_off: [...JSCOMP_OFF],
     rewrite_polyfills: true,
-    hide_warnings_for: 'node_modules',
+    // N.B.: goog.js refers to lots of properties on goog that are not
+    // declared by base_minimal.js, while if you compile against
+    // base.js instead you will discover that it uses @deprecated
+    // inherits, forwardDeclare etc.
+    hide_warnings_for: ['node_modules', 'build/src/closure/goog/goog.js'],
     define: ['COMPILED=true'],
   };
   if (argv.debug || argv.strict) {
@@ -597,11 +618,10 @@ function buildCompiled() {
  * closure compiler's ADVANCED_COMPILATION mode.
  */
 function buildAdvancedCompilationTest() {
-  const coreSrcs = argv.compileTs ?
-      TSC_OUTPUT_DIR + '/core/**/*.js' : 'core/**/*.js';
   const srcs = [
-    'closure/goog/base_minimal.js',
-    coreSrcs,
+    TSC_OUTPUT_DIR + '/closure/goog/base_minimal.js',
+    TSC_OUTPUT_DIR + '/closure/goog/goog.js',
+    TSC_OUTPUT_DIR + '/core/**/*.js',
     'blocks/**/*.js',
     'generators/**/*.js',
     'tests/compile/main.js',
@@ -668,7 +688,10 @@ function cleanBuildDir(done) {
  * Runs clang format on all files in the core directory.
  */
 function format() {
-  return gulp.src(['core/**/*.js', 'blocks/**/*.js'], {base: '.'})
+  return gulp.src([
+    'core/**/*.js', 'core/**/*.ts',
+    'blocks/**/*.js', 'blocks/**/*.ts'
+  ], {base: '.'})
       .pipe(clangFormatter.format('file', clangFormat))
       .pipe(gulp.dest('.'));
 };

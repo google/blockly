@@ -134,7 +134,8 @@
     // libary we use, mainly for goog.require / goog.provide /
     // goog.module).
     document.write(
-        '<script src="' + options.root + '/closure/goog/base.js"></script>');
+        '<script src="' + options.root +
+            'build/src/closure/goog/base.js"></script>');
 
     // Prevent spurious transpilation warnings.
     document.write('<script>goog.TRANSPILE = "never";</script>');
@@ -174,7 +175,7 @@
     for (let script, i = 0; script = scripts[i]; i++) {
       const fakeModuleName = 'script.' + script.replace(/[./]/g, "-");
       scriptDeps.push('  goog.addDependency(' +
-          quote('../../' + script) + ', [' + quote(fakeModuleName) +
+          quote('../../../../' + script) + ', [' + quote(fakeModuleName) +
           '], [' + requires.map(quote).join() + "], {'lang': 'es6'});\n");
       requires = [fakeModuleName];
     }

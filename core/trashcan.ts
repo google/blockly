@@ -100,7 +100,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
   private svgLid_: SVGElement = null as AnyDuringMigration;
 
   /** Task ID of opening/closing animation. */
-  private lidTask_ = 0;
+  private lidTask_: AnyDuringMigration = 0;
 
   /** Current state of lid opening (0.0 = closed, 1.0 = open). */
   private lidOpen_ = 0;

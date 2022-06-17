@@ -60,7 +60,7 @@ export const ANIMATION_TIME = 0.25;
  * Timer for animation out, to be cleared if we need to immediately hide
  * without disrupting new shows.
  */
-let animateOutTimer: number|null = null;
+let animateOutTimer: AnyDuringMigration = null;
 
 /** Callback for when the drop-down is hidden. */
 let onHide: Function|null = null;

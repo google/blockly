@@ -88,10 +88,10 @@ let blocked = false;
 export const LIMIT = 50;
 
 /** PID of suspended thread to clear tooltip on mouse out. */
-let mouseOutPid = 0;
+let mouseOutPid: AnyDuringMigration = 0;
 
 /** PID of suspended thread to show the tooltip. */
-let showPid = 0;
+let showPid: AnyDuringMigration = 0;
 
 /**
  * Last observed X location of the mouse pointer (freezes when tooltip appears).

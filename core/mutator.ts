@@ -83,7 +83,7 @@ export class Mutator extends Icon {
    * The PID associated with the updateWorkpace_ timeout, or 0 if no timeout
    * is currently running.
    */
-  private updateWorkspacePid_ = 0;
+  private updateWorkspacePid_: AnyDuringMigration = 0;
 
   /** @param quarkNames List of names of sub-blocks for flyout. */
   constructor(block: BlockSvg, quarkNames: string[]) {

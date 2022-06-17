@@ -131,7 +131,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    */
   // AnyDuringMigration because:  Type 'null' is not assignable to type '{ [key:
   // string]: number; }'.
-  private warningTextDb_: {[key: string]: number} = null as AnyDuringMigration;
+  private warningTextDb_: {[key: string]: AnyDuringMigration} =
+      null as AnyDuringMigration;
 
   /** Block's mutator icon (if any). */
   mutator: Mutator|null = null;

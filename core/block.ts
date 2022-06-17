@@ -16,11 +16,11 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Block');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_block_change';
+import './events/events_block_change.js';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_block_create';
+import './events/events_block_create.js';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_block_delete';
+import './events/events_block_delete.js';
 
 import {Blocks} from './blocks.js';
 /* eslint-disable-next-line no-unused-vars */

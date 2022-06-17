@@ -18,7 +18,7 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Mutator');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_bubble_open';
+import './events/events_bubble_open.js';
 
 /* eslint-disable-next-line no-unused-vars */
 import {Block} from './block.js';

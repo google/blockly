@@ -19,10 +19,10 @@ goog.declareModuleId('Blockly.IConnectionChecker');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../connection';
+import '../connection.js';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../rendered_connection';
+import '../rendered_connection.js';
 
 
 /**

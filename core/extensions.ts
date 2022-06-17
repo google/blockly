@@ -22,7 +22,7 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Extensions');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './mutator';
+import './mutator.js';
 
 /* eslint-disable-next-line no-unused-vars */
 import {Block} from './block.js';

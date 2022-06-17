@@ -17,7 +17,7 @@ goog.declareModuleId('Blockly.ISelectableToolboxItem');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../utils/toolbox';
+import '../utils/toolbox.js';
 
 /* eslint-disable-next-line no-unused-vars */
 import {IToolboxItem} from './i_toolbox_item.js';

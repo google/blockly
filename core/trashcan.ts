@@ -17,9 +17,9 @@ goog.declareModuleId('Blockly.Trashcan');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './metrics_manager';
+import './metrics_manager.js';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_trashcan_open';
+import './events/events_trashcan_open.js';
 
 /* eslint-disable-next-line no-unused-vars */
 import {BlocklyOptions} from './blockly_options.js';

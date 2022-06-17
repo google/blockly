@@ -134,9 +134,10 @@ export class Names {
   populateProcedures(workspace: Workspace) {
     let procedures = Procedures.allProcedures(workspace);
     // Flatten the return vs no-return procedure lists.
-    procedures = procedures[0].concat(procedures[1]);
-    for (let i = 0; i < procedures.length; i++) {
-      this.getName(procedures[i][0], NameType.PROCEDURE);
+    let flattenedProcedures: AnyDuringMigration[][] =
+        procedures[0].concat(procedures[1]);
+    for (let i = 0; i < flattenedProcedures.length; i++) {
+      this.getName(flattenedProcedures[i][0], NameType.PROCEDURE);
     }
   }
 

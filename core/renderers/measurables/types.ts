@@ -13,9 +13,9 @@
  * @namespace Blockly.blockRendering.Types
  */
 /* eslint-disable-next-line no-unused-vars */
-import { Measurable } from './base.js';
+import {Measurable} from './base.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Row } from './row.js';
+import {Row} from './row.js';
 
 
 /**
@@ -23,7 +23,7 @@ import { Row } from './row.js';
  * @alias Blockly.blockRendering.Types
  */
 class TypesContainer {
-  [index: string]: number | Function;
+  [index: string]: number|Function;
 
   NONE = 0;
   // None
@@ -135,7 +135,7 @@ class TypesContainer {
    * @param elem The element to check.
    * @return 1 if the object stores information about a spacer.
    */
-  isSpacer(elem: Measurable | Row): number {
+  isSpacer(elem: Measurable|Row): number {
     return elem.type & this.SPACER;
   }
 
@@ -203,7 +203,8 @@ class TypesContainer {
   }
 
   /**
-   * Whether a measurable stores information about a previous or next connection.
+   * Whether a measurable stores information about a previous or next
+   * connection.
    * @param elem The element to check.
    * @return 1 if the object stores information about a previous or next
    *     connection.

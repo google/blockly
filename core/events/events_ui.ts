@@ -17,10 +17,10 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { Block } from '../block.js';
+import {Block} from '../block.js';
 import * as registry from '../registry.js';
 
-import { UiBase } from './events_ui_base.js';
+import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
 
 
@@ -44,8 +44,8 @@ export class Ui extends UiBase {
    * @param opt_newValue New value of element.
    */
   constructor(
-    opt_block?: Block | null, opt_element?: string,
-    opt_oldValue?: AnyDuringMigration, opt_newValue?: AnyDuringMigration) {
+      opt_block?: Block|null, opt_element?: string,
+      opt_oldValue?: AnyDuringMigration, opt_newValue?: AnyDuringMigration) {
     const workspaceId = opt_block ? opt_block.workspace.id : undefined;
     super(workspaceId);
 

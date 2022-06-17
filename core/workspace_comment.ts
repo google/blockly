@@ -20,13 +20,13 @@ import './events/events_comment_create';
 import './events/events_comment_delete';
 
 /* eslint-disable-next-line no-unused-vars */
-import { CommentMove } from './events/events_comment_move.js';
+import {CommentMove} from './events/events_comment_move.js';
 import * as eventUtils from './events/utils.js';
-import { Coordinate } from './utils/coordinate.js';
+import {Coordinate} from './utils/coordinate.js';
 import * as idGenerator from './utils/idgenerator.js';
 import * as xml from './utils/xml.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Workspace } from './workspace.js';
+import {Workspace} from './workspace.js';
 
 
 /**
@@ -60,11 +60,11 @@ export class WorkspaceComment {
    *     ID.
    */
   constructor(
-    public workspace: Workspace, content: string, height: number,
-    width: number, opt_id?: string) {
+      public workspace: Workspace, content: string, height: number,
+      width: number, opt_id?: string) {
     this.id = opt_id && !workspace.getCommentById(opt_id) ?
-      opt_id :
-      idGenerator.genUid();
+        opt_id :
+        idGenerator.genUid();
 
     workspace.addTopComment(this);
 
@@ -158,7 +158,7 @@ export class WorkspaceComment {
    */
   moveBy(dx: number, dy: number) {
     const event =
-      new (eventUtils.get(eventUtils.COMMENT_MOVE))!(this) as CommentMove;
+        new (eventUtils.get(eventUtils.COMMENT_MOVE))!(this) as CommentMove;
     this.xy_.translate(dx, dy);
     event.recordNew();
     eventUtils.fire(event);
@@ -170,7 +170,7 @@ export class WorkspaceComment {
    */
   isDeletable(): boolean {
     return this.deletable_ &&
-      !(this.workspace && this.workspace.options.readOnly);
+        !(this.workspace && this.workspace.options.readOnly);
   }
 
   /**
@@ -187,7 +187,7 @@ export class WorkspaceComment {
    */
   isMovable(): boolean {
     return this.movable_ &&
-      !(this.workspace && this.workspace.options.readOnly);
+        !(this.workspace && this.workspace.options.readOnly);
   }
 
   /**
@@ -204,7 +204,7 @@ export class WorkspaceComment {
    */
   isEditable(): boolean {
     return this.editable_ &&
-      !(this.workspace && this.workspace.options.readOnly);
+        !(this.workspace && this.workspace.options.readOnly);
   }
 
   /**
@@ -230,7 +230,7 @@ export class WorkspaceComment {
   setContent(content: string) {
     if (this.content_ !== content) {
       eventUtils.fire(new (eventUtils.get(eventUtils.COMMENT_CHANGE))!
-        (this, this.content_, content));
+                      (this, this.content_, content));
       this.content_ = content;
     }
   }
@@ -286,7 +286,7 @@ export class WorkspaceComment {
       }
       try {
         eventUtils.fire(new (eventUtils.get(eventUtils.COMMENT_CREATE))!
-          (comment));
+                        (comment));
       } finally {
         if (!existingGroup) {
           eventUtils.setGroup(false);
@@ -305,16 +305,16 @@ export class WorkspaceComment {
     const info = WorkspaceComment.parseAttributes(xmlComment);
 
     const comment =
-      new WorkspaceComment(workspace, info.content, info.h, info.w, info.id);
+        new WorkspaceComment(workspace, info.content, info.h, info.w, info.id);
 
     // AnyDuringMigration because:  Argument of type 'string | null' is not
     // assignable to parameter of type 'string'.
     const commentX =
-      parseInt(xmlComment.getAttribute('x') as AnyDuringMigration, 10);
+        parseInt(xmlComment.getAttribute('x') as AnyDuringMigration, 10);
     // AnyDuringMigration because:  Argument of type 'string | null' is not
     // assignable to parameter of type 'string'.
     const commentY =
-      parseInt(xmlComment.getAttribute('y') as AnyDuringMigration, 10);
+        parseInt(xmlComment.getAttribute('y') as AnyDuringMigration, 10);
     if (!isNaN(commentX) && !isNaN(commentY)) {
       comment.moveBy(commentX, commentY);
     }
@@ -344,30 +344,30 @@ export class WorkspaceComment {
       // AnyDuringMigration because:  Type 'string | null' is not assignable to
       // type 'string'.
       id: xml.getAttribute('id') as
-        AnyDuringMigration,  // The height of the comment in workspace units,
+          AnyDuringMigration,  // The height of the comment in workspace units,
       // or 100 if not specified.
       // @type {number}
       h: xmlH ? parseInt(xmlH, 10) :
-        100,  // The width of the comment in workspace units, or 100 if
+                100,  // The width of the comment in workspace units, or 100 if
       // not specified.
       // @type {number}
       w: xmlW ? parseInt(xmlW, 10) :
-        100,  // The x position of the comment in workspace coordinates,
+                100,  // The x position of the comment in workspace coordinates,
       // or NaN if not
       // specified in the XML.
       // @type {number}
       // AnyDuringMigration because:  Argument of type 'string | null' is not
       // assignable to parameter of type 'string'.
       x: parseInt(
-        xml.getAttribute('x') as AnyDuringMigration,
-        10),  // The y position of the comment in workspace coordinates, or
+          xml.getAttribute('x') as AnyDuringMigration,
+          10),  // The y position of the comment in workspace coordinates, or
       // NaN if not
       // specified in the XML.
       // @type {number}
       // AnyDuringMigration because:  Argument of type 'string | null' is not
       // assignable to parameter of type 'string'.
       y: parseInt(
-        xml.getAttribute('y') as AnyDuringMigration, 10),  // @type {string}
+          xml.getAttribute('y') as AnyDuringMigration, 10),  // @type {string}
       // AnyDuringMigration because:  Type 'string | null' is not assignable to
       // type 'string'.
       content: xml.textContent as AnyDuringMigration,

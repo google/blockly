@@ -14,7 +14,7 @@
 
 import * as registry from '../registry.js';
 
-import { UiBase } from './events_ui_base.js';
+import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
 
 
@@ -41,8 +41,8 @@ export class ViewportChange extends UiBase {
    *     event.
    */
   constructor(
-    opt_top?: number, opt_left?: number, opt_scale?: number,
-    opt_workspaceId?: string, opt_oldScale?: number) {
+      opt_top?: number, opt_left?: number, opt_scale?: number,
+      opt_workspaceId?: string, opt_oldScale?: number) {
     super(opt_workspaceId);
 
     /**
@@ -94,4 +94,4 @@ export class ViewportChange extends UiBase {
 }
 
 registry.register(
-  registry.Type.EVENT, eventUtils.VIEWPORT_CHANGE, ViewportChange);
+    registry.Type.EVENT, eventUtils.VIEWPORT_CHANGE, ViewportChange);

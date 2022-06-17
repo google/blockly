@@ -27,7 +27,7 @@ import './i_toolbox_item';
 import '../workspace_svg';
 
 /* eslint-disable-next-line no-unused-vars */
-import { IRegistrable } from './i_registrable.js';
+import {IRegistrable} from './i_registrable.js';
 
 
 /**

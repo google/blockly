@@ -17,9 +17,9 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { ConstantProvider } from '../../../renderers/common/constants.js';
-import { Measurable } from '../../../renderers/measurables/base.js';
-import { Types } from '../../../renderers/measurables/types.js';
+import {ConstantProvider} from '../../../renderers/common/constants.js';
+import {Measurable} from '../../../renderers/measurables/base.js';
+import {Types} from '../../../renderers/measurables/types.js';
 
 
 /**

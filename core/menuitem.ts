@@ -26,13 +26,13 @@ export class MenuItem {
   private enabled_ = true;
 
   /** The DOM element for the menu item. */
-  private element_: HTMLDivElement | null = null;
+  private element_: HTMLDivElement|null = null;
 
   /** Whether the menu item is rendered right-to-left. */
   private rightToLeft_ = false;
 
   /** ARIA name for this menu. */
-  private roleName_: aria.Role | null = null;
+  private roleName_: aria.Role|null = null;
 
   /** Is this menu item checkable. */
   private checkable_ = false;
@@ -44,7 +44,7 @@ export class MenuItem {
   private highlight_ = false;
 
   /** Bound function to call when this menu item is clicked. */
-  private actionHandler_: Function | null = null;
+  private actionHandler_: Function|null = null;
 
   /**
    * @param content Text caption to display as the content of the item, or a
@@ -52,8 +52,8 @@ export class MenuItem {
    * @param opt_value Data/model associated with the menu item.
    */
   constructor(
-    private readonly content: string | HTMLElement,
-    private readonly opt_value?: string) {}
+      private readonly content: string|HTMLElement,
+      private readonly opt_value?: string) {}
 
   /**
    * Creates the menuitem's DOM.
@@ -67,12 +67,12 @@ export class MenuItem {
     // Set class and style
     // goog-menuitem* is deprecated, use blocklyMenuItem*.  May 2020.
     element.className = 'blocklyMenuItem goog-menuitem ' +
-      (this.enabled_ ? '' :
-        'blocklyMenuItemDisabled goog-menuitem-disabled ') +
-      (this.checked_ ? 'blocklyMenuItemSelected goog-option-selected ' : '') +
-      (this.highlight_ ? 'blocklyMenuItemHighlight goog-menuitem-highlight ' :
-        '') +
-      (this.rightToLeft_ ? 'blocklyMenuItemRtl goog-menuitem-rtl ' : '');
+        (this.enabled_ ? '' :
+                         'blocklyMenuItemDisabled goog-menuitem-disabled ') +
+        (this.checked_ ? 'blocklyMenuItemSelected goog-option-selected ' : '') +
+        (this.highlight_ ? 'blocklyMenuItemHighlight goog-menuitem-highlight ' :
+                           '') +
+        (this.rightToLeft_ ? 'blocklyMenuItemRtl goog-menuitem-rtl ' : '');
 
     const content = (document.createElement('div'));
     content.className = 'blocklyMenuItemContent goog-menuitem-content';
@@ -95,8 +95,8 @@ export class MenuItem {
       aria.setRole(element, this.roleName_);
     }
     aria.setState(
-      element, aria.State.SELECTED,
-      this.checkable_ && this.checked_ || false);
+        element, aria.State.SELECTED,
+        this.checkable_ && this.checked_ || false);
     aria.setState(element, aria.State.DISABLED, !this.enabled_);
 
     return element;
@@ -111,7 +111,7 @@ export class MenuItem {
    * Gets the menu item's element.
    * @return The DOM element.
    */
-  getElement(): Element | null {
+  getElement(): Element|null {
     return this.element_;
   }
 

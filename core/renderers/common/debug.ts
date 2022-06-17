@@ -34,9 +34,9 @@ export function isDebuggerEnabled(): boolean {
  */
 export function startDebugger() {
   deprecation.warn(
-    'Blockly.blockRendering.debug.startDebugger()', 'February 2022',
-    'September 2022',
-    'the debug renderer in @blockly/dev-tools (See https://www.npmjs.com/package/@blockly/dev-tools.)');
+      'Blockly.blockRendering.debug.startDebugger()', 'February 2022',
+      'September 2022',
+      'the debug renderer in @blockly/dev-tools (See https://www.npmjs.com/package/@blockly/dev-tools.)');
   useDebugger = true;
 }
 
@@ -48,8 +48,8 @@ export function startDebugger() {
  */
 export function stopDebugger() {
   deprecation.warn(
-    'Blockly.blockRendering.debug.stopDebugger()', 'February 2022',
-    'September 2022',
-    'the debug renderer in @blockly/dev-tools (See https://www.npmjs.com/package/@blockly/dev-tools.)');
+      'Blockly.blockRendering.debug.stopDebugger()', 'February 2022',
+      'September 2022',
+      'the debug renderer in @blockly/dev-tools (See https://www.npmjs.com/package/@blockly/dev-tools.)');
   useDebugger = false;
 }

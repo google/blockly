@@ -17,31 +17,31 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { Abstract } from './events/events_abstract.js';
+import {Abstract} from './events/events_abstract.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Field } from './field.js';
+import {Field} from './field.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IBlockDragger } from './interfaces/i_block_dragger.js';
+import {IBlockDragger} from './interfaces/i_block_dragger.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IConnectionChecker } from './interfaces/i_connection_checker.js';
+import {IConnectionChecker} from './interfaces/i_connection_checker.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IFlyout } from './interfaces/i_flyout.js';
+import {IFlyout} from './interfaces/i_flyout.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IMetricsManager } from './interfaces/i_metrics_manager.js';
+import {IMetricsManager} from './interfaces/i_metrics_manager.js';
 /* eslint-disable-next-line no-unused-vars */
-import { ISerializer } from './interfaces/i_serializer.js';
+import {ISerializer} from './interfaces/i_serializer.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IToolbox } from './interfaces/i_toolbox.js';
+import {IToolbox} from './interfaces/i_toolbox.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Cursor } from './keyboard_nav/cursor.js';
+import {Cursor} from './keyboard_nav/cursor.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Options } from './options.js';
+import {Options} from './options.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Renderer } from './renderers/common/renderer.js';
+import {Renderer} from './renderers/common/renderer.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Theme } from './theme.js';
+import {Theme} from './theme.js';
 /* eslint-disable-next-line no-unused-vars */
-import { ToolboxItem } from './toolbox/toolbox_item.js';
+import {ToolboxItem} from './toolbox/toolbox_item.js';
 
 
 /**
@@ -51,16 +51,16 @@ import { ToolboxItem } from './toolbox/toolbox_item.js';
  */
 const typeMap: {
   [key: string]:
-  { [key: string]: (new () => AnyDuringMigration) | AnyDuringMigration }
+      {[key: string]: (new () => AnyDuringMigration)|AnyDuringMigration}
 } = Object.create(null);
-export const TEST_ONLY = { typeMap };
+export const TEST_ONLY = {typeMap};
 
 /**
  * A map of maps. With the keys being the type and caseless name of the class we
  * are registring, and the value being the most recent cased name for that
  * registration.
  */
-const nameMap: { [key: string]: { [key: string]: string } } = Object.create(null);
+const nameMap: {[key: string]: {[key: string]: string}} = Object.create(null);
 
 /**
  * The string used to register the default class for a type of plugin.
@@ -73,20 +73,20 @@ export const DEFAULT = 'default';
  * @alias Blockly.registry.Type
  */
 export class Type<T> {
-  static CONNECTION_CHECKER = new Type < IConnectionChecker > ('connectionChecker');
-  static CURSOR = new Type < Cursor > ('cursor');
-  static EVENT = new Type < Abstract > ('event');
-  static FIELD = new Type < Field > ('field');
-  static RENDERER = new Type < Renderer > ('renderer');
-  static TOOLBOX = new Type < IToolbox > ('toolbox');
-  static THEME = new Type < Theme > ('theme');
-  static TOOLBOX_ITEM = new Type < ToolboxItem > ('toolboxItem');
-  static FLYOUTS_VERTICAL_TOOLBOX = new Type < IFlyout > ('flyoutsVerticalToolbox');
+  static CONNECTION_CHECKER = new Type<IConnectionChecker>('connectionChecker');
+  static CURSOR = new Type<Cursor>('cursor');
+  static EVENT = new Type<Abstract>('event');
+  static FIELD = new Type<Field>('field');
+  static RENDERER = new Type<Renderer>('renderer');
+  static TOOLBOX = new Type<IToolbox>('toolbox');
+  static THEME = new Type<Theme>('theme');
+  static TOOLBOX_ITEM = new Type<ToolboxItem>('toolboxItem');
+  static FLYOUTS_VERTICAL_TOOLBOX = new Type<IFlyout>('flyoutsVerticalToolbox');
   static FLYOUTS_HORIZONTAL_TOOLBOX =
-    new Type < IFlyout > ('flyoutsHorizontalToolbox');
-  static METRICS_MANAGER = new Type < IMetricsManager > ('metricsManager');
-  static BLOCK_DRAGGER = new Type < IBlockDragger > ('blockDragger');
-  static SERIALIZER = new Type < ISerializer > ('serializer');
+      new Type<IFlyout>('flyoutsHorizontalToolbox');
+  static METRICS_MANAGER = new Type<IMetricsManager>('metricsManager');
+  static BLOCK_DRAGGER = new Type<IBlockDragger>('blockDragger');
+  static SERIALIZER = new Type<ISerializer>('serializer');
 
   /** @param name The name of the registry type. */
   constructor(private readonly name: string) {}
@@ -141,22 +141,22 @@ export class Type<T> {
  * @alias Blockly.registry.register
  */
 export function register<T>(
-  type: string | Type<T>, name: string,
-  registryItem: (new (...p1: AnyDuringMigration[]) => T) | null |
+    type: string|Type<T>, name: string,
+    registryItem: (new (...p1: AnyDuringMigration[]) => T)|null|
     AnyDuringMigration,
-  opt_allowOverrides?: boolean): void {
+    opt_allowOverrides?: boolean): void {
   if (!(type instanceof Type) && typeof type !== 'string' ||
-    String(type).trim() === '') {
+      String(type).trim() === '') {
     throw Error(
-      'Invalid type "' + type + '". The type must be a' +
-      ' non-empty string or a Blockly.registry.Type.');
+        'Invalid type "' + type + '". The type must be a' +
+        ' non-empty string or a Blockly.registry.Type.');
   }
   type = String(type).toLowerCase();
 
   if (typeof name !== 'string' || name.trim() === '') {
     throw Error(
-      'Invalid name "' + name + '". The name must be a' +
-      ' non-empty string.');
+        'Invalid name "' + name + '". The name must be a' +
+        ' non-empty string.');
   }
   const caselessName = name.toLowerCase();
   if (!registryItem) {
@@ -176,8 +176,8 @@ export function register<T>(
   // Don't throw an error if opt_allowOverrides is true.
   if (!opt_allowOverrides && typeRegistry[caselessName]) {
     throw Error(
-      'Name "' + caselessName + '" with type "' + type +
-      '" already registered.');
+        'Name "' + caselessName + '" with type "' + type +
+        '" already registered.');
   }
   typeRegistry[caselessName] = registryItem;
   nameRegistry[caselessName] = name;
@@ -190,7 +190,7 @@ export function register<T>(
  * @param registryItem A class or object that we are checking for the required
  *     properties.
  */
-function validate(type: string, registryItem: Function | AnyDuringMigration) {
+function validate(type: string, registryItem: Function|AnyDuringMigration) {
   switch (type) {
     case String(Type.FIELD):
       if (typeof registryItem.fromJson !== 'function') {
@@ -207,14 +207,14 @@ function validate(type: string, registryItem: Function | AnyDuringMigration) {
  * @param name The plugin's name. (Ex. field_angle, geras)
  * @alias Blockly.registry.unregister
  */
-export function unregister<T>(type: string | Type<T>, name: string) {
+export function unregister<T>(type: string|Type<T>, name: string) {
   type = String(type).toLowerCase();
   name = name.toLowerCase();
   const typeRegistry = typeMap[type];
   if (!typeRegistry || !typeRegistry[name]) {
     console.warn(
-      'Unable to unregister [' + name + '][' + type + '] from the ' +
-      'registry.');
+        'Unable to unregister [' + name + '][' + type + '] from the ' +
+        'registry.');
     return;
   }
   delete typeMap[type][name];
@@ -233,8 +233,8 @@ export function unregister<T>(type: string | Type<T>, name: string) {
  *     exists.
  */
 function getItem<T>(
-  type: string | Type<T>, name: string, opt_throwIfMissing?: boolean):
-  (new (...p1: AnyDuringMigration[]) => T) | null | AnyDuringMigration {
+    type: string|Type<T>, name: string, opt_throwIfMissing?: boolean):
+    (new (...p1: AnyDuringMigration[]) => T)|null|AnyDuringMigration {
   type = String(type).toLowerCase();
   name = name.toLowerCase();
   const typeRegistry = typeMap[type];
@@ -242,7 +242,7 @@ function getItem<T>(
     const msg = 'Unable to find [' + name + '][' + type + '] in the registry.';
     if (opt_throwIfMissing) {
       throw new Error(
-        msg + ' You must require or register a ' + type + ' plugin.');
+          msg + ' You must require or register a ' + type + ' plugin.');
     } else {
       console.warn(msg);
     }
@@ -261,7 +261,7 @@ function getItem<T>(
  *     otherwise.
  * @alias Blockly.registry.hasItem
  */
-export function hasItem<T>(type: string | Type<T>, name: string): boolean {
+export function hasItem<T>(type: string|Type<T>, name: string): boolean {
   type = String(type).toLowerCase();
   name = name.toLowerCase();
   const typeRegistry = typeMap[type];
@@ -282,11 +282,11 @@ export function hasItem<T>(type: string | Type<T>, name: string): boolean {
  * @alias Blockly.registry.getClass
  */
 export function getClass<T>(
-  type: string | Type<T>, name: string, opt_throwIfMissing?: boolean):
-  (new (...p1: AnyDuringMigration[]) => T) | null {
+    type: string|Type<T>, name: string, opt_throwIfMissing?: boolean):
+    (new (...p1: AnyDuringMigration[]) => T)|null {
   return getItem(type, name, opt_throwIfMissing) as (
-    new (...p1: AnyDuringMigration[]) => T) |
-    null;
+             new (...p1: AnyDuringMigration[]) => T) |
+      null;
 }
 
 /**
@@ -300,7 +300,7 @@ export function getClass<T>(
  * @alias Blockly.registry.getObject
  */
 export function getObject<T>(
-  type: string | Type<T>, name: string, opt_throwIfMissing?: boolean): T | null {
+    type: string|Type<T>, name: string, opt_throwIfMissing?: boolean): T|null {
   return getItem(type, name, opt_throwIfMissing) as T;
 }
 
@@ -315,7 +315,8 @@ export function getObject<T>(
  * @alias Blockly.registry.getAllItems
  */
 export function getAllItems<T>(
-  type: string | Type<T>, opt_cased: boolean, opt_throwIfMissing?: boolean): { [key: string]: T | null | (new (...p1: AnyDuringMigration[]) => T) } | null {
+    type: string|Type<T>, opt_cased: boolean, opt_throwIfMissing?: boolean):
+    {[key: string]: T|null|(new (...p1: AnyDuringMigration[]) => T)}|null {
   type = String(type).toLowerCase();
   const typeRegistry = typeMap[type];
   if (!typeRegistry) {
@@ -351,8 +352,8 @@ export function getAllItems<T>(
  * @alias Blockly.registry.getClassFromOptions
  */
 export function getClassFromOptions<T>(
-  type: Type<T>, options: Options, opt_throwIfMissing?: boolean):
-  (new (...p1: AnyDuringMigration[]) => T) | null {
+    type: Type<T>, options: Options, opt_throwIfMissing?: boolean):
+    (new (...p1: AnyDuringMigration[]) => T)|null {
   const typeName = type.toString();
   const plugin = options.plugins[typeName] || DEFAULT;
 

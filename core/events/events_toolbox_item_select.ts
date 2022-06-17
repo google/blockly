@@ -16,7 +16,7 @@
 
 import * as registry from '../registry.js';
 
-import { UiBase } from './events_ui_base.js';
+import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
 
 
@@ -25,8 +25,8 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.ToolboxItemSelect
  */
 export class ToolboxItemSelect extends UiBase {
-  oldItem?: string | null;
-  newItem?: string | null;
+  oldItem?: string|null;
+  newItem?: string|null;
   override type: string;
 
   /**
@@ -38,8 +38,8 @@ export class ToolboxItemSelect extends UiBase {
    *    Undefined for a blank event.
    */
   constructor(
-    opt_oldItem?: string | null, opt_newItem?: string | null,
-    opt_workspaceId?: string) {
+      opt_oldItem?: string|null, opt_newItem?: string|null,
+      opt_workspaceId?: string) {
     super(opt_workspaceId);
 
     /** The previously selected toolbox item. */
@@ -75,4 +75,4 @@ export class ToolboxItemSelect extends UiBase {
 }
 
 registry.register(
-  registry.Type.EVENT, eventUtils.TOOLBOX_ITEM_SELECT, ToolboxItemSelect);
+    registry.Type.EVENT, eventUtils.TOOLBOX_ITEM_SELECT, ToolboxItemSelect);

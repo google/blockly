@@ -21,9 +21,9 @@ import '../block_drag_surface';
 import '../utils/coordinate';
 
 /* eslint-disable-next-line no-unused-vars */
-import { IContextMenu } from './i_contextmenu.js';
+import {IContextMenu} from './i_contextmenu.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IDraggable } from './i_draggable.js';
+import {IDraggable} from './i_draggable.js';
 
 
 /**

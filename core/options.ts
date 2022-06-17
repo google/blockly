@@ -13,16 +13,16 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlocklyOptions } from './blockly_options.js';
+import {BlocklyOptions} from './blockly_options.js';
 import * as registry from './registry.js';
-import { Theme } from './theme.js';
-import { Classic } from './theme/classic.js';
+import {Theme} from './theme.js';
+import {Classic} from './theme/classic.js';
 import * as idGenerator from './utils/idgenerator.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Metrics } from './utils/metrics.js';
+import {Metrics} from './utils/metrics.js';
 import * as toolbox from './utils/toolbox.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**
@@ -38,7 +38,7 @@ export class Options {
   disable: boolean;
   readOnly: boolean;
   maxBlocks: number;
-  maxInstances: { [key: string]: number } | null;
+  maxInstances: {[key: string]: number}|null;
   pathToMedia: string;
   hasCategories: boolean;
   moveOptions: MoveOptions;
@@ -48,22 +48,22 @@ export class Options {
   hasSounds: boolean;
   hasCss: boolean;
   horizontalLayout: boolean;
-  languageTree: toolbox.ToolboxInfo | null;
+  languageTree: toolbox.ToolboxInfo|null;
   gridOptions: GridOptions;
   zoomOptions: ZoomOptions;
   toolboxPosition: toolbox.Position;
   theme: Theme;
   renderer: string;
-  rendererOverrides: AnyDuringMigration | null;
+  rendererOverrides: AnyDuringMigration|null;
 
   /**
    * The SVG element for the grid pattern.
    * Created during injection.
    */
-  gridPattern: SVGElement | null = null;
-  parentWorkspace: WorkspaceSvg | null;
+  gridPattern: SVGElement|null = null;
+  parentWorkspace: WorkspaceSvg|null;
   plugins: {
-    [key: string]: (new (...p1: AnyDuringMigration[]) => AnyDuringMigration) |
+    [key: string]: (new(...p1: AnyDuringMigration[]) => AnyDuringMigration)|
     string
   };
 
@@ -74,7 +74,7 @@ export class Options {
    *     argument Contains an x and/or y property which is a float between 0
    *     and 1 specifying the degree of scrolling.
    */
-  setMetrics?: ((p1: { x: number, y: number }) => void) = undefined;
+  setMetrics?: ((p1: {x: number, y: number}) => void) = undefined;
 
   /**
    * A function that returns a metrics
@@ -98,7 +98,7 @@ export class Options {
     const readOnly = !!(options as AnyDuringMigration)['readOnly'];
     if (!readOnly) {
       toolboxJsonDef = toolbox.convertToolboxDefToJson(
-        (options as AnyDuringMigration)['toolbox']);
+          (options as AnyDuringMigration)['toolbox']);
       hasCategories = toolbox.hasCategories(toolboxJsonDef);
       hasTrashcan = (options as AnyDuringMigration)['trashcan'];
       if (hasTrashcan === undefined) {
@@ -123,7 +123,7 @@ export class Options {
     }
 
     let maxTrashcanContents =
-      (options as AnyDuringMigration)['maxTrashcanContents'];
+        (options as AnyDuringMigration)['maxTrashcanContents'];
     if (hasTrashcan) {
       if (maxTrashcanContents === undefined) {
         maxTrashcanContents = 32;
@@ -142,10 +142,10 @@ export class Options {
     let toolboxPosition: toolbox.Position;
     if (horizontalLayout) {
       toolboxPosition =
-        toolboxAtStart ? toolbox.Position.TOP : toolbox.Position.BOTTOM;
+          toolboxAtStart ? toolbox.Position.TOP : toolbox.Position.BOTTOM;
     } else {
       toolboxPosition = toolboxAtStart === rtl ? toolbox.Position.RIGHT :
-        toolbox.Position.LEFT;
+                                                 toolbox.Position.LEFT;
     }
 
     let hasCss = (options as AnyDuringMigration)['css'];
@@ -194,7 +194,7 @@ export class Options {
     this.theme = Options.parseThemeOptions_(options);
     this.renderer = renderer;
     this.rendererOverrides =
-      (options as AnyDuringMigration)['rendererOverrides'];
+        (options as AnyDuringMigration)['rendererOverrides'];
 
     /**
      * The parent of the current workspace, or null if there is no parent
@@ -215,11 +215,11 @@ export class Options {
    * @return Normalized move options.
    */
   private static parseMoveOptions_(
-    options: AnyDuringMigration, hasCategories: boolean): MoveOptions {
+      options: AnyDuringMigration, hasCategories: boolean): MoveOptions {
     const move = options['move'] || {};
     const moveOptions = {} as MoveOptions;
     if (move['scrollbars'] === undefined &&
-      options['scrollbars'] === undefined) {
+        options['scrollbars'] === undefined) {
       // AnyDuringMigration because:  Property 'scrollbars' does not exist on
       // type '{}'.
       (moveOptions as AnyDuringMigration).scrollbars = hasCategories;
@@ -230,11 +230,11 @@ export class Options {
       // AnyDuringMigration because:  Property 'scrollbars' does not exist on
       // type '{}'.
       (moveOptions as AnyDuringMigration).scrollbars.horizontal =
-        !!move['scrollbars']['horizontal'];
+          !!move['scrollbars']['horizontal'];
       // AnyDuringMigration because:  Property 'scrollbars' does not exist on
       // type '{}'.
       (moveOptions as AnyDuringMigration).scrollbars.vertical =
-        !!move['scrollbars']['vertical'];
+          !!move['scrollbars']['vertical'];
       // Convert scrollbars object to boolean if they have the same value.
       // This allows us to easily check for whether any scrollbars exist using
       // !!moveOptions.scrollbars.
@@ -242,7 +242,7 @@ export class Options {
       // type '{}'. AnyDuringMigration because:  Property 'scrollbars' does not
       // exist on type '{}'.
       if ((moveOptions as AnyDuringMigration).scrollbars.horizontal &&
-        (moveOptions as AnyDuringMigration).scrollbars.vertical) {
+          (moveOptions as AnyDuringMigration).scrollbars.vertical) {
         // AnyDuringMigration because:  Property 'scrollbars' does not exist on
         // type '{}'.
         (moveOptions as AnyDuringMigration).scrollbars = true;
@@ -250,8 +250,8 @@ export class Options {
         // type '{}'. AnyDuringMigration because:  Property 'scrollbars' does
         // not exist on type '{}'.
       } else if (
-        !(moveOptions as AnyDuringMigration).scrollbars.horizontal &&
-        !(moveOptions as AnyDuringMigration).scrollbars.vertical) {
+          !(moveOptions as AnyDuringMigration).scrollbars.horizontal &&
+          !(moveOptions as AnyDuringMigration).scrollbars.vertical) {
         // AnyDuringMigration because:  Property 'scrollbars' does not exist on
         // type '{}'.
         (moveOptions as AnyDuringMigration).scrollbars = false;
@@ -260,19 +260,19 @@ export class Options {
       // AnyDuringMigration because:  Property 'scrollbars' does not exist on
       // type '{}'.
       (moveOptions as AnyDuringMigration).scrollbars =
-        !!move['scrollbars'] || !!options['scrollbars'];
+          !!move['scrollbars'] || !!options['scrollbars'];
     }
 
     // AnyDuringMigration because:  Property 'scrollbars' does not exist on type
     // '{}'.
     if (!(moveOptions as AnyDuringMigration).scrollbars ||
-      move['wheel'] === undefined) {
+        move['wheel'] === undefined) {
       // Defaults to true if single-direction scroll is enabled.
       // AnyDuringMigration because:  Property 'scrollbars' does not exist on
       // type '{}'. AnyDuringMigration because:  Property 'wheel' does not exist
       // on type '{}'.
       (moveOptions as AnyDuringMigration).wheel =
-        typeof (moveOptions as AnyDuringMigration).scrollbars === 'object';
+          typeof (moveOptions as AnyDuringMigration).scrollbars === 'object';
     } else {
       // AnyDuringMigration because:  Property 'wheel' does not exist on type
       // '{}'.
@@ -333,7 +333,7 @@ export class Options {
       // AnyDuringMigration because:  Property 'startScale' does not exist on
       // type '{}'.
       (zoomOptions as AnyDuringMigration).startScale =
-        Number(zoom['startScale']);
+          Number(zoom['startScale']);
     }
     if (zoom['maxScale'] === undefined) {
       // AnyDuringMigration because:  Property 'maxScale' does not exist on type
@@ -361,7 +361,7 @@ export class Options {
       // AnyDuringMigration because:  Property 'scaleSpeed' does not exist on
       // type '{}'.
       (zoomOptions as AnyDuringMigration).scaleSpeed =
-        Number(zoom['scaleSpeed']);
+          Number(zoom['scaleSpeed']);
     }
     if (zoom['pinch'] === undefined) {
       // AnyDuringMigration because:  Property 'controls' does not exist on type
@@ -369,8 +369,8 @@ export class Options {
       // type '{}'. AnyDuringMigration because:  Property 'pinch' does not exist
       // on type '{}'.
       (zoomOptions as AnyDuringMigration).pinch =
-        (zoomOptions as AnyDuringMigration).wheel ||
-        (zoomOptions as AnyDuringMigration).controls;
+          (zoomOptions as AnyDuringMigration).wheel ||
+          (zoomOptions as AnyDuringMigration).controls;
     } else {
       // AnyDuringMigration because:  Property 'pinch' does not exist on type
       // '{}'.
@@ -398,12 +398,12 @@ export class Options {
     // AnyDuringMigration because:  Property 'length' does not exist on type
     // '{}'.
     (gridOptions as AnyDuringMigration).length =
-      grid['length'] === undefined ? 1 : Number(grid['length']);
+        grid['length'] === undefined ? 1 : Number(grid['length']);
     // AnyDuringMigration because:  Property 'spacing' does not exist on type
     // '{}'. AnyDuringMigration because:  Property 'snap' does not exist on type
     // '{}'.
     (gridOptions as AnyDuringMigration).snap =
-      (gridOptions as AnyDuringMigration).spacing > 0 && !!grid['snap'];
+        (gridOptions as AnyDuringMigration).spacing > 0 && !!grid['snap'];
     return gridOptions;
   }
 
@@ -421,7 +421,7 @@ export class Options {
       return theme;
     }
     return Theme.defineTheme(
-      theme.name || 'builtin' + idGenerator.getNextUniqueId(), theme);
+        theme.name || 'builtin' + idGenerator.getNextUniqueId(), theme);
   }
 }
 export interface GridOptions {
@@ -432,7 +432,7 @@ export interface GridOptions {
 }
 export interface MoveOptions {
   drag: boolean;
-  scrollbars: boolean | ScrollbarOptions;
+  scrollbars: boolean|ScrollbarOptions;
   wheel: boolean;
 }
 export interface ScrollbarOptions {

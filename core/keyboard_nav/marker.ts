@@ -18,9 +18,9 @@
 
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */
-import { MarkerSvg } from '../renderers/common/marker_svg.js';
+import {MarkerSvg} from '../renderers/common/marker_svg.js';
 
-import { ASTNode } from './ast_node.js';
+import {ASTNode} from './ast_node.js';
 
 
 /**
@@ -30,7 +30,7 @@ import { ASTNode } from './ast_node.js';
  */
 export class Marker {
   /** The colour of the marker. */
-  colour: string | null = null;
+  colour: string|null = null;
 
   /** The current location of the marker. */
   // AnyDuringMigration because:  Type 'null' is not assignable to type

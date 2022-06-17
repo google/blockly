@@ -13,9 +13,9 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { VariableModel } from '../variable_model.js';
+import {VariableModel} from '../variable_model.js';
 
-import { Abstract as AbstractEvent } from './events_abstract.js';
+import {Abstract as AbstractEvent} from './events_abstract.js';
 
 
 /**

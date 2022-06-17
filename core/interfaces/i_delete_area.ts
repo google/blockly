@@ -22,7 +22,7 @@
 // Unused import preserved for side-effects. Remove if unneeded.
 import './i_draggable';
 
-import { IDragTarget } from './i_drag_target.js';
+import {IDragTarget} from './i_drag_target.js';
 
 
 /**

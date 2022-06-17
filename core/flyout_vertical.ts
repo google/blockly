@@ -19,16 +19,16 @@ import './constants';
 
 import * as browserEvents from './browser_events.js';
 import * as dropDownDiv from './dropdowndiv.js';
-import { Flyout, FlyoutItem } from './flyout_base.js';
+import {Flyout, FlyoutItem} from './flyout_base.js';
 /* eslint-disable-next-line no-unused-vars */
-import { FlyoutButton } from './flyout_button.js';
+import {FlyoutButton} from './flyout_button.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Options } from './options.js';
+import {Options} from './options.js';
 import * as registry from './registry.js';
-import { Scrollbar } from './scrollbar.js';
+import {Scrollbar} from './scrollbar.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Coordinate } from './utils/coordinate.js';
-import { Rect } from './utils/rect.js';
+import {Coordinate} from './utils/coordinate.js';
+import {Rect} from './utils/rect.js';
 import * as toolbox from './utils/toolbox.js';
 import * as WidgetDiv from './widgetdiv.js';
 
@@ -57,7 +57,7 @@ export class VerticalFlyout extends Flyout {
    * @param xyRatio Contains a y property which is a float between 0 and 1
    *     specifying the degree of scrolling and a similar x property.
    */
-  protected override setMetrics_(xyRatio: { x: number, y: number }) {
+  protected override setMetrics_(xyRatio: {x: number, y: number}) {
     if (!this.isVisible()) {
       return;
     }
@@ -68,12 +68,12 @@ export class VerticalFlyout extends Flyout {
 
     if (typeof xyRatio.y === 'number') {
       this.workspace_.scrollY =
-        -(scrollMetrics.top +
-          (scrollMetrics.height - viewMetrics.height) * xyRatio.y);
+          -(scrollMetrics.top +
+            (scrollMetrics.height - viewMetrics.height) * xyRatio.y);
     }
     this.workspace_.translate(
-      this.workspace_.scrollX + absoluteMetrics.left,
-      this.workspace_.scrollY + absoluteMetrics.top);
+        this.workspace_.scrollX + absoluteMetrics.left,
+        this.workspace_.scrollY + absoluteMetrics.top);
   }
 
   /**
@@ -144,7 +144,7 @@ export class VerticalFlyout extends Flyout {
 
     const edgeWidth = this.width_ - this.CORNER_RADIUS;
     const edgeHeight =
-      targetWorkspaceViewMetrics.height - 2 * this.CORNER_RADIUS;
+        targetWorkspaceViewMetrics.height - 2 * this.CORNER_RADIUS;
     this.setBackgroundPath_(edgeWidth, edgeHeight);
 
     const x = this.getX();
@@ -163,20 +163,20 @@ export class VerticalFlyout extends Flyout {
     const totalWidth = width + this.CORNER_RADIUS;
 
     // Decide whether to start on the left or right.
-    const path: Array<string | number> =
-      ['M ' + (atRight ? totalWidth : 0) + ',0'];
+    const path: Array<string|number> =
+        ['M ' + (atRight ? totalWidth : 0) + ',0'];
     // Top.
     path.push('h', (atRight ? -width : width));
     // Rounded corner.
     path.push(
-      'a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, atRight ? 0 : 1,
-      atRight ? -this.CORNER_RADIUS : this.CORNER_RADIUS, this.CORNER_RADIUS);
+        'a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, atRight ? 0 : 1,
+        atRight ? -this.CORNER_RADIUS : this.CORNER_RADIUS, this.CORNER_RADIUS);
     // Side closest to workspace.
     path.push('v', Math.max(0, height));
     // Rounded corner.
     path.push(
-      'a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, atRight ? 0 : 1,
-      atRight ? this.CORNER_RADIUS : -this.CORNER_RADIUS, this.CORNER_RADIUS);
+        'a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, atRight ? 0 : 1,
+        atRight ? this.CORNER_RADIUS : -this.CORNER_RADIUS, this.CORNER_RADIUS);
     // Bottom.
     path.push('h', (atRight ? width : -width));
     path.push('z');
@@ -238,14 +238,14 @@ export class VerticalFlyout extends Flyout {
         const root = block!.getSvgRoot();
         const blockHW = block!.getHeightWidth();
         const moveX =
-          block!.outputConnection ? cursorX - this.tabWidth_ : cursorX;
+            block!.outputConnection ? cursorX - this.tabWidth_ : cursorX;
         block!.moveBy(moveX, cursorY);
 
         // AnyDuringMigration because:  Argument of type 'BlockSvg | undefined'
         // is not assignable to parameter of type 'BlockSvg'.
         const rect = this.createRect_(
-          block as AnyDuringMigration,
-          this.RTL ? moveX - blockHW.width : moveX, cursorY, blockHW, i);
+            block as AnyDuringMigration,
+            this.RTL ? moveX - blockHW.width : moveX, cursorY, blockHW, i);
 
         // AnyDuringMigration because:  Argument of type 'BlockSvg | undefined'
         // is not assignable to parameter of type 'BlockSvg'.
@@ -277,7 +277,7 @@ export class VerticalFlyout extends Flyout {
     const range = this.dragAngleRange_;
     // Check for left or right dragging.
     if (dragDirection < range && dragDirection > -range ||
-      (dragDirection < -180 + range || dragDirection > 180 - range)) {
+        (dragDirection < -180 + range || dragDirection > 180 - range)) {
       return true;
     }
     return false;
@@ -289,7 +289,7 @@ export class VerticalFlyout extends Flyout {
    * @return The component's bounding box. Null if drag target area should be
    *     ignored.
    */
-  override getClientRect(): Rect | null {
+  override getClientRect(): Rect|null {
     if (!this.svgGroup_ || this.autoClose || !this.isVisible()) {
       // The bounding rectangle won't compute correctly if the flyout is closed
       // and auto-close flyouts aren't valid drag targets (or delete areas).
@@ -350,7 +350,7 @@ export class VerticalFlyout extends Flyout {
           // AnyDuringMigration because:  Argument of type 'SVGElement |
           // undefined' is not assignable to parameter of type 'SVGElement'.
           this.moveRectToBlock_(
-            this.rectMap_.get(block) as AnyDuringMigration, block);
+              this.rectMap_.get(block) as AnyDuringMigration, block);
         }
       }
       if (this.RTL) {
@@ -358,20 +358,20 @@ export class VerticalFlyout extends Flyout {
         for (let i = 0, button; button = this.buttons_[i]; i++) {
           const y = button.getPosition().y;
           const x = flyoutWidth / this.workspace_.scale - button.width -
-            this.MARGIN - this.tabWidth_;
+              this.MARGIN - this.tabWidth_;
           button.moveTo(x, y);
         }
       }
 
       if (this.targetWorkspace!.toolboxPosition === this.toolboxPosition_ &&
-        this.toolboxPosition_ === toolbox.Position.LEFT &&
-        !this.targetWorkspace!.getToolbox()) {
+          this.toolboxPosition_ === toolbox.Position.LEFT &&
+          !this.targetWorkspace!.getToolbox()) {
         // This flyout is a simple toolbox. Reposition the workspace so that
         // (0,0) is in the correct position relative to the new absolute edge
         // (ie toolbox edge).
         this.targetWorkspace!.translate(
-          this.targetWorkspace!.scrollX + flyoutWidth,
-          this.targetWorkspace!.scrollY);
+            this.targetWorkspace!.scrollX + flyoutWidth,
+            this.targetWorkspace!.scrollY);
       }
       this.width_ = flyoutWidth;
       this.position();
@@ -381,4 +381,4 @@ export class VerticalFlyout extends Flyout {
 }
 
 registry.register(
-  registry.Type.FLYOUTS_VERTICAL_TOOLBOX, registry.DEFAULT, VerticalFlyout);
+    registry.Type.FLYOUTS_VERTICAL_TOOLBOX, registry.DEFAULT, VerticalFlyout);

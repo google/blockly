@@ -12,14 +12,14 @@
  * @class
  */
 
-import { Field } from './field.js';
+import {Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Sentinel } from './utils/sentinel.js';
-import { Size } from './utils/size.js';
-import { Svg } from './utils/svg.js';
+import {Sentinel} from './utils/sentinel.js';
+import {Size} from './utils/size.js';
+import {Svg} from './utils/svg.js';
 
 
 /**
@@ -39,7 +39,7 @@ export class FieldImage extends Field {
   private readonly imageHeight_: number;
 
   /** The function to be called when this field is clicked. */
-  private clickHandler_: ((p1: FieldImage) => AnyDuringMigration) | null = null;
+  private clickHandler_: ((p1: FieldImage) => AnyDuringMigration)|null = null;
 
   /** The rendered field's image element. */
   // AnyDuringMigration because:  Type 'null' is not assignable to type
@@ -83,9 +83,9 @@ export class FieldImage extends Field {
    * for a list of properties this parameter supports.
    */
   constructor(
-    src: string | Sentinel, width: string | number, height: string | number,
-    opt_alt?: string, opt_onClick?: (p1: FieldImage) => AnyDuringMigration,
-    opt_flipRtl?: boolean, opt_config?: AnyDuringMigration) {
+      src: string|Sentinel, width: string|number, height: string|number,
+      opt_alt?: string, opt_onClick?: (p1: FieldImage) => AnyDuringMigration,
+      opt_flipRtl?: boolean, opt_config?: AnyDuringMigration) {
     super(Field.SKIP_SETUP);
 
     // Return early.
@@ -96,13 +96,13 @@ export class FieldImage extends Field {
     const imageWidth = Number(parsing.replaceMessageReferences(width));
     if (isNaN(imageHeight) || isNaN(imageWidth)) {
       throw Error(
-        'Height and width values of an image field must cast to' +
-        ' numbers.');
+          'Height and width values of an image field must cast to' +
+          ' numbers.');
     }
     if (imageHeight <= 0 || imageWidth <= 0) {
       throw Error(
-        'Height and width values of an image field must be greater' +
-        ' than 0.');
+          'Height and width values of an image field must be greater' +
+          ' than 0.');
     }
 
     /** The size of the area rendered by the field. */
@@ -143,14 +143,14 @@ export class FieldImage extends Field {
   /** Create the block UI for this image. */
   override initView() {
     this.imageElement_ = dom.createSvgElement(
-      Svg.IMAGE, {
-      'height': this.imageHeight_ + 'px',
-      'width': this.size_.width + 'px',
-      'alt': this.altText_,
-    },
-      this.fieldGroup_);
+        Svg.IMAGE, {
+          'height': this.imageHeight_ + 'px',
+          'width': this.size_.width + 'px',
+          'alt': this.altText_,
+        },
+        this.fieldGroup_);
     this.imageElement_.setAttributeNS(
-      dom.XLINK_NS, 'xlink:href', this.value_ as string);
+        dom.XLINK_NS, 'xlink:href', this.value_ as string);
 
     if (this.clickHandler_) {
       this.imageElement_.style.cursor = 'pointer';
@@ -166,7 +166,7 @@ export class FieldImage extends Field {
    * @return A string, or null if invalid.
    */
   protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
-    string | null {
+      string|null {
     if (typeof opt_newValue !== 'string') {
       return null;
     }
@@ -182,7 +182,7 @@ export class FieldImage extends Field {
     this.value_ = newValue;
     if (this.imageElement_) {
       this.imageElement_.setAttributeNS(
-        dom.XLINK_NS, 'xlink:href', String(this.value_));
+          dom.XLINK_NS, 'xlink:href', String(this.value_));
     }
   }
 
@@ -198,7 +198,7 @@ export class FieldImage extends Field {
    * Set the alt text of this image.
    * @param alt New alt text.
    */
-  setAlt(alt: string | null) {
+  setAlt(alt: string|null) {
     if (alt === this.altText_) {
       return;
     }
@@ -223,7 +223,7 @@ export class FieldImage extends Field {
    * @param func The function that is called when the image is clicked, or null
    *     to remove.
    */
-  setOnClickHandler(func: ((p1: FieldImage) => AnyDuringMigration) | null) {
+  setOnClickHandler(func: ((p1: FieldImage) => AnyDuringMigration)|null) {
     this.clickHandler_ = func;
   }
 
@@ -233,7 +233,7 @@ export class FieldImage extends Field {
    * Return the image alt text instead.
    * @return The image alt text.
    */
-  protected override getText_(): string | null {
+  protected override getText_(): string|null {
     return this.altText_;
   }
 
@@ -249,8 +249,8 @@ export class FieldImage extends Field {
     // `this` might be a subclass of FieldImage if that class doesn't override
     // the static fromJson method.
     return new this(
-      options['src'], options['width'], options['height'], undefined,
-      undefined, undefined, options);
+        options['src'], options['width'], options['height'], undefined,
+        undefined, undefined, options);
   }
 }
 

@@ -76,7 +76,7 @@ export function setHsvValue(newValue: number) {
  *     can't be parsed.
  * @alias Blockly.utils.colour.parse
  */
-export function parse(str: string | number): string | null {
+export function parse(str: string|number): string|null {
   str = String(str).toLowerCase().trim();
   let hex = names[str];
   if (hex) {
@@ -212,8 +212,8 @@ export function hsvToHex(h: number, s: number, v: number): string {
  * @return Combined colour represented in hex.
  * @alias Blockly.utils.colour.blend
  */
-export function blend(colour1: string, colour2: string, factor: number): string |
-  null {
+export function blend(colour1: string, colour2: string, factor: number): string|
+    null {
   const hex1 = parse(colour1);
   if (!hex1) {
     return null;
@@ -238,7 +238,7 @@ export function blend(colour1: string, colour2: string, factor: number): string 
  *
  * @alias Blockly.utils.colour.names
  */
-export const names: { [key: string]: string } = {
+export const names: {[key: string]: string} = {
   'aqua': '#00ffff',
   'black': '#000000',
   'blue': '#0000ff',

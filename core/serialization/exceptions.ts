@@ -35,10 +35,10 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { Block } from '../block.js';
+import {Block} from '../block.js';
 
 // eslint-disable-next-line no-unused-vars
-import { State } from './blocks.js';
+import {State} from './blocks.js';
 
 
 /** @alias Blockly.serialization.exceptions.DeserializationError */
@@ -88,8 +88,8 @@ export class BadConnectionCheck extends DeserializationError {
    * @param childState The state object representing the child block.
    */
   constructor(
-    reason: string, childConnection: string, public childBlock: Block,
-    public childState: State) {
+      reason: string, childConnection: string, public childBlock: Block,
+      public childState: State) {
     super(`The block ${childBlock.toDevString()} could not connect its
 ${childConnection} to its parent, because: ${reason}`);
   }

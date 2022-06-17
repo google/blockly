@@ -18,11 +18,11 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { IDragTarget } from './interfaces/i_drag_target.js';
+import {IDragTarget} from './interfaces/i_drag_target.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IDraggable } from './interfaces/i_draggable.js';
+import {IDraggable} from './interfaces/i_draggable.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Rect } from './utils/rect.js';
+import {Rect} from './utils/rect.js';
 
 
 /**
@@ -79,7 +79,7 @@ export class DragTarget implements IDragTarget {
    * @return The component's bounding box. Null if drag target area should be
    *     ignored.
    */
-  getClientRect(): Rect | null {
+  getClientRect(): Rect|null {
     return null;
   }
 

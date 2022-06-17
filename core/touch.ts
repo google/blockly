@@ -13,7 +13,7 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { Gesture } from './gesture.js';
+import {Gesture} from './gesture.js';
 
 
 /**
@@ -36,39 +36,39 @@ const LONGPRESS = 750;
  * Copied from Closure's goog.events.BrowserFeature.TOUCH_ENABLED
  */
 export const TOUCH_ENABLED = 'ontouchstart' in globalThis ||
-  !!(globalThis['document'] && document.documentElement &&
-    'ontouchstart' in
-    document.documentElement) ||  // IE10 uses non-standard touch events,
-  // so it has a different check.
-  !!(globalThis['navigator'] &&
-    (globalThis['navigator']['maxTouchPoints'] ||
-      (globalThis['navigator'] as any)['msMaxTouchPoints']));
+    !!(globalThis['document'] && document.documentElement &&
+       'ontouchstart' in
+           document.documentElement) ||  // IE10 uses non-standard touch events,
+    // so it has a different check.
+    !!(globalThis['navigator'] &&
+       (globalThis['navigator']['maxTouchPoints'] ||
+        (globalThis['navigator'] as any)['msMaxTouchPoints']));
 
 /** Which touch events are we currently paying attention to? */
-let touchIdentifier_: string | null = null;
+let touchIdentifier_: string|null = null;
 
 /**
  * The TOUCH_MAP lookup dictionary specifies additional touch events to fire,
  * in conjunction with mouse events.
  * @alias Blockly.Touch.TOUCH_MAP
  */
-export const TOUCH_MAP: { [key: string]: string[] } = globalThis['PointerEvent'] ?
-  {
-    'mousedown': ['pointerdown'],
-    'mouseenter': ['pointerenter'],
-    'mouseleave': ['pointerleave'],
-    'mousemove': ['pointermove'],
-    'mouseout': ['pointerout'],
-    'mouseover': ['pointerover'],
-    'mouseup': ['pointerup', 'pointercancel'],
-    'touchend': ['pointerup'],
-    'touchcancel': ['pointercancel'],
-  } :
-  {
-    'mousedown': ['touchstart'],
-    'mousemove': ['touchmove'],
-    'mouseup': ['touchend', 'touchcancel'],
-  };
+export const TOUCH_MAP: {[key: string]: string[]} = globalThis['PointerEvent'] ?
+    {
+      'mousedown': ['pointerdown'],
+      'mouseenter': ['pointerenter'],
+      'mouseleave': ['pointerleave'],
+      'mousemove': ['pointermove'],
+      'mouseout': ['pointerout'],
+      'mouseover': ['pointerover'],
+      'mouseup': ['pointerup', 'pointercancel'],
+      'touchend': ['pointerup'],
+      'touchcancel': ['pointercancel'],
+    } :
+    {
+      'mousedown': ['touchstart'],
+      'mousemove': ['touchmove'],
+      'mouseup': ['touchend', 'touchcancel'],
+    };
 
 /** PID of queued long-press task. */
 let longPid_ = 0;
@@ -87,10 +87,10 @@ export function longStart(e: Event, gesture: Gesture) {
   longStop();
   // Punt on multitouch events.
   if (e instanceof TouchEvent && e.changedTouches &&
-    e.changedTouches.length !== 1) {
+      e.changedTouches.length !== 1) {
     return;
   }
-  longPid_ = setTimeout(function () {
+  longPid_ = setTimeout(function() {
     // TODO(#6097): Make types accurate, possibly by refactoring touch handling.
     const typelessEvent = e as AnyDuringMigration;
     // Additional check to distinguish between touch events and pointer events
@@ -141,7 +141,7 @@ export function clearTouchIdentifier() {
  *     handler; false if it should be blocked.
  * @alias Blockly.Touch.shouldHandleEvent
  */
-export function shouldHandleEvent(e: Event | PseudoEvent): boolean {
+export function shouldHandleEvent(e: Event|PseudoEvent): boolean {
   return !isMouseOrTouchEvent(e) || checkTouchIdentifier(e);
 }
 
@@ -153,7 +153,7 @@ export function shouldHandleEvent(e: Event | PseudoEvent): boolean {
  *     Otherwise 'mouse'.
  * @alias Blockly.Touch.getTouchIdentifierFromEvent
  */
-export function getTouchIdentifierFromEvent(e: Event | PseudoEvent): string {
+export function getTouchIdentifierFromEvent(e: Event|PseudoEvent): string {
   if (e instanceof MouseEvent) {
     return 'mouse';
   }
@@ -177,13 +177,13 @@ export function getTouchIdentifierFromEvent(e: Event | PseudoEvent): string {
   // AnyDuringMigration because:  Property 'changedTouches' does not exist on
   // type 'PseudoEvent | Event'.
   return (pseudoEvent as AnyDuringMigration).changedTouches &&
-    (pseudoEvent as AnyDuringMigration).changedTouches[0] &&
-    (pseudoEvent as AnyDuringMigration).changedTouches[0].identifier !==
-    undefined &&
-    (pseudoEvent as AnyDuringMigration).changedTouches[0].identifier !==
-    null ?
-    String((pseudoEvent as AnyDuringMigration).changedTouches[0].identifier) :
-    'mouse';
+          (pseudoEvent as AnyDuringMigration).changedTouches[0] &&
+          (pseudoEvent as AnyDuringMigration).changedTouches[0].identifier !==
+              undefined &&
+          (pseudoEvent as AnyDuringMigration).changedTouches[0].identifier !==
+              null ?
+      String((pseudoEvent as AnyDuringMigration).changedTouches[0].identifier) :
+      'mouse';
 }
 
 /**
@@ -199,7 +199,7 @@ export function getTouchIdentifierFromEvent(e: Event | PseudoEvent): string {
  *     identifier.
  * @alias Blockly.Touch.checkTouchIdentifier
  */
-export function checkTouchIdentifier(e: Event | PseudoEvent): boolean {
+export function checkTouchIdentifier(e: Event|PseudoEvent): boolean {
   const identifier = getTouchIdentifierFromEvent(e);
 
   // if (touchIdentifier_) is insufficient because Android touch
@@ -210,7 +210,7 @@ export function checkTouchIdentifier(e: Event | PseudoEvent): boolean {
     return touchIdentifier_ === identifier;
   }
   if (e.type === 'mousedown' || e.type === 'touchstart' ||
-    e.type === 'pointerdown') {
+      e.type === 'pointerdown') {
     // No identifier set yet, and this is the start of a drag.  Set it and
     // return.
     touchIdentifier_ = identifier;
@@ -228,11 +228,10 @@ export function checkTouchIdentifier(e: Event | PseudoEvent): boolean {
  * @param e A touch event.
  * @alias Blockly.Touch.setClientFromTouch
  */
-export function setClientFromTouch(e: Event | PseudoEvent) {
+export function setClientFromTouch(e: Event|PseudoEvent) {
   // AnyDuringMigration because:  Property 'changedTouches' does not exist on
   // type 'PseudoEvent | Event'.
-  if (e.type.startsWith('touch') &&
-    (e as AnyDuringMigration).changedTouches) {
+  if (e.type.startsWith('touch') && (e as AnyDuringMigration).changedTouches) {
     // Map the touch event's properties to the event.
     // AnyDuringMigration because:  Property 'changedTouches' does not exist on
     // type 'PseudoEvent | Event'.
@@ -252,10 +251,9 @@ export function setClientFromTouch(e: Event | PseudoEvent) {
  * @return True if it is a mouse, touch, or pointer event; false otherwise.
  * @alias Blockly.Touch.isMouseOrTouchEvent
  */
-export function isMouseOrTouchEvent(e: Event | PseudoEvent): boolean {
-  return e.type.startsWith('touch') ||
-    e.type.startsWith('mouse') ||
-    e.type.startsWith('pointer');
+export function isMouseOrTouchEvent(e: Event|PseudoEvent): boolean {
+  return e.type.startsWith('touch') || e.type.startsWith('mouse') ||
+      e.type.startsWith('pointer');
 }
 
 /**
@@ -264,9 +262,8 @@ export function isMouseOrTouchEvent(e: Event | PseudoEvent): boolean {
  * @return True if it is a touch or pointer event; false otherwise.
  * @alias Blockly.Touch.isTouchEvent
  */
-export function isTouchEvent(e: Event | PseudoEvent): boolean {
-  return e.type.startsWith('touch') ||
-    e.type.startsWith('pointer');
+export function isTouchEvent(e: Event|PseudoEvent): boolean {
+  return e.type.startsWith('touch') || e.type.startsWith('pointer');
 }
 
 
@@ -279,7 +276,7 @@ export function isTouchEvent(e: Event | PseudoEvent): boolean {
  * will be no real touch events.
  * @alias Blockly.Touch.splitEventByTouches
  */
-export function splitEventByTouches(e: Event): Array<Event | PseudoEvent> {
+export function splitEventByTouches(e: Event): Array<Event|PseudoEvent> {
   const events = [];
   if (e instanceof TouchEvent) {
     for (let i = 0; i < e.changedTouches.length; i++) {

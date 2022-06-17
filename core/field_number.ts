@@ -12,12 +12,12 @@
  * @class
  */
 
-import { Field } from './field.js';
+import {Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
-import { FieldTextInput } from './field_textinput.js';
+import {FieldTextInput} from './field_textinput.js';
 import * as aria from './utils/aria.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Sentinel } from './utils/sentinel.js';
+import {Sentinel} from './utils/sentinel.js';
 
 
 /**
@@ -41,7 +41,7 @@ export class FieldNumber extends FieldTextInput {
    * The number of decimal places to allow, or null to allow any number of
    * decimal digits.
    */
-  private decimalPlaces_: number | null = null;
+  private decimalPlaces_: number|null = null;
 
   /**
    * Serializable fields are saved by the serializer, non-serializable fields
@@ -69,9 +69,9 @@ export class FieldNumber extends FieldTextInput {
    * for a list of properties this parameter supports.
    */
   constructor(
-    opt_value?: string | number | Sentinel, opt_min?: string | number | null,
-    opt_max?: string | number | null, opt_precision?: string | number | null,
-    opt_validator?: Function | null, opt_config?: AnyDuringMigration) {
+      opt_value?: string|number|Sentinel, opt_min?: string|number|null,
+      opt_max?: string|number|null, opt_precision?: string|number|null,
+      opt_validator?: Function|null, opt_config?: AnyDuringMigration) {
     // Pass SENTINEL so that we can define properties before value validation.
     super(Field.SKIP_SETUP);
 
@@ -113,8 +113,8 @@ export class FieldNumber extends FieldTextInput {
    * @param precision Precision for value.
    */
   setConstraints(
-    min: number | string | undefined | null, max: number | string | undefined | null,
-    precision: number | string | undefined | null) {
+      min: number|string|undefined|null, max: number|string|undefined|null,
+      precision: number|string|undefined|null) {
     this.setMinInternal_(min);
     this.setMaxInternal_(max);
     this.setPrecisionInternal_(precision);
@@ -126,7 +126,7 @@ export class FieldNumber extends FieldTextInput {
    * reflect.
    * @param min Minimum value.
    */
-  setMin(min: number | string | undefined | null) {
+  setMin(min: number|string|undefined|null) {
     this.setMinInternal_(min);
     this.setValue(this.getValue());
   }
@@ -136,7 +136,7 @@ export class FieldNumber extends FieldTextInput {
    * value updates.
    * @param min Minimum value.
    */
-  private setMinInternal_(min: number | string | undefined | null) {
+  private setMinInternal_(min: number|string|undefined|null) {
     if (min == null) {
       this.min_ = -Infinity;
     } else {
@@ -161,7 +161,7 @@ export class FieldNumber extends FieldTextInput {
    * reflect.
    * @param max Maximum value.
    */
-  setMax(max: number | string | undefined | null) {
+  setMax(max: number|string|undefined|null) {
     this.setMaxInternal_(max);
     this.setValue(this.getValue());
   }
@@ -171,7 +171,7 @@ export class FieldNumber extends FieldTextInput {
    * value updates.
    * @param max Maximum value.
    */
-  private setMaxInternal_(max: number | string | undefined | null) {
+  private setMaxInternal_(max: number|string|undefined|null) {
     if (max == null) {
       this.max_ = Infinity;
     } else {
@@ -196,7 +196,7 @@ export class FieldNumber extends FieldTextInput {
    * value is rounded. Updates the field to reflect.
    * @param precision The number to which the field's value is rounded.
    */
-  setPrecision(precision: number | string | undefined | null) {
+  setPrecision(precision: number|string|undefined|null) {
     this.setPrecisionInternal_(precision);
     this.setValue(this.getValue());
   }
@@ -206,14 +206,14 @@ export class FieldNumber extends FieldTextInput {
    * value updates.
    * @param precision The number to which the field's value is rounded.
    */
-  private setPrecisionInternal_(precision: number | string | undefined | null) {
+  private setPrecisionInternal_(precision: number|string|undefined|null) {
     this.precision_ = Number(precision) || 0;
     let precisionString = String(this.precision_);
     if (precisionString.indexOf('e') !== -1) {
       // String() is fast.  But it turns .0000001 into '1e-7'.
       // Use the much slower toLocaleString to access all the digits.
       precisionString =
-        this.precision_.toLocaleString('en-US', { maximumFractionDigits: 20 });
+          this.precision_.toLocaleString('en-US', {maximumFractionDigits: 20});
     }
     const decimalIndex = precisionString.indexOf('.');
     if (decimalIndex === -1) {
@@ -242,7 +242,7 @@ export class FieldNumber extends FieldTextInput {
    * @return A valid number, or null if invalid.
    */
   protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
-    number | null {
+      number|null {
     if (opt_newValue === null) {
       return null;
     }
@@ -302,7 +302,7 @@ export class FieldNumber extends FieldTextInput {
     // `this` might be a subclass of FieldNumber if that class doesn't override
     // the static fromJson method.
     return new this(
-      options['value'], undefined, undefined, undefined, undefined, options);
+        options['value'], undefined, undefined, undefined, undefined, options);
   }
 }
 

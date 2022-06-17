@@ -17,31 +17,30 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from '../../block_svg.js';
-import { Input } from '../../input.js';
-import { inputTypes } from '../../input_types.js';
+import {BlockSvg} from '../../block_svg.js';
+import {Input} from '../../input.js';
+import {inputTypes} from '../../input_types.js';
+import {RenderInfo as BaseRenderInfo} from '../common/info.js';
+import {Measurable} from '../measurables/base.js';
+/* eslint-disable-next-line no-unused-vars */
+import {BottomRow} from '../measurables/bottom_row.js';
+import {ExternalValueInput} from '../measurables/external_value_input.js';
+/* eslint-disable-next-line no-unused-vars */
+import {Field} from '../measurables/field.js';
+import {InRowSpacer} from '../measurables/in_row_spacer.js';
+/* eslint-disable-next-line no-unused-vars */
+import {InputRow} from '../measurables/input_row.js';
+import {Row} from '../measurables/row.js';
+/* eslint-disable-next-line no-unused-vars */
+import {TopRow} from '../measurables/top_row.js';
+import {Types} from '../measurables/types.js';
 
-import { RenderInfo as BaseRenderInfo } from '../common/info.js';
-import { Measurable } from '../measurables/base.js';
 /* eslint-disable-next-line no-unused-vars */
-import { BottomRow } from '../measurables/bottom_row.js';
-import { ExternalValueInput } from '../measurables/external_value_input.js';
+import {ConstantProvider} from './constants.js';
+import {InlineInput} from './measurables/inline_input.js';
+import {StatementInput} from './measurables/statement_input.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Field } from '../measurables/field.js';
-import { InRowSpacer } from '../measurables/in_row_spacer.js';
-/* eslint-disable-next-line no-unused-vars */
-import { InputRow } from '../measurables/input_row.js';
-import { Row } from '../measurables/row.js';
-/* eslint-disable-next-line no-unused-vars */
-import { TopRow } from '../measurables/top_row.js';
-import { Types } from '../measurables/types.js';
-
-/* eslint-disable-next-line no-unused-vars */
-import { ConstantProvider } from './constants.js';
-import { InlineInput } from './measurables/inline_input.js';
-import { StatementInput } from './measurables/statement_input.js';
-/* eslint-disable-next-line no-unused-vars */
-import { Renderer } from './renderer.js';
+import {Renderer} from './renderer.js';
 
 
 /**
@@ -79,15 +78,15 @@ export class RenderInfo extends BaseRenderInfo {
     super.populateBottomRow_();
 
     const followsStatement = this.block_.inputList.length &&
-      this.block_.inputList[this.block_.inputList.length - 1].type ===
-      inputTypes.STATEMENT;
+        this.block_.inputList[this.block_.inputList.length - 1].type ===
+            inputTypes.STATEMENT;
     // The minimum height of the bottom row is smaller in Geras than in other
     // renderers, because the dark path adds a pixel.
     // If one of the row's elements has a greater height this will be
     // overwritten in the compute pass.
     if (!followsStatement) {
       this.bottomRow.minHeight =
-        this.constants_.MEDIUM_PADDING - this.constants_.DARK_PATH_OFFSET;
+          this.constants_.MEDIUM_PADDING - this.constants_.DARK_PATH_OFFSET;
     }
   }
 
@@ -106,7 +105,7 @@ export class RenderInfo extends BaseRenderInfo {
       // Dummy inputs have no visual representation, but the information is
       // still important.
       activeRow.minHeight =
-        Math.max(activeRow.minHeight, this.constants_.DUMMY_INPUT_MIN_HEIGHT);
+          Math.max(activeRow.minHeight, this.constants_.DUMMY_INPUT_MIN_HEIGHT);
       activeRow.hasDummyInput = true;
     }
     // Ignore row alignment if inline.
@@ -129,7 +128,7 @@ export class RenderInfo extends BaseRenderInfo {
       if (row.startsWithElemSpacer()) {
         // There's a spacer before the first element in the row.
         row.elements.push(new InRowSpacer(
-          this.constants_, this.getInRowSpacing_(null, oldElems[0])));
+            this.constants_, this.getInRowSpacing_(null, oldElems[0])));
       }
       if (!oldElems.length) {
         continue;
@@ -142,7 +141,7 @@ export class RenderInfo extends BaseRenderInfo {
       row.elements.push(oldElems[oldElems.length - 1]);
       if (row.endsWithElemSpacer()) {
         let spacing =
-          this.getInRowSpacing_(oldElems[oldElems.length - 1], null);
+            this.getInRowSpacing_(oldElems[oldElems.length - 1], null);
         if (hasExternalInputs && row.hasDummyInput) {
           spacing += this.constants_.TAB_WIDTH;
         }
@@ -152,7 +151,7 @@ export class RenderInfo extends BaseRenderInfo {
     }
   }
 
-  override getInRowSpacing_(prev: Measurable | null, next: Measurable | null) {
+  override getInRowSpacing_(prev: Measurable|null, next: Measurable|null) {
     if (!prev) {
       // Between an editable field and the beginning of the row.
       if (next && Types.isField(next) && (next as Field).isEditable) {
@@ -259,7 +258,7 @@ export class RenderInfo extends BaseRenderInfo {
         // RTL) to make the dark path under the previous connection show
         // through.
         const offset =
-          (this.RTL ? 1 : -1) * this.constants_.DARK_PATH_OFFSET / 2;
+            (this.RTL ? 1 : -1) * this.constants_.DARK_PATH_OFFSET / 2;
         return next.notchOffset + offset;
       }
     }
@@ -273,14 +272,14 @@ export class RenderInfo extends BaseRenderInfo {
         // RTL) to make the dark path under the previous connection show
         // through.
         const offset =
-          (this.RTL ? 1 : -1) * this.constants_.DARK_PATH_OFFSET / 2;
+            (this.RTL ? 1 : -1) * this.constants_.DARK_PATH_OFFSET / 2;
         return next.notchOffset - this.constants_.CORNER_RADIUS + offset;
       }
     }
 
     // Spacing between two fields of the same editability.
     if (Types.isField(prev) && next && Types.isField(next) &&
-      (prev as Field).isEditable === (next as Field).isEditable) {
+        (prev as Field).isEditable === (next as Field).isEditable) {
       return this.constants_.LARGE_PADDING;
     }
 
@@ -326,7 +325,7 @@ export class RenderInfo extends BaseRenderInfo {
     if (Types.isBottomRow(row)) {
       const bottomRow = row as BottomRow;
       const baseline =
-        bottomRow.yPos + bottomRow.height - bottomRow.descenderHeight;
+          bottomRow.yPos + bottomRow.height - bottomRow.descenderHeight;
       if (Types.isNextConnection(elem)) {
         return baseline + elem.height / 2;
       }
@@ -344,8 +343,8 @@ export class RenderInfo extends BaseRenderInfo {
     if (Types.isField(elem) || Types.isIcon(elem)) {
       result += elem.height / 2;
       if ((row.hasInlineInput || row.hasStatement) &&
-        elem.height + this.constants_.TALL_INPUT_FIELD_OFFSET_Y <=
-        row.height) {
+          elem.height + this.constants_.TALL_INPUT_FIELD_OFFSET_Y <=
+              row.height) {
         result += this.constants_.TALL_INPUT_FIELD_OFFSET_Y;
       }
     } else if (Types.isInlineInput(elem)) {
@@ -373,7 +372,7 @@ export class RenderInfo extends BaseRenderInfo {
           this.alignStatementRow_(row as InputRow);
         }
         if (prevInput && prevInput.hasStatement &&
-          row.width < prevInput.width) {
+            row.width < prevInput.width) {
           rowNextRightEdges.set(row, prevInput.width);
         } else {
           nextRightEdge = row.width;
@@ -393,7 +392,7 @@ export class RenderInfo extends BaseRenderInfo {
       } else {
         const currentWidth = row.width;
         const desiredWidth =
-          Math.max(prevRightEdge, rowNextRightEdges.get(row));
+            Math.max(prevRightEdge, rowNextRightEdges.get(row));
         const missingSpace = desiredWidth - currentWidth;
         if (missingSpace > 0) {
           this.addAlignmentPadding_(row, missingSpace);
@@ -407,7 +406,7 @@ export class RenderInfo extends BaseRenderInfo {
     // Limit the width of a statement row when a block is inline.
     if (this.isInline && row.hasStatement) {
       return this.statementEdge + this.constants_.MAX_BOTTOM_WIDTH +
-        this.startX;
+          this.startX;
     }
     return super.getDesiredRowWidth_(row);
   }
@@ -424,11 +423,11 @@ export class RenderInfo extends BaseRenderInfo {
       yCursor += row.height;
 
       widestRowWithConnectedBlocks =
-        Math.max(widestRowWithConnectedBlocks, row.widthWithConnectedBlocks);
+          Math.max(widestRowWithConnectedBlocks, row.widthWithConnectedBlocks);
       // Add padding to the bottom row if block height is less than minimum
       const heightWithoutHat = yCursor - this.topRow.ascenderHeight;
       if (row === this.bottomRow &&
-        heightWithoutHat < this.constants_.MIN_BLOCK_HEIGHT) {
+          heightWithoutHat < this.constants_.MIN_BLOCK_HEIGHT) {
         // But the hat height shouldn't be part of this.
         const diff = this.constants_.MIN_BLOCK_HEIGHT - heightWithoutHat;
         this.bottomRow.height += diff;
@@ -437,17 +436,17 @@ export class RenderInfo extends BaseRenderInfo {
       this.recordElemPositions_(row);
     }
     if (this.outputConnection && this.block_.nextConnection &&
-      this.block_.nextConnection.isConnected()) {
+        this.block_.nextConnection.isConnected()) {
       // Include width of connected block in value to stack width measurement.
       widestRowWithConnectedBlocks = Math.max(
-        widestRowWithConnectedBlocks,
-        this.block_.nextConnection.targetBlock().getHeightWidth().width -
-        this.constants_.DARK_PATH_OFFSET);
+          widestRowWithConnectedBlocks,
+          this.block_.nextConnection.targetBlock().getHeightWidth().width -
+              this.constants_.DARK_PATH_OFFSET);
     }
 
     this.bottomRow.baseline = yCursor - this.bottomRow.descenderHeight;
     this.widthWithChildren = widestRowWithConnectedBlocks + this.startX +
-      this.constants_.DARK_PATH_OFFSET;
+        this.constants_.DARK_PATH_OFFSET;
     this.width += this.constants_.DARK_PATH_OFFSET;
     this.height = yCursor + this.constants_.DARK_PATH_OFFSET;
     this.startY = this.topRow.capline;

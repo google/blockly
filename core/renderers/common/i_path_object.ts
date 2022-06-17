@@ -26,10 +26,10 @@ import '../../connection';
 // Unused import preserved for side-effects. Remove if unneeded.
 import '../../theme';
 
-import { BlockStyle } from '../../theme.js';
+import {BlockStyle} from '../../theme.js';
 
 /* eslint-disable-next-line no-unused-vars */
-import { ConstantProvider } from './constants.js';
+import {ConstantProvider} from './constants.js';
 
 
 /**

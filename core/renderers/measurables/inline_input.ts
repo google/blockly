@@ -18,12 +18,11 @@
 
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */
-import { Input } from '../../input.js';
+import {Input} from '../../input.js';
+import {ConstantProvider} from '../common/constants.js';
 
-import { ConstantProvider } from '../common/constants.js';
-
-import { InputConnection } from './input_connection.js';
-import { Types } from './types.js';
+import {InputConnection} from './input_connection.js';
+import {Types} from './types.js';
 
 
 /**
@@ -55,22 +54,22 @@ export class InlineInput extends InputConnection {
     }
 
     this.connectionHeight = !this.isDynamicShape ?
-      this.shape.height as number :
-      (this.shape.height as (p1: number) => number)(this.height);
+        this.shape.height as number :
+        (this.shape.height as (p1: number) => number)(this.height);
 
     this.connectionWidth = !this.isDynamicShape ?
-      this.shape.width as number :
-      (this.shape.width as (p1: number) => number)(this.height);
+        this.shape.width as number :
+        (this.shape.width as (p1: number) => number)(this.height);
     if (!this.connectedBlock) {
       this.width += this.connectionWidth * (this.isDynamicShape ? 2 : 1);
     }
 
     this.connectionOffsetY = 'connectionOffsetY' in this.shape ?
-      this.shape.connectionOffsetY(this.connectionHeight) :
-      this.constants.TAB_OFFSET_FROM_TOP;
+        this.shape.connectionOffsetY(this.connectionHeight) :
+        this.constants.TAB_OFFSET_FROM_TOP;
 
     this.connectionOffsetX = 'connectionOffsetX' in this.shape ?
-      this.shape.connectionOffsetX(this.connectionWidth) :
-      0;
+        this.shape.connectionOffsetX(this.connectionWidth) :
+        0;
   }
 }

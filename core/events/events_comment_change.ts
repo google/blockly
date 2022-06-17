@@ -14,9 +14,9 @@
 
 import * as registry from '../registry.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceComment } from '../workspace_comment.js';
+import {WorkspaceComment} from '../workspace_comment.js';
 
-import { CommentBase } from './events_comment_base.js';
+import {CommentBase} from './events_comment_base.js';
 import * as eventUtils from './utils.js';
 
 
@@ -39,21 +39,21 @@ export class CommentChange extends CommentBase {
    * @param opt_newContents New contents of the comment.
    */
   constructor(
-    opt_comment?: WorkspaceComment, opt_oldContents?: string,
-    opt_newContents?: string) {
+      opt_comment?: WorkspaceComment, opt_oldContents?: string,
+      opt_newContents?: string) {
     super(opt_comment);
 
     /** Type of this event. */
     this.type = eventUtils.COMMENT_CHANGE;
 
     if (!opt_comment) {
-      return; // Blank event to be populated by fromJson.
+      return;  // Blank event to be populated by fromJson.
     }
-    
+
     this.oldContents_ =
-      typeof opt_oldContents === 'undefined' ? '' : opt_oldContents;
+        typeof opt_oldContents === 'undefined' ? '' : opt_oldContents;
     this.newContents_ =
-      typeof opt_newContents === 'undefined' ? '' : opt_newContents;
+        typeof opt_newContents === 'undefined' ? '' : opt_newContents;
   }
 
   /**
@@ -103,4 +103,4 @@ export class CommentChange extends CommentBase {
 }
 
 registry.register(
-  registry.Type.EVENT, eventUtils.COMMENT_CHANGE, CommentChange);
+    registry.Type.EVENT, eventUtils.COMMENT_CHANGE, CommentChange);

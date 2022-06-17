@@ -17,10 +17,10 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { ConstantProvider } from '../common/constants.js';
+import {ConstantProvider} from '../common/constants.js';
 
-import { Measurable } from './base.js';
-import { Types } from './types.js';
+import {Measurable} from './base.js';
+import {Types} from './types.js';
 
 
 /**
@@ -37,9 +37,9 @@ export class SquareCorner extends Measurable {
   constructor(constants: ConstantProvider, opt_position?: string) {
     super(constants);
     this.type =
-      (!opt_position || opt_position === 'left' ? Types.LEFT_SQUARE_CORNER :
-        Types.RIGHT_SQUARE_CORNER) |
-      Types.CORNER;
+        (!opt_position || opt_position === 'left' ? Types.LEFT_SQUARE_CORNER :
+                                                    Types.RIGHT_SQUARE_CORNER) |
+        Types.CORNER;
     this.height = this.constants.NO_PADDING;
     this.width = this.constants.NO_PADDING;
   }

@@ -13,9 +13,9 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from '../../../block_svg.js';
-import { ConstantProvider } from '../../../renderers/common/constants.js';
-import { TopRow as BaseTopRow } from '../../../renderers/measurables/top_row.js';
+import {BlockSvg} from '../../../block_svg.js';
+import {ConstantProvider} from '../../../renderers/common/constants.js';
+import {TopRow as BaseTopRow} from '../../../renderers/measurables/top_row.js';
 
 
 /**
@@ -40,15 +40,14 @@ export class TopRow extends BaseTopRow {
   /** Render a round corner unless the block has an output connection. */
   override hasLeftSquareCorner(block: BlockSvg) {
     const hasHat =
-      (block.hat ? block.hat === 'cap' :
-        this.constants_.ADD_START_HATS) &&
-      !block.outputConnection && !block.previousConnection;
+        (block.hat ? block.hat === 'cap' : this.constants_.ADD_START_HATS) &&
+        !block.outputConnection && !block.previousConnection;
     return !!block.outputConnection || hasHat;
   }
 
   /** Render a round corner unless the block has an output connection. */
   override hasRightSquareCorner(block: BlockSvg) {
     return !!block.outputConnection && !block.statementInputCount &&
-      !block.nextConnection;
+        !block.nextConnection;
   }
 }

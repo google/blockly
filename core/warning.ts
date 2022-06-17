@@ -16,14 +16,14 @@
 import './events/events_bubble_open';
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from './block_svg.js';
-import { Bubble } from './bubble.js';
+import {BlockSvg} from './block_svg.js';
+import {Bubble} from './bubble.js';
 import * as eventUtils from './events/utils.js';
-import { Icon } from './icon.js';
+import {Icon} from './icon.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Coordinate } from './utils/coordinate.js';
+import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
-import { Svg } from './utils/svg.js';
+import {Svg} from './utils/svg.js';
 
 
 /**
@@ -34,7 +34,7 @@ export class Warning extends Icon {
   text_: AnyDuringMigration;
 
   /** The top-level node of the warning text, or null if not created. */
-  private paragraphElement_: SVGTextElement | null = null;
+  private paragraphElement_: SVGTextElement|null = null;
 
   /** Does this icon get hidden when the block is collapsed? */
   override collapseHidden = false;
@@ -55,29 +55,29 @@ export class Warning extends Icon {
   protected override drawIcon_(group: Element) {
     // Triangle with rounded corners.
     dom.createSvgElement(
-      Svg.PATH, {
-      'class': 'blocklyIconShape',
-      'd': 'M2,15Q-1,15 0.5,12L6.5,1.7Q8,-1 9.5,1.7L15.5,12Q17,15 14,15z',
-    },
-      group);
+        Svg.PATH, {
+          'class': 'blocklyIconShape',
+          'd': 'M2,15Q-1,15 0.5,12L6.5,1.7Q8,-1 9.5,1.7L15.5,12Q17,15 14,15z',
+        },
+        group);
     // Can't use a real '!' text character since different browsers and
     // operating systems render it differently. Body of exclamation point.
     dom.createSvgElement(
-      Svg.PATH, {
-      'class': 'blocklyIconSymbol',
-      'd': 'm7,4.8v3.16l0.27,2.27h1.46l0.27,-2.27v-3.16z',
-    },
-      group);
+        Svg.PATH, {
+          'class': 'blocklyIconSymbol',
+          'd': 'm7,4.8v3.16l0.27,2.27h1.46l0.27,-2.27v-3.16z',
+        },
+        group);
     // Dot of exclamation point.
     dom.createSvgElement(
-      Svg.RECT, {
-      'class': 'blocklyIconSymbol',
-      'x': '7',
-      'y': '11',
-      'height': '2',
-      'width': '2',
-    },
-      group);
+        Svg.RECT, {
+          'class': 'blocklyIconSymbol',
+          'x': '7',
+          'y': '11',
+          'height': '2',
+          'width': '2',
+        },
+        group);
   }
 
   /**
@@ -91,7 +91,7 @@ export class Warning extends Icon {
     // AnyDuringMigration because:  Property 'block_' does not exist on type
     // 'Warning'.
     eventUtils.fire(new (eventUtils.get(eventUtils.BUBBLE_OPEN))!
-      ((this as AnyDuringMigration).block_, visible, 'warning'));
+                    ((this as AnyDuringMigration).block_, visible, 'warning'));
     if (visible) {
       this.createBubble_();
     } else {
@@ -105,8 +105,8 @@ export class Warning extends Icon {
     // AnyDuringMigration because:  Property 'block_' does not exist on type
     // 'Warning'.
     this.bubble_ = Bubble.createNonEditableBubble(
-      this.paragraphElement_, (this as AnyDuringMigration).block_ as BlockSvg,
-      this.iconXY_ as Coordinate);
+        this.paragraphElement_, (this as AnyDuringMigration).block_ as BlockSvg,
+        this.iconXY_ as Coordinate);
     this.applyColour();
   }
 

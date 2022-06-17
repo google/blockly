@@ -14,13 +14,13 @@
 
 import * as browserEvents from './browser_events.js';
 /* eslint-disable-next-line no-unused-vars */
-import { MenuItem } from './menuitem.js';
+import {MenuItem} from './menuitem.js';
 import * as aria from './utils/aria.js';
-import { Coordinate } from './utils/coordinate.js';
+import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
-import { KeyCodes } from './utils/keycodes.js';
+import {KeyCodes} from './utils/keycodes.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Size } from './utils/size.js';
+import {Size} from './utils/size.js';
 import * as style from './utils/style.js';
 
 
@@ -41,34 +41,34 @@ export class Menu {
    * prevent the consequent mouseup event due to a simple click from
    * activating a menu item immediately.
    */
-  openingCoords: Coordinate | null = null;
+  openingCoords: Coordinate|null = null;
 
   /**
    * This is the element that we will listen to the real focus events on.
    * A value of null means no menu item is highlighted.
    */
-  private highlightedItem_: MenuItem | null = null;
+  private highlightedItem_: MenuItem|null = null;
 
   /** Mouse over event data. */
-  private mouseOverHandler_: browserEvents.Data | null = null;
+  private mouseOverHandler_: browserEvents.Data|null = null;
 
   /** Click event data. */
-  private clickHandler_: browserEvents.Data | null = null;
+  private clickHandler_: browserEvents.Data|null = null;
 
   /** Mouse enter event data. */
-  private mouseEnterHandler_: browserEvents.Data | null = null;
+  private mouseEnterHandler_: browserEvents.Data|null = null;
 
   /** Mouse leave event data. */
-  private mouseLeaveHandler_: browserEvents.Data | null = null;
+  private mouseLeaveHandler_: browserEvents.Data|null = null;
 
   /** Key down event data. */
-  private onKeyDownHandler_: browserEvents.Data | null = null;
+  private onKeyDownHandler_: browserEvents.Data|null = null;
 
   /** The menu's root DOM element. */
-  private element_: HTMLDivElement | null = null;
+  private element_: HTMLDivElement|null = null;
 
   /** ARIA name for this menu. */
-  private roleName_: aria.Role | null = null;
+  private roleName_: aria.Role|null = null;
 
   /** Constructs a new Menu instance. */
   constructor() {}
@@ -102,15 +102,15 @@ export class Menu {
 
     // Add event handlers.
     this.mouseOverHandler_ = browserEvents.conditionalBind(
-      element, 'mouseover', this, this.handleMouseOver_, true);
+        element, 'mouseover', this, this.handleMouseOver_, true);
     this.clickHandler_ = browserEvents.conditionalBind(
-      element, 'click', this, this.handleClick_, true);
+        element, 'click', this, this.handleClick_, true);
     this.mouseEnterHandler_ = browserEvents.conditionalBind(
-      element, 'mouseenter', this, this.handleMouseEnter_, true);
+        element, 'mouseenter', this, this.handleMouseEnter_, true);
     this.mouseLeaveHandler_ = browserEvents.conditionalBind(
-      element, 'mouseleave', this, this.handleMouseLeave_, true);
+        element, 'mouseleave', this, this.handleMouseLeave_, true);
     this.onKeyDownHandler_ = browserEvents.conditionalBind(
-      element, 'keydown', this, this.handleKeyEvent_);
+        element, 'keydown', this, this.handleKeyEvent_);
 
     container.appendChild(element);
   }
@@ -119,7 +119,7 @@ export class Menu {
    * Gets the menu's element.
    * @return The DOM element.
    */
-  getElement(): Element | null {
+  getElement(): Element|null {
     return this.element_;
   }
 
@@ -129,7 +129,7 @@ export class Menu {
     if (el) {
       // AnyDuringMigration because:  Property 'focus' does not exist on type
       // 'Element'.
-      (el as AnyDuringMigration).focus({ preventScroll: true });
+      (el as AnyDuringMigration).focus({preventScroll: true});
       dom.addClass(el, 'blocklyFocused');
     }
   }
@@ -192,7 +192,7 @@ export class Menu {
    * @param elem DOM element whose owner is to be returned.
    * @return Menu item for which the DOM element belongs to.
    */
-  private getMenuItem_(elem: Element): MenuItem | null {
+  private getMenuItem_(elem: Element): MenuItem|null {
     const menuElem = this.getElement();
     // Node might be the menu border (resulting in no associated menu item), or
     // a menu item's div, or some element within the menu item.
@@ -220,7 +220,7 @@ export class Menu {
    * Highlights the given menu item, or clears highlighting if null.
    * @param item Item to highlight, or null.
    */
-  setHighlighted(item: MenuItem | null) {
+  setHighlighted(item: MenuItem|null) {
     const currentHighlighted = this.highlightedItem_;
     if (currentHighlighted) {
       currentHighlighted.setHighlighted(false);
@@ -246,7 +246,7 @@ export class Menu {
     // AnyDuringMigration because:  Argument of type 'MenuItem | null' is not
     // assignable to parameter of type 'MenuItem'.
     const index =
-      this.menuItems_.indexOf(this.highlightedItem_ as AnyDuringMigration);
+        this.menuItems_.indexOf(this.highlightedItem_ as AnyDuringMigration);
     this.highlightHelper_(index, 1);
   }
 
@@ -258,7 +258,7 @@ export class Menu {
     // AnyDuringMigration because:  Argument of type 'MenuItem | null' is not
     // assignable to parameter of type 'MenuItem'.
     const index =
-      this.menuItems_.indexOf(this.highlightedItem_ as AnyDuringMigration);
+        this.menuItems_.indexOf(this.highlightedItem_ as AnyDuringMigration);
     this.highlightHelper_(index < 0 ? this.menuItems_.length : index, -1);
   }
 
@@ -325,7 +325,7 @@ export class Menu {
       // 'Event'. AnyDuringMigration because:  Property 'clientX' does not exist
       // on type 'Event'.
       const newCoords = new Coordinate(
-        (e as AnyDuringMigration).clientX, (e as AnyDuringMigration).clientY);
+          (e as AnyDuringMigration).clientX, (e as AnyDuringMigration).clientY);
       if (Coordinate.distance(oldCoords, newCoords) < 1) {
         // This menu was opened by a mousedown and we're handling the consequent
         // click event. The coords haven't changed, meaning this was the same
@@ -380,8 +380,8 @@ export class Menu {
     // exist on type 'Event'. AnyDuringMigration because:  Property 'shiftKey'
     // does not exist on type 'Event'.
     if ((e as AnyDuringMigration).shiftKey ||
-      (e as AnyDuringMigration).ctrlKey ||
-      (e as AnyDuringMigration).metaKey || (e as AnyDuringMigration).altKey) {
+        (e as AnyDuringMigration).ctrlKey ||
+        (e as AnyDuringMigration).metaKey || (e as AnyDuringMigration).altKey) {
       // Do not handle the key event if any modifier key is pressed.
       return;
     }

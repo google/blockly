@@ -11,11 +11,11 @@
  * Blockly's internal clipboard for managing copy-paste.
  * @namespace Blockly.clipboard
  */
-import { CopyData, ICopyable } from './interfaces/i_copyable.js';
+import {CopyData, ICopyable} from './interfaces/i_copyable.js';
 
 
 /** Metadata about the object that is currently on the clipboard. */
-let copyData: CopyData | null = null;
+let copyData: CopyData|null = null;
 
 /**
  * Copy a block or workspace comment onto the local clipboard.
@@ -31,7 +31,7 @@ export function copy(toCopy: ICopyable) {
  * @return The pasted thing if the paste was successful, null otherwise.
  * @alias Blockly.clipboard.paste
  */
-export function paste(): ICopyable | null {
+export function paste(): ICopyable|null {
   if (!copyData) {
     return null;
   }
@@ -42,7 +42,7 @@ export function paste(): ICopyable | null {
     workspace = workspace.targetWorkspace;
   }
   if (copyData.typeCounts &&
-    workspace.isCapacityAvailable(copyData.typeCounts)) {
+      workspace.isCapacityAvailable(copyData.typeCounts)) {
     return workspace.paste(copyData.saveInfo);
   }
   return null;
@@ -55,7 +55,7 @@ export function paste(): ICopyable | null {
  *     duplication failed.
  * @alias Blockly.clipboard.duplicate
  */
-export function duplicate(toDuplicate: ICopyable): ICopyable | null {
+export function duplicate(toDuplicate: ICopyable): ICopyable|null {
   const oldCopyData = copyData;
   copy(toDuplicate);
   const pastedThing = toDuplicate.toCopyData().source.paste(copyData!.saveInfo);

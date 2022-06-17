@@ -15,16 +15,15 @@
  * mode.
  * @class
  */
-import { ConnectionType } from '../../connection_type.js';
-import { RenderedConnection } from '../../rendered_connection.js';
-import { Theme } from '../../theme.js';
+import {ConnectionType} from '../../connection_type.js';
+import {RenderedConnection} from '../../rendered_connection.js';
+import {Theme} from '../../theme.js';
 import * as utilsColour from '../../utils/colour.js';
 import * as dom from '../../utils/dom.js';
-import { Svg } from '../../utils/svg.js';
+import {Svg} from '../../utils/svg.js';
 import * as svgPaths from '../../utils/svg_paths.js';
-
 /* eslint-disable-next-line no-unused-vars */
-import { ConstantProvider as BaseConstantProvider, Shape } from '../common/constants.js';
+import {ConstantProvider as BaseConstantProvider, Shape} from '../common/constants.js';
 
 /** An object containing sizing and path information about inside corners. */
 export interface InsideCorners {
@@ -84,7 +83,7 @@ export class ConstantProvider extends BaseConstantProvider {
 
   override START_HAT_WIDTH = 96;
 
-  override SHAPES = { HEXAGONAL: 1, ROUND: 2, SQUARE: 3, PUZZLE: 4, NOTCH: 5 };
+  override SHAPES = {HEXAGONAL: 1, ROUND: 2, SQUARE: 3, PUZZLE: 4, NOTCH: 5};
   SHAPE_IN_SHAPE_PADDING: AnyDuringMigration;
 
   override FULL_BLOCK_FIELDS = true;
@@ -93,7 +92,7 @@ export class ConstantProvider extends BaseConstantProvider {
   override FIELD_TEXT_FONTWEIGHT = 'bold';
 
   override FIELD_TEXT_FONTFAMILY =
-    '"Helvetica Neue", "Segoe UI", Helvetica, sans-serif';
+      '"Helvetica Neue", "Segoe UI", Helvetica, sans-serif';
   override FIELD_BORDER_RECT_RADIUS: AnyDuringMigration;
   override FIELD_BORDER_RECT_X_PADDING: AnyDuringMigration;
   override FIELD_BORDER_RECT_Y_PADDING: AnyDuringMigration;
@@ -156,19 +155,19 @@ export class ConstantProvider extends BaseConstantProvider {
    * The object containing information about the hexagon used for a boolean
    * reporter block. Null before init is called.
    */
-  HEXAGONAL: Shape | null = null;
+  HEXAGONAL: Shape|null = null;
 
   /**
    * The object containing information about the hexagon used for a number or
    * string reporter block. Null before init is called.
    */
-  ROUNDED: Shape | null = null;
+  ROUNDED: Shape|null = null;
 
   /**
    * The object containing information about the hexagon used for a
    * rectangular reporter block. Null before init is called.
    */
-  SQUARED: Shape | null = null;
+  SQUARED: Shape|null = null;
 
   constructor() {
     super();
@@ -282,7 +281,7 @@ export class ConstantProvider extends BaseConstantProvider {
     super.setFontConstants_(theme);
 
     this.FIELD_BORDER_RECT_HEIGHT =
-      this.FIELD_TEXT_HEIGHT + this.FIELD_BORDER_RECT_Y_PADDING * 2;
+        this.FIELD_TEXT_HEIGHT + this.FIELD_BORDER_RECT_Y_PADDING * 2;
     this.FIELD_DROPDOWN_BORDER_RECT_HEIGHT = this.FIELD_BORDER_RECT_HEIGHT;
   }
 
@@ -293,26 +292,26 @@ export class ConstantProvider extends BaseConstantProvider {
     this.SQUARED = this.makeSquared();
 
     this.STATEMENT_INPUT_NOTCH_OFFSET = this.NOTCH_OFFSET_LEFT +
-      (this.INSIDE_CORNERS as InsideCorners).rightWidth;
+        (this.INSIDE_CORNERS as InsideCorners).rightWidth;
   }
 
   override setDynamicProperties_(theme: Theme) {
     super.setDynamicProperties_(theme);
 
     this.SELECTED_GLOW_COLOUR = theme.getComponentStyle('selectedGlowColour') ||
-      this.SELECTED_GLOW_COLOUR;
+        this.SELECTED_GLOW_COLOUR;
     const selectedGlowSize =
-      Number(theme.getComponentStyle('selectedGlowSize'));
+        Number(theme.getComponentStyle('selectedGlowSize'));
     this.SELECTED_GLOW_SIZE = selectedGlowSize && !isNaN(selectedGlowSize) ?
-      selectedGlowSize :
-      this.SELECTED_GLOW_SIZE;
+        selectedGlowSize :
+        this.SELECTED_GLOW_SIZE;
     this.REPLACEMENT_GLOW_COLOUR =
-      theme.getComponentStyle('replacementGlowColour') ||
-      this.REPLACEMENT_GLOW_COLOUR;
+        theme.getComponentStyle('replacementGlowColour') ||
+        this.REPLACEMENT_GLOW_COLOUR;
     const replacementGlowSize =
-      Number(theme.getComponentStyle('replacementGlowSize'));
+        Number(theme.getComponentStyle('replacementGlowSize'));
     this.REPLACEMENT_GLOW_SIZE =
-      replacementGlowSize && !isNaN(replacementGlowSize) ?
+        replacementGlowSize && !isNaN(replacementGlowSize) ?
         replacementGlowSize :
         this.REPLACEMENT_GLOW_SIZE;
   }
@@ -336,7 +335,7 @@ export class ConstantProvider extends BaseConstantProvider {
       svgPaths.point(71, -height),
       svgPaths.point(width, 0),
     ]);
-    return { height, width, path: mainPath };
+    return {height, width, path: mainPath};
   }
 
   /**
@@ -366,7 +365,7 @@ export class ConstantProvider extends BaseConstantProvider {
       const direction = right ? -1 : 1;
       const dy = forward * height / 2;
       return svgPaths.lineTo(-direction * width, dy) +
-        svgPaths.lineTo(direction * width, dy);
+          svgPaths.lineTo(direction * width, dy);
     }
 
     return {
@@ -424,19 +423,19 @@ export class ConstantProvider extends BaseConstantProvider {
      * @return A path fragment describing a rounded connection.
      */
     function makeMainPath(
-      blockHeight: number, up: boolean, right: boolean): string {
+        blockHeight: number, up: boolean, right: boolean): string {
       const remainingHeight =
-        blockHeight > maxHeight ? blockHeight - maxHeight : 0;
+          blockHeight > maxHeight ? blockHeight - maxHeight : 0;
       const height = blockHeight > maxHeight ? maxHeight : blockHeight;
       const radius = height / 2;
       return svgPaths.arc(
-        'a', '0 0,1', radius,
-        svgPaths.point(
-          (up ? -1 : 1) * radius, (up ? -1 : 1) * radius)) +
-        svgPaths.lineOnAxis('v', (right ? 1 : -1) * remainingHeight) +
-        svgPaths.arc(
-          'a', '0 0,1', radius,
-          svgPaths.point((up ? 1 : -1) * radius, (up ? -1 : 1) * radius));
+                 'a', '0 0,1', radius,
+                 svgPaths.point(
+                     (up ? -1 : 1) * radius, (up ? -1 : 1) * radius)) +
+          svgPaths.lineOnAxis('v', (right ? 1 : -1) * remainingHeight) +
+          svgPaths.arc(
+              'a', '0 0,1', radius,
+              svgPaths.point((up ? 1 : -1) * radius, (up ? -1 : 1) * radius));
     }
 
     return {
@@ -494,13 +493,13 @@ export class ConstantProvider extends BaseConstantProvider {
     function makeMainPath(height: number, up: boolean, right: boolean): string {
       const innerHeight = height - radius * 2;
       return svgPaths.arc(
-        'a', '0 0,1', radius,
-        svgPaths.point(
-          (up ? -1 : 1) * radius, (up ? -1 : 1) * radius)) +
-        svgPaths.lineOnAxis('v', (right ? 1 : -1) * innerHeight) +
-        svgPaths.arc(
-          'a', '0 0,1', radius,
-          svgPaths.point((up ? 1 : -1) * radius, (up ? -1 : 1) * radius));
+                 'a', '0 0,1', radius,
+                 svgPaths.point(
+                     (up ? -1 : 1) * radius, (up ? -1 : 1) * radius)) +
+          svgPaths.lineOnAxis('v', (right ? 1 : -1) * innerHeight) +
+          svgPaths.arc(
+              'a', '0 0,1', radius,
+              svgPaths.point((up ? 1 : -1) * radius, (up ? -1 : 1) * radius));
     }
 
     return {
@@ -591,34 +590,34 @@ export class ConstantProvider extends BaseConstantProvider {
      */
     function makeMainPath(dir: number): string {
       return svgPaths.curve(
-        'c',
-        [
-          svgPaths.point(dir * curveWidth / 2, 0),
-          svgPaths.point(dir * curveWidth * 3 / 4, quarterHeight / 2),
-          svgPaths.point(dir * curveWidth, quarterHeight),
-        ]) +
-        svgPaths.line([svgPaths.point(dir * curveWidth, halfHeight)]) +
-        svgPaths.curve(
-          'c',
-          [
-            svgPaths.point(dir * curveWidth / 4, quarterHeight / 2),
-            svgPaths.point(dir * curveWidth / 2, quarterHeight),
-            svgPaths.point(dir * curveWidth, quarterHeight),
-          ]) +
-        svgPaths.lineOnAxis('h', dir * innerWidth) +
-        svgPaths.curve(
-          'c',
-          [
-            svgPaths.point(dir * curveWidth / 2, 0),
-            svgPaths.point(dir * curveWidth * 3 / 4, -(quarterHeight / 2)),
+                 'c',
+                 [
+                   svgPaths.point(dir * curveWidth / 2, 0),
+                   svgPaths.point(dir * curveWidth * 3 / 4, quarterHeight / 2),
+                   svgPaths.point(dir * curveWidth, quarterHeight),
+                 ]) +
+          svgPaths.line([svgPaths.point(dir * curveWidth, halfHeight)]) +
+          svgPaths.curve(
+              'c',
+              [
+                svgPaths.point(dir * curveWidth / 4, quarterHeight / 2),
+                svgPaths.point(dir * curveWidth / 2, quarterHeight),
+                svgPaths.point(dir * curveWidth, quarterHeight),
+              ]) +
+          svgPaths.lineOnAxis('h', dir * innerWidth) +
+          svgPaths.curve(
+              'c',
+              [
+                svgPaths.point(dir * curveWidth / 2, 0),
+                svgPaths.point(dir * curveWidth * 3 / 4, -(quarterHeight / 2)),
+                svgPaths.point(dir * curveWidth, -quarterHeight),
+              ]) +
+          svgPaths.line([svgPaths.point(dir * curveWidth, -halfHeight)]) +
+          svgPaths.curve('c', [
+            svgPaths.point(dir * curveWidth / 4, -(quarterHeight / 2)),
+            svgPaths.point(dir * curveWidth / 2, -quarterHeight),
             svgPaths.point(dir * curveWidth, -quarterHeight),
-          ]) +
-        svgPaths.line([svgPaths.point(dir * curveWidth, -halfHeight)]) +
-        svgPaths.curve('c', [
-          svgPaths.point(dir * curveWidth / 4, -(quarterHeight / 2)),
-          svgPaths.point(dir * curveWidth / 2, -quarterHeight),
-          svgPaths.point(dir * curveWidth, -quarterHeight),
-        ]);
+          ]);
     }
 
     const pathLeft = makeMainPath(1);
@@ -637,16 +636,16 @@ export class ConstantProvider extends BaseConstantProvider {
     const radius = this.CORNER_RADIUS;
 
     const innerTopLeftCorner =
-      svgPaths.arc('a', '0 0,0', radius, svgPaths.point(-radius, radius));
+        svgPaths.arc('a', '0 0,0', radius, svgPaths.point(-radius, radius));
 
     const innerTopRightCorner =
-      svgPaths.arc('a', '0 0,1', radius, svgPaths.point(-radius, radius));
+        svgPaths.arc('a', '0 0,1', radius, svgPaths.point(-radius, radius));
 
     const innerBottomLeftCorner =
-      svgPaths.arc('a', '0 0,0', radius, svgPaths.point(radius, radius));
+        svgPaths.arc('a', '0 0,0', radius, svgPaths.point(radius, radius));
 
     const innerBottomRightCorner =
-      svgPaths.arc('a', '0 0,1', radius, svgPaths.point(radius, radius));
+        svgPaths.arc('a', '0 0,1', radius, svgPaths.point(radius, radius));
 
     return {
       width: radius,
@@ -679,89 +678,89 @@ export class ConstantProvider extends BaseConstantProvider {
     // Using a dilate distorts the block shape.
     // Instead use a gaussian blur, and then set all alpha to 1 with a transfer.
     const selectedGlowFilter = dom.createSvgElement(
-      Svg.FILTER, {
-      'id': 'blocklySelectedGlowFilter' + this.randomIdentifier,
-      'height': '160%',
-      'width': '180%',
-      'y': '-30%',
-      'x': '-40%',
-    },
-      defs);
+        Svg.FILTER, {
+          'id': 'blocklySelectedGlowFilter' + this.randomIdentifier,
+          'height': '160%',
+          'width': '180%',
+          'y': '-30%',
+          'x': '-40%',
+        },
+        defs);
     dom.createSvgElement(
-      Svg.FEGAUSSIANBLUR,
-      { 'in': 'SourceGraphic', 'stdDeviation': this.SELECTED_GLOW_SIZE },
-      selectedGlowFilter);
+        Svg.FEGAUSSIANBLUR,
+        {'in': 'SourceGraphic', 'stdDeviation': this.SELECTED_GLOW_SIZE},
+        selectedGlowFilter);
     // Set all gaussian blur pixels to 1 opacity before applying flood
     const selectedComponentTransfer = dom.createSvgElement(
-      Svg.FECOMPONENTTRANSFER, { 'result': 'outBlur' }, selectedGlowFilter);
+        Svg.FECOMPONENTTRANSFER, {'result': 'outBlur'}, selectedGlowFilter);
     dom.createSvgElement(
-      Svg.FEFUNCA,
-      { 'type': 'table', 'tableValues': '0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1' },
-      selectedComponentTransfer);
+        Svg.FEFUNCA,
+        {'type': 'table', 'tableValues': '0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1'},
+        selectedComponentTransfer);
     // Color the highlight
     dom.createSvgElement(
-      Svg.FEFLOOD, {
-      'flood-color': this.SELECTED_GLOW_COLOUR,
-      'flood-opacity': 1,
-      'result': 'outColor',
-    },
-      selectedGlowFilter);
+        Svg.FEFLOOD, {
+          'flood-color': this.SELECTED_GLOW_COLOUR,
+          'flood-opacity': 1,
+          'result': 'outColor',
+        },
+        selectedGlowFilter);
     dom.createSvgElement(
-      Svg.FECOMPOSITE, {
-      'in': 'outColor',
-      'in2': 'outBlur',
-      'operator': 'in',
-      'result': 'outGlow',
-    },
-      selectedGlowFilter);
+        Svg.FECOMPOSITE, {
+          'in': 'outColor',
+          'in2': 'outBlur',
+          'operator': 'in',
+          'result': 'outGlow',
+        },
+        selectedGlowFilter);
     this.selectedGlowFilterId = selectedGlowFilter.id;
     this.selectedGlowFilter_ = selectedGlowFilter;
 
     // Using a dilate distorts the block shape.
     // Instead use a gaussian blur, and then set all alpha to 1 with a transfer.
     const replacementGlowFilter = dom.createSvgElement(
-      Svg.FILTER, {
-      'id': 'blocklyReplacementGlowFilter' + this.randomIdentifier,
-      'height': '160%',
-      'width': '180%',
-      'y': '-30%',
-      'x': '-40%',
-    },
-      defs);
+        Svg.FILTER, {
+          'id': 'blocklyReplacementGlowFilter' + this.randomIdentifier,
+          'height': '160%',
+          'width': '180%',
+          'y': '-30%',
+          'x': '-40%',
+        },
+        defs);
     dom.createSvgElement(
-      Svg.FEGAUSSIANBLUR,
-      { 'in': 'SourceGraphic', 'stdDeviation': this.REPLACEMENT_GLOW_SIZE },
-      replacementGlowFilter);
+        Svg.FEGAUSSIANBLUR,
+        {'in': 'SourceGraphic', 'stdDeviation': this.REPLACEMENT_GLOW_SIZE},
+        replacementGlowFilter);
     // Set all gaussian blur pixels to 1 opacity before applying flood
     const replacementComponentTransfer = dom.createSvgElement(
-      Svg.FECOMPONENTTRANSFER, { 'result': 'outBlur' }, replacementGlowFilter);
+        Svg.FECOMPONENTTRANSFER, {'result': 'outBlur'}, replacementGlowFilter);
     dom.createSvgElement(
-      Svg.FEFUNCA,
-      { 'type': 'table', 'tableValues': '0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1' },
-      replacementComponentTransfer);
+        Svg.FEFUNCA,
+        {'type': 'table', 'tableValues': '0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1'},
+        replacementComponentTransfer);
     // Color the highlight
     dom.createSvgElement(
-      Svg.FEFLOOD, {
-      'flood-color': this.REPLACEMENT_GLOW_COLOUR,
-      'flood-opacity': 1,
-      'result': 'outColor',
-    },
-      replacementGlowFilter);
+        Svg.FEFLOOD, {
+          'flood-color': this.REPLACEMENT_GLOW_COLOUR,
+          'flood-opacity': 1,
+          'result': 'outColor',
+        },
+        replacementGlowFilter);
     dom.createSvgElement(
-      Svg.FECOMPOSITE, {
-      'in': 'outColor',
-      'in2': 'outBlur',
-      'operator': 'in',
-      'result': 'outGlow',
-    },
-      replacementGlowFilter);
+        Svg.FECOMPOSITE, {
+          'in': 'outColor',
+          'in2': 'outBlur',
+          'operator': 'in',
+          'result': 'outGlow',
+        },
+        replacementGlowFilter);
     dom.createSvgElement(
-      Svg.FECOMPOSITE, {
-      'in': 'SourceGraphic',
-      'in2': 'outGlow',
-      'operator': 'over',
-    },
-      replacementGlowFilter);
+        Svg.FECOMPOSITE, {
+          'in': 'SourceGraphic',
+          'in2': 'outGlow',
+          'operator': 'over',
+        },
+        replacementGlowFilter);
     this.replacementGlowFilterId = replacementGlowFilter.id;
     this.replacementGlowFilter_ = replacementGlowFilter;
   }
@@ -773,7 +772,7 @@ export class ConstantProvider extends BaseConstantProvider {
       selector + ' .blocklyText,',
       selector + ' .blocklyFlyoutLabelText {',
       'font: ' + this.FIELD_TEXT_FONTWEIGHT + ' ' + this.FIELD_TEXT_FONTSIZE +
-      'pt ' + this.FIELD_TEXT_FONTFAMILY + ';',
+          'pt ' + this.FIELD_TEXT_FONTFAMILY + ';',
       '}',
 
       // Fields.

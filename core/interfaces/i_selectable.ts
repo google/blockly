@@ -14,9 +14,9 @@
  */
 
 // eslint-disable-next-line no-unused-vars
-import { IDeletable } from './i_deletable.js';
+import {IDeletable} from './i_deletable.js';
 // eslint-disable-next-line no-unused-vars
-import { IMovable } from './i_movable.js';
+import {IMovable} from './i_movable.js';
 
 
 /**

@@ -13,10 +13,10 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from '../block_svg.js';
+import {BlockSvg} from '../block_svg.js';
 import * as registry from '../registry.js';
 
-import { UiBase } from './events_ui_base.js';
+import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
 
 
@@ -25,7 +25,7 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.BubbleOpen
  */
 export class BubbleOpen extends UiBase {
-  blockId: string | null;
+  blockId: string|null;
   isOpen?: boolean;
   bubbleType?: string;
   override type: string;
@@ -38,7 +38,7 @@ export class BubbleOpen extends UiBase {
    *     'warning'. Undefined for a blank event.
    */
   constructor(
-    opt_block: BlockSvg, opt_isOpen?: boolean, opt_bubbleType?: string) {
+      opt_block: BlockSvg, opt_isOpen?: boolean, opt_bubbleType?: string) {
     const workspaceId = opt_block ? opt_block.workspace.id : undefined;
     super(workspaceId);
     this.blockId = opt_block ? opt_block.id : null;

@@ -15,14 +15,14 @@
 // Unused import preserved for side-effects. Remove if unneeded.
 import './metrics_manager';
 
-import { UiMetrics } from './metrics_manager.js';
-import { Scrollbar } from './scrollbar.js';
-import { Rect } from './utils/rect.js';
+import {UiMetrics} from './metrics_manager.js';
+import {Scrollbar} from './scrollbar.js';
+import {Rect} from './utils/rect.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Size } from './utils/size.js';
+import {Size} from './utils/size.js';
 import * as toolbox from './utils/toolbox.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**
@@ -76,13 +76,13 @@ export enum bumpDirection {
  * @alias Blockly.uiPosition.getStartPositionRect
  */
 export function getStartPositionRect(
-  position: Position, size: Size, horizontalPadding: number,
-  verticalPadding: number, metrics: UiMetrics,
-  workspace: WorkspaceSvg): Rect {
+    position: Position, size: Size, horizontalPadding: number,
+    verticalPadding: number, metrics: UiMetrics,
+    workspace: WorkspaceSvg): Rect {
   // Horizontal positioning.
   let left = 0;
   const hasVerticalScrollbar =
-    workspace.scrollbar && workspace.scrollbar.canScrollVertically();
+      workspace.scrollbar && workspace.scrollbar.canScrollVertically();
   if (position.horizontal === horizontalPosition.LEFT) {
     left = metrics.absoluteMetrics.left + horizontalPadding;
     if (hasVerticalScrollbar && workspace.RTL) {
@@ -91,7 +91,7 @@ export function getStartPositionRect(
   } else {
     // position.horizontal === horizontalPosition.RIGHT
     left = metrics.absoluteMetrics.left + metrics.viewMetrics.width -
-      size.width - horizontalPadding;
+        size.width - horizontalPadding;
     if (hasVerticalScrollbar && !workspace.RTL) {
       left -= Scrollbar.scrollbarThickness;
     }
@@ -103,7 +103,7 @@ export function getStartPositionRect(
   } else {
     // position.vertical === verticalPosition.BOTTOM
     top = metrics.absoluteMetrics.top + metrics.viewMetrics.height -
-      size.height - verticalPadding;
+        size.height - verticalPadding;
     if (workspace.scrollbar && workspace.scrollbar.canScrollHorizontally()) {
       // The scrollbars are always positioned on the bottom if they exist.
       top -= Scrollbar.scrollbarThickness;
@@ -123,15 +123,15 @@ export function getStartPositionRect(
  * @alias Blockly.uiPosition.getCornerOppositeToolbox
  */
 export function getCornerOppositeToolbox(
-  workspace: WorkspaceSvg, metrics: UiMetrics): Position {
+    workspace: WorkspaceSvg, metrics: UiMetrics): Position {
   const leftCorner =
-    metrics.toolboxMetrics.position !== toolbox.Position.LEFT &&
-    (!workspace.horizontalLayout || workspace.RTL);
+      metrics.toolboxMetrics.position !== toolbox.Position.LEFT &&
+      (!workspace.horizontalLayout || workspace.RTL);
   const topCorner = metrics.toolboxMetrics.position === toolbox.Position.BOTTOM;
   const hPosition =
-    leftCorner ? horizontalPosition.LEFT : horizontalPosition.RIGHT;
+      leftCorner ? horizontalPosition.LEFT : horizontalPosition.RIGHT;
   const vPosition = topCorner ? verticalPosition.TOP : verticalPosition.BOTTOM;
-  return { horizontal: hPosition, vertical: vPosition };
+  return {horizontal: hPosition, vertical: vPosition};
 }
 
 /**
@@ -148,8 +148,8 @@ export function getCornerOppositeToolbox(
  * @alias Blockly.uiPosition.bumpPositionRect
  */
 export function bumpPositionRect(
-  startRect: Rect, margin: number, bumpDir: bumpDirection,
-  savedPositions: Rect[]): Rect {
+    startRect: Rect, margin: number, bumpDir: bumpDirection,
+    savedPositions: Rect[]): Rect {
   let top = startRect.top;
   const left = startRect.left;
   const width = startRect.right - startRect.left;

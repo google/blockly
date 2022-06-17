@@ -14,9 +14,9 @@
 
 import * as registry from '../registry.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Workspace } from '../workspace.js';
+import {Workspace} from '../workspace.js';
 
-import { Abstract as AbstractEvent } from './events_abstract.js';
+import {Abstract as AbstractEvent} from './events_abstract.js';
 import * as eventUtils from './utils.js';
 
 
@@ -81,4 +81,4 @@ export class FinishedLoading extends AbstractEvent {
 }
 
 registry.register(
-  registry.Type.EVENT, eventUtils.FINISHED_LOADING, FinishedLoading);
+    registry.Type.EVENT, eventUtils.FINISHED_LOADING, FinishedLoading);

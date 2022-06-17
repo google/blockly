@@ -18,7 +18,7 @@
  */
 
 // eslint-disable-next-line no-unused-vars
-import { Workspace } from '../workspace.js';
+import {Workspace} from '../workspace.js';
 
 
 /**

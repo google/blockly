@@ -56,9 +56,9 @@ const PAGE_MODE_MULTIPLIER = 125;
  * @alias Blockly.browserEvents.conditionalBind
  */
 export function conditionalBind(
-  node: EventTarget, name: string, thisObject: AnyDuringMigration | null,
-  func: Function, opt_noCaptureIdentifier?: boolean,
-  opt_noPreventDefault?: boolean): Data {
+    node: EventTarget, name: string, thisObject: AnyDuringMigration|null,
+    func: Function, opt_noCaptureIdentifier?: boolean,
+    opt_noPreventDefault?: boolean): Data {
   let handled = false;
   function wrapFunc(e: AnyDuringMigration) {
     const captureIdentifier = !opt_noCaptureIdentifier;
@@ -126,8 +126,8 @@ export function conditionalBind(
  * @alias Blockly.browserEvents.bind
  */
 export function bind(
-  node: EventTarget, name: string, thisObject: AnyDuringMigration | null,
-  func: Function): Data {
+    node: EventTarget, name: string, thisObject: AnyDuringMigration|null,
+    func: Function): Data {
   function wrapFunc(e: AnyDuringMigration) {
     if (thisObject) {
       func.call(thisObject, e);
@@ -200,16 +200,16 @@ export function unbind(bindData: Data): Function {
 export function isTargetInput(e: Event): boolean {
   if (e.target instanceof HTMLElement) {
     if (e.target.isContentEditable ||
-      e.target.getAttribute('data-is-text-input') === 'true') {
+        e.target.getAttribute('data-is-text-input') === 'true') {
       return true;
     }
 
     if (e.target instanceof HTMLInputElement) {
       const target = e.target;
       return target.type === 'text' || target.type === 'number' ||
-        target.type === 'email' || target.type === 'password' ||
-        target.type === 'search' || target.type === 'tel' ||
-        target.type === 'url';
+          target.type === 'email' || target.type === 'password' ||
+          target.type === 'search' || target.type === 'tel' ||
+          target.type === 'url';
     }
 
     if (e.target instanceof HTMLTextAreaElement) {
@@ -249,7 +249,7 @@ export function isRightButton(e: Event): boolean {
  * @alias Blockly.browserEvents.mouseToSvg
  */
 export function mouseToSvg(
-  e: Event, svg: SVGSVGElement, matrix: SVGMatrix | null): SVGPoint {
+    e: Event, svg: SVGSVGElement, matrix: SVGMatrix|null): SVGPoint {
   const svgPoint = svg.createSVGPoint();
   // AnyDuringMigration because:  Property 'clientX' does not exist on type
   // 'Event'.
@@ -270,12 +270,12 @@ export function mouseToSvg(
  * @return Scroll delta object with .x and .y properties.
  * @alias Blockly.browserEvents.getScrollDeltaPixels
  */
-export function getScrollDeltaPixels(e: WheelEvent): { x: number, y: number } {
+export function getScrollDeltaPixels(e: WheelEvent): {x: number, y: number} {
   switch (e.deltaMode) {
     case 0x00:
     // Pixel mode.
     default:
-      return { x: e.deltaX, y: e.deltaY };
+      return {x: e.deltaX, y: e.deltaY};
     case 0x01:
       // Line mode.
       return {

@@ -16,16 +16,15 @@
 // Unused import preserved for side-effects. Remove if unneeded.
 import '../../theme';
 
-import { BlockStyle } from '../../theme.js';
+import {BlockSvg} from '../../block_svg.js';
+import {BlockStyle} from '../../theme.js';
 import * as colour from '../../utils/colour.js';
 import * as dom from '../../utils/dom.js';
-import { Svg } from '../../utils/svg.js';
-import { BlockSvg } from '../../block_svg.js';
-
-import { PathObject as BasePathObject } from '../common/path_object.js';
+import {Svg} from '../../utils/svg.js';
+import {PathObject as BasePathObject} from '../common/path_object.js';
 
 /* eslint-disable-next-line no-unused-vars */
-import { ConstantProvider } from './constants.js';
+import {ConstantProvider} from './constants.js';
 
 
 /**
@@ -47,13 +46,13 @@ export class PathObject extends BasePathObject {
    * @param constants The renderer's constants.
    */
   constructor(
-    root: SVGElement, style: BlockStyle,
-    public override constants: ConstantProvider) {
+      root: SVGElement, style: BlockStyle,
+      public override constants: ConstantProvider) {
     super(root, style, constants);
 
     /** The dark path of the block. */
     this.svgPathDark = dom.createSvgElement(
-      Svg.PATH, { 'class': 'blocklyPathDark', 'transform': 'translate(1,1)' });
+        Svg.PATH, {'class': 'blocklyPathDark', 'transform': 'translate(1,1)'});
     // SVG draw order is based on the order of elements (top most = back most)
     // So we need to insert the dark path before the base path to make sure it
     // gets drawn first.
@@ -61,7 +60,7 @@ export class PathObject extends BasePathObject {
 
     /** The light path of the block. */
     this.svgPathLight = dom.createSvgElement(
-      Svg.PATH, { 'class': 'blocklyPathLight' }, this.svgRoot);
+        Svg.PATH, {'class': 'blocklyPathLight'}, this.svgRoot);
   }
 
   override setPath(mainPath: string) {
@@ -98,13 +97,13 @@ export class PathObject extends BasePathObject {
   override setStyle(blockStyle: BlockStyle) {
     this.style = blockStyle;
     this.colourDark =
-      colour.blend('#000', this.style.colourPrimary, 0.2) || this.colourDark;
+        colour.blend('#000', this.style.colourPrimary, 0.2) || this.colourDark;
   }
 
   override updateHighlighted(highlighted: boolean) {
     if (highlighted) {
       this.svgPath.setAttribute(
-        'filter', 'url(#' + this.constants.embossFilterId + ')');
+          'filter', 'url(#' + this.constants.embossFilterId + ')');
       this.svgPathLight.style.display = 'none';
     } else {
       this.svgPath.setAttribute('filter', 'none');

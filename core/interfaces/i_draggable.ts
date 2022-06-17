@@ -14,7 +14,7 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { IDeletable } from './i_deletable.js';
+import {IDeletable} from './i_deletable.js';
 
 
 /**

@@ -17,7 +17,7 @@
  */
 
 // eslint-disable-next-line no-unused-vars
-import { ISerializer } from '../interfaces/i_serializer.js';
+import {ISerializer} from '../interfaces/i_serializer.js';
 import * as registry from '../registry.js';
 
 

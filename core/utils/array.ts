@@ -18,7 +18,7 @@
  * @alias Blockly.array.removeElem
  */
 export function removeElem(
-  arr: AnyDuringMigration[], value: AnyDuringMigration): boolean {
+    arr: AnyDuringMigration[], value: AnyDuringMigration): boolean {
   const i = arr.indexOf(value);
   if (i === -1) {
     return false;

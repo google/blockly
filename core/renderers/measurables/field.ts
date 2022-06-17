@@ -18,14 +18,13 @@
 
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */
-import { Field as BlocklyField } from '../../field.js';
+import {Field as BlocklyField} from '../../field.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Input } from '../../input.js';
+import {Input} from '../../input.js';
+import {ConstantProvider} from '../common/constants.js';
 
-import { ConstantProvider } from '../common/constants.js';
-
-import { Measurable } from './base.js';
-import { Types } from './types.js';
+import {Measurable} from './base.js';
+import {Types} from './types.js';
 
 
 /**
@@ -46,8 +45,8 @@ export class Field extends Measurable {
    * @param parentInput The parent input for the field.
    */
   constructor(
-    constants: ConstantProvider, public field: BlocklyField,
-    public parentInput: Input) {
+      constants: ConstantProvider, public field: BlocklyField,
+      public parentInput: Input) {
     super(constants);
 
     this.isEditable = field.EDITABLE;

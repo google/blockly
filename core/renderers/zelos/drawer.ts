@@ -13,28 +13,27 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from '../../block_svg.js';
+import {BlockSvg} from '../../block_svg.js';
 import * as svgPaths from '../../utils/svg_paths.js';
-
 /* eslint-disable-next-line no-unused-vars */
-import { BaseShape, DynamicShape, Notch } from '../common/constants.js';
+import {BaseShape, DynamicShape, Notch} from '../common/constants.js';
 import * as debug from '../common/debug.js';
-import { Drawer as BaseDrawer } from '../common/drawer.js';
-import { InlineInput } from '../measurables/inline_input.js';
+import {Drawer as BaseDrawer} from '../common/drawer.js';
+import {InlineInput} from '../measurables/inline_input.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Row } from '../measurables/row.js';
+import {Row} from '../measurables/row.js';
 /* eslint-disable-next-line no-unused-vars */
-import { SpacerRow } from '../measurables/spacer_row.js';
-import { Types } from '../measurables/types.js';
+import {SpacerRow} from '../measurables/spacer_row.js';
+import {Types} from '../measurables/types.js';
 
 /* eslint-disable-next-line no-unused-vars */
-import { InsideCorners } from './constants.js';
+import {InsideCorners} from './constants.js';
 /* eslint-disable-next-line no-unused-vars */
-import { RenderInfo } from './info.js';
+import {RenderInfo} from './info.js';
 /* eslint-disable-next-line no-unused-vars */
-import { StatementInput } from './measurables/inputs.js';
+import {StatementInput} from './measurables/inputs.js';
 /* eslint-disable-next-line no-unused-vars */
-import { PathObject } from './path_object.js';
+import {PathObject} from './path_object.js';
 
 
 /**
@@ -79,16 +78,16 @@ export class Drawer extends BaseDrawer {
       // AnyDuringMigration because:  Type 'number' is not assignable to type
       // 'null'.
       pathObject.outputShapeType =
-        this.info_.outputConnection.shape.type as AnyDuringMigration;
+          this.info_.outputConnection.shape.type as AnyDuringMigration;
     }
     pathObject.endDrawing();
   }
 
   override drawOutline_() {
     if (this.info_.outputConnection &&
-      this.info_.outputConnection.isDynamicShape &&
-      !this.info_.hasStatementInput &&
-      !this.info_.bottomRow.hasNextConnection) {
+        this.info_.outputConnection.isDynamicShape &&
+        !this.info_.hasStatementInput &&
+        !this.info_.bottomRow.hasNextConnection) {
       this.drawFlatTop_();
       this.drawRightDynamicConnection_();
       this.drawFlatBottom_();
@@ -100,7 +99,7 @@ export class Drawer extends BaseDrawer {
 
   override drawLeft_() {
     if (this.info_.outputConnection &&
-      this.info_.outputConnection.isDynamicShape) {
+        this.info_.outputConnection.isDynamicShape) {
       this.drawLeftDynamicConnection_();
     } else {
       super.drawLeft_();
@@ -120,21 +119,21 @@ export class Drawer extends BaseDrawer {
       const spacerRow = row as SpacerRow;
       if (spacerRow.precedesStatement || spacerRow.followsStatement) {
         const cornerHeight =
-          (this.constants_.INSIDE_CORNERS as InsideCorners).rightHeight;
+            (this.constants_.INSIDE_CORNERS as InsideCorners).rightHeight;
         const remainingHeight =
-          spacerRow.height - (spacerRow.precedesStatement ? cornerHeight : 0);
+            spacerRow.height - (spacerRow.precedesStatement ? cornerHeight : 0);
         this.outlinePath_ +=
-          (spacerRow.followsStatement ?
-            (this.constants_.INSIDE_CORNERS as InsideCorners)
-              .pathBottomRight :
-            '') +
-          (remainingHeight > 0 ?
-            svgPaths.lineOnAxis('V', spacerRow.yPos + remainingHeight) :
-            '') +
-          (spacerRow.precedesStatement ?
-            (this.constants_.INSIDE_CORNERS as InsideCorners)
-              .pathTopRight :
-            '');
+            (spacerRow.followsStatement ?
+                 (this.constants_.INSIDE_CORNERS as InsideCorners)
+                     .pathBottomRight :
+                 '') +
+            (remainingHeight > 0 ?
+                 svgPaths.lineOnAxis('V', spacerRow.yPos + remainingHeight) :
+                 '') +
+            (spacerRow.precedesStatement ?
+                 (this.constants_.INSIDE_CORNERS as InsideCorners)
+                     .pathTopRight :
+                 '');
         return;
       }
     }
@@ -146,7 +145,7 @@ export class Drawer extends BaseDrawer {
    */
   protected drawRightDynamicConnection_() {
     this.outlinePath_ += (this.info_.outputConnection.shape as DynamicShape)
-      .pathRightDown(this.info_.outputConnection.height);
+                             .pathRightDown(this.info_.outputConnection.height);
   }
 
   /**
@@ -156,7 +155,7 @@ export class Drawer extends BaseDrawer {
     this.positionOutputConnection_();
 
     this.outlinePath_ += (this.info_.outputConnection.shape as DynamicShape)
-      .pathUp(this.info_.outputConnection.height);
+                             .pathUp(this.info_.outputConnection.height);
 
     // Close off the path.  This draws a vertical line up to the start of the
     // block's path, which may be either a rounded or a sharp corner.
@@ -198,10 +197,10 @@ export class Drawer extends BaseDrawer {
     const connectionRight = input.xPos + input.connectionWidth;
 
     const outlinePath = svgPaths.moveTo(connectionRight, yPos) +
-      svgPaths.lineOnAxis('h', width) +
-      (input.shape as DynamicShape).pathRightDown(input.height) +
-      svgPaths.lineOnAxis('h', -width) +
-      (input.shape as DynamicShape).pathUp(input.height) + 'z';
+        svgPaths.lineOnAxis('h', width) +
+        (input.shape as DynamicShape).pathRightDown(input.height) +
+        svgPaths.lineOnAxis('h', -width) +
+        (input.shape as DynamicShape).pathUp(input.height) + 'z';
     const pathObject = this.block_.pathObject as PathObject;
     pathObject.setOutlinePath(inputName, outlinePath);
   }
@@ -212,21 +211,21 @@ export class Drawer extends BaseDrawer {
     const x = input.xPos + input.notchOffset + (input.shape as BaseShape).width;
 
     const innerTopLeftCorner = (input.shape as Notch).pathRight +
-      svgPaths.lineOnAxis(
-        'h', -(input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
-      this.constants_.INSIDE_CORNERS.pathTop;
+        svgPaths.lineOnAxis(
+            'h', -(input.notchOffset - this.constants_.INSIDE_CORNERS.width)) +
+        this.constants_.INSIDE_CORNERS.pathTop;
 
     const innerHeight = row.height - 2 * this.constants_.INSIDE_CORNERS.height;
 
     const innerBottomLeftCorner = this.constants_.INSIDE_CORNERS.pathBottom +
-      svgPaths.lineOnAxis(
-        'h', input.notchOffset - this.constants_.INSIDE_CORNERS.width) +
-      (input.connectedBottomNextConnection ? '' :
-        (input.shape as Notch).pathLeft);
+        svgPaths.lineOnAxis(
+            'h', input.notchOffset - this.constants_.INSIDE_CORNERS.width) +
+        (input.connectedBottomNextConnection ? '' :
+                                               (input.shape as Notch).pathLeft);
 
     this.outlinePath_ += svgPaths.lineOnAxis('H', x) + innerTopLeftCorner +
-      svgPaths.lineOnAxis('v', innerHeight) + innerBottomLeftCorner +
-      svgPaths.lineOnAxis('H', row.xPos + row.width);
+        svgPaths.lineOnAxis('v', innerHeight) + innerBottomLeftCorner +
+        svgPaths.lineOnAxis('H', row.xPos + row.width);
 
     this.positionStatementInputConnection_(row);
   }

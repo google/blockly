@@ -16,7 +16,7 @@
  * @class
  */
 
-import { ConstantProvider as BaseConstantProvider } from '../common/constants.js';
+import {ConstantProvider as BaseConstantProvider} from '../common/constants.js';
 
 
 /**

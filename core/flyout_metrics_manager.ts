@@ -13,10 +13,10 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { IFlyout } from './interfaces/i_flyout.js';
-import { ContainerRegion, MetricsManager } from './metrics_manager.js';
+import {IFlyout} from './interfaces/i_flyout.js';
+import {ContainerRegion, MetricsManager} from './metrics_manager.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**
@@ -38,8 +38,8 @@ export class FlyoutMetricsManager extends MetricsManager {
    * This is in workspace coordinates.
    * @return The bounding box of the blocks on the workspace.
    */
-  private getBoundingBox_(): SVGRect |
-  { height: number, y: number, width: number, x: number } {
+  private getBoundingBox_(): SVGRect|
+      {height: number, y: number, width: number, x: number} {
     let blockBoundingBox;
     try {
       blockBoundingBox = this.workspace.getCanvas().getBBox();
@@ -47,7 +47,7 @@ export class FlyoutMetricsManager extends MetricsManager {
       // Firefox has trouble with hidden elements (Bug 528969).
       // 2021 Update: It looks like this was fixed around Firefox 77 released in
       // 2020.
-      blockBoundingBox = { height: 0, y: 0, width: 0, x: 0 };
+      blockBoundingBox = {height: 0, y: 0, width: 0, x: 0};
     }
     return blockBoundingBox;
   }
@@ -66,11 +66,11 @@ export class FlyoutMetricsManager extends MetricsManager {
   }
 
   override getScrollMetrics(
-    opt_getWorkspaceCoordinates: boolean, opt_viewMetrics: ContainerRegion,
-    opt_contentMetrics: ContainerRegion) {
+      opt_getWorkspaceCoordinates: boolean, opt_viewMetrics: ContainerRegion,
+      opt_contentMetrics: ContainerRegion) {
     // AnyDuringMigration because:  Expected 1 arguments, but got 0.
     const contentMetrics =
-      opt_contentMetrics || (this.getContentMetrics as AnyDuringMigration)();
+        opt_contentMetrics || (this.getContentMetrics as AnyDuringMigration)();
     const margin = this.flyout.MARGIN * this.workspace.scale;
     const scale = opt_getWorkspaceCoordinates ? this.workspace.scale : 1;
 

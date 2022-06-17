@@ -14,7 +14,7 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { Field } from '../field.js';
+import {Field} from '../field.js';
 
 type fromJson = (p1: object) => Field;
 

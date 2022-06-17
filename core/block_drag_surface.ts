@@ -25,9 +25,9 @@
  * @class
  */
 
-import { Coordinate } from './utils/coordinate.js';
+import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
-import { Svg } from './utils/svg.js';
+import {Svg} from './utils/svg.js';
 import * as svgMath from './utils/svg_math.js';
 
 
@@ -38,13 +38,13 @@ import * as svgMath from './utils/svg_math.js';
  */
 export class BlockDragSurfaceSvg {
   /** The SVG drag surface. Set once by BlockDragSurfaceSvg.createDom. */
-  private SVG_: SVGElement | null = null;
+  private SVG_: SVGElement|null = null;
 
   /**
    * This is where blocks live while they are being dragged if the drag
    * surface is enabled.
    */
-  private dragGroup_: SVGElement | null = null;
+  private dragGroup_: SVGElement|null = null;
 
   /**
    * Cached value for the scale of the drag surface.
@@ -57,7 +57,7 @@ export class BlockDragSurfaceSvg {
    * This translation is in pixel units, because the scale is applied to the
    * drag group rather than the top-level SVG.
    */
-  private surfaceXY_: Coordinate | null = null;
+  private surfaceXY_: Coordinate|null = null;
   private readonly childSurfaceXY_: Coordinate;
 
   /** @param container Containing element. */
@@ -79,18 +79,18 @@ export class BlockDragSurfaceSvg {
     }
     // Already created.
     this.SVG_ = dom.createSvgElement(
-      Svg.SVG, {
-      'xmlns': dom.SVG_NS,
-      'xmlns:html': dom.HTML_NS,
-      'xmlns:xlink': dom.XLINK_NS,
-      'version': '1.1',
-      'class': 'blocklyBlockDragSurface',
-    },
-      this.container);
+        Svg.SVG, {
+          'xmlns': dom.SVG_NS,
+          'xmlns:html': dom.HTML_NS,
+          'xmlns:xlink': dom.XLINK_NS,
+          'version': '1.1',
+          'class': 'blocklyBlockDragSurface',
+        },
+        this.container);
     // AnyDuringMigration because:  Argument of type 'SVGElement | null' is not
     // assignable to parameter of type 'Element | undefined'.
     this.dragGroup_ =
-      dom.createSvgElement(Svg.G, {}, this.SVG_ as AnyDuringMigration);
+        dom.createSvgElement(Svg.G, {}, this.SVG_ as AnyDuringMigration);
   }
 
   /**
@@ -142,8 +142,8 @@ export class BlockDragSurfaceSvg {
     // AnyDuringMigration because:  Argument of type 'SVGElement | null' is not
     // assignable to parameter of type 'Element'.
     dom.setCssTransform(
-      this.SVG_ as AnyDuringMigration,
-      'translate3d(' + x + 'px, ' + y + 'px, 0)');
+        this.SVG_ as AnyDuringMigration,
+        'translate3d(' + x + 'px, ' + y + 'px, 0)');
   }
 
   /**
@@ -186,7 +186,7 @@ export class BlockDragSurfaceSvg {
    * BlockSvg.getRelativeToSurfaceXY).
    * @return Drag surface group element.
    */
-  getGroup(): SVGElement | null {
+  getGroup(): SVGElement|null {
     return this.dragGroup_;
   }
 
@@ -194,7 +194,7 @@ export class BlockDragSurfaceSvg {
    * Returns the SVG drag surface.
    * @returns The SVG drag surface.
    */
-  getSvgRoot(): SVGElement | null {
+  getSvgRoot(): SVGElement|null {
     return this.SVG_;
   }
 
@@ -203,7 +203,7 @@ export class BlockDragSurfaceSvg {
    * for BlockSvg.getRelativeToSurfaceXY).
    * @return Drag surface block DOM element, or null if no blocks exist.
    */
-  getCurrentBlock(): Element | null {
+  getCurrentBlock(): Element|null {
     return this.dragGroup_!.firstChild as Element;
   }
 

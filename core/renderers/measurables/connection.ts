@@ -18,12 +18,11 @@
 
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */
-import { RenderedConnection } from '../../rendered_connection.js';
+import {RenderedConnection} from '../../rendered_connection.js';
+import {ConstantProvider, Shape} from '../common/constants.js';
 
-import { ConstantProvider, Shape } from '../common/constants.js';
-
-import { Measurable } from './base.js';
-import { Types } from './types.js';
+import {Measurable} from './base.js';
+import {Types} from './types.js';
 
 /**
  * The base class to represent a connection and the space that it takes up on
@@ -40,7 +39,7 @@ export class Connection extends Measurable {
    *     represents.
    */
   constructor(
-    constants: ConstantProvider, public connectionModel: RenderedConnection) {
+      constants: ConstantProvider, public connectionModel: RenderedConnection) {
     super(constants);
 
     this.shape = this.constants.shapeFor(connectionModel);

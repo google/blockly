@@ -16,7 +16,7 @@
  * @class
  */
 
-import { ConstantProvider as BaseConstantProvider } from '../common/constants.js';
+import {ConstantProvider as BaseConstantProvider} from '../common/constants.js';
 
 
 /**
@@ -45,15 +45,15 @@ export class ConstantProvider extends BaseConstantProvider {
 
   override getCSS_(selector: string) {
     return super.getCSS_(selector)
-      .concat(/* eslint-enable indent */
-        [
-          /* eslint-disable indent */
-          // Insertion marker.
-          selector + ' .blocklyInsertionMarker>.blocklyPathLight,',
-          selector + ' .blocklyInsertionMarker>.blocklyPathDark {',
-          'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';',
-          'stroke: none;',
-          '}',
-        ]);
+        .concat(/* eslint-enable indent */
+                [
+                  /* eslint-disable indent */
+                  // Insertion marker.
+                  selector + ' .blocklyInsertionMarker>.blocklyPathLight,',
+                  selector + ' .blocklyInsertionMarker>.blocklyPathDark {',
+                  'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';',
+                  'stroke: none;',
+                  '}',
+                ]);
   }
 }

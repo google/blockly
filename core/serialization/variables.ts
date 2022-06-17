@@ -17,9 +17,9 @@
  */
 
 // eslint-disable-next-line no-unused-vars
-import { ISerializer } from '../interfaces/i_serializer.js';
+import {ISerializer} from '../interfaces/i_serializer.js';
 // eslint-disable-next-line no-unused-vars
-import { Workspace } from '../workspace.js';
+import {Workspace} from '../workspace.js';
 
 import * as priorities from './priorities.js';
 import * as serializationRegistry from './registry.js';
@@ -32,7 +32,7 @@ import * as serializationRegistry from './registry.js';
 export interface State {
   name: string;
   id: string;
-  type: string | undefined;
+  type: string|undefined;
 }
 
 /**
@@ -54,7 +54,7 @@ class VariableSerializer implements ISerializer {
    * @return The state of the workspace's variables, or null if there are no
    *     variables.
    */
-  save(workspace: Workspace): State[] | null {
+  save(workspace: Workspace): State[]|null {
     const variableStates = [];
     for (const variable of workspace.getAllVariables()) {
       const state = {
@@ -69,7 +69,7 @@ class VariableSerializer implements ISerializer {
     // AnyDuringMigration because:  Type '{ name: string; id: string; }[] |
     // null' is not assignable to type 'State[] | null'.
     return (variableStates.length ? variableStates : null) as
-      AnyDuringMigration;
+        AnyDuringMigration;
   }
 
   /**
@@ -81,7 +81,7 @@ class VariableSerializer implements ISerializer {
   load(state: State[], workspace: Workspace) {
     for (const varState of state) {
       workspace.createVariable(
-        varState['name'], varState['type'], varState['id']);
+          varState['name'], varState['type'], varState['id']);
     }
   }
 

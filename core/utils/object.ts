@@ -62,8 +62,8 @@ export function mixin(target: AnyDuringMigration, source: AnyDuringMigration) {
  * @alias Blockly.utils.object.deepMerge
  */
 export function deepMerge(
-  target: AnyDuringMigration,
-  source: AnyDuringMigration): AnyDuringMigration {
+    target: AnyDuringMigration,
+    source: AnyDuringMigration): AnyDuringMigration {
   for (const x in source) {
     if (source[x] !== null && typeof source[x] === 'object') {
       target[x] = deepMerge(target[x] || Object.create(null), source[x]);
@@ -85,7 +85,7 @@ export function values(obj: AnyDuringMigration): AnyDuringMigration[] {
     return Object.values(obj);
   }
   // Fallback for IE.
-  return Object.keys(obj).map(function (e) {
+  return Object.keys(obj).map(function(e) {
     return obj[e];
   });
 }

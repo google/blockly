@@ -12,11 +12,11 @@
  * @class
  */
 /* eslint-disable-next-line no-unused-vars */
-import { Cursor } from './keyboard_nav/cursor.js';
+import {Cursor} from './keyboard_nav/cursor.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Marker } from './keyboard_nav/marker.js';
+import {Marker} from './keyboard_nav/marker.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**
@@ -28,14 +28,14 @@ export class MarkerManager {
   static readonly LOCAL_MARKER = 'local_marker_1';
 
   /** The cursor. */
-  private cursor_: Cursor | null = null;
+  private cursor_: Cursor|null = null;
 
   /** The cursor's SVG element. */
-  private cursorSvg_: SVGElement | null = null;
-  private markers_: { [key: string]: Marker };
+  private cursorSvg_: SVGElement|null = null;
+  private markers_: {[key: string]: Marker};
 
   /** The marker's SVG element. */
-  private markerSvg_: SVGElement | null = null;
+  private markerSvg_: SVGElement|null = null;
 
   /** @param workspace The workspace for the marker manager. */
   constructor(private readonly workspace: WorkspaceSvg) {
@@ -53,7 +53,7 @@ export class MarkerManager {
       this.unregisterMarker(id);
     }
     marker.setDrawer(
-      this.workspace.getRenderer().makeMarkerDrawer(this.workspace, marker));
+        this.workspace.getRenderer().makeMarkerDrawer(this.workspace, marker));
     this.setMarkerSvg(marker.getDrawer().createDom());
     this.markers_[id] = marker;
   }
@@ -69,8 +69,8 @@ export class MarkerManager {
       delete this.markers_[id];
     } else {
       throw Error(
-        'Marker with ID ' + id + ' does not exist. ' +
-        'Can only unregister markers that exist.');
+          'Marker with ID ' + id + ' does not exist. ' +
+          'Can only unregister markers that exist.');
     }
   }
 
@@ -78,7 +78,7 @@ export class MarkerManager {
    * Get the cursor for the workspace.
    * @return The cursor for this workspace.
    */
-  getCursor(): Cursor | null {
+  getCursor(): Cursor|null {
     return this.cursor_;
   }
 
@@ -88,7 +88,7 @@ export class MarkerManager {
    * @return The marker that corresponds to the given ID, or null if none
    *     exists.
    */
-  getMarker(id: string): Marker | null {
+  getMarker(id: string): Marker|null {
     return this.markers_[id] || null;
   }
 
@@ -104,7 +104,7 @@ export class MarkerManager {
     this.cursor_ = cursor;
     if (this.cursor_) {
       const drawer = this.workspace.getRenderer().makeMarkerDrawer(
-        this.workspace, this.cursor_);
+          this.workspace, this.cursor_);
       this.cursor_.setDrawer(drawer);
       this.setCursorSvg(this.cursor_.getDrawer().createDom());
     }
@@ -115,7 +115,7 @@ export class MarkerManager {
    * @param cursorSvg The SVG root of the cursor to be added to the workspace
    *     SVG group.
    */
-  setCursorSvg(cursorSvg: SVGElement | null) {
+  setCursorSvg(cursorSvg: SVGElement|null) {
     if (!cursorSvg) {
       this.cursorSvg_ = null;
       return;
@@ -130,7 +130,7 @@ export class MarkerManager {
    * @param markerSvg The SVG root of the marker to be added to the workspace
    *     SVG group.
    */
-  setMarkerSvg(markerSvg: SVGElement | null) {
+  setMarkerSvg(markerSvg: SVGElement|null) {
     if (!markerSvg) {
       this.markerSvg_ = null;
       return;
@@ -139,7 +139,7 @@ export class MarkerManager {
     if (this.workspace.getBlockCanvas()) {
       if (this.cursorSvg_) {
         this.workspace.getBlockCanvas()!.insertBefore(
-          markerSvg, this.cursorSvg_);
+            markerSvg, this.cursorSvg_);
       } else {
         this.workspace.getBlockCanvas()!.appendChild(markerSvg);
       }

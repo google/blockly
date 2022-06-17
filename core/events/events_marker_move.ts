@@ -13,13 +13,13 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { Block } from '../block.js';
-import { ASTNode } from '../keyboard_nav/ast_node.js';
+import {Block} from '../block.js';
+import {ASTNode} from '../keyboard_nav/ast_node.js';
 import * as registry from '../registry.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Workspace } from '../workspace.js';
+import {Workspace} from '../workspace.js';
 
-import { UiBase } from './events_ui_base.js';
+import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
 
 
@@ -28,8 +28,8 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.MarkerMove
  */
 export class MarkerMove extends UiBase {
-  blockId: string | null;
-  oldNode?: ASTNode | null;
+  blockId: string|null;
+  oldNode?: ASTNode|null;
   newNode?: ASTNode;
   isCursor?: boolean;
   override type: string;
@@ -45,8 +45,8 @@ export class MarkerMove extends UiBase {
    *    Undefined for a blank event.
    */
   constructor(
-    opt_block?: Block | null, isCursor?: boolean, opt_oldNode?: ASTNode | null,
-    opt_newNode?: ASTNode) {
+      opt_block?: Block|null, isCursor?: boolean, opt_oldNode?: ASTNode|null,
+      opt_newNode?: ASTNode) {
     let workspaceId = opt_block ? opt_block.workspace.id : undefined;
     if (opt_newNode && opt_newNode.getType() === ASTNode.types.WORKSPACE) {
       workspaceId = (opt_newNode.getLocation() as Workspace).id;

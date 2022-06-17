@@ -16,17 +16,17 @@
 import './field_label';
 
 /* eslint-disable-next-line no-unused-vars */
-import { Block } from './block.js';
+import {Block} from './block.js';
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from './block_svg.js';
+import {BlockSvg} from './block_svg.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Connection } from './connection.js';
+import {Connection} from './connection.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Field } from './field.js';
+import {Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
-import { inputTypes } from './input_types.js';
+import {inputTypes} from './input_types.js';
 /* eslint-disable-next-line no-unused-vars */
-import { RenderedConnection } from './rendered_connection.js';
+import {RenderedConnection} from './rendered_connection.js';
 
 
 /**
@@ -50,11 +50,11 @@ export class Input {
    * @param connection Optional connection for this input.
    */
   constructor(
-    public type: number, public name: string, block: Block,
-    public connection: Connection | null) {
+      public type: number, public name: string, block: Block,
+      public connection: Connection|null) {
     if (type !== inputTypes.DUMMY && !name) {
       throw Error(
-        'Value inputs and statement inputs must have non-empty name.');
+          'Value inputs and statement inputs must have non-empty name.');
     }
     this.sourceBlock_ = block;
 
@@ -66,7 +66,7 @@ export class Input {
    * Get the source block for this input.
    * @return The source block, or null if there is none.
    */
-  getSourceBlock(): Block | null {
+  getSourceBlock(): Block|null {
     return this.sourceBlock_;
   }
 
@@ -78,7 +78,7 @@ export class Input {
    *     field again.  Should be unique to the host block.
    * @return The input being append to (to allow chaining).
    */
-  appendField(field: string | Field, opt_name?: string): Input {
+  appendField(field: string|Field, opt_name?: string): Input {
     this.insertFieldAt(this.fieldRow.length, field, opt_name);
     return this;
   }
@@ -92,7 +92,7 @@ export class Input {
    *     field again.  Should be unique to the host block.
    * @return The index following the last inserted field.
    */
-  insertFieldAt(index: number, field: string | Field, opt_name?: string): number {
+  insertFieldAt(index: number, field: string|Field, opt_name?: string): number {
     if (index < 0 || index > this.fieldRow.length) {
       throw Error('index ' + index + ' out of bounds.');
     }
@@ -221,7 +221,7 @@ export class Input {
    *     types are compatible.
    * @return The input being modified (to allow chaining).
    */
-  setCheck(check: string | string[] | null): Input {
+  setCheck(check: string|string[]|null): Input {
     if (!this.connection) {
       throw Error('This input does not have a connection.');
     }
@@ -249,7 +249,7 @@ export class Input {
    * @param shadow DOM representation of a block or null.
    * @return The input being modified (to allow chaining).
    */
-  setShadowDom(shadow: Element | null): Input {
+  setShadowDom(shadow: Element|null): Input {
     if (!this.connection) {
       throw Error('This input does not have a connection.');
     }
@@ -261,7 +261,7 @@ export class Input {
    * Returns the XML representation of the connection's shadow block.
    * @return Shadow DOM representation of a block or null.
    */
-  getShadowDom(): Element | null {
+  getShadowDom(): Element|null {
     if (!this.connection) {
       throw Error('This input does not have a connection.');
     }

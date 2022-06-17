@@ -14,4 +14,4 @@
 
 
 /** A dictionary of localised messages. */
-export const Msg: { [key: string]: string } = Object.create(null);
+export const Msg: {[key: string]: string} = Object.create(null);

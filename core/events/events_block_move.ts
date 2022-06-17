@@ -13,18 +13,18 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { Block } from '../block.js';
-import { ConnectionType } from '../connection_type.js';
+import {Block} from '../block.js';
+import {ConnectionType} from '../connection_type.js';
 import * as registry from '../registry.js';
-import { Coordinate } from '../utils/coordinate.js';
+import {Coordinate} from '../utils/coordinate.js';
 
-import { BlockBase } from './events_block_base.js';
+import {BlockBase} from './events_block_base.js';
 import * as eventUtils from './utils.js';
 
 interface BlockLocation {
   parentId: string;
   inputName: string;
-  coordinate: Coordinate | null;
+  coordinate: Coordinate|null;
 }  // eslint-disable-line no-unused-vars
 
 /**
@@ -40,11 +40,11 @@ export class BlockMove extends BlockBase {
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   oldInputName!: string;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  oldCoordinate!: Coordinate | null;
+  oldCoordinate!: Coordinate|null;
 
-  newParentId: string | null = null;
-  newInputName: string | null = null;
-  newCoordinate: Coordinate | null = null;
+  newParentId: string|null = null;
+  newInputName: string|null = null;
+  newCoordinate: Coordinate|null = null;
 
   /** @param opt_block The moved block.  Undefined for a blank event. */
   constructor(opt_block?: Block) {
@@ -80,7 +80,7 @@ export class BlockMove extends BlockBase {
     }
     if (this.newCoordinate) {
       json['newCoordinate'] = Math.round(this.newCoordinate.x) + ',' +
-        Math.round(this.newCoordinate.y);
+          Math.round(this.newCoordinate.y);
     }
     if (!this.recordUndo) {
       json['recordUndo'] = this.recordUndo;
@@ -143,8 +143,8 @@ export class BlockMove extends BlockBase {
    */
   override isNull(): boolean {
     return this.oldParentId === this.newParentId &&
-      this.oldInputName === this.newInputName &&
-      Coordinate.equals(this.oldCoordinate, this.newCoordinate);
+        this.oldInputName === this.newInputName &&
+        Coordinate.equals(this.oldCoordinate, this.newCoordinate);
   }
 
   /**
@@ -161,7 +161,7 @@ export class BlockMove extends BlockBase {
     const parentId = forward ? this.newParentId : this.oldParentId;
     const inputName = forward ? this.newInputName : this.oldInputName;
     const coordinate = forward ? this.newCoordinate : this.oldCoordinate;
-    let parentBlock: Block | null;
+    let parentBlock: Block|null;
     if (parentId) {
       parentBlock = workspace.getBlockById(parentId);
       if (!parentBlock) {
@@ -178,7 +178,7 @@ export class BlockMove extends BlockBase {
     } else {
       let blockConnection = block.outputConnection;
       if (!blockConnection ||
-        block.previousConnection && block.previousConnection.isConnected()) {
+          block.previousConnection && block.previousConnection.isConnected()) {
         blockConnection = block.previousConnection;
       }
       let parentConnection;

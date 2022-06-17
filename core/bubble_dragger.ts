@@ -18,22 +18,22 @@ import './bubble';
 import './constants';
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockDragSurfaceSvg } from './block_drag_surface.js';
-import { ComponentManager } from './component_manager.js';
+import {BlockDragSurfaceSvg} from './block_drag_surface.js';
+import {ComponentManager} from './component_manager.js';
 /* eslint-disable-next-line no-unused-vars */
-import { CommentMove } from './events/events_comment_move.js';
+import {CommentMove} from './events/events_comment_move.js';
 import * as eventUtils from './events/utils.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IBubble } from './interfaces/i_bubble.js';
+import {IBubble} from './interfaces/i_bubble.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IDeleteArea } from './interfaces/i_delete_area.js';
+import {IDeleteArea} from './interfaces/i_delete_area.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IDragTarget } from './interfaces/i_drag_target.js';
-import { Coordinate } from './utils/coordinate.js';
+import {IDragTarget} from './interfaces/i_drag_target.js';
+import {Coordinate} from './utils/coordinate.js';
 import * as svgMath from './utils/svg_math.js';
-import { WorkspaceCommentSvg } from './workspace_comment_svg.js';
+import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**
@@ -44,7 +44,7 @@ import { WorkspaceSvg } from './workspace_svg.js';
  */
 export class BubbleDragger {
   /** Which drag target the mouse pointer is over, if any. */
-  private dragTarget_: IDragTarget | null = null;
+  private dragTarget_: IDragTarget|null = null;
 
   /** Whether the bubble would be deleted if dropped immediately. */
   private wouldDeleteBubble_ = false;
@@ -69,9 +69,9 @@ export class BubbleDragger {
     // AnyDuringMigration because:  Type 'BlockDragSurfaceSvg | null' is not
     // assignable to type 'BlockDragSurfaceSvg'.
     this.dragSurface_ =
-      (svgMath.is3dSupported() && !!workspace.getBlockDragSurface() ?
-        workspace.getBlockDragSurface() :
-        null) as AnyDuringMigration;
+        (svgMath.is3dSupported() && !!workspace.getBlockDragSurface() ?
+             workspace.getBlockDragSurface() :
+             null) as AnyDuringMigration;
   }
 
   /**
@@ -142,11 +142,11 @@ export class BubbleDragger {
    * @param dragTarget The drag target that the bubblee is currently over.
    * @return Whether dropping the bubble immediately would delete the block.
    */
-  private shouldDelete_(dragTarget: IDragTarget | null): boolean {
+  private shouldDelete_(dragTarget: IDragTarget|null): boolean {
     if (dragTarget) {
       const componentManager = this.workspace.getComponentManager();
       const isDeleteArea = componentManager.hasCapability(
-        dragTarget.id, ComponentManager.Capability.DELETE_AREA);
+          dragTarget.id, ComponentManager.Capability.DELETE_AREA);
       if (isDeleteArea) {
         return (dragTarget as IDeleteArea).wouldDelete(this.bubble, false);
       }
@@ -173,7 +173,7 @@ export class BubbleDragger {
     this.dragBubble(e, currentDragDeltaXY);
 
     const preventMove =
-      this.dragTarget_ && this.dragTarget_.shouldPreventMove(this.bubble);
+        this.dragTarget_ && this.dragTarget_.shouldPreventMove(this.bubble);
     let newLoc;
     if (preventMove) {
       newLoc = this.startXY_;
@@ -211,7 +211,7 @@ export class BubbleDragger {
   private fireMoveEvent_() {
     if (this.bubble instanceof WorkspaceCommentSvg) {
       const event = new (eventUtils.get(eventUtils.COMMENT_MOVE))!
-        (this.bubble) as CommentMove;
+          (this.bubble) as CommentMove;
       event.setOldCoordinate(this.startXY_);
       event.recordNew();
       eventUtils.fire(event);
@@ -230,8 +230,8 @@ export class BubbleDragger {
    */
   private pixelsToWorkspaceUnits_(pixelCoord: Coordinate): Coordinate {
     const result = new Coordinate(
-      pixelCoord.x / this.workspace.scale,
-      pixelCoord.y / this.workspace.scale);
+        pixelCoord.x / this.workspace.scale,
+        pixelCoord.y / this.workspace.scale);
     if (this.workspace.isMutator) {
       // If we're in a mutator, its scale is always 1, purely because of some
       // oddities in our rendering optimizations.  The actual scale is the same

@@ -13,16 +13,16 @@
  */
 
 import * as Css from './css.js';
-import { Field } from './field.js';
+import {Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
-import { FieldTextInput } from './field_textinput.js';
+import {FieldTextInput} from './field_textinput.js';
 import * as aria from './utils/aria.js';
 import * as dom from './utils/dom.js';
-import { KeyCodes } from './utils/keycodes.js';
+import {KeyCodes} from './utils/keycodes.js';
 import * as parsing from './utils/parsing.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Sentinel } from './utils/sentinel.js';
-import { Svg } from './utils/svg.js';
+import {Sentinel} from './utils/sentinel.js';
+import {Svg} from './utils/svg.js';
 import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
 
@@ -65,8 +65,8 @@ export class FieldMultilineInput extends FieldTextInput {
    * for a list of properties this parameter supports.
    */
   constructor(
-    opt_value?: string | Sentinel, opt_validator?: Function,
-    opt_config?: AnyDuringMigration) {
+      opt_value?: string|Sentinel, opt_validator?: Function,
+      opt_config?: AnyDuringMigration) {
     super(Field.SKIP_SETUP);
 
     if (opt_value === Field.SKIP_SETUP) {
@@ -98,7 +98,7 @@ export class FieldMultilineInput extends FieldTextInput {
     // `Blockly.Xml.domToText` will appear on a single line (this is a
     // limitation of the plain-text format).
     fieldElement.textContent =
-      (this.getValue() as string).replace(/\n/g, '&#10;');
+        (this.getValue() as string).replace(/\n/g, '&#10;');
     return fieldElement;
   }
 
@@ -138,10 +138,10 @@ export class FieldMultilineInput extends FieldTextInput {
   override initView() {
     this.createBorderRect_();
     this.textGroup_ = dom.createSvgElement(
-      Svg.G, {
-      'class': 'blocklyEditableText',
-    },
-      this.fieldGroup_);
+        Svg.G, {
+          'class': 'blocklyEditableText',
+        },
+        this.fieldGroup_);
   }
 
   /**
@@ -158,7 +158,7 @@ export class FieldMultilineInput extends FieldTextInput {
     const lines = textLines.split('\n');
     textLines = '';
     const displayLinesNumber =
-      this.isOverflowedY_ ? this.maxLines_ : lines.length;
+        this.isOverflowedY_ ? this.maxLines_ : lines.length;
     for (let i = 0; i < displayLinesNumber; i++) {
       let text = lines[i];
       if (text.length > this.maxDisplayLength) {
@@ -209,15 +209,15 @@ export class FieldMultilineInput extends FieldTextInput {
     let y = 0;
     for (let i = 0; i < lines.length; i++) {
       const lineHeight = this.getConstants()!.FIELD_TEXT_HEIGHT +
-        this.getConstants()!.FIELD_BORDER_RECT_Y_PADDING;
+          this.getConstants()!.FIELD_BORDER_RECT_Y_PADDING;
       const span = dom.createSvgElement(
-        Svg.TEXT, {
-        'class': 'blocklyText blocklyMultilineText',
-        'x': this.getConstants()!.FIELD_BORDER_RECT_X_PADDING,
-        'y': y + this.getConstants()!.FIELD_BORDER_RECT_Y_PADDING,
-        'dy': this.getConstants()!.FIELD_TEXT_BASELINE,
-      },
-        this.textGroup_);
+          Svg.TEXT, {
+            'class': 'blocklyText blocklyMultilineText',
+            'x': this.getConstants()!.FIELD_BORDER_RECT_X_PADDING,
+            'y': y + this.getConstants()!.FIELD_BORDER_RECT_Y_PADDING,
+            'dy': this.getConstants()!.FIELD_TEXT_BASELINE,
+          },
+          this.textGroup_);
       span.appendChild(document.createTextNode(lines[i]));
       y += lineHeight;
     }
@@ -265,7 +265,7 @@ export class FieldMultilineInput extends FieldTextInput {
         totalWidth = textWidth;
       }
       totalHeight += this.getConstants()!.FIELD_TEXT_HEIGHT +
-        (i > 0 ? this.getConstants()!.FIELD_BORDER_RECT_Y_PADDING : 0);
+          (i > 0 ? this.getConstants()!.FIELD_BORDER_RECT_Y_PADDING : 0);
     }
     if (this.isBeingEdited_) {
       // The default width is based on the longest line in the display text,
@@ -275,7 +275,7 @@ export class FieldMultilineInput extends FieldTextInput {
       // lines than this.maxLines_.
       const actualEditorLines = this.value_.split('\n');
       const dummyTextElement = dom.createSvgElement(
-        Svg.TEXT, { 'class': 'blocklyText blocklyMultilineText' });
+          Svg.TEXT, {'class': 'blocklyText blocklyMultilineText'});
       const fontSize = this.getConstants()!.FIELD_TEXT_FONTSIZE;
       const fontWeight = this.getConstants()!.FIELD_TEXT_FONTWEIGHT;
       const fontFamily = this.getConstants()!.FIELD_TEXT_FONTFAMILY;
@@ -283,18 +283,18 @@ export class FieldMultilineInput extends FieldTextInput {
       for (let i = 0; i < actualEditorLines.length; i++) {
         if (actualEditorLines[i].length > this.maxDisplayLength) {
           actualEditorLines[i] =
-            actualEditorLines[i].substring(0, this.maxDisplayLength);
+              actualEditorLines[i].substring(0, this.maxDisplayLength);
         }
         dummyTextElement.textContent = actualEditorLines[i];
         const lineWidth = dom.getFastTextWidth(
-          dummyTextElement, fontSize, fontWeight, fontFamily);
+            dummyTextElement, fontSize, fontWeight, fontFamily);
         if (lineWidth > totalWidth) {
           totalWidth = lineWidth;
         }
       }
 
       const scrollbarWidth =
-        this.htmlInput_!.offsetWidth - this.htmlInput_!.clientWidth;
+          this.htmlInput_!.offsetWidth - this.htmlInput_!.clientWidth;
       totalWidth += scrollbarWidth;
     }
     if (this.borderRect_) {
@@ -306,7 +306,7 @@ export class FieldMultilineInput extends FieldTextInput {
       // AnyDuringMigration because:  Argument of type 'number' is not
       // assignable to parameter of type 'string'.
       this.borderRect_.setAttribute(
-        'height', totalHeight as AnyDuringMigration);
+          'height', totalHeight as AnyDuringMigration);
     }
     this.size_.width = totalWidth;
     this.size_.height = totalHeight;
@@ -341,7 +341,7 @@ export class FieldMultilineInput extends FieldTextInput {
     // AnyDuringMigration because:  Argument of type 'boolean' is not assignable
     // to parameter of type 'string'.
     htmlInput.setAttribute(
-      'spellcheck', this.spellcheck_ as AnyDuringMigration);
+        'spellcheck', this.spellcheck_ as AnyDuringMigration);
     const fontSize = this.getConstants()!.FIELD_TEXT_FONTSIZE * scale + 'pt';
     div!.style.fontSize = fontSize;
     htmlInput.style.fontSize = fontSize;
@@ -349,11 +349,11 @@ export class FieldMultilineInput extends FieldTextInput {
     htmlInput.style.borderRadius = borderRadius;
     const paddingX = this.getConstants()!.FIELD_BORDER_RECT_X_PADDING * scale;
     const paddingY =
-      this.getConstants()!.FIELD_BORDER_RECT_Y_PADDING * scale / 2;
+        this.getConstants()!.FIELD_BORDER_RECT_Y_PADDING * scale / 2;
     htmlInput.style.padding = paddingY + 'px ' + paddingX + 'px ' + paddingY +
-      'px ' + paddingX + 'px';
+        'px ' + paddingX + 'px';
     const lineHeight = this.getConstants()!.FIELD_TEXT_HEIGHT +
-      this.getConstants()!.FIELD_BORDER_RECT_Y_PADDING;
+        this.getConstants()!.FIELD_BORDER_RECT_Y_PADDING;
     htmlInput.style.lineHeight = lineHeight * scale + 'px';
 
     div!.appendChild(htmlInput);
@@ -380,7 +380,7 @@ export class FieldMultilineInput extends FieldTextInput {
    */
   setMaxLines(maxLines: number) {
     if (typeof maxLines === 'number' && maxLines > 0 &&
-      maxLines !== this.maxLines_) {
+        maxLines !== this.maxLines_) {
       this.maxLines_ = maxLines;
       this.forceRerender();
     }

@@ -17,15 +17,14 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from '../../block_svg.js';
+import {BlockSvg} from '../../block_svg.js';
+/* eslint-disable-next-line no-unused-vars */
+import {ConstantProvider} from '../common/constants.js';
 
 /* eslint-disable-next-line no-unused-vars */
-import { ConstantProvider } from '../common/constants.js';
-
-/* eslint-disable-next-line no-unused-vars */
-import { NextConnection } from './next_connection.js';
-import { Row } from './row.js';
-import { Types } from './types.js';
+import {NextConnection} from './next_connection.js';
+import {Row} from './row.js';
+import {Types} from './types.js';
 
 
 /**
@@ -41,7 +40,7 @@ export class BottomRow extends Row {
   hasNextConnection = false;
 
   /** The next connection on the row, if any. */
-  connection: NextConnection | null = null;
+  connection: NextConnection|null = null;
 
   /**
    * The amount that the bottom of the block extends below the horizontal

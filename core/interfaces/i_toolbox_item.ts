@@ -30,7 +30,7 @@ export interface IToolboxItem {
    * Gets the div for the toolbox item.
    * @return The div for the toolbox item.
    */
-  getDiv(): Element | null;
+  getDiv(): Element|null;
 
   /**
    * Gets a unique identifier for this toolbox item.
@@ -43,7 +43,7 @@ export interface IToolboxItem {
    * @return The parent toolbox item, or null if this toolbox item is not
    *     nested.
    */
-  getParent(): IToolboxItem | null;
+  getParent(): IToolboxItem|null;
 
   /**
    * Gets the nested level of the category.
@@ -70,7 +70,7 @@ export interface IToolboxItem {
    * Gets the HTML element that is clickable.
    * @return The HTML element that receives clicks.
    */
-  getClickTarget(): Element | null;
+  getClickTarget(): Element|null;
 
   /**
    * Sets whether the category is visible or not.

@@ -47,7 +47,7 @@ export function getNextUniqueId(): string {
  * your own environment.  Issues #251, #625, #682, #1304.
  */
 const soup = '!#$%()*+,-./:;=?@[]^_`{|}~' +
-  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
 /**
  * Generate a random unique ID.  This should be globally unique.
@@ -55,7 +55,7 @@ const soup = '!#$%()*+,-./:;=?@[]^_`{|}~' +
  * @return A globally unique ID string.
  */
 // AnyDuringMigration because:  Property 'genUid' does not exist on type '{}'.
-(internal as AnyDuringMigration).genUid = function (): string {
+(internal as AnyDuringMigration).genUid = function(): string {
   const length = 20;
   const soupLength = soup.length;
   const id = [];

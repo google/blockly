@@ -14,29 +14,29 @@
 
 import 'angular-mocks';
 
-import { BlockDragSurfaceSvg } from './block_drag_surface.js';
+import {BlockDragSurfaceSvg} from './block_drag_surface.js';
 /* eslint-disable-next-line no-unused-vars */
-import { BlocklyOptions } from './blockly_options.js';
+import {BlocklyOptions} from './blockly_options.js';
 import * as browserEvents from './browser_events.js';
 import * as bumpObjects from './bump_objects.js';
 import * as common from './common.js';
 import * as Css from './css.js';
 import * as dropDownDiv from './dropdowndiv.js';
-import { Grid } from './grid.js';
-import { Msg } from './msg.js';
-import { Options } from './options.js';
-import { ScrollbarPair } from './scrollbar_pair.js';
-import { ShortcutRegistry } from './shortcut_registry.js';
+import {Grid} from './grid.js';
+import {Msg} from './msg.js';
+import {Options} from './options.js';
+import {ScrollbarPair} from './scrollbar_pair.js';
+import {ShortcutRegistry} from './shortcut_registry.js';
 import * as Tooltip from './tooltip.js';
 import * as Touch from './touch.js';
 import * as aria from './utils/aria.js';
 import * as dom from './utils/dom.js';
-import { Svg } from './utils/svg.js';
+import {Svg} from './utils/svg.js';
 import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
-import { Workspace } from './workspace.js';
-import { WorkspaceDragSurfaceSvg } from './workspace_drag_surface_svg.js';
-import { WorkspaceSvg } from './workspace_svg.js';
+import {Workspace} from './workspace.js';
+import {WorkspaceDragSurfaceSvg} from './workspace_drag_surface_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**
@@ -47,18 +47,18 @@ import { WorkspaceSvg } from './workspace_svg.js';
  * @alias Blockly.inject
  */
 export function inject(
-  container: Element | string, opt_options?: BlocklyOptions): WorkspaceSvg {
+    container: Element|string, opt_options?: BlocklyOptions): WorkspaceSvg {
   if (typeof container === 'string') {
     // AnyDuringMigration because:  Type 'Element | null' is not assignable to
     // type 'string | Element'.
     container = (document.getElementById(container) ||
-      document.querySelector(container)) as AnyDuringMigration;
+                 document.querySelector(container)) as AnyDuringMigration;
   }
   // Verify that the container is in document.
   // AnyDuringMigration because:  Argument of type 'string | Element' is not
   // assignable to parameter of type 'Node'.
   if (!container ||
-    !dom.containsNode(document, container as AnyDuringMigration)) {
+      !dom.containsNode(document, container as AnyDuringMigration)) {
     throw Error('Error: container is not in current document.');
   }
   const options = new Options(opt_options || {} as BlocklyOptions);
@@ -79,7 +79,7 @@ export function inject(
   const workspaceDragSurface = new WorkspaceDragSurfaceSvg(subContainer);
 
   const workspace =
-    createMainWorkspace(svg, options, blockDragSurface, workspaceDragSurface);
+      createMainWorkspace(svg, options, blockDragSurface, workspaceDragSurface);
 
   init(workspace);
 
@@ -91,7 +91,7 @@ export function inject(
 
   common.svgResize(workspace);
 
-  subContainer.addEventListener('focusin', function () {
+  subContainer.addEventListener('focusin', function() {
     // AnyDuringMigration because:  Argument of type 'WorkspaceSvg' is not
     // assignable to parameter of type 'Workspace'.
     common.setMainWorkspace(workspace as AnyDuringMigration);
@@ -127,15 +127,15 @@ function createDom(container: Element, options: Options): Element {
     </svg>
     */
   const svg = dom.createSvgElement(
-    Svg.SVG, {
-    'xmlns': dom.SVG_NS,
-    'xmlns:html': dom.HTML_NS,
-    'xmlns:xlink': dom.XLINK_NS,
-    'version': '1.1',
-    'class': 'blocklySvg',
-    'tabindex': '0',
-  },
-    container);
+      Svg.SVG, {
+        'xmlns': dom.SVG_NS,
+        'xmlns:html': dom.HTML_NS,
+        'xmlns:xlink': dom.XLINK_NS,
+        'version': '1.1',
+        'class': 'blocklySvg',
+        'tabindex': '0',
+      },
+      container);
   /*
     <defs>
       ... filters go here ...
@@ -160,21 +160,21 @@ function createDom(container: Element, options: Options): Element {
  * @return Newly created main workspace.
  */
 function createMainWorkspace(
-  svg: Element, options: Options, blockDragSurface: BlockDragSurfaceSvg,
-  workspaceDragSurface: WorkspaceDragSurfaceSvg): WorkspaceSvg {
+    svg: Element, options: Options, blockDragSurface: BlockDragSurfaceSvg,
+    workspaceDragSurface: WorkspaceDragSurfaceSvg): WorkspaceSvg {
   options.parentWorkspace = null;
   const mainWorkspace =
-    new WorkspaceSvg(options, blockDragSurface, workspaceDragSurface);
+      new WorkspaceSvg(options, blockDragSurface, workspaceDragSurface);
   const wsOptions = mainWorkspace.options;
   mainWorkspace.scale = wsOptions.zoomOptions.startScale;
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
 
   // Set the theme name and renderer name onto the injection div.
   dom.addClass(
-    mainWorkspace.getInjectionDiv(),
-    mainWorkspace.getRenderer().getClassName());
+      mainWorkspace.getInjectionDiv(),
+      mainWorkspace.getRenderer().getClassName());
   dom.addClass(
-    mainWorkspace.getInjectionDiv(), mainWorkspace.getTheme().getClassName());
+      mainWorkspace.getInjectionDiv(), mainWorkspace.getTheme().getClassName());
 
   if (!wsOptions.hasCategories && wsOptions.languageTree) {
     // Add flyout as an <svg> that is a sibling of the workspace SVG.
@@ -189,13 +189,13 @@ function createMainWorkspace(
   }
   // Register the workspace svg as a UI component.
   mainWorkspace.getThemeManager().subscribe(
-    svg, 'workspaceBackgroundColour', 'background-color');
+      svg, 'workspaceBackgroundColour', 'background-color');
 
   // A null translation will also apply the correct initial scale.
   mainWorkspace.translate(0, 0);
 
   mainWorkspace.addChangeListener(
-    bumpObjects.bumpIntoBoundsHandler(mainWorkspace));
+      bumpObjects.bumpIntoBoundsHandler(mainWorkspace));
 
   // The SVG is now fully assembled.
   common.svgResize(mainWorkspace);
@@ -215,19 +215,19 @@ function init(mainWorkspace: WorkspaceSvg) {
 
   // Suppress the browser's context menu.
   browserEvents.conditionalBind(
-    svg.parentNode as Element, 'contextmenu', null,
-    function (e: AnyDuringMigration) {
-      if (!browserEvents.isTargetInput(e)) {
-        e.preventDefault();
-      }
-    });
+      svg.parentNode as Element, 'contextmenu', null,
+      function(e: AnyDuringMigration) {
+        if (!browserEvents.isTargetInput(e)) {
+          e.preventDefault();
+        }
+      });
 
   const workspaceResizeHandler =
-    browserEvents.conditionalBind(window, 'resize', null, function () {
-      mainWorkspace.hideChaff(true);
-      common.svgResize(mainWorkspace);
-      bumpObjects.bumpTopObjectsIntoBounds(mainWorkspace);
-    });
+      browserEvents.conditionalBind(window, 'resize', null, function() {
+        mainWorkspace.hideChaff(true);
+        common.svgResize(mainWorkspace);
+        bumpObjects.bumpTopObjectsIntoBounds(mainWorkspace);
+      });
   mainWorkspace.setResizeHandlerWrapper(workspaceResizeHandler);
 
   bindDocumentEvents();
@@ -256,15 +256,15 @@ function init(mainWorkspace: WorkspaceSvg) {
 
   if (options.moveOptions && options.moveOptions.scrollbars) {
     const horizontalScroll = options.moveOptions.scrollbars === true ||
-      !!options.moveOptions.scrollbars.horizontal;
+        !!options.moveOptions.scrollbars.horizontal;
     const verticalScroll = options.moveOptions.scrollbars === true ||
-      !!options.moveOptions.scrollbars.vertical;
+        !!options.moveOptions.scrollbars.vertical;
     mainWorkspace.scrollbar = new ScrollbarPair(
-      mainWorkspace, horizontalScroll, verticalScroll,
-      'blocklyMainWorkspaceScrollbar');
+        mainWorkspace, horizontalScroll, verticalScroll,
+        'blocklyMainWorkspaceScrollbar');
     mainWorkspace.scrollbar.resize();
   } else {
-    mainWorkspace.setMetrics({ x: 0.5, y: 0.5 });
+    mainWorkspace.setMetrics({x: 0.5, y: 0.5});
   }
 
   // Load the sounds.
@@ -287,7 +287,7 @@ function onKeyDown(e: KeyboardEvent) {
   }
 
   if (browserEvents.isTargetInput(e) ||
-    mainWorkspace.rendered && !mainWorkspace.isVisible()) {
+      mainWorkspace.rendered && !mainWorkspace.isVisible()) {
     // When focused on an HTML text input widget, don't trap any keys.
     // Ignore keypresses on rendered workspaces that have been explicitly
     // hidden.
@@ -314,7 +314,7 @@ let documentEventsBound = false;
  */
 function bindDocumentEvents() {
   if (!documentEventsBound) {
-    browserEvents.conditionalBind(document, 'scroll', null, function () {
+    browserEvents.conditionalBind(document, 'scroll', null, function() {
       const workspaces = Workspace.getAll();
       for (let i = 0, workspace; workspace = workspaces[i]; i++) {
         if (workspace instanceof WorkspaceSvg) {
@@ -330,10 +330,10 @@ function bindDocumentEvents() {
     // Some iPad versions don't fire resize after portrait to landscape change.
     if (userAgent.IPAD) {
       browserEvents.conditionalBind(
-        window, 'orientationchange', document, function () {
-          // TODO (#397): Fix for multiple Blockly workspaces.
-          common.svgResize(common.getMainWorkspace() as WorkspaceSvg);
-        });
+          window, 'orientationchange', document, function() {
+            // TODO (#397): Fix for multiple Blockly workspaces.
+            common.svgResize(common.getMainWorkspace() as WorkspaceSvg);
+          });
     }
   }
   documentEventsBound = true;
@@ -347,26 +347,26 @@ function bindDocumentEvents() {
 function loadSounds(pathToMedia: string, workspace: WorkspaceSvg) {
   const audioMgr = workspace.getAudioManager();
   audioMgr.load(
-    [
-      pathToMedia + 'click.mp3',
-      pathToMedia + 'click.wav',
-      pathToMedia + 'click.ogg',
-    ],
-    'click');
+      [
+        pathToMedia + 'click.mp3',
+        pathToMedia + 'click.wav',
+        pathToMedia + 'click.ogg',
+      ],
+      'click');
   audioMgr.load(
-    [
-      pathToMedia + 'disconnect.wav',
-      pathToMedia + 'disconnect.mp3',
-      pathToMedia + 'disconnect.ogg',
-    ],
-    'disconnect');
+      [
+        pathToMedia + 'disconnect.wav',
+        pathToMedia + 'disconnect.mp3',
+        pathToMedia + 'disconnect.ogg',
+      ],
+      'disconnect');
   audioMgr.load(
-    [
-      pathToMedia + 'delete.mp3',
-      pathToMedia + 'delete.ogg',
-      pathToMedia + 'delete.wav',
-    ],
-    'delete');
+      [
+        pathToMedia + 'delete.mp3',
+        pathToMedia + 'delete.ogg',
+        pathToMedia + 'delete.wav',
+      ],
+      'delete');
 
   // Bind temporary hooks that preload the sounds.
   const soundBinds: AnyDuringMigration[] = [];
@@ -384,7 +384,7 @@ function loadSounds(pathToMedia: string, workspace: WorkspaceSvg) {
 
   // Android ignores any sound not loaded as a result of a user action.
   soundBinds.push(browserEvents.conditionalBind(
-    document, 'mousemove', null, unbindSounds, true));
+      document, 'mousemove', null, unbindSounds, true));
   soundBinds.push(browserEvents.conditionalBind(
-    document, 'touchstart', null, unbindSounds, true));
+      document, 'touchstart', null, unbindSounds, true));
 }

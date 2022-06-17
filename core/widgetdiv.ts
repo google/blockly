@@ -21,11 +21,11 @@
 import * as common from './common.js';
 import * as dom from './utils/dom.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Rect } from './utils/rect.js';
+import {Rect} from './utils/rect.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Size } from './utils/size.js';
+import {Size} from './utils/size.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 
 /** The object currently using this container. */
@@ -43,14 +43,14 @@ let rendererClassName = '';
 let themeClassName = '';
 
 /** The HTML container for popup overlays (e.g. editor widgets). */
-let containerDiv: HTMLDivElement | null;
+let containerDiv: HTMLDivElement|null;
 
 /**
  * Returns the HTML container for editor widgets.
  * @return The editor widget container.
  * @alias Blockly.WidgetDiv.getDiv
  */
-export function getDiv(): HTMLDivElement | null {
+export function getDiv(): HTMLDivElement|null {
   return containerDiv;
 }
 
@@ -60,7 +60,7 @@ export function getDiv(): HTMLDivElement | null {
  * @alias Blockly.WidgetDiv.testOnly_setDiv
  * @ignore
  */
-export function testOnly_setDiv(newDiv: HTMLDivElement | null) {
+export function testOnly_setDiv(newDiv: HTMLDivElement|null) {
   containerDiv = newDiv;
 }
 
@@ -89,7 +89,7 @@ export function createDom() {
  * @alias Blockly.WidgetDiv.show
  */
 export function show(
-  newOwner: AnyDuringMigration, rtl: boolean, newDispose: Function) {
+    newOwner: AnyDuringMigration, rtl: boolean, newDispose: Function) {
   hide();
   owner = newOwner;
   dispose = newDispose;
@@ -191,7 +191,7 @@ function positionInternal(x: number, y: number, height: number) {
  * @alias Blockly.WidgetDiv.positionWithAnchor
  */
 export function positionWithAnchor(
-  viewportBBox: Rect, anchorBBox: Rect, widgetSize: Size, rtl: boolean) {
+    viewportBBox: Rect, anchorBBox: Rect, widgetSize: Size, rtl: boolean) {
   const y = calculateY(viewportBBox, anchorBBox, widgetSize);
   const x = calculateX(viewportBBox, anchorBBox, widgetSize, rtl);
 
@@ -215,8 +215,8 @@ export function positionWithAnchor(
  *     window coordinates.
  */
 function calculateX(
-  viewportBBox: Rect, anchorBBox: Rect, widgetSize: Size,
-  rtl: boolean): number {
+    viewportBBox: Rect, anchorBBox: Rect, widgetSize: Size,
+    rtl: boolean): number {
   if (rtl) {
     // Try to align the right side of the field and the right side of widget.
     const widgetLeft = anchorBBox.right - widgetSize.width;
@@ -245,7 +245,7 @@ function calculateX(
  *     window coordinates.
  */
 function calculateY(
-  viewportBBox: Rect, anchorBBox: Rect, widgetSize: Size): number {
+    viewportBBox: Rect, anchorBBox: Rect, widgetSize: Size): number {
   // Flip the widget vertically if off the bottom.
   // The widget could go off the top of the window, but it would also go off
   // the bottom.  The window is just too small.

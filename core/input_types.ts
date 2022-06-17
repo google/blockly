@@ -13,7 +13,7 @@
  * @namespace Blockly.inputTypes
  */
 
-import { ConnectionType } from './connection_type.js';
+import {ConnectionType} from './connection_type.js';
 
 
 /**

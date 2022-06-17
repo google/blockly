@@ -134,6 +134,6 @@ export function lineOnAxis(command: string, val: number): string {
  * @alias Blockly.utils.svgPaths.arc
  */
 export function arc(
-  command: string, flags: string, radius: number, point: string): string {
+    command: string, flags: string, radius: number, point: string): string {
   return command + ' ' + radius + ' ' + radius + ' ' + flags + point;
 }

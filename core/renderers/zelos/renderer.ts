@@ -16,27 +16,26 @@
 import '../../theme';
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from '../../block_svg.js';
-import { Connection } from '../../connection.js';
-import { ConnectionType } from '../../connection_type.js';
-import { InsertionMarkerManager } from '../../insertion_marker_manager.js';
+import {BlockSvg} from '../../block_svg.js';
+import {Connection} from '../../connection.js';
+import {ConnectionType} from '../../connection_type.js';
+import {InsertionMarkerManager} from '../../insertion_marker_manager.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Marker } from '../../keyboard_nav/marker.js';
-import { RenderedConnection } from '../../rendered_connection.js';
-import { BlockStyle } from '../../theme.js';
+import {Marker} from '../../keyboard_nav/marker.js';
+import {RenderedConnection} from '../../rendered_connection.js';
+import {BlockStyle} from '../../theme.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from '../../workspace_svg.js';
-
+import {WorkspaceSvg} from '../../workspace_svg.js';
 import * as blockRendering from '../common/block_rendering.js';
 /* eslint-disable-next-line no-unused-vars */
-import { RenderInfo as BaseRenderInfo } from '../common/info.js';
-import { Renderer as BaseRenderer } from '../common/renderer.js';
+import {RenderInfo as BaseRenderInfo} from '../common/info.js';
+import {Renderer as BaseRenderer} from '../common/renderer.js';
 
-import { ConstantProvider } from './constants.js';
-import { Drawer } from './drawer.js';
-import { RenderInfo } from './info.js';
-import { MarkerSvg } from './marker_svg.js';
-import { PathObject } from './path_object.js';
+import {ConstantProvider} from './constants.js';
+import {Drawer} from './drawer.js';
+import {RenderInfo} from './info.js';
+import {MarkerSvg} from './marker_svg.js';
+import {PathObject} from './path_object.js';
 
 
 /**
@@ -76,7 +75,7 @@ export class Renderer extends BaseRenderer {
    * @return The drawer.
    */
   protected override makeDrawer_(block: BlockSvg, info: BaseRenderInfo):
-    Drawer {
+      Drawer {
     return new Drawer(block, (info as RenderInfo));
   }
 
@@ -87,7 +86,7 @@ export class Renderer extends BaseRenderer {
    * @return The object in charge of drawing the marker.
    */
   override makeMarkerDrawer(workspace: WorkspaceSvg, marker: Marker):
-    MarkerSvg {
+      MarkerSvg {
     return new MarkerSvg(workspace, this.getConstants(), marker);
   }
 
@@ -99,26 +98,26 @@ export class Renderer extends BaseRenderer {
    */
   override makePathObject(root: SVGElement, style: BlockStyle): PathObject {
     return new PathObject(
-      root, style, (this.getConstants() as ConstantProvider));
+        root, style, (this.getConstants() as ConstantProvider));
   }
 
   /**
-  * Get the current renderer's constant provider.  We assume that when this is
-  * called, the renderer has already been initialized.
-  * @return The constant provider.
-  */
+   * Get the current renderer's constant provider.  We assume that when this is
+   * called, the renderer has already been initialized.
+   * @return The constant provider.
+   */
   override getConstants(): ConstantProvider {
     return this.constants_;
   }
 
   override shouldHighlightConnection(conn: Connection) {
     return conn.type !== ConnectionType.INPUT_VALUE &&
-      conn.type !== ConnectionType.OUTPUT_VALUE;
+        conn.type !== ConnectionType.OUTPUT_VALUE;
   }
 
   override getConnectionPreviewMethod(
-    closest: RenderedConnection, local: RenderedConnection,
-    topBlock: BlockSvg) {
+      closest: RenderedConnection, local: RenderedConnection,
+      topBlock: BlockSvg) {
     if (local.type === ConnectionType.OUTPUT_VALUE) {
       if (!closest.isConnected()) {
         return InsertionMarkerManager.PREVIEW_TYPE.INPUT_OUTLINE;

@@ -16,17 +16,17 @@
 import './constants';
 
 /* eslint-disable-next-line no-unused-vars */
-import { Block } from './block.js';
-import { ConnectionType } from './connection_type.js';
+import {Block} from './block.js';
+import {ConnectionType} from './connection_type.js';
 /* eslint-disable-next-line no-unused-vars */
-import { BlockMove } from './events/events_block_move.js';
+import {BlockMove} from './events/events_block_move.js';
 import * as eventUtils from './events/utils.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Input } from './input.js';
+import {Input} from './input.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IASTNodeLocationWithBlock } from './interfaces/i_ast_node_location_with_block.js';
+import {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_with_block.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IConnectionChecker } from './interfaces/i_connection_checker.js';
+import {IConnectionChecker} from './interfaces/i_connection_checker.js';
 import * as blocks from './serialization/blocks.js';
 import * as Xml from './xml.js';
 
@@ -48,7 +48,7 @@ export class Connection implements IASTNodeLocationWithBlock {
   static REASON_PREVIOUS_AND_OUTPUT = 8;
 
   /** Connection this connection connects to.  Null if not connected. */
-  targetConnection: Connection | null = null;
+  targetConnection: Connection|null = null;
 
   /** Has this connection been disposed of? */
   disposed = false;
@@ -68,7 +68,7 @@ export class Connection implements IASTNodeLocationWithBlock {
   /** Vertical location of this connection. */
   y = 0;
 
-  private shadowState_: blocks.State | null = null;
+  private shadowState_: blocks.State|null = null;
 
   /**
    * @param source The block establishing this connection.
@@ -110,7 +110,7 @@ export class Connection implements IASTNodeLocationWithBlock {
     let event;
     if (eventUtils.isEnabled()) {
       event =
-        new (eventUtils.get(eventUtils.BLOCK_MOVE))!(childBlock) as BlockMove;
+          new (eventUtils.get(eventUtils.BLOCK_MOVE))!(childBlock) as BlockMove;
     }
     connectReciprocally(parentConnection, childConnection);
     childBlock.setParent(parentBlock);
@@ -122,10 +122,10 @@ export class Connection implements IASTNodeLocationWithBlock {
     // Deal with the orphan if it exists.
     if (orphan) {
       const orphanConnection = parentConnection.type === INPUT ?
-        orphan.outputConnection :
-        orphan.previousConnection;
+          orphan.outputConnection :
+          orphan.previousConnection;
       const connection = Connection.getConnectionForOrphanedConnection(
-        childBlock, (orphanConnection));
+          childBlock, (orphanConnection));
       if (connection) {
         orphanConnection.connect(connection);
       } else {
@@ -166,7 +166,7 @@ export class Connection implements IASTNodeLocationWithBlock {
    */
   isSuperior(): boolean {
     return this.type === ConnectionType.INPUT_VALUE ||
-      this.type === ConnectionType.NEXT_STATEMENT;
+        this.type === ConnectionType.NEXT_STATEMENT;
   }
 
   /**
@@ -274,7 +274,7 @@ export class Connection implements IASTNodeLocationWithBlock {
     let event;
     if (eventUtils.isEnabled()) {
       event =
-        new (eventUtils.get(eventUtils.BLOCK_MOVE))!(childBlock) as BlockMove;
+          new (eventUtils.get(eventUtils.BLOCK_MOVE))!(childBlock) as BlockMove;
     }
     const otherConnection = this.targetConnection;
     if (otherConnection) {
@@ -300,7 +300,7 @@ export class Connection implements IASTNodeLocationWithBlock {
    * Returns the block that this connection connects to.
    * @return The connected block or null if none is connected.
    */
-  targetBlock(): Block | null {
+  targetBlock(): Block|null {
     if (this.isConnected()) {
       return this.targetConnection?.getSourceBlock() ?? null;
     }
@@ -313,9 +313,9 @@ export class Connection implements IASTNodeLocationWithBlock {
   protected onCheckChanged_() {
     // The new value type may not be compatible with the existing connection.
     if (this.isConnected() &&
-      (!this.targetConnection ||
-        !this.getConnectionChecker().canConnect(
-          this, this.targetConnection, false))) {
+        (!this.targetConnection ||
+         !this.getConnectionChecker().canConnect(
+             this, this.targetConnection, false))) {
       const child = this.isSuperior() ? this.targetBlock() : this.source;
       child!.unplug();
     }
@@ -327,7 +327,7 @@ export class Connection implements IASTNodeLocationWithBlock {
    *     types are compatible.
    * @return The connection being modified (to allow chaining).
    */
-  setCheck(check: string | string[] | null): Connection {
+  setCheck(check: string|string[]|null): Connection {
     if (check) {
       // Ensure that check is in an array.
       if (!Array.isArray(check)) {
@@ -348,7 +348,7 @@ export class Connection implements IASTNodeLocationWithBlock {
    * @return List of compatible value types.
    *     Null if all types are compatible.
    */
-  getCheck(): AnyDuringMigration[] | null {
+  getCheck(): AnyDuringMigration[]|null {
     return this.check_;
   }
 
@@ -356,8 +356,8 @@ export class Connection implements IASTNodeLocationWithBlock {
    * Changes the connection's shadow block.
    * @param shadowDom DOM representation of a block or null.
    */
-  setShadowDom(shadowDom: Element | null) {
-    this.setShadowStateInternal_({ shadowDom });
+  setShadowDom(shadowDom: Element|null) {
+    this.setShadowStateInternal_({shadowDom});
   }
 
   /**
@@ -368,18 +368,18 @@ export class Connection implements IASTNodeLocationWithBlock {
    *     just returned.
    * @return Shadow DOM representation of a block or null.
    */
-  getShadowDom(returnCurrent?: boolean): Element | null {
+  getShadowDom(returnCurrent?: boolean): Element|null {
     return returnCurrent && this.targetBlock()!.isShadow() ?
-      Xml.blockToDom((this.targetBlock() as Block)) as Element :
-      this.shadowDom_;
+        Xml.blockToDom((this.targetBlock() as Block)) as Element :
+        this.shadowDom_;
   }
 
   /**
    * Changes the connection's shadow block.
    * @param shadowState An state represetation of the block or null.
    */
-  setShadowState(shadowState: blocks.State | null) {
-    this.setShadowStateInternal_({ shadowState });
+  setShadowState(shadowState: blocks.State|null) {
+    this.setShadowStateInternal_({shadowState});
   }
 
   /**
@@ -391,7 +391,7 @@ export class Connection implements IASTNodeLocationWithBlock {
    *     returned.
    * @return Serialized object representation of the block, or null.
    */
-  getShadowState(returnCurrent?: boolean): blocks.State | null {
+  getShadowState(returnCurrent?: boolean): blocks.State|null {
     if (returnCurrent && this.targetBlock() && this.targetBlock()!.isShadow()) {
       return blocks.save(this.targetBlock() as Block);
     }
@@ -418,7 +418,7 @@ export class Connection implements IASTNodeLocationWithBlock {
    * @return The input that the connection belongs to or null if no parent
    *     exists.
    */
-  getParentInput(): Input | null {
+  getParentInput(): Input|null {
     let parentInput = null;
     const inputs = this.source.inputList;
     for (let i = 0; i < inputs.length; i++) {
@@ -470,7 +470,8 @@ export class Connection implements IASTNodeLocationWithBlock {
    * temporarily sets those properties to null so no shadow respawns.
    * @return The state of both the shadowDom_ and shadowState_ properties.
    */
-  private stashShadowState_(): { shadowDom: Element | null, shadowState: blocks.State | null } {
+  private stashShadowState_():
+      {shadowDom: Element|null, shadowState: blocks.State|null} {
     const shadowDom = this.getShadowDom(true);
     const shadowState = this.getShadowState(true);
     // Set to null so it doesn't respawn.
@@ -478,7 +479,7 @@ export class Connection implements IASTNodeLocationWithBlock {
     // 'Element'.
     this.shadowDom_ = null as AnyDuringMigration;
     this.shadowState_ = null;
-    return { shadowDom, shadowState };
+    return {shadowDom, shadowState};
   }
 
   /**
@@ -486,9 +487,9 @@ export class Connection implements IASTNodeLocationWithBlock {
    * @param param0 The state to reapply to the shadowDom_ and shadowState_
    *     properties.
    */
-  private applyShadowState_({ shadowDom, shadowState }: {
-    shadowDom: Element | null,
-    shadowState: blocks.State | null
+  private applyShadowState_({shadowDom, shadowState}: {
+    shadowDom: Element|null,
+    shadowState: blocks.State|null
   }) {
     // AnyDuringMigration because:  Type 'Element | null' is not assignable to
     // type 'Element'.
@@ -500,9 +501,9 @@ export class Connection implements IASTNodeLocationWithBlock {
    * Sets the state of the shadow of this connection.
    * @param param0 The state to set the shadow of this connection to.
    */
-  private setShadowStateInternal_({ shadowDom = null, shadowState = null }: {
-    shadowDom?: Element | null,
-    shadowState?: blocks.State | null
+  private setShadowStateInternal_({shadowDom = null, shadowState = null}: {
+    shadowDom?: Element|null,
+    shadowState?: blocks.State|null
   } = {}) {
     // One or both of these should always be null.
     // If neither is null, the shadowState will get priority.
@@ -540,7 +541,7 @@ export class Connection implements IASTNodeLocationWithBlock {
    * @return The shadow block that was created, or null if both the shadowState_
    *     and shadowDom_ are null.
    */
-  private createShadowBlock_(attemptToConnect: boolean): Block | null {
+  private createShadowBlock_(attemptToConnect: boolean): Block|null {
     const parentBlock = this.getSourceBlock();
     const shadowState = this.getShadowState();
     const shadowDom = this.getShadowDom();
@@ -577,7 +578,7 @@ export class Connection implements IASTNodeLocationWithBlock {
           }
         } else {
           throw new Error(
-            'Cannot connect a shadow block to a previous/output connection');
+              'Cannot connect a shadow block to a previous/output connection');
         }
       }
       return blockShadow;
@@ -590,7 +591,7 @@ export class Connection implements IASTNodeLocationWithBlock {
    * properties, in their respective serialized forms.
    * @param shadow The shadow to serialize, or null.
    */
-  private serializeShadow_(shadow: Block | null) {
+  private serializeShadow_(shadow: Block|null) {
     if (!shadow) {
       return;
     }
@@ -607,10 +608,10 @@ export class Connection implements IASTNodeLocationWithBlock {
    * @return The suitable connection point on the chain of blocks, or null.
    */
   static getConnectionForOrphanedConnection(
-    startBlock: Block, orphanConnection: Connection): Connection | null {
+      startBlock: Block, orphanConnection: Connection): Connection|null {
     if (orphanConnection.type === ConnectionType.OUTPUT_VALUE) {
       return getConnectionForOrphanedOutput(
-        startBlock, orphanConnection.getSourceBlock());
+          startBlock, orphanConnection.getSourceBlock());
     }
     // Otherwise we're dealing with a stack.
     const connection = startBlock.lastConnectionInStack(true);
@@ -643,8 +644,8 @@ function connectReciprocally(first: Connection, second: Connection) {
  * @param orphanBlock The inferior block.
  * @return The suitable connection point on 'block', or null.
  */
-function getSingleConnection(block: Block, orphanBlock: Block): Connection |
-  null {
+function getSingleConnection(block: Block, orphanBlock: Block): Connection|
+    null {
   let foundConnection = null;
   const output = orphanBlock.outputConnection;
   const typeChecker = output.getConnectionChecker();
@@ -673,7 +674,7 @@ function getSingleConnection(block: Block, orphanBlock: Block): Connection |
  * @return The suitable connection point on the chain of blocks, or null.
  */
 function getConnectionForOrphanedOutput(
-  startBlock: Block, orphanBlock: Block): Connection | null {
+    startBlock: Block, orphanBlock: Block): Connection|null {
   let newBlock = startBlock;
   let connection;
   while (connection = getSingleConnection((newBlock), orphanBlock)) {

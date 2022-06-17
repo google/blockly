@@ -67,7 +67,7 @@ export class Coordinate {
    * @param b A Coordinate.
    * @return True iff the coordinates are equal, or if both are null.
    */
-  static equals(a: Coordinate | null, b: Coordinate | null): boolean {
+  static equals(a: Coordinate|null, b: Coordinate|null): boolean {
     if (a === b) {
       return true;
     }
@@ -105,8 +105,8 @@ export class Coordinate {
    * @param b An x/y coordinate.
    * @return A Coordinate representing the difference between `a` and `b`.
    */
-  static difference(a: Coordinate | SVGPoint, b: Coordinate | SVGPoint):
-    Coordinate {
+  static difference(a: Coordinate|SVGPoint, b: Coordinate|SVGPoint):
+      Coordinate {
     return new Coordinate(a.x - b.x, a.y - b.y);
   }
 
@@ -116,7 +116,7 @@ export class Coordinate {
    * @param b An x/y coordinate.
    * @return A Coordinate representing the sum of the two coordinates.
    */
-  static sum(a: Coordinate | SVGPoint, b: Coordinate | SVGPoint): Coordinate {
+  static sum(a: Coordinate|SVGPoint, b: Coordinate|SVGPoint): Coordinate {
     return new Coordinate(a.x + b.x, a.y + b.y);
   }
 }

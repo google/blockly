@@ -19,28 +19,28 @@ import './events/events_comment_delete';
 import './events/events_selected';
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockDragSurfaceSvg } from './block_drag_surface.js';
+import {BlockDragSurfaceSvg} from './block_drag_surface.js';
 import * as browserEvents from './browser_events.js';
 import * as common from './common.js';
 import * as ContextMenu from './contextmenu.js';
 import * as Css from './css.js';
 /* eslint-disable-next-line no-unused-vars */
-import { CommentMove } from './events/events_comment_move.js';
+import {CommentMove} from './events/events_comment_move.js';
 import * as eventUtils from './events/utils.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IBoundedElement } from './interfaces/i_bounded_element.js';
+import {IBoundedElement} from './interfaces/i_bounded_element.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IBubble } from './interfaces/i_bubble.js';
-import { CopyData, ICopyable } from './interfaces/i_copyable.js';
+import {IBubble} from './interfaces/i_bubble.js';
+import {CopyData, ICopyable} from './interfaces/i_copyable.js';
 import * as Touch from './touch.js';
-import { Coordinate } from './utils/coordinate.js';
+import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
-import { Rect } from './utils/rect.js';
-import { Svg } from './utils/svg.js';
+import {Rect} from './utils/rect.js';
+import {Svg} from './utils/svg.js';
 import * as svgMath from './utils/svg_math.js';
-import { WorkspaceComment } from './workspace_comment.js';
+import {WorkspaceComment} from './workspace_comment.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 
 /** Size of the resize icon. */
@@ -57,7 +57,7 @@ const TEXTAREA_OFFSET = 2;
  * @alias Blockly.WorkspaceCommentSvg
  */
 export class WorkspaceCommentSvg extends WorkspaceComment implements
-  IBoundedElement, IBubble, ICopyable {
+    IBoundedElement, IBubble, ICopyable {
   /**
    * The width and height to use to size a workspace comment when it is first
    * added, before it has been edited by the user.
@@ -69,26 +69,26 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
   override workspace: WorkspaceSvg;
 
   /** Mouse up event data. */
-  private onMouseUpWrapper_: browserEvents.Data | null = null;
+  private onMouseUpWrapper_: browserEvents.Data|null = null;
 
   /** Mouse move event data. */
-  private onMouseMoveWrapper_: browserEvents.Data | null = null;
+  private onMouseMoveWrapper_: browserEvents.Data|null = null;
 
   /** Whether event handlers have been initialized. */
   private eventsInit_ = false;
-  private textarea_: HTMLTextAreaElement | null = null;
+  private textarea_: HTMLTextAreaElement|null = null;
 
-  private svgRectTarget_: SVGRectElement | null = null;
+  private svgRectTarget_: SVGRectElement|null = null;
 
-  private svgHandleTarget_: SVGRectElement | null = null;
+  private svgHandleTarget_: SVGRectElement|null = null;
 
-  private foreignObject_: SVGForeignObjectElement | null = null;
+  private foreignObject_: SVGForeignObjectElement|null = null;
 
-  private resizeGroup_: SVGGElement | null = null;
+  private resizeGroup_: SVGGElement|null = null;
 
-  private deleteGroup_: SVGGElement | null = null;
+  private deleteGroup_: SVGGElement|null = null;
 
-  private deleteIconBorder_: SVGCircleElement | null = null;
+  private deleteIconBorder_: SVGCircleElement|null = null;
 
   private focused_ = false;
   private autoLayout_ = false;
@@ -109,10 +109,10 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    *     ID.
    */
   constructor(
-    workspace: WorkspaceSvg, content: string, height: number, width: number,
-    opt_id?: string) {
+      workspace: WorkspaceSvg, content: string, height: number, width: number,
+      opt_id?: string) {
     super(workspace, content, height, width, opt_id);
-    this.svgGroup_ = dom.createSvgElement(Svg.G, { 'class': 'blocklyComment' });
+    this.svgGroup_ = dom.createSvgElement(Svg.G, {'class': 'blocklyComment'});
     (this.svgGroup_ as AnyDuringMigration).translate_ = '';
     this.workspace = workspace;
 
@@ -130,7 +130,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
      * True if it should move, false if it should be translated directly.
      */
     this.useDragSurface_ =
-      svgMath.is3dSupported() && !!workspace.getBlockDragSurface();
+        svgMath.is3dSupported() && !!workspace.getBlockDragSurface();
 
     this.render();
   }
@@ -171,11 +171,11 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     }
     if (!this.workspace.options.readOnly && !this.eventsInit_) {
       browserEvents.conditionalBind(
-        this.svgRectTarget_ as SVGRectElement, 'mousedown', this,
-        this.pathMouseDown_);
+          this.svgRectTarget_ as SVGRectElement, 'mousedown', this,
+          this.pathMouseDown_);
       browserEvents.conditionalBind(
-        this.svgHandleTarget_ as SVGRectElement, 'mousedown', this,
-        this.pathMouseDown_);
+          this.svgHandleTarget_ as SVGRectElement, 'mousedown', this,
+          this.pathMouseDown_);
     }
     this.eventsInit_ = true;
 
@@ -237,7 +237,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
       }
     }
     const event = new (eventUtils.get(eventUtils.SELECTED))!
-      (oldId, this.id, this.workspace.id);
+        (oldId, this.id, this.workspace.id);
     eventUtils.fire(event);
     common.setSelected(this);
     this.addSelect();
@@ -249,7 +249,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
       return;
     }
     const event = new (eventUtils.get(eventUtils.SELECTED))!
-      (this.id, null, this.workspace.id);
+        (this.id, null, this.workspace.id);
     eventUtils.fire(event);
     common.setSelected(null);
     this.removeSelect();
@@ -291,8 +291,8 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     let y = 0;
 
     const dragSurfaceGroup = this.useDragSurface_ ?
-      this.workspace.getBlockDragSurface()!.getGroup() :
-      null;
+        this.workspace.getBlockDragSurface()!.getGroup() :
+        null;
 
     let element = this.getSvgRoot();
     if (element) {
@@ -304,10 +304,10 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
         // If this element is the current element on the drag surface, include
         // the translation of the drag surface itself.
         if (this.useDragSurface_ &&
-          this.workspace.getBlockDragSurface()!.getCurrentBlock() ===
-          element) {
+            this.workspace.getBlockDragSurface()!.getCurrentBlock() ===
+                element) {
           const surfaceTranslation =
-            this.workspace.getBlockDragSurface()!.getSurfaceTranslation();
+              this.workspace.getBlockDragSurface()!.getSurfaceTranslation();
           x += surfaceTranslation.x;
           y += surfaceTranslation.y;
         }
@@ -315,7 +315,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
         // assignable to type 'SVGElement'.
         element = element.parentNode as AnyDuringMigration;
       } while (element && element !== this.workspace.getBubbleCanvas() &&
-        element !== dragSurfaceGroup);
+               element !== dragSurfaceGroup);
     }
     this.xy_ = new Coordinate(x, y);
     return this.xy_;
@@ -328,7 +328,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    */
   override moveBy(dx: number, dy: number) {
     const event =
-      new (eventUtils.get(eventUtils.COMMENT_MOVE))!(this) as CommentMove;
+        new (eventUtils.get(eventUtils.COMMENT_MOVE))!(this) as CommentMove;
     // TODO: Do I need to look up the relative to surface XY position here?
     const xy = this.getRelativeToSurfaceXY();
     this.translate(xy.x + dx, xy.y + dy);
@@ -347,7 +347,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
   translate(x: number, y: number) {
     this.xy_ = new Coordinate(x, y);
     this.getSvgRoot().setAttribute(
-      'transform', 'translate(' + x + ',' + y + ')');
+        'transform', 'translate(' + x + ',' + y + ')');
   }
 
   /**
@@ -382,12 +382,12 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
       dragSurface.translateSurface(newLoc.x, newLoc.y);
     } else {
       (this.svgGroup_ as AnyDuringMigration).translate_ =
-        'translate(' + newLoc.x + ',' + newLoc.y + ')';
+          'translate(' + newLoc.x + ',' + newLoc.y + ')';
       (this.svgGroup_ as AnyDuringMigration)
-        .setAttribute(
-          'transform',
-          (this.svgGroup_ as AnyDuringMigration).translate_ +
-          (this.svgGroup_ as AnyDuringMigration).skew_);
+          .setAttribute(
+              'transform',
+              (this.svgGroup_ as AnyDuringMigration).translate_ +
+                  (this.svgGroup_ as AnyDuringMigration).skew_);
     }
   }
 
@@ -545,9 +545,9 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     // AnyDuringMigration because:  Argument of type 'number' is not assignable
     // to parameter of type 'string'.
     element.setAttribute(
-      'x',
-      Math.round(this.workspace.RTL ? width - xy.x : xy.x) as
-      AnyDuringMigration);
+        'x',
+        Math.round(this.workspace.RTL ? width - xy.x : xy.x) as
+            AnyDuringMigration);
     // AnyDuringMigration because:  Argument of type 'number' is not assignable
     // to parameter of type 'string'.
     element.setAttribute('y', Math.round(xy.y) as AnyDuringMigration);
@@ -576,8 +576,8 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * Returns a bounding box describing the dimensions of this comment.
    * @return Object with height and width properties in workspace units.
    */
-  getHeightWidth(): { height: number, width: number } {
-    return { width: this.getWidth(), height: this.getHeight() };
+  getHeightWidth(): {height: number, width: number} {
+    return {width: this.getWidth(), height: this.getHeight()};
   }
 
   /** Renders the workspace comment. */
@@ -595,7 +595,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     this.svgGroup_.appendChild(this.foreignObject_ as AnyDuringMigration);
 
     this.svgHandleTarget_ = dom.createSvgElement(
-      Svg.RECT, { 'class': 'blocklyCommentHandleTarget', 'x': 0, 'y': 0 });
+        Svg.RECT, {'class': 'blocklyCommentHandleTarget', 'x': 0, 'y': 0});
     // AnyDuringMigration because:  Argument of type 'SVGRectElement | null' is
     // not assignable to parameter of type 'Node'.
     this.svgGroup_.appendChild(this.svgHandleTarget_ as AnyDuringMigration);
@@ -626,19 +626,19 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
     if (this.resizeGroup_) {
       browserEvents.conditionalBind(
-        (this.resizeGroup_), 'mousedown', this, this.resizeMouseDown_);
+          (this.resizeGroup_), 'mousedown', this, this.resizeMouseDown_);
     }
 
     if (this.isDeletable()) {
       browserEvents.conditionalBind(
-        this.deleteGroup_ as SVGGElement, 'mousedown', this,
-        this.deleteMouseDown_);
+          this.deleteGroup_ as SVGGElement, 'mousedown', this,
+          this.deleteMouseDown_);
       browserEvents.conditionalBind(
-        this.deleteGroup_ as SVGGElement, 'mouseout', this,
-        this.deleteMouseOut_);
+          this.deleteGroup_ as SVGGElement, 'mouseout', this,
+          this.deleteMouseOut_);
       browserEvents.conditionalBind(
-        this.deleteGroup_ as SVGGElement, 'mouseup', this,
-        this.deleteMouseUp_);
+          this.deleteGroup_ as SVGGElement, 'mouseup', this,
+          this.deleteMouseUp_);
     }
   }
 
@@ -665,7 +665,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     body.setAttribute('xmlns', dom.HTML_NS);
     body.className = 'blocklyMinimalBody';
     const textarea = document.createElementNS(dom.HTML_NS, 'textarea') as
-      HTMLTextAreaElement;
+        HTMLTextAreaElement;
     textarea.className = 'blocklyCommentTextarea';
     textarea.setAttribute('dir', this.RTL ? 'RTL' : 'LTR');
     textarea.readOnly = !this.isEditable();
@@ -674,18 +674,18 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     this.foreignObject_!.appendChild(body);
     // Don't zoom with mousewheel.
     browserEvents.conditionalBind(
-      textarea, 'wheel', this, function (e: AnyDuringMigration) {
-        e.stopPropagation();
-      });
+        textarea, 'wheel', this, function(e: AnyDuringMigration) {
+          e.stopPropagation();
+        });
     browserEvents.conditionalBind(
-      textarea, 'change', this,
-      /** @param e Unused event parameter */
-      /* eslint-enable no-unused-vars */
-      function (
-        this: WorkspaceCommentSvg,
+        textarea, 'change', this,
+        /** @param e Unused event parameter */
+        /* eslint-enable no-unused-vars */
+        function(
+            this: WorkspaceCommentSvg,
             /* eslint-disable no-unused-vars */ e: Event) {
-        this.setContent(textarea.value);
-      });
+          this.setContent(textarea.value);
+        });
     // AnyDuringMigration because:  Type 'SVGForeignObjectElement | null' is not
     // assignable to type 'Element'.
     return this.foreignObject_ as AnyDuringMigration;
@@ -694,73 +694,73 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
   /** Add the resize icon to the DOM */
   private addResizeDom_() {
     this.resizeGroup_ = dom.createSvgElement(
-      Svg.G, { 'class': this.RTL ? 'blocklyResizeSW' : 'blocklyResizeSE' },
-      this.svgGroup_);
+        Svg.G, {'class': this.RTL ? 'blocklyResizeSW' : 'blocklyResizeSE'},
+        this.svgGroup_);
     // AnyDuringMigration because:  Argument of type 'SVGGElement | null' is not
     // assignable to parameter of type 'Element | undefined'.
     dom.createSvgElement(
-      Svg.POLYGON,
-      { 'points': '0,x x,x x,0'.replace(/x/g, RESIZE_SIZE.toString()) },
-      this.resizeGroup_ as AnyDuringMigration);
+        Svg.POLYGON,
+        {'points': '0,x x,x x,0'.replace(/x/g, RESIZE_SIZE.toString())},
+        this.resizeGroup_ as AnyDuringMigration);
     // AnyDuringMigration because:  Argument of type 'SVGGElement | null' is not
     // assignable to parameter of type 'Element | undefined'.
     dom.createSvgElement(
-      Svg.LINE, {
-      'class': 'blocklyResizeLine',
-      'x1': RESIZE_SIZE / 3,
-      'y1': RESIZE_SIZE - 1,
-      'x2': RESIZE_SIZE - 1,
-      'y2': RESIZE_SIZE / 3,
-    },
-      this.resizeGroup_ as AnyDuringMigration);
+        Svg.LINE, {
+          'class': 'blocklyResizeLine',
+          'x1': RESIZE_SIZE / 3,
+          'y1': RESIZE_SIZE - 1,
+          'x2': RESIZE_SIZE - 1,
+          'y2': RESIZE_SIZE / 3,
+        },
+        this.resizeGroup_ as AnyDuringMigration);
     // AnyDuringMigration because:  Argument of type 'SVGGElement | null' is not
     // assignable to parameter of type 'Element | undefined'.
     dom.createSvgElement(
-      Svg.LINE, {
-      'class': 'blocklyResizeLine',
-      'x1': RESIZE_SIZE * 2 / 3,
-      'y1': RESIZE_SIZE - 1,
-      'x2': RESIZE_SIZE - 1,
-      'y2': RESIZE_SIZE * 2 / 3,
-    },
-      this.resizeGroup_ as AnyDuringMigration);
+        Svg.LINE, {
+          'class': 'blocklyResizeLine',
+          'x1': RESIZE_SIZE * 2 / 3,
+          'y1': RESIZE_SIZE - 1,
+          'x2': RESIZE_SIZE - 1,
+          'y2': RESIZE_SIZE * 2 / 3,
+        },
+        this.resizeGroup_ as AnyDuringMigration);
   }
 
   /** Add the delete icon to the DOM */
   private addDeleteDom_() {
     this.deleteGroup_ = dom.createSvgElement(
-      Svg.G, { 'class': 'blocklyCommentDeleteIcon' }, this.svgGroup_);
+        Svg.G, {'class': 'blocklyCommentDeleteIcon'}, this.svgGroup_);
     // AnyDuringMigration because:  Argument of type 'SVGGElement | null' is not
     // assignable to parameter of type 'Element | undefined'.
     this.deleteIconBorder_ = dom.createSvgElement(
-      Svg.CIRCLE,
-      { 'class': 'blocklyDeleteIconShape', 'r': '7', 'cx': '7.5', 'cy': '7.5' },
-      this.deleteGroup_ as AnyDuringMigration);
+        Svg.CIRCLE,
+        {'class': 'blocklyDeleteIconShape', 'r': '7', 'cx': '7.5', 'cy': '7.5'},
+        this.deleteGroup_ as AnyDuringMigration);
     // x icon.
     // AnyDuringMigration because:  Argument of type 'SVGGElement | null' is not
     // assignable to parameter of type 'Element | undefined'.
     dom.createSvgElement(
-      Svg.LINE, {
-      'x1': '5',
-      'y1': '10',
-      'x2': '10',
-      'y2': '5',
-      'stroke': '#fff',
-      'stroke-width': '2',
-    },
-      this.deleteGroup_ as AnyDuringMigration);
+        Svg.LINE, {
+          'x1': '5',
+          'y1': '10',
+          'x2': '10',
+          'y2': '5',
+          'stroke': '#fff',
+          'stroke-width': '2',
+        },
+        this.deleteGroup_ as AnyDuringMigration);
     // AnyDuringMigration because:  Argument of type 'SVGGElement | null' is not
     // assignable to parameter of type 'Element | undefined'.
     dom.createSvgElement(
-      Svg.LINE, {
-      'x1': '5',
-      'y1': '5',
-      'x2': '10',
-      'y2': '10',
-      'stroke': '#fff',
-      'stroke-width': '2',
-    },
-      this.deleteGroup_ as AnyDuringMigration);
+        Svg.LINE, {
+          'x1': '5',
+          'y1': '5',
+          'x2': '10',
+          'y2': '10',
+          'stroke': '#fff',
+          'stroke-width': '2',
+        },
+        this.deleteGroup_ as AnyDuringMigration);
   }
 
   /**
@@ -776,14 +776,14 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     }
     // Left-click (or middle click)
     this.workspace.startDrag(
-      e,
-      new Coordinate(
-        this.workspace.RTL ? -this.width_ : this.width_, this.height_));
+        e,
+        new Coordinate(
+            this.workspace.RTL ? -this.width_ : this.width_, this.height_));
 
     this.onMouseUpWrapper_ = browserEvents.conditionalBind(
-      document, 'mouseup', this, this.resizeMouseUp_);
+        document, 'mouseup', this, this.resizeMouseUp_);
     this.onMouseMoveWrapper_ = browserEvents.conditionalBind(
-      document, 'mousemove', this, this.resizeMouseMove_);
+        document, 'mousemove', this, this.resizeMouseMove_);
     this.workspace.hideChaff();
     // This event has been handled.  No need to bubble up to the document.
     e.stopPropagation();
@@ -796,7 +796,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
   private deleteMouseDown_(e: Event) {
     // Highlight the delete icon.
     dom.addClass(
-      this.deleteIconBorder_ as Element, 'blocklyDeleteIconHighlighted');
+        this.deleteIconBorder_ as Element, 'blocklyDeleteIconHighlighted');
     // This event has been handled.  No need to bubble up to the document.
     e.stopPropagation();
   }
@@ -808,7 +808,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
   private deleteMouseOut_(_e: Event) {
     // Restore highlight on the delete icon.
     dom.removeClass(
-      this.deleteIconBorder_ as Element, 'blocklyDeleteIconHighlighted');
+        this.deleteIconBorder_ as Element, 'blocklyDeleteIconHighlighted');
   }
 
   /**
@@ -865,9 +865,9 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     // AnyDuringMigration because:  Argument of type 'number' is not assignable
     // to parameter of type 'string'.
     this.foreignObject_!.setAttribute(
-      'width', size.width as AnyDuringMigration);
+        'width', size.width as AnyDuringMigration);
     this.foreignObject_!.setAttribute(
-      'height', (size.height - topOffset).toString());
+        'height', (size.height - topOffset).toString());
     if (this.RTL) {
       this.foreignObject_!.setAttribute('x', (-size.width).toString());
     }
@@ -900,7 +900,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     // AnyDuringMigration because:  Argument of type 'number' is not assignable
     // to parameter of type 'string'.
     this.svgHandleTarget_!.setAttribute(
-      'height', WorkspaceCommentSvg.TOP_OFFSET as AnyDuringMigration);
+        'height', WorkspaceCommentSvg.TOP_OFFSET as AnyDuringMigration);
     if (this.RTL) {
       this.svgRect_.setAttribute('transform', 'scale(-1 1)');
       this.svgRectTarget_!.setAttribute('transform', 'scale(-1 1)');
@@ -910,21 +910,21 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
       if (this.RTL) {
         // Mirror the resize group.
         this.resizeGroup_.setAttribute(
-          'transform',
-          'translate(' + (-width + RESIZE_SIZE) + ',' +
-          (height - RESIZE_SIZE) + ') scale(-1 1)');
+            'transform',
+            'translate(' + (-width + RESIZE_SIZE) + ',' +
+                (height - RESIZE_SIZE) + ') scale(-1 1)');
         this.deleteGroup_!.setAttribute(
-          'transform',
-          'translate(' + (-width + RESIZE_SIZE) + ',' + -RESIZE_SIZE +
-          ') scale(-1 1)');
+            'transform',
+            'translate(' + (-width + RESIZE_SIZE) + ',' + -RESIZE_SIZE +
+                ') scale(-1 1)');
       } else {
         this.resizeGroup_.setAttribute(
-          'transform',
-          'translate(' + (width - RESIZE_SIZE) + ',' +
-          (height - RESIZE_SIZE) + ')');
+            'transform',
+            'translate(' + (width - RESIZE_SIZE) + ',' +
+                (height - RESIZE_SIZE) + ')');
         this.deleteGroup_!.setAttribute(
-          'transform',
-          'translate(' + (width - RESIZE_SIZE) + ',' + -RESIZE_SIZE + ')');
+            'transform',
+            'translate(' + (width - RESIZE_SIZE) + ',' + -RESIZE_SIZE + ')');
       }
     }
 
@@ -946,18 +946,18 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     const comment = this;
     this.focused_ = true;
     // Defer CSS changes.
-    setTimeout(function () {
+    setTimeout(function() {
       if (comment.disposed_) {
         return;
       }
       comment.textarea_!.focus();
       comment.addFocus();
       dom.addClass(
-        comment.svgRectTarget_ as SVGRectElement,
-        'blocklyCommentTargetFocused');
+          comment.svgRectTarget_ as SVGRectElement,
+          'blocklyCommentTargetFocused');
       dom.addClass(
-        comment.svgHandleTarget_ as SVGRectElement,
-        'blocklyCommentHandleTargetFocused');
+          comment.svgHandleTarget_ as SVGRectElement,
+          'blocklyCommentHandleTargetFocused');
     }, 0);
   }
 
@@ -966,7 +966,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     const comment = this;
     this.focused_ = false;
     // Defer CSS changes.
-    setTimeout(function () {
+    setTimeout(function() {
       if (comment.disposed_) {
         return;
       }
@@ -974,11 +974,11 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
       comment.textarea_!.blur();
       comment.removeFocus();
       dom.removeClass(
-        comment.svgRectTarget_ as SVGRectElement,
-        'blocklyCommentTargetFocused');
+          comment.svgRectTarget_ as SVGRectElement,
+          'blocklyCommentTargetFocused');
       dom.removeClass(
-        comment.svgHandleTarget_ as SVGRectElement,
-        'blocklyCommentHandleTargetFocused');
+          comment.svgHandleTarget_ as SVGRectElement,
+          'blocklyCommentHandleTargetFocused');
     }, 0);
   }
 
@@ -991,15 +991,15 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * @return The created workspace comment.
    */
   static fromXmlRendered(
-    xmlComment: Element, workspace: WorkspaceSvg,
-    opt_wsWidth?: number): WorkspaceCommentSvg {
+      xmlComment: Element, workspace: WorkspaceSvg,
+      opt_wsWidth?: number): WorkspaceCommentSvg {
     eventUtils.disable();
     let comment;
     try {
       const info = WorkspaceComment.parseAttributes(xmlComment);
 
       comment = new WorkspaceCommentSvg(
-        workspace, info.content, info.h, info.w, info.id);
+          workspace, info.content, info.h, info.w, info.id);
       if (workspace.rendered) {
         comment.initSvg(true);
         comment.render();

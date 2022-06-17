@@ -13,12 +13,12 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { Block } from '../block.js';
+import {Block} from '../block.js';
 import * as registry from '../registry.js';
 import * as blocks from '../serialization/blocks.js';
 import * as Xml from '../xml.js';
 
-import { BlockBase } from './events_block_base.js';
+import {BlockBase} from './events_block_base.js';
 import * as eventUtils from './utils.js';
 
 
@@ -54,7 +54,7 @@ export class BlockCreate extends BlockBase {
     this.ids = eventUtils.getDescendantIds(opt_block);
 
     /** JSON representation of the block that was just created. */
-    this.json = blocks.save(opt_block, { addCoordinates: true }) as blocks.State;
+    this.json = blocks.save(opt_block, {addCoordinates: true}) as blocks.State;
   }
 
   /**

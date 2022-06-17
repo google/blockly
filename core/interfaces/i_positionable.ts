@@ -21,7 +21,7 @@ import '../metrics_manager';
 // Unused import preserved for side-effects. Remove if unneeded.
 import '../utils/rect';
 
-import { IComponent } from './i_component.js';
+import {IComponent} from './i_component.js';
 
 
 /**

@@ -12,18 +12,18 @@
  * @namespace Blockly.ContextMenuItems
  */
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from './block_svg.js';
+import {BlockSvg} from './block_svg.js';
 import * as clipboard from './clipboard.js';
-import { ContextMenuRegistry, RegistryItem, Scope } from './contextmenu_registry.js';
+import {ContextMenuRegistry, RegistryItem, Scope} from './contextmenu_registry.js';
 import * as dialog from './dialog.js';
 import * as Events from './events/events.js';
 import * as eventUtils from './events/utils.js';
-import { inputTypes } from './input_types.js';
-import { Msg } from './msg.js';
+import {inputTypes} from './input_types.js';
+import {Msg} from './msg.js';
 import * as idGenerator from './utils/idgenerator.js';
 import * as userAgent from './utils/useragent.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**
@@ -275,7 +275,7 @@ export function registerDeleteAll() {
         return Msg['DELETE_BLOCK'];
       } else {
         return Msg['DELETE_X_BLOCKS'].replace(
-          '%1', String(deletableBlocksLength));
+            '%1', String(deletableBlocksLength));
       }
     },
     preconditionFn(scope: Scope) {
@@ -296,13 +296,13 @@ export function registerDeleteAll() {
         deleteNext_(deletableBlocks, eventGroup);
       } else {
         dialog.confirm(
-          Msg['DELETE_ALL_BLOCKS'].replace(
-            '%1', String(deletableBlocks.length)),
-          function (ok) {
-            if (ok) {
-              deleteNext_(deletableBlocks, eventGroup);
-            }
-          });
+            Msg['DELETE_ALL_BLOCKS'].replace(
+                '%1', String(deletableBlocks.length)),
+            function(ok) {
+              if (ok) {
+                deleteNext_(deletableBlocks, eventGroup);
+              }
+            });
       }
     },
     scopeType: ContextMenuRegistry.ScopeType.WORKSPACE,
@@ -370,8 +370,8 @@ export function registerComment() {
       const block = scope.block;
       // IE doesn't support necessary features for comment editing.
       if (!userAgent.IE && !block!.isInFlyout &&
-        block!.workspace.options.comments && !block!.isCollapsed() &&
-        block!.isEditable()) {
+          block!.workspace.options.comments && !block!.isCollapsed() &&
+          block!.isEditable()) {
         return 'enabled';
       }
       return 'hidden';
@@ -399,7 +399,7 @@ export function registerInline() {
   const inlineOption: RegistryItem = {
     displayText(scope: Scope) {
       return scope.block!.getInputsInline() ? Msg['EXTERNAL_INPUTS'] :
-        Msg['INLINE_INPUTS'];
+                                              Msg['INLINE_INPUTS'];
     },
     preconditionFn(scope: Scope) {
       const block = scope.block;
@@ -408,7 +408,7 @@ export function registerInline() {
           // Only display this option if there are two value or dummy inputs
           // next to each other.
           if (block!.inputList[i - 1].type !== inputTypes.STATEMENT &&
-            block!.inputList[i].type !== inputTypes.STATEMENT) {
+              block!.inputList[i].type !== inputTypes.STATEMENT) {
             return 'enabled';
           }
         }
@@ -433,12 +433,12 @@ export function registerCollapseExpandBlock() {
   const collapseExpandOption: RegistryItem = {
     displayText(scope: Scope) {
       return scope.block!.isCollapsed() ? Msg['EXPAND_BLOCK'] :
-        Msg['COLLAPSE_BLOCK'];
+                                          Msg['COLLAPSE_BLOCK'];
     },
     preconditionFn(scope: Scope) {
       const block = scope.block;
       if (!block!.isInFlyout && block!.isMovable() &&
-        block!.workspace.options.collapse) {
+          block!.workspace.options.collapse) {
         return 'enabled';
       }
       return 'hidden';
@@ -461,12 +461,12 @@ export function registerDisable() {
   const disableOption: RegistryItem = {
     displayText(scope: Scope) {
       return scope.block!.isEnabled() ? Msg['DISABLE_BLOCK'] :
-        Msg['ENABLE_BLOCK'];
+                                        Msg['ENABLE_BLOCK'];
     },
     preconditionFn(scope: Scope) {
       const block = scope.block;
       if (!block!.isInFlyout && block!.workspace.options.disable &&
-        block!.isEditable()) {
+          block!.isEditable()) {
         if (block!.getInheritedDisabled()) {
           return 'disabled';
         }
@@ -508,8 +508,8 @@ export function registerDelete() {
         descendantCount -= nextBlock.getDescendants(false).length;
       }
       return descendantCount === 1 ?
-        Msg['DELETE_BLOCK'] :
-        Msg['DELETE_X_BLOCKS'].replace('%1', String(descendantCount));
+          Msg['DELETE_BLOCK'] :
+          Msg['DELETE_X_BLOCKS'].replace('%1', String(descendantCount));
     },
     preconditionFn(scope: Scope) {
       if (!scope.block!.isInFlyout && scope.block!.isDeletable()) {
@@ -541,7 +541,7 @@ export function registerHelp() {
     preconditionFn(scope: Scope) {
       const block = scope.block;
       const url = typeof block!.helpUrl === 'function' ? block!.helpUrl() :
-        block!.helpUrl;
+                                                         block!.helpUrl;
       if (url) {
         return 'enabled';
       }

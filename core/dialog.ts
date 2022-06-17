@@ -16,22 +16,22 @@
  * @namespace Blockly.dialog
  */
 
-let alertImplementation = function (
-  message: AnyDuringMigration, opt_callback: AnyDuringMigration) {
+let alertImplementation = function(
+    message: AnyDuringMigration, opt_callback: AnyDuringMigration) {
   window.alert(message);
   if (opt_callback) {
     opt_callback();
   }
 };
 
-let confirmImplementation = function (
-  message: AnyDuringMigration, callback: AnyDuringMigration) {
+let confirmImplementation = function(
+    message: AnyDuringMigration, callback: AnyDuringMigration) {
   callback(window.confirm(message));
 };
 
-let promptImplementation = function (
-  message: AnyDuringMigration, defaultValue: AnyDuringMigration,
-  callback: AnyDuringMigration) {
+let promptImplementation = function(
+    message: AnyDuringMigration, defaultValue: AnyDuringMigration,
+    callback: AnyDuringMigration) {
   callback(window.prompt(message, defaultValue));
 };
 
@@ -43,7 +43,7 @@ let promptImplementation = function (
  * @alias Blockly.dialog.alert
  */
 export function alert(
-  message: string, opt_callback?: () => AnyDuringMigration) {
+    message: string, opt_callback?: () => AnyDuringMigration) {
   alertImplementation(message, opt_callback);
 }
 
@@ -54,8 +54,8 @@ export function alert(
  * @alias Blockly.dialog.setAlert
  */
 export function setAlert(
-  alertFunction: (p1: string, p2?: () => AnyDuringMigration) =>
-    AnyDuringMigration) {
+    alertFunction: (p1: string, p2?: () => AnyDuringMigration) =>
+        AnyDuringMigration) {
   alertImplementation = alertFunction;
 }
 
@@ -67,7 +67,7 @@ export function setAlert(
  * @alias Blockly.dialog.confirm
  */
 export function confirm(
-  message: string, callback: (p1: boolean) => AnyDuringMigration) {
+    message: string, callback: (p1: boolean) => AnyDuringMigration) {
   confirmImplementation(message, callback);
 }
 
@@ -78,8 +78,8 @@ export function confirm(
  * @alias Blockly.dialog.setConfirm
  */
 export function setConfirm(
-  confirmFunction: (p1: string, p2: (p1: boolean) => AnyDuringMigration) =>
-    AnyDuringMigration) {
+    confirmFunction: (p1: string, p2: (p1: boolean) => AnyDuringMigration) =>
+        AnyDuringMigration) {
   confirmImplementation = confirmFunction;
 }
 
@@ -94,8 +94,8 @@ export function setConfirm(
  * @alias Blockly.dialog.prompt
  */
 export function prompt(
-  message: string, defaultValue: string,
-  callback: (p1: string | null) => AnyDuringMigration) {
+    message: string, defaultValue: string,
+    callback: (p1: string|null) => AnyDuringMigration) {
   promptImplementation(message, defaultValue, callback);
 }
 
@@ -106,8 +106,8 @@ export function prompt(
  * @alias Blockly.dialog.setPrompt
  */
 export function setPrompt(
-  promptFunction:
-    (p1: string, p2: string, p3: (p1: string | null) => AnyDuringMigration) =>
-      AnyDuringMigration) {
+    promptFunction:
+        (p1: string, p2: string, p3: (p1: string|null) => AnyDuringMigration) =>
+            AnyDuringMigration) {
   promptImplementation = promptFunction;
 }

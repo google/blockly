@@ -18,7 +18,7 @@
 // Unused import preserved for side-effects. Remove if unneeded.
 import './i_toolbox_item';
 
-import { ISelectableToolboxItem } from './i_selectable_toolbox_item.js';
+import {ISelectableToolboxItem} from './i_selectable_toolbox_item.js';
 
 
 /**

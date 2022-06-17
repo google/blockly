@@ -17,12 +17,12 @@
  * @class
  */
 
-import { BlockSvg } from './block_svg.js';
-import { DragTarget } from './drag_target.js';
+import {BlockSvg} from './block_svg.js';
+import {DragTarget} from './drag_target.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IDeleteArea } from './interfaces/i_delete_area.js';
+import {IDeleteArea} from './interfaces/i_delete_area.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IDraggable } from './interfaces/i_draggable.js';
+import {IDraggable} from './interfaces/i_draggable.js';
 
 
 /**

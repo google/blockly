@@ -18,23 +18,23 @@ import './metrics_manager';
 import './workspace';
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockDragSurfaceSvg } from './block_drag_surface.js';
+import {BlockDragSurfaceSvg} from './block_drag_surface.js';
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from './block_svg.js';
+import {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IBubble } from './interfaces/i_bubble.js';
-import { ContainerRegion } from './metrics_manager.js';
-import { Scrollbar } from './scrollbar.js';
+import {IBubble} from './interfaces/i_bubble.js';
+import {ContainerRegion} from './metrics_manager.js';
+import {Scrollbar} from './scrollbar.js';
 import * as Touch from './touch.js';
-import { Coordinate } from './utils/coordinate.js';
+import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import * as math from './utils/math.js';
-import { Size } from './utils/size.js';
-import { Svg } from './utils/svg.js';
+import {Size} from './utils/size.js';
+import {Svg} from './utils/svg.js';
 import * as userAgent from './utils/useragent.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**
@@ -64,10 +64,10 @@ export class Bubble implements IBubble {
   static ANCHOR_RADIUS = 8;
 
   /** Mouse up event data. */
-  private static onMouseUpWrapper_: browserEvents.Data | null = null;
+  private static onMouseUpWrapper_: browserEvents.Data|null = null;
 
   /** Mouse move event data. */
-  private static onMouseMoveWrapper_: browserEvents.Data | null = null;
+  private static onMouseMoveWrapper_: browserEvents.Data|null = null;
   workspace_: AnyDuringMigration;
   content_: AnyDuringMigration;
   shape_: AnyDuringMigration;
@@ -125,16 +125,16 @@ export class Bubble implements IBubble {
   private autoLayout_ = true;
 
   /** Method to call on resize of bubble. */
-  private resizeCallback_: (() => AnyDuringMigration) | null = null;
+  private resizeCallback_: (() => AnyDuringMigration)|null = null;
 
   /** Method to call on move of bubble. */
-  private moveCallback_: (() => AnyDuringMigration) | null = null;
+  private moveCallback_: (() => AnyDuringMigration)|null = null;
 
   /** Mouse down on bubbleBack_ event data. */
-  private onMouseDownBubbleWrapper_: browserEvents.Data | null = null;
+  private onMouseDownBubbleWrapper_: browserEvents.Data|null = null;
 
   /** Mouse down on resizeGroup_ event data. */
-  private onMouseDownResizeWrapper_: browserEvents.Data | null = null;
+  private onMouseDownResizeWrapper_: browserEvents.Data|null = null;
 
   /**
    * Describes whether this bubble has been disposed of (nodes and event
@@ -153,9 +153,9 @@ export class Bubble implements IBubble {
    * @struct
    */
   constructor(
-    workspace: WorkspaceSvg, content: SVGElement, shape: SVGElement,
-    anchorXY: Coordinate, bubbleWidth: number | null,
-    bubbleHeight: number | null) {
+      workspace: WorkspaceSvg, content: SVGElement, shape: SVGElement,
+      anchorXY: Coordinate, bubbleWidth: number|null,
+      bubbleHeight: number|null) {
     this.rendered_ = false;
     this.workspace_ = workspace;
     this.content_ = content;
@@ -169,7 +169,7 @@ export class Bubble implements IBubble {
 
     const canvas = workspace.getBubbleCanvas();
     canvas.appendChild(
-      this.createDom_(content, !!(bubbleWidth && bubbleHeight)));
+        this.createDom_(content, !!(bubbleWidth && bubbleHeight)));
 
     this.setAnchorLocation(anchorXY);
     if (!bubbleWidth || !bubbleHeight) {
@@ -208,9 +208,9 @@ export class Bubble implements IBubble {
         </g>
         */
     this.bubbleGroup_ = dom.createSvgElement(Svg.G, {});
-    let filter: { filter?: string } = {
+    let filter: {filter?: string} = {
       'filter': 'url(#' +
-        this.workspace_.getRenderer().getConstants().embossFilterId + ')',
+          this.workspace_.getRenderer().getConstants().embossFilterId + ')',
     };
     if (userAgent.JavaFx) {
       // Multiple reports that JavaFX can't handle filters.
@@ -220,44 +220,44 @@ export class Bubble implements IBubble {
     const bubbleEmboss = dom.createSvgElement(Svg.G, filter, this.bubbleGroup_);
     this.bubbleArrow_ = dom.createSvgElement(Svg.PATH, {}, bubbleEmboss);
     this.bubbleBack_ = dom.createSvgElement(
-      Svg.RECT, {
-      'class': 'blocklyDraggable',
-      'x': 0,
-      'y': 0,
-      'rx': Bubble.BORDER_WIDTH,
-      'ry': Bubble.BORDER_WIDTH,
-    },
-      bubbleEmboss);
+        Svg.RECT, {
+          'class': 'blocklyDraggable',
+          'x': 0,
+          'y': 0,
+          'rx': Bubble.BORDER_WIDTH,
+          'ry': Bubble.BORDER_WIDTH,
+        },
+        bubbleEmboss);
     if (hasResize) {
       this.resizeGroup_ = dom.createSvgElement(
-        Svg.G, {
-        'class': this.workspace_.RTL ? 'blocklyResizeSW' :
-          'blocklyResizeSE',
-      },
-        this.bubbleGroup_);
+          Svg.G, {
+            'class': this.workspace_.RTL ? 'blocklyResizeSW' :
+                                           'blocklyResizeSE',
+          },
+          this.bubbleGroup_);
       const resizeSize = 2 * Bubble.BORDER_WIDTH;
       dom.createSvgElement(
-        Svg.POLYGON,
-        { 'points': '0,x x,x x,0'.replace(/x/g, resizeSize.toString()) },
-        this.resizeGroup_);
+          Svg.POLYGON,
+          {'points': '0,x x,x x,0'.replace(/x/g, resizeSize.toString())},
+          this.resizeGroup_);
       dom.createSvgElement(
-        Svg.LINE, {
-        'class': 'blocklyResizeLine',
-        'x1': resizeSize / 3,
-        'y1': resizeSize - 1,
-        'x2': resizeSize - 1,
-        'y2': resizeSize / 3,
-      },
-        this.resizeGroup_);
+          Svg.LINE, {
+            'class': 'blocklyResizeLine',
+            'x1': resizeSize / 3,
+            'y1': resizeSize - 1,
+            'x2': resizeSize - 1,
+            'y2': resizeSize / 3,
+          },
+          this.resizeGroup_);
       dom.createSvgElement(
-        Svg.LINE, {
-        'class': 'blocklyResizeLine',
-        'x1': resizeSize * 2 / 3,
-        'y1': resizeSize - 1,
-        'x2': resizeSize - 1,
-        'y2': resizeSize * 2 / 3,
-      },
-        this.resizeGroup_);
+          Svg.LINE, {
+            'class': 'blocklyResizeLine',
+            'x1': resizeSize * 2 / 3,
+            'y1': resizeSize - 1,
+            'x2': resizeSize - 1,
+            'y2': resizeSize * 2 / 3,
+          },
+          this.resizeGroup_);
     } else {
       // AnyDuringMigration because:  Type 'null' is not assignable to type
       // 'SVGGElement'.
@@ -266,10 +266,10 @@ export class Bubble implements IBubble {
 
     if (!this.workspace_.options.readOnly) {
       this.onMouseDownBubbleWrapper_ = browserEvents.conditionalBind(
-        this.bubbleBack_, 'mousedown', this, this.bubbleMouseDown_);
+          this.bubbleBack_, 'mousedown', this, this.bubbleMouseDown_);
       if (this.resizeGroup_) {
         this.onMouseDownResizeWrapper_ = browserEvents.conditionalBind(
-          this.resizeGroup_, 'mousedown', this, this.resizeMouseDown_);
+            this.resizeGroup_, 'mousedown', this, this.resizeMouseDown_);
       }
     }
     this.bubbleGroup_.appendChild(content);
@@ -340,14 +340,14 @@ export class Bubble implements IBubble {
     }
     // Left-click (or middle click)
     this.workspace_.startDrag(
-      e,
-      new Coordinate(
-        this.workspace_.RTL ? -this.width_ : this.width_, this.height_));
+        e,
+        new Coordinate(
+            this.workspace_.RTL ? -this.width_ : this.width_, this.height_));
 
     Bubble.onMouseUpWrapper_ = browserEvents.conditionalBind(
-      document, 'mouseup', this, Bubble.bubbleMouseUp_);
+        document, 'mouseup', this, Bubble.bubbleMouseUp_);
     Bubble.onMouseMoveWrapper_ = browserEvents.conditionalBind(
-      document, 'mousemove', this, this.resizeMouseMove_);
+        document, 'mousemove', this, this.resizeMouseMove_);
     this.workspace_.hideChaff();
     // This event has been handled.  No need to bubble up to the document.
     e.stopPropagation();
@@ -416,7 +416,7 @@ export class Bubble implements IBubble {
   private layoutBubble_() {
     // Get the metrics in workspace units.
     const viewMetrics =
-      this.workspace_.getMetricsManager().getViewMetrics(true);
+        this.workspace_.getMetricsManager().getViewMetrics(true);
 
     const optimalLeft = this.getOptimalRelativeLeft_(viewMetrics);
     const optimalTop = this.getOptimalRelativeTop_(viewMetrics);
@@ -425,29 +425,29 @@ export class Bubble implements IBubble {
     const topPosition = {
       x: optimalLeft,
       y: -this.height_ -
-        this.workspace_.getRenderer().getConstants().MIN_BLOCK_HEIGHT as
-        number,
+              this.workspace_.getRenderer().getConstants().MIN_BLOCK_HEIGHT as
+          number,
     };
-    const startPosition = { x: -this.width_ - 30, y: optimalTop };
-    const endPosition = { x: bbox.width, y: optimalTop };
-    const bottomPosition = { x: optimalLeft, y: bbox.height };
+    const startPosition = {x: -this.width_ - 30, y: optimalTop};
+    const endPosition = {x: bbox.width, y: optimalTop};
+    const bottomPosition = {x: optimalLeft, y: bbox.height};
 
     const closerPosition =
-      bbox.width < bbox.height ? endPosition : bottomPosition;
+        bbox.width < bbox.height ? endPosition : bottomPosition;
     const fartherPosition =
-      bbox.width < bbox.height ? bottomPosition : endPosition;
+        bbox.width < bbox.height ? bottomPosition : endPosition;
 
     const topPositionOverlap = this.getOverlap_(topPosition, viewMetrics);
     const startPositionOverlap = this.getOverlap_(startPosition, viewMetrics);
     const closerPositionOverlap = this.getOverlap_(closerPosition, viewMetrics);
     const fartherPositionOverlap =
-      this.getOverlap_(fartherPosition, viewMetrics);
+        this.getOverlap_(fartherPosition, viewMetrics);
 
     // Set the position to whichever position shows the most of the bubble,
     // with tiebreaks going in the order: top > start > close > far.
     const mostOverlap = Math.max(
-      topPositionOverlap, startPositionOverlap, closerPositionOverlap,
-      fartherPositionOverlap);
+        topPositionOverlap, startPositionOverlap, closerPositionOverlap,
+        fartherPositionOverlap);
     if (topPositionOverlap === mostOverlap) {
       this.relativeLeft_ = topPosition.x;
       this.relativeTop_ = topPosition.y;
@@ -480,12 +480,12 @@ export class Bubble implements IBubble {
    * @return The percentage of the bubble that is visible.
    */
   private getOverlap_(
-    relativeMin: { x: number, y: number },
-    viewMetrics: ContainerRegion): number {
+      relativeMin: {x: number, y: number},
+      viewMetrics: ContainerRegion): number {
     // The position of the top-left corner of the bubble in workspace units.
     const bubbleMin = {
       x: this.workspace_.RTL ? this.anchorXY_.x - relativeMin.x - this.width_ :
-        relativeMin.x + this.anchorXY_.x,
+                               relativeMin.x + this.anchorXY_.x,
       y: relativeMin.y + this.anchorXY_.y,
     };
     // The position of the bottom-right corner of the bubble in workspace units.
@@ -500,7 +500,7 @@ export class Bubble implements IBubble {
     // the calculation.
 
     // The position of the top-left corner of the workspace.
-    const workspaceMin = { x: viewMetrics.left, y: viewMetrics.top };
+    const workspaceMin = {x: viewMetrics.left, y: viewMetrics.top};
     // The position of the bottom-right corner of the workspace.
     const workspaceMax = {
       x: viewMetrics.left + viewMetrics.width,
@@ -508,13 +508,13 @@ export class Bubble implements IBubble {
     };
 
     const overlapWidth = Math.min(bubbleMax.x, workspaceMax.x) -
-      Math.max(bubbleMin.x, workspaceMin.x);
+        Math.max(bubbleMin.x, workspaceMin.x);
     const overlapHeight = Math.min(bubbleMax.y, workspaceMax.y) -
-      Math.max(bubbleMin.y, workspaceMin.y);
+        Math.max(bubbleMin.y, workspaceMin.y);
     return Math.max(
-      0,
-      Math.min(
-        1, overlapWidth * overlapHeight / (this.width_ * this.height_)));
+        0,
+        Math.min(
+            1, overlapWidth * overlapHeight / (this.width_ * this.height_)));
   }
 
   /**
@@ -541,7 +541,7 @@ export class Bubble implements IBubble {
 
       const workspaceRight = viewMetrics.left + viewMetrics.width;
       const workspaceLeft = viewMetrics.left +  // Thickness in workspace units.
-        Scrollbar.scrollbarThickness / this.workspace_.scale;
+          Scrollbar.scrollbarThickness / this.workspace_.scale;
 
       if (bubbleLeft < workspaceLeft) {
         // Slide the bubble right until it is onscreen.
@@ -556,8 +556,8 @@ export class Bubble implements IBubble {
 
       const workspaceLeft = viewMetrics.left;
       const workspaceRight = viewMetrics.left +
-        viewMetrics.width -  // Thickness in workspace units.
-        Scrollbar.scrollbarThickness / this.workspace_.scale;
+          viewMetrics.width -  // Thickness in workspace units.
+          Scrollbar.scrollbarThickness / this.workspace_.scale;
 
       if (bubbleLeft < workspaceLeft) {
         // Slide the bubble right until it is onscreen.
@@ -591,8 +591,8 @@ export class Bubble implements IBubble {
     const bubbleBottom = bubbleTop + this.height_;
     const workspaceTop = viewMetrics.top;
     const workspaceBottom = viewMetrics.top +
-      viewMetrics.height -  // Thickness in workspace units.
-      Scrollbar.scrollbarThickness / this.workspace_.scale;
+        viewMetrics.height -  // Thickness in workspace units.
+        Scrollbar.scrollbarThickness / this.workspace_.scale;
 
     const anchorY = this.anchorXY_.y;
     if (bubbleTop < workspaceTop) {
@@ -625,7 +625,7 @@ export class Bubble implements IBubble {
    */
   moveTo(x: number, y: number) {
     this.bubbleGroup_.setAttribute(
-      'transform', 'translate(' + x + ',' + y + ')');
+        'transform', 'translate(' + x + ',' + y + ')');
   }
 
   /**
@@ -669,14 +669,14 @@ export class Bubble implements IBubble {
         // Mirror the resize group.
         const resizeSize = 2 * Bubble.BORDER_WIDTH;
         this.resizeGroup_.setAttribute(
-          'transform',
-          'translate(' + resizeSize + ',' + (height - doubleBorderWidth) +
-          ') scale(-1 1)');
+            'transform',
+            'translate(' + resizeSize + ',' + (height - doubleBorderWidth) +
+                ') scale(-1 1)');
       } else {
         this.resizeGroup_.setAttribute(
-          'transform',
-          'translate(' + (width - doubleBorderWidth) + ',' +
-          (height - doubleBorderWidth) + ')');
+            'transform',
+            'translate(' + (width - doubleBorderWidth) + ',' +
+                (height - doubleBorderWidth) + ')');
       }
     }
     if (this.autoLayout_) {
@@ -727,7 +727,7 @@ export class Bubble implements IBubble {
       // Calculate the thickness of the base of the arrow.
       const bubbleSize = this.getBubbleSize();
       let thickness =
-        (bubbleSize.width + bubbleSize.height) / Bubble.ARROW_THICKNESS;
+          (bubbleSize.width + bubbleSize.height) / Bubble.ARROW_THICKNESS;
       thickness = Math.min(thickness, bubbleSize.width, bubbleSize.height) / 4;
 
       // Back the tip of the arrow off of the anchor.
@@ -751,11 +751,11 @@ export class Bubble implements IBubble {
 
       steps.push('M' + baseX1 + ',' + baseY1);
       steps.push(
-        'C' + (baseX1 + swirlRun) + ',' + (baseY1 + swirlRise) + ' ' +
-        relAnchorX + ',' + relAnchorY + ' ' + relAnchorX + ',' + relAnchorY);
+          'C' + (baseX1 + swirlRun) + ',' + (baseY1 + swirlRise) + ' ' +
+          relAnchorX + ',' + relAnchorY + ' ' + relAnchorX + ',' + relAnchorY);
       steps.push(
-        'C' + relAnchorX + ',' + relAnchorY + ' ' + (baseX2 + swirlRun) +
-        ',' + (baseY2 + swirlRise) + ' ' + baseX2 + ',' + baseY2);
+          'C' + relAnchorX + ',' + relAnchorY + ' ' + (baseX2 + swirlRun) +
+          ',' + (baseY2 + swirlRise) + ' ' + baseX2 + ',' + baseY2);
     }
     steps.push('z');
     this.bubbleArrow_.setAttribute('d', steps.join(' '));
@@ -812,10 +812,10 @@ export class Bubble implements IBubble {
    */
   getRelativeToSurfaceXY(): Coordinate {
     return new Coordinate(
-      this.workspace_.RTL ?
-        -this.relativeLeft_ + this.anchorXY_.x - this.width_ :
-        this.anchorXY_.x + this.relativeLeft_,
-      this.anchorXY_.y + this.relativeTop_);
+        this.workspace_.RTL ?
+            -this.relativeLeft_ + this.anchorXY_.x - this.width_ :
+            this.anchorXY_.x + this.relativeLeft_,
+        this.anchorXY_.y + this.relativeTop_);
   }
 
   /**
@@ -862,7 +862,7 @@ export class Bubble implements IBubble {
     const lines = text.split('\n');
     for (let i = 0; i < lines.length; i++) {
       const tspanElement = dom.createSvgElement(
-        Svg.TSPAN, { 'dy': '1em', 'x': Bubble.BORDER_WIDTH }, paragraph);
+          Svg.TSPAN, {'dy': '1em', 'x': Bubble.BORDER_WIDTH}, paragraph);
       const textNode = document.createTextNode(lines[i]);
       tspanElement.appendChild(textNode);
     }
@@ -877,11 +877,11 @@ export class Bubble implements IBubble {
    * @return The non editable bubble.
    */
   static createNonEditableBubble(
-    paragraphElement: SVGTextElement, block: BlockSvg,
-    iconXY: Coordinate): Bubble {
+      paragraphElement: SVGTextElement, block: BlockSvg,
+      iconXY: Coordinate): Bubble {
     const bubble = new Bubble(
-      (block.workspace), paragraphElement, block.pathObject.svgPath, (iconXY),
-      null, null);
+        (block.workspace), paragraphElement, block.pathObject.svgPath, (iconXY),
+        null, null);
     // Expose this bubble's block's ID on its top-level SVG group.
     bubble.setSvgId(block.id);
     if (block.RTL) {
@@ -889,11 +889,11 @@ export class Bubble implements IBubble {
       // This cannot be done until the bubble is rendered on screen.
       const maxWidth = paragraphElement.getBBox().width;
       for (let i = 0, textElement;
-        textElement = paragraphElement.childNodes[i] as SVGTSpanElement;
-        i++) {
+           textElement = paragraphElement.childNodes[i] as SVGTSpanElement;
+           i++) {
         textElement.setAttribute('text-anchor', 'end');
         textElement.setAttribute(
-          'x', (maxWidth + Bubble.BORDER_WIDTH).toString());
+            'x', (maxWidth + Bubble.BORDER_WIDTH).toString());
       }
     }
     return bubble;

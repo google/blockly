@@ -49,7 +49,7 @@ import * as blocklyString from './utils/string.js';
  * @alias Blockly.Tooltip.TipInfo
  */
 export type TipInfo =
-  string | { tooltip: AnyDuringMigration } | (() => TipInfo | string | Function);
+    string|{tooltip: AnyDuringMigration}|(() => TipInfo|string|Function);
 
 /**
  * A function that renders custom tooltip UI.
@@ -65,7 +65,7 @@ export type CustomTooltip = (p1: Element, p2: Element) => AnyDuringMigration;
  * this is defined, the function will be called instead of rendering the default
  * tooltip UI.
  */
-let customTooltip: CustomTooltip | undefined = undefined;
+let customTooltip: CustomTooltip|undefined = undefined;
 
 /**
  * Sets a custom function that will be called if present instead of the default
@@ -81,7 +81,7 @@ export function setCustomTooltip(customFn: CustomTooltip) {
  * Gets the custom tooltip function.
  * @returns The custom tooltip function, if defined.
  */
-export function getCustomTooltip(): CustomTooltip | undefined {
+export function getCustomTooltip(): CustomTooltip|undefined {
   return customTooltip;
 }
 
@@ -162,14 +162,14 @@ export const HOVER_MS = 750;
 export const MARGINS = 5;
 
 /** The HTML container.  Set once by createDom. */
-let containerDiv: HTMLDivElement | null = null;
+let containerDiv: HTMLDivElement|null = null;
 
 /**
  * Returns the HTML tooltip container.
  * @returns The HTML tooltip container.
  * @alias Blockly.Tooltip.getDiv
  */
-export function getDiv(): HTMLDivElement | null {
+export function getDiv(): HTMLDivElement|null {
   return containerDiv;
 }
 
@@ -179,7 +179,7 @@ export function getDiv(): HTMLDivElement | null {
  * @return The tooltip text of the element.
  * @alias Blockly.Tooltip.getTooltipOfObject
  */
-export function getTooltipOfObject(object: AnyDuringMigration | null): string {
+export function getTooltipOfObject(object: AnyDuringMigration|null): string {
   const obj = getTargetObject(object);
   if (obj) {
     let tooltip = obj.tooltip;
@@ -200,11 +200,11 @@ export function getTooltipOfObject(object: AnyDuringMigration | null): string {
  * @param obj The object are trying to find the target tooltip object of.
  * @return The target tooltip object.
  */
-function getTargetObject(obj: object | null): { tooltip: AnyDuringMigration } | null {
+function getTargetObject(obj: object|null): {tooltip: AnyDuringMigration}|null {
   while (obj && (obj as any).tooltip) {
     if (typeof (obj as any).tooltip === 'string' ||
-      typeof (obj as any).tooltip === 'function') {
-      return obj as { tooltip: string | (() => string) };
+        typeof (obj as any).tooltip === 'function') {
+      return obj as {tooltip: string | (() => string)};
     }
     obj = (obj as any).tooltip;
   }
@@ -235,9 +235,9 @@ export function createDom() {
 export function bindMouseEvents(element: Element) {
   // TODO (#6097): Don't stash wrapper info on the DOM.
   (element as AnyDuringMigration).mouseOverWrapper_ =
-    browserEvents.bind(element, 'mouseover', null, onMouseOver);
+      browserEvents.bind(element, 'mouseover', null, onMouseOver);
   (element as AnyDuringMigration).mouseOutWrapper_ =
-    browserEvents.bind(element, 'mouseout', null, onMouseOut);
+      browserEvents.bind(element, 'mouseout', null, onMouseOut);
 
   // Don't use bindEvent_ for mousemove since that would create a
   // corresponding touch handler, even though this only makes sense in the
@@ -295,7 +295,7 @@ function onMouseOut(_e: Event) {
   // a mouseOut followed instantly by a mouseOver.  Fork off the mouseOut
   // event and kill it if a mouseOver is received immediately.
   // This way the task only fully executes if mousing into the void.
-  mouseOutPid = setTimeout(function () {
+  mouseOutPid = setTimeout(function() {
     element = null;
     poisonedElement = null;
     hide();
@@ -420,7 +420,7 @@ function renderDefaultContent() {
  * @param rtl True if the tooltip should be in right-to-left layout.
  * @returns Coordinates at which the tooltip div should be placed.
  */
-function getPosition(rtl: boolean): { x: number, y: number } {
+function getPosition(rtl: boolean): {x: number, y: number} {
   // Position the tooltip just below the cursor.
   const windowWidth = document.documentElement.clientWidth;
   const windowHeight = document.documentElement.clientHeight;
@@ -443,14 +443,14 @@ function getPosition(rtl: boolean): { x: number, y: number } {
     anchorX = Math.max(MARGINS - window.scrollX, anchorX);
   } else {
     if (anchorX + containerDiv!.offsetWidth >
-      windowWidth + window.scrollX - 2 * MARGINS) {
+        windowWidth + window.scrollX - 2 * MARGINS) {
       // Falling off the right edge of the screen;
       // clamp the tooltip on the edge.
       anchorX = windowWidth - containerDiv!.offsetWidth - 2 * MARGINS;
     }
   }
 
-  return { x: anchorX, y: anchorY };
+  return {x: anchorX, y: anchorY};
 }
 
 /** Create the tooltip and show it. */
@@ -475,7 +475,7 @@ function show() {
   containerDiv.style.display = 'block';
   visible = true;
 
-  const { x, y } = getPosition(rtl);
+  const {x, y} = getPosition(rtl);
   containerDiv.style.left = x + 'px';
   containerDiv.style.top = y + 'px';
 }

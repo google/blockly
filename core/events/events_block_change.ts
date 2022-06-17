@@ -13,13 +13,13 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { Block } from '../block.js';
+import {Block} from '../block.js';
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from '../block_svg.js';
+import {BlockSvg} from '../block_svg.js';
 import * as registry from '../registry.js';
 import * as Xml from '../xml.js';
 
-import { BlockBase } from './events_block_base.js';
+import {BlockBase} from './events_block_base.js';
 import * as eventUtils from './utils.js';
 
 
@@ -32,7 +32,7 @@ export class BlockChange extends BlockBase {
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   element!: string;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  name!: string | null;
+  name!: string|null;
   oldValue: AnyDuringMigration;
   newValue: AnyDuringMigration;
 
@@ -44,8 +44,8 @@ export class BlockChange extends BlockBase {
    * @param opt_newValue New value of element.
    */
   constructor(
-    opt_block?: Block, opt_element?: string, opt_name?: string | null,
-    opt_oldValue?: AnyDuringMigration, opt_newValue?: AnyDuringMigration) {
+      opt_block?: Block, opt_element?: string, opt_name?: string|null,
+      opt_oldValue?: AnyDuringMigration, opt_newValue?: AnyDuringMigration) {
     super(opt_block);
 
     /** Type of this event. */
@@ -143,7 +143,7 @@ export class BlockChange extends BlockBase {
           block.domToMutation(Xml.textToDom(value as string || '<mutation/>'));
         }
         eventUtils.fire(
-          new BlockChange(block, 'mutation', null, oldState, value));
+            new BlockChange(block, 'mutation', null, oldState, value));
         break;
       }
       default:

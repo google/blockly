@@ -19,20 +19,20 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from './block_svg.js';
+import {BlockSvg} from './block_svg.js';
 import * as dropDownDiv from './dropdowndiv.js';
-import { Field } from './field.js';
+import {Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
-import { Menu } from './menu.js';
-import { MenuItem } from './menuitem.js';
+import {Menu} from './menu.js';
+import {MenuItem} from './menuitem.js';
 import * as aria from './utils/aria.js';
-import { Coordinate } from './utils/coordinate.js';
+import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Sentinel } from './utils/sentinel.js';
+import {Sentinel} from './utils/sentinel.js';
 import * as utilsString from './utils/string.js';
-import { Svg } from './utils/svg.js';
+import {Svg} from './utils/svg.js';
 import * as userAgent from './utils/useragent.js';
 
 
@@ -52,21 +52,21 @@ export class FieldDropdown extends Field {
   static ARROW_CHAR: AnyDuringMigration;
 
   /** A reference to the currently selected menu item. */
-  private selectedMenuItem_: MenuItem | null = null;
+  private selectedMenuItem_: MenuItem|null = null;
 
   /** The dropdown menu. */
-  protected menu_: Menu | null = null;
+  protected menu_: Menu|null = null;
 
   /**
    * SVG image element if currently selected option is an image, or null.
    */
-  private imageElement_: SVGImageElement | null = null;
+  private imageElement_: SVGImageElement|null = null;
 
   /** Tspan based arrow element. */
-  private arrow_: SVGTSpanElement | null = null;
+  private arrow_: SVGTSpanElement|null = null;
 
   /** SVG based arrow element. */
-  private svgArrow_: SVGElement | null = null;
+  private svgArrow_: SVGElement|null = null;
 
   /**
    * Serializable fields are saved by the serializer, non-serializable fields
@@ -77,8 +77,8 @@ export class FieldDropdown extends Field {
   /** Mouse cursor style when over the hotspot that initiates the editor. */
   override CURSOR = 'default';
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  protected menuGenerator_!: AnyDuringMigration[][] |
-    ((this: FieldDropdown) => AnyDuringMigration[][]);
+  protected menuGenerator_!: AnyDuringMigration[][]|
+      ((this: FieldDropdown) => AnyDuringMigration[][]);
 
   /** A cache of the most recently generated options. */
   // AnyDuringMigration because:  Type 'null' is not assignable to type
@@ -88,14 +88,14 @@ export class FieldDropdown extends Field {
   /**
    * The prefix field label, of common words set after options are trimmed.
    */
-  override prefixField: string | null = null;
+  override prefixField: string|null = null;
 
   /**
    * The suffix field label, of common words set after options are trimmed.
    */
-  override suffixField: string | null = null;
+  override suffixField: string|null = null;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  private selectedOption_!: Array<string | ImageProperties>;
+  private selectedOption_!: Array<string|ImageProperties>;
   override clickTarget_: AnyDuringMigration;
 
   /**
@@ -115,8 +115,8 @@ export class FieldDropdown extends Field {
    * @throws {TypeError} If `menuGenerator` options are incorrectly structured.
    */
   constructor(
-    menuGenerator: AnyDuringMigration[][] | Function | Sentinel,
-    opt_validator?: Function, opt_config?: AnyDuringMigration) {
+      menuGenerator: AnyDuringMigration[][]|Function|Sentinel,
+      opt_validator?: Function, opt_config?: AnyDuringMigration) {
     super(Field.SKIP_SETUP);
 
 
@@ -134,7 +134,7 @@ export class FieldDropdown extends Field {
      * or a function which generates these options.
      */
     this.menuGenerator_ = menuGenerator as AnyDuringMigration[][] |
-      ((this: FieldDropdown) => AnyDuringMigration[][]);
+        ((this: FieldDropdown) => AnyDuringMigration[][]);
 
     this.trimOptions_();
 
@@ -207,21 +207,21 @@ export class FieldDropdown extends Field {
    */
   protected shouldAddBorderRect_(): boolean {
     return !this.getConstants()!.FIELD_DROPDOWN_NO_BORDER_RECT_SHADOW ||
-      this.getConstants()!.FIELD_DROPDOWN_NO_BORDER_RECT_SHADOW &&
-      !this.sourceBlock_.isShadow();
+        this.getConstants()!.FIELD_DROPDOWN_NO_BORDER_RECT_SHADOW &&
+        !this.sourceBlock_.isShadow();
   }
 
   /** Create a tspan based arrow. */
   protected createTextArrow_() {
     this.arrow_ = dom.createSvgElement(Svg.TSPAN, {}, this.textElement_);
     this.arrow_!.appendChild(document.createTextNode(
-      this.sourceBlock_.RTL ? FieldDropdown.ARROW_CHAR + ' ' :
-        ' ' + FieldDropdown.ARROW_CHAR));
+        this.sourceBlock_.RTL ? FieldDropdown.ARROW_CHAR + ' ' :
+                                ' ' + FieldDropdown.ARROW_CHAR));
     if (this.sourceBlock_.RTL) {
       // AnyDuringMigration because:  Argument of type 'SVGTSpanElement | null'
       // is not assignable to parameter of type 'Node'.
       this.textElement_.insertBefore(
-        this.arrow_ as AnyDuringMigration, this.textContent_);
+          this.arrow_ as AnyDuringMigration, this.textContent_);
     } else {
       // AnyDuringMigration because:  Argument of type 'SVGTSpanElement | null'
       // is not assignable to parameter of type 'Node'.
@@ -232,14 +232,14 @@ export class FieldDropdown extends Field {
   /** Create an SVG based arrow. */
   protected createSVGArrow_() {
     this.svgArrow_ = dom.createSvgElement(
-      Svg.IMAGE, {
-      'height': this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_SIZE + 'px',
-      'width': this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_SIZE + 'px',
-    },
-      this.fieldGroup_);
+        Svg.IMAGE, {
+          'height': this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_SIZE + 'px',
+          'width': this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_SIZE + 'px',
+        },
+        this.fieldGroup_);
     this.svgArrow_!.setAttributeNS(
-      dom.XLINK_NS, 'xlink:href',
-      this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_DATAURI);
+        dom.XLINK_NS, 'xlink:href',
+        this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_DATAURI);
   }
 
   /**
@@ -256,8 +256,8 @@ export class FieldDropdown extends Field {
       // 'Event'. AnyDuringMigration because:  Property 'clientX' does not exist
       // on type 'Event'.
       this.menu_!.openingCoords = new Coordinate(
-        (opt_e as AnyDuringMigration).clientX,
-        (opt_e as AnyDuringMigration).clientY);
+          (opt_e as AnyDuringMigration).clientX,
+          (opt_e as AnyDuringMigration).clientY);
     } else {
       this.menu_!.openingCoords = null;
     }
@@ -271,11 +271,11 @@ export class FieldDropdown extends Field {
 
     if (this.getConstants()!.FIELD_DROPDOWN_COLOURED_DIV) {
       const primaryColour = this.sourceBlock_.isShadow() ?
-        this.sourceBlock_.getParent()!.getColour() :
-        this.sourceBlock_.getColour();
+          this.sourceBlock_.getParent()!.getColour() :
+          this.sourceBlock_.getColour();
       const borderColour = this.sourceBlock_.isShadow() ?
-        (this.sourceBlock_.getParent() as BlockSvg).style.colourTertiary :
-        (this.sourceBlock_ as BlockSvg).style.colourTertiary;
+          (this.sourceBlock_.getParent() as BlockSvg).style.colourTertiary :
+          (this.sourceBlock_ as BlockSvg).style.colourTertiary;
       dropDownDiv.setColour(primaryColour, borderColour);
     }
 
@@ -405,7 +405,7 @@ export class FieldDropdown extends Field {
     }
 
     this.menuGenerator_ =
-      FieldDropdown.applyTrim_(options, prefixLength, suffixLength);
+        FieldDropdown.applyTrim_(options, prefixLength, suffixLength);
   }
 
   /**
@@ -430,7 +430,7 @@ export class FieldDropdown extends Field {
         // AnyDuringMigration because:  Property 'call' does not exist on type
         // 'any[][] | ((this: FieldDropdown) => any[][])'.
         this.generatedOptions_ =
-          (this.menuGenerator_ as AnyDuringMigration).call(this);
+            (this.menuGenerator_ as AnyDuringMigration).call(this);
         validateOptions(this.generatedOptions_);
       }
       return this.generatedOptions_;
@@ -444,7 +444,7 @@ export class FieldDropdown extends Field {
    * @return A valid language-neutral option, or null if invalid.
    */
   protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
-    string | null {
+      string|null {
     let isValueValid = false;
     const options = this.getOptions(true);
     for (let i = 0, option; option = options[i]; i++) {
@@ -457,9 +457,9 @@ export class FieldDropdown extends Field {
     if (!isValueValid) {
       if (this.sourceBlock_) {
         console.warn(
-          'Cannot set the dropdown\'s value to an unavailable option.' +
-          ' Block type: ' + this.sourceBlock_.type +
-          ', Field name: ' + this.name + ', Value: ' + opt_newValue);
+            'Cannot set the dropdown\'s value to an unavailable option.' +
+            ' Block type: ' + this.sourceBlock_.type +
+            ', Field name: ' + this.name + ', Value: ' + opt_newValue);
       }
       return null;
     }
@@ -526,15 +526,15 @@ export class FieldDropdown extends Field {
   private renderSelectedImage_(imageJson: ImageProperties) {
     this.imageElement_!.style.display = '';
     this.imageElement_!.setAttributeNS(
-      dom.XLINK_NS, 'xlink:href', imageJson.src);
+        dom.XLINK_NS, 'xlink:href', imageJson.src);
     // AnyDuringMigration because:  Argument of type 'number' is not assignable
     // to parameter of type 'string'.
     this.imageElement_!.setAttribute(
-      'height', imageJson.height as AnyDuringMigration);
+        'height', imageJson.height as AnyDuringMigration);
     // AnyDuringMigration because:  Argument of type 'number' is not assignable
     // to parameter of type 'string'.
     this.imageElement_!.setAttribute(
-      'width', imageJson.width as AnyDuringMigration);
+        'width', imageJson.width as AnyDuringMigration);
 
     const imageHeight = Number(imageJson.height);
     const imageWidth = Number(imageJson.width);
@@ -542,21 +542,21 @@ export class FieldDropdown extends Field {
     // Height and width include the border rect.
     const hasBorder = !!this.borderRect_;
     const height = Math.max(
-      hasBorder ? this.getConstants()!.FIELD_DROPDOWN_BORDER_RECT_HEIGHT : 0,
-      imageHeight + IMAGE_Y_PADDING);
+        hasBorder ? this.getConstants()!.FIELD_DROPDOWN_BORDER_RECT_HEIGHT : 0,
+        imageHeight + IMAGE_Y_PADDING);
     const xPadding =
-      hasBorder ? this.getConstants()!.FIELD_BORDER_RECT_X_PADDING : 0;
+        hasBorder ? this.getConstants()!.FIELD_BORDER_RECT_X_PADDING : 0;
     let arrowWidth = 0;
     if (this.svgArrow_) {
       arrowWidth = this.positionSVGArrow_(
-        imageWidth + xPadding,
-        height / 2 - this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_SIZE / 2);
+          imageWidth + xPadding,
+          height / 2 - this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_SIZE / 2);
     } else {
       arrowWidth = dom.getFastTextWidth(
-        this.arrow_ as SVGTSpanElement,
-        this.getConstants()!.FIELD_TEXT_FONTSIZE,
-        this.getConstants()!.FIELD_TEXT_FONTWEIGHT,
-        this.getConstants()!.FIELD_TEXT_FONTFAMILY);
+          this.arrow_ as SVGTSpanElement,
+          this.getConstants()!.FIELD_TEXT_FONTSIZE,
+          this.getConstants()!.FIELD_TEXT_FONTWEIGHT,
+          this.getConstants()!.FIELD_TEXT_FONTFAMILY);
     }
     this.size_.width = imageWidth + arrowWidth + xPadding * 2;
     this.size_.height = height;
@@ -570,7 +570,8 @@ export class FieldDropdown extends Field {
       this.textElement_.setAttribute('text-anchor', 'end');
       this.imageElement_!.setAttribute('x', xPadding.toString());
     }
-    this.imageElement_!.setAttribute('y', (height / 2 - imageHeight / 2).toString());
+    this.imageElement_!.setAttribute(
+        'y', (height / 2 - imageHeight / 2).toString());
 
     this.positionTextElement_(arrowX + xPadding, imageWidth + arrowWidth);
   }
@@ -585,19 +586,19 @@ export class FieldDropdown extends Field {
     // Height and width include the border rect.
     const hasBorder = !!this.borderRect_;
     const height = Math.max(
-      hasBorder ? this.getConstants()!.FIELD_DROPDOWN_BORDER_RECT_HEIGHT : 0,
-      this.getConstants()!.FIELD_TEXT_HEIGHT);
+        hasBorder ? this.getConstants()!.FIELD_DROPDOWN_BORDER_RECT_HEIGHT : 0,
+        this.getConstants()!.FIELD_TEXT_HEIGHT);
     const textWidth = dom.getFastTextWidth(
-      this.textElement_, this.getConstants()!.FIELD_TEXT_FONTSIZE,
-      this.getConstants()!.FIELD_TEXT_FONTWEIGHT,
-      this.getConstants()!.FIELD_TEXT_FONTFAMILY);
+        this.textElement_, this.getConstants()!.FIELD_TEXT_FONTSIZE,
+        this.getConstants()!.FIELD_TEXT_FONTWEIGHT,
+        this.getConstants()!.FIELD_TEXT_FONTFAMILY);
     const xPadding =
-      hasBorder ? this.getConstants()!.FIELD_BORDER_RECT_X_PADDING : 0;
+        hasBorder ? this.getConstants()!.FIELD_BORDER_RECT_X_PADDING : 0;
     let arrowWidth = 0;
     if (this.svgArrow_) {
       arrowWidth = this.positionSVGArrow_(
-        textWidth + xPadding,
-        height / 2 - this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_SIZE / 2);
+          textWidth + xPadding,
+          height / 2 - this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_SIZE / 2);
     }
     this.size_.width = textWidth + arrowWidth + xPadding * 2;
     this.size_.height = height;
@@ -617,12 +618,12 @@ export class FieldDropdown extends Field {
     }
     const hasBorder = !!this.borderRect_;
     const xPadding =
-      hasBorder ? this.getConstants()!.FIELD_BORDER_RECT_X_PADDING : 0;
+        hasBorder ? this.getConstants()!.FIELD_BORDER_RECT_X_PADDING : 0;
     const textPadding = this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_PADDING;
     const svgArrowSize = this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_SIZE;
     const arrowX = this.sourceBlock_.RTL ? xPadding : x + textPadding;
     this.svgArrow_.setAttribute(
-      'transform', 'translate(' + arrowX + ',' + y + ')');
+        'transform', 'translate(' + arrowX + ',' + y + ')');
     return svgArrowSize + textPadding;
   }
 
@@ -632,7 +633,7 @@ export class FieldDropdown extends Field {
    * image we return the image alt text.
    * @return Selected option text.
    */
-  protected override getText_(): string | null {
+  protected override getText_(): string|null {
     if (!this.selectedOption_) {
       return null;
     }
@@ -665,8 +666,8 @@ export class FieldDropdown extends Field {
    * @return A new array with all of the option text trimmed.
    */
   static applyTrim_(
-    options: AnyDuringMigration[][], prefixLength: number,
-    suffixLength: number): AnyDuringMigration[][] {
+      options: AnyDuringMigration[][], prefixLength: number,
+      suffixLength: number): AnyDuringMigration[][] {
     const newOptions = [];
     // Remove the prefix and suffix from the options.
     for (let i = 0; i < options.length; i++) {
@@ -717,23 +718,23 @@ function validateOptions(options: AnyDuringMigration) {
     if (!Array.isArray(tuple)) {
       foundError = true;
       console.error(
-        'Invalid option[' + i + ']: Each FieldDropdown option must be an ' +
-        'array. Found: ',
-        tuple);
+          'Invalid option[' + i + ']: Each FieldDropdown option must be an ' +
+              'array. Found: ',
+          tuple);
     } else if (typeof tuple[1] !== 'string') {
       foundError = true;
       console.error(
-        'Invalid option[' + i + ']: Each FieldDropdown option id must be ' +
-        'a string. Found ' + tuple[1] + ' in: ',
-        tuple);
+          'Invalid option[' + i + ']: Each FieldDropdown option id must be ' +
+              'a string. Found ' + tuple[1] + ' in: ',
+          tuple);
     } else if (
-      tuple[0] && typeof tuple[0] !== 'string' &&
-      typeof tuple[0].src !== 'string') {
+        tuple[0] && typeof tuple[0] !== 'string' &&
+        typeof tuple[0].src !== 'string') {
       foundError = true;
       console.error(
-        'Invalid option[' + i + ']: Each FieldDropdown option must have a ' +
-        'string label or image description. Found' + tuple[0] + ' in: ',
-        tuple);
+          'Invalid option[' + i + ']: Each FieldDropdown option must have a ' +
+              'string label or image description. Found' + tuple[0] + ' in: ',
+          tuple);
     }
   }
   if (foundError) {

@@ -12,7 +12,7 @@
  * @namespace Blockly.thrasos
  */
 
-import { RenderInfo } from './info.js';
-import { Renderer } from './renderer.js';
+import {RenderInfo} from './info.js';
+import {Renderer} from './renderer.js';
 
-export { Renderer, RenderInfo };
+export {Renderer, RenderInfo};

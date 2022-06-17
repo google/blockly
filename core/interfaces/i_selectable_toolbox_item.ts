@@ -18,7 +18,7 @@
 import '../utils/toolbox';
 
 /* eslint-disable-next-line no-unused-vars */
-import { IToolboxItem } from './i_toolbox_item.js';
+import {IToolboxItem} from './i_toolbox_item.js';
 
 
 /**

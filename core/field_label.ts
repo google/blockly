@@ -16,12 +16,12 @@
  * @class
  */
 
-import { Field } from './field.js';
+import {Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Sentinel } from './utils/sentinel.js';
+import {Sentinel} from './utils/sentinel.js';
 
 
 /**
@@ -33,7 +33,7 @@ export class FieldLabel extends Field {
   protected override DEFAULT_VALUE = '';
 
   /** The html class name to use for this field. */
-  private class_: string | null = null;
+  private class_: string|null = null;
 
   /**
    * Editable fields usually show some sort of UI indicating they are
@@ -54,8 +54,8 @@ export class FieldLabel extends Field {
    * for a list of properties this parameter supports.
    */
   constructor(
-    opt_value?: string | Sentinel, opt_class?: string,
-    opt_config?: AnyDuringMigration) {
+      opt_value?: string|Sentinel, opt_class?: string,
+      opt_config?: AnyDuringMigration) {
     super(Field.SKIP_SETUP);
 
     if (opt_value === Field.SKIP_SETUP) {
@@ -88,7 +88,7 @@ export class FieldLabel extends Field {
    * @return A valid string, or null if invalid.
    */
   protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
-    string | null {
+      string|null {
     if (opt_newValue === null || opt_newValue === undefined) {
       return null;
     }
@@ -99,7 +99,7 @@ export class FieldLabel extends Field {
    * Set the CSS class applied to the field's textElement_.
    * @param cssClass The new CSS class name, or null to remove.
    */
-  setClass(cssClass: string | null) {
+  setClass(cssClass: string|null) {
     if (this.textElement_) {
       // This check isn't necessary, but it's faster than letting removeClass
       // figure it out.

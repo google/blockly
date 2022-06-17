@@ -13,9 +13,9 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from '../../../block_svg.js';
-import { ConstantProvider } from '../../../renderers/common/constants.js';
-import { BottomRow as BaseBottomRow } from '../../../renderers/measurables/bottom_row.js';
+import {BlockSvg} from '../../../block_svg.js';
+import {ConstantProvider} from '../../../renderers/common/constants.js';
+import {BottomRow as BaseBottomRow} from '../../../renderers/measurables/bottom_row.js';
 
 
 /**
@@ -43,6 +43,6 @@ export class BottomRow extends BaseBottomRow {
   /** Render a round corner unless the block has an output connection. */
   override hasRightSquareCorner(block: BlockSvg) {
     return !!block.outputConnection && !block.statementInputCount &&
-      !block.nextConnection;
+        !block.nextConnection;
   }
 }

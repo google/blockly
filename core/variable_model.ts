@@ -18,7 +18,7 @@ import './events/events_var_create';
 import * as eventUtils from './events/utils.js';
 import * as idGenerator from './utils/idgenerator.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Workspace } from './workspace.js';
+import {Workspace} from './workspace.js';
 
 
 /**
@@ -41,8 +41,8 @@ export class VariableModel {
    * @param opt_id The unique ID of the variable. This will default to a UUID.
    */
   constructor(
-    public workspace: Workspace, public name: string, opt_type?: string,
-    opt_id?: string) {
+      public workspace: Workspace, public name: string, opt_type?: string,
+      opt_id?: string) {
     /**
      * The type of the variable, such as 'int' or 'sound_effect'. This may be
      * used to build a list of variables of a specific type. By default this is
@@ -74,6 +74,6 @@ export class VariableModel {
    *     greater.
    */
   static compareByName(var1: VariableModel, var2: VariableModel): number {
-    return var1.name.localeCompare(var2.name, undefined, { sensitivity: 'base' });
+    return var1.name.localeCompare(var2.name, undefined, {sensitivity: 'base'});
   }
 }

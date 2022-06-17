@@ -14,23 +14,23 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { IAutoHideable } from './interfaces/i_autohideable.js';
+import {IAutoHideable} from './interfaces/i_autohideable.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IComponent } from './interfaces/i_component.js';
+import {IComponent} from './interfaces/i_component.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IDeleteArea } from './interfaces/i_delete_area.js';
+import {IDeleteArea} from './interfaces/i_delete_area.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IDragTarget } from './interfaces/i_drag_target.js';
+import {IDragTarget} from './interfaces/i_drag_target.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IPositionable } from './interfaces/i_positionable.js';
+import {IPositionable} from './interfaces/i_positionable.js';
 import * as arrayUtils from './utils/array.js';
 
 
 class Capability<T> {
-  static POSITIONABLE = new Capability < IPositionable > ('positionable');
-  static DRAG_TARGET = new Capability < IDragTarget > ('drag_target');
-  static DELETE_AREA = new Capability < IDeleteArea > ('delete_area');
-  static AUTOHIDEABLE = new Capability < IAutoHideable > ('autohideable');
+  static POSITIONABLE = new Capability<IPositionable>('positionable');
+  static DRAG_TARGET = new Capability<IDragTarget>('drag_target');
+  static DELETE_AREA = new Capability<IDeleteArea>('delete_area');
+  static AUTOHIDEABLE = new Capability<IAutoHideable>('autohideable');
   private readonly name_: string;
   /** @param name The name of the component capability. */
   constructor(name: string) {
@@ -54,8 +54,8 @@ export class ComponentManager {
   static Capability = Capability;
 
   // static Capability: AnyDuringMigration;
-  private readonly componentData_: { [key: string]: ComponentDatum };
-  private readonly capabilityToComponentIds_: { [key: string]: string[] };
+  private readonly componentData_: {[key: string]: ComponentDatum};
+  private readonly capabilityToComponentIds_: {[key: string]: string[]};
 
   /** Creates a new ComponentManager instance. */
   constructor() {
@@ -79,8 +79,8 @@ export class ComponentManager {
     const id = componentInfo.component.id;
     if (!opt_allowOverrides && this.componentData_[id]) {
       throw Error(
-        'Plugin "' + id + '" with capabilities "' +
-        this.componentData_[id].capabilities + '" already added.');
+          'Plugin "' + id + '" with capabilities "' +
+          this.componentData_[id].capabilities + '" already added.');
     }
     this.componentData_[id] = componentInfo;
     const stringCapabilities = [];
@@ -117,15 +117,15 @@ export class ComponentManager {
    * @param id The ID of the component to add the capability to.
    * @param capability The capability to add.
    */
-  addCapability<T>(id: string, capability: string | Capability<T>) {
+  addCapability<T>(id: string, capability: string|Capability<T>) {
     if (!this.getComponent(id)) {
       throw Error(
-        'Cannot add capability, "' + capability + '". Plugin "' + id +
-        '" has not been added to the ComponentManager');
+          'Cannot add capability, "' + capability + '". Plugin "' + id +
+          '" has not been added to the ComponentManager');
     }
     if (this.hasCapability(id, capability)) {
       console.warn(
-        'Plugin "' + id + 'already has capability "' + capability + '"');
+          'Plugin "' + id + 'already has capability "' + capability + '"');
       return;
     }
     capability = String(capability).toLowerCase();
@@ -138,16 +138,16 @@ export class ComponentManager {
    * @param id The ID of the component to remove the capability from.
    * @param capability The capability to remove.
    */
-  removeCapability<T>(id: string, capability: string | Capability<T>) {
+  removeCapability<T>(id: string, capability: string|Capability<T>) {
     if (!this.getComponent(id)) {
       throw Error(
-        'Cannot remove capability, "' + capability + '". Plugin "' + id +
-        '" has not been added to the ComponentManager');
+          'Cannot remove capability, "' + capability + '". Plugin "' + id +
+          '" has not been added to the ComponentManager');
     }
     if (!this.hasCapability(id, capability)) {
       console.warn(
-        'Plugin "' + id + 'doesn\'t have capability "' + capability +
-        '" to remove');
+          'Plugin "' + id + 'doesn\'t have capability "' + capability +
+          '" to remove');
       return;
     }
     capability = String(capability).toLowerCase();
@@ -161,7 +161,7 @@ export class ComponentManager {
    * @param capability The capability to check for.
    * @return Whether the component has the capability.
    */
-  hasCapability<T>(id: string, capability: string | Capability<T>): boolean {
+  hasCapability<T>(id: string, capability: string|Capability<T>): boolean {
     capability = String(capability).toLowerCase();
     return this.componentData_[id].capabilities.indexOf(capability) !== -1;
   }
@@ -171,7 +171,7 @@ export class ComponentManager {
    * @param id The ID of the component to get.
    * @return The component with the given name or undefined if not found.
    */
-  getComponent(id: string): IComponent | undefined {
+  getComponent(id: string): IComponent|undefined {
     return this.componentData_[id] && this.componentData_[id].component;
   }
 
@@ -181,7 +181,7 @@ export class ComponentManager {
    * @param sorted Whether to return list ordered by weights.
    * @return The components that match the specified capability.
    */
-  getComponents<T>(capability: string | Capability<T>, sorted: boolean): T[] {
+  getComponents<T>(capability: string|Capability<T>, sorted: boolean): T[] {
     capability = String(capability).toLowerCase();
     const componentIds = this.capabilityToComponentIds_[capability];
     if (!componentIds) {
@@ -191,18 +191,18 @@ export class ComponentManager {
     if (sorted) {
       const componentDataList: AnyDuringMigration[] = [];
       const componentData = this.componentData_;
-      componentIds.forEach(function (id) {
+      componentIds.forEach(function(id) {
         componentDataList.push(componentData[id]);
       });
-      componentDataList.sort(function (a, b) {
+      componentDataList.sort(function(a, b) {
         return a.weight - b.weight;
       });
-      componentDataList.forEach(function (ComponentDatum) {
+      componentDataList.forEach(function(ComponentDatum) {
         components.push(ComponentDatum.component);
       });
     } else {
       const componentData = this.componentData_;
-      componentIds.forEach(function (id) {
+      componentIds.forEach(function(id) {
         components.push(componentData[id].component);
       });
     }
@@ -211,6 +211,6 @@ export class ComponentManager {
 }
 export interface ComponentDatum {
   component: IComponent;
-  capabilities: Array<string | Capability<IComponent>>;
+  capabilities: Array<string|Capability<IComponent>>;
   weight: number;
 }

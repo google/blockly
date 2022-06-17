@@ -17,28 +17,28 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { Block } from '../block.js';
+import {Block} from '../block.js';
 import * as registry from '../registry.js';
 import * as idGenerator from '../utils/idgenerator.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Workspace } from '../workspace.js';
+import {Workspace} from '../workspace.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from '../workspace_svg.js';
+import {WorkspaceSvg} from '../workspace_svg.js';
 
 /* eslint-disable-next-line no-unused-vars */
-import { Abstract } from './events_abstract.js';
+import {Abstract} from './events_abstract.js';
 /* eslint-disable-next-line no-unused-vars */
-import { BlockChange } from './events_block_change.js';
+import {BlockChange} from './events_block_change.js';
 /* eslint-disable-next-line no-unused-vars */
-import { BlockCreate } from './events_block_create.js';
+import {BlockCreate} from './events_block_create.js';
 /* eslint-disable-next-line no-unused-vars */
-import { BlockMove } from './events_block_move.js';
+import {BlockMove} from './events_block_move.js';
 /* eslint-disable-next-line no-unused-vars */
-import { CommentCreate } from './events_comment_create.js';
+import {CommentCreate} from './events_comment_create.js';
 /* eslint-disable-next-line no-unused-vars */
-import { CommentMove } from './events_comment_move.js';
+import {CommentMove} from './events_comment_move.js';
 /* eslint-disable-next-line no-unused-vars */
-import { ViewportChange } from './events_viewport.js';
+import {ViewportChange} from './events_viewport.js';
 
 
 /** Group ID for new events.  Grouped events are indivisible. */
@@ -232,7 +232,7 @@ export const FINISHED_LOADING = 'finished_loading';
  * appear connected.
  * @alias Blockly.Events.utils.BumpEvent
  */
-export type BumpEvent = BlockCreate | BlockMove | CommentCreate | CommentMove;
+export type BumpEvent = BlockCreate|BlockMove|CommentCreate|CommentMove;
 
 /**
  * List of events that cause objects to be bumped back into the visible
@@ -243,7 +243,7 @@ export type BumpEvent = BlockCreate | BlockMove | CommentCreate | CommentMove;
  * @alias Blockly.Events.utils.BUMP_EVENTS
  */
 export const BUMP_EVENTS: string[] =
-  [BLOCK_CREATE, BLOCK_MOVE, COMMENT_CREATE, COMMENT_MOVE];
+    [BLOCK_CREATE, BLOCK_MOVE, COMMENT_CREATE, COMMENT_MOVE];
 
 /** List of events queued for firing. */
 const FIRE_QUEUE: Abstract[] = [];
@@ -310,7 +310,7 @@ export function filter(queueIn: Abstract[], forward: boolean): Abstract[] {
         // Each item in the hash table has the event and the index of that event
         // in the input array.  This lets us make sure we only merge adjacent
         // move events.
-        hash[key] = { event, index: i };
+        hash[key] = {event, index: i};
         mergedQueue.push(event);
       } else if (event.type === MOVE && lastEntry.index === i - 1) {
         const moveEvent = event as BlockMove;
@@ -320,9 +320,9 @@ export function filter(queueIn: Abstract[], forward: boolean): Abstract[] {
         lastEvent.newCoordinate = moveEvent.newCoordinate;
         lastEntry.index = i;
       } else if (
-        event.type === CHANGE &&
-        (event as BlockChange).element === lastEvent.element &&
-        (event as BlockChange).name === lastEvent.name) {
+          event.type === CHANGE &&
+          (event as BlockChange).element === lastEvent.element &&
+          (event as BlockChange).name === lastEvent.name) {
         const changeEvent = event as BlockChange;
         // Merge change events.
         lastEvent.newValue = changeEvent.newValue;
@@ -339,13 +339,13 @@ export function filter(queueIn: Abstract[], forward: boolean): Abstract[] {
         {
           // Collision: newer events should merge into this event to maintain
           // order.
-          hash[key] = { event, index: i };
+          hash[key] = {event, index: i};
           mergedQueue.push(event);
         }
     }
   }
   // Filter out any events that have become null due to merging.
-  queue = mergedQueue.filter(function (e) {
+  queue = mergedQueue.filter(function(e) {
     return !e.isNull();
   });
   if (!forward) {
@@ -358,7 +358,7 @@ export function filter(queueIn: Abstract[], forward: boolean): Abstract[] {
     // AnyDuringMigration because:  Property 'element' does not exist on type
     // 'Abstract'.
     if (event.type === CHANGE &&
-      (event as AnyDuringMigration).element === 'mutation') {
+        (event as AnyDuringMigration).element === 'mutation') {
       queue.unshift(queue.splice(i, 1)[0]);
     }
   }
@@ -417,7 +417,7 @@ export function getGroup(): string {
  *   String to set group explicitly.
  * @alias Blockly.Events.utils.setGroup
  */
-export function setGroup(state: boolean | string) {
+export function setGroup(state: boolean|string) {
   if (typeof state === 'boolean') {
     group = state ? idGenerator.genUid() : '';
   } else {
@@ -449,7 +449,7 @@ export function getDescendantIds(block: Block): string[] {
  * @alias Blockly.Events.utils.fromJson
  */
 export function fromJson(
-  json: AnyDuringMigration, workspace: Workspace): Abstract {
+    json: AnyDuringMigration, workspace: Workspace): Abstract {
   const eventClass = get(json['type']);
   if (!eventClass) {
     throw Error('Unknown event type.');
@@ -467,7 +467,7 @@ export function fromJson(
  * @alias Blockly.Events.utils.get
  */
 export function get(eventType: string):
-  (new (...p1: AnyDuringMigration[]) => Abstract) | null {
+    (new (...p1: AnyDuringMigration[]) => Abstract)|null {
   return registry.getClass(registry.Type.EVENT, eventType);
 }
 
@@ -486,7 +486,7 @@ export function disableOrphans(event: Abstract) {
       return;
     }
     const eventWorkspace =
-      Workspace.getById(blockEvent.workspaceId) as WorkspaceSvg;
+        Workspace.getById(blockEvent.workspaceId) as WorkspaceSvg;
     let block = eventWorkspace.getBlockById(blockEvent.blockId);
     if (block) {
       // Changing blocks as part of this event shouldn't be undoable.
@@ -500,8 +500,8 @@ export function disableOrphans(event: Abstract) {
             child.setEnabled(true);
           }
         } else if (
-          (block.outputConnection || block.previousConnection) &&
-          !eventWorkspace.isDragging()) {
+            (block.outputConnection || block.previousConnection) &&
+            !eventWorkspace.isDragging()) {
           do {
             block.setEnabled(false);
             block = block.getNextBlock();

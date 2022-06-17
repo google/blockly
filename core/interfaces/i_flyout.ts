@@ -27,10 +27,10 @@ import '../utils/coordinate';
 import '../utils/svg';
 
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from '../workspace_svg.js';
+import {WorkspaceSvg} from '../workspace_svg.js';
 
 /* eslint-disable-next-line no-unused-vars */
-import { IRegistrable } from './i_registrable.js';
+import {IRegistrable} from './i_registrable.js';
 
 
 /**
@@ -45,7 +45,7 @@ export interface IFlyout extends IRegistrable {
   RTL: boolean;
 
   /** The target workspace */
-  targetWorkspace: WorkspaceSvg | null;
+  targetWorkspace: WorkspaceSvg|null;
 
   /** Margin around the edges of the blocks in the flyout. */
   readonly MARGIN: number;

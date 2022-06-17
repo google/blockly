@@ -13,11 +13,11 @@
  */
 
 import * as registry from '../registry.js';
-import { Coordinate } from '../utils/coordinate.js';
+import {Coordinate} from '../utils/coordinate.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceComment } from '../workspace_comment.js';
+import {WorkspaceComment} from '../workspace_comment.js';
 
-import { CommentBase } from './events_comment_base.js';
+import {CommentBase} from './events_comment_base.js';
 import * as eventUtils from './utils.js';
 
 
@@ -69,8 +69,8 @@ export class CommentMove extends CommentBase {
   recordNew() {
     if (!this.comment_) {
       throw Error(
-        'Tried to record the new position of a comment on the ' +
-        'same event twice.');
+          'Tried to record the new position of a comment on the ' +
+          'same event twice.');
     }
     this.newCoordinate_ = this.comment_.getXY();
     // AnyDuringMigration because:  Type 'null' is not assignable to type
@@ -96,11 +96,11 @@ export class CommentMove extends CommentBase {
     const json = super.toJson();
     if (this.oldCoordinate_) {
       json['oldCoordinate'] = Math.round(this.oldCoordinate_.x) + ',' +
-        Math.round(this.oldCoordinate_.y);
+          Math.round(this.oldCoordinate_.y);
     }
     if (this.newCoordinate_) {
       json['newCoordinate'] = Math.round(this.newCoordinate_.x) + ',' +
-        Math.round(this.newCoordinate_.y);
+          Math.round(this.newCoordinate_.y);
     }
     return json;
   }

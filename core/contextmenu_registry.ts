@@ -13,9 +13,9 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from './block_svg.js';
+import {BlockSvg} from './block_svg.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 
 enum ScopeType {
@@ -38,7 +38,7 @@ export class ContextMenuRegistry {
   static ScopeType = ScopeType;
   static registry: ContextMenuRegistry;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  private registry_!: { [key: string]: RegistryItem };
+  private registry_!: {[key: string]: RegistryItem};
 
   /** Resets the existing singleton instance of ContextMenuRegistry. */
   constructor() {
@@ -79,7 +79,7 @@ export class ContextMenuRegistry {
    * @param id The ID of the RegistryItem to get.
    * @return RegistryItem or null if not found
    */
-  getItem(id: string): RegistryItem | null {
+  getItem(id: string): RegistryItem|null {
     return this.registry_[id] || null;
   }
 
@@ -94,17 +94,17 @@ export class ContextMenuRegistry {
    * @return the list of ContextMenuOptions
    */
   getContextMenuOptions(scopeType: ScopeType, scope: Scope):
-    ContextMenuOption[] {
+      ContextMenuOption[] {
     const menuOptions: AnyDuringMigration[] = [];
     const registry = this.registry_;
-    Object.keys(registry).forEach(function (id) {
+    Object.keys(registry).forEach(function(id) {
       const item = registry[id];
       if (scopeType === item.scopeType) {
         const precondition = item.preconditionFn(scope);
         if (precondition !== 'hidden') {
           const displayText = typeof item.displayText === 'function' ?
-            item.displayText(scope) :
-            item.displayText;
+              item.displayText(scope) :
+              item.displayText;
           const menuOption: ContextMenuOption = {
             text: displayText,
             enabled: precondition === 'enabled',
@@ -116,20 +116,20 @@ export class ContextMenuRegistry {
         }
       }
     });
-    menuOptions.sort(function (a, b) {
+    menuOptions.sort(function(a, b) {
       return a.weight - b.weight;
     });
     return menuOptions;
   }
 }
 export interface Scope {
-  block: BlockSvg | undefined;
-  workspace: WorkspaceSvg | undefined;
+  block: BlockSvg|undefined;
+  workspace: WorkspaceSvg|undefined;
 }
 export interface RegistryItem {
   callback: (p1: Scope) => AnyDuringMigration;
   scopeType: ScopeType;
-  displayText: ((p1: Scope) => string) | string;
+  displayText: ((p1: Scope) => string)|string;
   preconditionFn: (p1: Scope) => string;
   weight: number;
   id: string;

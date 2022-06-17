@@ -13,24 +13,23 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from '../../block_svg.js';
+import {BlockSvg} from '../../block_svg.js';
 /* eslint-disable-next-line no-unused-vars */
-import { ASTNode } from '../../keyboard_nav/ast_node.js';
+import {ASTNode} from '../../keyboard_nav/ast_node.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Marker } from '../../keyboard_nav/marker.js';
+import {Marker} from '../../keyboard_nav/marker.js';
 /* eslint-disable-next-line no-unused-vars */
-import { RenderedConnection } from '../../rendered_connection.js';
+import {RenderedConnection} from '../../rendered_connection.js';
 import * as dom from '../../utils/dom.js';
-import { Svg } from '../../utils/svg.js';
+import {Svg} from '../../utils/svg.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from '../../workspace_svg.js';
+import {WorkspaceSvg} from '../../workspace_svg.js';
+/* eslint-disable-next-line no-unused-vars */
+import {ConstantProvider as BaseConstantProvider} from '../common/constants.js';
+import {MarkerSvg as BaseMarkerSvg} from '../common/marker_svg.js';
 
 /* eslint-disable-next-line no-unused-vars */
-import { ConstantProvider as BaseConstantProvider } from '../common/constants.js';
-import { MarkerSvg as BaseMarkerSvg } from '../common/marker_svg.js';
-
-/* eslint-disable-next-line no-unused-vars */
-import { ConstantProvider as ZelosConstantProvider } from './constants.js';
+import {ConstantProvider as ZelosConstantProvider} from './constants.js';
 
 
 /**
@@ -41,7 +40,7 @@ export class MarkerSvg extends BaseMarkerSvg {
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   constants_!: ZelosConstantProvider;
 
-  private markerCircle_: SVGCircleElement | null = null;
+  private markerCircle_: SVGCircleElement|null = null;
 
   /**
    * @param workspace The workspace the marker belongs to.
@@ -49,8 +48,8 @@ export class MarkerSvg extends BaseMarkerSvg {
    * @param marker The marker to draw.
    */
   constructor(
-    workspace: WorkspaceSvg, constants: BaseConstantProvider,
-    marker: Marker) {
+      workspace: WorkspaceSvg, constants: BaseConstantProvider,
+      marker: Marker) {
     super(workspace, constants, marker);
   }
 
@@ -126,12 +125,12 @@ export class MarkerSvg extends BaseMarkerSvg {
     // AnyDuringMigration because:  Argument of type 'SVGGElement | null' is not
     // assignable to parameter of type 'Element | undefined'.
     this.markerCircle_ = dom.createSvgElement(
-      Svg.CIRCLE, {
-      'r': this.constants_.CURSOR_RADIUS,
-      'style': 'display: none',
-      'stroke-width': this.constants_.CURSOR_STROKE_WIDTH,
-    },
-      this.markerSvg_!);
+        Svg.CIRCLE, {
+          'r': this.constants_.CURSOR_RADIUS,
+          'style': 'display: none',
+          'stroke-width': this.constants_.CURSOR_STROKE_WIDTH,
+        },
+        this.markerSvg_!);
 
     // Markers and stack cursors don't blink.
     if (this.isCursor()) {

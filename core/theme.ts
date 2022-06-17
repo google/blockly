@@ -21,8 +21,8 @@ import * as object from './utils/object.js';
  * @alias Blockly.Theme
  */
 export class Theme {
-  blockStyles: { [key: string]: BlockStyle };
-  categoryStyles: { [key: string]: CategoryStyle };
+  blockStyles: {[key: string]: BlockStyle};
+  categoryStyles: {[key: string]: CategoryStyle};
   componentStyles: ComponentStyle;
   fontStyle: FontStyle;
 
@@ -30,7 +30,7 @@ export class Theme {
    * Whether or not to add a 'hat' on top of all blocks with no previous or
    * output connections.
    */
-  startHats: boolean | null = null;
+  startHats: boolean|null = null;
 
   /**
    * @param name Theme name.
@@ -41,9 +41,9 @@ export class Theme {
    * @param opt_componentStyles A map of Blockly component names to style value.
    */
   constructor(
-    public name: string, opt_blockStyles?: { [key: string]: BlockStyle },
-    opt_categoryStyles?: { [key: string]: CategoryStyle },
-    opt_componentStyles?: ComponentStyle) {
+      public name: string, opt_blockStyles?: {[key: string]: BlockStyle},
+      opt_categoryStyles?: {[key: string]: CategoryStyle},
+      opt_componentStyles?: ComponentStyle) {
     /** The block styles map. */
     this.blockStyles = opt_blockStyles || Object.create(null);
 
@@ -52,7 +52,7 @@ export class Theme {
 
     /** The UI components styles map. */
     this.componentStyles =
-      opt_componentStyles || Object.create(null) as ComponentStyle;
+        opt_componentStyles || Object.create(null) as ComponentStyle;
 
     /** The font style. */
     this.fontStyle = Object.create(null) as FontStyle;
@@ -93,7 +93,7 @@ export class Theme {
    * @param componentName The name of the component.
    * @return The style value.
    */
-  getComponentStyle(componentName: string): string | null {
+  getComponentStyle(componentName: string): string|null {
     const style = (this.componentStyles as AnyDuringMigration)[componentName];
     if (style && typeof style === 'string' && this.getComponentStyle((style))) {
       return this.getComponentStyle((style));
@@ -167,25 +167,25 @@ export interface CategoryStyle {
   colour: string;
 }
 export interface ComponentStyle {
-  workspaceBackgroundColour: string | null;
-  toolboxBackgroundColour: string | null;
-  toolboxForegroundColour: string | null;
-  flyoutBackgroundColour: string | null;
-  flyoutForegroundColour: string | null;
-  flyoutOpacity: number | null;
-  scrollbarColour: string | null;
-  scrollbarOpacity: number | null;
-  insertionMarkerColour: string | null;
-  insertionMarkerOpacity: number | null;
-  markerColour: string | null;
-  cursorColour: string | null;
-  selectedGlowColour: string | null;
-  selectedGlowOpacity: number | null;
-  replacementGlowColour: string | null;
-  replacementGlowOpacity: number | null;
+  workspaceBackgroundColour: string|null;
+  toolboxBackgroundColour: string|null;
+  toolboxForegroundColour: string|null;
+  flyoutBackgroundColour: string|null;
+  flyoutForegroundColour: string|null;
+  flyoutOpacity: number|null;
+  scrollbarColour: string|null;
+  scrollbarOpacity: number|null;
+  insertionMarkerColour: string|null;
+  insertionMarkerOpacity: number|null;
+  markerColour: string|null;
+  cursorColour: string|null;
+  selectedGlowColour: string|null;
+  selectedGlowOpacity: number|null;
+  replacementGlowColour: string|null;
+  replacementGlowOpacity: number|null;
 }
 export interface FontStyle {
-  family: string | null;
-  weight: string | null;
-  size: number | null;
+  family: string|null;
+  weight: string|null;
+  size: number|null;
 }

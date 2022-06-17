@@ -13,16 +13,15 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from '../../block_svg.js';
-
+import {BlockSvg} from '../../block_svg.js';
 /* eslint-disable-next-line no-unused-vars */
-import { ConstantProvider } from '../common/constants.js';
+import {ConstantProvider} from '../common/constants.js';
 
-import { Hat } from './hat.js';
+import {Hat} from './hat.js';
 /* eslint-disable-next-line no-unused-vars */
-import { PreviousConnection } from './previous_connection.js';
-import { Row } from './row.js';
-import { Types } from './types.js';
+import {PreviousConnection} from './previous_connection.js';
+import {Row} from './row.js';
+import {Types} from './types.js';
 
 
 /**
@@ -50,7 +49,7 @@ export class TopRow extends Row {
   hasPreviousConnection = false;
 
   /** The previous connection on the block, if any. */
-  connection: PreviousConnection | null = null;
+  connection: PreviousConnection|null = null;
   override widthWithConnectedBlocks: AnyDuringMigration;
 
   /** @param constants The rendering constants provider. */
@@ -67,13 +66,12 @@ export class TopRow extends Row {
    */
   hasLeftSquareCorner(block: BlockSvg): boolean {
     const hasHat =
-      (block.hat ? block.hat === 'cap' :
-        this.constants_.ADD_START_HATS) &&
-      !block.outputConnection && !block.previousConnection;
+        (block.hat ? block.hat === 'cap' : this.constants_.ADD_START_HATS) &&
+        !block.outputConnection && !block.previousConnection;
     const prevBlock = block.getPreviousBlock();
 
     return !!block.outputConnection || hasHat ||
-      (prevBlock ? prevBlock.getNextBlock() === block : false);
+        (prevBlock ? prevBlock.getNextBlock() === block : false);
   }
 
   /**

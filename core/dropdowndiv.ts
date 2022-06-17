@@ -17,18 +17,18 @@
  * @class
  */
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from './block_svg.js';
+import {BlockSvg} from './block_svg.js';
 import * as common from './common.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Field } from './field.js';
+import {Field} from './field.js';
 import * as dom from './utils/dom.js';
 import * as math from './utils/math.js';
-import { Rect } from './utils/rect.js';
+import {Rect} from './utils/rect.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Size } from './utils/size.js';
+import {Size} from './utils/size.js';
 import * as style from './utils/style.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**
@@ -59,10 +59,10 @@ export const ANIMATION_TIME = 0.25;
  * Timer for animation out, to be cleared if we need to immediately hide
  * without disrupting new shows.
  */
-let animateOutTimer: number | null = null;
+let animateOutTimer: number|null = null;
 
 /** Callback for when the drop-down is hidden. */
-let onHide: Function | null = null;
+let onHide: Function|null = null;
 
 /** A class name representing the current owner's workspace renderer. */
 let renderedClassName = '';
@@ -83,13 +83,13 @@ let arrow: HTMLDivElement;
  * Drop-downs will appear within the bounds of this element if possible.
  * Set in setBoundsElement.
  */
-let boundsElement: Element | null = null;
+let boundsElement: Element|null = null;
 
 /** The object currently using the drop-down. */
-let owner: AnyDuringMigration | null = null;
+let owner: AnyDuringMigration|null = null;
 
 /** Whether the dropdown was positioned to a field or the source block. */
-let positionToField: boolean | null = null;
+let positionToField: boolean|null = null;
 
 /**
  * Dropdown bounds info object used to encapsulate sizing information about a
@@ -110,9 +110,9 @@ export interface PositionMetrics {
   initialY: number;
   finalX: number;
   finalY: number;
-  arrowX: number | null;
-  arrowY: number | null;
-  arrowAtTop: boolean | null;
+  arrowX: number|null;
+  arrowY: number|null;
+  arrowAtTop: boolean|null;
   arrowVisible: boolean;
 }
 
@@ -140,14 +140,14 @@ export function createDom() {
   div.style.opacity = 0 as AnyDuringMigration;
   // Transition animation for transform: translate() and opacity.
   div.style.transition = 'transform ' + ANIMATION_TIME + 's, ' +
-    'opacity ' + ANIMATION_TIME + 's';
+      'opacity ' + ANIMATION_TIME + 's';
 
   // Handle focusin/out events to add a visual indicator when
   // a child is focused or blurred.
-  div.addEventListener('focusin', function () {
+  div.addEventListener('focusin', function() {
     dom.addClass(div, 'blocklyFocused');
   });
-  div.addEventListener('focusout', function () {
+  div.addEventListener('focusout', function() {
     dom.removeClass(div, 'blocklyFocused');
   });
 }
@@ -157,7 +157,7 @@ export function createDom() {
  * within the box of this element if possible.
  * @param boundsElem Element to bind drop-down to.
  */
-export function setBoundsElement(boundsElem: Element | null) {
+export function setBoundsElement(boundsElem: Element|null) {
   boundsElement = boundsElem;
 }
 
@@ -197,10 +197,10 @@ export function setColour(backgroundColour: string, borderColour: string) {
  * @return True if the menu rendered below block; false if above.
  */
 export function showPositionedByBlock(
-  field: Field, block: BlockSvg, opt_onHide?: Function,
-  opt_secondaryYOffset?: number): boolean {
+    field: Field, block: BlockSvg, opt_onHide?: Function,
+    opt_secondaryYOffset?: number): boolean {
   return showPositionedByRect(
-    getScaledBboxOfBlock(block), field, opt_onHide, opt_secondaryYOffset);
+      getScaledBboxOfBlock(block), field, opt_onHide, opt_secondaryYOffset);
 }
 
 /**
@@ -214,11 +214,11 @@ export function showPositionedByBlock(
  * @return True if the menu rendered below block; false if above.
  */
 export function showPositionedByField(
-  field: Field, opt_onHide?: Function,
-  opt_secondaryYOffset?: number): boolean {
+    field: Field, opt_onHide?: Function,
+    opt_secondaryYOffset?: number): boolean {
   positionToField = true;
   return showPositionedByRect(
-    getScaledBboxOfField(field), field, opt_onHide, opt_secondaryYOffset);
+      getScaledBboxOfField(field), field, opt_onHide, opt_secondaryYOffset);
 }
 /**
  * Get the scaled bounding box of a block.
@@ -256,8 +256,8 @@ function getScaledBboxOfField(field: Field): Rect {
  * @return True if the menu rendered below block; false if above.
  */
 function showPositionedByRect(
-  bBox: Rect, field: Field, opt_onHide?: Function,
-  opt_secondaryYOffset?: number): boolean {
+    bBox: Rect, field: Field, opt_onHide?: Function,
+    opt_secondaryYOffset?: number): boolean {
   // If we can fit it, render below the block.
   const primaryX = bBox.left + (bBox.right - bBox.left) / 2;
   const primaryY = bBox.bottom;
@@ -275,8 +275,8 @@ function showPositionedByRect(
   }
   setBoundsElement(workspace.getParentSvg().parentNode as Element | null);
   return show(
-    field, sourceBlock.RTL, primaryX, primaryY, secondaryX, secondaryY,
-    opt_onHide);
+      field, sourceBlock.RTL, primaryX, primaryY, secondaryX, secondaryY,
+      opt_onHide);
 }
 
 /**
@@ -297,9 +297,9 @@ function showPositionedByRect(
  * @return True if the menu rendered at the primary origin point.
  */
 export function show(
-  newOwner: AnyDuringMigration | null, rtl: boolean, primaryX: number,
-  primaryY: number, secondaryX: number, secondaryY: number,
-  opt_onHide?: Function): boolean {
+    newOwner: AnyDuringMigration|null, rtl: boolean, primaryX: number,
+    primaryY: number, secondaryX: number, secondaryY: number,
+    opt_onHide?: Function): boolean {
   owner = newOwner;
   onHide = opt_onHide || null;
   // Set direction.
@@ -331,7 +331,7 @@ const internal = {};
  */
 // AnyDuringMigration because:  Property 'getBoundsInfo' does not exist on type
 // '{}'.
-(internal as AnyDuringMigration).getBoundsInfo = function (): BoundsInfo {
+(internal as AnyDuringMigration).getBoundsInfo = function(): BoundsInfo {
   const boundPosition = style.getPageOffset(boundsElement as Element);
   const boundSize = style.getSize(boundsElement as Element);
 
@@ -357,9 +357,9 @@ const internal = {};
  */
 // AnyDuringMigration because:  Property 'getPositionMetrics' does not exist on
 // type '{}'.
-(internal as AnyDuringMigration).getPositionMetrics = function (
-  primaryX: number, primaryY: number, secondaryX: number,
-  secondaryY: number): PositionMetrics {
+(internal as AnyDuringMigration).getPositionMetrics = function(
+    primaryX: number, primaryY: number, secondaryX: number,
+    secondaryY: number): PositionMetrics {
   // AnyDuringMigration because:  Property 'getBoundsInfo' does not exist on
   // type '{}'.
   const boundsInfo = (internal as AnyDuringMigration).getBoundsInfo();
@@ -398,10 +398,10 @@ const internal = {};
  *     arrow.
  */
 function getPositionBelowMetrics(
-  primaryX: number, primaryY: number, boundsInfo: BoundsInfo,
-  divSize: Size): PositionMetrics {
+    primaryX: number, primaryY: number, boundsInfo: BoundsInfo,
+    divSize: Size): PositionMetrics {
   const xCoords =
-    getPositionX(primaryX, boundsInfo.left, boundsInfo.right, divSize.width);
+      getPositionX(primaryX, boundsInfo.left, boundsInfo.right, divSize.width);
 
   const arrowY = -(ARROW_SIZE / 2 + BORDER_SIZE);
   const finalY = primaryY + PADDING_Y;
@@ -430,10 +430,10 @@ function getPositionBelowMetrics(
  *     arrow.
  */
 function getPositionAboveMetrics(
-  secondaryX: number, secondaryY: number, boundsInfo: BoundsInfo,
-  divSize: Size): PositionMetrics {
+    secondaryX: number, secondaryY: number, boundsInfo: BoundsInfo,
+    divSize: Size): PositionMetrics {
   const xCoords = getPositionX(
-    secondaryX, boundsInfo.left, boundsInfo.right, divSize.width);
+      secondaryX, boundsInfo.left, boundsInfo.right, divSize.width);
 
   const arrowY = divSize.height - BORDER_SIZE * 2 - ARROW_SIZE / 2;
   const finalY = secondaryY - divSize.height - PADDING_Y;
@@ -463,9 +463,9 @@ function getPositionAboveMetrics(
  *     arrow.
  */
 function getPositionTopOfPageMetrics(
-  sourceX: number, boundsInfo: BoundsInfo, divSize: Size): PositionMetrics {
+    sourceX: number, boundsInfo: BoundsInfo, divSize: Size): PositionMetrics {
   const xCoords =
-    getPositionX(sourceX, boundsInfo.left, boundsInfo.right, divSize.width);
+      getPositionX(sourceX, boundsInfo.left, boundsInfo.right, divSize.width);
 
   // No need to provide arrow-specific information because it won't be visible.
   return {
@@ -491,8 +491,8 @@ function getPositionTopOfPageMetrics(
  *     the DropDownDiv and the arrow.
  */
 export function getPositionX(
-  sourceX: number, boundsLeft: number, boundsRight: number,
-  divWidth: number): { divX: number, arrowX: number } {
+    sourceX: number, boundsLeft: number, boundsRight: number,
+    divWidth: number): {divX: number, arrowX: number} {
   let divX = sourceX;
   // Offset the topLeft coord so that the dropdowndiv is centered.
   divX -= divWidth / 2;
@@ -507,9 +507,9 @@ export function getPositionX(
   const horizPadding = ARROW_HORIZONTAL_PADDING;
   // Clamp the arrow position so that it stays attached to the dropdowndiv.
   relativeArrowX = math.clamp(
-    horizPadding, relativeArrowX, divWidth - horizPadding - ARROW_SIZE);
+      horizPadding, relativeArrowX, divWidth - horizPadding - ARROW_SIZE);
 
-  return { arrowX: relativeArrowX, divX };
+  return {arrowX: relativeArrowX, divX};
 }
 
 /**
@@ -528,8 +528,8 @@ export function isVisible(): boolean {
  * @return True if hidden.
  */
 export function hideIfOwner(
-  divOwner: AnyDuringMigration | null,
-  opt_withoutAnimation?: boolean): boolean {
+    divOwner: AnyDuringMigration|null,
+    opt_withoutAnimation?: boolean): boolean {
   if (owner === divOwner) {
     if (opt_withoutAnimation) {
       hideWithoutAnimation();
@@ -550,7 +550,7 @@ export function hide() {
   // 'string'.
   div.style.opacity = 0 as AnyDuringMigration;
   // Finish animation - reset all values to default.
-  animateOutTimer = setTimeout(function () {
+  animateOutTimer = setTimeout(function() {
     hideWithoutAnimation();
   }, ANIMATION_TIME * 1000);
   if (onHide) {
@@ -607,23 +607,23 @@ export function hideWithoutAnimation() {
  * @return True if the menu rendered at the primary origin point.
  */
 function positionInternal(
-  primaryX: number, primaryY: number, secondaryX: number,
-  secondaryY: number): boolean {
+    primaryX: number, primaryY: number, secondaryX: number,
+    secondaryY: number): boolean {
   // AnyDuringMigration because:  Property 'getPositionMetrics' does not exist
   // on type '{}'.
   const metrics =
-    (internal as AnyDuringMigration)
-      .getPositionMetrics(primaryX, primaryY, secondaryX, secondaryY);
+      (internal as AnyDuringMigration)
+          .getPositionMetrics(primaryX, primaryY, secondaryX, secondaryY);
 
   // Update arrow CSS.
   if (metrics.arrowVisible) {
     arrow.style.display = '';
     arrow.style.transform = 'translate(' + metrics.arrowX + 'px,' +
-      metrics.arrowY + 'px) rotate(45deg)';
+        metrics.arrowY + 'px) rotate(45deg)';
     arrow.setAttribute(
-      'class',
-      metrics.arrowAtTop ? 'blocklyDropDownArrow blocklyArrowTop' :
-        'blocklyDropDownArrow blocklyArrowBottom');
+        'class',
+        metrics.arrowAtTop ? 'blocklyDropDownArrow blocklyArrowTop' :
+                             'blocklyDropDownArrow blocklyArrowBottom');
   } else {
     arrow.style.display = 'none';
   }
@@ -666,7 +666,7 @@ export function repositionForWindowResize() {
     const field = owner as Field;
     const block = field.getSourceBlock() as BlockSvg;
     const bBox = positionToField ? getScaledBboxOfField(field) :
-      getScaledBboxOfBlock(block);
+                                   getScaledBboxOfBlock(block);
     // If we can fit it, render below the block.
     const primaryX = bBox.left + (bBox.right - bBox.left) / 2;
     const primaryY = bBox.bottom;

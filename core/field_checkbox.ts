@@ -15,11 +15,11 @@
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_block_change';
 
-import { Field } from './field.js';
+import {Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import * as dom from './utils/dom.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Sentinel } from './utils/sentinel.js';
+import {Sentinel} from './utils/sentinel.js';
 
 
 /**
@@ -61,8 +61,8 @@ export class FieldCheckbox extends Field {
    * for a list of properties this parameter supports.
    */
   constructor(
-    opt_value?: string | boolean | Sentinel, opt_validator?: Function,
-    opt_config?: AnyDuringMigration) {
+      opt_value?: string|boolean|Sentinel, opt_validator?: Function,
+      opt_config?: AnyDuringMigration) {
     super(Field.SKIP_SETUP);
 
     /**
@@ -130,7 +130,7 @@ export class FieldCheckbox extends Field {
    * @param character The character to use for the check mark, or null to use
    *     the default.
    */
-  setCheckCharacter(character: string | null) {
+  setCheckCharacter(character: string|null) {
     this.checkChar_ = character || FieldCheckbox.CHECK_CHAR;
     this.forceRerender();
   }
@@ -146,7 +146,7 @@ export class FieldCheckbox extends Field {
    * @return A valid value ('TRUE' or 'FALSE), or null if invalid.
    */
   protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
-    string | null {
+      string|null {
     if (opt_newValue === true || opt_newValue === 'TRUE') {
       return 'TRUE';
     }

@@ -12,7 +12,7 @@
  * @namespace Blockly.Themes
  */
 
-import { Classic } from './classic.js';
-import { Zelos } from './zelos.js';
+import {Classic} from './classic.js';
+import {Zelos} from './zelos.js';
 
-export { Classic, Zelos };
+export {Classic, Zelos};

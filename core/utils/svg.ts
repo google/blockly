@@ -22,31 +22,31 @@
  * @alias Blockly.utils.Svg
  */
 export class Svg<T> {
-  static ANIMATE = new Svg < SVGAnimateElement > ('animate');
-  static CIRCLE = new Svg < SVGCircleElement > ('circle');
-  static CLIPPATH = new Svg < SVGClipPathElement > ('clipPath');
-  static DEFS = new Svg < SVGDefsElement > ('defs');
-  static FECOMPOSITE = new Svg < SVGFECompositeElement > ('feComposite');
+  static ANIMATE = new Svg<SVGAnimateElement>('animate');
+  static CIRCLE = new Svg<SVGCircleElement>('circle');
+  static CLIPPATH = new Svg<SVGClipPathElement>('clipPath');
+  static DEFS = new Svg<SVGDefsElement>('defs');
+  static FECOMPOSITE = new Svg<SVGFECompositeElement>('feComposite');
   static FECOMPONENTTRANSFER =
-    new Svg < SVGFEComponentTransferElement > ('feComponentTransfer');
-  static FEFLOOD = new Svg < SVGFEFloodElement > ('feFlood');
-  static FEFUNCA = new Svg < SVGFEFuncAElement > ('feFuncA');
-  static FEGAUSSIANBLUR = new Svg < SVGFEGaussianBlurElement > ('feGaussianBlur');
-  static FEPOINTLIGHT = new Svg < SVGFEPointLightElement > ('fePointLight');
+      new Svg<SVGFEComponentTransferElement>('feComponentTransfer');
+  static FEFLOOD = new Svg<SVGFEFloodElement>('feFlood');
+  static FEFUNCA = new Svg<SVGFEFuncAElement>('feFuncA');
+  static FEGAUSSIANBLUR = new Svg<SVGFEGaussianBlurElement>('feGaussianBlur');
+  static FEPOINTLIGHT = new Svg<SVGFEPointLightElement>('fePointLight');
   static FESPECULARLIGHTING =
-    new Svg < SVGFESpecularLightingElement > ('feSpecularLighting');
-  static FILTER = new Svg < SVGFilterElement > ('filter');
-  static FOREIGNOBJECT = new Svg < SVGForeignObjectElement > ('foreignObject');
-  static G = new Svg < SVGGElement > ('g');
-  static IMAGE = new Svg < SVGImageElement > ('image');
-  static LINE = new Svg < SVGLineElement > ('line');
-  static PATH = new Svg < SVGPathElement > ('path');
-  static PATTERN = new Svg < SVGPatternElement > ('pattern');
-  static POLYGON = new Svg < SVGPolygonElement > ('polygon');
-  static RECT = new Svg < SVGRectElement > ('rect');
-  static SVG = new Svg < SVGSVGElement > ('svg');
-  static TEXT = new Svg < SVGTextElement > ('text');
-  static TSPAN = new Svg < SVGTSpanElement > ('tspan');
+      new Svg<SVGFESpecularLightingElement>('feSpecularLighting');
+  static FILTER = new Svg<SVGFilterElement>('filter');
+  static FOREIGNOBJECT = new Svg<SVGForeignObjectElement>('foreignObject');
+  static G = new Svg<SVGGElement>('g');
+  static IMAGE = new Svg<SVGImageElement>('image');
+  static LINE = new Svg<SVGLineElement>('line');
+  static PATH = new Svg<SVGPathElement>('path');
+  static PATTERN = new Svg<SVGPatternElement>('pattern');
+  static POLYGON = new Svg<SVGPolygonElement>('polygon');
+  static RECT = new Svg<SVGRectElement>('rect');
+  static SVG = new Svg<SVGSVGElement>('svg');
+  static TEXT = new Svg<SVGTextElement>('text');
+  static TSPAN = new Svg<SVGTSpanElement>('tspan');
 
   /** @param tagName The SVG element tag name. */
   constructor(private readonly tagName: string) {}

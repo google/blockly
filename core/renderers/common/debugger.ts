@@ -14,30 +14,29 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from '../../block_svg.js';
-import { ConnectionType } from '../../connection_type.js';
-import { FieldLabel } from '../../field_label.js';
+import {BlockSvg} from '../../block_svg.js';
+import {ConnectionType} from '../../connection_type.js';
+import {FieldLabel} from '../../field_label.js';
 /* eslint-disable-next-line no-unused-vars */
-import { RenderedConnection } from '../../rendered_connection.js';
+import {RenderedConnection} from '../../rendered_connection.js';
 import * as dom from '../../utils/dom.js';
-import { Svg } from '../../utils/svg.js';
+import {Svg} from '../../utils/svg.js';
+/* eslint-disable-next-line no-unused-vars */
+import {Measurable} from '../measurables/base.js';
+import {Field} from '../measurables/field.js';
+/* eslint-disable-next-line no-unused-vars */
+import {InRowSpacer} from '../measurables/in_row_spacer.js';
+import {InputConnection} from '../measurables/input_connection.js';
+/* eslint-disable-next-line no-unused-vars */
+import {Row} from '../measurables/row.js';
+import {Types} from '../measurables/types.js';
+/* eslint-disable-next-line no-unused-vars */
+import {RenderInfo as ZelosInfo} from '../zelos/info.js';
 
 /* eslint-disable-next-line no-unused-vars */
-import { Measurable } from '../measurables/base.js';
-import { Field } from '../measurables/field.js';
+import {ConstantProvider} from './constants.js';
 /* eslint-disable-next-line no-unused-vars */
-import { InRowSpacer } from '../measurables/in_row_spacer.js';
-import { InputConnection } from '../measurables/input_connection.js';
-/* eslint-disable-next-line no-unused-vars */
-import { Row } from '../measurables/row.js';
-import { Types } from '../measurables/types.js';
-/* eslint-disable-next-line no-unused-vars */
-import { RenderInfo as ZelosInfo } from '../zelos/info.js';
-
-/* eslint-disable-next-line no-unused-vars */
-import { ConstantProvider } from './constants.js';
-/* eslint-disable-next-line no-unused-vars */
-import { RenderInfo } from './info.js';
+import {RenderInfo} from './info.js';
 
 
 /**
@@ -105,18 +104,18 @@ export class Debug {
     }
 
     this.debugElements_.push(dom.createSvgElement(
-      Svg.RECT, {
-      'class': 'rowSpacerRect blockRenderDebug',
-      'x': isRtl ? -(row.xPos + row.width) : row.xPos,
-      'y': cursorY,
-      'width': row.width,
-      'height': height,
-      'stroke': isNegativeSpacing ? 'black' : 'blue',
-      'fill': 'blue',
-      'fill-opacity': '0.5',
-      'stroke-width': '1px',
-    },
-      this.svgRoot_));
+        Svg.RECT, {
+          'class': 'rowSpacerRect blockRenderDebug',
+          'x': isRtl ? -(row.xPos + row.width) : row.xPos,
+          'y': cursorY,
+          'width': row.width,
+          'height': height,
+          'stroke': isNegativeSpacing ? 'black' : 'blue',
+          'fill': 'blue',
+          'fill-opacity': '0.5',
+          'stroke-width': '1px',
+        },
+        this.svgRoot_));
   }
 
   /**
@@ -138,18 +137,18 @@ export class Debug {
     }
     const yPos = elem.centerline - elem.height / 2;
     this.debugElements_.push(dom.createSvgElement(
-      Svg.RECT, {
-      'class': 'elemSpacerRect blockRenderDebug',
-      'x': xPos,
-      'y': yPos,
-      'width': width,
-      'height': elem.height,
-      'stroke': 'pink',
-      'fill': isNegativeSpacing ? 'black' : 'pink',
-      'fill-opacity': '0.5',
-      'stroke-width': '1px',
-    },
-      this.svgRoot_));
+        Svg.RECT, {
+          'class': 'elemSpacerRect blockRenderDebug',
+          'x': xPos,
+          'y': yPos,
+          'width': width,
+          'height': elem.height,
+          'stroke': 'pink',
+          'fill': isNegativeSpacing ? 'black' : 'pink',
+          'fill-opacity': '0.5',
+          'stroke-width': '1px',
+        },
+        this.svgRoot_));
   }
 
   /**
@@ -165,39 +164,39 @@ export class Debug {
       }
       const yPos = elem.centerline - elem.height / 2;
       this.debugElements_.push(dom.createSvgElement(
-        Svg.RECT, {
-        'class': 'rowRenderingRect blockRenderDebug',
-        'x': xPos,
-        'y': yPos,
-        'width': elem.width,
-        'height': elem.height,
-        'stroke': 'black',
-        'fill': 'none',
-        'stroke-width': '1px',
-      },
-        this.svgRoot_));
+          Svg.RECT, {
+            'class': 'rowRenderingRect blockRenderDebug',
+            'x': xPos,
+            'y': yPos,
+            'width': elem.width,
+            'height': elem.height,
+            'stroke': 'black',
+            'fill': 'none',
+            'stroke-width': '1px',
+          },
+          this.svgRoot_));
 
       if (Types.isField(elem) && elem instanceof Field &&
-        elem.field instanceof FieldLabel) {
+          elem.field instanceof FieldLabel) {
         const baseline = this.constants.FIELD_TEXT_BASELINE;
         this.debugElements_.push(dom.createSvgElement(
-          Svg.RECT, {
-          'class': 'rowRenderingRect blockRenderDebug',
-          'x': xPos,
-          'y': yPos + baseline,
-          'width': elem.width,
-          'height': '0.1px',
-          'stroke': 'red',
-          'fill': 'none',
-          'stroke-width': '0.5px',
-        },
-          this.svgRoot_));
+            Svg.RECT, {
+              'class': 'rowRenderingRect blockRenderDebug',
+              'x': xPos,
+              'y': yPos + baseline,
+              'width': elem.width,
+              'height': '0.1px',
+              'stroke': 'red',
+              'fill': 'none',
+              'stroke-width': '0.5px',
+            },
+            this.svgRoot_));
       }
     }
 
 
     if (Types.isInput(elem) && elem instanceof InputConnection &&
-      Debug.config.connections) {
+        Debug.config.connections) {
       this.drawConnection(elem.connectionModel);
     }
   }
@@ -240,15 +239,15 @@ export class Debug {
     // because:  Property 'offsetInBlock_' is private and only accessible within
     // class 'RenderedConnection'.
     this.debugElements_.push(dom.createSvgElement(
-      Svg.CIRCLE, {
-      'class': 'blockRenderDebug',
-      'cx': (conn as AnyDuringMigration).offsetInBlock_.x,
-      'cy': (conn as AnyDuringMigration).offsetInBlock_.y,
-      'r': size,
-      'fill': fill,
-      'stroke': colour,
-    },
-      this.svgRoot_));
+        Svg.CIRCLE, {
+          'class': 'blockRenderDebug',
+          'cx': (conn as AnyDuringMigration).offsetInBlock_.x,
+          'cy': (conn as AnyDuringMigration).offsetInBlock_.y,
+          'r': size,
+          'fill': fill,
+          'stroke': colour,
+        },
+        this.svgRoot_));
   }
 
   /**
@@ -262,17 +261,17 @@ export class Debug {
       return;
     }
     this.debugElements_.push(dom.createSvgElement(
-      Svg.RECT, {
-      'class': 'elemRenderingRect blockRenderDebug',
-      'x': isRtl ? -(row.xPos + row.width) : row.xPos,
-      'y': row.yPos,
-      'width': row.width,
-      'height': row.height,
-      'stroke': 'red',
-      'fill': 'none',
-      'stroke-width': '1px',
-    },
-      this.svgRoot_));
+        Svg.RECT, {
+          'class': 'elemRenderingRect blockRenderDebug',
+          'x': isRtl ? -(row.xPos + row.width) : row.xPos,
+          'y': row.yPos,
+          'width': row.width,
+          'height': row.height,
+          'stroke': 'red',
+          'fill': 'none',
+          'stroke-width': '1px',
+        },
+        this.svgRoot_));
 
     // AnyDuringMigration because:  Property 'isTopOrBottomRow' does not exist
     // on type 'typeof Types'.
@@ -282,18 +281,18 @@ export class Debug {
 
     if (Debug.config.connectedBlockBounds) {
       this.debugElements_.push(dom.createSvgElement(
-        Svg.RECT, {
-        'class': 'connectedBlockWidth blockRenderDebug',
-        'x': isRtl ? -(row.xPos + row.widthWithConnectedBlocks) : row.xPos,
-        'y': row.yPos,
-        'width': row.widthWithConnectedBlocks,
-        'height': row.height,
-        'stroke': this.randomColour_,
-        'fill': 'none',
-        'stroke-width': '1px',
-        'stroke-dasharray': '3,3',
-      },
-        this.svgRoot_));
+          Svg.RECT, {
+            'class': 'connectedBlockWidth blockRenderDebug',
+            'x': isRtl ? -(row.xPos + row.widthWithConnectedBlocks) : row.xPos,
+            'y': row.yPos,
+            'width': row.widthWithConnectedBlocks,
+            'height': row.height,
+            'stroke': this.randomColour_,
+            'fill': 'none',
+            'stroke-width': '1px',
+            'stroke-dasharray': '3,3',
+          },
+          this.svgRoot_));
     }
   }
 
@@ -331,35 +330,35 @@ export class Debug {
     let xPos = info.RTL ? -info.width : 0;
     const yPos = 0;
     this.debugElements_.push(dom.createSvgElement(
-      Svg.RECT, {
-      'class': 'blockBoundingBox blockRenderDebug',
-      'x': xPos,
-      'y': yPos,
-      'width': info.width,
-      'height': info.height,
-      'stroke': 'black',
-      'fill': 'none',
-      'stroke-width': '1px',
-      'stroke-dasharray': '5,5',
-    },
-      this.svgRoot_));
+        Svg.RECT, {
+          'class': 'blockBoundingBox blockRenderDebug',
+          'x': xPos,
+          'y': yPos,
+          'width': info.width,
+          'height': info.height,
+          'stroke': 'black',
+          'fill': 'none',
+          'stroke-width': '1px',
+          'stroke-dasharray': '5,5',
+        },
+        this.svgRoot_));
 
     if (Debug.config.connectedBlockBounds) {
       // Bounding box with children.
       xPos = info.RTL ? -info.widthWithChildren : 0;
       this.debugElements_.push(dom.createSvgElement(
-        Svg.RECT, {
-        'class': 'blockRenderDebug',
-        'x': xPos,
-        'y': yPos,
-        'width': info.widthWithChildren,
-        'height': info.height,
-        'stroke': '#DF57BC',
-        'fill': 'none',
-        'stroke-width': '1px',
-        'stroke-dasharray': '3,3',
-      },
-        this.svgRoot_));
+          Svg.RECT, {
+            'class': 'blockRenderDebug',
+            'x': xPos,
+            'y': yPos,
+            'width': info.widthWithChildren,
+            'height': info.height,
+            'stroke': '#DF57BC',
+            'fill': 'none',
+            'stroke-width': '1px',
+            'stroke-dasharray': '3,3',
+          },
+          this.svgRoot_));
     }
   }
 
@@ -373,7 +372,7 @@ export class Debug {
     this.svgRoot_ = block.getSvgRoot();
 
     this.randomColour_ =
-      '#' + Math.floor(Math.random() * 16777215).toString(16);
+        '#' + Math.floor(Math.random() * 16777215).toString(16);
 
     let cursorY = 0;
     for (let i = 0; i < info.rows.length; i++) {
@@ -418,8 +417,8 @@ export class Debug {
       return;
     }
     svgPath.setAttribute(
-      'filter', 'url(#' + this.constants.debugFilterId + ')');
-    setTimeout(function () {
+        'filter', 'url(#' + this.constants.debugFilterId + ')');
+    setTimeout(function() {
       svgPath.setAttribute('filter', '');
     }, 100);
   }

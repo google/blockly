@@ -15,9 +15,9 @@
 
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from '../workspace_svg.js';
+import {WorkspaceSvg} from '../workspace_svg.js';
 
-import { ISelectable } from './i_selectable.js';
+import {ISelectable} from './i_selectable.js';
 
 
 /** @alias Blockly.ICopyable */
@@ -29,7 +29,7 @@ export interface ICopyable extends ISelectable {
   toCopyData: AnyDuringMigration;
 }
 export interface CopyData {
-  saveInfo: AnyDuringMigration | Element;
+  saveInfo: AnyDuringMigration|Element;
   source: WorkspaceSvg;
-  typeCounts: AnyDuringMigration | null;
+  typeCounts: AnyDuringMigration|null;
 }

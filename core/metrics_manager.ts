@@ -13,18 +13,18 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { IFlyout } from './interfaces/i_flyout.js';
+import {IFlyout} from './interfaces/i_flyout.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IMetricsManager } from './interfaces/i_metrics_manager.js';
+import {IMetricsManager} from './interfaces/i_metrics_manager.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IToolbox } from './interfaces/i_toolbox.js';
+import {IToolbox} from './interfaces/i_toolbox.js';
 import * as registry from './registry.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Metrics } from './utils/metrics.js';
-import { Size } from './utils/size.js';
+import {Metrics} from './utils/metrics.js';
+import {Size} from './utils/size.js';
 import * as toolboxUtils from './utils/toolbox.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**
@@ -42,7 +42,7 @@ export class MetricsManager implements IMetricsManager {
    * @return An object containing width and height attributes, which will both
    *     be zero if elem did not exist.
    */
-  protected getDimensionsPx_(elem: IToolbox | null | IFlyout): Size {
+  protected getDimensionsPx_(elem: IToolbox|null|IFlyout): Size {
     let width = 0;
     let height = 0;
     if (elem) {
@@ -61,7 +61,7 @@ export class MetricsManager implements IMetricsManager {
    */
   getFlyoutMetrics(opt_own?: boolean): ToolboxMetrics {
     const flyoutDimensions =
-      this.getDimensionsPx_(this.workspace.getFlyout(opt_own));
+        this.getDimensionsPx_(this.workspace.getFlyout(opt_own));
     return {
       width: flyoutDimensions.width,
       height: flyoutDimensions.height,
@@ -79,7 +79,7 @@ export class MetricsManager implements IMetricsManager {
    */
   getToolboxMetrics(): ToolboxMetrics {
     const toolboxDimensions =
-      this.getDimensionsPx_(this.workspace.getToolbox());
+        this.getDimensionsPx_(this.workspace.getToolbox());
 
     return {
       width: toolboxDimensions.width,
@@ -110,7 +110,7 @@ export class MetricsManager implements IMetricsManager {
     const doesToolboxExist = !!this.workspace.getToolbox();
     const doesFlyoutExist = !!this.workspace.getFlyout(true);
     const toolboxPosition =
-      doesToolboxExist ? toolboxMetrics.position : flyoutMetrics.position;
+        doesToolboxExist ? toolboxMetrics.position : flyoutMetrics.position;
 
     const atLeft = toolboxPosition === toolboxUtils.Position.LEFT;
     const atTop = toolboxPosition === toolboxUtils.Position.TOP;
@@ -147,24 +147,24 @@ export class MetricsManager implements IMetricsManager {
     const flyoutMetrics = this.getFlyoutMetrics(true);
     const doesToolboxExist = !!this.workspace.getToolbox();
     const toolboxPosition =
-      doesToolboxExist ? toolboxMetrics.position : flyoutMetrics.position;
+        doesToolboxExist ? toolboxMetrics.position : flyoutMetrics.position;
 
     if (this.workspace.getToolbox()) {
       if (toolboxPosition === toolboxUtils.Position.TOP ||
-        toolboxPosition === toolboxUtils.Position.BOTTOM) {
+          toolboxPosition === toolboxUtils.Position.BOTTOM) {
         svgMetrics.height -= toolboxMetrics.height;
       } else if (
-        toolboxPosition === toolboxUtils.Position.LEFT ||
-        toolboxPosition === toolboxUtils.Position.RIGHT) {
+          toolboxPosition === toolboxUtils.Position.LEFT ||
+          toolboxPosition === toolboxUtils.Position.RIGHT) {
         svgMetrics.width -= toolboxMetrics.width;
       }
     } else if (this.workspace.getFlyout(true)) {
       if (toolboxPosition === toolboxUtils.Position.TOP ||
-        toolboxPosition === toolboxUtils.Position.BOTTOM) {
+          toolboxPosition === toolboxUtils.Position.BOTTOM) {
         svgMetrics.height -= flyoutMetrics.height;
       } else if (
-        toolboxPosition === toolboxUtils.Position.LEFT ||
-        toolboxPosition === toolboxUtils.Position.RIGHT) {
+          toolboxPosition === toolboxUtils.Position.LEFT ||
+          toolboxPosition === toolboxUtils.Position.RIGHT) {
         svgMetrics.width -= flyoutMetrics.width;
       }
     }
@@ -204,7 +204,7 @@ export class MetricsManager implements IMetricsManager {
   hasFixedEdges(): boolean {
     // This exists for optimization of bump logic.
     return !this.workspace.isMovableHorizontally() ||
-      !this.workspace.isMovableVertically();
+        !this.workspace.isMovableVertically();
   }
 
   /**
@@ -215,7 +215,7 @@ export class MetricsManager implements IMetricsManager {
    * @return The fixed edges of the scroll area.
    */
   protected getComputedFixedEdges_(opt_viewMetrics?: ContainerRegion):
-    FixedEdges {
+      FixedEdges {
     if (!this.hasFixedEdges()) {
       // Return early if there are no edges.
       return {};
@@ -245,7 +245,8 @@ export class MetricsManager implements IMetricsManager {
    * @return The padded content area.
    */
   protected getPaddedContent_(
-    viewMetrics: ContainerRegion, contentMetrics: ContainerRegion): { top: number, bottom: number, left: number, right: number } {
+      viewMetrics: ContainerRegion, contentMetrics: ContainerRegion):
+      {top: number, bottom: number, left: number, right: number} {
     const contentBottom = contentMetrics.top + contentMetrics.height;
     const contentRight = contentMetrics.left + contentMetrics.width;
 
@@ -257,15 +258,15 @@ export class MetricsManager implements IMetricsManager {
     // Add a padding around the content that is at least half a screen wide.
     // Ensure padding is wide enough that blocks can scroll over entire screen.
     const top =
-      Math.min(contentMetrics.top - halfHeight, contentBottom - viewHeight);
+        Math.min(contentMetrics.top - halfHeight, contentBottom - viewHeight);
     const left =
-      Math.min(contentMetrics.left - halfWidth, contentRight - viewWidth);
+        Math.min(contentMetrics.left - halfWidth, contentRight - viewWidth);
     const bottom =
-      Math.max(contentBottom + halfHeight, contentMetrics.top + viewHeight);
+        Math.max(contentBottom + halfHeight, contentMetrics.top + viewHeight);
     const right =
-      Math.max(contentRight + halfWidth, contentMetrics.left + viewWidth);
+        Math.max(contentRight + halfWidth, contentMetrics.left + viewWidth);
 
-    return { top, bottom, left, right };
+    return {top, bottom, left, right};
   }
 
   /**
@@ -281,8 +282,8 @@ export class MetricsManager implements IMetricsManager {
    * @return The metrics for the scroll container.
    */
   getScrollMetrics(
-    opt_getWorkspaceCoordinates?: boolean, opt_viewMetrics?: ContainerRegion,
-    opt_contentMetrics?: ContainerRegion): ContainerRegion {
+      opt_getWorkspaceCoordinates?: boolean, opt_viewMetrics?: ContainerRegion,
+      opt_contentMetrics?: ContainerRegion): ContainerRegion {
     const scale = opt_getWorkspaceCoordinates ? this.workspace.scale : 1;
     const viewMetrics = opt_viewMetrics || this.getViewMetrics(false);
     const contentMetrics = opt_contentMetrics || this.getContentMetrics();
@@ -293,13 +294,13 @@ export class MetricsManager implements IMetricsManager {
 
     // Use combination of fixed bounds and padded content to make scroll area.
     const top =
-      fixedEdges.top !== undefined ? fixedEdges.top : paddedContent.top;
+        fixedEdges.top !== undefined ? fixedEdges.top : paddedContent.top;
     const left =
-      fixedEdges.left !== undefined ? fixedEdges.left : paddedContent.left;
+        fixedEdges.left !== undefined ? fixedEdges.left : paddedContent.left;
     const bottom = fixedEdges.bottom !== undefined ? fixedEdges.bottom :
-      paddedContent.bottom;
+                                                     paddedContent.bottom;
     const right =
-      fixedEdges.right !== undefined ? fixedEdges.right : paddedContent.right;
+        fixedEdges.right !== undefined ? fixedEdges.right : paddedContent.right;
 
     return {
       top: top / scale,
@@ -363,7 +364,7 @@ export class MetricsManager implements IMetricsManager {
     const viewMetrics = this.getViewMetrics();
     const contentMetrics = this.getContentMetrics();
     const scrollMetrics =
-      this.getScrollMetrics(false, viewMetrics, contentMetrics);
+        this.getScrollMetrics(false, viewMetrics, contentMetrics);
 
     return {
       contentHeight: contentMetrics.height,
@@ -424,4 +425,4 @@ export interface UiMetrics {
 }
 
 registry.register(
-  registry.Type.METRICS_MANAGER, registry.DEFAULT, MetricsManager);
+    registry.Type.METRICS_MANAGER, registry.DEFAULT, MetricsManager);

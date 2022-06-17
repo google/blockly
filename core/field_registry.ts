@@ -19,9 +19,9 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { Field } from './field.js';
+import {Field} from './field.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IRegistrableField } from './interfaces/i_registrable_field.js';
+import {IRegistrableField} from './interfaces/i_registrable_field.js';
 import * as registry from './registry.js';
 
 
@@ -59,17 +59,17 @@ export function unregister(type: string) {
  *     type name
  * @alias Blockly.fieldRegistry.fromJson
  */
-export function fromJson(options: AnyDuringMigration): Field | null {
+export function fromJson(options: AnyDuringMigration): Field|null {
   const fieldObject =
-    registry.getObject(registry.Type.FIELD, options['type']) as
-    IRegistrableField |
-    null;
+      registry.getObject(registry.Type.FIELD, options['type']) as
+          IRegistrableField |
+      null;
   if (!fieldObject) {
     console.warn(
-      'Blockly could not create a field of type ' + options['type'] +
-      '. The field is probably not being registered. This could be because' +
-      ' the file is not loaded, the field does not register itself (Issue' +
-      ' #1584), or the registration is not being reached.');
+        'Blockly could not create a field of type ' + options['type'] +
+        '. The field is probably not being registered. This could be because' +
+        ' the file is not loaded, the field does not register itself (Issue' +
+        ' #1584), or the registration is not being reached.');
     return null;
   }
   return fieldObject.fromJson(options);

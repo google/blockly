@@ -17,11 +17,11 @@
  */
 
 import * as browserEvents from './browser_events.js';
-import { Gesture } from './gesture.js';
+import {Gesture} from './gesture.js';
 import * as Touch from './touch.js';
-import { Coordinate } from './utils/coordinate.js';
+import {Coordinate} from './utils/coordinate.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 
 /*
@@ -43,7 +43,7 @@ const ZOOM_OUT_MULTIPLIER = 6;
 export class TouchGesture extends Gesture {
   /** Boolean for whether or not this gesture is a multi-touch gesture. */
   private isMultiTouch_ = false;
-  private cachedPoints_: { [key: string]: Coordinate };
+  private cachedPoints_: {[key: string]: Coordinate};
 
   /**
    * This is the ratio between the starting distance between the touch points
@@ -61,10 +61,10 @@ export class TouchGesture extends Gesture {
    * at the end of a drag.
    * Opaque data returned from Blockly.bindEventWithChecks_.
    */
-  private onStartWrapper_: browserEvents.Data | null = null;
+  private onStartWrapper_: browserEvents.Data|null = null;
 
   /** Boolean for whether or not the workspace supports pinch-zoom. */
-  private isPinchZoomEnabled_: boolean | null = null;
+  private isPinchZoomEnabled_: boolean|null = null;
   override onMoveWrapper_: AnyDuringMigration;
   override onUpWrapper_: AnyDuringMigration;
 
@@ -87,7 +87,7 @@ export class TouchGesture extends Gesture {
    */
   override doStart(e: Event) {
     this.isPinchZoomEnabled_ = this.startWorkspace_.options.zoomOptions &&
-      this.startWorkspace_.options.zoomOptions.pinch;
+        this.startWorkspace_.options.zoomOptions.pinch;
     super.doStart(e);
     if (!this.isEnding_ && Touch.isTouchEvent(e)) {
       this.handleTouchStart(e);
@@ -105,13 +105,13 @@ export class TouchGesture extends Gesture {
    */
   override bindMouseEvents(e: Event) {
     this.onStartWrapper_ = browserEvents.conditionalBind(
-      document, 'mousedown', null, this.handleStart.bind(this),
+        document, 'mousedown', null, this.handleStart.bind(this),
         /* opt_noCaptureIdentifier */ true);
     this.onMoveWrapper_ = browserEvents.conditionalBind(
-      document, 'mousemove', null, this.handleMove.bind(this),
+        document, 'mousemove', null, this.handleMove.bind(this),
         /* opt_noCaptureIdentifier */ true);
     this.onUpWrapper_ = browserEvents.conditionalBind(
-      document, 'mouseup', null, this.handleUp.bind(this),
+        document, 'mouseup', null, this.handleUp.bind(this),
         /* opt_noCaptureIdentifier */ true);
 
     e.preventDefault();
@@ -253,10 +253,10 @@ export class TouchGesture extends Gesture {
     if (this.previousScale_ > 0 && this.previousScale_ < Infinity) {
       const gestureScale = scale - this.previousScale_;
       const delta = gestureScale > 0 ? gestureScale * ZOOM_IN_MULTIPLIER :
-        gestureScale * ZOOM_OUT_MULTIPLIER;
+                                       gestureScale * ZOOM_OUT_MULTIPLIER;
       const workspace = this.startWorkspace_;
       const position = browserEvents.mouseToSvg(
-        e, workspace.getParentSvg(), workspace.getInverseScreenCTM());
+          e, workspace.getParentSvg(), workspace.getInverseScreenCTM());
       workspace.zoom(position.x, position.y, delta);
     }
     this.previousScale_ = scale;
@@ -283,16 +283,16 @@ export class TouchGesture extends Gesture {
    * @param e A touch or pointer event.
    * @return The current touch point coordinate
    */
-  getTouchPoint(e: Event): Coordinate | null {
+  getTouchPoint(e: Event): Coordinate|null {
     if (!this.startWorkspace_) {
       return null;
     }
     // TODO(#6097): Make types accurate, possibly by refactoring touch handling.
     const typelessEvent = e as AnyDuringMigration;
     return new Coordinate(
-      typelessEvent.changedTouches ? typelessEvent.changedTouches[0].pageX :
-        typelessEvent.pageX,
-      typelessEvent.changedTouches ? typelessEvent.changedTouches[0].pageY :
-        typelessEvent.pageY);
+        typelessEvent.changedTouches ? typelessEvent.changedTouches[0].pageX :
+                                       typelessEvent.pageX,
+        typelessEvent.changedTouches ? typelessEvent.changedTouches[0].pageY :
+                                       typelessEvent.pageY);
   }
 }

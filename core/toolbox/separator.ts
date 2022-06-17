@@ -14,13 +14,13 @@
 
 import * as Css from '../css.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IToolbox } from '../interfaces/i_toolbox.js';
+import {IToolbox} from '../interfaces/i_toolbox.js';
 import * as registry from '../registry.js';
 import * as dom from '../utils/dom.js';
 /* eslint-disable-next-line no-unused-vars */
 import * as toolbox from '../utils/toolbox.js';
 
-import { ToolboxItem } from './toolbox_item.js';
+import {ToolboxItem} from './toolbox_item.js';
 
 
 /**
@@ -33,9 +33,9 @@ export class ToolboxSeparator extends ToolboxItem {
   static registrationName = 'sep';
 
   /** All the CSS class names that are used to create a separator. */
-  protected cssConfig_: CssConfig = { 'container': 'blocklyTreeSeparator' };
+  protected cssConfig_: CssConfig = {'container': 'blocklyTreeSeparator'};
 
-  private htmlDiv_: HTMLDivElement | null = null;
+  private htmlDiv_: HTMLDivElement|null = null;
 
   /**
    * @param separatorDef The information needed to create a separator.
@@ -45,7 +45,7 @@ export class ToolboxSeparator extends ToolboxItem {
     super(separatorDef, toolbox);
 
     const cssConfig =
-      separatorDef['cssconfig'] || (separatorDef as any)['cssConfig'];
+        separatorDef['cssconfig'] || (separatorDef as any)['cssConfig'];
     Object.assign(this.cssConfig_, cssConfig);
   }
 
@@ -73,7 +73,7 @@ export class ToolboxSeparator extends ToolboxItem {
   }
 }
 export interface CssConfig {
-  container: string | undefined;
+  container: string|undefined;
 }
 
 /** CSS for Toolbox.  See css.js for use. */
@@ -95,5 +95,5 @@ Css.register(`
 `);
 
 registry.register(
-  registry.Type.TOOLBOX_ITEM, ToolboxSeparator.registrationName,
-  ToolboxSeparator);
+    registry.Type.TOOLBOX_ITEM, ToolboxSeparator.registrationName,
+    ToolboxSeparator);

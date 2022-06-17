@@ -18,7 +18,7 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { IComponent } from './i_component.js';
+import {IComponent} from './i_component.js';
 
 
 /**

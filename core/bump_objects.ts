@@ -33,24 +33,24 @@
  * @namespace Blockly.bumpObjects
  */
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from './block_svg.js';
+import {BlockSvg} from './block_svg.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Abstract } from './events/events_abstract.js';
-import { BlockCreate } from './events/events_block_create.js';
-import { BlockMove } from './events/events_block_move.js';
-import { CommentCreate } from './events/events_comment_create.js';
-import { CommentMove } from './events/events_comment_move.js';
+import {Abstract} from './events/events_abstract.js';
+import {BlockCreate} from './events/events_block_create.js';
+import {BlockMove} from './events/events_block_move.js';
+import {CommentCreate} from './events/events_comment_create.js';
+import {CommentMove} from './events/events_comment_move.js';
 /* eslint-disable-next-line no-unused-vars */
-import { ViewportChange } from './events/events_viewport.js';
+import {ViewportChange} from './events/events_viewport.js';
 import * as eventUtils from './events/utils.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IBoundedElement } from './interfaces/i_bounded_element.js';
-import { ContainerRegion, MetricsManager } from './metrics_manager.js';
+import {IBoundedElement} from './interfaces/i_bounded_element.js';
+import {ContainerRegion, MetricsManager} from './metrics_manager.js';
 import * as mathUtils from './utils/math.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceCommentSvg } from './workspace_comment_svg.js';
+import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**
@@ -63,8 +63,8 @@ import { WorkspaceSvg } from './workspace_svg.js';
  * @alias Blockly.bumpObjects.bumpIntoBounds
  */
 function bumpObjectIntoBounds(
-  workspace: WorkspaceSvg, scrollMetrics: ContainerRegion,
-  object: IBoundedElement): boolean {
+    workspace: WorkspaceSvg, scrollMetrics: ContainerRegion,
+    object: IBoundedElement): boolean {
   // Compute new top/left position for object.
   const objectMetrics = object.getBoundingRectangle();
   const height = objectMetrics.bottom - objectMetrics.top;
@@ -76,7 +76,7 @@ function bumpObjectIntoBounds(
   // If the object is taller than the workspace we want to
   // top-align the block
   const newYPosition =
-    mathUtils.clamp(topClamp, objectMetrics.top, bottomClamp);
+      mathUtils.clamp(topClamp, objectMetrics.top, bottomClamp);
   const deltaY = newYPosition - objectMetrics.top;
 
   // Note: Even in RTL mode the "anchor" of the object is the
@@ -96,7 +96,7 @@ function bumpObjectIntoBounds(
     rightClamp = Math.max(leftClamp, rightClamp);
   }
   const newXPosition =
-    mathUtils.clamp(leftClamp, objectMetrics.left, rightClamp);
+      mathUtils.clamp(leftClamp, objectMetrics.left, rightClamp);
   const deltaX = newXPosition - objectMetrics.left;
 
   if (deltaX || deltaY) {
@@ -114,7 +114,7 @@ export const bumpIntoBounds = bumpObjectIntoBounds;
  * @alias Blockly.bumpObjects.bumpIntoBoundsHandler
  */
 export function bumpIntoBoundsHandler(workspace: WorkspaceSvg):
-  (p1: Abstract) => AnyDuringMigration {
+    (p1: Abstract) => AnyDuringMigration {
   return (e) => {
     const metricsManager = workspace.getMetricsManager();
     if (!metricsManager.hasFixedEdges() || workspace.isDragging()) {
@@ -126,7 +126,7 @@ export function bumpIntoBoundsHandler(workspace: WorkspaceSvg):
 
       // Triggered by move/create event
       const object =
-        extractObjectFromEvent(workspace, e as eventUtils.BumpEvent);
+          extractObjectFromEvent(workspace, e as eventUtils.BumpEvent);
       if (!object) {
         return;
       }
@@ -135,12 +135,12 @@ export function bumpIntoBoundsHandler(workspace: WorkspaceSvg):
       eventUtils.setGroup(e.group);
 
       const wasBumped = bumpObjectIntoBounds(
-        workspace, scrollMetricsInWsCoords, (object as IBoundedElement));
+          workspace, scrollMetricsInWsCoords, (object as IBoundedElement));
 
       if (wasBumped && !e.group) {
         console.warn(
-          'Moved object in bounds but there was no' +
-          ' event group. This may break undo.');
+            'Moved object in bounds but there was no' +
+            ' event group. This may break undo.');
       }
       if (oldGroup !== null) {
         eventUtils.setGroup(oldGroup);
@@ -148,7 +148,7 @@ export function bumpIntoBoundsHandler(workspace: WorkspaceSvg):
     } else if (e.type === eventUtils.VIEWPORT_CHANGE) {
       const viewportEvent = (e as ViewportChange);
       if (viewportEvent.scale && viewportEvent.oldScale &&
-        viewportEvent.scale > viewportEvent.oldScale) {
+          viewportEvent.scale > viewportEvent.oldScale) {
         bumpTopObjectsIntoBounds(workspace);
       }
     }
@@ -164,8 +164,8 @@ export function bumpIntoBoundsHandler(workspace: WorkspaceSvg):
  *    object.
  */
 function extractObjectFromEvent(
-  workspace: WorkspaceSvg, e: eventUtils.BumpEvent): BlockSvg | null |
-  WorkspaceCommentSvg {
+    workspace: WorkspaceSvg, e: eventUtils.BumpEvent): BlockSvg|null|
+    WorkspaceCommentSvg {
   let object = null;
   switch (e.type) {
     case eventUtils.BLOCK_CREATE:
@@ -178,9 +178,9 @@ function extractObjectFromEvent(
     case eventUtils.COMMENT_CREATE:
     case eventUtils.COMMENT_MOVE:
       object = workspace.getCommentById(
-        (e as CommentCreate | CommentMove).commentId) as
-        WorkspaceCommentSvg |
-        null;
+                   (e as CommentCreate | CommentMove).commentId) as
+              WorkspaceCommentSvg |
+          null;
       break;
   }
   return object;

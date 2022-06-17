@@ -13,11 +13,11 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { ConstantProvider } from '../common/constants.js';
+import {ConstantProvider} from '../common/constants.js';
 
-import { InRowSpacer } from './in_row_spacer.js';
-import { Row } from './row.js';
-import { Types } from './types.js';
+import {InRowSpacer} from './in_row_spacer.js';
+import {Row} from './row.js';
+import {Types} from './types.js';
 
 
 /**
@@ -39,8 +39,8 @@ export class SpacerRow extends Row {
    * @param width The width of the spacer.
    */
   constructor(
-    constants: ConstantProvider, public override height: number,
-    public override width: number) {
+      constants: ConstantProvider, public override height: number,
+      public override width: number) {
     super(constants);
     this.type |= Types.SPACER | Types.BETWEEN_ROW_SPACER;
 

@@ -12,19 +12,19 @@
  * @class
  */
 
-import { BlockSvg } from './block_svg.js';
+import {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import * as Css from './css.js';
 import * as dropDownDiv from './dropdowndiv.js';
-import { Field } from './field.js';
+import {Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
-import { FieldTextInput } from './field_textinput.js';
+import {FieldTextInput} from './field_textinput.js';
 import * as dom from './utils/dom.js';
-import { KeyCodes } from './utils/keycodes.js';
+import {KeyCodes} from './utils/keycodes.js';
 import * as math from './utils/math.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Sentinel } from './utils/sentinel.js';
-import { Svg } from './utils/svg.js';
+import {Sentinel} from './utils/sentinel.js';
+import {Svg} from './utils/svg.js';
 import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
 
@@ -76,13 +76,13 @@ export class FieldAngle extends FieldTextInput {
   private round_: number;
 
   /** The angle picker's SVG element. */
-  private editor_: SVGElement | null = null;
+  private editor_: SVGElement|null = null;
 
   /** The angle picker's gauge path depending on the value. */
-  gauge_: SVGElement | null = null;
+  gauge_: SVGElement|null = null;
 
   /** The angle picker's line drawn representing the value's angle. */
-  line_: SVGElement | null = null;
+  line_: SVGElement|null = null;
 
   /** The degree symbol for this field. */
   // AnyDuringMigration because:  Type 'null' is not assignable to type
@@ -90,13 +90,13 @@ export class FieldAngle extends FieldTextInput {
   protected symbol_: SVGTSpanElement = null as AnyDuringMigration;
 
   /** Wrapper click event data. */
-  private clickWrapper_: browserEvents.Data | null = null;
+  private clickWrapper_: browserEvents.Data|null = null;
 
   /** Surface click event data. */
-  private clickSurfaceWrapper_: browserEvents.Data | null = null;
+  private clickSurfaceWrapper_: browserEvents.Data|null = null;
 
   /** Surface mouse move event data. */
-  private moveSurfaceWrapper_: browserEvents.Data | null = null;
+  private moveSurfaceWrapper_: browserEvents.Data|null = null;
 
   /**
    * Serializable fields are saved by the serializer, non-serializable fields
@@ -118,8 +118,8 @@ export class FieldAngle extends FieldTextInput {
    * for a list of properties this parameter supports.
    */
   constructor(
-    opt_value?: string | number | Sentinel, opt_validator?: Function,
-    opt_config?: AnyDuringMigration) {
+      opt_value?: string|number|Sentinel, opt_validator?: Function,
+      opt_config?: AnyDuringMigration) {
     super(Field.SKIP_SETUP);
 
     /**
@@ -242,22 +242,21 @@ export class FieldAngle extends FieldTextInput {
 
     if (this.sourceBlock_ instanceof BlockSvg) {
       dropDownDiv.setColour(
-        this.sourceBlock_.style.colourPrimary,
-        this.sourceBlock_.style.colourTertiary);
+          this.sourceBlock_.style.colourPrimary,
+          this.sourceBlock_.style.colourTertiary);
     }
 
     // AnyDuringMigration because:  Argument of type 'this' is not assignable to
     // parameter of type 'Field'.
     dropDownDiv.showPositionedByField(
-      this as AnyDuringMigration, this.dropdownDispose_.bind(this));
+        this as AnyDuringMigration, this.dropdownDispose_.bind(this));
 
     this.updateGraph_();
   }
 
   /** Create the angle dropdown editor. */
   private dropdownCreate_() {
-    const svg = dom.createSvgElement(
-      Svg.SVG, {
+    const svg = dom.createSvgElement(Svg.SVG, {
       'xmlns': dom.SVG_NS,
       'xmlns:html': dom.HTML_NS,
       'xmlns:xlink': dom.XLINK_NS,
@@ -267,50 +266,50 @@ export class FieldAngle extends FieldTextInput {
       'style': 'touch-action: none',
     });
     const circle = dom.createSvgElement(
-      Svg.CIRCLE, {
-      'cx': FieldAngle.HALF,
-      'cy': FieldAngle.HALF,
-      'r': FieldAngle.RADIUS,
-      'class': 'blocklyAngleCircle',
-    },
-      svg);
+        Svg.CIRCLE, {
+          'cx': FieldAngle.HALF,
+          'cy': FieldAngle.HALF,
+          'r': FieldAngle.RADIUS,
+          'class': 'blocklyAngleCircle',
+        },
+        svg);
     this.gauge_ =
-      dom.createSvgElement(Svg.PATH, { 'class': 'blocklyAngleGauge' }, svg);
+        dom.createSvgElement(Svg.PATH, {'class': 'blocklyAngleGauge'}, svg);
     this.line_ = dom.createSvgElement(
-      Svg.LINE, {
-      'x1': FieldAngle.HALF,
-      'y1': FieldAngle.HALF,
-      'class': 'blocklyAngleLine',
-    },
-      svg);
+        Svg.LINE, {
+          'x1': FieldAngle.HALF,
+          'y1': FieldAngle.HALF,
+          'class': 'blocklyAngleLine',
+        },
+        svg);
     // Draw markers around the edge.
     for (let angle = 0; angle < 360; angle += 15) {
       dom.createSvgElement(
-        Svg.LINE, {
-        'x1': FieldAngle.HALF + FieldAngle.RADIUS,
-        'y1': FieldAngle.HALF,
-        'x2': FieldAngle.HALF + FieldAngle.RADIUS -
-          (angle % 45 === 0 ? 10 : 5),
-        'y2': FieldAngle.HALF,
-        'class': 'blocklyAngleMarks',
-        'transform': 'rotate(' + angle + ',' + FieldAngle.HALF + ',' +
-          FieldAngle.HALF + ')',
-      },
-        svg);
+          Svg.LINE, {
+            'x1': FieldAngle.HALF + FieldAngle.RADIUS,
+            'y1': FieldAngle.HALF,
+            'x2': FieldAngle.HALF + FieldAngle.RADIUS -
+                (angle % 45 === 0 ? 10 : 5),
+            'y2': FieldAngle.HALF,
+            'class': 'blocklyAngleMarks',
+            'transform': 'rotate(' + angle + ',' + FieldAngle.HALF + ',' +
+                FieldAngle.HALF + ')',
+          },
+          svg);
     }
 
     // The angle picker is different from other fields in that it updates on
     // mousemove even if it's not in the middle of a drag.  In future we may
     // change this behaviour.
     this.clickWrapper_ =
-      browserEvents.conditionalBind(svg, 'click', this, this.hide_);
+        browserEvents.conditionalBind(svg, 'click', this, this.hide_);
     // On touch devices, the picker's value is only updated with a drag. Add
     // a click handler on the drag surface to update the value if the surface
     // is clicked.
     this.clickSurfaceWrapper_ = browserEvents.conditionalBind(
-      circle, 'click', this, this.onMouseMove_, true, true);
+        circle, 'click', this, this.onMouseMove_, true, true);
     this.moveSurfaceWrapper_ = browserEvents.conditionalBind(
-      circle, 'mousemove', this, this.onMouseMove_, true, true);
+        circle, 'mousemove', this, this.onMouseMove_, true, true);
     this.editor_ = svg;
   }
 
@@ -414,13 +413,13 @@ export class FieldAngle extends FieldTextInput {
       y2 -= Math.sin(angleRadians) * FieldAngle.RADIUS;
       // Don't ask how the flag calculations work.  They just do.
       let largeFlag =
-        Math.abs(Math.floor((angleRadians - angle1) / Math.PI) % 2);
+          Math.abs(Math.floor((angleRadians - angle1) / Math.PI) % 2);
       if (clockwiseFlag) {
         largeFlag = 1 - largeFlag;
       }
       path.push(
-        ' l ', x1, ',', y1, ' A ', FieldAngle.RADIUS, ',', FieldAngle.RADIUS,
-        ' 0 ', largeFlag, ' ', clockwiseFlag, ' ', x2, ',', y2, ' z');
+          ' l ', x1, ',', y1, ' A ', FieldAngle.RADIUS, ',', FieldAngle.RADIUS,
+          ' 0 ', largeFlag, ' ', clockwiseFlag, ' ', x2, ',', y2, ' z');
     }
     this.gauge_.setAttribute('d', path.join(''));
     // AnyDuringMigration because:  Argument of type 'number' is not assignable
@@ -474,7 +473,7 @@ export class FieldAngle extends FieldTextInput {
    * @return A valid angle, or null if invalid.
    */
   protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
-    number | null {
+      number|null {
     const value = Number(opt_newValue);
     if (isNaN(value) || !isFinite(value)) {
       return null;

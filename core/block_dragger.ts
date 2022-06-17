@@ -17,24 +17,24 @@ import './events/events_block_drag';
 
 import * as blockAnimation from './block_animations.js';
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from './block_svg.js';
+import {BlockSvg} from './block_svg.js';
 import * as bumpObjects from './bump_objects.js';
 import * as common from './common.js';
 /* eslint-disable-next-line no-unused-vars */
-import { BlockMove } from './events/events_block_move.js';
+import {BlockMove} from './events/events_block_move.js';
 import * as eventUtils from './events/utils.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Icon } from './icon.js';
-import { InsertionMarkerManager } from './insertion_marker_manager.js';
+import {Icon} from './icon.js';
+import {InsertionMarkerManager} from './insertion_marker_manager.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IBlockDragger } from './interfaces/i_block_dragger.js';
+import {IBlockDragger} from './interfaces/i_block_dragger.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IDragTarget } from './interfaces/i_drag_target.js';
+import {IDragTarget} from './interfaces/i_drag_target.js';
 import * as registry from './registry.js';
-import { Coordinate } from './utils/coordinate.js';
+import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**
@@ -46,7 +46,7 @@ export class BlockDragger implements IBlockDragger {
   protected draggedConnectionManager_: InsertionMarkerManager;
 
   /** Which drag area the mouse pointer is over, if any. */
-  private dragTarget_: IDragTarget | null = null;
+  private dragTarget_: IDragTarget|null = null;
 
   /** Whether the block would be deleted if dropped immediately. */
   protected wouldDeleteBlock_ = false;
@@ -58,8 +58,8 @@ export class BlockDragger implements IBlockDragger {
    * @param workspace The workspace to drag on.
    */
   constructor(
-    private readonly block: BlockSvg,
-    private readonly workspace: WorkspaceSvg) {
+      private readonly block: BlockSvg,
+      private readonly workspace: WorkspaceSvg) {
     /** Object that keeps track of connections on dragged blocks. */
     this.draggedConnectionManager_ = new InsertionMarkerManager(this.block);
 
@@ -129,9 +129,9 @@ export class BlockDragger implements IBlockDragger {
    */
   protected shouldDisconnect_(healStack: boolean): boolean {
     return !!(
-      this.block.getParent() ||
-      healStack && this.block.nextConnection &&
-      this.block.nextConnection.targetBlock());
+        this.block.getParent() ||
+        healStack && this.block.nextConnection &&
+            this.block.nextConnection.targetBlock());
   }
 
   /**
@@ -141,7 +141,7 @@ export class BlockDragger implements IBlockDragger {
    *     at mouse down, in pixel units.
    */
   protected disconnectBlock_(
-    healStack: boolean, currentDragDeltaXY: Coordinate) {
+      healStack: boolean, currentDragDeltaXY: Coordinate) {
     this.block.unplug(healStack);
     const delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
     const newLoc = Coordinate.sum(this.startXY_, delta);
@@ -154,7 +154,7 @@ export class BlockDragger implements IBlockDragger {
   /** Fire a UI event at the start of a block drag. */
   protected fireDragStartEvent_() {
     const event = new (eventUtils.get(eventUtils.BLOCK_DRAG))!
-      (this.block, true, this.block.getDescendants(false));
+        (this.block, true, this.block.getDescendants(false));
     eventUtils.fire(event);
   }
 
@@ -208,9 +208,9 @@ export class BlockDragger implements IBlockDragger {
     blockAnimation.disconnectUiStop();
 
     const preventMove =
-      !!this.dragTarget_ && this.dragTarget_.shouldPreventMove(this.block);
+        !!this.dragTarget_ && this.dragTarget_.shouldPreventMove(this.block);
     let newLoc: Coordinate;
-    let delta: Coordinate | null = null;
+    let delta: Coordinate|null = null;
     if (preventMove) {
       newLoc = this.startXY_;
     } else {
@@ -234,9 +234,9 @@ export class BlockDragger implements IBlockDragger {
         // Blocks dragged directly from a flyout may need to be bumped into
         // bounds.
         bumpObjects.bumpIntoBounds(
-          this.block.workspace,
-          this.workspace.getMetricsManager().getScrollMetrics(true),
-          this.block);
+            this.block.workspace,
+            this.workspace.getMetricsManager().getScrollMetrics(true),
+            this.block);
       }
     }
     this.workspace.setResizesEnabled(true);
@@ -251,7 +251,8 @@ export class BlockDragger implements IBlockDragger {
    * @return New location after drag. delta is in workspace units. newLocation
    *     is the new coordinate where the block should end up.
    */
-  protected getNewLocationAfterDrag_(currentDragDeltaXY: Coordinate): { delta: Coordinate, newLocation: Coordinate } {
+  protected getNewLocationAfterDrag_(currentDragDeltaXY: Coordinate):
+      {delta: Coordinate, newLocation: Coordinate} {
     const delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
     const newLocation = Coordinate.sum(this.startXY_, delta);
     return {
@@ -297,7 +298,7 @@ export class BlockDragger implements IBlockDragger {
   /** Fire a UI event at the end of a block drag. */
   protected fireDragEndEvent_() {
     const event = new (eventUtils.get(eventUtils.BLOCK_DRAG))!
-      (this.block, false, this.block.getDescendants(false));
+        (this.block, false, this.block.getDescendants(false));
     eventUtils.fire(event);
   }
 
@@ -312,20 +313,20 @@ export class BlockDragger implements IBlockDragger {
 
     if (toolbox) {
       const style = this.block.isDeletable() ? 'blocklyToolboxDelete' :
-        'blocklyToolboxGrab';
+                                               'blocklyToolboxGrab';
 
       // AnyDuringMigration because:  Property 'removeStyle' does not exist on
       // type 'IToolbox'.
       if (isEnd &&
-        typeof (toolbox as AnyDuringMigration).removeStyle === 'function') {
+          typeof (toolbox as AnyDuringMigration).removeStyle === 'function') {
         // AnyDuringMigration because:  Property 'removeStyle' does not exist on
         // type 'IToolbox'.
         (toolbox as AnyDuringMigration).removeStyle(style);
         // AnyDuringMigration because:  Property 'addStyle' does not exist on
         // type 'IToolbox'.
       } else if (
-        !isEnd &&
-        typeof (toolbox as AnyDuringMigration).addStyle === 'function') {
+          !isEnd &&
+          typeof (toolbox as AnyDuringMigration).addStyle === 'function') {
         // AnyDuringMigration because:  Property 'addStyle' does not exist on
         // type 'IToolbox'.
         (toolbox as AnyDuringMigration).addStyle(style);
@@ -336,7 +337,7 @@ export class BlockDragger implements IBlockDragger {
   /** Fire a move event at the end of a block drag. */
   protected fireMoveEvent_() {
     const event =
-      new (eventUtils.get(eventUtils.BLOCK_MOVE))!(this.block) as BlockMove;
+        new (eventUtils.get(eventUtils.BLOCK_MOVE))!(this.block) as BlockMove;
     event.oldCoordinate = this.startXY_;
     event.recordNew();
     eventUtils.fire(event);
@@ -360,8 +361,8 @@ export class BlockDragger implements IBlockDragger {
    */
   protected pixelsToWorkspaceUnits_(pixelCoord: Coordinate): Coordinate {
     const result = new Coordinate(
-      pixelCoord.x / this.workspace.scale,
-      pixelCoord.y / this.workspace.scale);
+        pixelCoord.x / this.workspace.scale,
+        pixelCoord.y / this.workspace.scale);
     if (this.workspace.isMutator) {
       // If we're in a mutator, its scale is always 1, purely because of some
       // oddities in our rendering optimizations.  The actual scale is the same
@@ -393,7 +394,7 @@ export class BlockDragger implements IBlockDragger {
   getInsertionMarkers(): BlockSvg[] {
     // No insertion markers with the old style of dragged connection managers.
     if (this.draggedConnectionManager_ &&
-      this.draggedConnectionManager_.getInsertionMarkers) {
+        this.draggedConnectionManager_.getInsertionMarkers) {
       return this.draggedConnectionManager_.getInsertionMarkers();
     }
     return [];

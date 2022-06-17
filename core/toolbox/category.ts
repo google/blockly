@@ -174,7 +174,8 @@ export class ToolboxCategory extends ToolboxItem implements
     this.colour_ = this.getColour_(categoryDef);
     Object.assign(
         this.cssConfig_,
-        (categoryDef as any)['cssconfig'] || categoryDef['cssConfig']);
+        categoryDef['cssconfig'] ||
+        (categoryDef as AnyDuringMigration)['cssConfig']);
   }
 
   /**

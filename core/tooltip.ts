@@ -342,8 +342,8 @@ export function dispose() {
 export function hide() {
   if (visible) {
     visible = false;
-    if (DIV) {
-      DIV.style.display = 'none';
+    if (containerDiv) {
+      containerDiv.style.display = 'none';
     }
   }
   if (showPid) {
@@ -379,7 +379,7 @@ function renderContent() {
     return;
   }
   if (typeof customTooltip === 'function') {
-    customTooltip(DIV, element);
+    customTooltip(containerDiv, element);
   } else {
     renderDefaultContent();
   }

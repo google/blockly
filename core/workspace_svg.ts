@@ -1558,11 +1558,12 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    */
   private pasteWorkspaceComment_(xmlComment: Element): WorkspaceCommentSvg {
     eventUtils.disable();
-    let comment;
+    let comment: WorkspaceCommentSvg;
     try {
       // AnyDuringMigration because:  Property 'get' does not exist on type
       // '(name: string) => void'.
-      comment = WorkspaceCommentSvg.fromXml(xmlComment, this);
+      comment = WorkspaceCommentSvg
+          .fromXml(xmlComment, this) as AnyDuringMigration;
       // Move the duplicate to original position.
       // AnyDuringMigration because:  Argument of type 'string | null' is not
       // assignable to parameter of type 'string'.

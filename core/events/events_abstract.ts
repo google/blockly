@@ -95,8 +95,9 @@ export abstract class Abstract {
    * Get workspace the event belongs to.
    * @return The workspace the event belongs to.
    * @throws {Error} if workspace is null.
+   * @internal
    */
-  protected getEventWorkspace_(): Workspace {
+  getEventWorkspace_(): Workspace {
     let workspace;
     if (this.workspaceId) {
       workspace = Workspace.getById(this.workspaceId);

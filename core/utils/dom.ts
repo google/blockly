@@ -19,7 +19,7 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { Svg } from './svg.js';
+import {Svg} from './svg.js';
 import * as userAgent from './useragent.js';
 
 
@@ -73,7 +73,7 @@ let canvasContext: CanvasRenderingContext2D = null as AnyDuringMigration;
  * @alias Blockly.utils.dom.createSvgElement
  */
 export function createSvgElement<T extends SVGElement>(
-  name: string | Svg<T>, attrs: AnyDuringMigration, opt_parent?: Element): T {
+    name: string|Svg<T>, attrs: AnyDuringMigration, opt_parent?: Element): T {
   const e = document.createElementNS(SVG_NS, String(name)) as T;
   for (const key in attrs) {
     e.setAttribute(key, attrs[key]);
@@ -172,7 +172,7 @@ export function hasClass(element: Element, className: string): boolean {
  * @alias Blockly.utils.dom.removeNode
  */
 // Copied from Closure goog.dom.removeNode
-export function removeNode(node: Node | null): Node | null {
+export function removeNode(node: Node|null): Node|null {
   return node && node.parentNode ? node.parentNode.removeChild(node) : null;
 }
 
@@ -205,8 +205,8 @@ export function insertAfter(newNode: Element, refNode: Element) {
  */
 export function containsNode(parent: Node, descendant: Node): boolean {
   return !!(
-    parent.compareDocumentPosition(descendant) &
-    NodeType.DOCUMENT_POSITION_CONTAINED_BY);
+      parent.compareDocumentPosition(descendant) &
+      NodeType.DOCUMENT_POSITION_CONTAINED_BY);
 }
 
 /**
@@ -301,10 +301,10 @@ export function getTextWidth(textElement: SVGTextElement): number {
  * @alias Blockly.utils.dom.getFastTextWidth
  */
 export function getFastTextWidth(
-  textElement: Element, fontSize: number, fontWeight: string,
-  fontFamily: string): number {
+    textElement: Element, fontSize: number, fontWeight: string,
+    fontFamily: string): number {
   return getFastTextWidthWithSizeString(
-    textElement, fontSize + 'pt', fontWeight, fontFamily);
+      textElement, fontSize + 'pt', fontWeight, fontFamily);
 }
 
 /**
@@ -321,13 +321,13 @@ export function getFastTextWidth(
  * @alias Blockly.utils.dom.getFastTextWidthWithSizeString
  */
 export function getFastTextWidthWithSizeString(
-  textElement: Element, fontSize: string, fontWeight: string,
-  fontFamily: string): number {
+    textElement: Element, fontSize: string, fontWeight: string,
+    fontFamily: string): number {
   const text = textElement.textContent;
   // AnyDuringMigration because:  Property 'baseVal' does not exist on type
   // 'string'.
   const key =
-    text + '\n' + (textElement.className as AnyDuringMigration).baseVal;
+      text + '\n' + (textElement.className as AnyDuringMigration).baseVal;
   let width;
 
   // Return the cached width if it exists.
@@ -374,8 +374,8 @@ export function getFastTextWidthWithSizeString(
  * @alias Blockly.utils.dom.measureFontMetrics
  */
 export function measureFontMetrics(
-  text: string, fontSize: string, fontWeight: string,
-  fontFamily: string): { height: number, baseline: number } {
+    text: string, fontSize: string, fontWeight: string,
+    fontFamily: string): {height: number, baseline: number} {
   const span = (document.createElement('span'));
   span.style.font = fontWeight + ' ' + fontSize + ' ' + fontFamily;
   span.textContent = text;

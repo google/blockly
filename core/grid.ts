@@ -17,7 +17,7 @@
  */
 
 import * as dom from './utils/dom.js';
-import { Svg } from './utils/svg.js';
+import {Svg} from './utils/svg.js';
 import * as userAgent from './utils/useragent.js';
 
 
@@ -134,8 +134,8 @@ export class Grid {
    * @param y2 The new y end position of the line (in px).
    */
   private setLineAttributes_(
-    line: SVGElement, width: number, x1: number, x2: number, y1: number,
-    y2: number) {
+      line: SVGElement, width: number, x1: number, x2: number, y1: number,
+      y2: number) {
     if (line) {
       // AnyDuringMigration because:  Argument of type 'number' is not
       // assignable to parameter of type 'string'.
@@ -184,8 +184,8 @@ export class Grid {
    * @return The SVG element for the grid pattern.
    */
   static createDom(
-    rnd: string, gridOptions: AnyDuringMigration,
-    defs: SVGElement): SVGElement {
+      rnd: string, gridOptions: AnyDuringMigration,
+      defs: SVGElement): SVGElement {
     /*
           <pattern id="blocklyGridPattern837493" patternUnits="userSpaceOnUse">
             <rect stroke="#888" />
@@ -193,16 +193,16 @@ export class Grid {
           </pattern>
         */
     const gridPattern = dom.createSvgElement(
-      Svg.PATTERN,
-      { 'id': 'blocklyGridPattern' + rnd, 'patternUnits': 'userSpaceOnUse' },
-      defs);
+        Svg.PATTERN,
+        {'id': 'blocklyGridPattern' + rnd, 'patternUnits': 'userSpaceOnUse'},
+        defs);
     // x1, y1, x1, x2 properties will be set later in update.
     if (gridOptions['length'] > 0 && gridOptions['spacing'] > 0) {
       dom.createSvgElement(
-        Svg.LINE, { 'stroke': gridOptions['colour'] }, gridPattern);
+          Svg.LINE, {'stroke': gridOptions['colour']}, gridPattern);
       if (gridOptions['length'] > 1) {
         dom.createSvgElement(
-          Svg.LINE, { 'stroke': gridOptions['colour'] }, gridPattern);
+            Svg.LINE, {'stroke': gridOptions['colour']}, gridPattern);
       }
     } else {
       // Edge 16 doesn't handle empty patterns

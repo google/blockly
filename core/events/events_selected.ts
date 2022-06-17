@@ -14,7 +14,7 @@
 
 import * as registry from '../registry.js';
 
-import { UiBase } from './events_ui_base.js';
+import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
 
 
@@ -23,8 +23,8 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.Selected
  */
 export class Selected extends UiBase {
-  oldElementId?: string | null;
-  newElementId?: string | null;
+  oldElementId?: string|null;
+  newElementId?: string|null;
   override type: string;
 
   /**
@@ -36,8 +36,8 @@ export class Selected extends UiBase {
    *    Null if no element previously selected. Undefined for a blank event.
    */
   constructor(
-    opt_oldElementId?: string | null, opt_newElementId?: string | null,
-    opt_workspaceId?: string) {
+      opt_oldElementId?: string|null, opt_newElementId?: string|null,
+      opt_workspaceId?: string) {
     super(opt_workspaceId);
 
     /** The id of the last selected element. */

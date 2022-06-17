@@ -18,12 +18,11 @@
 
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */
-import { Icon as BlocklyIcon } from '../../icon.js';
+import {Icon as BlocklyIcon} from '../../icon.js';
+import {ConstantProvider} from '../common/constants.js';
 
-import { ConstantProvider } from '../common/constants.js';
-
-import { Measurable } from './base.js';
-import { Types } from './types.js';
+import {Measurable} from './base.js';
+import {Types} from './types.js';
 
 
 /**

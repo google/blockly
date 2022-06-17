@@ -16,25 +16,25 @@
 import './events/events_block_change';
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from './block_svg.js';
+import {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import * as dialog from './dialog.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import * as eventUtils from './events/utils.js';
-import { Field } from './field.js';
+import {Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
-import { Msg } from './msg.js';
+import {Msg} from './msg.js';
 import * as aria from './utils/aria.js';
-import { Coordinate } from './utils/coordinate.js';
+import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
-import { KeyCodes } from './utils/keycodes.js';
+import {KeyCodes} from './utils/keycodes.js';
 import * as parsing from './utils/parsing.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Sentinel } from './utils/sentinel.js';
+import {Sentinel} from './utils/sentinel.js';
 import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**
@@ -43,7 +43,7 @@ import { WorkspaceSvg } from './workspace_svg.js';
  */
 export class FieldTextInput extends Field {
   /** The default value for this field. */
-  protected override DEFAULT_VALUE: string | number = '';
+  protected override DEFAULT_VALUE: string|number = '';
 
   /**
    * Pixel size of input border radius.
@@ -55,7 +55,7 @@ export class FieldTextInput extends Field {
   protected spellcheck_ = true;
 
   /** The HTML input element. */
-  protected htmlInput_: HTMLInputElement | null = null;
+  protected htmlInput_: HTMLInputElement|null = null;
 
   /** True if the field's value is currently being edited via the UI. */
   protected isBeingEdited_ = false;
@@ -66,19 +66,19 @@ export class FieldTextInput extends Field {
   protected isTextValid_ = false;
 
   /** Key down event data. */
-  private onKeyDownWrapper_: browserEvents.Data | null = null;
+  private onKeyDownWrapper_: browserEvents.Data|null = null;
 
   /** Key input event data. */
-  private onKeyInputWrapper_: browserEvents.Data | null = null;
+  private onKeyInputWrapper_: browserEvents.Data|null = null;
 
   /**
    * Whether the field should consider the whole parent block to be its click
    * target.
    */
-  fullBlockClickTarget_: boolean | null = false;
+  fullBlockClickTarget_: boolean|null = false;
 
   /** The workspace that this field belongs to. */
-  protected workspace_: WorkspaceSvg | null = null;
+  protected workspace_: WorkspaceSvg|null = null;
 
   /**
    * Serializable fields are saved by the serializer, non-serializable fields
@@ -107,8 +107,8 @@ export class FieldTextInput extends Field {
    * for a list of properties this parameter supports.
    */
   constructor(
-    opt_value?: string | Sentinel, opt_validator?: Function | null,
-    opt_config?: AnyDuringMigration) {
+      opt_value?: string|Sentinel, opt_validator?: Function|null,
+      opt_config?: AnyDuringMigration) {
     super(Field.SKIP_SETUP);
 
     if (opt_value === Field.SKIP_SETUP) {
@@ -148,7 +148,7 @@ export class FieldTextInput extends Field {
       // The special case is when this is the only non-label field on the block
       // and it has an output but no inputs.
       this.fullBlockClickTarget_ =
-        nFields <= 1 && this.sourceBlock_.outputConnection && !nConnections;
+          nFields <= 1 && this.sourceBlock_.outputConnection && !nConnections;
     } else {
       this.fullBlockClickTarget_ = false;
     }
@@ -167,7 +167,7 @@ export class FieldTextInput extends Field {
    * @return A valid string, or null if invalid.
    */
   protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
-    AnyDuringMigration {
+      AnyDuringMigration {
     if (opt_newValue === null || opt_newValue === undefined) {
       return null;
     }
@@ -190,8 +190,8 @@ export class FieldTextInput extends Field {
       this.value_ = this.htmlInput_!.getAttribute('data-untyped-default-value');
       if (this.sourceBlock_ && eventUtils.isEnabled()) {
         eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))!
-          (this.sourceBlock_, 'field', this.name || null,
-            oldValue, this.value_));
+                        (this.sourceBlock_, 'field', this.name || null,
+                         oldValue, this.value_));
       }
     }
   }
@@ -217,11 +217,11 @@ export class FieldTextInput extends Field {
     if (this.sourceBlock_ && this.getConstants()!.FULL_BLOCK_FIELDS) {
       if (this.borderRect_) {
         this.borderRect_.setAttribute(
-          'stroke', (this.sourceBlock_ as BlockSvg).style.colourTertiary);
+            'stroke', (this.sourceBlock_ as BlockSvg).style.colourTertiary);
       } else {
         (this.sourceBlock_ as BlockSvg)
-          .pathObject.svgPath.setAttribute(
-            'fill', this.getConstants()!.FIELD_BORDER_RECT_COLOUR);
+            .pathObject.svgPath.setAttribute(
+                'fill', this.getConstants()!.FIELD_BORDER_RECT_COLOUR);
       }
     }
   }
@@ -260,7 +260,7 @@ export class FieldTextInput extends Field {
       // AnyDuringMigration because:  Argument of type 'boolean' is not
       // assignable to parameter of type 'string'.
       this.htmlInput_.setAttribute(
-        'spellcheck', this.spellcheck_ as AnyDuringMigration);
+          'spellcheck', this.spellcheck_ as AnyDuringMigration);
     }
   }
 
@@ -275,7 +275,7 @@ export class FieldTextInput extends Field {
     this.workspace_ = (this.sourceBlock_ as BlockSvg).workspace;
     const quietInput = opt_quietInput || false;
     if (!quietInput &&
-      (userAgent.MOBILE || userAgent.ANDROID || userAgent.IPAD)) {
+        (userAgent.MOBILE || userAgent.ANDROID || userAgent.IPAD)) {
       this.showPromptEditor_();
     } else {
       this.showInlineEditor_(quietInput);
@@ -288,12 +288,12 @@ export class FieldTextInput extends Field {
    */
   private showPromptEditor_() {
     dialog.prompt(
-      Msg['CHANGE_VALUE_TITLE'], this.getText(), (text: string | null) => {
-        // Text is null if user pressed cancel button.
-        if (text !== null) {
-          this.setValue(this.getValueFromEditorText_(text));
-        }
-      });
+        Msg['CHANGE_VALUE_TITLE'], this.getText(), (text: string|null) => {
+          // Text is null if user pressed cancel button.
+          if (text !== null) {
+            this.setValue(this.getValueFromEditorText_(text));
+          }
+        });
   }
 
   /**
@@ -328,7 +328,7 @@ export class FieldTextInput extends Field {
     // AnyDuringMigration because:  Argument of type 'boolean' is not assignable
     // to parameter of type 'string'.
     htmlInput.setAttribute(
-      'spellcheck', this.spellcheck_ as AnyDuringMigration);
+        'spellcheck', this.spellcheck_ as AnyDuringMigration);
     const scale = this.workspace_!.getScale();
     const fontSize = this.getConstants()!.FIELD_TEXT_FONTSIZE * scale + 'pt';
     div!.style.fontSize = fontSize;
@@ -342,14 +342,14 @@ export class FieldTextInput extends Field {
       borderRadius = (bBox.bottom - bBox.top) / 2 + 'px';
       // Pull stroke colour from the existing shadow block
       const strokeColour = this.sourceBlock_.getParent() ?
-        (this.sourceBlock_.getParent() as BlockSvg).style.colourTertiary :
-        (this.sourceBlock_ as BlockSvg).style.colourTertiary;
+          (this.sourceBlock_.getParent() as BlockSvg).style.colourTertiary :
+          (this.sourceBlock_ as BlockSvg).style.colourTertiary;
       htmlInput.style.border = 1 * scale + 'px solid ' + strokeColour;
       div!.style.borderRadius = borderRadius;
       div!.style.transition = 'box-shadow 0.25s ease 0s';
       if (this.getConstants()!.FIELD_TEXTINPUT_BOX_SHADOW) {
         div!.style.boxShadow =
-          'rgba(255, 255, 255, 0.3) 0 0 0 ' + 4 * scale + 'px';
+            'rgba(255, 255, 255, 0.3) 0 0 0 ' + 4 * scale + 'px';
       }
     }
     htmlInput.style.borderRadius = borderRadius;
@@ -408,10 +408,10 @@ export class FieldTextInput extends Field {
   protected bindInputEvents_(htmlInput: HTMLElement) {
     // Trap Enter without IME and Esc to hide.
     this.onKeyDownWrapper_ = browserEvents.conditionalBind(
-      htmlInput, 'keydown', this, this.onHtmlInputKeyDown_);
+        htmlInput, 'keydown', this, this.onHtmlInputKeyDown_);
     // Resize after every input change.
     this.onKeyInputWrapper_ = browserEvents.conditionalBind(
-      htmlInput, 'input', this, this.onHtmlInputChange_);
+        htmlInput, 'input', this, this.onHtmlInputChange_);
   }
 
   /** Unbind handlers for user input and workspace size changes. */
@@ -440,7 +440,7 @@ export class FieldTextInput extends Field {
       // 'Event'.
     } else if ((e as AnyDuringMigration).keyCode === KeyCodes.ESC) {
       this.setValue(
-        this.htmlInput_!.getAttribute('data-untyped-default-value'));
+          this.htmlInput_!.getAttribute('data-untyped-default-value'));
       WidgetDiv.hide();
       dropDownDiv.hideWithoutAnimation();
       // AnyDuringMigration because:  Property 'keyCode' does not exist on type
@@ -452,7 +452,7 @@ export class FieldTextInput extends Field {
       // 'Event'. AnyDuringMigration because:  Argument of type 'this' is not
       // assignable to parameter of type 'Field'.
       (this.sourceBlock_ as BlockSvg)
-        .tab(this as AnyDuringMigration, !(e as AnyDuringMigration).shiftKey);
+          .tab(this as AnyDuringMigration, !(e as AnyDuringMigration).shiftKey);
       e.preventDefault();
     }
   }
@@ -522,7 +522,7 @@ export class FieldTextInput extends Field {
    * behaviour (which is a string cast of the field's value).
    * @return The HTML value if we're editing, otherwise null.
    */
-  protected override getText_(): string | null {
+  protected override getText_(): string|null {
     if (this.isBeingEdited_ && this.htmlInput_) {
       // We are currently editing, return the HTML input value instead.
       return this.htmlInput_.value;

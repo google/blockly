@@ -148,7 +148,7 @@ export function setRole(element: Element, roleName: Role) {
  * @alias Blockly.utils.aria.setState
  */
 export function setState(
-  element: Element, stateName: State, value: string | boolean | number | string[]) {
+    element: Element, stateName: State, value: string|boolean|number|string[]) {
   if (Array.isArray(value)) {
     value = value.join(' ');
   }

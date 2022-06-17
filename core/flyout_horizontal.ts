@@ -16,16 +16,16 @@
 
 import * as browserEvents from './browser_events.js';
 import * as dropDownDiv from './dropdowndiv.js';
-import { Flyout, FlyoutItem } from './flyout_base.js';
+import {Flyout, FlyoutItem} from './flyout_base.js';
 /* eslint-disable-next-line no-unused-vars */
-import { FlyoutButton } from './flyout_button.js';
+import {FlyoutButton} from './flyout_button.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Options } from './options.js';
+import {Options} from './options.js';
 import * as registry from './registry.js';
-import { Scrollbar } from './scrollbar.js';
+import {Scrollbar} from './scrollbar.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Coordinate } from './utils/coordinate.js';
-import { Rect } from './utils/rect.js';
+import {Coordinate} from './utils/coordinate.js';
+import {Rect} from './utils/rect.js';
 import * as toolbox from './utils/toolbox.js';
 import * as WidgetDiv from './widgetdiv.js';
 
@@ -52,7 +52,7 @@ export class HorizontalFlyout extends Flyout {
    * @param xyRatio Contains a y property which is a float between 0 and 1
    *     specifying the degree of scrolling and a similar x property.
    */
-  protected override setMetrics_(xyRatio: { x: number, y: number }) {
+  protected override setMetrics_(xyRatio: {x: number, y: number}) {
     if (!this.isVisible()) {
       return;
     }
@@ -64,13 +64,13 @@ export class HorizontalFlyout extends Flyout {
 
     if (typeof xyRatio.x === 'number') {
       this.workspace_.scrollX =
-        -(scrollMetrics.left +
-          (scrollMetrics.width - viewMetrics.width) * xyRatio.x);
+          -(scrollMetrics.left +
+            (scrollMetrics.width - viewMetrics.width) * xyRatio.x);
     }
 
     this.workspace_.translate(
-      this.workspace_.scrollX + absoluteMetrics.left,
-      this.workspace_.scrollY + absoluteMetrics.top);
+        this.workspace_.scrollX + absoluteMetrics.left,
+        this.workspace_.scrollY + absoluteMetrics.top);
   }
 
   /**
@@ -158,7 +158,7 @@ export class HorizontalFlyout extends Flyout {
   private setBackgroundPath_(width: number, height: number) {
     const atTop = this.toolboxPosition_ === toolbox.Position.TOP;
     // Start at top left.
-    const path: (string | number)[] = ['M 0,' + (atTop ? 0 : this.CORNER_RADIUS)];
+    const path: (string|number)[] = ['M 0,' + (atTop ? 0 : this.CORNER_RADIUS)];
 
     if (atTop) {
       // Top.
@@ -167,24 +167,24 @@ export class HorizontalFlyout extends Flyout {
       path.push('v', height);
       // Bottom.
       path.push(
-        'a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
-        -this.CORNER_RADIUS, this.CORNER_RADIUS);
+          'a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
+          -this.CORNER_RADIUS, this.CORNER_RADIUS);
       path.push('h', -width);
       // Left.
       path.push(
-        'a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
-        -this.CORNER_RADIUS, -this.CORNER_RADIUS);
+          'a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
+          -this.CORNER_RADIUS, -this.CORNER_RADIUS);
       path.push('z');
     } else {
       // Top.
       path.push(
-        'a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
-        this.CORNER_RADIUS, -this.CORNER_RADIUS);
+          'a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
+          this.CORNER_RADIUS, -this.CORNER_RADIUS);
       path.push('h', width);
       // Right.
       path.push(
-        'a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
-        this.CORNER_RADIUS, this.CORNER_RADIUS);
+          'a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, 1,
+          this.CORNER_RADIUS, this.CORNER_RADIUS);
       path.push('v', height);
       // Bottom.
       path.push('h', -width - 2 * this.CORNER_RADIUS);
@@ -265,7 +265,7 @@ export class HorizontalFlyout extends Flyout {
         // AnyDuringMigration because:  Argument of type 'BlockSvg | undefined'
         // is not assignable to parameter of type 'BlockSvg'.
         const rect = this.createRect_(
-          block as AnyDuringMigration, moveX, cursorY, blockHW, i);
+            block as AnyDuringMigration, moveX, cursorY, blockHW, i);
         cursorX += blockHW.width + gaps[i];
 
         // AnyDuringMigration because:  Argument of type 'BlockSvg | undefined'
@@ -296,7 +296,7 @@ export class HorizontalFlyout extends Flyout {
     const range = this.dragAngleRange_;
     // Check for up or down dragging.
     if (dragDirection < 90 + range && dragDirection > 90 - range ||
-      dragDirection > -90 - range && dragDirection < -90 + range) {
+        dragDirection > -90 - range && dragDirection < -90 + range) {
       return true;
     }
     return false;
@@ -308,7 +308,7 @@ export class HorizontalFlyout extends Flyout {
    * @return The component's bounding box. Null if drag target area should be
    *     ignored.
    */
-  override getClientRect(): Rect | null {
+  override getClientRect(): Rect|null {
     if (!this.svgGroup_ || this.autoClose || !this.isVisible()) {
       // The bounding rectangle won't compute correctly if the flyout is closed
       // and auto-close flyouts aren't valid drag targets (or delete areas).
@@ -357,19 +357,19 @@ export class HorizontalFlyout extends Flyout {
           // AnyDuringMigration because:  Argument of type 'SVGElement |
           // undefined' is not assignable to parameter of type 'SVGElement'.
           this.moveRectToBlock_(
-            this.rectMap_.get(block) as AnyDuringMigration, block);
+              this.rectMap_.get(block) as AnyDuringMigration, block);
         }
       }
 
       if (this.targetWorkspace!.toolboxPosition === this.toolboxPosition_ &&
-        this.toolboxPosition_ === toolbox.Position.TOP &&
-        !this.targetWorkspace!.getToolbox()) {
+          this.toolboxPosition_ === toolbox.Position.TOP &&
+          !this.targetWorkspace!.getToolbox()) {
         // This flyout is a simple toolbox. Reposition the workspace so that
         // (0,0) is in the correct position relative to the new absolute edge
         // (ie toolbox edge).
         this.targetWorkspace!.translate(
-          this.targetWorkspace!.scrollX,
-          this.targetWorkspace!.scrollY + flyoutHeight);
+            this.targetWorkspace!.scrollX,
+            this.targetWorkspace!.scrollY + flyoutHeight);
       }
       this.height_ = flyoutHeight;
       this.position();
@@ -379,5 +379,5 @@ export class HorizontalFlyout extends Flyout {
 }
 
 registry.register(
-  registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX, registry.DEFAULT,
-  HorizontalFlyout);
+    registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX, registry.DEFAULT,
+    HorizontalFlyout);

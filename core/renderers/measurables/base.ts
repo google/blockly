@@ -13,9 +13,9 @@
  * @class
  */
 /* eslint-disable-next-line no-unused-vars */
-import { ConstantProvider } from '../common/constants.js';
+import {ConstantProvider} from '../common/constants.js';
 
-import { Types } from './types.js';
+import {Types} from './types.js';
 
 
 /**

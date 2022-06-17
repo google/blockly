@@ -15,24 +15,24 @@
 import './events/events_block_change';
 
 /* eslint-disable-next-line no-unused-vars */
-import { Block } from './block.js';
+import {Block} from './block.js';
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from './block_svg.js';
-import { Blocks } from './blocks.js';
+import {BlockSvg} from './block_svg.js';
+import {Blocks} from './blocks.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Abstract } from './events/events_abstract.js';
+import {Abstract} from './events/events_abstract.js';
 /* eslint-disable-next-line no-unused-vars */
-import { BubbleOpen } from './events/events_bubble_open.js';
+import {BubbleOpen} from './events/events_bubble_open.js';
 import * as eventUtils from './events/utils.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Field } from './field.js';
-import { Msg } from './msg.js';
-import { Names } from './names.js';
+import {Field} from './field.js';
+import {Msg} from './msg.js';
+import {Names} from './names.js';
 import * as utilsXml from './utils/xml.js';
 import * as Variables from './variables.js';
-import { Workspace } from './workspace.js';
+import {Workspace} from './workspace.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 import * as Xml from './xml.js';
 
 
@@ -72,14 +72,14 @@ export interface ProcedureBlock {
  */
 export function allProcedures(root: Workspace): AnyDuringMigration[][][] {
   const proceduresNoReturn =
-    root.getBlocksByType('procedures_defnoreturn', false)
-      .map(function (block) {
+      root.getBlocksByType('procedures_defnoreturn', false)
+          .map(function(block) {
+            return (block as unknown as ProcedureBlock).getProcedureDef();
+          });
+  const proceduresReturn =
+      root.getBlocksByType('procedures_defreturn', false).map(function(block) {
         return (block as unknown as ProcedureBlock).getProcedureDef();
       });
-  const proceduresReturn =
-    root.getBlocksByType('procedures_defreturn', false).map(function (block) {
-      return (block as unknown as ProcedureBlock).getProcedureDef();
-    });
   proceduresNoReturn.sort(procTupleComparator);
   proceduresReturn.sort(procTupleComparator);
   return [proceduresNoReturn, proceduresReturn];
@@ -93,8 +93,8 @@ export function allProcedures(root: Workspace): AnyDuringMigration[][][] {
  * @return -1, 0, or 1 to signify greater than, equality, or less than.
  */
 function procTupleComparator(
-  ta: AnyDuringMigration[], tb: AnyDuringMigration[]): number {
-  return ta[0].localeCompare(tb[0], undefined, { sensitivity: 'base' });
+    ta: AnyDuringMigration[], tb: AnyDuringMigration[]): number {
+  return ta[0].localeCompare(tb[0], undefined, {sensitivity: 'base'});
 }
 
 /**
@@ -133,7 +133,7 @@ export function findLegalName(name: string, block: Block): string {
  * @return True if the name is legal.
  */
 function isLegalName(
-  name: string, workspace: Workspace, opt_exclude?: Block): boolean {
+    name: string, workspace: Workspace, opt_exclude?: Block): boolean {
   return !isNameUsed(name, workspace, opt_exclude);
 }
 
@@ -147,7 +147,7 @@ function isLegalName(
  * @alias Blockly.Procedures.isNameUsed
  */
 export function isNameUsed(
-  name: string, workspace: Workspace, opt_exclude?: Block): boolean {
+    name: string, workspace: Workspace, opt_exclude?: Block): boolean {
   const blocks = workspace.getAllBlocks(false);
   // Iterate through every block and check the name.
   for (let i = 0; i < blocks.length; i++) {
@@ -212,7 +212,7 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
     const nameField = utilsXml.createElement('field');
     nameField.setAttribute('name', 'NAME');
     nameField.appendChild(
-      utilsXml.createTextNode(Msg['PROCEDURES_DEFNORETURN_PROCEDURE']));
+        utilsXml.createTextNode(Msg['PROCEDURES_DEFNORETURN_PROCEDURE']));
     block.appendChild(nameField);
     xmlList.push(block);
   }
@@ -228,7 +228,7 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
     const nameField = utilsXml.createElement('field');
     nameField.setAttribute('name', 'NAME');
     nameField.appendChild(
-      utilsXml.createTextNode(Msg['PROCEDURES_DEFRETURN_PROCEDURE']));
+        utilsXml.createTextNode(Msg['PROCEDURES_DEFRETURN_PROCEDURE']));
     block.appendChild(nameField);
     xmlList.push(block);
   }
@@ -255,7 +255,7 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
    * @param templateName The type of the block to generate.
    */
   function populateProcedures(
-    procedureList: AnyDuringMigration[][], templateName: string) {
+      procedureList: AnyDuringMigration[][], templateName: string) {
     for (let i = 0; i < procedureList.length; i++) {
       const name = procedureList[i][0];
       const args = procedureList[i][1];
@@ -308,7 +308,7 @@ function updateMutatorFlyout(workspace: WorkspaceSvg) {
   const nameField = utilsXml.createElement('field');
   nameField.setAttribute('name', 'NAME');
   const argValue =
-    Variables.generateUniqueNameFromOptions(DEFAULT_ARG, usedNames);
+      Variables.generateUniqueNameFromOptions(DEFAULT_ARG, usedNames);
   const fieldContent = utilsXml.createTextNode(argValue);
 
   nameField.appendChild(fieldContent);
@@ -330,12 +330,12 @@ export function mutatorOpenListener(e: Abstract) {
   }
   const bubbleEvent = e as BubbleOpen;
   if (!(bubbleEvent.bubbleType === 'mutator' && bubbleEvent.isOpen) ||
-    !bubbleEvent.blockId) {
+      !bubbleEvent.blockId) {
     return;
   }
   const workspaceId = (bubbleEvent.workspaceId);
   const block = Workspace.getById(workspaceId)!.getBlockById(
-    bubbleEvent.blockId) as BlockSvg;
+                    bubbleEvent.blockId) as BlockSvg;
   const type = block.type;
   if (type !== 'procedures_defnoreturn' && type !== 'procedures_defreturn') {
     return;
@@ -351,8 +351,8 @@ export function mutatorOpenListener(e: Abstract) {
  */
 function mutatorChangeListener(e: Abstract) {
   if (e.type !== eventUtils.BLOCK_CREATE &&
-    e.type !== eventUtils.BLOCK_DELETE &&
-    e.type !== eventUtils.BLOCK_CHANGE) {
+      e.type !== eventUtils.BLOCK_DELETE &&
+      e.type !== eventUtils.BLOCK_CHANGE) {
     return;
   }
   const workspaceId = e.workspaceId as string;
@@ -411,7 +411,7 @@ export function mutateCallers(defBlock: Block) {
       // definition mutation.
       eventUtils.setRecordUndo(false);
       eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))!
-        (caller, 'mutation', null, oldMutation, newMutation));
+                      (caller, 'mutation', null, oldMutation, newMutation));
       eventUtils.setRecordUndo(oldRecordUndo);
     }
   }
@@ -424,7 +424,7 @@ export function mutateCallers(defBlock: Block) {
  * @return The procedure definition block, or null not found.
  * @alias Blockly.Procedures.getDefinition
  */
-export function getDefinition(name: string, workspace: Workspace): Block | null {
+export function getDefinition(name: string, workspace: Workspace): Block|null {
   // Do not assume procedure is a top block. Some languages allow nested
   // procedures. Also do not assume it is one of the built-in blocks. Only
   // rely on getProcedureDef.

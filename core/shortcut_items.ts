@@ -11,15 +11,15 @@
  * Registers default keyboard shortcuts.
  * @namespace Blockly.ShortcutItems
  */
-import { BlockSvg } from './block_svg.js';
+import {BlockSvg} from './block_svg.js';
 import * as clipboard from './clipboard.js';
 import * as common from './common.js';
-import { Gesture } from './gesture.js';
+import {Gesture} from './gesture.js';
 /* eslint-disable-next-line no-unused-vars */
-import { ICopyable } from './interfaces/i_copyable.js';
-import { KeyboardShortcut, ShortcutRegistry } from './shortcut_registry.js';
-import { KeyCodes } from './utils/keycodes.js';
-import { WorkspaceSvg } from './workspace_svg.js';
+import {ICopyable} from './interfaces/i_copyable.js';
+import {KeyboardShortcut, ShortcutRegistry} from './shortcut_registry.js';
+import {KeyCodes} from './utils/keycodes.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**
@@ -103,7 +103,7 @@ export function registerCopy() {
     preconditionFn(workspace) {
       const selected = common.getSelected();
       return !workspace.options.readOnly && !Gesture.inProgress() && selected &&
-        selected.isDeletable() && selected.isMovable();
+          selected.isDeletable() && selected.isMovable();
     },
     callback(workspace, e) {
       // Prevent the default copy behavior, which may beep or otherwise indicate
@@ -137,9 +137,9 @@ export function registerCut() {
     preconditionFn(workspace) {
       const selected = common.getSelected();
       return !!(
-        !workspace.options.readOnly && !Gesture.inProgress() && selected &&
-        selected instanceof BlockSvg && selected.isDeletable() &&
-        selected.isMovable() && !selected.workspace.isFlyout);
+          !workspace.options.readOnly && !Gesture.inProgress() && selected &&
+          selected instanceof BlockSvg && selected.isDeletable() &&
+          selected.isMovable() && !selected.workspace.isFlyout);
     },
     callback() {
       const selected = common.getSelected();

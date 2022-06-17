@@ -13,15 +13,15 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { ConstantProvider } from '../common/constants.js';
+import {ConstantProvider} from '../common/constants.js';
 
 /* eslint-disable-next-line no-unused-vars */
-import { Measurable } from './base.js';
+import {Measurable} from './base.js';
 /* eslint-disable-next-line no-unused-vars */
-import { InRowSpacer } from './in_row_spacer.js';
+import {InRowSpacer} from './in_row_spacer.js';
 /* eslint-disable-next-line no-unused-vars */
-import { InputConnection } from './input_connection.js';
-import { Types } from './types.js';
+import {InputConnection} from './input_connection.js';
+import {Types} from './types.js';
 
 
 /**
@@ -95,7 +95,7 @@ export class Row {
   notchOffset: number;
 
   /** Alignment of the row. */
-  align: number | null = null;
+  align: number|null = null;
 
   /** @param constants_ The rendering constants provider. */
   constructor(protected readonly constants_: ConstantProvider) {

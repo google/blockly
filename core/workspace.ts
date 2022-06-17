@@ -16,30 +16,30 @@
 import './connection_checker';
 
 /* eslint-disable-next-line no-unused-vars */
-import { Block } from './block.js';
+import {Block} from './block.js';
 /* eslint-disable-next-line no-unused-vars */
-import { BlocklyOptions } from './blockly_options.js';
+import {BlocklyOptions} from './blockly_options.js';
 /* eslint-disable-next-line no-unused-vars */
-import { ConnectionDB } from './connection_db.js';
+import {ConnectionDB} from './connection_db.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Abstract } from './events/events_abstract.js';
+import {Abstract} from './events/events_abstract.js';
 import * as eventUtils from './events/utils.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IASTNodeLocation } from './interfaces/i_ast_node_location.js';
+import {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IConnectionChecker } from './interfaces/i_connection_checker.js';
-import { Options } from './options.js';
+import {IConnectionChecker} from './interfaces/i_connection_checker.js';
+import {Options} from './options.js';
 import * as registry from './registry.js';
 import * as arrayUtils from './utils/array.js';
 import * as idGenerator from './utils/idgenerator.js';
 import * as math from './utils/math.js';
 /* eslint-disable-next-line no-unused-vars */
 import * as toolbox from './utils/toolbox.js';
-import { VariableMap } from './variable_map.js';
+import {VariableMap} from './variable_map.js';
 /* eslint-disable-next-line no-unused-vars */
-import { VariableModel } from './variable_model.js';
+import {VariableModel} from './variable_model.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceComment } from './workspace_comment.js';
+import {WorkspaceComment} from './workspace_comment.js';
 
 
 /** Database of all workspaces. */
@@ -109,7 +109,7 @@ export class Workspace implements IASTNodeLocation {
    * these by tracking "potential" variables in the flyout.  These variables
    * become real when references to them are dragged into the main workspace.
    */
-  private potentialVariableMap_: VariableMap | null = null;
+  private potentialVariableMap_: VariableMap|null = null;
 
   /** @param opt_options Dictionary of options. */
   constructor(opt_options?: Options) {
@@ -121,7 +121,7 @@ export class Workspace implements IASTNodeLocation {
     this.toolboxPosition = this.options.toolboxPosition;
 
     const connectionCheckerClass = registry.getClassFromOptions(
-      registry.Type.CONNECTION_CHECKER, this.options, true);
+        registry.Type.CONNECTION_CHECKER, this.options, true);
     /**
      * An object that encapsulates logic for safety, type, and dragging checks.
      */
@@ -158,8 +158,8 @@ export class Workspace implements IASTNodeLocation {
    * @return The comparison value. This tells Array.sort() how to change object
    *     a's index.
    */
-  private sortObjects_(a: Block | WorkspaceComment, b: Block | WorkspaceComment):
-    number {
+  private sortObjects_(a: Block|WorkspaceComment, b: Block|WorkspaceComment):
+      number {
     // AnyDuringMigration because:  Property 'getRelativeToSurfaceXY' does not
     // exist on type 'Block | WorkspaceComment'.
     const aXY = (a as AnyDuringMigration).getRelativeToSurfaceXY();
@@ -171,11 +171,11 @@ export class Workspace implements IASTNodeLocation {
     // AnyDuringMigration because:  Property 'offset' does not exist on type
     // '(a: Block | WorkspaceComment, b: Block | WorkspaceComment) => number'.
     return aXY.y +
-      (Workspace.prototype.sortObjects_ as AnyDuringMigration).offset *
-      aXY.x -
-      (bXY.y +
         (Workspace.prototype.sortObjects_ as AnyDuringMigration).offset *
-        bXY.x);
+        aXY.x -
+        (bXY.y +
+         (Workspace.prototype.sortObjects_ as AnyDuringMigration).offset *
+             bXY.x);
   }
 
   /**
@@ -204,12 +204,12 @@ export class Workspace implements IASTNodeLocation {
    */
   getTopBlocks(ordered: boolean): Block[] {
     // Copy the topBlocks_ list.
-    const blocks = (new Array < Block > ()).concat(this.topBlocks_);
+    const blocks = (new Array<Block>()).concat(this.topBlocks_);
     if (ordered && blocks.length > 1) {
       // AnyDuringMigration because:  Property 'offset' does not exist on type
       // '(a: Block | WorkspaceComment, b: Block | WorkspaceComment) => number'.
       (this.sortObjects_ as AnyDuringMigration).offset =
-        Math.sin(math.toRadians(Workspace.SCAN_ANGLE));
+          Math.sin(math.toRadians(Workspace.SCAN_ANGLE));
       if (this.RTL) {
         // AnyDuringMigration because:  Property 'offset' does not exist on type
         // '(a: Block | WorkspaceComment, b: Block | WorkspaceComment) =>
@@ -259,7 +259,7 @@ export class Workspace implements IASTNodeLocation {
       // AnyDuringMigration because:  Property 'offset' does not exist on type
       // '(a: Block | WorkspaceComment, b: Block | WorkspaceComment) => number'.
       (this.sortObjects_ as AnyDuringMigration).offset =
-        Math.sin(math.toRadians(Workspace.SCAN_ANGLE));
+          Math.sin(math.toRadians(Workspace.SCAN_ANGLE));
       if (this.RTL) {
         // AnyDuringMigration because:  Property 'offset' does not exist on type
         // '(a: Block | WorkspaceComment, b: Block | WorkspaceComment) =>
@@ -269,7 +269,7 @@ export class Workspace implements IASTNodeLocation {
       blocks.sort(this.sortObjects_);
     }
 
-    return blocks.filter(function (block: AnyDuringMigration) {
+    return blocks.filter(function(block: AnyDuringMigration) {
       return !block.isInsertionMarker();
     });
   }
@@ -285,8 +285,8 @@ export class Workspace implements IASTNodeLocation {
     // need to move to a separate function.
     if (this.commentDB_[comment.id]) {
       console.warn(
-        'Overriding an existing comment on this workspace, with id "' +
-        comment.id + '"');
+          'Overriding an existing comment on this workspace, with id "' +
+          comment.id + '"');
     }
     this.commentDB_[comment.id] = comment;
   }
@@ -298,8 +298,8 @@ export class Workspace implements IASTNodeLocation {
   removeTopComment(comment: WorkspaceComment) {
     if (!arrayUtils.removeElem(this.topComments_, comment)) {
       throw Error(
-        'Comment not present in workspace\'s list of top-most ' +
-        'comments.');
+          'Comment not present in workspace\'s list of top-most ' +
+          'comments.');
     }
     // Note: If the comment database starts to hold block comments, this may
     // need to move to a separate function.
@@ -314,12 +314,12 @@ export class Workspace implements IASTNodeLocation {
    */
   getTopComments(ordered: boolean): WorkspaceComment[] {
     // Copy the topComments_ list.
-    const comments = (new Array < WorkspaceComment > ()).concat(this.topComments_);
+    const comments = (new Array<WorkspaceComment>()).concat(this.topComments_);
     if (ordered && comments.length > 1) {
       // AnyDuringMigration because:  Property 'offset' does not exist on type
       // '(a: Block | WorkspaceComment, b: Block | WorkspaceComment) => number'.
       (this.sortObjects_ as AnyDuringMigration).offset =
-        Math.sin(math.toRadians(Workspace.SCAN_ANGLE));
+          Math.sin(math.toRadians(Workspace.SCAN_ANGLE));
       if (this.RTL) {
         // AnyDuringMigration because:  Property 'offset' does not exist on type
         // '(a: Block | WorkspaceComment, b: Block | WorkspaceComment) =>
@@ -356,7 +356,7 @@ export class Workspace implements IASTNodeLocation {
 
     // Insertion markers exist on the workspace for rendering reasons, but
     // aren't "real" blocks from a developer perspective.
-    const filtered = blocks.filter(function (block) {
+    const filtered = blocks.filter(function(block) {
       return !block.isInsertionMarker();
     });
 
@@ -410,8 +410,8 @@ export class Workspace implements IASTNodeLocation {
    * @param opt_id The unique ID of the variable. This will default to a UUID.
    * @return The newly created variable.
    */
-  createVariable(name: string, opt_type?: string | null, opt_id?: string | null):
-    VariableModel {
+  createVariable(name: string, opt_type?: string|null, opt_id?: string|null):
+      VariableModel {
     return this.variableMap_.createVariable(name, opt_type, opt_id);
   }
 
@@ -441,7 +441,7 @@ export class Workspace implements IASTNodeLocation {
    *     the empty string, which is a specific type.
    * @return The variable with the given name.
    */
-  getVariable(name: string, opt_type?: string): VariableModel | null {
+  getVariable(name: string, opt_type?: string): VariableModel|null {
     // TODO (#1559): Possibly delete this function after resolving #1559.
     return this.variableMap_.getVariable(name, opt_type);
   }
@@ -451,7 +451,7 @@ export class Workspace implements IASTNodeLocation {
    * @param id The ID to check for.
    * @return The variable with the given ID.
    */
-  getVariableById(id: string): VariableModel | null {
+  getVariableById(id: string): VariableModel|null {
     return this.variableMap_.getVariableById(id);
   }
 
@@ -462,7 +462,7 @@ export class Workspace implements IASTNodeLocation {
    * @return The sought after variables of the passed in type. An empty array if
    *     none are found.
    */
-  getVariablesOfType(type: string | null): VariableModel[] {
+  getVariablesOfType(type: string|null): VariableModel[] {
     return this.variableMap_.getVariablesOfType(type);
   }
 
@@ -537,8 +537,8 @@ export class Workspace implements IASTNodeLocation {
     }
 
     const maxInstanceOfType = this.options.maxInstances[type] !== undefined ?
-      this.options.maxInstances[type] :
-      Infinity;
+        this.options.maxInstances[type] :
+        Infinity;
 
     return maxInstanceOfType - this.getBlocksByType(type, false).length;
   }
@@ -608,7 +608,7 @@ export class Workspace implements IASTNodeLocation {
     let events = [inputEvent];
     // Do another undo/redo if the next one is of the same group.
     while (inputStack.length && inputEvent.group &&
-      inputEvent.group === inputStack[inputStack.length - 1].group) {
+           inputEvent.group === inputStack[inputStack.length - 1].group) {
       // AnyDuringMigration because:  Argument of type 'Abstract | undefined' is
       // not assignable to parameter of type 'Abstract'.
       events.push(inputStack.pop() as AnyDuringMigration);
@@ -682,7 +682,7 @@ export class Workspace implements IASTNodeLocation {
    * @param id ID of block to find.
    * @return The sought after block, or null if not found.
    */
-  getBlockById(id: string): Block | null {
+  getBlockById(id: string): Block|null {
     return this.blockDB_[id] || null;
   }
 
@@ -708,7 +708,7 @@ export class Workspace implements IASTNodeLocation {
    * @param id ID of comment to find.
    * @return The sought after comment, or null if not found.
    */
-  getCommentById(id: string): WorkspaceComment | null {
+  getCommentById(id: string): WorkspaceComment|null {
     return this.commentDB_[id] || null;
   }
 
@@ -735,7 +735,7 @@ export class Workspace implements IASTNodeLocation {
    * These exist in the flyout but not in the workspace.
    * @return The potential variable map.
    */
-  getPotentialVariableMap(): VariableMap | null {
+  getPotentialVariableMap(): VariableMap|null {
     return this.potentialVariableMap_;
   }
 
@@ -765,7 +765,7 @@ export class Workspace implements IASTNodeLocation {
    * @param id ID of workspace to find.
    * @return The sought after workspace or null if not found.
    */
-  static getById(id: string): Workspace | null {
+  static getById(id: string): Workspace|null {
     return WorkspaceDB_[id] || null;
   }
 

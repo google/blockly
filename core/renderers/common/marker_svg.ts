@@ -17,28 +17,28 @@
 import '../../events/events_marker_move';
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from '../../block_svg.js';
+import {BlockSvg} from '../../block_svg.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Connection } from '../../connection.js';
-import { ConnectionType } from '../../connection_type.js';
+import {Connection} from '../../connection.js';
+import {ConnectionType} from '../../connection_type.js';
 import * as eventUtils from '../../events/utils.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Field } from '../../field.js';
+import {Field} from '../../field.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IASTNodeLocationSvg } from '../../interfaces/i_ast_node_location_svg.js';
-import { ASTNode } from '../../keyboard_nav/ast_node.js';
+import {IASTNodeLocationSvg} from '../../interfaces/i_ast_node_location_svg.js';
+import {ASTNode} from '../../keyboard_nav/ast_node.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Marker } from '../../keyboard_nav/marker.js';
+import {Marker} from '../../keyboard_nav/marker.js';
 /* eslint-disable-next-line no-unused-vars */
-import { RenderedConnection } from '../../rendered_connection.js';
+import {RenderedConnection} from '../../rendered_connection.js';
 import * as dom from '../../utils/dom.js';
-import { Svg } from '../../utils/svg.js';
+import {Svg} from '../../utils/svg.js';
 import * as svgPaths from '../../utils/svg_paths.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from '../../workspace_svg.js';
+import {WorkspaceSvg} from '../../workspace_svg.js';
 
 /* eslint-disable-next-line no-unused-vars */
-import { ConstantProvider, Notch, PuzzleTab } from './constants.js';
+import {ConstantProvider, Notch, PuzzleTab} from './constants.js';
 
 
 /** The name of the CSS class for a cursor. */
@@ -62,22 +62,22 @@ export class MarkerSvg {
    * The workspace, field, or block that the marker SVG element should be
    * attached to.
    */
-  private parent_: IASTNodeLocationSvg | null = null;
+  private parent_: IASTNodeLocationSvg|null = null;
 
   /** The current SVG element for the marker. */
-  currentMarkerSvg: Element | null = null;
+  currentMarkerSvg: Element|null = null;
   colour_: string;
 
   /** The root SVG group containing the marker. */
-  protected markerSvg_: SVGGElement | null = null;
-  protected svgGroup_: SVGGElement | null = null;
+  protected markerSvg_: SVGGElement|null = null;
+  protected svgGroup_: SVGGElement|null = null;
 
-  protected markerBlock_: SVGPathElement | null = null;
+  protected markerBlock_: SVGPathElement|null = null;
 
-  protected markerInput_: SVGPathElement | null = null;
-  protected markerSvgLine_: SVGRectElement | null = null;
+  protected markerInput_: SVGPathElement|null = null;
+  protected markerSvgLine_: SVGRectElement|null = null;
 
-  protected markerSvgRect_: SVGRectElement | null = null;
+  protected markerSvgRect_: SVGRectElement|null = null;
 
   /**
    * @param workspace The workspace the marker belongs to.
@@ -85,10 +85,10 @@ export class MarkerSvg {
    * @param marker The marker to draw.
    */
   constructor(
-    private readonly workspace: WorkspaceSvg,
-    private constants: ConstantProvider, private readonly marker: Marker) {
+      private readonly workspace: WorkspaceSvg,
+      private constants: ConstantProvider, private readonly marker: Marker) {
     const defaultColour = this.isCursor() ? this.constants.CURSOR_COLOUR :
-      this.constants.MARKER_COLOUR;
+                                            this.constants.MARKER_COLOUR;
 
     /** The colour of the marker. */
     this.colour_ = marker.colour || defaultColour;
@@ -128,7 +128,7 @@ export class MarkerSvg {
   createDom(): SVGElement {
     const className = this.isCursor() ? CURSOR_CLASS : MARKER_CLASS;
 
-    this.svgGroup_ = dom.createSvgElement(Svg.G, { 'class': className });
+    this.svgGroup_ = dom.createSvgElement(Svg.G, {'class': className});
 
     this.createDomInternal_();
     return this.svgGroup_;
@@ -168,7 +168,7 @@ export class MarkerSvg {
     this.constants = this.workspace.getRenderer().getConstants();
 
     const defaultColour = this.isCursor() ? this.constants.CURSOR_COLOUR :
-      this.constants.MARKER_COLOUR;
+                                            this.constants.MARKER_COLOUR;
     this.colour_ = this.marker.colour || defaultColour;
     this.applyColour_(curNode);
 
@@ -227,13 +227,13 @@ export class MarkerSvg {
 
     if (block.previousConnection) {
       const connectionShape =
-        this.constants.shapeFor(block.previousConnection) as Notch |
-        PuzzleTab;
+          this.constants.shapeFor(block.previousConnection) as Notch |
+          PuzzleTab;
       this.positionPrevious_(
-        width, markerOffset, markerHeight, connectionShape);
+          width, markerOffset, markerHeight, connectionShape);
     } else if (block.outputConnection) {
       const connectionShape =
-        this.constants.shapeFor(block.outputConnection) as Notch | PuzzleTab;
+          this.constants.shapeFor(block.outputConnection) as Notch | PuzzleTab;
       this.positionOutput_(width, height, connectionShape);
     } else {
       this.positionBlock_(width, markerOffset, markerHeight);
@@ -385,11 +385,11 @@ export class MarkerSvg {
    * @param markerHeight The height of the marker.
    */
   protected positionBlock_(
-    width: number, markerOffset: number, markerHeight: number) {
+      width: number, markerOffset: number, markerHeight: number) {
     const markerPath = svgPaths.moveBy(-markerOffset, markerHeight) +
-      svgPaths.lineOnAxis('V', -markerOffset) +
-      svgPaths.lineOnAxis('H', width + markerOffset * 2) +
-      svgPaths.lineOnAxis('V', markerHeight);
+        svgPaths.lineOnAxis('V', -markerOffset) +
+        svgPaths.lineOnAxis('H', width + markerOffset * 2) +
+        svgPaths.lineOnAxis('V', markerHeight);
     this.markerBlock_!.setAttribute('d', markerPath);
     if (this.workspace.RTL) {
       // AnyDuringMigration because:  Argument of type 'SVGPathElement | null'
@@ -409,13 +409,13 @@ export class MarkerSvg {
     const y = connection.getOffsetInBlock().y;
 
     const path = svgPaths.moveTo(0, 0) +
-      (this.constants.shapeFor(connection) as PuzzleTab).pathDown;
+        (this.constants.shapeFor(connection) as PuzzleTab).pathDown;
 
     this.markerInput_!.setAttribute('d', path);
     this.markerInput_!.setAttribute(
-      'transform',
-      'translate(' + x + ',' + y + ')' +
-      (this.workspace.RTL ? ' scale(-1 1)' : ''));
+        'transform',
+        'translate(' + x + ',' + y + ')' +
+            (this.workspace.RTL ? ' scale(-1 1)' : ''));
     this.currentMarkerSvg = this.markerInput_;
   }
 
@@ -447,14 +447,14 @@ export class MarkerSvg {
    * @param connectionShape The shape object for the connection.
    */
   protected positionOutput_(
-    width: number, height: number, connectionShape: Notch | PuzzleTab) {
+      width: number, height: number, connectionShape: Notch|PuzzleTab) {
     // AnyDuringMigration because:  Property 'pathDown' does not exist on type
     // 'Notch | PuzzleTab'.
     const markerPath = svgPaths.moveBy(width, 0) +
-      svgPaths.lineOnAxis('h', -(width - connectionShape.width)) +
-      svgPaths.lineOnAxis('v', this.constants.TAB_OFFSET_FROM_TOP) +
-      (connectionShape as AnyDuringMigration).pathDown +
-      svgPaths.lineOnAxis('V', height) + svgPaths.lineOnAxis('H', width);
+        svgPaths.lineOnAxis('h', -(width - connectionShape.width)) +
+        svgPaths.lineOnAxis('v', this.constants.TAB_OFFSET_FROM_TOP) +
+        (connectionShape as AnyDuringMigration).pathDown +
+        svgPaths.lineOnAxis('V', height) + svgPaths.lineOnAxis('H', width);
     this.markerBlock_!.setAttribute('d', markerPath);
     if (this.workspace.RTL) {
       // AnyDuringMigration because:  Argument of type 'SVGPathElement | null'
@@ -474,16 +474,16 @@ export class MarkerSvg {
    * @param connectionShape The shape object for the connection.
    */
   protected positionPrevious_(
-    width: number, markerOffset: number, markerHeight: number,
-    connectionShape: Notch | PuzzleTab) {
+      width: number, markerOffset: number, markerHeight: number,
+      connectionShape: Notch|PuzzleTab) {
     // AnyDuringMigration because:  Property 'pathLeft' does not exist on type
     // 'Notch | PuzzleTab'.
     const markerPath = svgPaths.moveBy(-markerOffset, markerHeight) +
-      svgPaths.lineOnAxis('V', -markerOffset) +
-      svgPaths.lineOnAxis('H', this.constants.NOTCH_OFFSET_LEFT) +
-      (connectionShape as AnyDuringMigration).pathLeft +
-      svgPaths.lineOnAxis('H', width + markerOffset * 2) +
-      svgPaths.lineOnAxis('V', markerHeight);
+        svgPaths.lineOnAxis('V', -markerOffset) +
+        svgPaths.lineOnAxis('H', this.constants.NOTCH_OFFSET_LEFT) +
+        (connectionShape as AnyDuringMigration).pathLeft +
+        svgPaths.lineOnAxis('H', width + markerOffset * 2) +
+        svgPaths.lineOnAxis('V', markerHeight);
     this.markerBlock_!.setAttribute('d', markerPath);
     if (this.workspace.RTL) {
       // AnyDuringMigration because:  Argument of type 'SVGPathElement | null'
@@ -541,7 +541,7 @@ export class MarkerSvg {
   private fireMarkerEvent_(oldNode: ASTNode, curNode: ASTNode) {
     const curBlock = curNode.getSourceBlock();
     const event = new (eventUtils.get(eventUtils.MARKER_MOVE))!
-      (curBlock, this.isCursor(), oldNode, curNode);
+        (curBlock, this.isCursor(), oldNode, curNode);
     eventUtils.fire(event);
   }
 
@@ -577,55 +577,55 @@ export class MarkerSvg {
     // AnyDuringMigration because:  Argument of type 'SVGGElement | null' is not
     // assignable to parameter of type 'Element | undefined'.
     this.markerSvg_ = dom.createSvgElement(
-      Svg.G, {
-      'width': this.constants.CURSOR_WS_WIDTH,
-      'height': this.constants.WS_CURSOR_HEIGHT,
-    },
-      this.svgGroup_ as AnyDuringMigration);
+        Svg.G, {
+          'width': this.constants.CURSOR_WS_WIDTH,
+          'height': this.constants.WS_CURSOR_HEIGHT,
+        },
+        this.svgGroup_ as AnyDuringMigration);
 
     // A horizontal line used to represent a workspace coordinate or next
     // connection.
     // AnyDuringMigration because:  Argument of type 'SVGGElement | null' is not
     // assignable to parameter of type 'Element | undefined'.
     this.markerSvgLine_ = dom.createSvgElement(
-      Svg.RECT, {
-      'width': this.constants.CURSOR_WS_WIDTH,
-      'height': this.constants.WS_CURSOR_HEIGHT,
-      'style': 'display: none',
-    },
-      this.markerSvg_ as AnyDuringMigration);
+        Svg.RECT, {
+          'width': this.constants.CURSOR_WS_WIDTH,
+          'height': this.constants.WS_CURSOR_HEIGHT,
+          'style': 'display: none',
+        },
+        this.markerSvg_ as AnyDuringMigration);
 
     // A filled in rectangle used to represent a stack.
     // AnyDuringMigration because:  Argument of type 'SVGGElement | null' is not
     // assignable to parameter of type 'Element | undefined'.
     this.markerSvgRect_ = dom.createSvgElement(
-      Svg.RECT, {
-      'class': 'blocklyVerticalMarker',
-      'rx': 10,
-      'ry': 10,
-      'style': 'display: none',
-    },
-      this.markerSvg_ as AnyDuringMigration);
+        Svg.RECT, {
+          'class': 'blocklyVerticalMarker',
+          'rx': 10,
+          'ry': 10,
+          'style': 'display: none',
+        },
+        this.markerSvg_ as AnyDuringMigration);
 
     // A filled in puzzle piece used to represent an input value.
     // AnyDuringMigration because:  Argument of type 'SVGGElement | null' is not
     // assignable to parameter of type 'Element | undefined'.
     this.markerInput_ = dom.createSvgElement(
-      Svg.PATH, { 'transform': '', 'style': 'display: none' },
-      this.markerSvg_ as AnyDuringMigration);
+        Svg.PATH, {'transform': '', 'style': 'display: none'},
+        this.markerSvg_ as AnyDuringMigration);
 
     // A path used to represent a previous connection and a block, an output
     // connection and a block, or a block.
     // AnyDuringMigration because:  Argument of type 'SVGGElement | null' is not
     // assignable to parameter of type 'Element | undefined'.
     this.markerBlock_ = dom.createSvgElement(
-      Svg.PATH, {
-      'transform': '',
-      'style': 'display: none',
-      'fill': 'none',
-      'stroke-width': this.constants.CURSOR_STROKE_WIDTH,
-    },
-      this.markerSvg_ as AnyDuringMigration);
+        Svg.PATH, {
+          'transform': '',
+          'style': 'display: none',
+          'fill': 'none',
+          'stroke-width': this.constants.CURSOR_STROKE_WIDTH,
+        },
+        this.markerSvg_ as AnyDuringMigration);
 
     // Markers and stack markers don't blink.
     if (this.isCursor()) {
@@ -633,19 +633,19 @@ export class MarkerSvg {
       // AnyDuringMigration because:  Argument of type 'SVGRectElement | null'
       // is not assignable to parameter of type 'Element | undefined'.
       dom.createSvgElement(
-        Svg.ANIMATE, blinkProperties,
-        this.markerSvgLine_ as AnyDuringMigration);
+          Svg.ANIMATE, blinkProperties,
+          this.markerSvgLine_ as AnyDuringMigration);
       // AnyDuringMigration because:  Argument of type 'SVGPathElement | null'
       // is not assignable to parameter of type 'Element | undefined'.
       dom.createSvgElement(
-        Svg.ANIMATE, blinkProperties,
-        this.markerInput_ as AnyDuringMigration);
+          Svg.ANIMATE, blinkProperties,
+          this.markerInput_ as AnyDuringMigration);
       blinkProperties['attributeName'] = 'stroke';
       // AnyDuringMigration because:  Argument of type 'SVGPathElement | null'
       // is not assignable to parameter of type 'Element | undefined'.
       dom.createSvgElement(
-        Svg.ANIMATE, blinkProperties,
-        this.markerBlock_ as AnyDuringMigration);
+          Svg.ANIMATE, blinkProperties,
+          this.markerBlock_ as AnyDuringMigration);
     }
 
     // AnyDuringMigration because:  Type 'SVGGElement | null' is not assignable

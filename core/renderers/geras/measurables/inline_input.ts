@@ -17,12 +17,11 @@
  */
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */
-import { Input } from '../../../input.js';
-import { ConstantProvider as BaseConstantProvider } from '../../../renderers/common/constants.js';
-import { InlineInput as BaseInlineInput } from '../../../renderers/measurables/inline_input.js';
-
+import {Input} from '../../../input.js';
+import {ConstantProvider as BaseConstantProvider} from '../../../renderers/common/constants.js';
+import {InlineInput as BaseInlineInput} from '../../../renderers/measurables/inline_input.js';
 /* eslint-disable-next-line no-unused-vars */
-import { ConstantProvider as GerasConstantProvider } from '../constants.js';
+import {ConstantProvider as GerasConstantProvider} from '../constants.js';
 
 
 /**

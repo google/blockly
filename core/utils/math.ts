@@ -50,7 +50,7 @@ export function toDegrees(angleRadians: number): number {
  * @alias Blockly.utils.math.clamp
  */
 export function clamp(
-  lowerBound: number, number: number, upperBound: number): number {
+    lowerBound: number, number: number, upperBound: number): number {
   if (upperBound < lowerBound) {
     const temp = upperBound;
     upperBound = lowerBound;

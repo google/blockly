@@ -12,9 +12,8 @@
  * @class
  */
 import * as svgPaths from '../../utils/svg_paths.js';
-
 /* eslint-disable-next-line no-unused-vars */
-import { ConstantProvider } from '../common/constants.js';
+import {ConstantProvider} from '../common/constants.js';
 
 /** An object containing sizing and path information about an outside corner. */
 export interface OutsideCorner {
@@ -151,21 +150,21 @@ export class HighlightConstantProvider {
     const distance45outside = (1 - Math.SQRT1_2) * (radius + offset) - offset;
 
     const pathTopRtl = svgPaths.moveBy(distance45outside, distance45outside) +
-      svgPaths.arc(
-        'a', '0 0,0', radius,
-        svgPaths.point(
-          -distance45outside - offset, radius - distance45outside));
+        svgPaths.arc(
+            'a', '0 0,0', radius,
+            svgPaths.point(
+                -distance45outside - offset, radius - distance45outside));
 
     const pathBottomRtl = svgPaths.arc(
-      'a', '0 0,0', radius + offset,
-      svgPaths.point(radius + offset, radius + offset));
+        'a', '0 0,0', radius + offset,
+        svgPaths.point(radius + offset, radius + offset));
 
     const pathBottomLtr =
-      svgPaths.moveBy(distance45outside, -distance45outside) +
-      svgPaths.arc(
-        'a', '0 0,0', radius + offset,
-        svgPaths.point(
-          radius - distance45outside, distance45outside + offset));
+        svgPaths.moveBy(distance45outside, -distance45outside) +
+        svgPaths.arc(
+            'a', '0 0,0', radius + offset,
+            svgPaths.point(
+                radius - distance45outside, distance45outside + offset));
 
     return {
       width: radius + offset,
@@ -196,25 +195,25 @@ export class HighlightConstantProvider {
     const topLeftStartX = distance45inside;
     const topLeftStartY = distance45inside;
     const topLeftCornerHighlightRtl =
-      svgPaths.moveBy(topLeftStartX, topLeftStartY) +
-      svgPaths.arc(
-        'a', '0 0,1', radius - offset,
-        svgPaths.point(radius - topLeftStartX, -topLeftStartY + offset));
+        svgPaths.moveBy(topLeftStartX, topLeftStartY) +
+        svgPaths.arc(
+            'a', '0 0,1', radius - offset,
+            svgPaths.point(radius - topLeftStartX, -topLeftStartY + offset));
     /**
      * SVG path for drawing the highlight on the rounded top-left corner.
      */
     const topLeftCornerHighlightLtr = svgPaths.moveBy(offset, radius) +
-      svgPaths.arc(
-        'a', '0 0,1', radius - offset,
-        svgPaths.point(radius, -radius + offset));
+        svgPaths.arc(
+            'a', '0 0,1', radius - offset,
+            svgPaths.point(radius, -radius + offset));
 
     const bottomLeftStartX = distance45inside;
     const bottomLeftStartY = -distance45inside;
     const bottomLeftPath = svgPaths.moveBy(bottomLeftStartX, bottomLeftStartY) +
-      svgPaths.arc(
-        'a', '0 0,1', radius - offset,
-        svgPaths.point(
-          -bottomLeftStartX + offset, -bottomLeftStartY - radius));
+        svgPaths.arc(
+            'a', '0 0,1', radius - offset,
+            svgPaths.point(
+                -bottomLeftStartX + offset, -bottomLeftStartY - radius));
 
     return {
       height: radius,
@@ -240,29 +239,29 @@ export class HighlightConstantProvider {
     const verticalOverlap = 2.5;
 
     const highlightRtlUp =
-      svgPaths.moveBy(-2, -height + verticalOverlap + 0.9) +
-      svgPaths.lineTo(width * -0.45, -2.1);
+        svgPaths.moveBy(-2, -height + verticalOverlap + 0.9) +
+        svgPaths.lineTo(width * -0.45, -2.1);
 
     const highlightRtlDown = svgPaths.lineOnAxis('v', verticalOverlap) +
-      svgPaths.moveBy(-width * 0.97, 2.5) +
-      svgPaths.curve(
-        'q',
-        [
-          svgPaths.point(-width * 0.05, 10),
-          svgPaths.point(width * 0.3, 9.5),
-        ]) +
-      svgPaths.moveBy(width * 0.67, -1.9) +
-      svgPaths.lineOnAxis('v', verticalOverlap);
+        svgPaths.moveBy(-width * 0.97, 2.5) +
+        svgPaths.curve(
+            'q',
+            [
+              svgPaths.point(-width * 0.05, 10),
+              svgPaths.point(width * 0.3, 9.5),
+            ]) +
+        svgPaths.moveBy(width * 0.67, -1.9) +
+        svgPaths.lineOnAxis('v', verticalOverlap);
 
     const highlightLtrUp = svgPaths.lineOnAxis('v', -1.5) +
-      svgPaths.moveBy(width * -0.92, -0.5) +
-      svgPaths.curve(
-        'q',
-        [svgPaths.point(width * -0.19, -5.5), svgPaths.point(0, -11)]) +
-      svgPaths.moveBy(width * 0.92, 1);
+        svgPaths.moveBy(width * -0.92, -0.5) +
+        svgPaths.curve(
+            'q',
+            [svgPaths.point(width * -0.19, -5.5), svgPaths.point(0, -11)]) +
+        svgPaths.moveBy(width * 0.92, 1);
 
     const highlightLtrDown =
-      svgPaths.moveBy(-5, height - 0.7) + svgPaths.lineTo(width * 0.46, -2.1);
+        svgPaths.moveBy(-5, height - 0.7) + svgPaths.lineTo(width * 0.46, -2.1);
 
     return {
       width,
@@ -283,8 +282,8 @@ export class HighlightConstantProvider {
   makeNotch(): Notch {
     // This is only for the previous connection.
     const pathLeft = svgPaths.lineOnAxis('h', this.OFFSET) +
-      this.constantProvider.NOTCH.pathLeft;
-    return { pathLeft };
+        this.constantProvider.NOTCH.pathLeft;
+    return {pathLeft};
   }
 
   /**
@@ -293,8 +292,8 @@ export class HighlightConstantProvider {
    */
   makeJaggedTeeth(): JaggedTeeth {
     const pathLeft = svgPaths.lineTo(5.1, 2.6) + svgPaths.moveBy(-10.2, 6.8) +
-      svgPaths.lineTo(5.1, 2.6);
-    return { pathLeft, height: 12, width: 10.2 };
+        svgPaths.lineTo(5.1, 2.6);
+    return {pathLeft, height: 12, width: 10.2};
   }
 
   /**

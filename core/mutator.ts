@@ -20,28 +20,28 @@
 import './events/events_bubble_open';
 
 /* eslint-disable-next-line no-unused-vars */
-import { Block } from './block.js';
+import {Block} from './block.js';
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from './block_svg.js';
+import {BlockSvg} from './block_svg.js';
 /* eslint-disable-next-line no-unused-vars */
-import { BlocklyOptions } from './blockly_options.js';
-import { Bubble } from './bubble.js';
-import { config } from './config.js';
+import {BlocklyOptions} from './blockly_options.js';
+import {Bubble} from './bubble.js';
+import {config} from './config.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Connection } from './connection.js';
+import {Connection} from './connection.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Abstract } from './events/events_abstract.js';
-import { BlockChange } from './events/events_block_change.js';
+import {Abstract} from './events/events_abstract.js';
+import {BlockChange} from './events/events_block_change.js';
 import * as eventUtils from './events/utils.js';
-import { Icon } from './icon.js';
-import { Options } from './options.js';
+import {Icon} from './icon.js';
+import {Options} from './options.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Coordinate } from './utils/coordinate.js';
+import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
-import { Svg } from './utils/svg.js';
+import {Svg} from './utils/svg.js';
 import * as toolbox from './utils/toolbox.js';
 import * as xml from './utils/xml.js';
-import { WorkspaceSvg } from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**
@@ -52,7 +52,7 @@ export class Mutator extends Icon {
   quarkNames_: AnyDuringMigration;
 
   /** Workspace in the mutator's bubble. */
-  private workspace_: WorkspaceSvg | null = null;
+  private workspace_: WorkspaceSvg|null = null;
 
   /** Width of workspace. */
   private workspaceWidth_ = 0;
@@ -64,19 +64,19 @@ export class Mutator extends Icon {
    * The SVG element that is the parent of the mutator workspace, or null if
    * not created.
    */
-  private svgDialog_: SVGSVGElement | null = null;
+  private svgDialog_: SVGSVGElement|null = null;
 
   /**
    * The root block of the mutator workspace, created by decomposing the
    * source block.
    */
-  private rootBlock_: BlockSvg | null = null;
+  private rootBlock_: BlockSvg|null = null;
 
   /**
    * Function registered on the main workspace to update the mutator contents
    * when the main workspace changes.
    */
-  private sourceListener_: Function | null = null;
+  private sourceListener_: Function|null = null;
 
   /**
    * The PID associated with the updateWorkpace_ timeout, or 0 if no timeout
@@ -103,7 +103,7 @@ export class Mutator extends Icon {
    * @return The workspace inside this mutator icon's bubble or null if the
    *     mutator isn't open.
    */
-  getWorkspace(): WorkspaceSvg | null {
+  getWorkspace(): WorkspaceSvg|null {
     return this.workspace_;
   }
 
@@ -114,31 +114,31 @@ export class Mutator extends Icon {
   protected override drawIcon_(group: Element) {
     // Square with rounded corners.
     dom.createSvgElement(
-      Svg.RECT, {
-      'class': 'blocklyIconShape',
-      'rx': '4',
-      'ry': '4',
-      'height': '16',
-      'width': '16',
-    },
-      group);
+        Svg.RECT, {
+          'class': 'blocklyIconShape',
+          'rx': '4',
+          'ry': '4',
+          'height': '16',
+          'width': '16',
+        },
+        group);
     // Gear teeth.
     dom.createSvgElement(
-      Svg.PATH, {
-      'class': 'blocklyIconSymbol',
-      'd': 'm4.203,7.296 0,1.368 -0.92,0.677 -0.11,0.41 0.9,1.559 0.41,' +
-        '0.11 1.043,-0.457 1.187,0.683 0.127,1.134 0.3,0.3 1.8,0 0.3,' +
-        '-0.299 0.127,-1.138 1.185,-0.682 1.046,0.458 0.409,-0.11 0.9,' +
-        '-1.559 -0.11,-0.41 -0.92,-0.677 0,-1.366 0.92,-0.677 0.11,' +
-        '-0.41 -0.9,-1.559 -0.409,-0.109 -1.046,0.458 -1.185,-0.682 ' +
-        '-0.127,-1.138 -0.3,-0.299 -1.8,0 -0.3,0.3 -0.126,1.135 -1.187,' +
-        '0.682 -1.043,-0.457 -0.41,0.11 -0.899,1.559 0.108,0.409z',
-    },
-      group);
+        Svg.PATH, {
+          'class': 'blocklyIconSymbol',
+          'd': 'm4.203,7.296 0,1.368 -0.92,0.677 -0.11,0.41 0.9,1.559 0.41,' +
+              '0.11 1.043,-0.457 1.187,0.683 0.127,1.134 0.3,0.3 1.8,0 0.3,' +
+              '-0.299 0.127,-1.138 1.185,-0.682 1.046,0.458 0.409,-0.11 0.9,' +
+              '-1.559 -0.11,-0.41 -0.92,-0.677 0,-1.366 0.92,-0.677 0.11,' +
+              '-0.41 -0.9,-1.559 -0.409,-0.109 -1.046,0.458 -1.185,-0.682 ' +
+              '-0.127,-1.138 -0.3,-0.299 -1.8,0 -0.3,0.3 -0.126,1.135 -1.187,' +
+              '0.682 -1.043,-0.457 -0.41,0.11 -0.899,1.559 0.108,0.409z',
+        },
+        group);
     // Axle hole.
     dom.createSvgElement(
-      Svg.CIRCLE,
-      { 'class': 'blocklyIconShape', 'r': '2.7', 'cx': '8', 'cy': '8' }, group);
+        Svg.CIRCLE,
+        {'class': 'blocklyIconShape', 'r': '2.7', 'cx': '8', 'cy': '8'}, group);
   }
 
   /**
@@ -163,7 +163,7 @@ export class Mutator extends Icon {
         </svg>
         */
     this.svgDialog_ = dom.createSvgElement(
-      Svg.SVG, { 'x': Bubble.BORDER_WIDTH, 'y': Bubble.BORDER_WIDTH });
+        Svg.SVG, {'x': Bubble.BORDER_WIDTH, 'y': Bubble.BORDER_WIDTH});
     // Convert the list of names into a list of XML objects for the flyout.
     let quarkXml;
     if (this.quarkNames_.length) {
@@ -188,7 +188,7 @@ export class Mutator extends Icon {
       'rendererOverrides': this.block_.workspace.options.rendererOverrides,
     } as BlocklyOptions));
     workspaceOptions.toolboxPosition =
-      this.block_.RTL ? toolbox.Position.RIGHT : toolbox.Position.LEFT;
+        this.block_.RTL ? toolbox.Position.RIGHT : toolbox.Position.LEFT;
     const hasFlyout = !!quarkXml;
     if (hasFlyout) {
       workspaceOptions.languageTree = toolbox.convertToolboxDefToJson(quarkXml);
@@ -224,7 +224,7 @@ export class Mutator extends Icon {
       if (this.block_.isEditable()) {
         if (this.iconGroup_) {
           dom.removeClass(
-            this.iconGroup_ as Element, 'blocklyIconGroupReadonly');
+              this.iconGroup_ as Element, 'blocklyIconGroupReadonly');
         }
       } else {
         // Close any mutator bubble.  Icon is not clickable.
@@ -245,7 +245,7 @@ export class Mutator extends Icon {
     const flyout = this.workspace_!.getFlyout();
     if (flyout) {
       const flyoutScrollMetrics =
-        flyout.getWorkspace().getMetricsManager().getScrollMetrics();
+          flyout.getWorkspace().getMetricsManager().getScrollMetrics();
       height = Math.max(height, flyoutScrollMetrics.height + 20);
       width += flyout.getWidth();
     }
@@ -256,23 +256,23 @@ export class Mutator extends Icon {
     // Only resize if the size difference is significant.  Eliminates
     // shuddering.
     if (Math.abs(this.workspaceWidth_ - width) > doubleBorderWidth ||
-      Math.abs(this.workspaceHeight_ - height) > doubleBorderWidth) {
+        Math.abs(this.workspaceHeight_ - height) > doubleBorderWidth) {
       // Record some layout information for workspace metrics.
       this.workspaceWidth_ = width;
       this.workspaceHeight_ = height;
       // Resize the bubble.
       this.bubble_!.setBubbleSize(
-        width + doubleBorderWidth, height + doubleBorderWidth);
+          width + doubleBorderWidth, height + doubleBorderWidth);
       // AnyDuringMigration because:  Argument of type 'number' is not
       // assignable to parameter of type 'string'.
       this.svgDialog_!.setAttribute(
-        'width', this.workspaceWidth_ as AnyDuringMigration);
+          'width', this.workspaceWidth_ as AnyDuringMigration);
       // AnyDuringMigration because:  Argument of type 'number' is not
       // assignable to parameter of type 'string'.
       this.svgDialog_!.setAttribute(
-        'height', this.workspaceHeight_ as AnyDuringMigration);
+          'height', this.workspaceHeight_ as AnyDuringMigration);
       this.workspace_!.setCachedParentSvgSize(
-        this.workspaceWidth_, this.workspaceHeight_);
+          this.workspaceWidth_, this.workspaceHeight_);
     }
 
     if (this.block_.RTL) {
@@ -300,13 +300,13 @@ export class Mutator extends Icon {
       return;
     }
     eventUtils.fire(new (eventUtils.get(eventUtils.BUBBLE_OPEN))!
-      (this.block_, visible, 'mutator'));
+                    (this.block_, visible, 'mutator'));
     if (visible) {
       // Create the bubble.
       this.bubble_ = new Bubble(
-        (this.block_.workspace as WorkspaceSvg), this.createEditor_(),
-        this.block_.pathObject.svgPath, (this.iconXY_ as Coordinate), null,
-        null);
+          (this.block_.workspace as WorkspaceSvg), this.createEditor_(),
+          this.block_.pathObject.svgPath, (this.iconXY_ as Coordinate), null,
+          null);
       // Expose this mutator's block's ID on its top-level SVG group.
       this.bubble_.setSvgId(this.block_.id);
       this.bubble_.registerMoveEvent(this.onBubbleMove_.bind(this));
@@ -457,10 +457,10 @@ export class Mutator extends Icon {
       const newExtraState = BlockChange.getExtraBlockState_(block);
       if (oldExtraState !== newExtraState) {
         eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))!(
-          block, 'mutation', null, oldExtraState, newExtraState));
+            block, 'mutation', null, oldExtraState, newExtraState));
         // Ensure that any bump is part of this mutation's event group.
         const mutationGroup = eventUtils.getGroup();
-        setTimeout(function () {
+        setTimeout(function() {
           const oldGroup = eventUtils.getGroup();
           eventUtils.setGroup(mutationGroup);
           block.bumpNeighbours();
@@ -511,7 +511,7 @@ export class Mutator extends Icon {
    * @return True iff a reconnection was made, false otherwise.
    */
   static reconnect(
-    connectionChild: Connection, block: Block, inputName: string): boolean {
+      connectionChild: Connection, block: Block, inputName: string): boolean {
     if (!connectionChild || !connectionChild.getSourceBlock().workspace) {
       return false;
     }
@@ -519,7 +519,7 @@ export class Mutator extends Icon {
     const connectionParent = block.getInput(inputName)!.connection;
     const currentParent = connectionChild.targetBlock();
     if ((!currentParent || currentParent === block) && connectionParent &&
-      connectionParent.targetConnection !== connectionChild) {
+        connectionParent.targetConnection !== connectionChild) {
       if (connectionParent.isConnected()) {
         // There's already something connected here.  Get rid of it.
         connectionParent.disconnect();
@@ -536,7 +536,7 @@ export class Mutator extends Icon {
    * @param workspace The workspace that is inside a mutator.
    * @return The mutator's parent workspace or null.
    */
-  static findParentWs(workspace: WorkspaceSvg): WorkspaceSvg | null {
+  static findParentWs(workspace: WorkspaceSvg): WorkspaceSvg|null {
     let outerWs = null;
     if (workspace && workspace.options) {
       const parent = workspace.options.parentWorkspace;

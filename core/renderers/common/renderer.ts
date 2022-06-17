@@ -12,31 +12,32 @@
  * @class
  */
 /* eslint-disable-next-line no-unused-vars */
-import { Block } from '../../block.js';
+import {Block} from '../../block.js';
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from '../../block_svg.js';
-import { Connection } from '../../connection.js';
-import { ConnectionType } from '../../connection_type.js';
-import { InsertionMarkerManager, PreviewType } from '../../insertion_marker_manager.js';
+import {BlockSvg} from '../../block_svg.js';
+import {Connection} from '../../connection.js';
+import {ConnectionType} from '../../connection_type.js';
+import {InsertionMarkerManager, PreviewType} from '../../insertion_marker_manager.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IRegistrable } from '../../interfaces/i_registrable.js';
+import {IRegistrable} from '../../interfaces/i_registrable.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Marker } from '../../keyboard_nav/marker.js';
+import {Marker} from '../../keyboard_nav/marker.js';
 /* eslint-disable-next-line no-unused-vars */
-import { RenderedConnection } from '../../rendered_connection.js';
-import { BlockStyle, Theme } from '../../theme.js';
+import {RenderedConnection} from '../../rendered_connection.js';
+import {BlockStyle, Theme} from '../../theme.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from '../../workspace_svg.js';
-import { ConstantProvider } from './constants.js';
+import {WorkspaceSvg} from '../../workspace_svg.js';
+
+import {ConstantProvider} from './constants.js';
 import * as debug from './debug.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Debug } from './debugger.js';
-import { Drawer } from './drawer.js';
+import {Debug} from './debugger.js';
+import {Drawer} from './drawer.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IPathObject } from './i_path_object.js';
-import { RenderInfo } from './info.js';
-import { MarkerSvg } from './marker_svg.js';
-import { PathObject } from './path_object.js';
+import {IPathObject} from './i_path_object.js';
+import {RenderInfo} from './info.js';
+import {MarkerSvg} from './marker_svg.js';
+import {PathObject} from './path_object.js';
 
 
 /**
@@ -48,7 +49,7 @@ export class Renderer implements IRegistrable {
   protected constants_!: ConstantProvider;
 
   /** Rendering constant overrides, passed in through options. */
-  overrides: object | null = null;
+  overrides: object|null = null;
 
   /** @param name The renderer name. */
   constructor(public name: string) {}
@@ -83,8 +84,8 @@ export class Renderer implements IRegistrable {
    */
   createDom(svg: SVGElement, theme: Theme) {
     this.constants_.createDom(
-      svg, this.name + '-' + theme.name,
-      '.' + this.getClassName() + '.' + theme.getClassName());
+        svg, this.name + '-' + theme.name,
+        '.' + this.getClassName() + '.' + theme.getClassName());
   }
 
   /**
@@ -204,12 +205,12 @@ export class Renderer implements IRegistrable {
    * @return Whether there is a home for the orphan or not.
    */
   orphanCanConnectAtEnd(
-    topBlock: BlockSvg, orphanBlock: BlockSvg, localType: number): boolean {
+      topBlock: BlockSvg, orphanBlock: BlockSvg, localType: number): boolean {
     const orphanConnection = localType === ConnectionType.OUTPUT_VALUE ?
-      orphanBlock.outputConnection :
-      orphanBlock.previousConnection;
+        orphanBlock.outputConnection :
+        orphanBlock.previousConnection;
     return !!Connection.getConnectionForOrphanedConnection(
-      topBlock as Block, orphanConnection as Connection);
+        topBlock as Block, orphanConnection as Connection);
   }
 
   /**
@@ -221,13 +222,13 @@ export class Renderer implements IRegistrable {
    * @return The preview type to display.
    */
   getConnectionPreviewMethod(
-    closest: RenderedConnection, local: RenderedConnection,
-    topBlock: BlockSvg): PreviewType {
+      closest: RenderedConnection, local: RenderedConnection,
+      topBlock: BlockSvg): PreviewType {
     if (local.type === ConnectionType.OUTPUT_VALUE ||
-      local.type === ConnectionType.PREVIOUS_STATEMENT) {
+        local.type === ConnectionType.PREVIOUS_STATEMENT) {
       if (!closest.isConnected() ||
-        this.orphanCanConnectAtEnd(
-          topBlock, closest.targetBlock() as BlockSvg, local.type)) {
+          this.orphanCanConnectAtEnd(
+              topBlock, closest.targetBlock() as BlockSvg, local.type)) {
         return InsertionMarkerManager.PREVIEW_TYPE.INSERTION_MARKER;
       }
       return InsertionMarkerManager.PREVIEW_TYPE.REPLACEMENT_FADE;

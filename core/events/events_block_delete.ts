@@ -13,12 +13,12 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { Block } from '../block.js';
+import {Block} from '../block.js';
 import * as registry from '../registry.js';
 import * as blocks from '../serialization/blocks.js';
 import * as Xml from '../xml.js';
 
-import { BlockBase } from './events_block_base.js';
+import {BlockBase} from './events_block_base.js';
 import * as eventUtils from './utils.js';
 
 
@@ -63,7 +63,7 @@ export class BlockDelete extends BlockBase {
 
     /** JSON representation of the block that was just deleted. */
     this.oldJson =
-      blocks.save(opt_block, { addCoordinates: true }) as blocks.State;
+        blocks.save(opt_block, {addCoordinates: true}) as blocks.State;
   }
 
   /**
@@ -91,7 +91,7 @@ export class BlockDelete extends BlockBase {
     this.oldXml = Xml.textToDom(json['oldXml']);
     this.ids = json['ids'];
     this.wasShadow =
-      json['wasShadow'] || this.oldXml.tagName.toLowerCase() === 'shadow';
+        json['wasShadow'] || this.oldXml.tagName.toLowerCase() === 'shadow';
     this.oldJson = json['oldJson'] as blocks.State;
     if (json['recordUndo'] !== undefined) {
       this.recordUndo = json['recordUndo'];

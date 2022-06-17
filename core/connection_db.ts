@@ -21,13 +21,13 @@
 // Unused import preserved for side-effects. Remove if unneeded.
 import './constants';
 
-import { ConnectionType } from './connection_type.js';
+import {ConnectionType} from './connection_type.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IConnectionChecker } from './interfaces/i_connection_checker.js';
+import {IConnectionChecker} from './interfaces/i_connection_checker.js';
 /* eslint-disable-next-line no-unused-vars */
-import { RenderedConnection } from './rendered_connection.js';
+import {RenderedConnection} from './rendered_connection.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Coordinate } from './utils/coordinate.js';
+import {Coordinate} from './utils/coordinate.js';
 
 
 /**
@@ -66,7 +66,7 @@ export class ConnectionDB {
    * @return The index of the connection, or -1 if the connection was not found.
    */
   private findIndexOfConnection_(conn: RenderedConnection, yPos: number):
-    number {
+      number {
     if (!this.connections_.length) {
       return -1;
     }
@@ -89,7 +89,7 @@ export class ConnectionDB {
 
     pointer = bestGuess;
     while (pointer < this.connections_.length &&
-      this.connections_[pointer].y === yPos) {
+           this.connections_[pointer].y === yPos) {
       if (this.connections_[pointer] === conn) {
         return pointer;
       }
@@ -145,7 +145,7 @@ export class ConnectionDB {
    * @return List of connections.
    */
   getNeighbours(connection: RenderedConnection, maxRadius: number):
-    RenderedConnection[] {
+      RenderedConnection[] {
     const db = this.connections_;
     const currentX = connection.x;
     const currentY = connection.y;
@@ -206,7 +206,7 @@ export class ConnectionDB {
    * @return True if connection is in range.
    */
   private isInYRange_(index: number, baseY: number, maxRadius: number):
-    boolean {
+      boolean {
     return Math.abs(this.connections_[index].y - baseY) <= maxRadius;
   }
 
@@ -220,13 +220,13 @@ export class ConnectionDB {
    *     connection or null, and 'radius' which is the distance.
    */
   searchForClosest(
-    conn: RenderedConnection, maxRadius: number,
-    dxy: Coordinate): { connection: RenderedConnection, radius: number } {
+      conn: RenderedConnection, maxRadius: number,
+      dxy: Coordinate): {connection: RenderedConnection, radius: number} {
     if (!this.connections_.length) {
       // Don't bother.
       // AnyDuringMigration because:  Type 'null' is not assignable to type
       // 'RenderedConnection'.
-      return { connection: null as AnyDuringMigration, radius: maxRadius };
+      return {connection: null as AnyDuringMigration, radius: maxRadius};
     }
 
     // Stash the values of x and y from before the drag.
@@ -260,7 +260,7 @@ export class ConnectionDB {
 
     let pointerMax = closestIndex;
     while (pointerMax < this.connections_.length &&
-      this.isInYRange_(pointerMax, conn.y, maxRadius)) {
+           this.isInYRange_(pointerMax, conn.y, maxRadius)) {
       temp = this.connections_[pointerMax];
       if (this.checker.canConnect(conn, temp, true, bestRadius)) {
         bestConnection = temp;

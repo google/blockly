@@ -13,12 +13,11 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from '../../block_svg.js';
-
-import { Drawer as BaseDrawer } from '../common/drawer.js';
+import {BlockSvg} from '../../block_svg.js';
+import {Drawer as BaseDrawer} from '../common/drawer.js';
 
 /* eslint-disable-next-line no-unused-vars */
-import { RenderInfo } from './info.js';
+import {RenderInfo} from './info.js';
 
 
 /**

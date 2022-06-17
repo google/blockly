@@ -12,15 +12,15 @@
  * @namespace Blockly.Variables
  */
 
-import { Blocks } from './blocks.js';
+import {Blocks} from './blocks.js';
 import * as dialog from './dialog.js';
-import { Msg } from './msg.js';
+import {Msg} from './msg.js';
 import * as utilsXml from './utils/xml.js';
-import { VariableModel } from './variable_model.js';
+import {VariableModel} from './variable_model.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Workspace } from './workspace.js';
+import {Workspace} from './workspace.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 import * as Xml from './xml.js';
 
 /**
@@ -66,7 +66,7 @@ export function allUsedVarModels(ws: Workspace): VariableModel[] {
   return variableList;
 }
 
-const ALL_DEVELOPER_VARS_WARNINGS_BY_BLOCK_TYPE: { [key: string]: boolean } = {};
+const ALL_DEVELOPER_VARS_WARNINGS_BY_BLOCK_TYPE: {[key: string]: boolean} = {};
 
 /**
  * Find all developer variables used by blocks in the workspace.
@@ -103,16 +103,16 @@ export function allDeveloperVariables(workspace: Workspace): string[] {
  * @alias Blockly.Variables.flyoutCategory
  */
 export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
-  let xmlList = new Array < Element > ();
+  let xmlList = new Array<Element>();
   const button = document.createElement('button');
   button.setAttribute('text', '%{BKY_NEW_VARIABLE}');
   button.setAttribute('callbackKey', 'CREATE_VARIABLE');
 
-  workspace.registerButtonCallback('CREATE_VARIABLE', function (button) {
+  workspace.registerButtonCallback('CREATE_VARIABLE', function(button) {
     // AnyDuringMigration because:  Argument of type 'WorkspaceSvg' is not
     // assignable to parameter of type 'Workspace'.
     createVariableButtonHandler(
-      button.getTargetWorkspace() as AnyDuringMigration);
+        button.getTargetWorkspace() as AnyDuringMigration);
   });
 
   xmlList.push(button);
@@ -143,11 +143,11 @@ export function flyoutCategoryBlocks(workspace: Workspace): Element[] {
       // AnyDuringMigration because:  Argument of type 'number' is not
       // assignable to parameter of type 'string'.
       block.setAttribute(
-        'gap', (Blocks['math_change'] ? 8 : 24) as AnyDuringMigration);
+          'gap', (Blocks['math_change'] ? 8 : 24) as AnyDuringMigration);
       // AnyDuringMigration because:  Argument of type 'Element | null' is not
       // assignable to parameter of type 'Node'.
       block.appendChild(
-        generateVariableFieldDom(mostRecentVariable) as AnyDuringMigration);
+          generateVariableFieldDom(mostRecentVariable) as AnyDuringMigration);
       xmlList.push(block);
     }
     if (Blocks['math_change']) {
@@ -156,17 +156,17 @@ export function flyoutCategoryBlocks(workspace: Workspace): Element[] {
       // AnyDuringMigration because:  Argument of type 'number' is not
       // assignable to parameter of type 'string'.
       block.setAttribute(
-        'gap', (Blocks['variables_get'] ? 20 : 8) as AnyDuringMigration);
+          'gap', (Blocks['variables_get'] ? 20 : 8) as AnyDuringMigration);
       // AnyDuringMigration because:  Argument of type 'Element | null' is not
       // assignable to parameter of type 'Node'.
       block.appendChild(
-        generateVariableFieldDom(mostRecentVariable) as AnyDuringMigration);
+          generateVariableFieldDom(mostRecentVariable) as AnyDuringMigration);
       const value = Xml.textToDom(
-        '<value name="DELTA">' +
-        '<shadow type="math_number">' +
-        '<field name="NUM">1</field>' +
-        '</shadow>' +
-        '</value>');
+          '<value name="DELTA">' +
+          '<shadow type="math_number">' +
+          '<field name="NUM">1</field>' +
+          '</shadow>' +
+          '</value>');
       block.appendChild(value);
       xmlList.push(block);
     }
@@ -182,7 +182,7 @@ export function flyoutCategoryBlocks(workspace: Workspace): Element[] {
         // AnyDuringMigration because:  Argument of type 'Element | null' is not
         // assignable to parameter of type 'Node'.
         block.appendChild(
-          generateVariableFieldDom(variable) as AnyDuringMigration);
+            generateVariableFieldDom(variable) as AnyDuringMigration);
         xmlList.push(block);
       }
     }
@@ -204,7 +204,7 @@ export const VAR_LETTER_OPTIONS = 'ijkmnopqrstuvwxyzabcdefgh';
  */
 export function generateUniqueName(workspace: Workspace): string {
   return generateUniqueNameFromOptions(
-    VAR_LETTER_OPTIONS.charAt(0), workspace.getAllVariableNames());
+      VAR_LETTER_OPTIONS.charAt(0), workspace.getAllVariableNames());
 }
 
 /**
@@ -217,7 +217,7 @@ export function generateUniqueName(workspace: Workspace): string {
  * @alias Blockly.Variables.generateUniqueNameFromOptions
  */
 export function generateUniqueNameFromOptions(
-  startChar: string, usedNames: string[]): string {
+    startChar: string, usedNames: string[]): string {
   if (!usedNames.length) {
     return startChar;
   }
@@ -270,13 +270,13 @@ export function generateUniqueNameFromOptions(
  * @alias Blockly.Variables.createVariableButtonHandler
  */
 export function createVariableButtonHandler(
-  workspace: Workspace,
-  opt_callback?: (p1?: string | null) => AnyDuringMigration,
-  opt_type?: string) {
+    workspace: Workspace,
+    opt_callback?: (p1?: string|null) => AnyDuringMigration,
+    opt_type?: string) {
   const type = opt_type || '';
   // This function needs to be named so it can be called recursively.
   function promptAndCheckWithAlert(defaultName: AnyDuringMigration) {
-    promptName(Msg['NEW_VARIABLE_TITLE'], defaultName, function (text) {
+    promptName(Msg['NEW_VARIABLE_TITLE'], defaultName, function(text) {
       if (text) {
         const existing = nameUsedWithAnyType(text, workspace);
         if (existing) {
@@ -287,9 +287,9 @@ export function createVariableButtonHandler(
             msg = Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE'];
             msg = msg.replace('%1', existing.name).replace('%2', existing.type);
           }
-          dialog.alert(msg, function () {
+          dialog.alert(msg, function() {
             promptAndCheckWithAlert(  // Recurse
-              text);
+                text);
           });
         } else  // Recurse
         {
@@ -322,23 +322,23 @@ export function createVariableButtonHandler(
  * @alias Blockly.Variables.renameVariable
  */
 export function renameVariable(
-  workspace: Workspace, variable: VariableModel,
-  opt_callback?: (p1?: string | null) => AnyDuringMigration) {
+    workspace: Workspace, variable: VariableModel,
+    opt_callback?: (p1?: string|null) => AnyDuringMigration) {
   // This function needs to be named so it can be called recursively.
   function promptAndCheckWithAlert(defaultName: AnyDuringMigration) {
     const promptText =
-      Msg['RENAME_VARIABLE_TITLE'].replace('%1', variable.name);
-    promptName(promptText, defaultName, function (newName) {
+        Msg['RENAME_VARIABLE_TITLE'].replace('%1', variable.name);
+    promptName(promptText, defaultName, function(newName) {
       if (newName) {
         const existing =
-          nameUsedWithOtherType(newName, variable.type, workspace);
+            nameUsedWithOtherType(newName, variable.type, workspace);
         if (existing) {
           const msg = Msg['VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE']
-            .replace('%1', existing.name)
-            .replace('%2', existing.type);
-          dialog.alert(msg, function () {
+                          .replace('%1', existing.name)
+                          .replace('%2', existing.type);
+          dialog.alert(msg, function() {
             promptAndCheckWithAlert(  // Recurse
-              newName);
+                newName);
           });
         } else  // Recurse
         {
@@ -367,9 +367,9 @@ export function renameVariable(
  * @alias Blockly.Variables.promptName
  */
 export function promptName(
-  promptText: string, defaultText: string,
-  callback: (p1: string | null) => AnyDuringMigration) {
-  dialog.prompt(promptText, defaultText, function (newVar) {
+    promptText: string, defaultText: string,
+    callback: (p1: string|null) => AnyDuringMigration) {
+  dialog.prompt(promptText, defaultText, function(newVar) {
     // Merge runs of whitespace.  Strip leading and trailing whitespace.
     // Beyond this, all names are legal.
     if (newVar) {
@@ -392,7 +392,7 @@ export function promptName(
  *     none was found.
  */
 function nameUsedWithOtherType(
-  name: string, type: string, workspace: Workspace): VariableModel | null {
+    name: string, type: string, workspace: Workspace): VariableModel|null {
   const allVariables = workspace.getVariableMap().getAllVariables();
 
   name = name.toLowerCase();
@@ -412,7 +412,7 @@ function nameUsedWithOtherType(
  * @alias Blockly.Variables.nameUsedWithAnyType
  */
 export function nameUsedWithAnyType(
-  name: string, workspace: Workspace): VariableModel | null {
+    name: string, workspace: Workspace): VariableModel|null {
   const allVariables = workspace.getVariableMap().getAllVariables();
 
   name = name.toLowerCase();
@@ -430,8 +430,8 @@ export function nameUsedWithAnyType(
  * @return The generated DOM.
  * @alias Blockly.Variables.generateVariableFieldDom
  */
-export function generateVariableFieldDom(variableModel: VariableModel): Element |
-  null {
+export function generateVariableFieldDom(variableModel: VariableModel): Element|
+    null {
   /* Generates the following XML:
    * <field name="VAR" id="goKTKmYJ8DhVHpruv" variabletype="int">foo</field>
    */
@@ -457,8 +457,8 @@ export function generateVariableFieldDom(variableModel: VariableModel): Element 
  * @alias Blockly.Variables.getOrCreateVariablePackage
  */
 export function getOrCreateVariablePackage(
-  workspace: Workspace, id: string | null, opt_name?: string,
-  opt_type?: string): VariableModel {
+    workspace: Workspace, id: string|null, opt_name?: string,
+    opt_type?: string): VariableModel {
   let variable = getVariable(workspace, id, opt_name, opt_type);
   if (!variable) {
     variable = createVariable(workspace, id, opt_name, opt_type);
@@ -482,8 +482,8 @@ export function getOrCreateVariablePackage(
  * @alias Blockly.Variables.getVariable
  */
 export function getVariable(
-  workspace: Workspace, id: string | null, opt_name?: string,
-  opt_type?: string): VariableModel | null {
+    workspace: Workspace, id: string|null, opt_name?: string,
+    opt_type?: string): VariableModel|null {
   const potentialVariableMap = workspace.getPotentialVariableMap();
   let variable = null;
   // Try to just get the variable, by ID if possible.
@@ -523,14 +523,14 @@ export function getVariable(
  *     combination.
  */
 function createVariable(
-  workspace: Workspace, id: string | null, opt_name?: string,
-  opt_type?: string): VariableModel {
+    workspace: Workspace, id: string|null, opt_name?: string,
+    opt_type?: string): VariableModel {
   const potentialVariableMap = workspace.getPotentialVariableMap();
   // Variables without names get uniquely named for this workspace.
   if (!opt_name) {
     const ws =
-      (workspace.isFlyout ? (workspace as WorkspaceSvg).targetWorkspace :
-        workspace);
+        (workspace.isFlyout ? (workspace as WorkspaceSvg).targetWorkspace :
+                              workspace);
     // Must call version on exports to allow for mocking in tests. See #5321
     // AnyDuringMigration because:  Argument of type 'Workspace | WorkspaceSvg'
     // is not assignable to parameter of type 'Workspace'.
@@ -561,7 +561,7 @@ function createVariable(
  * @alias Blockly.Variables.getAddedVariables
  */
 export function getAddedVariables(
-  workspace: Workspace, originalVariables: VariableModel[]): VariableModel[] {
+    workspace: Workspace, originalVariables: VariableModel[]): VariableModel[] {
   const allCurrentVariables = workspace.getAllVariables();
   const addedVariables = [];
   if (originalVariables.length !== allCurrentVariables.length) {

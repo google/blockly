@@ -17,48 +17,48 @@ import '../shortcut_registry';
 // Unused import preserved for side-effects. Remove if unneeded.
 import '../events/events_toolbox_item_select';
 
-import { BlockSvg } from '../block_svg.js';
+import {BlockSvg} from '../block_svg.js';
 /* eslint-disable-next-line no-unused-vars */
-import { BlocklyOptions } from '../blockly_options.js';
+import {BlocklyOptions} from '../blockly_options.js';
 import * as browserEvents from '../browser_events.js';
 import * as common from '../common.js';
-import { ComponentManager } from '../component_manager.js';
+import {ComponentManager} from '../component_manager.js';
 import * as Css from '../css.js';
-import { DeleteArea } from '../delete_area.js';
+import {DeleteArea} from '../delete_area.js';
 import * as eventUtils from '../events/utils.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IAutoHideable } from '../interfaces/i_autohideable.js';
+import {IAutoHideable} from '../interfaces/i_autohideable.js';
 /* eslint-disable-next-line no-unused-vars */
-import { ICollapsibleToolboxItem } from '../interfaces/i_collapsible_toolbox_item.js';
+import {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_item.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IDraggable } from '../interfaces/i_draggable.js';
+import {IDraggable} from '../interfaces/i_draggable.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IFlyout } from '../interfaces/i_flyout.js';
+import {IFlyout} from '../interfaces/i_flyout.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IKeyboardAccessible } from '../interfaces/i_keyboard_accessible.js';
+import {IKeyboardAccessible} from '../interfaces/i_keyboard_accessible.js';
 /* eslint-disable-next-line no-unused-vars */
-import { ISelectableToolboxItem } from '../interfaces/i_selectable_toolbox_item.js';
+import {ISelectableToolboxItem} from '../interfaces/i_selectable_toolbox_item.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IStyleable } from '../interfaces/i_styleable.js';
+import {IStyleable} from '../interfaces/i_styleable.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IToolbox } from '../interfaces/i_toolbox.js';
+import {IToolbox} from '../interfaces/i_toolbox.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IToolboxItem } from '../interfaces/i_toolbox_item.js';
-import { Options } from '../options.js';
+import {IToolboxItem} from '../interfaces/i_toolbox_item.js';
+import {Options} from '../options.js';
 import * as registry from '../registry.js';
-import { KeyboardShortcut } from '../shortcut_registry.js';
+import {KeyboardShortcut} from '../shortcut_registry.js';
 import * as Touch from '../touch.js';
 import * as aria from '../utils/aria.js';
 import * as dom from '../utils/dom.js';
-import { KeyCodes } from '../utils/keycodes.js';
-import { Rect } from '../utils/rect.js';
+import {KeyCodes} from '../utils/keycodes.js';
+import {Rect} from '../utils/rect.js';
 import * as toolbox from '../utils/toolbox.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from '../workspace_svg.js';
+import {WorkspaceSvg} from '../workspace_svg.js';
 
 /* eslint-disable-next-line no-unused-vars */
-import { ToolboxCategory } from './category.js';
-import { CollapsibleToolboxCategory } from './collapsible_category.js';
+import {ToolboxCategory} from './category.js';
+import {CollapsibleToolboxCategory} from './collapsible_category.js';
 
 
 /**
@@ -67,8 +67,8 @@ import { CollapsibleToolboxCategory } from './collapsible_category.js';
  * @alias Blockly.Toolbox
  */
 export class Toolbox extends DeleteArea implements IAutoHideable,
-  IKeyboardAccessible,
-  IStyleable, IToolbox {
+                                                   IKeyboardAccessible,
+                                                   IStyleable, IToolbox {
   /**
    * The unique id for this component that is used to register with the
    * ComponentManager.
@@ -78,10 +78,10 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
   private readonly horizontalLayout_: boolean;
 
   /** The html container for the toolbox. */
-  HtmlDiv: HTMLDivElement | null = null;
+  HtmlDiv: HTMLDivElement|null = null;
 
   /** The html container for the contents of a toolbox. */
-  protected contentsDiv_: HTMLDivElement | null = null;
+  protected contentsDiv_: HTMLDivElement|null = null;
 
   /** Whether the Toolbox is visible. */
   protected isVisible_ = false;
@@ -97,15 +97,15 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
   RTL: boolean;
 
   /** The flyout for the toolbox. */
-  private flyout_: IFlyout | null = null;
-  protected contentMap_: { [key: string]: IToolboxItem };
+  private flyout_: IFlyout|null = null;
+  protected contentMap_: {[key: string]: IToolboxItem};
   toolboxPosition: toolbox.Position;
 
   /** The currently selected item. */
-  protected selectedItem_: ISelectableToolboxItem | null = null;
+  protected selectedItem_: ISelectableToolboxItem|null = null;
 
   /** The previously selected item. */
-  protected previouslySelectedItem_: ISelectableToolboxItem | null = null;
+  protected previouslySelectedItem_: ISelectableToolboxItem|null = null;
 
   /**
    * Array holding info needed to unbind event handlers.
@@ -122,8 +122,8 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
     /** The JSON describing the contents of this toolbox. */
     // AnyDuringMigration because:  Type 'ToolboxInfo | { contents: never[]; }'
     // is not assignable to type 'ToolboxInfo'.
-    this.toolboxDef_ = (workspace.options.languageTree || { 'contents': [] }) as
-      AnyDuringMigration;
+    this.toolboxDef_ = (workspace.options.languageTree || {'contents': []}) as
+        AnyDuringMigration;
 
     /** Whether the toolbox should be laid out horizontally. */
     this.horizontalLayout_ = workspace.options.horizontalLayout;
@@ -162,7 +162,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
     this.render(this.toolboxDef_);
     const themeManager = workspace.getThemeManager();
     themeManager.subscribe(
-      this.HtmlDiv, 'toolboxBackgroundColour', 'background-color');
+        this.HtmlDiv, 'toolboxBackgroundColour', 'background-color');
     themeManager.subscribe(this.HtmlDiv, 'toolboxForegroundColour', 'color');
     this.workspace.getComponentManager().addComponent({
       component: this,
@@ -229,15 +229,15 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
    *     toolbox.
    */
   protected attachEvents_(
-    container: HTMLDivElement, contentsContainer: HTMLDivElement) {
+      container: HTMLDivElement, contentsContainer: HTMLDivElement) {
     // Clicking on toolbox closes popups.
     const clickEvent = browserEvents.conditionalBind(
-      container, 'click', this, this.onClick_,
+        container, 'click', this, this.onClick_,
         /* opt_noCaptureIdentifier */ false, /* opt_noPreventDefault */ true);
     this.boundEvents_.push(clickEvent);
 
     const keyDownEvent = browserEvents.conditionalBind(
-      contentsContainer, 'keydown', this, this.onKeyDown_,
+        contentsContainer, 'keydown', this, this.onKeyDown_,
         /* opt_noCaptureIdentifier */ false, /* opt_noPreventDefault */ true);
     this.boundEvents_.push(keyDownEvent);
   }
@@ -337,10 +337,10 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
     let FlyoutClass = null;
     if (workspace.horizontalLayout) {
       FlyoutClass = registry.getClassFromOptions(
-        registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX, workspace.options, true);
+          registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX, workspace.options, true);
     } else {
       FlyoutClass = registry.getClassFromOptions(
-        registry.Type.FLYOUTS_VERTICAL_TOOLBOX, workspace.options, true);
+          registry.Type.FLYOUTS_VERTICAL_TOOLBOX, workspace.options, true);
     }
     return new FlyoutClass!(workspaceOptions);
   }
@@ -387,18 +387,18 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
    * @param fragment The document fragment to add the child toolbox elements to.
    */
   private createToolboxItem_(
-    toolboxItemDef: toolbox.ToolboxItemInfo, fragment: DocumentFragment) {
+      toolboxItemDef: toolbox.ToolboxItemInfo, fragment: DocumentFragment) {
     let registryName = toolboxItemDef['kind'];
 
     // Categories that are collapsible are created using a class registered
     // under a different name.
     if (registryName.toUpperCase() === 'CATEGORY' &&
-      toolbox.isCategoryCollapsible(toolboxItemDef as toolbox.CategoryInfo)) {
+        toolbox.isCategoryCollapsible(toolboxItemDef as toolbox.CategoryInfo)) {
       registryName = CollapsibleToolboxCategory.registrationName;
     }
 
     const ToolboxItemClass = registry.getClass(
-      registry.Type.TOOLBOX_ITEM, registryName.toLowerCase());
+        registry.Type.TOOLBOX_ITEM, registryName.toLowerCase());
     if (ToolboxItemClass) {
       const toolboxItem = new ToolboxItemClass(toolboxItemDef, this);
       toolboxItem.init();
@@ -462,7 +462,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
    * @return The component's bounding box. Null if drag target area should be
    *     ignored.
    */
-  override getClientRect(): Rect | null {
+  override getClientRect(): Rect|null {
     if (!this.HtmlDiv || !this.isVisible_) {
       return null;
     }
@@ -563,7 +563,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
    */
   protected updateCursorDeleteStyle_(addStyle: boolean) {
     const style =
-      this.wouldDelete_ ? 'blocklyToolboxDelete' : 'blocklyToolboxGrab';
+        this.wouldDelete_ ? 'blocklyToolboxDelete' : 'blocklyToolboxGrab';
     if (addStyle) {
       this.addStyle(style);
     } else {
@@ -576,7 +576,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
    * @param id The ID of the toolbox item.
    * @return The toolbox item with the given ID, or null if no item exists.
    */
-  getToolboxItemById(id: string): IToolboxItem | null {
+  getToolboxItemById(id: string): IToolboxItem|null {
     return this.contentMap_[id] || null;
   }
 
@@ -600,7 +600,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
    * Gets the toolbox flyout.
    * @return The toolbox flyout.
    */
-  getFlyout(): IFlyout | null {
+  getFlyout(): IFlyout|null {
     return this.flyout_;
   }
 
@@ -616,7 +616,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
    * Gets the selected item.
    * @return The selected item, or null if no item is currently selected.
    */
-  getSelectedItem(): ISelectableToolboxItem | null {
+  getSelectedItem(): ISelectableToolboxItem|null {
     return this.selectedItem_;
   }
 
@@ -625,7 +625,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
    * @return The previously selected item, or null if no item was previously
    *     selected.
    */
-  getPreviouslySelectedItem(): ISelectableToolboxItem | null {
+  getPreviouslySelectedItem(): ISelectableToolboxItem|null {
     return this.previouslySelectedItem_;
   }
 
@@ -683,11 +683,11 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
     const workspace = this.workspace;
     const rect = this.HtmlDiv!.getBoundingClientRect();
     const newX = this.toolboxPosition === toolbox.Position.LEFT ?
-      workspace.scrollX + rect.width :
-      workspace.scrollX;
+        workspace.scrollX + rect.width :
+        workspace.scrollX;
     const newY = this.toolboxPosition === toolbox.Position.TOP ?
-      workspace.scrollY + rect.height :
-      workspace.scrollY;
+        workspace.scrollY + rect.height :
+        workspace.scrollY;
     workspace.translate(newX, newY);
 
     // Even though the div hasn't changed size, the visible workspace
@@ -721,7 +721,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
    */
   refreshSelection() {
     if (this.selectedItem_ && this.selectedItem_.isSelectable() &&
-      this.selectedItem_.getContents().length) {
+        this.selectedItem_.getContents().length) {
       this.flyout_!.show(this.selectedItem_.getContents());
     }
   }
@@ -758,7 +758,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
    * No-op if the item is not selectable.
    * @param newItem The toolbox item to select.
    */
-  setSelectedItem(newItem: IToolboxItem | null) {
+  setSelectedItem(newItem: IToolboxItem|null) {
     const oldItem = this.selectedItem_;
 
     if (!newItem && !oldItem || newItem && !newItem.isSelectable()) {
@@ -769,14 +769,14 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
     // AnyDuringMigration because:  Argument of type 'IToolboxItem' is not
     // assignable to parameter of type 'ISelectableToolboxItem'.
     if (this.shouldDeselectItem_(oldItem, newItem as AnyDuringMigration) &&
-      oldItem !== null) {
+        oldItem !== null) {
       this.deselectItem_(oldItem);
     }
 
     // AnyDuringMigration because:  Argument of type 'IToolboxItem' is not
     // assignable to parameter of type 'ISelectableToolboxItem'.
     if (this.shouldSelectItem_(oldItem, newItem as AnyDuringMigration) &&
-      newItem !== null) {
+        newItem !== null) {
       // AnyDuringMigration because:  Argument of type 'IToolboxItem' is not
       // assignable to parameter of type 'ISelectableToolboxItem'.
       this.selectItem_(oldItem, newItem as AnyDuringMigration);
@@ -797,12 +797,12 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
    * @return True if the old item should be deselected, false otherwise.
    */
   protected shouldDeselectItem_(
-    oldItem: ISelectableToolboxItem | null,
-    newItem: ISelectableToolboxItem | null): boolean {
+      oldItem: ISelectableToolboxItem|null,
+      newItem: ISelectableToolboxItem|null): boolean {
     // Deselect the old item unless the old item is collapsible and has been
     // previously clicked on.
     return oldItem !== null &&
-      (!oldItem.isCollapsible() || oldItem !== newItem);
+        (!oldItem.isCollapsible() || oldItem !== newItem);
   }
 
   /**
@@ -812,8 +812,8 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
    * @return True if the new item should be selected, false otherwise.
    */
   protected shouldSelectItem_(
-    oldItem: ISelectableToolboxItem | null,
-    newItem: ISelectableToolboxItem | null): boolean {
+      oldItem: ISelectableToolboxItem|null,
+      newItem: ISelectableToolboxItem|null): boolean {
     // Select the new item unless the old item equals the new item.
     return newItem !== null && newItem !== oldItem;
   }
@@ -828,7 +828,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
     this.previouslySelectedItem_ = item;
     item.setSelected(false);
     aria.setState(
-      this.contentsDiv_ as Element, aria.State.ACTIVEDESCENDANT, '');
+        this.contentsDiv_ as Element, aria.State.ACTIVEDESCENDANT, '');
   }
 
   /**
@@ -837,13 +837,13 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
    * @param newItem The newly selected toolbox item.
    */
   protected selectItem_(
-    oldItem: ISelectableToolboxItem | null, newItem: ISelectableToolboxItem) {
+      oldItem: ISelectableToolboxItem|null, newItem: ISelectableToolboxItem) {
     this.selectedItem_ = newItem;
     this.previouslySelectedItem_ = oldItem;
     newItem.setSelected(true);
     aria.setState(
-      this.contentsDiv_ as Element, aria.State.ACTIVEDESCENDANT,
-      newItem.getId());
+        this.contentsDiv_ as Element, aria.State.ACTIVEDESCENDANT,
+        newItem.getId());
   }
 
   /**
@@ -865,10 +865,10 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
    * @param newItem The newly selected toolbox item.
    */
   protected updateFlyout_(
-    oldItem: ISelectableToolboxItem | null,
-    newItem: ISelectableToolboxItem | null) {
+      oldItem: ISelectableToolboxItem|null,
+      newItem: ISelectableToolboxItem|null) {
     if (!newItem || oldItem === newItem && !newItem.isCollapsible() ||
-      !newItem.getContents().length) {
+        !newItem.getContents().length) {
       this.flyout_!.hide();
     } else {
       this.flyout_!.show(newItem.getContents());
@@ -882,8 +882,8 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
    * @param newItem The newly selected toolbox item.
    */
   private fireSelectEvent_(
-    oldItem: ISelectableToolboxItem | null,
-    newItem: ISelectableToolboxItem | null) {
+      oldItem: ISelectableToolboxItem|null,
+      newItem: ISelectableToolboxItem|null) {
     const oldElement = oldItem && oldItem.getName();
     let newElement = newItem && newItem.getName();
     // In this case the toolbox closes, so the newElement should be null.
@@ -891,7 +891,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
       newElement = null;
     }
     const event = new (eventUtils.get(eventUtils.TOOLBOX_ITEM_SELECT))!
-      (oldElement, newElement, this.workspace.id);
+        (oldElement, newElement, this.workspace.id);
     eventUtils.fire(event);
   }
 
@@ -905,13 +905,13 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
     }
 
     if (this.selectedItem_.isCollapsible() &&
-      (this.selectedItem_ as ICollapsibleToolboxItem).isExpanded()) {
+        (this.selectedItem_ as ICollapsibleToolboxItem).isExpanded()) {
       const collapsibleItem = this.selectedItem_ as ICollapsibleToolboxItem;
       collapsibleItem.toggleExpanded();
       return true;
     } else if (
-      this.selectedItem_.getParent() &&
-      this.selectedItem_.getParent()!.isSelectable()) {
+        this.selectedItem_.getParent() &&
+        this.selectedItem_.getParent()!.isSelectable()) {
       this.setSelectedItem(this.selectedItem_.getParent());
       return true;
     }
@@ -1001,7 +1001,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
     // AnyDuringMigration because:  Argument of type 'HTMLDivElement | null' is
     // not assignable to parameter of type 'Element'.
     this.workspace.getThemeManager().unsubscribe(
-      this.HtmlDiv as AnyDuringMigration);
+        this.HtmlDiv as AnyDuringMigration);
     dom.removeNode(this.HtmlDiv);
   }
 }

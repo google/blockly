@@ -13,14 +13,14 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from './block_svg.js';
+import {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Bubble } from './bubble.js';
-import { Coordinate } from './utils/coordinate.js';
+import {Bubble} from './bubble.js';
+import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
-import { Size } from './utils/size.js';
-import { Svg } from './utils/svg.js';
+import {Size} from './utils/size.js';
+import {Svg} from './utils/svg.js';
 import * as svgMath from './utils/svg_math.js';
 
 
@@ -31,7 +31,7 @@ import * as svgMath from './utils/svg_math.js';
 export abstract class Icon {
   protected block_: BlockSvg;
   /** The icon SVG group. */
-  iconGroup_: SVGGElement | null = null;
+  iconGroup_: SVGGElement|null = null;
 
   /** Whether this icon gets hidden when the block is collapsed. */
   collapseHidden = true;
@@ -40,10 +40,10 @@ export abstract class Icon {
   readonly SIZE = 17;
 
   /** Bubble UI (if visible). */
-  protected bubble_: Bubble | null = null;
+  protected bubble_: Bubble|null = null;
 
   /** Absolute coordinate of icon's center. */
-  protected iconXY_: Coordinate | null = null;
+  protected iconXY_: Coordinate|null = null;
 
   /** @param block The block associated with this icon. */
   constructor(block: BlockSvg) {
@@ -62,7 +62,7 @@ export abstract class Icon {
         </g>
         */
     this.iconGroup_ =
-      dom.createSvgElement(Svg.G, { 'class': 'blocklyIconGroup' });
+        dom.createSvgElement(Svg.G, {'class': 'blocklyIconGroup'});
     if (this.block_.isInFlyout) {
       dom.addClass(this.iconGroup_ as Element, 'blocklyIconGroupReadonly');
     }
@@ -76,8 +76,8 @@ export abstract class Icon {
     // AnyDuringMigration because:  Argument of type 'SVGGElement | null' is not
     // assignable to parameter of type 'EventTarget'.
     browserEvents.conditionalBind(
-      this.iconGroup_ as AnyDuringMigration, 'mouseup', this,
-      this.iconClick_);
+        this.iconGroup_ as AnyDuringMigration, 'mouseup', this,
+        this.iconClick_);
     this.updateEditable();
   }
 
@@ -146,8 +146,8 @@ export abstract class Icon {
     const blockXY = this.block_.getRelativeToSurfaceXY();
     const iconXY = svgMath.getRelativeXY(this.iconGroup_ as SVGElement);
     const newXY = new Coordinate(
-      blockXY.x + iconXY.x + this.SIZE / 2,
-      blockXY.y + iconXY.y + this.SIZE / 2);
+        blockXY.x + iconXY.x + this.SIZE / 2,
+        blockXY.y + iconXY.y + this.SIZE / 2);
     if (!Coordinate.equals(this.getIconLocation(), newXY)) {
       this.setIconLocation(newXY);
     }
@@ -157,7 +157,7 @@ export abstract class Icon {
    * Returns the center of the block's icon relative to the surface.
    * @return Object with x and y properties in workspace coordinates.
    */
-  getIconLocation(): Coordinate | null {
+  getIconLocation(): Coordinate|null {
     return this.iconXY_;
   }
 

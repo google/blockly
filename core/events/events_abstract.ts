@@ -17,7 +17,7 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { Workspace } from '../workspace.js';
+import {Workspace} from '../workspace.js';
 
 import * as eventUtils from './utils.js';
 
@@ -28,7 +28,7 @@ import * as eventUtils from './utils.js';
  */
 export abstract class Abstract {
   /** Whether or not the event is blank (to be populated by fromJson). */
-  isBlank: boolean | null = null;
+  isBlank: boolean|null = null;
 
   /** The workspace identifier for this event. */
   workspaceId?: string = undefined;
@@ -59,7 +59,7 @@ export abstract class Abstract {
    * @return JSON representation.
    */
   toJson(): AnyDuringMigration {
-    const json = { 'type': this.type };
+    const json = {'type': this.type};
     if (this.group) {
       (json as AnyDuringMigration)['group'] = this.group;
     }
@@ -102,8 +102,8 @@ export abstract class Abstract {
     }
     if (!workspace) {
       throw Error(
-        'Workspace is null. Event must have been generated from real' +
-        ' Blockly events.');
+          'Workspace is null. Event must have been generated from real' +
+          ' Blockly events.');
     }
     return workspace;
   }

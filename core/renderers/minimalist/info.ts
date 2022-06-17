@@ -13,12 +13,11 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from '../../block_svg.js';
-
-import { RenderInfo as BaseRenderInfo } from '../common/info.js';
+import {BlockSvg} from '../../block_svg.js';
+import {RenderInfo as BaseRenderInfo} from '../common/info.js';
 
 /* eslint-disable-next-line no-unused-vars */
-import { Renderer } from './renderer.js';
+import {Renderer} from './renderer.js';
 
 
 /**

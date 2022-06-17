@@ -48,10 +48,10 @@ export function shortestStringLength(array: string[]): number {
     return 0;
   }
   return array
-    .reduce(function (a, b) {
-      return a.length < b.length ? a : b;
-    })
-    .length;
+      .reduce(function(a, b) {
+        return a.length < b.length ? a : b;
+      })
+      .length;
 }
 
 /**
@@ -63,7 +63,7 @@ export function shortestStringLength(array: string[]): number {
  * @alias Blockly.utils.string.commonWordPrefix
  */
 export function commonWordPrefix(
-  array: string[], opt_shortest?: number): number {
+    array: string[], opt_shortest?: number): number {
   if (!array.length) {
     return 0;
   } else if (array.length === 1) {
@@ -101,7 +101,7 @@ export function commonWordPrefix(
  * @alias Blockly.utils.string.commonWordSuffix
  */
 export function commonWordSuffix(
-  array: string[], opt_shortest?: number): number {
+    array: string[], opt_shortest?: number): number {
   if (!array.length) {
     return 0;
   } else if (array.length === 1) {
@@ -202,7 +202,7 @@ function wrapLine(text: string, limit: number): string {
  * @return Larger the better.
  */
 function wrapScore(
-  words: string[], wordBreaks: boolean[], limit: number): number {
+    words: string[], wordBreaks: boolean[], limit: number): number {
   // If this function becomes a performance liability, add caching.
   // Compute the length of each line.
   const lineLengths = [0];
@@ -239,8 +239,8 @@ function wrapScore(
   // aaa bbb
   // ccc ddd eee
   if (lineLengths.length > 1 &&
-    lineLengths[lineLengths.length - 1] <=
-    lineLengths[lineLengths.length - 2]) {
+      lineLengths[lineLengths.length - 1] <=
+          lineLengths[lineLengths.length - 2]) {
     score += 0.5;
   }
   return score;
@@ -254,7 +254,7 @@ function wrapScore(
  * @return New array of optimal line breaks.
  */
 function wrapMutate(
-  words: string[], wordBreaks: boolean[], limit: number): boolean[] {
+    words: string[], wordBreaks: boolean[], limit: number): boolean[] {
   let bestScore = wrapScore(words, wordBreaks, limit);
   let bestBreaks;
   // Try shifting every line break forward or backward.
@@ -262,7 +262,7 @@ function wrapMutate(
     if (wordBreaks[i] === wordBreaks[i + 1]) {
       continue;
     }
-    const mutatedWordBreaks = (new Array < boolean > ()).concat(wordBreaks);
+    const mutatedWordBreaks = (new Array<boolean>()).concat(wordBreaks);
     mutatedWordBreaks[i] = !mutatedWordBreaks[i];
     mutatedWordBreaks[i + 1] = !mutatedWordBreaks[i + 1];
     const mutatedScore = wrapScore(words, mutatedWordBreaks, limit);

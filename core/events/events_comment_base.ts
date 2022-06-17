@@ -14,14 +14,14 @@
 
 import * as utilsXml from '../utils/xml.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceComment } from '../workspace_comment.js';
+import {WorkspaceComment} from '../workspace_comment.js';
 import * as Xml from '../xml.js';
 
-import { Abstract as AbstractEvent } from './events_abstract.js';
+import {Abstract as AbstractEvent} from './events_abstract.js';
 /* eslint-disable-next-line no-unused-vars */
-import { CommentCreate } from './events_comment_create.js';
+import {CommentCreate} from './events_comment_create.js';
 /* eslint-disable-next-line no-unused-vars */
-import { CommentDelete } from './events_comment_delete.js';
+import {CommentDelete} from './events_comment_delete.js';
 import * as eventUtils from './utils.js';
 
 
@@ -87,7 +87,7 @@ export class CommentBase extends AbstractEvent {
    * @param create if True then Create, if False then Delete
    */
   static CommentCreateDeleteHelper(
-    event: CommentCreate | CommentDelete, create: boolean) {
+      event: CommentCreate|CommentDelete, create: boolean) {
     const workspace = event.getEventWorkspace_();
     if (create) {
       const xmlElement = utilsXml.createElement('xml');
@@ -100,7 +100,7 @@ export class CommentBase extends AbstractEvent {
       } else {
         // Only complain about root-level block.
         console.warn(
-          'Can\'t uncreate non-existent comment: ' + event.commentId);
+            'Can\'t uncreate non-existent comment: ' + event.commentId);
       }
     }
   }

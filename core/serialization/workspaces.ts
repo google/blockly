@@ -17,12 +17,12 @@
  */
 
 import * as eventUtils from '../events/utils.js';
-import { ISerializer } from '../interfaces/i_serializer.js';
+import {ISerializer} from '../interfaces/i_serializer.js';
 import * as registry from '../registry.js';
 import * as dom from '../utils/dom.js';
 // eslint-disable-next-line no-unused-vars
-import { Workspace } from '../workspace.js';
-import { WorkspaceSvg } from '../workspace_svg.js';
+import {Workspace} from '../workspace.js';
+import {WorkspaceSvg} from '../workspace_svg.js';
 
 
 /**
@@ -31,7 +31,8 @@ import { WorkspaceSvg } from '../workspace_svg.js';
  * @return The serialized state of the workspace.
  * @alias Blockly.serialization.workspaces.save
  */
-export function save(workspace: Workspace): { [key: string]: AnyDuringMigration } {
+export function save(workspace: Workspace):
+    {[key: string]: AnyDuringMigration} {
   const state = Object.create(null);
   const serializerMap = registry.getAllItems(registry.Type.SERIALIZER, true);
   for (const key in serializerMap) {
@@ -52,17 +53,17 @@ export function save(workspace: Workspace): { [key: string]: AnyDuringMigration 
  * @alias Blockly.serialization.workspaces.load
  */
 export function load(
-  state: { [key: string]: AnyDuringMigration }, workspace: Workspace,
-  { recordUndo = false }: { recordUndo?: boolean } = {}) {
+    state: {[key: string]: AnyDuringMigration}, workspace: Workspace,
+    {recordUndo = false}: {recordUndo?: boolean} = {}) {
   const serializerMap = registry.getAllItems(registry.Type.SERIALIZER, true);
   if (!serializerMap) {
     return;
   }
 
   const deserializers = Object.entries(serializerMap)
-    .sort(
-      (a, b) => (b[1] as ISerializer)!.priority -
-        (a[1] as ISerializer)!.priority);
+                            .sort(
+                                (a, b) => (b[1] as ISerializer)!.priority -
+                                    (a[1] as ISerializer)!.priority);
 
   const prevRecordUndo = eventUtils.getRecordUndo();
   eventUtils.setRecordUndo(recordUndo);
@@ -97,7 +98,7 @@ export function load(
   dom.stopTextWidthCache();
 
   eventUtils.fire(new (eventUtils.get(eventUtils.FINISHED_LOADING))!
-    (workspace));
+                  (workspace));
 
   eventUtils.setGroup(existingGroup);
   eventUtils.setRecordUndo(prevRecordUndo);

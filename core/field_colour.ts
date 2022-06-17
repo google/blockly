@@ -15,20 +15,20 @@
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_block_change';
 
-import { BlockSvg } from './block_svg.js';
+import {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import * as Css from './css.js';
 import * as dropDownDiv from './dropdowndiv.js';
-import { Field } from './field.js';
+import {Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import * as aria from './utils/aria.js';
 import * as colour from './utils/colour.js';
 import * as dom from './utils/dom.js';
 import * as idGenerator from './utils/idgenerator.js';
-import { KeyCodes } from './utils/keycodes.js';
+import {KeyCodes} from './utils/keycodes.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Sentinel } from './utils/sentinel.js';
-import { Size } from './utils/size.js';
+import {Sentinel} from './utils/sentinel.js';
+import {Size} from './utils/size.js';
 
 
 /**
@@ -80,25 +80,25 @@ export class FieldColour extends Field {
   static COLUMNS = 7;
 
   /** The field's colour picker element. */
-  private picker_: Element | null = null;
+  private picker_: Element|null = null;
 
   /** Index of the currently highlighted element. */
-  private highlightedIndex_: number | null = null;
+  private highlightedIndex_: number|null = null;
 
   /** Mouse click event data. */
-  private onClickWrapper_: browserEvents.Data | null = null;
+  private onClickWrapper_: browserEvents.Data|null = null;
 
   /** Mouse move event data. */
-  private onMouseMoveWrapper_: browserEvents.Data | null = null;
+  private onMouseMoveWrapper_: browserEvents.Data|null = null;
 
   /** Mouse enter event data. */
-  private onMouseEnterWrapper_: browserEvents.Data | null = null;
+  private onMouseEnterWrapper_: browserEvents.Data|null = null;
 
   /** Mouse leave event data. */
-  private onMouseLeaveWrapper_: browserEvents.Data | null = null;
+  private onMouseLeaveWrapper_: browserEvents.Data|null = null;
 
   /** Key down event data. */
-  private onKeyDownWrapper_: browserEvents.Data | null = null;
+  private onKeyDownWrapper_: browserEvents.Data|null = null;
 
   /**
    * Serializable fields are saved by the serializer, non-serializable fields
@@ -153,8 +153,8 @@ export class FieldColour extends Field {
    * for a list of properties this parameter supports.
    */
   constructor(
-    opt_value?: string | Sentinel, opt_validator?: Function,
-    opt_config?: AnyDuringMigration) {
+      opt_value?: string|Sentinel, opt_validator?: Function,
+      opt_config?: AnyDuringMigration) {
     super(Field.SKIP_SETUP);
 
     if (opt_value === Field.SKIP_SETUP) {
@@ -187,8 +187,8 @@ export class FieldColour extends Field {
   /** Create the block UI for this colour field. */
   override initView() {
     this.size_ = new Size(
-      this.getConstants()!.FIELD_COLOUR_DEFAULT_WIDTH,
-      this.getConstants()!.FIELD_COLOUR_DEFAULT_HEIGHT);
+        this.getConstants()!.FIELD_COLOUR_DEFAULT_WIDTH,
+        this.getConstants()!.FIELD_COLOUR_DEFAULT_HEIGHT);
     if (!this.getConstants()!.FIELD_COLOUR_FULL_BLOCK) {
       this.createBorderRect_();
       this.borderRect_.style['fillOpacity'] = '1';
@@ -204,7 +204,7 @@ export class FieldColour extends Field {
       }
     } else if (this.sourceBlock_ instanceof BlockSvg) {
       this.sourceBlock_.pathObject.svgPath.setAttribute(
-        'fill', this.getValue() as string);
+          'fill', this.getValue() as string);
       this.sourceBlock_.pathObject.svgPath.setAttribute('stroke', '#fff');
     }
   }
@@ -215,7 +215,7 @@ export class FieldColour extends Field {
    * @return A valid colour, or null if invalid.
    */
   protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
-    string | null {
+      string|null {
     if (typeof opt_newValue !== 'string') {
       return null;
     }
@@ -232,10 +232,10 @@ export class FieldColour extends Field {
     if (this.borderRect_) {
       this.borderRect_.style.fill = newValue as string;
     } else if (
-      this.sourceBlock_ && this.sourceBlock_.rendered &&
-      this.sourceBlock_ instanceof BlockSvg) {
+        this.sourceBlock_ && this.sourceBlock_.rendered &&
+        this.sourceBlock_ instanceof BlockSvg) {
       this.sourceBlock_.pathObject.svgPath.setAttribute(
-        'fill', newValue as string);
+          'fill', newValue as string);
       this.sourceBlock_.pathObject.svgPath.setAttribute('stroke', '#fff');
     }
   }
@@ -292,7 +292,7 @@ export class FieldColour extends Field {
     // Focus so we can start receiving keyboard events.
     // AnyDuringMigration because:  Property 'focus' does not exist on type
     // 'Element'.
-    (this.picker_ as AnyDuringMigration)!.focus({ preventScroll: true });
+    (this.picker_ as AnyDuringMigration)!.focus({preventScroll: true});
   }
 
   /**
@@ -417,7 +417,7 @@ export class FieldColour extends Field {
   private onMouseEnter_() {
     // AnyDuringMigration because:  Property 'focus' does not exist on type
     // 'Element'.
-    (this.picker_ as AnyDuringMigration)!.focus({ preventScroll: true });
+    (this.picker_ as AnyDuringMigration)!.focus({preventScroll: true});
   }
 
   /**
@@ -438,7 +438,7 @@ export class FieldColour extends Field {
    * Returns the currently highlighted item (if any).
    * @return Highlighted item (null if none).
    */
-  private getHighlighted_(): HTMLElement | null {
+  private getHighlighted_(): HTMLElement|null {
     if (!this.highlightedIndex_) {
       return null;
     }
@@ -474,8 +474,8 @@ export class FieldColour extends Field {
     // AnyDuringMigration because:  Argument of type 'string | null' is not
     // assignable to parameter of type 'string | number | boolean | string[]'.
     aria.setState(
-      this.picker_ as Element, aria.State.ACTIVEDESCENDANT,
-      cell.getAttribute('id') as AnyDuringMigration);
+        this.picker_ as Element, aria.State.ACTIVEDESCENDANT,
+        cell.getAttribute('id') as AnyDuringMigration);
   }
 
   /** Create a colour picker dropdown editor. */
@@ -492,7 +492,7 @@ export class FieldColour extends Field {
     aria.setRole(table, aria.Role.GRID);
     aria.setState(table, aria.State.EXPANDED, true);
     aria.setState(
-      table, aria.State.ROWCOUNT, Math.floor(colours.length / columns));
+        table, aria.State.ROWCOUNT, Math.floor(colours.length / columns));
     aria.setState(table, aria.State.COLCOUNT, columns);
     let row: Element;
     for (let i = 0; i < colours.length; i++) {
@@ -522,15 +522,15 @@ export class FieldColour extends Field {
 
     // Configure event handler on the table to listen for any event in a cell.
     this.onClickWrapper_ = browserEvents.conditionalBind(
-      table, 'click', this, this.onClick_, true);
+        table, 'click', this, this.onClick_, true);
     this.onMouseMoveWrapper_ = browserEvents.conditionalBind(
-      table, 'mousemove', this, this.onMouseMove_, true);
+        table, 'mousemove', this, this.onMouseMove_, true);
     this.onMouseEnterWrapper_ = browserEvents.conditionalBind(
-      table, 'mouseenter', this, this.onMouseEnter_, true);
+        table, 'mouseenter', this, this.onMouseEnter_, true);
     this.onMouseLeaveWrapper_ = browserEvents.conditionalBind(
-      table, 'mouseleave', this, this.onMouseLeave_, true);
+        table, 'mouseleave', this, this.onMouseLeave_, true);
     this.onKeyDownWrapper_ =
-      browserEvents.conditionalBind(table, 'keydown', this, this.onKeyDown_);
+        browserEvents.conditionalBind(table, 'keydown', this, this.onKeyDown_);
 
     this.picker_ = table;
   }
@@ -578,7 +578,7 @@ export class FieldColour extends Field {
 // AnyDuringMigration because:  Property 'DEFAULT_VALUE' is protected and only
 // accessible within class 'FieldColour' and its subclasses.
 (FieldColour.prototype as AnyDuringMigration).DEFAULT_VALUE =
-  FieldColour.COLOURS[0];
+    FieldColour.COLOURS[0];
 
 /** CSS for colour picker.  See css.js for use. */
 Css.register(`

@@ -24,15 +24,15 @@ let injected = false;
  * @param cssContent Multiline CSS string or an array of single lines of CSS.
  * @alias Blockly.Css.register
  */
-export function register(cssContent: string | string[]) {
+export function register(cssContent: string|string[]) {
   if (injected) {
     throw Error('CSS already injected');
   }
 
   if (Array.isArray(cssContent)) {
     deprecation.warn(
-      'Registering CSS by passing an array of strings', 'September 2021',
-      'September 2022', 'css.register passing a multiline string');
+        'Registering CSS by passing an array of strings', 'September 2021',
+        'September 2022', 'css.register passing a multiline string');
     content += '\n' + cssContent.join('\n');
   } else {
     // Add new cssContent in the global content.

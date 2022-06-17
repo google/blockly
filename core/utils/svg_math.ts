@@ -13,11 +13,12 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from '../workspace_svg.js';
-import { Coordinate } from './coordinate.js';
+import {WorkspaceSvg} from '../workspace_svg.js';
+
+import {Coordinate} from './coordinate.js';
 import * as deprecation from './deprecation.js';
-import { Rect } from './rect.js';
-import { Size } from './size.js';
+import {Rect} from './rect.js';
+import {Size} from './size.js';
 import * as style from './style.js';
 import * as userAgent from './useragent.js';
 
@@ -37,7 +38,7 @@ const XY_REGEX: RegExp = /translate\(\s*([-+\d.e]+)([ ,]\s*([-+\d.e]+)\s*)?/;
  * Accounts for same exceptions as XY_REGEX.
  */
 const XY_STYLE_REGEX: RegExp =
-  /transform:\s*translate(?:3d)?\(\s*([-+\d.e]+)\s*px([ ,]\s*([-+\d.e]+)\s*px)?/;
+    /transform:\s*translate(?:3d)?\(\s*([-+\d.e]+)\s*px([ ,]\s*([-+\d.e]+)\s*px)?/;
 
 
 /**
@@ -157,7 +158,7 @@ export function is3dSupported(): boolean {
         return false;
       }
       has3d =
-        computedStyle.getPropertyValue((transforms as AnyDuringMigration)[t]);
+          computedStyle.getPropertyValue((transforms as AnyDuringMigration)[t]);
     }
   }
   document.body.removeChild(el);
@@ -180,8 +181,8 @@ export function getViewportBBox(): Rect {
   // Pixels, in window coordinates.
   const scrollOffset = style.getViewportPageOffset();
   return new Rect(
-    scrollOffset.y, document.documentElement.clientHeight + scrollOffset.y,
-    scrollOffset.x, document.documentElement.clientWidth + scrollOffset.x);
+      scrollOffset.y, document.documentElement.clientHeight + scrollOffset.y,
+      scrollOffset.x, document.documentElement.clientWidth + scrollOffset.x);
 }
 
 /**
@@ -200,7 +201,7 @@ export function getDocumentScroll(): Coordinate {
     return new Coordinate(el.scrollLeft, el.scrollTop);
   }
   return new Coordinate(
-    win.pageXOffset || el.scrollLeft, win.pageYOffset || el.scrollTop);
+      win.pageXOffset || el.scrollLeft, win.pageYOffset || el.scrollTop);
 }
 
 /**
@@ -212,7 +213,7 @@ export function getDocumentScroll(): Coordinate {
  * @alias Blockly.utils.svgMath.screenToWsCoordinates
  */
 export function screenToWsCoordinates(
-  ws: WorkspaceSvg, screenCoordinates: Coordinate): Coordinate {
+    ws: WorkspaceSvg, screenCoordinates: Coordinate): Coordinate {
   const screenX = screenCoordinates.x;
   const screenY = screenCoordinates.y;
 
@@ -224,7 +225,7 @@ export function screenToWsCoordinates(
 
   // The client coordinates offset by the injection div's upper left corner.
   const clientOffsetPixels =
-    new Coordinate(screenX - boundingRect.left, screenY - boundingRect.top);
+      new Coordinate(screenX - boundingRect.left, screenY - boundingRect.top);
 
   // The offset in pixels between the main workspace's origin and the upper
   // left corner of the injection div.
@@ -233,7 +234,7 @@ export function screenToWsCoordinates(
   // The position of the new comment in pixels relative to the origin of the
   // main workspace.
   const finalOffsetPixels =
-    Coordinate.difference(clientOffsetPixels, mainOffsetPixels);
+      Coordinate.difference(clientOffsetPixels, mainOffsetPixels);
   // The position in main workspace coordinates.
   const finalOffsetMainWs = finalOffsetPixels.scale(1 / ws.scale);
   return finalOffsetMainWs;
@@ -252,12 +253,12 @@ export function svgSize(svg: SVGElement): Size {
   // The deprecated name is `Blockly.svgSize` because this function used to be
   // declared in Blockly.js.
   deprecation.warn(
-    'Blockly.svgSize', 'March 2021', 'March 2022',
-    'workspace.getCachedParentSvgSize');
+      'Blockly.svgSize', 'March 2021', 'March 2022',
+      'workspace.getCachedParentSvgSize');
   svg = svg as AnyDuringMigration;
   return new Size(
-    Number(svg.getAttribute('data-cached-width')),
-    Number(svg.getAttribute('data-cached-height')));
+      Number(svg.getAttribute('data-cached-width')),
+      Number(svg.getAttribute('data-cached-height')));
 }
 
 

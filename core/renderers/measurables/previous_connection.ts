@@ -17,13 +17,12 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { RenderedConnection } from '../../rendered_connection.js';
-
+import {RenderedConnection} from '../../rendered_connection.js';
 /* eslint-disable-next-line no-unused-vars */
-import { ConstantProvider } from '../common/constants.js';
+import {ConstantProvider} from '../common/constants.js';
 
-import { Connection } from './connection.js';
-import { Types } from './types.js';
+import {Connection} from './connection.js';
+import {Types} from './types.js';
 
 
 /**
@@ -39,7 +38,7 @@ export class PreviousConnection extends Connection {
    *     represents.
    */
   constructor(
-    constants: ConstantProvider, connectionModel: RenderedConnection) {
+      constants: ConstantProvider, connectionModel: RenderedConnection) {
     super(constants, connectionModel);
     this.type |= Types.PREVIOUS_CONNECTION;
     this.height = this.shape.height as number;

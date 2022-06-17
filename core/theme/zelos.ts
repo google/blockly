@@ -12,7 +12,7 @@
  * @namespace Blockly.Themes.Zelos
  */
 
-import { Theme } from '../theme.js';
+import {Theme} from '../theme.js';
 
 
 const defaultBlockStyles = {
@@ -70,15 +70,15 @@ const defaultBlockStyles = {
 };
 
 const categoryStyles = {
-  'colour_category': { 'colour': '#CF63CF' },
-  'list_category': { 'colour': '#9966FF' },
-  'logic_category': { 'colour': '#4C97FF' },
-  'loop_category': { 'colour': '#0fBD8C' },
-  'math_category': { 'colour': '#59C059' },
-  'procedure_category': { 'colour': '#FF6680' },
-  'text_category': { 'colour': '#FFBF00' },
-  'variable_category': { 'colour': '#FF8C1A' },
-  'variable_dynamic_category': { 'colour': '#FF8C1A' },
+  'colour_category': {'colour': '#CF63CF'},
+  'list_category': {'colour': '#9966FF'},
+  'logic_category': {'colour': '#4C97FF'},
+  'loop_category': {'colour': '#0fBD8C'},
+  'math_category': {'colour': '#59C059'},
+  'procedure_category': {'colour': '#FF6680'},
+  'text_category': {'colour': '#FFBF00'},
+  'variable_category': {'colour': '#FF8C1A'},
+  'variable_dynamic_category': {'colour': '#FF8C1A'},
 };
 
 /**

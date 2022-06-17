@@ -18,9 +18,9 @@
  * @namespace Blockly.utils.style
  */
 
-import { Coordinate } from './coordinate.js';
-import { Rect } from './rect.js';
-import { Size } from './size.js';
+import {Coordinate} from './coordinate.js';
+import {Rect} from './rect.js';
+import {Size} from './size.js';
 
 
 /**
@@ -85,8 +85,8 @@ function getStyle(element: Element, style: string): string {
   // 'Element'. AnyDuringMigration because:  Property 'style' does not exist on
   // type 'Element'.
   return getComputedStyle(element, style) || getCascadedStyle(element, style) ||
-    (element as AnyDuringMigration).style &&
-    (element as AnyDuringMigration).style[style];
+      (element as AnyDuringMigration).style &&
+      (element as AnyDuringMigration).style[style];
 }
 
 /**
@@ -109,7 +109,7 @@ export function getComputedStyle(element: Element, property: string): string {
       // element.style[..] is undefined for browser specific styles
       // as 'filter'.
       return (styles as AnyDuringMigration)[property] ||
-        styles.getPropertyValue(property) || '';
+          styles.getPropertyValue(property) || '';
     }
   }
 
@@ -132,8 +132,8 @@ export function getCascadedStyle(element: Element, style: string): string {
   // 'Element'. AnyDuringMigration because:  Property 'currentStyle' does not
   // exist on type 'Element'.
   return (element as AnyDuringMigration).currentStyle ?
-    (element as AnyDuringMigration).currentStyle[style] :
-    '' as string;
+      (element as AnyDuringMigration).currentStyle[style] :
+      '' as string;
 }
 
 /**
@@ -151,8 +151,8 @@ export function getPageOffset(el: Element): Coordinate {
   // of element since getBoundingClientRect returns relative coordinates to
   // the viewport.
   const scrollCoord = new Coordinate(
-    window.pageXOffset || documentElement.scrollLeft,
-    window.pageYOffset || documentElement.scrollTop);
+      window.pageXOffset || documentElement.scrollLeft,
+      window.pageYOffset || documentElement.scrollTop);
   pos.x = box.left + scrollCoord.x;
   pos.y = box.top + scrollCoord.y;
 
@@ -235,7 +235,7 @@ export function getBorderBox(element: Element): Rect {
  * @alias Blockly.utils.style.scrollIntoContainerView
  */
 export function scrollIntoContainerView(
-  element: Element, container: Element, opt_center?: boolean) {
+    element: Element, container: Element, opt_center?: boolean) {
   const offset = getContainerOffsetToScrollInto(element, container, opt_center);
   container.scrollLeft = offset.x;
   container.scrollTop = offset.y;
@@ -257,7 +257,7 @@ export function scrollIntoContainerView(
  * @alias Blockly.utils.style.getContainerOffsetToScrollInto
  */
 export function getContainerOffsetToScrollInto(
-  element: Element, container: Element, opt_center?: boolean): Coordinate {
+    element: Element, container: Element, opt_center?: boolean): Coordinate {
   // Absolute position of the element's border's top left corner.
   const elementPos = getPageOffset(element);
   // Absolute position of the container's border's top left corner.

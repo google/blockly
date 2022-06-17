@@ -17,12 +17,11 @@
  */
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */
-import { Input } from '../../input.js';
+import {Input} from '../../input.js';
+import {ConstantProvider} from '../common/constants.js';
 
-import { ConstantProvider } from '../common/constants.js';
-
-import { InputConnection } from './input_connection.js';
-import { Types } from './types.js';
+import {InputConnection} from './input_connection.js';
+import {Types} from './types.js';
 
 
 /**
@@ -46,9 +45,9 @@ export class StatementInput extends InputConnection {
       // We allow the dark path to show on the parent block so that the child
       // block looks embossed.  This takes up an extra pixel in both x and y.
       this.height =
-        this.connectedBlockHeight + this.constants.STATEMENT_BOTTOM_SPACER;
+          this.connectedBlockHeight + this.constants.STATEMENT_BOTTOM_SPACER;
     }
     this.width = this.constants.STATEMENT_INPUT_NOTCH_OFFSET +
-      (this.shape.width as number);
+        (this.shape.width as number);
   }
 }

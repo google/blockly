@@ -17,17 +17,17 @@
 import '../../theme';
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from '../../block_svg.js';
+import {BlockSvg} from '../../block_svg.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Connection } from '../../connection.js';
-import { BlockStyle } from '../../theme.js';
+import {Connection} from '../../connection.js';
+import {BlockStyle} from '../../theme.js';
 import * as dom from '../../utils/dom.js';
-import { Svg } from '../../utils/svg.js';
+import {Svg} from '../../utils/svg.js';
 
 /* eslint-disable-next-line no-unused-vars */
-import { ConstantProvider } from './constants.js';
+import {ConstantProvider} from './constants.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IPathObject } from './i_path_object.js';
+import {IPathObject} from './i_path_object.js';
 
 
 /**
@@ -61,13 +61,13 @@ export class PathObject implements IPathObject {
    * @param constants The renderer's constants.
    */
   constructor(
-    root: SVGElement, public style: BlockStyle,
-    public constants: ConstantProvider) {
+      root: SVGElement, public style: BlockStyle,
+      public constants: ConstantProvider) {
     this.svgRoot = root;
 
     /** The primary path of the block. */
     this.svgPath =
-      dom.createSvgElement(Svg.PATH, { 'class': 'blocklyPath' }, this.svgRoot);
+        dom.createSvgElement(Svg.PATH, {'class': 'blocklyPath'}, this.svgRoot);
   }
 
   /**
@@ -165,7 +165,7 @@ export class PathObject implements IPathObject {
   updateHighlighted(enable: boolean) {
     if (enable) {
       this.svgPath.setAttribute(
-        'filter', 'url(#' + this.constants.embossFilterId + ')');
+          'filter', 'url(#' + this.constants.embossFilterId + ')');
     } else {
       this.svgPath.setAttribute('filter', 'none');
     }
@@ -190,7 +190,7 @@ export class PathObject implements IPathObject {
     this.setClass_('blocklyDisabled', disabled);
     if (disabled) {
       this.svgPath.setAttribute(
-        'fill', 'url(#' + this.constants.disabledPatternId + ')');
+          'fill', 'url(#' + this.constants.disabledPatternId + ')');
     }
   }
 

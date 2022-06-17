@@ -17,13 +17,13 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { Theme } from './theme.js';
+import {Theme} from './theme.js';
 import * as arrayUtils from './utils/array.js';
 import * as dom from './utils/dom.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Workspace } from './workspace.js';
+import {Workspace} from './workspace.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**
@@ -33,7 +33,7 @@ import { WorkspaceSvg } from './workspace_svg.js';
 export class ThemeManager {
   /** A list of workspaces that are subscribed to this theme. */
   private subscribedWorkspaces_: Workspace[] = [];
-  private componentDB_: { [key: string]: Component[] };
+  private componentDB_: {[key: string]: Component[]};
   owner_: AnyDuringMigration;
 
   /**
@@ -76,7 +76,7 @@ export class ThemeManager {
 
     // Refresh all registered Blockly UI components.
     for (let i = 0, keys = Object.keys(this.componentDB_), key; key = keys[i];
-      i++) {
+         i++) {
       for (let j = 0, component; component = this.componentDB_[key][j]; j++) {
         const element = component.element;
         const propertyName = component.propertyName;
@@ -108,7 +108,7 @@ export class ThemeManager {
   unsubscribeWorkspace(workspace: Workspace) {
     if (!arrayUtils.removeElem(this.subscribedWorkspaces_, workspace)) {
       throw Error(
-        'Cannot unsubscribe a workspace that hasn\'t been subscribed.');
+          'Cannot unsubscribe a workspace that hasn\'t been subscribed.');
     }
   }
 
@@ -126,7 +126,7 @@ export class ThemeManager {
     }
 
     // Add the element to our component map.
-    this.componentDB_[componentName].push({ element, propertyName });
+    this.componentDB_[componentName].push({element, propertyName});
 
     // Initialize the element with its corresponding theme style.
     const style = this.theme && this.theme.getComponentStyle(componentName);

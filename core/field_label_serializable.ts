@@ -18,7 +18,7 @@
  * @class
  */
 
-import { FieldLabel } from './field_label.js';
+import {FieldLabel} from './field_label.js';
 import * as fieldRegistry from './field_registry.js';
 import * as parsing from './utils/parsing.js';
 
@@ -51,7 +51,7 @@ export class FieldLabelSerializable extends FieldLabel {
    * for a list of properties this parameter supports.
    */
   constructor(
-    opt_value?: string, opt_class?: string, opt_config?: AnyDuringMigration) {
+      opt_value?: string, opt_class?: string, opt_config?: AnyDuringMigration) {
     super(String(opt_value ?? ''), opt_class, opt_config);
   }
 
@@ -63,7 +63,7 @@ export class FieldLabelSerializable extends FieldLabel {
    * @nocollapse
    */
   static override fromJson(options: AnyDuringMigration):
-    FieldLabelSerializable {
+      FieldLabelSerializable {
     const text = parsing.replaceMessageReferences(options['text']);
     // `this` might be a subclass of FieldLabelSerializable if that class
     // doesn't override the static fromJson method.

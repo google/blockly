@@ -18,7 +18,7 @@
 
 import * as userAgent from './utils/useragent.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**
@@ -102,9 +102,9 @@ export class WorkspaceAudio {
         // was interrupted) See more:
         // https://developers.google.com/web/updates/2017/06/play-request-was-interrupted
         playPromise.then(sound.pause)
-          .catch(
-            // Play without user interaction was prevented.
-            function () {});
+            .catch(
+                // Play without user interaction was prevented.
+                function() {});
       } else {
         sound.pause();
       }
@@ -130,7 +130,7 @@ export class WorkspaceAudio {
       // Don't play one sound on top of another.
       const now = new Date();
       if (this.lastSound_ !== null &&
-        now.getTime() - this.lastSound_.getTime() < SOUND_LIMIT) {
+          now.getTime() - this.lastSound_.getTime() < SOUND_LIMIT) {
         return;
       }
       this.lastSound_ = now;

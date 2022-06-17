@@ -13,9 +13,9 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from './block_svg.js';
+import {BlockSvg} from './block_svg.js';
 import * as dom from './utils/dom.js';
-import { Svg } from './utils/svg.js';
+import {Svg} from './utils/svg.js';
 
 /** A bounding box for a cloned block. */
 interface CloneRect {
@@ -48,7 +48,7 @@ export function disposeUiEffect(block: BlockSvg) {
   // AnyDuringMigration because:  Property 'setAttribute' does not exist on type
   // 'Node'.
   (clone as AnyDuringMigration)
-    .setAttribute('transform', 'translate(' + xy.x + ',' + xy.y + ')');
+      .setAttribute('transform', 'translate(' + xy.x + ',' + xy.y + ')');
   workspace.getParentSvg().appendChild(clone);
   const cloneRect =
       {'x': xy.x, 'y': xy.y, 'width': block.width, 'height': block.height};
@@ -56,8 +56,8 @@ export function disposeUiEffect(block: BlockSvg) {
   // AnyDuringMigration because:  Argument of type 'Node' is not assignable to
   // parameter of type 'Element'.
   disposeUiStep(
-    clone as AnyDuringMigration, cloneRect, workspace.RTL, new Date(),
-    workspace.scale);
+      clone as AnyDuringMigration, cloneRect, workspace.RTL, new Date(),
+      workspace.scale);
 }
 /**
  * Animate a cloned block and eventually dispose of it.
@@ -70,21 +70,21 @@ export function disposeUiEffect(block: BlockSvg) {
  * @param workspaceScale Scale of workspace.
  */
 function disposeUiStep(
-  clone: Element, rect: CloneRect, rtl: boolean, start: Date,
-  workspaceScale: number) {
+    clone: Element, rect: CloneRect, rtl: boolean, start: Date,
+    workspaceScale: number) {
   const ms = new Date().getTime() - start.getTime();
   const percent = ms / 150;
   if (percent > 1) {
     dom.removeNode(clone);
   } else {
     const x =
-      rect.x + (rtl ? -1 : 1) * rect.width * workspaceScale / 2 * percent;
+        rect.x + (rtl ? -1 : 1) * rect.width * workspaceScale / 2 * percent;
     const y = rect.y + rect.height * workspaceScale * percent;
     const scale = (1 - percent) * workspaceScale;
     clone.setAttribute(
-      'transform',
-      'translate(' + x + ',' + y + ')' +
-      ' scale(' + scale + ')');
+        'transform',
+        'translate(' + x + ',' + y + ')' +
+            ' scale(' + scale + ')');
     setTimeout(disposeUiStep, 10, clone, rect, rtl, start, workspaceScale);
   }
 }
@@ -113,15 +113,15 @@ export function connectionUiEffect(block: BlockSvg) {
     xy.y += 3 * scale;
   }
   const ripple = dom.createSvgElement(
-    Svg.CIRCLE, {
-    'cx': xy.x,
-    'cy': xy.y,
-    'r': 0,
-    'fill': 'none',
-    'stroke': '#888',
-    'stroke-width': 10,
-  },
-    workspace.getParentSvg());
+      Svg.CIRCLE, {
+        'cx': xy.x,
+        'cy': xy.y,
+        'r': 0,
+        'fill': 'none',
+        'stroke': '#888',
+        'stroke-width': 10,
+      },
+      workspace.getParentSvg());
   // Start the animation.
   connectionUiStep(ripple, new Date(), scale);
 }
@@ -188,15 +188,15 @@ function disconnectUiStep(group: SVGElement, magnitude: number, start: Date) {
     (group as AnyDuringMigration).skew_ = '';
   } else {
     const skew = Math.round(
-      Math.sin(percent * Math.PI * WIGGLES) * (1 - percent) * magnitude);
+        Math.sin(percent * Math.PI * WIGGLES) * (1 - percent) * magnitude);
     (group as AnyDuringMigration).skew_ = 'skewX(' + skew + ')';
     disconnectGroup = group;
     disconnectPid = setTimeout(disconnectUiStep, 10, group, magnitude, start);
   }
   group.setAttribute(
-    'transform',
-    (group as AnyDuringMigration).translate_ +
-    (group as AnyDuringMigration).skew_);
+      'transform',
+      (group as AnyDuringMigration).translate_ +
+          (group as AnyDuringMigration).skew_);
 }
 
 /**

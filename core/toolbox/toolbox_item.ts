@@ -13,16 +13,16 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { ICollapsibleToolboxItem } from '../interfaces/i_collapsible_toolbox_item.js';
+import {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_item.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IToolbox } from '../interfaces/i_toolbox.js';
+import {IToolbox} from '../interfaces/i_toolbox.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IToolboxItem } from '../interfaces/i_toolbox_item.js';
+import {IToolboxItem} from '../interfaces/i_toolbox_item.js';
 import * as idGenerator from '../utils/idgenerator.js';
 /* eslint-disable-next-line no-unused-vars */
 import * as toolbox from '../utils/toolbox.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from '../workspace_svg.js';
+import {WorkspaceSvg} from '../workspace_svg.js';
 
 
 /**
@@ -31,9 +31,9 @@ import { WorkspaceSvg } from '../workspace_svg.js';
  */
 export class ToolboxItem implements IToolboxItem {
   protected id_: string;
-  protected parent_: ICollapsibleToolboxItem | null;
+  protected parent_: ICollapsibleToolboxItem|null;
   protected level_: number;
-  protected toolboxItemDef_: toolbox.ToolboxItemInfo | null;
+  protected toolboxItemDef_: toolbox.ToolboxItemInfo|null;
   protected workspace_: WorkspaceSvg;
 
   /**
@@ -43,12 +43,12 @@ export class ToolboxItem implements IToolboxItem {
    *     have a parent.
    */
   constructor(
-    toolboxItemDef: toolbox.ToolboxItemInfo,
-    protected readonly parentToolbox: IToolbox,
-    opt_parent?: ICollapsibleToolboxItem) {
+      toolboxItemDef: toolbox.ToolboxItemInfo,
+      protected readonly parentToolbox: IToolbox,
+      opt_parent?: ICollapsibleToolboxItem) {
     /** The id for the category. */
     this.id_ = (toolboxItemDef as AnyDuringMigration)['toolboxitemid'] ||
-      idGenerator.getNextUniqueId();
+        idGenerator.getNextUniqueId();
 
     /** The parent of the category. */
     this.parent_ = opt_parent || null;
@@ -75,7 +75,7 @@ export class ToolboxItem implements IToolboxItem {
    * Gets the div for the toolbox item.
    * @return The div for the toolbox item.
    */
-  getDiv(): Element | null {
+  getDiv(): Element|null {
     return null;
   }
 
@@ -87,7 +87,7 @@ export class ToolboxItem implements IToolboxItem {
    * @return The HTML element that receives clicks, or null if this item should
    *     not receive clicks.
    */
-  getClickTarget(): Element | null {
+  getClickTarget(): Element|null {
     return null;
   }
 
@@ -104,7 +104,7 @@ export class ToolboxItem implements IToolboxItem {
    * @return The parent toolbox item, or null if this toolbox item is not
    *     nested.
    */
-  getParent(): ICollapsibleToolboxItem | null {
+  getParent(): ICollapsibleToolboxItem|null {
     return null;
   }
 

@@ -24,20 +24,20 @@ import './events/events_bubble_open';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './warning';
 
-import { CommentModel } from './block.js';
+import {CommentModel} from './block.js';
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from './block_svg.js';
+import {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
-import { Bubble } from './bubble.js';
+import {Bubble} from './bubble.js';
 import * as Css from './css.js';
 import * as eventUtils from './events/utils.js';
-import { Icon } from './icon.js';
+import {Icon} from './icon.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Coordinate } from './utils/coordinate.js';
+import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Size } from './utils/size.js';
-import { Svg } from './utils/svg.js';
+import {Size} from './utils/size.js';
+import {Svg} from './utils/svg.js';
 import * as userAgent from './utils/useragent.js';
 
 
@@ -52,30 +52,30 @@ export class Comment extends Icon {
    * The model's text value at the start of an edit.
    * Used to tell if an event should be fired at the end of an edit.
    */
-  private cachedText_: string | null = '';
+  private cachedText_: string|null = '';
 
   /** Mouse up event data. */
-  private onMouseUpWrapper_: browserEvents.Data | null = null;
+  private onMouseUpWrapper_: browserEvents.Data|null = null;
 
   /** Wheel event data. */
-  private onWheelWrapper_: browserEvents.Data | null = null;
+  private onWheelWrapper_: browserEvents.Data|null = null;
 
   /** Change event data. */
-  private onChangeWrapper_: browserEvents.Data | null = null;
+  private onChangeWrapper_: browserEvents.Data|null = null;
 
   /** Input event data. */
-  private onInputWrapper_: browserEvents.Data | null = null;
+  private onInputWrapper_: browserEvents.Data|null = null;
 
   /**
    * The SVG element that contains the text edit area, or null if not created.
    */
-  private foreignObject_: SVGForeignObjectElement | null = null;
+  private foreignObject_: SVGForeignObjectElement|null = null;
 
   /** The editable text area, or null if not created. */
-  private textarea_: HTMLTextAreaElement | null = null;
+  private textarea_: HTMLTextAreaElement|null = null;
 
   /** The top-level node of the comment text, or null if not created. */
-  private paragraphElement_: SVGTextElement | null = null;
+  private paragraphElement_: SVGTextElement|null = null;
   override bubble_: AnyDuringMigration;
 
   /** @param block The block associated with this comment. */
@@ -98,28 +98,28 @@ export class Comment extends Icon {
   protected override drawIcon_(group: Element) {
     // Circle.
     dom.createSvgElement(
-      Svg.CIRCLE,
-      { 'class': 'blocklyIconShape', 'r': '8', 'cx': '8', 'cy': '8' }, group);
+        Svg.CIRCLE,
+        {'class': 'blocklyIconShape', 'r': '8', 'cx': '8', 'cy': '8'}, group);
     // Can't use a real '?' text character since different browsers and
     // operating systems render it differently. Body of question mark.
     dom.createSvgElement(
-      Svg.PATH, {
-      'class': 'blocklyIconSymbol',
-      'd': 'm6.8,10h2c0.003,-0.617 0.271,-0.962 0.633,-1.266 2.875,-2.405' +
-        '0.607,-5.534 -3.765,-3.874v1.7c3.12,-1.657 3.698,0.118 2.336,1.25' +
-        '-1.201,0.998 -1.201,1.528 -1.204,2.19z',
-    },
-      group);
+        Svg.PATH, {
+          'class': 'blocklyIconSymbol',
+          'd': 'm6.8,10h2c0.003,-0.617 0.271,-0.962 0.633,-1.266 2.875,-2.405' +
+              '0.607,-5.534 -3.765,-3.874v1.7c3.12,-1.657 3.698,0.118 2.336,1.25' +
+              '-1.201,0.998 -1.201,1.528 -1.204,2.19z',
+        },
+        group);
     // Dot of question mark.
     dom.createSvgElement(
-      Svg.RECT, {
-      'class': 'blocklyIconSymbol',
-      'x': '6.8',
-      'y': '10.78',
-      'height': '2',
-      'width': '2',
-    },
-      group);
+        Svg.RECT, {
+          'class': 'blocklyIconSymbol',
+          'x': '6.8',
+          'y': '10.78',
+          'height': '2',
+          'width': '2',
+        },
+        group);
   }
 
   /**
@@ -140,15 +140,15 @@ export class Comment extends Icon {
          */
 
     this.foreignObject_ = dom.createSvgElement(
-      Svg.FOREIGNOBJECT,
-      { 'x': Bubble.BORDER_WIDTH, 'y': Bubble.BORDER_WIDTH });
+        Svg.FOREIGNOBJECT,
+        {'x': Bubble.BORDER_WIDTH, 'y': Bubble.BORDER_WIDTH});
 
     const body = document.createElementNS(dom.HTML_NS, 'body');
     body.setAttribute('xmlns', dom.HTML_NS);
     body.className = 'blocklyMinimalBody';
 
     this.textarea_ = document.createElementNS(dom.HTML_NS, 'textarea') as
-      HTMLTextAreaElement;
+        HTMLTextAreaElement;
     const textarea = this.textarea_;
     textarea.className = 'blocklyCommentTextarea';
     textarea.setAttribute('dir', this.block_.RTL ? 'RTL' : 'LTR');
@@ -164,28 +164,28 @@ export class Comment extends Icon {
     // However doing so in Firefox swallows the cursor for unknown reasons.
     // So this is hooked to mouseup instead.  No big deal.
     this.onMouseUpWrapper_ = browserEvents.conditionalBind(
-      textarea, 'mouseup', this, this.startEdit_, true, true);
+        textarea, 'mouseup', this, this.startEdit_, true, true);
     // Don't zoom with mousewheel.
     this.onWheelWrapper_ = browserEvents.conditionalBind(
-      textarea, 'wheel', this, function (e: AnyDuringMigration) {
-        e.stopPropagation();
-      });
+        textarea, 'wheel', this, function(e: AnyDuringMigration) {
+          e.stopPropagation();
+        });
     this.onChangeWrapper_ = browserEvents.conditionalBind(
-      textarea, 'change', this,
-      /** @param _e Unused event parameter. */
-      function (this: Comment, _e: Event) {
-        if (this.cachedText_ !== this.model_.text) {
-          eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))!
-            (this.block_, 'comment', null, this.cachedText_,
-              this.model_.text));
-        }
-      });
+        textarea, 'change', this,
+        /** @param _e Unused event parameter. */
+        function(this: Comment, _e: Event) {
+          if (this.cachedText_ !== this.model_.text) {
+            eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))!
+                            (this.block_, 'comment', null, this.cachedText_,
+                             this.model_.text));
+          }
+        });
     this.onInputWrapper_ = browserEvents.conditionalBind(
-      textarea, 'input', this,
-      /** @param _e Unused event parameter. */
-      function (this: Comment, _e: Event) {
-        this.model_.text = textarea.value;
-      });
+        textarea, 'input', this,
+        /** @param _e Unused event parameter. */
+        function(this: Comment, _e: Event) {
+          this.model_.text = textarea.value;
+        });
 
     setTimeout(textarea.focus.bind(textarea), 0);
 
@@ -228,11 +228,11 @@ export class Comment extends Icon {
     // AnyDuringMigration because:  Argument of type 'number' is not assignable
     // to parameter of type 'string'.
     this.foreignObject_!.setAttribute(
-      'width', widthMinusBorder as AnyDuringMigration);
+        'width', widthMinusBorder as AnyDuringMigration);
     // AnyDuringMigration because:  Argument of type 'number' is not assignable
     // to parameter of type 'string'.
     this.foreignObject_!.setAttribute(
-      'height', heightMinusBorder as AnyDuringMigration);
+        'height', heightMinusBorder as AnyDuringMigration);
     this.textarea_!.style.width = widthMinusBorder - 4 + 'px';
     this.textarea_!.style.height = heightMinusBorder - 4 + 'px';
   }
@@ -246,7 +246,7 @@ export class Comment extends Icon {
       return;
     }
     eventUtils.fire(new (eventUtils.get(eventUtils.BUBBLE_OPEN))!
-      (this.block_, visible, 'comment'));
+                    (this.block_, visible, 'comment'));
     this.model_.pinned = visible;
     if (visible) {
       this.createBubble_();
@@ -270,9 +270,9 @@ export class Comment extends Icon {
   /** Show an editable bubble. */
   private createEditableBubble_() {
     this.bubble_ = new Bubble(
-      (this.block_.workspace), this.createEditor_(),
-      this.block_.pathObject.svgPath, (this.iconXY_ as Coordinate),
-      this.model_.size.width, this.model_.size.height);
+        (this.block_.workspace), this.createEditor_(),
+        this.block_.pathObject.svgPath, (this.iconXY_ as Coordinate),
+        this.model_.size.width, this.model_.size.height);
     // Expose this comment's block's ID on its top-level SVG group.
     this.bubble_.setSvgId(this.block_.id);
     this.bubble_.registerResizeEvent(this.onBubbleResize_.bind(this));
@@ -288,9 +288,9 @@ export class Comment extends Icon {
     // AnyDuringMigration because:  Argument of type 'string | null' is not
     // assignable to parameter of type 'string'.
     this.paragraphElement_ =
-      Bubble.textToDom(this.block_.getCommentText() as AnyDuringMigration);
+        Bubble.textToDom(this.block_.getCommentText() as AnyDuringMigration);
     this.bubble_ = Bubble.createNonEditableBubble(
-      this.paragraphElement_, (this.block_), this.iconXY_ as Coordinate);
+        this.paragraphElement_, (this.block_), this.iconXY_ as Coordinate);
     this.applyColour();
   }
 

@@ -15,7 +15,7 @@
  * Blockly's editor.
  * @class
  */
-import { Abstract as AbstractEvent } from './events_abstract.js';
+import {Abstract as AbstractEvent} from './events_abstract.js';
 
 
 /**

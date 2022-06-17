@@ -14,9 +14,9 @@
 
 import * as registry from '../registry.js';
 /* eslint-disable-next-line no-unused-vars */
-import { VariableModel } from '../variable_model.js';
+import {VariableModel} from '../variable_model.js';
 
-import { VarBase } from './events_var_base.js';
+import {VarBase} from './events_var_base.js';
 import * as eventUtils from './utils.js';
 
 

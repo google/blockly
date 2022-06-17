@@ -37,16 +37,16 @@
 
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */
-import { Block } from './block.js';
-import { BlockDefinition, Blocks } from './blocks.js';
+import {Block} from './block.js';
+import {BlockDefinition, Blocks} from './blocks.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Connection } from './connection.js';
+import {Connection} from './connection.js';
 /* eslint-disable-next-line no-unused-vars */
-import { ICopyable } from './interfaces/i_copyable.js';
+import {ICopyable} from './interfaces/i_copyable.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Workspace } from './workspace.js';
+import {Workspace} from './workspace.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**
@@ -78,14 +78,14 @@ export function setMainWorkspace(workspace: Workspace) {
 /**
  * Currently selected block.
  */
-let selected: ICopyable | null = null;
+let selected: ICopyable|null = null;
 
 /**
  * Returns the currently selected block.
  * @return The currently selected block.
  * @alias Blockly.common.getSelected
  */
-export function getSelected(): ICopyable | null {
+export function getSelected(): ICopyable|null {
   return selected;
 }
 
@@ -96,14 +96,14 @@ export function getSelected(): ICopyable | null {
  * @param newSelection The newly selected block.
  * @alias Blockly.common.setSelected
  */
-export function setSelected(newSelection: ICopyable | null) {
+export function setSelected(newSelection: ICopyable|null) {
   selected = newSelection;
 }
 
 /**
  * Container element in which to render the WidgetDiv, DropDownDiv and Tooltip.
  */
-let parentContainer: Element | null;
+let parentContainer: Element|null;
 
 /**
  * Get the container element in which to render the WidgetDiv, DropDownDiv and\
@@ -111,7 +111,7 @@ let parentContainer: Element | null;
  * @return The parent container.
  * @alias Blockly.common.getParentContainer
  */
-export function getParentContainer(): Element | null {
+export function getParentContainer(): Element|null {
   return parentContainer;
 }
 
@@ -178,7 +178,7 @@ export const draggingConnections: Connection[] = [];
  * @alias Blockly.common.getBlockTypeCounts
  */
 export function getBlockTypeCounts(
-  block: Block, opt_stripFollowing?: boolean): AnyDuringMigration {
+    block: Block, opt_stripFollowing?: boolean): AnyDuringMigration {
   const typeCountsMap = Object.create(null);
   const descendants = block.getDescendants(true);
   if (opt_stripFollowing) {
@@ -206,7 +206,7 @@ export function getBlockTypeCounts(
  *     of jsonDef.
  */
 function jsonInitFactory(jsonDef: AnyDuringMigration): () => void {
-  return function (this: Block) {
+  return function(this: Block) {
     this.jsonInit(jsonDef);
   };
 }
@@ -230,8 +230,8 @@ export function defineBlocksWithJsonArray(jsonArray: AnyDuringMigration[]) {
  * @alias Blockly.common.defineBlocksWithJsonArray
  */
 export function createBlockDefinitionsFromJsonArray(
-  jsonArray: AnyDuringMigration[]): { [key: string]: BlockDefinition } {
-  const blocks: { [key: string]: BlockDefinition } = {};
+    jsonArray: AnyDuringMigration[]): {[key: string]: BlockDefinition} {
+  const blocks: {[key: string]: BlockDefinition} = {};
   for (let i = 0; i < jsonArray.length; i++) {
     const elem = jsonArray[i];
     if (!elem) {
@@ -241,11 +241,11 @@ export function createBlockDefinitionsFromJsonArray(
     const type = elem['type'];
     if (!type) {
       console.warn(
-        `Block definition #${i} in JSON array is missing a type attribute. ` +
-        'Skipping.');
+          `Block definition #${i} in JSON array is missing a type attribute. ` +
+          'Skipping.');
       continue;
     }
-    blocks[type] = { init: jsonInitFactory(elem) };
+    blocks[type] = {init: jsonInitFactory(elem)};
   }
   return blocks;
 }
@@ -257,7 +257,7 @@ export function createBlockDefinitionsFromJsonArray(
  *     type names to block definitions.
  * @alias Blockly.common.defineBlocks
  */
-export function defineBlocks(blocks: { [key: string]: BlockDefinition }) {
+export function defineBlocks(blocks: {[key: string]: BlockDefinition}) {
   // Iterate over own enumerable properties.
   for (const type of Object.keys(blocks)) {
     const definition = blocks[type];

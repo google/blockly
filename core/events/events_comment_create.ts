@@ -14,10 +14,10 @@
 
 import * as registry from '../registry.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceComment } from '../workspace_comment.js';
+import {WorkspaceComment} from '../workspace_comment.js';
 import * as Xml from '../xml.js';
 
-import { CommentBase } from './events_comment_base.js';
+import {CommentBase} from './events_comment_base.js';
 import * as eventUtils from './utils.js';
 
 
@@ -77,4 +77,4 @@ export class CommentCreate extends CommentBase {
 }
 
 registry.register(
-  registry.Type.EVENT, eventUtils.COMMENT_CREATE, CommentCreate);
+    registry.Type.EVENT, eventUtils.COMMENT_CREATE, CommentCreate);

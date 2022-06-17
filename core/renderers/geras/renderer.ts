@@ -16,19 +16,18 @@
 import '../common/constants';
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from '../../block_svg.js';
-import { BlockStyle, Theme } from '../../theme.js';
-
+import {BlockSvg} from '../../block_svg.js';
+import {BlockStyle, Theme} from '../../theme.js';
 import * as blockRendering from '../common/block_rendering.js';
 /* eslint-disable-next-line no-unused-vars */
-import { RenderInfo as BaseRenderInfo } from '../common/info.js';
-import { Renderer as BaseRenderer } from '../common/renderer.js';
+import {RenderInfo as BaseRenderInfo} from '../common/info.js';
+import {Renderer as BaseRenderer} from '../common/renderer.js';
 
-import { ConstantProvider } from './constants.js';
-import { Drawer } from './drawer.js';
-import { HighlightConstantProvider } from './highlight_constants.js';
-import { RenderInfo } from './info.js';
-import { PathObject } from './path_object.js';
+import {ConstantProvider} from './constants.js';
+import {Drawer} from './drawer.js';
+import {HighlightConstantProvider} from './highlight_constants.js';
+import {RenderInfo} from './info.js';
+import {PathObject} from './path_object.js';
 
 
 /**
@@ -40,7 +39,7 @@ export class Renderer extends BaseRenderer {
   // AnyDuringMigration because:  Type 'null' is not assignable to type
   // 'HighlightConstantProvider'.
   private highlightConstants_: HighlightConstantProvider =
-    null as AnyDuringMigration;
+      null as AnyDuringMigration;
 
   /** @param name The renderer name. */
   constructor(name: string) {
@@ -83,7 +82,7 @@ export class Renderer extends BaseRenderer {
    * @return The drawer.
    */
   protected override makeDrawer_(block: BlockSvg, info: BaseRenderInfo):
-    Drawer {
+      Drawer {
     return new Drawer(block, (info as RenderInfo));
   }
 
@@ -95,7 +94,7 @@ export class Renderer extends BaseRenderer {
    */
   override makePathObject(root: SVGElement, style: BlockStyle): PathObject {
     return new PathObject(
-      root, style, (this.getConstants() as ConstantProvider));
+        root, style, (this.getConstants() as ConstantProvider));
   }
 
   /**

@@ -16,16 +16,15 @@
 // Unused import preserved for side-effects. Remove if unneeded.
 import '../../theme';
 
-import { BlockSvg } from '../../block_svg.js';
-import { Connection } from '../../connection.js';
-import { BlockStyle } from '../../theme.js';
+import {BlockSvg} from '../../block_svg.js';
+import {Connection} from '../../connection.js';
+import {BlockStyle} from '../../theme.js';
 import * as dom from '../../utils/dom.js';
-import { Svg } from '../../utils/svg.js';
-
-import { PathObject as BasePathObject } from '../common/path_object.js';
+import {Svg} from '../../utils/svg.js';
+import {PathObject as BasePathObject} from '../common/path_object.js';
 
 /* eslint-disable-next-line no-unused-vars */
-import { ConstantProvider } from './constants.js';
+import {ConstantProvider} from './constants.js';
 
 
 /**
@@ -35,8 +34,8 @@ import { ConstantProvider } from './constants.js';
  */
 export class PathObject extends BasePathObject {
   /** The selected path of the block. */
-  private svgPathSelected_: SVGElement | null = null;
-  private readonly outlines_: { [key: string]: SVGElement };
+  private svgPathSelected_: SVGElement|null = null;
+  private readonly outlines_: {[key: string]: SVGElement};
 
   /**
    * A set used to determine which outlines were used during a draw pass.  The
@@ -46,8 +45,8 @@ export class PathObject extends BasePathObject {
    */
   // AnyDuringMigration because:  Type 'null' is not assignable to type '{ [key:
   // string]: number; }'.
-  private remainingOutlines_: { [key: string]: number } =
-    null as AnyDuringMigration;
+  private remainingOutlines_: {[key: string]: number} =
+      null as AnyDuringMigration;
 
   /**
    * The type of block's output connection shape.  This is set when a block
@@ -61,8 +60,8 @@ export class PathObject extends BasePathObject {
    * @param constants The renderer's constants.
    */
   constructor(
-    root: SVGElement, style: BlockStyle,
-    public override constants: ConstantProvider) {
+      root: SVGElement, style: BlockStyle,
+      public override constants: ConstantProvider) {
     super(root, style, constants);
 
     /** The outline paths on the block. */
@@ -105,7 +104,7 @@ export class PathObject extends BasePathObject {
         this.svgPathSelected_ = this.svgPath.cloneNode(true) as SVGElement;
         this.svgPathSelected_.setAttribute('fill', 'none');
         this.svgPathSelected_.setAttribute(
-          'filter', 'url(#' + this.constants.selectedGlowFilterId + ')');
+            'filter', 'url(#' + this.constants.selectedGlowFilterId + ')');
         this.svgRoot.appendChild(this.svgPathSelected_);
       }
     } else {
@@ -120,7 +119,7 @@ export class PathObject extends BasePathObject {
     this.setClass_('blocklyReplaceable', enable);
     if (enable) {
       this.svgPath.setAttribute(
-        'filter', 'url(#' + this.constants.replacementGlowFilterId + ')');
+          'filter', 'url(#' + this.constants.replacementGlowFilterId + ')');
     } else {
       this.svgPath.removeAttribute('filter');
     }
@@ -134,7 +133,7 @@ export class PathObject extends BasePathObject {
     }
     if (enable) {
       outlinePath.setAttribute(
-        'filter', 'url(#' + this.constants.replacementGlowFilterId + ')');
+          'filter', 'url(#' + this.constants.replacementGlowFilterId + ')');
     } else {
       outlinePath.removeAttribute('filter');
     }
@@ -184,13 +183,13 @@ export class PathObject extends BasePathObject {
   private getOutlinePath_(name: string): SVGElement {
     if (!this.outlines_[name]) {
       this.outlines_[name] = dom.createSvgElement(
-        Svg.PATH, {
-        'class': 'blocklyOutlinePath',  // IE doesn't like paths without the
-        // data definition, set empty
-        // default
-        'd': '',
-      },
-        this.svgRoot);
+          Svg.PATH, {
+            'class': 'blocklyOutlinePath',  // IE doesn't like paths without the
+            // data definition, set empty
+            // default
+            'd': '',
+          },
+          this.svgRoot);
     }
     if (this.remainingOutlines_) {
       delete this.remainingOutlines_[name];

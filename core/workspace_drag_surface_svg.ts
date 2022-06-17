@@ -22,9 +22,9 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { Coordinate } from './utils/coordinate.js';
+import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
-import { Svg } from './utils/svg.js';
+import {Svg} from './utils/svg.js';
 import * as svgMath from './utils/svg_math.js';
 
 
@@ -94,7 +94,7 @@ export class WorkspaceDragSurfaceSvg {
 
     this.SVG_.style.display = 'block';
     dom.setCssTransform(
-      this.SVG_, 'translate3d(' + fixedX + 'px, ' + fixedY + 'px, 0)');
+        this.SVG_, 'translate3d(' + fixedX + 'px, ' + fixedY + 'px, 0)');
   }
 
   /**
@@ -114,15 +114,15 @@ export class WorkspaceDragSurfaceSvg {
   clearAndHide(newSurface: SVGElement) {
     if (!newSurface) {
       throw Error(
-        'Couldn\'t clear and hide the drag surface: missing new surface.');
+          'Couldn\'t clear and hide the drag surface: missing new surface.');
     }
     const blockCanvas = this.SVG_.childNodes[0] as Element;
     const bubbleCanvas = this.SVG_.childNodes[1] as Element;
     if (!blockCanvas || !bubbleCanvas ||
-      !dom.hasClass(blockCanvas, 'blocklyBlockCanvas') ||
-      !dom.hasClass(bubbleCanvas, 'blocklyBubbleCanvas')) {
+        !dom.hasClass(blockCanvas, 'blocklyBlockCanvas') ||
+        !dom.hasClass(bubbleCanvas, 'blocklyBubbleCanvas')) {
       throw Error(
-        'Couldn\'t clear and hide the drag surface. A node was missing.');
+          'Couldn\'t clear and hide the drag surface. A node was missing.');
     }
 
     // If there is a previous sibling, put the blockCanvas back right
@@ -161,17 +161,17 @@ export class WorkspaceDragSurfaceSvg {
      * @param scale The scale of the workspace being dragged.
      */
   setContentsAndShow(
-    blockCanvas: SVGElement, bubbleCanvas: SVGElement,
-    previousSibling: Element, width: number, height: number, scale: number) {
+      blockCanvas: SVGElement, bubbleCanvas: SVGElement,
+      previousSibling: Element, width: number, height: number, scale: number) {
     if (this.SVG_.childNodes.length) {
       throw Error('Already dragging a block.');
     }
     this.previousSibling_ = previousSibling;
     // Make sure the blocks and bubble canvas are scaled appropriately.
     blockCanvas.setAttribute(
-      'transform', 'translate(0, 0) scale(' + scale + ')');
+        'transform', 'translate(0, 0) scale(' + scale + ')');
     bubbleCanvas.setAttribute(
-      'transform', 'translate(0, 0) scale(' + scale + ')');
+        'transform', 'translate(0, 0) scale(' + scale + ')');
     // AnyDuringMigration because:  Argument of type 'number' is not assignable
     // to parameter of type 'string'.
     this.SVG_.setAttribute('width', width as AnyDuringMigration);

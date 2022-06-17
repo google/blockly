@@ -18,12 +18,11 @@
 
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */
-import { Input } from '../../input.js';
+import {Input} from '../../input.js';
+import {ConstantProvider} from '../common/constants.js';
 
-import { ConstantProvider } from '../common/constants.js';
-
-import { InputConnection } from './input_connection.js';
-import { Types } from './types.js';
+import {InputConnection} from './input_connection.js';
+import {Types} from './types.js';
 
 
 /**
@@ -50,11 +49,11 @@ export class ExternalValueInput extends InputConnection {
       this.height = this.shape.height as number;
     } else {
       this.height = this.connectedBlockHeight -
-        this.constants.TAB_OFFSET_FROM_TOP - this.constants.MEDIUM_PADDING;
+          this.constants.TAB_OFFSET_FROM_TOP - this.constants.MEDIUM_PADDING;
     }
 
     this.width = this.shape.width as
-      number + this.constants.EXTERNAL_VALUE_INPUT_PADDING;
+        number + this.constants.EXTERNAL_VALUE_INPUT_PADDING;
 
     this.connectionOffsetY = this.constants.TAB_OFFSET_FROM_TOP;
 

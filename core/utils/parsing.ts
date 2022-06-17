@@ -32,7 +32,8 @@
  * @namespace Blockly.utils.parsing
  */
 
-import { Msg } from '../msg.js';
+import {Msg} from '../msg.js';
+
 import * as colourUtils from './colour.js';
 
 
@@ -46,18 +47,18 @@ import * as colourUtils from './colour.js';
  * @return Array of strings and numbers.
  */
 function tokenizeInterpolationInternal(
-  message: string, parseInterpolationTokens: boolean): (string | number)[] {
+    message: string, parseInterpolationTokens: boolean): (string|number)[] {
   const tokens = [];
   const chars = message.split('');
   chars.push(  // End marker.
-    '');
+      '');
   // Parse the message with a finite state machine.
   // 0 - Base case.
   // 1 - % found.
   // 2 - Digit found.
   // 3 - Message ref found.
   let state = 0;
-  const buffer = new Array < string > ();
+  const buffer = new Array<string>();
   let number = null;
   for (let i = 0; i < chars.length; i++) {
     const c = chars[i];
@@ -126,18 +127,17 @@ function tokenizeInterpolationInternal(
               // BKY_ is the prefix used to namespace the strings used in
               // Blockly core files and the predefined blocks in ../blocks/.
               // These strings are defined in ../msgs/ files.
-              const bklyKey = keyUpper.startsWith('BKY_') ?
-                keyUpper.substring(4) :
-                null;
+              const bklyKey =
+                  keyUpper.startsWith('BKY_') ? keyUpper.substring(4) : null;
               if (bklyKey && bklyKey in Msg) {
                 const rawValue = Msg[bklyKey];
                 if (typeof rawValue === 'string') {
                   // Attempt to dereference substrings, too, appending to the
                   // end.
                   Array.prototype.push.apply(
-                    tokens,
-                    tokenizeInterpolationInternal(
-                      rawValue, parseInterpolationTokens));
+                      tokens,
+                      tokenizeInterpolationInternal(
+                          rawValue, parseInterpolationTokens));
                 } else if (parseInterpolationTokens) {
                   // When parsing interpolation tokens, numbers are special
                   // placeholders (%1, %2, etc). Make sure all other values are
@@ -202,7 +202,7 @@ function tokenizeInterpolationInternal(
  * @return Array of strings and numbers.
  * @alias Blockly.utils.parsing.tokenizeInterpolation
  */
-export function tokenizeInterpolation(message: string): (string | number)[] {
+export function tokenizeInterpolation(message: string): (string|number)[] {
   return tokenizeInterpolationInternal(message, true);
 }
 
@@ -215,8 +215,8 @@ export function tokenizeInterpolation(message: string): (string | number)[] {
  * @return String with message references replaced.
  * @alias Blockly.utils.parsing.replaceMessageReferences
  */
-export function replaceMessageReferences(message: string |
-  AnyDuringMigration): string {
+export function replaceMessageReferences(message: string|
+                                         AnyDuringMigration): string {
   if (typeof message !== 'string') {
     return message;
   }
@@ -265,23 +265,23 @@ export function checkMessageReferences(message: string): boolean {
  * @throws {Error} If the colour cannot be parsed.
  * @alias Blockly.utils.parsing.parseBlockColour
  */
-export function parseBlockColour(colour: number |
-  string): { hue: number | null, hex: string } {
+export function parseBlockColour(colour: number|
+                                 string): {hue: number|null, hex: string} {
   const dereferenced =
-    typeof colour === 'string' ? replaceMessageReferences(colour) : colour;
+      typeof colour === 'string' ? replaceMessageReferences(colour) : colour;
 
   const hue = Number(dereferenced);
   if (!isNaN(hue) && 0 <= hue && hue <= 360) {
     return {
       hue: hue,
       hex: colourUtils.hsvToHex(
-        hue, colourUtils.getHsvSaturation(), colourUtils.getHsvValue() * 255),
+          hue, colourUtils.getHsvSaturation(), colourUtils.getHsvValue() * 255),
     };
   } else {
     const hex = colourUtils.parse(dereferenced);
     if (hex) {
       // Only store hue if colour is set as a hue.
-      return { hue: null, hex: hex };
+      return {hue: null, hex: hex};
     } else {
       let errorMsg = 'Invalid colour: "' + dereferenced + '"';
       if (colour !== dereferenced) {

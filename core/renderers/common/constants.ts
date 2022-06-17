@@ -11,14 +11,14 @@
  * An object that provides constants for rendering blocks.
  * @class
  */
-import { ConnectionType } from '../../connection_type.js';
+import {ConnectionType} from '../../connection_type.js';
 /* eslint-disable-next-line no-unused-vars */
-import { RenderedConnection } from '../../rendered_connection.js';
-import { BlockStyle, Theme } from '../../theme.js';
+import {RenderedConnection} from '../../rendered_connection.js';
+import {BlockStyle, Theme} from '../../theme.js';
 import * as colour from '../../utils/colour.js';
 import * as dom from '../../utils/dom.js';
 import * as parsing from '../../utils/parsing.js';
-import { Svg } from '../../utils/svg.js';
+import {Svg} from '../../utils/svg.js';
 import * as svgPaths from '../../utils/svg_paths.js';
 import * as userAgent from '../../utils/useragent.js';
 
@@ -60,8 +60,8 @@ export interface PuzzleTab {
   type: number;
   width: number;
   height: number;
-  pathDown: string | ((p1: number) => string);
-  pathUp: string | ((p1: number) => string);
+  pathDown: string|((p1: number) => string);
+  pathUp: string|((p1: number) => string);
 }
 
 /**
@@ -75,15 +75,11 @@ export interface JaggedTeeth {
 }
 
 export type BaseShape = {
-  type: number;
-  width: number;
-  height: number;
+  type: number; width: number; height: number;
 };
 
 export type DynamicShape = {
-  type: number;
-  width: (p1: number) => number;
-  height: (p1: number) => number;
+  type: number; width: (p1: number) => number; height: (p1: number) => number;
   isDynamic: true;
   connectionOffsetY: (p1: number) => number;
   connectionOffsetX: (p1: number) => number;
@@ -94,7 +90,7 @@ export type DynamicShape = {
 };
 
 /** An object containing sizing and type information about a shape. */
-export type Shape = BaseShape | DynamicShape;
+export type Shape = BaseShape|DynamicShape;
 
 /** An object containing sizing and type information about a dynamic shape. */
 // export interface DynamicShape {
@@ -290,7 +286,7 @@ export class ConstantProvider {
    * The defs tag that contains all filters and patterns for this Blockly
    * instance.
    */
-  private defs_: SVGElement | null = null;
+  private defs_: SVGElement|null = null;
 
   /**
    * The ID of the emboss filter, or the empty string if no filter is set.
@@ -367,7 +363,7 @@ export class ConstantProvider {
   INSERTION_MARKER_OPACITY = 0.2;
 
   /** Enum for connection shapes. */
-  SHAPES = { PUZZLE: 1, NOTCH: 2 };
+  SHAPES = {PUZZLE: 1, NOTCH: 2};
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   JAGGED_TEETH!: JaggedTeeth;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
@@ -381,7 +377,7 @@ export class ConstantProvider {
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   OUTSIDE_CORNERS!: OutsideCorners;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  blockStyles!: { [key: string]: BlockStyle };
+  blockStyles!: {[key: string]: BlockStyle};
 
   constructor() {
     /**
@@ -441,17 +437,17 @@ export class ConstantProvider {
 
     /** A dropdown field's SVG arrow datauri. */
     this.FIELD_DROPDOWN_SVG_ARROW_DATAURI =
-      'data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllci' +
-      'AxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMi43MSIgaG' +
-      'VpZ2h0PSI4Ljc5IiB2aWV3Qm94PSIwIDAgMTIuNzEgOC43OSI+PHRpdGxlPmRyb3Bkb3duLW' +
-      'Fycm93PC90aXRsZT48ZyBvcGFjaXR5PSIwLjEiPjxwYXRoIGQ9Ik0xMi43MSwyLjQ0QTIuND' +
-      'EsMi40MSwwLDAsMSwxMiw0LjE2TDguMDgsOC4wOGEyLjQ1LDIuNDUsMCwwLDEtMy40NSwwTD' +
-      'AuNzIsNC4xNkEyLjQyLDIuNDIsMCwwLDEsMCwyLjQ0LDIuNDgsMi40OCwwLDAsMSwuNzEuNz' +
-      'FDMSwwLjQ3LDEuNDMsMCw2LjM2LDBTMTEuNzUsMC40NiwxMiwuNzFBMi40NCwyLjQ0LDAsMC' +
-      'wxLDEyLjcxLDIuNDRaIiBmaWxsPSIjMjMxZjIwIi8+PC9nPjxwYXRoIGQ9Ik02LjM2LDcuNz' +
-      'lhMS40MywxLjQzLDAsMCwxLTEtLjQyTDEuNDIsMy40NWExLjQ0LDEuNDQsMCwwLDEsMC0yYz' +
-      'AuNTYtLjU2LDkuMzEtMC41Niw5Ljg3LDBhMS40NCwxLjQ0LDAsMCwxLDAsMkw3LjM3LDcuMz' +
-      'dBMS40MywxLjQzLDAsMCwxLDYuMzYsNy43OVoiIGZpbGw9IiNmZmYiLz48L3N2Zz4=';
+        'data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllci' +
+        'AxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMi43MSIgaG' +
+        'VpZ2h0PSI4Ljc5IiB2aWV3Qm94PSIwIDAgMTIuNzEgOC43OSI+PHRpdGxlPmRyb3Bkb3duLW' +
+        'Fycm93PC90aXRsZT48ZyBvcGFjaXR5PSIwLjEiPjxwYXRoIGQ9Ik0xMi43MSwyLjQ0QTIuND' +
+        'EsMi40MSwwLDAsMSwxMiw0LjE2TDguMDgsOC4wOGEyLjQ1LDIuNDUsMCwwLDEtMy40NSwwTD' +
+        'AuNzIsNC4xNkEyLjQyLDIuNDIsMCwwLDEsMCwyLjQ0LDIuNDgsMi40OCwwLDAsMSwuNzEuNz' +
+        'FDMSwwLjQ3LDEuNDMsMCw2LjM2LDBTMTEuNzUsMC40NiwxMiwuNzFBMi40NCwyLjQ0LDAsMC' +
+        'wxLDEyLjcxLDIuNDRaIiBmaWxsPSIjMjMxZjIwIi8+PC9nPjxwYXRoIGQ9Ik02LjM2LDcuNz' +
+        'lhMS40MywxLjQzLDAsMCwxLTEtLjQyTDEuNDIsMy40NWExLjQ0LDEuNDQsMCwwLDEsMC0yYz' +
+        'AuNTYtLjU2LDkuMzEtMC41Niw5Ljg3LDBhMS40NCwxLjQ0LDAsMCwxLDAsMkw3LjM3LDcuMz' +
+        'dBMS40MywxLjQzLDAsMCwxLDYuMzYsNy43OVoiIGZpbGw9IiNmZmYiLz48L3N2Zz4=';
 
     /** A colour field's default height. */
     this.FIELD_COLOUR_DEFAULT_HEIGHT = this.FIELD_BORDER_RECT_HEIGHT;
@@ -523,7 +519,7 @@ export class ConstantProvider {
     this.setComponentConstants_(theme);
 
     this.ADD_START_HATS =
-      theme.startHats !== null ? theme.startHats : this.ADD_START_HATS;
+        theme.startHats !== null ? theme.startHats : this.ADD_START_HATS;
   }
 
   /**
@@ -544,8 +540,8 @@ export class ConstantProvider {
     }
 
     const fontMetrics = dom.measureFontMetrics(
-      'Hg', this.FIELD_TEXT_FONTSIZE + 'pt', this.FIELD_TEXT_FONTWEIGHT,
-      this.FIELD_TEXT_FONTFAMILY);
+        'Hg', this.FIELD_TEXT_FONTSIZE + 'pt', this.FIELD_TEXT_FONTWEIGHT,
+        this.FIELD_TEXT_FONTFAMILY);
 
     this.FIELD_TEXT_HEIGHT = fontMetrics.height;
     this.FIELD_TEXT_BASELINE = fontMetrics.baseline;
@@ -557,15 +553,15 @@ export class ConstantProvider {
    */
   protected setComponentConstants_(theme: Theme) {
     this.CURSOR_COLOUR =
-      theme.getComponentStyle('cursorColour') || this.CURSOR_COLOUR;
+        theme.getComponentStyle('cursorColour') || this.CURSOR_COLOUR;
     this.MARKER_COLOUR =
-      theme.getComponentStyle('markerColour') || this.MARKER_COLOUR;
+        theme.getComponentStyle('markerColour') || this.MARKER_COLOUR;
     this.INSERTION_MARKER_COLOUR =
-      theme.getComponentStyle('insertionMarkerColour') ||
-      this.INSERTION_MARKER_COLOUR;
+        theme.getComponentStyle('insertionMarkerColour') ||
+        this.INSERTION_MARKER_COLOUR;
     this.INSERTION_MARKER_OPACITY =
-      Number(theme.getComponentStyle('insertionMarkerOpacity')) ||
-      this.INSERTION_MARKER_OPACITY;
+        Number(theme.getComponentStyle('insertionMarkerOpacity')) ||
+        this.INSERTION_MARKER_OPACITY;
   }
 
   /**
@@ -575,12 +571,12 @@ export class ConstantProvider {
    * @return An object containing the style and an autogenerated name for that
    *     style.
    */
-  getBlockStyleForColour(colour: string): { style: BlockStyle, name: string } {
+  getBlockStyleForColour(colour: string): {style: BlockStyle, name: string} {
     const name = 'auto_' + colour;
     if (!this.blockStyles[name]) {
       this.blockStyles[name] = this.createBlockStyle_(colour);
     }
-    return { style: this.blockStyles[name], name };
+    return {style: this.blockStyles[name], name};
   }
 
   /**
@@ -589,11 +585,11 @@ export class ConstantProvider {
    * @return The named block style, or a default style if no style with the
    *     given name was found.
    */
-  getBlockStyle(blockStyleName: string | null): BlockStyle {
+  getBlockStyle(blockStyleName: string|null): BlockStyle {
     return this.blockStyles[blockStyleName || ''] ||
-      (blockStyleName && blockStyleName.indexOf('auto_') === 0 ?
-        this.getBlockStyleForColour(blockStyleName.substring(5)).style :
-        this.createBlockStyle_('#000000'));
+        (blockStyleName && blockStyleName.indexOf('auto_') === 0 ?
+             this.getBlockStyleForColour(blockStyleName.substring(5)).style :
+             this.createBlockStyle_('#000000'));
   }
 
   /**
@@ -602,7 +598,7 @@ export class ConstantProvider {
    * @return A populated block style based on the given colour.
    */
   protected createBlockStyle_(colour: string): BlockStyle {
-    return this.validatedBlockStyle_({ 'colourPrimary': colour });
+    return this.validatedBlockStyle_({'colourPrimary': colour});
   }
 
   /**
@@ -624,14 +620,14 @@ export class ConstantProvider {
     }
     // Validate required properties.
     const parsedColour =
-      parsing.parseBlockColour(valid['colourPrimary'] || '#000');
+        parsing.parseBlockColour(valid['colourPrimary'] || '#000');
     valid.colourPrimary = parsedColour.hex;
     valid.colourSecondary = valid['colourSecondary'] ?
-      parsing.parseBlockColour(valid['colourSecondary']).hex :
-      this.generateSecondaryColour_(valid.colourPrimary);
+        parsing.parseBlockColour(valid['colourSecondary']).hex :
+        this.generateSecondaryColour_(valid.colourPrimary);
     valid.colourTertiary = valid['colourTertiary'] ?
-      parsing.parseBlockColour(valid['colourTertiary']).hex :
-      this.generateTertiaryColour_(valid.colourPrimary);
+        parsing.parseBlockColour(valid['colourTertiary']).hex :
+        this.generateTertiaryColour_(valid.colourPrimary);
 
     valid.hat = valid['hat'] || '';
     return valid;
@@ -687,7 +683,7 @@ export class ConstantProvider {
       svgPaths.point(-width * 2, height / 2),
       svgPaths.point(width, height / 4),
     ]);
-    return { height, width, path: mainPath };
+    return {height, width, path: mainPath};
   }
 
   /**
@@ -702,7 +698,7 @@ export class ConstantProvider {
       svgPaths.point(70, -height),
       svgPaths.point(width, 0),
     ]);
-    return { height, width, path: mainPath };
+    return {height, width, path: mainPath};
   }
 
   /**
@@ -737,14 +733,14 @@ export class ConstantProvider {
       const endPoint2 = svgPaths.point(width, forward * halfHeight);
 
       return svgPaths.curve(
-        'c',
-        [
-          svgPaths.point(0, forward * control1Y),
-          svgPaths.point(-width, back * control2Y),
-          endPoint1,
-        ]) +
-        svgPaths.curve(
-          's', [svgPaths.point(width, back * control3Y), endPoint2]);
+                 'c',
+                 [
+                   svgPaths.point(0, forward * control1Y),
+                   svgPaths.point(-width, back * control2Y),
+                   endPoint1,
+                 ]) +
+          svgPaths.curve(
+              's', [svgPaths.point(width, back * control3Y), endPoint2]);
     }
 
     // c 0,-10  -8,8  -8,-7.5  s 8,2.5  8,-7.5
@@ -803,10 +799,10 @@ export class ConstantProvider {
     const radius = this.CORNER_RADIUS;
 
     const innerTopLeftCorner =
-      svgPaths.arc('a', '0 0,0', radius, svgPaths.point(-radius, radius));
+        svgPaths.arc('a', '0 0,0', radius, svgPaths.point(-radius, radius));
 
     const innerBottomLeftCorner =
-      svgPaths.arc('a', '0 0,0', radius, svgPaths.point(radius, radius));
+        svgPaths.arc('a', '0 0,0', radius, svgPaths.point(radius, radius));
 
     return {
       width: radius,
@@ -824,19 +820,19 @@ export class ConstantProvider {
     const radius = this.CORNER_RADIUS;
     /** SVG path for drawing the rounded top-left corner. */
     const topLeft = svgPaths.moveBy(0, radius) +
-      svgPaths.arc('a', '0 0,1', radius, svgPaths.point(radius, -radius));
+        svgPaths.arc('a', '0 0,1', radius, svgPaths.point(radius, -radius));
 
     /** SVG path for drawing the rounded top-right corner. */
     const topRight =
-      svgPaths.arc('a', '0 0,1', radius, svgPaths.point(radius, radius));
+        svgPaths.arc('a', '0 0,1', radius, svgPaths.point(radius, radius));
 
     /** SVG path for drawing the rounded bottom-left corner. */
     const bottomLeft =
-      svgPaths.arc('a', '0 0,1', radius, svgPaths.point(-radius, -radius));
+        svgPaths.arc('a', '0 0,1', radius, svgPaths.point(-radius, -radius));
 
     /** SVG path for drawing the rounded bottom-right corner. */
     const bottomRight =
-      svgPaths.arc('a', '0 0,1', radius, svgPaths.point(-radius, radius));
+        svgPaths.arc('a', '0 0,1', radius, svgPaths.point(-radius, radius));
 
     return {
       topLeft,
@@ -900,44 +896,44 @@ export class ConstantProvider {
     // AnyDuringMigration because:  Argument of type 'SVGElement | null' is not
     // assignable to parameter of type 'Element | undefined'.
     const embossFilter = dom.createSvgElement(
-      Svg.FILTER, { 'id': 'blocklyEmbossFilter' + this.randomIdentifier },
-      this.defs_ as AnyDuringMigration);
+        Svg.FILTER, {'id': 'blocklyEmbossFilter' + this.randomIdentifier},
+        this.defs_ as AnyDuringMigration);
     dom.createSvgElement(
-      Svg.FEGAUSSIANBLUR,
-      { 'in': 'SourceAlpha', 'stdDeviation': 1, 'result': 'blur' },
-      embossFilter);
+        Svg.FEGAUSSIANBLUR,
+        {'in': 'SourceAlpha', 'stdDeviation': 1, 'result': 'blur'},
+        embossFilter);
     const feSpecularLighting = dom.createSvgElement(
-      Svg.FESPECULARLIGHTING, {
-      'in': 'blur',
-      'surfaceScale': 1,
-      'specularConstant': 0.5,
-      'specularExponent': 10,
-      'lighting-color': 'white',
-      'result': 'specOut',
-    },
-      embossFilter);
+        Svg.FESPECULARLIGHTING, {
+          'in': 'blur',
+          'surfaceScale': 1,
+          'specularConstant': 0.5,
+          'specularExponent': 10,
+          'lighting-color': 'white',
+          'result': 'specOut',
+        },
+        embossFilter);
     dom.createSvgElement(
-      Svg.FEPOINTLIGHT, { 'x': -5000, 'y': -10000, 'z': 20000 },
-      feSpecularLighting);
+        Svg.FEPOINTLIGHT, {'x': -5000, 'y': -10000, 'z': 20000},
+        feSpecularLighting);
     dom.createSvgElement(
-      Svg.FECOMPOSITE, {
-      'in': 'specOut',
-      'in2': 'SourceAlpha',
-      'operator': 'in',
-      'result': 'specOut',
-    },
-      embossFilter);
+        Svg.FECOMPOSITE, {
+          'in': 'specOut',
+          'in2': 'SourceAlpha',
+          'operator': 'in',
+          'result': 'specOut',
+        },
+        embossFilter);
     dom.createSvgElement(
-      Svg.FECOMPOSITE, {
-      'in': 'SourceGraphic',
-      'in2': 'specOut',
-      'operator': 'arithmetic',
-      'k1': 0,
-      'k2': 1,
-      'k3': 1,
-      'k4': 0,
-    },
-      embossFilter);
+        Svg.FECOMPOSITE, {
+          'in': 'SourceGraphic',
+          'in2': 'specOut',
+          'operator': 'arithmetic',
+          'k1': 0,
+          'k2': 1,
+          'k3': 1,
+          'k4': 0,
+        },
+        embossFilter);
     this.embossFilterId = embossFilter.id;
     this.embossFilter_ = embossFilter;
 
@@ -951,18 +947,18 @@ export class ConstantProvider {
     // AnyDuringMigration because:  Argument of type 'SVGElement | null' is not
     // assignable to parameter of type 'Element | undefined'.
     const disabledPattern = dom.createSvgElement(
-      Svg.PATTERN, {
-      'id': 'blocklyDisabledPattern' + this.randomIdentifier,
-      'patternUnits': 'userSpaceOnUse',
-      'width': 10,
-      'height': 10,
-    },
-      this.defs_ as AnyDuringMigration);
+        Svg.PATTERN, {
+          'id': 'blocklyDisabledPattern' + this.randomIdentifier,
+          'patternUnits': 'userSpaceOnUse',
+          'width': 10,
+          'height': 10,
+        },
+        this.defs_ as AnyDuringMigration);
     dom.createSvgElement(
-      Svg.RECT, { 'width': 10, 'height': 10, 'fill': '#aaa' }, disabledPattern);
+        Svg.RECT, {'width': 10, 'height': 10, 'fill': '#aaa'}, disabledPattern);
     dom.createSvgElement(
-      Svg.PATH, { 'd': 'M 0 0 L 10 10 M 10 0 L 0 10', 'stroke': '#cc0' },
-      disabledPattern);
+        Svg.PATH, {'d': 'M 0 0 L 10 10 M 10 0 L 0 10', 'stroke': '#cc0'},
+        disabledPattern);
     this.disabledPatternId = disabledPattern.id;
     this.disabledPattern_ = disabledPattern;
 
@@ -979,37 +975,37 @@ export class ConstantProvider {
       // AnyDuringMigration because:  Argument of type 'SVGElement | null' is
       // not assignable to parameter of type 'Element | undefined'.
       const debugFilter = dom.createSvgElement(
-        Svg.FILTER, {
-        'id': 'blocklyDebugFilter' + this.randomIdentifier,
-        'height': '160%',
-        'width': '180%',
-        'y': '-30%',
-        'x': '-40%',
-      },
-        this.defs_ as AnyDuringMigration);
+          Svg.FILTER, {
+            'id': 'blocklyDebugFilter' + this.randomIdentifier,
+            'height': '160%',
+            'width': '180%',
+            'y': '-30%',
+            'x': '-40%',
+          },
+          this.defs_ as AnyDuringMigration);
       // Set all gaussian blur pixels to 1 opacity before applying flood
       const debugComponentTransfer = dom.createSvgElement(
-        Svg.FECOMPONENTTRANSFER, { 'result': 'outBlur' }, debugFilter);
+          Svg.FECOMPONENTTRANSFER, {'result': 'outBlur'}, debugFilter);
       dom.createSvgElement(
-        Svg.FEFUNCA,
-        { 'type': 'table', 'tableValues': '0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1' },
-        debugComponentTransfer);
+          Svg.FEFUNCA,
+          {'type': 'table', 'tableValues': '0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1'},
+          debugComponentTransfer);
       // Color the highlight
       dom.createSvgElement(
-        Svg.FEFLOOD, {
-        'flood-color': '#ff0000',
-        'flood-opacity': 0.5,
-        'result': 'outColor',
-      },
-        debugFilter);
+          Svg.FEFLOOD, {
+            'flood-color': '#ff0000',
+            'flood-opacity': 0.5,
+            'result': 'outColor',
+          },
+          debugFilter);
       dom.createSvgElement(
-        Svg.FECOMPOSITE, {
-        'in': 'outColor',
-        'in2': 'outBlur',
-        'operator': 'in',
-        'result': 'outGlow',
-      },
-        debugFilter);
+          Svg.FECOMPOSITE, {
+            'in': 'outColor',
+            'in2': 'outBlur',
+            'operator': 'in',
+            'result': 'outGlow',
+          },
+          debugFilter);
       this.debugFilterId = debugFilter.id;
       this.debugFilter_ = debugFilter;
     }

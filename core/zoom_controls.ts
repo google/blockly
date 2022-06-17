@@ -18,21 +18,21 @@ import './metrics_manager';
 import './events/events_click';
 
 import * as browserEvents from './browser_events.js';
-import { ComponentManager } from './component_manager.js';
+import {ComponentManager} from './component_manager.js';
 import * as Css from './css.js';
 import * as eventUtils from './events/utils.js';
 /* eslint-disable-next-line no-unused-vars */
-import { IPositionable } from './interfaces/i_positionable.js';
-import { UiMetrics } from './metrics_manager.js';
+import {IPositionable} from './interfaces/i_positionable.js';
+import {UiMetrics} from './metrics_manager.js';
 import * as uiPosition from './positionable_helpers.js';
-import { SPRITE } from './sprites.js';
+import {SPRITE} from './sprites.js';
 import * as Touch from './touch.js';
 import * as dom from './utils/dom.js';
-import { Rect } from './utils/rect.js';
-import { Size } from './utils/size.js';
-import { Svg } from './utils/svg.js';
+import {Rect} from './utils/rect.js';
+import {Size} from './utils/size.js';
+import {Svg} from './utils/svg.js';
 /* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**
@@ -50,19 +50,19 @@ export class ZoomControls implements IPositionable {
    * A handle to use to unbind the mouse down event handler for zoom reset
    *    button. Opaque data returned from browserEvents.conditionalBind.
    */
-  private onZoomResetWrapper_: browserEvents.Data | null = null;
+  private onZoomResetWrapper_: browserEvents.Data|null = null;
 
   /**
    * A handle to use to unbind the mouse down event handler for zoom in
    * button. Opaque data returned from browserEvents.conditionalBind.
    */
-  private onZoomInWrapper_: browserEvents.Data | null = null;
+  private onZoomInWrapper_: browserEvents.Data|null = null;
 
   /**
    * A handle to use to unbind the mouse down event handler for zoom out
    * button. Opaque data returned from browserEvents.conditionalBind.
    */
-  private onZoomOutWrapper_: browserEvents.Data | null = null;
+  private onZoomOutWrapper_: browserEvents.Data|null = null;
 
   /** The zoom in svg <g> element. */
   // AnyDuringMigration because:  Type 'null' is not assignable to type
@@ -173,7 +173,7 @@ export class ZoomControls implements IPositionable {
    * @return The UI elements's bounding box. Null if bounding box should be
    *     ignored by other UI elements.
    */
-  getBoundingRectangle(): Rect | null {
+  getBoundingRectangle(): Rect|null {
     let height = this.SMALL_SPACING_ + 2 * this.HEIGHT_;
     if (this.zoomResetGroup_) {
       height += this.LARGE_SPACING_ + this.HEIGHT_;
@@ -197,47 +197,47 @@ export class ZoomControls implements IPositionable {
     }
 
     const cornerPosition =
-      uiPosition.getCornerOppositeToolbox(this.workspace, metrics);
+        uiPosition.getCornerOppositeToolbox(this.workspace, metrics);
     let height = this.SMALL_SPACING_ + 2 * this.HEIGHT_;
     if (this.zoomResetGroup_) {
       height += this.LARGE_SPACING_ + this.HEIGHT_;
     }
     const startRect = uiPosition.getStartPositionRect(
-      cornerPosition, new Size(this.WIDTH_, height), this.MARGIN_HORIZONTAL_,
-      this.MARGIN_VERTICAL_, metrics, this.workspace);
+        cornerPosition, new Size(this.WIDTH_, height), this.MARGIN_HORIZONTAL_,
+        this.MARGIN_VERTICAL_, metrics, this.workspace);
 
     const verticalPosition = cornerPosition.vertical;
     const bumpDirection = verticalPosition === uiPosition.verticalPosition.TOP ?
-      uiPosition.bumpDirection.DOWN :
-      uiPosition.bumpDirection.UP;
+        uiPosition.bumpDirection.DOWN :
+        uiPosition.bumpDirection.UP;
     const positionRect = uiPosition.bumpPositionRect(
-      startRect, this.MARGIN_VERTICAL_, bumpDirection, savedPositions);
+        startRect, this.MARGIN_VERTICAL_, bumpDirection, savedPositions);
 
     if (verticalPosition === uiPosition.verticalPosition.TOP) {
       const zoomInTranslateY = this.SMALL_SPACING_ + this.HEIGHT_;
       this.zoomInGroup_.setAttribute(
-        'transform', 'translate(0, ' + zoomInTranslateY + ')');
+          'transform', 'translate(0, ' + zoomInTranslateY + ')');
       if (this.zoomResetGroup_) {
         const zoomResetTranslateY =
-          zoomInTranslateY + this.LARGE_SPACING_ + this.HEIGHT_;
+            zoomInTranslateY + this.LARGE_SPACING_ + this.HEIGHT_;
         this.zoomResetGroup_.setAttribute(
-          'transform', 'translate(0, ' + zoomResetTranslateY + ')');
+            'transform', 'translate(0, ' + zoomResetTranslateY + ')');
       }
     } else {
       const zoomInTranslateY =
-        this.zoomResetGroup_ ? this.LARGE_SPACING_ + this.HEIGHT_ : 0;
+          this.zoomResetGroup_ ? this.LARGE_SPACING_ + this.HEIGHT_ : 0;
       this.zoomInGroup_.setAttribute(
-        'transform', 'translate(0, ' + zoomInTranslateY + ')');
+          'transform', 'translate(0, ' + zoomInTranslateY + ')');
       const zoomOutTranslateY =
-        zoomInTranslateY + this.SMALL_SPACING_ + this.HEIGHT_;
+          zoomInTranslateY + this.SMALL_SPACING_ + this.HEIGHT_;
       this.zoomOutGroup_.setAttribute(
-        'transform', 'translate(0, ' + zoomOutTranslateY + ')');
+          'transform', 'translate(0, ' + zoomOutTranslateY + ')');
     }
 
     this.top_ = positionRect.top;
     this.left_ = positionRect.left;
     this.svgGroup_.setAttribute(
-      'transform', 'translate(' + this.left_ + ',' + this.top_ + ')');
+        'transform', 'translate(' + this.left_ + ',' + this.top_ + ')');
   }
 
   /**
@@ -258,32 +258,32 @@ export class ZoomControls implements IPositionable {
         </g>
         */
     this.zoomOutGroup_ =
-      dom.createSvgElement(Svg.G, { 'class': 'blocklyZoom' }, this.svgGroup_);
+        dom.createSvgElement(Svg.G, {'class': 'blocklyZoom'}, this.svgGroup_);
     const clip = dom.createSvgElement(
-      Svg.CLIPPATH, { 'id': 'blocklyZoomoutClipPath' + rnd },
-      this.zoomOutGroup_);
+        Svg.CLIPPATH, {'id': 'blocklyZoomoutClipPath' + rnd},
+        this.zoomOutGroup_);
     dom.createSvgElement(
-      Svg.RECT, {
-      'width': 32,
-      'height': 32,
-    },
-      clip);
+        Svg.RECT, {
+          'width': 32,
+          'height': 32,
+        },
+        clip);
     const zoomoutSvg = dom.createSvgElement(
-      Svg.IMAGE, {
-      'width': SPRITE.width,
-      'height': SPRITE.height,
-      'x': -64,
-      'y': -92,
-      'clip-path': 'url(#blocklyZoomoutClipPath' + rnd + ')',
-    },
-      this.zoomOutGroup_);
+        Svg.IMAGE, {
+          'width': SPRITE.width,
+          'height': SPRITE.height,
+          'x': -64,
+          'y': -92,
+          'clip-path': 'url(#blocklyZoomoutClipPath' + rnd + ')',
+        },
+        this.zoomOutGroup_);
     zoomoutSvg.setAttributeNS(
-      dom.XLINK_NS, 'xlink:href',
-      this.workspace.options.pathToMedia + SPRITE.url);
+        dom.XLINK_NS, 'xlink:href',
+        this.workspace.options.pathToMedia + SPRITE.url);
 
     // Attach listener.
     this.onZoomOutWrapper_ = browserEvents.conditionalBind(
-      this.zoomOutGroup_, 'mousedown', null, this.zoom_.bind(this, -1));
+        this.zoomOutGroup_, 'mousedown', null, this.zoom_.bind(this, -1));
   }
 
   /**
@@ -304,31 +304,31 @@ export class ZoomControls implements IPositionable {
         </g>
         */
     this.zoomInGroup_ =
-      dom.createSvgElement(Svg.G, { 'class': 'blocklyZoom' }, this.svgGroup_);
+        dom.createSvgElement(Svg.G, {'class': 'blocklyZoom'}, this.svgGroup_);
     const clip = dom.createSvgElement(
-      Svg.CLIPPATH, { 'id': 'blocklyZoominClipPath' + rnd }, this.zoomInGroup_);
+        Svg.CLIPPATH, {'id': 'blocklyZoominClipPath' + rnd}, this.zoomInGroup_);
     dom.createSvgElement(
-      Svg.RECT, {
-      'width': 32,
-      'height': 32,
-    },
-      clip);
+        Svg.RECT, {
+          'width': 32,
+          'height': 32,
+        },
+        clip);
     const zoominSvg = dom.createSvgElement(
-      Svg.IMAGE, {
-      'width': SPRITE.width,
-      'height': SPRITE.height,
-      'x': -32,
-      'y': -92,
-      'clip-path': 'url(#blocklyZoominClipPath' + rnd + ')',
-    },
-      this.zoomInGroup_);
+        Svg.IMAGE, {
+          'width': SPRITE.width,
+          'height': SPRITE.height,
+          'x': -32,
+          'y': -92,
+          'clip-path': 'url(#blocklyZoominClipPath' + rnd + ')',
+        },
+        this.zoomInGroup_);
     zoominSvg.setAttributeNS(
-      dom.XLINK_NS, 'xlink:href',
-      this.workspace.options.pathToMedia + SPRITE.url);
+        dom.XLINK_NS, 'xlink:href',
+        this.workspace.options.pathToMedia + SPRITE.url);
 
     // Attach listener.
     this.onZoomInWrapper_ = browserEvents.conditionalBind(
-      this.zoomInGroup_, 'mousedown', null, this.zoom_.bind(this, 1));
+        this.zoomInGroup_, 'mousedown', null, this.zoom_.bind(this, 1));
   }
 
   /**
@@ -367,26 +367,26 @@ export class ZoomControls implements IPositionable {
         </g>
         */
     this.zoomResetGroup_ =
-      dom.createSvgElement(Svg.G, { 'class': 'blocklyZoom' }, this.svgGroup_);
+        dom.createSvgElement(Svg.G, {'class': 'blocklyZoom'}, this.svgGroup_);
     const clip = dom.createSvgElement(
-      Svg.CLIPPATH, { 'id': 'blocklyZoomresetClipPath' + rnd },
-      this.zoomResetGroup_);
-    dom.createSvgElement(Svg.RECT, { 'width': 32, 'height': 32 }, clip);
+        Svg.CLIPPATH, {'id': 'blocklyZoomresetClipPath' + rnd},
+        this.zoomResetGroup_);
+    dom.createSvgElement(Svg.RECT, {'width': 32, 'height': 32}, clip);
     const zoomresetSvg = dom.createSvgElement(
-      Svg.IMAGE, {
-      'width': SPRITE.width,
-      'height': SPRITE.height,
-      'y': -92,
-      'clip-path': 'url(#blocklyZoomresetClipPath' + rnd + ')',
-    },
-      this.zoomResetGroup_);
+        Svg.IMAGE, {
+          'width': SPRITE.width,
+          'height': SPRITE.height,
+          'y': -92,
+          'clip-path': 'url(#blocklyZoomresetClipPath' + rnd + ')',
+        },
+        this.zoomResetGroup_);
     zoomresetSvg.setAttributeNS(
-      dom.XLINK_NS, 'xlink:href',
-      this.workspace.options.pathToMedia + SPRITE.url);
+        dom.XLINK_NS, 'xlink:href',
+        this.workspace.options.pathToMedia + SPRITE.url);
 
     // Attach event listeners.
     this.onZoomResetWrapper_ = browserEvents.conditionalBind(
-      this.zoomResetGroup_, 'mousedown', null, this.resetZoom_.bind(this));
+        this.zoomResetGroup_, 'mousedown', null, this.resetZoom_.bind(this));
   }
 
   /**
@@ -422,7 +422,7 @@ export class ZoomControls implements IPositionable {
   /** Fires a zoom control UI event. */
   private fireZoomEvent_() {
     const uiEvent = new (eventUtils.get(eventUtils.CLICK))!
-      (null, this.workspace.id, 'zoom_controls');
+        (null, this.workspace.id, 'zoom_controls');
     eventUtils.fire(uiEvent);
   }
 }

@@ -32,8 +32,8 @@ export class Rect {
    * @struct
    */
   constructor(
-    public top: number, public bottom: number, public left: number,
-    public right: number) {}
+      public top: number, public bottom: number, public left: number,
+      public right: number) {}
 
   /**
    * Tests whether this rectangle contains a x/y coordinate.
@@ -44,7 +44,7 @@ export class Rect {
    */
   contains(x: number, y: number): boolean {
     return x >= this.left && x <= this.right && y >= this.top &&
-      y <= this.bottom;
+        y <= this.bottom;
   }
 
   /**
@@ -55,7 +55,7 @@ export class Rect {
    */
   intersects(other: Rect): boolean {
     return !(
-      this.left > other.right || this.right < other.left ||
-      this.top > other.bottom || this.bottom < other.top);
+        this.left > other.right || this.right < other.left ||
+        this.top > other.bottom || this.bottom < other.top);
   }
 }

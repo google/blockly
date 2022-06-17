@@ -12,61 +12,62 @@
  * @namespace Blockly.utils
  */
 
+/* eslint-disable-next-line no-unused-vars */
+import {Block} from './block.js';
+import * as browserEvents from './browser_events.js';
+import * as common from './common.js';
+import * as extensions from './extensions.js';
 import * as aria from './utils/aria.js';
 import * as arrayUtils from './utils/array.js';
-import * as browserEvents from './browser_events.js';
 import * as colour from './utils/colour.js';
-import * as common from './common.js';
+import {Coordinate} from './utils/coordinate.js';
 import * as deprecation from './utils/deprecation.js';
 import * as dom from './utils/dom.js';
-import * as extensions from './extensions.js';
 import * as idGenerator from './utils/idgenerator.js';
+import {KeyCodes} from './utils/keycodes.js';
 import * as math from './utils/math.js';
+import {Metrics} from './utils/metrics.js';
 import * as object from './utils/object.js';
 import * as parsing from './utils/parsing.js';
+import {Rect} from './utils/rect.js';
+import {Size} from './utils/size.js';
 import * as stringUtils from './utils/string.js';
 import * as style from './utils/style.js';
+import {Svg} from './utils/svg.js';
 import * as svgMath from './utils/svg_math.js';
 import * as svgPaths from './utils/svg_paths.js';
 import * as toolbox from './utils/toolbox.js';
 import * as userAgent from './utils/useragent.js';
 import * as xml from './utils/xml.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Block } from './block.js';
-import { Coordinate } from './utils/coordinate.js';
-import { KeyCodes } from './utils/keycodes.js';
-import { Metrics } from './utils/metrics.js';
-import { Rect } from './utils/rect.js';
-import { Size } from './utils/size.js';
-import { Svg } from './utils/svg.js';
-/* eslint-disable-next-line no-unused-vars */
-import { WorkspaceSvg } from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg.js';
 
-
-export { aria };
-export { arrayUtils as array };
-export { browserEvents };
-export { colour };
-export { deprecation };
-export { dom };
-export { extensions };
-export { idGenerator };
-export { math };
-export { object };
-export { parsing };
-export { stringUtils as string };
-export { style };
-export { svgMath };
-export { svgPaths };
-export { toolbox };
-export { userAgent };
-export { xml };
-export { Coordinate };
-export { KeyCodes };
-export { Metrics };
-export { Rect };
-export { Size };
-export { Svg };
+export {
+  aria,
+  arrayUtils as array,
+  browserEvents,
+  colour,
+  Coordinate,
+  deprecation,
+  dom,
+  extensions,
+  idGenerator,
+  KeyCodes,
+  math,
+  Metrics,
+  object,
+  parsing,
+  Rect,
+  Size,
+  stringUtils as string,
+  style,
+  Svg,
+  svgMath,
+  svgPaths,
+  toolbox,
+  userAgent,
+  xml
+};
 
 /**
  * Halts the propagation of the event without doing anything else.
@@ -77,7 +78,7 @@ export { Svg };
 export function noEvent(e: Event) {
   // AnyDuringMigration because:  Property 'warn' does not exist on type 'void'.
   (deprecation as AnyDuringMigration)
-    .warn('Blockly.utils.noEvent', 'September 2021', 'September 2022');
+      .warn('Blockly.utils.noEvent', 'September 2021', 'September 2022');
   // This event has been handled.  No need to bubble up to the document.
   e.preventDefault();
   e.stopPropagation();
@@ -93,9 +94,9 @@ export function noEvent(e: Event) {
 export function isTargetInput(e: Event): boolean {
   // AnyDuringMigration because:  Property 'warn' does not exist on type 'void'.
   (deprecation as AnyDuringMigration)
-    .warn(
-      'Blockly.utils.isTargetInput', 'September 2021', 'September 2022',
-      'Blockly.browserEvents.isTargetInput');
+      .warn(
+          'Blockly.utils.isTargetInput', 'September 2021', 'September 2022',
+          'Blockly.browserEvents.isTargetInput');
   return browserEvents.isTargetInput(e);
 }
 
@@ -110,9 +111,9 @@ export function isTargetInput(e: Event): boolean {
 export function getRelativeXY(element: Element): Coordinate {
   // AnyDuringMigration because:  Property 'warn' does not exist on type 'void'.
   (deprecation as AnyDuringMigration)
-    .warn(
-      'Blockly.utils.getRelativeXY', 'December 2021', 'December 2022',
-      'Blockly.utils.svgMath.getRelativeXY');
+      .warn(
+          'Blockly.utils.getRelativeXY', 'December 2021', 'December 2022',
+          'Blockly.utils.svgMath.getRelativeXY');
   // AnyDuringMigration because:  Property 'getRelativeXY' does not exist on
   // type 'void'.
   return (svgMath as AnyDuringMigration).getRelativeXY(element);
@@ -130,9 +131,9 @@ export function getRelativeXY(element: Element): Coordinate {
 function getInjectionDivXY(element: Element): Coordinate {
   // AnyDuringMigration because:  Property 'warn' does not exist on type 'void'.
   (deprecation as AnyDuringMigration)
-    .warn(
-      'Blockly.utils.getInjectionDivXY_', 'December 2021', 'December 2022',
-      'Blockly.utils.svgMath.getInjectionDivXY');
+      .warn(
+          'Blockly.utils.getInjectionDivXY_', 'December 2021', 'December 2022',
+          'Blockly.utils.svgMath.getInjectionDivXY');
   // AnyDuringMigration because:  Property 'getInjectionDivXY' does not exist on
   // type 'void'.
   return (svgMath as AnyDuringMigration).getInjectionDivXY(element);
@@ -149,9 +150,9 @@ export const getInjectionDivXY_ = getInjectionDivXY;
 export function isRightButton(e: Event): boolean {
   // AnyDuringMigration because:  Property 'warn' does not exist on type 'void'.
   (deprecation as AnyDuringMigration)
-    .warn(
-      'Blockly.utils.isRightButton', 'September 2021', 'September 2022',
-      'Blockly.browserEvents.isRightButton');
+      .warn(
+          'Blockly.utils.isRightButton', 'September 2021', 'September 2022',
+          'Blockly.browserEvents.isRightButton');
   return browserEvents.isRightButton(e);
 }
 
@@ -166,12 +167,12 @@ export function isRightButton(e: Event): boolean {
  * @alias Blockly.utils.mouseToSvg
  */
 export function mouseToSvg(
-  e: Event, svg: SVGSVGElement, matrix: SVGMatrix | null): SVGPoint {
+    e: Event, svg: SVGSVGElement, matrix: SVGMatrix|null): SVGPoint {
   // AnyDuringMigration because:  Property 'warn' does not exist on type 'void'.
   (deprecation as AnyDuringMigration)
-    .warn(
-      'Blockly.utils.mouseToSvg', 'September 2021', 'September 2022',
-      'Blockly.browserEvents.mouseToSvg');
+      .warn(
+          'Blockly.utils.mouseToSvg', 'September 2021', 'September 2022',
+          'Blockly.browserEvents.mouseToSvg');
   return browserEvents.mouseToSvg(e, svg, matrix);
 }
 
@@ -182,12 +183,12 @@ export function mouseToSvg(
  * @deprecated Use Blockly.browserEvents.getScrollDeltaPixels instead.
  * @alias Blockly.utils.getScrollDeltaPixels
  */
-export function getScrollDeltaPixels(e: WheelEvent): { x: number, y: number } {
+export function getScrollDeltaPixels(e: WheelEvent): {x: number, y: number} {
   // AnyDuringMigration because:  Property 'warn' does not exist on type 'void'.
   (deprecation as AnyDuringMigration)
-    .warn(
-      'Blockly.utils.getScrollDeltaPixels', 'September 2021',
-      'September 2022', 'Blockly.browserEvents.getScrollDeltaPixels');
+      .warn(
+          'Blockly.utils.getScrollDeltaPixels', 'September 2021',
+          'September 2022', 'Blockly.browserEvents.getScrollDeltaPixels');
   return browserEvents.getScrollDeltaPixels(e);
 }
 
@@ -203,12 +204,12 @@ export function getScrollDeltaPixels(e: WheelEvent): { x: number, y: number } {
  * @deprecated
  * @alias Blockly.utils.tokenizeInterpolation
  */
-export function tokenizeInterpolation(message: string): Array<string | number> {
+export function tokenizeInterpolation(message: string): Array<string|number> {
   // AnyDuringMigration because:  Property 'warn' does not exist on type 'void'.
   (deprecation as AnyDuringMigration)
-    .warn(
-      'Blockly.utils.tokenizeInterpolation', 'December 2021',
-      'December 2022', 'Blockly.utils.parsing.tokenizeInterpolation');
+      .warn(
+          'Blockly.utils.tokenizeInterpolation', 'December 2021',
+          'December 2022', 'Blockly.utils.parsing.tokenizeInterpolation');
   // AnyDuringMigration because:  Property 'tokenizeInterpolation' does not
   // exist on type 'void'.
   return (parsing as AnyDuringMigration).tokenizeInterpolation(message);
@@ -224,13 +225,13 @@ export function tokenizeInterpolation(message: string): Array<string | number> {
  * @deprecated
  * @alias Blockly.utils.replaceMessageReferences
  */
-export function replaceMessageReferences(message: string |
-  AnyDuringMigration): string {
+export function replaceMessageReferences(message: string|
+                                         AnyDuringMigration): string {
   // AnyDuringMigration because:  Property 'warn' does not exist on type 'void'.
   (deprecation as AnyDuringMigration)
-    .warn(
-      'Blockly.utils.replaceMessageReferences', 'December 2021',
-      'December 2022', 'Blockly.utils.parsing.replaceMessageReferences');
+      .warn(
+          'Blockly.utils.replaceMessageReferences', 'December 2021',
+          'December 2022', 'Blockly.utils.parsing.replaceMessageReferences');
   // AnyDuringMigration because:  Property 'replaceMessageReferences' does not
   // exist on type 'void'.
   return (parsing as AnyDuringMigration).replaceMessageReferences(message);
@@ -248,9 +249,9 @@ export function replaceMessageReferences(message: string |
 export function checkMessageReferences(message: string): boolean {
   // AnyDuringMigration because:  Property 'warn' does not exist on type 'void'.
   (deprecation as AnyDuringMigration)
-    .warn(
-      'Blockly.utils.checkMessageReferences', 'December 2021',
-      'December 2022', 'Blockly.utils.parsing.checkMessageReferences');
+      .warn(
+          'Blockly.utils.checkMessageReferences', 'December 2021',
+          'December 2022', 'Blockly.utils.parsing.checkMessageReferences');
   // AnyDuringMigration because:  Property 'checkMessageReferences' does not
   // exist on type 'void'.
   return (parsing as AnyDuringMigration).checkMessageReferences(message);
@@ -265,9 +266,9 @@ export function checkMessageReferences(message: string): boolean {
 export function genUid(): string {
   // AnyDuringMigration because:  Property 'warn' does not exist on type 'void'.
   (deprecation as AnyDuringMigration)
-    .warn(
-      'Blockly.utils.genUid', 'September 2021', 'September 2022',
-      'Blockly.utils.idGenerator.genUid');
+      .warn(
+          'Blockly.utils.genUid', 'September 2021', 'September 2022',
+          'Blockly.utils.idGenerator.genUid');
   // AnyDuringMigration because:  Property 'genUid' does not exist on type
   // 'void'.
   return (idGenerator as AnyDuringMigration).genUid();
@@ -283,9 +284,9 @@ export function genUid(): string {
 export function is3dSupported(): boolean {
   // AnyDuringMigration because:  Property 'warn' does not exist on type 'void'.
   (deprecation as AnyDuringMigration)
-    .warn(
-      'Blockly.utils.is3dSupported', 'December 2021', 'December 2022',
-      'Blockly.utils.svgMath.is3dSupported');
+      .warn(
+          'Blockly.utils.is3dSupported', 'December 2021', 'December 2022',
+          'Blockly.utils.svgMath.is3dSupported');
   // AnyDuringMigration because:  Property 'is3dSupported' does not exist on
   // type 'void'.
   return (svgMath as AnyDuringMigration).is3dSupported();
@@ -302,9 +303,9 @@ export function is3dSupported(): boolean {
 export function getViewportBBox(): Rect {
   // AnyDuringMigration because:  Property 'warn' does not exist on type 'void'.
   (deprecation as AnyDuringMigration)
-    .warn(
-      'Blockly.utils.getViewportBBox', 'December 2021', 'December 2022',
-      'Blockly.utils.svgMath.getViewportBBox');
+      .warn(
+          'Blockly.utils.getViewportBBox', 'December 2021', 'December 2022',
+          'Blockly.utils.svgMath.getViewportBBox');
   // AnyDuringMigration because:  Property 'getViewportBBox' does not exist on
   // type 'void'.
   return (svgMath as AnyDuringMigration).getViewportBBox();
@@ -319,10 +320,10 @@ export function getViewportBBox(): Rect {
  * @deprecated
  */
 export function arrayRemove(
-  arr: AnyDuringMigration[], value: AnyDuringMigration): boolean {
+    arr: AnyDuringMigration[], value: AnyDuringMigration): boolean {
   // AnyDuringMigration because:  Property 'warn' does not exist on type 'void'.
   (deprecation as AnyDuringMigration)
-    .warn('Blockly.utils.arrayRemove', 'December 2021', 'December 2022');
+      .warn('Blockly.utils.arrayRemove', 'December 2021', 'December 2022');
   return arrayUtils.removeElem(arr, value);
 }
 
@@ -336,9 +337,9 @@ export function arrayRemove(
 export function getDocumentScroll(): Coordinate {
   // AnyDuringMigration because:  Property 'warn' does not exist on type 'void'.
   (deprecation as AnyDuringMigration)
-    .warn(
-      'Blockly.utils.getDocumentScroll', 'December 2021', 'December 2022',
-      'Blockly.utils.svgMath.getDocumentScroll');
+      .warn(
+          'Blockly.utils.getDocumentScroll', 'December 2021', 'December 2022',
+          'Blockly.utils.svgMath.getDocumentScroll');
   // AnyDuringMigration because:  Property 'getDocumentScroll' does not exist on
   // type 'void'.
   return (svgMath as AnyDuringMigration).getDocumentScroll();
@@ -355,12 +356,12 @@ export function getDocumentScroll(): Coordinate {
  * @alias Blockly.utils.getBlockTypeCounts
  */
 export function getBlockTypeCounts(
-  block: Block, opt_stripFollowing?: boolean): AnyDuringMigration {
+    block: Block, opt_stripFollowing?: boolean): AnyDuringMigration {
   // AnyDuringMigration because:  Property 'warn' does not exist on type 'void'.
   (deprecation as AnyDuringMigration)
-    .warn(
-      'Blockly.utils.getBlockTypeCounts', 'December 2021', 'December 2022',
-      'Blockly.common.getBlockTypeCounts');
+      .warn(
+          'Blockly.utils.getBlockTypeCounts', 'December 2021', 'December 2022',
+          'Blockly.common.getBlockTypeCounts');
   return common.getBlockTypeCounts(block, opt_stripFollowing);
 }
 
@@ -373,16 +374,16 @@ export function getBlockTypeCounts(
  * @return The workspace coordinates.
  */
 export function screenToWsCoordinates(
-  ws: WorkspaceSvg, screenCoordinates: Coordinate): Coordinate {
+    ws: WorkspaceSvg, screenCoordinates: Coordinate): Coordinate {
   // AnyDuringMigration because:  Property 'warn' does not exist on type 'void'.
   (deprecation as AnyDuringMigration)
-    .warn(
-      'Blockly.utils.screenToWsCoordinates', 'December 2021',
-      'December 2022', 'Blockly.utils.svgMath.screenToWsCoordinates');
+      .warn(
+          'Blockly.utils.screenToWsCoordinates', 'December 2021',
+          'December 2022', 'Blockly.utils.svgMath.screenToWsCoordinates');
   // AnyDuringMigration because:  Property 'screenToWsCoordinates' does not
   // exist on type 'void'.
   return (svgMath as AnyDuringMigration)
-    .screenToWsCoordinates(ws, screenCoordinates);
+      .screenToWsCoordinates(ws, screenCoordinates);
 }
 
 /**
@@ -396,13 +397,13 @@ export function screenToWsCoordinates(
  * @deprecated
  * @alias Blockly.utils.parseBlockColour
  */
-export function parseBlockColour(colour: number |
-  string): { hue: number | null, hex: string } {
+export function parseBlockColour(colour: number|
+                                 string): {hue: number|null, hex: string} {
   // AnyDuringMigration because:  Property 'warn' does not exist on type 'void'.
   (deprecation as AnyDuringMigration)
-    .warn(
-      'Blockly.utils.parseBlockColour', 'December 2021', 'December 2022',
-      'Blockly.utils.parsing.parseBlockColour');
+      .warn(
+          'Blockly.utils.parseBlockColour', 'December 2021', 'December 2022',
+          'Blockly.utils.parsing.parseBlockColour');
   // AnyDuringMigration because:  Property 'parseBlockColour' does not exist on
   // type 'void'.
   return (parsing as AnyDuringMigration).parseBlockColour(colour);
@@ -418,6 +419,6 @@ export function parseBlockColour(colour: number |
 export function runAfterPageLoad(fn: () => AnyDuringMigration) {
   // AnyDuringMigration because:  Property 'warn' does not exist on type 'void'.
   (deprecation as AnyDuringMigration)
-    .warn('Blockly.utils.runAfterPageLoad', 'December 2021', 'December 2022');
+      .warn('Blockly.utils.runAfterPageLoad', 'December 2021', 'December 2022');
   extensions.runAfterPageLoad(fn);
 }

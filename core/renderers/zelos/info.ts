@@ -16,36 +16,35 @@
  */
 
 /* eslint-disable-next-line no-unused-vars */
-import { BlockSvg } from '../../block_svg.js';
-import { FieldImage } from '../../field_image.js';
-import { FieldLabel } from '../../field_label.js';
-import { FieldTextInput } from '../../field_textinput.js';
-import { Align, Input } from '../../input.js';
-import { inputTypes } from '../../input_types.js';
+import {BlockSvg} from '../../block_svg.js';
+import {FieldImage} from '../../field_image.js';
+import {FieldLabel} from '../../field_label.js';
+import {FieldTextInput} from '../../field_textinput.js';
+import {Align, Input} from '../../input.js';
+import {inputTypes} from '../../input_types.js';
+/* eslint-disable-next-line no-unused-vars */
+import {RenderInfo as BaseRenderInfo} from '../common/info.js';
+/* eslint-disable-next-line no-unused-vars */
+import {Measurable} from '../measurables/base.js';
+import {Field} from '../measurables/field.js';
+import {InRowSpacer} from '../measurables/in_row_spacer.js';
+import {InputConnection} from '../measurables/input_connection.js';
+/* eslint-disable-next-line no-unused-vars */
+import {Row} from '../measurables/row.js';
+/* eslint-disable-next-line no-unused-vars */
+import {SpacerRow} from '../measurables/spacer_row.js';
+import {Types} from '../measurables/types.js';
 
 /* eslint-disable-next-line no-unused-vars */
-import { RenderInfo as BaseRenderInfo } from '../common/info.js';
+import {ConstantProvider, InsideCorners} from './constants.js';
+import {BottomRow} from './measurables/bottom_row.js';
+import {StatementInput} from './measurables/inputs.js';
+import {RightConnectionShape} from './measurables/row_elements.js';
+import {TopRow} from './measurables/top_row.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Measurable } from '../measurables/base.js';
-import { Field } from '../measurables/field.js';
-import { InRowSpacer } from '../measurables/in_row_spacer.js';
-import { InputConnection } from '../measurables/input_connection.js';
+import {PathObject} from './path_object.js';
 /* eslint-disable-next-line no-unused-vars */
-import { Row } from '../measurables/row.js';
-/* eslint-disable-next-line no-unused-vars */
-import { SpacerRow } from '../measurables/spacer_row.js';
-import { Types } from '../measurables/types.js';
-
-/* eslint-disable-next-line no-unused-vars */
-import { ConstantProvider, InsideCorners } from './constants.js';
-import { BottomRow } from './measurables/bottom_row.js';
-import { StatementInput } from './measurables/inputs.js';
-import { RightConnectionShape } from './measurables/row_elements.js';
-import { TopRow } from './measurables/top_row.js';
-/* eslint-disable-next-line no-unused-vars */
-import { PathObject } from './path_object.js';
-/* eslint-disable-next-line no-unused-vars */
-import { Renderer } from './renderer.js';
+import {Renderer} from './renderer.js';
 
 
 /**
@@ -65,7 +64,7 @@ export class RenderInfo extends BaseRenderInfo {
   override isInline = true;
   isMultiRow: boolean;
   hasStatementInput: boolean;
-  rightSide: RightConnectionShape | null;
+  rightSide: RightConnectionShape|null;
   private readonly rightAlignedDummyInputs_: WeakMap<Row, Input>;
 
   /**
@@ -104,8 +103,8 @@ export class RenderInfo extends BaseRenderInfo {
      * An object with rendering information about the right connection shape.
      */
     this.rightSide = this.outputConnection ?
-      new RightConnectionShape(this.constants_) :
-      null;
+        new RightConnectionShape(this.constants_) :
+        null;
 
     /**
      * A map of rows to right aligned dummy inputs within those rows. Used to
@@ -141,7 +140,7 @@ export class RenderInfo extends BaseRenderInfo {
     }
     // A statement input or an input following one always gets a new row.
     if (input.type === inputTypes.STATEMENT ||
-      lastInput.type === inputTypes.STATEMENT) {
+        lastInput.type === inputTypes.STATEMENT) {
       return true;
     }
     // Value and dummy inputs get new row if inputs are not inlined.
@@ -154,19 +153,19 @@ export class RenderInfo extends BaseRenderInfo {
   override getDesiredRowWidth_(row: Row): number {
     if (row.hasStatement) {
       const rightCornerWidth =
-        (this.constants_.INSIDE_CORNERS as InsideCorners).rightWidth || 0;
+          (this.constants_.INSIDE_CORNERS as InsideCorners).rightWidth || 0;
       return this.width - this.startX - rightCornerWidth;
     }
     return super.getDesiredRowWidth_(row);
   }
 
-  override getInRowSpacing_(prev: Measurable | null, next: Measurable | null):
-    number {
+  override getInRowSpacing_(prev: Measurable|null, next: Measurable|null):
+      number {
     if (!prev || !next) {
       // No need for padding at the beginning or end of the row if the
       // output shape is dynamic.
       if (this.outputConnection && this.outputConnection.isDynamicShape &&
-        !this.hasStatementInput && !this.bottomRow.hasNextConnection) {
+          !this.hasStatementInput && !this.bottomRow.hasNextConnection) {
         return this.constants_.NO_PADDING;
       }
     }
@@ -186,7 +185,7 @@ export class RenderInfo extends BaseRenderInfo {
     // AnyDuringMigration because:  Property 'isHat' does not exist on type
     // 'typeof Types'.
     if (prev && Types.isLeftSquareCorner(prev) && next &&
-      (Types as AnyDuringMigration).isHat(next)) {
+        (Types as AnyDuringMigration).isHat(next)) {
       return this.constants_.NO_PADDING;
     }
     return this.constants_.MEDIUM_PADDING;
@@ -201,19 +200,19 @@ export class RenderInfo extends BaseRenderInfo {
     const precedesStatement = Types.isInputRow(next) && next.hasStatement;
     if (precedesStatement || followsStatement) {
       const cornerHeight =
-        (this.constants_.INSIDE_CORNERS as InsideCorners).rightHeight || 0;
+          (this.constants_.INSIDE_CORNERS as InsideCorners).rightHeight || 0;
       const height = Math.max(this.constants_.NOTCH_HEIGHT, cornerHeight);
       return precedesStatement && followsStatement ?
-        Math.max(height, this.constants_.DUMMY_INPUT_MIN_HEIGHT) :
-        height;
+          Math.max(height, this.constants_.DUMMY_INPUT_MIN_HEIGHT) :
+          height;
     }
     // Top and bottom rows act as a spacer so we don't need any extra padding.
     if (Types.isTopRow(prev)) {
       const topRow = prev as TopRow;
       if (!topRow.hasPreviousConnection &&
-        (!this.outputConnection || this.hasStatementInput)) {
+          (!this.outputConnection || this.hasStatementInput)) {
         return Math.abs(
-          this.constants_.NOTCH_HEIGHT - this.constants_.CORNER_RADIUS);
+            this.constants_.NOTCH_HEIGHT - this.constants_.CORNER_RADIUS);
       }
       return this.constants_.NO_PADDING;
     }
@@ -221,15 +220,15 @@ export class RenderInfo extends BaseRenderInfo {
       const bottomRow = next as BottomRow;
       if (!this.outputConnection) {
         const topHeight = Math.max(
-          this.topRow.minHeight,
-          Math.max(
-            this.constants_.NOTCH_HEIGHT,
-            this.constants_.CORNER_RADIUS)) -
-          this.constants_.CORNER_RADIUS;
+                              this.topRow.minHeight,
+                              Math.max(
+                                  this.constants_.NOTCH_HEIGHT,
+                                  this.constants_.CORNER_RADIUS)) -
+            this.constants_.CORNER_RADIUS;
         return topHeight;
       } else if (!bottomRow.hasNextConnection && this.hasStatementInput) {
         return Math.abs(
-          this.constants_.NOTCH_HEIGHT - this.constants_.CORNER_RADIUS);
+            this.constants_.NOTCH_HEIGHT - this.constants_.CORNER_RADIUS);
       }
       return this.constants_.NO_PADDING;
     }
@@ -239,7 +238,7 @@ export class RenderInfo extends BaseRenderInfo {
   override getSpacerRowWidth_(prev: Row, next: Row): number {
     const width = this.width - this.startX;
     if (Types.isInputRow(prev) && prev.hasStatement ||
-      Types.isInputRow(next) && next.hasStatement) {
+        Types.isInputRow(next) && next.hasStatement) {
       return Math.max(width, this.constants_.STATEMENT_INPUT_SPACER_MIN_WIDTH);
     }
     return width;
@@ -247,13 +246,13 @@ export class RenderInfo extends BaseRenderInfo {
 
   override getElemCenterline_(row: Row, elem: Measurable): number {
     if (row.hasStatement && !Types.isSpacer(elem) &&
-      !Types.isStatementInput(elem)) {
+        !Types.isStatementInput(elem)) {
       return row.yPos + this.constants_.EMPTY_STATEMENT_INPUT_HEIGHT / 2;
     }
     if (Types.isInlineInput(elem) && elem instanceof InputConnection) {
       const connectedBlock = elem.connectedBlock;
       if (connectedBlock && connectedBlock.outputConnection &&
-        connectedBlock.nextConnection) {
+          connectedBlock.nextConnection) {
         return row.yPos + connectedBlock.height / 2;
       }
     }
@@ -265,7 +264,7 @@ export class RenderInfo extends BaseRenderInfo {
     // other right, keep track of the right aligned dummy input so we can add
     // padding later.
     if (input.type === inputTypes.DUMMY && activeRow.hasDummyInput &&
-      activeRow.align === Align.LEFT && input.align === Align.RIGHT) {
+        activeRow.align === Align.LEFT && input.align === Align.RIGHT) {
       this.rightAlignedDummyInputs_.set(activeRow, input);
     } else if (input.type === inputTypes.STATEMENT) {
       // Handle statements without next connections correctly.
@@ -289,7 +288,7 @@ export class RenderInfo extends BaseRenderInfo {
           alignmentDivider = elem;
         }
         if (Types.isField(elem) && elem instanceof Field &&
-          elem.parentInput === this.rightAlignedDummyInputs_.get(row)) {
+            elem.parentInput === this.rightAlignedDummyInputs_.get(row)) {
           break;
         }
       }
@@ -309,7 +308,7 @@ export class RenderInfo extends BaseRenderInfo {
    */
   protected adjustXPosition_() {
     const notchTotalWidth =
-      this.constants_.NOTCH_OFFSET_LEFT + this.constants_.NOTCH_WIDTH;
+        this.constants_.NOTCH_OFFSET_LEFT + this.constants_.NOTCH_WIDTH;
     let minXPos = notchTotalWidth;
     // Run through every input row on the block and only apply bump logic to the
     // first input row (if the block has prev connection) and every input row
@@ -320,17 +319,17 @@ export class RenderInfo extends BaseRenderInfo {
       const nextSpacer = this.rows[i + 1] as SpacerRow;
 
       const hasPrevNotch = i === 2 ? !!this.topRow.hasPreviousConnection :
-        !!prevSpacer.followsStatement;
+                                     !!prevSpacer.followsStatement;
       const hasNextNotch = i + 2 >= this.rows.length - 1 ?
-        !!this.bottomRow.hasNextConnection :
-        !!nextSpacer.precedesStatement;
+          !!this.bottomRow.hasNextConnection :
+          !!nextSpacer.precedesStatement;
 
       if (Types.isInputRow(row) && row.hasStatement) {
         row.measure();
         minXPos = row.width - row.getLastInput().width + notchTotalWidth;
       } else if (
-        hasPrevNotch && (i === 2 || hasNextNotch) && Types.isInputRow(row) &&
-        !row.hasStatement) {
+          hasPrevNotch && (i === 2 || hasNextNotch) && Types.isInputRow(row) &&
+          !row.hasStatement) {
         let xCursor = row.xPos;
         let prevInRowSpacer = null;
         for (let j = 0; j < row.elements.length; j++) {
@@ -340,9 +339,9 @@ export class RenderInfo extends BaseRenderInfo {
           }
           if (prevInRowSpacer && (Types.isField(elem) || Types.isInput(elem))) {
             if (xCursor < minXPos &&
-              !(Types.isField(elem) && elem instanceof Field &&
-                (elem.field instanceof FieldLabel ||
-                  elem.field instanceof FieldImage))) {
+                !(Types.isField(elem) && elem instanceof Field &&
+                  (elem.field instanceof FieldLabel ||
+                   elem.field instanceof FieldImage))) {
               const difference = minXPos - xCursor;
               prevInRowSpacer.width += difference;
             }
@@ -366,7 +365,7 @@ export class RenderInfo extends BaseRenderInfo {
     }
     const outputConnectionShape = this.outputConnection.shape;
     if (!('isDynamic' in outputConnectionShape &&
-      outputConnectionShape.isDynamic)) {
+          outputConnectionShape.isDynamic)) {
       return;
     }
 
@@ -381,8 +380,8 @@ export class RenderInfo extends BaseRenderInfo {
 
     // Adjust the height of the output connection.
     const blockHeight = this.bottomRow.hasNextConnection ?
-      this.height - this.bottomRow.descenderHeight :
-      this.height;
+        this.height - this.bottomRow.descenderHeight :
+        this.height;
     const connectionHeight = outputConnectionShape.height(blockHeight);
     const connectionWidth = outputConnectionShape.width(blockHeight);
 
@@ -390,9 +389,9 @@ export class RenderInfo extends BaseRenderInfo {
     this.outputConnection.width = connectionWidth;
     this.outputConnection.startX = connectionWidth;
     this.outputConnection.connectionOffsetY =
-      outputConnectionShape.connectionOffsetY(connectionHeight);
+        outputConnectionShape.connectionOffsetY(connectionHeight);
     this.outputConnection.connectionOffsetX =
-      outputConnectionShape.connectionOffsetX(connectionWidth);
+        outputConnectionShape.connectionOffsetX(connectionWidth);
 
     // Add the right connection measurable.
     // Don't add it if we have a value-to-statement or a value-to-stack block.
@@ -417,7 +416,7 @@ export class RenderInfo extends BaseRenderInfo {
    */
   protected finalizeHorizontalAlignment_() {
     if (!this.outputConnection || this.hasStatementInput ||
-      this.bottomRow.hasNextConnection) {
+        this.bottomRow.hasNextConnection) {
       return;
     }
     let totalNegativeSpacing = 0;
@@ -432,7 +431,7 @@ export class RenderInfo extends BaseRenderInfo {
       let rightNegPadding = this.getNegativeSpacing_(lastElem);
       totalNegativeSpacing = leftNegPadding + rightNegPadding;
       const minBlockWidth =
-        this.constants_.MIN_BLOCK_WIDTH + this.outputConnection.width * 2;
+          this.constants_.MIN_BLOCK_WIDTH + this.outputConnection.width * 2;
       if (this.width - totalNegativeSpacing < minBlockWidth) {
         // Maintain a minimum block width, split negative spacing between left
         // and right edge.
@@ -482,7 +481,7 @@ export class RenderInfo extends BaseRenderInfo {
           const width = this.height / 2 > maxWidth ? maxWidth : this.height / 2;
           const topPadding = this.constants_.SMALL_PADDING;
           const roundPadding =
-            width * (1 - Math.sin(Math.acos((width - topPadding) / width)));
+              width * (1 - Math.sin(Math.acos((width - topPadding) / width)));
           return connectionWidth - roundPadding;
         }
         default:
@@ -492,32 +491,32 @@ export class RenderInfo extends BaseRenderInfo {
     if (Types.isInlineInput(elem) && elem instanceof InputConnection) {
       const connectedBlock = elem.connectedBlock;
       const innerShape = connectedBlock ?
-        (connectedBlock.pathObject as PathObject).outputShapeType :
-        elem.shape.type;
+          (connectedBlock.pathObject as PathObject).outputShapeType :
+          elem.shape.type;
       if (innerShape == null) {
         return 0;
       }
       // Special case for value to stack / value to statement blocks.
       if (connectedBlock && connectedBlock.outputConnection &&
-        (connectedBlock.statementInputCount ||
-          connectedBlock.nextConnection)) {
+          (connectedBlock.statementInputCount ||
+           connectedBlock.nextConnection)) {
         return 0;
       }
       // Special case for hexagonal output.
       if (outerShape === constants.SHAPES.HEXAGONAL &&
-        outerShape !== innerShape) {
+          outerShape !== innerShape) {
         return 0;
       }
       return connectionWidth -
-        this.constants_.SHAPE_IN_SHAPE_PADDING[outerShape][innerShape];
+          this.constants_.SHAPE_IN_SHAPE_PADDING[outerShape][innerShape];
     } else if (Types.isField(elem) && elem instanceof Field) {
       // Special case for text inputs.
       if (outerShape === constants.SHAPES.ROUND &&
-        elem.field instanceof FieldTextInput) {
+          elem.field instanceof FieldTextInput) {
         return connectionWidth - 2.75 * constants.GRID_UNIT;
       }
       return connectionWidth -
-        this.constants_.SHAPE_IN_SHAPE_PADDING[outerShape][0];
+          this.constants_.SHAPE_IN_SHAPE_PADDING[outerShape][0];
     } else if (Types.isIcon(elem)) {
       return this.constants_.SMALL_PADDING;
     }
@@ -542,17 +541,17 @@ export class RenderInfo extends BaseRenderInfo {
 
       const firstRow = i === 2;
       const hasPrevNotch = firstRow ? !!this.topRow.hasPreviousConnection :
-        !!prevSpacer.followsStatement;
+                                      !!prevSpacer.followsStatement;
       const hasNextNotch = i + 2 >= this.rows.length - 1 ?
-        !!this.bottomRow.hasNextConnection :
-        !!nextSpacer.precedesStatement;
+          !!this.bottomRow.hasNextConnection :
+          !!nextSpacer.precedesStatement;
 
       if (hasPrevNotch) {
         const elem = row.elements[1];
         const hasSingleTextOrImageField = row.elements.length === 3 &&
-          elem instanceof Field &&
-          (elem.field instanceof FieldLabel ||
-            elem.field instanceof FieldImage);
+            elem instanceof Field &&
+            (elem.field instanceof FieldLabel ||
+             elem.field instanceof FieldImage);
         if (!firstRow && hasSingleTextOrImageField) {
           // Remove some padding if we have a single image or text field.
           prevSpacer.height -= this.constants_.SMALL_PADDING;
@@ -568,9 +567,9 @@ export class RenderInfo extends BaseRenderInfo {
           for (let j = 0; j < row.elements.length; j++) {
             const elem = row.elements[j];
             if (elem instanceof InputConnection && Types.isInlineInput(elem) &&
-              elem.connectedBlock && !elem.connectedBlock.isShadow() &&
-              elem.connectedBlock.getHeightWidth().height >=
-              minVerticalTightNestingHeight) {
+                elem.connectedBlock && !elem.connectedBlock.isShadow() &&
+                elem.connectedBlock.getHeightWidth().height >=
+                    minVerticalTightNestingHeight) {
               hasNonShadowConnectedBlocks = true;
               break;
             }

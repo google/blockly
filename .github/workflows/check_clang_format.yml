@@ -16,7 +16,7 @@ jobs:
     - uses: DoozyX/clang-format-lint-action@v0.13
       with:
         source: 'core'
-        extensions: 'js'
+        extensions: 'js,ts'
         # This should be as close as possible to the version that the npm
         # package supports. This can be found by running:
         # npx clang-format --version.

@@ -48,7 +48,7 @@ export class SpacerRow extends Row {
     super(constants);
     this.type |= Types.SPACER | Types.BETWEEN_ROW_SPACER;
 
-    this.elements = [new InRowSpacer(this.constants, width)];
+    this.elements = [new InRowSpacer(this.constants_, width)];
   }
 
   override measure() {}

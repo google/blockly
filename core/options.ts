@@ -12,8 +12,7 @@
  * @class
  */
 
-/* eslint-disable-next-line no-unused-vars */
-import { BlocklyOptions } from './blockly_options.js';
+import type {BlocklyOptions} from './blockly_options.js';
 import * as deprecation from './utils/deprecation.js';
 import * as registry from './registry.js';
 import { Theme } from './theme.js';

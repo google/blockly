@@ -321,10 +321,7 @@ function packageLocales() {
   // Remove references to goog.provide and goog.require.
   return gulp.src(`${BUILD_DIR}/msg/js/*.js`)
       .pipe(gulp.replace(/goog\.[^\n]+/g, ''))
-      .pipe(packageUMD(
-        'Blockly.Msg',
-        [{name: 'Blockly'}],
-        'umd-msg.template'))
+      .pipe(packageUMD('Blockly.Msg', [], 'umd-msg.template'))
       .pipe(gulp.dest(`${RELEASE_DIR}/msg`));
 };
 

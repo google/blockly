@@ -397,7 +397,7 @@ export class Mutator extends Icon {
   shouldIgnoreMutatorEvent_(e: Abstract) {
     return e.isUiEvent || e.type === eventUtils.CREATE ||
         e.type === eventUtils.CHANGE &&
-        /** @type {!BlockChange} */ (e).element === 'disabled';
+        (e as BlockChange).element === 'disabled';
   }
 
   /**

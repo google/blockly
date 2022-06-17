@@ -175,7 +175,7 @@ export class ToolboxCategory extends ToolboxItem implements
     Object.assign(
         this.cssConfig_,
         categoryDef['cssconfig'] ||
-        (categoryDef as AnyDuringMigration)['cssConfig']);
+            (categoryDef as AnyDuringMigration)['cssConfig']);
   }
 
   /**

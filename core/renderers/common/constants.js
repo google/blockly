@@ -1255,7 +1255,8 @@ ConstantProvider.prototype.getCSS_ = function(selector) {
 
     // Mass selection highlight.
     selector + ' .blocklyMassSelected {',
-    'outline: dashed 4px #ffcc33;',
+      'outline: dashed 4px #ffcc33;',
+      'outline-offset: 2px',
     '}',
 
     // Connection highlight.

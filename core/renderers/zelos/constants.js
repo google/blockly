@@ -973,6 +973,12 @@ ConstantProvider.prototype.getCSS_ = function(selector) {
     selector + ' .blocklyInsertionMarker>.blocklyPath {',
     'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';', 'stroke: none;',
     '}',
+    // Mass selection highlight.
+    selector + ' .blocklyMassSelected {',
+      'outline: dashed 4px #ffcc33;',
+      'outline-offset: 2px',
+    '}',
+
     /* eslint-enable indent */
   ];
 };

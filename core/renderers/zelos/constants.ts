@@ -342,6 +342,7 @@ export class ConstantProvider extends BaseConstantProvider {
    * Create sizing and path information about a hexagonal shape.
    * @return An object containing sizing and path information about a hexagonal
    *     shape for connections.
+   * @internal
    */
   makeHexagonal(): Shape {
     const maxWidth = this.MAX_DYNAMIC_CONNECTION_SHAPE_WIDTH;
@@ -403,6 +404,7 @@ export class ConstantProvider extends BaseConstantProvider {
    * Create sizing and path information about a rounded shape.
    * @return An object containing sizing and path information about a rounded
    *     shape for connections.
+   * @internal
    */
   makeRounded(): Shape {
     const maxWidth = this.MAX_DYNAMIC_CONNECTION_SHAPE_WIDTH;
@@ -473,6 +475,7 @@ export class ConstantProvider extends BaseConstantProvider {
    * Create sizing and path information about a squared shape.
    * @return An object containing sizing and path information about a squared
    *     shape for connections.
+   * @internal
    */
   makeSquared(): Shape {
     const radius = this.CORNER_RADIUS;

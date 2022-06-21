@@ -430,6 +430,7 @@ export function setGroup(state: boolean|string) {
  * @param block The root block.
  * @return List of block IDs.
  * @alias Blockly.Events.utils.getDescendantIds
+ * @internal
  */
 export function getDescendantIds(block: Block): string[] {
   const ids = [];

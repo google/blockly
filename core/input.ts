@@ -178,6 +178,7 @@ export class Input {
    * Should only be used to collapse/uncollapse a block.
    * @param visible True if visible.
    * @return List of blocks to render.
+   * @internal
    */
   setVisible(visible: boolean): BlockSvg[] {
     // Note: Currently there are only unit tests for block.setCollapsed()

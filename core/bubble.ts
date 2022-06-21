@@ -306,6 +306,7 @@ export class Bubble implements IBubble {
   /**
    * Show the context menu for this bubble.
    * @param _e Mouse event.
+   * @internal
    */
   showContextMenu(_e: Event) {}
   // NOP on bubbles, but used by the bubble dragger to pass events to
@@ -314,6 +315,7 @@ export class Bubble implements IBubble {
   /**
    * Get whether this bubble is deletable or not.
    * @return True if deletable.
+   * @internal
    */
   isDeletable(): boolean {
     return false;
@@ -390,6 +392,7 @@ export class Bubble implements IBubble {
   /**
    * Move this bubble to the top of the stack.
    * @return Whether or not the bubble has been moved.
+   * @internal
    */
   promote(): boolean {
     const svgGroup = this.bubbleGroup_.parentNode;
@@ -622,6 +625,7 @@ export class Bubble implements IBubble {
    * Move the bubble group to the specified location in workspace coordinates.
    * @param x The x position to move to.
    * @param y The y position to move to.
+   * @internal
    */
   moveTo(x: number, y: number) {
     this.bubbleGroup_.setAttribute(
@@ -631,6 +635,7 @@ export class Bubble implements IBubble {
   /**
    * Triggers a move callback if one exists at the end of a drag.
    * @param adding True if adding, false if removing.
+   * @internal
    */
   setDragging(adding: boolean) {
     if (!adding && this.moveCallback_) {
@@ -789,6 +794,7 @@ export class Bubble implements IBubble {
    * @param dragSurface The surface that carries rendered items during a drag,
    *     or null if no drag surface is in use.
    * @param newLoc The location to translate to, in workspace coordinates.
+   * @internal
    */
   moveDuringDrag(dragSurface: BlockDragSurfaceSvg, newLoc: Coordinate) {
     if (dragSurface) {
@@ -823,6 +829,7 @@ export class Bubble implements IBubble {
    * is shown it positions itself to not cover any blocks.  Once a user has
    * dragged it to reposition, it renders where the user put it.
    * @param enable True if auto-layout should be enabled, false otherwise.
+   * @internal
    */
   setAutoLayout(enable: boolean) {
     this.autoLayout_ = enable;
@@ -853,6 +860,7 @@ export class Bubble implements IBubble {
    * Create the text for a non editable bubble.
    * @param text The text to display.
    * @return The top-level node of the text.
+   * @internal
    */
   static textToDom(text: string): SVGTextElement {
     const paragraph = dom.createSvgElement(Svg.TEXT, {
@@ -875,6 +883,7 @@ export class Bubble implements IBubble {
    * @param block The block that the bubble is attached to.
    * @param iconXY The coordinate of the icon.
    * @return The non editable bubble.
+   * @internal
    */
   static createNonEditableBubble(
       paragraphElement: SVGTextElement, block: BlockSvg,

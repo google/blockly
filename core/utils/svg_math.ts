@@ -176,6 +176,7 @@ export function is3dSupported(): boolean {
  * @return An object containing window width, height, and scroll position in
  *     window coordinates.
  * @alias Blockly.utils.svgMath.getViewportBBox
+ * @internal
  */
 export function getViewportBBox(): Rect {
   // Pixels, in window coordinates.

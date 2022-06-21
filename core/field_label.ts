@@ -119,6 +119,7 @@ export class FieldLabel extends Field {
    * @param options A JSON object with options (text, and class).
    * @return The new field instance.
    * @nocollapse
+   * @internal
    */
   static fromJson(options: AnyDuringMigration): FieldLabel {
     const text = parsing.replaceMessageReferences(options['text']);

@@ -421,6 +421,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
   /**
    * Flip the lid open or shut.
    * @param state True if open.
+   * @internal
    */
   setLidOpen(state: boolean) {
     if (this.isLidOpen === state) {

@@ -244,6 +244,7 @@ export class FieldImage extends Field {
    *     flipRtl).
    * @return The new field instance.
    * @nocollapse
+   * @internal
    */
   static fromJson(options: AnyDuringMigration): FieldImage {
     // `this` might be a subclass of FieldImage if that class doesn't override

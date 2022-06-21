@@ -80,6 +80,7 @@ export class Connection implements IASTNodeLocationWithBlock {
    * Connect two connections together.  This is the connection on the superior
    * block.
    * @param childConnection Connection on inferior block.
+   * @internal
    */
   protected connect_(childConnection: Connection) {
     const INPUT = ConnectionType.INPUT_VALUE;
@@ -180,6 +181,7 @@ export class Connection implements IASTNodeLocationWithBlock {
   /**
    * Get the workspace's connection type checker object.
    * @return The connection type checker for the source block's workspace.
+   * @internal
    */
   getConnectionChecker(): IConnectionChecker {
     return this.source.workspace.connectionChecker;
@@ -190,6 +192,7 @@ export class Connection implements IASTNodeLocationWithBlock {
    * headless workspaces).
    * @param _otherConnection Connection that this connection failed to connect
    *     to.
+   * @internal
    */
   onFailedConnect(_otherConnection: Connection) {}
   // NOP
@@ -408,6 +411,7 @@ export class Connection implements IASTNodeLocationWithBlock {
    * computed from the rendered positioning.
    * @param _maxLimit The maximum radius to another connection.
    * @return List of connections.
+   * @internal
    */
   neighbours(_maxLimit: number): Connection[] {
     return [];
@@ -417,6 +421,7 @@ export class Connection implements IASTNodeLocationWithBlock {
    * Get the parent input of a connection.
    * @return The input that the connection belongs to or null if no parent
    *     exists.
+   * @internal
    */
   getParentInput(): Input|null {
     let parentInput = null;
@@ -627,6 +632,7 @@ export class Connection implements IASTNodeLocationWithBlock {
  * Update two connections to target each other.
  * @param first The first connection to update.
  * @param second The second connection to update.
+ * @internal
  */
 function connectReciprocally(first: Connection, second: Connection) {
   if (!first || !second) {

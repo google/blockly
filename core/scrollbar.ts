@@ -137,6 +137,7 @@ export class Scrollbar {
      * The upper left corner of the scrollbar's SVG group in CSS pixels relative
      * to the scrollbar's origin.  This is usually relative to the injection div
      * origin.
+     * @internal
      */
     this.position = new Coordinate(0, 0);
 
@@ -281,6 +282,7 @@ export class Scrollbar {
    * workspace.
    * @param x The new x coordinate.
    * @param y The new y coordinate.
+   * @internal
    */
   setPosition(x: number, y: number) {
     this.position.x = x;
@@ -787,6 +789,7 @@ export class Scrollbar {
   /**
    * Helper to calculate the ratio of handle position to scrollbar view size.
    * @return Ratio.
+   * @internal
    */
   getRatio_(): number {
     const scrollHandleRange = this.scrollbarLength_ - this.handleLength_;

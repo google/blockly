@@ -91,6 +91,7 @@ export class Debug {
    * @param row The row to render.
    * @param cursorY The y position of the top of the row.
    * @param isRtl Whether the block is rendered RTL.
+   * @internal
    */
   drawSpacerRow(row: Row, cursorY: number, isRtl: boolean) {
     if (!Debug.config.rowSpacers) {
@@ -123,6 +124,7 @@ export class Debug {
    * @param elem The spacer to render.
    * @param rowHeight The height of the container row.
    * @param isRtl Whether the block is rendered RTL.
+   * @internal
    */
   drawSpacerElem(elem: InRowSpacer, rowHeight: number, isRtl: boolean) {
     if (!Debug.config.elemSpacers) {
@@ -155,6 +157,7 @@ export class Debug {
    * Draw a debug rectangle for an in-row element.
    * @param elem The element to render.
    * @param isRtl Whether the block is rendered RTL.
+   * @internal
    */
   drawRenderedElem(elem: Measurable, isRtl: boolean) {
     if (Debug.config.elems) {
@@ -208,6 +211,7 @@ export class Debug {
    * @param conn The connection to circle.
    * @suppress {visibility} Suppress visibility of conn.offsetInBlock_ since
    * this is a debug module.
+   * @internal
    */
   drawConnection(conn: RenderedConnection) {
     if (!Debug.config.connections) {
@@ -255,6 +259,7 @@ export class Debug {
    * @param row The non-empty row to render.
    * @param cursorY The y position of the top of the row.
    * @param isRtl Whether the block is rendered RTL.
+   * @internal
    */
   drawRenderedRow(row: Row, cursorY: number, isRtl: boolean) {
     if (!Debug.config.rows) {
@@ -301,6 +306,7 @@ export class Debug {
    * @param row The non-empty row to render.
    * @param cursorY The y position of the top of the row.
    * @param isRtl Whether the block is rendered RTL.
+   * @internal
    */
   drawRowWithElements(row: Row, cursorY: number, isRtl: boolean) {
     for (let i = 0; i < row.elements.length; i++) {
@@ -321,6 +327,7 @@ export class Debug {
   /**
    * Draw a debug rectangle around the entire block.
    * @param info Rendering information about the block to debug.
+   * @internal
    */
   drawBoundingBox(info: RenderInfo) {
     if (!Debug.config.blockBounds) {
@@ -366,6 +373,7 @@ export class Debug {
    * Do all of the work to draw debug information for the whole block.
    * @param block The block to draw debug information for.
    * @param info Rendering information about the block to debug.
+   * @internal
    */
   drawDebug(block: BlockSvg, info: RenderInfo) {
     this.clearElems();
@@ -411,6 +419,7 @@ export class Debug {
   /**
    * Show a debug filter to highlight that a block has been rendered.
    * @param svgPath The block's SVG path.
+   * @internal
    */
   drawRender(svgPath: SVGElement) {
     if (!Debug.config.render) {

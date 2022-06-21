@@ -336,6 +336,7 @@ export function append(
  *     this function will be undo-able by the user. False by default.
  * @return The block that was just appended.
  * @alias Blockly.serialization.blocks.appendInternal
+ * @internal
  */
 export function appendInternal(
     state: State, workspace: Workspace,

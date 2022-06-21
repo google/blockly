@@ -74,6 +74,7 @@ export enum bumpDirection {
  * @param workspace The workspace.
  * @return The suggested start position.
  * @alias Blockly.uiPosition.getStartPositionRect
+ * @internal
  */
 export function getStartPositionRect(
     position: Position, size: Size, horizontalPadding: number,
@@ -121,6 +122,7 @@ export function getStartPositionRect(
  * @param metrics The workspace metrics.
  * @return The suggested corner position.
  * @alias Blockly.uiPosition.getCornerOppositeToolbox
+ * @internal
  */
 export function getCornerOppositeToolbox(
     workspace: WorkspaceSvg, metrics: UiMetrics): Position {
@@ -146,6 +148,7 @@ export function getCornerOppositeToolbox(
  *     elements already placed.
  * @return The suggested position rectangle.
  * @alias Blockly.uiPosition.bumpPositionRect
+ * @internal
  */
 export function bumpPositionRect(
     startRect: Rect, margin: number, bumpDir: bumpDirection,

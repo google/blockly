@@ -42,6 +42,7 @@ export class InputRow extends Row {
 
   /**
    * Inspect all subcomponents and populate all size properties on the row.
+   * @internal
    */
   override measure() {
     this.width = this.minWidth;

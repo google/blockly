@@ -32,6 +32,7 @@ export class RenderInfo extends BaseRenderInfo {
   /**
    * @param renderer The renderer in use.
    * @param block The block to measure.
+   * @internal
    */
   constructor(renderer: Renderer, block: BlockSvg) {
     super(renderer, block);
@@ -40,6 +41,7 @@ export class RenderInfo extends BaseRenderInfo {
   /**
    * Get the block renderer in use.
    * @return The block renderer in use.
+   * @internal
    */
   override getRenderer(): Renderer {
     // AnyDuringMigration because:  Property 'renderer_' does not exist on type

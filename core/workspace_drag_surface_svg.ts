@@ -86,6 +86,7 @@ export class WorkspaceDragSurfaceSvg {
    * Because of this, the drag coordinates must be adjusted by scale.
    * @param x X translation for the entire surface
    * @param y Y translation for the entire surface
+   * @internal
    */
   translateSurface(x: number, y: number) {
     // Make sure the svg exists on a pixel boundary so that it is not fuzzy.
@@ -101,6 +102,7 @@ export class WorkspaceDragSurfaceSvg {
    * Reports the surface translation in scaled workspace coordinates.
    * Use this when finishing a drag to return blocks to the correct position.
    * @return Current translation of the surface
+   * @internal
    */
   getSurfaceTranslation(): Coordinate {
     return svgMath.getRelativeXY((this.SVG_));
@@ -110,6 +112,7 @@ export class WorkspaceDragSurfaceSvg {
    * Move the blockCanvas and bubbleCanvas out of the surface SVG and on to
    * newSurface.
    * @param newSurface The element to put the drag surface contents into.
+   * @internal
    */
   clearAndHide(newSurface: SVGElement) {
     if (!newSurface) {
@@ -159,6 +162,7 @@ export class WorkspaceDragSurfaceSvg {
      * @param width The width of the workspace SVG element.
      * @param height The height of the workspace SVG element.
      * @param scale The scale of the workspace being dragged.
+ * @internal
      */
   setContentsAndShow(
       blockCanvas: SVGElement, bubbleCanvas: SVGElement,

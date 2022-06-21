@@ -93,6 +93,7 @@ export class Mutator extends Icon {
   /**
    * Set the block this mutator is associated with.
    * @param block The block associated with this mutator.
+   * @internal
    */
   setBlock(block: BlockSvg) {
     this.block_ = block;
@@ -102,6 +103,7 @@ export class Mutator extends Icon {
    * Returns the workspace inside this mutator icon's bubble.
    * @return The workspace inside this mutator icon's bubble or null if the
    *     mutator isn't open.
+   * @internal
    */
   getWorkspace(): WorkspaceSvg|null {
     return this.workspace_;

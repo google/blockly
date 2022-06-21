@@ -43,6 +43,7 @@ export class Field extends Measurable {
    * @param constants The rendering constants provider.
    * @param field The field to measure and store information for.
    * @param parentInput The parent input for the field.
+   * @internal
    */
   constructor(
       constants: ConstantProvider, public field: BlocklyField,

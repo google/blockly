@@ -77,6 +77,7 @@ export class BubbleDragger {
   /**
    * Sever all links from this object.
    * @suppress {checkTypes}
+   * @internal
    */
   dispose() {
     // AnyDuringMigration because:  Type 'null' is not assignable to type
@@ -92,6 +93,7 @@ export class BubbleDragger {
 
   /**
    * Start dragging a bubble.  This includes moving it to the drag surface.
+   * @internal
    */
   startBubbleDrag() {
     if (!eventUtils.getGroup()) {
@@ -113,6 +115,7 @@ export class BubbleDragger {
    * @param e The most recent move event.
    * @param currentDragDeltaXY How far the pointer has moved from the position
    *     at the start of the drag, in pixel units.
+   * @internal
    */
   dragBubble(e: Event, currentDragDeltaXY: Coordinate) {
     const delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
@@ -167,6 +170,7 @@ export class BubbleDragger {
    * @param e The mouseup/touchend event.
    * @param currentDragDeltaXY How far the pointer has moved from the position
    *     at the start of the drag, in pixel units.
+   * @internal
    */
   endBubbleDrag(e: Event, currentDragDeltaXY: Coordinate) {
     // Make sure internal state is fresh.

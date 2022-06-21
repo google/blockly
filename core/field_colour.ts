@@ -566,6 +566,7 @@ export class FieldColour extends Field {
    * @param options A JSON object with options (colour).
    * @return The new field instance.
    * @nocollapse
+   * @internal
    */
   static fromJson(options: AnyDuringMigration): FieldColour {
     // `this` might be a subclass of FieldColour if that class doesn't override

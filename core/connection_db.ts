@@ -50,6 +50,7 @@ export class ConnectionDB {
    * Add a connection to the database. Should not already exist in the database.
    * @param connection The connection to be added.
    * @param yPos The y position used to decide where to insert the connection.
+   * @internal
    */
   addConnection(connection: RenderedConnection, yPos: number) {
     const index = this.calculateIndexForYPos_(yPos);

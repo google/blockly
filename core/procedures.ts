@@ -323,6 +323,7 @@ function updateMutatorFlyout(workspace: WorkspaceSvg) {
  * update and adds a mutator change listener to the mutator workspace.
  * @param e The event that triggered this listener.
  * @alias Blockly.Procedures.mutatorOpenListener
+ * @internal
  */
 export function mutatorOpenListener(e: Abstract) {
   if (e.type !== eventUtils.BUBBLE_OPEN) {

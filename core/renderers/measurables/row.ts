@@ -108,6 +108,7 @@ export class Row {
   /**
    * Get the last input on this row, if it has one.
    * @return The last input on the row, or null.
+   * @internal
    */
   getLastInput(): InputConnection {
     // TODO: Consider moving this to InputRow, if possible.
@@ -124,6 +125,7 @@ export class Row {
 
   /**
    * Inspect all subcomponents and populate all size properties on the row.
+   * @internal
    */
   measure() {
     throw Error('Unexpected attempt to measure a base Row.');
@@ -132,6 +134,7 @@ export class Row {
   /**
    * Determines whether this row should start with an element spacer.
    * @return Whether the row should start with a spacer.
+   * @internal
    */
   startsWithElemSpacer(): boolean {
     return true;
@@ -140,6 +143,7 @@ export class Row {
   /**
    * Determines whether this row should end with an element spacer.
    * @return Whether the row should end with a spacer.
+   * @internal
    */
   endsWithElemSpacer(): boolean {
     return true;
@@ -148,6 +152,7 @@ export class Row {
   /**
    * Convenience method to get the first spacer element on this row.
    * @return The first spacer element on this row.
+   * @internal
    */
   getFirstSpacer(): InRowSpacer {
     for (let i = 0; i < this.elements.length; i++) {
@@ -164,6 +169,7 @@ export class Row {
   /**
    * Convenience method to get the last spacer element on this row.
    * @return The last spacer element on this row.
+   * @internal
    */
   getLastSpacer(): InRowSpacer {
     for (let i = this.elements.length - 1; i >= 0; i--) {

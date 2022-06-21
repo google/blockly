@@ -114,6 +114,7 @@ export class MarkerManager {
    * Add the cursor SVG to this workspace SVG group.
    * @param cursorSvg The SVG root of the cursor to be added to the workspace
    *     SVG group.
+   * @internal
    */
   setCursorSvg(cursorSvg: SVGElement|null) {
     if (!cursorSvg) {
@@ -129,6 +130,7 @@ export class MarkerManager {
    * Add the marker SVG to this workspaces SVG group.
    * @param markerSvg The SVG root of the marker to be added to the workspace
    *     SVG group.
+   * @internal
    */
   setMarkerSvg(markerSvg: SVGElement|null) {
     if (!markerSvg) {
@@ -157,6 +159,7 @@ export class MarkerManager {
    * Dispose of the marker manager.
    * Go through and delete all markers associated with this marker manager.
    * @suppress {checkTypes}
+   * @internal
    */
   dispose() {
     const markerIds = Object.keys(this.markers_);

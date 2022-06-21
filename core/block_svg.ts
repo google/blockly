@@ -338,6 +338,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   /**
    * Sets the parent of this block to be a new block or null.
    * @param newParent New parent block.
+   * @internal
    */
   override setParent(newParent: this|null) {
     const oldParent = this.parentBlock_;
@@ -454,6 +455,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * Move this block to its workspace's drag surface, accounting for
    * positioning. Generally should be called at the same time as
    * setDragging_(true). Does nothing if useDragSurface_ is false.
+   * @internal
    */
   moveToDragSurface() {
     if (!this.useDragSurface_) {
@@ -488,6 +490,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * Does nothing if useDragSurface_ is false.
    * @param newXY The position the block should take on on the workspace canvas,
    *     in workspace coordinates.
+   * @internal
    */
   moveOffDragSurface(newXY: Coordinate) {
     if (!this.useDragSurface_) {
@@ -504,6 +507,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * drag surface to translate blocks.
    * This block must be a top-level block.
    * @param newLoc The location to translate to, in workspace coordinates.
+   * @internal
    */
   moveDuringDrag(newLoc: Coordinate) {
     if (this.useDragSurface_) {
@@ -727,6 +731,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   /**
    * Show the context menu for this block.
    * @param e Mouse event.
+   * @internal
    */
   showContextMenu(e: Event) {
     const menuOptions = this.generateContextMenu();
@@ -744,6 +749,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * Also update any attached bubbles.
    * @param dx Horizontal offset from current location, in workspace units.
    * @param dy Vertical offset from current location, in workspace units.
+   * @internal
    */
   moveConnections(dx: number, dy: number) {
     if (!this.rendered) {
@@ -770,6 +776,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * Recursively adds or removes the dragging class to this node and its
    * children.
    * @param adding True if adding, false if removing.
+   * @internal
    */
   setDragging(adding: boolean) {
     if (adding) {
@@ -812,6 +819,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   /**
    * Sets whether this block is a shadow block or not.
    * @param shadow True if a shadow.
+   * @internal
    */
   override setShadow(shadow: boolean) {
     super.setShadow(shadow);
@@ -822,6 +830,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * Set whether this block is an insertion marker block or not.
    * Once set this cannot be unset.
    * @param insertionMarker True if an insertion marker.
+   * @internal
    */
   override setInsertionMarker(insertionMarker: boolean) {
     if (this.isInsertionMarker_ === insertionMarker) {
@@ -940,6 +949,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   /**
    * Encode a block for copying.
    * @return Copy metadata, or null if the block is an insertion marker.
+   * @internal
    */
   toCopyData(): CopyData|null {
     if (this.isInsertionMarker_) {
@@ -977,6 +987,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   /**
    * Updates the color of the block (and children) to match the current disabled
    * state.
+   * @internal
    */
   updateDisabled() {
     const children = (this.getChildren(false));
@@ -1187,6 +1198,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   /**
    * Update the cursor over this block by adding or removing a class.
    * @param enable True if the delete cursor should be shown, false otherwise.
+   * @internal
    */
   setDeleteStyle(enable: boolean) {
     this.pathObject.updateDraggingDelete(enable);
@@ -1250,6 +1262,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * <g> tags do not respect z-index so SVG renders them in the
    * order that they are in the DOM.  By placing this block first within the
    * block group's <g>, it will render on top of any other blocks.
+   * @internal
    */
   bringToFront() {
     let block = this;
@@ -1387,6 +1400,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * tracked_ value to false keeps it from adding itself to the db when it
    * gets its first moveTo call, saving expensive ops for later.
    * @param track If true, start tracking. If false, stop tracking.
+   * @internal
    */
   setConnectionTracking(track: boolean) {
     if (this.previousConnection) {
@@ -1430,6 +1444,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    *     Otherwise, for a non-rendered block return an empty list, and for a
    * collapsed block don't return inputs connections.
    * @return Array of connections.
+   * @internal
    */
   override getConnections_(all: boolean): RenderedConnection[] {
     const myConnections = [];
@@ -1461,6 +1476,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    *     be returned. If false, this will follow shadows to find the last
    *     connection.
    * @return The last next connection on the stack, or null.
+   * @internal
    */
   override lastConnectionInStack(ignoreShadows: boolean): RenderedConnection
       |null {
@@ -1474,6 +1490,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * @param otherBlock The other block to match against.
    * @param conn The other connection to match.
    * @return The matching connection on this block, or null.
+   * @internal
    */
   override getMatchingConnection(otherBlock: Block, conn: Connection):
       RenderedConnection|null {
@@ -1555,6 +1572,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   /**
    * Schedule snapping to grid and bumping neighbours to occur after a brief
    * delay.
+   * @internal
    */
   scheduleSnapAndBump() {
     const block = this;
@@ -1581,6 +1599,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * @param sourceConnection The connection on the moving block's stack.
    * @param targetConnection The connection that should stay stationary as this
    *     block is positioned.
+   * @internal
    */
   positionNearConnection(
       sourceConnection: RenderedConnection,
@@ -1700,6 +1719,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * Add the cursor SVG to this block's SVG group.
    * @param cursorSvg The SVG root of the cursor to be added to the block SVG
    *     group.
+   * @internal
    */
   setCursorSvg(cursorSvg: SVGElement) {
     this.pathObject.setCursorSvg(cursorSvg);
@@ -1709,6 +1729,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * Add the marker SVG to this block's SVG group.
    * @param markerSvg The SVG root of the marker to be added to the block SVG
    *     group.
+   * @internal
    */
   setMarkerSvg(markerSvg: SVGElement) {
     this.pathObject.setMarkerSvg(markerSvg);
@@ -1718,6 +1739,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * Returns a bounding box describing the dimensions of this block
    * and any blocks stacked below it.
    * @return Object with height and width properties in workspace units.
+   * @internal
    */
   getHeightWidth(): {height: number, width: number} {
     let height = this.height;
@@ -1739,6 +1761,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * will be replaced.  If a shadow block, it will disappear.  Otherwise it will
    * bump.
    * @param add True if highlighting should be added.
+   * @internal
    */
   fadeForReplacement(add: boolean) {
     this.pathObject.updateReplacementFade(add);
@@ -1749,6 +1772,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * to this input.
    * @param conn The connection on the input to highlight.
    * @param add True if highlighting should be added.
+   * @internal
    */
   highlightShapeForInput(conn: Connection, add: boolean) {
     this.pathObject.updateShapeForInputHighlight(conn, add);

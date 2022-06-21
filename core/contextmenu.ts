@@ -277,6 +277,7 @@ export function callbackFactory(block: Block, xml: Element): Function {
  * @return A menu option,
  *     containing text, enabled, and a callback.
  * @alias Blockly.ContextMenu.commentDeleteOption
+ * @internal
  */
 export function commentDeleteOption(comment: WorkspaceCommentSvg):
     LegacyContextMenuOption {
@@ -299,6 +300,7 @@ export function commentDeleteOption(comment: WorkspaceCommentSvg):
  * @return A menu option,
  *     containing text, enabled, and a callback.
  * @alias Blockly.ContextMenu.commentDuplicateOption
+ * @internal
  */
 export function commentDuplicateOption(comment: WorkspaceCommentSvg):
     LegacyContextMenuOption {
@@ -321,6 +323,7 @@ export function commentDuplicateOption(comment: WorkspaceCommentSvg):
  * @suppress {strictModuleDepCheck,checkTypes} Suppress checks while workspace
  *     comments are not bundled in.
  * @alias Blockly.ContextMenu.workspaceCommentOption
+ * @internal
  */
 export function workspaceCommentOption(
     ws: WorkspaceSvg, e: Event): ContextMenuOption {

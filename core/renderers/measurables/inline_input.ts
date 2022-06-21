@@ -38,6 +38,7 @@ export class InlineInput extends InputConnection {
   /**
    * @param constants The rendering constants provider.
    * @param input The inline input to measure and store information for.
+   * @internal
    */
   constructor(constants: ConstantProvider, input: Input) {
     super(constants, input);

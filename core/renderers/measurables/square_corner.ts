@@ -33,6 +33,7 @@ export class SquareCorner extends Measurable {
   /**
    * @param constants The rendering constants provider.
    * @param opt_position The position of this corner.
+   * @internal
    */
   constructor(constants: ConstantProvider, opt_position?: string) {
     super(constants);

@@ -29,6 +29,7 @@ export class Drawer extends BaseDrawer {
    * @param block The block to render.
    * @param info An object containing all information needed to render this
    *     block.
+   * @internal
    */
   constructor(block: BlockSvg, info: RenderInfo) {
     super(block, info);

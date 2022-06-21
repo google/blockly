@@ -97,6 +97,7 @@ export class FieldCheckbox extends Field {
   /**
    * Saves this field's value.
    * @return The boolean value held by this field.
+   * @internal
    */
   override saveState(): AnyDuringMigration {
     const legacyState = this.saveLegacyState(FieldCheckbox);
@@ -214,6 +215,7 @@ export class FieldCheckbox extends Field {
    * @param options A JSON object with options (checked).
    * @return The new field instance.
    * @nocollapse
+   * @internal
    */
   static fromJson(options: AnyDuringMigration): FieldCheckbox {
     // `this` might be a subclass of FieldCheckbox if that class doesn't

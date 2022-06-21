@@ -33,6 +33,7 @@ export class InRowSpacer extends Measurable {
   /**
    * @param constants The rendering constants provider.
    * @param width The width of the spacer.
+   * @internal
    */
   constructor(constants: ConstantProvider, width: number) {
     super(constants);

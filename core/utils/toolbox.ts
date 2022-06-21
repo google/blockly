@@ -193,6 +193,7 @@ export enum Position {
  * @param toolboxDef The definition of the toolbox in one of its many forms.
  * @return Object holding information for creating a toolbox.
  * @alias Blockly.utils.toolbox.convertToolboxDefToJson
+ * @internal
  */
 export function convertToolboxDefToJson(toolboxDef: ToolboxDefinition|
                                         null): ToolboxInfo|null {
@@ -240,6 +241,7 @@ function validateToolbox(toolboxJson: ToolboxInfo) {
  * @param flyoutDef The definition of the flyout in one of its many forms.
  * @return A list of flyout items.
  * @alias Blockly.utils.toolbox.convertFlyoutDefToJsonArray
+ * @internal
  */
 export function convertFlyoutDefToJsonArray(flyoutDef: FlyoutDefinition|
                                             null): FlyoutItemInfoArray {
@@ -270,6 +272,7 @@ export function convertFlyoutDefToJsonArray(flyoutDef: FlyoutDefinition|
  * @param toolboxJson Object holding information for creating a toolbox.
  * @return True if the toolbox has categories.
  * @alias Blockly.utils.toolbox.hasCategories
+ * @internal
  */
 export function hasCategories(toolboxJson: ToolboxInfo|null): boolean {
   if (!toolboxJson) {
@@ -292,6 +295,7 @@ export function hasCategories(toolboxJson: ToolboxInfo|null): boolean {
  * @param categoryInfo Object holing information for creating a category.
  * @return True if the category has subcategories.
  * @alias Blockly.utils.toolbox.isCategoryCollapsible
+ * @internal
  */
 export function isCategoryCollapsible(categoryInfo: CategoryInfo): boolean {
   if (!categoryInfo || !(categoryInfo as AnyDuringMigration)['contents']) {

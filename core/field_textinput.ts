@@ -561,6 +561,7 @@ export class FieldTextInput extends Field {
    * @param options A JSON object with options (text, and spellcheck).
    * @return The new field instance.
    * @nocollapse
+   * @internal
    */
   static fromJson(options: AnyDuringMigration): FieldTextInput {
     const text = parsing.replaceMessageReferences(options['text']);

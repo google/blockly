@@ -108,6 +108,7 @@ export class RenderedConnection extends Connection {
   /**
    * Dispose of this connection. Remove it from the database (if it is
    * tracked) and call the super-function to deal with connected blocks.
+   * @internal
    */
   override dispose() {
     super.dispose();
@@ -148,6 +149,7 @@ export class RenderedConnection extends Connection {
    * Move the block(s) belonging to the connection to a point where they don't
    * visually interfere with the specified connection.
    * @param staticConnection The connection to move away from.
+   * @internal
    */
   bumpAwayFrom(staticConnection: RenderedConnection) {
     if (this.sourceBlock_.workspace.isDragging()) {
@@ -241,6 +243,7 @@ export class RenderedConnection extends Connection {
   /**
    * Get the offset of this connection relative to the top left of its block.
    * @return The offset of the connection.
+   * @internal
    */
   getOffsetInBlock(): Coordinate {
     return this.offsetInBlock_;
@@ -248,6 +251,7 @@ export class RenderedConnection extends Connection {
 
   /**
    * Move the blocks on either side of this connection right next to each other.
+   * @internal
    */
   tighten() {
     const dx = this.targetConnection!.x - this.x;
@@ -330,6 +334,7 @@ export class RenderedConnection extends Connection {
   /**
    * Set whether this connections is tracked in the database or not.
    * @param doTracking If true, start tracking. If false, stop tracking.
+   * @internal
    */
   setTracking(doTracking: boolean) {
     if (doTracking &&
@@ -359,6 +364,7 @@ export class RenderedConnection extends Connection {
    * collapsed.
    *
    * Also closes down-stream icons/bubbles.
+   * @internal
    */
   stopTrackingAll() {
     this.setTracking(false);
@@ -428,6 +434,7 @@ export class RenderedConnection extends Connection {
    * attempted connection fails.
    * @param otherConnection Connection that this connection failed to connect
    *     to.
+   * @internal
    */
   override onFailedConnect(otherConnection: Connection) {
     const block = this.getSourceBlock();
@@ -490,6 +497,7 @@ export class RenderedConnection extends Connection {
    * @param maxLimit The maximum radius to another connection, in workspace
    *     units.
    * @return List of connections.
+   * @internal
    */
   override neighbours(maxLimit: number): Connection[] {
     return this.dbOpposite_.getNeighbours(this, maxLimit);

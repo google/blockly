@@ -35,6 +35,7 @@ export class StatementInput extends BaseStatementInput {
   /**
    * @param constants The rendering constants provider.
    * @param input The statement input to measure and store information for.
+   * @internal
    */
   constructor(constants: ConstantProvider, input: Input) {
     super(constants, input);

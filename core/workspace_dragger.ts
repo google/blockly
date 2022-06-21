@@ -49,6 +49,7 @@ export class WorkspaceDragger {
   /**
    * Sever all links from this object.
    * @suppress {checkTypes}
+   * @internal
    */
   dispose() {
     // AnyDuringMigration because:  Type 'null' is not assignable to type
@@ -68,6 +69,7 @@ export class WorkspaceDragger {
    * Finish dragging the workspace and put everything back where it belongs.
    * @param currentDragDeltaXY How far the pointer has moved from the position
    *     at the start of the drag, in pixel coordinates.
+   * @internal
    */
   endDrag(currentDragDeltaXY: Coordinate) {
     // Make sure everything is up to date.
@@ -79,6 +81,7 @@ export class WorkspaceDragger {
    * Move the workspace based on the most recent mouse movements.
    * @param currentDragDeltaXY How far the pointer has moved from the position
    *     at the start of the drag, in pixel coordinates.
+   * @internal
    */
   drag(currentDragDeltaXY: Coordinate) {
     const newXY = Coordinate.sum(this.startScrollXY_, currentDragDeltaXY);

@@ -124,6 +124,7 @@ export class MarkerSvg {
   /**
    * Create the DOM element for the marker.
    * @return The marker controls SVG group.
+   * @internal
    */
   createDom(): SVGElement {
     const className = this.isCursor() ? CURSOR_CLASS : MARKER_CLASS;

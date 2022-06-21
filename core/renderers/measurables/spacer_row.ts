@@ -37,6 +37,7 @@ export class SpacerRow extends Row {
    * @param constants The rendering constants provider.
    * @param height The height of the spacer.
    * @param width The width of the spacer.
+   * @internal
    */
   constructor(
       constants: ConstantProvider, public override height: number,

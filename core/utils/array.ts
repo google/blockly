@@ -16,6 +16,7 @@
  * @param value Value to remove.
  * @return True if an element was removed.
  * @alias Blockly.array.removeElem
+ * @internal
  */
 export function removeElem(
     arr: AnyDuringMigration[], value: AnyDuringMigration): boolean {

@@ -164,6 +164,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * May be called more than once.
    *
    * @param opt_noSelect Text inside text area will be selected if false
+   * @internal
    */
   initSvg(opt_noSelect?: boolean) {
     if (!this.workspace.rendered) {
@@ -203,6 +204,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
   /**
    * Show the context menu for this workspace comment.
    * @param e Mouse event.
+   * @internal
    */
   showContextMenu(e: Event) {
     if (this.workspace.options.readOnly) {
@@ -285,6 +287,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * coordinate system.
    * This does not change with workspace scale.
    * @return Object with .x and .y properties in workspace coordinates.
+   * @internal
    */
   getRelativeToSurfaceXY(): Coordinate {
     let x = 0;
@@ -325,6 +328,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * Move a comment by a relative offset.
    * @param dx Horizontal offset, in workspace units.
    * @param dy Vertical offset, in workspace units.
+   * @internal
    */
   override moveBy(dx: number, dy: number) {
     const event =
@@ -343,6 +347,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * of the block's SVG.
    * @param x The x coordinate of the translation in workspace units.
    * @param y The y coordinate of the translation in workspace units.
+   * @internal
    */
   translate(x: number, y: number) {
     this.xy_ = new Coordinate(x, y);
@@ -354,6 +359,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * Move this comment to its workspace's drag surface, accounting for
    * positioning.  Generally should be called at the same time as
    * setDragging(true).  Does nothing if useDragSurface_ is false.
+   * @internal
    */
   moveToDragSurface() {
     if (!this.useDragSurface_) {
@@ -376,6 +382,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * @param dragSurface The surface that carries rendered items during a drag,
    *     or null if no drag surface is in use.
    * @param newLoc The location to translate to, in workspace coordinates.
+   * @internal
    */
   moveDuringDrag(dragSurface: BlockDragSurfaceSvg, newLoc: Coordinate) {
     if (dragSurface) {
@@ -395,6 +402,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * Move the bubble group to the specified location in workspace coordinates.
    * @param x The x position to move to.
    * @param y The y position to move to.
+   * @internal
    */
   moveTo(x: number, y: number) {
     this.translate(x, y);
@@ -413,6 +421,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * comment.
    * Coordinate system: workspace coordinates.
    * @return Object with coordinates of the bounding box.
+   * @internal
    */
   getBoundingRectangle(): Rect {
     const blockXY = this.getRelativeToSurfaceXY();
@@ -447,6 +456,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
   /**
    * Set whether this comment is movable or not.
    * @param movable True if movable.
+   * @internal
    */
   override setMovable(movable: boolean) {
     super.setMovable(movable);
@@ -468,6 +478,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * Recursively adds or removes the dragging class to this node and its
    * children.
    * @param adding True if adding, false if removing.
+   * @internal
    */
   setDragging(adding: boolean) {
     if (adding) {
@@ -483,6 +494,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
   /**
    * Return the root node of the SVG or null if none exists.
    * @return The root SVG node (probably a group).
+   * @internal
    */
   getSvgRoot(): SVGElement {
     return this.svgGroup_;
@@ -491,6 +503,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
   /**
    * Returns this comment's text.
    * @return Comment text.
+   * @internal
    */
   override getContent(): string {
     return this.textarea_ ? this.textarea_.value : this.content_;
@@ -499,6 +512,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
   /**
    * Set this comment's content.
    * @param content Comment content.
+   * @internal
    */
   override setContent(content: string) {
     super.setContent(content);
@@ -510,6 +524,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
   /**
    * Update the cursor over this comment by adding or removing a class.
    * @param enable True if the delete cursor should be shown, false otherwise.
+   * @internal
    */
   setDeleteStyle(enable: boolean) {
     if (enable) {
@@ -524,6 +539,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * is shown it positions itself to not cover any blocks.  Once a user has
    * dragged it to reposition, it renders where the user put it.
    * @param _enable True if auto-layout should be enabled, false otherwise.
+   * @internal
    */
   setAutoLayout(_enable: boolean) {}
   // NOP for compatibility with the bubble dragger.
@@ -532,6 +548,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * Encode a comment subtree as XML with XY coordinates.
    * @param opt_noId True if the encoder should skip the comment ID.
    * @return Tree of XML elements.
+   * @internal
    */
   override toXmlWithXY(opt_noId?: boolean): Element {
     let width = 0;
@@ -563,6 +580,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
   /**
    * Encode a comment for copying.
    * @return Copy metadata.
+   * @internal
    */
   toCopyData(): CopyData {
     return {
@@ -575,6 +593,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
   /**
    * Returns a bounding box describing the dimensions of this comment.
    * @return Object with height and width properties in workspace units.
+   * @internal
    */
   getHeightWidth(): {height: number, width: number} {
     return {width: this.getWidth(), height: this.getHeight()};
@@ -989,6 +1008,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * @param opt_wsWidth The width of the workspace, which is used to position
    *     comments correctly in RTL.
    * @return The created workspace comment.
+   * @internal
    */
   static fromXmlRendered(
       xmlComment: Element, workspace: WorkspaceSvg,

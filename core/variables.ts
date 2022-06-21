@@ -559,6 +559,7 @@ function createVariable(
  *     after creating the new block, or [] if no new variables were added to the
  *     workspace.
  * @alias Blockly.Variables.getAddedVariables
+ * @internal
  */
 export function getAddedVariables(
     workspace: Workspace, originalVariables: VariableModel[]): VariableModel[] {

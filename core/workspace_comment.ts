@@ -113,6 +113,7 @@ export class WorkspaceComment {
   /**
    * Get comment height.
    * @return Comment height.
+   * @internal
    */
   getHeight(): number {
     return this.height_;
@@ -121,6 +122,7 @@ export class WorkspaceComment {
   /**
    * Set comment height.
    * @param height Comment height.
+   * @internal
    */
   setHeight(height: number) {
     this.height_ = height;
@@ -129,6 +131,7 @@ export class WorkspaceComment {
   /**
    * Get comment width.
    * @return Comment width.
+   * @internal
    */
   getWidth(): number {
     return this.width_;
@@ -137,6 +140,7 @@ export class WorkspaceComment {
   /**
    * Set comment width.
    * @param width comment width.
+   * @internal
    */
   setWidth(width: number) {
     this.width_ = width;
@@ -146,6 +150,7 @@ export class WorkspaceComment {
    * Get stored location.
    * @return The comment's stored location.
    *   This is not valid if the comment is currently being dragged.
+   * @internal
    */
   getXY(): Coordinate {
     return new Coordinate(this.xy_.x, this.xy_.y);
@@ -155,6 +160,7 @@ export class WorkspaceComment {
    * Move a comment by a relative offset.
    * @param dx Horizontal offset, in workspace units.
    * @param dy Vertical offset, in workspace units.
+   * @internal
    */
   moveBy(dx: number, dy: number) {
     const event =
@@ -167,6 +173,7 @@ export class WorkspaceComment {
   /**
    * Get whether this comment is deletable or not.
    * @return True if deletable.
+   * @internal
    */
   isDeletable(): boolean {
     return this.deletable_ &&
@@ -176,6 +183,7 @@ export class WorkspaceComment {
   /**
    * Set whether this comment is deletable or not.
    * @param deletable True if deletable.
+   * @internal
    */
   setDeletable(deletable: boolean) {
     this.deletable_ = deletable;
@@ -184,6 +192,7 @@ export class WorkspaceComment {
   /**
    * Get whether this comment is movable or not.
    * @return True if movable.
+   * @internal
    */
   isMovable(): boolean {
     return this.movable_ &&
@@ -193,6 +202,7 @@ export class WorkspaceComment {
   /**
    * Set whether this comment is movable or not.
    * @param movable True if movable.
+   * @internal
    */
   setMovable(movable: boolean) {
     this.movable_ = movable;
@@ -218,6 +228,7 @@ export class WorkspaceComment {
   /**
    * Returns this comment's text.
    * @return Comment text.
+   * @internal
    */
   getContent(): string {
     return this.content_;
@@ -226,6 +237,7 @@ export class WorkspaceComment {
   /**
    * Set this comment's content.
    * @param content Comment content.
+   * @internal
    */
   setContent(content: string) {
     if (this.content_ !== content) {
@@ -239,6 +251,7 @@ export class WorkspaceComment {
    * Encode a comment subtree as XML with XY coordinates.
    * @param opt_noId True if the encoder should skip the comment ID.
    * @return Tree of XML elements.
+   * @internal
    */
   toXmlWithXY(opt_noId?: boolean): Element {
     const element = this.toXml(opt_noId);
@@ -263,6 +276,7 @@ export class WorkspaceComment {
    * toXmlWithXY().
    * @param opt_noId True if the encoder should skip the comment ID.
    * @return Tree of XML elements.
+   * @internal
    */
   toXml(opt_noId?: boolean): Element {
     const commentElement = xml.createElement('comment');
@@ -277,6 +291,7 @@ export class WorkspaceComment {
    * Fire a create event for the given workspace comment, if comments are
    * enabled.
    * @param comment The comment that was just created.
+   * @internal
    */
   static fireCreateEvent(comment: WorkspaceComment) {
     if (eventUtils.isEnabled()) {
@@ -300,6 +315,7 @@ export class WorkspaceComment {
    * @param xmlComment XML comment element.
    * @param workspace The workspace.
    * @return The created workspace comment.
+   * @internal
    */
   static fromXml(xmlComment: Element, workspace: Workspace): WorkspaceComment {
     const info = WorkspaceComment.parseAttributes(xmlComment);
@@ -327,6 +343,7 @@ export class WorkspaceComment {
    * Decode an XML comment tag and return the results in an object.
    * @param xml XML comment element.
    * @return An object containing the id, size, position, and comment string.
+   * @internal
    */
   static parseAttributes(xml: Element): {
     id: string,

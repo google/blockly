@@ -58,6 +58,7 @@ export class PathObject extends BasePathObject {
    * @param root The root SVG element.
    * @param style The style object to use for colouring.
    * @param constants The renderer's constants.
+   * @internal
    */
   constructor(
       root: SVGElement, style: BlockStyle,
@@ -168,6 +169,7 @@ export class PathObject extends BasePathObject {
    * respective outline path SVG element.
    * @param name The input name.
    * @param pathString The path.
+   * @internal
    */
   setOutlinePath(name: string, pathString: string) {
     const outline = this.getOutlinePath_(name);

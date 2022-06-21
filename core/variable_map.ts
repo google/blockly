@@ -58,6 +58,7 @@ export class VariableMap {
    * Rename the given variable by updating its name in the variable map.
    * @param variable Variable to rename.
    * @param newName New variable name.
+   * @internal
    */
   renameVariable(variable: VariableModel, newName: string) {
     const type = variable.type;
@@ -249,6 +250,7 @@ export class VariableMap {
    * the user for confirmation.
    * @param variable Variable to delete.
    * @param uses An array of uses of the variable.
+   * @internal
    */
   deleteVariableInternal(variable: VariableModel, uses: Block[]) {
     const existingGroup = eventUtils.getGroup();
@@ -329,6 +331,7 @@ export class VariableMap {
    *     different than the workspace stored on this object if the passed in ws
    *     is a flyout workspace.
    * @return List of variable types.
+   * @internal
    */
   getVariableTypes(ws: Workspace|null): string[] {
     const variableMap = {};

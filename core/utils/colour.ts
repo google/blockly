@@ -23,6 +23,7 @@ let hsvSaturation = 0.45;
  * Get the richness of block colours, regardless of the hue.
  * @alias Blockly.utils.colour.getHsvSaturation
  * @return The current richness.
+ * @internal
  */
 export function getHsvSaturation(): number {
   return hsvSaturation;
@@ -33,6 +34,7 @@ export function getHsvSaturation(): number {
  * @param newSaturation The new richness, in the range of  0 (inclusive) to 1
  *     (exclusive)
  * @alias Blockly.utils.colour.setHsvSaturation
+ * @internal
  */
 export function setHsvSaturation(newSaturation: number) {
   hsvSaturation = newSaturation;
@@ -49,6 +51,7 @@ let hsvValue = 0.65;
  * Get the intensity of block colours, regardless of the hue.
  * @alias Blockly.utils.colour.getHsvValue
  * @return The current intensity.
+ * @internal
  */
 export function getHsvValue(): number {
   return hsvValue;
@@ -59,6 +62,7 @@ export function getHsvValue(): number {
  * @param newValue The new intensity, in the range of  0 (inclusive) to 1
  *     (exclusive)
  * @alias Blockly.utils.colour.setHsvValue
+ * @internal
  */
 export function setHsvValue(newValue: number) {
   hsvValue = newValue;

@@ -157,6 +157,7 @@ export class FieldDropdown extends Field {
    * Sets the field's value based on the given XML element. Should only be
    * called by Blockly.Xml.
    * @param fieldElement The element containing info about the field's state.
+   * @internal
    */
   override fromXml(fieldElement: Element) {
     if (this.isOptionListDynamic()) {
@@ -168,6 +169,7 @@ export class FieldDropdown extends Field {
   /**
    * Sets the field's value based on the given state.
    * @param state The state to apply to the dropdown field.
+   * @internal
    */
   override loadState(state: AnyDuringMigration) {
     if (this.loadLegacyState(FieldDropdown, state)) {
@@ -649,6 +651,7 @@ export class FieldDropdown extends Field {
    * @param options A JSON object with options (options).
    * @return The new field instance.
    * @nocollapse
+   * @internal
    */
   static fromJson(options: AnyDuringMigration): FieldDropdown {
     // `this` might be a subclass of FieldDropdown if that class doesn't
@@ -704,6 +707,7 @@ FieldDropdown.ARROW_CHAR = userAgent.ANDROID ? '\u25BC' : '\u25BE';
  * Validates the data structure to be processed as an options list.
  * @param options The proposed dropdown options.
  * @throws {TypeError} If proposed options are incorrectly structured.
+ * @internal
  */
 function validateOptions(options: AnyDuringMigration) {
   if (!Array.isArray(options)) {

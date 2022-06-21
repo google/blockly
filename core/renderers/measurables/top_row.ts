@@ -63,6 +63,7 @@ export class TopRow extends Row {
    * Returns whether or not the top row has a left square corner.
    * @param block The block whose top row this represents.
    * @return Whether or not the top row has a left square corner.
+   * @internal
    */
   hasLeftSquareCorner(block: BlockSvg): boolean {
     const hasHat =

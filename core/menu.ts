@@ -76,6 +76,7 @@ export class Menu {
   /**
    * Add a new menu item to the bottom of this menu.
    * @param menuItem Menu item to append.
+   * @internal
    */
   addChild(menuItem: MenuItem) {
     this.menuItems_.push(menuItem);
@@ -118,6 +119,7 @@ export class Menu {
   /**
    * Gets the menu's element.
    * @return The DOM element.
+   * @internal
    */
   getElement(): Element|null {
     return this.element_;
@@ -148,6 +150,7 @@ export class Menu {
   /**
    * Set the menu accessibility role.
    * @param roleName role name.
+   * @internal
    */
   setRole(roleName: aria.Role) {
     this.roleName_ = roleName;
@@ -219,6 +222,7 @@ export class Menu {
   /**
    * Highlights the given menu item, or clears highlighting if null.
    * @param item Item to highlight, or null.
+   * @internal
    */
   setHighlighted(item: MenuItem|null) {
     const currentHighlighted = this.highlightedItem_;
@@ -241,6 +245,7 @@ export class Menu {
   /**
    * Highlights the next highlightable item (or the first if nothing is
    * currently highlighted).
+   * @internal
    */
   highlightNext() {
     // AnyDuringMigration because:  Argument of type 'MenuItem | null' is not
@@ -253,6 +258,7 @@ export class Menu {
   /**
    * Highlights the previous highlightable item (or the last if nothing is
    * currently highlighted).
+   * @internal
    */
   highlightPrevious() {
     // AnyDuringMigration because:  Argument of type 'MenuItem | null' is not
@@ -427,6 +433,7 @@ export class Menu {
   /**
    * Get the size of a rendered menu.
    * @return Object with width and height properties.
+   * @internal
    */
   getSize(): Size {
     const menuDom = this.getElement();

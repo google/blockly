@@ -343,6 +343,7 @@ function mutatorPropertiesMatch(
  * Calls a function after the page has loaded, possibly immediately.
  * @param fn Function to run.
  * @throws Error Will throw if no global document can be found (e.g., Node.js).
+ * @internal
  */
 export function runAfterPageLoad(fn: () => AnyDuringMigration) {
   if (typeof document !== 'object') {

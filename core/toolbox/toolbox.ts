@@ -348,6 +348,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
   /**
    * Fills the toolbox with new toolbox items and removes any old contents.
    * @param toolboxDef Object holding information for creating a toolbox.
+   * @internal
    */
   render(toolboxDef: toolbox.ToolboxInfo) {
     this.toolboxDef_ = toolboxDef;
@@ -443,6 +444,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
   /**
    * Adds a style on the toolbox. Usually used to change the cursor.
    * @param style The name of the class to add.
+   * @internal
    */
   addStyle(style: string) {
     dom.addClass(this.HtmlDiv as Element, style);
@@ -451,6 +453,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
   /**
    * Removes a style from the toolbox. Usually used to change the cursor.
    * @param style The name of the class to remove.
+   * @internal
    */
   removeStyle(style: string) {
     dom.removeClass(this.HtmlDiv as Element, style);
@@ -702,6 +705,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Updates the category colours and background colour of selected categories.
+   * @internal
    */
   refreshTheme() {
     for (let i = 0; i < this.contents_.length; i++) {

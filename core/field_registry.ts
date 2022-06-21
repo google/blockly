@@ -58,6 +58,7 @@ export function unregister(type: string) {
  * @return The new field instance or null if a field wasn't found with the given
  *     type name
  * @alias Blockly.fieldRegistry.fromJson
+ * @internal
  */
 export function fromJson(options: AnyDuringMigration): Field|null {
   const fieldObject =

@@ -67,6 +67,10 @@ export class MissingConnection extends DeserializationError {
    *     'IF0', or 'next'.
    * @param block The block missing the connection.
    * @param state The state object containing the bad connection.
+   * @internal
+   * @internal
+   * @internal
+   * @internal
    */
   constructor(connection: string, public block: Block, public state: State) {
     super(`The block ${block.toDevString()} is missing a(n) ${connection}

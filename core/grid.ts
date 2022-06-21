@@ -63,6 +63,7 @@ export class Grid {
   /**
    * Dispose of this grid and unlink from the DOM.
    * @suppress {checkTypes}
+   * @internal
    */
   dispose() {
     // AnyDuringMigration because:  Type 'null' is not assignable to type
@@ -73,6 +74,7 @@ export class Grid {
   /**
    * Whether blocks should snap to the grid, based on the initial configuration.
    * @return True if blocks should snap, false otherwise.
+   * @internal
    */
   shouldSnap(): boolean {
     return this.snapToGrid_;
@@ -81,6 +83,7 @@ export class Grid {
   /**
    * Get the spacing of the grid points (in px).
    * @return The spacing of the grid points.
+   * @internal
    */
   getSpacing(): number {
     return this.spacing_;
@@ -90,6 +93,7 @@ export class Grid {
    * Get the ID of the pattern element, which should be randomized to avoid
    * conflicts with other Blockly instances on the page.
    * @return The pattern ID.
+   * @internal
    */
   getPatternId(): string {
     return this.pattern.id;
@@ -98,6 +102,7 @@ export class Grid {
   /**
    * Update the grid with a new scale.
    * @param scale The new workspace scale.
+   * @internal
    */
   update(scale: number) {
     this.scale_ = scale;
@@ -160,6 +165,7 @@ export class Grid {
    * visible.
    * @param x The new x position of the grid (in px).
    * @param y The new y position of the grid (in px).
+   * @internal
    */
   moveTo(x: number, y: number) {
     // AnyDuringMigration because:  Argument of type 'number' is not assignable
@@ -182,6 +188,7 @@ export class Grid {
    * @param gridOptions The object containing grid configuration.
    * @param defs The root SVG element for this workspace's defs.
    * @return The SVG element for the grid pattern.
+   * @internal
    */
   static createDom(
       rnd: string, gridOptions: AnyDuringMigration,

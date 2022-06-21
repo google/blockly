@@ -200,6 +200,7 @@ export class MetricsManager implements IMetricsManager {
   /**
    * Returns whether the scroll area has fixed edges.
    * @return Whether the scroll area has fixed edges.
+   * @internal
    */
   hasFixedEdges(): boolean {
     // This exists for optimization of bump logic.

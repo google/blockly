@@ -193,7 +193,10 @@ export class TouchGesture extends Gesture {
     return this.isMultiTouch_;
   }
 
-  /** Sever all links from this object. */
+  /**
+   * Sever all links from this object.
+   * @internal
+   */
   override dispose() {
     super.dispose();
 

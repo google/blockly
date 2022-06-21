@@ -82,7 +82,10 @@ export class Block implements IASTNodeLocation, IDeletable {
    */
   data: string|null = null;
 
-  /** Has this block been disposed of? */
+  /**
+   * Has this block been disposed of?
+   * @internal
+   */
   disposed = false;
 
   /**
@@ -190,6 +193,9 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @deprecated August 2019. Use getCommentText instead.
    */
   comment: string|Comment|null = null;
+  /**
+   * @internal
+   */
   commentModel: CommentModel;
   private readonly xy_: Coordinate;
   isInFlyout: boolean;
@@ -214,7 +220,10 @@ export class Block implements IASTNodeLocation, IDeletable {
   /** A bound callback function to use when the parent workspace changes. */
   private onchangeWrapper_: ((p1: Abstract) => AnyDuringMigration)|null = null;
 
-  /** A count of statement inputs on the block. */
+  /**
+   * A count of statement inputs on the block.
+   * @internal
+   */
   statementInputCount = 0;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   type!: string;

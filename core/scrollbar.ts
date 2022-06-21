@@ -53,6 +53,7 @@ export class Scrollbar {
 
   /**
    * The ratio of handle position offset to workspace content displacement.
+   * @internal
    */
   ratio = 1;
   private origin_: Coordinate;

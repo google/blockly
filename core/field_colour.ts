@@ -184,7 +184,10 @@ export class FieldColour extends Field {
     }
   }
 
-  /** Create the block UI for this colour field. */
+  /**
+   * Create the block UI for this colour field.
+   * @internal
+   */
   override initView() {
     this.size_ = new Size(
         this.getConstants()!.FIELD_COLOUR_DEFAULT_WIDTH,

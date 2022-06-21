@@ -139,9 +139,10 @@ export class Bubble implements IBubble {
   /**
    * Describes whether this bubble has been disposed of (nodes and event
    * listeners removed from the page) or not.
+   * @internal
    */
   disposed = false;
-  arrow_radians_: AnyDuringMigration;
+  private arrow_radians_: AnyDuringMigration;
 
   /**
    * @param workspace The workspace on which to draw the bubble.

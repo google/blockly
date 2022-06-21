@@ -749,7 +749,10 @@ export class Workspace implements IASTNodeLocation {
     return this.potentialVariableMap_;
   }
 
-  /** Create and store the potential variable map for this workspace. */
+  /**
+   * Create and store the potential variable map for this workspace.
+   * @internal
+   */
   createPotentialVariableMap() {
     this.potentialVariableMap_ = new VariableMap(this);
   }

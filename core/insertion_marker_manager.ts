@@ -165,7 +165,10 @@ export class InsertionMarkerManager {
     this.availableConnections_ = this.initAvailableConnections_();
   }
 
-  /** Sever all links from this object. */
+  /**
+   * Sever all links from this object.
+   * @internal
+   */
   dispose() {
     this.availableConnections_.length = 0;
 

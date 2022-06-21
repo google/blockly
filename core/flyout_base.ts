@@ -148,6 +148,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   RTL: boolean;
   /**
    * Whether the flyout should be laid out horizontally or not.
+   * @internal
    */
   horizontalLayout: boolean = false;
   protected toolboxPosition_: number;
@@ -952,6 +953,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
    * @param block The block to copy from the flyout.
    * @return True if you can create a new instance of the block, false
    *    otherwise.
+   * @internal
    */
   isBlockCreatable(block: BlockSvg): boolean {
     return block.isEnabled();

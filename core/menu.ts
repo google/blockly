@@ -125,7 +125,10 @@ export class Menu {
     return this.element_;
   }
 
-  /** Focus the menu element. */
+  /**
+   * Focus the menu element.
+   * @internal
+   */
   focus() {
     const el = this.getElement();
     if (el) {

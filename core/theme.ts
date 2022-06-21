@@ -23,14 +23,19 @@ import * as object from './utils/object.js';
  * @alias Blockly.Theme
  */
 export class Theme {
+  /** @internal */
   blockStyles: {[key: string]: BlockStyle};
+  /** @internal */
   categoryStyles: {[key: string]: CategoryStyle};
+  /** @internal */
   componentStyles: ComponentStyle;
+  /** @internal */
   fontStyle: FontStyle;
 
   /**
    * Whether or not to add a 'hat' on top of all blocks with no previous or
    * output connections.
+   * @internal
    */
   startHats: boolean|null = null;
 

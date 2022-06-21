@@ -87,11 +87,13 @@ export class FieldDropdown extends Field {
 
   /**
    * The prefix field label, of common words set after options are trimmed.
+   * @internal
    */
   override prefixField: string|null = null;
 
   /**
    * The suffix field label, of common words set after options are trimmed.
+   * @internal
    */
   override suffixField: string|null = null;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
@@ -181,7 +183,10 @@ export class FieldDropdown extends Field {
     this.setValue(state);
   }
 
-  /** Create the block UI for this dropdown. */
+  /**
+   * Create the block UI for this dropdown.
+   * @internal
+   */
   override initView() {
     if (this.shouldAddBorderRect_()) {
       this.createBorderRect_();
@@ -483,7 +488,10 @@ export class FieldDropdown extends Field {
     }
   }
 
-  /** Updates the dropdown arrow to match the colour/style of the block. */
+  /**
+   * Updates the dropdown arrow to match the colour/style of the block.
+   * @internal
+   */
   override applyColour() {
     const style = (this.sourceBlock_ as BlockSvg).style;
     if (this.borderRect_) {

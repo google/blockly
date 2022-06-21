@@ -61,6 +61,7 @@ export class FieldLabelSerializable extends FieldLabel {
    * @param options A JSON object with options (text, and class).
    * @return The new field instance.
    * @nocollapse
+   * @internal
    */
   static override fromJson(options: AnyDuringMigration):
       FieldLabelSerializable {

@@ -261,6 +261,7 @@ function deleteNext_(deleteList: BlockSvg[], eventGroup: string) {
 /**
  * Option to delete all blocks.
  * @alias Blockly.ContextMenuItems.registerDeleteAll
+ * @internal
  */
 export function registerDeleteAll() {
   // AnyDuringMigration because:  Type '(scope: Scope) => string | undefined' is

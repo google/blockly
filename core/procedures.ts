@@ -349,6 +349,7 @@ export function mutatorOpenListener(e: Abstract) {
  * Listens for changes in a procedure mutator and triggers flyout updates when
  * necessary.
  * @param e The event that triggered this listener.
+ * @internal
  */
 function mutatorChangeListener(e: Abstract) {
   if (e.type !== eventUtils.BLOCK_CREATE &&

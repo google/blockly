@@ -57,7 +57,10 @@ export class WorkspaceDragger {
     this.workspace = null as AnyDuringMigration;
   }
 
-  /** Start dragging the workspace. */
+  /**
+   * Start dragging the workspace.
+   * @internal
+   */
   startDrag() {
     if (common.getSelected()) {
       common.getSelected()!.unselect();

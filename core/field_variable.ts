@@ -475,6 +475,7 @@ export class FieldVariable extends FieldDropdown {
    *     defaultType).
    * @return The new field instance.
    * @nocollapse
+   * @internal
    */
   static override fromJson(options: AnyDuringMigration): FieldVariable {
     const varName = parsing.replaceMessageReferences(options['variable']);

@@ -74,7 +74,10 @@ export class FieldLabel extends Field {
     this.class_ = config['class'];
   }
 
-  /** Create block UI for this label. */
+  /**
+   * Create block UI for this label.
+   * @internal
+   */
   override initView() {
     this.createTextElement_();
     if (this.class_) {

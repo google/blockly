@@ -140,7 +140,10 @@ export class FieldImage extends Field {
     this.altText_ = parsing.replaceMessageReferences(config['alt']) || '';
   }
 
-  /** Create the block UI for this image. */
+  /**
+   * Create the block UI for this image.
+   * @internal
+   */
   override initView() {
     this.imageElement_ = dom.createSvgElement(
         Svg.IMAGE, {

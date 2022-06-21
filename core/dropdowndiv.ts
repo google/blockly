@@ -116,7 +116,10 @@ export interface PositionMetrics {
   arrowVisible: boolean;
 }
 
-/** Create and insert the DOM element for this div. */
+/**
+ * Create and insert the DOM element for this div.
+ * @internal
+ */
 export function createDom() {
   if (div) {
     return;

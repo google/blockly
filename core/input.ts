@@ -209,7 +209,10 @@ export class Input {
     return renderList;
   }
 
-  /** Mark all fields on this input as dirty. */
+  /**
+   * Mark all fields on this input as dirty.
+   * @internal
+   */
   markDirty() {
     for (let y = 0, field; field = this.fieldRow[y]; y++) {
       field.markDirty();

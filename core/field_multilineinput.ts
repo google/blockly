@@ -138,7 +138,10 @@ export class FieldMultilineInput extends FieldTextInput {
     this.setValue(state);
   }
 
-  /** Create the block UI for this field. */
+  /**
+   * Create the block UI for this field.
+   * @internal
+   */
   override initView() {
     this.createBorderRect_();
     this.textGroup_ = dom.createSvgElement(
@@ -417,6 +420,7 @@ export class FieldMultilineInput extends FieldTextInput {
    * @param options A JSON object with options (text, and spellcheck).
    * @return The new field instance.
    * @nocollapse
+   * @internal
    */
   static override fromJson(options: AnyDuringMigration): FieldMultilineInput {
     const text = parsing.replaceMessageReferences(options['text']);

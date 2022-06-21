@@ -135,7 +135,10 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     this.render();
   }
 
-  /** Dispose of this comment. */
+  /**
+   * Dispose of this comment.
+   * @internal
+   */
   override dispose() {
     if (this.disposed_) {
       return;
@@ -222,7 +225,10 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     ContextMenu.show(e, menuOptions, this.RTL);
   }
 
-  /** Select this comment.  Highlight it visually. */
+  /**
+   * Select this comment.  Highlight it visually.
+   * @internal
+   */
   select() {
     if (common.getSelected() === this) {
       return;
@@ -245,7 +251,10 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     this.addSelect();
   }
 
-  /** Unselect this comment.  Remove its highlighting. */
+  /**
+   * Unselect this comment.  Remove its highlighting.
+   * @internal
+   */
   unselect() {
     if (common.getSelected() !== this) {
       return;
@@ -258,24 +267,36 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     this.blurFocus();
   }
 
-  /** Select this comment.  Highlight it visually. */
+  /**
+   * Select this comment.  Highlight it visually.
+   * @internal
+   */
   addSelect() {
     dom.addClass(this.svgGroup_ as Element, 'blocklySelected');
     this.setFocus();
   }
 
-  /** Unselect this comment.  Remove its highlighting. */
+  /**
+   * Unselect this comment.  Remove its highlighting.
+   * @internal
+   */
   removeSelect() {
     dom.removeClass(this.svgGroup_ as Element, 'blocklySelected');
     this.blurFocus();
   }
 
-  /** Focus this comment.  Highlight it visually. */
+  /**
+   * Focus this comment.  Highlight it visually.
+   * @internal
+   */
   addFocus() {
     dom.addClass(this.svgGroup_ as Element, 'blocklyFocused');
   }
 
-  /** Unfocus this comment.  Remove its highlighting. */
+  /**
+   * Unfocus this comment.  Remove its highlighting.
+   * @internal
+   */
   removeFocus() {
     dom.removeClass(this.svgGroup_ as Element, 'blocklyFocused');
   }
@@ -444,7 +465,10 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     return new Rect(top, bottom, left, right);
   }
 
-  /** Add or remove the UI indicating if this comment is movable or not. */
+  /**
+   * Add or remove the UI indicating if this comment is movable or not.
+   * @internal
+   */
   updateMovable() {
     if (this.isMovable()) {
       dom.addClass(this.svgGroup_ as Element, 'blocklyDraggable');
@@ -599,7 +623,10 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     return {width: this.getWidth(), height: this.getHeight()};
   }
 
-  /** Renders the workspace comment. */
+  /**
+   * Renders the workspace comment.
+   * @internal
+   */
   render() {
     if (this.rendered_) {
       return;
@@ -960,7 +987,10 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     this.disposed_ = true;
   }
 
-  /** Set the focus on the text area. */
+  /**
+   * Set the focus on the text area.
+   * @internal
+   */
   setFocus() {
     const comment = this;
     this.focused_ = true;
@@ -980,7 +1010,10 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     }, 0);
   }
 
-  /** Remove focus from the text area. */
+  /**
+   * Remove focus from the text area.
+   * @internal
+   */
   blurFocus() {
     const comment = this;
     this.focused_ = false;

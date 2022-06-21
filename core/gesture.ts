@@ -192,7 +192,10 @@ export class Gesture {
     this.healStack_ = !internalConstants.DRAG_STACK;
   }
 
-  /** Sever all links from this object. */
+  /**
+   * Sever all links from this object.
+   * @internal
+   */
   dispose() {
     Touch.clearTouchIdentifier();
     Tooltip.unblock();

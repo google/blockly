@@ -146,7 +146,10 @@ export abstract class Field implements IASTNodeLocationSvg,
   // 'ConstantProvider'.
   protected constants_: ConstantProvider = null as AnyDuringMigration;
 
-  /** Has this field been disposed of? */
+  /**
+   * Has this field been disposed of?
+   * @internal
+   */
   disposed = false;
 
   /** Maximum characters of text to display before adding an ellipsis. */
@@ -172,10 +175,16 @@ export abstract class Field implements IASTNodeLocationSvg,
   // 'Element'.
   protected clickTarget_: Element = null as AnyDuringMigration;
 
-  /** The prefix field. */
+  /**
+   * The prefix field.
+   * @internal
+   */
   prefixField: string|null = null;
 
-  /** The suffix field. */
+  /**
+   * The suffix field.
+   * @internal
+   */
   suffixField: string|null = null;
 
   /**
@@ -304,7 +313,10 @@ export abstract class Field implements IASTNodeLocationSvg,
     this.initModel();
   }
 
-  /** Create the block UI for this field. */
+  /**
+   * Create the block UI for this field.
+   * @internal
+   */
   initView() {
     this.createBorderRect_();
     this.createTextElement_();

@@ -107,7 +107,10 @@ export class FieldCheckbox extends Field {
     return this.getValueBoolean();
   }
 
-  /** Create the block UI for this checkbox. */
+  /**
+   * Create the block UI for this checkbox.
+   * @internal
+   */
   override initView() {
     super.initView();
 

@@ -269,7 +269,10 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   // 'IToolbox'.
   private toolbox_: IToolbox = null as AnyDuringMigration;
 
-  /** The current gesture in progress on this workspace, if any. */
+  /**
+   * The current gesture in progress on this workspace, if any.
+   * @internal
+   */
   // AnyDuringMigration because:  Type 'null' is not assignable to type
   // 'TouchGesture'.
   currentGesture_: TouchGesture = null as AnyDuringMigration;
@@ -329,6 +332,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * In a flyout, the target workspace where blocks should be placed after a
    * drag. Otherwise null.
+   * @internal
    */
   // AnyDuringMigration because:  Type 'null' is not assignable to type
   // 'WorkspaceSvg'.
@@ -340,7 +344,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /** Inverted screen CTM is dirty, recalculate it. */
   private inverseScreenCTMDirty_ = true;
   private metricsManager_: IMetricsManager;
+  /** @internal */
   getMetrics: () => Metrics;
+  /** @internal */
   setMetrics: (p1: {x: number, y: number}) => void;
   private readonly componentManager_: ComponentManager;
 
@@ -603,7 +609,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     this.themeManager_.setTheme(theme);
   }
 
-  /** Refresh all blocks on the workspace after a theme update. */
+  /**
+   * Refresh all blocks on the workspace after a theme update.
+   */
   refreshTheme() {
     if (this.svgGroup_) {
       this.renderer_.refreshDom(this.svgGroup_, this.getTheme());
@@ -960,14 +968,20 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     }
   }
 
-  /** Add a trashcan. */
+  /**
+   * Add a trashcan.
+   * @internal
+   */
   addTrashcan() {
     this.trashcan = new Trashcan(this);
     const svgTrashcan = this.trashcan.createDom();
     this.svgGroup_.insertBefore(svgTrashcan, this.svgBlockCanvas_);
   }
 
-  /** Add zoom controls. */
+  /**
+   * Add zoom controls.
+   * @internal
+   */
   addZoomControls() {
     this.zoomControls_ = new ZoomControls(this);
     const svgZoomControls = this.zoomControls_.createDom();
@@ -1578,7 +1592,10 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     return comment;
   }
 
-  /** Refresh the toolbox unless there's a drag in progress. */
+  /**
+   * Refresh the toolbox unless there's a drag in progress.
+   * @internal
+   */
   refreshToolboxSelection() {
     const ws = this.isFlyout ? this.targetWorkspace : this;
     if (ws && !ws.currentGesture_ && ws.toolbox_ && ws.toolbox_.getFlyout()) {
@@ -2143,7 +2160,10 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     dom.addClass((this.svgBubbleCanvas_), 'blocklyCanvasTransitioning');
   }
 
-  /** Remove transition class from the block and bubble canvas. */
+  /**
+   * Remove transition class from the block and bubble canvas.
+   * @internal
+   */
   endCanvasTransition() {
     dom.removeClass((this.svgBlockCanvas_), 'blocklyCanvasTransitioning');
     dom.removeClass((this.svgBubbleCanvas_), 'blocklyCanvasTransitioning');
@@ -2554,14 +2574,20 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     return null;
   }
 
-  /** Clear the reference to the current gesture. */
+  /**
+   * Clear the reference to the current gesture.
+   * @internal
+   */
   clearGesture() {
     // AnyDuringMigration because:  Type 'null' is not assignable to type
     // 'TouchGesture'.
     this.currentGesture_ = null as AnyDuringMigration;
   }
 
-  /** Cancel the current gesture, if one exists. */
+  /**
+   * Cancel the current gesture, if one exists.
+   * @internal
+   */
   cancelCurrentGesture() {
     if (this.currentGesture_) {
       this.currentGesture_.cancel();

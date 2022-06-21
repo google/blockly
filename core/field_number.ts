@@ -297,6 +297,7 @@ export class FieldNumber extends FieldTextInput {
    * @param options A JSON object with options (value, min, max, and precision).
    * @return The new field instance.
    * @nocollapse
+   * @internal
    */
   static override fromJson(options: AnyDuringMigration): FieldNumber {
     // `this` might be a subclass of FieldNumber if that class doesn't override

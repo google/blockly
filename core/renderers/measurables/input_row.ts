@@ -34,7 +34,10 @@ export class InputRow extends Row {
   /** The total width of all blocks connected to this row. */
   connectedBlockWidths = 0;
 
-  /** @param constants The rendering constants provider. */
+  /**
+   * @param constants The rendering constants provider.
+   * @internal
+   */
   constructor(constants: ConstantProvider) {
     super(constants);
     this.type |= Types.INPUT_ROW;

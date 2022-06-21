@@ -73,7 +73,10 @@ export class ConstantProvider extends BaseConstantProvider {
 
   override CURSOR_COLOUR = '#ffa200';
 
-  /** Radius of the cursor for input and output connections. */
+  /**
+   * Radius of the cursor for input and output connections.
+   * @internal
+   */
   CURSOR_RADIUS = 5;
 
   override JAGGED_TEETH_HEIGHT = 0;
@@ -169,6 +172,7 @@ export class ConstantProvider extends BaseConstantProvider {
    */
   SQUARED: Shape|null = null;
 
+  /** @internal */
   constructor() {
     super();
 

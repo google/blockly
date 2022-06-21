@@ -105,6 +105,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * An property used internally to reference the block's rendering debugger.
+   * @internal
    */
   renderingDebugger: BlockRenderingDebug|null = null;
 
@@ -140,6 +141,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   // Create core elements for the block.
   private svgGroup_: SVGGElement;
   style: BlockStyle;
+  /** @internal */
   pathObject: IPathObject;
   override rendered = false;
 
@@ -696,7 +698,10 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     }
   }
 
-  /** Load the block's help page in a new window. */
+  /**
+   * Load the block's help page in a new window.
+   * @internal
+   */
   showHelp() {
     const url =
         typeof this.helpUrl === 'function' ? this.helpUrl() : this.helpUrl;
@@ -968,7 +973,10 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     };
   }
 
-  /** Updates the colour of the block to match the block's state. */
+  /**
+   * Updates the colour of the block to match the block's state.
+   * @internal
+   */
   applyColour() {
     this.pathObject.applyColour(this);
 
@@ -1615,7 +1623,10 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     }
   }
 
-  /** @return The first statement connection or null. */
+  /**
+   * @return The first statement connection or null.
+   * @internal
+   */
   override getFirstStatementConnection(): RenderedConnection|null {
     return super.getFirstStatementConnection() as RenderedConnection | null;
   }

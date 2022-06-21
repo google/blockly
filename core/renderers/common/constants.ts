@@ -377,8 +377,10 @@ export class ConstantProvider {
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   OUTSIDE_CORNERS!: OutsideCorners;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
+  /** @internal */
   blockStyles!: {[key: string]: BlockStyle};
 
+  /** @internal */
   constructor() {
     /**
      * Offset from the top of the row for placing fields on inline input rows
@@ -458,6 +460,7 @@ export class ConstantProvider {
     /**
      * A random identifier used to ensure a unique ID is used for each
      * filter/pattern for the case of multiple Blockly instances on a page.
+     * @internal
      */
     this.randomIdentifier = String(Math.random()).substring(2);
   }

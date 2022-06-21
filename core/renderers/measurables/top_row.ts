@@ -52,7 +52,10 @@ export class TopRow extends Row {
   connection: PreviousConnection|null = null;
   override widthWithConnectedBlocks: AnyDuringMigration;
 
-  /** @param constants The rendering constants provider. */
+  /**
+   * @param constants The rendering constants provider.
+   * @internal
+   */
   constructor(constants: ConstantProvider) {
     super(constants);
 

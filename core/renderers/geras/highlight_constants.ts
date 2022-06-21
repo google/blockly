@@ -84,7 +84,10 @@ export class HighlightConstantProvider {
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   START_HAT!: StartHat;
 
-  /** @param constants The rendering constants provider. */
+  /**
+   * @param constants The rendering constants provider.
+   * @internal
+   */
   constructor(constants: ConstantProvider) {
     /** The renderer's constant provider. */
     this.constantProvider = constants;

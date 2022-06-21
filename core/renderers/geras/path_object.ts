@@ -33,10 +33,15 @@ import {ConstantProvider} from './constants.js';
  * @alias Blockly.geras.PathObject
  */
 export class PathObject extends BasePathObject {
+  /** @internal */
   svgPathDark: SVGElement;
+  /** @internal */
   svgPathLight: SVGElement;
 
-  /** The colour of the dark path on the block in '#RRGGBB' format. */
+  /**
+   * The colour of the dark path on the block in '#RRGGBB' format.
+   * @internal
+   */
   colourDark = '#000000';
   override style: AnyDuringMigration;
 
@@ -64,6 +69,7 @@ export class PathObject extends BasePathObject {
         Svg.PATH, {'class': 'blocklyPathLight'}, this.svgRoot);
   }
 
+  /** @internal */
   override setPath(mainPath: string) {
     this.svgPath.setAttribute('d', mainPath);
     this.svgPathDark.setAttribute('d', mainPath);

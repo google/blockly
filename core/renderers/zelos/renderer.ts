@@ -45,7 +45,10 @@ import {PathObject} from './path_object.js';
 export class Renderer extends BaseRenderer {
   protected override constants_!: ConstantProvider;
 
-  /** @param name The renderer name. */
+  /**
+   * @param name The renderer name.
+   * @internal
+   */
   constructor(name: string) {
     super(name);
   }

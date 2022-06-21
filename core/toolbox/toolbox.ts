@@ -679,7 +679,10 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
     this.flyout_!.position();
   }
 
-  /** Handles resizing the toolbox when a toolbox item resizes. */
+  /**
+   * Handles resizing the toolbox when a toolbox item resizes.
+   * @internal
+   */
   handleToolboxItemResize() {
     // Reposition the workspace so that (0,0) is in the correct position
     // relative to the new absolute edge (ie toolbox edge).

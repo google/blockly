@@ -73,10 +73,16 @@ export class Debug {
 
   private randomColour_ = '';
 
-  /** @param constants The renderer's constants. */
+  /**
+   * @param constants The renderer's constants.
+   * @internal
+   */
   constructor(private readonly constants: ConstantProvider) {}
 
-  /** Remove all elements the this object created on the last pass. */
+  /**
+   * Remove all elements the this object created on the last pass.
+   * @internal
+   */
   clearElems() {
     for (let i = 0; i < this.debugElements_.length; i++) {
       const elem = this.debugElements_[i];

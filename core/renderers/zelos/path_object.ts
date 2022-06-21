@@ -54,6 +54,9 @@ export class PathObject extends BasePathObject {
    */
   outputShapeType = null;
 
+  /** @internal */
+  public override constants: ConstantProvider;
+
   /**
    * @param root The root SVG element.
    * @param style The style object to use for colouring.
@@ -62,13 +65,16 @@ export class PathObject extends BasePathObject {
    */
   constructor(
       root: SVGElement, style: BlockStyle,
-      public override constants: ConstantProvider) {
+      constants: ConstantProvider) {
     super(root, style, constants);
+
+    this.constants = constants;
 
     /** The outline paths on the block. */
     this.outlines_ = Object.create(null);
   }
 
+  /** @internal */
   override setPath(pathString: string) {
     super.setPath(pathString);
     if (this.svgPathSelected_) {
@@ -90,6 +96,7 @@ export class PathObject extends BasePathObject {
     }
   }
 
+  /** @internal */
   override flipRTL() {
     super.flipRTL();
     // Mirror each input outline path.
@@ -140,7 +147,10 @@ export class PathObject extends BasePathObject {
     }
   }
 
-  /** Method that's called when the drawer is about to draw the block. */
+  /**
+   * Method that's called when the drawer is about to draw the block.
+   * @internal
+   */
   beginDrawing() {
     this.remainingOutlines_ = Object.create(null);
     for (const key in this.outlines_) {
@@ -150,7 +160,10 @@ export class PathObject extends BasePathObject {
     }
   }
 
-  /** Method that's called when the drawer is done drawing. */
+  /**
+   * Method that's called when the drawer is done drawing.
+   * @internal
+   */
   endDrawing() {
     // Go through all remaining outlines that were not used this draw pass, and
     // remove them.

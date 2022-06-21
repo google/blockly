@@ -41,7 +41,10 @@ export class Renderer extends BaseRenderer {
   private highlightConstants_: HighlightConstantProvider =
       null as AnyDuringMigration;
 
-  /** @param name The renderer name. */
+  /**
+   * @param name The renderer name.
+   * @internal
+   */
   constructor(name: string) {
     super(name);
   }

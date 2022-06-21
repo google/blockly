@@ -89,7 +89,10 @@ export class Marker {
     }
   }
 
-  /** Redraw the current marker. */
+  /**
+   * Redraw the current marker.
+   * @internal
+   */
   draw() {
     if (this.drawer_) {
       this.drawer_.draw(this.curNode_, this.curNode_);

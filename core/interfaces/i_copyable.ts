@@ -25,6 +25,7 @@ export interface ICopyable extends ISelectable {
   /**
    * Encode for copying.
    * @return Copy metadata.
+   * @internal
    */
   toCopyData: AnyDuringMigration;
 }

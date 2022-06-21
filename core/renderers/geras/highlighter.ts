@@ -233,7 +233,10 @@ export class Highlighter {
     }
   }
 
-  /** Draw the highlight on the left side of the block. */
+  /**
+   * Draw the highlight on the left side of the block.
+   * @internal
+   */
   drawLeft() {
     const outputConnection = this.info_.outputConnection;
     if (outputConnection) {

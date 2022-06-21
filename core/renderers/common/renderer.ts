@@ -51,7 +51,10 @@ export class Renderer implements IRegistrable {
   /** Rendering constant overrides, passed in through options. */
   overrides: object|null = null;
 
-  /** @param name The renderer name. */
+  /**
+   * @param name The renderer name.
+   * @internal
+   */
   constructor(public name: string) {}
 
   /**

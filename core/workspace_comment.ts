@@ -49,6 +49,7 @@ export class WorkspaceComment {
 
   /** Whether this comment has been disposed. */
   protected disposed_ = false;
+  /** @internal */
   isComment = true;
 
   /**
@@ -93,7 +94,10 @@ export class WorkspaceComment {
     WorkspaceComment.fireCreateEvent(this);
   }
 
-  /** Dispose of this comment. */
+  /**
+   * Dispose of this comment.
+   * @internal
+   */
   dispose() {
     if (this.disposed_) {
       return;

@@ -227,7 +227,10 @@ export class RenderInfo {
     this.rows.push(this.bottomRow);
   }
 
-  /** Create all non-spacer elements that belong on the top row. */
+  /**
+   * Create all non-spacer elements that belong on the top row.
+   * @internal
+   */
   populateTopRow_() {
     const hasPrevious = !!this.block_.previousConnection;
     const hasHat = (this.block_.hat ? this.block_.hat === 'cap' :
@@ -268,7 +271,10 @@ export class RenderInfo {
     this.topRow.elements.push(new cornerClass(this.constants_, 'right'));
   }
 
-  /** Create all non-spacer elements that belong on the bottom row. */
+  /**
+   * Create all non-spacer elements that belong on the bottom row.
+   * @internal
+   */
   populateBottomRow_() {
     this.bottomRow.hasNextConnection = !!this.block_.nextConnection;
 

@@ -24,6 +24,7 @@ import {ConstantProvider as BaseConstantProvider} from '../common/constants.js';
  * @alias Blockly.minimalist.ConstantProvider
  */
 export class ConstantProvider extends BaseConstantProvider {
+  /** @internal */
   constructor() {
     super();
   }

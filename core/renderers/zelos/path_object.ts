@@ -74,7 +74,6 @@ export class PathObject extends BasePathObject {
     this.outlines_ = Object.create(null);
   }
 
-  /** @internal */
   override setPath(pathString: string) {
     super.setPath(pathString);
     if (this.svgPathSelected_) {
@@ -96,7 +95,6 @@ export class PathObject extends BasePathObject {
     }
   }
 
-  /** @internal */
   override flipRTL() {
     super.flipRTL();
     // Mirror each input outline path.

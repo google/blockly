@@ -704,7 +704,6 @@ export interface Params {
  * to another block.
  * @param block The block to find the parent connection on.
  * @return The connection connecting to the parent of the block.
- * @internal
  */
 function getParentConnection(block: Block): Connection {
   let topConnection = block.outputConnection;

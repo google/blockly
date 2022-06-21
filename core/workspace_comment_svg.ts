@@ -61,6 +61,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
   /**
    * The width and height to use to size a workspace comment when it is first
    * added, before it has been edited by the user.
+   * @internal
    */
   static DEFAULT_SIZE = 100;
 

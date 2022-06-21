@@ -73,7 +73,6 @@ export class BlockDragger implements IBlockDragger {
      * A list of all of the icons (comment, warning, and mutator) that are
      * on this block and its descendants.  Moving an icon moves the bubble that
      * extends from it if that bubble is open.
-     * @internal
      */
     this.dragIconData_ = initIconData(block);
   }

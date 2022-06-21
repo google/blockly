@@ -72,12 +72,16 @@ export class Workspace implements IASTNodeLocation {
   /** Is this workspace the surface for a flyout? */
   isFlyout = false;
 
-  /** Is this workspace the surface for a mutator? */
+  /**
+   * Is this workspace the surface for a mutator?
+   * @internal
+   */
   isMutator = false;
 
   /**
    * Returns `true` if the workspace is currently in the process of a bulk
    * clear.
+   * @internal
    */
   isClearing = false;
 

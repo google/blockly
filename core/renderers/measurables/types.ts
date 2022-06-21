@@ -93,7 +93,6 @@ class TypesContainer {
    * This must be updated to reflect the next enum flag value
    * to use if additional elements are added to
    * `Types`.
-   * @internal
    */
   nextTypeValue_ = 1 << 24;
 

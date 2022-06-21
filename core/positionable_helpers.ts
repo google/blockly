@@ -28,6 +28,7 @@ import {WorkspaceSvg} from './workspace_svg.js';
 /**
  * Enum for vertical positioning.
  * @alias Blockly.uiPosition.verticalPosition
+ * @internal
  */
 export enum verticalPosition {
   TOP,
@@ -37,6 +38,7 @@ export enum verticalPosition {
 /**
  * Enum for horizontal positioning.
  * @alias Blockly.uiPosition.horizontalPosition
+ * @internal
  */
 export enum horizontalPosition {
   LEFT,
@@ -46,6 +48,7 @@ export enum horizontalPosition {
 /**
  * An object defining a horizontal and vertical positioning.
  * @alias Blockly.uiPosition.Position
+ * @internal
  */
 export interface Position {
   horizontal: horizontalPosition;
@@ -55,6 +58,7 @@ export interface Position {
 /**
  * Enum for bump rules to use for dealing with collisions.
  * @alias Blockly.uiPosition.bumpDirection
+ * @internal
  */
 export enum bumpDirection {
   UP,

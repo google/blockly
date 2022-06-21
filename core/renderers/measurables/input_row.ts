@@ -31,7 +31,10 @@ import {Types} from './types.js';
  * @alias Blockly.blockRendering.InputRow
  */
 export class InputRow extends Row {
-  /** The total width of all blocks connected to this row. */
+  /**
+   * The total width of all blocks connected to this row.
+   * @internal
+   */
   connectedBlockWidths = 0;
 
   /**

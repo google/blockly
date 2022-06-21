@@ -75,7 +75,6 @@ export class BottomRow extends Row {
    * Returns whether or not the bottom row has a left square corner.
    * @param block The block whose bottom row this represents.
    * @return Whether or not the bottom row has a left square corner.
-   * @internal
    */
   hasLeftSquareCorner(block: BlockSvg): boolean {
     return !!block.outputConnection || !!block.getNextBlock();

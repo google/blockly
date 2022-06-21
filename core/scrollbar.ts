@@ -43,6 +43,7 @@ export class Scrollbar {
   /**
    * Default margin around the scrollbar (between the scrollbar and the edge of
    * the viewport in pixels).
+   * @internal
    */
   static readonly DEFAULT_SCROLLBAR_MARGIN = 0.5;
   private readonly pair_: boolean;

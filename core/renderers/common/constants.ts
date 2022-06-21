@@ -239,7 +239,10 @@ export class ConstantProvider {
   /** A field's border rect Y padding. */
   FIELD_BORDER_RECT_Y_PADDING = 3;
 
-  /** The backing colour of a field's border rect. */
+  /**
+   * The backing colour of a field's border rect.
+   * @internal
+   */
   FIELD_BORDER_RECT_COLOUR = '#fff';
   FIELD_TEXT_BASELINE_CENTER: boolean;
   FIELD_DROPDOWN_BORDER_RECT_HEIGHT: number;
@@ -280,6 +283,7 @@ export class ConstantProvider {
   FIELD_COLOUR_DEFAULT_WIDTH = 26;
   FIELD_COLOUR_DEFAULT_HEIGHT: number;
   FIELD_CHECKBOX_X_OFFSET: number;
+  /** @internal */
   randomIdentifier: string;
 
   /**
@@ -290,6 +294,7 @@ export class ConstantProvider {
 
   /**
    * The ID of the emboss filter, or the empty string if no filter is set.
+   * @internal
    */
   embossFilterId = '';
 
@@ -300,6 +305,7 @@ export class ConstantProvider {
 
   /**
    * The ID of the disabled pattern, or the empty string if no pattern is set.
+   * @internal
    */
   disabledPatternId = '';
 
@@ -327,39 +333,65 @@ export class ConstantProvider {
   // 'HTMLStyleElement'.
   private cssNode_: HTMLStyleElement = null as AnyDuringMigration;
 
-  /** Cursor colour. */
+  /**
+   * Cursor colour.
+   * @internal
+   */
   CURSOR_COLOUR = '#cc0a0a';
 
-  /** Immovable marker colour. */
+  /**
+   * Immovable marker colour.
+   * @internal
+   */
   MARKER_COLOUR = '#4286f4';
 
-  /** Width of the horizontal cursor. */
+  /**
+   * Width of the horizontal cursor.
+   * @internal
+   */
   CURSOR_WS_WIDTH = 100;
 
-  /** Height of the horizontal cursor. */
+  /**
+   * Height of the horizontal cursor.
+   * @internal
+   */
   WS_CURSOR_HEIGHT = 5;
 
-  /** Padding around a stack. */
+  /**
+   * Padding around a stack.
+   * @internal
+   */
   CURSOR_STACK_PADDING = 10;
 
-  /** Padding around a block. */
+  /**
+   * Padding around a block.
+   * @internal
+   */
   CURSOR_BLOCK_PADDING = 2;
 
-  /** Stroke of the cursor. */
+  /**
+   * Stroke of the cursor.
+   * @internal
+   */
   CURSOR_STROKE_WIDTH = 4;
 
   /**
    * Whether text input and colour fields fill up the entire source block.
+   * @internal
    */
   FULL_BLOCK_FIELDS = false;
 
   /**
    * The main colour of insertion markers, in hex.  The block is rendered a
    * transparent grey by changing the fill opacity in CSS.
+   * @internal
    */
   INSERTION_MARKER_COLOUR = '#000000';
 
-  /** The insertion marker opacity. */
+  /**
+   * The insertion marker opacity.
+   * @internal
+   */
   INSERTION_MARKER_OPACITY = 0.2;
 
   /** Enum for connection shapes. */

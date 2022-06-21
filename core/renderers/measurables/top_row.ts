@@ -39,6 +39,7 @@ export class TopRow extends Row {
    * The starting point for drawing the row, in the y direction.
    * This allows us to draw hats and similar shapes that don't start at the
    * origin. Must be non-negative (see #2820).
+   * @internal
    */
   capline = 0;
 

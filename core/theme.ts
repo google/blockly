@@ -1,20 +1,18 @@
-None * @internal None *
-        @internal
-        /** @fileoverview The class representing a theme. */
+/** @fileoverview The class representing a theme. */
 
-        /**
-         * @license
-         * Copyright 2018 Google LLC
-         * SPDX-License-Identifier: Apache-2.0
-         */
+/**
+ * @license
+ * Copyright 2018 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
 
-        /**
-         * The class representing a theme.
-         * @class
-         */
+/**
+ * The class representing a theme.
+ * @class
+ */
 
-        import * as registry from './registry.js';
+import * as registry from './registry.js';
 import * as object from './utils/object.js';
 
 

@@ -30,51 +30,72 @@ import {Types} from './types.js';
  * @alias Blockly.blockRendering.Row
  */
 export class Row {
+  /** @internal */
   type: number;
 
-  /** An array of elements contained in this row. */
+  /**
+   * An array of elements contained in this row.
+   * @internal
+   */
   elements: Measurable[] = [];
 
-  /** The height of the row. */
+  /**
+   * The height of the row.
+   * @internal
+   */
   height = 0;
 
   /**
    * The width of the row, from the left edge of the block to the right.
    * Does not include child blocks unless they are inline.
+   * @internal
    */
   width = 0;
 
-  /** The minimum height of the row. */
+  /**
+   * The minimum height of the row.
+   * @internal
+   */
   minHeight = 0;
 
   /**
    * The minimum width of the row, from the left edge of the block to the
    * right. Does not include child blocks unless they are inline.
+   * @internal
    */
   minWidth = 0;
 
   /**
    * The width of the row, from the left edge of the block to the edge of the
    * block or any connected child blocks.
+   * @internal
    */
   widthWithConnectedBlocks = 0;
 
   /**
    * The Y position of the row relative to the origin of the block's svg
    * group.
+   * @internal
    */
   yPos = 0;
 
   /**
    * The X position of the row relative to the origin of the block's svg
    * group.
+   * @internal
    */
   xPos = 0;
 
-  /** Whether the row has any external inputs. */
+  /**
+   * Whether the row has any external inputs.
+   * @internal
+   */
   hasExternalInput = false;
 
-  /** Whether the row has any statement inputs. */
+  /**
+   * Whether the row has any statement inputs.
+   * @internal
+   */
   hasStatement = false;
 
   /**
@@ -84,17 +105,29 @@ export class Row {
    */
   statementEdge = 0;
 
-  /** Whether the row has any inline inputs. */
+  /**
+   * Whether the row has any inline inputs.
+   * @internal
+   */
   hasInlineInput = false;
 
-  /** Whether the row has any dummy inputs. */
+  /**
+   * Whether the row has any dummy inputs.
+   * @internal
+   */
   hasDummyInput = false;
 
-  /** Whether the row has a jagged edge. */
+  /**
+   * Whether the row has a jagged edge.
+   * @internal
+   */
   hasJaggedEdge = false;
   notchOffset: number;
 
-  /** Alignment of the row. */
+  /**
+   * Alignment of the row.
+   * @internal
+   */
   align: number|null = null;
 
   /**

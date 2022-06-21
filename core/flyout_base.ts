@@ -192,7 +192,8 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   protected readonly tabWidth_: number;
 
   /**
-   * The target workspace
+   * The target workspace.
+   * @internal
    */
   targetWorkspace!: WorkspaceSvg;
   /**

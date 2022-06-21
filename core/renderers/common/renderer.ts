@@ -48,14 +48,22 @@ export class Renderer implements IRegistrable {
   /** The renderer's constant provider. */
   protected constants_!: ConstantProvider;
 
-  /** Rendering constant overrides, passed in through options. */
+  /** @internal */
+  name: string;
+
+  /**
+   * Rendering constant overrides, passed in through options.
+   * @internal
+   */
   overrides: object|null = null;
 
   /**
    * @param name The renderer name.
    * @internal
    */
-  constructor(public name: string) {}
+  constructor(name: string) {
+    this.name = name;
+  }
 
   /**
    * Gets the class name that identifies this renderer.

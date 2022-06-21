@@ -86,6 +86,7 @@ export class Type<T> {
       new Type<IFlyout>('flyoutsHorizontalToolbox');
   static METRICS_MANAGER = new Type<IMetricsManager>('metricsManager');
   static BLOCK_DRAGGER = new Type<IBlockDragger>('blockDragger');
+  /** @internal */
   static SERIALIZER = new Type<ISerializer>('serializer');
 
   /** @param name The name of the registry type. */

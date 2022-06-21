@@ -89,7 +89,6 @@ export class Connection implements IASTNodeLocationWithBlock {
    * Connect two connections together.  This is the connection on the superior
    * block.
    * @param childConnection Connection on inferior block.
-   * @internal
    */
   protected connect_(childConnection: Connection) {
     const INPUT = ConnectionType.INPUT_VALUE;
@@ -644,7 +643,6 @@ export class Connection implements IASTNodeLocationWithBlock {
  * Update two connections to target each other.
  * @param first The first connection to update.
  * @param second The second connection to update.
- * @internal
  */
 function connectReciprocally(first: Connection, second: Connection) {
   if (!first || !second) {

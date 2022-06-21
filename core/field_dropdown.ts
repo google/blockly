@@ -715,7 +715,6 @@ FieldDropdown.ARROW_CHAR = userAgent.ANDROID ? '\u25BC' : '\u25BE';
  * Validates the data structure to be processed as an options list.
  * @param options The proposed dropdown options.
  * @throws {TypeError} If proposed options are incorrectly structured.
- * @internal
  */
 function validateOptions(options: AnyDuringMigration) {
   if (!Array.isArray(options)) {

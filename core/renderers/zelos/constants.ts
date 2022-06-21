@@ -131,6 +131,7 @@ export class ConstantProvider extends BaseConstantProvider {
   /**
    * The ID of the selected glow filter, or the empty string if no filter is
    * set.
+   * @internal
    */
   selectedGlowFilterId = '';
 
@@ -144,6 +145,7 @@ export class ConstantProvider extends BaseConstantProvider {
   /**
    * The ID of the replacement glow filter, or the empty string if no filter
    * is set.
+   * @internal
    */
   replacementGlowFilterId = '';
 
@@ -231,6 +233,7 @@ export class ConstantProvider extends BaseConstantProvider {
      * When a block with the outer shape contains an input block with the inner
      * shape on its left or right edge, the block elements are aligned such that
      * the padding specified is reached.
+     * @internal
      */
     this.SHAPE_IN_SHAPE_PADDING = {
       1: {

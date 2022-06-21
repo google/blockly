@@ -69,7 +69,6 @@ export class PathObject extends BasePathObject {
         Svg.PATH, {'class': 'blocklyPathLight'}, this.svgRoot);
   }
 
-  /** @internal */
   override setPath(mainPath: string) {
     this.svgPath.setAttribute('d', mainPath);
     this.svgPathDark.setAttribute('d', mainPath);

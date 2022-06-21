@@ -37,11 +37,13 @@ import {IPathObject} from './i_path_object.js';
  */
 export class PathObject implements IPathObject {
   svgRoot: AnyDuringMigration;
+  /** @internal */
   svgPath: SVGElement;
 
   /**
    * Holds the cursors svg element when the cursor is attached to the block.
    * This is null if there is no cursor on the block.
+   * @internal
    */
   // AnyDuringMigration because:  Type 'null' is not assignable to type
   // 'SVGElement'.
@@ -50,10 +52,16 @@ export class PathObject implements IPathObject {
   /**
    * Holds the markers svg element when the marker is attached to the block.
    * This is null if there is no marker on the block.
+   * @internal
    */
   // AnyDuringMigration because:  Type 'null' is not assignable to type
   // 'SVGElement'.
   markerSvg: SVGElement = null as AnyDuringMigration;
+
+  /** @internal */
+  constants: ConstantProvider;
+  /** @internal */
+  style: BlockStyle;
 
   /**
    * @param root The root SVG element.
@@ -62,8 +70,11 @@ export class PathObject implements IPathObject {
    * @internal
    */
   constructor(
-      root: SVGElement, public style: BlockStyle,
-      public constants: ConstantProvider) {
+      root: SVGElement, style: BlockStyle,
+      constants: ConstantProvider) {
+    
+    this.constants = constants;
+    this.style = style;
     this.svgRoot = root;
 
     /** The primary path of the block. */
@@ -80,7 +91,10 @@ export class PathObject implements IPathObject {
     this.svgPath.setAttribute('d', pathString);
   }
 
-  /** Flip the SVG paths in RTL. */
+  /**
+   * Flip the SVG paths in RTL.
+   * @internal
+   */
   flipRTL() {
     // Mirror the block's path.
     this.svgPath.setAttribute('transform', 'scale(-1 1)');

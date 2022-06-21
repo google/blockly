@@ -48,6 +48,7 @@ export interface IToolboxItem {
   /**
    * Gets the nested level of the category.
    * @return The nested level of the category.
+   * @internal
    */
   getLevel(): number;
 

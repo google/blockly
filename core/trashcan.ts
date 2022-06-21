@@ -70,7 +70,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
 
   /**
    * The trashcan flyout.
-   * @package
+   * @internal
    */
   // AnyDuringMigration because:  Type 'null' is not assignable to type
   // 'IFlyout'.

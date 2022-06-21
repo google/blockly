@@ -39,7 +39,7 @@ export class MarkerManager {
 
   /**
    * @param workspace The workspace for the marker manager.
-   * @package
+   * @internal
    */
   constructor(private readonly workspace: WorkspaceSvg) {
     /** The map of markers for the workspace. */
@@ -153,7 +153,7 @@ export class MarkerManager {
 
   /**
    * Redraw the attached cursor SVG if needed.
-   * @package
+   * @internal
    */
   updateMarkers() {
     if (this.workspace.keyboardAccessibilityMode && this.cursorSvg_) {

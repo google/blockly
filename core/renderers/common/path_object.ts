@@ -70,9 +70,7 @@ export class PathObject implements IPathObject {
    * @internal
    */
   constructor(
-      root: SVGElement, style: BlockStyle,
-      constants: ConstantProvider) {
-    
+      root: SVGElement, style: BlockStyle, constants: ConstantProvider) {
     this.constants = constants;
     this.style = style;
     this.svgRoot = root;

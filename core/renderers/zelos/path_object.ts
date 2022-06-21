@@ -64,8 +64,7 @@ export class PathObject extends BasePathObject {
    * @internal
    */
   constructor(
-      root: SVGElement, style: BlockStyle,
-      constants: ConstantProvider) {
+      root: SVGElement, style: BlockStyle, constants: ConstantProvider) {
     super(root, style, constants);
 
     this.constants = constants;

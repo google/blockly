@@ -274,4 +274,11 @@ suite('Theme', function() {
           this.constants.validatedBlockStyle_(inputStyle), expectedOutput);
     });
   });
+
+  suite('defineTheme', function() {
+    test('Normalizes to lowercase', function() {
+      const theme = Blockly.Theme.defineTheme('TEST', {});
+      chai.assert.equal(theme.name, 'test');
+    });
+  });
 });

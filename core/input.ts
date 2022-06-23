@@ -290,9 +290,6 @@ export class Input {
     if (this.connection) {
       this.connection.dispose();
     }
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'Block'.
-    this.sourceBlock_ = null as AnyDuringMigration;
   }
 }
 

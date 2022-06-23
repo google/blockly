@@ -149,6 +149,7 @@ class Theme {
    * @return {!Theme} A new Blockly theme.
    */
   static defineTheme(name, themeObj) {
+    name = name.toLowerCase();
     const theme = new Theme(name);
     let base = themeObj['base'];
     if (base) {

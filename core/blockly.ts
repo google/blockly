@@ -1,9 +1,11 @@
-/** @fileoverview The top level namespace used to access the Blockly library. */
-
 /**
  * @license
  * Copyright 2011 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview The top level namespace used to access the Blockly library.
  */
 
 

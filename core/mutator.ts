@@ -1,12 +1,12 @@
 /**
- * @fileoverview Object representing a mutator dialog.  A mutator allows the
- * user to change the shape of a block using a nested blocks editor.
- */
-
-/**
  * @license
  * Copyright 2012 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Object representing a mutator dialog.  A mutator allows the
+ * user to change the shape of a block using a nested blocks editor.
  */
 
 

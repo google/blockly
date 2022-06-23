@@ -1,13 +1,13 @@
 /**
- * @fileoverview Utility methods for math.
- * These methods are not specific to Blockly, and could be factored out into
- * a JavaScript framework such as Closure.
- */
-
-/**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Utility methods for math.
+ * These methods are not specific to Blockly, and could be factored out into
+ * a JavaScript framework such as Closure.
  */
 
 

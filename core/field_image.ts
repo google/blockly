@@ -1,9 +1,11 @@
-/** @fileoverview Image field.  Used for pictures, icons, etc. */
-
 /**
  * @license
  * Copyright 2012 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Image field.  Used for pictures, icons, etc.
  */
 
 

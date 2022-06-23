@@ -1,9 +1,11 @@
-/** @fileoverview Events fired as a block drag. */
-
 /**
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Events fired as a block drag.
  */
 
 

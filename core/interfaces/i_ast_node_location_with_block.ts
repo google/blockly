@@ -1,12 +1,12 @@
 /**
- * @fileoverview The interface for an AST node location that has an associated
- * block.
- */
-
-/**
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview The interface for an AST node location that has an associated
+ * block.
  */
 
 

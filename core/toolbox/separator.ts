@@ -1,9 +1,11 @@
-/** @fileoverview A separator used for separating toolbox categories. */
-
 /**
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview A separator used for separating toolbox categories.
  */
 
 

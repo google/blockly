@@ -5,15 +5,14 @@
  */
 
 /**
- * @fileoverview The AppController Class brings together the Block
- * Factory, Block Library, and Block Exporter functionality into a single web
- * app.
- *
+ * Controller for the Blockly Factory
+ * @constructor
  */
 
 /**
- * Controller for the Blockly Factory
- * @constructor
+ * @fileoverview The AppController Class brings together the Block
+ * Factory, Block Library, and Block Exporter functionality into a single web
+ * app.
  */
 AppController = function() {
   // Initialize Block Library

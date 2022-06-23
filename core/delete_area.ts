@@ -1,12 +1,12 @@
 /**
- * @fileoverview The abstract class for a component that can delete a block or
- * bubble that is dropped on top of it.
- */
-
-/**
  * @license
  * Copyright 2021 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview The abstract class for a component that can delete a block or
+ * bubble that is dropped on top of it.
  */
 
 

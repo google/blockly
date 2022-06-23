@@ -1,9 +1,11 @@
-/** @fileoverview Angle input field. */
-
 /**
  * @license
  * Copyright 2013 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Angle input field.
  */
 
 

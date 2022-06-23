@@ -1,9 +1,11 @@
-/** @fileoverview The class representing one block. */
-
 /**
  * @license
  * Copyright 2011 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview The class representing one block.
  */
 
 

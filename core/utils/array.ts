@@ -1,9 +1,11 @@
-/** @fileoverview Utility methods related to arrays. */
-
 /**
  * @license
  * Copyright 2021 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Utility methods related to arrays.
  */
 
 

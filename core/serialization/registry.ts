@@ -1,12 +1,12 @@
 /**
- * @fileoverview Contains functions registering serializers (eg blocks,
- * variables, plugins, etc).
- */
-
-/**
  * @license
  * Copyright 2021 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Contains functions registering serializers (eg blocks,
+ * variables, plugins, etc).
  */
 
 

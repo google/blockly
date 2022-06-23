@@ -1,12 +1,12 @@
 /**
- * @fileoverview Helper function for warning developers about deprecations.
- * This method is not specific to Blockly.
- */
-
-/**
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Helper function for warning developers about deprecations.
+ * This method is not specific to Blockly.
  */
 
 

@@ -1,11 +1,11 @@
 /**
- * @fileoverview Horizontal flyout tray containing blocks which may be created.
- */
-
-/**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Horizontal flyout tray containing blocks which may be created.
  */
 
 

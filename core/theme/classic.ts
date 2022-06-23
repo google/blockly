@@ -1,12 +1,12 @@
 /**
- * @fileoverview Classic theme.
- * Contains multi-coloured border to create shadow effect.
- */
-
-/**
  * @license
  * Copyright 2018 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Classic theme.
+ * Contains multi-coloured border to create shadow effect.
  */
 
 

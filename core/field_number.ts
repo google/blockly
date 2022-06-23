@@ -1,9 +1,11 @@
-/** @fileoverview Number input field */
-
 /**
  * @license
  * Copyright 2016 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Number input field
  */
 
 

@@ -1,9 +1,11 @@
-/** @fileoverview Zelos theme. */
-
 /**
  * @license
  * Copyright 2018 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Zelos theme.
  */
 
 

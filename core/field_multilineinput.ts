@@ -1,9 +1,11 @@
-/** @fileoverview Text Area field. */
-
 /**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Text Area field.
  */
 
 

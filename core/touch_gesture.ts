@@ -1,12 +1,12 @@
 /**
- * @fileoverview The class extends Gesture to support pinch to zoom
- * for both pointer and touch events.
- */
-
-/**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview The class extends Gesture to support pinch to zoom
+ * for both pointer and touch events.
  */
 
 

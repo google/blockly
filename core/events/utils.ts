@@ -1,12 +1,12 @@
 /**
- * @fileoverview Helper methods for events that are fired as a result of
- * actions in Blockly's editor.
- */
-
-/**
  * @license
  * Copyright 2021 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Helper methods for events that are fired as a result of
+ * actions in Blockly's editor.
  */
 
 

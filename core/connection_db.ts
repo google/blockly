@@ -1,13 +1,13 @@
 /**
- * @fileoverview A database of all the rendered connections that could
- *    possibly be connected to (i.e. not collapsed, etc).
- *    Sorted by y coordinate.
- */
-
-/**
  * @license
  * Copyright 2011 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview A database of all the rendered connections that could
+ *    possibly be connected to (i.e. not collapsed, etc).
+ *    Sorted by y coordinate.
  */
 
 

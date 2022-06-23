@@ -1,12 +1,12 @@
 /**
- * @fileoverview Object in charge of storing and updating a workspace theme
- *     and UI components.
- */
-
-/**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Object in charge of storing and updating a workspace theme
+ *     and UI components.
  */
 
 

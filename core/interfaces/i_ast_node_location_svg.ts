@@ -1,11 +1,12 @@
-/** @fileoverview The interface for an AST node location SVG. */
-
 /**
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/**
+ * @fileoverview The interface for an AST node location SVG.
+ */
 
 
 /**

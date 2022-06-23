@@ -1,12 +1,12 @@
 /**
- * @fileoverview The namespace used to keep track of keyboard shortcuts and the
- * key codes used to execute those shortcuts.
- */
-
-/**
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview The namespace used to keep track of keyboard shortcuts and the
+ * key codes used to execute those shortcuts.
  */
 
 

@@ -1,9 +1,11 @@
-/** @fileoverview Events fired as a result of a marker move. */
-
 /**
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Events fired as a result of a marker move.
  */
 
 

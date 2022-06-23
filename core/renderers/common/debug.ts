@@ -1,9 +1,11 @@
-/** @fileoverview Block rendering debugging functionality. */
-
 /**
  * @license
  * Copyright 2021 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Block rendering debugging functionality.
  */
 
 

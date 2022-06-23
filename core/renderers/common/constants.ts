@@ -1,9 +1,11 @@
-/** @fileoverview An object that provides constants for rendering blocks. */
-
 /**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview An object that provides constants for rendering blocks.
  */
 
 
@@ -1044,32 +1046,32 @@ export class ConstantProvider {
     return [
       /* eslint-disable indent */
       /* clang-format off */
-      // Text. 
+      // Text.
       selector + ' .blocklyText, ', selector + ' .blocklyFlyoutLabelText {', 'font: ' + this.FIELD_TEXT_FONTWEIGHT + ' ' + this.FIELD_TEXT_FONTSIZE + 'pt ' + this.FIELD_TEXT_FONTFAMILY + ';', '}',
 
-      // Fields. 
+      // Fields.
       selector + ' .blocklyText {', 'fill: #fff;', '}', selector + ' .blocklyNonEditableText>rect,', selector + ' .blocklyEditableText>rect {', 'fill: ' + this.FIELD_BORDER_RECT_COLOUR + ';', 'fill-opacity: .6;', 'stroke: none;', '}', selector + ' .blocklyNonEditableText>text,', selector + ' .blocklyEditableText>text {', 'fill: #000;', '}',
 
-      // Flyout labels. 
+      // Flyout labels.
       selector + ' .blocklyFlyoutLabelText {', 'fill: #000;', '}',
 
-      // Bubbles. 
+      // Bubbles.
       selector + ' .blocklyText.blocklyBubbleText {', 'fill: #000;', '}',
 
-      // Editable field hover. 
+      // Editable field hover.
       selector + ' .blocklyEditableText:not(.editing):hover>rect {', 'stroke: #fff;', 'stroke-width: 2;', '}',
 
-      // Text field input. 
-      selector + ' .blocklyHtmlInput {', 'font-family: ' + this.FIELD_TEXT_FONTFAMILY + ';', 'font-weight: ' + this.FIELD_TEXT_FONTWEIGHT + ';', '}', // Selection highlight. 
+      // Text field input.
+      selector + ' .blocklyHtmlInput {', 'font-family: ' + this.FIELD_TEXT_FONTFAMILY + ';', 'font-weight: ' + this.FIELD_TEXT_FONTWEIGHT + ';', '}', // Selection highlight.
       selector + ' .blocklySelected>.blocklyPath {', 'stroke: #fc3;', 'stroke-width: 3px;', '}',
 
-      // Connection highlight. 
+      // Connection highlight.
       selector + ' .blocklyHighlightedConnectionPath {', 'stroke: #fc3;', '}',
 
-      // Replaceable highlight. 
+      // Replaceable highlight.
       selector + ' .blocklyReplaceable .blocklyPath {', 'fill-opacity: .5;', '}', selector + ' .blocklyReplaceable .blocklyPathLight,', selector + ' .blocklyReplaceable .blocklyPathDark {', 'display: none;', '}',
 
-      // Insertion marker. 
+      // Insertion marker.
       selector + ' .blocklyInsertionMarker>.blocklyPath {', 'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';', 'stroke: none;', '}',];
   }
 }

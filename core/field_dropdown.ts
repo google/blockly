@@ -1,13 +1,13 @@
 /**
- * @fileoverview Dropdown input field.  Used for editable titles and variables.
- * In the interests of a consistent UI, the toolbox shares some functions and
- * properties with the context menu.
- */
-
-/**
  * @license
  * Copyright 2012 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Dropdown input field.  Used for editable titles and variables.
+ * In the interests of a consistent UI, the toolbox shares some functions and
+ * properties with the context menu.
  */
 
 

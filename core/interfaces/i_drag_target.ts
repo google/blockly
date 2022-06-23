@@ -1,12 +1,12 @@
 /**
- * @fileoverview The interface for a component that has a handler for when a
- * block is dropped on top of it.
- */
-
-/**
  * @license
  * Copyright 2021 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview The interface for a component that has a handler for when a
+ * block is dropped on top of it.
  */
 
 

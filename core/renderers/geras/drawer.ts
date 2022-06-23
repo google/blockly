@@ -1,11 +1,11 @@
 /**
- * @fileoverview Renderer that preserves the look and feel of Blockly pre-2019.
- */
-
-/**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Renderer that preserves the look and feel of Blockly pre-2019.
  */
 
 

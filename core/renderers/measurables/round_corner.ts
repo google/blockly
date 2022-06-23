@@ -1,12 +1,12 @@
 /**
- * @fileoverview Objects representing a round corner in a row of a rendered
- * block.
- */
-
-/**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Objects representing a round corner in a row of a rendered
+ * block.
  */
 
 

@@ -1,12 +1,12 @@
 /**
- * @fileoverview The class representing a basic cursor.
- * Used to demo switching between different cursors.
- */
-
-/**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview The class representing a basic cursor.
+ * Used to demo switching between different cursors.
  */
 
 

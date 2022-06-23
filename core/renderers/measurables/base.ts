@@ -13,6 +13,8 @@
  * Methods for graphically rendering a block as SVG.
  * @class
  */
+goog.declareModuleId('Blockly.blockRendering.Measurable');
+
 /* eslint-disable-next-line no-unused-vars */
 import {ConstantProvider} from '../common/constants.js';
 

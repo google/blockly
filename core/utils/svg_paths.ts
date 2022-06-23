@@ -14,6 +14,7 @@
  * Methods for creating parts of SVG path strings.  See
  * @namespace Blockly.utils.svgPaths
  */
+goog.declareModuleId('Blockly.utils.svgPaths');
 
 
 /**

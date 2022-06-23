@@ -13,6 +13,7 @@
  * Browser event handling.
  * @namespace Blockly.browserEvents
  */
+goog.declareModuleId('Blockly.browserEvents');
 
 import * as Touch from './touch.js';
 import * as userAgent from './utils/useragent.js';

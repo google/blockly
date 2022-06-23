@@ -17,6 +17,7 @@
  * a JavaScript framework such as Closure.
  * @namespace Blockly.utils.userAgent
  */
+goog.declareModuleId('Blockly.utils.userAgent');
 
 /** The raw useragent string. */
 let rawUserAgent: string;

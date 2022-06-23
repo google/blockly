@@ -17,6 +17,7 @@
  * a JavaScript framework such as Closure.
  * @namespace Blockly.utils.dom
  */
+goog.declareModuleId('Blockly.utils.dom');
 
 /* eslint-disable-next-line no-unused-vars */
 import {Svg} from './svg.js';

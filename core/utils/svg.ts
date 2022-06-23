@@ -15,6 +15,7 @@
  * all SVG tag names used by Blockly.
  * @class
  */
+goog.declareModuleId('Blockly.utils.Svg');
 
 
 /**

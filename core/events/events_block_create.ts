@@ -13,6 +13,7 @@
  * Class for a block creation event.
  * @class
  */
+goog.declareModuleId('Blockly.Events.BlockCreate');
 
 /* eslint-disable-next-line no-unused-vars */
 import {Block} from '../block.js';

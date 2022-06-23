@@ -15,6 +15,7 @@
  * Blockly's editor.
  * @class
  */
+goog.declareModuleId('Blockly.Events.Abstract');
 
 /* eslint-disable-next-line no-unused-vars */
 import {Workspace} from '../workspace.js';

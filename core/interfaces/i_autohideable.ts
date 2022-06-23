@@ -16,6 +16,7 @@
  * when WorkspaceSvg.hideChaff is called.
  * @namespace Blockly.IAutoHideable
  */
+goog.declareModuleId('Blockly.IAutoHideable');
 
 /* eslint-disable-next-line no-unused-vars */
 import {IComponent} from './i_component.js';

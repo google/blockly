@@ -11,6 +11,7 @@
  * Re-exports of Blockly.zelos.* modules.
  * @namespace Blockly.zelos
  */
+goog.declareModuleId('Blockly.zelos');
 
 import {ConstantProvider} from './constants.js';
 import {Drawer} from './drawer.js';

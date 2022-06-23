@@ -15,6 +15,7 @@
  * Geras: spirit of old age.
  * @class
  */
+goog.declareModuleId('Blockly.geras.RenderInfo');
 
 /* eslint-disable-next-line no-unused-vars */
 import {BlockSvg} from '../../block_svg.js';

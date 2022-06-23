@@ -15,6 +15,7 @@
  * Used to traverse the Blockly AST.
  * @class
  */
+goog.declareModuleId('Blockly.ASTNode');
 
 /* eslint-disable-next-line no-unused-vars */
 import {Block} from '../block.js';

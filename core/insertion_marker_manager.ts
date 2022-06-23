@@ -13,6 +13,7 @@
  * Class that controls updates to connections during drags.
  * @class
  */
+goog.declareModuleId('Blockly.InsertionMarkerManager');
 
 import * as blockAnimations from './block_animations.js';
 /* eslint-disable-next-line no-unused-vars */

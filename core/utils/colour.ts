@@ -13,6 +13,7 @@
  * Utility methods for colour manipulation.
  * @namespace Blockly.utils.colour
  */
+goog.declareModuleId('Blockly.utils.colour');
 
 /**
  * The richness of block colours, regardless of the hue.

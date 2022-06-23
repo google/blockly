@@ -15,6 +15,7 @@
  * use these constants outside of the core library.
  * @namespace Blockly.internalConstants
  */
+goog.declareModuleId('Blockly.internalConstants');
 
 import {ConnectionType} from './connection_type.js';
 

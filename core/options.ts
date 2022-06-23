@@ -13,6 +13,7 @@
  * Object that controls settings for the workspace.
  * @class
  */
+goog.declareModuleId('Blockly.Options');
 
 import type {BlocklyOptions} from './blockly_options.js';
 import * as deprecation from './utils/deprecation.js';

@@ -13,6 +13,7 @@
  * Class representing inputs with connections on a rendered block.
  * @class
  */
+goog.declareModuleId('Blockly.blockRendering.InputConnection');
 
 /* eslint-disable-next-line no-unused-vars */
 import {BlockSvg} from '../../block_svg.js';

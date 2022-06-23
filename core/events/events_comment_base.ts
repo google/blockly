@@ -13,6 +13,7 @@
  * Base class for comment events.
  * @class
  */
+goog.declareModuleId('Blockly.Events.CommentBase');
 
 import * as utilsXml from '../utils/xml.js';
 /* eslint-disable-next-line no-unused-vars */

@@ -13,6 +13,7 @@
  * Zelos renderer.
  * @class
  */
+goog.declareModuleId('Blockly.zelos.Drawer');
 
 /* eslint-disable-next-line no-unused-vars */
 import {BlockSvg} from '../../block_svg.js';

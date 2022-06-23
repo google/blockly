@@ -13,6 +13,7 @@
  * Class for comment deletion event.
  * @class
  */
+goog.declareModuleId('Blockly.Events.CommentDelete');
 
 import * as registry from '../registry.js';
 /* eslint-disable-next-line no-unused-vars */

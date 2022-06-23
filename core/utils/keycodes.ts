@@ -17,6 +17,7 @@
  * a JavaScript framework such as Closure.
  * @namespace Blockly.utils.KeyCodes
  */
+goog.declareModuleId('Blockly.utils.KeyCodes');
 
 
 /**

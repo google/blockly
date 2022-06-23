@@ -13,6 +13,7 @@
  * Functions for injecting Blockly into a web page.
  * @namespace Blockly.inject
  */
+goog.declareModuleId('Blockly.inject');
 
 import 'angular-mocks';
 

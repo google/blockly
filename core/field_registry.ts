@@ -17,6 +17,7 @@
  *    fields based on JSON.
  * @namespace Blockly.fieldRegistry
  */
+goog.declareModuleId('Blockly.fieldRegistry');
 
 /* eslint-disable-next-line no-unused-vars */
 import {Field} from './field.js';

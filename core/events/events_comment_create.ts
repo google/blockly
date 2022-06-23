@@ -13,6 +13,7 @@
  * Class for comment creation event.
  * @class
  */
+goog.declareModuleId('Blockly.Events.CommentCreate');
 
 import * as registry from '../registry.js';
 /* eslint-disable-next-line no-unused-vars */

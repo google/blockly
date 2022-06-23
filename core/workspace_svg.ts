@@ -13,6 +13,7 @@
  * Object representing a workspace rendered as SVG.
  * @class
  */
+goog.declareModuleId('Blockly.WorkspaceSvg');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.

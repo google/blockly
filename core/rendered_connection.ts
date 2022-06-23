@@ -13,6 +13,7 @@
  * Components for creating connections between blocks.
  * @class
  */
+goog.declareModuleId('Blockly.RenderedConnection');
 
 /* eslint-disable-next-line no-unused-vars */
 import {Block} from './block.js';

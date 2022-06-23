@@ -13,6 +13,7 @@
  * The interface for a bubble.
  * @namespace Blockly.IBubble
  */
+goog.declareModuleId('Blockly.IBubble');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.

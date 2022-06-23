@@ -11,6 +11,7 @@
  * Re-exports of Blockly.minimalist.* modules.
  * @namespace Blockly.minimalist
  */
+goog.declareModuleId('Blockly.minimalist');
 
 import {ConstantProvider} from './constants.js';
 import {Drawer} from './drawer.js';

@@ -14,6 +14,7 @@
  * Makecode/scratch-style renderer.
  * @class
  */
+goog.declareModuleId('Blockly.zelos.RenderInfo');
 
 /* eslint-disable-next-line no-unused-vars */
 import {BlockSvg} from '../../block_svg.js';

@@ -16,6 +16,7 @@
  *     serializing part of the workspace.
  * @namespace Blockly.serialization.ISerializer
  */
+goog.declareModuleId('Blockly.serialization.ISerializer');
 
 // eslint-disable-next-line no-unused-vars
 import {Workspace} from '../workspace.js';

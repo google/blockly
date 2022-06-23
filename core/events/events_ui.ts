@@ -15,6 +15,7 @@
  * Blockly's editor.
  * @class
  */
+goog.declareModuleId('Blockly.Events.Ui');
 
 /* eslint-disable-next-line no-unused-vars */
 import {Block} from '../block.js';

@@ -13,6 +13,7 @@
  * Events fired as a result of actions in Blockly's editor.
  * @namespace Blockly.Events
  */
+goog.declareModuleId('Blockly.Events');
 
 import * as deprecation from '../utils/deprecation.js';
 

@@ -13,6 +13,7 @@
  * Zelos renderer.
  * @class
  */
+goog.declareModuleId('Blockly.zelos.Renderer');
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
 import '../../theme';

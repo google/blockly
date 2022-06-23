@@ -15,6 +15,7 @@
  * minimalist renderer.
  * @class
  */
+goog.declareModuleId('Blockly.minimalist.ConstantProvider');
 
 import {ConstantProvider as BaseConstantProvider} from '../common/constants.js';
 

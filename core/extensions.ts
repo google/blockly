@@ -19,6 +19,7 @@
  *      array attribute.
  * @namespace Blockly.Extensions
  */
+goog.declareModuleId('Blockly.Extensions');
 // Unused import preserved for side-effects. Remove if unneeded.
 import './mutator';
 

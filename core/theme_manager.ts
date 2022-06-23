@@ -15,6 +15,7 @@
  *     and UI components.
  * @class
  */
+goog.declareModuleId('Blockly.ThemeManager');
 
 /* eslint-disable-next-line no-unused-vars */
 import {Theme} from './theme.js';

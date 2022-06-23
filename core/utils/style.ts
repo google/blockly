@@ -17,6 +17,7 @@
  * a JavaScript framework such as Closure.
  * @namespace Blockly.utils.style
  */
+goog.declareModuleId('Blockly.utils.style');
 
 import {Coordinate} from './coordinate.js';
 import {Rect} from './rect.js';

@@ -13,6 +13,7 @@
  * Object representing a code comment on a rendered workspace.
  * @class
  */
+goog.declareModuleId('Blockly.WorkspaceCommentSvg');
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_comment_create';
 // Unused import preserved for side-effects. Remove if unneeded.

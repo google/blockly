@@ -13,6 +13,7 @@
  * Methods for rendering debug graphics.
  * @class
  */
+goog.declareModuleId('Blockly.blockRendering.Debug');
 
 /* eslint-disable-next-line no-unused-vars */
 import {BlockSvg} from '../../block_svg.js';

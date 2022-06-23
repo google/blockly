@@ -13,6 +13,7 @@
  * Namespace for themes.
  * @namespace Blockly.Themes
  */
+goog.declareModuleId('Blockly.Themes');
 
 import {Classic} from './classic.js';
 import {Zelos} from './zelos.js';

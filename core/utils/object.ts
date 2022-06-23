@@ -13,6 +13,7 @@
  * Utility methods for objects.
  * @namespace Blockly.utils.object
  */
+goog.declareModuleId('Blockly.utils.object');
 
 import * as deprecation from './utils/deprecation.js';
 

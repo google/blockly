@@ -15,6 +15,7 @@
  * A div that floats on top of the workspace, for drop-down menus.
  * @class
  */
+goog.declareModuleId('Blockly.dropDownDiv');
 /* eslint-disable-next-line no-unused-vars */
 import {BlockSvg} from './block_svg.js';
 import * as common from './common.js';

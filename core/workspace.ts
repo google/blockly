@@ -13,6 +13,7 @@
  * Object representing a workspace.
  * @class
  */
+goog.declareModuleId('Blockly.Workspace');
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import './connection_checker';

@@ -15,6 +15,7 @@
  * objects.
  * @namespace Blockly.serialization.workspaces
  */
+goog.declareModuleId('Blockly.serialization.workspaces');
 
 import * as eventUtils from '../events/utils.js';
 import {ISerializer} from '../interfaces/i_serializer.js';

@@ -13,6 +13,7 @@
  * Events fired as a result of a theme update.
  * @class
  */
+goog.declareModuleId('Blockly.Events.ThemeChange');
 
 import * as registry from '../registry.js';
 

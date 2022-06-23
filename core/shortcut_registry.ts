@@ -15,6 +15,7 @@
  * key codes used to execute those shortcuts.
  * @class
  */
+goog.declareModuleId('Blockly.ShortcutRegistry');
 
 import {KeyCodes} from './utils/keycodes.js';
 import * as object from './utils/object.js';

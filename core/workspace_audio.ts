@@ -15,6 +15,7 @@
  *     workspace.
  * @class
  */
+goog.declareModuleId('Blockly.WorkspaceAudio');
 
 import * as userAgent from './utils/useragent.js';
 /* eslint-disable-next-line no-unused-vars */

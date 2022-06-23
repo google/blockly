@@ -13,6 +13,7 @@
  * Methods for dragging a bubble visually.
  * @class
  */
+goog.declareModuleId('Blockly.BubbleDragger');
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import './bubble';

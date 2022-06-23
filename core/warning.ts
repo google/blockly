@@ -13,6 +13,7 @@
  * Object representing a warning.
  * @class
  */
+goog.declareModuleId('Blockly.Warning');
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_bubble_open';

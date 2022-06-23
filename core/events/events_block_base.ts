@@ -13,6 +13,7 @@
  * Base class for all types of block events.
  * @class
  */
+goog.declareModuleId('Blockly.Events.BlockBase');
 
 /* eslint-disable-next-line no-unused-vars */
 import {Block} from '../block.js';

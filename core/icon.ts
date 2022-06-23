@@ -13,6 +13,7 @@
  * Object representing an icon on a block.
  * @class
  */
+goog.declareModuleId('Blockly.Icon');
 
 /* eslint-disable-next-line no-unused-vars */
 import {BlockSvg} from './block_svg.js';

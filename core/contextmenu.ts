@@ -13,6 +13,7 @@
  * Functionality for the right-click context menus.
  * @namespace Blockly.ContextMenu
  */
+goog.declareModuleId('Blockly.ContextMenu');
 /* eslint-disable-next-line no-unused-vars */
 import {Block} from './block.js';
 /* eslint-disable-next-line no-unused-vars */

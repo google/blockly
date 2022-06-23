@@ -13,6 +13,7 @@
  * Utility functions for the toolbox and flyout.
  * @namespace Blockly.utils.toolbox
  */
+goog.declareModuleId('Blockly.utils.toolbox');
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
 import '../toolbox/category';

@@ -13,6 +13,7 @@
  * Colour input field.
  * @class
  */
+goog.declareModuleId('Blockly.FieldColour');
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_block_change';

@@ -13,6 +13,7 @@
  * Thrasos renderer.
  * @class
  */
+goog.declareModuleId('Blockly.thrasos.Renderer');
 
 /* eslint-disable-next-line no-unused-vars */
 import {BlockSvg} from '../../block_svg.js';

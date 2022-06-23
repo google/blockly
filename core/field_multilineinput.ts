@@ -13,6 +13,7 @@
  * Text Area field.
  * @class
  */
+goog.declareModuleId('Blockly.FieldMultilineInput');
 
 import * as Css from './css.js';
 import {Field} from './field.js';

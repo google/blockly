@@ -13,6 +13,7 @@
  * Utility functions for handling variable and procedure names.
  * @class
  */
+goog.declareModuleId('Blockly.Names');
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import './procedures';

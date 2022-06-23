@@ -13,6 +13,7 @@
  * The class representing one block.
  * @class
  */
+goog.declareModuleId('Blockly.Block');
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_block_change';

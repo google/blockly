@@ -13,6 +13,7 @@
  * The class representing a theme.
  * @class
  */
+goog.declareModuleId('Blockly.Theme');
 
 import * as registry from './registry.js';
 import * as object from './utils/object.js';

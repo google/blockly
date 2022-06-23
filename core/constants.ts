@@ -13,6 +13,7 @@
  * Blockly constants.
  * @namespace Blockly.constants
  */
+goog.declareModuleId('Blockly.constants');
 
 
 /**

@@ -13,6 +13,7 @@
  * Object representing a zoom icons.
  * @class
  */
+goog.declareModuleId('Blockly.ZoomControls');
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
 import './metrics_manager';

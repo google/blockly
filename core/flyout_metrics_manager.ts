@@ -13,6 +13,7 @@
  * Calculates and reports flyout workspace metrics.
  * @class
  */
+goog.declareModuleId('Blockly.FlyoutMetricsManager');
 
 /* eslint-disable-next-line no-unused-vars */
 import {IFlyout} from './interfaces/i_flyout.js';

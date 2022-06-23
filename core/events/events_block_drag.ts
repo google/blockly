@@ -13,6 +13,7 @@
  * Events fired as a block drag.
  * @class
  */
+goog.declareModuleId('Blockly.Events.BlockDrag');
 
 /* eslint-disable-next-line no-unused-vars */
 import {Block} from '../block.js';

@@ -13,6 +13,7 @@
  * Utilities for bumping objects back into worksapce bounds.
  * @namespace Blockly.bumpObjects
  */
+goog.declareModuleId('Blockly.bumpObjects');
 /* eslint-disable-next-line no-unused-vars */
 import {BlockSvg} from './block_svg.js';
 /* eslint-disable-next-line no-unused-vars */

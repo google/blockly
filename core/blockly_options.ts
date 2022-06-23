@@ -13,6 +13,7 @@
  * Object that defines user-specified options for the workspace.
  * @namespace Blockly.BlocklyOptions
  */
+goog.declareModuleId('Blockly.BlocklyOptions');
 
 
 /**

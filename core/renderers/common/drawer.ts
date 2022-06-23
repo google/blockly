@@ -13,6 +13,7 @@
  * Methods for graphically rendering a block as SVG.
  * @class
  */
+goog.declareModuleId('Blockly.blockRendering.Drawer');
 
 /* eslint-disable-next-line no-unused-vars */
 import {BlockSvg} from '../../block_svg.js';

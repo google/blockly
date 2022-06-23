@@ -15,6 +15,7 @@
  * block.
  * @class
  */
+goog.declareModuleId('Blockly.blockRendering.Field');
 
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */

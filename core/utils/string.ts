@@ -17,6 +17,7 @@
  * a JavaScript framework such as Closure.
  * @namespace Blockly.utils.string
  */
+goog.declareModuleId('Blockly.utils.string');
 
 import * as deprecation from './utils/deprecation.js';
 

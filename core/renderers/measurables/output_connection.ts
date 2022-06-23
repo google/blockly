@@ -15,6 +15,7 @@
  * during rendering.
  * @class
  */
+goog.declareModuleId('Blockly.blockRendering.OutputConnection');
 
 /* eslint-disable-next-line no-unused-vars */
 import {RenderedConnection} from '../../rendered_connection.js';

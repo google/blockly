@@ -14,6 +14,7 @@
  * Wrapper functions around JS functions for showing alert/confirmation dialogs.
  * @namespace Blockly.dialog
  */
+goog.declareModuleId('Blockly.dialog');
 
 let alertImplementation = function(
     message: AnyDuringMigration, opt_callback: AnyDuringMigration) {

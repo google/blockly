@@ -13,6 +13,7 @@
  * Class for a block move event.
  * @class
  */
+goog.declareModuleId('Blockly.Events.BlockMove');
 
 /* eslint-disable-next-line no-unused-vars */
 import {Block} from '../block.js';

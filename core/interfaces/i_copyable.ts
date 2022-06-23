@@ -13,6 +13,7 @@
  * The interface for an object that is copyable.
  * @namespace Blockly.ICopyable
  */
+goog.declareModuleId('Blockly.ICopyable');
 
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */

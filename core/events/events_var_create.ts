@@ -13,6 +13,7 @@
  * Class for a variable creation event.
  * @class
  */
+goog.declareModuleId('Blockly.Events.VarCreate');
 
 import * as registry from '../registry.js';
 /* eslint-disable-next-line no-unused-vars */

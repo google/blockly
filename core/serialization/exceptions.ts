@@ -13,6 +13,7 @@
  * Contains custom errors thrown by the serialization system.
  * @namespace Blockly.serialization.exceptions
  */
+goog.declareModuleId('Blockly.serialization.exceptions');
 
 /* eslint-disable-next-line no-unused-vars */
 import {Block} from '../block.js';

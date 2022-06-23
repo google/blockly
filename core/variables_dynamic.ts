@@ -1,9 +1,11 @@
-/** @fileoverview Utility functions for handling typed variables. */
-
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Utility functions for handling typed variables.
  */
 
 

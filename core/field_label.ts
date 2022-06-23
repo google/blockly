@@ -1,12 +1,12 @@
 /**
- * @fileoverview Non-editable, non-serializable text field.  Used for titles,
- *    labels, etc.
- */
-
-/**
  * @license
  * Copyright 2012 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Non-editable, non-serializable text field.  Used for titles,
+ *    labels, etc.
  */
 
 

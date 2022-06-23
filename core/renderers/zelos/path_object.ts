@@ -1,11 +1,12 @@
-/** @fileoverview An object that owns a block's rendering SVG elements. */
-
 /**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/**
+ * @fileoverview An object that owns a block's rendering SVG elements.
+ */
 
 
 /**

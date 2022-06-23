@@ -1,9 +1,11 @@
-/** @fileoverview Calculates and reports flyout workspace metrics. */
-
 /**
  * @license
  * Copyright 2021 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Calculates and reports flyout workspace metrics.
  */
 
 

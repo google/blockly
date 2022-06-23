@@ -1,12 +1,12 @@
 /**
- * @fileoverview Methods for adding highlights on block, for rendering in
- * compatibility mode.
- */
-
-/**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Methods for adding highlights on block, for rendering in
+ * compatibility mode.
  */
 
 

@@ -1,11 +1,11 @@
 /**
- * @fileoverview Object that defines user-specified options for the workspace.
- */
-
-/**
  * @license
  * Copyright 2016 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Object that defines user-specified options for the workspace.
  */
 
 

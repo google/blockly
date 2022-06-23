@@ -1,14 +1,14 @@
 /**
+ * @license
+ * Copyright 2016 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
  * @fileoverview An SVG that floats on top of the workspace.
  * Blocks are moved into this SVG during a drag, improving performance.
  * The entire SVG is translated using CSS translation instead of SVG so the
  * blocks are never repainted during drag improving performance.
- */
-
-/**
- * @license
- * Copyright 2016 Google LLC
- * SPDX-License-Identifier: Apache-2.0
  */
 
 

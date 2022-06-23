@@ -1,9 +1,11 @@
-/** @fileoverview Components for creating connections between blocks. */
-
 /**
  * @license
  * Copyright 2011 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Components for creating connections between blocks.
  */
 
 

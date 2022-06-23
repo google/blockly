@@ -1,11 +1,12 @@
-/** @fileoverview The interface for an object that is selectable. */
-
 /**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/**
+ * @fileoverview The interface for an object that is selectable.
+ */
 
 
 /**

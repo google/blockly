@@ -1,12 +1,12 @@
 /**
- * @fileoverview Handles serializing blocks to plain JavaScript objects only
- * containing state.
- */
-
-/**
  * @license
  * Copyright 2021 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Handles serializing blocks to plain JavaScript objects only
+ * containing state.
  */
 
 

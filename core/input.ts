@@ -1,9 +1,11 @@
-/** @fileoverview Object representing an input (value, statement, or dummy). */
-
 /**
  * @license
  * Copyright 2012 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Object representing an input (value, statement, or dummy).
  */
 
 

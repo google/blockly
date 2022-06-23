@@ -1,12 +1,12 @@
 /**
- * @fileoverview (Deprecated) Events fired as a result of UI actions in
- * Blockly's editor.
- */
-
-/**
  * @license
  * Copyright 2018 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview (Deprecated) Events fired as a result of UI actions in
+ * Blockly's editor.
  */
 
 

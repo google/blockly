@@ -1,9 +1,11 @@
-/** @fileoverview Registers default context menu items. */
-
 /**
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Registers default context menu items.
  */
 
 

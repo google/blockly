@@ -1,12 +1,12 @@
 /**
- * @fileoverview Zelos specific objects representing elements in a row of a
- * rendered block.
- */
-
-/**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Zelos specific objects representing elements in a row of a
+ * rendered block.
  */
 
 

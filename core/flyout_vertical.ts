@@ -1,9 +1,11 @@
-/** @fileoverview Layout code for a vertical variant of the flyout. */
-
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Layout code for a vertical variant of the flyout.
  */
 
 

@@ -1,9 +1,11 @@
-/** @fileoverview Base class for all types of block events. */
-
 /**
  * @license
  * Copyright 2018 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Base class for all types of block events.
  */
 
 

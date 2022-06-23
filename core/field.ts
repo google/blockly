@@ -1,13 +1,13 @@
 /**
- * @fileoverview Field.  Used for editable titles, variables, etc.
- * This is an abstract class that defines the UI on the block.  Actual
- * instances would be FieldTextInput, FieldDropdown, etc.
- */
-
-/**
  * @license
  * Copyright 2012 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Field.  Used for editable titles, variables, etc.
+ * This is an abstract class that defines the UI on the block.  Actual
+ * instances would be FieldTextInput, FieldDropdown, etc.
  */
 
 

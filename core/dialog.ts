@@ -1,14 +1,13 @@
 /**
- * @fileoverview Wrapper functions around JS functions for showing
- * alert/confirmation dialogs.
- */
-
-/**
  * @license
  * Copyright 2021 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/**
+ * @fileoverview Wrapper functions around JS functions for showing
+ * alert/confirmation dialogs.
+ */
 
 
 /**

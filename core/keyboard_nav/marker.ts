@@ -1,12 +1,12 @@
 /**
- * @fileoverview The class representing a marker.
- * Used primarily for keyboard navigation to show a marked location.
- */
-
-/**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview The class representing a marker.
+ * Used primarily for keyboard navigation to show a marked location.
  */
 
 

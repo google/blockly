@@ -1,9 +1,11 @@
-/** @fileoverview Events fired as a result of UI click in Blockly's editor. */
-
 /**
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Events fired as a result of UI click in Blockly's editor.
  */
 
 

@@ -1,14 +1,14 @@
 /**
+ * @license
+ * Copyright 2017 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
  * @fileoverview Extensions are functions that help initialize blocks, usually
  *      adding dynamic behavior such as onchange handlers and mutators. These
  *      are applied using Block.applyExtension(), or the JSON "extensions"
  *      array attribute.
- */
-
-/**
- * @license
- * Copyright 2017 Google LLC
- * SPDX-License-Identifier: Apache-2.0
  */
 
 

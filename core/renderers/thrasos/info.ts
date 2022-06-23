@@ -1,12 +1,12 @@
 /**
- * @fileoverview New (evolving) renderer.
- * Thrasos: spirit of boldness.
- */
-
-/**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview New (evolving) renderer.
+ * Thrasos: spirit of boldness.
  */
 
 

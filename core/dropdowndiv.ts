@@ -1,15 +1,14 @@
 /**
- * @fileoverview A div that floats on top of the workspace, for drop-down menus.
- * The drop-down can be kept inside the workspace, animate in/out, etc.
- */
-
-/**
  * @license
  * Copyright 2016 Massachusetts Institute of Technology
  * All rights reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/**
+ * @fileoverview A div that floats on top of the workspace, for drop-down menus.
+ * The drop-down can be kept inside the workspace, animate in/out, etc.
+ */
 
 
 /**

@@ -1,9 +1,11 @@
-/** @fileoverview Base class for comment events. */
-
 /**
  * @license
  * Copyright 2018 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Base class for comment events.
  */
 
 

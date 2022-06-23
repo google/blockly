@@ -1,12 +1,12 @@
 /**
- * @fileoverview Object representing a bottom row on a rendered block.
- * of its subcomponents.
- */
-
-/**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Object representing a bottom row on a rendered block.
+ * of its subcomponents.
  */
 
 

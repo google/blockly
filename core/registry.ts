@@ -1,12 +1,12 @@
 /**
- * @fileoverview This file is a universal registry that provides generic methods
- *    for registering and unregistering different types of classes.
- */
-
-/**
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview This file is a universal registry that provides generic methods
+ *    for registering and unregistering different types of classes.
  */
 
 

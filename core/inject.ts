@@ -1,9 +1,11 @@
-/** @fileoverview Functions for injecting Blockly into a web page. */
-
 /**
  * @license
  * Copyright 2011 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Functions for injecting Blockly into a web page.
  */
 
 

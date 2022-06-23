@@ -1,9 +1,11 @@
-/** @fileoverview Components for the variable model. */
-
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Components for the variable model.
  */
 
 

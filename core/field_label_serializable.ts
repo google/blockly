@@ -1,13 +1,13 @@
 /**
- * @fileoverview Non-editable, serializable text field. Behaves like a
- *    normal label but is serialized to XML. It may only be
- *    edited programmatically.
- */
-
-/**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Non-editable, serializable text field. Behaves like a
+ *    normal label but is serialized to XML. It may only be
+ *    edited programmatically.
  */
 
 

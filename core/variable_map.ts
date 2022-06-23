@@ -1,9 +1,11 @@
-/** @fileoverview Object representing a map of variables and their types. */
-
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Object representing a map of variables and their types.
  */
 
 

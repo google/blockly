@@ -1,12 +1,12 @@
 /**
- * @fileoverview Base class for events fired as a result of UI actions in
- * Blockly's editor.
- */
-
-/**
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Base class for events fired as a result of UI actions in
+ * Blockly's editor.
  */
 
 

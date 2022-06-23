@@ -1,9 +1,11 @@
-/** @fileoverview Methods for dragging a workspace visually. */
-
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Methods for dragging a workspace visually.
  */
 
 

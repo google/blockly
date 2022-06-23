@@ -1,12 +1,12 @@
 /**
- * @fileoverview The interface for a component that is automatically hidden
- * when WorkspaceSvg.hideChaff is called.
- */
-
-/**
  * @license
  * Copyright 2021 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview The interface for a component that is automatically hidden
+ * when WorkspaceSvg.hideChaff is called.
  */
 
 

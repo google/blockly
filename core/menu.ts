@@ -1,9 +1,11 @@
-/** @fileoverview Blockly menu similar to Closure's goog.ui.Menu */
-
 /**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Blockly menu similar to Closure's goog.ui.Menu
  */
 
 

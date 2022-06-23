@@ -1,9 +1,11 @@
-/** @fileoverview Object representing a scrollbar. */
-
 /**
  * @license
  * Copyright 2011 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Object representing a scrollbar.
  */
 
 

@@ -13,6 +13,7 @@
  * Inject Blockly's CSS synchronously.
  * @namespace Blockly.Css
  */
+goog.declareModuleId('Blockly.Css');
 
 import * as deprecation from './utils/deprecation.js';
 

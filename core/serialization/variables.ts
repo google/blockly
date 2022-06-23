@@ -15,6 +15,7 @@
  * state.
  * @namespace Blockly.serialization.variables
  */
+goog.declareModuleId('Blockly.serialization.variables');
 
 // eslint-disable-next-line no-unused-vars
 import {ISerializer} from '../interfaces/i_serializer.js';

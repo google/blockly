@@ -13,6 +13,7 @@
  * Class for a button in the flyout.
  * @class
  */
+goog.declareModuleId('Blockly.FlyoutButton');
 
 import * as browserEvents from './browser_events.js';
 import * as Css from './css.js';

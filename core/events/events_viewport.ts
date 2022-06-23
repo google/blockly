@@ -13,6 +13,7 @@
  * Events fired as a result of a viewport change.
  * @class
  */
+goog.declareModuleId('Blockly.Events.ViewportChange');
 
 import * as registry from '../registry.js';
 

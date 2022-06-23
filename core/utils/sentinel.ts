@@ -13,6 +13,7 @@
  * A type used to create flag values.
  * @class
  */
+goog.declareModuleId('Blockly.utils.Sentinel');
 
 
 /**

@@ -15,6 +15,7 @@
  * checking whether a potential connection is safe and valid.
  * @namespace Blockly.IConnectionChecker
  */
+goog.declareModuleId('Blockly.IConnectionChecker');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.

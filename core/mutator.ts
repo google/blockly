@@ -15,6 +15,7 @@
  * user to change the shape of a block using a nested blocks editor.
  * @class
  */
+goog.declareModuleId('Blockly.Mutator');
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_bubble_open';

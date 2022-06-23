@@ -12,6 +12,7 @@
 /**
  * @namespace Blockly.utils.parsing
  */
+goog.declareModuleId('Blockly.utils.parsing');
 
 import {Msg} from '../msg.js';
 

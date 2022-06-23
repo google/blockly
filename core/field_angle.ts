@@ -13,6 +13,7 @@
  * Angle input field.
  * @class
  */
+goog.declareModuleId('Blockly.FieldAngle');
 
 import {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';

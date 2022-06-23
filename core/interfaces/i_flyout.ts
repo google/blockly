@@ -13,6 +13,7 @@
  * The interface for a flyout.
  * @namespace Blockly.IFlyout
  */
+goog.declareModuleId('Blockly.IFlyout');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.

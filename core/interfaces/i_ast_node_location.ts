@@ -13,6 +13,7 @@
  * The interface for an AST node location.
  * @namespace Blockly.IASTNodeLocation
  */
+goog.declareModuleId('Blockly.IASTNodeLocation');
 
 /**
  * An AST node location interface.

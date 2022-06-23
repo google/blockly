@@ -18,6 +18,7 @@
  * priorities are deserialized first.
  * @namespace Blockly.serialization.priorities
  */
+goog.declareModuleId('Blockly.serialization.priorities');
 
 
 /**

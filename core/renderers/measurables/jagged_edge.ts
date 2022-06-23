@@ -15,6 +15,7 @@
  * block.
  * @class
  */
+goog.declareModuleId('Blockly.blockRendering.JaggedEdge');
 
 /* eslint-disable-next-line no-unused-vars */
 import {ConstantProvider} from '../common/constants.js';

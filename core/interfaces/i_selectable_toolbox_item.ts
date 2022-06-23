@@ -13,6 +13,7 @@
  * The interface for a selectable toolbox item.
  * @namespace Blockly.ISelectableToolboxItem
  */
+goog.declareModuleId('Blockly.ISelectableToolboxItem');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.

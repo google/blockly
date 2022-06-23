@@ -13,6 +13,7 @@
  * Blockly menu similar to Closure's goog.ui.Menu
  * @class
  */
+goog.declareModuleId('Blockly.Menu');
 
 import * as browserEvents from './browser_events.js';
 /* eslint-disable-next-line no-unused-vars */

@@ -13,6 +13,8 @@
  * Registers default context menu items.
  * @namespace Blockly.ContextMenuItems
  */
+goog.declareModuleId('Blockly.ContextMenuItems');
+
 /* eslint-disable-next-line no-unused-vars */
 import {BlockSvg} from './block_svg.js';
 import * as clipboard from './clipboard.js';

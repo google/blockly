@@ -13,6 +13,7 @@
  * Flyout tray containing blocks which may be created.
  * @class
  */
+goog.declareModuleId('Blockly.Flyout');
 
 /* eslint-disable-next-line no-unused-vars */
 import {Block} from './block.js';

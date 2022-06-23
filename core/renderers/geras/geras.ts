@@ -11,6 +11,7 @@
  * Re-exports of Blockly.geras.* modules.
  * @namespace Blockly.geras
  */
+goog.declareModuleId('Blockly.geras');
 
 import {ConstantProvider} from './constants.js';
 import {Drawer} from './drawer.js';

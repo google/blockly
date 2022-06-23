@@ -14,6 +14,7 @@
  *
  * @namespace Blockly.VariablesDynamic
  */
+goog.declareModuleId('Blockly.VariablesDynamic');
 
 import {Blocks} from './blocks.js';
 import {Msg} from './msg.js';

@@ -13,6 +13,7 @@
  * The interface for a toolbox item.
  * @namespace Blockly.IToolboxItem
  */
+goog.declareModuleId('Blockly.IToolboxItem');
 
 
 /**

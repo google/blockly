@@ -15,6 +15,7 @@
  * rendered block.
  * @class
  */
+goog.declareModuleId('Blockly.zelos.RightConnectionShape');
 
 /* eslint-disable-next-line no-unused-vars */
 import {ConstantProvider} from '../../../renderers/common/constants.js';

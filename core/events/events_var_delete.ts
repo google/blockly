@@ -13,6 +13,7 @@
  * Classes for all types of variable events.
  * @class
  */
+goog.declareModuleId('Blockly.Events.VarDelete');
 
 import * as registry from '../registry.js';
 /* eslint-disable-next-line no-unused-vars */

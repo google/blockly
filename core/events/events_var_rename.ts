@@ -13,6 +13,7 @@
  * Class for a variable rename event.
  * @class
  */
+goog.declareModuleId('Blockly.Events.VarRename');
 
 import * as registry from '../registry.js';
 /* eslint-disable-next-line no-unused-vars */

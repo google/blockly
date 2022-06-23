@@ -17,6 +17,7 @@
  * a JavaScript framework such as Closure.
  * @namespace Blockly.utils.aria
  */
+goog.declareModuleId('Blockly.utils.aria');
 
 
 /** ARIA states/properties prefix. */

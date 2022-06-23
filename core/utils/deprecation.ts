@@ -15,6 +15,7 @@
  * This method is not specific to Blockly.
  * @namespace Blockly.utils.deprecation
  */
+goog.declareModuleId('Blockly.utils.deprecation');
 
 
 /**

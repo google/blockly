@@ -13,6 +13,7 @@
  * An object representing the bottom row of a rendered block.
  * @class
  */
+goog.declareModuleId('Blockly.zelos.BottomRow');
 
 /* eslint-disable-next-line no-unused-vars */
 import {BlockSvg} from '../../../block_svg.js';

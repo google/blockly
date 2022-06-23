@@ -13,6 +13,7 @@
  * Methods for dragging a workspace visually.
  * @class
  */
+goog.declareModuleId('Blockly.WorkspaceDragger');
 
 import * as common from './common.js';
 import {Coordinate} from './utils/coordinate.js';

@@ -15,6 +15,7 @@
  *    for registering and unregistering different types of classes.
  * @namespace Blockly.registry
  */
+goog.declareModuleId('Blockly.registry');
 
 /* eslint-disable-next-line no-unused-vars */
 import {Abstract} from './events/events_abstract.js';

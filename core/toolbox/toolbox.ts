@@ -13,6 +13,8 @@
  * Toolbox from whence to create blocks.
  * @class
  */
+goog.declareModuleId('Blockly.Toolbox');
+
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
 import '../shortcut_registry';

@@ -15,7 +15,7 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.FieldImage');
 
-import {Field} from './field.js';
+import {Config as BaseFieldConfig, Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
@@ -84,7 +84,7 @@ export class FieldImage extends Field {
   constructor(
       src: string|Sentinel, width: string|number, height: string|number,
       opt_alt?: string, opt_onClick?: (p1: FieldImage) => AnyDuringMigration,
-      opt_flipRtl?: boolean, opt_config?: AnyDuringMigration) {
+      opt_flipRtl?: boolean, opt_config?: Config) {
     super(Field.SKIP_SETUP);
 
     // Return early.
@@ -133,10 +133,12 @@ export class FieldImage extends Field {
    * Configure the field based on the given map of options.
    * @param config A map of options to configure the field based on.
    */
-  protected override configure_(config: AnyDuringMigration) {
+  protected override configure_(config: Config) {
     super.configure_(config);
-    this.flipRtl_ = !!config['flipRtl'];
-    this.altText_ = parsing.replaceMessageReferences(config['alt']) || '';
+    if (config.flipRtl) this.flipRtl_ = config.flipRtl;
+    if (config.alt) {
+      this.altText_ = parsing.replaceMessageReferences(config.alt);
+    }
   }
 
   /**
@@ -260,3 +262,8 @@ export class FieldImage extends Field {
 fieldRegistry.register('field_image', FieldImage);
 
 (FieldImage.prototype as AnyDuringMigration).DEFAULT_VALUE = '';
+
+export interface Config extends BaseFieldConfig {
+  flipRtl?: boolean,
+  alt?: string,
+}

@@ -18,7 +18,7 @@ goog.declareModuleId('Blockly.FieldMultilineInput');
 import * as Css from './css.js';
 import {Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
-import {FieldTextInput} from './field_textinput.js';
+import {Config as TextInputConfig, FieldTextInput} from './field_textinput.js';
 import * as aria from './utils/aria.js';
 import * as dom from './utils/dom.js';
 import {KeyCodes} from './utils/keycodes.js';
@@ -68,7 +68,7 @@ export class FieldMultilineInput extends FieldTextInput {
    */
   constructor(
       opt_value?: string|Sentinel, opt_validator?: Function,
-      opt_config?: AnyDuringMigration) {
+      opt_config?: Config) {
     super(Field.SKIP_SETUP);
 
     if (opt_value === Field.SKIP_SETUP) {
@@ -83,9 +83,9 @@ export class FieldMultilineInput extends FieldTextInput {
     }
   }
 
-  override configure_(config: AnyDuringMigration) {
+  override configure_(config: Config) {
     super.configure_(config);
-    config['maxLines'] && this.setMaxLines(config['maxLines']);
+    if (config.maxLines) this.setMaxLines(config.maxLines);
   }
 
   /**
@@ -448,3 +448,7 @@ Css.register(`
 `);
 
 fieldRegistry.register('field_multilinetext', FieldMultilineInput);
+
+export interface Config extends TextInputConfig {
+  maxLines?: number;
+}

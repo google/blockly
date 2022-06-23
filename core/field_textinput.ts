@@ -23,7 +23,7 @@ import * as browserEvents from './browser_events.js';
 import * as dialog from './dialog.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import * as eventUtils from './events/utils.js';
-import {Field} from './field.js';
+import {Config as BaseFieldConfig, Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import {Msg} from './msg.js';
 import * as aria from './utils/aria.js';
@@ -105,7 +105,7 @@ export class FieldTextInput extends Field {
    */
   constructor(
       opt_value?: string|Sentinel, opt_validator?: Function|null,
-      opt_config?: AnyDuringMigration) {
+      opt_config?: Config) {
     super(Field.SKIP_SETUP);
 
     if (opt_value === Field.SKIP_SETUP) {
@@ -120,10 +120,10 @@ export class FieldTextInput extends Field {
     }
   }
 
-  override configure_(config: AnyDuringMigration) {
+  override configure_(config: Config) {
     super.configure_(config);
-    if (typeof config['spellcheck'] === 'boolean') {
-      this.spellcheck_ = config['spellcheck'];
+    if (config.spellcheck !== undefined) {
+      this.spellcheck_ = config.spellcheck;
     }
   }
 
@@ -575,3 +575,7 @@ export class FieldTextInput extends Field {
 fieldRegistry.register('field_input', FieldTextInput);
 
 (FieldTextInput.prototype as AnyDuringMigration).DEFAULT_VALUE = '';
+
+export interface Config extends BaseFieldConfig {
+  spellcheck?: boolean;
+}

@@ -17,7 +17,7 @@ goog.declareModuleId('Blockly.FieldNumber');
 
 import {Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
-import {FieldTextInput} from './field_textinput.js';
+import {Config as TextInputConfig, FieldTextInput} from './field_textinput.js';
 import * as aria from './utils/aria.js';
 import type {Sentinel} from './utils/sentinel.js';
 
@@ -70,7 +70,7 @@ export class FieldNumber extends FieldTextInput {
   constructor(
       opt_value?: string|number|Sentinel, opt_min?: string|number|null,
       opt_max?: string|number|null, opt_precision?: string|number|null,
-      opt_validator?: Function|null, opt_config?: AnyDuringMigration) {
+      opt_validator?: Function|null, opt_config?: Config) {
     // Pass SENTINEL so that we can define properties before value validation.
     super(Field.SKIP_SETUP);
 
@@ -92,11 +92,11 @@ export class FieldNumber extends FieldTextInput {
    * Configure the field based on the given map of options.
    * @param config A map of options to configure the field based on.
    */
-  override configure_(config: AnyDuringMigration) {
+  override configure_(config: Config) {
     super.configure_(config);
-    this.setMinInternal_(config['min']);
-    this.setMaxInternal_(config['max']);
-    this.setPrecisionInternal_(config['precision']);
+    this.setMinInternal_(config.min);
+    this.setMaxInternal_(config.max);
+    this.setPrecisionInternal_(config.precision);
   }
 
   /**
@@ -309,3 +309,9 @@ export class FieldNumber extends FieldTextInput {
 fieldRegistry.register('field_number', FieldNumber);
 
 (FieldNumber.prototype as AnyDuringMigration).DEFAULT_VALUE = 0;
+
+export interface Config extends TextInputConfig {
+  min?: number;
+  max?: number;
+  precision?: number;
+}

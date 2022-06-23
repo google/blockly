@@ -17,7 +17,7 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.FieldLabel');
 
-import {Field} from './field.js';
+import {Config as BaseFieldConfig, Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
@@ -52,7 +52,7 @@ export class FieldLabel extends Field {
    */
   constructor(
       opt_value?: string|Sentinel, opt_class?: string,
-      opt_config?: AnyDuringMigration) {
+      opt_config?: Config) {
     super(Field.SKIP_SETUP);
 
     if (opt_value === Field.SKIP_SETUP) {
@@ -66,9 +66,9 @@ export class FieldLabel extends Field {
     this.setValue(opt_value);
   }
 
-  override configure_(config: AnyDuringMigration) {
+  override configure_(config: Config) {
     super.configure_(config);
-    this.class_ = config['class'];
+    if (config.class) this.class_ = config.class;
   }
 
   /**
@@ -132,3 +132,7 @@ export class FieldLabel extends Field {
 fieldRegistry.register('field_label', FieldLabel);
 
 (FieldLabel.prototype as AnyDuringMigration).DEFAULT_VALUE = '';
+
+export interface Config extends BaseFieldConfig {
+  class?: string;
+}

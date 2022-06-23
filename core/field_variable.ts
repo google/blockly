@@ -84,7 +84,7 @@ export class FieldVariable extends FieldDropdown {
   constructor(
       varName: string|null|Sentinel, opt_validator?: Function,
       opt_variableTypes?: string[], opt_defaultType?: string,
-      opt_config?: AnyDuringMigration) {
+      opt_config?: Config) {
     super(Field.SKIP_SETUP);
 
     /**
@@ -123,9 +123,9 @@ export class FieldVariable extends FieldDropdown {
    * Configure the field based on the given map of options.
    * @param config A map of options to configure the field based on.
    */
-  protected override configure_(config: AnyDuringMigration) {
+  protected override configure_(config: Config) {
     super.configure_(config);
-    this.setTypes_(config['variableTypes'], config['defaultType']);
+    this.setTypes_(config.variableTypes, config.defaultType);
   }
 
   /**
@@ -527,3 +527,8 @@ export class FieldVariable extends FieldDropdown {
 }
 
 fieldRegistry.register('field_variable', FieldVariable);
+
+export interface Config extends BaseFieldConfig {
+  variableTypes?: string[];
+  defaultType?: string;
+}

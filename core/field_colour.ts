@@ -22,7 +22,7 @@ import {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import * as Css from './css.js';
 import * as dropDownDiv from './dropdowndiv.js';
-import {Field} from './field.js';
+import {Config as BaseFieldConfig, Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import * as aria from './utils/aria.js';
 import * as colour from './utils/colour.js';
@@ -155,7 +155,7 @@ export class FieldColour extends Field {
    */
   constructor(
       opt_value?: string|Sentinel, opt_validator?: Function,
-      opt_config?: AnyDuringMigration) {
+      opt_config?: Config) {
     super(Field.SKIP_SETUP);
 
     if (opt_value === Field.SKIP_SETUP) {
@@ -174,15 +174,11 @@ export class FieldColour extends Field {
    * Configure the field based on the given map of options.
    * @param config A map of options to configure the field based on.
    */
-  protected override configure_(config: AnyDuringMigration) {
+  protected override configure_(config: Config) {
     super.configure_(config);
-    if (config['colourOptions']) {
-      this.colours_ = config['colourOptions'];
-      this.titles_ = config['colourTitles'];
-    }
-    if (config['columns']) {
-      this.columns_ = config['columns'];
-    }
+    if (config.colourOptions) this.colours_ = config.colourOptions;
+    if (config.colourTitles) this.titles_ = config.colourTitles;
+    if (config.columns) this.columns_ = config.columns;
   }
 
   /**
@@ -618,3 +614,9 @@ Css.register(`
 `);
 
 fieldRegistry.register('field_colour', FieldColour);
+
+export interface Config extends BaseFieldConfig {
+  colourOptions?: string[];
+  colourTitles?: string[];
+  columns?: number;
+}

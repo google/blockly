@@ -19,7 +19,7 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.FieldLabelSerializable');
 
-import {FieldLabel} from './field_label.js';
+import {Config as LabelConfig, FieldLabel} from './field_label.js';
 import * as fieldRegistry from './field_registry.js';
 import * as parsing from './utils/parsing.js';
 
@@ -52,7 +52,7 @@ export class FieldLabelSerializable extends FieldLabel {
    * for a list of properties this parameter supports.
    */
   constructor(
-      opt_value?: string, opt_class?: string, opt_config?: AnyDuringMigration) {
+      opt_value?: string, opt_class?: string, opt_config?: LabelConfig) {
     super(String(opt_value ?? ''), opt_class, opt_config);
   }
 

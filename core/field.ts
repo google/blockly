@@ -209,7 +209,7 @@ export abstract class Field implements IASTNodeLocationSvg,
    */
   constructor(
       value: AnyDuringMigration, opt_validator?: Function|null,
-      opt_config?: AnyDuringMigration) {
+      opt_config?: Config) {
     /**
      * A generic value possessed by the field.
      * Should generally be non-null, only null when the field is created.
@@ -237,16 +237,11 @@ export abstract class Field implements IASTNodeLocationSvg,
    *     individual field's documentation for a list of properties this
    *     parameter supports.
    */
-  protected configure_(config: AnyDuringMigration) {
-    let tooltip = config['tooltip'];
-    if (typeof tooltip === 'string') {
-      tooltip = parsing.replaceMessageReferences(config['tooltip']);
-    }
-    tooltip && this.setTooltip(tooltip);
+  protected configure_(config: Config) {
+    // TODO (#2884): Possibly add CSS class config option.
+    // TODO (#2885): Possibly add cursor config option.
+    if (config.tooltip) this.setTooltip(config.tooltip);
   }
-
-  // TODO (#2884): Possibly add CSS class config option.
-  // TODO (#2885): Possibly add cursor config option.
 
   /**
    * Attach this field to a block.
@@ -1199,4 +1194,8 @@ export abstract class Field implements IASTNodeLocationSvg,
       workspace.getMarker(MarkerManager.LOCAL_MARKER)!.draw();
     }
   }
+}
+
+export interface Config {
+  tooltip?: string;
 }

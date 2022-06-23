@@ -21,7 +21,7 @@ goog.declareModuleId('Blockly.FieldDropdown');
 
 import type {BlockSvg} from './block_svg.js';
 import * as dropDownDiv from './dropdowndiv.js';
-import {Field} from './field.js';
+import {Config as BaseFieldConfig, Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import {Menu} from './menu.js';
 import {MenuItem} from './menuitem.js';
@@ -117,7 +117,9 @@ export class FieldDropdown extends Field {
    */
   constructor(
       menuGenerator: AnyDuringMigration[][]|Function|Sentinel,
-      opt_validator?: Function, opt_config?: AnyDuringMigration) {
+      opt_validator?: Function,
+      opt_config?: BaseFieldConfig
+  ) {
     super(Field.SKIP_SETUP);
 
     // If we pass SKIP_SETUP, don't do *anything* with the menu generator.

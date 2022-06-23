@@ -14,6 +14,7 @@
  * @class
  */
 goog.declareModuleId('Blockly.blockRendering.Renderer');
+
 /* eslint-disable-next-line no-unused-vars */
 import {Block} from '../../block.js';
 /* eslint-disable-next-line no-unused-vars */

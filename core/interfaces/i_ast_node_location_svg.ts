@@ -14,6 +14,7 @@
  * @namespace Blockly.IASTNodeLocationSvg
  */
 goog.declareModuleId('Blockly.IASTNodeLocationSvg');
+
 /* eslint-disable-next-line no-unused-vars */
 import {IASTNodeLocation} from './i_ast_node_location.js';
 

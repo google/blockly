@@ -14,6 +14,7 @@
  * @class
  */
 goog.declareModuleId('Blockly.geras.HighlightConstantProvider');
+
 import * as svgPaths from '../../utils/svg_paths.js';
 /* eslint-disable-next-line no-unused-vars */
 import {ConstantProvider} from '../common/constants.js';

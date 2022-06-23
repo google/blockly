@@ -16,6 +16,7 @@
  * @class
  */
 goog.declareModuleId('Blockly.zelos.ConstantProvider');
+
 import {ConnectionType} from '../../connection_type.js';
 import {RenderedConnection} from '../../rendered_connection.js';
 import {Theme} from '../../theme.js';

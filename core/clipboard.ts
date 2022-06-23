@@ -14,6 +14,7 @@
  * @namespace Blockly.clipboard
  */
 goog.declareModuleId('Blockly.clipboard');
+
 import {CopyData, ICopyable} from './interfaces/i_copyable.js';
 
 

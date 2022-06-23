@@ -14,6 +14,7 @@
  * @namespace Blockly.blockRendering.Types
  */
 goog.declareModuleId('Blockly.blockRendering.Types');
+
 /* eslint-disable-next-line no-unused-vars */
 import {Measurable} from './base.js';
 /* eslint-disable-next-line no-unused-vars */

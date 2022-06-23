@@ -18,6 +18,7 @@
  * @namespace Blockly.config
  */
 goog.declareModuleId('Blockly.config');
+
 /**
  * All the values that we expect developers to be able to change
  * before injecting Blockly.

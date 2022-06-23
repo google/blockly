@@ -14,6 +14,7 @@
  * @class
  */
 goog.declareModuleId('Blockly.zelos.PathObject');
+
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
 import '../../theme';

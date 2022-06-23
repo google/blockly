@@ -14,6 +14,7 @@
  * @class
  */
 goog.declareModuleId('Blockly.FieldVariable');
+
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_block_change';
 

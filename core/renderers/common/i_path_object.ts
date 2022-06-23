@@ -17,6 +17,7 @@
  * @namespace Blockly.blockRendering.IPathObject
  */
 goog.declareModuleId('Blockly.blockRendering.IPathObject');
+
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
 import '../../block_svg';

@@ -14,6 +14,7 @@
  * @namespace Blockly
  */
 goog.declareModuleId('Blockly');
+
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_block_create';
 // Unused import preserved for side-effects. Remove if unneeded.

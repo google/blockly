@@ -14,6 +14,7 @@
  * @namespace Blockly.Procedures
  */
 goog.declareModuleId('Blockly.Procedures');
+
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_block_change';
 

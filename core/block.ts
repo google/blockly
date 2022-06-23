@@ -193,9 +193,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @deprecated August 2019. Use getCommentText instead.
    */
   comment: string|Comment|null = null;
-  /**
-   * @internal
-   */
+  /** @internal */
   commentModel: CommentModel;
   private readonly xy_: Coordinate;
   isInFlyout: boolean;

@@ -130,9 +130,7 @@ export class FieldTextInput extends Field {
     }
   }
 
-  /**
-   * @internal
-   */
+  /** @internal */
   override initView() {
     if (this.getConstants()!.FULL_BLOCK_FIELDS) {
       // Step one: figure out if this is the only field on this block.

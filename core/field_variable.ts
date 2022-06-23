@@ -475,8 +475,8 @@ export class FieldVariable extends FieldDropdown {
    * @nocollapse
    * @internal
    */
-  static override fromJson(options: AnyDuringMigration): FieldVariable {
-    const varName = parsing.replaceMessageReferences(options['variable']);
+  static override fromJson(options: FromJsonConfig): FieldVariable {
+    const varName = parsing.replaceMessageReferences(options.variable);
     // `this` might be a subclass of FieldVariable if that class doesn't
     // override the static fromJson method.
     return new this(varName, undefined, undefined, undefined, options);
@@ -531,4 +531,8 @@ fieldRegistry.register('field_variable', FieldVariable);
 export interface Config extends BaseFieldConfig {
   variableTypes?: string[];
   defaultType?: string;
+}
+
+export interface FromJsonConfig extends Config {
+  variable?: string;
 }

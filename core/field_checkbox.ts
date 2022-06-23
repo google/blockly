@@ -217,10 +217,10 @@ export class FieldCheckbox extends Field {
    * @nocollapse
    * @internal
    */
-  static fromJson(options: AnyDuringMigration): FieldCheckbox {
+  static fromJson(options: FromJsonConfig): FieldCheckbox {
     // `this` might be a subclass of FieldCheckbox if that class doesn't
     // 'override' the static fromJson method.
-    return new this(options['checked'], undefined, options);
+    return new this(options.checked, undefined, options);
   }
 }
 
@@ -230,4 +230,8 @@ fieldRegistry.register('field_checkbox', FieldCheckbox);
 
 export interface Config extends BaseFieldConfig {
   checkCharacter?: string;
+}
+
+export interface FromJsonConfig extends Config {
+  checked?: boolean;
 }

@@ -121,8 +121,8 @@ export class FieldLabel extends Field {
    * @nocollapse
    * @internal
    */
-  static fromJson(options: AnyDuringMigration): FieldLabel {
-    const text = parsing.replaceMessageReferences(options['text']);
+  static fromJson(options: FromJsonConfig): FieldLabel {
+    const text = parsing.replaceMessageReferences(options.text);
     // `this` might be a subclass of FieldLabel if that class doesn't override
     // the static fromJson method.
     return new this(text, undefined, options);
@@ -135,4 +135,8 @@ fieldRegistry.register('field_label', FieldLabel);
 
 export interface Config extends BaseFieldConfig {
   class?: string;
+}
+
+export interface FromJsonConfig extends Config {
+  text?: string;
 }

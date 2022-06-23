@@ -564,8 +564,8 @@ export class FieldTextInput extends Field {
    * @nocollapse
    * @internal
    */
-  static fromJson(options: AnyDuringMigration): FieldTextInput {
-    const text = parsing.replaceMessageReferences(options['text']);
+  static fromJson(options: FromJsonConfig): FieldTextInput {
+    const text = parsing.replaceMessageReferences(options.text);
     // `this` might be a subclass of FieldTextInput if that class doesn't
     // override the static fromJson method.
     return new this(text, undefined, options);
@@ -578,4 +578,8 @@ fieldRegistry.register('field_input', FieldTextInput);
 
 export interface Config extends BaseFieldConfig {
   spellcheck?: boolean;
+}
+
+export interface FromJsonConfig extends Config {
+  text?: string;
 }

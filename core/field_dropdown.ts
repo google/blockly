@@ -658,10 +658,15 @@ export class FieldDropdown extends Field {
    * @nocollapse
    * @internal
    */
-  static fromJson(options: AnyDuringMigration): FieldDropdown {
+  static fromJson(options: FromJsonConfig): FieldDropdown {
+    if (!options.options) {
+      throw new Error('options are required for the dropdown field. The ' +
+          'options property must be assigned an array of ' +
+          '[humanReadableValue, languageNeutralValue] tuples.');
+    }
     // `this` might be a subclass of FieldDropdown if that class doesn't
     // override the static fromJson method.
-    return new this(options['options'], undefined, options);
+    return new this(options.options, undefined, options);
   }
 
   /**
@@ -688,7 +693,10 @@ export class FieldDropdown extends Field {
   }
 }
 
-/** Dropdown image properties. */
+interface FromJsonConfig extends BaseFieldConfig {
+  options?: MenuOption[];
+}
+
 interface ImageProperties {
   src: string;
   alt: string;

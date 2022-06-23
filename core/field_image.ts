@@ -87,10 +87,6 @@ export class FieldImage extends Field {
       opt_flipRtl?: boolean, opt_config?: Config) {
     super(Field.SKIP_SETUP);
 
-    // Return early.
-    if (!src) {
-      throw Error('Src value of an image field is required');
-    }
     const imageHeight = Number(parsing.replaceMessageReferences(height));
     const imageWidth = Number(parsing.replaceMessageReferences(width));
     if (isNaN(imageHeight) || isNaN(imageWidth)) {
@@ -250,11 +246,15 @@ export class FieldImage extends Field {
    * @nocollapse
    * @internal
    */
-  static fromJson(options: AnyDuringMigration): FieldImage {
+  static fromJson(options: FromJsonConfig): FieldImage {
+    if (!options.src || !options.width || !options.height) {
+      throw new Error('src, width, and height values for an image field are' +
+          'required. The width and height must be non-zero.');
+    }
     // `this` might be a subclass of FieldImage if that class doesn't override
     // the static fromJson method.
     return new this(
-        options['src'], options['width'], options['height'], undefined,
+        options.src, options.width, options.height, undefined,
         undefined, undefined, options);
   }
 }
@@ -266,4 +266,10 @@ fieldRegistry.register('field_image', FieldImage);
 export interface Config extends BaseFieldConfig {
   flipRtl?: boolean,
   alt?: string,
+}
+
+export interface FromJsonConfig extends Config {
+  src?: string;
+  width?: number;
+  height?: number;
 }

@@ -298,11 +298,11 @@ export class FieldNumber extends FieldTextInput {
    * @nocollapse
    * @internal
    */
-  static override fromJson(options: AnyDuringMigration): FieldNumber {
+  static override fromJson(options: FromJsonConfig): FieldNumber {
     // `this` might be a subclass of FieldNumber if that class doesn't override
     // the static fromJson method.
     return new this(
-        options['value'], undefined, undefined, undefined, undefined, options);
+        options.value, undefined, undefined, undefined, undefined, options);
   }
 }
 
@@ -314,4 +314,8 @@ export interface Config extends TextInputConfig {
   min?: number;
   max?: number;
   precision?: number;
+}
+
+export interface FromJsonConfig extends Config {
+  value?: number;
 }

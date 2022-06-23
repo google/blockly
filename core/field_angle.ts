@@ -486,10 +486,10 @@ export class FieldAngle extends FieldTextInput {
    * @nocollapse
    * @internal
    */
-  static override fromJson(options: AnyDuringMigration): FieldAngle {
+  static override fromJson(options: FromJsonConfig): FieldAngle {
     // `this` might be a subclass of FieldAngle if that class doesn't override
     // the static fromJson method.
-    return new this(options['angle'], undefined, options);
+    return new this(options.angle, undefined, options);
   }
 }
 
@@ -536,4 +536,8 @@ export interface Config extends TextConfig {
   offset?: number;
   wrap?: number;
   round?: number;
+}
+
+export interface FromJsonConfig extends Config {
+  angle?: number;
 }

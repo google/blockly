@@ -568,7 +568,7 @@ export class FieldColour extends Field {
    * @nocollapse
    * @internal
    */
-  static fromJson(options: AnyDuringMigration): FieldColour {
+  static fromJson(options: FromJsonConfig): FieldColour {
     // `this` might be a subclass of FieldColour if that class doesn't override
     // the static fromJson method.
     return new this(options['colour'], undefined, options);
@@ -619,4 +619,8 @@ export interface Config extends BaseFieldConfig {
   colourOptions?: string[];
   colourTitles?: string[];
   columns?: number;
+}
+
+export interface FromJsonConfig extends Config {
+  colour?: string;
 }

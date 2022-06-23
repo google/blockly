@@ -424,8 +424,8 @@ export class FieldMultilineInput extends FieldTextInput {
    * @nocollapse
    * @internal
    */
-  static override fromJson(options: AnyDuringMigration): FieldMultilineInput {
-    const text = parsing.replaceMessageReferences(options['text']);
+  static override fromJson(options: FromJsonConfig): FieldMultilineInput {
+    const text = parsing.replaceMessageReferences(options.text);
     // `this` might be a subclass of FieldMultilineInput if that class doesn't
     // override the static fromJson method.
     return new this(text, undefined, options);
@@ -451,4 +451,8 @@ fieldRegistry.register('field_multilinetext', FieldMultilineInput);
 
 export interface Config extends TextInputConfig {
   maxLines?: number;
+}
+
+export interface FromJsonConfig extends Config {
+  text?: string;
 }

@@ -13,6 +13,7 @@
  * Class for comment move event.
  * @class
  */
+goog.declareModuleId('Blockly.Events.CommentMove');
 
 import * as registry from '../registry.js';
 import {Coordinate} from '../utils/coordinate.js';

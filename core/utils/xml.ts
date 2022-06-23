@@ -17,6 +17,7 @@
  * a JavaScript framework such as Closure.
  * @namespace Blockly.utils.xml
  */
+goog.declareModuleId('Blockly.utils.xml');
 
 /**
  * Namespace for Blockly's XML.

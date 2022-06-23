@@ -15,6 +15,7 @@
  * Blockly.
  * @class
  */
+goog.declareModuleId('Blockly.Grid');
 
 import * as dom from './utils/dom.js';
 import {Svg} from './utils/svg.js';

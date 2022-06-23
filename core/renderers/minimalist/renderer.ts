@@ -13,6 +13,7 @@
  * Minimalist renderer.
  * @class
  */
+goog.declareModuleId('Blockly.minimalist.Renderer');
 
 /* eslint-disable-next-line no-unused-vars */
 import {BlockSvg} from '../../block_svg.js';

@@ -13,6 +13,7 @@
  * Class for comment change event.
  * @class
  */
+goog.declareModuleId('Blockly.Events.CommentChange');
 
 import * as registry from '../registry.js';
 /* eslint-disable-next-line no-unused-vars */

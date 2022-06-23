@@ -15,6 +15,8 @@
  * Blockly's editor.
  * @class
  */
+goog.declareModuleId('Blockly.Events.UiBase');
+
 import {Abstract as AbstractEvent} from './events_abstract.js';
 
 

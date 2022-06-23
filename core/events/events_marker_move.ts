@@ -13,6 +13,7 @@
  * Events fired as a result of a marker move.
  * @class
  */
+goog.declareModuleId('Blockly.Events.MarkerMove');
 
 /* eslint-disable-next-line no-unused-vars */
 import {Block} from '../block.js';

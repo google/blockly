@@ -17,6 +17,7 @@
  *    Sorted by y coordinate.
  * @class
  */
+goog.declareModuleId('Blockly.ConnectionDB');
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import './constants';

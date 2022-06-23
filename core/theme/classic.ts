@@ -15,6 +15,7 @@
  * Contains multi-coloured border to create shadow effect.
  * @namespace Blockly.Themes.Classic
  */
+goog.declareModuleId('Blockly.Themes.Classic');
 
 import {Theme} from '../theme.js';
 

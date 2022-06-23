@@ -13,6 +13,7 @@
  * Components for creating connections between blocks.
  * @class
  */
+goog.declareModuleId('Blockly.Connection');
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import './constants';

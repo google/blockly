@@ -17,6 +17,7 @@
  * properties with the context menu.
  * @class
  */
+goog.declareModuleId('Blockly.FieldDropdown');
 
 /* eslint-disable-next-line no-unused-vars */
 import {BlockSvg} from './block_svg.js';

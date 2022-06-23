@@ -15,6 +15,7 @@
  * a rendered block.
  * @class
  */
+goog.declareModuleId('Blockly.zelos.StatementInput');
 
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */

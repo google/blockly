@@ -13,6 +13,7 @@
  * Object representing a top row on a rendered block.
  * @class
  */
+goog.declareModuleId('Blockly.blockRendering.TopRow');
 
 /* eslint-disable-next-line no-unused-vars */
 import {BlockSvg} from '../../block_svg.js';

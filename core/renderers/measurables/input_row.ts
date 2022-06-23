@@ -15,6 +15,8 @@
  * rendered block.
  * @class
  */
+goog.declareModuleId('Blockly.blockRendering.InputRow');
+
 /* eslint-disable-next-line no-unused-vars */
 import {ConstantProvider} from '../common/constants.js';
 

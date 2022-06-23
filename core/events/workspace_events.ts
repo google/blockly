@@ -13,6 +13,7 @@
  * Class for a finished loading workspace event.
  * @class
  */
+goog.declareModuleId('Blockly.Events.FinishedLoading');
 
 import * as registry from '../registry.js';
 /* eslint-disable-next-line no-unused-vars */

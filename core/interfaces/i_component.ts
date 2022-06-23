@@ -16,6 +16,7 @@
  * the ComponentManager.
  * @namespace Blockly.IComponent
  */
+goog.declareModuleId('Blockly.IComponent');
 
 
 /**

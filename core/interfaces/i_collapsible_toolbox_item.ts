@@ -13,6 +13,7 @@
  * The interface for a collapsible toolbox item.
  * @namespace Blockly.ICollapsibleToolboxItem
  */
+goog.declareModuleId('Blockly.ICollapsibleToolboxItem');
 
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */

@@ -15,6 +15,8 @@
  * rendered block.
  * @class
  */
+goog.declareModuleId('Blockly.geras.InlineInput');
+
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */
 import {Input} from '../../../input.js';

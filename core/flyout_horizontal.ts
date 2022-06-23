@@ -13,6 +13,7 @@
  * Horizontal flyout tray containing blocks which may be created.
  * @class
  */
+goog.declareModuleId('Blockly.HorizontalFlyout');
 
 import * as browserEvents from './browser_events.js';
 import * as dropDownDiv from './dropdowndiv.js';

@@ -13,6 +13,7 @@
  * The interface for a positionable UI element.
  * @namespace Blockly.IPositionable
  */
+goog.declareModuleId('Blockly.IPositionable');
 
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */

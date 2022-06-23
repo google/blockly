@@ -15,6 +15,7 @@
  *    labels, etc.
  * @class
  */
+goog.declareModuleId('Blockly.FieldLabel');
 
 import {Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';

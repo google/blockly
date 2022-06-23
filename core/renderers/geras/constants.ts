@@ -15,6 +15,7 @@
  * mode.
  * @class
  */
+goog.declareModuleId('Blockly.geras.ConstantProvider');
 
 import {ConstantProvider as BaseConstantProvider} from '../common/constants.js';
 

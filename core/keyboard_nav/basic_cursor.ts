@@ -15,6 +15,7 @@
  * Used to demo switching between different cursors.
  * @class
  */
+goog.declareModuleId('Blockly.BasicCursor');
 
 import * as registry from '../registry.js';
 

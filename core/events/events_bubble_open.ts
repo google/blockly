@@ -13,6 +13,7 @@
  * Events fired as a result of bubble open.
  * @class
  */
+goog.declareModuleId('Blockly.Events.BubbleOpen');
 
 /* eslint-disable-next-line no-unused-vars */
 import {BlockSvg} from '../block_svg.js';

@@ -13,6 +13,7 @@
  * Methods animating a block on connection and disconnection.
  * @namespace Blockly.blockAnimations
  */
+goog.declareModuleId('Blockly.blockAnimations');
 
 /* eslint-disable-next-line no-unused-vars */
 import {BlockSvg} from './block_svg.js';

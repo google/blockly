@@ -13,6 +13,7 @@
  * Empty name space for the Message singleton.
  * @namespace Blockly.Msg
  */
+goog.declareModuleId('Blockly.Msg');
 
 
 /** A dictionary of localised messages. */

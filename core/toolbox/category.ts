@@ -13,6 +13,7 @@
  * A toolbox category used to organize blocks in the toolbox.
  * @class
  */
+goog.declareModuleId('Blockly.ToolboxCategory');
 
 import * as Css from '../css.js';
 /* eslint-disable-next-line no-unused-vars */

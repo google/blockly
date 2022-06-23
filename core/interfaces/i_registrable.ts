@@ -16,6 +16,7 @@
  *    (Ex. Toolbox, Fields, Renderers)
  * @namespace Blockly.IRegistrable
  */
+goog.declareModuleId('Blockly.IRegistrable');
 
 
 /**

@@ -13,6 +13,7 @@
  * Checkbox field.  Checked or not checked.
  * @class
  */
+goog.declareModuleId('Blockly.FieldCheckbox');
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_block_change';

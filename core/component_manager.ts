@@ -13,6 +13,7 @@
  * Manager for all items registered with the workspace.
  * @class
  */
+goog.declareModuleId('Blockly.ComponentManager');
 
 /* eslint-disable-next-line no-unused-vars */
 import {IAutoHideable} from './interfaces/i_autohideable.js';

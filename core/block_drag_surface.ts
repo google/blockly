@@ -1,4 +1,10 @@
 /**
+ * @license
+ * Copyright 2016 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
  * @fileoverview A class that manages a surface for dragging blocks.  When a
  * block drag is started, we move the block (and children) to a separate DOM
  * element that we move around using translate3d. At the end of the drag, the
@@ -6,13 +12,6 @@
  * performance by avoiding repainting the entire SVG on every mouse move
  * while dragging blocks.
  */
-
-/**
- * @license
- * Copyright 2016 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
-
 
 
 /**

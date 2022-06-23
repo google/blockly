@@ -1,12 +1,12 @@
 /**
- * @fileoverview Abstract class for events fired as a result of actions in
- * Blockly's editor.
- */
-
-/**
  * @license
  * Copyright 2018 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Abstract class for events fired as a result of actions in
+ * Blockly's editor.
  */
 
 

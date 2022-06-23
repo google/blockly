@@ -1,9 +1,11 @@
-/** @fileoverview Object representing a code comment on the workspace. */
-
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Object representing a code comment on the workspace.
  */
 
 

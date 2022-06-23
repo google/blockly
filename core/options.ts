@@ -1,9 +1,11 @@
-/** @fileoverview Object that controls settings for the workspace. */
-
 /**
  * @license
  * Copyright 2016 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Object that controls settings for the workspace.
  */
 
 

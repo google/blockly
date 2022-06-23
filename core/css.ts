@@ -1,9 +1,11 @@
-/** @fileoverview Inject Blockly's CSS synchronously. */
-
 /**
  * @license
  * Copyright 2013 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Inject Blockly's CSS synchronously.
  */
 
 

@@ -1,13 +1,13 @@
 /**
- * @fileoverview All the values that we expect developers to be able to change
- * before injecting Blockly. Changing these values during run time is not
- * generally recommended.
- */
-
-/**
  * @license
  * Copyright 2022 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview All the values that we expect developers to be able to change
+ * before injecting Blockly. Changing these values during run time is not
+ * generally recommended.
  */
 
 

@@ -1,9 +1,11 @@
-/** @fileoverview Utility functions for the toolbox and flyout. */
-
 /**
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Utility functions for the toolbox and flyout.
  */
 
 

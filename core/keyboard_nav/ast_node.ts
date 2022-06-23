@@ -1,12 +1,12 @@
 /**
- * @fileoverview The class representing an AST node.
- * Used to traverse the Blockly AST.
- */
-
-/**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview The class representing an AST node.
+ * Used to traverse the Blockly AST.
  */
 
 

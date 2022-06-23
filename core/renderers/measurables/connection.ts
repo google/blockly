@@ -1,12 +1,12 @@
 /**
- * @fileoverview Base class representing the space a connection takes up during
- * rendering.
- */
-
-/**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Base class representing the space a connection takes up during
+ * rendering.
  */
 
 

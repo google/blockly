@@ -1,12 +1,12 @@
 /**
- * @fileoverview The class representing a cursor that is used to navigate
- * between tab navigable fields.
- */
-
-/**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview The class representing a cursor that is used to navigate
+ * between tab navigable fields.
  */
 
 

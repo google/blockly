@@ -1,9 +1,11 @@
-/** @fileoverview Class for comment change event. */
-
 /**
  * @license
  * Copyright 2018 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Class for comment change event.
  */
 
 

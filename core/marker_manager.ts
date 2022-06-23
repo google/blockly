@@ -1,9 +1,11 @@
-/** @fileoverview Object in charge of managing markers and the cursor. */
-
 /**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Object in charge of managing markers and the cursor.
  */
 
 

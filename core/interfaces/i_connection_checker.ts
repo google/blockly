@@ -1,12 +1,12 @@
 /**
- * @fileoverview The interface for an object that encapsulates logic for
- * checking whether a potential connection is safe and valid.
- */
-
-/**
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview The interface for an object that encapsulates logic for
+ * checking whether a potential connection is safe and valid.
  */
 
 

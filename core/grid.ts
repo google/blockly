@@ -1,12 +1,12 @@
 /**
- * @fileoverview Object for configuring and updating a workspace grid in
- * Blockly.
- */
-
-/**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Object for configuring and updating a workspace grid in
+ * Blockly.
  */
 
 

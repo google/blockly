@@ -1,9 +1,11 @@
-/** @fileoverview Events fired as a result of element select action. */
-
 /**
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Events fired as a result of element select action.
  */
 
 

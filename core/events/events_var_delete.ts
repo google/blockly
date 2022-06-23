@@ -1,9 +1,11 @@
-/** @fileoverview Classes for all types of variable events. */
-
 /**
  * @license
  * Copyright 2018 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Classes for all types of variable events.
  */
 
 

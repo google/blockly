@@ -1,9 +1,11 @@
-/** @fileoverview Namespace for block rendering functionality. */
-
 /**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Namespace for block rendering functionality.
  */
 
 

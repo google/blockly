@@ -1,9 +1,11 @@
-/** @fileoverview Methods animating a block on connection and disconnection. */
-
 /**
  * @license
  * Copyright 2018 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Methods animating a block on connection and disconnection.
  */
 
 

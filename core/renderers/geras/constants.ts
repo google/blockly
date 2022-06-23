@@ -1,12 +1,12 @@
 /**
- * @fileoverview An object that provides constants for rendering blocks in Geras
- * mode.
- */
-
-/**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview An object that provides constants for rendering blocks in Geras
+ * mode.
  */
 
 

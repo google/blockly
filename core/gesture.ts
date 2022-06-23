@@ -1,12 +1,12 @@
 /**
- * @fileoverview The class representing an in-progress gesture, usually a drag
- * or a tap.
- */
-
-/**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview The class representing an in-progress gesture, usually a drag
+ * or a tap.
  */
 
 

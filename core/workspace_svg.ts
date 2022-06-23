@@ -1,9 +1,11 @@
-/** @fileoverview Object representing a workspace rendered as SVG. */
-
 /**
  * @license
  * Copyright 2014 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Object representing a workspace rendered as SVG.
  */
 
 

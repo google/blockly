@@ -1,11 +1,12 @@
-/** @fileoverview The interface for a Blockly field that can be registered. */
-
 /**
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/**
+ * @fileoverview The interface for a Blockly field that can be registered.
+ */
 
 
 /**

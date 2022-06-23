@@ -1,12 +1,12 @@
 /**
- * @fileoverview The record type for an object containing functions for
- * serializing part of the workspace.
- */
-
-/**
  * @license
  * Copyright 2021 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview The record type for an object containing functions for
+ * serializing part of the workspace.
  */
 
 

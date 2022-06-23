@@ -1,9 +1,11 @@
-/** @fileoverview Checkbox field.  Checked or not checked. */
-
 /**
  * @license
  * Copyright 2012 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Checkbox field.  Checked or not checked.
  */
 
 

@@ -1,9 +1,11 @@
-/** @fileoverview Empty name space for the Message singleton. */
-
 /**
  * @license
  * Copyright 2013 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Empty name space for the Message singleton.
  */
 
 

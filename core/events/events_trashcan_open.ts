@@ -1,9 +1,11 @@
-/** @fileoverview Events fired as a result of trashcan flyout open and close. */
-
 /**
  * @license
  * Copyright 2018 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Events fired as a result of trashcan flyout open and close.
  */
 
 

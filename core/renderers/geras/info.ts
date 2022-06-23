@@ -1,12 +1,12 @@
 /**
- * @fileoverview Old (compatibility) renderer.
- * Geras: spirit of old age.
- */
-
-/**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Old (compatibility) renderer.
+ * Geras: spirit of old age.
  */
 
 

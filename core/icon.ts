@@ -1,9 +1,11 @@
-/** @fileoverview Object representing an icon on a block. */
-
 /**
  * @license
  * Copyright 2013 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Object representing an icon on a block.
  */
 
 

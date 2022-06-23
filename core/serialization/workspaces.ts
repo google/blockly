@@ -1,12 +1,12 @@
 /**
- * @fileoverview Contains top-level functions for serializing workspaces to
- * plain JavaScript objects.
- */
-
-/**
  * @license
  * Copyright 2021 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Contains top-level functions for serializing workspaces to
+ * plain JavaScript objects.
  */
 
 

@@ -1,9 +1,11 @@
-/** @fileoverview Registers default keyboard shortcuts. */
-
 /**
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Registers default keyboard shortcuts.
  */
 
 

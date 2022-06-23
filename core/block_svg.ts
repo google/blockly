@@ -1,9 +1,11 @@
-/** @fileoverview Methods for graphically rendering a block as SVG. */
-
 /**
  * @license
  * Copyright 2012 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Methods for graphically rendering a block as SVG.
  */
 
 

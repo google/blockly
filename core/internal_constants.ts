@@ -1,12 +1,12 @@
 /**
- * @fileoverview Module that provides constants for use inside Blockly. Do not
- * use these constants outside of the core library.
- */
-
-/**
  * @license
  * Copyright 2021 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Module that provides constants for use inside Blockly. Do not
+ * use these constants outside of the core library.
  */
 
 

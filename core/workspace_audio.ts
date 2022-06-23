@@ -1,12 +1,12 @@
 /**
- * @fileoverview Object in charge of loading, storing, and playing audio for a
- *     workspace.
- */
-
-/**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Object in charge of loading, storing, and playing audio for a
+ *     workspace.
  */
 
 

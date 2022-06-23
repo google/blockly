@@ -1,9 +1,11 @@
-/** @fileoverview Object representing a top row on a rendered block. */
-
 /**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Object representing a top row on a rendered block.
  */
 
 

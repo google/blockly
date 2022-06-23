@@ -1,11 +1,11 @@
 /**
- * @fileoverview Class representing inputs with connections on a rendered block.
- */
-
-/**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Class representing inputs with connections on a rendered block.
  */
 
 

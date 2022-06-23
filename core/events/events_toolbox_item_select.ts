@@ -1,11 +1,11 @@
 /**
- * @fileoverview Events fired as a result of selecting an item on the toolbox.
- */
-
-/**
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Events fired as a result of selecting an item on the toolbox.
  */
 
 

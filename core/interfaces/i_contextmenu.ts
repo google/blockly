@@ -1,11 +1,12 @@
-/** @fileoverview The interface for an object that supports a right-click. */
-
 /**
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/**
+ * @fileoverview The interface for an object that supports a right-click.
+ */
 
 
 /**

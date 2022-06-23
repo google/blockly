@@ -1,12 +1,12 @@
 /**
- * @fileoverview Defines the Svg class. Its constants enumerate
- * all SVG tag names used by Blockly.
- */
-
-/**
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Defines the Svg class. Its constants enumerate
+ * all SVG tag names used by Blockly.
  */
 
 

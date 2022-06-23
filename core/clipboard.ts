@@ -1,9 +1,11 @@
-/** @fileoverview Blockly's internal clipboard for managing copy-paste. */
-
 /**
  * @license
  * Copyright 2021 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Blockly's internal clipboard for managing copy-paste.
  */
 
 

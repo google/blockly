@@ -1,9 +1,11 @@
-/** @fileoverview Object representing a zoom icons. */
-
 /**
  * @license
  * Copyright 2015 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Object representing a zoom icons.
  */
 
 

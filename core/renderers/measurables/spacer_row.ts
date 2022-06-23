@@ -1,9 +1,11 @@
-/** @fileoverview Object representing a spacer between two rows. */
-
 /**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Object representing a spacer between two rows.
  */
 
 

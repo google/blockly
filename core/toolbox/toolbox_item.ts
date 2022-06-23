@@ -1,9 +1,11 @@
-/** @fileoverview An item in the toolbox. */
-
 /**
  * @license
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview An item in the toolbox.
  */
 
 

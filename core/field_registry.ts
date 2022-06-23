@@ -1,13 +1,13 @@
 /**
- * @fileoverview Fields can be created based on a JSON definition. This file
- *    contains methods for registering those JSON definitions, and building the
- *    fields based on JSON.
- */
-
-/**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Fields can be created based on a JSON definition. This file
+ *    contains methods for registering those JSON definitions, and building the
+ *    fields based on JSON.
  */
 
 

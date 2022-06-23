@@ -1,12 +1,12 @@
 /**
- * @fileoverview Holds constants that have to do with the sprites that create
- * the trashcan and zoom controls.
- */
-
-/**
  * @license
  * Copyright 2022 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Holds constants that have to do with the sprites that create
+ * the trashcan and zoom controls.
  */
 
 

@@ -1,12 +1,12 @@
 /**
- * @fileoverview Utility functions for generating executable code from
- * Blockly code.
- */
-
-/**
  * @license
  * Copyright 2012 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Utility functions for generating executable code from
+ * Blockly code.
  */
 
 

@@ -1,9 +1,11 @@
-/** @fileoverview Utility methods. */
-
 /**
  * @license
  * Copyright 2012 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Utility methods.
  */
 
 

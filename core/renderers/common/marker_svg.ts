@@ -1,11 +1,12 @@
-/** @fileoverview Methods for graphically rendering a marker as SVG. */
-
 /**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
+/**
+ * @fileoverview Methods for graphically rendering a marker as SVG.
+ */
 
 
 /**

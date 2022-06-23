@@ -1,9 +1,11 @@
-/** @fileoverview A mapping of block type names to block prototype objects. */
-
 /**
  * @license
  * Copyright 2013 Google LLC
  * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview A mapping of block type names to block prototype objects.
  */
 
 

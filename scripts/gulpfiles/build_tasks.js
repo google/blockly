@@ -172,7 +172,7 @@ function stripApacheLicense() {
  */
 var JSCOMP_ERROR = [
   // 'accessControls',  // Deprecated; means same as visibility.
-  'checkPrototypalTypes',
+  // 'checkPrototypalTypes',
   'checkRegExp',
   // 'checkTypes',  // Disabled; see note in JSCOMP_OFF.
   'checkVars',

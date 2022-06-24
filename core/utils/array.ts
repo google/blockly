@@ -12,6 +12,8 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.array');
 
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.utils.array');
 
 /**
  * Removes the first occurrence of a particular value from an array.

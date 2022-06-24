@@ -42,7 +42,7 @@
     "license": "gulp checkLicenses",
     "lint": "eslint .",
     "package": "gulp package",
-    "prepare": "gulp buildJavaScriptAndDeps",
+    "prepare": "gulp prepare",
     "prepareDemos": "gulp prepareDemos",
     "publish": "gulp publish",
     "publish:beta": "gulp publishBeta",

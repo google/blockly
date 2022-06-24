@@ -52,6 +52,7 @@ import {MarkerSvg} from './marker_svg.js';
 import {PathObject} from './path_object.js';
 import {Renderer} from './renderer.js';
 
+
 /**
  * Returns whether the debugger is turned on.
  * @return Whether the debugger is turned on.

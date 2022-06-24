@@ -17,6 +17,7 @@ goog.declareModuleId('Blockly.utils.object');
 
 import * as deprecation from './utils/deprecation.js';
 
+
 /**
  * Inherit the prototype methods from one constructor into another.
  * @param childCtor Child class.

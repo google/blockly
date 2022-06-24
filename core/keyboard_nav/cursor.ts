@@ -22,6 +22,7 @@ import * as registry from '../registry.js';
 import {ASTNode} from './ast_node.js';
 import {Marker} from './marker.js';
 
+
 /**
  * Class for a cursor.
  * A cursor controls how a user navigates the Blockly AST.

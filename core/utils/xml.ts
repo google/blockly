@@ -19,6 +19,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.xml');
 
+
 /**
  * Namespace for Blockly's XML.
  * @alias Blockly.utils.xml.NAME_SPACE

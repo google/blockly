@@ -26,6 +26,7 @@ import {Svg} from '../../utils/svg.js';
 import * as svgPaths from '../../utils/svg_paths.js';
 import * as userAgent from '../../utils/useragent.js';
 
+
 /** An object containing sizing and path information about outside corners. */
 export interface OutsideCorners {
   topLeft: string;

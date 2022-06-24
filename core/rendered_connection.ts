@@ -33,6 +33,7 @@ import {Svg} from './utils/svg.js';
 import * as svgMath from './utils/svg_math.js';
 import * as svgPaths from './utils/svg_paths.js';
 
+
 /** A shape that has a pathDown property. */
 interface PathDownShape {
   pathDown: string;

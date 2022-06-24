@@ -16,6 +16,7 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.dialog');
 
+
 let alertImplementation = function(
     message: AnyDuringMigration, opt_callback: AnyDuringMigration) {
   window.alert(message);

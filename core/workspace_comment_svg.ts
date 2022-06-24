@@ -580,8 +580,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * @internal
    */
   override toXmlWithXY(opt_noId?: boolean): Element {
-    let width = 0;
-    // Not used in LTR.
+    let width = 0;  // Not used in LTR.
     if (this.workspace.RTL) {
       // Here be performance dragons: This calls getMetrics().
       width = this.workspace.getWidth();

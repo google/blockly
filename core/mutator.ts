@@ -516,9 +516,8 @@ export class Mutator extends Icon {
   static reconnect(
       connectionChild: Connection, block: Block, inputName: string): boolean {
     if (!connectionChild || !connectionChild.getSourceBlock().workspace) {
-      return false;
+      return false;  // No connection or block has been deleted.
     }
-    // No connection or block has been deleted.
     const connectionParent = block.getInput(inputName)!.connection;
     const currentParent = connectionChild.targetBlock();
     if ((!currentParent || currentParent === block) && connectionParent &&

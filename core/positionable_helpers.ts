@@ -97,8 +97,7 @@ export function getStartPositionRect(
     if (hasVerticalScrollbar && workspace.RTL) {
       left += Scrollbar.scrollbarThickness;
     }
-  } else {
-    // position.horizontal === horizontalPosition.RIGHT
+  } else {  // position.horizontal === horizontalPosition.RIGHT
     left = metrics.absoluteMetrics.left + metrics.viewMetrics.width -
         size.width - horizontalPadding;
     if (hasVerticalScrollbar && !workspace.RTL) {
@@ -109,8 +108,7 @@ export function getStartPositionRect(
   let top = 0;
   if (position.vertical === verticalPosition.TOP) {
     top = metrics.absoluteMetrics.top + verticalPadding;
-  } else {
-    // position.vertical === verticalPosition.BOTTOM
+  } else {  // position.vertical === verticalPosition.BOTTOM
     top = metrics.absoluteMetrics.top + metrics.viewMetrics.height -
         size.height - verticalPadding;
     if (workspace.scrollbar && workspace.scrollbar.canScrollHorizontally()) {
@@ -173,8 +171,7 @@ export function bumpPositionRect(
     if (boundingRect.intersects(otherEl)) {
       if (bumpDir === bumpDirection.UP) {
         top = otherEl.top - height - margin;
-      } else {
-        // bumpDir === bumpDirection.DOWN
+      } else {  // bumpDir === bumpDirection.DOWN
         top = otherEl.bottom + margin;
       }
       // Recheck other savedPositions

@@ -140,9 +140,8 @@ export class FieldVariable extends FieldDropdown {
    */
   override initModel() {
     if (this.variable_) {
-      return;
+      return;  // Initialization already happened.
     }
-    // Initialization already happened.
     const variable = Variables.getOrCreateVariablePackage(
         this.sourceBlock_.workspace, null, this.defaultVariableName,
         this.defaultType_);
@@ -349,9 +348,8 @@ export class FieldVariable extends FieldDropdown {
   private typeIsAllowed_(type: string): boolean {
     const typeList = this.getVariableTypes_();
     if (!typeList) {
-      return true;
+      return true;  // If it's null, all types are valid.
     }
-    // If it's null, all types are valid.
     for (let i = 0; i < typeList.length; i++) {
       if (type === typeList[i]) {
         return true;

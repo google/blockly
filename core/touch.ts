@@ -29,7 +29,7 @@ interface PseudoEvent {
   target: Element;
   stopPropagation: () => void;
   preventDefault: () => void;
-}  // eslint-disable-line no-unused-vars
+}
 
 /** Length in ms for a touch to become a long press. */
 const LONGPRESS = 750;
@@ -100,8 +100,7 @@ export function longStart(e: Event, gesture: Gesture) {
     // Additional check to distinguish between touch events and pointer events
     if (typelessEvent.changedTouches) {
       // TouchEvent
-      typelessEvent.button = 2;
-      // Simulate a right button click.
+      typelessEvent.button = 2;  // Simulate a right button click.
       // e was a touch event.  It needs to pretend to be a mouse event.
       typelessEvent.clientX = typelessEvent.changedTouches[0].clientX;
       typelessEvent.clientY = typelessEvent.changedTouches[0].clientY;

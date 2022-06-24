@@ -542,26 +542,22 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   /** Snap this block to the nearest grid point. */
   snapToGrid() {
     if (!this.workspace) {
-      return;
+      return;  // Deleted block.
     }
-    // Deleted block.
     if (this.workspace.isDragging()) {
-      return;
+      return  // Don't bump blocks during a drag.;
     }
-    // Don't bump blocks during a drag.
+    
     if (this.getParent()) {
-      return;
+      return;  // Only snap top-level blocks.
     }
-    // Only snap top-level blocks.
     if (this.isInFlyout) {
-      return;
+      return;  // Don't move blocks around in a flyout.
     }
-    // Don't move blocks around in a flyout.
     const grid = this.workspace.getGrid();
     if (!grid || !grid.shouldSnap()) {
-      return;
+      return;  // Config says no snapping.
     }
-    // Config says no snapping.
     const spacing = grid.getSpacing();
     const half = spacing / 2;
     const xy = this.getRelativeToSurfaceXY();
@@ -844,9 +840,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    */
   override setInsertionMarker(insertionMarker: boolean) {
     if (this.isInsertionMarker_ === insertionMarker) {
-      return;
+      return;  // No change.
     }
-    // No change.
     this.isInsertionMarker_ = insertionMarker;
     if (this.isInsertionMarker_) {
       this.setColour(
@@ -1043,17 +1038,14 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       this.commentIcon_!.updateText();
       return;
     }
-    // For backwards compatibility.
     if (shouldHaveComment) {
       this.commentIcon_ = new Comment(this);
-      this.comment = this.commentIcon_;
-    } else  // For backwards compatibility.
-    {
+      this.comment = this.commentIcon_;  // For backwards compatibility.
+    } else {
       this.commentIcon_!.dispose();
       this.commentIcon_ = null;
-      this.comment = null;
+      this.comment = null;  // For backwards compatibility.
     }
-    // For backwards compatibility.
     if (this.rendered) {
       this.render();
       // Adding or removing a comment icon will cause the block to change shape.
@@ -1090,8 +1082,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       // Wait until the drag finishes.
       const thisBlock = this;
       this.warningTextDb_[id] = setTimeout(function() {
-        if (thisBlock.workspace) {
-          // Check block wasn't deleted.
+        if (thisBlock.workspace) {  // Check block wasn't deleted.
           delete thisBlock.warningTextDb_[id];
           thisBlock.setWarningText(text, id);
         }
@@ -1541,13 +1532,11 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    */
   override bumpNeighbours() {
     if (!this.workspace) {
-      return;
+      return;  // Deleted block.
     }
-    // Deleted block.
     if (this.workspace.isDragging()) {
-      return;
+      return;  // Don't bump blocks during a drag.
     }
-    // Don't bump blocks during a drag.
     const rootBlock = this.getRootBlock();
     if (rootBlock.isInFlyout) {
       return;
@@ -1655,9 +1644,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    */
   render(opt_bubble?: boolean) {
     if (this.renderIsInProgress_) {
-      return;
+      return;  // Don't allow recursive renders.
     }
-    // Don't allow recursive renders.
     this.renderIsInProgress_ = true;
     try {
       this.rendered = true;

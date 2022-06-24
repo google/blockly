@@ -352,8 +352,7 @@ export function runAfterPageLoad(fn: () => AnyDuringMigration) {
     throw Error('runAfterPageLoad() requires browser document.');
   }
   if (document.readyState === 'complete') {
-    // Page has already loaded. Call immediately.
-    fn();
+    fn();  // Page has already loaded. Call immediately.
   } else {
     // Poll readyState.
     const readyStateCheckInterval = setInterval(function() {
@@ -393,8 +392,7 @@ export function buildTooltipForDropdown(
   // Wait for load, in case Blockly.Msg is not yet populated.
   // runAfterPageLoad() does not run in a Node.js environment due to lack
   // of document object, in which case skip the validation.
-  if (typeof document === 'object') {
-    // Relies on document.readyState
+  if (typeof document === 'object') {  // Relies on document.readyState
     runAfterPageLoad(function() {
       for (const key in lookupTable) {
         // Will print warnings if reference is missing.
@@ -446,8 +444,7 @@ function checkDropdownOptionsInTable(
   if (dropdown instanceof FieldDropdown && !dropdown.isOptionListDynamic()) {
     const options = dropdown.getOptions();
     for (let i = 0; i < options.length; i++) {
-      const optionKey = options[i][1];
-      // label, then value
+      const optionKey = options[i][1];  // label, then value
       if (lookupTable[optionKey] === null) {
         console.warn(
             'No tooltip mapping for value ' + optionKey + ' of field ' +
@@ -473,8 +470,7 @@ export function buildTooltipWithFieldText(
   // Wait for load, in case Blockly.Msg is not yet populated.
   // runAfterPageLoad() does not run in a Node.js environment due to lack
   // of document object, in which case skip the validation.
-  if (typeof document === 'object') {
-    // Relies on document.readyState
+  if (typeof document === 'object') {  // Relies on document.readyState
     runAfterPageLoad(function() {
       // Will print warnings if reference is missing.
       parsing.checkMessageReferences(msgTemplate);

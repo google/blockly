@@ -191,7 +191,7 @@ var JSCOMP_ERROR = [
   'misplacedTypeAnnotation',
   // 'missingOverride',  // There are many of these, which should be fixed.
   'missingPolyfill',
-  'missingProperties',
+  // 'missingProperties',
   'missingProvide',
   'missingRequire',
   'missingReturn',

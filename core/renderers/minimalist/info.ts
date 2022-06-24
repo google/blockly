@@ -13,6 +13,7 @@
  * Minimalist render info object.
  * @class
  */
+import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.minimalist.RenderInfo');
 
 /* eslint-disable-next-line no-unused-vars */

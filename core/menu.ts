@@ -13,6 +13,7 @@
  * Blockly menu similar to Closure's goog.ui.Menu
  * @class
  */
+import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Menu');
 
 import * as browserEvents from './browser_events.js';

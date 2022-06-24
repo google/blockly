@@ -13,6 +13,7 @@
  * Events fired as a result of element select action.
  * @class
  */
+import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.Selected');
 
 import * as registry from '../registry.js';

@@ -13,6 +13,7 @@
  * An object representing the top row of a rendered block.
  * @class
  */
+import * as goog from '../../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.zelos.TopRow');
 
 /* eslint-disable-next-line no-unused-vars */

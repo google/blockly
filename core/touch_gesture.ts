@@ -15,6 +15,7 @@
  * for both pointer and touch events.
  * @class
  */
+import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.TouchGesture');
 
 import * as browserEvents from './browser_events.js';

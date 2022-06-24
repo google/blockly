@@ -13,6 +13,7 @@
  * Namespace for block rendering functionality.
  * @namespace Blockly.blockRendering
  */
+import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering');
 
 import * as registry from '../../registry.js';

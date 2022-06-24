@@ -13,6 +13,7 @@
  * Manager for all items registered with the workspace.
  * @class
  */
+import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.ComponentManager');
 
 /* eslint-disable-next-line no-unused-vars */

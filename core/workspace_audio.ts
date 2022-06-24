@@ -15,6 +15,7 @@
  *     workspace.
  * @class
  */
+import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.WorkspaceAudio');
 
 import * as userAgent from './utils/useragent.js';

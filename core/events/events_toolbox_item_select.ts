@@ -13,6 +13,7 @@
  * Events fired as a result of selecting an item on the toolbox.
  * @class
  */
+import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.ToolboxItemSelect');
 
 import * as registry from '../registry.js';

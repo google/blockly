@@ -18,6 +18,7 @@
  * priorities are deserialized first.
  * @namespace Blockly.serialization.priorities
  */
+import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.serialization.priorities');
 
 

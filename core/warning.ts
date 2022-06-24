@@ -13,6 +13,7 @@
  * Object representing a warning.
  * @class
  */
+import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Warning');
 
 // Unused import preserved for side-effects. Remove if unneeded.

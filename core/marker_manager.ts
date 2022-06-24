@@ -13,6 +13,7 @@
  * Object in charge of managing markers and the cursor.
  * @class
  */
+import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.MarkerManager');
 
 /* eslint-disable-next-line no-unused-vars */

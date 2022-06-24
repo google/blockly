@@ -13,6 +13,7 @@
  * Blockly menu item similar to Closure's goog.ui.MenuItem
  * @class
  */
+import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.MenuItem');
 
 import * as aria from './utils/aria.js';

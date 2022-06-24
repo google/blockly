@@ -13,6 +13,7 @@
  * Object representing an input (value, statement, or dummy).
  * @class
  */
+import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Input');
 
 // Unused import preserved for side-effects. Remove if unneeded.

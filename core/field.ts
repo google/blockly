@@ -17,6 +17,7 @@
  * instances would be FieldTextInput, FieldDropdown, etc.
  * @class
  */
+import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Field');
 
 /* eslint-disable-next-line no-unused-vars */

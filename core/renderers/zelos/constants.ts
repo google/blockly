@@ -15,6 +15,7 @@
  * mode.
  * @class
  */
+import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.zelos.ConstantProvider');
 
 import {ConnectionType} from '../../connection_type.js';

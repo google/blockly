@@ -15,6 +15,7 @@
  * Thrasos: spirit of boldness.
  * @class
  */
+import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.thrasos.RenderInfo');
 
 /* eslint-disable-next-line no-unused-vars */

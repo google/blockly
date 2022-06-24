@@ -545,6 +545,18 @@ BlockSvg.prototype.translate = function(x, y) {
 };
 
 /**
+ * @param {Coordinate} positionOnDragSurface Offset on drag surface.
+ * @package
+ */
+BlockSvg.prototype.prepareForMoveToDragSurface = function(positionOnDragSurface) {
+  if (positionOnDragSurface) {
+    this.replaceTransformAttributes_(positionOnDragSurface);
+  } else {
+    this.clearTransformAttributes_();
+  }
+};
+
+/**
  * Move this block to its workspace's drag surface, accounting for positioning.
  * Generally should be called at the same time as setDragging_(true).
  * Does nothing if useDragSurface_ is false.
@@ -560,14 +572,10 @@ BlockSvg.prototype.moveToDragSurface = function(positionOnDragSurface) {
   // to keep the position in sync as it move on/off the surface.
   // This is in workspace coordinates.
   const xy = this.getRelativeToSurfaceXY();
-
-  if (positionOnDragSurface) {
-    this.replaceTransformAttributes_(positionOnDragSurface);
-  } else {
-    this.clearTransformAttributes_();
-  }
-
   this.workspace.getBlockDragSurface().translateSurface(xy.x, xy.y, true);
+
+  this.prepareForMoveToDragSurface(positionOnDragSurface);
+
   // Execute the move on the top-level SVG component
   const svg = this.getSvgRoot();
   if (svg) {
@@ -614,8 +622,7 @@ BlockSvg.prototype.moveDuringDrag = function(newLoc) {
     this.workspace.getBlockDragSurface().translateSurface(newLoc.x, newLoc.y);
   } else {
     this.svgGroup_.translate_ = 'translate(' + newLoc.x + ',' + newLoc.y + ')';
-    this.svgGroup_.setAttribute(
-        'transform', this.svgGroup_.translate_ + this.svgGroup_.skew_);
+    this.svgGroup_.setAttribute('transform', this.svgGroup_.translate_ + this.svgGroup_.skew_);
   }
 };
 

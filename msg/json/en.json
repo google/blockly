@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Varwin <devops@varwin.com>",
-		"lastupdated": "2022-06-01 13:05:47.851737",
+		"lastupdated": "2022-06-21 17:31:00.988844",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -307,6 +307,7 @@
 	"LISTS_ISEMPTY_TITLE": "%1 is empty",
 	"LISTS_ISEMPTY_TOOLTIP": "Returns true if the list is empty.",
 	"LISTS_INLIST": "in list",
+	"LISTS_INDEX": "#",
 	"LISTS_INDEX_OF_HELPURL": "https://github.com/google/blockly/wiki/Lists#getting-items-from-a-list",
 	"LISTS_INDEX_OF_FIRST": "find first occurrence of item",
 	"LISTS_INDEX_OF_LAST": "find last occurrence of item",

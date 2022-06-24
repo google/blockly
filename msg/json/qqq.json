@@ -301,6 +301,7 @@
 	"LISTS_ISEMPTY_TITLE": "block text - See [https://github.com/google/blockly/wiki/Lists#is-empty https://github.com/google/blockly/wiki/Lists#is-empty]. \n\nParameters:\n* %1 - the list to test",
 	"LISTS_ISEMPTY_TOOLTIP": "block tooltip - See [https://github.com/google/blockly/wiki/Lists#is-empty https://github.com/google/blockly/wiki/Lists#is-empty].",
 	"LISTS_INLIST": "block text - Title of blocks operating on [https://github.com/google/blockly/wiki/Lists lists].",
+	"LISTS_INDEX": "block lists and text - Typical list index sign.",
 	"LISTS_INDEX_OF_HELPURL": "{{Optional}} url - See [https://github.com/google/blockly/wiki/Lists#getting-items-from-a-list https://github.com/google/blockly/wiki/Lists#getting-items-from-a-list].",
 	"LISTS_INDEX_OF_FIRST": "dropdown - See [https://github.com/google/blockly/wiki/Lists#finding-items-in-a-list Lists#finding-items-in-a-list]. [[File:Blockly-list-find.png]]",
 	"LISTS_INDEX_OF_LAST": "dropdown - See [https://github.com/google/blockly/wiki/Lists#finding-items-in-a-list https://github.com/google/blockly/wiki/Lists#finding-items-in-a-list]. [[File:Blockly-list-find.png]]",
@@ -405,5 +406,6 @@
 	"WORKSPACE_ARIA_LABEL": "workspace - This text is read out when a user navigates to the workspace while using a screen reader.",
 	"COLLAPSED_WARNINGS_WARNING": "warning - This appears if the user collapses a block, and blocks inside that block have warnings attached to them. It should inform the user that the block they collapsed contains blocks that have warnings.",
 	"DIALOG_OK": "button label - Pressing this button closes help information.\n{{Identical|OK}}",
-	"DIALOG_CANCEL": "button label - Pressing this button cancels a proposed action.\n{{Identical|Cancel}}"
+	"DIALOG_CANCEL": "button label - Pressing this button cancels a proposed action.\n{{Identical|Cancel}}",
+	"SEARCH": ""
 }

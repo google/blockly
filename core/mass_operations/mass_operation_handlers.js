@@ -50,6 +50,7 @@ const MassOperationsHandler = function(workspace) {
   this.onMouseUpBlockWrapper_ = null;
   this.blocksCopyData_ = null;
   this.currentDragDeltaXY_ = new Coordinate(0, 0);
+  this.dragSurfacePadding_ = 50;
 
   workspace.addChangeListener(this.changeListener.bind(this));
 
@@ -190,11 +191,10 @@ MassOperationsHandler.prototype.handleMove_ = function(e) {
   this.currentDragDeltaXY_ = Coordinate.difference(currentXY, this.mouseDownXY_);
 
   if (this.blockDraggers_) {
-    this.blockDraggers_.forEach((dragger) => dragger.drag(e, this.currentDragDeltaXY_, this.initBlockStartCoordinates));
+    // We need use drag() only for one of draggers, because all sraggers use one drag_surface
+    this.blockDraggers_[0].drag(e, this.currentDragDeltaXY_, this.initBlockStartCoordinates);
     return;
   }
-
-  this.initBlockStartCoordinates = initBlockCoordinates;
 
   if (!this.hasExceededDragRadius_) {
     const currentDragDelta = Coordinate.magnitude(this.currentDragDeltaXY_);
@@ -207,16 +207,78 @@ MassOperationsHandler.prototype.handleMove_ = function(e) {
   const BlockDraggerClass = registry.getClassFromOptions(registry.Type.BLOCK_DRAGGER, this.workspace_.options, true);
   this.blockDraggers_ = this.selectedBlocks_.map((block) => new BlockDraggerClass(block, this.workspace_, true));
 
-  this.blockDraggers_.forEach((dragger, index) => {
-    const cordinates = this.selectedBlocks_[index].getRelativeToSurfaceXY();
+  // coordinates of start dragging may be not on top left block and we need to find
+  // top left angle for get right position of drag surface under all blocks
+  const dragSurfaceMinCoordinate = initBlockCoordinates.clone();
+  const dragSurfaceMaxCoordinate = initBlockCoordinates.clone();
+  let blockSvgWithMaxX;
+  let blockSvgWithMaxY;
 
-    let diff = Coordinate.difference(cordinates, initBlockCoordinates);
-    if (diff.x === 0 && diff.y === 0) diff = null;
+  this.selectedBlocks_.forEach((block, index) => {
+    const blockSvg = block.getSvgRoot();
+    const coordinates = block.getRelativeToSurfaceXY();
 
-    dragger.startDrag(this.currentDragDeltaXY_, false, diff);
+    if (index === 0) {
+      blockSvgWithMaxX = blockSvg;
+      blockSvgWithMaxY = blockSvg;
+    }
+
+    if (dragSurfaceMinCoordinate.x > coordinates.x) {
+      dragSurfaceMinCoordinate.x = coordinates.x;
+    }
+
+    if (dragSurfaceMaxCoordinate.x < coordinates.x) {
+      dragSurfaceMaxCoordinate.x = coordinates.x;
+      blockSvgWithMaxX = blockSvg;
+    }
+
+    if (dragSurfaceMinCoordinate.y > coordinates.y) {
+      dragSurfaceMinCoordinate.y = coordinates.y;
+    }
+
+    if (dragSurfaceMaxCoordinate.y < coordinates.y) {
+      dragSurfaceMaxCoordinate.y = coordinates.y;
+      blockSvgWithMaxY = blockSvg;
+    }
   });
 
-  this.blockDraggers_.forEach((dragger) => dragger.drag(e, this.currentDragDeltaXY_, initBlockCoordinates));
+  const workspaceCanvas = this.workspace_.getCanvas();
+  const workspaceCanvasTransform = window.getComputedStyle(workspaceCanvas).transform;
+  const workspaceCanvasMatrix = new WebKitCSSMatrix(workspaceCanvasTransform);
+
+  dragSurfaceMinCoordinate.x += workspaceCanvasMatrix.e / this.workspace_.scale;
+  dragSurfaceMinCoordinate.y += workspaceCanvasMatrix.f / this.workspace_.scale;
+  dragSurfaceMaxCoordinate.x += workspaceCanvasMatrix.e / this.workspace_.scale;
+  dragSurfaceMaxCoordinate.y += workspaceCanvasMatrix.f / this.workspace_.scale;
+
+  dragSurfaceMinCoordinate.x -= this.dragSurfacePadding_;
+  dragSurfaceMinCoordinate.y -= this.dragSurfacePadding_;
+  dragSurfaceMaxCoordinate.x += this.dragSurfacePadding_;
+  dragSurfaceMaxCoordinate.y += this.dragSurfacePadding_;
+  
+  // Now we can place all blocks to relative position on drag surface and keep positions between blocks
+  this.blockDraggers_.forEach((dragger, index) => {
+    const block = this.selectedBlocks_[index];
+    const coordinates = block.getRelativeToSurfaceXY();
+
+    let diff = Coordinate.difference(coordinates, dragSurfaceMinCoordinate);
+    if (diff.x === 0 && diff.y === 0) diff = null;
+
+    dragger.beforeStartDrag(this.currentDragDeltaXY_, false, diff);
+    block.prepareForMoveToDragSurface(diff);
+  });
+
+  const dragSurfaceWidth = (dragSurfaceMaxCoordinate.x - dragSurfaceMinCoordinate.x) + blockSvgWithMaxX.getBBox().width;
+  const dragSurfaceHeight = (dragSurfaceMaxCoordinate.y - dragSurfaceMinCoordinate.y) + blockSvgWithMaxY.getBBox().height;
+  const dragSurface = this.workspace_.getBlockDragSurface();
+  const blocksSvg = this.selectedBlocks_.map((b) => b.getSvgRoot());
+  
+  this.initBlockStartCoordinates = dragSurfaceMinCoordinate.clone();
+
+  dragSurface.translateSurface(this.initBlockStartCoordinates.x, this.initBlockStartCoordinates.y, true);
+  dragSurface.setBlocksAndShow(blocksSvg, dragSurfaceWidth, dragSurfaceHeight, true);
+
+  this.blockDraggers_[0].drag(e, this.currentDragDeltaXY_, this.initBlockStartCoordinates);
 };
 
 MassOperationsHandler.prototype.blockMouseUp = function(block, e) {

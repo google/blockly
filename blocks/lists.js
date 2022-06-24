@@ -402,12 +402,9 @@ Blocks['lists_getIndex'] = {
           break;
       }
       if (where === 'FROM_START' || where === 'FROM_END') {
-        const msg = (where === 'FROM_START') ?
-            Msg['LISTS_INDEX_FROM_START_TOOLTIP'] :
-            Msg['LISTS_INDEX_FROM_END_TOOLTIP'];
-        tooltip += '  ' +
-            msg.replace(
-                '%1', thisBlock.workspace.options.oneBasedIndex ? '#1' : '#0');
+        const msg = (where === 'FROM_START') ? Msg['LISTS_INDEX_FROM_START_TOOLTIP'] : Msg['LISTS_INDEX_FROM_END_TOOLTIP'];
+        const sign = Msg['LISTS_INDEX'];
+        tooltip += '  ' + msg.replace('%1', thisBlock.workspace.options.oneBasedIndex ? sign + '1' : sign + '0');
       }
       return tooltip;
     });
@@ -582,9 +579,8 @@ Blocks['lists_setIndex'] = {
           break;
       }
       if (where === 'FROM_START' || where === 'FROM_END') {
-        tooltip += '  ' +
-            Msg['LISTS_INDEX_FROM_START_TOOLTIP'].replace(
-                '%1', thisBlock.workspace.options.oneBasedIndex ? '#1' : '#0');
+        const sign = Msg['LISTS_INDEX'];
+        tooltip += '  ' + Msg['LISTS_INDEX_FROM_START_TOOLTIP'].replace('%1', thisBlock.workspace.options.oneBasedIndex ? sign + '1' : sign + '0');
       }
       return tooltip;
     });

@@ -67,7 +67,7 @@ const BlockDragger = function(block, workspace, offConnectionManager = false) {
    * @type {!InsertionMarkerManager}
    * @protected
    */
-  this.draggedConnectionManager_ = null
+  this.draggedConnectionManager_ = null;
 
   if (!offConnectionManager) {
     this.draggedConnectionManager_ = new InsertionMarkerManager(this.draggingBlock_);
@@ -154,7 +154,7 @@ const initIconData = function(block) {
  * @param {Coordinate} positionOnDragSurface Offset on drag surface.
  * @public
  */
-BlockDragger.prototype.startDrag = function(currentDragDeltaXY, healStack, positionOnDragSurface) {
+BlockDragger.prototype.beforeStartDrag = function(currentDragDeltaXY, healStack) {
   if (!eventUtils.getGroup()) {
     eventUtils.setGroup(true);
   }
@@ -182,6 +182,20 @@ BlockDragger.prototype.startDrag = function(currentDragDeltaXY, healStack, posit
   // For future consideration: we may be able to put moveToDragSurface inside
   // the block dragger, which would also let the block not track the block drag
   // surface.
+};
+
+/**
+ * Start dragging a block.  This includes moving it to the drag surface.
+ * @param {!Coordinate} currentDragDeltaXY How far the pointer has
+ *     moved from the position at mouse down, in pixel units.
+ * @param {boolean} healStack Whether or not to heal the stack after
+ *     disconnecting.
+ * @param {Coordinate} positionOnDragSurface Offset on drag surface.
+ * @public
+ */
+BlockDragger.prototype.startDrag = function(currentDragDeltaXY, healStack, positionOnDragSurface) {
+  this.beforeStartDrag(currentDragDeltaXY, healStack);
+
   this.draggingBlock_.moveToDragSurface(positionOnDragSurface);
 };
 
@@ -243,7 +257,7 @@ BlockDragger.prototype.drag = function(e, currentDragDeltaXY, customStartXY) {
   this.draggingBlock_.moveDuringDrag(newLoc);
   this.dragIcons_(delta);
 
-  if (!this.draggedConnectionManager_) return
+  if (!this.draggedConnectionManager_) return;
 
   const oldDragTarget = this.dragTarget_;
   this.dragTarget_ = this.workspace_.getDragTarget(e);

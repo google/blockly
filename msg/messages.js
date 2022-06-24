@@ -1209,6 +1209,10 @@ Blockly.Msg.LISTS_ISEMPTY_TOOLTIP = 'Returns true if the list is empty.';
 Blockly.Msg.LISTS_INLIST = 'in list';
 
 /** @type {string} */
+/// block lists and text - Typical list index sign.
+Blockly.Msg.LISTS_INDEX = '#';
+
+/** @type {string} */
 /// {{Optional}} url - See [https://github.com/google/blockly/wiki/Lists#getting-items-from-a-list
 /// https://github.com/google/blockly/wiki/Lists#getting-items-from-a-list].
 Blockly.Msg.LISTS_INDEX_OF_HELPURL = 'https://github.com/google/blockly/wiki/Lists#getting-items-from-a-list';

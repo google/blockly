@@ -13,6 +13,7 @@
  * Class for comment move event.
  * @class
  */
+import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.CommentMove');
 
 import * as registry from '../registry.js';

@@ -19,6 +19,7 @@
  *      array attribute.
  * @namespace Blockly.Extensions
  */
+import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Extensions');
 
 // Unused import preserved for side-effects. Remove if unneeded.

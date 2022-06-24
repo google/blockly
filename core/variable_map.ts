@@ -13,6 +13,7 @@
  * Object representing a map of variables and their types.
  * @class
  */
+import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.VariableMap');
 
 // Unused import preserved for side-effects. Remove if unneeded.

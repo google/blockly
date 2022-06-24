@@ -13,6 +13,7 @@
  * The interface for a block dragger.
  * @namespace Blockly.IBlockDragger
  */
+import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.IBlockDragger');
 
 /* eslint-disable-next-line no-unused-vars */

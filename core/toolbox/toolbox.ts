@@ -13,6 +13,7 @@
  * Toolbox from whence to create blocks.
  * @class
  */
+import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Toolbox');
 
 /* eslint-disable-next-line no-unused-vars */

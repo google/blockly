@@ -13,6 +13,7 @@
  * Object representing a workspace.
  * @class
  */
+import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Workspace');
 
 // Unused import preserved for side-effects. Remove if unneeded.

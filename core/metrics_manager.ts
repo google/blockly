@@ -13,6 +13,7 @@
  * Calculates and reports workspace metrics.
  * @class
  */
+import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.MetricsManager');
 
 /* eslint-disable-next-line no-unused-vars */

@@ -13,6 +13,7 @@
  * Utility methods.
  * @namespace Blockly.utils
  */
+import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils');
 
 /* eslint-disable-next-line no-unused-vars */

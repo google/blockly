@@ -13,6 +13,7 @@
  * The interface for an AST node location SVG.
  * @namespace Blockly.IASTNodeLocationSvg
  */
+import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.IASTNodeLocationSvg');
 
 /* eslint-disable-next-line no-unused-vars */

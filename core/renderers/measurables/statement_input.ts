@@ -15,6 +15,7 @@
  * rendered block.
  * @class
  */
+import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.StatementInput');
 
 /* eslint-disable-next-line no-unused-vars */

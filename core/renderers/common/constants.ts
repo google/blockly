@@ -13,6 +13,7 @@
  * An object that provides constants for rendering blocks.
  * @class
  */
+import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.ConstantProvider');
 
 import {ConnectionType} from '../../connection_type.js';

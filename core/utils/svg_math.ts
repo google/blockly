@@ -13,6 +13,7 @@
  * Utility methods realted to figuring out positions of SVG elements.
  * @namespace Blockly.utils.svgMath
  */
+import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.svgMath');
 
 /* eslint-disable-next-line no-unused-vars */

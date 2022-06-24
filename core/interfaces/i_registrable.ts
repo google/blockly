@@ -16,6 +16,7 @@
  *    (Ex. Toolbox, Fields, Renderers)
  * @namespace Blockly.IRegistrable
  */
+import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.IRegistrable');
 
 

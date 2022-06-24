@@ -13,6 +13,7 @@
  * Registers default context menu items.
  * @namespace Blockly.ContextMenuItems
  */
+import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.ContextMenuItems');
 
 /* eslint-disable-next-line no-unused-vars */

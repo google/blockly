@@ -13,6 +13,7 @@
  * Object representing a code comment.
  * @class
  */
+import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Comment');
 
 /* eslint-disable-next-line no-unused-vars */

@@ -15,6 +15,7 @@
  * Used primarily for keyboard navigation to show a marked location.
  * @class
  */
+import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Marker');
 
 /* eslint-disable-next-line no-unused-vars */

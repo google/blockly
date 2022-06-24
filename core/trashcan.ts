@@ -13,6 +13,7 @@
  * Object representing a trash can icon.
  * @class
  */
+import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Trashcan');
 
 /* eslint-disable-next-line no-unused-vars */

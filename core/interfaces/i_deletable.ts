@@ -13,6 +13,7 @@
  * The interface for an object that is deletable.
  * @namespace Blockly.IDeletable
  */
+import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.IDeletable');
 
 

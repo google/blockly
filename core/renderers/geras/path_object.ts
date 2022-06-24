@@ -13,6 +13,7 @@
  * An object that owns a block's rendering SVG elements.
  * @class
  */
+import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.geras.PathObject');
 
 /* eslint-disable-next-line no-unused-vars */

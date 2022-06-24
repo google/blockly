@@ -13,6 +13,7 @@
  * Objects for rendering highlights on blocks.
  * @class
  */
+import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.geras.HighlightConstantProvider');
 
 import * as svgPaths from '../../utils/svg_paths.js';

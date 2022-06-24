@@ -13,6 +13,7 @@
  * A toolbox category used to organize blocks in the toolbox.
  * @class
  */
+import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.CollapsibleToolboxCategory');
 
 /* eslint-disable-next-line no-unused-vars */

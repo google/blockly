@@ -13,6 +13,7 @@
  * Class for a block delete event.
  * @class
  */
+import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.BlockDelete');
 
 /* eslint-disable-next-line no-unused-vars */

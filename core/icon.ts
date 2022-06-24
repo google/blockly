@@ -13,6 +13,7 @@
  * Object representing an icon on a block.
  * @class
  */
+import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Icon');
 
 /* eslint-disable-next-line no-unused-vars */

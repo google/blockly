@@ -13,6 +13,7 @@
  * Abstract class for a variable event.
  * @class
  */
+import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.VarBase');
 
 /* eslint-disable-next-line no-unused-vars */

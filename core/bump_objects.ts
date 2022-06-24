@@ -13,6 +13,7 @@
  * Utilities for bumping objects back into worksapce bounds.
  * @namespace Blockly.bumpObjects
  */
+import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.bumpObjects');
 
 /* eslint-disable-next-line no-unused-vars */

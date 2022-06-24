@@ -16,6 +16,7 @@
  * elements.
  * @namespace Blockly.blockRendering.IPathObject
  */
+import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.IPathObject');
 
 /* eslint-disable-next-line no-unused-vars */

@@ -13,6 +13,7 @@
  * The interface for a bounded element.
  * @namespace Blockly.IBoundedElement
  */
+import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.IBoundedElement');
 
 /* eslint-disable-next-line no-unused-vars */

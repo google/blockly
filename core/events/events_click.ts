@@ -13,6 +13,7 @@
  * Events fired as a result of UI click in Blockly's editor.
  * @class
  */
+import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.Click');
 
 /* eslint-disable-next-line no-unused-vars */

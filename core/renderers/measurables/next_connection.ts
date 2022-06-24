@@ -15,6 +15,7 @@
  * rendering.
  * @class
  */
+import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.NextConnection');
 
 /* eslint-disable-next-line no-unused-vars */

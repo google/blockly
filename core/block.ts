@@ -13,6 +13,7 @@
  * The class representing one block.
  * @class
  */
+import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Block');
 
 // Unused import preserved for side-effects. Remove if unneeded.

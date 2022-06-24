@@ -186,7 +186,7 @@ var JSCOMP_ERROR = [
   'externsValidation',
   'extraRequire',  // Undocumented but valid.
   'functionParams',
-  'globalThis',
+  // 'globalThis',
   'invalidCasts',
   'misplacedTypeAnnotation',
   // 'missingOverride',  // There are many of these, which should be fixed.

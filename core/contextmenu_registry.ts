@@ -21,11 +21,6 @@ import {BlockSvg} from './block_svg.js';
 import {WorkspaceSvg} from './workspace_svg.js';
 
 
-enum ScopeType {
-  BLOCK = 'block',
-  WORKSPACE = 'workspace',
-}
-
 /**
  * Class for the registry of context menu items. This is intended to be a
  * singleton. You should not create a new instance, and only access this class
@@ -33,12 +28,6 @@ enum ScopeType {
  * @alias Blockly.ContextMenuRegistry
  */
 export class ContextMenuRegistry {
-  /**
-   * Where this menu item should be rendered. If the menu item should be
-   * rendered in multiple scopes, e.g. on both a block and a workspace, it
-   * should be registered for each scope.
-   */
-  static ScopeType = ScopeType;
   static registry: ContextMenuRegistry;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   private registry_!: {[key: string]: RegistryItem};
@@ -125,33 +114,71 @@ export class ContextMenuRegistry {
     return menuOptions;
   }
 }
-export interface Scope {
-  block: BlockSvg|undefined;
-  workspace: WorkspaceSvg|undefined;
-}
-export interface RegistryItem {
-  callback: (p1: Scope) => AnyDuringMigration;
-  scopeType: ScopeType;
-  displayText: ((p1: Scope) => string)|string;
-  preconditionFn: (p1: Scope) => string;
-  weight: number;
-  id: string;
-}
-export interface ContextMenuOption {
-  text: string;
-  enabled: boolean;
-  callback: (p1: Scope) => AnyDuringMigration;
-  scope: Scope;
-  weight: number;
-}
-export interface LegacyContextMenuOption {
-  text: string;
-  enabled: boolean;
-  callback: (p1: Scope) => AnyDuringMigration;
+
+export namespace ContextMenuRegistry {
+  /**
+   * Where this menu item should be rendered. If the menu item should be
+   * rendered in multiple scopes, e.g. on both a block and a workspace, it
+   * should be registered for each scope.
+   */
+  export enum ScopeType {
+    BLOCK = 'block',
+    WORKSPACE = 'workspace',
+  }
+
+  /**
+   * The actual workspace/block where the menu is being rendered. This is passed
+   * to callback and displayText functions that depend on this information.
+   */
+  export interface Scope {
+    block: BlockSvg|undefined;
+    workspace: WorkspaceSvg|undefined;
+  }
+
+  /**
+   * A menu item as entered in the registry.
+   */
+  export interface RegistryItem {
+    callback: (p1: Scope) => AnyDuringMigration;
+    scopeType: ScopeType;
+    displayText: ((p1: Scope) => string)|string;
+    preconditionFn: (p1: Scope) => string;
+    weight: number;
+    id: string;
+  }
+
+  /**
+   * A menu item as presented to contextmenu.js.
+   */
+  export interface ContextMenuOption {
+    text: string;
+    enabled: boolean;
+    callback: (p1: Scope) => AnyDuringMigration;
+    scope: Scope;
+    weight: number;
+  }
+
+  /**
+   * A subset of ContextMenuOption corresponding to what was publicly
+   * documented.  ContextMenuOption should be preferred for new code.
+   */
+  export interface LegacyContextMenuOption {
+    text: string;
+    enabled: boolean;
+    callback: (p1: Scope) => AnyDuringMigration;
+  }
+
+  /**
+   * Singleton instance of this class. All interactions with this class should
+   * be done on this object.
+   */
+  ContextMenuRegistry.registry = new ContextMenuRegistry();
 }
 
-/**
- * Singleton instance of this class. All interactions with this class should be
- * done on this object.
- */
-ContextMenuRegistry.registry = new ContextMenuRegistry();
+export type ScopeType = ContextMenuRegistry.ScopeType;
+export const ScopeType = ContextMenuRegistry.ScopeType;
+export type Scope = ContextMenuRegistry.Scope;
+export type RegistryItem = ContextMenuRegistry.RegistryItem;
+export type ContextMenuOption = ContextMenuRegistry.ContextMenuOption;
+export type LegacyContextMenuOption =
+    ContextMenuRegistry.LegacyContextMenuOption;

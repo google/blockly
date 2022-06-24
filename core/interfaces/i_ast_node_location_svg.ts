@@ -8,7 +8,6 @@
  * @fileoverview The interface for an AST node location SVG.
  */
 
-
 /**
  * The interface for an AST node location SVG.
  * @namespace Blockly.IASTNodeLocationSvg

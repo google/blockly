@@ -10,7 +10,6 @@
  * instances would be FieldTextInput, FieldDropdown, etc.
  */
 
-
 /**
  * Field.  Used for editable titles, variables, etc.
  * This is an abstract class that defines the UI on the block.  Actual

@@ -9,7 +9,6 @@
  * minimalist renderer.
  */
 
-
 /**
  * An object that provides constants for rendering blocks in the
  * minimalist renderer.

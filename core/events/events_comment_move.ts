@@ -8,7 +8,6 @@
  * @fileoverview Class for comment move event.
  */
 
-
 /**
  * Class for comment move event.
  * @class

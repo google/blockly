@@ -8,7 +8,6 @@
  * @fileoverview Functionality for the right-click context menus.
  */
 
-
 /**
  * Functionality for the right-click context menus.
  * @namespace Blockly.ContextMenu

@@ -8,7 +8,6 @@
  * @fileoverview Classes for all types of variable events.
  */
 
-
 /**
  * Classes for all types of variable events.
  * @class

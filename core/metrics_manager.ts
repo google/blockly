@@ -8,7 +8,6 @@
  * @fileoverview Calculates and reports workspace metrics.
  */
 
-
 /**
  * Calculates and reports workspace metrics.
  * @class

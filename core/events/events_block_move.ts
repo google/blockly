@@ -8,7 +8,6 @@
  * @fileoverview Class for a block move event.
  */
 
-
 /**
  * Class for a block move event.
  * @class
@@ -24,6 +23,7 @@ import {Coordinate} from '../utils/coordinate.js';
 
 import {BlockBase} from './events_block_base.js';
 import * as eventUtils from './utils.js';
+
 
 interface BlockLocation {
   parentId: string;

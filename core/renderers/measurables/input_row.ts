@@ -9,7 +9,6 @@
  * rendered block.
  */
 
-
 /**
  * Object representing a row that holds one or more inputs on a
  * rendered block.

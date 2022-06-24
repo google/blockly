@@ -8,7 +8,6 @@
  * @fileoverview Calculates and reports flyout workspace metrics.
  */
 
-
 /**
  * Calculates and reports flyout workspace metrics.
  * @class

@@ -9,7 +9,6 @@
  * block.
  */
 
-
 /**
  * Class representing inline inputs with connections on a rendered
  * block.

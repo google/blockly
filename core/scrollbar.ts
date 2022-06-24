@@ -8,7 +8,6 @@
  * @fileoverview Object representing a scrollbar.
  */
 
-
 /**
  * Object representing a scrollbar.
  * @class
@@ -26,6 +25,8 @@ import {Svg} from './utils/svg.js';
 import * as svgMath from './utils/svg_math.js';
 /* eslint-disable-next-line no-unused-vars */
 import {WorkspaceSvg} from './workspace_svg.js';
+
+
 /**
  * A note on units: most of the numbers that are in CSS pixels are scaled if the
  * scrollbar is in a mutator.

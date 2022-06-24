@@ -8,7 +8,6 @@
  * @fileoverview The interface for a metrics manager.
  */
 
-
 /**
  * The interface for a metrics manager.
  * @namespace Blockly.IMetricsManager

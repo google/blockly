@@ -8,7 +8,6 @@
  * @fileoverview Base class for all types of block events.
  */
 
-
 /**
  * Base class for all types of block events.
  * @class

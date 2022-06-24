@@ -9,7 +9,6 @@
  * mode.
  */
 
-
 /**
  * An object that provides constants for rendering blocks in Geras
  * mode.

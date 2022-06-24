@@ -8,7 +8,6 @@
  * @fileoverview Touch handling for Blockly.
  */
 
-
 /**
  * Touch handling for Blockly.
  * @namespace Blockly.Touch
@@ -269,7 +268,6 @@ export function isMouseOrTouchEvent(e: Event|PseudoEvent): boolean {
 export function isTouchEvent(e: Event|PseudoEvent): boolean {
   return e.type.startsWith('touch') || e.type.startsWith('pointer');
 }
-
 
 /**
  * Split an event into an array of events, one per changed touch or mouse

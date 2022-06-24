@@ -8,7 +8,6 @@
  * @fileoverview Object that defines user-specified options for the workspace.
  */
 
-
 /**
  * Object that defines user-specified options for the workspace.
  * @namespace Blockly.BlocklyOptions

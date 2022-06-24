@@ -8,7 +8,6 @@
  * @fileoverview Methods for dragging a bubble visually.
  */
 
-
 /**
  * Methods for dragging a bubble visually.
  * @class

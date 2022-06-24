@@ -9,8 +9,6 @@
  * the ComponentManager.
  */
 
-
-
 /**
  * Interface for a workspace component that can be registered with
  * the ComponentManager.

@@ -8,7 +8,6 @@
  * @fileoverview Generators for unique IDs.
  */
 
-
 /**
  * Generators for unique IDs.
  * @namespace Blockly.utils.idGenerator

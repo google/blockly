@@ -8,7 +8,6 @@
  * @fileoverview Class for comment creation event.
  */
 
-
 /**
  * Class for comment creation event.
  * @class

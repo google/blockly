@@ -6,7 +6,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-
 /**
  * Re-exports of Blockly.geras.* modules.
  * @namespace Blockly.geras
@@ -23,6 +22,7 @@ import {InlineInput} from './measurables/inline_input.js';
 import {StatementInput} from './measurables/statement_input.js';
 import {PathObject} from './path_object.js';
 import {Renderer} from './renderer.js';
+
 
 export {
   ConstantProvider,

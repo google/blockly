@@ -8,7 +8,6 @@
  * @fileoverview Inject Blockly's CSS synchronously.
  */
 
-
 /**
  * Inject Blockly's CSS synchronously.
  * @namespace Blockly.Css

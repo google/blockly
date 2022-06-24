@@ -9,7 +9,6 @@
  * containing state.
  */
 
-
 /**
  * Handles serializing variables to plain JavaScript objects, only containing
  * state.

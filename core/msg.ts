@@ -8,7 +8,6 @@
  * @fileoverview Empty name space for the Message singleton.
  */
 
-
 /**
  * Empty name space for the Message singleton.
  * @namespace Blockly.Msg

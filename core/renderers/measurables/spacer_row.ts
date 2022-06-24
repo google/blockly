@@ -8,7 +8,6 @@
  * @fileoverview Object representing a spacer between two rows.
  */
 
-
 /**
  * Object representing a spacer between two rows.
  * @class

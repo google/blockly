@@ -8,7 +8,6 @@
  * @fileoverview Class for a variable creation event.
  */
 
-
 /**
  * Class for a variable creation event.
  * @class

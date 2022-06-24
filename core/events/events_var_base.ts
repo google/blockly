@@ -8,7 +8,6 @@
  * @fileoverview Abstract class for a variable event.
  */
 
-
 /**
  * Abstract class for a variable event.
  * @class

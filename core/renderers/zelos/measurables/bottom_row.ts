@@ -8,7 +8,6 @@
  * @fileoverview An object representing the bottom row of a rendered block.
  */
 
-
 /**
  * An object representing the bottom row of a rendered block.
  * @class

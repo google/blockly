@@ -10,7 +10,6 @@
  * a JavaScript framework such as Closure.
  */
 
-
 /**
  * Useragent detection.
  * These methods are not specific to Blockly, and could be factored out into
@@ -19,6 +18,7 @@
  */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.userAgent');
+
 
 /** The raw useragent string. */
 let rawUserAgent: string;

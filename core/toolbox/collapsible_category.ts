@@ -8,7 +8,6 @@
  * @fileoverview A toolbox category used to organize blocks in the toolbox.
  */
 
-
 /**
  * A toolbox category used to organize blocks in the toolbox.
  * @class
@@ -261,7 +260,6 @@ export interface CssConfig {
   closedicon: string|null;
   contents: string|null;
 }
-
 
 registry.register(
     registry.Type.TOOLBOX_ITEM, CollapsibleToolboxCategory.registrationName,

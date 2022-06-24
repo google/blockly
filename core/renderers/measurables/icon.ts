@@ -9,7 +9,6 @@
  * block.
  */
 
-
 /**
  * Objects representing an icon in a row of a rendered
  * block.

@@ -9,7 +9,6 @@
  *    for registering and unregistering different types of classes.
  */
 
-
 /**
  * This file is a universal registry that provides generic methods
  *    for registering and unregistering different types of classes.
@@ -101,7 +100,6 @@ export class Type<T> {
     return this.name;
   }
 }
-
 
 // Type.CONNECTION_CHECKER = new Type('connectionChecker');
 

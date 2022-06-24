@@ -9,7 +9,6 @@
  * checking whether a potential connection is safe and valid.
  */
 
-
 /**
  * The interface for an object that encapsulates logic for
  * checking whether a potential connection is safe and valid.

@@ -9,8 +9,6 @@
  * when WorkspaceSvg.hideChaff is called.
  */
 
-
-
 /**
  * The interface for a component that is automatically hidden
  * when WorkspaceSvg.hideChaff is called.

@@ -9,7 +9,6 @@
  * containing state.
  */
 
-
 /**
  * Handles serializing blocks to plain JavaScript objects only containing state.
  * @namespace Blockly.serialization.blocks

@@ -8,7 +8,6 @@
  * @fileoverview The interface for a collapsible toolbox item.
  */
 
-
 /**
  * The interface for a collapsible toolbox item.
  * @namespace Blockly.ICollapsibleToolboxItem

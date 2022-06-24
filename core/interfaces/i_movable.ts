@@ -8,7 +8,6 @@
  * @fileoverview The interface for an object that is movable.
  */
 
-
 /**
  * The interface for an object that is movable.
  * @namespace Blockly.IMovable

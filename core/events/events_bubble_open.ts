@@ -8,7 +8,6 @@
  * @fileoverview Events fired as a result of bubble open.
  */
 
-
 /**
  * Events fired as a result of bubble open.
  * @class

@@ -8,7 +8,6 @@
  * @fileoverview Methods animating a block on connection and disconnection.
  */
 
-
 /**
  * Methods animating a block on connection and disconnection.
  * @namespace Blockly.blockAnimations
@@ -20,6 +19,7 @@ goog.declareModuleId('Blockly.blockAnimations');
 import {BlockSvg} from './block_svg.js';
 import * as dom from './utils/dom.js';
 import {Svg} from './utils/svg.js';
+
 
 /** A bounding box for a cloned block. */
 interface CloneRect {

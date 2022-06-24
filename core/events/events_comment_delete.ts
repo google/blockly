@@ -8,7 +8,6 @@
  * @fileoverview Class for comment deletion event.
  */
 
-
 /**
  * Class for comment deletion event.
  * @class

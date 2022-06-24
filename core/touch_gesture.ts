@@ -9,7 +9,6 @@
  * for both pointer and touch events.
  */
 
-
 /**
  * The class extends Gesture to support pinch to zoom
  * for both pointer and touch events.
@@ -30,7 +29,6 @@ import {WorkspaceSvg} from './workspace_svg.js';
  * Note: In this file "start" refers to touchstart, mousedown, and pointerstart
  * events.  "End" refers to touchend, mouseup, and pointerend events.
  */
-
 
 /** A multiplier used to convert the gesture scale to a zoom in delta. */
 const ZOOM_IN_MULTIPLIER = 5;

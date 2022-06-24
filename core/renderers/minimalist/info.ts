@@ -8,7 +8,6 @@
  * @fileoverview Minimalist render info object.
  */
 
-
 /**
  * Minimalist render info object.
  * @class

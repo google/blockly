@@ -9,7 +9,6 @@
  * compatibility mode.
  */
 
-
 /**
  * Methods for adding highlights on block, for rendering in
  * compatibility mode.

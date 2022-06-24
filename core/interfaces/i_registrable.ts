@@ -9,8 +9,6 @@
  *    (Ex. Toolbox, Fields, Renderers)
  */
 
-
-
 /**
  * The interface for a Blockly component that can be registered.
  *    (Ex. Toolbox, Fields, Renderers)

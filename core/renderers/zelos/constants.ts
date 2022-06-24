@@ -9,7 +9,6 @@
  * mode.
  */
 
-
 /**
  * An object that provides constants for rendering blocks in Zelos
  * mode.
@@ -28,6 +27,7 @@ import * as svgPaths from '../../utils/svg_paths.js';
 /* eslint-disable-next-line no-unused-vars */
 import {ConstantProvider as BaseConstantProvider, Shape} from '../common/constants.js';
 
+
 /** An object containing sizing and path information about inside corners. */
 export interface InsideCorners {
   width: number;
@@ -39,7 +39,6 @@ export interface InsideCorners {
   pathTopRight: string;
   pathBottomRight: string;
 }
-
 
 /**
  * An object that provides constants for rendering blocks in Zelos mode.

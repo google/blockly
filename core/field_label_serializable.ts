@@ -10,7 +10,6 @@
  *    edited programmatically.
  */
 
-
 /**
  * Non-editable, serializable text field. Behaves like a
  *    normal label but is serialized to XML. It may only be

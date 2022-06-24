@@ -9,7 +9,6 @@
  * rendered block.
  */
 
-
 /**
  * Class representing external value inputs with connections on a
  * rendered block.

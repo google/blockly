@@ -8,7 +8,6 @@
  * @fileoverview Methods for dragging a workspace visually.
  */
 
-
 /**
  * Methods for dragging a workspace visually.
  * @class

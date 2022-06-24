@@ -9,7 +9,6 @@
  * Thrasos: spirit of boldness.
  */
 
-
 /**
  * New (evolving) renderer.
  * Thrasos: spirit of boldness.

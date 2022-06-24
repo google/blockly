@@ -8,7 +8,6 @@
  * @fileoverview Events fired as a result of a viewport change.
  */
 
-
 /**
  * Events fired as a result of a viewport change.
  * @class

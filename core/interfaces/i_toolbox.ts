@@ -8,7 +8,6 @@
  * @fileoverview The interface for a toolbox.
  */
 
-
 /**
  * The interface for a toolbox.
  * @namespace Blockly.IToolbox

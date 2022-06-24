@@ -8,7 +8,6 @@
  * @fileoverview The interface for an object that is deletable.
  */
 
-
 /**
  * The interface for an object that is deletable.
  * @namespace Blockly.IDeletable

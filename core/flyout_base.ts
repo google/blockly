@@ -8,7 +8,6 @@
  * @fileoverview Flyout tray containing blocks which may be created.
  */
 
-
 /**
  * Flyout tray containing blocks which may be created.
  * @class

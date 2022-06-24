@@ -8,7 +8,6 @@
  * @fileoverview Layout code for a vertical variant of the flyout.
  */
 
-
 /**
  * Layout code for a vertical variant of the flyout.
  * @class

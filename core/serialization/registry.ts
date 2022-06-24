@@ -9,7 +9,6 @@
  * variables, plugins, etc).
  */
 
-
 /**
  * Contains functions registering serializers (eg blocks, variables, plugins,
  * etc).

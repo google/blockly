@@ -8,7 +8,6 @@
  * @fileoverview Thrasos renderer.
  */
 
-
 /**
  * Thrasos renderer.
  * @class

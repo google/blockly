@@ -9,7 +9,6 @@
  * plain JavaScript objects.
  */
 
-
 /**
  * Contains top-level functions for serializing workspaces to plain JavaScript
  * objects.

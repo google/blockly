@@ -8,7 +8,6 @@
  * @fileoverview The interface for an object that is copyable.
  */
 
-
 /**
  * The interface for an object that is copyable.
  * @namespace Blockly.ICopyable

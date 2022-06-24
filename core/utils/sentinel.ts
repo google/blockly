@@ -8,7 +8,6 @@
  * @fileoverview A type used to create flag values (e.g. SKIP_SETUP).
  */
 
-
 /**
  * A type used to create flag values.
  * @class

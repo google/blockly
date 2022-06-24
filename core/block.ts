@@ -8,7 +8,6 @@
  * @fileoverview The class representing one block.
  */
 
-
 /**
  * The class representing one block.
  * @class
@@ -707,7 +706,6 @@ export class Block implements IASTNodeLocation, IDeletable {
           'Cannot set parent to null while block is still connected to' +
           ' superior block.');
     }
-
 
     // This block hasn't actually moved on-screen, so there's no need to
     // update

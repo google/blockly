@@ -6,7 +6,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-
 /**
  * Re-exports of Blockly.minimalist.* modules.
  * @namespace Blockly.minimalist
@@ -18,5 +17,6 @@ import {ConstantProvider} from './constants.js';
 import {Drawer} from './drawer.js';
 import {RenderInfo} from './info.js';
 import {Renderer} from './renderer.js';
+
 
 export {ConstantProvider, Drawer, Renderer, RenderInfo};

@@ -8,7 +8,6 @@
  * @fileoverview Text input field.
  */
 
-
 /**
  * Text input field.
  * @class

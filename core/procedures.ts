@@ -8,7 +8,6 @@
  * @fileoverview Utility functions for handling procedures.
  */
 
-
 /**
  * Utility functions for handling procedures.
  * @namespace Blockly.Procedures

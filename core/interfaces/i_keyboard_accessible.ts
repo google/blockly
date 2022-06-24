@@ -8,7 +8,6 @@
  * @fileoverview The interface for objects that handle keyboard shortcuts.
  */
 
-
 /**
  * The interface for objects that handle keyboard shortcuts.
  * @namespace Blockly.IKeyboardAccessible

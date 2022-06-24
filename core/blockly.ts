@@ -8,7 +8,6 @@
  * @fileoverview The top level namespace used to access the Blockly library.
  */
 
-
 /**
  * The top level namespace used to access the Blockly library.
  * @namespace Blockly
@@ -348,7 +347,6 @@ export const defineBlocksWithJsonArray =
 // type 'void'.
 export const setParentContainer =
     (common as AnyDuringMigration).setParentContainer;
-
 
 /**
  * Returns the dimensions of the specified SVG image.

@@ -10,7 +10,6 @@
  * generally recommended.
  */
 
-
 /**
  * All the values that we expect developers to be able to change
  * before injecting Blockly. Changing these values during run time is not
@@ -19,6 +18,7 @@
  */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.config');
+
 
 /**
  * All the values that we expect developers to be able to change

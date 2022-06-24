@@ -8,7 +8,6 @@
  * @fileoverview Object representing a workspace rendered as SVG.
  */
 
-
 /**
  * Object representing a workspace rendered as SVG.
  * @class

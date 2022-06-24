@@ -9,13 +9,13 @@
  * alert/confirmation dialogs.
  */
 
-
 /**
  * Wrapper functions around JS functions for showing alert/confirmation dialogs.
  * @namespace Blockly.dialog
  */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.dialog');
+
 
 let alertImplementation = function(
     message: AnyDuringMigration, opt_callback: AnyDuringMigration) {

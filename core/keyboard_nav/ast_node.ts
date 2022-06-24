@@ -9,7 +9,6 @@
  * Used to traverse the Blockly AST.
  */
 
-
 /**
  * The class representing an AST node.
  * Used to traverse the Blockly AST.

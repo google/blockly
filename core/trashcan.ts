@@ -8,7 +8,6 @@
  * @fileoverview Object representing a trash can icon.
  */
 
-
 /**
  * Object representing a trash can icon.
  * @class

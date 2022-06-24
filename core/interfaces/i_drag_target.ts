@@ -9,8 +9,6 @@
  * block is dropped on top of it.
  */
 
-
-
 /**
  * The interface for a component that has a handler for when a
  * block is dropped on top of it.

@@ -9,7 +9,6 @@
  * a rendered block.
  */
 
-
 /**
  * Zelos specific objects representing inputs with connections on
  * a rendered block.

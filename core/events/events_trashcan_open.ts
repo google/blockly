@@ -8,7 +8,6 @@
  * @fileoverview Events fired as a result of trashcan flyout open and close.
  */
 
-
 /**
  * Events fired as a result of trashcan flyout open and close.
  * @class

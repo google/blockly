@@ -8,7 +8,6 @@
  * @fileoverview Namespace for block rendering functionality.
  */
 
-
 /**
  * Namespace for block rendering functionality.
  * @namespace Blockly.blockRendering
@@ -52,6 +51,7 @@ import {RenderInfo} from './info.js';
 import {MarkerSvg} from './marker_svg.js';
 import {PathObject} from './path_object.js';
 import {Renderer} from './renderer.js';
+
 
 /**
  * Returns whether the debugger is turned on.

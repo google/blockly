@@ -9,7 +9,6 @@
  * block.
  */
 
-
 /**
  * Objects representing a hat in a row of a rendered
  * block.

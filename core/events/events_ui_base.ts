@@ -9,7 +9,6 @@
  * Blockly's editor.
  */
 
-
 /**
  * Base class for events fired as a result of UI actions in
  * Blockly's editor.

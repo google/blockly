@@ -8,7 +8,6 @@
  * @fileoverview Class for a variable rename event.
  */
 
-
 /**
  * Class for a variable rename event.
  * @class

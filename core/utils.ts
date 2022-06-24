@@ -8,7 +8,6 @@
  * @fileoverview Utility methods.
  */
 
-
 /**
  * Utility methods.
  * @namespace Blockly.utils
@@ -45,6 +44,7 @@ import * as userAgent from './utils/useragent.js';
 import * as xml from './utils/xml.js';
 /* eslint-disable-next-line no-unused-vars */
 import {WorkspaceSvg} from './workspace_svg.js';
+
 
 export {
   aria,

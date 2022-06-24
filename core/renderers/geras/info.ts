@@ -9,7 +9,6 @@
  * Geras: spirit of old age.
  */
 
-
 /**
  * Old (compatibility) renderer.
  * Geras: spirit of old age.

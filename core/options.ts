@@ -8,7 +8,6 @@
  * @fileoverview Object that controls settings for the workspace.
  */
 
-
 /**
  * Object that controls settings for the workspace.
  * @class

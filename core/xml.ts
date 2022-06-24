@@ -8,7 +8,6 @@
  * @fileoverview XML reader and writer.
  */
 
-
 /**
  * XML reader and writer.
  * @namespace Blockly.Xml
@@ -905,7 +904,6 @@ function applyNextTagNodes(
     }
   }
 }
-
 
 /**
  * Decode an XML block tag and create a block (and possibly sub blocks) on the

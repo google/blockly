@@ -31,7 +31,7 @@ module.exports = {
   buildCompiled: buildTasks.compiled,
   buildAdvancedCompilationTest: buildTasks.advancedCompilationTest,
   buildJavaScript: buildTasks.javaScript,
-  buildJavaScriptAndDeps: gulp.series(buildTasks.javaScript, buildTasks.deps),
+  buildJavaScriptAndDeps: buildTasks.javaScriptAndDeps,
   // TODO(5621): Re-enable once typings generation is fixed.
   // checkin: gulp.parallel(buildTasks.checkinBuilt, typings.checkinTypings),
   checkin: gulp.parallel(buildTasks.checkinBuilt),
@@ -48,6 +48,7 @@ module.exports = {
   // typings: gulp.series(typings.typings, typings.msgTypings),
   // checkinTypings: typings.checkinTypings,
   package: packageTasks.package,
+  prepare: buildTasks.prepare,
   checkLicenses: licenseTasks.checkLicenses,
   recompile: releaseTasks.recompile,
   prepareDemos: appengineTasks.prepareDemos,

@@ -14,6 +14,7 @@
  * Makecode/scratch-style renderer.
  * @class
  */
+import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.zelos.RenderInfo');
 
 /* eslint-disable-next-line no-unused-vars */

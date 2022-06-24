@@ -13,6 +13,7 @@
  * The interface for an object that is selectable.
  * @namespace Blockly.ISelectable
  */
+import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.ISelectable');
 
 // eslint-disable-next-line no-unused-vars

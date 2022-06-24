@@ -13,6 +13,7 @@
  * Zelos renderer.
  * @class
  */
+import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.zelos.Drawer');
 
 /* eslint-disable-next-line no-unused-vars */

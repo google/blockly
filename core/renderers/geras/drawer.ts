@@ -13,6 +13,7 @@
  * Renderer that preserves the look and feel of Blockly pre-2019.
  * @class
  */
+import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.geras.Drawer');
 
 /* eslint-disable-next-line no-unused-vars */

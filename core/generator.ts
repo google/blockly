@@ -15,6 +15,7 @@
  * Blockly code.
  * @class
  */
+import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Generator');
 
 /* eslint-disable-next-line no-unused-vars */

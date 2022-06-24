@@ -13,6 +13,7 @@
  * Touch handling for Blockly.
  * @namespace Blockly.Touch
  */
+import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Touch');
 
 /* eslint-disable-next-line no-unused-vars */

@@ -19,6 +19,7 @@
  * @return True if an element was removed.
  * @alias Blockly.array.removeElem
  */
+import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.array');
 
 export function removeElem(

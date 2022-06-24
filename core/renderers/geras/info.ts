@@ -15,6 +15,7 @@
  * Geras: spirit of old age.
  * @class
  */
+import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.geras.RenderInfo');
 
 /* eslint-disable-next-line no-unused-vars */

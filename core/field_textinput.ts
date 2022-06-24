@@ -13,6 +13,7 @@
  * Text input field.
  * @class
  */
+import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.FieldTextInput');
 
 // Unused import preserved for side-effects. Remove if unneeded.

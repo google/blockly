@@ -13,6 +13,7 @@
  * Base class for comment events.
  * @class
  */
+import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.CommentBase');
 
 import * as utilsXml from '../utils/xml.js';

@@ -15,6 +15,7 @@
  * Used primarily for keyboard navigation.
  * @class
  */
+import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Cursor');
 
 import * as registry from '../registry.js';

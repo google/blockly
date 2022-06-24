@@ -13,6 +13,7 @@
  * The interface for a metrics manager.
  * @namespace Blockly.IMetricsManager
  */
+import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.IMetricsManager');
 
 /* eslint-disable-next-line no-unused-vars */

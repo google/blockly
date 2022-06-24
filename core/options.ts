@@ -13,6 +13,7 @@
  * Object that controls settings for the workspace.
  * @class
  */
+import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Options');
 
 import type {BlocklyOptions} from './blockly_options.js';

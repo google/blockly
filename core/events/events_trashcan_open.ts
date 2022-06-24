@@ -13,6 +13,7 @@
  * Events fired as a result of trashcan flyout open and close.
  * @class
  */
+import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.TrashcanOpen');
 
 import * as registry from '../registry.js';

@@ -13,6 +13,7 @@
  * Object representing a single row on a rendered block.
  * @class
  */
+import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.Row');
 
 /* eslint-disable-next-line no-unused-vars */

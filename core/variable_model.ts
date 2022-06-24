@@ -13,6 +13,7 @@
  * Components for the variable model.
  * @class
  */
+import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.VariableModel');
 
 // Unused import preserved for side-effects. Remove if unneeded.

@@ -13,6 +13,7 @@
  * Class that controls updates to connections during drags.
  * @class
  */
+import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.InsertionMarkerManager');
 
 import * as blockAnimations from './block_animations.js';

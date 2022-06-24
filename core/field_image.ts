@@ -8,7 +8,6 @@
  * @fileoverview Image field.  Used for pictures, icons, etc.
  */
 
-
 /**
  * Image field.  Used for pictures, icons, etc.
  * @class

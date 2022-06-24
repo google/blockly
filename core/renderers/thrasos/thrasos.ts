@@ -6,7 +6,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-
 /**
  * Re-exports of Blockly.thrasos.* modules.
  * @namespace Blockly.thrasos

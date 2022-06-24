@@ -8,7 +8,6 @@
  * @fileoverview Class for a block move event.
  */
 
-
 /**
  * Class for a block move event.
  * @class

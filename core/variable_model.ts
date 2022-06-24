@@ -8,7 +8,6 @@
  * @fileoverview Components for the variable model.
  */
 
-
 /**
  * Components for the variable model.
  * @class

@@ -8,7 +8,6 @@
  * @fileoverview Namespace for block rendering functionality.
  */
 
-
 /**
  * Namespace for block rendering functionality.
  * @namespace Blockly.blockRendering

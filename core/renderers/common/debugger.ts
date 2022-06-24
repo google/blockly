@@ -8,7 +8,6 @@
  * @fileoverview Methods for rendering debug graphics.
  */
 
-
 /**
  * Methods for rendering debug graphics.
  * @class
@@ -196,7 +195,6 @@ export class Debug {
             this.svgRoot_));
       }
     }
-
 
     if (Types.isInput(elem) && elem instanceof InputConnection &&
         Debug.config.connections) {

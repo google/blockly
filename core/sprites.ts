@@ -17,7 +17,6 @@ goog.declareModuleId('Blockly.sprite');
  * and zoom controls.
  */
 
-
 /**
  * Contains the path to a single png tat holds the images for the trashcan
  * as well as the zoom controls.

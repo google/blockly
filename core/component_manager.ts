@@ -8,7 +8,6 @@
  * @fileoverview Manager for all items registered with the workspace.
  */
 
-
 /**
  * Manager for all items registered with the workspace.
  * @class

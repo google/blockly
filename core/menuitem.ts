@@ -8,7 +8,6 @@
  * @fileoverview Blockly menu item similar to Closure's goog.ui.MenuItem
  */
 
-
 /**
  * Blockly menu item similar to Closure's goog.ui.MenuItem
  * @class

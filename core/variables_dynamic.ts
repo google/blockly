@@ -8,7 +8,6 @@
  * @fileoverview Utility functions for handling typed variables.
  */
 
-
 /**
  * Utility functions for handling typed variables.
  *
@@ -83,7 +82,6 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
       'CREATE_VARIABLE_NUMBER', numberButtonClickHandler);
   workspace.registerButtonCallback(
       'CREATE_VARIABLE_COLOUR', colourButtonClickHandler);
-
 
   // AnyDuringMigration because:  Argument of type 'WorkspaceSvg' is not
   // assignable to parameter of type 'Workspace'.

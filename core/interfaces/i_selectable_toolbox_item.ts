@@ -8,7 +8,6 @@
  * @fileoverview The interface for a selectable toolbox item.
  */
 
-
 /**
  * The interface for a selectable toolbox item.
  * @namespace Blockly.ISelectableToolboxItem

@@ -8,7 +8,6 @@
  * @fileoverview Events fired as a block drag.
  */
 
-
 /**
  * Events fired as a block drag.
  * @class

@@ -11,8 +11,6 @@
  * blocks are never repainted during drag improving performance.
  */
 
-
-
 /**
  * An SVG that floats on top of the workspace.
  * Blocks are moved into this SVG during a drag, improving performance.

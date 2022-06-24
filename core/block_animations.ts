@@ -8,7 +8,6 @@
  * @fileoverview Methods animating a block on connection and disconnection.
  */
 
-
 /**
  * Methods animating a block on connection and disconnection.
  * @namespace Blockly.blockAnimations

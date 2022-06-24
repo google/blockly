@@ -8,7 +8,6 @@
  * @fileoverview The interface for an AST node location.
  */
 
-
 /**
  * The interface for an AST node location.
  * @namespace Blockly.IASTNodeLocation

@@ -8,7 +8,6 @@
  * @fileoverview The interface for a bounded element.
  */
 
-
 /**
  * The interface for a bounded element.
  * @namespace Blockly.IBoundedElement

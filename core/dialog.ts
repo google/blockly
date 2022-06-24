@@ -9,7 +9,6 @@
  * alert/confirmation dialogs.
  */
 
-
 /**
  * Wrapper functions around JS functions for showing alert/confirmation dialogs.
  * @namespace Blockly.dialog

@@ -9,7 +9,6 @@
  * during rendering.
  */
 
-
 /**
  * Class representing the space a output connection takes up
  * during rendering.

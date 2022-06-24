@@ -8,7 +8,6 @@
  * @fileoverview Functions for injecting Blockly into a web page.
  */
 
-
 /**
  * Functions for injecting Blockly into a web page.
  * @namespace Blockly.inject

@@ -8,7 +8,6 @@
  * @fileoverview Events fired as a result of UI click in Blockly's editor.
  */
 
-
 /**
  * Events fired as a result of UI click in Blockly's editor.
  * @class

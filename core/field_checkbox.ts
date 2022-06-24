@@ -8,7 +8,6 @@
  * @fileoverview Checkbox field.  Checked or not checked.
  */
 
-
 /**
  * Checkbox field.  Checked or not checked.
  * @class

@@ -8,7 +8,6 @@
  * @fileoverview Namespace for themes.
  */
 
-
 /**
  * Namespace for themes.
  * @namespace Blockly.Themes

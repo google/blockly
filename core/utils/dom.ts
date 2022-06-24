@@ -10,7 +10,6 @@
  * a JavaScript framework such as Closure.
  */
 
-
 /**
  * Utility methods for DOM manipulation.
  * These methods are not specific to Blockly, and could be factored out into

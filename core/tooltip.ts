@@ -4,7 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-
 /**
  * Library to create tooltips for Blockly.
  * First, call createDom() after onload.

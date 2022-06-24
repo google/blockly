@@ -9,7 +9,6 @@
  * Blockly code.
  */
 
-
 /**
  * Utility functions for generating executable code from
  * Blockly code.

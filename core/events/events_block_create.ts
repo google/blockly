@@ -8,7 +8,6 @@
  * @fileoverview Class for a block creation event.
  */
 
-
 /**
  * Class for a block creation event.
  * @class

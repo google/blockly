@@ -8,7 +8,6 @@
  * @fileoverview Events fired as a result of element select action.
  */
 
-
 /**
  * Events fired as a result of element select action.
  * @class

@@ -8,7 +8,6 @@
  * @fileoverview Utility functions for handling variables.
  */
 
-
 /**
  * Utility functions for handling variables.
  * @namespace Blockly.Variables

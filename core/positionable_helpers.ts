@@ -8,7 +8,6 @@
  * @fileoverview Utility functions for positioning UI elements.
  */
 
-
 /**
  * Utility functions for positioning UI elements.
  * @namespace Blockly.uiPosition

@@ -8,7 +8,6 @@
  * @fileoverview Contains custom errors thrown by the serialization system.
  */
 
-
 /**
  * Contains custom errors thrown by the serialization system.
  * @namespace Blockly.serialization.exceptions

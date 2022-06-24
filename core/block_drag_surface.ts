@@ -13,7 +13,6 @@
  * while dragging blocks.
  */
 
-
 /**
  * A class that manages a surface for dragging blocks.  When a
  * block drag is started, we move the block (and children) to a separate DOM

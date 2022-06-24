@@ -8,7 +8,6 @@
  * @fileoverview Class for a block delete event.
  */
 
-
 /**
  * Class for a block delete event.
  * @class

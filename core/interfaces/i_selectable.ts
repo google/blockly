@@ -8,7 +8,6 @@
  * @fileoverview The interface for an object that is selectable.
  */
 
-
 /**
  * The interface for an object that is selectable.
  * @namespace Blockly.ISelectable

@@ -8,7 +8,6 @@
  * @fileoverview Utility methods for objects.
  */
 
-
 /**
  * Utility methods for objects.
  * @namespace Blockly.utils.object

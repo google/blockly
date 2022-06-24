@@ -9,7 +9,6 @@
  * Used primarily for keyboard navigation.
  */
 
-
 /**
  * The class representing a cursor.
  * Used primarily for keyboard navigation.

@@ -9,7 +9,6 @@
  * rendering.
  */
 
-
 /**
  * Base class representing the space a connection takes up during
  * rendering.

@@ -8,7 +8,6 @@
  * @fileoverview Utility methods related to block and message parsing.
  */
 
-
 /**
  * @namespace Blockly.utils.parsing
  */

@@ -8,7 +8,6 @@
  * @fileoverview The interface for a bubble.
  */
 
-
 /**
  * The interface for a bubble.
  * @namespace Blockly.IBubble

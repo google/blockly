@@ -9,7 +9,6 @@
  * Blockly's editor.
  */
 
-
 /**
  * Abstract class for events fired as a result of actions in
  * Blockly's editor.

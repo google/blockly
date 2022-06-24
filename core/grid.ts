@@ -9,7 +9,6 @@
  * Blockly.
  */
 
-
 /**
  * Object for configuring and updating a workspace grid in
  * Blockly.

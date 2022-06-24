@@ -8,7 +8,6 @@
  * @fileoverview Objects for rendering highlights on blocks.
  */
 
-
 /**
  * Objects for rendering highlights on blocks.
  * @class

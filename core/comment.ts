@@ -8,7 +8,6 @@
  * @fileoverview Object representing a code comment.
  */
 
-
 /**
  * Object representing a code comment.
  * @class

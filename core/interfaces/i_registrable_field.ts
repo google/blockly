@@ -8,7 +8,6 @@
  * @fileoverview The interface for a Blockly field that can be registered.
  */
 
-
 /**
  * The interface for a Blockly field that can be registered.
  * @namespace Blockly.IRegistrableField

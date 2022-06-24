@@ -5,7 +5,7 @@
 Blockly.Msg["ADD_COMMENT"] = "Добавить комментарий";
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Невозможно удалить переменную '%1', поскольку она является частью определения функции '%2'";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "Измените значение:";
-Blockly.Msg["CLEAN_UP"] = "Очистить блоки";
+Blockly.Msg["CLEAN_UP"] = "Упорядочить блоки";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "Свёрнутые блоки содержат предупреждения.";
 Blockly.Msg["COLLAPSE_ALL"] = "Свернуть блоки";
 Blockly.Msg["COLLAPSE_BLOCK"] = "Свернуть блок";
@@ -240,7 +240,7 @@ Blockly.Msg["MATH_RANDOM_FLOAT_HELPURL"] = "https://ru.wikipedia.org/wiki/Ген
 Blockly.Msg["MATH_RANDOM_FLOAT_TITLE_RANDOM"] = "случайное число от 0 (включительно) до 1";
 Blockly.Msg["MATH_RANDOM_FLOAT_TOOLTIP"] = "Возвращает случайное число от 0.0 (включительно) до 1.0.";
 Blockly.Msg["MATH_RANDOM_INT_HELPURL"] = "https://ru.wikipedia.org/wiki/Генератор_псевдослучайных_чисел";
-Blockly.Msg["MATH_RANDOM_INT_TITLE"] = "случайное целое число от %1 для %2";
+Blockly.Msg["MATH_RANDOM_INT_TITLE"] = "случайное целое число от %1 до %2";
 Blockly.Msg["MATH_RANDOM_INT_TOOLTIP"] = "Возвращает случайное число между двумя заданными пределами (включая и их).";
 Blockly.Msg["MATH_ROUND_HELPURL"] = "https://ru.wikipedia.org/wiki/Округление";
 Blockly.Msg["MATH_ROUND_OPERATOR_ROUND"] = "округлить";

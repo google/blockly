@@ -8,7 +8,6 @@
  * @fileoverview Zelos renderer.
  */
 
-
 /**
  * Zelos renderer.
  * @class

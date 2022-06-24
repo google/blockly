@@ -8,7 +8,6 @@
  * @fileoverview Utility functions for handling variables.
  */
 
-
 /**
  * Utility functions for handling variables.
  * @namespace Blockly.Variables
@@ -26,6 +25,7 @@ import {Workspace} from './workspace.js';
 /* eslint-disable-next-line no-unused-vars */
 import {WorkspaceSvg} from './workspace_svg.js';
 import * as Xml from './xml.js';
+
 
 /**
  * String for use in the "custom" attribute of a category in toolbox XML.

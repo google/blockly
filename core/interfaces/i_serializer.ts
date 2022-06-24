@@ -9,8 +9,6 @@
  * serializing part of the workspace.
  */
 
-
-
 /**
  * The record type for an object containing functions for
  *     serializing part of the workspace.

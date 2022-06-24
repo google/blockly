@@ -9,7 +9,6 @@
  * Used to demo switching between different cursors.
  */
 
-
 /**
  * The class representing a basic cursor.
  * Used to demo switching between different cursors.

@@ -9,7 +9,6 @@
  * use these constants outside of the core library.
  */
 
-
 /**
  * Module that provides constants for use inside Blockly. Do not
  * use these constants outside of the core library.

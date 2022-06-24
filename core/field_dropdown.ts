@@ -10,7 +10,6 @@
  * properties with the context menu.
  */
 
-
 /**
  * Dropdown input field.  Used for editable titles and variables.
  * In the interests of a consistent UI, the toolbox shares some functions and
@@ -120,7 +119,6 @@ export class FieldDropdown extends Field {
       menuGenerator: AnyDuringMigration[][]|Function|Sentinel,
       opt_validator?: Function, opt_config?: AnyDuringMigration) {
     super(Field.SKIP_SETUP);
-
 
     // If we pass SKIP_SETUP, don't do *anything* with the menu generator.
     if (menuGenerator === Field.SKIP_SETUP) {

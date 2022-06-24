@@ -8,7 +8,6 @@
  * @fileoverview Object representing a single row on a rendered block.
  */
 
-
 /**
  * Object representing a single row on a rendered block.
  * @class

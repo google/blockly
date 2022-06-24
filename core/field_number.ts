@@ -8,7 +8,6 @@
  * @fileoverview Number input field
  */
 
-
 /**
  * Number input field
  * @class

@@ -8,7 +8,6 @@
  * @fileoverview The interface for a block dragger.
  */
 
-
 /**
  * The interface for a block dragger.
  * @namespace Blockly.IBlockDragger

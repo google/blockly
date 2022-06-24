@@ -9,7 +9,6 @@
  *     workspace.
  */
 
-
 /**
  * Object in charge of loading, storing, and playing audio for a
  *     workspace.

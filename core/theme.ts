@@ -8,7 +8,6 @@
  * @fileoverview The class representing a theme.
  */
 
-
 /**
  * The class representing a theme.
  * @class

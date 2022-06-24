@@ -9,7 +9,6 @@
  * or a tap.
  */
 
-
 /**
  * The class representing an in-progress gesture, usually a drag
  * or a tap.
@@ -50,7 +49,6 @@ import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
 import {WorkspaceDragger} from './workspace_dragger.js';
 /* eslint-disable-next-line no-unused-vars */
 import {WorkspaceSvg} from './workspace_svg.js';
-
 
 
 /**

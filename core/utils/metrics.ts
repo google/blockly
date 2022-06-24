@@ -8,7 +8,6 @@
  * @fileoverview Workspace metrics definitions.
  */
 
-
 /**
  * Workspace metrics definitions.
  * @namespace Blockly.utils.Metrics

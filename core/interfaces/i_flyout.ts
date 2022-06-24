@@ -8,7 +8,6 @@
  * @fileoverview The interface for a flyout.
  */
 
-
 /**
  * The interface for a flyout.
  * @namespace Blockly.IFlyout

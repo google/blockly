@@ -8,8 +8,9 @@
  * @fileoverview Utility methods related to arrays.
  */
 
-
 /** @namespace Blockly.utils.array */
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.utils.array');
 
 
 /**
@@ -19,9 +20,6 @@
  * @return True if an element was removed.
  * @alias Blockly.array.removeElem
  */
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.utils.array');
-
 export function removeElem(
     arr: AnyDuringMigration[], value: AnyDuringMigration): boolean {
   const i = arr.indexOf(value);

@@ -9,7 +9,6 @@
  * actions in Blockly's editor.
  */
 
-
 /**
  * Helper methods for events that are fired as a result of
  * actions in Blockly's editor.

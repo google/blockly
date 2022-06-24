@@ -8,7 +8,6 @@
  * @fileoverview The interface for an object that is draggable.
  */
 
-
 /**
  * The interface for an object that is draggable.
  * @namespace Blockly.IDraggable

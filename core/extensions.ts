@@ -11,7 +11,6 @@
  *      array attribute.
  */
 
-
 /**
  * Extensions are functions that help initialize blocks, usually
  *      adding dynamic behavior such as onchange handlers and mutators. These

@@ -8,13 +8,13 @@
  * @fileoverview Utility methods for colour manipulation.
  */
 
-
 /**
  * Utility methods for colour manipulation.
  * @namespace Blockly.utils.colour
  */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.colour');
+
 
 /**
  * The richness of block colours, regardless of the hue.

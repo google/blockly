@@ -8,7 +8,6 @@
  * @fileoverview Class for a finished loading workspace event.
  */
 
-
 /**
  * Class for a finished loading workspace event.
  * @class

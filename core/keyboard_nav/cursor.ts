@@ -9,7 +9,6 @@
  * Used primarily for keyboard navigation.
  */
 
-
 /**
  * The class representing a cursor.
  * Used primarily for keyboard navigation.
@@ -22,6 +21,7 @@ import * as registry from '../registry.js';
 
 import {ASTNode} from './ast_node.js';
 import {Marker} from './marker.js';
+
 
 /**
  * Class for a cursor.

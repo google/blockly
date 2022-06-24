@@ -8,7 +8,6 @@
  * @fileoverview Browser event handling.
  */
 
-
 /**
  * Browser event handling.
  * @namespace Blockly.browserEvents
@@ -115,7 +114,6 @@ export function conditionalBind(
   }
   return bindData;
 }
-
 
 /**
  * Bind an event handler that should be called regardless of whether it is part

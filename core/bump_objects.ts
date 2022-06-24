@@ -8,7 +8,6 @@
  * @fileoverview Utilities for bumping objects back into worksapce bounds.
  */
 
-
 /**
  * Utilities for bumping objects back into worksapce bounds.
  * @namespace Blockly.bumpObjects

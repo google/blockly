@@ -8,7 +8,6 @@
  * @fileoverview Objects for rendering highlights on blocks.
  */
 
-
 /**
  * Objects for rendering highlights on blocks.
  * @class
@@ -19,6 +18,7 @@ goog.declareModuleId('Blockly.geras.HighlightConstantProvider');
 import * as svgPaths from '../../utils/svg_paths.js';
 /* eslint-disable-next-line no-unused-vars */
 import {ConstantProvider} from '../common/constants.js';
+
 
 /** An object containing sizing and path information about an outside corner. */
 export interface OutsideCorner {

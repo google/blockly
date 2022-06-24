@@ -10,7 +10,6 @@
  *     E.g. text input areas, colour pickers, context menus.
  */
 
-
 /**
  * A div that floats on top of Blockly.  This singleton contains
  *     temporary HTML UI widgets that the user is currently interacting with.

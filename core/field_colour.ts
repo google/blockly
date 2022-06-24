@@ -8,7 +8,6 @@
  * @fileoverview Colour input field.
  */
 
-
 /**
  * Colour input field.
  * @class

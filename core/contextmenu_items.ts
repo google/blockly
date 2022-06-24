@@ -8,7 +8,6 @@
  * @fileoverview Registers default context menu items.
  */
 
-
 /**
  * Registers default context menu items.
  * @namespace Blockly.ContextMenuItems

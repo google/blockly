@@ -8,7 +8,6 @@
  * @fileoverview Object representing a pair of scrollbars.
  */
 
-
 /**
  * Object representing a pair of scrollbars.
  * @class

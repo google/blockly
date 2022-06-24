@@ -8,7 +8,6 @@
  * @fileoverview Utility methods for SVG math.
  */
 
-
 /**
  * Utility methods realted to figuring out positions of SVG elements.
  * @namespace Blockly.utils.svgMath
@@ -43,7 +42,6 @@ const XY_REGEX: RegExp = /translate\(\s*([-+\d.e]+)([ ,]\s*([-+\d.e]+)\s*)?/;
  */
 const XY_STYLE_REGEX: RegExp =
     /transform:\s*translate(?:3d)?\(\s*([-+\d.e]+)\s*px([ ,]\s*([-+\d.e]+)\s*px)?/;
-
 
 /**
  * Return the coordinates of the top-left corner of this element relative to
@@ -264,7 +262,6 @@ export function svgSize(svg: SVGElement): Size {
       Number(svg.getAttribute('data-cached-width')),
       Number(svg.getAttribute('data-cached-height')));
 }
-
 
 export const TEST_ONLY = {
   XY_REGEX,

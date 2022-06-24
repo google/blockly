@@ -8,7 +8,6 @@
  * @fileoverview Object representing an icon on a block.
  */
 
-
 /**
  * Object representing an icon on a block.
  * @class

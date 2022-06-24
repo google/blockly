@@ -8,7 +8,6 @@
  * @fileoverview Minimalist rendering drawer.
  */
 
-
 /**
  * Minimalist rendering drawer.
  * @class

@@ -8,7 +8,6 @@
  * @fileoverview Utility functions for the toolbox and flyout.
  */
 
-
 /**
  * Utility functions for the toolbox and flyout.
  * @namespace Blockly.utils.toolbox
@@ -28,8 +27,8 @@ import {ConnectionState} from '../serialization/blocks.js';
 import {CssConfig as CategoryCssConfig} from '../toolbox/category.js';
 import {CssConfig as SeparatorCssConfig} from '../toolbox/separator.js';
 import * as Xml from '../xml.js';
-
 import * as userAgent from './useragent.js';
+
 
 /**
  * The information needed to create a block in the toolbox.

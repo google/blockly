@@ -8,7 +8,6 @@
  * @fileoverview Geras renderer.
  */
 
-
 /**
  * Geras renderer.
  * @class

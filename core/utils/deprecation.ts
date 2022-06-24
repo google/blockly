@@ -9,7 +9,6 @@
  * This method is not specific to Blockly.
  */
 
-
 /**
  * Helper function for warning developers about deprecations.
  * This method is not specific to Blockly.

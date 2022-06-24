@@ -8,7 +8,6 @@
  * @fileoverview Block rendering debugging functionality.
  */
 
-
 /**
  * Block rendering debugging functionality.
  * @namespace Blockly.blockRendering.debug

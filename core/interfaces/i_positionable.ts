@@ -8,7 +8,6 @@
  * @fileoverview The interface for a positionable UI element.
  */
 
-
 /**
  * The interface for a positionable UI element.
  * @namespace Blockly.IPositionable

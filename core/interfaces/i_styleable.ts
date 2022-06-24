@@ -8,7 +8,6 @@
  * @fileoverview The interface for an object that a style can be added to.
  */
 
-
 /**
  * The interface for an object that a style can be added to.
  * @namespace Blockly.IStyleable

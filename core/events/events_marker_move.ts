@@ -8,7 +8,6 @@
  * @fileoverview Events fired as a result of a marker move.
  */
 
-
 /**
  * Events fired as a result of a marker move.
  * @class

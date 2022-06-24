@@ -8,7 +8,6 @@
  * @fileoverview Class that controls updates to connections during drags.
  */
 
-
 /**
  * Class that controls updates to connections during drags.
  * @class
@@ -52,7 +51,6 @@ const DUPLICATE_BLOCK_ERROR = 'The insertion marker ' +
     'manager tried to create a marker but the result is missing %1. If ' +
     'you are using a mutator, make sure your domToMutation method is ' +
     'properly defined.';
-
 
 export enum PreviewType {
   INSERTION_MARKER = 0,

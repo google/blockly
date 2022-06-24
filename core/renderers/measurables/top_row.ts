@@ -13,6 +13,7 @@
  * Object representing a top row on a rendered block.
  * @class
  */
+import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.TopRow');
 
 /* eslint-disable-next-line no-unused-vars */

@@ -13,6 +13,7 @@
  * Class for comment deletion event.
  * @class
  */
+import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.CommentDelete');
 
 import * as registry from '../registry.js';

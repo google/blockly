@@ -13,6 +13,7 @@
  * Number input field
  * @class
  */
+import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.FieldNumber');
 
 import {Field} from './field.js';

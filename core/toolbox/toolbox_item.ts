@@ -13,6 +13,7 @@
  * An item in the toolbox.
  * @class
  */
+import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.ToolboxItem');
 
 /* eslint-disable-next-line no-unused-vars */

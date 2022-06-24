@@ -13,6 +13,7 @@
  * Classes for all types of variable events.
  * @class
  */
+import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.VarDelete');
 
 import * as registry from '../registry.js';

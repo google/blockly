@@ -13,6 +13,7 @@
  * Class for a variable rename event.
  * @class
  */
+import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.VarRename');
 
 import * as registry from '../registry.js';

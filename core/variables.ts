@@ -13,6 +13,7 @@
  * Utility functions for handling variables.
  * @namespace Blockly.Variables
  */
+import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Variables');
 
 import {Blocks} from './blocks.js';

@@ -13,6 +13,7 @@
  * Object representing a spacer between two rows.
  * @class
  */
+import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.SpacerRow');
 
 /* eslint-disable-next-line no-unused-vars */

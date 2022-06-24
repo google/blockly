@@ -13,6 +13,7 @@
  * Object representing a scrollbar.
  * @class
  */
+import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Scrollbar');
 
 import * as browserEvents from './browser_events.js';

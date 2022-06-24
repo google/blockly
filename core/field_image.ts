@@ -13,6 +13,7 @@
  * Image field.  Used for pictures, icons, etc.
  * @class
  */
+import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.FieldImage');
 
 import {Field} from './field.js';

@@ -13,6 +13,7 @@
  * Object representing a pair of scrollbars.
  * @class
  */
+import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.ScrollbarPair');
 
 import * as eventUtils from './events/utils.js';

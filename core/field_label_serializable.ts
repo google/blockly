@@ -17,6 +17,7 @@
  *    edited programmatically.
  * @class
  */
+import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.FieldLabelSerializable');
 
 import {FieldLabel} from './field_label.js';

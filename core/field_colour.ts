@@ -13,6 +13,7 @@
  * Colour input field.
  * @class
  */
+import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.FieldColour');
 
 // Unused import preserved for side-effects. Remove if unneeded.

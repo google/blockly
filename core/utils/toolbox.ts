@@ -13,6 +13,7 @@
  * Utility functions for the toolbox and flyout.
  * @namespace Blockly.utils.toolbox
  */
+import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.toolbox');
 
 /* eslint-disable-next-line no-unused-vars */

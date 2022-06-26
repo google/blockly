@@ -1382,5 +1382,15 @@
         },
       },
     },
+    {
+      'oldName': 'Blockly.Names',
+      exports: {
+        'Names.NameType': {
+          oldPath: 'Blockly.Names.NameType',
+          newExport: 'NameType',
+          newPath: 'Blockly.Names.NameType',
+        },
+      },
+    },
   ],
 }

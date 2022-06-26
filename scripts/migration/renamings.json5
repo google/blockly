@@ -1372,5 +1372,15 @@
         },
       },
     },
+    {
+      'oldName': 'Blockly.Input',
+      exports: {
+        'Input.Align': {
+          oldPath: 'Blockly.Input.Align',
+          newExport: 'Align',
+          newPath: 'Blockly.Input.Align',
+        },
+      },
+    },
   ],
 }

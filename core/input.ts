@@ -37,10 +37,9 @@ import {RenderedConnection} from './rendered_connection.js';
  * @alias Blockly.Input
  */
 export class Input {
-  static Align: AnyDuringMigration;
   private sourceBlock_: Block;
   fieldRow: Field[] = [];
-  align: number;
+  align: Input.Align;
 
   /** Is the input visible? */
   private visible_ = true;
@@ -62,7 +61,7 @@ export class Input {
     this.sourceBlock_ = block;
 
     /** Alignment of input's fields (left, right or centre). */
-    this.align = Align.LEFT;
+    this.align = Input.Align.LEFT;
   }
 
   /**
@@ -234,11 +233,11 @@ export class Input {
 
   /**
    * Change the alignment of the connection's field(s).
-   * @param align One of the values of Align In RTL mode directions are
-   *     reversed, and Align.RIGHT aligns to the left.
+   * @param align One of the values of Align.  In RTL mode directions
+   *     are reversed, and Align.RIGHT aligns to the left.
    * @return The input being modified (to allow chaining).
    */
-  setAlign(align: number): Input {
+  setAlign(align: Input.Align): Input {
     this.align = align;
     if (this.sourceBlock_.rendered) {
       const sourceBlock = this.sourceBlock_ as BlockSvg;
@@ -299,15 +298,17 @@ export class Input {
   }
 }
 
-/**
- * Enum for alignment of inputs.
- * @alias Blockly.Input.Align
- */
-export enum Align {
-  LEFT = -1,
-  CENTRE,
-  RIGHT
+export namespace Input {
+  /**
+   * Enum for alignment of inputs.
+   * @alias Blockly.Input.Align
+   */
+  export enum Align {
+    LEFT = -1,
+    CENTRE = 0,
+    RIGHT = 1,
+  }
 }
 
-// Add Align to Input so that `Blockly.Input.Align` is publicly accessible.
-Input.Align = Align;
+export type Align = Input.Align;
+export const Align = Input.Align;

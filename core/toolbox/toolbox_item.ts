@@ -114,6 +114,7 @@ export class ToolboxItem implements IToolboxItem {
   /**
    * Gets the nested level of the category.
    * @return The nested level of the category.
+   * @internal
    */
   getLevel(): number {
     return this.level_;

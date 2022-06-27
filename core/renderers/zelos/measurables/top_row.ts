@@ -31,7 +31,10 @@ import {TopRow as BaseTopRow} from '../../../renderers/measurables/top_row.js';
  * @alias Blockly.zelos.TopRow
  */
 export class TopRow extends BaseTopRow {
-  /** @param constants The rendering constants provider. */
+  /**
+   * @param constants The rendering constants provider.
+   * @internal
+   */
   constructor(constants: ConstantProvider) {
     super(constants);
   }

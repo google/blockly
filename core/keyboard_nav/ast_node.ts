@@ -145,6 +145,7 @@ export class ASTNode {
   /**
    * Whether the node points to a connection.
    * @return [description]
+   * @internal
    */
   isConnection(): boolean {
     return this.isConnection_;

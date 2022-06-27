@@ -94,6 +94,7 @@ export class FieldMultilineInput extends FieldTextInput {
    * @param fieldElement The element to populate with info about the field's
    *     state.
    * @return The element containing info about the field's state.
+   * @internal
    */
   override toXml(fieldElement: Element): Element {
     // Replace '\n' characters with HTML-escaped equivalent '&#10'. This is
@@ -109,6 +110,7 @@ export class FieldMultilineInput extends FieldTextInput {
    * Sets the field's value based on the given XML element. Should only be
    * called by Blockly.Xml.
    * @param fieldElement The element containing info about the field's state.
+   * @internal
    */
   override fromXml(fieldElement: Element) {
     this.setValue(fieldElement.textContent!.replace(/&#10;/g, '\n'));
@@ -117,6 +119,7 @@ export class FieldMultilineInput extends FieldTextInput {
   /**
    * Saves this field's value.
    * @return The state of this field.
+   * @internal
    */
   override saveState(): AnyDuringMigration {
     const legacyState = this.saveLegacyState(FieldMultilineInput);
@@ -129,6 +132,7 @@ export class FieldMultilineInput extends FieldTextInput {
   /**
    * Sets the field's value based on the given state.
    * @param state The state of the variable to assign to this variable field.
+   * @internal
    */
   override loadState(state: AnyDuringMigration) {
     if (this.loadLegacyState(Field, state)) {
@@ -137,7 +141,10 @@ export class FieldMultilineInput extends FieldTextInput {
     this.setValue(state);
   }
 
-  /** Create the block UI for this field. */
+  /**
+   * Create the block UI for this field.
+   * @internal
+   */
   override initView() {
     this.createBorderRect_();
     this.textGroup_ = dom.createSvgElement(
@@ -416,6 +423,7 @@ export class FieldMultilineInput extends FieldTextInput {
    * @param options A JSON object with options (text, and spellcheck).
    * @return The new field instance.
    * @nocollapse
+   * @internal
    */
   static override fromJson(options: AnyDuringMigration): FieldMultilineInput {
     const text = parsing.replaceMessageReferences(options['text']);

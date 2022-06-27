@@ -188,6 +188,7 @@ export class ScrollbarPair {
    * (e.g. in a flyout.)
    * @param x The x coordinate of the scrollbar's origin, in CSS pixels.
    * @param y The y coordinate of the scrollbar's origin, in CSS pixels.
+   * @internal
    */
   setOrigin(x: number, y: number) {
     if (this.hScroll) {

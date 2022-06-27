@@ -77,6 +77,7 @@ export function getSelected(): ICopyable|null {
  * programmatically select a block, use `BlockSvg#select`.
  * @param newSelection The newly selected block.
  * @alias Blockly.common.setSelected
+ * @internal
  */
 export function setSelected(newSelection: ICopyable|null) {
   selected = newSelection;

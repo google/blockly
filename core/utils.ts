@@ -303,6 +303,7 @@ export function is3dSupported(): boolean {
  *     window coordinates.
  * @alias Blockly.utils.getViewportBBox
  * @deprecated
+ * @internal
  */
 export function getViewportBBox(): Rect {
   // AnyDuringMigration because:  Property 'warn' does not exist on type 'void'.
@@ -322,6 +323,7 @@ export function getViewportBBox(): Rect {
  * @return True if an element was removed.
  * @alias Blockly.utils.arrayRemove
  * @deprecated
+ * @internal
  */
 export function arrayRemove(
     arr: AnyDuringMigration[], value: AnyDuringMigration): boolean {

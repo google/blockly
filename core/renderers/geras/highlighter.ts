@@ -70,6 +70,7 @@ export class Highlighter {
   /**
    * @param info An object containing all information needed to render this
    *     block.
+   * @internal
    */
   constructor(info: RenderInfo) {
     this.info_ = info;
@@ -96,6 +97,7 @@ export class Highlighter {
   /**
    * Get the steps for the highlight path.
    * @return The steps for the highlight path.
+   * @internal
    */
   getPath(): string {
     return this.steps_ + '\n' + this.inlineSteps_;
@@ -104,6 +106,7 @@ export class Highlighter {
   /**
    * Add a highlight to the top corner of a block.
    * @param row The top row of the block.
+   * @internal
    */
   drawTopCorner(row: TopRow) {
     this.steps_ += svgPaths.moveBy(row.xPos, this.info_.startY);
@@ -133,6 +136,7 @@ export class Highlighter {
   /**
    * Add a highlight on a jagged edge for a collapsed block.
    * @param row  The row to highlight.
+   * @internal
    */
   drawJaggedEdge_(row: Row) {
     if (this.info_.RTL) {
@@ -146,6 +150,7 @@ export class Highlighter {
   /**
    * Add a highlight on a value input.
    * @param row The row the input belongs to.
+   * @internal
    */
   drawValueInput(row: Row) {
     const input = row.getLastInput() as InlineInput;
@@ -166,6 +171,7 @@ export class Highlighter {
   /**
    * Add a highlight on a statement input.
    * @param row The row to highlight.
+   * @internal
    */
   drawStatementInput(row: Row) {
     const input = row.getLastInput();
@@ -188,6 +194,7 @@ export class Highlighter {
   /**
    * Add a highlight on the right side of a row.
    * @param row The row to highlight.
+   * @internal
    */
   drawRightSideRow(row: Row) {
     const rightEdge = row.xPos + row.width - this.highlightOffset_;
@@ -206,6 +213,7 @@ export class Highlighter {
   /**
    * Add a highlight to the bottom row.
    * @param row The row to highlight.
+   * @internal
    */
   drawBottomRow(row: BottomRow) {
     // Highlight the vertical edge of the bottom row on the input side.
@@ -226,7 +234,10 @@ export class Highlighter {
     }
   }
 
-  /** Draw the highlight on the left side of the block. */
+  /**
+   * Draw the highlight on the left side of the block.
+   * @internal
+   */
   drawLeft() {
     const outputConnection = this.info_.outputConnection;
     if (outputConnection) {
@@ -259,6 +270,7 @@ export class Highlighter {
   /**
    * Add a highlight to an inline input.
    * @param input The input to highlight.
+   * @internal
    */
   drawInlineInput(input: InlineInput) {
     const offset = this.highlightOffset_;

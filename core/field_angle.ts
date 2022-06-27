@@ -212,7 +212,10 @@ export class FieldAngle extends FieldTextInput {
     }
   }
 
-  /** Create the block UI for this field. */
+  /**
+   * Create the block UI for this field.
+   * @internal
+   */
   override initView() {
     super.initView();
     // Add the degree symbol to the left of the number, even in RTL (issue
@@ -505,6 +508,7 @@ export class FieldAngle extends FieldTextInput {
    * @param options A JSON object with options (angle).
    * @return The new field instance.
    * @nocollapse
+   * @internal
    */
   static override fromJson(options: AnyDuringMigration): FieldAngle {
     // `this` might be a subclass of FieldAngle if that class doesn't override

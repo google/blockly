@@ -80,7 +80,10 @@ export class BlockDragger implements IBlockDragger {
     this.dragIconData_ = initIconData(block);
   }
 
-  /** Sever all links from this object. */
+  /**
+   * Sever all links from this object.
+   * @internal
+   */
   dispose() {
     this.dragIconData_.length = 0;
 

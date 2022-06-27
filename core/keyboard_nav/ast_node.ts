@@ -694,9 +694,14 @@ export class ASTNode {
     return astNode;
   }
 }
-export interface Params {
-  wsCoordinate: Coordinate;
+
+export namespace ASTNode {
+  export interface Params {
+    wsCoordinate: Coordinate;
+  }
 }
+
+export type Params = ASTNode.Params;
 
 /**
  * Gets the parent connection on a block.

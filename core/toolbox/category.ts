@@ -585,16 +585,22 @@ export class ToolboxCategory extends ToolboxItem implements
     dom.removeNode(this.htmlDiv_);
   }
 }
-export interface CssConfig {
-  container: string|undefined;
-  row: string|undefined;
-  rowcontentcontainer: string|undefined;
-  icon: string|undefined;
-  label: string|undefined;
-  selected: string|undefined;
-  openicon: string|undefined;
-  closedicon: string|undefined;
+
+export namespace ToolboxCategory {
+  /** All the CSS class names that are used to create a category. */
+  export interface CssConfig {
+    container: string|undefined;
+    row: string|undefined;
+    rowcontentcontainer: string|undefined;
+    icon: string|undefined;
+    label: string|undefined;
+    selected: string|undefined;
+    openicon: string|undefined;
+    closedicon: string|undefined;
+  }
 }
+
+export type CssConfig = ToolboxCategory.CssConfig;
 
 /** CSS for Toolbox.  See css.js for use. */
 Css.register(`

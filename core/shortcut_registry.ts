@@ -326,14 +326,18 @@ export class ShortcutRegistry {
   }
 }
 
-export interface KeyboardShortcut {
-  callback?: ((p1: Workspace, p2: Event, p3: KeyboardShortcut) => boolean);
-  name: string;
-  preconditionFn?: ((p1: Workspace) => boolean);
-  metadata?: object;
-  keyCodes?: (number|string)[];
-  allowCollision?: boolean;
+export namespace ShortcutRegistry {
+  export interface KeyboardShortcut {
+    callback?: ((p1: Workspace, p2: Event, p3: KeyboardShortcut) => boolean);
+    name: string;
+    preconditionFn?: ((p1: Workspace) => boolean);
+    metadata?: object;
+    keyCodes?: (number|string)[];
+    allowCollsion?: boolean;
+  }
 }
+
+export type KeyboardShortcut = ShortcutRegistry.KeyboardShortcut;
 
 // Creates and assigns the singleton instance.
 const registry = new ShortcutRegistry();

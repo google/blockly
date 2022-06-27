@@ -52,7 +52,6 @@ const BUMP_RANDOMNESS = 10;
  * @alias Blockly.RenderedConnection
  */
 export class RenderedConnection extends Connection {
-
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   sourceBlock_!: BlockSvg;
   private readonly db_: ConnectionDB;

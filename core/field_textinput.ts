@@ -133,6 +133,7 @@ export class FieldTextInput extends Field {
     }
   }
 
+  /** @internal */
   override initView() {
     if (this.getConstants()!.FULL_BLOCK_FIELDS) {
       // Step one: figure out if this is the only field on this block.
@@ -215,7 +216,10 @@ export class FieldTextInput extends Field {
     }
   }
 
-  /** Updates text field to match the colour/style of the block. */
+  /**
+   * Updates text field to match the colour/style of the block.
+   * @internal
+   */
   override applyColour() {
     if (this.sourceBlock_ && this.getConstants()!.FULL_BLOCK_FIELDS) {
       if (this.borderRect_) {
@@ -564,6 +568,7 @@ export class FieldTextInput extends Field {
    * @param options A JSON object with options (text, and spellcheck).
    * @return The new field instance.
    * @nocollapse
+   * @internal
    */
   static fromJson(options: AnyDuringMigration): FieldTextInput {
     const text = parsing.replaceMessageReferences(options['text']);

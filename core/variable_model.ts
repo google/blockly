@@ -75,6 +75,7 @@ export class VariableModel {
    * @param var2 Second variable to compare.
    * @return -1 if name of var1 is less than name of var2, 0 if equal, and 1 if
    *     greater.
+   * @internal
    */
   static compareByName(var1: VariableModel, var2: VariableModel): number {
     return var1.name.localeCompare(var2.name, undefined, {sensitivity: 'base'});

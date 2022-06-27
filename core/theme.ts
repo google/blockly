@@ -24,14 +24,19 @@ import * as object from './utils/object.js';
  * @alias Blockly.Theme
  */
 export class Theme {
+  /** @internal */
   blockStyles: {[key: string]: BlockStyle};
+  /** @internal */
   categoryStyles: {[key: string]: CategoryStyle};
+  /** @internal */
   componentStyles: ComponentStyle;
+  /** @internal */
   fontStyle: FontStyle;
 
   /**
    * Whether or not to add a 'hat' on top of all blocks with no previous or
    * output connections.
+   * @internal
    */
   startHats: boolean|null = null;
 
@@ -67,6 +72,7 @@ export class Theme {
   /**
    * Gets the class name that identifies this theme.
    * @return The CSS class name.
+   * @internal
    */
   getClassName(): string {
     return this.name + '-theme';

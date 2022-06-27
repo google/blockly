@@ -52,15 +52,27 @@ export class Renderer implements IRegistrable {
   /** The renderer's constant provider. */
   protected constants_!: ConstantProvider;
 
-  /** Rendering constant overrides, passed in through options. */
+  /** @internal */
+  name: string;
+
+  /**
+   * Rendering constant overrides, passed in through options.
+   * @internal
+   */
   overrides: object|null = null;
 
-  /** @param name The renderer name. */
-  constructor(public name: string) {}
+  /**
+   * @param name The renderer name.
+   * @internal
+   */
+  constructor(name: string) {
+    this.name = name;
+  }
 
   /**
    * Gets the class name that identifies this renderer.
    * @return The CSS class name.
+   * @internal
    */
   getClassName(): string {
     return this.name + '-renderer';
@@ -70,6 +82,7 @@ export class Renderer implements IRegistrable {
    * Initialize the renderer.
    * @param theme The workspace theme object.
    * @param opt_rendererOverrides Rendering constant overrides.
+   * @internal
    */
   init(theme: Theme, opt_rendererOverrides?: object) {
     this.constants_ = this.makeConstants_();
@@ -85,6 +98,7 @@ export class Renderer implements IRegistrable {
    * Create any DOM elements that this renderer needs.
    * @param svg The root of the workspace's SVG.
    * @param theme The workspace theme object.
+   * @internal
    */
   createDom(svg: SVGElement, theme: Theme) {
     this.constants_.createDom(
@@ -96,6 +110,7 @@ export class Renderer implements IRegistrable {
    * Refresh the renderer after a theme change.
    * @param svg The root of the workspace's SVG.
    * @param theme The workspace theme object.
+   * @internal
    */
   refreshDom(svg: SVGElement, theme: Theme) {
     const previousConstants = this.getConstants();
@@ -114,6 +129,7 @@ export class Renderer implements IRegistrable {
   /**
    * Dispose of this renderer.
    * Delete all DOM elements that this renderer and its constants created.
+   * @internal
    */
   dispose() {
     if (this.constants_) {
@@ -164,6 +180,7 @@ export class Renderer implements IRegistrable {
    * @param workspace The workspace the marker belongs to.
    * @param marker The marker.
    * @return The object in charge of drawing the marker.
+   * @internal
    */
   makeMarkerDrawer(workspace: WorkspaceSvg, marker: Marker): MarkerSvg {
     return new MarkerSvg(workspace, this.getConstants(), marker);
@@ -174,6 +191,7 @@ export class Renderer implements IRegistrable {
    * @param root The root SVG element.
    * @param style The style object to use for colouring.
    * @return The renderer path object.
+   * @internal
    */
   makePathObject(root: SVGElement, style: BlockStyle): IPathObject {
     return new PathObject(root, style, (this.constants_));
@@ -183,6 +201,7 @@ export class Renderer implements IRegistrable {
    * Get the current renderer's constant provider.  We assume that when this is
    * called, the renderer has already been initialized.
    * @return The constant provider.
+   * @internal
    */
   getConstants(): ConstantProvider {
     return this.constants_;
@@ -192,6 +211,7 @@ export class Renderer implements IRegistrable {
    * Determine whether or not to highlight a connection.
    * @param _conn The connection to determine whether or not to highlight.
    * @return True if we should highlight the connection.
+   * @internal
    */
   shouldHighlightConnection(_conn: Connection): boolean {
     return true;
@@ -207,6 +227,7 @@ export class Renderer implements IRegistrable {
    * @param orphanBlock The orphan block that wants to find a home.
    * @param localType The type of the connection being dragged.
    * @return Whether there is a home for the orphan or not.
+   * @internal
    */
   orphanCanConnectAtEnd(
       topBlock: BlockSvg, orphanBlock: BlockSvg, localType: number): boolean {
@@ -224,6 +245,7 @@ export class Renderer implements IRegistrable {
    * @param local The connection currently being dragged.
    * @param topBlock The block currently being dragged.
    * @return The preview type to display.
+   * @internal
    */
   getConnectionPreviewMethod(
       closest: RenderedConnection, local: RenderedConnection,
@@ -244,6 +266,7 @@ export class Renderer implements IRegistrable {
   /**
    * Render the block.
    * @param block The block to render.
+   * @internal
    */
   render(block: BlockSvg) {
     if (debug.isDebuggerEnabled() && !block.renderingDebugger) {

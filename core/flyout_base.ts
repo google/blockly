@@ -130,6 +130,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   RTL: boolean;
   /**
    * Whether the flyout should be laid out horizontally or not.
+   * @internal
    */
   horizontalLayout: boolean = false;
   protected toolboxPosition_: number;
@@ -173,7 +174,8 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   protected readonly tabWidth_: number;
 
   /**
-   * The target workspace
+   * The target workspace.
+   * @internal
    */
   targetWorkspace!: WorkspaceSvg;
   /**
@@ -287,6 +289,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     /**
      * A map from blocks to the rects which are beneath them to act as input
      * targets.
+     * @internal
      */
     this.rectMap_ = new WeakMap();
 
@@ -440,6 +443,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   /**
    * Get the workspace inside the flyout.
    * @return The workspace inside the flyout.
+   * @internal
    */
   getWorkspace(): WorkspaceSvg {
     return this.workspace_;
@@ -932,6 +936,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
    * @param block The block to copy from the flyout.
    * @return True if you can create a new instance of the block, false
    *    otherwise.
+   * @internal
    */
   isBlockCreatable(block: BlockSvg): boolean {
     return block.isEnabled();
@@ -942,6 +947,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
    * @param originalBlock The block to copy from the flyout.
    * @return The newly created block.
    * @throws {Error} if something went wrong with deserialization.
+   * @internal
    */
   createBlock(originalBlock: BlockSvg): BlockSvg {
     let newBlock = null;
@@ -1087,6 +1093,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   /**
    * @return True if this flyout may be scrolled with a scrollbar or
    *     by dragging.
+   * @internal
    */
   isScrollable(): boolean {
     return this.workspace_.scrollbar ? this.workspace_.scrollbar.isVisible() :

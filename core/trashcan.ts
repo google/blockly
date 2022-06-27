@@ -72,7 +72,10 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
    */
   private readonly contents_: string[] = [];
 
-  /** The trashcan flyout. */
+  /**
+   * The trashcan flyout.
+   * @internal
+   */
   // AnyDuringMigration because:  Type 'null' is not assignable to type
   // 'IFlyout'.
   flyout: IFlyout = null as AnyDuringMigration;
@@ -425,6 +428,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
   /**
    * Flip the lid open or shut.
    * @param state True if open.
+   * @internal
    */
   setLidOpen(state: boolean) {
     if (this.isLidOpen === state) {

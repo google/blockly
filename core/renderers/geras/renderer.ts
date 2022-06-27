@@ -45,7 +45,10 @@ export class Renderer extends BaseRenderer {
   private highlightConstants_: HighlightConstantProvider =
       null as AnyDuringMigration;
 
-  /** @param name The renderer name. */
+  /**
+   * @param name The renderer name.
+   * @internal
+   */
   constructor(name: string) {
     super(name);
   }
@@ -53,6 +56,7 @@ export class Renderer extends BaseRenderer {
   /**
    * Initialize the renderer.  Geras has a highlight provider in addition to
    * the normal constant provider.
+   * @internal
    */
   override init(theme: Theme, opt_rendererOverrides: AnyDuringMigration) {
     super.init(theme, opt_rendererOverrides);
@@ -95,6 +99,7 @@ export class Renderer extends BaseRenderer {
    * @param root The root SVG element.
    * @param style The style object to use for colouring.
    * @return The renderer path object.
+   * @internal
    */
   override makePathObject(root: SVGElement, style: BlockStyle): PathObject {
     return new PathObject(
@@ -113,6 +118,7 @@ export class Renderer extends BaseRenderer {
    * Get the renderer's highlight constant provider.  We assume that when this
    * is called, the renderer has already been initialized.
    * @return The highlight constant provider.
+   * @internal
    */
   getHighlightConstants(): HighlightConstantProvider {
     return this.highlightConstants_;

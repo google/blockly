@@ -33,7 +33,10 @@ import {Types} from './types.js';
 export class Hat extends Measurable {
   ascenderHeight: number;
 
-  /** @param constants The rendering constants provider. */
+  /**
+   * @param constants The rendering constants provider.
+   * @internal
+   */
   constructor(constants: ConstantProvider) {
     super(constants);
     this.type |= Types.HAT;

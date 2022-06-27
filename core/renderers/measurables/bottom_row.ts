@@ -37,16 +37,23 @@ import {Types} from './types.js';
  * @alias Blockly.blockRendering.BottomRow
  */
 export class BottomRow extends Row {
-  /** Whether this row has a next connection. */
+  /**
+   * Whether this row has a next connection.
+   * @internal
+   */
   hasNextConnection = false;
 
-  /** The next connection on the row, if any. */
+  /**
+   * The next connection on the row, if any.
+   * @internal
+   */
   connection: NextConnection|null = null;
 
   /**
    * The amount that the bottom of the block extends below the horizontal
    * edge, e.g. because of a next connection.  Must be non-negative (see
    * #2820).
+   * @internal
    */
   descenderHeight = 0;
 
@@ -56,7 +63,10 @@ export class BottomRow extends Row {
    */
   baseline = 0;
 
-  /** @param constants The rendering constants provider. */
+  /**
+   * @param constants The rendering constants provider.
+   * @internal
+   */
   constructor(constants: ConstantProvider) {
     super(constants);
     this.type |= Types.BOTTOM_ROW;

@@ -33,10 +33,16 @@ import {Types} from './types.js';
  * @alias Blockly.blockRendering.InputRow
  */
 export class InputRow extends Row {
-  /** The total width of all blocks connected to this row. */
+  /**
+   * The total width of all blocks connected to this row.
+   * @internal
+   */
   connectedBlockWidths = 0;
 
-  /** @param constants The rendering constants provider. */
+  /**
+   * @param constants The rendering constants provider.
+   * @internal
+   */
   constructor(constants: ConstantProvider) {
     super(constants);
     this.type |= Types.INPUT_ROW;
@@ -44,6 +50,7 @@ export class InputRow extends Row {
 
   /**
    * Inspect all subcomponents and populate all size properties on the row.
+   * @internal
    */
   override measure() {
     this.width = this.minWidth;

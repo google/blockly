@@ -29,7 +29,10 @@ import {BottomRow as BaseBottomRow} from '../../../renderers/measurables/bottom_
  * @alias Blockly.zelos.BottomRow
  */
 export class BottomRow extends BaseBottomRow {
-  /** @param constants The rendering constants provider. */
+  /**
+   * @param constants The rendering constants provider.
+   * @internal
+   */
   constructor(constants: ConstantProvider) {
     super(constants);
   }

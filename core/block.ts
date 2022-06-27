@@ -85,7 +85,10 @@ export class Block implements IASTNodeLocation, IDeletable {
    */
   data: string|null = null;
 
-  /** Has this block been disposed of? */
+  /**
+   * Has this block been disposed of?
+   * @internal
+   */
   disposed = false;
 
   /**
@@ -193,6 +196,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @deprecated August 2019. Use getCommentText instead.
    */
   comment: string|Comment|null = null;
+  /** @internal */
   commentModel: CommentModel;
   private readonly xy_: Coordinate;
   isInFlyout: boolean;
@@ -217,7 +221,10 @@ export class Block implements IASTNodeLocation, IDeletable {
   /** A bound callback function to use when the parent workspace changes. */
   private onchangeWrapper_: ((p1: Abstract) => AnyDuringMigration)|null = null;
 
-  /** A count of statement inputs on the block. */
+  /**
+   * A count of statement inputs on the block.
+   * @internal
+   */
   statementInputCount = 0;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   type!: string;
@@ -493,6 +500,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * Returns all connections originating from this block.
    * @param _all If true, return all connections even hidden ones.
    * @return Array of connections.
+   * @internal
    */
   getConnections_(_all: boolean): Connection[] {
     const myConnections = [];
@@ -520,6 +528,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    *     be returned. If false, this will follow shadows to find the last
    *     connection.
    * @return The last next connection on the stack, or null.
+   * @internal
    */
   lastConnectionInStack(ignoreShadows: boolean): Connection|null {
     let nextConnection = this.nextConnection;
@@ -609,6 +618,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * Return the connection on the first statement input on this block, or null
    * if there are none.
    * @return The first statement connection or null.
+   * @internal
    */
   getFirstStatementConnection(): Connection|null {
     for (let i = 0, input; input = this.inputList[i]; i++) {
@@ -640,6 +650,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * the top block of the sub stack. If we are nested in a statement input only
    * find the top-most nested block. Do not go all the way to the root block.
    * @return The top block in a stack.
+   * @internal
    */
   getTopStackBlock(): this {
     let block = this;
@@ -684,6 +695,7 @@ export class Block implements IASTNodeLocation, IDeletable {
   /**
    * Set parent of this block to be a new block or null.
    * @param newParent New parent block.
+   * @internal
    */
   setParent(newParent: this|null) {
     if (newParent === this.parentBlock_) {
@@ -809,6 +821,7 @@ export class Block implements IASTNodeLocation, IDeletable {
   /**
    * Set whether this block is a shadow block or not.
    * @param shadow True if a shadow.
+   * @internal
    */
   setShadow(shadow: boolean) {
     this.isShadow_ = shadow;
@@ -826,6 +839,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * Set whether this block is an insertion marker block or not.
    * Once set this cannot be unset.
    * @param insertionMarker True if an insertion marker.
+   * @internal
    */
   setInsertionMarker(insertionMarker: boolean) {
     this.isInsertionMarker_ = insertionMarker;
@@ -868,6 +882,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @param otherBlock The other block to match against.
    * @param conn The other connection to match.
    * @return The matching connection on this block, or null.
+   * @internal
    */
   getMatchingConnection(otherBlock: Block, conn: Connection): Connection|null {
     const connections = this.getConnections_(true);
@@ -1015,6 +1030,7 @@ export class Block implements IASTNodeLocation, IDeletable {
   /**
    * Return all variables referenced by this block.
    * @return List of variable models.
+   * @internal
    */
   getVarModels(): VariableModel[] {
     const vars = [];
@@ -1038,6 +1054,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * Notification that a variable is renaming but keeping the same ID.  If the
    * variable is in use on this block, rerender to show the new name.
    * @param variable The variable being renamed.
+   * @internal
    */
   updateVarName(variable: VariableModel) {
     for (let i = 0, input; input = this.inputList[i]; i++) {

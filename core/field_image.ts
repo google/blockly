@@ -143,7 +143,10 @@ export class FieldImage extends Field {
     this.altText_ = parsing.replaceMessageReferences(config['alt']) || '';
   }
 
-  /** Create the block UI for this image. */
+  /**
+   * Create the block UI for this image.
+   * @internal
+   */
   override initView() {
     this.imageElement_ = dom.createSvgElement(
         Svg.IMAGE, {
@@ -247,6 +250,7 @@ export class FieldImage extends Field {
    *     flipRtl).
    * @return The new field instance.
    * @nocollapse
+   * @internal
    */
   static fromJson(options: AnyDuringMigration): FieldImage {
     // `this` might be a subclass of FieldImage if that class doesn't override

@@ -136,6 +136,7 @@ export class FieldVariable extends FieldDropdown {
    * Initialize the model for this field if it has not already been initialized.
    * If the value has not been set to a variable by the first render, we make up
    * a variable rather than let the value be invalid.
+   * @internal
    */
   override initModel() {
     if (this.variable_) {
@@ -210,6 +211,7 @@ export class FieldVariable extends FieldDropdown {
    *     full state of the field being referenced (ie ID, name, and type) rather
    *     than just a reference to it (ie ID).
    * @return The state of the variable field.
+   * @internal
    */
   override saveState(doFullSerialization?: boolean): AnyDuringMigration {
     const legacyState = this.saveLegacyState(FieldVariable);
@@ -229,6 +231,7 @@ export class FieldVariable extends FieldDropdown {
   /**
    * Sets the field's value based on the given state.
    * @param state The state of the variable to assign to this variable field.
+   * @internal
    */
   override loadState(state: AnyDuringMigration) {
     if (this.loadLegacyState(FieldVariable, state)) {
@@ -274,6 +277,7 @@ export class FieldVariable extends FieldDropdown {
    * Not guaranteed to be in the variable map on the workspace (e.g. if accessed
    * after the variable has been deleted).
    * @return The selected variable, or null if none was selected.
+   * @internal
    */
   getVariable(): VariableModel|null {
     return this.variable_;
@@ -426,6 +430,7 @@ export class FieldVariable extends FieldDropdown {
    * Refreshes the name of the variable by grabbing the name of the model.
    * Used when a variable gets renamed, but the ID stays the same. Should only
    * be called by the block.
+   * @internal
    */
   override refreshVariableName() {
     this.forceRerender();
@@ -461,6 +466,7 @@ export class FieldVariable extends FieldDropdown {
    * Overrides referencesVariables(), indicating this field refers to a
    * variable.
    * @return True.
+   * @internal
    */
   override referencesVariables(): boolean {
     return true;
@@ -473,6 +479,7 @@ export class FieldVariable extends FieldDropdown {
    *     defaultType).
    * @return The new field instance.
    * @nocollapse
+   * @internal
    */
   static override fromJson(options: AnyDuringMigration): FieldVariable {
     const varName = parsing.replaceMessageReferences(options['variable']);

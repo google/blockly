@@ -39,6 +39,7 @@ export class Connection extends Measurable {
    * @param constants The rendering constants provider.
    * @param connectionModel The connection object on the block that this
    *     represents.
+   * @internal
    */
   constructor(
       constants: ConstantProvider, public connectionModel: RenderedConnection) {

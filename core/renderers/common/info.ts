@@ -99,6 +99,7 @@ export class RenderInfo {
   /**
    * @param renderer The renderer in use.
    * @param block The block to measure.
+   * @internal
    */
   constructor(protected readonly renderer: Renderer, block: BlockSvg) {
     this.block_ = block;
@@ -150,6 +151,7 @@ export class RenderInfo {
   /**
    * Get the block renderer in use.
    * @return The block renderer in use.
+   * @internal
    */
   getRenderer(): Renderer {
     return this.renderer;
@@ -162,6 +164,7 @@ export class RenderInfo {
    * This measure pass does not propagate changes to the block (although fields
    * may choose to rerender when getSize() is called).  However, calling it
    * repeatedly may be expensive.
+   * @internal
    */
   measure() {
     this.createRows_();
@@ -227,7 +230,10 @@ export class RenderInfo {
     this.rows.push(this.bottomRow);
   }
 
-  /** Create all non-spacer elements that belong on the top row. */
+  /**
+   * Create all non-spacer elements that belong on the top row.
+   * @internal
+   */
   populateTopRow_() {
     const hasPrevious = !!this.block_.previousConnection;
     const hasHat = (this.block_.hat ? this.block_.hat === 'cap' :
@@ -268,7 +274,10 @@ export class RenderInfo {
     this.topRow.elements.push(new cornerClass(this.constants_, 'right'));
   }
 
-  /** Create all non-spacer elements that belong on the bottom row. */
+  /**
+   * Create all non-spacer elements that belong on the bottom row.
+   * @internal
+   */
   populateBottomRow_() {
     this.bottomRow.hasNextConnection = !!this.block_.nextConnection;
 

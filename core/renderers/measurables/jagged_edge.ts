@@ -31,7 +31,10 @@ import {Types} from './types.js';
  * @alias Blockly.blockRendering.JaggedEdge
  */
 export class JaggedEdge extends Measurable {
-  /** @param constants The rendering constants provider. */
+  /**
+   * @param constants The rendering constants provider.
+   * @internal
+   */
   constructor(constants: ConstantProvider) {
     super(constants);
     this.type |= Types.JAGGED_EDGE;

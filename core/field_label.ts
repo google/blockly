@@ -75,7 +75,10 @@ export class FieldLabel extends Field {
     this.class_ = config['class'];
   }
 
-  /** Create block UI for this label. */
+  /**
+   * Create block UI for this label.
+   * @internal
+   */
   override initView() {
     this.createTextElement_();
     if (this.class_) {
@@ -120,6 +123,7 @@ export class FieldLabel extends Field {
    * @param options A JSON object with options (text, and class).
    * @return The new field instance.
    * @nocollapse
+   * @internal
    */
   static fromJson(options: AnyDuringMigration): FieldLabel {
     const text = parsing.replaceMessageReferences(options['text']);

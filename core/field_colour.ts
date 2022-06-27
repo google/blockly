@@ -187,7 +187,10 @@ export class FieldColour extends Field {
     }
   }
 
-  /** Create the block UI for this colour field. */
+  /**
+   * Create the block UI for this colour field.
+   * @internal
+   */
   override initView() {
     this.size_ = new Size(
         this.getConstants()!.FIELD_COLOUR_DEFAULT_WIDTH,
@@ -569,6 +572,7 @@ export class FieldColour extends Field {
    * @param options A JSON object with options (colour).
    * @return The new field instance.
    * @nocollapse
+   * @internal
    */
   static fromJson(options: AnyDuringMigration): FieldColour {
     // `this` might be a subclass of FieldColour if that class doesn't override

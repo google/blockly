@@ -16,9 +16,9 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.BubbleDragger');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './bubble';
+import './bubble.js';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './constants';
+import './constants.js';
 
 /* eslint-disable-next-line no-unused-vars */
 import {BlockDragSurfaceSvg} from './block_drag_surface.js';

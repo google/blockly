@@ -16,7 +16,7 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Connection');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './constants';
+import './constants.js';
 
 /* eslint-disable-next-line no-unused-vars */
 import {Block} from './block.js';

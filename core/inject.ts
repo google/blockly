@@ -15,8 +15,6 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.inject');
 
-import 'angular-mocks';
-
 import {BlockDragSurfaceSvg} from './block_drag_surface.js';
 /* eslint-disable-next-line no-unused-vars */
 import {BlocklyOptions} from './blockly_options.js';

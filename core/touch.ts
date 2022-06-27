@@ -74,7 +74,7 @@ export const TOUCH_MAP: {[key: string]: string[]} = globalThis['PointerEvent'] ?
     };
 
 /** PID of queued long-press task. */
-let longPid_ = 0;
+let longPid_: AnyDuringMigration = 0;
 
 /**
  * Context menus on touch devices are activated using a long-press.

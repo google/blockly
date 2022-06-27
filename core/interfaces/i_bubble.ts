@@ -17,10 +17,10 @@ goog.declareModuleId('Blockly.IBubble');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../block_drag_surface';
+import '../block_drag_surface.js';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../utils/coordinate';
+import '../utils/coordinate.js';
 
 /* eslint-disable-next-line no-unused-vars */
 import {IContextMenu} from './i_contextmenu.js';

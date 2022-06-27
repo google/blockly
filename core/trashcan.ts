@@ -17,9 +17,9 @@ goog.declareModuleId('Blockly.Trashcan');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './metrics_manager';
+import './metrics_manager.js';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_trashcan_open';
+import './events/events_trashcan_open.js';
 
 /* eslint-disable-next-line no-unused-vars */
 import {BlocklyOptions} from './blockly_options.js';
@@ -100,7 +100,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
   private svgLid_: SVGElement = null as AnyDuringMigration;
 
   /** Task ID of opening/closing animation. */
-  private lidTask_ = 0;
+  private lidTask_: AnyDuringMigration = 0;
 
   /** Current state of lid opening (0.0 = closed, 1.0 = open). */
   private lidOpen_ = 0;

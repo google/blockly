@@ -96,7 +96,7 @@ export function show(
   setTimeout(function() {
     menu.focus();
   }, 1);
-  currentBlock = null; // May be set by Blockly.Block.
+  currentBlock = null;  // May be set by Blockly.Block.
 }
 
 /**

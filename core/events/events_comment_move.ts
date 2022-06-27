@@ -54,7 +54,7 @@ export class CommentMove extends CommentBase {
     if (!opt_comment) {
       return;  // Blank event to be populated by fromJson.
     }
-    
+
     /**
      * The comment that is being moved.  Will be cleared after recording the new
      * location.

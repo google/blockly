@@ -182,7 +182,7 @@ export function disconnectUiEffect(block: BlockSvg) {
  */
 function disconnectUiStep(group: SVGElement, magnitude: number, start: Date) {
   const DURATION = 200;  // Milliseconds.
-  const WIGGLES = 3;  // Half oscillations.
+  const WIGGLES = 3;     // Half oscillations.
 
   const ms = new Date().getTime() - start.getTime();
   const percent = ms / DURATION;

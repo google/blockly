@@ -49,7 +49,7 @@ export class BlockCreate extends BlockBase {
     if (!opt_block) {
       return;  // Blank event to be populated by fromJson.
     }
-    
+
     if (opt_block.isShadow()) {
     }
 

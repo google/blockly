@@ -547,7 +547,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     if (this.workspace.isDragging()) {
       return  // Don't bump blocks during a drag.;
     }
-    
+
     if (this.getParent()) {
       return;  // Only snap top-level blocks.
     }

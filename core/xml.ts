@@ -538,12 +538,12 @@ export function appendDomToWorkspace(
   if (bbox && bbox.top !== bbox.bottom) {  // Check if any previous block.
     let offsetY = 0;  // Offset to add to y of the new block.
     let offsetX = 0;
-    const farY = bbox.bottom;  // Bottom position.
+    const farY = bbox.bottom;                             // Bottom position.
     const topX = workspace.RTL ? bbox.right : bbox.left;  // X of bounding box.
     // Check position of the new blocks.
-    let newLeftX = Infinity;  // X of top left corner.
+    let newLeftX = Infinity;    // X of top left corner.
     let newRightX = -Infinity;  // X of top right corner.
-    let newY = Infinity;  // Y of top corner.
+    let newY = Infinity;        // Y of top corner.
     const ySeparation = 10;
     for (let i = 0; i < newBlockIds.length; i++) {
       const blockXY =

@@ -44,7 +44,7 @@ export class CommentDelete extends CommentBase {
     if (!opt_comment) {
       return;  // Blank event to be populated by fromJson.
     }
-    
+
     this.xml = opt_comment.toXmlWithXY();
   }
   // TODO (#1266): "Full" and "minimal" serialization.

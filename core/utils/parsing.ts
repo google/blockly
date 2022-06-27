@@ -44,8 +44,7 @@ function tokenizeInterpolationInternal(
   let number = null;
   for (let i = 0; i < chars.length; i++) {
     const c = chars[i];
-    if (state === 0) {
-      // Start escape.
+    if (state === 0) {  // Start escape.
       if (c === '%') {
         const text = buffer.join('');
         if (text) {
@@ -54,13 +53,11 @@ function tokenizeInterpolationInternal(
         buffer.length = 0;
         state = 1;
       } else {
-        buffer.push(c);
+        buffer.push(c);  // Regular char.
       }
-    } else  // Regular char.
-      if (state === 1) {
+    } else if (state === 1) {
         if (c === '%') {
-          buffer.push(c);
-          // Escaped %: %%
+          buffer.push(c);  // Escaped %: %%
           state = 0;
         } else if (parseInterpolationTokens && '0' <= c && c <= '9') {
           state = 2;
@@ -73,32 +70,24 @@ function tokenizeInterpolationInternal(
         } else if (c === '{') {
           state = 3;
         } else {
-          buffer.push('%', c);
-          // Not recognized. Return as literal.
+          buffer.push('%', c);  // Not recognized. Return as literal.
           state = 0;
         }
       } else if (state === 2) {
-        // Multi-digit number.
         if ('0' <= c && c <= '9') {
-          number += c;
-        } else  // Multi-digit number.
-        {
+          number += c; // Multi-digit number.
+        } else {
           tokens.push(parseInt(number ?? '', 10));
-          i--;
-          // Parse this char again.
+          i--;  // Parse this char again.
           state = 0;
         }
-      } else if (state === 3) {
-        // String table reference
+      } else if (state === 3) {  // String table reference
         if (c === '') {
           // Premature end before closing '}'
-          buffer.splice(0, 0, '%{');
-          // Re-insert leading delimiter
-          i--;
-          // Parse this char again.
-          state = 0;
-        } else  // and parse as string literal.
-          if (c !== '}') {
+          buffer.splice(0, 0, '%{');  // Re-insert leading delimiter
+          i--;  // Parse this char again.
+          state = 0;  // and parse as string literal.
+        } else if (c !== '}') {
             buffer.push(c);
           } else {
             const rawKey = buffer.join('');
@@ -132,18 +121,16 @@ function tokenizeInterpolationInternal(
                 // No entry found in the string table. Pass reference as string.
                 tokens.push('%{' + rawKey + '}');
               }
-              buffer.length = 0;
-              // Clear the array
+              buffer.length = 0;  // Clear the array
               state = 0;
             } else {
               tokens.push('%{' + rawKey + '}');
               buffer.length = 0;
-              state = 0;
+              state = 0;  // and parse as string literal.
             }
           }
       }
   }
-  // and parse as string literal.
   let text = buffer.join('');
   if (text) {
     tokens.push(text);
@@ -228,11 +215,10 @@ export function checkMessageReferences(message: string): boolean {
       const msgKey = m[i].toUpperCase();
       if (msgTable[msgKey.slice(6, -1)] === undefined) {
         console.warn('No message string for ' + m[i] + ' in ' + message);
-        validSoFar = false;
+        validSoFar = false;  // Continue to report other errors.
       }
     }
   }
-  // Continue to report other errors.
 
   return validSoFar;
 }

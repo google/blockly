@@ -171,8 +171,7 @@ export class Drawer extends BaseDrawer {
 
     if (bottomRow.connection) {
       const connInfo = bottomRow.connection;
-      const x = connInfo.xPos;
-      // Already contains info about startX.
+      const x = connInfo.xPos;  // Already contains info about startX.
       const connX =
           (this.info_.RTL ? -x : x) + this.constants_.DARK_PATH_OFFSET / 2;
       connInfo.connectionModel.setOffsetInBlock(

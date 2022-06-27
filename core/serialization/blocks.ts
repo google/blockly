@@ -488,8 +488,7 @@ function tryToConnectParent(
       throw new MissingConnection('output', child, state);
     }
     connected = parentConnection.connect(childConnection);
-  } else {
-    // Statement type.
+  } else {  // Statement type.
     childConnection = child.previousConnection;
     if (!childConnection) {
       throw new MissingConnection('previous', child, state);

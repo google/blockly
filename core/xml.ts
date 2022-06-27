@@ -107,8 +107,7 @@ export function variablesToDom(variableList: VariableModel[]): Element {
  */
 export function blockToDomWithXY(block: Block, opt_noId?: boolean): Element|
     DocumentFragment {
-  if (block.isInsertionMarker()) {
-    // Skip over insertion markers.
+  if (block.isInsertionMarker()) {  // Skip over insertion markers.
     block = block.getChildren(false)[0];
     if (!block) {
       // Disappears when appended.
@@ -116,8 +115,7 @@ export function blockToDomWithXY(block: Block, opt_noId?: boolean): Element|
     }
   }
 
-  let width = 0;
-  // Not used in LTR.
+  let width = 0;  // Not used in LTR.
   if (block.workspace?.RTL) {
     width = block.workspace.getWidth();
   }
@@ -437,13 +435,11 @@ export function clearWorkspaceAndLoadFromXml(
  * @alias Blockly.Xml.domToWorkspace
  */
 export function domToWorkspace(xml: Element, workspace: Workspace): string[] {
-  let width = 0;
-  // Not used in LTR.
+  let width = 0;  // Not used in LTR.
   if (workspace.RTL) {
     width = workspace.getWidth();
   }
-  const newBlockIds = [];
-  // A list of block IDs added by this call.
+  const newBlockIds = [];  // A list of block IDs added by this call.
   dom.startTextWidthCache();
   const existingGroup = eventUtils.getGroup();
   if (!existingGroup) {
@@ -539,22 +535,15 @@ export function appendDomToWorkspace(
   const bbox = (workspace as WorkspaceSvg).getBlocksBoundingBox();
   // Load the new blocks into the workspace and get the IDs of the new blocks.
   const newBlockIds = domToWorkspace(xml, workspace);
-  if (bbox && bbox.top !== bbox.bottom) {
-    // check if any previous block
-    let offsetY = 0;
-    // offset to add to y of the new block
+  if (bbox && bbox.top !== bbox.bottom) {  // Check if any previous block.
+    let offsetY = 0;  // Offset to add to y of the new block.
     let offsetX = 0;
-    const farY = bbox.bottom;
-    // bottom position
-    const topX = workspace.RTL ? bbox.right : bbox.left;
-    // x of bounding box
+    const farY = bbox.bottom;  // Bottom position.
+    const topX = workspace.RTL ? bbox.right : bbox.left;  // X of bounding box.
     // Check position of the new blocks.
-    let newLeftX = Infinity;
-    // x of top left corner
-    let newRightX = -Infinity;
-    // x of top right corner
-    let newY = Infinity;
-    // y of top corner
+    let newLeftX = Infinity;  // X of top left corner.
+    let newRightX = -Infinity;  // X of top right corner.
+    let newY = Infinity;  // Y of top corner.
     const ySeparation = 10;
     for (let i = 0; i < newBlockIds.length; i++) {
       const blockXY =
@@ -562,12 +551,10 @@ export function appendDomToWorkspace(
       if (blockXY.y < newY) {
         newY = blockXY.y;
       }
-      if (blockXY.x < newLeftX) {
-        // if we left align also on x
+      if (blockXY.x < newLeftX) {  // if we left align also on x
         newLeftX = blockXY.x;
       }
-      if (blockXY.x > newRightX) {
-        // if we right align also on x
+      if (blockXY.x > newRightX) {  // if we right align also on x
         newRightX = blockXY.x;
       }
     }
@@ -673,7 +660,7 @@ interface childNodeTagMap {
   field: Element[];
   input: Element[];
   next: Element[];
-}  // eslint-disable-line no-unused-vars
+}
 
 /**
  * Creates a mapping of childNodes for each supported XML tag for the provided

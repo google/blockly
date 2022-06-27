@@ -84,6 +84,7 @@ export class TouchGesture extends Gesture {
    * Start a gesture: update the workspace to indicate that a gesture is in
    * progress and bind mousemove and mouseup handlers.
    * @param e A mouse down, touch start or pointer down event.
+   * @internal
    */
   override doStart(e: Event) {
     this.isPinchZoomEnabled_ = this.startWorkspace_.options.zoomOptions &&
@@ -102,6 +103,7 @@ export class TouchGesture extends Gesture {
    * In addition, binding a second mouse down event to detect multi-touch
    * events.
    * @param e A mouse down or touch start event.
+   * @internal
    */
   override bindMouseEvents(e: Event) {
     this.onStartWrapper_ = browserEvents.conditionalBind(
@@ -121,6 +123,7 @@ export class TouchGesture extends Gesture {
   /**
    * Handle a mouse down, touch start, or pointer down event.
    * @param e A mouse down, touch start, or pointer down event.
+   * @internal
    */
   handleStart(e: Event) {
     if (this.isDragging()) {
@@ -139,6 +142,7 @@ export class TouchGesture extends Gesture {
   /**
    * Handle a mouse move, touch move, or pointer move event.
    * @param e A mouse move, touch move, or pointer move event.
+   * @internal
    */
   override handleMove(e: Event) {
     if (this.isDragging()) {
@@ -161,6 +165,7 @@ export class TouchGesture extends Gesture {
   /**
    * Handle a mouse up, touch end, or pointer up event.
    * @param e A mouse up, touch end, or pointer up event.
+   * @internal
    */
   override handleUp(e: Event) {
     if (Touch.isTouchEvent(e) && !this.isDragging()) {
@@ -182,12 +187,16 @@ export class TouchGesture extends Gesture {
   /**
    * Whether this gesture is part of a multi-touch gesture.
    * @return Whether this gesture is part of a multi-touch gesture.
+   * @internal
    */
   isMultiTouch(): boolean {
     return this.isMultiTouch_;
   }
 
-  /** Sever all links from this object. */
+  /**
+   * Sever all links from this object.
+   * @internal
+   */
   override dispose() {
     super.dispose();
 
@@ -200,6 +209,7 @@ export class TouchGesture extends Gesture {
    * Handle a touch start or pointer down event and keep track of current
    * pointers.
    * @param e A touch start, or pointer down event.
+   * @internal
    */
   handleTouchStart(e: Event) {
     const pointerId = Touch.getTouchIdentifierFromEvent(e);
@@ -222,6 +232,7 @@ export class TouchGesture extends Gesture {
    * Handle a touch move or pointer move event and zoom in/out if two pointers
    * are on the screen.
    * @param e A touch move, or pointer move event.
+   * @internal
    */
   handleTouchMove(e: Event) {
     const pointerId = Touch.getTouchIdentifierFromEvent(e);
@@ -266,6 +277,7 @@ export class TouchGesture extends Gesture {
   /**
    * Handle a touch end or pointer end event and end the gesture.
    * @param e A touch end, or pointer end event.
+   * @internal
    */
   handleTouchEnd(e: Event) {
     const pointerId = Touch.getTouchIdentifierFromEvent(e);
@@ -282,6 +294,7 @@ export class TouchGesture extends Gesture {
    * Helper function returning the current touch point coordinate.
    * @param e A touch or pointer event.
    * @return The current touch point coordinate
+   * @internal
    */
   getTouchPoint(e: Event): Coordinate|null {
     if (!this.startWorkspace_) {

@@ -41,7 +41,10 @@ export class MarkerManager {
   /** The marker's SVG element. */
   private markerSvg_: SVGElement|null = null;
 
-  /** @param workspace The workspace for the marker manager. */
+  /**
+   * @param workspace The workspace for the marker manager.
+   * @internal
+   */
   constructor(private readonly workspace: WorkspaceSvg) {
     /** The map of markers for the workspace. */
     this.markers_ = Object.create(null);
@@ -118,6 +121,7 @@ export class MarkerManager {
    * Add the cursor SVG to this workspace SVG group.
    * @param cursorSvg The SVG root of the cursor to be added to the workspace
    *     SVG group.
+   * @internal
    */
   setCursorSvg(cursorSvg: SVGElement|null) {
     if (!cursorSvg) {
@@ -133,6 +137,7 @@ export class MarkerManager {
    * Add the marker SVG to this workspaces SVG group.
    * @param markerSvg The SVG root of the marker to be added to the workspace
    *     SVG group.
+   * @internal
    */
   setMarkerSvg(markerSvg: SVGElement|null) {
     if (!markerSvg) {
@@ -150,7 +155,10 @@ export class MarkerManager {
     }
   }
 
-  /** Redraw the attached cursor SVG if needed. */
+  /**
+   * Redraw the attached cursor SVG if needed.
+   * @internal
+   */
   updateMarkers() {
     if (this.workspace.keyboardAccessibilityMode && this.cursorSvg_) {
       this.workspace.getCursor()!.draw();
@@ -161,6 +169,7 @@ export class MarkerManager {
    * Dispose of the marker manager.
    * Go through and delete all markers associated with this marker manager.
    * @suppress {checkTypes}
+   * @internal
    */
   dispose() {
     const markerIds = Object.keys(this.markers_);

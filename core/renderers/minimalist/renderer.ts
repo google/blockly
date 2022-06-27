@@ -32,7 +32,10 @@ import {RenderInfo} from './info.js';
  * @alias Blockly.minimalist.Renderer
  */
 export class Renderer extends BaseRenderer {
-  /** @param name The renderer name. */
+  /**
+   * @param name The renderer name.
+   * @internal
+   */
   constructor(name: string) {
     super(name);
   }

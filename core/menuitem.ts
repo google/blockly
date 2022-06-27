@@ -113,6 +113,7 @@ export class MenuItem {
   /**
    * Gets the menu item's element.
    * @return The DOM element.
+   * @internal
    */
   getElement(): Element|null {
     return this.element_;
@@ -121,6 +122,7 @@ export class MenuItem {
   /**
    * Gets the unique ID for this menu item.
    * @return Unique component ID.
+   * @internal
    */
   getId(): string {
     return this.element_!.id;
@@ -129,6 +131,7 @@ export class MenuItem {
   /**
    * Gets the value associated with the menu item.
    * @return value Value associated with the menu item.
+   * @internal
    */
   getValue(): AnyDuringMigration {
     return this.opt_value;
@@ -137,6 +140,7 @@ export class MenuItem {
   /**
    * Set menu item's rendering direction.
    * @param rtl True if RTL, false if LTR.
+   * @internal
    */
   setRightToLeft(rtl: boolean) {
     this.rightToLeft_ = rtl;
@@ -145,6 +149,7 @@ export class MenuItem {
   /**
    * Set the menu item's accessibility role.
    * @param roleName Role name.
+   * @internal
    */
   setRole(roleName: aria.Role) {
     this.roleName_ = roleName;
@@ -154,6 +159,7 @@ export class MenuItem {
    * Sets the menu item to be checkable or not. Set to true for menu items
    * that represent checkable options.
    * @param checkable Whether the menu item is checkable.
+   * @internal
    */
   setCheckable(checkable: boolean) {
     this.checkable_ = checkable;
@@ -162,6 +168,7 @@ export class MenuItem {
   /**
    * Checks or unchecks the component.
    * @param checked Whether to check or uncheck the component.
+   * @internal
    */
   setChecked(checked: boolean) {
     this.checked_ = checked;
@@ -170,6 +177,7 @@ export class MenuItem {
   /**
    * Highlights or unhighlights the component.
    * @param highlight Whether to highlight or unhighlight the component.
+   * @internal
    */
   setHighlighted(highlight: boolean) {
     this.highlight_ = highlight;
@@ -193,6 +201,7 @@ export class MenuItem {
   /**
    * Returns true if the menu item is enabled, false otherwise.
    * @return Whether the menu item is enabled.
+   * @internal
    */
   isEnabled(): boolean {
     return this.enabled_;
@@ -201,6 +210,7 @@ export class MenuItem {
   /**
    * Enables or disables the menu item.
    * @param enabled Whether to enable or disable the menu item.
+   * @internal
    */
   setEnabled(enabled: boolean) {
     this.enabled_ = enabled;
@@ -209,6 +219,7 @@ export class MenuItem {
   /**
    * Performs the appropriate action when the menu item is activated
    * by the user.
+   * @internal
    */
   performAction() {
     if (this.isEnabled() && this.actionHandler_) {
@@ -221,6 +232,7 @@ export class MenuItem {
    * `obj` will be used as the 'this' object in the function when called.
    * @param fn The handler.
    * @param obj Used as the 'this' object in fn when called.
+   * @internal
    */
   onAction(fn: (p1: MenuItem) => AnyDuringMigration, obj: AnyDuringMigration) {
     this.actionHandler_ = fn.bind(obj);

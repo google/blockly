@@ -181,6 +181,7 @@ export class Input {
    * Should only be used to collapse/uncollapse a block.
    * @param visible True if visible.
    * @return List of blocks to render.
+   * @internal
    */
   setVisible(visible: boolean): BlockSvg[] {
     // Note: Currently there are only unit tests for block.setCollapsed()
@@ -211,7 +212,10 @@ export class Input {
     return renderList;
   }
 
-  /** Mark all fields on this input as dirty. */
+  /**
+   * Mark all fields on this input as dirty.
+   * @internal
+   */
   markDirty() {
     for (let y = 0, field; field = this.fieldRow[y]; y++) {
       field.markDirty();

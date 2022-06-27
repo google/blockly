@@ -340,6 +340,7 @@ function onMouseMove(e: Event) {
 /**
  * Dispose of the tooltip.
  * @alias Blockly.Tooltip.dispose
+ * @internal
  */
 export function dispose() {
   element = null;
@@ -367,6 +368,7 @@ export function hide() {
  * Hide any in-progress tooltips and block showing new tooltips until the next
  * call to unblock().
  * @alias Blockly.Tooltip.block
+ * @internal
  */
 export function block() {
   hide();
@@ -377,6 +379,7 @@ export function block() {
  * Unblock tooltips: allow them to be scheduled and shown according to their own
  * logic.
  * @alias Blockly.Tooltip.unblock
+ * @internal
  */
 export function unblock() {
   blocked = false;

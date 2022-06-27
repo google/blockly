@@ -365,7 +365,10 @@ export class Comment extends Icon {
     }
   }
 
-  /** Update the comment's view to match the model. */
+  /**
+   * Update the comment's view to match the model.
+   * @internal
+   */
   updateText() {
     if (this.textarea_) {
       // AnyDuringMigration because:  Type 'string | null' is not assignable to

@@ -117,7 +117,10 @@ export interface PositionMetrics {
   arrowVisible: boolean;
 }
 
-/** Create and insert the DOM element for this div. */
+/**
+ * Create and insert the DOM element for this div.
+ * @internal
+ */
 export function createDom() {
   if (div) {
     return;
@@ -296,6 +299,7 @@ function showPositionedByRect(
  * @param secondaryY Secondary/alternative origin point y, in absolute px.
  * @param opt_onHide Optional callback for when the drop-down is hidden.
  * @return True if the menu rendered at the primary origin point.
+ * @internal
  */
 export function show(
     newOwner: AnyDuringMigration|null, rtl: boolean, primaryX: number,
@@ -490,6 +494,7 @@ function getPositionTopOfPageMetrics(
  * @param divWidth The width of the div in px.
  * @return An object containing metrics for the x positions of the left side of
  *     the DropDownDiv and the arrow.
+ * @internal
  */
 export function getPositionX(
     sourceX: number, boundsLeft: number, boundsRight: number,
@@ -656,6 +661,7 @@ function positionInternal(
 /**
  * Repositions the dropdownDiv on window resize. If it doesn't know how to
  * calculate the new position, it will just hide it instead.
+ * @internal
  */
 export function repositionForWindowResize() {
   // This condition mainly catches the dropdown div when it is being used as a

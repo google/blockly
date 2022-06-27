@@ -17,7 +17,7 @@ goog.declareModuleId('Blockly.geras.Renderer');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../common/constants';
+import '../common/constants.js';
 
 /* eslint-disable-next-line no-unused-vars */
 import {BlockSvg} from '../../block_svg.js';

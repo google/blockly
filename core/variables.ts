@@ -88,6 +88,18 @@ export function allDeveloperVariables(workspace: Workspace): string[] {
   const variableHash = Object.create(null);
   for (let i = 0, block; block = blocks[i]; i++) {
     let getDeveloperVariables = block.getDeveloperVariables;
+    if (!getDeveloperVariables &&
+        (block as AnyDuringMigration).getDeveloperVars) {
+      // August 2018: getDeveloperVars() was deprecated and renamed
+      // getDeveloperVariables().
+      getDeveloperVariables = (block as AnyDuringMigration).getDeveloperVars;
+      if (!ALL_DEVELOPER_VARS_WARNINGS_BY_BLOCK_TYPE[block.type]) {
+        console.warn(
+            'Function getDeveloperVars() deprecated. Use ' +
+            'getDeveloperVariables() (block type \'' + block.type + '\')');
+        ALL_DEVELOPER_VARS_WARNINGS_BY_BLOCK_TYPE[block.type] = true;
+      }
+    }
     if (getDeveloperVariables) {
       const devVars = block.getDeveloperVariables!();
       for (let j = 0; j < devVars.length; j++) {

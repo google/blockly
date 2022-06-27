@@ -17,16 +17,16 @@ goog.declareModuleId('Blockly.IToolbox');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../utils/toolbox';
+import '../utils/toolbox.js';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './i_flyout';
+import './i_flyout.js';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './i_toolbox_item';
+import './i_toolbox_item.js';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../workspace_svg';
+import '../workspace_svg.js';
 
 /* eslint-disable-next-line no-unused-vars */
 import {IRegistrable} from './i_registrable.js';

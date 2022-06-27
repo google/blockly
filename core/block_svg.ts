@@ -17,11 +17,11 @@ goog.declareModuleId('Blockly.BlockSvg');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './theme';
+import './theme.js';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_selected';
+import './events/events_selected.js';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './touch';
+import './touch.js';
 
 import {Block} from './block.js';
 import * as blockAnimations from './block_animations.js';
@@ -131,7 +131,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    */
   // AnyDuringMigration because:  Type 'null' is not assignable to type '{ [key:
   // string]: number; }'.
-  private warningTextDb_: {[key: string]: number} = null as AnyDuringMigration;
+  private warningTextDb_: {[key: string]: AnyDuringMigration} =
+      null as AnyDuringMigration;
 
   /** Block's mutator icon (if any). */
   mutator: Mutator|null = null;

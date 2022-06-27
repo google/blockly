@@ -190,7 +190,7 @@ function stripApacheLicense() {
  */
 var JSCOMP_ERROR = [
   // 'accessControls',  // Deprecated; means same as visibility.
-  'checkPrototypalTypes',
+  // 'checkPrototypalTypes',  // override annotations are stripped by tsc.
   'checkRegExp',
   // 'checkTypes',  // Disabled; see note in JSCOMP_OFF.
   'checkVars',
@@ -204,12 +204,12 @@ var JSCOMP_ERROR = [
   'externsValidation',
   'extraRequire',  // Undocumented but valid.
   'functionParams',
-  'globalThis',
+  // 'globalThis',  // This types are stripped by tsc.
   'invalidCasts',
   'misplacedTypeAnnotation',
   // 'missingOverride',  // There are many of these, which should be fixed.
   'missingPolyfill',
-  'missingProperties',
+  // 'missingProperties',  // Unset static properties are stripped by tsc.
   'missingProvide',
   'missingRequire',
   'missingReturn',

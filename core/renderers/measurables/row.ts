@@ -141,7 +141,7 @@ export class Row {
     /** The type of this rendering object. */
     this.type = Types.ROW;
 
-    this.notchOffset = this.constants.NOTCH_OFFSET_LEFT;
+    this.notchOffset = this.constants_.NOTCH_OFFSET_LEFT;
   }
 
   /**

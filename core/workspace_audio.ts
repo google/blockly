@@ -88,7 +88,7 @@ export class WorkspaceAudio {
         break;
       }
     }
-    if (sound && sound.play) {
+    if (sound) {
       this.SOUNDS_[name] = sound;
     }
   }

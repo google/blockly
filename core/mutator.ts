@@ -18,7 +18,7 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Mutator');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_bubble_open';
+import './events/events_bubble_open.js';
 
 /* eslint-disable-next-line no-unused-vars */
 import {Block} from './block.js';
@@ -83,7 +83,7 @@ export class Mutator extends Icon {
    * The PID associated with the updateWorkpace_ timeout, or 0 if no timeout
    * is currently running.
    */
-  private updateWorkspacePid_ = 0;
+  private updateWorkspacePid_: AnyDuringMigration = 0;
 
   /** @param quarkNames List of names of sub-blocks for flyout. */
   constructor(block: BlockSvg, quarkNames: string[]) {
@@ -397,7 +397,7 @@ export class Mutator extends Icon {
   shouldIgnoreMutatorEvent_(e: Abstract) {
     return e.isUiEvent || e.type === eventUtils.CREATE ||
         e.type === eventUtils.CHANGE &&
-        /** @type {!BlockChange} */ (e).element === 'disabled';
+        (e as BlockChange).element === 'disabled';
   }
 
   /**

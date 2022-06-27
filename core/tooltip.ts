@@ -87,10 +87,10 @@ let blocked = false;
 export const LIMIT = 50;
 
 /** PID of suspended thread to clear tooltip on mouse out. */
-let mouseOutPid = 0;
+let mouseOutPid: AnyDuringMigration = 0;
 
 /** PID of suspended thread to show the tooltip. */
-let showPid = 0;
+let showPid: AnyDuringMigration = 0;
 
 /**
  * Last observed X location of the mouse pointer (freezes when tooltip appears).
@@ -341,8 +341,8 @@ export function dispose() {
 export function hide() {
   if (visible) {
     visible = false;
-    if (DIV) {
-      DIV.style.display = 'none';
+    if (containerDiv) {
+      containerDiv.style.display = 'none';
     }
   }
   if (showPid) {
@@ -378,7 +378,7 @@ function renderContent() {
     return;
   }
   if (typeof customTooltip === 'function') {
-    customTooltip(DIV, element);
+    customTooltip(containerDiv, element);
   } else {
     renderDefaultContent();
   }

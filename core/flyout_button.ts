@@ -63,7 +63,7 @@ export class FlyoutButton {
    * @param workspace The workspace in which to place this button.
    * @param targetWorkspace The flyout's target workspace.
    * @param json The JSON specifying the label/button.
-   * @param isLabel Whether this button should be styled as a label.
+   * @param isLabel_ Whether this button should be styled as a label.
    * @internal
    */
   constructor(

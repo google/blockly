@@ -16,9 +16,9 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.VariableMap');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_var_delete';
+import './events/events_var_delete.js';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_var_rename';
+import './events/events_var_rename.js';
 
 /* eslint-disable-next-line no-unused-vars */
 import {Block} from './block.js';

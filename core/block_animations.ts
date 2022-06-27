@@ -30,7 +30,7 @@ interface CloneRect {
 }  // eslint-disable-line no-unused-vars
 
 /** PID of disconnect UI animation.  There can only be one at a time. */
-let disconnectPid = 0;
+let disconnectPid: AnyDuringMigration = 0;
 
 /** SVG group of wobbling block.  There can only be one at a time. */
 // AnyDuringMigration because:  Type 'null' is not assignable to type 'Element'.

@@ -332,7 +332,7 @@ export interface KeyboardShortcut {
   preconditionFn?: ((p1: Workspace) => boolean);
   metadata?: object;
   keyCodes?: (number|string)[];
-  allowCollsion?: boolean;
+  allowCollision?: boolean;
 }
 
 // Creates and assigns the singleton instance.

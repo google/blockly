@@ -16,7 +16,7 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.FieldVariable');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_block_change';
+import './events/events_block_change.js';
 
 /* eslint-disable-next-line no-unused-vars */
 import {Block} from './block.js';

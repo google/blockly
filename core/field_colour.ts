@@ -16,7 +16,7 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.FieldColour');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_block_change';
+import './events/events_block_change.js';
 
 import {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';

@@ -52,12 +52,6 @@ const DUPLICATE_BLOCK_ERROR = 'The insertion marker ' +
     'you are using a mutator, make sure your domToMutation method is ' +
     'properly defined.';
 
-export enum PreviewType {
-  INSERTION_MARKER = 0,
-  INPUT_OUTLINE = 1,
-  REPLACEMENT_FADE = 2,
-}
-
 /**
  * Class that controls updates to connections during drags.  It is primarily
  * responsible for finding the closest eligible connection and highlighting or
@@ -65,11 +59,6 @@ export enum PreviewType {
  * @alias Blockly.InsertionMarkerManager
  */
 export class InsertionMarkerManager {
-  /**
-   * An enum describing different kinds of previews the InsertionMarkerManager
-   * could display.
-   */
-  static PREVIEW_TYPE = PreviewType;
   private readonly topBlock_: BlockSvg;
   private readonly workspace_: WorkspaceSvg;
 
@@ -790,3 +779,17 @@ export class InsertionMarkerManager {
     return result;
   }
 }
+
+export namespace InsertionMarkerManager {
+  /**
+   * An enum describing different kinds of previews the InsertionMarkerManager
+   * could display.
+   */
+  export enum PreviewType {
+    INSERTION_MARKER = 0,
+    INPUT_OUTLINE = 1,
+    REPLACEMENT_FADE = 2,
+  }
+}
+
+export type PreviewType = InsertionMarkerManager.PreviewType;

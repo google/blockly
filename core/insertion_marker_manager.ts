@@ -41,7 +41,7 @@ interface CandidateConnection {
   closest: RenderedConnection|null;
   local: RenderedConnection|null;
   radius: number;
-}  // eslint-disable-line no-unused-vars
+}
 
 /**
  * An error message to throw if the block created by createMarkerBlock_ is
@@ -299,9 +299,8 @@ export class InsertionMarkerManager {
       for (let i = 0; i < sourceBlock.inputList.length; i++) {
         const sourceInput = sourceBlock.inputList[i];
         if (sourceInput.name === constants.COLLAPSED_INPUT_NAME) {
-          continue;
+          continue;  // Ignore the collapsed input.
         }
-        // Ignore the collapsed input.
         const resultInput = result.inputList[i];
         if (!resultInput) {
           throw new Error(DUPLICATE_BLOCK_ERROR.replace('%1', 'an input'));
@@ -395,8 +394,7 @@ export class InsertionMarkerManager {
         console.error(
             'Only one of localConnection_ and closestConnection_ was set.');
       }
-    } else {
-      // No connection found.
+    } else {  // No connection found.
       // Only need to update if we were showing a preview before.
       return !!(this.localConnection_ && this.closestConnection_);
     }

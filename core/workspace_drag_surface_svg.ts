@@ -58,9 +58,8 @@ export class WorkspaceDragSurfaceSvg {
   /** Create the drag surface and inject it into the container. */
   createDom() {
     if (this.SVG_) {
-      return;
+      return;  // Already created.
     }
-    // Already created.
     /**
      * Dom structure when the workspace is being dragged. If there is no drag in
      * progress, the SVG is empty and display: none.

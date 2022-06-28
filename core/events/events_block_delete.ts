@@ -49,9 +49,9 @@ export class BlockDelete extends BlockBase {
     this.type = eventUtils.BLOCK_DELETE;
 
     if (!opt_block) {
-      return;
+      return;  // Blank event to be populated by fromJson.
     }
-    // Blank event to be populated by fromJson.
+
     if (opt_block.getParent()) {
       throw Error('Connected blocks cannot be deleted.');
     }

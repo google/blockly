@@ -440,8 +440,7 @@ export class Drawer {
 
     if (bottomRow.connection) {
       const connInfo = bottomRow.connection;
-      const x = connInfo.xPos;
-      // Already contains info about startX.
+      const x = connInfo.xPos;  // Already contains info about startX.
       const connX = this.info_.RTL ? -x : x;
       connInfo.connectionModel.setOffsetInBlock(connX, bottomRow.baseline);
     }

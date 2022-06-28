@@ -47,9 +47,9 @@ export class BlockCreate extends BlockBase {
     this.type = eventUtils.BLOCK_CREATE;
 
     if (!opt_block) {
-      return;
+      return;  // Blank event to be populated by fromJson.
     }
-    // Blank event to be populated by fromJson.
+
     if (opt_block.isShadow()) {
     }
 

@@ -27,7 +27,7 @@ interface CloneRect {
   y: number;
   width: number;
   height: number;
-}  // eslint-disable-line no-unused-vars
+}
 
 /** PID of disconnect UI animation.  There can only be one at a time. */
 let disconnectPid: AnyDuringMigration = 0;
@@ -105,9 +105,8 @@ export function connectionUiEffect(block: BlockSvg) {
   const scale = workspace.scale;
   workspace.getAudioManager().play('click');
   if (scale < 1) {
-    return;
+    return;  // Too small to care about visual effects.
   }
-  // Too small to care about visual effects.
   // Determine the absolute coordinates of the inferior block.
   const xy = workspace.getSvgXY(block.getSvgRoot());
   // Offset the coordinates based on the two connection types, fix scale.
@@ -161,9 +160,8 @@ function connectionUiStep(ripple: SVGElement, start: Date, scale: number) {
 export function disconnectUiEffect(block: BlockSvg) {
   block.workspace.getAudioManager().play('disconnect');
   if (block.workspace.scale < 1) {
-    return;
+    return;  // Too small to care about visual effects.
   }
-  // Too small to care about visual effects.
   // Horizontal distance for bottom of block to wiggle.
   const DISPLACEMENT = 10;
   // Scale magnitude of skew to height of block.
@@ -183,10 +181,8 @@ export function disconnectUiEffect(block: BlockSvg) {
  * @param start Date of animation's start.
  */
 function disconnectUiStep(group: SVGElement, magnitude: number, start: Date) {
-  const DURATION = 200;
-  // Milliseconds.
-  const WIGGLES = 3;
-  // Half oscillations.
+  const DURATION = 200;  // Milliseconds.
+  const WIGGLES = 3;     // Half oscillations.
 
   const ms = new Date().getTime() - start.getTime();
   const percent = ms / DURATION;

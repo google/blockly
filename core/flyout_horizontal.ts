@@ -328,8 +328,7 @@ export class HorizontalFlyout extends Flyout {
     if (this.toolboxPosition_ === toolbox.Position.TOP) {
       const height = flyoutRect.height;
       return new Rect(-BIG_NUM, top + height, -BIG_NUM, BIG_NUM);
-    } else {
-      // Bottom.
+    } else {  // Bottom.
       return new Rect(top, BIG_NUM, -BIG_NUM, BIG_NUM);
     }
   }

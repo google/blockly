@@ -96,9 +96,8 @@ export function show(
   setTimeout(function() {
     menu.focus();
   }, 1);
-  currentBlock = null;
+  currentBlock = null;  // May be set by Blockly.Block.
 }
-// May be set by Blockly.Block.
 
 /**
  * Create the context menu object and populate it with the given options.

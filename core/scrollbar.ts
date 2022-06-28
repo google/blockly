@@ -664,8 +664,7 @@ export class Scrollbar {
    */
   private onMouseDownBar_(e: Event) {
     this.workspace.markFocused();
-    Touch.clearTouchIdentifier();
-    // This is really a click.
+    Touch.clearTouchIdentifier();  // This is really a click.
     this.cleanUp_();
     if (browserEvents.isRightButton(e)) {
       // Right-click.

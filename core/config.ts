@@ -31,7 +31,7 @@ interface Config {
   currentConnectionPreference: number;
   bumpDelay: number;
   connectingSnapRadius: number;
-}  // eslint-disable-line no-unused-vars
+}
 
 /** Default snap radius. */
 const DEFAULT_SNAP_RADIUS = 28;

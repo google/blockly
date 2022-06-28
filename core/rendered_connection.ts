@@ -37,12 +37,12 @@ import * as svgPaths from './utils/svg_paths.js';
 /** A shape that has a pathDown property. */
 interface PathDownShape {
   pathDown: string;
-}  // eslint-disable-line no-unused-vars
+}
 
 /** A shape that has a pathLeft property. */
 interface PathLeftShape {
   pathLeft: string;
-}  // eslint-disable-line no-unused-vars
+}
 
 /** Maximum randomness in workspace units for bumping a block. */
 const BUMP_RANDOMNESS = 10;

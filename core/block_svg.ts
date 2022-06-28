@@ -143,7 +143,6 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   /** Block's warning icon (if any). */
   warning: Warning|null = null;
 
-  // Create core elements for the block.
   private svgGroup_: SVGGElement;
   style: BlockStyle;
   /** @internal */
@@ -615,10 +614,10 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       this.updateCollapsed_();
     } else if (this.rendered) {
       this.render();
+      // Don't bump neighbours. Users like to store collapsed functions together
+      // and bumping makes them go out of alignment.
     }
   }
-  // Don't bump neighbours. Users like to store collapsed functions together
-  // and bumping makes them go out of alignment.
 
   /**
    * Makes sure that when the block is collapsed, it is rendered correctly

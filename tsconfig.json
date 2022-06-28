@@ -4,7 +4,7 @@
     "closure/**/*",  // Just for ouptut directory structure.
   ],
   "exclude": [
-    "core/blockly.ts"
+    "core/blockly.js"
   ],
   "compilerOptions": {
     // Tells TypeScript to read JS files, as

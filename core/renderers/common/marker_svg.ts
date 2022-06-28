@@ -81,6 +81,9 @@ export class MarkerSvg {
 
   protected markerSvgRect_: SVGRectElement|null = null;
 
+  /** The constants necessary to draw the marker. */
+  protected constants_: ConstantProvider;
+
   /**
    * @param workspace The workspace the marker belongs to.
    * @param constants The constants for the renderer.
@@ -88,9 +91,11 @@ export class MarkerSvg {
    */
   constructor(
       private readonly workspace: WorkspaceSvg,
-      private constants: ConstantProvider, private readonly marker: Marker) {
-    const defaultColour = this.isCursor() ? this.constants.CURSOR_COLOUR :
-                                            this.constants.MARKER_COLOUR;
+      constants: ConstantProvider, private readonly marker: Marker) {
+    this.constants_ = constants;
+
+    const defaultColour = this.isCursor() ? this.constants_.CURSOR_COLOUR :
+                                            this.constants_.MARKER_COLOUR;
 
     /** The colour of the marker. */
     this.colour_ = marker.colour || defaultColour;
@@ -168,10 +173,10 @@ export class MarkerSvg {
       return;
     }
 
-    this.constants = this.workspace.getRenderer().getConstants();
+    this.constants_ = this.workspace.getRenderer().getConstants();
 
-    const defaultColour = this.isCursor() ? this.constants.CURSOR_COLOUR :
-                                            this.constants.MARKER_COLOUR;
+    const defaultColour = this.isCursor() ? this.constants_.CURSOR_COLOUR :
+                                            this.constants_.MARKER_COLOUR;
     this.colour_ = this.marker.colour || defaultColour;
     this.applyColour_(curNode);
 
@@ -226,17 +231,17 @@ export class MarkerSvg {
     const width = block.width;
     const height = block.height;
     const markerHeight = height * HEIGHT_MULTIPLIER;
-    const markerOffset = this.constants.CURSOR_BLOCK_PADDING;
+    const markerOffset = this.constants_.CURSOR_BLOCK_PADDING;
 
     if (block.previousConnection) {
       const connectionShape =
-          this.constants.shapeFor(block.previousConnection) as Notch |
+          this.constants_.shapeFor(block.previousConnection) as Notch |
           PuzzleTab;
       this.positionPrevious_(
           width, markerOffset, markerHeight, connectionShape);
     } else if (block.outputConnection) {
       const connectionShape =
-          this.constants.shapeFor(block.outputConnection) as Notch | PuzzleTab;
+          this.constants_.shapeFor(block.outputConnection) as Notch | PuzzleTab;
       this.positionOutput_(width, height, connectionShape);
     } else {
       this.positionBlock_(width, markerOffset, markerHeight);
@@ -280,10 +285,10 @@ export class MarkerSvg {
     const y = wsCoordinate.y;
 
     if (this.workspace.RTL) {
-      x -= this.constants.CURSOR_WS_WIDTH;
+      x -= this.constants_.CURSOR_WS_WIDTH;
     }
 
-    this.positionLine_(x, y, this.constants.CURSOR_WS_WIDTH);
+    this.positionLine_(x, y, this.constants_.CURSOR_WS_WIDTH);
     this.setParent_(this.workspace);
     this.showCurrent_();
   }
@@ -349,13 +354,13 @@ export class MarkerSvg {
 
     // Add padding so that being on a stack looks different than being on a
     // block.
-    const width = heightWidth.width + this.constants.CURSOR_STACK_PADDING;
-    const height = heightWidth.height + this.constants.CURSOR_STACK_PADDING;
+    const width = heightWidth.width + this.constants_.CURSOR_STACK_PADDING;
+    const height = heightWidth.height + this.constants_.CURSOR_STACK_PADDING;
 
     // Shift the rectangle slightly to upper left so padding is equal on all
     // sides.
-    const xPadding = -this.constants.CURSOR_STACK_PADDING / 2;
-    const yPadding = -this.constants.CURSOR_STACK_PADDING / 2;
+    const xPadding = -this.constants_.CURSOR_STACK_PADDING / 2;
+    const yPadding = -this.constants_.CURSOR_STACK_PADDING / 2;
 
     let x = xPadding;
     const y = yPadding;
@@ -412,7 +417,7 @@ export class MarkerSvg {
     const y = connection.getOffsetInBlock().y;
 
     const path = svgPaths.moveTo(0, 0) +
-        (this.constants.shapeFor(connection) as PuzzleTab).pathDown;
+        (this.constants_.shapeFor(connection) as PuzzleTab).pathDown;
 
     this.markerInput_!.setAttribute('d', path);
     this.markerInput_!.setAttribute(
@@ -455,7 +460,7 @@ export class MarkerSvg {
     // 'Notch | PuzzleTab'.
     const markerPath = svgPaths.moveBy(width, 0) +
         svgPaths.lineOnAxis('h', -(width - connectionShape.width)) +
-        svgPaths.lineOnAxis('v', this.constants.TAB_OFFSET_FROM_TOP) +
+        svgPaths.lineOnAxis('v', this.constants_.TAB_OFFSET_FROM_TOP) +
         (connectionShape as AnyDuringMigration).pathDown +
         svgPaths.lineOnAxis('V', height) + svgPaths.lineOnAxis('H', width);
     this.markerBlock_!.setAttribute('d', markerPath);
@@ -483,7 +488,7 @@ export class MarkerSvg {
     // 'Notch | PuzzleTab'.
     const markerPath = svgPaths.moveBy(-markerOffset, markerHeight) +
         svgPaths.lineOnAxis('V', -markerOffset) +
-        svgPaths.lineOnAxis('H', this.constants.NOTCH_OFFSET_LEFT) +
+        svgPaths.lineOnAxis('H', this.constants_.NOTCH_OFFSET_LEFT) +
         (connectionShape as AnyDuringMigration).pathLeft +
         svgPaths.lineOnAxis('H', width + markerOffset * 2) +
         svgPaths.lineOnAxis('V', markerHeight);
@@ -581,8 +586,8 @@ export class MarkerSvg {
     // assignable to parameter of type 'Element | undefined'.
     this.markerSvg_ = dom.createSvgElement(
         Svg.G, {
-          'width': this.constants.CURSOR_WS_WIDTH,
-          'height': this.constants.WS_CURSOR_HEIGHT,
+          'width': this.constants_.CURSOR_WS_WIDTH,
+          'height': this.constants_.WS_CURSOR_HEIGHT,
         },
         this.svgGroup_ as AnyDuringMigration);
 
@@ -592,8 +597,8 @@ export class MarkerSvg {
     // assignable to parameter of type 'Element | undefined'.
     this.markerSvgLine_ = dom.createSvgElement(
         Svg.RECT, {
-          'width': this.constants.CURSOR_WS_WIDTH,
-          'height': this.constants.WS_CURSOR_HEIGHT,
+          'width': this.constants_.CURSOR_WS_WIDTH,
+          'height': this.constants_.WS_CURSOR_HEIGHT,
           'style': 'display: none',
         },
         this.markerSvg_ as AnyDuringMigration);
@@ -626,7 +631,7 @@ export class MarkerSvg {
           'transform': '',
           'style': 'display: none',
           'fill': 'none',
-          'stroke-width': this.constants.CURSOR_STROKE_WIDTH,
+          'stroke-width': this.constants_.CURSOR_STROKE_WIDTH,
         },
         this.markerSvg_ as AnyDuringMigration);
 

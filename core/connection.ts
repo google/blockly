@@ -50,6 +50,8 @@ export class Connection implements IASTNodeLocationWithBlock {
   static REASON_DRAG_CHECKS_FAILED = 7;
   static REASON_PREVIOUS_AND_OUTPUT = 8;
 
+  protected sourceBlock_: Block;
+
   /** Connection this connection connects to.  Null if not connected. */
   targetConnection: Connection|null = null;
 
@@ -86,7 +88,9 @@ export class Connection implements IASTNodeLocationWithBlock {
    * @param source The block establishing this connection.
    * @param type The type of the connection.
    */
-  constructor(private readonly source: Block, public type: number) {}
+  constructor(source: Block, public type: number) {
+    this.sourceBlock_ = source;
+  }
 
   /**
    * Connect two connections together.  This is the connection on the superior
@@ -171,7 +175,7 @@ export class Connection implements IASTNodeLocationWithBlock {
    * @return The source block.
    */
   getSourceBlock(): Block {
-    return this.source;
+    return this.sourceBlock_;
   }
 
   /**
@@ -198,7 +202,7 @@ export class Connection implements IASTNodeLocationWithBlock {
    * @internal
    */
   getConnectionChecker(): IConnectionChecker {
-    return this.source.workspace.connectionChecker;
+    return this.sourceBlock_.workspace.connectionChecker;
   }
 
   /**
@@ -258,13 +262,13 @@ export class Connection implements IASTNodeLocationWithBlock {
     let parentConnection;
     if (this.isSuperior()) {
       // Superior block.
-      parentBlock = this.source;
+      parentBlock = this.sourceBlock_;
       childBlock = otherConnection.getSourceBlock();
       parentConnection = this;
     } else {
       // Inferior block.
       parentBlock = otherConnection.getSourceBlock();
-      childBlock = this.source;
+      childBlock = this.sourceBlock_;
       parentConnection = otherConnection;
     }
 
@@ -333,7 +337,7 @@ export class Connection implements IASTNodeLocationWithBlock {
         (!this.targetConnection ||
          !this.getConnectionChecker().canConnect(
              this, this.targetConnection, false))) {
-      const child = this.isSuperior() ? this.targetBlock() : this.source;
+      const child = this.isSuperior() ? this.targetBlock() : this.sourceBlock_;
       child!.unplug();
     }
   }
@@ -439,7 +443,7 @@ export class Connection implements IASTNodeLocationWithBlock {
    */
   getParentInput(): Input|null {
     let parentInput = null;
-    const inputs = this.source.inputList;
+    const inputs = this.sourceBlock_.inputList;
     for (let i = 0; i < inputs.length; i++) {
       if (inputs[i].connection === this) {
         parentInput = inputs[i];
@@ -455,7 +459,7 @@ export class Connection implements IASTNodeLocationWithBlock {
    * @return The description.
    */
   toString(): string {
-    const block = this.source;
+    const block = this.sourceBlock_;
     if (!block) {
       return 'Orphan Connection';
     }

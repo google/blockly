@@ -172,13 +172,19 @@ export class Gesture {
   protected isEnding_ = false;
   private healStack_: boolean;
 
+  /** The event that most recently updated this gesture. */
+  private mostRecentEvent_: Event;
+
   /**
    * @param e The event that kicked off this gesture.
    * @param creatorWorkspace The workspace that created this gesture and has a
    *     reference to it.
    */
   constructor(
-      private e: Event, private readonly creatorWorkspace: WorkspaceSvg) {
+      private e: Event,
+      private readonly creatorWorkspace: WorkspaceSvg) {
+    this.mostRecentEvent_ = e;
+    
     /**
      * How far the mouse has moved during this drag, in pixel units.
      * (0, 0) is at this.mouseDownXY_.
@@ -236,7 +242,7 @@ export class Gesture {
       this.updateIsDragging_();
       Touch.longStop();
     }
-    this.e = e;
+    this.mostRecentEvent_ = e;
   }
 
   /**
@@ -402,7 +408,7 @@ export class Gesture {
     this.blockDragger_ =
         new BlockDraggerClass!((this.targetBlock_), (this.startWorkspace_));
     this.blockDragger_!.startDrag(this.currentDragDeltaXY_, this.healStack_);
-    this.blockDragger_!.drag(this.e, this.currentDragDeltaXY_);
+    this.blockDragger_!.drag(this.mostRecentEvent_, this.currentDragDeltaXY_);
   }
 
   // TODO (fenichel): Possibly combine this and startDraggingBlock_.
@@ -411,7 +417,7 @@ export class Gesture {
     this.bubbleDragger_ =
         new BubbleDragger((this.startBubble_), (this.startWorkspace_));
     this.bubbleDragger_.startBubbleDrag();
-    this.bubbleDragger_.dragBubble(this.e, this.currentDragDeltaXY_);
+    this.bubbleDragger_.dragBubble(this.mostRecentEvent_, this.currentDragDeltaXY_);
   }
 
   /**
@@ -439,7 +445,7 @@ export class Gesture {
     this.startWorkspace_.hideChaff(!!this.flyout_);
 
     this.startWorkspace_.markFocused();
-    this.e = e;
+    this.mostRecentEvent_ = e;
 
     Tooltip.block();
 
@@ -500,9 +506,9 @@ export class Gesture {
     if (this.isDraggingWorkspace_) {
       this.workspaceDragger_.drag(this.currentDragDeltaXY_);
     } else if (this.isDraggingBlock_) {
-      this.blockDragger_!.drag(this.e, this.currentDragDeltaXY_);
+      this.blockDragger_!.drag(this.mostRecentEvent_, this.currentDragDeltaXY_);
     } else if (this.isDraggingBubble_) {
-      this.bubbleDragger_.dragBubble(this.e, this.currentDragDeltaXY_);
+      this.bubbleDragger_.dragBubble(this.mostRecentEvent_, this.currentDragDeltaXY_);
     }
     e.preventDefault();
     e.stopPropagation();
@@ -564,9 +570,9 @@ export class Gesture {
     }
     Touch.longStop();
     if (this.isDraggingBubble_) {
-      this.bubbleDragger_.endBubbleDrag(this.e, this.currentDragDeltaXY_);
+      this.bubbleDragger_.endBubbleDrag(this.mostRecentEvent_, this.currentDragDeltaXY_);
     } else if (this.isDraggingBlock_) {
-      this.blockDragger_!.endDrag(this.e, this.currentDragDeltaXY_);
+      this.blockDragger_!.endDrag(this.mostRecentEvent_, this.currentDragDeltaXY_);
     } else if (this.isDraggingWorkspace_) {
       this.workspaceDragger_.endDrag(this.currentDragDeltaXY_);
     }
@@ -610,7 +616,7 @@ export class Gesture {
           'but the gesture had already been started.');
     }
     this.setStartWorkspace_(ws);
-    this.e = e;
+    this.mostRecentEvent_ = e;
     this.doStart(e);
   }
 
@@ -652,7 +658,7 @@ export class Gesture {
           'but the gesture had already been started.');
     }
     this.setStartBlock(block);
-    this.e = e;
+    this.mostRecentEvent_ = e;
   }
 
   /**
@@ -668,7 +674,7 @@ export class Gesture {
           'but the gesture had already been started.');
     }
     this.setStartBubble(bubble);
-    this.e = e;
+    this.mostRecentEvent_ = e;
   }
 
   /* Begin functions defining what actions to take to execute clicks on each
@@ -686,7 +692,7 @@ export class Gesture {
 
   /** Execute a field click. */
   private doFieldClick_() {
-    this.startField_.showEditor(this.e);
+    this.startField_.showEditor(this.mostRecentEvent_);
     this.bringBlockToFront_();
   }
 

@@ -180,8 +180,7 @@ export class Gesture {
    * @param creatorWorkspace The workspace that created this gesture and has a
    *     reference to it.
    */
-  constructor(
-      private e: Event, private readonly creatorWorkspace: WorkspaceSvg) {
+  constructor(e: Event, private readonly creatorWorkspace: WorkspaceSvg) {
     this.mostRecentEvent_ = e;
 
     /**

@@ -39,7 +39,7 @@ import {RenderedConnection} from './rendered_connection.js';
 export class Input {
   private sourceBlock_: Block;
   fieldRow: Field[] = [];
-  align: Input.Align;
+  align: Align;
 
   /** Is the input visible? */
   private visible_ = true;
@@ -61,7 +61,7 @@ export class Input {
     this.sourceBlock_ = block;
 
     /** Alignment of input's fields (left, right or centre). */
-    this.align = Input.Align.LEFT;
+    this.align = Align.LEFT;
   }
 
   /**
@@ -237,7 +237,7 @@ export class Input {
    *     are reversed, and Align.RIGHT aligns to the left.
    * @return The input being modified (to allow chaining).
    */
-  setAlign(align: Input.Align): Input {
+  setAlign(align: Align): Input {
     this.align = align;
     if (this.sourceBlock_.rendered) {
       const sourceBlock = this.sourceBlock_ as BlockSvg;

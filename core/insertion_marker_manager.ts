@@ -785,11 +785,12 @@ export namespace InsertionMarkerManager {
    * An enum describing different kinds of previews the InsertionMarkerManager
    * could display.
    */
-  export enum PreviewType {
+  export enum PREVIEW_TYPE {
     INSERTION_MARKER = 0,
     INPUT_OUTLINE = 1,
     REPLACEMENT_FADE = 2,
   }
 }
 
-export type PreviewType = InsertionMarkerManager.PreviewType;
+export type PreviewType = InsertionMarkerManager.PREVIEW_TYPE;
+export const PreviewType = InsertionMarkerManager.PREVIEW_TYPE;

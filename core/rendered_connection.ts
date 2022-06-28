@@ -568,3 +568,4 @@ export namespace RenderedConnection {
 }
 
 export type TrackedState = RenderedConnection.TrackedState;
+export const TrackedState = RenderedConnection.TrackedState;

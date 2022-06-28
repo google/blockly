@@ -274,18 +274,15 @@ export function mouseToSvg(
  */
 export function getScrollDeltaPixels(e: WheelEvent): {x: number, y: number} {
   switch (e.deltaMode) {
-    case 0x00:
-    // Pixel mode.
+    case 0x00:  // Pixel mode.
     default:
       return {x: e.deltaX, y: e.deltaY};
-    case 0x01:
-      // Line mode.
+    case 0x01:  // Line mode.
       return {
         x: e.deltaX * LINE_MODE_MULTIPLIER,
         y: e.deltaY * LINE_MODE_MULTIPLIER,
       };
-    case 0x02:
-      // Page mode.
+    case 0x02:  // Page mode.
       return {
         x: e.deltaX * PAGE_MODE_MULTIPLIER,
         y: e.deltaY * PAGE_MODE_MULTIPLIER,

@@ -459,9 +459,8 @@ export class Block implements IASTNodeLocation, IDeletable {
           thisConnection.type === ConnectionType.INPUT_VALUE &&
           thisConnection.targetConnection) {
         if (connection) {
-          return null;
+          return null;  // More than one value input found.
         }
-        // More than one value input found.
         connection = thisConnection;
       }
     }
@@ -1542,9 +1541,8 @@ export class Block implements IASTNodeLocation, IDeletable {
           'JSON attribute \'extensions\' should be an array of' +
           ' strings. Found raw string in JSON for \'' + json['type'] +
           '\' block.');
-      json['extensions'] = [json['extensions']];
+      json['extensions'] = [json['extensions']];  // Correct and continue.
     }
-    // Correct and continue.
 
     // Add the mutator to the block.
     if (json['mutator'] !== undefined) {
@@ -1998,9 +1996,8 @@ export class Block implements IASTNodeLocation, IDeletable {
     this.commentModel.text = text;
     // AnyDuringMigration because:  Type 'string | null' is not assignable to
     // type 'string | Comment'.
-    this.comment = text as AnyDuringMigration;
+    this.comment = text as AnyDuringMigration;  // For backwards compatibility.
   }
-  // For backwards compatibility.
 
   /**
    * Set this block's warning text.

@@ -509,8 +509,8 @@ export class FieldColour extends Field {
       }
       const cell = (document.createElement('td'));
       row!.appendChild(cell);
-      cell.setAttribute('data-colour', colours[i]);
       // This becomes the value, if clicked.
+      cell.setAttribute('data-colour', colours[i]);
       cell.title = titles[i] || colours[i];
       cell.id = idGenerator.getNextUniqueId();
       // AnyDuringMigration because:  Argument of type 'number' is not

@@ -311,8 +311,7 @@ export class VerticalFlyout extends Flyout {
     if (this.toolboxPosition_ === toolbox.Position.LEFT) {
       const width = flyoutRect.width;
       return new Rect(-BIG_NUM, BIG_NUM, -BIG_NUM, left + width);
-    } else {
-      // Right
+    } else {  // Right
       return new Rect(-BIG_NUM, BIG_NUM, left, BIG_NUM);
     }
   }

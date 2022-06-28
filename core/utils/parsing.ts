@@ -44,8 +44,7 @@ function tokenizeInterpolationInternal(
   let number = null;
   for (let i = 0; i < chars.length; i++) {
     const c = chars[i];
-    if (state === 0) {
-      // Start escape.
+    if (state === 0) {  // Start escape.
       if (c === '%') {
         const text = buffer.join('');
         if (text) {
@@ -54,96 +53,84 @@ function tokenizeInterpolationInternal(
         buffer.length = 0;
         state = 1;
       } else {
+        buffer.push(c);  // Regular char.
+      }
+    } else if (state === 1) {
+      if (c === '%') {
+        buffer.push(c);  // Escaped %: %%
+        state = 0;
+      } else if (parseInterpolationTokens && '0' <= c && c <= '9') {
+        state = 2;
+        number = c;
+        const text = buffer.join('');
+        if (text) {
+          tokens.push(text);
+        }
+        buffer.length = 0;
+      } else if (c === '{') {
+        state = 3;
+      } else {
+        buffer.push('%', c);  // Not recognized. Return as literal.
+        state = 0;
+      }
+    } else if (state === 2) {
+      if ('0' <= c && c <= '9') {
+        number += c;  // Multi-digit number.
+      } else {
+        tokens.push(parseInt(number ?? '', 10));
+        i--;  // Parse this char again.
+        state = 0;
+      }
+    } else if (state === 3) {  // String table reference
+      if (c === '') {
+        // Premature end before closing '}'
+        buffer.splice(0, 0, '%{');  // Re-insert leading delimiter
+        i--;                        // Parse this char again.
+        state = 0;                  // and parse as string literal.
+      } else if (c !== '}') {
         buffer.push(c);
-      }
-    } else  // Regular char.
-      if (state === 1) {
-        if (c === '%') {
-          buffer.push(c);
-          // Escaped %: %%
-          state = 0;
-        } else if (parseInterpolationTokens && '0' <= c && c <= '9') {
-          state = 2;
-          number = c;
-          const text = buffer.join('');
-          if (text) {
-            tokens.push(text);
-          }
-          buffer.length = 0;
-        } else if (c === '{') {
-          state = 3;
-        } else {
-          buffer.push('%', c);
-          // Not recognized. Return as literal.
-          state = 0;
-        }
-      } else if (state === 2) {
-        // Multi-digit number.
-        if ('0' <= c && c <= '9') {
-          number += c;
-        } else  // Multi-digit number.
-        {
-          tokens.push(parseInt(number ?? '', 10));
-          i--;
-          // Parse this char again.
-          state = 0;
-        }
-      } else if (state === 3) {
-        // String table reference
-        if (c === '') {
-          // Premature end before closing '}'
-          buffer.splice(0, 0, '%{');
-          // Re-insert leading delimiter
-          i--;
-          // Parse this char again.
-          state = 0;
-        } else  // and parse as string literal.
-          if (c !== '}') {
-            buffer.push(c);
-          } else {
-            const rawKey = buffer.join('');
-            if (/[A-Z]\w*/i.test(rawKey)) {  // Strict matching
-              // Found a valid string key. Attempt case insensitive match.
-              const keyUpper = rawKey.toUpperCase();
+      } else {
+        const rawKey = buffer.join('');
+        if (/[A-Z]\w*/i.test(rawKey)) {  // Strict matching
+          // Found a valid string key. Attempt case insensitive match.
+          const keyUpper = rawKey.toUpperCase();
 
-              // BKY_ is the prefix used to namespace the strings used in
-              // Blockly core files and the predefined blocks in ../blocks/.
-              // These strings are defined in ../msgs/ files.
-              const bklyKey =
-                  keyUpper.startsWith('BKY_') ? keyUpper.substring(4) : null;
-              if (bklyKey && bklyKey in Msg) {
-                const rawValue = Msg[bklyKey];
-                if (typeof rawValue === 'string') {
-                  // Attempt to dereference substrings, too, appending to the
-                  // end.
-                  Array.prototype.push.apply(
-                      tokens,
-                      tokenizeInterpolationInternal(
-                          rawValue, parseInterpolationTokens));
-                } else if (parseInterpolationTokens) {
-                  // When parsing interpolation tokens, numbers are special
-                  // placeholders (%1, %2, etc). Make sure all other values are
-                  // strings.
-                  tokens.push(String(rawValue));
-                } else {
-                  tokens.push(rawValue);
-                }
-              } else {
-                // No entry found in the string table. Pass reference as string.
-                tokens.push('%{' + rawKey + '}');
-              }
-              buffer.length = 0;
-              // Clear the array
-              state = 0;
+          // BKY_ is the prefix used to namespace the strings used in
+          // Blockly core files and the predefined blocks in ../blocks/.
+          // These strings are defined in ../msgs/ files.
+          const bklyKey =
+              keyUpper.startsWith('BKY_') ? keyUpper.substring(4) : null;
+          if (bklyKey && bklyKey in Msg) {
+            const rawValue = Msg[bklyKey];
+            if (typeof rawValue === 'string') {
+              // Attempt to dereference substrings, too, appending to the
+              // end.
+              Array.prototype.push.apply(
+                  tokens,
+                  tokenizeInterpolationInternal(
+                      rawValue, parseInterpolationTokens));
+            } else if (parseInterpolationTokens) {
+              // When parsing interpolation tokens, numbers are special
+              // placeholders (%1, %2, etc). Make sure all other values are
+              // strings.
+              tokens.push(String(rawValue));
             } else {
-              tokens.push('%{' + rawKey + '}');
-              buffer.length = 0;
-              state = 0;
+              tokens.push(rawValue);
             }
+          } else {
+            // No entry found in the string table. Pass reference as string.
+            tokens.push('%{' + rawKey + '}');
           }
+          buffer.length = 0;  // Clear the array
+          state = 0;
+        } else {
+          tokens.push('%{' + rawKey + '}');
+          buffer.length = 0;
+          state = 0;  // and parse as string literal.
+        }
       }
+    }
   }
-  // and parse as string literal.
   let text = buffer.join('');
   if (text) {
     tokens.push(text);
@@ -228,11 +215,10 @@ export function checkMessageReferences(message: string): boolean {
       const msgKey = m[i].toUpperCase();
       if (msgTable[msgKey.slice(6, -1)] === undefined) {
         console.warn('No message string for ' + m[i] + ' in ' + message);
-        validSoFar = false;
+        validSoFar = false;  // Continue to report other errors.
       }
     }
   }
-  // Continue to report other errors.
 
   return validSoFar;
 }

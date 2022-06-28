@@ -492,8 +492,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
       return new Rect(top, BIG_NUM, -BIG_NUM, BIG_NUM);
     } else if (this.toolboxPosition === toolbox.Position.LEFT) {
       return new Rect(-BIG_NUM, BIG_NUM, -BIG_NUM, right);
-    } else {
-      // Right
+    } else {  // Right
       return new Rect(-BIG_NUM, BIG_NUM, left, BIG_NUM);
     }
   }
@@ -665,15 +664,13 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
       this.width_ = workspaceMetrics.viewWidth;
       if (this.toolboxPosition === toolbox.Position.TOP) {
         toolboxDiv.style.top = '0';
-      } else {
-        // Bottom
+      } else {  // Bottom
         toolboxDiv.style.bottom = '0';
       }
     } else {
       if (this.toolboxPosition === toolbox.Position.RIGHT) {
         toolboxDiv.style.right = '0';
-      } else {
-        // Left
+      } else {  // Left
         toolboxDiv.style.left = '0';
       }
       toolboxDiv.style.height = '100%';

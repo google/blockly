@@ -224,13 +224,13 @@ export class ConstantProvider {
    * ``setFontConstants_`` to be the height of the text based on the font
    * used.
    */
-  FIELD_TEXT_HEIGHT: number = -1;
+  FIELD_TEXT_HEIGHT: number = -1;  // Dynamically set.
 
   /**
    * Text baseline.  This constant is dynamically set in ``setFontConstants_``
    * to be the baseline of the text based on the font used.
    */
-  FIELD_TEXT_BASELINE: number = -1;
+  FIELD_TEXT_BASELINE: number = -1;  // Dynamically set.
 
   /** A field's border rect corner radius. */
   FIELD_BORDER_RECT_RADIUS = 4;
@@ -462,8 +462,6 @@ export class ConstantProvider {
     this.EMPTY_STATEMENT_INPUT_HEIGHT = this.MIN_BLOCK_HEIGHT;
 
     this.START_POINT = svgPaths.moveBy(0, 0);
-    // Dynamically set.
-    // Dynamically set.
 
     /** A field's text element's dominant baseline. */
     this.FIELD_TEXT_BASELINE_CENTER = !userAgent.IE && !userAgent.EDGE;
@@ -773,8 +771,7 @@ export class ConstantProvider {
       const halfHeight = height / 2;
       const control1Y = halfHeight + overlap;
       const control2Y = halfHeight + 0.5;
-      const control3Y = overlap;
-      // 2.5
+      const control3Y = overlap;  // 2.5
 
       const endPoint1 = svgPaths.point(-width, forward * halfHeight);
       const endPoint2 = svgPaths.point(width, forward * halfHeight);

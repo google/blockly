@@ -309,10 +309,8 @@ export class FieldDropdown extends Field {
     const options = this.getOptions(false);
     this.selectedMenuItem_ = null;
     for (let i = 0; i < options.length; i++) {
-      let content = options[i][0];
-      // Human-readable text or image.
-      const value = options[i][1];
-      // Language-neutral value.
+      let content = options[i][0];  // Human-readable text or image.
+      const value = options[i][1];  // Language-neutral value.
       if (typeof content === 'object') {
         // An image, not text.
         const image = new Image(content['width'], content['height']);
@@ -387,9 +385,8 @@ export class FieldDropdown extends Field {
       }
     }
     if (hasImages || options.length < 2) {
-      return;
+      return;  // Do nothing if too few items or at least one label is an image.
     }
-    // Do nothing if too few items or at least one label is an image.
     const strings = [];
     for (let i = 0; i < options.length; i++) {
       strings.push(options[i][0]);
@@ -697,7 +694,7 @@ interface ImageProperties {
   alt: string;
   width: number;
   height: number;
-}  // eslint-disable-line no-unused-vars
+}
 
 /**
  * The y offset from the top of the field to the top of the image, if an image

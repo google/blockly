@@ -304,11 +304,9 @@ export function createVariableButtonHandler(
             msg = msg.replace('%1', existing.name).replace('%2', existing.type);
           }
           dialog.alert(msg, function() {
-            promptAndCheckWithAlert(  // Recurse
-                text);
+            promptAndCheckWithAlert(text);
           });
-        } else  // Recurse
-        {
+        } else {
           // No conflict
           workspace.createVariable(text, type);
           if (opt_callback) {
@@ -353,11 +351,9 @@ export function renameVariable(
                           .replace('%1', existing.name)
                           .replace('%2', existing.type);
           dialog.alert(msg, function() {
-            promptAndCheckWithAlert(  // Recurse
-                newName);
+            promptAndCheckWithAlert(newName);
           });
-        } else  // Recurse
-        {
+        } else {
           workspace.renameVariableById(variable.getId(), newName);
           if (opt_callback) {
             opt_callback(newName);

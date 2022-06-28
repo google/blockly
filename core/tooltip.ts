@@ -197,9 +197,8 @@ function getTargetObject(obj: object|null): {tooltip: AnyDuringMigration}|null {
  */
 export function createDom() {
   if (containerDiv) {
-    return;
+    return;  // Already created.
   }
-  // Already created.
   // Create an HTML container for popup overlays (e.g. editor widgets).
   containerDiv = document.createElement('div');
   containerDiv.className = 'blocklyTooltipDiv';

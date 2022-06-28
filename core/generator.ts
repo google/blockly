@@ -152,8 +152,8 @@ export class Generator {
     }
     // AnyDuringMigration because:  Type 'string' is not assignable to type
     // 'any[]'.
-    code = code.join('\n') as AnyDuringMigration;
     // Blank line between each section.
+    code = code.join('\n') as AnyDuringMigration;
     // AnyDuringMigration because:  Argument of type 'any[]' is not assignable
     // to parameter of type 'string'. AnyDuringMigration because:  Type 'string'
     // is not assignable to type 'any[]'.
@@ -395,8 +395,7 @@ export class Generator {
    * @return Code snippet with ID.
    */
   injectId(msg: string, block: Block): string {
-    const id = block.id.replace(/\$/g, '$$$$');
-    // Issue 251.
+    const id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
     return msg.replace(/%1/g, '\'' + id + '\'');
   }
 

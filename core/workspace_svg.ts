@@ -1432,8 +1432,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     if (!this.rendered || !state['type'] && !state['tagName']) {
       return null;
     }
-    if (this.currentGesture_) {
-      // Dragging while pasting?  No.
+    if (this.currentGesture_) {  // Dragging while pasting?  No.
       this.currentGesture_.cancel();
     }
 
@@ -1852,9 +1851,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
         // This is needed as for some browser/system combinations which do not
         // set deltaX.
         x = this.scrollX - scrollDelta.y;
-        y = this.scrollY;
+        y = this.scrollY;  // Don't scroll vertically.
       }
-      // Don't scroll vertically.
       this.scroll(x, y);
     }
     e.preventDefault();
@@ -1956,9 +1954,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       if (this.options.languageTree) {
         throw Error('Can\'t nullify an existing toolbox.');
       }
-      return;
+      return;  // No change (null to null).
     }
-    // No change (null to null).
     if (!this.options.languageTree) {
       throw Error('Existing toolbox is null.  Can\'t create new toolbox.');
     }
@@ -2046,9 +2043,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     let scaleChange = Math.pow(speed, amount);
     const newScale = this.scale * scaleChange;
     if (this.scale === newScale) {
-      return;
+      return;  // No change in zoom.
     }
-    // No change in zoom.
 
     // Clamp scale within valid range.
     if (newScale > this.options.zoomOptions.maxScale) {
@@ -2122,9 +2118,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     let blocksWidth = blocksBox.right - blocksBox.left + doubleMargin;
     let blocksHeight = blocksBox.bottom - blocksBox.top + doubleMargin;
     if (!blocksWidth) {
-      return;
+      return;  // Prevents zooming to infinity.
     }
-    // Prevents zooming to infinity.
     if (this.flyout_) {
       // We have to add the flyout size to both the workspace size and the
       // block size because the blocks we want to resize include the blocks in

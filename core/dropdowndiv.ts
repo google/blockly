@@ -123,9 +123,8 @@ export interface PositionMetrics {
  */
 export function createDom() {
   if (div) {
-    return;
+    return;  // Already created.
   }
-  // Already created.
   div = document.createElement('div');
   div.className = 'blocklyDropDownDiv';
   const parentDiv = common.getParentContainer() || document.body;
@@ -442,8 +441,7 @@ function getPositionAboveMetrics(
 
   const arrowY = divSize.height - BORDER_SIZE * 2 - ARROW_SIZE / 2;
   const finalY = secondaryY - divSize.height - PADDING_Y;
-  const initialY = secondaryY - divSize.height;
-  // No padding on Y.
+  const initialY = secondaryY - divSize.height;  // No padding on Y.
 
   return {
     initialX: xCoords.divX,

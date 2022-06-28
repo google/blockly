@@ -42,9 +42,9 @@ export class CommentDelete extends CommentBase {
     this.type = eventUtils.COMMENT_DELETE;
 
     if (!opt_comment) {
-      return;
+      return;  // Blank event to be populated by fromJson.
     }
-    // Blank event to be populated by fromJson.
+
     this.xml = opt_comment.toXmlWithXY();
   }
   // TODO (#1266): "Full" and "minimal" serialization.

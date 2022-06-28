@@ -673,9 +673,8 @@ function getSingleConnection(block: Block, orphanBlock: Block): Connection|
     const connection = input.connection;
     if (connection && typeChecker.canConnect(output, connection, false)) {
       if (foundConnection) {
-        return null;
+        return null;  // More than one connection.
       }
-      // More than one connection.
       foundConnection = connection;
     }
   }

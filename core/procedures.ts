@@ -440,10 +440,9 @@ export function getDefinition(name: string, workspace: Workspace): Block|null {
     if (procedureBlock.getProcedureDef) {
       const tuple = procedureBlock.getProcedureDef();
       if (tuple && Names.equals(tuple[0], name)) {
-        return blocks[i];
+        return blocks[i];  // Can't use procedureBlock var due to type check.
       }
     }
   }
-  // Can't use procedureBlock var due to type check.
   return null;
 }

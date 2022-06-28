@@ -346,13 +346,11 @@ export class ZoomControls implements IPositionable {
     this.workspace.markFocused();
     this.workspace.zoomCenter(amount);
     this.fireZoomEvent_();
-    Touch.clearTouchIdentifier();
-    // Don't block future drags.
-    e.stopPropagation();
-    // Don't start a workspace scroll.
-    e.preventDefault();
+    Touch.clearTouchIdentifier();  // Don't block future drags.
+    e.stopPropagation();           // Don't start a workspace scroll.
+    e.preventDefault();            // Stop double-clicking from selecting text.
   }
-  // Stop double-clicking from selecting text.
+
   /**
    * Create the zoom reset icon and its event handler.
    * @param rnd The random string to use as a suffix in the clip path's ID.
@@ -416,13 +414,11 @@ export class ZoomControls implements IPositionable {
 
     setTimeout(this.workspace.endCanvasTransition.bind(this.workspace), 500);
     this.fireZoomEvent_();
-    Touch.clearTouchIdentifier();
-    // Don't block future drags.
-    e.stopPropagation();
-    // Don't start a workspace scroll.
-    e.preventDefault();
+    Touch.clearTouchIdentifier();  // Don't block future drags.
+    e.stopPropagation();           // Don't start a workspace scroll.
+    e.preventDefault();            // Stop double-clicking from selecting text.
   }
-  // Stop double-clicking from selecting text.
+
   /** Fires a zoom control UI event. */
   private fireZoomEvent_() {
     const uiEvent = new (eventUtils.get(eventUtils.CLICK))!

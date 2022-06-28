@@ -1050,8 +1050,7 @@ export abstract class Field implements IASTNodeLocationSvg,
    *     the empty string.
    */
   setTooltip(newTip: Tooltip.TipInfo|null) {
-    if (!newTip && newTip !== '') {
-      // If null or undefined.
+    if (!newTip && newTip !== '') {  // If null or undefined.
       newTip = this.sourceBlock_;
     }
     const clickTarget = this.getClickTarget_();

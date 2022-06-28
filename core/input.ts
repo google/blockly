@@ -278,9 +278,8 @@ export class Input {
   /** Initialize the fields on this input. */
   init() {
     if (!this.sourceBlock_.workspace.rendered) {
-      return;
+      return;  // Headless blocks don't need fields initialized.
     }
-    // Headless blocks don't need fields initialized.
     for (let i = 0; i < this.fieldRow.length; i++) {
       this.fieldRow[i].init();
     }

@@ -71,9 +71,8 @@ export function testOnly_setDiv(newDiv: HTMLDivElement|null) {
  */
 export function createDom() {
   if (containerDiv) {
-    return;
+    return;  // Already created.
   }
-  // Already created.
 
   containerDiv = document.createElement('div') as HTMLDivElement;
   containerDiv.className = 'blocklyWidgetDiv';

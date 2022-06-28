@@ -548,7 +548,7 @@ export class Bubble implements IBubble {
       const bubbleLeft = bubbleRight - this.width_;
 
       const workspaceRight = viewMetrics.left + viewMetrics.width;
-      const workspaceLeft = viewMetrics.left + 
+      const workspaceLeft = viewMetrics.left +
           // Thickness in workspace units.
           Scrollbar.scrollbarThickness / this.workspace_.scale;
 
@@ -564,8 +564,7 @@ export class Bubble implements IBubble {
       const bubbleRight = bubbleLeft + this.width_;
 
       const workspaceLeft = viewMetrics.left;
-      const workspaceRight = viewMetrics.left +
-          viewMetrics.width - 
+      const workspaceRight = viewMetrics.left + viewMetrics.width -
           // Thickness in workspace units.
           Scrollbar.scrollbarThickness / this.workspace_.scale;
 

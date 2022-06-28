@@ -79,10 +79,16 @@ class TypesContainer {
   INPUT_ROW = 1 << 23;
 
   // Input Row.
-  /** A Left Corner Union Type. */
+  /**
+   * A Left Corner Union Type.
+   * @internal
+   */
   LEFT_CORNER = this.LEFT_SQUARE_CORNER | this.LEFT_ROUND_CORNER;
 
-  /** A Right Corner Union Type. */
+  /**
+   * A Right Corner Union Type.
+   * @internal
+   */
   RIGHT_CORNER = this.RIGHT_SQUARE_CORNER | this.RIGHT_ROUND_CORNER;
 
   /**
@@ -97,6 +103,7 @@ class TypesContainer {
    * Get the enum flag value of an existing type or register a new type.
    * @param type The name of the type.
    * @return The enum flag value associated with that type.
+   * @internal
    */
   getType(type: string): number {
     if (!Object.prototype.hasOwnProperty.call(this, type)) {
@@ -110,6 +117,7 @@ class TypesContainer {
    * Whether a measurable stores information about a field.
    * @param elem The element to check.
    * @return 1 if the object stores information about a field.
+   * @internal
    */
   isField(elem: Measurable): number {
     return elem.type & this.FIELD;
@@ -119,6 +127,7 @@ class TypesContainer {
    * Whether a measurable stores information about a hat.
    * @param elem The element to check.
    * @return 1 if the object stores information about a hat.
+   * @internal
    */
   isHat(elem: Measurable): number {
     return elem.type & this.HAT;
@@ -128,6 +137,7 @@ class TypesContainer {
    * Whether a measurable stores information about an icon.
    * @param elem The element to check.
    * @return 1 if the object stores information about an icon.
+   * @internal
    */
   isIcon(elem: Measurable): number {
     return elem.type & this.ICON;
@@ -137,6 +147,7 @@ class TypesContainer {
    * Whether a measurable stores information about a spacer.
    * @param elem The element to check.
    * @return 1 if the object stores information about a spacer.
+   * @internal
    */
   isSpacer(elem: Measurable|Row): number {
     return elem.type & this.SPACER;
@@ -146,6 +157,7 @@ class TypesContainer {
    * Whether a measurable stores information about an in-row spacer.
    * @param elem The element to check.
    * @return 1 if the object stores information about an in-row spacer.
+   * @internal
    */
   isInRowSpacer(elem: Measurable): number {
     return elem.type & this.IN_ROW_SPACER;
@@ -155,6 +167,7 @@ class TypesContainer {
    * Whether a measurable stores information about an input.
    * @param elem The element to check.
    * @return 1 if the object stores information about an input.
+   * @internal
    */
   isInput(elem: Measurable): number {
     return elem.type & this.INPUT;
@@ -164,6 +177,7 @@ class TypesContainer {
    * Whether a measurable stores information about an external input.
    * @param elem The element to check.
    * @return 1 if the object stores information about an external input.
+   * @internal
    */
   isExternalInput(elem: Measurable): number {
     return elem.type & this.EXTERNAL_VALUE_INPUT;
@@ -173,6 +187,7 @@ class TypesContainer {
    * Whether a measurable stores information about an inline input.
    * @param elem The element to check.
    * @return 1 if the object stores information about an inline input.
+   * @internal
    */
   isInlineInput(elem: Measurable): number {
     return elem.type & this.INLINE_INPUT;
@@ -182,6 +197,7 @@ class TypesContainer {
    * Whether a measurable stores information about a statement input.
    * @param elem The element to check.
    * @return 1 if the object stores information about a statement input.
+   * @internal
    */
   isStatementInput(elem: Measurable): number {
     return elem.type & this.STATEMENT_INPUT;
@@ -191,6 +207,7 @@ class TypesContainer {
    * Whether a measurable stores information about a previous connection.
    * @param elem The element to check.
    * @return 1 if the object stores information about a previous connection.
+   * @internal
    */
   isPreviousConnection(elem: Measurable): number {
     return elem.type & this.PREVIOUS_CONNECTION;
@@ -200,6 +217,7 @@ class TypesContainer {
    * Whether a measurable stores information about a next connection.
    * @param elem The element to check.
    * @return 1 if the object stores information about a next connection.
+   * @internal
    */
   isNextConnection(elem: Measurable): number {
     return elem.type & this.NEXT_CONNECTION;
@@ -211,6 +229,7 @@ class TypesContainer {
    * @param elem The element to check.
    * @return 1 if the object stores information about a previous or next
    *     connection.
+   * @internal
    */
   isPreviousOrNextConnection(elem: Measurable): number {
     return elem.type & (this.PREVIOUS_CONNECTION | this.NEXT_CONNECTION);
@@ -220,6 +239,7 @@ class TypesContainer {
    * Whether a measurable stores information about a left round corner.
    * @param elem The element to check.
    * @return 1 if the object stores information about a left round corner.
+   * @internal
    */
   isLeftRoundedCorner(elem: Measurable): number {
     return elem.type & this.LEFT_ROUND_CORNER;
@@ -229,6 +249,7 @@ class TypesContainer {
    * Whether a measurable stores information about a right round corner.
    * @param elem The element to check.
    * @return 1 if the object stores information about a right round corner.
+   * @internal
    */
   isRightRoundedCorner(elem: Measurable): number {
     return elem.type & this.RIGHT_ROUND_CORNER;
@@ -238,6 +259,7 @@ class TypesContainer {
    * Whether a measurable stores information about a left square corner.
    * @param elem The element to check.
    * @return 1 if the object stores information about a left square corner.
+   * @internal
    */
   isLeftSquareCorner(elem: Measurable): number {
     return elem.type & this.LEFT_SQUARE_CORNER;
@@ -247,6 +269,7 @@ class TypesContainer {
    * Whether a measurable stores information about a right square corner.
    * @param elem The element to check.
    * @return 1 if the object stores information about a right square corner.
+   * @internal
    */
   isRightSquareCorner(elem: Measurable): number {
     return elem.type & this.RIGHT_SQUARE_CORNER;
@@ -256,6 +279,7 @@ class TypesContainer {
    * Whether a measurable stores information about a corner.
    * @param elem The element to check.
    * @return 1 if the object stores information about a corner.
+   * @internal
    */
   isCorner(elem: Measurable): number {
     return elem.type & this.CORNER;
@@ -265,6 +289,7 @@ class TypesContainer {
    * Whether a measurable stores information about a jagged edge.
    * @param elem The element to check.
    * @return 1 if the object stores information about a jagged edge.
+   * @internal
    */
   isJaggedEdge(elem: Measurable): number {
     return elem.type & this.JAGGED_EDGE;
@@ -274,6 +299,7 @@ class TypesContainer {
    * Whether a measurable stores information about a row.
    * @param row The row to check.
    * @return 1 if the object stores information about a row.
+   * @internal
    */
   isRow(row: Row): number {
     return row.type & this.ROW;
@@ -283,6 +309,7 @@ class TypesContainer {
    * Whether a measurable stores information about a between-row spacer.
    * @param row The row to check.
    * @return 1 if the object stores information about a between-row spacer.
+   * @internal
    */
   isBetweenRowSpacer(row: Row): number {
     return row.type & this.BETWEEN_ROW_SPACER;
@@ -292,6 +319,7 @@ class TypesContainer {
    * Whether a measurable stores information about a top row.
    * @param row The row to check.
    * @return 1 if the object stores information about a top row.
+   * @internal
    */
   isTopRow(row: Row): number {
     return row.type & this.TOP_ROW;
@@ -301,6 +329,7 @@ class TypesContainer {
    * Whether a measurable stores information about a bottom row.
    * @param row The row to check.
    * @return 1 if the object stores information about a bottom row.
+   * @internal
    */
   isBottomRow(row: Row): number {
     return row.type & this.BOTTOM_ROW;
@@ -310,6 +339,7 @@ class TypesContainer {
    * Whether a measurable stores information about a top or bottom row.
    * @param row The row to check.
    * @return 1 if the object stores information about a top or bottom row.
+   * @internal
    */
   isTopOrBottomRow(row: Row): number {
     return row.type & (this.TOP_ROW | this.BOTTOM_ROW);
@@ -319,6 +349,7 @@ class TypesContainer {
    * Whether a measurable stores information about an input row.
    * @param row The row to check.
    * @return 1 if the object stores information about an input row.
+   * @internal
    */
   isInputRow(row: Row): number {
     return row.type & this.INPUT_ROW;

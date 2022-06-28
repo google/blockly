@@ -17,29 +17,29 @@ goog.declareModuleId('Blockly.WorkspaceSvg');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './procedures';
+import './procedures.js';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './variables';
+import './variables.js';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './variables_dynamic';
+import './variables_dynamic.js';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './rendered_connection';
+import './rendered_connection.js';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './zoom_controls';
+import './zoom_controls.js';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_block_create';
+import './events/events_block_create.js';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_theme_change';
+import './events/events_theme_change.js';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_viewport';
+import './events/events_viewport.js';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './metrics_manager';
+import './metrics_manager.js';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './msg';
+import './msg.js';
 
 /* eslint-disable-next-line no-unused-vars */
 import {Block} from './block.js';
@@ -272,7 +272,10 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   // 'IToolbox'.
   private toolbox_: IToolbox = null as AnyDuringMigration;
 
-  /** The current gesture in progress on this workspace, if any. */
+  /**
+   * The current gesture in progress on this workspace, if any.
+   * @internal
+   */
   // AnyDuringMigration because:  Type 'null' is not assignable to type
   // 'TouchGesture'.
   currentGesture_: TouchGesture = null as AnyDuringMigration;
@@ -332,6 +335,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * In a flyout, the target workspace where blocks should be placed after a
    * drag. Otherwise null.
+   * @internal
    */
   // AnyDuringMigration because:  Type 'null' is not assignable to type
   // 'WorkspaceSvg'.
@@ -343,7 +347,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /** Inverted screen CTM is dirty, recalculate it. */
   private inverseScreenCTMDirty_ = true;
   private metricsManager_: IMetricsManager;
+  /** @internal */
   getMetrics: () => Metrics;
+  /** @internal */
   setMetrics: (p1: {x: number, y: number}) => void;
   private readonly componentManager_: ComponentManager;
 
@@ -508,6 +514,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Sets the metrics manager for the workspace.
    * @param metricsManager The metrics manager.
+   * @internal
    */
   setMetricsManager(metricsManager: IMetricsManager) {
     this.metricsManager_ = metricsManager;
@@ -527,6 +534,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * Add the cursor SVG to this workspaces SVG group.
    * @param cursorSvg The SVG root of the cursor to be added to the workspace
    *     SVG group.
+   * @internal
    */
   setCursorSvg(cursorSvg: SVGElement) {
     this.markerManager_.setCursorSvg(cursorSvg);
@@ -536,6 +544,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * Add the marker SVG to this workspaces SVG group.
    * @param markerSvg The SVG root of the marker to be added to the workspace
    *     SVG group.
+   * @internal
    */
   setMarkerSvg(markerSvg: SVGElement) {
     this.markerManager_.setMarkerSvg(markerSvg);
@@ -546,6 +555,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @param id The ID of the marker.
    * @return The marker with the given ID or null if no marker with the given ID
    *     exists.
+   * @internal
    */
   getMarker(id: string): Marker|null {
     if (this.markerManager_) {
@@ -576,6 +586,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Get the theme manager for this workspace.
    * @return The theme manager for this workspace.
+   * @internal
    */
   getThemeManager(): ThemeManager {
     return this.themeManager_;
@@ -601,7 +612,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     this.themeManager_.setTheme(theme);
   }
 
-  /** Refresh all blocks on the workspace after a theme update. */
+  /**
+   * Refresh all blocks on the workspace after a theme update.
+   */
   refreshTheme() {
     if (this.svgGroup_) {
       this.renderer_.refreshDom(this.svgGroup_, this.getTheme());
@@ -685,6 +698,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * The origin (0,0) is the top-left corner of the Blockly SVG.
    * @param element SVG element to find the coordinates of.
    * @return Object with .x and .y properties.
+   * @internal
    */
   getSvgXY(element: SVGElement): Coordinate {
     let x = 0;
@@ -712,6 +726,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Gets the size of the workspace's parent SVG element.
    * @return The cached width and height of the workspace's parent SVG element.
+   * @internal
    */
   getCachedParentSvgSize(): Size {
     const size = this.cachedParentSvgSize_;
@@ -724,6 +739,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * The workspace origin is where a block would render at position (0, 0).
    * It is not the upper left corner of the workspace SVG.
    * @return Offset in pixels.
+   * @internal
    */
   getOriginOffsetInPixels(): Coordinate {
     return svgMath.getInjectionDivXY(this.getCanvas());
@@ -735,6 +751,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * Note: We assume this is only called after the workspace has been injected
    * into the DOM.
    * @return The first parent div with 'injectionDiv' in the name.
+   * @internal
    */
   getInjectionDiv(): Element {
     // NB: it would be better to pass this in at createDom, but is more likely
@@ -756,6 +773,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Get the SVG block canvas for the workspace.
    * @return The SVG group for the workspace.
+   * @internal
    */
   getBlockCanvas(): SVGElement|null {
     return this.svgBlockCanvas_;
@@ -953,14 +971,20 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     }
   }
 
-  /** Add a trashcan. */
+  /**
+   * Add a trashcan.
+   * @internal
+   */
   addTrashcan() {
     this.trashcan = new Trashcan(this);
     const svgTrashcan = this.trashcan.createDom();
     this.svgGroup_.insertBefore(svgTrashcan, this.svgBlockCanvas_);
   }
 
-  /** Add zoom controls. */
+  /**
+   * Add zoom controls.
+   * @internal
+   */
   addZoomControls() {
     this.zoomControls_ = new ZoomControls(this);
     const svgZoomControls = this.zoomControls_.createDom();
@@ -971,6 +995,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * Add a flyout element in an element with the given tag name.
    * @param tagName What type of tag the flyout belongs in.
    * @return The element containing the flyout DOM.
+   * @internal
    */
   addFlyout(tagName: string|Svg<SVGSVGElement>|Svg<SVGGElement>): Element {
     const workspaceOptions = new Options(({
@@ -1009,6 +1034,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * configuration.  It will be null if there is no flyout.
    * @param opt_own Whether to only return the workspace's own flyout.
    * @return The flyout on this workspace.
+   * @internal
    */
   getFlyout(opt_own?: boolean): IFlyout|null {
     if (this.flyout_ || opt_own) {
@@ -1023,6 +1049,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Getter for the toolbox associated with this workspace, if one exists.
    * @return The toolbox on this workspace.
+   * @internal
    */
   getToolbox(): IToolbox|null {
     return this.toolbox_;
@@ -1041,6 +1068,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * If enabled, resize the parts of the workspace that change when the
    * workspace contents (e.g. block positions) change.  This will also scroll
    * the workspace contents if needed.
+   * @internal
    */
   resizeContents() {
     if (!this.resizesEnabled_ || !this.rendered) {
@@ -1088,6 +1116,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Resizes and repositions workspace chrome if the page has a new
    * scroll position.
+   * @internal
    */
   updateScreenCalculationsIfScrolled() {
     /* eslint-disable indent */
@@ -1112,6 +1141,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * with getSvgMetrics.
    * @param width The width of the parent SVG element.
    * @param height The height of the parent SVG element
+   * @internal
    */
   setCachedParentSvgSize(width: number|null, height: number|null) {
     const svg = this.getParentSvg();
@@ -1164,6 +1194,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Fires a viewport event if events are enabled and there is a change in
    * viewport values.
+   * @internal
    */
   maybeFireViewportChangeEvent() {
     if (!eventUtils.isEnabled()) {
@@ -1218,6 +1249,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * Called at the end of a workspace drag to take the contents
    * out of the drag surface and put them back into the workspace SVG.
    * Does nothing if the workspace drag surface is not enabled.
+   * @internal
    */
   resetDragSurface() {
     // Don't do anything if we aren't using a drag surface.
@@ -1239,6 +1271,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * Called at the beginning of a workspace drag to move contents of
    * the workspace to the drag surface.
    * Does nothing if the drag surface is not enabled.
+   * @internal
    */
   setupDragSurface() {
     // Don't do anything if we aren't using a drag surface.
@@ -1278,6 +1311,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Gets the drag surface blocks are moved to when a drag is started.
    * @return This workspace's block drag surface, if one is in use.
+   * @internal
    */
   getBlockDragSurface(): BlockDragSurfaceSvg|null {
     return this.blockDragSurface_;
@@ -1524,11 +1558,12 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    */
   private pasteWorkspaceComment_(xmlComment: Element): WorkspaceCommentSvg {
     eventUtils.disable();
-    let comment;
+    let comment: WorkspaceCommentSvg;
     try {
       // AnyDuringMigration because:  Property 'get' does not exist on type
       // '(name: string) => void'.
-      comment = WorkspaceCommentSvg.fromXml(xmlComment, this);
+      comment =
+          WorkspaceCommentSvg.fromXml(xmlComment, this) as AnyDuringMigration;
       // Move the duplicate to original position.
       // AnyDuringMigration because:  Argument of type 'string | null' is not
       // assignable to parameter of type 'string'.
@@ -1561,7 +1596,10 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     return comment;
   }
 
-  /** Refresh the toolbox unless there's a drag in progress. */
+  /**
+   * Refresh the toolbox unless there's a drag in progress.
+   * @internal
+   */
   refreshToolboxSelection() {
     const ws = this.isFlyout ? this.targetWorkspace : this;
     if (ws && !ws.currentGesture_ && ws.toolbox_ && ws.toolbox_.getFlyout()) {
@@ -1886,6 +1924,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Show the context menu for the workspace.
    * @param e Mouse event.
+   * @internal
    */
   showContextMenu(e: Event) {
     if (this.options.readOnly || this.isFlyout) {
@@ -2118,13 +2157,17 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Add a transition class to the block and bubble canvas, to animate any
    * transform changes.
+   * @internal
    */
   beginCanvasTransition() {
     dom.addClass((this.svgBlockCanvas_), 'blocklyCanvasTransitioning');
     dom.addClass((this.svgBubbleCanvas_), 'blocklyCanvasTransitioning');
   }
 
-  /** Remove transition class from the block and bubble canvas. */
+  /**
+   * Remove transition class from the block and bubble canvas.
+   * @internal
+   */
   endCanvasTransition() {
     dom.removeClass((this.svgBlockCanvas_), 'blocklyCanvasTransitioning');
     dom.removeClass((this.svgBubbleCanvas_), 'blocklyCanvasTransitioning');
@@ -2271,6 +2314,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * the meaning of these values.
    * @param x Target X to scroll to.
    * @param y Target Y to scroll to.
+   * @internal
    */
   scroll(x: number, y: number) {
     this.hideChaff(/* opt_onlyClosePopups= */
@@ -2506,6 +2550,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @param e Mouse event or touch event.
    * @return The gesture that is tracking this touch stream, or null if no valid
    *     gesture exists.
+   * @internal
    */
   getGesture(e: Event): TouchGesture|null {
     const isStart = e.type === 'mousedown' || e.type === 'touchstart' ||
@@ -2533,14 +2578,20 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     return null;
   }
 
-  /** Clear the reference to the current gesture. */
+  /**
+   * Clear the reference to the current gesture.
+   * @internal
+   */
   clearGesture() {
     // AnyDuringMigration because:  Type 'null' is not assignable to type
     // 'TouchGesture'.
     this.currentGesture_ = null as AnyDuringMigration;
   }
 
-  /** Cancel the current gesture, if one exists. */
+  /**
+   * Cancel the current gesture, if one exists.
+   * @internal
+   */
   cancelCurrentGesture() {
     if (this.currentGesture_) {
       this.currentGesture_.cancel();
@@ -2558,6 +2609,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Get the grid object for this workspace, or null if there is none.
    * @return The grid object for this workspace.
+   * @internal
    */
   getGrid(): Grid|null {
     return this.grid_;
@@ -2612,6 +2664,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
  * scrollbars accordingly.
  * @param workspace The workspace to resize.
  * @alias Blockly.WorkspaceSvg.resizeSvgContents
+ * @internal
  */
 export function resizeSvgContents(workspace: WorkspaceSvg) {
   workspace.resizeContents();

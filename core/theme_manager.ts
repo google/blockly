@@ -40,6 +40,7 @@ export class ThemeManager {
   /**
    * @param workspace The main workspace.
    * @param theme The workspace theme.
+   * @internal
    */
   constructor(private readonly workspace: WorkspaceSvg, private theme: Theme) {
     /** A map of subscribed UI components, keyed by component name. */
@@ -49,6 +50,7 @@ export class ThemeManager {
   /**
    * Get the workspace theme.
    * @return The workspace theme.
+   * @internal
    */
   getTheme(): Theme {
     return this.theme;
@@ -57,6 +59,7 @@ export class ThemeManager {
   /**
    * Set the workspace theme, and refresh the workspace and all components.
    * @param theme The workspace theme.
+   * @internal
    */
   setTheme(theme: Theme) {
     const prevTheme = this.theme;
@@ -97,6 +100,7 @@ export class ThemeManager {
    * Subscribe a workspace to changes to the selected theme.  If a new theme is
    * set, the workspace is called to refresh its blocks.
    * @param workspace The workspace to subscribe.
+   * @internal
    */
   subscribeWorkspace(workspace: Workspace) {
     this.subscribedWorkspaces_.push(workspace);
@@ -105,6 +109,7 @@ export class ThemeManager {
   /**
    * Unsubscribe a workspace to changes to the selected theme.
    * @param workspace The workspace to unsubscribe.
+   * @internal
    */
   unsubscribeWorkspace(workspace: Workspace) {
     if (!arrayUtils.removeElem(this.subscribedWorkspaces_, workspace)) {
@@ -120,6 +125,7 @@ export class ThemeManager {
    * @param componentName The name used to identify the component. This must be
    *     the same name used to configure the style in the Theme object.
    * @param propertyName The inline style property name to update.
+   * @internal
    */
   subscribe(element: Element, componentName: string, propertyName: string) {
     if (!this.componentDB_[componentName]) {
@@ -139,6 +145,7 @@ export class ThemeManager {
   /**
    * Unsubscribe an element to changes to the selected theme.
    * @param element The element to unsubscribe.
+   * @internal
    */
   unsubscribe(element: Element) {
     if (!element) {
@@ -163,6 +170,7 @@ export class ThemeManager {
   /**
    * Dispose of this theme manager.
    * @suppress {checkTypes}
+   * @internal
    */
   dispose() {
     this.owner_ = null;

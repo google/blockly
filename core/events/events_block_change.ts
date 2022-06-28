@@ -118,7 +118,7 @@ export class BlockChange extends BlockBase {
     const value = forward ? this.newValue : this.oldValue;
     switch (this.element) {
       case 'field': {
-        const field = block.getField(this.name);
+        const field = block.getField(this.name!);
         if (field) {
           field.setValue(value);
         } else {
@@ -161,6 +161,7 @@ export class BlockChange extends BlockBase {
    * depending on the block's definition).
    * @param block The block to get the extra state of.
    * @return A stringified version of the extra state of the given block.
+   * @internal
    */
   static getExtraBlockState_(block: BlockSvg): string {
     if (block.saveExtraState) {

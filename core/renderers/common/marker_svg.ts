@@ -16,7 +16,7 @@ import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.MarkerSvg');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../../events/events_marker_move';
+import '../../events/events_marker_move.js';
 
 /* eslint-disable-next-line no-unused-vars */
 import {BlockSvg} from '../../block_svg.js';
@@ -126,6 +126,7 @@ export class MarkerSvg {
   /**
    * Create the DOM element for the marker.
    * @return The marker controls SVG group.
+   * @internal
    */
   createDom(): SVGElement {
     const className = this.isCursor() ? CURSOR_CLASS : MARKER_CLASS;

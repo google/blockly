@@ -16,7 +16,7 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Names');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './procedures';
+import './procedures.js';
 
 import {Msg} from './msg.js';
 import * as Procedures from './procedures.js';
@@ -133,9 +133,10 @@ export class Names {
   populateProcedures(workspace: Workspace) {
     let procedures = Procedures.allProcedures(workspace);
     // Flatten the return vs no-return procedure lists.
-    procedures = procedures[0].concat(procedures[1]);
-    for (let i = 0; i < procedures.length; i++) {
-      this.getName(procedures[i][0], NameType.PROCEDURE);
+    let flattenedProcedures: AnyDuringMigration[][] =
+        procedures[0].concat(procedures[1]);
+    for (let i = 0; i < flattenedProcedures.length; i++) {
+      this.getName(flattenedProcedures[i][0], NameType.PROCEDURE);
     }
   }
 

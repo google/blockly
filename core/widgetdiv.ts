@@ -191,6 +191,7 @@ function positionInternal(x: number, y: number, height: number) {
  * @param rtl Whether the workspace is in RTL mode.  This determines horizontal
  *     alignment.
  * @alias Blockly.WidgetDiv.positionWithAnchor
+ * @internal
  */
 export function positionWithAnchor(
     viewportBBox: Rect, anchorBBox: Rect, widgetSize: Size, rtl: boolean) {

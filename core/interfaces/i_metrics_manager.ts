@@ -17,13 +17,13 @@ goog.declareModuleId('Blockly.IMetricsManager');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../metrics_manager';
+import '../metrics_manager.js';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../utils/metrics';
+import '../utils/metrics.js';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../utils/size';
+import '../utils/size.js';
 
 
 /**
@@ -34,6 +34,7 @@ export interface IMetricsManager {
   /**
    * Returns whether the scroll area has fixed edges.
    * @return Whether the scroll area has fixed edges.
+   * @internal
    */
   hasFixedEdges: AnyDuringMigration;
 

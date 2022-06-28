@@ -58,6 +58,7 @@ import {Renderer} from './renderer.js';
  * @return Whether the debugger is turned on.
  * @alias Blockly.blockRendering.isDebuggerEnabled
  * @deprecated
+ * @internal
  */
 export function isDebuggerEnabled(): boolean {
   deprecation.warn(
@@ -90,6 +91,7 @@ export function unregister(name: string) {
  * Turn on the blocks debugger.
  * @alias Blockly.blockRendering.startDebugger
  * @deprecated
+ * @internal
  */
 export function startDebugger() {
   deprecation.warn(
@@ -103,6 +105,7 @@ export function startDebugger() {
  * Turn off the blocks debugger.
  * @alias Blockly.blockRendering.stopDebugger
  * @deprecated
+ * @internal
  */
 export function stopDebugger() {
   deprecation.warn(
@@ -120,6 +123,7 @@ export function stopDebugger() {
  * @return The new instance of a renderer.
  *     Already initialized.
  * @alias Blockly.blockRendering.init
+ * @internal
  */
 export function init(
     name: string, theme: Theme, opt_rendererOverrides?: object): Renderer {

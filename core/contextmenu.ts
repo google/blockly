@@ -124,11 +124,15 @@ function populate_(
     menu.addChild(menuItem);
     menuItem.setEnabled(option.enabled);
     if (option.enabled) {
-      const actionHandler = function(this: ContextMenuOption) {
+      const actionHandler = function() {
         hide();
-        this.callback(this.scope);
+        // If .scope does not exist on the option, then the callback will not
+        // be expecting a scope parameter, so there should be no problems. Just
+        // assume it is a ContextMenuOption and we'll pass undefined if it's
+        // not.
+        option.callback((option as ContextMenuOption).scope);
       };
-      menuItem.onAction(actionHandler, option);
+      menuItem.onAction(actionHandler, {});
     }
   }
   return menu;
@@ -260,6 +264,7 @@ export function callbackFactory(block: Block, xml: Element): Function {
  * @return A menu option,
  *     containing text, enabled, and a callback.
  * @alias Blockly.ContextMenu.commentDeleteOption
+ * @internal
  */
 export function commentDeleteOption(comment: WorkspaceCommentSvg):
     LegacyContextMenuOption {
@@ -282,6 +287,7 @@ export function commentDeleteOption(comment: WorkspaceCommentSvg):
  * @return A menu option,
  *     containing text, enabled, and a callback.
  * @alias Blockly.ContextMenu.commentDuplicateOption
+ * @internal
  */
 export function commentDuplicateOption(comment: WorkspaceCommentSvg):
     LegacyContextMenuOption {
@@ -304,6 +310,7 @@ export function commentDuplicateOption(comment: WorkspaceCommentSvg):
  * @suppress {strictModuleDepCheck,checkTypes} Suppress checks while workspace
  *     comments are not bundled in.
  * @alias Blockly.ContextMenu.workspaceCommentOption
+ * @internal
  */
 export function workspaceCommentOption(
     ws: WorkspaceSvg, e: Event): ContextMenuOption {

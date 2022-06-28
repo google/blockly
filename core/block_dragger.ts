@@ -16,7 +16,7 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.BlockDragger');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_block_drag';
+import './events/events_block_drag.js';
 
 import * as blockAnimation from './block_animations.js';
 /* eslint-disable-next-line no-unused-vars */
@@ -80,7 +80,10 @@ export class BlockDragger implements IBlockDragger {
     this.dragIconData_ = initIconData(block);
   }
 
-  /** Sever all links from this object. */
+  /**
+   * Sever all links from this object.
+   * @internal
+   */
   dispose() {
     this.dragIconData_.length = 0;
 

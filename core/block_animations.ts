@@ -30,7 +30,7 @@ interface CloneRect {
 }  // eslint-disable-line no-unused-vars
 
 /** PID of disconnect UI animation.  There can only be one at a time. */
-let disconnectPid = 0;
+let disconnectPid: AnyDuringMigration = 0;
 
 /** SVG group of wobbling block.  There can only be one at a time. */
 // AnyDuringMigration because:  Type 'null' is not assignable to type 'Element'.
@@ -40,6 +40,7 @@ let disconnectGroup: Element = null as AnyDuringMigration;
  * Play some UI effects (sound, animation) when disposing of a block.
  * @param block The block being disposed of.
  * @alias Blockly.blockAnimations.disposeUiEffect
+ * @internal
  */
 export function disposeUiEffect(block: BlockSvg) {
   const workspace = block.workspace;
@@ -97,6 +98,7 @@ function disposeUiStep(
  * Play some UI effects (sound, ripple) after a connection has been established.
  * @param block The block being connected.
  * @alias Blockly.blockAnimations.connectionUiEffect
+ * @internal
  */
 export function connectionUiEffect(block: BlockSvg) {
   const workspace = block.workspace;
@@ -154,6 +156,7 @@ function connectionUiStep(ripple: SVGElement, start: Date, scale: number) {
  * Play some UI effects (sound, animation) when disconnecting a block.
  * @param block The block being disconnected.
  * @alias Blockly.blockAnimations.disconnectUiEffect
+ * @internal
  */
 export function disconnectUiEffect(block: BlockSvg) {
   block.workspace.getAudioManager().play('disconnect');
@@ -206,6 +209,7 @@ function disconnectUiStep(group: SVGElement, magnitude: number, start: Date) {
 /**
  * Stop the disconnect UI animation immediately.
  * @alias Blockly.blockAnimations.disconnectUiStop
+ * @internal
  */
 export function disconnectUiStop() {
   if (disconnectGroup) {

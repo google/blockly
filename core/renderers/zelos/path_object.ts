@@ -17,7 +17,7 @@ goog.declareModuleId('Blockly.zelos.PathObject');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../../theme';
+import '../../theme.js';
 
 import {BlockSvg} from '../../block_svg.js';
 import {Connection} from '../../connection.js';
@@ -57,15 +57,20 @@ export class PathObject extends BasePathObject {
    */
   outputShapeType = null;
 
+  /** @internal */
+  public override constants: ConstantProvider;
+
   /**
    * @param root The root SVG element.
    * @param style The style object to use for colouring.
    * @param constants The renderer's constants.
+   * @internal
    */
   constructor(
-      root: SVGElement, style: BlockStyle,
-      public override constants: ConstantProvider) {
+      root: SVGElement, style: BlockStyle, constants: ConstantProvider) {
     super(root, style, constants);
+
+    this.constants = constants;
 
     /** The outline paths on the block. */
     this.outlines_ = Object.create(null);
@@ -142,7 +147,10 @@ export class PathObject extends BasePathObject {
     }
   }
 
-  /** Method that's called when the drawer is about to draw the block. */
+  /**
+   * Method that's called when the drawer is about to draw the block.
+   * @internal
+   */
   beginDrawing() {
     this.remainingOutlines_ = Object.create(null);
     for (const key in this.outlines_) {
@@ -152,7 +160,10 @@ export class PathObject extends BasePathObject {
     }
   }
 
-  /** Method that's called when the drawer is done drawing. */
+  /**
+   * Method that's called when the drawer is done drawing.
+   * @internal
+   */
   endDrawing() {
     // Go through all remaining outlines that were not used this draw pass, and
     // remove them.
@@ -171,6 +182,7 @@ export class PathObject extends BasePathObject {
    * respective outline path SVG element.
    * @param name The input name.
    * @param pathString The path.
+   * @internal
    */
   setOutlinePath(name: string, pathString: string) {
     const outline = this.getOutlinePath_(name);

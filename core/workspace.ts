@@ -16,7 +16,7 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Workspace');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './connection_checker';
+import './connection_checker.js';
 
 /* eslint-disable-next-line no-unused-vars */
 import {Block} from './block.js';
@@ -75,12 +75,16 @@ export class Workspace implements IASTNodeLocation {
   /** Is this workspace the surface for a flyout? */
   isFlyout = false;
 
-  /** Is this workspace the surface for a mutator? */
+  /**
+   * Is this workspace the surface for a mutator?
+   * @internal
+   */
   isMutator = false;
 
   /**
    * Returns `true` if the workspace is currently in the process of a bulk
    * clear.
+   * @internal
    */
   isClearing = false;
 
@@ -280,6 +284,7 @@ export class Workspace implements IASTNodeLocation {
   /**
    * Adds a comment to the list of top comments.
    * @param comment comment to add.
+   * @internal
    */
   addTopComment(comment: WorkspaceComment) {
     this.topComments_.push(comment);
@@ -297,6 +302,7 @@ export class Workspace implements IASTNodeLocation {
   /**
    * Removes a comment from the list of top comments.
    * @param comment comment to remove.
+   * @internal
    */
   removeTopComment(comment: WorkspaceComment) {
     if (!arrayUtils.removeElem(this.topComments_, comment)) {
@@ -314,6 +320,7 @@ export class Workspace implements IASTNodeLocation {
    * sorted by position; top to bottom (with slight LTR or RTL bias).
    * @param ordered Sort the list if true.
    * @return The top-level comment objects.
+   * @internal
    */
   getTopComments(ordered: boolean): WorkspaceComment[] {
     // Copy the topComments_ list.
@@ -472,6 +479,7 @@ export class Workspace implements IASTNodeLocation {
   /**
    * Return all variable types.
    * @return List of variable types.
+   * @internal
    */
   getVariableTypes(): string[] {
     return this.variableMap_.getVariableTypes(this);
@@ -584,6 +592,7 @@ export class Workspace implements IASTNodeLocation {
   /**
    * Gets the undo stack for workplace.
    * @return undo stack
+   * @internal
    */
   getUndoStack(): Abstract[] {
     return this.undoStack_;
@@ -592,6 +601,7 @@ export class Workspace implements IASTNodeLocation {
   /**
    * Gets the redo stack for workplace.
    * @return redo stack
+   * @internal
    */
   getRedoStack(): Abstract[] {
     return this.redoStack_;
@@ -693,6 +703,7 @@ export class Workspace implements IASTNodeLocation {
    * Set a block on this workspace with the specified ID.
    * @param id ID of block to set.
    * @param block The block to set.
+   * @internal
    */
   setBlockById(id: string, block: Block) {
     this.blockDB_[id] = block;
@@ -701,6 +712,7 @@ export class Workspace implements IASTNodeLocation {
   /**
    * Delete a block off this workspace with the specified ID.
    * @param id ID of block to delete.
+   * @internal
    */
   removeBlockById(id: string) {
     delete this.blockDB_[id];
@@ -710,6 +722,7 @@ export class Workspace implements IASTNodeLocation {
    * Find the comment on this workspace with the specified ID.
    * @param id ID of comment to find.
    * @return The sought after comment, or null if not found.
+   * @internal
    */
   getCommentById(id: string): WorkspaceComment|null {
     return this.commentDB_[id] || null;
@@ -737,12 +750,16 @@ export class Workspace implements IASTNodeLocation {
    * Return the variable map that contains "potential" variables.
    * These exist in the flyout but not in the workspace.
    * @return The potential variable map.
+   * @internal
    */
   getPotentialVariableMap(): VariableMap|null {
     return this.potentialVariableMap_;
   }
 
-  /** Create and store the potential variable map for this workspace. */
+  /**
+   * Create and store the potential variable map for this workspace.
+   * @internal
+   */
   createPotentialVariableMap() {
     this.potentialVariableMap_ = new VariableMap(this);
   }
@@ -758,6 +775,7 @@ export class Workspace implements IASTNodeLocation {
   /**
    * Set the map of all variables on the workspace.
    * @param variableMap The variable map.
+   * @internal
    */
   setVariableMap(variableMap: VariableMap) {
     this.variableMap_ = variableMap;

@@ -22,7 +22,7 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Extensions');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './mutator';
+import './mutator.js';
 
 /* eslint-disable-next-line no-unused-vars */
 import {Block} from './block.js';
@@ -345,6 +345,7 @@ function mutatorPropertiesMatch(
  * Calls a function after the page has loaded, possibly immediately.
  * @param fn Function to run.
  * @throws Error Will throw if no global document can be found (e.g., Node.js).
+ * @internal
  */
 export function runAfterPageLoad(fn: () => AnyDuringMigration) {
   if (typeof document !== 'object') {

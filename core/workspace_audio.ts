@@ -48,7 +48,10 @@ export class WorkspaceAudio {
     this.SOUNDS_ = Object.create(null);
   }
 
-  /** Dispose of this audio manager. */
+  /**
+   * Dispose of this audio manager.
+   * @internal
+   */
   dispose() {
     // AnyDuringMigration because:  Type 'null' is not assignable to type
     // 'WorkspaceSvg'.
@@ -85,12 +88,15 @@ export class WorkspaceAudio {
         break;
       }
     }
-    if (sound && sound.play) {
+    if (sound) {
       this.SOUNDS_[name] = sound;
     }
   }
 
-  /** Preload all the audio files so that they play quickly when asked for. */
+  /**
+   * Preload all the audio files so that they play quickly when asked for.
+   * @internal
+   */
   preload() {
     for (const name in this.SOUNDS_) {
       const sound = this.SOUNDS_[name];

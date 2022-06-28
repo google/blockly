@@ -16,9 +16,9 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.BubbleDragger');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './bubble';
+import './bubble.js';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './constants';
+import './constants.js';
 
 /* eslint-disable-next-line no-unused-vars */
 import {BlockDragSurfaceSvg} from './block_drag_surface.js';
@@ -80,6 +80,7 @@ export class BubbleDragger {
   /**
    * Sever all links from this object.
    * @suppress {checkTypes}
+   * @internal
    */
   dispose() {
     // AnyDuringMigration because:  Type 'null' is not assignable to type
@@ -95,6 +96,7 @@ export class BubbleDragger {
 
   /**
    * Start dragging a bubble.  This includes moving it to the drag surface.
+   * @internal
    */
   startBubbleDrag() {
     if (!eventUtils.getGroup()) {
@@ -116,6 +118,7 @@ export class BubbleDragger {
    * @param e The most recent move event.
    * @param currentDragDeltaXY How far the pointer has moved from the position
    *     at the start of the drag, in pixel units.
+   * @internal
    */
   dragBubble(e: Event, currentDragDeltaXY: Coordinate) {
     const delta = this.pixelsToWorkspaceUnits_(currentDragDeltaXY);
@@ -170,6 +173,7 @@ export class BubbleDragger {
    * @param e The mouseup/touchend event.
    * @param currentDragDeltaXY How far the pointer has moved from the position
    *     at the start of the drag, in pixel units.
+   * @internal
    */
   endBubbleDrag(e: Event, currentDragDeltaXY: Coordinate) {
     // Make sure internal state is fresh.

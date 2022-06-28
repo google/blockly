@@ -40,6 +40,7 @@ export class Icon extends Measurable {
    * rendering
    * @param constants The rendering constants provider.
    * @param icon The icon to measure and store information for.
+   * @internal
    */
   constructor(constants: ConstantProvider, public icon: BlocklyIcon) {
     super(constants);

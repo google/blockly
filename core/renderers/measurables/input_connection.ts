@@ -44,6 +44,7 @@ export class InputConnection extends Connection {
   /**
    * @param constants The rendering constants provider.
    * @param input The input to measure and store information for.
+   * @internal
    */
   constructor(constants: ConstantProvider, public input: Input) {
     super(constants, input.connection as RenderedConnection);

@@ -56,6 +56,7 @@ export class Drawer {
    * @param block The block to render.
    * @param info An object containing all information needed to render this
    *     block.
+   * @internal
    */
   constructor(block: BlockSvg, info: RenderInfo) {
     this.block_ = block;
@@ -74,6 +75,7 @@ export class Drawer {
    * joined with spaces and set directly on the block.  This guarantees that
    * the steps are separated by spaces for improved readability, but isn't
    * required.
+   * @internal
    */
   draw() {
     this.hideHiddenIcons_();

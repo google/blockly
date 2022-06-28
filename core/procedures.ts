@@ -16,7 +16,7 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Procedures');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_block_change';
+import './events/events_block_change.js';
 
 /* eslint-disable-next-line no-unused-vars */
 import {Block} from './block.js';
@@ -327,6 +327,7 @@ function updateMutatorFlyout(workspace: WorkspaceSvg) {
  * update and adds a mutator change listener to the mutator workspace.
  * @param e The event that triggered this listener.
  * @alias Blockly.Procedures.mutatorOpenListener
+ * @internal
  */
 export function mutatorOpenListener(e: Abstract) {
   if (e.type !== eventUtils.BUBBLE_OPEN) {

@@ -576,6 +576,7 @@ function registerBlockOptions_() {
  * Registers all default context menu items. This should be called once per
  * instance of ContextMenuRegistry.
  * @alias Blockly.ContextMenuItems.registerDefaultOptions
+ * @internal
  */
 export function registerDefaultOptions() {
   registerWorkspaceOptions_();

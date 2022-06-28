@@ -16,7 +16,7 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Connection');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './constants';
+import './constants.js';
 
 /* eslint-disable-next-line no-unused-vars */
 import {Block} from './block.js';
@@ -53,7 +53,10 @@ export class Connection implements IASTNodeLocationWithBlock {
   /** Connection this connection connects to.  Null if not connected. */
   targetConnection: Connection|null = null;
 
-  /** Has this connection been disposed of? */
+  /**
+   * Has this connection been disposed of?
+   * @internal
+   */
   disposed = false;
 
   /** List of compatible value types.  Null if all types are compatible. */
@@ -65,10 +68,16 @@ export class Connection implements IASTNodeLocationWithBlock {
   // 'Element'.
   private shadowDom_: Element = null as AnyDuringMigration;
 
-  /** Horizontal location of this connection. */
+  /**
+   * Horizontal location of this connection.
+   * @internal
+   */
   x = 0;
 
-  /** Vertical location of this connection. */
+  /**
+   * Vertical location of this connection.
+   * @internal
+   */
   y = 0;
 
   private shadowState_: blocks.State|null = null;
@@ -137,7 +146,10 @@ export class Connection implements IASTNodeLocationWithBlock {
     }
   }
 
-  /** Dispose of this connection and deal with connected blocks. */
+  /**
+   * Dispose of this connection and deal with connected blocks.
+   * @internal
+   */
   dispose() {
     // isConnected returns true for shadows and non-shadows.
     if (this.isConnected()) {
@@ -183,6 +195,7 @@ export class Connection implements IASTNodeLocationWithBlock {
   /**
    * Get the workspace's connection type checker object.
    * @return The connection type checker for the source block's workspace.
+   * @internal
    */
   getConnectionChecker(): IConnectionChecker {
     return this.source.workspace.connectionChecker;
@@ -193,6 +206,7 @@ export class Connection implements IASTNodeLocationWithBlock {
    * headless workspaces).
    * @param _otherConnection Connection that this connection failed to connect
    *     to.
+   * @internal
    */
   onFailedConnect(_otherConnection: Connection) {}
   // NOP
@@ -411,6 +425,7 @@ export class Connection implements IASTNodeLocationWithBlock {
    * computed from the rendered positioning.
    * @param _maxLimit The maximum radius to another connection.
    * @return List of connections.
+   * @internal
    */
   neighbours(_maxLimit: number): Connection[] {
     return [];
@@ -420,6 +435,7 @@ export class Connection implements IASTNodeLocationWithBlock {
    * Get the parent input of a connection.
    * @return The input that the connection belongs to or null if no parent
    *     exists.
+   * @internal
    */
   getParentInput(): Input|null {
     let parentInput = null;

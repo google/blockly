@@ -33,7 +33,10 @@ export class RightConnectionShape extends Measurable {
   override height = 0;
   override width = 0;
 
-  /** @param constants The rendering constants provider. */
+  /**
+   * @param constants The rendering constants provider.
+   * @internal
+   */
   constructor(constants: ConstantProvider) {
     super(constants);
     // AnyDuringMigration because:  Property 'getType' does not exist on type

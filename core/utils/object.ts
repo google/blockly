@@ -15,7 +15,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.object');
 
-import * as deprecation from './utils/deprecation.js';
+import * as deprecation from './deprecation.js';
 
 
 /**

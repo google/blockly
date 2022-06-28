@@ -20,7 +20,7 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.ConnectionDB');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './constants';
+import './constants.js';
 
 import {ConnectionType} from './connection_type.js';
 /* eslint-disable-next-line no-unused-vars */
@@ -51,6 +51,7 @@ export class ConnectionDB {
    * Add a connection to the database. Should not already exist in the database.
    * @param connection The connection to be added.
    * @param yPos The y position used to decide where to insert the connection.
+   * @internal
    */
   addConnection(connection: RenderedConnection, yPos: number) {
     const index = this.calculateIndexForYPos_(yPos);

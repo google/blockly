@@ -38,6 +38,7 @@ export class ConstantProvider extends BaseConstantProvider {
   MAX_BOTTOM_WIDTH = 30;
   override STATEMENT_BOTTOM_SPACER: AnyDuringMigration;
 
+  /** @internal */
   constructor() {
     super();
 

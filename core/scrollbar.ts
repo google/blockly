@@ -48,6 +48,7 @@ export class Scrollbar {
   /**
    * Default margin around the scrollbar (between the scrollbar and the edge of
    * the viewport in pixels).
+   * @internal
    */
   static readonly DEFAULT_SCROLLBAR_MARGIN = 0.5;
   private readonly pair_: boolean;
@@ -58,6 +59,7 @@ export class Scrollbar {
 
   /**
    * The ratio of handle position offset to workspace content displacement.
+   * @internal
    */
   ratio = 1;
   private origin_: Coordinate;
@@ -142,6 +144,7 @@ export class Scrollbar {
      * The upper left corner of the scrollbar's SVG group in CSS pixels relative
      * to the scrollbar's origin.  This is usually relative to the injection div
      * origin.
+     * @internal
      */
     this.position = new Coordinate(0, 0);
 
@@ -286,6 +289,7 @@ export class Scrollbar {
    * workspace.
    * @param x The new x coordinate.
    * @param y The new y coordinate.
+   * @internal
    */
   setPosition(x: number, y: number) {
     this.position.x = x;
@@ -792,6 +796,7 @@ export class Scrollbar {
   /**
    * Helper to calculate the ratio of handle position to scrollbar view size.
    * @return Ratio.
+   * @internal
    */
   getRatio_(): number {
     const scrollHandleRange = this.scrollbarLength_ - this.handleLength_;

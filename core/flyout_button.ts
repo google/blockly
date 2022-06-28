@@ -63,7 +63,8 @@ export class FlyoutButton {
    * @param workspace The workspace in which to place this button.
    * @param targetWorkspace The flyout's target workspace.
    * @param json The JSON specifying the label/button.
-   * @param isLabel Whether this button should be styled as a label.
+   * @param isLabel_ Whether this button should be styled as a label.
+   * @internal
    */
   constructor(
       private readonly workspace: WorkspaceSvg,
@@ -208,6 +209,7 @@ export class FlyoutButton {
   /**
    * Location of the button.
    * @return x, y coordinates.
+   * @internal
    */
   getPosition(): Coordinate {
     return this.position_;

@@ -89,19 +89,24 @@ export class HighlightConstantProvider {
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   START_HAT!: StartHat;
 
-  /** @param constants The rendering constants provider. */
+  /**
+   * @param constants The rendering constants provider.
+   * @internal
+   */
   constructor(constants: ConstantProvider) {
     /** The renderer's constant provider. */
     this.constantProvider = constants;
 
     /**
      * The start point, which is offset in both X and Y, as an SVG path chunk.
+     * @internal
      */
     this.START_POINT = svgPaths.moveBy(this.OFFSET, this.OFFSET);
   }
 
   /**
    * Initialize shape objects based on the constants set in the constructor.
+   * @internal
    */
   init() {
     /**
@@ -143,6 +148,7 @@ export class HighlightConstantProvider {
   /**
    * @return An object containing sizing and path information about inside
    *     corner highlights.
+   * @internal
    */
   makeInsideCorner(): InsideCorner {
     const radius = this.constantProvider.CORNER_RADIUS;
@@ -186,6 +192,7 @@ export class HighlightConstantProvider {
   /**
    * @return An object containing sizing and path information about outside
    *     corner highlights.
+   * @internal
    */
   makeOutsideCorner(): OutsideCorner {
     const radius = this.constantProvider.CORNER_RADIUS;
@@ -234,6 +241,7 @@ export class HighlightConstantProvider {
   /**
    * @return An object containing sizing and path information about puzzle tab
    *     highlights.
+   * @internal
    */
   makePuzzleTab(): PuzzleTab {
     const width = this.constantProvider.TAB_WIDTH;
@@ -283,6 +291,7 @@ export class HighlightConstantProvider {
   /**
    * @return An object containing sizing and path information about notch
    *     highlights.
+   * @internal
    */
   makeNotch(): Notch {
     // This is only for the previous connection.
@@ -294,6 +303,7 @@ export class HighlightConstantProvider {
   /**
    * @return An object containing sizing and path information about collapsed
    *     block edge highlights.
+   * @internal
    */
   makeJaggedTeeth(): JaggedTeeth {
     const pathLeft = svgPaths.lineTo(5.1, 2.6) + svgPaths.moveBy(-10.2, 6.8) +
@@ -304,6 +314,7 @@ export class HighlightConstantProvider {
   /**
    * @return An object containing sizing and path information about start
    *     highlights.
+   * @internal
    */
   makeStartHat(): StartHat {
     const hatHeight = this.constantProvider.START_HAT.height;

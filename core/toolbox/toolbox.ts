@@ -17,9 +17,9 @@ goog.declareModuleId('Blockly.Toolbox');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../shortcut_registry';
+import '../shortcut_registry.js';
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../events/events_toolbox_item_select';
+import '../events/events_toolbox_item_select.js';
 
 import {BlockSvg} from '../block_svg.js';
 /* eslint-disable-next-line no-unused-vars */
@@ -352,6 +352,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
   /**
    * Fills the toolbox with new toolbox items and removes any old contents.
    * @param toolboxDef Object holding information for creating a toolbox.
+   * @internal
    */
   render(toolboxDef: toolbox.ToolboxInfo) {
     this.toolboxDef_ = toolboxDef;
@@ -447,6 +448,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
   /**
    * Adds a style on the toolbox. Usually used to change the cursor.
    * @param style The name of the class to add.
+   * @internal
    */
   addStyle(style: string) {
     dom.addClass(this.HtmlDiv as Element, style);
@@ -455,6 +457,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
   /**
    * Removes a style from the toolbox. Usually used to change the cursor.
    * @param style The name of the class to remove.
+   * @internal
    */
   removeStyle(style: string) {
     dom.removeClass(this.HtmlDiv as Element, style);
@@ -680,7 +683,10 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
     this.flyout_!.position();
   }
 
-  /** Handles resizing the toolbox when a toolbox item resizes. */
+  /**
+   * Handles resizing the toolbox when a toolbox item resizes.
+   * @internal
+   */
   handleToolboxItemResize() {
     // Reposition the workspace so that (0,0) is in the correct position
     // relative to the new absolute edge (ie toolbox edge).
@@ -706,6 +712,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Updates the category colours and background colour of selected categories.
+   * @internal
    */
   refreshTheme() {
     for (let i = 0; i < this.contents_.length; i++) {

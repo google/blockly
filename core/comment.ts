@@ -17,16 +17,16 @@ goog.declareModuleId('Blockly.Comment');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './block';
+import './block.js';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './workspace_svg';
+import './workspace_svg.js';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_block_change';
+import './events/events_block_change.js';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_bubble_open';
+import './events/events_bubble_open.js';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './warning';
+import './warning.js';
 
 import {CommentModel} from './block.js';
 /* eslint-disable-next-line no-unused-vars */
@@ -365,7 +365,10 @@ export class Comment extends Icon {
     }
   }
 
-  /** Update the comment's view to match the model. */
+  /**
+   * Update the comment's view to match the model.
+   * @internal
+   */
   updateText() {
     if (this.textarea_) {
       // AnyDuringMigration because:  Type 'string | null' is not assignable to

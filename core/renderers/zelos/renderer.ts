@@ -17,7 +17,7 @@ goog.declareModuleId('Blockly.zelos.Renderer');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../../theme';
+import '../../theme.js';
 
 /* eslint-disable-next-line no-unused-vars */
 import {BlockSvg} from '../../block_svg.js';
@@ -49,7 +49,10 @@ import {PathObject} from './path_object.js';
 export class Renderer extends BaseRenderer {
   protected override constants_!: ConstantProvider;
 
-  /** @param name The renderer name. */
+  /**
+   * @param name The renderer name.
+   * @internal
+   */
   constructor(name: string) {
     super(name);
   }
@@ -88,6 +91,7 @@ export class Renderer extends BaseRenderer {
    * @param workspace The workspace the cursor belongs to.
    * @param marker The marker.
    * @return The object in charge of drawing the marker.
+   * @internal
    */
   override makeMarkerDrawer(workspace: WorkspaceSvg, marker: Marker):
       MarkerSvg {
@@ -99,6 +103,7 @@ export class Renderer extends BaseRenderer {
    * @param root The root SVG element.
    * @param style The style object to use for colouring.
    * @return The renderer path object.
+   * @internal
    */
   override makePathObject(root: SVGElement, style: BlockStyle): PathObject {
     return new PathObject(

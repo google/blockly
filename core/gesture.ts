@@ -18,9 +18,9 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Gesture');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './block_dragger';
+import './block_dragger.js';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_click';
+import './events/events_click.js';
 
 import * as blockAnimations from './block_animations.js';
 /* eslint-disable-next-line no-unused-vars */
@@ -192,7 +192,10 @@ export class Gesture {
     this.healStack_ = !internalConstants.DRAG_STACK;
   }
 
-  /** Sever all links from this object. */
+  /**
+   * Sever all links from this object.
+   * @internal
+   */
   dispose() {
     Touch.clearTouchIdentifier();
     Tooltip.unblock();
@@ -415,6 +418,7 @@ export class Gesture {
    * Start a gesture: update the workspace to indicate that a gesture is in
    * progress and bind mousemove and mouseup handlers.
    * @param e A mouse down or touch start event.
+   * @internal
    */
   doStart(e: Event) {
     if (browserEvents.isTargetInput(e)) {
@@ -474,6 +478,7 @@ export class Gesture {
   /**
    * Bind gesture events.
    * @param e A mouse down or touch start event.
+   * @internal
    */
   bindMouseEvents(e: Event) {
     this.onMoveWrapper_ = browserEvents.conditionalBind(
@@ -488,6 +493,7 @@ export class Gesture {
   /**
    * Handle a mouse move or touch move event.
    * @param e A mouse move or touch move event.
+   * @internal
    */
   handleMove(e: Event) {
     this.updateFromEvent_(e);
@@ -505,6 +511,7 @@ export class Gesture {
   /**
    * Handle a mouse up or touch end event.
    * @param e A mouse up or touch end event.
+   * @internal
    */
   handleUp(e: Event) {
     this.updateFromEvent_(e);
@@ -546,6 +553,7 @@ export class Gesture {
   /**
    * Cancel an in-progress gesture.  If a workspace or block drag is in
    * progress, end the drag at the most recent location.
+   * @internal
    */
   cancel() {
     // Disposing of a block cancels in-progress drags, but dragging to a delete
@@ -568,6 +576,7 @@ export class Gesture {
   /**
    * Handle a real or faked right-click event by showing a context menu.
    * @param e A mouse move or touch move event.
+   * @internal
    */
   handleRightClick(e: Event) {
     if (this.targetBlock_) {
@@ -592,6 +601,7 @@ export class Gesture {
    * Handle a mousedown/touchstart event on a workspace.
    * @param e A mouse down or touch start event.
    * @param ws The workspace the event hit.
+   * @internal
    */
   handleWsStart(e: Event, ws: WorkspaceSvg) {
     if (this.hasStarted_) {
@@ -617,6 +627,7 @@ export class Gesture {
    * Handle a mousedown/touchstart event on a flyout.
    * @param e A mouse down or touch start event.
    * @param flyout The flyout the event hit.
+   * @internal
    */
   handleFlyoutStart(e: Event, flyout: IFlyout) {
     if (this.hasStarted_) {
@@ -632,6 +643,7 @@ export class Gesture {
    * Handle a mousedown/touchstart event on a block.
    * @param e A mouse down or touch start event.
    * @param block The block the event hit.
+   * @internal
    */
   handleBlockStart(e: Event, block: BlockSvg) {
     if (this.hasStarted_) {
@@ -647,6 +659,7 @@ export class Gesture {
    * Handle a mousedown/touchstart event on a bubble.
    * @param e A mouse down or touch start event.
    * @param bubble The bubble the event hit.
+   * @internal
    */
   handleBubbleStart(e: Event, bubble: IBubble) {
     if (this.hasStarted_) {
@@ -732,6 +745,7 @@ export class Gesture {
   /**
    * Record the field that a gesture started on.
    * @param field The field the gesture started on.
+   * @internal
    */
   setStartField(field: Field) {
     if (this.hasStarted_) {
@@ -747,6 +761,7 @@ export class Gesture {
   /**
    * Record the bubble that a gesture started on
    * @param bubble The bubble the gesture started on.
+   * @internal
    */
   setStartBubble(bubble: IBubble) {
     if (!this.startBubble_) {
@@ -758,6 +773,7 @@ export class Gesture {
    * Record the block that a gesture started on, and set the target block
    * appropriately.
    * @param block The block the gesture started on.
+   * @internal
    */
   setStartBlock(block: BlockSvg) {
     // If the gesture already went through a bubble, don't set the start block.
@@ -866,6 +882,7 @@ export class Gesture {
    * This function is called externally to block actions that cannot be taken
    * mid-drag (e.g. using the keyboard to delete the selected blocks).
    * @return True if this gesture is a drag of a workspace or block.
+   * @internal
    */
   isDragging(): boolean {
     return this.isDraggingWorkspace_ || this.isDraggingBlock_ ||
@@ -877,6 +894,7 @@ export class Gesture {
    * has a corresponding mouse up, but in reality it is possible to lose a
    * mouse up, leaving an in-process gesture hanging.
    * @return Whether this gesture was a click on a workspace.
+   * @internal
    */
   hasStarted(): boolean {
     return this.hasStarted_;
@@ -886,6 +904,7 @@ export class Gesture {
    * Get a list of the insertion markers that currently exist.  Block drags have
    * 0, 1, or 2 insertion markers.
    * @return A possibly empty list of insertion marker blocks.
+   * @internal
    */
   getInsertionMarkers(): BlockSvg[] {
     if (this.blockDragger_) {

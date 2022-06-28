@@ -56,8 +56,8 @@ export function getRelativeXY(element: Element): Coordinate {
   // Checking for the existence of x/y properties is faster than getAttribute.
   // However, x/y contains an SVGAnimatedLength object, so rely on getAttribute
   // to get the number.
-  const x = element.x && element.getAttribute('x');
-  const y = element.y && element.getAttribute('y');
+  const x = (element as any).x && element.getAttribute('x');
+  const y = (element as any).y && element.getAttribute('y');
   if (x) {
     xy.x = parseInt(x, 10);
   }
@@ -178,6 +178,7 @@ export function is3dSupported(): boolean {
  * @return An object containing window width, height, and scroll position in
  *     window coordinates.
  * @alias Blockly.utils.svgMath.getViewportBBox
+ * @internal
  */
 export function getViewportBBox(): Rect {
   // Pixels, in window coordinates.

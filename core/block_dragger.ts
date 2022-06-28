@@ -66,7 +66,6 @@ export class BlockDragger implements IBlockDragger {
    * @param workspace The workspace to drag on.
    */
   constructor(block: BlockSvg, workspace: WorkspaceSvg) {
-
     this.draggingBlock_ = block;
 
     /** Object that keeps track of connections on dragged blocks. */
@@ -222,8 +221,8 @@ export class BlockDragger implements IBlockDragger {
 
     blockAnimation.disconnectUiStop();
 
-    const preventMove =
-        !!this.dragTarget_ && this.dragTarget_.shouldPreventMove(this.draggingBlock_);
+    const preventMove = !!this.dragTarget_ &&
+        this.dragTarget_.shouldPreventMove(this.draggingBlock_);
     let newLoc: Coordinate;
     let delta: Coordinate|null = null;
     if (preventMove) {
@@ -328,7 +327,7 @@ export class BlockDragger implements IBlockDragger {
 
     if (toolbox) {
       const style = this.draggingBlock_.isDeletable() ? 'blocklyToolboxDelete' :
-                                               'blocklyToolboxGrab';
+                                                        'blocklyToolboxGrab';
 
       // AnyDuringMigration because:  Property 'removeStyle' does not exist on
       // type 'IToolbox'.
@@ -351,8 +350,8 @@ export class BlockDragger implements IBlockDragger {
 
   /** Fire a move event at the end of a block drag. */
   protected fireMoveEvent_() {
-    const event =
-        new (eventUtils.get(eventUtils.BLOCK_MOVE))!(this.draggingBlock_) as BlockMove;
+    const event = new (eventUtils.get(eventUtils.BLOCK_MOVE))!
+        (this.draggingBlock_) as BlockMove;
     event.oldCoordinate = this.startXY_;
     event.recordNew();
     eventUtils.fire(event);

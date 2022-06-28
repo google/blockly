@@ -90,8 +90,8 @@ export class MarkerSvg {
    * @param marker The marker to draw.
    */
   constructor(
-      private readonly workspace: WorkspaceSvg,
-      constants: ConstantProvider, private readonly marker: Marker) {
+      private readonly workspace: WorkspaceSvg, constants: ConstantProvider,
+      private readonly marker: Marker) {
     this.constants_ = constants;
 
     const defaultColour = this.isCursor() ? this.constants_.CURSOR_COLOUR :

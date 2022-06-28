@@ -181,10 +181,9 @@ export class Gesture {
    *     reference to it.
    */
   constructor(
-      private e: Event,
-      private readonly creatorWorkspace: WorkspaceSvg) {
+      private e: Event, private readonly creatorWorkspace: WorkspaceSvg) {
     this.mostRecentEvent_ = e;
-    
+
     /**
      * How far the mouse has moved during this drag, in pixel units.
      * (0, 0) is at this.mouseDownXY_.
@@ -417,7 +416,8 @@ export class Gesture {
     this.bubbleDragger_ =
         new BubbleDragger((this.startBubble_), (this.startWorkspace_));
     this.bubbleDragger_.startBubbleDrag();
-    this.bubbleDragger_.dragBubble(this.mostRecentEvent_, this.currentDragDeltaXY_);
+    this.bubbleDragger_.dragBubble(
+        this.mostRecentEvent_, this.currentDragDeltaXY_);
   }
 
   /**
@@ -508,7 +508,8 @@ export class Gesture {
     } else if (this.isDraggingBlock_) {
       this.blockDragger_!.drag(this.mostRecentEvent_, this.currentDragDeltaXY_);
     } else if (this.isDraggingBubble_) {
-      this.bubbleDragger_.dragBubble(this.mostRecentEvent_, this.currentDragDeltaXY_);
+      this.bubbleDragger_.dragBubble(
+          this.mostRecentEvent_, this.currentDragDeltaXY_);
     }
     e.preventDefault();
     e.stopPropagation();
@@ -570,9 +571,11 @@ export class Gesture {
     }
     Touch.longStop();
     if (this.isDraggingBubble_) {
-      this.bubbleDragger_.endBubbleDrag(this.mostRecentEvent_, this.currentDragDeltaXY_);
+      this.bubbleDragger_.endBubbleDrag(
+          this.mostRecentEvent_, this.currentDragDeltaXY_);
     } else if (this.isDraggingBlock_) {
-      this.blockDragger_!.endDrag(this.mostRecentEvent_, this.currentDragDeltaXY_);
+      this.blockDragger_!.endDrag(
+          this.mostRecentEvent_, this.currentDragDeltaXY_);
     } else if (this.isDraggingWorkspace_) {
       this.workspaceDragger_.endDrag(this.currentDragDeltaXY_);
     }

@@ -48,8 +48,7 @@ export class ToolboxItem implements IToolboxItem {
    *     have a parent.
    */
   constructor(
-      toolboxItemDef: toolbox.ToolboxItemInfo,
-      parentToolbox: IToolbox,
+      toolboxItemDef: toolbox.ToolboxItemInfo, parentToolbox: IToolbox,
       opt_parent?: ICollapsibleToolboxItem) {
     /** The id for the category. */
     this.id_ = (toolboxItemDef as AnyDuringMigration)['toolboxitemid'] ||

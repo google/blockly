@@ -324,13 +324,20 @@ function buildDeps(done) {
   ];
 
   const args = roots.map(root => `--root '${root}' `).join('');
-  execSync(`closure-make-deps ${args} > '${DEPS_FILE}'`,
-           {stdio: 'inherit'});
+  execSync(
+      `set -o pipefail; \
+       (closure-make-deps ${args} >'${DEPS_FILE}') 2>&1 \
+       | (grep -v '^WARNING in' ; true)`,
+      {stdio: 'inherit'});
 
   // Use grep to filter out the entries that are already in deps.js.
   const testArgs = testRoots.map(root => `--root '${root}' `).join('');
-  execSync(`closure-make-deps ${testArgs} | grep 'tests/mocha' ` +
-      `> '${TEST_DEPS_FILE}'`, {stdio: 'inherit'});
+  execSync(
+      `set -o pipefail; \
+       (closure-make-deps ${testArgs} | grep 'tests/mocha' \
+            > '${TEST_DEPS_FILE}') 2>&1 \
+       | (grep -v '^WARNING in' ; true)`,
+      {stdio: 'inherit'});
   done();
 };
 

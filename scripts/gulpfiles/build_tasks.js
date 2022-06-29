@@ -91,7 +91,11 @@ const NAMESPACE_PROPERTY = '__namespace__';
  *   of module that is the chunk's entrypoint / top level module.
  *   Will guess based on .reexport if not supplied.
  * - .reexport: if running in a browser, save the chunk's exports
- *   object at this location in the global namespace.
+ *   object (or a single export of it; see reexportOnly, below) at
+ *   this location in the global namespace.
+ * - .reexportOnly: if reexporting and this property is set,
+ *   save only the correspondingly-named export.  Otherwise
+ *   save the whole export object.
  *
  * The function getChunkOptions will, after running
  * closure-calculate-chunks, update each chunk to add the following
@@ -408,6 +412,21 @@ function chunkWrapper(chunk) {
   const exportsExpression =
       chunk.exports || `${NAMESPACE_VARIABLE}.${chunk.reexport}`;
 
+  // Code to assign the result of the factory function to the desired
+  // export location when running in a browser.  When
+  // chunk.reexportOnly is set, this additionally does two other
+  // things:
+  // - It ensures that only the desired property of the exports object
+  //   is assigned to the specified reexport location.
+  // - It ensures that the namesspace object is accessible via the
+  //   selected sub-object, so that any dependent modules can obtain
+  //   it.
+  const browserExportStatements = chunk.reexportOnly ?
+      `root.${chunk.reexport} = factoryExports.${chunk.reexportOnly};\n` +
+      `    root.${chunk.reexport}.${NAMESPACE_PROPERTY} = ` +
+      `factoryExports.${NAMESPACE_PROPERTY};` :
+      `root.${chunk.reexport} = factoryExports;`;
+
   // Note that when loading in a browser the base of the exported path
   // (e.g. Blockly.blocks.all - see issue #5932) might not exist
   // before factory has been executed, so calling factory() and
@@ -423,7 +442,7 @@ function chunkWrapper(chunk) {
     module.exports = factory(${cjsDepsExpr});
   } else { // Browser
     var factoryExports = factory(${browserDepsExpr});
-    root.${chunk.reexport} = factoryExports;
+    ${browserExportStatements}
   }
 }(this, function(${factoryArgs}) {
 var ${NAMESPACE_VARIABLE}=${namespaceExpr};

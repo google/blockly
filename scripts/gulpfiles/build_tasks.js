@@ -311,7 +311,7 @@ function buildDeps(done) {
   execSync(`closure-make-deps ${testArgs} | grep 'tests/mocha' ` +
       `> '${TEST_DEPS_FILE}'`, {stdio: 'inherit'});
   done();
-};
+}
 
 /**
  * This task regenrates msg/json/en.js and msg/json/qqq.js from
@@ -341,7 +341,7 @@ this removal!
 `);
 
   done();
-};
+}
 
 /**
  * This task builds Blockly's lang files.
@@ -367,7 +367,7 @@ function buildLangfiles(done) {
   execSync(createMessagesCmd, {stdio: 'inherit'});
 
   done();
-};
+}
 
 /**
  * A helper method to return an closure compiler chunk wrapper that
@@ -434,7 +434,7 @@ ${exportsExpression}.${NAMESPACE_PROPERTY}=${NAMESPACE_VARIABLE};
 return ${exportsExpression};
 }));
 `;
-};
+}
 
 /**
  * Get chunking options to pass to Closure Compiler by using
@@ -566,7 +566,10 @@ function compile(options) {
     // declared by base_minimal.js, while if you compile against
     // base.js instead you will discover that it uses @deprecated
     // inherits, forwardDeclare etc.
-    hide_warnings_for: ['node_modules', 'build/src/closure/goog/goog.js'],
+    hide_warnings_for: [
+      'node_modules',
+      path.join(TSC_OUTPUT_DIR, 'closure', 'goog', 'goog.js'),
+    ],
     define: ['COMPILED=true'],
   };
   if (argv.debug || argv.strict) {
@@ -611,7 +614,7 @@ function buildCompiled() {
       .pipe(
           gulp.sourcemaps.write('.', {includeContent: false, sourceRoot: './'}))
       .pipe(gulp.dest(BUILD_DIR));
-};
+}
 
 /**
  * This task builds Blockly core, blocks and generators together and uses
@@ -671,7 +674,7 @@ function checkinBuilt() {
     `${BUILD_DIR}/*_compressed.js.map`,
     `${BUILD_DIR}/msg/js/*.js`,
   ], {base: BUILD_DIR}).pipe(gulp.dest('.'));
-};
+}
 
 /**
  * This task cleans the build directory (by deleting it).
@@ -694,7 +697,7 @@ function format() {
   ], {base: '.'})
       .pipe(clangFormatter.format('file', clangFormat))
       .pipe(gulp.dest('.'));
-};
+}
 
 module.exports = {
   build: build,

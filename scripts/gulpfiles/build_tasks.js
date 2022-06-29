@@ -230,7 +230,7 @@ var JSCOMP_ERROR = [
   'undefinedVars',
   'underscore',
   'unknownDefines',
-  'unusedLocalVariables',
+  // 'unusedLocalVariables',  // Disabled; see note in JSCOMP_OFF.
   'unusedPrivateMembers',
   'uselessCode',
   'untranspilableFeatures',
@@ -269,6 +269,7 @@ var JSCOMP_OFF = [
    */
   'checkTypes',
   'nonStandardJsDocs',  // Due to @internal
+  'unusedLocalVariables',  // Due to code generated for merged namespaces.
 
   /* In order to transition to ES modules, modules will need to import
    * one another by relative paths. This means that the previous

@@ -287,8 +287,8 @@
     "./generators/javascript/loops.js",
     "./generators/javascript/logic.js",
     "./generators/javascript/lists.js",
-    "./generators/javascript.js",
     "./generators/javascript/colour.js",
+    "./generators/javascript.js",
     "./generators/javascript/all.js",
     "./generators/python/variables_dynamic.js",
     "./generators/python/variables.js",
@@ -331,8 +331,8 @@
     "./generators/dart/loops.js",
     "./generators/dart/logic.js",
     "./generators/dart/lists.js",
-    "./generators/dart.js",
     "./generators/dart/colour.js",
+    "./generators/dart.js",
     "./generators/dart/all.js"
   ]
 }

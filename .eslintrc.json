@@ -78,7 +78,6 @@
         "browser": true
     },
     "globals": {
-        "Blockly": true,
         "goog": true,
         "exports": true
     },

@@ -123,6 +123,7 @@ const chunks = [
     name: 'javascript',
     entry: 'generators/javascript/all.js',
     reexport: 'Blockly.JavaScript',
+    reexportOnly: 'javascriptGenerator',
   },
   {
     name: 'python',
@@ -143,6 +144,7 @@ const chunks = [
     name: 'dart',
     entry: 'generators/dart/all.js',
     reexport: 'Blockly.Dart',
+    reexportOnly: 'dartGenerator',
   }
 ];
 

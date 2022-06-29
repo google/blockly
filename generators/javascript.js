@@ -320,4 +320,4 @@ JavaScript.getAdjusted = function(
   return at;
 };
 
-exports = JavaScript;
+exports.javascriptGenerator = JavaScript;

@@ -23,5 +23,15 @@ for (const require of window.bootstrapInfo.requires) {
   // previously existed in each chunk entrypoint.
   if (require === 'Blockly.libraryBlocks') {
     window.libraryBlocks = goog.module.get(require);
+    continue;
+  }
+  const exportName = {
+    'Blockly.Dart': 'dartGenerator',
+    'Blockly.Dart.all': 'dartGenerator',
+    'Blockly.JavaScript': 'javascriptGenerator',
+    'Blockly.JavaScript.all': 'javascriptGenerator',
+  }[require];
+  if (exportName) {
+    window[exportName] = goog.module.get(require)[exportName];
   }
 }

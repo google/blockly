@@ -6,8 +6,8 @@
 
 goog.module('Blockly.test.generator');
 
-goog.require('Blockly.Dart');
-goog.require('Blockly.JavaScript');
+const {dartGenerator} = goog.require('Blockly.Dart');
+const {javaScriptGenerator} = goog.require('Blockly.JavaScript');
 goog.require('Blockly.Lua');
 goog.require('Blockly.PHP');
 goog.require('Blockly.Python');
@@ -83,8 +83,8 @@ suite('Generator', function() {
     });
 
     const testCase = [
-      [Blockly.Dart, 'Dart'],
-      [Blockly.JavaScript, 'JavaScript'],
+      [dartGenerator, 'Dart'],
+      [javascriptGenerator, 'JavaScript'],
       [Blockly.Lua, 'Lua'],
       [Blockly.PHP, 'PHP'],
       [Blockly.Python, 'Python']];

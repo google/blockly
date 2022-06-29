@@ -1,0 +1,7 @@
+{
+    "globals": {
+        "Blockly": true,
+        "dartGenerator": true,
+        "javascriptGenerator": true
+    }
+}

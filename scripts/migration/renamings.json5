@@ -1341,6 +1341,16 @@
     {
       'oldName': 'Blockly.utils.global',
       'newPath': 'globalThis',
-    }
+    },
+    {
+      oldName: 'Blockly.Dart',
+      newExport: 'dartGenerator',
+      newPath: 'Blockly.Dart',
+    },
+    {
+      oldName: 'Blockly.JavaScript',
+      newExport: 'javascriptGenerator',
+      newPath: 'Blockly.JavaScript',
+    },
   ],
 }

@@ -13,6 +13,7 @@
 
 goog.module('Blockly.JavaScript.all');
 
+const moduleExports = goog.require('Blockly.JavaScript');
 goog.require('Blockly.JavaScript.colour');
 goog.require('Blockly.JavaScript.lists');
 goog.require('Blockly.JavaScript.logic');
@@ -23,3 +24,4 @@ goog.require('Blockly.JavaScript.texts');
 goog.require('Blockly.JavaScript.variables');
 goog.require('Blockly.JavaScript.variablesDynamic');
 
+exports = moduleExports;

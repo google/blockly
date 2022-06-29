@@ -170,7 +170,7 @@ function toXml() {
 
 function toJavaScript() {
   var code = '\'use strict\';\n\n'
-  code += Blockly.JavaScript.workspaceToCode(demoWorkspace);
+  code += javascriptGenerator.workspaceToCode(demoWorkspace);
   setOutput(code);
   outputCode = code;
 }
@@ -194,7 +194,7 @@ function toLua() {
 }
 
 function toDart() {
-  var code = Blockly.Dart.workspaceToCode(demoWorkspace);
+  var code = dartGenerator.workspaceToCode(demoWorkspace);
   setOutput(code);
   outputCode = code;
 }

@@ -88,7 +88,7 @@ export class ConstantProvider extends BaseConstantProvider {
 
   override START_HAT_WIDTH = 96;
 
-  override SHAPES = Shapes;
+  override SHAPES = {HEXAGONAL: 1, ROUND: 2, SQUARE: 3, PUZZLE: 4, NOTCH: 5};
   SHAPE_IN_SHAPE_PADDING: AnyDuringMigration;
 
   override FULL_BLOCK_FIELDS = true;
@@ -856,16 +856,3 @@ export class ConstantProvider extends BaseConstantProvider {
   }
 }
 /* eslint-enable indent */
-
-enum Shapes {
-  HEXAGONAL = 1,
-  ROUND = 2,
-  SQUARE = 3,
-  PUZZLE = 4,
-  NOTCH = 5
-}
-// No need to use namespace merging to apply Shapes to the ConstantProvider
-// class, because it was originally (and still) provided as an instance
-// property.
-// No need to export Shapes from this module at this time, because all code
-// (internal and external) accesses it as constantProviderInstance.SHAPES.

@@ -399,8 +399,7 @@ export class ConstantProvider {
    */
   INSERTION_MARKER_OPACITY = 0.2;
 
-  /** Enum for connection shapes. */
-  SHAPES = Shapes;
+  SHAPES: {[key: string]: number} = {PUZZLE: 1, NOTCH: 2};
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   JAGGED_TEETH!: JaggedTeeth;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
@@ -1124,13 +1123,3 @@ export class ConstantProvider {
 }
 /* clang-format on */
 /* eslint-enable indent */
-
-enum Shapes {
-  PUZZLE = 1,
-  NOTCH = 2,
-}
-// No need to use namespace merging to apply Shapes to the ConstantProvider
-// class, because it was originally (and still) provided as an instance
-// property.
-// No need to export Shapes from this module at this time, because all code
-// (internal and external) accesses it as constantProviderInstance.SHAPES.

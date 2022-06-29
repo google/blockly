@@ -333,7 +333,7 @@ export namespace ShortcutRegistry {
     preconditionFn?: ((p1: Workspace) => boolean);
     metadata?: object;
     keyCodes?: (number|string)[];
-    allowCollsion?: boolean;
+    allowCollision?: boolean;
   }
 }
 

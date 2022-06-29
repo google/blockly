@@ -32,8 +32,7 @@ import {Workspace} from './workspace.js';
  * @alias Blockly.Names
  */
 export class Names {
-  static NameType: AnyDuringMigration;
-  static DEVELOPER_VARIABLE_TYPE: AnyDuringMigration;
+  static DEVELOPER_VARIABLE_TYPE: NameType;
   private readonly variablePrefix_: string;
   private readonly reservedDict_: AnyDuringMigration;
   private db_: {[key: string]: {[key: string]: string}};
@@ -250,26 +249,27 @@ export class Names {
   }
 }
 
-/**
- * Enum for the type of a name. Different name types may have different rules
- * about collisions.
- * When JavaScript (or most other languages) is generated, variable 'foo' and
- * procedure 'foo' would collide.  However, Blockly has no such problems since
- * variable get 'foo' and procedure call 'foo' are unambiguous.
- * Therefore, Blockly keeps a separate name type to disambiguate.
- * getName('foo', 'VARIABLE') -> 'foo'
- * getName('foo', 'PROCEDURE') -> 'foo2'
- * @alias Blockly.Names.NameType
- */
-export enum NameType {
-  DEVELOPER_VARIABLE = 'DEVELOPER_VARIABLE',
-  VARIABLE = 'VARIABLE',
-  PROCEDURE = 'PROCEDURE'
+export namespace Names {
+  /**
+   * Enum for the type of a name. Different name types may have different rules
+   * about collisions.
+   * When JavaScript (or most other languages) is generated, variable 'foo' and
+   * procedure 'foo' would collide.  However, Blockly has no such problems since
+   * variable get 'foo' and procedure call 'foo' are unambiguous.
+   * Therefore, Blockly keeps a separate name type to disambiguate.
+   * getName('foo', 'VARIABLE') -> 'foo'
+   * getName('foo', 'PROCEDURE') -> 'foo2'
+   * @alias Blockly.Names.NameType
+   */
+  export enum NameType {
+    DEVELOPER_VARIABLE = 'DEVELOPER_VARIABLE',
+    VARIABLE = 'VARIABLE',
+    PROCEDURE = 'PROCEDURE',
+  }
 }
 
-// We have to export NameType here so that it is accessible under the old name
-// `Blockly.Names.NameType`
-Names.NameType = NameType;
+export type NameType = Names.NameType;
+export const NameType = Names.NameType;
 
 /**
  * Constant to separate developer variable names from user-defined variable

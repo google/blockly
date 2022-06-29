@@ -47,30 +47,11 @@ interface PathLeftShape {
 /** Maximum randomness in workspace units for bumping a block. */
 const BUMP_RANDOMNESS = 10;
 
-enum TrackedState {
-  WILL_TRACK = -1,
-  UNTRACKED = 0,
-  TRACKED = 1,
-}
-
 /**
  * Class for a connection between blocks that may be rendered on screen.
  * @alias Blockly.RenderedConnection
  */
 export class RenderedConnection extends Connection {
-  /**
-   * Enum for different kinds of tracked states.
-   *
-   * WILL_TRACK means that this connection will add itself to
-   * the db on the next moveTo call it receives.
-   *
-   * UNTRACKED means that this connection will not add
-   * itself to the database until setTracking(true) is explicitly called.
-   *
-   * TRACKED means that this connection is currently being tracked.
-   */
-  static TrackedState = TrackedState;
-
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   sourceBlock_!: BlockSvg;
   private readonly db_: ConnectionDB;
@@ -566,3 +547,25 @@ export class RenderedConnection extends Connection {
     }
   }
 }
+
+export namespace RenderedConnection {
+  /**
+   * Enum for different kinds of tracked states.
+   *
+   * WILL_TRACK means that this connection will add itself to
+   * the db on the next moveTo call it receives.
+   *
+   * UNTRACKED means that this connection will not add
+   * itself to the database until setTracking(true) is explicitly called.
+   *
+   * TRACKED means that this connection is currently being tracked.
+   */
+  export enum TrackedState {
+    WILL_TRACK = -1,
+    UNTRACKED = 0,
+    TRACKED = 1,
+  }
+}
+
+export type TrackedState = RenderedConnection.TrackedState;
+export const TrackedState = RenderedConnection.TrackedState;

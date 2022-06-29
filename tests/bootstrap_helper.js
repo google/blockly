@@ -17,4 +17,11 @@
 /* eslint-disable-next-line no-undef */
 for (const require of window.bootstrapInfo.requires) {
   goog.require(require);
+
+  // If require is a top-level chunk, create a global variable for it.
+  // This replaces the goog.module.declareLegacyNamespace calls that
+  // previously existed in each chunk entrypoint.
+  if (require === 'Blockly.libraryBlocks') {
+    window.libraryBlocks = goog.module.get(require);
+  }
 }

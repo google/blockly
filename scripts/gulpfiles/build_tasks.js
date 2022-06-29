@@ -87,6 +87,9 @@ const NAMESPACE_PROPERTY = '__namespace__';
  *   will be written to.
  * - .entry: the source .js file which is the entrypoint for the
  *   chunk.
+ * - .exports: an expression evaluating to the exports/Module object
+ *   of module that is the chunk's entrypoint / top level module.
+ *   Will guess based on .reexport if not supplied.
  * - .reexport: if running in a browser, save the chunk's exports
  *   object at this location in the global namespace.
  *
@@ -109,6 +112,7 @@ const chunks = [
   {
     name: 'blocks',
     entry: 'blocks/blocks.js',
+    exports: 'module$exports$Blockly$libraryBlocks',
     reexport: 'Blockly.libraryBlocks',
   },
   {
@@ -400,15 +404,9 @@ function chunkWrapper(chunk) {
   }    
 
   // Expression that evaluates the the value of the exports object for
-  // the specified chunk.  For now we guess the name that is created
-  // by the module's goog.module.delcareLegacyNamespace call based on
-  // chunk.reexport.
-  const exportsExpression = `${NAMESPACE_VARIABLE}.${chunk.reexport}`;
-  // In near future we might try to guess the internally-generated
-  // name for the ES module's exports object.
-  // const exportsExpression =
-  //     'module$' + chunk.entry.replace(/\.m?js$/, '').replace(/\//g, '$');
-  
+  // the specified chunk.
+  const exportsExpression =
+      chunk.exports || `${NAMESPACE_VARIABLE}.${chunk.reexport}`;
 
   // Note that when loading in a browser the base of the exported path
   // (e.g. Blockly.blocks.all - see issue #5932) might not exist

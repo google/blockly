@@ -9,7 +9,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.libraryBlocks.testBlocks');
+goog.provide('testBlocks');
 
 goog.require('Blockly');
 

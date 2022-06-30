@@ -82,7 +82,7 @@ function checkBuildDir(done) {
  * This task copies source files into the release directory.
  */
 function packageSources() {
-  return gulp.src(['core/**/**.js', 'blocks/**.js', 'generators/**/**.js'],
+  return gulp.src(['core/**/**', 'blocks/**', 'generators/**/**'],
       {base: '.'})
     .pipe(gulp.dest(RELEASE_DIR));
 };

@@ -41,8 +41,8 @@ export class Hat extends Measurable {
     super(constants);
     this.type |= Types.HAT;
 
-    this.height = this.constants.START_HAT.height;
-    this.width = this.constants.START_HAT.width;
+    this.height = this.constants_.START_HAT.height;
+    this.width = this.constants_.START_HAT.width;
 
     this.ascenderHeight = this.height;
   }

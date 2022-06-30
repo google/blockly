@@ -53,6 +53,6 @@ export class OutputConnection extends Connection {
 
     this.startX = this.width;
 
-    this.connectionOffsetY = this.constants.TAB_OFFSET_FROM_TOP;
+    this.connectionOffsetY = this.constants_.TAB_OFFSET_FROM_TOP;
   }
 }

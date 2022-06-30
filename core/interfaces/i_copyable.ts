@@ -31,8 +31,13 @@ export interface ICopyable extends ISelectable {
    */
   toCopyData: AnyDuringMigration;
 }
-export interface CopyData {
-  saveInfo: AnyDuringMigration|Element;
-  source: WorkspaceSvg;
-  typeCounts: AnyDuringMigration|null;
+
+export namespace ICopyable {
+  export interface CopyData {
+    saveInfo: AnyDuringMigration|Element;
+    source: WorkspaceSvg;
+    typeCounts: AnyDuringMigration|null;
+  }
 }
+
+export type CopyData = ICopyable.CopyData;

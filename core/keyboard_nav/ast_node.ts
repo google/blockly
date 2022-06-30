@@ -42,18 +42,6 @@ import {Workspace} from '../workspace.js';
  * @alias Blockly.ASTNode
  */
 export class ASTNode {
-  /** Object holding different types for an AST node. */
-  static types = {
-    FIELD: 'field',
-    BLOCK: 'block',
-    INPUT: 'input',
-    OUTPUT: 'output',
-    NEXT: 'next',
-    PREVIOUS: 'previous',
-    STACK: 'stack',
-    WORKSPACE: 'workspace',
-  };
-
   /**
    * True to navigate to all fields. False to only navigate to clickable fields.
    */
@@ -694,9 +682,29 @@ export class ASTNode {
     return astNode;
   }
 }
-export interface Params {
-  wsCoordinate: Coordinate;
+
+export namespace ASTNode {
+  export interface Params {
+    wsCoordinate: Coordinate;
+  }
+
+  export enum types {
+    FIELD = 'field',
+    BLOCK = 'block',
+    INPUT = 'input',
+    OUTPUT = 'output',
+    NEXT = 'next',
+    PREVIOUS = 'previous',
+    STACK = 'stack',
+    WORKSPACE = 'workspace',
+  }
 }
+
+export type Params = ASTNode.Params;
+// No need to export ASTNode.types from the module at this time because (1) it
+// wasn't automatically converted by the automatic migration script, (2) the
+// name doesn't follow the styleguide.
+
 
 /**
  * Gets the parent connection on a block.

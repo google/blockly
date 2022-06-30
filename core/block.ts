@@ -2102,8 +2102,13 @@ export class Block implements IASTNodeLocation, IDeletable {
     return msg;
   }
 }
-export interface CommentModel {
-  text: string|null;
-  pinned: boolean;
-  size: Size;
+
+export namespace Block {
+  export interface CommentModel {
+    text: string|null;
+    pinned: boolean;
+    size: Size;
+  }
 }
+
+export type CommentModel = Block.CommentModel;

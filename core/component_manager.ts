@@ -211,8 +211,14 @@ export class ComponentManager {
     return components;
   }
 }
-export interface ComponentDatum {
-  component: IComponent;
-  capabilities: Array<string|Capability<IComponent>>;
-  weight: number;
+
+export namespace ComponentManager {
+  /** An object storing component information. */
+  export interface ComponentDatum {
+    component: IComponent;
+    capabilities: Array<string|Capability<IComponent>>;
+    weight: number;
+  }
 }
+
+export type ComponentDatum = ComponentManager.ComponentDatum;

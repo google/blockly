@@ -249,17 +249,27 @@ export class CollapsibleToolboxCategory extends ToolboxCategory implements
     return this.toolboxItems_;
   }
 }
-export interface CssConfig {
-  container: string|null;
-  row: string|null;
-  rowcontentcontainer: string|null;
-  icon: string|null;
-  label: string|null;
-  selected: string|null;
-  openicon: string|null;
-  closedicon: string|null;
-  contents: string|null;
+
+export namespace CollapsibleToolboxCategory {
+  /**
+   * All the CSS class names that are used to create a collapsible
+   * category. This is all the properties from the regular category plus
+   * contents.
+   */
+  export interface CssConfig {
+    container: string|null;
+    row: string|null;
+    rowcontentcontainer: string|null;
+    icon: string|null;
+    label: string|null;
+    selected: string|null;
+    openicon: string|null;
+    closedicon: string|null;
+    contents: string|null;
+  }
 }
+
+export type CssConfig = CollapsibleToolboxCategory.CssConfig;
 
 registry.register(
     registry.Type.TOOLBOX_ITEM, CollapsibleToolboxCategory.registrationName,

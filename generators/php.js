@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.PHP');
-goog.module.declareLegacyNamespace();
 
 const objectUtils = goog.require('Blockly.utils.object');
 const stringUtils = goog.require('Blockly.utils.string');

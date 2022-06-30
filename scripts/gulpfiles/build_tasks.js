@@ -89,7 +89,6 @@ const NAMESPACE_PROPERTY = '__namespace__';
  *   chunk.
  * - .exports: an expression evaluating to the exports/Module object
  *   of module that is the chunk's entrypoint / top level module.
- *   Will guess based on .reexport if not supplied.
  * - .reexport: if running in a browser, save the chunk's exports
  *   object (or a single export of it; see reexportOnly, below) at
  *   this location in the global namespace.
@@ -111,6 +110,7 @@ const chunks = [
   {
     name: 'blockly',
     entry: path.join(CORE_DIR, 'blockly.js'),
+    exports: 'Blockly',
     reexport: 'Blockly',
   },
   {
@@ -122,30 +122,35 @@ const chunks = [
   {
     name: 'javascript',
     entry: 'generators/javascript/all.js',
+    exports: 'module$exports$Blockly$JavaScript',
     reexport: 'Blockly.JavaScript',
     reexportOnly: 'javascriptGenerator',
   },
   {
     name: 'python',
     entry: 'generators/python/all.js',
+    exports: 'module$exports$Blockly$Python',
     reexport: 'Blockly.Python',
     reexportOnly: 'pythonGenerator',
   },
   {
     name: 'php',
     entry: 'generators/php/all.js',
+    exports: 'module$exports$Blockly$PHP',
     reexport: 'Blockly.PHP',
     reexportOnly: 'phpGenerator',
   },
   {
     name: 'lua',
     entry: 'generators/lua/all.js',
+    exports: 'module$exports$Blockly$Lua',
     reexport: 'Blockly.Lua',
     reexportOnly: 'luaGenerator',
   },
   {
     name: 'dart',
     entry: 'generators/dart/all.js',
+    exports: 'module$exports$Blockly$Dart',
     reexport: 'Blockly.Dart',
     reexportOnly: 'dartGenerator',
   }
@@ -412,11 +417,6 @@ function chunkWrapper(chunk) {
     namespaceExpr = `${factoryArgs}.${NAMESPACE_PROPERTY}`;
   }    
 
-  // Expression that evaluates the the value of the exports object for
-  // the specified chunk.
-  const exportsExpression =
-      chunk.exports || `${NAMESPACE_VARIABLE}.${chunk.reexport}`;
-
   // Code to assign the result of the factory function to the desired
   // export location when running in a browser.  When
   // chunk.reexportOnly is set, this additionally does two other
@@ -452,8 +452,8 @@ function chunkWrapper(chunk) {
 }(this, function(${factoryArgs}) {
 var ${NAMESPACE_VARIABLE}=${namespaceExpr};
 %output%
-${exportsExpression}.${NAMESPACE_PROPERTY}=${NAMESPACE_VARIABLE};
-return ${exportsExpression};
+${chunk.exports}.${NAMESPACE_PROPERTY}=${NAMESPACE_VARIABLE};
+return ${chunk.exports};
 }));
 `;
 }

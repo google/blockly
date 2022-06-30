@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.Python');
-goog.module.declareLegacyNamespace();
 
 const stringUtils = goog.require('Blockly.utils.string');
 const Variables = goog.require('Blockly.Variables');

@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.Dart');
-goog.module.declareLegacyNamespace();
 
 const Variables = goog.require('Blockly.Variables');
 const stringUtils = goog.require('Blockly.utils.string');

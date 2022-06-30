@@ -12,7 +12,6 @@
 'use strict';
 
 goog.module('Blockly.Lua');
-goog.module.declareLegacyNamespace();
 
 const objectUtils = goog.require('Blockly.utils.object');
 const stringUtils = goog.require('Blockly.utils.string');

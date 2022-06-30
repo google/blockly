@@ -301,4 +301,4 @@ PHP.getAdjusted = function(block, atId, opt_delta, opt_negate, opt_order) {
   return at;
 };
 
-exports = PHP;
+exports.phpGenerator = PHP;

@@ -1357,5 +1357,10 @@
       newExport: 'luaGenerator',
       newPath: 'Blockly.Lua',
     },
+    {
+      oldName: 'Blockly.PHP',
+      newExport: 'phpGenerator',
+      newPath: 'Blockly.php',
+    },
   ],
 }

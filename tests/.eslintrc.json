@@ -3,6 +3,7 @@
         "Blockly": true,
         "dartGenerator": true,
         "javascriptGenerator": true,
-        "luaGenerator": true
+        "luaGenerator": true,
+        "phpGenerator": true
     }
 }

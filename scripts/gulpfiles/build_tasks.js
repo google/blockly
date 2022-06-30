@@ -134,6 +134,7 @@ const chunks = [
     name: 'php',
     entry: 'generators/php/all.js',
     reexport: 'Blockly.PHP',
+    reexportOnly: 'phpGenerator',
   },
   {
     name: 'lua',

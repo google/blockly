@@ -144,7 +144,7 @@ suite('Multiline Input Fields', function() {
           {title: 'String with newline', expectedCode: '\'bark bark\' .. \'\\n\' ..\n\' bark bark bark\' .. \'\\n\' ..\n\' bark bar bark bark\' .. \'\\n\' ..\n\'\'',
             createBlock: createBlockFn('bark bark\n bark bark bark\n bark bar bark bark\n')},
         ]},
-      {title: 'PHP', generator: Blockly.PHP,
+      {title: 'PHP', generator: phpGenerator,
         testCases: [
           {title: 'Empty string', expectedCode: '\'\'',
             createBlock: createBlockFn('')},

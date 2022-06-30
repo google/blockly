@@ -129,6 +129,7 @@ const chunks = [
     name: 'python',
     entry: 'generators/python/all.js',
     reexport: 'Blockly.Python',
+    reexportOnly: 'pythonGenerator',
   },
   {
     name: 'php',

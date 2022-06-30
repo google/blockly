@@ -4,6 +4,7 @@
         "dartGenerator": true,
         "javascriptGenerator": true,
         "luaGenerator": true,
-        "phpGenerator": true
+        "phpGenerator": true,
+        "pythonGenerator": true
     }
 }

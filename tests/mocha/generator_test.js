@@ -10,7 +10,7 @@ const {dartGenerator} = goog.require('Blockly.Dart');
 const {javaScriptGenerator} = goog.require('Blockly.JavaScript');
 const {luaGenerator} = goog.require('Blockly.Lua');
 const {phpGenerator} = goog.require('Blockly.PHP');
-goog.require('Blockly.Python');
+const {pythonGenerator} = goog.require('Blockly.Python');
 const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
 
 
@@ -87,7 +87,7 @@ suite('Generator', function() {
       [javascriptGenerator, 'JavaScript'],
       [luaGenerator, 'Lua'],
       [phpGenerator, 'PHP'],
-      [Blockly.Python, 'Python']];
+      [pythonGenerator, 'Python']];
 
     suite('Trivial', function() {
       testCase.forEach(function(testCase) {

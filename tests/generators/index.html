@@ -176,7 +176,7 @@ function toJavaScript() {
 }
 
 function toPython() {
-  var code = Blockly.Python.workspaceToCode(demoWorkspace);
+  var code = pythonGenerator.workspaceToCode(demoWorkspace);
   setOutput(code);
   outputCode = code;
 }

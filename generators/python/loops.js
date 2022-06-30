@@ -11,9 +11,9 @@
 
 goog.module('Blockly.Python.loops');
 
-const Python = goog.require('Blockly.Python');
 const stringUtils = goog.require('Blockly.utils.string');
 const {NameType} = goog.require('Blockly.Names');
+const {pythonGenerator: Python} = goog.require('Blockly.Python');
 
 
 Python['controls_repeat_ext'] = function(block) {

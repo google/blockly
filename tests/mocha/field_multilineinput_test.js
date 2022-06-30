@@ -151,7 +151,7 @@ suite('Multiline Input Fields', function() {
           {title: 'String with newline', expectedCode: '\'bark bark\' . "\\n" .\n\' bark bark bark\' . "\\n" .\n\' bark bar bark bark\' . "\\n" .\n\'\'',
             createBlock: createBlockFn('bark bark\n bark bark bark\n bark bar bark bark\n')},
         ]},
-      {title: 'Python', generator: Blockly.Python,
+      {title: 'Python', generator: pythonGenerator,
         testCases: [
           {title: 'Empty string', expectedCode: '\'\'',
             createBlock: createBlockFn('')},

@@ -9,9 +9,9 @@
  */
 'use strict';
 
-goog.provide('testBlocks');
+goog.module('testBlocks');
 
-goog.require('Blockly');
+const Blockly = goog.require('Blockly');
 
 Blockly.defineBlocksWithJsonArray([
     {

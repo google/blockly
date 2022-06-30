@@ -110,7 +110,7 @@ const chunks = [
   {
     name: 'blockly',
     entry: path.join(CORE_DIR, 'blockly.js'),
-    exports: 'Blockly',
+    exports: 'module$exports$Blockly',
     reexport: 'Blockly',
   },
   {
@@ -619,7 +619,13 @@ function buildCompiled() {
   // Closure Compiler options.
   const packageJson = getPackageJson();  // For version number.
   const options = {
-    define: 'Blockly.VERSION="' + packageJson.version + '"',
+    // The documentation for @define claims you can't use it on a
+    // non-global, but the closure compiler turns everything in to a
+    // global - you just have to know what the new name is!  With
+    // declareLegacyNamespace this was very straightforward.  Without
+    // it, we have to rely on implmentation details.  See
+    // https://github.com/google/closure-compiler/issues/1601#issuecomment-483452226
+    define: `${chunks[0].exports}.VERSION='${packageJson.version}'`,
     chunk: chunkOptions.chunk,
     chunk_wrapper: chunkOptions.chunk_wrapper,
     rename_prefix_namespace: NAMESPACE_VARIABLE,

@@ -43,14 +43,14 @@ export class StatementInput extends InputConnection {
     this.type |= Types.STATEMENT_INPUT;
 
     if (!this.connectedBlock) {
-      this.height = this.constants.EMPTY_STATEMENT_INPUT_HEIGHT;
+      this.height = this.constants_.EMPTY_STATEMENT_INPUT_HEIGHT;
     } else {
       // We allow the dark path to show on the parent block so that the child
       // block looks embossed.  This takes up an extra pixel in both x and y.
       this.height =
-          this.connectedBlockHeight + this.constants.STATEMENT_BOTTOM_SPACER;
+          this.connectedBlockHeight + this.constants_.STATEMENT_BOTTOM_SPACER;
     }
-    this.width = this.constants.STATEMENT_INPUT_NOTCH_OFFSET +
+    this.width = this.constants_.STATEMENT_INPUT_NOTCH_OFFSET +
         (this.shape.width as number);
   }
 }

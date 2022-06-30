@@ -42,7 +42,7 @@ export class SquareCorner extends Measurable {
         (!opt_position || opt_position === 'left' ? Types.LEFT_SQUARE_CORNER :
                                                     Types.RIGHT_SQUARE_CORNER) |
         Types.CORNER;
-    this.height = this.constants.NO_PADDING;
-    this.width = this.constants.NO_PADDING;
+    this.height = this.constants_.NO_PADDING;
+    this.width = this.constants_.NO_PADDING;
   }
 }

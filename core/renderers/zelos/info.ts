@@ -60,7 +60,7 @@ export class RenderInfo extends BaseRenderInfo {
   override topRow: TopRow;
   override bottomRow: BottomRow;
   override constants_: ConstantProvider;
-  override renderer: Renderer;
+  override renderer_: Renderer;
 
   override isInline = true;
   isMultiRow: boolean;
@@ -76,9 +76,9 @@ export class RenderInfo extends BaseRenderInfo {
   constructor(renderer: Renderer, block: BlockSvg) {
     super(renderer, block);
 
-    this.renderer = renderer;
+    this.renderer_ = renderer;
 
-    this.constants_ = this.renderer.getConstants();
+    this.constants_ = this.renderer_.getConstants();
 
     /**
      * An object with rendering information about the top row of the block.
@@ -121,7 +121,7 @@ export class RenderInfo extends BaseRenderInfo {
    * @internal
    */
   override getRenderer(): Renderer {
-    return this.renderer as Renderer;
+    return this.renderer_ as Renderer;
   }
 
   override measure() {

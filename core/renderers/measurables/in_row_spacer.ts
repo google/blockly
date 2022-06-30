@@ -40,6 +40,6 @@ export class InRowSpacer extends Measurable {
     super(constants);
     this.type |= Types.SPACER | Types.IN_ROW_SPACER;
     this.width = width;
-    this.height = this.constants.SPACER_DEFAULT_HEIGHT;
+    this.height = this.constants_.SPACER_DEFAULT_HEIGHT;
   }
 }

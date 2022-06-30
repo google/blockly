@@ -46,8 +46,8 @@ export class InlineInput extends InputConnection {
     this.type |= Types.INLINE_INPUT;
 
     if (!this.connectedBlock) {
-      this.height = this.constants.EMPTY_INLINE_INPUT_HEIGHT;
-      this.width = this.constants.EMPTY_INLINE_INPUT_PADDING;
+      this.height = this.constants_.EMPTY_INLINE_INPUT_HEIGHT;
+      this.width = this.constants_.EMPTY_INLINE_INPUT_PADDING;
     } else {
       // We allow the dark path to show on the parent block so that the child
       // block looks embossed.  This takes up an extra pixel in both x and y.
@@ -68,7 +68,7 @@ export class InlineInput extends InputConnection {
 
     this.connectionOffsetY = 'connectionOffsetY' in this.shape ?
         this.shape.connectionOffsetY(this.connectionHeight) :
-        this.constants.TAB_OFFSET_FROM_TOP;
+        this.constants_.TAB_OFFSET_FROM_TOP;
 
     this.connectionOffsetX = 'connectionOffsetX' in this.shape ?
         this.shape.connectionOffsetX(this.connectionWidth) :

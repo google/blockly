@@ -188,7 +188,7 @@ function toPhp() {
 }
 
 function toLua() {
-  var code = Blockly.Lua.workspaceToCode(demoWorkspace);
+  var code = luaGenerator.workspaceToCode(demoWorkspace);
   setOutput(code);
   outputCode = code;
 }

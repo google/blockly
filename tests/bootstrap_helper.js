@@ -30,6 +30,8 @@ for (const require of window.bootstrapInfo.requires) {
     'Blockly.Dart.all': 'dartGenerator',
     'Blockly.JavaScript': 'javascriptGenerator',
     'Blockly.JavaScript.all': 'javascriptGenerator',
+    'Blockly.Lua': 'luaGenerator',
+    'Blockly.Lua.all': 'luaGenerator',
   }[require];
   if (exportName) {
     window[exportName] = goog.module.get(require)[exportName];

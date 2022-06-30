@@ -204,4 +204,4 @@ Lua.scrub_ = function(block, code, opt_thisOnly) {
   return commentCode + code + nextCode;
 };
 
-exports = Lua;
+exports.luaGenerator = Lua;

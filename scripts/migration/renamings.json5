@@ -1352,5 +1352,10 @@
       newExport: 'javascriptGenerator',
       newPath: 'Blockly.JavaScript',
     },
+    {
+      oldName: 'Blockly.Lua',
+      newExport: 'luaGenerator',
+      newPath: 'Blockly.Lua',
+    },
   ],
 }

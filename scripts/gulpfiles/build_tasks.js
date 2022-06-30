@@ -139,6 +139,7 @@ const chunks = [
     name: 'lua',
     entry: 'generators/lua/all.js',
     reexport: 'Blockly.Lua',
+    reexportOnly: 'luaGenerator',
   },
   {
     name: 'dart',

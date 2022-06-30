@@ -2,6 +2,7 @@
     "globals": {
         "Blockly": true,
         "dartGenerator": true,
-        "javascriptGenerator": true
+        "javascriptGenerator": true,
+        "luaGenerator": true
     }
 }

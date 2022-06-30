@@ -11,9 +11,9 @@
 
 goog.module('Blockly.PHP.loops');
 
-const PHP = goog.require('Blockly.PHP');
 const stringUtils = goog.require('Blockly.utils.string');
 const {NameType} = goog.require('Blockly.Names');
+const {phpGenerator: PHP} = goog.require('Blockly.PHP');
 
 
 PHP['controls_repeat_ext'] = function(block) {

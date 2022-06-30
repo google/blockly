@@ -11,7 +11,7 @@
 
 goog.module('Blockly.Python.colour');
 
-const Python = goog.require('Blockly.Python');
+const {pythonGenerator: Python} = goog.require('Blockly.Python');
 
 
 Python['colour_picker'] = function(block) {

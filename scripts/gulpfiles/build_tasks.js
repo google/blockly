@@ -87,8 +87,14 @@ const NAMESPACE_PROPERTY = '__namespace__';
  *   will be written to.
  * - .entry: the source .js file which is the entrypoint for the
  *   chunk.
+ * - .exports: an expression evaluating to the exports/Module object
+ *   of module that is the chunk's entrypoint / top level module.
  * - .reexport: if running in a browser, save the chunk's exports
- *   object at this location in the global namespace.
+ *   object (or a single export of it; see reexportOnly, below) at
+ *   this location in the global namespace.
+ * - .reexportOnly: if reexporting and this property is set,
+ *   save only the correspondingly-named export.  Otherwise
+ *   save the whole export object.
  *
  * The function getChunkOptions will, after running
  * closure-calculate-chunks, update each chunk to add the following
@@ -104,37 +110,49 @@ const chunks = [
   {
     name: 'blockly',
     entry: path.join(CORE_DIR, 'blockly.js'),
+    exports: 'module$exports$Blockly',
     reexport: 'Blockly',
   },
   {
     name: 'blocks',
     entry: 'blocks/blocks.js',
+    exports: 'module$exports$Blockly$libraryBlocks',
     reexport: 'Blockly.libraryBlocks',
   },
   {
     name: 'javascript',
     entry: 'generators/javascript/all.js',
+    exports: 'module$exports$Blockly$JavaScript',
     reexport: 'Blockly.JavaScript',
+    reexportOnly: 'javascriptGenerator',
   },
   {
     name: 'python',
     entry: 'generators/python/all.js',
+    exports: 'module$exports$Blockly$Python',
     reexport: 'Blockly.Python',
+    reexportOnly: 'pythonGenerator',
   },
   {
     name: 'php',
     entry: 'generators/php/all.js',
+    exports: 'module$exports$Blockly$PHP',
     reexport: 'Blockly.PHP',
+    reexportOnly: 'phpGenerator',
   },
   {
     name: 'lua',
     entry: 'generators/lua/all.js',
+    exports: 'module$exports$Blockly$Lua',
     reexport: 'Blockly.Lua',
+    reexportOnly: 'luaGenerator',
   },
   {
     name: 'dart',
     entry: 'generators/dart/all.js',
+    exports: 'module$exports$Blockly$Dart',
     reexport: 'Blockly.Dart',
+    reexportOnly: 'dartGenerator',
   }
 ];
 
@@ -311,7 +329,7 @@ function buildDeps(done) {
   execSync(`closure-make-deps ${testArgs} | grep 'tests/mocha' ` +
       `> '${TEST_DEPS_FILE}'`, {stdio: 'inherit'});
   done();
-};
+}
 
 /**
  * This task regenrates msg/json/en.js and msg/json/qqq.js from
@@ -341,7 +359,7 @@ this removal!
 `);
 
   done();
-};
+}
 
 /**
  * This task builds Blockly's lang files.
@@ -367,7 +385,7 @@ function buildLangfiles(done) {
   execSync(createMessagesCmd, {stdio: 'inherit'});
 
   done();
-};
+}
 
 /**
  * A helper method to return an closure compiler chunk wrapper that
@@ -399,16 +417,20 @@ function chunkWrapper(chunk) {
     namespaceExpr = `${factoryArgs}.${NAMESPACE_PROPERTY}`;
   }    
 
-  // Expression that evaluates the the value of the exports object for
-  // the specified chunk.  For now we guess the name that is created
-  // by the module's goog.module.delcareLegacyNamespace call based on
-  // chunk.reexport.
-  const exportsExpression = `${NAMESPACE_VARIABLE}.${chunk.reexport}`;
-  // In near future we might try to guess the internally-generated
-  // name for the ES module's exports object.
-  // const exportsExpression =
-  //     'module$' + chunk.entry.replace(/\.m?js$/, '').replace(/\//g, '$');
-  
+  // Code to assign the result of the factory function to the desired
+  // export location when running in a browser.  When
+  // chunk.reexportOnly is set, this additionally does two other
+  // things:
+  // - It ensures that only the desired property of the exports object
+  //   is assigned to the specified reexport location.
+  // - It ensures that the namesspace object is accessible via the
+  //   selected sub-object, so that any dependent modules can obtain
+  //   it.
+  const browserExportStatements = chunk.reexportOnly ?
+      `root.${chunk.reexport} = factoryExports.${chunk.reexportOnly};\n` +
+      `    root.${chunk.reexport}.${NAMESPACE_PROPERTY} = ` +
+      `factoryExports.${NAMESPACE_PROPERTY};` :
+      `root.${chunk.reexport} = factoryExports;`;
 
   // Note that when loading in a browser the base of the exported path
   // (e.g. Blockly.blocks.all - see issue #5932) might not exist
@@ -425,16 +447,16 @@ function chunkWrapper(chunk) {
     module.exports = factory(${cjsDepsExpr});
   } else { // Browser
     var factoryExports = factory(${browserDepsExpr});
-    root.${chunk.reexport} = factoryExports;
+    ${browserExportStatements}
   }
 }(this, function(${factoryArgs}) {
 var ${NAMESPACE_VARIABLE}=${namespaceExpr};
 %output%
-${exportsExpression}.${NAMESPACE_PROPERTY}=${NAMESPACE_VARIABLE};
-return ${exportsExpression};
+${chunk.exports}.${NAMESPACE_PROPERTY}=${NAMESPACE_VARIABLE};
+return ${chunk.exports};
 }));
 `;
-};
+}
 
 /**
  * Get chunking options to pass to Closure Compiler by using
@@ -566,7 +588,10 @@ function compile(options) {
     // declared by base_minimal.js, while if you compile against
     // base.js instead you will discover that it uses @deprecated
     // inherits, forwardDeclare etc.
-    hide_warnings_for: ['node_modules', 'build/src/closure/goog/goog.js'],
+    hide_warnings_for: [
+      'node_modules',
+      path.join(TSC_OUTPUT_DIR, 'closure', 'goog', 'goog.js'),
+    ],
     define: ['COMPILED=true'],
   };
   if (argv.debug || argv.strict) {
@@ -594,7 +619,13 @@ function buildCompiled() {
   // Closure Compiler options.
   const packageJson = getPackageJson();  // For version number.
   const options = {
-    define: 'Blockly.VERSION="' + packageJson.version + '"',
+    // The documentation for @define claims you can't use it on a
+    // non-global, but the closure compiler turns everything in to a
+    // global - you just have to know what the new name is!  With
+    // declareLegacyNamespace this was very straightforward.  Without
+    // it, we have to rely on implmentation details.  See
+    // https://github.com/google/closure-compiler/issues/1601#issuecomment-483452226
+    define: `${chunks[0].exports}.VERSION='${packageJson.version}'`,
     chunk: chunkOptions.chunk,
     chunk_wrapper: chunkOptions.chunk_wrapper,
     rename_prefix_namespace: NAMESPACE_VARIABLE,
@@ -611,7 +642,7 @@ function buildCompiled() {
       .pipe(
           gulp.sourcemaps.write('.', {includeContent: false, sourceRoot: './'}))
       .pipe(gulp.dest(BUILD_DIR));
-};
+}
 
 /**
  * This task builds Blockly core, blocks and generators together and uses
@@ -671,7 +702,7 @@ function checkinBuilt() {
     `${BUILD_DIR}/*_compressed.js.map`,
     `${BUILD_DIR}/msg/js/*.js`,
   ], {base: BUILD_DIR}).pipe(gulp.dest('.'));
-};
+}
 
 /**
  * This task cleans the build directory (by deleting it).
@@ -694,7 +725,7 @@ function format() {
   ], {base: '.'})
       .pipe(clangFormatter.format('file', clangFormat))
       .pipe(gulp.dest('.'));
-};
+}
 
 module.exports = {
   build: build,

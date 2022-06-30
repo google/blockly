@@ -25,7 +25,7 @@ goog.require('Blockly.libraryBlocks.math');
 /** @suppress {extraRequire} */
 goog.require('Blockly.libraryBlocks.texts');
 /** @suppress {extraRequire} */
-goog.require('Blockly.libraryBlocks.testBlocks');
+goog.require('testBlocks');
 
 
 function init() {

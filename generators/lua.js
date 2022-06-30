@@ -12,7 +12,6 @@
 'use strict';
 
 goog.module('Blockly.Lua');
-goog.module.declareLegacyNamespace();
 
 const objectUtils = goog.require('Blockly.utils.object');
 const stringUtils = goog.require('Blockly.utils.string');
@@ -204,4 +203,4 @@ Lua.scrub_ = function(block, code, opt_thisOnly) {
   return commentCode + code + nextCode;
 };
 
-exports = Lua;
+exports.luaGenerator = Lua;

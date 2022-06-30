@@ -170,31 +170,31 @@ function toXml() {
 
 function toJavaScript() {
   var code = '\'use strict\';\n\n'
-  code += Blockly.JavaScript.workspaceToCode(demoWorkspace);
+  code += javascriptGenerator.workspaceToCode(demoWorkspace);
   setOutput(code);
   outputCode = code;
 }
 
 function toPython() {
-  var code = Blockly.Python.workspaceToCode(demoWorkspace);
+  var code = pythonGenerator.workspaceToCode(demoWorkspace);
   setOutput(code);
   outputCode = code;
 }
 
 function toPhp() {
-  var code = Blockly.PHP.workspaceToCode(demoWorkspace);
+  var code = phpGenerator.workspaceToCode(demoWorkspace);
   setOutput(code);
   outputCode = code;
 }
 
 function toLua() {
-  var code = Blockly.Lua.workspaceToCode(demoWorkspace);
+  var code = luaGenerator.workspaceToCode(demoWorkspace);
   setOutput(code);
   outputCode = code;
 }
 
 function toDart() {
-  var code = Blockly.Dart.workspaceToCode(demoWorkspace);
+  var code = dartGenerator.workspaceToCode(demoWorkspace);
   setOutput(code);
   outputCode = code;
 }

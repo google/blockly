@@ -1341,6 +1341,31 @@
     {
       'oldName': 'Blockly.utils.global',
       'newPath': 'globalThis',
-    }
+    },
+    {
+      oldName: 'Blockly.Dart',
+      newExport: 'dartGenerator',
+      newPath: 'Blockly.Dart',
+    },
+    {
+      oldName: 'Blockly.JavaScript',
+      newExport: 'javascriptGenerator',
+      newPath: 'Blockly.JavaScript',
+    },
+    {
+      oldName: 'Blockly.Lua',
+      newExport: 'luaGenerator',
+      newPath: 'Blockly.Lua',
+    },
+    {
+      oldName: 'Blockly.PHP',
+      newExport: 'phpGenerator',
+      newPath: 'Blockly.php',
+    },
+    {
+      oldName: 'Blockly.Python',
+      newExport: 'pythonGenerator',
+      newPath: 'Blockly.Python',
+    },
   ],
 }

@@ -11,9 +11,9 @@
 
 goog.module('Blockly.Python.procedures');
 
-const Python = goog.require('Blockly.Python');
 const Variables = goog.require('Blockly.Variables');
 const {NameType} = goog.require('Blockly.Names');
+const {pythonGenerator: Python} = goog.require('Blockly.Python');
 
 
 Python['procedures_defreturn'] = function(block) {

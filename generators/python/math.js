@@ -11,8 +11,8 @@
 
 goog.module('Blockly.Python.math');
 
-const Python = goog.require('Blockly.Python');
 const {NameType} = goog.require('Blockly.Names');
+const {pythonGenerator: Python} = goog.require('Blockly.Python');
 
 
 // If any new block imports any library, add that library name here.

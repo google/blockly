@@ -11,8 +11,8 @@
 
 goog.module('Blockly.JavaScript.texts');
 
-const JavaScript = goog.require('Blockly.JavaScript');
 const {NameType} = goog.require('Blockly.Names');
+const {javascriptGenerator: JavaScript} = goog.require('Blockly.JavaScript');
 
 
 /**

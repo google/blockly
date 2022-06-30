@@ -37,13 +37,18 @@ export class Measurable {
   centerline = 0;
   notchOffset: number;
 
+  /** The renderer's constant provider. */
+  protected readonly constants_: ConstantProvider
+
   /**
    * @param constants The rendering constants provider.
    * @internal
    */
-  constructor(protected readonly constants: ConstantProvider) {
+  constructor(constants: ConstantProvider) {
+    this.constants_ = constants;
+
     this.type = Types.NONE;
 
-    this.notchOffset = this.constants.NOTCH_OFFSET_LEFT;
+    this.notchOffset = this.constants_.NOTCH_OFFSET_LEFT;
   }
 }

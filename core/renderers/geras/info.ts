@@ -56,7 +56,7 @@ export class RenderInfo extends BaseRenderInfo {
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   override constants_!: ConstantProvider;
 
-  override renderer: Renderer;
+  protected override readonly renderer_: Renderer;
 
   /**
    * @param renderer The renderer in use.
@@ -65,7 +65,7 @@ export class RenderInfo extends BaseRenderInfo {
    */
   constructor(renderer: Renderer, block: BlockSvg) {
     super(renderer, block);
-    this.renderer = renderer;
+    this.renderer_ = renderer;
   }
 
   /**
@@ -74,7 +74,7 @@ export class RenderInfo extends BaseRenderInfo {
    * @internal
    */
   override getRenderer(): Renderer {
-    return this.renderer;
+    return this.renderer_;
   }
 
   override populateBottomRow_() {

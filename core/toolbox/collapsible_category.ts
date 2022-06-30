@@ -119,7 +119,7 @@ export class CollapsibleToolboxCategory extends ToolboxCategory implements
     const ToolboxItemClass =
         registry.getClass(registry.Type.TOOLBOX_ITEM, registryName);
     const toolboxItem =
-        new ToolboxItemClass!(itemDef, this.parentToolbox, this);
+        new ToolboxItemClass!(itemDef, this.parentToolbox_, this);
     this.toolboxItems_.push(toolboxItem);
   }
 
@@ -144,7 +144,7 @@ export class CollapsibleToolboxCategory extends ToolboxCategory implements
 
   override createIconDom_() {
     const toolboxIcon = document.createElement('span');
-    if (!this.parentToolbox.isHorizontal()) {
+    if (!this.parentToolbox_.isHorizontal()) {
       // AnyDuringMigration because:  Argument of type 'string | undefined' is
       // not assignable to parameter of type 'string'.
       dom.addClass(
@@ -198,7 +198,7 @@ export class CollapsibleToolboxCategory extends ToolboxCategory implements
     aria.setState(
         this.htmlDiv_ as HTMLDivElement, aria.State.EXPANDED, isExpanded);
 
-    this.parentToolbox.handleToolboxItemResize();
+    this.parentToolbox_.handleToolboxItemResize();
   }
 
   override setVisible_(isVisible: boolean) {
@@ -210,8 +210,8 @@ export class CollapsibleToolboxCategory extends ToolboxCategory implements
     }
     this.isHidden_ = !isVisible;
 
-    if (this.parentToolbox.getSelectedItem() === this) {
-      this.parentToolbox.clearSelection();
+    if (this.parentToolbox_.getSelectedItem() === this) {
+      this.parentToolbox_.clearSelection();
     }
   }
 

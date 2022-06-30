@@ -38,7 +38,7 @@ export class JaggedEdge extends Measurable {
   constructor(constants: ConstantProvider) {
     super(constants);
     this.type |= Types.JAGGED_EDGE;
-    this.height = this.constants.JAGGED_TEETH.height;
-    this.width = this.constants.JAGGED_TEETH.width;
+    this.height = this.constants_.JAGGED_TEETH.height;
+    this.width = this.constants_.JAGGED_TEETH.width;
   }
 }

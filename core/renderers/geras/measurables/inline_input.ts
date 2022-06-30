@@ -32,7 +32,7 @@ import {ConstantProvider as GerasConstantProvider} from '../constants.js';
  * @alias Blockly.geras.InlineInput
  */
 export class InlineInput extends BaseInlineInput {
-  override constants: GerasConstantProvider;
+  override constants_: GerasConstantProvider;
 
   /**
    * @param constants The rendering constants provider.
@@ -41,13 +41,13 @@ export class InlineInput extends BaseInlineInput {
    */
   constructor(constants: BaseConstantProvider, input: Input) {
     super(constants, input);
-    this.constants = constants as GerasConstantProvider;
+    this.constants_ = constants as GerasConstantProvider;
 
     if (this.connectedBlock) {
       // We allow the dark path to show on the parent block so that the child
       // block looks embossed.  This takes up an extra pixel in both x and y.
-      this.width += this.constants.DARK_PATH_OFFSET;
-      this.height += this.constants.DARK_PATH_OFFSET;
+      this.width += this.constants_.DARK_PATH_OFFSET;
+      this.height += this.constants_.DARK_PATH_OFFSET;
     }
   }
 }

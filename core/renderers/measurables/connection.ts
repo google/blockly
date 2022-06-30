@@ -45,7 +45,7 @@ export class Connection extends Measurable {
       constants: ConstantProvider, public connectionModel: RenderedConnection) {
     super(constants);
 
-    this.shape = this.constants.shapeFor(connectionModel);
+    this.shape = this.constants_.shapeFor(connectionModel);
 
     this.isDynamicShape = 'isDynamic' in this.shape && this.shape.isDynamic;
     this.type |= Types.CONNECTION;

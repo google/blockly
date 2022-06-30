@@ -35,8 +35,13 @@ import {WorkspaceSvg} from './workspace_svg.js';
  * @alias Blockly.MetricsManager
  */
 export class MetricsManager implements IMetricsManager {
+  /** The workspace to calculate metrics for. */
+  protected readonly workspace_: WorkspaceSvg;
+
   /** @param workspace The workspace to calculate metrics for. */
-  constructor(protected readonly workspace: WorkspaceSvg) {}
+  constructor(workspace: WorkspaceSvg) {
+    this.workspace_ = workspace;
+  }
 
   /**
    * Gets the dimensions of the given workspace component, in pixel coordinates.
@@ -64,11 +69,11 @@ export class MetricsManager implements IMetricsManager {
    */
   getFlyoutMetrics(opt_own?: boolean): ToolboxMetrics {
     const flyoutDimensions =
-        this.getDimensionsPx_(this.workspace.getFlyout(opt_own));
+        this.getDimensionsPx_(this.workspace_.getFlyout(opt_own));
     return {
       width: flyoutDimensions.width,
       height: flyoutDimensions.height,
-      position: this.workspace.toolboxPosition,
+      position: this.workspace_.toolboxPosition,
     };
   }
 
@@ -82,12 +87,12 @@ export class MetricsManager implements IMetricsManager {
    */
   getToolboxMetrics(): ToolboxMetrics {
     const toolboxDimensions =
-        this.getDimensionsPx_(this.workspace.getToolbox());
+        this.getDimensionsPx_(this.workspace_.getToolbox());
 
     return {
       width: toolboxDimensions.width,
       height: toolboxDimensions.height,
-      position: this.workspace.toolboxPosition,
+      position: this.workspace_.toolboxPosition,
     };
   }
 
@@ -97,7 +102,7 @@ export class MetricsManager implements IMetricsManager {
    * @return The width and height of the workspace's parent SVG element.
    */
   getSvgMetrics(): Size {
-    return this.workspace.getCachedParentSvgSize();
+    return this.workspace_.getCachedParentSvgSize();
   }
 
   /**
@@ -110,8 +115,8 @@ export class MetricsManager implements IMetricsManager {
     let absoluteLeft = 0;
     const toolboxMetrics = this.getToolboxMetrics();
     const flyoutMetrics = this.getFlyoutMetrics(true);
-    const doesToolboxExist = !!this.workspace.getToolbox();
-    const doesFlyoutExist = !!this.workspace.getFlyout(true);
+    const doesToolboxExist = !!this.workspace_.getToolbox();
+    const doesFlyoutExist = !!this.workspace_.getFlyout(true);
     const toolboxPosition =
         doesToolboxExist ? toolboxMetrics.position : flyoutMetrics.position;
 
@@ -144,15 +149,15 @@ export class MetricsManager implements IMetricsManager {
    *     coordinates or pixel coordinates.
    */
   getViewMetrics(opt_getWorkspaceCoordinates?: boolean): ContainerRegion {
-    const scale = opt_getWorkspaceCoordinates ? this.workspace.scale : 1;
+    const scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
     const svgMetrics = this.getSvgMetrics();
     const toolboxMetrics = this.getToolboxMetrics();
     const flyoutMetrics = this.getFlyoutMetrics(true);
-    const doesToolboxExist = !!this.workspace.getToolbox();
+    const doesToolboxExist = !!this.workspace_.getToolbox();
     const toolboxPosition =
         doesToolboxExist ? toolboxMetrics.position : flyoutMetrics.position;
 
-    if (this.workspace.getToolbox()) {
+    if (this.workspace_.getToolbox()) {
       if (toolboxPosition === toolboxUtils.Position.TOP ||
           toolboxPosition === toolboxUtils.Position.BOTTOM) {
         svgMetrics.height -= toolboxMetrics.height;
@@ -161,7 +166,7 @@ export class MetricsManager implements IMetricsManager {
           toolboxPosition === toolboxUtils.Position.RIGHT) {
         svgMetrics.width -= toolboxMetrics.width;
       }
-    } else if (this.workspace.getFlyout(true)) {
+    } else if (this.workspace_.getFlyout(true)) {
       if (toolboxPosition === toolboxUtils.Position.TOP ||
           toolboxPosition === toolboxUtils.Position.BOTTOM) {
         svgMetrics.height -= flyoutMetrics.height;
@@ -174,8 +179,8 @@ export class MetricsManager implements IMetricsManager {
     return {
       height: svgMetrics.height / scale,
       width: svgMetrics.width / scale,
-      top: -this.workspace.scrollY / scale,
-      left: -this.workspace.scrollX / scale,
+      top: -this.workspace_.scrollY / scale,
+      left: -this.workspace_.scrollX / scale,
     };
   }
 
@@ -188,9 +193,9 @@ export class MetricsManager implements IMetricsManager {
    * @return The metrics for the content container.
    */
   getContentMetrics(opt_getWorkspaceCoordinates?: boolean): ContainerRegion {
-    const scale = opt_getWorkspaceCoordinates ? 1 : this.workspace.scale;
+    const scale = opt_getWorkspaceCoordinates ? 1 : this.workspace_.scale;
     // Block bounding box is in workspace coordinates.
-    const blockBox = this.workspace.getBlocksBoundingBox();
+    const blockBox = this.workspace_.getBlocksBoundingBox();
 
     return {
       height: (blockBox.bottom - blockBox.top) * scale,
@@ -207,8 +212,8 @@ export class MetricsManager implements IMetricsManager {
    */
   hasFixedEdges(): boolean {
     // This exists for optimization of bump logic.
-    return !this.workspace.isMovableHorizontally() ||
-        !this.workspace.isMovableVertically();
+    return !this.workspace_.isMovableHorizontally() ||
+        !this.workspace_.isMovableVertically();
   }
 
   /**
@@ -225,8 +230,8 @@ export class MetricsManager implements IMetricsManager {
       return {};
     }
 
-    const hScrollEnabled = this.workspace.isMovableHorizontally();
-    const vScrollEnabled = this.workspace.isMovableVertically();
+    const hScrollEnabled = this.workspace_.isMovableHorizontally();
+    const vScrollEnabled = this.workspace_.isMovableVertically();
 
     const viewMetrics = opt_viewMetrics || this.getViewMetrics(false);
 
@@ -288,7 +293,7 @@ export class MetricsManager implements IMetricsManager {
   getScrollMetrics(
       opt_getWorkspaceCoordinates?: boolean, opt_viewMetrics?: ContainerRegion,
       opt_contentMetrics?: ContainerRegion): ContainerRegion {
-    const scale = opt_getWorkspaceCoordinates ? this.workspace.scale : 1;
+    const scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
     const viewMetrics = opt_viewMetrics || this.getViewMetrics(false);
     const contentMetrics = opt_contentMetrics || this.getContentMetrics();
     const fixedEdges = this.getComputedFixedEdges_(viewMetrics);

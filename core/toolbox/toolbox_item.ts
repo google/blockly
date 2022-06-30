@@ -38,6 +38,8 @@ export class ToolboxItem implements IToolboxItem {
   protected level_: number;
   protected toolboxItemDef_: toolbox.ToolboxItemInfo|null;
   protected workspace_: WorkspaceSvg;
+  /** The toolbox this category belongs to. */
+  protected readonly parentToolbox_: IToolbox;
 
   /**
    * @param toolboxItemDef The JSON defining the toolbox item.
@@ -46,8 +48,7 @@ export class ToolboxItem implements IToolboxItem {
    *     have a parent.
    */
   constructor(
-      toolboxItemDef: toolbox.ToolboxItemInfo,
-      protected readonly parentToolbox: IToolbox,
+      toolboxItemDef: toolbox.ToolboxItemInfo, parentToolbox: IToolbox,
       opt_parent?: ICollapsibleToolboxItem) {
     /** The id for the category. */
     this.id_ = (toolboxItemDef as AnyDuringMigration)['toolboxitemid'] ||
@@ -62,8 +63,10 @@ export class ToolboxItem implements IToolboxItem {
     /** The JSON definition of the toolbox item. */
     this.toolboxItemDef_ = toolboxItemDef;
 
+    this.parentToolbox_ = parentToolbox;
+
     /** The workspace of the parent toolbox. */
-    this.workspace_ = this.parentToolbox.getWorkspace();
+    this.workspace_ = this.parentToolbox_.getWorkspace();
   }
 
   /**

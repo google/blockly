@@ -28,12 +28,16 @@ import {WorkspaceSvg} from './workspace_svg.js';
  * @alias Blockly.FlyoutMetricsManager
  */
 export class FlyoutMetricsManager extends MetricsManager {
+  /** The flyout that owns the workspace to calculate metrics for. */
+  protected flyout_: IFlyout;
+
   /**
    * @param workspace The flyout's workspace.
    * @param flyout The flyout.
    */
-  constructor(workspace: WorkspaceSvg, private readonly flyout: IFlyout) {
+  constructor(workspace: WorkspaceSvg, flyout: IFlyout) {
     super(workspace);
+    this.flyout_ = flyout;
   }
 
   /**
@@ -45,7 +49,7 @@ export class FlyoutMetricsManager extends MetricsManager {
       {height: number, y: number, width: number, x: number} {
     let blockBoundingBox;
     try {
-      blockBoundingBox = this.workspace.getCanvas().getBBox();
+      blockBoundingBox = this.workspace_.getCanvas().getBBox();
     } catch (e) {
       // Firefox has trouble with hidden elements (Bug 528969).
       // 2021 Update: It looks like this was fixed around Firefox 77 released in
@@ -58,7 +62,7 @@ export class FlyoutMetricsManager extends MetricsManager {
   override getContentMetrics(opt_getWorkspaceCoordinates: boolean) {
     // The bounding box is in workspace coordinates.
     const blockBoundingBox = this.getBoundingBox_();
-    const scale = opt_getWorkspaceCoordinates ? 1 : this.workspace.scale;
+    const scale = opt_getWorkspaceCoordinates ? 1 : this.workspace_.scale;
 
     return {
       height: blockBoundingBox.height * scale,
@@ -74,8 +78,8 @@ export class FlyoutMetricsManager extends MetricsManager {
     // AnyDuringMigration because:  Expected 1 arguments, but got 0.
     const contentMetrics =
         opt_contentMetrics || (this.getContentMetrics as AnyDuringMigration)();
-    const margin = this.flyout.MARGIN * this.workspace.scale;
-    const scale = opt_getWorkspaceCoordinates ? this.workspace.scale : 1;
+    const margin = this.flyout_.MARGIN * this.workspace_.scale;
+    const scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
 
     // The left padding isn't just the margin. Some blocks are also offset by
     // tabWidth so that value and statement blocks line up.

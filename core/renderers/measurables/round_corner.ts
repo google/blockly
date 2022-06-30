@@ -42,9 +42,9 @@ export class RoundCorner extends Measurable {
         (!opt_position || opt_position === 'left' ? Types.LEFT_ROUND_CORNER :
                                                     Types.RIGHT_ROUND_CORNER) |
         Types.CORNER;
-    this.width = this.constants.CORNER_RADIUS;
+    this.width = this.constants_.CORNER_RADIUS;
     // The rounded corner extends into the next row by 4 so we only take the
     // height that is aligned with this row.
-    this.height = this.constants.CORNER_RADIUS / 2;
+    this.height = this.constants_.CORNER_RADIUS / 2;
   }
 }

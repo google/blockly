@@ -51,13 +51,13 @@ export class ExternalValueInput extends InputConnection {
       this.height = this.shape.height as number;
     } else {
       this.height = this.connectedBlockHeight -
-          this.constants.TAB_OFFSET_FROM_TOP - this.constants.MEDIUM_PADDING;
+          this.constants_.TAB_OFFSET_FROM_TOP - this.constants_.MEDIUM_PADDING;
     }
 
     this.width = this.shape.width as
-        number + this.constants.EXTERNAL_VALUE_INPUT_PADDING;
+        number + this.constants_.EXTERNAL_VALUE_INPUT_PADDING;
 
-    this.connectionOffsetY = this.constants.TAB_OFFSET_FROM_TOP;
+    this.connectionOffsetY = this.constants_.TAB_OFFSET_FROM_TOP;
 
     this.connectionHeight = this.shape.height as number;
 

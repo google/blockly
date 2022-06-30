@@ -270,7 +270,7 @@ export class ToolboxCategory extends ToolboxItem implements
    */
   protected createIconDom_(): Element {
     const toolboxIcon = document.createElement('span');
-    if (!this.parentToolbox.isHorizontal()) {
+    if (!this.parentToolbox_.isHorizontal()) {
       // AnyDuringMigration because:  Argument of type 'string | undefined' is
       // not assignable to parameter of type 'string'.
       dom.addClass(
@@ -450,8 +450,8 @@ export class ToolboxCategory extends ToolboxItem implements
     this.htmlDiv_!.style.display = isVisible ? 'block' : 'none';
     this.isHidden_ = !isVisible;
 
-    if (this.parentToolbox.getSelectedItem() === this) {
-      this.parentToolbox.clearSelection();
+    if (this.parentToolbox_.getSelectedItem() === this) {
+      this.parentToolbox_.clearSelection();
     }
   }
 

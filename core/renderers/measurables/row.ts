@@ -133,11 +133,16 @@ export class Row {
    */
   align: number|null = null;
 
+  protected readonly constants_: ConstantProvider;
+
   /**
-   * @param constants_ The rendering constants provider.
+   * @param constants The rendering constants provider.
    * @internal
    */
-  constructor(protected readonly constants_: ConstantProvider) {
+  constructor(constants: ConstantProvider) {
+    /** The renderer's constant provider. */
+    this.constants_ = constants;
+
     /** The type of this rendering object. */
     this.type = Types.ROW;
 

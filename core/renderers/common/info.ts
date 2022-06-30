@@ -67,6 +67,9 @@ export class RenderInfo {
   isInsertionMarker: boolean;
   RTL: boolean;
 
+  /** The block renderer in use. */
+  protected readonly renderer_: Renderer;
+
   /** The height of the rendered block, including child blocks. */
   height = 0;
 
@@ -101,11 +104,13 @@ export class RenderInfo {
    * @param block The block to measure.
    * @internal
    */
-  constructor(protected readonly renderer: Renderer, block: BlockSvg) {
+  constructor(renderer: Renderer, block: BlockSvg) {
+    this.renderer_ = renderer;
+
     this.block_ = block;
 
     /** The renderer's constant provider. */
-    this.constants_ = this.renderer.getConstants();
+    this.constants_ = this.renderer_.getConstants();
 
     /**
      * A measurable representing the output connection if the block has one.
@@ -154,7 +159,7 @@ export class RenderInfo {
    * @internal
    */
   getRenderer(): Renderer {
-    return this.renderer;
+    return this.renderer_;
   }
 
   /**

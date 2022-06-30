@@ -427,27 +427,38 @@ export class Options {
         theme.name || 'builtin' + idGenerator.getNextUniqueId(), theme);
   }
 }
-export interface GridOptions {
-  colour: string;
-  length: number;
-  snap: boolean;
-  spacing: number;
+
+export namespace Options {
+  export interface GridOptions {
+    colour: string;
+    length: number;
+    snap: boolean;
+    spacing: number;
+  }
+
+  export interface MoveOptions {
+    drag: boolean;
+    scrollbars: boolean|ScrollbarOptions;
+    wheel: boolean;
+  }
+
+  export interface ScrollbarOptions {
+    horizontal: boolean;
+    vertical: boolean;
+  }
+
+  export interface ZoomOptions {
+    controls: boolean;
+    maxScale: number;
+    minScale: number;
+    pinch: boolean;
+    scaleSpeed: number;
+    startScale: number;
+    wheel: boolean;
+  }
 }
-export interface MoveOptions {
-  drag: boolean;
-  scrollbars: boolean|ScrollbarOptions;
-  wheel: boolean;
-}
-export interface ScrollbarOptions {
-  horizontal: boolean;
-  vertical: boolean;
-}
-export interface ZoomOptions {
-  controls: boolean;
-  maxScale: number;
-  minScale: number;
-  pinch: boolean;
-  scaleSpeed: number;
-  startScale: number;
-  wheel: boolean;
-}
+
+export type GridOptions = Options.GridOptions;
+export type MoveOptions = Options.MoveOptions;
+export type ScrollbarOptions = Options.ScrollbarOptions;
+export type ZoomOptions = Options.ZoomOptions;

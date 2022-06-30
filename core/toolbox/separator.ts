@@ -75,9 +75,14 @@ export class ToolboxSeparator extends ToolboxItem {
     dom.removeNode(this.htmlDiv_ as HTMLDivElement);
   }
 }
-export interface CssConfig {
-  container: string|undefined;
+
+export namespace ToolboxSeparator {
+  export interface CssConfig {
+    container: string|undefined;
+  }
 }
+
+export type CssConfig = ToolboxSeparator.CssConfig;
 
 /** CSS for Toolbox.  See css.js for use. */
 Css.register(`

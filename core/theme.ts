@@ -165,35 +165,46 @@ export class Theme {
     return theme;
   }
 }
-export interface BlockStyle {
-  colourPrimary: string;
-  colourSecondary: string;
-  colourTertiary: string;
-  hat?: string;
+
+export namespace Theme {
+  export interface BlockStyle {
+    colourPrimary: string;
+    colourSecondary: string;
+    colourTertiary: string;
+    hat?: string;
+  }
+
+  export interface CategoryStyle {
+    colour: string;
+  }
+
+  export interface ComponentStyle {
+    workspaceBackgroundColour: string|null;
+    toolboxBackgroundColour: string|null;
+    toolboxForegroundColour: string|null;
+    flyoutBackgroundColour: string|null;
+    flyoutForegroundColour: string|null;
+    flyoutOpacity: number|null;
+    scrollbarColour: string|null;
+    scrollbarOpacity: number|null;
+    insertionMarkerColour: string|null;
+    insertionMarkerOpacity: number|null;
+    markerColour: string|null;
+    cursorColour: string|null;
+    selectedGlowColour: string|null;
+    selectedGlowOpacity: number|null;
+    replacementGlowColour: string|null;
+    replacementGlowOpacity: number|null;
+  }
+
+  export interface FontStyle {
+    family: string|null;
+    weight: string|null;
+    size: number|null;
+  }
 }
-export interface CategoryStyle {
-  colour: string;
-}
-export interface ComponentStyle {
-  workspaceBackgroundColour: string|null;
-  toolboxBackgroundColour: string|null;
-  toolboxForegroundColour: string|null;
-  flyoutBackgroundColour: string|null;
-  flyoutForegroundColour: string|null;
-  flyoutOpacity: number|null;
-  scrollbarColour: string|null;
-  scrollbarOpacity: number|null;
-  insertionMarkerColour: string|null;
-  insertionMarkerOpacity: number|null;
-  markerColour: string|null;
-  cursorColour: string|null;
-  selectedGlowColour: string|null;
-  selectedGlowOpacity: number|null;
-  replacementGlowColour: string|null;
-  replacementGlowOpacity: number|null;
-}
-export interface FontStyle {
-  family: string|null;
-  weight: string|null;
-  size: number|null;
-}
+
+export type BlockStyle = Theme.BlockStyle;
+export type CategoryStyle = Theme.CategoryStyle;
+export type ComponentStyle = Theme.ComponentStyle;
+export type FontStyle = Theme.FontStyle;

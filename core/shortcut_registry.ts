@@ -30,13 +30,6 @@ import {Workspace} from './workspace.js';
  * @alias Blockly.ShortcutRegistry
  */
 export class ShortcutRegistry {
-  /** Enum of valid modifiers. */
-  static modifierKeys = {
-    'Shift': KeyCodes.SHIFT,
-    'Control': KeyCodes.CTRL,
-    'Alt': KeyCodes.ALT,
-    'Meta': KeyCodes.META,
-  };
   static registry: AnyDuringMigration;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   private registry_!: {[key: string]: KeyboardShortcut};
@@ -326,14 +319,29 @@ export class ShortcutRegistry {
   }
 }
 
-export interface KeyboardShortcut {
-  callback?: ((p1: Workspace, p2: Event, p3: KeyboardShortcut) => boolean);
-  name: string;
-  preconditionFn?: ((p1: Workspace) => boolean);
-  metadata?: object;
-  keyCodes?: (number|string)[];
-  allowCollision?: boolean;
+export namespace ShortcutRegistry {
+  export interface KeyboardShortcut {
+    callback?: ((p1: Workspace, p2: Event, p3: KeyboardShortcut) => boolean);
+    name: string;
+    preconditionFn?: ((p1: Workspace) => boolean);
+    metadata?: object;
+    keyCodes?: (number|string)[];
+    allowCollision?: boolean;
+  }
+
+  /** Supported modifiers. */
+  export enum modifierKeys {
+    Shift = KeyCodes.SHIFT,
+    Control = KeyCodes.CTRL,
+    Alt = KeyCodes.ALT,
+    Meta = KeyCodes.META,
+  }
 }
+
+export type KeyboardShortcut = ShortcutRegistry.KeyboardShortcut;
+// No need to export ShorcutRegistry.modifierKeys from the module at this time
+// because (1) it wasn't automatically converted by the automatic migration
+// script, (2) the name doesn't follow the styleguide.
 
 // Creates and assigns the singleton instance.
 const registry = new ShortcutRegistry();

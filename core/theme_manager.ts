@@ -185,7 +185,13 @@ export class ThemeManager {
     this.componentDB_ = null as AnyDuringMigration;
   }
 }
-export interface Component {
-  element: Element;
-  propertyName: string;
+
+export namespace ThemeManager {
+  /** The type for a Blockly UI Component. */
+  export interface Component {
+    element: Element;
+    propertyName: string;
+  }
 }
+
+export type Component = ThemeManager.Component;

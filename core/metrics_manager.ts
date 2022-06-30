@@ -401,32 +401,56 @@ export class MetricsManager implements IMetricsManager {
     };
   }
 }
-export interface ToolboxMetrics {
-  width: number;
-  height: number;
-  position: toolboxUtils.Position;
+
+export namespace MetricsManager {
+  /**
+   * Describes the width, height and location of the toolbox on the main
+   * workspace.
+   */
+  export interface ToolboxMetrics {
+    width: number;
+    height: number;
+    position: toolboxUtils.Position;
+  }
+
+  /** Describes where the viewport starts in relation to the workspace SVG. */
+  export interface AbsoluteMetrics {
+    left: number;
+    top: number;
+  }
+
+  /**
+   * All the measurements needed to describe the size and location of a
+   * container.
+   */
+  export interface ContainerRegion {
+    height: number;
+    width: number;
+    top: number;
+    left: number;
+  }
+
+  /** Describes fixed edges of the workspace. */
+  export interface FixedEdges {
+    top?: number;
+    bottom?: number;
+    left?: number;
+    right?: number;
+  }
+
+  /** Common metrics used for UI elements. */
+  export interface UiMetrics {
+    viewMetrics: ContainerRegion;
+    absoluteMetrics: AbsoluteMetrics;
+    toolboxMetrics: ToolboxMetrics;
+  }
 }
-export interface AbsoluteMetrics {
-  left: number;
-  top: number;
-}
-export interface ContainerRegion {
-  height: number;
-  width: number;
-  top: number;
-  left: number;
-}
-export interface FixedEdges {
-  top?: number;
-  bottom?: number;
-  left?: number;
-  right?: number;
-}
-export interface UiMetrics {
-  viewMetrics: ContainerRegion;
-  absoluteMetrics: AbsoluteMetrics;
-  toolboxMetrics: ToolboxMetrics;
-}
+
+export type ToolboxMetrics = MetricsManager.ToolboxMetrics;
+export type AbsoluteMetrics = MetricsManager.AbsoluteMetrics;
+export type ContainerRegion = MetricsManager.ContainerRegion;
+export type FixedEdges = MetricsManager.FixedEdges;
+export type UiMetrics = MetricsManager.UiMetrics;
 
 registry.register(
     registry.Type.METRICS_MANAGER, registry.DEFAULT, MetricsManager);

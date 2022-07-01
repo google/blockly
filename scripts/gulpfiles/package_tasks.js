@@ -14,7 +14,7 @@ gulp.replace = require('gulp-replace');
 gulp.rename = require('gulp-rename');
 gulp.insert = require('gulp-insert');
 gulp.umd = require('gulp-umd');
-gulp.regexReplace = require('gulp-regex-replace');
+gulp.replace = require('gulp-replace');
 
 var path = require('path');
 var fs = require('fs');
@@ -393,7 +393,7 @@ function packageDTS() {
   ];
   return gulp.src(handwrittenSrcs, {base: 'typings'})
       .pipe(gulp.src(`${BUILD_DIR}/ts/**/*.d.ts`))
-      .pipe(gulp.regexReplace({regex: 'AnyDuringMigration', replace: 'any'}))
+      .pipe(gulp.replace('AnyDuringMigration', 'any'))
       .pipe(gulp.dest(RELEASE_DIR));
 };
 

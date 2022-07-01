@@ -1,12 +1,12 @@
 {
   "chunk": [
-    "blockly:260",
-    "blocks:10:blockly",
-    "all:11:blockly",
-    "all1:11:blockly",
-    "all2:11:blockly",
-    "all3:11:blockly",
-    "all4:11:blockly"
+    "main:261",
+    "blocks:10:main",
+    "all:11:main",
+    "all1:11:main",
+    "all2:11:main",
+    "all3:11:main",
+    "all4:11:main"
   ],
   "js": [
     "./build/src/core/inject.js",
@@ -267,8 +267,9 @@
     "./build/src/core/connection.js",
     "./build/src/core/common.js",
     "./build/src/core/blocks.js",
-    "./build/src/closure/goog/base_minimal.js",
     "./build/src/core/blockly.js",
+    "./build/src/closure/goog/base_minimal.js",
+    "./build/src/core/main.js",
     "./blocks/variables_dynamic.js",
     "./blocks/variables.js",
     "./blocks/text.js",

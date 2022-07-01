@@ -9,6 +9,4 @@
  * @author samelh@google.com (Sam El-Husseini)
  */
 
-/// <reference path="blockly.d.ts" />
-
-export * from 'core/blockly';
+export * from './declarations/core/blockly';

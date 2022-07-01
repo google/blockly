@@ -9,8 +9,5 @@
  * @author samelh@google.com (Sam El-Husseini)
  */
 
-/// <reference path="core.d.ts" />
-
-import * as Blockly from './core';
 declare const javascript: any;
 export = javascript;

@@ -389,8 +389,9 @@ function packageDTS() {
   const handwrittenSrcs = [
     'typings/*.d.ts',
     'typings/msg/msg.d.ts',
+    `${BUILD_DIR}/ts/**/*.d.ts`
   ];
-  return gulp.src(handwrittenSrcs, {base: 'typings'})
+  return gulp.src(handwrittenSrcs)
       .pipe(gulp.dest(RELEASE_DIR));
 };
 

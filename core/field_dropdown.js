@@ -130,13 +130,6 @@ const FieldDropdown = function(menuGenerator, opt_validator, opt_config) {
   this.onInputHandler_ = null;
 
   /**
-   * Constant max count option menu for add search
-   * @type {number}
-   * @private
-   */
-  this.maxOptionForAddSearch = 10;
-
-  /**
    * The dropdown menu.
    * @type {?Menu}
    * @protected
@@ -170,6 +163,13 @@ const FieldDropdown = function(menuGenerator, opt_validator, opt_config) {
    * @private
    */
   this.container_ = null;
+
+  /**
+   * Seacrh input element for menu.
+   * @type {?HTMLElement}
+   * @private
+   */
+  this.search_ = null;
 };
 object.inherits(FieldDropdown, Field);
 
@@ -251,6 +251,11 @@ FieldDropdown.MAX_MENU_HEIGHT_VH = 0.45;
  * @const
  */
 const IMAGE_Y_OFFSET = 5;
+
+/**
+ * Constant max count option menu for add search
+ */
+const MAX_OPTIONS_FOR_ADD_SEARCH = 10;
 
 /**
  * The total vertical padding above and below an image.
@@ -379,7 +384,7 @@ FieldDropdown.prototype.createSVGArrow_ = function() {
 };
 
 FieldDropdown.prototype.createSearch_ = function() {
-  const inputElement = this.createSearchInput_();
+  const inputElement = this.search_ = this.createSearchInput_();
   const inputWrapper = document.createElement('div');
   dom.addClass(inputWrapper, 'blockly-dropdown-search-input');
   inputWrapper.appendChild(inputElement);
@@ -408,8 +413,7 @@ FieldDropdown.prototype.showEditor_ = function(opt_e) {
 
   // Remove any pre-existing elements in the dropdown.
   DropDownDiv.clearContent();
-
-  const addSearchInput = this.options_.length > this.maxOptionForAddSearch;
+  const addSearchInput = this.options_.length > MAX_OPTIONS_FOR_ADD_SEARCH;
   if (addSearchInput) {
     this.container_.appendChild(this.createSearch_());
   }
@@ -435,6 +439,9 @@ FieldDropdown.prototype.showEditor_ = function(opt_e) {
   // Otherwise it will cause a page scroll to get the misplaced menu in
   // view. See issue #1329.
   this.menu_.focus();
+  if (addSearchInput && this.search_) {
+    this.search_.focus();
+  }
 
   if (this.selectedMenuItem_) {
     this.menu_.setHighlighted(this.selectedMenuItem_);

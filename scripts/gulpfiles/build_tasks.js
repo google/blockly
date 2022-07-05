@@ -109,7 +109,7 @@ const NAMESPACE_PROPERTY = '__namespace__';
 const chunks = [
   {
     name: 'blockly',
-    entry: path.join(CORE_DIR, 'blockly.js'),
+    entry: path.join(CORE_DIR, 'main.js'),
     exports: 'module$exports$Blockly',
     reexport: 'Blockly',
   },

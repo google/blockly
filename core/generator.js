@@ -547,7 +547,7 @@ Object.defineProperties(Generator.prototype, {
      * @return {!Names|undefined} Name database.
      */
     get: function() {
-      deprecation.warn('variableDB_', 'May 2021', 'May 2026', 'nameDB_');
+      deprecation.warn('variableDB_', 'May 2021', 'September 2022', 'nameDB_');
       return this.nameDB_;
     },
     /**
@@ -555,7 +555,7 @@ Object.defineProperties(Generator.prototype, {
      * @param {!Names|undefined} nameDb New name database.
      */
     set: function(nameDb) {
-      deprecation.warn('variableDB_', 'May 2021', 'May 2026', 'nameDB_');
+      deprecation.warn('variableDB_', 'May 2021', 'September 2022', 'nameDB_');
       this.nameDB_ = nameDb;
     },
   },

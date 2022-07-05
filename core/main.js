@@ -14,11 +14,14 @@
 goog.module('Blockly.main');
 
 const Blockly = goog.require('Blockly');
+const ContextMenu = goog.require('Blockly.ContextMenu');
+const Events = goog.require('Blockly.Events');
 const Msg = goog.require('Blockly.Msg');
 const colour = goog.require('Blockly.utils.colour');
 const common = goog.require('Blockly.common');
 const deprecation = goog.require('Blockly.utils.deprecation');
 const dialog = goog.require('Blockly.dialog');
+const eventUtils = goog.require('Blockly.Events.utils');
 
 /*
  * Aliased functions and properties that used to be on the Blockly namespace.
@@ -156,6 +159,59 @@ Object.defineProperties(Blockly, {
   },
 });
 
+// Add accessors for properties on Blockly.ContextMenu that have now
+// been deprecated.
+Object.defineProperties(ContextMenu, {
+  /**
+   * Which block is the context menu attached to?
+   * @name Blockly.ContextMenu.currentBlock
+   * @type {Block}
+   * @deprecated Use Blockly.Tooltip.getCurrentBlock() /
+   *     .setCurrentBlock() instead.  (September 2021)
+   * @suppress {checkTypes}
+   */
+  currentBlock: {
+    get: function() {
+      deprecation.warn(
+          'Blockly.ContextMenu.currentBlock', 'September 2021',
+          'September 2022', 'Blockly.Tooltip.getCurrentBlock()');
+      return ContextMenu.getCurrentBlock();
+    },
+    set: function(block) {
+      deprecation.warn(
+          'Blockly.ContextMenu.currentBlock', 'September 2021',
+          'September 2022', 'Blockly.Tooltip.setCurrentBlock(block)');
+      ContextMenu.setCurrentBlock(block);
+    },
+  },
+});
+
+// Add accessors for properties on Blockly.Events that have now been
+// deprecated.
+Object.defineProperties(Events, {
+  /**
+   * Sets whether the next event should be added to the undo stack.
+   * @name Blockly.Evenents.recordUndo
+   * @type {boolean}
+   * @deprecated Use Blockly.Events.getRecordUndo() and
+   *     .setRecordUndo().  (September 2021)
+   * @suppress {checkTypes}
+   */
+  recordUndo: {
+    get: function() {
+      deprecation.warn(
+          'Blockly.Events.recordUndo', 'September 2021', 'September 2022',
+          'Blockly.Events.getRecordUndo()');
+      return eventUtils.getRecordUndo();
+    },
+    set: function(record) {
+      deprecation.warn(
+          'Blockly.Events.recordUndo', 'September 2021', 'September 2022',
+          'Blockly.Events.setRecordUndo()');
+      eventUtils.setRecordUndo(record);
+    },
+  },
+});
 
 // If Blockly is compiled with ADVANCED_COMPILATION and/or loaded as a
 // CJS or ES module there will not be a Blockly global variable

@@ -110,7 +110,7 @@ const chunks = [
   {
     name: 'blockly',
     entry: path.join(CORE_DIR, 'main.js'),
-    exports: 'module$exports$Blockly',
+    exports: 'module$build$src$core$blockly',
     reexport: 'Blockly',
   },
   {
@@ -653,7 +653,7 @@ function buildCompiled() {
     // declareLegacyNamespace this was very straightforward.  Without
     // it, we have to rely on implmentation details.  See
     // https://github.com/google/closure-compiler/issues/1601#issuecomment-483452226
-    define: `${chunks[0].exports}.VERSION='${packageJson.version}'`,
+    define: `VERSION$$${chunks[0].exports}='${packageJson.version}'`,
     chunk: chunkOptions.chunk,
     chunk_wrapper: chunkOptions.chunk_wrapper,
     rename_prefix_namespace: NAMESPACE_VARIABLE,

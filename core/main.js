@@ -18,6 +18,7 @@ const ContextMenu = goog.require('Blockly.ContextMenu');
 const Events = goog.require('Blockly.Events');
 const Msg = goog.require('Blockly.Msg');
 const Tooltip = goog.require('Blockly.Tooltip');
+const WidgetDiv = goog.require('Blockly.WidgetDiv');
 const colour = goog.require('Blockly.utils.colour');
 const common = goog.require('Blockly.common');
 const deprecation = goog.require('Blockly.utils.deprecation');
@@ -248,6 +249,27 @@ Object.defineProperties(Tooltip, {
           'Blockly.Tooltip.DIV', 'September 2021', 'September 2022',
           'Blockly.Tooltip.getDiv()');
       return Tooltip.getDiv();
+    },
+  },
+});
+
+// Add accessors for properties on Blockly.WidgetDiv that have now been
+// deprecated.
+Object.defineProperties(WidgetDiv, {
+  /**
+   * The HTML container for popup overlays (e.g. editor widgets).
+   * @name Blockly.WidgetDiv.DIV
+   * @type {?Element}
+   * @deprecated Use Blockly.WidgetDiv.getDiv() and .setDiv().
+   *     (September 2021)
+   * @suppress {checkTypes}
+   */
+  DIV: {
+    get: function() {
+      deprecation.warn(
+          'Blockly.WidgetDiv.DIV', 'September 2021', 'September 2022',
+          'Blockly.WidgetDiv.getDiv()');
+      return WidgetDiv.getDiv();
     },
   },
 });

@@ -11,7 +11,7 @@
 
 goog.module('Blockly.Dart.variablesDynamic');
 
-const Dart = goog.require('Blockly.Dart');
+const {dartGenerator: Dart} = goog.require('Blockly.Dart');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Dart.variables');
 

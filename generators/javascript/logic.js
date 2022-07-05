@@ -11,7 +11,7 @@
 
 goog.module('Blockly.JavaScript.logic');
 
-const JavaScript = goog.require('Blockly.JavaScript');
+const {javascriptGenerator: JavaScript} = goog.require('Blockly.JavaScript');
 
 
 JavaScript['controls_if'] = function(block) {

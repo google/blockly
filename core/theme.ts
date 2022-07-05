@@ -142,6 +142,7 @@ export class Theme {
    * @return A new Blockly theme.
    */
   static defineTheme(name: string, themeObj: AnyDuringMigration): Theme {
+    name = name.toLowerCase();
     const theme = new Theme(name);
     let base = themeObj['base'];
     if (base) {

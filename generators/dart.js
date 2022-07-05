@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.Dart');
-goog.module.declareLegacyNamespace();
 
 const Variables = goog.require('Blockly.Variables');
 const stringUtils = goog.require('Blockly.utils.string');
@@ -301,4 +300,4 @@ Dart.getAdjusted = function(block, atId, opt_delta, opt_negate,
   return at;
 };
 
-exports = Dart;
+exports.dartGenerator = Dart;

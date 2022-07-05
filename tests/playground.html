@@ -184,8 +184,15 @@ function load() {
 }
 
 function toCode(lang) {
+  var generator = ({
+    'JavaScript': javascriptGenerator,
+    'Python': pythonGenerator,
+    'PHP': phpGenerator,
+    'Lua': luaGenerator,
+    'Dart': dartGenerator,
+  })[lang];
   var output = document.getElementById('importExport');
-  output.value = Blockly[lang].workspaceToCode(workspace);
+  output.value = generator.workspaceToCode(workspace);
   taChange();
 }
 

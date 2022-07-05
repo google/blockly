@@ -11,7 +11,7 @@
 
 goog.module('Blockly.Dart.loops');
 
-const Dart = goog.require('Blockly.Dart');
+const {dartGenerator: Dart} = goog.require('Blockly.Dart');
 const stringUtils = goog.require('Blockly.utils.string');
 const {NameType} = goog.require('Blockly.Names');
 

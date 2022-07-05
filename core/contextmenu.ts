@@ -30,7 +30,6 @@ import {MenuItem} from './menuitem.js';
 import {Msg} from './msg.js';
 import * as aria from './utils/aria.js';
 import {Coordinate} from './utils/coordinate.js';
-import * as deprecation from './utils/deprecation.js';
 import * as dom from './utils/dom.js';
 import {Rect} from './utils/rect.js';
 import * as svgMath from './utils/svg_math.js';

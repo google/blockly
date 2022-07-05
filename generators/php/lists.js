@@ -22,10 +22,9 @@
 
 goog.module('Blockly.PHP.lists');
 
-const PHP = goog.require('Blockly.PHP');
 const stringUtils = goog.require('Blockly.utils.string');
 const {NameType} = goog.require('Blockly.Names');
-
+const {phpGenerator: PHP} = goog.require('Blockly.PHP');
 
 PHP['lists_create_empty'] = function(block) {
   // Create an empty list.

@@ -11,9 +11,9 @@
 
 goog.module('Blockly.Lua.loops');
 
-const Lua = goog.require('Blockly.Lua');
 const stringUtils = goog.require('Blockly.utils.string');
 const {NameType} = goog.require('Blockly.Names');
+const {luaGenerator: Lua} = goog.require('Blockly.Lua');
 
 
 /**

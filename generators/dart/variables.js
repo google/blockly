@@ -11,8 +11,8 @@
 
 goog.module('Blockly.Dart.variables');
 
-const Dart = goog.require('Blockly.Dart');
 const {NameType} = goog.require('Blockly.Names');
+const {dartGenerator: Dart} = goog.require('Blockly.Dart');
 
 
 Dart['variables_get'] = function(block) {

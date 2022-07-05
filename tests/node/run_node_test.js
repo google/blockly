@@ -10,6 +10,7 @@
 
 const assert = require('chai').assert;
 const Blockly = require('../../dist/');
+const {javascriptGenerator} = require('../../dist/javascript');
 
 const xmlText = '<xml xmlns="https://developers.google.com/blockly/xml">\n' +
 '  <block type="text_print" x="37" y="63">\n' +
@@ -48,7 +49,7 @@ suite('Test Node.js', function() {
     Blockly.Xml.domToWorkspace(xml, workspace);
 
     // Convert code
-    const code = Blockly.JavaScript.workspaceToCode(workspace);
+    const code = javascriptGenerator.workspaceToCode(workspace);
 
     // Check output
     assert.equal('window.alert(\'Hello from Blockly!\');', code.trim(), 'equal');

@@ -123,35 +123,35 @@ suite('Multiline Input Fields', function() {
      * @type {Array<CodeGenerationTestSuite>}
      */
     const testSuites = [
-      {title: 'Dart', generator: Blockly.Dart,
+      {title: 'Dart', generator: dartGenerator,
         testCases: [
           {title: 'Empty string', expectedCode: '\'\'',
             createBlock: createBlockFn('')},
           {title: 'String with newline', expectedCode: '\'bark bark\' + \'\\n\' + \n\' bark bark bark\' + \'\\n\' + \n\' bark bar bark bark\' + \'\\n\' + \n\'\'',
             createBlock: createBlockFn('bark bark\n bark bark bark\n bark bar bark bark\n')},
         ]},
-      {title: 'JavaScript', generator: Blockly.JavaScript,
+      {title: 'JavaScript', generator: javascriptGenerator,
         testCases: [
           {title: 'Empty string', expectedCode: '\'\'',
             createBlock: createBlockFn('')},
           {title: 'String with newline', expectedCode: '\'bark bark\' + \'\\n\' +\n\' bark bark bark\' + \'\\n\' +\n\' bark bar bark bark\' + \'\\n\' +\n\'\'',
             createBlock: createBlockFn('bark bark\n bark bark bark\n bark bar bark bark\n')},
         ]},
-      {title: 'Lua', generator: Blockly.Lua,
+      {title: 'Lua', generator: luaGenerator,
         testCases: [
           {title: 'Empty string', expectedCode: '\'\'',
             createBlock: createBlockFn('')},
           {title: 'String with newline', expectedCode: '\'bark bark\' .. \'\\n\' ..\n\' bark bark bark\' .. \'\\n\' ..\n\' bark bar bark bark\' .. \'\\n\' ..\n\'\'',
             createBlock: createBlockFn('bark bark\n bark bark bark\n bark bar bark bark\n')},
         ]},
-      {title: 'PHP', generator: Blockly.PHP,
+      {title: 'PHP', generator: phpGenerator,
         testCases: [
           {title: 'Empty string', expectedCode: '\'\'',
             createBlock: createBlockFn('')},
           {title: 'String with newline', expectedCode: '\'bark bark\' . "\\n" .\n\' bark bark bark\' . "\\n" .\n\' bark bar bark bark\' . "\\n" .\n\'\'',
             createBlock: createBlockFn('bark bark\n bark bark bark\n bark bar bark bark\n')},
         ]},
-      {title: 'Python', generator: Blockly.Python,
+      {title: 'Python', generator: pythonGenerator,
         testCases: [
           {title: 'Empty string', expectedCode: '\'\'',
             createBlock: createBlockFn('')},

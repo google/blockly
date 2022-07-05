@@ -17,4 +17,27 @@
 /* eslint-disable-next-line no-undef */
 for (const require of window.bootstrapInfo.requires) {
   goog.require(require);
+
+  // If require is a top-level chunk, create a global variable for it.
+  // This replaces the goog.module.declareLegacyNamespace calls that
+  // previously existed in each chunk entrypoint.
+  const exportName = {
+    'Blockly.Dart': 'dartGenerator',
+    'Blockly.Dart.all': 'dartGenerator',
+    'Blockly.JavaScript': 'javascriptGenerator',
+    'Blockly.JavaScript.all': 'javascriptGenerator',
+    'Blockly.Lua': 'luaGenerator',
+    'Blockly.Lua.all': 'luaGenerator',
+    'Blockly.PHP': 'phpGenerator',
+    'Blockly.PHP.all': 'phpGenerator',
+    'Blockly.Python': 'pythonGenerator',
+    'Blockly.Python.all': 'pythonGenerator',
+  }[require];
+  if (exportName) {
+    window[exportName] = goog.module.get(require)[exportName];
+  } else if (require === 'Blockly') {
+    window.Blockly = goog.module.get(require);
+  } else if (require === 'Blockly.libraryBlocks') {
+    window.libraryBlocks = goog.module.get(require);
+  }
 }

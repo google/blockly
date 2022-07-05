@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.JavaScript');
-goog.module.declareLegacyNamespace();
 
 const Variables = goog.require('Blockly.Variables');
 const objectUtils = goog.require('Blockly.utils.object');
@@ -320,4 +319,4 @@ JavaScript.getAdjusted = function(
   return at;
 };
 
-exports = JavaScript;
+exports.javascriptGenerator = JavaScript;

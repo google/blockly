@@ -25686,7 +25686,7 @@ declare module "core/inject" {
      * @return {!WorkspaceSvg} Newly created main workspace.
      * @alias Blockly.inject
      */
-    export function inject(container: Element | string, opt_options?: (() => void) | undefined): WorkspaceSvg;
+    export function inject(container: Element | string, opt_options?: Object | undefined): WorkspaceSvg;
     import { WorkspaceSvg } from "core/workspace_svg";
 }
 declare module "core/blockly" {

@@ -11,7 +11,7 @@
 
 goog.module('Blockly.Dart.logic');
 
-const Dart = goog.require('Blockly.Dart');
+const {dartGenerator: Dart} = goog.require('Blockly.Dart');
 
 
 Dart['controls_if'] = function(block) {

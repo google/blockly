@@ -18,7 +18,6 @@ goog.declareModuleId('Blockly.Tooltip');
 
 import * as browserEvents from './browser_events.js';
 import * as common from './common.js';
-import * as deprecation from './utils/deprecation.js';
 import * as blocklyString from './utils/string.js';
 
 

@@ -20,7 +20,6 @@ goog.module('Blockly.Tooltip');
 const blocklyString = goog.require('Blockly.utils.string');
 const browserEvents = goog.require('Blockly.browserEvents');
 const common = goog.require('Blockly.common');
-const deprecation = goog.require('Blockly.utils.deprecation');
 
 
 /**
@@ -89,25 +88,6 @@ const isVisible = function() {
   return visible;
 };
 exports.isVisible = isVisible;
-
-Object.defineProperties(exports, {
-  /**
-   * Is a tooltip currently showing?
-   * @name Blockly.Tooltip.visible
-   * @type {boolean}
-   * @deprecated Use Blockly.Tooltip.isVisible() instead.  (September
-   *     2021)
-   * @suppress {checkTypes}
-   */
-  visible: {
-    get: function() {
-      deprecation.warn(
-          'Blockly.Tooltip.visible', 'September 2021', 'September 2022',
-          'Blockly.Tooltip.isVisible()');
-      return isVisible();
-    },
-  },
-});
 
 /**
  * Is someone else blocking the tooltip from being shown?
@@ -205,25 +185,6 @@ const getDiv = function() {
   return DIV;
 };
 exports.getDiv = getDiv;
-
-Object.defineProperties(exports, {
-  /**
-   * The HTML container.  Set once by createDom.
-   * @name Blockly.Tooltip.DIV
-   * @type {HTMLDivElement}
-   * @deprecated Use Blockly.Tooltip.getDiv() and .setDiv().
-   *     (September 2021)
-   * @suppress {checkTypes}
-   */
-  DIV: {
-    get: function() {
-      deprecation.warn(
-          'Blockly.Tooltip.DIV', 'September 2021', 'September 2022',
-          'Blockly.Tooltip.getDiv()');
-      return getDiv();
-    },
-  },
-});
 
 /**
  * Returns the tooltip text for the given element.

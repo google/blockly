@@ -17,6 +17,7 @@ const Blockly = goog.require('Blockly');
 const ContextMenu = goog.require('Blockly.ContextMenu');
 const Events = goog.require('Blockly.Events');
 const Msg = goog.require('Blockly.Msg');
+const Tooltip = goog.require('Blockly.Tooltip');
 const colour = goog.require('Blockly.utils.colour');
 const common = goog.require('Blockly.common');
 const deprecation = goog.require('Blockly.utils.deprecation');
@@ -209,6 +210,44 @@ Object.defineProperties(Events, {
           'Blockly.Events.recordUndo', 'September 2021', 'September 2022',
           'Blockly.Events.setRecordUndo()');
       eventUtils.setRecordUndo(record);
+    },
+  },
+});
+
+
+// Add accessors for properties on Blockly.Tooltip that have now been
+// deprecated.
+Object.defineProperties(Tooltip, {
+  /**
+   * Is a tooltip currently showing?
+   * @name Blockly.Tooltip.visible
+   * @type {boolean}
+   * @deprecated Use Blockly.Tooltip.isVisible() instead.  (September
+   *     2021)
+   * @suppress {checkTypes}
+   */
+  visible: {
+    get: function() {
+      deprecation.warn(
+          'Blockly.Tooltip.visible', 'September 2021', 'September 2022',
+          'Blockly.Tooltip.isVisible()');
+      return Tooltip.isVisible();
+    },
+  },
+  /**
+   * The HTML container.  Set once by createDom.
+   * @name Blockly.Tooltip.DIV
+   * @type {HTMLDivElement}
+   * @deprecated Use Blockly.Tooltip.getDiv() and .setDiv().
+   *     (September 2021)
+   * @suppress {checkTypes}
+   */
+  DIV: {
+    get: function() {
+      deprecation.warn(
+          'Blockly.Tooltip.DIV', 'September 2021', 'September 2022',
+          'Blockly.Tooltip.getDiv()');
+      return Tooltip.getDiv();
     },
   },
 });

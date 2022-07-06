@@ -134,14 +134,11 @@ def ${Python.FUNCTION_NAME_PLACEHOLDER_}(start, stop, step):
       if (stringUtils.isNumber(arg)) {
         // Simple number.
         arg = Number(arg);
-      } else if (arg.match(/^\w+$/)) {
-        // Variable.
-        arg = 'float(' + arg + ')';
-      } else {
-        // It's complicated.
+      } else if (!arg.match(/^\w+$/)) {
+        // Not a variable, it's complicated.
         const varName = Python.nameDB_.getDistinctName(
             variable0 + suffix, NameType.VARIABLE);
-        code += varName + ' = float(' + arg + ')\n';
+        code += varName + ' = ' + arg + '\n';
         arg = varName;
       }
       return arg;

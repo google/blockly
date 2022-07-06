@@ -640,9 +640,7 @@ let content = (`
     box-shadow: 0 0 3px 1px rgb(0 0 0 / 30%);
   }
 
-  .blocklyWidgetDiv .blocklyMenu.blocklyFocused {
-    /* box-shadow: 0 0 6px 1px rgba(0,0,0,.3); */
-  }
+  .blocklyWidgetDiv .blocklyMenu.blocklyFocused {}
 
   .blocklyDropDownDiv .blocklyMenu {
     background: inherit;  /* Compatibility with gapi, reset from goog-menu */

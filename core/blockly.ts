@@ -722,17 +722,3 @@ export namespace serialization {
   export const workspaces = serializationWorkspaces;
   export type ISerializer = SerializerInterface;
 };
-
-// If Blockly is compiled with ADVANCED_COMPILATION and/or loaded as a
-// CJS or ES module there will not be a Blockly global variable
-// created.  This can cause problems because a very common way of
-// loading translations is to use a <script> tag to load one of
-// msg/js/*.js, which consists of lines like:
-// Blockly.Msg["ADD_COMMENT"] = "Add Comment";
-// Blockly.Msg["CLEAN_UP"] = "Clean up Blocks";
-// This obviously only works if Blockly.Msg is the Msg export from the
-// Blockly.Msg module - so make sure it is, but only if there is not
-// yet a Blockly global variable.
-if (!('Blockly' in globalThis)) {
-  (globalThis as AnyDuringMigration)['Blockly'] = {'Msg': Msg};
-}

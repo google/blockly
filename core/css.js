@@ -621,26 +621,32 @@ let content = (`
 
   .blocklyWidgetDiv .blocklyMenu {
     background: #fff;
-    border: 1px solid transparent;
-    box-shadow: 0 0 3px 1px rgba(0,0,0,.3);
     font: normal 13px Arial, sans-serif;
     margin: 0;
     outline: none;
     padding: 4px 0;
-    position: absolute;
     overflow-y: auto;
     overflow-x: hidden;
-    max-height: 100%;
+    max-height: 265px;
     z-index: 20000;  /* Arbitrary, but some apps depend on it... */
   }
 
+  .blocklyWidgetDiv .blocklyMenuWrapper {
+    border: 1px solid;
+    border-color: #dadce0;
+    background-color: #fff;
+    border-radius: 2px;
+    padding: 4px;
+    box-shadow: 0 0 3px 1px rgb(0 0 0 / 30%);
+  }
+
   .blocklyWidgetDiv .blocklyMenu.blocklyFocused {
-    box-shadow: 0 0 6px 1px rgba(0,0,0,.3);
+    /* box-shadow: 0 0 6px 1px rgba(0,0,0,.3); */
   }
 
   .blocklyDropDownDiv .blocklyMenu {
     background: inherit;  /* Compatibility with gapi, reset from goog-menu */
-    border: inherit;  /* Compatibility with gapi, reset from goog-menu */
+    border: none;  /* Compatibility with gapi, reset from goog-menu */
     font: normal 13px "Helvetica Neue", Helvetica, sans-serif;
     outline: none;
     position: relative;  /* Compatibility with gapi, reset from goog-menu */

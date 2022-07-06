@@ -140,7 +140,7 @@ const Menu = function() {
    * @type {Number}
    * @private
    */
-  this.MAX_HEGIHT_MENU = 265;
+  this.MAX_HEIGHT_MENU = 265;
 };
 
 /**
@@ -156,11 +156,11 @@ const Menu = function() {
 };
 
 Menu.prototype.onInput_ = function(e) {
-  const seacrhText = e.target.value.toLowerCase();
+  const searchText = e.target.value.toLowerCase();
   const suggestedItems = [];
 
   for (let i = 0; i < this.menuItems_.length; i++) {
-    if (this.menuItems_[i].content_.toLowerCase().indexOf(seacrhText) > -1) {
+    if (this.menuItems_[i].content_.toLowerCase().indexOf(searchText) > -1) {
       suggestedItems.push(this.menuItems_[i]);
     }
   }
@@ -168,7 +168,6 @@ Menu.prototype.onInput_ = function(e) {
   this.element_.innerHTML = '';
 
   for (let i = 0, menuItem; (menuItem = suggestedItems[i]); i++) {
-    console.log('menuItem', menuItem);
     this.element_.appendChild(menuItem.createDom());
   }
 };
@@ -559,7 +558,7 @@ Menu.prototype.getSize = function() {
   const menuSize = style.getSize(/** @type {!Element} */
                                  (menuDom));
   // Recalculate height for the total content, not only box height.
-  menuSize.height = Math.min(this.MAX_HEGIHT_MENU, menuDom.scrollHeight);
+  menuSize.height = Math.min(this.MAX_HEIGHT_MENU, menuDom.scrollHeight);
   return menuSize;
 };
 

@@ -38,7 +38,7 @@ import * as Tooltip from './tooltip';
 import * as Touch from './touch';
 import {Coordinate} from './utils/coordinate';
 import {Workspace} from './workspace';
-import type {WorkspaceCommentSvg} from './workspace_comment_svg';
+import {WorkspaceCommentSvg} from './workspace_comment_svg';
 import {WorkspaceDragger} from './workspace_dragger';
 import type {WorkspaceSvg} from './workspace_svg';
 

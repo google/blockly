@@ -40,7 +40,7 @@ import './metrics_manager';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './msg';
 
-import type {Block} from './block';
+import {Block} from './block';
 import type {BlockDragSurfaceSvg} from './block_drag_surface';
 import {BlockSvg} from './block_svg';
 import type {BlocklyOptions} from './blockly_options';
@@ -78,7 +78,7 @@ import {Classic} from './theme/classic';
 import {ThemeManager} from './theme_manager';
 import * as Tooltip from './tooltip';
 import {TouchGesture} from './touch_gesture';
-import type {Trashcan} from './trashcan';
+import {Trashcan} from './trashcan';
 import * as utils from './utils';
 import * as arrayUtils from './utils/array';
 import {Coordinate} from './utils/coordinate';
@@ -96,8 +96,8 @@ import * as VariablesDynamic from './variables_dynamic';
 import * as WidgetDiv from './widgetdiv';
 import {Workspace} from './workspace';
 import {WorkspaceAudio} from './workspace_audio';
-import type {WorkspaceComment} from './workspace_comment';
-import type {WorkspaceCommentSvg} from './workspace_comment_svg';
+import {WorkspaceComment} from './workspace_comment';
+import {WorkspaceCommentSvg} from './workspace_comment_svg';
 import type {WorkspaceDragSurfaceSvg} from './workspace_drag_surface_svg';
 import * as Xml from './xml';
 import {ZoomControls} from './zoom_controls';

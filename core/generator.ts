@@ -18,7 +18,7 @@
 
 import type {Block} from './block';
 import * as common from './common';
-import type {Names, NameType} from './names';
+import {Names, NameType} from './names';
 import * as deprecation from './utils/deprecation';
 import type {Workspace} from './workspace';
 

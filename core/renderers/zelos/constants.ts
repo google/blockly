@@ -23,7 +23,7 @@ import * as utilsColour from '../../utils/colour';
 import * as dom from '../../utils/dom';
 import {Svg} from '../../utils/svg';
 import * as svgPaths from '../../utils/svg_paths';
-import type {ConstantProvider as BaseConstantProvider, Shape} from '../common/constants';
+import {ConstantProvider as BaseConstantProvider, Shape} from '../common/constants';
 
 
 /** An object containing sizing and path information about inside corners. */

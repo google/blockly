@@ -19,7 +19,7 @@
 import type {Block} from '../block';
 import * as registry from '../registry';
 import * as idGenerator from '../utils/idgenerator';
-import type {Workspace} from '../workspace';
+import {Workspace} from '../workspace';
 import type {WorkspaceSvg} from '../workspace_svg';
 
 import type {Abstract} from './events_abstract';

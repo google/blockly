@@ -16,7 +16,7 @@
  */
 
 
-import type {Workspace} from '../workspace';
+import {Workspace} from '../workspace';
 
 import * as eventUtils from './utils';
 

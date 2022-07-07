@@ -17,7 +17,7 @@
 // Unused import preserved for side-effects. Remove if unneeded.
 import './connection_checker';
 
-import type {Block} from './block';
+import {Block} from './block';
 import type {BlocklyOptions} from './blockly_options';
 import type {ConnectionDB} from './connection_db';
 import type {Abstract} from './events/events_abstract';

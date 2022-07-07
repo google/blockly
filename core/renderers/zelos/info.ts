@@ -21,7 +21,7 @@ import {FieldLabel} from '../../field_label';
 import {FieldTextInput} from '../../field_textinput';
 import {Align, Input} from '../../input';
 import {inputTypes} from '../../input_types';
-import type {RenderInfo as BaseRenderInfo} from '../common/info';
+import {RenderInfo as BaseRenderInfo} from '../common/info';
 import type {Measurable} from '../measurables/base';
 import {Field} from '../measurables/field';
 import {InRowSpacer} from '../measurables/in_row_spacer';

@@ -23,7 +23,7 @@ import {DeleteArea} from './delete_area';
 import * as BlockCreate from './events/events_block_create';
 import * as VarCreate from './events/events_var_create';
 import * as eventUtils from './events/utils';
-import type {FlyoutButton} from './flyout_button';
+import {FlyoutButton} from './flyout_button';
 import {FlyoutMetricsManager} from './flyout_metrics_manager';
 import * as Gesture from './gesture';
 import type {IFlyout} from './interfaces/i_flyout';

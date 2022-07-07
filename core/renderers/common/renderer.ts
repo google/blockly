@@ -27,7 +27,7 @@ import type {WorkspaceSvg} from '../../workspace_svg';
 
 import {ConstantProvider} from './constants';
 import * as debug from './debug';
-import type {Debug} from './debugger';
+import {Debug} from './debugger';
 import {Drawer} from './drawer';
 import type {IPathObject} from './i_path_object';
 import {RenderInfo} from './info';

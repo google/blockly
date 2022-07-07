@@ -25,7 +25,7 @@ import './touch';
 import {Block} from './block';
 import * as blockAnimations from './block_animations';
 import * as browserEvents from './browser_events';
-import type {Comment} from './comment';
+import {Comment} from './comment';
 import * as common from './common';
 import {config} from './config';
 import type {Connection} from './connection';
@@ -60,7 +60,7 @@ import * as dom from './utils/dom';
 import {Rect} from './utils/rect';
 import {Svg} from './utils/svg';
 import * as svgMath from './utils/svg_math';
-import type {Warning} from './warning';
+import {Warning} from './warning';
 import {Workspace} from './workspace';
 import type {WorkspaceSvg} from './workspace_svg';
 

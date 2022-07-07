@@ -16,8 +16,7 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {Workspace} from '../workspace';
+import type {Workspace} from '../workspace';
 
 import * as eventUtils from './utils';
 

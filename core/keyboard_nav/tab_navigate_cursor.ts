@@ -16,8 +16,7 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {Field} from '../field';
+import type {Field} from '../field';
 
 import {ASTNode} from './ast_node';
 import {BasicCursor} from './basic_cursor';

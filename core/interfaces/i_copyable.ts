@@ -15,8 +15,7 @@
 
 
 /* eslint-disable-next-line no-unused-vars */
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from '../workspace_svg';
+import type {WorkspaceSvg} from '../workspace_svg';
 
 import {ISelectable} from './i_selectable';
 

@@ -16,22 +16,15 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from '../block';
-/* eslint-disable-next-line no-unused-vars */
-import {Connection} from '../connection';
+import type {Block} from '../block';
+import type {Connection} from '../connection';
 import {ConnectionType} from '../connection_type';
-/* eslint-disable-next-line no-unused-vars */
-import {Field} from '../field';
-/* eslint-disable-next-line no-unused-vars */
-import {Input} from '../input';
-/* eslint-disable-next-line no-unused-vars */
-import {IASTNodeLocation} from '../interfaces/i_ast_node_location';
-/* eslint-disable-next-line no-unused-vars */
-import {IASTNodeLocationWithBlock} from '../interfaces/i_ast_node_location_with_block';
+import type {Field} from '../field';
+import type {Input} from '../input';
+import type {IASTNodeLocation} from '../interfaces/i_ast_node_location';
+import type {IASTNodeLocationWithBlock} from '../interfaces/i_ast_node_location_with_block';
 import {Coordinate} from '../utils/coordinate';
-/* eslint-disable-next-line no-unused-vars */
-import {Workspace} from '../workspace';
+import type {Workspace} from '../workspace';
 
 
 /**

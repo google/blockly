@@ -15,24 +15,18 @@
 
 
 import * as blockAnimations from './block_animations';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg';
+import type {BlockSvg} from './block_svg';
 import * as common from './common';
 import {ComponentManager} from './component_manager';
 import {config} from './config';
 import {ConnectionType} from './connection_type';
 import * as constants from './constants';
 import * as eventUtils from './events/utils';
-/* eslint-disable-next-line no-unused-vars */
-import {IDeleteArea} from './interfaces/i_delete_area';
-/* eslint-disable-next-line no-unused-vars */
-import {IDragTarget} from './interfaces/i_drag_target';
-/* eslint-disable-next-line no-unused-vars */
-import {RenderedConnection} from './rendered_connection';
-/* eslint-disable-next-line no-unused-vars */
-import {Coordinate} from './utils/coordinate';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg';
+import type {IDeleteArea} from './interfaces/i_delete_area';
+import type {IDragTarget} from './interfaces/i_drag_target';
+import type {RenderedConnection} from './rendered_connection';
+import type {Coordinate} from './utils/coordinate';
+import type {WorkspaceSvg} from './workspace_svg';
 
 
 /** Represents a nearby valid connection. */

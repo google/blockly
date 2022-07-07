@@ -15,12 +15,9 @@
 
 
 import * as Css from '../css';
-/* eslint-disable-next-line no-unused-vars */
-import {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_item';
-/* eslint-disable-next-line no-unused-vars */
-import {ISelectableToolboxItem} from '../interfaces/i_selectable_toolbox_item';
-/* eslint-disable-next-line no-unused-vars */
-import {IToolbox} from '../interfaces/i_toolbox';
+import type {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_item';
+import type {ISelectableToolboxItem} from '../interfaces/i_selectable_toolbox_item';
+import type {IToolbox} from '../interfaces/i_toolbox';
 import {IToolboxItem} from '../interfaces/i_toolbox_item';
 import * as registry from '../registry';
 import * as aria from '../utils/aria';

@@ -17,17 +17,12 @@
 
 
 /* eslint-disable-next-line no-unused-vars */
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from './block';
+import type {Block} from './block';
 import {BlockDefinition, Blocks} from './blocks';
-/* eslint-disable-next-line no-unused-vars */
-import {Connection} from './connection';
-/* eslint-disable-next-line no-unused-vars */
-import {ICopyable} from './interfaces/i_copyable';
-/* eslint-disable-next-line no-unused-vars */
-import {Workspace} from './workspace';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg';
+import type {Connection} from './connection';
+import type {ICopyable} from './interfaces/i_copyable';
+import type {Workspace} from './workspace';
+import type {WorkspaceSvg} from './workspace_svg';
 
 
 /**

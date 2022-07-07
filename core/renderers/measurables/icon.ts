@@ -17,8 +17,7 @@
 
 
 /* eslint-disable-next-line no-unused-vars */
-/* eslint-disable-next-line no-unused-vars */
-import {Icon as BlocklyIcon} from '../../icon';
+import type {Icon as BlocklyIcon} from '../../icon';
 import {ConstantProvider} from '../common/constants';
 
 import {Measurable} from './base';

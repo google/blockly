@@ -14,8 +14,7 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {Gesture} from './gesture';
+import type {Gesture} from './gesture';
 
 
 /**

@@ -16,22 +16,17 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg';
+import type {BlockSvg} from '../../block_svg';
 import {RenderInfo as BaseRenderInfo} from '../common/info';
 import {Measurable} from '../measurables/base';
-/* eslint-disable-next-line no-unused-vars */
-import {BottomRow} from '../measurables/bottom_row';
-/* eslint-disable-next-line no-unused-vars */
-import {Field} from '../measurables/field';
+import type {BottomRow} from '../measurables/bottom_row';
+import type {Field} from '../measurables/field';
 import {InRowSpacer} from '../measurables/in_row_spacer';
 import {Row} from '../measurables/row';
-/* eslint-disable-next-line no-unused-vars */
-import {TopRow} from '../measurables/top_row';
+import type {TopRow} from '../measurables/top_row';
 import {Types} from '../measurables/types';
 
-/* eslint-disable-next-line no-unused-vars */
-import {Renderer} from './renderer';
+import type {Renderer} from './renderer';
 
 
 /**

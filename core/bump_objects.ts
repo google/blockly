@@ -14,25 +14,19 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg';
-/* eslint-disable-next-line no-unused-vars */
-import {Abstract} from './events/events_abstract';
+import type {BlockSvg} from './block_svg';
+import type {Abstract} from './events/events_abstract';
 import {BlockCreate} from './events/events_block_create';
 import {BlockMove} from './events/events_block_move';
 import {CommentCreate} from './events/events_comment_create';
 import {CommentMove} from './events/events_comment_move';
-/* eslint-disable-next-line no-unused-vars */
-import {ViewportChange} from './events/events_viewport';
+import type {ViewportChange} from './events/events_viewport';
 import * as eventUtils from './events/utils';
-/* eslint-disable-next-line no-unused-vars */
-import {IBoundedElement} from './interfaces/i_bounded_element';
+import type {IBoundedElement} from './interfaces/i_bounded_element';
 import {ContainerRegion, MetricsManager} from './metrics_manager';
 import * as mathUtils from './utils/math';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceCommentSvg} from './workspace_comment_svg';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg';
+import type {WorkspaceCommentSvg} from './workspace_comment_svg';
+import type {WorkspaceSvg} from './workspace_svg';
 
 
 /**

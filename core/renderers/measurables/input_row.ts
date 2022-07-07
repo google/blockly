@@ -16,8 +16,7 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from '../common/constants';
+import type {ConstantProvider} from '../common/constants';
 
 import {ExternalValueInput} from './external_value_input';
 import {InputConnection} from './input_connection';

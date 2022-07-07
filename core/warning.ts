@@ -17,13 +17,11 @@
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_bubble_open';
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg';
+import type {BlockSvg} from './block_svg';
 import {Bubble} from './bubble';
 import * as eventUtils from './events/utils';
 import {Icon} from './icon';
-/* eslint-disable-next-line no-unused-vars */
-import {Coordinate} from './utils/coordinate';
+import type {Coordinate} from './utils/coordinate';
 import * as dom from './utils/dom';
 import {Svg} from './utils/svg';
 

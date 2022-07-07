@@ -21,32 +21,22 @@ import '../shortcut_registry';
 import '../events/events_toolbox_item_select';
 
 import {BlockSvg} from '../block_svg';
-/* eslint-disable-next-line no-unused-vars */
-import {BlocklyOptions} from '../blockly_options';
+import type {BlocklyOptions} from '../blockly_options';
 import * as browserEvents from '../browser_events';
 import * as common from '../common';
 import {ComponentManager} from '../component_manager';
 import * as Css from '../css';
 import {DeleteArea} from '../delete_area';
 import * as eventUtils from '../events/utils';
-/* eslint-disable-next-line no-unused-vars */
-import {IAutoHideable} from '../interfaces/i_autohideable';
-/* eslint-disable-next-line no-unused-vars */
-import {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_item';
-/* eslint-disable-next-line no-unused-vars */
-import {IDraggable} from '../interfaces/i_draggable';
-/* eslint-disable-next-line no-unused-vars */
-import {IFlyout} from '../interfaces/i_flyout';
-/* eslint-disable-next-line no-unused-vars */
-import {IKeyboardAccessible} from '../interfaces/i_keyboard_accessible';
-/* eslint-disable-next-line no-unused-vars */
-import {ISelectableToolboxItem} from '../interfaces/i_selectable_toolbox_item';
-/* eslint-disable-next-line no-unused-vars */
-import {IStyleable} from '../interfaces/i_styleable';
-/* eslint-disable-next-line no-unused-vars */
-import {IToolbox} from '../interfaces/i_toolbox';
-/* eslint-disable-next-line no-unused-vars */
-import {IToolboxItem} from '../interfaces/i_toolbox_item';
+import type {IAutoHideable} from '../interfaces/i_autohideable';
+import type {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_item';
+import type {IDraggable} from '../interfaces/i_draggable';
+import type {IFlyout} from '../interfaces/i_flyout';
+import type {IKeyboardAccessible} from '../interfaces/i_keyboard_accessible';
+import type {ISelectableToolboxItem} from '../interfaces/i_selectable_toolbox_item';
+import type {IStyleable} from '../interfaces/i_styleable';
+import type {IToolbox} from '../interfaces/i_toolbox';
+import type {IToolboxItem} from '../interfaces/i_toolbox_item';
 import {Options} from '../options';
 import * as registry from '../registry';
 import {KeyboardShortcut} from '../shortcut_registry';
@@ -56,11 +46,9 @@ import * as dom from '../utils/dom';
 import {KeyCodes} from '../utils/keycodes';
 import {Rect} from '../utils/rect';
 import * as toolbox from '../utils/toolbox';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from '../workspace_svg';
+import type {WorkspaceSvg} from '../workspace_svg';
 
-/* eslint-disable-next-line no-unused-vars */
-import {ToolboxCategory} from './category';
+import type {ToolboxCategory} from './category';
 import {CollapsibleToolboxCategory} from './collapsible_category';
 
 

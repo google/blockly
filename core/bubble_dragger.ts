@@ -19,23 +19,17 @@ import './bubble';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './constants';
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockDragSurfaceSvg} from './block_drag_surface';
+import type {BlockDragSurfaceSvg} from './block_drag_surface';
 import {ComponentManager} from './component_manager';
-/* eslint-disable-next-line no-unused-vars */
-import {CommentMove} from './events/events_comment_move';
+import type {CommentMove} from './events/events_comment_move';
 import * as eventUtils from './events/utils';
-/* eslint-disable-next-line no-unused-vars */
-import {IBubble} from './interfaces/i_bubble';
-/* eslint-disable-next-line no-unused-vars */
-import {IDeleteArea} from './interfaces/i_delete_area';
-/* eslint-disable-next-line no-unused-vars */
-import {IDragTarget} from './interfaces/i_drag_target';
+import type {IBubble} from './interfaces/i_bubble';
+import type {IDeleteArea} from './interfaces/i_delete_area';
+import type {IDragTarget} from './interfaces/i_drag_target';
 import {Coordinate} from './utils/coordinate';
 import * as svgMath from './utils/svg_math';
 import {WorkspaceCommentSvg} from './workspace_comment_svg';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg';
+import type {WorkspaceSvg} from './workspace_svg';
 
 
 /**

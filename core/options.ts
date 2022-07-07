@@ -14,17 +14,14 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlocklyOptions} from './blockly_options';
+import type {BlocklyOptions} from './blockly_options';
 import * as registry from './registry';
 import {Theme} from './theme';
 import {Classic} from './theme/classic';
 import * as idGenerator from './utils/idgenerator';
-/* eslint-disable-next-line no-unused-vars */
-import {Metrics} from './utils/metrics';
+import type {Metrics} from './utils/metrics';
 import * as toolbox from './utils/toolbox';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg';
+import type {WorkspaceSvg} from './workspace_svg';
 
 
 /**

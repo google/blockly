@@ -22,32 +22,25 @@ import './block_dragger';
 import './events/events_click';
 
 import * as blockAnimations from './block_animations';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg';
+import type {BlockSvg} from './block_svg';
 import * as browserEvents from './browser_events';
 import {BubbleDragger} from './bubble_dragger';
 import * as common from './common';
 import {config} from './config';
 import * as eventUtils from './events/utils';
-/* eslint-disable-next-line no-unused-vars */
-import {Field} from './field';
-/* eslint-disable-next-line no-unused-vars */
-import {IBlockDragger} from './interfaces/i_block_dragger';
-/* eslint-disable-next-line no-unused-vars */
-import {IBubble} from './interfaces/i_bubble';
-/* eslint-disable-next-line no-unused-vars */
-import {IFlyout} from './interfaces/i_flyout';
+import type {Field} from './field';
+import type {IBlockDragger} from './interfaces/i_block_dragger';
+import type {IBubble} from './interfaces/i_bubble';
+import type {IFlyout} from './interfaces/i_flyout';
 import * as internalConstants from './internal_constants';
 import * as registry from './registry';
 import * as Tooltip from './tooltip';
 import * as Touch from './touch';
 import {Coordinate} from './utils/coordinate';
 import {Workspace} from './workspace';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceCommentSvg} from './workspace_comment_svg';
+import type {WorkspaceCommentSvg} from './workspace_comment_svg';
 import {WorkspaceDragger} from './workspace_dragger';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg';
+import type {WorkspaceSvg} from './workspace_svg';
 
 
 /**

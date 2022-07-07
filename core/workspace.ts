@@ -17,31 +17,22 @@
 // Unused import preserved for side-effects. Remove if unneeded.
 import './connection_checker';
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from './block';
-/* eslint-disable-next-line no-unused-vars */
-import {BlocklyOptions} from './blockly_options';
-/* eslint-disable-next-line no-unused-vars */
-import {ConnectionDB} from './connection_db';
-/* eslint-disable-next-line no-unused-vars */
-import {Abstract} from './events/events_abstract';
+import type {Block} from './block';
+import type {BlocklyOptions} from './blockly_options';
+import type {ConnectionDB} from './connection_db';
+import type {Abstract} from './events/events_abstract';
 import * as eventUtils from './events/utils';
-/* eslint-disable-next-line no-unused-vars */
-import {IASTNodeLocation} from './interfaces/i_ast_node_location';
-/* eslint-disable-next-line no-unused-vars */
-import {IConnectionChecker} from './interfaces/i_connection_checker';
+import type {IASTNodeLocation} from './interfaces/i_ast_node_location';
+import type {IConnectionChecker} from './interfaces/i_connection_checker';
 import {Options} from './options';
 import * as registry from './registry';
 import * as arrayUtils from './utils/array';
 import * as idGenerator from './utils/idgenerator';
 import * as math from './utils/math';
-/* eslint-disable-next-line no-unused-vars */
-import * as toolbox from './utils/toolbox';
+import type * as toolbox from './utils/toolbox';
 import {VariableMap} from './variable_map';
-/* eslint-disable-next-line no-unused-vars */
-import {VariableModel} from './variable_model';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceComment} from './workspace_comment';
+import type {VariableModel} from './variable_model';
+import type {WorkspaceComment} from './workspace_comment';
 
 
 /** Database of all workspaces. */

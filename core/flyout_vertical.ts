@@ -22,14 +22,11 @@ import './constants';
 import * as browserEvents from './browser_events';
 import * as dropDownDiv from './dropdowndiv';
 import {Flyout, FlyoutItem} from './flyout_base';
-/* eslint-disable-next-line no-unused-vars */
-import {FlyoutButton} from './flyout_button';
-/* eslint-disable-next-line no-unused-vars */
-import {Options} from './options';
+import type {FlyoutButton} from './flyout_button';
+import type {Options} from './options';
 import * as registry from './registry';
 import {Scrollbar} from './scrollbar';
-/* eslint-disable-next-line no-unused-vars */
-import {Coordinate} from './utils/coordinate';
+import type {Coordinate} from './utils/coordinate';
 import {Rect} from './utils/rect';
 import * as toolbox from './utils/toolbox';
 import * as WidgetDiv from './widgetdiv';

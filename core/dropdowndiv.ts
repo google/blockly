@@ -16,19 +16,15 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg';
+import type {BlockSvg} from './block_svg';
 import * as common from './common';
-/* eslint-disable-next-line no-unused-vars */
-import {Field} from './field';
+import type {Field} from './field';
 import * as dom from './utils/dom';
 import * as math from './utils/math';
 import {Rect} from './utils/rect';
-/* eslint-disable-next-line no-unused-vars */
-import {Size} from './utils/size';
+import type {Size} from './utils/size';
 import * as style from './utils/style';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg';
+import type {WorkspaceSvg} from './workspace_svg';
 
 
 /**

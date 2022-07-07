@@ -18,18 +18,14 @@
 // Unused import preserved for side-effects. Remove if unneeded.
 import '../../theme';
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg';
-/* eslint-disable-next-line no-unused-vars */
-import {Connection} from '../../connection';
+import type {BlockSvg} from '../../block_svg';
+import type {Connection} from '../../connection';
 import {BlockStyle} from '../../theme';
 import * as dom from '../../utils/dom';
 import {Svg} from '../../utils/svg';
 
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from './constants';
-/* eslint-disable-next-line no-unused-vars */
-import {IPathObject} from './i_path_object';
+import type {ConstantProvider} from './constants';
+import type {IPathObject} from './i_path_object';
 
 
 /**

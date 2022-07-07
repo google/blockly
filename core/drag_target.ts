@@ -16,12 +16,9 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {IDragTarget} from './interfaces/i_drag_target';
-/* eslint-disable-next-line no-unused-vars */
-import {IDraggable} from './interfaces/i_draggable';
-/* eslint-disable-next-line no-unused-vars */
-import {Rect} from './utils/rect';
+import type {IDragTarget} from './interfaces/i_drag_target';
+import type {IDraggable} from './interfaces/i_draggable';
+import type {Rect} from './utils/rect';
 
 
 /**

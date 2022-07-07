@@ -21,10 +21,8 @@ import '../block_drag_surface';
 // Unused import preserved for side-effects. Remove if unneeded.
 import '../utils/coordinate';
 
-/* eslint-disable-next-line no-unused-vars */
-import {IContextMenu} from './i_contextmenu';
-/* eslint-disable-next-line no-unused-vars */
-import {IDraggable} from './i_draggable';
+import type {IContextMenu} from './i_contextmenu';
+import type {IDraggable} from './i_draggable';
 
 
 /**

@@ -15,8 +15,7 @@
 
 
 import {ConnectionType} from '../../connection_type';
-/* eslint-disable-next-line no-unused-vars */
-import {RenderedConnection} from '../../rendered_connection';
+import type {RenderedConnection} from '../../rendered_connection';
 import {BlockStyle, Theme} from '../../theme';
 import * as colour from '../../utils/colour';
 import * as dom from '../../utils/dom';

@@ -20,12 +20,9 @@
 
 import * as common from './common';
 import * as dom from './utils/dom';
-/* eslint-disable-next-line no-unused-vars */
-import {Rect} from './utils/rect';
-/* eslint-disable-next-line no-unused-vars */
-import {Size} from './utils/size';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg';
+import type {Rect} from './utils/rect';
+import type {Size} from './utils/size';
+import type {WorkspaceSvg} from './workspace_svg';
 
 
 /** The object currently using this container. */

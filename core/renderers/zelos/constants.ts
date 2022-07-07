@@ -23,8 +23,7 @@ import * as utilsColour from '../../utils/colour';
 import * as dom from '../../utils/dom';
 import {Svg} from '../../utils/svg';
 import * as svgPaths from '../../utils/svg_paths';
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider as BaseConstantProvider, Shape} from '../common/constants';
+import type {ConstantProvider as BaseConstantProvider, Shape} from '../common/constants';
 
 
 /** An object containing sizing and path information about inside corners. */

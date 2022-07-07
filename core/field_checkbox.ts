@@ -20,8 +20,7 @@ import './events/events_block_change';
 import {Field} from './field';
 import * as fieldRegistry from './field_registry';
 import * as dom from './utils/dom';
-/* eslint-disable-next-line no-unused-vars */
-import {Sentinel} from './utils/sentinel';
+import type {Sentinel} from './utils/sentinel';
 
 
 /**

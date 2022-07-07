@@ -16,8 +16,7 @@
 
 import * as common from './common';
 import {Coordinate} from './utils/coordinate';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg';
+import type {WorkspaceSvg} from './workspace_svg';
 
 
 /**

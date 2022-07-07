@@ -19,12 +19,10 @@
 import * as common from './common';
 import {Connection} from './connection';
 import {ConnectionType} from './connection_type';
-/* eslint-disable-next-line no-unused-vars */
-import {IConnectionChecker} from './interfaces/i_connection_checker';
+import type {IConnectionChecker} from './interfaces/i_connection_checker';
 import * as internalConstants from './internal_constants';
 import * as registry from './registry';
-/* eslint-disable-next-line no-unused-vars */
-import {RenderedConnection} from './rendered_connection';
+import type {RenderedConnection} from './rendered_connection';
 
 
 /**

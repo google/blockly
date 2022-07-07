@@ -14,28 +14,20 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg';
+import type {BlockSvg} from '../../block_svg';
 import * as svgPaths from '../../utils/svg_paths';
-/* eslint-disable-next-line no-unused-vars */
-import {BaseShape, DynamicShape, Notch} from '../common/constants';
+import type {BaseShape, DynamicShape, Notch} from '../common/constants';
 import * as debug from '../common/debug';
 import {Drawer as BaseDrawer} from '../common/drawer';
 import {InlineInput} from '../measurables/inline_input';
-/* eslint-disable-next-line no-unused-vars */
-import {Row} from '../measurables/row';
-/* eslint-disable-next-line no-unused-vars */
-import {SpacerRow} from '../measurables/spacer_row';
+import type {Row} from '../measurables/row';
+import type {SpacerRow} from '../measurables/spacer_row';
 import {Types} from '../measurables/types';
 
-/* eslint-disable-next-line no-unused-vars */
-import {InsideCorners} from './constants';
-/* eslint-disable-next-line no-unused-vars */
-import {RenderInfo} from './info';
-/* eslint-disable-next-line no-unused-vars */
-import {StatementInput} from './measurables/inputs';
-/* eslint-disable-next-line no-unused-vars */
-import {PathObject} from './path_object';
+import type {InsideCorners} from './constants';
+import type {RenderInfo} from './info';
+import type {StatementInput} from './measurables/inputs';
+import type {PathObject} from './path_object';
 
 
 /**

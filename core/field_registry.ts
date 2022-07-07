@@ -18,10 +18,8 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {Field} from './field';
-/* eslint-disable-next-line no-unused-vars */
-import {IRegistrableField} from './interfaces/i_registrable_field';
+import type {Field} from './field';
+import type {IRegistrableField} from './interfaces/i_registrable_field';
 import * as registry from './registry';
 
 

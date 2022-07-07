@@ -16,29 +16,19 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from '../block';
+import type {Block} from '../block';
 import * as registry from '../registry';
 import * as idGenerator from '../utils/idgenerator';
-/* eslint-disable-next-line no-unused-vars */
-import {Workspace} from '../workspace';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from '../workspace_svg';
+import type {Workspace} from '../workspace';
+import type {WorkspaceSvg} from '../workspace_svg';
 
-/* eslint-disable-next-line no-unused-vars */
-import {Abstract} from './events_abstract';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockChange} from './events_block_change';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockCreate} from './events_block_create';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockMove} from './events_block_move';
-/* eslint-disable-next-line no-unused-vars */
-import {CommentCreate} from './events_comment_create';
-/* eslint-disable-next-line no-unused-vars */
-import {CommentMove} from './events_comment_move';
-/* eslint-disable-next-line no-unused-vars */
-import {ViewportChange} from './events_viewport';
+import type {Abstract} from './events_abstract';
+import type {BlockChange} from './events_block_change';
+import type {BlockCreate} from './events_block_create';
+import type {BlockMove} from './events_block_move';
+import type {CommentCreate} from './events_comment_create';
+import type {CommentMove} from './events_comment_move';
+import type {ViewportChange} from './events_viewport';
 
 
 /** Group ID for new events.  Grouped events are indivisible. */

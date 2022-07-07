@@ -16,10 +16,8 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {RenderedConnection} from '../../rendered_connection';
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from '../common/constants';
+import type {RenderedConnection} from '../../rendered_connection';
+import type {ConstantProvider} from '../common/constants';
 
 import {Connection} from './connection';
 import {Types} from './types';

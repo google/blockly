@@ -28,8 +28,7 @@ import * as colour from './utils/colour';
 import * as dom from './utils/dom';
 import * as idGenerator from './utils/idgenerator';
 import {KeyCodes} from './utils/keycodes';
-/* eslint-disable-next-line no-unused-vars */
-import {Sentinel} from './utils/sentinel';
+import type {Sentinel} from './utils/sentinel';
 import {Size} from './utils/size';
 
 

@@ -14,8 +14,7 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from './block';
+import type {Block} from './block';
 import * as browserEvents from './browser_events';
 import * as common from './common';
 import * as extensions from './extensions';
@@ -41,8 +40,7 @@ import * as svgPaths from './utils/svg_paths';
 import * as toolbox from './utils/toolbox';
 import * as userAgent from './utils/useragent';
 import * as xml from './utils/xml';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg';
+import type {WorkspaceSvg} from './workspace_svg';
 
 
 export {

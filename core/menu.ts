@@ -15,14 +15,12 @@
 
 
 import * as browserEvents from './browser_events';
-/* eslint-disable-next-line no-unused-vars */
-import {MenuItem} from './menuitem';
+import type {MenuItem} from './menuitem';
 import * as aria from './utils/aria';
 import {Coordinate} from './utils/coordinate';
 import * as dom from './utils/dom';
 import {KeyCodes} from './utils/keycodes';
-/* eslint-disable-next-line no-unused-vars */
-import {Size} from './utils/size';
+import type {Size} from './utils/size';
 import * as style from './utils/style';
 
 

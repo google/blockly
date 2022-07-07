@@ -14,14 +14,11 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg';
+import type {BlockSvg} from '../../block_svg';
 import {Align, Input} from '../../input';
 import {inputTypes} from '../../input_types';
-/* eslint-disable-next-line no-unused-vars */
-import {RenderedConnection} from '../../rendered_connection';
-/* eslint-disable-next-line no-unused-vars */
-import {Measurable} from '../measurables/base';
+import type {RenderedConnection} from '../../rendered_connection';
+import type {Measurable} from '../measurables/base';
 import {BottomRow} from '../measurables/bottom_row';
 import {ExternalValueInput} from '../measurables/external_value_input';
 import {Field} from '../measurables/field';
@@ -35,18 +32,15 @@ import {NextConnection} from '../measurables/next_connection';
 import {OutputConnection} from '../measurables/output_connection';
 import {PreviousConnection} from '../measurables/previous_connection';
 import {RoundCorner} from '../measurables/round_corner';
-/* eslint-disable-next-line no-unused-vars */
-import {Row} from '../measurables/row';
+import type {Row} from '../measurables/row';
 import {SpacerRow} from '../measurables/spacer_row';
 import {SquareCorner} from '../measurables/square_corner';
 import {StatementInput} from '../measurables/statement_input';
 import {TopRow} from '../measurables/top_row';
 import {Types} from '../measurables/types';
 
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from './constants';
-/* eslint-disable-next-line no-unused-vars */
-import {Renderer} from './renderer';
+import type {ConstantProvider} from './constants';
+import type {Renderer} from './renderer';
 
 
 /**

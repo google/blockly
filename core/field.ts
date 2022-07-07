@@ -26,30 +26,21 @@ import './events/events_block_change';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './gesture';
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from './block';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg';
+import type {Block} from './block';
+import type {BlockSvg} from './block_svg';
 import * as browserEvents from './browser_events';
 import * as dropDownDiv from './dropdowndiv';
 import * as eventUtils from './events/utils';
-/* eslint-disable-next-line no-unused-vars */
-import {Input} from './input';
-/* eslint-disable-next-line no-unused-vars */
-import {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg';
-/* eslint-disable-next-line no-unused-vars */
-import {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_with_block';
-/* eslint-disable-next-line no-unused-vars */
-import {IKeyboardAccessible} from './interfaces/i_keyboard_accessible';
-/* eslint-disable-next-line no-unused-vars */
-import {IRegistrable} from './interfaces/i_registrable';
+import type {Input} from './input';
+import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg';
+import type {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_with_block';
+import type {IKeyboardAccessible} from './interfaces/i_keyboard_accessible';
+import type {IRegistrable} from './interfaces/i_registrable';
 import {MarkerManager} from './marker_manager';
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from './renderers/common/constants';
+import type {ConstantProvider} from './renderers/common/constants';
 import {KeyboardShortcut} from './shortcut_registry';
 import * as Tooltip from './tooltip';
-/* eslint-disable-next-line no-unused-vars */
-import {Coordinate} from './utils/coordinate';
+import type {Coordinate} from './utils/coordinate';
 import * as dom from './utils/dom';
 import * as parsing from './utils/parsing';
 import {Rect} from './utils/rect';
@@ -60,8 +51,7 @@ import {Svg} from './utils/svg';
 import * as userAgent from './utils/useragent';
 import * as utilsXml from './utils/xml';
 import * as WidgetDiv from './widgetdiv';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg';
+import type {WorkspaceSvg} from './workspace_svg';
 import * as Xml from './xml';
 
 

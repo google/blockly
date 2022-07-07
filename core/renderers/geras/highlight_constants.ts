@@ -15,8 +15,7 @@
 
 
 import * as svgPaths from '../../utils/svg_paths';
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from '../common/constants';
+import type {ConstantProvider} from '../common/constants';
 
 
 /** An object containing sizing and path information about an outside corner. */

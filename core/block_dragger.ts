@@ -18,25 +18,19 @@
 import './events/events_block_drag';
 
 import * as blockAnimation from './block_animations';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg';
+import type {BlockSvg} from './block_svg';
 import * as bumpObjects from './bump_objects';
 import * as common from './common';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockMove} from './events/events_block_move';
+import type {BlockMove} from './events/events_block_move';
 import * as eventUtils from './events/utils';
-/* eslint-disable-next-line no-unused-vars */
-import {Icon} from './icon';
+import type {Icon} from './icon';
 import {InsertionMarkerManager} from './insertion_marker_manager';
-/* eslint-disable-next-line no-unused-vars */
-import {IBlockDragger} from './interfaces/i_block_dragger';
-/* eslint-disable-next-line no-unused-vars */
-import {IDragTarget} from './interfaces/i_drag_target';
+import type {IBlockDragger} from './interfaces/i_block_dragger';
+import type {IDragTarget} from './interfaces/i_drag_target';
 import * as registry from './registry';
 import {Coordinate} from './utils/coordinate';
 import * as dom from './utils/dom';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg';
+import type {WorkspaceSvg} from './workspace_svg';
 
 
 /**

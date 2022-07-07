@@ -22,40 +22,31 @@ import './events/events_block_create';
 import './events/events_block_delete';
 
 import {Blocks} from './blocks';
-/* eslint-disable-next-line no-unused-vars */
-import {Comment} from './comment';
+import type {Comment} from './comment';
 import * as common from './common';
 import {Connection} from './connection';
 import {ConnectionType} from './connection_type';
 import * as constants from './constants';
-/* eslint-disable-next-line no-unused-vars */
-import {Abstract} from './events/events_abstract';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockMove} from './events/events_block_move';
+import type {Abstract} from './events/events_abstract';
+import type {BlockMove} from './events/events_block_move';
 import * as eventUtils from './events/utils';
 import * as Extensions from './extensions';
-/* eslint-disable-next-line no-unused-vars */
-import {Field} from './field';
+import type {Field} from './field';
 import * as fieldRegistry from './field_registry';
 import {Align, Input} from './input';
 import {inputTypes} from './input_types';
-/* eslint-disable-next-line no-unused-vars */
-import {IASTNodeLocation} from './interfaces/i_ast_node_location';
-/* eslint-disable-next-line no-unused-vars */
-import {IDeletable} from './interfaces/i_deletable';
+import type {IASTNodeLocation} from './interfaces/i_ast_node_location';
+import type {IDeletable} from './interfaces/i_deletable';
 import {ASTNode} from './keyboard_nav/ast_node';
-/* eslint-disable-next-line no-unused-vars */
-import {Mutator} from './mutator';
+import type {Mutator} from './mutator';
 import * as Tooltip from './tooltip';
 import * as arrayUtils from './utils/array';
 import {Coordinate} from './utils/coordinate';
 import * as idGenerator from './utils/idgenerator';
 import * as parsing from './utils/parsing';
 import {Size} from './utils/size';
-/* eslint-disable-next-line no-unused-vars */
-import {VariableModel} from './variable_model';
-/* eslint-disable-next-line no-unused-vars */
-import {Workspace} from './workspace';
+import type {VariableModel} from './variable_model';
+import type {Workspace} from './workspace';
 
 
 /**

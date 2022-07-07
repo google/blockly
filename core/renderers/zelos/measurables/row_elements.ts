@@ -16,8 +16,7 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from '../../../renderers/common/constants';
+import type {ConstantProvider} from '../../../renderers/common/constants';
 import {Measurable} from '../../../renderers/measurables/base';
 import {Types} from '../../../renderers/measurables/types';
 

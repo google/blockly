@@ -19,8 +19,7 @@ import './events/events_var_delete';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_var_rename';
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from './block';
+import type {Block} from './block';
 import * as dialog from './dialog';
 import * as eventUtils from './events/utils';
 import {Msg} from './msg';
@@ -28,8 +27,7 @@ import {Names} from './names';
 import * as arrayUtils from './utils/array';
 import * as idGenerator from './utils/idgenerator';
 import {VariableModel} from './variable_model';
-/* eslint-disable-next-line no-unused-vars */
-import {Workspace} from './workspace';
+import type {Workspace} from './workspace';
 
 
 /**

@@ -25,8 +25,7 @@ import * as dom from '../../utils/dom';
 import {Svg} from '../../utils/svg';
 import {PathObject as BasePathObject} from '../common/path_object';
 
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from './constants';
+import type {ConstantProvider} from './constants';
 
 
 /**

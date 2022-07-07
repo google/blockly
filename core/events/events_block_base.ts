@@ -14,8 +14,7 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from '../block';
+import type {Block} from '../block';
 
 import {Abstract as AbstractEvent} from './events_abstract';
 

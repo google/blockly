@@ -21,14 +21,12 @@ import './events/events_comment_create';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_comment_delete';
 
-/* eslint-disable-next-line no-unused-vars */
-import {CommentMove} from './events/events_comment_move';
+import type {CommentMove} from './events/events_comment_move';
 import * as eventUtils from './events/utils';
 import {Coordinate} from './utils/coordinate';
 import * as idGenerator from './utils/idgenerator';
 import * as xml from './utils/xml';
-/* eslint-disable-next-line no-unused-vars */
-import {Workspace} from './workspace';
+import type {Workspace} from './workspace';
 
 
 /**

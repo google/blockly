@@ -14,29 +14,20 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg';
+import type {BlockSvg} from '../../block_svg';
 import * as svgPaths from '../../utils/svg_paths';
 import {Connection} from '../measurables/connection';
-/* eslint-disable-next-line no-unused-vars */
-import {ExternalValueInput} from '../measurables/external_value_input';
-/* eslint-disable-next-line no-unused-vars */
-import {Field} from '../measurables/field';
-/* eslint-disable-next-line no-unused-vars */
-import {Icon} from '../measurables/icon';
-/* eslint-disable-next-line no-unused-vars */
-import {InlineInput} from '../measurables/inline_input';
-/* eslint-disable-next-line no-unused-vars */
-import {PreviousConnection} from '../measurables/previous_connection';
-/* eslint-disable-next-line no-unused-vars */
-import {Row} from '../measurables/row';
+import type {ExternalValueInput} from '../measurables/external_value_input';
+import type {Field} from '../measurables/field';
+import type {Icon} from '../measurables/icon';
+import type {InlineInput} from '../measurables/inline_input';
+import type {PreviousConnection} from '../measurables/previous_connection';
+import type {Row} from '../measurables/row';
 import {Types} from '../measurables/types';
 
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider, Notch, PuzzleTab} from './constants';
+import type {ConstantProvider, Notch, PuzzleTab} from './constants';
 import * as debug from './debug';
-/* eslint-disable-next-line no-unused-vars */
-import {RenderInfo} from './info';
+import type {RenderInfo} from './info';
 
 
 /**

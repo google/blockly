@@ -14,24 +14,17 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg';
-/* eslint-disable-next-line no-unused-vars */
-import {ASTNode} from '../../keyboard_nav/ast_node';
-/* eslint-disable-next-line no-unused-vars */
-import {Marker} from '../../keyboard_nav/marker';
-/* eslint-disable-next-line no-unused-vars */
-import {RenderedConnection} from '../../rendered_connection';
+import type {BlockSvg} from '../../block_svg';
+import type {ASTNode} from '../../keyboard_nav/ast_node';
+import type {Marker} from '../../keyboard_nav/marker';
+import type {RenderedConnection} from '../../rendered_connection';
 import * as dom from '../../utils/dom';
 import {Svg} from '../../utils/svg';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from '../../workspace_svg';
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider as BaseConstantProvider} from '../common/constants';
+import type {WorkspaceSvg} from '../../workspace_svg';
+import type {ConstantProvider as BaseConstantProvider} from '../common/constants';
 import {MarkerSvg as BaseMarkerSvg} from '../common/marker_svg';
 
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider as ZelosConstantProvider} from './constants';
+import type {ConstantProvider as ZelosConstantProvider} from './constants';
 
 
 /**

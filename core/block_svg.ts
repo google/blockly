@@ -25,45 +25,33 @@ import './touch';
 import {Block} from './block';
 import * as blockAnimations from './block_animations';
 import * as browserEvents from './browser_events';
-/* eslint-disable-next-line no-unused-vars */
-import {Comment} from './comment';
+import type {Comment} from './comment';
 import * as common from './common';
 import {config} from './config';
-/* eslint-disable-next-line no-unused-vars */
-import {Connection} from './connection';
+import type {Connection} from './connection';
 import {ConnectionType} from './connection_type';
 import * as constants from './constants';
 import * as ContextMenu from './contextmenu';
 import {ContextMenuOption, ContextMenuRegistry, LegacyContextMenuOption} from './contextmenu_registry';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockMove} from './events/events_block_move';
+import type {BlockMove} from './events/events_block_move';
 import * as eventUtils from './events/utils';
-/* eslint-disable-next-line no-unused-vars */
-import {Field} from './field';
+import type {Field} from './field';
 import {FieldLabel} from './field_label';
-/* eslint-disable-next-line no-unused-vars */
-import {Icon} from './icon';
-/* eslint-disable-next-line no-unused-vars */
-import {Input} from './input';
-/* eslint-disable-next-line no-unused-vars */
-import {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg';
-/* eslint-disable-next-line no-unused-vars */
-import {IBoundedElement} from './interfaces/i_bounded_element';
+import type {Icon} from './icon';
+import type {Input} from './input';
+import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg';
+import type {IBoundedElement} from './interfaces/i_bounded_element';
 import {CopyData, ICopyable} from './interfaces/i_copyable';
-/* eslint-disable-next-line no-unused-vars */
-import {IDraggable} from './interfaces/i_draggable';
+import type {IDraggable} from './interfaces/i_draggable';
 import * as internalConstants from './internal_constants';
 import {ASTNode} from './keyboard_nav/ast_node';
 import {TabNavigateCursor} from './keyboard_nav/tab_navigate_cursor';
 import {MarkerManager} from './marker_manager';
 import {Msg} from './msg';
-/* eslint-disable-next-line no-unused-vars */
-import {Mutator} from './mutator';
+import type {Mutator} from './mutator';
 import {RenderedConnection} from './rendered_connection';
-/* eslint-disable-next-line no-unused-vars */
-import {Debug as BlockRenderingDebug} from './renderers/common/debugger';
-/* eslint-disable-next-line no-unused-vars */
-import {IPathObject} from './renderers/common/i_path_object';
+import type {Debug as BlockRenderingDebug} from './renderers/common/debugger';
+import type {IPathObject} from './renderers/common/i_path_object';
 import * as blocks from './serialization/blocks';
 import {BlockStyle} from './theme';
 import * as Tooltip from './tooltip';
@@ -72,11 +60,9 @@ import * as dom from './utils/dom';
 import {Rect} from './utils/rect';
 import {Svg} from './utils/svg';
 import * as svgMath from './utils/svg_math';
-/* eslint-disable-next-line no-unused-vars */
-import {Warning} from './warning';
+import type {Warning} from './warning';
 import {Workspace} from './workspace';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg';
+import type {WorkspaceSvg} from './workspace_svg';
 
 
 /**

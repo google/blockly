@@ -18,10 +18,8 @@
 
 import {BlockSvg} from './block_svg';
 import {DragTarget} from './drag_target';
-/* eslint-disable-next-line no-unused-vars */
-import {IDeleteArea} from './interfaces/i_delete_area';
-/* eslint-disable-next-line no-unused-vars */
-import {IDraggable} from './interfaces/i_draggable';
+import type {IDeleteArea} from './interfaces/i_delete_area';
+import type {IDraggable} from './interfaces/i_draggable';
 
 
 /**

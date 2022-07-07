@@ -14,15 +14,12 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from './block';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg';
+import type {Block} from './block';
+import type {BlockSvg} from './block_svg';
 import * as common from './common';
 import {config} from './config';
 import {Connection} from './connection';
-/* eslint-disable-next-line no-unused-vars */
-import {ConnectionDB} from './connection_db';
+import type {ConnectionDB} from './connection_db';
 import {ConnectionType} from './connection_type';
 import * as eventUtils from './events/utils';
 import * as internalConstants from './internal_constants';

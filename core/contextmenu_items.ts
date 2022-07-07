@@ -14,8 +14,7 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg';
+import type {BlockSvg} from './block_svg';
 import * as clipboard from './clipboard';
 import {ContextMenuRegistry, RegistryItem, Scope} from './contextmenu_registry';
 import * as dialog from './dialog';
@@ -25,8 +24,7 @@ import {inputTypes} from './input_types';
 import {Msg} from './msg';
 import * as idGenerator from './utils/idgenerator';
 import * as userAgent from './utils/useragent';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg';
+import type {WorkspaceSvg} from './workspace_svg';
 
 
 /**

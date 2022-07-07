@@ -21,8 +21,7 @@ import '../toolbox/category';
 // Unused import preserved for side-effects. Remove if unneeded.
 import '../toolbox/separator';
 
-/* eslint-disable-next-line no-unused-vars */
-import {ConnectionState} from '../serialization/blocks';
+import type {ConnectionState} from '../serialization/blocks';
 import {CssConfig as CategoryCssConfig} from '../toolbox/category';
 import {CssConfig as SeparatorCssConfig} from '../toolbox/separator';
 import * as Xml from '../xml';

@@ -19,10 +19,8 @@ import * as dialog from './dialog';
 import {Msg} from './msg';
 import * as utilsXml from './utils/xml';
 import {VariableModel} from './variable_model';
-/* eslint-disable-next-line no-unused-vars */
-import {Workspace} from './workspace';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg';
+import type {Workspace} from './workspace';
+import type {WorkspaceSvg} from './workspace_svg';
 import * as Xml from './xml';
 
 

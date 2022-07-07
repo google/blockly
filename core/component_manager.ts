@@ -14,16 +14,11 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {IAutoHideable} from './interfaces/i_autohideable';
-/* eslint-disable-next-line no-unused-vars */
-import {IComponent} from './interfaces/i_component';
-/* eslint-disable-next-line no-unused-vars */
-import {IDeleteArea} from './interfaces/i_delete_area';
-/* eslint-disable-next-line no-unused-vars */
-import {IDragTarget} from './interfaces/i_drag_target';
-/* eslint-disable-next-line no-unused-vars */
-import {IPositionable} from './interfaces/i_positionable';
+import type {IAutoHideable} from './interfaces/i_autohideable';
+import type {IComponent} from './interfaces/i_component';
+import type {IDeleteArea} from './interfaces/i_delete_area';
+import type {IDragTarget} from './interfaces/i_drag_target';
+import type {IPositionable} from './interfaces/i_positionable';
 import * as arrayUtils from './utils/array';
 
 

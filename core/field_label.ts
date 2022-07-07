@@ -20,8 +20,7 @@ import {Field} from './field';
 import * as fieldRegistry from './field_registry';
 import * as dom from './utils/dom';
 import * as parsing from './utils/parsing';
-/* eslint-disable-next-line no-unused-vars */
-import {Sentinel} from './utils/sentinel';
+import type {Sentinel} from './utils/sentinel';
 
 
 /**

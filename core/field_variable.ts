@@ -17,20 +17,16 @@
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_block_change';
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from './block';
+import type {Block} from './block';
 import {Field} from './field';
 import {FieldDropdown} from './field_dropdown';
 import * as fieldRegistry from './field_registry';
 import * as internalConstants from './internal_constants';
-/* eslint-disable-next-line no-unused-vars */
-import {Menu} from './menu';
-/* eslint-disable-next-line no-unused-vars */
-import {MenuItem} from './menuitem';
+import type {Menu} from './menu';
+import type {MenuItem} from './menuitem';
 import {Msg} from './msg';
 import * as parsing from './utils/parsing';
-/* eslint-disable-next-line no-unused-vars */
-import {Sentinel} from './utils/sentinel';
+import type {Sentinel} from './utils/sentinel';
 import {Size} from './utils/size';
 import {VariableModel} from './variable_model';
 import * as Variables from './variables';

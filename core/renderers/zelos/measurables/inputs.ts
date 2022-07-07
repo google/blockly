@@ -17,8 +17,7 @@
 
 
 /* eslint-disable-next-line no-unused-vars */
-/* eslint-disable-next-line no-unused-vars */
-import {Input} from '../../../input';
+import type {Input} from '../../../input';
 import {ConstantProvider} from '../../../renderers/common/constants';
 import {StatementInput as BaseStatementInput} from '../../../renderers/measurables/statement_input';
 

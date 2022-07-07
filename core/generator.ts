@@ -16,14 +16,11 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from './block';
+import type {Block} from './block';
 import * as common from './common';
-/* eslint-disable-next-line no-unused-vars */
-import {Names, NameType} from './names';
+import type {Names, NameType} from './names';
 import * as deprecation from './utils/deprecation';
-/* eslint-disable-next-line no-unused-vars */
-import {Workspace} from './workspace';
+import type {Workspace} from './workspace';
 
 
 /**

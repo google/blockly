@@ -20,13 +20,10 @@ import './metrics_manager';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './workspace';
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockDragSurfaceSvg} from './block_drag_surface';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg';
+import type {BlockDragSurfaceSvg} from './block_drag_surface';
+import type {BlockSvg} from './block_svg';
 import * as browserEvents from './browser_events';
-/* eslint-disable-next-line no-unused-vars */
-import {IBubble} from './interfaces/i_bubble';
+import type {IBubble} from './interfaces/i_bubble';
 import {ContainerRegion} from './metrics_manager';
 import {Scrollbar} from './scrollbar';
 import * as Touch from './touch';
@@ -36,8 +33,7 @@ import * as math from './utils/math';
 import {Size} from './utils/size';
 import {Svg} from './utils/svg';
 import * as userAgent from './utils/useragent';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg';
+import type {WorkspaceSvg} from './workspace_svg';
 
 
 /**

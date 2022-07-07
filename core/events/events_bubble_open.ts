@@ -14,8 +14,7 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../block_svg';
+import type {BlockSvg} from '../block_svg';
 import * as registry from '../registry';
 
 import {UiBase} from './events_ui_base';

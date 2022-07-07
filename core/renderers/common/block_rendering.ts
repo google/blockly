@@ -15,8 +15,7 @@
 
 
 import * as registry from '../../registry';
-/* eslint-disable-next-line no-unused-vars */
-import {Theme} from '../../theme';
+import type {Theme} from '../../theme';
 import * as deprecation from '../../utils/deprecation';
 import {Measurable} from '../measurables/base';
 import {BottomRow} from '../measurables/bottom_row';

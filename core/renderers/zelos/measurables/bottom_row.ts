@@ -14,8 +14,7 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../../block_svg';
+import type {BlockSvg} from '../../../block_svg';
 import {ConstantProvider} from '../../../renderers/common/constants';
 import {BottomRow as BaseBottomRow} from '../../../renderers/measurables/bottom_row';
 

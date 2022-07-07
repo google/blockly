@@ -17,29 +17,21 @@
 // Unused import preserved for side-effects. Remove if unneeded.
 import '../../events/events_marker_move';
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg';
-/* eslint-disable-next-line no-unused-vars */
-import {Connection} from '../../connection';
+import type {BlockSvg} from '../../block_svg';
+import type {Connection} from '../../connection';
 import {ConnectionType} from '../../connection_type';
 import * as eventUtils from '../../events/utils';
-/* eslint-disable-next-line no-unused-vars */
-import {Field} from '../../field';
-/* eslint-disable-next-line no-unused-vars */
-import {IASTNodeLocationSvg} from '../../interfaces/i_ast_node_location_svg';
+import type {Field} from '../../field';
+import type {IASTNodeLocationSvg} from '../../interfaces/i_ast_node_location_svg';
 import {ASTNode} from '../../keyboard_nav/ast_node';
-/* eslint-disable-next-line no-unused-vars */
-import {Marker} from '../../keyboard_nav/marker';
-/* eslint-disable-next-line no-unused-vars */
-import {RenderedConnection} from '../../rendered_connection';
+import type {Marker} from '../../keyboard_nav/marker';
+import type {RenderedConnection} from '../../rendered_connection';
 import * as dom from '../../utils/dom';
 import {Svg} from '../../utils/svg';
 import * as svgPaths from '../../utils/svg_paths';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from '../../workspace_svg';
+import type {WorkspaceSvg} from '../../workspace_svg';
 
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider, Notch, PuzzleTab} from './constants';
+import type {ConstantProvider, Notch, PuzzleTab} from './constants';
 
 
 /** The name of the CSS class for a cursor. */

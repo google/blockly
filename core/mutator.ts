@@ -19,24 +19,18 @@
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_bubble_open';
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from './block';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg';
-/* eslint-disable-next-line no-unused-vars */
-import {BlocklyOptions} from './blockly_options';
+import type {Block} from './block';
+import type {BlockSvg} from './block_svg';
+import type {BlocklyOptions} from './blockly_options';
 import {Bubble} from './bubble';
 import {config} from './config';
-/* eslint-disable-next-line no-unused-vars */
-import {Connection} from './connection';
-/* eslint-disable-next-line no-unused-vars */
-import {Abstract} from './events/events_abstract';
+import type {Connection} from './connection';
+import type {Abstract} from './events/events_abstract';
 import {BlockChange} from './events/events_block_change';
 import * as eventUtils from './events/utils';
 import {Icon} from './icon';
 import {Options} from './options';
-/* eslint-disable-next-line no-unused-vars */
-import {Coordinate} from './utils/coordinate';
+import type {Coordinate} from './utils/coordinate';
 import * as dom from './utils/dom';
 import {Svg} from './utils/svg';
 import * as toolbox from './utils/toolbox';

@@ -14,8 +14,7 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from '../block';
+import type {Block} from '../block';
 
 // eslint-disable-next-line no-unused-vars
 import {State} from './blocks';

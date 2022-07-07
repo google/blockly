@@ -16,32 +16,19 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {Abstract} from './events/events_abstract';
-/* eslint-disable-next-line no-unused-vars */
-import {Field} from './field';
-/* eslint-disable-next-line no-unused-vars */
-import {IBlockDragger} from './interfaces/i_block_dragger';
-/* eslint-disable-next-line no-unused-vars */
-import {IConnectionChecker} from './interfaces/i_connection_checker';
-/* eslint-disable-next-line no-unused-vars */
-import {IFlyout} from './interfaces/i_flyout';
-/* eslint-disable-next-line no-unused-vars */
-import {IMetricsManager} from './interfaces/i_metrics_manager';
-/* eslint-disable-next-line no-unused-vars */
-import {ISerializer} from './interfaces/i_serializer';
-/* eslint-disable-next-line no-unused-vars */
-import {IToolbox} from './interfaces/i_toolbox';
-/* eslint-disable-next-line no-unused-vars */
-import {Cursor} from './keyboard_nav/cursor';
-/* eslint-disable-next-line no-unused-vars */
-import {Options} from './options';
-/* eslint-disable-next-line no-unused-vars */
-import {Renderer} from './renderers/common/renderer';
-/* eslint-disable-next-line no-unused-vars */
-import {Theme} from './theme';
-/* eslint-disable-next-line no-unused-vars */
-import {ToolboxItem} from './toolbox/toolbox_item';
+import type {Abstract} from './events/events_abstract';
+import type {Field} from './field';
+import type {IBlockDragger} from './interfaces/i_block_dragger';
+import type {IConnectionChecker} from './interfaces/i_connection_checker';
+import type {IFlyout} from './interfaces/i_flyout';
+import type {IMetricsManager} from './interfaces/i_metrics_manager';
+import type {ISerializer} from './interfaces/i_serializer';
+import type {IToolbox} from './interfaces/i_toolbox';
+import type {Cursor} from './keyboard_nav/cursor';
+import type {Options} from './options';
+import type {Renderer} from './renderers/common/renderer';
+import type {Theme} from './theme';
+import type {ToolboxItem} from './toolbox/toolbox_item';
 
 
 /**

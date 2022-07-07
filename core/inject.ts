@@ -15,8 +15,7 @@
 
 
 import {BlockDragSurfaceSvg} from './block_drag_surface';
-/* eslint-disable-next-line no-unused-vars */
-import {BlocklyOptions} from './blockly_options';
+import type {BlocklyOptions} from './blockly_options';
 import * as browserEvents from './browser_events';
 import * as bumpObjects from './bump_objects';
 import * as common from './common';

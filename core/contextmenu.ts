@@ -14,10 +14,8 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from './block';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg';
+import type {Block} from './block';
+import type {BlockSvg} from './block_svg';
 import * as browserEvents from './browser_events';
 import * as clipboard from './clipboard';
 import {config} from './config';
@@ -35,8 +33,7 @@ import * as svgMath from './utils/svg_math';
 import * as userAgent from './utils/useragent';
 import * as WidgetDiv from './widgetdiv';
 import {WorkspaceCommentSvg} from './workspace_comment_svg';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg';
+import type {WorkspaceSvg} from './workspace_svg';
 import * as Xml from './xml';
 
 

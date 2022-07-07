@@ -14,8 +14,7 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from '../block';
+import type {Block} from '../block';
 import * as registry from '../registry';
 
 import {UiBase} from './events_ui_base';

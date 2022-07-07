@@ -28,18 +28,15 @@ import './events/events_bubble_open';
 import './warning';
 
 import {CommentModel} from './block';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg';
+import type {BlockSvg} from './block_svg';
 import * as browserEvents from './browser_events';
 import {Bubble} from './bubble';
 import * as Css from './css';
 import * as eventUtils from './events/utils';
 import {Icon} from './icon';
-/* eslint-disable-next-line no-unused-vars */
-import {Coordinate} from './utils/coordinate';
+import type {Coordinate} from './utils/coordinate';
 import * as dom from './utils/dom';
-/* eslint-disable-next-line no-unused-vars */
-import {Size} from './utils/size';
+import type {Size} from './utils/size';
 import {Svg} from './utils/svg';
 import * as userAgent from './utils/useragent';
 

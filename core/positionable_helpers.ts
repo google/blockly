@@ -21,11 +21,9 @@ import './metrics_manager';
 import {UiMetrics} from './metrics_manager';
 import {Scrollbar} from './scrollbar';
 import {Rect} from './utils/rect';
-/* eslint-disable-next-line no-unused-vars */
-import {Size} from './utils/size';
+import type {Size} from './utils/size';
 import * as toolbox from './utils/toolbox';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg';
+import type {WorkspaceSvg} from './workspace_svg';
 
 
 /**

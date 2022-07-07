@@ -14,10 +14,8 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from './block';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg';
+import type {Block} from './block';
+import type {BlockSvg} from './block_svg';
 import * as browserEvents from './browser_events';
 import * as common from './common';
 import {ComponentManager} from './component_manager';
@@ -25,14 +23,11 @@ import {DeleteArea} from './delete_area';
 import * as BlockCreate from './events/events_block_create';
 import * as VarCreate from './events/events_var_create';
 import * as eventUtils from './events/utils';
-/* eslint-disable-next-line no-unused-vars */
-import {FlyoutButton} from './flyout_button';
+import type {FlyoutButton} from './flyout_button';
 import {FlyoutMetricsManager} from './flyout_metrics_manager';
 import * as Gesture from './gesture';
-/* eslint-disable-next-line no-unused-vars */
-import {IFlyout} from './interfaces/i_flyout';
-/* eslint-disable-next-line no-unused-vars */
-import {Options} from './options';
+import type {IFlyout} from './interfaces/i_flyout';
+import type {Options} from './options';
 import * as blockRendering from './renderers/common/block_rendering';
 import {ScrollbarPair} from './scrollbar_pair';
 import * as blocks from './serialization/blocks';
@@ -41,8 +36,7 @@ import * as Touch from './touch';
 import {Coordinate} from './utils/coordinate';
 import * as dom from './utils/dom';
 import * as idGenerator from './utils/idgenerator';
-/* eslint-disable-next-line no-unused-vars */
-import {Rect} from './utils/rect';
+import type {Rect} from './utils/rect';
 import {Svg} from './utils/svg';
 import * as toolbox from './utils/toolbox';
 import * as Variables from './variables';

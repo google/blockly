@@ -14,10 +14,8 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {Measurable} from './base';
-/* eslint-disable-next-line no-unused-vars */
-import {Row} from './row';
+import type {Measurable} from './base';
+import type {Row} from './row';
 
 
 /**

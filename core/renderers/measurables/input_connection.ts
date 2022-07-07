@@ -14,14 +14,10 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg';
-/* eslint-disable-next-line no-unused-vars */
-import {Input} from '../../input';
-/* eslint-disable-next-line no-unused-vars */
-import {RenderedConnection} from '../../rendered_connection';
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from '../common/constants';
+import type {BlockSvg} from '../../block_svg';
+import type {Input} from '../../input';
+import type {RenderedConnection} from '../../rendered_connection';
+import type {ConstantProvider} from '../common/constants';
 
 import {Connection} from './connection';
 import {Types} from './types';

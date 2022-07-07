@@ -17,8 +17,7 @@
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_block_change';
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg';
+import type {BlockSvg} from './block_svg';
 import * as browserEvents from './browser_events';
 import * as dialog from './dialog';
 import * as dropDownDiv from './dropdowndiv';
@@ -31,12 +30,10 @@ import {Coordinate} from './utils/coordinate';
 import * as dom from './utils/dom';
 import {KeyCodes} from './utils/keycodes';
 import * as parsing from './utils/parsing';
-/* eslint-disable-next-line no-unused-vars */
-import {Sentinel} from './utils/sentinel';
+import type {Sentinel} from './utils/sentinel';
 import * as userAgent from './utils/useragent';
 import * as WidgetDiv from './widgetdiv';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg';
+import type {WorkspaceSvg} from './workspace_svg';
 
 
 /**

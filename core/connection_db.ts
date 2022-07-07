@@ -22,12 +22,9 @@
 import './constants';
 
 import {ConnectionType} from './connection_type';
-/* eslint-disable-next-line no-unused-vars */
-import {IConnectionChecker} from './interfaces/i_connection_checker';
-/* eslint-disable-next-line no-unused-vars */
-import {RenderedConnection} from './rendered_connection';
-/* eslint-disable-next-line no-unused-vars */
-import {Coordinate} from './utils/coordinate';
+import type {IConnectionChecker} from './interfaces/i_connection_checker';
+import type {RenderedConnection} from './rendered_connection';
+import type {Coordinate} from './utils/coordinate';
 
 
 /**

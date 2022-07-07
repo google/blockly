@@ -14,30 +14,22 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from '../../block';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg';
+import type {Block} from '../../block';
+import type {BlockSvg} from '../../block_svg';
 import {Connection} from '../../connection';
 import {ConnectionType} from '../../connection_type';
 import {InsertionMarkerManager, PreviewType} from '../../insertion_marker_manager';
-/* eslint-disable-next-line no-unused-vars */
-import {IRegistrable} from '../../interfaces/i_registrable';
-/* eslint-disable-next-line no-unused-vars */
-import {Marker} from '../../keyboard_nav/marker';
-/* eslint-disable-next-line no-unused-vars */
-import {RenderedConnection} from '../../rendered_connection';
+import type {IRegistrable} from '../../interfaces/i_registrable';
+import type {Marker} from '../../keyboard_nav/marker';
+import type {RenderedConnection} from '../../rendered_connection';
 import {BlockStyle, Theme} from '../../theme';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from '../../workspace_svg';
+import type {WorkspaceSvg} from '../../workspace_svg';
 
 import {ConstantProvider} from './constants';
 import * as debug from './debug';
-/* eslint-disable-next-line no-unused-vars */
-import {Debug} from './debugger';
+import type {Debug} from './debugger';
 import {Drawer} from './drawer';
-/* eslint-disable-next-line no-unused-vars */
-import {IPathObject} from './i_path_object';
+import type {IPathObject} from './i_path_object';
 import {RenderInfo} from './info';
 import {MarkerSvg} from './marker_svg';
 import {PathObject} from './path_object';

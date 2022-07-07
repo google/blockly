@@ -14,12 +14,10 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg';
+import type {BlockSvg} from '../../block_svg';
 import {Drawer as BaseDrawer} from '../common/drawer';
 
-/* eslint-disable-next-line no-unused-vars */
-import {RenderInfo} from './info';
+import type {RenderInfo} from './info';
 
 
 /**

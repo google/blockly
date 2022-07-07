@@ -23,8 +23,7 @@
 // Unused import preserved for side-effects. Remove if unneeded.
 import './mutator';
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from './block';
+import type {Block} from './block';
 import {BlockSvg} from './block_svg';
 import {FieldDropdown} from './field_dropdown';
 import {Mutator} from './mutator';

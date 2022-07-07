@@ -17,10 +17,8 @@
 
 
 /* eslint-disable-next-line no-unused-vars */
-/* eslint-disable-next-line no-unused-vars */
-import {Field as BlocklyField} from '../../field';
-/* eslint-disable-next-line no-unused-vars */
-import {Input} from '../../input';
+import type {Field as BlocklyField} from '../../field';
+import type {Input} from '../../input';
 import {ConstantProvider} from '../common/constants';
 
 import {Measurable} from './base';

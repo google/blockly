@@ -18,8 +18,7 @@
 // Unused import preserved for side-effects. Remove if unneeded.
 import '../utils/toolbox';
 
-/* eslint-disable-next-line no-unused-vars */
-import {IToolboxItem} from './i_toolbox_item';
+import type {IToolboxItem} from './i_toolbox_item';
 
 
 /**

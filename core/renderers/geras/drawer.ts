@@ -14,22 +14,17 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg';
+import type {BlockSvg} from '../../block_svg';
 import * as svgPaths from '../../utils/svg_paths';
 import * as debug from '../common/debug';
 import {Drawer as BaseDrawer} from '../common/drawer';
 import {Row} from '../measurables/row';
 
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from './constants';
+import type {ConstantProvider} from './constants';
 import {Highlighter} from './highlighter';
-/* eslint-disable-next-line no-unused-vars */
-import {RenderInfo} from './info';
-/* eslint-disable-next-line no-unused-vars */
-import {InlineInput} from './measurables/inline_input';
-/* eslint-disable-next-line no-unused-vars */
-import {PathObject} from './path_object';
+import type {RenderInfo} from './info';
+import type {InlineInput} from './measurables/inline_input';
+import type {PathObject} from './path_object';
 
 
 /**

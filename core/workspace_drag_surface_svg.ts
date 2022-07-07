@@ -20,8 +20,7 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {Coordinate} from './utils/coordinate';
+import type {Coordinate} from './utils/coordinate';
 import * as dom from './utils/dom';
 import {Svg} from './utils/svg';
 import * as svgMath from './utils/svg_math';

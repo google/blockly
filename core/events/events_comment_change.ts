@@ -15,8 +15,7 @@
 
 
 import * as registry from '../registry';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceComment} from '../workspace_comment';
+import type {WorkspaceComment} from '../workspace_comment';
 
 import {CommentBase} from './events_comment_base';
 import * as eventUtils from './utils';

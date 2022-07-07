@@ -18,8 +18,7 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {Svg} from './svg';
+import type {Svg} from './svg';
 import * as userAgent from './useragent';
 
 

@@ -14,8 +14,7 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from '../block';
+import type {Block} from '../block';
 import * as registry from '../registry';
 import * as blocks from '../serialization/blocks';
 import * as Xml from '../xml';

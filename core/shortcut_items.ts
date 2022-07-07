@@ -18,8 +18,7 @@ import {BlockSvg} from './block_svg';
 import * as clipboard from './clipboard';
 import * as common from './common';
 import {Gesture} from './gesture';
-/* eslint-disable-next-line no-unused-vars */
-import {ICopyable} from './interfaces/i_copyable';
+import type {ICopyable} from './interfaces/i_copyable';
 import {KeyboardShortcut, ShortcutRegistry} from './shortcut_registry';
 import {KeyCodes} from './utils/keycodes';
 import {WorkspaceSvg} from './workspace_svg';

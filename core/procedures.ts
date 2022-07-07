@@ -17,25 +17,19 @@
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_block_change';
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from './block';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg';
+import type {Block} from './block';
+import type {BlockSvg} from './block_svg';
 import {Blocks} from './blocks';
-/* eslint-disable-next-line no-unused-vars */
-import {Abstract} from './events/events_abstract';
-/* eslint-disable-next-line no-unused-vars */
-import {BubbleOpen} from './events/events_bubble_open';
+import type {Abstract} from './events/events_abstract';
+import type {BubbleOpen} from './events/events_bubble_open';
 import * as eventUtils from './events/utils';
-/* eslint-disable-next-line no-unused-vars */
-import {Field} from './field';
+import type {Field} from './field';
 import {Msg} from './msg';
 import {Names} from './names';
 import * as utilsXml from './utils/xml';
 import * as Variables from './variables';
 import {Workspace} from './workspace';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg';
+import type {WorkspaceSvg} from './workspace_svg';
 import * as Xml from './xml';
 
 

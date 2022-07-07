@@ -14,17 +14,12 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_item';
-/* eslint-disable-next-line no-unused-vars */
-import {IToolbox} from '../interfaces/i_toolbox';
-/* eslint-disable-next-line no-unused-vars */
-import {IToolboxItem} from '../interfaces/i_toolbox_item';
+import type {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_item';
+import type {IToolbox} from '../interfaces/i_toolbox';
+import type {IToolboxItem} from '../interfaces/i_toolbox_item';
 import * as idGenerator from '../utils/idgenerator';
-/* eslint-disable-next-line no-unused-vars */
-import * as toolbox from '../utils/toolbox';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from '../workspace_svg';
+import type * as toolbox from '../utils/toolbox';
+import type {WorkspaceSvg} from '../workspace_svg';
 
 
 /**

@@ -16,31 +16,24 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg';
+import type {BlockSvg} from '../../block_svg';
 import {Input} from '../../input';
 import {inputTypes} from '../../input_types';
 import {RenderInfo as BaseRenderInfo} from '../common/info';
 import {Measurable} from '../measurables/base';
-/* eslint-disable-next-line no-unused-vars */
-import {BottomRow} from '../measurables/bottom_row';
+import type {BottomRow} from '../measurables/bottom_row';
 import {ExternalValueInput} from '../measurables/external_value_input';
-/* eslint-disable-next-line no-unused-vars */
-import {Field} from '../measurables/field';
+import type {Field} from '../measurables/field';
 import {InRowSpacer} from '../measurables/in_row_spacer';
-/* eslint-disable-next-line no-unused-vars */
-import {InputRow} from '../measurables/input_row';
+import type {InputRow} from '../measurables/input_row';
 import {Row} from '../measurables/row';
-/* eslint-disable-next-line no-unused-vars */
-import {TopRow} from '../measurables/top_row';
+import type {TopRow} from '../measurables/top_row';
 import {Types} from '../measurables/types';
 
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from './constants';
+import type {ConstantProvider} from './constants';
 import {InlineInput} from './measurables/inline_input';
 import {StatementInput} from './measurables/statement_input';
-/* eslint-disable-next-line no-unused-vars */
-import {Renderer} from './renderer';
+import type {Renderer} from './renderer';
 
 
 /**

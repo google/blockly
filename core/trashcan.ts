@@ -20,38 +20,29 @@ import './metrics_manager';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_trashcan_open';
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlocklyOptions} from './blockly_options';
+import type {BlocklyOptions} from './blockly_options';
 import * as browserEvents from './browser_events';
 import {ComponentManager} from './component_manager';
 import {DeleteArea} from './delete_area';
-/* eslint-disable-next-line no-unused-vars */
-import {Abstract} from './events/events_abstract';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockDelete} from './events/events_block_delete';
+import type {Abstract} from './events/events_abstract';
+import type {BlockDelete} from './events/events_block_delete';
 import * as eventUtils from './events/utils';
-/* eslint-disable-next-line no-unused-vars */
-import {IAutoHideable} from './interfaces/i_autohideable';
-/* eslint-disable-next-line no-unused-vars */
-import {IDraggable} from './interfaces/i_draggable';
-/* eslint-disable-next-line no-unused-vars */
-import {IFlyout} from './interfaces/i_flyout';
-/* eslint-disable-next-line no-unused-vars */
-import {IPositionable} from './interfaces/i_positionable';
+import type {IAutoHideable} from './interfaces/i_autohideable';
+import type {IDraggable} from './interfaces/i_draggable';
+import type {IFlyout} from './interfaces/i_flyout';
+import type {IPositionable} from './interfaces/i_positionable';
 import {UiMetrics} from './metrics_manager';
 import {Options} from './options';
 import * as uiPosition from './positionable_helpers';
 import * as registry from './registry';
-/* eslint-disable-next-line no-unused-vars */
-import * as blocks from './serialization/blocks';
+import type * as blocks from './serialization/blocks';
 import {SPRITE} from './sprites';
 import * as dom from './utils/dom';
 import {Rect} from './utils/rect';
 import {Size} from './utils/size';
 import {Svg} from './utils/svg';
 import * as toolbox from './utils/toolbox';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg';
+import type {WorkspaceSvg} from './workspace_svg';
 
 
 /**

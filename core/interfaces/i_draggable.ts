@@ -14,8 +14,7 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {IDeletable} from './i_deletable';
+import type {IDeletable} from './i_deletable';
 
 
 /**

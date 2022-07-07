@@ -18,8 +18,7 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg';
+import type {BlockSvg} from './block_svg';
 import * as dropDownDiv from './dropdowndiv';
 import {Field} from './field';
 import * as fieldRegistry from './field_registry';
@@ -29,8 +28,7 @@ import * as aria from './utils/aria';
 import {Coordinate} from './utils/coordinate';
 import * as dom from './utils/dom';
 import * as parsing from './utils/parsing';
-/* eslint-disable-next-line no-unused-vars */
-import {Sentinel} from './utils/sentinel';
+import type {Sentinel} from './utils/sentinel';
 import * as utilsString from './utils/string';
 import {Svg} from './utils/svg';
 import * as userAgent from './utils/useragent';

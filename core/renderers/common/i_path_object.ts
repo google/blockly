@@ -28,8 +28,7 @@ import '../../theme';
 
 import {BlockStyle} from '../../theme';
 
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from './constants';
+import type {ConstantProvider} from './constants';
 
 
 /**

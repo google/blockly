@@ -14,12 +14,10 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from '../block';
+import type {Block} from '../block';
 import {ASTNode} from '../keyboard_nav/ast_node';
 import * as registry from '../registry';
-/* eslint-disable-next-line no-unused-vars */
-import {Workspace} from '../workspace';
+import type {Workspace} from '../workspace';
 
 import {UiBase} from './events_ui_base';
 import * as eventUtils from './utils';

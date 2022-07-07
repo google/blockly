@@ -17,18 +17,13 @@
 // Unused import preserved for side-effects. Remove if unneeded.
 import './constants';
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from './block';
+import type {Block} from './block';
 import {ConnectionType} from './connection_type';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockMove} from './events/events_block_move';
+import type {BlockMove} from './events/events_block_move';
 import * as eventUtils from './events/utils';
-/* eslint-disable-next-line no-unused-vars */
-import {Input} from './input';
-/* eslint-disable-next-line no-unused-vars */
-import {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_with_block';
-/* eslint-disable-next-line no-unused-vars */
-import {IConnectionChecker} from './interfaces/i_connection_checker';
+import type {Input} from './input';
+import type {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_with_block';
+import type {IConnectionChecker} from './interfaces/i_connection_checker';
 import * as blocks from './serialization/blocks';
 import * as Xml from './xml';
 

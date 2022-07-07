@@ -40,13 +40,10 @@ import './metrics_manager';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './msg';
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from './block';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockDragSurfaceSvg} from './block_drag_surface';
+import type {Block} from './block';
+import type {BlockDragSurfaceSvg} from './block_drag_surface';
 import {BlockSvg} from './block_svg';
-/* eslint-disable-next-line no-unused-vars */
-import {BlocklyOptions} from './blockly_options';
+import type {BlocklyOptions} from './blockly_options';
 import * as browserEvents from './browser_events';
 import * as common from './common';
 import {ComponentManager} from './component_manager';
@@ -56,71 +53,52 @@ import * as ContextMenu from './contextmenu';
 import {ContextMenuRegistry} from './contextmenu_registry';
 import * as dropDownDiv from './dropdowndiv';
 import * as eventUtils from './events/utils';
-/* eslint-disable-next-line no-unused-vars */
-import {FlyoutButton} from './flyout_button';
+import type {FlyoutButton} from './flyout_button';
 import {Gesture} from './gesture';
 import {Grid} from './grid';
-/* eslint-disable-next-line no-unused-vars */
-import {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg';
-/* eslint-disable-next-line no-unused-vars */
-import {IBoundedElement} from './interfaces/i_bounded_element';
-/* eslint-disable-next-line no-unused-vars */
-import {ICopyable} from './interfaces/i_copyable';
-/* eslint-disable-next-line no-unused-vars */
-import {IDragTarget} from './interfaces/i_drag_target';
-/* eslint-disable-next-line no-unused-vars */
-import {IFlyout} from './interfaces/i_flyout';
-/* eslint-disable-next-line no-unused-vars */
-import {IMetricsManager} from './interfaces/i_metrics_manager';
-/* eslint-disable-next-line no-unused-vars */
-import {IToolbox} from './interfaces/i_toolbox';
-/* eslint-disable-next-line no-unused-vars */
-import {Cursor} from './keyboard_nav/cursor';
-/* eslint-disable-next-line no-unused-vars */
-import {Marker} from './keyboard_nav/marker';
+import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg';
+import type {IBoundedElement} from './interfaces/i_bounded_element';
+import type {ICopyable} from './interfaces/i_copyable';
+import type {IDragTarget} from './interfaces/i_drag_target';
+import type {IFlyout} from './interfaces/i_flyout';
+import type {IMetricsManager} from './interfaces/i_metrics_manager';
+import type {IToolbox} from './interfaces/i_toolbox';
+import type {Cursor} from './keyboard_nav/cursor';
+import type {Marker} from './keyboard_nav/marker';
 import {MarkerManager} from './marker_manager';
 import {Options} from './options';
 import * as Procedures from './procedures';
 import * as registry from './registry';
 import * as blockRendering from './renderers/common/block_rendering';
-/* eslint-disable-next-line no-unused-vars */
-import {Renderer} from './renderers/common/renderer';
-/* eslint-disable-next-line no-unused-vars */
-import {ScrollbarPair} from './scrollbar_pair';
+import type {Renderer} from './renderers/common/renderer';
+import type {ScrollbarPair} from './scrollbar_pair';
 import * as blocks from './serialization/blocks';
-/* eslint-disable-next-line no-unused-vars */
-import {Theme} from './theme';
+import type {Theme} from './theme';
 import {Classic} from './theme/classic';
 import {ThemeManager} from './theme_manager';
 import * as Tooltip from './tooltip';
 import {TouchGesture} from './touch_gesture';
-/* eslint-disable-next-line no-unused-vars */
-import {Trashcan} from './trashcan';
+import type {Trashcan} from './trashcan';
 import * as utils from './utils';
 import * as arrayUtils from './utils/array';
 import {Coordinate} from './utils/coordinate';
 import * as dom from './utils/dom';
-/* eslint-disable-next-line no-unused-vars */
-import {Metrics} from './utils/metrics';
+import type {Metrics} from './utils/metrics';
 import {Rect} from './utils/rect';
 import {Size} from './utils/size';
 import {Svg} from './utils/svg';
 import * as svgMath from './utils/svg_math';
 import * as toolbox from './utils/toolbox';
 import * as userAgent from './utils/useragent';
-/* eslint-disable-next-line no-unused-vars */
-import {VariableModel} from './variable_model';
+import type {VariableModel} from './variable_model';
 import * as Variables from './variables';
 import * as VariablesDynamic from './variables_dynamic';
 import * as WidgetDiv from './widgetdiv';
 import {Workspace} from './workspace';
 import {WorkspaceAudio} from './workspace_audio';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceComment} from './workspace_comment';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceCommentSvg} from './workspace_comment_svg';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceDragSurfaceSvg} from './workspace_drag_surface_svg';
+import type {WorkspaceComment} from './workspace_comment';
+import type {WorkspaceCommentSvg} from './workspace_comment_svg';
+import type {WorkspaceDragSurfaceSvg} from './workspace_drag_surface_svg';
 import * as Xml from './xml';
 import {ZoomControls} from './zoom_controls';
 

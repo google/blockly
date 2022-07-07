@@ -21,22 +21,16 @@
 import './renderer';
 
 import * as svgPaths from '../../utils/svg_paths';
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from '../common/constants';
-/* eslint-disable-next-line no-unused-vars */
-import {BottomRow} from '../measurables/bottom_row';
-/* eslint-disable-next-line no-unused-vars */
-import {Row} from '../measurables/row';
+import type {ConstantProvider} from '../common/constants';
+import type {BottomRow} from '../measurables/bottom_row';
+import type {Row} from '../measurables/row';
 import {SpacerRow} from '../measurables/spacer_row';
-/* eslint-disable-next-line no-unused-vars */
-import {TopRow} from '../measurables/top_row';
+import type {TopRow} from '../measurables/top_row';
 import {Types} from '../measurables/types';
 
 import {HighlightConstantProvider, InsideCorner, JaggedTeeth, Notch, OutsideCorner, PuzzleTab, StartHat} from './highlight_constants';
-/* eslint-disable-next-line no-unused-vars */
-import {RenderInfo} from './info';
-/* eslint-disable-next-line no-unused-vars */
-import {InlineInput} from './measurables/inline_input';
+import type {RenderInfo} from './info';
+import type {InlineInput} from './measurables/inline_input';
 
 
 /**

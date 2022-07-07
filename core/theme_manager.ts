@@ -16,14 +16,11 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {Theme} from './theme';
+import type {Theme} from './theme';
 import * as arrayUtils from './utils/array';
 import * as dom from './utils/dom';
-/* eslint-disable-next-line no-unused-vars */
-import {Workspace} from './workspace';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg';
+import type {Workspace} from './workspace';
+import type {WorkspaceSvg} from './workspace_svg';
 
 
 /**

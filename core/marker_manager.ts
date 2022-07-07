@@ -14,12 +14,9 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {Cursor} from './keyboard_nav/cursor';
-/* eslint-disable-next-line no-unused-vars */
-import {Marker} from './keyboard_nav/marker';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg';
+import type {Cursor} from './keyboard_nav/cursor';
+import type {Marker} from './keyboard_nav/marker';
+import type {WorkspaceSvg} from './workspace_svg';
 
 
 /**

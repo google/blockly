@@ -19,11 +19,9 @@ import './procedures';
 
 import {Msg} from './msg';
 import * as Procedures from './procedures';
-/* eslint-disable-next-line no-unused-vars */
-import {VariableMap} from './variable_map';
+import type {VariableMap} from './variable_map';
 import * as Variables from './variables';
-/* eslint-disable-next-line no-unused-vars */
-import {Workspace} from './workspace';
+import type {Workspace} from './workspace';
 
 
 /**

@@ -14,30 +14,22 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg';
+import type {BlockSvg} from '../../block_svg';
 import {ConnectionType} from '../../connection_type';
 import {FieldLabel} from '../../field_label';
-/* eslint-disable-next-line no-unused-vars */
-import {RenderedConnection} from '../../rendered_connection';
+import type {RenderedConnection} from '../../rendered_connection';
 import * as dom from '../../utils/dom';
 import {Svg} from '../../utils/svg';
-/* eslint-disable-next-line no-unused-vars */
-import {Measurable} from '../measurables/base';
+import type {Measurable} from '../measurables/base';
 import {Field} from '../measurables/field';
-/* eslint-disable-next-line no-unused-vars */
-import {InRowSpacer} from '../measurables/in_row_spacer';
+import type {InRowSpacer} from '../measurables/in_row_spacer';
 import {InputConnection} from '../measurables/input_connection';
-/* eslint-disable-next-line no-unused-vars */
-import {Row} from '../measurables/row';
+import type {Row} from '../measurables/row';
 import {Types} from '../measurables/types';
-/* eslint-disable-next-line no-unused-vars */
-import {RenderInfo as ZelosInfo} from '../zelos/info';
+import type {RenderInfo as ZelosInfo} from '../zelos/info';
 
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from './constants';
-/* eslint-disable-next-line no-unused-vars */
-import {RenderInfo} from './info';
+import type {ConstantProvider} from './constants';
+import type {RenderInfo} from './info';
 
 
 /**

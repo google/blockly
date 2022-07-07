@@ -17,18 +17,13 @@
 // Unused import preserved for side-effects. Remove if unneeded.
 import './field_label';
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from './block';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg';
-/* eslint-disable-next-line no-unused-vars */
-import {Connection} from './connection';
-/* eslint-disable-next-line no-unused-vars */
-import {Field} from './field';
+import type {Block} from './block';
+import type {BlockSvg} from './block_svg';
+import type {Connection} from './connection';
+import type {Field} from './field';
 import * as fieldRegistry from './field_registry';
 import {inputTypes} from './input_types';
-/* eslint-disable-next-line no-unused-vars */
-import {RenderedConnection} from './rendered_connection';
+import type {RenderedConnection} from './rendered_connection';
 
 
 /**

@@ -27,11 +27,9 @@ import '../utils/coordinate';
 // Unused import preserved for side-effects. Remove if unneeded.
 import '../utils/svg';
 
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from '../workspace_svg';
+import type {WorkspaceSvg} from '../workspace_svg';
 
-/* eslint-disable-next-line no-unused-vars */
-import {IRegistrable} from './i_registrable';
+import type {IRegistrable} from './i_registrable';
 
 
 /**

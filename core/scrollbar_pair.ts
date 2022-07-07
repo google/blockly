@@ -17,11 +17,9 @@
 import * as eventUtils from './events/utils';
 import {Scrollbar} from './scrollbar';
 import * as dom from './utils/dom';
-/* eslint-disable-next-line no-unused-vars */
-import {Metrics} from './utils/metrics';
+import type {Metrics} from './utils/metrics';
 import {Svg} from './utils/svg';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg';
+import type {WorkspaceSvg} from './workspace_svg';
 
 
 /**

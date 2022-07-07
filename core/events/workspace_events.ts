@@ -15,8 +15,7 @@
 
 
 import * as registry from '../registry';
-/* eslint-disable-next-line no-unused-vars */
-import {Workspace} from '../workspace';
+import type {Workspace} from '../workspace';
 
 import {Abstract as AbstractEvent} from './events_abstract';
 import * as eventUtils from './utils';

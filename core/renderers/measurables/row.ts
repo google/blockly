@@ -14,15 +14,11 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from '../common/constants';
+import type {ConstantProvider} from '../common/constants';
 
-/* eslint-disable-next-line no-unused-vars */
-import {Measurable} from './base';
-/* eslint-disable-next-line no-unused-vars */
-import {InRowSpacer} from './in_row_spacer';
-/* eslint-disable-next-line no-unused-vars */
-import {InputConnection} from './input_connection';
+import type {Measurable} from './base';
+import type {InRowSpacer} from './in_row_spacer';
+import type {InputConnection} from './input_connection';
 import {Types} from './types';
 
 

@@ -15,12 +15,10 @@
 
 
 import * as Css from '../css';
-/* eslint-disable-next-line no-unused-vars */
-import {IToolbox} from '../interfaces/i_toolbox';
+import type {IToolbox} from '../interfaces/i_toolbox';
 import * as registry from '../registry';
 import * as dom from '../utils/dom';
-/* eslint-disable-next-line no-unused-vars */
-import * as toolbox from '../utils/toolbox';
+import type * as toolbox from '../utils/toolbox';
 
 import {ToolboxItem} from './toolbox_item';
 

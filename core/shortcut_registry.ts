@@ -18,8 +18,7 @@
 
 import {KeyCodes} from './utils/keycodes';
 import * as object from './utils/object';
-/* eslint-disable-next-line no-unused-vars */
-import {Workspace} from './workspace';
+import type {Workspace} from './workspace';
 
 
 /**

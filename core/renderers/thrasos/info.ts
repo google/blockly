@@ -14,25 +14,25 @@
  * Thrasos: spirit of boldness.
  * @class
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.thrasos.RenderInfo');
 
 /* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg.js';
-import {RenderInfo as BaseRenderInfo} from '../common/info.js';
-import {Measurable} from '../measurables/base.js';
+import {BlockSvg} from '../../block_svg';
+import {RenderInfo as BaseRenderInfo} from '../common/info';
+import {Measurable} from '../measurables/base';
 /* eslint-disable-next-line no-unused-vars */
-import {BottomRow} from '../measurables/bottom_row.js';
+import {BottomRow} from '../measurables/bottom_row';
 /* eslint-disable-next-line no-unused-vars */
-import {Field} from '../measurables/field.js';
-import {InRowSpacer} from '../measurables/in_row_spacer.js';
-import {Row} from '../measurables/row.js';
+import {Field} from '../measurables/field';
+import {InRowSpacer} from '../measurables/in_row_spacer';
+import {Row} from '../measurables/row';
 /* eslint-disable-next-line no-unused-vars */
-import {TopRow} from '../measurables/top_row.js';
-import {Types} from '../measurables/types.js';
+import {TopRow} from '../measurables/top_row';
+import {Types} from '../measurables/types';
 
 /* eslint-disable-next-line no-unused-vars */
-import {Renderer} from './renderer.js';
+import {Renderer} from './renderer';
 
 
 /**

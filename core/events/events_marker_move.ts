@@ -12,18 +12,18 @@
  * Events fired as a result of a marker move.
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.Events.MarkerMove');
 
 /* eslint-disable-next-line no-unused-vars */
-import {Block} from '../block.js';
-import {ASTNode} from '../keyboard_nav/ast_node.js';
-import * as registry from '../registry.js';
+import {Block} from '../block';
+import {ASTNode} from '../keyboard_nav/ast_node';
+import * as registry from '../registry';
 /* eslint-disable-next-line no-unused-vars */
-import {Workspace} from '../workspace.js';
+import {Workspace} from '../workspace';
 
-import {UiBase} from './events_ui_base.js';
-import * as eventUtils from './utils.js';
+import {UiBase} from './events_ui_base';
+import * as eventUtils from './utils';
 
 
 /**

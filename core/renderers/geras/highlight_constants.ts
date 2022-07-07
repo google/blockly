@@ -12,12 +12,12 @@
  * Objects for rendering highlights on blocks.
  * @class
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.geras.HighlightConstantProvider');
 
-import * as svgPaths from '../../utils/svg_paths.js';
+import * as svgPaths from '../../utils/svg_paths';
 /* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from '../common/constants.js';
+import {ConstantProvider} from '../common/constants';
 
 
 /** An object containing sizing and path information about an outside corner. */

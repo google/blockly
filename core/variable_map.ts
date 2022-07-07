@@ -12,25 +12,25 @@
  * Object representing a map of variables and their types.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.VariableMap');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_var_delete.js';
+import './events/events_var_delete';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_var_rename.js';
+import './events/events_var_rename';
 
 /* eslint-disable-next-line no-unused-vars */
-import {Block} from './block.js';
-import * as dialog from './dialog.js';
-import * as eventUtils from './events/utils.js';
-import {Msg} from './msg.js';
-import {Names} from './names.js';
-import * as arrayUtils from './utils/array.js';
-import * as idGenerator from './utils/idgenerator.js';
-import {VariableModel} from './variable_model.js';
+import {Block} from './block';
+import * as dialog from './dialog';
+import * as eventUtils from './events/utils';
+import {Msg} from './msg';
+import {Names} from './names';
+import * as arrayUtils from './utils/array';
+import * as idGenerator from './utils/idgenerator';
+import {VariableModel} from './variable_model';
 /* eslint-disable-next-line no-unused-vars */
-import {Workspace} from './workspace.js';
+import {Workspace} from './workspace';
 
 
 /**

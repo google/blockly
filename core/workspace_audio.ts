@@ -14,12 +14,12 @@
  *     workspace.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.WorkspaceAudio');
 
-import * as userAgent from './utils/useragent.js';
+import * as userAgent from './utils/useragent';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg';
 
 
 /**

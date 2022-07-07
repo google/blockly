@@ -12,25 +12,25 @@
  * Renderer that preserves the look and feel of Blockly pre-2019.
  * @class
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.geras.Drawer');
 
 /* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg.js';
-import * as svgPaths from '../../utils/svg_paths.js';
-import * as debug from '../common/debug.js';
-import {Drawer as BaseDrawer} from '../common/drawer.js';
-import {Row} from '../measurables/row.js';
+import {BlockSvg} from '../../block_svg';
+import * as svgPaths from '../../utils/svg_paths';
+import * as debug from '../common/debug';
+import {Drawer as BaseDrawer} from '../common/drawer';
+import {Row} from '../measurables/row';
 
 /* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from './constants.js';
-import {Highlighter} from './highlighter.js';
+import {ConstantProvider} from './constants';
+import {Highlighter} from './highlighter';
 /* eslint-disable-next-line no-unused-vars */
-import {RenderInfo} from './info.js';
+import {RenderInfo} from './info';
 /* eslint-disable-next-line no-unused-vars */
-import {InlineInput} from './measurables/inline_input.js';
+import {InlineInput} from './measurables/inline_input';
 /* eslint-disable-next-line no-unused-vars */
-import {PathObject} from './path_object.js';
+import {PathObject} from './path_object';
 
 
 /**

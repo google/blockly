@@ -13,12 +13,12 @@
  * tooltip will be used. Third, call bindMouseEvents(e) passing the SVG element.
  * @namespace Blockly.Tooltip
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.Tooltip');
 
-import * as browserEvents from './browser_events.js';
-import * as common from './common.js';
-import * as blocklyString from './utils/string.js';
+import * as browserEvents from './browser_events';
+import * as common from './common';
+import * as blocklyString from './utils/string';
 
 
 /**

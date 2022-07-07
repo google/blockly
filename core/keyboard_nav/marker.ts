@@ -14,14 +14,14 @@
  * Used primarily for keyboard navigation to show a marked location.
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.Marker');
 
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */
-import {MarkerSvg} from '../renderers/common/marker_svg.js';
+import {MarkerSvg} from '../renderers/common/marker_svg';
 
-import {ASTNode} from './ast_node.js';
+import {ASTNode} from './ast_node';
 
 
 /**

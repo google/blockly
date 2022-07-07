@@ -12,13 +12,13 @@
  * Measurable types.
  * @namespace Blockly.blockRendering.Types
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.blockRendering.Types');
 
 /* eslint-disable-next-line no-unused-vars */
-import {Measurable} from './base.js';
+import {Measurable} from './base';
 /* eslint-disable-next-line no-unused-vars */
-import {Row} from './row.js';
+import {Row} from './row';
 
 
 /**

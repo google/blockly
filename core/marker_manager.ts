@@ -12,15 +12,15 @@
  * Object in charge of managing markers and the cursor.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.MarkerManager');
 
 /* eslint-disable-next-line no-unused-vars */
-import {Cursor} from './keyboard_nav/cursor.js';
+import {Cursor} from './keyboard_nav/cursor';
 /* eslint-disable-next-line no-unused-vars */
-import {Marker} from './keyboard_nav/marker.js';
+import {Marker} from './keyboard_nav/marker';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg';
 
 
 /**

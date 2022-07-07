@@ -16,17 +16,17 @@
  *     E.g. text input areas, colour pickers, context menus.
  * @namespace Blockly.WidgetDiv
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.WidgetDiv');
 
-import * as common from './common.js';
-import * as dom from './utils/dom.js';
+import * as common from './common';
+import * as dom from './utils/dom';
 /* eslint-disable-next-line no-unused-vars */
-import {Rect} from './utils/rect.js';
+import {Rect} from './utils/rect';
 /* eslint-disable-next-line no-unused-vars */
-import {Size} from './utils/size.js';
+import {Size} from './utils/size';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg';
 
 
 /** The object currently using this container. */

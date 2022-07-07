@@ -14,17 +14,17 @@
  * rendered block.
  * @class
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.blockRendering.InputRow');
 
 /* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from '../common/constants.js';
+import {ConstantProvider} from '../common/constants';
 
-import {ExternalValueInput} from './external_value_input.js';
-import {InputConnection} from './input_connection.js';
-import {Row} from './row.js';
-import {StatementInput} from './statement_input.js';
-import {Types} from './types.js';
+import {ExternalValueInput} from './external_value_input';
+import {InputConnection} from './input_connection';
+import {Row} from './row';
+import {StatementInput} from './statement_input';
+import {Types} from './types';
 
 
 /**

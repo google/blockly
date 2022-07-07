@@ -12,33 +12,33 @@
  * Functionality for the right-click context menus.
  * @namespace Blockly.ContextMenu
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.ContextMenu');
 
 /* eslint-disable-next-line no-unused-vars */
-import {Block} from './block.js';
+import {Block} from './block';
 /* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
-import * as browserEvents from './browser_events.js';
-import * as clipboard from './clipboard.js';
-import {config} from './config.js';
-import {ContextMenuOption, ContextMenuRegistry, LegacyContextMenuOption} from './contextmenu_registry.js';
-import * as BlockCreate from './events/events_block_create.js';
-import * as eventUtils from './events/utils.js';
-import {Menu} from './menu.js';
-import {MenuItem} from './menuitem.js';
-import {Msg} from './msg.js';
-import * as aria from './utils/aria.js';
-import {Coordinate} from './utils/coordinate.js';
-import * as dom from './utils/dom.js';
-import {Rect} from './utils/rect.js';
-import * as svgMath from './utils/svg_math.js';
-import * as userAgent from './utils/useragent.js';
-import * as WidgetDiv from './widgetdiv.js';
-import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
+import {BlockSvg} from './block_svg';
+import * as browserEvents from './browser_events';
+import * as clipboard from './clipboard';
+import {config} from './config';
+import {ContextMenuOption, ContextMenuRegistry, LegacyContextMenuOption} from './contextmenu_registry';
+import * as BlockCreate from './events/events_block_create';
+import * as eventUtils from './events/utils';
+import {Menu} from './menu';
+import {MenuItem} from './menuitem';
+import {Msg} from './msg';
+import * as aria from './utils/aria';
+import {Coordinate} from './utils/coordinate';
+import * as dom from './utils/dom';
+import {Rect} from './utils/rect';
+import * as svgMath from './utils/svg_math';
+import * as userAgent from './utils/useragent';
+import * as WidgetDiv from './widgetdiv';
+import {WorkspaceCommentSvg} from './workspace_comment_svg';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
-import * as Xml from './xml.js';
+import {WorkspaceSvg} from './workspace_svg';
+import * as Xml from './xml';
 
 
 /**

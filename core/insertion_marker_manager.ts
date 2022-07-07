@@ -12,28 +12,28 @@
  * Class that controls updates to connections during drags.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.InsertionMarkerManager');
 
-import * as blockAnimations from './block_animations.js';
+import * as blockAnimations from './block_animations';
 /* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
-import * as common from './common.js';
-import {ComponentManager} from './component_manager.js';
-import {config} from './config.js';
-import {ConnectionType} from './connection_type.js';
-import * as constants from './constants.js';
-import * as eventUtils from './events/utils.js';
+import {BlockSvg} from './block_svg';
+import * as common from './common';
+import {ComponentManager} from './component_manager';
+import {config} from './config';
+import {ConnectionType} from './connection_type';
+import * as constants from './constants';
+import * as eventUtils from './events/utils';
 /* eslint-disable-next-line no-unused-vars */
-import {IDeleteArea} from './interfaces/i_delete_area.js';
+import {IDeleteArea} from './interfaces/i_delete_area';
 /* eslint-disable-next-line no-unused-vars */
-import {IDragTarget} from './interfaces/i_drag_target.js';
+import {IDragTarget} from './interfaces/i_drag_target';
 /* eslint-disable-next-line no-unused-vars */
-import {RenderedConnection} from './rendered_connection.js';
+import {RenderedConnection} from './rendered_connection';
 /* eslint-disable-next-line no-unused-vars */
-import {Coordinate} from './utils/coordinate.js';
+import {Coordinate} from './utils/coordinate';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg';
 
 
 /** Represents a nearby valid connection. */

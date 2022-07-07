@@ -12,13 +12,13 @@
  * Methods animating a block on connection and disconnection.
  * @namespace Blockly.blockAnimations
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.blockAnimations');
 
 /* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
-import * as dom from './utils/dom.js';
-import {Svg} from './utils/svg.js';
+import {BlockSvg} from './block_svg';
+import * as dom from './utils/dom';
+import {Svg} from './utils/svg';
 
 
 /** A bounding box for a cloned block. */

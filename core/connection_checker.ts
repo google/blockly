@@ -14,18 +14,18 @@
  * potential connection is safe and valid.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.ConnectionChecker');
 
-import * as common from './common.js';
-import {Connection} from './connection.js';
-import {ConnectionType} from './connection_type.js';
+import * as common from './common';
+import {Connection} from './connection';
+import {ConnectionType} from './connection_type';
 /* eslint-disable-next-line no-unused-vars */
-import {IConnectionChecker} from './interfaces/i_connection_checker.js';
-import * as internalConstants from './internal_constants.js';
-import * as registry from './registry.js';
+import {IConnectionChecker} from './interfaces/i_connection_checker';
+import * as internalConstants from './internal_constants';
+import * as registry from './registry';
 /* eslint-disable-next-line no-unused-vars */
-import {RenderedConnection} from './rendered_connection.js';
+import {RenderedConnection} from './rendered_connection';
 
 
 /**

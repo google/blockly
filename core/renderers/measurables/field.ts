@@ -14,18 +14,18 @@
  * block.
  * @class
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.blockRendering.Field');
 
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */
-import {Field as BlocklyField} from '../../field.js';
+import {Field as BlocklyField} from '../../field';
 /* eslint-disable-next-line no-unused-vars */
-import {Input} from '../../input.js';
-import {ConstantProvider} from '../common/constants.js';
+import {Input} from '../../input';
+import {ConstantProvider} from '../common/constants';
 
-import {Measurable} from './base.js';
-import {Types} from './types.js';
+import {Measurable} from './base';
+import {Types} from './types';
 
 
 /**

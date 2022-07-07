@@ -12,25 +12,25 @@
  * An object that owns a block's rendering SVG elements.
  * @class
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.blockRendering.PathObject');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../../theme.js';
+import '../../theme';
 
 /* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg.js';
+import {BlockSvg} from '../../block_svg';
 /* eslint-disable-next-line no-unused-vars */
-import {Connection} from '../../connection.js';
-import {BlockStyle} from '../../theme.js';
-import * as dom from '../../utils/dom.js';
-import {Svg} from '../../utils/svg.js';
+import {Connection} from '../../connection';
+import {BlockStyle} from '../../theme';
+import * as dom from '../../utils/dom';
+import {Svg} from '../../utils/svg';
 
 /* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from './constants.js';
+import {ConstantProvider} from './constants';
 /* eslint-disable-next-line no-unused-vars */
-import {IPathObject} from './i_path_object.js';
+import {IPathObject} from './i_path_object';
 
 
 /**

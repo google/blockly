@@ -14,17 +14,17 @@
  * Blockly code.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.Generator');
 
 /* eslint-disable-next-line no-unused-vars */
-import {Block} from './block.js';
-import * as common from './common.js';
+import {Block} from './block';
+import * as common from './common';
 /* eslint-disable-next-line no-unused-vars */
-import {Names, NameType} from './names.js';
-import * as deprecation from './utils/deprecation.js';
+import {Names, NameType} from './names';
+import * as deprecation from './utils/deprecation';
 /* eslint-disable-next-line no-unused-vars */
-import {Workspace} from './workspace.js';
+import {Workspace} from './workspace';
 
 
 /**

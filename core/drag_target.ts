@@ -14,15 +14,15 @@
  * block or bubble is dragged over or dropped on top of it.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.DragTarget');
 
 /* eslint-disable-next-line no-unused-vars */
-import {IDragTarget} from './interfaces/i_drag_target.js';
+import {IDragTarget} from './interfaces/i_drag_target';
 /* eslint-disable-next-line no-unused-vars */
-import {IDraggable} from './interfaces/i_draggable.js';
+import {IDraggable} from './interfaces/i_draggable';
 /* eslint-disable-next-line no-unused-vars */
-import {Rect} from './utils/rect.js';
+import {Rect} from './utils/rect';
 
 
 /**

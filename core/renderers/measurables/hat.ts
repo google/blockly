@@ -14,14 +14,14 @@
  * block.
  * @class
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.blockRendering.Hat');
 
 /* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from '../common/constants.js';
+import {ConstantProvider} from '../common/constants';
 
-import {Measurable} from './base.js';
-import {Types} from './types.js';
+import {Measurable} from './base';
+import {Types} from './types';
 
 
 /**

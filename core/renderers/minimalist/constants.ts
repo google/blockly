@@ -14,10 +14,10 @@
  * minimalist renderer.
  * @class
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.minimalist.ConstantProvider');
 
-import {ConstantProvider as BaseConstantProvider} from '../common/constants.js';
+import {ConstantProvider as BaseConstantProvider} from '../common/constants';
 
 
 /**

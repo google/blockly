@@ -12,18 +12,18 @@
  * Utility methods realted to figuring out positions of SVG elements.
  * @namespace Blockly.utils.svgMath
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.utils.svgMath');
 
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from '../workspace_svg.js';
+import {WorkspaceSvg} from '../workspace_svg';
 
-import {Coordinate} from './coordinate.js';
-import * as deprecation from './deprecation.js';
-import {Rect} from './rect.js';
-import {Size} from './size.js';
-import * as style from './style.js';
-import * as userAgent from './useragent.js';
+import {Coordinate} from './coordinate';
+import * as deprecation from './deprecation';
+import {Rect} from './rect';
+import {Size} from './size';
+import * as style from './style';
+import * as userAgent from './useragent';
 
 
 /**

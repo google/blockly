@@ -14,23 +14,23 @@
  * elements.
  * @namespace Blockly.blockRendering.IPathObject
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.blockRendering.IPathObject');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../../block_svg.js';
+import '../../block_svg';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../../connection.js';
+import '../../connection';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../../theme.js';
+import '../../theme';
 
-import {BlockStyle} from '../../theme.js';
+import {BlockStyle} from '../../theme';
 
 /* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from './constants.js';
+import {ConstantProvider} from './constants';
 
 
 /**

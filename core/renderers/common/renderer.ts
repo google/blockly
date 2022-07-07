@@ -12,36 +12,36 @@
  * Base renderer.
  * @class
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.blockRendering.Renderer');
 
 /* eslint-disable-next-line no-unused-vars */
-import {Block} from '../../block.js';
+import {Block} from '../../block';
 /* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg.js';
-import {Connection} from '../../connection.js';
-import {ConnectionType} from '../../connection_type.js';
-import {InsertionMarkerManager, PreviewType} from '../../insertion_marker_manager.js';
+import {BlockSvg} from '../../block_svg';
+import {Connection} from '../../connection';
+import {ConnectionType} from '../../connection_type';
+import {InsertionMarkerManager, PreviewType} from '../../insertion_marker_manager';
 /* eslint-disable-next-line no-unused-vars */
-import {IRegistrable} from '../../interfaces/i_registrable.js';
+import {IRegistrable} from '../../interfaces/i_registrable';
 /* eslint-disable-next-line no-unused-vars */
-import {Marker} from '../../keyboard_nav/marker.js';
+import {Marker} from '../../keyboard_nav/marker';
 /* eslint-disable-next-line no-unused-vars */
-import {RenderedConnection} from '../../rendered_connection.js';
-import {BlockStyle, Theme} from '../../theme.js';
+import {RenderedConnection} from '../../rendered_connection';
+import {BlockStyle, Theme} from '../../theme';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from '../../workspace_svg.js';
+import {WorkspaceSvg} from '../../workspace_svg';
 
-import {ConstantProvider} from './constants.js';
-import * as debug from './debug.js';
+import {ConstantProvider} from './constants';
+import * as debug from './debug';
 /* eslint-disable-next-line no-unused-vars */
-import {Debug} from './debugger.js';
-import {Drawer} from './drawer.js';
+import {Debug} from './debugger';
+import {Drawer} from './drawer';
 /* eslint-disable-next-line no-unused-vars */
-import {IPathObject} from './i_path_object.js';
-import {RenderInfo} from './info.js';
-import {MarkerSvg} from './marker_svg.js';
-import {PathObject} from './path_object.js';
+import {IPathObject} from './i_path_object';
+import {RenderInfo} from './info';
+import {MarkerSvg} from './marker_svg';
+import {PathObject} from './path_object';
 
 
 /**

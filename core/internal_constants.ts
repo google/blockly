@@ -14,10 +14,10 @@
  * use these constants outside of the core library.
  * @namespace Blockly.internalConstants
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.internalConstants');
 
-import {ConnectionType} from './connection_type.js';
+import {ConnectionType} from './connection_type';
 
 
 /**

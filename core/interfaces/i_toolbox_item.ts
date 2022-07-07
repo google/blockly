@@ -12,7 +12,7 @@
  * The interface for a toolbox item.
  * @namespace Blockly.IToolboxItem
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.IToolboxItem');
 
 

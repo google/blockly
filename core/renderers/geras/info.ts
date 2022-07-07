@@ -14,34 +14,34 @@
  * Geras: spirit of old age.
  * @class
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.geras.RenderInfo');
 
 /* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg.js';
-import {Input} from '../../input.js';
-import {inputTypes} from '../../input_types.js';
-import {RenderInfo as BaseRenderInfo} from '../common/info.js';
-import {Measurable} from '../measurables/base.js';
+import {BlockSvg} from '../../block_svg';
+import {Input} from '../../input';
+import {inputTypes} from '../../input_types';
+import {RenderInfo as BaseRenderInfo} from '../common/info';
+import {Measurable} from '../measurables/base';
 /* eslint-disable-next-line no-unused-vars */
-import {BottomRow} from '../measurables/bottom_row.js';
-import {ExternalValueInput} from '../measurables/external_value_input.js';
+import {BottomRow} from '../measurables/bottom_row';
+import {ExternalValueInput} from '../measurables/external_value_input';
 /* eslint-disable-next-line no-unused-vars */
-import {Field} from '../measurables/field.js';
-import {InRowSpacer} from '../measurables/in_row_spacer.js';
+import {Field} from '../measurables/field';
+import {InRowSpacer} from '../measurables/in_row_spacer';
 /* eslint-disable-next-line no-unused-vars */
-import {InputRow} from '../measurables/input_row.js';
-import {Row} from '../measurables/row.js';
+import {InputRow} from '../measurables/input_row';
+import {Row} from '../measurables/row';
 /* eslint-disable-next-line no-unused-vars */
-import {TopRow} from '../measurables/top_row.js';
-import {Types} from '../measurables/types.js';
+import {TopRow} from '../measurables/top_row';
+import {Types} from '../measurables/types';
 
 /* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from './constants.js';
-import {InlineInput} from './measurables/inline_input.js';
-import {StatementInput} from './measurables/statement_input.js';
+import {ConstantProvider} from './constants';
+import {InlineInput} from './measurables/inline_input';
+import {StatementInput} from './measurables/statement_input';
 /* eslint-disable-next-line no-unused-vars */
-import {Renderer} from './renderer.js';
+import {Renderer} from './renderer';
 
 
 /**

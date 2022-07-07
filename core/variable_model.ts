@@ -12,16 +12,16 @@
  * Components for the variable model.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.VariableModel');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_var_create.js';
+import './events/events_var_create';
 
-import * as eventUtils from './events/utils.js';
-import * as idGenerator from './utils/idgenerator.js';
+import * as eventUtils from './events/utils';
+import * as idGenerator from './utils/idgenerator';
 /* eslint-disable-next-line no-unused-vars */
-import {Workspace} from './workspace.js';
+import {Workspace} from './workspace';
 
 
 /**

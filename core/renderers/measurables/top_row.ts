@@ -12,19 +12,19 @@
  * Object representing a top row on a rendered block.
  * @class
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.blockRendering.TopRow');
 
 /* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg.js';
+import {BlockSvg} from '../../block_svg';
 /* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from '../common/constants.js';
+import {ConstantProvider} from '../common/constants';
 
-import {Hat} from './hat.js';
+import {Hat} from './hat';
 /* eslint-disable-next-line no-unused-vars */
-import {PreviousConnection} from './previous_connection.js';
-import {Row} from './row.js';
-import {Types} from './types.js';
+import {PreviousConnection} from './previous_connection';
+import {Row} from './row';
+import {Types} from './types';
 
 
 /**

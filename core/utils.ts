@@ -12,38 +12,38 @@
  * Utility methods.
  * @namespace Blockly.utils
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.utils');
 
 /* eslint-disable-next-line no-unused-vars */
-import {Block} from './block.js';
-import * as browserEvents from './browser_events.js';
-import * as common from './common.js';
-import * as extensions from './extensions.js';
-import * as aria from './utils/aria.js';
-import * as arrayUtils from './utils/array.js';
-import * as colour from './utils/colour.js';
-import {Coordinate} from './utils/coordinate.js';
-import * as deprecation from './utils/deprecation.js';
-import * as dom from './utils/dom.js';
-import * as idGenerator from './utils/idgenerator.js';
-import {KeyCodes} from './utils/keycodes.js';
-import * as math from './utils/math.js';
-import {Metrics} from './utils/metrics.js';
-import * as object from './utils/object.js';
-import * as parsing from './utils/parsing.js';
-import {Rect} from './utils/rect.js';
-import {Size} from './utils/size.js';
-import * as stringUtils from './utils/string.js';
-import * as style from './utils/style.js';
-import {Svg} from './utils/svg.js';
-import * as svgMath from './utils/svg_math.js';
-import * as svgPaths from './utils/svg_paths.js';
-import * as toolbox from './utils/toolbox.js';
-import * as userAgent from './utils/useragent.js';
-import * as xml from './utils/xml.js';
+import {Block} from './block';
+import * as browserEvents from './browser_events';
+import * as common from './common';
+import * as extensions from './extensions';
+import * as aria from './utils/aria';
+import * as arrayUtils from './utils/array';
+import * as colour from './utils/colour';
+import {Coordinate} from './utils/coordinate';
+import * as deprecation from './utils/deprecation';
+import * as dom from './utils/dom';
+import * as idGenerator from './utils/idgenerator';
+import {KeyCodes} from './utils/keycodes';
+import * as math from './utils/math';
+import {Metrics} from './utils/metrics';
+import * as object from './utils/object';
+import * as parsing from './utils/parsing';
+import {Rect} from './utils/rect';
+import {Size} from './utils/size';
+import * as stringUtils from './utils/string';
+import * as style from './utils/style';
+import {Svg} from './utils/svg';
+import * as svgMath from './utils/svg_math';
+import * as svgPaths from './utils/svg_paths';
+import * as toolbox from './utils/toolbox';
+import * as userAgent from './utils/useragent';
+import * as xml from './utils/xml';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg';
 
 
 export {

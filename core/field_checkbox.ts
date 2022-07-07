@@ -12,17 +12,17 @@
  * Checkbox field.  Checked or not checked.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.FieldCheckbox');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_block_change.js';
+import './events/events_block_change';
 
-import {Field} from './field.js';
-import * as fieldRegistry from './field_registry.js';
-import * as dom from './utils/dom.js';
+import {Field} from './field';
+import * as fieldRegistry from './field_registry';
+import * as dom from './utils/dom';
 /* eslint-disable-next-line no-unused-vars */
-import {Sentinel} from './utils/sentinel.js';
+import {Sentinel} from './utils/sentinel';
 
 
 /**

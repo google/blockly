@@ -16,12 +16,12 @@
  *    edited programmatically.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.FieldLabelSerializable');
 
-import {FieldLabel} from './field_label.js';
-import * as fieldRegistry from './field_registry.js';
-import * as parsing from './utils/parsing.js';
+import {FieldLabel} from './field_label';
+import * as fieldRegistry from './field_registry';
+import * as parsing from './utils/parsing';
 
 
 /**

@@ -14,13 +14,13 @@
  * Used to demo switching between different cursors.
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.BasicCursor');
 
-import * as registry from '../registry.js';
+import * as registry from '../registry';
 
-import {ASTNode} from './ast_node.js';
-import {Cursor} from './cursor.js';
+import {ASTNode} from './ast_node';
+import {Cursor} from './cursor';
 
 
 /**

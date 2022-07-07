@@ -12,11 +12,11 @@
  * The interface for an object that is draggable.
  * @namespace Blockly.IDraggable
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.IDraggable');
 
 /* eslint-disable-next-line no-unused-vars */
-import {IDeletable} from './i_deletable.js';
+import {IDeletable} from './i_deletable';
 
 
 /**

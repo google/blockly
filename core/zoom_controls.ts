@@ -12,31 +12,31 @@
  * Object representing a zoom icons.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.ZoomControls');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './metrics_manager.js';
+import './metrics_manager';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_click.js';
+import './events/events_click';
 
-import * as browserEvents from './browser_events.js';
-import {ComponentManager} from './component_manager.js';
-import * as Css from './css.js';
-import * as eventUtils from './events/utils.js';
+import * as browserEvents from './browser_events';
+import {ComponentManager} from './component_manager';
+import * as Css from './css';
+import * as eventUtils from './events/utils';
 /* eslint-disable-next-line no-unused-vars */
-import {IPositionable} from './interfaces/i_positionable.js';
-import {UiMetrics} from './metrics_manager.js';
-import * as uiPosition from './positionable_helpers.js';
-import {SPRITE} from './sprites.js';
-import * as Touch from './touch.js';
-import * as dom from './utils/dom.js';
-import {Rect} from './utils/rect.js';
-import {Size} from './utils/size.js';
-import {Svg} from './utils/svg.js';
+import {IPositionable} from './interfaces/i_positionable';
+import {UiMetrics} from './metrics_manager';
+import * as uiPosition from './positionable_helpers';
+import {SPRITE} from './sprites';
+import * as Touch from './touch';
+import * as dom from './utils/dom';
+import {Rect} from './utils/rect';
+import {Size} from './utils/size';
+import {Svg} from './utils/svg';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg';
 
 
 /**

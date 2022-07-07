@@ -12,118 +12,118 @@
  * Object representing a workspace rendered as SVG.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.WorkspaceSvg');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './procedures.js';
+import './procedures';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './variables.js';
+import './variables';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './variables_dynamic.js';
+import './variables_dynamic';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './rendered_connection.js';
+import './rendered_connection';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './zoom_controls.js';
+import './zoom_controls';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_block_create.js';
+import './events/events_block_create';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_theme_change.js';
+import './events/events_theme_change';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_viewport.js';
+import './events/events_viewport';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './metrics_manager.js';
+import './metrics_manager';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './msg.js';
+import './msg';
 
 /* eslint-disable-next-line no-unused-vars */
-import {Block} from './block.js';
+import {Block} from './block';
 /* eslint-disable-next-line no-unused-vars */
-import {BlockDragSurfaceSvg} from './block_drag_surface.js';
-import {BlockSvg} from './block_svg.js';
+import {BlockDragSurfaceSvg} from './block_drag_surface';
+import {BlockSvg} from './block_svg';
 /* eslint-disable-next-line no-unused-vars */
-import {BlocklyOptions} from './blockly_options.js';
-import * as browserEvents from './browser_events.js';
-import * as common from './common.js';
-import {ComponentManager} from './component_manager.js';
-import {config} from './config.js';
-import {ConnectionDB} from './connection_db.js';
-import * as ContextMenu from './contextmenu.js';
-import {ContextMenuRegistry} from './contextmenu_registry.js';
-import * as dropDownDiv from './dropdowndiv.js';
-import * as eventUtils from './events/utils.js';
+import {BlocklyOptions} from './blockly_options';
+import * as browserEvents from './browser_events';
+import * as common from './common';
+import {ComponentManager} from './component_manager';
+import {config} from './config';
+import {ConnectionDB} from './connection_db';
+import * as ContextMenu from './contextmenu';
+import {ContextMenuRegistry} from './contextmenu_registry';
+import * as dropDownDiv from './dropdowndiv';
+import * as eventUtils from './events/utils';
 /* eslint-disable-next-line no-unused-vars */
-import {FlyoutButton} from './flyout_button.js';
-import {Gesture} from './gesture.js';
-import {Grid} from './grid.js';
+import {FlyoutButton} from './flyout_button';
+import {Gesture} from './gesture';
+import {Grid} from './grid';
 /* eslint-disable-next-line no-unused-vars */
-import {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
+import {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg';
 /* eslint-disable-next-line no-unused-vars */
-import {IBoundedElement} from './interfaces/i_bounded_element.js';
+import {IBoundedElement} from './interfaces/i_bounded_element';
 /* eslint-disable-next-line no-unused-vars */
-import {ICopyable} from './interfaces/i_copyable.js';
+import {ICopyable} from './interfaces/i_copyable';
 /* eslint-disable-next-line no-unused-vars */
-import {IDragTarget} from './interfaces/i_drag_target.js';
+import {IDragTarget} from './interfaces/i_drag_target';
 /* eslint-disable-next-line no-unused-vars */
-import {IFlyout} from './interfaces/i_flyout.js';
+import {IFlyout} from './interfaces/i_flyout';
 /* eslint-disable-next-line no-unused-vars */
-import {IMetricsManager} from './interfaces/i_metrics_manager.js';
+import {IMetricsManager} from './interfaces/i_metrics_manager';
 /* eslint-disable-next-line no-unused-vars */
-import {IToolbox} from './interfaces/i_toolbox.js';
+import {IToolbox} from './interfaces/i_toolbox';
 /* eslint-disable-next-line no-unused-vars */
-import {Cursor} from './keyboard_nav/cursor.js';
+import {Cursor} from './keyboard_nav/cursor';
 /* eslint-disable-next-line no-unused-vars */
-import {Marker} from './keyboard_nav/marker.js';
-import {MarkerManager} from './marker_manager.js';
-import {Options} from './options.js';
-import * as Procedures from './procedures.js';
-import * as registry from './registry.js';
-import * as blockRendering from './renderers/common/block_rendering.js';
+import {Marker} from './keyboard_nav/marker';
+import {MarkerManager} from './marker_manager';
+import {Options} from './options';
+import * as Procedures from './procedures';
+import * as registry from './registry';
+import * as blockRendering from './renderers/common/block_rendering';
 /* eslint-disable-next-line no-unused-vars */
-import {Renderer} from './renderers/common/renderer.js';
+import {Renderer} from './renderers/common/renderer';
 /* eslint-disable-next-line no-unused-vars */
-import {ScrollbarPair} from './scrollbar_pair.js';
-import * as blocks from './serialization/blocks.js';
+import {ScrollbarPair} from './scrollbar_pair';
+import * as blocks from './serialization/blocks';
 /* eslint-disable-next-line no-unused-vars */
-import {Theme} from './theme.js';
-import {Classic} from './theme/classic.js';
-import {ThemeManager} from './theme_manager.js';
-import * as Tooltip from './tooltip.js';
-import {TouchGesture} from './touch_gesture.js';
+import {Theme} from './theme';
+import {Classic} from './theme/classic';
+import {ThemeManager} from './theme_manager';
+import * as Tooltip from './tooltip';
+import {TouchGesture} from './touch_gesture';
 /* eslint-disable-next-line no-unused-vars */
-import {Trashcan} from './trashcan.js';
-import * as utils from './utils.js';
-import * as arrayUtils from './utils/array.js';
-import {Coordinate} from './utils/coordinate.js';
-import * as dom from './utils/dom.js';
+import {Trashcan} from './trashcan';
+import * as utils from './utils';
+import * as arrayUtils from './utils/array';
+import {Coordinate} from './utils/coordinate';
+import * as dom from './utils/dom';
 /* eslint-disable-next-line no-unused-vars */
-import {Metrics} from './utils/metrics.js';
-import {Rect} from './utils/rect.js';
-import {Size} from './utils/size.js';
-import {Svg} from './utils/svg.js';
-import * as svgMath from './utils/svg_math.js';
-import * as toolbox from './utils/toolbox.js';
-import * as userAgent from './utils/useragent.js';
+import {Metrics} from './utils/metrics';
+import {Rect} from './utils/rect';
+import {Size} from './utils/size';
+import {Svg} from './utils/svg';
+import * as svgMath from './utils/svg_math';
+import * as toolbox from './utils/toolbox';
+import * as userAgent from './utils/useragent';
 /* eslint-disable-next-line no-unused-vars */
-import {VariableModel} from './variable_model.js';
-import * as Variables from './variables.js';
-import * as VariablesDynamic from './variables_dynamic.js';
-import * as WidgetDiv from './widgetdiv.js';
-import {Workspace} from './workspace.js';
-import {WorkspaceAudio} from './workspace_audio.js';
+import {VariableModel} from './variable_model';
+import * as Variables from './variables';
+import * as VariablesDynamic from './variables_dynamic';
+import * as WidgetDiv from './widgetdiv';
+import {Workspace} from './workspace';
+import {WorkspaceAudio} from './workspace_audio';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceComment} from './workspace_comment.js';
+import {WorkspaceComment} from './workspace_comment';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
+import {WorkspaceCommentSvg} from './workspace_comment_svg';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceDragSurfaceSvg} from './workspace_drag_surface_svg.js';
-import * as Xml from './xml.js';
-import {ZoomControls} from './zoom_controls.js';
+import {WorkspaceDragSurfaceSvg} from './workspace_drag_surface_svg';
+import * as Xml from './xml';
+import {ZoomControls} from './zoom_controls';
 
 
 /** Margin around the top/bottom/left/right after a zoomToFit call. */

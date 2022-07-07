@@ -12,15 +12,15 @@
  * Number input field
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.FieldNumber');
 
-import {Field} from './field.js';
-import * as fieldRegistry from './field_registry.js';
-import {FieldTextInput} from './field_textinput.js';
-import * as aria from './utils/aria.js';
+import {Field} from './field';
+import * as fieldRegistry from './field_registry';
+import {FieldTextInput} from './field_textinput';
+import * as aria from './utils/aria';
 /* eslint-disable-next-line no-unused-vars */
-import {Sentinel} from './utils/sentinel.js';
+import {Sentinel} from './utils/sentinel';
 
 
 /**

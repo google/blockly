@@ -12,22 +12,22 @@
  * Calculates and reports workspace metrics.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.MetricsManager');
 
 /* eslint-disable-next-line no-unused-vars */
-import {IFlyout} from './interfaces/i_flyout.js';
+import {IFlyout} from './interfaces/i_flyout';
 /* eslint-disable-next-line no-unused-vars */
-import {IMetricsManager} from './interfaces/i_metrics_manager.js';
+import {IMetricsManager} from './interfaces/i_metrics_manager';
 /* eslint-disable-next-line no-unused-vars */
-import {IToolbox} from './interfaces/i_toolbox.js';
-import * as registry from './registry.js';
+import {IToolbox} from './interfaces/i_toolbox';
+import * as registry from './registry';
 /* eslint-disable-next-line no-unused-vars */
-import {Metrics} from './utils/metrics.js';
-import {Size} from './utils/size.js';
-import * as toolboxUtils from './utils/toolbox.js';
+import {Metrics} from './utils/metrics';
+import {Size} from './utils/size';
+import * as toolboxUtils from './utils/toolbox';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg';
 
 
 /**

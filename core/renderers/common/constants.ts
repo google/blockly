@@ -12,19 +12,19 @@
  * An object that provides constants for rendering blocks.
  * @class
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.blockRendering.ConstantProvider');
 
-import {ConnectionType} from '../../connection_type.js';
+import {ConnectionType} from '../../connection_type';
 /* eslint-disable-next-line no-unused-vars */
-import {RenderedConnection} from '../../rendered_connection.js';
-import {BlockStyle, Theme} from '../../theme.js';
-import * as colour from '../../utils/colour.js';
-import * as dom from '../../utils/dom.js';
-import * as parsing from '../../utils/parsing.js';
-import {Svg} from '../../utils/svg.js';
-import * as svgPaths from '../../utils/svg_paths.js';
-import * as userAgent from '../../utils/useragent.js';
+import {RenderedConnection} from '../../rendered_connection';
+import {BlockStyle, Theme} from '../../theme';
+import * as colour from '../../utils/colour';
+import * as dom from '../../utils/dom';
+import * as parsing from '../../utils/parsing';
+import {Svg} from '../../utils/svg';
+import * as svgPaths from '../../utils/svg_paths';
+import * as userAgent from '../../utils/useragent';
 
 
 /** An object containing sizing and path information about outside corners. */

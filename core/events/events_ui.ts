@@ -14,15 +14,15 @@
  * Blockly's editor.
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.Events.Ui');
 
 /* eslint-disable-next-line no-unused-vars */
-import {Block} from '../block.js';
-import * as registry from '../registry.js';
+import {Block} from '../block';
+import * as registry from '../registry';
 
-import {UiBase} from './events_ui_base.js';
-import * as eventUtils from './utils.js';
+import {UiBase} from './events_ui_base';
+import * as eventUtils from './utils';
 
 
 /**

@@ -12,45 +12,45 @@
  * Namespace for block rendering functionality.
  * @namespace Blockly.blockRendering
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.blockRendering');
 
-import * as registry from '../../registry.js';
+import * as registry from '../../registry';
 /* eslint-disable-next-line no-unused-vars */
-import {Theme} from '../../theme.js';
-import * as deprecation from '../../utils/deprecation.js';
-import {Measurable} from '../measurables/base.js';
-import {BottomRow} from '../measurables/bottom_row.js';
-import {Connection} from '../measurables/connection.js';
-import {ExternalValueInput} from '../measurables/external_value_input.js';
-import {Field} from '../measurables/field.js';
-import {Hat} from '../measurables/hat.js';
-import {Icon} from '../measurables/icon.js';
-import {InRowSpacer} from '../measurables/in_row_spacer.js';
-import {InlineInput} from '../measurables/inline_input.js';
-import {InputConnection} from '../measurables/input_connection.js';
-import {InputRow} from '../measurables/input_row.js';
-import {JaggedEdge} from '../measurables/jagged_edge.js';
-import {NextConnection} from '../measurables/next_connection.js';
-import {OutputConnection} from '../measurables/output_connection.js';
-import {PreviousConnection} from '../measurables/previous_connection.js';
-import {RoundCorner} from '../measurables/round_corner.js';
-import {Row} from '../measurables/row.js';
-import {SpacerRow} from '../measurables/spacer_row.js';
-import {SquareCorner} from '../measurables/square_corner.js';
-import {StatementInput} from '../measurables/statement_input.js';
-import {TopRow} from '../measurables/top_row.js';
-import {Types} from '../measurables/types.js';
+import {Theme} from '../../theme';
+import * as deprecation from '../../utils/deprecation';
+import {Measurable} from '../measurables/base';
+import {BottomRow} from '../measurables/bottom_row';
+import {Connection} from '../measurables/connection';
+import {ExternalValueInput} from '../measurables/external_value_input';
+import {Field} from '../measurables/field';
+import {Hat} from '../measurables/hat';
+import {Icon} from '../measurables/icon';
+import {InRowSpacer} from '../measurables/in_row_spacer';
+import {InlineInput} from '../measurables/inline_input';
+import {InputConnection} from '../measurables/input_connection';
+import {InputRow} from '../measurables/input_row';
+import {JaggedEdge} from '../measurables/jagged_edge';
+import {NextConnection} from '../measurables/next_connection';
+import {OutputConnection} from '../measurables/output_connection';
+import {PreviousConnection} from '../measurables/previous_connection';
+import {RoundCorner} from '../measurables/round_corner';
+import {Row} from '../measurables/row';
+import {SpacerRow} from '../measurables/spacer_row';
+import {SquareCorner} from '../measurables/square_corner';
+import {StatementInput} from '../measurables/statement_input';
+import {TopRow} from '../measurables/top_row';
+import {Types} from '../measurables/types';
 
-import {ConstantProvider} from './constants.js';
-import * as debug from './debug.js';
-import {Debug} from './debugger.js';
-import {Drawer} from './drawer.js';
-import {IPathObject} from './i_path_object.js';
-import {RenderInfo} from './info.js';
-import {MarkerSvg} from './marker_svg.js';
-import {PathObject} from './path_object.js';
-import {Renderer} from './renderer.js';
+import {ConstantProvider} from './constants';
+import * as debug from './debug';
+import {Debug} from './debugger';
+import {Drawer} from './drawer';
+import {IPathObject} from './i_path_object';
+import {RenderInfo} from './info';
+import {MarkerSvg} from './marker_svg';
+import {PathObject} from './path_object';
+import {Renderer} from './renderer';
 
 
 /**

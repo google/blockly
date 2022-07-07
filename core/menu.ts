@@ -12,19 +12,19 @@
  * Blockly menu similar to Closure's goog.ui.Menu
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.Menu');
 
-import * as browserEvents from './browser_events.js';
+import * as browserEvents from './browser_events';
 /* eslint-disable-next-line no-unused-vars */
-import {MenuItem} from './menuitem.js';
-import * as aria from './utils/aria.js';
-import {Coordinate} from './utils/coordinate.js';
-import * as dom from './utils/dom.js';
-import {KeyCodes} from './utils/keycodes.js';
+import {MenuItem} from './menuitem';
+import * as aria from './utils/aria';
+import {Coordinate} from './utils/coordinate';
+import * as dom from './utils/dom';
+import {KeyCodes} from './utils/keycodes';
 /* eslint-disable-next-line no-unused-vars */
-import {Size} from './utils/size.js';
-import * as style from './utils/style.js';
+import {Size} from './utils/size';
+import * as style from './utils/style';
 
 
 /**

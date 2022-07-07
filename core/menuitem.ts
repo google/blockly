@@ -12,12 +12,12 @@
  * Blockly menu item similar to Closure's goog.ui.MenuItem
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.MenuItem');
 
-import * as aria from './utils/aria.js';
-import * as dom from './utils/dom.js';
-import * as idGenerator from './utils/idgenerator.js';
+import * as aria from './utils/aria';
+import * as dom from './utils/dom';
+import * as idGenerator from './utils/idgenerator';
 
 
 /**

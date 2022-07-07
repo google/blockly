@@ -12,72 +12,72 @@
  * Methods for graphically rendering a block as SVG.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.BlockSvg');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './theme.js';
+import './theme';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_selected.js';
+import './events/events_selected';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './touch.js';
+import './touch';
 
-import {Block} from './block.js';
-import * as blockAnimations from './block_animations.js';
-import * as browserEvents from './browser_events.js';
+import {Block} from './block';
+import * as blockAnimations from './block_animations';
+import * as browserEvents from './browser_events';
 /* eslint-disable-next-line no-unused-vars */
-import {Comment} from './comment.js';
-import * as common from './common.js';
-import {config} from './config.js';
+import {Comment} from './comment';
+import * as common from './common';
+import {config} from './config';
 /* eslint-disable-next-line no-unused-vars */
-import {Connection} from './connection.js';
-import {ConnectionType} from './connection_type.js';
-import * as constants from './constants.js';
-import * as ContextMenu from './contextmenu.js';
-import {ContextMenuOption, ContextMenuRegistry, LegacyContextMenuOption} from './contextmenu_registry.js';
+import {Connection} from './connection';
+import {ConnectionType} from './connection_type';
+import * as constants from './constants';
+import * as ContextMenu from './contextmenu';
+import {ContextMenuOption, ContextMenuRegistry, LegacyContextMenuOption} from './contextmenu_registry';
 /* eslint-disable-next-line no-unused-vars */
-import {BlockMove} from './events/events_block_move.js';
-import * as eventUtils from './events/utils.js';
+import {BlockMove} from './events/events_block_move';
+import * as eventUtils from './events/utils';
 /* eslint-disable-next-line no-unused-vars */
-import {Field} from './field.js';
-import {FieldLabel} from './field_label.js';
+import {Field} from './field';
+import {FieldLabel} from './field_label';
 /* eslint-disable-next-line no-unused-vars */
-import {Icon} from './icon.js';
+import {Icon} from './icon';
 /* eslint-disable-next-line no-unused-vars */
-import {Input} from './input.js';
+import {Input} from './input';
 /* eslint-disable-next-line no-unused-vars */
-import {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
+import {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg';
 /* eslint-disable-next-line no-unused-vars */
-import {IBoundedElement} from './interfaces/i_bounded_element.js';
-import {CopyData, ICopyable} from './interfaces/i_copyable.js';
+import {IBoundedElement} from './interfaces/i_bounded_element';
+import {CopyData, ICopyable} from './interfaces/i_copyable';
 /* eslint-disable-next-line no-unused-vars */
-import {IDraggable} from './interfaces/i_draggable.js';
-import * as internalConstants from './internal_constants.js';
-import {ASTNode} from './keyboard_nav/ast_node.js';
-import {TabNavigateCursor} from './keyboard_nav/tab_navigate_cursor.js';
-import {MarkerManager} from './marker_manager.js';
-import {Msg} from './msg.js';
+import {IDraggable} from './interfaces/i_draggable';
+import * as internalConstants from './internal_constants';
+import {ASTNode} from './keyboard_nav/ast_node';
+import {TabNavigateCursor} from './keyboard_nav/tab_navigate_cursor';
+import {MarkerManager} from './marker_manager';
+import {Msg} from './msg';
 /* eslint-disable-next-line no-unused-vars */
-import {Mutator} from './mutator.js';
-import {RenderedConnection} from './rendered_connection.js';
+import {Mutator} from './mutator';
+import {RenderedConnection} from './rendered_connection';
 /* eslint-disable-next-line no-unused-vars */
-import {Debug as BlockRenderingDebug} from './renderers/common/debugger.js';
+import {Debug as BlockRenderingDebug} from './renderers/common/debugger';
 /* eslint-disable-next-line no-unused-vars */
-import {IPathObject} from './renderers/common/i_path_object.js';
-import * as blocks from './serialization/blocks.js';
-import {BlockStyle} from './theme.js';
-import * as Tooltip from './tooltip.js';
-import {Coordinate} from './utils/coordinate.js';
-import * as dom from './utils/dom.js';
-import {Rect} from './utils/rect.js';
-import {Svg} from './utils/svg.js';
-import * as svgMath from './utils/svg_math.js';
+import {IPathObject} from './renderers/common/i_path_object';
+import * as blocks from './serialization/blocks';
+import {BlockStyle} from './theme';
+import * as Tooltip from './tooltip';
+import {Coordinate} from './utils/coordinate';
+import * as dom from './utils/dom';
+import {Rect} from './utils/rect';
+import {Svg} from './utils/svg';
+import * as svgMath from './utils/svg_math';
 /* eslint-disable-next-line no-unused-vars */
-import {Warning} from './warning.js';
-import {Workspace} from './workspace.js';
+import {Warning} from './warning';
+import {Workspace} from './workspace';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg';
 
 
 /**

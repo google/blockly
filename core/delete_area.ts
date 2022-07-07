@@ -14,15 +14,15 @@
  * bubble that is dropped on top of it.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.DeleteArea');
 
-import {BlockSvg} from './block_svg.js';
-import {DragTarget} from './drag_target.js';
+import {BlockSvg} from './block_svg';
+import {DragTarget} from './drag_target';
 /* eslint-disable-next-line no-unused-vars */
-import {IDeleteArea} from './interfaces/i_delete_area.js';
+import {IDeleteArea} from './interfaces/i_delete_area';
 /* eslint-disable-next-line no-unused-vars */
-import {IDraggable} from './interfaces/i_draggable.js';
+import {IDraggable} from './interfaces/i_draggable';
 
 
 /**

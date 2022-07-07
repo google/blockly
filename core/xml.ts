@@ -12,40 +12,40 @@
  * XML reader and writer.
  * @namespace Blockly.Xml
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.Xml');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './comment.js';
+import './comment';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './variables.js';
+import './variables';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './workspace_comment.js';
+import './workspace_comment';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './workspace_comment_svg.js';
+import './workspace_comment_svg';
 
 /* eslint-disable-next-line no-unused-vars */
-import {Block} from './block.js';
+import {Block} from './block';
 /* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
+import {BlockSvg} from './block_svg';
 /* eslint-disable-next-line no-unused-vars */
-import {Connection} from './connection.js';
-import * as eventUtils from './events/utils.js';
+import {Connection} from './connection';
+import * as eventUtils from './events/utils';
 /* eslint-disable-next-line no-unused-vars */
-import {Field} from './field.js';
-import {inputTypes} from './input_types.js';
-import * as dom from './utils/dom.js';
-import {Size} from './utils/size.js';
-import * as utilsXml from './utils/xml.js';
+import {Field} from './field';
+import {inputTypes} from './input_types';
+import * as dom from './utils/dom';
+import {Size} from './utils/size';
+import * as utilsXml from './utils/xml';
 /* eslint-disable-next-line no-unused-vars */
-import {VariableModel} from './variable_model.js';
-import * as Variables from './variables.js';
+import {VariableModel} from './variable_model';
+import * as Variables from './variables';
 /* eslint-disable-next-line no-unused-vars */
-import {Workspace} from './workspace.js';
-import {WorkspaceComment} from './workspace_comment.js';
-import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
+import {Workspace} from './workspace';
+import {WorkspaceComment} from './workspace_comment';
+import {WorkspaceCommentSvg} from './workspace_comment_svg';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg';
 
 
 /**

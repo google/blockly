@@ -12,25 +12,25 @@
  * A toolbox category used to organize blocks in the toolbox.
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.ToolboxCategory');
 
-import * as Css from '../css.js';
+import * as Css from '../css';
 /* eslint-disable-next-line no-unused-vars */
-import {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_item.js';
+import {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_item';
 /* eslint-disable-next-line no-unused-vars */
-import {ISelectableToolboxItem} from '../interfaces/i_selectable_toolbox_item.js';
+import {ISelectableToolboxItem} from '../interfaces/i_selectable_toolbox_item';
 /* eslint-disable-next-line no-unused-vars */
-import {IToolbox} from '../interfaces/i_toolbox.js';
-import {IToolboxItem} from '../interfaces/i_toolbox_item.js';
-import * as registry from '../registry.js';
-import * as aria from '../utils/aria.js';
-import * as colourUtils from '../utils/colour.js';
-import * as dom from '../utils/dom.js';
-import * as parsing from '../utils/parsing.js';
-import * as toolbox from '../utils/toolbox.js';
+import {IToolbox} from '../interfaces/i_toolbox';
+import {IToolboxItem} from '../interfaces/i_toolbox_item';
+import * as registry from '../registry';
+import * as aria from '../utils/aria';
+import * as colourUtils from '../utils/colour';
+import * as dom from '../utils/dom';
+import * as parsing from '../utils/parsing';
+import * as toolbox from '../utils/toolbox';
 
-import {ToolboxItem} from './toolbox_item.js';
+import {ToolboxItem} from './toolbox_item';
 
 
 /**

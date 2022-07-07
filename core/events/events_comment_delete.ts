@@ -12,15 +12,15 @@
  * Class for comment deletion event.
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.Events.CommentDelete');
 
-import * as registry from '../registry.js';
+import * as registry from '../registry';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceComment} from '../workspace_comment.js';
+import {WorkspaceComment} from '../workspace_comment';
 
-import {CommentBase} from './events_comment_base.js';
-import * as eventUtils from './utils.js';
+import {CommentBase} from './events_comment_base';
+import * as eventUtils from './utils';
 
 
 /**

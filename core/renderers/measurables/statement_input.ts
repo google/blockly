@@ -14,16 +14,16 @@
  * rendered block.
  * @class
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.blockRendering.StatementInput');
 
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */
-import {Input} from '../../input.js';
-import {ConstantProvider} from '../common/constants.js';
+import {Input} from '../../input';
+import {ConstantProvider} from '../common/constants';
 
-import {InputConnection} from './input_connection.js';
-import {Types} from './types.js';
+import {InputConnection} from './input_connection';
+import {Types} from './types';
 
 
 /**

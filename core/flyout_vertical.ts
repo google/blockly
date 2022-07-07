@@ -12,28 +12,28 @@
  * Layout code for a vertical variant of the flyout.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.VerticalFlyout');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './block.js';
+import './block';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './constants.js';
+import './constants';
 
-import * as browserEvents from './browser_events.js';
-import * as dropDownDiv from './dropdowndiv.js';
-import {Flyout, FlyoutItem} from './flyout_base.js';
+import * as browserEvents from './browser_events';
+import * as dropDownDiv from './dropdowndiv';
+import {Flyout, FlyoutItem} from './flyout_base';
 /* eslint-disable-next-line no-unused-vars */
-import {FlyoutButton} from './flyout_button.js';
+import {FlyoutButton} from './flyout_button';
 /* eslint-disable-next-line no-unused-vars */
-import {Options} from './options.js';
-import * as registry from './registry.js';
-import {Scrollbar} from './scrollbar.js';
+import {Options} from './options';
+import * as registry from './registry';
+import {Scrollbar} from './scrollbar';
 /* eslint-disable-next-line no-unused-vars */
-import {Coordinate} from './utils/coordinate.js';
-import {Rect} from './utils/rect.js';
-import * as toolbox from './utils/toolbox.js';
-import * as WidgetDiv from './widgetdiv.js';
+import {Coordinate} from './utils/coordinate';
+import {Rect} from './utils/rect';
+import * as toolbox from './utils/toolbox';
+import * as WidgetDiv from './widgetdiv';
 
 
 /**

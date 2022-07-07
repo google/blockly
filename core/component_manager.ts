@@ -12,20 +12,20 @@
  * Manager for all items registered with the workspace.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.ComponentManager');
 
 /* eslint-disable-next-line no-unused-vars */
-import {IAutoHideable} from './interfaces/i_autohideable.js';
+import {IAutoHideable} from './interfaces/i_autohideable';
 /* eslint-disable-next-line no-unused-vars */
-import {IComponent} from './interfaces/i_component.js';
+import {IComponent} from './interfaces/i_component';
 /* eslint-disable-next-line no-unused-vars */
-import {IDeleteArea} from './interfaces/i_delete_area.js';
+import {IDeleteArea} from './interfaces/i_delete_area';
 /* eslint-disable-next-line no-unused-vars */
-import {IDragTarget} from './interfaces/i_drag_target.js';
+import {IDragTarget} from './interfaces/i_drag_target';
 /* eslint-disable-next-line no-unused-vars */
-import {IPositionable} from './interfaces/i_positionable.js';
-import * as arrayUtils from './utils/array.js';
+import {IPositionable} from './interfaces/i_positionable';
+import * as arrayUtils from './utils/array';
 
 
 class Capability<T> {

@@ -12,18 +12,18 @@
  * A separator used for separating toolbox categories.
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.ToolboxSeparator');
 
-import * as Css from '../css.js';
+import * as Css from '../css';
 /* eslint-disable-next-line no-unused-vars */
-import {IToolbox} from '../interfaces/i_toolbox.js';
-import * as registry from '../registry.js';
-import * as dom from '../utils/dom.js';
+import {IToolbox} from '../interfaces/i_toolbox';
+import * as registry from '../registry';
+import * as dom from '../utils/dom';
 /* eslint-disable-next-line no-unused-vars */
-import * as toolbox from '../utils/toolbox.js';
+import * as toolbox from '../utils/toolbox';
 
-import {ToolboxItem} from './toolbox_item.js';
+import {ToolboxItem} from './toolbox_item';
 
 
 /**

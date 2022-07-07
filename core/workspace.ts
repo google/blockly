@@ -12,37 +12,37 @@
  * Object representing a workspace.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.Workspace');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './connection_checker.js';
+import './connection_checker';
 
 /* eslint-disable-next-line no-unused-vars */
-import {Block} from './block.js';
+import {Block} from './block';
 /* eslint-disable-next-line no-unused-vars */
-import {BlocklyOptions} from './blockly_options.js';
+import {BlocklyOptions} from './blockly_options';
 /* eslint-disable-next-line no-unused-vars */
-import {ConnectionDB} from './connection_db.js';
+import {ConnectionDB} from './connection_db';
 /* eslint-disable-next-line no-unused-vars */
-import {Abstract} from './events/events_abstract.js';
-import * as eventUtils from './events/utils.js';
+import {Abstract} from './events/events_abstract';
+import * as eventUtils from './events/utils';
 /* eslint-disable-next-line no-unused-vars */
-import {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
+import {IASTNodeLocation} from './interfaces/i_ast_node_location';
 /* eslint-disable-next-line no-unused-vars */
-import {IConnectionChecker} from './interfaces/i_connection_checker.js';
-import {Options} from './options.js';
-import * as registry from './registry.js';
-import * as arrayUtils from './utils/array.js';
-import * as idGenerator from './utils/idgenerator.js';
-import * as math from './utils/math.js';
+import {IConnectionChecker} from './interfaces/i_connection_checker';
+import {Options} from './options';
+import * as registry from './registry';
+import * as arrayUtils from './utils/array';
+import * as idGenerator from './utils/idgenerator';
+import * as math from './utils/math';
 /* eslint-disable-next-line no-unused-vars */
-import * as toolbox from './utils/toolbox.js';
-import {VariableMap} from './variable_map.js';
+import * as toolbox from './utils/toolbox';
+import {VariableMap} from './variable_map';
 /* eslint-disable-next-line no-unused-vars */
-import {VariableModel} from './variable_model.js';
+import {VariableModel} from './variable_model';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceComment} from './workspace_comment.js';
+import {WorkspaceComment} from './workspace_comment';
 
 
 /** Database of all workspaces. */

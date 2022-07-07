@@ -12,26 +12,26 @@
  * Components for creating connections between blocks.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.RenderedConnection');
 
 /* eslint-disable-next-line no-unused-vars */
-import {Block} from './block.js';
+import {Block} from './block';
 /* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
-import * as common from './common.js';
-import {config} from './config.js';
-import {Connection} from './connection.js';
+import {BlockSvg} from './block_svg';
+import * as common from './common';
+import {config} from './config';
+import {Connection} from './connection';
 /* eslint-disable-next-line no-unused-vars */
-import {ConnectionDB} from './connection_db.js';
-import {ConnectionType} from './connection_type.js';
-import * as eventUtils from './events/utils.js';
-import * as internalConstants from './internal_constants.js';
-import {Coordinate} from './utils/coordinate.js';
-import * as dom from './utils/dom.js';
-import {Svg} from './utils/svg.js';
-import * as svgMath from './utils/svg_math.js';
-import * as svgPaths from './utils/svg_paths.js';
+import {ConnectionDB} from './connection_db';
+import {ConnectionType} from './connection_type';
+import * as eventUtils from './events/utils';
+import * as internalConstants from './internal_constants';
+import {Coordinate} from './utils/coordinate';
+import * as dom from './utils/dom';
+import {Svg} from './utils/svg';
+import * as svgMath from './utils/svg_math';
+import * as svgPaths from './utils/svg_paths';
 
 
 /** A shape that has a pathDown property. */

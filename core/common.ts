@@ -14,21 +14,21 @@
  * must not be at the top level to avoid circular dependencies.
  * @namespace Blockly.common
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.common');
 
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */
-import {Block} from './block.js';
-import {BlockDefinition, Blocks} from './blocks.js';
+import {Block} from './block';
+import {BlockDefinition, Blocks} from './blocks';
 /* eslint-disable-next-line no-unused-vars */
-import {Connection} from './connection.js';
+import {Connection} from './connection';
 /* eslint-disable-next-line no-unused-vars */
-import {ICopyable} from './interfaces/i_copyable.js';
+import {ICopyable} from './interfaces/i_copyable';
 /* eslint-disable-next-line no-unused-vars */
-import {Workspace} from './workspace.js';
+import {Workspace} from './workspace';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg';
 
 
 /**

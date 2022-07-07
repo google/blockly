@@ -14,25 +14,25 @@
  * Used to traverse the Blockly AST.
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.ASTNode');
 
 /* eslint-disable-next-line no-unused-vars */
-import {Block} from '../block.js';
+import {Block} from '../block';
 /* eslint-disable-next-line no-unused-vars */
-import {Connection} from '../connection.js';
-import {ConnectionType} from '../connection_type.js';
+import {Connection} from '../connection';
+import {ConnectionType} from '../connection_type';
 /* eslint-disable-next-line no-unused-vars */
-import {Field} from '../field.js';
+import {Field} from '../field';
 /* eslint-disable-next-line no-unused-vars */
-import {Input} from '../input.js';
+import {Input} from '../input';
 /* eslint-disable-next-line no-unused-vars */
-import {IASTNodeLocation} from '../interfaces/i_ast_node_location.js';
+import {IASTNodeLocation} from '../interfaces/i_ast_node_location';
 /* eslint-disable-next-line no-unused-vars */
-import {IASTNodeLocationWithBlock} from '../interfaces/i_ast_node_location_with_block.js';
-import {Coordinate} from '../utils/coordinate.js';
+import {IASTNodeLocationWithBlock} from '../interfaces/i_ast_node_location_with_block';
+import {Coordinate} from '../utils/coordinate';
 /* eslint-disable-next-line no-unused-vars */
-import {Workspace} from '../workspace.js';
+import {Workspace} from '../workspace';
 
 
 /**

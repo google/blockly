@@ -12,21 +12,21 @@
  * Object representing a warning.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.Warning');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_bubble_open.js';
+import './events/events_bubble_open';
 
 /* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
-import {Bubble} from './bubble.js';
-import * as eventUtils from './events/utils.js';
-import {Icon} from './icon.js';
+import {BlockSvg} from './block_svg';
+import {Bubble} from './bubble';
+import * as eventUtils from './events/utils';
+import {Icon} from './icon';
 /* eslint-disable-next-line no-unused-vars */
-import {Coordinate} from './utils/coordinate.js';
-import * as dom from './utils/dom.js';
-import {Svg} from './utils/svg.js';
+import {Coordinate} from './utils/coordinate';
+import * as dom from './utils/dom';
+import {Svg} from './utils/svg';
 
 
 /**

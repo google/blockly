@@ -14,18 +14,18 @@
  * mode.
  * @class
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.zelos.ConstantProvider');
 
-import {ConnectionType} from '../../connection_type.js';
-import {RenderedConnection} from '../../rendered_connection.js';
-import {Theme} from '../../theme.js';
-import * as utilsColour from '../../utils/colour.js';
-import * as dom from '../../utils/dom.js';
-import {Svg} from '../../utils/svg.js';
-import * as svgPaths from '../../utils/svg_paths.js';
+import {ConnectionType} from '../../connection_type';
+import {RenderedConnection} from '../../rendered_connection';
+import {Theme} from '../../theme';
+import * as utilsColour from '../../utils/colour';
+import * as dom from '../../utils/dom';
+import {Svg} from '../../utils/svg';
+import * as svgPaths from '../../utils/svg_paths';
 /* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider as BaseConstantProvider, Shape} from '../common/constants.js';
+import {ConstantProvider as BaseConstantProvider, Shape} from '../common/constants';
 
 
 /** An object containing sizing and path information about inside corners. */

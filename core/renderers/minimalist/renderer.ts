@@ -12,19 +12,19 @@
  * Minimalist renderer.
  * @class
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.minimalist.Renderer');
 
 /* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg.js';
-import * as blockRendering from '../common/block_rendering.js';
+import {BlockSvg} from '../../block_svg';
+import * as blockRendering from '../common/block_rendering';
 /* eslint-disable-next-line no-unused-vars */
-import {RenderInfo as BaseRenderInfo} from '../common/info.js';
-import {Renderer as BaseRenderer} from '../common/renderer.js';
+import {RenderInfo as BaseRenderInfo} from '../common/info';
+import {Renderer as BaseRenderer} from '../common/renderer';
 
-import {ConstantProvider} from './constants.js';
-import {Drawer} from './drawer.js';
-import {RenderInfo} from './info.js';
+import {ConstantProvider} from './constants';
+import {Drawer} from './drawer';
+import {RenderInfo} from './info';
 
 
 /**

@@ -16,12 +16,12 @@
  * a JavaScript framework such as Closure.
  * @namespace Blockly.utils.style
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.utils.style');
 
-import {Coordinate} from './coordinate.js';
-import {Rect} from './rect.js';
-import {Size} from './size.js';
+import {Coordinate} from './coordinate';
+import {Rect} from './rect';
+import {Size} from './size';
 
 
 /**

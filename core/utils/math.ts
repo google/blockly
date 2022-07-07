@@ -16,7 +16,7 @@
  * a JavaScript framework such as Closure.
  * @namespace Blockly.utils.math
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.utils.math');
 
 

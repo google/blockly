@@ -12,43 +12,43 @@
  * Flyout tray containing blocks which may be created.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.Flyout');
 
 /* eslint-disable-next-line no-unused-vars */
-import {Block} from './block.js';
+import {Block} from './block';
 /* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
-import * as browserEvents from './browser_events.js';
-import * as common from './common.js';
-import {ComponentManager} from './component_manager.js';
-import {DeleteArea} from './delete_area.js';
-import * as BlockCreate from './events/events_block_create.js';
-import * as VarCreate from './events/events_var_create.js';
-import * as eventUtils from './events/utils.js';
+import {BlockSvg} from './block_svg';
+import * as browserEvents from './browser_events';
+import * as common from './common';
+import {ComponentManager} from './component_manager';
+import {DeleteArea} from './delete_area';
+import * as BlockCreate from './events/events_block_create';
+import * as VarCreate from './events/events_var_create';
+import * as eventUtils from './events/utils';
 /* eslint-disable-next-line no-unused-vars */
-import {FlyoutButton} from './flyout_button.js';
-import {FlyoutMetricsManager} from './flyout_metrics_manager.js';
-import * as Gesture from './gesture.js';
+import {FlyoutButton} from './flyout_button';
+import {FlyoutMetricsManager} from './flyout_metrics_manager';
+import * as Gesture from './gesture';
 /* eslint-disable-next-line no-unused-vars */
-import {IFlyout} from './interfaces/i_flyout.js';
+import {IFlyout} from './interfaces/i_flyout';
 /* eslint-disable-next-line no-unused-vars */
-import {Options} from './options.js';
-import * as blockRendering from './renderers/common/block_rendering.js';
-import {ScrollbarPair} from './scrollbar_pair.js';
-import * as blocks from './serialization/blocks.js';
-import * as Tooltip from './tooltip.js';
-import * as Touch from './touch.js';
-import {Coordinate} from './utils/coordinate.js';
-import * as dom from './utils/dom.js';
-import * as idGenerator from './utils/idgenerator.js';
+import {Options} from './options';
+import * as blockRendering from './renderers/common/block_rendering';
+import {ScrollbarPair} from './scrollbar_pair';
+import * as blocks from './serialization/blocks';
+import * as Tooltip from './tooltip';
+import * as Touch from './touch';
+import {Coordinate} from './utils/coordinate';
+import * as dom from './utils/dom';
+import * as idGenerator from './utils/idgenerator';
 /* eslint-disable-next-line no-unused-vars */
-import {Rect} from './utils/rect.js';
-import {Svg} from './utils/svg.js';
-import * as toolbox from './utils/toolbox.js';
-import * as Variables from './variables.js';
-import {WorkspaceSvg} from './workspace_svg.js';
-import * as Xml from './xml.js';
+import {Rect} from './utils/rect';
+import {Svg} from './utils/svg';
+import * as toolbox from './utils/toolbox';
+import * as Variables from './variables';
+import {WorkspaceSvg} from './workspace_svg';
+import * as Xml from './xml';
 
 
 enum FlyoutItemType {

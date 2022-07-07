@@ -14,10 +14,10 @@
  * Contains multi-coloured border to create shadow effect.
  * @namespace Blockly.Themes.Classic
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.Themes.Classic');
 
-import {Theme} from '../theme.js';
+import {Theme} from '../theme';
 
 
 const defaultBlockStyles = {

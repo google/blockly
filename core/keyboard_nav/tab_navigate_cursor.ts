@@ -14,14 +14,14 @@
  * between tab navigable fields.
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.TabNavigateCursor');
 
 /* eslint-disable-next-line no-unused-vars */
-import {Field} from '../field.js';
+import {Field} from '../field';
 
-import {ASTNode} from './ast_node.js';
-import {BasicCursor} from './basic_cursor.js';
+import {ASTNode} from './ast_node';
+import {BasicCursor} from './basic_cursor';
 
 
 /**

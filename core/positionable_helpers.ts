@@ -12,21 +12,21 @@
  * Utility functions for positioning UI elements.
  * @namespace Blockly.uiPosition
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.uiPosition');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './metrics_manager.js';
+import './metrics_manager';
 
-import {UiMetrics} from './metrics_manager.js';
-import {Scrollbar} from './scrollbar.js';
-import {Rect} from './utils/rect.js';
+import {UiMetrics} from './metrics_manager';
+import {Scrollbar} from './scrollbar';
+import {Rect} from './utils/rect';
 /* eslint-disable-next-line no-unused-vars */
-import {Size} from './utils/size.js';
-import * as toolbox from './utils/toolbox.js';
+import {Size} from './utils/size';
+import * as toolbox from './utils/toolbox';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg';
 
 
 /**

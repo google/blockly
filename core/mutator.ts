@@ -14,35 +14,35 @@
  * user to change the shape of a block using a nested blocks editor.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.Mutator');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_bubble_open.js';
+import './events/events_bubble_open';
 
 /* eslint-disable-next-line no-unused-vars */
-import {Block} from './block.js';
+import {Block} from './block';
 /* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
+import {BlockSvg} from './block_svg';
 /* eslint-disable-next-line no-unused-vars */
-import {BlocklyOptions} from './blockly_options.js';
-import {Bubble} from './bubble.js';
-import {config} from './config.js';
+import {BlocklyOptions} from './blockly_options';
+import {Bubble} from './bubble';
+import {config} from './config';
 /* eslint-disable-next-line no-unused-vars */
-import {Connection} from './connection.js';
+import {Connection} from './connection';
 /* eslint-disable-next-line no-unused-vars */
-import {Abstract} from './events/events_abstract.js';
-import {BlockChange} from './events/events_block_change.js';
-import * as eventUtils from './events/utils.js';
-import {Icon} from './icon.js';
-import {Options} from './options.js';
+import {Abstract} from './events/events_abstract';
+import {BlockChange} from './events/events_block_change';
+import * as eventUtils from './events/utils';
+import {Icon} from './icon';
+import {Options} from './options';
 /* eslint-disable-next-line no-unused-vars */
-import {Coordinate} from './utils/coordinate.js';
-import * as dom from './utils/dom.js';
-import {Svg} from './utils/svg.js';
-import * as toolbox from './utils/toolbox.js';
-import * as xml from './utils/xml.js';
-import {WorkspaceSvg} from './workspace_svg.js';
+import {Coordinate} from './utils/coordinate';
+import * as dom from './utils/dom';
+import {Svg} from './utils/svg';
+import * as toolbox from './utils/toolbox';
+import * as xml from './utils/xml';
+import {WorkspaceSvg} from './workspace_svg';
 
 
 /**

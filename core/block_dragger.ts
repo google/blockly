@@ -12,32 +12,32 @@
  * Methods for dragging a block visually.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.BlockDragger');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_block_drag.js';
+import './events/events_block_drag';
 
-import * as blockAnimation from './block_animations.js';
+import * as blockAnimation from './block_animations';
 /* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
-import * as bumpObjects from './bump_objects.js';
-import * as common from './common.js';
+import {BlockSvg} from './block_svg';
+import * as bumpObjects from './bump_objects';
+import * as common from './common';
 /* eslint-disable-next-line no-unused-vars */
-import {BlockMove} from './events/events_block_move.js';
-import * as eventUtils from './events/utils.js';
+import {BlockMove} from './events/events_block_move';
+import * as eventUtils from './events/utils';
 /* eslint-disable-next-line no-unused-vars */
-import {Icon} from './icon.js';
-import {InsertionMarkerManager} from './insertion_marker_manager.js';
+import {Icon} from './icon';
+import {InsertionMarkerManager} from './insertion_marker_manager';
 /* eslint-disable-next-line no-unused-vars */
-import {IBlockDragger} from './interfaces/i_block_dragger.js';
+import {IBlockDragger} from './interfaces/i_block_dragger';
 /* eslint-disable-next-line no-unused-vars */
-import {IDragTarget} from './interfaces/i_drag_target.js';
-import * as registry from './registry.js';
-import {Coordinate} from './utils/coordinate.js';
-import * as dom from './utils/dom.js';
+import {IDragTarget} from './interfaces/i_drag_target';
+import * as registry from './registry';
+import {Coordinate} from './utils/coordinate';
+import * as dom from './utils/dom';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg';
 
 
 /**

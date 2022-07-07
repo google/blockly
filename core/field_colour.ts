@@ -12,26 +12,26 @@
  * Colour input field.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.FieldColour');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_block_change.js';
+import './events/events_block_change';
 
-import {BlockSvg} from './block_svg.js';
-import * as browserEvents from './browser_events.js';
-import * as Css from './css.js';
-import * as dropDownDiv from './dropdowndiv.js';
-import {Field} from './field.js';
-import * as fieldRegistry from './field_registry.js';
-import * as aria from './utils/aria.js';
-import * as colour from './utils/colour.js';
-import * as dom from './utils/dom.js';
-import * as idGenerator from './utils/idgenerator.js';
-import {KeyCodes} from './utils/keycodes.js';
+import {BlockSvg} from './block_svg';
+import * as browserEvents from './browser_events';
+import * as Css from './css';
+import * as dropDownDiv from './dropdowndiv';
+import {Field} from './field';
+import * as fieldRegistry from './field_registry';
+import * as aria from './utils/aria';
+import * as colour from './utils/colour';
+import * as dom from './utils/dom';
+import * as idGenerator from './utils/idgenerator';
+import {KeyCodes} from './utils/keycodes';
 /* eslint-disable-next-line no-unused-vars */
-import {Sentinel} from './utils/sentinel.js';
-import {Size} from './utils/size.js';
+import {Sentinel} from './utils/sentinel';
+import {Size} from './utils/size';
 
 
 /**

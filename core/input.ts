@@ -12,24 +12,24 @@
  * Object representing an input (value, statement, or dummy).
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.Input');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './field_label.js';
+import './field_label';
 
 /* eslint-disable-next-line no-unused-vars */
-import {Block} from './block.js';
+import {Block} from './block';
 /* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
+import {BlockSvg} from './block_svg';
 /* eslint-disable-next-line no-unused-vars */
-import {Connection} from './connection.js';
+import {Connection} from './connection';
 /* eslint-disable-next-line no-unused-vars */
-import {Field} from './field.js';
-import * as fieldRegistry from './field_registry.js';
-import {inputTypes} from './input_types.js';
+import {Field} from './field';
+import * as fieldRegistry from './field_registry';
+import {inputTypes} from './input_types';
 /* eslint-disable-next-line no-unused-vars */
-import {RenderedConnection} from './rendered_connection.js';
+import {RenderedConnection} from './rendered_connection';
 
 
 /**

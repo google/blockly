@@ -12,10 +12,10 @@
  * Inject Blockly's CSS synchronously.
  * @namespace Blockly.Css
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.Css');
 
-import * as deprecation from './utils/deprecation.js';
+import * as deprecation from './utils/deprecation';
 
 
 /** Has CSS already been injected? */

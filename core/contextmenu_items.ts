@@ -12,22 +12,22 @@
  * Registers default context menu items.
  * @namespace Blockly.ContextMenuItems
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.ContextMenuItems');
 
 /* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
-import * as clipboard from './clipboard.js';
-import {ContextMenuRegistry, RegistryItem, Scope} from './contextmenu_registry.js';
-import * as dialog from './dialog.js';
-import * as Events from './events/events.js';
-import * as eventUtils from './events/utils.js';
-import {inputTypes} from './input_types.js';
-import {Msg} from './msg.js';
-import * as idGenerator from './utils/idgenerator.js';
-import * as userAgent from './utils/useragent.js';
+import {BlockSvg} from './block_svg';
+import * as clipboard from './clipboard';
+import {ContextMenuRegistry, RegistryItem, Scope} from './contextmenu_registry';
+import * as dialog from './dialog';
+import * as Events from './events/events';
+import * as eventUtils from './events/utils';
+import {inputTypes} from './input_types';
+import {Msg} from './msg';
+import * as idGenerator from './utils/idgenerator';
+import * as userAgent from './utils/useragent';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg';
 
 
 /**

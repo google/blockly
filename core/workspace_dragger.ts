@@ -12,13 +12,13 @@
  * Methods for dragging a workspace visually.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.WorkspaceDragger');
 
-import * as common from './common.js';
-import {Coordinate} from './utils/coordinate.js';
+import * as common from './common';
+import {Coordinate} from './utils/coordinate';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg';
 
 
 /**

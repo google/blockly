@@ -12,13 +12,13 @@
  * Events fired as a result of a theme update.
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.Events.ThemeChange');
 
-import * as registry from '../registry.js';
+import * as registry from '../registry';
 
-import {UiBase} from './events_ui_base.js';
-import * as eventUtils from './utils.js';
+import {UiBase} from './events_ui_base';
+import * as eventUtils from './utils';
 
 
 /**

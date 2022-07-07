@@ -12,13 +12,13 @@
  * Registry for context menu option items.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.ContextMenuRegistry');
 
 /* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
+import {BlockSvg} from './block_svg';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg';
 
 
 /**

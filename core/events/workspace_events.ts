@@ -12,15 +12,15 @@
  * Class for a finished loading workspace event.
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.Events.FinishedLoading');
 
-import * as registry from '../registry.js';
+import * as registry from '../registry';
 /* eslint-disable-next-line no-unused-vars */
-import {Workspace} from '../workspace.js';
+import {Workspace} from '../workspace';
 
-import {Abstract as AbstractEvent} from './events_abstract.js';
-import * as eventUtils from './utils.js';
+import {Abstract as AbstractEvent} from './events_abstract';
+import * as eventUtils from './utils';
 
 
 /**

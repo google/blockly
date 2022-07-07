@@ -14,18 +14,18 @@
  * of its subcomponents.
  * @class
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.blockRendering.BottomRow');
 
 /* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg.js';
+import {BlockSvg} from '../../block_svg';
 /* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from '../common/constants.js';
+import {ConstantProvider} from '../common/constants';
 
 /* eslint-disable-next-line no-unused-vars */
-import {NextConnection} from './next_connection.js';
-import {Row} from './row.js';
-import {Types} from './types.js';
+import {NextConnection} from './next_connection';
+import {Row} from './row';
+import {Types} from './types';
 
 
 /**

@@ -12,15 +12,15 @@
  * Classes for all types of variable events.
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.Events.VarDelete');
 
-import * as registry from '../registry.js';
+import * as registry from '../registry';
 /* eslint-disable-next-line no-unused-vars */
-import {VariableModel} from '../variable_model.js';
+import {VariableModel} from '../variable_model';
 
-import {VarBase} from './events_var_base.js';
-import * as eventUtils from './utils.js';
+import {VarBase} from './events_var_base';
+import * as eventUtils from './utils';
 
 
 /**

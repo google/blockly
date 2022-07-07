@@ -14,16 +14,16 @@
  * rendering.
  * @class
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.blockRendering.Connection');
 
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */
-import {RenderedConnection} from '../../rendered_connection.js';
-import {ConstantProvider, Shape} from '../common/constants.js';
+import {RenderedConnection} from '../../rendered_connection';
+import {ConstantProvider, Shape} from '../common/constants';
 
-import {Measurable} from './base.js';
-import {Types} from './types.js';
+import {Measurable} from './base';
+import {Types} from './types';
 
 
 /**

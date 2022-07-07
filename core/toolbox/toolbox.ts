@@ -12,57 +12,57 @@
  * Toolbox from whence to create blocks.
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.Toolbox');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../shortcut_registry.js';
+import '../shortcut_registry';
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../events/events_toolbox_item_select.js';
+import '../events/events_toolbox_item_select';
 
-import {BlockSvg} from '../block_svg.js';
+import {BlockSvg} from '../block_svg';
 /* eslint-disable-next-line no-unused-vars */
-import {BlocklyOptions} from '../blockly_options.js';
-import * as browserEvents from '../browser_events.js';
-import * as common from '../common.js';
-import {ComponentManager} from '../component_manager.js';
-import * as Css from '../css.js';
-import {DeleteArea} from '../delete_area.js';
-import * as eventUtils from '../events/utils.js';
+import {BlocklyOptions} from '../blockly_options';
+import * as browserEvents from '../browser_events';
+import * as common from '../common';
+import {ComponentManager} from '../component_manager';
+import * as Css from '../css';
+import {DeleteArea} from '../delete_area';
+import * as eventUtils from '../events/utils';
 /* eslint-disable-next-line no-unused-vars */
-import {IAutoHideable} from '../interfaces/i_autohideable.js';
+import {IAutoHideable} from '../interfaces/i_autohideable';
 /* eslint-disable-next-line no-unused-vars */
-import {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_item.js';
+import {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_item';
 /* eslint-disable-next-line no-unused-vars */
-import {IDraggable} from '../interfaces/i_draggable.js';
+import {IDraggable} from '../interfaces/i_draggable';
 /* eslint-disable-next-line no-unused-vars */
-import {IFlyout} from '../interfaces/i_flyout.js';
+import {IFlyout} from '../interfaces/i_flyout';
 /* eslint-disable-next-line no-unused-vars */
-import {IKeyboardAccessible} from '../interfaces/i_keyboard_accessible.js';
+import {IKeyboardAccessible} from '../interfaces/i_keyboard_accessible';
 /* eslint-disable-next-line no-unused-vars */
-import {ISelectableToolboxItem} from '../interfaces/i_selectable_toolbox_item.js';
+import {ISelectableToolboxItem} from '../interfaces/i_selectable_toolbox_item';
 /* eslint-disable-next-line no-unused-vars */
-import {IStyleable} from '../interfaces/i_styleable.js';
+import {IStyleable} from '../interfaces/i_styleable';
 /* eslint-disable-next-line no-unused-vars */
-import {IToolbox} from '../interfaces/i_toolbox.js';
+import {IToolbox} from '../interfaces/i_toolbox';
 /* eslint-disable-next-line no-unused-vars */
-import {IToolboxItem} from '../interfaces/i_toolbox_item.js';
-import {Options} from '../options.js';
-import * as registry from '../registry.js';
-import {KeyboardShortcut} from '../shortcut_registry.js';
-import * as Touch from '../touch.js';
-import * as aria from '../utils/aria.js';
-import * as dom from '../utils/dom.js';
-import {KeyCodes} from '../utils/keycodes.js';
-import {Rect} from '../utils/rect.js';
-import * as toolbox from '../utils/toolbox.js';
+import {IToolboxItem} from '../interfaces/i_toolbox_item';
+import {Options} from '../options';
+import * as registry from '../registry';
+import {KeyboardShortcut} from '../shortcut_registry';
+import * as Touch from '../touch';
+import * as aria from '../utils/aria';
+import * as dom from '../utils/dom';
+import {KeyCodes} from '../utils/keycodes';
+import {Rect} from '../utils/rect';
+import * as toolbox from '../utils/toolbox';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from '../workspace_svg.js';
+import {WorkspaceSvg} from '../workspace_svg';
 
 /* eslint-disable-next-line no-unused-vars */
-import {ToolboxCategory} from './category.js';
-import {CollapsibleToolboxCategory} from './collapsible_category.js';
+import {ToolboxCategory} from './category';
+import {CollapsibleToolboxCategory} from './collapsible_category';
 
 
 /**

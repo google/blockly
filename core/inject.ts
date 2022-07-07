@@ -12,32 +12,32 @@
  * Functions for injecting Blockly into a web page.
  * @namespace Blockly.inject
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.inject');
 
-import {BlockDragSurfaceSvg} from './block_drag_surface.js';
+import {BlockDragSurfaceSvg} from './block_drag_surface';
 /* eslint-disable-next-line no-unused-vars */
-import {BlocklyOptions} from './blockly_options.js';
-import * as browserEvents from './browser_events.js';
-import * as bumpObjects from './bump_objects.js';
-import * as common from './common.js';
-import * as Css from './css.js';
-import * as dropDownDiv from './dropdowndiv.js';
-import {Grid} from './grid.js';
-import {Msg} from './msg.js';
-import {Options} from './options.js';
-import {ScrollbarPair} from './scrollbar_pair.js';
-import {ShortcutRegistry} from './shortcut_registry.js';
-import * as Tooltip from './tooltip.js';
-import * as Touch from './touch.js';
-import * as aria from './utils/aria.js';
-import * as dom from './utils/dom.js';
-import {Svg} from './utils/svg.js';
-import * as userAgent from './utils/useragent.js';
-import * as WidgetDiv from './widgetdiv.js';
-import {Workspace} from './workspace.js';
-import {WorkspaceDragSurfaceSvg} from './workspace_drag_surface_svg.js';
-import {WorkspaceSvg} from './workspace_svg.js';
+import {BlocklyOptions} from './blockly_options';
+import * as browserEvents from './browser_events';
+import * as bumpObjects from './bump_objects';
+import * as common from './common';
+import * as Css from './css';
+import * as dropDownDiv from './dropdowndiv';
+import {Grid} from './grid';
+import {Msg} from './msg';
+import {Options} from './options';
+import {ScrollbarPair} from './scrollbar_pair';
+import {ShortcutRegistry} from './shortcut_registry';
+import * as Tooltip from './tooltip';
+import * as Touch from './touch';
+import * as aria from './utils/aria';
+import * as dom from './utils/dom';
+import {Svg} from './utils/svg';
+import * as userAgent from './utils/useragent';
+import * as WidgetDiv from './widgetdiv';
+import {Workspace} from './workspace';
+import {WorkspaceDragSurfaceSvg} from './workspace_drag_surface_svg';
+import {WorkspaceSvg} from './workspace_svg';
 
 
 /**

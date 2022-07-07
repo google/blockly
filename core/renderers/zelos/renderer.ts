@@ -12,34 +12,34 @@
  * Zelos renderer.
  * @class
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.zelos.Renderer');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../../theme.js';
+import '../../theme';
 
 /* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg.js';
-import {Connection} from '../../connection.js';
-import {ConnectionType} from '../../connection_type.js';
-import {InsertionMarkerManager} from '../../insertion_marker_manager.js';
+import {BlockSvg} from '../../block_svg';
+import {Connection} from '../../connection';
+import {ConnectionType} from '../../connection_type';
+import {InsertionMarkerManager} from '../../insertion_marker_manager';
 /* eslint-disable-next-line no-unused-vars */
-import {Marker} from '../../keyboard_nav/marker.js';
-import {RenderedConnection} from '../../rendered_connection.js';
-import {BlockStyle} from '../../theme.js';
+import {Marker} from '../../keyboard_nav/marker';
+import {RenderedConnection} from '../../rendered_connection';
+import {BlockStyle} from '../../theme';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from '../../workspace_svg.js';
-import * as blockRendering from '../common/block_rendering.js';
+import {WorkspaceSvg} from '../../workspace_svg';
+import * as blockRendering from '../common/block_rendering';
 /* eslint-disable-next-line no-unused-vars */
-import {RenderInfo as BaseRenderInfo} from '../common/info.js';
-import {Renderer as BaseRenderer} from '../common/renderer.js';
+import {RenderInfo as BaseRenderInfo} from '../common/info';
+import {Renderer as BaseRenderer} from '../common/renderer';
 
-import {ConstantProvider} from './constants.js';
-import {Drawer} from './drawer.js';
-import {RenderInfo} from './info.js';
-import {MarkerSvg} from './marker_svg.js';
-import {PathObject} from './path_object.js';
+import {ConstantProvider} from './constants';
+import {Drawer} from './drawer';
+import {RenderInfo} from './info';
+import {MarkerSvg} from './marker_svg';
+import {PathObject} from './path_object';
 
 
 /**

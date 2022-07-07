@@ -12,20 +12,20 @@
  * The interface for a bubble.
  * @namespace Blockly.IBubble
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.IBubble');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../block_drag_surface.js';
+import '../block_drag_surface';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../utils/coordinate.js';
+import '../utils/coordinate';
 
 /* eslint-disable-next-line no-unused-vars */
-import {IContextMenu} from './i_contextmenu.js';
+import {IContextMenu} from './i_contextmenu';
 /* eslint-disable-next-line no-unused-vars */
-import {IDraggable} from './i_draggable.js';
+import {IDraggable} from './i_draggable';
 
 
 /**

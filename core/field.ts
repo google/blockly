@@ -16,54 +16,54 @@
  * instances would be FieldTextInput, FieldDropdown, etc.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.Field');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './shortcut_registry.js';
+import './shortcut_registry';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_block_change.js';
+import './events/events_block_change';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './gesture.js';
+import './gesture';
 
 /* eslint-disable-next-line no-unused-vars */
-import {Block} from './block.js';
+import {Block} from './block';
 /* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
-import * as browserEvents from './browser_events.js';
-import * as dropDownDiv from './dropdowndiv.js';
-import * as eventUtils from './events/utils.js';
+import {BlockSvg} from './block_svg';
+import * as browserEvents from './browser_events';
+import * as dropDownDiv from './dropdowndiv';
+import * as eventUtils from './events/utils';
 /* eslint-disable-next-line no-unused-vars */
-import {Input} from './input.js';
+import {Input} from './input';
 /* eslint-disable-next-line no-unused-vars */
-import {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
+import {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg';
 /* eslint-disable-next-line no-unused-vars */
-import {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_with_block.js';
+import {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_with_block';
 /* eslint-disable-next-line no-unused-vars */
-import {IKeyboardAccessible} from './interfaces/i_keyboard_accessible.js';
+import {IKeyboardAccessible} from './interfaces/i_keyboard_accessible';
 /* eslint-disable-next-line no-unused-vars */
-import {IRegistrable} from './interfaces/i_registrable.js';
-import {MarkerManager} from './marker_manager.js';
+import {IRegistrable} from './interfaces/i_registrable';
+import {MarkerManager} from './marker_manager';
 /* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from './renderers/common/constants.js';
-import {KeyboardShortcut} from './shortcut_registry.js';
-import * as Tooltip from './tooltip.js';
+import {ConstantProvider} from './renderers/common/constants';
+import {KeyboardShortcut} from './shortcut_registry';
+import * as Tooltip from './tooltip';
 /* eslint-disable-next-line no-unused-vars */
-import {Coordinate} from './utils/coordinate.js';
-import * as dom from './utils/dom.js';
-import * as parsing from './utils/parsing.js';
-import {Rect} from './utils/rect.js';
-import {Sentinel} from './utils/sentinel.js';
-import {Size} from './utils/size.js';
-import * as style from './utils/style.js';
-import {Svg} from './utils/svg.js';
-import * as userAgent from './utils/useragent.js';
-import * as utilsXml from './utils/xml.js';
-import * as WidgetDiv from './widgetdiv.js';
+import {Coordinate} from './utils/coordinate';
+import * as dom from './utils/dom';
+import * as parsing from './utils/parsing';
+import {Rect} from './utils/rect';
+import {Sentinel} from './utils/sentinel';
+import {Size} from './utils/size';
+import * as style from './utils/style';
+import {Svg} from './utils/svg';
+import * as userAgent from './utils/useragent';
+import * as utilsXml from './utils/xml';
+import * as WidgetDiv from './widgetdiv';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
-import * as Xml from './xml.js';
+import {WorkspaceSvg} from './workspace_svg';
+import * as Xml from './xml';
 
 
 /**

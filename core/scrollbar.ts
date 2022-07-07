@@ -12,19 +12,19 @@
  * Object representing a scrollbar.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.Scrollbar');
 
-import * as browserEvents from './browser_events.js';
-import * as Touch from './touch.js';
-import {Coordinate} from './utils/coordinate.js';
-import * as dom from './utils/dom.js';
+import * as browserEvents from './browser_events';
+import * as Touch from './touch';
+import {Coordinate} from './utils/coordinate';
+import * as dom from './utils/dom';
 /* eslint-disable-next-line no-unused-vars */
-import {Metrics} from './utils/metrics.js';
-import {Svg} from './utils/svg.js';
-import * as svgMath from './utils/svg_math.js';
+import {Metrics} from './utils/metrics';
+import {Svg} from './utils/svg';
+import * as svgMath from './utils/svg_math';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg';
 
 
 /**

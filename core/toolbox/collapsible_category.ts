@@ -12,22 +12,22 @@
  * A toolbox category used to organize blocks in the toolbox.
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.CollapsibleToolboxCategory');
 
 /* eslint-disable-next-line no-unused-vars */
-import {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_item.js';
+import {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_item';
 /* eslint-disable-next-line no-unused-vars */
-import {IToolbox} from '../interfaces/i_toolbox.js';
+import {IToolbox} from '../interfaces/i_toolbox';
 /* eslint-disable-next-line no-unused-vars */
-import {IToolboxItem} from '../interfaces/i_toolbox_item.js';
-import * as registry from '../registry.js';
-import * as aria from '../utils/aria.js';
-import * as dom from '../utils/dom.js';
-import * as toolbox from '../utils/toolbox.js';
+import {IToolboxItem} from '../interfaces/i_toolbox_item';
+import * as registry from '../registry';
+import * as aria from '../utils/aria';
+import * as dom from '../utils/dom';
+import * as toolbox from '../utils/toolbox';
 
-import {ToolboxCategory} from './category.js';
-import {ToolboxSeparator} from './separator.js';
+import {ToolboxCategory} from './category';
+import {ToolboxSeparator} from './separator';
 
 
 /**

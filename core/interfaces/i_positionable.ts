@@ -12,18 +12,18 @@
  * The interface for a positionable UI element.
  * @namespace Blockly.IPositionable
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.IPositionable');
 
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../metrics_manager.js';
+import '../metrics_manager';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../utils/rect.js';
+import '../utils/rect';
 
-import {IComponent} from './i_component.js';
+import {IComponent} from './i_component';
 
 
 /**

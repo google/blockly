@@ -14,13 +14,13 @@
  * Used primarily for keyboard navigation.
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.Cursor');
 
-import * as registry from '../registry.js';
+import * as registry from '../registry';
 
-import {ASTNode} from './ast_node.js';
-import {Marker} from './marker.js';
+import {ASTNode} from './ast_node';
+import {Marker} from './marker';
 
 
 /**

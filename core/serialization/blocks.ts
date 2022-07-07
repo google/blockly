@@ -13,27 +13,27 @@
  * Handles serializing blocks to plain JavaScript objects only containing state.
  * @namespace Blockly.serialization.blocks
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.serialization.blocks');
 
 /* eslint-disable-next-line no-unused-vars */
-import {Block} from '../block.js';
+import {Block} from '../block';
 /* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../block_svg.js';
+import {BlockSvg} from '../block_svg';
 // eslint-disable-next-line no-unused-vars
-import {Connection} from '../connection.js';
-import * as eventUtils from '../events/utils.js';
-import {inputTypes} from '../input_types.js';
+import {Connection} from '../connection';
+import * as eventUtils from '../events/utils';
+import {inputTypes} from '../input_types';
 // eslint-disable-next-line no-unused-vars
-import {ISerializer} from '../interfaces/i_serializer.js';
-import {Size} from '../utils/size.js';
+import {ISerializer} from '../interfaces/i_serializer';
+import {Size} from '../utils/size';
 // eslint-disable-next-line no-unused-vars
-import {Workspace} from '../workspace.js';
-import * as Xml from '../xml.js';
+import {Workspace} from '../workspace';
+import * as Xml from '../xml';
 
-import {BadConnectionCheck, MissingBlockType, MissingConnection, RealChildOfShadow} from './exceptions.js';
-import * as priorities from './priorities.js';
-import * as serializationRegistry from './registry.js';
+import {BadConnectionCheck, MissingBlockType, MissingConnection, RealChildOfShadow} from './exceptions';
+import * as priorities from './priorities';
+import * as serializationRegistry from './registry';
 
 
 // TODO(#5160): Remove this once lint is fixed.

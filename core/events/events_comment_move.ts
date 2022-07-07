@@ -12,16 +12,16 @@
  * Class for comment move event.
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.Events.CommentMove');
 
-import * as registry from '../registry.js';
-import {Coordinate} from '../utils/coordinate.js';
+import * as registry from '../registry';
+import {Coordinate} from '../utils/coordinate';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceComment} from '../workspace_comment.js';
+import {WorkspaceComment} from '../workspace_comment';
 
-import {CommentBase} from './events_comment_base.js';
-import * as eventUtils from './utils.js';
+import {CommentBase} from './events_comment_base';
+import * as eventUtils from './utils';
 
 
 /**

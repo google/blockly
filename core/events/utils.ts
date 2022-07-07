@@ -14,32 +14,32 @@
  * actions in Blockly's editor.
  * @namespace Blockly.Events.utils
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.Events.utils');
 
 /* eslint-disable-next-line no-unused-vars */
-import {Block} from '../block.js';
-import * as registry from '../registry.js';
-import * as idGenerator from '../utils/idgenerator.js';
+import {Block} from '../block';
+import * as registry from '../registry';
+import * as idGenerator from '../utils/idgenerator';
 /* eslint-disable-next-line no-unused-vars */
-import {Workspace} from '../workspace.js';
+import {Workspace} from '../workspace';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from '../workspace_svg.js';
+import {WorkspaceSvg} from '../workspace_svg';
 
 /* eslint-disable-next-line no-unused-vars */
-import {Abstract} from './events_abstract.js';
+import {Abstract} from './events_abstract';
 /* eslint-disable-next-line no-unused-vars */
-import {BlockChange} from './events_block_change.js';
+import {BlockChange} from './events_block_change';
 /* eslint-disable-next-line no-unused-vars */
-import {BlockCreate} from './events_block_create.js';
+import {BlockCreate} from './events_block_create';
 /* eslint-disable-next-line no-unused-vars */
-import {BlockMove} from './events_block_move.js';
+import {BlockMove} from './events_block_move';
 /* eslint-disable-next-line no-unused-vars */
-import {CommentCreate} from './events_comment_create.js';
+import {CommentCreate} from './events_comment_create';
 /* eslint-disable-next-line no-unused-vars */
-import {CommentMove} from './events_comment_move.js';
+import {CommentMove} from './events_comment_move';
 /* eslint-disable-next-line no-unused-vars */
-import {ViewportChange} from './events_viewport.js';
+import {ViewportChange} from './events_viewport';
 
 
 /** Group ID for new events.  Grouped events are indivisible. */

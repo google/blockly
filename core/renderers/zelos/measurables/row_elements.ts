@@ -14,13 +14,13 @@
  * rendered block.
  * @class
  */
-import * as goog from '../../../../closure/goog/goog.js';
+import * as goog from '../../../../closure/goog/goog';
 goog.declareModuleId('Blockly.zelos.RightConnectionShape');
 
 /* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from '../../../renderers/common/constants.js';
-import {Measurable} from '../../../renderers/measurables/base.js';
-import {Types} from '../../../renderers/measurables/types.js';
+import {ConstantProvider} from '../../../renderers/common/constants';
+import {Measurable} from '../../../renderers/measurables/base';
+import {Types} from '../../../renderers/measurables/types';
 
 
 /**

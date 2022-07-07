@@ -12,33 +12,33 @@
  * Methods for rendering debug graphics.
  * @class
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.blockRendering.Debug');
 
 /* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg.js';
-import {ConnectionType} from '../../connection_type.js';
-import {FieldLabel} from '../../field_label.js';
+import {BlockSvg} from '../../block_svg';
+import {ConnectionType} from '../../connection_type';
+import {FieldLabel} from '../../field_label';
 /* eslint-disable-next-line no-unused-vars */
-import {RenderedConnection} from '../../rendered_connection.js';
-import * as dom from '../../utils/dom.js';
-import {Svg} from '../../utils/svg.js';
+import {RenderedConnection} from '../../rendered_connection';
+import * as dom from '../../utils/dom';
+import {Svg} from '../../utils/svg';
 /* eslint-disable-next-line no-unused-vars */
-import {Measurable} from '../measurables/base.js';
-import {Field} from '../measurables/field.js';
+import {Measurable} from '../measurables/base';
+import {Field} from '../measurables/field';
 /* eslint-disable-next-line no-unused-vars */
-import {InRowSpacer} from '../measurables/in_row_spacer.js';
-import {InputConnection} from '../measurables/input_connection.js';
+import {InRowSpacer} from '../measurables/in_row_spacer';
+import {InputConnection} from '../measurables/input_connection';
 /* eslint-disable-next-line no-unused-vars */
-import {Row} from '../measurables/row.js';
-import {Types} from '../measurables/types.js';
+import {Row} from '../measurables/row';
+import {Types} from '../measurables/types';
 /* eslint-disable-next-line no-unused-vars */
-import {RenderInfo as ZelosInfo} from '../zelos/info.js';
+import {RenderInfo as ZelosInfo} from '../zelos/info';
 
 /* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from './constants.js';
+import {ConstantProvider} from './constants';
 /* eslint-disable-next-line no-unused-vars */
-import {RenderInfo} from './info.js';
+import {RenderInfo} from './info';
 
 
 /**

@@ -10,19 +10,19 @@
  * Re-exports of Blockly.zelos.* modules.
  * @namespace Blockly.zelos
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.zelos');
 
-import {ConstantProvider} from './constants.js';
-import {Drawer} from './drawer.js';
-import {RenderInfo} from './info.js';
-import {MarkerSvg} from './marker_svg.js';
-import {BottomRow} from './measurables/bottom_row.js';
-import {StatementInput} from './measurables/inputs.js';
-import {RightConnectionShape} from './measurables/row_elements.js';
-import {TopRow} from './measurables/top_row.js';
-import {PathObject} from './path_object.js';
-import {Renderer} from './renderer.js';
+import {ConstantProvider} from './constants';
+import {Drawer} from './drawer';
+import {RenderInfo} from './info';
+import {MarkerSvg} from './marker_svg';
+import {BottomRow} from './measurables/bottom_row';
+import {StatementInput} from './measurables/inputs';
+import {RightConnectionShape} from './measurables/row_elements';
+import {TopRow} from './measurables/top_row';
+import {PathObject} from './path_object';
+import {Renderer} from './renderer';
 
 
 export {

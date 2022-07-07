@@ -14,30 +14,30 @@
  * compatibility mode.
  * @class
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.geras.Highlighter');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './renderer.js';
+import './renderer';
 
-import * as svgPaths from '../../utils/svg_paths.js';
+import * as svgPaths from '../../utils/svg_paths';
 /* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from '../common/constants.js';
+import {ConstantProvider} from '../common/constants';
 /* eslint-disable-next-line no-unused-vars */
-import {BottomRow} from '../measurables/bottom_row.js';
+import {BottomRow} from '../measurables/bottom_row';
 /* eslint-disable-next-line no-unused-vars */
-import {Row} from '../measurables/row.js';
-import {SpacerRow} from '../measurables/spacer_row.js';
+import {Row} from '../measurables/row';
+import {SpacerRow} from '../measurables/spacer_row';
 /* eslint-disable-next-line no-unused-vars */
-import {TopRow} from '../measurables/top_row.js';
-import {Types} from '../measurables/types.js';
+import {TopRow} from '../measurables/top_row';
+import {Types} from '../measurables/types';
 
-import {HighlightConstantProvider, InsideCorner, JaggedTeeth, Notch, OutsideCorner, PuzzleTab, StartHat} from './highlight_constants.js';
+import {HighlightConstantProvider, InsideCorner, JaggedTeeth, Notch, OutsideCorner, PuzzleTab, StartHat} from './highlight_constants';
 /* eslint-disable-next-line no-unused-vars */
-import {RenderInfo} from './info.js';
+import {RenderInfo} from './info';
 /* eslint-disable-next-line no-unused-vars */
-import {InlineInput} from './measurables/inline_input.js';
+import {InlineInput} from './measurables/inline_input';
 
 
 /**

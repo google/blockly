@@ -12,16 +12,16 @@
  * Class for comment creation event.
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.Events.CommentCreate');
 
-import * as registry from '../registry.js';
+import * as registry from '../registry';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceComment} from '../workspace_comment.js';
-import * as Xml from '../xml.js';
+import {WorkspaceComment} from '../workspace_comment';
+import * as Xml from '../xml';
 
-import {CommentBase} from './events_comment_base.js';
-import * as eventUtils from './utils.js';
+import {CommentBase} from './events_comment_base';
+import * as eventUtils from './utils';
 
 
 /**

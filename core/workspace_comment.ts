@@ -12,24 +12,24 @@
  * Object representing a code comment on the workspace.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.WorkspaceComment');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_comment_change.js';
+import './events/events_comment_change';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_comment_create.js';
+import './events/events_comment_create';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_comment_delete.js';
+import './events/events_comment_delete';
 
 /* eslint-disable-next-line no-unused-vars */
-import {CommentMove} from './events/events_comment_move.js';
-import * as eventUtils from './events/utils.js';
-import {Coordinate} from './utils/coordinate.js';
-import * as idGenerator from './utils/idgenerator.js';
-import * as xml from './utils/xml.js';
+import {CommentMove} from './events/events_comment_move';
+import * as eventUtils from './events/utils';
+import {Coordinate} from './utils/coordinate';
+import * as idGenerator from './utils/idgenerator';
+import * as xml from './utils/xml';
 /* eslint-disable-next-line no-unused-vars */
-import {Workspace} from './workspace.js';
+import {Workspace} from './workspace';
 
 
 /**

@@ -12,7 +12,7 @@
  * An enum for the possible types of connections.
  * @namespace Blockly.ConnectionType
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.ConnectionType');
 
 

@@ -14,16 +14,16 @@
  * objects.
  * @namespace Blockly.serialization.workspaces
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.serialization.workspaces');
 
-import * as eventUtils from '../events/utils.js';
-import {ISerializer} from '../interfaces/i_serializer.js';
-import * as registry from '../registry.js';
-import * as dom from '../utils/dom.js';
+import * as eventUtils from '../events/utils';
+import {ISerializer} from '../interfaces/i_serializer';
+import * as registry from '../registry';
+import * as dom from '../utils/dom';
 // eslint-disable-next-line no-unused-vars
-import {Workspace} from '../workspace.js';
-import {WorkspaceSvg} from '../workspace_svg.js';
+import {Workspace} from '../workspace';
+import {WorkspaceSvg} from '../workspace_svg';
 
 
 /**

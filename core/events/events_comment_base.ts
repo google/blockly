@@ -12,20 +12,20 @@
  * Base class for comment events.
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.Events.CommentBase');
 
-import * as utilsXml from '../utils/xml.js';
+import * as utilsXml from '../utils/xml';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceComment} from '../workspace_comment.js';
-import * as Xml from '../xml.js';
+import {WorkspaceComment} from '../workspace_comment';
+import * as Xml from '../xml';
 
-import {Abstract as AbstractEvent} from './events_abstract.js';
+import {Abstract as AbstractEvent} from './events_abstract';
 /* eslint-disable-next-line no-unused-vars */
-import {CommentCreate} from './events_comment_create.js';
+import {CommentCreate} from './events_comment_create';
 /* eslint-disable-next-line no-unused-vars */
-import {CommentDelete} from './events_comment_delete.js';
-import * as eventUtils from './utils.js';
+import {CommentDelete} from './events_comment_delete';
+import * as eventUtils from './utils';
 
 
 /**

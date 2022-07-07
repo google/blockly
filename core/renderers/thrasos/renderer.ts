@@ -12,15 +12,15 @@
  * Thrasos renderer.
  * @class
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.thrasos.Renderer');
 
 /* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg.js';
-import * as blockRendering from '../common/block_rendering.js';
-import {Renderer as BaseRenderer} from '../common/renderer.js';
+import {BlockSvg} from '../../block_svg';
+import * as blockRendering from '../common/block_rendering';
+import {Renderer as BaseRenderer} from '../common/renderer';
 
-import {RenderInfo} from './info.js';
+import {RenderInfo} from './info';
 
 
 /**

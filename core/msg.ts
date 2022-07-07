@@ -12,7 +12,7 @@
  * Empty name space for the Message singleton.
  * @namespace Blockly.Msg
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.Msg');
 
 

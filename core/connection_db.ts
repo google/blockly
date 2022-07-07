@@ -16,19 +16,19 @@
  *    Sorted by y coordinate.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.ConnectionDB');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './constants.js';
+import './constants';
 
-import {ConnectionType} from './connection_type.js';
+import {ConnectionType} from './connection_type';
 /* eslint-disable-next-line no-unused-vars */
-import {IConnectionChecker} from './interfaces/i_connection_checker.js';
+import {IConnectionChecker} from './interfaces/i_connection_checker';
 /* eslint-disable-next-line no-unused-vars */
-import {RenderedConnection} from './rendered_connection.js';
+import {RenderedConnection} from './rendered_connection';
 /* eslint-disable-next-line no-unused-vars */
-import {Coordinate} from './utils/coordinate.js';
+import {Coordinate} from './utils/coordinate';
 
 
 /**

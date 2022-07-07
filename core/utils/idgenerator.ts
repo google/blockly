@@ -12,7 +12,7 @@
  * Generators for unique IDs.
  * @namespace Blockly.utils.idGenerator
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.utils.idGenerator');
 
 

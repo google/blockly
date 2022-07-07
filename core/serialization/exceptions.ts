@@ -12,14 +12,14 @@
  * Contains custom errors thrown by the serialization system.
  * @namespace Blockly.serialization.exceptions
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.serialization.exceptions');
 
 /* eslint-disable-next-line no-unused-vars */
-import {Block} from '../block.js';
+import {Block} from '../block';
 
 // eslint-disable-next-line no-unused-vars
-import {State} from './blocks.js';
+import {State} from './blocks';
 
 
 /** @alias Blockly.serialization.exceptions.DeserializationError */

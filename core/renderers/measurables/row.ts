@@ -12,19 +12,19 @@
  * Object representing a single row on a rendered block.
  * @class
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.blockRendering.Row');
 
 /* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from '../common/constants.js';
+import {ConstantProvider} from '../common/constants';
 
 /* eslint-disable-next-line no-unused-vars */
-import {Measurable} from './base.js';
+import {Measurable} from './base';
 /* eslint-disable-next-line no-unused-vars */
-import {InRowSpacer} from './in_row_spacer.js';
+import {InRowSpacer} from './in_row_spacer';
 /* eslint-disable-next-line no-unused-vars */
-import {InputConnection} from './input_connection.js';
-import {Types} from './types.js';
+import {InputConnection} from './input_connection';
+import {Types} from './types';
 
 
 /**

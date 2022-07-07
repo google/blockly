@@ -12,37 +12,37 @@
  * Object representing a code comment.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.Comment');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './block.js';
+import './block';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './workspace_svg.js';
+import './workspace_svg';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_block_change.js';
+import './events/events_block_change';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_bubble_open.js';
+import './events/events_bubble_open';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './warning.js';
+import './warning';
 
-import {CommentModel} from './block.js';
+import {CommentModel} from './block';
 /* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
-import * as browserEvents from './browser_events.js';
-import {Bubble} from './bubble.js';
-import * as Css from './css.js';
-import * as eventUtils from './events/utils.js';
-import {Icon} from './icon.js';
+import {BlockSvg} from './block_svg';
+import * as browserEvents from './browser_events';
+import {Bubble} from './bubble';
+import * as Css from './css';
+import * as eventUtils from './events/utils';
+import {Icon} from './icon';
 /* eslint-disable-next-line no-unused-vars */
-import {Coordinate} from './utils/coordinate.js';
-import * as dom from './utils/dom.js';
+import {Coordinate} from './utils/coordinate';
+import * as dom from './utils/dom';
 /* eslint-disable-next-line no-unused-vars */
-import {Size} from './utils/size.js';
-import {Svg} from './utils/svg.js';
-import * as userAgent from './utils/useragent.js';
+import {Size} from './utils/size';
+import {Svg} from './utils/svg';
+import * as userAgent from './utils/useragent';
 
 
 /**

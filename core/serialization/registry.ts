@@ -14,12 +14,12 @@
  * etc).
  * @namespace Blockly.serialization.registry
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.serialization.registry');
 
 // eslint-disable-next-line no-unused-vars
-import {ISerializer} from '../interfaces/i_serializer.js';
-import * as registry from '../registry.js';
+import {ISerializer} from '../interfaces/i_serializer';
+import * as registry from '../registry';
 
 
 /**

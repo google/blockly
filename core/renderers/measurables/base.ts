@@ -12,13 +12,13 @@
  * Methods for graphically rendering a block as SVG.
  * @class
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.blockRendering.Measurable');
 
 /* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from '../common/constants.js';
+import {ConstantProvider} from '../common/constants';
 
-import {Types} from './types.js';
+import {Types} from './types';
 
 
 /**

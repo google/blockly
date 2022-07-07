@@ -13,18 +13,18 @@
  *
  * @namespace Blockly.VariablesDynamic
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.VariablesDynamic');
 
-import {Blocks} from './blocks.js';
-import {Msg} from './msg.js';
-import * as xml from './utils/xml.js';
-import {VariableModel} from './variable_model.js';
-import * as Variables from './variables.js';
+import {Blocks} from './blocks';
+import {Msg} from './msg';
+import * as xml from './utils/xml';
+import {VariableModel} from './variable_model';
+import * as Variables from './variables';
 /* eslint-disable-next-line no-unused-vars */
-import {Workspace} from './workspace.js';
+import {Workspace} from './workspace';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg';
 
 
 /**

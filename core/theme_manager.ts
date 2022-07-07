@@ -14,17 +14,17 @@
  *     and UI components.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.ThemeManager');
 
 /* eslint-disable-next-line no-unused-vars */
-import {Theme} from './theme.js';
-import * as arrayUtils from './utils/array.js';
-import * as dom from './utils/dom.js';
+import {Theme} from './theme';
+import * as arrayUtils from './utils/array';
+import * as dom from './utils/dom';
 /* eslint-disable-next-line no-unused-vars */
-import {Workspace} from './workspace.js';
+import {Workspace} from './workspace';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg';
 
 
 /**

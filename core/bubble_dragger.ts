@@ -12,31 +12,31 @@
  * Methods for dragging a bubble visually.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.BubbleDragger');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './bubble.js';
+import './bubble';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './constants.js';
+import './constants';
 
 /* eslint-disable-next-line no-unused-vars */
-import {BlockDragSurfaceSvg} from './block_drag_surface.js';
-import {ComponentManager} from './component_manager.js';
+import {BlockDragSurfaceSvg} from './block_drag_surface';
+import {ComponentManager} from './component_manager';
 /* eslint-disable-next-line no-unused-vars */
-import {CommentMove} from './events/events_comment_move.js';
-import * as eventUtils from './events/utils.js';
+import {CommentMove} from './events/events_comment_move';
+import * as eventUtils from './events/utils';
 /* eslint-disable-next-line no-unused-vars */
-import {IBubble} from './interfaces/i_bubble.js';
+import {IBubble} from './interfaces/i_bubble';
 /* eslint-disable-next-line no-unused-vars */
-import {IDeleteArea} from './interfaces/i_delete_area.js';
+import {IDeleteArea} from './interfaces/i_delete_area';
 /* eslint-disable-next-line no-unused-vars */
-import {IDragTarget} from './interfaces/i_drag_target.js';
-import {Coordinate} from './utils/coordinate.js';
-import * as svgMath from './utils/svg_math.js';
-import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
+import {IDragTarget} from './interfaces/i_drag_target';
+import {Coordinate} from './utils/coordinate';
+import * as svgMath from './utils/svg_math';
+import {WorkspaceCommentSvg} from './workspace_comment_svg';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg';
 
 
 /**

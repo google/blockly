@@ -14,13 +14,13 @@
  * key codes used to execute those shortcuts.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.ShortcutRegistry');
 
-import {KeyCodes} from './utils/keycodes.js';
-import * as object from './utils/object.js';
+import {KeyCodes} from './utils/keycodes';
+import * as object from './utils/object';
 /* eslint-disable-next-line no-unused-vars */
-import {Workspace} from './workspace.js';
+import {Workspace} from './workspace';
 
 
 /**

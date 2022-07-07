@@ -14,16 +14,16 @@
  * block.
  * @class
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.blockRendering.Icon');
 
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */
-import {Icon as BlocklyIcon} from '../../icon.js';
-import {ConstantProvider} from '../common/constants.js';
+import {Icon as BlocklyIcon} from '../../icon';
+import {ConstantProvider} from '../common/constants';
 
-import {Measurable} from './base.js';
-import {Types} from './types.js';
+import {Measurable} from './base';
+import {Types} from './types';
 
 
 /**

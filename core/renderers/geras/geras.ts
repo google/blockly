@@ -10,18 +10,18 @@
  * Re-exports of Blockly.geras.* modules.
  * @namespace Blockly.geras
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.geras');
 
-import {ConstantProvider} from './constants.js';
-import {Drawer} from './drawer.js';
-import {HighlightConstantProvider} from './highlight_constants.js';
-import {Highlighter} from './highlighter.js';
-import {RenderInfo} from './info.js';
-import {InlineInput} from './measurables/inline_input.js';
-import {StatementInput} from './measurables/statement_input.js';
-import {PathObject} from './path_object.js';
-import {Renderer} from './renderer.js';
+import {ConstantProvider} from './constants';
+import {Drawer} from './drawer';
+import {HighlightConstantProvider} from './highlight_constants';
+import {Highlighter} from './highlighter';
+import {RenderInfo} from './info';
+import {InlineInput} from './measurables/inline_input';
+import {StatementInput} from './measurables/statement_input';
+import {PathObject} from './path_object';
+import {Renderer} from './renderer';
 
 
 export {

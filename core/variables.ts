@@ -12,19 +12,19 @@
  * Utility functions for handling variables.
  * @namespace Blockly.Variables
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.Variables');
 
-import {Blocks} from './blocks.js';
-import * as dialog from './dialog.js';
-import {Msg} from './msg.js';
-import * as utilsXml from './utils/xml.js';
-import {VariableModel} from './variable_model.js';
+import {Blocks} from './blocks';
+import * as dialog from './dialog';
+import {Msg} from './msg';
+import * as utilsXml from './utils/xml';
+import {VariableModel} from './variable_model';
 /* eslint-disable-next-line no-unused-vars */
-import {Workspace} from './workspace.js';
+import {Workspace} from './workspace';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
-import * as Xml from './xml.js';
+import {WorkspaceSvg} from './workspace_svg';
+import * as Xml from './xml';
 
 
 /**

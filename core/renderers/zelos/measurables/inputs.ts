@@ -14,14 +14,14 @@
  * a rendered block.
  * @class
  */
-import * as goog from '../../../../closure/goog/goog.js';
+import * as goog from '../../../../closure/goog/goog';
 goog.declareModuleId('Blockly.zelos.StatementInput');
 
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */
-import {Input} from '../../../input.js';
-import {ConstantProvider} from '../../../renderers/common/constants.js';
-import {StatementInput as BaseStatementInput} from '../../../renderers/measurables/statement_input.js';
+import {Input} from '../../../input';
+import {ConstantProvider} from '../../../renderers/common/constants';
+import {StatementInput as BaseStatementInput} from '../../../renderers/measurables/statement_input';
 
 
 /**

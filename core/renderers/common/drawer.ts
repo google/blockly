@@ -12,32 +12,32 @@
  * Methods for graphically rendering a block as SVG.
  * @class
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.blockRendering.Drawer');
 
 /* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg.js';
-import * as svgPaths from '../../utils/svg_paths.js';
-import {Connection} from '../measurables/connection.js';
+import {BlockSvg} from '../../block_svg';
+import * as svgPaths from '../../utils/svg_paths';
+import {Connection} from '../measurables/connection';
 /* eslint-disable-next-line no-unused-vars */
-import {ExternalValueInput} from '../measurables/external_value_input.js';
+import {ExternalValueInput} from '../measurables/external_value_input';
 /* eslint-disable-next-line no-unused-vars */
-import {Field} from '../measurables/field.js';
+import {Field} from '../measurables/field';
 /* eslint-disable-next-line no-unused-vars */
-import {Icon} from '../measurables/icon.js';
+import {Icon} from '../measurables/icon';
 /* eslint-disable-next-line no-unused-vars */
-import {InlineInput} from '../measurables/inline_input.js';
+import {InlineInput} from '../measurables/inline_input';
 /* eslint-disable-next-line no-unused-vars */
-import {PreviousConnection} from '../measurables/previous_connection.js';
+import {PreviousConnection} from '../measurables/previous_connection';
 /* eslint-disable-next-line no-unused-vars */
-import {Row} from '../measurables/row.js';
-import {Types} from '../measurables/types.js';
+import {Row} from '../measurables/row';
+import {Types} from '../measurables/types';
 
 /* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider, Notch, PuzzleTab} from './constants.js';
-import * as debug from './debug.js';
+import {ConstantProvider, Notch, PuzzleTab} from './constants';
+import * as debug from './debug';
 /* eslint-disable-next-line no-unused-vars */
-import {RenderInfo} from './info.js';
+import {RenderInfo} from './info';
 
 
 /**

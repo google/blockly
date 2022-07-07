@@ -14,12 +14,12 @@
  * Blockly.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.Grid');
 
-import * as dom from './utils/dom.js';
-import {Svg} from './utils/svg.js';
-import * as userAgent from './utils/useragent.js';
+import * as dom from './utils/dom';
+import {Svg} from './utils/svg';
+import * as userAgent from './utils/useragent';
 
 
 /**

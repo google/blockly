@@ -12,7 +12,7 @@
  * Object that defines user-specified options for the workspace.
  * @namespace Blockly.BlocklyOptions
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.BlocklyOptions');
 
 

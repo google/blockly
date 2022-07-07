@@ -12,28 +12,28 @@
  * Utilities for bumping objects back into worksapce bounds.
  * @namespace Blockly.bumpObjects
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.bumpObjects');
 
 /* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
+import {BlockSvg} from './block_svg';
 /* eslint-disable-next-line no-unused-vars */
-import {Abstract} from './events/events_abstract.js';
-import {BlockCreate} from './events/events_block_create.js';
-import {BlockMove} from './events/events_block_move.js';
-import {CommentCreate} from './events/events_comment_create.js';
-import {CommentMove} from './events/events_comment_move.js';
+import {Abstract} from './events/events_abstract';
+import {BlockCreate} from './events/events_block_create';
+import {BlockMove} from './events/events_block_move';
+import {CommentCreate} from './events/events_comment_create';
+import {CommentMove} from './events/events_comment_move';
 /* eslint-disable-next-line no-unused-vars */
-import {ViewportChange} from './events/events_viewport.js';
-import * as eventUtils from './events/utils.js';
+import {ViewportChange} from './events/events_viewport';
+import * as eventUtils from './events/utils';
 /* eslint-disable-next-line no-unused-vars */
-import {IBoundedElement} from './interfaces/i_bounded_element.js';
-import {ContainerRegion, MetricsManager} from './metrics_manager.js';
-import * as mathUtils from './utils/math.js';
+import {IBoundedElement} from './interfaces/i_bounded_element';
+import {ContainerRegion, MetricsManager} from './metrics_manager';
+import * as mathUtils from './utils/math';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
+import {WorkspaceCommentSvg} from './workspace_comment_svg';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg';
 
 
 /**

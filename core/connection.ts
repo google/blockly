@@ -12,26 +12,26 @@
  * Components for creating connections between blocks.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.Connection');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './constants.js';
+import './constants';
 
 /* eslint-disable-next-line no-unused-vars */
-import {Block} from './block.js';
-import {ConnectionType} from './connection_type.js';
+import {Block} from './block';
+import {ConnectionType} from './connection_type';
 /* eslint-disable-next-line no-unused-vars */
-import {BlockMove} from './events/events_block_move.js';
-import * as eventUtils from './events/utils.js';
+import {BlockMove} from './events/events_block_move';
+import * as eventUtils from './events/utils';
 /* eslint-disable-next-line no-unused-vars */
-import {Input} from './input.js';
+import {Input} from './input';
 /* eslint-disable-next-line no-unused-vars */
-import {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_with_block.js';
+import {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_with_block';
 /* eslint-disable-next-line no-unused-vars */
-import {IConnectionChecker} from './interfaces/i_connection_checker.js';
-import * as blocks from './serialization/blocks.js';
-import * as Xml from './xml.js';
+import {IConnectionChecker} from './interfaces/i_connection_checker';
+import * as blocks from './serialization/blocks';
+import * as Xml from './xml';
 
 
 /**

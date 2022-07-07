@@ -12,47 +12,47 @@
  * Object representing a trash can icon.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.Trashcan');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './metrics_manager.js';
+import './metrics_manager';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_trashcan_open.js';
+import './events/events_trashcan_open';
 
 /* eslint-disable-next-line no-unused-vars */
-import {BlocklyOptions} from './blockly_options.js';
-import * as browserEvents from './browser_events.js';
-import {ComponentManager} from './component_manager.js';
-import {DeleteArea} from './delete_area.js';
+import {BlocklyOptions} from './blockly_options';
+import * as browserEvents from './browser_events';
+import {ComponentManager} from './component_manager';
+import {DeleteArea} from './delete_area';
 /* eslint-disable-next-line no-unused-vars */
-import {Abstract} from './events/events_abstract.js';
+import {Abstract} from './events/events_abstract';
 /* eslint-disable-next-line no-unused-vars */
-import {BlockDelete} from './events/events_block_delete.js';
-import * as eventUtils from './events/utils.js';
+import {BlockDelete} from './events/events_block_delete';
+import * as eventUtils from './events/utils';
 /* eslint-disable-next-line no-unused-vars */
-import {IAutoHideable} from './interfaces/i_autohideable.js';
+import {IAutoHideable} from './interfaces/i_autohideable';
 /* eslint-disable-next-line no-unused-vars */
-import {IDraggable} from './interfaces/i_draggable.js';
+import {IDraggable} from './interfaces/i_draggable';
 /* eslint-disable-next-line no-unused-vars */
-import {IFlyout} from './interfaces/i_flyout.js';
+import {IFlyout} from './interfaces/i_flyout';
 /* eslint-disable-next-line no-unused-vars */
-import {IPositionable} from './interfaces/i_positionable.js';
-import {UiMetrics} from './metrics_manager.js';
-import {Options} from './options.js';
-import * as uiPosition from './positionable_helpers.js';
-import * as registry from './registry.js';
+import {IPositionable} from './interfaces/i_positionable';
+import {UiMetrics} from './metrics_manager';
+import {Options} from './options';
+import * as uiPosition from './positionable_helpers';
+import * as registry from './registry';
 /* eslint-disable-next-line no-unused-vars */
-import * as blocks from './serialization/blocks.js';
-import {SPRITE} from './sprites.js';
-import * as dom from './utils/dom.js';
-import {Rect} from './utils/rect.js';
-import {Size} from './utils/size.js';
-import {Svg} from './utils/svg.js';
-import * as toolbox from './utils/toolbox.js';
+import * as blocks from './serialization/blocks';
+import {SPRITE} from './sprites';
+import * as dom from './utils/dom';
+import {Rect} from './utils/rect';
+import {Size} from './utils/size';
+import {Svg} from './utils/svg';
+import * as toolbox from './utils/toolbox';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg';
 
 
 /**

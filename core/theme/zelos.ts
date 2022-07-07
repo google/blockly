@@ -12,10 +12,10 @@
  * Zelos theme.
  * @namespace Blockly.Themes.Zelos
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.Themes.Zelos');
 
-import {Theme} from '../theme.js';
+import {Theme} from '../theme';
 
 
 const defaultBlockStyles = {

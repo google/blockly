@@ -12,17 +12,17 @@
  * Image field.  Used for pictures, icons, etc.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.FieldImage');
 
-import {Field} from './field.js';
-import * as fieldRegistry from './field_registry.js';
-import * as dom from './utils/dom.js';
-import * as parsing from './utils/parsing.js';
+import {Field} from './field';
+import * as fieldRegistry from './field_registry';
+import * as dom from './utils/dom';
+import * as parsing from './utils/parsing';
 /* eslint-disable-next-line no-unused-vars */
-import {Sentinel} from './utils/sentinel.js';
-import {Size} from './utils/size.js';
-import {Svg} from './utils/svg.js';
+import {Sentinel} from './utils/sentinel';
+import {Size} from './utils/size';
+import {Svg} from './utils/svg';
 
 
 /**

@@ -12,10 +12,10 @@
  * Utility methods for objects.
  * @namespace Blockly.utils.object
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.utils.object');
 
-import * as deprecation from './deprecation.js';
+import * as deprecation from './deprecation';
 
 
 /**

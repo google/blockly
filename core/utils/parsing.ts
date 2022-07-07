@@ -11,12 +11,12 @@
 /**
  * @namespace Blockly.utils.parsing
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.utils.parsing');
 
-import {Msg} from '../msg.js';
+import {Msg} from '../msg';
 
-import * as colourUtils from './colour.js';
+import * as colourUtils from './colour';
 
 
 /**

@@ -18,18 +18,18 @@
  *      array attribute.
  * @namespace Blockly.Extensions
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.Extensions');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './mutator.js';
+import './mutator';
 
 /* eslint-disable-next-line no-unused-vars */
-import {Block} from './block.js';
-import {BlockSvg} from './block_svg.js';
-import {FieldDropdown} from './field_dropdown.js';
-import {Mutator} from './mutator.js';
-import * as parsing from './utils/parsing.js';
+import {Block} from './block';
+import {BlockSvg} from './block_svg';
+import {FieldDropdown} from './field_dropdown';
+import {Mutator} from './mutator';
+import * as parsing from './utils/parsing';
 
 
 /** The set of all registered extensions, keyed by extension name/id. */

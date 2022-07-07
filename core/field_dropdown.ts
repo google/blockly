@@ -16,25 +16,25 @@
  * properties with the context menu.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.FieldDropdown');
 
 /* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
-import * as dropDownDiv from './dropdowndiv.js';
-import {Field} from './field.js';
-import * as fieldRegistry from './field_registry.js';
-import {Menu} from './menu.js';
-import {MenuItem} from './menuitem.js';
-import * as aria from './utils/aria.js';
-import {Coordinate} from './utils/coordinate.js';
-import * as dom from './utils/dom.js';
-import * as parsing from './utils/parsing.js';
+import {BlockSvg} from './block_svg';
+import * as dropDownDiv from './dropdowndiv';
+import {Field} from './field';
+import * as fieldRegistry from './field_registry';
+import {Menu} from './menu';
+import {MenuItem} from './menuitem';
+import * as aria from './utils/aria';
+import {Coordinate} from './utils/coordinate';
+import * as dom from './utils/dom';
+import * as parsing from './utils/parsing';
 /* eslint-disable-next-line no-unused-vars */
-import {Sentinel} from './utils/sentinel.js';
-import * as utilsString from './utils/string.js';
-import {Svg} from './utils/svg.js';
-import * as userAgent from './utils/useragent.js';
+import {Sentinel} from './utils/sentinel';
+import * as utilsString from './utils/string';
+import {Svg} from './utils/svg';
+import * as userAgent from './utils/useragent';
 
 
 /**

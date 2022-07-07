@@ -12,17 +12,17 @@
  * Class for a block move event.
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.Events.BlockMove');
 
 /* eslint-disable-next-line no-unused-vars */
-import {Block} from '../block.js';
-import {ConnectionType} from '../connection_type.js';
-import * as registry from '../registry.js';
-import {Coordinate} from '../utils/coordinate.js';
+import {Block} from '../block';
+import {ConnectionType} from '../connection_type';
+import * as registry from '../registry';
+import {Coordinate} from '../utils/coordinate';
 
-import {BlockBase} from './events_block_base.js';
-import * as eventUtils from './utils.js';
+import {BlockBase} from './events_block_base';
+import * as eventUtils from './utils';
 
 
 interface BlockLocation {

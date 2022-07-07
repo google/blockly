@@ -14,16 +14,16 @@
  * state.
  * @namespace Blockly.serialization.variables
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.serialization.variables');
 
 // eslint-disable-next-line no-unused-vars
-import {ISerializer} from '../interfaces/i_serializer.js';
+import {ISerializer} from '../interfaces/i_serializer';
 // eslint-disable-next-line no-unused-vars
-import {Workspace} from '../workspace.js';
+import {Workspace} from '../workspace';
 
-import * as priorities from './priorities.js';
-import * as serializationRegistry from './registry.js';
+import * as priorities from './priorities';
+import * as serializationRegistry from './registry';
 
 
 /**

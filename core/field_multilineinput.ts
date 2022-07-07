@@ -12,22 +12,22 @@
  * Text Area field.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.FieldMultilineInput');
 
-import * as Css from './css.js';
-import {Field} from './field.js';
-import * as fieldRegistry from './field_registry.js';
-import {FieldTextInput} from './field_textinput.js';
-import * as aria from './utils/aria.js';
-import * as dom from './utils/dom.js';
-import {KeyCodes} from './utils/keycodes.js';
-import * as parsing from './utils/parsing.js';
+import * as Css from './css';
+import {Field} from './field';
+import * as fieldRegistry from './field_registry';
+import {FieldTextInput} from './field_textinput';
+import * as aria from './utils/aria';
+import * as dom from './utils/dom';
+import {KeyCodes} from './utils/keycodes';
+import * as parsing from './utils/parsing';
 /* eslint-disable-next-line no-unused-vars */
-import {Sentinel} from './utils/sentinel.js';
-import {Svg} from './utils/svg.js';
-import * as userAgent from './utils/useragent.js';
-import * as WidgetDiv from './widgetdiv.js';
+import {Sentinel} from './utils/sentinel';
+import {Svg} from './utils/svg';
+import * as userAgent from './utils/useragent';
+import * as WidgetDiv from './widgetdiv';
 
 
 /**

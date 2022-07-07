@@ -16,10 +16,10 @@
  * a JavaScript framework such as Closure.
  * @namespace Blockly.utils.string
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.utils.string');
 
-import * as deprecation from './deprecation.js';
+import * as deprecation from './deprecation';
 
 
 /**

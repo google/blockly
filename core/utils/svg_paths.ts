@@ -13,7 +13,7 @@
  * Methods for creating parts of SVG path strings.  See
  * @namespace Blockly.utils.svgPaths
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.utils.svgPaths');
 
 

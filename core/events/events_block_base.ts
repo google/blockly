@@ -12,13 +12,13 @@
  * Base class for all types of block events.
  * @class
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.Events.BlockBase');
 
 /* eslint-disable-next-line no-unused-vars */
-import {Block} from '../block.js';
+import {Block} from '../block';
 
-import {Abstract as AbstractEvent} from './events_abstract.js';
+import {Abstract as AbstractEvent} from './events_abstract';
 
 
 /**

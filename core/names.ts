@@ -12,19 +12,19 @@
  * Utility functions for handling variable and procedure names.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.Names');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './procedures.js';
+import './procedures';
 
-import {Msg} from './msg.js';
-import * as Procedures from './procedures.js';
+import {Msg} from './msg';
+import * as Procedures from './procedures';
 /* eslint-disable-next-line no-unused-vars */
-import {VariableMap} from './variable_map.js';
-import * as Variables from './variables.js';
+import {VariableMap} from './variable_map';
+import * as Variables from './variables';
 /* eslint-disable-next-line no-unused-vars */
-import {Workspace} from './workspace.js';
+import {Workspace} from './workspace';
 
 
 /**

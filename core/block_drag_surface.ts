@@ -22,13 +22,13 @@
  * while dragging blocks.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.BlockDragSurfaceSvg');
 
-import {Coordinate} from './utils/coordinate.js';
-import * as dom from './utils/dom.js';
-import {Svg} from './utils/svg.js';
-import * as svgMath from './utils/svg_math.js';
+import {Coordinate} from './utils/coordinate';
+import * as dom from './utils/dom';
+import {Svg} from './utils/svg';
+import * as svgMath from './utils/svg_math';
 
 
 /**

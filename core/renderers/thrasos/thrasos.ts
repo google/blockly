@@ -10,11 +10,11 @@
  * Re-exports of Blockly.thrasos.* modules.
  * @namespace Blockly.thrasos
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.thrasos');
 
-import {RenderInfo} from './info.js';
-import {Renderer} from './renderer.js';
+import {RenderInfo} from './info';
+import {Renderer} from './renderer';
 
 
 export {Renderer, RenderInfo};

@@ -16,14 +16,14 @@
  *    fields based on JSON.
  * @namespace Blockly.fieldRegistry
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.fieldRegistry');
 
 /* eslint-disable-next-line no-unused-vars */
-import {Field} from './field.js';
+import {Field} from './field';
 /* eslint-disable-next-line no-unused-vars */
-import {IRegistrableField} from './interfaces/i_registrable_field.js';
-import * as registry from './registry.js';
+import {IRegistrableField} from './interfaces/i_registrable_field';
+import * as registry from './registry';
 
 
 /**

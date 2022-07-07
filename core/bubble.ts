@@ -12,33 +12,33 @@
  * Object representing a UI bubble.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.Bubble');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './metrics_manager.js';
+import './metrics_manager';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './workspace.js';
+import './workspace';
 
 /* eslint-disable-next-line no-unused-vars */
-import {BlockDragSurfaceSvg} from './block_drag_surface.js';
+import {BlockDragSurfaceSvg} from './block_drag_surface';
 /* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
-import * as browserEvents from './browser_events.js';
+import {BlockSvg} from './block_svg';
+import * as browserEvents from './browser_events';
 /* eslint-disable-next-line no-unused-vars */
-import {IBubble} from './interfaces/i_bubble.js';
-import {ContainerRegion} from './metrics_manager.js';
-import {Scrollbar} from './scrollbar.js';
-import * as Touch from './touch.js';
-import {Coordinate} from './utils/coordinate.js';
-import * as dom from './utils/dom.js';
-import * as math from './utils/math.js';
-import {Size} from './utils/size.js';
-import {Svg} from './utils/svg.js';
-import * as userAgent from './utils/useragent.js';
+import {IBubble} from './interfaces/i_bubble';
+import {ContainerRegion} from './metrics_manager';
+import {Scrollbar} from './scrollbar';
+import * as Touch from './touch';
+import {Coordinate} from './utils/coordinate';
+import * as dom from './utils/dom';
+import * as math from './utils/math';
+import {Size} from './utils/size';
+import {Svg} from './utils/svg';
+import * as userAgent from './utils/useragent';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg';
 
 
 /**

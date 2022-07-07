@@ -14,18 +14,18 @@
  * block is dropped on top of it.
  * @namespace Blockly.IDragTarget
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.IDragTarget');
 
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './i_draggable.js';
+import './i_draggable';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../utils/rect.js';
+import '../utils/rect';
 
-import {IComponent} from './i_component.js';
+import {IComponent} from './i_component';
 
 
 /**

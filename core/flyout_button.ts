@@ -12,20 +12,20 @@
  * Class for a button in the flyout.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.FlyoutButton');
 
-import * as browserEvents from './browser_events.js';
-import * as Css from './css.js';
-import {Coordinate} from './utils/coordinate.js';
-import * as dom from './utils/dom.js';
-import * as parsing from './utils/parsing.js';
-import * as style from './utils/style.js';
-import {Svg} from './utils/svg.js';
+import * as browserEvents from './browser_events';
+import * as Css from './css';
+import {Coordinate} from './utils/coordinate';
+import * as dom from './utils/dom';
+import * as parsing from './utils/parsing';
+import * as style from './utils/style';
+import {Svg} from './utils/svg';
 /* eslint-disable-next-line no-unused-vars */
-import * as toolbox from './utils/toolbox.js';
+import * as toolbox from './utils/toolbox';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg';
 
 
 /**

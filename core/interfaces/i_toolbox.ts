@@ -12,24 +12,24 @@
  * The interface for a toolbox.
  * @namespace Blockly.IToolbox
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.IToolbox');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../utils/toolbox.js';
+import '../utils/toolbox';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './i_flyout.js';
+import './i_flyout';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './i_toolbox_item.js';
+import './i_toolbox_item';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../workspace_svg.js';
+import '../workspace_svg';
 
 /* eslint-disable-next-line no-unused-vars */
-import {IRegistrable} from './i_registrable.js';
+import {IRegistrable} from './i_registrable';
 
 
 /**

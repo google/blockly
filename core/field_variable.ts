@@ -12,30 +12,30 @@
  * Variable input field.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.FieldVariable');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_block_change.js';
+import './events/events_block_change';
 
 /* eslint-disable-next-line no-unused-vars */
-import {Block} from './block.js';
-import {Field} from './field.js';
-import {FieldDropdown} from './field_dropdown.js';
-import * as fieldRegistry from './field_registry.js';
-import * as internalConstants from './internal_constants.js';
+import {Block} from './block';
+import {Field} from './field';
+import {FieldDropdown} from './field_dropdown';
+import * as fieldRegistry from './field_registry';
+import * as internalConstants from './internal_constants';
 /* eslint-disable-next-line no-unused-vars */
-import {Menu} from './menu.js';
+import {Menu} from './menu';
 /* eslint-disable-next-line no-unused-vars */
-import {MenuItem} from './menuitem.js';
-import {Msg} from './msg.js';
-import * as parsing from './utils/parsing.js';
+import {MenuItem} from './menuitem';
+import {Msg} from './msg';
+import * as parsing from './utils/parsing';
 /* eslint-disable-next-line no-unused-vars */
-import {Sentinel} from './utils/sentinel.js';
-import {Size} from './utils/size.js';
-import {VariableModel} from './variable_model.js';
-import * as Variables from './variables.js';
-import * as Xml from './xml.js';
+import {Sentinel} from './utils/sentinel';
+import {Size} from './utils/size';
+import {VariableModel} from './variable_model';
+import * as Variables from './variables';
+import * as Xml from './xml';
 
 
 /**

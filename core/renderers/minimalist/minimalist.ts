@@ -10,13 +10,13 @@
  * Re-exports of Blockly.minimalist.* modules.
  * @namespace Blockly.minimalist
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.minimalist');
 
-import {ConstantProvider} from './constants.js';
-import {Drawer} from './drawer.js';
-import {RenderInfo} from './info.js';
-import {Renderer} from './renderer.js';
+import {ConstantProvider} from './constants';
+import {Drawer} from './drawer';
+import {RenderInfo} from './info';
+import {Renderer} from './renderer';
 
 
 export {ConstantProvider, Drawer, Renderer, RenderInfo};

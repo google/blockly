@@ -12,51 +12,51 @@
  * The class representing one block.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.Block');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_block_change.js';
+import './events/events_block_change';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_block_create.js';
+import './events/events_block_create';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_block_delete.js';
+import './events/events_block_delete';
 
-import {Blocks} from './blocks.js';
+import {Blocks} from './blocks';
 /* eslint-disable-next-line no-unused-vars */
-import {Comment} from './comment.js';
-import * as common from './common.js';
-import {Connection} from './connection.js';
-import {ConnectionType} from './connection_type.js';
-import * as constants from './constants.js';
+import {Comment} from './comment';
+import * as common from './common';
+import {Connection} from './connection';
+import {ConnectionType} from './connection_type';
+import * as constants from './constants';
 /* eslint-disable-next-line no-unused-vars */
-import {Abstract} from './events/events_abstract.js';
+import {Abstract} from './events/events_abstract';
 /* eslint-disable-next-line no-unused-vars */
-import {BlockMove} from './events/events_block_move.js';
-import * as eventUtils from './events/utils.js';
-import * as Extensions from './extensions.js';
+import {BlockMove} from './events/events_block_move';
+import * as eventUtils from './events/utils';
+import * as Extensions from './extensions';
 /* eslint-disable-next-line no-unused-vars */
-import {Field} from './field.js';
-import * as fieldRegistry from './field_registry.js';
-import {Align, Input} from './input.js';
-import {inputTypes} from './input_types.js';
+import {Field} from './field';
+import * as fieldRegistry from './field_registry';
+import {Align, Input} from './input';
+import {inputTypes} from './input_types';
 /* eslint-disable-next-line no-unused-vars */
-import {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
+import {IASTNodeLocation} from './interfaces/i_ast_node_location';
 /* eslint-disable-next-line no-unused-vars */
-import {IDeletable} from './interfaces/i_deletable.js';
-import {ASTNode} from './keyboard_nav/ast_node.js';
+import {IDeletable} from './interfaces/i_deletable';
+import {ASTNode} from './keyboard_nav/ast_node';
 /* eslint-disable-next-line no-unused-vars */
-import {Mutator} from './mutator.js';
-import * as Tooltip from './tooltip.js';
-import * as arrayUtils from './utils/array.js';
-import {Coordinate} from './utils/coordinate.js';
-import * as idGenerator from './utils/idgenerator.js';
-import * as parsing from './utils/parsing.js';
-import {Size} from './utils/size.js';
+import {Mutator} from './mutator';
+import * as Tooltip from './tooltip';
+import * as arrayUtils from './utils/array';
+import {Coordinate} from './utils/coordinate';
+import * as idGenerator from './utils/idgenerator';
+import * as parsing from './utils/parsing';
+import {Size} from './utils/size';
 /* eslint-disable-next-line no-unused-vars */
-import {VariableModel} from './variable_model.js';
+import {VariableModel} from './variable_model';
 /* eslint-disable-next-line no-unused-vars */
-import {Workspace} from './workspace.js';
+import {Workspace} from './workspace';
 
 
 /**

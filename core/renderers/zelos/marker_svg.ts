@@ -12,27 +12,27 @@
  * Methods for graphically rendering a marker as SVG.
  * @class
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.zelos.MarkerSvg');
 
 /* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg.js';
+import {BlockSvg} from '../../block_svg';
 /* eslint-disable-next-line no-unused-vars */
-import {ASTNode} from '../../keyboard_nav/ast_node.js';
+import {ASTNode} from '../../keyboard_nav/ast_node';
 /* eslint-disable-next-line no-unused-vars */
-import {Marker} from '../../keyboard_nav/marker.js';
+import {Marker} from '../../keyboard_nav/marker';
 /* eslint-disable-next-line no-unused-vars */
-import {RenderedConnection} from '../../rendered_connection.js';
-import * as dom from '../../utils/dom.js';
-import {Svg} from '../../utils/svg.js';
+import {RenderedConnection} from '../../rendered_connection';
+import * as dom from '../../utils/dom';
+import {Svg} from '../../utils/svg';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from '../../workspace_svg.js';
+import {WorkspaceSvg} from '../../workspace_svg';
 /* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider as BaseConstantProvider} from '../common/constants.js';
-import {MarkerSvg as BaseMarkerSvg} from '../common/marker_svg.js';
+import {ConstantProvider as BaseConstantProvider} from '../common/constants';
+import {MarkerSvg as BaseMarkerSvg} from '../common/marker_svg';
 
 /* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider as ZelosConstantProvider} from './constants.js';
+import {ConstantProvider as ZelosConstantProvider} from './constants';
 
 
 /**

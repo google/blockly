@@ -12,37 +12,37 @@
  * Events fired as a result of actions in Blockly's editor.
  * @namespace Blockly.Events
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.Events');
 
-import {Abstract as AbstractEvent} from './events_abstract.js';
-import {BlockBase} from './events_block_base.js';
-import {BlockChange} from './events_block_change.js';
-import {BlockCreate} from './events_block_create.js';
-import {BlockDelete} from './events_block_delete.js';
-import {BlockDrag} from './events_block_drag.js';
-import {BlockMove} from './events_block_move.js';
-import {BubbleOpen} from './events_bubble_open.js';
-import {Click} from './events_click.js';
-import {CommentBase} from './events_comment_base.js';
-import {CommentChange} from './events_comment_change.js';
-import {CommentCreate} from './events_comment_create.js';
-import {CommentDelete} from './events_comment_delete.js';
-import {CommentMove} from './events_comment_move.js';
-import {MarkerMove} from './events_marker_move.js';
-import {Selected} from './events_selected.js';
-import {ThemeChange} from './events_theme_change.js';
-import {ToolboxItemSelect} from './events_toolbox_item_select.js';
-import {TrashcanOpen} from './events_trashcan_open.js';
-import {Ui} from './events_ui.js';
-import {UiBase} from './events_ui_base.js';
-import {VarBase} from './events_var_base.js';
-import {VarCreate} from './events_var_create.js';
-import {VarDelete} from './events_var_delete.js';
-import {VarRename} from './events_var_rename.js';
-import {ViewportChange} from './events_viewport.js';
-import * as eventUtils from './utils.js';
-import {FinishedLoading} from './workspace_events.js';
+import {Abstract as AbstractEvent} from './events_abstract';
+import {BlockBase} from './events_block_base';
+import {BlockChange} from './events_block_change';
+import {BlockCreate} from './events_block_create';
+import {BlockDelete} from './events_block_delete';
+import {BlockDrag} from './events_block_drag';
+import {BlockMove} from './events_block_move';
+import {BubbleOpen} from './events_bubble_open';
+import {Click} from './events_click';
+import {CommentBase} from './events_comment_base';
+import {CommentChange} from './events_comment_change';
+import {CommentCreate} from './events_comment_create';
+import {CommentDelete} from './events_comment_delete';
+import {CommentMove} from './events_comment_move';
+import {MarkerMove} from './events_marker_move';
+import {Selected} from './events_selected';
+import {ThemeChange} from './events_theme_change';
+import {ToolboxItemSelect} from './events_toolbox_item_select';
+import {TrashcanOpen} from './events_trashcan_open';
+import {Ui} from './events_ui';
+import {UiBase} from './events_ui_base';
+import {VarBase} from './events_var_base';
+import {VarCreate} from './events_var_create';
+import {VarDelete} from './events_var_delete';
+import {VarRename} from './events_var_rename';
+import {ViewportChange} from './events_viewport';
+import * as eventUtils from './utils';
+import {FinishedLoading} from './workspace_events';
 
 
 // Events.

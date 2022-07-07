@@ -12,42 +12,42 @@
  * Methods for graphically rendering a block as SVG.
  * @class
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.blockRendering.RenderInfo');
 
 /* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg.js';
-import {Align, Input} from '../../input.js';
-import {inputTypes} from '../../input_types.js';
+import {BlockSvg} from '../../block_svg';
+import {Align, Input} from '../../input';
+import {inputTypes} from '../../input_types';
 /* eslint-disable-next-line no-unused-vars */
-import {RenderedConnection} from '../../rendered_connection.js';
+import {RenderedConnection} from '../../rendered_connection';
 /* eslint-disable-next-line no-unused-vars */
-import {Measurable} from '../measurables/base.js';
-import {BottomRow} from '../measurables/bottom_row.js';
-import {ExternalValueInput} from '../measurables/external_value_input.js';
-import {Field} from '../measurables/field.js';
-import {Hat} from '../measurables/hat.js';
-import {Icon} from '../measurables/icon.js';
-import {InRowSpacer} from '../measurables/in_row_spacer.js';
-import {InlineInput} from '../measurables/inline_input.js';
-import {InputRow} from '../measurables/input_row.js';
-import {JaggedEdge} from '../measurables/jagged_edge.js';
-import {NextConnection} from '../measurables/next_connection.js';
-import {OutputConnection} from '../measurables/output_connection.js';
-import {PreviousConnection} from '../measurables/previous_connection.js';
-import {RoundCorner} from '../measurables/round_corner.js';
+import {Measurable} from '../measurables/base';
+import {BottomRow} from '../measurables/bottom_row';
+import {ExternalValueInput} from '../measurables/external_value_input';
+import {Field} from '../measurables/field';
+import {Hat} from '../measurables/hat';
+import {Icon} from '../measurables/icon';
+import {InRowSpacer} from '../measurables/in_row_spacer';
+import {InlineInput} from '../measurables/inline_input';
+import {InputRow} from '../measurables/input_row';
+import {JaggedEdge} from '../measurables/jagged_edge';
+import {NextConnection} from '../measurables/next_connection';
+import {OutputConnection} from '../measurables/output_connection';
+import {PreviousConnection} from '../measurables/previous_connection';
+import {RoundCorner} from '../measurables/round_corner';
 /* eslint-disable-next-line no-unused-vars */
-import {Row} from '../measurables/row.js';
-import {SpacerRow} from '../measurables/spacer_row.js';
-import {SquareCorner} from '../measurables/square_corner.js';
-import {StatementInput} from '../measurables/statement_input.js';
-import {TopRow} from '../measurables/top_row.js';
-import {Types} from '../measurables/types.js';
+import {Row} from '../measurables/row';
+import {SpacerRow} from '../measurables/spacer_row';
+import {SquareCorner} from '../measurables/square_corner';
+import {StatementInput} from '../measurables/statement_input';
+import {TopRow} from '../measurables/top_row';
+import {Types} from '../measurables/types';
 
 /* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from './constants.js';
+import {ConstantProvider} from './constants';
 /* eslint-disable-next-line no-unused-vars */
-import {Renderer} from './renderer.js';
+import {Renderer} from './renderer';
 
 
 /**

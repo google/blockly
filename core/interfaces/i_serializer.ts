@@ -14,11 +14,11 @@
  *     serializing part of the workspace.
  * @namespace Blockly.serialization.ISerializer
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.serialization.ISerializer');
 
 // eslint-disable-next-line no-unused-vars
-import {Workspace} from '../workspace.js';
+import {Workspace} from '../workspace';
 
 
 /**

@@ -12,32 +12,32 @@
  * Utility functions for handling procedures.
  * @namespace Blockly.Procedures
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.Procedures');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_block_change.js';
+import './events/events_block_change';
 
 /* eslint-disable-next-line no-unused-vars */
-import {Block} from './block.js';
+import {Block} from './block';
 /* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
-import {Blocks} from './blocks.js';
+import {BlockSvg} from './block_svg';
+import {Blocks} from './blocks';
 /* eslint-disable-next-line no-unused-vars */
-import {Abstract} from './events/events_abstract.js';
+import {Abstract} from './events/events_abstract';
 /* eslint-disable-next-line no-unused-vars */
-import {BubbleOpen} from './events/events_bubble_open.js';
-import * as eventUtils from './events/utils.js';
+import {BubbleOpen} from './events/events_bubble_open';
+import * as eventUtils from './events/utils';
 /* eslint-disable-next-line no-unused-vars */
-import {Field} from './field.js';
-import {Msg} from './msg.js';
-import {Names} from './names.js';
-import * as utilsXml from './utils/xml.js';
-import * as Variables from './variables.js';
-import {Workspace} from './workspace.js';
+import {Field} from './field';
+import {Msg} from './msg';
+import {Names} from './names';
+import * as utilsXml from './utils/xml';
+import * as Variables from './variables';
+import {Workspace} from './workspace';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
-import * as Xml from './xml.js';
+import {WorkspaceSvg} from './workspace_svg';
+import * as Xml from './xml';
 
 
 /**

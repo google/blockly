@@ -12,22 +12,22 @@
  * Utility functions for the toolbox and flyout.
  * @namespace Blockly.utils.toolbox
  */
-import * as goog from '../../closure/goog/goog.js';
+import * as goog from '../../closure/goog/goog';
 goog.declareModuleId('Blockly.utils.toolbox');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../toolbox/category.js';
+import '../toolbox/category';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../toolbox/separator.js';
+import '../toolbox/separator';
 
 /* eslint-disable-next-line no-unused-vars */
-import {ConnectionState} from '../serialization/blocks.js';
-import {CssConfig as CategoryCssConfig} from '../toolbox/category.js';
-import {CssConfig as SeparatorCssConfig} from '../toolbox/separator.js';
-import * as Xml from '../xml.js';
-import * as userAgent from './useragent.js';
+import {ConnectionState} from '../serialization/blocks';
+import {CssConfig as CategoryCssConfig} from '../toolbox/category';
+import {CssConfig as SeparatorCssConfig} from '../toolbox/separator';
+import * as Xml from '../xml';
+import * as userAgent from './useragent';
 
 
 /**

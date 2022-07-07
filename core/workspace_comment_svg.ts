@@ -12,39 +12,39 @@
  * Object representing a code comment on a rendered workspace.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.WorkspaceCommentSvg');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_comment_create.js';
+import './events/events_comment_create';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_comment_delete.js';
+import './events/events_comment_delete';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_selected.js';
+import './events/events_selected';
 
 /* eslint-disable-next-line no-unused-vars */
-import {BlockDragSurfaceSvg} from './block_drag_surface.js';
-import * as browserEvents from './browser_events.js';
-import * as common from './common.js';
-import * as ContextMenu from './contextmenu.js';
-import * as Css from './css.js';
+import {BlockDragSurfaceSvg} from './block_drag_surface';
+import * as browserEvents from './browser_events';
+import * as common from './common';
+import * as ContextMenu from './contextmenu';
+import * as Css from './css';
 /* eslint-disable-next-line no-unused-vars */
-import {CommentMove} from './events/events_comment_move.js';
-import * as eventUtils from './events/utils.js';
+import {CommentMove} from './events/events_comment_move';
+import * as eventUtils from './events/utils';
 /* eslint-disable-next-line no-unused-vars */
-import {IBoundedElement} from './interfaces/i_bounded_element.js';
+import {IBoundedElement} from './interfaces/i_bounded_element';
 /* eslint-disable-next-line no-unused-vars */
-import {IBubble} from './interfaces/i_bubble.js';
-import {CopyData, ICopyable} from './interfaces/i_copyable.js';
-import * as Touch from './touch.js';
-import {Coordinate} from './utils/coordinate.js';
-import * as dom from './utils/dom.js';
-import {Rect} from './utils/rect.js';
-import {Svg} from './utils/svg.js';
-import * as svgMath from './utils/svg_math.js';
-import {WorkspaceComment} from './workspace_comment.js';
+import {IBubble} from './interfaces/i_bubble';
+import {CopyData, ICopyable} from './interfaces/i_copyable';
+import * as Touch from './touch';
+import {Coordinate} from './utils/coordinate';
+import * as dom from './utils/dom';
+import {Rect} from './utils/rect';
+import {Svg} from './utils/svg';
+import * as svgMath from './utils/svg_math';
+import {WorkspaceComment} from './workspace_comment';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg';
 
 
 /** Size of the resize icon. */

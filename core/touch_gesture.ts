@@ -14,15 +14,15 @@
  * for both pointer and touch events.
  * @class
  */
-import * as goog from '../closure/goog/goog.js';
+import * as goog from '../closure/goog/goog';
 goog.declareModuleId('Blockly.TouchGesture');
 
-import * as browserEvents from './browser_events.js';
-import {Gesture} from './gesture.js';
-import * as Touch from './touch.js';
-import {Coordinate} from './utils/coordinate.js';
+import * as browserEvents from './browser_events';
+import {Gesture} from './gesture';
+import * as Touch from './touch';
+import {Coordinate} from './utils/coordinate';
 /* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import {WorkspaceSvg} from './workspace_svg';
 
 
 /*

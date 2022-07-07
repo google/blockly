@@ -12,20 +12,20 @@
  * Class representing inputs with connections on a rendered block.
  * @class
  */
-import * as goog from '../../../closure/goog/goog.js';
+import * as goog from '../../../closure/goog/goog';
 goog.declareModuleId('Blockly.blockRendering.InputConnection');
 
 /* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg.js';
+import {BlockSvg} from '../../block_svg';
 /* eslint-disable-next-line no-unused-vars */
-import {Input} from '../../input.js';
+import {Input} from '../../input';
 /* eslint-disable-next-line no-unused-vars */
-import {RenderedConnection} from '../../rendered_connection.js';
+import {RenderedConnection} from '../../rendered_connection';
 /* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from '../common/constants.js';
+import {ConstantProvider} from '../common/constants';
 
-import {Connection} from './connection.js';
-import {Types} from './types.js';
+import {Connection} from './connection';
+import {Types} from './types';
 
 
 /**

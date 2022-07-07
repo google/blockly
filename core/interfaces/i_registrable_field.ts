@@ -12,8 +12,7 @@
  * The interface for a Blockly field that can be registered.
  * @namespace Blockly.IRegistrableField
  */
-import * as goog from '../../closure/goog/goog';
-goog.declareModuleId('Blockly.IRegistrableField');
+
 
 /* eslint-disable-next-line no-unused-vars */
 import {Field} from '../field';

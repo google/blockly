@@ -14,8 +14,7 @@
  *    labels, etc.
  * @class
  */
-import * as goog from '../closure/goog/goog';
-goog.declareModuleId('Blockly.FieldLabel');
+
 
 import {Field} from './field';
 import * as fieldRegistry from './field_registry';

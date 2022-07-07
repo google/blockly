@@ -14,8 +14,7 @@
  * potential connection is safe and valid.
  * @class
  */
-import * as goog from '../closure/goog/goog';
-goog.declareModuleId('Blockly.ConnectionChecker');
+
 
 import * as common from './common';
 import {Connection} from './connection';

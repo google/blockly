@@ -11,8 +11,7 @@
 /**
  * @namespace Blockly.utils.parsing
  */
-import * as goog from '../../closure/goog/goog';
-goog.declareModuleId('Blockly.utils.parsing');
+
 
 import {Msg} from '../msg';
 

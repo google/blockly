@@ -12,8 +12,7 @@
  * Layout code for a vertical variant of the flyout.
  * @class
  */
-import * as goog from '../closure/goog/goog';
-goog.declareModuleId('Blockly.VerticalFlyout');
+
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import './block';

@@ -22,8 +22,7 @@
  * while dragging blocks.
  * @class
  */
-import * as goog from '../closure/goog/goog';
-goog.declareModuleId('Blockly.BlockDragSurfaceSvg');
+
 
 import {Coordinate} from './utils/coordinate';
 import * as dom from './utils/dom';

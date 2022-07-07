@@ -12,8 +12,7 @@
  * Utility functions for handling procedures.
  * @namespace Blockly.Procedures
  */
-import * as goog from '../closure/goog/goog';
-goog.declareModuleId('Blockly.Procedures');
+
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_block_change';

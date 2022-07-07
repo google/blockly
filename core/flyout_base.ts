@@ -12,8 +12,7 @@
  * Flyout tray containing blocks which may be created.
  * @class
  */
-import * as goog from '../closure/goog/goog';
-goog.declareModuleId('Blockly.Flyout');
+
 
 /* eslint-disable-next-line no-unused-vars */
 import {Block} from './block';

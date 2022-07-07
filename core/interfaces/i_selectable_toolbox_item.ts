@@ -12,8 +12,7 @@
  * The interface for a selectable toolbox item.
  * @namespace Blockly.ISelectableToolboxItem
  */
-import * as goog from '../../closure/goog/goog';
-goog.declareModuleId('Blockly.ISelectableToolboxItem');
+
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.

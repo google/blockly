@@ -12,8 +12,7 @@
  * A separator used for separating toolbox categories.
  * @class
  */
-import * as goog from '../../closure/goog/goog';
-goog.declareModuleId('Blockly.ToolboxSeparator');
+
 
 import * as Css from '../css';
 /* eslint-disable-next-line no-unused-vars */

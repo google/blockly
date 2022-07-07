@@ -10,8 +10,7 @@
  * Re-exports of Blockly.geras.* modules.
  * @namespace Blockly.geras
  */
-import * as goog from '../../../closure/goog/goog';
-goog.declareModuleId('Blockly.geras');
+
 
 import {ConstantProvider} from './constants';
 import {Drawer} from './drawer';

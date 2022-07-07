@@ -12,8 +12,7 @@
  * Class for a variable creation event.
  * @class
  */
-import * as goog from '../../closure/goog/goog';
-goog.declareModuleId('Blockly.Events.VarCreate');
+
 
 import * as registry from '../registry';
 /* eslint-disable-next-line no-unused-vars */

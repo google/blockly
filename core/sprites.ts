@@ -8,8 +8,7 @@
  * @fileoverview Holds constants that have to do with the sprites that create
  * the trashcan and zoom controls.
  */
-import * as goog from '../closure/goog/goog';
-goog.declareModuleId('Blockly.sprite');
+
 
 
 /**

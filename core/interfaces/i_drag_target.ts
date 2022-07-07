@@ -14,8 +14,7 @@
  * block is dropped on top of it.
  * @namespace Blockly.IDragTarget
  */
-import * as goog from '../../closure/goog/goog';
-goog.declareModuleId('Blockly.IDragTarget');
+
 
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */

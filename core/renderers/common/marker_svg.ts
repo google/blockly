@@ -12,8 +12,7 @@
  * Methods for graphically rendering a marker as SVG.
  * @class
  */
-import * as goog from '../../../closure/goog/goog';
-goog.declareModuleId('Blockly.blockRendering.MarkerSvg');
+
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import '../../events/events_marker_move';

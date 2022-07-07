@@ -12,8 +12,7 @@
  * Object representing a workspace.
  * @class
  */
-import * as goog from '../closure/goog/goog';
-goog.declareModuleId('Blockly.Workspace');
+
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import './connection_checker';

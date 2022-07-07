@@ -12,8 +12,7 @@
  * Class for a finished loading workspace event.
  * @class
  */
-import * as goog from '../../closure/goog/goog';
-goog.declareModuleId('Blockly.Events.FinishedLoading');
+
 
 import * as registry from '../registry';
 /* eslint-disable-next-line no-unused-vars */

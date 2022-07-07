@@ -18,8 +18,7 @@
  *      array attribute.
  * @namespace Blockly.Extensions
  */
-import * as goog from '../closure/goog/goog';
-goog.declareModuleId('Blockly.Extensions');
+
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import './mutator';

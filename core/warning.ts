@@ -12,8 +12,7 @@
  * Object representing a warning.
  * @class
  */
-import * as goog from '../closure/goog/goog';
-goog.declareModuleId('Blockly.Warning');
+
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_bubble_open';

@@ -14,8 +14,7 @@
  * bubble that is dropped on top of it.
  * @class
  */
-import * as goog from '../closure/goog/goog';
-goog.declareModuleId('Blockly.DeleteArea');
+
 
 import {BlockSvg} from './block_svg';
 import {DragTarget} from './drag_target';

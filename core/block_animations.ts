@@ -12,8 +12,7 @@
  * Methods animating a block on connection and disconnection.
  * @namespace Blockly.blockAnimations
  */
-import * as goog from '../closure/goog/goog';
-goog.declareModuleId('Blockly.blockAnimations');
+
 
 /* eslint-disable-next-line no-unused-vars */
 import {BlockSvg} from './block_svg';

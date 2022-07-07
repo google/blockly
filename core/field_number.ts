@@ -12,8 +12,7 @@
  * Number input field
  * @class
  */
-import * as goog from '../closure/goog/goog';
-goog.declareModuleId('Blockly.FieldNumber');
+
 
 import {Field} from './field';
 import * as fieldRegistry from './field_registry';

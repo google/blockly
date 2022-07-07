@@ -12,8 +12,7 @@
  * Methods for dragging a block visually.
  * @class
  */
-import * as goog from '../closure/goog/goog';
-goog.declareModuleId('Blockly.BlockDragger');
+
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_block_drag';

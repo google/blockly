@@ -14,8 +14,7 @@
  * mode.
  * @class
  */
-import * as goog from '../../../closure/goog/goog';
-goog.declareModuleId('Blockly.zelos.ConstantProvider');
+
 
 import {ConnectionType} from '../../connection_type';
 import {RenderedConnection} from '../../rendered_connection';

@@ -14,8 +14,7 @@
  * the ComponentManager.
  * @namespace Blockly.IComponent
  */
-import * as goog from '../../closure/goog/goog';
-goog.declareModuleId('Blockly.IComponent');
+
 
 
 /**

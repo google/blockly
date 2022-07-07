@@ -14,8 +14,7 @@
  * a rendered block.
  * @class
  */
-import * as goog from '../../../../closure/goog/goog';
-goog.declareModuleId('Blockly.zelos.StatementInput');
+
 
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */

@@ -14,8 +14,7 @@
  * must not be at the top level to avoid circular dependencies.
  * @namespace Blockly.common
  */
-import * as goog from '../closure/goog/goog';
-goog.declareModuleId('Blockly.common');
+
 
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */

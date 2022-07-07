@@ -12,8 +12,7 @@
  * Events fired as a result of actions in Blockly's editor.
  * @namespace Blockly.Events
  */
-import * as goog from '../../closure/goog/goog';
-goog.declareModuleId('Blockly.Events');
+
 
 import {Abstract as AbstractEvent} from './events_abstract';
 import {BlockBase} from './events_block_base';

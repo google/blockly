@@ -12,8 +12,7 @@
  * Namespace for block rendering functionality.
  * @namespace Blockly.blockRendering
  */
-import * as goog from '../../../closure/goog/goog';
-goog.declareModuleId('Blockly.blockRendering');
+
 
 import * as registry from '../../registry';
 /* eslint-disable-next-line no-unused-vars */

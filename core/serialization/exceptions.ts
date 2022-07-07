@@ -12,8 +12,7 @@
  * Contains custom errors thrown by the serialization system.
  * @namespace Blockly.serialization.exceptions
  */
-import * as goog from '../../closure/goog/goog';
-goog.declareModuleId('Blockly.serialization.exceptions');
+
 
 /* eslint-disable-next-line no-unused-vars */
 import {Block} from '../block';

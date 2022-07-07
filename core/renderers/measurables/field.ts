@@ -14,8 +14,7 @@
  * block.
  * @class
  */
-import * as goog from '../../../closure/goog/goog';
-goog.declareModuleId('Blockly.blockRendering.Field');
+
 
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */

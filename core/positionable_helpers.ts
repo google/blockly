@@ -12,8 +12,7 @@
  * Utility functions for positioning UI elements.
  * @namespace Blockly.uiPosition
  */
-import * as goog from '../closure/goog/goog';
-goog.declareModuleId('Blockly.uiPosition');
+
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.

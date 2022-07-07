@@ -12,8 +12,7 @@
  * Workspace metrics definitions.
  * @namespace Blockly.utils.Metrics
  */
-import * as goog from '../../closure/goog/goog';
-goog.declareModuleId('Blockly.utils.Metrics');
+
 
 
 /** @alias Blockly.utils.Metrics */

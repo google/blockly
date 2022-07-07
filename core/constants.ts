@@ -12,8 +12,7 @@
  * Blockly constants.
  * @namespace Blockly.constants
  */
-import * as goog from '../closure/goog/goog';
-goog.declareModuleId('Blockly.constants');
+
 
 
 /**

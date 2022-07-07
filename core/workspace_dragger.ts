@@ -12,8 +12,7 @@
  * Methods for dragging a workspace visually.
  * @class
  */
-import * as goog from '../closure/goog/goog';
-goog.declareModuleId('Blockly.WorkspaceDragger');
+
 
 import * as common from './common';
 import {Coordinate} from './utils/coordinate';

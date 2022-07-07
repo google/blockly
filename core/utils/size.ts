@@ -16,8 +16,7 @@
  * a JavaScript framework such as Closure.
  * @class
  */
-import * as goog from '../../closure/goog/goog';
-goog.declareModuleId('Blockly.utils.Size');
+
 
 
 /**

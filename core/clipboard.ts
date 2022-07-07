@@ -12,8 +12,7 @@
  * Blockly's internal clipboard for managing copy-paste.
  * @namespace Blockly.clipboard
  */
-import * as goog from '../closure/goog/goog';
-goog.declareModuleId('Blockly.clipboard');
+
 
 import {CopyData, ICopyable} from './interfaces/i_copyable';
 

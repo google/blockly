@@ -12,8 +12,7 @@
  * Utility methods for colour manipulation.
  * @namespace Blockly.utils.colour
  */
-import * as goog from '../../closure/goog/goog';
-goog.declareModuleId('Blockly.utils.colour');
+
 
 
 /**

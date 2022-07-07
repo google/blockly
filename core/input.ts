@@ -12,8 +12,7 @@
  * Object representing an input (value, statement, or dummy).
  * @class
  */
-import * as goog from '../closure/goog/goog';
-goog.declareModuleId('Blockly.Input');
+
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import './field_label';

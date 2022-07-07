@@ -12,8 +12,7 @@
  * Minimalist rendering drawer.
  * @class
  */
-import * as goog from '../../../closure/goog/goog';
-goog.declareModuleId('Blockly.minimalist.Drawer');
+
 
 /* eslint-disable-next-line no-unused-vars */
 import {BlockSvg} from '../../block_svg';

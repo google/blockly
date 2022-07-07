@@ -14,8 +14,7 @@
  * Blockly's editor.
  * @class
  */
-import * as goog from '../../closure/goog/goog';
-goog.declareModuleId('Blockly.Events.Abstract');
+
 
 /* eslint-disable-next-line no-unused-vars */
 import {Workspace} from '../workspace';

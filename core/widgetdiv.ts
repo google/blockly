@@ -16,8 +16,7 @@
  *     E.g. text input areas, colour pickers, context menus.
  * @namespace Blockly.WidgetDiv
  */
-import * as goog from '../closure/goog/goog';
-goog.declareModuleId('Blockly.WidgetDiv');
+
 
 import * as common from './common';
 import * as dom from './utils/dom';

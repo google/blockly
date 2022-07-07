@@ -12,8 +12,7 @@
  * Functions for injecting Blockly into a web page.
  * @namespace Blockly.inject
  */
-import * as goog from '../closure/goog/goog';
-goog.declareModuleId('Blockly.inject');
+
 
 import {BlockDragSurfaceSvg} from './block_drag_surface';
 /* eslint-disable-next-line no-unused-vars */

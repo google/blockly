@@ -12,8 +12,7 @@
  * An object that provides constants for rendering blocks.
  * @class
  */
-import * as goog from '../../../closure/goog/goog';
-goog.declareModuleId('Blockly.blockRendering.ConstantProvider');
+
 
 import {ConnectionType} from '../../connection_type';
 /* eslint-disable-next-line no-unused-vars */

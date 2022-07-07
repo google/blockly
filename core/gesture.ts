@@ -14,8 +14,7 @@
  * or a tap.
  * @class
  */
-import * as goog from '../closure/goog/goog';
-goog.declareModuleId('Blockly.Gesture');
+
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import './block_dragger';

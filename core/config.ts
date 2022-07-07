@@ -16,8 +16,7 @@
  * generally recommended.
  * @namespace Blockly.config
  */
-import * as goog from '../closure/goog/goog';
-goog.declareModuleId('Blockly.config');
+
 
 
 /**

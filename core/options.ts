@@ -12,8 +12,7 @@
  * Object that controls settings for the workspace.
  * @class
  */
-import * as goog from '../closure/goog/goog';
-goog.declareModuleId('Blockly.Options');
+
 
 /* eslint-disable-next-line no-unused-vars */
 import {BlocklyOptions} from './blockly_options';

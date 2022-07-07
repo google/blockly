@@ -12,8 +12,7 @@
  * Class for a variable rename event.
  * @class
  */
-import * as goog from '../../closure/goog/goog';
-goog.declareModuleId('Blockly.Events.VarRename');
+
 
 import * as registry from '../registry';
 /* eslint-disable-next-line no-unused-vars */

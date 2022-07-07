@@ -12,8 +12,7 @@
  * The interface for objects that handle keyboard shortcuts.
  * @namespace Blockly.IKeyboardAccessible
  */
-import * as goog from '../../closure/goog/goog';
-goog.declareModuleId('Blockly.IKeyboardAccessible');
+
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.

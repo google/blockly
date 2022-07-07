@@ -9,8 +9,7 @@
  */
 
 /** @namespace Blockly.utils.array */
-import * as goog from '../../closure/goog/goog';
-goog.declareModuleId('Blockly.utils.array');
+
 
 
 /**

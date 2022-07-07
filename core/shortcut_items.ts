@@ -12,8 +12,7 @@
  * Registers default keyboard shortcuts.
  * @namespace Blockly.ShortcutItems
  */
-import * as goog from '../closure/goog/goog';
-goog.declareModuleId('Blockly.ShortcutItems');
+
 
 import {BlockSvg} from './block_svg';
 import * as clipboard from './clipboard';

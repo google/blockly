@@ -16,8 +16,7 @@
  *    Sorted by y coordinate.
  * @class
  */
-import * as goog from '../closure/goog/goog';
-goog.declareModuleId('Blockly.ConnectionDB');
+
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import './constants';

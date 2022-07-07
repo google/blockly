@@ -12,8 +12,7 @@
  * Block rendering debugging functionality.
  * @namespace Blockly.blockRendering.debug
  */
-import * as goog from '../../../closure/goog/goog';
-goog.declareModuleId('Blockly.blockRendering.debug');
+
 
 import * as deprecation from '../../utils/deprecation';
 

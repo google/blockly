@@ -14,8 +14,7 @@
  * key codes used to execute those shortcuts.
  * @class
  */
-import * as goog from '../closure/goog/goog';
-goog.declareModuleId('Blockly.ShortcutRegistry');
+
 
 import {KeyCodes} from './utils/keycodes';
 import * as object from './utils/object';

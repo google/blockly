@@ -14,8 +14,7 @@
  * objects.
  * @namespace Blockly.serialization.workspaces
  */
-import * as goog from '../../closure/goog/goog';
-goog.declareModuleId('Blockly.serialization.workspaces');
+
 
 import * as eventUtils from '../events/utils';
 import {ISerializer} from '../interfaces/i_serializer';

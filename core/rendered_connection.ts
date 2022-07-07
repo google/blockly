@@ -12,8 +12,7 @@
  * Components for creating connections between blocks.
  * @class
  */
-import * as goog from '../closure/goog/goog';
-goog.declareModuleId('Blockly.RenderedConnection');
+
 
 /* eslint-disable-next-line no-unused-vars */
 import {Block} from './block';

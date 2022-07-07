@@ -12,8 +12,7 @@
  * Class for a block move event.
  * @class
  */
-import * as goog from '../../closure/goog/goog';
-goog.declareModuleId('Blockly.Events.BlockMove');
+
 
 /* eslint-disable-next-line no-unused-vars */
 import {Block} from '../block';

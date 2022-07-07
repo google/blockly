@@ -13,8 +13,7 @@
  * Handles serializing blocks to plain JavaScript objects only containing state.
  * @namespace Blockly.serialization.blocks
  */
-import * as goog from '../../closure/goog/goog';
-goog.declareModuleId('Blockly.serialization.blocks');
+
 
 /* eslint-disable-next-line no-unused-vars */
 import {Block} from '../block';

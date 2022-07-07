@@ -10,8 +10,7 @@
  * Re-exports of Blockly.zelos.* modules.
  * @namespace Blockly.zelos
  */
-import * as goog from '../../../closure/goog/goog';
-goog.declareModuleId('Blockly.zelos');
+
 
 import {ConstantProvider} from './constants';
 import {Drawer} from './drawer';

@@ -14,8 +14,7 @@
  * that is dropped on top of it.
  * @namespace Blockly.IDeleteArea
  */
-import * as goog from '../../closure/goog/goog';
-goog.declareModuleId('Blockly.IDeleteArea');
+
 
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */

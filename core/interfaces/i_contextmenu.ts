@@ -12,8 +12,7 @@
  * The interface for an object that supports a right-click.
  * @namespace Blockly.IContextMenu
  */
-import * as goog from '../../closure/goog/goog';
-goog.declareModuleId('Blockly.IContextMenu');
+
 
 
 /** @alias Blockly.IContextMenu */

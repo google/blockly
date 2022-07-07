@@ -12,8 +12,7 @@
  * An item in the toolbox.
  * @class
  */
-import * as goog from '../../closure/goog/goog';
-goog.declareModuleId('Blockly.ToolboxItem');
+
 
 /* eslint-disable-next-line no-unused-vars */
 import {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_item';

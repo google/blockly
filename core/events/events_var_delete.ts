@@ -12,8 +12,7 @@
  * Classes for all types of variable events.
  * @class
  */
-import * as goog from '../../closure/goog/goog';
-goog.declareModuleId('Blockly.Events.VarDelete');
+
 
 import * as registry from '../registry';
 /* eslint-disable-next-line no-unused-vars */

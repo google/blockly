@@ -14,8 +14,7 @@
  * Used to demo switching between different cursors.
  * @class
  */
-import * as goog from '../../closure/goog/goog';
-goog.declareModuleId('Blockly.BasicCursor');
+
 
 import * as registry from '../registry';
 

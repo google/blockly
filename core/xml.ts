@@ -12,8 +12,7 @@
  * XML reader and writer.
  * @namespace Blockly.Xml
  */
-import * as goog from '../closure/goog/goog';
-goog.declareModuleId('Blockly.Xml');
+
 
 // Unused import preserved for side-effects. Remove if unneeded.
 import './comment';

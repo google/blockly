@@ -12,8 +12,7 @@
  * Renderer that preserves the look and feel of Blockly pre-2019.
  * @class
  */
-import * as goog from '../../../closure/goog/goog';
-goog.declareModuleId('Blockly.geras.Drawer');
+
 
 /* eslint-disable-next-line no-unused-vars */
 import {BlockSvg} from '../../block_svg';

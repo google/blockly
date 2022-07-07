@@ -18,8 +18,7 @@
  * blocks are never repainted during drag improving performance.
  * @class
  */
-import * as goog from '../closure/goog/goog';
-goog.declareModuleId('Blockly.WorkspaceDragSurfaceSvg');
+
 
 /* eslint-disable-next-line no-unused-vars */
 import {Coordinate} from './utils/coordinate';

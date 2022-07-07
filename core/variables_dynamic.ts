@@ -13,8 +13,7 @@
  *
  * @namespace Blockly.VariablesDynamic
  */
-import * as goog from '../closure/goog/goog';
-goog.declareModuleId('Blockly.VariablesDynamic');
+
 
 import {Blocks} from './blocks';
 import {Msg} from './msg';

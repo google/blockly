@@ -20,6 +20,10 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js'],
   },
   output: {
-    filename: 'bundle.js',
-  }
+    filename: 'blockly_compressed.js',
+    library: {
+      type: 'umd',
+      name: 'blockly',
+    },
+  },
 };

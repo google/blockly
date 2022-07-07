@@ -174,4 +174,4 @@ export class BlockChange extends BlockBase {
   }
 }
 
-registry.register(registry.Type.EVENT, eventUtils.CHANGE, BlockChange);
+registry.register(registry.Type.EVENT, eventUtils.BLOCK_CHANGE, BlockChange);

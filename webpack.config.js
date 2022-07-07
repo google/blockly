@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+const CircularDepencencyPlugin = require('circular-dependency-plugin');
+
 module.exports = {
   mode: 'development',
   devtool: 'inline-source-map',
@@ -17,6 +19,11 @@ module.exports = {
       },
     ],
   },
+  plugins: [
+    new CircularDepencencyPlugin({
+      include: /core/,
+    }),
+  ],
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
   },

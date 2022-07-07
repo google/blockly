@@ -6,6 +6,7 @@
 
 module.exports = {
   mode: 'development',
+  devtool: 'inline-source-map',
   entry: './core/blockly.ts',
   module: {
     rules: [

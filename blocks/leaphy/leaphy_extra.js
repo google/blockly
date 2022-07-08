@@ -115,11 +115,8 @@ Blockly.defineBlocksWithJsonArray([
   },
   {
     "type": "leaphy_led_set_basic",
-    "message0": "%%{BKY_LEAPHY_LED_SET_BASIC} %1 %%{BKY_LEAPHY_LED_BASIC_LED} %2 %%{BKY_LEAPHY_LED_BASIC_RED} %3 %%{BKY_LEAPHY_LED_BASIC_GREEN} %4 %%{BKY_LEAPHY_LED_BASIC_BLUE} %5",
+    "message0": "%%{BKY_LEAPHY_LED_BASIC_LED} %1 %%{BKY_LEAPHY_LED_BASIC_RED} %2 %%{BKY_LEAPHY_LED_BASIC_GREEN} %3 %%{BKY_LEAPHY_LED_BASIC_BLUE} %4",
     "args0": [
-      {
-        "type": "input_dummy"
-      },
       {
         "type": "input_value",
         "name": "LED_SET_LED",
@@ -150,11 +147,8 @@ Blockly.defineBlocksWithJsonArray([
   },
   {
     "type": "leaphy_led_set_speed",
-    "message0": "%%{BKY_LEAPHY_LED_SET_SPEED} %1 %%{BKY_LEAPHY_LED_SET_SPEEDVALUE} %2",
+    "message0": "%%{BKY_LEAPHY_LED_SET_SPEEDVALUE} %1",
     "args0": [
-      {
-        "type": "input_dummy"
-      },
       {
         "type": "input_value",
         "name": "LED_SET_SPEEDVALUE",
@@ -170,11 +164,11 @@ Blockly.defineBlocksWithJsonArray([
   },
   {
     "type": "leaphy_led_strip_demo",
-    "message0": "%%{BKY_LEAPHY_LED_STRIP_DEMO} %1 %2 %%{BKY_LEAPHY_LED_STRIP_DEMO_RED} %3 %%{BKY_LEAPHY_LED_STRIP_DEMO_GREEN} %4 %%{BKY_LEAPHY_LED_STRIP_DEMO_BLUE} %5",
+    "message0": "%%{BKY_LEAPHY_LED_STRIP_DEMO} %1 %2 %3 %4 %5",
     "args0": [
       {
         "type": "field_dropdown",
-        "name": "NAME",
+        "name": "DEMO_TYPE",
         "options": [["%{BKY_LEAPHY_LED_STRIP_LIGHTBANK}", "0"], ["%{BKY_LEAPHY_LED_STRIP_BREATHE}", "1"], ["%{BKY_LEAPHY_LED_STRIP_GULF}", "3"], ["%{BKY_LEAPHY_LED_STRIP_RAINBOW}", "4"], ["%{BKY_LEAPHY_LED_STRIP_COLORGULF}", "5"]]
       },
       {
@@ -331,7 +325,7 @@ Blockly.defineBlocksWithJsonArray([
   },
   {
     "type": "leaphy_display_print_line",
-    "message0": "%%{BKY_LEAPHY_DISPLAY_PRINT} %1 %%{BKY_LEAPHY_DISPLAY_ROW} %2 %3 %4",
+    "message0": "%%{BKY_LEAPHY_DISPLAY_PRINT} %1 %2 %3",
     "args0": [
       {
         "type": "input_dummy"
@@ -340,9 +334,6 @@ Blockly.defineBlocksWithJsonArray([
         "type": "field_dropdown",
         "name": "DISPLAY_ROW",
         "options": [["1", "0"], ["2", "1"], ["3", "2"]]
-      },
-      {
-        "type": "input_dummy"
       },
       {
         "type": "input_value",
@@ -359,7 +350,7 @@ Blockly.defineBlocksWithJsonArray([
   },
   {
     "type": "leaphy_display_print_value",
-    "message0": "%%{BKY_LEAPHY_DISPLAY_PRINT} %1 %%{BKY_LEAPHY_DISPLAY_ROW} %2 %3 %4 = %5 %6",
+    "message0": "%%{BKY_LEAPHY_DISPLAY_PRINT} %1 %2 %3 = %4 %5",
     "args0": [
       {
         "type": "input_dummy"
@@ -368,9 +359,6 @@ Blockly.defineBlocksWithJsonArray([
         "type": "field_dropdown",
         "name": "DISPLAY_ROW",
         "options": [["1", "0"], ["2", "1"], ["3", "2"]]
-      },
-      {
-        "type": "input_dummy"
       },
       {
         "type": "input_value",

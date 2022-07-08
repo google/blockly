@@ -9,7 +9,9 @@ const CircularDepencencyPlugin = require('circular-dependency-plugin');
 module.exports = {
   mode: 'development',
   devtool: 'inline-source-map',
-  entry: './core/blockly.ts',
+  entry: {
+    blockly_compressed: './core/blockly.ts',
+  },
   module: {
     rules: [
       {
@@ -28,7 +30,7 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js'],
   },
   output: {
-    filename: 'blockly_compressed.js',
+    filename: '[name].js',
     library: {
       type: 'umd',
       name: 'blockly',

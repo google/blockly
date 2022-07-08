@@ -33,7 +33,7 @@ import {VariableMap} from './variable_map';
 import type {VariableModel} from './variable_model';
 import type {WorkspaceComment} from './workspace_comment';
 
-import {addWorkspaceToDb, getWorkspaceById, removeWorkspaceFromDb} from './common.js';
+import {addWorkspaceToDb, getWorkspaceById, removeWorkspaceFromDb} from './common';
 
 /**
  * Class for a workspace.  This is a data structure that contains blocks.

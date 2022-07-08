@@ -26,50 +26,60 @@ goog.require('Blockly.Mutator');
 
 Blockly.Blocks['leaphy_start'] = {
   init: function() {
-    this.appendDummyInput()
-        .appendField(Blockly.Msg.LEAPHY_START)
-        .setAlign(Blockly.ALIGN_CENTRE);
+    this.jsonInit({
+      "lastDummyAlign0": "CENTRE",
+      "message0": "%%{BKY_LEAPHY_START}"      
+    })
     this.setStyle('leaphy_blocks');
     this.appendStatementInput('STACK');
     this.setDeletable(false);
   }
 };
 
-Blockly.Blocks['leaphy_serial_print_line'] = {
-  /**
-     * Block for printing to serial output
-     * @this Blockly.Block
-     */
-  init: function() {
-    this.appendDummyInput()
-        .appendField(Blockly.Msg.LEAPHY_SERIAL_PRINT);
-    this.appendValueInput('VALUE');
-    this.setInputsInline(true);
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
-    this.setStyle('leaphy_blocks');
+Blockly.defineBlocksWithJsonArray([
+  {
+    "type": "leaphy_serial_print_line",
+    "message0": "%%{BKY_LEAPHY_SERIAL_PRINT} %1 %2",
+    "args0": [
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "input_value",
+        "name": "VALUE"
+      }
+    ],
+    "inputsInline": true,
+    "previousStatement": null,
+    "nextStatement": null,
+    "style": "leaphy_blocks",
+    "tooltip": "",
+    "helpUrl": ""
   },
-};
-
-Blockly.Blocks['leaphy_serial_print_value'] = {
-  /**
-     * Block for printing to serial output
-     * @this Blockly.Block
-     */
-  init: function() {
-    this.appendDummyInput()
-        .appendField(Blockly.Msg.LEAPHY_SERIAL_PRINT);
-    this.appendValueInput('NAME');
-    this.appendDummyInput()
-        .appendField("=");
-    this.appendValueInput('VALUE');
-    this.setInputsInline(true);
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
-    this.setStyle('leaphy_blocks');
-  },
-};
-
-// Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
-
-// ]);  // END JSON EXTRACT (Do not delete this comment.)
+  {
+    "type": "leaphy_serial_print_value",
+    "message0": "%%{BKY_LEAPHY_SERIAL_PRINT} %1 %2 = %3 %4",
+    "args0": [
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "input_value",
+        "name": "NAME"
+      },
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "input_value",
+        "name": "VALUE"
+      }
+    ],
+    "inputsInline": true,
+    "previousStatement": null,
+    "nextStatement": null,
+    "style": "leaphy_blocks",
+    "tooltip": "",
+    "helpUrl": ""
+  }
+])  // END JSON EXTRACT (Do not delete this comment.)

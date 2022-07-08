@@ -19,7 +19,6 @@
 import type {Block} from '../block';
 import * as registry from '../registry';
 import * as idGenerator from '../utils/idgenerator';
-import {Workspace} from '../workspace';
 import type {WorkspaceSvg} from '../workspace_svg';
 
 import type {Abstract} from './events_abstract';
@@ -29,6 +28,10 @@ import type {BlockMove} from './events_block_move';
 import type {CommentCreate} from './events_comment_create';
 import type {CommentMove} from './events_comment_move';
 import type {ViewportChange} from './events_viewport';
+
+/** @internal */
+export const {Workspace} = await import('../workspace');
+
 
 
 /** Group ID for new events.  Grouped events are indivisible. */
@@ -440,7 +443,7 @@ export function getDescendantIds(block: Block): string[] {
  * @alias Blockly.Events.utils.fromJson
  */
 export function fromJson(
-    json: AnyDuringMigration, workspace: Workspace): Abstract {
+  json: AnyDuringMigration, workspace: InstanceType<typeof Workspace>): Abstract {
   const eventClass = get(json['type']);
   if (!eventClass) {
     throw Error('Unknown event type.');

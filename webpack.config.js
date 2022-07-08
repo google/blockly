@@ -34,4 +34,7 @@ module.exports = {
       name: 'blockly',
     },
   },
+  experiments: {
+    topLevelAwait: true,
+  },
 };

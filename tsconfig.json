@@ -4,7 +4,8 @@
     "closure/**/*",  // Just for ouptut directory structure.
   ],
   "exclude": [
-    "core/blockly.js"
+    "core/blockly.js",
+    "core/internal.ts"
   ],
   "compilerOptions": {
     // Tells TypeScript to read JS files, as
@@ -19,7 +20,7 @@
     // next to the .js files
     //"declarationDir": "build/ts/declarations",
 
-    "module": "ES2015",
+    "module": "ES2022",
     "moduleResolution": "node",
     "target": "ES2020",
     "strict": true,

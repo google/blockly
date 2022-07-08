@@ -15,8 +15,7 @@
 
 
 /* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-import './metrics_manager';
+
 
 import {UiMetrics} from './metrics_manager';
 import {Scrollbar} from './scrollbar';

@@ -14,15 +14,6 @@
  */
 
 
-// Unused import preserved for side-effects. Remove if unneeded.
-import './comment';
-// Unused import preserved for side-effects. Remove if unneeded.
-import './variables';
-// Unused import preserved for side-effects. Remove if unneeded.
-import './workspace_comment';
-// Unused import preserved for side-effects. Remove if unneeded.
-import './workspace_comment_svg';
-
 import type {Block} from './block';
 import type {BlockSvg} from './block_svg';
 import type {Connection} from './connection';

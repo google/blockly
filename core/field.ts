@@ -18,13 +18,6 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-import './shortcut_registry';
-// Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_block_change';
-// Unused import preserved for side-effects. Remove if unneeded.
-import './gesture';
 
 import type {Block} from './block';
 import type {BlockSvg} from './block_svg';

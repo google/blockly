@@ -14,12 +14,6 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-import './metrics_manager';
-// Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_click';
-
 import * as browserEvents from './browser_events';
 import {ComponentManager} from './component_manager';
 import * as Css from './css';

@@ -14,8 +14,7 @@
  */
 
 
-// Unused import preserved for side-effects. Remove if unneeded.
-import './constants';
+
 
 import type {Block} from './block';
 import {ConnectionType} from './connection_type';

@@ -14,8 +14,7 @@
  */
 
 
-// Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_block_change';
+
 
 import type {Block} from './block';
 import {Field} from './field';

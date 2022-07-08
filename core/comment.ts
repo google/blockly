@@ -14,18 +14,6 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-import './block';
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-import './workspace_svg';
-// Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_block_change';
-// Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_bubble_open';
-// Unused import preserved for side-effects. Remove if unneeded.
-import './warning';
 
 import {CommentModel} from './block';
 import type {BlockSvg} from './block_svg';

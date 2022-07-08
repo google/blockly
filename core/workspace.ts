@@ -14,8 +14,7 @@
  */
 
 
-// Unused import preserved for side-effects. Remove if unneeded.
-import './connection_checker';
+
 
 import {Block} from './block';
 import type {BlocklyOptions} from './blockly_options';

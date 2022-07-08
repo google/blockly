@@ -14,11 +14,6 @@
  */
 
 
-// Unused import preserved for side-effects. Remove if unneeded.
-import './bubble';
-// Unused import preserved for side-effects. Remove if unneeded.
-import './constants';
-
 import type {BlockDragSurfaceSvg} from './block_drag_surface';
 import {ComponentManager} from './component_manager';
 import type {CommentMove} from './events/events_comment_move';

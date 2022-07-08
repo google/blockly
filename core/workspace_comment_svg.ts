@@ -14,13 +14,6 @@
  */
 
 
-// Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_comment_create';
-// Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_comment_delete';
-// Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_selected';
-
 import type {BlockDragSurfaceSvg} from './block_drag_surface';
 import * as browserEvents from './browser_events';
 import * as common from './common';

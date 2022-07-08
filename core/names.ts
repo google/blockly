@@ -14,8 +14,7 @@
  */
 
 
-// Unused import preserved for side-effects. Remove if unneeded.
-import './procedures';
+
 
 import {Msg} from './msg';
 import * as Procedures from './procedures';

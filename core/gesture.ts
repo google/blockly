@@ -16,11 +16,6 @@
  */
 
 
-// Unused import preserved for side-effects. Remove if unneeded.
-import './block_dragger';
-// Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_click';
-
 import * as blockAnimations from './block_animations';
 import type {BlockSvg} from './block_svg';
 import * as browserEvents from './browser_events';

@@ -14,11 +14,6 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-import './metrics_manager';
-// Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_trashcan_open';
 
 import type {BlocklyOptions} from './blockly_options';
 import * as browserEvents from './browser_events';

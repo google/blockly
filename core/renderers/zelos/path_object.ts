@@ -15,8 +15,7 @@
 
 
 /* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-import '../../theme';
+
 
 import {BlockSvg} from '../../block_svg';
 import {Connection} from '../../connection';

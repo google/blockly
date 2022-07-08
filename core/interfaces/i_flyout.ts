@@ -15,17 +15,13 @@
 
 
 /* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-import '../utils/toolbox';
+
 /* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-import '../block_svg';
+
 /* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-import '../utils/coordinate';
+
 /* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-import '../utils/svg';
+
 
 import type {WorkspaceSvg} from '../workspace_svg';
 

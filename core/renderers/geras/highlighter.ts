@@ -17,8 +17,7 @@
 
 
 /* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-import './renderer';
+
 
 import * as svgPaths from '../../utils/svg_paths';
 import type {ConstantProvider} from '../common/constants';

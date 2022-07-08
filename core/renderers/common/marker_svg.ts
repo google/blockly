@@ -14,8 +14,7 @@
  */
 
 
-// Unused import preserved for side-effects. Remove if unneeded.
-import '../../events/events_marker_move';
+
 
 import type {BlockSvg} from '../../block_svg';
 import type {Connection} from '../../connection';

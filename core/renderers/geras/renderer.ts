@@ -15,8 +15,7 @@
 
 
 /* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-import '../common/constants';
+
 
 import type {BlockSvg} from '../../block_svg';
 import {BlockStyle, Theme} from '../../theme';

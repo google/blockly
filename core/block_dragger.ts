@@ -14,8 +14,7 @@
  */
 
 
-// Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_block_drag';
+
 
 import * as blockAnimation from './block_animations';
 import type {BlockSvg} from './block_svg';

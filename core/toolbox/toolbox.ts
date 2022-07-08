@@ -14,11 +14,6 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-import '../shortcut_registry';
-// Unused import preserved for side-effects. Remove if unneeded.
-import '../events/events_toolbox_item_select';
 
 import {BlockSvg} from '../block_svg';
 import type {BlocklyOptions} from '../blockly_options';

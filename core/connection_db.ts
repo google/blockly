@@ -18,8 +18,7 @@
  */
 
 
-// Unused import preserved for side-effects. Remove if unneeded.
-import './constants';
+
 
 import {ConnectionType} from './connection_type';
 import type {IConnectionChecker} from './interfaces/i_connection_checker';

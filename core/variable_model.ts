@@ -14,8 +14,7 @@
  */
 
 
-// Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_var_create';
+
 
 import * as eventUtils from './events/utils';
 import * as idGenerator from './utils/idgenerator';

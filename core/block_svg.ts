@@ -14,13 +14,6 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-import './theme';
-// Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_selected';
-// Unused import preserved for side-effects. Remove if unneeded.
-import './touch';
 
 import {Block} from './block';
 import * as blockAnimations from './block_animations';

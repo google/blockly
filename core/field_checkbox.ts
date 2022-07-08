@@ -14,8 +14,7 @@
  */
 
 
-// Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_block_change';
+
 
 import {Field} from './field';
 import * as fieldRegistry from './field_registry';

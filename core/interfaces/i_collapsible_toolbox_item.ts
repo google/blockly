@@ -16,8 +16,7 @@
 
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-import './i_toolbox_item';
+
 
 import {ISelectableToolboxItem} from './i_selectable_toolbox_item';
 

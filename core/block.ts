@@ -14,13 +14,6 @@
  */
 
 
-// Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_block_change';
-// Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_block_create';
-// Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_block_delete';
-
 import {Blocks} from './blocks';
 import type {Comment} from './comment';
 import * as common from './common';

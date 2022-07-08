@@ -16,8 +16,7 @@
  */
 
 
-// Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_bubble_open';
+
 
 import type {Block} from './block';
 import type {BlockSvg} from './block_svg';

@@ -14,11 +14,6 @@
  */
 
 
-// Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_var_delete';
-// Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_var_rename';
-
 import type {Block} from './block';
 import * as dialog from './dialog';
 import * as eventUtils from './events/utils';

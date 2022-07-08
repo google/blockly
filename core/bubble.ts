@@ -14,11 +14,6 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-import './metrics_manager';
-// Unused import preserved for side-effects. Remove if unneeded.
-import './workspace';
 
 import type {BlockDragSurfaceSvg} from './block_drag_surface';
 import type {BlockSvg} from './block_svg';

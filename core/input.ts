@@ -14,8 +14,7 @@
  */
 
 
-// Unused import preserved for side-effects. Remove if unneeded.
-import './field_label';
+
 
 import type {Block} from './block';
 import type {BlockSvg} from './block_svg';

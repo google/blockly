@@ -14,11 +14,6 @@
  */
 
 
-// Unused import preserved for side-effects. Remove if unneeded.
-import './block';
-// Unused import preserved for side-effects. Remove if unneeded.
-import './constants';
-
 import * as browserEvents from './browser_events';
 import * as dropDownDiv from './dropdowndiv';
 import {Flyout, FlyoutItem} from './flyout_base';

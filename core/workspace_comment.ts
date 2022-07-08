@@ -14,13 +14,6 @@
  */
 
 
-// Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_comment_change';
-// Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_comment_create';
-// Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_comment_delete';
-
 import type {CommentMove} from './events/events_comment_move';
 import * as eventUtils from './events/utils';
 import {Coordinate} from './utils/coordinate';

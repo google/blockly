@@ -14,31 +14,6 @@
  */
 
 
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-import './procedures';
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-import './variables';
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-import './variables_dynamic';
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-import './rendered_connection';
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-import './zoom_controls';
-// Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_block_create';
-// Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_theme_change';
-// Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_viewport';
-// Unused import preserved for side-effects. Remove if unneeded.
-import './metrics_manager';
-// Unused import preserved for side-effects. Remove if unneeded.
-import './msg';
 
 import {Block} from './block';
 import type {BlockDragSurfaceSvg} from './block_drag_surface';

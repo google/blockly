@@ -15,18 +15,10 @@
  * @namespace Blockly.Events.utils
  */
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from '../block.js';
-import * as registry from '../registry.js';
-import * as idGenerator from '../utils/idgenerator.js';
-/* eslint-disable-next-line no-unused-vars */
-import type {Workspace} from '../workspace.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from '../workspace_svg.js';
-
 import type {Block} from '../block';
 import * as registry from '../registry';
 import * as idGenerator from '../utils/idgenerator';
+import type {Workspace} from '../workspace';
 import type {WorkspaceSvg} from '../workspace_svg';
 
 import type {Abstract} from './events_abstract';
@@ -37,11 +29,8 @@ import type {CommentCreate} from './events_comment_create';
 import type {CommentMove} from './events_comment_move';
 import type {ViewportChange} from './events_viewport';
 
-/** @internal */
-export const {Workspace} = await import('../workspace');
 
-
-import {getWorkspaceById} from '../common.js';
+import {getWorkspaceById} from '../common';
 
 
 /** Group ID for new events.  Grouped events are indivisible. */
@@ -453,7 +442,7 @@ export function getDescendantIds(block: Block): string[] {
  * @alias Blockly.Events.utils.fromJson
  */
 export function fromJson(
-  json: AnyDuringMigration, workspace: InstanceType<typeof Workspace>): Abstract {
+  json: AnyDuringMigration, workspace: Workspace): Abstract {
   const eventClass = get(json['type']);
   if (!eventClass) {
     throw Error('Unknown event type.');

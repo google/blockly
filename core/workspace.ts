@@ -33,9 +33,7 @@ import {VariableMap} from './variable_map';
 import type {VariableModel} from './variable_model';
 import type {WorkspaceComment} from './workspace_comment';
 
-
-/** Database of all workspaces. */
-const WorkspaceDB_ = Object.create(null);
+import {addWorkspaceToDb, getWorkspaceById, removeWorkspaceFromDb} from './common.js';
 
 /**
  * Class for a workspace.  This is a data structure that contains blocks.
@@ -110,7 +108,7 @@ export class Workspace implements IASTNodeLocation {
   /** @param opt_options Dictionary of options. */
   constructor(opt_options?: Options) {
     this.id = idGenerator.genUid();
-    WorkspaceDB_[this.id] = this;
+    addWorkspaceToDb(this);
     this.options = opt_options || new Options(({} as BlocklyOptions));
     this.RTL = !!this.options.RTL;
     this.horizontalLayout = !!this.options.horizontalLayout;
@@ -143,7 +141,7 @@ export class Workspace implements IASTNodeLocation {
     this.listeners_.length = 0;
     this.clear();
     // Remove from workspace database.
-    delete WorkspaceDB_[this.id];
+    removeWorkspaceFromDb(this);
   }
 
   /**
@@ -776,7 +774,7 @@ export class Workspace implements IASTNodeLocation {
    * @return The sought after workspace or null if not found.
    */
   static getById(id: string): Workspace|null {
-    return WorkspaceDB_[id] || null;
+    return getWorkspaceById(id) || null;
   }
 
   /**
@@ -784,10 +782,11 @@ export class Workspace implements IASTNodeLocation {
    * @return Array of workspaces.
    */
   static getAll(): Workspace[] {
-    const workspaces = [];
-    for (const workspaceId in WorkspaceDB_) {
-      workspaces.push(WorkspaceDB_[workspaceId]);
-    }
-    return workspaces;
+    return [];
+    // const workspaces = [];
+    // for (const workspaceId in WorkspaceDB_) {
+    //   workspaces.push(WorkspaceDB_[workspaceId]);
+    // }
+    // return workspaces;
   }
 }

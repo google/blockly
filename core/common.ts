@@ -25,6 +25,23 @@ import type {Workspace} from './workspace';
 import type {WorkspaceSvg} from './workspace_svg';
 
 
+
+/** Database of all workspaces. */
+const WorkspaceDB_ = Object.create(null);
+
+export function getWorkspaceById(id: string): Workspace {
+  return WorkspaceDB_[id];
+}
+
+export function addWorkspaceToDb(workspace: Workspace) {
+  WorkspaceDB_[workspace.id] = workspace;
+}
+
+export function removeWorkspaceFromDb(workspace: Workspace) {
+  delete WorkspaceDB_[workspace.id];
+}
+
+
 /**
  * The main workspace most recently used.
  * Set by Blockly.WorkspaceSvg.prototype.markFocused

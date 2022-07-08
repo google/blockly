@@ -15,6 +15,14 @@
  * @namespace Blockly.Events.utils
  */
 
+/* eslint-disable-next-line no-unused-vars */
+import {Block} from '../block.js';
+import * as registry from '../registry.js';
+import * as idGenerator from '../utils/idgenerator.js';
+/* eslint-disable-next-line no-unused-vars */
+import type {Workspace} from '../workspace.js';
+/* eslint-disable-next-line no-unused-vars */
+import {WorkspaceSvg} from '../workspace_svg.js';
 
 import type {Block} from '../block';
 import * as registry from '../registry';
@@ -32,6 +40,8 @@ import type {ViewportChange} from './events_viewport';
 /** @internal */
 export const {Workspace} = await import('../workspace');
 
+
+import {getWorkspaceById} from '../common.js';
 
 
 /** Group ID for new events.  Grouped events are indivisible. */
@@ -265,7 +275,7 @@ function fireNow() {
     if (!event.workspaceId) {
       continue;
     }
-    const eventWorkspace = Workspace.getById(event.workspaceId);
+    const eventWorkspace = getWorkspaceById(event.workspaceId);
     if (eventWorkspace) {
       eventWorkspace.fireChangeListener(event);
     }
@@ -480,7 +490,7 @@ export function disableOrphans(event: Abstract) {
       return;
     }
     const eventWorkspace =
-        Workspace.getById(blockEvent.workspaceId) as WorkspaceSvg;
+        getWorkspaceById(blockEvent.workspaceId) as WorkspaceSvg;
     let block = eventWorkspace.getBlockById(blockEvent.blockId);
     if (block) {
       // Changing blocks as part of this event shouldn't be undoable.

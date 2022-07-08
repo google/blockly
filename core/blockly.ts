@@ -14,17 +14,6 @@
  */
 
 
-// Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_block_create';
-// Unused import preserved for side-effects. Remove if unneeded.
-import './events/workspace_events';
-// Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_ui';
-// Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_ui_base';
-// Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_var_create';
-
 import {Block} from './block';
 import * as blockAnimations from './block_animations';
 import {BlockDragSurfaceSvg} from './block_drag_surface';

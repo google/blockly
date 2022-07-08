@@ -20,9 +20,6 @@
  */
 
 
-// Unused import preserved for side-effects. Remove if unneeded.
-import './mutator';
-
 import type {Block} from './block';
 import {BlockSvg} from './block_svg';
 import {FieldDropdown} from './field_dropdown';

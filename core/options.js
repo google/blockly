@@ -105,7 +105,8 @@ class Options {
     }
     let pathToMedia = 'https://blockly-demo.appspot.com/static/media/';
     if (options['media']) {
-      pathToMedia = options['media'];
+      pathToMedia = options['media'].endsWith('/') ? options['media'] :
+                                                     options['media'] + '/';
     } else if (options['path']) {
       // 'path' is a deprecated option which has been replaced by 'media'.
       pathToMedia = options['path'] + 'media/';

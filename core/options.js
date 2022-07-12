@@ -15,6 +15,7 @@
  */
 goog.module('Blockly.Options');
 
+const deprecation = goog.require('Blockly.utils.deprecation');
 const idGenerator = goog.require('Blockly.utils.idGenerator');
 const registry = goog.require('Blockly.registry');
 const toolbox = goog.require('Blockly.utils.toolbox');
@@ -109,6 +110,7 @@ class Options {
                                                      options['media'] + '/';
     } else if (options['path']) {
       // 'path' is a deprecated option which has been replaced by 'media'.
+      deprecation.warn('path', 'Nov 2014', 'Jul 2023', 'media');
       pathToMedia = options['path'] + 'media/';
     }
     let oneBasedIndex;

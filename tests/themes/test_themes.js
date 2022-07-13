@@ -5,24 +5,22 @@
  */
 'use strict';
 
-goog.provide('Blockly.TestThemes');
-
 
 /**
  * A theme with classic colours but enables start hats.
  */
-Blockly.Themes.TestHats = Blockly.Theme.defineTheme('testhats', {
+const TestHatsTheme = Blockly.Theme.defineTheme('testhats', {
   'base': Blockly.Themes.Classic
 });
-Blockly.Themes.TestHats.setStartHats(true);
+TestHatsTheme.setStartHats(true);
 
 /**
  * A theme with classic colours but a different font.
  */
-Blockly.Themes.TestFont = Blockly.Theme.defineTheme('testfont', {
+const TestFontTheme = Blockly.Theme.defineTheme('testfont', {
   'base': Blockly.Themes.Classic
 });
-Blockly.Themes.TestFont.setFontStyle({
+TestFontTheme.setFontStyle({
   'family': '"Times New Roman", Times, serif',
   'weight': null, // Use default font-weight
   'size': 16
@@ -33,9 +31,9 @@ Blockly.Themes.TestFont.setFontStyle({
  * @type {!Object<string, Blockly.Theme>}
  * @private
  */
-Blockly.Themes.testThemes_ = {
-  'Test Hats': Blockly.Themes.TestHats,
-  'Test Font': Blockly.Themes.TestFont
+const testThemes_ = {
+  'Test Hats': TestHatsTheme,
+  'Test Font': TestFontTheme
 };
 
 /**
@@ -45,7 +43,7 @@ Blockly.Themes.testThemes_ = {
  * @package
  */
 function getTestTheme(value) {
-  return Blockly.Themes.testThemes_[value];
+  return testThemes_[value];
 }
 
 /**
@@ -54,7 +52,7 @@ function getTestTheme(value) {
  */
 function populateTestThemes() {
   var themeChanger = document.getElementById('themeChanger');
-  var keys = Object.keys(Blockly.Themes.testThemes_);
+  var keys = Object.keys(testThemes_);
   for (var i = 0, key; (key = keys[i]); i++) {
     var option = document.createElement('option');
     option.setAttribute('value', key);

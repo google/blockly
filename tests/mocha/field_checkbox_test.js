@@ -6,7 +6,9 @@
 
 goog.module('Blockly.test.fieldCheckbox');
 
-const {defineRowBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+const {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSetValueTests} = goog.require('Blockly.test.helpers.fields');
+const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+const {defineRowBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
 
 
 suite('Checkbox Fields', function() {
@@ -61,7 +63,7 @@ suite('Checkbox Fields', function() {
    * @param {!Blockly.FieldCheckbox} field The field to check.
    */
   const assertFieldDefault = function(field) {
-    testHelpers.assertFieldValue(
+    assertFieldValue(
         field, defaultFieldValue, defaultFieldValue.toLowerCase());
   };
   /**
@@ -70,15 +72,15 @@ suite('Checkbox Fields', function() {
    * @param {!FieldValueTestCase} testCase The test case.
    */
   const validTestCaseAssertField = function(field, testCase) {
-    testHelpers.assertFieldValue(
+    assertFieldValue(
         field, testCase.expectedValue, testCase.expectedValue.toLowerCase());
   };
 
-  testHelpers.runConstructorSuiteTests(
+  runConstructorSuiteTests(
       Blockly.FieldCheckbox, validValueTestCases, invalidValueTestCases,
       validTestCaseAssertField, assertFieldDefault);
 
-  testHelpers.runFromJsonSuiteTests(
+  runFromJsonSuiteTests(
       Blockly.FieldCheckbox, validValueTestCases, invalidValueTestCases,
       validTestCaseAssertField, assertFieldDefault);
 
@@ -87,14 +89,14 @@ suite('Checkbox Fields', function() {
       setup(function() {
         this.field = new Blockly.FieldCheckbox('TRUE');
       });
-      testHelpers.runSetValueTests(
+      runSetValueTests(
           validValueTestCases, invalidValueTestCases, 'TRUE', 'true');
     });
     suite('False -> New Value', function() {
       setup(function() {
         this.field = new Blockly.FieldCheckbox('FALSE');
       });
-      testHelpers.runSetValueTests(
+      runSetValueTests(
           validValueTestCases, invalidValueTestCases, 'FALSE', 'false');
     });
   });
@@ -131,7 +133,7 @@ suite('Checkbox Fields', function() {
         });
         test('New Value', function() {
           this.field.setValue(suiteInfo.value);
-          testHelpers.assertFieldValue(
+          assertFieldValue(
               this.field, suiteInfo.expectedValue,
               String(suiteInfo.expectedValue).toLowerCase());
         });

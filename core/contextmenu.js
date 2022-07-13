@@ -23,11 +23,13 @@ const clipboard = goog.require('Blockly.clipboard');
 const deprecation = goog.require('Blockly.utils.deprecation');
 const dom = goog.require('Blockly.utils.dom');
 const eventUtils = goog.require('Blockly.Events.utils');
-const internalConstants = goog.require('Blockly.internalConstants');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const svgMath = goog.require('Blockly.utils.svgMath');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {config} = goog.require('Blockly.config');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 const {MenuItem} = goog.require('Blockly.MenuItem');
 const {Menu} = goog.require('Blockly.Menu');
@@ -262,17 +264,16 @@ const callbackFactory = function(block, xml) {
     eventUtils.disable();
     let newBlock;
     try {
-      newBlock = Xml.domToBlock(xml, block.workspace);
-      // Remove module from block
-      newBlock.removeAttribute('module');
+      newBlock =
+          /** @type {!BlockSvg} */ (Xml.domToBlock(xml, block.workspace));
       // Move the new block next to the old block.
       const xy = block.getRelativeToSurfaceXY();
       if (block.RTL) {
-        xy.x -= internalConstants.SNAP_RADIUS;
+        xy.x -= config.snapRadius;
       } else {
-        xy.x += internalConstants.SNAP_RADIUS;
+        xy.x += config.snapRadius;
       }
-      xy.y += internalConstants.SNAP_RADIUS * 2;
+      xy.y += config.snapRadius * 2;
       newBlock.moveBy(xy.x, xy.y);
     } finally {
       eventUtils.enable();
@@ -358,7 +359,7 @@ exports.commentDuplicateOption = commentDuplicateOption;
  * @alias Blockly.ContextMenu.workspaceCommentOption
  */
 const workspaceCommentOption = function(ws, e) {
-  const WorkspaceCommentSvg = goog.module.get('Blockly.WorkspaceCommentSvg');
+  const {WorkspaceCommentSvg} = goog.module.get('Blockly.WorkspaceCommentSvg');
   if (!WorkspaceCommentSvg) {
     throw Error('Missing require for Blockly.WorkspaceCommentSvg');
   }

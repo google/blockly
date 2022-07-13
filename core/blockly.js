@@ -22,7 +22,6 @@ const Css = goog.require('Blockly.Css');
 const Events = goog.require('Blockly.Events');
 const Extensions = goog.require('Blockly.Extensions');
 const Procedures = goog.require('Blockly.Procedures');
-const ProceduresLocalArgument = goog.require('Blockly.ProceduresLocalArgument');
 const ShortcutItems = goog.require('Blockly.ShortcutItems');
 const Themes = goog.require('Blockly.Themes');
 const Tooltip = goog.require('Blockly.Tooltip');
@@ -41,6 +40,7 @@ const common = goog.require('Blockly.common');
 const constants = goog.require('Blockly.constants');
 const deprecation = goog.require('Blockly.utils.deprecation');
 const dialog = goog.require('Blockly.dialog');
+const dropDownDiv = goog.require('Blockly.dropDownDiv');
 const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const geras = goog.require('Blockly.geras');
 const internalConstants = goog.require('Blockly.internalConstants');
@@ -72,6 +72,7 @@ const {Bubble} = goog.require('Blockly.Bubble');
 const {CollapsibleToolboxCategory} = goog.require('Blockly.CollapsibleToolboxCategory');
 const {Comment} = goog.require('Blockly.Comment');
 const {ComponentManager} = goog.require('Blockly.ComponentManager');
+const {config} = goog.require('Blockly.config');
 const {ConnectionChecker} = goog.require('Blockly.ConnectionChecker');
 const {ConnectionDB} = goog.require('Blockly.ConnectionDB');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
@@ -80,14 +81,12 @@ const {ContextMenuRegistry} = goog.require('Blockly.ContextMenuRegistry');
 const {Cursor} = goog.require('Blockly.Cursor');
 const {DeleteArea} = goog.require('Blockly.DeleteArea');
 const {DragTarget} = goog.require('Blockly.DragTarget');
-const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
 const {FieldAngle} = goog.require('Blockly.FieldAngle');
 const {FieldCheckbox} = goog.require('Blockly.FieldCheckbox');
 const {FieldColour} = goog.require('Blockly.FieldColour');
 const {FieldDropdown} = goog.require('Blockly.FieldDropdown');
 const {FieldImage} = goog.require('Blockly.FieldImage');
 const {FieldLabelSerializable} = goog.require('Blockly.FieldLabelSerializable');
-const {FieldLabelHover} = goog.require('Blockly.FieldLabelHover');
 const {FieldLabel} = goog.require('Blockly.FieldLabel');
 const {FieldMultilineInput} = goog.require('Blockly.FieldMultilineInput');
 const {FieldNumber} = goog.require('Blockly.FieldNumber');
@@ -308,7 +307,8 @@ exports.svgResize = common.svgResize;
  * @alias Blockly.hideChaff
  */
 const hideChaff = function(opt_onlyClosePopups) {
-  common.getMainWorkspace().hideChaff(opt_onlyClosePopups);
+  /** @type {!WorkspaceSvg} */ (common.getMainWorkspace())
+      .hideChaff(opt_onlyClosePopups);
 };
 exports.hideChaff = hideChaff;
 
@@ -333,7 +333,7 @@ exports.defineBlocksWithJsonArray = common.defineBlocksWithJsonArray;
 
 /**
  * Set the parent container.  This is the container element that the WidgetDiv,
- * DropDownDiv, and Tooltip are rendered into the first time `Blockly.inject`
+ * dropDownDiv, and Tooltip are rendered into the first time `Blockly.inject`
  * is called.
  * This method is a NOP if called after the first ``Blockly.inject``.
  * @param {!Element} container The container element.
@@ -530,7 +530,7 @@ const paste = function() {
   deprecation.warn(
       'Blockly.paste', 'December 2021', 'December 2022',
       'Blockly.clipboard.paste');
-  return clipboard.paste();
+  return !!clipboard.paste();
 };
 exports.paste = paste;
 
@@ -644,14 +644,16 @@ exports.unbindEvent_ = unbindEvent_;
  * @see browserEvents.conditionalBind
  * @alias Blockly.bindEventWithChecks_
  */
-const bindEventWithChecks_ = function(node, name, thisObject, func, opt_noCaptureIdentifier, opt_noPreventDefault) {
+const bindEventWithChecks_ = function(
+    node, name, thisObject, func, opt_noCaptureIdentifier,
+    opt_noPreventDefault) {
   deprecation.warn(
       'Blockly.bindEventWithChecks_', 'December 2021', 'December 2022',
       'Blockly.browserEvents.conditionalBind');
-
-  return browserEvents.conditionalBind(node, name, thisObject, func, opt_noCaptureIdentifier, opt_noPreventDefault);
+  return browserEvents.conditionalBind(
+      node, name, thisObject, func, opt_noCaptureIdentifier,
+      opt_noPreventDefault);
 };
-
 exports.bindEventWithChecks_ = bindEventWithChecks_;
 
 // Aliases to allow external code to access these values for legacy reasons.
@@ -662,7 +664,7 @@ exports.FLYOUT_DRAG_RADIUS = internalConstants.FLYOUT_DRAG_RADIUS;
 exports.SNAP_RADIUS = internalConstants.SNAP_RADIUS;
 exports.CONNECTING_SNAP_RADIUS = internalConstants.CONNECTING_SNAP_RADIUS;
 exports.CURRENT_CONNECTION_PREFERENCE =
-    internalConstants.CURRENT_CONNECTION_PREFERENCE;
+  internalConstants.CURRENT_CONNECTION_PREFERENCE;
 exports.BUMP_DELAY = internalConstants.BUMP_DELAY;
 exports.BUMP_RANDOMNESS = internalConstants.BUMP_RANDOMNESS;
 exports.COLLAPSE_CHARS = internalConstants.COLLAPSE_CHARS;
@@ -678,7 +680,7 @@ exports.OPPOSITE_TYPE = internalConstants.OPPOSITE_TYPE;
 exports.RENAME_VARIABLE_ID = internalConstants.RENAME_VARIABLE_ID;
 exports.DELETE_VARIABLE_ID = internalConstants.DELETE_VARIABLE_ID;
 exports.COLLAPSED_INPUT_NAME = constants.COLLAPSED_INPUT_NAME;
-exports.COLLAPSED_FIELD_NAME = constants.COLLAPSED_FIELD_NAME;
+exports.COLLAPSED_FIELD_NAME = constants.COLLAPSED_FIELD_NAME;;
 
 /**
  * String for use in the "custom" attribute of a category in toolbox XML.
@@ -731,7 +733,7 @@ exports.Css = Css;
 exports.Cursor = Cursor;
 exports.DeleteArea = DeleteArea;
 exports.DragTarget = DragTarget;
-exports.DropDownDiv = DropDownDiv;
+exports.DropDownDiv = dropDownDiv;
 exports.Events = Events;
 exports.Extensions = Extensions;
 exports.Field = Field;
@@ -742,7 +744,6 @@ exports.FieldDropdown = FieldDropdown;
 exports.FieldImage = FieldImage;
 exports.FieldLabel = FieldLabel;
 exports.FieldLabelSerializable = FieldLabelSerializable;
-exports.FieldLabelHover = FieldLabelHover;
 exports.FieldMultilineInput = FieldMultilineInput;
 exports.FieldNumber = FieldNumber;
 exports.FieldTextInput = FieldTextInput;
@@ -795,7 +796,6 @@ exports.Msg = Msg;
 exports.Names = Names;
 exports.Options = Options;
 exports.Procedures = Procedures;
-exports.ProceduresLocalArgument = ProceduresLocalArgument;
 exports.RenderedConnection = RenderedConnection;
 exports.Scrollbar = Scrollbar;
 exports.ScrollbarPair = ScrollbarPair;
@@ -835,6 +835,7 @@ exports.browserEvents = browserEvents;
 exports.bumpObjects = bumpObjects;
 exports.clipboard = clipboard;
 exports.common = common;
+exports.config = config;
 /** @deprecated Use Blockly.ConnectionType instead. */
 exports.connectionTypes = ConnectionType;
 exports.constants = constants;

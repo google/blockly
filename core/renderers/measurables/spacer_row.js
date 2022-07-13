@@ -14,7 +14,6 @@
  */
 goog.module('Blockly.blockRendering.SpacerRow');
 
-const object = goog.require('Blockly.utils.object');
 /* eslint-disable-next-line no-unused-vars */
 const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
 const {InRowSpacer} = goog.require('Blockly.blockRendering.InRowSpacer');
@@ -24,31 +23,47 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
 
 /**
  * An object containing information about a spacer between two rows.
- * @param {!ConstantProvider} constants The rendering
- *   constants provider.
- * @param {number} height The height of the spacer.
- * @param {number} width The width of the spacer.
- * @package
- * @constructor
  * @extends {Row}
+ * @struct
  * @alias Blockly.blockRendering.SpacerRow
  */
-const SpacerRow = function(constants, height, width) {
-  SpacerRow.superClass_.constructor.call(this, constants);
-  this.type |= Types.SPACER | Types.BETWEEN_ROW_SPACER;
-  this.width = width;
-  this.height = height;
-  this.followsStatement = false;
-  this.widthWithConnectedBlocks = 0;
-  this.elements = [new InRowSpacer(this.constants_, width)];
-};
-object.inherits(SpacerRow, Row);
+class SpacerRow extends Row {
+  /**
+   * @param {!ConstantProvider} constants The rendering
+   *   constants provider.
+   * @param {number} height The height of the spacer.
+   * @param {number} width The width of the spacer.
+   * @package
+   */
+  constructor(constants, height, width) {
+    super(constants);
+    this.type |= Types.SPACER | Types.BETWEEN_ROW_SPACER;
 
-/**
- * @override
- */
-SpacerRow.prototype.measure = function() {
-  // NOP.  Width and height were set at creation.
-};
+    /** @type {number} */
+    this.width = width;
+
+    /** @type {number} */
+    this.height = height;
+
+    /** @type {boolean} */
+    this.followsStatement = false;
+
+    /** @type {boolean} */
+    this.precedesStatement = false;
+
+    /** @type {number} */
+    this.widthWithConnectedBlocks = 0;
+
+    /** @type {!Array.<!InRowSpacer>} */
+    this.elements = [new InRowSpacer(this.constants_, width)];
+  }
+
+  /**
+   * @override
+   */
+  measure() {
+    // NOP.  Width and height were set at creation.
+  }
+}
 
 exports.SpacerRow = SpacerRow;

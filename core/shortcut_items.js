@@ -75,7 +75,7 @@ const registerDuplicate = function() {
     preconditionFn: function(workspace) {
       const selected = common.getSelected();
       return !workspace.options.readOnly && !Gesture.inProgress() && selected &&
-          selected.isDeletable() && selected.isMovable();
+        selected.isDeletable() && selected.isMovable();
     },
     callback: function(workspace, e) {
       e.preventDefault();

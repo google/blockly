@@ -20,28 +20,30 @@ goog.module('Blockly.utils.Svg');
 
 /**
  * A name with the type of the SVG element stored in the generic.
- * @param {string} tagName The SVG element tag name.
- * @constructor
  * @template T
- * @private
  * @alias Blockly.utils.Svg
  */
-const Svg = function(tagName) {
+class Svg {
   /**
-   * @type {string}
-   * @private
+   * @param {string} tagName The SVG element tag name.
+   * @package
    */
-  this.tagName_ = tagName;
-};
+  constructor(tagName) {
+    /**
+     * @type {string}
+     * @private
+     */
+    this.tagName_ = tagName;
+  }
 
-/**
- * Returns the SVG element tag name.
- * @return {string} The name.
- * @override
- */
-Svg.prototype.toString = function() {
-  return this.tagName_;
-};
+  /**
+   * Returns the SVG element tag name.
+   * @return {string} The name.
+   */
+  toString() {
+    return this.tagName_;
+  }
+}
 
 /**
  * @type {!Svg<!SVGAnimateElement>}
@@ -54,12 +56,6 @@ Svg.ANIMATE = new Svg('animate');
  * @package
  */
 Svg.CIRCLE = new Svg('circle');
-
-/**
- * @type {!Svg<!SVGCircleElement>}
- * @package
- */
- Svg.ELLIPSE = new Svg('ellipse');
 
 /**
  * @type {!Svg<!SVGClipPathElement>}

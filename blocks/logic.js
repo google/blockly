@@ -10,7 +10,7 @@
  */
 'use strict';
 
-goog.module('Blockly.blocks.logic');
+goog.module('Blockly.libraryBlocks.logic');
 
 /* eslint-disable-next-line no-unused-vars */
 const AbstractEvent = goog.requireType('Blockly.Events.Abstract');
@@ -19,20 +19,25 @@ const Extensions = goog.require('Blockly.Extensions');
 const xmlUtils = goog.require('Blockly.utils.xml');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockDefinition} = goog.requireType('Blockly.blocks');
 const {Msg} = goog.require('Blockly.Msg');
 const {Mutator} = goog.require('Blockly.Mutator');
 /* eslint-disable-next-line no-unused-vars */
 const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
-const {defineBlocksWithJsonArray} = goog.require('Blockly.common');
+const {createBlockDefinitionsFromJsonArray, defineBlocks} = goog.require('Blockly.common');
 /** @suppress {extraRequire} */
 goog.require('Blockly.FieldDropdown');
 /** @suppress {extraRequire} */
 goog.require('Blockly.FieldLabel');
 
-
-defineBlocksWithJsonArray([
+/**
+ * A dictionary of the block definitions provided by this module.
+ * @type {!Object<string, !BlockDefinition>}
+ */
+const blocks = createBlockDefinitionsFromJsonArray([
   // Block for boolean data type: true and false.
   {
     'type': 'logic_boolean',
@@ -258,6 +263,7 @@ defineBlocksWithJsonArray([
     'tooltip': '%{BKY_CONTROLS_IF_ELSE_TOOLTIP}',
   },
 ]);
+exports.blocks = blocks;
 
 /**
  * Tooltip text, keyed by block OP value. Used by logic_compare and
@@ -645,3 +651,6 @@ const LOGIC_TERNARY_ONCHANGE_MIXIN = {
 };
 
 Extensions.registerMixin('logic_ternary', LOGIC_TERNARY_ONCHANGE_MIXIN);
+
+// Register provided blocks.
+defineBlocks(blocks);

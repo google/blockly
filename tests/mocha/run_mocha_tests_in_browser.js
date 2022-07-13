@@ -61,8 +61,18 @@ async function runMochaTestsInBrowser() {
   const elem = await browser.$('#failureCount');
   const numOfFailure = await elem.getAttribute('tests_failed');
 
+  if (numOfFailure > 0) {
+    console.log('============Blockly Mocha Test Failures================')
+    const failureMessagesEls = await browser.$$('#failureMessages p');
+    if (!failureMessagesEls.length) {
+      console.log('There is at least one test failure, but no messages reported. Mocha may be failing because no tests are being run.');
+    }
+    for (let el of failureMessagesEls) {
+      console.log(await el.getText());
+    }
+  }
+
   console.log('============Blockly Mocha Test Summary=================');
-  console.log(numOfFailure);
   console.log(numOfFailure + ' tests failed');
   console.log('============Blockly Mocha Test Summary=================');
   if (parseInt(numOfFailure) !== 0) {

@@ -6,7 +6,7 @@
 
 goog.module('Blockly.test.extensions');
 
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
 
 
 suite('Extensions', function() {
@@ -244,8 +244,8 @@ suite('Extensions', function() {
         // Make sure all of the functions were installed correctly.
         chai.assert.equal(block.domToMutation(), 'domToMutationFn');
         chai.assert.equal(block.mutationToDom(), 'mutationToDomFn');
-        chai.assert.isFalse(Object.prototype.hasOwnProperty.call(block, 'compose'));
-        chai.assert.isFalse(Object.prototype.hasOwnProperty.call(block, 'decompose'));
+        chai.assert.isUndefined(block['compose']);
+        chai.assert.isUndefined(block['decompose']);
       });
     });
   });

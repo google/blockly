@@ -25,28 +25,42 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  * The base class to represent a part of a block that takes up space during
  * rendering.  The constructor for each non-spacer Measurable records the size
  * of the block element (e.g. field, statement input).
- * @param {!ConstantProvider} constants The rendering
- *   constants provider.
- * @package
- * @constructor
  * @alias Blockly.blockRendering.Measurable
  */
-const Measurable = function(constants) {
-  this.width = 0;
-  this.height = 0;
-  this.type = Types.NONE;
-
-  this.xPos = 0;
-  this.centerline = 0;
-
+class Measurable {
   /**
-   * The renderer's constant provider.
-   * @type {!ConstantProvider}
-   * @protected
+   * @param {!ConstantProvider} constants The rendering
+   *   constants provider.
+   * @package
    */
-  this.constants_ = constants;
+  constructor(constants) {
+    /** @type {number} */
+    this.width = 0;
 
-  this.notchOffset = this.constants_.NOTCH_OFFSET_LEFT;
-};
+    /** @type {number} */
+    this.height = 0;
+
+    /** @type {number} */
+    this.type = Types.NONE;
+
+    /** @type {number} */
+    this.xPos = 0;
+
+    /** @type {number} */
+    this.centerline = 0;
+
+    /**
+     * The renderer's constant provider.
+     * @type {!ConstantProvider}
+     * @protected
+     */
+    this.constants_ = constants;
+
+    /** @type {number} */
+    this.notchOffset = this.constants_.NOTCH_OFFSET_LEFT;
+  }
+}
+
+exports.Measurable = Measurable;
 
 exports.Measurable = Measurable;

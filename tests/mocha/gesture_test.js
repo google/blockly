@@ -6,7 +6,11 @@
 
 goog.module('Blockly.test.gesture');
 
-const {assertEventFired, assertEventNotFired, defineBasicBlockWithField, dispatchPointerEvent, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+const {assertEventFired, assertEventNotFired} = goog.require('Blockly.test.helpers.events');
+const {defineBasicBlockWithField} = goog.require('Blockly.test.helpers.blockDefinitions');
+const {dispatchPointerEvent} = goog.require('Blockly.test.helpers.userInput');
+const eventUtils = goog.require('Blockly.Events.utils');
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
 
 
 suite('Gesture', function() {
@@ -34,8 +38,8 @@ suite('Gesture', function() {
 
 
     assertEventFired(eventsFireStub, Blockly.Events.Selected,
-        {oldElementId: null, newElementId: block.id}, fieldWorkspace.id);
-    assertEventNotFired(eventsFireStub, Blockly.Events.Click, {});
+        {oldElementId: null, newElementId: block.id, type: eventUtils.SELECTED}, fieldWorkspace.id);
+    assertEventNotFired(eventsFireStub, Blockly.Events.Click, {type: eventUtils.CLICK});
   }
 
   function getTopFlyoutBlock(flyout) {

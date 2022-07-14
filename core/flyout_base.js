@@ -34,6 +34,7 @@ const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 const {DeleteArea} = goog.require('Blockly.DeleteArea');
 /* eslint-disable-next-line no-unused-vars */
 const {FlyoutButton} = goog.requireType('Blockly.FlyoutButton');
+const {FlyoutBookmarks} = goog.requireType('Blockly.FlyoutBookmarks');
 const {FlyoutMetricsManager} = goog.require('Blockly.FlyoutMetricsManager');
 /* eslint-disable-next-line no-unused-vars */
 const {IFlyout} = goog.require('Blockly.IFlyout');
@@ -606,8 +607,11 @@ class Flyout extends DeleteArea {
       'x2': 16,
       'y2': 25,
     }, this.closeButtonSVG_);
-  };
+  }
 
+  /**
+   * CremoveCloseButton_
+   */
   removeCloseButton_() {
     if (this.onMouseDownCloseWrapper_) {
       browserEvents.unbind(this.onMouseDownCloseWrapper_);
@@ -620,6 +624,9 @@ class Flyout extends DeleteArea {
     }
   }
 
+  /**
+   * createFlyoutEndShadow_
+   */
   createFlyoutEndShadow_() {
     this.removeFlyoutEndShadow_();
 
@@ -643,12 +650,18 @@ class Flyout extends DeleteArea {
     flyoutParentEl.insertBefore(this.flyoutEndShadowDiv_, flyoutSVG.nextSibling);
   }
 
+  /**
+   * removeFlyoutEndShadow_
+   */
   removeFlyoutEndShadow_() {
     if (this.flyoutEndShadowDiv_) {
       this.flyoutEndShadowDiv_.remove();
     }
   }
 
+  /**
+   * createZoomControls_
+   */
   createZoomControls_() {
     if (this.flyoutTopPanel_) {
       this.resizeZoomControls_();
@@ -786,12 +799,19 @@ class Flyout extends DeleteArea {
     });
   }
 
+  /**
+   * resizeZoomControls_
+   */
   resizeZoomControls_() {
     if (!this.flyoutTopPanel_) return;
 
     this.flyoutTopPanel_.style.width = `${this.width_}px`;
   }
 
+  /**
+   * zoomIn_
+   * @param {Event} e event
+   */
   zoomIn_(e) {
     e.stopPropagation();
     e.preventDefault();
@@ -800,9 +820,13 @@ class Flyout extends DeleteArea {
     this.workspace_.setScale(scale);
     this.position();
     eventUtils.fire(new (eventUtils.get(eventUtils.FLYOUT_ZOOM))(this.getWorkspace().id, scale));
-  };
+  }
 
-  zoomOut_ = function(e) {
+  /**
+   * zoomOut_
+   * @param {Event} e event
+   */
+  zoomOut_(e) {
     e.stopPropagation();
     e.preventDefault();
     const scale = this.workspace_.scale - 0.1;
@@ -812,6 +836,9 @@ class Flyout extends DeleteArea {
     eventUtils.fire(new (eventUtils.get(eventUtils.FLYOUT_ZOOM))(this.getWorkspace().id, scale));
   }
 
+  /**
+   * removeZoomControls_
+   */
   removeZoomControls_() {
     if (this.flyoutTopPanel_) {
       this.zoomInButtonSvg_.removeEventListener('click', this.zoomIn_);
@@ -1253,6 +1280,11 @@ class Flyout extends DeleteArea {
       browserEvents.bind(rect, 'mouseleave', this, () => this.blockMouseLeave_(block)));
   }
 
+  /**
+   * blockMouseEnter_
+   * @param {!Event} e event
+   * @param {!BlockSvg} block The flyout block
+   */
   blockMouseEnter_(e, block) {
     if (this.disableBlocksMouseEvents) return;
     if (e.buttons) return;
@@ -1260,6 +1292,10 @@ class Flyout extends DeleteArea {
     block.addSelect();
   }
 
+  /**
+   * blockMouseLeave_
+   * @param {!BlockSvg} block The flyout block
+   */
   blockMouseLeave_(block) {
     if (this.disableBlocksMouseEvents) return;
 

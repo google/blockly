@@ -53,6 +53,7 @@ const {ContextMenuRegistry} = goog.require('Blockly.ContextMenuRegistry');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
 const {Cursor} = goog.requireType('Blockly.Cursor');
+const {Events} = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const {FlyoutButton} = goog.requireType('Blockly.FlyoutButton');
 const {Gesture} = goog.require('Blockly.Gesture');
@@ -965,7 +966,7 @@ class WorkspaceSvg extends Workspace {
     if (!this.massOperationsHandler_) {
       this.massOperationsHandler_ = new MassOperationsHandler(this);
     }
-  };
+  }
 
   /**
    * Dispose of this workspace.
@@ -1166,6 +1167,10 @@ class WorkspaceSvg extends Workspace {
     return null;
   }
 
+  /**
+   * flyoutListener
+   * @param {Event} event flyout event
+   */
   flyoutListener(event) {
     switch (event.type) {
       case Events.FLYOUT_SHOW: {
@@ -1182,7 +1187,7 @@ class WorkspaceSvg extends Workspace {
         return;
       }
     }
-  };
+  }
 
   /**
    * Getter for the toolbox associated with this workspace, if one exists.
@@ -1200,7 +1205,7 @@ class WorkspaceSvg extends Workspace {
    */
   getModuleBar() {
     return this.moduleBar_;
-  };
+  }
 
   /**
    * Update items that use screen coordinate calculations
@@ -1597,7 +1602,7 @@ class WorkspaceSvg extends Workspace {
     let pastedThing;
     // Checks if this is JSON. JSON has a type property, while elements don't.
     if (state['type']) {
-      pastedThing =  this.pasteBlock_(null, /** @type {!blocks.State} */ (state), options);
+      pastedThing = this.pasteBlock_(null, /** @type {!blocks.State} */ (state), options);
     } else {
       const xmlBlock = /** @type {!Element} */ (state);
       if (xmlBlock.tagName.toLowerCase() === 'comment') {
@@ -1846,17 +1851,23 @@ class WorkspaceSvg extends Workspace {
     }
   }
 
+  /**
+   * cleanUpMassOperations
+   */
   cleanUpMassOperations() {
-  if (this.massOperationsHandler_) this.massOperationsHandler_.cleanUp();
-};
-
-  getMassOperations() {
-  if (this.massOperationsHandler_) {
-    return this.massOperationsHandler_;
-  } else if (this.svgGroup_) {
-    return new MassOperationsHandler(this);
+    if (this.massOperationsHandler_) this.massOperationsHandler_.cleanUp();
   }
-};
+
+  /**
+   * getMassOperations
+   */
+  getMassOperations() {
+    if (this.massOperationsHandler_) {
+      return this.massOperationsHandler_;
+    } else if (this.svgGroup_) {
+      return new MassOperationsHandler(this);
+    }
+  }
 
   /**
    * Start tracking a drag of an object on this workspace.
@@ -2840,26 +2851,13 @@ class WorkspaceSvg extends Workspace {
 }
 
 /**
- * Size the workspace when the contents change.  This also updates
- * scrollbars accordingly.
- * @param {!WorkspaceSvg} workspace The workspace to resize.
- * @alias Blockly.WorkspaceSvg.resizeSvgContents
- */
-const resizeSvgContents = function(workspace) {
-  workspace.resizeContents();
-};
-exports.resizeSvgContents = resizeSvgContents;
-
-exports.WorkspaceSvg = WorkspaceSvg;
-
-/**
  * Close tooltips, context menus, dropdown selections, etc.
  * @param {boolean=} opt_onlyClosePopups Whether only popups should be closed.
  */
 WorkspaceSvg.prototype.hideChaff = function(opt_onlyClosePopups) {
   Tooltip.hide();
   WidgetDiv.hide();
-  DropDownDiv.hideWithoutAnimation();
+  dropDownDiv.hideWithoutAnimation();
 
   const onlyClosePopups = !!opt_onlyClosePopups;
   const autoHideables = this.getComponentManager().getComponents(

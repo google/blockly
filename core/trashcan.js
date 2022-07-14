@@ -559,16 +559,16 @@ class Trashcan extends DeleteArea {
     this.openFlyout();
   }
 
-/**
- * Fires a UI event for trashcan flyout open or close.
- * @param {boolean} trashcanOpen Whether the flyout is opening.
- * @private
- */
-Blockly.Trashcan.prototype.fireUiEvent_ = function(trashcanOpen) {
-  var uiEvent = new (Blockly.Events.get(Blockly.Events.TRASHCAN_OPEN))(
-      trashcanOpen,this.workspace_.id);
-  Blockly.Events.fire(uiEvent);
-};
+  /**
+   * Fires a UI event for trashcan flyout open or close.
+   * @param {boolean} trashcanOpen Whether the flyout is opening.
+   * @private
+   */
+  fireUiEvent_(trashcanOpen) {
+    var uiEvent = new (Blockly.Events.get(Blockly.Events.TRASHCAN_OPEN))(
+        trashcanOpen,this.workspace_.id);
+    Blockly.Events.fire(uiEvent);
+  };
 
   /**
    * Prevents a workspace scroll and click event if the trashcan has blocks.

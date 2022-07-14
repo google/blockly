@@ -159,19 +159,19 @@ const BlockDragger = class {
     // drag surface.
   };
 
-/**
- * Start dragging a block.  This includes moving it to the drag surface.
- * @param {!Coordinate} currentDragDeltaXY How far the pointer has
- *     moved from the position at mouse down, in pixel units.
- * @param {boolean} healStack Whether or not to heal the stack after
- *     disconnecting.
- * @param {Coordinate} positionOnDragSurface Offset on drag surface.
- * @public
- */
-BlockDragger.prototype.startDrag = function(currentDragDeltaXY, healStack, positionOnDragSurface) {
-  this.beforeStartDrag(currentDragDeltaXY, healStack);
+  /**
+   * Start dragging a block.  This includes moving it to the drag surface.
+   * @param {!Coordinate} currentDragDeltaXY How far the pointer has
+   *     moved from the position at mouse down, in pixel units.
+   * @param {boolean} healStack Whether or not to heal the stack after
+   *     disconnecting.
+   * @param {Coordinate} positionOnDragSurface Offset on drag surface.
+   * @public
+   */
+  startDrag(currentDragDeltaXY, healStack, positionOnDragSurface) {
+    this.beforeStartDrag(currentDragDeltaXY, healStack);
 
-  this.draggingBlock_.moveToDragSurface(positionOnDragSurface);
+    this.draggingBlock_.moveToDragSurface(positionOnDragSurface);
   }
 
   /**

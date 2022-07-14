@@ -134,5 +134,3 @@ class Abstract {
 }
 
 exports.Abstract = Abstract;
-
-exports = Abstract;

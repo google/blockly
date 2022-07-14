@@ -321,7 +321,7 @@ class Drawer {
     }
 
     if (!svgGroup) {
-      return
+      return;
     }
 
     const yPos = fieldInfo.centerline - fieldInfo.height / 2;
@@ -475,7 +475,5 @@ class Drawer {
     }
   }
 }
-
-exports.Drawer = Drawer;
 
 exports.Drawer = Drawer;

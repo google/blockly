@@ -173,5 +173,3 @@ class Warning extends Icon {
 }
 
 exports.Warning = Warning;
-
-exports.Warning = Warning;

@@ -132,5 +132,3 @@ class Marker {
 }
 
 exports.Marker = Marker;
-
-exports.Marker = Marker;

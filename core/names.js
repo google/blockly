@@ -23,6 +23,8 @@ const {VariableMap} = goog.requireType('Blockly.VariableMap');
 const {Workspace} = goog.requireType('Blockly.Workspace');
 /** @suppress {extraRequire} */
 goog.requireType('Blockly.Procedures');
+/** @suppress {extraRequire} */
+goog.requireType('Blockly.ProceduresLocalArgument');
 
 
 /**
@@ -141,7 +143,7 @@ const Names = class {
    */
   populateProcedures(workspace) {
     let procedures =
-        goog.module.get('Blockly.Procedures').allProcedures(workspace);
+      goog.module.get('Blockly.Procedures').allProcedures(workspace);
     const proceduresLocalArgument =
       goog.module.get('Blockly.ProceduresLocalArgument').allProcedures(workspace);
 

@@ -164,5 +164,3 @@ class PathObject extends BasePathObject {
 }
 
 exports.PathObject = PathObject;
-
-exports.PathObject = PathObject;

@@ -50,5 +50,3 @@ class TabNavigateCursor extends BasicCursor {
 }
 
 exports.TabNavigateCursor = TabNavigateCursor;
-
-exports.TabNavigateCursor = TabNavigateCursor;

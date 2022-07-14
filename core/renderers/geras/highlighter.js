@@ -309,5 +309,3 @@ class Highlighter {
 }
 
 exports.Highlighter = Highlighter;
-
-exports.Highlighter = Highlighter;

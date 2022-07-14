@@ -1009,5 +1009,3 @@ class ConstantProvider extends BaseConstantProvider {
 }
 
 exports.ConstantProvider = ConstantProvider;
-
-exports.ConstantProvider = ConstantProvider;

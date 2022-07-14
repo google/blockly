@@ -1,6 +1,6 @@
 {
   "chunk": [
-    "blockly:275",
+    "blockly:276",
     "blocks:10:blockly",
     "all:11:blockly"
   ],
@@ -103,6 +103,9 @@
     ".\\core\\grid.js",
     ".\\core\\css.js",
     ".\\core\\flyout_button.js",
+    ".\\core\\contextmenu_registry.js",
+    ".\\core\\theme\\classic.js",
+    ".\\core\\blockly_options.js",
     ".\\core\\events\\events_viewport.js",
     ".\\core\\events\\events_ui.js",
     ".\\core\\events\\events_trashcan_open.js",
@@ -134,9 +137,6 @@
     ".\\core\\events\\events_block_delete.js",
     ".\\core\\events\\events_block_create.js",
     ".\\core\\events\\events.js",
-    ".\\core\\contextmenu_registry.js",
-    ".\\core\\theme\\classic.js",
-    ".\\core\\blockly_options.js",
     ".\\core\\utils.js",
     ".\\core\\renderers\\zelos\\measurables\\top_row.js",
     ".\\core\\renderers\\zelos\\measurables\\row_elements.js",
@@ -202,6 +202,7 @@
     ".\\core\\renderers\\common\\debug.js",
     ".\\core\\renderers\\common\\block_rendering.js",
     ".\\core\\variables_dynamic.js",
+    ".\\core\\procedures_local_arguments.js",
     ".\\core\\events\\events_var_rename.js",
     ".\\core\\events\\events_var_delete.js",
     ".\\core\\variable_map.js",

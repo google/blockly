@@ -62,5 +62,3 @@ class Measurable {
 }
 
 exports.Measurable = Measurable;
-
-exports.Measurable = Measurable;

@@ -246,5 +246,3 @@ class Drawer extends BaseDrawer {
 }
 
 exports.Drawer = Drawer;
-
-exports.Drawer = Drawer;

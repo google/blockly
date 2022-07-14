@@ -719,5 +719,3 @@ class MarkerSvg {
 }
 
 exports.MarkerSvg = MarkerSvg;
-
-exports.MarkerSvg = MarkerSvg;

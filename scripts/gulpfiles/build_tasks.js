@@ -482,13 +482,14 @@ function getChunkOptions() {
     const [nickname, numJsFiles, parentNick] = element.split(':');
 
     // Get array of files for just this chunk.
-    const chunkFiles = jsFiles.splice(0, numJsFiles);
+    const chunkFiles = jsFiles.splice(0, numJsFiles).map(filepath => filepath.replace(/\\/g, '/'));
 
     // Figure out which chunk this is by looking for one of the
     // known chunk entrypoints in chunkFiles.  N.B.: O(n*m).  :-(
     const chunk = chunks.find(chunk => chunkFiles.find(f => f.endsWith('/' + chunk.entry)));
     if (!chunk) {
       console.log(chunks.filter(chunk => !chunkFiles.find(f => f.endsWith('/' + chunk.entry))))
+      console.log(chunkFiles)
       throw new Error('Unable to identify chunk')
     };
 

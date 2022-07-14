@@ -337,5 +337,3 @@ class RenderInfo extends BaseRenderInfo {
 }
 
 exports.RenderInfo = RenderInfo;
-
-exports.RenderInfo = RenderInfo;

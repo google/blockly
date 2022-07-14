@@ -38,6 +38,7 @@ const svgMath = goog.require('Blockly.utils.svgMath');
 const toolbox = goog.require('Blockly.utils.toolbox');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const utils = goog.require('Blockly.utils');
+const Events = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockDragSurfaceSvg} = goog.requireType('Blockly.BlockDragSurfaceSvg');
 const {BlockSvg} = goog.require('Blockly.BlockSvg');
@@ -53,7 +54,6 @@ const {ContextMenuRegistry} = goog.require('Blockly.ContextMenuRegistry');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 /* eslint-disable-next-line no-unused-vars */
 const {Cursor} = goog.requireType('Blockly.Cursor');
-const {Events} = goog.require('Blockly.Events');
 /* eslint-disable-next-line no-unused-vars */
 const {FlyoutButton} = goog.requireType('Blockly.FlyoutButton');
 const {Gesture} = goog.require('Blockly.Gesture');

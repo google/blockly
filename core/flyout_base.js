@@ -34,7 +34,7 @@ const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 const {DeleteArea} = goog.require('Blockly.DeleteArea');
 /* eslint-disable-next-line no-unused-vars */
 const {FlyoutButton} = goog.requireType('Blockly.FlyoutButton');
-const {FlyoutBookmarks} = goog.requireType('Blockly.FlyoutBookmarks');
+const {FlyoutBookmarks} = goog.require('Blockly.FlyoutBookmarks');
 const {FlyoutMetricsManager} = goog.require('Blockly.FlyoutMetricsManager');
 /* eslint-disable-next-line no-unused-vars */
 const {IFlyout} = goog.require('Blockly.IFlyout');

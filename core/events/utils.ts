@@ -20,7 +20,7 @@ goog.declareModuleId('Blockly.Events.utils');
 import type {Block} from '../block.js';
 import * as registry from '../registry.js';
 import * as idGenerator from '../utils/idgenerator.js';
-import type {Workspace} from '../workspace.js';
+import {Workspace} from '../workspace.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
 
 import type {Abstract} from './events_abstract.js';

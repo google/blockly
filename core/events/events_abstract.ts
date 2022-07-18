@@ -17,7 +17,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.Abstract');
 
-import type {Workspace} from '../workspace.js';
+import {Workspace} from '../workspace.js';
 
 import * as eventUtils from './utils.js';
 

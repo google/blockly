@@ -26,7 +26,7 @@ import './touch.js';
 import {Block} from './block.js';
 import * as blockAnimations from './block_animations.js';
 import * as browserEvents from './browser_events.js';
-import type {Comment} from './comment.js';
+import {Comment} from './comment.js';
 import * as common from './common.js';
 import {config} from './config.js';
 import type {Connection} from './connection.js';
@@ -61,7 +61,7 @@ import * as dom from './utils/dom.js';
 import {Rect} from './utils/rect.js';
 import {Svg} from './utils/svg.js';
 import * as svgMath from './utils/svg_math.js';
-import type {Warning} from './warning.js';
+import {Warning} from './warning.js';
 import {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 

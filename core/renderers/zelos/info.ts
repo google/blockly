@@ -22,7 +22,7 @@ import {FieldLabel} from '../../field_label.js';
 import {FieldTextInput} from '../../field_textinput.js';
 import {Align, Input} from '../../input.js';
 import {inputTypes} from '../../input_types.js';
-import type {RenderInfo as BaseRenderInfo} from '../common/info.js';
+import {RenderInfo as BaseRenderInfo} from '../common/info.js';
 import type {Measurable} from '../measurables/base.js';
 import {Field} from '../measurables/field.js';
 import {InRowSpacer} from '../measurables/in_row_spacer.js';

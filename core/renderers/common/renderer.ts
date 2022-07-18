@@ -28,7 +28,7 @@ import type {WorkspaceSvg} from '../../workspace_svg.js';
 
 import {ConstantProvider} from './constants.js';
 import * as debug from './debug.js';
-import type {Debug} from './debugger.js';
+import {Debug} from './debugger.js';
 import {Drawer} from './drawer.js';
 import type {IPathObject} from './i_path_object.js';
 import {RenderInfo} from './info.js';

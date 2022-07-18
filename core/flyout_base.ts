@@ -24,7 +24,7 @@ import {DeleteArea} from './delete_area.js';
 import * as BlockCreate from './events/events_block_create.js';
 import * as VarCreate from './events/events_var_create.js';
 import * as eventUtils from './events/utils.js';
-import type {FlyoutButton} from './flyout_button.js';
+import {FlyoutButton} from './flyout_button.js';
 import {FlyoutMetricsManager} from './flyout_metrics_manager.js';
 import * as Gesture from './gesture.js';
 import type {IFlyout} from './interfaces/i_flyout.js';

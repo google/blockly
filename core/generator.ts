@@ -19,7 +19,7 @@ goog.declareModuleId('Blockly.Generator');
 
 import type {Block} from './block.js';
 import * as common from './common.js';
-import type {Names, NameType} from './names.js';
+import {Names, NameType} from './names.js';
 import * as deprecation from './utils/deprecation.js';
 import type {Workspace} from './workspace.js';
 

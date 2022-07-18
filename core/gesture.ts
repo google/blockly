@@ -39,7 +39,7 @@ import * as Tooltip from './tooltip.js';
 import * as Touch from './touch.js';
 import {Coordinate} from './utils/coordinate.js';
 import {Workspace} from './workspace.js';
-import type {WorkspaceCommentSvg} from './workspace_comment_svg.js';
+import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
 import {WorkspaceDragger} from './workspace_dragger.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 

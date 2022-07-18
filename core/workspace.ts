@@ -18,7 +18,7 @@ goog.declareModuleId('Blockly.Workspace');
 // Unused import preserved for side-effects. Remove if unneeded.
 import './connection_checker.js';
 
-import type {Block} from './block.js';
+import {Block} from './block.js';
 import type {BlocklyOptions} from './blockly_options.js';
 import type {ConnectionDB} from './connection_db.js';
 import type {Abstract} from './events/events_abstract.js';

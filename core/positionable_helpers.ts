@@ -22,11 +22,9 @@ import './metrics_manager.js';
 import {UiMetrics} from './metrics_manager.js';
 import {Scrollbar} from './scrollbar.js';
 import {Rect} from './utils/rect.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Size} from './utils/size.js';
+import type {Size} from './utils/size.js';
 import * as toolbox from './utils/toolbox.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**

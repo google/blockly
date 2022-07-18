@@ -16,36 +16,28 @@
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.zelos.RenderInfo');
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg.js';
+import type {BlockSvg} from '../../block_svg.js';
 import {FieldImage} from '../../field_image.js';
 import {FieldLabel} from '../../field_label.js';
 import {FieldTextInput} from '../../field_textinput.js';
 import {Align, Input} from '../../input.js';
 import {inputTypes} from '../../input_types.js';
-/* eslint-disable-next-line no-unused-vars */
-import {RenderInfo as BaseRenderInfo} from '../common/info.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Measurable} from '../measurables/base.js';
+import type {RenderInfo as BaseRenderInfo} from '../common/info.js';
+import type {Measurable} from '../measurables/base.js';
 import {Field} from '../measurables/field.js';
 import {InRowSpacer} from '../measurables/in_row_spacer.js';
 import {InputConnection} from '../measurables/input_connection.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Row} from '../measurables/row.js';
-/* eslint-disable-next-line no-unused-vars */
-import {SpacerRow} from '../measurables/spacer_row.js';
+import type {Row} from '../measurables/row.js';
+import type {SpacerRow} from '../measurables/spacer_row.js';
 import {Types} from '../measurables/types.js';
 
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider, InsideCorners} from './constants.js';
+import type {ConstantProvider, InsideCorners} from './constants.js';
 import {BottomRow} from './measurables/bottom_row.js';
 import {StatementInput} from './measurables/inputs.js';
 import {RightConnectionShape} from './measurables/row_elements.js';
 import {TopRow} from './measurables/top_row.js';
-/* eslint-disable-next-line no-unused-vars */
-import {PathObject} from './path_object.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Renderer} from './renderer.js';
+import type {PathObject} from './path_object.js';
+import type {Renderer} from './renderer.js';
 
 
 /**

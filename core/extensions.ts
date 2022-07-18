@@ -24,8 +24,7 @@ goog.declareModuleId('Blockly.Extensions');
 // Unused import preserved for side-effects. Remove if unneeded.
 import './mutator.js';
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from './block.js';
+import type {Block} from './block.js';
 import {BlockSvg} from './block_svg.js';
 import {FieldDropdown} from './field_dropdown.js';
 import {Mutator} from './mutator.js';

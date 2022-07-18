@@ -15,22 +15,17 @@
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.geras.Drawer');
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg.js';
+import type {BlockSvg} from '../../block_svg.js';
 import * as svgPaths from '../../utils/svg_paths.js';
 import * as debug from '../common/debug.js';
 import {Drawer as BaseDrawer} from '../common/drawer.js';
 import {Row} from '../measurables/row.js';
 
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from './constants.js';
+import type {ConstantProvider} from './constants.js';
 import {Highlighter} from './highlighter.js';
-/* eslint-disable-next-line no-unused-vars */
-import {RenderInfo} from './info.js';
-/* eslint-disable-next-line no-unused-vars */
-import {InlineInput} from './measurables/inline_input.js';
-/* eslint-disable-next-line no-unused-vars */
-import {PathObject} from './path_object.js';
+import type {RenderInfo} from './info.js';
+import type {InlineInput} from './measurables/inline_input.js';
+import type {PathObject} from './path_object.js';
 
 
 /**

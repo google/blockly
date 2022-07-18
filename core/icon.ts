@@ -15,11 +15,9 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Icon');
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
+import type {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Bubble} from './bubble.js';
+import type {Bubble} from './bubble.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import {Size} from './utils/size.js';

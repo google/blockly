@@ -17,14 +17,11 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Generator');
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from './block.js';
+import type {Block} from './block.js';
 import * as common from './common.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Names, NameType} from './names.js';
+import type {Names, NameType} from './names.js';
 import * as deprecation from './utils/deprecation.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Workspace} from './workspace.js';
+import type {Workspace} from './workspace.js';
 
 
 /**

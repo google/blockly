@@ -20,10 +20,8 @@ import * as dialog from './dialog.js';
 import {Msg} from './msg.js';
 import * as utilsXml from './utils/xml.js';
 import {VariableModel} from './variable_model.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Workspace} from './workspace.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import type {Workspace} from './workspace.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 import * as Xml from './xml.js';
 
 

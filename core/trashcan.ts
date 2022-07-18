@@ -21,38 +21,29 @@ import './metrics_manager.js';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_trashcan_open.js';
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlocklyOptions} from './blockly_options.js';
+import type {BlocklyOptions} from './blockly_options.js';
 import * as browserEvents from './browser_events.js';
 import {ComponentManager} from './component_manager.js';
 import {DeleteArea} from './delete_area.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Abstract} from './events/events_abstract.js';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockDelete} from './events/events_block_delete.js';
+import type {Abstract} from './events/events_abstract.js';
+import type {BlockDelete} from './events/events_block_delete.js';
 import * as eventUtils from './events/utils.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IAutoHideable} from './interfaces/i_autohideable.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IDraggable} from './interfaces/i_draggable.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IFlyout} from './interfaces/i_flyout.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IPositionable} from './interfaces/i_positionable.js';
+import type {IAutoHideable} from './interfaces/i_autohideable.js';
+import type {IDraggable} from './interfaces/i_draggable.js';
+import type {IFlyout} from './interfaces/i_flyout.js';
+import type {IPositionable} from './interfaces/i_positionable.js';
 import {UiMetrics} from './metrics_manager.js';
 import {Options} from './options.js';
 import * as uiPosition from './positionable_helpers.js';
 import * as registry from './registry.js';
-/* eslint-disable-next-line no-unused-vars */
-import * as blocks from './serialization/blocks.js';
+import type * as blocks from './serialization/blocks.js';
 import {SPRITE} from './sprites.js';
 import * as dom from './utils/dom.js';
 import {Rect} from './utils/rect.js';
 import {Size} from './utils/size.js';
 import {Svg} from './utils/svg.js';
 import * as toolbox from './utils/toolbox.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**

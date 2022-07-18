@@ -15,25 +15,19 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.bumpObjects');
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Abstract} from './events/events_abstract.js';
+import type {BlockSvg} from './block_svg.js';
+import type {Abstract} from './events/events_abstract.js';
 import {BlockCreate} from './events/events_block_create.js';
 import {BlockMove} from './events/events_block_move.js';
 import {CommentCreate} from './events/events_comment_create.js';
 import {CommentMove} from './events/events_comment_move.js';
-/* eslint-disable-next-line no-unused-vars */
-import {ViewportChange} from './events/events_viewport.js';
+import type {ViewportChange} from './events/events_viewport.js';
 import * as eventUtils from './events/utils.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IBoundedElement} from './interfaces/i_bounded_element.js';
+import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import {ContainerRegion, MetricsManager} from './metrics_manager.js';
 import * as mathUtils from './utils/math.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import type {WorkspaceCommentSvg} from './workspace_comment_svg.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**

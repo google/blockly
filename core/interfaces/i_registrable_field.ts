@@ -15,8 +15,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.IRegistrableField');
 
-/* eslint-disable-next-line no-unused-vars */
-import {Field} from '../field.js';
+import type {Field} from '../field.js';
 
 
 type fromJson = (p1: object) => Field;

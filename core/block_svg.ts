@@ -26,45 +26,33 @@ import './touch.js';
 import {Block} from './block.js';
 import * as blockAnimations from './block_animations.js';
 import * as browserEvents from './browser_events.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Comment} from './comment.js';
+import type {Comment} from './comment.js';
 import * as common from './common.js';
 import {config} from './config.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Connection} from './connection.js';
+import type {Connection} from './connection.js';
 import {ConnectionType} from './connection_type.js';
 import * as constants from './constants.js';
 import * as ContextMenu from './contextmenu.js';
 import {ContextMenuOption, ContextMenuRegistry, LegacyContextMenuOption} from './contextmenu_registry.js';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockMove} from './events/events_block_move.js';
+import type {BlockMove} from './events/events_block_move.js';
 import * as eventUtils from './events/utils.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Field} from './field.js';
+import type {Field} from './field.js';
 import {FieldLabel} from './field_label.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Icon} from './icon.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Input} from './input.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IBoundedElement} from './interfaces/i_bounded_element.js';
+import type {Icon} from './icon.js';
+import type {Input} from './input.js';
+import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
+import type {IBoundedElement} from './interfaces/i_bounded_element.js';
 import {CopyData, ICopyable} from './interfaces/i_copyable.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IDraggable} from './interfaces/i_draggable.js';
+import type {IDraggable} from './interfaces/i_draggable.js';
 import * as internalConstants from './internal_constants.js';
 import {ASTNode} from './keyboard_nav/ast_node.js';
 import {TabNavigateCursor} from './keyboard_nav/tab_navigate_cursor.js';
 import {MarkerManager} from './marker_manager.js';
 import {Msg} from './msg.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Mutator} from './mutator.js';
+import type {Mutator} from './mutator.js';
 import {RenderedConnection} from './rendered_connection.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Debug as BlockRenderingDebug} from './renderers/common/debugger.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IPathObject} from './renderers/common/i_path_object.js';
+import type {Debug as BlockRenderingDebug} from './renderers/common/debugger.js';
+import type {IPathObject} from './renderers/common/i_path_object.js';
 import * as blocks from './serialization/blocks.js';
 import {BlockStyle} from './theme.js';
 import * as Tooltip from './tooltip.js';
@@ -73,11 +61,9 @@ import * as dom from './utils/dom.js';
 import {Rect} from './utils/rect.js';
 import {Svg} from './utils/svg.js';
 import * as svgMath from './utils/svg_math.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Warning} from './warning.js';
+import type {Warning} from './warning.js';
 import {Workspace} from './workspace.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**

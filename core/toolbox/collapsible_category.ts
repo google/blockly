@@ -15,12 +15,9 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.CollapsibleToolboxCategory');
 
-/* eslint-disable-next-line no-unused-vars */
-import {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_item.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IToolbox} from '../interfaces/i_toolbox.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IToolboxItem} from '../interfaces/i_toolbox_item.js';
+import type {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_item.js';
+import type {IToolbox} from '../interfaces/i_toolbox.js';
+import type {IToolboxItem} from '../interfaces/i_toolbox_item.js';
 import * as registry from '../registry.js';
 import * as aria from '../utils/aria.js';
 import * as dom from '../utils/dom.js';

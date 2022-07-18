@@ -15,30 +15,22 @@
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.Renderer');
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from '../../block.js';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg.js';
+import type {Block} from '../../block.js';
+import type {BlockSvg} from '../../block_svg.js';
 import {Connection} from '../../connection.js';
 import {ConnectionType} from '../../connection_type.js';
 import {InsertionMarkerManager, PreviewType} from '../../insertion_marker_manager.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IRegistrable} from '../../interfaces/i_registrable.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Marker} from '../../keyboard_nav/marker.js';
-/* eslint-disable-next-line no-unused-vars */
-import {RenderedConnection} from '../../rendered_connection.js';
+import type {IRegistrable} from '../../interfaces/i_registrable.js';
+import type {Marker} from '../../keyboard_nav/marker.js';
+import type {RenderedConnection} from '../../rendered_connection.js';
 import {BlockStyle, Theme} from '../../theme.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from '../../workspace_svg.js';
+import type {WorkspaceSvg} from '../../workspace_svg.js';
 
 import {ConstantProvider} from './constants.js';
 import * as debug from './debug.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Debug} from './debugger.js';
+import type {Debug} from './debugger.js';
 import {Drawer} from './drawer.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IPathObject} from './i_path_object.js';
+import type {IPathObject} from './i_path_object.js';
 import {RenderInfo} from './info.js';
 import {MarkerSvg} from './marker_svg.js';
 import {PathObject} from './path_object.js';

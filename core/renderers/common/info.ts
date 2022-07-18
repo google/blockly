@@ -15,14 +15,11 @@
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.RenderInfo');
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg.js';
+import type {BlockSvg} from '../../block_svg.js';
 import {Align, Input} from '../../input.js';
 import {inputTypes} from '../../input_types.js';
-/* eslint-disable-next-line no-unused-vars */
-import {RenderedConnection} from '../../rendered_connection.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Measurable} from '../measurables/base.js';
+import type {RenderedConnection} from '../../rendered_connection.js';
+import type {Measurable} from '../measurables/base.js';
 import {BottomRow} from '../measurables/bottom_row.js';
 import {ExternalValueInput} from '../measurables/external_value_input.js';
 import {Field} from '../measurables/field.js';
@@ -36,18 +33,15 @@ import {NextConnection} from '../measurables/next_connection.js';
 import {OutputConnection} from '../measurables/output_connection.js';
 import {PreviousConnection} from '../measurables/previous_connection.js';
 import {RoundCorner} from '../measurables/round_corner.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Row} from '../measurables/row.js';
+import type {Row} from '../measurables/row.js';
 import {SpacerRow} from '../measurables/spacer_row.js';
 import {SquareCorner} from '../measurables/square_corner.js';
 import {StatementInput} from '../measurables/statement_input.js';
 import {TopRow} from '../measurables/top_row.js';
 import {Types} from '../measurables/types.js';
 
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from './constants.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Renderer} from './renderer.js';
+import type {ConstantProvider} from './constants.js';
+import type {Renderer} from './renderer.js';
 
 
 /**

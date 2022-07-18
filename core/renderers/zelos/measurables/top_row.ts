@@ -15,8 +15,7 @@
 import * as goog from '../../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.zelos.TopRow');
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../../block_svg.js';
+import type {BlockSvg} from '../../../block_svg.js';
 import {ConstantProvider} from '../../../renderers/common/constants.js';
 import {TopRow as BaseTopRow} from '../../../renderers/measurables/top_row.js';
 

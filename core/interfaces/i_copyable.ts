@@ -16,8 +16,7 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.ICopyable');
 
 /* eslint-disable-next-line no-unused-vars */
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from '../workspace_svg.js';
+import type {WorkspaceSvg} from '../workspace_svg.js';
 
 import {ISelectable} from './i_selectable.js';
 

@@ -15,30 +15,22 @@
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.Debug');
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg.js';
+import type {BlockSvg} from '../../block_svg.js';
 import {ConnectionType} from '../../connection_type.js';
 import {FieldLabel} from '../../field_label.js';
-/* eslint-disable-next-line no-unused-vars */
-import {RenderedConnection} from '../../rendered_connection.js';
+import type {RenderedConnection} from '../../rendered_connection.js';
 import * as dom from '../../utils/dom.js';
 import {Svg} from '../../utils/svg.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Measurable} from '../measurables/base.js';
+import type {Measurable} from '../measurables/base.js';
 import {Field} from '../measurables/field.js';
-/* eslint-disable-next-line no-unused-vars */
-import {InRowSpacer} from '../measurables/in_row_spacer.js';
+import type {InRowSpacer} from '../measurables/in_row_spacer.js';
 import {InputConnection} from '../measurables/input_connection.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Row} from '../measurables/row.js';
+import type {Row} from '../measurables/row.js';
 import {Types} from '../measurables/types.js';
-/* eslint-disable-next-line no-unused-vars */
-import {RenderInfo as ZelosInfo} from '../zelos/info.js';
+import type {RenderInfo as ZelosInfo} from '../zelos/info.js';
 
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from './constants.js';
-/* eslint-disable-next-line no-unused-vars */
-import {RenderInfo} from './info.js';
+import type {ConstantProvider} from './constants.js';
+import type {RenderInfo} from './info.js';
 
 
 /**

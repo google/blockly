@@ -15,29 +15,20 @@
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.Drawer');
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg.js';
+import type {BlockSvg} from '../../block_svg.js';
 import * as svgPaths from '../../utils/svg_paths.js';
 import {Connection} from '../measurables/connection.js';
-/* eslint-disable-next-line no-unused-vars */
-import {ExternalValueInput} from '../measurables/external_value_input.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Field} from '../measurables/field.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Icon} from '../measurables/icon.js';
-/* eslint-disable-next-line no-unused-vars */
-import {InlineInput} from '../measurables/inline_input.js';
-/* eslint-disable-next-line no-unused-vars */
-import {PreviousConnection} from '../measurables/previous_connection.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Row} from '../measurables/row.js';
+import type {ExternalValueInput} from '../measurables/external_value_input.js';
+import type {Field} from '../measurables/field.js';
+import type {Icon} from '../measurables/icon.js';
+import type {InlineInput} from '../measurables/inline_input.js';
+import type {PreviousConnection} from '../measurables/previous_connection.js';
+import type {Row} from '../measurables/row.js';
 import {Types} from '../measurables/types.js';
 
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider, Notch, PuzzleTab} from './constants.js';
+import type {ConstantProvider, Notch, PuzzleTab} from './constants.js';
 import * as debug from './debug.js';
-/* eslint-disable-next-line no-unused-vars */
-import {RenderInfo} from './info.js';
+import type {RenderInfo} from './info.js';
 
 
 /**

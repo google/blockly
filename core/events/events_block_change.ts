@@ -15,10 +15,8 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.BlockChange');
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from '../block.js';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../block_svg.js';
+import type {Block} from '../block.js';
+import type {BlockSvg} from '../block_svg.js';
 import * as registry from '../registry.js';
 import * as Xml from '../xml.js';
 

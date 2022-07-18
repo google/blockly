@@ -23,12 +23,9 @@ goog.declareModuleId('Blockly.ConnectionDB');
 import './constants.js';
 
 import {ConnectionType} from './connection_type.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IConnectionChecker} from './interfaces/i_connection_checker.js';
-/* eslint-disable-next-line no-unused-vars */
-import {RenderedConnection} from './rendered_connection.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Coordinate} from './utils/coordinate.js';
+import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
+import type {RenderedConnection} from './rendered_connection.js';
+import type {Coordinate} from './utils/coordinate.js';
 
 
 /**

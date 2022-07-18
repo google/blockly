@@ -25,8 +25,7 @@ import * as browserEvents from './browser_events.js';
 import {ComponentManager} from './component_manager.js';
 import * as Css from './css.js';
 import * as eventUtils from './events/utils.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IPositionable} from './interfaces/i_positionable.js';
+import type {IPositionable} from './interfaces/i_positionable.js';
 import {UiMetrics} from './metrics_manager.js';
 import * as uiPosition from './positionable_helpers.js';
 import {SPRITE} from './sprites.js';
@@ -35,8 +34,7 @@ import * as dom from './utils/dom.js';
 import {Rect} from './utils/rect.js';
 import {Size} from './utils/size.js';
 import {Svg} from './utils/svg.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**

@@ -19,18 +19,14 @@ goog.declareModuleId('Blockly.blockRendering.PathObject');
 // Unused import preserved for side-effects. Remove if unneeded.
 import '../../theme.js';
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Connection} from '../../connection.js';
+import type {BlockSvg} from '../../block_svg.js';
+import type {Connection} from '../../connection.js';
 import {BlockStyle} from '../../theme.js';
 import * as dom from '../../utils/dom.js';
 import {Svg} from '../../utils/svg.js';
 
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from './constants.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IPathObject} from './i_path_object.js';
+import type {ConstantProvider} from './constants.js';
+import type {IPathObject} from './i_path_object.js';
 
 
 /**

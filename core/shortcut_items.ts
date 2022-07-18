@@ -19,8 +19,7 @@ import {BlockSvg} from './block_svg.js';
 import * as clipboard from './clipboard.js';
 import * as common from './common.js';
 import {Gesture} from './gesture.js';
-/* eslint-disable-next-line no-unused-vars */
-import {ICopyable} from './interfaces/i_copyable.js';
+import type {ICopyable} from './interfaces/i_copyable.js';
 import {KeyboardShortcut, ShortcutRegistry} from './shortcut_registry.js';
 import {KeyCodes} from './utils/keycodes.js';
 import {WorkspaceSvg} from './workspace_svg.js';

@@ -20,11 +20,9 @@ import './procedures.js';
 
 import {Msg} from './msg.js';
 import * as Procedures from './procedures.js';
-/* eslint-disable-next-line no-unused-vars */
-import {VariableMap} from './variable_map.js';
+import type {VariableMap} from './variable_map.js';
 import * as Variables from './variables.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Workspace} from './workspace.js';
+import type {Workspace} from './workspace.js';
 
 
 /**

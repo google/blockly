@@ -22,32 +22,22 @@ import '../shortcut_registry.js';
 import '../events/events_toolbox_item_select.js';
 
 import {BlockSvg} from '../block_svg.js';
-/* eslint-disable-next-line no-unused-vars */
-import {BlocklyOptions} from '../blockly_options.js';
+import type {BlocklyOptions} from '../blockly_options.js';
 import * as browserEvents from '../browser_events.js';
 import * as common from '../common.js';
 import {ComponentManager} from '../component_manager.js';
 import * as Css from '../css.js';
 import {DeleteArea} from '../delete_area.js';
 import * as eventUtils from '../events/utils.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IAutoHideable} from '../interfaces/i_autohideable.js';
-/* eslint-disable-next-line no-unused-vars */
-import {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_item.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IDraggable} from '../interfaces/i_draggable.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IFlyout} from '../interfaces/i_flyout.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IKeyboardAccessible} from '../interfaces/i_keyboard_accessible.js';
-/* eslint-disable-next-line no-unused-vars */
-import {ISelectableToolboxItem} from '../interfaces/i_selectable_toolbox_item.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IStyleable} from '../interfaces/i_styleable.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IToolbox} from '../interfaces/i_toolbox.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IToolboxItem} from '../interfaces/i_toolbox_item.js';
+import type {IAutoHideable} from '../interfaces/i_autohideable.js';
+import type {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_item.js';
+import type {IDraggable} from '../interfaces/i_draggable.js';
+import type {IFlyout} from '../interfaces/i_flyout.js';
+import type {IKeyboardAccessible} from '../interfaces/i_keyboard_accessible.js';
+import type {ISelectableToolboxItem} from '../interfaces/i_selectable_toolbox_item.js';
+import type {IStyleable} from '../interfaces/i_styleable.js';
+import type {IToolbox} from '../interfaces/i_toolbox.js';
+import type {IToolboxItem} from '../interfaces/i_toolbox_item.js';
 import {Options} from '../options.js';
 import * as registry from '../registry.js';
 import {KeyboardShortcut} from '../shortcut_registry.js';
@@ -57,11 +47,9 @@ import * as dom from '../utils/dom.js';
 import {KeyCodes} from '../utils/keycodes.js';
 import {Rect} from '../utils/rect.js';
 import * as toolbox from '../utils/toolbox.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from '../workspace_svg.js';
+import type {WorkspaceSvg} from '../workspace_svg.js';
 
-/* eslint-disable-next-line no-unused-vars */
-import {ToolboxCategory} from './category.js';
+import type {ToolboxCategory} from './category.js';
 import {CollapsibleToolboxCategory} from './collapsible_category.js';
 
 

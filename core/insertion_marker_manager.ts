@@ -16,24 +16,18 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.InsertionMarkerManager');
 
 import * as blockAnimations from './block_animations.js';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
+import type {BlockSvg} from './block_svg.js';
 import * as common from './common.js';
 import {ComponentManager} from './component_manager.js';
 import {config} from './config.js';
 import {ConnectionType} from './connection_type.js';
 import * as constants from './constants.js';
 import * as eventUtils from './events/utils.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IDeleteArea} from './interfaces/i_delete_area.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IDragTarget} from './interfaces/i_drag_target.js';
-/* eslint-disable-next-line no-unused-vars */
-import {RenderedConnection} from './rendered_connection.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Coordinate} from './utils/coordinate.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import type {IDeleteArea} from './interfaces/i_delete_area.js';
+import type {IDragTarget} from './interfaces/i_drag_target.js';
+import type {RenderedConnection} from './rendered_connection.js';
+import type {Coordinate} from './utils/coordinate.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 /** Represents a nearby valid connection. */

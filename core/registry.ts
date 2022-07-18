@@ -17,32 +17,19 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.registry');
 
-/* eslint-disable-next-line no-unused-vars */
-import {Abstract} from './events/events_abstract.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Field} from './field.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IBlockDragger} from './interfaces/i_block_dragger.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IConnectionChecker} from './interfaces/i_connection_checker.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IFlyout} from './interfaces/i_flyout.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IMetricsManager} from './interfaces/i_metrics_manager.js';
-/* eslint-disable-next-line no-unused-vars */
-import {ISerializer} from './interfaces/i_serializer.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IToolbox} from './interfaces/i_toolbox.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Cursor} from './keyboard_nav/cursor.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Options} from './options.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Renderer} from './renderers/common/renderer.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Theme} from './theme.js';
-/* eslint-disable-next-line no-unused-vars */
-import {ToolboxItem} from './toolbox/toolbox_item.js';
+import type {Abstract} from './events/events_abstract.js';
+import type {Field} from './field.js';
+import type {IBlockDragger} from './interfaces/i_block_dragger.js';
+import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
+import type {IFlyout} from './interfaces/i_flyout.js';
+import type {IMetricsManager} from './interfaces/i_metrics_manager.js';
+import type {ISerializer} from './interfaces/i_serializer.js';
+import type {IToolbox} from './interfaces/i_toolbox.js';
+import type {Cursor} from './keyboard_nav/cursor.js';
+import type {Options} from './options.js';
+import type {Renderer} from './renderers/common/renderer.js';
+import type {Theme} from './theme.js';
+import type {ToolboxItem} from './toolbox/toolbox_item.js';
 
 
 /**

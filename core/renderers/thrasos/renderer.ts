@@ -15,8 +15,7 @@
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.thrasos.Renderer');
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg.js';
+import type {BlockSvg} from '../../block_svg.js';
 import * as blockRendering from '../common/block_rendering.js';
 import {Renderer as BaseRenderer} from '../common/renderer.js';
 

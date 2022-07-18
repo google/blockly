@@ -19,8 +19,7 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.FieldDropdown');
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
+import type {BlockSvg} from './block_svg.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import {Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
@@ -30,8 +29,7 @@ import * as aria from './utils/aria.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Sentinel} from './utils/sentinel.js';
+import type {Sentinel} from './utils/sentinel.js';
 import * as utilsString from './utils/string.js';
 import {Svg} from './utils/svg.js';
 import * as userAgent from './utils/useragent.js';

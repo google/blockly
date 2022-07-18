@@ -22,10 +22,8 @@ import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
 import * as style from './utils/style.js';
 import {Svg} from './utils/svg.js';
-/* eslint-disable-next-line no-unused-vars */
-import * as toolbox from './utils/toolbox.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import type * as toolbox from './utils/toolbox.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**

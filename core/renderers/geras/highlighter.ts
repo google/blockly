@@ -22,22 +22,16 @@ goog.declareModuleId('Blockly.geras.Highlighter');
 import './renderer.js';
 
 import * as svgPaths from '../../utils/svg_paths.js';
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from '../common/constants.js';
-/* eslint-disable-next-line no-unused-vars */
-import {BottomRow} from '../measurables/bottom_row.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Row} from '../measurables/row.js';
+import type {ConstantProvider} from '../common/constants.js';
+import type {BottomRow} from '../measurables/bottom_row.js';
+import type {Row} from '../measurables/row.js';
 import {SpacerRow} from '../measurables/spacer_row.js';
-/* eslint-disable-next-line no-unused-vars */
-import {TopRow} from '../measurables/top_row.js';
+import type {TopRow} from '../measurables/top_row.js';
 import {Types} from '../measurables/types.js';
 
 import {HighlightConstantProvider, InsideCorner, JaggedTeeth, Notch, OutsideCorner, PuzzleTab, StartHat} from './highlight_constants.js';
-/* eslint-disable-next-line no-unused-vars */
-import {RenderInfo} from './info.js';
-/* eslint-disable-next-line no-unused-vars */
-import {InlineInput} from './measurables/inline_input.js';
+import type {RenderInfo} from './info.js';
+import type {InlineInput} from './measurables/inline_input.js';
 
 
 /**

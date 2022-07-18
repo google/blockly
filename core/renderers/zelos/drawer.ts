@@ -15,28 +15,20 @@
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.zelos.Drawer');
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg.js';
+import type {BlockSvg} from '../../block_svg.js';
 import * as svgPaths from '../../utils/svg_paths.js';
-/* eslint-disable-next-line no-unused-vars */
-import {BaseShape, DynamicShape, Notch} from '../common/constants.js';
+import type {BaseShape, DynamicShape, Notch} from '../common/constants.js';
 import * as debug from '../common/debug.js';
 import {Drawer as BaseDrawer} from '../common/drawer.js';
 import {InlineInput} from '../measurables/inline_input.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Row} from '../measurables/row.js';
-/* eslint-disable-next-line no-unused-vars */
-import {SpacerRow} from '../measurables/spacer_row.js';
+import type {Row} from '../measurables/row.js';
+import type {SpacerRow} from '../measurables/spacer_row.js';
 import {Types} from '../measurables/types.js';
 
-/* eslint-disable-next-line no-unused-vars */
-import {InsideCorners} from './constants.js';
-/* eslint-disable-next-line no-unused-vars */
-import {RenderInfo} from './info.js';
-/* eslint-disable-next-line no-unused-vars */
-import {StatementInput} from './measurables/inputs.js';
-/* eslint-disable-next-line no-unused-vars */
-import {PathObject} from './path_object.js';
+import type {InsideCorners} from './constants.js';
+import type {RenderInfo} from './info.js';
+import type {StatementInput} from './measurables/inputs.js';
+import type {PathObject} from './path_object.js';
 
 
 /**

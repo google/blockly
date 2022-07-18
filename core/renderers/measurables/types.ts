@@ -15,10 +15,8 @@
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.Types');
 
-/* eslint-disable-next-line no-unused-vars */
-import {Measurable} from './base.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Row} from './row.js';
+import type {Measurable} from './base.js';
+import type {Row} from './row.js';
 
 
 /**

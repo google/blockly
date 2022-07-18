@@ -15,12 +15,10 @@
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.minimalist.RenderInfo');
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg.js';
+import type {BlockSvg} from '../../block_svg.js';
 import {RenderInfo as BaseRenderInfo} from '../common/info.js';
 
-/* eslint-disable-next-line no-unused-vars */
-import {Renderer} from './renderer.js';
+import type {Renderer} from './renderer.js';
 
 
 /**

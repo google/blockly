@@ -17,8 +17,7 @@ goog.declareModuleId('Blockly.WorkspaceDragger');
 
 import * as common from './common.js';
 import {Coordinate} from './utils/coordinate.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**

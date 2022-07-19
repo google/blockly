@@ -23,7 +23,7 @@ import {InsertionMarkerManager, PreviewType} from '../../insertion_marker_manage
 import type {IRegistrable} from '../../interfaces/i_registrable.js';
 import type {Marker} from '../../keyboard_nav/marker.js';
 import type {RenderedConnection} from '../../rendered_connection.js';
-import {BlockStyle, Theme} from '../../theme.js';
+import type {BlockStyle, Theme} from '../../theme.js';
 import type {WorkspaceSvg} from '../../workspace_svg.js';
 
 import {ConstantProvider} from './constants.js';

@@ -20,7 +20,7 @@ import type {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import * as clipboard from './clipboard.js';
 import {config} from './config.js';
-import {ContextMenuOption, ContextMenuRegistry, LegacyContextMenuOption} from './contextmenu_registry.js';
+import type {ContextMenuOption, ContextMenuRegistry, LegacyContextMenuOption} from './contextmenu_registry.js';
 import * as BlockCreate from './events/events_block_create.js';
 import * as eventUtils from './events/utils.js';
 import {Menu} from './menu.js';

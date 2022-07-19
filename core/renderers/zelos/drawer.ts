@@ -20,7 +20,7 @@ import * as svgPaths from '../../utils/svg_paths.js';
 import type {BaseShape, DynamicShape, Notch} from '../common/constants.js';
 import * as debug from '../common/debug.js';
 import {Drawer as BaseDrawer} from '../common/drawer.js';
-import {InlineInput} from '../measurables/inline_input.js';
+import type {InlineInput} from '../measurables/inline_input.js';
 import type {Row} from '../measurables/row.js';
 import type {SpacerRow} from '../measurables/spacer_row.js';
 import {Types} from '../measurables/types.js';

@@ -28,7 +28,7 @@ import * as dom from './utils/dom.js';
 import * as idGenerator from './utils/idgenerator.js';
 import {KeyCodes} from './utils/keycodes.js';
 import * as math from './utils/math.js';
-import {Metrics} from './utils/metrics.js';
+import type {Metrics} from './utils/metrics.js';
 import * as object from './utils/object.js';
 import * as parsing from './utils/parsing.js';
 import {Rect} from './utils/rect.js';

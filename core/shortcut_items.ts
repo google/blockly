@@ -22,7 +22,7 @@ import {Gesture} from './gesture.js';
 import type {ICopyable} from './interfaces/i_copyable.js';
 import {KeyboardShortcut, ShortcutRegistry} from './shortcut_registry.js';
 import {KeyCodes} from './utils/keycodes.js';
-import {WorkspaceSvg} from './workspace_svg.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**

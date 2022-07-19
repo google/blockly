@@ -17,7 +17,7 @@ goog.declareModuleId('Blockly.blockRendering.ConstantProvider');
 
 import {ConnectionType} from '../../connection_type.js';
 import type {RenderedConnection} from '../../rendered_connection.js';
-import {BlockStyle, Theme} from '../../theme.js';
+import type {BlockStyle, Theme} from '../../theme.js';
 import * as colour from '../../utils/colour.js';
 import * as dom from '../../utils/dom.js';
 import * as parsing from '../../utils/parsing.js';

@@ -18,16 +18,16 @@ import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.geras.RenderInfo');
 
 import type {BlockSvg} from '../../block_svg.js';
-import {Input} from '../../input.js';
+import type {Input} from '../../input.js';
 import {inputTypes} from '../../input_types.js';
 import {RenderInfo as BaseRenderInfo} from '../common/info.js';
-import {Measurable} from '../measurables/base.js';
+import type {Measurable} from '../measurables/base.js';
 import type {BottomRow} from '../measurables/bottom_row.js';
 import {ExternalValueInput} from '../measurables/external_value_input.js';
 import type {Field} from '../measurables/field.js';
 import {InRowSpacer} from '../measurables/in_row_spacer.js';
 import type {InputRow} from '../measurables/input_row.js';
-import {Row} from '../measurables/row.js';
+import type {Row} from '../measurables/row.js';
 import type {TopRow} from '../measurables/top_row.js';
 import {Types} from '../measurables/types.js';
 

@@ -40,7 +40,7 @@ import type {IToolbox} from '../interfaces/i_toolbox.js';
 import type {IToolboxItem} from '../interfaces/i_toolbox_item.js';
 import {Options} from '../options.js';
 import * as registry from '../registry.js';
-import {KeyboardShortcut} from '../shortcut_registry.js';
+import type {KeyboardShortcut} from '../shortcut_registry.js';
 import * as Touch from '../touch.js';
 import * as aria from '../utils/aria.js';
 import * as dom from '../utils/dom.js';

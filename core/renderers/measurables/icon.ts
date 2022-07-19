@@ -19,7 +19,7 @@ goog.declareModuleId('Blockly.blockRendering.Icon');
 
 /* eslint-disable-next-line no-unused-vars */
 import type {Icon as BlocklyIcon} from '../../icon.js';
-import {ConstantProvider} from '../common/constants.js';
+import type {ConstantProvider} from '../common/constants.js';
 
 import {Measurable} from './base.js';
 import {Types} from './types.js';

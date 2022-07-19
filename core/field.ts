@@ -39,7 +39,7 @@ import type {IKeyboardAccessible} from './interfaces/i_keyboard_accessible.js';
 import type {IRegistrable} from './interfaces/i_registrable.js';
 import {MarkerManager} from './marker_manager.js';
 import type {ConstantProvider} from './renderers/common/constants.js';
-import {KeyboardShortcut} from './shortcut_registry.js';
+import type {KeyboardShortcut} from './shortcut_registry.js';
 import * as Tooltip from './tooltip.js';
 import type {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';

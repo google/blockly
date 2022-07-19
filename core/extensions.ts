@@ -25,7 +25,7 @@ goog.declareModuleId('Blockly.Extensions');
 import './mutator.js';
 
 import type {Block} from './block.js';
-import {BlockSvg} from './block_svg.js';
+import type {BlockSvg} from './block_svg.js';
 import {FieldDropdown} from './field_dropdown.js';
 import {Mutator} from './mutator.js';
 import * as parsing from './utils/parsing.js';

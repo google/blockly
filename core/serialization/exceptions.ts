@@ -16,9 +16,7 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.serialization.exceptions');
 
 import type {Block} from '../block.js';
-
-// eslint-disable-next-line no-unused-vars
-import {State} from './blocks.js';
+import type {State} from './blocks.js';
 
 
 /** @alias Blockly.serialization.exceptions.DeserializationError */

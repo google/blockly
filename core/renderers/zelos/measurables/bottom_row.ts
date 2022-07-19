@@ -16,7 +16,7 @@ import * as goog from '../../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.zelos.BottomRow');
 
 import type {BlockSvg} from '../../../block_svg.js';
-import {ConstantProvider} from '../../../renderers/common/constants.js';
+import type {ConstantProvider} from '../../../renderers/common/constants.js';
 import {BottomRow as BaseBottomRow} from '../../../renderers/measurables/bottom_row.js';
 
 

@@ -26,7 +26,7 @@ import {ComponentManager} from './component_manager.js';
 import * as Css from './css.js';
 import * as eventUtils from './events/utils.js';
 import type {IPositionable} from './interfaces/i_positionable.js';
-import {UiMetrics} from './metrics_manager.js';
+import type {UiMetrics} from './metrics_manager.js';
 import * as uiPosition from './positionable_helpers.js';
 import {SPRITE} from './sprites.js';
 import * as Touch from './touch.js';

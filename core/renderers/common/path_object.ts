@@ -21,7 +21,7 @@ import '../../theme.js';
 
 import type {BlockSvg} from '../../block_svg.js';
 import type {Connection} from '../../connection.js';
-import {BlockStyle} from '../../theme.js';
+import type {BlockStyle} from '../../theme.js';
 import * as dom from '../../utils/dom.js';
 import {Svg} from '../../utils/svg.js';
 

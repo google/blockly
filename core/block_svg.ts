@@ -42,7 +42,7 @@ import type {Icon} from './icon.js';
 import type {Input} from './input.js';
 import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
 import type {IBoundedElement} from './interfaces/i_bounded_element.js';
-import {CopyData, ICopyable} from './interfaces/i_copyable.js';
+import type {CopyData, ICopyable} from './interfaces/i_copyable.js';
 import type {IDraggable} from './interfaces/i_draggable.js';
 import * as internalConstants from './internal_constants.js';
 import {ASTNode} from './keyboard_nav/ast_node.js';
@@ -54,7 +54,7 @@ import {RenderedConnection} from './rendered_connection.js';
 import type {Debug as BlockRenderingDebug} from './renderers/common/debugger.js';
 import type {IPathObject} from './renderers/common/i_path_object.js';
 import * as blocks from './serialization/blocks.js';
-import {BlockStyle} from './theme.js';
+import type {BlockStyle} from './theme.js';
 import * as Tooltip from './tooltip.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
@@ -62,7 +62,7 @@ import {Rect} from './utils/rect.js';
 import {Svg} from './utils/svg.js';
 import * as svgMath from './utils/svg_math.js';
 import {Warning} from './warning.js';
-import {Workspace} from './workspace.js';
+import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
 

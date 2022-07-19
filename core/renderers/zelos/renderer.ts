@@ -20,12 +20,12 @@ goog.declareModuleId('Blockly.zelos.Renderer');
 import '../../theme.js';
 
 import type {BlockSvg} from '../../block_svg.js';
-import {Connection} from '../../connection.js';
+import type {Connection} from '../../connection.js';
 import {ConnectionType} from '../../connection_type.js';
 import {InsertionMarkerManager} from '../../insertion_marker_manager.js';
 import type {Marker} from '../../keyboard_nav/marker.js';
-import {RenderedConnection} from '../../rendered_connection.js';
-import {BlockStyle} from '../../theme.js';
+import type {RenderedConnection} from '../../rendered_connection.js';
+import type {BlockStyle} from '../../theme.js';
 import type {WorkspaceSvg} from '../../workspace_svg.js';
 import * as blockRendering from '../common/block_rendering.js';
 import type {RenderInfo as BaseRenderInfo} from '../common/info.js';

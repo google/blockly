@@ -23,6 +23,9 @@
     "moduleResolution": "node",
     "target": "ES2020",
     "strict": true,
-    "outDir": "build"
+    "outDir": "build",
+
+    // This does not work understand enums so we cannot leave it enabled.
+    // "importsNotUsedAsValues": "error"
   }
 }

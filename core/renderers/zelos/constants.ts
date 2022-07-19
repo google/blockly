@@ -18,8 +18,8 @@ import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.zelos.ConstantProvider');
 
 import {ConnectionType} from '../../connection_type.js';
-import {RenderedConnection} from '../../rendered_connection.js';
-import {Theme} from '../../theme.js';
+import type {RenderedConnection} from '../../rendered_connection.js';
+import type {Theme} from '../../theme.js';
 import * as utilsColour from '../../utils/colour.js';
 import * as dom from '../../utils/dom.js';
 import {Svg} from '../../utils/svg.js';

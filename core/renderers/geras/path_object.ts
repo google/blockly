@@ -19,8 +19,8 @@ goog.declareModuleId('Blockly.geras.PathObject');
 // Unused import preserved for side-effects. Remove if unneeded.
 import '../../theme.js';
 
-import {BlockSvg} from '../../block_svg.js';
-import {BlockStyle} from '../../theme.js';
+import type {BlockSvg} from '../../block_svg.js';
+import type {BlockStyle} from '../../theme.js';
 import * as colour from '../../utils/colour.js';
 import * as dom from '../../utils/dom.js';
 import {Svg} from '../../utils/svg.js';

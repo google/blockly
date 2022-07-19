@@ -19,7 +19,7 @@ goog.declareModuleId('Blockly.zelos.StatementInput');
 
 /* eslint-disable-next-line no-unused-vars */
 import type {Input} from '../../../input.js';
-import {ConstantProvider} from '../../../renderers/common/constants.js';
+import type {ConstantProvider} from '../../../renderers/common/constants.js';
 import {StatementInput as BaseStatementInput} from '../../../renderers/measurables/statement_input.js';
 
 

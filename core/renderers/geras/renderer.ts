@@ -20,7 +20,7 @@ goog.declareModuleId('Blockly.geras.Renderer');
 import '../common/constants.js';
 
 import type {BlockSvg} from '../../block_svg.js';
-import {BlockStyle, Theme} from '../../theme.js';
+import type {BlockStyle, Theme} from '../../theme.js';
 import * as blockRendering from '../common/block_rendering.js';
 import type {RenderInfo as BaseRenderInfo} from '../common/info.js';
 import {Renderer as BaseRenderer} from '../common/renderer.js';

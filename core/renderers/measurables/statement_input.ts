@@ -19,7 +19,7 @@ goog.declareModuleId('Blockly.blockRendering.StatementInput');
 
 /* eslint-disable-next-line no-unused-vars */
 import type {Input} from '../../input.js';
-import {ConstantProvider} from '../common/constants.js';
+import type {ConstantProvider} from '../common/constants.js';
 
 import {InputConnection} from './input_connection.js';
 import {Types} from './types.js';

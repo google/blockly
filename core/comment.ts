@@ -28,7 +28,7 @@ import './events/events_bubble_open.js';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './warning.js';
 
-import {CommentModel} from './block.js';
+import type {CommentModel} from './block.js';
 import type {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import {Bubble} from './bubble.js';

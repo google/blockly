@@ -27,7 +27,7 @@ import '../../connection.js';
 // Unused import preserved for side-effects. Remove if unneeded.
 import '../../theme.js';
 
-import {BlockStyle} from '../../theme.js';
+import type {BlockStyle} from '../../theme.js';
 
 import type {ConstantProvider} from './constants.js';
 

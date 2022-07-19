@@ -32,7 +32,7 @@ import type {IAutoHideable} from './interfaces/i_autohideable.js';
 import type {IDraggable} from './interfaces/i_draggable.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
 import type {IPositionable} from './interfaces/i_positionable.js';
-import {UiMetrics} from './metrics_manager.js';
+import type {UiMetrics} from './metrics_manager.js';
 import {Options} from './options.js';
 import * as uiPosition from './positionable_helpers.js';
 import * as registry from './registry.js';

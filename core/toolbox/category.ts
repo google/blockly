@@ -19,7 +19,7 @@ import * as Css from '../css.js';
 import type {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_item.js';
 import type {ISelectableToolboxItem} from '../interfaces/i_selectable_toolbox_item.js';
 import type {IToolbox} from '../interfaces/i_toolbox.js';
-import {IToolboxItem} from '../interfaces/i_toolbox_item.js';
+import type {IToolboxItem} from '../interfaces/i_toolbox_item.js';
 import * as registry from '../registry.js';
 import * as aria from '../utils/aria.js';
 import * as colourUtils from '../utils/colour.js';

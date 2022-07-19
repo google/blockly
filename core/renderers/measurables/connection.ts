@@ -19,7 +19,7 @@ goog.declareModuleId('Blockly.blockRendering.Connection');
 
 /* eslint-disable-next-line no-unused-vars */
 import type {RenderedConnection} from '../../rendered_connection.js';
-import {ConstantProvider, Shape} from '../common/constants.js';
+import type {ConstantProvider, Shape} from '../common/constants.js';
 
 import {Measurable} from './base.js';
 import {Types} from './types.js';

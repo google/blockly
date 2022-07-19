@@ -19,7 +19,7 @@ goog.declareModuleId('Blockly.uiPosition');
 // Unused import preserved for side-effects. Remove if unneeded.
 import './metrics_manager.js';
 
-import {UiMetrics} from './metrics_manager.js';
+import type {UiMetrics} from './metrics_manager.js';
 import {Scrollbar} from './scrollbar.js';
 import {Rect} from './utils/rect.js';
 import type {Size} from './utils/size.js';

@@ -25,7 +25,7 @@ import type {BlockDragSurfaceSvg} from './block_drag_surface.js';
 import type {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import type {IBubble} from './interfaces/i_bubble.js';
-import {ContainerRegion} from './metrics_manager.js';
+import type {ContainerRegion} from './metrics_manager.js';
 import {Scrollbar} from './scrollbar.js';
 import * as Touch from './touch.js';
 import {Coordinate} from './utils/coordinate.js';

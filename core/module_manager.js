@@ -28,15 +28,14 @@
 goog.module('Blockly.ModuleManager');
 
 const {ModuleModel} = goog.require('Blockly.ModuleModel');
-
-goog.require('Blockly.ModuleBar');
-goog.require('Blockly.Events');
-goog.require('Blockly.Events.ModuleDelete');
-goog.require('Blockly.Events.ModuleRename');
-goog.require('Blockly.Msg');
-goog.require('Blockly.utils');
-goog.require('Blockly.utils.object');
-
+const Events = goog.require('Blockly.Events');
+const {ModuleCreate} = goog.require('Blockly.Events.ModuleCreate');
+const {ModuleActivate} = goog.require('Blockly.Events.ModuleActivate');
+const {ModuleMove} = goog.require('Blockly.Events.ModuleMove');
+const {ModuleDelete} = goog.require('Blockly.Events.ModuleDelete');
+const {ModuleRename} = goog.require('Blockly.Events.ModuleRename');
+const {MoveBlockToModule} = goog.require('Blockly.Events.MoveBlockToModule');
+const idGenerator = goog.require('Blockly.utils.idGenerator');
 
 /**
  * Class for a module management.
@@ -86,9 +85,9 @@ ModuleManager.prototype.clear = function() {
     this.workspace.getModuleBar().render();
   }
 
-  const existingGroup = Blockly.Events.getGroup();
+  const existingGroup = Events.getGroup();
   if (!existingGroup) {
-    Blockly.Events.setGroup(true);
+    Events.setGroup(true);
   }
 
   try {
@@ -97,7 +96,7 @@ ModuleManager.prototype.clear = function() {
     }
   } finally {
     if (!existingGroup) {
-      Blockly.Events.setGroup(false);
+      Events.setGroup(false);
     }
   }
 };
@@ -131,7 +130,7 @@ ModuleManager.prototype.renameModule = function(module, newName) {
     this.workspace.getModuleBar().render();
   }
 
-  Blockly.Events.fire(new Blockly.Events.ModuleRename(module, previousName));
+  Events.fire(new ModuleRename(module, previousName));
 };
 
 
@@ -149,7 +148,7 @@ ModuleManager.prototype.moveModule = function(module, newOrder) {
     this.workspace.getModuleBar().render();
   }
 
-  Blockly.Events.fire(new Blockly.Events.ModuleMove(module, newOrder, previousOrder));
+  Events.fire(new ModuleMove(module, newOrder, previousOrder));
 };
 
 /**
@@ -167,7 +166,7 @@ ModuleManager.prototype.createModule = function(name, opt_id, scrollX, scrollY, 
     return this.getModuleById(opt_id);
   }
 
-  const id = opt_id || Blockly.utils.idGenerator.genUid();
+  const id = opt_id || idGenerator.genUid();
   const module = new ModuleModel(this.workspace, name, id);
 
   module.scrollX = scrollX || 0;
@@ -194,16 +193,16 @@ ModuleManager.prototype.createModule = function(name, opt_id, scrollX, scrollY, 
  * @private
  */
 ModuleManager.prototype.fireCreateEvent_ = function(module) {
-  if (Blockly.Events.isEnabled()) {
-    const existingGroup = Blockly.Events.getGroup();
+  if (Events.isEnabled()) {
+    const existingGroup = Events.getGroup();
     if (!existingGroup) {
-      Blockly.Events.setGroup(true);
+      Events.setGroup(true);
     }
     try {
-      Blockly.Events.fire(new Blockly.Events.ModuleCreate(module));
+      Events.fire(new ModuleCreate(module));
     } finally {
       if (!existingGroup) {
-        Blockly.Events.setGroup(false);
+        Events.setGroup(false);
       }
     }
   }
@@ -223,9 +222,9 @@ ModuleManager.prototype.moveBlockToModule = function(block, module) {
     return;
   }
 
-  const existingGroup = Blockly.Events.getGroup();
+  const existingGroup = Events.getGroup();
   if (!existingGroup) {
-    Blockly.Events.setGroup(true);
+    Events.setGroup(true);
   }
 
   try {
@@ -235,18 +234,18 @@ ModuleManager.prototype.moveBlockToModule = function(block, module) {
     block.unplug();
     block.removeRender();
 
-    Blockly.Events.disable();
+    Events.disable();
     this.activateModule(module);
-    Blockly.Events.enable();
+    Events.enable();
 
     this.workspace.centerOnBlock(block.id);
 
     block.select();
 
-    Blockly.Events.fire(new Blockly.Events.MoveBlockToModule(block, newModuleId, previousModuleId));
+    Events.fire(new MoveBlockToModule(block, newModuleId, previousModuleId));
   } finally {
     if (!existingGroup) {
-      Blockly.Events.setGroup(false);
+      Events.setGroup(false);
     }
   }
 };
@@ -264,9 +263,9 @@ ModuleManager.prototype.moveBlocksToModule = function(blocks, module, massOperat
     return;
   }
 
-  const existingGroup = Blockly.Events.getGroup();
+  const existingGroup = Events.getGroup();
   if (!existingGroup) {
-    Blockly.Events.setGroup(true);
+    Events.setGroup(true);
   }
 
   try {
@@ -281,14 +280,14 @@ ModuleManager.prototype.moveBlocksToModule = function(blocks, module, massOperat
 
     massOperations.cleanUp();
 
-    Blockly.Events.disable();
+    Events.disable();
     this.activateModule(module);
-    Blockly.Events.enable();
+    Events.enable();
 
     blocks.forEach((b) => massOperations.addBlockToSelected(b));
   } finally {
     if (!existingGroup) {
-      Blockly.Events.setGroup(false);
+      Events.setGroup(false);
     }
   }
 };
@@ -299,20 +298,20 @@ ModuleManager.prototype.moveBlocksToModule = function(blocks, module, massOperat
  *     Null for a blank event.
  * @param {String} newModuleId The new module id.
  * @param {String} previousModuleId The previous module id.
- * @extends {Blockly.Events.ModuleBase}
+ * @extends {Events.ModuleBase}
  * @private
  */
 ModuleManager.prototype.fireMoveBlockToModule_ = function(block, newModuleId, previousModuleId) {
-  if (Blockly.Events.isEnabled()) {
-    const existingGroup = Blockly.Events.getGroup();
+  if (Events.isEnabled()) {
+    const existingGroup = Events.getGroup();
     if (!existingGroup) {
-      Blockly.Events.setGroup(true);
+      Events.setGroup(true);
     }
     try {
-      Blockly.Events.fire(new Blockly.Events.MoveBlockToModule(block, newModuleId, previousModuleId));
+      Events.fire(new MoveBlockToModule(block, newModuleId, previousModuleId));
     } finally {
       if (!existingGroup) {
-        Blockly.Events.setGroup(false);
+        Events.setGroup(false);
       }
     }
   }
@@ -330,10 +329,10 @@ ModuleManager.prototype.deleteModule = function(module) {
       let existingGroup = null;
 
       try {
-        existingGroup = Blockly.Events.getGroup();
+        existingGroup = Events.getGroup();
 
         if (!existingGroup) {
-          Blockly.Events.setGroup(true);
+          Events.setGroup(true);
         }
 
         if (this.workspace instanceof Blockly.WorkspaceSvg && this.workspace.getModuleBar()) {
@@ -343,7 +342,7 @@ ModuleManager.prototype.deleteModule = function(module) {
         this.fireDeleteEvent_(module);
       } finally {
         if (!existingGroup) {
-          Blockly.Events.setGroup(false);
+          Events.setGroup(false);
         }
       }
       return this.moduleMap_[i - 1] || this.moduleMap_[0];
@@ -357,17 +356,17 @@ ModuleManager.prototype.deleteModule = function(module) {
  * @private
  */
 ModuleManager.prototype.fireDeleteEvent_ = function(module) {
-  if (Blockly.Events.isEnabled()) {
-    const existingGroup = Blockly.Events.getGroup();
+  if (Events.isEnabled()) {
+    const existingGroup = Events.getGroup();
 
     if (!existingGroup) {
-      Blockly.Events.setGroup(true);
+      Events.setGroup(true);
     }
     try {
-      Blockly.Events.fire(new Blockly.Events.ModuleDelete(module));
+      Events.fire(new ModuleDelete(module));
     } finally {
       if (!existingGroup) {
-        Blockly.Events.setGroup(false);
+        Events.setGroup(false);
       }
     }
   }
@@ -384,14 +383,14 @@ ModuleManager.prototype.activateModule = function(module) {
 
   Blockly.ContextMenu.hide();
   const previousActive = this.getActiveModule();
-  const existingGroup = Blockly.Events.getGroup();
+  const existingGroup = Events.getGroup();
 
   if (!existingGroup) {
-    Blockly.Events.setGroup(true);
+    Events.setGroup(true);
   }
 
   try {
-    Blockly.Events.disable();
+    Events.disable();
 
     // remove render
     if (this.workspace.rendered) {
@@ -468,13 +467,13 @@ ModuleManager.prototype.activateModule = function(module) {
       }
     }
 
-    Blockly.Events.enable();
-    Blockly.Events.fire(new Blockly.Events.ModuleActivate(module, previousActive));
+    Events.enable();
+    Events.fire(new ModuleActivate(module, previousActive));
   } catch (e) {
-    Blockly.Events.enable();
+    Events.enable();
   } finally {
     if (!existingGroup) {
-      Blockly.Events.setGroup(false);
+      Events.setGroup(false);
     }
   }
 };

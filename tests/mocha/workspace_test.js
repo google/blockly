@@ -6,8 +6,9 @@
 
 goog.module('Blockly.test.workspace');
 
-const {assertVariableValues, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
-const {testAWorkspace} = goog.require('Blockly.test.workspaceHelpers');
+const {assertVariableValues} = goog.require('Blockly.test.helpers.variables');
+const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+const {testAWorkspace} = goog.require('Blockly.test.helpers.workspace');
 
 
 suite('Workspace', function() {

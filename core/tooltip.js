@@ -4,23 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Library to create tooltips for Blockly.
- * First, call init() after onload.
- * Second, set the 'tooltip' property on any SVG element that needs a tooltip.
- * If the tooltip is a string, then that message will be displayed.
- * If the tooltip is an SVG element, then that object's tooltip will be used.
- * Third, call bindMouseEvents(e) passing the SVG element.
- */
 'use strict';
 
 /**
  * Library to create tooltips for Blockly.
- * First, call init() after onload.
+ * First, call createDom() after onload.
  * Second, set the 'tooltip' property on any SVG element that needs a tooltip.
- * If the tooltip is a string, then that message will be displayed.
- * If the tooltip is an SVG element, then that object's tooltip will be used.
- * Third, call bindMouseEvents(e) passing the SVG element.
+ * If the tooltip is a string, or a function that returns a string, that message
+ * will be displayed. If the tooltip is an SVG element, then that object's
+ * tooltip will be used. Third, call bindMouseEvents(e) passing the SVG element.
  * @namespace Blockly.Tooltip
  */
 goog.module('Blockly.Tooltip');
@@ -41,6 +33,46 @@ const deprecation = goog.require('Blockly.utils.deprecation');
  */
 let TipInfo;
 exports.TipInfo = TipInfo;
+
+/**
+ * A function that renders custom tooltip UI.
+ * 1st parameter: the div element to render content into.
+ * 2nd parameter: the element being moused over (i.e., the element for which the
+ * tooltip should be shown).
+ * @typedef {function(!Element, !Element)}
+ * @alias Blockly.Tooltip.CustomTooltip
+ */
+let CustomTooltip;
+exports.CustomTooltip = CustomTooltip;
+
+/**
+ * An optional function that renders custom tooltips into the provided DIV. If
+ * this is defined, the function will be called instead of rendering the default
+ * tooltip UI.
+ * @type {!CustomTooltip|undefined}
+ */
+let customTooltip = undefined;
+
+/**
+ * Sets a custom function that will be called if present instead of the default
+ * tooltip UI.
+ * @param {!CustomTooltip} customFn A custom tooltip used to render an alternate
+ *     tooltip UI.
+ * @alias Blockly.Tooltip.setCustomTooltip
+ */
+const setCustomTooltip = function(customFn) {
+  customTooltip = customFn;
+};
+exports.setCustomTooltip = setCustomTooltip;
+
+/**
+ * Gets the custom tooltip function.
+ * @returns {!CustomTooltip|undefined} The custom tooltip function, if defined.
+ */
+const getCustomTooltip = function() {
+  return customTooltip;
+};
+exports.getCustomTooltip = getCustomTooltip;
 
 /**
  * Is a tooltip currently showing?
@@ -160,13 +192,13 @@ exports.MARGINS = MARGINS;
 
 /**
  * The HTML container.  Set once by createDom.
- * @type {Element}
+ * @type {?HTMLDivElement}
  */
 let DIV = null;
 
 /**
  * Returns the HTML tooltip container.
- * @returns {Element} The HTML tooltip container.
+ * @returns {?HTMLDivElement} The HTML tooltip container.
  * @alias Blockly.Tooltip.getDiv
  */
 const getDiv = function() {
@@ -178,7 +210,7 @@ Object.defineProperties(exports, {
   /**
    * The HTML container.  Set once by createDom.
    * @name Blockly.Tooltip.DIV
-   * @type {Element}
+   * @type {HTMLDivElement}
    * @deprecated Use Blockly.Tooltip.getDiv() and .setDiv().
    *     (September 2021)
    * @suppress {checkTypes}
@@ -242,7 +274,7 @@ const createDom = function() {
     return;  // Already created.
   }
   // Create an HTML container for popup overlays (e.g. editor widgets).
-  DIV = document.createElement('div');
+  DIV = /** @type {!HTMLDivElement} */ (document.createElement('div'));
   DIV.className = 'blocklyTooltipDiv';
   const container = common.getParentContainer() || document.body;
   container.appendChild(DIV);
@@ -410,6 +442,76 @@ const unblock = function() {
 exports.unblock = unblock;
 
 /**
+ * Renders the tooltip content into the tooltip div.
+ */
+const renderContent = function() {
+  if (!DIV || !element) {
+    // This shouldn't happen, but if it does, we can't render.
+    return;
+  }
+  if (typeof customTooltip === 'function') {
+    customTooltip(DIV, element);
+  } else {
+    renderDefaultContent();
+  }
+};
+
+/**
+ * Renders the default tooltip UI.
+ */
+const renderDefaultContent = function() {
+  let tip = getTooltipOfObject(element);
+  tip = blocklyString.wrap(tip, LIMIT);
+  // Create new text, line by line.
+  const lines = tip.split('\n');
+  for (let i = 0; i < lines.length; i++) {
+    const div = /** @type {!HTMLDivElement} */ (document.createElement('div'));
+    div.appendChild(document.createTextNode(lines[i]));
+    DIV.appendChild(div);
+  }
+};
+
+/**
+ * Gets the coordinates for the tooltip div, taking into account the edges of
+ * the screen to prevent showing the tooltip offscreen.
+ * @param {boolean} rtl True if the tooltip should be in right-to-left layout.
+ * @returns {{x: number, y: number}} Coordinates at which the tooltip div should
+ *     be placed.
+ */
+const getPosition = function(rtl) {
+  // Position the tooltip just below the cursor.
+  const windowWidth = document.documentElement.clientWidth;
+  const windowHeight = document.documentElement.clientHeight;
+
+  let anchorX = lastX;
+  if (rtl) {
+    anchorX -= OFFSET_X + DIV.offsetWidth;
+  } else {
+    anchorX += OFFSET_X;
+  }
+
+  let anchorY = lastY + OFFSET_Y;
+  if (anchorY + DIV.offsetHeight > windowHeight + window.scrollY) {
+    // Falling off the bottom of the screen; shift the tooltip up.
+    anchorY -= DIV.offsetHeight + 2 * OFFSET_Y;
+  }
+
+  if (rtl) {
+    // Prevent falling off left edge in RTL mode.
+    anchorX = Math.max(MARGINS - window.scrollX, anchorX);
+  } else {
+    if (anchorX + DIV.offsetWidth >
+        windowWidth + window.scrollX - 2 * MARGINS) {
+      // Falling off the right edge of the screen;
+      // clamp the tooltip on the edge.
+      anchorX = windowWidth - DIV.offsetWidth - 2 * MARGINS;
+    }
+  }
+
+  return {x: anchorX, y: anchorY};
+};
+
+/**
  * Create the tooltip and show it.
  */
 const show = function() {
@@ -423,46 +525,17 @@ const show = function() {
   }
   // Erase all existing text.
   DIV.textContent = '';
-  let tip = getTooltipOfObject(element);
-  tip = blocklyString.wrap(tip, LIMIT);
-  // Create new text, line by line.
-  const lines = tip.split('\n');
-  for (let i = 0; i < lines.length; i++) {
-    const div = document.createElement('div');
-    div.appendChild(document.createTextNode(lines[i]));
-    DIV.appendChild(div);
-  }
-  const rtl = /** @type {{RTL: boolean}} */ (element).RTL;
-  const windowWidth = document.documentElement.clientWidth;
-  const windowHeight = document.documentElement.clientHeight;
+
+  // Add new content.
+  renderContent();
+
   // Display the tooltip.
+  const rtl = /** @type {{RTL: boolean}} */ (element).RTL;
   DIV.style.direction = rtl ? 'rtl' : 'ltr';
   DIV.style.display = 'block';
   visible = true;
-  // Move the tooltip to just below the cursor.
-  let anchorX = lastX;
-  if (rtl) {
-    anchorX -= OFFSET_X + DIV.offsetWidth;
-  } else {
-    anchorX += OFFSET_X;
-  }
-  let anchorY = lastY + OFFSET_Y;
 
-  if (anchorY + DIV.offsetHeight > windowHeight + window.scrollY) {
-    // Falling off the bottom of the screen; shift the tooltip up.
-    anchorY -= DIV.offsetHeight + 2 * OFFSET_Y;
-  }
-  if (rtl) {
-    // Prevent falling off left edge in RTL mode.
-    anchorX = Math.max(MARGINS - window.scrollX, anchorX);
-  } else {
-    if (anchorX + DIV.offsetWidth >
-        windowWidth + window.scrollX - 2 * MARGINS) {
-      // Falling off the right edge of the screen;
-      // clamp the tooltip on the edge.
-      anchorX = windowWidth - DIV.offsetWidth - 2 * MARGINS;
-    }
-  }
-  DIV.style.top = anchorY + 'px';
-  DIV.style.left = anchorX + 'px';
+  const {x, y} = getPosition(rtl);
+  DIV.style.left = x + 'px';
+  DIV.style.top = y + 'px';
 };

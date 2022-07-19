@@ -6,7 +6,9 @@
 
 goog.module('Blockly.test.blockCreateEvent');
 
-const {assertEventFired, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+const {assertEventFired} = goog.require('Blockly.test.helpers.events');
+const eventUtils = goog.require('Blockly.Events.utils');
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
 
 
 suite('Block Create Event', function() {
@@ -48,7 +50,7 @@ suite('Block Create Event', function() {
     assertEventFired(
         this.eventsFireStub,
         Blockly.Events.BlockCreate,
-        {'recordUndo': false},
+        {'recordUndo': false, 'type': eventUtils.BLOCK_CREATE},
         this.workspace.id,
         'shadowId');
     const calls = this.eventsFireStub.getCalls();

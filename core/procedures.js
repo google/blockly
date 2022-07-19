@@ -15,15 +15,19 @@
  */
 goog.module('Blockly.Procedures');
 
-/* eslint-disable-next-line no-unused-vars */
-const Abstract = goog.requireType('Blockly.Events.Abstract');
 const Variables = goog.require('Blockly.Variables');
 const Xml = goog.require('Blockly.Xml');
 const eventUtils = goog.require('Blockly.Events.utils');
 const utilsXml = goog.require('Blockly.utils.xml');
+/* eslint-disable-next-line no-unused-vars */
+const {Abstract} = goog.requireType('Blockly.Events.Abstract');
 const {Blocks} = goog.require('Blockly.blocks');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const {BubbleOpen} = goog.requireType('Blockly.Events.BubbleOpen');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {Field} = goog.requireType('Blockly.Field');
 const {Msg} = goog.require('Blockly.Msg');
@@ -160,8 +164,9 @@ const isNameUsed = function(name, workspace, opt_exclude) {
     if (blocks[i] === opt_exclude) {
       continue;
     }
-    if (blocks[i].getProcedureDef) {
-      const procedureBlock = /** @type {!ProcedureBlock} */ (blocks[i]);
+    // Assume it is a procedure block so we can check.
+    const procedureBlock = /** @type {!ProcedureBlock} */ (blocks[i]);
+    if (procedureBlock.getProcedureDef) {
       const procName = procedureBlock.getProcedureDef();
       if (Names.equals(procName[0], name)) {
         return true;
@@ -191,8 +196,9 @@ const rename = function(name) {
     // Rename any callers.
     const blocks = this.getSourceBlock().workspace.getAllBlocks(false);
     for (let i = 0; i < blocks.length; i++) {
-      if (blocks[i].renameProcedure) {
-        const procedureBlock = /** @type {!ProcedureBlock} */ (blocks[i]);
+      // Assume it is a procedure so we can check.
+      const procedureBlock = /** @type {!ProcedureBlock} */ (blocks[i]);
+      if (procedureBlock.renameProcedure) {
         procedureBlock.renameProcedure(
             /** @type {string} */ (oldName), legalName);
       }
@@ -204,12 +210,13 @@ exports.rename = rename;
 
 /**
  * Construct the blocks required by the flyout for the procedure category.
- * @param {!Workspace} workspace The workspace containing procedures.
+ * @param {!WorkspaceSvg} workspace The workspace containing procedures.
  * @return {!Array<!Element>} Array of XML block elements.
  * @alias Blockly.Procedures.flyoutCategory
  */
 const flyoutCategory = function(workspace) {
   const xmlList = [];
+
   if (Blocks['procedures_ifreturn']) {
     // <block type="procedures_ifreturn" gap="16"></block>
     const block = utilsXml.createElement('block');
@@ -263,7 +270,7 @@ exports.flyoutCategory = flyoutCategory;
 /**
  * Updates the procedure mutator's flyout so that the arg block is not a
  * duplicate of another arg.
- * @param {!Workspace} workspace The procedure mutator's workspace. This
+ * @param {!WorkspaceSvg} workspace The procedure mutator's workspace. This
  *     workspace's flyout is what is being updated.
  */
 const updateMutatorFlyout = function(workspace) {
@@ -297,17 +304,21 @@ const updateMutatorFlyout = function(workspace) {
  * @package
  */
 const mutatorOpenListener = function(e) {
-  if (!(e.type === eventUtils.BUBBLE_OPEN && e.bubbleType === 'mutator' &&
-        e.isOpen)) {
+  if (e.type !== eventUtils.BUBBLE_OPEN) {
     return;
   }
-  const workspaceId = /** @type {string} */ (e.workspaceId);
-  const block = Workspace.getById(workspaceId).getBlockById(e.blockId);
+  const bubbleEvent = /** @type {!BubbleOpen} */ (e);
+  if (!(bubbleEvent.bubbleType === 'mutator' && bubbleEvent.isOpen)) {
+    return;
+  }
+  const workspaceId = /** @type {string} */ (bubbleEvent.workspaceId);
+  const block = /** @type {!BlockSvg} */
+      (Workspace.getById(workspaceId).getBlockById(bubbleEvent.blockId));
   const type = block.type;
   if (type !== 'procedures_defnoreturn' && type !== 'procedures_defreturn') {
     return;
   }
-  const workspace = block.mutator.getWorkspace();
+  const workspace = /** @type {!WorkspaceSvg} */ (block.mutator.getWorkspace());
   updateMutatorFlyout(workspace);
   workspace.addChangeListener(mutatorChangeListener);
 };
@@ -342,8 +353,9 @@ const getCallers = function(name, workspace) {
   const blocks = workspace.getAllBlocks(false);
   // Iterate through every block and check the name.
   for (let i = 0; i < blocks.length; i++) {
-    if (blocks[i].getProcedureCall) {
-      const procedureBlock = /** @type {!ProcedureBlock} */ (blocks[i]);
+    // Assume it is a procedure block so we can check.
+    const procedureBlock = /** @type {!ProcedureBlock} */ (blocks[i]);
+    if (procedureBlock.getProcedureCall) {
       const procName = procedureBlock.getProcedureCall();
       // Procedure name may be null if the block is only half-built.
       if (procName && Names.equals(procName, name)) {
@@ -399,8 +411,9 @@ const getDefinition = function(name, workspace) {
   // rely on getProcedureDef.
   const blocks = workspace.getAllBlocks(false);
   for (let i = 0; i < blocks.length; i++) {
-    if (blocks[i].getProcedureDef) {
-      const procedureBlock = /** @type {!ProcedureBlock} */ (blocks[i]);
+    // Assume it is a procedure block so we can check.
+    const procedureBlock = /** @type {!ProcedureBlock} */ (blocks[i]);
+    if (procedureBlock.getProcedureDef) {
       const tuple = procedureBlock.getProcedureDef();
       if (tuple && Names.equals(tuple[0], name)) {
         return blocks[i];  // Can't use procedureBlock var due to type check.

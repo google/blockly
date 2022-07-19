@@ -15,49 +15,51 @@
  */
 goog.module('Blockly.Events.FlyoutShow');
 
-const Abstract = goog.require('Blockly.Events.Abstract');
+const {Abstract: AbstractEvent} = goog.require('Blockly.Events.Abstract');
 const eventUtils = goog.require('Blockly.Events.utils');
-const object = goog.require('Blockly.utils.object');
 const registry = goog.require('Blockly.registry');
 
 
 /**
  * Class for a flyout show event.
- * @constructor
  * @alias Blockly.Events.FlyoutShow
  */
-const FlyoutShow = function(workspaceId) {
-  FlyoutShow.superClass_.constructor.call(this);
+class FlyoutShow extends AbstractEvent {
+  /**
+   * @param {!workspaceId} workspaceId workspaceId
+   */
+  constructor(workspaceId) {
+    super();
+
+    /**
+     * The workspace identifier for this event.
+     * @type {string}
+     */
+    this.workspaceId = workspaceId;
+
+    this.recordUndo = false;
+
+    /**
+     * Type of this event.
+     * @type {string}
+     */
+    this.type = eventUtils.FLYOUT_SHOW;
+  }
 
   /**
-   * The workspace identifier for this event.
-   * @type {string}
+   * Encode the event as JSON.
+   * @return {!Object} JSON representation.
    */
-  this.workspaceId = workspaceId
+  toJson() {
+    return {};
+  }
 
-  this.recordUndo = false
-};
-object.inherits(FlyoutShow, Abstract);
-
-/**
- * Type of this event.
- * @type {string}
- */
-FlyoutShow.prototype.type = eventUtils.FLYOUT_SHOW;
-
-/**
- * Encode the event as JSON.
- * @return {!Object} JSON representation.
- */
-FlyoutShow.prototype.toJson = function() {
-  return {}
-};
-
-/**
- * Decode the JSON event.
- * @param {!Object} json JSON representation.
- */
-FlyoutShow.prototype.fromJson = function(json) {};
+  /**
+   * Decode the JSON event.
+   * @param {!Object} json JSON representation.
+   */
+  fromJson() {}
+}
 
 registry.register(registry.Type.EVENT, eventUtils.FLYOUT_SHOW, FlyoutShow);
 

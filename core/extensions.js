@@ -24,6 +24,7 @@ goog.module('Blockly.Extensions');
 const parsing = goog.require('Blockly.utils.parsing');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+const {FieldDropdown} = goog.require('Blockly.FieldDropdown');
 goog.requireType('Blockly.Mutator');
 
 
@@ -454,7 +455,7 @@ exports.buildTooltipForDropdown = buildTooltipForDropdown;
 const checkDropdownOptionsInTable = function(block, dropdownName, lookupTable) {
   // Validate all dropdown options have values.
   const dropdown = block.getField(dropdownName);
-  if (!dropdown.isOptionListDynamic()) {
+  if (dropdown instanceof FieldDropdown && !dropdown.isOptionListDynamic()) {
     const options = dropdown.getOptions();
     for (let i = 0; i < options.length; i++) {
       const optionKey = options[i][1];  // label, then value
@@ -512,11 +513,11 @@ exports.buildTooltipWithFieldText = buildTooltipWithFieldText;
  * @this {Block}
  */
 const extensionParentTooltip = function() {
-  this.tooltipWhenNotConnected = this.tooltip;
+  const tooltipWhenNotConnected = this.tooltip;
   this.setTooltip(function() {
     const parent = this.getParent();
     return (parent && parent.getInputsInline() && parent.tooltip) ||
-        this.tooltipWhenNotConnected;
+        tooltipWhenNotConnected;
   }.bind(this));
 };
 register('parent_tooltip_when_inline', extensionParentTooltip);

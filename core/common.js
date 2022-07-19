@@ -17,7 +17,8 @@
  */
 goog.module('Blockly.common');
 
-const {Blocks} = goog.require('Blockly.blocks');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockDefinition, Blocks} = goog.require('Blockly.blocks');
 /* eslint-disable-next-line no-unused-vars */
 const {Connection} = goog.requireType('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
@@ -134,11 +135,9 @@ const svgResize = function(workspace) {
   }
 
   let mainWorkspace = workspace;
-
-  while (mainWorkspace && mainWorkspace.options.parentWorkspace) {
+  while (mainWorkspace.options.parentWorkspace) {
     mainWorkspace = mainWorkspace.options.parentWorkspace;
   }
-
   const svg = mainWorkspace.getParentSvg();
   const cachedSize = mainWorkspace.getCachedParentSvgSize();
   const div = svg.parentNode;
@@ -219,22 +218,55 @@ const jsonInitFactory = function(jsonDef) {
  * @alias Blockly.common.defineBlocksWithJsonArray
  */
 const defineBlocksWithJsonArray = function(jsonArray) {
+  defineBlocks(createBlockDefinitionsFromJsonArray(jsonArray));
+};
+exports.defineBlocksWithJsonArray = defineBlocksWithJsonArray;
+
+/**
+ * Define blocks from an array of JSON block definitions, as might be generated
+ * by the Blockly Developer Tools.
+ * @param {!Array<!Object>} jsonArray An array of JSON block definitions.
+ * @return {!Object<string, !BlockDefinition>} A map of the block
+ *     definitions created.
+ * @alias Blockly.common.defineBlocksWithJsonArray
+ */
+const createBlockDefinitionsFromJsonArray = function(jsonArray) {
+  const /** @type {!Object<string,!BlockDefinition>} */ blocks = {};
   for (let i = 0; i < jsonArray.length; i++) {
     const elem = jsonArray[i];
     if (!elem) {
-      console.warn(
-          'Block definition #' + i + ' in JSON array is ' + elem + '. ' +
-          'Skipping.');
-    } else {
-      const typename = elem.type;
-      if (!typename) {
-        console.warn(
-            'Block definition #' + i +
-            ' in JSON array is missing a type attribute. Skipping.');
-      } else {
-        Blocks[typename] = {init: jsonInitFactory(elem)};
-      }
+      console.warn(`Block definition #${i} in JSON array is ${elem}. Skipping`);
+      continue;
     }
+    const type = elem.type;
+    if (!type) {
+      console.warn(
+          `Block definition #${i} in JSON array is missing a type attribute. ` +
+          'Skipping.');
+      continue;
+    }
+    blocks[type] = {init: jsonInitFactory(elem)};
+  }
+  return blocks;
+};
+exports.createBlockDefinitionsFromJsonArray =
+    createBlockDefinitionsFromJsonArray;
+
+/**
+ * Add the specified block definitions to the block definitions
+ * dictionary (Blockly.Blocks).
+ * @param {!Object<string,!BlockDefinition>} blocks A map of block
+ *     type names to block definitions.
+ * @alias Blockly.common.defineBlocks
+ */
+const defineBlocks = function(blocks) {
+  // Iterate over own enumerable properties.
+  for (const type of Object.keys(blocks)) {
+    const definition = blocks[type];
+    if (type in Blocks) {
+      console.warn(`Block definiton "${type}" overwrites previous definition.`);
+    }
+    Blocks[type] = definition;
   }
 };
-exports.defineBlocksWithJsonArray = defineBlocksWithJsonArray;
+exports.defineBlocks = defineBlocks;

@@ -23,47 +23,45 @@
 
 goog.module('Blockly.Events.ModuleBase');
 
-const Abstract = goog.require('Blockly.Events.Abstract');
-const object = goog.require('Blockly.utils.object');
-const eventUtils = goog.require('Blockly.Events.utils')
+const {Abstract: AbstractEvent} = goog.require('Blockly.Events.Abstract');
 
 /**
  * Abstract class for a module event.
- * @param {ModuleModel} module The module this event corresponds
- *     to.
  * @extends {Events.Abstract}
- * @constructor
  */
-const ModuleBase = function(module) {
-  ModuleBase.superClass_.constructor.call(this);
+class ModuleBase extends AbstractEvent {
+  /**
+   * @param {ModuleModel} module The module this event corresponds to.
+   */
+  constructor(module) {
+    super();
+
+    /**
+     * The module id for the module this event pertains to.
+     * @type {string}
+     */
+    this.moduleId = module.getId();
+    this.workspaceId = module.workspace.id;
+  }
 
   /**
-   * The module id for the module this event pertains to.
-   * @type {string}
+   * Encode the event as JSON.
+   * @return {!Object} JSON representation.
    */
-  this.moduleId = module.getId();
-  this.workspaceId = module.workspace.id;
-};
+  toJson() {
+    const json = super.toJson();
+    json['moduleId'] = this.moduleId;
+    return json;
+  }
 
-object.inherits(ModuleBase, Abstract);
+  /**
+   * Decode the JSON event.
+   * @param {!Object} json JSON representation.
+   */
+  fromJson(json) {
+    super.fromJson(json);
+    this.moduleId = json['moduleId'];
+  }
+}
 
-/**
- * Encode the event as JSON.
- * @return {!Object} JSON representation.
- */
-ModuleBase.prototype.toJson = function() {
-  var json = ModuleBase.superClass_.toJson.call(this);
-  json['moduleId'] = this.moduleId;
-  return json;
-};
-
-/**
- * Decode the JSON event.
- * @param {!Object} json JSON representation.
- */
-ModuleBase.prototype.fromJson = function(json) {
-  ModuleBase.superClass_.toJson.call(this);
-  this.moduleId = json['moduleId'];
-};
-
-exports.ModuleBase = ModuleBase
+exports.ModuleBase = ModuleBase;

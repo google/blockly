@@ -106,7 +106,7 @@ BlocklyDevTools.Analytics.PLATFORM_WEB = "web";
  */
 BlocklyDevTools.Analytics.init = function() {
   // stub
-  this.LOG_TO_CONSOLE_ && console.log('Analytics.init');
+  this.LOG_TO_CONSOLE_ && console.info('Analytics.init');
 };
 
 /**
@@ -118,7 +118,7 @@ BlocklyDevTools.Analytics.init = function() {
 BlocklyDevTools.Analytics.onNavigateTo = function(viewId) {
   // stub
   this.LOG_TO_CONSOLE_ &&
-      console.log('Analytics.onNavigateTo(' + viewId + ')');
+      console.info('Analytics.onNavigateTo(' + viewId + ')');
 };
 
 /**

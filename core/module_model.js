@@ -27,9 +27,7 @@
  */
 goog.module('Blockly.ModuleModel');
 
-goog.require('Blockly.Events');
-goog.require('Blockly.Events.ModuleCreate');
-goog.require('Blockly.utils');
+const idGenerator = goog.require('Blockly.utils.idGenerator');
 
 
 /**
@@ -68,7 +66,7 @@ const ModuleModel = function(workspace, name, opt_id) {
    * @type {string}
    * @private
    */
-  this.id_ = opt_id || Blockly.utils.genUid();
+  this.id_ = opt_id || idGenerator.genUid();
 };
 
 /**
@@ -100,10 +98,10 @@ ModuleModel.prototype.getId = function() {
  * @return {string} Translateed or raw module name.
  */
 ModuleModel.prototype.getName = function() {
-  const translatedName = Blockly.Msg[this._translationKey]
+  const translatedName = Blockly.Msg[this._translationKey];
 
   return translatedName || this.name;
 };
 
-exports.ModuleModel = ModuleModel
+exports.ModuleModel = ModuleModel;
 

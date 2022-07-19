@@ -18,10 +18,10 @@ import * as goog from '../../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.geras.InlineInput');
 
 /* eslint-disable-next-line no-unused-vars */
-import type {Input} from '../../../input.js';
-import type {ConstantProvider as BaseConstantProvider} from '../../../renderers/common/constants.js';
-import {InlineInput as BaseInlineInput} from '../../../renderers/measurables/inline_input.js';
-import type {ConstantProvider as GerasConstantProvider} from '../constants.js';
+import type {Input} from '../../../input';
+import type {ConstantProvider as BaseConstantProvider} from '../../../renderers/common/constants';
+import {InlineInput as BaseInlineInput} from '../../../renderers/measurables/inline_input';
+import type {ConstantProvider as GerasConstantProvider} from '../constants';
 
 
 /**

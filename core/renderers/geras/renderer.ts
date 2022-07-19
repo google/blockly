@@ -19,11 +19,11 @@ goog.declareModuleId('Blockly.geras.Renderer');
 // Unused import preserved for side-effects. Remove if unneeded.
 import '../common/constants.js';
 
-import type {BlockSvg} from '../../block_svg.js';
-import type {BlockStyle, Theme} from '../../theme.js';
-import * as blockRendering from '../common/block_rendering.js';
-import type {RenderInfo as BaseRenderInfo} from '../common/info.js';
-import {Renderer as BaseRenderer} from '../common/renderer.js';
+import type {BlockSvg} from '../../block_svg';
+import type {BlockStyle, Theme} from '../../theme';
+import * as blockRendering from '../common/block_rendering';
+import type {RenderInfo as BaseRenderInfo} from '../common/info';
+import {Renderer as BaseRenderer} from '../common/renderer';
 
 import {ConstantProvider} from './constants.js';
 import {Drawer} from './drawer.js';

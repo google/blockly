@@ -22,7 +22,7 @@ goog.declareModuleId('Blockly.IDeleteArea');
 // Unused import preserved for side-effects. Remove if unneeded.
 import './i_draggable.js';
 
-import type {IDragTarget} from './i_drag_target.js';
+import type {IDragTarget} from './i_drag_target';
 
 
 /**

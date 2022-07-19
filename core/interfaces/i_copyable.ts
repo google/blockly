@@ -15,8 +15,8 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.ICopyable');
 
-import type {WorkspaceSvg} from '../workspace_svg.js';
-import type {ISelectable} from './i_selectable.js';
+import type {WorkspaceSvg} from '../workspace_svg';
+import type {ISelectable} from './i_selectable';
 
 
 /** @alias Blockly.ICopyable */

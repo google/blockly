@@ -20,7 +20,7 @@ goog.declareModuleId('Blockly.ICollapsibleToolboxItem');
 // Unused import preserved for side-effects. Remove if unneeded.
 import './i_toolbox_item.js';
 
-import type {ISelectableToolboxItem} from './i_selectable_toolbox_item.js';
+import type {ISelectableToolboxItem} from './i_selectable_toolbox_item';
 
 
 /**

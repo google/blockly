@@ -29,9 +29,9 @@ import {SpacerRow} from '../measurables/spacer_row.js';
 import type {TopRow} from '../measurables/top_row.js';
 import {Types} from '../measurables/types.js';
 
-import type {HighlightConstantProvider, InsideCorner, JaggedTeeth, Notch, OutsideCorner, PuzzleTab, StartHat} from './highlight_constants.js';
-import type {RenderInfo} from './info.js';
-import type {InlineInput} from './measurables/inline_input.js';
+import type {HighlightConstantProvider, InsideCorner, JaggedTeeth, Notch, OutsideCorner, PuzzleTab, StartHat} from './highlight_constants';
+import type {RenderInfo} from './info';
+import type {InlineInput} from './measurables/inline_input';
 
 
 /**

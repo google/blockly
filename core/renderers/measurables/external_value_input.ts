@@ -18,8 +18,8 @@ import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.ExternalValueInput');
 
 /* eslint-disable-next-line no-unused-vars */
-import type {Input} from '../../input.js';
-import type {ConstantProvider} from '../common/constants.js';
+import type {Input} from '../../input';
+import type {ConstantProvider} from '../common/constants';
 
 import {InputConnection} from './input_connection.js';
 import {Types} from './types.js';

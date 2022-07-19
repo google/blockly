@@ -15,8 +15,8 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.ISelectable');
 
-import type {IDeletable} from './i_deletable.js';
-import type {IMovable} from './i_movable.js';
+import type {IDeletable} from './i_deletable';
+import type {IMovable} from './i_movable';
 
 
 /**

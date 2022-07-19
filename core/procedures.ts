@@ -18,20 +18,21 @@ goog.declareModuleId('Blockly.Procedures');
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_block_change.js';
 
-import type {Block} from './block.js';
-import type {BlockSvg} from './block_svg.js';
-import {Blocks} from './blocks.js';
-import type {Abstract} from './events/events_abstract.js';
-import type {BubbleOpen} from './events/events_bubble_open.js';
-import * as eventUtils from './events/utils.js';
-import type {Field} from './field.js';
-import {Msg} from './msg.js';
-import {Names} from './names.js';
-import * as utilsXml from './utils/xml.js';
-import * as Variables from './variables.js';
-import {Workspace} from './workspace.js';
-import type {WorkspaceSvg} from './workspace_svg.js';
-import * as Xml from './xml.js';
+import type {Block} from './block';
+import type {BlockSvg} from './block_svg';
+import {Blocks} from './blocks';
+import * as common from './common';
+import type {Abstract} from './events/events_abstract';
+import type {BubbleOpen} from './events/events_bubble_open';
+import * as eventUtils from './events/utils';
+import type {Field} from './field';
+import {Msg} from './msg';
+import {Names} from './names';
+import * as utilsXml from './utils/xml';
+import * as Variables from './variables';
+import type {Workspace} from './workspace';
+import type {WorkspaceSvg} from './workspace_svg';
+import * as Xml from './xml';
 
 
 /**
@@ -333,8 +334,8 @@ export function mutatorOpenListener(e: Abstract) {
     return;
   }
   const workspaceId = (bubbleEvent.workspaceId);
-  const block = Workspace.getById(workspaceId)!.getBlockById(
-                    bubbleEvent.blockId) as BlockSvg;
+  const block = common.getWorkspaceById(workspaceId)!.getBlockById(
+                    bubbleEvent.blockId) as AnyDuringMigration as BlockSvg;
   const type = block.type;
   if (type !== 'procedures_defnoreturn' && type !== 'procedures_defreturn') {
     return;
@@ -355,7 +356,7 @@ function mutatorChangeListener(e: Abstract) {
     return;
   }
   const workspaceId = e.workspaceId as string;
-  const workspace = Workspace.getById(workspaceId) as WorkspaceSvg;
+  const workspace = common.getWorkspaceById(workspaceId) as AnyDuringMigration as WorkspaceSvg;
   updateMutatorFlyout(workspace);
 }
 

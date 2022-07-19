@@ -18,26 +18,24 @@ goog.declareModuleId('Blockly.Workspace');
 // Unused import preserved for side-effects. Remove if unneeded.
 import './connection_checker.js';
 
-import {Block} from './block.js';
-import type {BlocklyOptions} from './blockly_options.js';
-import type {ConnectionDB} from './connection_db.js';
-import type {Abstract} from './events/events_abstract.js';
-import * as eventUtils from './events/utils.js';
-import type {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
-import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
-import {Options} from './options.js';
-import * as registry from './registry.js';
-import * as arrayUtils from './utils/array.js';
-import * as idGenerator from './utils/idgenerator.js';
-import * as math from './utils/math.js';
-import type * as toolbox from './utils/toolbox.js';
-import {VariableMap} from './variable_map.js';
-import type {VariableModel} from './variable_model.js';
-import type {WorkspaceComment} from './workspace_comment.js';
+import {Block} from './block';
+import type {BlocklyOptions} from './blockly_options';
+import type {ConnectionDB} from './connection_db';
+import type {Abstract} from './events/events_abstract';
+import * as common from './common';
+import * as eventUtils from './events/utils';
+import type {IASTNodeLocation} from './interfaces/i_ast_node_location';
+import type {IConnectionChecker} from './interfaces/i_connection_checker';
+import {Options} from './options';
+import * as registry from './registry';
+import * as arrayUtils from './utils/array';
+import * as idGenerator from './utils/idgenerator';
+import * as math from './utils/math';
+import type * as toolbox from './utils/toolbox';
+import {VariableMap} from './variable_map';
+import type {VariableModel} from './variable_model';
+import type {WorkspaceComment} from './workspace_comment';
 
-
-/** Database of all workspaces. */
-const WorkspaceDB_ = Object.create(null);
 
 /**
  * Class for a workspace.  This is a data structure that contains blocks.
@@ -112,7 +110,7 @@ export class Workspace implements IASTNodeLocation {
   /** @param opt_options Dictionary of options. */
   constructor(opt_options?: Options) {
     this.id = idGenerator.genUid();
-    WorkspaceDB_[this.id] = this;
+    common.registerWorkspace(this);
     this.options = opt_options || new Options(({} as BlocklyOptions));
     this.RTL = !!this.options.RTL;
     this.horizontalLayout = !!this.options.horizontalLayout;
@@ -145,7 +143,7 @@ export class Workspace implements IASTNodeLocation {
     this.listeners_.length = 0;
     this.clear();
     // Remove from workspace database.
-    delete WorkspaceDB_[this.id];
+    common.unregisterWorkpace(this);
   }
 
   /**
@@ -770,26 +768,5 @@ export class Workspace implements IASTNodeLocation {
    */
   setVariableMap(variableMap: VariableMap) {
     this.variableMap_ = variableMap;
-  }
-
-  /**
-   * Find the workspace with the specified ID.
-   * @param id ID of workspace to find.
-   * @return The sought after workspace or null if not found.
-   */
-  static getById(id: string): Workspace|null {
-    return WorkspaceDB_[id] || null;
-  }
-
-  /**
-   * Find all workspaces.
-   * @return Array of workspaces.
-   */
-  static getAll(): Workspace[] {
-    const workspaces = [];
-    for (const workspaceId in WorkspaceDB_) {
-      workspaces.push(WorkspaceDB_[workspaceId]);
-    }
-    return workspaces;
   }
 }

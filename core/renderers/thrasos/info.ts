@@ -17,15 +17,15 @@
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.thrasos.RenderInfo');
 
-import type {BlockSvg} from '../../block_svg.js';
-import {RenderInfo as BaseRenderInfo} from '../common/info.js';
-import type {Measurable} from '../measurables/base.js';
-import type {BottomRow} from '../measurables/bottom_row.js';
-import type {Field} from '../measurables/field.js';
-import {InRowSpacer} from '../measurables/in_row_spacer.js';
-import type {Row} from '../measurables/row.js';
-import type {TopRow} from '../measurables/top_row.js';
-import {Types} from '../measurables/types.js';
+import type {BlockSvg} from '../../block_svg';
+import {RenderInfo as BaseRenderInfo} from '../common/info';
+import type {Measurable} from '../measurables/base';
+import type {BottomRow} from '../measurables/bottom_row';
+import type {Field} from '../measurables/field';
+import {InRowSpacer} from '../measurables/in_row_spacer';
+import type {Row} from '../measurables/row';
+import type {TopRow} from '../measurables/top_row';
+import {Types} from '../measurables/types';
 
 import type {Renderer} from './renderer.js';
 

@@ -17,7 +17,8 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.Abstract');
 
-import {Workspace} from '../workspace.js';
+import * as common from '../common';
+import type {Workspace} from '../workspace';
 
 import * as eventUtils from './utils.js';
 
@@ -99,7 +100,7 @@ export abstract class Abstract {
   getEventWorkspace_(): Workspace {
     let workspace;
     if (this.workspaceId) {
-      workspace = Workspace.getById(this.workspaceId);
+      workspace = common.getWorkspaceById(this.workspaceId);
     }
     if (!workspace) {
       throw Error(

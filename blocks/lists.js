@@ -10,25 +10,29 @@
  */
 'use strict';
 
-goog.module('Blockly.blocks.lists');
+goog.module('Blockly.libraryBlocks.lists');
 
 const xmlUtils = goog.require('Blockly.utils.xml');
 const {Align} = goog.require('Blockly.Input');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
-const {Blocks} = goog.require('Blockly.blocks');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockDefinition} = goog.requireType('Blockly.blocks');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
 const {FieldDropdown} = goog.require('Blockly.FieldDropdown');
 const {Msg} = goog.require('Blockly.Msg');
 const {Mutator} = goog.require('Blockly.Mutator');
 /* eslint-disable-next-line no-unused-vars */
 const {Workspace} = goog.requireType('Blockly.Workspace');
-const {defineBlocksWithJsonArray} = goog.require('Blockly.common');
+const {createBlockDefinitionsFromJsonArray, defineBlocks} = goog.require('Blockly.common');
 /** @suppress {extraRequire} */
 goog.require('Blockly.FieldDropdown');
 
-
-defineBlocksWithJsonArray([
+/**
+ * A dictionary of the block definitions provided by this module.
+ * @type {!Object<string, !BlockDefinition>}
+ */
+const blocks = createBlockDefinitionsFromJsonArray([
   // Block for creating an empty list
   // The 'list_create_with' block is preferred as it is more flexible.
   // <block type="lists_create_with">
@@ -112,8 +116,9 @@ defineBlocksWithJsonArray([
     'helpUrl': '%{BKY_LISTS_LENGTH_HELPURL}',
   },
 ]);
+exports.blocks = blocks;
 
-Blocks['lists_create_with'] = {
+blocks['lists_create_with'] = {
   /**
    * Block for creating a list with any number of elements of any type.
    * @this {Block}
@@ -255,7 +260,7 @@ Blocks['lists_create_with'] = {
   },
 };
 
-Blocks['lists_create_with_container'] = {
+blocks['lists_create_with_container'] = {
   /**
    * Mutator block for list container.
    * @this {Block}
@@ -270,7 +275,7 @@ Blocks['lists_create_with_container'] = {
   },
 };
 
-Blocks['lists_create_with_item'] = {
+blocks['lists_create_with_item'] = {
   /**
    * Mutator block for adding items.
    * @this {Block}
@@ -285,7 +290,7 @@ Blocks['lists_create_with_item'] = {
   },
 };
 
-Blocks['lists_indexOf'] = {
+blocks['lists_indexOf'] = {
   /**
    * Block for finding an item in the list.
    * @this {Block}
@@ -312,7 +317,7 @@ Blocks['lists_indexOf'] = {
   },
 };
 
-Blocks['lists_getIndex'] = {
+blocks['lists_getIndex'] = {
   /**
    * Block for getting element at index.
    * @this {Block}
@@ -513,7 +518,8 @@ Blocks['lists_getIndex'] = {
   },
 };
 
-Blocks['lists_setIndex'] = {
+
+blocks['lists_setIndex'] = {
   /**
    * Block for setting the element at index.
    * @this {Block}
@@ -664,7 +670,7 @@ Blocks['lists_setIndex'] = {
   },
 };
 
-Blocks['lists_getSublist'] = {
+blocks['lists_getSublist'] = {
   /**
    * Block for getting sublist.
    * @this {Block}
@@ -782,7 +788,7 @@ Blocks['lists_getSublist'] = {
   },
 };
 
-Blocks['lists_sort'] = {
+blocks['lists_sort'] = {
   /**
    * Block for sorting a list.
    * @this {Block}
@@ -822,7 +828,7 @@ Blocks['lists_sort'] = {
   },
 };
 
-Blocks['lists_split'] = {
+blocks['lists_split'] = {
   /**
    * Block for splitting text into a list, or joining a list into text.
    * @this {Block}
@@ -909,3 +915,6 @@ Blocks['lists_split'] = {
   // dropdown values.
   // XML hooks are kept for backwards compatibility.
 };
+
+// Register provided blocks.
+defineBlocks(blocks);

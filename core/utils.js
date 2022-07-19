@@ -17,12 +17,12 @@ goog.module('Blockly.utils');
 
 const aria = goog.require('Blockly.utils.aria');
 const arrayUtils = goog.require('Blockly.utils.array');
+const argumentLocal = goog.require('Blockly.utils.argumentLocal');
 const browserEvents = goog.require('Blockly.browserEvents');
 const colourUtils = goog.require('Blockly.utils.colour');
 const common = goog.require('Blockly.common');
 const deprecation = goog.require('Blockly.utils.deprecation');
 const dom = goog.require('Blockly.utils.dom');
-const argumentLocal = goog.require('Blockly.utils.argumentLocal');
 const extensions = goog.require('Blockly.Extensions');
 const global = goog.require('Blockly.utils.global');
 const idGenerator = goog.require('Blockly.utils.idGenerator');

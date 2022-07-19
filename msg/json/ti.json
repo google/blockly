@@ -44,12 +44,6 @@
 	"COLOUR_BLEND_COLOUR2": "ሕብሪ 2",
 	"COLOUR_BLEND_RATIO": "መጠን",
 	"CONTROLS_REPEAT_INPUT_DO": "ስራሕ",
-	"IOS_OK": "ሕራይ",
-	"IOS_CANCEL": "ኣትርፍ",
-	"IOS_ERROR": "ጌጋ",
-	"IOS_VARIABLES_ADD_BUTTON": "ወስኽ",
-	"IOS_VARIABLES_RENAME_BUTTON": "ዳግም ሰይም",
-	"IOS_VARIABLES_DELETE_BUTTON": "ሰርዝ",
 	"LISTS_GET_INDEX_RANDOM": "ሃውራዊ",
 	"DIALOG_OK": "ሕራይ",
 	"DIALOG_CANCEL": "ኣትርፍ"

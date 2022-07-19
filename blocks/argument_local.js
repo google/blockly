@@ -11,15 +11,18 @@
 
 'use strict';
 
-goog.module('Blockly.blocks.argumentLocal');
+goog.module('Blockly.libraryBlocks.argumentLocal');
 
 const dialog = goog.require('Blockly.dialog');
 const Extensions = goog.require('Blockly.Extensions');
 const Events = goog.require('Blockly.Events');
-const {Blocks} = goog.require('Blockly.blocks');
 const {Msg} = goog.require('Blockly.Msg');
+const {defineBlocks} = goog.require('Blockly.common');
 
- Blocks['argument_local'] = {
+
+const blocks = {};
+
+blocks['argument_local'] = {
   init: function() {
     this.jsonInit({
       'message0': '%1',
@@ -36,7 +39,6 @@ const {Msg} = goog.require('Blockly.Msg');
       'extensions': ['contextMenu'],
     });
   },
-
   onchange: function(event) {
     if (event.type !== Events.BLOCK_MOVE) {
       return;
@@ -71,6 +73,9 @@ const {Msg} = goog.require('Blockly.Msg');
   },
 };
 
+
+exports.blocks = blocks;
+
 /**
  * Mixin to add context menu items to rename argument.
  * Used by blocks 'argument_local'.
@@ -79,7 +84,7 @@ const {Msg} = goog.require('Blockly.Msg');
  * @package
  * @readonly
  */
- const CUSTOM_CONTEXT_MENU = {
+const CUSTOM_CONTEXT_MENU = {
   /**
    * Add menu option to rename argument and delete option
    * to disable block.
@@ -109,13 +114,17 @@ const {Msg} = goog.require('Blockly.Msg');
   },
 };
 
+// Register provided blocks.
+defineBlocks(blocks);
+
 /**
  * Factory for callbacks for rename argument dropdown menu option
  * @param {!Block} block The block with the argument to rename.
  * @return {!function()} A function that renames the argument.
  */
- const renameOptionCallbackFactory = function(block) {
+const renameOptionCallbackFactory = function(block) {
   const argumentValue = block.getFieldValue('VALUE');
+
   return function() {
     const callback = (newName) => {
       block.changeArgumentName.call(block, newName);

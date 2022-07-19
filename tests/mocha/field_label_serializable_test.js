@@ -6,7 +6,9 @@
 
 goog.module('Blockly.test.fieldLabelSerialization');
 
-const {createTestBlock, defineRowBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+const {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSetValueTests} = goog.require('Blockly.test.helpers.fields');
+const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+const {createTestBlock, defineRowBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
 
 
 suite('Label Serializable Fields', function() {
@@ -53,7 +55,7 @@ suite('Label Serializable Fields', function() {
    * @param {!Blockly.FieldLabelSerializable} field The field to check.
    */
   const assertFieldDefault = function(field) {
-    testHelpers.assertFieldValue(field, defaultFieldValue);
+    assertFieldValue(field, defaultFieldValue);
   };
   /**
    * Asserts that the field properties are correct based on the test case.
@@ -61,14 +63,14 @@ suite('Label Serializable Fields', function() {
    * @param {!FieldValueTestCase} testCase The test case.
    */
   const validTestCaseAssertField = function(field, testCase) {
-    testHelpers.assertFieldValue(field, testCase.expectedValue);
+    assertFieldValue(field, testCase.expectedValue);
   };
 
-  testHelpers.runConstructorSuiteTests(
+  runConstructorSuiteTests(
       Blockly.FieldLabelSerializable, validValueTestCases,
       invalidValueTestCases, validTestCaseAssertField, assertFieldDefault);
 
-  testHelpers.runFromJsonSuiteTests(
+  runFromJsonSuiteTests(
       Blockly.FieldLabelSerializable, validValueTestCases, invalidValueTestCases,
       validTestCaseAssertField, assertFieldDefault);
 
@@ -77,12 +79,12 @@ suite('Label Serializable Fields', function() {
       setup(function() {
         this.field = new Blockly.FieldLabelSerializable();
       });
-      testHelpers.runSetValueTests(
+      runSetValueTests(
           validValueTestCases, invalidValueTestCases, defaultFieldValue);
       test('With source block', function() {
         this.field.setSourceBlock(createTestBlock());
         this.field.setValue('value');
-        testHelpers.assertFieldValue(this.field, 'value');
+        assertFieldValue(this.field, 'value');
       });
     });
     suite('Value -> New Value', function() {
@@ -90,12 +92,12 @@ suite('Label Serializable Fields', function() {
       setup(function() {
         this.field = new Blockly.FieldLabelSerializable(initialValue);
       });
-      testHelpers.runSetValueTests(
+      runSetValueTests(
           validValueTestCases, invalidValueTestCases, initialValue);
       test('With source block', function() {
         this.field.setSourceBlock(createTestBlock());
         this.field.setValue('value');
-        testHelpers.assertFieldValue(this.field, 'value');
+        assertFieldValue(this.field, 'value');
       });
     });
   });

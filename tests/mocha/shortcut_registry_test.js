@@ -6,13 +6,15 @@
 
 goog.module('Blockly.test.shortcutRegistry');
 
-const {createKeyDownEvent, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers');
+const {createKeyDownEvent} = goog.require('Blockly.test.helpers.userInput');
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
 
 
 suite('Keyboard Shortcut Registry Test', function() {
   setup(function() {
     sharedTestSetup.call(this);
-    this.registry = new Blockly.ShortcutRegistry();
+    this.registry = Blockly.ShortcutRegistry.registry;
+    this.registry.reset();
     Blockly.ShortcutItems.registerDefaultShortcuts();
   });
   teardown(function() {

@@ -450,12 +450,16 @@ function test_number_properties()
   assertEquals(42 % 2 == 0, true, 'even')
   assertEquals(42.1 % 2 == 1, false, 'odd')
   assertEquals(math_isPrime(5), true, 'prime 5')
+  assertEquals(math_isPrime(5 + 2), true, 'prime 5 + 2 (extra parentheses)')
   assertEquals(math_isPrime(25), false, 'prime 25')
   assertEquals(math_isPrime(-31.1), false, 'prime negative')
   assertEquals(math.pi % 1 == 0, false, 'whole')
   assertEquals(math.huge > 0, true, 'positive')
+  assertEquals(5 + 2 > 0, true, '5 + 2 is positive (extra parentheses)')
   assertEquals(-42 < 0, true, 'negative')
+  assertEquals(3 + 2 < 0, false, '3 + 2 is negative (extra parentheses)')
   assertEquals(42 % 2 == 0, true, 'divisible')
+  assertEquals(not nil, true, 'divisible by 0')
 end
 
 
@@ -521,23 +525,23 @@ function math_median(t)
   if #t == 0 then
     return 0
   end
-  local temp={}
+  local temp = {}
   for _, v in ipairs(t) do
-    if type(v) == "number" then
+    if type(v) == 'number' then
       table.insert(temp, v)
     end
   end
   table.sort(temp)
   if #temp % 2 == 0 then
-    return (temp[#temp/2] + temp[(#temp/2)+1]) / 2
+    return (temp[#temp / 2] + temp[(#temp / 2) + 1]) / 2
   else
-    return temp[math.ceil(#temp/2)]
+    return temp[math.ceil(#temp / 2)]
   end
 end
 
 function math_modes(t)
   -- Source: http://lua-users.org/wiki/SimpleStats
-  local counts={}
+  local counts = {}
   for _, v in ipairs(t) do
     if counts[v] == nil then
       counts[v] = 1
@@ -551,7 +555,7 @@ function math_modes(t)
       biggestCount = v
     end
   end
-  local temp={}
+  local temp = {}
   for k, v in pairs(counts) do
     if v == biggestCount then
       table.insert(temp, k)
@@ -703,9 +707,8 @@ function firstIndexOf(str, substr)
   local i = string.find(str, substr, 1, true)
   if i == nil then
     return 0
-  else
-    return i
   end
+  return i
 end
 
 function lastIndexOf(str, substr)

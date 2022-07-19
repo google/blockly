@@ -7,7 +7,7 @@
 goog.module('Blockly.test.astNode');
 
 const {ASTNode} = goog.require('Blockly.ASTNode');
-const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
+const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
 
 
 suite('ASTNode', function() {

@@ -8,8 +8,9 @@ goog.module('Blockly.test.procedures');
 
 goog.require('Blockly');
 goog.require('Blockly.Msg');
-const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers');
-const {assertCallBlockStructure, assertDefBlockStructure, createProcDefBlock, createProcCallBlock} = goog.require('Blockly.test.procedureHelpers');
+const {assertCallBlockStructure, assertDefBlockStructure, createProcDefBlock, createProcCallBlock} = goog.require('Blockly.test.helpers.procedures');
+const {runSerializationTestSuite} = goog.require('Blockly.test.helpers.serialization');
+const {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
 
 
 suite('Procedures', function() {
@@ -293,8 +294,12 @@ suite('Procedures', function() {
       });
     });
     suite('caller param mismatch', function() {
-      test.skip('callreturn with missing args', function() {
-        // TODO: How do we want it to behave in this situation?
+      setup(function() {
+        this.TEST_VAR_ID = 'test-id';
+        this.genUidStub = createGenUidStubWithReturns(this.TEST_VAR_ID);
+      });
+
+      test('callreturn with missing args', function() {
         const defBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
             <block type="procedures_defreturn">
               <field name="NAME">do something</field>
@@ -309,10 +314,9 @@ suite('Procedures', function() {
             '</block>'
         ), this.workspace);
         assertDefBlockStructure(defBlock, true, ['x'], ['arg']);
-        assertCallBlockStructure(callBlock, ['x'], ['arg']);
+        assertCallBlockStructure(callBlock, [], [], 'do something2');
       });
-      test.skip('callreturn with bad args', function() {
-        // TODO: How do we want it to behave in this situation?
+      test('callreturn with bad args', function() {
         const defBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
             <block type="procedures_defreturn">
               <field name="NAME">do something</field>
@@ -329,10 +333,10 @@ suite('Procedures', function() {
             </block>
         `), this.workspace);
         assertDefBlockStructure(defBlock, true, ['x'], ['arg']);
-        assertCallBlockStructure(callBlock, ['x'], ['arg']);
+        assertCallBlockStructure(
+            callBlock, ['y'], [this.TEST_VAR_ID], 'do something2');
       });
-      test.skip('callnoreturn with missing args', function() {
-        // TODO: How do we want it to behave in this situation?
+      test('callnoreturn with missing args', function() {
         const defBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
             <block type="procedures_defnoreturn">
               <field name="NAME">do something</field>
@@ -347,10 +351,9 @@ suite('Procedures', function() {
             '</block>'
         ), this.workspace);
         assertDefBlockStructure(defBlock, false, ['x'], ['arg']);
-        assertCallBlockStructure(callBlock, ['x'], ['arg']);
+        assertCallBlockStructure(callBlock, [], [], 'do something2');
       });
-      test.skip('callnoreturn with bad args', function() {
-        // TODO: How do we want it to behave in this situation?
+      test('callnoreturn with bad args', function() {
         const defBlock = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(`
             <block type="procedures_defnoreturn">
               <field name="NAME">do something</field>
@@ -367,7 +370,8 @@ suite('Procedures', function() {
             </block>
         `), this.workspace);
         assertDefBlockStructure(defBlock, false, ['x'], ['arg']);
-        assertCallBlockStructure(callBlock, ['x'], ['arg']);
+        assertCallBlockStructure(
+            callBlock, ['y'], [this.TEST_VAR_ID], 'do something2');
       });
     });
   });
@@ -1203,7 +1207,7 @@ suite('Procedures', function() {
               },
         },
       ];
-      testHelpers.runSerializationTestSuite(testCases);
+      runSerializationTestSuite(testCases);
     });
   });
 });

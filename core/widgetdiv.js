@@ -56,13 +56,13 @@ let themeClassName = '';
 
 /**
  * The HTML container for popup overlays (e.g. editor widgets).
- * @type {?Element}
+ * @type {?HTMLDivElement}
  */
 let DIV;
 
 /**
  * Returns the HTML container for editor widgets.
- * @return {?Element} The editor widget container.
+ * @return {?HTMLDivElement} The editor widget container.
  * @alias Blockly.WidgetDiv.getDiv
  */
 const getDiv = function() {
@@ -72,7 +72,7 @@ exports.getDiv = getDiv;
 
 /**
  * Allows unit tests to reset the div.
- * @param {?Element} newDiv The new value for the DIV field.
+ * @param {?HTMLDivElement} newDiv The new value for the DIV field.
  * @alias Blockly.WidgetDiv.testOnly_setDiv
  * @ignore
  */
@@ -109,7 +109,7 @@ const createDom = function() {
     return;  // Already created.
   }
 
-  DIV = document.createElement('div');
+  DIV = /** @type {!HTMLDivElement} */ (document.createElement('div'));
   DIV.className = 'blocklyWidgetDiv';
   const container = common.getParentContainer() || document.body;
   container.appendChild(DIV);

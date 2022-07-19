@@ -21,6 +21,8 @@ const utilsXml = goog.require('Blockly.utils.xml');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
 /* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+/* eslint-disable-next-line no-unused-vars */
 const {Connection} = goog.requireType('Blockly.Connection');
 /* eslint-disable-next-line no-unused-vars */
 const {Field} = goog.requireType('Blockly.Field');
@@ -94,7 +96,6 @@ const variablesToDom = function(variableList) {
   return variables;
 };
 exports.variablesToDom = variablesToDom;
-
 /**
  * Encode a list of modules as XML.
  * @param {!Blockly.Workspace} workspace The workspace containing blocks.
@@ -435,7 +436,7 @@ exports.textToDom = textToDom;
  * Clear the given workspace then decode an XML DOM and
  * create blocks on the workspace.
  * @param {!Element} xml XML DOM.
- * @param {!Workspace} workspace The workspace.
+ * @param {!WorkspaceSvg} workspace The workspace.
  * @return {!Array<string>} An array containing new block IDs.
  * @alias Blockly.Xml.clearWorkspaceAndLoadFromXml
  */
@@ -486,12 +487,12 @@ const domToWorkspace = function(xml, workspace) {
   }
 
   // Disable workspace resizes as an optimization.
-  if (workspace.setResizesEnabled) {
-    workspace.setResizesEnabled(false);
+  // Assume it is rendered so we can check.
+  if (/** @type {!WorkspaceSvg} */ (workspace).setResizesEnabled) {
+    /** @type {!WorkspaceSvg} */ (workspace).setResizesEnabled(false);
   }
 
   let variablesFirst = true;
-
   try {
     // first load modules
     for (let i = 0, xmlChild; (xmlChild = xml.childNodes[i]); i++) {
@@ -515,7 +516,6 @@ const domToWorkspace = function(xml, workspace) {
 
         const blockX = xmlChildElement.hasAttribute('x') ? parseInt(xmlChildElement.getAttribute('x'), 10) : 10;
         const blockY = xmlChildElement.hasAttribute('y') ? parseInt(xmlChildElement.getAttribute('y'), 10) : 10;
-
         if (!isNaN(blockX) && !isNaN(blockY)) {
           block.moveBy(workspace.RTL ? width - blockX : blockX, blockY);
         }
@@ -528,7 +528,8 @@ const domToWorkspace = function(xml, workspace) {
           const {WorkspaceCommentSvg} = goog.module.get('Blockly.WorkspaceCommentSvg');
 
           if (!WorkspaceCommentSvg) {
-            console.warn('Missing require for Blockly.WorkspaceCommentSvg, ignoring workspace comment.');
+            console.warn(
+                'Missing require for Blockly.WorkspaceCommentSvg, ignoring workspace comment.');
           } else {
             WorkspaceCommentSvg.fromXml(xmlChildElement, /** @type {!WorkspaceSvg} */ (workspace), width);
           }
@@ -536,7 +537,8 @@ const domToWorkspace = function(xml, workspace) {
           const {WorkspaceComment} =
             goog.module.get('Blockly.WorkspaceComment');
           if (!WorkspaceComment) {
-            console.warn('Missing require for Blockly.WorkspaceComment, ignoring workspace comment.');
+            console.warn(
+                'Missing require for Blockly.WorkspaceComment, ignoring workspace comment.');
           } else {
             WorkspaceComment.fromXml(xmlChildElement, workspace);
           }
@@ -580,12 +582,11 @@ const domToWorkspace = function(xml, workspace) {
   }
 
   // Re-enable workspace resizing.
-  if (workspace.setResizesEnabled) {
-    workspace.setResizesEnabled(true);
+  if (/** @type {!WorkspaceSvg} */ (workspace).setResizesEnabled) {
+    /** @type {!WorkspaceSvg} */ (workspace).setResizesEnabled(true);
   }
 
   eventUtils.fire(new (eventUtils.get(eventUtils.FINISHED_LOADING))(workspace));
-
   return newBlockIds;
 };
 exports.domToWorkspace = domToWorkspace;
@@ -599,12 +600,14 @@ exports.domToWorkspace = domToWorkspace;
  * @alias Blockly.Xml.appendDomToWorkspace
  */
 const appendDomToWorkspace = function(xml, workspace) {
-  let bbox;  // Bounding box of the current blocks.
-  // First check if we have a workspaceSvg, otherwise the blocks have no shape
+  // First check if we have a WorkspaceSvg, otherwise the blocks have no shape
   // and the position does not matter.
-  if (Object.prototype.hasOwnProperty.call(workspace, 'scale')) {
-    bbox = workspace.getBlocksBoundingBox();
+  // Assume it is rendered so we can check.
+  if (!/** @type {!WorkspaceSvg} */ (workspace).getBlocksBoundingBox) {
+    return domToWorkspace(xml, workspace);
   }
+
+  const bbox = /** @type {!WorkspaceSvg} */ (workspace).getBlocksBoundingBox();
   // Load the new blocks into the workspace and get the IDs of the new blocks.
   const newBlockIds = domToWorkspace(xml, workspace);
   if (bbox && bbox.top !== bbox.bottom) {  // check if any previous block
@@ -675,6 +678,7 @@ const domToBlock = function(xmlBlock, workspace) {
     const blocks = topBlock.getDescendants(false);
 
     if (workspace.rendered && topBlock.inActiveModule() && (!workspace.isFlyout || (!topBlock.isObsolete() && !topBlock.isRemoved()))) {
+      const topBlockSvg = /** @type {!BlockSvg} */ (topBlock);
       // Wait to track connections to speed up assembly.
       topBlock.setConnectionTracking(false);
       // Render each block.
@@ -688,15 +692,16 @@ const domToBlock = function(xmlBlock, workspace) {
       // Populating the connection database may be deferred until after the
       // blocks have rendered.
       setTimeout(function() {
-        if (!topBlock.disposed) {
-          topBlock.setConnectionTracking(true);
+        if (!topBlockSvg.disposed) {
+          topBlockSvg.setConnectionTracking(true);
         }
       }, 1);
-      topBlock.updateDisabled();
+      topBlockSvg.updateDisabled();
       // Allow the scrollbars to resize and move based on the new contents.
       // TODO(@picklesrus): #387. Remove when domToBlock avoids resizing.
-      workspace.resizeContents();
+      /** @type {!WorkspaceSvg} */ (workspace).resizeContents();
     } else {
+      const blocks = topBlock.getDescendants(false);
       for (let i = blocks.length - 1; i >= 0; i--) {
         blocks[i].initModel();
       }
@@ -711,7 +716,8 @@ const domToBlock = function(xmlBlock, workspace) {
     for (let i = 0; i < newVariables.length; i++) {
       const thisVariable = newVariables[i];
 
-      eventUtils.fire(new (eventUtils.get(eventUtils.VAR_CREATE))(thisVariable));
+      eventUtils.fire(
+          new (eventUtils.get(eventUtils.VAR_CREATE))(thisVariable));
     }
     // Block events come after var events, in case they refer to newly created
     // variables.
@@ -881,8 +887,9 @@ const applyCommentTagNodes = function(xmlChildren, block) {
     }
 
     if (pinned && block.getCommentIcon && !block.isInFlyout && block.workspace.rendered && block.inActiveModule()) {
+      const blockSvg = /** @type {BlockSvg} */ (block);
       setTimeout(function() {
-        block.getCommentIcon().setVisible(true);
+        blockSvg.getCommentIcon().setVisible(true);
       }, 1);
     }
   }
@@ -921,6 +928,7 @@ const applyFieldTagNodes = function(xmlChildren, block) {
  */
 const findChildBlocks = function(xmlNode) {
   const childBlockInfo = {childBlockElement: null, childShadowElement: null};
+
   for (let i = 0; i < xmlNode.childNodes.length; i++) {
     const xmlChild = xmlNode.childNodes[i];
     if (xmlChild.nodeType === dom.NodeType.ELEMENT_NODE) {
@@ -1014,13 +1022,14 @@ const applyNextTagNodes = function(xmlChildren, workspace, block) {
  *    is a next connection, rather than output or statement.
  * @return {!Block} The root block created.
  */
-const domToBlockHeadless = function(
-    xmlBlock, workspace, parentConnection, connectedToParentNext) {
+const domToBlockHeadless = function(xmlBlock, workspace, parentConnection, connectedToParentNext) {
   let block = null;
   const prototypeName = xmlBlock.getAttribute('type');
+
   if (!prototypeName) {
     throw TypeError('Block type unspecified: ' + xmlBlock.outerHTML);
   }
+
   const id = xmlBlock.getAttribute('id');
   let moduleId;
 
@@ -1029,7 +1038,6 @@ const domToBlockHeadless = function(
   }
 
   block = workspace.newBlock(prototypeName, id, moduleId);
-
   // Preprocess childNodes so tags can be processed in a consistent order.
   const xmlChildNameMap = mapSupportedXmlTags(xmlBlock);
 
@@ -1051,8 +1059,7 @@ const domToBlockHeadless = function(
       } else if (block.previousConnection) {
         parentConnection.connect(block.previousConnection);
       } else {
-        throw TypeError(
-            'Child block does not have output or previous statement.');
+        throw TypeError('Child block does not have output or previous statement.');
       }
     }
   }
@@ -1062,47 +1069,59 @@ const domToBlockHeadless = function(
   applyNextTagNodes(xmlChildNameMap.next, workspace, block);
 
   if (shouldCallInitSvg) {
-    // InitSvg needs to be called after variable fields are loaded.
-    block.initSvg();
+    // This shouldn't even be called here
+    // (ref: https://github.com/google/blockly/pull/4296#issuecomment-884226021
+    // But the XML serializer/deserializer is iceboxed so I'm not going to fix
+    // it.
+    (/** @type {!BlockSvg} */ (block)).initSvg();
   }
 
   const inline = xmlBlock.getAttribute('inline');
   if (inline) {
     block.setInputsInline(inline === 'true');
   }
+
   const disabled = xmlBlock.getAttribute('disabled');
   if (disabled) {
     block.setEnabled(disabled !== 'true' && disabled !== 'disabled');
   }
+
   const deletable = xmlBlock.getAttribute('deletable');
   if (deletable) {
     block.setDeletable(deletable === 'true');
   }
+
   const movable = xmlBlock.getAttribute('movable');
   if (movable) {
     block.setMovable(movable === 'true');
   }
+
   const editable = xmlBlock.getAttribute('editable');
   if (editable) {
     block.setEditable(editable === 'true');
   }
+
   const collapsed = xmlBlock.getAttribute('collapsed');
   if (collapsed) {
     block.setCollapsed(collapsed === 'true');
   }
+
   if (xmlBlock.nodeName.toLowerCase() === 'shadow') {
     // Ensure all children are also shadows.
     const children = block.getChildren(false);
+
     for (let i = 0; i < children.length; i++) {
       const child = children[i];
       if (!child.isShadow()) {
         throw TypeError('Shadow block not allowed non-shadow child.');
       }
     }
+
     // Ensure this block doesn't have any variable inputs.
     if (block.getVarModels().length) {
       throw TypeError('Shadow blocks cannot have variable references.');
     }
+    
     block.setShadow(true);
   }
   return block;

@@ -24,11 +24,11 @@ const browserEvents = goog.require('Blockly.browserEvents');
 const bumpObjects = goog.require('Blockly.bumpObjects');
 const common = goog.require('Blockly.common');
 const dom = goog.require('Blockly.utils.dom');
+const dropDownDiv = goog.require('Blockly.dropDownDiv');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const {BlockDragSurfaceSvg} = goog.require('Blockly.BlockDragSurfaceSvg');
 /* eslint-disable-next-line no-unused-vars */
 const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
-const {DropDownDiv} = goog.require('Blockly.DropDownDiv');
 const {Grid} = goog.require('Blockly.Grid');
 const {Msg} = goog.require('Blockly.Msg');
 const {Options} = goog.require('Blockly.Options');
@@ -57,9 +57,10 @@ const inject = function(container, opt_options) {
   if (!container || !dom.containsNode(document, container)) {
     throw Error('Error: container is not in current document.');
   }
-  const options = new Options(opt_options || (/** @type {!BlocklyOptions} */ ({})));
-  const subContainer = document.createElement('div');
-
+  const options =
+      new Options(opt_options || (/** @type {!BlocklyOptions} */ ({})));
+  const subContainer =
+      /** @type {!HTMLDivElement} */ (document.createElement('div'));
   subContainer.className = 'injectionDiv';
   subContainer.tabIndex = 0;
 
@@ -74,13 +75,15 @@ const inject = function(container, opt_options) {
 
   const workspaceDragSurface = new WorkspaceDragSurfaceSvg(subContainer);
 
-  const workspace = createMainWorkspace(svg, options, blockDragSurface, workspaceDragSurface);
+  const workspace =
+      createMainWorkspace(svg, options, blockDragSurface, workspaceDragSurface);
 
   init(workspace);
 
   // Keep focus on the first workspace so entering keyboard navigation looks
   // correct.
   common.setMainWorkspace(workspace);
+
   common.svgResize(workspace);
 
   subContainer.addEventListener('focusin', function() {
@@ -151,9 +154,8 @@ const createDom = function(container, options) {
  *     SVG for the workspace.
  * @return {!WorkspaceSvg} Newly created main workspace.
  */
-const createMainWorkspace = function( svg, options, blockDragSurface, workspaceDragSurface) {
+const createMainWorkspace = function(svg, options, blockDragSurface, workspaceDragSurface) {
   options.parentWorkspace = null;
-
   const mainWorkspace = new WorkspaceSvg(options, blockDragSurface, workspaceDragSurface);
   const wsOptions = mainWorkspace.options;
 
@@ -189,7 +191,7 @@ const createMainWorkspace = function( svg, options, blockDragSurface, workspaceD
   // The SVG is now fully assembled.
   common.svgResize(mainWorkspace);
   WidgetDiv.createDom();
-  DropDownDiv.createDom();
+  dropDownDiv.createDom();
   Tooltip.createDom();
 
   return mainWorkspace;
@@ -278,7 +280,8 @@ const init = function(mainWorkspace) {
 // TODO (https://github.com/google/blockly/issues/1998) handle cases where there
 // are multiple workspaces and non-main workspaces are able to accept input.
 const onKeyDown = function(e) {
-  const mainWorkspace = common.getMainWorkspace();
+  const mainWorkspace =
+      /** @type {!WorkspaceSvg} */ (common.getMainWorkspace());
   if (!mainWorkspace) {
     return;
   }
@@ -341,7 +344,7 @@ const bindDocumentEvents = function() {
 /**
  * Load sounds for the given workspace.
  * @param {string} pathToMedia The path to the media directory.
- * @param {!Workspace} workspace The workspace to load sounds for.
+ * @param {!WorkspaceSvg} workspace The workspace to load sounds for.
  */
 const loadSounds = function(pathToMedia, workspace) {
   const audioMgr = workspace.getAudioManager();

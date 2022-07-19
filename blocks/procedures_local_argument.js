@@ -10,9 +10,7 @@
  */
  'use strict';
 
- goog.module('Blockly.blocks.proceduresLocalArgument');
-
- Blockly.ProceduresLocalArgumentUtils = {};
+ goog.module('Blockly.libraryBlocks.proceduresLocalArgument');
 
  /* eslint-disable-next-line no-unused-vars */
  const AbstractEvent = goog.requireType('Blockly.Events.Abstract');
@@ -26,7 +24,6 @@
  const {ConnectionType} = goog.require('Blockly.ConnectionType');
  /* eslint-disable-next-line no-unused-vars */
  const {Block} = goog.requireType('Blockly.Block');
- const {Blocks} = goog.require('Blockly.blocks');
  /* eslint-disable-next-line no-unused-vars */
  const {Gesture} = goog.require('Blockly.Gesture');
  const {FieldCheckbox} = goog.require('Blockly.FieldCheckbox');
@@ -38,57 +35,66 @@
  const {Names} = goog.require('Blockly.Names');
  /* eslint-disable-next-line no-unused-vars */
  const {Workspace} = goog.requireType('Blockly.Workspace');
+ const {defineBlocks} = goog.require('Blockly.common');
  /** @suppress {extraRequire} */
  goog.require('Blockly.Comment');
  /** @suppress {extraRequire} */
  goog.require('Blockly.Warning');
 
 /**
-  * Common properties for the procedure_defnoreturn and
-  * procedure_defreturn blocks.
-  */
-/**
- * Disconnect old blocks from all value inputs on this block, but hold onto them
- * in case they can be reattached later. Also save the shadow DOM if it exists.
- * The result is a map from argument ID to information that was associated with
- * that argument at the beginning of the mutation.
- * @return {!Object.<string, {shadow: Element, block: Blockly.Block}>} An object
- *     mapping argument IDs to blocks and shadow DOMs.
- * @private
- * @this Blockly.Block
+ * A dictionary of the block definitions provided by this module.
+ * @type {!Object<string, !BlockDefinition>}
  */
-  Blockly.ProceduresLocalArgumentUtils.disconnectOldBlocks_ = function() {
-  // Remove old stuff
-  const connectionMap = {};
-  for (let i = 0, input; (input = this.inputList[i]); i++) {
-    if (input.name !== 'STACK' && input.connection) {
-      const target = input.connection.targetBlock();
-      const saveInfo = {
-        shadow: input.connection.getShadowDom(),
-        block: target,
-      };
-      connectionMap[input.name] = saveInfo;
+const blocks = {};
+exports.blocks = blocks;
 
-      // Remove the shadow DOM, then disconnect the block. Otherwise a shadow
-      // block will respawn instantly, and we'd have to remove it when we remove
-      // the input.
-      input.connection.setShadowDom(null, true);
-      if (input.connection.targetConnection && input.name !== 'RETURN') {
-        input.connection.disconnect();
+const PROCEDURES_WITH_ARGUMENT = {
+    /**
+   * Disconnect old blocks from all value inputs on this block, but hold onto them
+   * in case they can be reattached later. Also save the shadow DOM if it exists.
+   * The result is a map from argument ID to information that was associated with
+   * that argument at the beginning of the mutation.
+   * @return {!Object.<string, {shadow: Element, block: Blockly.Block}>} An object
+   *     mapping argument IDs to blocks and shadow DOMs.
+   * @private
+   * @this Blockly.Block
+   */
+  disconnectOldBlocks_: function() {
+    // Remove old stuff
+    const connectionMap = {};
+
+    for (let i = 0, input; (input = this.inputList[i]); i++) {
+      if (input.name !== 'STACK' && input.connection) {
+        const target = input.connection.targetBlock();
+        const saveInfo = {
+          shadow: input.connection.getShadowDom(),
+          block: target,
+        };
+        connectionMap[input.name] = saveInfo;
+
+        // Remove the shadow DOM, then disconnect the block. Otherwise a shadow
+        // block will respawn instantly, and we'd have to remove it when we remove
+        // the input.
+        input.connection.setShadowDom(null, true);
+        if (input.connection.targetConnection && input.name !== 'RETURN') {
+          input.connection.disconnect();
+        }
       }
     }
-  }
-  return connectionMap;
-  };
+
+    return connectionMap;
+  },
+
   /**
- * Removes all value inputs on the block.
- * @private
- * @this Block
- */
-  Blockly.ProceduresLocalArgumentUtils.removeValueInputs_ = function() {
-  // Delete inputs directly instead of with block.removeInput to avoid splicing
-  // out of the input list at every index.
+   * Removes all value inputs on the block.
+   * @private
+   * @this Block
+   */
+  removeValueInputs_: function() {
+    // Delete inputs directly instead of with block.removeInput to avoid splicing
+    // out of the input list at every index.
     const newInputList = [];
+
     for (let i = 0, input; (input = this.inputList[i]); i++) {
       if (input.type === ConnectionType.INPUT_VALUE && input.name !== 'RETURN') {
         input.dispose();
@@ -96,37 +102,40 @@
         newInputList.push(input);
       }
     }
+
     this.inputList = newInputList;
-  };
-/**
- * Delete all shadow blocks in the given map.
- * @param {!Object.<string, Blockly.Block>} connectionMap An object mapping
- *     argument IDs to the blocks that were connected to those IDs at the
- *     beginning of the mutation.
- * @private
- * @this Blockly.Block
- */
-  Blockly.ProceduresLocalArgumentUtils.deleteShadows_ = function(connectionMap) {
-  // Get rid of all of the old shadow blocks if they aren't connected.
-  if (connectionMap) {
-    for (const id in connectionMap) {
-      const saveInfo = connectionMap[id];
-      if (saveInfo) {
-        const block = saveInfo['block'];
-        if (block && block.isShadow()) {
-          block.dispose();
-          delete connectionMap[id];
+  },
+
+  /**
+   * Delete all shadow blocks in the given map.
+   * @param {!Object.<string, Blockly.Block>} connectionMap An object mapping
+   *     argument IDs to the blocks that were connected to those IDs at the
+   *     beginning of the mutation.
+   * @private
+   * @this Blockly.Block
+   */
+  deleteShadows_: function(connectionMap) {
+    // Get rid of all of the old shadow blocks if they aren't connected.
+    if (connectionMap) {
+      for (const id in connectionMap) {
+        const saveInfo = connectionMap[id];
+        if (saveInfo) {
+          const block = saveInfo['block'];
+          if (block && block.isShadow()) {
+            block.dispose();
+            delete connectionMap[id];
+          }
         }
       }
     }
-  }
-  };
+  },
+
   /**
     * Add or remove the statement block from this function definition.
     * @param {boolean} hasStatements True if a statement block is needed.
     * @this {Block}
     */
-  Blockly.ProceduresLocalArgumentUtils.setStatements_ = function(hasStatements) {
+  setStatements_: function(hasStatements) {
     if (this.hasStatements_ === hasStatements) {
       return;
     }
@@ -140,7 +149,8 @@
       this.removeInput('STACK', true);
     }
     this.hasStatements_ = hasStatements;
-  };
+  },
+
   /**
    * Build a DOM node representing a shadow block of the given type.
    * @param {string} name Name argument block.
@@ -149,7 +159,7 @@
    * @private
    * @this Block
    */
-  Blockly.ProceduresLocalArgumentUtils.buildArgumentBlock_ = function(name, argId) {
+  buildArgumentBlock_: function(name, argId) {
     const block = xmlUtils.createElement('shadow');
     block.setAttribute('type', 'argument_local');
 
@@ -164,12 +174,14 @@
 
     block.appendChild(field);
     return block;
-  };
+  },
+
   /**
    * Create inputs in def block
    */
-  Blockly.ProceduresLocalArgumentUtils.createInputs_ = function() {
+  createInputs_: function() {
     this.argumentModels_ = [];
+
     for (let i = 0, argument; (argument = this.updatedArguments_[i]); i++) {
       const argumentBlock = this.buildArgumentBlock_(argument.name, argument.id);
 
@@ -180,13 +192,13 @@
         .setShadowDom(argumentBlock);
       this.moveInputBefore(argument.id, 'PARAMS');
     }
-  };
+  },
 
   /**
   * Remove unused arguments in procedures.
   * @private
   */
-  Blockly.ProceduresLocalArgumentUtils.removeArguments_ = function() {
+  removeArguments_: function() {
     if (!this.argumentModels_.length) {
       return;
     }
@@ -218,13 +230,14 @@
         argumentBlock.dispose();
       }
     }
-  };
+  },
+
   /**
-    * Update the display of parameters for this procedure definition block.
-    * @private
-    * @this {Block}
-    */
-  Blockly.ProceduresLocalArgumentUtils.updateParams_ = function() {
+  * Update the display of parameters for this procedure definition block.
+  * @private
+  * @this {Block}
+  */
+  updateParams_: function() {
     Events.disable();
     try {
       const connectionMap = this.disconnectOldBlocks_();
@@ -235,7 +248,8 @@
     } finally {
       Events.enable();
     }
-  };
+  },
+
   /**
     * Create XML to represent the argument inputs.
     * Backwards compatible serialization implementation.
@@ -244,7 +258,7 @@
     * @return {!Element} XML storage element.
     * @this {Block}
     */
-  Blockly.ProceduresLocalArgumentUtils.mutationToDom = function(optParamIds) {
+  mutationToDom: function(optParamIds) {
     const container = xmlUtils.createElement('mutation');
     if (optParamIds) {
       container.setAttribute('name', this.getFieldValue('NAME'));
@@ -263,14 +277,15 @@
       container.setAttribute('statements', 'false');
     }
     return container;
-  };
+  },
+
   /**
     * Parse XML to restore the argument inputs.
     * Backwards compatible serialization implementation.
     * @param {!Element} xmlElement XML storage element.
     * @this {Block}
     */
-  Blockly.ProceduresLocalArgumentUtils.domToMutation = function(xmlElement) {
+  domToMutation: function(xmlElement) {
     this.arguments_ = [];
     this.argumentModels_ = [];
     this.updatedArguments_ = [];
@@ -283,9 +298,7 @@
           this.argumentModels_.push({id: varId, name: varName});
           this.updatedArguments_.push({id: varId, name: varName});
         } else {
-          console.log(
-            'Failed to create a variable with name ' + varName +
-               ', ignoring.');
+          console.info('Failed to create a variable with name ' + varName + ', ignoring.');
         }
       }
     }
@@ -294,14 +307,15 @@
 
     // Show or hide the statement input.
     this.setStatements_(xmlElement.getAttribute('statements') !== 'false');
-  };
+  },
+
   /**
     * Returns the state of this block as a JSON serializable object.
     * @return {?{params: (!Array<{name: string, id: string}>|undefined),
     *     hasStatements: (boolean|undefined)}} The state of this block, eg the
     *     parameters and statements.
     */
-  Blockly.ProceduresLocalArgumentUtils.saveExtraState = function() {
+  saveExtraState: function() {
     if (!this.argumentModels_.length && this.hasStatements_) {
       return null;
     }
@@ -320,13 +334,14 @@
       state.hasStatements = false;
     }
     return state;
-  };
+  },
+
   /**
     * Applies the given state to this block.
     * @param {*} state The state to apply to this block, eg the parameters and
     *     statements.
     */
-  Blockly.ProceduresLocalArgumentUtils.loadExtraState = function(state) {
+  loadExtraState: function(state) {
     this.arguments_ = [];
     this.argumentModels_ = [];
     this.updatedArguments_ = [];
@@ -341,14 +356,15 @@
     this.updateParams_();
     ProceduresLocalArgument.mutateCallers(this);
     this.setStatements_(state.hasStatements !== false);
-  };
+  },
+
   /**
     * Populate the mutator's dialog with this block's components.
     * @param {!Workspace} workspace Mutator's workspace.
     * @return {!Block} Root block in mutator.
     * @this {Block}
     */
-  Blockly.ProceduresLocalArgumentUtils.decompose = function(workspace) {
+  decompose: function(workspace) {
     /*
       * Creates the following XML:
       * <block type="procedures_local_mutatorcontainer">
@@ -400,13 +416,14 @@
     // Initialize procedure's callers with blank IDs.
     ProceduresLocalArgument.mutateCallers(this);
     return containerBlock;
-  };
+  },
+
   /**
     * Reconfigure this block based on the mutator dialog's components.
     * @param {!Block} containerBlock Root block in mutator.
     * @this {Block}
     */
-  Blockly.ProceduresLocalArgumentUtils.compose = function(containerBlock) {
+  compose: function(containerBlock) {
     // Parameter list.
     this.arguments_ = [];
     this.updatedArguments_ = [];
@@ -448,21 +465,23 @@
         }
       }
     }
-  };
+  },
+
   /**
     * Return all variables referenced by this block.
     * @return {!Array<string>} List of variable names.
     * @this {Block}
     */
-  Blockly.ProceduresLocalArgumentUtils.getArguments = function() {
+  getArguments: function() {
     return this.arguments_;
-  };
+  },
+
   /**
     * Add custom menu options to this block's context menu.
     * @param {!Array} options List of menu options to add to.
     * @this {Block}
     */
-  Blockly.ProceduresLocalArgumentUtils.customContextMenu = function(options) {
+  customContextMenu: function(options) {
     if (this.isInFlyout) {
       return;
     }
@@ -483,7 +502,8 @@
     xmlBlock.appendChild(xmlMutation);
     option.callback = ContextMenu.callbackFactory(this, xmlBlock);
     options.push(option);
-  };
+  },
+
   /**
   * Return the signature of this procedure definition.
   * @return {!Array} Tuple containing three elements:
@@ -492,14 +512,13 @@
   *     - that it DOES NOT have a return value.
   * @this {Block}
   */
-  Blockly.ProceduresLocalArgumentUtils.getProcedureDef = function() {
+  getProcedureDef: function() {
     return [this.getFieldValue('NAME'), this.arguments_, false];
-  };
+  },
 
-  Blockly.ProceduresLocalArgumentUtils.callType_ = 'procedures_with_argument_callnoreturn';
+};
 
-
-Blocks['procedures_with_argument_defnoreturn'] = {
+blocks['procedures_with_argument_defnoreturn'] = {
   /**
     * Block for defining a procedure with no return value.
     * @this {Block}
@@ -530,27 +549,10 @@ Blocks['procedures_with_argument_defnoreturn'] = {
     this.statementConnection_ = null;
   },
 
-  disconnectOldBlocks_: Blockly.ProceduresLocalArgumentUtils.disconnectOldBlocks_,
-  deleteShadows_: Blockly.ProceduresLocalArgumentUtils.deleteShadows_,
-  createInputs_: Blockly.ProceduresLocalArgumentUtils.createInputs_,
-  removeArguments_: Blockly.ProceduresLocalArgumentUtils.removeArguments_,
-  removeValueInputs_: Blockly.ProceduresLocalArgumentUtils.removeValueInputs_,
-  setStatements_: Blockly.ProceduresLocalArgumentUtils.setStatements_,
-  buildArgumentBlock_: Blockly.ProceduresLocalArgumentUtils.buildArgumentBlock_,
-  updateParams_: Blockly.ProceduresLocalArgumentUtils.updateParams_,
-  mutationToDom: Blockly.ProceduresLocalArgumentUtils.mutationToDom,
-  domToMutation: Blockly.ProceduresLocalArgumentUtils.domToMutation,
-  saveExtraState: Blockly.ProceduresLocalArgumentUtils.saveExtraState,
-  loadExtraState: Blockly.ProceduresLocalArgumentUtils.loadExtraState,
-  decompose: Blockly.ProceduresLocalArgumentUtils.decompose,
-  compose: Blockly.ProceduresLocalArgumentUtils.compose,
-  getArguments: Blockly.ProceduresLocalArgumentUtils.getArguments,
-  customContextMenu: Blockly.ProceduresLocalArgumentUtils.customContextMenu,
-  getProcedureDef: Blockly.ProceduresLocalArgumentUtils.getProcedureDef,
-  callType_: 'procedures_with_argument_callnoreturn',
+  ...PROCEDURES_WITH_ARGUMENT,
 };
 
-Blocks['procedures_with_argument_defreturn'] = {
+blocks['procedures_with_argument_defreturn'] = {
   /**
     * Block for defining a procedure with a return value.
     * @this {Block}
@@ -584,27 +586,11 @@ Blocks['procedures_with_argument_defreturn'] = {
     this.statementConnection_ = null;
   },
 
-  disconnectOldBlocks_: Blockly.ProceduresLocalArgumentUtils.disconnectOldBlocks_,
-  deleteShadows_: Blockly.ProceduresLocalArgumentUtils.deleteShadows_,
-  createInputs_: Blockly.ProceduresLocalArgumentUtils.createInputs_,
-  removeArguments_: Blockly.ProceduresLocalArgumentUtils.removeArguments_,
-  removeValueInputs_: Blockly.ProceduresLocalArgumentUtils.removeValueInputs_,
-  setStatements_: Blockly.ProceduresLocalArgumentUtils.setStatements_,
-  buildArgumentBlock_: Blockly.ProceduresLocalArgumentUtils.buildArgumentBlock_,
-  updateParams_: Blockly.ProceduresLocalArgumentUtils.updateParams_,
-  mutationToDom: Blockly.ProceduresLocalArgumentUtils.mutationToDom,
-  domToMutation: Blockly.ProceduresLocalArgumentUtils.domToMutation,
-  saveExtraState: Blockly.ProceduresLocalArgumentUtils.saveExtraState,
-  loadExtraState: Blockly.ProceduresLocalArgumentUtils.loadExtraState,
-  decompose: Blockly.ProceduresLocalArgumentUtils.decompose,
-  compose: Blockly.ProceduresLocalArgumentUtils.compose,
-  getArguments: Blockly.ProceduresLocalArgumentUtils.getArguments,
-  customContextMenu: Blockly.ProceduresLocalArgumentUtils.customContextMenu,
-  getProcedureDef: Blockly.ProceduresLocalArgumentUtils.getProcedureDef,
+  ...PROCEDURES_WITH_ARGUMENT,
   callType_: 'procedures_with_argument_callreturn',
 };
 
-Blocks['procedures_local_mutatorcontainer'] = {
+blocks['procedures_local_mutatorcontainer'] = {
   /**
     * Mutator block for procedure container.
     * @this {Block}
@@ -622,7 +608,7 @@ Blocks['procedures_local_mutatorcontainer'] = {
   },
 };
 
-Blocks['procedures_local_mutatorarg'] = {
+blocks['procedures_local_mutatorarg'] = {
   /**
     * Mutator block for procedure argument.
     * @this {Block}
@@ -1024,8 +1010,7 @@ const PROCEDURE_CALL_COMMON = {
           // problem with event grouping. If you see this message please
           // investigate. If the use ends up being valid we may need to reorder
           // events in the undo stack.
-          console.log(
-            'Saw an existing group while responding to a definition change');
+          console.info('Saw an existing group while responding to a definition change');
         }
         Events.setGroup(event.group);
         if (event.newValue) {
@@ -1054,6 +1039,7 @@ const PROCEDURE_CALL_COMMON = {
     option.text = Msg.PROCEDURES_HIGHLIGHT_DEF;
     const name = this.getProcedureCall();
     const workspace = this.workspace;
+
     option.callback = function() {
       let def = ProceduresLocalArgument.getDefinition(name, workspace);
 
@@ -1071,7 +1057,7 @@ const PROCEDURE_CALL_COMMON = {
   },
 };
 
-Blocks.procedures_with_argument_callnoreturn = {
+blocks.procedures_with_argument_callnoreturn = {
   ...PROCEDURE_CALL_COMMON,
   /**
     * Block for calling a procedure with no return value.
@@ -1094,7 +1080,7 @@ Blocks.procedures_with_argument_callnoreturn = {
   defType_: 'procedures_with_argument_defnoreturn',
 };
 
-Blocks.procedures_with_argument_callreturn = {
+blocks.procedures_with_argument_callreturn = {
   ...PROCEDURE_CALL_COMMON,
   /**
     * Block for calling a procedure with a return value.
@@ -1115,3 +1101,6 @@ Blocks.procedures_with_argument_callreturn = {
 
   defType_: 'procedures_with_argument_defreturn',
 };
+
+// Register provided blocks.
+defineBlocks(blocks);

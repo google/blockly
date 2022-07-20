@@ -25,8 +25,7 @@ import {FieldTextInput} from './field_textinput.js';
 import * as dom from './utils/dom.js';
 import {KeyCodes} from './utils/keycodes.js';
 import * as math from './utils/math.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Sentinel} from './utils/sentinel.js';
+import type {Sentinel} from './utils/sentinel.js';
 import {Svg} from './utils/svg.js';
 import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';

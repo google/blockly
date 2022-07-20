@@ -21,8 +21,7 @@ goog.declareModuleId('Blockly.IASTNodeLocationWithBlock');
 // Unused import preserved for side-effects. Remove if unneeded.
 import '../block.js';
 
-/* eslint-disable-next-line no-unused-vars */
-import {IASTNodeLocation} from './i_ast_node_location.js';
+import type {IASTNodeLocation} from './i_ast_node_location.js';
 
 
 /**

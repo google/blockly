@@ -15,14 +15,12 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.ContextMenu');
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from './block.js';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
+import type {Block} from './block.js';
+import type {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import * as clipboard from './clipboard.js';
 import {config} from './config.js';
-import {ContextMenuOption, ContextMenuRegistry, LegacyContextMenuOption} from './contextmenu_registry.js';
+import type {ContextMenuOption, ContextMenuRegistry, LegacyContextMenuOption} from './contextmenu_registry.js';
 import * as BlockCreate from './events/events_block_create.js';
 import * as eventUtils from './events/utils.js';
 import {Menu} from './menu.js';
@@ -37,8 +35,7 @@ import * as svgMath from './utils/svg_math.js';
 import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
 import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 import * as Xml from './xml.js';
 
 

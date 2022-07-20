@@ -16,12 +16,10 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.ToolboxSeparator');
 
 import * as Css from '../css.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IToolbox} from '../interfaces/i_toolbox.js';
+import type {IToolbox} from '../interfaces/i_toolbox.js';
 import * as registry from '../registry.js';
 import * as dom from '../utils/dom.js';
-/* eslint-disable-next-line no-unused-vars */
-import * as toolbox from '../utils/toolbox.js';
+import type * as toolbox from '../utils/toolbox.js';
 
 import {ToolboxItem} from './toolbox_item.js';
 

@@ -29,8 +29,7 @@ import * as colour from './utils/colour.js';
 import * as dom from './utils/dom.js';
 import * as idGenerator from './utils/idgenerator.js';
 import {KeyCodes} from './utils/keycodes.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Sentinel} from './utils/sentinel.js';
+import type {Sentinel} from './utils/sentinel.js';
 import {Size} from './utils/size.js';
 
 

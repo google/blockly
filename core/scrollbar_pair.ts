@@ -18,11 +18,9 @@ goog.declareModuleId('Blockly.ScrollbarPair');
 import * as eventUtils from './events/utils.js';
 import {Scrollbar} from './scrollbar.js';
 import * as dom from './utils/dom.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Metrics} from './utils/metrics.js';
+import type {Metrics} from './utils/metrics.js';
 import {Svg} from './utils/svg.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**

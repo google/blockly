@@ -27,10 +27,9 @@ import '../../connection.js';
 // Unused import preserved for side-effects. Remove if unneeded.
 import '../../theme.js';
 
-import {BlockStyle} from '../../theme.js';
+import type {BlockStyle} from '../../theme.js';
 
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from './constants.js';
+import type {ConstantProvider} from './constants.js';
 
 
 /**

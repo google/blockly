@@ -15,15 +15,11 @@
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.Row');
 
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from '../common/constants.js';
+import type {ConstantProvider} from '../common/constants.js';
 
-/* eslint-disable-next-line no-unused-vars */
-import {Measurable} from './base.js';
-/* eslint-disable-next-line no-unused-vars */
-import {InRowSpacer} from './in_row_spacer.js';
-/* eslint-disable-next-line no-unused-vars */
-import {InputConnection} from './input_connection.js';
+import type {Measurable} from './base.js';
+import type {InRowSpacer} from './in_row_spacer.js';
+import type {InputConnection} from './input_connection.js';
 import {Types} from './types.js';
 
 

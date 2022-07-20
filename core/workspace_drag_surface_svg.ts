@@ -21,8 +21,7 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.WorkspaceDragSurfaceSvg');
 
-/* eslint-disable-next-line no-unused-vars */
-import {Coordinate} from './utils/coordinate.js';
+import type {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import {Svg} from './utils/svg.js';
 import * as svgMath from './utils/svg_math.js';

@@ -18,10 +18,9 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Marker');
 
 /* eslint-disable-next-line no-unused-vars */
-/* eslint-disable-next-line no-unused-vars */
-import {MarkerSvg} from '../renderers/common/marker_svg.js';
+import type {MarkerSvg} from '../renderers/common/marker_svg.js';
 
-import {ASTNode} from './ast_node.js';
+import type {ASTNode} from './ast_node.js';
 
 
 /**

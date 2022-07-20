@@ -17,14 +17,11 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Generator');
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from './block.js';
+import type {Block} from './block.js';
 import * as common from './common.js';
-/* eslint-disable-next-line no-unused-vars */
 import {Names, NameType} from './names.js';
 import * as deprecation from './utils/deprecation.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Workspace} from './workspace.js';
+import type {Workspace} from './workspace.js';
 
 
 /**
@@ -529,7 +526,8 @@ Object.defineProperties(Generator.prototype, {
     /** @return Name database. */
     get(this: Generator): Names |
         undefined {
-          deprecation.warn('variableDB_', 'May 2021', 'September 2022', 'nameDB_');
+          deprecation.warn(
+              'variableDB_', 'May 2021', 'September 2022', 'nameDB_');
           return this.nameDB_;
         },
     /** @param nameDb New name database. */

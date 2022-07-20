@@ -19,8 +19,7 @@ goog.declareModuleId('Blockly.ShortcutRegistry');
 
 import {KeyCodes} from './utils/keycodes.js';
 import * as object from './utils/object.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Workspace} from './workspace.js';
+import type {Workspace} from './workspace.js';
 
 
 /**

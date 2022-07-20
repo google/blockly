@@ -19,15 +19,14 @@ goog.declareModuleId('Blockly.zelos.PathObject');
 // Unused import preserved for side-effects. Remove if unneeded.
 import '../../theme.js';
 
-import {BlockSvg} from '../../block_svg.js';
-import {Connection} from '../../connection.js';
-import {BlockStyle} from '../../theme.js';
+import type {BlockSvg} from '../../block_svg.js';
+import type {Connection} from '../../connection.js';
+import type {BlockStyle} from '../../theme.js';
 import * as dom from '../../utils/dom.js';
 import {Svg} from '../../utils/svg.js';
 import {PathObject as BasePathObject} from '../common/path_object.js';
 
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from './constants.js';
+import type {ConstantProvider} from './constants.js';
 
 
 /**

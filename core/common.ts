@@ -18,17 +18,12 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.common');
 
 /* eslint-disable-next-line no-unused-vars */
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from './block.js';
+import type {Block} from './block.js';
 import {BlockDefinition, Blocks} from './blocks.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Connection} from './connection.js';
-/* eslint-disable-next-line no-unused-vars */
-import {ICopyable} from './interfaces/i_copyable.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Workspace} from './workspace.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import type {Connection} from './connection.js';
+import type {ICopyable} from './interfaces/i_copyable.js';
+import type {Workspace} from './workspace.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**

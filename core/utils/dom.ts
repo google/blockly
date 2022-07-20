@@ -19,8 +19,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.dom');
 
-/* eslint-disable-next-line no-unused-vars */
-import {Svg} from './svg.js';
+import type {Svg} from './svg.js';
 import * as userAgent from './useragent.js';
 
 

@@ -28,8 +28,7 @@ import './i_toolbox_item.js';
 // Unused import preserved for side-effects. Remove if unneeded.
 import '../workspace_svg.js';
 
-/* eslint-disable-next-line no-unused-vars */
-import {IRegistrable} from './i_registrable.js';
+import type {IRegistrable} from './i_registrable.js';
 
 
 /**

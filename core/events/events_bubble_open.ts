@@ -15,8 +15,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.BubbleOpen');
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../block_svg.js';
+import type {BlockSvg} from '../block_svg.js';
 import * as registry from '../registry.js';
 
 import {UiBase} from './events_ui_base.js';

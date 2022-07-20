@@ -18,31 +18,22 @@ goog.declareModuleId('Blockly.Workspace');
 // Unused import preserved for side-effects. Remove if unneeded.
 import './connection_checker.js';
 
-/* eslint-disable-next-line no-unused-vars */
 import {Block} from './block.js';
-/* eslint-disable-next-line no-unused-vars */
-import {BlocklyOptions} from './blockly_options.js';
-/* eslint-disable-next-line no-unused-vars */
-import {ConnectionDB} from './connection_db.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Abstract} from './events/events_abstract.js';
+import type {BlocklyOptions} from './blockly_options.js';
+import type {ConnectionDB} from './connection_db.js';
+import type {Abstract} from './events/events_abstract.js';
 import * as eventUtils from './events/utils.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IConnectionChecker} from './interfaces/i_connection_checker.js';
+import type {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
+import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
 import {Options} from './options.js';
 import * as registry from './registry.js';
 import * as arrayUtils from './utils/array.js';
 import * as idGenerator from './utils/idgenerator.js';
 import * as math from './utils/math.js';
-/* eslint-disable-next-line no-unused-vars */
-import * as toolbox from './utils/toolbox.js';
+import type * as toolbox from './utils/toolbox.js';
 import {VariableMap} from './variable_map.js';
-/* eslint-disable-next-line no-unused-vars */
-import {VariableModel} from './variable_model.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceComment} from './workspace_comment.js';
+import type {VariableModel} from './variable_model.js';
+import type {WorkspaceComment} from './workspace_comment.js';
 
 
 /** Database of all workspaces. */

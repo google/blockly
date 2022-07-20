@@ -20,24 +20,18 @@ goog.declareModuleId('Blockly.Mutator');
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_bubble_open.js';
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from './block.js';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
-/* eslint-disable-next-line no-unused-vars */
-import {BlocklyOptions} from './blockly_options.js';
+import type {Block} from './block.js';
+import type {BlockSvg} from './block_svg.js';
+import type {BlocklyOptions} from './blockly_options.js';
 import {Bubble} from './bubble.js';
 import {config} from './config.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Connection} from './connection.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Abstract} from './events/events_abstract.js';
+import type {Connection} from './connection.js';
+import type {Abstract} from './events/events_abstract.js';
 import {BlockChange} from './events/events_block_change.js';
 import * as eventUtils from './events/utils.js';
 import {Icon} from './icon.js';
 import {Options} from './options.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Coordinate} from './utils/coordinate.js';
+import type {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import {Svg} from './utils/svg.js';
 import * as toolbox from './utils/toolbox.js';

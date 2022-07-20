@@ -15,10 +15,8 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.ContextMenuRegistry');
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import type {BlockSvg} from './block_svg.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**

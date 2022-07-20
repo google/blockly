@@ -19,12 +19,10 @@ import * as browserEvents from './browser_events.js';
 import * as Touch from './touch.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Metrics} from './utils/metrics.js';
+import type {Metrics} from './utils/metrics.js';
 import {Svg} from './utils/svg.js';
 import * as svgMath from './utils/svg_math.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**

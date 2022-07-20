@@ -15,8 +15,7 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Touch');
 
-/* eslint-disable-next-line no-unused-vars */
-import {Gesture} from './gesture.js';
+import type {Gesture} from './gesture.js';
 
 
 /**

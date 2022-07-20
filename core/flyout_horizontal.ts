@@ -18,14 +18,11 @@ goog.declareModuleId('Blockly.HorizontalFlyout');
 import * as browserEvents from './browser_events.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import {Flyout, FlyoutItem} from './flyout_base.js';
-/* eslint-disable-next-line no-unused-vars */
-import {FlyoutButton} from './flyout_button.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Options} from './options.js';
+import type {FlyoutButton} from './flyout_button.js';
+import type {Options} from './options.js';
 import * as registry from './registry.js';
 import {Scrollbar} from './scrollbar.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Coordinate} from './utils/coordinate.js';
+import type {Coordinate} from './utils/coordinate.js';
 import {Rect} from './utils/rect.js';
 import * as toolbox from './utils/toolbox.js';
 import * as WidgetDiv from './widgetdiv.js';

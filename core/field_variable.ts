@@ -18,20 +18,16 @@ goog.declareModuleId('Blockly.FieldVariable');
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_block_change.js';
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from './block.js';
+import type {Block} from './block.js';
 import {Field} from './field.js';
 import {FieldDropdown} from './field_dropdown.js';
 import * as fieldRegistry from './field_registry.js';
 import * as internalConstants from './internal_constants.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Menu} from './menu.js';
-/* eslint-disable-next-line no-unused-vars */
-import {MenuItem} from './menuitem.js';
+import type {Menu} from './menu.js';
+import type {MenuItem} from './menuitem.js';
 import {Msg} from './msg.js';
 import * as parsing from './utils/parsing.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Sentinel} from './utils/sentinel.js';
+import type {Sentinel} from './utils/sentinel.js';
 import {Size} from './utils/size.js';
 import {VariableModel} from './variable_model.js';
 import * as Variables from './variables.js';

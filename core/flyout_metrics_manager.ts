@@ -15,11 +15,9 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.FlyoutMetricsManager');
 
-/* eslint-disable-next-line no-unused-vars */
-import {IFlyout} from './interfaces/i_flyout.js';
+import type {IFlyout} from './interfaces/i_flyout.js';
 import {ContainerRegion, MetricsManager} from './metrics_manager.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**

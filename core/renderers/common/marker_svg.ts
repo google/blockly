@@ -18,29 +18,21 @@ goog.declareModuleId('Blockly.blockRendering.MarkerSvg');
 // Unused import preserved for side-effects. Remove if unneeded.
 import '../../events/events_marker_move.js';
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Connection} from '../../connection.js';
+import type {BlockSvg} from '../../block_svg.js';
+import type {Connection} from '../../connection.js';
 import {ConnectionType} from '../../connection_type.js';
 import * as eventUtils from '../../events/utils.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Field} from '../../field.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IASTNodeLocationSvg} from '../../interfaces/i_ast_node_location_svg.js';
+import type {Field} from '../../field.js';
+import type {IASTNodeLocationSvg} from '../../interfaces/i_ast_node_location_svg.js';
 import {ASTNode} from '../../keyboard_nav/ast_node.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Marker} from '../../keyboard_nav/marker.js';
-/* eslint-disable-next-line no-unused-vars */
-import {RenderedConnection} from '../../rendered_connection.js';
+import type {Marker} from '../../keyboard_nav/marker.js';
+import type {RenderedConnection} from '../../rendered_connection.js';
 import * as dom from '../../utils/dom.js';
 import {Svg} from '../../utils/svg.js';
 import * as svgPaths from '../../utils/svg_paths.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from '../../workspace_svg.js';
+import type {WorkspaceSvg} from '../../workspace_svg.js';
 
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider, Notch, PuzzleTab} from './constants.js';
+import type {ConstantProvider, Notch, PuzzleTab} from './constants.js';
 
 
 /** The name of the CSS class for a cursor. */

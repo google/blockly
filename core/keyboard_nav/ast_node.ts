@@ -17,22 +17,15 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.ASTNode');
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from '../block.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Connection} from '../connection.js';
+import type {Block} from '../block.js';
+import type {Connection} from '../connection.js';
 import {ConnectionType} from '../connection_type.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Field} from '../field.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Input} from '../input.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IASTNodeLocation} from '../interfaces/i_ast_node_location.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IASTNodeLocationWithBlock} from '../interfaces/i_ast_node_location_with_block.js';
+import type {Field} from '../field.js';
+import type {Input} from '../input.js';
+import type {IASTNodeLocation} from '../interfaces/i_ast_node_location.js';
+import type {IASTNodeLocationWithBlock} from '../interfaces/i_ast_node_location_with_block.js';
 import {Coordinate} from '../utils/coordinate.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Workspace} from '../workspace.js';
+import type {Workspace} from '../workspace.js';
 
 
 /**

@@ -15,8 +15,7 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils');
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from './block.js';
+import type {Block} from './block.js';
 import * as browserEvents from './browser_events.js';
 import * as common from './common.js';
 import * as extensions from './extensions.js';
@@ -29,7 +28,7 @@ import * as dom from './utils/dom.js';
 import * as idGenerator from './utils/idgenerator.js';
 import {KeyCodes} from './utils/keycodes.js';
 import * as math from './utils/math.js';
-import {Metrics} from './utils/metrics.js';
+import type {Metrics} from './utils/metrics.js';
 import * as object from './utils/object.js';
 import * as parsing from './utils/parsing.js';
 import {Rect} from './utils/rect.js';
@@ -42,8 +41,7 @@ import * as svgPaths from './utils/svg_paths.js';
 import * as toolbox from './utils/toolbox.js';
 import * as userAgent from './utils/useragent.js';
 import * as xml from './utils/xml.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 export {

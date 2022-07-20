@@ -21,14 +21,11 @@ import './metrics_manager.js';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './workspace.js';
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockDragSurfaceSvg} from './block_drag_surface.js';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
+import type {BlockDragSurfaceSvg} from './block_drag_surface.js';
+import type {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IBubble} from './interfaces/i_bubble.js';
-import {ContainerRegion} from './metrics_manager.js';
+import type {IBubble} from './interfaces/i_bubble.js';
+import type {ContainerRegion} from './metrics_manager.js';
 import {Scrollbar} from './scrollbar.js';
 import * as Touch from './touch.js';
 import {Coordinate} from './utils/coordinate.js';
@@ -37,8 +34,7 @@ import * as math from './utils/math.js';
 import {Size} from './utils/size.js';
 import {Svg} from './utils/svg.js';
 import * as userAgent from './utils/useragent.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**

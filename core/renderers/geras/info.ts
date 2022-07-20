@@ -17,31 +17,24 @@
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.geras.RenderInfo');
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg.js';
-import {Input} from '../../input.js';
+import type {BlockSvg} from '../../block_svg.js';
+import type {Input} from '../../input.js';
 import {inputTypes} from '../../input_types.js';
 import {RenderInfo as BaseRenderInfo} from '../common/info.js';
-import {Measurable} from '../measurables/base.js';
-/* eslint-disable-next-line no-unused-vars */
-import {BottomRow} from '../measurables/bottom_row.js';
+import type {Measurable} from '../measurables/base.js';
+import type {BottomRow} from '../measurables/bottom_row.js';
 import {ExternalValueInput} from '../measurables/external_value_input.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Field} from '../measurables/field.js';
+import type {Field} from '../measurables/field.js';
 import {InRowSpacer} from '../measurables/in_row_spacer.js';
-/* eslint-disable-next-line no-unused-vars */
-import {InputRow} from '../measurables/input_row.js';
-import {Row} from '../measurables/row.js';
-/* eslint-disable-next-line no-unused-vars */
-import {TopRow} from '../measurables/top_row.js';
+import type {InputRow} from '../measurables/input_row.js';
+import type {Row} from '../measurables/row.js';
+import type {TopRow} from '../measurables/top_row.js';
 import {Types} from '../measurables/types.js';
 
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from './constants.js';
+import type {ConstantProvider} from './constants.js';
 import {InlineInput} from './measurables/inline_input.js';
 import {StatementInput} from './measurables/statement_input.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Renderer} from './renderer.js';
+import type {Renderer} from './renderer.js';
 
 
 /**

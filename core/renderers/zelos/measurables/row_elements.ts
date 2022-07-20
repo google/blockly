@@ -17,8 +17,7 @@
 import * as goog from '../../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.zelos.RightConnectionShape');
 
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from '../../../renderers/common/constants.js';
+import type {ConstantProvider} from '../../../renderers/common/constants.js';
 import {Measurable} from '../../../renderers/measurables/base.js';
 import {Types} from '../../../renderers/measurables/types.js';
 

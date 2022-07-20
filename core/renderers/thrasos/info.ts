@@ -17,22 +17,17 @@
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.thrasos.RenderInfo');
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg.js';
+import type {BlockSvg} from '../../block_svg.js';
 import {RenderInfo as BaseRenderInfo} from '../common/info.js';
-import {Measurable} from '../measurables/base.js';
-/* eslint-disable-next-line no-unused-vars */
-import {BottomRow} from '../measurables/bottom_row.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Field} from '../measurables/field.js';
+import type {Measurable} from '../measurables/base.js';
+import type {BottomRow} from '../measurables/bottom_row.js';
+import type {Field} from '../measurables/field.js';
 import {InRowSpacer} from '../measurables/in_row_spacer.js';
-import {Row} from '../measurables/row.js';
-/* eslint-disable-next-line no-unused-vars */
-import {TopRow} from '../measurables/top_row.js';
+import type {Row} from '../measurables/row.js';
+import type {TopRow} from '../measurables/top_row.js';
 import {Types} from '../measurables/types.js';
 
-/* eslint-disable-next-line no-unused-vars */
-import {Renderer} from './renderer.js';
+import type {Renderer} from './renderer.js';
 
 
 /**

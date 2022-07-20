@@ -15,10 +15,8 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Flyout');
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from './block.js';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
+import type {Block} from './block.js';
+import type {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import * as common from './common.js';
 import {ComponentManager} from './component_manager.js';
@@ -26,14 +24,11 @@ import {DeleteArea} from './delete_area.js';
 import * as BlockCreate from './events/events_block_create.js';
 import * as VarCreate from './events/events_var_create.js';
 import * as eventUtils from './events/utils.js';
-/* eslint-disable-next-line no-unused-vars */
 import {FlyoutButton} from './flyout_button.js';
 import {FlyoutMetricsManager} from './flyout_metrics_manager.js';
 import * as Gesture from './gesture.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IFlyout} from './interfaces/i_flyout.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Options} from './options.js';
+import type {IFlyout} from './interfaces/i_flyout.js';
+import type {Options} from './options.js';
 import * as blockRendering from './renderers/common/block_rendering.js';
 import {ScrollbarPair} from './scrollbar_pair.js';
 import * as blocks from './serialization/blocks.js';
@@ -42,8 +37,7 @@ import * as Touch from './touch.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import * as idGenerator from './utils/idgenerator.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Rect} from './utils/rect.js';
+import type {Rect} from './utils/rect.js';
 import {Svg} from './utils/svg.js';
 import * as toolbox from './utils/toolbox.js';
 import * as Variables from './variables.js';

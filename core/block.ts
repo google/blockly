@@ -23,40 +23,31 @@ import './events/events_block_create.js';
 import './events/events_block_delete.js';
 
 import {Blocks} from './blocks.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Comment} from './comment.js';
+import type {Comment} from './comment.js';
 import * as common from './common.js';
 import {Connection} from './connection.js';
 import {ConnectionType} from './connection_type.js';
 import * as constants from './constants.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Abstract} from './events/events_abstract.js';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockMove} from './events/events_block_move.js';
+import type {Abstract} from './events/events_abstract.js';
+import type {BlockMove} from './events/events_block_move.js';
 import * as eventUtils from './events/utils.js';
 import * as Extensions from './extensions.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Field} from './field.js';
+import type {Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import {Align, Input} from './input.js';
 import {inputTypes} from './input_types.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IDeletable} from './interfaces/i_deletable.js';
+import type {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
+import type {IDeletable} from './interfaces/i_deletable.js';
 import {ASTNode} from './keyboard_nav/ast_node.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Mutator} from './mutator.js';
+import type {Mutator} from './mutator.js';
 import * as Tooltip from './tooltip.js';
 import * as arrayUtils from './utils/array.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as idGenerator from './utils/idgenerator.js';
 import * as parsing from './utils/parsing.js';
 import {Size} from './utils/size.js';
-/* eslint-disable-next-line no-unused-vars */
-import {VariableModel} from './variable_model.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Workspace} from './workspace.js';
+import type {VariableModel} from './variable_model.js';
+import type {Workspace} from './workspace.js';
 
 
 /**

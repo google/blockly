@@ -16,19 +16,14 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.serialization.blocks');
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from '../block.js';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../block_svg.js';
-// eslint-disable-next-line no-unused-vars
-import {Connection} from '../connection.js';
+import type {Block} from '../block.js';
+import type {BlockSvg} from '../block_svg.js';
+import type {Connection} from '../connection.js';
 import * as eventUtils from '../events/utils.js';
 import {inputTypes} from '../input_types.js';
-// eslint-disable-next-line no-unused-vars
-import {ISerializer} from '../interfaces/i_serializer.js';
+import type {ISerializer} from '../interfaces/i_serializer.js';
 import {Size} from '../utils/size.js';
-// eslint-disable-next-line no-unused-vars
-import {Workspace} from '../workspace.js';
+import type {Workspace} from '../workspace.js';
 import * as Xml from '../xml.js';
 
 import {BadConnectionCheck, MissingBlockType, MissingConnection, RealChildOfShadow} from './exceptions.js';

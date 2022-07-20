@@ -18,12 +18,10 @@ import * as goog from '../../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.geras.StatementInput');
 
 /* eslint-disable-next-line no-unused-vars */
-/* eslint-disable-next-line no-unused-vars */
-import {Input} from '../../../input.js';
-import {ConstantProvider as BaseConstantProvider} from '../../../renderers/common/constants.js';
+import type {Input} from '../../../input.js';
+import type {ConstantProvider as BaseConstantProvider} from '../../../renderers/common/constants.js';
 import {StatementInput as BaseStatementInput} from '../../../renderers/measurables/statement_input.js';
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider as GerasConstantProvider} from '../constants.js';
+import type {ConstantProvider as GerasConstantProvider} from '../constants.js';
 
 
 /**

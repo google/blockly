@@ -18,11 +18,11 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.serialization.workspaces');
 
 import * as eventUtils from '../events/utils.js';
-import {ISerializer} from '../interfaces/i_serializer.js';
+import type {ISerializer} from '../interfaces/i_serializer.js';
 import * as registry from '../registry.js';
 import * as dom from '../utils/dom.js';
 // eslint-disable-next-line no-unused-vars
-import {Workspace} from '../workspace.js';
+import type {Workspace} from '../workspace.js';
 import {WorkspaceSvg} from '../workspace_svg.js';
 
 

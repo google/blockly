@@ -15,8 +15,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.BlockDrag');
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from '../block.js';
+import type {Block} from '../block.js';
 import * as registry from '../registry.js';
 
 import {UiBase} from './events_ui_base.js';

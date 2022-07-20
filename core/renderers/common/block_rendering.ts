@@ -16,8 +16,7 @@ import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering');
 
 import * as registry from '../../registry.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Theme} from '../../theme.js';
+import type {Theme} from '../../theme.js';
 import * as deprecation from '../../utils/deprecation.js';
 import {Measurable} from '../measurables/base.js';
 import {BottomRow} from '../measurables/bottom_row.js';
@@ -46,7 +45,7 @@ import {ConstantProvider} from './constants.js';
 import * as debug from './debug.js';
 import {Debug} from './debugger.js';
 import {Drawer} from './drawer.js';
-import {IPathObject} from './i_path_object.js';
+import type {IPathObject} from './i_path_object.js';
 import {RenderInfo} from './info.js';
 import {MarkerSvg} from './marker_svg.js';
 import {PathObject} from './path_object.js';

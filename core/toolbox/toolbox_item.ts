@@ -15,17 +15,12 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.ToolboxItem');
 
-/* eslint-disable-next-line no-unused-vars */
-import {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_item.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IToolbox} from '../interfaces/i_toolbox.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IToolboxItem} from '../interfaces/i_toolbox_item.js';
+import type {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_item.js';
+import type {IToolbox} from '../interfaces/i_toolbox.js';
+import type {IToolboxItem} from '../interfaces/i_toolbox_item.js';
 import * as idGenerator from '../utils/idgenerator.js';
-/* eslint-disable-next-line no-unused-vars */
-import * as toolbox from '../utils/toolbox.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from '../workspace_svg.js';
+import type * as toolbox from '../utils/toolbox.js';
+import type {WorkspaceSvg} from '../workspace_svg.js';
 
 
 /**

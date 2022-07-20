@@ -19,8 +19,7 @@ import {Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import {FieldTextInput} from './field_textinput.js';
 import * as aria from './utils/aria.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Sentinel} from './utils/sentinel.js';
+import type {Sentinel} from './utils/sentinel.js';
 
 
 /**

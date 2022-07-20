@@ -19,10 +19,8 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.fieldRegistry');
 
-/* eslint-disable-next-line no-unused-vars */
-import {Field} from './field.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IRegistrableField} from './interfaces/i_registrable_field.js';
+import type {Field} from './field.js';
+import type {IRegistrableField} from './interfaces/i_registrable_field.js';
 import * as registry from './registry.js';
 
 

@@ -18,18 +18,13 @@ goog.declareModuleId('Blockly.Connection');
 // Unused import preserved for side-effects. Remove if unneeded.
 import './constants.js';
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from './block.js';
+import type {Block} from './block.js';
 import {ConnectionType} from './connection_type.js';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockMove} from './events/events_block_move.js';
+import type {BlockMove} from './events/events_block_move.js';
 import * as eventUtils from './events/utils.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Input} from './input.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_with_block.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IConnectionChecker} from './interfaces/i_connection_checker.js';
+import type {Input} from './input.js';
+import type {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_with_block.js';
+import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
 import * as blocks from './serialization/blocks.js';
 import * as Xml from './xml.js';
 

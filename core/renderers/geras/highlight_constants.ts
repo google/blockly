@@ -16,8 +16,7 @@ import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.geras.HighlightConstantProvider');
 
 import * as svgPaths from '../../utils/svg_paths.js';
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from '../common/constants.js';
+import type {ConstantProvider} from '../common/constants.js';
 
 
 /** An object containing sizing and path information about an outside corner. */

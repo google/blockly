@@ -20,8 +20,7 @@ import './events/events_var_create.js';
 
 import * as eventUtils from './events/utils.js';
 import * as idGenerator from './utils/idgenerator.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Workspace} from './workspace.js';
+import type {Workspace} from './workspace.js';
 
 
 /**

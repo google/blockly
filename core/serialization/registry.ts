@@ -18,7 +18,7 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.serialization.registry');
 
 // eslint-disable-next-line no-unused-vars
-import {ISerializer} from '../interfaces/i_serializer.js';
+import type {ISerializer} from '../interfaces/i_serializer.js';
 import * as registry from '../registry.js';
 
 

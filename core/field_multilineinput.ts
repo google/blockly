@@ -23,8 +23,7 @@ import * as aria from './utils/aria.js';
 import * as dom from './utils/dom.js';
 import {KeyCodes} from './utils/keycodes.js';
 import * as parsing from './utils/parsing.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Sentinel} from './utils/sentinel.js';
+import type {Sentinel} from './utils/sentinel.js';
 import {Svg} from './utils/svg.js';
 import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';

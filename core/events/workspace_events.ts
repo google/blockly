@@ -16,8 +16,7 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.FinishedLoading');
 
 import * as registry from '../registry.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Workspace} from '../workspace.js';
+import type {Workspace} from '../workspace.js';
 
 import {Abstract as AbstractEvent} from './events_abstract.js';
 import * as eventUtils from './utils.js';

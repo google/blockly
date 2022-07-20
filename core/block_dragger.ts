@@ -19,25 +19,19 @@ goog.declareModuleId('Blockly.BlockDragger');
 import './events/events_block_drag.js';
 
 import * as blockAnimation from './block_animations.js';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
+import type {BlockSvg} from './block_svg.js';
 import * as bumpObjects from './bump_objects.js';
 import * as common from './common.js';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockMove} from './events/events_block_move.js';
+import type {BlockMove} from './events/events_block_move.js';
 import * as eventUtils from './events/utils.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Icon} from './icon.js';
+import type {Icon} from './icon.js';
 import {InsertionMarkerManager} from './insertion_marker_manager.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IBlockDragger} from './interfaces/i_block_dragger.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IDragTarget} from './interfaces/i_drag_target.js';
+import type {IBlockDragger} from './interfaces/i_block_dragger.js';
+import type {IDragTarget} from './interfaces/i_drag_target.js';
 import * as registry from './registry.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**

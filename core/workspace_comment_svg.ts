@@ -22,20 +22,16 @@ import './events/events_comment_delete.js';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_selected.js';
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockDragSurfaceSvg} from './block_drag_surface.js';
+import type {BlockDragSurfaceSvg} from './block_drag_surface.js';
 import * as browserEvents from './browser_events.js';
 import * as common from './common.js';
 import * as ContextMenu from './contextmenu.js';
 import * as Css from './css.js';
-/* eslint-disable-next-line no-unused-vars */
-import {CommentMove} from './events/events_comment_move.js';
+import type {CommentMove} from './events/events_comment_move.js';
 import * as eventUtils from './events/utils.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IBoundedElement} from './interfaces/i_bounded_element.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IBubble} from './interfaces/i_bubble.js';
-import {CopyData, ICopyable} from './interfaces/i_copyable.js';
+import type {IBoundedElement} from './interfaces/i_bounded_element.js';
+import type {IBubble} from './interfaces/i_bubble.js';
+import type {CopyData, ICopyable} from './interfaces/i_copyable.js';
 import * as Touch from './touch.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
@@ -43,8 +39,7 @@ import {Rect} from './utils/rect.js';
 import {Svg} from './utils/svg.js';
 import * as svgMath from './utils/svg_math.js';
 import {WorkspaceComment} from './workspace_comment.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 /** Size of the resize icon. */

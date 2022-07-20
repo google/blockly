@@ -27,30 +27,21 @@ import './events/events_block_change.js';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './gesture.js';
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from './block.js';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
+import type {Block} from './block.js';
+import type {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import * as eventUtils from './events/utils.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Input} from './input.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_with_block.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IKeyboardAccessible} from './interfaces/i_keyboard_accessible.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IRegistrable} from './interfaces/i_registrable.js';
+import type {Input} from './input.js';
+import type {IASTNodeLocationSvg} from './interfaces/i_ast_node_location_svg.js';
+import type {IASTNodeLocationWithBlock} from './interfaces/i_ast_node_location_with_block.js';
+import type {IKeyboardAccessible} from './interfaces/i_keyboard_accessible.js';
+import type {IRegistrable} from './interfaces/i_registrable.js';
 import {MarkerManager} from './marker_manager.js';
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from './renderers/common/constants.js';
-import {KeyboardShortcut} from './shortcut_registry.js';
+import type {ConstantProvider} from './renderers/common/constants.js';
+import type {KeyboardShortcut} from './shortcut_registry.js';
 import * as Tooltip from './tooltip.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Coordinate} from './utils/coordinate.js';
+import type {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
 import {Rect} from './utils/rect.js';
@@ -61,8 +52,7 @@ import {Svg} from './utils/svg.js';
 import * as userAgent from './utils/useragent.js';
 import * as utilsXml from './utils/xml.js';
 import * as WidgetDiv from './widgetdiv.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 import * as Xml from './xml.js';
 
 

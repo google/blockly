@@ -15,8 +15,7 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.ContextMenuItems');
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
+import type {BlockSvg} from './block_svg.js';
 import * as clipboard from './clipboard.js';
 import {ContextMenuRegistry, RegistryItem, Scope} from './contextmenu_registry.js';
 import * as dialog from './dialog.js';
@@ -26,8 +25,7 @@ import {inputTypes} from './input_types.js';
 import {Msg} from './msg.js';
 import * as idGenerator from './utils/idgenerator.js';
 import * as userAgent from './utils/useragent.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**

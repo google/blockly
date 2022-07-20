@@ -15,8 +15,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.BlockDelete');
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from '../block.js';
+import type {Block} from '../block.js';
 import * as registry from '../registry.js';
 import * as blocks from '../serialization/blocks.js';
 import * as Xml from '../xml.js';

@@ -16,8 +16,7 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.inject');
 
 import {BlockDragSurfaceSvg} from './block_drag_surface.js';
-/* eslint-disable-next-line no-unused-vars */
-import {BlocklyOptions} from './blockly_options.js';
+import type {BlocklyOptions} from './blockly_options.js';
 import * as browserEvents from './browser_events.js';
 import * as bumpObjects from './bump_objects.js';
 import * as common from './common.js';

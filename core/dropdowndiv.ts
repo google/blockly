@@ -17,19 +17,15 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.dropDownDiv');
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
+import type {BlockSvg} from './block_svg.js';
 import * as common from './common.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Field} from './field.js';
+import type {Field} from './field.js';
 import * as dom from './utils/dom.js';
 import * as math from './utils/math.js';
 import {Rect} from './utils/rect.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Size} from './utils/size.js';
+import type {Size} from './utils/size.js';
 import * as style from './utils/style.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**

@@ -17,8 +17,7 @@
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.JaggedEdge');
 
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from '../common/constants.js';
+import type {ConstantProvider} from '../common/constants.js';
 
 import {Measurable} from './base.js';
 import {Types} from './types.js';

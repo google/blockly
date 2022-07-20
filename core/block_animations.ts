@@ -15,8 +15,7 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockAnimations');
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
+import type {BlockSvg} from './block_svg.js';
 import * as dom from './utils/dom.js';
 import {Svg} from './utils/svg.js';
 

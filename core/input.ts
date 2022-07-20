@@ -18,18 +18,13 @@ goog.declareModuleId('Blockly.Input');
 // Unused import preserved for side-effects. Remove if unneeded.
 import './field_label.js';
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from './block.js';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Connection} from './connection.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Field} from './field.js';
+import type {Block} from './block.js';
+import type {BlockSvg} from './block_svg.js';
+import type {Connection} from './connection.js';
+import type {Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import {inputTypes} from './input_types.js';
-/* eslint-disable-next-line no-unused-vars */
-import {RenderedConnection} from './rendered_connection.js';
+import type {RenderedConnection} from './rendered_connection.js';
 
 
 /**

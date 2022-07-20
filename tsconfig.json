@@ -24,7 +24,9 @@
     "target": "ES2020",
     "strict": true,
 
-    // This does not understand enums so we cannot leave it enabled.
+    // This does not understand enums only used to define other enums, so we
+    // cannot leave it enabled.
+    // See: https://github.com/microsoft/TypeScript/issues/49974
     // "importsNotUsedAsValues": "error"
   }
 }

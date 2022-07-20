@@ -15,14 +15,10 @@
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.InputConnection');
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from '../../block_svg.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Input} from '../../input.js';
-/* eslint-disable-next-line no-unused-vars */
-import {RenderedConnection} from '../../rendered_connection.js';
-/* eslint-disable-next-line no-unused-vars */
-import {ConstantProvider} from '../common/constants.js';
+import type {BlockSvg} from '../../block_svg.js';
+import type {Input} from '../../input.js';
+import type {RenderedConnection} from '../../rendered_connection.js';
+import type {ConstantProvider} from '../common/constants.js';
 
 import {Connection} from './connection.js';
 import {Types} from './types.js';

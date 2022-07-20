@@ -15,12 +15,10 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.MarkerMove');
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from '../block.js';
+import type {Block} from '../block.js';
 import {ASTNode} from '../keyboard_nav/ast_node.js';
 import * as registry from '../registry.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Workspace} from '../workspace.js';
+import type {Workspace} from '../workspace.js';
 
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';

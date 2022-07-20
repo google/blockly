@@ -15,19 +15,14 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.MetricsManager');
 
-/* eslint-disable-next-line no-unused-vars */
-import {IFlyout} from './interfaces/i_flyout.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IMetricsManager} from './interfaces/i_metrics_manager.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IToolbox} from './interfaces/i_toolbox.js';
+import type {IFlyout} from './interfaces/i_flyout.js';
+import type {IMetricsManager} from './interfaces/i_metrics_manager.js';
+import type {IToolbox} from './interfaces/i_toolbox.js';
 import * as registry from './registry.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Metrics} from './utils/metrics.js';
+import type {Metrics} from './utils/metrics.js';
 import {Size} from './utils/size.js';
 import * as toolboxUtils from './utils/toolbox.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**

@@ -16,15 +16,12 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.CommentBase');
 
 import * as utilsXml from '../utils/xml.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceComment} from '../workspace_comment.js';
+import type {WorkspaceComment} from '../workspace_comment.js';
 import * as Xml from '../xml.js';
 
 import {Abstract as AbstractEvent} from './events_abstract.js';
-/* eslint-disable-next-line no-unused-vars */
-import {CommentCreate} from './events_comment_create.js';
-/* eslint-disable-next-line no-unused-vars */
-import {CommentDelete} from './events_comment_delete.js';
+import type {CommentCreate} from './events_comment_create.js';
+import type {CommentDelete} from './events_comment_delete.js';
 import * as eventUtils from './utils.js';
 
 

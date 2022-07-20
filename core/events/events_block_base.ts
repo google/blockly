@@ -15,8 +15,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.BlockBase');
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from '../block.js';
+import type {Block} from '../block.js';
 
 import {Abstract as AbstractEvent} from './events_abstract.js';
 

@@ -18,8 +18,7 @@ goog.declareModuleId('Blockly.FieldTextInput');
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_block_change.js';
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
+import type {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import * as dialog from './dialog.js';
 import * as dropDownDiv from './dropdowndiv.js';
@@ -32,12 +31,10 @@ import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import {KeyCodes} from './utils/keycodes.js';
 import * as parsing from './utils/parsing.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Sentinel} from './utils/sentinel.js';
+import type {Sentinel} from './utils/sentinel.js';
 import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**

@@ -18,25 +18,19 @@ goog.declareModuleId('Blockly.Procedures');
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_block_change.js';
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from './block.js';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
+import type {Block} from './block.js';
+import type {BlockSvg} from './block_svg.js';
 import {Blocks} from './blocks.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Abstract} from './events/events_abstract.js';
-/* eslint-disable-next-line no-unused-vars */
-import {BubbleOpen} from './events/events_bubble_open.js';
+import type {Abstract} from './events/events_abstract.js';
+import type {BubbleOpen} from './events/events_bubble_open.js';
 import * as eventUtils from './events/utils.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Field} from './field.js';
+import type {Field} from './field.js';
 import {Msg} from './msg.js';
 import {Names} from './names.js';
 import * as utilsXml from './utils/xml.js';
 import * as Variables from './variables.js';
 import {Workspace} from './workspace.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 import * as Xml from './xml.js';
 
 

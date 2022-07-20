@@ -15,8 +15,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.IDraggable');
 
-/* eslint-disable-next-line no-unused-vars */
-import {IDeletable} from './i_deletable.js';
+import type {IDeletable} from './i_deletable.js';
 
 
 /**

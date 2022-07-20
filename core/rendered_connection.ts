@@ -15,15 +15,12 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.RenderedConnection');
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from './block.js';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
+import type {Block} from './block.js';
+import type {BlockSvg} from './block_svg.js';
 import * as common from './common.js';
 import {config} from './config.js';
 import {Connection} from './connection.js';
-/* eslint-disable-next-line no-unused-vars */
-import {ConnectionDB} from './connection_db.js';
+import type {ConnectionDB} from './connection_db.js';
 import {ConnectionType} from './connection_type.js';
 import * as eventUtils from './events/utils.js';
 import * as internalConstants from './internal_constants.js';

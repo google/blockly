@@ -17,8 +17,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.IAutoHideable');
 
-/* eslint-disable-next-line no-unused-vars */
-import {IComponent} from './i_component.js';
+import type {IComponent} from './i_component.js';
 
 
 /**

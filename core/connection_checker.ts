@@ -20,12 +20,10 @@ goog.declareModuleId('Blockly.ConnectionChecker');
 import * as common from './common.js';
 import {Connection} from './connection.js';
 import {ConnectionType} from './connection_type.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IConnectionChecker} from './interfaces/i_connection_checker.js';
+import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
 import * as internalConstants from './internal_constants.js';
 import * as registry from './registry.js';
-/* eslint-disable-next-line no-unused-vars */
-import {RenderedConnection} from './rendered_connection.js';
+import type {RenderedConnection} from './rendered_connection.js';
 
 
 /**

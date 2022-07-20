@@ -22,14 +22,12 @@ import './events/events_comment_create.js';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_comment_delete.js';
 
-/* eslint-disable-next-line no-unused-vars */
-import {CommentMove} from './events/events_comment_move.js';
+import type {CommentMove} from './events/events_comment_move.js';
 import * as eventUtils from './events/utils.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as idGenerator from './utils/idgenerator.js';
 import * as xml from './utils/xml.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Workspace} from './workspace.js';
+import type {Workspace} from './workspace.js';
 
 
 /**

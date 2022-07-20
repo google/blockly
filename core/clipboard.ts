@@ -15,7 +15,7 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.clipboard');
 
-import {CopyData, ICopyable} from './interfaces/i_copyable.js';
+import type {CopyData, ICopyable} from './interfaces/i_copyable.js';
 
 
 /** Metadata about the object that is currently on the clipboard. */

@@ -17,10 +17,8 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.serialization.variables');
 
-// eslint-disable-next-line no-unused-vars
-import {ISerializer} from '../interfaces/i_serializer.js';
-// eslint-disable-next-line no-unused-vars
-import {Workspace} from '../workspace.js';
+import type {ISerializer} from '../interfaces/i_serializer.js';
+import type {Workspace} from '../workspace.js';
 
 import * as priorities from './priorities.js';
 import * as serializationRegistry from './registry.js';

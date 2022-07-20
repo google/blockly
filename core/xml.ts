@@ -24,28 +24,21 @@ import './workspace_comment.js';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './workspace_comment_svg.js';
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from './block.js';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Connection} from './connection.js';
+import type {Block} from './block.js';
+import type {BlockSvg} from './block_svg.js';
+import type {Connection} from './connection.js';
 import * as eventUtils from './events/utils.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Field} from './field.js';
+import type {Field} from './field.js';
 import {inputTypes} from './input_types.js';
 import * as dom from './utils/dom.js';
 import {Size} from './utils/size.js';
 import * as utilsXml from './utils/xml.js';
-/* eslint-disable-next-line no-unused-vars */
-import {VariableModel} from './variable_model.js';
+import type {VariableModel} from './variable_model.js';
 import * as Variables from './variables.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Workspace} from './workspace.js';
+import type {Workspace} from './workspace.js';
 import {WorkspaceComment} from './workspace_comment.js';
 import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**

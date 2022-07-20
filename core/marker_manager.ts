@@ -15,12 +15,9 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.MarkerManager');
 
-/* eslint-disable-next-line no-unused-vars */
-import {Cursor} from './keyboard_nav/cursor.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Marker} from './keyboard_nav/marker.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import type {Cursor} from './keyboard_nav/cursor.js';
+import type {Marker} from './keyboard_nav/marker.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**

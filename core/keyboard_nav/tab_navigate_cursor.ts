@@ -17,8 +17,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.TabNavigateCursor');
 
-/* eslint-disable-next-line no-unused-vars */
-import {Field} from '../field.js';
+import type {Field} from '../field.js';
 
 import {ASTNode} from './ast_node.js';
 import {BasicCursor} from './basic_cursor.js';

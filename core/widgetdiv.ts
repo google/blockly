@@ -22,12 +22,9 @@ goog.declareModuleId('Blockly.WidgetDiv');
 import * as common from './common.js';
 import * as deprecation from './utils/deprecation.js';
 import * as dom from './utils/dom.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Rect} from './utils/rect.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Size} from './utils/size.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import type {Rect} from './utils/rect.js';
+import type {Size} from './utils/size.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 /** The object currently using this container. */

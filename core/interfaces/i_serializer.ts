@@ -17,8 +17,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.serialization.ISerializer');
 
-// eslint-disable-next-line no-unused-vars
-import {Workspace} from '../workspace.js';
+import type {Workspace} from '../workspace.js';
 
 
 /**

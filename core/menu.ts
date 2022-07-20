@@ -16,14 +16,12 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Menu');
 
 import * as browserEvents from './browser_events.js';
-/* eslint-disable-next-line no-unused-vars */
-import {MenuItem} from './menuitem.js';
+import type {MenuItem} from './menuitem.js';
 import * as aria from './utils/aria.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import {KeyCodes} from './utils/keycodes.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Size} from './utils/size.js';
+import type {Size} from './utils/size.js';
 import * as style from './utils/style.js';
 
 

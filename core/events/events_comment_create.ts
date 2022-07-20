@@ -16,8 +16,7 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.CommentCreate');
 
 import * as registry from '../registry.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceComment} from '../workspace_comment.js';
+import type {WorkspaceComment} from '../workspace_comment.js';
 import * as Xml from '../xml.js';
 
 import {CommentBase} from './events_comment_base.js';

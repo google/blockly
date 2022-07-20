@@ -18,11 +18,9 @@ import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.Field');
 
 /* eslint-disable-next-line no-unused-vars */
-/* eslint-disable-next-line no-unused-vars */
-import {Field as BlocklyField} from '../../field.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Input} from '../../input.js';
-import {ConstantProvider} from '../common/constants.js';
+import type {Field as BlocklyField} from '../../field.js';
+import type {Input} from '../../input.js';
+import type {ConstantProvider} from '../common/constants.js';
 
 import {Measurable} from './base.js';
 import {Types} from './types.js';

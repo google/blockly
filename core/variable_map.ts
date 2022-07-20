@@ -20,8 +20,7 @@ import './events/events_var_delete.js';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_var_rename.js';
 
-/* eslint-disable-next-line no-unused-vars */
-import {Block} from './block.js';
+import type {Block} from './block.js';
 import * as dialog from './dialog.js';
 import * as eventUtils from './events/utils.js';
 import {Msg} from './msg.js';
@@ -29,8 +28,7 @@ import {Names} from './names.js';
 import * as arrayUtils from './utils/array.js';
 import * as idGenerator from './utils/idgenerator.js';
 import {VariableModel} from './variable_model.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Workspace} from './workspace.js';
+import type {Workspace} from './workspace.js';
 
 
 /**

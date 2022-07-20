@@ -15,17 +15,14 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Options');
 
-/* eslint-disable-next-line no-unused-vars */
-import {BlocklyOptions} from './blockly_options.js';
+import type {BlocklyOptions} from './blockly_options.js';
 import * as registry from './registry.js';
 import {Theme} from './theme.js';
 import {Classic} from './theme/classic.js';
 import * as idGenerator from './utils/idgenerator.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Metrics} from './utils/metrics.js';
+import type {Metrics} from './utils/metrics.js';
 import * as toolbox from './utils/toolbox.js';
-/* eslint-disable-next-line no-unused-vars */
-import {WorkspaceSvg} from './workspace_svg.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**

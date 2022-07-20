@@ -25,7 +25,7 @@ import './i_draggable.js';
 // Unused import preserved for side-effects. Remove if unneeded.
 import '../utils/rect.js';
 
-import {IComponent} from './i_component.js';
+import type {IComponent} from './i_component.js';
 
 
 /**

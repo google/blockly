@@ -15,16 +15,11 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.ComponentManager');
 
-/* eslint-disable-next-line no-unused-vars */
-import {IAutoHideable} from './interfaces/i_autohideable.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IComponent} from './interfaces/i_component.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IDeleteArea} from './interfaces/i_delete_area.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IDragTarget} from './interfaces/i_drag_target.js';
-/* eslint-disable-next-line no-unused-vars */
-import {IPositionable} from './interfaces/i_positionable.js';
+import type {IAutoHideable} from './interfaces/i_autohideable.js';
+import type {IComponent} from './interfaces/i_component.js';
+import type {IDeleteArea} from './interfaces/i_delete_area.js';
+import type {IDragTarget} from './interfaces/i_drag_target.js';
+import type {IPositionable} from './interfaces/i_positionable.js';
 import * as arrayUtils from './utils/array.js';
 
 

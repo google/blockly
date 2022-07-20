@@ -28,19 +28,16 @@ import './events/events_bubble_open.js';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './warning.js';
 
-import {CommentModel} from './block.js';
-/* eslint-disable-next-line no-unused-vars */
-import {BlockSvg} from './block_svg.js';
+import type {CommentModel} from './block.js';
+import type {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import {Bubble} from './bubble.js';
 import * as Css from './css.js';
 import * as eventUtils from './events/utils.js';
 import {Icon} from './icon.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Coordinate} from './utils/coordinate.js';
+import type {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
-/* eslint-disable-next-line no-unused-vars */
-import {Size} from './utils/size.js';
+import type {Size} from './utils/size.js';
 import {Svg} from './utils/svg.js';
 import * as userAgent from './utils/useragent.js';
 

@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Varwin <devops@varwin.com>",
-		"lastupdated": "2022-06-21 17:31:00.988844",
+		"lastupdated": "2022-07-21 14:23:53.892013",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -36,6 +36,8 @@
 	"NEW_MODULE": "Create",
 	"NEW_MODULE_TITLE": "Name:",
 	"DELETE_ALL_SELECTED": "Delete all selected blocks",
+	"COPY_ALL_SELECTED": "Copy all selected blocks",
+	"DUPLICATE_ALL_SELECTED": "Duplicate all selected blocks",
 	"MOVE_SELECTED_BLOCKS_TO_MODULE": "Move blocks to module %1",
 	"SELECT_ALL": "Select all blocks",
 	"LOADING_ERROR": "Error loading workspace",

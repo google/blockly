@@ -609,6 +609,23 @@ MassOperationsHandler.prototype.generateContextMenu = function() {
     enabled: true,
   });
 
+  menuOptions.push({
+    text: Msg['COPY_ALL_SELECTED'],
+    callback: () => {
+      this.copySelected_();
+    },
+    enabled: true,
+  });
+
+  menuOptions.push({
+    text: Msg['DUPLICATE_ALL_SELECTED'],
+    callback: () => {
+      this.copySelected_();
+      this.pasteCopiedBlocks_();
+    },
+    enabled: true,
+  });
+
   if (this.workspace_.options.showModuleBar && this.workspace_.getModuleManager().getAllModules().length > 1) {
     const aBlock = this.selectedBlocks_[0];
 

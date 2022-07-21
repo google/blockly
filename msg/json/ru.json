@@ -23,6 +23,8 @@
 		"locale": "ru"
 	},
 	"DELETE_ALL_SELECTED": "Удалить все выбранные блоки",
+	"COPY_ALL_SELECTED": "Копировать все выбранные блоки",
+	"DUPLICATE_ALL_SELECTED": "Дублировать все выбранные блоки",
 	"MOVE_SELECTED_BLOCKS_TO_MODULE": "Переместить блоки в модуль %1",
 	"SELECT_ALL": "Выбрать все блоки",
 	"VARIABLES_DEFAULT_NAME": "элемент",

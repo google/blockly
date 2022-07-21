@@ -571,6 +571,15 @@ export const VARIABLE_DYNAMIC_CATEGORY_NAME: string =
 export const PROCEDURE_CATEGORY_NAME: string =
     (Procedures as AnyDuringMigration).CATEGORY_NAME;
 
+// I hate this so much.
+Workspace.prototype.newBlock = function (prototypeName: string, opt_id?: string): Block {
+  return new Block(this, prototypeName, opt_id);
+}
+
+WorkspaceSvg.prototype.newBlock = function (prototypeName: string, opt_id?: string): BlockSvg {
+  return new BlockSvg(this, prototypeName, opt_id);
+}
+
 // Re-export submodules that no longer declareLegacyNamespace.
 export {browserEvents};
 export {ContextMenu};

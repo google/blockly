@@ -152,7 +152,7 @@
 	"MATH_SINGLE_TOOLTIP_NEG": "Renvoie l’opposé d’un nombre",
 	"MATH_SINGLE_TOOLTIP_LN": "Renvoie le logarithme naturel d’un nombre.",
 	"MATH_SINGLE_TOOLTIP_LOG10": "Renvoie le logarithme décimal d’un nombre.",
-	"MATH_SINGLE_TOOLTIP_EXP": "Renvoie <em>e</em> à la puissance d’un nombre.",
+	"MATH_SINGLE_TOOLTIP_EXP": "Renvoie e (la constante d’Euler) élevé à la puissance d’un nombre donné, c’est-à-dire l’exponentielle népérienne ou naturelle de ce nombre.",
 	"MATH_SINGLE_TOOLTIP_POW10": "Renvoie 10 à la puissance d’un nombre.",
 	"MATH_TRIG_HELPURL": "https://fr.wikipedia.org/wiki/Fonction_trigonom%C3%A9trique",
 	"MATH_TRIG_TOOLTIP_SIN": "Renvoie le sinus d’un angle en degrés (pas en radians).",

@@ -93,16 +93,12 @@ class Trashcan extends DeleteArea {
      */
     this.flyout = null;
 
-     /**
+    /**
      * Current state of lid opening (0.0 = closed, 1.0 = open).
      * @type {number}
      * @private
      */
     this.lidOpen_ = 0;
-
-    if (this.workspace_.options.maxTrashcanContents <= 0) {
-      return;
-    }
 
     /**
      * Current open/close state of the lid.
@@ -111,54 +107,58 @@ class Trashcan extends DeleteArea {
     this.isLidOpen = false;
 
     /**
-     * The minimum openness of the lid. Used to indicate if the trashcan
-     * contains blocks.
-     * @type {number}
-     * @private
-     */
+      * The minimum openness of the lid. Used to indicate if the trashcan
+      * contains blocks.
+      * @type {number}
+      * @private
+      */
     this.minOpenness_ = 0;
-
+ 
     /**
-     * The SVG group containing the trash can.
-     * @type {SVGElement}
-     * @private
-     */
+      * The SVG group containing the trash can.
+      * @type {SVGElement}
+      * @private
+      */
     this.svgGroup_ = null;
-
+ 
     /**
-     * The SVG image element of the trash can lid.
-     * @type {SVGElement}
-     * @private
-     */
+      * The SVG image element of the trash can lid.
+      * @type {SVGElement}
+      * @private
+      */
     this.svgLid_ = null;
-
+ 
     /**
-     * Task ID of opening/closing animation.
-     * @type {number}
-     * @private
-     */
+      * Task ID of opening/closing animation.
+      * @type {number}
+      * @private
+      */
     this.lidTask_ = 0;
-
+ 
     /**
-     * Left coordinate of the trash can.
-     * @type {number}
-     * @private
-     */
+      * Left coordinate of the trash can.
+      * @type {number}
+      * @private
+      */
     this.left_ = 0;
-
+ 
     /**
-     * Top coordinate of the trash can.
-     * @type {number}
-     * @private
-     */
+      * Top coordinate of the trash can.
+      * @type {number}
+      * @private
+      */
     this.top_ = 0;
-
+ 
     /**
-     * Whether this trash can has been initialized.
-     * @type {boolean}
-     * @private
-     */
+      * Whether this trash can has been initialized.
+      * @type {boolean}
+      * @private
+      */
     this.initialized_ = false;
+
+    if (this.workspace_.options.maxTrashcanContents <= 0) {
+      return;
+    }
 
     // Create flyout options.
     const flyoutWorkspaceOptions = new Options(
@@ -523,8 +523,7 @@ class Trashcan extends DeleteArea {
         (this.workspace_.horizontalLayout && this.workspace_.RTL);
     this.svgLid_.setAttribute(
         'transform',
-        'rotate(' + (openAtRight ? -lidAngle : lidAngle) + ',' +
-            (openAtRight ? 4 : WIDTH - 4) + ',' + (LID_HEIGHT - 2) + ')');
+        'rotate(' + (openAtRight ? -lidAngle : lidAngle) + ',' + (openAtRight ? 4 : WIDTH - 4) + ',' + (LID_HEIGHT - 2) + ')');
   }
 
   /**
@@ -536,6 +535,7 @@ class Trashcan extends DeleteArea {
    */
   setMinOpenness_(newMin) {
     this.minOpenness_ = newMin;
+
     if (!this.isLidOpen) {
       this.setLidAngle_(newMin * MAX_LID_ANGLE);
     }

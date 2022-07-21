@@ -284,12 +284,10 @@ class FieldAngle extends FieldTextInput {
           Svg.LINE, {
             'x1': FieldAngle.HALF + FieldAngle.RADIUS,
             'y1': FieldAngle.HALF,
-            'x2': FieldAngle.HALF + FieldAngle.RADIUS -
-                (angle % 45 === 0 ? 10 : 5),
+            'x2': FieldAngle.HALF + FieldAngle.RADIUS - (angle % 45 === 0 ? 10 : 5),
             'y2': FieldAngle.HALF,
             'class': 'blocklyAngleMarks',
-            'transform': 'rotate(' + angle + ',' + FieldAngle.HALF + ',' +
-                FieldAngle.HALF + ')',
+            'transform': 'rotate(' + angle + ',' + FieldAngle.HALF + ',' + FieldAngle.HALF + ')',
           },
           svg);
     }
@@ -454,9 +452,10 @@ class FieldAngle extends FieldTextInput {
     }
     if (multiplier) {
       const value = /** @type {number} */ (this.getValue());
-    this.displayMouseOrKeyboardValue_(value + (multiplier * this.round_));
-    e.preventDefault();
-    e.stopPropagation();}
+      this.displayMouseOrKeyboardValue_(value + (multiplier * this.round_));
+      e.preventDefault();
+      e.stopPropagation();
+    }
   }
 
   /**

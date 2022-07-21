@@ -416,8 +416,9 @@ class Block {
     this.unplug(healStack);
     if (eventUtils.isEnabled()) {
       eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_DELETE))(this));
-  }
-  eventUtils.disable();
+    }
+
+    eventUtils.disable();
 
     try {
       // This block is now at the top of the workspace.
@@ -850,12 +851,12 @@ class Block {
       arrayUtils.removeElem(this.parentBlock_.childBlocks_, this);
 
       // This block hasn't actually moved on-screen, so there's no need to// update
-    //     its connection locations.
-  } else {
-    // New parent must be non-null so remove this block from the workspace's
-    //     list of top-most blocks.
-    this.workspace.removeTopBlock(this);
-  }
+      //     its connection locations.
+    } else {
+      // New parent must be non-null so remove this block from the workspace's
+      //     list of top-most blocks.
+      this.workspace.removeTopBlock(this);
+    }
 
     this.parentBlock_ = newParent;
     if (newParent) {

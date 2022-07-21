@@ -79,7 +79,7 @@ import {Classic} from './theme/classic';
 import {ThemeManager} from './theme_manager';
 import * as Tooltip from './tooltip';
 import {TouchGesture} from './touch_gesture';
-import {Trashcan} from './trashcan';
+import type {Trashcan} from './trashcan';
 import * as utils from './utils';
 import * as arrayUtils from './utils/array';
 import {Coordinate} from './utils/coordinate';
@@ -954,9 +954,16 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @internal
    */
   addTrashcan() {
-    this.trashcan = new Trashcan(this);
+    this.trashcan = WorkspaceSvg.newTrashcan(this);
     const svgTrashcan = this.trashcan.createDom();
     this.svgGroup_.insertBefore(svgTrashcan, this.svgBlockCanvas_);
+  }
+
+  /**
+   * @internal
+   */
+  static newTrashcan(workspace: WorkspaceSvg): AnyDuringMigration {
+    return {};
   }
 
   /**

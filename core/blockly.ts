@@ -580,6 +580,10 @@ WorkspaceSvg.prototype.newBlock = function (prototypeName: string, opt_id?: stri
   return new BlockSvg(this, prototypeName, opt_id);
 }
 
+// WorkspaceSvg.newTrashcan = function(workspace: WorkspaceSvg): Trashcan {
+//   return new Trashcan(workspace);
+// }
+
 // Re-export submodules that no longer declareLegacyNamespace.
 export {browserEvents};
 export {ContextMenu};

@@ -18,7 +18,7 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Gesture');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './block_dragger.js';
+// import './block_dragger';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_click.js';
 

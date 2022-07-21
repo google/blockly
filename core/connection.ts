@@ -16,7 +16,7 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Connection');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './constants.js';
+// import './constants';
 
 import type {Block} from './block.js';
 import {ConnectionType} from './connection_type.js';

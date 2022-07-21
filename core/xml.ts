@@ -16,13 +16,13 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Xml');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './comment.js';
+// import './comment';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './variables.js';
+// import './variables';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './workspace_comment.js';
+// import './workspace_comment';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './workspace_comment_svg.js';
+// import './workspace_comment_svg';
 
 import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';

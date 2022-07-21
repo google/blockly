@@ -17,7 +17,7 @@ goog.declareModuleId('Blockly.geras.PathObject');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../../theme.js';
+// import '../../theme';
 
 import type {BlockSvg} from '../../block_svg';
 import type {BlockStyle} from '../../theme';

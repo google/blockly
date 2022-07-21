@@ -16,7 +16,7 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Names');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './procedures.js';
+// import './procedures';
 
 import {Msg} from './msg.js';
 import * as Procedures from './procedures.js';

@@ -19,13 +19,13 @@ goog.declareModuleId('Blockly.blockRendering.IPathObject');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../../block_svg.js';
+// import '../../block_svg';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../../connection.js';
+// import '../../connection';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../../theme.js';
+// import '../../theme';
 
 import type {BlockStyle} from '../../theme.js';
 

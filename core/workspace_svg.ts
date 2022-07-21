@@ -17,19 +17,19 @@ goog.declareModuleId('Blockly.WorkspaceSvg');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './procedures.js';
+// import './procedures';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './variables.js';
+// import './variables';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './variables_dynamic.js';
+// import './variables_dynamic';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './rendered_connection.js';
+// import './rendered_connection';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './zoom_controls.js';
+// import './zoom_controls';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_block_create.js';
 // Unused import preserved for side-effects. Remove if unneeded.
@@ -37,9 +37,9 @@ import './events/events_theme_change.js';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_viewport.js';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './metrics_manager.js';
+// import './metrics_manager';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './msg.js';
+// import './msg';
 
 import type {Block} from './block.js';
 import type {BlockDragSurfaceSvg} from './block_drag_surface.js';

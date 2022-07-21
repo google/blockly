@@ -17,7 +17,7 @@ goog.declareModuleId('Blockly.IKeyboardAccessible');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../shortcut_registry.js';
+// import '../shortcut_registry';
 
 
 /**

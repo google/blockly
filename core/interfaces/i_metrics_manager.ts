@@ -17,13 +17,13 @@ goog.declareModuleId('Blockly.IMetricsManager');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../metrics_manager.js';
+// import '../metrics_manager';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../utils/metrics.js';
+// import '../utils/metrics';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../utils/size.js';
+// import '../utils/size';
 
 
 /**

@@ -17,10 +17,10 @@ goog.declareModuleId('Blockly.utils.toolbox');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../toolbox/category.js';
+// import '../toolbox/category';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../toolbox/separator.js';
+// import '../toolbox/separator';
 
 import type {ConnectionState} from '../serialization/blocks.js';
 import type {CssConfig as CategoryCssConfig} from '../toolbox/category.js';

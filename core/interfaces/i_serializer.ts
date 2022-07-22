@@ -17,7 +17,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.serialization.ISerializer');
 
-import type {Workspace} from '../workspace';
+import type {Workspace} from '../workspace.js';
 
 
 /**

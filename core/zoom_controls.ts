@@ -17,7 +17,7 @@ goog.declareModuleId('Blockly.ZoomControls');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-// import './metrics_manager';
+// import './metrics_manager.js';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_click.js';
 

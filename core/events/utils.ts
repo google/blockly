@@ -17,12 +17,12 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.utils');
 
-import type {Block} from '../block';
-import * as common from '../common';
-import * as registry from '../registry';
-import * as idGenerator from '../utils/idgenerator';
-import type {Workspace} from '../workspace';
-import type {WorkspaceSvg} from '../workspace_svg';
+import type {Block} from '../block.js';
+import * as common from '../common.js';
+import * as registry from '../registry.js';
+import * as idGenerator from '../utils/idgenerator.js';
+import type {Workspace} from '../workspace.js';
+import type {WorkspaceSvg} from '../workspace_svg.js';
 
 import type {Abstract} from './events_abstract.js';
 import type {BlockChange} from './events_block_change.js';

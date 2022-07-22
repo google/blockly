@@ -17,7 +17,7 @@ goog.declareModuleId('Blockly.IBoundedElement');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-// import '../utils/rect';
+// import '../utils/rect.js';
 
 
 /**

@@ -17,19 +17,19 @@
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.geras.RenderInfo');
 
-import type {BlockSvg} from '../../block_svg';
-import type {Input} from '../../input';
-import {inputTypes} from '../../input_types';
-import {RenderInfo as BaseRenderInfo} from '../common/info';
-import type {Measurable} from '../measurables/base';
-import type {BottomRow} from '../measurables/bottom_row';
-import {ExternalValueInput} from '../measurables/external_value_input';
-import type {Field} from '../measurables/field';
-import {InRowSpacer} from '../measurables/in_row_spacer';
-import type {InputRow} from '../measurables/input_row';
-import type {Row} from '../measurables/row';
-import type {TopRow} from '../measurables/top_row';
-import {Types} from '../measurables/types';
+import type {BlockSvg} from '../../block_svg.js';
+import type {Input} from '../../input.js';
+import {inputTypes} from '../../input_types.js';
+import {RenderInfo as BaseRenderInfo} from '../common/info.js';
+import type {Measurable} from '../measurables/base.js';
+import type {BottomRow} from '../measurables/bottom_row.js';
+import {ExternalValueInput} from '../measurables/external_value_input.js';
+import type {Field} from '../measurables/field.js';
+import {InRowSpacer} from '../measurables/in_row_spacer.js';
+import type {InputRow} from '../measurables/input_row.js';
+import type {Row} from '../measurables/row.js';
+import type {TopRow} from '../measurables/top_row.js';
+import {Types} from '../measurables/types.js';
 
 import type {ConstantProvider} from './constants.js';
 import {InlineInput} from './measurables/inline_input.js';

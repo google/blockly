@@ -17,14 +17,14 @@ goog.declareModuleId('Blockly.geras.PathObject');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-// import '../../theme';
+// import '../../theme.js';
 
-import type {BlockSvg} from '../../block_svg';
-import type {BlockStyle} from '../../theme';
-import * as colour from '../../utils/colour';
-import * as dom from '../../utils/dom';
-import {Svg} from '../../utils/svg';
-import {PathObject as BasePathObject} from '../common/path_object';
+import type {BlockSvg} from '../../block_svg.js';
+import type {BlockStyle} from '../../theme.js';
+import * as colour from '../../utils/colour.js';
+import * as dom from '../../utils/dom.js';
+import {Svg} from '../../utils/svg.js';
+import {PathObject as BasePathObject} from '../common/path_object.js';
 
 import type {ConstantProvider} from './constants.js';
 

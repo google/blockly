@@ -17,16 +17,16 @@ goog.declareModuleId('Blockly.Comment');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-// import './block';
+// import './block.js';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-// import './workspace_svg';
+// import './workspace_svg.js';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_block_change.js';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_bubble_open.js';
 // Unused import preserved for side-effects. Remove if unneeded.
-// import './warning';
+// import './warning.js';
 
 import type {CommentModel} from './block.js';
 import type {BlockSvg} from './block_svg.js';

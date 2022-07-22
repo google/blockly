@@ -18,23 +18,23 @@ goog.declareModuleId('Blockly.Workspace');
 // Unused import preserved for side-effects. Remove if unneeded.
 import './connection_checker.js';
 
-import type {Block} from './block'; 
-import type {BlocklyOptions} from './blockly_options';
-import type {ConnectionDB} from './connection_db';
-import type {Abstract} from './events/events_abstract';
-import * as common from './common';
-import * as eventUtils from './events/utils';
-import type {IASTNodeLocation} from './interfaces/i_ast_node_location';
-import type {IConnectionChecker} from './interfaces/i_connection_checker';
-import {Options} from './options';
-import * as registry from './registry';
-import * as arrayUtils from './utils/array';
-import * as idGenerator from './utils/idgenerator';
-import * as math from './utils/math';
-import type * as toolbox from './utils/toolbox';
-import {VariableMap} from './variable_map';
-import type {VariableModel} from './variable_model';
-import type {WorkspaceComment} from './workspace_comment';
+import type {Block} from './block.js'; 
+import type {BlocklyOptions} from './blockly_options.js';
+import type {ConnectionDB} from './connection_db.js';
+import type {Abstract} from './events/events_abstract.js';
+import * as common from './common.js';
+import * as eventUtils from './events/utils.js';
+import type {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
+import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
+import {Options} from './options.js';
+import * as registry from './registry.js';
+import * as arrayUtils from './utils/array.js';
+import * as idGenerator from './utils/idgenerator.js';
+import * as math from './utils/math.js';
+import type * as toolbox from './utils/toolbox.js';
+import {VariableMap} from './variable_map.js';
+import type {VariableModel} from './variable_model.js';
+import type {WorkspaceComment} from './workspace_comment.js';
 
 
 /**

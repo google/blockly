@@ -19,7 +19,7 @@ goog.declareModuleId('Blockly.geras.Highlighter');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-// import './renderer';
+// import './renderer.js';
 
 import * as svgPaths from '../../utils/svg_paths.js';
 import type {ConstantProvider} from '../common/constants.js';
@@ -29,9 +29,9 @@ import {SpacerRow} from '../measurables/spacer_row.js';
 import type {TopRow} from '../measurables/top_row.js';
 import {Types} from '../measurables/types.js';
 
-import type {HighlightConstantProvider, InsideCorner, JaggedTeeth, Notch, OutsideCorner, PuzzleTab, StartHat} from './highlight_constants';
-import type {RenderInfo} from './info';
-import type {InlineInput} from './measurables/inline_input';
+import type {HighlightConstantProvider, InsideCorner, JaggedTeeth, Notch, OutsideCorner, PuzzleTab, StartHat} from './highlight_constants.js';
+import type {RenderInfo} from './info.js';
+import type {InlineInput} from './measurables/inline_input.js';
 
 
 /**

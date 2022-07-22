@@ -17,11 +17,11 @@ goog.declareModuleId('Blockly.BlockSvg');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-// import './theme';
+// import './theme.js';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_selected.js';
 // Unused import preserved for side-effects. Remove if unneeded.
-// import './touch';
+// import './touch.js';
 
 import {Block} from './block.js';
 import * as blockAnimations from './block_animations.js';

@@ -18,29 +18,29 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Gesture');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-// import './block_dragger';
+// import './block_dragger.js';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_click.js';
 
-import * as blockAnimations from './block_animations';
-import type {BlockSvg} from './block_svg';
-import * as browserEvents from './browser_events';
-import {BubbleDragger} from './bubble_dragger';
-import * as common from './common';
-import {config} from './config';
-import * as eventUtils from './events/utils';
-import type {Field} from './field';
-import type {IBlockDragger} from './interfaces/i_block_dragger';
-import type {IBubble} from './interfaces/i_bubble';
-import type {IFlyout} from './interfaces/i_flyout';
-import * as internalConstants from './internal_constants';
-import * as registry from './registry';
-import * as Tooltip from './tooltip';
-import * as Touch from './touch';
-import {Coordinate} from './utils/coordinate';
-import {WorkspaceCommentSvg} from './workspace_comment_svg';
-import {WorkspaceDragger} from './workspace_dragger';
-import type {WorkspaceSvg} from './workspace_svg';
+import * as blockAnimations from './block_animations.js';
+import type {BlockSvg} from './block_svg.js';
+import * as browserEvents from './browser_events.js';
+import {BubbleDragger} from './bubble_dragger.js';
+import * as common from './common.js';
+import {config} from './config.js';
+import * as eventUtils from './events/utils.js';
+import type {Field} from './field.js';
+import type {IBlockDragger} from './interfaces/i_block_dragger.js';
+import type {IBubble} from './interfaces/i_bubble.js';
+import type {IFlyout} from './interfaces/i_flyout.js';
+import * as internalConstants from './internal_constants.js';
+import * as registry from './registry.js';
+import * as Tooltip from './tooltip.js';
+import * as Touch from './touch.js';
+import {Coordinate} from './utils/coordinate.js';
+import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
+import {WorkspaceDragger} from './workspace_dragger.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**

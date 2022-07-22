@@ -107,6 +107,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
   protected boundEvents_: browserEvents.Data[] = [];
   override wouldDelete_: AnyDuringMigration;
 
+   /** The workspace this toolbox is on. */
   protected readonly workspace_: WorkspaceSvg;
 
   /** @param workspace The workspace in which to create new blocks. */

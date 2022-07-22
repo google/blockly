@@ -36,48 +36,109 @@
  * goog.require calls.
  */
 
-export const global = goog.global;
-export const require = goog.require;
-export const define = goog.define;
-export const DEBUG = goog.DEBUG;
-export const LOCALE = goog.LOCALE;
-export const TRUSTED_SITE = goog.TRUSTED_SITE;
-export const DISALLOW_TEST_ONLY_CODE = goog.DISALLOW_TEST_ONLY_CODE;
-export const getGoogModule = goog.module.get;
-export const setTestOnly = goog.setTestOnly;
-export const forwardDeclare = goog.forwardDeclare;
-export const getObjectByName = goog.getObjectByName;
-export const basePath = goog.basePath;
-export const addSingletonGetter = goog.addSingletonGetter;
-export const typeOf = goog.typeOf;
-export const isArrayLike = goog.isArrayLike;
-export const isDateLike = goog.isDateLike;
-export const isObject = goog.isObject;
-export const getUid = goog.getUid;
-export const hasUid = goog.hasUid;
-export const removeUid = goog.removeUid;
-export const now = Date.now;
-export const globalEval = goog.globalEval;
-export const getCssName = goog.getCssName;
-export const setCssNameMapping = goog.setCssNameMapping;
-export const getMsg = goog.getMsg;
-export const getMsgWithFallback = goog.getMsgWithFallback;
-export const exportSymbol = goog.exportSymbol;
-export const exportProperty = goog.exportProperty;
-export const abstractMethod = goog.abstractMethod;
-export const cloneObject = goog.cloneObject;
-export const bind = goog.bind;
-export const partial = goog.partial;
-export const inherits = goog.inherits;
-export const scope = goog.scope;
-export const defineClass = goog.defineClass;
-export const declareModuleId = goog.declareModuleId;
+export const global = globalThis;
+export const require = function(namespace) {
+  if (!COMPILED) {
+    // Might need to lazy load on old IE.
+    if (goog.ENABLE_DEBUG_LOADER) {
+      goog.debugLoader_.requested(namespace);
+    }
+
+    // If the object already exists we do not need to do anything.
+    if (goog.isProvided_(namespace)) {
+      if (goog.isInModuleLoader_()) {
+        return goog.module.getInternal_(namespace);
+      }
+    } else if (goog.ENABLE_DEBUG_LOADER) {
+      var moduleLoaderState = goog.moduleLoaderState_;
+      goog.moduleLoaderState_ = null;
+      try {
+        goog.debugLoader_.load_(namespace);
+      } finally {
+        goog.moduleLoaderState_ = moduleLoaderState;
+      }
+    }
+
+    return null;
+  }
+};
+
+
+// export const define = goog.define;
+// export const DEBUG = goog.DEBUG;
+// export const LOCALE = goog.LOCALE;
+// export const TRUSTED_SITE = goog.TRUSTED_SITE;
+// export const DISALLOW_TEST_ONLY_CODE = goog.DISALLOW_TEST_ONLY_CODE;
+// export const getGoogModule = goog.module.get;
+// export const setTestOnly = goog.setTestOnly;
+// export const forwardDeclare = goog.forwardDeclare;
+// export const getObjectByName = goog.getObjectByName;
+// export const basePath = goog.basePath;
+// export const addSingletonGetter = goog.addSingletonGetter;
+// export const typeOf = goog.typeOf;
+// export const isArrayLike = goog.isArrayLike;
+// export const isDateLike = goog.isDateLike;
+// export const isObject = goog.isObject;
+// export const getUid = goog.getUid;
+// export const hasUid = goog.hasUid;
+// export const removeUid = goog.removeUid;
+// export const now = Date.now;
+// export const globalEval = goog.globalEval;
+// export const getCssName = goog.getCssName;
+// export const setCssNameMapping = goog.setCssNameMapping;
+// export const getMsg = goog.getMsg;
+// export const getMsgWithFallback = goog.getMsgWithFallback;
+// export const exportSymbol = goog.exportSymbol;
+// export const exportProperty = goog.exportProperty;
+// export const abstractMethod = goog.abstractMethod;
+// export const cloneObject = goog.cloneObject;
+// export const bind = goog.bind;
+// export const partial = goog.partial;
+// export const inherits = goog.inherits;
+// export const scope = goog.scope;
+// export const defineClass = goog.defineClass;
+export const declareModuleId = function(namespace) {
+  if (!COMPILED) {
+    if (!goog.isInEs6ModuleLoader_()) {
+      throw new Error(
+          'goog.declareModuleId may only be called from ' +
+          'within an ES6 module');
+    }
+    if (goog.moduleLoaderState_ && goog.moduleLoaderState_.moduleName) {
+      throw new Error(
+          'goog.declareModuleId may only be called once per module.');
+    }
+    if (namespace in goog.loadedModules_) {
+      throw new Error(
+          'Module with namespace "' + namespace + '" already exists.');
+    }
+  }
+  if (goog.moduleLoaderState_) {
+    // Not bundled - debug loading.
+    goog.moduleLoaderState_.moduleName = namespace;
+  } else {
+    // Bundled - not debug loading, no module loader state.
+    var jscomp = goog.global['$jscomp'];
+    if (!jscomp || typeof jscomp.getCurrentModulePath != 'function') {
+      throw new Error(
+          'Module with namespace "' + namespace +
+          '" has been loaded incorrectly.');
+    }
+    var exports = jscomp.require(jscomp.getCurrentModulePath());
+    goog.loadedModules_[namespace] = {
+      exports: exports,
+      type: goog.ModuleType.ES6,
+      moduleId: namespace
+    };
+  }
+};
+
 
 // Export select properties of module. Do not export the function itself or
 // goog.module.declareLegacyNamespace.
-export const module = {
-  get: goog.module.get,
-};
+// export const module = {
+//   get: goog.module.get,
+// };
 
 // Omissions include:
 // goog.ENABLE_DEBUG_LOADER - define only used in base.

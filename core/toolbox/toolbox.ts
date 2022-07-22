@@ -107,9 +107,13 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
   protected boundEvents_: browserEvents.Data[] = [];
   override wouldDelete_: AnyDuringMigration;
 
+  protected readonly workspace_: WorkspaceSvg;
+
   /** @param workspace The workspace in which to create new blocks. */
-  constructor(private readonly workspace: WorkspaceSvg) {
+  constructor(workspace: WorkspaceSvg) {
     super();
+
+    this.workspace_ = workspace;
 
     /** The JSON describing the contents of this toolbox. */
     // AnyDuringMigration because:  Type 'ToolboxInfo | { contents: never[]; }'
@@ -141,12 +145,12 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /** Initializes the toolbox */
   init() {
-    const workspace = this.workspace;
+    const workspace = this.workspace_;
     const svg = workspace.getParentSvg();
 
     this.flyout_ = this.createFlyout_();
 
-    this.HtmlDiv = this.createDom_(this.workspace);
+    this.HtmlDiv = this.createDom_(this.workspace_);
     dom.insertAfter(this.flyout_.createDom('svg'), svg);
     this.setVisible(true);
     this.flyout_.init(workspace);
@@ -156,7 +160,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
     themeManager.subscribe(
         this.HtmlDiv, 'toolboxBackgroundColour', 'background-color');
     themeManager.subscribe(this.HtmlDiv, 'toolboxForegroundColour', 'color');
-    this.workspace.getComponentManager().addComponent({
+    this.workspace_.getComponentManager().addComponent({
       component: this,
       weight: 1,
       capabilities: [
@@ -310,7 +314,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
    *     `Blockly.VerticalFlyout`, and no flyout plugin is specified.
    */
   protected createFlyout_(): IFlyout {
-    const workspace = this.workspace;
+    const workspace = this.workspace_;
     // TODO (#4247): Look into adding a makeFlyout method to Blockly Options.
     const workspaceOptions = new Options(({
       'parentWorkspace': workspace,
@@ -603,7 +607,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
    * @return The parent workspace for the toolbox.
    */
   getWorkspace(): WorkspaceSvg {
-    return this.workspace;
+    return this.workspace_;
   }
 
   /**
@@ -637,7 +641,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
    * whether the workspace is in rtl.
    */
   position() {
-    const workspaceMetrics = this.workspace.getMetrics();
+    const workspaceMetrics = this.workspace_.getMetrics();
     const toolboxDiv = this.HtmlDiv;
     if (!toolboxDiv) {
       // Not initialized yet.
@@ -675,7 +679,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
   handleToolboxItemResize() {
     // Reposition the workspace so that (0,0) is in the correct position
     // relative to the new absolute edge (ie toolbox edge).
-    const workspace = this.workspace;
+    const workspace = this.workspace_;
     const rect = this.HtmlDiv!.getBoundingClientRect();
     const newX = this.toolboxPosition === toolbox.Position.LEFT ?
         workspace.scrollX + rect.width :
@@ -735,7 +739,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
     this.isVisible_ = isVisible;
     // Invisible toolbox is ignored as drag targets and must have the drag
     // target updated.
-    this.workspace.recordDragTargets();
+    this.workspace_.recordDragTargets();
   }
 
   /**
@@ -887,7 +891,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
       newElement = null;
     }
     const event = new (eventUtils.get(eventUtils.TOOLBOX_ITEM_SELECT))!
-        (oldElement, newElement, this.workspace.id);
+        (oldElement, newElement, this.workspace_.id);
     eventUtils.fire(event);
   }
 
@@ -981,7 +985,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /** Disposes of this toolbox. */
   dispose() {
-    this.workspace.getComponentManager().removeComponent('toolbox');
+    this.workspace_.getComponentManager().removeComponent('toolbox');
     this.flyout_!.dispose();
     for (let i = 0; i < this.contents_.length; i++) {
       const toolboxItem = this.contents_[i];
@@ -996,7 +1000,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
     // AnyDuringMigration because:  Argument of type 'HTMLDivElement | null' is
     // not assignable to parameter of type 'Element'.
-    this.workspace.getThemeManager().unsubscribe(
+    this.workspace_.getThemeManager().unsubscribe(
         this.HtmlDiv as AnyDuringMigration);
     dom.removeNode(this.HtmlDiv);
   }

@@ -41,10 +41,10 @@ export interface BlocklyOptions {
   renderer?: string;
   rendererOverrides?: {[rendererConstant: string]: any};
   rtl?: boolean;
-  scrollbars?: ScrollbarOptions | boolean;
+  scrollbars?: ScrollbarOptions|boolean;
   sounds?: boolean;
   theme?: Theme;
-  toolbox?: string | object | Element;
+  toolbox?: string|object|Element;
   toolboxPosition?: string;
   trashcan?: boolean;
   maxTrashcanContents?: boolean;

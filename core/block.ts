@@ -144,13 +144,13 @@ export class Block implements IASTNodeLocation, IDeletable {
    * An optional function that reconfigures the block based on the contents of
    * the mutator dialog.
    */
-  compose?: ((p1: Block) => void)|null = null;
+  compose?: ((p1: Block) => void)|null = undefined;
 
   /**
    * An optional function that populates the mutator's dialog with
    * this block's components.
    */
-  decompose?: ((p1: Workspace) => Block)|null = null;
+  decompose?: ((p1: Workspace) => Block)|null = undefined;
   id: string;
   // AnyDuringMigration because:  Type 'null' is not assignable to type
   // 'Connection'.

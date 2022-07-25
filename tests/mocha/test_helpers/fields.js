@@ -6,7 +6,7 @@
 
 goog.declareModuleId('Blockly.test.helpers.fields');
 
-const {runTestCases, TestCase} = goog.require('Blockly.test.helpers.common');
+import {runTestCases, TestCase} from './common.js';
 
 
 /**

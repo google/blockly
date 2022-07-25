@@ -6,7 +6,7 @@
 
 goog.declareModuleId('Blockly.test.helpers.serialization');
 
-const {runTestCases} = goog.require('Blockly.test.helpers.common');
+import {runTestCases} from './common.js';
 
 /**
  * Serialization test case.

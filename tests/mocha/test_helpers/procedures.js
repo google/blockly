@@ -5,7 +5,7 @@
  */
 goog.declareModuleId('Blockly.test.helpers.procedures');
 
-const {ConnectionType} = goog.require('Blockly.ConnectionType');
+import {ConnectionType} from '../../../core/connection_type.js';
 
 
 /**

@@ -6,9 +6,8 @@
 
 goog.declareModuleId('Blockly.test.helpers.setupTeardown');
 
-const eventUtils = goog.require('Blockly.Events.utils');
-const {Blocks} = goog.require('Blockly.blocks');
-
+import * as eventUtils from '../../../core/events/utils.js';
+import {Blocks} from '../../../blocks/blocks.js';
 
 /**
  * Safely disposes of Blockly workspace, logging any errors.

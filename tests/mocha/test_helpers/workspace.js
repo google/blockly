@@ -12,7 +12,7 @@ const eventUtils = goog.require('Blockly.Events.utils');
 const {workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
 
 
-function testAWorkspace() {
+export function testAWorkspace() {
   setup(function() {
     Blockly.defineBlocksWithJsonArray([{
       "type": "get_var_block",
@@ -1528,4 +1528,3 @@ function testAWorkspace() {
     });
   });
 }
-exports.testAWorkspace = testAWorkspace;

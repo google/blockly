@@ -15,7 +15,7 @@ const {runTestSuites} = goog.require('Blockly.test.helpers.common');
  * @implements {TestCase}
  * @record
  */
-class CodeGenerationTestCase {
+export class CodeGenerationTestCase {
   /**
    * Class for a code generation test case.
    */
@@ -43,14 +43,13 @@ class CodeGenerationTestCase {
    */
   createBlock(workspace) {}
 }
-exports.CodeGenerationTestCase = CodeGenerationTestCase;
 
 /**
  * Code generation test suite.
  * @extends {TestSuite<CodeGenerationTestCase, CodeGenerationTestSuite>}
  * @record
  */
-class CodeGenerationTestSuite {
+export class CodeGenerationTestSuite {
   /**
    * Class for a code generation test suite.
    */
@@ -61,7 +60,6 @@ class CodeGenerationTestSuite {
     this.generator;
   }
 }
-exports.CodeGenerationTestSuite = CodeGenerationTestSuite;
 
 /**
  * Returns mocha test callback for code generation based on provided
@@ -102,7 +100,7 @@ const createCodeGenerationTestFn_ = (generator) => {
  * Runs blockToCode test suites.
  * @param {!Array<!CodeGenerationTestSuite>} testSuites The test suites to run.
  */
-const runCodeGenerationTestSuites = (testSuites) => {
+export const runCodeGenerationTestSuites = (testSuites) => {
   /**
    * Creates function used to generate mocha test callback.
    * @param {!CodeGenerationTestSuite} suiteInfo The test suite information.
@@ -115,4 +113,3 @@ const runCodeGenerationTestSuites = (testSuites) => {
 
   runTestSuites(testSuites, createTestFn);
 };
-exports.runCodeGenerationTestSuites = runCodeGenerationTestSuites;

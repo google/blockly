@@ -6,7 +6,7 @@
 
 goog.declareModuleId('Blockly.test.astNode');
 
-const {ASTNode} = goog.require('Blockly.ASTNode');
+import {ASTNode} from '../../core/keyboard_nav/ast_node.js';
 import {sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
 
 

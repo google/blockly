@@ -6,7 +6,7 @@
 
 goog.declareModuleId('Blockly.test.connectionDb');
 
-const {ConnectionType} = goog.require('Blockly.ConnectionType');
+import {ConnectionType} from '../../core/connection_type.js';
 import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 

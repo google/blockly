@@ -9,7 +9,7 @@ goog.declareModuleId('Blockly.test.workspaceSvg');
 import {assertEventFired, assertEventNotFired, createFireChangeListenerSpy} from './test_helpers/events.js';
 import {assertVariableValues} from './test_helpers/variables.js';
 import {defineStackBlock} from './test_helpers/block_definitions.js';
-const eventUtils = goog.require('Blockly.Events.utils');
+import * as eventUtils from '../../core/events/utils.js';
 import {sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
 import {testAWorkspace} from './test_helpers/workspace.js';
 

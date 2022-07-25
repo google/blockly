@@ -6,7 +6,7 @@
 
 goog.declareModuleId('Blockly.test.workspaceComment');
 
-goog.require('Blockly.WorkspaceComment');
+import {WorkspaceComment} from '../../core/workspace_comment.js';
 import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 

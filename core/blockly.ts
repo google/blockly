@@ -572,17 +572,22 @@ export const PROCEDURE_CATEGORY_NAME: string =
     (Procedures as AnyDuringMigration).CATEGORY_NAME;
 
 // I hate this so much.
-Workspace.prototype.newBlock = function (prototypeName: string, opt_id?: string): Block {
-  return new Block(this, prototypeName, opt_id);
-}
+Workspace.prototype.newBlock = function(prototypeName: string, opt_id?: string):
+                                   Block {
+                                     return new Block(
+                                         this, prototypeName, opt_id);
+                                   }
 
-WorkspaceSvg.prototype.newBlock = function (prototypeName: string, opt_id?: string): BlockSvg {
-  return new BlockSvg(this, prototypeName, opt_id);
-}
+                               WorkspaceSvg.prototype.newBlock =
+    function(prototypeName: string, opt_id?: string):
+        BlockSvg {
+          return new BlockSvg(this, prototypeName, opt_id);
+        }
 
-WorkspaceSvg.newTrashcan = function(workspace: WorkspaceSvg): Trashcan {
-  return new Trashcan(workspace);
-}
+    WorkspaceSvg.newTrashcan = function(workspace: WorkspaceSvg):
+        Trashcan {
+          return new Trashcan(workspace);
+        }
 
 // Re-export submodules that no longer declareLegacyNamespace.
 export {browserEvents};

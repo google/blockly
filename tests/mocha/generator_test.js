@@ -6,6 +6,7 @@
 
 goog.declareModuleId('Blockly.test.generator');
 
+// TODO: Not sure hwo to handle this.
 const {dartGenerator} = goog.require('Blockly.Dart');
 const {javaScriptGenerator} = goog.require('Blockly.JavaScript');
 const {luaGenerator} = goog.require('Blockly.Lua');

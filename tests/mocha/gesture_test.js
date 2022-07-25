@@ -9,7 +9,7 @@ goog.declareModuleId('Blockly.test.gesture');
 import {assertEventFired, assertEventNotFired} from './test_helpers/events.js';
 import {defineBasicBlockWithField} from './test_helpers/block_definitions.js';
 import {dispatchPointerEvent} from './test_helpers/user_input.js';
-const eventUtils = goog.require('Blockly.Events.utils');
+import * as eventUtils from '../../core/events/utils.js';
 import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 

@@ -7,7 +7,7 @@
 goog.declareModuleId('Blockly.test.theme');
 
 import {assertEventFired} from './test_helpers/events.js';
-const eventUtils = goog.require('Blockly.Events.utils');
+import * as eventUtils from '../../core/events/utils.js';
 import {sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
 
 

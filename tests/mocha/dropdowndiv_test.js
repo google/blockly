@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.dropdown');
+goog.declareModuleId('Blockly.test.dropdown');
 
 const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
 

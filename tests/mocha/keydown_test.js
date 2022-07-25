@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.keydown');
+goog.declareModuleId('Blockly.test.keydown');
 
 const {createKeyDownEvent} = goog.require('Blockly.test.helpers.userInput');
 const {defineStackBlock} = goog.require('Blockly.test.helpers.blockDefinitions');

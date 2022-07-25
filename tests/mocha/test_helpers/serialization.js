@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.helpers.serialization');
+goog.declareModuleId('Blockly.test.helpers.serialization');
 
 const {runTestCases} = goog.require('Blockly.test.helpers.common');
 

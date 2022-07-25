@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.blockChangeEvent');
+goog.declareModuleId('Blockly.test.blockChangeEvent');
 
 const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
 const {defineMutatorBlocks} = goog.require('Blockly.test.helpers.blockDefinitions');

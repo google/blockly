@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.variableMap');
+goog.declareModuleId('Blockly.test.variableMap');
 
 const {assertVariableValues} = goog.require('Blockly.test.helpers.variables');
 const {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');

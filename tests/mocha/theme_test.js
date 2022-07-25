@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.theme');
+goog.declareModuleId('Blockly.test.theme');
 
 const {assertEventFired} = goog.require('Blockly.test.helpers.events');
 const eventUtils = goog.require('Blockly.Events.utils');

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.helpers.warnings');
+goog.declareModuleId('Blockly.test.helpers.warnings');
 
 
 /**

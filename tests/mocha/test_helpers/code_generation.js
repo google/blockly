@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.helpers.codeGeneration');
+goog.declareModuleId('Blockly.test.helpers.codeGeneration');
 
 const {runTestSuites} = goog.require('Blockly.test.helpers.common');
 

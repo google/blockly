@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.trashcan');
+goog.declareModuleId('Blockly.test.trashcan');
 
 const {assertEventFired, assertEventNotFired} = goog.require('Blockly.test.helpers.events');
 const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');

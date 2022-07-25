@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.generator');
+goog.declareModuleId('Blockly.test.generator');
 
 const {dartGenerator} = goog.require('Blockly.Dart');
 const {javaScriptGenerator} = goog.require('Blockly.JavaScript');

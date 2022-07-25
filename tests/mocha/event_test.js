@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.event');
+goog.declareModuleId('Blockly.test.event');
 
 const {ASTNode} = goog.require('Blockly.ASTNode');
 const {assertEventEquals, assertNthCallEventArgEquals, createFireChangeListenerSpy} = goog.require('Blockly.test.helpers.events');

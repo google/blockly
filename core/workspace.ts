@@ -18,7 +18,7 @@ goog.declareModuleId('Blockly.Workspace');
 // Unused import preserved for side-effects. Remove if unneeded.
 import './connection_checker.js';
 
-import {Block} from './block.js';
+import type {Block} from './block.js';
 import type {BlocklyOptions} from './blockly_options.js';
 import type {ConnectionDB} from './connection_db.js';
 import type {Abstract} from './events/events_abstract.js';
@@ -511,6 +511,7 @@ export class Workspace implements IASTNodeLocation {
    * @return The created block.
    */
   newBlock(prototypeName: string, opt_id?: string): Block {
+    const {Block} = goog.module.get('Blockly.Block');
     return new Block(this, prototypeName, opt_id);
   }
 

@@ -19,7 +19,7 @@ goog.declareModuleId('Blockly.Names');
 import './procedures.js';
 
 import {Msg} from './msg.js';
-import * as Procedures from './procedures.js';
+// import * as Procedures from './procedures.js';
 import type {VariableMap} from './variable_map.js';
 import * as Variables from './variables.js';
 import type {Workspace} from './workspace.js';
@@ -129,7 +129,8 @@ export class Names {
    * @param workspace Workspace to generate procedures from.
    */
   populateProcedures(workspace: Workspace) {
-    let procedures = Procedures.allProcedures(workspace);
+    let procedures =
+        goog.module.get('Blockly.Procedures').allProcedures(workspace);
     // Flatten the return vs no-return procedure lists.
     let flattenedProcedures: AnyDuringMigration[][] =
         procedures[0].concat(procedures[1]);

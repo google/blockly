@@ -99,6 +99,7 @@ export abstract class Abstract {
   getEventWorkspace_(): Workspace {
     let workspace;
     if (this.workspaceId) {
+      const {Workspace} = goog.module.get('Blockly.Workspace');
       workspace = Workspace.getById(this.workspaceId);
     }
     if (!workspace) {

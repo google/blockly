@@ -18,7 +18,7 @@ goog.declareModuleId('Blockly.inject');
 import {BlockDragSurfaceSvg} from './block_drag_surface.js';
 import type {BlocklyOptions} from './blockly_options.js';
 import * as browserEvents from './browser_events.js';
-import * as bumpObjects from './bump_objects.js';
+// import * as bumpObjects from './bump_objects.js';
 import * as common from './common.js';
 import * as Css from './css.js';
 import * as dropDownDiv from './dropdowndiv.js';
@@ -195,7 +195,8 @@ function createMainWorkspace(
   mainWorkspace.translate(0, 0);
 
   mainWorkspace.addChangeListener(
-      bumpObjects.bumpIntoBoundsHandler(mainWorkspace));
+      goog.module.get('Blockly.bumpObjects')
+          .bumpIntoBoundsHandler(mainWorkspace));
 
   // The SVG is now fully assembled.
   common.svgResize(mainWorkspace);
@@ -226,7 +227,8 @@ function init(mainWorkspace: WorkspaceSvg) {
       browserEvents.conditionalBind(window, 'resize', null, function() {
         mainWorkspace.hideChaff(true);
         common.svgResize(mainWorkspace);
-        bumpObjects.bumpTopObjectsIntoBounds(mainWorkspace);
+        goog.module.get('Blockly.bumpObjects')
+            .bumpTopObjectsIntoBounds(mainWorkspace);
       });
   mainWorkspace.setResizeHandlerWrapper(workspaceResizeHandler);
 

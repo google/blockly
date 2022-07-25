@@ -26,7 +26,7 @@ import './touch.js';
 import {Block} from './block.js';
 import * as blockAnimations from './block_animations.js';
 import * as browserEvents from './browser_events.js';
-import {Comment} from './comment.js';
+import type {Comment} from './comment.js';
 import * as common from './common.js';
 import {config} from './config.js';
 import type {Connection} from './connection.js';
@@ -61,7 +61,7 @@ import * as dom from './utils/dom.js';
 import {Rect} from './utils/rect.js';
 import {Svg} from './utils/svg.js';
 import * as svgMath from './utils/svg_math.js';
-import {Warning} from './warning.js';
+import type {Warning} from './warning.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
@@ -1011,6 +1011,10 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   override setCommentText(text: string|null) {
     // AnyDuringMigration because:  Property 'get' does not exist on type
     // '(name: string) => void'.
+    const {Comment} = goog.module.get('Blockly.Comment');
+    if (!Comment) {
+      throw Error('Missing require for Blockly.Comment');
+    }
     if (this.commentModel.text === text) {
       return;
     }
@@ -1045,6 +1049,10 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    *     multiple warnings.
    */
   override setWarningText(text: string|null, opt_id?: string) {
+    const {Warning} = goog.module.get('Blockly.Warning');
+    if (!Warning) {
+      throw Error('Missing require for Blockly.Warning');
+    }
     if (!this.warningTextDb_) {
       // Create a database of warning PIDs.
       // Only runs once per block (and only those with warnings).

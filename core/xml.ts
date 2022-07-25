@@ -34,10 +34,10 @@ import * as dom from './utils/dom.js';
 import {Size} from './utils/size.js';
 import * as utilsXml from './utils/xml.js';
 import type {VariableModel} from './variable_model.js';
-import * as Variables from './variables.js';
+// import * as Variables from './variables.js';
 import type {Workspace} from './workspace.js';
-import {WorkspaceComment} from './workspace_comment.js';
-import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
+// import {WorkspaceComment} from './workspace_comment.js';
+// import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
 
@@ -51,8 +51,8 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 export function workspaceToDom(
     workspace: Workspace, opt_noId?: boolean): Element {
   const treeXml = utilsXml.createElement('xml');
-  const variablesElement =
-      variablesToDom(Variables.allUsedVarModels(workspace));
+  const variablesElement = variablesToDom(
+      goog.module.get('Blockly.Variables').allUsedVarModels(workspace));
   if (variablesElement.hasChildNodes()) {
     treeXml.appendChild(variablesElement);
   }
@@ -476,10 +476,26 @@ export function domToWorkspace(xml: Element, workspace: Workspace): string[] {
         throw TypeError('Shadow block cannot be a top-level block.');
       } else if (name === 'comment') {
         if (workspace.rendered) {
-          WorkspaceCommentSvg.fromXmlRendered(
-              xmlChildElement, workspace as WorkspaceSvg, width);
+          const {WorkspaceCommentSvg} =
+              goog.module.get('Blockly.WorkspaceCommentSvg');
+          if (!WorkspaceCommentSvg) {
+            console.warn(
+                'Missing require for Blockly.WorkspaceCommentSvg, ' +
+                'ignoring workspace comment.');
+          } else {
+            WorkspaceCommentSvg.fromXmlRendered(
+                xmlChildElement, workspace, width);
+          }
         } else {
-          WorkspaceComment.fromXml(xmlChildElement, workspace);
+          const {WorkspaceComment} =
+              goog.module.get('Blockly.WorkspaceComment');
+          if (!WorkspaceComment) {
+            console.warn(
+                'Missing require for Blockly.WorkspaceComment, ' +
+                'ignoring workspace comment.');
+          } else {
+            WorkspaceComment.fromXml(xmlChildElement, workspace);
+          }
         }
       } else if (name === 'variables') {
         if (variablesFirst) {
@@ -612,7 +628,8 @@ export function domToBlock(xmlBlock: Element, workspace: Workspace): Block {
     // AnyDuringMigration because:  Property 'get' does not exist on type
     // '(name: string) => void'.
     const newVariables =
-        Variables.getAddedVariables(workspace, variablesBeforeCreation);
+        goog.module.get('Blockly.Variables')
+            .getAddedVariables(workspace, variablesBeforeCreation);
     // Fire a VarCreate event for each (if any) new variable created.
     for (let i = 0; i < newVariables.length; i++) {
       const thisVariable = newVariables[i];
@@ -681,6 +698,12 @@ function mapSupportedXmlTags(xmlBlock: Element): childNodeTagMap {
         childNodeMap.mutation.push(xmlChild);
         break;
       case 'comment':
+        if (!goog.module.get('Blockly.Comment')) {
+          console.warn(
+              'Missing require for Comment, ' +
+              'ignoring block comment.');
+          break;
+        }
         childNodeMap.comment.push(xmlChild);
         break;
       case 'data':

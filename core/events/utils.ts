@@ -20,7 +20,7 @@ goog.declareModuleId('Blockly.Events.utils');
 import type {Block} from '../block.js';
 import * as registry from '../registry.js';
 import * as idGenerator from '../utils/idgenerator.js';
-import {Workspace} from '../workspace.js';
+import type {Workspace} from '../workspace.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
 
 import type {Abstract} from './events_abstract.js';
@@ -263,6 +263,7 @@ function fireNow() {
     if (!event.workspaceId) {
       continue;
     }
+    const {Workspace} = goog.module.get('Blockly.Workspace');
     const eventWorkspace = Workspace.getById(event.workspaceId);
     if (eventWorkspace) {
       eventWorkspace.fireChangeListener(event);
@@ -477,6 +478,7 @@ export function disableOrphans(event: Abstract) {
     if (!blockEvent.workspaceId) {
       return;
     }
+    const {Workspace} = goog.module.get('Blockly.Workspace');
     const eventWorkspace =
         Workspace.getById(blockEvent.workspaceId) as WorkspaceSvg;
     let block = eventWorkspace.getBlockById(blockEvent.blockId);

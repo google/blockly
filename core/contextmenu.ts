@@ -33,7 +33,7 @@ import {Rect} from './utils/rect.js';
 import * as svgMath from './utils/svg_math.js';
 import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
-import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
+import type {WorkspaceCommentSvg} from './workspace_comment_svg.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 import * as Xml from './xml.js';
 
@@ -309,6 +309,10 @@ export function commentDuplicateOption(comment: WorkspaceCommentSvg):
  */
 export function workspaceCommentOption(
     ws: WorkspaceSvg, e: Event): ContextMenuOption {
+  const {WorkspaceCommentSvg} = goog.module.get('Blockly.WorkspaceCommentSvg');
+  if (!WorkspaceCommentSvg) {
+    throw Error('Missing require for Blockly.WorkspaceCommentSvg');
+  }
   // Helper function to create and position a comment correctly based on the
   // location of the mouse event.
   function addWsComment() {

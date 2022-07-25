@@ -24,7 +24,7 @@ import {DeleteArea} from './delete_area.js';
 import * as BlockCreate from './events/events_block_create.js';
 import * as VarCreate from './events/events_var_create.js';
 import * as eventUtils from './events/utils.js';
-import {FlyoutButton} from './flyout_button.js';
+import type {FlyoutButton} from './flyout_button.js';
 import {FlyoutMetricsManager} from './flyout_metrics_manager.js';
 import * as Gesture from './gesture.js';
 import type {IFlyout} from './interfaces/i_flyout.js';
@@ -707,6 +707,10 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
    */
   private createButton_(btnInfo: toolbox.ButtonOrLabelInfo, isLabel: boolean):
       FlyoutButton {
+    const {FlyoutButton} = goog.module.get('Blockly.FlyoutButton');
+    if (!FlyoutButton) {
+      throw Error('Missing require for Blockly.FlyoutButton');
+    }
     const curButton = new FlyoutButton(
         this.workspace_, (this.targetWorkspace as WorkspaceSvg), btnInfo,
         isLabel);

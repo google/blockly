@@ -68,7 +68,7 @@ import type {Cursor} from './keyboard_nav/cursor.js';
 import type {Marker} from './keyboard_nav/marker.js';
 import {MarkerManager} from './marker_manager.js';
 import {Options} from './options.js';
-import * as Procedures from './procedures.js';
+// import * as Procedures from './procedures.js';
 import * as registry from './registry.js';
 import * as blockRendering from './renderers/common/block_rendering.js';
 import type {Renderer} from './renderers/common/renderer.js';
@@ -79,7 +79,7 @@ import {Classic} from './theme/classic.js';
 import {ThemeManager} from './theme_manager.js';
 import * as Tooltip from './tooltip.js';
 import {TouchGesture} from './touch_gesture.js';
-import {Trashcan} from './trashcan.js';
+import type {Trashcan} from './trashcan.js';
 import * as utils from './utils.js';
 import * as arrayUtils from './utils/array.js';
 import {Coordinate} from './utils/coordinate.js';
@@ -92,16 +92,16 @@ import * as svgMath from './utils/svg_math.js';
 import * as toolbox from './utils/toolbox.js';
 import * as userAgent from './utils/useragent.js';
 import type {VariableModel} from './variable_model.js';
-import * as Variables from './variables.js';
-import * as VariablesDynamic from './variables_dynamic.js';
+// import * as Variables from './variables.js';
+// import * as VariablesDynamic from './variables_dynamic.js';
 import * as WidgetDiv from './widgetdiv.js';
 import {Workspace} from './workspace.js';
 import {WorkspaceAudio} from './workspace_audio.js';
-import {WorkspaceComment} from './workspace_comment.js';
-import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
+import type {WorkspaceComment} from './workspace_comment.js';
+import type {WorkspaceCommentSvg} from './workspace_comment_svg.js';
 import type {WorkspaceDragSurfaceSvg} from './workspace_drag_surface_svg.js';
 import * as Xml from './xml.js';
-import {ZoomControls} from './zoom_controls.js';
+// import {ZoomControls} from './zoom_controls.js';
 
 
 /** Margin around the top/bottom/left/right after a zoomToFit call. */
@@ -437,16 +437,19 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
      */
     this.flyoutButtonCallbacks_ = Object.create(null);
 
+    const Variables = goog.module.get('Blockly.Variables');
     if (Variables && Variables.flyoutCategory) {
       this.registerToolboxCategoryCallback(
           Variables.CATEGORY_NAME, Variables.flyoutCategory);
     }
 
+    const VariablesDynamic = goog.module.get('Blockly.VariablesDynamic');
     if (VariablesDynamic && VariablesDynamic.flyoutCategory) {
       this.registerToolboxCategoryCallback(
           VariablesDynamic.CATEGORY_NAME, VariablesDynamic.flyoutCategory);
     }
 
+    const Procedures = goog.module.get('Blockly.Procedures');
     if (Procedures && Procedures.flyoutCategory) {
       this.registerToolboxCategoryCallback(
           Procedures.CATEGORY_NAME, Procedures.flyoutCategory);
@@ -954,6 +957,10 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @internal
    */
   addTrashcan() {
+    const {Trashcan} = goog.module.get('Blockly.Trashcan');
+    if (!Trashcan) {
+      throw Error('Missing require for Blockly.Trashcan');
+    }
     this.trashcan = new Trashcan(this);
     const svgTrashcan = this.trashcan.createDom();
     this.svgGroup_.insertBefore(svgTrashcan, this.svgBlockCanvas_);
@@ -964,6 +971,10 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @internal
    */
   addZoomControls() {
+    const {ZoomControls} = goog.module.get('Blockly.ZoomControls');
+    if (!ZoomControls) {
+      throw Error('Missing require for Blockly.ZoomControls');
+    }
     this.zoomControls_ = new ZoomControls(this);
     const svgZoomControls = this.zoomControls_.createDom();
     this.svgGroup_.appendChild(svgZoomControls);
@@ -1539,8 +1550,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     try {
       // AnyDuringMigration because:  Property 'get' does not exist on type
       // '(name: string) => void'.
-      comment =
-          WorkspaceCommentSvg.fromXml(xmlComment, this) as AnyDuringMigration;
+      comment = goog.module.get('Blockly.WorkspaceCommentSvg')
+                    .fromXml(xmlComment, this);
       // Move the duplicate to original position.
       // AnyDuringMigration because:  Argument of type 'string | null' is not
       // assignable to parameter of type 'string'.
@@ -1565,9 +1576,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       eventUtils.enable();
     }
     if (eventUtils.isEnabled()) {
-      // AnyDuringMigration because:  Property 'get' does not exist on type
-      // '(name: string) => void'.
-      WorkspaceComment.fireCreateEvent(comment);
+      goog.module.get('Blockly.WorkspaceComment').fireCreateEvent(comment);
     }
     comment.select();
     return comment;

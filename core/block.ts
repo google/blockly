@@ -232,6 +232,15 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @throws When the prototypeName is not valid or not allowed.
    */
   constructor(workspace: Workspace, prototypeName: string, opt_id?: string) {
+    const {Generator} = goog.module.get('Blockly.Generator');
+    if (Generator &&
+        typeof Generator.prototype[prototypeName] !== 'undefined') {
+      // Occluding Generator class members is not allowed.
+      throw Error(
+          'Block prototypeName "' + prototypeName +
+          '" conflicts with Blockly.Generator members.');
+    }
+
     this.workspace = workspace;
 
     this.id = opt_id && !workspace.getBlockById(opt_id) ? opt_id :

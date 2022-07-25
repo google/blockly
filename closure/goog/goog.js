@@ -37,33 +37,7 @@
  */
 
 export const global = globalThis;
-export const require = function(namespace) {
-  if (!COMPILED) {
-    // Might need to lazy load on old IE.
-    if (goog.ENABLE_DEBUG_LOADER) {
-      goog.debugLoader_.requested(namespace);
-    }
-
-    // If the object already exists we do not need to do anything.
-    if (goog.isProvided_(namespace)) {
-      if (goog.isInModuleLoader_()) {
-        return goog.module.getInternal_(namespace);
-      }
-    } else if (goog.ENABLE_DEBUG_LOADER) {
-      var moduleLoaderState = goog.moduleLoaderState_;
-      goog.moduleLoaderState_ = null;
-      try {
-        goog.debugLoader_.load_(namespace);
-      } finally {
-        goog.moduleLoaderState_ = moduleLoaderState;
-      }
-    }
-
-    return null;
-  }
-};
-
-
+// export const require = goog.require;
 // export const define = goog.define;
 // export const DEBUG = goog.DEBUG;
 // export const LOCALE = goog.LOCALE;
@@ -98,38 +72,8 @@ export const require = function(namespace) {
 // export const scope = goog.scope;
 // export const defineClass = goog.defineClass;
 export const declareModuleId = function(namespace) {
-  if (!COMPILED) {
-    if (!goog.isInEs6ModuleLoader_()) {
-      throw new Error(
-          'goog.declareModuleId may only be called from ' +
-          'within an ES6 module');
-    }
-    if (goog.moduleLoaderState_ && goog.moduleLoaderState_.moduleName) {
-      throw new Error(
-          'goog.declareModuleId may only be called once per module.');
-    }
-    if (namespace in goog.loadedModules_) {
-      throw new Error(
-          'Module with namespace "' + namespace + '" already exists.');
-    }
-  }
-  if (goog.moduleLoaderState_) {
-    // Not bundled - debug loading.
-    goog.moduleLoaderState_.moduleName = namespace;
-  } else {
-    // Bundled - not debug loading, no module loader state.
-    var jscomp = goog.global['$jscomp'];
-    if (!jscomp || typeof jscomp.getCurrentModulePath != 'function') {
-      throw new Error(
-          'Module with namespace "' + namespace +
-          '" has been loaded incorrectly.');
-    }
-    var exports = jscomp.require(jscomp.getCurrentModulePath());
-    goog.loadedModules_[namespace] = {
-      exports: exports,
-      type: goog.ModuleType.ES6,
-      moduleId: namespace
-    };
+  if (window.goog && window.goog.declareModuleId) {
+    window.goog.declareModuleId.call(this, namespace);
   }
 };
 

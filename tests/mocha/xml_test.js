@@ -6,8 +6,8 @@
 
 goog.declareModuleId('Blockly.test.xml');
 
-const {addBlockTypeToCleanup, createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
-const {assertVariableValues} = goog.require('Blockly.test.helpers.variables');
+import {addBlockTypeToCleanup, createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
+import {assertVariableValues} from './test_helpers/variables.js';
 
 
 suite('XML', function() {

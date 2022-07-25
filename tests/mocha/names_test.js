@@ -6,7 +6,7 @@
 
 goog.declareModuleId('Blockly.test.names');
 
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 
 suite('Names', function() {

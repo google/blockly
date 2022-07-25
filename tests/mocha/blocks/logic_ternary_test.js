@@ -8,7 +8,7 @@ goog.declareModuleId('Blockly.test.logicTernary');
 
 const eventUtils = goog.require('Blockly.Events.utils');
 const {runSerializationTestSuite} = goog.require('Blockly.test.helpers.serialization');
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 
 suite('Logic ternary', function() {

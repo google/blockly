@@ -6,9 +6,9 @@
 
 goog.declareModuleId('Blockly.test.comments');
 
-const {assertEventFired} = goog.require('Blockly.test.helpers.events');
+import {assertEventFired} from './test_helpers/events.js';
 const eventUtils = goog.require('Blockly.Events.utils');
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 
 suite('Comments', function() {

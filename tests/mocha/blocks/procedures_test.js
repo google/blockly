@@ -8,9 +8,9 @@ goog.declareModuleId('Blockly.test.procedures');
 
 goog.require('Blockly');
 goog.require('Blockly.Msg');
-const {assertCallBlockStructure, assertDefBlockStructure, createProcDefBlock, createProcCallBlock} = goog.require('Blockly.test.helpers.procedures');
+import {assertCallBlockStructure, assertDefBlockStructure, createProcDefBlock, createProcCallBlock} from './test_helpers/procedures.js';
 const {runSerializationTestSuite} = goog.require('Blockly.test.helpers.serialization');
-const {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+import {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
 
 
 suite('Procedures', function() {

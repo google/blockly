@@ -6,7 +6,7 @@
 
 goog.declareModuleId('Blockly.test.dropdown');
 
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 
 suite('DropDownDiv', function() {

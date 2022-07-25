@@ -7,9 +7,9 @@
 goog.declareModuleId('Blockly.test.lists');
 
 const {runSerializationTestSuite} = goog.require('Blockly.test.helpers.serialization');
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
-const {defineStatementBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
+import {defineStatementBlock} from './test_helpers/block_definitions.js';
 
 
 suite('Lists', function() {

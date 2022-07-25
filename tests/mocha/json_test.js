@@ -6,8 +6,8 @@
 
 goog.declareModuleId('Blockly.test.json');
 
-const {addMessageToCleanup, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
-const {assertNoWarnings, assertWarnings} = goog.require('Blockly.test.helpers.warnings');
+import {addMessageToCleanup, sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
+import {assertNoWarnings, assertWarnings} from './test_helpers/warnings.js';
 
 
 suite('JSON Block Definitions', function() {

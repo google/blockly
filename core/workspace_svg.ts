@@ -962,8 +962,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * @internal
    */
-  static newTrashcan(workspace: WorkspaceSvg): AnyDuringMigration {
-    return {};
+  static newTrashcan(workspace: WorkspaceSvg): Trashcan {
+    throw new Error('unimplemented');
   }
 
   /**
@@ -1669,8 +1669,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *     ID.
    * @return The created block.
    */
-  override newBlock(prototypeName: string, opt_id?: string): AnyDuringMigration {
-    return {};
+  override newBlock(prototypeName: string, opt_id?: string): BlockSvg {
+    throw new Error('unimplemented');
   }
 
   /**

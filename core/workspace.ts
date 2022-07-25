@@ -508,8 +508,8 @@ export class Workspace implements IASTNodeLocation {
    *     ID.
    * @return The created block.
    */
-  newBlock(prototypeName: string, opt_id?: string): AnyDuringMigration {
-    return {};
+  newBlock(prototypeName: string, opt_id?: string): Block {
+    throw new Error('unimplemented');
   }
 
   /**

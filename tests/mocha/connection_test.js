@@ -6,8 +6,8 @@
 
 goog.declareModuleId('Blockly.test.connection');
 
-const {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
-const {defineRowBlock, defineStatementBlock, defineStackBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
+import {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
+import {defineRowBlock, defineStatementBlock, defineStackBlock} from './test_helpers/block_definitions.js';
 
 
 suite('Connection', function() {

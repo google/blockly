@@ -6,9 +6,9 @@
 
 goog.declareModuleId('Blockly.test.keydown');
 
-const {createKeyDownEvent} = goog.require('Blockly.test.helpers.userInput');
-const {defineStackBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+import {createKeyDownEvent} from './test_helpers/user_input.js';
+import {defineStackBlock} from './test_helpers/block_definitions.js';
+import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 
 suite('Key Down', function() {

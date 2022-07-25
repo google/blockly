@@ -6,10 +6,10 @@
 
 goog.declareModuleId('Blockly.test.fieldMultiline');
 
-const {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSetValueTests} = goog.require('Blockly.test.helpers.fields');
-const {createTestBlock, defineRowBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
-const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
-const {runCodeGenerationTestSuites} = goog.require('Blockly.test.helpers.codeGeneration');
+import {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSetValueTests} from './test_helpers/fields.js';
+import {createTestBlock, defineRowBlock} from './test_helpers/block_definitions.js';
+import {sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
+import {runCodeGenerationTestSuites} from './test_helpers/code_generation.js';
 
 
 suite('Multiline Input Fields', function() {

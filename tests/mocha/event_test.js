@@ -7,9 +7,9 @@
 goog.declareModuleId('Blockly.test.event');
 
 const {ASTNode} = goog.require('Blockly.ASTNode');
-const {assertEventEquals, assertNthCallEventArgEquals, createFireChangeListenerSpy} = goog.require('Blockly.test.helpers.events');
-const {assertVariableValues} = goog.require('Blockly.test.helpers.variables');
-const {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+import {assertEventEquals, assertNthCallEventArgEquals, createFireChangeListenerSpy} from './test_helpers/events.js';
+import {assertVariableValues} from './test_helpers/variables.js';
+import {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
 const eventUtils = goog.require('Blockly.Events.utils');
 goog.require('Blockly.WorkspaceComment');
 

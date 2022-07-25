@@ -6,8 +6,8 @@
 
 goog.declareModuleId('Blockly.test.variableMap');
 
-const {assertVariableValues} = goog.require('Blockly.test.helpers.variables');
-const {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+import {assertVariableValues} from './test_helpers/variables.js';
+import {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 
 suite('Variable Map', function() {

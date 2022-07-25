@@ -6,8 +6,8 @@
 
 goog.declareModuleId('Blockly.test.shortcutRegistry');
 
-const {createKeyDownEvent} = goog.require('Blockly.test.helpers.userInput');
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+import {createKeyDownEvent} from './test_helpers/user_input.js';
+import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 
 suite('Keyboard Shortcut Registry Test', function() {

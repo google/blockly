@@ -6,7 +6,7 @@
 
 goog.declareModuleId('Blockly.test.contextMenuItem');
 
-const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+import {sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
 
 
 suite('Context Menu Items', function() {

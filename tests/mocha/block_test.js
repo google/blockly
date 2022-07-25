@@ -8,10 +8,10 @@ goog.declareModuleId('Blockly.test.blocks');
 
 const {Blocks} = goog.require('Blockly.blocks');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
-const {createDeprecationWarningStub} = goog.require('Blockly.test.helpers.warnings');
-const {createRenderedBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
+import {createDeprecationWarningStub} from './test_helpers/warnings.js';
+import {createRenderedBlock} from './test_helpers/block_definitions.js';
 const eventUtils = goog.require('Blockly.Events.utils');
-const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+import {sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
 
 
 suite('Blocks', function() {

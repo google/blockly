@@ -13,7 +13,7 @@ const {runTestCases} = goog.require('Blockly.test.helpers.common');
  * @implements {TestCase}
  * @record
  */
-class SerializationTestCase {
+export class SerializationTestCase {
   /**
    * Class for a block serialization test case.
    */
@@ -45,13 +45,12 @@ class SerializationTestCase {
    */
   assertBlockStructure(block) {}
 }
-exports.SerializationTestCase = SerializationTestCase;
 
 /**
  * Runs serialization test suite.
  * @param {!Array<!SerializationTestCase>} testCases The test cases to run.
  */
-const runSerializationTestSuite = (testCases) => {
+export const runSerializationTestSuite = (testCases) => {
   /**
    * Creates test callback for xmlToBlock test.
    * @param {!SerializationTestCase} testCase The test case information.
@@ -129,4 +128,3 @@ const runSerializationTestSuite = (testCases) => {
     });
   });
 };
-exports.runSerializationTestSuite = runSerializationTestSuite;

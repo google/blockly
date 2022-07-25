@@ -95,12 +95,3 @@ export function domToText(dom: Node): string {
   const oSerializer = new XMLSerializer();
   return oSerializer.serializeToString(dom);
 }
-
-export function textToDom(text: string): Element {
-  const doc = textToDomDocument(text);
-  if (!doc || !doc.documentElement ||
-      doc.getElementsByTagName('parsererror').length) {
-    throw Error('textToDom was unable to parse: ' + text);
-  }
-  return doc.documentElement;
-}

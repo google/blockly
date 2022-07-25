@@ -175,7 +175,7 @@ export function flyoutCategoryBlocks(workspace: Workspace): Element[] {
       // assignable to parameter of type 'Node'.
       block.appendChild(
           generateVariableFieldDom(mostRecentVariable) as AnyDuringMigration);
-      const value = utilsXml.textToDom(
+      const value = Xml.textToDom(
           '<value name="DELTA">' +
           '<shadow type="math_number">' +
           '<field name="NUM">1</field>' +

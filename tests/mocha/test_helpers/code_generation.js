@@ -7,7 +7,7 @@
 
 goog.declareModuleId('Blockly.test.helpers.codeGeneration');
 
-const {runTestSuites} = goog.require('Blockly.test.helpers.common');
+import {runTestSuites} from './common.js';
 
 
 /**

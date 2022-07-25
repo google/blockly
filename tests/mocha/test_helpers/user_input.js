@@ -6,7 +6,7 @@
 
 goog.declareModuleId('Blockly.test.helpers.userInput');
 
-const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
+import {KeyCodes} from '../../../core/utils/keycodes.js';
 
 
 /**

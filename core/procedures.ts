@@ -335,7 +335,7 @@ export function mutatorOpenListener(e: Abstract) {
   }
   const workspaceId = (bubbleEvent.workspaceId);
   const block = common.getWorkspaceById(workspaceId)!.getBlockById(
-                    bubbleEvent.blockId) as AnyDuringMigration as BlockSvg;
+                    bubbleEvent.blockId) as BlockSvg;
   const type = block.type;
   if (type !== 'procedures_defnoreturn' && type !== 'procedures_defreturn') {
     return;
@@ -356,7 +356,7 @@ function mutatorChangeListener(e: Abstract) {
     return;
   }
   const workspaceId = e.workspaceId as string;
-  const workspace = common.getWorkspaceById(workspaceId) as AnyDuringMigration as WorkspaceSvg;
+  const workspace = common.getWorkspaceById(workspaceId) as WorkspaceSvg;
   updateMutatorFlyout(workspace);
 }
 

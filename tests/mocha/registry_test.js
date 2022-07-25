@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.registry');
+goog.declareModuleId('Blockly.test.registry');
 
 const {assertWarnings} = goog.require('Blockly.test.helpers.warnings');
 const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');

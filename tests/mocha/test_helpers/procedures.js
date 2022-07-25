@@ -3,7 +3,7 @@
  * Copyright 2020 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
-goog.module('Blockly.test.helpers.procedures');
+goog.declareModuleId('Blockly.test.helpers.procedures');
 
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
 

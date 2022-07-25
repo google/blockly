@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.fieldMultiline');
+goog.declareModuleId('Blockly.test.fieldMultiline');
 
 const {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSetValueTests} = goog.require('Blockly.test.helpers.fields');
 const {createTestBlock, defineRowBlock} = goog.require('Blockly.test.helpers.blockDefinitions');

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.comments');
+goog.declareModuleId('Blockly.test.comments');
 
 const {assertEventFired} = goog.require('Blockly.test.helpers.events');
 const eventUtils = goog.require('Blockly.Events.utils');

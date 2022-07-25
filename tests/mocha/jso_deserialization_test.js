@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.jsoDeserialization');
+goog.declareModuleId('Blockly.test.jsoDeserialization');
 
 const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
 const {assertEventFired} = goog.require('Blockly.test.helpers.events');

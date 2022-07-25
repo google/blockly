@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.procedures');
+goog.declareModuleId('Blockly.test.procedures');
 
 goog.require('Blockly');
 goog.require('Blockly.Msg');

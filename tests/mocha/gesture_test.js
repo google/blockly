@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.gesture');
+goog.declareModuleId('Blockly.test.gesture');
 
 const {assertEventFired, assertEventNotFired} = goog.require('Blockly.test.helpers.events');
 const {defineBasicBlockWithField} = goog.require('Blockly.test.helpers.blockDefinitions');

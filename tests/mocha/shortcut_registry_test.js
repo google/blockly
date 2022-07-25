@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.shortcutRegistry');
+goog.declareModuleId('Blockly.test.shortcutRegistry');
 
 const {createKeyDownEvent} = goog.require('Blockly.test.helpers.userInput');
 const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');

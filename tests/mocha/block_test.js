@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.blocks');
+goog.declareModuleId('Blockly.test.blocks');
 
 const {Blocks} = goog.require('Blockly.blocks');
 const {ConnectionType} = goog.require('Blockly.ConnectionType');

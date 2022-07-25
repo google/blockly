@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.helpers.blockDefinitions');
+goog.declareModuleId('Blockly.test.helpers.blockDefinitions');
 
 
 function defineStackBlock(name = 'stack_block') {

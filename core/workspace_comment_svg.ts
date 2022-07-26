@@ -25,7 +25,7 @@ import './events/events_selected.js';
 import type {BlockDragSurfaceSvg} from './block_drag_surface.js';
 import * as browserEvents from './browser_events.js';
 import * as common from './common.js';
-import * as ContextMenu from './contextmenu.js';
+// import * as ContextMenu from './contextmenu.js';
 import * as Css from './css.js';
 import type {CommentMove} from './events/events_comment_move.js';
 import * as eventUtils from './events/utils.js';

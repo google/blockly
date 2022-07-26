@@ -62,18 +62,30 @@ export const DEFAULT = 'default';
  */
 export class Type<T> {
   static CONNECTION_CHECKER = new Type<IConnectionChecker>('connectionChecker');
+
   static CURSOR = new Type<Cursor>('cursor');
+
   static EVENT = new Type<Abstract>('event');
+
   static FIELD = new Type<Field>('field');
+
   static RENDERER = new Type<Renderer>('renderer');
+
   static TOOLBOX = new Type<IToolbox>('toolbox');
+
   static THEME = new Type<Theme>('theme');
+
   static TOOLBOX_ITEM = new Type<ToolboxItem>('toolboxItem');
+
   static FLYOUTS_VERTICAL_TOOLBOX = new Type<IFlyout>('flyoutsVerticalToolbox');
+
   static FLYOUTS_HORIZONTAL_TOOLBOX =
       new Type<IFlyout>('flyoutsHorizontalToolbox');
+
   static METRICS_MANAGER = new Type<IMetricsManager>('metricsManager');
+
   static BLOCK_DRAGGER = new Type<IBlockDragger>('blockDragger');
+
   /** @internal */
   static SERIALIZER = new Type<ISerializer>('serializer');
 
@@ -89,31 +101,11 @@ export class Type<T> {
   }
 }
 
-// Type.CONNECTION_CHECKER = new Type('connectionChecker');
 
-// Type.CURSOR = new Type('cursor');
 
-// Type.EVENT = new Type('event');
 
-// Type.FIELD = new Type('field');
 
-// Type.RENDERER = new Type('renderer');
 
-// Type.TOOLBOX = new Type('toolbox');
-
-// Type.THEME = new Type('theme');
-
-// Type.TOOLBOX_ITEM = new Type('toolboxItem');
-
-// Type.FLYOUTS_VERTICAL_TOOLBOX = new Type('flyoutsVerticalToolbox');
-
-// Type.FLYOUTS_HORIZONTAL_TOOLBOX = new Type('flyoutsHorizontalToolbox');
-
-// Type.METRICS_MANAGER = new Type('metricsManager');
-
-// Type.BLOCK_DRAGGER = new Type('blockDragger');
-
-// Type.SERIALIZER = new Type('serializer');
 
 /**
  * Registers a class based on a type and name.

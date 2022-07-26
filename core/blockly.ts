@@ -605,6 +605,10 @@ WorkspaceCommentSvg.prototype.showContextMenu = function(this: WorkspaceCommentS
   ContextMenu.show(e, menuOptions, this.RTL);
 }
 
+Mutator.prototype.newWorkspaceSvg = function(options: Options): WorkspaceSvg {
+  return new WorkspaceSvg(options);
+}
+
 
 // Re-export submodules that no longer declareLegacyNamespace.
 export {browserEvents};

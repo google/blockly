@@ -609,6 +609,16 @@ Mutator.prototype.newWorkspaceSvg = function(options: Options): WorkspaceSvg {
   return new WorkspaceSvg(options);
 }
 
+Names.prototype.populateProcedures = function(this: Names, workspace: Workspace) {
+  let procedures = Procedures.allProcedures(workspace);
+  // Flatten the return vs no-return procedure lists.
+  let flattenedProcedures: AnyDuringMigration[][] =
+      procedures[0].concat(procedures[1]);
+  for (let i = 0; i < flattenedProcedures.length; i++) {
+    this.getName(flattenedProcedures[i][0], Names.NameType.PROCEDURE);
+  }
+}
+
 
 // Re-export submodules that no longer declareLegacyNamespace.
 export {browserEvents};

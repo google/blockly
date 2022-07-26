@@ -21,8 +21,6 @@ import {Workspace} from './workspace.js';
 
 /**
  * Blockly options.
- * This interface is further described in
- * `typings/parts/blockly-interfaces.d.ts`.
  * @alias Blockly.BlocklyOptions
  */
 export interface BlocklyOptions {

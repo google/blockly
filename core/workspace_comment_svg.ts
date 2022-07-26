@@ -210,7 +210,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * @internal
    */
   showContextMenu(e: Event) {
-    throw new Error('unimplemented')l;
+    throw new Error('unimplemented');
   }
 
   /**

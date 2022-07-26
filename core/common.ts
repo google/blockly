@@ -229,7 +229,7 @@ function jsonInitFactory(jsonDef: AnyDuringMigration): () => void {
  * @alias Blockly.common.defineBlocksWithJsonArray
  */
 export function defineBlocksWithJsonArray(jsonArray: AnyDuringMigration[]) {
-  defineBlocks(createBlockDefinitionsFromJsonArray(jsonArray));
+  TEST_ONLY.defineBlocksWithJsonArrayInternal(jsonArray);
 }
 
 /**
@@ -278,3 +278,9 @@ export function defineBlocks(blocks: {[key: string]: BlockDefinition}) {
     Blocks[type] = definition;
   }
 }
+
+function defineBlocksWithJsonArrayInternal(jsonArray: AnyDuringMigration[]) {
+  defineBlocks(createBlockDefinitionsFromJsonArray(jsonArray));
+}
+
+export const TEST_ONLY = {defineBlocksWithJsonArrayInternal};

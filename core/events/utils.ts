@@ -246,14 +246,7 @@ const FIRE_QUEUE: Abstract[] = [];
  * @alias Blockly.Events.utils.fire
  */
 export function fire(event: Abstract) {
-  if (!isEnabled()) {
-    return;
-  }
-  if (!FIRE_QUEUE.length) {
-    // First event added; schedule a firing of the event queue.
-    setTimeout(fireNow, 0);
-  }
-  FIRE_QUEUE.push(event);
+  TEST_ONLY.fireInternal(event);
 }
 
 /** Fire all queued events. */
@@ -269,6 +262,18 @@ function fireNow() {
       eventWorkspace.fireChangeListener(event);
     }
   }
+}
+
+/** @internal */
+function fireInternal(event: Abstract) {
+  if (!isEnabled()) {
+    return;
+  }
+  if (!FIRE_QUEUE.length) {
+    // First event added; schedule a firing of the event queue.
+    setTimeout(fireNow, 0);
+  }
+  FIRE_QUEUE.push(event);
 }
 
 /**
@@ -510,4 +515,5 @@ export function disableOrphans(event: Abstract) {
 export const TEST_ONLY = {
   FIRE_QUEUE,
   fireNow,
+  fireInternal,
 };

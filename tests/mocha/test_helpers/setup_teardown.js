@@ -36,7 +36,7 @@ exports.workspaceTeardown = workspaceTeardown;
  * @private
  */
 function createEventsFireStubFireImmediately_(clock) {
-  const stub = sinon.stub(eventUtils, 'fire');
+  const stub = sinon.stub(eventUtils.TEST_ONLY, 'fireInternal');
   stub.callsFake(function(event) {
     // Call original method.
     stub.wrappedMethod.call(this, ...arguments);
@@ -79,7 +79,7 @@ exports.addBlockTypeToCleanup = addBlockTypeToCleanup;
  * @private
  */
 function wrapDefineBlocksWithJsonArrayWithCleanup_(sharedCleanupObj) {
-  const stub = sinon.stub(Blockly, 'defineBlocksWithJsonArray');
+  const stub = sinon.stub(Blockly.common.TEST_ONLY, 'defineBlocksWithJsonArrayInternal');
   stub.callsFake(function(jsonArray) {
     if (jsonArray) {
       jsonArray.forEach((jsonBlock) => {

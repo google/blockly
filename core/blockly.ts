@@ -589,6 +589,8 @@ Workspace.prototype.newBlock = function(prototypeName: string, opt_id?: string):
           return new Trashcan(workspace);
         }
 
+
+
 // Re-export submodules that no longer declareLegacyNamespace.
 export {browserEvents};
 export {ContextMenu};

@@ -589,6 +589,21 @@ Workspace.prototype.newBlock = function(prototypeName: string, opt_id?: string):
           return new Trashcan(workspace);
         }
 
+WorkspaceCommentSvg.prototype.showContextMenu = function(this: WorkspaceCommentSvg, e: Event) {
+  if (this.workspace.options.readOnly) {
+    return;
+  }
+  // Save the current workspace comment in a variable for use in closures.
+  const comment = this;
+  const menuOptions = [];
+
+  if (this.isDeletable() && this.isMovable()) {
+    menuOptions.push(ContextMenu.commentDuplicateOption(comment));
+    menuOptions.push(ContextMenu.commentDeleteOption(comment));
+  }
+
+  ContextMenu.show(e, menuOptions, this.RTL);
+}
 
 
 // Re-export submodules that no longer declareLegacyNamespace.

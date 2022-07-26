@@ -61,44 +61,31 @@ export const DEFAULT = 'default';
  * @alias Blockly.registry.Type
  */
 export class Type<T> {
-  // Type.CONNECTION_CHECKER = new Type('connectionChecker');
   static CONNECTION_CHECKER = new Type<IConnectionChecker>('connectionChecker');
 
-  // Type.CURSOR = new Type('cursor');
   static CURSOR = new Type<Cursor>('cursor');
 
-  // Type.EVENT = new Type('event');
   static EVENT = new Type<Abstract>('event');
 
-  // Type.FIELD = new Type('field');
   static FIELD = new Type<Field>('field');
 
-  // Type.RENDERER = new Type('renderer');
   static RENDERER = new Type<Renderer>('renderer');
 
-  // Type.TOOLBOX = new Type('toolbox');
   static TOOLBOX = new Type<IToolbox>('toolbox');
 
-  // Type.THEME = new Type('theme');
   static THEME = new Type<Theme>('theme');
 
-  // Type.TOOLBOX_ITEM = new Type('toolboxItem');
   static TOOLBOX_ITEM = new Type<ToolboxItem>('toolboxItem');
 
-  // Type.FLYOUTS_VERTICAL_TOOLBOX = new Type('flyoutsVerticalToolbox');
   static FLYOUTS_VERTICAL_TOOLBOX = new Type<IFlyout>('flyoutsVerticalToolbox');
 
-  // Type.FLYOUTS_HORIZONTAL_TOOLBOX = new Type('flyoutsHorizontalToolbox');
   static FLYOUTS_HORIZONTAL_TOOLBOX =
       new Type<IFlyout>('flyoutsHorizontalToolbox');
 
-  // Type.METRICS_MANAGER = new Type('metricsManager');
   static METRICS_MANAGER = new Type<IMetricsManager>('metricsManager');
 
-  // Type.BLOCK_DRAGGER = new Type('blockDragger');
   static BLOCK_DRAGGER = new Type<IBlockDragger>('blockDragger');
 
-  // Type.SERIALIZER = new Type('serializer');
   /** @internal */
   static SERIALIZER = new Type<ISerializer>('serializer');
 

@@ -28,7 +28,7 @@ let copyData: CopyData|null = null;
  * @internal
  */
 export function copy(toCopy: ICopyable) {
-  copyData = toCopy.toCopyData();
+  TEST_ONLY.copyInternal(toCopy);
 }
 
 /**
@@ -66,6 +66,10 @@ export function duplicate(toDuplicate: ICopyable): ICopyable|null {
   return TEST_ONLY.duplicateInternal(toDuplicate);
 }
 
+function copyInternal(toCopy: ICopyable) {
+  copyData = toCopy.toCopyData();
+}
+
 function duplicateInternal(toDuplicate: ICopyable): ICopyable|null {
   const oldCopyData = copyData;
   copy(toDuplicate);
@@ -76,4 +80,5 @@ function duplicateInternal(toDuplicate: ICopyable): ICopyable|null {
 
 export const TEST_ONLY = {
   duplicateInternal,
+  copyInternal,
 }

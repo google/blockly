@@ -334,7 +334,7 @@ suite('Context Menu Items', function() {
       });
 
       test('Calls duplicate', function() {
-        const spy = sinon.spy(Blockly.clipboard, 'duplicate');
+        const spy = sinon.spy(Blockly.clipboard.TEST_ONLY, 'duplicateInternal');
 
         this.duplicateOption.callback(this.scope);
 

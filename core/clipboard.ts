@@ -63,9 +63,17 @@ export function paste(): ICopyable|null {
  * @internal
  */
 export function duplicate(toDuplicate: ICopyable): ICopyable|null {
+  return TEST_ONLY.duplicateInternal(toDuplicate);
+}
+
+function duplicateInternal(toDuplicate: ICopyable): ICopyable|null {
   const oldCopyData = copyData;
   copy(toDuplicate);
   const pastedThing = toDuplicate.toCopyData().source.paste(copyData!.saveInfo);
   copyData = oldCopyData;
   return pastedThing;
+}
+
+export const TEST_ONLY = {
+  duplicateInternal,
 }

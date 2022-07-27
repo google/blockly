@@ -60,7 +60,7 @@ export function unregister(type: string) {
  * @internal
  */
 export function fromJson(options: AnyDuringMigration): Field|null {
-  return fromJsonInternal(options);
+  return TEST_ONLY.fromJsonInternal(options);
 }
 
 function fromJsonInternal(options: AnyDuringMigration): Field|null {

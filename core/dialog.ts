@@ -69,7 +69,7 @@ export function setAlert(
  */
 export function confirm(
     message: string, callback: (p1: boolean) => AnyDuringMigration) {
-  confirmImplementation(message, callback);
+  TEST_ONLY.confirmInternal(message, callback);
 }
 
 /**
@@ -111,4 +111,13 @@ export function setPrompt(
         (p1: string, p2: string, p3: (p1: string|null) => AnyDuringMigration) =>
             AnyDuringMigration) {
   promptImplementation = promptFunction;
+}
+
+function confirmInternal(
+    message: string, callback: (p1: boolean) => AnyDuringMigration) {
+  confirmImplementation(message, callback);
+}
+
+export const TEST_ONLY = {
+  confirmInternal,
 }

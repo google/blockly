@@ -30,8 +30,6 @@ import * as eventUtils from './utils.js';
  */
 export class BlockDelete extends BlockBase {
   override type: string;
-  // Respawning shadow blocks is handled via disconnection.
-  override recordUndo = false;
   oldXml: AnyDuringMigration;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   ids!: string[];
@@ -55,6 +53,8 @@ export class BlockDelete extends BlockBase {
       throw Error('Connected blocks cannot be deleted.');
     }
     if (opt_block.isShadow()) {
+      // Respawning shadow blocks is handled via disconnection.
+      this.recordUndo = false;
     }
 
     this.oldXml = Xml.blockToDomWithXY(opt_block);

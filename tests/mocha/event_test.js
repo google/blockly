@@ -17,7 +17,7 @@ goog.require('Blockly.WorkspaceComment');
 suite('Events', function() {
   setup(function() {
     sharedTestSetup.call(this, {fireEventsNow: false});
-    this.eventsFireSpy = sinon.spy(eventUtils, 'fire');
+    this.eventsFireSpy = sinon.spy(eventUtils.TEST_ONLY, 'fireInternal');
     this.workspace = new Blockly.Workspace();
     Blockly.defineBlocksWithJsonArray([{
       'type': 'field_variable_test_block',

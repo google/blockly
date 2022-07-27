@@ -217,8 +217,7 @@ export const VAR_LETTER_OPTIONS = 'ijkmnopqrstuvwxyzabcdefgh';
  * @alias Blockly.Variables.generateUniqueName
  */
 export function generateUniqueName(workspace: Workspace): string {
-  return generateUniqueNameFromOptions(
-      VAR_LETTER_OPTIONS.charAt(0), workspace.getAllVariableNames());
+  return TEST_ONLY.generateUniqueNameInternal(workspace);
 }
 
 /**
@@ -586,4 +585,13 @@ export function getAddedVariables(
     }
   }
   return addedVariables;
+}
+
+function generateUniqueNameInternal(workspace: Workspace): string {
+  return generateUniqueNameFromOptions(
+      VAR_LETTER_OPTIONS.charAt(0), workspace.getAllVariableNames());
+}
+
+export const TEST_ONLY = {
+  generateUniqueNameInternal,
 }

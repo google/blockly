@@ -80,10 +80,6 @@ suite('Utils', function() {
     });
 
     suite('String table interpolation', function() {
-      setup(function() {
-        Blockly.Msg = Blockly.Msg || { };
-      });
-
       test('Simple interpolation', function() {
         Blockly.Msg.STRING_REF = 'test string';
         chai.assert.deepEqual(

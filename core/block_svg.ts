@@ -86,9 +86,9 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * the block.
    */
   static readonly COLLAPSED_WARNING_ID = 'TEMP_COLLAPSED_WARNING_';
-  override decompose?: ((p1: Workspace) => BlockSvg)|null;
+  override decompose?: ((p1: Workspace) => BlockSvg);
   // override compose?: ((p1: BlockSvg) => void)|null;
-  saveConnections?: ((p1: BlockSvg) => AnyDuringMigration)|null;
+  saveConnections?: ((p1: BlockSvg) => AnyDuringMigration);
   customContextMenu?:
       ((p1: Array<ContextMenuOption|LegacyContextMenuOption>) =>
            AnyDuringMigration)|null;

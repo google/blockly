@@ -162,6 +162,10 @@ Blockly.Msg.NEW_MODULE_TITLE = 'Name:';
 /** @type {string} */
 Blockly.Msg.DELETE_ALL_SELECTED = 'Delete all selected blocks'
 /** @type {string} */
+Blockly.Msg.COPY_ALL_SELECTED = 'Copy all selected blocks'
+/** @type {string} */
+Blockly.Msg.DUPLICATE_ALL_SELECTED = 'Duplicate all selected blocks'
+/** @type {string} */
 Blockly.Msg.MOVE_SELECTED_BLOCKS_TO_MODULE = 'Move blocks to module %1'
 /** @type {string} */
 Blockly.Msg.SELECT_ALL = 'Select all blocks'

@@ -278,19 +278,7 @@ export function convertFlyoutDefToJsonArray(flyoutDef: FlyoutDefinition|
  * @internal
  */
 export function hasCategories(toolboxJson: ToolboxInfo|null): boolean {
-  if (!toolboxJson) {
-    return false;
-  }
-
-  const toolboxKind = toolboxJson['kind'];
-  if (toolboxKind) {
-    return toolboxKind === CATEGORY_TOOLBOX_KIND;
-  }
-
-  const categories = toolboxJson['contents'].filter(function(item) {
-    return item['kind'].toUpperCase() === 'CATEGORY';
-  });
-  return !!categories.length;
+  return TEST_ONLY.hasCategoriesInternal(toolboxJson);
 }
 
 /**
@@ -419,4 +407,24 @@ export function parseToolboxTree(toolboxDef: Element|null|string): Element|
     toolboxDef = null;
   }
   return toolboxDef;
+}
+
+function hasCategoriesInternal(toolboxJson: ToolboxInfo|null): boolean {
+  if (!toolboxJson) {
+    return false;
+  }
+
+  const toolboxKind = toolboxJson['kind'];
+  if (toolboxKind) {
+    return toolboxKind === CATEGORY_TOOLBOX_KIND;
+  }
+
+  const categories = toolboxJson['contents'].filter(function(item) {
+    return item['kind'].toUpperCase() === 'CATEGORY';
+  });
+  return !!categories.length;
+}
+
+export const TEST_ONLY = {
+  hasCategoriesInternal,
 }

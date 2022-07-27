@@ -415,11 +415,7 @@ export function getGroup(): string {
  * @alias Blockly.Events.utils.setGroup
  */
 export function setGroup(state: boolean|string) {
-  if (typeof state === 'boolean') {
-    group = state ? idGenerator.genUid() : '';
-  } else {
-    group = state;
-  }
+  TEST_ONLY.setGroupInternal(state);
 }
 
 /**
@@ -512,8 +508,17 @@ export function disableOrphans(event: Abstract) {
   }
 }
 
+function setGroupInternal(state: boolean|string) {
+  if (typeof state === 'boolean') {
+    group = state ? idGenerator.genUid() : '';
+  } else {
+    group = state;
+  }
+}
+
 export const TEST_ONLY = {
   FIRE_QUEUE,
   fireNow,
   fireInternal,
+  setGroupInternal,
 };

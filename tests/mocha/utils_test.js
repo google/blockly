@@ -185,7 +185,6 @@ suite('Utils', function() {
   });
 
   test('replaceMessageReferences', function() {
-    Blockly.Msg = Blockly.Msg || {};
     Blockly.Msg.STRING_REF = 'test string';
     Blockly.Msg.SUBREF = 'subref';
     Blockly.Msg.STRING_REF_WITH_ARG = 'test %1 string';

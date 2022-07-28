@@ -16,9 +16,9 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.VerticalFlyout');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './block.js';
+// import './block.js';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './constants.js';
+// import './constants.js';
 
 import * as browserEvents from './browser_events.js';
 import * as dropDownDiv from './dropdowndiv.js';

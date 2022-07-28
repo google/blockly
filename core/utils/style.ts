@@ -32,6 +32,13 @@ import {Size} from './size.js';
  * @alias Blockly.utils.style.getSize
  */
 export function getSize(element: Element): Size {
+  return TEST_ONLY.getSizeInternal(element);
+}
+
+/**
+ * Private version of getSize for stubbing in tests.
+ */
+function getSizeInternal(element: Element): Size {
   if (getStyle(element, 'display') !== 'none') {
     return getSizeWithDisplay(element);
   }
@@ -57,6 +64,7 @@ export function getSize(element: Element): Size {
 
   return new Size(offsetWidth, offsetHeight);
 }
+
 /**
  * Gets the height and width of an element when the display is not none.
  * @param element Element to get size of.
@@ -291,4 +299,8 @@ export function getContainerOffsetToScrollInto(
     scrollTop += Math.min(relY, Math.max(relY - spaceY, 0));
   }
   return new Coordinate(scrollLeft, scrollTop);
+}
+
+export const TEST_ONLY = {
+  getSizeInternal,
 }

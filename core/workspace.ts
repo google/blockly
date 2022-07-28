@@ -18,10 +18,11 @@ goog.declareModuleId('Blockly.Workspace');
 // Unused import preserved for side-effects. Remove if unneeded.
 import './connection_checker.js';
 
-import {Block} from './block.js';
+import type {Block} from './block.js';
 import type {BlocklyOptions} from './blockly_options.js';
 import type {ConnectionDB} from './connection_db.js';
 import type {Abstract} from './events/events_abstract.js';
+import * as common from './common.js';
 import * as eventUtils from './events/utils.js';
 import type {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
 import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
@@ -35,9 +36,6 @@ import {VariableMap} from './variable_map.js';
 import type {VariableModel} from './variable_model.js';
 import type {WorkspaceComment} from './workspace_comment.js';
 
-
-/** Database of all workspaces. */
-const WorkspaceDB_ = Object.create(null);
 
 /**
  * Class for a workspace.  This is a data structure that contains blocks.
@@ -112,7 +110,7 @@ export class Workspace implements IASTNodeLocation {
   /** @param opt_options Dictionary of options. */
   constructor(opt_options?: Options) {
     this.id = idGenerator.genUid();
-    WorkspaceDB_[this.id] = this;
+    common.registerWorkspace(this);
     this.options = opt_options || new Options(({} as BlocklyOptions));
     this.RTL = !!this.options.RTL;
     this.horizontalLayout = !!this.options.horizontalLayout;
@@ -145,7 +143,7 @@ export class Workspace implements IASTNodeLocation {
     this.listeners_.length = 0;
     this.clear();
     // Remove from workspace database.
-    delete WorkspaceDB_[this.id];
+    common.unregisterWorkpace(this);
   }
 
   /**
@@ -511,7 +509,9 @@ export class Workspace implements IASTNodeLocation {
    * @return The created block.
    */
   newBlock(prototypeName: string, opt_id?: string): Block {
-    return new Block(this, prototypeName, opt_id);
+    throw new Error(
+        'The implementation of newBlock should be ' +
+        'monkey-patched in by blockly.ts');
   }
 
   /**
@@ -778,7 +778,7 @@ export class Workspace implements IASTNodeLocation {
    * @return The sought after workspace or null if not found.
    */
   static getById(id: string): Workspace|null {
-    return WorkspaceDB_[id] || null;
+    return common.getWorkspaceById(id);
   }
 
   /**
@@ -786,10 +786,6 @@ export class Workspace implements IASTNodeLocation {
    * @return Array of workspaces.
    */
   static getAll(): Workspace[] {
-    const workspaces = [];
-    for (const workspaceId in WorkspaceDB_) {
-      workspaces.push(WorkspaceDB_[workspaceId]);
-    }
-    return workspaces;
+    return common.getAllWorkspaces();
   }
 }

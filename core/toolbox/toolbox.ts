@@ -17,7 +17,7 @@ goog.declareModuleId('Blockly.Toolbox');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../shortcut_registry.js';
+// import '../shortcut_registry.js';
 // Unused import preserved for side-effects. Remove if unneeded.
 import '../events/events_toolbox_item_select.js';
 
@@ -107,7 +107,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
   protected boundEvents_: browserEvents.Data[] = [];
   override wouldDelete_: AnyDuringMigration;
 
-   /** The workspace this toolbox is on. */
+  /** The workspace this toolbox is on. */
   protected readonly workspace_: WorkspaceSvg;
 
   /** @param workspace The workspace in which to create new blocks. */

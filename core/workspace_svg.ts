@@ -17,19 +17,19 @@ goog.declareModuleId('Blockly.WorkspaceSvg');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './procedures.js';
+// import './procedures.js';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './variables.js';
+// import './variables.js';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './variables_dynamic.js';
+// import './variables_dynamic.js';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './rendered_connection.js';
+// import './rendered_connection.js';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './zoom_controls.js';
+// import './zoom_controls.js';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_block_create.js';
 // Unused import preserved for side-effects. Remove if unneeded.
@@ -37,13 +37,13 @@ import './events/events_theme_change.js';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_viewport.js';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './metrics_manager.js';
+// import './metrics_manager.js';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './msg.js';
+// import './msg.js';
 
 import type {Block} from './block.js';
 import type {BlockDragSurfaceSvg} from './block_drag_surface.js';
-import {BlockSvg} from './block_svg.js';
+import type {BlockSvg} from './block_svg.js';
 import type {BlocklyOptions} from './blockly_options.js';
 import * as browserEvents from './browser_events.js';
 import * as common from './common.js';
@@ -79,7 +79,7 @@ import {Classic} from './theme/classic.js';
 import {ThemeManager} from './theme_manager.js';
 import * as Tooltip from './tooltip.js';
 import {TouchGesture} from './touch_gesture.js';
-import {Trashcan} from './trashcan.js';
+import type {Trashcan} from './trashcan.js';
 import * as utils from './utils.js';
 import * as arrayUtils from './utils/array.js';
 import {Coordinate} from './utils/coordinate.js';
@@ -954,9 +954,18 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @internal
    */
   addTrashcan() {
-    this.trashcan = new Trashcan(this);
+    this.trashcan = WorkspaceSvg.newTrashcan(this);
     const svgTrashcan = this.trashcan.createDom();
     this.svgGroup_.insertBefore(svgTrashcan, this.svgBlockCanvas_);
+  }
+
+  /**
+   * @internal
+   */
+  static newTrashcan(workspace: WorkspaceSvg): Trashcan {
+    throw new Error(
+        'The implementation of newTrashcan should be ' +
+        'monkey-patched in by blockly.ts');
   }
 
   /**
@@ -1663,7 +1672,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @return The created block.
    */
   override newBlock(prototypeName: string, opt_id?: string): BlockSvg {
-    return new BlockSvg(this, prototypeName, opt_id);
+    throw new Error(
+        'The implementation of newBlock should be ' +
+        'monkey-patched in by blockly.ts');
   }
 
   /**
@@ -1856,7 +1867,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     // Start at 1 since the 0th block was used for initialization.
     for (let i = 1; i < topElements.length; i++) {
       const topElement = topElements[i];
-      if (topElement instanceof BlockSvg && topElement.isInsertionMarker()) {
+      if ((topElement as AnyDuringMigration).isInsertionmarker &&
+          (topElement as AnyDuringMigration).isInsertionMarker()) {
         continue;
       }
       const blockBoundary = topElement.getBoundingRectangle();

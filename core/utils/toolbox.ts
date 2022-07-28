@@ -17,10 +17,10 @@ goog.declareModuleId('Blockly.utils.toolbox');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../toolbox/category.js';
+// import '../toolbox/category.js';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../toolbox/separator.js';
+// import '../toolbox/separator.js';
 
 import type {ConnectionState} from '../serialization/blocks.js';
 import type {CssConfig as CategoryCssConfig} from '../toolbox/category.js';
@@ -278,6 +278,13 @@ export function convertFlyoutDefToJsonArray(flyoutDef: FlyoutDefinition|
  * @internal
  */
 export function hasCategories(toolboxJson: ToolboxInfo|null): boolean {
+  return TEST_ONLY.hasCategoriesInternal(toolboxJson);
+}
+
+/**
+ * Private version of hasCategories for stubbing in tests.
+ */
+function hasCategoriesInternal(toolboxJson: ToolboxInfo|null): boolean {
   if (!toolboxJson) {
     return false;
   }
@@ -419,4 +426,8 @@ export function parseToolboxTree(toolboxDef: Element|null|string): Element|
     toolboxDef = null;
   }
   return toolboxDef;
+}
+
+export const TEST_ONLY = {
+  hasCategoriesInternal,
 }

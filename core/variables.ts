@@ -99,7 +99,7 @@ export function allDeveloperVariables(workspace: Workspace): string[] {
       }
     }
     if (getDeveloperVariables) {
-      const devVars = block.getDeveloperVariables!();
+      const devVars = getDeveloperVariables();
       for (let j = 0; j < devVars.length; j++) {
         variableHash[devVars[j]] = true;
       }

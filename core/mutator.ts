@@ -218,7 +218,8 @@ export class Mutator extends Icon {
    * @internal
    */
   newWorkspaceSvg(options: Options): WorkspaceSvg {
-    throw new Error('The implementation of newWorkspaceSvg should be ' +
+    throw new Error(
+        'The implementation of newWorkspaceSvg should be ' +
         'monkey-patched in by blockly.ts');
   }
 

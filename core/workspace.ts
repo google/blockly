@@ -509,7 +509,8 @@ export class Workspace implements IASTNodeLocation {
    * @return The created block.
    */
   newBlock(prototypeName: string, opt_id?: string): Block {
-    throw new Error('The implementation of newBlock should be ' +
+    throw new Error(
+        'The implementation of newBlock should be ' +
         'monkey-patched in by blockly.ts');
   }
 

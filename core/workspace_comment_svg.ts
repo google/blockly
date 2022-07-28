@@ -210,7 +210,8 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * @internal
    */
   showContextMenu(e: Event) {
-    throw new Error('The implementation of showContextMenu should be ' +
+    throw new Error(
+        'The implementation of showContextMenu should be ' +
         'monkey-patched in by blockly.ts');
   }
 

@@ -963,7 +963,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @internal
    */
   static newTrashcan(workspace: WorkspaceSvg): Trashcan {
-    throw new Error('The implementation of newTrashcan should be ' +
+    throw new Error(
+        'The implementation of newTrashcan should be ' +
         'monkey-patched in by blockly.ts');
   }
 
@@ -1671,7 +1672,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @return The created block.
    */
   override newBlock(prototypeName: string, opt_id?: string): BlockSvg {
-    throw new Error('The implementation of newBlock should be ' +
+    throw new Error(
+        'The implementation of newBlock should be ' +
         'monkey-patched in by blockly.ts');
   }
 

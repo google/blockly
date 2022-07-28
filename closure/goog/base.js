@@ -617,8 +617,8 @@ goog.declareModuleId = function(namespace) {
           'within an ES6 module');
     }
     if (goog.moduleLoaderState_ && goog.moduleLoaderState_.moduleName) {
-      throw new Error(
-          'goog.declareModuleId may only be called once per module.');
+      // throw new Error(
+      //     'goog.declareModuleId may only be called once per module.');
     }
     if (namespace in goog.loadedModules_) {
       throw new Error(

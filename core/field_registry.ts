@@ -60,6 +60,13 @@ export function unregister(type: string) {
  * @internal
  */
 export function fromJson(options: AnyDuringMigration): Field|null {
+  return TEST_ONLY.fromJsonInternal(options);
+}
+
+/**
+ * Private version of fromJson for stubbing in tests.
+ */
+function fromJsonInternal(options: AnyDuringMigration): Field|null {
   const fieldObject =
       registry.getObject(registry.Type.FIELD, options['type']) as
           IRegistrableField |
@@ -73,4 +80,8 @@ export function fromJson(options: AnyDuringMigration): Field|null {
     return null;
   }
   return fieldObject.fromJson(options);
+}
+
+export const TEST_ONLY = {
+  fromJsonInternal,
 }

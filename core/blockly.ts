@@ -571,6 +571,59 @@ export const VARIABLE_DYNAMIC_CATEGORY_NAME: string =
 export const PROCEDURE_CATEGORY_NAME: string =
     (Procedures as AnyDuringMigration).CATEGORY_NAME;
 
+// Context for why we need to monkey-patch in these functions (internal):
+//   https://docs.google.com/document/d/1MbO0LEA-pAyx1ErGLJnyUqTLrcYTo-5zga9qplnxeXo/edit?usp=sharing&resourcekey=0-5h_32-i-dHwHjf_9KYEVKg
+
+// clang-format off
+Workspace.prototype.newBlock =
+    function(prototypeName: string, opt_id?: string): Block {
+      return new Block(this, prototypeName, opt_id);
+    }
+
+WorkspaceSvg.prototype.newBlock =
+    function(prototypeName: string, opt_id?: string): BlockSvg {
+      return new BlockSvg(this, prototypeName, opt_id);
+    }
+
+WorkspaceSvg.newTrashcan = function(workspace: WorkspaceSvg): Trashcan {
+  return new Trashcan(workspace);
+}
+
+WorkspaceCommentSvg.prototype.showContextMenu =
+    function(this: WorkspaceCommentSvg, e: Event) {
+      if (this.workspace.options.readOnly) {
+        return;
+      }
+      // Save the current workspace comment in a variable for use in closures.
+      const comment = this;
+      const menuOptions = [];
+    
+      if (this.isDeletable() && this.isMovable()) {
+        menuOptions.push(ContextMenu.commentDuplicateOption(comment));
+        menuOptions.push(ContextMenu.commentDeleteOption(comment));
+      }
+    
+      ContextMenu.show(e, menuOptions, this.RTL);
+    }
+
+Mutator.prototype.newWorkspaceSvg =
+    function(options: Options): WorkspaceSvg {
+      return new WorkspaceSvg(options);
+    }
+
+Names.prototype.populateProcedures =
+    function(this: Names, workspace: Workspace) {
+      let procedures = Procedures.allProcedures(workspace);
+      // Flatten the return vs no-return procedure lists.
+      let flattenedProcedures: AnyDuringMigration[][] =
+          procedures[0].concat(procedures[1]);
+      for (let i = 0; i < flattenedProcedures.length; i++) {
+        this.getName(flattenedProcedures[i][0], Names.NameType.PROCEDURE);
+      }
+    }
+// clang-format on
+
+
 // Re-export submodules that no longer declareLegacyNamespace.
 export {browserEvents};
 export {ContextMenu};

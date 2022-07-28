@@ -26,6 +26,39 @@ import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
 
+/** Database of all workspaces. */
+const WorkspaceDB_ = Object.create(null);
+
+
+/**
+ * Find the workspace with the specified ID.
+ * @param id ID of workspace to find.
+ * @return The sought after workspace or null if not found.
+ */
+export function getWorkspaceById(id: string): Workspace|null {
+  return WorkspaceDB_[id] || null;
+}
+
+/**
+ * Find all workspaces.
+ * @return Array of workspaces.
+ */
+export function getAllWorkspaces(): Workspace[] {
+  const workspaces = [];
+  for (const workspaceId in WorkspaceDB_) {
+    workspaces.push(WorkspaceDB_[workspaceId]);
+  }
+  return workspaces;
+}
+
+export function registerWorkspace(workspace: Workspace) {
+  WorkspaceDB_[workspace.id] = workspace;
+}
+
+export function unregisterWorkpace(workspace: Workspace) {
+  delete WorkspaceDB_[workspace.id];
+}
+
 /**
  * The main workspace most recently used.
  * Set by Blockly.WorkspaceSvg.prototype.markFocused
@@ -196,6 +229,13 @@ function jsonInitFactory(jsonDef: AnyDuringMigration): () => void {
  * @alias Blockly.common.defineBlocksWithJsonArray
  */
 export function defineBlocksWithJsonArray(jsonArray: AnyDuringMigration[]) {
+  TEST_ONLY.defineBlocksWithJsonArrayInternal(jsonArray);
+}
+
+/**
+ * Private version of defineBlocksWithJsonArray for stubbing in tests.
+ */
+function defineBlocksWithJsonArrayInternal(jsonArray: AnyDuringMigration[]) {
   defineBlocks(createBlockDefinitionsFromJsonArray(jsonArray));
 }
 
@@ -245,3 +285,5 @@ export function defineBlocks(blocks: {[key: string]: BlockDefinition}) {
     Blocks[type] = definition;
   }
 }
+
+export const TEST_ONLY = {defineBlocksWithJsonArrayInternal};

@@ -103,7 +103,7 @@ suite('Key Down', function() {
   suite('Copy', function() {
     setup(function() {
       setSelectedBlock(this.workspace);
-      this.copySpy = sinon.spy(Blockly.clipboard, 'copy');
+      this.copySpy = sinon.spy(Blockly.clipboard.TEST_ONLY, 'copyInternal');
       this.hideChaffSpy = sinon.spy(
         Blockly.WorkspaceSvg.prototype, 'hideChaff');
     });

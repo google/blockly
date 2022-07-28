@@ -17,10 +17,10 @@ goog.declareModuleId('Blockly.IBlockDragger');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../block_svg.js';
+// import '../block_svg.js';
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import '../utils/coordinate.js';
+// import '../utils/coordinate.js';
 
 
 /**

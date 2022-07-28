@@ -36,7 +36,6 @@
 	"LISTS_ISEMPTY_TOOLTIP": "Jitt „Wohr“ us, wann en dä Leß nix dren es.",
 	"LISTS_INDEX_FROM_START_TOOLTIP": "%1 es de Eezde en de Leß.",
 	"LISTS_INDEX_FROM_END_TOOLTIP": "%1 es de Läzde en de Leß.",
-	"LISTS_SORT_HELPURL": "https://github.com/google/blockly/wiki/Lists#sorting-a-list",
 	"LISTS_SORT_ORDER_ASCENDING": "opwääts",
 	"LISTS_SORT_ORDER_DESCENDING": "rökwääts zottehre",
 	"VARIABLES_SET": "säz der Wäät en %1 op %2",

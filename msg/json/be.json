@@ -277,7 +277,6 @@
 	"LISTS_GET_SUBLIST_END_FROM_END": "па # з канца",
 	"LISTS_GET_SUBLIST_END_LAST": "па апошні",
 	"LISTS_GET_SUBLIST_TOOLTIP": "Стварае копію ўказанай частцы спісу.",
-	"LISTS_SORT_HELPURL": "https://github.com/google/blockly/wiki/Lists#sorting-a-list",
 	"LISTS_SORT_TITLE": "сартаваць %1 %2 %3",
 	"LISTS_SORT_TOOLTIP": "Сартаваць копію спісу.",
 	"LISTS_SORT_ORDER_ASCENDING": "па ўзрастанню",

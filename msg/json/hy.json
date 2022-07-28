@@ -114,7 +114,6 @@
 	"MATH_ARITHMETIC_TOOLTIP_MULTIPLY": "Վերադարձնում է երկու թվերի արտադրյալը",
 	"MATH_ARITHMETIC_TOOLTIP_DIVIDE": "Վերադարձնում է քանորդը",
 	"MATH_ARITHMETIC_TOOLTIP_POWER": "Վերադարձնում է առաջին թիվի աստիճանը",
-	"MATH_SINGLE_HELPURL": "https://en.wikipedia.org/wiki/Square_root",
 	"MATH_SINGLE_OP_ROOT": "Քառակուսի արմատ",
 	"MATH_SINGLE_TOOLTIP_ROOT": "Վերադարձնում է թվի քառակուսի աստիճանը",
 	"MATH_SINGLE_OP_ABSOLUTE": "բացարձակ",

@@ -143,7 +143,6 @@
 	"TEXT_TRIM_OPERATOR_RIGHT": "ডানপাশ থেকে খালি অংশ ছাটাই",
 	"TEXT_PRINT_TITLE": "%1 মুদ্রণ করুন",
 	"TEXT_REVERSE_MESSAGE0": "%1 উল্টান",
-	"TEXT_REVERSE_HELPURL": "https://github.com/google/blockly/wiki/Text#reversing-text",
 	"LISTS_CREATE_EMPTY_TITLE": "খালি তালিকা তৈরি করুন",
 	"LISTS_CREATE_EMPTY_TOOLTIP": "পাঠাবে একটি তালিকা, দের্ঘ্য হবে ০, কোন উপাত্ত থাকবে না",
 	"LISTS_CREATE_WITH_TOOLTIP": "যেকোন সংখ্যক পদ নিয়ে একটি তালিকা তৈরি করুন।",

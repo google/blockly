@@ -769,4 +769,21 @@ export class Workspace implements IASTNodeLocation {
   setVariableMap(variableMap: VariableMap) {
     this.variableMap_ = variableMap;
   }
+
+  /**
+   * Find the workspace with the specified ID.
+   * @param id ID of workspace to find.
+   * @return The sought after workspace or null if not found.
+   */
+  static getById(id: string): Workspace|null {
+    return common.getWorkspaceById(id);
+  }
+
+  /**
+   * Find all workspaces.
+   * @return Array of workspaces.
+   */
+  static getAll(): Workspace[] {
+    return common.getAllWorkspaces();
+  }
 }

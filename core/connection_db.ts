@@ -39,8 +39,8 @@ export class ConnectionDB {
   private readonly connections_: RenderedConnection[] = [];
 
   /**
-   * @param connectionChecker The workspace's connection type checker, used to decide if
-   *     connections are valid during a drag.
+   * @param connectionChecker The workspace's connection type checker, used to
+   *     decide if connections are valid during a drag.
    */
   constructor(private readonly connectionChecker: IConnectionChecker) {}
 

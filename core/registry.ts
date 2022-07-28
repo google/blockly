@@ -103,10 +103,6 @@ export class Type<T> {
 
 
 
-
-
-
-
 /**
  * Registers a class based on a type and name.
  * @param type The type of the plugin.

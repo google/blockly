@@ -32,6 +32,13 @@ export function copy(toCopy: ICopyable) {
 }
 
 /**
+ * Private version of copy for stubbing in tests.
+ */
+function copyInternal(toCopy: ICopyable) {
+  copyData = toCopy.toCopyData();
+}
+
+/**
  * Paste a block or workspace comment on to the main workspace.
  * @return The pasted thing if the paste was successful, null otherwise.
  * @alias Blockly.clipboard.paste
@@ -66,10 +73,9 @@ export function duplicate(toDuplicate: ICopyable): ICopyable|null {
   return TEST_ONLY.duplicateInternal(toDuplicate);
 }
 
-function copyInternal(toCopy: ICopyable) {
-  copyData = toCopy.toCopyData();
-}
-
+/**
+ * Private version of duplicate for stubbing in tests.
+ */
 function duplicateInternal(toDuplicate: ICopyable): ICopyable|null {
   const oldCopyData = copyData;
   copy(toDuplicate);

@@ -73,6 +73,15 @@ export function confirm(
 }
 
 /**
+ * Private version of confirm for stubbing in tests.
+ */
+function confirmInternal(
+    message: string, callback: (p1: boolean) => AnyDuringMigration) {
+  confirmImplementation(message, callback);
+}
+
+
+/**
  * Sets the function to be run when Blockly.dialog.confirm() is called.
  * @param confirmFunction The function to be run.
  * @see Blockly.dialog.confirm
@@ -111,11 +120,6 @@ export function setPrompt(
         (p1: string, p2: string, p3: (p1: string|null) => AnyDuringMigration) =>
             AnyDuringMigration) {
   promptImplementation = promptFunction;
-}
-
-function confirmInternal(
-    message: string, callback: (p1: boolean) => AnyDuringMigration) {
-  confirmImplementation(message, callback);
 }
 
 export const TEST_ONLY = {

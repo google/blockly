@@ -221,6 +221,14 @@ export function generateUniqueName(workspace: Workspace): string {
 }
 
 /**
+ * Private version of generateUniqueName for stubbing in tests.
+ */
+function generateUniqueNameInternal(workspace: Workspace): string {
+  return generateUniqueNameFromOptions(
+      VAR_LETTER_OPTIONS.charAt(0), workspace.getAllVariableNames());
+}
+
+/**
  * Returns a unique name that is not present in the usedNames array. This
  * will try to generate single letter names in the range a -> z (skip l). It
  * will start with the character passed to startChar.
@@ -585,11 +593,6 @@ export function getAddedVariables(
     }
   }
   return addedVariables;
-}
-
-function generateUniqueNameInternal(workspace: Workspace): string {
-  return generateUniqueNameFromOptions(
-      VAR_LETTER_OPTIONS.charAt(0), workspace.getAllVariableNames());
 }
 
 export const TEST_ONLY = {

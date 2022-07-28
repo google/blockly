@@ -249,6 +249,21 @@ export function fire(event: Abstract) {
   TEST_ONLY.fireInternal(event);
 }
 
+/**
+ * Private version of fireInternal for stubbing in tests.
+ */
+function fireInternal(event: Abstract) {
+  if (!isEnabled()) {
+    return;
+  }
+  if (!FIRE_QUEUE.length) {
+    // First event added; schedule a firing of the event queue.
+    setTimeout(fireNow, 0);
+  }
+  FIRE_QUEUE.push(event);
+}
+
+
 /** Fire all queued events. */
 function fireNow() {
   const queue = filter(FIRE_QUEUE, true);
@@ -262,18 +277,6 @@ function fireNow() {
       eventWorkspace.fireChangeListener(event);
     }
   }
-}
-
-/** @internal */
-function fireInternal(event: Abstract) {
-  if (!isEnabled()) {
-    return;
-  }
-  if (!FIRE_QUEUE.length) {
-    // First event added; schedule a firing of the event queue.
-    setTimeout(fireNow, 0);
-  }
-  FIRE_QUEUE.push(event);
 }
 
 /**
@@ -419,6 +422,17 @@ export function setGroup(state: boolean|string) {
 }
 
 /**
+ * Private version of setGroup for stubbing in tests.
+ */
+function setGroupInternal(state: boolean|string) {
+  if (typeof state === 'boolean') {
+    group = state ? idGenerator.genUid() : '';
+  } else {
+    group = state;
+  }
+}
+
+/**
  * Compute a list of the IDs of the specified block and all its descendants.
  * @param block The root block.
  * @return List of block IDs.
@@ -505,14 +519,6 @@ export function disableOrphans(event: Abstract) {
         recordUndo = initialUndoFlag;
       }
     }
-  }
-}
-
-function setGroupInternal(state: boolean|string) {
-  if (typeof state === 'boolean') {
-    group = state ? idGenerator.genUid() : '';
-  } else {
-    group = state;
   }
 }
 

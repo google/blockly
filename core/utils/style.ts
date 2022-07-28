@@ -34,6 +34,37 @@ import {Size} from './size.js';
 export function getSize(element: Element): Size {
   return TEST_ONLY.getSizeInternal(element);
 }
+
+/**
+ * Private version of getSize for stubbing in tests.
+ */
+function getSizeInternal(element: Element): Size {
+  if (getStyle(element, 'display') !== 'none') {
+    return getSizeWithDisplay(element);
+  }
+
+  // Evaluate size with a temporary element.
+  // AnyDuringMigration because:  Property 'style' does not exist on type
+  // 'Element'.
+  const style = (element as AnyDuringMigration).style;
+  const originalDisplay = style.display;
+  const originalVisibility = style.visibility;
+  const originalPosition = style.position;
+
+  style.visibility = 'hidden';
+  style.position = 'absolute';
+  style.display = 'inline';
+
+  const offsetWidth = (element as HTMLElement).offsetWidth;
+  const offsetHeight = (element as HTMLElement).offsetHeight;
+
+  style.display = originalDisplay;
+  style.position = originalPosition;
+  style.visibility = originalVisibility;
+
+  return new Size(offsetWidth, offsetHeight);
+}
+
 /**
  * Gets the height and width of an element when the display is not none.
  * @param element Element to get size of.
@@ -268,33 +299,6 @@ export function getContainerOffsetToScrollInto(
     scrollTop += Math.min(relY, Math.max(relY - spaceY, 0));
   }
   return new Coordinate(scrollLeft, scrollTop);
-}
-
-function getSizeInternal(element: Element): Size {
-  if (getStyle(element, 'display') !== 'none') {
-    return getSizeWithDisplay(element);
-  }
-
-  // Evaluate size with a temporary element.
-  // AnyDuringMigration because:  Property 'style' does not exist on type
-  // 'Element'.
-  const style = (element as AnyDuringMigration).style;
-  const originalDisplay = style.display;
-  const originalVisibility = style.visibility;
-  const originalPosition = style.position;
-
-  style.visibility = 'hidden';
-  style.position = 'absolute';
-  style.display = 'inline';
-
-  const offsetWidth = (element as HTMLElement).offsetWidth;
-  const offsetHeight = (element as HTMLElement).offsetHeight;
-
-  style.display = originalDisplay;
-  style.position = originalPosition;
-  style.visibility = originalVisibility;
-
-  return new Size(offsetWidth, offsetHeight);
 }
 
 export const TEST_ONLY = {

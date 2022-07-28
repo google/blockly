@@ -233,6 +233,13 @@ export function defineBlocksWithJsonArray(jsonArray: AnyDuringMigration[]) {
 }
 
 /**
+ * Private version of defineBlocksWithJsonArray for stubbing in tests.
+ */
+function defineBlocksWithJsonArrayInternal(jsonArray: AnyDuringMigration[]) {
+  defineBlocks(createBlockDefinitionsFromJsonArray(jsonArray));
+}
+
+/**
  * Define blocks from an array of JSON block definitions, as might be generated
  * by the Blockly Developer Tools.
  * @param jsonArray An array of JSON block definitions.
@@ -277,10 +284,6 @@ export function defineBlocks(blocks: {[key: string]: BlockDefinition}) {
     }
     Blocks[type] = definition;
   }
-}
-
-function defineBlocksWithJsonArrayInternal(jsonArray: AnyDuringMigration[]) {
-  defineBlocks(createBlockDefinitionsFromJsonArray(jsonArray));
 }
 
 export const TEST_ONLY = {defineBlocksWithJsonArrayInternal};

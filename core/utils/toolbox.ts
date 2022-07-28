@@ -282,6 +282,25 @@ export function hasCategories(toolboxJson: ToolboxInfo|null): boolean {
 }
 
 /**
+ * Private version of hasCategories for stubbing in tests.
+ */
+function hasCategoriesInternal(toolboxJson: ToolboxInfo|null): boolean {
+  if (!toolboxJson) {
+    return false;
+  }
+
+  const toolboxKind = toolboxJson['kind'];
+  if (toolboxKind) {
+    return toolboxKind === CATEGORY_TOOLBOX_KIND;
+  }
+
+  const categories = toolboxJson['contents'].filter(function(item) {
+    return item['kind'].toUpperCase() === 'CATEGORY';
+  });
+  return !!categories.length;
+}
+
+/**
  * Whether or not the category is collapsible.
  * @param categoryInfo Object holing information for creating a category.
  * @return True if the category has subcategories.
@@ -407,22 +426,6 @@ export function parseToolboxTree(toolboxDef: Element|null|string): Element|
     toolboxDef = null;
   }
   return toolboxDef;
-}
-
-function hasCategoriesInternal(toolboxJson: ToolboxInfo|null): boolean {
-  if (!toolboxJson) {
-    return false;
-  }
-
-  const toolboxKind = toolboxJson['kind'];
-  if (toolboxKind) {
-    return toolboxKind === CATEGORY_TOOLBOX_KIND;
-  }
-
-  const categories = toolboxJson['contents'].filter(function(item) {
-    return item['kind'].toUpperCase() === 'CATEGORY';
-  });
-  return !!categories.length;
 }
 
 export const TEST_ONLY = {

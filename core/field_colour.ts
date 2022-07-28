@@ -66,7 +66,6 @@ export class FieldColour extends Field {
     '#ffccff', '#ff99ff', '#cc66cc', '#cc33cc',
     '#993399', '#663366', '#330033',
   ];
-  protected override DEFAULT_VALUE: AnyDuringMigration;
 
   /**
    * An array of tooltip strings for the palette.  If not the same length as

@@ -29,9 +29,6 @@ import type {Sentinel} from './utils/sentinel.js';
  * @alias Blockly.FieldCheckbox
  */
 export class FieldCheckbox extends Field {
-  /** The default value for this field. */
-  protected override DEFAULT_VALUE = false;
-
   /** Default character for the checkmark. */
   static readonly CHECK_CHAR = '\u2713';
   private checkChar_: string;
@@ -230,3 +227,5 @@ export class FieldCheckbox extends Field {
 }
 
 fieldRegistry.register('field_checkbox', FieldCheckbox);
+
+(FieldCheckbox.prototype as AnyDuringMigration).DEFAULT_VALUE = false;

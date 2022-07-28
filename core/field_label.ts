@@ -29,9 +29,6 @@ import type {Sentinel} from './utils/sentinel.js';
  * @alias Blockly.FieldLabel
  */
 export class FieldLabel extends Field {
-  /** The default value for this field. */
-  protected override DEFAULT_VALUE = '';
-
   /** The html class name to use for this field. */
   private class_: string|null = null;
 
@@ -133,3 +130,5 @@ export class FieldLabel extends Field {
 }
 
 fieldRegistry.register('field_label', FieldLabel);
+
+(FieldLabel.prototype as AnyDuringMigration).DEFAULT_VALUE = '';

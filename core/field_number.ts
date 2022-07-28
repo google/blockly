@@ -27,9 +27,6 @@ import type {Sentinel} from './utils/sentinel.js';
  * @alias Blockly.FieldNumber
  */
 export class FieldNumber extends FieldTextInput {
-  /** The default value for this field. */
-  protected override DEFAULT_VALUE = 0;
-
   /** The minimum value this number field can contain. */
   protected min_: number = -Infinity;
 
@@ -310,3 +307,5 @@ export class FieldNumber extends FieldTextInput {
 }
 
 fieldRegistry.register('field_number', FieldNumber);
+
+(FieldNumber.prototype as AnyDuringMigration).DEFAULT_VALUE = 0;

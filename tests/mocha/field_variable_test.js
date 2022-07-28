@@ -18,7 +18,7 @@ suite('Variable Fields', function() {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
     // Stub for default variable name.
-    sinon.stub(Blockly.Variables, 'generateUniqueName').returns(
+    sinon.stub(Blockly.Variables.TEST_ONLY, 'generateUniqueNameInternal').returns(
       FAKE_VARIABLE_NAME);
   });
   teardown(function() {

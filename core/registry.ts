@@ -61,6 +61,17 @@ export const DEFAULT = 'default';
  * @alias Blockly.registry.Type
  */
 export class Type<T> {
+  /** @param name The name of the registry type. */
+  constructor(private readonly name: string) {}
+
+  /**
+   * Returns the name of the type.
+   * @return The name.
+   */
+  toString(): string {
+    return this.name;
+  }
+
   static CONNECTION_CHECKER = new Type<IConnectionChecker>('connectionChecker');
 
   static CURSOR = new Type<Cursor>('cursor');
@@ -88,24 +99,7 @@ export class Type<T> {
 
   /** @internal */
   static SERIALIZER = new Type<ISerializer>('serializer');
-
-  /** @param name The name of the registry type. */
-  constructor(private readonly name: string) {}
-
-  /**
-   * Returns the name of the type.
-   * @return The name.
-   */
-  toString(): string {
-    return this.name;
-  }
 }
-
-
-
-
-
-
 
 /**
  * Registers a class based on a type and name.

@@ -18,9 +18,10 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.utils');
 
 import type {Block} from '../block.js';
+import * as common from '../common.js';
 import * as registry from '../registry.js';
 import * as idGenerator from '../utils/idgenerator.js';
-import {Workspace} from '../workspace.js';
+import type {Workspace} from '../workspace.js';
 import type {WorkspaceSvg} from '../workspace_svg.js';
 
 import type {Abstract} from './events_abstract.js';
@@ -245,6 +246,13 @@ const FIRE_QUEUE: Abstract[] = [];
  * @alias Blockly.Events.utils.fire
  */
 export function fire(event: Abstract) {
+  TEST_ONLY.fireInternal(event);
+}
+
+/**
+ * Private version of fireInternal for stubbing in tests.
+ */
+function fireInternal(event: Abstract) {
   if (!isEnabled()) {
     return;
   }
@@ -255,6 +263,7 @@ export function fire(event: Abstract) {
   FIRE_QUEUE.push(event);
 }
 
+
 /** Fire all queued events. */
 function fireNow() {
   const queue = filter(FIRE_QUEUE, true);
@@ -263,7 +272,7 @@ function fireNow() {
     if (!event.workspaceId) {
       continue;
     }
-    const eventWorkspace = Workspace.getById(event.workspaceId);
+    const eventWorkspace = common.getWorkspaceById(event.workspaceId);
     if (eventWorkspace) {
       eventWorkspace.fireChangeListener(event);
     }
@@ -409,6 +418,13 @@ export function getGroup(): string {
  * @alias Blockly.Events.utils.setGroup
  */
 export function setGroup(state: boolean|string) {
+  TEST_ONLY.setGroupInternal(state);
+}
+
+/**
+ * Private version of setGroup for stubbing in tests.
+ */
+function setGroupInternal(state: boolean|string) {
   if (typeof state === 'boolean') {
     group = state ? idGenerator.genUid() : '';
   } else {
@@ -478,7 +494,7 @@ export function disableOrphans(event: Abstract) {
       return;
     }
     const eventWorkspace =
-        Workspace.getById(blockEvent.workspaceId) as WorkspaceSvg;
+        common.getWorkspaceById(blockEvent.workspaceId) as WorkspaceSvg;
     let block = eventWorkspace.getBlockById(blockEvent.blockId);
     if (block) {
       // Changing blocks as part of this event shouldn't be undoable.
@@ -509,4 +525,6 @@ export function disableOrphans(event: Abstract) {
 export const TEST_ONLY = {
   FIRE_QUEUE,
   fireNow,
+  fireInternal,
+  setGroupInternal,
 };

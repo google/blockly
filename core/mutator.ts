@@ -36,7 +36,7 @@ import * as dom from './utils/dom.js';
 import {Svg} from './utils/svg.js';
 import * as toolbox from './utils/toolbox.js';
 import * as xml from './utils/xml.js';
-import {WorkspaceSvg} from './workspace_svg.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**
@@ -190,7 +190,7 @@ export class Mutator extends Icon {
     if (hasFlyout) {
       workspaceOptions.languageTree = toolbox.convertToolboxDefToJson(quarkXml);
     }
-    this.workspace_ = new WorkspaceSvg(workspaceOptions);
+    this.workspace_ = this.newWorkspaceSvg(workspaceOptions);
     this.workspace_.isMutator = true;
     this.workspace_.addChangeListener(eventUtils.disableOrphans);
 
@@ -212,6 +212,15 @@ export class Mutator extends Icon {
     // AnyDuringMigration because:  Type 'SVGSVGElement | null' is not
     // assignable to type 'SVGElement'.
     return this.svgDialog_ as AnyDuringMigration;
+  }
+
+  /**
+   * @internal
+   */
+  newWorkspaceSvg(options: Options): WorkspaceSvg {
+    throw new Error(
+        'The implementation of newWorkspaceSvg should be ' +
+        'monkey-patched in by blockly.ts');
   }
 
   /** Add or remove the UI indicating if this icon may be clicked or not. */

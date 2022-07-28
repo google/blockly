@@ -18,7 +18,7 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Gesture');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './block_dragger.js';
+// import './block_dragger.js';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_click.js';
 
@@ -38,7 +38,6 @@ import * as registry from './registry.js';
 import * as Tooltip from './tooltip.js';
 import * as Touch from './touch.js';
 import {Coordinate} from './utils/coordinate.js';
-import {Workspace} from './workspace.js';
 import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
 import {WorkspaceDragger} from './workspace_dragger.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
@@ -936,7 +935,7 @@ export class Gesture {
    * @return True if gesture is occurring.
    */
   static inProgress(): boolean {
-    const workspaces = Workspace.getAll();
+    const workspaces = common.getAllWorkspaces();
     for (let i = 0, workspace; workspace = workspaces[i]; i++) {
       // Not actually necessarily a WorkspaceSvg, but it doesn't matter b/c
       // we're just checking if the property exists. Theoretically we would

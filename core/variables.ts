@@ -217,6 +217,13 @@ export const VAR_LETTER_OPTIONS = 'ijkmnopqrstuvwxyzabcdefgh';
  * @alias Blockly.Variables.generateUniqueName
  */
 export function generateUniqueName(workspace: Workspace): string {
+  return TEST_ONLY.generateUniqueNameInternal(workspace);
+}
+
+/**
+ * Private version of generateUniqueName for stubbing in tests.
+ */
+function generateUniqueNameInternal(workspace: Workspace): string {
   return generateUniqueNameFromOptions(
       VAR_LETTER_OPTIONS.charAt(0), workspace.getAllVariableNames());
 }
@@ -586,4 +593,8 @@ export function getAddedVariables(
     }
   }
   return addedVariables;
+}
+
+export const TEST_ONLY = {
+  generateUniqueNameInternal,
 }

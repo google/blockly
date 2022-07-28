@@ -20,7 +20,7 @@ goog.declareModuleId('Blockly.IDeleteArea');
 /* eslint-disable-next-line no-unused-vars */
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './i_draggable.js';
+// import './i_draggable.js';
 
 import type {IDragTarget} from './i_drag_target.js';
 

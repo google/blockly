@@ -28,6 +28,13 @@ let copyData: CopyData|null = null;
  * @internal
  */
 export function copy(toCopy: ICopyable) {
+  TEST_ONLY.copyInternal(toCopy);
+}
+
+/**
+ * Private version of copy for stubbing in tests.
+ */
+function copyInternal(toCopy: ICopyable) {
   copyData = toCopy.toCopyData();
 }
 
@@ -63,9 +70,21 @@ export function paste(): ICopyable|null {
  * @internal
  */
 export function duplicate(toDuplicate: ICopyable): ICopyable|null {
+  return TEST_ONLY.duplicateInternal(toDuplicate);
+}
+
+/**
+ * Private version of duplicate for stubbing in tests.
+ */
+function duplicateInternal(toDuplicate: ICopyable): ICopyable|null {
   const oldCopyData = copyData;
   copy(toDuplicate);
   const pastedThing = toDuplicate.toCopyData().source.paste(copyData!.saveInfo);
   copyData = oldCopyData;
   return pastedThing;
+}
+
+export const TEST_ONLY = {
+  duplicateInternal,
+  copyInternal,
 }

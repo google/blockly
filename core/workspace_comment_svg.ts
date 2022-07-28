@@ -16,16 +16,16 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.WorkspaceCommentSvg');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_comment_create.js';
+// import './events/events_comment_create.js';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './events/events_comment_delete.js';
+// import './events/events_comment_delete.js';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_selected.js';
 
 import type {BlockDragSurfaceSvg} from './block_drag_surface.js';
 import * as browserEvents from './browser_events.js';
 import * as common from './common.js';
-import * as ContextMenu from './contextmenu.js';
+// import * as ContextMenu from './contextmenu.js';
 import * as Css from './css.js';
 import type {CommentMove} from './events/events_comment_move.js';
 import * as eventUtils from './events/utils.js';
@@ -210,19 +210,9 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * @internal
    */
   showContextMenu(e: Event) {
-    if (this.workspace.options.readOnly) {
-      return;
-    }
-    // Save the current workspace comment in a variable for use in closures.
-    const comment = this;
-    const menuOptions = [];
-
-    if (this.isDeletable() && this.isMovable()) {
-      menuOptions.push(ContextMenu.commentDuplicateOption(comment));
-      menuOptions.push(ContextMenu.commentDeleteOption(comment));
-    }
-
-    ContextMenu.show(e, menuOptions, this.RTL);
+    throw new Error(
+        'The implementation of showContextMenu should be ' +
+        'monkey-patched in by blockly.ts');
   }
 
   /**

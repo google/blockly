@@ -109,14 +109,14 @@ suite('WorkspaceSvg', function() {
       }.bind(this), 'Existing toolbox is null.  Can\'t create new toolbox.');
     });
     test('Existing toolbox has no categories', function() {
-      sinon.stub(Blockly.utils.toolbox, 'hasCategories').returns(true);
+      sinon.stub(Blockly.utils.toolbox.TEST_ONLY, 'hasCategoriesInternal').returns(true);
       this.workspace.toolbox_ = null;
       chai.assert.throws(function() {
         this.workspace.updateToolbox({'contents': []});
       }.bind(this), 'Existing toolbox has no categories.  Can\'t change mode.');
     });
     test('Existing toolbox has categories', function() {
-      sinon.stub(Blockly.utils.toolbox, 'hasCategories').returns(false);
+      sinon.stub(Blockly.utils.toolbox.TEST_ONLY, 'hasCategoriesInternal').returns(false);
       this.workspace.flyout_ = null;
       chai.assert.throws(function() {
         this.workspace.updateToolbox({'contents': []});

@@ -17,9 +17,9 @@ goog.declareModuleId('Blockly.Bubble');
 
 /* eslint-disable-next-line no-unused-vars */
 // Unused import preserved for side-effects. Remove if unneeded.
-import './metrics_manager.js';
+// import './metrics_manager.js';
 // Unused import preserved for side-effects. Remove if unneeded.
-import './workspace.js';
+// import './workspace.js';
 
 import type {BlockDragSurfaceSvg} from './block_drag_surface.js';
 import type {BlockSvg} from './block_svg.js';

@@ -315,7 +315,7 @@ let documentEventsBound = false;
 function bindDocumentEvents() {
   if (!documentEventsBound) {
     browserEvents.conditionalBind(document, 'scroll', null, function() {
-      const workspaces = Workspace.getAll();
+      const workspaces = common.getAllWorkspaces();
       for (let i = 0, workspace; workspace = workspaces[i]; i++) {
         if (workspace instanceof WorkspaceSvg) {
           workspace.updateInverseScreenCTM();

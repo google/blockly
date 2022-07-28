@@ -20,7 +20,7 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.ConnectionDB');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-import './constants.js';
+// import './constants.js';
 
 import {ConnectionType} from './connection_type.js';
 import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
@@ -39,10 +39,10 @@ export class ConnectionDB {
   private readonly connections_: RenderedConnection[] = [];
 
   /**
-   * @param checker The workspace's connection type checker, used to decide if
-   *     connections are valid during a drag.
+   * @param connectionChecker The workspace's connection type checker, used to
+   *     decide if connections are valid during a drag.
    */
-  constructor(private readonly checker: IConnectionChecker) {}
+  constructor(private readonly connectionChecker: IConnectionChecker) {}
 
   /**
    * Add a connection to the database. Should not already exist in the database.
@@ -248,7 +248,7 @@ export class ConnectionDB {
     let pointerMin = closestIndex - 1;
     while (pointerMin >= 0 && this.isInYRange_(pointerMin, conn.y, maxRadius)) {
       temp = this.connections_[pointerMin];
-      if (this.checker.canConnect(conn, temp, true, bestRadius)) {
+      if (this.connectionChecker.canConnect(conn, temp, true, bestRadius)) {
         bestConnection = temp;
         // AnyDuringMigration because:  Argument of type 'RenderedConnection' is
         // not assignable to parameter of type 'Connection'.
@@ -261,7 +261,7 @@ export class ConnectionDB {
     while (pointerMax < this.connections_.length &&
            this.isInYRange_(pointerMax, conn.y, maxRadius)) {
       temp = this.connections_[pointerMax];
-      if (this.checker.canConnect(conn, temp, true, bestRadius)) {
+      if (this.connectionChecker.canConnect(conn, temp, true, bestRadius)) {
         bestConnection = temp;
         // AnyDuringMigration because:  Argument of type 'RenderedConnection' is
         // not assignable to parameter of type 'Connection'.

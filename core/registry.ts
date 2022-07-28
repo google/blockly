@@ -99,7 +99,6 @@ export class Type<T> {
 
   /** @internal */
   static SERIALIZER = new Type<ISerializer>('serializer');
-
 }
 
 

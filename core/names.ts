@@ -129,7 +129,8 @@ export class Names {
    * @param workspace Workspace to generate procedures from.
    */
   populateProcedures(workspace: Workspace) {
-    throw new Error('unimplemented');
+    throw new Error('The implementation of populateProcedures should be ' +
+        'monkey-patched in by blockly.ts');
   }
 
   /**

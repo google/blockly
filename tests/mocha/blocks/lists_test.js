@@ -14,8 +14,8 @@ const {defineStatementBlock} = goog.require('Blockly.test.helpers.blockDefinitio
 
 suite('Lists', function() {
   setup(function() {
-    defineStatementBlock();
     sharedTestSetup.call(this);
+    defineStatementBlock();
     this.workspace = new Blockly.Workspace();
   });
 

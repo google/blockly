@@ -197,7 +197,7 @@ export class Connection implements IASTNodeLocationWithBlock {
    * @internal
    */
   getConnectionChecker(): IConnectionChecker {
-    return this.sourceBlock_.workspace.connectionChecker;
+    return this.sourceBlock_.workspace!.connectionChecker;
   }
 
   /**

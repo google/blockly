@@ -169,10 +169,10 @@ export class Gesture {
 
   /**
    * @param e The event that kicked off this gesture.
-   * @param creatorWorkspace_ The workspace that created this gesture and has a
+   * @param creatorWorkspace The workspace that created this gesture and has a
    *     reference to it.
    */
-  constructor(e: Event, private readonly creatorWorkspace_: WorkspaceSvg) {
+  constructor(e: Event, private readonly creatorWorkspace: WorkspaceSvg) {
     this.mostRecentEvent_ = e;
 
     /**
@@ -196,7 +196,7 @@ export class Gesture {
     Touch.clearTouchIdentifier();
     Tooltip.unblock();
     // Clear the owner's reference to this gesture.
-    this.creatorWorkspace_.clearGesture();
+    this.creatorWorkspace.clearGesture();
 
     if (this.onMoveWrapper_) {
       browserEvents.unbind(this.onMoveWrapper_);
@@ -393,7 +393,7 @@ export class Gesture {
   /** Create a block dragger and start dragging the selected block. */
   private startDraggingBlock_() {
     const BlockDraggerClass = registry.getClassFromOptions(
-        registry.Type.BLOCK_DRAGGER, this.creatorWorkspace_.options, true);
+        registry.Type.BLOCK_DRAGGER, this.creatorWorkspace.options, true);
 
     this.blockDragger_ =
         new BlockDraggerClass!((this.targetBlock_), (this.startWorkspace_));
@@ -717,7 +717,7 @@ export class Gesture {
    * @param _e A mouse up or touch end event.
    */
   private doWorkspaceClick_(_e: Event) {
-    const ws = this.creatorWorkspace_;
+    const ws = this.creatorWorkspace;
     if (common.getSelected()) {
       common.getSelected()!.unselect();
     }

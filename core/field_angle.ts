@@ -37,7 +37,7 @@ import * as WidgetDiv from './widgetdiv.js';
  */
 export class FieldAngle extends FieldTextInput {
   /** The default value for this field. */
-  //protected override DEFAULT_VALUE = 0;
+  // protected override DEFAULT_VALUE = 0;
 
   /**
    * The default amount to round angles to when using a mouse or keyboard nav

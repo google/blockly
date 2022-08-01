@@ -36,8 +36,6 @@ interface BlockLocation {
  */
 export class BlockMove extends BlockBase {
   override type: string;
-  // Moving shadow blocks is handled via disconnection.
-  override recordUndo = false;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   oldParentId!: string;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
@@ -61,6 +59,8 @@ export class BlockMove extends BlockBase {
     }
     // Blank event to be populated by fromJson.
     if (opt_block.isShadow()) {
+      // Moving shadow blocks is handled via disconnection.
+      this.recordUndo = false;
     }
 
     const location = this.currentLocation_();

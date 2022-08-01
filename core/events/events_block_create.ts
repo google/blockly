@@ -30,8 +30,6 @@ import * as eventUtils from './utils.js';
  */
 export class BlockCreate extends BlockBase {
   override type: string;
-  // Moving shadow blocks is handled via disconnection.
-  override recordUndo = false;
   xml: AnyDuringMigration;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   ids!: string[];
@@ -50,6 +48,8 @@ export class BlockCreate extends BlockBase {
     }
 
     if (opt_block.isShadow()) {
+      // Moving shadow blocks is handled via disconnection.
+      this.recordUndo = false;
     }
 
     this.xml = Xml.blockToDomWithXY(opt_block);

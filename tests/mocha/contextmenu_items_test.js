@@ -356,7 +356,7 @@ suite('Context Menu Items', function() {
         chai.assert.equal(this.commentOption.preconditionFn(this.scope), 'enabled');
       });
 
-      test('Hidden for IE', function() {
+      test.skip('Hidden for IE', function() {
         const oldState = Blockly.utils.userAgent.IE;
         try {
           Blockly.utils.userAgent.IE = true;

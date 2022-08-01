@@ -42,9 +42,6 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  * @alias Blockly.FieldTextInput
  */
 export class FieldTextInput extends Field {
-  /** The default value for this field. */
-  protected override DEFAULT_VALUE: string|number = '';
-
   /**
    * Pixel size of input border radius.
    * Should match blocklyText's border-radius in CSS.
@@ -576,3 +573,5 @@ export class FieldTextInput extends Field {
 }
 
 fieldRegistry.register('field_input', FieldTextInput);
+
+(FieldTextInput.prototype as AnyDuringMigration).DEFAULT_VALUE = '';

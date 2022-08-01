@@ -142,7 +142,7 @@ export function registerCut() {
       return !!(
           !workspace.options.readOnly && !Gesture.inProgress() && selected &&
           selected instanceof BlockSvg && selected.isDeletable() &&
-          selected.isMovable() && !selected.workspace.isFlyout);
+          selected.isMovable() && !selected.workspace!.isFlyout);
     },
     callback() {
       const selected = common.getSelected();

@@ -30,7 +30,8 @@ readonly BUILD_DIR='build'
 # Q4 2021	7.20211209.0-beta.0	920002
 # Q4 2021	7.20211209.0	929665
 # Q2 2022	8.0.0	  928056
-readonly BLOCKLY_SIZE_EXPECTED=928056
+# Q3 2022	8.0.0	1040413 (mid-quarter typescript conversion)
+readonly BLOCKLY_SIZE_EXPECTED=1040413
 
 # Size of blocks_compressed.js
 # Q2 2019	2.20190722.0	75618
@@ -46,7 +47,8 @@ readonly BLOCKLY_SIZE_EXPECTED=928056
 # Q4 2021	7.20211209.0-beta.0	82054
 # Q4 2021	7.20211209.0	86966
 # Q2 2022	8.0.0	   90769
-readonly BLOCKS_SIZE_EXPECTED=90769
+# Q3 2022	8.0.0	102176 (mid-quarter typescript conversion)
+readonly BLOCKS_SIZE_EXPECTED=102176
 
 # Size of blockly_compressed.js.gz
 # Q2 2019	2.20190722.0	180925
@@ -63,7 +65,8 @@ readonly BLOCKS_SIZE_EXPECTED=90769
 # Q4 2021	7.20211209.0-beta.0	169863
 # Q4 2021	7.20211209.0	171759
 # Q2 2022	8.0.0	  173997
-readonly BLOCKLY_GZ_SIZE_EXPECTED=173997
+# Q3 2022	8.0.0	185766 (mid-quarter typescript conversion)
+readonly BLOCKLY_GZ_SIZE_EXPECTED=185766
 
 # Size of blocks_compressed.js.gz
 # Q2 2019	2.20190722.0	14552
@@ -79,7 +82,8 @@ readonly BLOCKLY_GZ_SIZE_EXPECTED=173997
 # Q4 2021	7.20211209.0-beta.0	16616
 # Q4 2021	7.20211209.0	15760
 # Q2 2022	8.0.0	   16192
-readonly BLOCKS_GZ_SIZE_EXPECTED=16192
+# Q3 2022	8.0.0	17016 (mid-quarter typescript conversion)
+readonly BLOCKS_GZ_SIZE_EXPECTED=17016
 
 # ANSI colors
 readonly BOLD_GREEN='\033[1;32m'

@@ -360,7 +360,7 @@
 	"LISTS_REVERSE_HELPURL": "{{Optional}} url - Information describing reversing a list.",
 	"LISTS_REVERSE_MESSAGE0": "block text - Title of block that returns a copy of a list (%1) with the order of items reversed.",
 	"LISTS_REVERSE_TOOLTIP": "tooltip - Short description for a block that reverses a copy of a list.",
-	"ORDINAL_NUMBER_SUFFIX": "{{Optional}}\ngrammar - Text that follows an ordinal number (a number that indicates position relative to other numbers).  In most languages, such text appears before the number, so this should be blank.  An exception is Hungarian. See [[Translating:Blockly#Ordinal_numbers]] for more information.",
+	"ORDINAL_NUMBER_SUFFIX": "{{Optional}}\ngrammar - Text that follows an ordinal number (a number that indicates position relative to other numbers). In most languages, such text appears before the number, so this should be blank. An exception is Hungarian. See [[Translating:Blockly#Ordinal_numbers]] for more information.",
 	"VARIABLES_GET_HELPURL": "{{Optional}} url - Information about ''variables'' in computer programming.  Consider using your language's translation of [https://en.wikipedia.org/wiki/Variable_(computer_science) https://en.wikipedia.org/wiki/Variable_(computer_science)], if it exists.",
 	"VARIABLES_GET_TOOLTIP": "tooltip - This gets the value of the named variable without modifying it.",
 	"VARIABLES_GET_CREATE_SET": "context menu - Selecting this creates a block to set (change) the value of this variable. \n\nParameters:\n* %1 - the name of the variable.",

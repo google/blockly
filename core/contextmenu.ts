@@ -230,7 +230,7 @@ export function callbackFactory(block: Block, xml: Element): Function {
     eventUtils.disable();
     let newBlock;
     try {
-      newBlock = Xml.domToBlock(xml, block.workspace) as BlockSvg;
+      newBlock = Xml.domToBlock(xml, block.workspace!) as BlockSvg;
       // Move the new block next to the old block.
       const xy = block.getRelativeToSurfaceXY();
       if (block.RTL) {

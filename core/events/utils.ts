@@ -333,15 +333,14 @@ export function filter(queueIn: Abstract[], forward: boolean): Abstract[] {
         lastEvent.viewLeft = viewportEvent.viewLeft;
         lastEvent.scale = viewportEvent.scale;
         lastEvent.oldScale = viewportEvent.oldScale;
-      } else  // Drop click events caused by opening/closing bubbles.
-        if (event.type === CLICK && lastEvent.type === BUBBLE_OPEN) {
-        } else  // Drop click events caused by opening/closing bubbles.
-        {
-          // Collision: newer events should merge into this event to maintain
-          // order.
-          hash[key] = {event, index: i};
-          mergedQueue.push(event);
-        }
+      } else if (event.type === CLICK && lastEvent.type === BUBBLE_OPEN) {
+        // Drop click events caused by opening/closing bubbles.
+      } else {
+        // Collision: newer events should merge into this event to maintain
+        // order.
+        hash[key] = {event, index: i};
+        mergedQueue.push(event);
+      }
     }
   }
   // Filter out any events that have become null due to merging.

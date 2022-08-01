@@ -891,7 +891,7 @@ export class Bubble implements IBubble {
       paragraphElement: SVGTextElement, block: BlockSvg,
       iconXY: Coordinate): Bubble {
     const bubble = new Bubble(
-        (block.workspace), paragraphElement, block.pathObject.svgPath, (iconXY),
+        block.workspace!, paragraphElement, block.pathObject.svgPath, (iconXY),
         null, null);
     // Expose this bubble's block's ID on its top-level SVG group.
     bubble.setSvgId(block.id);

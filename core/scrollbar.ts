@@ -868,6 +868,3 @@ export class Scrollbar {
         first.scrollTop === second.scrollTop;
   }
 }
-
-if (Touch.TOUCH_ENABLED) {
-}

@@ -302,12 +302,12 @@ export class Generator {
     const outerOrderClass = Math.floor(outerOrder);
     const innerOrderClass = Math.floor(innerOrder);
     if (outerOrderClass <= innerOrderClass) {
-      // Don't generate parens around NONE-NONE and ATOMIC-ATOMIC pairs.
-      // 0 is the atomic order, 99 is the none order.  No parentheses needed.
-      // In all known languages multiple such code blocks are not order
-      // sensitive.  In fact in Python ('a' 'b') 'c' would fail.
       if (outerOrderClass === innerOrderClass &&
           (outerOrderClass === 0 || outerOrderClass === 99)) {
+        // Don't generate parens around NONE-NONE and ATOMIC-ATOMIC pairs.
+        // 0 is the atomic order, 99 is the none order.  No parentheses needed.
+        // In all known languages multiple such code blocks are not order
+        // sensitive.  In fact in Python ('a' 'b') 'c' would fail.
       } else {
         // The operators outside this code are stronger than the operators
         // inside this code.  To prevent the code from being pulled apart,

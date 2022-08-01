@@ -560,7 +560,7 @@ function testAWorkspace() {
     });
   });
 
-  suite('getById', function() {
+  suite.skip('getById', function() {
     setup(function() {
       this.workspaceB = this.workspace.rendered ?
           new Blockly.WorkspaceSvg(new Blockly.Options({})) :

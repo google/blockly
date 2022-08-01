@@ -42,7 +42,7 @@ let disconnectGroup: Element = null as AnyDuringMigration;
  * @internal
  */
 export function disposeUiEffect(block: BlockSvg) {
-  const workspace = block.workspace;
+  const workspace = block.workspace!;
   const svgGroup = block.getSvgRoot();
   workspace.getAudioManager().play('delete');
 
@@ -100,7 +100,7 @@ function disposeUiStep(
  * @internal
  */
 export function connectionUiEffect(block: BlockSvg) {
-  const workspace = block.workspace;
+  const workspace = block.workspace!;
   const scale = workspace.scale;
   workspace.getAudioManager().play('click');
   if (scale < 1) {
@@ -157,8 +157,8 @@ function connectionUiStep(ripple: SVGElement, start: Date, scale: number) {
  * @internal
  */
 export function disconnectUiEffect(block: BlockSvg) {
-  block.workspace.getAudioManager().play('disconnect');
-  if (block.workspace.scale < 1) {
+  block.workspace!.getAudioManager().play('disconnect');
+  if (block.workspace!.scale < 1) {
     return;  // Too small to care about visual effects.
   }
   // Horizontal distance for bottom of block to wiggle.

@@ -61,7 +61,7 @@ suite('Gesture', function() {
     const e = {id: 'dummy_test_event'};
     const gesture = new Blockly.Gesture(e, this.workspace);
     chai.assert.equal(gesture.mostRecentEvent_, e);
-    chai.assert.equal(gesture.creatorWorkspace_, this.workspace);
+    chai.assert.equal(gesture.creatorWorkspace, this.workspace);
   });
 
   test('Field click - Click in workspace', function() {

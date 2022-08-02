@@ -41,7 +41,7 @@ export class BlockDrag extends UiBase {
    *     event.
    */
   constructor(opt_block?: Block, opt_isStart?: boolean, opt_blocks?: Block[]) {
-    const workspaceId = opt_block ? opt_block.workspace?.id : undefined;
+    const workspaceId = opt_block ? opt_block.workspace.id : undefined;
     super(workspaceId);
     this.blockId = opt_block ? opt_block.id : null;
 

@@ -43,7 +43,7 @@ export class Click extends UiBase {
   constructor(
       opt_block?: Block|null, opt_workspaceId?: string|null,
       opt_targetType?: string) {
-    let workspaceId = opt_block ? opt_block.workspace!.id : opt_workspaceId;
+    let workspaceId = opt_block ? opt_block.workspace.id : opt_workspaceId;
     if (workspaceId === null) {
       workspaceId = undefined;
     }

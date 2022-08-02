@@ -268,11 +268,11 @@ export class ASTNode {
     // TODO(#6097): Use instanceof checks to exit early for values of
     // curLocation that don't make sense.
     const curLocationAsBlock = curLocation as Block;
-    if (!curLocationAsBlock || !curLocationAsBlock.workspace) {
+    if (!curLocationAsBlock || curLocationAsBlock.disposed) {
       return null;
     }
     const curRoot = curLocationAsBlock.getRootBlock();
-    const topBlocks = curRoot.workspace?.getTopBlocks(true) ?? [];
+    const topBlocks = curRoot.workspace.getTopBlocks(true);
     for (let i = 0; i < topBlocks.length; i++) {
       const topBlock = topBlocks[i];
       if (curRoot.id === topBlock.id) {

@@ -581,7 +581,7 @@ export class Gesture {
   handleRightClick(e: Event) {
     if (this.targetBlock_) {
       this.bringBlockToFront_();
-      this.targetBlock_.workspace!.hideChaff(!!this.flyout_);
+      this.targetBlock_.workspace.hideChaff(!!this.flyout_);
       this.targetBlock_.showContextMenu(e);
     } else if (this.startBubble_) {
       this.startBubble_.showContextMenu(e);

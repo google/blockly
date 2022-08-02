@@ -271,7 +271,7 @@ export class Comment extends Icon {
   /** Show an editable bubble. */
   private createEditableBubble_() {
     this.bubble_ = new Bubble(
-        this.block_.workspace!, this.createEditor_(),
+        this.block_.workspace, this.createEditor_(),
         this.block_.pathObject.svgPath, (this.iconXY_ as Coordinate),
         this.model_.size.width, this.model_.size.height);
     // Expose this comment's block's ID on its top-level SVG group.

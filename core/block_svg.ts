@@ -144,7 +144,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   /** Whether mousedown events have been bound yet. */
   private eventsInit_ = false;
 
-  override workspace: WorkspaceSvg|null;
+  override workspace: WorkspaceSvg;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   override outputConnection!: RenderedConnection;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
@@ -223,7 +223,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * May be called more than once.
    */
   initSvg() {
-    if (!this.workspace!.rendered) {
+    if (!this.workspace.rendered) {
       throw TypeError('Workspace is headless.');
     }
     for (let i = 0, input; input = this.inputList[i]; i++) {
@@ -236,13 +236,13 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     this.applyColour();
     this.pathObject.updateMovable(this.isMovable());
     const svg = this.getSvgRoot();
-    if (!this.workspace!.options.readOnly && !this.eventsInit_ && svg) {
+    if (!this.workspace.options.readOnly && !this.eventsInit_ && svg) {
       browserEvents.conditionalBind(svg, 'mousedown', this, this.onMouseDown_);
     }
     this.eventsInit_ = true;
 
     if (!svg.parentNode) {
-      this.workspace!.getCanvas().appendChild(svg);
+      this.workspace.getCanvas().appendChild(svg);
     }
   }
 
@@ -287,7 +287,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       }
     }
     const event = new (eventUtils.get(eventUtils.SELECTED))!
-        (oldId, this.id, this.workspace!.id);
+        (oldId, this.id, this.workspace.id);
     eventUtils.fire(event);
     common.setSelected(this);
     this.addSelect();
@@ -302,8 +302,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       return;
     }
     const event = new (eventUtils.get(eventUtils.SELECTED))!
-        (this.id, null, this.workspace!.id);
-    event.workspaceId = this.workspace!.id;
+        (this.id, null, this.workspace.id);
+    event.workspaceId = this.workspace.id;
     eventUtils.fire(event);
     common.setSelected(null);
     this.removeSelect();
@@ -348,7 +348,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
     // Bail early if workspace is clearing, or we aren't rendered.
     // We won't need to reattach ourselves anywhere.
-    if (this.workspace!.isClearing || !svgRoot) {
+    if (this.workspace.isClearing || !svgRoot) {
       return;
     }
 
@@ -361,7 +361,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     } else if (oldParent) {
       // If we are losing a parent, we want to move our DOM element to the
       // root of the workspace.
-      this.workspace!.getCanvas().appendChild(svgRoot);
+      this.workspace.getCanvas().appendChild(svgRoot);
       this.translate(oldXY.x, oldXY.y);
     }
 
@@ -381,7 +381,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     let y = 0;
 
     const dragSurfaceGroup = this.useDragSurface_ ?
-        this.workspace!.getBlockDragSurface()!.getGroup() :
+        this.workspace.getBlockDragSurface()!.getGroup() :
         null;
 
     let element: SVGElement = this.getSvgRoot();
@@ -394,15 +394,15 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
         // If this element is the current element on the drag surface, include
         // the translation of the drag surface itself.
         if (this.useDragSurface_ &&
-            this.workspace!.getBlockDragSurface()!.getCurrentBlock() ===
+            this.workspace.getBlockDragSurface()!.getCurrentBlock() ===
                 element) {
           const surfaceTranslation =
-              this.workspace!.getBlockDragSurface()!.getSurfaceTranslation();
+              this.workspace.getBlockDragSurface()!.getSurfaceTranslation();
           x += surfaceTranslation.x;
           y += surfaceTranslation.y;
         }
         element = element.parentNode as SVGElement;
-      } while (element && element !== this.workspace!.getCanvas() &&
+      } while (element && element !== this.workspace.getCanvas() &&
                element !== dragSurfaceGroup);
     }
     return new Coordinate(x, y);
@@ -429,7 +429,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       event!.recordNew();
       eventUtils.fire(event);
     }
-    this.workspace!.resizeContents();
+    this.workspace.resizeContents();
   }
 
   /**
@@ -459,11 +459,11 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     // This is in workspace coordinates.
     const xy = this.getRelativeToSurfaceXY();
     this.clearTransformAttributes_();
-    this.workspace!.getBlockDragSurface()!.translateSurface(xy.x, xy.y);
+    this.workspace.getBlockDragSurface()!.translateSurface(xy.x, xy.y);
     // Execute the move on the top-level SVG component
     const svg = this.getSvgRoot();
     if (svg) {
-      this.workspace!.getBlockDragSurface()!.setBlocksAndShow(svg);
+      this.workspace.getBlockDragSurface()!.setBlocksAndShow(svg);
     }
   }
 
@@ -490,8 +490,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     }
     // Translate to current position, turning off 3d.
     this.translate(newXY.x, newXY.y);
-    this.workspace!.getBlockDragSurface()!.clearAndHide(
-        this.workspace!.getCanvas());
+    this.workspace.getBlockDragSurface()!.clearAndHide(
+        this.workspace.getCanvas());
   }
 
   /**
@@ -503,7 +503,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    */
   moveDuringDrag(newLoc: Coordinate) {
     if (this.useDragSurface_) {
-      this.workspace!.getBlockDragSurface()!.translateSurface(
+      this.workspace.getBlockDragSurface()!.translateSurface(
           newLoc.x, newLoc.y);
     } else {
       (this.svgGroup_ as AnyDuringMigration).translate_ =
@@ -526,10 +526,10 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /** Snap this block to the nearest grid point. */
   snapToGrid() {
-    if (!this.workspace) {
+    if (this.disposed) {
       return;  // Deleted block.
     }
-    if (this.workspace!.isDragging()) {
+    if (this.workspace.isDragging()) {
       return  // Don't bump blocks during a drag.;
     }
 
@@ -539,7 +539,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     if (this.isInFlyout) {
       return;  // Don't move blocks around in a flyout.
     }
-    const grid = this.workspace!.getGrid();
+    const grid = this.workspace.getGrid();
     if (!grid || !grid.shouldSnap()) {
       return;  // Config says no snapping.
     }
@@ -581,7 +581,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * A dirty field is a field that needs to be re-rendered.
    */
   markDirty() {
-    this.pathObject.constants = this.workspace!.getRenderer().getConstants();
+    this.pathObject.constants = this.workspace.getRenderer().getConstants();
     for (let i = 0, input; input = this.inputList[i]; i++) {
       input.markDirty();
     }
@@ -667,8 +667,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       nextField.showEditor();
 
       // Also move the cursor if we're in keyboard nav mode.
-      if (this.workspace!.keyboardAccessibilityMode) {
-        this.workspace!.getCursor()!.setCurNode(nextNode);
+      if (this.workspace.keyboardAccessibilityMode) {
+        this.workspace.getCursor()!.setCurNode(nextNode);
       }
     }
   }
@@ -678,7 +678,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * @param e Mouse down event or touch start event.
    */
   private onMouseDown_(e: Event) {
-    const gesture = this.workspace && this.workspace!.getGesture(e);
+    const gesture = this.workspace.getGesture(e);
     if (gesture) {
       gesture.handleBlockStart(e, this);
     }
@@ -702,7 +702,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    */
   protected generateContextMenu():
       Array<ContextMenuOption|LegacyContextMenuOption>|null {
-    if (this.workspace!.options.readOnly || !this.contextMenu) {
+    if (this.workspace.options.readOnly || !this.contextMenu) {
       return null;
     }
     // AnyDuringMigration because:  Argument of type '{ block: this; }' is not
@@ -830,7 +830,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     this.isInsertionMarker_ = insertionMarker;
     if (this.isInsertionMarker_) {
       this.setColour(
-          this.workspace!.getRenderer().getConstants().INSERTION_MARKER_COLOUR);
+          this.workspace.getRenderer().getConstants().INSERTION_MARKER_COLOUR);
       this.pathObject.updateInsertionMarker(true);
     }
   }
@@ -852,7 +852,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * @suppress {checkTypes}
    */
   override dispose(healStack?: boolean, animate?: boolean) {
-    if (!this.workspace) {
+    if (this.disposed) {
       // The block has already been deleted.
       return;
     }
@@ -865,7 +865,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     // If this block is being dragged, unlink the mouse events.
     if (common.getSelected() === this) {
       this.unselect();
-      this.workspace!.cancelCurrentGesture();
+      this.workspace.cancelCurrentGesture();
     }
     // If this block has a context menu open, close it.
     if (ContextMenu.getCurrentBlock() === this) {
@@ -920,11 +920,11 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * grouping, or hide chaff, then use `block.dispose()` directly.
    */
   checkAndDelete() {
-    if (this.workspace!.isFlyout) {
+    if (this.workspace.isFlyout) {
       return;
     }
     eventUtils.setGroup(true);
-    this.workspace!.hideChaff();
+    this.workspace.hideChaff();
     if (this.outputConnection) {
       // Do not attempt to heal rows
       // (https://github.com/google/blockly/issues/4832)
@@ -953,7 +953,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
                     this as AnyDuringMigration,
                     {addCoordinates: true, addNextBlocks: false}) as
           blocks.State,
-      source: this.workspace!,
+      source: this.workspace,
       typeCounts: common.getBlockTypeCounts(this as AnyDuringMigration, true),
     };
   }
@@ -1062,12 +1062,12 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       clearTimeout(this.warningTextDb_[id]);
       delete this.warningTextDb_[id];
     }
-    if (this.workspace!.isDragging()) {
+    if (this.workspace.isDragging()) {
       // Don't change the warning text during a drag.
       // Wait until the drag finishes.
       const thisBlock = this;
       this.warningTextDb_[id] = setTimeout(function() {
-        if (thisBlock.workspace) {  // Check block wasn't deleted.
+        if (!thisBlock.disposed) {  // Check block wasn't deleted.
           delete thisBlock.warningTextDb_[id];
           thisBlock.setWarningText(text, id);
         }
@@ -1212,7 +1212,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   override setColour(colour: number|string) {
     super.setColour(colour);
     const styleObj =
-        this.workspace!.getRenderer().getConstants().getBlockStyleForColour(
+        this.workspace.getRenderer().getConstants().getBlockStyleForColour(
             this.colour_);
 
     this.pathObject.setStyle(styleObj.style);
@@ -1229,7 +1229,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    */
   override setStyle(blockStyleName: string) {
     const blockStyle =
-        this.workspace!.getRenderer().getConstants().getBlockStyle(
+        this.workspace.getRenderer().getConstants().getBlockStyle(
             blockStyleName);
     this.styleName_ = blockStyleName;
 
@@ -1516,10 +1516,10 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * connected should not coincidentally line up on screen.
    */
   override bumpNeighbours() {
-    if (!this.workspace) {
+    if (this.disposed) {
       return;  // Deleted block.
     }
-    if (this.workspace!.isDragging()) {
+    if (this.workspace.isDragging()) {
       return;  // Don't bump blocks during a drag.
     }
     const rootBlock = this.getRootBlock();
@@ -1639,7 +1639,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       if (this.isCollapsed()) {
         this.updateCollapsed_();
       }
-      this.workspace!.getRenderer().render(this);
+      this.workspace.getRenderer().render(this);
       this.updateConnectionLocations_();
 
       if (opt_bubble !== false) {
@@ -1648,7 +1648,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
           parentBlock.render(true);
         } else {
           // Top-most block. Fire an event to allow scrollbars to resize.
-          this.workspace!.resizeContents();
+          this.workspace.resizeContents();
         }
       }
 
@@ -1661,14 +1661,12 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /** Redraw any attached marker or cursor svgs if needed. */
   protected updateMarkers_() {
-    if (this.workspace!.keyboardAccessibilityMode &&
-        this.pathObject.cursorSvg) {
-      this.workspace!.getCursor()!.draw();
+    if (this.workspace.keyboardAccessibilityMode && this.pathObject.cursorSvg) {
+      this.workspace.getCursor()!.draw();
     }
-    if (this.workspace!.keyboardAccessibilityMode &&
-        this.pathObject.markerSvg) {
+    if (this.workspace.keyboardAccessibilityMode && this.pathObject.markerSvg) {
       // TODO(#4592): Update all markers on the block.
-      this.workspace!.getMarker(MarkerManager.LOCAL_MARKER)!.draw();
+      this.workspace.getMarker(MarkerManager.LOCAL_MARKER)!.draw();
     }
   }
 
@@ -1740,7 +1738,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     if (nextBlock) {
       const nextHeightWidth = nextBlock.getHeightWidth();
       const tabHeight =
-          this.workspace!.getRenderer().getConstants().NOTCH_HEIGHT;
+          this.workspace.getRenderer().getConstants().NOTCH_HEIGHT;
       height += nextHeightWidth.height - tabHeight;
       width = Math.max(width, nextHeightWidth.width);
     }

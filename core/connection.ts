@@ -197,7 +197,7 @@ export class Connection implements IASTNodeLocationWithBlock {
    * @internal
    */
   getConnectionChecker(): IConnectionChecker {
-    return this.sourceBlock_.workspace!.connectionChecker;
+    return this.sourceBlock_.workspace.connectionChecker;
   }
 
   /**
@@ -563,7 +563,7 @@ export class Connection implements IASTNodeLocationWithBlock {
     const parentBlock = this.getSourceBlock();
     const shadowState = this.getShadowState();
     const shadowDom = this.getShadowDom();
-    if (!parentBlock.workspace || !shadowState && !shadowDom) {
+    if (parentBlock.disposed || !shadowState && !shadowDom) {
       return null;
     }
 

@@ -41,7 +41,7 @@ export class BlockBase extends AbstractEvent {
     this.blockId = this.isBlank ? '' : opt_block!.id;
 
     /** The workspace identifier for this event. */
-    this.workspaceId = this.isBlank ? '' : opt_block!.workspace?.id ?? '';
+    this.workspaceId = this.isBlank ? '' : opt_block!.workspace.id;
   }
 
   /**

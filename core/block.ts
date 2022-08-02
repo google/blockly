@@ -754,7 +754,8 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @return True if deletable.
    */
   isDeletable(): boolean {
-    return this.deletable_ && !this.isShadow_ && !this.disposed && !this.workspace.options.readOnly;
+    return this.deletable_ && !this.isShadow_ && !this.disposed &&
+        !this.workspace.options.readOnly;
   }
 
   /**
@@ -770,7 +771,8 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @return True if movable.
    */
   isMovable(): boolean {
-    return this.movable_ && !this.isShadow_ && !this.disposed && !this.workspace.options.readOnly;
+    return this.movable_ && !this.isShadow_ && !this.disposed &&
+        !this.workspace.options.readOnly;
   }
 
   /**

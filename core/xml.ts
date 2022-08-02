@@ -118,8 +118,7 @@ export function blockToDomWithXY(block: Block, opt_noId?: boolean): Element|
   // AnyDuringMigration because:  Property 'setAttribute' does not exist on type
   // 'Element | DocumentFragment'.
   (element as AnyDuringMigration)
-      .setAttribute(
-          'x', Math.round(block.workspace.RTL ? width - xy.x : xy.x));
+      .setAttribute('x', Math.round(block.workspace.RTL ? width - xy.x : xy.x));
   // AnyDuringMigration because:  Property 'setAttribute' does not exist on type
   // 'Element | DocumentFragment'.
   (element as AnyDuringMigration).setAttribute('y', Math.round(xy.y));

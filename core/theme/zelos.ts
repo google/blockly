@@ -7,15 +7,15 @@
 /**
  * @fileoverview Zelos theme.
  */
-'use strict';
 
 /**
  * Zelos theme.
  * @namespace Blockly.Themes.Zelos
  */
-goog.module('Blockly.Themes.Zelos');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Themes.Zelos');
 
-const {Theme} = goog.require('Blockly.Theme');
+import {Theme} from '../theme.js';
 
 
 const defaultBlockStyles = {
@@ -86,9 +86,6 @@ const categoryStyles = {
 
 /**
  * Zelos theme.
- * @type {Theme}
  * @alias Blockly.Themes.Zelos
  */
-const Zelos = new Theme('zelos', defaultBlockStyles, categoryStyles);
-
-exports.Zelos = Zelos;
+export const Zelos = new Theme('zelos', defaultBlockStyles, categoryStyles);

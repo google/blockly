@@ -8,26 +8,22 @@
  * @fileoverview The interface for an object that is movable.
  */
 
-'use strict';
-
 /**
  * The interface for an object that is movable.
  * @namespace Blockly.IMovable
  */
-goog.module('Blockly.IMovable');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.IMovable');
 
 
 /**
  * The interface for an object that is movable.
- * @interface
  * @alias Blockly.IMovable
  */
-const IMovable = function() {};
-
-/**
- * Get whether this is movable or not.
- * @return {boolean} True if movable.
- */
-IMovable.prototype.isMovable;
-
-exports.IMovable = IMovable;
+export interface IMovable {
+  /**
+   * Get whether this is movable or not.
+   * @return True if movable.
+   */
+  isMovable: AnyDuringMigration;
+}

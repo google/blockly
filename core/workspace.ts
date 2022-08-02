@@ -7,182 +7,131 @@
 /**
  * @fileoverview Object representing a workspace.
  */
-'use strict';
 
 /**
  * Object representing a workspace.
  * @class
  */
-goog.module('Blockly.Workspace');
+import * as goog from '../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Workspace');
 
-const arrayUtils = goog.require('Blockly.utils.array');
-const eventUtils = goog.require('Blockly.Events.utils');
-const idGenerator = goog.require('Blockly.utils.idGenerator');
-const math = goog.require('Blockly.utils.math');
-const registry = goog.require('Blockly.registry');
-/* eslint-disable-next-line no-unused-vars */
-const toolbox = goog.requireType('Blockly.utils.toolbox');
-/* eslint-disable-next-line no-unused-vars */
-const {Abstract} = goog.requireType('Blockly.Events.Abstract');
-/* eslint-disable-next-line no-unused-vars */
-const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
-/* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
-/* eslint-disable-next-line no-unused-vars */
-const {ConnectionDB} = goog.requireType('Blockly.ConnectionDB');
-/* eslint-disable-next-line no-unused-vars */
-const {IASTNodeLocation} = goog.require('Blockly.IASTNodeLocation');
-/* eslint-disable-next-line no-unused-vars */
-const {IConnectionChecker} = goog.requireType('Blockly.IConnectionChecker');
-const {Options} = goog.require('Blockly.Options');
-const {VariableMap} = goog.require('Blockly.VariableMap');
-/* eslint-disable-next-line no-unused-vars */
-const {VariableModel} = goog.requireType('Blockly.VariableModel');
-/* eslint-disable-next-line no-unused-vars */
-const {WorkspaceComment} = goog.requireType('Blockly.WorkspaceComment');
-/** @suppress {extraRequire} */
-goog.require('Blockly.ConnectionChecker');
+// Unused import preserved for side-effects. Remove if unneeded.
+import './connection_checker.js';
 
+import type {Block} from './block.js';
+import type {BlocklyOptions} from './blockly_options.js';
+import type {ConnectionDB} from './connection_db.js';
+import type {Abstract} from './events/events_abstract.js';
+import * as common from './common.js';
+import * as eventUtils from './events/utils.js';
+import type {IASTNodeLocation} from './interfaces/i_ast_node_location.js';
+import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
+import {Options} from './options.js';
+import * as registry from './registry.js';
+import * as arrayUtils from './utils/array.js';
+import * as idGenerator from './utils/idgenerator.js';
+import * as math from './utils/math.js';
+import type * as toolbox from './utils/toolbox.js';
+import {VariableMap} from './variable_map.js';
+import type {VariableModel} from './variable_model.js';
+import type {WorkspaceComment} from './workspace_comment.js';
 
-/**
- * Database of all workspaces.
- * @private
- */
-const WorkspaceDB_ = Object.create(null);
 
 /**
  * Class for a workspace.  This is a data structure that contains blocks.
  * There is no UI, and can be created headlessly.
- * @implements {IASTNodeLocation}
  * @alias Blockly.Workspace
  */
-class Workspace {
+export class Workspace implements IASTNodeLocation {
   /**
-   * @param {!Options=} opt_options Dictionary of options.
+   * Angle away from the horizontal to sweep for blocks.  Order of execution is
+   * generally top to bottom, but a small angle changes the scan to give a bit
+   * of a left to right bias (reversed in RTL).  Units are in degrees. See:
+   * https://tvtropes.org/pmwiki/pmwiki.php/Main/DiagonalBilling
    */
-  constructor(opt_options) {
-    /** @type {string} */
+  static SCAN_ANGLE = 3;
+  id: string;
+  options: Options;
+  RTL: boolean;
+  horizontalLayout: boolean;
+  toolboxPosition: toolbox.Position;
+
+  /**
+   * Returns `true` if the workspace is visible and `false` if it's headless.
+   */
+  rendered = false;
+
+  /** Is this workspace the surface for a flyout? */
+  isFlyout = false;
+
+  /**
+   * Is this workspace the surface for a mutator?
+   * @internal
+   */
+  isMutator = false;
+
+  /**
+   * Returns `true` if the workspace is currently in the process of a bulk
+   * clear.
+   * @internal
+   */
+  isClearing = false;
+
+  /**
+   * Maximum number of undo events in stack. `0` turns off undo, `Infinity`
+   * sets it to unlimited.
+   */
+  MAX_UNDO = 1024;
+
+  /** Set of databases for rapid lookup of connection locations. */
+  connectionDBList: ConnectionDB[] = [];
+  connectionChecker: IConnectionChecker;
+
+  private readonly topBlocks_: Block[] = [];
+  private readonly topComments_: WorkspaceComment[] = [];
+  private readonly commentDB_: AnyDuringMigration;
+  private readonly listeners_: Function[] = [];
+  protected undoStack_: Abstract[] = [];
+  protected redoStack_: Abstract[] = [];
+  private readonly blockDB_: AnyDuringMigration;
+  private readonly typedBlocksDB_: AnyDuringMigration;
+  private variableMap_: VariableMap;
+
+  /**
+   * Blocks in the flyout can refer to variables that don't exist in the main
+   * workspace.  For instance, the "get item in list" block refers to an
+   * "item" variable regardless of whether the variable has been created yet.
+   * A FieldVariable must always refer to a VariableModel.  We reconcile
+   * these by tracking "potential" variables in the flyout.  These variables
+   * become real when references to them are dragged into the main workspace.
+   */
+  private potentialVariableMap_: VariableMap|null = null;
+
+  /** @param opt_options Dictionary of options. */
+  constructor(opt_options?: Options) {
     this.id = idGenerator.genUid();
-    WorkspaceDB_[this.id] = this;
-    /** @type {!Options} */
-    this.options =
-        opt_options || new Options(/** @type {!BlocklyOptions} */ ({}));
-    /** @type {boolean} */
+    common.registerWorkspace(this);
+    this.options = opt_options || new Options(({} as BlocklyOptions));
     this.RTL = !!this.options.RTL;
-    /** @type {boolean} */
     this.horizontalLayout = !!this.options.horizontalLayout;
-    /** @type {toolbox.Position} */
     this.toolboxPosition = this.options.toolboxPosition;
-
-    /**
-     * Returns `true` if the workspace is visible and `false` if it's headless.
-     * @type {boolean}
-     */
-    this.rendered = false;
-
-    /**
-     * Is this workspace the surface for a flyout?
-     * @type {boolean}
-     */
-    this.isFlyout = false;
-
-    /**
-     * Is this workspace the surface for a mutator?
-     * @type {boolean}
-     * @package
-     */
-    this.isMutator = false;
-
-    /**
-     * Returns `true` if the workspace is currently in the process of a bulk
-     * clear.
-     * @type {boolean}
-     * @package
-     */
-    this.isClearing = false;
-
-    /**
-     * Maximum number of undo events in stack. `0` turns off undo, `Infinity`
-     * sets it to unlimited.
-     * @type {number}
-     */
-    this.MAX_UNDO = 1024;
-
-    /**
-     * Set of databases for rapid lookup of connection locations.
-     * @type {Array<!ConnectionDB>}
-     */
-    this.connectionDBList = null;
 
     const connectionCheckerClass = registry.getClassFromOptions(
         registry.Type.CONNECTION_CHECKER, this.options, true);
     /**
      * An object that encapsulates logic for safety, type, and dragging checks.
-     * @type {!IConnectionChecker}
      */
-    this.connectionChecker = new connectionCheckerClass(this);
-
-    /**
-     * @type {!Array<!Block>}
-     * @private
-     */
-    this.topBlocks_ = [];
-    /**
-     * @type {!Array<!WorkspaceComment>}
-     * @private
-     */
-    this.topComments_ = [];
-    /**
-     * @type {!Object}
-     * @private
-     */
+    this.connectionChecker = new connectionCheckerClass!(this);
     this.commentDB_ = Object.create(null);
-    /**
-     * @type {!Array<!Function>}
-     * @private
-     */
-    this.listeners_ = [];
-    /**
-     * @type {!Array<!Abstract>}
-     * @protected
-     */
-    this.undoStack_ = [];
-    /**
-     * @type {!Array<!Abstract>}
-     * @protected
-     */
-    this.redoStack_ = [];
-    /**
-     * @type {!Object}
-     * @private
-     */
     this.blockDB_ = Object.create(null);
-    /**
-     * @type {!Object}
-     * @private
-     */
     this.typedBlocksDB_ = Object.create(null);
 
     /**
      * A map from variable type to list of variable names.  The lists contain
      * all of the named variables in the workspace, including variables that are
      * not currently in use.
-     * @type {!VariableMap}
-     * @private
      */
     this.variableMap_ = new VariableMap(this);
-
-    /**
-     * Blocks in the flyout can refer to variables that don't exist in the main
-     * workspace.  For instance, the "get item in list" block refers to an
-     * "item" variable regardless of whether the variable has been created yet.
-     * A FieldVariable must always refer to a VariableModel.  We reconcile
-     * these by tracking "potential" variables in the flyout.  These variables
-     * become real when references to them are dragged into the main workspace.
-     * @type {?VariableMap}
-     * @private
-     */
-    this.potentialVariableMap_ = null;
   }
 
   /**
@@ -194,40 +143,50 @@ class Workspace {
     this.listeners_.length = 0;
     this.clear();
     // Remove from workspace database.
-    delete WorkspaceDB_[this.id];
+    common.unregisterWorkpace(this);
   }
 
   /**
    * Compare function for sorting objects (blocks, comments, etc) by position;
    *    top to bottom (with slight LTR or RTL bias).
-   * @param {!Block | !WorkspaceComment} a The first object to
-   *    compare.
-   * @param {!Block | !WorkspaceComment} b The second object to
-   *    compare.
-   * @return {number} The comparison value. This tells Array.sort() how to
-   *    change object a's index.
-   * @private
+   * @param a The first object to compare.
+   * @param b The second object to compare.
+   * @return The comparison value. This tells Array.sort() how to change object
+   *     a's index.
    */
-  sortObjects_(a, b) {
-    const aXY = a.getRelativeToSurfaceXY();
-    const bXY = b.getRelativeToSurfaceXY();
-    return (aXY.y + Workspace.prototype.sortObjects_.offset * aXY.x) -
-        (bXY.y + Workspace.prototype.sortObjects_.offset * bXY.x);
+  private sortObjects_(a: Block|WorkspaceComment, b: Block|WorkspaceComment):
+      number {
+    // AnyDuringMigration because:  Property 'getRelativeToSurfaceXY' does not
+    // exist on type 'Block | WorkspaceComment'.
+    const aXY = (a as AnyDuringMigration).getRelativeToSurfaceXY();
+    // AnyDuringMigration because:  Property 'getRelativeToSurfaceXY' does not
+    // exist on type 'Block | WorkspaceComment'.
+    const bXY = (b as AnyDuringMigration).getRelativeToSurfaceXY();
+    // AnyDuringMigration because:  Property 'offset' does not exist on type
+    // '(a: Block | WorkspaceComment, b: Block | WorkspaceComment) => number'.
+    // AnyDuringMigration because:  Property 'offset' does not exist on type
+    // '(a: Block | WorkspaceComment, b: Block | WorkspaceComment) => number'.
+    return aXY.y +
+        (Workspace.prototype.sortObjects_ as AnyDuringMigration).offset *
+        aXY.x -
+        (bXY.y +
+         (Workspace.prototype.sortObjects_ as AnyDuringMigration).offset *
+             bXY.x);
   }
 
   /**
    * Adds a block to the list of top blocks.
-   * @param {!Block} block Block to add.
+   * @param block Block to add.
    */
-  addTopBlock(block) {
+  addTopBlock(block: Block) {
     this.topBlocks_.push(block);
   }
 
   /**
    * Removes a block from the list of top blocks.
-   * @param {!Block} block Block to remove.
+   * @param block Block to remove.
    */
-  removeTopBlock(block) {
+  removeTopBlock(block: Block) {
     if (!arrayUtils.removeElem(this.topBlocks_, block)) {
       throw Error('Block not present in workspace\'s list of top-most blocks.');
     }
@@ -236,16 +195,22 @@ class Workspace {
   /**
    * Finds the top-level blocks and returns them.  Blocks are optionally sorted
    * by position; top to bottom (with slight LTR or RTL bias).
-   * @param {boolean} ordered Sort the list if true.
-   * @return {!Array<!Block>} The top-level block objects.
+   * @param ordered Sort the list if true.
+   * @return The top-level block objects.
    */
-  getTopBlocks(ordered) {
+  getTopBlocks(ordered: boolean): Block[] {
     // Copy the topBlocks_ list.
-    const blocks = [].concat(this.topBlocks_);
+    const blocks = (new Array<Block>()).concat(this.topBlocks_);
     if (ordered && blocks.length > 1) {
-      this.sortObjects_.offset = Math.sin(math.toRadians(Workspace.SCAN_ANGLE));
+      // AnyDuringMigration because:  Property 'offset' does not exist on type
+      // '(a: Block | WorkspaceComment, b: Block | WorkspaceComment) => number'.
+      (this.sortObjects_ as AnyDuringMigration).offset =
+          Math.sin(math.toRadians(Workspace.SCAN_ANGLE));
       if (this.RTL) {
-        this.sortObjects_.offset *= -1;
+        // AnyDuringMigration because:  Property 'offset' does not exist on type
+        // '(a: Block | WorkspaceComment, b: Block | WorkspaceComment) =>
+        // number'.
+        (this.sortObjects_ as AnyDuringMigration).offset *= -1;
       }
       blocks.sort(this.sortObjects_);
     }
@@ -254,9 +219,9 @@ class Workspace {
 
   /**
    * Add a block to the list of blocks keyed by type.
-   * @param {!Block} block Block to add.
+   * @param block Block to add.
    */
-  addTypedBlock(block) {
+  addTypedBlock(block: Block) {
     if (!this.typedBlocksDB_[block.type]) {
       this.typedBlocksDB_[block.type] = [];
     }
@@ -265,9 +230,9 @@ class Workspace {
 
   /**
    * Remove a block from the list of blocks keyed by type.
-   * @param {!Block} block Block to remove.
+   * @param block Block to remove.
    */
-  removeTypedBlock(block) {
+  removeTypedBlock(block: Block) {
     arrayUtils.removeElem(this.typedBlocksDB_[block.type], block);
     if (!this.typedBlocksDB_[block.type].length) {
       delete this.typedBlocksDB_[block.type];
@@ -277,34 +242,40 @@ class Workspace {
   /**
    * Finds the blocks with the associated type and returns them. Blocks are
    * optionally sorted by position; top to bottom (with slight LTR or RTL bias).
-   * @param {string} type The type of block to search for.
-   * @param {boolean} ordered Sort the list if true.
-   * @return {!Array<!Block>} The blocks of the given type.
+   * @param type The type of block to search for.
+   * @param ordered Sort the list if true.
+   * @return The blocks of the given type.
    */
-  getBlocksByType(type, ordered) {
+  getBlocksByType(type: string, ordered: boolean): Block[] {
     if (!this.typedBlocksDB_[type]) {
       return [];
     }
     const blocks = this.typedBlocksDB_[type].slice(0);
     if (ordered && blocks.length > 1) {
-      this.sortObjects_.offset = Math.sin(math.toRadians(Workspace.SCAN_ANGLE));
+      // AnyDuringMigration because:  Property 'offset' does not exist on type
+      // '(a: Block | WorkspaceComment, b: Block | WorkspaceComment) => number'.
+      (this.sortObjects_ as AnyDuringMigration).offset =
+          Math.sin(math.toRadians(Workspace.SCAN_ANGLE));
       if (this.RTL) {
-        this.sortObjects_.offset *= -1;
+        // AnyDuringMigration because:  Property 'offset' does not exist on type
+        // '(a: Block | WorkspaceComment, b: Block | WorkspaceComment) =>
+        // number'.
+        (this.sortObjects_ as AnyDuringMigration).offset *= -1;
       }
       blocks.sort(this.sortObjects_);
     }
 
-    return blocks.filter(function(block) {
+    return blocks.filter(function(block: AnyDuringMigration) {
       return !block.isInsertionMarker();
     });
   }
 
   /**
    * Adds a comment to the list of top comments.
-   * @param {!WorkspaceComment} comment comment to add.
-   * @package
+   * @param comment comment to add.
+   * @internal
    */
-  addTopComment(comment) {
+  addTopComment(comment: WorkspaceComment) {
     this.topComments_.push(comment);
 
     // Note: If the comment database starts to hold block comments, this may
@@ -319,10 +290,10 @@ class Workspace {
 
   /**
    * Removes a comment from the list of top comments.
-   * @param {!WorkspaceComment} comment comment to remove.
-   * @package
+   * @param comment comment to remove.
+   * @internal
    */
-  removeTopComment(comment) {
+  removeTopComment(comment: WorkspaceComment) {
     if (!arrayUtils.removeElem(this.topComments_, comment)) {
       throw Error(
           'Comment not present in workspace\'s list of top-most ' +
@@ -336,17 +307,23 @@ class Workspace {
   /**
    * Finds the top-level comments and returns them.  Comments are optionally
    * sorted by position; top to bottom (with slight LTR or RTL bias).
-   * @param {boolean} ordered Sort the list if true.
-   * @return {!Array<!WorkspaceComment>} The top-level comment objects.
-   * @package
+   * @param ordered Sort the list if true.
+   * @return The top-level comment objects.
+   * @internal
    */
-  getTopComments(ordered) {
+  getTopComments(ordered: boolean): WorkspaceComment[] {
     // Copy the topComments_ list.
-    const comments = [].concat(this.topComments_);
+    const comments = (new Array<WorkspaceComment>()).concat(this.topComments_);
     if (ordered && comments.length > 1) {
-      this.sortObjects_.offset = Math.sin(math.toRadians(Workspace.SCAN_ANGLE));
+      // AnyDuringMigration because:  Property 'offset' does not exist on type
+      // '(a: Block | WorkspaceComment, b: Block | WorkspaceComment) => number'.
+      (this.sortObjects_ as AnyDuringMigration).offset =
+          Math.sin(math.toRadians(Workspace.SCAN_ANGLE));
       if (this.RTL) {
-        this.sortObjects_.offset *= -1;
+        // AnyDuringMigration because:  Property 'offset' does not exist on type
+        // '(a: Block | WorkspaceComment, b: Block | WorkspaceComment) =>
+        // number'.
+        (this.sortObjects_ as AnyDuringMigration).offset *= -1;
       }
       comments.sort(this.sortObjects_);
     }
@@ -356,11 +333,11 @@ class Workspace {
   /**
    * Find all blocks in workspace.  Blocks are optionally sorted
    * by position; top to bottom (with slight LTR or RTL bias).
-   * @param {boolean} ordered Sort the list if true.
-   * @return {!Array<!Block>} Array of blocks.
+   * @param ordered Sort the list if true.
+   * @return Array of blocks.
    */
-  getAllBlocks(ordered) {
-    let blocks;
+  getAllBlocks(ordered: boolean): Block[] {
+    let blocks: AnyDuringMigration[];
     if (ordered) {
       // Slow, but ordered.
       const topBlocks = this.getTopBlocks(true);
@@ -385,9 +362,7 @@ class Workspace {
     return filtered;
   }
 
-  /**
-   * Dispose of all blocks and comments in workspace.
-   */
+  /** Dispose of all blocks and comments in workspace. */
   clear() {
     this.isClearing = true;
     try {
@@ -414,139 +389,137 @@ class Workspace {
   }
 
   /* Begin functions that are just pass-throughs to the variable map. */
-
   /**
    * Rename a variable by updating its name in the variable map. Identify the
    * variable to rename with the given ID.
-   * @param {string} id ID of the variable to rename.
-   * @param {string} newName New variable name.
+   * @param id ID of the variable to rename.
+   * @param newName New variable name.
    */
-  renameVariableById(id, newName) {
+  renameVariableById(id: string, newName: string) {
     this.variableMap_.renameVariableById(id, newName);
   }
 
   /**
    * Create a variable with a given name, optional type, and optional ID.
-   * @param {string} name The name of the variable. This must be unique across
-   *     variables and procedures.
-   * @param {?string=} opt_type The type of the variable like 'int' or 'string'.
+   * @param name The name of the variable. This must be unique across variables
+   *     and procedures.
+   * @param opt_type The type of the variable like 'int' or 'string'.
    *     Does not need to be unique. Field_variable can filter variables based
    * on their type. This will default to '' which is a specific type.
-   * @param {?string=} opt_id The unique ID of the variable. This will default
-   *     to a UUID.
-   * @return {!VariableModel} The newly created variable.
+   * @param opt_id The unique ID of the variable. This will default to a UUID.
+   * @return The newly created variable.
    */
-  createVariable(name, opt_type, opt_id) {
+  createVariable(name: string, opt_type?: string|null, opt_id?: string|null):
+      VariableModel {
     return this.variableMap_.createVariable(name, opt_type, opt_id);
   }
 
   /**
    * Find all the uses of the given variable, which is identified by ID.
-   * @param {string} id ID of the variable to find.
-   * @return {!Array<!Block>} Array of block usages.
+   * @param id ID of the variable to find.
+   * @return Array of block usages.
    */
-  getVariableUsesById(id) {
+  getVariableUsesById(id: string): Block[] {
     return this.variableMap_.getVariableUsesById(id);
   }
 
   /**
    * Delete a variables by the passed in ID and all of its uses from this
    * workspace. May prompt the user for confirmation.
-   * @param {string} id ID of variable to delete.
+   * @param id ID of variable to delete.
    */
-  deleteVariableById(id) {
+  deleteVariableById(id: string) {
     this.variableMap_.deleteVariableById(id);
   }
 
   /**
    * Find the variable by the given name and return it. Return null if not
    * found.
-   * @param {string} name The name to check for.
-   * @param {string=} opt_type The type of the variable.  If not provided it
-   *     defaults to the empty string, which is a specific type.
-   * @return {?VariableModel} The variable with the given name.
+   * @param name The name to check for.
+   * @param opt_type The type of the variable.  If not provided it defaults to
+   *     the empty string, which is a specific type.
+   * @return The variable with the given name.
    */
-  getVariable(name, opt_type) {
+  getVariable(name: string, opt_type?: string): VariableModel|null {
     // TODO (#1559): Possibly delete this function after resolving #1559.
     return this.variableMap_.getVariable(name, opt_type);
   }
 
   /**
    * Find the variable by the given ID and return it. Return null if not found.
-   * @param {string} id The ID to check for.
-   * @return {?VariableModel} The variable with the given ID.
+   * @param id The ID to check for.
+   * @return The variable with the given ID.
    */
-  getVariableById(id) {
+  getVariableById(id: string): VariableModel|null {
     return this.variableMap_.getVariableById(id);
   }
 
   /**
    * Find the variable with the specified type. If type is null, return list of
    *     variables with empty string type.
-   * @param {?string} type Type of the variables to find.
-   * @return {!Array<!VariableModel>} The sought after variables of the
-   *     passed in type. An empty array if none are found.
+   * @param type Type of the variables to find.
+   * @return The sought after variables of the passed in type. An empty array if
+   *     none are found.
    */
-  getVariablesOfType(type) {
+  getVariablesOfType(type: string|null): VariableModel[] {
     return this.variableMap_.getVariablesOfType(type);
   }
 
   /**
    * Return all variable types.
-   * @return {!Array<string>} List of variable types.
-   * @package
+   * @return List of variable types.
+   * @internal
    */
-  getVariableTypes() {
+  getVariableTypes(): string[] {
     return this.variableMap_.getVariableTypes(this);
   }
 
   /**
    * Return all variables of all types.
-   * @return {!Array<!VariableModel>} List of variable models.
+   * @return List of variable models.
    */
-  getAllVariables() {
+  getAllVariables(): VariableModel[] {
     return this.variableMap_.getAllVariables();
   }
 
   /**
    * Returns all variable names of all types.
-   * @return {!Array<string>} List of all variable names of all types.
+   * @return List of all variable names of all types.
    */
-  getAllVariableNames() {
+  getAllVariableNames(): string[] {
     return this.variableMap_.getAllVariableNames();
   }
-
   /* End functions that are just pass-throughs to the variable map. */
-
   /**
    * Returns the horizontal offset of the workspace.
    * Intended for LTR/RTL compatibility in XML.
    * Not relevant for a headless workspace.
-   * @return {number} Width.
+   * @return Width.
    */
-  getWidth() {
+  getWidth(): number {
     return 0;
   }
 
   /**
    * Obtain a newly created block.
-   * @param {!string} prototypeName Name of the language object containing
-   *     type-specific functions for this block.
-   * @param {string=} opt_id Optional ID.  Use this ID if provided, otherwise
-   *     create a new ID.
-   * @return {!Block} The created block.
+   * @param prototypeName Name of the language object containing type-specific
+   *     functions for this block.
+   * @param opt_id Optional ID.  Use this ID if provided, otherwise create a new
+   *     ID.
+   * @return The created block.
    */
-  newBlock(prototypeName, opt_id) {
-    const {Block} = goog.module.get('Blockly.Block');
-    return new Block(this, prototypeName, opt_id);
+  newBlock(prototypeName: string, opt_id?: string): Block {
+    throw new Error(
+        'The implementation of newBlock should be ' +
+        'monkey-patched in by blockly.ts');
   }
 
   /**
    * The number of blocks that may be added to the workspace before reaching
    *     the maxBlocks.
-   * @return {number} Number of blocks left.
+   * @return Number of blocks left.
    */
-  remainingCapacity() {
+  remainingCapacity(): number {
     if (isNaN(this.options.maxBlocks)) {
       return Infinity;
     }
@@ -557,15 +530,15 @@ class Workspace {
   /**
    * The number of blocks of the given type that may be added to the workspace
    *    before reaching the maxInstances allowed for that type.
-   * @param {string} type Type of block to return capacity for.
-   * @return {number} Number of blocks of type left.
+   * @param type Type of block to return capacity for.
+   * @return Number of blocks of type left.
    */
-  remainingCapacityOfType(type) {
+  remainingCapacityOfType(type: string): number {
     if (!this.options.maxInstances) {
       return Infinity;
     }
 
-    const maxInstanceOfType = (this.options.maxInstances[type] !== undefined) ?
+    const maxInstanceOfType = this.options.maxInstances[type] !== undefined ?
         this.options.maxInstances[type] :
         Infinity;
 
@@ -577,13 +550,11 @@ class Workspace {
    *    created. If the total number of blocks represented by the map is more
    * than the total remaining capacity, it returns false. If a type count is
    * more than the remaining capacity for that type, it returns false.
-   * @param {!Object} typeCountsMap A map of types to counts (usually
-   *     representing
-   *    blocks to be created).
-   * @return {boolean} True if there is capacity for the given map,
-   *    false otherwise.
+   * @param typeCountsMap A map of types to counts (usually representing blocks
+   *     to be created).
+   * @return True if there is capacity for the given map, false otherwise.
    */
-  isCapacityAvailable(typeCountsMap) {
+  isCapacityAvailable(typeCountsMap: AnyDuringMigration): boolean {
     if (!this.hasBlockLimits()) {
       return true;
     }
@@ -603,35 +574,35 @@ class Workspace {
   /**
    * Checks if the workspace has any limits on the maximum number of blocks,
    *    or the maximum number of blocks of specific types.
-   * @return {boolean} True if it has block limits, false otherwise.
+   * @return True if it has block limits, false otherwise.
    */
-  hasBlockLimits() {
+  hasBlockLimits(): boolean {
     return this.options.maxBlocks !== Infinity || !!this.options.maxInstances;
   }
 
   /**
    * Gets the undo stack for workplace.
-   * @return {!Array<!Abstract>} undo stack
-   * @package
+   * @return undo stack
+   * @internal
    */
-  getUndoStack() {
+  getUndoStack(): Abstract[] {
     return this.undoStack_;
   }
 
   /**
    * Gets the redo stack for workplace.
-   * @return {!Array<!Abstract>} redo stack
-   * @package
+   * @return redo stack
+   * @internal
    */
-  getRedoStack() {
+  getRedoStack(): Abstract[] {
     return this.redoStack_;
   }
 
   /**
    * Undo or redo the previous action.
-   * @param {boolean} redo False if undo, true if redo.
+   * @param redo False if undo, true if redo.
    */
-  undo(redo) {
+  undo(redo: boolean) {
     const inputStack = redo ? this.redoStack_ : this.undoStack_;
     const outputStack = redo ? this.undoStack_ : this.redoStack_;
     const inputEvent = inputStack.pop();
@@ -642,7 +613,9 @@ class Workspace {
     // Do another undo/redo if the next one is of the same group.
     while (inputStack.length && inputEvent.group &&
            inputEvent.group === inputStack[inputStack.length - 1].group) {
-      events.push(inputStack.pop());
+      // AnyDuringMigration because:  Argument of type 'Abstract | undefined' is
+      // not assignable to parameter of type 'Abstract'.
+      events.push(inputStack.pop() as AnyDuringMigration);
     }
     // Push these popped events on the opposite stack.
     for (let i = 0; i < events.length; i++) {
@@ -661,9 +634,7 @@ class Workspace {
     }
   }
 
-  /**
-   * Clear the undo/redo stacks.
-   */
+  /** Clear the undo/redo stacks. */
   clearUndo() {
     this.undoStack_.length = 0;
     this.redoStack_.length = 0;
@@ -676,27 +647,27 @@ class Workspace {
    * Note that there may be a few recent events already on the stack.  Thus the
    * new change listener might be called with events that occurred a few
    * milliseconds before the change listener was added.
-   * @param {!Function} func Function to call.
-   * @return {!Function} Obsolete return value, ignore.
+   * @param func Function to call.
+   * @return Obsolete return value, ignore.
    */
-  addChangeListener(func) {
+  addChangeListener(func: Function): Function {
     this.listeners_.push(func);
     return func;
   }
 
   /**
    * Stop listening for this workspace's changes.
-   * @param {!Function} func Function to stop calling.
+   * @param func Function to stop calling.
    */
-  removeChangeListener(func) {
+  removeChangeListener(func: Function) {
     arrayUtils.removeElem(this.listeners_, func);
   }
 
   /**
    * Fire a change event.
-   * @param {!Abstract} event Event to fire.
+   * @param event Event to fire.
    */
-  fireChangeListener(event) {
+  fireChangeListener(event: Abstract) {
     if (event.recordUndo) {
       this.undoStack_.push(event);
       this.redoStack_.length = 0;
@@ -712,52 +683,50 @@ class Workspace {
 
   /**
    * Find the block on this workspace with the specified ID.
-   * @param {string} id ID of block to find.
-   * @return {?Block} The sought after block, or null if not found.
+   * @param id ID of block to find.
+   * @return The sought after block, or null if not found.
    */
-  getBlockById(id) {
+  getBlockById(id: string): Block|null {
     return this.blockDB_[id] || null;
   }
 
   /**
    * Set a block on this workspace with the specified ID.
-   * @param {string} id ID of block to set.
-   * @param {Block} block The block to set.
-   * @package
+   * @param id ID of block to set.
+   * @param block The block to set.
+   * @internal
    */
-  setBlockById(id, block) {
+  setBlockById(id: string, block: Block) {
     this.blockDB_[id] = block;
   }
 
   /**
    * Delete a block off this workspace with the specified ID.
-   * @param {string} id ID of block to delete.
-   * @package
+   * @param id ID of block to delete.
+   * @internal
    */
-  removeBlockById(id) {
+  removeBlockById(id: string) {
     delete this.blockDB_[id];
   }
 
   /**
    * Find the comment on this workspace with the specified ID.
-   * @param {string} id ID of comment to find.
-   * @return {?WorkspaceComment} The sought after comment, or null if not
-   *     found.
-   * @package
+   * @param id ID of comment to find.
+   * @return The sought after comment, or null if not found.
+   * @internal
    */
-  getCommentById(id) {
+  getCommentById(id: string): WorkspaceComment|null {
     return this.commentDB_[id] || null;
   }
 
   /**
    * Checks whether all value and statement inputs in the workspace are filled
    * with blocks.
-   * @param {boolean=} opt_shadowBlocksAreFilled An optional argument
-   *     controlling whether shadow blocks are counted as filled. Defaults to
-   *     true.
-   * @return {boolean} True if all inputs are filled, false otherwise.
+   * @param opt_shadowBlocksAreFilled An optional argument controlling whether
+   *     shadow blocks are counted as filled. Defaults to true.
+   * @return True if all inputs are filled, false otherwise.
    */
-  allInputsFilled(opt_shadowBlocksAreFilled) {
+  allInputsFilled(opt_shadowBlocksAreFilled?: boolean): boolean {
     const blocks = this.getTopBlocks(false);
     for (let i = 0; i < blocks.length; i++) {
       const block = blocks[i];
@@ -771,16 +740,16 @@ class Workspace {
   /**
    * Return the variable map that contains "potential" variables.
    * These exist in the flyout but not in the workspace.
-   * @return {?VariableMap} The potential variable map.
-   * @package
+   * @return The potential variable map.
+   * @internal
    */
-  getPotentialVariableMap() {
+  getPotentialVariableMap(): VariableMap|null {
     return this.potentialVariableMap_;
   }
 
   /**
    * Create and store the potential variable map for this workspace.
-   * @package
+   * @internal
    */
   createPotentialVariableMap() {
     this.potentialVariableMap_ = new VariableMap(this);
@@ -788,49 +757,35 @@ class Workspace {
 
   /**
    * Return the map of all variables on the workspace.
-   * @return {!VariableMap} The variable map.
+   * @return The variable map.
    */
-  getVariableMap() {
+  getVariableMap(): VariableMap {
     return this.variableMap_;
   }
 
   /**
    * Set the map of all variables on the workspace.
-   * @param {!VariableMap} variableMap The variable map.
-   * @package
+   * @param variableMap The variable map.
+   * @internal
    */
-  setVariableMap(variableMap) {
+  setVariableMap(variableMap: VariableMap) {
     this.variableMap_ = variableMap;
   }
 
   /**
    * Find the workspace with the specified ID.
-   * @param {string} id ID of workspace to find.
-   * @return {?Workspace} The sought after workspace or null if not found.
+   * @param id ID of workspace to find.
+   * @return The sought after workspace or null if not found.
    */
-  static getById(id) {
-    return WorkspaceDB_[id] || null;
+  static getById(id: string): Workspace|null {
+    return common.getWorkspaceById(id);
   }
 
   /**
    * Find all workspaces.
-   * @return {!Array<!Workspace>} Array of workspaces.
+   * @return Array of workspaces.
    */
-  static getAll() {
-    const workspaces = [];
-    for (const workspaceId in WorkspaceDB_) {
-      workspaces.push(WorkspaceDB_[workspaceId]);
-    }
-    return workspaces;
+  static getAll(): Workspace[] {
+    return common.getAllWorkspaces();
   }
 }
-
-/**
- * Angle away from the horizontal to sweep for blocks.  Order of execution is
- * generally top to bottom, but a small angle changes the scan to give a bit of
- * a left to right bias (reversed in RTL).  Units are in degrees.
- * See: https://tvtropes.org/pmwiki/pmwiki.php/Main/DiagonalBilling
- */
-Workspace.SCAN_ANGLE = 3;
-
-exports.Workspace = Workspace;

@@ -7,18 +7,14 @@
 /**
  * @fileoverview Empty name space for the Message singleton.
  */
-'use strict';
 
 /**
  * Empty name space for the Message singleton.
  * @namespace Blockly.Msg
  */
-goog.module('Blockly.Msg');
+import * as goog from '../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Msg');
 
 
-/**
- * A dictionary of localised messages.
- * @type {!Object<string>}
- */
-const Msg = Object.create(null);
-exports.Msg = Msg;
+/** A dictionary of localised messages. */
+export const Msg: {[key: string]: string} = Object.create(null);

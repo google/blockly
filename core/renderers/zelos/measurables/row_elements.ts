@@ -14,33 +14,32 @@
  * rendered block.
  * @class
  */
-goog.module('Blockly.zelos.RightConnectionShape');
+import * as goog from '../../../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.zelos.RightConnectionShape');
 
-/* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const {Measurable} = goog.require('Blockly.blockRendering.Measurable');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+import type {ConstantProvider} from '../../../renderers/common/constants.js';
+import {Measurable} from '../../../renderers/measurables/base.js';
+import {Types} from '../../../renderers/measurables/types.js';
 
 
 /**
  * An object containing information about the space a right connection shape
  * takes up during rendering.
- * @extends {Measurable}
  * @alias Blockly.zelos.RightConnectionShape
  */
-class RightConnectionShape extends Measurable {
+export class RightConnectionShape extends Measurable {
+  // Size is dynamic
+  override height = 0;
+  override width = 0;
+
   /**
-   * @param {!ConstantProvider} constants The rendering
-   *   constants provider.
-   * @package
+   * @param constants The rendering constants provider.
+   * @internal
    */
-  constructor(constants) {
+  constructor(constants: ConstantProvider) {
     super(constants);
-    this.type |= Types.getType('RIGHT_CONNECTION');
-    // Size is dynamic
-    this.height = 0;
-    this.width = 0;
+    // AnyDuringMigration because:  Property 'getType' does not exist on type
+    // 'typeof Types'.
+    this.type |= (Types as AnyDuringMigration).getType('RIGHT_CONNECTION');
   }
 }
-
-exports.RightConnectionShape = RightConnectionShape;

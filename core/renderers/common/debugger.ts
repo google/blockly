@@ -7,83 +7,75 @@
 /**
  * @fileoverview Methods for rendering debug graphics.
  */
-'use strict';
-
 
 /**
  * Methods for rendering debug graphics.
  * @class
  */
-goog.module('Blockly.blockRendering.Debug');
+import * as goog from '../../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.blockRendering.Debug');
 
-const dom = goog.require('Blockly.utils.dom');
-/* eslint-disable-next-line no-unused-vars */
-const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-const {ConnectionType} = goog.require('Blockly.ConnectionType');
-/* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const {Field} = goog.require('Blockly.blockRendering.Field');
-const {FieldLabel} = goog.require('Blockly.FieldLabel');
-const {InputConnection} = goog.require('Blockly.blockRendering.InputConnection');
-/* eslint-disable-next-line no-unused-vars */
-const {InRowSpacer} = goog.requireType('Blockly.blockRendering.InRowSpacer');
-/* eslint-disable-next-line no-unused-vars */
-const {Measurable} = goog.requireType('Blockly.blockRendering.Measurable');
-/* eslint-disable-next-line no-unused-vars */
-const {RenderInfo} = goog.requireType('Blockly.blockRendering.RenderInfo');
-/* eslint-disable-next-line no-unused-vars */
-const {RenderInfo: ZelosInfo} = goog.requireType('Blockly.zelos.RenderInfo');
-/* eslint-disable-next-line no-unused-vars */
-const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
-/* eslint-disable-next-line no-unused-vars */
-const {Row} = goog.requireType('Blockly.blockRendering.Row');
-const {Svg} = goog.require('Blockly.utils.Svg');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+import type {BlockSvg} from '../../block_svg.js';
+import {ConnectionType} from '../../connection_type.js';
+import {FieldLabel} from '../../field_label.js';
+import type {RenderedConnection} from '../../rendered_connection.js';
+import * as dom from '../../utils/dom.js';
+import {Svg} from '../../utils/svg.js';
+import type {Measurable} from '../measurables/base.js';
+import {Field} from '../measurables/field.js';
+import type {InRowSpacer} from '../measurables/in_row_spacer.js';
+import {InputConnection} from '../measurables/input_connection.js';
+import type {Row} from '../measurables/row.js';
+import {Types} from '../measurables/types.js';
+import type {RenderInfo as ZelosInfo} from '../zelos/info.js';
+
+import type {ConstantProvider} from './constants.js';
+import type {RenderInfo} from './info.js';
 
 
 /**
  * An object that renders rectangles and dots for debugging rendering code.
  * @alias Blockly.blockRendering.Debug
  */
-class Debug {
+export class Debug {
   /**
-   * @param {!ConstantProvider} constants The renderer's
-   *     constants.
-   * @package
+   * Configuration object containing booleans to enable and disable debug
+   * rendering of specific rendering components.
+   * @struct
    */
-  constructor(constants) {
-    /**
-     * An array of SVG elements that have been created by this object.
-     * @type {Array<!SVGElement>}
-     * @private
-     */
-    this.debugElements_ = [];
+  static config = {
+    rowSpacers: true,
+    elemSpacers: true,
+    rows: true,
+    elems: true,
+    connections: true,
+    blockBounds: true,
+    connectedBlockBounds: true,
+    render: true,
+  };
 
-    /**
-     * The SVG root of the block that is being rendered.  Debug elements will
-     * be attached to this root.
-     * @type {SVGElement}
-     * @private
-     */
-    this.svgRoot_ = null;
+  /** An array of SVG elements that have been created by this object. */
+  private debugElements_: SVGElement[] = [];
 
-    /**
-     * The renderer's constant provider.
-     * @type {!ConstantProvider}
-     * @private
-     */
-    this.constants_ = constants;
+  /**
+   * The SVG root of the block that is being rendered.  Debug elements will
+   * be attached to this root.
+   */
+  // AnyDuringMigration because:  Type 'null' is not assignable to type
+  // 'SVGElement'.
+  private svgRoot_: SVGElement = null as AnyDuringMigration;
 
-    /**
-     * @type {string}
-     * @private
-     */
-    this.randomColour_ = '';
-  }
+  private randomColour_ = '';
+
+  /**
+   * @param constants The renderer's constants.
+   * @internal
+   */
+  constructor(private readonly constants: ConstantProvider) {}
 
   /**
    * Remove all elements the this object created on the last pass.
-   * @package
+   * @internal
    */
   clearElems() {
     for (let i = 0; i < this.debugElements_.length; i++) {
@@ -96,12 +88,12 @@ class Debug {
 
   /**
    * Draw a debug rectangle for a spacer (empty) row.
-   * @param {!Row} row The row to render.
-   * @param {number} cursorY The y position of the top of the row.
-   * @param {boolean} isRtl Whether the block is rendered RTL.
-   * @package
+   * @param row The row to render.
+   * @param cursorY The y position of the top of the row.
+   * @param isRtl Whether the block is rendered RTL.
+   * @internal
    */
-  drawSpacerRow(row, cursorY, isRtl) {
+  drawSpacerRow(row: Row, cursorY: number, isRtl: boolean) {
     if (!Debug.config.rowSpacers) {
       return;
     }
@@ -129,12 +121,12 @@ class Debug {
 
   /**
    * Draw a debug rectangle for a horizontal spacer.
-   * @param {!InRowSpacer} elem The spacer to render.
-   * @param {number} rowHeight The height of the container row.
-   * @param {boolean} isRtl Whether the block is rendered RTL.
-   * @package
+   * @param elem The spacer to render.
+   * @param rowHeight The height of the container row.
+   * @param isRtl Whether the block is rendered RTL.
+   * @internal
    */
-  drawSpacerElem(elem, rowHeight, isRtl) {
+  drawSpacerElem(elem: InRowSpacer, rowHeight: number, isRtl: boolean) {
     if (!Debug.config.elemSpacers) {
       return;
     }
@@ -163,11 +155,11 @@ class Debug {
 
   /**
    * Draw a debug rectangle for an in-row element.
-   * @param {!Measurable} elem The element to render.
-   * @param {boolean} isRtl Whether the block is rendered RTL.
-   * @package
+   * @param elem The element to render.
+   * @param isRtl Whether the block is rendered RTL.
+   * @internal
    */
-  drawRenderedElem(elem, isRtl) {
+  drawRenderedElem(elem: Measurable, isRtl: boolean) {
     if (Debug.config.elems) {
       let xPos = elem.xPos;
       if (isRtl) {
@@ -189,7 +181,7 @@ class Debug {
 
       if (Types.isField(elem) && elem instanceof Field &&
           elem.field instanceof FieldLabel) {
-        const baseline = this.constants_.FIELD_TEXT_BASELINE;
+        const baseline = this.constants.FIELD_TEXT_BASELINE;
         this.debugElements_.push(dom.createSvgElement(
             Svg.RECT, {
               'class': 'rowRenderingRect blockRenderDebug',
@@ -205,7 +197,6 @@ class Debug {
       }
     }
 
-
     if (Types.isInput(elem) && elem instanceof InputConnection &&
         Debug.config.connections) {
       this.drawConnection(elem.connectionModel);
@@ -216,12 +207,12 @@ class Debug {
    * Draw a circle at the location of the given connection.  Inputs and outputs
    * share the same colours, as do previous and next.  When positioned correctly
    * a connected pair will look like a bullseye.
-   * @param {RenderedConnection} conn The connection to circle.
+   * @param conn The connection to circle.
    * @suppress {visibility} Suppress visibility of conn.offsetInBlock_ since
    * this is a debug module.
-   * @package
+   * @internal
    */
-  drawConnection(conn) {
+  drawConnection(conn: RenderedConnection) {
     if (!Debug.config.connections) {
       return;
     }
@@ -246,11 +237,15 @@ class Debug {
       colour = 'goldenrod';
       fill = colour;
     }
+    // AnyDuringMigration because:  Property 'offsetInBlock_' is private and
+    // only accessible within class 'RenderedConnection'. AnyDuringMigration
+    // because:  Property 'offsetInBlock_' is private and only accessible within
+    // class 'RenderedConnection'.
     this.debugElements_.push(dom.createSvgElement(
         Svg.CIRCLE, {
           'class': 'blockRenderDebug',
-          'cx': conn.offsetInBlock_.x,
-          'cy': conn.offsetInBlock_.y,
+          'cx': (conn as AnyDuringMigration).offsetInBlock_.x,
+          'cy': (conn as AnyDuringMigration).offsetInBlock_.y,
           'r': size,
           'fill': fill,
           'stroke': colour,
@@ -260,12 +255,12 @@ class Debug {
 
   /**
    * Draw a debug rectangle for a non-empty row.
-   * @param {!Row} row The non-empty row to render.
-   * @param {number} cursorY The y position of the top of the row.
-   * @param {boolean} isRtl Whether the block is rendered RTL.
-   * @package
+   * @param row The non-empty row to render.
+   * @param cursorY The y position of the top of the row.
+   * @param isRtl Whether the block is rendered RTL.
+   * @internal
    */
-  drawRenderedRow(row, cursorY, isRtl) {
+  drawRenderedRow(row: Row, cursorY: number, isRtl: boolean) {
     if (!Debug.config.rows) {
       return;
     }
@@ -282,7 +277,9 @@ class Debug {
         },
         this.svgRoot_));
 
-    if (Types.isTopOrBottomRow(row)) {
+    // AnyDuringMigration because:  Property 'isTopOrBottomRow' does not exist
+    // on type 'typeof Types'.
+    if ((Types as AnyDuringMigration).isTopOrBottomRow(row)) {
       return;
     }
 
@@ -305,12 +302,12 @@ class Debug {
 
   /**
    * Draw debug rectangles for a non-empty row and all of its subcomponents.
-   * @param {!Row} row The non-empty row to render.
-   * @param {number} cursorY The y position of the top of the row.
-   * @param {boolean} isRtl Whether the block is rendered RTL.
-   * @package
+   * @param row The non-empty row to render.
+   * @param cursorY The y position of the top of the row.
+   * @param isRtl Whether the block is rendered RTL.
+   * @internal
    */
-  drawRowWithElements(row, cursorY, isRtl) {
+  drawRowWithElements(row: Row, cursorY: number, isRtl: boolean) {
     for (let i = 0; i < row.elements.length; i++) {
       const elem = row.elements[i];
       if (!elem) {
@@ -318,8 +315,7 @@ class Debug {
         continue;
       }
       if (Types.isSpacer(elem)) {
-        this.drawSpacerElem(
-            /** @type {!InRowSpacer} */ (elem), row.height, isRtl);
+        this.drawSpacerElem(elem as InRowSpacer, row.height, isRtl);
       } else {
         this.drawRenderedElem(elem, isRtl);
       }
@@ -329,11 +325,10 @@ class Debug {
 
   /**
    * Draw a debug rectangle around the entire block.
-   * @param {!RenderInfo} info Rendering information about
-   *     the block to debug.
-   * @package
+   * @param info Rendering information about the block to debug.
+   * @internal
    */
-  drawBoundingBox(info) {
+  drawBoundingBox(info: RenderInfo) {
     if (!Debug.config.blockBounds) {
       return;
     }
@@ -375,12 +370,11 @@ class Debug {
 
   /**
    * Do all of the work to draw debug information for the whole block.
-   * @param {!BlockSvg} block The block to draw debug information for.
-   * @param {!RenderInfo} info Rendering information about
-   *     the block to debug.
-   * @package
+   * @param block The block to draw debug information for.
+   * @param info Rendering information about the block to debug.
+   * @internal
    */
-  drawDebug(block, info) {
+  drawDebug(block: BlockSvg, info: RenderInfo) {
     this.clearElems();
     this.svgRoot_ = block.getSvgRoot();
 
@@ -411,7 +405,7 @@ class Debug {
      * TODO: Find a better way to do this check without pulling in all of
      * zelos, or just delete this line or the whole debug renderer.
      */
-    const maybeZelosInfo = /** @type {!ZelosInfo} */ (info);
+    const maybeZelosInfo = info as ZelosInfo;
     if (maybeZelosInfo.rightSide) {
       this.drawRenderedElem(maybeZelosInfo.rightSide, info.RTL);
     }
@@ -423,35 +417,17 @@ class Debug {
 
   /**
    * Show a debug filter to highlight that a block has been rendered.
-   * @param {!SVGElement} svgPath The block's SVG path.
-   * @package
+   * @param svgPath The block's SVG path.
+   * @internal
    */
-  drawRender(svgPath) {
+  drawRender(svgPath: SVGElement) {
     if (!Debug.config.render) {
       return;
     }
     svgPath.setAttribute(
-        'filter', 'url(#' + this.constants_.debugFilterId + ')');
+        'filter', 'url(#' + this.constants.debugFilterId + ')');
     setTimeout(function() {
       svgPath.setAttribute('filter', '');
     }, 100);
   }
 }
-
-/**
- * Configuration object containing booleans to enable and disable debug
- * rendering of specific rendering components.
- * @struct
- */
-Debug.config = {
-  rowSpacers: true,
-  elemSpacers: true,
-  rows: true,
-  elems: true,
-  connections: true,
-  blockBounds: true,
-  connectedBlockBounds: true,
-  render: true,
-};
-
-exports.Debug = Debug;

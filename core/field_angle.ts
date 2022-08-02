@@ -7,154 +7,165 @@
 /**
  * @fileoverview Angle input field.
  */
-'use strict';
 
 /**
  * Angle input field.
  * @class
  */
-goog.module('Blockly.FieldAngle');
+import * as goog from '../closure/goog/goog.js';
+goog.declareModuleId('Blockly.FieldAngle');
 
-const Css = goog.require('Blockly.Css');
-const WidgetDiv = goog.require('Blockly.WidgetDiv');
-const browserEvents = goog.require('Blockly.browserEvents');
-const dom = goog.require('Blockly.utils.dom');
-const dropDownDiv = goog.require('Blockly.dropDownDiv');
-const fieldRegistry = goog.require('Blockly.fieldRegistry');
-const math = goog.require('Blockly.utils.math');
-const userAgent = goog.require('Blockly.utils.userAgent');
-const {BlockSvg} = goog.require('Blockly.BlockSvg');
-const {Field} = goog.require('Blockly.Field');
-const {FieldTextInput} = goog.require('Blockly.FieldTextInput');
-const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
-/* eslint-disable-next-line no-unused-vars */
-const {Sentinel} = goog.requireType('Blockly.utils.Sentinel');
-const {Svg} = goog.require('Blockly.utils.Svg');
+import {BlockSvg} from './block_svg.js';
+import * as browserEvents from './browser_events.js';
+import * as Css from './css.js';
+import * as dropDownDiv from './dropdowndiv.js';
+import {Field} from './field.js';
+import * as fieldRegistry from './field_registry.js';
+import {FieldTextInput} from './field_textinput.js';
+import * as dom from './utils/dom.js';
+import {KeyCodes} from './utils/keycodes.js';
+import * as math from './utils/math.js';
+import type {Sentinel} from './utils/sentinel.js';
+import {Svg} from './utils/svg.js';
+import * as userAgent from './utils/useragent.js';
+import * as WidgetDiv from './widgetdiv.js';
 
 
 /**
  * Class for an editable angle field.
- * @extends {FieldTextInput}
  * @alias Blockly.FieldAngle
  */
-class FieldAngle extends FieldTextInput {
+export class FieldAngle extends FieldTextInput {
+  /** The default value for this field. */
+  // protected override DEFAULT_VALUE = 0;
+
   /**
-   * @param {(string|number|!Sentinel)=} opt_value The initial value of
-   *     the field. Should cast to a number. Defaults to 0.
-   *     Also accepts Field.SKIP_SETUP if you wish to skip setup (only used by
-   *     subclasses that want to handle configuration and setting the field
-   *     value after their own constructors have run).
-   * @param {Function=} opt_validator A function that is called to validate
-   *     changes to the field's value. Takes in a number & returns a
-   *     validated number, or null to abort the change.
-   * @param {Object=} opt_config A map of options used to configure the field.
-   *     See the [field creation documentation]{@link
-   *     https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/angle#creation}
-   *     for a list of properties this parameter supports.
+   * The default amount to round angles to when using a mouse or keyboard nav
+   * input. Must be a positive integer to support keyboard navigation.
    */
-  constructor(opt_value, opt_validator, opt_config) {
+  static readonly ROUND = 15;
+
+  /** Half the width of protractor image. */
+  static readonly HALF = 100 / 2;
+
+  /**
+   * Default property describing which direction makes an angle field's value
+   * increase. Angle increases clockwise (true) or counterclockwise (false).
+   */
+  static readonly CLOCKWISE = false;
+
+  /**
+   * The default offset of 0 degrees (and all angles). Always offsets in the
+   * counterclockwise direction, regardless of the field's clockwise property.
+   * Usually either 0 (0 = right) or 90 (0 = up).
+   */
+  static readonly OFFSET = 0;
+
+  /**
+   * The default maximum angle to allow before wrapping.
+   * Usually either 360 (for 0 to 359.9) or 180 (for -179.9 to 180).
+   */
+  static readonly WRAP = 360;
+
+  /**
+   * Radius of protractor circle.  Slightly smaller than protractor size since
+   * otherwise SVG crops off half the border at the edges.
+   */
+  static readonly RADIUS: number = FieldAngle.HALF - 1;
+  private clockwise_: boolean;
+  private offset_: number;
+  private wrap_: number;
+  private round_: number;
+
+  /** The angle picker's SVG element. */
+  private editor_: SVGElement|null = null;
+
+  /** The angle picker's gauge path depending on the value. */
+  gauge_: SVGElement|null = null;
+
+  /** The angle picker's line drawn representing the value's angle. */
+  line_: SVGElement|null = null;
+
+  /** The degree symbol for this field. */
+  // AnyDuringMigration because:  Type 'null' is not assignable to type
+  // 'SVGTSpanElement'.
+  protected symbol_: SVGTSpanElement = null as AnyDuringMigration;
+
+  /** Wrapper click event data. */
+  private clickWrapper_: browserEvents.Data|null = null;
+
+  /** Surface click event data. */
+  private clickSurfaceWrapper_: browserEvents.Data|null = null;
+
+  /** Surface mouse move event data. */
+  private moveSurfaceWrapper_: browserEvents.Data|null = null;
+
+  /**
+   * Serializable fields are saved by the serializer, non-serializable fields
+   * are not. Editable fields should also be serializable.
+   */
+  override SERIALIZABLE = true;
+
+  /**
+   * @param opt_value The initial value of the field. Should cast to a number.
+   *     Defaults to 0. Also accepts Field.SKIP_SETUP if you wish to skip setup
+   *     (only used by subclasses that want to handle configuration and setting
+   *     the field value after their own constructors have run).
+   * @param opt_validator A function that is called to validate changes to the
+   *     field's value. Takes in a number & returns a validated number, or null
+   *     to abort the change.
+   * @param opt_config A map of options used to configure the field.
+   *     See the [field creation documentation]{@link
+   * https://developers.google.com/blockly/guides/create-custom-blocks/fields/built-in-fields/angle#creation}
+   * for a list of properties this parameter supports.
+   */
+  constructor(
+      opt_value?: string|number|Sentinel, opt_validator?: Function,
+      opt_config?: AnyDuringMigration) {
     super(Field.SKIP_SETUP);
 
     /**
      * Should the angle increase as the angle picker is moved clockwise (true)
      * or counterclockwise (false)
      * @see FieldAngle.CLOCKWISE
-     * @type {boolean}
-     * @private
      */
     this.clockwise_ = FieldAngle.CLOCKWISE;
 
     /**
      * The offset of zero degrees (and all other angles).
      * @see FieldAngle.OFFSET
-     * @type {number}
-     * @private
      */
     this.offset_ = FieldAngle.OFFSET;
 
     /**
      * The maximum angle to allow before wrapping.
      * @see FieldAngle.WRAP
-     * @type {number}
-     * @private
      */
     this.wrap_ = FieldAngle.WRAP;
 
     /**
      * The amount to round angles to when using a mouse or keyboard nav input.
      * @see FieldAngle.ROUND
-     * @type {number}
-     * @private
      */
     this.round_ = FieldAngle.ROUND;
 
-    /**
-     * The angle picker's SVG element.
-     * @type {?SVGElement}
-     * @private
-     */
-    this.editor_ = null;
-
-    /**
-     * The angle picker's gauge path depending on the value.
-     * @type {?SVGElement}
-     */
-    this.gauge_ = null;
-
-    /**
-     * The angle picker's line drawn representing the value's angle.
-     * @type {?SVGElement}
-     */
-    this.line_ = null;
-
-    /**
-     * The degree symbol for this field.
-     * @type {SVGTSpanElement}
-     * @protected
-     */
-    this.symbol_ = null;
-
-    /**
-     * Wrapper click event data.
-     * @type {?browserEvents.Data}
-     * @private
-     */
-    this.clickWrapper_ = null;
-
-    /**
-     * Surface click event data.
-     * @type {?browserEvents.Data}
-     * @private
-     */
-    this.clickSurfaceWrapper_ = null;
-
-    /**
-     * Surface mouse move event data.
-     * @type {?browserEvents.Data}
-     * @private
-     */
-    this.moveSurfaceWrapper_ = null;
-
-    /**
-     * Serializable fields are saved by the serializer, non-serializable fields
-     * are not. Editable fields should also be serializable.
-     * @type {boolean}
-     */
-    this.SERIALIZABLE = true;
-
-    if (opt_value === Field.SKIP_SETUP) return;
-    if (opt_config) this.configure_(opt_config);
+    if (opt_value === Field.SKIP_SETUP) {
+      return;
+    }
+    if (opt_config) {
+      this.configure_(opt_config);
+    }
     this.setValue(opt_value);
-    if (opt_validator) this.setValidator(opt_validator);
+    if (opt_validator) {
+      this.setValidator(opt_validator);
+    }
   }
 
   /**
    * Configure the field based on the given map of options.
-   * @param {!Object} config A map of options to configure the field based on.
-   * @protected
-   * @override
+   * @param config A map of options to configure the field based on.
    */
-  configure_(config) {
+  override configure_(config: AnyDuringMigration) {
     super.configure_(config);
 
     switch (config['mode']) {
@@ -202,40 +213,37 @@ class FieldAngle extends FieldTextInput {
 
   /**
    * Create the block UI for this field.
-   * @package
+   * @internal
    */
-  initView() {
+  override initView() {
     super.initView();
     // Add the degree symbol to the left of the number, even in RTL (issue
     // #2380)
-    this.symbol_ = dom.createSvgElement(Svg.TSPAN, {}, null);
+    this.symbol_ = dom.createSvgElement(Svg.TSPAN, {});
     this.symbol_.appendChild(document.createTextNode('\u00B0'));
     this.textElement_.appendChild(this.symbol_);
   }
 
-  /**
-   * Updates the graph when the field rerenders.
-   * @protected
-   * @override
-   */
-  render_() {
+  /** Updates the graph when the field rerenders. */
+  protected override render_() {
     super.render_();
     this.updateGraph_();
   }
 
   /**
    * Create and show the angle field's editor.
-   * @param {Event=} opt_e Optional mouse event that triggered the field to
-   *     open, or undefined if triggered programmatically.
-   * @protected
+   * @param opt_e Optional mouse event that triggered the field to open, or
+   *     undefined if triggered programmatically.
    */
-  showEditor_(opt_e) {
+  protected override showEditor_(opt_e?: Event) {
     // Mobile browsers have issues with in-line textareas (focus & keyboards).
     const noFocus = userAgent.MOBILE || userAgent.ANDROID || userAgent.IPAD;
     super.showEditor_(opt_e, noFocus);
 
     this.dropdownCreate_();
-    dropDownDiv.getContentDiv().appendChild(this.editor_);
+    // AnyDuringMigration because:  Argument of type 'SVGElement | null' is not
+    // assignable to parameter of type 'Node'.
+    dropDownDiv.getContentDiv().appendChild(this.editor_ as AnyDuringMigration);
 
     if (this.sourceBlock_ instanceof BlockSvg) {
       dropDownDiv.setColour(
@@ -243,27 +251,25 @@ class FieldAngle extends FieldTextInput {
           this.sourceBlock_.style.colourTertiary);
     }
 
-    dropDownDiv.showPositionedByField(this, this.dropdownDispose_.bind(this));
+    // AnyDuringMigration because:  Argument of type 'this' is not assignable to
+    // parameter of type 'Field'.
+    dropDownDiv.showPositionedByField(
+        this as AnyDuringMigration, this.dropdownDispose_.bind(this));
 
     this.updateGraph_();
   }
 
-  /**
-   * Create the angle dropdown editor.
-   * @private
-   */
-  dropdownCreate_() {
-    const svg = dom.createSvgElement(
-        Svg.SVG, {
-          'xmlns': dom.SVG_NS,
-          'xmlns:html': dom.HTML_NS,
-          'xmlns:xlink': dom.XLINK_NS,
-          'version': '1.1',
-          'height': (FieldAngle.HALF * 2) + 'px',
-          'width': (FieldAngle.HALF * 2) + 'px',
-          'style': 'touch-action: none',
-        },
-        null);
+  /** Create the angle dropdown editor. */
+  private dropdownCreate_() {
+    const svg = dom.createSvgElement(Svg.SVG, {
+      'xmlns': dom.SVG_NS,
+      'xmlns:html': dom.HTML_NS,
+      'xmlns:xlink': dom.XLINK_NS,
+      'version': '1.1',
+      'height': FieldAngle.HALF * 2 + 'px',
+      'width': FieldAngle.HALF * 2 + 'px',
+      'style': 'touch-action: none',
+    });
     const circle = dom.createSvgElement(
         Svg.CIRCLE, {
           'cx': FieldAngle.HALF,
@@ -312,11 +318,8 @@ class FieldAngle extends FieldTextInput {
     this.editor_ = svg;
   }
 
-  /**
-   * Disposes of events and DOM-references belonging to the angle editor.
-   * @private
-   */
-  dropdownDispose_() {
+  /** Disposes of events and DOM-references belonging to the angle editor. */
+  private dropdownDispose_() {
     if (this.clickWrapper_) {
       browserEvents.unbind(this.clickWrapper_);
       this.clickWrapper_ = null;
@@ -333,25 +336,25 @@ class FieldAngle extends FieldTextInput {
     this.line_ = null;
   }
 
-  /**
-   * Hide the editor.
-   * @private
-   */
-  hide_() {
+  /** Hide the editor. */
+  private hide_() {
     dropDownDiv.hideIfOwner(this);
     WidgetDiv.hide();
   }
 
   /**
    * Set the angle to match the mouse's position.
-   * @param {!Event} e Mouse move event.
-   * @protected
+   * @param e Mouse move event.
    */
-  onMouseMove_(e) {
+  protected onMouseMove_(e: Event) {
     // Calculate angle.
-    const bBox = this.gauge_.ownerSVGElement.getBoundingClientRect();
-    const dx = e.clientX - bBox.left - FieldAngle.HALF;
-    const dy = e.clientY - bBox.top - FieldAngle.HALF;
+    const bBox = this.gauge_!.ownerSVGElement!.getBoundingClientRect();
+    // AnyDuringMigration because:  Property 'clientX' does not exist on type
+    // 'Event'.
+    const dx = (e as AnyDuringMigration).clientX - bBox.left - FieldAngle.HALF;
+    // AnyDuringMigration because:  Property 'clientY' does not exist on type
+    // 'Event'.
+    const dy = (e as AnyDuringMigration).clientY - bBox.top - FieldAngle.HALF;
     let angle = Math.atan(-dy / dx);
     if (isNaN(angle)) {
       // This shouldn't happen, but let's not let this error propagate further.
@@ -379,10 +382,9 @@ class FieldAngle extends FieldTextInput {
    * Handles and displays values that are input via mouse or arrow key input.
    * These values need to be rounded and wrapped before being displayed so
    * that the text input's value is appropriate.
-   * @param {number} angle New angle.
-   * @private
+   * @param angle New angle.
    */
-  displayMouseOrKeyboardValue_(angle) {
+  private displayMouseOrKeyboardValue_(angle: number) {
     if (this.round_) {
       angle = Math.round(angle / this.round_) * this.round_;
     }
@@ -392,11 +394,8 @@ class FieldAngle extends FieldTextInput {
     }
   }
 
-  /**
-   * Redraw the graph with the current angle.
-   * @private
-   */
-  updateGraph_() {
+  /** Redraw the graph with the current angle. */
+  private updateGraph_() {
     if (!this.gauge_) {
       return;
     }
@@ -428,36 +427,46 @@ class FieldAngle extends FieldTextInput {
           ' 0 ', largeFlag, ' ', clockwiseFlag, ' ', x2, ',', y2, ' z');
     }
     this.gauge_.setAttribute('d', path.join(''));
-    this.line_.setAttribute('x2', x2);
-    this.line_.setAttribute('y2', y2);
+    // AnyDuringMigration because:  Argument of type 'number' is not assignable
+    // to parameter of type 'string'.
+    this.line_!.setAttribute('x2', x2 as AnyDuringMigration);
+    // AnyDuringMigration because:  Argument of type 'number' is not assignable
+    // to parameter of type 'string'.
+    this.line_!.setAttribute('y2', y2 as AnyDuringMigration);
   }
 
   /**
    * Handle key down to the editor.
-   * @param {!Event} e Keyboard event.
-   * @protected
-   * @override
+   * @param e Keyboard event.
    */
-  onHtmlInputKeyDown_(e) {
+  protected override onHtmlInputKeyDown_(e: Event) {
     super.onHtmlInputKeyDown_(e);
 
     let multiplier;
-    if (e.keyCode === KeyCodes.LEFT) {
+    // AnyDuringMigration because:  Property 'keyCode' does not exist on type
+    // 'Event'.
+    if ((e as AnyDuringMigration).keyCode === KeyCodes.LEFT) {
       // decrement (increment in RTL)
       multiplier = this.sourceBlock_.RTL ? 1 : -1;
-    } else if (e.keyCode === KeyCodes.RIGHT) {
+      // AnyDuringMigration because:  Property 'keyCode' does not exist on type
+      // 'Event'.
+    } else if ((e as AnyDuringMigration).keyCode === KeyCodes.RIGHT) {
       // increment (decrement in RTL)
       multiplier = this.sourceBlock_.RTL ? -1 : 1;
-    } else if (e.keyCode === KeyCodes.DOWN) {
+      // AnyDuringMigration because:  Property 'keyCode' does not exist on type
+      // 'Event'.
+    } else if ((e as AnyDuringMigration).keyCode === KeyCodes.DOWN) {
       // decrement
       multiplier = -1;
-    } else if (e.keyCode === KeyCodes.UP) {
+      // AnyDuringMigration because:  Property 'keyCode' does not exist on type
+      // 'Event'.
+    } else if ((e as AnyDuringMigration).keyCode === KeyCodes.UP) {
       // increment
       multiplier = 1;
     }
     if (multiplier) {
-      const value = /** @type {number} */ (this.getValue());
-      this.displayMouseOrKeyboardValue_(value + (multiplier * this.round_));
+      const value = this.getValue() as number;
+      this.displayMouseOrKeyboardValue_(value + multiplier * this.round_);
       e.preventDefault();
       e.stopPropagation();
     }
@@ -465,12 +474,11 @@ class FieldAngle extends FieldTextInput {
 
   /**
    * Ensure that the input value is a valid angle.
-   * @param {*=} opt_newValue The input value.
-   * @return {?number} A valid angle, or null if invalid.
-   * @protected
-   * @override
+   * @param opt_newValue The input value.
+   * @return A valid angle, or null if invalid.
    */
-  doClassValidation_(opt_newValue) {
+  protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
+      number|null {
     const value = Number(opt_newValue);
     if (isNaN(value) || !isFinite(value)) {
       return null;
@@ -480,11 +488,10 @@ class FieldAngle extends FieldTextInput {
 
   /**
    * Wraps the value so that it is in the range (-360 + wrap, wrap).
-   * @param {number} value The value to wrap.
-   * @return {number} The wrapped value.
-   * @private
+   * @param value The value to wrap.
+   * @return The wrapped value.
    */
-  wrapValue_(value) {
+  private wrapValue_(value: number): number {
     value %= 360;
     if (value < 0) {
       value += 360;
@@ -497,71 +504,19 @@ class FieldAngle extends FieldTextInput {
 
   /**
    * Construct a FieldAngle from a JSON arg object.
-   * @param {!Object} options A JSON object with options (angle).
-   * @return {!FieldAngle} The new field instance.
-   * @package
+   * @param options A JSON object with options (angle).
+   * @return The new field instance.
    * @nocollapse
-   * @override
+   * @internal
    */
-  static fromJson(options) {
+  static override fromJson(options: AnyDuringMigration): FieldAngle {
     // `this` might be a subclass of FieldAngle if that class doesn't override
     // the static fromJson method.
     return new this(options['angle'], undefined, options);
   }
 }
 
-/**
- * The default value for this field.
- * @type {*}
- * @protected
- */
-FieldAngle.prototype.DEFAULT_VALUE = 0;
-
-/**
- * The default amount to round angles to when using a mouse or keyboard nav
- * input. Must be a positive integer to support keyboard navigation.
- * @const {number}
- */
-FieldAngle.ROUND = 15;
-
-/**
- * Half the width of protractor image.
- * @const {number}
- */
-FieldAngle.HALF = 100 / 2;
-
-/**
- * Default property describing which direction makes an angle field's value
- * increase. Angle increases clockwise (true) or counterclockwise (false).
- * @const {boolean}
- */
-FieldAngle.CLOCKWISE = false;
-
-/**
- * The default offset of 0 degrees (and all angles). Always offsets in the
- * counterclockwise direction, regardless of the field's clockwise property.
- * Usually either 0 (0 = right) or 90 (0 = up).
- * @const {number}
- */
-FieldAngle.OFFSET = 0;
-
-/**
- * The default maximum angle to allow before wrapping.
- * Usually either 360 (for 0 to 359.9) or 180 (for -179.9 to 180).
- * @const {number}
- */
-FieldAngle.WRAP = 360;
-
-/**
- * Radius of protractor circle.  Slightly smaller than protractor size since
- * otherwise SVG crops off half the border at the edges.
- * @const {number}
- */
-FieldAngle.RADIUS = FieldAngle.HALF - 1;
-
-/**
- * CSS for angle field.  See css.js for use.
- */
+/** CSS for angle field.  See css.js for use. */
 Css.register(`
 .blocklyAngleCircle {
   stroke: #444;
@@ -591,4 +546,4 @@ Css.register(`
 
 fieldRegistry.register('field_angle', FieldAngle);
 
-exports.FieldAngle = FieldAngle;
+(FieldAngle.prototype as AnyDuringMigration).DEFAULT_VALUE = 0;

@@ -8,19 +8,16 @@
  * @fileoverview The interface for an AST node location.
  */
 
-'use strict';
-
 /**
  * The interface for an AST node location.
  * @namespace Blockly.IASTNodeLocation
  */
-goog.module('Blockly.IASTNodeLocation');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.IASTNodeLocation');
+
 
 /**
  * An AST node location interface.
- * @interface
  * @alias Blockly.IASTNodeLocation
  */
-const IASTNodeLocation = function() {};
-
-exports.IASTNodeLocation = IASTNodeLocation;
+export interface IASTNodeLocation {}

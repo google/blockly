@@ -9,7 +9,6 @@
  *    contains methods for registering those JSON definitions, and building the
  *    fields based on JSON.
  */
-'use strict';
 
 /**
  * Fields can be created based on a JSON definition. This file
@@ -17,56 +16,61 @@
  *    fields based on JSON.
  * @namespace Blockly.fieldRegistry
  */
-goog.module('Blockly.fieldRegistry');
+import * as goog from '../closure/goog/goog.js';
+goog.declareModuleId('Blockly.fieldRegistry');
 
-const registry = goog.require('Blockly.registry');
-/* eslint-disable-next-line no-unused-vars */
-const {Field} = goog.requireType('Blockly.Field');
-/* eslint-disable-next-line no-unused-vars */
-const {IRegistrableField} = goog.requireType('Blockly.IRegistrableField');
+import type {Field} from './field.js';
+import type {IRegistrableField} from './interfaces/i_registrable_field.js';
+import * as registry from './registry.js';
 
 
 /**
  * Registers a field type.
  * fieldRegistry.fromJson uses this registry to
  * find the appropriate field type.
- * @param {string} type The field type name as used in the JSON definition.
- * @param {!IRegistrableField} fieldClass The field class containing a
- *     fromJson function that can construct an instance of the field.
- * @throws {Error} if the type name is empty, the field is already
- *     registered, or the fieldClass is not an object containing a fromJson
- *     function.
+ * @param type The field type name as used in the JSON definition.
+ * @param fieldClass The field class containing a fromJson function that can
+ *     construct an instance of the field.
+ * @throws {Error} if the type name is empty, the field is already registered,
+ *     or the fieldClass is not an object containing a fromJson function.
  * @alias Blockly.fieldRegistry.register
  */
-const register = function(type, fieldClass) {
+export function register(type: string, fieldClass: IRegistrableField) {
   registry.register(registry.Type.FIELD, type, fieldClass);
-};
-exports.register = register;
+}
 
 /**
  * Unregisters the field registered with the given type.
- * @param {string} type The field type name as used in the JSON definition.
+ * @param type The field type name as used in the JSON definition.
  * @alias Blockly.fieldRegistry.unregister
  */
-const unregister = function(type) {
+export function unregister(type: string) {
   registry.unregister(registry.Type.FIELD, type);
-};
-exports.unregister = unregister;
+}
 
 /**
  * Construct a Field from a JSON arg object.
  * Finds the appropriate registered field by the type name as registered using
  * fieldRegistry.register.
- * @param {!Object} options A JSON object with a type and options specific
- *     to the field type.
- * @return {?Field} The new field instance or null if a field wasn't
- *     found with the given type name
+ * @param options A JSON object with a type and options specific to the field
+ *     type.
+ * @return The new field instance or null if a field wasn't found with the given
+ *     type name
  * @alias Blockly.fieldRegistry.fromJson
- * @package
+ * @internal
  */
-const fromJson = function(options) {
-  const fieldObject = /** @type {?IRegistrableField} */ (
-      registry.getObject(registry.Type.FIELD, options['type']));
+export function fromJson(options: AnyDuringMigration): Field|null {
+  return TEST_ONLY.fromJsonInternal(options);
+}
+
+/**
+ * Private version of fromJson for stubbing in tests.
+ */
+function fromJsonInternal(options: AnyDuringMigration): Field|null {
+  const fieldObject =
+      registry.getObject(registry.Type.FIELD, options['type']) as
+          IRegistrableField |
+      null;
   if (!fieldObject) {
     console.warn(
         'Blockly could not create a field of type ' + options['type'] +
@@ -76,5 +80,8 @@ const fromJson = function(options) {
     return null;
   }
   return fieldObject.fromJson(options);
-};
-exports.fromJson = fromJson;
+}
+
+export const TEST_ONLY = {
+  fromJsonInternal,
+}

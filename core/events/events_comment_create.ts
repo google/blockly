@@ -7,54 +7,54 @@
 /**
  * @fileoverview Class for comment creation event.
  */
-'use strict';
 
 /**
  * Class for comment creation event.
  * @class
  */
-goog.module('Blockly.Events.CommentCreate');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Events.CommentCreate');
 
-const Xml = goog.require('Blockly.Xml');
-const eventUtils = goog.require('Blockly.Events.utils');
-const registry = goog.require('Blockly.registry');
-const {CommentBase} = goog.require('Blockly.Events.CommentBase');
-/* eslint-disable-next-line no-unused-vars */
-const {WorkspaceComment} = goog.requireType('Blockly.WorkspaceComment');
+import * as registry from '../registry.js';
+import type {WorkspaceComment} from '../workspace_comment.js';
+import * as Xml from '../xml.js';
+
+import {CommentBase} from './events_comment_base.js';
+import * as eventUtils from './utils.js';
 
 
 /**
  * Class for a comment creation event.
- * @extends {CommentBase}
  * @alias Blockly.Events.CommentCreate
  */
-class CommentCreate extends CommentBase {
+export class CommentCreate extends CommentBase {
+  override type: string;
+
+  xml: AnyDuringMigration;
+
   /**
-   * @param {!WorkspaceComment=} opt_comment The created comment.
+   * @param opt_comment The created comment.
    *     Undefined for a blank event.
    */
-  constructor(opt_comment) {
+  constructor(opt_comment?: WorkspaceComment) {
     super(opt_comment);
 
-    /**
-     * Type of this event.
-     * @type {string}
-     */
+    /** Type of this event. */
     this.type = eventUtils.COMMENT_CREATE;
 
     if (!opt_comment) {
-      return;  // Blank event to be populated by fromJson.
+      return;
     }
-
+    // Blank event to be populated by fromJson.
     this.xml = opt_comment.toXmlWithXY();
   }
 
   // TODO (#1266): "Full" and "minimal" serialization.
   /**
    * Encode the event as JSON.
-   * @return {!Object} JSON representation.
+   * @return JSON representation.
    */
-  toJson() {
+  override toJson(): AnyDuringMigration {
     const json = super.toJson();
     json['xml'] = Xml.domToText(this.xml);
     return json;
@@ -62,23 +62,21 @@ class CommentCreate extends CommentBase {
 
   /**
    * Decode the JSON event.
-   * @param {!Object} json JSON representation.
+   * @param json JSON representation.
    */
-  fromJson(json) {
+  override fromJson(json: AnyDuringMigration) {
     super.fromJson(json);
     this.xml = Xml.textToDom(json['xml']);
   }
 
   /**
    * Run a creation event.
-   * @param {boolean} forward True if run forward, false if run backward (undo).
+   * @param forward True if run forward, false if run backward (undo).
    */
-  run(forward) {
+  override run(forward: boolean) {
     CommentBase.CommentCreateDeleteHelper(this, forward);
   }
 }
 
 registry.register(
     registry.Type.EVENT, eventUtils.COMMENT_CREATE, CommentCreate);
-
-exports.CommentCreate = CommentCreate;

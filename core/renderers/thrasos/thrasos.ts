@@ -1,3 +1,5 @@
+/** @fileoverview Re-exports of Blockly.thrasos.* modules. */
+
 /**
  * @license
  * Copyright 2021 Google LLC
@@ -5,18 +7,14 @@
  */
 
 /**
- * @fileoverview Re-exports of Blockly.thrasos.* modules.
- */
-'use strict';
-
-/**
  * Re-exports of Blockly.thrasos.* modules.
  * @namespace Blockly.thrasos
  */
-goog.module('Blockly.thrasos');
+import * as goog from '../../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.thrasos');
 
-const {RenderInfo} = goog.require('Blockly.thrasos.RenderInfo');
-const {Renderer} = goog.require('Blockly.thrasos.Renderer');
+import {RenderInfo} from './info.js';
+import {Renderer} from './renderer.js';
 
-exports.RenderInfo = RenderInfo;
-exports.Renderer = Renderer;
+
+export {Renderer, RenderInfo};

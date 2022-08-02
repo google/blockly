@@ -8,16 +8,16 @@
  * @fileoverview Classic theme.
  * Contains multi-coloured border to create shadow effect.
  */
-'use strict';
 
 /**
  * Classic theme.
  * Contains multi-coloured border to create shadow effect.
  * @namespace Blockly.Themes.Classic
  */
-goog.module('Blockly.Themes.Classic');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Themes.Classic');
 
-const {Theme} = goog.require('Blockly.Theme');
+import {Theme} from '../theme.js';
 
 
 const defaultBlockStyles = {
@@ -48,9 +48,7 @@ const categoryStyles = {
 /**
  * Classic theme.
  * Contains multi-coloured border to create shadow effect.
- * @type {Theme}
  * @alias Blockly.Themes.Classic
  */
-const Classic = new Theme('classic', defaultBlockStyles, categoryStyles);
-
-exports.Classic = Classic;
+export const Classic = new Theme(
+    'classic', defaultBlockStyles as AnyDuringMigration, categoryStyles);

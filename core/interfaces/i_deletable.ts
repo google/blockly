@@ -8,26 +8,22 @@
  * @fileoverview The interface for an object that is deletable.
  */
 
-'use strict';
-
 /**
  * The interface for an object that is deletable.
  * @namespace Blockly.IDeletable
  */
-goog.module('Blockly.IDeletable');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.IDeletable');
 
 
 /**
  * The interface for an object that can be deleted.
- * @interface
  * @alias Blockly.IDeletable
  */
-const IDeletable = function() {};
-
-/**
- * Get whether this object is deletable or not.
- * @return {boolean} True if deletable.
- */
-IDeletable.prototype.isDeletable;
-
-exports.IDeletable = IDeletable;
+export interface IDeletable {
+  /**
+   * Get whether this object is deletable or not.
+   * @return True if deletable.
+   */
+  isDeletable: AnyDuringMigration;
+}

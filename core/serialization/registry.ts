@@ -8,38 +8,36 @@
  * @fileoverview Contains functions registering serializers (eg blocks,
  * variables, plugins, etc).
  */
-'use strict';
 
 /**
  * Contains functions registering serializers (eg blocks, variables, plugins,
  * etc).
  * @namespace Blockly.serialization.registry
  */
-goog.module('Blockly.serialization.registry');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.serialization.registry');
 
-const registry = goog.require('Blockly.registry');
 // eslint-disable-next-line no-unused-vars
-const {ISerializer} = goog.requireType('Blockly.serialization.ISerializer');
+import type {ISerializer} from '../interfaces/i_serializer.js';
+import * as registry from '../registry.js';
 
 
 /**
  * Registers the given serializer so that it can be used for serialization and
  * deserialization.
- * @param {string} name The name of the serializer to register.
- * @param {ISerializer} serializer The serializer to register.
+ * @param name The name of the serializer to register.
+ * @param serializer The serializer to register.
  * @alias Blockly.serialization.registry.register
  */
-const register = function(name, serializer) {
+export function register(name: string, serializer: ISerializer) {
   registry.register(registry.Type.SERIALIZER, name, serializer);
-};
-exports.register = register;
+}
 
 /**
  * Unregisters the serializer associated with the given name.
- * @param {string} name The name of the serializer to unregister.
+ * @param name The name of the serializer to unregister.
  * @alias Blockly.serialization.registry.unregister
  */
-const unregister = function(name) {
+export function unregister(name: string) {
   registry.unregister(registry.Type.SERIALIZER, name);
-};
-exports.unregister = unregister;
+}

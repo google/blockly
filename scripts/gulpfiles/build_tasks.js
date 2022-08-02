@@ -110,7 +110,7 @@ const chunks = [
   {
     name: 'blockly',
     entry: path.join(CORE_DIR, 'main.js'),
-    exports: 'module$exports$Blockly',
+    exports: 'module$build$src$core$blockly',
     reexport: 'Blockly',
   },
   {
@@ -190,7 +190,7 @@ function stripApacheLicense() {
  */
 var JSCOMP_ERROR = [
   // 'accessControls',  // Deprecated; means same as visibility.
-  'checkPrototypalTypes',
+  // 'checkPrototypalTypes',  // override annotations are stripped by tsc.
   'checkRegExp',
   // 'checkTypes',  // Disabled; see note in JSCOMP_OFF.
   'checkVars',
@@ -204,12 +204,12 @@ var JSCOMP_ERROR = [
   'externsValidation',
   'extraRequire',  // Undocumented but valid.
   'functionParams',
-  'globalThis',
+  // 'globalThis',  // This types are stripped by tsc.
   'invalidCasts',
   'misplacedTypeAnnotation',
   // 'missingOverride',  // There are many of these, which should be fixed.
   'missingPolyfill',
-  'missingProperties',
+  // 'missingProperties',  // Unset static properties are stripped by tsc.
   'missingProvide',
   'missingRequire',
   'missingReturn',
@@ -230,7 +230,7 @@ var JSCOMP_ERROR = [
   'undefinedVars',
   'underscore',
   'unknownDefines',
-  'unusedLocalVariables',
+  // 'unusedLocalVariables',  // Disabled; see note in JSCOMP_OFF.
   'unusedPrivateMembers',
   'uselessCode',
   'untranspilableFeatures',
@@ -269,6 +269,7 @@ var JSCOMP_OFF = [
    */
   'checkTypes',
   'nonStandardJsDocs',  // Due to @internal
+  'unusedLocalVariables',  // Due to code generated for merged namespaces.
 
   /* In order to transition to ES modules, modules will need to import
    * one another by relative paths. This means that the previous
@@ -289,6 +290,26 @@ var JSCOMP_OFF = [
    */
   'visibility',
 ];
+
+/**
+ * The npm prepare script, run by npm install after installing modules
+ * and as part of the packaging process.
+ *
+ * This does just enough of the build that npm start should work.
+ *
+ * Exception: when running in the CI environment, we don't build
+ * anything.  We don't need to, because npm test will build everything
+ * needed, and we don't want to, because a tsc error would prevent
+ * other workflows (like lint and format) from completing.
+ */
+function prepare() {
+  if (process.env.CI) {
+    return gulp.src('.');  // Do nothing.
+  }
+  return buildJavaScriptAndDeps();
+}
+
+const buildJavaScriptAndDeps = gulp.series(buildJavaScript, buildDeps);
 
 /**
  * Builds Blockly as a JS program, by running tsc on all the files in
@@ -321,13 +342,16 @@ function buildDeps(done) {
   ];
 
   const args = roots.map(root => `--root '${root}' `).join('');
-  execSync(`closure-make-deps ${args} > '${DEPS_FILE}'`,
-           {stdio: 'inherit'});
+  execSync(
+      `closure-make-deps ${args} 2>/dev/null >'${DEPS_FILE}'`,
+      {stdio: 'inherit'});
 
   // Use grep to filter out the entries that are already in deps.js.
   const testArgs = testRoots.map(root => `--root '${root}' `).join('');
-  execSync(`closure-make-deps ${testArgs} | grep 'tests/mocha' ` +
-      `> '${TEST_DEPS_FILE}'`, {stdio: 'inherit'});
+  execSync(
+      `closure-make-deps ${testArgs} 2>/dev/null \
+           | grep 'tests/mocha' > '${TEST_DEPS_FILE}'`,
+      {stdio: 'inherit'});
   done();
 }
 
@@ -625,7 +649,7 @@ function buildCompiled() {
     // declareLegacyNamespace this was very straightforward.  Without
     // it, we have to rely on implmentation details.  See
     // https://github.com/google/closure-compiler/issues/1601#issuecomment-483452226
-    define: `${chunks[0].exports}.VERSION='${packageJson.version}'`,
+    define: `VERSION$$${chunks[0].exports}='${packageJson.version}'`,
     chunk: chunkOptions.chunk,
     chunk_wrapper: chunkOptions.chunk_wrapper,
     rename_prefix_namespace: NAMESPACE_VARIABLE,
@@ -728,7 +752,9 @@ function format() {
 }
 
 module.exports = {
+  prepare: prepare,
   build: build,
+  javaScriptAndDeps: buildJavaScriptAndDeps,
   javaScript: buildJavaScript,
   deps: buildDeps,
   generateLangfiles: generateLangfiles,

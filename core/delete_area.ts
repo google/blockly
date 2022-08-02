@@ -9,53 +9,46 @@
  * bubble that is dropped on top of it.
  */
 
-'use strict';
-
 /**
  * The abstract class for a component that can delete a block or
  * bubble that is dropped on top of it.
  * @class
  */
-goog.module('Blockly.DeleteArea');
+import * as goog from '../closure/goog/goog.js';
+goog.declareModuleId('Blockly.DeleteArea');
 
-const {BlockSvg} = goog.require('Blockly.BlockSvg');
-const {DragTarget} = goog.require('Blockly.DragTarget');
-/* eslint-disable-next-line no-unused-vars */
-const {IDeleteArea} = goog.require('Blockly.IDeleteArea');
-/* eslint-disable-next-line no-unused-vars */
-const {IDraggable} = goog.requireType('Blockly.IDraggable');
+import {BlockSvg} from './block_svg.js';
+import {DragTarget} from './drag_target.js';
+import type {IDeleteArea} from './interfaces/i_delete_area.js';
+import type {IDraggable} from './interfaces/i_draggable.js';
 
 
 /**
  * Abstract class for a component that can delete a block or bubble that is
  * dropped on top of it.
- * @extends {DragTarget}
- * @implements {IDeleteArea}
  * @alias Blockly.DeleteArea
  */
-class DeleteArea extends DragTarget {
+export class DeleteArea extends DragTarget implements IDeleteArea {
+  /**
+   * Whether the last block or bubble dragged over this delete area would be
+   * deleted if dropped on this component.
+   * This property is not updated after the block or bubble is deleted.
+   */
+  protected wouldDelete_ = false;
+
+  /**
+   * The unique id for this component that is used to register with the
+   * ComponentManager.
+   */
+  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
+  override id!: string;
+
   /**
    * Constructor for DeleteArea. Should not be called directly, only by a
    * subclass.
    */
   constructor() {
     super();
-
-    /**
-     * Whether the last block or bubble dragged over this delete area would be
-     * deleted if dropped on this component.
-     * This property is not updated after the block or bubble is deleted.
-     * @type {boolean}
-     * @protected
-     */
-    this.wouldDelete_ = false;
-
-    /**
-     * The unique id for this component that is used to register with the
-     * ComponentManager.
-     * @type {string}
-     */
-    this.id;
   }
 
   /**
@@ -63,16 +56,14 @@ class DeleteArea extends DragTarget {
    * this area.
    * This method should check if the element is deletable and is always called
    * before onDragEnter/onDragOver/onDragExit.
-   * @param {!IDraggable} element The block or bubble currently being
-   *   dragged.
-   * @param {boolean} couldConnect Whether the element could could connect to
-   *     another.
-   * @return {boolean} Whether the element provided would be deleted if dropped
-   *     on this area.
+   * @param element The block or bubble currently being dragged.
+   * @param couldConnect Whether the element could could connect to another.
+   * @return Whether the element provided would be deleted if dropped on this
+   *     area.
    */
-  wouldDelete(element, couldConnect) {
+  wouldDelete(element: IDraggable, couldConnect: boolean): boolean {
     if (element instanceof BlockSvg) {
-      const block = /** @type {BlockSvg} */ (element);
+      const block = (element);
       const couldDeleteBlock = !block.getParent() && block.isDeletable();
       this.updateWouldDelete_(couldDeleteBlock && !couldConnect);
     } else {
@@ -83,12 +74,9 @@ class DeleteArea extends DragTarget {
 
   /**
    * Updates the internal wouldDelete_ state.
-   * @param {boolean} wouldDelete The new value for the wouldDelete state.
-   * @protected
+   * @param wouldDelete The new value for the wouldDelete state.
    */
-  updateWouldDelete_(wouldDelete) {
+  protected updateWouldDelete_(wouldDelete: boolean) {
     this.wouldDelete_ = wouldDelete;
   }
 }
-
-exports.DeleteArea = DeleteArea;

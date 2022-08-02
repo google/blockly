@@ -8,45 +8,42 @@
  * @fileoverview An object that encapsulates logic for checking whether a
  * potential connection is safe and valid.
  */
-'use strict';
 
 /**
  * An object that encapsulates logic for checking whether a
  * potential connection is safe and valid.
  * @class
  */
-goog.module('Blockly.ConnectionChecker');
+import * as goog from '../closure/goog/goog.js';
+goog.declareModuleId('Blockly.ConnectionChecker');
 
-const common = goog.require('Blockly.common');
-const internalConstants = goog.require('Blockly.internalConstants');
-const registry = goog.require('Blockly.registry');
-const {ConnectionType} = goog.require('Blockly.ConnectionType');
-const {Connection} = goog.require('Blockly.Connection');
-/* eslint-disable-next-line no-unused-vars */
-const {IConnectionChecker} = goog.require('Blockly.IConnectionChecker');
-/* eslint-disable-next-line no-unused-vars */
-const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
+import * as common from './common.js';
+import {Connection} from './connection.js';
+import {ConnectionType} from './connection_type.js';
+import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
+import * as internalConstants from './internal_constants.js';
+import * as registry from './registry.js';
+import type {RenderedConnection} from './rendered_connection.js';
 
 
 /**
  * Class for connection type checking logic.
- * @implements {IConnectionChecker}
  * @alias Blockly.ConnectionChecker
  */
-class ConnectionChecker {
+export class ConnectionChecker implements IConnectionChecker {
   /**
    * Check whether the current connection can connect with the target
    * connection.
-   * @param {Connection} a Connection to check compatibility with.
-   * @param {Connection} b Connection to check compatibility with.
-   * @param {boolean} isDragging True if the connection is being made by
-   *     dragging a block.
-   * @param {number=} opt_distance The max allowable distance between the
-   *     connections for drag checks.
-   * @return {boolean} Whether the connection is legal.
-   * @public
+   * @param a Connection to check compatibility with.
+   * @param b Connection to check compatibility with.
+   * @param isDragging True if the connection is being made by dragging a block.
+   * @param opt_distance The max allowable distance between the connections for
+   *     drag checks.
+   * @return Whether the connection is legal.
    */
-  canConnect(a, b, isDragging, opt_distance) {
+  canConnect(
+      a: Connection|null, b: Connection|null, isDragging: boolean,
+      opt_distance?: number): boolean {
     return this.canConnectWithReason(a, b, isDragging, opt_distance) ===
         Connection.CAN_CONNECT;
   }
@@ -54,33 +51,33 @@ class ConnectionChecker {
   /**
    * Checks whether the current connection can connect with the target
    * connection, and return an error code if there are problems.
-   * @param {Connection} a Connection to check compatibility with.
-   * @param {Connection} b Connection to check compatibility with.
-   * @param {boolean} isDragging True if the connection is being made by
-   *     dragging a block.
-   * @param {number=} opt_distance The max allowable distance between the
-   *     connections for drag checks.
-   * @return {number} Connection.CAN_CONNECT if the connection is legal,
-   *    an error code otherwise.
-   * @public
+   * @param a Connection to check compatibility with.
+   * @param b Connection to check compatibility with.
+   * @param isDragging True if the connection is being made by dragging a block.
+   * @param opt_distance The max allowable distance between the connections for
+   *     drag checks.
+   * @return Connection.CAN_CONNECT if the connection is legal, an error code
+   *     otherwise.
    */
-  canConnectWithReason(a, b, isDragging, opt_distance) {
+  canConnectWithReason(
+      a: Connection|null, b: Connection|null, isDragging: boolean,
+      opt_distance?: number): number {
     const safety = this.doSafetyChecks(a, b);
     if (safety !== Connection.CAN_CONNECT) {
       return safety;
     }
 
     // If the safety checks passed, both connections are non-null.
-    const connOne = /** @type {!Connection} **/ (a);
-    const connTwo = /** @type {!Connection} **/ (b);
+    const connOne = a!;
+    const connTwo = b!;
     if (!this.doTypeChecks(connOne, connTwo)) {
       return Connection.REASON_CHECKS_FAILED;
     }
 
     if (isDragging &&
         !this.doDragChecks(
-            /** @type {!RenderedConnection} **/ (a),
-            /** @type {!RenderedConnection} **/ (b), opt_distance || 0)) {
+            a as RenderedConnection, b as RenderedConnection,
+            opt_distance || 0)) {
       return Connection.REASON_DRAG_CHECKS_FAILED;
     }
 
@@ -89,14 +86,13 @@ class ConnectionChecker {
 
   /**
    * Helper method that translates a connection error code into a string.
-   * @param {number} errorCode The error code.
-   * @param {Connection} a One of the two connections being checked.
-   * @param {Connection} b The second of the two connections being
-   *     checked.
-   * @return {string} A developer-readable error string.
-   * @public
+   * @param errorCode The error code.
+   * @param a One of the two connections being checked.
+   * @param b The second of the two connections being checked.
+   * @return A developer-readable error string.
    */
-  getErrorMessage(errorCode, a, b) {
+  getErrorMessage(errorCode: number, a: Connection|null, b: Connection|null):
+      string {
     switch (errorCode) {
       case Connection.REASON_SELF_CONNECTION:
         return 'Attempted to connect a block to itself.';
@@ -108,8 +104,8 @@ class ConnectionChecker {
       case Connection.REASON_TARGET_NULL:
         return 'Target connection is null.';
       case Connection.REASON_CHECKS_FAILED: {
-        const connOne = /** @type {!Connection} **/ (a);
-        const connTwo = /** @type {!Connection} **/ (b);
+        const connOne = a!;
+        const connTwo = b!;
         let msg = 'Connection checks failed. ';
         msg += connOne + ' expected ' + connOne.getCheck() + ', found ' +
             connTwo.getCheck();
@@ -129,12 +125,11 @@ class ConnectionChecker {
   /**
    * Check that connecting the given connections is safe, meaning that it would
    * not break any of Blockly's basic assumptions (e.g. no self connections).
-   * @param {Connection} a The first of the connections to check.
-   * @param {Connection} b The second of the connections to check.
-   * @return {number} An enum with the reason this connection is safe or unsafe.
-   * @public
+   * @param a The first of the connections to check.
+   * @param b The second of the connections to check.
+   * @return An enum with the reason this connection is safe or unsafe.
    */
-  doSafetyChecks(a, b) {
+  doSafetyChecks(a: Connection|null, b: Connection|null): number {
     if (!a || !b) {
       return Connection.REASON_TARGET_NULL;
     }
@@ -181,12 +176,11 @@ class ConnectionChecker {
    * Check whether this connection is compatible with another connection with
    * respect to the value type system.  E.g. square_root("Hello") is not
    * compatible.
-   * @param {!Connection} a Connection to compare.
-   * @param {!Connection} b Connection to compare against.
-   * @return {boolean} True if the connections share a type.
-   * @public
+   * @param a Connection to compare.
+   * @param b Connection to compare against.
+   * @return True if the connections share a type.
    */
-  doTypeChecks(a, b) {
+  doTypeChecks(a: Connection, b: Connection): boolean {
     const checkArrayOne = a.getCheck();
     const checkArrayTwo = b.getCheck();
 
@@ -206,15 +200,16 @@ class ConnectionChecker {
 
   /**
    * Check whether this connection can be made by dragging.
-   * @param {!RenderedConnection} a Connection to compare.
-   * @param {!RenderedConnection} b Connection to compare against.
-   * @param {number} distance The maximum allowable distance between
-   *     connections.
-   * @return {boolean} True if the connection is allowed during a drag.
-   * @public
+   * @param a Connection to compare.
+   * @param b Connection to compare against.
+   * @param distance The maximum allowable distance between connections.
+   * @return True if the connection is allowed during a drag.
    */
-  doDragChecks(a, b, distance) {
-    if (a.distanceFrom(b) > distance) {
+  doDragChecks(a: RenderedConnection, b: RenderedConnection, distance: number):
+      boolean {
+    // AnyDuringMigration because:  Argument of type 'RenderedConnection' is not
+    // assignable to parameter of type 'Connection'.
+    if (a.distanceFrom(b as AnyDuringMigration) > distance) {
       return false;
     }
 
@@ -225,11 +220,13 @@ class ConnectionChecker {
 
     switch (b.type) {
       case ConnectionType.PREVIOUS_STATEMENT:
-        return this.canConnectToPrevious_(a, b);
+        // AnyDuringMigration because:  Argument of type 'RenderedConnection' is
+        // not assignable to parameter of type 'Connection'.
+        return this.canConnectToPrevious_(a as AnyDuringMigration, b);
       case ConnectionType.OUTPUT_VALUE: {
         // Don't offer to connect an already connected left (male) value plug to
         // an available right (female) value plug.
-        if ((b.isConnected() && !b.targetBlock().isInsertionMarker()) ||
+        if (b.isConnected() && !b.targetBlock()!.isInsertionMarker() ||
             a.isConnected()) {
           return false;
         }
@@ -239,8 +236,8 @@ class ConnectionChecker {
         // Offering to connect the left (male) of a value block to an already
         // connected value pair is ok, we'll splice it in.
         // However, don't offer to splice into an immovable block.
-        if (b.isConnected() && !b.targetBlock().isMovable() &&
-            !b.targetBlock().isShadow()) {
+        if (b.isConnected() && !b.targetBlock()!.isMovable() &&
+            !b.targetBlock()!.isShadow()) {
           return false;
         }
         break;
@@ -251,7 +248,7 @@ class ConnectionChecker {
         // is fine.  Similarly, replacing a terminal statement with another
         // terminal statement is allowed.
         if (b.isConnected() && !a.getSourceBlock().nextConnection &&
-            !b.targetBlock().isShadow() && b.targetBlock().nextConnection) {
+            !b.targetBlock()!.isShadow() && b.targetBlock()!.nextConnection) {
           return false;
         }
         break;
@@ -262,7 +259,9 @@ class ConnectionChecker {
     }
 
     // Don't let blocks try to connect to themselves or ones they nest.
-    if (common.draggingConnections.indexOf(b) !== -1) {
+    // AnyDuringMigration because:  Argument of type 'RenderedConnection' is not
+    // assignable to parameter of type 'Connection'.
+    if (common.draggingConnections.indexOf(b as AnyDuringMigration) !== -1) {
       return false;
     }
 
@@ -271,14 +270,12 @@ class ConnectionChecker {
 
   /**
    * Helper function for drag checking.
-   * @param {!Connection} a The connection to check, which must be a
-   *     statement input or next connection.
-   * @param {!Connection} b A nearby connection to check, which
-   *     must be a previous connection.
-   * @return {boolean} True if the connection is allowed, false otherwise.
-   * @protected
+   * @param a The connection to check, which must be a statement input or next
+   *     connection.
+   * @param b A nearby connection to check, which must be a previous connection.
+   * @return True if the connection is allowed, false otherwise.
    */
-  canConnectToPrevious_(a, b) {
+  protected canConnectToPrevious_(a: Connection, b: Connection): boolean {
     if (a.targetConnection) {
       // This connection is already occupied.
       // A next connection will never disconnect itself mid-drag.
@@ -296,17 +293,15 @@ class ConnectionChecker {
 
     const targetBlock = b.targetBlock();
     // If it is connected to a real block, game over.
-    if (!targetBlock.isInsertionMarker()) {
+    if (!targetBlock!.isInsertionMarker()) {
       return false;
     }
     // If it's connected to an insertion marker but that insertion marker
     // is the first block in a stack, it's still fine.  If that insertion
     // marker is in the middle of a stack, it won't work.
-    return !targetBlock.getPreviousBlock();
+    return !targetBlock!.getPreviousBlock();
   }
 }
 
 registry.register(
     registry.Type.CONNECTION_CHECKER, registry.DEFAULT, ConnectionChecker);
-
-exports.ConnectionChecker = ConnectionChecker;

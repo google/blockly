@@ -8,28 +8,26 @@
  * @fileoverview New (evolving) renderer.
  * Thrasos: spirit of boldness.
  */
-'use strict';
 
 /**
  * New (evolving) renderer.
  * Thrasos: spirit of boldness.
  * @class
  */
-goog.module('Blockly.thrasos.RenderInfo');
+import * as goog from '../../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.thrasos.RenderInfo');
 
-/* eslint-disable-next-line no-unused-vars */
-const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-/* eslint-disable-next-line no-unused-vars */
-const {BottomRow} = goog.requireType('Blockly.blockRendering.BottomRow');
-/* eslint-disable-next-line no-unused-vars */
-const {Field} = goog.requireType('Blockly.blockRendering.Field');
-const {InRowSpacer} = goog.require('Blockly.blockRendering.InRowSpacer');
-const {RenderInfo: BaseRenderInfo} = goog.require('Blockly.blockRendering.RenderInfo');
-/* eslint-disable-next-line no-unused-vars */
-const {Renderer} = goog.requireType('Blockly.thrasos.Renderer');
-/* eslint-disable-next-line no-unused-vars */
-const {TopRow} = goog.requireType('Blockly.blockRendering.TopRow');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+import type {BlockSvg} from '../../block_svg.js';
+import {RenderInfo as BaseRenderInfo} from '../common/info.js';
+import type {Measurable} from '../measurables/base.js';
+import type {BottomRow} from '../measurables/bottom_row.js';
+import type {Field} from '../measurables/field.js';
+import {InRowSpacer} from '../measurables/in_row_spacer.js';
+import type {Row} from '../measurables/row.js';
+import type {TopRow} from '../measurables/top_row.js';
+import {Types} from '../measurables/types.js';
+
+import type {Renderer} from './renderer.js';
 
 
 /**
@@ -38,32 +36,34 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  * This measure pass does not propagate changes to the block (although fields
  * may choose to rerender when getSize() is called).  However, calling it
  * repeatedly may be expensive.
- * @extends {BaseRenderInfo}
  * @alias Blockly.thrasos.RenderInfo
  */
-class RenderInfo extends BaseRenderInfo {
+export class RenderInfo extends BaseRenderInfo {
+  override widthWithChildren: AnyDuringMigration;
+  override height: AnyDuringMigration;
+  override startY: AnyDuringMigration;
+
   /**
-   * @param {!Renderer} renderer The renderer in use.
-   * @param {!BlockSvg} block The block to measure.
-   * @package
+   * @param renderer The renderer in use.
+   * @param block The block to measure.
+   * @internal
    */
-  constructor(renderer, block) {
+  constructor(renderer: Renderer, block: BlockSvg) {
     super(renderer, block);
   }
 
   /**
    * Get the block renderer in use.
-   * @return {!Renderer} The block renderer in use.
-   * @package
+   * @return The block renderer in use.
+   * @internal
    */
-  getRenderer() {
-    return /** @type {!Renderer} */ (this.renderer_);
+  override getRenderer(): Renderer {
+    // AnyDuringMigration because:  Property 'renderer_' does not exist on type
+    // 'RenderInfo'.
+    return (this as AnyDuringMigration).renderer_ as Renderer;
   }
 
-  /**
-   * @override
-   */
-  addElemSpacing_() {
+  override addElemSpacing_() {
     let hasExternalInputs = false;
     for (let i = 0; i < this.rows.length; i++) {
       const row = this.rows[i];
@@ -103,14 +103,10 @@ class RenderInfo extends BaseRenderInfo {
     }
   }
 
-  /**
-   * @override
-   */
-  getInRowSpacing_(prev, next) {
+  override getInRowSpacing_(prev: Measurable|null, next: Measurable|null) {
     if (!prev) {
       // Between an editable field and the beginning of the row.
-      if (next && Types.isField(next) &&
-          (/** @type {Field} */ (next)).isEditable) {
+      if (next && Types.isField(next) && (next as Field).isEditable) {
         return this.constants_.MEDIUM_PADDING;
       }
       // Inline input at the beginning of the row.
@@ -127,19 +123,23 @@ class RenderInfo extends BaseRenderInfo {
     // Spacing between a non-input and the end of the row.
     if (!Types.isInput(prev) && !next) {
       // Between an editable field and the end of the row.
-      if (Types.isField(prev) && (/** @type {Field} */ (prev)).isEditable) {
+      if (Types.isField(prev) && (prev as Field).isEditable) {
         return this.constants_.MEDIUM_PADDING;
       }
       // Padding at the end of an icon-only row to make the block shape clearer.
       if (Types.isIcon(prev)) {
-        return (this.constants_.LARGE_PADDING * 2) + 1;
+        return this.constants_.LARGE_PADDING * 2 + 1;
       }
-      if (Types.isHat(prev)) {
+      // AnyDuringMigration because:  Property 'isHat' does not exist on type
+      // 'typeof Types'.
+      if ((Types as AnyDuringMigration).isHat(prev)) {
         return this.constants_.NO_PADDING;
       }
       // Establish a minimum width for a block with a previous or next
       // connection.
-      if (Types.isPreviousOrNextConnection(prev)) {
+      // AnyDuringMigration because:  Property 'isPreviousOrNextConnection' does
+      // not exist on type 'typeof Types'.
+      if ((Types as AnyDuringMigration).isPreviousOrNextConnection(prev)) {
         return this.constants_.LARGE_PADDING;
       }
       // Between rounded corner and the end of the row.
@@ -153,10 +153,11 @@ class RenderInfo extends BaseRenderInfo {
       // Between noneditable fields and icons and the end of the row.
       return this.constants_.LARGE_PADDING;
     }
-
     // Between inputs and the end of the row.
     if (Types.isInput(prev) && !next) {
-      if (Types.isExternalInput(prev)) {
+      // AnyDuringMigration because:  Property 'isExternalInput' does not exist
+      // on type 'typeof Types'.
+      if ((Types as AnyDuringMigration).isExternalInput(prev)) {
         return this.constants_.NO_PADDING;
       } else if (Types.isInlineInput(prev)) {
         return this.constants_.LARGE_PADDING;
@@ -168,16 +169,20 @@ class RenderInfo extends BaseRenderInfo {
     // Spacing between a non-input and an input.
     if (!Types.isInput(prev) && next && Types.isInput(next)) {
       // Between an editable field and an input.
-      if (Types.isField(prev) && (/** @type {Field} */ (prev)).isEditable) {
+      if (Types.isField(prev) && (prev as Field).isEditable) {
         if (Types.isInlineInput(next)) {
           return this.constants_.SMALL_PADDING;
-        } else if (Types.isExternalInput(next)) {
+          // AnyDuringMigration because:  Property 'isExternalInput' does not
+          // exist on type 'typeof Types'.
+        } else if ((Types as AnyDuringMigration).isExternalInput(next)) {
           return this.constants_.SMALL_PADDING;
         }
       } else {
         if (Types.isInlineInput(next)) {
           return this.constants_.MEDIUM_LARGE_PADDING;
-        } else if (Types.isExternalInput(next)) {
+          // AnyDuringMigration because:  Property 'isExternalInput' does not
+          // exist on type 'typeof Types'.
+        } else if ((Types as AnyDuringMigration).isExternalInput(next)) {
           return this.constants_.MEDIUM_LARGE_PADDING;
         } else if (Types.isStatementInput(next)) {
           return this.constants_.LARGE_PADDING;
@@ -194,7 +199,7 @@ class RenderInfo extends BaseRenderInfo {
     // Spacing between an inline input and a field.
     if (Types.isInlineInput(prev) && next && Types.isField(next)) {
       // Editable field after inline input.
-      if ((/** @type {Field} */ (next)).isEditable) {
+      if ((next as Field).isEditable) {
         return this.constants_.MEDIUM_PADDING;
       } else {
         // Noneditable field after inline input.
@@ -204,7 +209,9 @@ class RenderInfo extends BaseRenderInfo {
 
     if (Types.isLeftSquareCorner(prev) && next) {
       // Spacing between a hat and a corner
-      if (Types.isHat(next)) {
+      // AnyDuringMigration because:  Property 'isHat' does not exist on type
+      // 'typeof Types'.
+      if ((Types as AnyDuringMigration).isHat(next)) {
         return this.constants_.NO_PADDING;
       }
       // Spacing between a square corner and a previous or next connection
@@ -212,7 +219,6 @@ class RenderInfo extends BaseRenderInfo {
         return next.notchOffset;
       }
     }
-
     // Spacing between a rounded corner and a previous or next connection.
     if (Types.isLeftRoundedCorner(prev) && next) {
       return next.notchOffset - this.constants_.CORNER_RADIUS;
@@ -220,8 +226,7 @@ class RenderInfo extends BaseRenderInfo {
 
     // Spacing between two fields of the same editability.
     if (Types.isField(prev) && next && Types.isField(next) &&
-        ((/** @type {Field} */ (prev)).isEditable ===
-         (/** @type {Field} */ (next)).isEditable)) {
+        (prev as Field).isEditable === (next as Field).isEditable) {
       return this.constants_.LARGE_PADDING;
     }
 
@@ -233,10 +238,7 @@ class RenderInfo extends BaseRenderInfo {
     return this.constants_.MEDIUM_PADDING;
   }
 
-  /**
-   * @override
-   */
-  getSpacerRowHeight_(prev, next) {
+  override getSpacerRowHeight_(prev: Row, next: Row) {
     // If we have an empty block add a spacer to increase the height.
     if (Types.isTopRow(prev) && Types.isBottomRow(next)) {
       return this.constants_.EMPTY_BLOCK_SPACER_HEIGHT;
@@ -260,15 +262,12 @@ class RenderInfo extends BaseRenderInfo {
     return this.constants_.MEDIUM_PADDING;
   }
 
-  /**
-   * @override
-   */
-  getElemCenterline_(row, elem) {
+  override getElemCenterline_(row: Row, elem: Measurable) {
     if (Types.isSpacer(elem)) {
       return row.yPos + elem.height / 2;
     }
     if (Types.isBottomRow(row)) {
-      const bottomRow = /** @type {!BottomRow} */ (row);
+      const bottomRow = row as BottomRow;
       const baseline =
           bottomRow.yPos + bottomRow.height - bottomRow.descenderHeight;
       if (Types.isNextConnection(elem)) {
@@ -277,8 +276,10 @@ class RenderInfo extends BaseRenderInfo {
       return baseline - elem.height / 2;
     }
     if (Types.isTopRow(row)) {
-      const topRow = /** @type {!TopRow} */ (row);
-      if (Types.isHat(elem)) {
+      const topRow = row as TopRow;
+      // AnyDuringMigration because:  Property 'isHat' does not exist on type
+      // 'typeof Types'.
+      if ((Types as AnyDuringMigration).isHat(elem)) {
         return topRow.capline - elem.height / 2;
       }
       return topRow.capline + elem.height / 2;
@@ -290,15 +291,12 @@ class RenderInfo extends BaseRenderInfo {
           this.constants_.TALL_INPUT_FIELD_OFFSET_Y + elem.height / 2;
       result += offset;
     } else {
-      result += (row.height / 2);
+      result += row.height / 2;
     }
     return result;
   }
 
-  /**
-   * @override
-   */
-  finalize_() {
+  override finalize_() {
     // Performance note: this could be combined with the draw pass, if the time
     // that this takes is excessive.  But it shouldn't be, because it only
     // accesses and sets properties that already exist on the objects.
@@ -338,5 +336,3 @@ class RenderInfo extends BaseRenderInfo {
     this.startY = this.topRow.capline;
   }
 }
-
-exports.RenderInfo = RenderInfo;

@@ -9,42 +9,37 @@
  * that is dropped on top of it.
  */
 
-'use strict';
-
 /**
  * The interface for a component that can delete a block or bubble
  * that is dropped on top of it.
  * @namespace Blockly.IDeleteArea
  */
-goog.module('Blockly.IDeleteArea');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.IDeleteArea');
 
 /* eslint-disable-next-line no-unused-vars */
-const {IDragTarget} = goog.require('Blockly.IDragTarget');
 /* eslint-disable-next-line no-unused-vars */
-const {IDraggable} = goog.requireType('Blockly.IDraggable');
+// Unused import preserved for side-effects. Remove if unneeded.
+// import './i_draggable.js';
+
+import type {IDragTarget} from './i_drag_target.js';
 
 
 /**
  * Interface for a component that can delete a block or bubble that is dropped
  * on top of it.
- * @extends {IDragTarget}
- * @interface
  * @alias Blockly.IDeleteArea
  */
-const IDeleteArea = function() {};
-
-/**
- * Returns whether the provided block or bubble would be deleted if dropped on
- * this area.
- * This method should check if the element is deletable and is always called
- * before onDragEnter/onDragOver/onDragExit.
- * @param {!IDraggable} element The block or bubble currently being
- *   dragged.
- * @param {boolean} couldConnect Whether the element could could connect to
- *     another.
- * @return {boolean} Whether the element provided would be deleted if dropped on
- *     this area.
- */
-IDeleteArea.prototype.wouldDelete;
-
-exports.IDeleteArea = IDeleteArea;
+export interface IDeleteArea extends IDragTarget {
+  /**
+   * Returns whether the provided block or bubble would be deleted if dropped on
+   * this area.
+   * This method should check if the element is deletable and is always called
+   * before onDragEnter/onDragOver/onDragExit.
+   * @param element The block or bubble currently being dragged.
+   * @param couldConnect Whether the element could could connect to another.
+   * @return Whether the element provided would be deleted if dropped on this
+   *     area.
+   */
+  wouldDelete: AnyDuringMigration;
+}

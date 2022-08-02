@@ -9,7 +9,6 @@
  * These methods are not specific to Blockly, and could be factored out into
  * a JavaScript framework such as Closure.
  */
-'use strict';
 
 /**
  * Useragent detection.
@@ -17,63 +16,48 @@
  * a JavaScript framework such as Closure.
  * @namespace Blockly.utils.userAgent
  */
-goog.module('Blockly.utils.userAgent');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.utils.userAgent');
 
 
-/**
- * The raw useragent string.
- * @type {string}
- */
-let rawUserAgent;
+/** The raw useragent string. */
+let rawUserAgent: string;
 
-/** @type {boolean} */
-let isIe;
+let isIe: boolean;
 
-/** @type {boolean} */
-let isEdge;
+let isEdge: boolean;
 
-/** @type {boolean} */
-let isJavaFx;
+let isJavaFx: boolean;
 
-/** @type {boolean} */
-let isChrome;
+let isChrome: boolean;
 
-/** @type {boolean} */
-let isWebKit;
+let isWebKit: boolean;
 
-/** @type {boolean} */
-let isGecko;
+let isGecko: boolean;
 
-/** @type {boolean} */
-let isAndroid;
+let isAndroid: boolean;
 
-/** @type {boolean} */
-let isIPad;
+let isIPad: boolean;
 
-/** @type {boolean} */
-let isIPod;
+let isIPod: boolean;
 
-/** @type {boolean} */
-let isIPhone;
+let isIPhone: boolean;
 
-/** @type {boolean} */
-let isMac;
+let isMac: boolean;
 
-/** @type {boolean} */
-let isTablet;
+let isTablet: boolean;
 
-/** @type {boolean} */
-let isMobile;
+let isMobile: boolean;
 
 (function(raw) {
 rawUserAgent = raw;
 const rawUpper = rawUserAgent.toUpperCase();
 /**
  * Case-insensitive test of whether name is in the useragent string.
- * @param {string} name Name to test.
- * @return {boolean} True if name is present.
+ * @param name Name to test.
+ * @return True if name is present.
  */
-function has(name) {
+function has(name: string): boolean {
   return rawUpper.indexOf(name.toUpperCase()) !== -1;
 }
 
@@ -106,90 +90,46 @@ isMac = has('Macintosh');
 
 // Devices.  Logic from:
 // https://github.com/google/closure-library/blob/master/closure/goog/labs/useragent/device.js
-isTablet = isIPad || (isAndroid && !has('Mobile')) || has('Silk');
+isTablet = isIPad || isAndroid && !has('Mobile') || has('Silk');
 isMobile = !isTablet && (isIPod || isIPhone || isAndroid || has('IEMobile'));
-})((globalThis['navigator'] && globalThis['navigator']['userAgent']) || '');
+})(globalThis['navigator'] && globalThis['navigator']['userAgent'] || '');
 
-/**
- * @const {string}
- * @alias Blockly.utils.userAgent.raw
- */
-exports.raw = rawUserAgent;
+/** @alias Blockly.utils.userAgent.raw */
+export const raw: string = rawUserAgent;
 
-/**
- * @const {boolean}
- * @alias Blockly.utils.userAgent.IE
- */
-exports.IE = isIe;
+/** @alias Blockly.utils.userAgent.IE */
+export const IE: boolean = isIe;
 
-/**
- * @const {boolean}
- * @alias Blockly.utils.userAgent.EDGE
- */
-exports.EDGE = isEdge;
+/** @alias Blockly.utils.userAgent.EDGE */
+export const EDGE: boolean = isEdge;
 
-/**
- * @const {boolean}
- * @alias Blockly.utils.userAgent.JavaFx
- */
-exports.JavaFx = isJavaFx;
+/** @alias Blockly.utils.userAgent.JavaFx */
+export const JavaFx: boolean = isJavaFx;
 
-/**
- * @const {boolean}
- * @alias Blockly.utils.userAgent.CHROME
- */
-exports.CHROME = isChrome;
+/** @alias Blockly.utils.userAgent.CHROME */
+export const CHROME: boolean = isChrome;
 
-/**
- * @const {boolean}
- * @alias Blockly.utils.userAgent.WEBKIT
- */
-exports.WEBKIT = isWebKit;
+/** @alias Blockly.utils.userAgent.WEBKIT */
+export const WEBKIT: boolean = isWebKit;
+/** @alias Blockly.utils.userAgent.GECKO */
+export const GECKO: boolean = isGecko;
 
-/**
- * @const {boolean}
- * @alias Blockly.utils.userAgent.GECKO
- */
-exports.GECKO = isGecko;
+/** @alias Blockly.utils.userAgent.ANDROID */
+export const ANDROID: boolean = isAndroid;
 
-/**
- * @const {boolean}
- * @alias Blockly.utils.userAgent.ANDROID
- */
-exports.ANDROID = isAndroid;
+/** @alias Blockly.utils.userAgent.IPAD */
+export const IPAD: boolean = isIPad;
+/** @alias Blockly.utils.userAgent.IPOD */
+export const IPOD: boolean = isIPod;
 
-/**
- * @const {boolean}
- * @alias Blockly.utils.userAgent.IPAD
- */
-exports.IPAD = isIPad;
+/** @alias Blockly.utils.userAgent.IPHONE */
+export const IPHONE: boolean = isIPhone;
 
-/**
- * @const {boolean}
- * @alias Blockly.utils.userAgent.IPOD
- */
-exports.IPOD = isIPod;
+/** @alias Blockly.utils.userAgent.MAC */
+export const MAC: boolean = isMac;
 
-/**
- * @const {boolean}
- * @alias Blockly.utils.userAgent.IPHONE
- */
-exports.IPHONE = isIPhone;
+/** @alias Blockly.utils.userAgent.TABLET */
+export const TABLET: boolean = isTablet;
 
-/**
- * @const {boolean}
- * @alias Blockly.utils.userAgent.MAC
- */
-exports.MAC = isMac;
-
-/**
- * @const {boolean}
- * @alias Blockly.utils.userAgent.TABLET
- */
-exports.TABLET = isTablet;
-
-/**
- * @const {boolean}
- * @alias Blockly.utils.userAgent.MOBILE
- */
-exports.MOBILE = isMobile;
+/** @alias Blockly.utils.userAgent.MOBILE */
+export const MOBILE: boolean = isMobile;

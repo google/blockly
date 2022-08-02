@@ -14,57 +14,52 @@
  * rendered block.
  * @class
  */
-goog.module('Blockly.blockRendering.ExternalValueInput');
+import * as goog from '../../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.blockRendering.ExternalValueInput');
 
 /* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const {InputConnection} = goog.require('Blockly.blockRendering.InputConnection');
-/* eslint-disable-next-line no-unused-vars */
-const {Input} = goog.requireType('Blockly.Input');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+import type {Input} from '../../input.js';
+import type {ConstantProvider} from '../common/constants.js';
+
+import {InputConnection} from './input_connection.js';
+import {Types} from './types.js';
 
 
 /**
  * An object containing information about the space an external value input
  * takes up during rendering
  * @struct
- * @extends {InputConnection}
  * @alias Blockly.blockRendering.ExternalValueInput
  */
-class ExternalValueInput extends InputConnection {
+export class ExternalValueInput extends InputConnection {
+  override height = 0;
+  override width: number;
+  override connectionOffsetY: number;
+  connectionHeight: number;
+  connectionWidth: number;
+
   /**
-   * @param {!ConstantProvider} constants The rendering
-   *   constants provider.
-   * @param {!Input} input The external value input to measure and store
-   *     information for.
-   * @package
+   * @param constants The rendering constants provider.
+   * @param input The external value input to measure and store information for.
+   * @internal
    */
-  constructor(constants, input) {
+  constructor(constants: ConstantProvider, input: Input) {
     super(constants, input);
     this.type |= Types.EXTERNAL_VALUE_INPUT;
-
-    /** @type {number} */
-    this.height = 0;
     if (!this.connectedBlock) {
-      this.height = this.shape.height;
+      this.height = this.shape.height as number;
     } else {
       this.height = this.connectedBlockHeight -
           this.constants_.TAB_OFFSET_FROM_TOP - this.constants_.MEDIUM_PADDING;
     }
 
-    /** @type {number} */
-    this.width =
-        this.shape.width + this.constants_.EXTERNAL_VALUE_INPUT_PADDING;
+    this.width = this.shape.width as
+        number + this.constants_.EXTERNAL_VALUE_INPUT_PADDING;
 
-    /** @type {number} */
     this.connectionOffsetY = this.constants_.TAB_OFFSET_FROM_TOP;
 
-    /** @type {number} */
-    this.connectionHeight = this.shape.height;
+    this.connectionHeight = this.shape.height as number;
 
-    /** @type {number} */
-    this.connectionWidth = this.shape.width;
+    this.connectionWidth = this.shape.width as number;
   }
 }
-
-exports.ExternalValueInput = ExternalValueInput;

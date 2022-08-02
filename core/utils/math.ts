@@ -9,7 +9,6 @@
  * These methods are not specific to Blockly, and could be factored out into
  * a JavaScript framework such as Closure.
  */
-'use strict';
 
 /**
  * Utility methods for math.
@@ -17,47 +16,46 @@
  * a JavaScript framework such as Closure.
  * @namespace Blockly.utils.math
  */
-goog.module('Blockly.utils.math');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.utils.math');
 
 
 /**
  * Converts degrees to radians.
  * Copied from Closure's goog.math.toRadians.
- * @param {number} angleDegrees Angle in degrees.
- * @return {number} Angle in radians.
+ * @param angleDegrees Angle in degrees.
+ * @return Angle in radians.
  * @alias Blockly.utils.math.toRadians
  */
-const toRadians = function(angleDegrees) {
+export function toRadians(angleDegrees: number): number {
   return angleDegrees * Math.PI / 180;
-};
-exports.toRadians = toRadians;
+}
 
 /**
  * Converts radians to degrees.
  * Copied from Closure's goog.math.toDegrees.
- * @param {number} angleRadians Angle in radians.
- * @return {number} Angle in degrees.
+ * @param angleRadians Angle in radians.
+ * @return Angle in degrees.
  * @alias Blockly.utils.math.toDegrees
  */
-const toDegrees = function(angleRadians) {
+export function toDegrees(angleRadians: number): number {
   return angleRadians * 180 / Math.PI;
-};
-exports.toDegrees = toDegrees;
+}
 
 /**
  * Clamp the provided number between the lower bound and the upper bound.
- * @param {number} lowerBound The desired lower bound.
- * @param {number} number The number to clamp.
- * @param {number} upperBound The desired upper bound.
- * @return {number} The clamped number.
+ * @param lowerBound The desired lower bound.
+ * @param number The number to clamp.
+ * @param upperBound The desired upper bound.
+ * @return The clamped number.
  * @alias Blockly.utils.math.clamp
  */
-const clamp = function(lowerBound, number, upperBound) {
+export function clamp(
+    lowerBound: number, number: number, upperBound: number): number {
   if (upperBound < lowerBound) {
     const temp = upperBound;
     upperBound = lowerBound;
     lowerBound = temp;
   }
   return Math.max(lowerBound, Math.min(number, upperBound));
-};
-exports.clamp = clamp;
+}

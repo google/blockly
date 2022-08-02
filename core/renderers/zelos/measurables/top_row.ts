@@ -7,17 +7,17 @@
 /**
  * @fileoverview An object representing the top row of a rendered block.
  */
-'use strict';
 
 /**
  * An object representing the top row of a rendered block.
  * @class
  */
-goog.module('Blockly.zelos.TopRow');
+import * as goog from '../../../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.zelos.TopRow');
 
-/* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const {TopRow: BaseTopRow} = goog.require('Blockly.blockRendering.TopRow');
+import type {BlockSvg} from '../../../block_svg.js';
+import type {ConstantProvider} from '../../../renderers/common/constants.js';
+import {TopRow as BaseTopRow} from '../../../renderers/measurables/top_row.js';
 
 
 /**
@@ -27,45 +27,32 @@ const {TopRow: BaseTopRow} = goog.require('Blockly.blockRendering.TopRow');
  * connections.
  * After this constructor is called, the row will contain all non-spacer
  * elements it needs.
- * @extends {BaseTopRow}
  * @alias Blockly.zelos.TopRow
  */
-class TopRow extends BaseTopRow {
+export class TopRow extends BaseTopRow {
   /**
-   * @param {!ConstantProvider} constants The rendering
-   *   constants provider.
-   * @package
+   * @param constants The rendering constants provider.
+   * @internal
    */
-  constructor(constants) {
+  constructor(constants: ConstantProvider) {
     super(constants);
   }
 
-  /**
-   * @override
-   */
-  endsWithElemSpacer() {
+  override endsWithElemSpacer() {
     return false;
   }
 
-  /**
-   * Render a round corner unless the block has an output connection.
-   * @override
-   */
-  hasLeftSquareCorner(block) {
+  /** Render a round corner unless the block has an output connection. */
+  override hasLeftSquareCorner(block: BlockSvg) {
     const hasHat =
         (block.hat ? block.hat === 'cap' : this.constants_.ADD_START_HATS) &&
         !block.outputConnection && !block.previousConnection;
     return !!block.outputConnection || hasHat;
   }
 
-  /**
-   * Render a round corner unless the block has an output connection.
-   * @override
-   */
-  hasRightSquareCorner(block) {
+  /** Render a round corner unless the block has an output connection. */
+  override hasRightSquareCorner(block: BlockSvg) {
     return !!block.outputConnection && !block.statementInputCount &&
         !block.nextConnection;
   }
 }
-
-exports.TopRow = TopRow;

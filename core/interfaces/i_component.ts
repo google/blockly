@@ -9,29 +9,24 @@
  * the ComponentManager.
  */
 
-'use strict';
-
 /**
  * Interface for a workspace component that can be registered with
  * the ComponentManager.
  * @namespace Blockly.IComponent
  */
-goog.module('Blockly.IComponent');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.IComponent');
 
 
 /**
  * The interface for a workspace component that can be registered with the
  * ComponentManager.
- * @interface
  * @alias Blockly.IComponent
  */
-const IComponent = function() {};
-
-/**
- * The unique id for this component that is used to register with the
- * ComponentManager.
- * @type {string}
- */
-IComponent.prototype.id;
-
-exports.IComponent = IComponent;
+export interface IComponent {
+  /**
+   * The unique id for this component that is used to register with the
+   * ComponentManager.
+   */
+  id: string;
+}

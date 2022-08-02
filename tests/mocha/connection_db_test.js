@@ -203,13 +203,13 @@ suite('Connection Database', function() {
   suite('Search For Closest', function() {
     setup(function() {
       // Ignore type checks.
-      sinon.stub(this.database.connectionChecker_, 'doTypeChecks')
+      sinon.stub(this.database.connectionChecker, 'doTypeChecks')
           .returns(true);
       // Ignore safety checks.
-      sinon.stub(this.database.connectionChecker_, 'doSafetyChecks')
+      sinon.stub(this.database.connectionChecker, 'doSafetyChecks')
           .returns(Blockly.Connection.CAN_CONNECT);
       // Skip everything but the distance checks.
-      sinon.stub(this.database.connectionChecker_, 'doDragChecks')
+      sinon.stub(this.database.connectionChecker, 'doDragChecks')
           .callsFake(function(a, b, distance) {
             return a.distanceFrom(b) <= distance;
           });

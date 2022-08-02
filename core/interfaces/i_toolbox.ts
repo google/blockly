@@ -8,135 +8,116 @@
  * @fileoverview The interface for a toolbox.
  */
 
-'use strict';
-
 /**
  * The interface for a toolbox.
  * @namespace Blockly.IToolbox
  */
-goog.module('Blockly.IToolbox');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.IToolbox');
 
 /* eslint-disable-next-line no-unused-vars */
-const toolbox = goog.requireType('Blockly.utils.toolbox');
+// Unused import preserved for side-effects. Remove if unneeded.
+// import '../utils/toolbox.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IFlyout} = goog.requireType('Blockly.IFlyout');
+// Unused import preserved for side-effects. Remove if unneeded.
+// import './i_flyout.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IRegistrable} = goog.require('Blockly.IRegistrable');
+// Unused import preserved for side-effects. Remove if unneeded.
+// import './i_toolbox_item.js';
 /* eslint-disable-next-line no-unused-vars */
-const {IToolboxItem} = goog.requireType('Blockly.IToolboxItem');
-/* eslint-disable-next-line no-unused-vars */
-const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
+// Unused import preserved for side-effects. Remove if unneeded.
+// import '../workspace_svg.js';
+
+import type {IRegistrable} from './i_registrable.js';
 
 
 /**
  * Interface for a toolbox.
- * @extends {IRegistrable}
- * @interface
  * @alias Blockly.IToolbox
  */
-const IToolbox = function() {};
+export interface IToolbox extends IRegistrable {
+  /** Initializes the toolbox. */
+  init: AnyDuringMigration;
 
-/**
- * Initializes the toolbox.
- * @return {void}
- */
-IToolbox.prototype.init;
+  /**
+   * Fills the toolbox with new toolbox items and removes any old contents.
+   * @param toolboxDef Object holding information for creating a toolbox.
+   */
+  render: AnyDuringMigration;
 
-/**
- * Fills the toolbox with new toolbox items and removes any old contents.
- * @param {!toolbox.ToolboxInfo} toolboxDef Object holding information
- *     for creating a toolbox.
- */
-IToolbox.prototype.render;
+  /**
+   * Gets the width of the toolbox.
+   * @return The width of the toolbox.
+   */
+  getWidth: AnyDuringMigration;
 
-/**
- * Gets the width of the toolbox.
- * @return {number} The width of the toolbox.
- */
-IToolbox.prototype.getWidth;
+  /**
+   * Gets the height of the toolbox.
+   * @return The width of the toolbox.
+   */
+  getHeight: AnyDuringMigration;
 
-/**
- * Gets the height of the toolbox.
- * @return {number} The width of the toolbox.
- */
-IToolbox.prototype.getHeight;
+  /**
+   * Gets the toolbox flyout.
+   * @return The toolbox flyout.
+   */
+  getFlyout: AnyDuringMigration;
 
-/**
- * Gets the toolbox flyout.
- * @return {?IFlyout} The toolbox flyout.
- */
-IToolbox.prototype.getFlyout;
+  /**
+   * Gets the workspace for the toolbox.
+   * @return The parent workspace for the toolbox.
+   */
+  getWorkspace: AnyDuringMigration;
 
-/**
- * Gets the workspace for the toolbox.
- * @return {!WorkspaceSvg} The parent workspace for the toolbox.
- */
-IToolbox.prototype.getWorkspace;
+  /**
+   * Gets whether or not the toolbox is horizontal.
+   * @return True if the toolbox is horizontal, false if the toolbox is
+   *     vertical.
+   */
+  isHorizontal: AnyDuringMigration;
 
-/**
- * Gets whether or not the toolbox is horizontal.
- * @return {boolean} True if the toolbox is horizontal, false if the toolbox is
- *     vertical.
- */
-IToolbox.prototype.isHorizontal;
+  /**
+   * Positions the toolbox based on whether it is a horizontal toolbox and
+   * whether the workspace is in rtl.
+   */
+  position: AnyDuringMigration;
 
-/**
- * Positions the toolbox based on whether it is a horizontal toolbox and whether
- * the workspace is in rtl.
- * @return {void}
- */
-IToolbox.prototype.position;
+  /** Handles resizing the toolbox when a toolbox item resizes. */
+  handleToolboxItemResize: AnyDuringMigration;
 
-/**
- * Handles resizing the toolbox when a toolbox item resizes.
- * @return {void}
- */
-IToolbox.prototype.handleToolboxItemResize;
+  /** Unhighlights any previously selected item. */
+  clearSelection: AnyDuringMigration;
 
-/**
- * Unhighlights any previously selected item.
- * @return {void}
- */
-IToolbox.prototype.clearSelection;
+  /**
+   * Updates the category colours and background colour of selected categories.
+   */
+  refreshTheme: AnyDuringMigration;
 
-/**
- * Updates the category colours and background colour of selected categories.
- * @return {void}
- */
-IToolbox.prototype.refreshTheme;
+  /**
+   * Updates the flyout's content without closing it.  Should be used in
+   * response to a change in one of the dynamic categories, such as variables or
+   * procedures.
+   */
+  refreshSelection: AnyDuringMigration;
 
-/**
- * Updates the flyout's content without closing it.  Should be used in response
- * to a change in one of the dynamic categories, such as variables or
- * procedures.
- * @return {void}
- */
-IToolbox.prototype.refreshSelection;
+  /**
+   * Sets the visibility of the toolbox.
+   * @param isVisible True if toolbox should be visible.
+   */
+  setVisible: AnyDuringMigration;
 
-/**
- * Sets the visibility of the toolbox.
- * @param {boolean} isVisible True if toolbox should be visible.
- */
-IToolbox.prototype.setVisible;
+  /**
+   * Selects the toolbox item by it's position in the list of toolbox items.
+   * @param position The position of the item to select.
+   */
+  selectItemByPosition: AnyDuringMigration;
 
-/**
- * Selects the toolbox item by it's position in the list of toolbox items.
- * @param {number} position The position of the item to select.
- * @return {void}
- */
-IToolbox.prototype.selectItemByPosition;
+  /**
+   * Gets the selected item.
+   * @return The selected item, or null if no item is currently selected.
+   */
+  getSelectedItem: AnyDuringMigration;
 
-/**
- * Gets the selected item.
- * @return {?IToolboxItem} The selected item, or null if no item is
- *     currently selected.
- */
-IToolbox.prototype.getSelectedItem;
-
-/**
- * Disposes of this toolbox.
- * @return {void}
- */
-IToolbox.prototype.dispose;
-
-exports.IToolbox = IToolbox;
+  /** Disposes of this toolbox. */
+  dispose: AnyDuringMigration;
+}

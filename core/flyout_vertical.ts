@@ -7,58 +7,57 @@
 /**
  * @fileoverview Layout code for a vertical variant of the flyout.
  */
-'use strict';
 
 /**
  * Layout code for a vertical variant of the flyout.
  * @class
  */
-goog.module('Blockly.VerticalFlyout');
+import * as goog from '../closure/goog/goog.js';
+goog.declareModuleId('Blockly.VerticalFlyout');
 
-const WidgetDiv = goog.require('Blockly.WidgetDiv');
-const browserEvents = goog.require('Blockly.browserEvents');
-const dropDownDiv = goog.require('Blockly.dropDownDiv');
-const registry = goog.require('Blockly.registry');
-const toolbox = goog.require('Blockly.utils.toolbox');
-/* eslint-disable-next-line no-unused-vars */
-const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
-const {Flyout} = goog.require('Blockly.Flyout');
-/* eslint-disable-next-line no-unused-vars */
-const {FlyoutItem} = goog.requireType('Blockly.Flyout');
-/* eslint-disable-next-line no-unused-vars */
-const {FlyoutButton} = goog.requireType('Blockly.FlyoutButton');
-/* eslint-disable-next-line no-unused-vars */
-const {Options} = goog.requireType('Blockly.Options');
-const {Rect} = goog.require('Blockly.utils.Rect');
-const {Scrollbar} = goog.require('Blockly.Scrollbar');
-/** @suppress {extraRequire} */
-goog.require('Blockly.Block');
-/** @suppress {extraRequire} */
-goog.require('Blockly.constants');
+// Unused import preserved for side-effects. Remove if unneeded.
+// import './block.js';
+// Unused import preserved for side-effects. Remove if unneeded.
+// import './constants.js';
+
+import * as browserEvents from './browser_events.js';
+import * as dropDownDiv from './dropdowndiv.js';
+import {Flyout, FlyoutItem} from './flyout_base.js';
+import type {FlyoutButton} from './flyout_button.js';
+import type {Options} from './options.js';
+import * as registry from './registry.js';
+import {Scrollbar} from './scrollbar.js';
+import type {Coordinate} from './utils/coordinate.js';
+import {Rect} from './utils/rect.js';
+import * as toolbox from './utils/toolbox.js';
+import * as WidgetDiv from './widgetdiv.js';
 
 
 /**
  * Class for a flyout.
- * @extends {Flyout}
  * @alias Blockly.VerticalFlyout
  */
-class VerticalFlyout extends Flyout {
-  /**
-   * @param {!Options} workspaceOptions Dictionary of options for the
-   *     workspace.
-   */
-  constructor(workspaceOptions) {
+export class VerticalFlyout extends Flyout {
+  /** The name of the vertical flyout in the registry. */
+  static registryName = 'verticalFlyout';
+
+  // Record the height for workspace metrics.
+  override height_: AnyDuringMigration;
+
+  // Record the width for workspace metrics and .position.
+  override width_: AnyDuringMigration;
+
+  /** @param workspaceOptions Dictionary of options for the workspace. */
+  constructor(workspaceOptions: Options) {
     super(workspaceOptions);
   }
 
   /**
    * Sets the translation of the flyout to match the scrollbars.
-   * @param {!{x:number,y:number}} xyRatio Contains a y property which is a
-   *     float between 0 and 1 specifying the degree of scrolling and a similar
-   *     x property.
-   * @protected
+   * @param xyRatio Contains a y property which is a float between 0 and 1
+   *     specifying the degree of scrolling and a similar x property.
    */
-  setMetrics_(xyRatio) {
+  protected override setMetrics_(xyRatio: {x: number, y: number}) {
     if (!this.isVisible()) {
       return;
     }
@@ -79,28 +78,29 @@ class VerticalFlyout extends Flyout {
 
   /**
    * Calculates the x coordinate for the flyout position.
-   * @return {number} X coordinate.
+   * @return X coordinate.
    */
-  getX() {
+  override getX(): number {
     if (!this.isVisible()) {
       return 0;
     }
-    const metricsManager = this.targetWorkspace.getMetricsManager();
+    const metricsManager = this.targetWorkspace!.getMetricsManager();
     const absoluteMetrics = metricsManager.getAbsoluteMetrics();
     const viewMetrics = metricsManager.getViewMetrics();
     const toolboxMetrics = metricsManager.getToolboxMetrics();
     let x = 0;
 
     // If this flyout is not the trashcan flyout (e.g. toolbox or mutator).
-    if (this.targetWorkspace.toolboxPosition === this.toolboxPosition_) {
+    // Trashcan flyout is opposite the main flyout.
+    if (this.targetWorkspace!.toolboxPosition === this.toolboxPosition_) {
       // If there is a category toolbox.
-      if (this.targetWorkspace.getToolbox()) {
+      // Simple (flyout-only) toolbox.
+      if (this.targetWorkspace!.getToolbox()) {
         if (this.toolboxPosition_ === toolbox.Position.LEFT) {
           x = toolboxMetrics.width;
         } else {
           x = viewMetrics.width - this.width_;
         }
-        // Simple (flyout-only) toolbox.
       } else {
         if (this.toolboxPosition_ === toolbox.Position.LEFT) {
           x = 0;
@@ -109,7 +109,6 @@ class VerticalFlyout extends Flyout {
           x = viewMetrics.width;
         }
       }
-      // Trashcan flyout is opposite the main flyout.
     } else {
       if (this.toolboxPosition_ === toolbox.Position.LEFT) {
         x = 0;
@@ -127,24 +126,20 @@ class VerticalFlyout extends Flyout {
 
   /**
    * Calculates the y coordinate for the flyout position.
-   * @return {number} Y coordinate.
+   * @return Y coordinate.
    */
-  getY() {
+  override getY(): number {
     // Y is always 0 since this is a vertical flyout.
     return 0;
   }
 
-  /**
-   * Move the flyout to the edge of the workspace.
-   */
-  position() {
-    if (!this.isVisible() || !this.targetWorkspace.isVisible()) {
+  /** Move the flyout to the edge of the workspace. */
+  override position() {
+    if (!this.isVisible() || !this.targetWorkspace!.isVisible()) {
       return;
     }
-    const metricsManager = this.targetWorkspace.getMetricsManager();
+    const metricsManager = this.targetWorkspace!.getMetricsManager();
     const targetWorkspaceViewMetrics = metricsManager.getViewMetrics();
-
-    // Record the height for workspace metrics.
     this.height_ = targetWorkspaceViewMetrics.height;
 
     const edgeWidth = this.width_ - this.CORNER_RADIUS;
@@ -160,20 +155,18 @@ class VerticalFlyout extends Flyout {
 
   /**
    * Create and set the path for the visible boundaries of the flyout.
-   * @param {number} width The width of the flyout, not including the
-   *     rounded corners.
-   * @param {number} height The height of the flyout, not including
-   *     rounded corners.
-   * @private
+   * @param width The width of the flyout, not including the rounded corners.
+   * @param height The height of the flyout, not including rounded corners.
    */
-  setBackgroundPath_(width, height) {
+  private setBackgroundPath_(width: number, height: number) {
     const atRight = this.toolboxPosition_ === toolbox.Position.RIGHT;
     const totalWidth = width + this.CORNER_RADIUS;
 
     // Decide whether to start on the left or right.
-    const path = ['M ' + (atRight ? totalWidth : 0) + ',0'];
+    const path: Array<string|number> =
+        ['M ' + (atRight ? totalWidth : 0) + ',0'];
     // Top.
-    path.push('h', atRight ? -width : width);
+    path.push('h', (atRight ? -width : width));
     // Rounded corner.
     path.push(
         'a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, atRight ? 0 : 1,
@@ -185,31 +178,28 @@ class VerticalFlyout extends Flyout {
         'a', this.CORNER_RADIUS, this.CORNER_RADIUS, 0, 0, atRight ? 0 : 1,
         atRight ? this.CORNER_RADIUS : -this.CORNER_RADIUS, this.CORNER_RADIUS);
     // Bottom.
-    path.push('h', atRight ? width : -width);
+    path.push('h', (atRight ? width : -width));
     path.push('z');
-    this.svgBackground_.setAttribute('d', path.join(' '));
+    this.svgBackground_!.setAttribute('d', path.join(' '));
   }
 
-  /**
-   * Scroll the flyout to the top.
-   */
-  scrollToStart() {
+  /** Scroll the flyout to the top. */
+  override scrollToStart() {
     this.workspace_.scrollbar.setY(0);
   }
 
   /**
    * Scroll the flyout.
-   * @param {!WheelEvent} e Mouse wheel scroll event.
-   * @protected
+   * @param e Mouse wheel scroll event.
    */
-  wheel_(e) {
+  protected override wheel_(e: WheelEvent) {
     const scrollDelta = browserEvents.getScrollDeltaPixels(e);
 
     if (scrollDelta.y) {
       const metricsManager = this.workspace_.getMetricsManager();
       const scrollMetrics = metricsManager.getScrollMetrics();
       const viewMetrics = metricsManager.getViewMetrics();
-      const pos = (viewMetrics.top - scrollMetrics.top) + scrollDelta.y;
+      const pos = viewMetrics.top - scrollMetrics.top + scrollDelta.y;
 
       this.workspace_.scrollbar.setY(pos);
       // When the flyout moves from a wheel event, hide WidgetDiv and
@@ -217,7 +207,6 @@ class VerticalFlyout extends Flyout {
       WidgetDiv.hide();
       dropDownDiv.hideWithoutAnimation();
     }
-
     // Don't scroll the page.
     e.preventDefault();
     // Don't propagate mousewheel event (zooming).
@@ -226,43 +215,45 @@ class VerticalFlyout extends Flyout {
 
   /**
    * Lay out the blocks in the flyout.
-   * @param {!Array<!FlyoutItem>} contents The blocks and buttons to lay
-   *     out.
-   * @param {!Array<number>} gaps The visible gaps between blocks.
-   * @protected
+   * @param contents The blocks and buttons to lay out.
+   * @param gaps The visible gaps between blocks.
    */
-  layout_(contents, gaps) {
-    this.workspace_.scale = this.targetWorkspace.scale;
+  protected override layout_(contents: FlyoutItem[], gaps: number[]) {
+    this.workspace_.scale = this.targetWorkspace!.scale;
     const margin = this.MARGIN;
     const cursorX = this.RTL ? margin : margin + this.tabWidth_;
     let cursorY = margin;
 
-    for (let i = 0, item; (item = contents[i]); i++) {
+    for (let i = 0, item; item = contents[i]; i++) {
       if (item.type === 'block') {
         const block = item.block;
-        const allBlocks = block.getDescendants(false);
-        for (let j = 0, child; (child = allBlocks[j]); j++) {
+        const allBlocks = block!.getDescendants(false);
+        for (let j = 0, child; child = allBlocks[j]; j++) {
           // Mark blocks as being inside a flyout.  This is used to detect and
           // prevent the closure of the flyout if the user right-clicks on such
           // a block.
           child.isInFlyout = true;
         }
-        block.render();
-        const root = block.getSvgRoot();
-        const blockHW = block.getHeightWidth();
+        block!.render();
+        const root = block!.getSvgRoot();
+        const blockHW = block!.getHeightWidth();
         const moveX =
-            block.outputConnection ? cursorX - this.tabWidth_ : cursorX;
-        block.moveBy(moveX, cursorY);
+            block!.outputConnection ? cursorX - this.tabWidth_ : cursorX;
+        block!.moveBy(moveX, cursorY);
 
+        // AnyDuringMigration because:  Argument of type 'BlockSvg | undefined'
+        // is not assignable to parameter of type 'BlockSvg'.
         const rect = this.createRect_(
-            block, this.RTL ? moveX - blockHW.width : moveX, cursorY, blockHW,
-            i);
+            block as AnyDuringMigration,
+            this.RTL ? moveX - blockHW.width : moveX, cursorY, blockHW, i);
 
-        this.addBlockListeners_(root, block, rect);
+        // AnyDuringMigration because:  Argument of type 'BlockSvg | undefined'
+        // is not assignable to parameter of type 'BlockSvg'.
+        this.addBlockListeners_(root, block as AnyDuringMigration, rect);
 
         cursorY += blockHW.height + gaps[i];
       } else if (item.type === 'button') {
-        const button = /** @type {!FlyoutButton} */ (item.button);
+        const button = item.button as FlyoutButton;
         this.initFlyoutButton_(button, cursorX, cursorY);
         cursorY += button.height + gaps[i];
       }
@@ -273,12 +264,12 @@ class VerticalFlyout extends Flyout {
    * Determine if a drag delta is toward the workspace, based on the position
    * and orientation of the flyout. This is used in determineDragIntention_ to
    * determine if a new block should be created or if the flyout should scroll.
-   * @param {!Coordinate} currentDragDeltaXY How far the pointer has
-   *     moved from the position at mouse down, in pixel units.
-   * @return {boolean} True if the drag is toward the workspace.
-   * @package
+   * @param currentDragDeltaXY How far the pointer has moved from the position
+   *     at mouse down, in pixel units.
+   * @return True if the drag is toward the workspace.
+   * @internal
    */
-  isDragTowardWorkspace(currentDragDeltaXY) {
+  override isDragTowardWorkspace(currentDragDeltaXY: Coordinate): boolean {
     const dx = currentDragDeltaXY.x;
     const dy = currentDragDeltaXY.y;
     // Direction goes from -180 to 180, with 0 toward the right and 90 on top.
@@ -286,7 +277,7 @@ class VerticalFlyout extends Flyout {
 
     const range = this.dragAngleRange_;
     // Check for left or right dragging.
-    if ((dragDirection < range && dragDirection > -range) ||
+    if (dragDirection < range && dragDirection > -range ||
         (dragDirection < -180 + range || dragDirection > 180 - range)) {
       return true;
     }
@@ -296,10 +287,10 @@ class VerticalFlyout extends Flyout {
   /**
    * Returns the bounding rectangle of the drag target area in pixel units
    * relative to viewport.
-   * @return {?Rect} The component's bounding box. Null if drag
-   *   target area should be ignored.
+   * @return The component's bounding box. Null if drag target area should be
+   *     ignored.
    */
-  getClientRect() {
+  override getClientRect(): Rect|null {
     if (!this.svgGroup_ || this.autoClose || !this.isVisible()) {
       // The bounding rectangle won't compute correctly if the flyout is closed
       // and auto-close flyouts aren't valid drag targets (or delete areas).
@@ -325,20 +316,19 @@ class VerticalFlyout extends Flyout {
   /**
    * Compute width of flyout.  toolbox.Position mat under each block.
    * For RTL: Lay out the blocks and buttons to be right-aligned.
-   * @protected
    */
-  reflowInternal_() {
+  protected override reflowInternal_() {
     this.workspace_.scale = this.getFlyoutScale();
     let flyoutWidth = 0;
     const blocks = this.workspace_.getTopBlocks(false);
-    for (let i = 0, block; (block = blocks[i]); i++) {
+    for (let i = 0, block; block = blocks[i]; i++) {
       let width = block.getHeightWidth().width;
       if (block.outputConnection) {
         width -= this.tabWidth_;
       }
       flyoutWidth = Math.max(flyoutWidth, width);
     }
-    for (let i = 0, button; (button = this.buttons_[i]); i++) {
+    for (let i = 0, button; button = this.buttons_[i]; i++) {
       flyoutWidth = Math.max(flyoutWidth, button.width);
     }
     flyoutWidth += this.MARGIN * 1.5 + this.tabWidth_;
@@ -346,7 +336,7 @@ class VerticalFlyout extends Flyout {
     flyoutWidth += Scrollbar.scrollbarThickness;
 
     if (this.width_ !== flyoutWidth) {
-      for (let i = 0, block; (block = blocks[i]); i++) {
+      for (let i = 0, block; block = blocks[i]; i++) {
         if (this.RTL) {
           // With the flyoutWidth known, right-align the blocks.
           const oldX = block.getRelativeToSurfaceXY().x;
@@ -357,12 +347,15 @@ class VerticalFlyout extends Flyout {
           block.moveBy(newX - oldX, 0);
         }
         if (this.rectMap_.has(block)) {
-          this.moveRectToBlock_(this.rectMap_.get(block), block);
+          // AnyDuringMigration because:  Argument of type 'SVGElement |
+          // undefined' is not assignable to parameter of type 'SVGElement'.
+          this.moveRectToBlock_(
+              this.rectMap_.get(block) as AnyDuringMigration, block);
         }
       }
       if (this.RTL) {
         // With the flyoutWidth known, right-align the buttons.
-        for (let i = 0, button; (button = this.buttons_[i]); i++) {
+        for (let i = 0, button; button = this.buttons_[i]; i++) {
           const y = button.getPosition().y;
           const x = flyoutWidth / this.workspace_.scale - button.width -
               this.MARGIN - this.tabWidth_;
@@ -370,32 +363,22 @@ class VerticalFlyout extends Flyout {
         }
       }
 
-      if (this.targetWorkspace.toolboxPosition === this.toolboxPosition_ &&
+      if (this.targetWorkspace!.toolboxPosition === this.toolboxPosition_ &&
           this.toolboxPosition_ === toolbox.Position.LEFT &&
-          !this.targetWorkspace.getToolbox()) {
+          !this.targetWorkspace!.getToolbox()) {
         // This flyout is a simple toolbox. Reposition the workspace so that
         // (0,0) is in the correct position relative to the new absolute edge
         // (ie toolbox edge).
-        this.targetWorkspace.translate(
-            this.targetWorkspace.scrollX + flyoutWidth,
-            this.targetWorkspace.scrollY);
+        this.targetWorkspace!.translate(
+            this.targetWorkspace!.scrollX + flyoutWidth,
+            this.targetWorkspace!.scrollY);
       }
-
-      // Record the width for workspace metrics and .position.
       this.width_ = flyoutWidth;
       this.position();
-      this.targetWorkspace.recordDragTargets();
+      this.targetWorkspace!.recordDragTargets();
     }
   }
 }
 
-/**
- * The name of the vertical flyout in the registry.
- * @type {string}
- */
-VerticalFlyout.registryName = 'verticalFlyout';
-
 registry.register(
     registry.Type.FLYOUTS_VERTICAL_TOOLBOX, registry.DEFAULT, VerticalFlyout);
-
-exports.VerticalFlyout = VerticalFlyout;

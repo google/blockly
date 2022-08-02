@@ -8,116 +8,135 @@
  * @fileoverview Common functions used both internally and externally, but which
  * must not be at the top level to avoid circular dependencies.
  */
-'use strict';
 
 /**
  * Common functions used both internally and externally, but which
  * must not be at the top level to avoid circular dependencies.
  * @namespace Blockly.common
  */
-goog.module('Blockly.common');
+import * as goog from '../closure/goog/goog.js';
+goog.declareModuleId('Blockly.common');
 
 /* eslint-disable-next-line no-unused-vars */
-const {BlockDefinition, Blocks} = goog.require('Blockly.blocks');
-/* eslint-disable-next-line no-unused-vars */
-const {Connection} = goog.requireType('Blockly.Connection');
-/* eslint-disable-next-line no-unused-vars */
-const {ICopyable} = goog.requireType('Blockly.ICopyable');
-/* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
-/* eslint-disable-next-line no-unused-vars */
-const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
-/* eslint-disable-next-line no-unused-vars */
-const {Workspace} = goog.requireType('Blockly.Workspace');
+import type {Block} from './block.js';
+import {BlockDefinition, Blocks} from './blocks.js';
+import type {Connection} from './connection.js';
+import type {ICopyable} from './interfaces/i_copyable.js';
+import type {Workspace} from './workspace.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
+
+/** Database of all workspaces. */
+const WorkspaceDB_ = Object.create(null);
+
+
+/**
+ * Find the workspace with the specified ID.
+ * @param id ID of workspace to find.
+ * @return The sought after workspace or null if not found.
+ */
+export function getWorkspaceById(id: string): Workspace|null {
+  return WorkspaceDB_[id] || null;
+}
+
+/**
+ * Find all workspaces.
+ * @return Array of workspaces.
+ */
+export function getAllWorkspaces(): Workspace[] {
+  const workspaces = [];
+  for (const workspaceId in WorkspaceDB_) {
+    workspaces.push(WorkspaceDB_[workspaceId]);
+  }
+  return workspaces;
+}
+
+export function registerWorkspace(workspace: Workspace) {
+  WorkspaceDB_[workspace.id] = workspace;
+}
+
+export function unregisterWorkpace(workspace: Workspace) {
+  delete WorkspaceDB_[workspace.id];
+}
 
 /**
  * The main workspace most recently used.
  * Set by Blockly.WorkspaceSvg.prototype.markFocused
- * @type {!Workspace}
  */
-let mainWorkspace;
+let mainWorkspace: Workspace;
 
 /**
  * Returns the last used top level workspace (based on focus).  Try not to use
  * this function, particularly if there are multiple Blockly instances on a
  * page.
- * @return {!Workspace} The main workspace.
+ * @return The main workspace.
  * @alias Blockly.common.getMainWorkspace
  */
-const getMainWorkspace = function() {
+export function getMainWorkspace(): Workspace {
   return mainWorkspace;
-};
-exports.getMainWorkspace = getMainWorkspace;
+}
 
 /**
  * Sets last used main workspace.
- * @param {!Workspace} workspace The most recently used top level workspace.
+ * @param workspace The most recently used top level workspace.
  * @alias Blockly.common.setMainWorkspace
  */
-const setMainWorkspace = function(workspace) {
+export function setMainWorkspace(workspace: Workspace) {
   mainWorkspace = workspace;
-};
-exports.setMainWorkspace = setMainWorkspace;
+}
 
 /**
  * Currently selected block.
- * @type {?ICopyable}
  */
-let selected = null;
+let selected: ICopyable|null = null;
 
 /**
  * Returns the currently selected block.
- * @return {?ICopyable} The currently selected block.
+ * @return The currently selected block.
  * @alias Blockly.common.getSelected
  */
-const getSelected = function() {
+export function getSelected(): ICopyable|null {
   return selected;
-};
-exports.getSelected = getSelected;
+}
 
 /**
  * Sets the currently selected block. This function does not visually mark the
  * block as selected or fire the required events. If you wish to
  * programmatically select a block, use `BlockSvg#select`.
- * @param {?ICopyable} newSelection The newly selected block.
+ * @param newSelection The newly selected block.
  * @alias Blockly.common.setSelected
- * @package
+ * @internal
  */
-const setSelected = function(newSelection) {
+export function setSelected(newSelection: ICopyable|null) {
   selected = newSelection;
-};
-exports.setSelected = setSelected;
+}
 
 /**
  * Container element in which to render the WidgetDiv, DropDownDiv and Tooltip.
- * @type {?Element}
  */
-let parentContainer;
+let parentContainer: Element|null;
 
 /**
  * Get the container element in which to render the WidgetDiv, DropDownDiv and\
  * Tooltip.
- * @return {?Element} The parent container.
+ * @return The parent container.
  * @alias Blockly.common.getParentContainer
  */
-const getParentContainer = function() {
+export function getParentContainer(): Element|null {
   return parentContainer;
-};
-exports.getParentContainer = getParentContainer;
+}
 
 /**
  * Set the parent container.  This is the container element that the WidgetDiv,
  * DropDownDiv, and Tooltip are rendered into the first time `Blockly.inject`
  * is called.
  * This method is a NOP if called after the first ``Blockly.inject``.
- * @param {!Element} newParent The container element.
+ * @param newParent The container element.
  * @alias Blockly.common.setParentContainer
  */
-const setParentContainer = function(newParent) {
+export function setParentContainer(newParent: Element) {
   parentContainer = newParent;
-};
-exports.setParentContainer = setParentContainer;
+}
 
 /**
  * Size the SVG image to completely fill its container. Call this when the view
@@ -125,10 +144,10 @@ exports.setParentContainer = setParentContainer;
  * See workspace.resizeContents to resize the workspace when the contents
  * change (e.g. when a block is added or removed).
  * Record the height/width of the SVG image.
- * @param {!WorkspaceSvg} workspace Any workspace in the SVG.
+ * @param workspace Any workspace in the SVG.
  * @alias Blockly.common.svgResize
  */
-const svgResize = function(workspace) {
+export function svgResize(workspace: WorkspaceSvg) {
   let mainWorkspace = workspace;
   while (mainWorkspace.options.parentWorkspace) {
     mainWorkspace = mainWorkspace.options.parentWorkspace;
@@ -152,26 +171,25 @@ const svgResize = function(workspace) {
     mainWorkspace.setCachedParentSvgSize(null, height);
   }
   mainWorkspace.resize();
-};
-exports.svgResize = svgResize;
+}
 
 /**
  * All of the connections on blocks that are currently being dragged.
- * @type {!Array<!Connection>}
  */
-exports.draggingConnections = [];
+export const draggingConnections: Connection[] = [];
 
 /**
  * Get a map of all the block's descendants mapping their type to the number of
  *    children with that type.
- * @param {!Block} block The block to map.
- * @param {boolean=} opt_stripFollowing Optionally ignore all following
+ * @param block The block to map.
+ * @param opt_stripFollowing Optionally ignore all following
  *    statements (blocks that are not inside a value or statement input
  *    of the block).
- * @return {!Object} Map of types to type counts for descendants of the bock.
+ * @return Map of types to type counts for descendants of the bock.
  * @alias Blockly.common.getBlockTypeCounts
  */
-const getBlockTypeCounts = function(block, opt_stripFollowing) {
+export function getBlockTypeCounts(
+    block: Block, opt_stripFollowing?: boolean): AnyDuringMigration {
   const typeCountsMap = Object.create(null);
   const descendants = block.getDescendants(true);
   if (opt_stripFollowing) {
@@ -181,7 +199,7 @@ const getBlockTypeCounts = function(block, opt_stripFollowing) {
       descendants.splice(index, descendants.length - index);
     }
   }
-  for (let i = 0, checkBlock; (checkBlock = descendants[i]); i++) {
+  for (let i = 0, checkBlock; checkBlock = descendants[i]; i++) {
     if (typeCountsMap[checkBlock.type]) {
       typeCountsMap[checkBlock.type]++;
     } else {
@@ -189,43 +207,49 @@ const getBlockTypeCounts = function(block, opt_stripFollowing) {
     }
   }
   return typeCountsMap;
-};
-exports.getBlockTypeCounts = getBlockTypeCounts;
+}
 
 /**
  * Helper function for defining a block from JSON.  The resulting function has
  * the correct value of jsonDef at the point in code where jsonInit is called.
- * @param {!Object} jsonDef The JSON definition of a block.
- * @return {function()} A function that calls jsonInit with the correct value
+ * @param jsonDef The JSON definition of a block.
+ * @return A function that calls jsonInit with the correct value
  *     of jsonDef.
  */
-const jsonInitFactory = function(jsonDef) {
-  return /** @this {Block} */ function() {
+function jsonInitFactory(jsonDef: AnyDuringMigration): () => void {
+  return function(this: Block) {
     this.jsonInit(jsonDef);
   };
-};
+}
 
 /**
  * Define blocks from an array of JSON block definitions, as might be generated
  * by the Blockly Developer Tools.
- * @param {!Array<!Object>} jsonArray An array of JSON block definitions.
+ * @param jsonArray An array of JSON block definitions.
  * @alias Blockly.common.defineBlocksWithJsonArray
  */
-const defineBlocksWithJsonArray = function(jsonArray) {
+export function defineBlocksWithJsonArray(jsonArray: AnyDuringMigration[]) {
+  TEST_ONLY.defineBlocksWithJsonArrayInternal(jsonArray);
+}
+
+/**
+ * Private version of defineBlocksWithJsonArray for stubbing in tests.
+ */
+function defineBlocksWithJsonArrayInternal(jsonArray: AnyDuringMigration[]) {
   defineBlocks(createBlockDefinitionsFromJsonArray(jsonArray));
-};
-exports.defineBlocksWithJsonArray = defineBlocksWithJsonArray;
+}
 
 /**
  * Define blocks from an array of JSON block definitions, as might be generated
  * by the Blockly Developer Tools.
- * @param {!Array<!Object>} jsonArray An array of JSON block definitions.
- * @return {!Object<string, !BlockDefinition>} A map of the block
+ * @param jsonArray An array of JSON block definitions.
+ * @return A map of the block
  *     definitions created.
  * @alias Blockly.common.defineBlocksWithJsonArray
  */
-const createBlockDefinitionsFromJsonArray = function(jsonArray) {
-  const /** @type {!Object<string,!BlockDefinition>} */ blocks = {};
+export function createBlockDefinitionsFromJsonArray(
+    jsonArray: AnyDuringMigration[]): {[key: string]: BlockDefinition} {
+  const blocks: {[key: string]: BlockDefinition} = {};
   for (let i = 0; i < jsonArray.length; i++) {
     const elem = jsonArray[i];
     if (!elem) {
@@ -242,18 +266,16 @@ const createBlockDefinitionsFromJsonArray = function(jsonArray) {
     blocks[type] = {init: jsonInitFactory(elem)};
   }
   return blocks;
-};
-exports.createBlockDefinitionsFromJsonArray =
-    createBlockDefinitionsFromJsonArray;
+}
 
 /**
  * Add the specified block definitions to the block definitions
  * dictionary (Blockly.Blocks).
- * @param {!Object<string,!BlockDefinition>} blocks A map of block
+ * @param blocks A map of block
  *     type names to block definitions.
  * @alias Blockly.common.defineBlocks
  */
-const defineBlocks = function(blocks) {
+export function defineBlocks(blocks: {[key: string]: BlockDefinition}) {
   // Iterate over own enumerable properties.
   for (const type of Object.keys(blocks)) {
     const definition = blocks[type];
@@ -262,5 +284,6 @@ const defineBlocks = function(blocks) {
     }
     Blocks[type] = definition;
   }
-};
-exports.defineBlocks = defineBlocks;
+}
+
+export const TEST_ONLY = {defineBlocksWithJsonArrayInternal};

@@ -8,24 +8,18 @@
  * @fileoverview The interface for an object that is draggable.
  */
 
-'use strict';
-
 /**
  * The interface for an object that is draggable.
  * @namespace Blockly.IDraggable
  */
-goog.module('Blockly.IDraggable');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.IDraggable');
 
-/* eslint-disable-next-line no-unused-vars */
-const {IDeletable} = goog.require('Blockly.IDeletable');
+import type {IDeletable} from './i_deletable.js';
 
 
 /**
  * The interface for an object that can be dragged.
- * @extends {IDeletable}
- * @interface
  * @alias Blockly.IDraggable
  */
-const IDraggable = function() {};
-
-exports.IDraggable = IDraggable;
+export interface IDraggable extends IDeletable {}

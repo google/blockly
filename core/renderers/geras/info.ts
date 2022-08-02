@@ -8,36 +8,33 @@
  * @fileoverview Old (compatibility) renderer.
  * Geras: spirit of old age.
  */
-'use strict';
 
 /**
  * Old (compatibility) renderer.
  * Geras: spirit of old age.
  * @class
  */
-goog.module('Blockly.geras.RenderInfo');
+import * as goog from '../../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.geras.RenderInfo');
 
-/* eslint-disable-next-line no-unused-vars */
-const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-/* eslint-disable-next-line no-unused-vars */
-const {BottomRow} = goog.requireType('Blockly.blockRendering.BottomRow');
-/* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider} = goog.requireType('Blockly.geras.ConstantProvider');
-const {ExternalValueInput} = goog.require('Blockly.blockRendering.ExternalValueInput');
-/* eslint-disable-next-line no-unused-vars */
-const {Field} = goog.requireType('Blockly.blockRendering.Field');
-const {InRowSpacer} = goog.require('Blockly.blockRendering.InRowSpacer');
-const {InlineInput} = goog.require('Blockly.geras.InlineInput');
-/* eslint-disable-next-line no-unused-vars */
-const {InputRow} = goog.requireType('Blockly.blockRendering.InputRow');
-const {RenderInfo: BaseRenderInfo} = goog.require('Blockly.blockRendering.RenderInfo');
-/* eslint-disable-next-line no-unused-vars */
-const {Renderer} = goog.requireType('Blockly.geras.Renderer');
-const {StatementInput} = goog.require('Blockly.geras.StatementInput');
-/* eslint-disable-next-line no-unused-vars */
-const {TopRow} = goog.requireType('Blockly.blockRendering.TopRow');
-const {Types} = goog.require('Blockly.blockRendering.Types');
-const {inputTypes} = goog.require('Blockly.inputTypes');
+import type {BlockSvg} from '../../block_svg.js';
+import type {Input} from '../../input.js';
+import {inputTypes} from '../../input_types.js';
+import {RenderInfo as BaseRenderInfo} from '../common/info.js';
+import type {Measurable} from '../measurables/base.js';
+import type {BottomRow} from '../measurables/bottom_row.js';
+import {ExternalValueInput} from '../measurables/external_value_input.js';
+import type {Field} from '../measurables/field.js';
+import {InRowSpacer} from '../measurables/in_row_spacer.js';
+import type {InputRow} from '../measurables/input_row.js';
+import type {Row} from '../measurables/row.js';
+import type {TopRow} from '../measurables/top_row.js';
+import {Types} from '../measurables/types.js';
+
+import type {ConstantProvider} from './constants.js';
+import {InlineInput} from './measurables/inline_input.js';
+import {StatementInput} from './measurables/statement_input.js';
+import type {Renderer} from './renderer.js';
 
 
 /**
@@ -46,41 +43,39 @@ const {inputTypes} = goog.require('Blockly.inputTypes');
  * This measure pass does not propagate changes to the block (although fields
  * may choose to rerender when getSize() is called).  However, calling it
  * repeatedly may be expensive.
- * @extends {BaseRenderInfo}
  * @alias Blockly.geras.RenderInfo
  */
-class RenderInfo extends BaseRenderInfo {
-  /**
-   * @param {!Renderer} renderer The renderer in use.
-   * @param {!BlockSvg} block The block to measure.
-   * @package
-   */
-  constructor(renderer, block) {
-    super(renderer, block);
+export class RenderInfo extends BaseRenderInfo {
+  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
+  override constants_!: ConstantProvider;
 
-    /** @type {!ConstantProvider} */
-    this.constants_;
+  protected override readonly renderer_: Renderer;
+
+  /**
+   * @param renderer The renderer in use.
+   * @param block The block to measure.
+   * @internal
+   */
+  constructor(renderer: Renderer, block: BlockSvg) {
+    super(renderer, block);
+    this.renderer_ = renderer;
   }
 
   /**
    * Get the block renderer in use.
-   * @return {!Renderer} The block renderer in use.
-   * @package
+   * @return The block renderer in use.
+   * @internal
    */
-  getRenderer() {
-    return /** @type {!Renderer} */ (this.renderer_);
+  override getRenderer(): Renderer {
+    return this.renderer_;
   }
 
-  /**
-   * @override
-   */
-  populateBottomRow_() {
+  override populateBottomRow_() {
     super.populateBottomRow_();
 
     const followsStatement = this.block_.inputList.length &&
         this.block_.inputList[this.block_.inputList.length - 1].type ===
             inputTypes.STATEMENT;
-
     // The minimum height of the bottom row is smaller in Geras than in other
     // renderers, because the dark path adds a pixel.
     // If one of the row's elements has a greater height this will be
@@ -91,10 +86,7 @@ class RenderInfo extends BaseRenderInfo {
     }
   }
 
-  /**
-   * @override
-   */
-  addInput_(input, activeRow) {
+  override addInput_(input: Input, activeRow: Row) {
     // Non-dummy inputs have visual representations onscreen.
     if (this.isInline && input.type === inputTypes.VALUE) {
       activeRow.elements.push(new InlineInput(this.constants_, input));
@@ -118,17 +110,14 @@ class RenderInfo extends BaseRenderInfo {
     }
   }
 
-  /**
-   * @override
-   */
-  addElemSpacing_() {
+  override addElemSpacing_() {
     let hasExternalInputs = false;
-    for (let i = 0, row; (row = this.rows[i]); i++) {
+    for (let i = 0, row; row = this.rows[i]; i++) {
       if (row.hasExternalInput) {
         hasExternalInputs = true;
       }
     }
-    for (let i = 0, row; (row = this.rows[i]); i++) {
+    for (let i = 0, row; row = this.rows[i]; i++) {
       const oldElems = row.elements;
       row.elements = [];
       // No spacing needed before the corner on the top row or the bottom row.
@@ -158,14 +147,10 @@ class RenderInfo extends BaseRenderInfo {
     }
   }
 
-  /**
-   * @override
-   */
-  getInRowSpacing_(prev, next) {
+  override getInRowSpacing_(prev: Measurable|null, next: Measurable|null) {
     if (!prev) {
       // Between an editable field and the beginning of the row.
-      if (next && Types.isField(next) &&
-          (/** @type {Field} */ (next)).isEditable) {
+      if (next && Types.isField(next) && (next as Field).isEditable) {
         return this.constants_.MEDIUM_PADDING;
       }
       // Inline input at the beginning of the row.
@@ -182,12 +167,12 @@ class RenderInfo extends BaseRenderInfo {
     // Spacing between a non-input and the end of the row or a statement input.
     if (!Types.isInput(prev) && (!next || Types.isStatementInput(next))) {
       // Between an editable field and the end of the row.
-      if (Types.isField(prev) && (/** @type {Field} */ (prev)).isEditable) {
+      if (Types.isField(prev) && (prev as Field).isEditable) {
         return this.constants_.MEDIUM_PADDING;
       }
       // Padding at the end of an icon-only row to make the block shape clearer.
       if (Types.isIcon(prev)) {
-        return (this.constants_.LARGE_PADDING * 2) + 1;
+        return this.constants_.LARGE_PADDING * 2 + 1;
       }
       if (Types.isHat(prev)) {
         return this.constants_.NO_PADDING;
@@ -223,7 +208,7 @@ class RenderInfo extends BaseRenderInfo {
     // Spacing between a non-input and an input.
     if (!Types.isInput(prev) && next && Types.isInput(next)) {
       // Between an editable field and an input.
-      if (Types.isField(prev) && (/** @type {Field} */ (prev)).isEditable) {
+      if (Types.isField(prev) && (prev as Field).isEditable) {
         if (Types.isInlineInput(next)) {
           return this.constants_.SMALL_PADDING;
         } else if (Types.isExternalInput(next)) {
@@ -245,11 +230,10 @@ class RenderInfo extends BaseRenderInfo {
     if (Types.isIcon(prev) && next && !Types.isInput(next)) {
       return this.constants_.LARGE_PADDING;
     }
-
     // Spacing between an inline input and a field.
     if (Types.isInlineInput(prev) && next && Types.isField(next)) {
       // Editable field after inline input.
-      if ((/** @type {Field} */ (next)).isEditable) {
+      if ((next as Field).isEditable) {
         return this.constants_.MEDIUM_PADDING;
       } else {
         // Noneditable field after inline input.
@@ -291,8 +275,7 @@ class RenderInfo extends BaseRenderInfo {
 
     // Spacing between two fields of the same editability.
     if (Types.isField(prev) && next && Types.isField(next) &&
-        ((/** @type {Field} */ (prev)).isEditable ===
-         (/** @type {Field} */ (next)).isEditable)) {
+        (prev as Field).isEditable === (next as Field).isEditable) {
       return this.constants_.LARGE_PADDING;
     }
 
@@ -304,10 +287,7 @@ class RenderInfo extends BaseRenderInfo {
     return this.constants_.MEDIUM_PADDING;
   }
 
-  /**
-   * @override
-   */
-  getSpacerRowHeight_(prev, next) {
+  override getSpacerRowHeight_(prev: Row, next: Row) {
     // If we have an empty block add a spacer to increase the height.
     if (Types.isTopRow(prev) && Types.isBottomRow(next)) {
       return this.constants_.EMPTY_BLOCK_SPACER_HEIGHT;
@@ -334,15 +314,12 @@ class RenderInfo extends BaseRenderInfo {
     return this.constants_.MEDIUM_PADDING;
   }
 
-  /**
-   * @override
-   */
-  getElemCenterline_(row, elem) {
+  override getElemCenterline_(row: Row, elem: Measurable) {
     if (Types.isSpacer(elem)) {
       return row.yPos + elem.height / 2;
     }
     if (Types.isBottomRow(row)) {
-      const bottomRow = /** @type {!BottomRow} */ (row);
+      const bottomRow = row as BottomRow;
       const baseline =
           bottomRow.yPos + bottomRow.height - bottomRow.descenderHeight;
       if (Types.isNextConnection(elem)) {
@@ -351,7 +328,7 @@ class RenderInfo extends BaseRenderInfo {
       return baseline - elem.height / 2;
     }
     if (Types.isTopRow(row)) {
-      const topRow = /** @type {!TopRow} */ (row);
+      const topRow = row as TopRow;
       if (Types.isHat(elem)) {
         return topRow.capline - elem.height / 2;
       }
@@ -360,7 +337,7 @@ class RenderInfo extends BaseRenderInfo {
 
     let result = row.yPos;
     if (Types.isField(elem) || Types.isIcon(elem)) {
-      result += (elem.height / 2);
+      result += elem.height / 2;
       if ((row.hasInlineInput || row.hasStatement) &&
           elem.height + this.constants_.TALL_INPUT_FIELD_OFFSET_Y <=
               row.height) {
@@ -369,31 +346,26 @@ class RenderInfo extends BaseRenderInfo {
     } else if (Types.isInlineInput(elem)) {
       result += elem.height / 2;
     } else {
-      result += (row.height / 2);
+      result += row.height / 2;
     }
     return result;
   }
 
-  /**
-   * @override
-   */
-  alignRowElements_() {
+  override alignRowElements_() {
     if (!this.isInline) {
       super.alignRowElements_();
       return;
     }
-
     // Walk backgrounds through rows on the block, keeping track of the right
     // input edge.
     let nextRightEdge = 0;
     const rowNextRightEdges = new WeakMap();
     let prevInput = null;
-    for (let i = this.rows.length - 1, row; (row = this.rows[i]); i--) {
+    for (let i = this.rows.length - 1, row; row = this.rows[i]; i--) {
       rowNextRightEdges.set(row, nextRightEdge);
       if (Types.isInputRow(row)) {
         if (row.hasStatement) {
-          this.alignStatementRow_(
-              /** @type {!InputRow} */ (row));
+          this.alignStatementRow_(row as InputRow);
         }
         if (prevInput && prevInput.hasStatement &&
             row.width < prevInput.width) {
@@ -407,7 +379,7 @@ class RenderInfo extends BaseRenderInfo {
     // Walk down each row from the top, comparing the prev and next right input
     // edges and setting the desired width to the max of the two.
     let prevRightEdge = 0;
-    for (let i = 0, row; (row = this.rows[i]); i++) {
+    for (let i = 0, row; row = this.rows[i]; i++) {
       if (row.hasStatement) {
         prevRightEdge = this.getDesiredRowWidth_(row);
       } else if (Types.isSpacer(row)) {
@@ -426,10 +398,7 @@ class RenderInfo extends BaseRenderInfo {
     }
   }
 
-  /**
-   * @override
-   */
-  getDesiredRowWidth_(row) {
+  override getDesiredRowWidth_(row: Row) {
     // Limit the width of a statement row when a block is inline.
     if (this.isInline && row.hasStatement) {
       return this.statementEdge + this.constants_.MAX_BOTTOM_WIDTH +
@@ -438,16 +407,13 @@ class RenderInfo extends BaseRenderInfo {
     return super.getDesiredRowWidth_(row);
   }
 
-  /**
-   * @override
-   */
-  finalize_() {
+  override finalize_() {
     // Performance note: this could be combined with the draw pass, if the time
     // that this takes is excessive.  But it shouldn't be, because it only
     // accesses and sets properties that already exist on the objects.
     let widestRowWithConnectedBlocks = 0;
     let yCursor = 0;
-    for (let i = 0, row; (row = this.rows[i]); i++) {
+    for (let i = 0, row; row = this.rows[i]; i++) {
       row.yPos = yCursor;
       row.xPos = this.startX;
       yCursor += row.height;
@@ -475,8 +441,6 @@ class RenderInfo extends BaseRenderInfo {
     }
 
     this.bottomRow.baseline = yCursor - this.bottomRow.descenderHeight;
-
-    // The dark (lowlight) adds to the size of the block in both x and y.
     this.widthWithChildren = widestRowWithConnectedBlocks + this.startX +
         this.constants_.DARK_PATH_OFFSET;
     this.width += this.constants_.DARK_PATH_OFFSET;
@@ -484,5 +448,3 @@ class RenderInfo extends BaseRenderInfo {
     this.startY = this.topRow.capline;
   }
 }
-
-exports.RenderInfo = RenderInfo;

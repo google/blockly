@@ -14,32 +14,33 @@
  * block.
  * @class
  */
-goog.module('Blockly.blockRendering.InlineInput');
+import * as goog from '../../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.blockRendering.InlineInput');
 
 /* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider, DynamicShape} = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const {InputConnection} = goog.require('Blockly.blockRendering.InputConnection');
-/* eslint-disable-next-line no-unused-vars */
-const {Input} = goog.requireType('Blockly.Input');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+import type {Input} from '../../input.js';
+import type {ConstantProvider} from '../common/constants.js';
+
+import {InputConnection} from './input_connection.js';
+import {Types} from './types.js';
 
 
 /**
  * An object containing information about the space an inline input takes up
  * during rendering
- * @extends {InputConnection}
  * @struct
  * @alias Blockly.blockRendering.InlineInput
  */
-class InlineInput extends InputConnection {
+export class InlineInput extends InputConnection {
+  connectionHeight: number;
+  connectionWidth: number;
+
   /**
-   * @param {!ConstantProvider} constants The rendering
-   *   constants provider.
-   * @param {!Input} input The inline input to measure and store
-   *     information for.
-   * @package
+   * @param constants The rendering constants provider.
+   * @param input The inline input to measure and store information for.
+   * @internal
    */
-  constructor(constants, input) {
+  constructor(constants: ConstantProvider, input: Input) {
     super(constants, input);
     this.type |= Types.INLINE_INPUT;
 
@@ -53,31 +54,23 @@ class InlineInput extends InputConnection {
       this.height = this.connectedBlockHeight;
     }
 
-    /** @type {number} */
     this.connectionHeight = !this.isDynamicShape ?
-        this.shape.height :
-        (/** @type {!DynamicShape} */ (this.shape)).height(this.height);
+        this.shape.height as number :
+        (this.shape.height as (p1: number) => number)(this.height);
 
-    /** @type {number} */
     this.connectionWidth = !this.isDynamicShape ?
-        this.shape.width :
-        (/** @type {!DynamicShape} */ (this.shape)).width(this.height);
+        this.shape.width as number :
+        (this.shape.width as (p1: number) => number)(this.height);
     if (!this.connectedBlock) {
       this.width += this.connectionWidth * (this.isDynamicShape ? 2 : 1);
     }
 
-    /** @type {number} */
-    this.connectionOffsetY = this.isDynamicShape ?
-        (/** @type {!DynamicShape} */ (this.shape))
-            .connectionOffsetY(this.connectionHeight) :
+    this.connectionOffsetY = 'connectionOffsetY' in this.shape ?
+        this.shape.connectionOffsetY(this.connectionHeight) :
         this.constants_.TAB_OFFSET_FROM_TOP;
 
-    /** @type {number} */
-    this.connectionOffsetX = this.isDynamicShape ?
-        (/** @type {!DynamicShape} */ (this.shape))
-            .connectionOffsetX(this.connectionWidth) :
+    this.connectionOffsetX = 'connectionOffsetX' in this.shape ?
+        this.shape.connectionOffsetX(this.connectionWidth) :
         0;
   }
 }
-
-exports.InlineInput = InlineInput;

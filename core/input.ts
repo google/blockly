@@ -7,92 +7,75 @@
 /**
  * @fileoverview Object representing an input (value, statement, or dummy).
  */
-'use strict';
 
 /**
  * Object representing an input (value, statement, or dummy).
  * @class
  */
-goog.module('Blockly.Input');
+import * as goog from '../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Input');
 
-const fieldRegistry = goog.require('Blockly.fieldRegistry');
-/* eslint-disable-next-line no-unused-vars */
-const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-/* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
-/* eslint-disable-next-line no-unused-vars */
-const {Connection} = goog.requireType('Blockly.Connection');
-/* eslint-disable-next-line no-unused-vars */
-const {Field} = goog.requireType('Blockly.Field');
-/* eslint-disable-next-line no-unused-vars */
-const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
-const {inputTypes} = goog.require('Blockly.inputTypes');
-/** @suppress {extraRequire} */
-goog.require('Blockly.FieldLabel');
+// Unused import preserved for side-effects. Remove if unneeded.
+import './field_label.js';
+
+import type {Block} from './block.js';
+import type {BlockSvg} from './block_svg.js';
+import type {Connection} from './connection.js';
+import type {Field} from './field.js';
+import * as fieldRegistry from './field_registry.js';
+import {inputTypes} from './input_types.js';
+import type {RenderedConnection} from './rendered_connection.js';
 
 
 /**
  * Class for an input with an optional field.
  * @alias Blockly.Input
  */
-class Input {
+export class Input {
+  private sourceBlock_: Block;
+  fieldRow: Field[] = [];
+  align: Align;
+
+  /** Is the input visible? */
+  private visible_ = true;
+
   /**
-   * @param {number} type The type of the input.
-   * @param {string} name Language-neutral identifier which may used to find
-   *     this input again.
-   * @param {!Block} block The block containing this input.
-   * @param {Connection} connection Optional connection for this input.
+   * @param type The type of the input.
+   * @param name Language-neutral identifier which may used to find this input
+   *     again.
+   * @param block The block containing this input.
+   * @param connection Optional connection for this input.
    */
-  constructor(type, name, block, connection) {
+  constructor(
+      public type: number, public name: string, block: Block,
+      public connection: Connection|null) {
     if (type !== inputTypes.DUMMY && !name) {
       throw Error(
           'Value inputs and statement inputs must have non-empty name.');
     }
-    /** @type {number} */
-    this.type = type;
-    /** @type {string} */
-    this.name = name;
-    /**
-     * @type {!Block}
-     * @private
-     */
     this.sourceBlock_ = block;
-    /** @type {Connection} */
-    this.connection = connection;
-    /** @type {!Array<!Field>} */
-    this.fieldRow = [];
 
-    /**
-     * Alignment of input's fields (left, right or centre).
-     * @type {number}
-     */
+    /** Alignment of input's fields (left, right or centre). */
     this.align = Align.LEFT;
-
-    /**
-     * Is the input visible?
-     * @type {boolean}
-     * @private
-     */
-    this.visible_ = true;
   }
 
   /**
    * Get the source block for this input.
-   * @return {?Block} The source block, or null if there is none.
+   * @return The source block, or null if there is none.
    */
-  getSourceBlock() {
+  getSourceBlock(): Block|null {
     return this.sourceBlock_;
   }
 
   /**
    * Add a field (or label from string), and all prefix and suffix fields, to
    * the end of the input's field row.
-   * @param {string|!Field} field Something to add as a field.
-   * @param {string=} opt_name Language-neutral identifier which may used to
-   *     find this field again.  Should be unique to the host block.
-   * @return {!Input} The input being append to (to allow chaining).
+   * @param field Something to add as a field.
+   * @param opt_name Language-neutral identifier which may used to find this
+   *     field again.  Should be unique to the host block.
+   * @return The input being append to (to allow chaining).
    */
-  appendField(field, opt_name) {
+  appendField(field: string|Field, opt_name?: string): Input {
     this.insertFieldAt(this.fieldRow.length, field, opt_name);
     return this;
   }
@@ -100,13 +83,13 @@ class Input {
   /**
    * Inserts a field (or label from string), and all prefix and suffix fields,
    * at the location of the input's field row.
-   * @param {number} index The index at which to insert field.
-   * @param {string|!Field} field Something to add as a field.
-   * @param {string=} opt_name Language-neutral identifier which may used to
-   *     find this field again.  Should be unique to the host block.
-   * @return {number} The index following the last inserted field.
+   * @param index The index at which to insert field.
+   * @param field Something to add as a field.
+   * @param opt_name Language-neutral identifier which may used to find this
+   *     field again.  Should be unique to the host block.
+   * @return The index following the last inserted field.
    */
-  insertFieldAt(index, field, opt_name) {
+  insertFieldAt(index: number, field: string|Field, opt_name?: string): number {
     if (index < 0 || index > this.fieldRow.length) {
       throw Error('index ' + index + ' out of bounds.');
     }
@@ -118,10 +101,10 @@ class Input {
 
     // Generate a FieldLabel when given a plain text field.
     if (typeof field === 'string') {
-      field = /** @type {!Field} **/ (fieldRegistry.fromJson({
+      field = fieldRegistry.fromJson({
         'type': 'field_label',
         'text': field,
-      }));
+      }) as Field;
     }
 
     field.setSourceBlock(this.sourceBlock_);
@@ -145,8 +128,7 @@ class Input {
     }
 
     if (this.sourceBlock_.rendered) {
-      this.sourceBlock_ = /** @type {!BlockSvg} */ (this.sourceBlock_);
-      this.sourceBlock_.render();
+      (this.sourceBlock_ as BlockSvg).render();
       // Adding a field will cause the block to change shape.
       this.sourceBlock_.bumpNeighbours();
     }
@@ -155,21 +137,19 @@ class Input {
 
   /**
    * Remove a field from this input.
-   * @param {string} name The name of the field.
-   * @param {boolean=} opt_quiet True to prevent an error if field is not
-   *     present.
-   * @return {boolean} True if operation succeeds, false if field is not present
-   *     and opt_quiet is true.
+   * @param name The name of the field.
+   * @param opt_quiet True to prevent an error if field is not present.
+   * @return True if operation succeeds, false if field is not present and
+   *     opt_quiet is true.
    * @throws {Error} if the field is not present and opt_quiet is false.
    */
-  removeField(name, opt_quiet) {
-    for (let i = 0, field; (field = this.fieldRow[i]); i++) {
+  removeField(name: string, opt_quiet?: boolean): boolean {
+    for (let i = 0, field; field = this.fieldRow[i]; i++) {
       if (field.name === name) {
         field.dispose();
         this.fieldRow.splice(i, 1);
         if (this.sourceBlock_.rendered) {
-          this.sourceBlock_ = /** @type {!BlockSvg} */ (this.sourceBlock_);
-          this.sourceBlock_.render();
+          (this.sourceBlock_ as BlockSvg).render();
           // Removing a field will cause the block to change shape.
           this.sourceBlock_.bumpNeighbours();
         }
@@ -184,42 +164,41 @@ class Input {
 
   /**
    * Gets whether this input is visible or not.
-   * @return {boolean} True if visible.
+   * @return True if visible.
    */
-  isVisible() {
+  isVisible(): boolean {
     return this.visible_;
   }
 
   /**
    * Sets whether this input is visible or not.
    * Should only be used to collapse/uncollapse a block.
-   * @param {boolean} visible True if visible.
-   * @return {!Array<!BlockSvg>} List of blocks to render.
-   * @package
+   * @param visible True if visible.
+   * @return List of blocks to render.
+   * @internal
    */
-  setVisible(visible) {
+  setVisible(visible: boolean): BlockSvg[] {
     // Note: Currently there are only unit tests for block.setCollapsed()
     // because this function is package. If this function goes back to being a
     // public API tests (lots of tests) should be added.
-    let renderList = [];
+    let renderList: AnyDuringMigration[] = [];
     if (this.visible_ === visible) {
       return renderList;
     }
     this.visible_ = visible;
 
-    for (let y = 0, field; (field = this.fieldRow[y]); y++) {
+    for (let y = 0, field; field = this.fieldRow[y]; y++) {
       field.setVisible(visible);
     }
     if (this.connection) {
-      this.connection =
-          /** @type {!RenderedConnection} */ (this.connection);
+      const renderedConnection = this.connection as RenderedConnection;
       // Has a connection.
       if (visible) {
-        renderList = this.connection.startTrackingAll();
+        renderList = renderedConnection.startTrackingAll();
       } else {
-        this.connection.stopTrackingAll();
+        renderedConnection.stopTrackingAll();
       }
-      const child = this.connection.targetBlock();
+      const child = renderedConnection.targetBlock();
       if (child) {
         child.getSvgRoot().style.display = visible ? 'block' : 'none';
       }
@@ -229,21 +208,21 @@ class Input {
 
   /**
    * Mark all fields on this input as dirty.
-   * @package
+   * @internal
    */
   markDirty() {
-    for (let y = 0, field; (field = this.fieldRow[y]); y++) {
+    for (let y = 0, field; field = this.fieldRow[y]; y++) {
       field.markDirty();
     }
   }
 
   /**
    * Change a connection's compatibility.
-   * @param {string|Array<string>|null} check Compatible value type or
-   *     list of value types.  Null if all types are compatible.
-   * @return {!Input} The input being modified (to allow chaining).
+   * @param check Compatible value type or list of value types.  Null if all
+   *     types are compatible.
+   * @return The input being modified (to allow chaining).
    */
-  setCheck(check) {
+  setCheck(check: string|string[]|null): Input {
     if (!this.connection) {
       throw Error('This input does not have a connection.');
     }
@@ -253,25 +232,25 @@ class Input {
 
   /**
    * Change the alignment of the connection's field(s).
-   * @param {number} align One of the values of Align
-   *   In RTL mode directions are reversed, and Align.RIGHT aligns to the left.
-   * @return {!Input} The input being modified (to allow chaining).
+   * @param align One of the values of Align.  In RTL mode directions
+   *     are reversed, and Align.RIGHT aligns to the left.
+   * @return The input being modified (to allow chaining).
    */
-  setAlign(align) {
+  setAlign(align: Align): Input {
     this.align = align;
     if (this.sourceBlock_.rendered) {
-      this.sourceBlock_ = /** @type {!BlockSvg} */ (this.sourceBlock_);
-      this.sourceBlock_.render();
+      const sourceBlock = this.sourceBlock_ as BlockSvg;
+      sourceBlock.render();
     }
     return this;
   }
 
   /**
    * Changes the connection's shadow block.
-   * @param {?Element} shadow DOM representation of a block or null.
-   * @return {!Input} The input being modified (to allow chaining).
+   * @param shadow DOM representation of a block or null.
+   * @return The input being modified (to allow chaining).
    */
-  setShadowDom(shadow) {
+  setShadowDom(shadow: Element|null): Input {
     if (!this.connection) {
       throw Error('This input does not have a connection.');
     }
@@ -281,20 +260,18 @@ class Input {
 
   /**
    * Returns the XML representation of the connection's shadow block.
-   * @return {?Element} Shadow DOM representation of a block or null.
+   * @return Shadow DOM representation of a block or null.
    */
-  getShadowDom() {
+  getShadowDom(): Element|null {
     if (!this.connection) {
       throw Error('This input does not have a connection.');
     }
     return this.connection.getShadowDom();
   }
 
-  /**
-   * Initialize the fields on this input.
-   */
+  /** Initialize the fields on this input. */
   init() {
-    if (!this.sourceBlock_.workspace.rendered) {
+    if (!this.sourceBlock_.workspace!.rendered) {
       return;  // Headless blocks don't need fields initialized.
     }
     for (let i = 0; i < this.fieldRow.length; i++) {
@@ -307,29 +284,29 @@ class Input {
    * @suppress {checkTypes}
    */
   dispose() {
-    for (let i = 0, field; (field = this.fieldRow[i]); i++) {
+    for (let i = 0, field; field = this.fieldRow[i]; i++) {
       field.dispose();
     }
     if (this.connection) {
       this.connection.dispose();
     }
-    this.sourceBlock_ = null;
+    // AnyDuringMigration because:  Type 'null' is not assignable to type
+    // 'Block'.
+    this.sourceBlock_ = null as AnyDuringMigration;
   }
 }
 
-/**
- * Enum for alignment of inputs.
- * @enum {number}
- * @alias Blockly.Input.Align
- */
-const Align = {
-  LEFT: -1,
-  CENTRE: 0,
-  RIGHT: 1,
-};
-exports.Align = Align;
+export namespace Input {
+  /**
+   * Enum for alignment of inputs.
+   * @alias Blockly.Input.Align
+   */
+  export enum Align {
+    LEFT = -1,
+    CENTRE = 0,
+    RIGHT = 1,
+  }
+}
 
-// Add Align to Input so that `Blockly.Input.Align` is publicly accessible.
-Input.Align = Align;
-
-exports.Input = Input;
+export type Align = Input.Align;
+export const Align = Input.Align;

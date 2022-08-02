@@ -8,43 +8,38 @@
  * @fileoverview Objects representing inline inputs with connections on a
  * rendered block.
  */
-'use strict';
 
 /**
  * Objects representing inline inputs with connections on a
  * rendered block.
  * @class
  */
-goog.module('Blockly.geras.InlineInput');
+import * as goog from '../../../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.geras.InlineInput');
 
 /* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider: BaseConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
-/* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider: GerasConstantProvider} = goog.requireType('Blockly.geras.ConstantProvider');
-const {InlineInput: BaseInlineInput} = goog.require('Blockly.blockRendering.InlineInput');
-/* eslint-disable-next-line no-unused-vars */
-const {Input} = goog.requireType('Blockly.Input');
+import type {Input} from '../../../input.js';
+import type {ConstantProvider as BaseConstantProvider} from '../../../renderers/common/constants.js';
+import {InlineInput as BaseInlineInput} from '../../../renderers/measurables/inline_input.js';
+import type {ConstantProvider as GerasConstantProvider} from '../constants.js';
 
 
 /**
  * An object containing information about the space an inline input takes up
  * during rendering.
- * @extends {BaseInlineInput}
  * @alias Blockly.geras.InlineInput
  */
-class InlineInput extends BaseInlineInput {
-  /**
-   * @param {!BaseConstantProvider} constants The rendering
-   *   constants provider.
-   * @param {!Input} input The inline input to measure and store
-   *     information for.
-   * @package
-   */
-  constructor(constants, input) {
-    super(constants, input);
+export class InlineInput extends BaseInlineInput {
+  override constants_: GerasConstantProvider;
 
-    /** @type {!GerasConstantProvider} */
-    this.constants_;
+  /**
+   * @param constants The rendering constants provider.
+   * @param input The inline input to measure and store information for.
+   * @internal
+   */
+  constructor(constants: BaseConstantProvider, input: Input) {
+    super(constants, input);
+    this.constants_ = constants as GerasConstantProvider;
 
     if (this.connectedBlock) {
       // We allow the dark path to show on the parent block so that the child
@@ -54,5 +49,3 @@ class InlineInput extends BaseInlineInput {
     }
   }
 }
-
-exports.InlineInput = InlineInput;

@@ -9,88 +9,74 @@
  * block or bubble is dragged over or dropped on top of it.
  */
 
-'use strict';
-
 /**
  * The abstract class for a component with custom behaviour when a
  * block or bubble is dragged over or dropped on top of it.
  * @class
  */
-goog.module('Blockly.DragTarget');
+import * as goog from '../closure/goog/goog.js';
+goog.declareModuleId('Blockly.DragTarget');
 
-/* eslint-disable-next-line no-unused-vars */
-const {IDragTarget} = goog.require('Blockly.IDragTarget');
-/* eslint-disable-next-line no-unused-vars */
-const {IDraggable} = goog.requireType('Blockly.IDraggable');
-/* eslint-disable-next-line no-unused-vars */
-const {Rect} = goog.requireType('Blockly.utils.Rect');
+import type {IDragTarget} from './interfaces/i_drag_target.js';
+import type {IDraggable} from './interfaces/i_draggable.js';
+import type {Rect} from './utils/rect.js';
 
 
 /**
  * Abstract class for a component with custom behaviour when a block or bubble
  * is dragged over or dropped on top of it.
- * @implements {IDragTarget}
  * @alias Blockly.DragTarget
  */
-class DragTarget {
+export class DragTarget implements IDragTarget {
+  /**
+   * The unique id for this component that is used to register with the
+   * ComponentManager.
+   */
+  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
+  id!: string;
+
   /**
    * Constructor for DragTarget. It exists to add the id property and should not
    * be called directly, only by a subclass.
    */
-  constructor() {
-    /**
-     * The unique id for this component that is used to register with the
-     * ComponentManager.
-     * @type {string}
-     */
-    this.id;
-  }
+  constructor() {}
 
   /**
    * Handles when a cursor with a block or bubble enters this drag target.
-   * @param {!IDraggable} _dragElement The block or bubble currently being
-   *   dragged.
+   * @param _dragElement The block or bubble currently being dragged.
    */
-  onDragEnter(_dragElement) {
-    // no-op
-  }
+  onDragEnter(_dragElement: IDraggable) {}
+  // no-op
 
   /**
    * Handles when a cursor with a block or bubble is dragged over this drag
    * target.
-   * @param {!IDraggable} _dragElement The block or bubble currently being
-   *   dragged.
+   * @param _dragElement The block or bubble currently being dragged.
    */
-  onDragOver(_dragElement) {
-    // no-op
-  }
+  onDragOver(_dragElement: IDraggable) {}
+  // no-op
 
   /**
    * Handles when a cursor with a block or bubble exits this drag target.
-   * @param {!IDraggable} _dragElement The block or bubble currently being
-   *   dragged.
+   * @param _dragElement The block or bubble currently being dragged.
    */
-  onDragExit(_dragElement) {
-    // no-op
-  }
-
+  onDragExit(_dragElement: IDraggable) {}
+  // no-op
   /**
    * Handles when a block or bubble is dropped on this component.
    * Should not handle delete here.
-   * @param {!IDraggable} _dragElement The block or bubble currently being
-   *   dragged.
+   * @param _dragElement The block or bubble currently being dragged.
    */
-  onDrop(_dragElement) {
-    // no-op
-  }
+  onDrop(_dragElement: IDraggable) {}
+  // no-op
 
   /**
    * Returns the bounding rectangle of the drag target area in pixel units
    * relative to the Blockly injection div.
-   * @return {?Rect} The component's bounding box. Null if drag
-   *   target area should be ignored.
+   * @return The component's bounding box. Null if drag target area should be
+   *     ignored.
    */
-  getClientRect() {
+  getClientRect(): Rect|null {
     return null;
   }
 
@@ -98,14 +84,11 @@ class DragTarget {
    * Returns whether the provided block or bubble should not be moved after
    * being dropped on this component. If true, the element will return to where
    * it was when the drag started.
-   * @param {!IDraggable} _dragElement The block or bubble currently being
-   *   dragged.
-   * @return {boolean} Whether the block or bubble provided should be returned
-   *     to drag start.
+   * @param _dragElement The block or bubble currently being dragged.
+   * @return Whether the block or bubble provided should be returned to drag
+   *     start.
    */
-  shouldPreventMove(_dragElement) {
+  shouldPreventMove(_dragElement: IDraggable): boolean {
     return false;
   }
 }
-
-exports.DragTarget = DragTarget;

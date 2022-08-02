@@ -17,8 +17,10 @@ const Xml = goog.require('Blockly.Xml');
 const {Align} = goog.require('Blockly.Input');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+// const {BlockDefinition} = goog.requireType('Blockly.blocks');
+// TODO (6248): Properly import the BlockDefinition type.
 /* eslint-disable-next-line no-unused-vars */
-const {BlockDefinition} = goog.requireType('Blockly.blocks');
+const BlockDefinition = Object;
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
 const {FieldDropdown} = goog.require('Blockly.FieldDropdown');
 const {Msg} = goog.require('Blockly.Msg');

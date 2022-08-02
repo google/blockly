@@ -1,3 +1,5 @@
+/** @fileoverview Re-exports of Blockly.zelos.* modules. */
+
 /**
  * @license
  * Copyright 2021 Google LLC
@@ -5,34 +7,33 @@
  */
 
 /**
- * @fileoverview Re-exports of Blockly.zelos.* modules.
- */
-'use strict';
-
-/**
  * Re-exports of Blockly.zelos.* modules.
  * @namespace Blockly.zelos
  */
-goog.module('Blockly.zelos');
+import * as goog from '../../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.zelos');
 
-const {BottomRow} = goog.require('Blockly.zelos.BottomRow');
-const {ConstantProvider} = goog.require('Blockly.zelos.ConstantProvider');
-const {Drawer} = goog.require('Blockly.zelos.Drawer');
-const {MarkerSvg} = goog.require('Blockly.zelos.MarkerSvg');
-const {PathObject} = goog.require('Blockly.zelos.PathObject');
-const {RenderInfo} = goog.require('Blockly.zelos.RenderInfo');
-const {Renderer} = goog.require('Blockly.zelos.Renderer');
-const {RightConnectionShape} = goog.require('Blockly.zelos.RightConnectionShape');
-const {StatementInput} = goog.require('Blockly.zelos.StatementInput');
-const {TopRow} = goog.require('Blockly.zelos.TopRow');
+import {ConstantProvider} from './constants.js';
+import {Drawer} from './drawer.js';
+import {RenderInfo} from './info.js';
+import {MarkerSvg} from './marker_svg.js';
+import {BottomRow} from './measurables/bottom_row.js';
+import {StatementInput} from './measurables/inputs.js';
+import {RightConnectionShape} from './measurables/row_elements.js';
+import {TopRow} from './measurables/top_row.js';
+import {PathObject} from './path_object.js';
+import {Renderer} from './renderer.js';
 
-exports.BottomRow = BottomRow;
-exports.ConstantProvider = ConstantProvider;
-exports.Drawer = Drawer;
-exports.MarkerSvg = MarkerSvg;
-exports.PathObject = PathObject;
-exports.RenderInfo = RenderInfo;
-exports.Renderer = Renderer;
-exports.RightConnectionShape = RightConnectionShape;
-exports.StatementInput = StatementInput;
-exports.TopRow = TopRow;
+
+export {
+  BottomRow,
+  ConstantProvider,
+  Drawer,
+  MarkerSvg,
+  PathObject,
+  Renderer,
+  RenderInfo,
+  RightConnectionShape,
+  StatementInput,
+  TopRow
+};

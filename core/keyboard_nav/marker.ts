@@ -8,19 +8,19 @@
  * @fileoverview The class representing a marker.
  * Used primarily for keyboard navigation to show a marked location.
  */
-'use strict';
 
 /**
  * The class representing a marker.
  * Used primarily for keyboard navigation to show a marked location.
  * @class
  */
-goog.module('Blockly.Marker');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Marker');
 
 /* eslint-disable-next-line no-unused-vars */
-const {ASTNode} = goog.requireType('Blockly.ASTNode');
-/* eslint-disable-next-line no-unused-vars */
-const {MarkerSvg} = goog.requireType('Blockly.blockRendering.MarkerSvg');
+import type {MarkerSvg} from '../renderers/common/marker_svg.js';
+
+import type {ASTNode} from './ast_node.js';
 
 
 /**
@@ -28,63 +28,50 @@ const {MarkerSvg} = goog.requireType('Blockly.blockRendering.MarkerSvg');
  * This is used in keyboard navigation to save a location in the Blockly AST.
  * @alias Blockly.Marker
  */
-class Marker {
+export class Marker {
+  /** The colour of the marker. */
+  colour: string|null = null;
+
+  /** The current location of the marker. */
+  // AnyDuringMigration because:  Type 'null' is not assignable to type
+  // 'ASTNode'.
+  private curNode_: ASTNode = null as AnyDuringMigration;
+
   /**
-   * Constructs a new Marker instance.
+   * The object in charge of drawing the visual representation of the current
+   * node.
    */
-  constructor() {
-    /**
-     * The colour of the marker.
-     * @type {?string}
-     */
-    this.colour = null;
+  // AnyDuringMigration because:  Type 'null' is not assignable to type
+  // 'MarkerSvg'.
+  private drawer_: MarkerSvg = null as AnyDuringMigration;
 
-    /**
-     * The current location of the marker.
-     * @type {ASTNode}
-     * @private
-     */
-    this.curNode_ = null;
+  /** The type of the marker. */
+  type = 'marker';
 
-    /**
-     * The object in charge of drawing the visual representation of the current
-     * node.
-     * @type {MarkerSvg}
-     * @private
-     */
-    this.drawer_ = null;
-
-    /**
-     * The type of the marker.
-     * @type {string}
-     */
-    this.type = 'marker';
-  }
+  /** Constructs a new Marker instance. */
+  constructor() {}
 
   /**
    * Sets the object in charge of drawing the marker.
-   * @param {MarkerSvg} drawer The object in charge of
-   *     drawing the marker.
+   * @param drawer The object in charge of drawing the marker.
    */
-  setDrawer(drawer) {
+  setDrawer(drawer: MarkerSvg) {
     this.drawer_ = drawer;
   }
 
   /**
    * Get the current drawer for the marker.
-   * @return {MarkerSvg} The object in charge of drawing
-   *     the marker.
+   * @return The object in charge of drawing the marker.
    */
-  getDrawer() {
+  getDrawer(): MarkerSvg {
     return this.drawer_;
   }
 
   /**
    * Gets the current location of the marker.
-   * @return {ASTNode} The current field, connection, or block the marker
-   *     is on.
+   * @return The current field, connection, or block the marker is on.
    */
-  getCurNode() {
+  getCurNode(): ASTNode {
     return this.curNode_;
   }
 
@@ -92,9 +79,9 @@ class Marker {
    * Set the location of the marker and call the update method.
    * Setting isStack to true will only work if the newLocation is the top most
    * output or previous connection on a stack.
-   * @param {ASTNode} newNode The new location of the marker.
+   * @param newNode The new location of the marker.
    */
-  setCurNode(newNode) {
+  setCurNode(newNode: ASTNode) {
     const oldNode = this.curNode_;
     this.curNode_ = newNode;
     if (this.drawer_) {
@@ -104,7 +91,7 @@ class Marker {
 
   /**
    * Redraw the current marker.
-   * @package
+   * @internal
    */
   draw() {
     if (this.drawer_) {
@@ -112,23 +99,17 @@ class Marker {
     }
   }
 
-  /**
-   * Hide the marker SVG.
-   */
+  /** Hide the marker SVG. */
   hide() {
     if (this.drawer_) {
       this.drawer_.hide();
     }
   }
 
-  /**
-   * Dispose of this marker.
-   */
+  /** Dispose of this marker. */
   dispose() {
     if (this.getDrawer()) {
       this.getDrawer().dispose();
     }
   }
 }
-
-exports.Marker = Marker;

@@ -7,39 +7,47 @@
 /**
  * @fileoverview Class for comment move event.
  */
-'use strict';
 
 /**
  * Class for comment move event.
  * @class
  */
-goog.module('Blockly.Events.CommentMove');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Events.CommentMove');
 
-const eventUtils = goog.require('Blockly.Events.utils');
-const registry = goog.require('Blockly.registry');
-const {CommentBase} = goog.require('Blockly.Events.CommentBase');
-const {Coordinate} = goog.require('Blockly.utils.Coordinate');
-/* eslint-disable-next-line no-unused-vars */
-const {WorkspaceComment} = goog.requireType('Blockly.WorkspaceComment');
+import * as registry from '../registry.js';
+import {Coordinate} from '../utils/coordinate.js';
+import type {WorkspaceComment} from '../workspace_comment.js';
+
+import {CommentBase} from './events_comment_base.js';
+import * as eventUtils from './utils.js';
 
 
 /**
  * Class for a comment move event.  Created before the move.
- * @extends {CommentBase}
  * @alias Blockly.Events.CommentMove
  */
-class CommentMove extends CommentBase {
+export class CommentMove extends CommentBase {
+  override type: string;
+
+  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
+  comment_!: WorkspaceComment;
+  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
+  oldCoordinate_!: Coordinate;
+
+  /** The location after the move, in workspace coordinates. */
+  // AnyDuringMigration because:  Type 'null' is not assignable to type
+  // 'Coordinate'.
+  newCoordinate_: Coordinate = null as AnyDuringMigration;
+
   /**
-   * @param {!WorkspaceComment=} opt_comment The comment that is being
-   *     moved.  Undefined for a blank event.
+   * @param opt_comment The comment that is being moved.  Undefined for a blank
+   *     event.
    */
-  constructor(opt_comment) {
+  constructor(opt_comment?: WorkspaceComment) {
     super(opt_comment);
 
-    /**
-     * Type of this event.
-     * @type {string}
-     */
+    /** Type of this event. */
     this.type = eventUtils.COMMENT_MOVE;
 
     if (!opt_comment) {
@@ -49,21 +57,11 @@ class CommentMove extends CommentBase {
     /**
      * The comment that is being moved.  Will be cleared after recording the new
      * location.
-     * @type {WorkspaceComment}
      */
     this.comment_ = opt_comment;
 
-    /**
-     * The location before the move, in workspace coordinates.
-     * @type {!Coordinate}
-     */
+    /** The location before the move, in workspace coordinates. */
     this.oldCoordinate_ = opt_comment.getXY();
-
-    /**
-     * The location after the move, in workspace coordinates.
-     * @type {Coordinate}
-     */
-    this.newCoordinate_ = null;
   }
 
   /**
@@ -77,25 +75,26 @@ class CommentMove extends CommentBase {
           'same event twice.');
     }
     this.newCoordinate_ = this.comment_.getXY();
-    this.comment_ = null;
+    // AnyDuringMigration because:  Type 'null' is not assignable to type
+    // 'WorkspaceComment'.
+    this.comment_ = null as AnyDuringMigration;
   }
 
   /**
    * Override the location before the move.  Use this if you don't create the
    * event until the end of the move, but you know the original location.
-   * @param {!Coordinate} xy The location before the move,
-   *     in workspace coordinates.
+   * @param xy The location before the move, in workspace coordinates.
    */
-  setOldCoordinate(xy) {
+  setOldCoordinate(xy: Coordinate) {
     this.oldCoordinate_ = xy;
   }
 
   // TODO (#1266): "Full" and "minimal" serialization.
   /**
    * Encode the event as JSON.
-   * @return {!Object} JSON representation.
+   * @return JSON representation.
    */
-  toJson() {
+  override toJson(): AnyDuringMigration {
     const json = super.toJson();
     if (this.oldCoordinate_) {
       json['oldCoordinate'] = Math.round(this.oldCoordinate_.x) + ',' +
@@ -110,9 +109,9 @@ class CommentMove extends CommentBase {
 
   /**
    * Decode the JSON event.
-   * @param {!Object} json JSON representation.
+   * @param json JSON representation.
    */
-  fromJson(json) {
+  override fromJson(json: AnyDuringMigration) {
     super.fromJson(json);
 
     if (json['oldCoordinate']) {
@@ -127,17 +126,17 @@ class CommentMove extends CommentBase {
 
   /**
    * Does this event record any change of state?
-   * @return {boolean} False if something changed.
+   * @return False if something changed.
    */
-  isNull() {
+  override isNull(): boolean {
     return Coordinate.equals(this.oldCoordinate_, this.newCoordinate_);
   }
 
   /**
    * Run a move event.
-   * @param {boolean} forward True if run forward, false if run backward (undo).
+   * @param forward True if run forward, false if run backward (undo).
    */
-  run(forward) {
+  override run(forward: boolean) {
     const workspace = this.getEventWorkspace_();
     const comment = workspace.getCommentById(this.commentId);
     if (!comment) {
@@ -153,5 +152,3 @@ class CommentMove extends CommentBase {
 }
 
 registry.register(registry.Type.EVENT, eventUtils.COMMENT_MOVE, CommentMove);
-
-exports.CommentMove = CommentMove;

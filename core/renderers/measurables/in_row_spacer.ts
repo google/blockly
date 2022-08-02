@@ -14,34 +14,31 @@
  * block.
  * @class
  */
-goog.module('Blockly.blockRendering.InRowSpacer');
+import * as goog from '../../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.blockRendering.InRowSpacer');
 
-/* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const {Measurable} = goog.require('Blockly.blockRendering.Measurable');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+import type {ConstantProvider} from '../common/constants.js';
+
+import {Measurable} from './base.js';
+import {Types} from './types.js';
 
 
 /**
  * An object containing information about a spacer between two elements on a
  * row.
- * @extends {Measurable}
  * @struct
  * @alias Blockly.blockRendering.InRowSpacer
  */
-class InRowSpacer extends Measurable {
+export class InRowSpacer extends Measurable {
   /**
-   * @param {!ConstantProvider} constants The rendering
-   *   constants provider.
-   * @param {number} width The width of the spacer.
-   * @package
+   * @param constants The rendering constants provider.
+   * @param width The width of the spacer.
+   * @internal
    */
-  constructor(constants, width) {
+  constructor(constants: ConstantProvider, width: number) {
     super(constants);
     this.type |= Types.SPACER | Types.IN_ROW_SPACER;
     this.width = width;
     this.height = this.constants_.SPACER_DEFAULT_HEIGHT;
   }
 }
-
-exports.InRowSpacer = InRowSpacer;

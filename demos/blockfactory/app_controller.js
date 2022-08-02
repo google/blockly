@@ -8,7 +8,6 @@
  * @fileoverview The AppController Class brings together the Block
  * Factory, Block Library, and Block Exporter functionality into a single web
  * app.
- *
  */
 
 /**
@@ -121,7 +120,7 @@ AppController.prototype.exportBlockLibraryToFile = function() {
         { format: BlocklyDevTools.Analytics.FORMAT_XML });
   } else {
     var msg = 'Could not export Block Library without file name under which ' +
-      'to save library.';
+        'to save library.';
     BlocklyDevTools.Analytics.onWarning(msg);
     alert(msg);
   }

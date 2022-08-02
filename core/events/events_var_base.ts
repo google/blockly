@@ -7,51 +7,48 @@
 /**
  * @fileoverview Abstract class for a variable event.
  */
-'use strict';
 
 /**
  * Abstract class for a variable event.
  * @class
  */
-goog.module('Blockly.Events.VarBase');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Events.VarBase');
 
-const {Abstract: AbstractEvent} = goog.require('Blockly.Events.Abstract');
-/* eslint-disable-next-line no-unused-vars */
-const {VariableModel} = goog.requireType('Blockly.VariableModel');
+import type {VariableModel} from '../variable_model.js';
+
+import {Abstract as AbstractEvent} from './events_abstract.js';
 
 
 /**
  * Abstract class for a variable event.
- * @extends {AbstractEvent}
  * @alias Blockly.Events.VarBase
  */
-class VarBase extends AbstractEvent {
+export class VarBase extends AbstractEvent {
+  override isBlank: AnyDuringMigration;
+  varId: string;
+  override workspaceId: string;
+
   /**
-   * @param {!VariableModel=} opt_variable The variable this event
-   *     corresponds to.  Undefined for a blank event.
+   * @param opt_variable The variable this event corresponds to.  Undefined for
+   *     a blank event.
    */
-  constructor(opt_variable) {
+  constructor(opt_variable?: VariableModel) {
     super();
     this.isBlank = typeof opt_variable === 'undefined';
 
-    /**
-     * The variable id for the variable this event pertains to.
-     * @type {string}
-     */
-    this.varId = this.isBlank ? '' : opt_variable.getId();
+    /** The variable id for the variable this event pertains to. */
+    this.varId = this.isBlank ? '' : opt_variable!.getId();
 
-    /**
-     * The workspace identifier for this event.
-     * @type {string}
-     */
-    this.workspaceId = this.isBlank ? '' : opt_variable.workspace.id;
+    /** The workspace identifier for this event. */
+    this.workspaceId = this.isBlank ? '' : opt_variable!.workspace.id;
   }
 
   /**
    * Encode the event as JSON.
-   * @return {!Object} JSON representation.
+   * @return JSON representation.
    */
-  toJson() {
+  override toJson(): AnyDuringMigration {
     const json = super.toJson();
     json['varId'] = this.varId;
     return json;
@@ -59,12 +56,10 @@ class VarBase extends AbstractEvent {
 
   /**
    * Decode the JSON event.
-   * @param {!Object} json JSON representation.
+   * @param json JSON representation.
    */
-  fromJson(json) {
+  override fromJson(json: AnyDuringMigration) {
     super.fromJson(json);
     this.varId = json['varId'];
   }
 }
-
-exports.VarBase = VarBase;

@@ -7,19 +7,19 @@
 /**
  * @fileoverview Class for a finished loading workspace event.
  */
-'use strict';
 
 /**
  * Class for a finished loading workspace event.
  * @class
  */
-goog.module('Blockly.Events.FinishedLoading');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Events.FinishedLoading');
 
-const eventUtils = goog.require('Blockly.Events.utils');
-const registry = goog.require('Blockly.registry');
-const {Abstract: AbstractEvent} = goog.require('Blockly.Events.Abstract');
-/* eslint-disable-next-line no-unused-vars */
-const {Workspace} = goog.requireType('Blockly.Workspace');
+import * as registry from '../registry.js';
+import type {Workspace} from '../workspace.js';
+
+import {Abstract as AbstractEvent} from './events_abstract.js';
+import * as eventUtils from './utils.js';
 
 
 /**
@@ -27,60 +27,55 @@ const {Workspace} = goog.requireType('Blockly.Workspace');
  * Used to notify the developer when the workspace has finished loading (i.e
  * domToWorkspace).
  * Finished loading events do not record undo or redo.
- * @extends {AbstractEvent}
  * @alias Blockly.Events.FinishedLoading
  */
-class FinishedLoading extends AbstractEvent {
+export class FinishedLoading extends AbstractEvent {
+  override isBlank: boolean;
+  override workspaceId: string;
+
+  // Workspace events do not undo or redo.
+  override recordUndo = false;
+  override type: string;
+  override group: AnyDuringMigration;
+
   /**
-   * @param {!Workspace=} opt_workspace The workspace that has finished
-   *    loading.  Undefined for a blank event.
+   * @param opt_workspace The workspace that has finished loading.  Undefined
+   *     for a blank event.
    */
-  constructor(opt_workspace) {
+  constructor(opt_workspace?: Workspace) {
     super();
-    /**
-     * Whether or not the event is blank (to be populated by fromJson).
-     * @type {boolean}
-     */
+    /** Whether or not the event is blank (to be populated by fromJson). */
     this.isBlank = typeof opt_workspace === 'undefined';
 
-    /**
-     * The workspace identifier for this event.
-     * @type {string}
-     */
+    /** The workspace identifier for this event. */
     this.workspaceId = opt_workspace ? opt_workspace.id : '';
 
-    // Workspace events do not undo or redo.
-    this.recordUndo = false;
-
-    /**
-     * Type of this event.
-     * @type {string}
-     */
+    /** Type of this event. */
     this.type = eventUtils.FINISHED_LOADING;
   }
 
   /**
    * Encode the event as JSON.
-   * @return {!Object} JSON representation.
+   * @return JSON representation.
    */
-  toJson() {
+  override toJson(): AnyDuringMigration {
     const json = {
       'type': this.type,
     };
     if (this.group) {
-      json['group'] = this.group;
+      (json as AnyDuringMigration)['group'] = this.group;
     }
     if (this.workspaceId) {
-      json['workspaceId'] = this.workspaceId;
+      (json as AnyDuringMigration)['workspaceId'] = this.workspaceId;
     }
     return json;
   }
 
   /**
    * Decode the JSON event.
-   * @param {!Object} json JSON representation.
+   * @param json JSON representation.
    */
-  fromJson(json) {
+  override fromJson(json: AnyDuringMigration) {
     this.isBlank = false;
     this.workspaceId = json['workspaceId'];
     this.group = json['group'];
@@ -89,5 +84,3 @@ class FinishedLoading extends AbstractEvent {
 
 registry.register(
     registry.Type.EVENT, eventUtils.FINISHED_LOADING, FinishedLoading);
-
-exports.FinishedLoading = FinishedLoading;

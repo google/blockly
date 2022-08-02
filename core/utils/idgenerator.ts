@@ -7,13 +7,13 @@
 /**
  * @fileoverview Generators for unique IDs.
  */
-'use strict';
 
 /**
  * Generators for unique IDs.
  * @namespace Blockly.utils.idGenerator
  */
-goog.module('Blockly.utils.idGenerator');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.utils.idGenerator');
 
 
 /**
@@ -22,12 +22,9 @@ goog.module('Blockly.utils.idGenerator');
  * @ignore
  */
 const internal = {};
-exports.TEST_ONLY = internal;
+export const TEST_ONLY = internal;
 
-/**
- * Next unique ID to use.
- * @type {number}
- */
+/** Next unique ID to use. */
 let nextId = 0;
 
 /**
@@ -38,13 +35,12 @@ let nextId = 0;
  * For UUIDs use genUid (below) instead; this ID generator should
  * primarily be used for IDs that end up in the DOM.
  *
- * @return {string} The next unique identifier.
+ * @return The next unique identifier.
  * @alias Blockly.utils.idGenerator.getNextUniqueId
  */
-const getNextUniqueId = function() {
+export function getNextUniqueId(): string {
   return 'blockly-' + (nextId++).toString(36);
-};
-exports.getNextUniqueId = getNextUniqueId;
+}
 
 /**
  * Legal characters for the universally unique IDs.  Should be all on
@@ -59,9 +55,10 @@ const soup = '!#$%()*+,-./:;=?@[]^_`{|}~' +
 /**
  * Generate a random unique ID.  This should be globally unique.
  * 87 characters ^ 20 length > 128 bits (better than a UUID).
- * @return {string} A globally unique ID string.
+ * @return A globally unique ID string.
  */
-internal.genUid = function() {
+// AnyDuringMigration because:  Property 'genUid' does not exist on type '{}'.
+(internal as AnyDuringMigration).genUid = function(): string {
   const length = 20;
   const soupLength = soup.length;
   const id = [];
@@ -74,10 +71,10 @@ internal.genUid = function() {
 /**
  * Generate a random unique ID.
  * @see internal.genUid
- * @return {string} A globally unique ID string.
+ * @return A globally unique ID string.
  * @alias Blockly.utils.idGenerator.genUid
  */
-const genUid = function() {
-  return internal.genUid();
-};
-exports.genUid = genUid;
+export function genUid(): string {
+  // AnyDuringMigration because:  Property 'genUid' does not exist on type '{}'.
+  return (internal as AnyDuringMigration).genUid();
+}

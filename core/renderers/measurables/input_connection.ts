@@ -12,48 +12,47 @@
  * Class representing inputs with connections on a rendered block.
  * @class
  */
-goog.module('Blockly.blockRendering.InputConnection');
+import * as goog from '../../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.blockRendering.InputConnection');
 
-/* eslint-disable-next-line no-unused-vars */
-const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
-const {Connection} = goog.require('Blockly.blockRendering.Connection');
-/* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
-/* eslint-disable-next-line no-unused-vars */
-const {Input} = goog.requireType('Blockly.Input');
-/* eslint-disable-next-line no-unused-vars */
-const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+import type {BlockSvg} from '../../block_svg.js';
+import type {Input} from '../../input.js';
+import type {RenderedConnection} from '../../rendered_connection.js';
+import type {ConstantProvider} from '../common/constants.js';
+
+import {Connection} from './connection.js';
+import {Types} from './types.js';
 
 
 /**
  * The base class to represent an input that takes up space on a block
  * during rendering
- * @package
- * @extends {Connection}
  * @alias Blockly.blockRendering.InputConnection
  */
-class InputConnection extends Connection {
+export class InputConnection extends Connection {
+  align: number;
+  connectedBlock: BlockSvg|null;
+  connectedBlockWidth: number;
+  connectedBlockHeight: number;
+  connectionOffsetX: number = 0;
+  connectionOffsetY: number = 0;
+
   /**
-   * @param {!ConstantProvider} constants The rendering
-   *   constants provider.
-   * @param {!Input} input The input to measure and store information for.
+   * @param constants The rendering constants provider.
+   * @param input The input to measure and store information for.
+   * @internal
    */
-  constructor(constants, input) {
-    super(constants, /** @type {!RenderedConnection} */ (input.connection));
+  constructor(constants: ConstantProvider, public input: Input) {
+    super(constants, input.connection as RenderedConnection);
 
     this.type |= Types.INPUT;
 
-    /** @type {!Input} */
-    this.input = input;
-
-    /** @type {number} */
     this.align = input.align;
 
-    /** @type {BlockSvg} */
-    this.connectedBlock = input.connection && input.connection.targetBlock() ?
-        /** @type {BlockSvg} */ (input.connection.targetBlock()) :
-        null;
+    this.connectedBlock =
+        (input.connection && input.connection.targetBlock() ?
+             input.connection.targetBlock() as BlockSvg :
+             null);
 
     if (this.connectedBlock) {
       const bBox = this.connectedBlock.getHeightWidth();
@@ -63,13 +62,5 @@ class InputConnection extends Connection {
       this.connectedBlockWidth = 0;
       this.connectedBlockHeight = 0;
     }
-
-    /** @type {number} */
-    this.connectionOffsetX = 0;
-
-    /** @type {number} */
-    this.connectionOffsetY = 0;
   }
 }
-
-exports.InputConnection = InputConnection;

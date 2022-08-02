@@ -7,83 +7,74 @@
 /**
  * @fileoverview Events fired as a result of a marker move.
  */
-'use strict';
 
 /**
  * Events fired as a result of a marker move.
  * @class
  */
-goog.module('Blockly.Events.MarkerMove');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Events.MarkerMove');
 
-const eventUtils = goog.require('Blockly.Events.utils');
-const registry = goog.require('Blockly.registry');
-const {ASTNode} = goog.require('Blockly.ASTNode');
-/* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
-const {UiBase} = goog.require('Blockly.Events.UiBase');
-/* eslint-disable-next-line no-unused-vars */
-const {Workspace} = goog.requireType('Blockly.Workspace');
+import type {Block} from '../block.js';
+import {ASTNode} from '../keyboard_nav/ast_node.js';
+import * as registry from '../registry.js';
+import type {Workspace} from '../workspace.js';
+
+import {UiBase} from './events_ui_base.js';
+import * as eventUtils from './utils.js';
 
 
 /**
  * Class for a marker move event.
- * @extends {UiBase}
  * @alias Blockly.Events.MarkerMove
  */
-class MarkerMove extends UiBase {
+export class MarkerMove extends UiBase {
+  blockId: string|null;
+  oldNode?: ASTNode|null;
+  newNode?: ASTNode;
+  isCursor?: boolean;
+  override type: string;
+
   /**
-   * @param {?Block=} opt_block The affected block. Null if current node
-   *    is of type workspace. Undefined for a blank event.
-   * @param {boolean=} isCursor Whether this is a cursor event. Undefined for a
-   *    blank event.
-   * @param {?ASTNode=} opt_oldNode The old node the marker used to be on.
+   * @param opt_block The affected block. Null if current node is of type
+   *     workspace. Undefined for a blank event.
+   * @param isCursor Whether this is a cursor event. Undefined for a blank
+   *     event.
+   * @param opt_oldNode The old node the marker used to be on.
    *    Undefined for a blank event.
-   * @param {!ASTNode=} opt_newNode The new node the marker is now on.
+   * @param opt_newNode The new node the marker is now on.
    *    Undefined for a blank event.
    */
-  constructor(opt_block, isCursor, opt_oldNode, opt_newNode) {
-    let workspaceId = opt_block ? opt_block.workspace.id : undefined;
+  constructor(
+      opt_block?: Block|null, isCursor?: boolean, opt_oldNode?: ASTNode|null,
+      opt_newNode?: ASTNode) {
+    let workspaceId = opt_block ? opt_block.workspace!.id : undefined;
     if (opt_newNode && opt_newNode.getType() === ASTNode.types.WORKSPACE) {
-      workspaceId = (/** @type {!Workspace} */ (opt_newNode.getLocation())).id;
+      workspaceId = (opt_newNode.getLocation() as Workspace).id;
     }
     super(workspaceId);
 
-    /**
-     * The workspace identifier for this event.
-     * @type {?string}
-     */
+    /** The workspace identifier for this event. */
     this.blockId = opt_block ? opt_block.id : null;
 
-    /**
-     * The old node the marker used to be on.
-     * @type {?ASTNode|undefined}
-     */
+    /** The old node the marker used to be on. */
     this.oldNode = opt_oldNode;
 
-    /**
-     * The new node the  marker is now on.
-     * @type {ASTNode|undefined}
-     */
+    /** The new node the  marker is now on. */
     this.newNode = opt_newNode;
 
-    /**
-     * Whether this is a cursor event.
-     * @type {boolean|undefined}
-     */
+    /** Whether this is a cursor event. */
     this.isCursor = isCursor;
 
-    /**
-     * Type of this event.
-     * @type {string}
-     */
+    /** Type of this event. */
     this.type = eventUtils.MARKER_MOVE;
   }
 
   /**
    * Encode the event as JSON.
-   * @return {!Object} JSON representation.
+   * @return JSON representation.
    */
-  toJson() {
+  override toJson(): AnyDuringMigration {
     const json = super.toJson();
     json['isCursor'] = this.isCursor;
     json['blockId'] = this.blockId;
@@ -94,9 +85,9 @@ class MarkerMove extends UiBase {
 
   /**
    * Decode the JSON event.
-   * @param {!Object} json JSON representation.
+   * @param json JSON representation.
    */
-  fromJson(json) {
+  override fromJson(json: AnyDuringMigration) {
     super.fromJson(json);
     this.isCursor = json['isCursor'];
     this.blockId = json['blockId'];
@@ -106,5 +97,3 @@ class MarkerMove extends UiBase {
 }
 
 registry.register(registry.Type.EVENT, eventUtils.MARKER_MOVE, MarkerMove);
-
-exports.MarkerMove = MarkerMove;

@@ -7,64 +7,59 @@
 /**
  * @fileoverview Events fired as a block drag.
  */
-'use strict';
 
 /**
  * Events fired as a block drag.
  * @class
  */
-goog.module('Blockly.Events.BlockDrag');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Events.BlockDrag');
 
-const eventUtils = goog.require('Blockly.Events.utils');
-const registry = goog.require('Blockly.registry');
-/* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
-const {UiBase} = goog.require('Blockly.Events.UiBase');
+import type {Block} from '../block.js';
+import * as registry from '../registry.js';
+
+import {UiBase} from './events_ui_base.js';
+import * as eventUtils from './utils.js';
 
 
 /**
  * Class for a block drag event.
- * @extends {UiBase}
  * @alias Blockly.Events.BlockDrag
  */
-class BlockDrag extends UiBase {
+export class BlockDrag extends UiBase {
+  blockId: AnyDuringMigration;
+  isStart?: boolean;
+  blocks?: Block[];
+  override type: string;
+
   /**
-   * @param {!Block=} opt_block The top block in the stack that is being
-   *    dragged. Undefined for a blank event.
-   * @param {boolean=} opt_isStart Whether this is the start of a block drag.
+   * @param opt_block The top block in the stack that is being dragged.
+   *     Undefined for a blank event.
+   * @param opt_isStart Whether this is the start of a block drag.
    *    Undefined for a blank event.
-   * @param {!Array<!Block>=} opt_blocks The blocks affected by this
-   *    drag. Undefined for a blank event.
+   * @param opt_blocks The blocks affected by this drag. Undefined for a blank
+   *     event.
    */
-  constructor(opt_block, opt_isStart, opt_blocks) {
-    const workspaceId = opt_block ? opt_block.workspace.id : undefined;
+  constructor(opt_block?: Block, opt_isStart?: boolean, opt_blocks?: Block[]) {
+    const workspaceId = opt_block ? opt_block.workspace?.id : undefined;
     super(workspaceId);
     this.blockId = opt_block ? opt_block.id : null;
 
-    /**
-     * Whether this is the start of a block drag.
-     * @type {boolean|undefined}
-     */
+    /** Whether this is the start of a block drag. */
     this.isStart = opt_isStart;
 
-    /**
-     * The blocks affected by this drag event.
-     * @type {!Array<!Block>|undefined}
-     */
+    /** The blocks affected by this drag event. */
     this.blocks = opt_blocks;
 
-    /**
-     * Type of this event.
-     * @type {string}
-     */
+    /** Type of this event. */
     this.type = eventUtils.BLOCK_DRAG;
   }
 
   /**
    * Encode the event as JSON.
-   * @return {!Object} JSON representation.
+   * @return JSON representation.
    */
-  toJson() {
+  override toJson(): AnyDuringMigration {
     const json = super.toJson();
     json['isStart'] = this.isStart;
     json['blockId'] = this.blockId;
@@ -74,9 +69,9 @@ class BlockDrag extends UiBase {
 
   /**
    * Decode the JSON event.
-   * @param {!Object} json JSON representation.
+   * @param json JSON representation.
    */
-  fromJson(json) {
+  override fromJson(json: AnyDuringMigration) {
     super.fromJson(json);
     this.isStart = json['isStart'];
     this.blockId = json['blockId'];
@@ -85,5 +80,3 @@ class BlockDrag extends UiBase {
 }
 
 registry.register(registry.Type.EVENT, eventUtils.BLOCK_DRAG, BlockDrag);
-
-exports.BlockDrag = BlockDrag;

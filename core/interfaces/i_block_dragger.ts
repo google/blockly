@@ -8,64 +8,58 @@
  * @fileoverview The interface for a block dragger.
  */
 
-'use strict';
-
 /**
  * The interface for a block dragger.
  * @namespace Blockly.IBlockDragger
  */
-goog.module('Blockly.IBlockDragger');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.IBlockDragger');
 
 /* eslint-disable-next-line no-unused-vars */
-const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+// Unused import preserved for side-effects. Remove if unneeded.
+// import '../block_svg.js';
 /* eslint-disable-next-line no-unused-vars */
-const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
+// Unused import preserved for side-effects. Remove if unneeded.
+// import '../utils/coordinate.js';
 
 
 /**
  * A block dragger interface.
- * @interface
  * @alias Blockly.IBlockDragger
  */
-const IBlockDragger = function() {};
+export interface IBlockDragger {
+  /**
+   * Start dragging a block.  This includes moving it to the drag surface.
+   * @param currentDragDeltaXY How far the pointer has moved from the position
+   *     at mouse down, in pixel units.
+   * @param healStack Whether or not to heal the stack after disconnecting.
+   */
+  startDrag: AnyDuringMigration;
 
-/**
- * Start dragging a block.  This includes moving it to the drag surface.
- * @param {!Coordinate} currentDragDeltaXY How far the pointer has
- *     moved from the position at mouse down, in pixel units.
- * @param {boolean} healStack Whether or not to heal the stack after
- *     disconnecting.
- */
-IBlockDragger.prototype.startDrag;
+  /**
+   * Execute a step of block dragging, based on the given event.  Update the
+   * display accordingly.
+   * @param e The most recent move event.
+   * @param currentDragDeltaXY How far the pointer has moved from the position
+   *     at the start of the drag, in pixel units.
+   */
+  drag: AnyDuringMigration;
 
-/**
- * Execute a step of block dragging, based on the given event.  Update the
- * display accordingly.
- * @param {!Event} e The most recent move event.
- * @param {!Coordinate} currentDragDeltaXY How far the pointer has
- *     moved from the position at the start of the drag, in pixel units.
- */
-IBlockDragger.prototype.drag;
+  /**
+   * Finish a block drag and put the block back on the workspace.
+   * @param e The mouseup/touchend event.
+   * @param currentDragDeltaXY How far the pointer has moved from the position
+   *     at the start of the drag, in pixel units.
+   */
+  endDrag: AnyDuringMigration;
 
-/**
- * Finish a block drag and put the block back on the workspace.
- * @param {!Event} e The mouseup/touchend event.
- * @param {!Coordinate} currentDragDeltaXY How far the pointer has
- *     moved from the position at the start of the drag, in pixel units.
- */
-IBlockDragger.prototype.endDrag;
+  /**
+   * Get a list of the insertion markers that currently exist.  Drags have 0, 1,
+   * or 2 insertion markers.
+   * @return A possibly empty list of insertion marker blocks.
+   */
+  getInsertionMarkers: AnyDuringMigration;
 
-/**
- * Get a list of the insertion markers that currently exist.  Drags have 0, 1,
- * or 2 insertion markers.
- * @return {!Array.<!BlockSvg>} A possibly empty list of insertion
- *     marker blocks.
- */
-IBlockDragger.prototype.getInsertionMarkers;
-
-/**
- * Sever all links from this object and do any necessary cleanup.
- */
-IBlockDragger.prototype.dispose;
-
-exports.IBlockDragger = IBlockDragger;
+  /** Sever all links from this object and do any necessary cleanup. */
+  dispose: () => void;
+}

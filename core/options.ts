@@ -7,26 +7,23 @@
 /**
  * @fileoverview Object that controls settings for the workspace.
  */
-'use strict';
 
 /**
  * Object that controls settings for the workspace.
  * @class
  */
-goog.module('Blockly.Options');
+import * as goog from '../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Options');
 
-const deprecation = goog.require('Blockly.utils.deprecation');
-const idGenerator = goog.require('Blockly.utils.idGenerator');
-const registry = goog.require('Blockly.registry');
-const toolbox = goog.require('Blockly.utils.toolbox');
-/* eslint-disable-next-line no-unused-vars */
-const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
-const {Classic} = goog.require('Blockly.Themes.Classic');
-/* eslint-disable-next-line no-unused-vars */
-const {Metrics} = goog.requireType('Blockly.utils.Metrics');
-const {Theme} = goog.require('Blockly.Theme');
-/* eslint-disable-next-line no-unused-vars */
-const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
+import type {BlocklyOptions} from './blockly_options.js';
+import * as deprecation from './utils/deprecation.js';
+import * as registry from './registry.js';
+import {Theme} from './theme.js';
+import {Classic} from './theme/classic.js';
+import * as idGenerator from './utils/idgenerator.js';
+import type {Metrics} from './utils/metrics.js';
+import * as toolbox from './utils/toolbox.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**
@@ -34,13 +31,64 @@ const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
  * is unspecified.
  * @alias Blockly.Options
  */
-class Options {
+export class Options {
+  RTL: boolean;
+  oneBasedIndex: boolean;
+  collapse: boolean;
+  comments: boolean;
+  disable: boolean;
+  readOnly: boolean;
+  maxBlocks: number;
+  maxInstances: {[key: string]: number}|null;
+  pathToMedia: string;
+  hasCategories: boolean;
+  moveOptions: MoveOptions;
+  hasScrollbars: AnyDuringMigration;
+  hasTrashcan: boolean;
+  maxTrashcanContents: number;
+  hasSounds: boolean;
+  hasCss: boolean;
+  horizontalLayout: boolean;
+  languageTree: toolbox.ToolboxInfo|null;
+  gridOptions: GridOptions;
+  zoomOptions: ZoomOptions;
+  toolboxPosition: toolbox.Position;
+  theme: Theme;
+  renderer: string;
+  rendererOverrides: AnyDuringMigration|null;
+
   /**
-   * @param {!BlocklyOptions} options Dictionary of options.
+   * The SVG element for the grid pattern.
+   * Created during injection.
+   */
+  gridPattern: SVGElement|null = null;
+  parentWorkspace: WorkspaceSvg|null;
+  plugins: {
+    [key: string]: (new(...p1: AnyDuringMigration[]) => AnyDuringMigration)|
+    string
+  };
+
+  /**
+   * If set, sets the translation of the workspace to match the scrollbars.
+   * A function that
+   *     sets the translation of the workspace to match the scrollbars. The
+   *     argument Contains an x and/or y property which is a float between 0
+   *     and 1 specifying the degree of scrolling.
+   */
+  setMetrics?: ((p1: {x: number, y: number}) => void) = undefined;
+
+  /**
+   * A function that returns a metrics
+   *     object that describes the current workspace.
+   */
+  getMetrics?: (() => Metrics) = undefined;
+
+  /**
+   * @param options Dictionary of options.
    *     Specification:
    * https://developers.google.com/blockly/guides/get-started/web#configuration
    */
-  constructor(options) {
+  constructor(options: BlocklyOptions) {
     let toolboxJsonDef = null;
     let hasCategories = false;
     let hasTrashcan = false;
@@ -48,33 +96,35 @@ class Options {
     let hasComments = false;
     let hasDisable = false;
     let hasSounds = false;
-    const readOnly = !!options['readOnly'];
+    const readOnly = !!(options as AnyDuringMigration)['readOnly'];
     if (!readOnly) {
-      toolboxJsonDef = toolbox.convertToolboxDefToJson(options['toolbox']);
+      toolboxJsonDef = toolbox.convertToolboxDefToJson(
+          (options as AnyDuringMigration)['toolbox']);
       hasCategories = toolbox.hasCategories(toolboxJsonDef);
-      hasTrashcan = options['trashcan'];
+      hasTrashcan = (options as AnyDuringMigration)['trashcan'];
       if (hasTrashcan === undefined) {
         hasTrashcan = hasCategories;
       }
-      hasCollapse = options['collapse'];
+      hasCollapse = (options as AnyDuringMigration)['collapse'];
       if (hasCollapse === undefined) {
         hasCollapse = hasCategories;
       }
-      hasComments = options['comments'];
+      hasComments = (options as AnyDuringMigration)['comments'];
       if (hasComments === undefined) {
         hasComments = hasCategories;
       }
-      hasDisable = options['disable'];
+      hasDisable = (options as AnyDuringMigration)['disable'];
       if (hasDisable === undefined) {
         hasDisable = hasCategories;
       }
-      hasSounds = options['sounds'];
+      hasSounds = (options as AnyDuringMigration)['sounds'];
       if (hasSounds === undefined) {
         hasSounds = true;
       }
     }
 
-    let maxTrashcanContents = options['maxTrashcanContents'];
+    let maxTrashcanContents =
+        (options as AnyDuringMigration)['maxTrashcanContents'];
     if (hasTrashcan) {
       if (maxTrashcanContents === undefined) {
         maxTrashcanContents = 32;
@@ -82,25 +132,24 @@ class Options {
     } else {
       maxTrashcanContents = 0;
     }
-    const rtl = !!options['rtl'];
-    let horizontalLayout = options['horizontalLayout'];
+    const rtl = !!(options as AnyDuringMigration)['rtl'];
+    let horizontalLayout = (options as AnyDuringMigration)['horizontalLayout'];
     if (horizontalLayout === undefined) {
       horizontalLayout = false;
     }
-    let toolboxAtStart = options['toolboxPosition'];
+    let toolboxAtStart = (options as AnyDuringMigration)['toolboxPosition'];
     toolboxAtStart = toolboxAtStart !== 'end';
 
-    /** @type {!toolbox.Position} */
-    let toolboxPosition;
+    let toolboxPosition: toolbox.Position;
     if (horizontalLayout) {
       toolboxPosition =
           toolboxAtStart ? toolbox.Position.TOP : toolbox.Position.BOTTOM;
     } else {
-      toolboxPosition = (toolboxAtStart === rtl) ? toolbox.Position.RIGHT :
-                                                   toolbox.Position.LEFT;
+      toolboxPosition = toolboxAtStart === rtl ? toolbox.Position.RIGHT :
+                                                 toolbox.Position.LEFT;
     }
 
-    let hasCss = options['css'];
+    let hasCss = (options as AnyDuringMigration)['css'];
     if (hasCss === undefined) {
       hasCss = true;
     }
@@ -108,153 +157,145 @@ class Options {
     if (options['media']) {
       pathToMedia = options['media'].endsWith('/') ? options['media'] :
                                                      options['media'] + '/';
-    } else if (options['path']) {
+    } else if ((options as AnyDuringMigration)['path']) {
       // 'path' is a deprecated option which has been replaced by 'media'.
       deprecation.warn('path', 'Nov 2014', 'Jul 2023', 'media');
-      pathToMedia = options['path'] + 'media/';
+      pathToMedia = (options as AnyDuringMigration)['path'] + 'media/';
     }
     let oneBasedIndex;
-    if (options['oneBasedIndex'] === undefined) {
+    if ((options as AnyDuringMigration)['oneBasedIndex'] === undefined) {
       oneBasedIndex = true;
     } else {
-      oneBasedIndex = !!options['oneBasedIndex'];
+      oneBasedIndex = !!(options as AnyDuringMigration)['oneBasedIndex'];
     }
-    const renderer = options['renderer'] || 'geras';
+    const renderer = (options as AnyDuringMigration)['renderer'] || 'geras';
 
-    const plugins = options['plugins'] || {};
+    const plugins = (options as AnyDuringMigration)['plugins'] || {};
 
-    /** @type {boolean} */
     this.RTL = rtl;
-    /** @type {boolean} */
     this.oneBasedIndex = oneBasedIndex;
-    /** @type {boolean} */
     this.collapse = hasCollapse;
-    /** @type {boolean} */
     this.comments = hasComments;
-    /** @type {boolean} */
     this.disable = hasDisable;
-    /** @type {boolean} */
     this.readOnly = readOnly;
-    /** @type {number} */
-    this.maxBlocks = options['maxBlocks'] || Infinity;
-    /** @type {?Object<string, number>} */
-    this.maxInstances = options['maxInstances'];
-    /** @type {string} */
+    this.maxBlocks = (options as AnyDuringMigration)['maxBlocks'] || Infinity;
+    this.maxInstances = (options as AnyDuringMigration)['maxInstances'];
     this.pathToMedia = pathToMedia;
-    /** @type {boolean} */
     this.hasCategories = hasCategories;
-    /** @type {!Options.MoveOptions} */
     this.moveOptions = Options.parseMoveOptions_(options, hasCategories);
     /** @deprecated  January 2019 */
     this.hasScrollbars = !!this.moveOptions.scrollbars;
-    /** @type {boolean} */
     this.hasTrashcan = hasTrashcan;
-    /** @type {number} */
     this.maxTrashcanContents = maxTrashcanContents;
-    /** @type {boolean} */
     this.hasSounds = hasSounds;
-    /** @type {boolean} */
     this.hasCss = hasCss;
-    /** @type {boolean} */
     this.horizontalLayout = horizontalLayout;
-    /** @type {?toolbox.ToolboxInfo} */
     this.languageTree = toolboxJsonDef;
-    /** @type {!Options.GridOptions} */
     this.gridOptions = Options.parseGridOptions_(options);
-    /** @type {!Options.ZoomOptions} */
     this.zoomOptions = Options.parseZoomOptions_(options);
-    /** @type {!toolbox.Position} */
     this.toolboxPosition = toolboxPosition;
-    /** @type {!Theme} */
     this.theme = Options.parseThemeOptions_(options);
-    /** @type {string} */
     this.renderer = renderer;
-    /** @type {?Object} */
-    this.rendererOverrides = options['rendererOverrides'];
-
-    /**
-     * The SVG element for the grid pattern.
-     * Created during injection.
-     * @type {?SVGElement}
-     */
-    this.gridPattern = null;
+    this.rendererOverrides =
+        (options as AnyDuringMigration)['rendererOverrides'];
 
     /**
      * The parent of the current workspace, or null if there is no parent
      * workspace.  We can assert that this is of type WorkspaceSvg as opposed to
      * Workspace as this is only used in a rendered workspace.
-     * @type {?WorkspaceSvg}
      */
-    this.parentWorkspace = options['parentWorkspace'];
+    this.parentWorkspace = (options as AnyDuringMigration)['parentWorkspace'];
 
-    /**
-     * Map of plugin type to name of registered plugin or plugin class.
-     * @type {!Object<string, (function(new:?, ...?)|string)>}
-     */
+    /** Map of plugin type to name of registered plugin or plugin class. */
     this.plugins = plugins;
-
-    /**
-     * If set, sets the translation of the workspace to match the scrollbars.
-     * @type {undefined|function(!{x:number,y:number}):void} A function that
-     *     sets the translation of the workspace to match the scrollbars. The
-     *     argument Contains an x and/or y property which is a float between 0
-     *     and 1 specifying the degree of scrolling.
-     */
-    this.setMetrics = undefined;
-
-    /**
-     * @type {undefined|function():!Metrics} A function that returns a metrics
-     *     object that describes the current workspace.
-     */
-    this.getMetrics = undefined;
   }
 
   /**
    * Parse the user-specified move options, using reasonable defaults where
    *    behaviour is unspecified.
-   * @param {!Object} options Dictionary of options.
-   * @param {boolean} hasCategories Whether the workspace has categories or not.
-   * @return {!Options.MoveOptions} Normalized move options.
-   * @private
+   * @param options Dictionary of options.
+   * @param hasCategories Whether the workspace has categories or not.
+   * @return Normalized move options.
    */
-  static parseMoveOptions_(options, hasCategories) {
+  private static parseMoveOptions_(
+      options: AnyDuringMigration, hasCategories: boolean): MoveOptions {
     const move = options['move'] || {};
-    const moveOptions = {};
+    const moveOptions = {} as MoveOptions;
     if (move['scrollbars'] === undefined &&
         options['scrollbars'] === undefined) {
-      moveOptions.scrollbars = hasCategories;
+      // AnyDuringMigration because:  Property 'scrollbars' does not exist on
+      // type '{}'.
+      (moveOptions as AnyDuringMigration).scrollbars = hasCategories;
     } else if (typeof move['scrollbars'] === 'object') {
-      moveOptions.scrollbars = {};
-      moveOptions.scrollbars.horizontal = !!move['scrollbars']['horizontal'];
-      moveOptions.scrollbars.vertical = !!move['scrollbars']['vertical'];
+      // AnyDuringMigration because:  Property 'scrollbars' does not exist on
+      // type '{}'.
+      (moveOptions as AnyDuringMigration).scrollbars = {};
+      // AnyDuringMigration because:  Property 'scrollbars' does not exist on
+      // type '{}'.
+      (moveOptions as AnyDuringMigration).scrollbars.horizontal =
+          !!move['scrollbars']['horizontal'];
+      // AnyDuringMigration because:  Property 'scrollbars' does not exist on
+      // type '{}'.
+      (moveOptions as AnyDuringMigration).scrollbars.vertical =
+          !!move['scrollbars']['vertical'];
       // Convert scrollbars object to boolean if they have the same value.
       // This allows us to easily check for whether any scrollbars exist using
       // !!moveOptions.scrollbars.
-      if (moveOptions.scrollbars.horizontal &&
-          moveOptions.scrollbars.vertical) {
-        moveOptions.scrollbars = true;
+      // AnyDuringMigration because:  Property 'scrollbars' does not exist on
+      // type '{}'. AnyDuringMigration because:  Property 'scrollbars' does not
+      // exist on type '{}'.
+      if ((moveOptions as AnyDuringMigration).scrollbars.horizontal &&
+          (moveOptions as AnyDuringMigration).scrollbars.vertical) {
+        // AnyDuringMigration because:  Property 'scrollbars' does not exist on
+        // type '{}'.
+        (moveOptions as AnyDuringMigration).scrollbars = true;
+        // AnyDuringMigration because:  Property 'scrollbars' does not exist on
+        // type '{}'. AnyDuringMigration because:  Property 'scrollbars' does
+        // not exist on type '{}'.
       } else if (
-          !moveOptions.scrollbars.horizontal &&
-          !moveOptions.scrollbars.vertical) {
-        moveOptions.scrollbars = false;
+          !(moveOptions as AnyDuringMigration).scrollbars.horizontal &&
+          !(moveOptions as AnyDuringMigration).scrollbars.vertical) {
+        // AnyDuringMigration because:  Property 'scrollbars' does not exist on
+        // type '{}'.
+        (moveOptions as AnyDuringMigration).scrollbars = false;
       }
     } else {
-      moveOptions.scrollbars = !!move['scrollbars'] || !!options['scrollbars'];
+      // AnyDuringMigration because:  Property 'scrollbars' does not exist on
+      // type '{}'.
+      (moveOptions as AnyDuringMigration).scrollbars =
+          !!move['scrollbars'] || !!options['scrollbars'];
     }
 
-    if (!moveOptions.scrollbars || move['wheel'] === undefined) {
+    // AnyDuringMigration because:  Property 'scrollbars' does not exist on type
+    // '{}'.
+    if (!(moveOptions as AnyDuringMigration).scrollbars ||
+        move['wheel'] === undefined) {
       // Defaults to true if single-direction scroll is enabled.
-      moveOptions.wheel = typeof moveOptions.scrollbars === 'object';
+      // AnyDuringMigration because:  Property 'scrollbars' does not exist on
+      // type '{}'. AnyDuringMigration because:  Property 'wheel' does not exist
+      // on type '{}'.
+      (moveOptions as AnyDuringMigration).wheel =
+          typeof (moveOptions as AnyDuringMigration).scrollbars === 'object';
     } else {
-      moveOptions.wheel = !!move['wheel'];
+      // AnyDuringMigration because:  Property 'wheel' does not exist on type
+      // '{}'.
+      (moveOptions as AnyDuringMigration).wheel = !!move['wheel'];
     }
-    if (!moveOptions.scrollbars) {
-      moveOptions.drag = false;
+    // AnyDuringMigration because:  Property 'scrollbars' does not exist on type
+    // '{}'.
+    if (!(moveOptions as AnyDuringMigration).scrollbars) {
+      // AnyDuringMigration because:  Property 'drag' does not exist on type
+      // '{}'.
+      (moveOptions as AnyDuringMigration).drag = false;
     } else if (move['drag'] === undefined) {
       // Defaults to true if scrollbars is true.
-      moveOptions.drag = true;
+      // AnyDuringMigration because:  Property 'drag' does not exist on type
+      // '{}'.
+      (moveOptions as AnyDuringMigration).drag = true;
     } else {
-      moveOptions.drag = !!move['drag'];
+      // AnyDuringMigration because:  Property 'drag' does not exist on type
+      // '{}'.
+      (moveOptions as AnyDuringMigration).drag = !!move['drag'];
     }
     return moveOptions;
   }
@@ -263,47 +304,80 @@ class Options {
    * Parse the user-specified zoom options, using reasonable defaults where
    * behaviour is unspecified.  See zoom documentation:
    *   https://developers.google.com/blockly/guides/configure/web/zoom
-   * @param {!Object} options Dictionary of options.
-   * @return {!Options.ZoomOptions} Normalized zoom options.
-   * @private
+   * @param options Dictionary of options.
+   * @return Normalized zoom options.
    */
-  static parseZoomOptions_(options) {
+  private static parseZoomOptions_(options: AnyDuringMigration): ZoomOptions {
     const zoom = options['zoom'] || {};
-    const zoomOptions = {};
+    const zoomOptions = {} as ZoomOptions;
     if (zoom['controls'] === undefined) {
-      zoomOptions.controls = false;
+      // AnyDuringMigration because:  Property 'controls' does not exist on type
+      // '{}'.
+      (zoomOptions as AnyDuringMigration).controls = false;
     } else {
-      zoomOptions.controls = !!zoom['controls'];
+      // AnyDuringMigration because:  Property 'controls' does not exist on type
+      // '{}'.
+      (zoomOptions as AnyDuringMigration).controls = !!zoom['controls'];
     }
     if (zoom['wheel'] === undefined) {
-      zoomOptions.wheel = false;
+      // AnyDuringMigration because:  Property 'wheel' does not exist on type
+      // '{}'.
+      (zoomOptions as AnyDuringMigration).wheel = false;
     } else {
-      zoomOptions.wheel = !!zoom['wheel'];
+      // AnyDuringMigration because:  Property 'wheel' does not exist on type
+      // '{}'.
+      (zoomOptions as AnyDuringMigration).wheel = !!zoom['wheel'];
     }
     if (zoom['startScale'] === undefined) {
-      zoomOptions.startScale = 1;
+      // AnyDuringMigration because:  Property 'startScale' does not exist on
+      // type '{}'.
+      (zoomOptions as AnyDuringMigration).startScale = 1;
     } else {
-      zoomOptions.startScale = Number(zoom['startScale']);
+      // AnyDuringMigration because:  Property 'startScale' does not exist on
+      // type '{}'.
+      (zoomOptions as AnyDuringMigration).startScale =
+          Number(zoom['startScale']);
     }
     if (zoom['maxScale'] === undefined) {
-      zoomOptions.maxScale = 3;
+      // AnyDuringMigration because:  Property 'maxScale' does not exist on type
+      // '{}'.
+      (zoomOptions as AnyDuringMigration).maxScale = 3;
     } else {
-      zoomOptions.maxScale = Number(zoom['maxScale']);
+      // AnyDuringMigration because:  Property 'maxScale' does not exist on type
+      // '{}'.
+      (zoomOptions as AnyDuringMigration).maxScale = Number(zoom['maxScale']);
     }
     if (zoom['minScale'] === undefined) {
-      zoomOptions.minScale = 0.3;
+      // AnyDuringMigration because:  Property 'minScale' does not exist on type
+      // '{}'.
+      (zoomOptions as AnyDuringMigration).minScale = 0.3;
     } else {
-      zoomOptions.minScale = Number(zoom['minScale']);
+      // AnyDuringMigration because:  Property 'minScale' does not exist on type
+      // '{}'.
+      (zoomOptions as AnyDuringMigration).minScale = Number(zoom['minScale']);
     }
     if (zoom['scaleSpeed'] === undefined) {
-      zoomOptions.scaleSpeed = 1.2;
+      // AnyDuringMigration because:  Property 'scaleSpeed' does not exist on
+      // type '{}'.
+      (zoomOptions as AnyDuringMigration).scaleSpeed = 1.2;
     } else {
-      zoomOptions.scaleSpeed = Number(zoom['scaleSpeed']);
+      // AnyDuringMigration because:  Property 'scaleSpeed' does not exist on
+      // type '{}'.
+      (zoomOptions as AnyDuringMigration).scaleSpeed =
+          Number(zoom['scaleSpeed']);
     }
     if (zoom['pinch'] === undefined) {
-      zoomOptions.pinch = zoomOptions.wheel || zoomOptions.controls;
+      // AnyDuringMigration because:  Property 'controls' does not exist on type
+      // '{}'. AnyDuringMigration because:  Property 'wheel' does not exist on
+      // type '{}'. AnyDuringMigration because:  Property 'pinch' does not exist
+      // on type '{}'.
+      (zoomOptions as AnyDuringMigration).pinch =
+          (zoomOptions as AnyDuringMigration).wheel ||
+          (zoomOptions as AnyDuringMigration).controls;
     } else {
-      zoomOptions.pinch = !!zoom['pinch'];
+      // AnyDuringMigration because:  Property 'pinch' does not exist on type
+      // '{}'.
+      (zoomOptions as AnyDuringMigration).pinch = !!zoom['pinch'];
     }
     return zoomOptions;
   }
@@ -312,83 +386,79 @@ class Options {
    * Parse the user-specified grid options, using reasonable defaults where
    * behaviour is unspecified. See grid documentation:
    *   https://developers.google.com/blockly/guides/configure/web/grid
-   * @param {!Object} options Dictionary of options.
-   * @return {!Options.GridOptions} Normalized grid options.
-   * @private
+   * @param options Dictionary of options.
+   * @return Normalized grid options.
    */
-  static parseGridOptions_(options) {
+  private static parseGridOptions_(options: AnyDuringMigration): GridOptions {
     const grid = options['grid'] || {};
-    const gridOptions = {};
-    gridOptions.spacing = Number(grid['spacing']) || 0;
-    gridOptions.colour = grid['colour'] || '#888';
-    gridOptions.length =
-        (grid['length'] === undefined) ? 1 : Number(grid['length']);
-    gridOptions.snap = gridOptions.spacing > 0 && !!grid['snap'];
+    const gridOptions = {} as GridOptions;
+    // AnyDuringMigration because:  Property 'spacing' does not exist on type
+    // '{}'.
+    (gridOptions as AnyDuringMigration).spacing = Number(grid['spacing']) || 0;
+    // AnyDuringMigration because:  Property 'colour' does not exist on type
+    // '{}'.
+    (gridOptions as AnyDuringMigration).colour = grid['colour'] || '#888';
+    // AnyDuringMigration because:  Property 'length' does not exist on type
+    // '{}'.
+    (gridOptions as AnyDuringMigration).length =
+        grid['length'] === undefined ? 1 : Number(grid['length']);
+    // AnyDuringMigration because:  Property 'spacing' does not exist on type
+    // '{}'. AnyDuringMigration because:  Property 'snap' does not exist on type
+    // '{}'.
+    (gridOptions as AnyDuringMigration).snap =
+        (gridOptions as AnyDuringMigration).spacing > 0 && !!grid['snap'];
     return gridOptions;
   }
 
   /**
    * Parse the user-specified theme options, using the classic theme as a
    * default. https://developers.google.com/blockly/guides/configure/web/themes
-   * @param {!Object} options Dictionary of options.
-   * @return {!Theme} A Blockly Theme.
-   * @private
+   * @param options Dictionary of options.
+   * @return A Blockly Theme.
    */
-  static parseThemeOptions_(options) {
+  private static parseThemeOptions_(options: AnyDuringMigration): Theme {
     const theme = options['theme'] || Classic;
     if (typeof theme === 'string') {
-      return /** @type {!Theme} */ (
-          registry.getObject(registry.Type.THEME, theme));
+      return registry.getObject(registry.Type.THEME, theme) as Theme;
     } else if (theme instanceof Theme) {
-      return /** @type {!Theme} */ (theme);
+      return theme;
     }
     return Theme.defineTheme(
-        theme.name || ('builtin' + idGenerator.getNextUniqueId()), theme);
+        theme.name || 'builtin' + idGenerator.getNextUniqueId(), theme);
   }
 }
 
-/**
- * Grid Options.
- * @typedef {{
- *     colour: string,
- *     length: number,
- *     snap: boolean,
- *     spacing: number
- * }}
- */
-Options.GridOptions;
+export namespace Options {
+  export interface GridOptions {
+    colour: string;
+    length: number;
+    snap: boolean;
+    spacing: number;
+  }
 
-/**
- * Move Options.
- * @typedef {{
- *     drag: boolean,
- *     scrollbars: (boolean | !Options.ScrollbarOptions),
- *     wheel: boolean
- * }}
- */
-Options.MoveOptions;
+  export interface MoveOptions {
+    drag: boolean;
+    scrollbars: boolean|ScrollbarOptions;
+    wheel: boolean;
+  }
 
-/**
- * Scrollbar Options.
- * @typedef {{
- *     horizontal: boolean,
- *     vertical: boolean
- * }}
- */
-Options.ScrollbarOptions;
+  export interface ScrollbarOptions {
+    horizontal: boolean;
+    vertical: boolean;
+  }
 
-/**
- * Zoom Options.
- * @typedef {{
- *     controls: boolean,
- *     maxScale: number,
- *     minScale: number,
- *     pinch: boolean,
- *     scaleSpeed: number,
- *     startScale: number,
- *     wheel: boolean
- * }}
- */
-Options.ZoomOptions;
+  export interface ZoomOptions {
+    controls: boolean;
+    maxScale: number;
+    minScale: number;
+    pinch: boolean;
+    scaleSpeed: number;
+    startScale: number;
+    wheel: boolean;
+  }
+}
 
-exports.Options = Options;
+export type GridOptions = Options.GridOptions;
+export type MoveOptions = Options.MoveOptions;
+export type ScrollbarOptions = Options.ScrollbarOptions;
+export type ZoomOptions = Options.ZoomOptions;

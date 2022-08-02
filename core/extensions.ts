@@ -10,7 +10,6 @@
  *      are applied using Block.applyExtension(), or the JSON "extensions"
  *      array attribute.
  */
-'use strict';
 
 /**
  * Extensions are functions that help initialize blocks, usually
@@ -19,35 +18,36 @@
  *      array attribute.
  * @namespace Blockly.Extensions
  */
-goog.module('Blockly.Extensions');
+import * as goog from '../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Extensions');
 
-const parsing = goog.require('Blockly.utils.parsing');
-/* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
-const {FieldDropdown} = goog.require('Blockly.FieldDropdown');
-goog.requireType('Blockly.Mutator');
+// Unused import preserved for side-effects. Remove if unneeded.
+// import './mutator.js';
+
+import type {Block} from './block.js';
+import type {BlockSvg} from './block_svg.js';
+import {FieldDropdown} from './field_dropdown.js';
+import {Mutator} from './mutator.js';
+import * as parsing from './utils/parsing.js';
 
 
-/**
- * The set of all registered extensions, keyed by extension name/id.
- * @private
- */
+/** The set of all registered extensions, keyed by extension name/id. */
 const allExtensions = Object.create(null);
-exports.TEST_ONLY = {allExtensions};
+export const TEST_ONLY = {allExtensions};
 
 /**
  * Registers a new extension function. Extensions are functions that help
  * initialize blocks, usually adding dynamic behavior such as onchange
  * handlers and mutators. These are applied using Block.applyExtension(), or
  * the JSON "extensions" array attribute.
- * @param {string} name The name of this extension.
- * @param {Function} initFn The function to initialize an extended block.
+ * @param name The name of this extension.
+ * @param initFn The function to initialize an extended block.
  * @throws {Error} if the extension name is empty, the extension is already
  *     registered, or extensionFn is not a function.
  * @alias Blockly.Extensions.register
  */
-const register = function(name, initFn) {
-  if ((typeof name !== 'string') || (name.trim() === '')) {
+export function register(name: string, initFn: Function) {
+  if (typeof name !== 'string' || name.trim() === '') {
     throw Error('Error: Invalid extension name "' + name + '"');
   }
   if (allExtensions[name]) {
@@ -57,113 +57,98 @@ const register = function(name, initFn) {
     throw Error('Error: Extension "' + name + '" must be a function');
   }
   allExtensions[name] = initFn;
-};
-exports.register = register;
+}
 
 /**
  * Registers a new extension function that adds all key/value of mixinObj.
- * @param {string} name The name of this extension.
- * @param {!Object} mixinObj The values to mix in.
+ * @param name The name of this extension.
+ * @param mixinObj The values to mix in.
  * @throws {Error} if the extension name is empty or the extension is already
  *     registered.
  * @alias Blockly.Extensions.registerMixin
  */
-const registerMixin = function(name, mixinObj) {
+export function registerMixin(name: string, mixinObj: AnyDuringMigration) {
   if (!mixinObj || typeof mixinObj !== 'object') {
     throw Error('Error: Mixin "' + name + '" must be a object');
   }
-  register(
-      name,
-      /** @this {Block} */
-      function() {
-        this.mixin(mixinObj);
-      });
-};
-exports.registerMixin = registerMixin;
+  register(name, function(this: Block) {
+    this.mixin(mixinObj);
+  });
+}
 
 /**
  * Registers a new extension function that adds a mutator to the block.
  * At register time this performs some basic sanity checks on the mutator.
  * The wrapper may also add a mutator dialog to the block, if both compose and
  * decompose are defined on the mixin.
- * @param {string} name The name of this mutator extension.
- * @param {!Object} mixinObj The values to mix in.
- * @param {(function())=} opt_helperFn An optional function to apply after
- *     mixing in the object.
- * @param {!Array<string>=} opt_blockList A list of blocks to appear in the
- *     flyout of the mutator dialog.
+ * @param name The name of this mutator extension.
+ * @param mixinObj The values to mix in.
+ * @param opt_helperFn An optional function to apply after mixing in the object.
+ * @param opt_blockList A list of blocks to appear in the flyout of the mutator
+ *     dialog.
  * @throws {Error} if the mutation is invalid or can't be applied to the block.
  * @alias Blockly.Extensions.registerMutator
  */
-const registerMutator = function(name, mixinObj, opt_helperFn, opt_blockList) {
+export function registerMutator(
+    name: string, mixinObj: AnyDuringMigration,
+    opt_helperFn?: () => AnyDuringMigration, opt_blockList?: string[]) {
   const errorPrefix = 'Error when registering mutator "' + name + '": ';
 
   checkHasMutatorProperties(errorPrefix, mixinObj);
   const hasMutatorDialog = checkMutatorDialog(mixinObj, errorPrefix);
 
-  if (opt_helperFn && (typeof opt_helperFn !== 'function')) {
+  if (opt_helperFn && typeof opt_helperFn !== 'function') {
     throw Error(errorPrefix + 'Extension "' + name + '" is not a function');
   }
 
   // Sanity checks passed.
-  register(
-      name,
-      /** @this {Block} */
-      function() {
-        if (hasMutatorDialog) {
-          const {Mutator} = goog.module.get('Blockly.Mutator');
-          if (!Mutator) {
-            throw Error(errorPrefix + 'Missing require for Blockly.Mutator');
-          }
-          this.setMutator(new Mutator(opt_blockList || []));
-        }
-        // Mixin the object.
-        this.mixin(mixinObj);
+  register(name, function(this: Block) {
+    if (hasMutatorDialog) {
+      this.setMutator(new Mutator(this as BlockSvg, opt_blockList || []));
+    }
+    // Mixin the object.
+    this.mixin(mixinObj);
 
-        if (opt_helperFn) {
-          opt_helperFn.apply(this);
-        }
-      });
-};
-exports.registerMutator = registerMutator;
+    if (opt_helperFn) {
+      opt_helperFn.apply(this);
+    }
+  });
+}
 
 /**
  * Unregisters the extension registered with the given name.
- * @param {string} name The name of the extension to unregister.
+ * @param name The name of the extension to unregister.
  * @alias Blockly.Extensions.unregister
  */
-const unregister = function(name) {
+export function unregister(name: string) {
   if (isRegistered(name)) {
     delete allExtensions[name];
   } else {
     console.warn(
         'No extension mapping for name "' + name + '" found to unregister');
   }
-};
-exports.unregister = unregister;
+}
 
 /**
  * Returns whether an extension is registered with the given name.
- * @param {string} name The name of the extension to check for.
- * @return {boolean} True if the extension is registered.  False if it is
- *     not registered.
+ * @param name The name of the extension to check for.
+ * @return True if the extension is registered.  False if it is not registered.
  * @alias Blockly.Extensions.isRegistered
  */
-const isRegistered = function(name) {
+export function isRegistered(name: string): boolean {
   return !!allExtensions[name];
-};
-exports.isRegistered = isRegistered;
+}
 
 /**
  * Applies an extension method to a block. This should only be called during
  * block construction.
- * @param {string} name The name of the extension.
- * @param {!Block} block The block to apply the named extension to.
- * @param {boolean} isMutator True if this extension defines a mutator.
+ * @param name The name of the extension.
+ * @param block The block to apply the named extension to.
+ * @param isMutator True if this extension defines a mutator.
  * @throws {Error} if the extension is not found.
  * @alias Blockly.Extensions.apply
  */
-const apply = function(name, block, isMutator) {
+export function apply(name: string, block: Block, isMutator: boolean) {
   const extensionFn = allExtensions[name];
   if (typeof extensionFn !== 'function') {
     throw Error('Error: Extension "' + name + '" not found.');
@@ -184,25 +169,23 @@ const apply = function(name, block, isMutator) {
     checkHasMutatorProperties(errorPrefix, block);
   } else {
     if (!mutatorPropertiesMatch(
-            /** @type {!Array<Object>} */ (mutatorProperties), block)) {
+            mutatorProperties as AnyDuringMigration[], block)) {
       throw Error(
           'Error when applying extension "' + name + '": ' +
           'mutation properties changed when applying a non-mutator extension.');
     }
   }
-};
-exports.apply = apply;
+}
 
 /**
  * Check that the given block does not have any of the four mutator properties
  * defined on it.  This function should be called before applying a mutator
  * extension to a block, to make sure we are not overwriting properties.
- * @param {string} mutationName The name of the mutation to reference in error
- *     messages.
- * @param {!Block} block The block to check.
+ * @param mutationName The name of the mutation to reference in error messages.
+ * @param block The block to check.
  * @throws {Error} if any of the properties already exist on the block.
  */
-const checkNoMutatorProperties = function(mutationName, block) {
+function checkNoMutatorProperties(mutationName: string, block: Block) {
   const properties = getMutatorProperties(block);
   if (properties.length) {
     throw Error(
@@ -210,66 +193,70 @@ const checkNoMutatorProperties = function(mutationName, block) {
         '" to a block that already has mutator functions.' +
         '  Block id: ' + block.id);
   }
-};
+}
 
 /**
  * Checks if the given object has both the 'mutationToDom' and 'domToMutation'
  * functions.
- * @param {?} object The object to check.
- * @param {string} errorPrefix The string to prepend to any error message.
- * @return {boolean} True if the object has both functions.  False if it has
- *     neither function.
- * @throws {Error} if the object has only one of the functions, or either is
- *     not actually a function.
+ * @param object The object to check.
+ * @param errorPrefix The string to prepend to any error message.
+ * @return True if the object has both functions.  False if it has neither
+ *     function.
+ * @throws {Error} if the object has only one of the functions, or either is not
+ *     actually a function.
  */
-const checkXmlHooks = function(object, errorPrefix) {
+function checkXmlHooks(
+    object: AnyDuringMigration, errorPrefix: string): boolean {
   return checkHasFunctionPair(
       object.mutationToDom, object.domToMutation,
       errorPrefix + ' mutationToDom/domToMutation');
-};
-
+}
 /**
  * Checks if the given object has both the 'saveExtraState' and 'loadExtraState'
  * functions.
- * @param {?} object The object to check.
- * @param {string} errorPrefix The string to prepend to any error message.
- * @return {boolean} True if the object has both functions.  False if it has
- *     neither function.
- * @throws {Error} if the object has only one of the functions, or either is
- *     not actually a function.
+ * @param object The object to check.
+ * @param errorPrefix The string to prepend to any error message.
+ * @return True if the object has both functions.  False if it has neither
+ *     function.
+ * @throws {Error} if the object has only one of the functions, or either is not
+ *     actually a function.
  */
-const checkJsonHooks = function(object, errorPrefix) {
+function checkJsonHooks(
+    object: AnyDuringMigration, errorPrefix: string): boolean {
   return checkHasFunctionPair(
       object.saveExtraState, object.loadExtraState,
       errorPrefix + ' saveExtraState/loadExtraState');
-};
+}
 
 /**
  * Checks if the given object has both the 'compose' and 'decompose' functions.
- * @param {?} object The object to check.
- * @param {string} errorPrefix The string to prepend to any error message.
- * @return {boolean} True if the object has both functions.  False if it has
- *     neither function.
- * @throws {Error} if the object has only one of the functions, or either is
- *     not actually a function.
+ * @param object The object to check.
+ * @param errorPrefix The string to prepend to any error message.
+ * @return True if the object has both functions.  False if it has neither
+ *     function.
+ * @throws {Error} if the object has only one of the functions, or either is not
+ *     actually a function.
  */
-const checkMutatorDialog = function(object, errorPrefix) {
+function checkMutatorDialog(
+    object: AnyDuringMigration, errorPrefix: string): boolean {
   return checkHasFunctionPair(
       object.compose, object.decompose, errorPrefix + ' compose/decompose');
-};
+}
 
 /**
  * Checks that both or neither of the given functions exist and that they are
  * indeed functions.
- * @param {*} func1 The first function in the pair.
- * @param {*} func2 The second function in the pair.
- * @param {string} errorPrefix The string to prepend to any error message.
- * @return {boolean} True if the object has both functions.  False if it has
- *     neither function.
- * @throws {Error} If the object has only one of the functions, or either is
- *     not actually a function.
+ * @param func1 The first function in the pair.
+ * @param func2 The second function in the pair.
+ * @param errorPrefix The string to prepend to any error message.
+ * @return True if the object has both functions.  False if it has neither
+ *     function.
+ * @throws {Error} If the object has only one of the functions, or either is not
+ *     actually a function.
  */
-const checkHasFunctionPair = function(func1, func2, errorPrefix) {
+function checkHasFunctionPair(
+    func1: AnyDuringMigration, func2: AnyDuringMigration,
+    errorPrefix: string): boolean {
   if (func1 && func2) {
     if (typeof func1 !== 'function' || typeof func2 !== 'function') {
       throw Error(errorPrefix + ' must be a function');
@@ -279,14 +266,15 @@ const checkHasFunctionPair = function(func1, func2, errorPrefix) {
     return false;
   }
   throw Error(errorPrefix + 'Must have both or neither functions');
-};
+}
 
 /**
  * Checks that the given object required mutator properties.
- * @param {string} errorPrefix The string to prepend to any error message.
- * @param {!Object} object The object to inspect.
+ * @param errorPrefix The string to prepend to any error message.
+ * @param object The object to inspect.
  */
-const checkHasMutatorProperties = function(errorPrefix, object) {
+function checkHasMutatorProperties(
+    errorPrefix: string, object: AnyDuringMigration) {
   const hasXmlHooks = checkXmlHooks(object, errorPrefix);
   const hasJsonHooks = checkJsonHooks(object, errorPrefix);
   if (!hasXmlHooks && !hasJsonHooks) {
@@ -297,15 +285,15 @@ const checkHasMutatorProperties = function(errorPrefix, object) {
   // A block with a mutator isn't required to have a mutation dialog, but
   // it should still have both or neither of compose and decompose.
   checkMutatorDialog(object, errorPrefix);
-};
+}
 
 /**
  * Get a list of values of mutator properties on the given block.
- * @param {!Block} block The block to inspect.
- * @return {!Array<Object>} A list with all of the defined properties, which
- *     should be functions, but may be anything other than undefined.
+ * @param block The block to inspect.
+ * @return A list with all of the defined properties, which should be functions,
+ *     but may be anything other than undefined.
  */
-const getMutatorProperties = function(block) {
+function getMutatorProperties(block: Block): AnyDuringMigration[] {
   const result = [];
   // List each function explicitly by reference to allow for renaming
   // during compilation.
@@ -328,17 +316,18 @@ const getMutatorProperties = function(block) {
     result.push(block.decompose);
   }
   return result;
-};
+}
 
 /**
  * Check that the current mutator properties match a list of old mutator
  * properties.  This should be called after applying a non-mutator extension,
  * to verify that the extension didn't change properties it shouldn't.
- * @param {!Array<Object>} oldProperties The old values to compare to.
- * @param {!Block} block The block to inspect for new values.
- * @return {boolean} True if the property lists match.
+ * @param oldProperties The old values to compare to.
+ * @param block The block to inspect for new values.
+ * @return True if the property lists match.
  */
-const mutatorPropertiesMatch = function(oldProperties, block) {
+function mutatorPropertiesMatch(
+    oldProperties: AnyDuringMigration[], block: Block): boolean {
   const newProperties = getMutatorProperties(block);
   if (newProperties.length !== oldProperties.length) {
     return false;
@@ -349,15 +338,15 @@ const mutatorPropertiesMatch = function(oldProperties, block) {
     }
   }
   return true;
-};
+}
 
 /**
  * Calls a function after the page has loaded, possibly immediately.
- * @param {function()} fn Function to run.
+ * @param fn Function to run.
  * @throws Error Will throw if no global document can be found (e.g., Node.js).
- * @package
+ * @internal
  */
-const runAfterPageLoad = function(fn) {
+export function runAfterPageLoad(fn: () => AnyDuringMigration) {
   if (typeof document !== 'object') {
     throw Error('runAfterPageLoad() requires browser document.');
   }
@@ -372,8 +361,7 @@ const runAfterPageLoad = function(fn) {
       }
     }, 10);
   }
-};
-exports.runAfterPageLoad = runAfterPageLoad;
+}
 
 /**
  * Builds an extension function that will map a dropdown value to a tooltip
@@ -388,16 +376,16 @@ exports.runAfterPageLoad = runAfterPageLoad;
  * loading the first block of any given type, the extension will validate every
  * dropdown option has a matching tooltip in the lookupTable.  Errors are
  * reported as warnings in the console, and are never fatal.
- * @param {string} dropdownName The name of the field whose value is the key
- *     to the lookup table.
- * @param {!Object<string, string>} lookupTable The table of field values to
- *     tooltip text.
- * @return {!Function} The extension function.
+ * @param dropdownName The name of the field whose value is the key to the
+ *     lookup table.
+ * @param lookupTable The table of field values to tooltip text.
+ * @return The extension function.
  * @alias Blockly.Extensions.buildTooltipForDropdown
  */
-const buildTooltipForDropdown = function(dropdownName, lookupTable) {
+export function buildTooltipForDropdown(
+    dropdownName: string, lookupTable: {[key: string]: string}): Function {
   // List of block types already validated, to minimize duplicate warnings.
-  const blockTypesChecked = [];
+  const blockTypesChecked: AnyDuringMigration[] = [];
 
   // Check the tooltip string messages for invalid references.
   // Wait for load, in case Blockly.Msg is not yet populated.
@@ -412,17 +400,14 @@ const buildTooltipForDropdown = function(dropdownName, lookupTable) {
     });
   }
 
-  /**
-   * The actual extension.
-   * @this {Block}
-   */
-  const extensionFn = function() {
+  /** The actual extension. */
+  function extensionFn(this: Block) {
     if (this.type && blockTypesChecked.indexOf(this.type) === -1) {
       checkDropdownOptionsInTable(this, dropdownName, lookupTable);
       blockTypesChecked.push(this.type);
     }
 
-    this.setTooltip(function() {
+    this.setTooltip(function(this: Block) {
       const value = String(this.getFieldValue(dropdownName));
       let tooltip = lookupTable[value];
       if (tooltip === null) {
@@ -431,7 +416,7 @@ const buildTooltipForDropdown = function(dropdownName, lookupTable) {
           let warning = 'No tooltip mapping for value ' + value + ' of field ' +
               dropdownName;
           if (this.type !== null) {
-            warning += (' of block type ' + this.type);
+            warning += ' of block type ' + this.type;
           }
           console.warn(warning + '.');
         }
@@ -440,19 +425,19 @@ const buildTooltipForDropdown = function(dropdownName, lookupTable) {
       }
       return tooltip;
     }.bind(this));
-  };
+  }
   return extensionFn;
-};
-exports.buildTooltipForDropdown = buildTooltipForDropdown;
+}
 
 /**
  * Checks all options keys are present in the provided string lookup table.
  * Emits console warnings when they are not.
- * @param {!Block} block The block containing the dropdown
- * @param {string} dropdownName The name of the dropdown
- * @param {!Object<string, string>} lookupTable The string lookup table
+ * @param block The block containing the dropdown
+ * @param dropdownName The name of the dropdown
+ * @param lookupTable The string lookup table
  */
-const checkDropdownOptionsInTable = function(block, dropdownName, lookupTable) {
+function checkDropdownOptionsInTable(
+    block: Block, dropdownName: string, lookupTable: {[key: string]: string}) {
   // Validate all dropdown options have values.
   const dropdown = block.getField(dropdownName);
   if (dropdown instanceof FieldDropdown && !dropdown.isOptionListDynamic()) {
@@ -466,19 +451,20 @@ const checkDropdownOptionsInTable = function(block, dropdownName, lookupTable) {
       }
     }
   }
-};
+}
 
 /**
  * Builds an extension function that will install a dynamic tooltip. The
  * tooltip message should include the string '%1' and that string will be
  * replaced with the text of the named field.
- * @param {string} msgTemplate The template form to of the message text, with
- *     %1 placeholder.
- * @param {string} fieldName The field with the replacement text.
- * @return {!Function} The extension function.
+ * @param msgTemplate The template form to of the message text, with %1
+ *     placeholder.
+ * @param fieldName The field with the replacement text.
+ * @return The extension function.
  * @alias Blockly.Extensions.buildTooltipWithFieldText
  */
-const buildTooltipWithFieldText = function(msgTemplate, fieldName) {
+export function buildTooltipWithFieldText(
+    msgTemplate: string, fieldName: string): Function {
   // Check the tooltip string messages for invalid references.
   // Wait for load, in case Blockly.Msg is not yet populated.
   // runAfterPageLoad() does not run in a Node.js environment due to lack
@@ -490,34 +476,29 @@ const buildTooltipWithFieldText = function(msgTemplate, fieldName) {
     });
   }
 
-  /**
-   * The actual extension.
-   * @this {Block}
-   */
-  const extensionFn = function() {
-    this.setTooltip(function() {
+  /** The actual extension. */
+  function extensionFn(this: Block) {
+    this.setTooltip(function(this: Block) {
       const field = this.getField(fieldName);
       return parsing.replaceMessageReferences(msgTemplate)
           .replace('%1', field ? field.getText() : '');
     }.bind(this));
-  };
+  }
   return extensionFn;
-};
-exports.buildTooltipWithFieldText = buildTooltipWithFieldText;
+}
 
 /**
  * Configures the tooltip to mimic the parent block when connected. Otherwise,
  * uses the tooltip text at the time this extension is initialized. This takes
  * advantage of the fact that all other values from JSON are initialized before
  * extensions.
- * @this {Block}
  */
-const extensionParentTooltip = function() {
+function extensionParentTooltip(this: Block) {
   const tooltipWhenNotConnected = this.tooltip;
-  this.setTooltip(function() {
+  this.setTooltip(function(this: Block) {
     const parent = this.getParent();
-    return (parent && parent.getInputsInline() && parent.tooltip) ||
+    return parent && parent.getInputsInline() && parent.tooltip ||
         tooltipWhenNotConnected;
   }.bind(this));
-};
+}
 register('parent_tooltip_when_inline', extensionParentTooltip);

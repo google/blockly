@@ -7,51 +7,44 @@
 /**
  * @fileoverview Calculates and reports flyout workspace metrics.
  */
-'use strict';
 
 /**
  * Calculates and reports flyout workspace metrics.
  * @class
  */
-goog.module('Blockly.FlyoutMetricsManager');
+import * as goog from '../closure/goog/goog.js';
+goog.declareModuleId('Blockly.FlyoutMetricsManager');
 
-/* eslint-disable-next-line no-unused-vars */
-const {IFlyout} = goog.requireType('Blockly.IFlyout');
-const {MetricsManager} = goog.require('Blockly.MetricsManager');
-/* eslint-disable-next-line no-unused-vars */
-const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
+import type {IFlyout} from './interfaces/i_flyout.js';
+import {ContainerRegion, MetricsManager} from './metrics_manager.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**
  * Calculates metrics for a flyout's workspace.
  * The metrics are mainly used to size scrollbars for the flyout.
- * @extends {MetricsManager}
  * @alias Blockly.FlyoutMetricsManager
  */
-class FlyoutMetricsManager extends MetricsManager {
-  /**
-   * @param {!WorkspaceSvg} workspace The flyout's workspace.
-   * @param {!IFlyout} flyout The flyout.
-   */
-  constructor(workspace, flyout) {
-    super(workspace);
+export class FlyoutMetricsManager extends MetricsManager {
+  /** The flyout that owns the workspace to calculate metrics for. */
+  protected flyout_: IFlyout;
 
-    /**
-     * The flyout that owns the workspace to calculate metrics for.
-     * @type {!IFlyout}
-     * @protected
-     */
+  /**
+   * @param workspace The flyout's workspace.
+   * @param flyout The flyout.
+   */
+  constructor(workspace: WorkspaceSvg, flyout: IFlyout) {
+    super(workspace);
     this.flyout_ = flyout;
   }
 
   /**
    * Gets the bounding box of the blocks on the flyout's workspace.
    * This is in workspace coordinates.
-   * @return {!SVGRect|{height: number, y: number, width: number, x: number}}
-   *     The bounding box of the blocks on the workspace.
-   * @private
+   * @return The bounding box of the blocks on the workspace.
    */
-  getBoundingBox_() {
+  private getBoundingBox_(): SVGRect|
+      {height: number, y: number, width: number, x: number} {
     let blockBoundingBox;
     try {
       blockBoundingBox = this.workspace_.getCanvas().getBBox();
@@ -64,10 +57,7 @@ class FlyoutMetricsManager extends MetricsManager {
     return blockBoundingBox;
   }
 
-  /**
-   * @override
-   */
-  getContentMetrics(opt_getWorkspaceCoordinates) {
+  override getContentMetrics(opt_getWorkspaceCoordinates: boolean) {
     // The bounding box is in workspace coordinates.
     const blockBoundingBox = this.getBoundingBox_();
     const scale = opt_getWorkspaceCoordinates ? 1 : this.workspace_.scale;
@@ -80,12 +70,12 @@ class FlyoutMetricsManager extends MetricsManager {
     };
   }
 
-  /**
-   * @override
-   */
-  getScrollMetrics(
-      opt_getWorkspaceCoordinates, opt_viewMetrics, opt_contentMetrics) {
-    const contentMetrics = opt_contentMetrics || this.getContentMetrics();
+  override getScrollMetrics(
+      opt_getWorkspaceCoordinates: boolean, opt_viewMetrics: ContainerRegion,
+      opt_contentMetrics: ContainerRegion) {
+    // AnyDuringMigration because:  Expected 1 arguments, but got 0.
+    const contentMetrics =
+        opt_contentMetrics || (this.getContentMetrics as AnyDuringMigration)();
     const margin = this.flyout_.MARGIN * this.workspace_.scale;
     const scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
 
@@ -102,5 +92,3 @@ class FlyoutMetricsManager extends MetricsManager {
     };
   }
 }
-
-exports.FlyoutMetricsManager = FlyoutMetricsManager;

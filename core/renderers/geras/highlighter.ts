@@ -8,34 +8,30 @@
  * @fileoverview Methods for adding highlights on block, for rendering in
  * compatibility mode.
  */
-'use strict';
 
 /**
  * Methods for adding highlights on block, for rendering in
  * compatibility mode.
  * @class
  */
-goog.module('Blockly.geras.Highlighter');
+import * as goog from '../../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.geras.Highlighter');
 
-const svgPaths = goog.require('Blockly.utils.svgPaths');
 /* eslint-disable-next-line no-unused-vars */
-const {BottomRow} = goog.require('Blockly.blockRendering.BottomRow');
-/* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
-/* eslint-disable-next-line no-unused-vars */
-const {HighlightConstantProvider} = goog.requireType('Blockly.geras.HighlightConstantProvider');
-/* eslint-disable-next-line no-unused-vars */
-const {InlineInput} = goog.require('Blockly.geras.InlineInput');
-/* eslint-disable-next-line no-unused-vars */
-const {RenderInfo} = goog.requireType('Blockly.geras.RenderInfo');
-/* eslint-disable-next-line no-unused-vars */
-const {Renderer} = goog.requireType('Blockly.geras.Renderer');
-/* eslint-disable-next-line no-unused-vars */
-const {Row} = goog.requireType('Blockly.blockRendering.Row');
-const {SpacerRow} = goog.require('Blockly.blockRendering.SpacerRow');
-/* eslint-disable-next-line no-unused-vars */
-const {TopRow} = goog.require('Blockly.blockRendering.TopRow');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+// Unused import preserved for side-effects. Remove if unneeded.
+// import './renderer.js';
+
+import * as svgPaths from '../../utils/svg_paths.js';
+import type {ConstantProvider} from '../common/constants.js';
+import type {BottomRow} from '../measurables/bottom_row.js';
+import type {Row} from '../measurables/row.js';
+import {SpacerRow} from '../measurables/spacer_row.js';
+import type {TopRow} from '../measurables/top_row.js';
+import {Types} from '../measurables/types.js';
+
+import type {HighlightConstantProvider, InsideCorner, JaggedTeeth, Notch, OutsideCorner, PuzzleTab, StartHat} from './highlight_constants.js';
+import type {RenderInfo} from './info.js';
+import type {InlineInput} from './measurables/inline_input.js';
 
 
 /**
@@ -50,36 +46,38 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  * tab and notch shapes, but are not exactly the same.
  * @alias Blockly.geras.Highlighter
  */
-class Highlighter {
+export class Highlighter {
+  info_: RenderInfo;
+  steps_ = '';
+  inlineSteps_ = '';
+  RTL_: boolean;
+  constants_: ConstantProvider;
+  highlightConstants_: HighlightConstantProvider;
+  private readonly highlightOffset_: number;
+  outsideCornerPaths_: OutsideCorner;
+  insideCornerPaths_: InsideCorner;
+  puzzleTabPaths_: PuzzleTab;
+  notchPaths_: Notch;
+  startPaths_: StartHat;
+  jaggedTeethPaths_: JaggedTeeth;
+
   /**
-   * @param {!RenderInfo} info An object containing all
-   *     information needed to render this block.
-   * @package
+   * @param info An object containing all information needed to render this
+   *     block.
+   * @internal
    */
-  constructor(info) {
+  constructor(info: RenderInfo) {
     this.info_ = info;
-    this.steps_ = '';
-    this.inlineSteps_ = '';
 
     this.RTL_ = this.info_.RTL;
 
-    const renderer = /** @type {!Renderer} */ (info.getRenderer());
+    const renderer = (info.getRenderer());
 
-    /**
-     * The renderer's constant provider.
-     * @type {!ConstantProvider}
-     */
+    /** The renderer's constant provider. */
     this.constants_ = renderer.getConstants();
 
-    /**
-     * @type {!HighlightConstantProvider}
-     */
     this.highlightConstants_ = renderer.getHighlightConstants();
-    /**
-     * The offset between the block's main path and highlight path.
-     * @type {number}
-     * @private
-     */
+    /** The offset between the block's main path and highlight path. */
     this.highlightOffset_ = this.highlightConstants_.OFFSET;
 
     this.outsideCornerPaths_ = this.highlightConstants_.OUTSIDE_CORNER;
@@ -92,21 +90,21 @@ class Highlighter {
 
   /**
    * Get the steps for the highlight path.
-   * @return {string} The steps for the highlight path.
-   * @package
+   * @return The steps for the highlight path.
+   * @internal
    */
-  getPath() {
+  getPath(): string {
     return this.steps_ + '\n' + this.inlineSteps_;
   }
 
   /**
    * Add a highlight to the top corner of a block.
-   * @param {!TopRow} row The top row of the block.
-   * @package
+   * @param row The top row of the block.
+   * @internal
    */
-  drawTopCorner(row) {
+  drawTopCorner(row: TopRow) {
     this.steps_ += svgPaths.moveBy(row.xPos, this.info_.startY);
-    for (let i = 0, elem; (elem = row.elements[i]); i++) {
+    for (let i = 0, elem; elem = row.elements[i]; i++) {
       if (Types.isLeftSquareCorner(elem)) {
         this.steps_ += this.highlightConstants_.START_POINT;
       } else if (Types.isLeftRoundedCorner(elem)) {
@@ -131,10 +129,10 @@ class Highlighter {
 
   /**
    * Add a highlight on a jagged edge for a collapsed block.
-   * @param {!Row} row  The row to highlight.
-   * @package
+   * @param row  The row to highlight.
+   * @internal
    */
-  drawJaggedEdge_(row) {
+  drawJaggedEdge_(row: Row) {
     if (this.info_.RTL) {
       const remainder =
           row.height - this.jaggedTeethPaths_.height - this.highlightOffset_;
@@ -145,11 +143,11 @@ class Highlighter {
 
   /**
    * Add a highlight on a value input.
-   * @param {!Row} row The row the input belongs to.
-   * @package
+   * @param row The row the input belongs to.
+   * @internal
    */
-  drawValueInput(row) {
-    const input = /** @type {!InlineInput}} */ (row.getLastInput());
+  drawValueInput(row: Row) {
+    const input = row.getLastInput() as InlineInput;
     if (this.RTL_) {
       const belowTabHeight = row.height - input.connectionHeight;
 
@@ -166,13 +164,13 @@ class Highlighter {
 
   /**
    * Add a highlight on a statement input.
-   * @param {!Row} row The row to highlight.
-   * @package
+   * @param row The row to highlight.
+   * @internal
    */
-  drawStatementInput(row) {
+  drawStatementInput(row: Row) {
     const input = row.getLastInput();
     if (this.RTL_) {
-      const innerHeight = row.height - (2 * this.insideCornerPaths_.height);
+      const innerHeight = row.height - 2 * this.insideCornerPaths_.height;
       this.steps_ += svgPaths.moveTo(input.xPos, row.yPos) +
           this.insideCornerPaths_.pathTop(this.RTL_) +
           svgPaths.lineOnAxis('v', innerHeight) +
@@ -189,10 +187,10 @@ class Highlighter {
 
   /**
    * Add a highlight on the right side of a row.
-   * @param {!Row} row The row to highlight.
-   * @package
+   * @param row The row to highlight.
+   * @internal
    */
-  drawRightSideRow(row) {
+  drawRightSideRow(row: Row) {
     const rightEdge = row.xPos + row.width - this.highlightOffset_;
     if (row instanceof SpacerRow && row.followsStatement) {
       this.steps_ += svgPaths.lineOnAxis('H', rightEdge);
@@ -208,10 +206,10 @@ class Highlighter {
 
   /**
    * Add a highlight to the bottom row.
-   * @param {!BottomRow} row The row to highlight.
-   * @package
+   * @param row The row to highlight.
+   * @internal
    */
-  drawBottomRow(row) {
+  drawBottomRow(row: BottomRow) {
     // Highlight the vertical edge of the bottom row on the input side.
     // Highlighting is always from the top left, both in LTR and RTL.
     if (this.RTL_) {
@@ -232,7 +230,7 @@ class Highlighter {
 
   /**
    * Draw the highlight on the left side of the block.
-   * @package
+   * @internal
    */
   drawLeft() {
     const outputConnection = this.info_.outputConnection;
@@ -265,10 +263,10 @@ class Highlighter {
 
   /**
    * Add a highlight to an inline input.
-   * @param {!InlineInput} input The input to highlight.
-   * @package
+   * @param input The input to highlight.
+   * @internal
    */
-  drawInlineInput(input) {
+  drawInlineInput(input: InlineInput) {
     const offset = this.highlightOffset_;
 
     // Relative to the block's left.
@@ -284,28 +282,25 @@ class Highlighter {
 
       const startX = connectionRight - offset;
 
-      this.inlineSteps_ += svgPaths.moveTo(startX, startY) +
-          // Right edge above tab.
-          svgPaths.lineOnAxis('v', aboveTabHeight) +
-          // Back of tab.
-          this.puzzleTabPaths_.pathDown(this.RTL_) +
-          // Right edge below tab.
-          svgPaths.lineOnAxis('v', belowTabHeight) +
-          // Bottom.
+      this.inlineSteps_ +=
+          svgPaths.moveTo(startX, startY) +           // Right edge above tab.
+          svgPaths.lineOnAxis('v', aboveTabHeight) +  // Back of tab.
+          this.puzzleTabPaths_.pathDown(this.RTL_) +  // Right edge below tab.
+          svgPaths.lineOnAxis('v', belowTabHeight) +  // Bottom.
           svgPaths.lineOnAxis('h', bottomHighlightWidth);
     } else {
-      this.inlineSteps_ +=
-          // Go to top right corner.
-          svgPaths.moveTo(input.xPos + input.width + offset, startY) +
-          // Highlight right edge, bottom.
+      this.inlineSteps_ +=  // Go to top right corner.
+          svgPaths.moveTo(
+              input.xPos + input.width + offset,
+              startY) +  // Highlight right edge, bottom.
           svgPaths.lineOnAxis('v', input.height) +
-          svgPaths.lineOnAxis('h', -bottomHighlightWidth) +
-          // Go to top of tab.
-          svgPaths.moveTo(connectionRight, yPos + input.connectionOffsetY) +
-          // Short highlight glint at bottom of tab.
+          svgPaths.lineOnAxis(
+              'h', -bottomHighlightWidth) +  // Go to top of tab.
+          svgPaths.moveTo(
+              connectionRight,
+              yPos + input.connectionOffsetY) +  // Short highlight glint at
+          // bottom of tab.
           this.puzzleTabPaths_.pathDown(this.RTL_);
     }
   }
 }
-
-exports.Highlighter = Highlighter;

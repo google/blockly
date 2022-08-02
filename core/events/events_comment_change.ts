@@ -7,40 +7,45 @@
 /**
  * @fileoverview Class for comment change event.
  */
-'use strict';
 
 /**
  * Class for comment change event.
  * @class
  */
-goog.module('Blockly.Events.CommentChange');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Events.CommentChange');
 
-const eventUtils = goog.require('Blockly.Events.utils');
-const registry = goog.require('Blockly.registry');
-const {CommentBase} = goog.require('Blockly.Events.CommentBase');
-/* eslint-disable-next-line no-unused-vars */
-const {WorkspaceComment} = goog.requireType('Blockly.WorkspaceComment');
+import * as registry from '../registry.js';
+import type {WorkspaceComment} from '../workspace_comment.js';
+
+import {CommentBase} from './events_comment_base.js';
+import * as eventUtils from './utils.js';
 
 
 /**
  * Class for a comment change event.
- * @extends {CommentBase}
  * @alias Blockly.Events.CommentChange
  */
-class CommentChange extends CommentBase {
+export class CommentChange extends CommentBase {
+  override type: string;
+
+  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
+  oldContents_!: string;
+  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
+  newContents_!: string;
+
   /**
-   * @param {!WorkspaceComment=} opt_comment The comment that is being
-   *     changed.  Undefined for a blank event.
-   * @param {string=} opt_oldContents Previous contents of the comment.
-   * @param {string=} opt_newContents New contents of the comment.
+   * @param opt_comment The comment that is being changed.  Undefined for a
+   *     blank event.
+   * @param opt_oldContents Previous contents of the comment.
+   * @param opt_newContents New contents of the comment.
    */
-  constructor(opt_comment, opt_oldContents, opt_newContents) {
+  constructor(
+      opt_comment?: WorkspaceComment, opt_oldContents?: string,
+      opt_newContents?: string) {
     super(opt_comment);
 
-    /**
-     * Type of this event.
-     * @type {string}
-     */
+    /** Type of this event. */
     this.type = eventUtils.COMMENT_CHANGE;
 
     if (!opt_comment) {
@@ -55,9 +60,9 @@ class CommentChange extends CommentBase {
 
   /**
    * Encode the event as JSON.
-   * @return {!Object} JSON representation.
+   * @return JSON representation.
    */
-  toJson() {
+  override toJson(): AnyDuringMigration {
     const json = super.toJson();
     json['oldContents'] = this.oldContents_;
     json['newContents'] = this.newContents_;
@@ -66,9 +71,9 @@ class CommentChange extends CommentBase {
 
   /**
    * Decode the JSON event.
-   * @param {!Object} json JSON representation.
+   * @param json JSON representation.
    */
-  fromJson(json) {
+  override fromJson(json: AnyDuringMigration) {
     super.fromJson(json);
     this.oldContents_ = json['oldContents'];
     this.newContents_ = json['newContents'];
@@ -76,17 +81,17 @@ class CommentChange extends CommentBase {
 
   /**
    * Does this event record any change of state?
-   * @return {boolean} False if something changed.
+   * @return False if something changed.
    */
-  isNull() {
+  override isNull(): boolean {
     return this.oldContents_ === this.newContents_;
   }
 
   /**
    * Run a change event.
-   * @param {boolean} forward True if run forward, false if run backward (undo).
+   * @param forward True if run forward, false if run backward (undo).
    */
-  run(forward) {
+  override run(forward: boolean) {
     const workspace = this.getEventWorkspace_();
     const comment = workspace.getCommentById(this.commentId);
     if (!comment) {
@@ -101,5 +106,3 @@ class CommentChange extends CommentBase {
 
 registry.register(
     registry.Type.EVENT, eventUtils.COMMENT_CHANGE, CommentChange);
-
-exports.CommentChange = CommentChange;

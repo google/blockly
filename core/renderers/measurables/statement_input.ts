@@ -14,32 +14,30 @@
  * rendered block.
  * @class
  */
-goog.module('Blockly.blockRendering.StatementInput');
+import * as goog from '../../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.blockRendering.StatementInput');
 
 /* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const {InputConnection} = goog.require('Blockly.blockRendering.InputConnection');
-/* eslint-disable-next-line no-unused-vars */
-const {Input} = goog.requireType('Blockly.Input');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+import type {Input} from '../../input.js';
+import type {ConstantProvider} from '../common/constants.js';
+
+import {InputConnection} from './input_connection.js';
+import {Types} from './types.js';
 
 
 /**
  * An object containing information about the space a statement input takes up
  * during rendering
  * @struct
- * @extends {InputConnection}
  * @alias Blockly.blockRendering.StatementInput
  */
-class StatementInput extends InputConnection {
+export class StatementInput extends InputConnection {
   /**
-   * @param {!ConstantProvider} constants The rendering
-   *   constants provider.
-   * @param {!Input} input The statement input to measure and store
-   *     information for.
-   * @package
+   * @param constants The rendering constants provider.
+   * @param input The statement input to measure and store information for.
+   * @internal
    */
-  constructor(constants, input) {
+  constructor(constants: ConstantProvider, input: Input) {
     super(constants, input);
     this.type |= Types.STATEMENT_INPUT;
 
@@ -51,9 +49,7 @@ class StatementInput extends InputConnection {
       this.height =
           this.connectedBlockHeight + this.constants_.STATEMENT_BOTTOM_SPACER;
     }
-    this.width =
-        this.constants_.STATEMENT_INPUT_NOTCH_OFFSET + this.shape.width;
+    this.width = this.constants_.STATEMENT_INPUT_NOTCH_OFFSET +
+        (this.shape.width as number);
   }
 }
-
-exports.StatementInput = StatementInput;

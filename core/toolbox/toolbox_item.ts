@@ -7,81 +7,60 @@
 /**
  * @fileoverview An item in the toolbox.
  */
-'use strict';
 
 /**
  * An item in the toolbox.
  * @class
  */
-goog.module('Blockly.ToolboxItem');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.ToolboxItem');
 
-const idGenerator = goog.require('Blockly.utils.idGenerator');
-/* eslint-disable-next-line no-unused-vars */
-const toolbox = goog.requireType('Blockly.utils.toolbox');
-/* eslint-disable-next-line no-unused-vars */
-const {ICollapsibleToolboxItem} = goog.requireType('Blockly.ICollapsibleToolboxItem');
-/* eslint-disable-next-line no-unused-vars */
-const {IToolboxItem} = goog.require('Blockly.IToolboxItem');
-/* eslint-disable-next-line no-unused-vars */
-const {IToolbox} = goog.requireType('Blockly.IToolbox');
-/* eslint-disable-next-line no-unused-vars */
-const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
+import type {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_item.js';
+import type {IToolbox} from '../interfaces/i_toolbox.js';
+import type {IToolboxItem} from '../interfaces/i_toolbox_item.js';
+import * as idGenerator from '../utils/idgenerator.js';
+import type * as toolbox from '../utils/toolbox.js';
+import type {WorkspaceSvg} from '../workspace_svg.js';
 
 
 /**
  * Class for an item in the toolbox.
- * @implements {IToolboxItem}
  * @alias Blockly.ToolboxItem
  */
-class ToolboxItem {
-  /**
-   * @param {!toolbox.ToolboxItemInfo} toolboxItemDef The JSON defining
-   *     the toolbox item.
-   * @param {!IToolbox} toolbox The toolbox that holds the toolbox item.
-   * @param {ICollapsibleToolboxItem=} opt_parent The parent toolbox item
-   *     or null if the category does not have a parent.
-   */
-  constructor(toolboxItemDef, toolbox, opt_parent) {
-    /**
-     * The id for the category.
-     * @type {string}
-     * @protected
-     */
-    this.id_ = toolboxItemDef['toolboxitemid'] || idGenerator.getNextUniqueId();
+export class ToolboxItem implements IToolboxItem {
+  protected id_: string;
+  protected parent_: ICollapsibleToolboxItem|null;
+  protected level_: number;
+  protected toolboxItemDef_: toolbox.ToolboxItemInfo|null;
+  protected workspace_: WorkspaceSvg;
+  /** The toolbox this category belongs to. */
+  protected readonly parentToolbox_: IToolbox;
 
-    /**
-     * The parent of the category.
-     * @type {?ICollapsibleToolboxItem}
-     * @protected
-     */
+  /**
+   * @param toolboxItemDef The JSON defining the toolbox item.
+   * @param parentToolbox The toolbox that holds the toolbox item.
+   * @param opt_parent The parent toolbox item or null if the category does not
+   *     have a parent.
+   */
+  constructor(
+      toolboxItemDef: toolbox.ToolboxItemInfo, parentToolbox: IToolbox,
+      opt_parent?: ICollapsibleToolboxItem) {
+    /** The id for the category. */
+    this.id_ = (toolboxItemDef as AnyDuringMigration)['toolboxitemid'] ||
+        idGenerator.getNextUniqueId();
+
+    /** The parent of the category. */
     this.parent_ = opt_parent || null;
 
-    /**
-     * The level that the category is nested at.
-     * @type {number}
-     * @protected
-     */
+    /** The level that the category is nested at. */
     this.level_ = this.parent_ ? this.parent_.getLevel() + 1 : 0;
 
-    /**
-     * The JSON definition of the toolbox item.
-     * @type {?toolbox.ToolboxItemInfo}
-     * @protected
-     */
+    /** The JSON definition of the toolbox item. */
     this.toolboxItemDef_ = toolboxItemDef;
 
-    /**
-     * The toolbox this category belongs to.
-     * @type {!IToolbox}
-     * @protected
-     */
-    this.parentToolbox_ = toolbox;
+    this.parentToolbox_ = parentToolbox;
 
-    /**
-     * The workspace of the parent toolbox.
-     * @type {!WorkspaceSvg}
-     * @protected
-     */
+    /** The workspace of the parent toolbox. */
     this.workspace_ = this.parentToolbox_.getWorkspace();
   }
 
@@ -89,18 +68,15 @@ class ToolboxItem {
    * Initializes the toolbox item.
    * This includes creating the DOM and updating the state of any items based
    * on the info object.
-   * @public
    */
-  init() {
-    // No-op by default.
-  }
+  init() {}
+  // No-op by default.
 
   /**
    * Gets the div for the toolbox item.
-   * @return {?Element} The div for the toolbox item.
-   * @public
+   * @return The div for the toolbox item.
    */
-  getDiv() {
+  getDiv(): Element|null {
     return null;
   }
 
@@ -109,75 +85,63 @@ class ToolboxItem {
    * The parent toolbox element receives clicks. The parent toolbox will add an
    * ID to this element so it can pass the onClick event to the correct
    * toolboxItem.
-   * @return {?Element} The HTML element that receives clicks, or null if this
-   *     item should not receive clicks.
-   * @public
+   * @return The HTML element that receives clicks, or null if this item should
+   *     not receive clicks.
    */
-  getClickTarget() {
+  getClickTarget(): Element|null {
     return null;
   }
 
   /**
    * Gets a unique identifier for this toolbox item.
-   * @return {string} The ID for the toolbox item.
-   * @public
+   * @return The ID for the toolbox item.
    */
-  getId() {
+  getId(): string {
     return this.id_;
   }
 
   /**
    * Gets the parent if the toolbox item is nested.
-   * @return {?ICollapsibleToolboxItem} The parent toolbox item, or null if
-   *     this toolbox item is not nested.
-   * @public
+   * @return The parent toolbox item, or null if this toolbox item is not
+   *     nested.
    */
-  getParent() {
+  getParent(): ICollapsibleToolboxItem|null {
     return null;
   }
 
   /**
    * Gets the nested level of the category.
-   * @return {number} The nested level of the category.
-   * @package
+   * @return The nested level of the category.
+   * @internal
    */
-  getLevel() {
+  getLevel(): number {
     return this.level_;
   }
 
   /**
    * Whether the toolbox item is selectable.
-   * @return {boolean} True if the toolbox item can be selected.
-   * @public
+   * @return True if the toolbox item can be selected.
    */
-  isSelectable() {
+  isSelectable(): boolean {
     return false;
   }
 
   /**
    * Whether the toolbox item is collapsible.
-   * @return {boolean} True if the toolbox item is collapsible.
-   * @public
+   * @return True if the toolbox item is collapsible.
    */
-  isCollapsible() {
+  isCollapsible(): boolean {
     return false;
   }
 
-  /**
-   * Dispose of this toolbox item. No-op by default.
-   * @public
-   */
+  /** Dispose of this toolbox item. No-op by default. */
   dispose() {}
 
   /**
    * Sets whether the category is visible or not.
    * For a category to be visible its parent category must also be expanded.
-   * @param {boolean} _isVisible True if category should be visible.
-   * @protected
+   * @param _isVisible True if category should be visible.
    */
-  setVisible_(_isVisible) {
-    // nop by default
-  }
+  setVisible_(_isVisible: boolean) {}
 }
-
-exports.ToolboxItem = ToolboxItem;
+// nop by default

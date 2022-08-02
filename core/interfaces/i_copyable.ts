@@ -8,42 +8,33 @@
  * @fileoverview The interface for an object that is copyable.
  */
 
-'use strict';
-
 /**
  * The interface for an object that is copyable.
  * @namespace Blockly.ICopyable
  */
-goog.module('Blockly.ICopyable');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.ICopyable');
 
-/* eslint-disable-next-line no-unused-vars */
-const {ISelectable} = goog.require('Blockly.ISelectable');
-/* eslint-disable-next-line no-unused-vars */
-const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
+import type {WorkspaceSvg} from '../workspace_svg.js';
+import type {ISelectable} from './i_selectable.js';
 
 
-/**
- * @extends {ISelectable}
- * @interface
- * @alias Blockly.ICopyable
- */
-const ICopyable = function() {};
+/** @alias Blockly.ICopyable */
+export interface ICopyable extends ISelectable {
+  /**
+   * Encode for copying.
+   * @return Copy metadata.
+   * @internal
+   */
+  toCopyData: AnyDuringMigration;
+}
 
-/**
- * Encode for copying.
- * @return {?ICopyable.CopyData} Copy metadata.
- * @package
- */
-ICopyable.prototype.toCopyData;
+export namespace ICopyable {
+  export interface CopyData {
+    saveInfo: AnyDuringMigration|Element;
+    source: WorkspaceSvg;
+    typeCounts: AnyDuringMigration|null;
+  }
+}
 
-/**
- * Copy Metadata.
- * @typedef {{
- *            saveInfo:(!Object|!Element),
- *            source:WorkspaceSvg,
- *            typeCounts:?Object
- *          }}
- */
-ICopyable.CopyData;
-
-exports.ICopyable = ICopyable;
+export type CopyData = ICopyable.CopyData;

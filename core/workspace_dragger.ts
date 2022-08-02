@@ -7,18 +7,17 @@
 /**
  * @fileoverview Methods for dragging a workspace visually.
  */
-'use strict';
 
 /**
  * Methods for dragging a workspace visually.
  * @class
  */
-goog.module('Blockly.WorkspaceDragger');
+import * as goog from '../closure/goog/goog.js';
+goog.declareModuleId('Blockly.WorkspaceDragger');
 
-const common = goog.require('Blockly.common');
-const {Coordinate} = goog.require('Blockly.utils.Coordinate');
-/* eslint-disable-next-line no-unused-vars */
-const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
+import * as common from './common.js';
+import {Coordinate} from './utils/coordinate.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**
@@ -29,87 +28,77 @@ const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
  * commands based on events.
  * @alias Blockly.WorkspaceDragger
  */
-class WorkspaceDragger {
-  /**
-   * @param {!WorkspaceSvg} workspace The workspace to drag.
-   */
-  constructor(workspace) {
-    /**
-     * @type {!WorkspaceSvg}
-     * @private
-     */
-    this.workspace_ = workspace;
+export class WorkspaceDragger {
+  private readonly horizontalScrollEnabled_: boolean;
+  private readonly verticalScrollEnabled_: boolean;
+  protected startScrollXY_: Coordinate;
 
-    /**
-     * Whether horizontal scroll is enabled.
-     * @type {boolean}
-     * @private
-     */
-    this.horizontalScrollEnabled_ = this.workspace_.isMovableHorizontally();
+  /** @param workspace The workspace to drag. */
+  constructor(private workspace: WorkspaceSvg) {
+    /** Whether horizontal scroll is enabled. */
+    this.horizontalScrollEnabled_ = this.workspace.isMovableHorizontally();
 
-    /**
-     * Whether vertical scroll is enabled.
-     * @type {boolean}
-     * @private
-     */
-    this.verticalScrollEnabled_ = this.workspace_.isMovableVertically();
+    /** Whether vertical scroll is enabled. */
+    this.verticalScrollEnabled_ = this.workspace.isMovableVertically();
 
     /**
      * The scroll position of the workspace at the beginning of the drag.
      * Coordinate system: pixel coordinates.
-     * @type {!Coordinate}
-     * @protected
      */
     this.startScrollXY_ = new Coordinate(workspace.scrollX, workspace.scrollY);
   }
+
   /**
    * Sever all links from this object.
-   * @package
    * @suppress {checkTypes}
+   * @internal
    */
   dispose() {
-    this.workspace_ = null;
+    // AnyDuringMigration because:  Type 'null' is not assignable to type
+    // 'WorkspaceSvg'.
+    this.workspace = null as AnyDuringMigration;
   }
+
   /**
    * Start dragging the workspace.
-   * @package
+   * @internal
    */
   startDrag() {
     if (common.getSelected()) {
-      common.getSelected().unselect();
+      common.getSelected()!.unselect();
     }
-    this.workspace_.setupDragSurface();
+    this.workspace.setupDragSurface();
   }
+
   /**
    * Finish dragging the workspace and put everything back where it belongs.
-   * @param {!Coordinate} currentDragDeltaXY How far the pointer has
-   *     moved from the position at the start of the drag, in pixel coordinates.
-   * @package
+   * @param currentDragDeltaXY How far the pointer has moved from the position
+   *     at the start of the drag, in pixel coordinates.
+   * @internal
    */
-  endDrag(currentDragDeltaXY) {
+  endDrag(currentDragDeltaXY: Coordinate) {
     // Make sure everything is up to date.
     this.drag(currentDragDeltaXY);
-    this.workspace_.resetDragSurface();
+    this.workspace.resetDragSurface();
   }
+
   /**
    * Move the workspace based on the most recent mouse movements.
-   * @param {!Coordinate} currentDragDeltaXY How far the pointer has
-   *     moved from the position at the start of the drag, in pixel coordinates.
-   * @package
+   * @param currentDragDeltaXY How far the pointer has moved from the position
+   *     at the start of the drag, in pixel coordinates.
+   * @internal
    */
-  drag(currentDragDeltaXY) {
+  drag(currentDragDeltaXY: Coordinate) {
     const newXY = Coordinate.sum(this.startScrollXY_, currentDragDeltaXY);
 
     if (this.horizontalScrollEnabled_ && this.verticalScrollEnabled_) {
-      this.workspace_.scroll(newXY.x, newXY.y);
+      this.workspace.scroll(newXY.x, newXY.y);
     } else if (this.horizontalScrollEnabled_) {
-      this.workspace_.scroll(newXY.x, this.workspace_.scrollY);
+      this.workspace.scroll(newXY.x, this.workspace.scrollY);
     } else if (this.verticalScrollEnabled_) {
-      this.workspace_.scroll(this.workspace_.scrollX, newXY.y);
+      this.workspace.scroll(this.workspace.scrollX, newXY.y);
     } else {
       throw new TypeError('Invalid state.');
     }
   }
 }
-
-exports.WorkspaceDragger = WorkspaceDragger;

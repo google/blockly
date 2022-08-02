@@ -14,33 +14,30 @@
  * block.
  * @class
  */
-goog.module('Blockly.blockRendering.JaggedEdge');
+import * as goog from '../../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.blockRendering.JaggedEdge');
 
-/* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const {Measurable} = goog.require('Blockly.blockRendering.Measurable');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+import type {ConstantProvider} from '../common/constants.js';
+
+import {Measurable} from './base.js';
+import {Types} from './types.js';
 
 
 /**
  * An object containing information about the jagged edge of a collapsed block
  * takes up during rendering
- * @extends {Measurable}
  * @struct
  * @alias Blockly.blockRendering.JaggedEdge
  */
-class JaggedEdge extends Measurable {
+export class JaggedEdge extends Measurable {
   /**
-   * @param {!ConstantProvider} constants The rendering
-   *   constants provider.
-   * @package
+   * @param constants The rendering constants provider.
+   * @internal
    */
-  constructor(constants) {
+  constructor(constants: ConstantProvider) {
     super(constants);
     this.type |= Types.JAGGED_EDGE;
     this.height = this.constants_.JAGGED_TEETH.height;
     this.width = this.constants_.JAGGED_TEETH.width;
   }
 }
-
-exports.JaggedEdge = JaggedEdge;

@@ -1,4 +1,3 @@
-
 /**
  * @license
  * Copyright 2019 Google LLC
@@ -15,47 +14,43 @@
  * during rendering.
  * @class
  */
-goog.module('Blockly.blockRendering.OutputConnection');
+import * as goog from '../../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.blockRendering.OutputConnection');
 
-const {Connection} = goog.require('Blockly.blockRendering.Connection');
-/* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
-/* eslint-disable-next-line no-unused-vars */
-const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+import type {RenderedConnection} from '../../rendered_connection.js';
+import type {ConstantProvider} from '../common/constants.js';
+
+import {Connection} from './connection.js';
+import {Types} from './types.js';
 
 
 /**
  * An object containing information about the space an output connection takes
  * up during rendering.
- * @extends {Connection}
  * @struct
  * @alias Blockly.blockRendering.OutputConnection
  */
-class OutputConnection extends Connection {
+export class OutputConnection extends Connection {
+  startX: number;
+  connectionOffsetY: number;
+  connectionOffsetX = 0;
+
   /**
-   * @param {!ConstantProvider} constants The rendering
-   *   constants provider.
-   * @param {!RenderedConnection} connectionModel The connection object on
-   *     the block that this represents.
-   * @package
+   * @param constants The rendering constants provider.
+   * @param connectionModel The connection object on the block that this
+   *     represents.
+   * @internal
    */
-  constructor(constants, connectionModel) {
+  constructor(
+      constants: ConstantProvider, connectionModel: RenderedConnection) {
     super(constants, connectionModel);
     this.type |= Types.OUTPUT_CONNECTION;
 
-    this.height = !this.isDynamicShape ? this.shape.height : 0;
-    this.width = !this.isDynamicShape ? this.shape.width : 0;
+    this.height = !this.isDynamicShape ? this.shape.height as number : 0;
+    this.width = !this.isDynamicShape ? this.shape.width as number : 0;
 
-    /** @type {number} */
     this.startX = this.width;
 
-    /** @type {number} */
     this.connectionOffsetY = this.constants_.TAB_OFFSET_FROM_TOP;
-
-    /** @type {number} */
-    this.connectionOffsetX = 0;
   }
 }
-
-exports.OutputConnection = OutputConnection;

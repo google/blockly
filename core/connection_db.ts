@@ -9,7 +9,6 @@
  *    possibly be connected to (i.e. not collapsed, etc).
  *    Sorted by y coordinate.
  */
-'use strict';
 
 /**
  * A database of all the rendered connections that could
@@ -17,17 +16,16 @@
  *    Sorted by y coordinate.
  * @class
  */
-goog.module('Blockly.ConnectionDB');
+import * as goog from '../closure/goog/goog.js';
+goog.declareModuleId('Blockly.ConnectionDB');
 
-const {ConnectionType} = goog.require('Blockly.ConnectionType');
-/* eslint-disable-next-line no-unused-vars */
-const {Coordinate} = goog.requireType('Blockly.utils.Coordinate');
-/* eslint-disable-next-line no-unused-vars */
-const {IConnectionChecker} = goog.requireType('Blockly.IConnectionChecker');
-/* eslint-disable-next-line no-unused-vars */
-const {RenderedConnection} = goog.requireType('Blockly.RenderedConnection');
-/** @suppress {extraRequire} */
-goog.require('Blockly.constants');
+// Unused import preserved for side-effects. Remove if unneeded.
+// import './constants.js';
+
+import {ConnectionType} from './connection_type.js';
+import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
+import type {RenderedConnection} from './rendered_connection.js';
+import type {Coordinate} from './utils/coordinate.js';
 
 
 /**
@@ -36,36 +34,23 @@ goog.require('Blockly.constants');
  * connections in an area may be looked up quickly using a binary search.
  * @alias Blockly.ConnectionDB
  */
-class ConnectionDB {
+export class ConnectionDB {
+  /** Array of connections sorted by y position in workspace units. */
+  private readonly connections_: RenderedConnection[] = [];
+
   /**
-   * @param {!IConnectionChecker} checker The workspace's
-   *     connection type checker, used to decide if connections are valid during
-   * a drag.
+   * @param connectionChecker The workspace's connection type checker, used to
+   *     decide if connections are valid during a drag.
    */
-  constructor(checker) {
-    /**
-     * Array of connections sorted by y position in workspace units.
-     * @type {!Array<!RenderedConnection>}
-     * @private
-     */
-    this.connections_ = [];
-    /**
-     * The workspace's connection type checker, used to decide if connections
-     * are valid during a drag.
-     * @type {!IConnectionChecker}
-     * @private
-     */
-    this.connectionChecker_ = checker;
-  }
+  constructor(private readonly connectionChecker: IConnectionChecker) {}
 
   /**
    * Add a connection to the database. Should not already exist in the database.
-   * @param {!RenderedConnection} connection The connection to be added.
-   * @param {number} yPos The y position used to decide where to insert the
-   *    connection.
-   * @package
+   * @param connection The connection to be added.
+   * @param yPos The y position used to decide where to insert the connection.
+   * @internal
    */
-  addConnection(connection, yPos) {
+  addConnection(connection: RenderedConnection, yPos: number) {
     const index = this.calculateIndexForYPos_(yPos);
     this.connections_.splice(index, 0, connection);
   }
@@ -75,14 +60,12 @@ class ConnectionDB {
    *
    * Starts by doing a binary search to find the approximate location, then
    * linearly searches nearby for the exact connection.
-   * @param {!RenderedConnection} conn The connection to find.
-   * @param {number} yPos The y position used to find the index of the
-   *     connection.
-   * @return {number} The index of the connection, or -1 if the connection was
-   *     not found.
-   * @private
+   * @param conn The connection to find.
+   * @param yPos The y position used to find the index of the connection.
+   * @return The index of the connection, or -1 if the connection was not found.
    */
-  findIndexOfConnection_(conn, yPos) {
+  private findIndexOfConnection_(conn: RenderedConnection, yPos: number):
+      number {
     if (!this.connections_.length) {
       return -1;
     }
@@ -116,12 +99,10 @@ class ConnectionDB {
 
   /**
    * Finds the correct index for the given y position.
-   * @param {number} yPos The y position used to decide where to
-   *    insert the connection.
-   * @return {number} The candidate index.
-   * @private
+   * @param yPos The y position used to decide where to insert the connection.
+   * @return The candidate index.
    */
-  calculateIndexForYPos_(yPos) {
+  private calculateIndexForYPos_(yPos: number): number {
     if (!this.connections_.length) {
       return 0;
     }
@@ -143,12 +124,11 @@ class ConnectionDB {
 
   /**
    * Remove a connection from the database.  Must already exist in DB.
-   * @param {!RenderedConnection} connection The connection to be removed.
-   * @param {number} yPos The y position used to find the index of the
-   *     connection.
+   * @param connection The connection to be removed.
+   * @param yPos The y position used to find the index of the connection.
    * @throws {Error} If the connection cannot be found in the database.
    */
-  removeConnection(connection, yPos) {
+  removeConnection(connection: RenderedConnection, yPos: number) {
     const index = this.findIndexOfConnection_(connection, yPos);
     if (index === -1) {
       throw Error('Unable to find connection in connectionDB.');
@@ -159,12 +139,12 @@ class ConnectionDB {
   /**
    * Find all nearby connections to the given connection.
    * Type checking does not apply, since this function is used for bumping.
-   * @param {!RenderedConnection} connection The connection whose
-   *     neighbours should be returned.
-   * @param {number} maxRadius The maximum radius to another connection.
-   * @return {!Array<!RenderedConnection>} List of connections.
+   * @param connection The connection whose neighbours should be returned.
+   * @param maxRadius The maximum radius to another connection.
+   * @return List of connections.
    */
-  getNeighbours(connection, maxRadius) {
+  getNeighbours(connection: RenderedConnection, maxRadius: number):
+      RenderedConnection[] {
     const db = this.connections_;
     const currentX = connection.x;
     const currentY = connection.y;
@@ -182,16 +162,16 @@ class ConnectionDB {
       pointerMid = Math.floor((pointerMin + pointerMax) / 2);
     }
 
-    const neighbours = [];
+    const neighbours: AnyDuringMigration[] = [];
     /**
      * Computes if the current connection is within the allowed radius of
      * another connection. This function is a closure and has access to outside
      * variables.
-     * @param {number} yIndex The other connection's index in the database.
-     * @return {boolean} True if the current connection's vertical distance from
-     *     the other connection is less than the allowed radius.
+     * @param yIndex The other connection's index in the database.
+     * @return True if the current connection's vertical distance from the other
+     *     connection is less than the allowed radius.
      */
-    function checkConnection_(yIndex) {
+    function checkConnection_(yIndex: number): boolean {
       const dx = currentX - db[yIndex].x;
       const dy = currentY - db[yIndex].y;
       const r = Math.sqrt(dx * dx + dy * dy);
@@ -219,32 +199,33 @@ class ConnectionDB {
   /**
    * Is the candidate connection close to the reference connection.
    * Extremely fast; only looks at Y distance.
-   * @param {number} index Index in database of candidate connection.
-   * @param {number} baseY Reference connection's Y value.
-   * @param {number} maxRadius The maximum radius to another connection.
-   * @return {boolean} True if connection is in range.
-   * @private
+   * @param index Index in database of candidate connection.
+   * @param baseY Reference connection's Y value.
+   * @param maxRadius The maximum radius to another connection.
+   * @return True if connection is in range.
    */
-  isInYRange_(index, baseY, maxRadius) {
-    return (Math.abs(this.connections_[index].y - baseY) <= maxRadius);
+  private isInYRange_(index: number, baseY: number, maxRadius: number):
+      boolean {
+    return Math.abs(this.connections_[index].y - baseY) <= maxRadius;
   }
 
   /**
    * Find the closest compatible connection to this connection.
-   * @param {!RenderedConnection} conn The connection searching for a compatible
-   *     mate.
-   * @param {number} maxRadius The maximum radius to another connection.
-   * @param {!Coordinate} dxy Offset between this connection's
-   *     location in the database and the current location (as a result of
-   *     dragging).
-   * @return {!{connection: RenderedConnection, radius: number}}
-   *     Contains two properties: 'connection' which is either another
+   * @param conn The connection searching for a compatible mate.
+   * @param maxRadius The maximum radius to another connection.
+   * @param dxy Offset between this connection's location in the database and
+   *     the current location (as a result of dragging).
+   * @return Contains two properties: 'connection' which is either another
    *     connection or null, and 'radius' which is the distance.
    */
-  searchForClosest(conn, maxRadius, dxy) {
+  searchForClosest(
+      conn: RenderedConnection, maxRadius: number,
+      dxy: Coordinate): {connection: RenderedConnection, radius: number} {
     if (!this.connections_.length) {
       // Don't bother.
-      return {connection: null, radius: maxRadius};
+      // AnyDuringMigration because:  Type 'null' is not assignable to type
+      // 'RenderedConnection'.
+      return {connection: null as AnyDuringMigration, radius: maxRadius};
     }
 
     // Stash the values of x and y from before the drag.
@@ -267,9 +248,11 @@ class ConnectionDB {
     let pointerMin = closestIndex - 1;
     while (pointerMin >= 0 && this.isInYRange_(pointerMin, conn.y, maxRadius)) {
       temp = this.connections_[pointerMin];
-      if (this.connectionChecker_.canConnect(conn, temp, true, bestRadius)) {
+      if (this.connectionChecker.canConnect(conn, temp, true, bestRadius)) {
         bestConnection = temp;
-        bestRadius = temp.distanceFrom(conn);
+        // AnyDuringMigration because:  Argument of type 'RenderedConnection' is
+        // not assignable to parameter of type 'Connection'.
+        bestRadius = temp.distanceFrom(conn as AnyDuringMigration);
       }
       pointerMin--;
     }
@@ -278,9 +261,11 @@ class ConnectionDB {
     while (pointerMax < this.connections_.length &&
            this.isInYRange_(pointerMax, conn.y, maxRadius)) {
       temp = this.connections_[pointerMax];
-      if (this.connectionChecker_.canConnect(conn, temp, true, bestRadius)) {
+      if (this.connectionChecker.canConnect(conn, temp, true, bestRadius)) {
         bestConnection = temp;
-        bestRadius = temp.distanceFrom(conn);
+        // AnyDuringMigration because:  Argument of type 'RenderedConnection' is
+        // not assignable to parameter of type 'Connection'.
+        bestRadius = temp.distanceFrom(conn as AnyDuringMigration);
       }
       pointerMax++;
     }
@@ -288,19 +273,22 @@ class ConnectionDB {
     // Reset the values of x and y.
     conn.x = baseX;
     conn.y = baseY;
-
     // If there were no valid connections, bestConnection will be null.
-    return {connection: bestConnection, radius: bestRadius};
+    // AnyDuringMigration because:  Type 'RenderedConnection | null' is not
+    // assignable to type 'RenderedConnection'.
+    return {
+      connection: bestConnection as AnyDuringMigration,
+      radius: bestRadius
+    };
   }
 
   /**
    * Initialize a set of connection DBs for a workspace.
-   * @param {!IConnectionChecker} checker The workspace's
-   *     connection checker, used to decide if connections are valid during a
-   *     drag.
-   * @return {!Array<!ConnectionDB>} Array of databases.
+   * @param checker The workspace's connection checker, used to decide if
+   *     connections are valid during a drag.
+   * @return Array of databases.
    */
-  static init(checker) {
+  static init(checker: IConnectionChecker): ConnectionDB[] {
     // Create four databases, one for each connection type.
     const dbList = [];
     dbList[ConnectionType.INPUT_VALUE] = new ConnectionDB(checker);
@@ -310,5 +298,3 @@ class ConnectionDB {
     return dbList;
   }
 }
-
-exports.ConnectionDB = ConnectionDB;

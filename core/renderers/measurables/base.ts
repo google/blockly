@@ -8,17 +8,16 @@
  * @fileoverview Methods for graphically rendering a block as SVG.
  */
 
-'use strict';
-
 /**
  * Methods for graphically rendering a block as SVG.
  * @class
  */
-goog.module('Blockly.blockRendering.Measurable');
+import * as goog from '../../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.blockRendering.Measurable');
 
-/* eslint-disable-next-line no-unused-vars */
-const {ConstantProvider} = goog.requireType('Blockly.blockRendering.ConstantProvider');
-const {Types} = goog.require('Blockly.blockRendering.Types');
+import type {ConstantProvider} from '../common/constants.js';
+
+import {Types} from './types.js';
 
 
 /**
@@ -27,38 +26,28 @@ const {Types} = goog.require('Blockly.blockRendering.Types');
  * of the block element (e.g. field, statement input).
  * @alias Blockly.blockRendering.Measurable
  */
-class Measurable {
+export class Measurable {
+  width: number = 0;
+
+  height: number = 0;
+  type: number;
+  xPos = 0;
+
+  centerline = 0;
+  notchOffset: number;
+
+  /** The renderer's constant provider. */
+  protected readonly constants_: ConstantProvider
+
   /**
-   * @param {!ConstantProvider} constants The rendering
-   *   constants provider.
-   * @package
+   * @param constants The rendering constants provider.
+   * @internal
    */
-  constructor(constants) {
-    /** @type {number} */
-    this.width = 0;
-
-    /** @type {number} */
-    this.height = 0;
-
-    /** @type {number} */
-    this.type = Types.NONE;
-
-    /** @type {number} */
-    this.xPos = 0;
-
-    /** @type {number} */
-    this.centerline = 0;
-
-    /**
-     * The renderer's constant provider.
-     * @type {!ConstantProvider}
-     * @protected
-     */
+  constructor(constants: ConstantProvider) {
     this.constants_ = constants;
 
-    /** @type {number} */
+    this.type = Types.NONE;
+
     this.notchOffset = this.constants_.NOTCH_OFFSET_LEFT;
   }
 }
-
-exports.Measurable = Measurable;

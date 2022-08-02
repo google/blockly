@@ -9,99 +9,119 @@
  * alert/confirmation dialogs.
  */
 
-'use strict';
-
 /**
  * Wrapper functions around JS functions for showing alert/confirmation dialogs.
  * @namespace Blockly.dialog
  */
-goog.module('Blockly.dialog');
+import * as goog from '../closure/goog/goog.js';
+goog.declareModuleId('Blockly.dialog');
 
-let alertImplementation = function(message, opt_callback) {
+
+let alertImplementation = function(
+    message: AnyDuringMigration, opt_callback: AnyDuringMigration) {
   window.alert(message);
   if (opt_callback) {
     opt_callback();
   }
 };
 
-let confirmImplementation = function(message, callback) {
+let confirmImplementation = function(
+    message: AnyDuringMigration, callback: AnyDuringMigration) {
   callback(window.confirm(message));
 };
 
-let promptImplementation = function(message, defaultValue, callback) {
+let promptImplementation = function(
+    message: AnyDuringMigration, defaultValue: AnyDuringMigration,
+    callback: AnyDuringMigration) {
   callback(window.prompt(message, defaultValue));
 };
 
 /**
  * Wrapper to window.alert() that app developers may override via setAlert to
  * provide alternatives to the modal browser window.
- * @param {string} message The message to display to the user.
- * @param {function()=} opt_callback The callback when the alert is dismissed.
+ * @param message The message to display to the user.
+ * @param opt_callback The callback when the alert is dismissed.
  * @alias Blockly.dialog.alert
  */
-const alert = function(message, opt_callback) {
+export function alert(
+    message: string, opt_callback?: () => AnyDuringMigration) {
   alertImplementation(message, opt_callback);
-};
-exports.alert = alert;
+}
 
 /**
  * Sets the function to be run when Blockly.dialog.alert() is called.
- * @param {!function(string, function()=)} alertFunction The function to be run.
+ * @param alertFunction The function to be run.
  * @see Blockly.dialog.alert
  * @alias Blockly.dialog.setAlert
  */
-const setAlert = function(alertFunction) {
+export function setAlert(
+    alertFunction: (p1: string, p2?: () => AnyDuringMigration) =>
+        AnyDuringMigration) {
   alertImplementation = alertFunction;
-};
-exports.setAlert = setAlert;
+}
 
 /**
  * Wrapper to window.confirm() that app developers may override via setConfirm
  * to provide alternatives to the modal browser window.
- * @param {string} message The message to display to the user.
- * @param {!function(boolean)} callback The callback for handling user response.
+ * @param message The message to display to the user.
+ * @param callback The callback for handling user response.
  * @alias Blockly.dialog.confirm
  */
-const confirm = function(message, callback) {
+export function confirm(
+    message: string, callback: (p1: boolean) => AnyDuringMigration) {
+  TEST_ONLY.confirmInternal(message, callback);
+}
+
+/**
+ * Private version of confirm for stubbing in tests.
+ */
+function confirmInternal(
+    message: string, callback: (p1: boolean) => AnyDuringMigration) {
   confirmImplementation(message, callback);
-};
-exports.confirm = confirm;
+}
+
 
 /**
  * Sets the function to be run when Blockly.dialog.confirm() is called.
- * @param {!function(string, !function(boolean))} confirmFunction The function
- *    to be run.
+ * @param confirmFunction The function to be run.
  * @see Blockly.dialog.confirm
  * @alias Blockly.dialog.setConfirm
  */
-const setConfirm = function(confirmFunction) {
+export function setConfirm(
+    confirmFunction: (p1: string, p2: (p1: boolean) => AnyDuringMigration) =>
+        AnyDuringMigration) {
   confirmImplementation = confirmFunction;
-};
-exports.setConfirm = setConfirm;
+}
 
 /**
  * Wrapper to window.prompt() that app developers may override via setPrompt to
  * provide alternatives to the modal browser window. Built-in browser prompts
  * are often used for better text input experience on mobile device. We strongly
  * recommend testing mobile when overriding this.
- * @param {string} message The message to display to the user.
- * @param {string} defaultValue The value to initialize the prompt with.
- * @param {!function(?string)} callback The callback for handling user response.
+ * @param message The message to display to the user.
+ * @param defaultValue The value to initialize the prompt with.
+ * @param callback The callback for handling user response.
  * @alias Blockly.dialog.prompt
  */
-const prompt = function(message, defaultValue, callback) {
+export function prompt(
+    message: string, defaultValue: string,
+    callback: (p1: string|null) => AnyDuringMigration) {
   promptImplementation(message, defaultValue, callback);
-};
-exports.prompt = prompt;
+}
 
 /**
  * Sets the function to be run when Blockly.dialog.prompt() is called.
- * @param {!function(string, string, !function(?string))} promptFunction The
- *    function to be run.
+ * @param promptFunction The function to be run.
  * @see Blockly.dialog.prompt
  * @alias Blockly.dialog.setPrompt
  */
-const setPrompt = function(promptFunction) {
+export function setPrompt(
+    promptFunction:
+        (p1: string, p2: string, p3: (p1: string|null) => AnyDuringMigration) =>
+            AnyDuringMigration) {
   promptImplementation = promptFunction;
-};
-exports.setPrompt = setPrompt;
+}
+
+export const TEST_ONLY = {
+  confirmInternal,
+}

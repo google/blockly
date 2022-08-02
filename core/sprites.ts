@@ -8,23 +8,22 @@
  * @fileoverview Holds constants that have to do with the sprites that create
  * the trashcan and zoom controls.
  */
-'use strict';
+import * as goog from '../closure/goog/goog.js';
+goog.declareModuleId('Blockly.sprite');
+
 
 /**
  * Holds constants that have to do with the sprites that create the trashcan
  * and zoom controls.
  */
-goog.module('Blockly.sprite');
-
 
 /**
  * Contains the path to a single png tat holds the images for the trashcan
  * as well as the zoom controls.
  * @alias Blockly.sprite.SPRITE
  */
-const SPRITE = {
+export const SPRITE = {
   width: 96,
   height: 124,
   url: 'sprites.png',
 };
-exports.SPRITE = SPRITE;

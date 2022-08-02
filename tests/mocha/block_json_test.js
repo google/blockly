@@ -289,7 +289,7 @@ suite('Block JSON initialization', function() {
 
   suite('fieldFromJson_', function() {
     setup(function() {
-      this.stub = sinon.stub(Blockly.fieldRegistry, 'fromJson')
+      this.stub = sinon.stub(Blockly.fieldRegistry.TEST_ONLY, 'fromJsonInternal')
           .callsFake(function(elem) {
             switch (elem['type']) {
               case 'field_label':

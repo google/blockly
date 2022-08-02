@@ -9,33 +9,29 @@
  * block.
  */
 
-'use strict';
-
 /**
  * The interface for an AST node location that has an associated
  * block.
  * @namespace Blockly.IASTNodeLocationWithBlock
  */
-goog.module('Blockly.IASTNodeLocationWithBlock');
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.IASTNodeLocationWithBlock');
 
 /* eslint-disable-next-line no-unused-vars */
-const {Block} = goog.requireType('Blockly.Block');
-/* eslint-disable-next-line no-unused-vars */
-const {IASTNodeLocation} = goog.require('Blockly.IASTNodeLocation');
+// Unused import preserved for side-effects. Remove if unneeded.
+// import '../block.js';
+
+import type {IASTNodeLocation} from './i_ast_node_location.js';
 
 
 /**
  * An AST node location that has an associated block.
- * @interface
- * @extends {IASTNodeLocation}
  * @alias Blockly.IASTNodeLocationWithBlock
  */
-const IASTNodeLocationWithBlock = function() {};
-
-/**
- * Get the source block associated with this node.
- * @return {Block} The source block.
- */
-IASTNodeLocationWithBlock.prototype.getSourceBlock;
-
-exports.IASTNodeLocationWithBlock = IASTNodeLocationWithBlock;
+export interface IASTNodeLocationWithBlock extends IASTNodeLocation {
+  /**
+   * Get the source block associated with this node.
+   * @return The source block.
+   */
+  getSourceBlock: AnyDuringMigration;
+}

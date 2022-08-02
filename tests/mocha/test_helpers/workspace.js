@@ -62,7 +62,7 @@ function testAWorkspace() {
 
   suite('clear', function() {
     test('Trivial', function() {
-      sinon.stub(eventUtils, "setGroup").returns(null);
+      sinon.stub(eventUtils.TEST_ONLY, "setGroupInternal").returns(null);
       this.workspace.createVariable('name1', 'type1', 'id1');
       this.workspace.createVariable('name2', 'type2', 'id2');
       this.workspace.newBlock('');
@@ -75,7 +75,7 @@ function testAWorkspace() {
     });
 
     test('No variables', function() {
-      sinon.stub(eventUtils, "setGroup").returns(null);
+      sinon.stub(eventUtils.TEST_ONLY, "setGroupInternal").returns(null);
       this.workspace.newBlock('');
 
       this.workspace.clear();
@@ -98,7 +98,7 @@ function testAWorkspace() {
     test('deleteVariableById(id2) one usage', function() {
       // Deleting variable one usage should not trigger confirm dialog.
       const stub =
-          sinon.stub(Blockly.dialog, "confirm").callsArgWith(1, true);
+          sinon.stub(Blockly.dialog.TEST_ONLY, "confirmInternal").callsArgWith(1, true);
       this.workspace.deleteVariableById('id2');
 
       sinon.assert.notCalled(stub);
@@ -111,7 +111,7 @@ function testAWorkspace() {
     test('deleteVariableById(id1) multiple usages confirm', function() {
       // Deleting variable with multiple usages triggers confirm dialog.
       const stub =
-          sinon.stub(Blockly.dialog, "confirm").callsArgWith(1, true);
+          sinon.stub(Blockly.dialog.TEST_ONLY, "confirmInternal").callsArgWith(1, true);
       this.workspace.deleteVariableById('id1');
 
       sinon.assert.calledOnce(stub);
@@ -124,7 +124,7 @@ function testAWorkspace() {
     test('deleteVariableById(id1) multiple usages cancel', function() {
       // Deleting variable with multiple usages triggers confirm dialog.
       const stub =
-          sinon.stub(Blockly.dialog, "confirm").callsArgWith(1, false);
+          sinon.stub(Blockly.dialog.TEST_ONLY, "confirmInternal").callsArgWith(1, false);
       this.workspace.deleteVariableById('id1');
 
       sinon.assert.calledOnce(stub);
@@ -560,7 +560,7 @@ function testAWorkspace() {
     });
   });
 
-  suite('getById', function() {
+  suite.skip('getById', function() {
     setup(function() {
       this.workspaceB = this.workspace.rendered ?
           new Blockly.WorkspaceSvg(new Blockly.Options({})) :

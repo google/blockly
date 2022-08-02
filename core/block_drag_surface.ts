@@ -13,8 +13,6 @@
  * while dragging blocks.
  */
 
-'use strict';
-
 /**
  * A class that manages a surface for dragging blocks.  When a
  * block drag is started, we move the block (and children) to a separate DOM
@@ -24,12 +22,13 @@
  * while dragging blocks.
  * @class
  */
-goog.module('Blockly.BlockDragSurfaceSvg');
+import * as goog from '../closure/goog/goog.js';
+goog.declareModuleId('Blockly.BlockDragSurfaceSvg');
 
-const dom = goog.require('Blockly.utils.dom');
-const svgMath = goog.require('Blockly.utils.svgMath');
-const {Coordinate} = goog.require('Blockly.utils.Coordinate');
-const {Svg} = goog.require('Blockly.utils.Svg');
+import {Coordinate} from './utils/coordinate.js';
+import * as dom from './utils/dom.js';
+import {Svg} from './utils/svg.js';
+import * as svgMath from './utils/svg_math.js';
 
 
 /**
@@ -37,69 +36,48 @@ const {Svg} = goog.require('Blockly.utils.Svg');
  * SVG that contains only the currently moving block, or nothing.
  * @alias Blockly.BlockDragSurfaceSvg
  */
-const BlockDragSurfaceSvg = class {
+export class BlockDragSurfaceSvg {
+  /** The SVG drag surface. Set once by BlockDragSurfaceSvg.createDom. */
+  private SVG_: SVGElement|null = null;
+
   /**
-   * @param {!Element} container Containing element.
+   * This is where blocks live while they are being dragged if the drag
+   * surface is enabled.
    */
-  constructor(container) {
-    /**
-     * The SVG drag surface. Set once by BlockDragSurfaceSvg.createDom.
-     * @type {?SVGElement}
-     * @private
-     */
-    this.SVG_ = null;
+  private dragGroup_: SVGElement|null = null;
 
-    /**
-     * This is where blocks live while they are being dragged if the drag
-     * surface is enabled.
-     * @type {?SVGElement}
-     * @private
-     */
-    this.dragGroup_ = null;
+  /**
+   * Cached value for the scale of the drag surface.
+   * Used to set/get the correct translation during and after a drag.
+   */
+  private scale_ = 1;
 
-    /**
-     * Containing HTML element; parent of the workspace and the drag surface.
-     * @type {!Element}
-     * @private
-     */
-    this.container_ = container;
+  /**
+   * Cached value for the translation of the drag surface.
+   * This translation is in pixel units, because the scale is applied to the
+   * drag group rather than the top-level SVG.
+   */
+  private surfaceXY_: Coordinate|null = null;
+  private readonly childSurfaceXY_: Coordinate;
 
-    /**
-     * Cached value for the scale of the drag surface.
-     * Used to set/get the correct translation during and after a drag.
-     * @type {number}
-     * @private
-     */
-    this.scale_ = 1;
-
-    /**
-     * Cached value for the translation of the drag surface.
-     * This translation is in pixel units, because the scale is applied to the
-     * drag group rather than the top-level SVG.
-     * @type {?Coordinate}
-     * @private
-     */
-    this.surfaceXY_ = null;
-
+  /** @param container Containing element. */
+  constructor(private readonly container: Element) {
     /**
      * Cached value for the translation of the child drag surface in pixel
      * units. Since the child drag surface tracks the translation of the
      * workspace this is ultimately the translation of the workspace.
-     * @type {!Coordinate}
-     * @private
      */
     this.childSurfaceXY_ = new Coordinate(0, 0);
 
     this.createDom();
   }
 
-  /**
-   * Create the drag surface and inject it into the container.
-   */
+  /** Create the drag surface and inject it into the container. */
   createDom() {
     if (this.SVG_) {
-      return;  // Already created.
+      return;
     }
+    // Already created.
     this.SVG_ = dom.createSvgElement(
         Svg.SVG, {
           'xmlns': dom.SVG_NS,
@@ -108,41 +86,43 @@ const BlockDragSurfaceSvg = class {
           'version': '1.1',
           'class': 'blocklyBlockDragSurface',
         },
-        this.container_);
-    this.dragGroup_ = dom.createSvgElement(Svg.G, {}, this.SVG_);
+        this.container);
+    // AnyDuringMigration because:  Argument of type 'SVGElement | null' is not
+    // assignable to parameter of type 'Element | undefined'.
+    this.dragGroup_ =
+        dom.createSvgElement(Svg.G, {}, this.SVG_ as AnyDuringMigration);
   }
 
   /**
    * Set the SVG blocks on the drag surface's group and show the surface.
    * Only one block group should be on the drag surface at a time.
-   * @param {!SVGElement} blocks Block or group of blocks to place on the drag
-   * surface.
+   * @param blocks Block or group of blocks to place on the drag surface.
    */
-  setBlocksAndShow(blocks) {
-    if (this.dragGroup_.childNodes.length) {
+  setBlocksAndShow(blocks: SVGElement) {
+    if (this.dragGroup_!.childNodes.length) {
       throw Error('Already dragging a block.');
     }
     // appendChild removes the blocks from the previous parent
-    this.dragGroup_.appendChild(blocks);
-    this.SVG_.style.display = 'block';
+    this.dragGroup_!.appendChild(blocks);
+    this.SVG_!.style.display = 'block';
     this.surfaceXY_ = new Coordinate(0, 0);
   }
 
   /**
    * Translate and scale the entire drag surface group to the given position, to
    * keep in sync with the workspace.
-   * @param {number} x X translation in pixel coordinates.
-   * @param {number} y Y translation in pixel coordinates.
-   * @param {number} scale Scale of the group.
+   * @param x X translation in pixel coordinates.
+   * @param y Y translation in pixel coordinates.
+   * @param scale Scale of the group.
    */
-  translateAndScaleGroup(x, y, scale) {
+  translateAndScaleGroup(x: number, y: number, scale: number) {
     this.scale_ = scale;
     // Make sure the svg exists on a pixel boundary so that it is not fuzzy.
     const roundX = Math.round(x);
     const roundY = Math.round(y);
     this.childSurfaceXY_.x = roundX;
     this.childSurfaceXY_.y = roundY;
-    this.dragGroup_.setAttribute(
+    this.dragGroup_!.setAttribute(
         'transform',
         'translate(' + roundX + ',' + roundY + ') scale(' + scale + ')');
   }
@@ -152,24 +132,28 @@ const BlockDragSurfaceSvg = class {
    * @private
    */
   translateSurfaceInternal_() {
-    let x = this.surfaceXY_.x;
-    let y = this.surfaceXY_.y;
+    let x = this.surfaceXY_!.x;
+    let y = this.surfaceXY_!.y;
     // Make sure the svg exists on a pixel boundary so that it is not fuzzy.
     x = Math.round(x);
     y = Math.round(y);
-    this.SVG_.style.display = 'block';
+    this.SVG_!.style.display = 'block';
 
-    dom.setCssTransform(this.SVG_, 'translate3d(' + x + 'px, ' + y + 'px, 0)');
+    // AnyDuringMigration because:  Argument of type 'SVGElement | null' is not
+    // assignable to parameter of type 'Element'.
+    dom.setCssTransform(
+        this.SVG_ as AnyDuringMigration,
+        'translate3d(' + x + 'px, ' + y + 'px, 0)');
   }
 
   /**
    * Translates the entire surface by a relative offset.
-   * @param {number} deltaX Horizontal offset in pixel units.
-   * @param {number} deltaY Vertical offset in pixel units.
+   * @param deltaX Horizontal offset in pixel units.
+   * @param deltaY Vertical offset in pixel units.
    */
-  translateBy(deltaX, deltaY) {
-    const x = this.surfaceXY_.x + deltaX;
-    const y = this.surfaceXY_.y + deltaY;
+  translateBy(deltaX: number, deltaY: number) {
+    const x = this.surfaceXY_!.x + deltaX;
+    const y = this.surfaceXY_!.y + deltaY;
     this.surfaceXY_ = new Coordinate(x, y);
     this.translateSurfaceInternal_();
   }
@@ -179,10 +163,10 @@ const BlockDragSurfaceSvg = class {
    * We translate the drag surface instead of the blocks inside the surface
    * so that the browser avoids repainting the SVG.
    * Because of this, the drag coordinates must be adjusted by scale.
-   * @param {number} x X translation for the entire surface.
-   * @param {number} y Y translation for the entire surface.
+   * @param x X translation for the entire surface.
+   * @param y Y translation for the entire surface.
    */
-  translateSurface(x, y) {
+  translateSurface(x: number, y: number) {
     this.surfaceXY_ = new Coordinate(x * this.scale_, y * this.scale_);
     this.translateSurfaceInternal_();
   }
@@ -190,47 +174,46 @@ const BlockDragSurfaceSvg = class {
   /**
    * Reports the surface translation in scaled workspace coordinates.
    * Use this when finishing a drag to return blocks to the correct position.
-   * @return {!Coordinate} Current translation of the surface.
+   * @return Current translation of the surface.
    */
-  getSurfaceTranslation() {
-    const xy = svgMath.getRelativeXY(/** @type {!SVGElement} */ (this.SVG_));
+  getSurfaceTranslation(): Coordinate {
+    const xy = svgMath.getRelativeXY(this.SVG_ as SVGElement);
     return new Coordinate(xy.x / this.scale_, xy.y / this.scale_);
   }
 
   /**
    * Provide a reference to the drag group (primarily for
    * BlockSvg.getRelativeToSurfaceXY).
-   * @return {?SVGElement} Drag surface group element.
+   * @return Drag surface group element.
    */
-  getGroup() {
+  getGroup(): SVGElement|null {
     return this.dragGroup_;
   }
 
   /**
    * Returns the SVG drag surface.
-   * @returns {?SVGElement} The SVG drag surface.
+   * @returns The SVG drag surface.
    */
-  getSvgRoot() {
+  getSvgRoot(): SVGElement|null {
     return this.SVG_;
   }
 
   /**
    * Get the current blocks on the drag surface, if any (primarily
    * for BlockSvg.getRelativeToSurfaceXY).
-   * @return {?Element} Drag surface block DOM element, or null if no blocks
-   *     exist.
+   * @return Drag surface block DOM element, or null if no blocks exist.
    */
-  getCurrentBlock() {
-    return /** @type {Element} */ (this.dragGroup_.firstChild);
+  getCurrentBlock(): Element|null {
+    return this.dragGroup_!.firstChild as Element;
   }
 
   /**
    * Gets the translation of the child block surface
    * This surface is in charge of keeping track of how much the workspace has
    * moved.
-   * @return {!Coordinate} The amount the workspace has been moved.
+   * @return The amount the workspace has been moved.
    */
-  getWsTranslation() {
+  getWsTranslation(): Coordinate {
     // Returning a copy so the coordinate can not be changed outside this class.
     return this.childSurfaceXY_.clone();
   }
@@ -240,26 +223,24 @@ const BlockDragSurfaceSvg = class {
    * element.
    * If the block is being deleted it doesn't need to go back to the original
    * surface, since it would be removed immediately during dispose.
-   * @param {Element=} opt_newSurface Surface the dragging blocks should be
-   *     moved to, or null if the blocks should be removed from this surface
-   *     without being moved to a different surface.
+   * @param opt_newSurface Surface the dragging blocks should be moved to, or
+   *     null if the blocks should be removed from this surface without being
+   *     moved to a different surface.
    */
-  clearAndHide(opt_newSurface) {
+  clearAndHide(opt_newSurface?: Element) {
     const currentBlockElement = this.getCurrentBlock();
     if (currentBlockElement) {
       if (opt_newSurface) {
         // appendChild removes the node from this.dragGroup_
         opt_newSurface.appendChild(currentBlockElement);
       } else {
-        this.dragGroup_.removeChild(currentBlockElement);
+        this.dragGroup_!.removeChild(currentBlockElement);
       }
     }
-    this.SVG_.style.display = 'none';
-    if (this.dragGroup_.childNodes.length) {
+    this.SVG_!.style.display = 'none';
+    if (this.dragGroup_!.childNodes.length) {
       throw Error('Drag group was not cleared.');
     }
     this.surfaceXY_ = null;
   }
-};
-
-exports.BlockDragSurfaceSvg = BlockDragSurfaceSvg;
+}

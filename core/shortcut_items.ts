@@ -69,7 +69,8 @@ export function registerDelete() {
     name: names.DELETE,
     preconditionFn(workspace) {
       const selected = common.getSelected();
-      return !workspace.options.readOnly && selected && selected.isDeletable();
+      return !!(
+          !workspace.options.readOnly && selected && selected.isDeletable());
     },
     callback(workspace, e) {
       // Delete or backspace.

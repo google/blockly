@@ -25,5 +25,5 @@ export interface IDeletable {
    * Get whether this object is deletable or not.
    * @return True if deletable.
    */
-  isDeletable: AnyDuringMigration;
+  isDeletable(): boolean;
 }

@@ -29,6 +29,10 @@ goog.declareModuleId('Blockly.IToolbox');
 // import '../workspace_svg.js';
 
 import type {IRegistrable} from './i_registrable.js';
+import type {IToolboxItem} from './i_toolbox_item.js';
+import type {ToolboxInfo} from '../utils/toolbox.js';
+import type {IFlyout} from './i_flyout.js';
+import type {WorkspaceSvg} from '../workspace_svg.js';
 
 
 /**
@@ -37,87 +41,87 @@ import type {IRegistrable} from './i_registrable.js';
  */
 export interface IToolbox extends IRegistrable {
   /** Initializes the toolbox. */
-  init: AnyDuringMigration;
+  init(): void;
 
   /**
    * Fills the toolbox with new toolbox items and removes any old contents.
    * @param toolboxDef Object holding information for creating a toolbox.
    */
-  render: AnyDuringMigration;
+  render(toolboxDef: ToolboxInfo): void;
 
   /**
    * Gets the width of the toolbox.
    * @return The width of the toolbox.
    */
-  getWidth: AnyDuringMigration;
+  getWidth(): number;
 
   /**
    * Gets the height of the toolbox.
-   * @return The width of the toolbox.
+   * @return The height of the toolbox.
    */
-  getHeight: AnyDuringMigration;
+  getHeight(): number;
 
   /**
    * Gets the toolbox flyout.
    * @return The toolbox flyout.
    */
-  getFlyout: AnyDuringMigration;
+  getFlyout(): IFlyout|null;
 
   /**
    * Gets the workspace for the toolbox.
    * @return The parent workspace for the toolbox.
    */
-  getWorkspace: AnyDuringMigration;
+  getWorkspace(): WorkspaceSvg;
 
   /**
    * Gets whether or not the toolbox is horizontal.
    * @return True if the toolbox is horizontal, false if the toolbox is
    *     vertical.
    */
-  isHorizontal: AnyDuringMigration;
+  isHorizontal(): boolean;
 
   /**
    * Positions the toolbox based on whether it is a horizontal toolbox and
    * whether the workspace is in rtl.
    */
-  position: AnyDuringMigration;
+  position(): void;
 
   /** Handles resizing the toolbox when a toolbox item resizes. */
-  handleToolboxItemResize: AnyDuringMigration;
+  handleToolboxItemResize(): void;
 
   /** Unhighlights any previously selected item. */
-  clearSelection: AnyDuringMigration;
+  clearSelection(): void;
 
   /**
    * Updates the category colours and background colour of selected categories.
    */
-  refreshTheme: AnyDuringMigration;
+  refreshTheme(): void;
 
   /**
    * Updates the flyout's content without closing it.  Should be used in
    * response to a change in one of the dynamic categories, such as variables or
    * procedures.
    */
-  refreshSelection: AnyDuringMigration;
+  refreshSelection(): void;
 
   /**
    * Sets the visibility of the toolbox.
    * @param isVisible True if toolbox should be visible.
    */
-  setVisible: AnyDuringMigration;
+  setVisible(isVisible: boolean): void;
 
   /**
    * Selects the toolbox item by it's position in the list of toolbox items.
    * @param position The position of the item to select.
    */
-  selectItemByPosition: AnyDuringMigration;
+  selectItemByPosition(position: number): void;
 
   /**
    * Gets the selected item.
    * @return The selected item, or null if no item is currently selected.
    */
-  getSelectedItem: AnyDuringMigration;
+  getSelectedItem(): IToolboxItem|null;
 
   /** Disposes of this toolbox. */
-  dispose: AnyDuringMigration;
+  dispose(): void;
 }

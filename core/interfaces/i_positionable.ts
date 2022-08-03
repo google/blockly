@@ -13,6 +13,8 @@
  * @namespace Blockly.IPositionable
  */
 import * as goog from '../../closure/goog/goog.js';
+import type {Rect} from '../utils/rect.js';
+import type {UiMetrics} from '../metrics_manager.js';
 goog.declareModuleId('Blockly.IPositionable');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -36,7 +38,7 @@ export interface IPositionable extends IComponent {
    * @param metrics The workspace metrics.
    * @param savedPositions List of rectangles that are already on the workspace.
    */
-  position: AnyDuringMigration;
+  position(metrics: UiMetrics, savedPositions: Rect[]): void;
 
   /**
    * Returns the bounding rectangle of the UI element in pixel units relative to
@@ -44,5 +46,5 @@ export interface IPositionable extends IComponent {
    * @return The UI elements's bounding box. Null if bounding box should be
    *     ignored by other UI elements.
    */
-  getBoundingRectangle: AnyDuringMigration;
+  getBoundingRectangle(): Rect|null;
 }

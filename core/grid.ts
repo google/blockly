@@ -20,6 +20,7 @@ goog.declareModuleId('Blockly.Grid');
 import * as dom from './utils/dom.js';
 import {Svg} from './utils/svg.js';
 import * as userAgent from './utils/useragent.js';
+import {GridOptions} from './blockly_options.js';
 
 
 /**
@@ -44,12 +45,12 @@ export class Grid {
    *     See grid documentation:
    *     https://developers.google.com/blockly/guides/configure/web/grid
    */
-  constructor(private pattern: SVGElement, options: AnyDuringMigration) {
+  constructor(private pattern: SVGElement, options: GridOptions) {
     /** The spacing of the grid lines (in px). */
-    this.spacing_ = options['spacing'];
+    this.spacing_ = options['spacing'] ?? 0;
 
     /** How long the grid lines should be (in px). */
-    this.length_ = options['length'];
+    this.length_ = options['length'] ?? 1;
 
     /** The horizontal grid line, if it exists. */
     this.line1_ = pattern.firstChild as SVGElement;
@@ -58,18 +59,7 @@ export class Grid {
     this.line2_ = this.line1_ && this.line1_.nextSibling as SVGElement;
 
     /** Whether blocks should snap to the grid. */
-    this.snapToGrid_ = options['snap'];
-  }
-
-  /**
-   * Dispose of this grid and unlink from the DOM.
-   * @suppress {checkTypes}
-   * @internal
-   */
-  dispose() {
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'SVGElement'.
-    this.pattern = null as AnyDuringMigration;
+    this.snapToGrid_ = options['snap'] ?? false;
   }
 
   /**
@@ -110,12 +100,8 @@ export class Grid {
     // MSIE freaks if it sees a 0x0 pattern, so set empty patterns to 100x100.
     const safeSpacing = this.spacing_ * scale || 100;
 
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
-    this.pattern.setAttribute('width', safeSpacing as AnyDuringMigration);
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
-    this.pattern.setAttribute('height', safeSpacing as AnyDuringMigration);
+    this.pattern.setAttribute('width', safeSpacing.toString());
+    this.pattern.setAttribute('height', safeSpacing.toString());
 
     let half = Math.floor(this.spacing_ / 2) + 0.5;
     let start = half - this.length_ / 2;
@@ -143,21 +129,11 @@ export class Grid {
       line: SVGElement, width: number, x1: number, x2: number, y1: number,
       y2: number) {
     if (line) {
-      // AnyDuringMigration because:  Argument of type 'number' is not
-      // assignable to parameter of type 'string'.
-      line.setAttribute('stroke-width', width as AnyDuringMigration);
-      // AnyDuringMigration because:  Argument of type 'number' is not
-      // assignable to parameter of type 'string'.
-      line.setAttribute('x1', x1 as AnyDuringMigration);
-      // AnyDuringMigration because:  Argument of type 'number' is not
-      // assignable to parameter of type 'string'.
-      line.setAttribute('y1', y1 as AnyDuringMigration);
-      // AnyDuringMigration because:  Argument of type 'number' is not
-      // assignable to parameter of type 'string'.
-      line.setAttribute('x2', x2 as AnyDuringMigration);
-      // AnyDuringMigration because:  Argument of type 'number' is not
-      // assignable to parameter of type 'string'.
-      line.setAttribute('y2', y2 as AnyDuringMigration);
+      line.setAttribute('stroke-width', width.toString());
+      line.setAttribute('x1', x1.toString());
+      line.setAttribute('y1', y1.toString());
+      line.setAttribute('x2', x2.toString());
+      line.setAttribute('y2', y2.toString());
     }
   }
 
@@ -169,12 +145,8 @@ export class Grid {
    * @internal
    */
   moveTo(x: number, y: number) {
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
-    this.pattern.setAttribute('x', x as AnyDuringMigration);
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
-    this.pattern.setAttribute('y', y as AnyDuringMigration);
+    this.pattern.setAttribute('x', x.toString());
+    this.pattern.setAttribute('y', y.toString());
 
     if (userAgent.IE || userAgent.EDGE) {
       // IE/Edge doesn't notice that the x/y offsets have changed.
@@ -191,9 +163,8 @@ export class Grid {
    * @return The SVG element for the grid pattern.
    * @internal
    */
-  static createDom(
-      rnd: string, gridOptions: AnyDuringMigration,
-      defs: SVGElement): SVGElement {
+  static createDom(rnd: string, gridOptions: GridOptions, defs: SVGElement):
+      SVGElement {
     /*
           <pattern id="blocklyGridPattern837493" patternUnits="userSpaceOnUse">
             <rect stroke="#888" />
@@ -205,10 +176,10 @@ export class Grid {
         {'id': 'blocklyGridPattern' + rnd, 'patternUnits': 'userSpaceOnUse'},
         defs);
     // x1, y1, x1, x2 properties will be set later in update.
-    if (gridOptions['length'] > 0 && gridOptions['spacing'] > 0) {
+    if ((gridOptions['length'] ?? 1) > 0 && (gridOptions['spacing'] ?? 0) > 0) {
       dom.createSvgElement(
           Svg.LINE, {'stroke': gridOptions['colour']}, gridPattern);
-      if (gridOptions['length'] > 1) {
+      if (gridOptions['length'] ?? 1 > 1) {
         dom.createSvgElement(
             Svg.LINE, {'stroke': gridOptions['colour']}, gridPattern);
       }

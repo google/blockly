@@ -378,13 +378,10 @@ function packageReadme() {
 };
 
 /**
- * This task copies the typings/blockly.d.ts TypeScript definition
- * file into the release directory.  The bundled declaration file is
- * referenced in package.json in the types property.
- * As of Q4 2021 this simply copies the existing ts definition files, since
- * generation through typescript-closure-tools does not work with goog.module.
- * TODO(5621): Regenerate definition files and copy them into the release dir as
- * needed.
+ * This task copies the generated .d.ts files in build/declarations and the
+ * hand-written .d.ts files in typings/ into the release directory. The main
+ * entrypoint file (index.d.ts) is referenced in package.json in the types
+ * property.
  */
 function packageDTS() {
   const handwrittenSrcs = [

@@ -46,7 +46,7 @@ export class BubbleDragger {
   /** Whether the bubble would be deleted if dropped immediately. */
   private wouldDeleteBubble_ = false;
   private readonly startXY_: Coordinate;
-  private dragSurface_: BlockDragSurfaceSvg | null;
+  private dragSurface_: BlockDragSurfaceSvg|null;
 
   /**
    * @param bubble The item on the bubble canvas to drag.
@@ -64,7 +64,7 @@ export class BubbleDragger {
      * be used.  Block dragging and bubble dragging use the same surface.
      */
     this.dragSurface_ =
-      svgMath.is3dSupported() && !!workspace.getBlockDragSurface() ?
+        svgMath.is3dSupported() && !!workspace.getBlockDragSurface() ?
         workspace.getBlockDragSurface() :
         null;
   }
@@ -74,7 +74,7 @@ export class BubbleDragger {
    * @suppress {checkTypes}
    * @internal
    */
-  dispose() { }
+  dispose() {}
 
   /**
    * Start dragging a bubble.  This includes moving it to the drag surface.

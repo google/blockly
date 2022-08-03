@@ -392,7 +392,7 @@ function packageDTS() {
     'typings/msg/msg.d.ts',
   ];
   return gulp.src(handwrittenSrcs, {base: 'typings'})
-      .pipe(gulp.src(`${BUILD_DIR}/ts/**/*.d.ts`))
+      .pipe(gulp.src(`${BUILD_DIR}/${TYPINGS_BUILD_DIR}/**/*.d.ts`))
       .pipe(gulp.replace('AnyDuringMigration', 'any'))
       .pipe(gulp.dest(RELEASE_DIR));
 };

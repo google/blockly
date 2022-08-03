@@ -25,7 +25,7 @@ var closureDeps = require('google-closure-deps');
 var argv = require('yargs').argv;
 var rimraf = require('rimraf');
 
-var {BUILD_DIR, DEPS_FILE, TEST_DEPS_FILE, TSC_OUTPUT_DIR} = require('./config');
+var {BUILD_DIR, DEPS_FILE, TEST_DEPS_FILE, TSC_OUTPUT_DIR, TYPINGS_BUILD_DIR} = require('./config');
 var {getPackageJson} = require('./helper_tasks');
 
 ////////////////////////////////////////////////////////////
@@ -317,7 +317,9 @@ const buildJavaScriptAndDeps = gulp.series(buildJavaScript, buildDeps);
  * buildCompiled.
  */
 function buildJavaScript(done) {
-  execSync(`tsc -outDir "${TSC_OUTPUT_DIR}"`, {stdio: 'inherit'});
+  execSync(
+      `tsc -outDir "${TSC_OUTPUT_DIR}" -declarationDir "${TYPINGS_BUILD_DIR}"`,
+      {stdio: 'inherit'});
   done();
 }
 

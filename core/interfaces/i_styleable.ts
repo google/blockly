@@ -25,11 +25,11 @@ export interface IStyleable {
    * Adds a style on the toolbox. Usually used to change the cursor.
    * @param style The name of the class to add.
    */
-  addStyle: AnyDuringMigration;
+  addStyle(style: string): void;
 
   /**
    * Removes a style from the toolbox. Usually used to change the cursor.
    * @param style The name of the class to remove.
    */
-  removeStyle: AnyDuringMigration;
+  removeStyle(style: string): void;
 }

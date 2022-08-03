@@ -59,9 +59,9 @@ const PAGE_MODE_MULTIPLIER = 125;
  * @alias Blockly.browserEvents.conditionalBind
  */
 export function conditionalBind(
-  node: EventTarget, name: string, thisObject: Object | null = null,
-  func: Function, opt_noCaptureIdentifier?: boolean,
-  opt_noPreventDefault?: boolean): Data {
+    node: EventTarget, name: string, thisObject: Object|null = null,
+    func: Function, opt_noCaptureIdentifier?: boolean,
+    opt_noPreventDefault?: boolean): Data {
   let handled = false;
   function wrapFunc(e: Event) {
     const captureIdentifier = !opt_noCaptureIdentifier;
@@ -128,8 +128,8 @@ export function conditionalBind(
  * @alias Blockly.browserEvents.bind
  */
 export function bind(
-  node: EventTarget, name: string, thisObject: Object | null = null,
-  func: Function): Data {
+    node: EventTarget, name: string, thisObject: Object|null = null,
+    func: Function): Data {
   function wrapFunc(e: Event) {
     if (thisObject) {
       func.call(thisObject, e);
@@ -153,8 +153,7 @@ export function bind(
     if (name in Touch.TOUCH_MAP) {
       const touchWrapFunc = (e: Event) => {
         // Punt on multitouch events.
-        if (e instanceof TouchEvent &&
-            e.changedTouches &&
+        if (e instanceof TouchEvent && e.changedTouches &&
             e.changedTouches.length === 1) {
           // Map the touch event's properties to the event.
           const touchPoint = e.changedTouches[0];
@@ -248,7 +247,7 @@ export function isRightButton(e: MouseEvent): boolean {
  * @alias Blockly.browserEvents.mouseToSvg
  */
 export function mouseToSvg(
-  e: MouseEvent, svg: SVGSVGElement, matrix: SVGMatrix | null): SVGPoint {
+    e: MouseEvent, svg: SVGSVGElement, matrix: SVGMatrix|null): SVGPoint {
   const svgPoint = svg.createSVGPoint();
   svgPoint.x = e.clientX;
   svgPoint.y = e.clientY;

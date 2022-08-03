@@ -32,7 +32,7 @@ interface CloneRect {
 let disconnectPid: AnyDuringMigration = 0;
 
 /** SVG group of wobbling block.  There can only be one at a time. */
-let disconnectGroup: SVGElement | null = null;
+let disconnectGroup: SVGElement|null = null;
 
 
 /**

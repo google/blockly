@@ -26,14 +26,14 @@ export interface ICopyable extends ISelectable {
    * @return Copy metadata.
    * @internal
    */
-  toCopyData: AnyDuringMigration;
+  toCopyData(): CopyData|null;
 }
 
 export namespace ICopyable {
   export interface CopyData {
-    saveInfo: AnyDuringMigration|Element;
+    saveInfo: Object|Element;
     source: WorkspaceSvg;
-    typeCounts: AnyDuringMigration|null;
+    typeCounts: Object|null;
   }
 }
 

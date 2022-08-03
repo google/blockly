@@ -25,7 +25,7 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.BlockDragSurfaceSvg');
 
-import { Coordinate } from './utils/coordinate.js';
+import {Coordinate} from './utils/coordinate.js';
 import * as deprecation from './utils/deprecation.js';
 import * as dom from './utils/dom.js';
 import {Svg} from './utils/svg.js';
@@ -71,25 +71,22 @@ export class BlockDragSurfaceSvg {
     this.childSurfaceXY_ = new Coordinate(0, 0);
 
     this.svg_ = dom.createSvgElement(
-      Svg.SVG,
-      {
-        'xmlns': dom.SVG_NS,
-        'xmlns:html': dom.HTML_NS,
-        'xmlns:xlink': dom.XLINK_NS,
-        'version': '1.1',
-        'class': 'blocklyBlockDragSurface',
-      },
-      this.container);
-    this.dragGroup_ =
-      dom.createSvgElement(Svg.G, {}, this.svg_ as SVGElement);
+        Svg.SVG, {
+          'xmlns': dom.SVG_NS,
+          'xmlns:html': dom.HTML_NS,
+          'xmlns:xlink': dom.XLINK_NS,
+          'version': '1.1',
+          'class': 'blocklyBlockDragSurface',
+        },
+        this.container);
+    this.dragGroup_ = dom.createSvgElement(Svg.G, {}, this.svg_ as SVGElement);
   }
 
   /** Create the drag surface and inject it into the container. */
   createDom() {
     // No alternative provided, because now the dom is just automatically
     // created in the constructor now.
-    deprecation.warn(
-        'BlockDragSurfaceSvg createDom', 'June 2022', 'June 2023');
+    deprecation.warn('BlockDragSurfaceSvg createDom', 'June 2022', 'June 2023');
   }
 
   /**
@@ -188,7 +185,7 @@ export class BlockDragSurfaceSvg {
    * Returns the SVG drag surface.
    * @returns The SVG drag surface.
    */
-  getSvgRoot(): SVGElement | null {
+  getSvgRoot(): SVGElement|null {
     return this.svg_;
   }
 
@@ -197,7 +194,7 @@ export class BlockDragSurfaceSvg {
    * for BlockSvg.getRelativeToSurfaceXY).
    * @return Drag surface block DOM element, or null if no blocks exist.
    */
-  getCurrentBlock(): Element | null {
+  getCurrentBlock(): Element|null {
     return this.dragGroup_.firstChild as Element;
   }
 

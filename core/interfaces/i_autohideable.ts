@@ -30,5 +30,5 @@ export interface IAutoHideable extends IComponent {
    * @param onlyClosePopups Whether only popups should be closed.
    *   Flyouts should not be closed if this is true.
    */
-  autoHide: AnyDuringMigration;
+  autoHide(onlyClosePopups: boolean): void;
 }

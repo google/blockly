@@ -15,6 +15,8 @@
  * @namespace Blockly.IConnectionChecker
  */
 import * as goog from '../../closure/goog/goog.js';
+import type {Connection} from '../connection.js';
+import type {RenderedConnection} from '../rendered_connection.js';
 goog.declareModuleId('Blockly.IConnectionChecker');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -40,7 +42,9 @@ export interface IConnectionChecker {
    *     drag checks.
    * @return Whether the connection is legal.
    */
-  canConnect: AnyDuringMigration;
+  canConnect(
+      a: Connection|null, b: Connection|null, isDragging: boolean,
+      opt_distance?: number): boolean;
 
   /**
    * Checks whether the current connection can connect with the target
@@ -53,7 +57,9 @@ export interface IConnectionChecker {
    * @return Connection.CAN_CONNECT if the connection is legal, an error code
    *     otherwise.
    */
-  canConnectWithReason: AnyDuringMigration;
+  canConnectWithReason(
+      a: Connection|null, b: Connection|null, isDragging: boolean,
+      opt_distance?: number): number;
 
   /**
    * Helper method that translates a connection error code into a string.
@@ -62,7 +68,8 @@ export interface IConnectionChecker {
    * @param b The second of the two connections being checked.
    * @return A developer-readable error string.
    */
-  getErrorMessage: AnyDuringMigration;
+  getErrorMessage(errorCode: number, a: Connection|null, b: Connection|null):
+      string;
 
   /**
    * Check that connecting the given connections is safe, meaning that it would
@@ -71,7 +78,7 @@ export interface IConnectionChecker {
    * @param b The second of the connections to check.
    * @return An enum with the reason this connection is safe or unsafe.
    */
-  doSafetyChecks: AnyDuringMigration;
+  doSafetyChecks(a: Connection|null, b: Connection|null): number;
 
   /**
    * Check whether this connection is compatible with another connection with
@@ -81,7 +88,7 @@ export interface IConnectionChecker {
    * @param b Connection to compare against.
    * @return True if the connections share a type.
    */
-  doTypeChecks: AnyDuringMigration;
+  doTypeChecks(a: Connection, b: Connection): boolean;
 
   /**
    * Check whether this connection can be made by dragging.
@@ -90,5 +97,6 @@ export interface IConnectionChecker {
    * @param distance The maximum allowable distance between connections.
    * @return True if the connection is allowed during a drag.
    */
-  doDragChecks: AnyDuringMigration;
+  doDragChecks(a: RenderedConnection, b: RenderedConnection, distance: number):
+      boolean;
 }

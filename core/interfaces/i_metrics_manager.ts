@@ -13,6 +13,9 @@
  * @namespace Blockly.IMetricsManager
  */
 import * as goog from '../../closure/goog/goog.js';
+import type {ContainerRegion, ToolboxMetrics, AbsoluteMetrics, UiMetrics} from '../metrics_manager.js';
+import type {Size} from '../utils/size.js';
+import type {Metrics} from '../utils/metrics.js';
 goog.declareModuleId('Blockly.IMetricsManager');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -36,7 +39,7 @@ export interface IMetricsManager {
    * @return Whether the scroll area has fixed edges.
    * @internal
    */
-  hasFixedEdges: AnyDuringMigration;
+  hasFixedEdges(): boolean;
 
   /**
    * Returns the metrics for the scroll area of the workspace.
@@ -50,7 +53,9 @@ export interface IMetricsManager {
    *     again, if it is needed.
    * @return The metrics for the scroll container
    */
-  getScrollMetrics: AnyDuringMigration;
+  getScrollMetrics(
+      opt_getWorkspaceCoordinates?: boolean, opt_viewMetrics?: ContainerRegion,
+      opt_contentMetrics?: ContainerRegion): ContainerRegion;
 
   /**
    * Gets the width and the height of the flyout on the workspace in pixel
@@ -59,7 +64,7 @@ export interface IMetricsManager {
    * @param opt_own Whether to only return the workspace's own flyout.
    * @return The width and height of the flyout.
    */
-  getFlyoutMetrics: AnyDuringMigration;
+  getFlyoutMetrics(opt_own?: boolean): ToolboxMetrics;
 
   /**
    * Gets the width, height and position of the toolbox on the workspace in
@@ -69,14 +74,14 @@ export interface IMetricsManager {
    * simple toolbox @see {@link getFlyoutMetrics}.
    * @return The object with the width, height and position of the toolbox.
    */
-  getToolboxMetrics: AnyDuringMigration;
+  getToolboxMetrics(): ToolboxMetrics;
 
   /**
    * Gets the width and height of the workspace's parent SVG element in pixel
    * coordinates. This area includes the toolbox and the visible workspace area.
    * @return The width and height of the workspace's parent SVG element.
    */
-  getSvgMetrics: AnyDuringMigration;
+  getSvgMetrics(): Size;
 
   /**
    * Gets the absolute left and absolute top in pixel coordinates.
@@ -84,7 +89,7 @@ export interface IMetricsManager {
    * container.
    * @return The absolute metrics for the workspace.
    */
-  getAbsoluteMetrics: AnyDuringMigration;
+  getAbsoluteMetrics(): AbsoluteMetrics;
 
   /**
    * Gets the metrics for the visible workspace in either pixel or workspace
@@ -94,7 +99,7 @@ export interface IMetricsManager {
    * @return The width, height, top and left of the viewport in either workspace
    *     coordinates or pixel coordinates.
    */
-  getViewMetrics: AnyDuringMigration;
+  getViewMetrics(opt_getWorkspaceCoordinates?: boolean): ContainerRegion;
 
   /**
    * Gets content metrics in either pixel or workspace coordinates.
@@ -104,7 +109,7 @@ export interface IMetricsManager {
    *     workspace coordinates, false to get them in pixel coordinates.
    * @return The metrics for the content container.
    */
-  getContentMetrics: AnyDuringMigration;
+  getContentMetrics(opt_getWorkspaceCoordinates?: boolean): ContainerRegion;
 
   /**
    * Returns an object with all the metrics required to size scrollbars for a
@@ -136,11 +141,11 @@ export interface IMetricsManager {
    *     compare.
    * @return Contains size and position metrics of a top level workspace.
    */
-  getMetrics: AnyDuringMigration;
+  getMetrics(): Metrics;
 
   /**
    * Returns common metrics used by UI elements.
    * @return The UI metrics.
    */
-  getUiMetrics: AnyDuringMigration;
+  getUiMetrics(): UiMetrics;
 }

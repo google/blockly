@@ -186,6 +186,7 @@ export function bind(
  * @alias Blockly.browserEvents.unbind
  */
 export function unbind(bindData: Data): (e: Event) => void {
+  let callback = bindData[bindData.length - 1][2];
   while (bindData.length) {
     const bindDatum = bindData.pop();
     const node = bindDatum![0];
@@ -193,7 +194,7 @@ export function unbind(bindData: Data): (e: Event) => void {
     const func = bindDatum![2];
     node.removeEventListener(name, func, false);
   }
-  return bindData[bindData.length - 1][2];
+  return callback;
 }
 
 /**

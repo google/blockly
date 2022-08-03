@@ -135,7 +135,7 @@ function connectionUiStep(ripple: SVGElement, start: Date, scale: number) {
     dom.removeNode(ripple);
   } else {
     ripple.setAttribute('r', (percent * 25 * scale).toString());
-    ripple.style.opacity = (1 - percent) as unknown as string;
+    ripple.style.opacity = (1 - percent).toString();
     disconnectPid = setTimeout(connectionUiStep, 10, ripple, start, scale);
   }
 }

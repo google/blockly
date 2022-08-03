@@ -217,7 +217,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
   init() {
     if (this.workspace.options.maxTrashcanContents > 0) {
       dom.insertAfter(
-          this.flyout?.createDom(Svg.SVG), this.workspace.getParentSvg());
+          this.flyout?.createDom(Svg.SVG)!, this.workspace.getParentSvg());
       this.flyout?.init(this.workspace);
     }
     this.workspace.getComponentManager().addComponent({

@@ -29,7 +29,10 @@ goog.declareModuleId('Blockly.IFlyout');
 // import '../utils/svg.js';
 
 import type {WorkspaceSvg} from '../workspace_svg.js';
-
+import type {BlockSvg} from '../block_svg.js';
+import type {Coordinate} from '../utils/coordinate.js';
+import type {FlyoutDefinition} from '../utils/toolbox.js';
+import type {Svg} from '../utils/svg.js';
 import type {IRegistrable} from './i_registrable.js';
 
 
@@ -64,43 +67,43 @@ export interface IFlyout extends IRegistrable {
    *     or <g>.
    * @return The flyout's SVG group.
    */
-  createDom: AnyDuringMigration;
+  createDom(tagName: string|Svg<SVGSVGElement>|Svg<SVGGElement>): SVGElement;
 
   /**
    * Initializes the flyout.
    * @param targetWorkspace The workspace in which to create new blocks.
    */
-  init: AnyDuringMigration;
+  init(targetWorkspace: WorkspaceSvg): void;
 
   /**
    * Dispose of this flyout.
    * Unlink from all DOM elements to prevent memory leaks.
    */
-  dispose: () => void;
+  dispose(): void;
 
   /**
    * Get the width of the flyout.
    * @return The width of the flyout.
    */
-  getWidth: AnyDuringMigration;
+  getWidth(): number;
 
   /**
    * Get the height of the flyout.
-   * @return The width of the flyout.
+   * @return The height of the flyout.
    */
-  getHeight: AnyDuringMigration;
+  getHeight(): number;
 
   /**
    * Get the workspace inside the flyout.
    * @return The workspace inside the flyout.
    */
-  getWorkspace: AnyDuringMigration;
+  getWorkspace(): WorkspaceSvg;
 
   /**
    * Is the flyout visible?
    * @return True if visible.
    */
-  isVisible: AnyDuringMigration;
+  isVisible(): boolean;
 
   /**
    * Set whether the flyout is visible. A value of true does not necessarily
@@ -108,16 +111,16 @@ export interface IFlyout extends IRegistrable {
    * hidden.
    * @param visible True if visible.
    */
-  setVisible: AnyDuringMigration;
+  setVisible(visible: boolean): void;
 
   /**
    * Set whether this flyout's container is visible.
    * @param visible Whether the container is visible.
    */
-  setContainerVisible: AnyDuringMigration;
+  setContainerVisible(visible: boolean): void;
 
   /** Hide and empty the flyout. */
-  hide: () => void;
+  hide(): void;
 
   /**
    * Show and populate the flyout.
@@ -125,7 +128,7 @@ export interface IFlyout extends IRegistrable {
    *     of Nodes, a NodeList, a toolbox definition, or a string with the name
    *     of the dynamic category.
    */
-  show: AnyDuringMigration;
+  show(flyoutDef: FlyoutDefinition|string): void;
 
   /**
    * Create a copy of this block on the workspace.
@@ -133,31 +136,31 @@ export interface IFlyout extends IRegistrable {
    * @return The newly created block.
    * @throws {Error} if something went wrong with deserialization.
    */
-  createBlock: AnyDuringMigration;
+  createBlock(originalBlock: BlockSvg): BlockSvg;
 
   /** Reflow blocks and their mats. */
-  reflow: () => void;
+  reflow(): void;
 
   /**
    * @return True if this flyout may be scrolled with a scrollbar or by
    *     dragging.
    */
-  isScrollable: AnyDuringMigration;
+  isScrollable(): boolean;
 
   /**
    * Calculates the x coordinate for the flyout position.
    * @return X coordinate.
    */
-  getX: AnyDuringMigration;
+  getX(): number;
 
   /**
    * Calculates the y coordinate for the flyout position.
    * @return Y coordinate.
    */
-  getY: AnyDuringMigration;
+  getY(): number;
 
   /** Position the flyout. */
-  position: AnyDuringMigration;
+  position(): void;
 
   /**
    * Determine if a drag delta is toward the workspace, based on the position
@@ -167,7 +170,7 @@ export interface IFlyout extends IRegistrable {
    *     at mouse down, in pixel units.
    * @return True if the drag is toward the workspace.
    */
-  isDragTowardWorkspace: AnyDuringMigration;
+  isDragTowardWorkspace(currentDragDeltaXY: Coordinate): boolean;
 
   /**
    * Does this flyout allow you to create a new instance of the given block?
@@ -176,8 +179,8 @@ export interface IFlyout extends IRegistrable {
    * @return True if you can create a new instance of the block, false
    *     otherwise.
    */
-  isBlockCreatable: AnyDuringMigration;
+  isBlockCreatable(block: BlockSvg): boolean;
 
   /** Scroll the flyout to the beginning of its contents. */
-  scrollToStart: () => void;
+  scrollToStart(): void;
 }

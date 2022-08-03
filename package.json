@@ -33,7 +33,6 @@
     "clean:release": "gulp cleanReleaseDir",
     "checkin": "gulp checkin",
     "checkin:built": "gulp checkinBuilt",
-    "checkin:typings": "gulp checkinTypings",
     "deployDemos": "gulp deployDemos",
     "deployDemos:beta": "gulp deployDemosBeta",
     "format": "gulp clangFormat",

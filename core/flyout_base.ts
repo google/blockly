@@ -132,7 +132,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   /**
    * Opaque data that can be passed to Blockly.unbindEvent_.
    */
-  private eventWrappers_: AnyDuringMigration[][] = [];
+  private eventWrappers_: browserEvents.Data = [];
 
   /**
    * Function that will be registered as a change listener on the workspace
@@ -904,7 +904,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
    */
   private blockMouseDown_(block: BlockSvg): Function {
     const flyout = this;
-    return (e: Event) => {
+    return (e: MouseEvent) => {
       const gesture = flyout.targetWorkspace.getGesture(e);
       if (gesture) {
         gesture.setStartBlock(block);
@@ -917,7 +917,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
    * Mouse down on the flyout background.  Start a vertical scroll drag.
    * @param e Mouse down event.
    */
-  private onMouseDown_(e: Event) {
+  private onMouseDown_(e: MouseEvent) {
     const gesture = this.targetWorkspace.getGesture(e);
     if (gesture) {
       gesture.handleFlyoutStart(e, this);

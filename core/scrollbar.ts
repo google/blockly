@@ -660,7 +660,7 @@ export class Scrollbar {
    * Called when scrollbar background is clicked.
    * @param e Mouse down event.
    */
-  private onMouseDownBar_(e: Event) {
+  private onMouseDownBar_(e: MouseEvent) {
     this.workspace.markFocused();
     Touch.clearTouchIdentifier();  // This is really a click.
     this.cleanUp_();
@@ -699,7 +699,7 @@ export class Scrollbar {
    * Called when scrollbar handle is clicked.
    * @param e Mouse down event.
    */
-  private onMouseDownHandle_(e: Event) {
+  private onMouseDownHandle_(e: MouseEvent) {
     this.workspace.markFocused();
     this.cleanUp_();
     if (browserEvents.isRightButton(e)) {

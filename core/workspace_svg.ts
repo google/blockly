@@ -1701,7 +1701,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * Handle a mouse-down on SVG drawing surface.
    * @param e Mouse down event.
    */
-  private onMouseDown_(e: Event) {
+  private onMouseDown_(e: MouseEvent) {
     const gesture = this.getGesture(e);
     if (gesture) {
       gesture.handleWsStart(e, this);
@@ -1713,7 +1713,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @param e Mouse down event.
    * @param xy Starting location of object.
    */
-  startDrag(e: Event, xy: Coordinate) {
+  startDrag(e: MouseEvent, xy: Coordinate) {
     // Record the starting offset between the bubble's location and the mouse.
     const point = browserEvents.mouseToSvg(
         e, this.getParentSvg(), this.getInverseScreenCTM());
@@ -1728,7 +1728,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @param e Mouse move event.
    * @return New location of object.
    */
-  moveDrag(e: Event): Coordinate {
+  moveDrag(e: MouseEvent): Coordinate {
     const point = browserEvents.mouseToSvg(
         e, this.getParentSvg(), this.getInverseScreenCTM());
     // Fix scale of mouse event.

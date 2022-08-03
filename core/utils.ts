@@ -155,7 +155,7 @@ export function isRightButton(e: Event): boolean {
       .warn(
           'Blockly.utils.isRightButton', 'September 2021', 'September 2022',
           'Blockly.browserEvents.isRightButton');
-  return browserEvents.isRightButton(e);
+  return browserEvents.isRightButton(e as MouseEvent);
 }
 
 /**
@@ -175,7 +175,7 @@ export function mouseToSvg(
       .warn(
           'Blockly.utils.mouseToSvg', 'September 2021', 'September 2022',
           'Blockly.browserEvents.mouseToSvg');
-  return browserEvents.mouseToSvg(e, svg, matrix);
+  return browserEvents.mouseToSvg(e as MouseEvent, svg, matrix);
 }
 
 /**

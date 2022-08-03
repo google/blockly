@@ -333,7 +333,7 @@ export class Bubble implements IBubble {
    * Handle a mouse-down on bubble's resize corner.
    * @param e Mouse down event.
    */
-  private resizeMouseDown_(e: Event) {
+  private resizeMouseDown_(e: MouseEvent) {
     this.promote();
     Bubble.unbindDragEvents_();
     if (browserEvents.isRightButton(e)) {

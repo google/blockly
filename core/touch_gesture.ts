@@ -85,7 +85,7 @@ export class TouchGesture extends Gesture {
    * @param e A mouse down, touch start or pointer down event.
    * @internal
    */
-  override doStart(e: Event) {
+  override doStart(e: MouseEvent) {
     this.isPinchZoomEnabled_ = this.startWorkspace_.options.zoomOptions &&
         this.startWorkspace_.options.zoomOptions.pinch;
     super.doStart(e);
@@ -143,7 +143,7 @@ export class TouchGesture extends Gesture {
    * @param e A mouse move, touch move, or pointer move event.
    * @internal
    */
-  override handleMove(e: Event) {
+  override handleMove(e: MouseEvent) {
     if (this.isDragging()) {
       // We are in the middle of a drag, only handle the relevant events
       if (Touch.shouldHandleEvent(e)) {
@@ -233,7 +233,7 @@ export class TouchGesture extends Gesture {
    * @param e A touch move, or pointer move event.
    * @internal
    */
-  handleTouchMove(e: Event) {
+  handleTouchMove(e: MouseEvent) {
     const pointerId = Touch.getTouchIdentifierFromEvent(e);
     // Update the cache
     // AnyDuringMigration because:  Type 'Coordinate | null' is not assignable
@@ -252,7 +252,7 @@ export class TouchGesture extends Gesture {
    * Handle pinch zoom gesture.
    * @param e A touch move, or pointer move event.
    */
-  private handlePinch_(e: Event) {
+  private handlePinch_(e: MouseEvent) {
     const pointers = Object.keys(this.cachedPoints_);
     // Calculate the distance between the two pointers
     const point0 = (this.cachedPoints_[pointers[0]]);

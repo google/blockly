@@ -162,7 +162,7 @@ export class ConnectionDB {
       pointerMid = Math.floor((pointerMin + pointerMax) / 2);
     }
 
-    const neighbours: AnyDuringMigration[] = [];
+    const neighbours: RenderedConnection[] = [];
     /**
      * Computes if the current connection is within the allowed radius of
      * another connection. This function is a closure and has access to outside
@@ -220,12 +220,10 @@ export class ConnectionDB {
    */
   searchForClosest(
       conn: RenderedConnection, maxRadius: number,
-      dxy: Coordinate): {connection: RenderedConnection, radius: number} {
+      dxy: Coordinate): {connection: RenderedConnection|null, radius: number} {
     if (!this.connections_.length) {
       // Don't bother.
-      // AnyDuringMigration because:  Type 'null' is not assignable to type
-      // 'RenderedConnection'.
-      return {connection: null as AnyDuringMigration, radius: maxRadius};
+      return {connection: null, radius: maxRadius};
     }
 
     // Stash the values of x and y from before the drag.
@@ -250,9 +248,7 @@ export class ConnectionDB {
       temp = this.connections_[pointerMin];
       if (this.connectionChecker.canConnect(conn, temp, true, bestRadius)) {
         bestConnection = temp;
-        // AnyDuringMigration because:  Argument of type 'RenderedConnection' is
-        // not assignable to parameter of type 'Connection'.
-        bestRadius = temp.distanceFrom(conn as AnyDuringMigration);
+        bestRadius = temp.distanceFrom(conn);
       }
       pointerMin--;
     }
@@ -263,9 +259,7 @@ export class ConnectionDB {
       temp = this.connections_[pointerMax];
       if (this.connectionChecker.canConnect(conn, temp, true, bestRadius)) {
         bestConnection = temp;
-        // AnyDuringMigration because:  Argument of type 'RenderedConnection' is
-        // not assignable to parameter of type 'Connection'.
-        bestRadius = temp.distanceFrom(conn as AnyDuringMigration);
+        bestRadius = temp.distanceFrom(conn);
       }
       pointerMax++;
     }
@@ -274,12 +268,7 @@ export class ConnectionDB {
     conn.x = baseX;
     conn.y = baseY;
     // If there were no valid connections, bestConnection will be null.
-    // AnyDuringMigration because:  Type 'RenderedConnection | null' is not
-    // assignable to type 'RenderedConnection'.
-    return {
-      connection: bestConnection as AnyDuringMigration,
-      radius: bestRadius
-    };
+    return {connection: bestConnection, radius: bestRadius};
   }
 
   /**

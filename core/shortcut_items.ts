@@ -106,8 +106,9 @@ export function registerCopy() {
     name: names.COPY,
     preconditionFn(workspace) {
       const selected = common.getSelected();
-      return !workspace.options.readOnly && !Gesture.inProgress() && selected &&
-          selected.isDeletable() && selected.isMovable();
+      return !!(
+          !workspace.options.readOnly && !Gesture.inProgress() && selected &&
+          selected.isDeletable() && selected.isMovable());
     },
     callback(workspace, e) {
       // Prevent the default copy behavior, which may beep or otherwise indicate

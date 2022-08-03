@@ -59,7 +59,7 @@ const PAGE_MODE_MULTIPLIER = 125;
  * @alias Blockly.browserEvents.conditionalBind
  */
 export function conditionalBind(
-    node: EventTarget, name: string, thisObject: Object|null = null,
+    node: EventTarget, name: string, thisObject: Object|null,
     func: Function, opt_noCaptureIdentifier?: boolean,
     opt_noPreventDefault?: boolean): Data {
   let handled = false;
@@ -128,7 +128,7 @@ export function conditionalBind(
  * @alias Blockly.browserEvents.bind
  */
 export function bind(
-    node: EventTarget, name: string, thisObject: Object|null = null,
+    node: EventTarget, name: string, thisObject: Object|null,
     func: Function): Data {
   function wrapFunc(e: Event) {
     if (thisObject) {

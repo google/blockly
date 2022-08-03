@@ -13,6 +13,7 @@
  * @namespace Blockly.IKeyboardAccessible
  */
 import * as goog from '../../closure/goog/goog.js';
+import {KeyboardShortcut} from '../shortcut_registry.js';
 goog.declareModuleId('Blockly.IKeyboardAccessible');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -30,5 +31,5 @@ export interface IKeyboardAccessible {
    * @param shortcut The shortcut to be handled.
    * @return True if the shortcut has been handled, false otherwise.
    */
-  onShortcut: AnyDuringMigration;
+  onShortcut(shortcut: KeyboardShortcut): boolean;
 }

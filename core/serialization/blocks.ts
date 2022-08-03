@@ -49,18 +49,18 @@ export interface ConnectionState {
  */
 export interface State {
   type: string;
-  id: string|undefined;
-  x: number|undefined;
-  y: number|undefined;
-  collapsed: boolean|undefined;
-  enabled: boolean|undefined;
-  inline: boolean|undefined;
-  data: string|undefined;
-  extraState: AnyDuringMigration|undefined;
-  icons: {[key: string]: AnyDuringMigration}|undefined;
-  fields: {[key: string]: AnyDuringMigration}|undefined;
-  inputs: {[key: string]: ConnectionState}|undefined;
-  next: ConnectionState|undefined;
+  id?: string;
+  x?: number;
+  y?: number;
+  collapsed?: boolean;
+  enabled?: boolean;
+  inline?: boolean;
+  data?: string;
+  extraState?: AnyDuringMigration;
+  icons?: {[key: string]: AnyDuringMigration};
+  fields?: {[key: string]: AnyDuringMigration};
+  inputs?: {[key: string]: ConnectionState};
+  next?: ConnectionState;
 }
 
 /**

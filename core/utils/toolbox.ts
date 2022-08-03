@@ -36,22 +36,22 @@ import * as userAgent from './useragent.js';
  */
 export interface BlockInfo {
   kind: string;
-  blockxml: string|Node|undefined;
-  type: string|undefined;
-  gap: string|number|undefined;
-  disabled: string|boolean|undefined;
-  enabled: boolean|undefined;
-  id: string|undefined;
-  x: number|undefined;
-  y: number|undefined;
-  collapsed: boolean|undefined;
-  inline: boolean|undefined;
-  data: string|undefined;
-  extraState: AnyDuringMigration|undefined;
-  icons: {[key: string]: AnyDuringMigration}|undefined;
-  fields: {[key: string]: AnyDuringMigration}|undefined;
-  inputs: {[key: string]: ConnectionState}|undefined;
-  next: ConnectionState|undefined;
+  blockxml?: string|Node;
+  type?: string;
+  gap?: string|number;
+  disabled?: string|boolean;
+  enabled?: boolean;
+  id?: string;
+  x?: number;
+  y?: number;
+  collapsed?: boolean;
+  inline?: boolean;
+  data?: string;
+  extraState?: AnyDuringMigration;
+  icons?: {[key: string]: AnyDuringMigration};
+  fields?: {[key: string]: AnyDuringMigration};
+  inputs?: {[key: string]: ConnectionState};
+  next?: ConnectionState;
 }
 
 /**

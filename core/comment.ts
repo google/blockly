@@ -87,7 +87,7 @@ export class Comment extends Icon {
     this.model_ = block.commentModel;
     // If someone creates the comment directly instead of calling
     // block.setCommentText we want to make sure the text is non-null;
-    this.model_.text = this.model_.text || '';
+    this.model_.text = this.model_.text ?? '';
 
     this.createIcon();
   }
@@ -153,7 +153,7 @@ export class Comment extends Icon {
     const textarea = this.textarea_;
     textarea.className = 'blocklyCommentTextarea';
     textarea.setAttribute('dir', this.block_.RTL ? 'RTL' : 'LTR');
-    textarea.value = this.model_.text || '';
+    textarea.value = this.model_.text ?? '';
     this.resizeTextarea_();
 
     body.appendChild(textarea);
@@ -363,7 +363,7 @@ export class Comment extends Icon {
    */
   updateText() {
     if (this.textarea_) {
-      this.textarea_.value = this.model_.text || '';
+      this.textarea_.value = this.model_.text ?? '';
     } else if (this.paragraphElement_) {
       // Non-Editable mode.
       // TODO (#2917): If 2917 gets added this will probably need to be updated.

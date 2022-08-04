@@ -315,13 +315,18 @@ export function hideChaff(opt_onlyClosePopups?: boolean) {
  * Returns the main workspace.  Returns the last used main workspace (based on
  * focus).  Try not to use this function, particularly if there are multiple
  * Blockly instances on a page.
- * @return The main workspace.
  * @see Blockly.common.getMainWorkspace
  * @alias Blockly.getMainWorkspace
  */
 // AnyDuringMigration because:  Property 'getMainWorkspace' does not exist on
 // type 'void'.
 export const getMainWorkspace = (common as AnyDuringMigration).getMainWorkspace;
+
+/**
+ * Returns the currently selected copyable object.
+ * @alias Blockly.common.getSelected
+ */
+export const getSelected = common.getSelected;
 
 /**
  * Define blocks from an array of JSON block definitions, as might be generated

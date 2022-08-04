@@ -25,5 +25,5 @@ export interface IMovable {
    * Get whether this is movable or not.
    * @return True if movable.
    */
-  isMovable: AnyDuringMigration;
+  isMovable(): boolean;
 }

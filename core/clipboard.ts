@@ -79,7 +79,8 @@ export function duplicate(toDuplicate: ICopyable): ICopyable|null {
 function duplicateInternal(toDuplicate: ICopyable): ICopyable|null {
   const oldCopyData = copyData;
   copy(toDuplicate);
-  const pastedThing = toDuplicate.toCopyData().source.paste(copyData!.saveInfo);
+  const pastedThing =
+      toDuplicate.toCopyData()?.source?.paste(copyData!.saveInfo) ?? null;
   copyData = oldCopyData;
   return pastedThing;
 }

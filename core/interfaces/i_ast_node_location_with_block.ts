@@ -22,6 +22,7 @@ goog.declareModuleId('Blockly.IASTNodeLocationWithBlock');
 // import '../block.js';
 
 import type {IASTNodeLocation} from './i_ast_node_location.js';
+import type {Block} from '../block.js';
 
 
 /**
@@ -33,5 +34,5 @@ export interface IASTNodeLocationWithBlock extends IASTNodeLocation {
    * Get the source block associated with this node.
    * @return The source block.
    */
-  getSourceBlock: AnyDuringMigration;
+  getSourceBlock(): Block;
 }

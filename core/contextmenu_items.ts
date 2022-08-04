@@ -114,7 +114,7 @@ function toggleOption_(shouldCollapse: boolean, topBlocks: BlockSvg[]) {
   const DELAY = 10;
   let ms = 0;
   let timeoutCounter = 0;
-  function timeoutFn(block: AnyDuringMigration) {
+  function timeoutFn(block: BlockSvg) {
     timeoutCounter--;
     block.setCollapsed(shouldCollapse);
     if (timeoutCounter === 0) {
@@ -123,13 +123,11 @@ function toggleOption_(shouldCollapse: boolean, topBlocks: BlockSvg[]) {
   }
   Events.setGroup(true);
   for (let i = 0; i < topBlocks.length; i++) {
-    let block = topBlocks[i];
+    let block: BlockSvg|null = topBlocks[i];
     while (block) {
       timeoutCounter++;
       setTimeout(timeoutFn.bind(null, block), ms);
-      // AnyDuringMigration because:  Type 'BlockSvg | null' is not assignable
-      // to type 'BlockSvg'.
-      block = block.getNextBlock() as AnyDuringMigration;
+      block = block.getNextBlock();
       ms += DELAY;
     }
   }
@@ -148,14 +146,12 @@ export function registerCollapse() {
       if (scope.workspace!.options.collapse) {
         const topBlocks = scope.workspace!.getTopBlocks(false);
         for (let i = 0; i < topBlocks.length; i++) {
-          let block = topBlocks[i];
+          let block: BlockSvg|null = topBlocks[i];
           while (block) {
             if (!block.isCollapsed()) {
               return 'enabled';
             }
-            // AnyDuringMigration because:  Type 'BlockSvg | null' is not
-            // assignable to type 'BlockSvg'.
-            block = block.getNextBlock() as AnyDuringMigration;
+            block = block.getNextBlock();
           }
         }
         return 'disabled';
@@ -185,14 +181,12 @@ export function registerExpand() {
       if (scope.workspace!.options.collapse) {
         const topBlocks = scope.workspace!.getTopBlocks(false);
         for (let i = 0; i < topBlocks.length; i++) {
-          let block = topBlocks[i];
+          let block: BlockSvg|null = topBlocks[i];
           while (block) {
             if (block.isCollapsed()) {
               return 'enabled';
             }
-            // AnyDuringMigration because:  Type 'BlockSvg | null' is not
-            // assignable to type 'BlockSvg'.
-            block = block.getNextBlock() as AnyDuringMigration;
+            block = block.getNextBlock();
           }
         }
         return 'disabled';
@@ -231,7 +225,7 @@ function addDeletableBlocks_(block: BlockSvg, deleteList: BlockSvg[]) {
  * @return list of blocks to delete.
  */
 function getDeletableBlocks_(workspace: WorkspaceSvg): BlockSvg[] {
-  const deleteList: AnyDuringMigration[] = [];
+  const deleteList: BlockSvg[] = [];
   const topBlocks = workspace.getTopBlocks(true);
   for (let i = 0; i < topBlocks.length; i++) {
     addDeletableBlocks_(topBlocks[i], deleteList);
@@ -265,12 +259,10 @@ function deleteNext_(deleteList: BlockSvg[], eventGroup: string) {
  * @alias Blockly.ContextMenuItems.registerDeleteAll
  */
 export function registerDeleteAll() {
-  // AnyDuringMigration because:  Type '(scope: Scope) => string | undefined' is
-  // not assignable to type 'string | ((p1: Scope) => string)'.
   const deleteOption: RegistryItem = {
     displayText(scope: Scope) {
       if (!scope.workspace) {
-        return;
+        return '';
       }
       const deletableBlocksLength = getDeletableBlocks_(scope.workspace).length;
       if (deletableBlocksLength === 1) {
@@ -282,7 +274,7 @@ export function registerDeleteAll() {
     },
     preconditionFn(scope: Scope) {
       if (!scope.workspace) {
-        return;
+        return 'disabled';
       }
       const deletableBlocksLength = getDeletableBlocks_(scope.workspace).length;
       return deletableBlocksLength > 0 ? 'enabled' : 'disabled';
@@ -310,7 +302,7 @@ export function registerDeleteAll() {
     scopeType: ContextMenuRegistry.ScopeType.WORKSPACE,
     id: 'workspaceDelete',
     weight: 6,
-  } as AnyDuringMigration;
+  };
   ContextMenuRegistry.registry.register(deleteOption);
 }
 /** Registers all workspace-scoped context menu items. */

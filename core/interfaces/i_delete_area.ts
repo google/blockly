@@ -23,6 +23,7 @@ goog.declareModuleId('Blockly.IDeleteArea');
 // import './i_draggable.js';
 
 import type {IDragTarget} from './i_drag_target.js';
+import type {IDraggable} from './i_draggable.js';
 
 
 /**
@@ -41,5 +42,5 @@ export interface IDeleteArea extends IDragTarget {
    * @return Whether the element provided would be deleted if dropped on this
    *     area.
    */
-  wouldDelete: AnyDuringMigration;
+  wouldDelete(element: IDraggable, couldConnect: boolean): boolean;
 }

@@ -22,5 +22,5 @@ export interface IContextMenu {
    * Show the context menu for this object.
    * @param e Mouse event.
    */
-  showContextMenu: AnyDuringMigration;
+  showContextMenu(e: Event): void;
 }

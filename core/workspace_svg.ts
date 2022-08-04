@@ -895,7 +895,6 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     }
 
     if (this.grid_) {
-      this.grid_.dispose();
       // AnyDuringMigration because:  Type 'null' is not assignable to type
       // 'Grid'.
       this.grid_ = null as AnyDuringMigration;

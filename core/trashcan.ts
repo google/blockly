@@ -42,6 +42,7 @@ import * as dom from './utils/dom.js';
 import {Rect} from './utils/rect.js';
 import {Size} from './utils/size.js';
 import {Svg} from './utils/svg.js';
+import {BlockInfo} from './utils/toolbox.js';
 import * as toolbox from './utils/toolbox.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
@@ -67,9 +68,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
    * The trashcan flyout.
    * @internal
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'IFlyout'.
-  flyout: IFlyout = null as AnyDuringMigration;
+  flyout: IFlyout|null = null;
 
   /** Current open/close state of the lid. */
   isLidOpen = false;
@@ -81,17 +80,13 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
   private minOpenness_ = 0;
 
   /** The SVG group containing the trash can. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'SVGElement'.
-  private svgGroup_: SVGElement = null as AnyDuringMigration;
+  private svgGroup_: SVGElement|null = null;
 
   /** The SVG image element of the trash can lid. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'SVGElement'.
-  private svgLid_: SVGElement = null as AnyDuringMigration;
+  private svgLid_: SVGElement|null = null;
 
   /** Task ID of opening/closing animation. */
-  private lidTask_: AnyDuringMigration = 0;
+  private lidTask_: ReturnType<typeof setTimeout>|null = null;
 
   /** Current state of lid opening (0.0 = closed, 1.0 = open). */
   private lidOpen_ = 0;
@@ -222,8 +217,8 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
   init() {
     if (this.workspace.options.maxTrashcanContents > 0) {
       dom.insertAfter(
-          this.flyout.createDom(Svg.SVG), this.workspace.getParentSvg());
-      this.flyout.init(this.workspace);
+          this.flyout?.createDom(Svg.SVG)!, this.workspace.getParentSvg());
+      this.flyout?.init(this.workspace);
     }
     this.workspace.getComponentManager().addComponent({
       component: this,
@@ -248,17 +243,12 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
     this.workspace.getComponentManager().removeComponent('trashcan');
     if (this.svgGroup_) {
       dom.removeNode(this.svgGroup_);
-      // AnyDuringMigration because:  Type 'null' is not assignable to type
-      // 'SVGElement'.
-      this.svgGroup_ = null as AnyDuringMigration;
+      this.svgGroup_ = null;
     }
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'SVGElement'.
-    this.svgLid_ = null as AnyDuringMigration;
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'WorkspaceSvg'.
-    this.workspace = null as AnyDuringMigration;
-    clearTimeout(this.lidTask_);
+    this.svgLid_ = null;
+    if (this.lidTask_) {
+      clearTimeout(this.lidTask_);
+    }
   }
 
   /**
@@ -285,7 +275,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
     const contents = this.contents_.map(function(string) {
       return JSON.parse(string);
     });
-    this.flyout.show(contents);
+    this.flyout?.show(contents);
     this.fireUiEvent_(true);
   }
 
@@ -294,7 +284,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
     if (!this.contentsIsOpen()) {
       return;
     }
-    this.flyout.hide();
+    this.flyout?.hide();
     this.fireUiEvent_(false);
     this.workspace.recordDragTargets();
   }
@@ -355,7 +345,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
 
     this.top_ = positionRect.top;
     this.left_ = positionRect.left;
-    this.svgGroup_.setAttribute(
+    this.svgGroup_?.setAttribute(
         'transform', 'translate(' + this.left_ + ',' + this.top_ + ')');
   }
 
@@ -425,7 +415,9 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
     if (this.isLidOpen === state) {
       return;
     }
-    clearTimeout(this.lidTask_);
+    if (this.lidTask_) {
+      clearTimeout(this.lidTask_);
+    }
     this.isLidOpen = state;
     this.animateLid_();
   }
@@ -442,9 +434,9 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
 
     // Linear interpolation between min and max.
     const opacity = OPACITY_MIN + this.lidOpen_ * (OPACITY_MAX - OPACITY_MIN);
-    // AnyDuringMigration because:  Type 'number' is not assignable to type
-    // 'string'.
-    this.svgGroup_.style.opacity = opacity as AnyDuringMigration;
+    if (this.svgGroup_) {
+      this.svgGroup_.style.opacity = opacity.toString();
+    }
 
     if (this.lidOpen_ > this.minOpenness_ && this.lidOpen_ < 1) {
       this.lidTask_ =
@@ -460,7 +452,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
     const openAtRight =
         this.workspace.toolboxPosition === toolbox.Position.RIGHT ||
         this.workspace.horizontalLayout && this.workspace.RTL;
-    this.svgLid_.setAttribute(
+    this.svgLid_?.setAttribute(
         'transform',
         'rotate(' + (openAtRight ? -lidAngle : lidAngle) + ',' +
             (openAtRight ? 4 : WIDTH - 4) + ',' + (LID_HEIGHT - 2) + ')');
@@ -547,7 +539,8 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
     }
     const deleteEvent = event as BlockDelete;
     if (event.type === eventUtils.BLOCK_DELETE && !deleteEvent.wasShadow) {
-      const cleanedJson = this.cleanBlockJson_(deleteEvent.oldJson);
+      const cleanedJson =
+          JSON.stringify(this.cleanBlockJson_(deleteEvent.oldJson));
       if (this.contents_.indexOf(cleanedJson) !== -1) {
         return;
       }
@@ -565,9 +558,10 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
    * Converts JSON representing a block into text that can be stored in the
    * content array.
    * @param json A JSON representation of a block's state.
-   * @return Text representing the JSON, cleaned of all unnecessary attributes.
+   * @return A BlockInfo object corresponding to the JSON, cleaned of all
+   *     unnecessary attributes.
    */
-  private cleanBlockJson_(json: blocks.State): string {
+  private cleanBlockJson_(json: blocks.State): BlockInfo {
     // Create a deep copy.
     json = JSON.parse(JSON.stringify(json)) as blocks.State;
 
@@ -595,29 +589,38 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
       const inputs = json['inputs'];
       for (const name in inputs) {
         const input = inputs[name];
-        // AnyDuringMigration because:  Argument of type 'State | undefined' is
-        // not assignable to parameter of type 'State'.
-        cleanRec((input as AnyDuringMigration)['block']);
-        // AnyDuringMigration because:  Argument of type 'State | undefined' is
-        // not assignable to parameter of type 'State'.
-        cleanRec((input as AnyDuringMigration)['shadow']);
+        const block = input['block'];
+        const shadow = input['shadow'];
+        if (block) {
+          cleanRec(block);
+        }
+        if (shadow) {
+          cleanRec(shadow);
+        }
       }
       if (json['next']) {
         const next = json['next'];
-        // AnyDuringMigration because:  Argument of type 'State | undefined' is
-        // not assignable to parameter of type 'State'.
-        cleanRec((next as AnyDuringMigration)['block']);
-        // AnyDuringMigration because:  Argument of type 'State | undefined' is
-        // not assignable to parameter of type 'State'.
-        cleanRec((next as AnyDuringMigration)['shadow']);
+        const block = next['block'];
+        const shadow = next['shadow'];
+        if (block) {
+          cleanRec(block);
+        }
+        if (shadow) {
+          cleanRec(shadow);
+        }
       }
     }
 
     cleanRec(json);
-    (json as AnyDuringMigration)['kind'] = 'BLOCK';
-    return JSON.stringify(json);
+
+    const blockInfo: BlockInfo = {
+      'kind': 'BLOCK',
+      ...json,
+    };
+    return blockInfo;
   }
 }
+
 
 /** Width of both the trash can and lid images. */
 const WIDTH = 47;

@@ -68,39 +68,29 @@ export class Bubble implements IBubble {
 
   /** Mouse move event data. */
   private static onMouseMoveWrapper_: browserEvents.Data|null = null;
-  workspace_: AnyDuringMigration;
-  content_: AnyDuringMigration;
-  shape_: AnyDuringMigration;
+  workspace_: WorkspaceSvg;
+  content_: SVGElement;
+  shape_: SVGElement;
 
   /** Flag to stop incremental rendering during construction. */
   private readonly rendered_: boolean;
 
   /** The SVG group containing all parts of the bubble. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'SVGGElement'.
-  private bubbleGroup_: SVGGElement = null as AnyDuringMigration;
+  private bubbleGroup_: SVGGElement|null = null;
 
   /**
    * The SVG path for the arrow from the bubble to the icon on the block.
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'SVGPathElement'.
-  private bubbleArrow_: SVGPathElement = null as AnyDuringMigration;
+  private bubbleArrow_: SVGPathElement|null = null;
 
   /** The SVG rect for the main body of the bubble. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'SVGRectElement'.
-  private bubbleBack_: SVGRectElement = null as AnyDuringMigration;
+  private bubbleBack_: SVGRectElement|null = null;
 
   /** The SVG group for the resize hash marks on some bubbles. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'SVGGElement'.
-  private resizeGroup_: SVGGElement = null as AnyDuringMigration;
+  private resizeGroup_: SVGGElement|null = null;
 
   /** Absolute coordinate of anchor point, in workspace coordinates. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'Coordinate'.
-  private anchorXY_: Coordinate = null as AnyDuringMigration;
+  private anchorXY_!: Coordinate;
 
   /**
    * Relative X coordinate of bubble with respect to the anchor's centre,
@@ -125,10 +115,10 @@ export class Bubble implements IBubble {
   private autoLayout_ = true;
 
   /** Method to call on resize of bubble. */
-  private resizeCallback_: (() => AnyDuringMigration)|null = null;
+  private resizeCallback_: (() => void)|null = null;
 
   /** Method to call on move of bubble. */
-  private moveCallback_: (() => AnyDuringMigration)|null = null;
+  private moveCallback_: (() => void)|null = null;
 
   /** Mouse down on bubbleBack_ event data. */
   private onMouseDownBubbleWrapper_: browserEvents.Data|null = null;
@@ -142,7 +132,7 @@ export class Bubble implements IBubble {
    * @internal
    */
   disposed = false;
-  private arrow_radians_: AnyDuringMigration;
+  private arrow_radians_: number;
 
   /**
    * @param workspace The workspace on which to draw the bubble.
@@ -260,9 +250,7 @@ export class Bubble implements IBubble {
           },
           this.resizeGroup_);
     } else {
-      // AnyDuringMigration because:  Type 'null' is not assignable to type
-      // 'SVGGElement'.
-      this.resizeGroup_ = null as AnyDuringMigration;
+      this.resizeGroup_ = null;
     }
 
     if (!this.workspace_.options.readOnly) {
@@ -290,7 +278,7 @@ export class Bubble implements IBubble {
    * @param id ID of block.
    */
   setSvgId(id: string) {
-    this.bubbleGroup_.setAttribute('data-block-id', id);
+    this.bubbleGroup_?.setAttribute('data-block-id', id);
   }
 
   /**
@@ -374,20 +362,16 @@ export class Bubble implements IBubble {
    * Register a function as a callback event for when the bubble is resized.
    * @param callback The function to call on resize.
    */
-  registerResizeEvent(callback: Function) {
-    // AnyDuringMigration because:  Type 'Function' is not assignable to type
-    // '() => any'.
-    this.resizeCallback_ = callback as AnyDuringMigration;
+  registerResizeEvent(callback: () => void) {
+    this.resizeCallback_ = callback;
   }
 
   /**
    * Register a function as a callback event for when the bubble is moved.
    * @param callback The function to call on move.
    */
-  registerMoveEvent(callback: Function) {
-    // AnyDuringMigration because:  Type 'Function' is not assignable to type
-    // '() => any'.
-    this.moveCallback_ = callback as AnyDuringMigration;
+  registerMoveEvent(callback: () => void) {
+    this.moveCallback_ = callback;
   }
 
   /**
@@ -396,9 +380,9 @@ export class Bubble implements IBubble {
    * @internal
    */
   promote(): boolean {
-    const svgGroup = this.bubbleGroup_.parentNode;
-    if (svgGroup!.lastChild !== this.bubbleGroup_) {
-      svgGroup!.appendChild(this.bubbleGroup_);
+    const svgGroup = this.bubbleGroup_?.parentNode;
+    if (svgGroup?.lastChild !== this.bubbleGroup_ && this.bubbleGroup_) {
+      svgGroup?.appendChild(this.bubbleGroup_);
       return true;
     }
     return false;
@@ -630,7 +614,7 @@ export class Bubble implements IBubble {
    * @internal
    */
   moveTo(x: number, y: number) {
-    this.bubbleGroup_.setAttribute(
+    this.bubbleGroup_?.setAttribute(
         'transform', 'translate(' + x + ',' + y + ')');
   }
 
@@ -665,12 +649,8 @@ export class Bubble implements IBubble {
     height = Math.max(height, doubleBorderWidth + 20);
     this.width_ = width;
     this.height_ = height;
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
-    this.bubbleBack_.setAttribute('width', width as AnyDuringMigration);
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
-    this.bubbleBack_.setAttribute('height', height as AnyDuringMigration);
+    this.bubbleBack_?.setAttribute('width', width.toString());
+    this.bubbleBack_?.setAttribute('height', height.toString());
     if (this.resizeGroup_) {
       if (this.workspace_.RTL) {
         // Mirror the resize group.
@@ -765,7 +745,7 @@ export class Bubble implements IBubble {
           ',' + (baseY2 + swirlRise) + ' ' + baseX2 + ',' + baseY2);
     }
     steps.push('z');
-    this.bubbleArrow_.setAttribute('d', steps.join(' '));
+    this.bubbleArrow_?.setAttribute('d', steps.join(' '));
   }
 
   /**
@@ -773,8 +753,8 @@ export class Bubble implements IBubble {
    * @param hexColour Hex code of colour.
    */
   setColour(hexColour: string) {
-    this.bubbleBack_.setAttribute('fill', hexColour);
-    this.bubbleArrow_.setAttribute('fill', hexColour);
+    this.bubbleBack_?.setAttribute('fill', hexColour);
+    this.bubbleArrow_?.setAttribute('fill', hexColour);
   }
 
   /** Dispose of this bubble. */

@@ -13,6 +13,8 @@
  * @namespace Blockly.IBubble
  */
 import * as goog from '../../closure/goog/goog.js';
+import type {Coordinate} from '../utils/coordinate.js';
+import type {BlockDragSurfaceSvg} from '../block_drag_surface.js';
 goog.declareModuleId('Blockly.IBubble');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -36,13 +38,13 @@ export interface IBubble extends IDraggable, IContextMenu {
    * relative to the drawing surface's origin (0,0), in workspace units.
    * @return Object with .x and .y properties.
    */
-  getRelativeToSurfaceXY: AnyDuringMigration;
+  getRelativeToSurfaceXY(): Coordinate;
 
   /**
    * Return the root node of the bubble's SVG group.
    * @return The root SVG node of the bubble's group.
    */
-  getSvgRoot: AnyDuringMigration;
+  getSvgRoot(): SVGElement;
 
   /**
    * Set whether auto-layout of this bubble is enabled.  The first time a bubble
@@ -50,13 +52,13 @@ export interface IBubble extends IDraggable, IContextMenu {
    * dragged it to reposition, it renders where the user put it.
    * @param enable True if auto-layout should be enabled, false otherwise.
    */
-  setAutoLayout: AnyDuringMigration;
+  setAutoLayout(enable: boolean): void;
 
   /**
-   * Triggers a move callback if one exists at the end of a drag.
-   * @param adding True if adding, false if removing.
+   * Sets whether or not this bubble is being dragged.
+   * @param adding True if dragging, false otherwise.
    */
-  setDragging: AnyDuringMigration;
+  setDragging(dragging: boolean): void;
 
   /**
    * Move this bubble during a drag, taking into account whether or not there is
@@ -65,21 +67,22 @@ export interface IBubble extends IDraggable, IContextMenu {
    *     or null if no drag surface is in use.
    * @param newLoc The location to translate to, in workspace coordinates.
    */
-  moveDuringDrag: AnyDuringMigration;
+  moveDuringDrag(dragSurface: BlockDragSurfaceSvg|null, newLoc: Coordinate):
+      void;
 
   /**
    * Move the bubble to the specified location in workspace coordinates.
    * @param x The x position to move to.
    * @param y The y position to move to.
    */
-  moveTo: AnyDuringMigration;
+  moveTo(x: number, y: number): void;
 
   /**
    * Update the style of this bubble when it is dragged over a delete area.
    * @param enable True if the bubble is about to be deleted, false otherwise.
    */
-  setDeleteStyle: AnyDuringMigration;
+  setDeleteStyle(enable: boolean): void;
 
   /** Dispose of this bubble. */
-  dispose: () => void;
+  dispose(): void;
 }

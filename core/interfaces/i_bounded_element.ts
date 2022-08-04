@@ -13,6 +13,7 @@
  * @namespace Blockly.IBoundedElement
  */
 import * as goog from '../../closure/goog/goog.js';
+import type {Rect} from '../utils/rect.js';
 goog.declareModuleId('Blockly.IBoundedElement');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -30,12 +31,12 @@ export interface IBoundedElement {
    * the element. Coordinate system: workspace coordinates.
    * @return Object with coordinates of the bounded element.
    */
-  getBoundingRectangle: AnyDuringMigration;
+  getBoundingRectangle(): Rect;
 
   /**
    * Move the element by a relative offset.
    * @param dx Horizontal offset in workspace units.
    * @param dy Vertical offset in workspace units.
    */
-  moveBy: AnyDuringMigration;
+  moveBy(dx: number, dy: number): void;
 }

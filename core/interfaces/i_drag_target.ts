@@ -15,6 +15,10 @@
  * @namespace Blockly.IDragTarget
  */
 import * as goog from '../../closure/goog/goog.js';
+import {Rect} from '../utils/rect.js';
+
+import {IDraggable} from './i_draggable.js';
+
 goog.declareModuleId('Blockly.IDragTarget');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -40,33 +44,33 @@ export interface IDragTarget extends IComponent {
    * @return The component's bounding box. Null if drag target area should be
    *     ignored.
    */
-  getClientRect: AnyDuringMigration;
+  getClientRect(): Rect|null;
 
   /**
    * Handles when a cursor with a block or bubble enters this drag target.
    * @param dragElement The block or bubble currently being dragged.
    */
-  onDragEnter: AnyDuringMigration;
+  onDragEnter(dragElement: IDraggable): void;
 
   /**
    * Handles when a cursor with a block or bubble is dragged over this drag
    * target.
    * @param dragElement The block or bubble currently being dragged.
    */
-  onDragOver: AnyDuringMigration;
+  onDragOver(dragElement: IDraggable): void;
 
   /**
    * Handles when a cursor with a block or bubble exits this drag target.
    * @param dragElement The block or bubble currently being dragged.
    */
-  onDragExit: AnyDuringMigration;
+  onDragExit(dragElement: IDraggable): void;
 
   /**
    * Handles when a block or bubble is dropped on this component.
    * Should not handle delete here.
    * @param dragElement The block or bubble currently being dragged.
    */
-  onDrop: AnyDuringMigration;
+  onDrop(dragElement: IDraggable): void;
 
   /**
    * Returns whether the provided block or bubble should not be moved after
@@ -76,5 +80,5 @@ export interface IDragTarget extends IComponent {
    * @return Whether the block or bubble provided should be returned to drag
    *     start.
    */
-  shouldPreventMove: AnyDuringMigration;
+  shouldPreventMove(dragElement: IDraggable): boolean;
 }

@@ -27,8 +27,8 @@ export interface ISelectable extends IDeletable, IMovable {
   id: string;
 
   /** Select this.  Highlight it visually. */
-  select: AnyDuringMigration;
+  select(): void;
 
   /** Unselect this.  Unhighlight it visually. */
-  unselect: AnyDuringMigration;
+  unselect(): void;
 }

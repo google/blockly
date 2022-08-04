@@ -13,6 +13,8 @@
  * @namespace Blockly.IBlockDragger
  */
 import * as goog from '../../closure/goog/goog.js';
+import type {Coordinate} from '../utils/coordinate.js';
+import type {BlockSvg} from '../block_svg.js';
 goog.declareModuleId('Blockly.IBlockDragger');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -34,7 +36,7 @@ export interface IBlockDragger {
    *     at mouse down, in pixel units.
    * @param healStack Whether or not to heal the stack after disconnecting.
    */
-  startDrag: AnyDuringMigration;
+  startDrag(currentDragDeltaXY: Coordinate, healStack: boolean): void;
 
   /**
    * Execute a step of block dragging, based on the given event.  Update the
@@ -43,7 +45,7 @@ export interface IBlockDragger {
    * @param currentDragDeltaXY How far the pointer has moved from the position
    *     at the start of the drag, in pixel units.
    */
-  drag: AnyDuringMigration;
+  drag(e: Event, currentDragDeltaXY: Coordinate): void;
 
   /**
    * Finish a block drag and put the block back on the workspace.
@@ -51,15 +53,15 @@ export interface IBlockDragger {
    * @param currentDragDeltaXY How far the pointer has moved from the position
    *     at the start of the drag, in pixel units.
    */
-  endDrag: AnyDuringMigration;
+  endDrag(e: Event, currentDragDeltaXY: Coordinate): void;
 
   /**
    * Get a list of the insertion markers that currently exist.  Drags have 0, 1,
    * or 2 insertion markers.
    * @return A possibly empty list of insertion marker blocks.
    */
-  getInsertionMarkers: AnyDuringMigration;
+  getInsertionMarkers(): BlockSvg[];
 
   /** Sever all links from this object and do any necessary cleanup. */
-  dispose: () => void;
+  dispose(): void;
 }

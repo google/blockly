@@ -207,9 +207,7 @@ export class ConnectionChecker implements IConnectionChecker {
    */
   doDragChecks(a: RenderedConnection, b: RenderedConnection, distance: number):
       boolean {
-    // AnyDuringMigration because:  Argument of type 'RenderedConnection' is not
-    // assignable to parameter of type 'Connection'.
-    if (a.distanceFrom(b as AnyDuringMigration) > distance) {
+    if (a.distanceFrom(b) > distance) {
       return false;
     }
 
@@ -220,9 +218,7 @@ export class ConnectionChecker implements IConnectionChecker {
 
     switch (b.type) {
       case ConnectionType.PREVIOUS_STATEMENT:
-        // AnyDuringMigration because:  Argument of type 'RenderedConnection' is
-        // not assignable to parameter of type 'Connection'.
-        return this.canConnectToPrevious_(a as AnyDuringMigration, b);
+        return this.canConnectToPrevious_(a, b);
       case ConnectionType.OUTPUT_VALUE: {
         // Don't offer to connect an already connected left (male) value plug to
         // an available right (female) value plug.
@@ -259,9 +255,7 @@ export class ConnectionChecker implements IConnectionChecker {
     }
 
     // Don't let blocks try to connect to themselves or ones they nest.
-    // AnyDuringMigration because:  Argument of type 'RenderedConnection' is not
-    // assignable to parameter of type 'Connection'.
-    if (common.draggingConnections.indexOf(b as AnyDuringMigration) !== -1) {
+    if (common.draggingConnections.indexOf(b) !== -1) {
       return false;
     }
 

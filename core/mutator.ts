@@ -319,7 +319,7 @@ export class Mutator extends Icon {
       const tree = this.workspace_!.options.languageTree;
       const flyout = this.workspace_!.getFlyout();
       if (tree) {
-        flyout!.init(this.workspace_);
+        flyout!.init(this.workspace_!);
         flyout!.show(tree);
       }
 

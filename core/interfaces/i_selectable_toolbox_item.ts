@@ -13,6 +13,7 @@
  * @namespace Blockly.ISelectableToolboxItem
  */
 import * as goog from '../../closure/goog/goog.js';
+import type {FlyoutItemInfoArray} from '../utils/toolbox';
 goog.declareModuleId('Blockly.ISelectableToolboxItem');
 
 /* eslint-disable-next-line no-unused-vars */
@@ -31,20 +32,20 @@ export interface ISelectableToolboxItem extends IToolboxItem {
    * Gets the name of the toolbox item. Used for emitting events.
    * @return The name of the toolbox item.
    */
-  getName: AnyDuringMigration;
+  getName(): string;
 
   /**
    * Gets the contents of the toolbox item. These are items that are meant to be
    * displayed in the flyout.
    * @return The definition of items to be displayed in the flyout.
    */
-  getContents: AnyDuringMigration;
+  getContents(): FlyoutItemInfoArray|string;
 
   /**
    * Sets the current toolbox item as selected.
    * @param _isSelected True if this category is selected, false otherwise.
    */
-  setSelected: AnyDuringMigration;
+  setSelected(_isSelected: boolean): void;
 
   /**
    * Gets the HTML element that is clickable.
@@ -53,11 +54,11 @@ export interface ISelectableToolboxItem extends IToolboxItem {
    * toolboxItem.
    * @return The HTML element that receives clicks.
    */
-  getClickTarget: AnyDuringMigration;
+  getClickTarget(): Element;
 
   /**
    * Handles when the toolbox item is clicked.
    * @param _e Click event to handle.
    */
-  onClick: AnyDuringMigration;
+  onClick(_e: Event): void;
 }

@@ -178,11 +178,11 @@ export class Mutator extends Icon {
       // event filter from workspaceChanged_ .
       'disable': false,
       'parentWorkspace': this.block_.workspace,
-      'media': this.block_.workspace!.options.pathToMedia,
+      'media': this.block_.workspace.options.pathToMedia,
       'rtl': this.block_.RTL,
       'horizontalLayout': false,
-      'renderer': this.block_.workspace!.options.renderer,
-      'rendererOverrides': this.block_.workspace!.options.rendererOverrides,
+      'renderer': this.block_.workspace.options.renderer,
+      'rendererOverrides': this.block_.workspace.options.rendererOverrides,
     } as BlocklyOptions));
     workspaceOptions.toolboxPosition =
         this.block_.RTL ? toolbox.Position.RIGHT : toolbox.Position.LEFT;
@@ -353,7 +353,7 @@ export class Mutator extends Icon {
             this.block_.saveConnections(thisRootBlock);
           }
         };
-        this.block_.workspace!.addChangeListener(this.sourceListener_);
+        this.block_.workspace.addChangeListener(this.sourceListener_);
       }
       this.resizeBubble_();
       // When the mutator's workspace changes, update the source block.
@@ -372,7 +372,7 @@ export class Mutator extends Icon {
       this.workspaceWidth_ = 0;
       this.workspaceHeight_ = 0;
       if (this.sourceListener_) {
-        this.block_.workspace!.removeChangeListener(this.sourceListener_);
+        this.block_.workspace.removeChangeListener(this.sourceListener_);
         this.sourceListener_ = null;
       }
     }

@@ -226,7 +226,7 @@ export function showPositionedByField(
  */
 function getScaledBboxOfBlock(block: BlockSvg): Rect {
   const blockSvg = block.getSvgRoot();
-  const scale = block.workspace!.scale;
+  const scale = block.workspace.scale;
   const scaledHeight = block.height * scale;
   const scaledWidth = block.width * scale;
   const xy = style.getPageOffset(blockSvg);
@@ -268,7 +268,7 @@ function showPositionedByRect(
   }
   const sourceBlock = field.getSourceBlock() as BlockSvg;
   // Set bounds to main workspace; show the drop-down.
-  let workspace = sourceBlock.workspace!;
+  let workspace = sourceBlock.workspace;
   while (workspace.options.parentWorkspace) {
     workspace = workspace.options.parentWorkspace;
   }

@@ -162,7 +162,7 @@ function saveAttributes(block: Block, state: State) {
  * @param state The state object to append to.
  */
 function saveCoords(block: Block, state: State) {
-  const workspace = block.workspace!;
+  const workspace = block.workspace;
   const xy = block.getRelativeToSurfaceXY();
   state['x'] = Math.round(workspace.RTL ? workspace.getWidth() - xy.x : xy.x);
   state['y'] = Math.round(xy.y);
@@ -416,7 +416,7 @@ function loadCoords(block: Block, state: State) {
   let x = state['x'] === undefined ? 0 : state['x'];
   const y = state['y'] === undefined ? 0 : state['y'];
 
-  const workspace = block.workspace!;
+  const workspace = block.workspace;
   x = workspace.RTL ? workspace.getWidth() - x : x;
 
   block.moveBy(x, y);
@@ -492,7 +492,7 @@ function tryToConnectParent(
   }
 
   if (!connected) {
-    const checker = child.workspace!.connectionChecker;
+    const checker = child.workspace.connectionChecker;
     throw new BadConnectionCheck(
         checker.getErrorMessage(
             checker.canConnectWithReason(
@@ -606,7 +606,7 @@ function loadConnection(
   }
   if (connectionState['block']) {
     appendPrivate(
-        connectionState['block'], connection.getSourceBlock().workspace!,
+        connectionState['block'], connection.getSourceBlock().workspace,
         {parentConnection: connection});
   }
 }

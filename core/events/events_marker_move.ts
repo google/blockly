@@ -48,7 +48,7 @@ export class MarkerMove extends UiBase {
   constructor(
       opt_block?: Block|null, isCursor?: boolean, opt_oldNode?: ASTNode|null,
       opt_newNode?: ASTNode) {
-    let workspaceId = opt_block ? opt_block.workspace!.id : undefined;
+    let workspaceId = opt_block ? opt_block.workspace.id : undefined;
     if (opt_newNode && opt_newNode.getType() === ASTNode.types.WORKSPACE) {
       workspaceId = (opt_newNode.getLocation() as Workspace).id;
     }

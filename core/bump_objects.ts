@@ -91,7 +91,7 @@ export const bumpIntoBounds = bumpObjectIntoBounds;
  * @alias Blockly.bumpObjects.bumpIntoBoundsHandler
  */
 export function bumpIntoBoundsHandler(workspace: WorkspaceSvg):
-    (p1: Abstract) => AnyDuringMigration {
+    (p1: Abstract) => void {
   return (e) => {
     const metricsManager = workspace.getMetricsManager();
     if (!metricsManager.hasFixedEdges() || workspace.isDragging()) {

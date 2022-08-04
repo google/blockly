@@ -244,7 +244,7 @@ function deleteNext_(deleteList: BlockSvg[], eventGroup: string) {
   eventUtils.setGroup(eventGroup);
   const block = deleteList.shift();
   if (block) {
-    if (block.workspace) {
+    if (!block.disposed) {
       block.dispose(false, true);
       setTimeout(deleteNext_, DELAY, deleteList, eventGroup);
     } else {
@@ -364,7 +364,7 @@ export function registerComment() {
       const block = scope.block;
       // IE doesn't support necessary features for comment editing.
       if (!userAgent.IE && !block!.isInFlyout &&
-          block!.workspace!.options.comments && !block!.isCollapsed() &&
+          block!.workspace.options.comments && !block!.isCollapsed() &&
           block!.isEditable()) {
         return 'enabled';
       }
@@ -432,7 +432,7 @@ export function registerCollapseExpandBlock() {
     preconditionFn(scope: Scope) {
       const block = scope.block;
       if (!block!.isInFlyout && block!.isMovable() &&
-          block!.workspace!.options.collapse) {
+          block!.workspace.options.collapse) {
         return 'enabled';
       }
       return 'hidden';
@@ -459,7 +459,7 @@ export function registerDisable() {
     },
     preconditionFn(scope: Scope) {
       const block = scope.block;
-      if (!block!.isInFlyout && block!.workspace!.options.disable &&
+      if (!block!.isInFlyout && block!.workspace.options.disable &&
           block!.isEditable()) {
         if (block!.getInheritedDisabled()) {
           return 'disabled';

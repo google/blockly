@@ -46,7 +46,7 @@ export class Ui extends UiBase {
   constructor(
       opt_block?: Block|null, opt_element?: string,
       opt_oldValue?: AnyDuringMigration, opt_newValue?: AnyDuringMigration) {
-    const workspaceId = opt_block ? opt_block.workspace!.id : undefined;
+    const workspaceId = opt_block ? opt_block.workspace.id : undefined;
     super(workspaceId);
 
     this.blockId = opt_block ? opt_block.id : null;

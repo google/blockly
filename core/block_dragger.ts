@@ -242,7 +242,7 @@ export class BlockDragger implements IBlockDragger {
         // Blocks dragged directly from a flyout may need to be bumped into
         // bounds.
         bumpObjects.bumpIntoBounds(
-            this.draggingBlock_.workspace!,
+            this.draggingBlock_.workspace,
             this.workspace_.getMetricsManager().getScrollMetrics(true),
             this.draggingBlock_);
       }

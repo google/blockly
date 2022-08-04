@@ -70,14 +70,14 @@ export class RenderedConnection extends Connection {
      * Connection database for connections of this type on the current
      * workspace.
      */
-    this.db_ = source.workspace!.connectionDBList[type];
+    this.db_ = source.workspace.connectionDBList[type];
 
     /**
      * Connection database for connections compatible with this type on the
      * current workspace.
      */
     this.dbOpposite_ =
-        source.workspace!
+        source.workspace
             .connectionDBList[internalConstants.OPPOSITE_TYPE[type]];
 
     /** Workspace units, (0, 0) is top left of block. */
@@ -134,7 +134,7 @@ export class RenderedConnection extends Connection {
    * @internal
    */
   bumpAwayFrom(staticConnection: RenderedConnection) {
-    if (this.sourceBlock_.workspace!.isDragging()) {
+    if (this.sourceBlock_.workspace.isDragging()) {
       // Don't move blocks around while the user is doing the same.
       return;
     }
@@ -271,7 +271,7 @@ export class RenderedConnection extends Connection {
     let steps;
     const sourceBlockSvg = (this.sourceBlock_);
     const renderConstants =
-        sourceBlockSvg.workspace!.getRenderer().getConstants();
+        sourceBlockSvg.workspace.getRenderer().getConstants();
     const shape = renderConstants.shapeFor(this);
     if (this.type === ConnectionType.INPUT_VALUE ||
         this.type === ConnectionType.OUTPUT_VALUE) {

@@ -133,7 +133,7 @@ export class InsertionMarkerManager {
      * The workspace on which these connections are being dragged.
      * Does not change during a drag.
      */
-    this.workspace_ = block.workspace!;
+    this.workspace_ = block.workspace;
 
     /**
      * The insertion marker that shows up between blocks to show where a block

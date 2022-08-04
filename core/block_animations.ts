@@ -32,8 +32,8 @@ interface CloneRect {
 let disconnectPid: AnyDuringMigration = 0;
 
 /** SVG group of wobbling block.  There can only be one at a time. */
-// AnyDuringMigration because:  Type 'null' is not assignable to type 'Element'.
-let disconnectGroup: Element = null as AnyDuringMigration;
+let disconnectGroup: SVGElement|null = null;
+
 
 /**
  * Play some UI effects (sound, animation) when disposing of a block.
@@ -42,26 +42,18 @@ let disconnectGroup: Element = null as AnyDuringMigration;
  * @internal
  */
 export function disposeUiEffect(block: BlockSvg) {
-  const workspace = block.workspace!;
+  const workspace = block.workspace;
   const svgGroup = block.getSvgRoot();
   workspace.getAudioManager().play('delete');
 
   const xy = workspace.getSvgXY(svgGroup);
   // Deeply clone the current block.
-  const clone = svgGroup.cloneNode(true);
-  // AnyDuringMigration because:  Property 'setAttribute' does not exist on type
-  // 'Node'.
-  (clone as AnyDuringMigration)
-      .setAttribute('transform', 'translate(' + xy.x + ',' + xy.y + ')');
+  const clone: SVGGElement = svgGroup.cloneNode(true) as SVGGElement;
+  clone.setAttribute('transform', 'translate(' + xy.x + ',' + xy.y + ')');
   workspace.getParentSvg().appendChild(clone);
   const cloneRect =
       {'x': xy.x, 'y': xy.y, 'width': block.width, 'height': block.height};
-  // Start the animation.
-  // AnyDuringMigration because:  Argument of type 'Node' is not assignable to
-  // parameter of type 'Element'.
-  disposeUiStep(
-      clone as AnyDuringMigration, cloneRect, workspace.RTL, new Date(),
-      workspace.scale);
+  disposeUiStep(clone, cloneRect, workspace.RTL, new Date(), workspace.scale);
 }
 /**
  * Animate a cloned block and eventually dispose of it.
@@ -100,7 +92,7 @@ function disposeUiStep(
  * @internal
  */
 export function connectionUiEffect(block: BlockSvg) {
-  const workspace = block.workspace!;
+  const workspace = block.workspace;
   const scale = workspace.scale;
   workspace.getAudioManager().play('click');
   if (scale < 1) {
@@ -143,9 +135,7 @@ function connectionUiStep(ripple: SVGElement, start: Date, scale: number) {
     dom.removeNode(ripple);
   } else {
     ripple.setAttribute('r', (percent * 25 * scale).toString());
-    // AnyDuringMigration because:  Type 'number' is not assignable to type
-    // 'string'.
-    ripple.style.opacity = (1 - percent) as AnyDuringMigration;
+    ripple.style.opacity = (1 - percent).toString();
     disconnectPid = setTimeout(connectionUiStep, 10, ripple, start, scale);
   }
 }
@@ -157,8 +147,9 @@ function connectionUiStep(ripple: SVGElement, start: Date, scale: number) {
  * @internal
  */
 export function disconnectUiEffect(block: BlockSvg) {
-  block.workspace!.getAudioManager().play('disconnect');
-  if (block.workspace!.scale < 1) {
+  disconnectUiStop();
+  block.workspace.getAudioManager().play('disconnect');
+  if (block.workspace.scale < 1) {
     return;  // Too small to care about visual effects.
   }
   // Horizontal distance for bottom of block to wiggle.
@@ -170,7 +161,8 @@ export function disconnectUiEffect(block: BlockSvg) {
     magnitude *= -1;
   }
   // Start the animation.
-  disconnectUiStep(block.getSvgRoot(), magnitude, new Date());
+  disconnectGroup = block.getSvgRoot();
+  disconnectUiStep(disconnectGroup, magnitude, new Date());
 }
 
 /**
@@ -186,19 +178,14 @@ function disconnectUiStep(group: SVGElement, magnitude: number, start: Date) {
   const ms = new Date().getTime() - start.getTime();
   const percent = ms / DURATION;
 
-  if (percent > 1) {
-    (group as AnyDuringMigration).skew_ = '';
-  } else {
-    const skew = Math.round(
+  let skew = '';
+  if (percent <= 1) {
+    const val = Math.round(
         Math.sin(percent * Math.PI * WIGGLES) * (1 - percent) * magnitude);
-    (group as AnyDuringMigration).skew_ = 'skewX(' + skew + ')';
-    disconnectGroup = group;
+    skew = `skewX(${val})`;
     disconnectPid = setTimeout(disconnectUiStep, 10, group, magnitude, start);
   }
-  group.setAttribute(
-      'transform',
-      (group as AnyDuringMigration).translate_ +
-          (group as AnyDuringMigration).skew_);
+  group.setAttribute('transform', skew);
 }
 
 /**
@@ -209,11 +196,7 @@ function disconnectUiStep(group: SVGElement, magnitude: number, start: Date) {
 export function disconnectUiStop() {
   if (disconnectGroup) {
     clearTimeout(disconnectPid);
-    const group = disconnectGroup;
-    (group as AnyDuringMigration).skew_ = '';
-    group.setAttribute('transform', (group as AnyDuringMigration).translate_);
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'Element'.
-    disconnectGroup = null as AnyDuringMigration;
+    disconnectGroup.setAttribute('transform', '');
+    disconnectGroup = null;
   }
 }

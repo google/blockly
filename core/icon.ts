@@ -111,7 +111,7 @@ export abstract class Icon {
    * @param e Mouse click event.
    */
   protected iconClick_(e: Event) {
-    if (this.block_.workspace!.isDragging()) {
+    if (this.block_.workspace.isDragging()) {
       // Drag operation is concluding.  Don't open the editor.
       return;
     }

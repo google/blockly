@@ -221,9 +221,7 @@ export class Block implements IASTNodeLocation, IDeletable {
   type!: string;
   // Record initial inline state.
   inputsInlineDefault?: boolean;
-  // Setting this to null indicates that the block has been disposed. Must be
-  // nullable.
-  workspace: Workspace|null;
+  workspace: Workspace;
 
   /**
    * @param workspace The block's workspace.
@@ -317,7 +315,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @suppress {checkTypes}
    */
   dispose(healStack: boolean) {
-    if (!this.workspace) {
+    if (this.disposed) {
       // Already deleted.
       return;
     }
@@ -335,13 +333,10 @@ export class Block implements IASTNodeLocation, IDeletable {
     try {
       // This block is now at the top of the workspace.
       // Remove this block from the workspace's list of top-most blocks.
-      if (this.workspace) {
-        this.workspace.removeTopBlock(this);
-        this.workspace.removeTypedBlock(this);
-        // Remove from block database.
-        this.workspace.removeBlockById(this.id);
-        this.workspace = null;
-      }
+      this.workspace.removeTopBlock(this);
+      this.workspace.removeTypedBlock(this);
+      // Remove from block database.
+      this.workspace.removeBlockById(this.id);
 
       // First, dispose of all my children.
       for (let i = this.childBlocks_.length - 1; i >= 0; i--) {
@@ -428,7 +423,7 @@ export class Block implements IASTNodeLocation, IDeletable {
     // Disconnect the child block.
     childConnection?.disconnect();
     // Connect child to the parent if possible, otherwise bump away.
-    if (this.workspace!.connectionChecker.canConnect(
+    if (this.workspace.connectionChecker.canConnect(
             childConnection, parentConnection, false)) {
       parentConnection.connect(childConnection!);
     } else {
@@ -481,7 +476,7 @@ export class Block implements IASTNodeLocation, IDeletable {
       const nextTarget = this.nextConnection.targetConnection;
       nextTarget?.disconnect();
       if (previousTarget &&
-          this.workspace!.connectionChecker.canConnect(
+          this.workspace.connectionChecker.canConnect(
               previousTarget, nextTarget, false)) {
         // Attach the next statement to the previous statement.
         previousTarget.connect(nextTarget!);
@@ -721,7 +716,7 @@ export class Block implements IASTNodeLocation, IDeletable {
     } else {
       // New parent must be non-null so remove this block from the workspace's
       //     list of top-most blocks.
-      this.workspace!.removeTopBlock(this);
+      this.workspace.removeTopBlock(this);
     }
 
     this.parentBlock_ = newParent;
@@ -729,7 +724,7 @@ export class Block implements IASTNodeLocation, IDeletable {
       // Add this block to the new parent's child list.
       newParent.childBlocks_.push(this);
     } else {
-      this.workspace!.addTopBlock(this);
+      this.workspace.addTopBlock(this);
     }
   }
 
@@ -759,8 +754,8 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @return True if deletable.
    */
   isDeletable(): boolean {
-    return this.deletable_ && !this.isShadow_ &&
-        !(this.workspace && this.workspace.options.readOnly);
+    return this.deletable_ && !this.isShadow_ && !this.disposed &&
+        !this.workspace.options.readOnly;
   }
 
   /**
@@ -776,8 +771,8 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @return True if movable.
    */
   isMovable(): boolean {
-    return this.movable_ && !this.isShadow_ &&
-        !(this.workspace && this.workspace.options.readOnly);
+    return this.movable_ && !this.isShadow_ && !this.disposed &&
+        !this.workspace.options.readOnly;
   }
 
   /**
@@ -796,10 +791,10 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @return True if duplicatable.
    */
   isDuplicatable(): boolean {
-    if (!this.workspace!.hasBlockLimits()) {
+    if (!this.workspace.hasBlockLimits()) {
       return true;
     }
-    return this.workspace!.isCapacityAvailable(
+    return this.workspace.isCapacityAvailable(
         common.getBlockTypeCounts(this, true));
   }
 
@@ -843,8 +838,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @return True if editable.
    */
   isEditable(): boolean {
-    return this.editable_ &&
-        !(this.workspace && this.workspace.options.readOnly);
+    return this.editable_ && !this.disposed && !this.workspace.options.readOnly;
   }
 
   /**
@@ -974,11 +968,11 @@ export class Block implements IASTNodeLocation, IDeletable {
       throw Error('onchange must be a function.');
     }
     if (this.onchangeWrapper_) {
-      this.workspace!.removeChangeListener(this.onchangeWrapper_);
+      this.workspace.removeChangeListener(this.onchangeWrapper_);
     }
     this.onchange = onchangeFn;
     this.onchangeWrapper_ = onchangeFn.bind(this);
-    this.workspace!.addChangeListener(this.onchangeWrapper_);
+    this.workspace.addChangeListener(this.onchangeWrapper_);
   }
 
   /**
@@ -1031,7 +1025,7 @@ export class Block implements IASTNodeLocation, IDeletable {
       for (let j = 0, field; field = input.fieldRow[j]; j++) {
         if (field.referencesVariables()) {
           const model =
-              this.workspace!.getVariableById(field.getValue() as string);
+              this.workspace.getVariableById(field.getValue() as string);
           // Check if the variable actually exists (and isn't just a potential
           // variable).
           if (model) {

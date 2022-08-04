@@ -111,7 +111,7 @@ export function findLegalName(name: string, block: Block): string {
     return name;
   }
   name = name || Msg['UNNAMED_KEY'] || 'unnamed';
-  while (!isLegalName(name, block.workspace!, block)) {
+  while (!isLegalName(name, block.workspace, block)) {
     // Collision with another procedure.
     const r = name.match(/^(.*?)(\d+)$/);
     if (!r) {
@@ -179,7 +179,7 @@ export function rename(this: Field, name: string): string {
   const oldName = this.getValue();
   if (oldName !== name && oldName !== legalName) {
     // Rename any callers.
-    const blocks = this.getSourceBlock().workspace!.getAllBlocks(false);
+    const blocks = this.getSourceBlock().workspace.getAllBlocks(false);
     for (let i = 0; i < blocks.length; i++) {
       // Assume it is a procedure so we can check.
       const procedureBlock = blocks[i] as unknown as ProcedureBlock;
@@ -396,7 +396,7 @@ export function mutateCallers(defBlock: Block) {
   const procedureBlock = defBlock as unknown as ProcedureBlock;
   const name = procedureBlock.getProcedureDef()[0];
   const xmlElement = defBlock.mutationToDom!(true);
-  const callers = getCallers(name, defBlock.workspace!);
+  const callers = getCallers(name, defBlock.workspace);
   for (let i = 0, caller; caller = callers[i]; i++) {
     const oldMutationDom = caller.mutationToDom!();
     const oldMutation = oldMutationDom && Xml.domToText(oldMutationDom);

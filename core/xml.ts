@@ -109,7 +109,7 @@ export function blockToDomWithXY(block: Block, opt_noId?: boolean): Element|
   }
 
   let width = 0;  // Not used in LTR.
-  if (block.workspace?.RTL) {
+  if (block.workspace.RTL) {
     width = block.workspace.getWidth();
   }
 
@@ -118,8 +118,7 @@ export function blockToDomWithXY(block: Block, opt_noId?: boolean): Element|
   // AnyDuringMigration because:  Property 'setAttribute' does not exist on type
   // 'Element | DocumentFragment'.
   (element as AnyDuringMigration)
-      .setAttribute(
-          'x', Math.round(block.workspace?.RTL ? width - xy.x : xy.x));
+      .setAttribute('x', Math.round(block.workspace.RTL ? width - xy.x : xy.x));
   // AnyDuringMigration because:  Property 'setAttribute' does not exist on type
   // 'Element | DocumentFragment'.
   (element as AnyDuringMigration).setAttribute('y', Math.round(xy.y));

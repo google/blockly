@@ -499,8 +499,8 @@ export function unbindEvent_(bindData: browserEvents.Data): Function {
  * @alias Blockly.bindEventWithChecks_
  */
 export function bindEventWithChecks_(
-    node: EventTarget, name: string, thisObject: Object|null,
-    func: Function, opt_noCaptureIdentifier?: boolean,
+    node: EventTarget, name: string, thisObject: Object|null, func: Function,
+    opt_noCaptureIdentifier?: boolean,
     opt_noPreventDefault?: boolean): browserEvents.Data {
   deprecation.warn(
       'Blockly.bindEventWithChecks_', 'December 2021', 'December 2022',

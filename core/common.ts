@@ -86,13 +86,12 @@ export function setMainWorkspace(workspace: Workspace) {
 }
 
 /**
- * Currently selected block.
+ * Currently selected copyable object.
  */
 let selected: ICopyable|null = null;
 
 /**
- * Returns the currently selected block.
- * @return The currently selected block.
+ * Returns the currently selected copyable object.
  * @alias Blockly.common.getSelected
  */
 export function getSelected(): ICopyable|null {

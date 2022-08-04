@@ -85,9 +85,15 @@ Object.defineProperties(Blockly, {
    */
   mainWorkspace: {
     set: function(x) {
+      deprecation.warn(
+          'Blockly.mainWorkspace', 'August 2022', 'September 2022',
+          'Blockly.getMainWorkspace');
       common.setMainWorkspace(x);
     },
     get: function() {
+      deprecation.warn(
+          'Blockly.mainWorkspace', 'August 2022', 'September 2022',
+          'Blockly.getMainWorkspace');
       return common.getMainWorkspace();
     },
   },
@@ -123,9 +129,15 @@ Object.defineProperties(Blockly, {
    */
   selected: {
     get: function() {
+      deprecation.warn(
+          'Blockly.selected', 'August 2022', 'September 2022',
+          'Blockly.getSelected');
       return common.getSelected();
     },
     set: function(newSelection) {
+      deprecation.warn(
+          'Blockly.selected', 'August 2022', 'September 2022',
+          'Blockly.getSelected');
       common.setSelected(newSelection);
     },
   },

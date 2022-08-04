@@ -57,13 +57,10 @@ export class Connection implements IASTNodeLocationWithBlock {
   disposed = false;
 
   /** List of compatible value types.  Null if all types are compatible. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type 'any[]'.
-  private check_: AnyDuringMigration[] = null as AnyDuringMigration;
+  private check_: string[]|null = null;
 
   /** DOM representation of a shadow block, or null if none. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'Element'.
-  private shadowDom_: Element = null as AnyDuringMigration;
+  private shadowDom_: Element|null = null;
 
   /**
    * Horizontal location of this connection.
@@ -345,16 +342,13 @@ export class Connection implements IASTNodeLocationWithBlock {
    */
   setCheck(check: string|string[]|null): Connection {
     if (check) {
-      // Ensure that check is in an array.
       if (!Array.isArray(check)) {
         check = [check];
       }
       this.check_ = check;
       this.onCheckChanged_();
     } else {
-      // AnyDuringMigration because:  Type 'null' is not assignable to type
-      // 'any[]'.
-      this.check_ = null as AnyDuringMigration;
+      this.check_ = null;
     }
     return this;
   }
@@ -364,7 +358,7 @@ export class Connection implements IASTNodeLocationWithBlock {
    * @return List of compatible value types.
    *     Null if all types are compatible.
    */
-  getCheck(): AnyDuringMigration[]|null {
+  getCheck(): string[]|null {
     return this.check_;
   }
 
@@ -493,9 +487,7 @@ export class Connection implements IASTNodeLocationWithBlock {
     const shadowDom = this.getShadowDom(true);
     const shadowState = this.getShadowState(true);
     // Set to null so it doesn't respawn.
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'Element'.
-    this.shadowDom_ = null as AnyDuringMigration;
+    this.shadowDom_ = null;
     this.shadowState_ = null;
     return {shadowDom, shadowState};
   }
@@ -509,9 +501,7 @@ export class Connection implements IASTNodeLocationWithBlock {
     shadowDom: Element|null,
     shadowState: blocks.State|null
   }) {
-    // AnyDuringMigration because:  Type 'Element | null' is not assignable to
-    // type 'Element'.
-    this.shadowDom_ = shadowDom as AnyDuringMigration;
+    this.shadowDom_ = shadowDom;
     this.shadowState_ = shadowState;
   }
 
@@ -525,9 +515,7 @@ export class Connection implements IASTNodeLocationWithBlock {
   } = {}) {
     // One or both of these should always be null.
     // If neither is null, the shadowState will get priority.
-    // AnyDuringMigration because:  Type 'Element | null' is not assignable to
-    // type 'Element'.
-    this.shadowDom_ = shadowDom as AnyDuringMigration;
+    this.shadowDom_ = shadowDom;
     this.shadowState_ = shadowState;
 
     const target = this.targetBlock();
@@ -692,12 +680,10 @@ function getSingleConnection(block: Block, orphanBlock: Block): Connection|
  */
 function getConnectionForOrphanedOutput(
     startBlock: Block, orphanBlock: Block): Connection|null {
-  let newBlock = startBlock;
+  let newBlock: Block|null = startBlock;
   let connection;
-  while (connection = getSingleConnection((newBlock), orphanBlock)) {
-    // AnyDuringMigration because:  Type 'Block | null' is not assignable to
-    // type 'Block'.
-    newBlock = connection.targetBlock() as AnyDuringMigration;
+  while (connection = getSingleConnection(newBlock, orphanBlock)) {
+    newBlock = connection.targetBlock();
     if (!newBlock || newBlock.isShadow()) {
       return connection;
     }

@@ -63,7 +63,7 @@ export class Input {
    * Get the source block for this input.
    * @return The source block, or null if there is none.
    */
-  getSourceBlock(): Block|null {
+  getSourceBlock(): Block {
     return this.sourceBlock_;
   }
 

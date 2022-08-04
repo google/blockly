@@ -130,7 +130,7 @@ import * as Procedures from './procedures.js';
 import * as registry from './registry.js';
 import {RenderedConnection} from './rendered_connection.js';
 import * as blockRendering from './renderers/common/block_rendering.js';
-import * as constants from './constants';
+import * as constants from './constants.js';
 import * as geras from './renderers/geras/geras.js';
 import * as minimalist from './renderers/minimalist/minimalist.js';
 import * as thrasos from './renderers/thrasos/thrasos.js';

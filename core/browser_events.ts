@@ -185,6 +185,9 @@ export function bind(
  * @alias Blockly.browserEvents.unbind
  */
 export function unbind(bindData: Data): (e: Event) => void {
+  // Accessing an element of the last property of the array is unsafe if the
+  // bindData is an empty array. But that should never happen because developers
+  // should only pass Data from bind or conditionalBind.
   let callback = bindData[bindData.length - 1][2];
   while (bindData.length) {
     const bindDatum = bindData.pop();

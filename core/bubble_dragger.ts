@@ -46,7 +46,7 @@ export class BubbleDragger {
   /** Whether the bubble would be deleted if dropped immediately. */
   private wouldDeleteBubble_ = false;
   private readonly startXY_: Coordinate;
-  private dragSurface_: BlockDragSurfaceSvg;
+  private dragSurface_: BlockDragSurfaceSvg|null;
 
   /**
    * @param bubble The item on the bubble canvas to drag.
@@ -63,29 +63,10 @@ export class BubbleDragger {
      * The drag surface to move bubbles to during a drag, or null if none should
      * be used.  Block dragging and bubble dragging use the same surface.
      */
-    // AnyDuringMigration because:  Type 'BlockDragSurfaceSvg | null' is not
-    // assignable to type 'BlockDragSurfaceSvg'.
     this.dragSurface_ =
-        (svgMath.is3dSupported() && !!workspace.getBlockDragSurface() ?
-             workspace.getBlockDragSurface() :
-             null) as AnyDuringMigration;
-  }
-
-  /**
-   * Sever all links from this object.
-   * @suppress {checkTypes}
-   * @internal
-   */
-  dispose() {
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'IBubble'.
-    this.bubble = null as AnyDuringMigration;
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'WorkspaceSvg'.
-    this.workspace = null as AnyDuringMigration;
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'BlockDragSurfaceSvg'.
-    this.dragSurface_ = null as AnyDuringMigration;
+        svgMath.is3dSupported() && !!workspace.getBlockDragSurface() ?
+        workspace.getBlockDragSurface() :
+        null;
   }
 
   /**
@@ -100,7 +81,10 @@ export class BubbleDragger {
     this.workspace.setResizesEnabled(false);
     this.bubble.setAutoLayout(false);
     if (this.dragSurface_) {
-      this.moveToDragSurface_();
+      this.bubble.moveTo(0, 0);
+      this.dragSurface_.translateSurface(this.startXY_.x, this.startXY_.y);
+      // Execute the move on the top-level SVG component.
+      this.dragSurface_.setBlocksAndShow(this.bubble.getSvgRoot());
     }
 
     this.bubble.setDragging && this.bubble.setDragging(true);
@@ -241,16 +225,5 @@ export class BubbleDragger {
       result.scale(1 / mainScale);
     }
     return result;
-  }
-
-  /**
-   * Move the bubble onto the drag surface at the beginning of a drag.  Move the
-   * drag surface to preserve the apparent location of the bubble.
-   */
-  private moveToDragSurface_() {
-    this.bubble.moveTo(0, 0);
-    this.dragSurface_.translateSurface(this.startXY_.x, this.startXY_.y);
-    // Execute the move on the top-level SVG component.
-    this.dragSurface_.setBlocksAndShow(this.bubble.getSvgRoot());
   }
 }

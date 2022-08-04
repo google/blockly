@@ -211,9 +211,6 @@ export class Gesture {
     if (this.workspaceDragger_) {
       this.workspaceDragger_.dispose();
     }
-    if (this.bubbleDragger_) {
-      this.bubbleDragger_.dispose();
-    }
   }
 
   /**

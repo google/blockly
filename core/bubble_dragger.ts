@@ -70,13 +70,6 @@ export class BubbleDragger {
   }
 
   /**
-   * Sever all links from this object.
-   * @suppress {checkTypes}
-   * @internal
-   */
-  dispose() {}
-
-  /**
    * Start dragging a bubble.  This includes moving it to the drag surface.
    * @internal
    */

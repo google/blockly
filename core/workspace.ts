@@ -66,7 +66,6 @@ export class Workspace implements IASTNodeLocation {
 
   /**
    * Is this workspace the surface for a mutator?
-   * @internal
    */
   isMutator = false;
 

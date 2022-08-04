@@ -156,9 +156,9 @@ export function bind(
             e.changedTouches.length === 1) {
           // Map the touch event's properties to the event.
           const touchPoint = e.changedTouches[0];
-          // TODO: We are trying to make a touch event look like a mouse event,
-          //   which is not allowed, because it requires adding more properties
-          //   to the event. How do we want to deal with this?
+          // TODO (6311): We are trying to make a touch event look like a mouse
+          //   event, which is not allowed, because it requires adding more
+          //   properties to the event. How do we want to deal with this?
           (e as AnyDuringMigration).clientX = touchPoint.clientX;
           (e as AnyDuringMigration).clientY = touchPoint.clientY;
         }

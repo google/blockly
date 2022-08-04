@@ -682,7 +682,7 @@ function getConnectionForOrphanedOutput(
     startBlock: Block, orphanBlock: Block): Connection|null {
   let newBlock: Block|null = startBlock;
   let connection;
-  while (connection = getSingleConnection((newBlock), orphanBlock)) {
+  while (connection = getSingleConnection(newBlock, orphanBlock)) {
     newBlock = connection.targetBlock();
     if (!newBlock || newBlock.isShadow()) {
       return connection;

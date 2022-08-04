@@ -69,8 +69,8 @@ export function registerDelete() {
     name: names.DELETE,
     preconditionFn(workspace) {
       const selected = common.getSelected();
-      return !!(
-          !workspace.options.readOnly && selected && selected.isDeletable());
+      return !workspace.options.readOnly && selected != null &&
+          selected.isDeletable();
     },
     callback(workspace, e) {
       // Delete or backspace.
@@ -106,9 +106,8 @@ export function registerCopy() {
     name: names.COPY,
     preconditionFn(workspace) {
       const selected = common.getSelected();
-      return !!(
-          !workspace.options.readOnly && !Gesture.inProgress() && selected &&
-          selected.isDeletable() && selected.isMovable());
+      return !workspace.options.readOnly && !Gesture.inProgress() &&
+          selected != null && selected.isDeletable() && selected.isMovable();
     },
     callback(workspace, e) {
       // Prevent the default copy behavior, which may beep or otherwise indicate
@@ -141,10 +140,10 @@ export function registerCut() {
     name: names.CUT,
     preconditionFn(workspace) {
       const selected = common.getSelected();
-      return !!(
-          !workspace.options.readOnly && !Gesture.inProgress() && selected &&
-          selected instanceof BlockSvg && selected.isDeletable() &&
-          selected.isMovable() && !selected.workspace!.isFlyout);
+      return !workspace.options.readOnly && !Gesture.inProgress() &&
+          selected != null && selected instanceof BlockSvg &&
+          selected.isDeletable() && selected.isMovable() &&
+          !selected.workspace!.isFlyout;
     },
     callback() {
       const selected = common.getSelected();

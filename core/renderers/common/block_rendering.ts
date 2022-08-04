@@ -125,7 +125,8 @@ export function stopDebugger() {
  * @internal
  */
 export function init(
-    name: string, theme: Theme, opt_rendererOverrides?: object): Renderer {
+    name: string, theme: Theme,
+    opt_rendererOverrides?: {[rendererConstant: string]: any}): Renderer {
   const rendererClass = registry.getClass(registry.Type.RENDERER, name);
   const renderer = new rendererClass!(name);
   renderer.init(theme, opt_rendererOverrides);

@@ -294,9 +294,7 @@ export const TOOLBOX_AT_RIGHT = toolbox.Position.RIGHT;
  * @see Blockly.common.svgResize
  * @alias Blockly.svgResize
  */
-// AnyDuringMigration because:  Property 'svgResize' does not exist on type
-// 'void'.
-export const svgResize = (common as AnyDuringMigration).svgResize;
+export const svgResize = common.svgResize;
 
 /**
  * Close tooltips, context menus, dropdown selections, etc.
@@ -305,10 +303,7 @@ export const svgResize = (common as AnyDuringMigration).svgResize;
  * @alias Blockly.hideChaff
  */
 export function hideChaff(opt_onlyClosePopups?: boolean) {
-  // AnyDuringMigration because:  Property 'getMainWorkspace' does not exist on
-  // type 'void'.
-  ((common as AnyDuringMigration).getMainWorkspace() as WorkspaceSvg)
-      .hideChaff(opt_onlyClosePopups);
+  (common.getMainWorkspace() as WorkspaceSvg).hideChaff(opt_onlyClosePopups);
 }
 
 /**
@@ -318,9 +313,7 @@ export function hideChaff(opt_onlyClosePopups?: boolean) {
  * @see Blockly.common.getMainWorkspace
  * @alias Blockly.getMainWorkspace
  */
-// AnyDuringMigration because:  Property 'getMainWorkspace' does not exist on
-// type 'void'.
-export const getMainWorkspace = (common as AnyDuringMigration).getMainWorkspace;
+export const getMainWorkspace = common.getMainWorkspace;
 
 /**
  * Returns the currently selected copyable object.
@@ -335,10 +328,8 @@ export const getSelected = common.getSelected;
  * @see Blockly.common.defineBlocksWithJsonArray
  * @alias Blockly.defineBlocksWithJsonArray
  */
-// AnyDuringMigration because:  Property 'defineBlocksWithJsonArray' does not
-// exist on type 'void'.
-export const defineBlocksWithJsonArray =
-    (common as AnyDuringMigration).defineBlocksWithJsonArray;
+export const defineBlocksWithJsonArray = common.defineBlocksWithJsonArray;
+
 /**
  * Set the parent container.  This is the container element that the WidgetDiv,
  * dropDownDiv, and Tooltip are rendered into the first time `Blockly.inject`
@@ -348,10 +339,7 @@ export const defineBlocksWithJsonArray =
  * @see Blockly.common.setParentContainer
  * @alias Blockly.setParentContainer
  */
-// AnyDuringMigration because:  Property 'setParentContainer' does not exist on
-// type 'void'.
-export const setParentContainer =
-    (common as AnyDuringMigration).setParentContainer;
+export const setParentContainer = common.setParentContainer;
 
 /**
  * Returns the dimensions of the specified SVG image.
@@ -390,8 +378,7 @@ export function copy(toCopy: ICopyable) {
   deprecation.warn(
       'Blockly.copy', 'December 2021', 'December 2022',
       'Blockly.clipboard.copy');
-  // AnyDuringMigration because:  Property 'copy' does not exist on type 'void'.
-  (clipboard as AnyDuringMigration).copy(toCopy);
+  clipboard.copy(toCopy);
 }
 
 /**
@@ -405,9 +392,7 @@ export function paste(): boolean {
   deprecation.warn(
       'Blockly.paste', 'December 2021', 'December 2022',
       'Blockly.clipboard.paste');
-  // AnyDuringMigration because:  Property 'paste' does not exist on type
-  // 'void'.
-  return !!(clipboard as AnyDuringMigration).paste();
+  return !!clipboard.paste();
 }
 
 /**
@@ -421,9 +406,7 @@ export function duplicate(toDuplicate: ICopyable) {
   deprecation.warn(
       'Blockly.duplicate', 'December 2021', 'December 2022',
       'Blockly.clipboard.duplicate');
-  // AnyDuringMigration because:  Property 'duplicate' does not exist on type
-  // 'void'.
-  (clipboard as AnyDuringMigration).duplicate(toDuplicate);
+  clipboard.duplicate(toDuplicate);
 }
 
 /**
@@ -438,9 +421,7 @@ export function isNumber(str: string): boolean {
   deprecation.warn(
       'Blockly.isNumber', 'December 2021', 'December 2022',
       'Blockly.utils.string.isNumber');
-  // AnyDuringMigration because:  Property 'string' does not exist on type
-  // 'void'.
-  return (utils as AnyDuringMigration).string.isNumber(str);
+  return utils.string.isNumber(str);
 }
 
 /**
@@ -473,7 +454,7 @@ export function hueToHex(hue: number): string {
  * @alias Blockly.bindEvent_
  */
 export function bindEvent_(
-    node: EventTarget, name: string, thisObject: AnyDuringMigration|null,
+    node: EventTarget, name: string, thisObject: Object|null,
     func: Function): browserEvents.Data {
   deprecation.warn(
       'Blockly.bindEvent_', 'December 2021', 'December 2022',
@@ -518,7 +499,7 @@ export function unbindEvent_(bindData: browserEvents.Data): Function {
  * @alias Blockly.bindEventWithChecks_
  */
 export function bindEventWithChecks_(
-    node: EventTarget, name: string, thisObject: AnyDuringMigration|null,
+    node: EventTarget, name: string, thisObject: Object|null,
     func: Function, opt_noCaptureIdentifier?: boolean,
     opt_noPreventDefault?: boolean): browserEvents.Data {
   deprecation.warn(
@@ -535,14 +516,8 @@ export const DRAG_STACK = internalConstants.DRAG_STACK;
 export const OPPOSITE_TYPE = internalConstants.OPPOSITE_TYPE;
 export const RENAME_VARIABLE_ID = internalConstants.RENAME_VARIABLE_ID;
 export const DELETE_VARIABLE_ID = internalConstants.DELETE_VARIABLE_ID;
-// AnyDuringMigration because:  Property 'COLLAPSED_INPUT_NAME' does not exist
-// on type 'void'.
-export const COLLAPSED_INPUT_NAME =
-    (constants as AnyDuringMigration).COLLAPSED_INPUT_NAME;
-// AnyDuringMigration because:  Property 'COLLAPSED_FIELD_NAME' does not exist
-// on type 'void'.
-export const COLLAPSED_FIELD_NAME =
-    (constants as AnyDuringMigration).COLLAPSED_FIELD_NAME;
+export const COLLAPSED_INPUT_NAME = constants.COLLAPSED_INPUT_NAME;
+export const COLLAPSED_FIELD_NAME = constants.COLLAPSED_FIELD_NAME;
 
 /**
  * String for use in the "custom" attribute of a category in toolbox XML.
@@ -550,10 +525,7 @@ export const COLLAPSED_FIELD_NAME =
  * variable blocks.
  * @alias Blockly.VARIABLE_CATEGORY_NAME
  */
-// AnyDuringMigration because:  Property 'CATEGORY_NAME' does not exist on type
-// 'void'.
-export const VARIABLE_CATEGORY_NAME: string =
-    (Variables as AnyDuringMigration).CATEGORY_NAME;
+export const VARIABLE_CATEGORY_NAME: string = Variables.CATEGORY_NAME;
 
 /**
  * String for use in the "custom" attribute of a category in toolbox XML.
@@ -561,20 +533,15 @@ export const VARIABLE_CATEGORY_NAME: string =
  * variable blocks.
  * @alias Blockly.VARIABLE_DYNAMIC_CATEGORY_NAME
  */
-// AnyDuringMigration because:  Property 'CATEGORY_NAME' does not exist on type
-// 'void'.
 export const VARIABLE_DYNAMIC_CATEGORY_NAME: string =
-    (VariablesDynamic as AnyDuringMigration).CATEGORY_NAME;
+    VariablesDynamic.CATEGORY_NAME;
 /**
  * String for use in the "custom" attribute of a category in toolbox XML.
  * This string indicates that the category should be dynamically populated with
  * procedure blocks.
  * @alias Blockly.PROCEDURE_CATEGORY_NAME
  */
-// AnyDuringMigration because:  Property 'CATEGORY_NAME' does not exist on type
-// 'void'.
-export const PROCEDURE_CATEGORY_NAME: string =
-    (Procedures as AnyDuringMigration).CATEGORY_NAME;
+export const PROCEDURE_CATEGORY_NAME: string = Procedures.CATEGORY_NAME;
 
 // Context for why we need to monkey-patch in these functions (internal):
 //   https://docs.google.com/document/d/1MbO0LEA-pAyx1ErGLJnyUqTLrcYTo-5zga9qplnxeXo/edit?usp=sharing&resourcekey=0-5h_32-i-dHwHjf_9KYEVKg

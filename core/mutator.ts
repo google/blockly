@@ -143,7 +143,7 @@ export class Mutator extends Icon {
    * Disable if block is uneditable.
    * @param e Mouse click event.
    */
-  protected override iconClick_(e: Event) {
+  protected override iconClick_(e: MouseEvent) {
     if (this.block_.isEditable()) {
       super.iconClick_(e);
     }

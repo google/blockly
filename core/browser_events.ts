@@ -24,7 +24,7 @@ import * as userAgent from './utils/useragent.js';
  * `bind` and `conditionalBind`.
  * @alias Blockly.browserEvents.Data
  */
-export type Data = AnyDuringMigration[][];
+export type Data = [EventTarget, string, (e: Event) => void][];
 
 /**
  * The multiplier for scroll wheel deltas using the line delta mode.
@@ -59,11 +59,10 @@ const PAGE_MODE_MULTIPLIER = 125;
  * @alias Blockly.browserEvents.conditionalBind
  */
 export function conditionalBind(
-    node: EventTarget, name: string, thisObject: AnyDuringMigration|null,
-    func: Function, opt_noCaptureIdentifier?: boolean,
-    opt_noPreventDefault?: boolean): Data {
+    node: EventTarget, name: string, thisObject: Object|null, func: Function,
+    opt_noCaptureIdentifier?: boolean, opt_noPreventDefault?: boolean): Data {
   let handled = false;
-  function wrapFunc(e: AnyDuringMigration) {
+  function wrapFunc(e: Event) {
     const captureIdentifier = !opt_noCaptureIdentifier;
     // Handle each touch point separately.  If the event was a mouse event, this
     // will hand back an array with one element, which we're fine handling.
@@ -83,7 +82,7 @@ export function conditionalBind(
     }
   }
 
-  const bindData = [];
+  const bindData: Data = [];
   if (globalThis['PointerEvent'] && name in Touch.TOUCH_MAP) {
     for (let i = 0; i < Touch.TOUCH_MAP[name].length; i++) {
       const type = Touch.TOUCH_MAP[name][i];
@@ -96,7 +95,7 @@ export function conditionalBind(
 
     // Add equivalent touch event.
     if (name in Touch.TOUCH_MAP) {
-      const touchWrapFunc = (e: AnyDuringMigration) => {
+      const touchWrapFunc = (e: Event) => {
         wrapFunc(e);
         // Calling preventDefault stops the browser from scrolling/zooming the
         // page.
@@ -128,9 +127,9 @@ export function conditionalBind(
  * @alias Blockly.browserEvents.bind
  */
 export function bind(
-    node: EventTarget, name: string, thisObject: AnyDuringMigration|null,
+    node: EventTarget, name: string, thisObject: Object|null,
     func: Function): Data {
-  function wrapFunc(e: AnyDuringMigration) {
+  function wrapFunc(e: Event) {
     if (thisObject) {
       func.call(thisObject, e);
     } else {
@@ -138,7 +137,7 @@ export function bind(
     }
   }
 
-  const bindData = [];
+  const bindData: Data = [];
   if (globalThis['PointerEvent'] && name in Touch.TOUCH_MAP) {
     for (let i = 0; i < Touch.TOUCH_MAP[name].length; i++) {
       const type = Touch.TOUCH_MAP[name][i];
@@ -151,13 +150,17 @@ export function bind(
 
     // Add equivalent touch event.
     if (name in Touch.TOUCH_MAP) {
-      const touchWrapFunc = (e: AnyDuringMigration) => {
+      const touchWrapFunc = (e: Event) => {
         // Punt on multitouch events.
-        if (e.changedTouches && e.changedTouches.length === 1) {
+        if (e instanceof TouchEvent && e.changedTouches &&
+            e.changedTouches.length === 1) {
           // Map the touch event's properties to the event.
           const touchPoint = e.changedTouches[0];
-          e.clientX = touchPoint.clientX;
-          e.clientY = touchPoint.clientY;
+          // TODO (6311): We are trying to make a touch event look like a mouse
+          //   event, which is not allowed, because it requires adding more
+          //   properties to the event. How do we want to deal with this?
+          (e as AnyDuringMigration).clientX = touchPoint.clientX;
+          (e as AnyDuringMigration).clientY = touchPoint.clientY;
         }
         wrapFunc(e);
 
@@ -181,16 +184,19 @@ export function bind(
  * @return The function call.
  * @alias Blockly.browserEvents.unbind
  */
-export function unbind(bindData: Data): Function {
-  let func;
+export function unbind(bindData: Data): (e: Event) => void {
+  // Accessing an element of the last property of the array is unsafe if the
+  // bindData is an empty array. But that should never happen because developers
+  // should only pass Data from bind or conditionalBind.
+  let callback = bindData[bindData.length - 1][2];
   while (bindData.length) {
     const bindDatum = bindData.pop();
     const node = bindDatum![0];
     const name = bindDatum![1];
-    func = bindDatum![2];
+    const func = bindDatum![2];
     node.removeEventListener(name, func, false);
   }
-  return func;
+  return callback;
 }
 
 /**
@@ -228,17 +234,13 @@ export function isTargetInput(e: Event): boolean {
  * @return True if right-click.
  * @alias Blockly.browserEvents.isRightButton
  */
-export function isRightButton(e: Event): boolean {
-  // AnyDuringMigration because:  Property 'ctrlKey' does not exist on type
-  // 'Event'.
-  if ((e as AnyDuringMigration).ctrlKey && userAgent.MAC) {
+export function isRightButton(e: MouseEvent): boolean {
+  if (e.ctrlKey && userAgent.MAC) {
     // Control-clicking on Mac OS X is treated as a right-click.
     // WebKit on Mac OS X fails to change button to 2 (but Gecko does).
     return true;
   }
-  // AnyDuringMigration because:  Property 'button' does not exist on type
-  // 'Event'.
-  return (e as AnyDuringMigration).button === 2;
+  return e.button === 2;
 }
 
 /**
@@ -251,14 +253,10 @@ export function isRightButton(e: Event): boolean {
  * @alias Blockly.browserEvents.mouseToSvg
  */
 export function mouseToSvg(
-    e: Event, svg: SVGSVGElement, matrix: SVGMatrix|null): SVGPoint {
+    e: MouseEvent, svg: SVGSVGElement, matrix: SVGMatrix|null): SVGPoint {
   const svgPoint = svg.createSVGPoint();
-  // AnyDuringMigration because:  Property 'clientX' does not exist on type
-  // 'Event'.
-  svgPoint.x = (e as AnyDuringMigration).clientX;
-  // AnyDuringMigration because:  Property 'clientY' does not exist on type
-  // 'Event'.
-  svgPoint.y = (e as AnyDuringMigration).clientY;
+  svgPoint.x = e.clientX;
+  svgPoint.y = e.clientY;
 
   if (!matrix) {
     matrix = svg.getScreenCTM()!.inverse();

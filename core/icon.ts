@@ -110,7 +110,7 @@ export abstract class Icon {
    * Clicking on the icon toggles if the bubble is visible.
    * @param e Mouse click event.
    */
-  protected iconClick_(e: Event) {
+  protected iconClick_(e: MouseEvent) {
     if (this.block_.workspace.isDragging()) {
       // Drag operation is concluding.  Don't open the editor.
       return;

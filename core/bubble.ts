@@ -321,7 +321,7 @@ export class Bubble implements IBubble {
    * Handle a mouse-down on bubble's resize corner.
    * @param e Mouse down event.
    */
-  private resizeMouseDown_(e: Event) {
+  private resizeMouseDown_(e: MouseEvent) {
     this.promote();
     Bubble.unbindDragEvents_();
     if (browserEvents.isRightButton(e)) {
@@ -348,7 +348,7 @@ export class Bubble implements IBubble {
    * Resize this bubble to follow the mouse.
    * @param e Mouse move event.
    */
-  private resizeMouseMove_(e: Event) {
+  private resizeMouseMove_(e: MouseEvent) {
     this.autoLayout_ = false;
     const newXY = this.workspace_.moveDrag(e);
     this.setBubbleSize(this.workspace_.RTL ? -newXY.x : newXY.x, newXY.y);
@@ -833,7 +833,7 @@ export class Bubble implements IBubble {
    * Handle a mouse-up event while dragging a bubble's border or resize handle.
    * @param _e Mouse up event.
    */
-  private static bubbleMouseUp_(_e: Event) {
+  private static bubbleMouseUp_(_e: MouseEvent) {
     Touch.clearTouchIdentifier();
     Bubble.unbindDragEvents_();
   }

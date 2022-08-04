@@ -243,7 +243,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
    * Handles on click events for when the toolbox or toolbox items are clicked.
    * @param e Click event to handle.
    */
-  protected onClick_(e: Event) {
+  protected onClick_(e: MouseEvent) {
     if (browserEvents.isRightButton(e) || e.target === this.HtmlDiv) {
       // Close flyout.
       (common.getMainWorkspace() as WorkspaceSvg).hideChaff(false);

@@ -417,7 +417,7 @@ export class Gesture {
    * @param e A mouse down or touch start event.
    * @internal
    */
-  doStart(e: Event) {
+  doStart(e: MouseEvent) {
     if (browserEvents.isTargetInput(e)) {
       this.cancel();
       return;
@@ -603,7 +603,7 @@ export class Gesture {
    * @param ws The workspace the event hit.
    * @internal
    */
-  handleWsStart(e: Event, ws: WorkspaceSvg) {
+  handleWsStart(e: MouseEvent, ws: WorkspaceSvg) {
     if (this.hasStarted_) {
       throw Error(
           'Tried to call gesture.handleWsStart, ' +
@@ -629,7 +629,7 @@ export class Gesture {
    * @param flyout The flyout the event hit.
    * @internal
    */
-  handleFlyoutStart(e: Event, flyout: IFlyout) {
+  handleFlyoutStart(e: MouseEvent, flyout: IFlyout) {
     if (this.hasStarted_) {
       throw Error(
           'Tried to call gesture.handleFlyoutStart, ' +

@@ -802,7 +802,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * Handle a mouse-down on comment's resize corner.
    * @param e Mouse down event.
    */
-  private resizeMouseDown_(e: Event) {
+  private resizeMouseDown_(e: MouseEvent) {
     this.unbindDragEvents_();
     if (browserEvents.isRightButton(e)) {
       // No right-click.
@@ -882,7 +882,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * Resize this comment to follow the mouse.
    * @param e Mouse move event.
    */
-  private resizeMouseMove_(e: Event) {
+  private resizeMouseMove_(e: MouseEvent) {
     this.autoLayout_ = false;
     const newXY = this.workspace.moveDrag(e);
     this.setSize_(this.RTL ? -newXY.x : newXY.x, newXY.y);

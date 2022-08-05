@@ -129,8 +129,8 @@ export namespace ContextMenuRegistry {
    * to callback and displayText functions that depend on this information.
    */
   export interface Scope {
-    block: BlockSvg|undefined;
-    workspace: WorkspaceSvg|undefined;
+    block?: BlockSvg;
+    workspace?: WorkspaceSvg;
   }
 
   /**

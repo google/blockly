@@ -83,7 +83,7 @@ export class FieldMultilineInput extends FieldTextInput {
     }
   }
 
-  override configure_(config: FieldMultilineInputConfig) {
+  protected override configure_(config: FieldMultilineInputConfig) {
     super.configure_(config);
     if (config.maxLines) this.setMaxLines(config.maxLines);
   }

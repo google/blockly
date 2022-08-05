@@ -92,7 +92,7 @@ export class FieldNumber extends FieldTextInput {
    * Configure the field based on the given map of options.
    * @param config A map of options to configure the field based on.
    */
-  override configure_(config: FieldNumberConfig) {
+  protected override configure_(config: FieldNumberConfig) {
     super.configure_(config);
     this.setMinInternal_(config.min);
     this.setMaxInternal_(config.max);

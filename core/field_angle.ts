@@ -165,7 +165,7 @@ export class FieldAngle extends FieldTextInput {
    * Configure the field based on the given map of options.
    * @param config A map of options to configure the field based on.
    */
-  override configure_(config: FieldAngleConfig) {
+  protected override configure_(config: FieldAngleConfig) {
     super.configure_(config);
 
     switch (config.mode) {

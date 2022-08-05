@@ -66,7 +66,7 @@ export class FieldLabel extends Field {
     this.setValue(opt_value);
   }
 
-  override configure_(config: FieldImageConfig) {
+  protected override configure_(config: FieldImageConfig) {
     super.configure_(config);
     if (config.class) this.class_ = config.class;
   }

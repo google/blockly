@@ -120,7 +120,7 @@ export class FieldTextInput extends Field {
     }
   }
 
-  override configure_(config: FieldTextInputConfig) {
+  protected override configure_(config: FieldTextInputConfig) {
     super.configure_(config);
     if (config.spellcheck !== undefined) {
       this.spellcheck_ = config.spellcheck;

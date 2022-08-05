@@ -19,7 +19,7 @@ goog.declareModuleId('Blockly.FieldVariable');
 import './events/events_block_change.js';
 
 import type {Block} from './block.js';
-import {Field} from './field.js';
+import {Field, Config as BaseFieldConfig} from './field.js';
 import {FieldDropdown} from './field_dropdown.js';
 import * as fieldRegistry from './field_registry.js';
 import * as internalConstants from './internal_constants.js';

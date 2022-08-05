@@ -9,12 +9,6 @@
  * @author samelh@google.com (Sam El-Husseini)
  */
 
-/// <reference path="core.d.ts" />
-/// <reference path="blocks.d.ts" />
-/// <reference path="javascript.d.ts" />
-/// <reference path="msg/msg.d.ts" />
-
-export * from './core';
-export * as libraryBlocks from './blocks';
+export * from './declarations/core/blockly';
+export * as libraryBlocks from './blocks';  // Handcrafted file.
 export const JavaScript: any;
-import './msg/msg';

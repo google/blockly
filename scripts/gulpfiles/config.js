@@ -32,7 +32,7 @@ exports.DEPS_FILE = path.join(exports.BUILD_DIR, 'deps.js');
 exports.TEST_DEPS_FILE = path.join(exports.BUILD_DIR, 'deps.mocha.js');
 
 // Directory to write typings output to.
-exports.TYPINGS_BUILD_DIR = path.join(exports.BUILD_DIR, 'typings');
+exports.TYPINGS_BUILD_DIR = path.join(exports.BUILD_DIR, 'declarations');
 
 // Directory where typescript compiler output can be found.
 // Matches the value in tsconfig.json: outDir

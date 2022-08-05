@@ -153,10 +153,6 @@ const rebuildAll = gulp.series(
   buildTasks.cleanBuildDir,
   buildTasks.build,
   buildTasks.checkinBuilt,
-  // TODO(5621): Re-enable once typings generation is fixed.
-  // typings.typings,
-  // typings.msgTypings,
-  // typings.checkinTypings,
   );
 
 // Package and publish to npm.

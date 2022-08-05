@@ -50,7 +50,6 @@ class Capability<T> {
 export class ComponentManager {
   static Capability = Capability;
 
-  // static Capability: AnyDuringMigration;
   private readonly componentData_: {[key: string]: ComponentDatum};
   private readonly capabilityToComponentIds_: {[key: string]: string[]};
 
@@ -178,15 +177,16 @@ export class ComponentManager {
    * @param sorted Whether to return list ordered by weights.
    * @return The components that match the specified capability.
    */
-  getComponents<T>(capability: string|Capability<T>, sorted: boolean): T[] {
+  getComponents<T extends IComponent>(
+      capability: string|Capability<T>, sorted: boolean): T[] {
     capability = String(capability).toLowerCase();
     const componentIds = this.capabilityToComponentIds_[capability];
     if (!componentIds) {
       return [];
     }
-    const components: AnyDuringMigration[] = [];
+    const components: T[] = [];
     if (sorted) {
-      const componentDataList: AnyDuringMigration[] = [];
+      const componentDataList: ComponentDatum[] = [];
       const componentData = this.componentData_;
       componentIds.forEach(function(id) {
         componentDataList.push(componentData[id]);
@@ -195,12 +195,12 @@ export class ComponentManager {
         return a.weight - b.weight;
       });
       componentDataList.forEach(function(ComponentDatum) {
-        components.push(ComponentDatum.component);
+        components.push(ComponentDatum.component as T);
       });
     } else {
       const componentData = this.componentData_;
       componentIds.forEach(function(id) {
-        components.push(componentData[id].component);
+        components.push(componentData[id].component as T);
       });
     }
     return components;

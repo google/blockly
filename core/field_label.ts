@@ -17,7 +17,7 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.FieldLabel');
 
-import {Config as BaseFieldConfig, Field} from './field.js';
+import {FieldConfig, Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
@@ -51,7 +51,7 @@ export class FieldLabel extends Field {
    * for a list of properties this parameter supports.
    */
   constructor(
-      opt_value?: string|Sentinel, opt_class?: string, opt_config?: Config) {
+      opt_value?: string|Sentinel, opt_class?: string, opt_config?: FieldImageConfig) {
     super(Field.SKIP_SETUP);
 
     if (opt_value === Field.SKIP_SETUP) {
@@ -65,7 +65,7 @@ export class FieldLabel extends Field {
     this.setValue(opt_value);
   }
 
-  override configure_(config: Config) {
+  override configure_(config: FieldImageConfig) {
     super.configure_(config);
     if (config.class) this.class_ = config.class;
   }
@@ -120,7 +120,7 @@ export class FieldLabel extends Field {
    * @nocollapse
    * @internal
    */
-  static fromJson(options: FromJsonConfig): FieldLabel {
+  static fromJson(options: FieldImageFromJsonConfig): FieldLabel {
     const text = parsing.replaceMessageReferences(options.text);
     // `this` might be a subclass of FieldLabel if that class doesn't override
     // the static fromJson method.
@@ -137,7 +137,7 @@ fieldRegistry.register('field_label', FieldLabel);
 /**
  * Config options for the label field.
  */
-export interface Config extends BaseFieldConfig {
+export interface FieldImageConfig extends FieldConfig {
   class?: string;
 }
 // clang-format on
@@ -146,6 +146,6 @@ export interface Config extends BaseFieldConfig {
 /**
  * fromJson config options for the label field.
  */
-export interface FromJsonConfig extends Config {
+export interface FieldImageFromJsonConfig extends FieldImageConfig {
   text?: string;
 }

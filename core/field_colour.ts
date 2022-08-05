@@ -22,7 +22,7 @@ import {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import * as Css from './css.js';
 import * as dropDownDiv from './dropdowndiv.js';
-import {Config as BaseFieldConfig, Field} from './field.js';
+import {FieldConfig, Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import * as aria from './utils/aria.js';
 import * as colour from './utils/colour.js';
@@ -155,7 +155,7 @@ export class FieldColour extends Field {
    */
   constructor(
       opt_value?: string|Sentinel, opt_validator?: Function,
-      opt_config?: Config) {
+      opt_config?: FieldColourConfig) {
     super(Field.SKIP_SETUP);
 
     if (opt_value === Field.SKIP_SETUP) {
@@ -174,7 +174,7 @@ export class FieldColour extends Field {
    * Configure the field based on the given map of options.
    * @param config A map of options to configure the field based on.
    */
-  protected override configure_(config: Config) {
+  protected override configure_(config: FieldColourConfig) {
     super.configure_(config);
     if (config.colourOptions) this.colours_ = config.colourOptions;
     if (config.colourTitles) this.titles_ = config.colourTitles;
@@ -568,7 +568,7 @@ export class FieldColour extends Field {
    * @nocollapse
    * @internal
    */
-  static fromJson(options: FromJsonConfig): FieldColour {
+  static fromJson(options: FieldColourFromJsonConfig): FieldColour {
     // `this` might be a subclass of FieldColour if that class doesn't override
     // the static fromJson method.
     return new this(options['colour'], undefined, options);
@@ -618,7 +618,7 @@ fieldRegistry.register('field_colour', FieldColour);
 /**
  * Config options for the colour field.
  */
-export interface Config extends BaseFieldConfig {
+export interface FieldColourConfig extends FieldConfig {
   colourOptions?: string[];
   colourTitles?: string[];
   columns?: number;
@@ -627,6 +627,6 @@ export interface Config extends BaseFieldConfig {
 /**
  * fromJson config options for the colour field.
  */
-export interface FromJsonConfig extends Config {
+export interface FieldColourFromJsonConfig extends FieldColourConfig {
   colour?: string;
 }

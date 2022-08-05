@@ -23,7 +23,7 @@ import * as browserEvents from './browser_events.js';
 import * as dialog from './dialog.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import * as eventUtils from './events/utils.js';
-import {Config as BaseFieldConfig, Field} from './field.js';
+import {FieldConfig, Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import {Msg} from './msg.js';
 import * as aria from './utils/aria.js';
@@ -105,7 +105,7 @@ export class FieldTextInput extends Field {
    */
   constructor(
       opt_value?: string|Sentinel, opt_validator?: Function|null,
-      opt_config?: Config) {
+      opt_config?: FieldTextInputConfig) {
     super(Field.SKIP_SETUP);
 
     if (opt_value === Field.SKIP_SETUP) {
@@ -120,7 +120,7 @@ export class FieldTextInput extends Field {
     }
   }
 
-  override configure_(config: Config) {
+  override configure_(config: FieldTextInputConfig) {
     super.configure_(config);
     if (config.spellcheck !== undefined) {
       this.spellcheck_ = config.spellcheck;
@@ -564,7 +564,7 @@ export class FieldTextInput extends Field {
    * @nocollapse
    * @internal
    */
-  static fromJson(options: FromJsonConfig): FieldTextInput {
+  static fromJson(options: FieldTextInputFromJsonConfig): FieldTextInput {
     const text = parsing.replaceMessageReferences(options.text);
     // `this` might be a subclass of FieldTextInput if that class doesn't
     // override the static fromJson method.
@@ -579,13 +579,13 @@ fieldRegistry.register('field_input', FieldTextInput);
 /**
  * Config options for the text input field.
  */
-export interface Config extends BaseFieldConfig {
+export interface FieldTextInputConfig extends FieldConfig {
   spellcheck?: boolean;
 }
 
 /**
  * fromJson config options for the text input field.
  */
-export interface FromJsonConfig extends Config {
+export interface FieldTextInputFromJsonConfig extends FieldTextInputConfig {
   text?: string;
 }

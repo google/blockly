@@ -21,7 +21,7 @@ goog.declareModuleId('Blockly.FieldDropdown');
 
 import type {BlockSvg} from './block_svg.js';
 import * as dropDownDiv from './dropdowndiv.js';
-import {Config as BaseFieldConfig, Field} from './field.js';
+import {FieldConfig, Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import {Menu} from './menu.js';
 import {MenuItem} from './menuitem.js';
@@ -117,7 +117,7 @@ export class FieldDropdown extends Field {
    */
   constructor(
       menuGenerator: AnyDuringMigration[][]|Function|Sentinel,
-      opt_validator?: Function, opt_config?: BaseFieldConfig) {
+      opt_validator?: Function, opt_config?: FieldConfig) {
     super(Field.SKIP_SETUP);
 
     // If we pass SKIP_SETUP, don't do *anything* with the menu generator.
@@ -656,7 +656,7 @@ export class FieldDropdown extends Field {
    * @nocollapse
    * @internal
    */
-  static fromJson(options: FromJsonConfig): FieldDropdown {
+  static fromJson(options: FieldDropdownFromJsonConfig): FieldDropdown {
     if (!options.options) {
       throw new Error(
           'options are required for the dropdown field. The ' +
@@ -702,7 +702,6 @@ export interface ImageProperties {
   height: number;
 }
 
-
 /**
  * An individual option in the dropdown menu. The first element is the human-
  * readable value (text or image), and the second element is the language-
@@ -713,7 +712,7 @@ export type MenuOption = [string | ImageProperties, string];
 /**
  * fromJson config for the dropdown field.
  */
-export interface FromJsonConfig extends BaseFieldConfig {
+export interface FieldDropdownFromJsonConfig extends FieldConfig {
   options?: MenuOption[];
 }
 

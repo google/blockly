@@ -21,7 +21,7 @@ import * as Css from './css.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import {Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
-import {Config as TextConfig, FieldTextInput} from './field_textinput.js';
+import {FieldTextInputConfig, FieldTextInput} from './field_textinput.js';
 import * as dom from './utils/dom.js';
 import {KeyCodes} from './utils/keycodes.js';
 import * as math from './utils/math.js';
@@ -121,7 +121,7 @@ export class FieldAngle extends FieldTextInput {
    */
   constructor(
       opt_value?: string|number|Sentinel, opt_validator?: Function,
-      opt_config?: Config) {
+      opt_config?: FieldAngleConfig) {
     super(Field.SKIP_SETUP);
 
     /**
@@ -165,7 +165,7 @@ export class FieldAngle extends FieldTextInput {
    * Configure the field based on the given map of options.
    * @param config A map of options to configure the field based on.
    */
-  override configure_(config: Config) {
+  override configure_(config: FieldAngleConfig) {
     super.configure_(config);
 
     switch (config.mode) {
@@ -486,7 +486,7 @@ export class FieldAngle extends FieldTextInput {
    * @nocollapse
    * @internal
    */
-  static override fromJson(options: FromJsonConfig): FieldAngle {
+  static override fromJson(options: FieldAngleFromJsonConfig): FieldAngle {
     // `this` might be a subclass of FieldAngle if that class doesn't override
     // the static fromJson method.
     return new this(options.angle, undefined, options);
@@ -547,7 +547,7 @@ export enum Mode {
 /**
  * Extra configuration options for the angle field.
  */
-export interface Config extends TextConfig {
+export interface FieldAngleConfig extends FieldTextInputConfig {
   mode?: Mode;
   clockwise?: boolean;
   offset?: number;
@@ -558,6 +558,6 @@ export interface Config extends TextConfig {
 /**
  * fromJson configuration options for the angle field.
  */
-export interface FromJsonConfig extends Config {
+export interface FieldAngleFromJsonConfig extends FieldAngleConfig {
   angle?: number;
 }

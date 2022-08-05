@@ -15,7 +15,7 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.FieldImage');
 
-import {Config as BaseFieldConfig, Field} from './field.js';
+import {FieldConfig, Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
@@ -84,7 +84,7 @@ export class FieldImage extends Field {
   constructor(
       src: string|Sentinel, width: string|number, height: string|number,
       opt_alt?: string, opt_onClick?: (p1: FieldImage) => AnyDuringMigration,
-      opt_flipRtl?: boolean, opt_config?: Config) {
+      opt_flipRtl?: boolean, opt_config?: FieldImageConfig) {
     super(Field.SKIP_SETUP);
 
     const imageHeight = Number(parsing.replaceMessageReferences(height));
@@ -129,7 +129,7 @@ export class FieldImage extends Field {
    * Configure the field based on the given map of options.
    * @param config A map of options to configure the field based on.
    */
-  protected override configure_(config: Config) {
+  protected override configure_(config: FieldImageConfig) {
     super.configure_(config);
     if (config.flipRtl) this.flipRtl_ = config.flipRtl;
     if (config.alt) {
@@ -246,7 +246,7 @@ export class FieldImage extends Field {
    * @nocollapse
    * @internal
    */
-  static fromJson(options: FromJsonConfig): FieldImage {
+  static fromJson(options: FieldImageFromJsonConfig): FieldImage {
     if (!options.src || !options.width || !options.height) {
       throw new Error(
           'src, width, and height values for an image field are' +
@@ -267,14 +267,14 @@ fieldRegistry.register('field_image', FieldImage);
 /**
  * Config options for the image field.
  */
-export interface Config extends BaseFieldConfig {
+export interface FieldImageConfig extends FieldConfig {
   flipRtl?: boolean, alt?: string,
 }
 
 /**
  * fromJson config options for the colour field.
  */
-export interface FromJsonConfig extends Config {
+export interface FieldImageFromJsonConfig extends FieldImageConfig {
   src?: string;
   width?: number;
   height?: number;

@@ -209,7 +209,7 @@ export abstract class Field implements IASTNodeLocationSvg,
    */
   constructor(
       value: AnyDuringMigration, opt_validator?: Function|null,
-      opt_config?: Config) {
+      opt_config?: FieldConfig) {
     /**
      * A generic value possessed by the field.
      * Should generally be non-null, only null when the field is created.
@@ -237,7 +237,7 @@ export abstract class Field implements IASTNodeLocationSvg,
    *     individual field's documentation for a list of properties this
    *     parameter supports.
    */
-  protected configure_(config: Config) {
+  protected configure_(config: FieldConfig) {
     // TODO (#2884): Possibly add CSS class config option.
     // TODO (#2885): Possibly add cursor config option.
     if (config.tooltip) {
@@ -1201,6 +1201,6 @@ export abstract class Field implements IASTNodeLocationSvg,
 /**
  * Extra configuration options for the base field.
  */
-export interface Config {
+export interface FieldConfig {
   tooltip?: string;
 }

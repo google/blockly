@@ -19,7 +19,7 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.FieldLabelSerializable');
 
-import {Config as LabelConfig, FromJsonConfig as LabelFromJsonConfig, FieldLabel} from './field_label.js';
+import {FieldImageConfig as LabelConfig, FieldImageFromJsonConfig as LabelFromJsonConfig, FieldLabel} from './field_label.js';
 import * as fieldRegistry from './field_registry.js';
 import * as parsing from './utils/parsing.js';
 

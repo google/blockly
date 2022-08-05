@@ -328,7 +328,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /** @internal */
   getMetrics: () => Metrics;
   /** @internal */
-  setMetrics: (p1: {x: number, y: number}) => void;
+  setMetrics: (p1: {x?: number, y?: number}) => void;
   private readonly componentManager_: ComponentManager;
 
   /**

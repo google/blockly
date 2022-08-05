@@ -76,7 +76,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
    *     between 0 and 1 specifying the degree of scrolling and a
    *     similar x property.
    */
-  protected abstract setMetrics_(xyRatio: {x: number, y: number}): void;
+  protected abstract setMetrics_(xyRatio: {x?: number, y?: number}): void;
 
   /**
    * Lay out the blocks in the flyout.

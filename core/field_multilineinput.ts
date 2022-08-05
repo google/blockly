@@ -424,7 +424,8 @@ export class FieldMultilineInput extends FieldTextInput {
    * @nocollapse
    * @internal
    */
-  static override fromJson(options: FieldMultilineInputFromJsonConfig): FieldMultilineInput {
+  static override fromJson(options: FieldMultilineInputFromJsonConfig):
+      FieldMultilineInput {
     const text = parsing.replaceMessageReferences(options.text);
     // `this` might be a subclass of FieldMultilineInput if that class doesn't
     // override the static fromJson method.
@@ -459,6 +460,7 @@ export interface FieldMultilineInputConfig extends FieldTextInputConfig {
 /**
  * fromJson config options for the multiline input field.
  */
-export interface FieldMultilineInputFromJsonConfig extends FieldMultilineInputConfig {
+export interface FieldMultilineInputFromJsonConfig extends
+    FieldMultilineInputConfig {
   text?: string;
 }

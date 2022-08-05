@@ -475,7 +475,8 @@ export class FieldVariable extends FieldDropdown {
    * @nocollapse
    * @internal
    */
-  static override fromJson(options: FieldVariableFromJsonConfig): FieldVariable {
+  static override fromJson(options: FieldVariableFromJsonConfig):
+      FieldVariable {
     const varName = parsing.replaceMessageReferences(options.variable);
     // `this` might be a subclass of FieldVariable if that class doesn't
     // override the static fromJson method.

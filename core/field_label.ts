@@ -51,7 +51,8 @@ export class FieldLabel extends Field {
    * for a list of properties this parameter supports.
    */
   constructor(
-      opt_value?: string|Sentinel, opt_class?: string, opt_config?: FieldImageConfig) {
+      opt_value?: string|Sentinel, opt_class?: string,
+      opt_config?: FieldImageConfig) {
     super(Field.SKIP_SETUP);
 
     if (opt_value === Field.SKIP_SETUP) {

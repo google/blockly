@@ -15,8 +15,9 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.BlocklyOptions');
 
-import {Theme} from './theme.js';
-import {Workspace} from './workspace.js';
+import type {Theme, ITheme} from './theme.js';
+import type {WorkspaceSvg} from './workspace_svg.js';
+import type {ToolboxDefinition} from './utils/toolbox.js';
 
 
 /**
@@ -26,7 +27,7 @@ import {Workspace} from './workspace.js';
 export interface BlocklyOptions {
   collapse?: boolean;
   comments?: boolean;
-  cs?: boolean;
+  css?: boolean;
   disable?: boolean;
   grid?: GridOptions;
   horizontalLayout?: boolean;
@@ -41,14 +42,14 @@ export interface BlocklyOptions {
   rtl?: boolean;
   scrollbars?: ScrollbarOptions|boolean;
   sounds?: boolean;
-  theme?: Theme;
-  toolbox?: string|object|Element;
+  theme?: Theme|string|ITheme;
+  toolbox?: string|ToolboxDefinition|Element;
   toolboxPosition?: string;
   trashcan?: boolean;
-  maxTrashcanContents?: boolean;
-  plugins?: object;
+  maxTrashcanContents?: number;
+  plugins?: {[key: string]: (new(...p1: any[]) => any)|string};
   zoom?: ZoomOptions;
-  parentWorkspace?: Workspace;
+  parentWorkspace?: WorkspaceSvg;
 }
 
 export interface GridOptions {

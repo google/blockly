@@ -19,11 +19,21 @@ import * as registry from './registry.js';
 import * as object from './utils/object.js';
 
 
+export interface ITheme {
+  blockStyles: {[key: string]: BlockStyle};
+  categoryStyles: {[key: string]: CategoryStyle};
+  componentStyles: ComponentStyle;
+  fontStyle: FontStyle;
+  startHats: boolean|null;
+  base?: string|Theme;
+  name: string;
+}
+
 /**
  * Class for a theme.
  * @alias Blockly.Theme
  */
-export class Theme {
+export class Theme implements ITheme {
   /** @internal */
   blockStyles: {[key: string]: BlockStyle};
   /** @internal */
@@ -141,13 +151,13 @@ export class Theme {
    * @param themeObj An object containing theme properties.
    * @return A new Blockly theme.
    */
-  static defineTheme(name: string, themeObj: AnyDuringMigration): Theme {
+  static defineTheme(name: string, themeObj: ITheme): Theme {
     name = name.toLowerCase();
     const theme = new Theme(name);
     let base = themeObj['base'];
     if (base) {
       if (typeof base === 'string') {
-        base = registry.getObject(registry.Type.THEME, base);
+        base = registry.getObject(registry.Type.THEME, base) ?? undefined;
       }
       if (base instanceof Theme) {
         object.deepMerge(theme, base);

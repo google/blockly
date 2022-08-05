@@ -464,7 +464,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     /** The block renderer used for rendering blocks on this workspace. */
     this.renderer_ = blockRendering.init(
         this.options.renderer || 'geras', this.getTheme(),
-        this.options.rendererOverrides);
+        this.options.rendererOverrides ?? undefined);
 
     /**
      * The cached size of the parent svg element.

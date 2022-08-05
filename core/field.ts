@@ -240,7 +240,9 @@ export abstract class Field implements IASTNodeLocationSvg,
   protected configure_(config: Config) {
     // TODO (#2884): Possibly add CSS class config option.
     // TODO (#2885): Possibly add cursor config option.
-    if (config.tooltip) this.setTooltip(config.tooltip);
+    if (config.tooltip) {
+      this.setTooltip(parsing.replaceMessageReferences(config.tooltip));
+    }
   }
 
   /**

@@ -255,7 +255,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     this.workspace_.setMetricsManager(
         new FlyoutMetricsManager(this.workspace_, this));
 
-    this.workspace_.isFlyout = true;
+    this.workspace_.internalIsFlyout = true;
     // Keep the workspace visibility consistent with the flyout's visibility.
     this.workspace_.setVisible(this.isVisible_);
 

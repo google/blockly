@@ -51,8 +51,7 @@ export class FieldLabel extends Field {
    * for a list of properties this parameter supports.
    */
   constructor(
-      opt_value?: string|Sentinel, opt_class?: string,
-      opt_config?: Config) {
+      opt_value?: string|Sentinel, opt_class?: string, opt_config?: Config) {
     super(Field.SKIP_SETUP);
 
     if (opt_value === Field.SKIP_SETUP) {
@@ -137,7 +136,8 @@ fieldRegistry.register('field_label', FieldLabel);
  * Config options for the label field.
  */
 export interface Config extends BaseFieldConfig {
-  class?: string;
+  class
+  ?: string;
 }
 
 /**

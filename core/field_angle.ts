@@ -532,7 +532,7 @@ fieldRegistry.register('field_angle', FieldAngle);
  *   - offset: 90
  *   - wrap: 0
  *   - round: 15
- * 
+ *
  * Protractor specifies:
  *   - clockwise: false
  *   - offset: 0

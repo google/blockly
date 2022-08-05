@@ -117,9 +117,7 @@ export class FieldDropdown extends Field {
    */
   constructor(
       menuGenerator: AnyDuringMigration[][]|Function|Sentinel,
-      opt_validator?: Function,
-      opt_config?: BaseFieldConfig
-  ) {
+      opt_validator?: Function, opt_config?: BaseFieldConfig) {
     super(Field.SKIP_SETUP);
 
     // If we pass SKIP_SETUP, don't do *anything* with the menu generator.
@@ -660,7 +658,8 @@ export class FieldDropdown extends Field {
    */
   static fromJson(options: FromJsonConfig): FieldDropdown {
     if (!options.options) {
-      throw new Error('options are required for the dropdown field. The ' +
+      throw new Error(
+          'options are required for the dropdown field. The ' +
           'options property must be assigned an array of ' +
           '[humanReadableValue, languageNeutralValue] tuples.');
     }
@@ -711,10 +710,10 @@ export interface ImageProperties {
  */
 export type MenuOption = [string | ImageProperties, string]
 
-/**
- * fromJson config for the dropdown field.
- */
-export interface FromJsonConfig extends BaseFieldConfig {
+    /**
+     * fromJson config for the dropdown field.
+     */
+    export interface FromJsonConfig extends BaseFieldConfig {
   options?: MenuOption[];
 }
 

@@ -708,12 +708,12 @@ export interface ImageProperties {
  * readable value (text or image), and the second element is the language-
  * neutral value.
  */
-export type MenuOption = [string | ImageProperties, string]
+export type MenuOption = [string | ImageProperties, string];
 
-    /**
-     * fromJson config for the dropdown field.
-     */
-    export interface FromJsonConfig extends BaseFieldConfig {
+/**
+ * fromJson config for the dropdown field.
+ */
+export interface FromJsonConfig extends BaseFieldConfig {
   options?: MenuOption[];
 }
 

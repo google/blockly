@@ -132,13 +132,16 @@ fieldRegistry.register('field_label', FieldLabel);
 
 (FieldLabel.prototype as AnyDuringMigration).DEFAULT_VALUE = '';
 
+// clang-format off
+// Clang does not like the 'class' keyword being used as a property.
 /**
  * Config options for the label field.
  */
 export interface Config extends BaseFieldConfig {
-  class
-  ?: string;
+  class?: string;
 }
+// clang-format on
+
 
 /**
  * fromJson config options for the label field.

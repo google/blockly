@@ -133,10 +133,16 @@ fieldRegistry.register('field_label', FieldLabel);
 
 (FieldLabel.prototype as AnyDuringMigration).DEFAULT_VALUE = '';
 
+/**
+ * Config options for the label field.
+ */
 export interface Config extends BaseFieldConfig {
   class?: string;
 }
 
+/**
+ * fromJson config options for the label field.
+ */
 export interface FromJsonConfig extends Config {
   text?: string;
 }

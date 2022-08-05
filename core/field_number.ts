@@ -310,12 +310,18 @@ fieldRegistry.register('field_number', FieldNumber);
 
 (FieldNumber.prototype as AnyDuringMigration).DEFAULT_VALUE = 0;
 
+/**
+ * Config options for the number field.
+ */
 export interface Config extends TextInputConfig {
   min?: number;
   max?: number;
   precision?: number;
 }
 
+/**
+ * fromJson config options for the number field.
+ */
 export interface FromJsonConfig extends Config {
   value?: number;
 }

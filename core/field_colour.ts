@@ -615,12 +615,18 @@ Css.register(`
 
 fieldRegistry.register('field_colour', FieldColour);
 
+/**
+ * Config options for the colour field.
+ */
 export interface Config extends BaseFieldConfig {
   colourOptions?: string[];
   colourTitles?: string[];
   columns?: number;
 }
 
+/**
+ * fromJson config options for the colour field.
+ */
 export interface FromJsonConfig extends Config {
   colour?: string;
 }

@@ -576,10 +576,16 @@ fieldRegistry.register('field_input', FieldTextInput);
 
 (FieldTextInput.prototype as AnyDuringMigration).DEFAULT_VALUE = '';
 
+/**
+ * Config options for the text input field.
+ */
 export interface Config extends BaseFieldConfig {
   spellcheck?: boolean;
 }
 
+/**
+ * fromJson config options for the text input field.
+ */
 export interface FromJsonConfig extends Config {
   text?: string;
 }

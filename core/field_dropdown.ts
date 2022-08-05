@@ -694,21 +694,28 @@ export class FieldDropdown extends Field {
 }
 
 /**
- * An individual option in the dropdown menu. The first element is the human-
- * readable value (text or image), and the second element is the language-
- * neutral value.
+ * Definition of a human-readable image dropdown option.
  */
-type MenuOption = [string | ImageProperties, string]
-
-interface FromJsonConfig extends BaseFieldConfig {
-  options?: MenuOption[];
-}
-
-interface ImageProperties {
+export interface ImageProperties {
   src: string;
   alt: string;
   width: number;
   height: number;
+}
+
+
+/**
+ * An individual option in the dropdown menu. The first element is the human-
+ * readable value (text or image), and the second element is the language-
+ * neutral value.
+ */
+export type MenuOption = [string | ImageProperties, string]
+
+/**
+ * fromJson config for the dropdown field.
+ */
+export interface FromJsonConfig extends BaseFieldConfig {
+  options?: MenuOption[];
 }
 
 /**

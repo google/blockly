@@ -1196,6 +1196,9 @@ export abstract class Field implements IASTNodeLocationSvg,
   }
 }
 
+/**
+ * Extra configuration options for the base field.
+ */
 export interface Config {
   tooltip?: string;
 }

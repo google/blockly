@@ -263,11 +263,17 @@ fieldRegistry.register('field_image', FieldImage);
 
 (FieldImage.prototype as AnyDuringMigration).DEFAULT_VALUE = '';
 
+/**
+ * Config options for the image field.
+ */
 export interface Config extends BaseFieldConfig {
   flipRtl?: boolean,
   alt?: string,
 }
 
+/**
+ * fromJson config options for the colour field.
+ */
 export interface FromJsonConfig extends Config {
   src?: string;
   width?: number;

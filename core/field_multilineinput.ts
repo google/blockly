@@ -449,10 +449,16 @@ Css.register(`
 
 fieldRegistry.register('field_multilinetext', FieldMultilineInput);
 
+/**
+ * Config options for the multiline input field.
+ */
 export interface Config extends TextInputConfig {
   maxLines?: number;
 }
 
+/**
+ * fromJson config options for the multiline input field.
+ */
 export interface FromJsonConfig extends Config {
   text?: string;
 }

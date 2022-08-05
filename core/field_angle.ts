@@ -525,11 +525,28 @@ fieldRegistry.register('field_angle', FieldAngle);
 
 (FieldAngle.prototype as AnyDuringMigration).DEFAULT_VALUE = 0;
 
+/**
+ * The two main modes of the angle field.
+ * Compass specifies:
+ *   - clockwise: true
+ *   - offset: 90
+ *   - wrap: 0
+ *   - round: 15
+ * 
+ * Protractor specifies:
+ *   - clockwise: false
+ *   - offset: 0
+ *   - wrap: 0
+ *   - round: 15
+ */
 export enum Mode {
   COMPASS = 'compass',
   PROTRACTOR = 'protractor',
 }
 
+/**
+ * Extra configuration options for the angle field.
+ */
 export interface Config extends TextConfig {
   mode?: Mode;
   clockwise?: boolean;
@@ -538,6 +555,9 @@ export interface Config extends TextConfig {
   round?: number;
 }
 
+/**
+ * fromJson configuration options for the angle field.
+ */
 export interface FromJsonConfig extends Config {
   angle?: number;
 }

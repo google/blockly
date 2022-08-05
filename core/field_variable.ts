@@ -528,11 +528,17 @@ export class FieldVariable extends FieldDropdown {
 
 fieldRegistry.register('field_variable', FieldVariable);
 
+/**
+ * Config options for the variable field.
+ */
 export interface Config extends BaseFieldConfig {
   variableTypes?: string[];
   defaultType?: string;
 }
 
+/**
+ * fromJson config options for the variable field.
+ */
 export interface FromJsonConfig extends Config {
   variable?: string;
 }

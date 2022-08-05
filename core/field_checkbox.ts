@@ -228,10 +228,16 @@ fieldRegistry.register('field_checkbox', FieldCheckbox);
 
 (FieldCheckbox.prototype as AnyDuringMigration).DEFAULT_VALUE = false;
 
+/**
+ * Config options for the checkbox field.
+ */
 export interface Config extends BaseFieldConfig {
   checkCharacter?: string;
 }
 
+/**
+ * fromJson config options for the checkbox field.
+ */
 export interface FromJsonConfig extends Config {
   checked?: boolean;
 }

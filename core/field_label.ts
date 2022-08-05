@@ -52,7 +52,7 @@ export class FieldLabel extends Field {
    */
   constructor(
       opt_value?: string|Sentinel, opt_class?: string,
-      opt_config?: FieldImageConfig) {
+      opt_config?: FieldLabelConfig) {
     super(Field.SKIP_SETUP);
 
     if (opt_value === Field.SKIP_SETUP) {
@@ -66,7 +66,7 @@ export class FieldLabel extends Field {
     this.setValue(opt_value);
   }
 
-  protected override configure_(config: FieldImageConfig) {
+  protected override configure_(config: FieldLabelConfig) {
     super.configure_(config);
     if (config.class) this.class_ = config.class;
   }
@@ -121,7 +121,7 @@ export class FieldLabel extends Field {
    * @nocollapse
    * @internal
    */
-  static fromJson(options: FieldImageFromJsonConfig): FieldLabel {
+  static fromJson(options: FieldLabelFromJsonConfig): FieldLabel {
     const text = parsing.replaceMessageReferences(options.text);
     // `this` might be a subclass of FieldLabel if that class doesn't override
     // the static fromJson method.
@@ -138,7 +138,7 @@ fieldRegistry.register('field_label', FieldLabel);
 /**
  * Config options for the label field.
  */
-export interface FieldImageConfig extends FieldConfig {
+export interface FieldLabelConfig extends FieldConfig {
   class?: string;
 }
 // clang-format on
@@ -147,6 +147,6 @@ export interface FieldImageConfig extends FieldConfig {
 /**
  * fromJson config options for the label field.
  */
-export interface FieldImageFromJsonConfig extends FieldImageConfig {
+export interface FieldLabelFromJsonConfig extends FieldLabelConfig {
   text?: string;
 }

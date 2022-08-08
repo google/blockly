@@ -9,4 +9,4 @@
  * @author samelh@google.com (Sam El-Husseini)
  */
 
-export * from './declarations/core/blockly';
+export * from './core/blockly';

@@ -9,6 +9,6 @@
  * @author samelh@google.com (Sam El-Husseini)
  */
 
-export * from './declarations/core/blockly';
+export * from './core/blockly';
 export * as libraryBlocks from './blocks';  // Handcrafted file.
 export const JavaScript: any;

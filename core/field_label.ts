@@ -17,7 +17,7 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.FieldLabel');
 
-import {Field} from './field.js';
+import {FieldConfig, Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
@@ -52,7 +52,7 @@ export class FieldLabel extends Field {
    */
   constructor(
       opt_value?: string|Sentinel, opt_class?: string,
-      opt_config?: AnyDuringMigration) {
+      opt_config?: FieldLabelConfig) {
     super(Field.SKIP_SETUP);
 
     if (opt_value === Field.SKIP_SETUP) {
@@ -66,9 +66,9 @@ export class FieldLabel extends Field {
     this.setValue(opt_value);
   }
 
-  override configure_(config: AnyDuringMigration) {
+  protected override configure_(config: FieldLabelConfig) {
     super.configure_(config);
-    this.class_ = config['class'];
+    if (config.class) this.class_ = config.class;
   }
 
   /**
@@ -121,8 +121,8 @@ export class FieldLabel extends Field {
    * @nocollapse
    * @internal
    */
-  static fromJson(options: AnyDuringMigration): FieldLabel {
-    const text = parsing.replaceMessageReferences(options['text']);
+  static fromJson(options: FieldLabelFromJsonConfig): FieldLabel {
+    const text = parsing.replaceMessageReferences(options.text);
     // `this` might be a subclass of FieldLabel if that class doesn't override
     // the static fromJson method.
     return new this(text, undefined, options);
@@ -132,3 +132,21 @@ export class FieldLabel extends Field {
 fieldRegistry.register('field_label', FieldLabel);
 
 (FieldLabel.prototype as AnyDuringMigration).DEFAULT_VALUE = '';
+
+// clang-format off
+// Clang does not like the 'class' keyword being used as a property.
+/**
+ * Config options for the label field.
+ */
+export interface FieldLabelConfig extends FieldConfig {
+  class?: string;
+}
+// clang-format on
+
+
+/**
+ * fromJson config options for the label field.
+ */
+export interface FieldLabelFromJsonConfig extends FieldLabelConfig {
+  text?: string;
+}

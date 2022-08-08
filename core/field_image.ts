@@ -15,7 +15,7 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.FieldImage');
 
-import {Field} from './field.js';
+import {FieldConfig, Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import * as dom from './utils/dom.js';
 import * as parsing from './utils/parsing.js';
@@ -84,13 +84,9 @@ export class FieldImage extends Field {
   constructor(
       src: string|Sentinel, width: string|number, height: string|number,
       opt_alt?: string, opt_onClick?: (p1: FieldImage) => AnyDuringMigration,
-      opt_flipRtl?: boolean, opt_config?: AnyDuringMigration) {
+      opt_flipRtl?: boolean, opt_config?: FieldImageConfig) {
     super(Field.SKIP_SETUP);
 
-    // Return early.
-    if (!src) {
-      throw Error('Src value of an image field is required');
-    }
     const imageHeight = Number(parsing.replaceMessageReferences(height));
     const imageWidth = Number(parsing.replaceMessageReferences(width));
     if (isNaN(imageHeight) || isNaN(imageWidth)) {
@@ -133,10 +129,12 @@ export class FieldImage extends Field {
    * Configure the field based on the given map of options.
    * @param config A map of options to configure the field based on.
    */
-  protected override configure_(config: AnyDuringMigration) {
+  protected override configure_(config: FieldImageConfig) {
     super.configure_(config);
-    this.flipRtl_ = !!config['flipRtl'];
-    this.altText_ = parsing.replaceMessageReferences(config['alt']) || '';
+    if (config.flipRtl) this.flipRtl_ = config.flipRtl;
+    if (config.alt) {
+      this.altText_ = parsing.replaceMessageReferences(config.alt);
+    }
   }
 
   /**
@@ -248,15 +246,37 @@ export class FieldImage extends Field {
    * @nocollapse
    * @internal
    */
-  static fromJson(options: AnyDuringMigration): FieldImage {
+  static fromJson(options: FieldImageFromJsonConfig): FieldImage {
+    if (!options.src || !options.width || !options.height) {
+      throw new Error(
+          'src, width, and height values for an image field are' +
+          'required. The width and height must be non-zero.');
+    }
     // `this` might be a subclass of FieldImage if that class doesn't override
     // the static fromJson method.
     return new this(
-        options['src'], options['width'], options['height'], undefined,
-        undefined, undefined, options);
+        options.src, options.width, options.height, undefined, undefined,
+        undefined, options);
   }
 }
 
 fieldRegistry.register('field_image', FieldImage);
 
 (FieldImage.prototype as AnyDuringMigration).DEFAULT_VALUE = '';
+
+/**
+ * Config options for the image field.
+ */
+export interface FieldImageConfig extends FieldConfig {
+  flipRtl?: boolean;
+  alt?: string;
+}
+
+/**
+ * fromJson config options for the colour field.
+ */
+export interface FieldImageFromJsonConfig extends FieldImageConfig {
+  src?: string;
+  width?: number;
+  height?: number;
+}

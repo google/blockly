@@ -21,7 +21,7 @@ import * as Css from './css.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import {Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
-import {FieldTextInput} from './field_textinput.js';
+import {FieldTextInputConfig, FieldTextInput} from './field_textinput.js';
 import * as dom from './utils/dom.js';
 import {KeyCodes} from './utils/keycodes.js';
 import * as math from './utils/math.js';
@@ -121,7 +121,7 @@ export class FieldAngle extends FieldTextInput {
    */
   constructor(
       opt_value?: string|number|Sentinel, opt_validator?: Function,
-      opt_config?: AnyDuringMigration) {
+      opt_config?: FieldAngleConfig) {
     super(Field.SKIP_SETUP);
 
     /**
@@ -165,15 +165,15 @@ export class FieldAngle extends FieldTextInput {
    * Configure the field based on the given map of options.
    * @param config A map of options to configure the field based on.
    */
-  override configure_(config: AnyDuringMigration) {
+  protected override configure_(config: FieldAngleConfig) {
     super.configure_(config);
 
-    switch (config['mode']) {
-      case 'compass':
+    switch (config.mode) {
+      case Mode.COMPASS:
         this.clockwise_ = true;
         this.offset_ = 90;
         break;
-      case 'protractor':
+      case Mode.PROTRACTOR:
         // This is the default mode, so we could do nothing. But just to
         // future-proof, we'll set it anyway.
         this.clockwise_ = false;
@@ -182,33 +182,10 @@ export class FieldAngle extends FieldTextInput {
     }
 
     // Allow individual settings to override the mode setting.
-    const clockwise = config['clockwise'];
-    if (typeof clockwise === 'boolean') {
-      this.clockwise_ = clockwise;
-    }
-
-    // If these are passed as null then we should leave them on the default.
-    let offset = config['offset'];
-    if (offset !== null) {
-      offset = Number(offset);
-      if (!isNaN(offset)) {
-        this.offset_ = offset;
-      }
-    }
-    let wrap = config['wrap'];
-    if (wrap !== null) {
-      wrap = Number(wrap);
-      if (!isNaN(wrap)) {
-        this.wrap_ = wrap;
-      }
-    }
-    let round = config['round'];
-    if (round !== null) {
-      round = Number(round);
-      if (!isNaN(round)) {
-        this.round_ = round;
-      }
-    }
+    if (config.clockwise) this.clockwise_ = config.clockwise;
+    if (config.offset) this.offset_ = config.offset;
+    if (config.wrap) this.wrap_ = config.wrap;
+    if (config.round) this.round_ = config.round;
   }
 
   /**
@@ -509,10 +486,10 @@ export class FieldAngle extends FieldTextInput {
    * @nocollapse
    * @internal
    */
-  static override fromJson(options: AnyDuringMigration): FieldAngle {
+  static override fromJson(options: FieldAngleFromJsonConfig): FieldAngle {
     // `this` might be a subclass of FieldAngle if that class doesn't override
     // the static fromJson method.
-    return new this(options['angle'], undefined, options);
+    return new this(options.angle, undefined, options);
   }
 }
 
@@ -547,3 +524,40 @@ Css.register(`
 fieldRegistry.register('field_angle', FieldAngle);
 
 (FieldAngle.prototype as AnyDuringMigration).DEFAULT_VALUE = 0;
+
+/**
+ * The two main modes of the angle field.
+ * Compass specifies:
+ *   - clockwise: true
+ *   - offset: 90
+ *   - wrap: 0
+ *   - round: 15
+ *
+ * Protractor specifies:
+ *   - clockwise: false
+ *   - offset: 0
+ *   - wrap: 0
+ *   - round: 15
+ */
+export enum Mode {
+  COMPASS = 'compass',
+  PROTRACTOR = 'protractor',
+}
+
+/**
+ * Extra configuration options for the angle field.
+ */
+export interface FieldAngleConfig extends FieldTextInputConfig {
+  mode?: Mode;
+  clockwise?: boolean;
+  offset?: number;
+  wrap?: number;
+  round?: number;
+}
+
+/**
+ * fromJson configuration options for the angle field.
+ */
+export interface FieldAngleFromJsonConfig extends FieldAngleConfig {
+  angle?: number;
+}

@@ -22,7 +22,6 @@ suite('Image Fields', function() {
    * @type {!Array<!FieldCreationTestCase>}
    */
   const invalidValueTestCases = [
-    {title: 'Undefined Src', value: undefined, args: [undefined, 1, 1]},
     {title: 'Undefined Size', value: 'src', args: ['src', undefined, undefined]},
     {title: 'Zero Size', value: 'src', args: ['src', 0, 0]},
     {title: 'Non-Parsable String for Size', value: 'src', args: ['src', 'bad', 'bad']},

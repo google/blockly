@@ -19,7 +19,7 @@ goog.declareModuleId('Blockly.FieldVariable');
 import './events/events_block_change.js';
 
 import type {Block} from './block.js';
-import {Field} from './field.js';
+import {Field, FieldConfig} from './field.js';
 import {FieldDropdown} from './field_dropdown.js';
 import * as fieldRegistry from './field_registry.js';
 import * as internalConstants from './internal_constants.js';
@@ -84,7 +84,7 @@ export class FieldVariable extends FieldDropdown {
   constructor(
       varName: string|null|Sentinel, opt_validator?: Function,
       opt_variableTypes?: string[], opt_defaultType?: string,
-      opt_config?: AnyDuringMigration) {
+      opt_config?: FieldVariableConfig) {
     super(Field.SKIP_SETUP);
 
     /**
@@ -123,9 +123,9 @@ export class FieldVariable extends FieldDropdown {
    * Configure the field based on the given map of options.
    * @param config A map of options to configure the field based on.
    */
-  protected override configure_(config: AnyDuringMigration) {
+  protected override configure_(config: FieldVariableConfig) {
     super.configure_(config);
-    this.setTypes_(config['variableTypes'], config['defaultType']);
+    this.setTypes_(config.variableTypes, config.defaultType);
   }
 
   /**
@@ -475,8 +475,9 @@ export class FieldVariable extends FieldDropdown {
    * @nocollapse
    * @internal
    */
-  static override fromJson(options: AnyDuringMigration): FieldVariable {
-    const varName = parsing.replaceMessageReferences(options['variable']);
+  static override fromJson(options: FieldVariableFromJsonConfig):
+      FieldVariable {
+    const varName = parsing.replaceMessageReferences(options.variable);
     // `this` might be a subclass of FieldVariable if that class doesn't
     // override the static fromJson method.
     return new this(varName, undefined, undefined, undefined, options);
@@ -527,3 +528,18 @@ export class FieldVariable extends FieldDropdown {
 }
 
 fieldRegistry.register('field_variable', FieldVariable);
+
+/**
+ * Config options for the variable field.
+ */
+export interface FieldVariableConfig extends FieldConfig {
+  variableTypes?: string[];
+  defaultType?: string;
+}
+
+/**
+ * fromJson config options for the variable field.
+ */
+export interface FieldVariableFromJsonConfig extends FieldVariableConfig {
+  variable?: string;
+}

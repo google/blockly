@@ -19,7 +19,7 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.FieldLabelSerializable');
 
-import {FieldLabelConfig as LabelConfig, FieldLabelFromJsonConfig as LabelFromJsonConfig, FieldLabel} from './field_label.js';
+import {FieldLabelConfig, FieldLabelFromJsonConfig, FieldLabel} from './field_label.js';
 import * as fieldRegistry from './field_registry.js';
 import * as parsing from './utils/parsing.js';
 
@@ -52,7 +52,7 @@ export class FieldLabelSerializable extends FieldLabel {
    * for a list of properties this parameter supports.
    */
   constructor(
-      opt_value?: string, opt_class?: string, opt_config?: LabelConfig) {
+      opt_value?: string, opt_class?: string, opt_config?: FieldLabelConfig) {
     super(String(opt_value ?? ''), opt_class, opt_config);
   }
 
@@ -64,7 +64,7 @@ export class FieldLabelSerializable extends FieldLabel {
    * @nocollapse
    * @internal
    */
-  static override fromJson(options: LabelFromJsonConfig):
+  static override fromJson(options: FieldLabelFromJsonConfig):
       FieldLabelSerializable {
     const text = parsing.replaceMessageReferences(options.text);
     // `this` might be a subclass of FieldLabelSerializable if that class

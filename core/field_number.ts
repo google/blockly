@@ -17,7 +17,7 @@ goog.declareModuleId('Blockly.FieldNumber');
 
 import {Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
-import {FieldTextInputConfig as FieldTextInputConfig, FieldTextInput} from './field_textinput.js';
+import {FieldTextInputConfig, FieldTextInput} from './field_textinput.js';
 import * as aria from './utils/aria.js';
 import type {Sentinel} from './utils/sentinel.js';
 

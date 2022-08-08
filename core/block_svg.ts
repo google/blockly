@@ -115,10 +115,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * Map from IDs for warnings text to PIDs of functions to apply them.
    * Used to be able to maintain multiple warnings.
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type '{ [key:
-  // string]: number; }'.
-  private warningTextDb_: {[key: string]: AnyDuringMigration} =
-      null as AnyDuringMigration;
+  private warningTextDb = new Map<string, ReturnType<typeof setTimeout>>();
 
   /** Block's mutator icon (if any). */
   mutator: Mutator|null = null;
@@ -880,13 +877,11 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     this.rendered = false;
 
     // Clear pending warnings.
-    if (this.warningTextDb_) {
-      for (const n in this.warningTextDb_) {
-        clearTimeout(this.warningTextDb_[n]);
+    if (this.warningTextDb.size) {
+      for (const n of this.warningTextDb.values()) {
+        clearTimeout(n);
       }
-      // AnyDuringMigration because:  Type 'null' is not assignable to type '{
-      // [key: string]: number; }'.
-      this.warningTextDb_ = null as AnyDuringMigration;
+      this.warningTextDb.clear();
     }
 
     const icons = this.getIcons();
@@ -1045,33 +1040,29 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    *     multiple warnings.
    */
   override setWarningText(text: string|null, opt_id?: string) {
-    if (!this.warningTextDb_) {
-      // Create a database of warning PIDs.
-      // Only runs once per block (and only those with warnings).
-      this.warningTextDb_ = Object.create(null);
-    }
     const id = opt_id || '';
     if (!id) {
       // Kill all previous pending processes, this edit supersedes them all.
-      for (const n of Object.keys(this.warningTextDb_)) {
-        clearTimeout(this.warningTextDb_[n]);
-        delete this.warningTextDb_[n];
+      for (const timeout of this.warningTextDb.values()) {
+        clearTimeout(timeout);
       }
-    } else if (this.warningTextDb_[id]) {
+      this.warningTextDb.clear();
+    } else if (this.warningTextDb.has(id)) {
       // Only queue up the latest change.  Kill any earlier pending process.
-      clearTimeout(this.warningTextDb_[id]);
-      delete this.warningTextDb_[id];
+      clearTimeout(this.warningTextDb.get(id)!);
+      this.warningTextDb.delete(id);
     }
     if (this.workspace.isDragging()) {
       // Don't change the warning text during a drag.
       // Wait until the drag finishes.
       const thisBlock = this;
-      this.warningTextDb_[id] = setTimeout(function() {
-        if (!thisBlock.disposed) {  // Check block wasn't deleted.
-          delete thisBlock.warningTextDb_[id];
-          thisBlock.setWarningText(text, id);
-        }
-      }, 100);
+      this.warningTextDb.set(
+          id, setTimeout(() => {
+            if (!this.disposed) {  // Check block wasn't deleted.
+              this.warningTextDb.delete(id);
+              this.setWarningText(text, id);
+            }
+          }, 100));
       return;
     }
     if (this.isInFlyout) {

@@ -42,7 +42,9 @@ const ZOOM_OUT_MULTIPLIER = 6;
 export class TouchGesture extends Gesture {
   /** Boolean for whether or not this gesture is a multi-touch gesture. */
   private isMultiTouch_ = false;
-  private cachedPoints_: {[key: string]: Coordinate};
+
+  /** A map of cached points used for tracking multi-touch gestures. */
+  private cachedPoints = new Map<string, Coordinate|null>();
 
   /**
    * This is the ratio between the starting distance between the touch points
@@ -66,18 +68,6 @@ export class TouchGesture extends Gesture {
   private isPinchZoomEnabled_: boolean|null = null;
   override onMoveWrapper_: AnyDuringMigration;
   override onUpWrapper_: AnyDuringMigration;
-
-  /**
-   * @param e The event that kicked off this gesture.
-   * @param creatorWorkspace The workspace that created this gesture and has a
-   *     reference to it.
-   */
-  constructor(e: Event, creatorWorkspace: WorkspaceSvg) {
-    super(e, creatorWorkspace);
-
-    /** A map of cached points used for tracking multi-touch gestures. */
-    this.cachedPoints_ = Object.create(null);
-  }
 
   /**
    * Start a gesture: update the workspace to indicate that a gesture is in
@@ -213,14 +203,12 @@ export class TouchGesture extends Gesture {
   handleTouchStart(e: Event) {
     const pointerId = Touch.getTouchIdentifierFromEvent(e);
     // store the pointerId in the current list of pointers
-    // AnyDuringMigration because:  Type 'Coordinate | null' is not assignable
-    // to type 'Coordinate'.
-    this.cachedPoints_[pointerId] = this.getTouchPoint(e) as AnyDuringMigration;
-    const pointers = Object.keys(this.cachedPoints_);
+    this.cachedPoints.set(pointerId, this.getTouchPoint(e));
+    const pointers = Array.from(this.cachedPoints.keys());
     // If two pointers are down, store info
     if (pointers.length === 2) {
-      const point0 = (this.cachedPoints_[pointers[0]]);
-      const point1 = (this.cachedPoints_[pointers[1]]);
+      const point0 = (this.cachedPoints.get(pointers[0]))!;
+      const point1 = (this.cachedPoints.get(pointers[1]))!;
       this.startDistance_ = Coordinate.distance(point0, point1);
       this.isMultiTouch_ = true;
       e.preventDefault();
@@ -236,12 +224,9 @@ export class TouchGesture extends Gesture {
   handleTouchMove(e: MouseEvent) {
     const pointerId = Touch.getTouchIdentifierFromEvent(e);
     // Update the cache
-    // AnyDuringMigration because:  Type 'Coordinate | null' is not assignable
-    // to type 'Coordinate'.
-    this.cachedPoints_[pointerId] = this.getTouchPoint(e) as AnyDuringMigration;
+    this.cachedPoints.set(pointerId, this.getTouchPoint(e));
 
-    const pointers = Object.keys(this.cachedPoints_);
-    if (this.isPinchZoomEnabled_ && pointers.length === 2) {
+    if (this.isPinchZoomEnabled_ && this.cachedPoints.size === 2) {
       this.handlePinch_(e);
     } else {
       super.handleMove(e);
@@ -253,10 +238,10 @@ export class TouchGesture extends Gesture {
    * @param e A touch move, or pointer move event.
    */
   private handlePinch_(e: MouseEvent) {
-    const pointers = Object.keys(this.cachedPoints_);
+    const pointers = Array.from(this.cachedPoints.keys());
     // Calculate the distance between the two pointers
-    const point0 = (this.cachedPoints_[pointers[0]]);
-    const point1 = (this.cachedPoints_[pointers[1]]);
+    const point0 = (this.cachedPoints.get(pointers[0]))!;
+    const point1 = (this.cachedPoints.get(pointers[1]))!;
     const moveDistance = Coordinate.distance(point0, point1);
     const scale = moveDistance / this.startDistance_;
 
@@ -280,11 +265,11 @@ export class TouchGesture extends Gesture {
    */
   handleTouchEnd(e: Event) {
     const pointerId = Touch.getTouchIdentifierFromEvent(e);
-    if (this.cachedPoints_[pointerId]) {
-      delete this.cachedPoints_[pointerId];
+    if (this.cachedPoints.has(pointerId)) {
+      this.cachedPoints.delete(pointerId);
     }
-    if (Object.keys(this.cachedPoints_).length < 2) {
-      this.cachedPoints_ = Object.create(null);
+    if (this.cachedPoints.size < 2) {
+      this.cachedPoints.clear();
       this.previousScale_ = 0;
     }
   }

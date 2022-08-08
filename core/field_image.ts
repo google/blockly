@@ -268,7 +268,8 @@ fieldRegistry.register('field_image', FieldImage);
  * Config options for the image field.
  */
 export interface FieldImageConfig extends FieldConfig {
-  flipRtl?: boolean, alt?: string,
+  flipRtl?: boolean;
+  alt?: string;
 }
 
 /**

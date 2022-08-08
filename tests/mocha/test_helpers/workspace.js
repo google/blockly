@@ -840,7 +840,7 @@ function testAWorkspace() {
             '  <block type="stack_block" id="2"></block>' +
             '</xml>';
 
-        testUndoConnect.call(this, xml, 1, 2, (parent, child) => {
+        testUndoConnect.call(this, xml, '1', '2', (parent, child) => {
           parent.nextConnection.connect(child.previousConnection);
         });
       });
@@ -852,7 +852,7 @@ function testAWorkspace() {
             '  <block type="row_block" id="2"></block>' +
             '</xml>';
 
-        testUndoConnect.call(this, xml, 1, 2, (parent, child) => {
+        testUndoConnect.call(this, xml, '1', '2', (parent, child) => {
           parent.getInput('INPUT').connection.connect(child.outputConnection);
         });
       });
@@ -864,7 +864,7 @@ function testAWorkspace() {
             '  <block type="stack_block" id="2"></block>' +
             '</xml>';
 
-        testUndoConnect.call(this, xml, 1, 2, (parent, child) => {
+        testUndoConnect.call(this, xml, '1', '2', (parent, child) => {
           parent.getInput('STATEMENT').connection
               .connect(child.previousConnection);
         });
@@ -881,7 +881,7 @@ function testAWorkspace() {
             '  <block type="stack_block" id="2"></block>' +
             '</xml>';
 
-        testUndoConnect.call(this, xml, 1, 2, (parent, child) => {
+        testUndoConnect.call(this, xml, '1', '2', (parent, child) => {
           parent.nextConnection.connect(child.previousConnection);
         });
       });
@@ -897,7 +897,7 @@ function testAWorkspace() {
             '  <block type="row_block" id="2"></block>' +
             '</xml>';
 
-        testUndoConnect.call(this, xml, 1, 2, (parent, child) => {
+        testUndoConnect.call(this, xml, '1', '2', (parent, child) => {
           parent.getInput('INPUT').connection.connect(child.outputConnection);
         });
       });
@@ -913,7 +913,7 @@ function testAWorkspace() {
             '  <block type="stack_block" id="2"></block>' +
             '</xml>';
 
-        testUndoConnect.call(this, xml, 1, 2, (parent, child) => {
+        testUndoConnect.call(this, xml, '1', '2', (parent, child) => {
           parent.getInput('STATEMENT').connection
               .connect(child.previousConnection);
         });
@@ -930,7 +930,7 @@ function testAWorkspace() {
             '  <block type="stack_block" id="2"></block>' +
             '</xml>';
 
-        testUndoConnect.call(this, xml, 1, 2, (parent, child) => {
+        testUndoConnect.call(this, xml, '1', '2', (parent, child) => {
           parent.nextConnection.connect(child.previousConnection);
         });
       });
@@ -946,7 +946,7 @@ function testAWorkspace() {
             '  <block type="row_block" id="2"></block>' +
             '</xml>';
 
-        testUndoConnect.call(this, xml, 1, 2, (parent, child) => {
+        testUndoConnect.call(this, xml, '1', '2', (parent, child) => {
           parent.getInput('INPUT').connection.connect(child.outputConnection);
         });
       });
@@ -962,7 +962,7 @@ function testAWorkspace() {
             '  <block type="stack_block" id="2"></block>' +
             '</xml>';
 
-        testUndoConnect.call(this, xml, 1, 2, (parent, child) => {
+        testUndoConnect.call(this, xml, '1', '2', (parent, child) => {
           parent.getInput('STATEMENT').connection
               .connect(child.previousConnection);
         });
@@ -1034,7 +1034,7 @@ function testAWorkspace() {
             '    </next>' +
             '  </block>' +
             '</xml>';
-        testUndoDisconnect.call(this, xml, 2);
+        testUndoDisconnect.call(this, xml, '2');
       });
 
       test('Row', function() {
@@ -1046,7 +1046,7 @@ function testAWorkspace() {
             '    </value>' +
             '  </block>' +
             '</xml>';
-        testUndoDisconnect.call(this, xml, 2);
+        testUndoDisconnect.call(this, xml, '2');
       });
 
       test('Statement', function() {
@@ -1058,7 +1058,7 @@ function testAWorkspace() {
             '    </statement>' +
             '  </block>' +
             '</xml>';
-        testUndoDisconnect.call(this, xml, 2);
+        testUndoDisconnect.call(this, xml, '2');
       });
 
       test('Stack w/ child', function() {
@@ -1074,7 +1074,7 @@ function testAWorkspace() {
             '    </next>' +
             '  </block>' +
             '</xml>';
-        testUndoDisconnect.call(this, xml, 2);
+        testUndoDisconnect.call(this, xml, '2');
       });
 
       test('Row w/ child', function() {
@@ -1090,7 +1090,7 @@ function testAWorkspace() {
             '    </value>' +
             '  </block>' +
             '</xml>';
-        testUndoDisconnect.call(this, xml, 2);
+        testUndoDisconnect.call(this, xml, '2');
       });
 
       test('Statement w/ child', function() {
@@ -1106,7 +1106,7 @@ function testAWorkspace() {
             '    </statement>' +
             '  </block>' +
             '</xml>';
-        testUndoDisconnect.call(this, xml, 2);
+        testUndoDisconnect.call(this, xml, '2');
       });
 
       test('Stack w/ shadow', function() {
@@ -1121,7 +1121,7 @@ function testAWorkspace() {
             '    </next>' +
             '  </block>' +
             '</xml>';
-        testUndoDisconnect.call(this, xml, 2);
+        testUndoDisconnect.call(this, xml, '2');
         chai.assert.equal(this.workspace.getAllBlocks().length, 2,
             'expected there to only be 2 blocks on the workspace ' +
             '(check for shadows)');
@@ -1137,7 +1137,7 @@ function testAWorkspace() {
             '    </value>' +
             '  </block>' +
             '</xml>';
-        testUndoDisconnect.call(this, xml, 2);
+        testUndoDisconnect.call(this, xml, '2');
         chai.assert.equal(this.workspace.getAllBlocks().length, 2,
             'expected there to only be 2 blocks on the workspace ' +
             '(check for shadows)');
@@ -1153,7 +1153,7 @@ function testAWorkspace() {
             '    </statement>' +
             '  </block>' +
             '</xml>';
-        testUndoDisconnect.call(this, xml, 2);
+        testUndoDisconnect.call(this, xml, '2');
       });
     });
 

@@ -30,10 +30,12 @@ import type {Workspace} from './workspace.js';
  */
 export class ShortcutRegistry {
   static registry: AnyDuringMigration;
-  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  private registry_!: {[key: string]: KeyboardShortcut};
-  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  private keyMap_!: {[key: string]: string[]};
+
+  /** Registry of all keyboard shortcuts, keyed by name of shortcut. */
+  private registry_ = new Map<string, KeyboardShortcut>();
+
+  /** Map of key codes to an array of shortcut names. */
+  private keyMap = new Map<string, string[]>();
 
   /** Resets the existing ShortcutRegistry singleton. */
   constructor() {
@@ -42,11 +44,8 @@ export class ShortcutRegistry {
 
   /** Clear and recreate the registry and keyMap. */
   reset() {
-    /** Registry of all keyboard shortcuts, keyed by name of shortcut. */
-    this.registry_ = Object.create(null);
-
-    /** Map of key codes to an array of shortcut names. */
-    this.keyMap_ = Object.create(null);
+    this.registry_.clear();
+    this.keyMap.clear();
   }
 
   /**
@@ -57,12 +56,12 @@ export class ShortcutRegistry {
    * @throws {Error} if a shortcut with the same name already exists.
    */
   register(shortcut: KeyboardShortcut, opt_allowOverrides?: boolean) {
-    const registeredShortcut = this.registry_[shortcut.name];
+    const registeredShortcut = this.registry_.get(shortcut.name);
     if (registeredShortcut && !opt_allowOverrides) {
       throw new Error(
           'Shortcut with name "' + shortcut.name + '" already exists.');
     }
-    this.registry_[shortcut.name] = shortcut;
+    this.registry_.set(shortcut.name, shortcut);
 
     const keyCodes = shortcut.keyCodes;
     if (keyCodes && keyCodes.length > 0) {
@@ -80,7 +79,7 @@ export class ShortcutRegistry {
    * @return True if an item was unregistered, false otherwise.
    */
   unregister(shortcutName: string): boolean {
-    const shortcut = this.registry_[shortcutName];
+    const shortcut = this.registry_.get(shortcutName);
 
     if (!shortcut) {
       console.warn(
@@ -90,7 +89,7 @@ export class ShortcutRegistry {
 
     this.removeAllKeyMappings(shortcutName);
 
-    delete this.registry_[shortcutName];
+    this.registry_.delete(shortcutName);
     return true;
   }
 
@@ -109,7 +108,7 @@ export class ShortcutRegistry {
       keyCode: string|number|KeyCodes, shortcutName: string,
       opt_allowCollision?: boolean) {
     keyCode = String(keyCode);
-    const shortcutNames = this.keyMap_[keyCode];
+    const shortcutNames = this.keyMap.get(keyCode);
     if (shortcutNames && !opt_allowCollision) {
       throw new Error(
           'Shortcut with name "' + shortcutName + '" collides with shortcuts ' +
@@ -117,7 +116,7 @@ export class ShortcutRegistry {
     } else if (shortcutNames && opt_allowCollision) {
       shortcutNames.unshift(shortcutName);
     } else {
-      this.keyMap_[keyCode] = [shortcutName];
+      this.keyMap.set(keyCode, [shortcutName]);
     }
   }
 
@@ -134,12 +133,14 @@ export class ShortcutRegistry {
    */
   removeKeyMapping(keyCode: string, shortcutName: string, opt_quiet?: boolean):
       boolean {
-    const shortcutNames = this.keyMap_[keyCode];
+    const shortcutNames = this.keyMap.get(keyCode);
 
-    if (!shortcutNames && !opt_quiet) {
-      console.warn(
-          'No keyboard shortcut with name "' + shortcutName +
-          '" registered with key code "' + keyCode + '"');
+    if (!shortcutNames) {
+      if (!opt_quiet) {
+        console.warn(
+            'No keyboard shortcut with name "' + shortcutName +
+            '" registered with key code "' + keyCode + '"');
+      }
       return false;
     }
 
@@ -147,7 +148,7 @@ export class ShortcutRegistry {
     if (shortcutIdx > -1) {
       shortcutNames.splice(shortcutIdx, 1);
       if (shortcutNames.length === 0) {
-        delete this.keyMap_[keyCode];
+        this.keyMap.delete(keyCode);
       }
       return true;
     }
@@ -166,7 +167,7 @@ export class ShortcutRegistry {
    * @param shortcutName The name of the shortcut to remove from the key map.
    */
   removeAllKeyMappings(shortcutName: string) {
-    for (const keyCode in this.keyMap_) {
+    for (const keyCode of this.keyMap.keys()) {
       this.removeKeyMapping(keyCode, shortcutName, true);
     }
   }
@@ -174,18 +175,25 @@ export class ShortcutRegistry {
   /**
    * Sets the key map. Setting the key map will override any default key
    * mappings.
-   * @param keyMap The object with key code to shortcut names.
+   * @param newKeyMap The object with key code to shortcut names.
    */
-  setKeyMap(keyMap: {[key: string]: string[]}) {
-    this.keyMap_ = keyMap;
+  setKeyMap(newKeyMap: {[key: string]: string[]}) {
+    this.keyMap.clear();
+    for (const key in newKeyMap) {
+      this.keyMap.set(key, newKeyMap[key]);
+    }
   }
 
   /**
    * Gets the current key map.
    * @return The object holding key codes to ShortcutRegistry.KeyboardShortcut.
    */
-  getKeyMap(): {[key: string]: KeyboardShortcut[]} {
-    return object.deepMerge(Object.create(null), this.keyMap_);
+  getKeyMap(): {[key: string]: string[]} {
+    const legacyKeyMap: {[key: string]: string[]} = Object.create(null);
+    for (const [key, value] of this.keyMap) {
+      legacyKeyMap[key] = value;
+    }
+    return object.deepMerge(Object.create(null), legacyKeyMap);
   }
 
   /**
@@ -193,7 +201,12 @@ export class ShortcutRegistry {
    * @return The registry of keyboard shortcuts.
    */
   getRegistry(): {[key: string]: KeyboardShortcut} {
-    return object.deepMerge(Object.create(null), this.registry_);
+    const legacyRegistry: {[key: string]: KeyboardShortcut} =
+        Object.create(null);
+    for (const [key, value] of this.registry_) {
+      legacyRegistry[key] = value;
+    }
+    return object.deepMerge(Object.create(null), legacyRegistry);
   }
 
   /**
@@ -209,10 +222,10 @@ export class ShortcutRegistry {
       return false;
     }
     for (let i = 0, shortcutName; shortcutName = shortcutNames[i]; i++) {
-      const shortcut = this.registry_[shortcutName];
-      if (!shortcut.preconditionFn || shortcut.preconditionFn(workspace)) {
+      const shortcut = this.registry_.get(shortcutName);
+      if (!shortcut?.preconditionFn || shortcut?.preconditionFn(workspace)) {
         // If the key has been handled, stop processing shortcuts.
-        if (shortcut.callback && shortcut.callback(workspace, e, shortcut)) {
+        if (shortcut?.callback && shortcut?.callback(workspace, e, shortcut)) {
           return true;
         }
       }
@@ -227,7 +240,7 @@ export class ShortcutRegistry {
    *     Undefined if no shortcuts exist.
    */
   getShortcutNamesByKeyCode(keyCode: string): string[]|undefined {
-    return this.keyMap_[keyCode] || [];
+    return this.keyMap.get(keyCode) || [];
   }
 
   /**
@@ -238,8 +251,7 @@ export class ShortcutRegistry {
    */
   getKeyCodesByShortcutName(shortcutName: string): string[] {
     const keys = [];
-    for (const keyCode in this.keyMap_) {
-      const shortcuts = this.keyMap_[keyCode];
+    for (const [keyCode, shortcuts] of this.keyMap) {
       const shortcutIdx = shortcuts.indexOf(shortcutName);
       if (shortcutIdx > -1) {
         keys.push(keyCode);

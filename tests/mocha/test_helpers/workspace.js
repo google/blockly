@@ -69,8 +69,7 @@ function testAWorkspace() {
 
       this.workspace.clear();
       chai.assert.equal(this.workspace.topBlocks_.length, 0);
-      const varMapLength =
-          Object.keys(this.workspace.variableMap_.variableMap_).length;
+      const varMapLength = this.workspace.variableMap_.variableMap.size;
       chai.assert.equal(varMapLength, 0);
     });
 
@@ -80,8 +79,7 @@ function testAWorkspace() {
 
       this.workspace.clear();
       chai.assert.equal(this.workspace.topBlocks_.length, 0);
-      const varMapLength =
-          Object.keys(this.workspace.variableMap_.variableMap_).length;
+      const varMapLength = this.workspace.variableMap_.variableMap.size;
       chai.assert.equal(varMapLength, 0);
     });
   });

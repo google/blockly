@@ -38,21 +38,19 @@ import type {Workspace} from './workspace.js';
  * @alias Blockly.VariableMap
  */
 export class VariableMap {
-  private variableMap_: {[key: string]: VariableModel[]};
+  /**
+   * A map from variable type to list of variable names.  The lists contain
+   * all of the named variables in the workspace, including variables that are
+   * not currently in use.
+   */
+  private variableMap = new Map<string, VariableModel[]>();
 
   /** @param workspace The workspace this map belongs to. */
-  constructor(public workspace: Workspace) {
-    /**
-     * A map from variable type to list of variable names.  The lists contain
-     * all of the named variables in the workspace, including variables that are
-     * not currently in use.
-     */
-    this.variableMap_ = Object.create(null);
-  }
+  constructor(public workspace: Workspace) {}
 
   /** Clear the variable map. */
   clear() {
-    this.variableMap_ = Object.create(null);
+    this.variableMap.clear();
   }
   /* Begin functions for renaming variables. */
   /**
@@ -141,7 +139,7 @@ export class VariableMap {
     // Finally delete the original variable, which is now unreferenced.
     eventUtils.fire(new (eventUtils.get(eventUtils.VAR_DELETE))!(variable));
     // And remove it from the list.
-    arrayUtils.removeElem(this.variableMap_[type], variable);
+    arrayUtils.removeElem(this.variableMap.get(type)!, variable);
   }
   /* End functions for renaming variables. */
   /**
@@ -174,14 +172,14 @@ export class VariableMap {
     const type = opt_type || '';
     variable = new VariableModel(this.workspace, name, type, id);
 
-    const variables = this.variableMap_[type] || [];
+    const variables = this.variableMap.get(type) || [];
     variables.push(variable);
     // Delete the list of variables of this type, and re-add it so that
     // the most recent addition is at the end.
     // This is used so the toolbox's set block is set to the most recent
     // variable.
-    delete this.variableMap_[type];
-    this.variableMap_[type] = variables;
+    this.variableMap.delete(type);
+    this.variableMap.set(type, variables);
 
     return variable;
   }
@@ -192,13 +190,16 @@ export class VariableMap {
    */
   deleteVariable(variable: VariableModel) {
     const variableId = variable.getId();
-    const variableList = this.variableMap_[variable.type];
-    for (let i = 0; i < variableList.length; i++) {
-      const tempVar = variableList[i];
-      if (tempVar.getId() === variableId) {
-        variableList.splice(i, 1);
-        eventUtils.fire(new (eventUtils.get(eventUtils.VAR_DELETE))!(variable));
-        return;
+    const variableList = this.variableMap.get(variable.type);
+    if (variableList) {
+      for (let i = 0; i < variableList.length; i++) {
+        const tempVar = variableList[i];
+        if (tempVar.getId() === variableId) {
+          variableList.splice(i, 1);
+          eventUtils.fire(new (eventUtils.get(eventUtils.VAR_DELETE))!
+                          (variable));
+          return;
+        }
       }
     }
   }
@@ -280,7 +281,7 @@ export class VariableMap {
    */
   getVariable(name: string, opt_type?: string|null): VariableModel|null {
     const type = opt_type || '';
-    const list = this.variableMap_[type];
+    const list = this.variableMap.get(type);
     if (list) {
       for (let j = 0, variable; variable = list[j]; j++) {
         if (Names.equals(variable.name, name)) {
@@ -297,10 +298,8 @@ export class VariableMap {
    * @return The variable with the given ID.
    */
   getVariableById(id: string): VariableModel|null {
-    const keys = Object.keys(this.variableMap_);
-    for (let i = 0; i < keys.length; i++) {
-      const key = keys[i];
-      for (let j = 0, variable; variable = this.variableMap_[key][j]; j++) {
+    for (const [key, variables] of this.variableMap) {
+      for (const variable of variables) {
         if (variable.getId() === id) {
           return variable;
         }
@@ -318,7 +317,7 @@ export class VariableMap {
    */
   getVariablesOfType(type: string|null): VariableModel[] {
     type = type || '';
-    const variableList = this.variableMap_[type];
+    const variableList = this.variableMap.get(type);
     if (variableList) {
       return variableList.slice();
     }
@@ -335,22 +334,16 @@ export class VariableMap {
    * @internal
    */
   getVariableTypes(ws: Workspace|null): string[] {
-    const variableMap = {};
-    Object.assign(variableMap, this.variableMap_);
+    const variableTypes = new Set<string>(this.variableMap.keys());
     if (ws && ws.getPotentialVariableMap()) {
-      Object.assign(variableMap, ws.getPotentialVariableMap()!.variableMap_);
-    }
-    const types = Object.keys(variableMap);
-    let hasEmpty = false;
-    for (let i = 0; i < types.length; i++) {
-      if (types[i] === '') {
-        hasEmpty = true;
+      for (const key of ws.getPotentialVariableMap()!.variableMap.keys()) {
+        variableTypes.add(key);
       }
     }
-    if (!hasEmpty) {
-      types.push('');
+    if (!variableTypes.has('')) {
+      variableTypes.add('');
     }
-    return types;
+    return Array.from(variableTypes.values());
   }
 
   /**
@@ -358,9 +351,9 @@ export class VariableMap {
    * @return List of variable models.
    */
   getAllVariables(): VariableModel[] {
-    let allVariables: AnyDuringMigration[] = [];
-    for (const key in this.variableMap_) {
-      allVariables = allVariables.concat(this.variableMap_[key]);
+    let allVariables: VariableModel[] = [];
+    for (const variables of this.variableMap.values()) {
+      allVariables = allVariables.concat(variables);
     }
     return allVariables;
   }
@@ -370,12 +363,9 @@ export class VariableMap {
    * @return All of the variable names of all types.
    */
   getAllVariableNames(): string[] {
-    const allNames = [];
-    for (const key in this.variableMap_) {
-      const variables = this.variableMap_[key];
-      for (let i = 0, variable; variable = variables[i]; i++) {
-        allNames.push(variable.name);
-      }
+    let allNames: string[] = [];
+    for (const variables of this.variableMap.values()) {
+      allNames = allNames.concat(variables.map(variable => variable.name));
     }
     return allNames;
   }

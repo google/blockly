@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.logicTernary');
+goog.declareModuleId('Blockly.test.logicTernary');
 
-const eventUtils = goog.require('Blockly.Events.utils');
-const {runSerializationTestSuite} = goog.require('Blockly.test.helpers.serialization');
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+import * as eventUtils from '../../build/src/core/events/utils.js';
+import {runSerializationTestSuite} from '../test_helpers/serialization.js';
+import {sharedTestSetup, sharedTestTeardown} from '../test_helpers/setup_teardown.js';
 
 
 suite('Logic ternary', function() {

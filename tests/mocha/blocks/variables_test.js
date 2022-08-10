@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.variables');
+goog.declareModuleId('Blockly.test.variables');
 
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+import {sharedTestSetup, sharedTestTeardown} from '../test_helpers/setup_teardown.js';
 
 
 suite('Variables', function() {

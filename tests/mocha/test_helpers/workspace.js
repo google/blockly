@@ -4,15 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.helpers.workspace');
+goog.declareModuleId('Blockly.test.helpers.workspace');
 
-const {assertVariableValues} = goog.require('Blockly.test.helpers.variables');
-const {assertWarnings} = goog.require('Blockly.test.helpers.warnings');
-const eventUtils = goog.require('Blockly.Events.utils');
-const {workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+import {assertVariableValues} from './variables.js';
+import {assertWarnings} from './warnings.js';
+import * as eventUtils from '../../../build/src/core/events/utils.js';
+import {workspaceTeardown} from './setup_teardown.js';
 
 
-function testAWorkspace() {
+export function testAWorkspace() {
   setup(function() {
     Blockly.defineBlocksWithJsonArray([{
       "type": "get_var_block",
@@ -1528,4 +1528,3 @@ function testAWorkspace() {
     });
   });
 }
-exports.testAWorkspace = testAWorkspace;

@@ -4,13 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.procedures');
+goog.declareModuleId('Blockly.test.procedures');
 
-goog.require('Blockly');
-goog.require('Blockly.Msg');
-const {assertCallBlockStructure, assertDefBlockStructure, createProcDefBlock, createProcCallBlock} = goog.require('Blockly.test.helpers.procedures');
-const {runSerializationTestSuite} = goog.require('Blockly.test.helpers.serialization');
-const {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+import * as Blockly from '../../build/src/core/blockly.js';
+import {assertCallBlockStructure, assertDefBlockStructure, createProcDefBlock, createProcCallBlock} from '../test_helpers/procedures.js';
+import {runSerializationTestSuite} from '../test_helpers/serialization.js';
+import {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} from '../test_helpers/setup_teardown.js';
 
 
 suite('Procedures', function() {

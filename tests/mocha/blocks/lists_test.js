@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.lists');
+goog.declareModuleId('Blockly.test.lists');
 
-const {runSerializationTestSuite} = goog.require('Blockly.test.helpers.serialization');
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
-const {ConnectionType} = goog.require('Blockly.ConnectionType');
-const {defineStatementBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
+import {runSerializationTestSuite} from '../test_helpers/serialization.js';
+import {sharedTestSetup, sharedTestTeardown} from '../test_helpers/setup_teardown.js';
+import {ConnectionType} from '../../build/src/core/connection_type.js';
+import {defineStatementBlock} from '../test_helpers/block_definitions.js';
 
 
 suite('Lists', function() {

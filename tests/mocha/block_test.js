@@ -4,14 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.blocks');
+goog.declareModuleId('Blockly.test.blocks');
 
-const {Blocks} = goog.require('Blockly.blocks');
-const {ConnectionType} = goog.require('Blockly.ConnectionType');
-const {createDeprecationWarningStub} = goog.require('Blockly.test.helpers.warnings');
-const {createRenderedBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
-const eventUtils = goog.require('Blockly.Events.utils');
-const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+import {ConnectionType} from '../../build/src/core/connection_type.js';
+import {createDeprecationWarningStub} from './test_helpers/warnings.js';
+import {createRenderedBlock} from './test_helpers/block_definitions.js';
+import * as eventUtils from '../../build/src/core/events/utils.js';
+import {sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
 
 
 suite('Blocks', function() {
@@ -1990,7 +1989,7 @@ suite('Blocks', function() {
       // so we assert init was called to be safe.
       let initCalled = false;
       let recordUndoDuringInit;
-      Blocks['init_test_block'].init = function() {
+      Blockly.Blocks['init_test_block'].init = function() {
         initCalled = true;
         recordUndoDuringInit = eventUtils.getRecordUndo();
         throw new Error();

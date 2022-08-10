@@ -4,14 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.event');
+goog.declareModuleId('Blockly.test.event');
 
-const {ASTNode} = goog.require('Blockly.ASTNode');
-const {assertEventEquals, assertNthCallEventArgEquals, createFireChangeListenerSpy} = goog.require('Blockly.test.helpers.events');
-const {assertVariableValues} = goog.require('Blockly.test.helpers.variables');
-const {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
-const eventUtils = goog.require('Blockly.Events.utils');
-goog.require('Blockly.WorkspaceComment');
+import * as Blockly from '../../build/src/core/blockly.js';
+import {ASTNode} from '../../build/src/core/keyboard_nav/ast_node.js';
+import {assertEventEquals, assertNthCallEventArgEquals, createFireChangeListenerSpy} from './test_helpers/events.js';
+import {assertVariableValues} from './test_helpers/variables.js';
+import {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
+import * as eventUtils from '../../build/src/core/events/utils.js';
+import {WorkspaceComment} from '../../build/src/core/workspace_comment.js';
 
 
 suite('Events', function() {

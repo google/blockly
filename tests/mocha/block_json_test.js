@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.blockJson');
+goog.declareModuleId('Blockly.test.blockJson');
 
-const {Align} = goog.require('Blockly.Input');
+import {Align} from '../../build/src/core/input.js';
 
 
 suite('Block JSON initialization', function() {

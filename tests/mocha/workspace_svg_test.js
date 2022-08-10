@@ -4,14 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.workspaceSvg');
+goog.declareModuleId('Blockly.test.workspaceSvg');
 
-const {assertEventFired, assertEventNotFired, createFireChangeListenerSpy} = goog.require('Blockly.test.helpers.events');
-const {assertVariableValues} = goog.require('Blockly.test.helpers.variables');
-const {defineStackBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
-const eventUtils = goog.require('Blockly.Events.utils');
-const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
-const {testAWorkspace} = goog.require('Blockly.test.helpers.workspace');
+import {assertEventFired, assertEventNotFired, createFireChangeListenerSpy} from './test_helpers/events.js';
+import {assertVariableValues} from './test_helpers/variables.js';
+import {defineStackBlock} from './test_helpers/block_definitions.js';
+import * as eventUtils from '../../build/src/core/events/utils.js';
+import {sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
+import {testAWorkspace} from './test_helpers/workspace.js';
 
 
 suite('WorkspaceSvg', function() {

@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.connectionDb');
+goog.declareModuleId('Blockly.test.connectionDb');
 
-const {ConnectionType} = goog.require('Blockly.ConnectionType');
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+import {ConnectionType} from '../../build/src/core/connection_type.js';
+import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 
 suite('Connection Database', function() {

@@ -6,9 +6,9 @@
 
 goog.declareModuleId('Blockly.test.lists');
 
-const {runSerializationTestSuite} = goog.require('Blockly.test.helpers.serialization');
+import {runSerializationTestSuite} from '../test_helpers/serialization.js';
 import {sharedTestSetup, sharedTestTeardown} from '../test_helpers/setup_teardown.js';
-const {ConnectionType} = goog.require('Blockly.ConnectionType');
+import {ConnectionType} from '../../build/src/core/connection_type.js';
 import {defineStatementBlock} from '../test_helpers/block_definitions.js';
 
 

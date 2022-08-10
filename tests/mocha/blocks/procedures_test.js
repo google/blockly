@@ -6,10 +6,9 @@
 
 goog.declareModuleId('Blockly.test.procedures');
 
-goog.require('Blockly');
-goog.require('Blockly.Msg');
+import * as Blockly from '../../build/src/core/blockly.js';
 import {assertCallBlockStructure, assertDefBlockStructure, createProcDefBlock, createProcCallBlock} from '../test_helpers/procedures.js';
-const {runSerializationTestSuite} = goog.require('Blockly.test.helpers.serialization');
+import {runSerializationTestSuite} from '../test_helpers/serialization.js';
 import {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} from '../test_helpers/setup_teardown.js';
 
 

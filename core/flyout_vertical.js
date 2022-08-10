@@ -233,8 +233,8 @@ class VerticalFlyout extends Flyout {
    * @protected
    */
   layout_(contents, gaps) {
-    const margin = this.MARGIN;
-    const cursorX = this.RTL ? margin : margin + this.tabWidth_;
+    const margin = this.RTL ? this.MARGIN : this.START_MARGIN;
+    const cursorX = this.RTL ? margin : this.MARGIN + this.tabWidth_;
     let cursorY = margin;
 
     for (let i = 0, item; (item = contents[i]); i++) {

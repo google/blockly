@@ -1,6 +1,6 @@
 {
   "name": "blockly",
-  "version": "8.0.4",
+  "version": "8.0.5",
   "description": "Blockly is a library for building visual programming editors.",
   "keywords": [
     "blockly"

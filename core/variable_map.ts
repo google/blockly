@@ -363,11 +363,7 @@ export class VariableMap {
    * @return All of the variable names of all types.
    */
   getAllVariableNames(): string[] {
-    let allNames: string[] = [];
-    for (const variables of this.variableMap.values()) {
-      allNames = allNames.concat(variables.map(variable => variable.name));
-    }
-    return allNames;
+    return Array.from(this.variableMap.values()).flat().map(variable => variable.name);
   }
 
   /**

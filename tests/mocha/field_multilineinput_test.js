@@ -11,6 +11,11 @@ import {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSe
 import {createTestBlock, defineRowBlock} from './test_helpers/block_definitions.js';
 import {sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
 import {runCodeGenerationTestSuites} from './test_helpers/code_generation.js';
+const {dartGenerator} = goog.require('Blockly.Dart');
+const {javascriptGenerator} = goog.require('Blockly.JavaScript');
+const {luaGenerator} = goog.require('Blockly.Lua');
+const {phpGenerator} = goog.require('Blockly.PHP');
+const {pythonGenerator} = goog.require('Blockly.Python');
 
 
 suite('Multiline Input Fields', function() {

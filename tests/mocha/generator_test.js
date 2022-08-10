@@ -8,7 +8,7 @@ goog.declareModuleId('Blockly.test.generator');
 
 import * as Blockly from '../../build/src/core/blockly.js';
 const {dartGenerator} = goog.require('Blockly.Dart');
-const {javaScriptGenerator} = goog.require('Blockly.JavaScript');
+const {javascriptGenerator} = goog.require('Blockly.JavaScript');
 const {luaGenerator} = goog.require('Blockly.Lua');
 const {phpGenerator} = goog.require('Blockly.PHP');
 const {pythonGenerator} = goog.require('Blockly.Python');

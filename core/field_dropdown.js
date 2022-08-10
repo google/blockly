@@ -352,6 +352,7 @@ class FieldDropdown extends Field {
 
     const options = this.getOptions(false);
     this.selectedMenuItem_ = null;
+    options.sort((a, b) => a[0].localeCompare(b[0], undefined, {numeric: true, sensitivity: 'base'}));
 
     for (let i = 0; i < options.length; i++) {
       let content = options[i][0];  // Human-readable text or image.

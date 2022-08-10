@@ -167,7 +167,7 @@ export function sharedTestTeardown() {
 
     const blockTypes = this.sharedCleanup.blockTypesCleanup_;
     for (let i = 0; i < blockTypes.length; i++) {
-      delete Blocks[blockTypes[i]];
+      delete Blockly.Blocks[blockTypes[i]];
     }
     const messages = this.sharedCleanup.messagesCleanup_;
     for (let i = 0; i < messages.length; i++) {

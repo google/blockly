@@ -6,6 +6,7 @@
 
 goog.declareModuleId('Blockly.test.serialization');
 
+import * as Blockly from '../../build/src/core/blockly.js';
 import {TestCase, TestSuite, runTestCases, runTestSuites} from './test_helpers/common.js';
 import {sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
 

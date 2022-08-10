@@ -6,6 +6,7 @@
 
 goog.declareModuleId('Blockly.test.fieldTest');
 
+import * as Blockly from '../../build/src/core/blockly.js';
 import {addBlockTypeToCleanup, addMessageToCleanup, sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
 import {createDeprecationWarningStub} from './test_helpers/warnings.js';
 

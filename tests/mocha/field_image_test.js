@@ -6,6 +6,7 @@
 
 goog.declareModuleId('Blockly.test.fieldImage');
 
+import * as Blockly from '../../build/src/core/blockly.js';
 import {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSetValueTests} from './test_helpers/fields.js';
 import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 

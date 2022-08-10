@@ -6,6 +6,7 @@
 
 goog.declareModuleId('Blockly.test.fieldColour');
 
+import * as Blockly from '../../build/src/core/blockly.js';
 import {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSetValueTests} from './test_helpers/fields.js';
 import {createTestBlock, defineRowBlock} from './test_helpers/block_definitions.js';
 import {sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';

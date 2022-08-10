@@ -6,6 +6,7 @@
 
 goog.declareModuleId('Blockly.test.jsoSerialization');
 
+import * as Blockly from '../../build/src/core/blockly.js';
 import {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
 import {defineRowBlock, defineStackBlock, defineStatementBlock} from './test_helpers/block_definitions.js';
 

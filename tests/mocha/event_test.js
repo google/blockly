@@ -6,6 +6,7 @@
 
 goog.declareModuleId('Blockly.test.event');
 
+import * as Blockly from '../../build/src/core/blockly.js';
 import {ASTNode} from '../../build/src/core/keyboard_nav/ast_node.js';
 import {assertEventEquals, assertNthCallEventArgEquals, createFireChangeListenerSpy} from './test_helpers/events.js';
 import {assertVariableValues} from './test_helpers/variables.js';

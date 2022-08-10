@@ -1989,7 +1989,7 @@ suite('Blocks', function() {
       // so we assert init was called to be safe.
       let initCalled = false;
       let recordUndoDuringInit;
-      Blocks['init_test_block'].init = function() {
+      Blockly.Blocks['init_test_block'].init = function() {
         initCalled = true;
         recordUndoDuringInit = eventUtils.getRecordUndo();
         throw new Error();

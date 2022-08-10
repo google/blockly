@@ -607,7 +607,7 @@ function compile(options) {
     compilation_level: 'SIMPLE_OPTIMIZATIONS',
     warning_level: argv.verbose ? 'VERBOSE' : 'DEFAULT',
     language_in: 'ECMASCRIPT_2020',
-    language_out: 'ECMASCRIPT5_STRICT',
+    language_out: 'ECMASCRIPT_2015',
     jscomp_off: [...JSCOMP_OFF],
     rewrite_polyfills: true,
     // N.B.: goog.js refers to lots of properties on goog that are not

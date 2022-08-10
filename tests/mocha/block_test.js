@@ -6,11 +6,10 @@
 
 goog.declareModuleId('Blockly.test.blocks');
 
-import {Blocks} from '../../blocks/blocks.js';
-import {ConnectionType} from '../../core/connection_type.js';
+import {ConnectionType} from '../../build/src/core/connection_type.js';
 import {createDeprecationWarningStub} from './test_helpers/warnings.js';
 import {createRenderedBlock} from './test_helpers/block_definitions.js';
-import * as eventUtils from '../../core/events/utils.js';
+import * as eventUtils from '../../build/src/core/events/utils.js';
 import {sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
 
 

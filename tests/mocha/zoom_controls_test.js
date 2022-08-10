@@ -7,7 +7,7 @@
 goog.declareModuleId('Blockly.test.zoomControls');
 
 import {assertEventFired, assertEventNotFired} from './test_helpers/events.js';
-import * as eventUtils from '../../core/events/utils.js';
+import * as eventUtils from '../../build/src/core/events/utils.js';
 import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 import {simulateClick} from './test_helpers/user_input.js';
 

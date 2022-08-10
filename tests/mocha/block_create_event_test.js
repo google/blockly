@@ -7,7 +7,7 @@
 goog.declareModuleId('Blockly.test.blockCreateEvent');
 
 import {assertEventFired} from './test_helpers/events.js';
-import * as eventUtils from '../../core/events/utils.js';
+import * as eventUtils from '../../build/src/core/events/utils.js';
 import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 

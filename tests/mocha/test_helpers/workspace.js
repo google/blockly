@@ -8,7 +8,7 @@ goog.declareModuleId('Blockly.test.helpers.workspace');
 
 import {assertVariableValues} from './variables.js';
 import {assertWarnings} from './warnings.js';
-import * as eventUtils from '../../../core/events/utils.js';
+import * as eventUtils from '../../../build/src/core/events/utils.js';
 import {workspaceTeardown} from './setup_teardown.js';
 
 

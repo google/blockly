@@ -7,7 +7,7 @@
 goog.declareModuleId('Blockly.test.cursor');
 
 import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
-import {ASTNode} from '../../core/keyboard_nav/ast_node.js';
+import {ASTNode} from '../../build/src/core/keyboard_nav/ast_node.js';
 
 
 suite('Cursor', function() {

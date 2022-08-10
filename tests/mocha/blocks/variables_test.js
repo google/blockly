@@ -6,7 +6,7 @@
 
 goog.declareModuleId('Blockly.test.variables');
 
-import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
+import {sharedTestSetup, sharedTestTeardown} from '../test_helpers/setup_teardown.js';
 
 
 suite('Variables', function() {

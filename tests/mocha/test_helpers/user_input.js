@@ -6,7 +6,7 @@
 
 goog.declareModuleId('Blockly.test.helpers.userInput');
 
-import {KeyCodes} from '../../../core/utils/keycodes.js';
+import {KeyCodes} from '../../../build/src/core/utils/keycodes.js';
 
 
 /**

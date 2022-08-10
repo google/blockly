@@ -6,7 +6,8 @@
 
 goog.declareModuleId('Blockly.test.flyout');
 
-import {defineStackBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
+import {sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
+import {defineStackBlock} from './test_helpers/block_definitions.js';
 import {getBasicToolbox, getChildItem, getCollapsibleItem, getDeeplyNestedJSON, getInjectedToolbox, getNonCollapsibleItem, getProperSimpleJson, getSeparator, getSimpleJson, getXmlArray} from './test_helpers/toolbox_definitions.js';
 
 

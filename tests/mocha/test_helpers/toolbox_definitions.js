@@ -175,7 +175,7 @@ export function getDeeplyNestedJSON() {
  * Get an array filled with xml elements.
  * @return {Array<Node>} Array holding xml elements for a toolbox.
  */
-function getXmlArray() {
+export function getXmlArray() {
   const block = Blockly.Xml.textToDom(
       `<block type="logic_compare">
         <field name="OP">NEQ</field>
@@ -195,7 +195,6 @@ function getXmlArray() {
   const label = Blockly.Xml.textToDom('<label text="tooltips"></label>');
   return [block, separator, button, label];
 }
-exports.getXmlArray = getXmlArray;
 
 export function getInjectedToolbox() {
   /**

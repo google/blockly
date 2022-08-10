@@ -6,7 +6,7 @@
 
 goog.declareModuleId('Blockly.test.connectionChecker');
 
-import {ConnectionType} from '../../core/connection_type.js';
+import {ConnectionType} from '../../build/src/core/connection_type.js';
 import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 

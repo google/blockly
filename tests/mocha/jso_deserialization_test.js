@@ -8,7 +8,7 @@ goog.declareModuleId('Blockly.test.jsoDeserialization');
 
 import {sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
 import {assertEventFired} from './test_helpers/events.js';
-import * as eventUtils from '../../core/events/utils.js';
+import * as eventUtils from '../../build/src/core/events/utils.js';
 
 
 suite('JSO Deserialization', function() {

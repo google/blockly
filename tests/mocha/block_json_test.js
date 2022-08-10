@@ -6,7 +6,7 @@
 
 goog.declareModuleId('Blockly.test.blockJson');
 
-import {Align} from '../../core/input.js';
+import {Align} from '../../build/src/core/input.js';
 
 
 suite('Block JSON initialization', function() {

@@ -6,12 +6,12 @@
 
 goog.declareModuleId('Blockly.test.event');
 
-import {ASTNode} from '../../core/keyboard_nav/ast_node.js';
+import {ASTNode} from '../../build/src/core/keyboard_nav/ast_node.js';
 import {assertEventEquals, assertNthCallEventArgEquals, createFireChangeListenerSpy} from './test_helpers/events.js';
 import {assertVariableValues} from './test_helpers/variables.js';
 import {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
-import * as eventUtils from '../../core/events/utils.js';
-import {WorkspaceComment} from '../../core/workspace_comment.js';
+import * as eventUtils from '../../build/src/core/events/utils.js';
+import {WorkspaceComment} from '../../build/src/core/workspace_comment.js';
 
 
 suite('Events', function() {

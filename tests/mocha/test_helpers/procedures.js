@@ -5,7 +5,7 @@
  */
 goog.declareModuleId('Blockly.test.helpers.procedures');
 
-import {ConnectionType} from '../../../core/connection_type.js';
+import {ConnectionType} from '../../../build/src/core/connection_type.js';
 
 
 /**

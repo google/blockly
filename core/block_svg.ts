@@ -877,12 +877,10 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     this.rendered = false;
 
     // Clear pending warnings.
-    if (this.warningTextDb.size) {
-      for (const n of this.warningTextDb.values()) {
-        clearTimeout(n);
-      }
-      this.warningTextDb.clear();
+    for (const n of this.warningTextDb.values()) {
+      clearTimeout(n);
     }
+    this.warningTextDb.clear();
 
     const icons = this.getIcons();
     for (let i = 0; i < icons.length; i++) {

@@ -29,22 +29,22 @@ import type {Workspace} from './workspace.js';
  * @alias Blockly.ShortcutRegistry
  */
 export class ShortcutRegistry {
-  static registry: AnyDuringMigration;
+  static readonly registry = new ShortcutRegistry();
 
   /** Registry of all keyboard shortcuts, keyed by name of shortcut. */
-  private registry_ = new Map<string, KeyboardShortcut>();
+  private shortcuts = new Map<string, KeyboardShortcut>();
 
   /** Map of key codes to an array of shortcut names. */
   private keyMap = new Map<string, string[]>();
 
   /** Resets the existing ShortcutRegistry singleton. */
-  constructor() {
+  private constructor() {
     this.reset();
   }
 
   /** Clear and recreate the registry and keyMap. */
   reset() {
-    this.registry_.clear();
+    this.shortcuts.clear();
     this.keyMap.clear();
   }
 
@@ -56,12 +56,12 @@ export class ShortcutRegistry {
    * @throws {Error} if a shortcut with the same name already exists.
    */
   register(shortcut: KeyboardShortcut, opt_allowOverrides?: boolean) {
-    const registeredShortcut = this.registry_.get(shortcut.name);
+    const registeredShortcut = this.shortcuts.get(shortcut.name);
     if (registeredShortcut && !opt_allowOverrides) {
       throw new Error(
           'Shortcut with name "' + shortcut.name + '" already exists.');
     }
-    this.registry_.set(shortcut.name, shortcut);
+    this.shortcuts.set(shortcut.name, shortcut);
 
     const keyCodes = shortcut.keyCodes;
     if (keyCodes && keyCodes.length > 0) {
@@ -79,7 +79,7 @@ export class ShortcutRegistry {
    * @return True if an item was unregistered, false otherwise.
    */
   unregister(shortcutName: string): boolean {
-    const shortcut = this.registry_.get(shortcutName);
+    const shortcut = this.shortcuts.get(shortcutName);
 
     if (!shortcut) {
       console.warn(
@@ -89,7 +89,7 @@ export class ShortcutRegistry {
 
     this.removeAllKeyMappings(shortcutName);
 
-    this.registry_.delete(shortcutName);
+    this.shortcuts.delete(shortcutName);
     return true;
   }
 
@@ -193,7 +193,7 @@ export class ShortcutRegistry {
     for (const [key, value] of this.keyMap) {
       legacyKeyMap[key] = value;
     }
-    return object.deepMerge(Object.create(null), legacyKeyMap);
+    return legacyKeyMap;
   }
 
   /**
@@ -203,7 +203,7 @@ export class ShortcutRegistry {
   getRegistry(): {[key: string]: KeyboardShortcut} {
     const legacyRegistry: {[key: string]: KeyboardShortcut} =
         Object.create(null);
-    for (const [key, value] of this.registry_) {
+    for (const [key, value] of this.shortcuts) {
       legacyRegistry[key] = value;
     }
     return object.deepMerge(Object.create(null), legacyRegistry);
@@ -222,7 +222,7 @@ export class ShortcutRegistry {
       return false;
     }
     for (let i = 0, shortcutName; shortcutName = shortcutNames[i]; i++) {
-      const shortcut = this.registry_.get(shortcutName);
+      const shortcut = this.shortcuts.get(shortcutName);
       if (!shortcut?.preconditionFn || shortcut?.preconditionFn(workspace)) {
         // If the key has been handled, stop processing shortcuts.
         if (shortcut?.callback && shortcut?.callback(workspace, e, shortcut)) {
@@ -288,7 +288,7 @@ export class ShortcutRegistry {
    * @param modifiers List of modifiers to be used with the key.
    * @throws {Error} if the modifier is not in the valid modifiers list.
    */
-  private checkModifiers_(modifiers: string[]) {
+  private checkModifiers_(modifiers: KeyCodes[]) {
     const validModifiers = object.values(ShortcutRegistry.modifierKeys);
     for (let i = 0, modifier; modifier = modifiers[i]; i++) {
       if (validModifiers.indexOf(modifier) < 0) {
@@ -304,7 +304,7 @@ export class ShortcutRegistry {
    *     valid modifiers can be found in the ShortcutRegistry.modifierKeys.
    * @return The serialized key code for the given modifiers and key.
    */
-  createSerializedKey(keyCode: number, modifiers: string[]|null): string {
+  createSerializedKey(keyCode: number, modifiers: KeyCodes[]|null): string {
     let serializedKey = '';
 
     if (modifiers) {
@@ -353,7 +353,3 @@ export type KeyboardShortcut = ShortcutRegistry.KeyboardShortcut;
 // No need to export ShorcutRegistry.modifierKeys from the module at this time
 // because (1) it wasn't automatically converted by the automatic migration
 // script, (2) the name doesn't follow the styleguide.
-
-// Creates and assigns the singleton instance.
-const registry = new ShortcutRegistry();
-ShortcutRegistry.registry = registry;

@@ -193,7 +193,7 @@ class Field {
      * Maximum characters of text to display before adding an ellipsis.
      * @type {number}
      */
-    this.maxDisplayLength = 60;
+    this.maxDisplayLength = 80;
 
     /**
      * Block this field is attached to.  Starts as null, then set in init.

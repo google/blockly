@@ -362,9 +362,8 @@ export function registerComment() {
     },
     preconditionFn(scope: Scope) {
       const block = scope.block;
-      if (!block!.isInFlyout &&
-          block!.workspace.options.comments && !block!.isCollapsed() &&
-          block!.isEditable()) {
+      if (!block!.isInFlyout && block!.workspace.options.comments &&
+          !block!.isCollapsed() && block!.isEditable()) {
         return 'enabled';
       }
       return 'hidden';

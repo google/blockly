@@ -97,9 +97,6 @@ isMobile = !isTablet && (isIPod || isIPhone || isAndroid || has('IEMobile'));
 /** @alias Blockly.utils.userAgent.raw */
 export const raw: string = rawUserAgent;
 
-/** @alias Blockly.utils.userAgent.EDGE */
-export const EDGE: boolean = isEdge;
-
 /** @alias Blockly.utils.userAgent.JavaFx */
 export const JavaFx: boolean = isJavaFx;
 

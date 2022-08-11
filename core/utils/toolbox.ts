@@ -405,16 +405,8 @@ function addAttributes(node: Node, obj: AnyDuringMigration) {
 export function parseToolboxTree(toolboxDef: Element|null|string): Element|
     null {
   if (toolboxDef) {
-    if (typeof toolboxDef !== 'string') {
-      if (userAgent.IE && toolboxDef.outerHTML) {
-        // In this case the tree will not have been properly built by the
-        // browser. The HTML will be contained in the element, but it will
-        // not have the proper DOM structure since the browser doesn't support
-        // XSLTProcessor (XML -> HTML).
-        toolboxDef = toolboxDef.outerHTML;
-      } else if (!(toolboxDef instanceof Element)) {
-        toolboxDef = null;
-      }
+    if (typeof toolboxDef !== 'string' && !(toolboxDef instanceof Element)) {
+      toolboxDef = null;
     }
     if (typeof toolboxDef === 'string') {
       toolboxDef = Xml.textToDom(toolboxDef);

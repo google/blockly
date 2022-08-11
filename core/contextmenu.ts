@@ -349,9 +349,7 @@ export function workspaceCommentOption(
   }
 
   const wsCommentOption = {
-    // Foreign objects don't work in IE.  Don't let the user create comments
-    // that they won't be able to edit.
-    enabled: !userAgent.IE,
+    enabled: true,
   } as ContextMenuOption;
   wsCommentOption.text = Msg['ADD_COMMENT'];
   wsCommentOption.callback = function() {

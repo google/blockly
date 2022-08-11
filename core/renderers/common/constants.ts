@@ -462,7 +462,7 @@ export class ConstantProvider {
     this.START_POINT = svgPaths.moveBy(0, 0);
 
     /** A field's text element's dominant baseline. */
-    this.FIELD_TEXT_BASELINE_CENTER = !userAgent.IE && !userAgent.EDGE;
+    this.FIELD_TEXT_BASELINE_CENTER = !userAgent.EDGE;
 
     /** A dropdown field's border rect height. */
     this.FIELD_DROPDOWN_BORDER_RECT_HEIGHT = this.FIELD_BORDER_RECT_HEIGHT;

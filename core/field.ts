@@ -797,7 +797,7 @@ export abstract class Field implements IASTNodeLocationSvg,
         scaledWidth += 1 * scale;
         scaledHeight += 1 * scale;
       } else {
-        if (!userAgent.EDGE && !userAgent.IE) {
+        if (!userAgent.EDGE) {
           xy.x -= 0.5 * scale;
           xy.y -= 0.5 * scale;
         }

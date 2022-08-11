@@ -269,7 +269,7 @@ export function getTextWidth(textElement: SVGTextElement): number {
 
   // Attempt to compute fetch the width of the SVG text element.
   try {
-    if (userAgent.IE || userAgent.EDGE) {
+    if (userAgent.EDGE) {
       width = textElement.getBBox().width;
     } else {
       width = textElement.getComputedTextLength();

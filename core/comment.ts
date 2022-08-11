@@ -256,10 +256,7 @@ export class Comment extends Icon {
 
   /** Show the bubble. Handles deciding if it should be editable or not. */
   private createBubble_() {
-    if (!this.block_.isEditable() || userAgent.IE) {
-      // MSIE does not support foreignobject; textareas are impossible.
-      // https://docs.microsoft.com/en-us/openspecs/ie_standards/ms-svg/56e6e04c-7c8c-44dd-8100-bd745ee42034
-      // Always treat comments in IE as uneditable.
+    if (!this.block_.isEditable()) {
       this.createNonEditableBubble_();
     } else {
       this.createEditableBubble_();

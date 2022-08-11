@@ -362,8 +362,7 @@ export function registerComment() {
     },
     preconditionFn(scope: Scope) {
       const block = scope.block;
-      // IE doesn't support necessary features for comment editing.
-      if (!userAgent.IE && !block!.isInFlyout &&
+      if (!block!.isInFlyout &&
           block!.workspace.options.comments && !block!.isCollapsed() &&
           block!.isEditable()) {
         return 'enabled';

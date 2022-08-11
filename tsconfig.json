@@ -13,6 +13,8 @@
 
     // Generate d.ts files
     "declaration": true,
+    // Generate declaration maps used for api-extractor
+    "declarationMap": true,
 
     "module": "ES2015",
     "moduleResolution": "node",

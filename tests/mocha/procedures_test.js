@@ -1237,7 +1237,9 @@ suite('Procedures, dont auto fire events', function() {
               this.workspace, testSuite.callType);
           this.callerBlock.setFieldValue('proc name', 'NAME');
 
-
+          // Run the clock now so that the create events get fired. If we fire
+          // it after disposing, a new procedure def will get created when
+          // the caller create event is heard.
           this.clock.runAll();
           this.defBlock.dispose();
           this.clock.runAll();

@@ -2,10 +2,12 @@
 	"@metadata": {
 		"authors": [
 			"Mapmeld",
+			"Timzy D'Great",
 			"Ukabia"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "ihe",
+	"UNNAMED_KEY": "enweghị aha",
 	"TODAY": "Taa",
 	"DUPLICATE_BLOCK": "Ntụgharị",
 	"ADD_COMMENT": "Tịnye okwu",
@@ -101,6 +103,12 @@
 	"LOGIC_TERNARY_IF_FALSE": "ọ bụrụ ụgha",
 	"LOGIC_TERNARY_TOOLTIP": "Lelee ọnọdụ na 'ule'. Ọ bụrụ na ọnọdụ ahụ bụ eziokwu, weghachitere akara 'ọ bụrụ na eziokwu’; ma ọ bụghị ya weghachitere akara 'ọ bụrụ ụgha'.",
 	"MATH_NUMBER_TOOLTIP": "Ọnụọgụgụ.",
+	"MATH_TRIG_SIN": "mmehie",
+	"MATH_TRIG_COS": "cos",
+	"MATH_TRIG_TAN": "tan",
+	"MATH_TRIG_ASIN": "asin",
+	"MATH_TRIG_ACOS": "acos",
+	"MATH_TRIG_ATAN": "atan",
 	"MATH_ARITHMETIC_TOOLTIP_ADD": "Weghachite ngụkọ ọnụ ọgụgụ abụọ ahụ.",
 	"MATH_ARITHMETIC_TOOLTIP_MINUS": "Weghachite nwepụ ọnụ ọgụgụ abụọ ahụ.",
 	"MATH_ARITHMETIC_TOOLTIP_MULTIPLY": "Weghachite mụbaa ọnụ ọgụgụ abụọ ahụ.",
@@ -233,6 +241,7 @@
 	"LISTS_GET_INDEX_GET": "nweta",
 	"LISTS_GET_INDEX_GET_REMOVE": "nweta ma wepu",
 	"LISTS_GET_INDEX_REMOVE": "wepu",
+	"LISTS_GET_INDEX_FROM_START": "#",
 	"LISTS_GET_INDEX_FROM_END": "# site na njedebe",
 	"LISTS_GET_INDEX_FIRST": "mbu",
 	"LISTS_GET_INDEX_LAST": "ikpeazụ",

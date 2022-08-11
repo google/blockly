@@ -784,25 +784,19 @@ export abstract class Field implements IASTNodeLocationSvg,
     if (!this.borderRect_) {
       // Browsers are inconsistent in what they return for a bounding box.
       // - Webkit / Blink: fill-box / object bounding box
-      // - Gecko / Triden / EdgeHTML: stroke-box
+      // - Gecko: stroke-box
       const bBox = (this.sourceBlock_ as BlockSvg).getHeightWidth();
       const scale = (this.sourceBlock_.workspace as WorkspaceSvg).scale;
       xy = this.getAbsoluteXY_();
-      scaledWidth = bBox.width * scale;
-      scaledHeight = bBox.height * scale;
+      scaledWidth = (bBox.width + 1) * scale;
+      scaledHeight = (bBox.height +1) * scale;
 
       if (userAgent.GECKO) {
         xy.x += 1.5 * scale;
         xy.y += 1.5 * scale;
-        scaledWidth += 1 * scale;
-        scaledHeight += 1 * scale;
       } else {
-        if (!userAgent.EDGE) {
-          xy.x -= 0.5 * scale;
-          xy.y -= 0.5 * scale;
-        }
-        scaledWidth += 1 * scale;
-        scaledHeight += 1 * scale;
+        xy.x -= 0.5 * scale;
+        xy.y -= 0.5 * scale;
       }
     } else {
       const bBox = this.borderRect_.getBoundingClientRect();

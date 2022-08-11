@@ -147,12 +147,6 @@ export class Grid {
   moveTo(x: number, y: number) {
     this.pattern.setAttribute('x', x.toString());
     this.pattern.setAttribute('y', y.toString());
-
-    if (userAgent.EDGE) {
-      // Edge doesn't notice that the x/y offsets have changed.
-      // Force an update.
-      this.update(this.scale_);
-    }
   }
 
   /**

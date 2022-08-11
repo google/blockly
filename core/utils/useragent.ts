@@ -97,9 +97,6 @@ isMobile = !isTablet && (isIPod || isIPhone || isAndroid || has('IEMobile'));
 /** @alias Blockly.utils.userAgent.raw */
 export const raw: string = rawUserAgent;
 
-/** @alias Blockly.utils.userAgent.IE */
-export const IE: boolean = isIe;
-
 /** @alias Blockly.utils.userAgent.EDGE */
 export const EDGE: boolean = isEdge;
 
@@ -111,6 +108,7 @@ export const CHROME: boolean = isChrome;
 
 /** @alias Blockly.utils.userAgent.WEBKIT */
 export const WEBKIT: boolean = isWebKit;
+
 /** @alias Blockly.utils.userAgent.GECKO */
 export const GECKO: boolean = isGecko;
 

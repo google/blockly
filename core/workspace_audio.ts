@@ -32,7 +32,8 @@ const SOUND_LIMIT = 100;
  * @alias Blockly.WorkspaceAudio
  */
 export class WorkspaceAudio {
-  private SOUNDS_: AnyDuringMigration;
+  /** Database of pre-loaded sounds. */
+  private sounds = new Map<string, HTMLAudioElement>();
 
   /** Time that the last sound was played. */
   // AnyDuringMigration because:  Type 'null' is not assignable to type 'Date'.
@@ -42,10 +43,7 @@ export class WorkspaceAudio {
    * @param parentWorkspace The parent of the workspace this audio object
    *     belongs to, or null.
    */
-  constructor(private parentWorkspace: WorkspaceSvg) {
-    /** Database of pre-loaded sounds. */
-    this.SOUNDS_ = Object.create(null);
-  }
+  constructor(private parentWorkspace: WorkspaceSvg) {}
 
   /**
    * Dispose of this audio manager.
@@ -55,7 +53,7 @@ export class WorkspaceAudio {
     // AnyDuringMigration because:  Type 'null' is not assignable to type
     // 'WorkspaceSvg'.
     this.parentWorkspace = null as AnyDuringMigration;
-    this.SOUNDS_ = null;
+    this.sounds.clear();
   }
 
   /**
@@ -88,7 +86,7 @@ export class WorkspaceAudio {
       }
     }
     if (sound) {
-      this.SOUNDS_[name] = sound;
+      this.sounds.set(name, sound);
     }
   }
 
@@ -97,8 +95,7 @@ export class WorkspaceAudio {
    * @internal
    */
   preload() {
-    for (const name in this.SOUNDS_) {
-      const sound = this.SOUNDS_[name];
+    for (const sound of this.sounds.values()) {
       sound.volume = 0.01;
       const playPromise = sound.play();
       // Edge does not return a promise, so we need to check.
@@ -131,7 +128,7 @@ export class WorkspaceAudio {
    * @param opt_volume Volume of sound (0-1).
    */
   play(name: string, opt_volume?: number) {
-    const sound = this.SOUNDS_[name];
+    const sound = this.sounds.get(name);
     if (sound) {
       // Don't play one sound on top of another.
       const now = new Date();
@@ -147,7 +144,7 @@ export class WorkspaceAudio {
         // node which must be deleted and recreated for each new audio tag.
         mySound = sound;
       } else {
-        mySound = sound.cloneNode();
+        mySound = sound.cloneNode() as HTMLAudioElement;
       }
       mySound.volume = opt_volume === undefined ? 1 : opt_volume;
       mySound.play();

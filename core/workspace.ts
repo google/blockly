@@ -102,12 +102,12 @@ export class Workspace implements IASTNodeLocation {
 
   private readonly topBlocks_: Block[] = [];
   private readonly topComments_: WorkspaceComment[] = [];
-  private readonly commentDB_: AnyDuringMigration;
+  private readonly commentDB = new Map<string, WorkspaceComment>();
   private readonly listeners_: Function[] = [];
   protected undoStack_: Abstract[] = [];
   protected redoStack_: Abstract[] = [];
-  private readonly blockDB_: AnyDuringMigration;
-  private readonly typedBlocksDB_: AnyDuringMigration;
+  private readonly blockDB = new Map<string, Block>();
+  private readonly typedBlocksDB = new Map<string, Block[]>();
   private variableMap_: VariableMap;
 
   /**
@@ -135,9 +135,6 @@ export class Workspace implements IASTNodeLocation {
      * An object that encapsulates logic for safety, type, and dragging checks.
      */
     this.connectionChecker = new connectionCheckerClass!(this);
-    this.commentDB_ = Object.create(null);
-    this.blockDB_ = Object.create(null);
-    this.typedBlocksDB_ = Object.create(null);
 
     /**
      * A map from variable type to list of variable names.  The lists contain
@@ -235,10 +232,10 @@ export class Workspace implements IASTNodeLocation {
    * @param block Block to add.
    */
   addTypedBlock(block: Block) {
-    if (!this.typedBlocksDB_[block.type]) {
-      this.typedBlocksDB_[block.type] = [];
+    if (!this.typedBlocksDB.has(block.type)) {
+      this.typedBlocksDB.set(block.type, []);
     }
-    this.typedBlocksDB_[block.type].push(block);
+    this.typedBlocksDB.get(block.type)!.push(block);
   }
 
   /**
@@ -246,9 +243,9 @@ export class Workspace implements IASTNodeLocation {
    * @param block Block to remove.
    */
   removeTypedBlock(block: Block) {
-    arrayUtils.removeElem(this.typedBlocksDB_[block.type], block);
-    if (!this.typedBlocksDB_[block.type].length) {
-      delete this.typedBlocksDB_[block.type];
+    arrayUtils.removeElem(this.typedBlocksDB.get(block.type)!, block);
+    if (!this.typedBlocksDB.get(block.type)!.length) {
+      this.typedBlocksDB.delete(block.type);
     }
   }
 
@@ -260,11 +257,11 @@ export class Workspace implements IASTNodeLocation {
    * @return The blocks of the given type.
    */
   getBlocksByType(type: string, ordered: boolean): Block[] {
-    if (!this.typedBlocksDB_[type]) {
+    if (!this.typedBlocksDB.has(type)) {
       return [];
     }
-    const blocks = this.typedBlocksDB_[type].slice(0);
-    if (ordered && blocks.length > 1) {
+    const blocks = this.typedBlocksDB.get(type)!.slice(0);
+    if (ordered && blocks && blocks.length > 1) {
       // AnyDuringMigration because:  Property 'offset' does not exist on type
       // '(a: Block | WorkspaceComment, b: Block | WorkspaceComment) => number'.
       (this.sortObjects_ as AnyDuringMigration).offset =
@@ -293,12 +290,12 @@ export class Workspace implements IASTNodeLocation {
 
     // Note: If the comment database starts to hold block comments, this may
     // need to move to a separate function.
-    if (this.commentDB_[comment.id]) {
+    if (this.commentDB.has(comment.id)) {
       console.warn(
           'Overriding an existing comment on this workspace, with id "' +
           comment.id + '"');
     }
-    this.commentDB_[comment.id] = comment;
+    this.commentDB.set(comment.id, comment);
   }
 
   /**
@@ -314,7 +311,7 @@ export class Workspace implements IASTNodeLocation {
     }
     // Note: If the comment database starts to hold block comments, this may
     // need to move to a separate function.
-    delete this.commentDB_[comment.id];
+    this.commentDB.delete(comment.id);
   }
 
   /**
@@ -700,7 +697,7 @@ export class Workspace implements IASTNodeLocation {
    * @return The sought after block, or null if not found.
    */
   getBlockById(id: string): Block|null {
-    return this.blockDB_[id] || null;
+    return this.blockDB.get(id) || null;
   }
 
   /**
@@ -710,7 +707,7 @@ export class Workspace implements IASTNodeLocation {
    * @internal
    */
   setBlockById(id: string, block: Block) {
-    this.blockDB_[id] = block;
+    this.blockDB.set(id, block);
   }
 
   /**
@@ -719,7 +716,7 @@ export class Workspace implements IASTNodeLocation {
    * @internal
    */
   removeBlockById(id: string) {
-    delete this.blockDB_[id];
+    this.blockDB.delete(id);
   }
 
   /**
@@ -729,7 +726,7 @@ export class Workspace implements IASTNodeLocation {
    * @internal
    */
   getCommentById(id: string): WorkspaceComment|null {
-    return this.commentDB_[id] || null;
+    return this.commentDB.get(id) ?? null;
   }
 
   /**

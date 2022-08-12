@@ -50,20 +50,13 @@ class Capability<T> {
 export class ComponentManager {
   static Capability = Capability;
 
-  // static Capability: AnyDuringMigration;
-  private readonly componentData_: {[key: string]: ComponentDatum};
-  private readonly capabilityToComponentIds_: {[key: string]: string[]};
+  /**
+   * A map of the components registered with the workspace, mapped to id.
+   */
+  private readonly componentData = new Map<string, ComponentDatum>();
 
-  /** Creates a new ComponentManager instance. */
-  constructor() {
-    /**
-     * A map of the components registered with the workspace, mapped to id.
-     */
-    this.componentData_ = Object.create(null);
-
-    /** A map of capabilities to component IDs. */
-    this.capabilityToComponentIds_ = Object.create(null);
-  }
+  /** A map of capabilities to component IDs. */
+  private readonly capabilityToComponentIds = new Map<string, string[]>();
 
   /**
    * Adds a component.
@@ -74,23 +67,23 @@ export class ComponentManager {
   addComponent(componentInfo: ComponentDatum, opt_allowOverrides?: boolean) {
     // Don't throw an error if opt_allowOverrides is true.
     const id = componentInfo.component.id;
-    if (!opt_allowOverrides && this.componentData_[id]) {
+    if (!opt_allowOverrides && this.componentData.has(id)) {
       throw Error(
           'Plugin "' + id + '" with capabilities "' +
-          this.componentData_[id].capabilities + '" already added.');
+          this.componentData.get(id)?.capabilities + '" already added.');
     }
-    this.componentData_[id] = componentInfo;
+    this.componentData.set(id, componentInfo);
     const stringCapabilities = [];
     for (let i = 0; i < componentInfo.capabilities.length; i++) {
       const capability = String(componentInfo.capabilities[i]).toLowerCase();
       stringCapabilities.push(capability);
-      if (this.capabilityToComponentIds_[capability] === undefined) {
-        this.capabilityToComponentIds_[capability] = [id];
+      if (!this.capabilityToComponentIds.has(capability)) {
+        this.capabilityToComponentIds.set(capability, [id]);
       } else {
-        this.capabilityToComponentIds_[capability].push(id);
+        this.capabilityToComponentIds.get(capability)?.push(id);
       }
     }
-    this.componentData_[id].capabilities = stringCapabilities;
+    this.componentData.get(id)!.capabilities = stringCapabilities;
   }
 
   /**
@@ -98,15 +91,15 @@ export class ComponentManager {
    * @param id The ID of the component to remove.
    */
   removeComponent(id: string) {
-    const componentInfo = this.componentData_[id];
+    const componentInfo = this.componentData.get(id);
     if (!componentInfo) {
       return;
     }
     for (let i = 0; i < componentInfo.capabilities.length; i++) {
       const capability = String(componentInfo.capabilities[i]).toLowerCase();
-      arrayUtils.removeElem(this.capabilityToComponentIds_[capability], id);
+      arrayUtils.removeElem(this.capabilityToComponentIds.get(capability)!, id);
     }
-    delete this.componentData_[id];
+    this.componentData.delete(id);
   }
 
   /**
@@ -126,8 +119,8 @@ export class ComponentManager {
       return;
     }
     capability = String(capability).toLowerCase();
-    this.componentData_[id].capabilities.push(capability);
-    this.capabilityToComponentIds_[capability].push(id);
+    this.componentData.get(id)?.capabilities.push(capability);
+    this.capabilityToComponentIds.get(capability)?.push(id);
   }
 
   /**
@@ -148,8 +141,8 @@ export class ComponentManager {
       return;
     }
     capability = String(capability).toLowerCase();
-    arrayUtils.removeElem(this.componentData_[id].capabilities, capability);
-    arrayUtils.removeElem(this.capabilityToComponentIds_[capability], id);
+    arrayUtils.removeElem(this.componentData.get(id)!.capabilities, capability);
+    arrayUtils.removeElem(this.capabilityToComponentIds.get(capability)!, id);
   }
 
   /**
@@ -160,7 +153,8 @@ export class ComponentManager {
    */
   hasCapability<T>(id: string, capability: string|Capability<T>): boolean {
     capability = String(capability).toLowerCase();
-    return this.componentData_[id].capabilities.indexOf(capability) !== -1;
+    return this.componentData.has(id) &&
+        this.componentData.get(id)!.capabilities.indexOf(capability) !== -1;
   }
 
   /**
@@ -169,7 +163,7 @@ export class ComponentManager {
    * @return The component with the given name or undefined if not found.
    */
   getComponent(id: string): IComponent|undefined {
-    return this.componentData_[id] && this.componentData_[id].component;
+    return this.componentData.get(id)?.component;
   }
 
   /**
@@ -180,16 +174,15 @@ export class ComponentManager {
    */
   getComponents<T>(capability: string|Capability<T>, sorted: boolean): T[] {
     capability = String(capability).toLowerCase();
-    const componentIds = this.capabilityToComponentIds_[capability];
+    const componentIds = this.capabilityToComponentIds.get(capability);
     if (!componentIds) {
       return [];
     }
     const components: AnyDuringMigration[] = [];
     if (sorted) {
       const componentDataList: AnyDuringMigration[] = [];
-      const componentData = this.componentData_;
-      componentIds.forEach(function(id) {
-        componentDataList.push(componentData[id]);
+      componentIds.forEach((id) => {
+        componentDataList.push(this.componentData.get(id));
       });
       componentDataList.sort(function(a, b) {
         return a.weight - b.weight;
@@ -198,9 +191,8 @@ export class ComponentManager {
         components.push(ComponentDatum.component);
       });
     } else {
-      const componentData = this.componentData_;
-      componentIds.forEach(function(id) {
-        components.push(componentData[id].component);
+      componentIds.forEach((id) => {
+        components.push(this.componentData.get(id)!.component);
       });
     }
     return components;

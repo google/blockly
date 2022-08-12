@@ -261,7 +261,7 @@ const Menu = class {
     const el = this.getElement();
     if (el) {
       el.focus({preventScroll: true});
-      dom.addClass(el, 'blocklyFocused');
+      // dom.addClass(el, 'blocklyFocused');
     }
 
     if (this.searchElement_) {
@@ -277,7 +277,7 @@ const Menu = class {
     const el = this.getElement();
     if (el) {
       el.blur();
-      dom.removeClass(el, 'blocklyFocused');
+      // dom.removeClass(el, 'blocklyFocused');
     }
   }
 

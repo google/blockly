@@ -1238,6 +1238,19 @@ class Block {
   }
 
   /**
+   * Returns the language-neutral text of the given field.
+   * @param {string} name The name of the field.
+   * @return {*} Text of the field or null if field does not exist.
+   */
+  getFieldText(name) {
+    const field = this.getField(name);
+    if (field) {
+      return field.getText();
+    }
+    return null;
+  }
+
+  /**
    * Sets the text of the given field for this block.
    * @param {*} newValue The text to set.
    * @param {string} name The name of the field to set the value of.

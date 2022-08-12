@@ -1,6 +1,6 @@
 {
   "chunk": [
-    "blockly:279",
+    "blockly:280",
     "blocks:12:blockly",
     "all:11:blockly"
   ],
@@ -17,6 +17,7 @@
     ".\\core\\field_variable.js",
     ".\\core\\field_number.js",
     ".\\core\\field_multilineinput.js",
+    ".\\core\\field_label_hover.js",
     ".\\core\\field_label_serializable.js",
     ".\\core\\field_colour.js",
     ".\\core\\field_checkbox.js",

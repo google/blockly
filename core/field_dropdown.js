@@ -134,12 +134,12 @@ class FieldDropdown extends Field {
         (menuGenerator);
 
     /**
-   * A map of options used to configure the field.
-   * @private
-   */
-  this.opt_config_ = opt_config;
+     * A map of options used to configure the field.
+     * @private
+     */
+    this.opt_config_ = opt_config;
 
-  /**
+    /**
      * A cache of the most recently generated options.
      * @type {Array<!Array<string>>}
      * @private
@@ -147,13 +147,13 @@ class FieldDropdown extends Field {
     this.generatedOptions_ = null;
 
     /**
-   * List of the options for this dropdown.
-   * @type {Array<!Array>}
-   * @private
-   */
-  this.options_ = [];
+     * List of the options for this dropdown.
+     * @type {Array<!Array>}
+     * @private
+     */
+    this.options_ = [];
 
-  /**
+    /**
      * The prefix field label, of common words set after options are trimmed.
      * @type {?string}
      * @package
@@ -292,64 +292,13 @@ class FieldDropdown extends Field {
   }
 
   /**
-   * Creates the text input for the search bar.
-   * @return {!HTMLInputElement} A text input for the search bar.
-   * @protected
-   */
-  createSearchInput_() {
-    const textInput = document.createElement('input');
-    textInput.type = 'search';
-    textInput.setAttribute('placeholder', Msg['SEARCH']);
-    return textInput;
-  }
-
-
-  /**
-   * @param {Event} e event
-   */
-  onInput_(e) {
-    const seacrhText = e.target.value.toLowerCase();
-    const suggestedItems = [];
-
-    for (let i = 0; i < this.options_.length; i++) {
-      if (this.options_[i][0].toLowerCase().indexOf(seacrhText) > -1) {
-        suggestedItems.push(this.options_[i]);
-      }
-    }
-
-    this.clearDropdown_();
-    this.dropdownCreate_(suggestedItems);
-    this.menu_.render(this.container_);
-    const menuElement = /** @type {!Element} */ (this.menu_.getElement());
-    dom.addClass(menuElement, 'blocklyDropdownMenu');
-  }
-
-  /**
-   * Creates the text input for the search bar.
-   * @return {HTMLDivElement} search input
-   */
-  createSearch_() {
-    const inputElement = this.createSearchInput_();
-    const inputWrapper = document.createElement('div');
-    dom.addClass(inputWrapper, 'blockly-dropdown-search-input');
-    inputWrapper.appendChild(inputElement);
-
-    this.onInputHandler_ = browserEvents.conditionalBind(
-      inputElement, 'input', this, this.onInput_, 300);
-
-    return inputWrapper;
-  }
-
-  /**
    * Create a dropdown menu under the text.
    * @param {Event=} opt_e Optional mouse event that triggered the field to
    *     open, or undefined if triggered programmatically.
    * @protected
    */
   showEditor_(opt_e) {
-    this.container_ = dropDownDiv.getContentDiv();
-    this.options_ = this.getOptions(false);
-    this.dropdownCreate_(this.options_);
+    this.dropdownCreate_();
 
     if (opt_e && typeof opt_e.clientX === 'number') {
       this.menu_.openingCoords = new Coordinate(opt_e.clientX, opt_e.clientY);
@@ -403,6 +352,7 @@ class FieldDropdown extends Field {
 
     const options = this.getOptions(false);
     this.selectedMenuItem_ = null;
+    options.sort((a, b) => a[0].localeCompare(b[0], undefined, {numeric: true, sensitivity: 'base'}));
 
     for (let i = 0; i < options.length; i++) {
       let content = options[i][0];  // Human-readable text or image.

@@ -32,6 +32,10 @@ Blockly.Constants.Colour.HUE = 20;
 
 var digitalPinOptions = [["2", "2"], ["3", "3"], ["4", "4"], ["5", "5"], ["6", "6"], ["7", "7"], ["8", "8"], ["9", "9"], ["10", "10"], ["11", "11"], ["12", "12"], ["13", "13"], ["14", "14"], ["15", "15"], ["16", "16"], ["17", "17"], ["18", "18"], ["19", "19"]];
 var ledstripDemoOptions = [["%{BKY_LEAPHY_LED_STRIP_LIGHTBANK}", "0"], ["%{BKY_LEAPHY_LED_STRIP_BREATHE}", "1"], ["%{BKY_LEAPHY_LED_STRIP_GULF}", "3"], ["%{BKY_LEAPHY_LED_STRIP_RAINBOW}", "4"], ["%{BKY_LEAPHY_LED_STRIP_COLORGULF}", "5"]];
+var rgbColor = [["%{BKY_LEAPHY_RGB_COLOR_RED}", "0"], ["%{BKY_LEAPHY_RGB_COLOR_GREEN}", "1"], ["%{BKY_LEAPHY_RGB_COLOR_BLUE}", "2"]]
+var rgbColorRaw = [["%{BKY_LEAPHY_RGB_RAW_COLOR_RED}", "0"], ["%{BKY_LEAPHY_RGB_RAW_COLOR_GREEN}", "1"], ["%{BKY_LEAPHY_RGB_RAW_COLOR_BLUE}", "2"]]
+var displayPinNumbers = [["1", "0"], ["2", "1"], ["3", "2"]]
+var ledstripDemoOptions = [["%{BKY_LEAPHY_LED_STRIP_LIGHTBANK}", "0"], ["%{BKY_LEAPHY_LED_STRIP_BREATHE}", "1"], ["%{BKY_LEAPHY_LED_STRIP_GULF}", "3"], ["%{BKY_LEAPHY_LED_STRIP_RAINBOW}", "4"], ["%{BKY_LEAPHY_LED_STRIP_COLORGULF}", "5"]]
 
 Blockly.defineBlocksWithJsonArray([
   {
@@ -41,7 +45,7 @@ Blockly.defineBlocksWithJsonArray([
       {
         "type": "field_dropdown",
         "name": "COLOR_TYPE ",
-        "options": [["%{BKY_LEAPHY_RGB_COLOR_RED}", "0"], ["%{BKY_LEAPHY_RGB_COLOR_GREEN}", "1"], ["%{BKY_LEAPHY_RGB_COLOR_BLUE}", "2"]]
+        "options": rgbColor
       }
     ],
     "style": "leaphy_blocks",
@@ -56,7 +60,7 @@ Blockly.defineBlocksWithJsonArray([
       {
         "type": "field_dropdown",
         "name": "COLOR_TYPE ",
-        "options": [["%{BKY_LEAPHY_RGB_RAW_COLOR_RED}", "0"], ["%{BKY_LEAPHY_RGB_RAW_COLOR_GREEN}", "1"], ["%{BKY_LEAPHY_RGB_RAW_COLOR_BLUE}", "2"]]
+        "options": rgbColorRaw
       }
     ],
     "style": "leaphy_blocks",
@@ -169,7 +173,7 @@ Blockly.defineBlocksWithJsonArray([
       {
         "type": "field_dropdown",
         "name": "DEMO_TYPE",
-        "options": [["%{BKY_LEAPHY_LED_STRIP_LIGHTBANK}", "0"], ["%{BKY_LEAPHY_LED_STRIP_BREATHE}", "1"], ["%{BKY_LEAPHY_LED_STRIP_GULF}", "3"], ["%{BKY_LEAPHY_LED_STRIP_RAINBOW}", "4"], ["%{BKY_LEAPHY_LED_STRIP_COLORGULF}", "5"]]
+        "options": ledstripDemoOptions
       },
       {
         "type": "input_dummy"
@@ -204,7 +208,7 @@ Blockly.defineBlocksWithJsonArray([
       {
         "type": "field_dropdown",
         "name": "SERVO_PIN",
-        "options": [["2", "2"], ["3", "3"], ["4", "4"], ["5", "5"], ["6", "6"], ["7", "7"], ["8", "8"], ["9", "9"], ["10", "10"], ["11", "11"], ["12", "12"], ["13", "13"], ["14", "14"], ["15", "15"], ["16", "16"], ["17", "17"], ["18", "18"], ["19", "19"]]
+        "options": digitalPinOptions
       },
       {
         "type": "input_dummy"
@@ -230,7 +234,7 @@ Blockly.defineBlocksWithJsonArray([
       {
         "type": "field_dropdown",
         "name": "SERVO_PIN",
-        "options": [["2", "2"], ["3", "3"], ["4", "4"], ["5", "5"], ["6", "6"], ["7", "7"], ["8", "8"], ["9", "9"], ["10", "10"], ["11", "11"], ["12", "12"], ["13", "13"], ["14", "14"], ["15", "15"], ["16", "16"], ["17", "17"], ["18", "18"], ["19", "19"]]
+        "options": digitalPinOptions
       }
     ],
     "output": "Number",
@@ -246,7 +250,7 @@ Blockly.defineBlocksWithJsonArray([
       {
         "type": "field_dropdown",
         "name": "PIN",
-        "options": [["2", "2"], ["3", "3"], ["4", "4"], ["5", "5"], ["6", "6"], ["7", "7"], ["8", "8"], ["9", "9"], ["10", "10"], ["11", "11"], ["12", "12"], ["13", "13"], ["14", "14"], ["15", "15"], ["16", "16"], ["17", "17"], ["18", "18"], ["19", "19"]]
+        "options": digitalPinOptions
       },
       {
         "type": "input_value",
@@ -268,7 +272,7 @@ Blockly.defineBlocksWithJsonArray([
       {
         "type": "field_dropdown",
         "name": "PIN",
-        "options": [["2", "2"], ["3", "3"], ["4", "4"], ["5", "5"], ["6", "6"], ["7", "7"], ["8", "8"], ["9", "9"], ["10", "10"], ["11", "11"], ["12", "12"], ["13", "13"], ["14", "14"], ["15", "15"], ["16", "16"], ["17", "17"], ["18", "18"], ["19", "19"]]
+        "options": digitalPinOptions
       },
       {
         "type": "input_value",
@@ -291,12 +295,12 @@ Blockly.defineBlocksWithJsonArray([
       {
         "type": "field_dropdown",
         "name": "TRIG_PIN",
-        "options": [["2", "2"], ["3", "3"], ["4", "4"], ["5", "5"], ["6", "6"], ["7", "7"], ["8", "8"], ["9", "9"], ["10", "10"], ["11", "11"], ["12", "12"], ["13", "13"], ["14", "14"], ["15", "15"], ["16", "16"], ["17", "17"], ["18", "18"], ["19", "19"]]
+        "options": digitalPinOptions
       },
       {
         "type": "field_dropdown",
         "name": "ECHO_PIN",
-        "options": [["2", "2"], ["3", "3"], ["4", "4"], ["5", "5"], ["6", "6"], ["7", "7"], ["8", "8"], ["9", "9"], ["10", "10"], ["11", "11"], ["12", "12"], ["13", "13"], ["14", "14"], ["15", "15"], ["16", "16"], ["17", "17"], ["18", "18"], ["19", "19"]]
+        "options": digitalPinOptions
       }
     ],
     "output": "Number",
@@ -333,7 +337,7 @@ Blockly.defineBlocksWithJsonArray([
       {
         "type": "field_dropdown",
         "name": "DISPLAY_ROW",
-        "options": [["1", "0"], ["2", "1"], ["3", "2"]]
+        "options": displayPinNumbers
       },
       {
         "type": "input_value",
@@ -358,7 +362,7 @@ Blockly.defineBlocksWithJsonArray([
       {
         "type": "field_dropdown",
         "name": "DISPLAY_ROW",
-        "options": [["1", "0"], ["2", "1"], ["3", "2"]]
+        "options": displayPinNumbers
       },
       {
         "type": "input_value",

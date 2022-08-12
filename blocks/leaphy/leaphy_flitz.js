@@ -24,6 +24,8 @@ goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.FieldLabel');
 goog.require('Blockly.Mutator');
 
+var stomachSensorOptions = [["%{BKY_LEAPHY_STOMACH_SENSOR_TYPE1}", "1"], ["%{BKY_LEAPHY_STOMACH_SENSOR_TYPE2}", "2"]]
+
 Blockly.defineBlocksWithJsonArray([
   {
     "type": "leaphy_flitz_read_stomach_sensor",
@@ -32,7 +34,7 @@ Blockly.defineBlocksWithJsonArray([
       {
         "type": "field_dropdown",
         "name": "SENSOR_TYPE",
-        "options": [["%{BKY_LEAPHY_STOMACH_SENSOR_TYPE1}", "1"], ["%{BKY_LEAPHY_STOMACH_SENSOR_TYPE2}", "2"]]
+        "options": stomachSensorOptions
       }
     ],
     "output": "Number",

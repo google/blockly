@@ -78,5 +78,10 @@ Blockly.Extensions.registerMixin('updateDisplay', {
    updateFields: function () {
     Blockly.Arduino.Boards.refreshBlockFieldDropdown(
       this, 'DISPLAY_ROW', 'displayRows');
-  }
-})
+  }}
+);
+
+Blockly.Extensions.register('setDeletableFalse', function () {
+  this.appendStatementInput('STACK');
+}
+)

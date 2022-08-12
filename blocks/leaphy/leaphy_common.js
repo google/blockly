@@ -24,19 +24,17 @@ goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.FieldLabel');
 goog.require('Blockly.Mutator');
 
-Blockly.Blocks['leaphy_start'] = {
-  init: function() {
-    this.jsonInit({
-      "lastDummyAlign0": "CENTRE",
-      "message0": "%%{BKY_LEAPHY_START}"      
-    })
-    this.setStyle('leaphy_blocks');
-    this.appendStatementInput('STACK');
-    this.setDeletable(false);
-  }
-};
 
 Blockly.defineBlocksWithJsonArray([
+  {
+    "type": "leaphy_start",
+    "lastDummyAlign0": "CENTRE",
+    "message0": "%%{BKY_LEAPHY_START}",
+    "style": "leaphy_blocks",
+    "extensions": ["setDeletableFalse"],
+    "tooltip": "",
+    "helpUrl": ""
+  },
   {
     "type": "leaphy_serial_print_line",
     "message0": "%%{BKY_LEAPHY_SERIAL_PRINT} %1 %2",

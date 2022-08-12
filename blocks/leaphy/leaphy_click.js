@@ -24,7 +24,11 @@ goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.FieldLabel');
 goog.require('Blockly.Mutator');
 
- 
+var motorDropdown = [["%{BKY_LEAPHY_MOTOR_A_DROPDOWN}","9"], ["%{BKY_LEAPHY_MOTOR_B_DROPDOWN}","10"]];
+
+var digitalPinOptions = [["2", "2"], ["3", "3"], ["4", "4"], ["5", "5"], ["6", "6"], ["7", "7"], ["8", "8"], ["9", "9"], ["10", "10"], ["11", "11"], ["12", "12"], ["13", "13"], ["14", "14"], ["15", "15"], ["16", "16"], ["17", "17"], ["18", "18"], ["19", "19"]];
+
+
 Blockly.defineBlocksWithJsonArray([{
   "type": "leaphy_click_set_motor",
   "message0": "%%{BKY_LEAPHY_MOTOR_TYPE} %1 %2 %%{BKY_LEAPHY_MOTOR_SPEED} %3",
@@ -32,16 +36,7 @@ Blockly.defineBlocksWithJsonArray([{
     {
       "type": "field_dropdown",
       "name": "MOTOR_TYPE",
-      "options": [
-        [
-          "%{BKY_LEAPHY_MOTOR_A_DROPDOWN}",
-          "9"
-        ],
-        [
-          "%{BKY_LEAPHY_MOTOR_B_DROPDOWN}",
-          "10"
-        ]
-      ]
+      "options": motorDropdown
     },
     {
       "type": "input_dummy"
@@ -66,7 +61,7 @@ Blockly.defineBlocksWithJsonArray([{
     {
       "type": "field_dropdown",
       "name": "PIN1",
-      "options": [["2", "2"], ["3", "3"], ["4", "4"], ["5", "5"], ["6", "6"], ["7", "7"], ["8", "8"], ["9", "9"], ["10", "10"], ["11", "11"], ["12", "12"], ["13", "13"], ["14", "14"], ["15", "15"], ["16", "16"], ["17", "17"], ["18", "18"], ["19", "19"]]
+      "options": digitalPinOptions
     },
     {
       "type": "input_value",
@@ -76,7 +71,7 @@ Blockly.defineBlocksWithJsonArray([{
     {
       "type": "field_dropdown",
       "name": "PIN2",
-      "options": [["2", "2"], ["3", "3"], ["4", "4"], ["5", "5"], ["6", "6"], ["7", "7"], ["8", "8"], ["9", "9"], ["10", "10"], ["11", "11"], ["12", "12"], ["13", "13"], ["14", "14"], ["15", "15"], ["16", "16"], ["17", "17"], ["18", "18"], ["19", "19"]]
+      "options": digitalPinOptions
     },
     {
       "type": "input_value",
@@ -86,7 +81,7 @@ Blockly.defineBlocksWithJsonArray([{
     {
       "type": "field_dropdown",
       "name": "PIN3",
-      "options": [["2", "2"], ["3", "3"], ["4", "4"], ["5", "5"], ["6", "6"], ["7", "7"], ["8", "8"], ["9", "9"], ["10", "10"], ["11", "11"], ["12", "12"], ["13", "13"], ["14", "14"], ["15", "15"], ["16", "16"], ["17", "17"], ["18", "18"], ["19", "19"]]
+      "options": digitalPinOptions
     },
     {
       "type": "input_value",

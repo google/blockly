@@ -1032,7 +1032,6 @@ suite('Procedures', function() {
           });
         });
       });
-
       /**
        * Test cases for serialization tests.
        * @type {Array<SerializationTestCase>}

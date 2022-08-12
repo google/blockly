@@ -20,7 +20,6 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.dom');
 
 import type {Svg} from './svg.js';
-import * as userAgent from './useragent.js';
 
 
 /**

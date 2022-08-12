@@ -23,10 +23,6 @@ goog.declareModuleId('Blockly.utils.userAgent');
 /** The raw useragent string. */
 let rawUserAgent: string;
 
-let isIe: boolean;
-
-let isEdge: boolean;
-
 let isJavaFx: boolean;
 
 let isChrome: boolean;
@@ -63,18 +59,16 @@ function has(name: string): boolean {
 
 // Browsers.  Logic from:
 // https://github.com/google/closure-library/blob/master/closure/goog/labs/useragent/browser.js
-isIe = has('Trident') || has('MSIE');
-isEdge = has('Edge');
 // Useragent for JavaFX:
 // Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.44
 //     (KHTML, like Gecko) JavaFX/8.0 Safari/537.44
 isJavaFx = has('JavaFX');
-isChrome = (has('Chrome') || has('CriOS')) && !isEdge;
+isChrome = (has('Chrome') || has('CriOS'));
 
 // Engines.  Logic from:
 // https://github.com/google/closure-library/blob/master/closure/goog/labs/useragent/engine.js
-isWebKit = has('WebKit') && !isEdge;
-isGecko = has('Gecko') && !isWebKit && !isIe && !isEdge;
+isWebKit = has('WebKit');
+isGecko = has('Gecko') && !isWebKit;
 
 // Platforms.  Logic from:
 // https://github.com/google/closure-library/blob/master/closure/goog/labs/useragent/platform.js

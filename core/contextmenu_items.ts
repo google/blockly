@@ -24,7 +24,6 @@ import * as eventUtils from './events/utils.js';
 import {inputTypes} from './input_types.js';
 import {Msg} from './msg.js';
 import * as idGenerator from './utils/idgenerator.js';
-import * as userAgent from './utils/useragent.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
 

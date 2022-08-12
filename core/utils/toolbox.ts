@@ -26,7 +26,6 @@ import type {ConnectionState} from '../serialization/blocks.js';
 import type {CssConfig as CategoryCssConfig} from '../toolbox/category.js';
 import type {CssConfig as SeparatorCssConfig} from '../toolbox/separator.js';
 import * as Xml from '../xml.js';
-import * as userAgent from './useragent.js';
 
 
 /**

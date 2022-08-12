@@ -39,7 +39,6 @@ import type {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import type {Size} from './utils/size.js';
 import {Svg} from './utils/svg.js';
-import * as userAgent from './utils/useragent.js';
 
 
 /**

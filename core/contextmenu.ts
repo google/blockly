@@ -30,7 +30,6 @@ import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import {Rect} from './utils/rect.js';
 import * as svgMath from './utils/svg_math.js';
-import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
 import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
 import type {WorkspaceSvg} from './workspace_svg.js';

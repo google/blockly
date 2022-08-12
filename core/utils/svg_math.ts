@@ -22,7 +22,6 @@ import * as deprecation from './deprecation.js';
 import {Rect} from './rect.js';
 import {Size} from './size.js';
 import * as style from './style.js';
-import * as userAgent from './useragent.js';
 
 
 /**

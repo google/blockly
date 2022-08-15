@@ -40,6 +40,7 @@
     "generate:langfiles": "gulp generateLangfiles",
     "license": "gulp checkLicenses",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "package": "gulp package",
     "prepare": "gulp prepare",
     "prepareDemos": "gulp prepareDemos",

@@ -2,9 +2,6 @@
 /msg/*
 /build/*
 /dist/*
-/tests/*
-/tests/scripts/*
-/tests/playgrounds/*
 /tests/blocks/*
 /tests/themes/*
 /tests/compile/*
@@ -19,9 +16,5 @@
 /appengine/*
 /externs/*
 /closure/*
-/scripts/*
 /scripts/gulpfiles/*
 /typings/*
-gulpfile.js
-/blocks/*
-/core/blockly.js

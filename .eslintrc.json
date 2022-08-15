@@ -15,9 +15,8 @@
             }
         ],
         "no-trailing-spaces": ["error", { "skipBlankLines": true }],
-        // Temporarily disable. 447 problems.
         "no-unused-vars": [
-            "off",
+            "warn",
             {
                 "args": "after-used",
                 // Ignore vars starting with an underscore.
@@ -34,15 +33,13 @@
         // Blockly doesn't have space before function paren when defining functions.
         "space-before-function-paren": ["error", "never"],
         // Blockly doesn't have space before function paren when calling functions.
-        // Temporarily disable. 34 problems. Auto fixable?
-        "func-call-spacing": ["off", "never"],
+        "func-call-spacing": ["error", "never"],
         "space-infix-ops": ["error"],
         // Blockly uses 'use strict' in files.
         "strict": ["off"],
         // Closure style allows redeclarations.
         "no-redeclare": ["off"],
-        // Disable JsDoc validation, since we use TsDoc
-        "valid-jsdoc": ["off"],
+        "valid-jsdoc": ["error"],
         "no-console": ["off"],
         "no-multi-spaces": ["error", { "ignoreEOLComments": true }],
         "operator-linebreak": ["error", "after"],
@@ -74,40 +71,7 @@
             "imports": "always-multiline",
             "exports": "always-multiline",
             "functions": "ignore"
-        }],
-        // TS rules
-        // Blockly uses namespaces to do declaration merging in some cases.
-        "@typescript-eslint/no-namespace": ["off"],
-        // Needs decision. 601 problems.
-       "@typescript-eslint/no-non-null-assertion": ["off"],
-       // Temporarily disable. 85 problems.
-       "@typescript-eslint/no-unused-vars": ["off"],
-       // Temporarily disable. 23 problems.
-       "@typescript-eslint/no-explicit-any": ["off"],
-       // Temporarily disable. 128 problems.
-       "require-jsdoc": ["off"],
-       // Temporarily disable. 55 problems.
-       "@typescript-eslint/ban-types": ["off"],
-       // Temporarily disable. 18 problems. Autofixable?
-       "@typescript-eslint/no-inferrable-types": ["off"],
-       // Temporarily disable. 33 problems.
-       "@typescript-eslint/no-empty-function": ["off"],
-       // Temporarily disable. 17 problems.
-       "@typescript-eslint/no-this-alias": ["off"],
-       // Temporarily disable. 28 problems.
-       "no-invalid-this": ["off"],
-       // Temporarily disable. 3 problems.
-       "@typescript-eslint/no-empty-interface": ["off"]
-    },
-    "plugins": [
-        "@typescript-eslint/eslint-plugin"
-    ],
-    "parser":  "@typescript-eslint/parser",
-    "parserOptions": {
-      "project": "./tsconfig.json",
-      "tsconfigRootDir": ".",
-      "ecmaVersion": 2020,
-      "sourceType": "module"
+        }]
     },
     "env": {
         "es2020": true,
@@ -118,6 +82,54 @@
         "exports": true
     },
     "extends": [
-        "eslint:recommended", "google", "plugin:@typescript-eslint/recommended"
-    ]
+        "eslint:recommended", "google"
+    ],
+    // TypeScript-specific config. Uses above rules plus these.
+    "overrides": [{
+        "files": ["**/*.ts", "**/*.tsx"],
+        "plugins": [
+            "@typescript-eslint/eslint-plugin"
+        ],
+        "parser":  "@typescript-eslint/parser",
+        "parserOptions": {
+            "project": "./tsconfig.json",
+            "tsconfigRootDir": ".",
+            "ecmaVersion": 2020,
+            "sourceType": "module"
+        },
+        "extends": ["plugin:@typescript-eslint/recommended"],
+        "rules": {
+            // TS rules
+            // Disable JsDoc validation, since we use TsDoc.
+            "valid-jsdoc": ["off"],
+            // Blockly uses namespaces to do declaration merging in some cases.
+            "@typescript-eslint/no-namespace": ["off"],
+            // Needs decision. 601 problems.
+            "@typescript-eslint/no-non-null-assertion": ["off"],
+            // Temporarily disable. 85 problems.
+            "@typescript-eslint/no-unused-vars": ["off"],
+            // Temporarily disable. 23 problems.
+            "@typescript-eslint/no-explicit-any": ["off"],
+            // Temporarily disable. 128 problems.
+            "require-jsdoc": ["off"],
+            // Temporarily disable. 55 problems.
+            "@typescript-eslint/ban-types": ["off"],
+            // Temporarily disable. 18 problems. Autofixable?
+            "@typescript-eslint/no-inferrable-types": ["off"],
+            // Temporarily disable. 33 problems.
+            "@typescript-eslint/no-empty-function": ["off"],
+            // Temporarily disable. 17 problems.
+            "@typescript-eslint/no-this-alias": ["off"],
+            // Temporarily disable. 28 problems.
+            "no-invalid-this": ["off"],
+            // Temporarily disable. 3 problems.
+            "@typescript-eslint/no-empty-interface": ["off"],
+            // Temporarily disable. 447 problems.
+            "no-unused-vars": ["off"],
+            // Temporarily disable. 34 problems. Auto fixable?
+            "func-call-spacing": ["off"],
+            // This is already off above, but does not stop eslint complaining here. Curious.
+            "prefer-spread": ["off"]
+        }
+    }]
 }

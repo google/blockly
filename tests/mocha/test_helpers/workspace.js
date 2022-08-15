@@ -69,8 +69,7 @@ export function testAWorkspace() {
 
       this.workspace.clear();
       chai.assert.equal(this.workspace.topBlocks_.length, 0);
-      const varMapLength =
-          Object.keys(this.workspace.variableMap_.variableMap_).length;
+      const varMapLength = this.workspace.variableMap_.variableMap.size;
       chai.assert.equal(varMapLength, 0);
     });
 
@@ -80,8 +79,7 @@ export function testAWorkspace() {
 
       this.workspace.clear();
       chai.assert.equal(this.workspace.topBlocks_.length, 0);
-      const varMapLength =
-          Object.keys(this.workspace.variableMap_.variableMap_).length;
+      const varMapLength = this.workspace.variableMap_.variableMap.size;
       chai.assert.equal(varMapLength, 0);
     });
   });
@@ -840,7 +838,7 @@ export function testAWorkspace() {
             '  <block type="stack_block" id="2"></block>' +
             '</xml>';
 
-        testUndoConnect.call(this, xml, 1, 2, (parent, child) => {
+        testUndoConnect.call(this, xml, '1', '2', (parent, child) => {
           parent.nextConnection.connect(child.previousConnection);
         });
       });
@@ -852,7 +850,7 @@ export function testAWorkspace() {
             '  <block type="row_block" id="2"></block>' +
             '</xml>';
 
-        testUndoConnect.call(this, xml, 1, 2, (parent, child) => {
+        testUndoConnect.call(this, xml, '1', '2', (parent, child) => {
           parent.getInput('INPUT').connection.connect(child.outputConnection);
         });
       });
@@ -864,7 +862,7 @@ export function testAWorkspace() {
             '  <block type="stack_block" id="2"></block>' +
             '</xml>';
 
-        testUndoConnect.call(this, xml, 1, 2, (parent, child) => {
+        testUndoConnect.call(this, xml, '1', '2', (parent, child) => {
           parent.getInput('STATEMENT').connection
               .connect(child.previousConnection);
         });
@@ -881,7 +879,7 @@ export function testAWorkspace() {
             '  <block type="stack_block" id="2"></block>' +
             '</xml>';
 
-        testUndoConnect.call(this, xml, 1, 2, (parent, child) => {
+        testUndoConnect.call(this, xml, '1', '2', (parent, child) => {
           parent.nextConnection.connect(child.previousConnection);
         });
       });
@@ -897,7 +895,7 @@ export function testAWorkspace() {
             '  <block type="row_block" id="2"></block>' +
             '</xml>';
 
-        testUndoConnect.call(this, xml, 1, 2, (parent, child) => {
+        testUndoConnect.call(this, xml, '1', '2', (parent, child) => {
           parent.getInput('INPUT').connection.connect(child.outputConnection);
         });
       });
@@ -913,7 +911,7 @@ export function testAWorkspace() {
             '  <block type="stack_block" id="2"></block>' +
             '</xml>';
 
-        testUndoConnect.call(this, xml, 1, 2, (parent, child) => {
+        testUndoConnect.call(this, xml, '1', '2', (parent, child) => {
           parent.getInput('STATEMENT').connection
               .connect(child.previousConnection);
         });
@@ -930,7 +928,7 @@ export function testAWorkspace() {
             '  <block type="stack_block" id="2"></block>' +
             '</xml>';
 
-        testUndoConnect.call(this, xml, 1, 2, (parent, child) => {
+        testUndoConnect.call(this, xml, '1', '2', (parent, child) => {
           parent.nextConnection.connect(child.previousConnection);
         });
       });
@@ -946,7 +944,7 @@ export function testAWorkspace() {
             '  <block type="row_block" id="2"></block>' +
             '</xml>';
 
-        testUndoConnect.call(this, xml, 1, 2, (parent, child) => {
+        testUndoConnect.call(this, xml, '1', '2', (parent, child) => {
           parent.getInput('INPUT').connection.connect(child.outputConnection);
         });
       });
@@ -962,7 +960,7 @@ export function testAWorkspace() {
             '  <block type="stack_block" id="2"></block>' +
             '</xml>';
 
-        testUndoConnect.call(this, xml, 1, 2, (parent, child) => {
+        testUndoConnect.call(this, xml, '1', '2', (parent, child) => {
           parent.getInput('STATEMENT').connection
               .connect(child.previousConnection);
         });
@@ -1034,7 +1032,7 @@ export function testAWorkspace() {
             '    </next>' +
             '  </block>' +
             '</xml>';
-        testUndoDisconnect.call(this, xml, 2);
+        testUndoDisconnect.call(this, xml, '2');
       });
 
       test('Row', function() {
@@ -1046,7 +1044,7 @@ export function testAWorkspace() {
             '    </value>' +
             '  </block>' +
             '</xml>';
-        testUndoDisconnect.call(this, xml, 2);
+        testUndoDisconnect.call(this, xml, '2');
       });
 
       test('Statement', function() {
@@ -1058,7 +1056,7 @@ export function testAWorkspace() {
             '    </statement>' +
             '  </block>' +
             '</xml>';
-        testUndoDisconnect.call(this, xml, 2);
+        testUndoDisconnect.call(this, xml, '2');
       });
 
       test('Stack w/ child', function() {
@@ -1074,7 +1072,7 @@ export function testAWorkspace() {
             '    </next>' +
             '  </block>' +
             '</xml>';
-        testUndoDisconnect.call(this, xml, 2);
+        testUndoDisconnect.call(this, xml, '2');
       });
 
       test('Row w/ child', function() {
@@ -1090,7 +1088,7 @@ export function testAWorkspace() {
             '    </value>' +
             '  </block>' +
             '</xml>';
-        testUndoDisconnect.call(this, xml, 2);
+        testUndoDisconnect.call(this, xml, '2');
       });
 
       test('Statement w/ child', function() {
@@ -1106,7 +1104,7 @@ export function testAWorkspace() {
             '    </statement>' +
             '  </block>' +
             '</xml>';
-        testUndoDisconnect.call(this, xml, 2);
+        testUndoDisconnect.call(this, xml, '2');
       });
 
       test('Stack w/ shadow', function() {
@@ -1121,7 +1119,7 @@ export function testAWorkspace() {
             '    </next>' +
             '  </block>' +
             '</xml>';
-        testUndoDisconnect.call(this, xml, 2);
+        testUndoDisconnect.call(this, xml, '2');
         chai.assert.equal(this.workspace.getAllBlocks().length, 2,
             'expected there to only be 2 blocks on the workspace ' +
             '(check for shadows)');
@@ -1137,7 +1135,7 @@ export function testAWorkspace() {
             '    </value>' +
             '  </block>' +
             '</xml>';
-        testUndoDisconnect.call(this, xml, 2);
+        testUndoDisconnect.call(this, xml, '2');
         chai.assert.equal(this.workspace.getAllBlocks().length, 2,
             'expected there to only be 2 blocks on the workspace ' +
             '(check for shadows)');
@@ -1153,7 +1151,7 @@ export function testAWorkspace() {
             '    </statement>' +
             '  </block>' +
             '</xml>';
-        testUndoDisconnect.call(this, xml, 2);
+        testUndoDisconnect.call(this, xml, '2');
       });
     });
 

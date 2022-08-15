@@ -27,8 +27,8 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  */
 export class ContextMenuRegistry {
   static registry: ContextMenuRegistry;
-  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  private registry_!: {[key: string]: RegistryItem};
+  /** Registry of all registered RegistryItems, keyed by ID. */
+  private registry_ = new Map<string, RegistryItem>();
 
   /** Resets the existing singleton instance of ContextMenuRegistry. */
   constructor() {
@@ -37,8 +37,7 @@ export class ContextMenuRegistry {
 
   /** Clear and recreate the registry. */
   reset() {
-    /** Registry of all registered RegistryItems, keyed by ID. */
-    this.registry_ = Object.create(null);
+    this.registry_.clear();
   }
 
   /**
@@ -47,10 +46,10 @@ export class ContextMenuRegistry {
    * @throws {Error} if an item with the given ID already exists.
    */
   register(item: RegistryItem) {
-    if (this.registry_[item.id]) {
+    if (this.registry_.has(item.id)) {
       throw Error('Menu item with ID "' + item.id + '" is already registered.');
     }
-    this.registry_[item.id] = item;
+    this.registry_.set(item.id, item);
   }
 
   /**
@@ -59,10 +58,10 @@ export class ContextMenuRegistry {
    * @throws {Error} if an item with the given ID does not exist.
    */
   unregister(id: string) {
-    if (!this.registry_[id]) {
+    if (!this.registry_.has(id)) {
       throw new Error('Menu item with ID "' + id + '" not found.');
     }
-    delete this.registry_[id];
+    this.registry_.delete(id);
   }
 
   /**
@@ -70,7 +69,7 @@ export class ContextMenuRegistry {
    * @return RegistryItem or null if not found
    */
   getItem(id: string): RegistryItem|null {
-    return this.registry_[id] || null;
+    return this.registry_.get(id) ?? null;
   }
 
   /**
@@ -86,9 +85,7 @@ export class ContextMenuRegistry {
   getContextMenuOptions(scopeType: ScopeType, scope: Scope):
       ContextMenuOption[] {
     const menuOptions: AnyDuringMigration[] = [];
-    const registry = this.registry_;
-    Object.keys(registry).forEach(function(id) {
-      const item = registry[id];
+    for (const item of this.registry_.values()) {
       if (scopeType === item.scopeType) {
         const precondition = item.preconditionFn(scope);
         if (precondition !== 'hidden') {
@@ -105,7 +102,7 @@ export class ContextMenuRegistry {
           menuOptions.push(menuOption);
         }
       }
-    });
+    }
     menuOptions.sort(function(a, b) {
       return a.weight - b.weight;
     });

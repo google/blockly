@@ -31,7 +31,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 export class ThemeManager {
   /** A list of workspaces that are subscribed to this theme. */
   private subscribedWorkspaces_: Workspace[] = [];
-  private componentDB_: {[key: string]: Component[]};
+  private componentDB = new Map<string, Component[]>();
   owner_: AnyDuringMigration;
 
   /**
@@ -39,10 +39,7 @@ export class ThemeManager {
    * @param theme The workspace theme.
    * @internal
    */
-  constructor(private readonly workspace: WorkspaceSvg, private theme: Theme) {
-    /** A map of subscribed UI components, keyed by component name. */
-    this.componentDB_ = Object.create(null);
-  }
+  constructor(private readonly workspace: WorkspaceSvg, private theme: Theme) {}
 
   /**
    * Get the workspace theme.
@@ -76,9 +73,8 @@ export class ThemeManager {
     }
 
     // Refresh all registered Blockly UI components.
-    for (let i = 0, keys = Object.keys(this.componentDB_), key; key = keys[i];
-         i++) {
-      for (let j = 0, component; component = this.componentDB_[key][j]; j++) {
+    for (const [key, componentList] of this.componentDB) {
+      for (const component of componentList) {
         const element = component.element;
         const propertyName = component.propertyName;
         const style = this.theme && this.theme.getComponentStyle(key);
@@ -125,12 +121,12 @@ export class ThemeManager {
    * @internal
    */
   subscribe(element: Element, componentName: string, propertyName: string) {
-    if (!this.componentDB_[componentName]) {
-      this.componentDB_[componentName] = [];
+    if (!this.componentDB.has(componentName)) {
+      this.componentDB.set(componentName, []);
     }
 
     // Add the element to our component map.
-    this.componentDB_[componentName].push({element, propertyName});
+    this.componentDB.get(componentName)!.push({element, propertyName});
 
     // Initialize the element with its corresponding theme style.
     const style = this.theme && this.theme.getComponentStyle(componentName);
@@ -149,17 +145,15 @@ export class ThemeManager {
       return;
     }
     // Go through all component, and remove any references to this element.
-    const componentNames = Object.keys(this.componentDB_);
-    for (let c = 0, componentName; componentName = componentNames[c]; c++) {
-      const elements = this.componentDB_[componentName];
+    for (const [componentName, elements] of this.componentDB) {
       for (let i = elements.length - 1; i >= 0; i--) {
         if (elements[i].element === element) {
           elements.splice(i, 1);
         }
       }
       // Clean up the component map entry if the list is empty.
-      if (!this.componentDB_[componentName].length) {
-        delete this.componentDB_[componentName];
+      if (!elements.length) {
+        this.componentDB.delete(componentName);
       }
     }
   }
@@ -177,9 +171,7 @@ export class ThemeManager {
     // AnyDuringMigration because:  Type 'null' is not assignable to type
     // 'Workspace[]'.
     this.subscribedWorkspaces_ = null as AnyDuringMigration;
-    // AnyDuringMigration because:  Type 'null' is not assignable to type '{
-    // [key: string]: Component[]; }'.
-    this.componentDB_ = null as AnyDuringMigration;
+    this.componentDB.clear();
   }
 }
 

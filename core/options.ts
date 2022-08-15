@@ -150,9 +150,8 @@ export class Options {
       deprecation.warn('path', 'Nov 2014', 'Jul 2023', 'media');
       pathToMedia = (options as any)['path'] + 'media/';
     }
-    let oneBasedIndex;
     const rawOneBasedIndex = options['oneBasedIndex'];
-    oneBasedIndex = rawOneBasedIndex === undefined ? true : rawOneBasedIndex;
+    const oneBasedIndex = rawOneBasedIndex === undefined ? true : rawOneBasedIndex;
     const renderer = options['renderer'] || 'geras';
 
     const plugins = options['plugins'] || {};

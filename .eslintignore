@@ -23,3 +23,5 @@
 /scripts/gulpfiles/*
 /typings/*
 gulpfile.js
+/blocks/*
+/core/blockly.js

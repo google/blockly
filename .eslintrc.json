@@ -95,7 +95,9 @@
        // Temporarily disable. 17 problems.
        "@typescript-eslint/no-this-alias": ["off"],
        // Temporarily disable. 28 problems.
-       "no-invalid-this": ["off"]
+       "no-invalid-this": ["off"],
+       // Temporarily disable. 3 problems.
+       "@typescript-eslint/no-empty-interface": ["off"]
     },
     "plugins": [
         "@typescript-eslint/eslint-plugin"

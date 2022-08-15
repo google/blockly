@@ -151,7 +151,8 @@ export class Options {
       pathToMedia = (options as any)['path'] + 'media/';
     }
     const rawOneBasedIndex = options['oneBasedIndex'];
-    const oneBasedIndex = rawOneBasedIndex === undefined ? true : rawOneBasedIndex;
+    const oneBasedIndex =
+        rawOneBasedIndex === undefined ? true : rawOneBasedIndex;
     const renderer = options['renderer'] || 'geras';
 
     const plugins = options['plugins'] || {};

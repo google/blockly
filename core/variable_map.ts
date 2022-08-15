@@ -365,7 +365,7 @@ export class VariableMap {
   getAllVariableNames(): string[] {
     return Array.from(this.variableMap.values())
         .flat()
-        .map(variable => variable.name);
+        .map((variable) => variable.name);
   }
 
   /**

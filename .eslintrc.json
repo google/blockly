@@ -39,7 +39,8 @@
         "strict": ["off"],
         // Closure style allows redeclarations.
         "no-redeclare": ["off"],
-        "valid-jsdoc": ["error", {"requireReturn": false}],
+        // Disable JsDoc validation, since we use TsDoc
+        "valid-jsdoc": ["off"],
         "no-console": ["off"],
         "no-multi-spaces": ["error", { "ignoreEOLComments": true }],
         "operator-linebreak": ["error", "after"],
@@ -71,7 +72,19 @@
             "imports": "always-multiline",
             "exports": "always-multiline",
             "functions": "ignore"
-        }]
+        }],
+        // TS rules
+        "@typescript-eslint/no-non-null-assertion": ["off"]
+    },
+    "plugins": [
+        "@typescript-eslint/eslint-plugin"
+    ],
+    "parser":  "@typescript-eslint/parser",
+    "parserOptions": {
+      "project": "./tsconfig.json",
+      "tsconfigRootDir": ".",
+      "ecmaVersion": 2020,
+      "sourceType": "module"
     },
     "env": {
         "es2020": true,
@@ -82,6 +95,6 @@
         "exports": true
     },
     "extends": [
-        "eslint:recommended", "google"
+        "eslint:recommended", "google", "plugin:@typescript-eslint/recommended"
     ]
 }

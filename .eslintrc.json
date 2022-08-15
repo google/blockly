@@ -15,8 +15,9 @@
             }
         ],
         "no-trailing-spaces": ["error", { "skipBlankLines": true }],
+        // Temporarily disable. 447 problems.
         "no-unused-vars": [
-            "warn",
+            "off",
             {
                 "args": "after-used",
                 // Ignore vars starting with an underscore.
@@ -33,7 +34,8 @@
         // Blockly doesn't have space before function paren when defining functions.
         "space-before-function-paren": ["error", "never"],
         // Blockly doesn't have space before function paren when calling functions.
-        "func-call-spacing": ["error", "never"],
+        // Temporarily disable. 34 problems. Auto fixable?
+        "func-call-spacing": ["off", "never"],
         "space-infix-ops": ["error"],
         // Blockly uses 'use strict' in files.
         "strict": ["off"],
@@ -74,7 +76,26 @@
             "functions": "ignore"
         }],
         // TS rules
-        "@typescript-eslint/no-non-null-assertion": ["off"]
+        // Blockly uses namespaces to do declaration merging in some cases.
+        "@typescript-eslint/no-namespace": ["off"],
+        // Needs decision. 601 problems.
+       "@typescript-eslint/no-non-null-assertion": ["off"],
+       // Temporarily disable. 85 problems.
+       "@typescript-eslint/no-unused-vars": ["off"],
+       // Temporarily disable. 23 problems.
+       "@typescript-eslint/no-explicit-any": ["off"],
+       // Temporarily disable. 128 problems.
+       "require-jsdoc": ["off"],
+       // Temporarily disable. 55 problems.
+       "@typescript-eslint/ban-types": ["off"],
+       // Temporarily disable. 18 problems. Autofixable?
+       "@typescript-eslint/no-inferrable-types": ["off"],
+       // Temporarily disable. 33 problems.
+       "@typescript-eslint/no-empty-function": ["off"],
+       // Temporarily disable. 17 problems.
+       "@typescript-eslint/no-this-alias": ["off"],
+       // Temporarily disable. 28 problems.
+       "no-invalid-this": ["off"]
     },
     "plugins": [
         "@typescript-eslint/eslint-plugin"

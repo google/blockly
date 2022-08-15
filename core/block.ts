@@ -743,8 +743,7 @@ export class Block implements IASTNodeLocation, IDeletable {
     for (let child, i = 0; child = childBlocks[i]; i++) {
       // AnyDuringMigration because:  Argument of type 'Block[]' is not
       // assignable to parameter of type 'this[]'.
-      blocks.push.apply(
-          blocks, child.getDescendants(ordered) as AnyDuringMigration);
+      blocks.push(...child.getDescendants(ordered) as AnyDuringMigration);
     }
     return blocks;
   }

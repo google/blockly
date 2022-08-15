@@ -127,9 +127,7 @@
             // Temporarily disable. 447 problems.
             "no-unused-vars": ["off"],
             // Temporarily disable. 34 problems. Auto fixable?
-            "func-call-spacing": ["off"],
-            // This is already off above, but does not stop eslint complaining here. Curious.
-            "prefer-spread": ["off"]
+            "func-call-spacing": ["off"]
         }
     }]
 }

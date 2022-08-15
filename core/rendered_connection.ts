@@ -400,7 +400,7 @@ export class RenderedConnection extends Connection {
         connections = block.getConnections_(true);
       }
       for (let i = 0; i < connections.length; i++) {
-        renderList.push.apply(renderList, connections[i].startTrackingAll());
+        renderList.push(...connections[i].startTrackingAll());
       }
       if (!renderList.length) {
         // Leaf block.

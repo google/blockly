@@ -84,4 +84,4 @@ function fromJsonInternal(options: AnyDuringMigration): Field|null {
 
 export const TEST_ONLY = {
   fromJsonInternal,
-}
+};

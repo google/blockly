@@ -44,7 +44,7 @@ import * as Xml from './xml.js';
  */
 let currentBlock: Block|null = null;
 
-let dummyOwner = {};
+const dummyOwner = {};
 
 /**
  * Gets the block the context menu is currently attached to.

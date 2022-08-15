@@ -1117,7 +1117,7 @@ export class ConstantProvider {
       selector + ' .blocklyReplaceable .blocklyPath {', 'fill-opacity: .5;', '}', selector + ' .blocklyReplaceable .blocklyPathLight,', selector + ' .blocklyReplaceable .blocklyPathDark {', 'display: none;', '}',
 
       // Insertion marker.
-      selector + ' .blocklyInsertionMarker>.blocklyPath {', 'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';', 'stroke: none;', '}',];
+      selector + ' .blocklyInsertionMarker>.blocklyPath {', 'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';', 'stroke: none;', '}'];
   }
 }
 /* clang-format on */

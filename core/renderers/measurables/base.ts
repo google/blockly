@@ -37,7 +37,7 @@ export class Measurable {
   notchOffset: number;
 
   /** The renderer's constant provider. */
-  protected readonly constants_: ConstantProvider
+  protected readonly constants_: ConstantProvider;
 
   /**
    * @param constants The rendering constants provider.

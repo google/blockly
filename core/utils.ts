@@ -68,7 +68,7 @@ export {
   svgPaths,
   toolbox,
   userAgent,
-  xml
+  xml,
 };
 
 /**

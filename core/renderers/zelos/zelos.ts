@@ -35,5 +35,5 @@ export {
   RenderInfo,
   RightConnectionShape,
   StatementInput,
-  TopRow
+  TopRow,
 };

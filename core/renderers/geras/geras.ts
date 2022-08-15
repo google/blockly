@@ -33,5 +33,5 @@ export {
   PathObject,
   Renderer,
   RenderInfo,
-  StatementInput
+  StatementInput,
 };

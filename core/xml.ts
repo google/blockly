@@ -667,7 +667,7 @@ function mapSupportedXmlTags(xmlBlock: Element): childNodeTagMap {
     data: new Array<Element>(),
     field: new Array<Element>(),
     input: new Array<Element>(),
-    next: new Array<Element>()
+    next: new Array<Element>(),
   };
   for (let i = 0; i < xmlBlock.children.length; i++) {
     const xmlChild = xmlBlock.children[i];

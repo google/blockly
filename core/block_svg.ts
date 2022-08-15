@@ -530,7 +530,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       return;  // Deleted block.
     }
     if (this.workspace.isDragging()) {
-      return  // Don't bump blocks during a drag.;
+      return;  // Don't bump blocks during a drag.;
     }
 
     if (this.getParent()) {

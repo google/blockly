@@ -430,4 +430,4 @@ export function parseToolboxTree(toolboxDef: Element|null|string): Element|
 
 export const TEST_ONLY = {
   hasCategoriesInternal,
-}
+};

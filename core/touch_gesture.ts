@@ -21,8 +21,6 @@ import * as browserEvents from './browser_events.js';
 import {Gesture} from './gesture.js';
 import * as Touch from './touch.js';
 import {Coordinate} from './utils/coordinate.js';
-import type {WorkspaceSvg} from './workspace_svg.js';
-
 
 /*
  * Note: In this file "start" refers to touchstart, mousedown, and pointerstart

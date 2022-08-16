@@ -147,7 +147,7 @@ export class PathObject extends BasePathObject {
    * @internal
    */
   beginDrawing() {
-    this.remainingOutlines.clear()
+    this.remainingOutlines.clear();
     for (const key of this.outlines.keys()) {
       this.remainingOutlines.add(key);
     }

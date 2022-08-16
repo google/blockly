@@ -120,6 +120,7 @@ export class Names {
    * Generate names for procedures.
    * @param workspace Workspace to generate procedures from.
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   populateProcedures(workspace: Workspace) {
     throw new Error(
         'The implementation of populateProcedures should be ' +

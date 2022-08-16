@@ -298,7 +298,7 @@ export class VariableMap {
    * @return The variable with the given ID.
    */
   getVariableById(id: string): VariableModel|null {
-    for (const [key, variables] of this.variableMap) {
+    for (const [_key, variables] of this.variableMap) {
       for (const variable of variables) {
         if (variable.getId() === id) {
           return variable;
@@ -365,7 +365,7 @@ export class VariableMap {
   getAllVariableNames(): string[] {
     return Array.from(this.variableMap.values())
         .flat()
-        .map(variable => variable.name);
+        .map((variable) => variable.name);
   }
 
   /**

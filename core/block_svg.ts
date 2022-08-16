@@ -527,7 +527,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       return;  // Deleted block.
     }
     if (this.workspace.isDragging()) {
-      return  // Don't bump blocks during a drag.;
+      return;  // Don't bump blocks during a drag.;
     }
 
     if (this.getParent()) {
@@ -1053,7 +1053,6 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     if (this.workspace.isDragging()) {
       // Don't change the warning text during a drag.
       // Wait until the drag finishes.
-      const thisBlock = this;
       this.warningTextDb.set(
           id, setTimeout(() => {
             if (!this.disposed) {  // Check block wasn't deleted.

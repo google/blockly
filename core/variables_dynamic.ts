@@ -39,17 +39,20 @@ function stringButtonClickHandler(button: AnyDuringMigration) {
   Variables.createVariableButtonHandler(
       button.getTargetWorkspace(), undefined, 'String');
 }
+// eslint-disable-next-line camelcase
 export const onCreateVariableButtonClick_String = stringButtonClickHandler;
 function numberButtonClickHandler(button: AnyDuringMigration) {
   Variables.createVariableButtonHandler(
       button.getTargetWorkspace(), undefined, 'Number');
 }
+// eslint-disable-next-line camelcase
 export const onCreateVariableButtonClick_Number = numberButtonClickHandler;
 
 function colourButtonClickHandler(button: AnyDuringMigration) {
   Variables.createVariableButtonHandler(
       button.getTargetWorkspace(), undefined, 'Colour');
 }
+// eslint-disable-next-line camelcase
 export const onCreateVariableButtonClick_Colour = colourButtonClickHandler;
 
 /**

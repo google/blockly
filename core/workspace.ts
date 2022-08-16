@@ -353,13 +353,13 @@ export class Workspace implements IASTNodeLocation {
       const topBlocks = this.getTopBlocks(true);
       blocks = [];
       for (let i = 0; i < topBlocks.length; i++) {
-        blocks.push.apply(blocks, topBlocks[i].getDescendants(true));
+        blocks.push(...topBlocks[i].getDescendants(true));
       }
     } else {
       // Fast, but in no particular order.
       blocks = this.getTopBlocks(false);
       for (let i = 0; i < blocks.length; i++) {
-        blocks.push.apply(blocks, blocks[i].getChildren(false));
+        blocks.push(...blocks[i].getChildren(false));
       }
     }
 
@@ -518,6 +518,7 @@ export class Workspace implements IASTNodeLocation {
    *     ID.
    * @return The created block.
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   newBlock(prototypeName: string, opt_id?: string): Block {
     throw new Error(
         'The implementation of newBlock should be ' +

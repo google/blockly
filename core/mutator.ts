@@ -217,6 +217,7 @@ export class Mutator extends Icon {
   /**
    * @internal
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   newWorkspaceSvg(options: Options): WorkspaceSvg {
     throw new Error(
         'The implementation of newWorkspaceSvg should be ' +

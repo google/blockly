@@ -39,7 +39,7 @@
         "strict": ["off"],
         // Closure style allows redeclarations.
         "no-redeclare": ["off"],
-        "valid-jsdoc": ["error", {"requireReturn": false}],
+        "valid-jsdoc": ["error"],
         "no-console": ["off"],
         "no-multi-spaces": ["error", { "ignoreEOLComments": true }],
         "operator-linebreak": ["error", "after"],
@@ -83,5 +83,54 @@
     },
     "extends": [
         "eslint:recommended", "google"
-    ]
+    ],
+    // TypeScript-specific config. Uses above rules plus these.
+    "overrides": [{
+        "files": ["**/*.ts", "**/*.tsx"],
+        "plugins": [
+            "@typescript-eslint/eslint-plugin"
+        ],
+        "parser":  "@typescript-eslint/parser",
+        "parserOptions": {
+            "project": "./tsconfig.json",
+            "tsconfigRootDir": ".",
+            "ecmaVersion": 2020,
+            "sourceType": "module"
+        },
+        "extends": ["plugin:@typescript-eslint/recommended"],
+        "rules": {
+            // TS rules
+            // Disable JsDoc validation, since we use TsDoc.
+            "valid-jsdoc": ["off"],
+            // Blockly uses namespaces to do declaration merging in some cases.
+            "@typescript-eslint/no-namespace": ["off"],
+            // Use the updated TypeScript-specific rule.
+            "no-invalid-this": ["off"],
+            "@typescript-eslint/no-invalid-this": ["error"],
+            // Needs decision. 601 problems.
+            "@typescript-eslint/no-non-null-assertion": ["off"],
+            // Use TS-specific rule.
+            "no-unused-vars": ["off"],
+            "@typescript-eslint/no-unused-vars": ["warn", {
+                "argsIgnorePattern": "^_",
+                "varsIgnorePattern": "^_"
+            }],
+            // Temporarily disable. 23 problems.
+            "@typescript-eslint/no-explicit-any": ["off"],
+            // Temporarily disable. 128 problems.
+            "require-jsdoc": ["off"],
+            // Temporarily disable. 55 problems.
+            "@typescript-eslint/ban-types": ["off"],
+            // Temporarily disable. 18 problems. Autofixable?
+            "@typescript-eslint/no-inferrable-types": ["off"],
+            // Temporarily disable. 33 problems.
+            "@typescript-eslint/no-empty-function": ["off"],
+            // Temporarily disable. 17 problems.
+            "@typescript-eslint/no-this-alias": ["off"],
+            // Temporarily disable. 3 problems.
+            "@typescript-eslint/no-empty-interface": ["off"],
+            // Temporarily disable. 34 problems.
+            "func-call-spacing": ["off"]
+        }
+    }]
 }

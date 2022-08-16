@@ -550,16 +550,16 @@ export const PROCEDURE_CATEGORY_NAME: string = Procedures.CATEGORY_NAME;
 Workspace.prototype.newBlock =
     function(prototypeName: string, opt_id?: string): Block {
       return new Block(this, prototypeName, opt_id);
-    }
+    };
 
 WorkspaceSvg.prototype.newBlock =
     function(prototypeName: string, opt_id?: string): BlockSvg {
       return new BlockSvg(this, prototypeName, opt_id);
-    }
+    };
 
 WorkspaceSvg.newTrashcan = function(workspace: WorkspaceSvg): Trashcan {
   return new Trashcan(workspace);
-}
+};
 
 WorkspaceCommentSvg.prototype.showContextMenu =
     function(this: WorkspaceCommentSvg, e: Event) {
@@ -576,23 +576,23 @@ WorkspaceCommentSvg.prototype.showContextMenu =
       }
     
       ContextMenu.show(e, menuOptions, this.RTL);
-    }
+    };
 
 Mutator.prototype.newWorkspaceSvg =
     function(options: Options): WorkspaceSvg {
       return new WorkspaceSvg(options);
-    }
+    };
 
 Names.prototype.populateProcedures =
     function(this: Names, workspace: Workspace) {
-      let procedures = Procedures.allProcedures(workspace);
+      const procedures = Procedures.allProcedures(workspace);
       // Flatten the return vs no-return procedure lists.
-      let flattenedProcedures: AnyDuringMigration[][] =
+      const flattenedProcedures: AnyDuringMigration[][] =
           procedures[0].concat(procedures[1]);
       for (let i = 0; i < flattenedProcedures.length; i++) {
         this.getName(flattenedProcedures[i][0], Names.NameType.PROCEDURE);
       }
-    }
+    };
 // clang-format on
 
 
@@ -746,4 +746,4 @@ export namespace serialization {
   export const variables = serializationVariables;
   export const workspaces = serializationWorkspaces;
   export type ISerializer = SerializerInterface;
-};
+}

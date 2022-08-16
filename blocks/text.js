@@ -343,7 +343,7 @@ blocks['text_getSubstring'] = {
         /**
          * @param {*} value The input value.
          * @this {FieldDropdown}
-         * @returns {null|undefined} Null if the field has been replaced;
+         * @return {null|undefined} Null if the field has been replaced;
          *     otherwise undefined.
          */
         function(value) {

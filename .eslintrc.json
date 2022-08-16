@@ -141,7 +141,10 @@
             "valid-jsdoc": ["off"],
             // Don't require types in params and returns docs.
             "jsdoc/require-param-type": ["off"],
-            "jsdoc/require-returns-type": ["off"]
+            "jsdoc/require-returns-type": ["off"],
+            // params and returns docs are optional.
+            "jsdoc/require-param-description": ["off"],
+            "jsdoc/require-returns": ["off"]
                        
         }
     }]

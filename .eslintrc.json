@@ -139,7 +139,9 @@
             // TsDoc rules (using JsDoc plugin)
             // Disable built-in jsdoc verifier.
             "valid-jsdoc": ["off"],
-            "jsdoc/require-param-type": ["off"] 
+            // Don't require types in params and returns docs.
+            "jsdoc/require-param-type": ["off"],
+            "jsdoc/require-returns-type": ["off"]
                        
         }
     }]

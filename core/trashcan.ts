@@ -68,8 +68,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
    * The trashcan flyout.
    * @internal
    */
-  // Flyout is always initialized in the constructor.
-  flyout!: IFlyout;
+  flyout: IFlyout|null = null;
 
   /** Current open/close state of the lid. */
   isLidOpen = false;
@@ -218,8 +217,8 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
   init() {
     if (this.workspace.options.maxTrashcanContents > 0) {
       dom.insertAfter(
-          this.flyout.createDom(Svg.SVG), this.workspace.getParentSvg());
-      this.flyout.init(this.workspace);
+          this.flyout!.createDom(Svg.SVG)!, this.workspace.getParentSvg());
+      this.flyout!.init(this.workspace);
     }
     this.workspace.getComponentManager().addComponent({
       component: this,
@@ -265,7 +264,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
    * @return True if the trashcan contents-flyout is currently open.
    */
   contentsIsOpen(): boolean {
-    return this.flyout.isVisible();
+    return !!this.flyout && this.flyout.isVisible();
   }
 
   /** Opens the trashcan flyout. */
@@ -276,7 +275,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
     const contents = this.contents_.map(function(string) {
       return JSON.parse(string);
     });
-    this.flyout.show(contents);
+    this.flyout?.show(contents);
     this.fireUiEvent_(true);
   }
 
@@ -285,7 +284,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
     if (!this.contentsIsOpen()) {
       return;
     }
-    this.flyout.hide();
+    this.flyout?.hide();
     this.fireUiEvent_(false);
     this.workspace.recordDragTargets();
   }
@@ -298,7 +297,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
   autoHide(onlyClosePopups: boolean) {
     // For now the trashcan flyout always autocloses because it overlays the
     // trashcan UI (no trashcan to click to close it).
-    if (!onlyClosePopups) {
+    if (!onlyClosePopups && this.flyout) {
       this.closeFlyout();
     }
   }

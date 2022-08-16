@@ -6,6 +6,7 @@
 
 /**
  * Namespace for block rendering functionality.
+ *
  * @namespace Blockly.blockRendering
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -50,7 +51,8 @@ import {Renderer} from './renderer.js';
 
 /**
  * Returns whether the debugger is turned on.
- * @return Whether the debugger is turned on.
+ *
+ * @returns Whether the debugger is turned on.
  * @alias Blockly.blockRendering.isDebuggerEnabled
  * @deprecated
  * @internal
@@ -65,6 +67,7 @@ export function isDebuggerEnabled(): boolean {
 
 /**
  * Registers a new renderer.
+ *
  * @param name The name of the renderer.
  * @param rendererClass The new renderer class to register.
  * @throws {Error} if a renderer with the same name has already been registered.
@@ -75,6 +78,7 @@ export function register(name: string, rendererClass: Function) {
 
 /**
  * Unregisters the renderer registered with the given name.
+ *
  * @param name The name of the renderer.
  * @alias Blockly.blockRendering.unregister
  */
@@ -84,6 +88,7 @@ export function unregister(name: string) {
 
 /**
  * Turn on the blocks debugger.
+ *
  * @alias Blockly.blockRendering.startDebugger
  * @deprecated
  * @internal
@@ -98,6 +103,7 @@ export function startDebugger() {
 
 /**
  * Turn off the blocks debugger.
+ *
  * @alias Blockly.blockRendering.stopDebugger
  * @deprecated
  * @internal
@@ -112,10 +118,11 @@ export function stopDebugger() {
 
 /**
  * Initialize anything needed for rendering (constants, etc).
+ *
  * @param name Name of the renderer to initialize.
  * @param theme The workspace theme object.
  * @param opt_rendererOverrides Rendering constant overrides.
- * @return The new instance of a renderer.
+ * @returns The new instance of a renderer.
  *     Already initialized.
  * @alias Blockly.blockRendering.init
  * @internal

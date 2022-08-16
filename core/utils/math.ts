@@ -8,6 +8,7 @@
  * Utility methods for math.
  * These methods are not specific to Blockly, and could be factored out into
  * a JavaScript framework such as Closure.
+ *
  * @namespace Blockly.utils.math
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -17,8 +18,9 @@ goog.declareModuleId('Blockly.utils.math');
 /**
  * Converts degrees to radians.
  * Copied from Closure's goog.math.toRadians.
+ *
  * @param angleDegrees Angle in degrees.
- * @return Angle in radians.
+ * @returns Angle in radians.
  * @alias Blockly.utils.math.toRadians
  */
 export function toRadians(angleDegrees: number): number {
@@ -28,8 +30,9 @@ export function toRadians(angleDegrees: number): number {
 /**
  * Converts radians to degrees.
  * Copied from Closure's goog.math.toDegrees.
+ *
  * @param angleRadians Angle in radians.
- * @return Angle in degrees.
+ * @returns Angle in degrees.
  * @alias Blockly.utils.math.toDegrees
  */
 export function toDegrees(angleRadians: number): number {
@@ -38,10 +41,11 @@ export function toDegrees(angleRadians: number): number {
 
 /**
  * Clamp the provided number between the lower bound and the upper bound.
+ *
  * @param lowerBound The desired lower bound.
  * @param number The number to clamp.
  * @param upperBound The desired upper bound.
- * @return The clamped number.
+ * @returns The clamped number.
  * @alias Blockly.utils.math.clamp
  */
 export function clamp(

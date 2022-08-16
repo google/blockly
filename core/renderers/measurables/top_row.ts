@@ -6,6 +6,7 @@
 
 /**
  * Object representing a top row on a rendered block.
+ *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -27,6 +28,7 @@ import {Types} from './types.js';
  * connections.
  * After this constructor is called, the row will contain all non-spacer
  * elements it needs.
+ *
  * @struct
  * @alias Blockly.blockRendering.TopRow
  */
@@ -35,6 +37,7 @@ export class TopRow extends Row {
    * The starting point for drawing the row, in the y direction.
    * This allows us to draw hats and similar shapes that don't start at the
    * origin. Must be non-negative (see #2820).
+   *
    * @internal
    */
   capline = 0;
@@ -61,8 +64,9 @@ export class TopRow extends Row {
 
   /**
    * Returns whether or not the top row has a left square corner.
+   *
    * @param block The block whose top row this represents.
-   * @return Whether or not the top row has a left square corner.
+   * @returns Whether or not the top row has a left square corner.
    * @internal
    */
   hasLeftSquareCorner(block: BlockSvg): boolean {
@@ -77,8 +81,9 @@ export class TopRow extends Row {
 
   /**
    * Returns whether or not the top row has a right square corner.
+   *
    * @param _block The block whose top row this represents.
-   * @return Whether or not the top row has a right square corner.
+   * @returns Whether or not the top row has a right square corner.
    */
   hasRightSquareCorner(_block: BlockSvg): boolean {
     return true;

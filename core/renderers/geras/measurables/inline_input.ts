@@ -7,6 +7,7 @@
 /**
  * Objects representing inline inputs with connections on a
  * rendered block.
+ *
  * @class
  */
 import * as goog from '../../../../closure/goog/goog.js';
@@ -22,6 +23,7 @@ import type {ConstantProvider as GerasConstantProvider} from '../constants.js';
 /**
  * An object containing information about the space an inline input takes up
  * during rendering.
+ *
  * @alias Blockly.geras.InlineInput
  */
 export class InlineInput extends BaseInlineInput {

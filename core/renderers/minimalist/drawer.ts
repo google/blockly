@@ -6,6 +6,7 @@
 
 /**
  * Minimalist rendering drawer.
+ *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -19,6 +20,7 @@ import type {RenderInfo} from './info.js';
 
 /**
  * An object that draws a block based on the given rendering information.
+ *
  * @alias Blockly.minimalist.Drawer
  */
 export class Drawer extends BaseDrawer {

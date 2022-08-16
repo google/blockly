@@ -6,6 +6,7 @@
 
 /**
  * Registers default keyboard shortcuts.
+ *
  * @namespace Blockly.ShortcutItems
  */
 import * as goog from '../closure/goog/goog.js';
@@ -23,6 +24,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Object holding the names of the default shortcut items.
+ *
  * @alias Blockly.ShortcutItems.names
  */
 export enum names {
@@ -37,6 +39,7 @@ export enum names {
 
 /**
  * Keyboard shortcut to hide chaff on escape.
+ *
  * @alias Blockly.ShortcutItems.registerEscape
  */
 export function registerEscape() {
@@ -58,6 +61,7 @@ export function registerEscape() {
 
 /**
  * Keyboard shortcut to delete a block on delete or backspace
+ *
  * @alias Blockly.ShortcutItems.registerDelete
  */
 export function registerDelete() {
@@ -88,6 +92,7 @@ export function registerDelete() {
 
 /**
  * Keyboard shortcut to copy a block on ctrl+c, cmd+c, or alt+c.
+ *
  * @alias Blockly.ShortcutItems.registerCopy
  */
 export function registerCopy() {
@@ -122,6 +127,7 @@ export function registerCopy() {
 
 /**
  * Keyboard shortcut to copy and delete a block on ctrl+x, cmd+x, or alt+x.
+ *
  * @alias Blockly.ShortcutItems.registerCut
  */
 export function registerCut() {
@@ -159,6 +165,7 @@ export function registerCut() {
 
 /**
  * Keyboard shortcut to paste a block on ctrl+v, cmd+v, or alt+v.
+ *
  * @alias Blockly.ShortcutItems.registerPaste
  */
 export function registerPaste() {
@@ -185,6 +192,7 @@ export function registerPaste() {
 
 /**
  * Keyboard shortcut to undo the previous action on ctrl+z, cmd+z, or alt+z.
+ *
  * @alias Blockly.ShortcutItems.registerUndo
  */
 export function registerUndo() {
@@ -214,6 +222,7 @@ export function registerUndo() {
 /**
  * Keyboard shortcut to redo the previous action on ctrl+shift+z, cmd+shift+z,
  * or alt+shift+z.
+ *
  * @alias Blockly.ShortcutItems.registerRedo
  */
 export function registerRedo() {
@@ -246,6 +255,7 @@ export function registerRedo() {
 /**
  * Registers all default keyboard shortcut item. This should be called once per
  * instance of KeyboardShortcutRegistry.
+ *
  * @alias Blockly.ShortcutItems.registerDefaultShortcuts
  * @internal
  */

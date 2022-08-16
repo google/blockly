@@ -6,6 +6,7 @@
 
 /**
  * Blockly's internal clipboard for managing copy-paste.
+ *
  * @namespace Blockly.clipboard
  */
 import * as goog from '../closure/goog/goog.js';
@@ -19,6 +20,7 @@ let copyData: CopyData|null = null;
 
 /**
  * Copy a block or workspace comment onto the local clipboard.
+ *
  * @param toCopy Block or Workspace Comment to be copied.
  * @alias Blockly.clipboard.copy
  * @internal
@@ -29,6 +31,8 @@ export function copy(toCopy: ICopyable) {
 
 /**
  * Private version of copy for stubbing in tests.
+ *
+ * @param toCopy
  */
 function copyInternal(toCopy: ICopyable) {
   copyData = toCopy.toCopyData();
@@ -36,7 +40,8 @@ function copyInternal(toCopy: ICopyable) {
 
 /**
  * Paste a block or workspace comment on to the main workspace.
- * @return The pasted thing if the paste was successful, null otherwise.
+ *
+ * @returns The pasted thing if the paste was successful, null otherwise.
  * @alias Blockly.clipboard.paste
  * @internal
  */
@@ -59,8 +64,9 @@ export function paste(): ICopyable|null {
 
 /**
  * Duplicate this block and its children, or a workspace comment.
+ *
  * @param toDuplicate Block or Workspace Comment to be duplicated.
- * @return The block or workspace comment that was duplicated, or null if the
+ * @returns The block or workspace comment that was duplicated, or null if the
  *     duplication failed.
  * @alias Blockly.clipboard.duplicate
  * @internal
@@ -71,6 +77,8 @@ export function duplicate(toDuplicate: ICopyable): ICopyable|null {
 
 /**
  * Private version of duplicate for stubbing in tests.
+ *
+ * @param toDuplicate
  */
 function duplicateInternal(toDuplicate: ICopyable): ICopyable|null {
   const oldCopyData = copyData;

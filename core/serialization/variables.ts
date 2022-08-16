@@ -7,6 +7,7 @@
 /**
  * Handles serializing variables to plain JavaScript objects, only containing
  * state.
+ *
  * @namespace Blockly.serialization.variables
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -21,6 +22,7 @@ import * as serializationRegistry from './registry.js';
 
 /**
  * Represents the state of a given variable.
+ *
  * @alias Blockly.serialization.variables.State
  */
 export interface State {
@@ -31,6 +33,7 @@ export interface State {
 
 /**
  * Serializer for saving and loading variable state.
+ *
  * @alias Blockly.serialization.variables.VariableSerializer
  */
 class VariableSerializer implements ISerializer {
@@ -44,8 +47,9 @@ class VariableSerializer implements ISerializer {
 
   /**
    * Serializes the variables of the given workspace.
+   *
    * @param workspace The workspace to save the variables of.
-   * @return The state of the workspace's variables, or null if there are no
+   * @returns The state of the workspace's variables, or null if there are no
    *     variables.
    */
   save(workspace: Workspace): State[]|null {
@@ -69,6 +73,7 @@ class VariableSerializer implements ISerializer {
   /**
    * Deserializes the variable defined by the given state into the given
    * workspace.
+   *
    * @param state The state of the variables to deserialize.
    * @param workspace The workspace to deserialize into.
    */
@@ -81,6 +86,7 @@ class VariableSerializer implements ISerializer {
 
   /**
    * Disposes of any variables that exist on the workspace.
+   *
    * @param workspace The workspace to clear the variables of.
    */
   clear(workspace: Workspace) {

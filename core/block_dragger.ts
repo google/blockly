@@ -6,6 +6,7 @@
 
 /**
  * Methods for dragging a block visually.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -33,6 +34,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 /**
  * Class for a block dragger.  It moves blocks around the workspace when they
  * are being dragged by a mouse or touch.
+ *
  * @alias Blockly.BlockDragger
  */
 export class BlockDragger implements IBlockDragger {
@@ -80,6 +82,7 @@ export class BlockDragger implements IBlockDragger {
 
   /**
    * Sever all links from this object.
+   *
    * @internal
    */
   dispose() {
@@ -92,6 +95,7 @@ export class BlockDragger implements IBlockDragger {
 
   /**
    * Start dragging a block.  This includes moving it to the drag surface.
+   *
    * @param currentDragDeltaXY How far the pointer has moved from the position
    *     at mouse down, in pixel units.
    * @param healStack Whether or not to heal the stack after disconnecting.
@@ -128,8 +132,9 @@ export class BlockDragger implements IBlockDragger {
 
   /**
    * Whether or not we should disconnect the block when a drag is started.
+   *
    * @param healStack Whether or not to heal the stack after disconnecting.
-   * @return True to disconnect the block, false otherwise.
+   * @returns True to disconnect the block, false otherwise.
    */
   protected shouldDisconnect_(healStack: boolean): boolean {
     return !!(
@@ -140,6 +145,7 @@ export class BlockDragger implements IBlockDragger {
 
   /**
    * Disconnects the block and moves it to a new location.
+   *
    * @param healStack Whether or not to heal the stack after disconnecting.
    * @param currentDragDeltaXY How far the pointer has moved from the position
    *     at mouse down, in pixel units.
@@ -165,6 +171,7 @@ export class BlockDragger implements IBlockDragger {
   /**
    * Execute a step of block dragging, based on the given event.  Update the
    * display accordingly.
+   *
    * @param e The most recent move event.
    * @param currentDragDeltaXY How far the pointer has moved from the position
    *     at the start of the drag, in pixel units.
@@ -197,6 +204,7 @@ export class BlockDragger implements IBlockDragger {
 
   /**
    * Finish a block drag and put the block back on the workspace.
+   *
    * @param e The mouseup/touchend event.
    * @param currentDragDeltaXY How far the pointer has moved from the position
    *     at the start of the drag, in pixel units.
@@ -250,9 +258,10 @@ export class BlockDragger implements IBlockDragger {
 
   /**
    * Calculates the drag delta and new location values after a block is dragged.
+   *
    * @param currentDragDeltaXY How far the pointer has moved from the start of
    *     the drag, in pixel units.
-   * @return New location after drag. delta is in workspace units. newLocation
+   * @returns New location after drag. delta is in workspace units. newLocation
    *     is the new coordinate where the block should end up.
    */
   protected getNewLocationAfterDrag_(currentDragDeltaXY: Coordinate):
@@ -269,7 +278,8 @@ export class BlockDragger implements IBlockDragger {
    * May delete the dragging block, if allowed. If `this.wouldDeleteBlock_` is
    * not true, the block will not be deleted. This should be called at the end
    * of a block drag.
-   * @return True if the block was deleted.
+   *
+   * @returns True if the block was deleted.
    */
   protected maybeDeleteBlock_(): boolean {
     if (this.wouldDeleteBlock_) {
@@ -284,6 +294,7 @@ export class BlockDragger implements IBlockDragger {
 
   /**
    * Updates the necessary information to place a block at a certain location.
+   *
    * @param delta The change in location from where the block started the drag
    *     to where it ended the drag.
    */
@@ -310,6 +321,7 @@ export class BlockDragger implements IBlockDragger {
    * Adds or removes the style of the cursor for the toolbox.
    * This is what changes the cursor to display an x when a deletable block is
    * held over the toolbox.
+   *
    * @param isEnd True if we are at the end of a drag, false otherwise.
    */
   protected updateToolboxStyle_(isEnd: boolean) {
@@ -360,8 +372,9 @@ export class BlockDragger implements IBlockDragger {
    * correction for mutator workspaces.
    * This function does not consider differing origins.  It simply scales the
    * input's x and y values.
+   *
    * @param pixelCoord A coordinate with x and y values in CSS pixel units.
-   * @return The input coordinate divided by the workspace scale.
+   * @returns The input coordinate divided by the workspace scale.
    */
   protected pixelsToWorkspaceUnits_(pixelCoord: Coordinate): Coordinate {
     const result = new Coordinate(
@@ -379,6 +392,7 @@ export class BlockDragger implements IBlockDragger {
 
   /**
    * Move all of the icons connected to this drag.
+   *
    * @param dxy How far to move the icons from their original positions, in
    *     workspace units.
    */
@@ -393,7 +407,8 @@ export class BlockDragger implements IBlockDragger {
   /**
    * Get a list of the insertion markers that currently exist.  Drags have 0, 1,
    * or 2 insertion markers.
-   * @return A possibly empty list of insertion marker blocks.
+   *
+   * @returns A possibly empty list of insertion marker blocks.
    */
   getInsertionMarkers(): BlockSvg[] {
     // No insertion markers with the old style of dragged connection managers.
@@ -415,8 +430,9 @@ export interface IconPositionData {
  * Make a list of all of the icons (comment, warning, and mutator) that are
  * on this block and its descendants.  Moving an icon moves the bubble that
  * extends from it if that bubble is open.
+ *
  * @param block The root block that is being dragged.
- * @return The list of all icons and their locations.
+ * @returns The list of all icons and their locations.
  */
 function initIconData(block: BlockSvg): IconPositionData[] {
   // Build a list of icons that need to be moved and where they started.

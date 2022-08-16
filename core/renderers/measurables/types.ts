@@ -6,6 +6,7 @@
 
 /**
  * Measurable types.
+ *
  * @namespace Blockly.blockRendering.Types
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -17,6 +18,7 @@ import type {Row} from './row.js';
 
 /**
  * Types of rendering elements.
+ *
  * @alias Blockly.blockRendering.Types
  */
 class TypesContainer {
@@ -50,12 +52,14 @@ class TypesContainer {
 
   /**
    * A Left Corner Union Type.
+   *
    * @internal
    */
   LEFT_CORNER = this.LEFT_SQUARE_CORNER | this.LEFT_ROUND_CORNER;
 
   /**
    * A Right Corner Union Type.
+   *
    * @internal
    */
   RIGHT_CORNER = this.RIGHT_SQUARE_CORNER | this.RIGHT_ROUND_CORNER;
@@ -70,8 +74,9 @@ class TypesContainer {
 
   /**
    * Get the enum flag value of an existing type or register a new type.
+   *
    * @param type The name of the type.
-   * @return The enum flag value associated with that type.
+   * @returns The enum flag value associated with that type.
    * @internal
    */
   getType(type: string): number {
@@ -84,8 +89,9 @@ class TypesContainer {
 
   /**
    * Whether a measurable stores information about a field.
+   *
    * @param elem The element to check.
-   * @return 1 if the object stores information about a field.
+   * @returns 1 if the object stores information about a field.
    * @internal
    */
   isField(elem: Measurable): number {
@@ -94,8 +100,9 @@ class TypesContainer {
 
   /**
    * Whether a measurable stores information about a hat.
+   *
    * @param elem The element to check.
-   * @return 1 if the object stores information about a hat.
+   * @returns 1 if the object stores information about a hat.
    * @internal
    */
   isHat(elem: Measurable): number {
@@ -104,8 +111,9 @@ class TypesContainer {
 
   /**
    * Whether a measurable stores information about an icon.
+   *
    * @param elem The element to check.
-   * @return 1 if the object stores information about an icon.
+   * @returns 1 if the object stores information about an icon.
    * @internal
    */
   isIcon(elem: Measurable): number {
@@ -114,8 +122,9 @@ class TypesContainer {
 
   /**
    * Whether a measurable stores information about a spacer.
+   *
    * @param elem The element to check.
-   * @return 1 if the object stores information about a spacer.
+   * @returns 1 if the object stores information about a spacer.
    * @internal
    */
   isSpacer(elem: Measurable|Row): number {
@@ -124,8 +133,9 @@ class TypesContainer {
 
   /**
    * Whether a measurable stores information about an in-row spacer.
+   *
    * @param elem The element to check.
-   * @return 1 if the object stores information about an in-row spacer.
+   * @returns 1 if the object stores information about an in-row spacer.
    * @internal
    */
   isInRowSpacer(elem: Measurable): number {
@@ -134,8 +144,9 @@ class TypesContainer {
 
   /**
    * Whether a measurable stores information about an input.
+   *
    * @param elem The element to check.
-   * @return 1 if the object stores information about an input.
+   * @returns 1 if the object stores information about an input.
    * @internal
    */
   isInput(elem: Measurable): number {
@@ -144,8 +155,9 @@ class TypesContainer {
 
   /**
    * Whether a measurable stores information about an external input.
+   *
    * @param elem The element to check.
-   * @return 1 if the object stores information about an external input.
+   * @returns 1 if the object stores information about an external input.
    * @internal
    */
   isExternalInput(elem: Measurable): number {
@@ -154,8 +166,9 @@ class TypesContainer {
 
   /**
    * Whether a measurable stores information about an inline input.
+   *
    * @param elem The element to check.
-   * @return 1 if the object stores information about an inline input.
+   * @returns 1 if the object stores information about an inline input.
    * @internal
    */
   isInlineInput(elem: Measurable): number {
@@ -164,8 +177,9 @@ class TypesContainer {
 
   /**
    * Whether a measurable stores information about a statement input.
+   *
    * @param elem The element to check.
-   * @return 1 if the object stores information about a statement input.
+   * @returns 1 if the object stores information about a statement input.
    * @internal
    */
   isStatementInput(elem: Measurable): number {
@@ -174,8 +188,9 @@ class TypesContainer {
 
   /**
    * Whether a measurable stores information about a previous connection.
+   *
    * @param elem The element to check.
-   * @return 1 if the object stores information about a previous connection.
+   * @returns 1 if the object stores information about a previous connection.
    * @internal
    */
   isPreviousConnection(elem: Measurable): number {
@@ -184,8 +199,9 @@ class TypesContainer {
 
   /**
    * Whether a measurable stores information about a next connection.
+   *
    * @param elem The element to check.
-   * @return 1 if the object stores information about a next connection.
+   * @returns 1 if the object stores information about a next connection.
    * @internal
    */
   isNextConnection(elem: Measurable): number {
@@ -195,8 +211,9 @@ class TypesContainer {
   /**
    * Whether a measurable stores information about a previous or next
    * connection.
+   *
    * @param elem The element to check.
-   * @return 1 if the object stores information about a previous or next
+   * @returns 1 if the object stores information about a previous or next
    *     connection.
    * @internal
    */
@@ -206,8 +223,9 @@ class TypesContainer {
 
   /**
    * Whether a measurable stores information about a left round corner.
+   *
    * @param elem The element to check.
-   * @return 1 if the object stores information about a left round corner.
+   * @returns 1 if the object stores information about a left round corner.
    * @internal
    */
   isLeftRoundedCorner(elem: Measurable): number {
@@ -216,8 +234,9 @@ class TypesContainer {
 
   /**
    * Whether a measurable stores information about a right round corner.
+   *
    * @param elem The element to check.
-   * @return 1 if the object stores information about a right round corner.
+   * @returns 1 if the object stores information about a right round corner.
    * @internal
    */
   isRightRoundedCorner(elem: Measurable): number {
@@ -226,8 +245,9 @@ class TypesContainer {
 
   /**
    * Whether a measurable stores information about a left square corner.
+   *
    * @param elem The element to check.
-   * @return 1 if the object stores information about a left square corner.
+   * @returns 1 if the object stores information about a left square corner.
    * @internal
    */
   isLeftSquareCorner(elem: Measurable): number {
@@ -236,8 +256,9 @@ class TypesContainer {
 
   /**
    * Whether a measurable stores information about a right square corner.
+   *
    * @param elem The element to check.
-   * @return 1 if the object stores information about a right square corner.
+   * @returns 1 if the object stores information about a right square corner.
    * @internal
    */
   isRightSquareCorner(elem: Measurable): number {
@@ -246,8 +267,9 @@ class TypesContainer {
 
   /**
    * Whether a measurable stores information about a corner.
+   *
    * @param elem The element to check.
-   * @return 1 if the object stores information about a corner.
+   * @returns 1 if the object stores information about a corner.
    * @internal
    */
   isCorner(elem: Measurable): number {
@@ -256,8 +278,9 @@ class TypesContainer {
 
   /**
    * Whether a measurable stores information about a jagged edge.
+   *
    * @param elem The element to check.
-   * @return 1 if the object stores information about a jagged edge.
+   * @returns 1 if the object stores information about a jagged edge.
    * @internal
    */
   isJaggedEdge(elem: Measurable): number {
@@ -266,8 +289,9 @@ class TypesContainer {
 
   /**
    * Whether a measurable stores information about a row.
+   *
    * @param row The row to check.
-   * @return 1 if the object stores information about a row.
+   * @returns 1 if the object stores information about a row.
    * @internal
    */
   isRow(row: Row): number {
@@ -276,8 +300,9 @@ class TypesContainer {
 
   /**
    * Whether a measurable stores information about a between-row spacer.
+   *
    * @param row The row to check.
-   * @return 1 if the object stores information about a between-row spacer.
+   * @returns 1 if the object stores information about a between-row spacer.
    * @internal
    */
   isBetweenRowSpacer(row: Row): number {
@@ -286,8 +311,9 @@ class TypesContainer {
 
   /**
    * Whether a measurable stores information about a top row.
+   *
    * @param row The row to check.
-   * @return 1 if the object stores information about a top row.
+   * @returns 1 if the object stores information about a top row.
    * @internal
    */
   isTopRow(row: Row): number {
@@ -296,8 +322,9 @@ class TypesContainer {
 
   /**
    * Whether a measurable stores information about a bottom row.
+   *
    * @param row The row to check.
-   * @return 1 if the object stores information about a bottom row.
+   * @returns 1 if the object stores information about a bottom row.
    * @internal
    */
   isBottomRow(row: Row): number {
@@ -306,8 +333,9 @@ class TypesContainer {
 
   /**
    * Whether a measurable stores information about a top or bottom row.
+   *
    * @param row The row to check.
-   * @return 1 if the object stores information about a top or bottom row.
+   * @returns 1 if the object stores information about a top or bottom row.
    * @internal
    */
   isTopOrBottomRow(row: Row): number {
@@ -316,8 +344,9 @@ class TypesContainer {
 
   /**
    * Whether a measurable stores information about an input row.
+   *
    * @param row The row to check.
-   * @return 1 if the object stores information about an input row.
+   * @returns 1 if the object stores information about an input row.
    * @internal
    */
   isInputRow(row: Row): number {

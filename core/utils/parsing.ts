@@ -18,11 +18,12 @@ import * as colourUtils from './colour.js';
 /**
  * Internal implementation of the message reference and interpolation token
  * parsing used by tokenizeInterpolation() and replaceMessageReferences().
+ *
  * @param message Text which might contain string table references and
  *     interpolation tokens.
  * @param parseInterpolationTokens Option to parse numeric
  *     interpolation tokens (%1, %2, ...) when true.
- * @return Array of strings and numbers.
+ * @returns Array of strings and numbers.
  */
 function tokenizeInterpolationInternal(
     message: string, parseInterpolationTokens: boolean): (string|number)[] {
@@ -162,9 +163,10 @@ function tokenizeInterpolationInternal(
  * %{BKY_MY_MSG} will both be replaced with the value in
  * Msg['MY_MSG']). Percentage sign characters '%' may be self-escaped
  * (e.g., '%%').
+ *
  * @param message Text which might contain string table references and
  *     interpolation tokens.
- * @return Array of strings and numbers.
+ * @returns Array of strings and numbers.
  * @alias Blockly.utils.parsing.tokenizeInterpolation
  */
 export function tokenizeInterpolation(message: string): (string|number)[] {
@@ -175,9 +177,10 @@ export function tokenizeInterpolation(message: string): (string|number)[] {
  * Replaces string table references in a message, if the message is a string.
  * For example, "%{bky_my_msg}" and "%{BKY_MY_MSG}" will both be replaced with
  * the value in Msg['MY_MSG'].
+ *
  * @param message Message, which may be a string that contains
  *     string table references.
- * @return String with message references replaced.
+ * @returns String with message references replaced.
  * @alias Blockly.utils.parsing.replaceMessageReferences
  */
 export function replaceMessageReferences(message: string|
@@ -194,8 +197,9 @@ export function replaceMessageReferences(message: string|
 /**
  * Validates that any %{MSG_KEY} references in the message refer to keys of
  * the Msg string table.
+ *
  * @param message Text which might contain string table references.
- * @return True if all message references have matching values.
+ * @returns True if all message references have matching values.
  *     Otherwise, false.
  * @alias Blockly.utils.parsing.checkMessageReferences
  */
@@ -222,9 +226,10 @@ export function checkMessageReferences(message: string): boolean {
 /**
  * Parse a block colour from a number or string, as provided in a block
  * definition.
+ *
  * @param colour HSV hue value (0 to 360), #RRGGBB string,
  *     or a message reference string pointing to one of those two values.
- * @return An object containing the colour as
+ * @returns An object containing the colour as
  *     a #RRGGBB string, and the hue if the input was an HSV hue value.
  * @throws {Error} If the colour cannot be parsed.
  * @alias Blockly.utils.parsing.parseBlockColour

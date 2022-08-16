@@ -7,6 +7,7 @@
 /**
  * Defines the Svg class. Its constants enumerate
  * all SVG tag names used by Blockly.
+ *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -15,6 +16,7 @@ goog.declareModuleId('Blockly.utils.Svg');
 
 /**
  * A name with the type of the SVG element stored in the generic.
+ *
  * @alias Blockly.utils.Svg
  */
 export class Svg<_T> {
@@ -75,7 +77,8 @@ export class Svg<_T> {
 
   /**
    * Returns the SVG element tag name.
-   * @return The name.
+   *
+   * @returns The name.
    */
   toString(): string {
     return this.tagName;

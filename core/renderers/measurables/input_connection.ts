@@ -6,6 +6,7 @@
 
 /**
  * Class representing inputs with connections on a rendered block.
+ *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -23,6 +24,7 @@ import {Types} from './types.js';
 /**
  * The base class to represent an input that takes up space on a block
  * during rendering
+ *
  * @alias Blockly.blockRendering.InputConnection
  */
 export class InputConnection extends Connection {

@@ -7,6 +7,7 @@
 /**
  * Class representing statement inputs with connections on a
  * rendered block.
+ *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -23,6 +24,7 @@ import {Types} from './types.js';
 /**
  * An object containing information about the space a statement input takes up
  * during rendering
+ *
  * @struct
  * @alias Blockly.blockRendering.StatementInput
  */

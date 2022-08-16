@@ -6,6 +6,7 @@
 
 /**
  * Events fired as a block drag.
+ *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -20,6 +21,7 @@ import * as eventUtils from './utils.js';
 
 /**
  * Class for a block drag event.
+ *
  * @alias Blockly.Events.BlockDrag
  */
 export class BlockDrag extends UiBase {
@@ -53,7 +55,8 @@ export class BlockDrag extends UiBase {
 
   /**
    * Encode the event as JSON.
-   * @return JSON representation.
+   *
+   * @returns JSON representation.
    */
   override toJson(): AnyDuringMigration {
     const json = super.toJson();
@@ -65,6 +68,7 @@ export class BlockDrag extends UiBase {
 
   /**
    * Decode the JSON event.
+   *
    * @param json JSON representation.
    */
   override fromJson(json: AnyDuringMigration) {

@@ -11,9 +11,10 @@ goog.declareModuleId('Blockly.utils.array');
 
 /**
  * Removes the first occurrence of a particular value from an array.
+ *
  * @param arr Array from which to remove value.
  * @param value Value to remove.
- * @return True if an element was removed.
+ * @returns True if an element was removed.
  * @alias Blockly.array.removeElem
  * @internal
  */

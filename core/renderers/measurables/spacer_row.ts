@@ -6,6 +6,7 @@
 
 /**
  * Object representing a spacer between two rows.
+ *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -20,6 +21,7 @@ import {Types} from './types.js';
 
 /**
  * An object containing information about a spacer between two rows.
+ *
  * @struct
  * @alias Blockly.blockRendering.SpacerRow
  */

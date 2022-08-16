@@ -7,6 +7,7 @@
 /**
  * The class representing a marker.
  * Used primarily for keyboard navigation to show a marked location.
+ *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -21,6 +22,7 @@ import type {ASTNode} from './ast_node.js';
 /**
  * Class for a marker.
  * This is used in keyboard navigation to save a location in the Blockly AST.
+ *
  * @alias Blockly.Marker
  */
 export class Marker {
@@ -48,6 +50,7 @@ export class Marker {
 
   /**
    * Sets the object in charge of drawing the marker.
+   *
    * @param drawer The object in charge of drawing the marker.
    */
   setDrawer(drawer: MarkerSvg) {
@@ -56,7 +59,8 @@ export class Marker {
 
   /**
    * Get the current drawer for the marker.
-   * @return The object in charge of drawing the marker.
+   *
+   * @returns The object in charge of drawing the marker.
    */
   getDrawer(): MarkerSvg {
     return this.drawer_;
@@ -64,7 +68,8 @@ export class Marker {
 
   /**
    * Gets the current location of the marker.
-   * @return The current field, connection, or block the marker is on.
+   *
+   * @returns The current field, connection, or block the marker is on.
    */
   getCurNode(): ASTNode {
     return this.curNode_;
@@ -74,6 +79,7 @@ export class Marker {
    * Set the location of the marker and call the update method.
    * Setting isStack to true will only work if the newLocation is the top most
    * output or previous connection on a stack.
+   *
    * @param newNode The new location of the marker.
    */
   setCurNode(newNode: ASTNode) {
@@ -86,6 +92,7 @@ export class Marker {
 
   /**
    * Redraw the current marker.
+   *
    * @internal
    */
   draw() {

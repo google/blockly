@@ -6,6 +6,7 @@
 
 /**
  * Thrasos renderer.
+ *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -20,6 +21,7 @@ import {RenderInfo} from './info.js';
 
 /**
  * The thrasos renderer.
+ *
  * @alias Blockly.thrasos.Renderer
  */
 export class Renderer extends BaseRenderer {
@@ -33,8 +35,9 @@ export class Renderer extends BaseRenderer {
 
   /**
    * Create a new instance of the renderer's render info object.
+   *
    * @param block The block to measure.
-   * @return The render info object.
+   * @returns The render info object.
    */
   protected override makeRenderInfo_(block: BlockSvg): RenderInfo {
     return new RenderInfo(this, block);

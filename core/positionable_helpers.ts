@@ -6,6 +6,7 @@
 
 /**
  * Utility functions for positioning UI elements.
+ *
  * @namespace Blockly.uiPosition
  */
 import * as goog from '../closure/goog/goog.js';
@@ -25,6 +26,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Enum for vertical positioning.
+ *
  * @alias Blockly.uiPosition.verticalPosition
  * @internal
  */
@@ -35,6 +37,7 @@ export enum verticalPosition {
 
 /**
  * Enum for horizontal positioning.
+ *
  * @alias Blockly.uiPosition.horizontalPosition
  * @internal
  */
@@ -45,6 +48,7 @@ export enum horizontalPosition {
 
 /**
  * An object defining a horizontal and vertical positioning.
+ *
  * @alias Blockly.uiPosition.Position
  * @internal
  */
@@ -55,6 +59,7 @@ export interface Position {
 
 /**
  * Enum for bump rules to use for dealing with collisions.
+ *
  * @alias Blockly.uiPosition.bumpDirection
  * @internal
  */
@@ -68,13 +73,14 @@ export enum bumpDirection {
  * element of the specified size given the restraints and locations of the
  * scrollbars. This method does not take into account any already placed UI
  * elements.
+ *
  * @param position The starting horizontal and vertical position.
  * @param size the size of the UI element to get a start position for.
  * @param horizontalPadding The horizontal padding to use.
  * @param verticalPadding The vertical padding to use.
  * @param metrics The workspace UI metrics.
  * @param workspace The workspace.
- * @return The suggested start position.
+ * @returns The suggested start position.
  * @alias Blockly.uiPosition.getStartPositionRect
  * @internal
  */
@@ -118,9 +124,10 @@ export function getStartPositionRect(
  * the toolbox.
  * If in horizontal orientation, defaults to the bottom corner. If in vertical
  * orientation, defaults to the right corner.
+ *
  * @param workspace The workspace.
  * @param metrics The workspace metrics.
- * @return The suggested corner position.
+ * @returns The suggested corner position.
  * @alias Blockly.uiPosition.getCornerOppositeToolbox
  * @internal
  */
@@ -140,13 +147,14 @@ export function getCornerOppositeToolbox(
  * Returns a position Rect based on a starting position that is bumped
  * so that it doesn't intersect with any of the provided savedPositions. This
  * method does not check that the bumped position is still within bounds.
+ *
  * @param startRect The starting position to use.
  * @param margin The margin to use between elements when bumping.
  * @param bumpDir The direction to bump if there is a collision with an existing
  *     UI element.
  * @param savedPositions List of rectangles that represent the positions of UI
  *     elements already placed.
- * @return The suggested position rectangle.
+ * @returns The suggested position rectangle.
  * @alias Blockly.uiPosition.bumpPositionRect
  * @internal
  */

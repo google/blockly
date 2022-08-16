@@ -6,6 +6,7 @@
 
 /**
  * Utility functions for handling variable and procedure names.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -23,6 +24,7 @@ import type {Workspace} from './workspace.js';
 
 /**
  * Class for a database of entity names (variables, procedures, etc).
+ *
  * @alias Blockly.Names
  */
 export class Names {
@@ -71,6 +73,7 @@ export class Names {
 
   /**
    * Set the variable map that maps from variable name to variable object.
+   *
    * @param map The map to track.
    */
   setVariableMap(map: VariableMap) {
@@ -80,8 +83,9 @@ export class Names {
   /**
    * Get the name for a user-defined variable, based on its ID.
    * This should only be used for variables of NameType VARIABLE.
+   *
    * @param id The ID to look up in the variable map.
-   * @return The name of the referenced variable, or null if there was no
+   * @returns The name of the referenced variable, or null if there was no
    *     variable map or the variable was not found in the map.
    */
   private getNameForUserVariable_(id: string): string|null {
@@ -103,6 +107,7 @@ export class Names {
 
   /**
    * Generate names for user variables, but only ones that are being used.
+   *
    * @param workspace Workspace to generate variables from.
    */
   populateVariables(workspace: Workspace) {
@@ -114,6 +119,7 @@ export class Names {
 
   /**
    * Generate names for procedures.
+   *
    * @param workspace Workspace to generate procedures from.
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -125,10 +131,11 @@ export class Names {
 
   /**
    * Convert a Blockly entity name to a legal exportable entity name.
+   *
    * @param nameOrId The Blockly entity name (no constraints) or variable ID.
    * @param type The type of the name in Blockly ('VARIABLE', 'PROCEDURE',
    *     'DEVELOPER_VARIABLE', etc...).
-   * @return An entity name that is legal in the exported language.
+   * @returns An entity name that is legal in the exported language.
    */
   getName(nameOrId: string, type: NameType|string): string {
     let name = nameOrId;
@@ -159,9 +166,10 @@ export class Names {
 
   /**
    * Return a list of all known user-created names of a specified name type.
+   *
    * @param type The type of entity in Blockly ('VARIABLE', 'PROCEDURE',
    *     'DEVELOPER_VARIABLE', etc...).
-   * @return A list of Blockly entity names (no constraints).
+   * @returns A list of Blockly entity names (no constraints).
    */
   getUserNames(type: NameType|string): string[] {
     const userNames = this.db.get(type)?.keys();
@@ -173,10 +181,11 @@ export class Names {
    * Ensure that this is a new name not overlapping any previously defined name.
    * Also check against list of reserved words for the current language and
    * ensure name doesn't collide.
+   *
    * @param name The Blockly entity name (no constraints).
    * @param type The type of entity in Blockly ('VARIABLE', 'PROCEDURE',
    *     'DEVELOPER_VARIABLE', etc...).
-   * @return An entity name that is legal in the exported language.
+   * @returns An entity name that is legal in the exported language.
    */
   getDistinctName(name: string, type: NameType|string): string {
     let safeName = this.safeName_(name);
@@ -200,8 +209,9 @@ export class Names {
    * Given a proposed entity name, generate a name that conforms to the
    * [_A-Za-z][_A-Za-z0-9]* format that most languages consider legal for
    * variable and function names.
+   *
    * @param name Potentially illegal entity name.
-   * @return Safe entity name.
+   * @returns Safe entity name.
    */
   private safeName_(name: string): string {
     if (!name) {
@@ -222,9 +232,10 @@ export class Names {
   /**
    * Do the given two entity names refer to the same entity?
    * Blockly names are case-insensitive.
+   *
    * @param name1 First name.
    * @param name2 Second name.
-   * @return True if names are the same.
+   * @returns True if names are the same.
    */
   static equals(name1: string, name2: string): boolean {
     // name1.localeCompare(name2) is slower.
@@ -242,6 +253,7 @@ export namespace Names {
    * Therefore, Blockly keeps a separate name type to disambiguate.
    * getName('foo', 'VARIABLE') -> 'foo'
    * getName('foo', 'PROCEDURE') -> 'foo2'
+   *
    * @alias Blockly.Names.NameType
    */
   export enum NameType {

@@ -6,6 +6,7 @@
 
 /**
  * A separator used for separating toolbox categories.
+ *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -23,6 +24,7 @@ import {ToolboxItem} from './toolbox_item.js';
 /**
  * Class for a toolbox separator. This is the thin visual line that appears on
  * the toolbox. This item is not interactable.
+ *
  * @alias Blockly.ToolboxSeparator
  */
 export class ToolboxSeparator extends ToolboxItem {
@@ -52,7 +54,8 @@ export class ToolboxSeparator extends ToolboxItem {
 
   /**
    * Creates the DOM for a separator.
-   * @return The parent element for the separator.
+   *
+   * @returns The parent element for the separator.
    */
   protected createDom_(): HTMLDivElement {
     const container = (document.createElement('div'));

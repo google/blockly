@@ -6,6 +6,7 @@
 
 /**
  * Object representing a scrollbar.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -30,6 +31,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  * Class for a pure SVG scrollbar.
  * This technique offers a scrollbar that is guaranteed to work, but may not
  * look or behave like the system's scrollbars.
+ *
  * @alias Blockly.Scrollbar
  */
 export class Scrollbar {
@@ -42,6 +44,7 @@ export class Scrollbar {
   /**
    * Default margin around the scrollbar (between the scrollbar and the edge of
    * the viewport in pixels).
+   *
    * @internal
    */
   static readonly DEFAULT_SCROLLBAR_MARGIN = 0.5;
@@ -53,6 +56,7 @@ export class Scrollbar {
 
   /**
    * The ratio of handle position offset to workspace content displacement.
+   *
    * @internal
    */
   ratio = 1;
@@ -138,6 +142,7 @@ export class Scrollbar {
      * The upper left corner of the scrollbar's SVG group in CSS pixels relative
      * to the scrollbar's origin.  This is usually relative to the injection div
      * origin.
+     *
      * @internal
      */
     this.position = new Coordinate(0, 0);
@@ -179,6 +184,7 @@ export class Scrollbar {
   /**
    * Dispose of this scrollbar.
    * Unlink from all DOM elements to prevent memory leaks.
+   *
    * @suppress {checkTypes}
    */
   dispose() {
@@ -204,8 +210,9 @@ export class Scrollbar {
   /**
    * Constrain the handle's length within the minimum (0) and maximum
    * (scrollbar background) values allowed for the scrollbar.
+   *
    * @param value Value that is potentially out of bounds, in CSS pixels.
-   * @return Constrained value, in CSS pixels.
+   * @returns Constrained value, in CSS pixels.
    */
   private constrainHandleLength_(value: number): number {
     if (value <= 0 || isNaN(value)) {
@@ -219,6 +226,7 @@ export class Scrollbar {
   /**
    * Set the length of the scrollbar's handle and change the SVG attribute
    * accordingly.
+   *
    * @param newLength The new scrollbar handle length in CSS pixels.
    */
   private setHandleLength_(newLength: number) {
@@ -232,8 +240,9 @@ export class Scrollbar {
   /**
    * Constrain the handle's position within the minimum (0) and maximum values
    * allowed for the scrollbar.
+   *
    * @param value Value that is potentially out of bounds, in CSS pixels.
-   * @return Constrained value, in CSS pixels.
+   * @returns Constrained value, in CSS pixels.
    */
   private constrainHandlePosition_(value: number): number {
     if (value <= 0 || isNaN(value)) {
@@ -250,6 +259,7 @@ export class Scrollbar {
   /**
    * Set the offset of the scrollbar's handle from the scrollbar's position, and
    * change the SVG attribute accordingly.
+   *
    * @param newPosition The new scrollbar handle offset in CSS pixels.
    */
   setHandlePosition(newPosition: number) {
@@ -263,6 +273,7 @@ export class Scrollbar {
   /**
    * Set the size of the scrollbar's background and change the SVG attribute
    * accordingly.
+   *
    * @param newSize The new scrollbar background length in CSS pixels.
    */
   private setScrollbarLength_(newSize: number) {
@@ -281,6 +292,7 @@ export class Scrollbar {
    * Set the position of the scrollbar's SVG group in CSS pixels relative to the
    * scrollbar's origin.  This sets the scrollbar's location within the
    * workspace.
+   *
    * @param x The new x coordinate.
    * @param y The new y coordinate.
    * @internal
@@ -297,6 +309,7 @@ export class Scrollbar {
 
   /**
    * Recalculate the scrollbar's location and its length.
+   *
    * @param opt_metrics A data structure of from the describing all the required
    *     dimensions.  If not provided, it will be fetched from the host object.
    */
@@ -331,9 +344,10 @@ export class Scrollbar {
   /**
    * Returns whether the a resizeView is necessary by comparing the passed
    * hostMetrics with cached old host metrics.
+   *
    * @param hostMetrics A data structure describing all the required dimensions,
    *     possibly fetched from the host object.
-   * @return Whether a resizeView is necessary.
+   * @returns Whether a resizeView is necessary.
    */
   private requiresViewResize_(hostMetrics: Metrics): boolean {
     if (!this.oldHostMetrics_) {
@@ -347,6 +361,7 @@ export class Scrollbar {
 
   /**
    * Recalculate a horizontal scrollbar's location and length.
+   *
    * @param hostMetrics A data structure describing all the required dimensions,
    *     possibly fetched from the host object.
    */
@@ -362,6 +377,7 @@ export class Scrollbar {
    * Recalculate a horizontal scrollbar's location on the screen and path
    * length. This should be called when the layout or size of the window has
    * changed.
+   *
    * @param hostMetrics A data structure describing all the required dimensions,
    *     possibly fetched from the host object.
    */
@@ -392,6 +408,7 @@ export class Scrollbar {
   /**
    * Recalculate a horizontal scrollbar's location within its path and length.
    * This should be called when the contents of the workspace have changed.
+   *
    * @param hostMetrics A data structure describing all the required dimensions,
    *     possibly fetched from the host object.
    */
@@ -445,6 +462,7 @@ export class Scrollbar {
 
   /**
    * Recalculate a vertical scrollbar's location and length.
+   *
    * @param hostMetrics A data structure describing all the required dimensions,
    *     possibly fetched from the host object.
    */
@@ -459,6 +477,7 @@ export class Scrollbar {
   /**
    * Recalculate a vertical scrollbar's location on the screen and path length.
    * This should be called when the layout or size of the window has changed.
+   *
    * @param hostMetrics A data structure describing all the required dimensions,
    *     possibly fetched from the host object.
    */
@@ -486,6 +505,7 @@ export class Scrollbar {
   /**
    * Recalculate a vertical scrollbar's location within its path and length.
    * This should be called when the contents of the workspace have changed.
+   *
    * @param hostMetrics A data structure describing all the required dimensions,
    *     possibly fetched from the host object.
    */
@@ -540,6 +560,7 @@ export class Scrollbar {
   /**
    * Create all the DOM elements required for a scrollbar.
    * The resulting widget is not sized.
+   *
    * @param opt_class A class to be applied to this scrollbar.
    */
   private createDom_(opt_class?: string) {
@@ -591,7 +612,8 @@ export class Scrollbar {
   /**
    * Is the scrollbar visible.  Non-paired scrollbars disappear when they aren't
    * needed.
-   * @return True if visible.
+   *
+   * @returns True if visible.
    */
   isVisible(): boolean {
     return this.isVisible_;
@@ -600,6 +622,7 @@ export class Scrollbar {
   /**
    * Set whether the scrollbar's container is visible and update
    * display accordingly if visibility has changed.
+   *
    * @param visible Whether the container is visible
    */
   setContainerVisible(visible: boolean) {
@@ -614,6 +637,7 @@ export class Scrollbar {
   /**
    * Set whether the scrollbar is visible.
    * Only applies to non-paired scrollbars.
+   *
    * @param visible True if visible.
    */
   setVisible(visible: boolean) {
@@ -654,6 +678,7 @@ export class Scrollbar {
   /**
    * Scroll by one pageful.
    * Called when scrollbar background is clicked.
+   *
    * @param e Mouse down event.
    */
   private onMouseDownBar_(e: MouseEvent) {
@@ -693,6 +718,7 @@ export class Scrollbar {
   /**
    * Start a dragging operation.
    * Called when scrollbar handle is clicked.
+   *
    * @param e Mouse down event.
    */
   private onMouseDownHandle_(e: MouseEvent) {
@@ -734,6 +760,7 @@ export class Scrollbar {
 
   /**
    * Drag the scrollbar's handle.
+   *
    * @param e Mouse up event.
    */
   private onMouseMoveHandle_(e: Event) {
@@ -788,7 +815,8 @@ export class Scrollbar {
 
   /**
    * Helper to calculate the ratio of handle position to scrollbar view size.
-   * @return Ratio.
+   *
+   * @returns Ratio.
    * @internal
    */
   getRatio_(): number {
@@ -821,6 +849,7 @@ export class Scrollbar {
 
   /**
    * Set the scrollbar handle's position.
+   *
    * @param value The content displacement, relative to the view in pixels.
    * @param updateMetrics Whether to update metrics on this set call.
    *    Defaults to true.
@@ -837,6 +866,7 @@ export class Scrollbar {
    * relative to the injection div origin. This is for times when the scrollbar
    * is used in an object whose origin isn't the same as the main workspace
    * (e.g. in a flyout.)
+   *
    * @param x The x coordinate of the scrollbar's origin, in CSS pixels.
    * @param y The y coordinate of the scrollbar's origin, in CSS pixels.
    */
@@ -848,7 +878,7 @@ export class Scrollbar {
    * @param first An object containing computed measurements of a workspace.
    * @param second Another object containing computed measurements of a
    *     workspace.
-   * @return Whether the two sets of metrics are equivalent.
+   * @returns Whether the two sets of metrics are equivalent.
    */
   private static metricsAreEquivalent_(first: Metrics, second: Metrics):
       boolean {

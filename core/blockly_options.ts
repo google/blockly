@@ -6,6 +6,7 @@
 
 /**
  * Object that defines user-specified options for the workspace.
+ *
  * @namespace Blockly.BlocklyOptions
  */
 import * as goog from '../closure/goog/goog.js';
@@ -18,6 +19,7 @@ import type {ToolboxDefinition} from './utils/toolbox.js';
 
 /**
  * Blockly options.
+ *
  * @alias Blockly.BlocklyOptions
  */
 export interface BlocklyOptions {

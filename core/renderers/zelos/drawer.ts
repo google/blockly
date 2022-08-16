@@ -6,6 +6,7 @@
 
 /**
  * Zelos renderer.
+ *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -29,6 +30,7 @@ import type {PathObject} from './path_object.js';
 
 /**
  * An object that draws a block based on the given rendering information.
+ *
  * @alias Blockly.zelos.Drawer
  */
 export class Drawer extends BaseDrawer {
@@ -101,6 +103,7 @@ export class Drawer extends BaseDrawer {
   /**
    * Add steps for the right side of a row that does not have value or
    * statement input connections.
+   *
    * @param row The row to draw the side of.
    */
   protected override drawRightSideRow_(row: Row) {

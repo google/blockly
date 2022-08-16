@@ -1,5 +1,4 @@
 /**
- * @license
  * Copyright 2012 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -583,7 +582,8 @@ export class Bubble implements IBubble {
    *
    * @param viewMetrics The view metrics of the workspace the bubble will appear
    *     in.
-   * @returns The optimal vertical position of the top-left corner of the bubble.
+   * @returns The optimal vertical position of the top-left corner of the
+   *     bubble.
    */
   private getOptimalRelativeTop_(viewMetrics: ContainerRegion): number {
     let relativeTop = -this.height_ / 4;

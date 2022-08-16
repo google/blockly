@@ -1,5 +1,4 @@
 /**
- * @license
  * Copyright 2012 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -488,8 +487,8 @@ export class Workspace implements IASTNodeLocation {
    *     variables with empty string type.
    *
    * @param type Type of the variables to find.
-   * @returns The sought after variables of the passed in type. An empty array if
-   *     none are found.
+   * @returns The sought after variables of the passed in type. An empty array
+   *     if none are found.
    */
   getVariablesOfType(type: string|null): VariableModel[] {
     return this.variableMap_.getVariablesOfType(type);

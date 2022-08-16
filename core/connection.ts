@@ -1,5 +1,4 @@
 /**
- * @license
  * Copyright 2011 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -572,8 +571,8 @@ export class Connection implements IASTNodeLocationWithBlock {
    *
    * @param attemptToConnect Whether to try to connect the shadow block to this
    *     connection or not.
-   * @returns The shadow block that was created, or null if both the shadowState_
-   *     and shadowDom_ are null.
+   * @returns The shadow block that was created, or null if both the
+   *     shadowState_ and shadowDom_ are null.
    */
   private createShadowBlock_(attemptToConnect: boolean): Block|null {
     const parentBlock = this.getSourceBlock();

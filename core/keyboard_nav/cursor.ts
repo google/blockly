@@ -1,5 +1,4 @@
 /**
- * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -111,8 +110,8 @@ export class Cursor extends Marker {
   /**
    * Find the out connection, field, or block.
    *
-   * @returns The out element, or null if the current node is not set or there is
-   *     no out value.
+   * @returns The out element, or null if the current node is not set or there
+   *     is no out value.
    */
   out(): ASTNode|null {
     const curNode = this.getCurNode();

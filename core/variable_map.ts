@@ -1,5 +1,4 @@
 /**
- * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -321,8 +320,8 @@ export class VariableMap {
    *     null, return list of variables with empty string type.
    *
    * @param type Type of the variables to find.
-   * @returns The sought after variables of the passed in type. An empty array if
-   *     none are found.
+   * @returns The sought after variables of the passed in type. An empty array
+   *     if none are found.
    */
   getVariablesOfType(type: string|null): VariableModel[] {
     type = type || '';

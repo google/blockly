@@ -1,5 +1,4 @@
 /**
- * @license
  * Copyright 2012 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -267,8 +266,8 @@ export class FieldVariable extends FieldDropdown {
   /**
    * Get the text from this field, which is the selected variable's name.
    *
-   * @returns The selected variable's name, or the empty string if no variable is
-   *     selected.
+   * @returns The selected variable's name, or the empty string if no variable
+   *     is selected.
    */
   override getText(): string {
     return this.variable_ ? this.variable_.name : '';

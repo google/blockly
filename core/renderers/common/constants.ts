@@ -460,7 +460,8 @@ export class ConstantProvider {
 
     this.START_POINT = svgPaths.moveBy(0, 0);
 
-    /** A field's text element's dominant baseline. Pre-2022 this could be false
+    /**
+     * A field's text element's dominant baseline. Pre-2022 this could be false
      * for certain browsers.
      */
     this.FIELD_TEXT_BASELINE_CENTER = true;

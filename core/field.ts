@@ -789,7 +789,7 @@ export abstract class Field implements IASTNodeLocationSvg,
       const scale = (this.sourceBlock_.workspace as WorkspaceSvg).scale;
       xy = this.getAbsoluteXY_();
       scaledWidth = (bBox.width + 1) * scale;
-      scaledHeight = (bBox.height +1) * scale;
+      scaledHeight = (bBox.height + 1) * scale;
 
       if (userAgent.GECKO) {
         xy.x += 1.5 * scale;

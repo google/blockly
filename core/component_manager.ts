@@ -23,7 +23,7 @@ import type {IPositionable} from './interfaces/i_positionable.js';
 import * as arrayUtils from './utils/array.js';
 
 
-class Capability<T> {
+class Capability<_T> {
   static POSITIONABLE = new Capability<IPositionable>('positionable');
   static DRAG_TARGET = new Capability<IDragTarget>('drag_target');
   static DELETE_AREA = new Capability<IDeleteArea>('delete_area');

@@ -109,8 +109,12 @@
             "@typescript-eslint/no-invalid-this": ["error"],
             // Needs decision. 601 problems.
             "@typescript-eslint/no-non-null-assertion": ["off"],
-            // Temporarily disable. 85 problems.
-            "@typescript-eslint/no-unused-vars": ["off"],
+            // Use TS-specific rule.
+            "no-unused-vars": ["off"],
+            "@typescript-eslint/no-unused-vars": ["warn", {
+                "argsIgnorePattern": "^_",
+                "varsIgnorePattern": "^_"
+            }],
             // Temporarily disable. 23 problems.
             "@typescript-eslint/no-explicit-any": ["off"],
             // Temporarily disable. 128 problems.
@@ -125,9 +129,7 @@
             "@typescript-eslint/no-this-alias": ["off"],
             // Temporarily disable. 3 problems.
             "@typescript-eslint/no-empty-interface": ["off"],
-            // Temporarily disable. 447 problems.
-            "no-unused-vars": ["off"],
-            // Temporarily disable. 34 problems. Auto fixable?
+            // Temporarily disable. 34 problems.
             "func-call-spacing": ["off"]
         }
     }]

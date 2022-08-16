@@ -518,6 +518,7 @@ export class Workspace implements IASTNodeLocation {
    *     ID.
    * @return The created block.
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   newBlock(prototypeName: string, opt_id?: string): Block {
     throw new Error(
         'The implementation of newBlock should be ' +

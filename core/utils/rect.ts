@@ -25,7 +25,6 @@ export class Rect {
    * @param bottom Bottom.
    * @param left Left.
    * @param right Right.
-   * @struct
    */
   constructor(
       public top: number, public bottom: number, public left: number,

@@ -22,7 +22,6 @@ import {Types} from './types.js';
  * An object containing information about a spacer between two elements on a
  * row.
  *
- * @struct
  * @alias Blockly.blockRendering.InRowSpacer
  */
 export class InRowSpacer extends Measurable {

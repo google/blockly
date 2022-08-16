@@ -38,8 +38,6 @@ export class Debug {
   /**
    * Configuration object containing booleans to enable and disable debug
    * rendering of specific rendering components.
-   *
-   * @struct
    */
   static config = {
     rowSpacers: true,

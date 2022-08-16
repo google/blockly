@@ -23,7 +23,6 @@ export class Size {
   /**
    * @param width Width.
    * @param height Height.
-   * @struct
    */
   constructor(public width: number, public height: number) {}
 

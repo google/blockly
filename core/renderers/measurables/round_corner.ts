@@ -22,7 +22,6 @@ import {Types} from './types.js';
  * An object containing information about the space a rounded corner takes up
  * during rendering.
  *
- * @struct
  * @alias Blockly.blockRendering.RoundCorner
  */
 export class RoundCorner extends Measurable {

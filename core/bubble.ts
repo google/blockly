@@ -139,7 +139,6 @@ export class Bubble implements IBubble {
    * @param anchorXY Absolute position of bubble's anchor point.
    * @param bubbleWidth Width of bubble, or null if not resizable.
    * @param bubbleHeight Height of bubble, or null if not resizable.
-   * @struct
    */
   constructor(
       workspace: WorkspaceSvg, content: SVGElement, shape: SVGElement,

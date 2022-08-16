@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Checkbox field.  Checked or not checked.
- */
-
-/**
  * Checkbox field.  Checked or not checked.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -26,6 +23,7 @@ import type {Sentinel} from './utils/sentinel.js';
 
 /**
  * Class for a checkbox field.
+ *
  * @alias Blockly.FieldCheckbox
  */
 export class FieldCheckbox extends Field {
@@ -84,6 +82,7 @@ export class FieldCheckbox extends Field {
 
   /**
    * Configure the field based on the given map of options.
+   *
    * @param config A map of options to configure the field based on.
    */
   protected override configure_(config: FieldCheckboxConfig) {
@@ -93,7 +92,8 @@ export class FieldCheckbox extends Field {
 
   /**
    * Saves this field's value.
-   * @return The boolean value held by this field.
+   *
+   * @returns The boolean value held by this field.
    * @internal
    */
   override saveState(): AnyDuringMigration {
@@ -106,6 +106,7 @@ export class FieldCheckbox extends Field {
 
   /**
    * Create the block UI for this checkbox.
+   *
    * @internal
    */
   override initView() {
@@ -128,6 +129,7 @@ export class FieldCheckbox extends Field {
 
   /**
    * Set the character used for the check mark.
+   *
    * @param character The character to use for the check mark, or null to use
    *     the default.
    */
@@ -143,8 +145,9 @@ export class FieldCheckbox extends Field {
 
   /**
    * Ensure that the input value is valid ('TRUE' or 'FALSE').
+   *
    * @param opt_newValue The input value.
-   * @return A valid value ('TRUE' or 'FALSE), or null if invalid.
+   * @returns A valid value ('TRUE' or 'FALSE), or null if invalid.
    */
   protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
       string|null {
@@ -159,6 +162,7 @@ export class FieldCheckbox extends Field {
 
   /**
    * Update the value of the field, and update the checkElement.
+   *
    * @param newValue The value to be saved. The default validator guarantees
    *     that this is a either 'TRUE' or 'FALSE'.
    */
@@ -172,7 +176,8 @@ export class FieldCheckbox extends Field {
 
   /**
    * Get the value of this field, either 'TRUE' or 'FALSE'.
-   * @return The value of this field.
+   *
+   * @returns The value of this field.
    */
   override getValue(): string {
     return this.value_ ? 'TRUE' : 'FALSE';
@@ -180,7 +185,8 @@ export class FieldCheckbox extends Field {
 
   /**
    * Get the boolean value of this field.
-   * @return The boolean value of this field.
+   *
+   * @returns The boolean value of this field.
    */
   getValueBoolean(): boolean {
     return this.value_ as boolean;
@@ -188,7 +194,8 @@ export class FieldCheckbox extends Field {
 
   /**
    * Get the text of this field. Used when the block is collapsed.
-   * @return Text representing the value of this field ('true' or 'false').
+   *
+   * @returns Text representing the value of this field ('true' or 'false').
    */
   override getText(): string {
     return String(this.convertValueToBool_(this.value_));
@@ -199,8 +206,9 @@ export class FieldCheckbox extends Field {
    *
    * Converts 'TRUE' to true and 'FALSE' to false correctly, everything else
    * is cast to a boolean.
+   *
    * @param value The value to convert.
-   * @return The converted value.
+   * @returns The converted value.
    */
   private convertValueToBool_(value: AnyDuringMigration): boolean {
     if (typeof value === 'string') {
@@ -212,8 +220,9 @@ export class FieldCheckbox extends Field {
 
   /**
    * Construct a FieldCheckbox from a JSON arg object.
+   *
    * @param options A JSON object with options (checked).
-   * @return The new field instance.
+   * @returns The new field instance.
    * @nocollapse
    * @internal
    */

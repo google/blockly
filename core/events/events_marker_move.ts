@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Events fired as a result of a marker move.
- */
-
-/**
  * Events fired as a result of a marker move.
+ *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -26,6 +23,7 @@ import * as eventUtils from './utils.js';
 
 /**
  * Class for a marker move event.
+ *
  * @alias Blockly.Events.MarkerMove
  */
 export class MarkerMove extends UiBase {
@@ -72,7 +70,8 @@ export class MarkerMove extends UiBase {
 
   /**
    * Encode the event as JSON.
-   * @return JSON representation.
+   *
+   * @returns JSON representation.
    */
   override toJson(): AnyDuringMigration {
     const json = super.toJson();
@@ -85,6 +84,7 @@ export class MarkerMove extends UiBase {
 
   /**
    * Decode the JSON event.
+   *
    * @param json JSON representation.
    */
   override fromJson(json: AnyDuringMigration) {

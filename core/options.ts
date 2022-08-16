@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Object that controls settings for the workspace.
- */
-
-/**
  * Object that controls settings for the workspace.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -29,6 +26,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 /**
  * Parse the user-specified options, using reasonable defaults where behaviour
  * is unspecified.
+ *
  * @alias Blockly.Options
  */
 export class Options {
@@ -197,9 +195,10 @@ export class Options {
   /**
    * Parse the user-specified move options, using reasonable defaults where
    *    behaviour is unspecified.
+   *
    * @param options Dictionary of options.
    * @param hasCategories Whether the workspace has categories or not.
-   * @return Normalized move options.
+   * @returns Normalized move options.
    */
   private static parseMoveOptions_(
       options: BlocklyOptions, hasCategories: boolean): MoveOptions {
@@ -249,8 +248,9 @@ export class Options {
    * Parse the user-specified zoom options, using reasonable defaults where
    * behaviour is unspecified.  See zoom documentation:
    *   https://developers.google.com/blockly/guides/configure/web/zoom
+   *
    * @param options Dictionary of options.
-   * @return Normalized zoom options.
+   * @returns Normalized zoom options.
    */
   private static parseZoomOptions_(options: BlocklyOptions): ZoomOptions {
     const zoom = options['zoom'] || {};
@@ -297,8 +297,9 @@ export class Options {
    * Parse the user-specified grid options, using reasonable defaults where
    * behaviour is unspecified. See grid documentation:
    *   https://developers.google.com/blockly/guides/configure/web/grid
+   *
    * @param options Dictionary of options.
-   * @return Normalized grid options.
+   * @returns Normalized grid options.
    */
   private static parseGridOptions_(options: BlocklyOptions): GridOptions {
     const grid = options['grid'] || {};
@@ -314,8 +315,9 @@ export class Options {
   /**
    * Parse the user-specified theme options, using the classic theme as a
    * default. https://developers.google.com/blockly/guides/configure/web/themes
+   *
    * @param options Dictionary of options.
-   * @return A Blockly Theme.
+   * @returns A Blockly Theme.
    */
   private static parseThemeOptions_(options: BlocklyOptions): Theme {
     const theme = options['theme'] || Classic;

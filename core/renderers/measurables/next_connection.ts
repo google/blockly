@@ -5,11 +5,6 @@
  */
 
 /**
- * @fileoverview Class representing the space a next connection takes up during
- * rendering.
- */
-
-/**
  * Class representing the space a next connection takes up during
  * rendering.
  * @class

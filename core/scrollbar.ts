@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Object representing a scrollbar.
- */
-
-/**
  * Object representing a scrollbar.
  * @class
  */

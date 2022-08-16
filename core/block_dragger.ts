@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Methods for dragging a block visually.
- */
-
-/**
  * Methods for dragging a block visually.
  * @class
  */

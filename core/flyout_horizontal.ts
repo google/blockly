@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Horizontal flyout tray containing blocks which may be created.
- */
-
-/**
  * Horizontal flyout tray containing blocks which may be created.
  * @class
  */

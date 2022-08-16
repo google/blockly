@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview An enum for the possible types of connections.
- */
-
-/**
  * An enum for the possible types of connections.
  * @namespace Blockly.ConnectionType
  */

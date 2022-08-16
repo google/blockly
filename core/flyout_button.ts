@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Class for a button in the flyout.
- */
-
-/**
  * Class for a button in the flyout.
  * @class
  */

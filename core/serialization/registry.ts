@@ -5,11 +5,6 @@
  */
 
 /**
- * @fileoverview Contains functions registering serializers (eg blocks,
- * variables, plugins, etc).
- */
-
-/**
  * Contains functions registering serializers (eg blocks, variables, plugins,
  * etc).
  * @namespace Blockly.serialization.registry

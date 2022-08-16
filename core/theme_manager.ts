@@ -5,11 +5,6 @@
  */
 
 /**
- * @fileoverview Object in charge of storing and updating a workspace theme
- *     and UI components.
- */
-
-/**
  * Object in charge of storing and updating a workspace theme
  *     and UI components.
  * @class

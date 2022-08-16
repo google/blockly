@@ -5,11 +5,6 @@
  */
 
 /**
- * @fileoverview Objects representing a square corner in a row of a rendered
- * block.
- */
-
-/**
  * Objects representing a square corner in a row of a rendered
  * block.
  * @class

@@ -5,12 +5,6 @@
  */
 
 /**
- * @fileoverview Utilities for element styles.
- * These methods are not specific to Blockly, and could be factored out into
- * a JavaScript framework such as Closure.
- */
-
-/**
  * Utilities for element styles.
  * These methods are not specific to Blockly, and could be factored out into
  * a JavaScript framework such as Closure.

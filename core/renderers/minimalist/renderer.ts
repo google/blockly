@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Minimalist renderer.
- */
-
-/**
  * Minimalist renderer.
  * @class
  */

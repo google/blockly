@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Zelos theme.
- */
-
-/**
  * Zelos theme.
  * @namespace Blockly.Themes.Zelos
  */

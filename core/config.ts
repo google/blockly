@@ -5,15 +5,10 @@
  */
 
 /**
- * @fileoverview All the values that we expect developers to be able to change
- * before injecting Blockly. Changing these values during run time is not
- * generally recommended.
- */
-
-/**
  * All the values that we expect developers to be able to change
  * before injecting Blockly. Changing these values during run time is not
  * generally recommended.
+ *
  * @namespace Blockly.config
  */
 import * as goog from '../closure/goog/goog.js';
@@ -43,6 +38,7 @@ const DEFAULT_SNAP_RADIUS = 28;
 export const config: Config = {
   /**
    * Number of pixels the mouse must move before a drag starts.
+   *
    * @alias Blockly.config.dragRadius
    */
   dragRadius: 5,
@@ -50,17 +46,20 @@ export const config: Config = {
    * Number of pixels the mouse must move before a drag/scroll starts from the
    * flyout.  Because the drag-intention is determined when this is reached, it
    * is larger than dragRadius so that the drag-direction is clearer.
+   *
    * @alias Blockly.config.flyoutDragRadius
    */
   flyoutDragRadius: 10,
   /**
    * Maximum misalignment between connections for them to snap together.
+   *
    * @alias Blockly.config.snapRadius
    */
   snapRadius: DEFAULT_SNAP_RADIUS,
   /**
    * Maximum misalignment between connections for them to snap together.
    * This should be the same as the snap radius.
+   *
    * @alias Blockly.config.connectingSnapRadius
    */
   connectingSnapRadius: DEFAULT_SNAP_RADIUS,
@@ -69,11 +68,13 @@ export const config: Config = {
    * to a new connection.  The current previewed connection is considered to be
    * this much closer to the matching connection on the block than it actually
    * is.
+   *
    * @alias Blockly.config.currentConnectionPreference
    */
   currentConnectionPreference: 8,
   /**
    * Delay in ms between trigger and bumping unconnected block out of alignment.
+   *
    * @alias Blockly.config.bumpDelay
    */
   bumpDelay: 250,

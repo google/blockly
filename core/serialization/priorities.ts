@@ -5,12 +5,6 @@
  */
 
 /**
- * @fileoverview The top level namespace for priorities of plugin serializers.
- * Includes constants for the priorities of different plugin
- * serializers. Higher priorities are deserialized first.
- */
-
-/**
  * The top level namespace for priorities of plugin serializers.
  * Includes constants for the priorities of different plugin serializers. Higher
  * priorities are deserialized first.

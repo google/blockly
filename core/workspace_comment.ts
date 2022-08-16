@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Object representing a code comment on the workspace.
- */
-
-/**
  * Object representing a code comment on the workspace.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -32,6 +29,7 @@ import type {Workspace} from './workspace.js';
 
 /**
  * Class for a workspace comment.
+ *
  * @alias Blockly.WorkspaceComment
  */
 export class WorkspaceComment {
@@ -97,6 +95,7 @@ export class WorkspaceComment {
 
   /**
    * Dispose of this comment.
+   *
    * @internal
    */
   dispose() {
@@ -117,7 +116,8 @@ export class WorkspaceComment {
 
   /**
    * Get comment height.
-   * @return Comment height.
+   *
+   * @returns Comment height.
    * @internal
    */
   getHeight(): number {
@@ -126,6 +126,7 @@ export class WorkspaceComment {
 
   /**
    * Set comment height.
+   *
    * @param height Comment height.
    * @internal
    */
@@ -135,7 +136,8 @@ export class WorkspaceComment {
 
   /**
    * Get comment width.
-   * @return Comment width.
+   *
+   * @returns Comment width.
    * @internal
    */
   getWidth(): number {
@@ -144,6 +146,7 @@ export class WorkspaceComment {
 
   /**
    * Set comment width.
+   *
    * @param width comment width.
    * @internal
    */
@@ -153,7 +156,8 @@ export class WorkspaceComment {
 
   /**
    * Get stored location.
-   * @return The comment's stored location.
+   *
+   * @returns The comment's stored location.
    *   This is not valid if the comment is currently being dragged.
    * @internal
    */
@@ -163,6 +167,7 @@ export class WorkspaceComment {
 
   /**
    * Move a comment by a relative offset.
+   *
    * @param dx Horizontal offset, in workspace units.
    * @param dy Vertical offset, in workspace units.
    * @internal
@@ -177,7 +182,8 @@ export class WorkspaceComment {
 
   /**
    * Get whether this comment is deletable or not.
-   * @return True if deletable.
+   *
+   * @returns True if deletable.
    * @internal
    */
   isDeletable(): boolean {
@@ -187,6 +193,7 @@ export class WorkspaceComment {
 
   /**
    * Set whether this comment is deletable or not.
+   *
    * @param deletable True if deletable.
    * @internal
    */
@@ -196,7 +203,8 @@ export class WorkspaceComment {
 
   /**
    * Get whether this comment is movable or not.
-   * @return True if movable.
+   *
+   * @returns True if movable.
    * @internal
    */
   isMovable(): boolean {
@@ -206,6 +214,7 @@ export class WorkspaceComment {
 
   /**
    * Set whether this comment is movable or not.
+   *
    * @param movable True if movable.
    * @internal
    */
@@ -215,7 +224,8 @@ export class WorkspaceComment {
 
   /**
    * Get whether this comment is editable or not.
-   * @return True if editable.
+   *
+   * @returns True if editable.
    */
   isEditable(): boolean {
     return this.editable_ &&
@@ -224,6 +234,7 @@ export class WorkspaceComment {
 
   /**
    * Set whether this comment is editable or not.
+   *
    * @param editable True if editable.
    */
   setEditable(editable: boolean) {
@@ -232,7 +243,8 @@ export class WorkspaceComment {
 
   /**
    * Returns this comment's text.
-   * @return Comment text.
+   *
+   * @returns Comment text.
    * @internal
    */
   getContent(): string {
@@ -241,6 +253,7 @@ export class WorkspaceComment {
 
   /**
    * Set this comment's content.
+   *
    * @param content Comment content.
    * @internal
    */
@@ -254,8 +267,9 @@ export class WorkspaceComment {
 
   /**
    * Encode a comment subtree as XML with XY coordinates.
+   *
    * @param opt_noId True if the encoder should skip the comment ID.
-   * @return Tree of XML elements.
+   * @returns Tree of XML elements.
    * @internal
    */
   toXmlWithXY(opt_noId?: boolean): Element {
@@ -279,8 +293,9 @@ export class WorkspaceComment {
    * Encode a comment subtree as XML, but don't serialize the XY coordinates.
    * This method avoids some expensive metrics-related calls that are made in
    * toXmlWithXY().
+   *
    * @param opt_noId True if the encoder should skip the comment ID.
-   * @return Tree of XML elements.
+   * @returns Tree of XML elements.
    * @internal
    */
   toXml(opt_noId?: boolean): Element {
@@ -295,6 +310,7 @@ export class WorkspaceComment {
   /**
    * Fire a create event for the given workspace comment, if comments are
    * enabled.
+   *
    * @param comment The comment that was just created.
    * @internal
    */
@@ -317,9 +333,10 @@ export class WorkspaceComment {
 
   /**
    * Decode an XML comment tag and create a comment on the workspace.
+   *
    * @param xmlComment XML comment element.
    * @param workspace The workspace.
-   * @return The created workspace comment.
+   * @returns The created workspace comment.
    * @internal
    */
   static fromXml(xmlComment: Element, workspace: Workspace): WorkspaceComment {
@@ -346,8 +363,9 @@ export class WorkspaceComment {
 
   /**
    * Decode an XML comment tag and return the results in an object.
+   *
    * @param xml XML comment element.
-   * @return An object containing the id, size, position, and comment string.
+   * @returns An object containing the id, size, position, and comment string.
    * @internal
    */
   static parseAttributes(xml: Element): {

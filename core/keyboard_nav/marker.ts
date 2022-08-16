@@ -5,11 +5,6 @@
  */
 
 /**
- * @fileoverview The class representing a marker.
- * Used primarily for keyboard navigation to show a marked location.
- */
-
-/**
  * The class representing a marker.
  * Used primarily for keyboard navigation to show a marked location.
  * @class

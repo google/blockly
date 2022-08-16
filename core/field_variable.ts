@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Variable input field.
- */
-
-/**
  * Variable input field.
  * @class
  */

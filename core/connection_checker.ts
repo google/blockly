@@ -5,11 +5,6 @@
  */
 
 /**
- * @fileoverview An object that encapsulates logic for checking whether a
- * potential connection is safe and valid.
- */
-
-/**
  * An object that encapsulates logic for checking whether a
  * potential connection is safe and valid.
  * @class

@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Events fired as a result of selecting an item on the toolbox.
- */
-
-/**
  * Events fired as a result of selecting an item on the toolbox.
  * @class
  */

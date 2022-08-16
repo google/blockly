@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Flyout tray containing blocks which may be created.
- */
-
-/**
  * Flyout tray containing blocks which may be created.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -46,6 +43,7 @@ enum FlyoutItemType {
 
 /**
  * Class for a flyout.
+ *
  * @alias Blockly.Flyout
  */
 export abstract class Flyout extends DeleteArea implements IFlyout {
@@ -58,14 +56,16 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
    * Determine if a drag delta is toward the workspace, based on the position
    * and orientation of the flyout. This is used in determineDragIntention_ to
    * determine if a new block should be created or if the flyout should scroll.
+   *
    * @param currentDragDeltaXY How far the pointer has
    *     moved from the position at mouse down, in pixel units.
-   * @return True if the drag is toward the workspace.
+   * @returns True if the drag is toward the workspace.
    */
   abstract isDragTowardWorkspace(currentDragDeltaXY: Coordinate): boolean;
 
   /**
    * Sets the translation of the flyout to match the scrollbars.
+   *
    * @param xyRatio Contains a y property which is a float
    *     between 0 and 1 specifying the degree of scrolling and a
    *     similar x property.
@@ -74,6 +74,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
 
   /**
    * Lay out the blocks in the flyout.
+   *
    * @param contents The blocks and buttons to lay
    *     out.
    * @param gaps The visible gaps between blocks.
@@ -82,6 +83,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
 
   /**
    * Scroll the flyout.
+   *
    * @param e Mouse wheel scroll event.
    */
   protected abstract wheel_(e: WheelEvent): void;
@@ -94,13 +96,15 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
 
   /**
    * Calculates the x coordinate for the flyout position.
-   * @return X coordinate.
+   *
+   * @returns X coordinate.
    */
   abstract getX(): number;
 
   /**
    * Calculates the y coordinate for the flyout position.
-   * @return Y coordinate.
+   *
+   * @returns Y coordinate.
    */
   abstract getY(): number;
 
@@ -118,6 +122,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   RTL: boolean;
   /**
    * Whether the flyout should be laid out horizontally or not.
+   *
    * @internal
    */
   horizontalLayout: boolean = false;
@@ -163,6 +168,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
 
   /**
    * The target workspace.
+   *
    * @internal
    */
   targetWorkspace!: WorkspaceSvg;
@@ -277,6 +283,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     /**
      * A map from blocks to the rects which are beneath them to act as input
      * targets.
+     *
      * @internal
      */
     this.rectMap_ = new WeakMap();
@@ -304,9 +311,10 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
    * Creates the flyout's DOM.  Only needs to be called once.  The flyout can
    * either exist as its own SVG element or be a g element nested inside a
    * separate SVG element.
+   *
    * @param tagName The type of tag to
    *     put the flyout in. This should be <svg> or <g>.
-   * @return The flyout's SVG group.
+   * @returns The flyout's SVG group.
    */
   createDom(tagName: string|Svg<SVGSVGElement>|Svg<SVGGElement>): SVGElement {
     /*
@@ -331,6 +339,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
 
   /**
    * Initializes the flyout.
+   *
    * @param targetWorkspace The workspace in which to
    *     create new blocks.
    */
@@ -382,6 +391,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   /**
    * Dispose of this flyout.
    * Unlink from all DOM elements to prevent memory leaks.
+   *
    * @suppress {checkTypes}
    */
   dispose() {
@@ -405,7 +415,8 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
 
   /**
    * Get the width of the flyout.
-   * @return The width of the flyout.
+   *
+   * @returns The width of the flyout.
    */
   getWidth(): number {
     return this.width_;
@@ -413,7 +424,8 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
 
   /**
    * Get the height of the flyout.
-   * @return The width of the flyout.
+   *
+   * @returns The width of the flyout.
    */
   getHeight(): number {
     return this.height_;
@@ -422,7 +434,8 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   /**
    * Get the scale (zoom level) of the flyout. By default,
    * this matches the target workspace scale, but this can be overridden.
-   * @return Flyout workspace scale.
+   *
+   * @returns Flyout workspace scale.
    */
   getFlyoutScale(): number {
     return this.targetWorkspace.scale;
@@ -430,7 +443,8 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
 
   /**
    * Get the workspace inside the flyout.
-   * @return The workspace inside the flyout.
+   *
+   * @returns The workspace inside the flyout.
    * @internal
    */
   getWorkspace(): WorkspaceSvg {
@@ -439,7 +453,8 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
 
   /**
    * Is the flyout visible?
-   * @return True if visible.
+   *
+   * @returns True if visible.
    */
   isVisible(): boolean {
     return this.isVisible_;
@@ -449,6 +464,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
    * Set whether the flyout is visible. A value of true does not necessarily
    * mean that the flyout is shown. It could be hidden because its container is
    * hidden.
+   *
    * @param visible True if visible.
    */
   setVisible(visible: boolean) {
@@ -467,6 +483,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
 
   /**
    * Set whether this flyout's container is visible.
+   *
    * @param visible Whether the container is visible.
    */
   setContainerVisible(visible: boolean) {
@@ -498,6 +515,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
 
   /**
    * Update the view based on coordinates calculated in position().
+   *
    * @param width The computed width of the flyout's SVG group
    * @param height The computed height of the flyout's SVG group.
    * @param x The computed x origin of the flyout's SVG group.
@@ -560,6 +578,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
 
   /**
    * Show and populate the flyout.
+   *
    * @param flyoutDef Contents to display
    *     in the flyout. This is either an array of Nodes, a NodeList, a
    *     toolbox definition, or a string with the name of the dynamic category.
@@ -583,6 +602,10 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
 
     // IE 11 is an incompetent browser that fails to fire mouseout events.
     // When the mouse is over the background, deselect all blocks.
+    /**
+     *
+     * @param this
+     */
     function deselectAll(this: Flyout) {
       const topBlocks = this.workspace_.getTopBlocks(false);
       for (let i = 0, block; block = topBlocks[i]; i++) {
@@ -615,9 +638,10 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   /**
    * Create the contents array and gaps array necessary to create the layout for
    * the flyout.
+   *
    * @param parsedContent The array
    *     of objects to show in the flyout.
-   * @return The list of contents and gaps needed to lay out the flyout.
+   * @returns The list of contents and gaps needed to lay out the flyout.
    */
   private createFlyoutInfo_(parsedContent: toolbox.FlyoutItemInfoArray):
       {contents: FlyoutItem[], gaps: number[]} {
@@ -673,8 +697,9 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
 
   /**
    * Gets the flyout definition for the dynamic category.
+   *
    * @param categoryName The name of the dynamic category.
-   * @return The definition of the
+   * @returns The definition of the
    *     flyout in one of its many forms.
    */
   private getDynamicCategoryContents_(categoryName: string):
@@ -694,9 +719,10 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
 
   /**
    * Creates a flyout button or a flyout label.
+   *
    * @param btnInfo The object holding information about a button or a label.
    * @param isLabel True if the button is a label, false otherwise.
-   * @return The object used to display the button in the
+   * @returns The object used to display the button in the
    *    flyout.
    */
   private createButton_(btnInfo: toolbox.ButtonOrLabelInfo, isLabel: boolean):
@@ -710,8 +736,9 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   /**
    * Create a block from the xml and permanently disable any blocks that were
    * defined as disabled.
+   *
    * @param blockInfo The info of the block.
-   * @return The block created from the blockInfo.
+   * @returns The block created from the blockInfo.
    */
   private createFlyoutBlock_(blockInfo: toolbox.BlockInfo): BlockSvg {
     let block;
@@ -745,8 +772,9 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   /**
    * Returns a block from the array of recycled blocks with the given type, or
    * undefined if one cannot be found.
+   *
    * @param blockType The type of the block to try to recycle.
-   * @return The recycled block, or undefined if
+   * @returns The recycled block, or undefined if
    *     one could not be recycled.
    */
   private getRecycledBlock_(blockType: string): BlockSvg|undefined {
@@ -762,6 +790,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
 
   /**
    * Adds a gap in the flyout based on block info.
+   *
    * @param blockInfo Information about a block.
    * @param gaps The list of gaps between items in the flyout.
    * @param defaultGap The default gap between one element and the
@@ -783,6 +812,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
 
   /**
    * Add the necessary gap in the flyout for a separator.
+   *
    * @param sepInfo The object holding
    *    information about a separator.
    * @param gaps The list gaps between items in the flyout.
@@ -848,8 +878,9 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
 
   /**
    * Returns whether the given block can be recycled or not.
+   *
    * @param _block The block to check for recyclability.
-   * @return True if the block can be recycled. False otherwise.
+   * @returns True if the block can be recycled. False otherwise.
    */
   protected blockIsRecyclable_(_block: BlockSvg): boolean {
     // By default, recycling is disabled.
@@ -860,6 +891,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
    * Puts a previously created block into the recycle bin and moves it to the
    * top of the workspace. Used during large workspace swaps to limit the number
    * of new DOM elements we need to create.
+   *
    * @param block The block to recycle.
    */
   private recycleBlock_(block: BlockSvg) {
@@ -870,6 +902,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
 
   /**
    * Add listeners to a block that has been added to the flyout.
+   *
    * @param root The root node of the SVG group the block is in.
    * @param block The block to add listeners for.
    * @param rect The invisible rectangle under the block that acts
@@ -893,8 +926,9 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
 
   /**
    * Handle a mouse-down on an SVG block in a non-closing flyout.
+   *
    * @param block The flyout block to copy.
-   * @return Function to call when block is clicked.
+   * @returns Function to call when block is clicked.
    */
   private blockMouseDown_(block: BlockSvg): Function {
     const flyout = this;
@@ -909,6 +943,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
 
   /**
    * Mouse down on the flyout background.  Start a vertical scroll drag.
+   *
    * @param e Mouse down event.
    */
   private onMouseDown_(e: MouseEvent) {
@@ -921,8 +956,9 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   /**
    * Does this flyout allow you to create a new instance of the given block?
    * Used for deciding if a block can be "dragged out of" the flyout.
+   *
    * @param block The block to copy from the flyout.
-   * @return True if you can create a new instance of the block, false
+   * @returns True if you can create a new instance of the block, false
    *    otherwise.
    * @internal
    */
@@ -932,8 +968,9 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
 
   /**
    * Create a copy of this block on the workspace.
+   *
    * @param originalBlock The block to copy from the flyout.
-   * @return The newly created block.
+   * @returns The newly created block.
    * @throws {Error} if something went wrong with deserialization.
    * @internal
    */
@@ -978,6 +1015,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   /**
    * Initialize the given button: move it to the correct location,
    * add listeners, etc.
+   *
    * @param button The button to initialize and place.
    * @param x The x position of the cursor during this layout pass.
    * @param y The y position of the cursor during this layout pass.
@@ -996,14 +1034,17 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
 
   /**
    * Create and place a rectangle corresponding to the given block.
+   *
    * @param block The block to associate the rect to.
    * @param x The x position of the cursor during this layout pass.
    * @param y The y position of the cursor during this layout pass.
    * @param blockHW The height and width of
    *     the block.
+   * @param blockHW.height
    * @param index The index into the mats list where this rect should
    *     be placed.
-   * @return Newly created SVG element for the rectangle behind
+   * @param blockHW.width
+   * @returns Newly created SVG element for the rectangle behind
    *     the block.
    */
   protected createRect_(
@@ -1031,6 +1072,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   /**
    * Move a rectangle to sit exactly behind a block, taking into account tabs,
    * hats, and any other protrusions we invent.
+   *
    * @param rect The rectangle to move directly behind the block.
    * @param block The block the rectangle should be behind.
    */
@@ -1079,7 +1121,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   }
 
   /**
-   * @return True if this flyout may be scrolled with a scrollbar or
+   * @returns True if this flyout may be scrolled with a scrollbar or
    *     by dragging.
    * @internal
    */
@@ -1090,8 +1132,9 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
 
   /**
    * Copy a block from the flyout to the workspace and position it correctly.
+   *
    * @param oldBlock The flyout block to copy.
-   * @return The new block in the main workspace.
+   * @returns The new block in the main workspace.
    */
   private placeNewBlock_(oldBlock: BlockSvg): BlockSvg {
     const targetWorkspace = this.targetWorkspace;
@@ -1113,6 +1156,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
 
   /**
    * Positions a block on the target workspace.
+   *
    * @param oldBlock The flyout block being copied.
    * @param block The block to posiiton.
    */

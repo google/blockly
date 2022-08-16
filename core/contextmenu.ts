@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Functionality for the right-click context menus.
- */
-
-/**
  * Functionality for the right-click context menus.
+ *
  * @namespace Blockly.ContextMenu
  */
 import * as goog from '../closure/goog/goog.js';
@@ -46,7 +43,8 @@ const dummyOwner = {};
 
 /**
  * Gets the block the context menu is currently attached to.
- * @return The block the context menu is attached to.
+ *
+ * @returns The block the context menu is attached to.
  * @alias Blockly.ContextMenu.getCurrentBlock
  */
 export function getCurrentBlock(): Block|null {
@@ -55,6 +53,7 @@ export function getCurrentBlock(): Block|null {
 
 /**
  * Sets the block the context menu is currently attached to.
+ *
  * @param block The block the context menu is attached to.
  * @alias Blockly.ContextMenu.setCurrentBlock
  */
@@ -69,6 +68,7 @@ let menu_: Menu|null = null;
 
 /**
  * Construct the menu based on the list of options and show the menu.
+ *
  * @param e Mouse event.
  * @param options Array of menu options.
  * @param rtl True if RTL, false if LTR.
@@ -96,9 +96,10 @@ export function show(
 
 /**
  * Create the context menu object and populate it with the given options.
+ *
  * @param options Array of menu options.
  * @param rtl True if RTL, false if LTR.
- * @return The menu that will be shown on right click.
+ * @returns The menu that will be shown on right click.
  */
 function populate_(
     options: (ContextMenuOption|LegacyContextMenuOption)[],
@@ -134,6 +135,7 @@ function populate_(
 
 /**
  * Add the menu to the page and position it correctly.
+ *
  * @param menu The menu to add and position.
  * @param e Mouse event for the right click that is making the context
  *     menu appear.
@@ -170,6 +172,7 @@ function position_(menu: Menu, e: Event, rtl: boolean) {
 
 /**
  * Create and render the menu widget inside Blockly's widget div.
+ *
  * @param menu The menu to add to the widget div.
  */
 function createWidget_(menu: Menu) {
@@ -188,6 +191,7 @@ function createWidget_(menu: Menu) {
 }
 /**
  * Halts the propagation of the event without doing anything else.
+ *
  * @param e An event.
  */
 function haltPropagation(e: Event) {
@@ -198,6 +202,7 @@ function haltPropagation(e: Event) {
 
 /**
  * Hide the context menu.
+ *
  * @alias Blockly.ContextMenu.hide
  */
 export function hide() {
@@ -207,6 +212,7 @@ export function hide() {
 
 /**
  * Dispose of the menu.
+ *
  * @alias Blockly.ContextMenu.dispose
  */
 export function dispose() {
@@ -219,9 +225,10 @@ export function dispose() {
 /**
  * Create a callback function that creates and configures a block,
  *   then places the new block next to the original.
+ *
  * @param block Original block.
  * @param xml XML representation of new block.
- * @return Function that creates a block.
+ * @returns Function that creates a block.
  * @alias Blockly.ContextMenu.callbackFactory
  */
 export function callbackFactory(block: Block, xml: Element): Function {
@@ -253,9 +260,10 @@ export function callbackFactory(block: Block, xml: Element): Function {
 
 /**
  * Make a context menu option for deleting the current workspace comment.
+ *
  * @param comment The workspace comment where the
  *     right-click originated.
- * @return A menu option,
+ * @returns A menu option,
  *     containing text, enabled, and a callback.
  * @alias Blockly.ContextMenu.commentDeleteOption
  * @internal
@@ -276,9 +284,10 @@ export function commentDeleteOption(comment: WorkspaceCommentSvg):
 
 /**
  * Make a context menu option for duplicating the current workspace comment.
+ *
  * @param comment The workspace comment where the
  *     right-click originated.
- * @return A menu option,
+ * @returns A menu option,
  *     containing text, enabled, and a callback.
  * @alias Blockly.ContextMenu.commentDuplicateOption
  * @internal
@@ -297,10 +306,11 @@ export function commentDuplicateOption(comment: WorkspaceCommentSvg):
 
 /**
  * Make a context menu option for adding a comment on the workspace.
+ *
  * @param ws The workspace where the right-click
  *     originated.
  * @param e The right-click mouse event.
- * @return A menu option, containing text, enabled, and a callback.
+ * @returns A menu option, containing text, enabled, and a callback.
  * @suppress {strictModuleDepCheck,checkTypes} Suppress checks while workspace
  *     comments are not bundled in.
  * @alias Blockly.ContextMenu.workspaceCommentOption
@@ -310,6 +320,9 @@ export function workspaceCommentOption(
     ws: WorkspaceSvg, e: Event): ContextMenuOption {
   // Helper function to create and position a comment correctly based on the
   // location of the mouse event.
+  /**
+   *
+   */
   function addWsComment() {
     const comment = new WorkspaceCommentSvg(
         ws, Msg['WORKSPACE_COMMENT_DEFAULT_TEXT'],

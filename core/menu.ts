@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Blockly menu similar to Closure's goog.ui.Menu
- */
-
-/**
  * Blockly menu similar to Closure's goog.ui.Menu
  * @class
  */

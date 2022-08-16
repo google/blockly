@@ -5,11 +5,6 @@
  */
 
 /**
- * @fileoverview Objects representing inline inputs with connections on a
- * rendered block.
- */
-
-/**
  * Objects representing inline inputs with connections on a
  * rendered block.
  * @class

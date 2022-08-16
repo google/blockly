@@ -5,11 +5,6 @@
  */
 
 /**
- * @fileoverview Objects representing a spacer in a row of a rendered
- * block.
- */
-
-/**
  * Objects representing a spacer in a row of a rendered
  * block.
  * @class

@@ -6,11 +6,6 @@
  */
 
 /**
- * @fileoverview A div that floats on top of the workspace, for drop-down menus.
- * The drop-down can be kept inside the workspace, animate in/out, etc.
- */
-
-/**
  * A div that floats on top of the workspace, for drop-down menus.
  * @class
  */

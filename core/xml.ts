@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview XML reader and writer.
- */
-
-/**
  * XML reader and writer.
  * @namespace Blockly.Xml
  */

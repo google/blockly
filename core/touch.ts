@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Touch handling for Blockly.
- */
-
-/**
  * Touch handling for Blockly.
  * @namespace Blockly.Touch
  */

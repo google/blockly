@@ -5,11 +5,6 @@
  */
 
 /**
- * @fileoverview The interface for an object that owns a block's rendering SVG
- * elements.
- */
-
-/**
  * The interface for an object that owns a block's rendering SVG
  * elements.
  * @namespace Blockly.blockRendering.IPathObject

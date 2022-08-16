@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Utility methods.
- */
-
-/**
  * Utility methods.
  * @namespace Blockly.utils
  */

@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview A toolbox category used to organize blocks in the toolbox.
- */
-
-/**
  * A toolbox category used to organize blocks in the toolbox.
  * @class
  */

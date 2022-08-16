@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Utility functions for handling typed variables.
- */
-
-/**
  * Utility functions for handling typed variables.
  *
  * @namespace Blockly.VariablesDynamic

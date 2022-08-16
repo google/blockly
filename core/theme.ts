@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview The class representing a theme.
- */
-
-/**
  * The class representing a theme.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -31,6 +28,7 @@ export interface ITheme {
 
 /**
  * Class for a theme.
+ *
  * @alias Blockly.Theme
  */
 export class Theme implements ITheme {
@@ -46,6 +44,7 @@ export class Theme implements ITheme {
   /**
    * Whether or not to add a 'hat' on top of all blocks with no previous or
    * output connections.
+   *
    * @internal
    */
   startHats: boolean|null = null;
@@ -81,7 +80,8 @@ export class Theme implements ITheme {
 
   /**
    * Gets the class name that identifies this theme.
-   * @return The CSS class name.
+   *
+   * @returns The CSS class name.
    * @internal
    */
   getClassName(): string {
@@ -90,6 +90,7 @@ export class Theme implements ITheme {
 
   /**
    * Overrides or adds a style to the blockStyles map.
+   *
    * @param blockStyleName The name of the block style.
    * @param blockStyle The block style.
    */
@@ -99,6 +100,7 @@ export class Theme implements ITheme {
 
   /**
    * Overrides or adds a style to the categoryStyles map.
+   *
    * @param categoryStyleName The name of the category style.
    * @param categoryStyle The category style.
    */
@@ -109,8 +111,9 @@ export class Theme implements ITheme {
   /**
    * Gets the style for a given Blockly UI component.  If the style value is a
    * string, we attempt to find the value of any named references.
+   *
    * @param componentName The name of the component.
-   * @return The style value.
+   * @returns The style value.
    */
   getComponentStyle(componentName: string): string|null {
     const style = (this.componentStyles as AnyDuringMigration)[componentName];
@@ -122,6 +125,7 @@ export class Theme implements ITheme {
 
   /**
    * Configure a specific Blockly UI component with a style value.
+   *
    * @param componentName The name of the component.
    * @param styleValue The style value.
    */
@@ -131,6 +135,7 @@ export class Theme implements ITheme {
 
   /**
    * Configure a theme's font style.
+   *
    * @param fontStyle The font style.
    */
   setFontStyle(fontStyle: FontStyle) {
@@ -139,6 +144,7 @@ export class Theme implements ITheme {
 
   /**
    * Configure a theme's start hats.
+   *
    * @param startHats True if the theme enables start hats, false otherwise.
    */
   setStartHats(startHats: boolean) {
@@ -147,9 +153,10 @@ export class Theme implements ITheme {
 
   /**
    * Define a new Blockly theme.
+   *
    * @param name The name of the theme.
    * @param themeObj An object containing theme properties.
-   * @return A new Blockly theme.
+   * @returns A new Blockly theme.
    */
   static defineTheme(name: string, themeObj: ITheme): Theme {
     name = name.toLowerCase();

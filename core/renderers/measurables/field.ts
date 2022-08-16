@@ -5,11 +5,6 @@
  */
 
 /**
- * @fileoverview Objects representing a field in a row of a rendered
- * block.
- */
-
-/**
  * Objects representing a field in a row of a rendered
  * block.
  * @class

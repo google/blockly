@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Registers default keyboard shortcuts.
- */
-
-/**
  * Registers default keyboard shortcuts.
  * @namespace Blockly.ShortcutItems
  */

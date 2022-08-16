@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Object in charge of managing markers and the cursor.
- */
-
-/**
  * Object in charge of managing markers and the cursor.
  * @class
  */

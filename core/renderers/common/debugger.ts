@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Methods for rendering debug graphics.
- */
-
-/**
  * Methods for rendering debug graphics.
  * @class
  */

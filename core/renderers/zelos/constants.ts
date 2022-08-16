@@ -5,11 +5,6 @@
  */
 
 /**
- * @fileoverview An object that provides constants for rendering blocks in Zelos
- * mode.
- */
-
-/**
  * An object that provides constants for rendering blocks in Zelos
  * mode.
  * @class

@@ -5,11 +5,6 @@
  */
 
 /**
- * @fileoverview Contains top-level functions for serializing workspaces to
- * plain JavaScript objects.
- */
-
-/**
  * Contains top-level functions for serializing workspaces to plain JavaScript
  * objects.
  * @namespace Blockly.serialization.workspaces

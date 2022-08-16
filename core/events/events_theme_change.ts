@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Events fired as a result of a theme update.
- */
-
-/**
  * Events fired as a result of a theme update.
  * @class
  */

@@ -5,11 +5,6 @@
  */
 
 /**
- * @fileoverview The class representing a cursor that is used to navigate
- * between tab navigable fields.
- */
-
-/**
  * The class representing a cursor that is used to navigate
  * between tab navigable fields.
  * @class

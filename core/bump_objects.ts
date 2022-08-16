@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Utilities for bumping objects back into worksapce bounds.
- */
-
-/**
  * Utilities for bumping objects back into worksapce bounds.
+ *
  * @namespace Blockly.bumpObjects
  */
 import * as goog from '../closure/goog/goog.js';
@@ -32,11 +29,12 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Bumps the given object that has passed out of bounds.
+ *
  * @param workspace The workspace containing the object.
  * @param scrollMetrics Scroll metrics
  *    in workspace coordinates.
  * @param object The object to bump.
- * @return True if block was bumped.
+ * @returns True if block was bumped.
  * @alias Blockly.bumpObjects.bumpIntoBounds
  */
 function bumpObjectIntoBounds(
@@ -86,8 +84,9 @@ export const bumpIntoBounds = bumpObjectIntoBounds;
 
 /**
  * Creates a handler for bumping objects when they cross fixed bounds.
+ *
  * @param workspace The workspace to handle.
- * @return The event handler.
+ * @returns The event handler.
  * @alias Blockly.bumpObjects.bumpIntoBoundsHandler
  */
 export function bumpIntoBoundsHandler(workspace: WorkspaceSvg):
@@ -134,10 +133,11 @@ export function bumpIntoBoundsHandler(workspace: WorkspaceSvg):
 
 /**
  * Extracts the object from the given event.
+ *
  * @param workspace The workspace the event originated
  *    from.
  * @param e An event containing an object.
- * @return The extracted
+ * @returns The extracted
  *    object.
  */
 function extractObjectFromEvent(
@@ -165,6 +165,7 @@ function extractObjectFromEvent(
 
 /**
  * Bumps the top objects in the given workspace into bounds.
+ *
  * @param workspace The workspace.
  * @alias Blockly.bumpObjects.bumpTopObjectsIntoBounds
  */

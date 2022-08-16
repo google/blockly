@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Text Area field.
- */
-
-/**
  * Text Area field.
  * @class
  */

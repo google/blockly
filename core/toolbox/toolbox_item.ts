@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview An item in the toolbox.
- */
-
-/**
  * An item in the toolbox.
  * @class
  */

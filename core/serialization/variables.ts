@@ -5,11 +5,6 @@
  */
 
 /**
- * @fileoverview Handles serializing variables to plain JavaScript objects, only
- * containing state.
- */
-
-/**
  * Handles serializing variables to plain JavaScript objects, only containing
  * state.
  * @namespace Blockly.serialization.variables

@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Object representing a top row on a rendered block.
- */
-
-/**
  * Object representing a top row on a rendered block.
  * @class
  */

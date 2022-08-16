@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview A separator used for separating toolbox categories.
- */
-
-/**
  * A separator used for separating toolbox categories.
  * @class
  */

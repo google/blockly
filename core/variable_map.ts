@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Object representing a map of variables and their types.
- */
-
-/**
  * Object representing a map of variables and their types.
  * @class
  */

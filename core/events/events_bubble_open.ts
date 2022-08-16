@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Events fired as a result of bubble open.
- */
-
-/**
  * Events fired as a result of bubble open.
+ *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -24,6 +21,7 @@ import * as eventUtils from './utils.js';
 
 /**
  * Class for a bubble open event.
+ *
  * @alias Blockly.Events.BubbleOpen
  */
 export class BubbleOpen extends UiBase {
@@ -57,7 +55,8 @@ export class BubbleOpen extends UiBase {
 
   /**
    * Encode the event as JSON.
-   * @return JSON representation.
+   *
+   * @returns JSON representation.
    */
   override toJson(): AnyDuringMigration {
     const json = super.toJson();
@@ -69,6 +68,7 @@ export class BubbleOpen extends UiBase {
 
   /**
    * Decode the JSON event.
+   *
    * @param json JSON representation.
    */
   override fromJson(json: AnyDuringMigration) {

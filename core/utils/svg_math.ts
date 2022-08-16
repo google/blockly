@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Utility methods for SVG math.
- */
-
-/**
  * Utility methods realted to figuring out positions of SVG elements.
  * @namespace Blockly.utils.svgMath
  */

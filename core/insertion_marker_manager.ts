@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Class that controls updates to connections during drags.
- */
-
-/**
  * Class that controls updates to connections during drags.
  * @class
  */

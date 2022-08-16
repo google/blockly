@@ -5,11 +5,6 @@
  */
 
 /**
- * @fileoverview The class extends Gesture to support pinch to zoom
- * for both pointer and touch events.
- */
-
-/**
  * The class extends Gesture to support pinch to zoom
  * for both pointer and touch events.
  * @class

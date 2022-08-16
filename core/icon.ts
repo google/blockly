@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Object representing an icon on a block.
- */
-
-/**
  * Object representing an icon on a block.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -27,6 +24,7 @@ import * as svgMath from './utils/svg_math.js';
 
 /**
  * Class for an icon.
+ *
  * @alias Blockly.Icon
  */
 export abstract class Icon {
@@ -100,7 +98,8 @@ export abstract class Icon {
 
   /**
    * Is the associated bubble visible?
-   * @return True if the bubble is visible.
+   *
+   * @returns True if the bubble is visible.
    */
   isVisible(): boolean {
     return !!this.bubble_;
@@ -108,6 +107,7 @@ export abstract class Icon {
 
   /**
    * Clicking on the icon toggles if the bubble is visible.
+   *
    * @param e Mouse click event.
    */
   protected iconClick_(e: MouseEvent) {
@@ -129,6 +129,7 @@ export abstract class Icon {
 
   /**
    * Notification that the icon has moved.  Update the arrow accordingly.
+   *
    * @param xy Absolute location in workspace coordinates.
    */
   setIconLocation(xy: Coordinate) {
@@ -156,7 +157,8 @@ export abstract class Icon {
 
   /**
    * Returns the center of the block's icon relative to the surface.
-   * @return Object with x and y properties in workspace coordinates.
+   *
+   * @returns Object with x and y properties in workspace coordinates.
    */
   getIconLocation(): Coordinate|null {
     return this.iconXY_;
@@ -166,7 +168,8 @@ export abstract class Icon {
    * Get the size of the icon as used for rendering.
    * This differs from the actual size of the icon, because it bulges slightly
    * out of its row rather than increasing the height of its row.
-   * @return Height and width.
+   *
+   * @returns Height and width.
    */
   getCorrectedSize(): Size {
     // TODO (#2562): Remove getCorrectedSize.
@@ -175,6 +178,7 @@ export abstract class Icon {
 
   /**
    * Draw the icon.
+   *
    * @param _group The icon group.
    */
   protected drawIcon_(_group: Element) {}
@@ -182,6 +186,7 @@ export abstract class Icon {
 
   /**
    * Show or hide the icon.
+   *
    * @param _visible True if the icon should be visible.
    */
   setVisible(_visible: boolean) {}

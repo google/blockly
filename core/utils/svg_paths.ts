@@ -1,9 +1,4 @@
 /**
- * @fileoverview Methods for creating parts of SVG path strings.  See
- * developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths
- */
-
-/**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0

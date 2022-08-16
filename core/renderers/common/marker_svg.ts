@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Methods for graphically rendering a marker as SVG.
- */
-
-/**
  * Methods for graphically rendering a marker as SVG.
  * @class
  */

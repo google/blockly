@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Toolbox from whence to create blocks.
- */
-
-/**
  * Toolbox from whence to create blocks.
  * @class
  */

@@ -5,11 +5,6 @@
  */
 
 /**
- * @fileoverview Objects representing statement inputs with connections on a
- * rendered block.
- */
-
-/**
  * Objects representing statement inputs with connections on a
  * rendered block.
  * @class

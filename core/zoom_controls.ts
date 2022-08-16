@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Object representing a zoom icons.
- */
-
-/**
  * Object representing a zoom icons.
  * @class
  */

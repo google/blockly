@@ -5,11 +5,6 @@
  */
 
 /**
- * @fileoverview Object representing a bottom row on a rendered block.
- * of its subcomponents.
- */
-
-/**
  * Object representing a bottom row on a rendered block.
  * of its subcomponents.
  * @class

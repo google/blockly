@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Utility functions for handling variable and procedure names.
- */
-
-/**
  * Utility functions for handling variable and procedure names.
  * @class
  */

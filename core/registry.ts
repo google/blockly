@@ -5,11 +5,6 @@
  */
 
 /**
- * @fileoverview This file is a universal registry that provides generic methods
- *    for registering and unregistering different types of classes.
- */
-
-/**
  * This file is a universal registry that provides generic methods
  *    for registering and unregistering different types of classes.
  * @namespace Blockly.registry

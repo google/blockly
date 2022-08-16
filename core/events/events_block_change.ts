@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Class for a block change event.
- */
-
-/**
  * Class for a block change event.
+ *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -26,6 +23,7 @@ import * as eventUtils from './utils.js';
 
 /**
  * Class for a block change event.
+ *
  * @alias Blockly.Events.BlockChange
  */
 export class BlockChange extends BlockBase {
@@ -63,7 +61,8 @@ export class BlockChange extends BlockBase {
 
   /**
    * Encode the event as JSON.
-   * @return JSON representation.
+   *
+   * @returns JSON representation.
    */
   override toJson(): AnyDuringMigration {
     const json = super.toJson();
@@ -78,6 +77,7 @@ export class BlockChange extends BlockBase {
 
   /**
    * Decode the JSON event.
+   *
    * @param json JSON representation.
    */
   override fromJson(json: AnyDuringMigration) {
@@ -90,7 +90,8 @@ export class BlockChange extends BlockBase {
 
   /**
    * Does this event record any change of state?
-   * @return False if something changed.
+   *
+   * @returns False if something changed.
    */
   override isNull(): boolean {
     return this.oldValue === this.newValue;
@@ -98,6 +99,7 @@ export class BlockChange extends BlockBase {
 
   /**
    * Run a change event.
+   *
    * @param forward True if run forward, false if run backward (undo).
    */
   override run(forward: boolean) {
@@ -157,8 +159,9 @@ export class BlockChange extends BlockBase {
   /**
    * Returns the extra state of the given block (either as XML or a JSO,
    * depending on the block's definition).
+   *
    * @param block The block to get the extra state of.
-   * @return A stringified version of the extra state of the given block.
+   * @returns A stringified version of the extra state of the given block.
    * @internal
    */
   static getExtraBlockState_(block: BlockSvg): string {

@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview The class representing one block.
- */
-
-/**
  * The class representing one block.
  * @class
  */

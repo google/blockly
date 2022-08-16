@@ -5,11 +5,6 @@
  */
 
 /**
- * @fileoverview Objects representing an icon in a row of a rendered
- * block.
- */
-
-/**
  * Objects representing an icon in a row of a rendered
  * block.
  * @class

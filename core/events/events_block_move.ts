@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Class for a block move event.
- */
-
-/**
  * Class for a block move event.
+ *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -32,6 +29,7 @@ interface BlockLocation {
 
 /**
  * Class for a block move event.  Created before the move.
+ *
  * @alias Blockly.Events.BlockMove
  */
 export class BlockMove extends BlockBase {
@@ -71,7 +69,8 @@ export class BlockMove extends BlockBase {
 
   /**
    * Encode the event as JSON.
-   * @return JSON representation.
+   *
+   * @returns JSON representation.
    */
   override toJson(): AnyDuringMigration {
     const json = super.toJson();
@@ -93,6 +92,7 @@ export class BlockMove extends BlockBase {
 
   /**
    * Decode the JSON event.
+   *
    * @param json JSON representation.
    */
   override fromJson(json: AnyDuringMigration) {
@@ -119,7 +119,8 @@ export class BlockMove extends BlockBase {
   /**
    * Returns the parentId and input if the block is connected,
    *   or the XY location if disconnected.
-   * @return Collection of location info.
+   *
+   * @returns Collection of location info.
    */
   private currentLocation_(): BlockLocation {
     const workspace = this.getEventWorkspace_();
@@ -142,7 +143,8 @@ export class BlockMove extends BlockBase {
 
   /**
    * Does this event record any change of state?
-   * @return False if something changed.
+   *
+   * @returns False if something changed.
    */
   override isNull(): boolean {
     return this.oldParentId === this.newParentId &&
@@ -152,6 +154,7 @@ export class BlockMove extends BlockBase {
 
   /**
    * Run a move event.
+   *
    * @param forward True if run forward, false if run backward (undo).
    */
   override run(forward: boolean) {

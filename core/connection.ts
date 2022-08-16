@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Components for creating connections between blocks.
- */
-
-/**
  * Components for creating connections between blocks.
  * @class
  */

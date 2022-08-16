@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Utility methods related to block and message parsing.
- */
-
-/**
  * @namespace Blockly.utils.parsing
  */
 import * as goog from '../../closure/goog/goog.js';

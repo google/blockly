@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Measurable types.
- */
-
-/**
  * Measurable types.
  * @namespace Blockly.blockRendering.Types
  */

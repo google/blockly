@@ -1,9 +1,4 @@
 /**
- * @fileoverview Makecode/scratch-style renderer.
- * Zelos: spirit of eager rivalry, emulation, envy, jealousy, and zeal.
- */
-
-/**
  * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0

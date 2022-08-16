@@ -5,12 +5,6 @@
  */
 
 /**
- * @fileoverview ARIA-related constants and utilities.
- * These methods are not specific to Blockly, and could be factored out into
- * a JavaScript framework such as Closure.
- */
-
-/**
  * ARIA-related constants and utilities.
  * These methods are not specific to Blockly, and could be factored out into
  * a JavaScript framework such as Closure.

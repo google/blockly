@@ -5,11 +5,6 @@
  */
 
 /**
- * @fileoverview Non-editable, non-serializable text field.  Used for titles,
- *    labels, etc.
- */
-
-/**
  * Non-editable, non-serializable text field.  Used for titles,
  *    labels, etc.
  * @class

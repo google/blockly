@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Class representing inputs with connections on a rendered block.
- */
-
-/**
  * Class representing inputs with connections on a rendered block.
  * @class
  */

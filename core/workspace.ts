@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Object representing a workspace.
- */
-
-/**
  * Object representing a workspace.
  * @class
  */

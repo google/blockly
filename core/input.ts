@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Object representing an input (value, statement, or dummy).
- */
-
-/**
  * Object representing an input (value, statement, or dummy).
  * @class
  */

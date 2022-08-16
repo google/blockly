@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview The interface for a toolbox.
- */
-
-/**
  * The interface for a toolbox.
+ *
  * @namespace Blockly.IToolbox
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -37,6 +34,7 @@ import type {WorkspaceSvg} from '../workspace_svg.js';
 
 /**
  * Interface for a toolbox.
+ *
  * @alias Blockly.IToolbox
  */
 export interface IToolbox extends IRegistrable {
@@ -45,37 +43,43 @@ export interface IToolbox extends IRegistrable {
 
   /**
    * Fills the toolbox with new toolbox items and removes any old contents.
+   *
    * @param toolboxDef Object holding information for creating a toolbox.
    */
   render(toolboxDef: ToolboxInfo): void;
 
   /**
    * Gets the width of the toolbox.
-   * @return The width of the toolbox.
+   *
+   * @returns The width of the toolbox.
    */
   getWidth(): number;
 
   /**
    * Gets the height of the toolbox.
-   * @return The height of the toolbox.
+   *
+   * @returns The height of the toolbox.
    */
   getHeight(): number;
 
   /**
    * Gets the toolbox flyout.
-   * @return The toolbox flyout.
+   *
+   * @returns The toolbox flyout.
    */
   getFlyout(): IFlyout|null;
 
   /**
    * Gets the workspace for the toolbox.
-   * @return The parent workspace for the toolbox.
+   *
+   * @returns The parent workspace for the toolbox.
    */
   getWorkspace(): WorkspaceSvg;
 
   /**
    * Gets whether or not the toolbox is horizontal.
-   * @return True if the toolbox is horizontal, false if the toolbox is
+   *
+   * @returns True if the toolbox is horizontal, false if the toolbox is
    *     vertical.
    */
   isHorizontal(): boolean;
@@ -106,19 +110,22 @@ export interface IToolbox extends IRegistrable {
 
   /**
    * Sets the visibility of the toolbox.
+   *
    * @param isVisible True if toolbox should be visible.
    */
   setVisible(isVisible: boolean): void;
 
   /**
    * Selects the toolbox item by it's position in the list of toolbox items.
+   *
    * @param position The position of the item to select.
    */
   selectItemByPosition(position: number): void;
 
   /**
    * Gets the selected item.
-   * @return The selected item, or null if no item is currently selected.
+   *
+   * @returns The selected item, or null if no item is currently selected.
    */
   getSelectedItem(): IToolboxItem|null;
 

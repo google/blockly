@@ -5,15 +5,10 @@
  */
 
 /**
- * @fileoverview Fields can be created based on a JSON definition. This file
- *    contains methods for registering those JSON definitions, and building the
- *    fields based on JSON.
- */
-
-/**
  * Fields can be created based on a JSON definition. This file
  *    contains methods for registering those JSON definitions, and building the
  *    fields based on JSON.
+ *
  * @namespace Blockly.fieldRegistry
  */
 import * as goog from '../closure/goog/goog.js';
@@ -28,6 +23,7 @@ import * as registry from './registry.js';
  * Registers a field type.
  * fieldRegistry.fromJson uses this registry to
  * find the appropriate field type.
+ *
  * @param type The field type name as used in the JSON definition.
  * @param fieldClass The field class containing a fromJson function that can
  *     construct an instance of the field.
@@ -41,6 +37,7 @@ export function register(type: string, fieldClass: IRegistrableField) {
 
 /**
  * Unregisters the field registered with the given type.
+ *
  * @param type The field type name as used in the JSON definition.
  * @alias Blockly.fieldRegistry.unregister
  */
@@ -52,9 +49,10 @@ export function unregister(type: string) {
  * Construct a Field from a JSON arg object.
  * Finds the appropriate registered field by the type name as registered using
  * fieldRegistry.register.
+ *
  * @param options A JSON object with a type and options specific to the field
  *     type.
- * @return The new field instance or null if a field wasn't found with the given
+ * @returns The new field instance or null if a field wasn't found with the given
  *     type name
  * @alias Blockly.fieldRegistry.fromJson
  * @internal
@@ -65,6 +63,8 @@ export function fromJson(options: AnyDuringMigration): Field|null {
 
 /**
  * Private version of fromJson for stubbing in tests.
+ *
+ * @param options
  */
 function fromJsonInternal(options: AnyDuringMigration): Field|null {
   const fieldObject =

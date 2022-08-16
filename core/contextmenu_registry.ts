@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Registry for context menu option items.
- */
-
-/**
  * Registry for context menu option items.
  * @class
  */

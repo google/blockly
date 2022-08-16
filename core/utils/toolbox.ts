@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Utility functions for the toolbox and flyout.
- */
-
-/**
  * Utility functions for the toolbox and flyout.
  * @namespace Blockly.utils.toolbox
  */

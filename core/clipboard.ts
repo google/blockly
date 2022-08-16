@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Blockly's internal clipboard for managing copy-paste.
- */
-
-/**
  * Blockly's internal clipboard for managing copy-paste.
  * @namespace Blockly.clipboard
  */

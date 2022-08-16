@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Angle input field.
- */
-
-/**
  * Angle input field.
  * @class
  */

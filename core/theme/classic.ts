@@ -5,11 +5,6 @@
  */
 
 /**
- * @fileoverview Classic theme.
- * Contains multi-coloured border to create shadow effect.
- */
-
-/**
  * Classic theme.
  * Contains multi-coloured border to create shadow effect.
  * @namespace Blockly.Themes.Classic

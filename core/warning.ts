@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Object representing a warning.
- */
-
-/**
  * Object representing a warning.
  * @class
  */

@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Renderer that preserves the look and feel of Blockly pre-2019.
- */
-
-/**
  * Renderer that preserves the look and feel of Blockly pre-2019.
  * @class
  */

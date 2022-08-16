@@ -5,11 +5,6 @@
  */
 
 /**
- * @fileoverview Utility functions for generating executable code from
- * Blockly code.
- */
-
-/**
  * Utility functions for generating executable code from
  * Blockly code.
  * @class

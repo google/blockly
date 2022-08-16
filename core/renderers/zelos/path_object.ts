@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview An object that owns a block's rendering SVG elements.
- */
-
-/**
  * An object that owns a block's rendering SVG elements.
  * @class
  */

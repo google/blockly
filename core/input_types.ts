@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview An enum for the possible types of inputs.
- */
-
-/**
  * An enum for the possible types of inputs.
  * @namespace Blockly.inputTypes
  */

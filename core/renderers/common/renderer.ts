@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Base renderer.
- */
-
-/**
  * Base renderer.
  * @class
  */

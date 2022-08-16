@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Object representing a UI bubble.
- */
-
-/**
  * Object representing a UI bubble.
  * @class
  */

@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview An object that provides constants for rendering blocks.
- */
-
-/**
  * An object that provides constants for rendering blocks.
  * @class
  */

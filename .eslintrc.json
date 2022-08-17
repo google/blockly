@@ -148,7 +148,17 @@
             // Disable for now (breaks on `this` which is not really a param).
             "jsdoc/require-param": ["off"],
             // Don't auto-add missing jsdoc.
-            "jsdoc/require-jsdoc": ["warn", {"enableFixer": false}]
+            "jsdoc/require-jsdoc": ["warn", {"enableFixer": false}],
+            // Disable because of false alarms with Closure-supported tags.
+            // Re-enable after Closure is removed.
+            "jsdoc/check-tag-names": ["off"],
+            // Re-enable after Closure is removed. There shouldn't even be types in the TsDoc.
+            // These are "types" because of Closure's @suppress {warningName}
+            "jsdoc/no-undefined-types": ["off"],
+            "jsdoc/valid-types": ["off"],
+            // Disabled due to not handling `this`. If re-enabled, checkDestructured option
+            // should be left as false.
+            "jsdoc/check-param-names": ["off", {"checkDestructured": false}]
                        
         }
     }]

@@ -635,7 +635,7 @@ function buildCompiled() {
   for (const src of ['core', 'blocks', 'generators']) {
     const target = `${BUILD_DIR}/${src}`
     if (!fs.existsSync(target)) {
-      fs.symlinkSync(`../${dir}`, target);
+      fs.symlinkSync(`../${src}`, target);
     }
   }
 

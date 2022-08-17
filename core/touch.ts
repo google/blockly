@@ -89,12 +89,16 @@ let longPid_: AnyDuringMigration = 0;
 export function longStart(e: Event, gesture: Gesture) {
   longStop();
   // Punt on multitouch events.
-  if (e instanceof TouchEvent && e.changedTouches &&
-      e.changedTouches.length !== 1) {
+  // AnyDuringMigration because:  Property 'changedTouches' does not exist on
+  // type 'Event'.
+  if ((e as AnyDuringMigration).changedTouches &&
+      (e as AnyDuringMigration).changedTouches.length !== 1) {
     return;
   }
   longPid_ = setTimeout(function() {
     // TODO(#6097): Make types accurate, possibly by refactoring touch handling.
+    // AnyDuringMigration because:  Property 'changedTouches' does not exist on
+    // type 'Event'.
     const typelessEvent = e as AnyDuringMigration;
     // Additional check to distinguish between touch events and pointer events
     if (typelessEvent.changedTouches) {
@@ -280,11 +284,17 @@ export function isTouchEvent(e: Event|PseudoEvent): boolean {
  */
 export function splitEventByTouches(e: Event): Array<Event|PseudoEvent> {
   const events = [];
-  if (e instanceof TouchEvent) {
-    for (let i = 0; i < e.changedTouches.length; i++) {
+  // AnyDuringMigration because:  Property 'changedTouches' does not exist on
+  // type 'PseudoEvent | Event'.
+  if ((e as AnyDuringMigration).changedTouches) {
+    // AnyDuringMigration because:  Property 'changedTouches' does not exist on
+    // type 'PseudoEvent | Event'.
+    for (let i = 0; i < (e as AnyDuringMigration).changedTouches.length; i++) {
       const newEvent = {
         type: e.type,
-        changedTouches: [e.changedTouches[i]],
+        // AnyDuringMigration because:  Property 'changedTouches' does not exist
+        // on type 'PseudoEvent | Event'.
+        changedTouches: [(e as AnyDuringMigration).changedTouches[i]],
         target: e.target,
         stopPropagation() {
           e.stopPropagation();

@@ -22,7 +22,6 @@ import * as deprecation from './deprecation.js';
 import {Rect} from './rect.js';
 import {Size} from './size.js';
 import * as style from './style.js';
-import * as userAgent from './useragent.js';
 
 
 /**
@@ -196,12 +195,6 @@ export function getViewportBBox(): Rect {
 export function getDocumentScroll(): Coordinate {
   const el = document.documentElement;
   const win = window;
-  if (userAgent.IE && win.pageYOffset !== el.scrollTop) {
-    // The keyboard on IE10 touch devices shifts the page using the pageYOffset
-    // without modifying scrollTop. For this case, we want the body scroll
-    // offsets.
-    return new Coordinate(el.scrollLeft, el.scrollTop);
-  }
   return new Coordinate(
       win.pageXOffset || el.scrollLeft, win.pageYOffset || el.scrollTop);
 }

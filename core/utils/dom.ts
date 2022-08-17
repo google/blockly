@@ -20,7 +20,6 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.dom');
 
 import type {Svg} from './svg.js';
-import * as userAgent from './useragent.js';
 
 
 /**
@@ -269,11 +268,7 @@ export function getTextWidth(textElement: SVGTextElement): number {
 
   // Attempt to compute fetch the width of the SVG text element.
   try {
-    if (userAgent.IE || userAgent.EDGE) {
-      width = textElement.getBBox().width;
-    } else {
-      width = textElement.getComputedTextLength();
-    }
+    width = textElement.getComputedTextLength();
   } catch (e) {
     // In other cases where we fail to get the computed text. Instead, use an
     // approximation and do not cache the result. At some later point in time

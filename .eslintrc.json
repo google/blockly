@@ -144,7 +144,11 @@
             "jsdoc/require-returns-type": ["off"],
             // params and returns docs are optional.
             "jsdoc/require-param-description": ["off"],
-            "jsdoc/require-returns": ["off"]
+            "jsdoc/require-returns": ["off"],
+            // Don't automatically add missing params (breaks on `this`)
+            "jsdoc/require-param": ["warn", {"enableFixer": false}],
+            // Don't auto-add missing jsdoc.
+            "jsdoc/require-jsdoc": ["warn", {"enableFixer": false}]
                        
         }
     }]

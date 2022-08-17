@@ -7,6 +7,7 @@
  * Utility methods for size calculation.
  * These methods are not specific to Blockly, and could be factored out into
  * a JavaScript framework such as Closure.
+ *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -15,6 +16,7 @@ goog.declareModuleId('Blockly.utils.Size');
 
 /**
  * Class for representing sizes consisting of a width and height.
+ *
  * @alias Blockly.utils.Size
  */
 export class Size {
@@ -26,9 +28,10 @@ export class Size {
 
   /**
    * Compares sizes for equality.
+   *
    * @param a A Size.
    * @param b A Size.
-   * @return True iff the sizes have equal widths and equal heights, or if both
+   * @returns True iff the sizes have equal widths and equal heights, or if both
    *     are null.
    */
   static equals(a: Size|null, b: Size|null): boolean {

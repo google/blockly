@@ -5,6 +5,7 @@
 
 /**
  * Minimalist render info object.
+ *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -22,6 +23,7 @@ import type {Renderer} from './renderer.js';
  * This measure pass does not propagate changes to the block (although fields
  * may choose to rerender when getSize() is called).  However, calling it
  * repeatedly may be expensive.
+ *
  * @alias Blockly.minimalist.RenderInfo
  */
 export class RenderInfo extends BaseRenderInfo {
@@ -36,7 +38,8 @@ export class RenderInfo extends BaseRenderInfo {
 
   /**
    * Get the block renderer in use.
-   * @return The block renderer in use.
+   *
+   * @returns The block renderer in use.
    * @internal
    */
   override getRenderer(): Renderer {

@@ -5,6 +5,7 @@
 
 /**
  * Object representing a UI bubble.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -34,6 +35,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Class for UI bubble.
+ *
  * @alias Blockly.Bubble
  */
 export class Bubble implements IBubble {
@@ -124,6 +126,7 @@ export class Bubble implements IBubble {
   /**
    * Describes whether this bubble has been disposed of (nodes and event
    * listeners removed from the page) or not.
+   *
    * @internal
    */
   disposed = false;
@@ -172,9 +175,10 @@ export class Bubble implements IBubble {
 
   /**
    * Create the bubble's DOM.
+   *
    * @param content SVG content for the bubble.
    * @param hasResize Add diagonal resize gripper if true.
-   * @return The bubble's SVG group.
+   * @returns The bubble's SVG group.
    */
   private createDom_(content: Element, hasResize: boolean): SVGElement {
     /* Create the bubble.  Here's the markup that will be generated:
@@ -261,7 +265,8 @@ export class Bubble implements IBubble {
 
   /**
    * Return the root node of the bubble's SVG group.
-   * @return The root SVG node of the bubble's group.
+   *
+   * @returns The root SVG node of the bubble's group.
    */
   getSvgRoot(): SVGElement {
     return this.bubbleGroup_ as SVGElement;
@@ -269,6 +274,7 @@ export class Bubble implements IBubble {
 
   /**
    * Expose the block's ID on the bubble's top-level SVG group.
+   *
    * @param id ID of block.
    */
   setSvgId(id: string) {
@@ -277,6 +283,7 @@ export class Bubble implements IBubble {
 
   /**
    * Handle a mouse-down on bubble's border.
+   *
    * @param e Mouse down event.
    */
   private bubbleMouseDown_(e: Event) {
@@ -288,6 +295,7 @@ export class Bubble implements IBubble {
 
   /**
    * Show the context menu for this bubble.
+   *
    * @param _e Mouse event.
    * @internal
    */
@@ -297,7 +305,8 @@ export class Bubble implements IBubble {
 
   /**
    * Get whether this bubble is deletable or not.
-   * @return True if deletable.
+   *
+   * @returns True if deletable.
    * @internal
    */
   isDeletable(): boolean {
@@ -306,6 +315,7 @@ export class Bubble implements IBubble {
 
   /**
    * Update the style of this bubble when it is dragged over a delete area.
+   *
    * @param _enable True if the bubble is about to be deleted, false otherwise.
    */
   setDeleteStyle(_enable: boolean) {}
@@ -313,6 +323,7 @@ export class Bubble implements IBubble {
 
   /**
    * Handle a mouse-down on bubble's resize corner.
+   *
    * @param e Mouse down event.
    */
   private resizeMouseDown_(e: MouseEvent) {
@@ -340,6 +351,7 @@ export class Bubble implements IBubble {
 
   /**
    * Resize this bubble to follow the mouse.
+   *
    * @param e Mouse move event.
    */
   private resizeMouseMove_(e: MouseEvent) {
@@ -354,6 +366,7 @@ export class Bubble implements IBubble {
 
   /**
    * Register a function as a callback event for when the bubble is resized.
+   *
    * @param callback The function to call on resize.
    */
   registerResizeEvent(callback: () => void) {
@@ -362,6 +375,7 @@ export class Bubble implements IBubble {
 
   /**
    * Register a function as a callback event for when the bubble is moved.
+   *
    * @param callback The function to call on move.
    */
   registerMoveEvent(callback: () => void) {
@@ -370,7 +384,8 @@ export class Bubble implements IBubble {
 
   /**
    * Move this bubble to the top of the stack.
-   * @return Whether or not the bubble has been moved.
+   *
+   * @returns Whether or not the bubble has been moved.
    * @internal
    */
   promote(): boolean {
@@ -385,6 +400,7 @@ export class Bubble implements IBubble {
   /**
    * Notification that the anchor has moved.
    * Update the arrow and bubble accordingly.
+   *
    * @param xy Absolute location.
    */
   setAnchorLocation(xy: Coordinate) {
@@ -455,11 +471,12 @@ export class Bubble implements IBubble {
   /**
    * Calculate the what percentage of the bubble overlaps with the visible
    * workspace (what percentage of the bubble is visible).
+   *
    * @param relativeMin The position of the top-left corner of the bubble
    *     relative to the anchor point.
    * @param viewMetrics The view metrics of the workspace the bubble will appear
    *     in.
-   * @return The percentage of the bubble that is visible.
+   * @returns The percentage of the bubble that is visible.
    */
   private getOverlap_(
       relativeMin: {x: number, y: number},
@@ -503,9 +520,10 @@ export class Bubble implements IBubble {
    * Calculate what the optimal horizontal position of the top-left corner of
    * the bubble is (relative to the anchor point) so that the most area of the
    * bubble is shown.
+   *
    * @param viewMetrics The view metrics of the workspace the bubble will appear
    *     in.
-   * @return The optimal horizontal position of the top-left corner of the
+   * @returns The optimal horizontal position of the top-left corner of the
    *     bubble.
    */
   private getOptimalRelativeLeft_(viewMetrics: ContainerRegion): number {
@@ -561,7 +579,7 @@ export class Bubble implements IBubble {
    *
    * @param viewMetrics The view metrics of the workspace the bubble will appear
    *     in.
-   * @return The optimal vertical position of the top-left corner of the bubble.
+   * @returns The optimal vertical position of the top-left corner of the bubble.
    */
   private getOptimalRelativeTop_(viewMetrics: ContainerRegion): number {
     let relativeTop = -this.height_ / 4;
@@ -604,6 +622,7 @@ export class Bubble implements IBubble {
 
   /**
    * Move the bubble group to the specified location in workspace coordinates.
+   *
    * @param x The x position to move to.
    * @param y The y position to move to.
    * @internal
@@ -615,6 +634,7 @@ export class Bubble implements IBubble {
 
   /**
    * Triggers a move callback if one exists at the end of a drag.
+   *
    * @param adding True if adding, false if removing.
    * @internal
    */
@@ -626,7 +646,8 @@ export class Bubble implements IBubble {
 
   /**
    * Get the dimensions of this bubble.
-   * @return The height and width of the bubble.
+   *
+   * @returns The height and width of the bubble.
    */
   getBubbleSize(): Size {
     return new Size(this.width_, this.height_);
@@ -634,6 +655,7 @@ export class Bubble implements IBubble {
 
   /**
    * Size this bubble.
+   *
    * @param width Width of the bubble.
    * @param height Height of the bubble.
    */
@@ -745,6 +767,7 @@ export class Bubble implements IBubble {
 
   /**
    * Change the colour of a bubble.
+   *
    * @param hexColour Hex code of colour.
    */
   setColour(hexColour: string) {
@@ -768,6 +791,7 @@ export class Bubble implements IBubble {
   /**
    * Move this bubble during a drag, taking into account whether or not there is
    * a drag surface.
+   *
    * @param dragSurface The surface that carries rendered items during a drag,
    *     or null if no drag surface is in use.
    * @param newLoc The location to translate to, in workspace coordinates.
@@ -791,7 +815,8 @@ export class Bubble implements IBubble {
   /**
    * Return the coordinates of the top-left corner of this bubble's body
    * relative to the drawing surface's origin (0,0), in workspace units.
-   * @return Object with .x and .y properties.
+   *
+   * @returns Object with .x and .y properties.
    */
   getRelativeToSurfaceXY(): Coordinate {
     return new Coordinate(
@@ -805,6 +830,7 @@ export class Bubble implements IBubble {
    * Set whether auto-layout of this bubble is enabled.  The first time a bubble
    * is shown it positions itself to not cover any blocks.  Once a user has
    * dragged it to reposition, it renders where the user put it.
+   *
    * @param enable True if auto-layout should be enabled, false otherwise.
    * @internal
    */
@@ -826,6 +852,7 @@ export class Bubble implements IBubble {
 
   /**
    * Handle a mouse-up event while dragging a bubble's border or resize handle.
+   *
    * @param _e Mouse up event.
    */
   private static bubbleMouseUp_(_e: MouseEvent) {
@@ -835,8 +862,9 @@ export class Bubble implements IBubble {
 
   /**
    * Create the text for a non editable bubble.
+   *
    * @param text The text to display.
-   * @return The top-level node of the text.
+   * @returns The top-level node of the text.
    * @internal
    */
   static textToDom(text: string): SVGTextElement {
@@ -856,10 +884,11 @@ export class Bubble implements IBubble {
 
   /**
    * Creates a bubble that can not be edited.
+   *
    * @param paragraphElement The text element for the non editable bubble.
    * @param block The block that the bubble is attached to.
    * @param iconXY The coordinate of the icon.
-   * @return The non editable bubble.
+   * @returns The non editable bubble.
    * @internal
    */
   static createNonEditableBubble(

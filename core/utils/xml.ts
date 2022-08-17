@@ -7,6 +7,7 @@
  * XML element manipulation.
  * These methods are not specific to Blockly, and could be factored out into
  * a JavaScript framework such as Closure.
+ *
  * @namespace Blockly.utils.xml
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -15,6 +16,7 @@ goog.declareModuleId('Blockly.utils.xml');
 
 /**
  * Namespace for Blockly's XML.
+ *
  * @alias Blockly.utils.xml.NAME_SPACE
  */
 export const NAME_SPACE = 'https://developers.google.com/blockly/xml';
@@ -29,7 +31,8 @@ let xmlDocument: Document = globalThis['document'];
 
 /**
  * Get the document object to use for XML serialization.
- * @return The document object.
+ *
+ * @returns The document object.
  * @alias Blockly.utils.xml.getDocument
  */
 export function getDocument(): Document {
@@ -38,6 +41,7 @@ export function getDocument(): Document {
 
 /**
  * Get the document object to use for XML serialization.
+ *
  * @param document The document object to use.
  * @alias Blockly.utils.xml.setDocument
  */
@@ -47,8 +51,9 @@ export function setDocument(document: Document) {
 
 /**
  * Create DOM element for XML.
+ *
  * @param tagName Name of DOM element.
- * @return New DOM element.
+ * @returns New DOM element.
  * @alias Blockly.utils.xml.createElement
  */
 export function createElement(tagName: string): Element {
@@ -57,8 +62,9 @@ export function createElement(tagName: string): Element {
 
 /**
  * Create text element for XML.
+ *
  * @param text Text content.
- * @return New DOM text node.
+ * @returns New DOM text node.
  * @alias Blockly.utils.xml.createTextNode
  */
 export function createTextNode(text: string): Text {
@@ -67,8 +73,9 @@ export function createTextNode(text: string): Text {
 
 /**
  * Converts an XML string into a DOM tree.
+ *
  * @param text XML string.
- * @return The DOM document.
+ * @returns The DOM document.
  * @throws if XML doesn't parse.
  * @alias Blockly.utils.xml.textToDomDocument
  */
@@ -80,8 +87,9 @@ export function textToDomDocument(text: string): Document {
 /**
  * Converts a DOM structure into plain text.
  * Currently the text format is fairly ugly: all one line with no whitespace.
+ *
  * @param dom A tree of XML nodes.
- * @return Text representation.
+ * @returns Text representation.
  * @alias Blockly.utils.xml.domToText
  */
 export function domToText(dom: Node): string {

@@ -5,6 +5,7 @@
 
 /**
  * Components for creating connections between blocks.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -26,6 +27,7 @@ import * as Xml from './xml.js';
 
 /**
  * Class for a connection between blocks.
+ *
  * @alias Blockly.Connection
  */
 export class Connection implements IASTNodeLocationWithBlock {
@@ -47,6 +49,7 @@ export class Connection implements IASTNodeLocationWithBlock {
 
   /**
    * Has this connection been disposed of?
+   *
    * @internal
    */
   disposed = false;
@@ -59,12 +62,14 @@ export class Connection implements IASTNodeLocationWithBlock {
 
   /**
    * Horizontal location of this connection.
+   *
    * @internal
    */
   x = 0;
 
   /**
    * Vertical location of this connection.
+   *
    * @internal
    */
   y = 0;
@@ -82,6 +87,7 @@ export class Connection implements IASTNodeLocationWithBlock {
   /**
    * Connect two connections together.  This is the connection on the superior
    * block.
+   *
    * @param childConnection Connection on inferior block.
    */
   protected connect_(childConnection: Connection) {
@@ -139,6 +145,7 @@ export class Connection implements IASTNodeLocationWithBlock {
 
   /**
    * Dispose of this connection and deal with connected blocks.
+   *
    * @internal
    */
   dispose() {
@@ -159,7 +166,8 @@ export class Connection implements IASTNodeLocationWithBlock {
 
   /**
    * Get the source block for this connection.
-   * @return The source block.
+   *
+   * @returns The source block.
    */
   getSourceBlock(): Block {
     return this.sourceBlock_;
@@ -168,7 +176,8 @@ export class Connection implements IASTNodeLocationWithBlock {
   /**
    * Does the connection belong to a superior block (higher in the source
    * stack)?
-   * @return True if connection faces down or right.
+   *
+   * @returns True if connection faces down or right.
    */
   isSuperior(): boolean {
     return this.type === ConnectionType.INPUT_VALUE ||
@@ -177,7 +186,8 @@ export class Connection implements IASTNodeLocationWithBlock {
 
   /**
    * Is the connection connected?
-   * @return True if connection is connected to another connection.
+   *
+   * @returns True if connection is connected to another connection.
    */
   isConnected(): boolean {
     return !!this.targetConnection;
@@ -185,7 +195,8 @@ export class Connection implements IASTNodeLocationWithBlock {
 
   /**
    * Get the workspace's connection type checker object.
-   * @return The connection type checker for the source block's workspace.
+   *
+   * @returns The connection type checker for the source block's workspace.
    * @internal
    */
   getConnectionChecker(): IConnectionChecker {
@@ -195,6 +206,7 @@ export class Connection implements IASTNodeLocationWithBlock {
   /**
    * Called when an attempted connection fails. NOP by default (i.e. for
    * headless workspaces).
+   *
    * @param _otherConnection Connection that this connection failed to connect
    *     to.
    * @internal
@@ -204,8 +216,9 @@ export class Connection implements IASTNodeLocationWithBlock {
 
   /**
    * Connect this connection to another connection.
+   *
    * @param otherConnection Connection to connect to.
-   * @return Whether the the blocks are now connected or not.
+   * @returns Whether the the blocks are now connected or not.
    */
   connect(otherConnection: Connection): boolean {
     if (this.targetConnection === otherConnection) {
@@ -275,6 +288,7 @@ export class Connection implements IASTNodeLocationWithBlock {
 
   /**
    * Disconnect two blocks that are connected by this connection.
+   *
    * @param parentBlock The superior block.
    * @param childBlock The inferior block.
    */
@@ -306,7 +320,8 @@ export class Connection implements IASTNodeLocationWithBlock {
 
   /**
    * Returns the block that this connection connects to.
-   * @return The connected block or null if none is connected.
+   *
+   * @returns The connected block or null if none is connected.
    */
   targetBlock(): Block|null {
     if (this.isConnected()) {
@@ -331,9 +346,10 @@ export class Connection implements IASTNodeLocationWithBlock {
 
   /**
    * Change a connection's compatibility.
+   *
    * @param check Compatible value type or list of value types. Null if all
    *     types are compatible.
-   * @return The connection being modified (to allow chaining).
+   * @returns The connection being modified (to allow chaining).
    */
   setCheck(check: string|string[]|null): Connection {
     if (check) {
@@ -350,7 +366,8 @@ export class Connection implements IASTNodeLocationWithBlock {
 
   /**
    * Get a connection's compatibility.
-   * @return List of compatible value types.
+   *
+   * @returns List of compatible value types.
    *     Null if all types are compatible.
    */
   getCheck(): string[]|null {
@@ -359,6 +376,7 @@ export class Connection implements IASTNodeLocationWithBlock {
 
   /**
    * Changes the connection's shadow block.
+   *
    * @param shadowDom DOM representation of a block or null.
    */
   setShadowDom(shadowDom: Element|null) {
@@ -367,11 +385,12 @@ export class Connection implements IASTNodeLocationWithBlock {
 
   /**
    * Returns the xml representation of the connection's shadow block.
+   *
    * @param returnCurrent If true, and the shadow block is currently attached to
    *     this connection, this serializes the state of that block and returns it
    *     (so that field values are correct). Otherwise the saved shadowDom is
    *     just returned.
-   * @return Shadow DOM representation of a block or null.
+   * @returns Shadow DOM representation of a block or null.
    */
   getShadowDom(returnCurrent?: boolean): Element|null {
     return returnCurrent && this.targetBlock()!.isShadow() ?
@@ -381,6 +400,7 @@ export class Connection implements IASTNodeLocationWithBlock {
 
   /**
    * Changes the connection's shadow block.
+   *
    * @param shadowState An state represetation of the block or null.
    */
   setShadowState(shadowState: blocks.State|null) {
@@ -390,11 +410,12 @@ export class Connection implements IASTNodeLocationWithBlock {
   /**
    * Returns the serialized object representation of the connection's shadow
    * block.
+   *
    * @param returnCurrent If true, and the shadow block is currently attached to
    *     this connection, this serializes the state of that block and returns it
    *     (so that field values are correct). Otherwise the saved state is just
    *     returned.
-   * @return Serialized object representation of the block, or null.
+   * @returns Serialized object representation of the block, or null.
    */
   getShadowState(returnCurrent?: boolean): blocks.State|null {
     if (returnCurrent && this.targetBlock() && this.targetBlock()!.isShadow()) {
@@ -411,8 +432,9 @@ export class Connection implements IASTNodeLocationWithBlock {
    * and always return an empty list (the default).
    * {@link Blockly.RenderedConnection} overrides this behavior with a list
    * computed from the rendered positioning.
+   *
    * @param _maxLimit The maximum radius to another connection.
-   * @return List of connections.
+   * @returns List of connections.
    * @internal
    */
   neighbours(_maxLimit: number): Connection[] {
@@ -421,7 +443,8 @@ export class Connection implements IASTNodeLocationWithBlock {
 
   /**
    * Get the parent input of a connection.
-   * @return The input that the connection belongs to or null if no parent
+   *
+   * @returns The input that the connection belongs to or null if no parent
    *     exists.
    * @internal
    */
@@ -440,7 +463,8 @@ export class Connection implements IASTNodeLocationWithBlock {
   /**
    * This method returns a string describing this Connection in developer terms
    * (English only). Intended to on be used in console logs and errors.
-   * @return The description.
+   *
+   * @returns The description.
    */
   toString(): string {
     const block = this.sourceBlock_;
@@ -475,7 +499,8 @@ export class Connection implements IASTNodeLocationWithBlock {
   /**
    * Returns the state of the shadowDom_ and shadowState_ properties, then
    * temporarily sets those properties to null so no shadow respawns.
-   * @return The state of both the shadowDom_ and shadowState_ properties.
+   *
+   * @returns The state of both the shadowDom_ and shadowState_ properties.
    */
   private stashShadowState_():
       {shadowDom: Element|null, shadowState: blocks.State|null} {
@@ -489,6 +514,7 @@ export class Connection implements IASTNodeLocationWithBlock {
 
   /**
    * Reapplies the stashed state of the shadowDom_ and shadowState_ properties.
+   *
    * @param param0 The state to reapply to the shadowDom_ and shadowState_
    *     properties.
    */
@@ -502,6 +528,7 @@ export class Connection implements IASTNodeLocationWithBlock {
 
   /**
    * Sets the state of the shadow of this connection.
+   *
    * @param param0 The state to set the shadow of this connection to.
    */
   private setShadowStateInternal_({shadowDom = null, shadowState = null}: {
@@ -537,9 +564,10 @@ export class Connection implements IASTNodeLocationWithBlock {
   /**
    * Creates a shadow block based on the current shadowState_ or shadowDom_.
    * shadowState_ gets priority.
+   *
    * @param attemptToConnect Whether to try to connect the shadow block to this
    *     connection or not.
-   * @return The shadow block that was created, or null if both the shadowState_
+   * @returns The shadow block that was created, or null if both the shadowState_
    *     and shadowDom_ are null.
    */
   private createShadowBlock_(attemptToConnect: boolean): Block|null {
@@ -590,6 +618,7 @@ export class Connection implements IASTNodeLocationWithBlock {
   /**
    * Saves the given shadow block to both the shadowDom_ and shadowState_
    * properties, in their respective serialized forms.
+   *
    * @param shadow The shadow to serialize, or null.
    */
   private serializeShadow_(shadow: Block|null) {
@@ -604,9 +633,10 @@ export class Connection implements IASTNodeLocationWithBlock {
    * Returns the connection (starting at the startBlock) which will accept
    * the given connection. This includes compatible connection types and
    * connection checks.
+   *
    * @param startBlock The block on which to start the search.
    * @param orphanConnection The connection that is looking for a home.
-   * @return The suitable connection point on the chain of blocks, or null.
+   * @returns The suitable connection point on the chain of blocks, or null.
    */
   static getConnectionForOrphanedConnection(
       startBlock: Block, orphanConnection: Connection): Connection|null {
@@ -626,6 +656,7 @@ export class Connection implements IASTNodeLocationWithBlock {
 
 /**
  * Update two connections to target each other.
+ *
  * @param first The first connection to update.
  * @param second The second connection to update.
  */
@@ -641,9 +672,10 @@ function connectReciprocally(first: Connection, second: Connection) {
  * block, if one can be found. If the block has multiple compatible connections
  * (even if they are filled) this returns null. If the block has no compatible
  * connections, this returns null.
+ *
  * @param block The superior block.
  * @param orphanBlock The inferior block.
- * @return The suitable connection point on 'block', or null.
+ * @returns The suitable connection point on 'block', or null.
  */
 function getSingleConnection(block: Block, orphanBlock: Block): Connection|
     null {
@@ -669,9 +701,10 @@ function getSingleConnection(block: Block, orphanBlock: Block): Connection|
  * are zero or multiple eligible connections, returns null.  Otherwise
  * returns the only input on the last block in the chain.
  * Terminates early for shadow blocks.
+ *
  * @param startBlock The block on which to start the search.
  * @param orphanBlock The block that is looking for a home.
- * @return The suitable connection point on the chain of blocks, or null.
+ * @returns The suitable connection point on the chain of blocks, or null.
  */
 function getConnectionForOrphanedOutput(
     startBlock: Block, orphanBlock: Block): Connection|null {

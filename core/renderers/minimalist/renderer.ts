@@ -5,6 +5,7 @@
 
 /**
  * Minimalist renderer.
+ *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -22,6 +23,7 @@ import {RenderInfo} from './info.js';
 
 /**
  * The minimalist renderer.
+ *
  * @alias Blockly.minimalist.Renderer
  */
 export class Renderer extends BaseRenderer {
@@ -35,7 +37,8 @@ export class Renderer extends BaseRenderer {
 
   /**
    * Create a new instance of the renderer's constant provider.
-   * @return The constant provider.
+   *
+   * @returns The constant provider.
    */
   protected override makeConstants_(): ConstantProvider {
     return new ConstantProvider();
@@ -43,8 +46,9 @@ export class Renderer extends BaseRenderer {
 
   /**
    * Create a new instance of the renderer's render info object.
+   *
    * @param block The block to measure.
-   * @return The render info object.
+   * @returns The render info object.
    */
   protected override makeRenderInfo_(block: BlockSvg): RenderInfo {
     return new RenderInfo(this, block);
@@ -52,10 +56,11 @@ export class Renderer extends BaseRenderer {
 
   /**
    * Create a new instance of the renderer's drawer.
+   *
    * @param block The block to render.
    * @param info An object containing all information needed to render this
    *     block.
-   * @return The drawer.
+   * @returns The drawer.
    */
   protected override makeDrawer_(block: BlockSvg, info: BaseRenderInfo):
       Drawer {

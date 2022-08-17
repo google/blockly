@@ -5,6 +5,7 @@
 
 /**
  * Number input field
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -19,6 +20,7 @@ import type {Sentinel} from './utils/sentinel.js';
 
 /**
  * Class for an editable number field.
+ *
  * @alias Blockly.FieldNumber
  */
 export class FieldNumber extends FieldTextInput {
@@ -85,6 +87,7 @@ export class FieldNumber extends FieldTextInput {
 
   /**
    * Configure the field based on the given map of options.
+   *
    * @param config A map of options to configure the field based on.
    */
   protected override configure_(config: FieldNumberConfig) {
@@ -102,6 +105,7 @@ export class FieldNumber extends FieldTextInput {
    * precision. The least significant digit place is inferred from the
    * precision. Integers values can be enforces by choosing an integer
    * precision.
+   *
    * @param min Minimum value.
    * @param max Maximum value.
    * @param precision Precision for value.
@@ -118,6 +122,7 @@ export class FieldNumber extends FieldTextInput {
   /**
    * Sets the minimum value this field can contain. Updates the value to
    * reflect.
+   *
    * @param min Minimum value.
    */
   setMin(min: number|string|undefined|null) {
@@ -128,6 +133,7 @@ export class FieldNumber extends FieldTextInput {
   /**
    * Sets the minimum value this field can contain. Called internally to avoid
    * value updates.
+   *
    * @param min Minimum value.
    */
   private setMinInternal_(min: number|string|undefined|null) {
@@ -144,7 +150,8 @@ export class FieldNumber extends FieldTextInput {
   /**
    * Returns the current minimum value this field can contain. Default is
    * -Infinity.
-   * @return The current minimum value this field can contain.
+   *
+   * @returns The current minimum value this field can contain.
    */
   getMin(): number {
     return this.min_;
@@ -153,6 +160,7 @@ export class FieldNumber extends FieldTextInput {
   /**
    * Sets the maximum value this field can contain. Updates the value to
    * reflect.
+   *
    * @param max Maximum value.
    */
   setMax(max: number|string|undefined|null) {
@@ -163,6 +171,7 @@ export class FieldNumber extends FieldTextInput {
   /**
    * Sets the maximum value this field can contain. Called internally to avoid
    * value updates.
+   *
    * @param max Maximum value.
    */
   private setMaxInternal_(max: number|string|undefined|null) {
@@ -179,7 +188,8 @@ export class FieldNumber extends FieldTextInput {
   /**
    * Returns the current maximum value this field can contain. Default is
    * Infinity.
-   * @return The current maximum value this field can contain.
+   *
+   * @returns The current maximum value this field can contain.
    */
   getMax(): number {
     return this.max_;
@@ -188,6 +198,7 @@ export class FieldNumber extends FieldTextInput {
   /**
    * Sets the precision of this field's value, i.e. the number to which the
    * value is rounded. Updates the field to reflect.
+   *
    * @param precision The number to which the field's value is rounded.
    */
   setPrecision(precision: number|string|undefined|null) {
@@ -198,6 +209,7 @@ export class FieldNumber extends FieldTextInput {
   /**
    * Sets the precision of this field's value. Called internally to avoid
    * value updates.
+   *
    * @param precision The number to which the field's value is rounded.
    */
   private setPrecisionInternal_(precision: number|string|undefined|null) {
@@ -223,7 +235,8 @@ export class FieldNumber extends FieldTextInput {
    * Returns the current precision of this field. The precision being the
    * number to which the field's value is rounded. A precision of 0 means that
    * the value is not rounded.
-   * @return The number to which this field's value is rounded.
+   *
+   * @returns The number to which this field's value is rounded.
    */
   getPrecision(): number {
     return this.precision_;
@@ -232,8 +245,9 @@ export class FieldNumber extends FieldTextInput {
   /**
    * Ensure that the input value is a valid number (must fulfill the
    * constraints placed on the field).
+   *
    * @param opt_newValue The input value.
-   * @return A valid number, or null if invalid.
+   * @returns A valid number, or null if invalid.
    */
   protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
       number|null {
@@ -271,7 +285,8 @@ export class FieldNumber extends FieldTextInput {
 
   /**
    * Create the number input editor widget.
-   * @return The newly created number input editor.
+   *
+   * @returns The newly created number input editor.
    */
   protected override widgetCreate_(): HTMLElement {
     const htmlInput = super.widgetCreate_();
@@ -288,8 +303,9 @@ export class FieldNumber extends FieldTextInput {
 
   /**
    * Construct a FieldNumber from a JSON arg object.
+   *
    * @param options A JSON object with options (value, min, max, and precision).
-   * @return The new field instance.
+   * @returns The new field instance.
    * @nocollapse
    * @internal
    */

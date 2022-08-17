@@ -1,4 +1,4 @@
-/** @fileoverview Re-exports of Blockly.minimalist.* modules. */
+/** @file Re-exports of Blockly.minimalist.* modules. */
 
 /**
  * Copyright 2021 Google LLC
@@ -7,6 +7,7 @@
 
 /**
  * Re-exports of Blockly.minimalist.* modules.
+ *
  * @namespace Blockly.minimalist
  */
 import * as goog from '../../../closure/goog/goog.js';

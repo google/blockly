@@ -5,6 +5,7 @@
 
 /**
  * Utility methods realted to figuring out positions of SVG elements.
+ *
  * @namespace Blockly.utils.svgMath
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -40,8 +41,9 @@ const XY_STYLE_REGEX: RegExp =
 /**
  * Return the coordinates of the top-left corner of this element relative to
  * its parent.  Only for SVG elements and children (e.g. rect, g, path).
+ *
  * @param element SVG element to find the coordinates of.
- * @return Object with .x and .y properties.
+ * @returns Object with .x and .y properties.
  * @alias Blockly.utils.svgMath.getRelativeXY
  */
 export function getRelativeXY(element: Element): Coordinate {
@@ -85,9 +87,10 @@ export function getRelativeXY(element: Element): Coordinate {
 /**
  * Return the coordinates of the top-left corner of this element relative to
  * the div Blockly was injected into.
+ *
  * @param element SVG element to find the coordinates of. If this is not a child
  *     of the div Blockly was injected into, the behaviour is undefined.
- * @return Object with .x and .y properties.
+ * @returns Object with .x and .y properties.
  * @alias Blockly.utils.svgMath.getInjectionDivXY
  */
 export function getInjectionDivXY(element: Element): Coordinate {
@@ -109,7 +112,8 @@ export function getInjectionDivXY(element: Element): Coordinate {
 /**
  * Check if 3D transforms are supported by adding an element
  * and attempting to set the property.
- * @return True if 3D transforms are supported.
+ *
+ * @returns True if 3D transforms are supported.
  * @alias Blockly.utils.svgMath.is3dSupported
  */
 export function is3dSupported(): boolean {
@@ -169,7 +173,8 @@ export function is3dSupported(): boolean {
 /**
  * Get the position of the current viewport in window coordinates.  This takes
  * scroll into account.
- * @return An object containing window width, height, and scroll position in
+ *
+ * @returns An object containing window width, height, and scroll position in
  *     window coordinates.
  * @alias Blockly.utils.svgMath.getViewportBBox
  * @internal
@@ -185,7 +190,8 @@ export function getViewportBBox(): Rect {
 /**
  * Gets the document scroll distance as a coordinate object.
  * Copied from Closure's goog.dom.getDocumentScroll.
- * @return Object with values 'x' and 'y'.
+ *
+ * @returns Object with values 'x' and 'y'.
  * @alias Blockly.utils.svgMath.getDocumentScroll
  */
 export function getDocumentScroll(): Coordinate {
@@ -203,10 +209,11 @@ export function getDocumentScroll(): Coordinate {
 
 /**
  * Converts screen coordinates to workspace coordinates.
+ *
  * @param ws The workspace to find the coordinates on.
  * @param screenCoordinates The screen coordinates to be converted to workspace
  *     coordinates
- * @return The workspace coordinates.
+ * @returns The workspace coordinates.
  * @alias Blockly.utils.svgMath.screenToWsCoordinates
  */
 export function screenToWsCoordinates(
@@ -239,8 +246,9 @@ export function screenToWsCoordinates(
 
 /**
  * Returns the dimensions of the specified SVG image.
+ *
  * @param svg SVG image.
- * @return Contains width and height properties.
+ * @returns Contains width and height properties.
  * @deprecated Use workspace.getCachedParentSvgSize. (2021 March 5)
  * @alias Blockly.utils.svgMath.svgSize
  */

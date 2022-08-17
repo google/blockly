@@ -6,6 +6,7 @@
 /**
  * The class representing a cursor.
  * Used primarily for keyboard navigation.
+ *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -20,6 +21,7 @@ import {Marker} from './marker.js';
 /**
  * Class for a cursor.
  * A cursor controls how a user navigates the Blockly AST.
+ *
  * @alias Blockly.Cursor
  */
 export class Cursor extends Marker {
@@ -32,7 +34,8 @@ export class Cursor extends Marker {
 
   /**
    * Find the next connection, field, or block.
-   * @return The next element, or null if the current node is not set or there
+   *
+   * @returns The next element, or null if the current node is not set or there
    *     is no next value.
    */
   next(): ASTNode|null {
@@ -56,7 +59,8 @@ export class Cursor extends Marker {
 
   /**
    * Find the in connection or field.
-   * @return The in element, or null if the current node is not set or there is
+   *
+   * @returns The in element, or null if the current node is not set or there is
    *     no in value.
    */
   in(): ASTNode|null {
@@ -80,7 +84,8 @@ export class Cursor extends Marker {
 
   /**
    * Find the previous connection, field, or block.
-   * @return The previous element, or null if the current node is not set or
+   *
+   * @returns The previous element, or null if the current node is not set or
    *     there is no previous value.
    */
   prev(): ASTNode|null {
@@ -104,7 +109,8 @@ export class Cursor extends Marker {
 
   /**
    * Find the out connection, field, or block.
-   * @return The out element, or null if the current node is not set or there is
+   *
+   * @returns The out element, or null if the current node is not set or there is
    *     no out value.
    */
   out(): ASTNode|null {

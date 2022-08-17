@@ -6,6 +6,7 @@
 /**
  * Base class representing the space a connection takes up during
  * rendering.
+ *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -22,6 +23,7 @@ import {Types} from './types.js';
 /**
  * The base class to represent a connection and the space that it takes up on
  * the block.
+ *
  * @alias Blockly.blockRendering.Connection
  */
 export class Connection extends Measurable {

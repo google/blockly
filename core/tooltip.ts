@@ -10,6 +10,7 @@
  * If the tooltip is a string, or a function that returns a string, that message
  * will be displayed. If the tooltip is an SVG element, then that object's
  * tooltip will be used. Third, call bindMouseEvents(e) passing the SVG element.
+ *
  * @namespace Blockly.Tooltip
  */
 import * as goog from '../closure/goog/goog.js';
@@ -25,6 +26,7 @@ import * as blocklyString from './utils/string.js';
  * Either a string, an object containing a tooltip property, or a function which
  * returns either a string, or another arbitrarily nested function which
  * eventually unwinds to a string.
+ *
  * @alias Blockly.Tooltip.TipInfo
  */
 export type TipInfo =
@@ -35,6 +37,7 @@ export type TipInfo =
  * 1st parameter: the div element to render content into.
  * 2nd parameter: the element being moused over (i.e., the element for which the
  * tooltip should be shown).
+ *
  * @alias Blockly.Tooltip.CustomTooltip
  */
 export type CustomTooltip = (p1: Element, p2: Element) => AnyDuringMigration;
@@ -49,6 +52,7 @@ let customTooltip: CustomTooltip|undefined = undefined;
 /**
  * Sets a custom function that will be called if present instead of the default
  * tooltip UI.
+ *
  * @param customFn A custom tooltip used to render an alternate tooltip UI.
  * @alias Blockly.Tooltip.setCustomTooltip
  */
@@ -58,6 +62,7 @@ export function setCustomTooltip(customFn: CustomTooltip) {
 
 /**
  * Gets the custom tooltip function.
+ *
  * @returns The custom tooltip function, if defined.
  */
 export function getCustomTooltip(): CustomTooltip|undefined {
@@ -69,6 +74,7 @@ let visible = false;
 
 /**
  * Returns whether or not a tooltip is showing
+ *
  * @returns True if a tooltip is showing
  * @alias Blockly.Tooltip.isVisible
  */
@@ -81,6 +87,7 @@ let blocked = false;
 
 /**
  * Maximum width (in characters) of a tooltip.
+ *
  * @alias Blockly.Tooltip.LIMIT
  */
 export const LIMIT = 50;
@@ -112,30 +119,35 @@ let poisonedElement: AnyDuringMigration = null;
 
 /**
  * Horizontal offset between mouse cursor and tooltip.
+ *
  * @alias Blockly.Tooltip.OFFSET_X
  */
 export const OFFSET_X = 0;
 
 /**
  * Vertical offset between mouse cursor and tooltip.
+ *
  * @alias Blockly.Tooltip.OFFSET_Y
  */
 export const OFFSET_Y = 10;
 
 /**
  * Radius mouse can move before killing tooltip.
+ *
  * @alias Blockly.Tooltip.RADIUS_OK
  */
 export const RADIUS_OK = 10;
 
 /**
  * Delay before tooltip appears.
+ *
  * @alias Blockly.Tooltip.HOVER_MS
  */
 export const HOVER_MS = 750;
 
 /**
  * Horizontal padding between tooltip and screen edge.
+ *
  * @alias Blockly.Tooltip.MARGINS
  */
 export const MARGINS = 5;
@@ -145,6 +157,7 @@ let containerDiv: HTMLDivElement|null = null;
 
 /**
  * Returns the HTML tooltip container.
+ *
  * @returns The HTML tooltip container.
  * @alias Blockly.Tooltip.getDiv
  */
@@ -154,8 +167,9 @@ export function getDiv(): HTMLDivElement|null {
 
 /**
  * Returns the tooltip text for the given element.
+ *
  * @param object The object to get the tooltip text of.
- * @return The tooltip text of the element.
+ * @returns The tooltip text of the element.
  * @alias Blockly.Tooltip.getTooltipOfObject
  */
 export function getTooltipOfObject(object: AnyDuringMigration|null): string {
@@ -176,8 +190,9 @@ export function getTooltipOfObject(object: AnyDuringMigration|null): string {
 /**
  * Returns the target object that the given object is targeting for its
  * tooltip. Could be the object itself.
+ *
  * @param obj The object are trying to find the target tooltip object of.
- * @return The target tooltip object.
+ * @returns The target tooltip object.
  */
 function getTargetObject(obj: object|null): {tooltip: AnyDuringMigration}|null {
   while (obj && (obj as any).tooltip) {
@@ -192,6 +207,7 @@ function getTargetObject(obj: object|null): {tooltip: AnyDuringMigration}|null {
 
 /**
  * Create the tooltip div and inject it onto the page.
+ *
  * @alias Blockly.Tooltip.createDom
  */
 export function createDom() {
@@ -207,6 +223,7 @@ export function createDom() {
 
 /**
  * Binds the required mouse events onto an SVG element.
+ *
  * @param element SVG element onto which tooltip is to be bound.
  * @alias Blockly.Tooltip.bindMouseEvents
  */
@@ -225,6 +242,7 @@ export function bindMouseEvents(element: Element) {
 
 /**
  * Unbinds tooltip mouse events from the SVG element.
+ *
  * @param element SVG element onto which tooltip is bound.
  * @alias Blockly.Tooltip.unbindMouseEvents
  */
@@ -241,6 +259,7 @@ export function unbindMouseEvents(element: Element) {
 /**
  * Hide the tooltip if the mouse is over a different object.
  * Initialize the tooltip to potentially appear for this object.
+ *
  * @param e Mouse event.
  */
 function onMouseOver(e: Event) {
@@ -262,6 +281,7 @@ function onMouseOver(e: Event) {
 
 /**
  * Hide the tooltip if the mouse leaves the object and enters the workspace.
+ *
  * @param _e Mouse event.
  */
 function onMouseOut(_e: Event) {
@@ -284,6 +304,7 @@ function onMouseOut(_e: Event) {
 /**
  * When hovering over an element, schedule a tooltip to be shown.  If a tooltip
  * is already visible, hide it if the mouse strays out of a certain radius.
+ *
  * @param e Mouse event.
  */
 function onMouseMove(e: Event) {
@@ -323,6 +344,7 @@ function onMouseMove(e: Event) {
 
 /**
  * Dispose of the tooltip.
+ *
  * @alias Blockly.Tooltip.dispose
  * @internal
  */
@@ -334,6 +356,7 @@ export function dispose() {
 
 /**
  * Hide the tooltip.
+ *
  * @alias Blockly.Tooltip.hide
  */
 export function hide() {
@@ -351,6 +374,7 @@ export function hide() {
 /**
  * Hide any in-progress tooltips and block showing new tooltips until the next
  * call to unblock().
+ *
  * @alias Blockly.Tooltip.block
  * @internal
  */
@@ -362,6 +386,7 @@ export function block() {
 /**
  * Unblock tooltips: allow them to be scheduled and shown according to their own
  * logic.
+ *
  * @alias Blockly.Tooltip.unblock
  * @internal
  */
@@ -398,6 +423,7 @@ function renderDefaultContent() {
 /**
  * Gets the coordinates for the tooltip div, taking into account the edges of
  * the screen to prevent showing the tooltip offscreen.
+ *
  * @param rtl True if the tooltip should be in right-to-left layout.
  * @returns Coordinates at which the tooltip div should be placed.
  */

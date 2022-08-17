@@ -5,6 +5,7 @@
 
 /**
  * Blockly menu item similar to Closure's goog.ui.MenuItem
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -17,6 +18,7 @@ import * as idGenerator from './utils/idgenerator.js';
 
 /**
  * Class representing an item in a menu.
+ *
  * @alias Blockly.MenuItem
  */
 export class MenuItem {
@@ -55,7 +57,8 @@ export class MenuItem {
 
   /**
    * Creates the menuitem's DOM.
-   * @return Completed DOM.
+   *
+   * @returns Completed DOM.
    */
   createDom(): Element {
     const element = (document.createElement('div'));
@@ -107,7 +110,8 @@ export class MenuItem {
 
   /**
    * Gets the menu item's element.
-   * @return The DOM element.
+   *
+   * @returns The DOM element.
    * @internal
    */
   getElement(): Element|null {
@@ -116,7 +120,8 @@ export class MenuItem {
 
   /**
    * Gets the unique ID for this menu item.
-   * @return Unique component ID.
+   *
+   * @returns Unique component ID.
    * @internal
    */
   getId(): string {
@@ -125,7 +130,8 @@ export class MenuItem {
 
   /**
    * Gets the value associated with the menu item.
-   * @return value Value associated with the menu item.
+   *
+   * @returns value Value associated with the menu item.
    * @internal
    */
   getValue(): AnyDuringMigration {
@@ -134,6 +140,7 @@ export class MenuItem {
 
   /**
    * Set menu item's rendering direction.
+   *
    * @param rtl True if RTL, false if LTR.
    * @internal
    */
@@ -143,6 +150,7 @@ export class MenuItem {
 
   /**
    * Set the menu item's accessibility role.
+   *
    * @param roleName Role name.
    * @internal
    */
@@ -153,6 +161,7 @@ export class MenuItem {
   /**
    * Sets the menu item to be checkable or not. Set to true for menu items
    * that represent checkable options.
+   *
    * @param checkable Whether the menu item is checkable.
    * @internal
    */
@@ -162,6 +171,7 @@ export class MenuItem {
 
   /**
    * Checks or unchecks the component.
+   *
    * @param checked Whether to check or uncheck the component.
    * @internal
    */
@@ -171,6 +181,7 @@ export class MenuItem {
 
   /**
    * Highlights or unhighlights the component.
+   *
    * @param highlight Whether to highlight or unhighlight the component.
    * @internal
    */
@@ -195,7 +206,8 @@ export class MenuItem {
 
   /**
    * Returns true if the menu item is enabled, false otherwise.
-   * @return Whether the menu item is enabled.
+   *
+   * @returns Whether the menu item is enabled.
    * @internal
    */
   isEnabled(): boolean {
@@ -204,6 +216,7 @@ export class MenuItem {
 
   /**
    * Enables or disables the menu item.
+   *
    * @param enabled Whether to enable or disable the menu item.
    * @internal
    */
@@ -214,6 +227,7 @@ export class MenuItem {
   /**
    * Performs the appropriate action when the menu item is activated
    * by the user.
+   *
    * @internal
    */
   performAction() {
@@ -225,6 +239,7 @@ export class MenuItem {
   /**
    * Set the handler that's called when the menu item is activated by the user.
    * `obj` will be used as the 'this' object in the function when called.
+   *
    * @param fn The handler.
    * @param obj Used as the 'this' object in fn when called.
    * @internal

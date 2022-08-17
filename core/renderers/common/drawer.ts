@@ -5,6 +5,7 @@
 
 /**
  * Methods for graphically rendering a block as SVG.
+ *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -28,6 +29,7 @@ import type {RenderInfo} from './info.js';
 
 /**
  * An object that draws a block based on the given rendering information.
+ *
  * @alias Blockly.blockRendering.Drawer
  */
 export class Drawer {
@@ -61,6 +63,7 @@ export class Drawer {
    * joined with spaces and set directly on the block.  This guarantees that
    * the steps are separated by spaces for improved readability, but isn't
    * required.
+   *
    * @internal
    */
   draw() {
@@ -150,6 +153,7 @@ export class Drawer {
 
   /**
    * Add steps for the jagged edge of a row on a collapsed block.
+   *
    * @param row The row to draw the side of.
    */
   protected drawJaggedEdge_(row: Row) {
@@ -161,6 +165,7 @@ export class Drawer {
   /**
    * Add steps for an external value input, rendered as a notch in the side
    * of the block.
+   *
    * @param row The row that this input belongs to.
    */
   protected drawValueInput_(row: Row) {
@@ -184,6 +189,7 @@ export class Drawer {
 
   /**
    * Add steps for a statement input.
+   *
    * @param row The row that this input belongs to.
    */
   protected drawStatementInput_(row: Row) {
@@ -209,6 +215,7 @@ export class Drawer {
   /**
    * Add steps for the right side of a row that does not have value or
    * statement input connections.
+   *
    * @param row The row to draw the side of.
    */
   protected drawRightSideRow_(row: Row) {
@@ -288,6 +295,7 @@ export class Drawer {
 
   /**
    * Push a field or icon's new position to its SVG root.
+   *
    * @param fieldInfo The rendering information for the field or icon.
    */
   protected layoutField_(fieldInfo: Icon|Field) {
@@ -335,6 +343,7 @@ export class Drawer {
 
   /**
    * Add steps for an inline input.
+   *
    * @param input The information about the input to render.
    */
   protected drawInlineInput_(input: InlineInput) {
@@ -360,6 +369,7 @@ export class Drawer {
    * Position the connection on an inline value input, taking into account
    * RTL and the small gap between the parent block and child block which lets
    * the parent block's dark path show through.
+   *
    * @param input The information about the input that the connection is on.
    */
   protected positionInlineInputConnection_(input: InlineInput) {
@@ -380,6 +390,7 @@ export class Drawer {
    * Position the connection on a statement input, taking into account
    * RTL and the small gap between the parent block and child block which lets
    * the parent block's dark path show through.
+   *
    * @param row The row that the connection is on.
    */
   protected positionStatementInputConnection_(row: Row) {
@@ -397,6 +408,7 @@ export class Drawer {
    * Position the connection on an external value input, taking into account
    * RTL and the small gap between the parent block and child block which lets
    * the parent block's dark path show through.
+   *
    * @param row The row that the connection is on.
    */
   protected positionExternalValueConnection_(row: Row) {

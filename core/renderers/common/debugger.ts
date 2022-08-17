@@ -5,6 +5,7 @@
 
 /**
  * Methods for rendering debug graphics.
+ *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -30,6 +31,7 @@ import type {RenderInfo} from './info.js';
 
 /**
  * An object that renders rectangles and dots for debugging rendering code.
+ *
  * @alias Blockly.blockRendering.Debug
  */
 export class Debug {
@@ -69,6 +71,7 @@ export class Debug {
 
   /**
    * Remove all elements the this object created on the last pass.
+   *
    * @internal
    */
   clearElems() {
@@ -82,6 +85,7 @@ export class Debug {
 
   /**
    * Draw a debug rectangle for a spacer (empty) row.
+   *
    * @param row The row to render.
    * @param cursorY The y position of the top of the row.
    * @param isRtl Whether the block is rendered RTL.
@@ -115,6 +119,7 @@ export class Debug {
 
   /**
    * Draw a debug rectangle for a horizontal spacer.
+   *
    * @param elem The spacer to render.
    * @param rowHeight The height of the container row.
    * @param isRtl Whether the block is rendered RTL.
@@ -149,6 +154,7 @@ export class Debug {
 
   /**
    * Draw a debug rectangle for an in-row element.
+   *
    * @param elem The element to render.
    * @param isRtl Whether the block is rendered RTL.
    * @internal
@@ -201,6 +207,7 @@ export class Debug {
    * Draw a circle at the location of the given connection.  Inputs and outputs
    * share the same colours, as do previous and next.  When positioned correctly
    * a connected pair will look like a bullseye.
+   *
    * @param conn The connection to circle.
    * @suppress {visibility} Suppress visibility of conn.offsetInBlock_ since
    * this is a debug module.
@@ -249,6 +256,7 @@ export class Debug {
 
   /**
    * Draw a debug rectangle for a non-empty row.
+   *
    * @param row The non-empty row to render.
    * @param cursorY The y position of the top of the row.
    * @param isRtl Whether the block is rendered RTL.
@@ -296,6 +304,7 @@ export class Debug {
 
   /**
    * Draw debug rectangles for a non-empty row and all of its subcomponents.
+   *
    * @param row The non-empty row to render.
    * @param cursorY The y position of the top of the row.
    * @param isRtl Whether the block is rendered RTL.
@@ -319,6 +328,7 @@ export class Debug {
 
   /**
    * Draw a debug rectangle around the entire block.
+   *
    * @param info Rendering information about the block to debug.
    * @internal
    */
@@ -364,6 +374,7 @@ export class Debug {
 
   /**
    * Do all of the work to draw debug information for the whole block.
+   *
    * @param block The block to draw debug information for.
    * @param info Rendering information about the block to debug.
    * @internal
@@ -411,6 +422,7 @@ export class Debug {
 
   /**
    * Show a debug filter to highlight that a block has been rendered.
+   *
    * @param svgPath The block's SVG path.
    * @internal
    */

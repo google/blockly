@@ -6,6 +6,7 @@
 /**
  * Contains top-level functions for serializing workspaces to plain JavaScript
  * objects.
+ *
  * @namespace Blockly.serialization.workspaces
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -22,8 +23,9 @@ import {WorkspaceSvg} from '../workspace_svg.js';
 
 /**
  * Returns the state of the workspace as a plain JavaScript object.
+ *
  * @param workspace The workspace to serialize.
- * @return The serialized state of the workspace.
+ * @returns The serialized state of the workspace.
  * @alias Blockly.serialization.workspaces.save
  */
 export function save(workspace: Workspace):
@@ -41,6 +43,7 @@ export function save(workspace: Workspace):
 
 /**
  * Loads the variable represented by the given state into the given workspace.
+ *
  * @param state The state of the workspace to deserialize into the workspace.
  * @param workspace The workspace to add the new state to.
  * @param param1 recordUndo: If true, events triggered by this function will be

@@ -5,6 +5,7 @@
 
 /**
  * Methods for graphically rendering a marker as SVG.
+ *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -44,6 +45,7 @@ const HEIGHT_MULTIPLIER = 3 / 4;
 
 /**
  * Class for a marker.
+ *
  * @alias Blockly.blockRendering.MarkerSvg
  */
 export class MarkerSvg {
@@ -90,7 +92,8 @@ export class MarkerSvg {
 
   /**
    * Return the root node of the SVG or null if none exists.
-   * @return The root SVG node.
+   *
+   * @returns The root SVG node.
    */
   getSvgRoot(): SVGElement {
     // AnyDuringMigration because:  Type 'SVGGElement | null' is not assignable
@@ -100,7 +103,8 @@ export class MarkerSvg {
 
   /**
    * Get the marker.
-   * @return The marker to draw for.
+   *
+   * @returns The marker to draw for.
    */
   getMarker(): Marker {
     return this.marker;
@@ -109,7 +113,8 @@ export class MarkerSvg {
   /**
    * True if the marker should be drawn as a cursor, false otherwise.
    * A cursor is drawn as a flashing line. A marker is drawn as a solid line.
-   * @return True if the marker is a cursor, false otherwise.
+   *
+   * @returns True if the marker is a cursor, false otherwise.
    */
   isCursor(): boolean {
     return this.marker.type === 'cursor';
@@ -117,7 +122,8 @@ export class MarkerSvg {
 
   /**
    * Create the DOM element for the marker.
-   * @return The marker controls SVG group.
+   *
+   * @returns The marker controls SVG group.
    * @internal
    */
   createDom(): SVGElement {
@@ -131,6 +137,7 @@ export class MarkerSvg {
 
   /**
    * Attaches the SVG root of the marker to the SVG group of the parent.
+   *
    * @param newParent The workspace, field, or block that the marker SVG element
    *     should be attached to.
    */
@@ -151,6 +158,7 @@ export class MarkerSvg {
 
   /**
    * Update the marker.
+   *
    * @param oldNode The previous node the marker was on or null.
    * @param curNode The node that we want to draw the marker for.
    */
@@ -180,6 +188,7 @@ export class MarkerSvg {
 
   /**
    * Update the marker's visible state based on the type of curNode..
+   *
    * @param curNode The node that we want to draw the marker for.
    */
   protected showAtLocation_(curNode: ASTNode) {
@@ -211,6 +220,7 @@ export class MarkerSvg {
   /**
    * Show the marker as a combination of the previous connection and block,
    * the output connection and block, or just the block.
+   *
    * @param curNode The node to draw the marker for.
    */
   private showWithBlockPrevOutput_(curNode: ASTNode) {
@@ -239,6 +249,7 @@ export class MarkerSvg {
 
   /**
    * Position and display the marker for a block.
+   *
    * @param curNode The node to draw the marker for.
    */
   protected showWithBlock_(curNode: ASTNode) {
@@ -247,6 +258,7 @@ export class MarkerSvg {
 
   /**
    * Position and display the marker for a previous connection.
+   *
    * @param curNode The node to draw the marker for.
    */
   protected showWithPrevious_(curNode: ASTNode) {
@@ -255,6 +267,7 @@ export class MarkerSvg {
 
   /**
    * Position and display the marker for an output connection.
+   *
    * @param curNode The node to draw the marker for.
    */
   protected showWithOutput_(curNode: ASTNode) {
@@ -264,6 +277,7 @@ export class MarkerSvg {
   /**
    * Position and display the marker for a workspace coordinate.
    * This is a horizontal line.
+   *
    * @param curNode The node to draw the marker for.
    */
   protected showWithCoordinates_(curNode: ASTNode) {
@@ -283,6 +297,7 @@ export class MarkerSvg {
   /**
    * Position and display the marker for a field.
    * This is a box around the field.
+   *
    * @param curNode The node to draw the marker for.
    */
   protected showWithField_(curNode: ASTNode) {
@@ -298,6 +313,7 @@ export class MarkerSvg {
   /**
    * Position and display the marker for an input.
    * This is a puzzle piece.
+   *
    * @param curNode The node to draw the marker for.
    */
   protected showWithInput_(curNode: ASTNode) {
@@ -312,6 +328,7 @@ export class MarkerSvg {
   /**
    * Position and display the marker for a next connection.
    * This is a horizontal line.
+   *
    * @param curNode The node to draw the marker for.
    */
   protected showWithNext_(curNode: ASTNode) {
@@ -331,6 +348,7 @@ export class MarkerSvg {
   /**
    * Position and display the marker for a stack.
    * This is a box with extra padding around the entire stack of blocks.
+   *
    * @param curNode The node to draw the marker for.
    */
   protected showWithStack_(curNode: ASTNode) {
@@ -375,6 +393,7 @@ export class MarkerSvg {
   /**
    * Position the marker for a block.
    * Displays an outline of the top half of a rectangle around a block.
+   *
    * @param width The width of the block.
    * @param markerOffset The extra padding for around the block.
    * @param markerHeight The height of the marker.
@@ -397,6 +416,7 @@ export class MarkerSvg {
   /**
    * Position the marker for an input connection.
    * Displays a filled in puzzle piece.
+   *
    * @param connection The connection to position marker around.
    */
   protected positionInput_(connection: RenderedConnection) {
@@ -417,6 +437,7 @@ export class MarkerSvg {
   /**
    * Move and show the marker at the specified coordinate in workspace units.
    * Displays a horizontal line.
+   *
    * @param x The new x, in workspace units.
    * @param y The new y, in workspace units.
    * @param width The new width, in workspace units.
@@ -437,6 +458,7 @@ export class MarkerSvg {
   /**
    * Position the marker for an output connection.
    * Displays a puzzle outline and the top and bottom path.
+   *
    * @param width The width of the block.
    * @param height The height of the block.
    * @param connectionShape The shape object for the connection.
@@ -463,6 +485,7 @@ export class MarkerSvg {
    * Position the marker for a previous connection.
    * Displays a half rectangle with a notch in the top to represent the previous
    * connection.
+   *
    * @param width The width of the block.
    * @param markerOffset The offset of the marker from around the block.
    * @param markerHeight The height of the marker.
@@ -491,6 +514,7 @@ export class MarkerSvg {
   /**
    * Move and show the marker at the specified coordinate in workspace units.
    * Displays a filled in rectangle.
+   *
    * @param x The new x, in workspace units.
    * @param y The new y, in workspace units.
    * @param width The new width, in workspace units.
@@ -514,6 +538,7 @@ export class MarkerSvg {
 
   /**
    * Flip the SVG paths in RTL.
+   *
    * @param markerSvg The marker that we want to flip.
    */
   private flipRtl_(markerSvg: SVGElement) {
@@ -530,6 +555,7 @@ export class MarkerSvg {
 
   /**
    * Fire event for the marker or marker.
+   *
    * @param oldNode The old node the marker used to be on.
    * @param curNode The new node the marker is currently on.
    */
@@ -542,7 +568,8 @@ export class MarkerSvg {
 
   /**
    * Get the properties to make a marker blink.
-   * @return The object holding attributes to make the marker blink.
+   *
+   * @returns The object holding attributes to make the marker blink.
    */
   protected getBlinkProperties_(): AnyDuringMigration {
     return {
@@ -556,7 +583,8 @@ export class MarkerSvg {
 
   /**
    * Create the marker SVG.
-   * @return The SVG node created.
+   *
+   * @returns The SVG node created.
    */
   protected createDomInternal_(): Element {
     /* This markup will be generated and added to the .svgGroup_:
@@ -650,6 +678,7 @@ export class MarkerSvg {
 
   /**
    * Apply the marker's colour.
+   *
    * @param _curNode The node that we want to draw the marker for.
    */
   protected applyColour_(_curNode: ASTNode) {

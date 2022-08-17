@@ -5,6 +5,7 @@
 
 /**
  * Manager for all items registered with the workspace.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -31,7 +32,8 @@ class Capability<_T> {
 
   /**
    * Returns the name of the capability.
-   * @return The name.
+   *
+   * @returns The name.
    */
   toString(): string {
     return this.name_;
@@ -40,6 +42,7 @@ class Capability<_T> {
 
 /**
  * Manager for all items registered with the workspace.
+ *
  * @alias Blockly.ComponentManager
  */
 export class ComponentManager {
@@ -55,6 +58,7 @@ export class ComponentManager {
 
   /**
    * Adds a component.
+   *
    * @param componentInfo The data for the component to register.
    * @param opt_allowOverrides True to prevent an error when overriding an
    *     already registered item.
@@ -83,6 +87,7 @@ export class ComponentManager {
 
   /**
    * Removes a component.
+   *
    * @param id The ID of the component to remove.
    */
   removeComponent(id: string) {
@@ -99,6 +104,7 @@ export class ComponentManager {
 
   /**
    * Adds a capability to a existing registered component.
+   *
    * @param id The ID of the component to add the capability to.
    * @param capability The capability to add.
    */
@@ -120,6 +126,7 @@ export class ComponentManager {
 
   /**
    * Removes a capability from an existing registered component.
+   *
    * @param id The ID of the component to remove the capability from.
    * @param capability The capability to remove.
    */
@@ -142,9 +149,10 @@ export class ComponentManager {
 
   /**
    * Returns whether the component with this id has the specified capability.
+   *
    * @param id The ID of the component to check.
    * @param capability The capability to check for.
-   * @return Whether the component has the capability.
+   * @returns Whether the component has the capability.
    */
   hasCapability<T>(id: string, capability: string|Capability<T>): boolean {
     capability = String(capability).toLowerCase();
@@ -154,8 +162,9 @@ export class ComponentManager {
 
   /**
    * Gets the component with the given ID.
+   *
    * @param id The ID of the component to get.
-   * @return The component with the given name or undefined if not found.
+   * @returns The component with the given name or undefined if not found.
    */
   getComponent(id: string): IComponent|undefined {
     return this.componentData.get(id)?.component;
@@ -163,9 +172,10 @@ export class ComponentManager {
 
   /**
    * Gets all the components with the specified capability.
+   *
    * @param capability The capability of the component.
    * @param sorted Whether to return list ordered by weights.
-   * @return The components that match the specified capability.
+   * @returns The components that match the specified capability.
    */
   getComponents<T>(capability: string|Capability<T>, sorted: boolean): T[] {
     capability = String(capability).toLowerCase();

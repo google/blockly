@@ -5,6 +5,7 @@
 
 /**
  * Base renderer.
+ *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -33,6 +34,7 @@ import {PathObject} from './path_object.js';
 
 /**
  * The base class for a block renderer.
+ *
  * @alias Blockly.blockRendering.Renderer
  */
 export class Renderer implements IRegistrable {
@@ -44,6 +46,7 @@ export class Renderer implements IRegistrable {
 
   /**
    * Rendering constant overrides, passed in through options.
+   *
    * @internal
    */
   overrides: object|null = null;
@@ -58,7 +61,8 @@ export class Renderer implements IRegistrable {
 
   /**
    * Gets the class name that identifies this renderer.
-   * @return The CSS class name.
+   *
+   * @returns The CSS class name.
    * @internal
    */
   getClassName(): string {
@@ -67,6 +71,7 @@ export class Renderer implements IRegistrable {
 
   /**
    * Initialize the renderer.
+   *
    * @param theme The workspace theme object.
    * @param opt_rendererOverrides Rendering constant overrides.
    * @internal
@@ -83,6 +88,7 @@ export class Renderer implements IRegistrable {
 
   /**
    * Create any DOM elements that this renderer needs.
+   *
    * @param svg The root of the workspace's SVG.
    * @param theme The workspace theme object.
    * @internal
@@ -95,6 +101,7 @@ export class Renderer implements IRegistrable {
 
   /**
    * Refresh the renderer after a theme change.
+   *
    * @param svg The root of the workspace's SVG.
    * @param theme The workspace theme object.
    * @internal
@@ -116,6 +123,7 @@ export class Renderer implements IRegistrable {
   /**
    * Dispose of this renderer.
    * Delete all DOM elements that this renderer and its constants created.
+   *
    * @internal
    */
   dispose() {
@@ -126,7 +134,8 @@ export class Renderer implements IRegistrable {
 
   /**
    * Create a new instance of the renderer's constant provider.
-   * @return The constant provider.
+   *
+   * @returns The constant provider.
    */
   protected makeConstants_(): ConstantProvider {
     return new ConstantProvider();
@@ -134,8 +143,9 @@ export class Renderer implements IRegistrable {
 
   /**
    * Create a new instance of the renderer's render info object.
+   *
    * @param block The block to measure.
-   * @return The render info object.
+   * @returns The render info object.
    */
   protected makeRenderInfo_(block: BlockSvg): RenderInfo {
     return new RenderInfo(this, block);
@@ -143,10 +153,11 @@ export class Renderer implements IRegistrable {
 
   /**
    * Create a new instance of the renderer's drawer.
+   *
    * @param block The block to render.
    * @param info An object containing all information needed to render this
    *     block.
-   * @return The drawer.
+   * @returns The drawer.
    */
   protected makeDrawer_(block: BlockSvg, info: RenderInfo): Drawer {
     return new Drawer(block, info);
@@ -154,7 +165,8 @@ export class Renderer implements IRegistrable {
 
   /**
    * Create a new instance of the renderer's debugger.
-   * @return The renderer debugger.
+   *
+   * @returns The renderer debugger.
    * @suppress {strictModuleDepCheck} Debug renderer only included in
    * playground.
    */
@@ -164,9 +176,10 @@ export class Renderer implements IRegistrable {
 
   /**
    * Create a new instance of the renderer's marker drawer.
+   *
    * @param workspace The workspace the marker belongs to.
    * @param marker The marker.
-   * @return The object in charge of drawing the marker.
+   * @returns The object in charge of drawing the marker.
    * @internal
    */
   makeMarkerDrawer(workspace: WorkspaceSvg, marker: Marker): MarkerSvg {
@@ -175,9 +188,10 @@ export class Renderer implements IRegistrable {
 
   /**
    * Create a new instance of a renderer path object.
+   *
    * @param root The root SVG element.
    * @param style The style object to use for colouring.
-   * @return The renderer path object.
+   * @returns The renderer path object.
    * @internal
    */
   makePathObject(root: SVGElement, style: BlockStyle): IPathObject {
@@ -187,7 +201,8 @@ export class Renderer implements IRegistrable {
   /**
    * Get the current renderer's constant provider.  We assume that when this is
    * called, the renderer has already been initialized.
-   * @return The constant provider.
+   *
+   * @returns The constant provider.
    * @internal
    */
   getConstants(): ConstantProvider {
@@ -196,8 +211,9 @@ export class Renderer implements IRegistrable {
 
   /**
    * Determine whether or not to highlight a connection.
+   *
    * @param _conn The connection to determine whether or not to highlight.
-   * @return True if we should highlight the connection.
+   * @returns True if we should highlight the connection.
    * @internal
    */
   shouldHighlightConnection(_conn: Connection): boolean {
@@ -209,11 +225,12 @@ export class Renderer implements IRegistrable {
    * block-clump. If the clump is a row the end is the last input. If the clump
    * is a stack, the end is the last next connection. If the clump is neither,
    * then this returns false.
+   *
    * @param topBlock The top block of the block clump we want to try and connect
    *     to.
    * @param orphanBlock The orphan block that wants to find a home.
    * @param localType The type of the connection being dragged.
-   * @return Whether there is a home for the orphan or not.
+   * @returns Whether there is a home for the orphan or not.
    * @internal
    */
   orphanCanConnectAtEnd(
@@ -228,10 +245,11 @@ export class Renderer implements IRegistrable {
   /**
    * Chooses a connection preview method based on the available connection, the
    * current dragged connection, and the block being dragged.
+   *
    * @param closest The available connection.
    * @param local The connection currently being dragged.
    * @param topBlock The block currently being dragged.
-   * @return The preview type to display.
+   * @returns The preview type to display.
    * @internal
    */
   getConnectionPreviewMethod(
@@ -252,6 +270,7 @@ export class Renderer implements IRegistrable {
 
   /**
    * Render the block.
+   *
    * @param block The block to render.
    * @internal
    */

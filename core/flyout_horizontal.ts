@@ -5,6 +5,7 @@
 
 /**
  * Horizontal flyout tray containing blocks which may be created.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -25,6 +26,7 @@ import * as WidgetDiv from './widgetdiv.js';
 
 /**
  * Class for a flyout.
+ *
  * @alias Blockly.HorizontalFlyout
  */
 export class HorizontalFlyout extends Flyout {
@@ -42,6 +44,7 @@ export class HorizontalFlyout extends Flyout {
 
   /**
    * Sets the translation of the flyout to match the scrollbars.
+   *
    * @param xyRatio Contains a y property which is a float between 0 and 1
    *     specifying the degree of scrolling and a similar x property.
    */
@@ -68,7 +71,8 @@ export class HorizontalFlyout extends Flyout {
 
   /**
    * Calculates the x coordinate for the flyout position.
-   * @return X coordinate.
+   *
+   * @returns X coordinate.
    */
   override getX(): number {
     // X is always 0 since this is a horizontal flyout.
@@ -77,7 +81,8 @@ export class HorizontalFlyout extends Flyout {
 
   /**
    * Calculates the y coordinate for the flyout position.
-   * @return Y coordinate.
+   *
+   * @returns Y coordinate.
    */
   override getY(): number {
     if (!this.isVisible()) {
@@ -145,6 +150,7 @@ export class HorizontalFlyout extends Flyout {
 
   /**
    * Create and set the path for the visible boundaries of the flyout.
+   *
    * @param width The width of the flyout, not including the rounded corners.
    * @param height The height of the flyout, not including rounded corners.
    */
@@ -194,6 +200,7 @@ export class HorizontalFlyout extends Flyout {
 
   /**
    * Scroll the flyout.
+   *
    * @param e Mouse wheel scroll event.
    */
   protected override wheel_(e: WheelEvent) {
@@ -220,6 +227,7 @@ export class HorizontalFlyout extends Flyout {
 
   /**
    * Lay out the blocks in the flyout.
+   *
    * @param contents The blocks and buttons to lay out.
    * @param gaps The visible gaps between blocks.
    */
@@ -276,9 +284,10 @@ export class HorizontalFlyout extends Flyout {
    * Determine if a drag delta is toward the workspace, based on the position
    * and orientation of the flyout. This is used in determineDragIntention_ to
    * determine if a new block should be created or if the flyout should scroll.
+   *
    * @param currentDragDeltaXY How far the pointer has moved from the position
    *     at mouse down, in pixel units.
-   * @return True if the drag is toward the workspace.
+   * @returns True if the drag is toward the workspace.
    * @internal
    */
   override isDragTowardWorkspace(currentDragDeltaXY: Coordinate): boolean {
@@ -299,7 +308,8 @@ export class HorizontalFlyout extends Flyout {
   /**
    * Returns the bounding rectangle of the drag target area in pixel units
    * relative to viewport.
-   * @return The component's bounding box. Null if drag target area should be
+   *
+   * @returns The component's bounding box. Null if drag target area should be
    *     ignored.
    */
   override getClientRect(): Rect|null {

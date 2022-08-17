@@ -5,6 +5,7 @@
 
 /**
  * Angle input field.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -28,6 +29,7 @@ import * as WidgetDiv from './widgetdiv.js';
 
 /**
  * Class for an editable angle field.
+ *
  * @alias Blockly.FieldAngle
  */
 export class FieldAngle extends FieldTextInput {
@@ -122,24 +124,28 @@ export class FieldAngle extends FieldTextInput {
     /**
      * Should the angle increase as the angle picker is moved clockwise (true)
      * or counterclockwise (false)
+     *
      * @see FieldAngle.CLOCKWISE
      */
     this.clockwise_ = FieldAngle.CLOCKWISE;
 
     /**
      * The offset of zero degrees (and all other angles).
+     *
      * @see FieldAngle.OFFSET
      */
     this.offset_ = FieldAngle.OFFSET;
 
     /**
      * The maximum angle to allow before wrapping.
+     *
      * @see FieldAngle.WRAP
      */
     this.wrap_ = FieldAngle.WRAP;
 
     /**
      * The amount to round angles to when using a mouse or keyboard nav input.
+     *
      * @see FieldAngle.ROUND
      */
     this.round_ = FieldAngle.ROUND;
@@ -158,6 +164,7 @@ export class FieldAngle extends FieldTextInput {
 
   /**
    * Configure the field based on the given map of options.
+   *
    * @param config A map of options to configure the field based on.
    */
   protected override configure_(config: FieldAngleConfig) {
@@ -185,6 +192,7 @@ export class FieldAngle extends FieldTextInput {
 
   /**
    * Create the block UI for this field.
+   *
    * @internal
    */
   override initView() {
@@ -204,6 +212,7 @@ export class FieldAngle extends FieldTextInput {
 
   /**
    * Create and show the angle field's editor.
+   *
    * @param opt_e Optional mouse event that triggered the field to open, or
    *     undefined if triggered programmatically.
    */
@@ -316,6 +325,7 @@ export class FieldAngle extends FieldTextInput {
 
   /**
    * Set the angle to match the mouse's position.
+   *
    * @param e Mouse move event.
    */
   protected onMouseMove_(e: Event) {
@@ -354,6 +364,7 @@ export class FieldAngle extends FieldTextInput {
    * Handles and displays values that are input via mouse or arrow key input.
    * These values need to be rounded and wrapped before being displayed so
    * that the text input's value is appropriate.
+   *
    * @param angle New angle.
    */
   private displayMouseOrKeyboardValue_(angle: number) {
@@ -409,6 +420,7 @@ export class FieldAngle extends FieldTextInput {
 
   /**
    * Handle key down to the editor.
+   *
    * @param e Keyboard event.
    */
   protected override onHtmlInputKeyDown_(e: Event) {
@@ -446,8 +458,9 @@ export class FieldAngle extends FieldTextInput {
 
   /**
    * Ensure that the input value is a valid angle.
+   *
    * @param opt_newValue The input value.
-   * @return A valid angle, or null if invalid.
+   * @returns A valid angle, or null if invalid.
    */
   protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
       number|null {
@@ -460,8 +473,9 @@ export class FieldAngle extends FieldTextInput {
 
   /**
    * Wraps the value so that it is in the range (-360 + wrap, wrap).
+   *
    * @param value The value to wrap.
-   * @return The wrapped value.
+   * @returns The wrapped value.
    */
   private wrapValue_(value: number): number {
     value %= 360;
@@ -476,8 +490,9 @@ export class FieldAngle extends FieldTextInput {
 
   /**
    * Construct a FieldAngle from a JSON arg object.
+   *
    * @param options A JSON object with options (angle).
-   * @return The new field instance.
+   * @returns The new field instance.
    * @nocollapse
    * @internal
    */

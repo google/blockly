@@ -5,6 +5,7 @@
 
 /**
  * An object representing the top row of a rendered block.
+ *
  * @class
  */
 import * as goog from '../../../../closure/goog/goog.js';
@@ -22,6 +23,7 @@ import {TopRow as BaseTopRow} from '../../../renderers/measurables/top_row.js';
  * connections.
  * After this constructor is called, the row will contain all non-spacer
  * elements it needs.
+ *
  * @alias Blockly.zelos.TopRow
  */
 export class TopRow extends BaseTopRow {

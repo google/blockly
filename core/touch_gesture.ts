@@ -6,6 +6,7 @@
 /**
  * The class extends Gesture to support pinch to zoom
  * for both pointer and touch events.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -29,6 +30,7 @@ const ZOOM_OUT_MULTIPLIER = 6;
 
 /**
  * Class for one gesture.
+ *
  * @alias Blockly.TouchGesture
  */
 export class TouchGesture extends Gesture {
@@ -64,6 +66,7 @@ export class TouchGesture extends Gesture {
   /**
    * Start a gesture: update the workspace to indicate that a gesture is in
    * progress and bind mousemove and mouseup handlers.
+   *
    * @param e A mouse down, touch start or pointer down event.
    * @internal
    */
@@ -83,6 +86,7 @@ export class TouchGesture extends Gesture {
    * opt_noCaptureIdentifier.
    * In addition, binding a second mouse down event to detect multi-touch
    * events.
+   *
    * @param e A mouse down or touch start event.
    * @internal
    */
@@ -103,6 +107,7 @@ export class TouchGesture extends Gesture {
 
   /**
    * Handle a mouse down, touch start, or pointer down event.
+   *
    * @param e A mouse down, touch start, or pointer down event.
    * @internal
    */
@@ -122,6 +127,7 @@ export class TouchGesture extends Gesture {
 
   /**
    * Handle a mouse move, touch move, or pointer move event.
+   *
    * @param e A mouse move, touch move, or pointer move event.
    * @internal
    */
@@ -145,6 +151,7 @@ export class TouchGesture extends Gesture {
 
   /**
    * Handle a mouse up, touch end, or pointer up event.
+   *
    * @param e A mouse up, touch end, or pointer up event.
    * @internal
    */
@@ -167,7 +174,8 @@ export class TouchGesture extends Gesture {
 
   /**
    * Whether this gesture is part of a multi-touch gesture.
-   * @return Whether this gesture is part of a multi-touch gesture.
+   *
+   * @returns Whether this gesture is part of a multi-touch gesture.
    * @internal
    */
   isMultiTouch(): boolean {
@@ -176,6 +184,7 @@ export class TouchGesture extends Gesture {
 
   /**
    * Sever all links from this object.
+   *
    * @internal
    */
   override dispose() {
@@ -189,6 +198,7 @@ export class TouchGesture extends Gesture {
   /**
    * Handle a touch start or pointer down event and keep track of current
    * pointers.
+   *
    * @param e A touch start, or pointer down event.
    * @internal
    */
@@ -210,6 +220,7 @@ export class TouchGesture extends Gesture {
   /**
    * Handle a touch move or pointer move event and zoom in/out if two pointers
    * are on the screen.
+   *
    * @param e A touch move, or pointer move event.
    * @internal
    */
@@ -227,6 +238,7 @@ export class TouchGesture extends Gesture {
 
   /**
    * Handle pinch zoom gesture.
+   *
    * @param e A touch move, or pointer move event.
    */
   private handlePinch_(e: MouseEvent) {
@@ -252,6 +264,7 @@ export class TouchGesture extends Gesture {
 
   /**
    * Handle a touch end or pointer end event and end the gesture.
+   *
    * @param e A touch end, or pointer end event.
    * @internal
    */
@@ -268,8 +281,9 @@ export class TouchGesture extends Gesture {
 
   /**
    * Helper function returning the current touch point coordinate.
+   *
    * @param e A touch or pointer event.
-   * @return The current touch point coordinate
+   * @returns The current touch point coordinate
    * @internal
    */
   getTouchPoint(e: Event): Coordinate|null {

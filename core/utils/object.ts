@@ -5,6 +5,7 @@
 
 /**
  * Utility methods for objects.
+ *
  * @namespace Blockly.utils.object
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -15,6 +16,7 @@ import * as deprecation from './deprecation.js';
 
 /**
  * Inherit the prototype methods from one constructor into another.
+ *
  * @param childCtor Child class.
  * @param parentCtor Parent class.
  * @suppress {strictMissingProperties} superClass_ is not defined on Function.
@@ -41,6 +43,7 @@ export function inherits(childCtor: Function, parentCtor: Function) {
 
 /**
  * Copies all the members of a source object to a target object.
+ *
  * @param target Target.
  * @param source Source.
  * @alias Blockly.utils.object.mixin
@@ -55,9 +58,10 @@ export function mixin(target: AnyDuringMigration, source: AnyDuringMigration) {
 
 /**
  * Complete a deep merge of all members of a source object with a target object.
+ *
  * @param target Target.
  * @param source Source.
- * @return The resulting object.
+ * @returns The resulting object.
  * @alias Blockly.utils.object.deepMerge
  */
 export function deepMerge(
@@ -75,8 +79,9 @@ export function deepMerge(
 
 /**
  * Returns an array of a given object's own enumerable property values.
+ *
  * @param obj Object containing values.
- * @return Array of values.
+ * @returns Array of values.
  * @alias Blockly.utils.object.values
  */
 export function values(obj: AnyDuringMigration): AnyDuringMigration[] {

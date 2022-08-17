@@ -2714,7 +2714,6 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Sets the X/Y translations of a top level workspace.
    *
-   * @param this
    * @param xyRatio Contains an x and/or y property which is a float between 0
    *     and 1 specifying the degree of scrolling.
    */

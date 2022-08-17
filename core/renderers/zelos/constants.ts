@@ -6,6 +6,7 @@
 /**
  * An object that provides constants for rendering blocks in Zelos
  * mode.
+ *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -36,6 +37,7 @@ export interface InsideCorners {
 
 /**
  * An object that provides constants for rendering blocks in Zelos mode.
+ *
  * @alias Blockly.zelos.ConstantProvider
  */
 export class ConstantProvider extends BaseConstantProvider {
@@ -71,6 +73,7 @@ export class ConstantProvider extends BaseConstantProvider {
 
   /**
    * Radius of the cursor for input and output connections.
+   *
    * @internal
    */
   CURSOR_RADIUS = 5;
@@ -127,6 +130,7 @@ export class ConstantProvider extends BaseConstantProvider {
   /**
    * The ID of the selected glow filter, or the empty string if no filter is
    * set.
+   *
    * @internal
    */
   selectedGlowFilterId = '';
@@ -141,6 +145,7 @@ export class ConstantProvider extends BaseConstantProvider {
   /**
    * The ID of the replacement glow filter, or the empty string if no filter
    * is set.
+   *
    * @internal
    */
   replacementGlowFilterId = '';
@@ -229,6 +234,7 @@ export class ConstantProvider extends BaseConstantProvider {
      * When a block with the outer shape contains an input block with the inner
      * shape on its left or right edge, the block elements are aligned such that
      * the padding specified is reached.
+     *
      * @internal
      */
     this.SHAPE_IN_SHAPE_PADDING = {
@@ -342,7 +348,8 @@ export class ConstantProvider extends BaseConstantProvider {
 
   /**
    * Create sizing and path information about a hexagonal shape.
-   * @return An object containing sizing and path information about a hexagonal
+   *
+   * @returns An object containing sizing and path information about a hexagonal
    *     shape for connections.
    * @internal
    */
@@ -355,11 +362,12 @@ export class ConstantProvider extends BaseConstantProvider {
      * height. The 'up' and 'down' versions of the paths are the same, but the Y
      * sign flips.  The 'left' and 'right' versions of the path are also the
      * same, but the X sign flips.
+     *
      * @param height The height of the block the connection is on.
      * @param up True if the path should be drawn from bottom to top, false
      *     otherwise.
      * @param right True if the path is for the right side of the block.
-     * @return A path fragment describing a rounded connection.
+     * @returns A path fragment describing a rounded connection.
      */
     function makeMainPath(height: number, up: boolean, right: boolean): string {
       const halfHeight = height / 2;
@@ -404,7 +412,8 @@ export class ConstantProvider extends BaseConstantProvider {
 
   /**
    * Create sizing and path information about a rounded shape.
-   * @return An object containing sizing and path information about a rounded
+   *
+   * @returns An object containing sizing and path information about a rounded
    *     shape for connections.
    * @internal
    */
@@ -420,11 +429,12 @@ export class ConstantProvider extends BaseConstantProvider {
      * drawn in between the two arcs. The 'up' and 'down' versions of the paths
      * are the same, but the Y sign flips.  The 'up' and 'right' versions of the
      * path flip the sweep-flag which moves the arc at negative angles.
+     *
      * @param blockHeight The height of the block the connection is on.
      * @param up True if the path should be drawn from bottom to top, false
      *     otherwise.
      * @param right True if the path is for the right side of the block.
-     * @return A path fragment describing a rounded connection.
+     * @returns A path fragment describing a rounded connection.
      */
     function makeMainPath(
         blockHeight: number, up: boolean, right: boolean): string {
@@ -475,7 +485,8 @@ export class ConstantProvider extends BaseConstantProvider {
 
   /**
    * Create sizing and path information about a squared shape.
-   * @return An object containing sizing and path information about a squared
+   *
+   * @returns An object containing sizing and path information about a squared
    *     shape for connections.
    * @internal
    */
@@ -489,11 +500,12 @@ export class ConstantProvider extends BaseConstantProvider {
      * The 'left' and 'right' versions of the paths are the same, but the Y sign
      * flips.  The 'up' and 'down' versions of the path determine where the
      * corner point is placed and in turn the direction of the corners.
+     *
      * @param height The height of the block the connection is on.
      * @param up True if the path should be drawn from bottom to top, false
      *     otherwise.
      * @param right True if the path is for the right side of the block.
-     * @return A path fragment describing a squared connection.
+     * @returns A path fragment describing a squared connection.
      */
     function makeMainPath(height: number, up: boolean, right: boolean): string {
       const innerHeight = height - radius * 2;
@@ -589,9 +601,10 @@ export class ConstantProvider extends BaseConstantProvider {
 
     /**
      * Make the main path for the notch.
+     *
      * @param dir Direction multiplier to apply to horizontal offsets along the
      *     path. Either 1 or -1.
-     * @return A path fragment describing a notch.
+     * @returns A path fragment describing a notch.
      */
     function makeMainPath(dir: number): string {
       return svgPaths.curve(

@@ -601,10 +601,6 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
 
     // IE 11 is an incompetent browser that fails to fire mouseout events.
     // When the mouse is over the background, deselect all blocks.
-    /**
-     *
-     * @param this
-     */
     function deselectAll(this: Flyout) {
       const topBlocks = this.workspace_.getTopBlocks(false);
       for (let i = 0, block; block = topBlocks[i]; i++) {

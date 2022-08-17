@@ -5,6 +5,7 @@
 
 /**
  * Events fired as a result of selecting an item on the toolbox.
+ *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -18,6 +19,7 @@ import * as eventUtils from './utils.js';
 
 /**
  * Class for a toolbox item select event.
+ *
  * @alias Blockly.Events.ToolboxItemSelect
  */
 export class ToolboxItemSelect extends UiBase {
@@ -50,7 +52,8 @@ export class ToolboxItemSelect extends UiBase {
 
   /**
    * Encode the event as JSON.
-   * @return JSON representation.
+   *
+   * @returns JSON representation.
    */
   override toJson(): AnyDuringMigration {
     const json = super.toJson();
@@ -61,6 +64,7 @@ export class ToolboxItemSelect extends UiBase {
 
   /**
    * Decode the JSON event.
+   *
    * @param json JSON representation.
    */
   override fromJson(json: AnyDuringMigration) {

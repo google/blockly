@@ -5,6 +5,7 @@
 
 /**
  * Object representing an input (value, statement, or dummy).
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -24,6 +25,7 @@ import type {RenderedConnection} from './rendered_connection.js';
 
 /**
  * Class for an input with an optional field.
+ *
  * @alias Blockly.Input
  */
 export class Input {
@@ -56,7 +58,8 @@ export class Input {
 
   /**
    * Get the source block for this input.
-   * @return The source block, or null if there is none.
+   *
+   * @returns The source block, or null if there is none.
    */
   getSourceBlock(): Block {
     return this.sourceBlock_;
@@ -65,10 +68,11 @@ export class Input {
   /**
    * Add a field (or label from string), and all prefix and suffix fields, to
    * the end of the input's field row.
+   *
    * @param field Something to add as a field.
    * @param opt_name Language-neutral identifier which may used to find this
    *     field again.  Should be unique to the host block.
-   * @return The input being append to (to allow chaining).
+   * @returns The input being append to (to allow chaining).
    */
   appendField(field: string|Field, opt_name?: string): Input {
     this.insertFieldAt(this.fieldRow.length, field, opt_name);
@@ -78,11 +82,12 @@ export class Input {
   /**
    * Inserts a field (or label from string), and all prefix and suffix fields,
    * at the location of the input's field row.
+   *
    * @param index The index at which to insert field.
    * @param field Something to add as a field.
    * @param opt_name Language-neutral identifier which may used to find this
    *     field again.  Should be unique to the host block.
-   * @return The index following the last inserted field.
+   * @returns The index following the last inserted field.
    */
   insertFieldAt(index: number, field: string|Field, opt_name?: string): number {
     if (index < 0 || index > this.fieldRow.length) {
@@ -132,9 +137,10 @@ export class Input {
 
   /**
    * Remove a field from this input.
+   *
    * @param name The name of the field.
    * @param opt_quiet True to prevent an error if field is not present.
-   * @return True if operation succeeds, false if field is not present and
+   * @returns True if operation succeeds, false if field is not present and
    *     opt_quiet is true.
    * @throws {Error} if the field is not present and opt_quiet is false.
    */
@@ -159,7 +165,8 @@ export class Input {
 
   /**
    * Gets whether this input is visible or not.
-   * @return True if visible.
+   *
+   * @returns True if visible.
    */
   isVisible(): boolean {
     return this.visible_;
@@ -168,8 +175,9 @@ export class Input {
   /**
    * Sets whether this input is visible or not.
    * Should only be used to collapse/uncollapse a block.
+   *
    * @param visible True if visible.
-   * @return List of blocks to render.
+   * @returns List of blocks to render.
    * @internal
    */
   setVisible(visible: boolean): BlockSvg[] {
@@ -203,6 +211,7 @@ export class Input {
 
   /**
    * Mark all fields on this input as dirty.
+   *
    * @internal
    */
   markDirty() {
@@ -213,9 +222,10 @@ export class Input {
 
   /**
    * Change a connection's compatibility.
+   *
    * @param check Compatible value type or list of value types.  Null if all
    *     types are compatible.
-   * @return The input being modified (to allow chaining).
+   * @returns The input being modified (to allow chaining).
    */
   setCheck(check: string|string[]|null): Input {
     if (!this.connection) {
@@ -227,9 +237,10 @@ export class Input {
 
   /**
    * Change the alignment of the connection's field(s).
+   *
    * @param align One of the values of Align.  In RTL mode directions
    *     are reversed, and Align.RIGHT aligns to the left.
-   * @return The input being modified (to allow chaining).
+   * @returns The input being modified (to allow chaining).
    */
   setAlign(align: Align): Input {
     this.align = align;
@@ -242,8 +253,9 @@ export class Input {
 
   /**
    * Changes the connection's shadow block.
+   *
    * @param shadow DOM representation of a block or null.
-   * @return The input being modified (to allow chaining).
+   * @returns The input being modified (to allow chaining).
    */
   setShadowDom(shadow: Element|null): Input {
     if (!this.connection) {
@@ -255,7 +267,8 @@ export class Input {
 
   /**
    * Returns the XML representation of the connection's shadow block.
-   * @return Shadow DOM representation of a block or null.
+   *
+   * @returns Shadow DOM representation of a block or null.
    */
   getShadowDom(): Element|null {
     if (!this.connection) {
@@ -276,6 +289,7 @@ export class Input {
 
   /**
    * Sever all links to this input.
+   *
    * @suppress {checkTypes}
    */
   dispose() {
@@ -291,6 +305,7 @@ export class Input {
 export namespace Input {
   /**
    * Enum for alignment of inputs.
+   *
    * @alias Blockly.Input.Align
    */
   export enum Align {

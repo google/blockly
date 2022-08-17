@@ -5,6 +5,7 @@
 
 /**
  * Workspace metrics definitions.
+ *
  * @namespace Blockly.utils.Metrics
  */
 import * as goog from '../../closure/goog/goog.js';

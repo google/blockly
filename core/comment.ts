@@ -171,7 +171,6 @@ export class Comment extends Icon {
     this.onChangeWrapper_ = browserEvents.conditionalBind(
         textarea, 'change', this,
         /**
-         * @param this
          * @param _e Unused event parameter.
          */
         function(this: Comment, _e: Event) {
@@ -184,7 +183,6 @@ export class Comment extends Icon {
     this.onInputWrapper_ = browserEvents.conditionalBind(
         textarea, 'input', this,
         /**
-         * @param this
          * @param _e Unused event parameter.
          */
         function(this: Comment, _e: Event) {

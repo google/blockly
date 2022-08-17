@@ -767,7 +767,8 @@ export class ConstantProvider {
   }
 
   /**
-   * @returns An object containing sizing and path information about puzzle tabs.
+   * @returns An object containing sizing and path information about puzzle
+   *     tabs.
    * @internal
    */
   makePuzzleTab(): PuzzleTab {

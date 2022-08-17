@@ -296,8 +296,8 @@ function checkHasMutatorProperties(
  * Get a list of values of mutator properties on the given block.
  *
  * @param block The block to inspect.
- * @returns A list with all of the defined properties, which should be functions,
- *     but may be anything other than undefined.
+ * @returns A list with all of the defined properties, which should be
+ *     functions, but may be anything other than undefined.
  */
 function getMutatorProperties(block: Block): AnyDuringMigration[] {
   const result = [];

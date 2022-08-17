@@ -261,8 +261,8 @@ export class ASTNode {
    * Navigate between stacks of blocks on the workspace.
    *
    * @param forward True to go forward. False to go backwards.
-   * @returns The first block of the next stack or null if there are no blocks on
-   *     the workspace.
+   * @returns The first block of the next stack or null if there are no blocks
+   *     on the workspace.
    */
   private navigateBetweenStacks_(forward: boolean): ASTNode|null {
     let curLocation = this.getLocation();
@@ -464,9 +464,8 @@ export class ASTNode {
   /**
    * Find the element to the left of the current element in the AST.
    *
-   * @returns An AST node that wraps the previous field, connection, workspace or
-   *     block. Or null if no node exists to the left.
-   * null.
+   * @returns An AST node that wraps the previous field, connection, workspace
+   *     or block. Or null if no node exists to the left. null.
    */
   prev(): ASTNode|null {
     switch (this.type_) {

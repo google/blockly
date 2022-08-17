@@ -4,14 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.workspaceSvg');
+goog.declareModuleId('Blockly.test.workspaceSvg');
 
-const {assertEventFired, assertEventNotFired, createFireChangeListenerSpy} = goog.require('Blockly.test.helpers.events');
-const {assertVariableValues} = goog.require('Blockly.test.helpers.variables');
-const {defineStackBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
-const eventUtils = goog.require('Blockly.Events.utils');
-const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
-const {testAWorkspace} = goog.require('Blockly.test.helpers.workspace');
+import {assertEventFired, assertEventNotFired, createFireChangeListenerSpy} from './test_helpers/events.js';
+import {assertVariableValues} from './test_helpers/variables.js';
+import {defineStackBlock} from './test_helpers/block_definitions.js';
+import * as eventUtils from '../../build/src/core/events/utils.js';
+import {sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
+import {testAWorkspace} from './test_helpers/workspace.js';
 
 
 suite('WorkspaceSvg', function() {
@@ -121,48 +121,6 @@ suite('WorkspaceSvg', function() {
       chai.assert.throws(function() {
         this.workspace.updateToolbox({'contents': []});
       }.bind(this), 'Existing toolbox has categories.  Can\'t change mode.');
-    });
-  });
-
-  suite('addTopBlock', function() {
-    setup(function() {
-      this.targetWorkspace = new Blockly.Workspace();
-      this.workspace.isFlyout = true;
-      this.workspace.targetWorkspace = this.targetWorkspace;
-      Blockly.defineBlocksWithJsonArray([{
-        "type": "get_var_block",
-        "message0": "%1",
-        "args0": [
-          {
-            "type": "field_variable",
-            "name": "VAR",
-            "variableTypes": ["", "type1", "type2"],
-          },
-        ],
-      }]);
-    });
-
-    teardown(function() {
-      // Have to dispose of the main workspace after the flyout workspace
-      // because it holds the variable map.
-      // Normally the main workspace disposes of the flyout workspace.
-      workspaceTeardown.call(this, this.targetWorkspace);
-    });
-
-    test('Trivial Flyout is True', function() {
-      this.targetWorkspace.createVariable('name1', '', '1');
-
-      // Flyout.init usually does this binding.
-      this.workspace.variableMap_ = this.targetWorkspace.getVariableMap();
-
-      Blockly.Events.disable();
-      const block = new Blockly.Block(this.workspace, 'get_var_block');
-      block.inputList[0].fieldRow[0].setValue('1');
-      Blockly.Events.enable();
-
-      this.workspace.removeTopBlock(block);
-      this.workspace.addTopBlock(block);
-      assertVariableValues(this.workspace, 'name1', '', '1');
     });
   });
 

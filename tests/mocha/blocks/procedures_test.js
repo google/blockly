@@ -4,14 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.procedures');
+goog.declareModuleId('Blockly.test.procedures');
 
-goog.require('Blockly');
-goog.require('Blockly.Msg');
-const {assertCallBlockStructure, assertDefBlockStructure, createProcDefBlock, createProcCallBlock} = goog.require('Blockly.test.helpers.procedures');
-const {runSerializationTestSuite} = goog.require('Blockly.test.helpers.serialization');
-const {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
-
+import * as Blockly from '../../../build/src/core/blockly.js';
+import {assertCallBlockStructure, assertDefBlockStructure, createProcDefBlock, createProcCallBlock} from '../test_helpers/procedures.js';
+import {runSerializationTestSuite} from '../test_helpers/serialization.js';
+import {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} from '../test_helpers/setup_teardown.js';
 
 suite('Procedures', function() {
   setup(function() {
@@ -1208,6 +1206,46 @@ suite('Procedures', function() {
         },
       ];
       runSerializationTestSuite(testCases);
+    });
+  });
+});
+
+suite('Procedures, dont auto fire events', function() {
+  setup(function() {
+    sharedTestSetup.call(this, {fireEventsNow: false});
+    this.workspace = new Blockly.Workspace();
+  });
+  teardown(function() {
+    sharedTestTeardown.call(this);
+  });
+
+  const testSuites = [
+    {title: 'procedures_defreturn', hasReturn: true,
+      defType: 'procedures_defreturn', callType: 'procedures_callreturn'},
+    {title: 'procedures_defnoreturn', hasReturn: false,
+      defType: 'procedures_defnoreturn', callType: 'procedures_callnoreturn'},
+  ];
+
+  testSuites.forEach((testSuite) => {
+    suite(testSuite.title, function() {
+      suite('Disposal', function() {
+        test('callers are disposed when definitions are disposed', function() {
+          this.defBlock = new Blockly.Block(this.workspace, testSuite.defType);
+          this.defBlock.setFieldValue('proc name', 'NAME');
+          this.callerBlock = new Blockly.Block(
+              this.workspace, testSuite.callType);
+          this.callerBlock.setFieldValue('proc name', 'NAME');
+
+          // Run the clock now so that the create events get fired. If we fire
+          // it after disposing, a new procedure def will get created when
+          // the caller create event is heard.
+          this.clock.runAll();
+          this.defBlock.dispose();
+          this.clock.runAll();
+
+          chai.assert.isTrue(this.callerBlock.disposed);
+        });
+      });
     });
   });
 });

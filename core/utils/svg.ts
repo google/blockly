@@ -22,7 +22,7 @@ goog.declareModuleId('Blockly.utils.Svg');
  * A name with the type of the SVG element stored in the generic.
  * @alias Blockly.utils.Svg
  */
-export class Svg<T> {
+export class Svg<_T> {
   /** @internal */
   static ANIMATE = new Svg<SVGAnimateElement>('animate');
   /** @internal */

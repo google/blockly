@@ -124,4 +124,4 @@ export function setPrompt(
 
 export const TEST_ONLY = {
   confirmInternal,
-}
+};

@@ -21,7 +21,7 @@ goog.declareModuleId('Blockly.FieldDropdown');
 
 import type {BlockSvg} from './block_svg.js';
 import * as dropDownDiv from './dropdowndiv.js';
-import {Field} from './field.js';
+import {FieldConfig, Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import {Menu} from './menu.js';
 import {MenuItem} from './menuitem.js';
@@ -117,7 +117,7 @@ export class FieldDropdown extends Field {
    */
   constructor(
       menuGenerator: AnyDuringMigration[][]|Function|Sentinel,
-      opt_validator?: Function, opt_config?: AnyDuringMigration) {
+      opt_validator?: Function, opt_config?: FieldConfig) {
     super(Field.SKIP_SETUP);
 
     // If we pass SKIP_SETUP, don't do *anything* with the menu generator.
@@ -656,10 +656,16 @@ export class FieldDropdown extends Field {
    * @nocollapse
    * @internal
    */
-  static fromJson(options: AnyDuringMigration): FieldDropdown {
+  static fromJson(options: FieldDropdownFromJsonConfig): FieldDropdown {
+    if (!options.options) {
+      throw new Error(
+          'options are required for the dropdown field. The ' +
+          'options property must be assigned an array of ' +
+          '[humanReadableValue, languageNeutralValue] tuples.');
+    }
     // `this` might be a subclass of FieldDropdown if that class doesn't
     // override the static fromJson method.
-    return new this(options['options'], undefined, options);
+    return new this(options.options, undefined, options);
   }
 
   /**
@@ -686,12 +692,28 @@ export class FieldDropdown extends Field {
   }
 }
 
-/** Dropdown image properties. */
-interface ImageProperties {
+/**
+ * Definition of a human-readable image dropdown option.
+ */
+export interface ImageProperties {
   src: string;
   alt: string;
   width: number;
   height: number;
+}
+
+/**
+ * An individual option in the dropdown menu. The first element is the human-
+ * readable value (text or image), and the second element is the language-
+ * neutral value.
+ */
+export type MenuOption = [string | ImageProperties, string];
+
+/**
+ * fromJson config for the dropdown field.
+ */
+export interface FieldDropdownFromJsonConfig extends FieldConfig {
+  options?: MenuOption[];
 }
 
 /**

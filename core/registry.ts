@@ -60,7 +60,7 @@ export const DEFAULT = 'default';
  * A name with the type of the element stored in the generic.
  * @alias Blockly.registry.Type
  */
-export class Type<T> {
+export class Type<_T> {
   /** @param name The name of the registry type. */
   constructor(private readonly name: string) {}
 

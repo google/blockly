@@ -11,8 +11,9 @@
     // normally they are ignored as source files
     "allowJs": true,
 
-    // Generate d.ts files
+    // Generate d.ts files and sourcemaps.
     "declaration": true,
+    "sourceMap": true,
 
     "module": "ES2015",
     "moduleResolution": "node",

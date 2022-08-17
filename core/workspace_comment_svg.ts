@@ -209,6 +209,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * @param e Mouse event.
    * @internal
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   showContextMenu(e: Event) {
     throw new Error(
         'The implementation of showContextMenu should be ' +
@@ -714,11 +715,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
         });
     browserEvents.conditionalBind(
         textarea, 'change', this,
-        /** @param e Unused event parameter */
-        /* eslint-enable no-unused-vars */
-        function(
-            this: WorkspaceCommentSvg,
-            /* eslint-disable no-unused-vars */ e: Event) {
+        function(this: WorkspaceCommentSvg, _e: Event) {
           this.setContent(textarea.value);
         });
     // AnyDuringMigration because:  Type 'SVGForeignObjectElement | null' is not

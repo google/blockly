@@ -303,4 +303,4 @@ export function getContainerOffsetToScrollInto(
 
 export const TEST_ONLY = {
   getSizeInternal,
-}
+};

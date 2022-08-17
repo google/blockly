@@ -531,7 +531,7 @@ blocks['lists_getIndex'] = {
         /**
          * @param {*} value The input value.
          * @this {FieldDropdown}
-         * @returns {null|undefined} Null if the field has been replaced;
+         * @return {null|undefined} Null if the field has been replaced;
          *     otherwise undefined.
          */
         function(value) {
@@ -694,7 +694,7 @@ blocks['lists_setIndex'] = {
         /**
          * @param {*} value The input value.
          * @this {FieldDropdown}
-         * @returns {null|undefined} Null if the field has been replaced;
+         * @return {null|undefined} Null if the field has been replaced;
          *     otherwise undefined.
          */
         function(value) {
@@ -822,7 +822,7 @@ blocks['lists_getSublist'] = {
         /**
          * @param {*} value The input value.
          * @this {FieldDropdown}
-         * @returns {null|undefined} Null if the field has been replaced;
+         * @return {null|undefined} Null if the field has been replaced;
          *     otherwise undefined.
          */
         function(value) {

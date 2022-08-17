@@ -191,7 +191,7 @@ export class Mutator extends Icon {
       workspaceOptions.languageTree = toolbox.convertToolboxDefToJson(quarkXml);
     }
     this.workspace_ = this.newWorkspaceSvg(workspaceOptions);
-    this.workspace_.isMutator = true;
+    this.workspace_.internalIsMutator = true;
     this.workspace_.addChangeListener(eventUtils.disableOrphans);
 
     // Mutator flyouts go inside the mutator workspace's <g> rather than in
@@ -217,6 +217,7 @@ export class Mutator extends Icon {
   /**
    * @internal
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   newWorkspaceSvg(options: Options): WorkspaceSvg {
     throw new Error(
         'The implementation of newWorkspaceSvg should be ' +

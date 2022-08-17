@@ -18,7 +18,7 @@ goog.declareModuleId('Blockly.FieldMultilineInput');
 import * as Css from './css.js';
 import {Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
-import {FieldTextInput} from './field_textinput.js';
+import {FieldTextInputConfig, FieldTextInput} from './field_textinput.js';
 import * as aria from './utils/aria.js';
 import * as dom from './utils/dom.js';
 import {KeyCodes} from './utils/keycodes.js';
@@ -68,7 +68,7 @@ export class FieldMultilineInput extends FieldTextInput {
    */
   constructor(
       opt_value?: string|Sentinel, opt_validator?: Function,
-      opt_config?: AnyDuringMigration) {
+      opt_config?: FieldMultilineInputConfig) {
     super(Field.SKIP_SETUP);
 
     if (opt_value === Field.SKIP_SETUP) {
@@ -83,9 +83,9 @@ export class FieldMultilineInput extends FieldTextInput {
     }
   }
 
-  override configure_(config: AnyDuringMigration) {
+  protected override configure_(config: FieldMultilineInputConfig) {
     super.configure_(config);
-    config['maxLines'] && this.setMaxLines(config['maxLines']);
+    if (config.maxLines) this.setMaxLines(config.maxLines);
   }
 
   /**
@@ -424,8 +424,9 @@ export class FieldMultilineInput extends FieldTextInput {
    * @nocollapse
    * @internal
    */
-  static override fromJson(options: AnyDuringMigration): FieldMultilineInput {
-    const text = parsing.replaceMessageReferences(options['text']);
+  static override fromJson(options: FieldMultilineInputFromJsonConfig):
+      FieldMultilineInput {
+    const text = parsing.replaceMessageReferences(options.text);
     // `this` might be a subclass of FieldMultilineInput if that class doesn't
     // override the static fromJson method.
     return new this(text, undefined, options);
@@ -448,3 +449,18 @@ Css.register(`
 `);
 
 fieldRegistry.register('field_multilinetext', FieldMultilineInput);
+
+/**
+ * Config options for the multiline input field.
+ */
+export interface FieldMultilineInputConfig extends FieldTextInputConfig {
+  maxLines?: number;
+}
+
+/**
+ * fromJson config options for the multiline input field.
+ */
+export interface FieldMultilineInputFromJsonConfig extends
+    FieldMultilineInputConfig {
+  text?: string;
+}

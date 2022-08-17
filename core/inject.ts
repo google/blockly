@@ -34,7 +34,6 @@ import * as dom from './utils/dom.js';
 import {Svg} from './utils/svg.js';
 import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
-import {Workspace} from './workspace.js';
 import {WorkspaceDragSurfaceSvg} from './workspace_drag_surface_svg.js';
 import {WorkspaceSvg} from './workspace_svg.js';
 

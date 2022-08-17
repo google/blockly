@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.trashcan');
+goog.declareModuleId('Blockly.test.trashcan');
 
-const {assertEventFired, assertEventNotFired} = goog.require('Blockly.test.helpers.events');
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
-const {defineBasicBlockWithField, defineMutatorBlocks, defineRowBlock, defineStackBlock, defineStatementBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
-const eventUtils = goog.require('Blockly.Events.utils');
-const {simulateClick} = goog.require('Blockly.test.helpers.userInput');
+import {assertEventFired, assertEventNotFired} from './test_helpers/events.js';
+import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
+import {defineBasicBlockWithField, defineMutatorBlocks, defineRowBlock, defineStackBlock, defineStatementBlock} from './test_helpers/block_definitions.js';
+import * as eventUtils from '../../build/src/core/events/utils.js';
+import {simulateClick} from './test_helpers/user_input.js';
 
 
 suite("Trashcan", function() {

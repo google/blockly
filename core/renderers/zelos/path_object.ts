@@ -37,18 +37,17 @@ import type {ConstantProvider} from './constants.js';
 export class PathObject extends BasePathObject {
   /** The selected path of the block. */
   private svgPathSelected_: SVGElement|null = null;
-  private readonly outlines_: {[key: string]: SVGElement};
+
+  /** The outline paths on the block. */
+  private readonly outlines = new Map<string, SVGElement>();
 
   /**
    * A set used to determine which outlines were used during a draw pass.  The
    * set is initialized with a reference to all the outlines in
-   * `this.outlines_`. Every time we use an outline during the draw pass, the
+   * `this.outlines`. Every time we use an outline during the draw pass, the
    * reference is removed from this set.
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type '{ [key:
-  // string]: number; }'.
-  private remainingOutlines_: {[key: string]: number} =
-      null as AnyDuringMigration;
+  private remainingOutlines = new Set<string>();
 
   /**
    * The type of block's output connection shape.  This is set when a block
@@ -70,9 +69,6 @@ export class PathObject extends BasePathObject {
     super(root, style, constants);
 
     this.constants = constants;
-
-    /** The outline paths on the block. */
-    this.outlines_ = Object.create(null);
   }
 
   override setPath(pathString: string) {
@@ -91,16 +87,16 @@ export class PathObject extends BasePathObject {
     }
 
     // Apply colour to outlines.
-    for (const key in this.outlines_) {
-      this.outlines_[key].setAttribute('fill', this.style.colourTertiary);
+    for (const outline of this.outlines.values()) {
+      outline.setAttribute('fill', this.style.colourTertiary);
     }
   }
 
   override flipRTL() {
     super.flipRTL();
     // Mirror each input outline path.
-    for (const key in this.outlines_) {
-      this.outlines_[key].setAttribute('transform', 'scale(-1 1)');
+    for (const outline of this.outlines.values()) {
+      outline.setAttribute('transform', 'scale(-1 1)');
     }
   }
 
@@ -151,11 +147,9 @@ export class PathObject extends BasePathObject {
    * @internal
    */
   beginDrawing() {
-    this.remainingOutlines_ = Object.create(null);
-    for (const key in this.outlines_) {
-      // The value set here isn't used anywhere, we are just using the
-      // object as a Set data structure.
-      this.remainingOutlines_[key] = 1;
+    this.remainingOutlines.clear();
+    for (const key of this.outlines.keys()) {
+      this.remainingOutlines.add(key);
     }
   }
 
@@ -166,14 +160,12 @@ export class PathObject extends BasePathObject {
   endDrawing() {
     // Go through all remaining outlines that were not used this draw pass, and
     // remove them.
-    if (this.remainingOutlines_) {
-      for (const key in this.remainingOutlines_) {
+    if (this.remainingOutlines.size) {
+      for (const key of this.remainingOutlines) {
         this.removeOutlinePath_(key);
       }
     }
-    // AnyDuringMigration because:  Type 'null' is not assignable to type '{
-    // [key: string]: number; }'.
-    this.remainingOutlines_ = null as AnyDuringMigration;
+    this.remainingOutlines.clear();
   }
 
   /**
@@ -195,20 +187,21 @@ export class PathObject extends BasePathObject {
    * @return The SVG outline path.
    */
   private getOutlinePath_(name: string): SVGElement {
-    if (!this.outlines_[name]) {
-      this.outlines_[name] = dom.createSvgElement(
-          Svg.PATH, {
-            'class': 'blocklyOutlinePath',  // IE doesn't like paths without the
-            // data definition, set empty
-            // default
-            'd': '',
-          },
-          this.svgRoot);
+    if (!this.outlines.has(name)) {
+      this.outlines.set(
+          name,
+          dom.createSvgElement(
+              Svg.PATH, {
+                'class':
+                    'blocklyOutlinePath',  // IE doesn't like paths without the
+                // data definition, set empty
+                // default
+                'd': '',
+              },
+              this.svgRoot));
     }
-    if (this.remainingOutlines_) {
-      delete this.remainingOutlines_[name];
-    }
-    return this.outlines_[name];
+    this.remainingOutlines.delete(name);
+    return this.outlines.get(name)!;
   }
 
   /**
@@ -216,7 +209,7 @@ export class PathObject extends BasePathObject {
    * @param name The input name.
    */
   private removeOutlinePath_(name: string) {
-    this.outlines_[name].parentNode!.removeChild(this.outlines_[name]);
-    delete this.outlines_[name];
+    this.outlines.get(name)?.parentNode?.removeChild(this.outlines.get(name)!);
+    this.outlines.delete(name);
   }
 }

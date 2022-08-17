@@ -23,7 +23,6 @@ import * as dom from '../../utils/dom.js';
 import * as parsing from '../../utils/parsing.js';
 import {Svg} from '../../utils/svg.js';
 import * as svgPaths from '../../utils/svg_paths.js';
-import * as userAgent from '../../utils/useragent.js';
 
 
 /** An object containing sizing and path information about outside corners. */
@@ -461,8 +460,11 @@ export class ConstantProvider {
 
     this.START_POINT = svgPaths.moveBy(0, 0);
 
-    /** A field's text element's dominant baseline. */
-    this.FIELD_TEXT_BASELINE_CENTER = !userAgent.IE && !userAgent.EDGE;
+    /**
+     * A field's text element's dominant baseline. Pre-2022 this could be false
+     * for certain browsers.
+     */
+    this.FIELD_TEXT_BASELINE_CENTER = true;
 
     /** A dropdown field's border rect height. */
     this.FIELD_DROPDOWN_BORDER_RECT_HEIGHT = this.FIELD_BORDER_RECT_HEIGHT;
@@ -1117,7 +1119,7 @@ export class ConstantProvider {
       selector + ' .blocklyReplaceable .blocklyPath {', 'fill-opacity: .5;', '}', selector + ' .blocklyReplaceable .blocklyPathLight,', selector + ' .blocklyReplaceable .blocklyPathDark {', 'display: none;', '}',
 
       // Insertion marker.
-      selector + ' .blocklyInsertionMarker>.blocklyPath {', 'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';', 'stroke: none;', '}',];
+      selector + ' .blocklyInsertionMarker>.blocklyPath {', 'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';', 'stroke: none;', '}'];
   }
 }
 /* clang-format on */

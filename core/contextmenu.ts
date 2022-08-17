@@ -20,19 +20,16 @@ import type {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import * as clipboard from './clipboard.js';
 import {config} from './config.js';
-import type {ContextMenuOption, ContextMenuRegistry, LegacyContextMenuOption} from './contextmenu_registry.js';
-import * as BlockCreate from './events/events_block_create.js';
+import type {ContextMenuOption, LegacyContextMenuOption} from './contextmenu_registry.js';
 import * as eventUtils from './events/utils.js';
 import {Menu} from './menu.js';
 import {MenuItem} from './menuitem.js';
 import {Msg} from './msg.js';
 import * as aria from './utils/aria.js';
 import {Coordinate} from './utils/coordinate.js';
-import * as deprecation from './utils/deprecation.js';
 import * as dom from './utils/dom.js';
 import {Rect} from './utils/rect.js';
 import * as svgMath from './utils/svg_math.js';
-import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
 import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
@@ -44,7 +41,7 @@ import * as Xml from './xml.js';
  */
 let currentBlock: Block|null = null;
 
-let dummyOwner = {};
+const dummyOwner = {};
 
 /**
  * Gets the block the context menu is currently attached to.
@@ -351,9 +348,7 @@ export function workspaceCommentOption(
   }
 
   const wsCommentOption = {
-    // Foreign objects don't work in IE.  Don't let the user create comments
-    // that they won't be able to edit.
-    enabled: !userAgent.IE,
+    enabled: true,
   } as ContextMenuOption;
   wsCommentOption.text = Msg['ADD_COMMENT'];
   wsCommentOption.callback = function() {

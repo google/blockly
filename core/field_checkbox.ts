@@ -18,7 +18,7 @@ goog.declareModuleId('Blockly.FieldCheckbox');
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_block_change.js';
 
-import {Field} from './field.js';
+import {FieldConfig, Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import * as dom from './utils/dom.js';
 import type {Sentinel} from './utils/sentinel.js';
@@ -61,7 +61,7 @@ export class FieldCheckbox extends Field {
    */
   constructor(
       opt_value?: string|boolean|Sentinel, opt_validator?: Function,
-      opt_config?: AnyDuringMigration) {
+      opt_config?: FieldCheckboxConfig) {
     super(Field.SKIP_SETUP);
 
     /**
@@ -86,11 +86,9 @@ export class FieldCheckbox extends Field {
    * Configure the field based on the given map of options.
    * @param config A map of options to configure the field based on.
    */
-  protected override configure_(config: AnyDuringMigration) {
+  protected override configure_(config: FieldCheckboxConfig) {
     super.configure_(config);
-    if (config['checkCharacter']) {
-      this.checkChar_ = config['checkCharacter'];
-    }
+    if (config.checkCharacter) this.checkChar_ = config.checkCharacter;
   }
 
   /**
@@ -219,13 +217,27 @@ export class FieldCheckbox extends Field {
    * @nocollapse
    * @internal
    */
-  static fromJson(options: AnyDuringMigration): FieldCheckbox {
+  static fromJson(options: FieldCheckboxFromJsonConfig): FieldCheckbox {
     // `this` might be a subclass of FieldCheckbox if that class doesn't
     // 'override' the static fromJson method.
-    return new this(options['checked'], undefined, options);
+    return new this(options.checked, undefined, options);
   }
 }
 
 fieldRegistry.register('field_checkbox', FieldCheckbox);
 
 (FieldCheckbox.prototype as AnyDuringMigration).DEFAULT_VALUE = false;
+
+/**
+ * Config options for the checkbox field.
+ */
+export interface FieldCheckboxConfig extends FieldConfig {
+  checkCharacter?: string;
+}
+
+/**
+ * fromJson config options for the checkbox field.
+ */
+export interface FieldCheckboxFromJsonConfig extends FieldCheckboxConfig {
+  checked?: boolean;
+}

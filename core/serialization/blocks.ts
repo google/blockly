@@ -84,7 +84,7 @@ export function save(block: Block, {
   addCoordinates = false,
   addInputBlocks = true,
   addNextBlocks = true,
-  doFullSerialization = true
+  doFullSerialization = true,
 }: {
   addCoordinates?: boolean,
   addInputBlocks?: boolean,

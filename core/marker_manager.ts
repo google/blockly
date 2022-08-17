@@ -33,7 +33,9 @@ export class MarkerManager {
 
   /** The cursor's SVG element. */
   private cursorSvg_: SVGElement|null = null;
-  private markers_: {[key: string]: Marker};
+
+  /** The map of markers for the workspace. */
+  private markers = new Map<string, Marker>();
 
   /** The marker's SVG element. */
   private markerSvg_: SVGElement|null = null;
@@ -42,10 +44,7 @@ export class MarkerManager {
    * @param workspace The workspace for the marker manager.
    * @internal
    */
-  constructor(private readonly workspace: WorkspaceSvg) {
-    /** The map of markers for the workspace. */
-    this.markers_ = Object.create(null);
-  }
+  constructor(private readonly workspace: WorkspaceSvg) {}
 
   /**
    * Register the marker by adding it to the map of markers.
@@ -53,13 +52,13 @@ export class MarkerManager {
    * @param marker The marker to register.
    */
   registerMarker(id: string, marker: Marker) {
-    if (this.markers_[id]) {
+    if (this.markers.has(id)) {
       this.unregisterMarker(id);
     }
     marker.setDrawer(
         this.workspace.getRenderer().makeMarkerDrawer(this.workspace, marker));
     this.setMarkerSvg(marker.getDrawer().createDom());
-    this.markers_[id] = marker;
+    this.markers.set(id, marker);
   }
 
   /**
@@ -67,10 +66,10 @@ export class MarkerManager {
    * @param id The ID of the marker to unregister.
    */
   unregisterMarker(id: string) {
-    const marker = this.markers_[id];
+    const marker = this.markers.get(id);
     if (marker) {
       marker.dispose();
-      delete this.markers_[id];
+      this.markers.delete(id);
     } else {
       throw Error(
           'Marker with ID ' + id + ' does not exist. ' +
@@ -93,7 +92,7 @@ export class MarkerManager {
    *     exists.
    */
   getMarker(id: string): Marker|null {
-    return this.markers_[id] || null;
+    return this.markers.get(id) || null;
   }
 
   /**
@@ -169,13 +168,11 @@ export class MarkerManager {
    * @internal
    */
   dispose() {
-    const markerIds = Object.keys(this.markers_);
+    const markerIds = Object.keys(this.markers);
     for (let i = 0, markerId; markerId = markerIds[i]; i++) {
       this.unregisterMarker(markerId);
     }
-    // AnyDuringMigration because:  Type 'null' is not assignable to type '{
-    // [key: string]: Marker; }'.
-    this.markers_ = null as AnyDuringMigration;
+    this.markers.clear();
     if (this.cursor_) {
       this.cursor_.dispose();
       this.cursor_ = null;

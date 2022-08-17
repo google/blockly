@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.contextMenuItem');
+goog.declareModuleId('Blockly.test.contextMenuItem');
 
-const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+import {sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
 
 
 suite('Context Menu Items', function() {
@@ -354,16 +354,6 @@ suite('Context Menu Items', function() {
 
       test('Enabled for normal block', function() {
         chai.assert.equal(this.commentOption.preconditionFn(this.scope), 'enabled');
-      });
-
-      test.skip('Hidden for IE', function() {
-        const oldState = Blockly.utils.userAgent.IE;
-        try {
-          Blockly.utils.userAgent.IE = true;
-          chai.assert.equal(this.commentOption.preconditionFn(this.scope), 'hidden');
-        } finally {
-          Blockly.utils.userAgent.IE = oldState;
-        }
       });
 
       test('Hidden for collapsed block', function() {

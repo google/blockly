@@ -17,7 +17,7 @@ goog.declareModuleId('Blockly.FieldNumber');
 
 import {Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
-import {FieldTextInput} from './field_textinput.js';
+import {FieldTextInputConfig, FieldTextInput} from './field_textinput.js';
 import * as aria from './utils/aria.js';
 import type {Sentinel} from './utils/sentinel.js';
 
@@ -70,7 +70,7 @@ export class FieldNumber extends FieldTextInput {
   constructor(
       opt_value?: string|number|Sentinel, opt_min?: string|number|null,
       opt_max?: string|number|null, opt_precision?: string|number|null,
-      opt_validator?: Function|null, opt_config?: AnyDuringMigration) {
+      opt_validator?: Function|null, opt_config?: FieldNumberConfig) {
     // Pass SENTINEL so that we can define properties before value validation.
     super(Field.SKIP_SETUP);
 
@@ -92,11 +92,11 @@ export class FieldNumber extends FieldTextInput {
    * Configure the field based on the given map of options.
    * @param config A map of options to configure the field based on.
    */
-  override configure_(config: AnyDuringMigration) {
+  protected override configure_(config: FieldNumberConfig) {
     super.configure_(config);
-    this.setMinInternal_(config['min']);
-    this.setMaxInternal_(config['max']);
-    this.setPrecisionInternal_(config['precision']);
+    this.setMinInternal_(config.min);
+    this.setMaxInternal_(config.max);
+    this.setPrecisionInternal_(config.precision);
   }
 
   /**
@@ -298,14 +298,30 @@ export class FieldNumber extends FieldTextInput {
    * @nocollapse
    * @internal
    */
-  static override fromJson(options: AnyDuringMigration): FieldNumber {
+  static override fromJson(options: FieldNumberFromJsonConfig): FieldNumber {
     // `this` might be a subclass of FieldNumber if that class doesn't override
     // the static fromJson method.
     return new this(
-        options['value'], undefined, undefined, undefined, undefined, options);
+        options.value, undefined, undefined, undefined, undefined, options);
   }
 }
 
 fieldRegistry.register('field_number', FieldNumber);
 
 (FieldNumber.prototype as AnyDuringMigration).DEFAULT_VALUE = 0;
+
+/**
+ * Config options for the number field.
+ */
+export interface FieldNumberConfig extends FieldTextInputConfig {
+  min?: number;
+  max?: number;
+  precision?: number;
+}
+
+/**
+ * fromJson config options for the number field.
+ */
+export interface FieldNumberFromJsonConfig extends FieldNumberConfig {
+  value?: number;
+}

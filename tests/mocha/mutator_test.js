@@ -5,10 +5,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.mutator');
+goog.declareModuleId('Blockly.test.mutator');
 
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
-const {createRenderedBlock, defineMutatorBlocks} = goog.require('Blockly.test.helpers.blockDefinitions');
+import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
+import {createRenderedBlock, defineMutatorBlocks} from './test_helpers/block_definitions.js';
 
 
 suite('Mutator', function() {

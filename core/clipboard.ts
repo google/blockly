@@ -88,4 +88,4 @@ function duplicateInternal(toDuplicate: ICopyable): ICopyable|null {
 export const TEST_ONLY = {
   duplicateInternal,
   copyInternal,
-}
+};

@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.toolbox');
+goog.declareModuleId('Blockly.test.toolbox');
 
-const {defineStackBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
-const {getBasicToolbox, getCategoryJSON, getChildItem, getCollapsibleItem, getDeeplyNestedJSON, getInjectedToolbox, getNonCollapsibleItem, getSeparator, getSimpleJson, getXmlArray} = goog.require('Blockly.test.helpers.toolboxDefinitions');
+import {defineStackBlock} from './test_helpers/block_definitions.js';
+import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
+import {getBasicToolbox, getCategoryJSON, getChildItem, getCollapsibleItem, getDeeplyNestedJSON, getInjectedToolbox, getNonCollapsibleItem, getSeparator, getSimpleJson, getXmlArray} from './test_helpers/toolbox_definitions.js';
 
 
 suite('Toolbox', function() {

@@ -316,18 +316,18 @@ export class Block implements IASTNodeLocation, IDeletable {
    */
   dispose(healStack: boolean) {
     if (this.disposed) {
-      // Already deleted.
       return;
-    }
-    // Terminate onchange event calls.
-    if (this.onchangeWrapper_) {
-      this.workspace.removeChangeListener(this.onchangeWrapper_);
     }
 
     this.unplug(healStack);
     if (eventUtils.isEnabled()) {
       eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_DELETE))!(this));
     }
+
+    if (this.onchangeWrapper_) {
+      this.workspace.removeChangeListener(this.onchangeWrapper_);
+    }
+
     eventUtils.disable();
 
     try {
@@ -743,8 +743,7 @@ export class Block implements IASTNodeLocation, IDeletable {
     for (let child, i = 0; child = childBlocks[i]; i++) {
       // AnyDuringMigration because:  Argument of type 'Block[]' is not
       // assignable to parameter of type 'this[]'.
-      blocks.push.apply(
-          blocks, child.getDescendants(ordered) as AnyDuringMigration);
+      blocks.push(...child.getDescendants(ordered) as AnyDuringMigration);
     }
     return blocks;
   }

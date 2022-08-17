@@ -23,7 +23,7 @@ import * as browserEvents from './browser_events.js';
 import * as dialog from './dialog.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import * as eventUtils from './events/utils.js';
-import {Field} from './field.js';
+import {FieldConfig, Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import {Msg} from './msg.js';
 import * as aria from './utils/aria.js';
@@ -105,7 +105,7 @@ export class FieldTextInput extends Field {
    */
   constructor(
       opt_value?: string|Sentinel, opt_validator?: Function|null,
-      opt_config?: AnyDuringMigration) {
+      opt_config?: FieldTextInputConfig) {
     super(Field.SKIP_SETUP);
 
     if (opt_value === Field.SKIP_SETUP) {
@@ -120,10 +120,10 @@ export class FieldTextInput extends Field {
     }
   }
 
-  override configure_(config: AnyDuringMigration) {
+  protected override configure_(config: FieldTextInputConfig) {
     super.configure_(config);
-    if (typeof config['spellcheck'] === 'boolean') {
-      this.spellcheck_ = config['spellcheck'];
+    if (config.spellcheck !== undefined) {
+      this.spellcheck_ = config.spellcheck;
     }
   }
 
@@ -564,8 +564,8 @@ export class FieldTextInput extends Field {
    * @nocollapse
    * @internal
    */
-  static fromJson(options: AnyDuringMigration): FieldTextInput {
-    const text = parsing.replaceMessageReferences(options['text']);
+  static fromJson(options: FieldTextInputFromJsonConfig): FieldTextInput {
+    const text = parsing.replaceMessageReferences(options.text);
     // `this` might be a subclass of FieldTextInput if that class doesn't
     // override the static fromJson method.
     return new this(text, undefined, options);
@@ -575,3 +575,17 @@ export class FieldTextInput extends Field {
 fieldRegistry.register('field_input', FieldTextInput);
 
 (FieldTextInput.prototype as AnyDuringMigration).DEFAULT_VALUE = '';
+
+/**
+ * Config options for the text input field.
+ */
+export interface FieldTextInputConfig extends FieldConfig {
+  spellcheck?: boolean;
+}
+
+/**
+ * fromJson config options for the text input field.
+ */
+export interface FieldTextInputFromJsonConfig extends FieldTextInputConfig {
+  text?: string;
+}

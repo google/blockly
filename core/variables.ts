@@ -46,8 +46,8 @@ export const CATEGORY_NAME = 'VARIABLE';
  */
 export function allUsedVarModels(ws: Workspace): VariableModel[] {
   const blocks = ws.getAllBlocks(false);
-  const variableHash = Object.create(null);
-  // Iterate through every block and add each variable to the hash.
+  const variables = new Set<VariableModel>();
+  // Iterate through every block and add each variable to the set.
   for (let i = 0; i < blocks.length; i++) {
     const blockVariables = blocks[i].getVarModels();
     if (blockVariables) {
@@ -55,17 +55,13 @@ export function allUsedVarModels(ws: Workspace): VariableModel[] {
         const variable = blockVariables[j];
         const id = variable.getId();
         if (id) {
-          variableHash[id] = variable;
+          variables.add(variable);
         }
       }
     }
   }
-  // Flatten the hash into a list.
-  const variableList = [];
-  for (const id in variableHash) {
-    variableList.push(variableHash[id]);
-  }
-  return variableList;
+  // Convert the set into a list.
+  return Array.from(variables.values());
 }
 
 const ALL_DEVELOPER_VARS_WARNINGS_BY_BLOCK_TYPE: {[key: string]: boolean} = {};
@@ -83,7 +79,7 @@ const ALL_DEVELOPER_VARS_WARNINGS_BY_BLOCK_TYPE: {[key: string]: boolean} = {};
  */
 export function allDeveloperVariables(workspace: Workspace): string[] {
   const blocks = workspace.getAllBlocks(false);
-  const variableHash = Object.create(null);
+  const variables = new Set<string>();
   for (let i = 0, block; block = blocks[i]; i++) {
     let getDeveloperVariables = block.getDeveloperVariables;
     if (!getDeveloperVariables &&
@@ -101,12 +97,12 @@ export function allDeveloperVariables(workspace: Workspace): string[] {
     if (getDeveloperVariables) {
       const devVars = getDeveloperVariables();
       for (let j = 0; j < devVars.length; j++) {
-        variableHash[devVars[j]] = true;
+        variables.add(devVars[j]);
       }
     }
   }
-  // Flatten the hash into a list.
-  return Object.keys(variableHash);
+  // Convert the set into a list.
+  return Array.from(variables.values());
 }
 
 /**
@@ -597,4 +593,4 @@ export function getAddedVariables(
 
 export const TEST_ONLY = {
   generateUniqueNameInternal,
-}
+};

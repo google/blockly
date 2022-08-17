@@ -152,17 +152,17 @@ export class Scrollbar {
     const scrollbarThickness = Scrollbar.scrollbarThickness;
     if (horizontal) {
       this.svgBackground_!.setAttribute(
-          'height', scrollbarThickness.toString());
-      this.outerSvg_!.setAttribute('height', scrollbarThickness.toString());
+          'height', String(scrollbarThickness));
+      this.outerSvg_!.setAttribute('height', String(scrollbarThickness));
       this.svgHandle_!.setAttribute(
-          'height', (scrollbarThickness - 5).toString());
-      this.svgHandle_!.setAttribute('y', (2.5).toString());
+          'height', String(scrollbarThickness - 5));
+      this.svgHandle_!.setAttribute('y', String(2.5));
     } else {
-      this.svgBackground_!.setAttribute('width', scrollbarThickness.toString());
-      this.outerSvg_!.setAttribute('width', scrollbarThickness.toString());
+      this.svgBackground_!.setAttribute('width', String(scrollbarThickness));
+      this.outerSvg_!.setAttribute('width', String(scrollbarThickness));
       this.svgHandle_!.setAttribute(
-          'width', (scrollbarThickness - 5).toString());
-      this.svgHandle_!.setAttribute('x', (2.5).toString());
+          'width', String(scrollbarThickness - 5));
+      this.svgHandle_!.setAttribute('x', String(2.5));
 
       this.lengthAttribute_ = 'height';
       this.positionAttribute_ = 'y';
@@ -224,7 +224,7 @@ export class Scrollbar {
   private setHandleLength_(newLength: number) {
     this.handleLength_ = newLength;
     this.svgHandle_!.setAttribute(
-        this.lengthAttribute_, this.handleLength_.toString());
+        this.lengthAttribute_, String(this.handleLength_));
   }
 
   /**
@@ -253,7 +253,7 @@ export class Scrollbar {
   setHandlePosition(newPosition: number) {
     this.handlePosition_ = newPosition;
     this.svgHandle_!.setAttribute(
-        this.positionAttribute_, this.handlePosition_.toString());
+        this.positionAttribute_, String(this.handlePosition_));
   }
 
   /**
@@ -264,9 +264,9 @@ export class Scrollbar {
   private setScrollbarLength_(newSize: number) {
     this.scrollbarLength_ = newSize;
     this.outerSvg_!.setAttribute(
-        this.lengthAttribute_, this.scrollbarLength_.toString());
+        this.lengthAttribute_, String(this.scrollbarLength_));
     this.svgBackground_!.setAttribute(
-        this.lengthAttribute_, this.scrollbarLength_.toString());
+        this.lengthAttribute_, String(this.scrollbarLength_));
   }
 
   /**

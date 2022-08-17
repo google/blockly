@@ -6,7 +6,6 @@
 /**
  * Utility functions for generating executable code from
  * Blockly code.
- *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -21,7 +20,6 @@ import type {Workspace} from './workspace.js';
 
 /**
  * Class for a code generator that translates the blocks into a language.
- *
  * @unrestricted
  * @alias Blockly.Generator
  */
@@ -106,9 +104,8 @@ export class Generator {
 
   /**
    * Generate code for all blocks in the workspace to the specified language.
-   *
    * @param workspace Workspace to generate code from.
-   * @returns Generated code.
+   * @return Generated code.
    */
   workspaceToCode(workspace?: Workspace): string {
     if (!workspace) {
@@ -168,10 +165,9 @@ export class Generator {
   /**
    * Prepend a common prefix onto each line of code.
    * Intended for indenting code or adding comment markers.
-   *
    * @param text The lines of code.
    * @param prefix The common prefix.
-   * @returns The prefixed lines of code.
+   * @return The prefixed lines of code.
    */
   prefixLines(text: string, prefix: string): string {
     return prefix + text.replace(/(?!\n$)\n/g, '\n' + prefix);
@@ -179,9 +175,8 @@ export class Generator {
 
   /**
    * Recursively spider a tree of blocks, returning all their comments.
-   *
    * @param block The block from which to start spidering.
-   * @returns Concatenated list of comments.
+   * @return Concatenated list of comments.
    */
   allNestedComments(block: Block): string {
     const comments = [];
@@ -202,10 +197,9 @@ export class Generator {
   /**
    * Generate code for the specified block (and attached blocks).
    * The generator must be initialized before calling this function.
-   *
    * @param block The block to generate code for.
    * @param opt_thisOnly True to generate code for only this statement.
-   * @returns For statement blocks, the generated code.
+   * @return For statement blocks, the generated code.
    *     For value blocks, an array containing the generated code and an
    * operator order value.  Returns '' if block is null.
    */
@@ -262,12 +256,11 @@ export class Generator {
 
   /**
    * Generate code representing the specified value input.
-   *
    * @param block The block containing the input.
    * @param name The name of the input.
    * @param outerOrder The maximum binding strength (minimum order value) of any
    *     operators adjacent to "block".
-   * @returns Generated code or '' if no blocks are connected or the specified
+   * @return Generated code or '' if no blocks are connected or the specified
    *     input does not exist.
    */
   valueToCode(block: Block, name: string, outerOrder: number): string {
@@ -337,10 +330,9 @@ export class Generator {
    * statement input. Indent the code.
    * This is mainly used in generators. When trying to generate code to evaluate
    * look at using workspaceToCode or blockToCode.
-   *
    * @param block The block containing the input.
    * @param name The name of the input.
-   * @returns Generated code or '' if no blocks are connected.
+   * @return Generated code or '' if no blocks are connected.
    */
   statementToCode(block: Block, name: string): string {
     const targetBlock = block.getInputTargetBlock(name);
@@ -363,10 +355,9 @@ export class Generator {
    * Add statement suffix at the start of the loop block (right after the loop
    * statement executes), and a statement prefix to the end of the loop block
    * (right before the loop statement executes).
-   *
    * @param branch Code for loop contents.
    * @param block Enclosing block.
-   * @returns Loop contents, with infinite loop trap added.
+   * @return Loop contents, with infinite loop trap added.
    */
   addLoopTrap(branch: string, block: Block): string {
     if (this.INFINITE_LOOP_TRAP) {
@@ -390,10 +381,9 @@ export class Generator {
   /**
    * Inject a block ID into a message to replace '%1'.
    * Used for STATEMENT_PREFIX, STATEMENT_SUFFIX, and INFINITE_LOOP_TRAP.
-   *
    * @param msg Code snippet with '%1'.
    * @param block Block which has an ID.
-   * @returns Code snippet with ID.
+   * @return Code snippet with ID.
    */
   injectId(msg: string, block: Block): string {
     const id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
@@ -402,7 +392,6 @@ export class Generator {
 
   /**
    * Add one or more words to the list of reserved words for this language.
-   *
    * @param words Comma-separated list of words to add to the list.
    *     No spaces.  Duplicates are ok.
    */
@@ -427,7 +416,7 @@ export class Generator {
    * @param desiredName The desired name of the function (e.g. mathIsPrime).
    * @param code A list of statements or one multi-line code string.  Use '  '
    *     for indents (they will be replaced).
-   * @returns The actual name of the new function.  This may differ from
+   * @return The actual name of the new function.  This may differ from
    *     desiredName if the former has already been taken by the user.
    */
   protected provideFunction_(desiredName: string, code: string[]|string):
@@ -460,7 +449,6 @@ export class Generator {
    * Hook for code to run before code generation starts.
    * Subclasses may override this, e.g. to initialise the database of variable
    * names.
-   *
    * @param _workspace Workspace to generate code from.
    */
   init(_workspace: Workspace) {
@@ -479,11 +467,10 @@ export class Generator {
    * Subclasses may override this, e.g. to generate code for statements
    * following the block, or to handle comments for the specified block and any
    * connected value blocks.
-   *
    * @param _block The current block.
    * @param code The code created for this block.
    * @param _opt_thisOnly True to generate code for only this statement.
-   * @returns Code with comments and subsequent blocks added.
+   * @return Code with comments and subsequent blocks added.
    */
   protected scrub_(_block: Block, code: string, _opt_thisOnly?: boolean):
       string {
@@ -495,9 +482,8 @@ export class Generator {
    * Hook for code to run at end of code generation.
    * Subclasses may override this, e.g. to prepend the generated code with
    * import statements or variable definitions.
-   *
    * @param code Generated code.
-   * @returns Completed code.
+   * @return Completed code.
    */
   finish(code: string): string {
     // Optionally override
@@ -512,9 +498,8 @@ export class Generator {
    * anything.
    * Subclasses may override this, e.g. if their language does not allow
    * naked values.
-   *
    * @param line Line of generated code.
-   * @returns Legal line of code.
+   * @return Legal line of code.
    */
   scrubNakedValue(line: string): string {
     // Optionally override
@@ -525,7 +510,6 @@ export class Generator {
 Object.defineProperties(Generator.prototype, {
   /**
    * A database of variable names.
-   *
    * @name Blockly.Generator.prototype.variableDB_
    * @deprecated 'variableDB_' was renamed to 'nameDB_' (May 2021).
    * @suppress {checkTypes}
@@ -533,20 +517,14 @@ Object.defineProperties(Generator.prototype, {
   // AnyDuringMigration because:  Type 'Names | undefined' is not assignable to
   // type 'PropertyDescriptor'.
   variableDB_: ({
-    /**
-     * @param this
-     * @returns Name database.
-     */
+    /** @return Name database. */
     get(this: Generator): Names |
         undefined {
           deprecation.warn(
               'variableDB_', 'May 2021', 'September 2022', 'nameDB_');
           return this.nameDB_;
         },
-    /**
-     * @param this
-     * @param nameDb New name database.
-     */
+    /** @param nameDb New name database. */
     set(this: Generator, nameDb: Names|undefined) {
       deprecation.warn('variableDB_', 'May 2021', 'September2022', 'nameDB_');
       this.nameDB_ = nameDb;

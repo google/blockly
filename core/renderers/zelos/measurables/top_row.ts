@@ -5,7 +5,6 @@
 
 /**
  * An object representing the top row of a rendered block.
- *
  * @class
  */
 import * as goog from '../../../../closure/goog/goog.js';
@@ -23,7 +22,6 @@ import {TopRow as BaseTopRow} from '../../../renderers/measurables/top_row.js';
  * connections.
  * After this constructor is called, the row will contain all non-spacer
  * elements it needs.
- *
  * @alias Blockly.zelos.TopRow
  */
 export class TopRow extends BaseTopRow {
@@ -39,11 +37,7 @@ export class TopRow extends BaseTopRow {
     return false;
   }
 
-  /**
-   * Render a round corner unless the block has an output connection.
-   *
-   * @param block
-   */
+  /** Render a round corner unless the block has an output connection. */
   override hasLeftSquareCorner(block: BlockSvg) {
     const hasHat =
         (block.hat ? block.hat === 'cap' : this.constants_.ADD_START_HATS) &&
@@ -51,11 +45,7 @@ export class TopRow extends BaseTopRow {
     return !!block.outputConnection || hasHat;
   }
 
-  /**
-   * Render a round corner unless the block has an output connection.
-   *
-   * @param block
-   */
+  /** Render a round corner unless the block has an output connection. */
   override hasRightSquareCorner(block: BlockSvg) {
     return !!block.outputConnection && !block.statementInputCount &&
         !block.nextConnection;

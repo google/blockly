@@ -5,7 +5,6 @@
 
 /**
  * Objects for rendering highlights on blocks.
- *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -63,7 +62,6 @@ export interface JaggedTeeth {
  * Some highlights are simple offsets of the parent paths and can be generated
  * programmatically.  Others, especially on curves, are just made out of piles
  * of constants and are hard to tweak.
- *
  * @alias Blockly.geras.HighlightConstantProvider
  */
 export class HighlightConstantProvider {
@@ -95,7 +93,6 @@ export class HighlightConstantProvider {
 
     /**
      * The start point, which is offset in both X and Y, as an SVG path chunk.
-     *
      * @internal
      */
     this.START_POINT = svgPaths.moveBy(this.OFFSET, this.OFFSET);
@@ -103,7 +100,6 @@ export class HighlightConstantProvider {
 
   /**
    * Initialize shape objects based on the constants set in the constructor.
-   *
    * @internal
    */
   init() {
@@ -144,7 +140,7 @@ export class HighlightConstantProvider {
   }
 
   /**
-   * @returns An object containing sizing and path information about inside
+   * @return An object containing sizing and path information about inside
    *     corner highlights.
    * @internal
    */
@@ -188,7 +184,7 @@ export class HighlightConstantProvider {
   }
 
   /**
-   * @returns An object containing sizing and path information about outside
+   * @return An object containing sizing and path information about outside
    *     corner highlights.
    * @internal
    */
@@ -237,7 +233,7 @@ export class HighlightConstantProvider {
   }
 
   /**
-   * @returns An object containing sizing and path information about puzzle tab
+   * @return An object containing sizing and path information about puzzle tab
    *     highlights.
    * @internal
    */
@@ -287,7 +283,7 @@ export class HighlightConstantProvider {
   }
 
   /**
-   * @returns An object containing sizing and path information about notch
+   * @return An object containing sizing and path information about notch
    *     highlights.
    * @internal
    */
@@ -299,7 +295,7 @@ export class HighlightConstantProvider {
   }
 
   /**
-   * @returns An object containing sizing and path information about collapsed
+   * @return An object containing sizing and path information about collapsed
    *     block edge highlights.
    * @internal
    */
@@ -310,7 +306,7 @@ export class HighlightConstantProvider {
   }
 
   /**
-   * @returns An object containing sizing and path information about start
+   * @return An object containing sizing and path information about start
    *     highlights.
    * @internal
    */

@@ -5,7 +5,6 @@
 
 /**
  * A toolbox category used to organize blocks in the toolbox.
- *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -28,7 +27,6 @@ import {ToolboxItem} from './toolbox_item.js';
 
 /**
  * Class for a category in a toolbox.
- *
  * @alias Blockly.ToolboxCategory
  */
 export class ToolboxCategory extends ToolboxItem implements
@@ -116,8 +114,7 @@ export class ToolboxCategory extends ToolboxItem implements
 
   /**
    * Creates an object holding the default classes for a category.
-   *
-   * @returns The configuration object holding all the CSS classes for a
+   * @return The configuration object holding all the CSS classes for a
    *     category.
    */
   protected makeDefaultCssConfig_(): CssConfig {
@@ -141,7 +138,6 @@ export class ToolboxCategory extends ToolboxItem implements
   /**
    * Parses the contents array depending on if the category is a dynamic
    * category, or if its contents are meant to be shown in the flyout.
-   *
    * @param categoryDef The information needed to create a category.
    */
   protected parseContents_(categoryDef: toolbox.CategoryInfo) {
@@ -162,7 +158,6 @@ export class ToolboxCategory extends ToolboxItem implements
 
   /**
    * Parses the non-contents parts of the category def.
-   *
    * @param categoryDef The information needed to create a category.
    */
   protected parseCategoryDef_(categoryDef: toolbox.CategoryInfo) {
@@ -177,8 +172,7 @@ export class ToolboxCategory extends ToolboxItem implements
 
   /**
    * Creates the DOM for the category.
-   *
-   * @returns The parent element for the category.
+   * @return The parent element for the category.
    */
   protected createDom_(): HTMLDivElement {
     this.htmlDiv_ = this.createContainer_();
@@ -213,8 +207,7 @@ export class ToolboxCategory extends ToolboxItem implements
 
   /**
    * Creates the container that holds the row and any subcategories.
-   *
-   * @returns The div that holds the icon and the label.
+   * @return The div that holds the icon and the label.
    */
   protected createContainer_(): HTMLDivElement {
     const container = (document.createElement('div'));
@@ -228,8 +221,7 @@ export class ToolboxCategory extends ToolboxItem implements
   /**
    * Creates the parent of the contents container. All clicks will happen on
    * this div.
-   *
-   * @returns The div that holds the contents container.
+   * @return The div that holds the contents container.
    */
   protected createRowContainer_(): HTMLDivElement {
     const rowDiv = (document.createElement('div'));
@@ -252,8 +244,7 @@ export class ToolboxCategory extends ToolboxItem implements
   /**
    * Creates the container for the label and icon.
    * This is necessary so we can set all subcategory pointer events to none.
-   *
-   * @returns The div that holds the icon and the label.
+   * @return The div that holds the icon and the label.
    */
   protected createRowContentsContainer_(): HTMLDivElement {
     const contentsContainer = (document.createElement('div'));
@@ -267,8 +258,7 @@ export class ToolboxCategory extends ToolboxItem implements
 
   /**
    * Creates the span that holds the category icon.
-   *
-   * @returns The span that holds the category icon.
+   * @return The span that holds the category icon.
    */
   protected createIconDom_(): Element {
     const toolboxIcon = document.createElement('span');
@@ -286,9 +276,8 @@ export class ToolboxCategory extends ToolboxItem implements
   /**
    * Creates the span that holds the category label.
    * This should have an ID for accessibility purposes.
-   *
    * @param name The name of the category.
-   * @returns The span that holds the category label.
+   * @return The span that holds the category label.
    */
   protected createLabelDom_(name: string): Element {
     const toolboxLabel = document.createElement('span');
@@ -309,7 +298,6 @@ export class ToolboxCategory extends ToolboxItem implements
 
   /**
    * Add the strip of colour to the toolbox category.
-   *
    * @param colour The category colour.
    */
   protected addColourBorder_(colour: string) {
@@ -326,9 +314,8 @@ export class ToolboxCategory extends ToolboxItem implements
 
   /**
    * Gets either the colour or the style for a category.
-   *
    * @param categoryDef The object holding information on the category.
-   * @returns The hex colour for the category.
+   * @return The hex colour for the category.
    */
   protected getColour_(categoryDef: toolbox.CategoryInfo): string {
     const styleName =
@@ -352,9 +339,8 @@ export class ToolboxCategory extends ToolboxItem implements
   /**
    * Sets the colour for the category using the style name and returns the new
    * colour as a hex string.
-   *
    * @param styleName Name of the style.
-   * @returns The hex colour for the category.
+   * @return The hex colour for the category.
    */
   private getColourfromStyle_(styleName: string): string {
     const theme = this.workspace_.getTheme();
@@ -375,8 +361,7 @@ export class ToolboxCategory extends ToolboxItem implements
    * The parent toolbox element receives clicks. The parent toolbox will add an
    * ID to this element so it can pass the onClick event to the correct
    * toolboxItem.
-   *
-   * @returns The HTML element that receives clicks.
+   * @return The HTML element that receives clicks.
    */
   override getClickTarget(): Element {
     return this.rowDiv_ as Element;
@@ -384,10 +369,9 @@ export class ToolboxCategory extends ToolboxItem implements
 
   /**
    * Parses the colour on the category.
-   *
    * @param colourValue HSV hue value (0 to 360), #RRGGBB string, or a message
    *     reference string pointing to one of those two values.
-   * @returns The hex colour for the category.
+   * @return The hex colour for the category.
    */
   private parseColour_(colourValue: number|string): string {
     // Decode the colour for any potential message references
@@ -416,7 +400,6 @@ export class ToolboxCategory extends ToolboxItem implements
 
   /**
    * Adds appropriate classes to display an open icon.
-   *
    * @param iconDiv The div that holds the icon.
    */
   protected openIcon_(iconDiv: Element|null) {
@@ -434,7 +417,6 @@ export class ToolboxCategory extends ToolboxItem implements
 
   /**
    * Adds appropriate classes to display a closed icon.
-   *
    * @param iconDiv The div that holds the icon.
    */
   protected closeIcon_(iconDiv: Element|null) {
@@ -454,7 +436,6 @@ export class ToolboxCategory extends ToolboxItem implements
   /**
    * Sets whether the category is visible or not.
    * For a category to be visible its parent category must also be expanded.
-   *
    * @param isVisible True if category should be visible.
    */
   override setVisible_(isVisible: boolean) {
@@ -483,8 +464,7 @@ export class ToolboxCategory extends ToolboxItem implements
    * Whether the category is visible.
    * A category is only visible if all of its ancestors are expanded and
    * isHidden_ is false.
-   *
-   * @returns True if the category is visible, false otherwise.
+   * @return True if the category is visible, false otherwise.
    */
   isVisible(): boolean {
     return !this.isHidden_ && this.allAncestorsExpanded_();
@@ -493,8 +473,7 @@ export class ToolboxCategory extends ToolboxItem implements
   /**
    * Whether all ancestors of a category (parent and parent's parent, etc.) are
    * expanded.
-   *
-   * @returns True only if every ancestor is expanded
+   * @return True only if every ancestor is expanded
    */
   protected allAncestorsExpanded_(): boolean {
     let category: IToolboxItem = this;
@@ -513,7 +492,6 @@ export class ToolboxCategory extends ToolboxItem implements
 
   /**
    * Handles when the toolbox item is clicked.
-   *
    * @param _e Click event to handle.
    */
   onClick(_e: Event) {}
@@ -521,7 +499,6 @@ export class ToolboxCategory extends ToolboxItem implements
 
   /**
    * Sets the current category as selected.
-   *
    * @param isSelected True if this category is selected, false otherwise.
    */
   setSelected(isSelected: boolean) {
@@ -539,7 +516,6 @@ export class ToolboxCategory extends ToolboxItem implements
 
   /**
    * Sets whether the category is disabled.
-   *
    * @param isDisabled True to disable the category, false otherwise.
    */
   setDisabled(isDisabled: boolean) {
@@ -553,8 +529,7 @@ export class ToolboxCategory extends ToolboxItem implements
 
   /**
    * Gets the name of the category. Used for emitting events.
-   *
-   * @returns The name of the toolbox item.
+   * @return The name of the toolbox item.
    */
   getName(): string {
     return this.name_;
@@ -571,8 +546,7 @@ export class ToolboxCategory extends ToolboxItem implements
   /**
    * Gets the contents of the category. These are items that are meant to be
    * displayed in the flyout.
-   *
-   * @returns The definition of items to be displayed in the flyout.
+   * @return The definition of items to be displayed in the flyout.
    */
   getContents(): toolbox.FlyoutItemInfoArray|string {
     return this.flyoutItems_;
@@ -582,7 +556,6 @@ export class ToolboxCategory extends ToolboxItem implements
    * Updates the contents to be displayed in the flyout.
    * If the flyout is open when the contents are updated, refreshSelection on
    * the toolbox must also be called.
-   *
    * @param contents The contents to be displayed in the flyout. A string can be
    *     supplied to create a dynamic category.
    */

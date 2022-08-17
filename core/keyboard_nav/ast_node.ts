@@ -6,7 +6,6 @@
 /**
  * The class representing an AST node.
  * Used to traverse the Blockly AST.
- *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -27,7 +26,6 @@ import type {Workspace} from '../workspace.js';
  * Class for an AST node.
  * It is recommended that you use one of the createNode methods instead of
  * creating a node directly.
- *
  * @alias Blockly.ASTNode
  */
 export class ASTNode {
@@ -79,7 +77,6 @@ export class ASTNode {
 
   /**
    * Parse the optional parameters.
-   *
    * @param params The user specified parameters.
    */
   private processParams_(params: Params|null) {
@@ -95,8 +92,7 @@ export class ASTNode {
    * Gets the value pointed to by this node.
    * It is the callers responsibility to check the node type to figure out what
    * type of object they get back from this.
-   *
-   * @returns The current field, connection, workspace, or block the cursor is
+   * @return The current field, connection, workspace, or block the cursor is
    *     on.
    */
   getLocation(): IASTNodeLocation {
@@ -106,8 +102,7 @@ export class ASTNode {
   /**
    * The type of the current location.
    * One of ASTNode.types
-   *
-   * @returns The type of the location.
+   * @return The type of the location.
    */
   getType(): string {
     return this.type_;
@@ -115,8 +110,7 @@ export class ASTNode {
 
   /**
    * The coordinate on the workspace.
-   *
-   * @returns The workspace coordinate or null if the location is not a
+   * @return The workspace coordinate or null if the location is not a
    *     workspace.
    */
   getWsCoordinate(): Coordinate {
@@ -125,8 +119,7 @@ export class ASTNode {
 
   /**
    * Whether the node points to a connection.
-   *
-   * @returns [description]
+   * @return [description]
    * @internal
    */
   isConnection(): boolean {
@@ -137,8 +130,7 @@ export class ASTNode {
    * Given an input find the next editable field or an input with a non null
    * connection in the same block. The current location must be an input
    * connection.
-   *
-   * @returns The AST node holding the next field or connection or null if there
+   * @return The AST node holding the next field or connection or null if there
    *     is no editable field or input connection after the given input.
    */
   private findNextForInput_(): ASTNode|null {
@@ -167,8 +159,7 @@ export class ASTNode {
   /**
    * Given a field find the next editable field or an input with a non null
    * connection in the same block. The current location must be a field.
-   *
-   * @returns The AST node pointing to the next field or connection or null if
+   * @return The AST node pointing to the next field or connection or null if
    *     there is no editable field or input connection after the given input.
    */
   private findNextForField_(): ASTNode|null {
@@ -198,8 +189,7 @@ export class ASTNode {
    * Given an input find the previous editable field or an input with a non null
    * connection in the same block. The current location must be an input
    * connection.
-   *
-   * @returns The AST node holding the previous field or connection.
+   * @return The AST node holding the previous field or connection.
    */
   private findPrevForInput_(): ASTNode|null {
     const location = this.location_ as Connection;
@@ -227,8 +217,7 @@ export class ASTNode {
   /**
    * Given a field find the previous editable field or an input with a non null
    * connection in the same block. The current location must be a field.
-   *
-   * @returns The AST node holding the previous input or field.
+   * @return The AST node holding the previous input or field.
    */
   private findPrevForField_(): ASTNode|null {
     const location = this.location_ as Field;
@@ -259,10 +248,9 @@ export class ASTNode {
 
   /**
    * Navigate between stacks of blocks on the workspace.
-   *
    * @param forward True to go forward. False to go backwards.
-   * @returns The first block of the next stack or null if there are no blocks
-   *     on the workspace.
+   * @return The first block of the next stack or null if there are no blocks on
+   *     the workspace.
    */
   private navigateBetweenStacks_(forward: boolean): ASTNode|null {
     let curLocation = this.getLocation();
@@ -298,9 +286,8 @@ export class ASTNode {
    * Finds the top most AST node for a given block.
    * This is either the previous connection, output connection or block
    * depending on what kind of connections the block has.
-   *
    * @param block The block that we want to find the top connection on.
-   * @returns The AST node containing the top connection.
+   * @return The AST node containing the top connection.
    */
   private findTopASTNodeForBlock_(block: Block): ASTNode|null {
     const topConnection = getParentConnection(block);
@@ -314,9 +301,8 @@ export class ASTNode {
   /**
    * Get the AST node pointing to the input that the block is nested under or if
    * the block is not nested then get the stack AST node.
-   *
    * @param block The source block of the current location.
-   * @returns The AST node pointing to the input connection or the top block of
+   * @return The AST node pointing to the input connection or the top block of
    *     the stack this block is in.
    */
   private getOutAstNodeForBlock_(block: Block): ASTNode|null {
@@ -344,9 +330,8 @@ export class ASTNode {
 
   /**
    * Find the first editable field or input with a connection on a given block.
-   *
    * @param block The source block of the current location.
-   * @returns An AST node pointing to the first field or input.
+   * @return An AST node pointing to the first field or input.
    * Null if there are no editable fields or inputs with connections on the
    * block.
    */
@@ -370,8 +355,7 @@ export class ASTNode {
 
   /**
    * Finds the source block of the location of this node.
-   *
-   * @returns The source block of the location, or null if the node is of type
+   * @return The source block of the location, or null if the node is of type
    *     workspace.
    */
   getSourceBlock(): Block|null {
@@ -388,8 +372,7 @@ export class ASTNode {
 
   /**
    * Find the element to the right of the current element in the AST.
-   *
-   * @returns An AST node that wraps the next field, connection, block, or
+   * @return An AST node that wraps the next field, connection, block, or
    *     workspace. Or null if there is no node to the right.
    */
   next(): ASTNode|null {
@@ -429,8 +412,7 @@ export class ASTNode {
   /**
    * Find the element one level below and all the way to the left of the current
    * location.
-   *
-   * @returns An AST node that wraps the next field, connection, workspace, or
+   * @return An AST node that wraps the next field, connection, workspace, or
    *     block. Or null if there is nothing below this node.
    */
   in(): ASTNode|null {
@@ -464,8 +446,9 @@ export class ASTNode {
   /**
    * Find the element to the left of the current element in the AST.
    *
-   * @returns An AST node that wraps the previous field, connection, workspace
-   *     or block. Or null if no node exists to the left. null.
+   * @returns An AST node that wraps the previous field, connection, workspace or
+   *     block. Or null if no node exists to the left.
+   * null.
    */
   prev(): ASTNode|null {
     switch (this.type_) {
@@ -506,8 +489,7 @@ export class ASTNode {
   /**
    * Find the next element that is one position above and all the way to the
    * left of the current location.
-   *
-   * @returns An AST node that wraps the next field, connection, workspace or
+   * @return An AST node that wraps the next field, connection, workspace or
    *     block. Or null if we are at the workspace level.
    */
   out(): ASTNode|null {
@@ -555,9 +537,8 @@ export class ASTNode {
 
   /**
    * Whether an AST node of the given type points to a connection.
-   *
    * @param type The type to check.  One of ASTNode.types.
-   * @returns True if a node of the given type points to a connection.
+   * @return True if a node of the given type points to a connection.
    */
   private static isConnectionType_(type: string): boolean {
     switch (type) {
@@ -572,9 +553,8 @@ export class ASTNode {
 
   /**
    * Create an AST node pointing to a field.
-   *
    * @param field The location of the AST node.
-   * @returns An AST node pointing to a field.
+   * @return An AST node pointing to a field.
    */
   static createFieldNode(field: Field): ASTNode|null {
     if (!field) {
@@ -587,9 +567,8 @@ export class ASTNode {
    * Creates an AST node pointing to a connection. If the connection has a
    * parent input then create an AST node of type input that will hold the
    * connection.
-   *
    * @param connection This is the connection the node will point to.
-   * @returns An AST node pointing to a connection.
+   * @return An AST node pointing to a connection.
    */
   static createConnectionNode(connection: Connection): ASTNode|null {
     if (!connection) {
@@ -620,9 +599,8 @@ export class ASTNode {
   /**
    * Creates an AST node pointing to an input. Stores the input connection as
    * the location.
-   *
    * @param input The input used to create an AST node.
-   * @returns An AST node pointing to a input.
+   * @return An AST node pointing to a input.
    */
   static createInputNode(input: Input): ASTNode|null {
     if (!input || !input.connection) {
@@ -633,9 +611,8 @@ export class ASTNode {
 
   /**
    * Creates an AST node pointing to a block.
-   *
    * @param block The block used to create an AST node.
-   * @returns An AST node pointing to a block.
+   * @return An AST node pointing to a block.
    */
   static createBlockNode(block: Block): ASTNode|null {
     if (!block) {
@@ -648,10 +625,9 @@ export class ASTNode {
    * Create an AST node of type stack. A stack, represented by its top block, is
    *     the set of all blocks connected to a top block, including the top
    * block.
-   *
    * @param topBlock A top block has no parent and can be found in the list
    *     returned by workspace.getTopBlocks().
-   * @returns An AST node of type stack that points to the top block on the
+   * @return An AST node of type stack that points to the top block on the
    *     stack.
    */
   static createStackNode(topBlock: Block): ASTNode|null {
@@ -663,10 +639,9 @@ export class ASTNode {
 
   /**
    * Creates an AST node pointing to a workspace.
-   *
    * @param workspace The workspace that we are on.
    * @param wsCoordinate The position on the workspace for this node.
-   * @returns An AST node pointing to a workspace and a position on the
+   * @return An AST node pointing to a workspace and a position on the
    *     workspace.
    */
   static createWorkspaceNode(
@@ -681,9 +656,8 @@ export class ASTNode {
   /**
    * Creates an AST node for the top position on a block.
    * This is either an output connection, previous connection, or block.
-   *
    * @param block The block to find the top most AST node on.
-   * @returns The AST node holding the top most position on the block.
+   * @return The AST node holding the top most position on the block.
    */
   static createTopNode(block: Block): ASTNode|null {
     let astNode;
@@ -725,9 +699,8 @@ export type Params = ASTNode.Params;
  * This is either an output connection, previous connection or undefined.
  * If both connections exist return the one that is actually connected
  * to another block.
- *
  * @param block The block to find the parent connection on.
- * @returns The connection connecting to the parent of the block.
+ * @return The connection connecting to the parent of the block.
  */
 function getParentConnection(block: Block): Connection {
   let topConnection = block.outputConnection;

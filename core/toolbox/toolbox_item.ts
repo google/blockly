@@ -5,7 +5,6 @@
 
 /**
  * An item in the toolbox.
- *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -21,7 +20,6 @@ import type {WorkspaceSvg} from '../workspace_svg.js';
 
 /**
  * Class for an item in the toolbox.
- *
  * @alias Blockly.ToolboxItem
  */
 export class ToolboxItem implements IToolboxItem {
@@ -71,8 +69,7 @@ export class ToolboxItem implements IToolboxItem {
 
   /**
    * Gets the div for the toolbox item.
-   *
-   * @returns The div for the toolbox item.
+   * @return The div for the toolbox item.
    */
   getDiv(): Element|null {
     return null;
@@ -83,8 +80,7 @@ export class ToolboxItem implements IToolboxItem {
    * The parent toolbox element receives clicks. The parent toolbox will add an
    * ID to this element so it can pass the onClick event to the correct
    * toolboxItem.
-   *
-   * @returns The HTML element that receives clicks, or null if this item should
+   * @return The HTML element that receives clicks, or null if this item should
    *     not receive clicks.
    */
   getClickTarget(): Element|null {
@@ -93,8 +89,7 @@ export class ToolboxItem implements IToolboxItem {
 
   /**
    * Gets a unique identifier for this toolbox item.
-   *
-   * @returns The ID for the toolbox item.
+   * @return The ID for the toolbox item.
    */
   getId(): string {
     return this.id_;
@@ -102,8 +97,7 @@ export class ToolboxItem implements IToolboxItem {
 
   /**
    * Gets the parent if the toolbox item is nested.
-   *
-   * @returns The parent toolbox item, or null if this toolbox item is not
+   * @return The parent toolbox item, or null if this toolbox item is not
    *     nested.
    */
   getParent(): ICollapsibleToolboxItem|null {
@@ -112,8 +106,7 @@ export class ToolboxItem implements IToolboxItem {
 
   /**
    * Gets the nested level of the category.
-   *
-   * @returns The nested level of the category.
+   * @return The nested level of the category.
    * @internal
    */
   getLevel(): number {
@@ -122,8 +115,7 @@ export class ToolboxItem implements IToolboxItem {
 
   /**
    * Whether the toolbox item is selectable.
-   *
-   * @returns True if the toolbox item can be selected.
+   * @return True if the toolbox item can be selected.
    */
   isSelectable(): boolean {
     return false;
@@ -131,8 +123,7 @@ export class ToolboxItem implements IToolboxItem {
 
   /**
    * Whether the toolbox item is collapsible.
-   *
-   * @returns True if the toolbox item is collapsible.
+   * @return True if the toolbox item is collapsible.
    */
   isCollapsible(): boolean {
     return false;
@@ -144,7 +135,6 @@ export class ToolboxItem implements IToolboxItem {
   /**
    * Sets whether the category is visible or not.
    * For a category to be visible its parent category must also be expanded.
-   *
    * @param _isVisible True if category should be visible.
    */
   setVisible_(_isVisible: boolean) {}

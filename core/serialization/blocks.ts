@@ -5,7 +5,6 @@
 
 /**
  * Handles serializing blocks to plain JavaScript objects only containing state.
- *
  * @namespace Blockly.serialization.blocks
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -31,7 +30,6 @@ import * as serializationRegistry from './registry.js';
 
 /**
  * Represents the state of a connection.
- *
  * @alias Blockly.serialization.blocks.ConnectionState
  */
 export interface ConnectionState {
@@ -41,7 +39,6 @@ export interface ConnectionState {
 
 /**
  * Represents the state of a given block.
- *
  * @alias Blockly.serialization.blocks.State
  */
 export interface State {
@@ -62,7 +59,6 @@ export interface State {
 
 /**
  * Returns the state of the given block as a plain JavaScript object.
- *
  * @param block The block to serialize.
  * @param param1 addCoordinates: If true, the coordinates of the block are added
  *     to the serialized state. False by default. addinputBlocks: If true,
@@ -74,11 +70,7 @@ export interface State {
  *     instead serialize all of the info about that state. This supports
  *     deserializing the block into a workspace where that state doesn't yet
  *     exist. True by default.
- * @param param1.addCoordinates
- * @param param1.addInputBlocks
- * @param param1.addNextBlocks
- * @param param1.doFullSerialization
- * @returns The serialized state of the block, or null if the block could not be
+ * @return The serialized state of the block, or null if the block could not be
  *     serialied (eg it was an insertion marker).
  * @alias Blockly.serialization.blocks.save
  */
@@ -138,7 +130,6 @@ export function save(block: Block, {
 /**
  * Adds attributes to the given state object based on the state of the block.
  * Eg collapsed, disabled, inline, etc.
- *
  * @param block The block to base the attributes on.
  * @param state The state object to append to.
  */
@@ -161,7 +152,6 @@ function saveAttributes(block: Block, state: State) {
 
 /**
  * Adds the coordinates of the given block to the given state object.
- *
  * @param block The block to base the coordinates on.
  * @param state The state object to append to.
  */
@@ -173,7 +163,6 @@ function saveCoords(block: Block, state: State) {
 }
 /**
  * Adds any extra state the block may provide to the given state object.
- *
  * @param block The block to serialize the extra state of.
  * @param state The state object to append to.
  */
@@ -196,7 +185,6 @@ function saveExtraState(block: Block, state: State) {
 
 /**
  * Adds the state of all of the icons on the block to the given state object.
- *
  * @param block The block to serialize the icon state of.
  * @param state The state object to append to.
  */
@@ -216,7 +204,6 @@ function saveIcons(block: Block, state: State) {
 
 /**
  * Adds the state of all of the fields on the block to the given state object.
- *
  * @param block The block to serialize the field state of.
  * @param state The state object to append to.
  * @param doFullSerialization Whether or not to serialize the full state of the
@@ -241,7 +228,6 @@ function saveFields(block: Block, state: State, doFullSerialization: boolean) {
 /**
  * Adds the state of all of the child blocks of the given block (which are
  * connected to inputs) to the given state object.
- *
  * @param block The block to serialize the input blocks of.
  * @param state The state object to append to.
  * @param doFullSerialization Whether or not to do full serialization.
@@ -269,7 +255,6 @@ function saveInputBlocks(
 /**
  * Adds the state of all of the next blocks of the given block to the given
  * state object.
- *
  * @param block The block to serialize the next blocks of.
  * @param state The state object to append to.
  * @param doFullSerialization Whether or not to do full serialization.
@@ -289,9 +274,8 @@ function saveNextBlocks(
 /**
  * Returns the state of the given connection (ie the state of any connected
  * shadow or real blocks).
- *
  * @param connection The connection to serialize the connected blocks of.
- * @returns An object containing the state of any connected shadow block, or any
+ * @return An object containing the state of any connected shadow block, or any
  *     connected real block.
  * @param doFullSerialization Whether or not to do full serialization.
  */
@@ -314,13 +298,11 @@ function saveConnection(connection: Connection, doFullSerialization: boolean):
 
 /**
  * Loads the block represented by the given state into the given workspace.
- *
  * @param state The state of a block to deserialize into the workspace.
  * @param workspace The workspace to add the block to.
  * @param param1 recordUndo: If true, events triggered by this function will be
  *     undo-able by the user. False by default.
- * @param param1.recordUndo
- * @returns The block that was just loaded.
+ * @return The block that was just loaded.
  * @alias Blockly.serialization.blocks.append
  */
 export function append(
@@ -335,7 +317,6 @@ export function append(
  * external API.
  * But it is exported so that other places within Blockly can call it directly
  * with the extra parameters.
- *
  * @param state The state of a block to deserialize into the workspace.
  * @param workspace The workspace to add the block to.
  * @param param1 parentConnection: If provided, the system will attempt to
@@ -343,10 +324,7 @@ export function append(
  *     default. isShadow: If true, the block will be set to a shadow block after
  *     it is created. False by default. recordUndo: If true, events triggered by
  *     this function will be undo-able by the user. False by default.
- * @param param1.parentConnection
- * @param param1.isShadow
- * @param param1.recordUndo
- * @returns The block that was just appended.
+ * @return The block that was just appended.
  * @alias Blockly.serialization.blocks.appendInternal
  * @internal
  */
@@ -391,16 +369,13 @@ export function appendInternal(
  * This is defined privately so that it can be called recursively without firing
  * eroneous events. Events (and other things we only want to occur on the top
  * block) are handled by appendInternal.
- *
  * @param state The state of a block to deserialize into the workspace.
  * @param workspace The workspace to add the block to.
  * @param param1 parentConnection: If provided, the system will attempt to
  *     connect the block to this connection after it is created. Undefined by
  *     default. isShadow: The block will be set to a shadow block after it is
  *     created. False by default.
- * @param param1.parentConnection
- * @param param1.isShadow
- * @returns The block that was just appended.
+ * @return The block that was just appended.
  */
 function appendPrivate(
     state: State, workspace: Workspace,
@@ -428,7 +403,6 @@ function appendPrivate(
 /**
  * Applies any coordinate information available on the state object to the
  * block.
- *
  * @param block The block to set the position of.
  * @param state The state object to reference.
  */
@@ -444,7 +418,6 @@ function loadCoords(block: Block, state: State) {
 
 /**
  * Applies any attribute information available on the state object to the block.
- *
  * @param block The block to set the attributes of.
  * @param state The state object to reference.
  */
@@ -466,7 +439,6 @@ function loadAttributes(block: Block, state: State) {
 /**
  * Applies any extra state information available on the state object to the
  * block.
- *
  * @param block The block to set the extra state of.
  * @param state The state object to reference.
  */
@@ -483,7 +455,6 @@ function loadExtraState(block: Block, state: State) {
 
 /**
  * Attempts to connect the block to the parent connection, if it exists.
- *
  * @param parentConnection The parent connection to try to connect the block to.
  * @param child The block to try to connect to the parent.
  * @param state The state which defines the given block
@@ -530,7 +501,6 @@ function tryToConnectParent(
 /**
  * Applies icon state to the icons on the block, based on the given state
  * object.
- *
  * @param block The block to set the icon state of.
  * @param state The state object to reference.
  */
@@ -559,7 +529,6 @@ function loadIcons(block: Block, state: State) {
 
 /**
  * Applies any field information available on the state object to the block.
- *
  * @param block The block to set the field state of.
  * @param state The state object to reference.
  */
@@ -584,7 +553,6 @@ function loadFields(block: Block, state: State) {
 /**
  * Creates any child blocks (attached to inputs) defined by the given state
  * and attaches them to the given block.
- *
  * @param block The block to attach input blocks to.
  * @param state The state object to reference.
  */
@@ -606,7 +574,6 @@ function loadInputBlocks(block: Block, state: State) {
 /**
  * Creates any next blocks defined by the given state and attaches them to the
  * given block.
- *
  * @param block The block to attach next blocks to.
  * @param state The state object to reference.
  */
@@ -622,7 +589,6 @@ function loadNextBlocks(block: Block, state: State) {
 /**
  * Applies the state defined by connectionState to the given connection, ie
  * assigns shadows and attaches child blocks.
- *
  * @param connection The connection to deserialize the connected blocks of.
  * @param connectionState The object containing the state of any connected
  *     shadow block, or any connected real block.
@@ -642,7 +608,6 @@ function loadConnection(
 // TODO(#5146): Remove this from the serialization system.
 /**
  * Initializes the give block, eg init the model, inits the svg, renders, etc.
- *
  * @param block The block to initialize.
  * @param rendered Whether the block is a rendered or headless block.
  */
@@ -671,7 +636,6 @@ const saveBlock = save;
 
 /**
  * Serializer for saving and loading block state.
- *
  * @alias Blockly.serialization.blocks.BlockSerializer
  */
 class BlockSerializer implements ISerializer {
@@ -685,9 +649,8 @@ class BlockSerializer implements ISerializer {
 
   /**
    * Serializes the blocks of the given workspace.
-   *
    * @param workspace The workspace to save the blocks of.
-   * @returns The state of the workspace's blocks, or null if there are no
+   * @return The state of the workspace's blocks, or null if there are no
    *     blocks.
    */
   save(workspace: Workspace): {languageVersion: number, blocks: State[]}|null {
@@ -711,11 +674,8 @@ class BlockSerializer implements ISerializer {
   /**
    * Deserializes the blocks defined by the given state into the given
    * workspace.
-   *
    * @param state The state of the blocks to deserialize.
-   * @param state.languageVersion
    * @param workspace The workspace to deserialize into.
-   * @param state.blocks
    */
   load(
       state: {languageVersion: number, blocks: State[]}, workspace: Workspace) {
@@ -727,7 +687,6 @@ class BlockSerializer implements ISerializer {
 
   /**
    * Disposes of any blocks that exist on the workspace.
-   *
    * @param workspace The workspace to clear the blocks of.
    */
   clear(workspace: Workspace) {

@@ -5,7 +5,6 @@
 
 /**
  * Utility functions for handling variables.
- *
  * @namespace Blockly.Variables
  */
 import * as goog from '../closure/goog/goog.js';
@@ -27,7 +26,6 @@ import * as Xml from './xml.js';
  * variable blocks.
  * See also Blockly.Procedures.CATEGORY_NAME and
  * Blockly.VariablesDynamic.CATEGORY_NAME.
- *
  * @alias Blockly.Variables.CATEGORY_NAME
  */
 export const CATEGORY_NAME = 'VARIABLE';
@@ -37,9 +35,8 @@ export const CATEGORY_NAME = 'VARIABLE';
  * For use by generators.
  * To get a list of all variables on a workspace, including unused variables,
  * call Workspace.getAllVariables.
- *
  * @param ws The workspace to search for variables.
- * @returns Array of variable models.
+ * @return Array of variable models.
  * @alias Blockly.Variables.allUsedVarModels
  */
 export function allUsedVarModels(ws: Workspace): VariableModel[] {
@@ -71,9 +68,8 @@ const ALL_DEVELOPER_VARS_WARNINGS_BY_BLOCK_TYPE: {[key: string]: boolean} = {};
  * To declare developer variables, define the getDeveloperVariables function on
  * your block and return a list of variable names.
  * For use by generators.
- *
  * @param workspace The workspace to search.
- * @returns A list of non-duplicated variable names.
+ * @return A list of non-duplicated variable names.
  * @alias Blockly.Variables.allDeveloperVariables
  */
 export function allDeveloperVariables(workspace: Workspace): string[] {
@@ -107,9 +103,8 @@ export function allDeveloperVariables(workspace: Workspace): string[] {
 /**
  * Construct the elements (blocks and button) required by the flyout for the
  * variable category.
- *
  * @param workspace The workspace containing variables.
- * @returns Array of XML elements.
+ * @return Array of XML elements.
  * @alias Blockly.Variables.flyoutCategory
  */
 export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
@@ -136,9 +131,8 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
 
 /**
  * Construct the blocks required by the flyout for the variable category.
- *
  * @param workspace The workspace containing variables.
- * @returns Array of XML block elements.
+ * @return Array of XML block elements.
  * @alias Blockly.Variables.flyoutCategoryBlocks
  */
 export function flyoutCategoryBlocks(workspace: Workspace): Element[] {
@@ -209,9 +203,8 @@ export const VAR_LETTER_OPTIONS = 'ijkmnopqrstuvwxyzabcdefgh';
  * generate single letter variable names in the range 'i' to 'z' to start with.
  * If no unique name is located it will try 'i' to 'z', 'a' to 'h',
  * then 'i2' to 'z2' etc.  Skip 'l'.
- *
  * @param workspace The workspace to be unique in.
- * @returns New variable name.
+ * @return New variable name.
  * @alias Blockly.Variables.generateUniqueName
  */
 export function generateUniqueName(workspace: Workspace): string {
@@ -220,8 +213,6 @@ export function generateUniqueName(workspace: Workspace): string {
 
 /**
  * Private version of generateUniqueName for stubbing in tests.
- *
- * @param workspace
  */
 function generateUniqueNameInternal(workspace: Workspace): string {
   return generateUniqueNameFromOptions(
@@ -232,10 +223,9 @@ function generateUniqueNameInternal(workspace: Workspace): string {
  * Returns a unique name that is not present in the usedNames array. This
  * will try to generate single letter names in the range a -> z (skip l). It
  * will start with the character passed to startChar.
- *
  * @param startChar The character to start the search at.
  * @param usedNames A list of all of the used names.
- * @returns A unique name that is not present in the usedNames array.
+ * @return A unique name that is not present in the usedNames array.
  * @alias Blockly.Variables.generateUniqueNameFromOptions
  */
 export function generateUniqueNameFromOptions(
@@ -297,10 +287,6 @@ export function createVariableButtonHandler(
     opt_type?: string) {
   const type = opt_type || '';
   // This function needs to be named so it can be called recursively.
-  /**
-   *
-   * @param defaultName
-   */
   function promptAndCheckWithAlert(defaultName: AnyDuringMigration) {
     promptName(Msg['NEW_VARIABLE_TITLE'], defaultName, function(text) {
       if (text) {
@@ -338,7 +324,6 @@ export function createVariableButtonHandler(
  * Opens a prompt that allows the user to enter a new name for a variable.
  * Triggers a rename if the new name is valid. Or re-prompts if there is a
  * collision.
- *
  * @param workspace The workspace on which to rename the variable.
  * @param variable Variable to rename.
  * @param opt_callback A callback. It will be passed an acceptable new variable
@@ -350,10 +335,6 @@ export function renameVariable(
     workspace: Workspace, variable: VariableModel,
     opt_callback?: (p1?: string|null) => AnyDuringMigration) {
   // This function needs to be named so it can be called recursively.
-  /**
-   *
-   * @param defaultName
-   */
   function promptAndCheckWithAlert(defaultName: AnyDuringMigration) {
     const promptText =
         Msg['RENAME_VARIABLE_TITLE'].replace('%1', variable.name);
@@ -387,7 +368,6 @@ export function renameVariable(
 
 /**
  * Prompt the user for a new variable name.
- *
  * @param promptText The string of the prompt.
  * @param defaultText The default value to show in the prompt's field.
  * @param callback A callback. It will return the new variable name, or null if
@@ -413,11 +393,10 @@ export function promptName(
 /**
  * Check whether there exists a variable with the given name but a different
  * type.
- *
  * @param name The name to search for.
  * @param type The type to exclude from the search.
  * @param workspace The workspace to search for the variable.
- * @returns The variable with the given name and a different type, or null if
+ * @return The variable with the given name and a different type, or null if
  *     none was found.
  */
 function nameUsedWithOtherType(
@@ -435,10 +414,9 @@ function nameUsedWithOtherType(
 
 /**
  * Check whether there exists a variable with the given name of any type.
- *
  * @param name The name to search for.
  * @param workspace The workspace to search for the variable.
- * @returns The variable with the given name, or null if none was found.
+ * @return The variable with the given name, or null if none was found.
  * @alias Blockly.Variables.nameUsedWithAnyType
  */
 export function nameUsedWithAnyType(
@@ -456,9 +434,8 @@ export function nameUsedWithAnyType(
 
 /**
  * Generate DOM objects representing a variable field.
- *
  * @param variableModel The variable model to represent.
- * @returns The generated DOM.
+ * @return The generated DOM.
  * @alias Blockly.Variables.generateVariableFieldDom
  */
 export function generateVariableFieldDom(variableModel: VariableModel): Element|
@@ -478,13 +455,12 @@ export function generateVariableFieldDom(variableModel: VariableModel): Element|
 /**
  * Helper function to look up or create a variable on the given workspace.
  * If no variable exists, creates and returns it.
- *
  * @param workspace The workspace to search for the variable.  It may be a
  *     flyout workspace or main workspace.
  * @param id The ID to use to look up or create the variable, or null.
  * @param opt_name The string to use to look up or create the variable.
  * @param opt_type The type to use to look up or create the variable.
- * @returns The variable corresponding to the given ID or name + type
+ * @return The variable corresponding to the given ID or name + type
  *     combination.
  * @alias Blockly.Variables.getOrCreateVariablePackage
  */
@@ -502,7 +478,6 @@ export function getOrCreateVariablePackage(
  * Look up  a variable on the given workspace.
  * Always looks in the main workspace before looking in the flyout workspace.
  * Always prefers lookup by ID to lookup by name + type.
- *
  * @param workspace The workspace to search for the variable.  It may be a
  *     flyout workspace or main workspace.
  * @param id The ID to use to look up the variable, or null.
@@ -510,7 +485,7 @@ export function getOrCreateVariablePackage(
  *     Only used if lookup by ID fails.
  * @param opt_type The type to use to look up the variable.
  *     Only used if lookup by ID fails.
- * @returns The variable corresponding to the given ID or name + type
+ * @return The variable corresponding to the given ID or name + type
  *     combination, or null if not found.
  * @alias Blockly.Variables.getVariable
  */
@@ -547,13 +522,12 @@ export function getVariable(
 
 /**
  * Helper function to create a variable on the given workspace.
- *
  * @param workspace The workspace in which to create the variable.  It may be a
  *     flyout workspace or main workspace.
  * @param id The ID to use to create the variable, or null.
  * @param opt_name The string to use to create the variable.
  * @param opt_type The type to use to create the variable.
- * @returns The variable corresponding to the given ID or name + type
+ * @return The variable corresponding to the given ID or name + type
  *     combination.
  */
 function createVariable(
@@ -586,11 +560,10 @@ function createVariable(
  * Helper function to get the list of variables that have been added to the
  * workspace after adding a new block, using the given list of variables that
  * were in the workspace before the new block was added.
- *
  * @param workspace The workspace to inspect.
  * @param originalVariables The array of variables that existed in the workspace
  *     before adding the new block.
- * @returns The new array of variables that were freshly added to the workspace
+ * @return The new array of variables that were freshly added to the workspace
  *     after creating the new block, or [] if no new variables were added to the
  *     workspace.
  * @alias Blockly.Variables.getAddedVariables

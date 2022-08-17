@@ -7,7 +7,6 @@
  * A div that floats on top of Blockly.  This singleton contains
  *     temporary HTML UI widgets that the user is currently interacting with.
  *     E.g. text input areas, colour pickers, context menus.
- *
  * @namespace Blockly.WidgetDiv
  */
 import * as goog from '../closure/goog/goog.js';
@@ -39,8 +38,7 @@ let containerDiv: HTMLDivElement|null;
 
 /**
  * Returns the HTML container for editor widgets.
- *
- * @returns The editor widget container.
+ * @return The editor widget container.
  * @alias Blockly.WidgetDiv.getDiv
  */
 export function getDiv(): HTMLDivElement|null {
@@ -49,7 +47,6 @@ export function getDiv(): HTMLDivElement|null {
 
 /**
  * Allows unit tests to reset the div.
- *
  * @param newDiv The new value for the DIV field.
  * @alias Blockly.WidgetDiv.testOnly_setDiv
  * @ignore
@@ -60,7 +57,6 @@ export function testOnly_setDiv(newDiv: HTMLDivElement|null) {
 
 /**
  * Create the widget div and inject it onto the page.
- *
  * @alias Blockly.WidgetDiv.createDom
  */
 export function createDom() {
@@ -76,7 +72,6 @@ export function createDom() {
 
 /**
  * Initialize and display the widget div.  Close the old one if needed.
- *
  * @param newOwner The object that will be using this container.
  * @param rtl Right-to-left (true) or left-to-right (false).
  * @param newDispose Optional cleanup function to be run when the widget is
@@ -104,7 +99,6 @@ export function show(
 
 /**
  * Destroy the widget and hide the div.
- *
  * @alias Blockly.WidgetDiv.hide
  */
 export function hide() {
@@ -140,8 +134,7 @@ export function hide() {
 
 /**
  * Is the container visible?
- *
- * @returns True if visible.
+ * @return True if visible.
  * @alias Blockly.WidgetDiv.isVisible
  */
 export function isVisible(): boolean {
@@ -151,7 +144,6 @@ export function isVisible(): boolean {
 /**
  * Destroy the widget and hide the div if it is being used by the specified
  * object.
- *
  * @param oldOwner The object that was using this container.
  * @alias Blockly.WidgetDiv.hideIfOwner
  */
@@ -163,7 +155,6 @@ export function hideIfOwner(oldOwner: AnyDuringMigration) {
 /**
  * Set the widget div's position and height.  This function does nothing clever:
  * it will not ensure that your widget div ends up in the visible window.
- *
  * @param x Horizontal location (window coordinates, not body).
  * @param y Vertical location (window coordinates, not body).
  * @param height The height of the widget div (pixels).
@@ -179,7 +170,6 @@ function positionInternal(x: number, y: number, height: number) {
  * The widget should be placed adjacent to but not overlapping the anchor
  * rectangle.  The preferred position is directly below and aligned to the left
  * (LTR) or right (RTL) side of the anchor.
- *
  * @param viewportBBox The bounding rectangle of the current viewport, in window
  *     coordinates.
  * @param anchorBBox The bounding rectangle of the anchor, in window
@@ -206,14 +196,13 @@ export function positionWithAnchor(
 /**
  * Calculate an x position (in window coordinates) such that the widget will not
  * be offscreen on the right or left.
- *
  * @param viewportBBox The bounding rectangle of the current viewport, in window
  *     coordinates.
  * @param anchorBBox The bounding rectangle of the anchor, in window
  *     coordinates.
  * @param widgetSize The dimensions of the widget inside the widget div.
  * @param rtl Whether the Blockly workspace is in RTL mode.
- * @returns A valid x-coordinate for the top left corner of the widget div, in
+ * @return A valid x-coordinate for the top left corner of the widget div, in
  *     window coordinates.
  */
 function calculateX(
@@ -238,13 +227,12 @@ function calculateX(
 /**
  * Calculate a y position (in window coordinates) such that the widget will not
  * be offscreen on the top or bottom.
- *
  * @param viewportBBox The bounding rectangle of the current viewport, in window
  *     coordinates.
  * @param anchorBBox The bounding rectangle of the anchor, in window
  *     coordinates.
  * @param widgetSize The dimensions of the widget inside the widget div.
- * @returns A valid y-coordinate for the top left corner of the widget div, in
+ * @return A valid y-coordinate for the top left corner of the widget div, in
  *     window coordinates.
  */
 function calculateY(

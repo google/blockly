@@ -5,7 +5,6 @@
 
 /**
  * Text Area field.
- *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -27,7 +26,6 @@ import * as WidgetDiv from './widgetdiv.js';
 
 /**
  * Class for an editable text area field.
- *
  * @alias Blockly.FieldMultilineInput
  */
 export class FieldMultilineInput extends FieldTextInput {
@@ -87,10 +85,9 @@ export class FieldMultilineInput extends FieldTextInput {
 
   /**
    * Serializes this field's value to XML. Should only be called by Blockly.Xml.
-   *
    * @param fieldElement The element to populate with info about the field's
    *     state.
-   * @returns The element containing info about the field's state.
+   * @return The element containing info about the field's state.
    * @internal
    */
   override toXml(fieldElement: Element): Element {
@@ -106,7 +103,6 @@ export class FieldMultilineInput extends FieldTextInput {
   /**
    * Sets the field's value based on the given XML element. Should only be
    * called by Blockly.Xml.
-   *
    * @param fieldElement The element containing info about the field's state.
    * @internal
    */
@@ -116,8 +112,7 @@ export class FieldMultilineInput extends FieldTextInput {
 
   /**
    * Saves this field's value.
-   *
-   * @returns The state of this field.
+   * @return The state of this field.
    * @internal
    */
   override saveState(): AnyDuringMigration {
@@ -130,7 +125,6 @@ export class FieldMultilineInput extends FieldTextInput {
 
   /**
    * Sets the field's value based on the given state.
-   *
    * @param state The state of the variable to assign to this variable field.
    * @internal
    */
@@ -143,7 +137,6 @@ export class FieldMultilineInput extends FieldTextInput {
 
   /**
    * Create the block UI for this field.
-   *
    * @internal
    */
   override initView() {
@@ -158,8 +151,7 @@ export class FieldMultilineInput extends FieldTextInput {
   /**
    * Get the text from this field as displayed on screen.  May differ from
    * getText due to ellipsis, and other formatting.
-   *
-   * @returns Currently displayed text.
+   * @return Currently displayed text.
    */
   protected override getDisplayText_(): string {
     let textLines = this.getText();
@@ -200,7 +192,6 @@ export class FieldMultilineInput extends FieldTextInput {
    * field, and updates the text of the field if it is not currently being
    * edited (i.e. handled by the htmlInput_). Is being redefined here to update
    * overflow state of the field.
-   *
    * @param newValue The value to be saved. The default validator guarantees
    *     that this is a string.
    */
@@ -331,7 +322,6 @@ export class FieldMultilineInput extends FieldTextInput {
    * Show the inline free-text editor on top of the text.
    * Overrides the default behaviour to force rerender in order to
    * correct block size, based on editor text.
-   *
    * @param _opt_e Optional mouse event that triggered the field to open, or
    *     undefined if triggered programmatically.
    * @param opt_quietInput True if editor should be created without focus.
@@ -344,8 +334,7 @@ export class FieldMultilineInput extends FieldTextInput {
 
   /**
    * Create the text input editor widget.
-   *
-   * @returns The newly created text input editor.
+   * @return The newly created text input editor.
    */
   protected override widgetCreate_(): HTMLTextAreaElement {
     const div = WidgetDiv.getDiv();
@@ -390,7 +379,6 @@ export class FieldMultilineInput extends FieldTextInput {
 
   /**
    * Sets the maxLines config for this field.
-   *
    * @param maxLines Defines the maximum number of lines allowed, before
    *     scrolling functionality is enabled.
    */
@@ -404,8 +392,7 @@ export class FieldMultilineInput extends FieldTextInput {
 
   /**
    * Returns the maxLines config of this field.
-   *
-   * @returns The maxLines config value.
+   * @return The maxLines config value.
    */
   getMaxLines(): number {
     return this.maxLines_;
@@ -414,7 +401,6 @@ export class FieldMultilineInput extends FieldTextInput {
   /**
    * Handle key down to the editor. Override the text input definition of this
    * so as to not close the editor when enter is typed in.
-   *
    * @param e Keyboard event.
    */
   protected override onHtmlInputKeyDown_(e: Event) {
@@ -428,9 +414,8 @@ export class FieldMultilineInput extends FieldTextInput {
   /**
    * Construct a FieldMultilineInput from a JSON arg object,
    * dereferencing any string table references.
-   *
    * @param options A JSON object with options (text, and spellcheck).
-   * @returns The new field instance.
+   * @return The new field instance.
    * @nocollapse
    * @internal
    */

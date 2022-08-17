@@ -5,7 +5,6 @@
 
 /**
  * Methods for creating parts of SVG path strings.  See
- *
  * @namespace Blockly.utils.svgPaths
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -17,10 +16,9 @@ goog.declareModuleId('Blockly.utils.svgPaths');
  * the coordinate is relative or absolute.  The result has leading
  * and trailing spaces, and separates the x and y coordinates with a comma but
  * no space.
- *
  * @param x The x coordinate.
  * @param y The y coordinate.
- * @returns A string of the format ' x,y '
+ * @return A string of the format ' x,y '
  * @alias Blockly.utils.svgPaths.point
  */
 export function point(x: number, y: number): string {
@@ -31,13 +29,12 @@ export function point(x: number, y: number): string {
  * Draw a cubic or quadratic curve.  See
  * developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d#Cubic_B%C3%A9zier_Curve
  * These coordinates are unitless and hence in the user coordinate system.
- *
  * @param command The command to use.
  *     Should be one of: c, C, s, S, q, Q.
  * @param points  An array containing all of the points to pass to the curve
  *     command, in order.  The points are represented as strings of the format '
  *     x, y '.
- * @returns A string defining one or more Bezier curves.  See the MDN
+ * @return A string defining one or more Bezier curves.  See the MDN
  *     documentation for exact format.
  * @alias Blockly.utils.svgPaths.curve
  */
@@ -50,10 +47,9 @@ export function curve(command: string, points: string[]): string {
  * The coordinates are absolute.
  * These coordinates are unitless and hence in the user coordinate system.
  * See developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths#Line_commands
- *
  * @param x The absolute x coordinate.
  * @param y The absolute y coordinate.
- * @returns A string of the format ' M x,y '
+ * @return A string of the format ' M x,y '
  * @alias Blockly.utils.svgPaths.moveTo
  */
 export function moveTo(x: number, y: number): string {
@@ -65,10 +61,9 @@ export function moveTo(x: number, y: number): string {
  * Coordinates are relative.
  * These coordinates are unitless and hence in the user coordinate system.
  * See developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths#Line_commands
- *
  * @param dx The relative x coordinate.
  * @param dy The relative y coordinate.
- * @returns A string of the format ' m dx,dy '
+ * @return A string of the format ' m dx,dy '
  * @alias Blockly.utils.svgPaths.moveBy
  */
 export function moveBy(dx: number, dy: number): string {
@@ -80,10 +75,9 @@ export function moveBy(dx: number, dy: number): string {
  * point shifted by dx along the x-axis and dy along the y-axis.
  * These coordinates are unitless and hence in the user coordinate system.
  * See developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths#Line_commands
- *
  * @param dx The relative x coordinate.
  * @param dy The relative y coordinate.
- * @returns A string of the format ' l dx,dy '
+ * @return A string of the format ' l dx,dy '
  * @alias Blockly.utils.svgPaths.lineTo
  */
 export function lineTo(dx: number, dy: number): string {
@@ -95,10 +89,9 @@ export function lineTo(dx: number, dy: number): string {
  * equivalent to a series of 'l' commands.
  * These coordinates are unitless and hence in the user coordinate system.
  * See developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths#Line_commands
- *
  * @param points An array containing all of the points to draw lines to, in
  *     order.  The points are represented as strings of the format ' dx,dy '.
- * @returns A string of the format ' l (dx,dy)+ '
+ * @return A string of the format ' l (dx,dy)+ '
  * @alias Blockly.utils.svgPaths.line
  */
 export function line(points: string[]): string {
@@ -111,12 +104,11 @@ export function line(points: string[]): string {
  * relative or absolute.
  * These coordinates are unitless and hence in the user coordinate system.
  * See developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d#LineTo_path_commands
- *
  * @param command The command to prepend to the coordinate.  This should be one
  *     of: V, v, H, h.
  * @param val The coordinate to pass to the command.  It may be absolute or
  *     relative.
- * @returns A string of the format ' command val '
+ * @return A string of the format ' command val '
  * @alias Blockly.utils.svgPaths.lineOnAxis
  */
 export function lineOnAxis(command: string, val: number): string {
@@ -127,14 +119,13 @@ export function lineOnAxis(command: string, val: number): string {
  * Draw an elliptical arc curve.
  * These coordinates are unitless and hence in the user coordinate system.
  * See developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d#Elliptical_Arc_Curve
- *
  * @param command The command string.  Either 'a' or 'A'.
  * @param flags The flag string.  See the MDN documentation for a description
  *     and examples.
  * @param radius The radius of the arc to draw.
  * @param point The point to move the cursor to after drawing the arc, specified
  *     either in absolute or relative coordinates depending on the command.
- * @returns A string of the format 'command radius radius flags point'
+ * @return A string of the format 'command radius radius flags point'
  * @alias Blockly.utils.svgPaths.arc
  */
 export function arc(

@@ -6,7 +6,6 @@
 /**
  * Zelos specific objects representing inputs with connections on
  * a rendered block.
- *
  * @class
  */
 import * as goog from '../../../../closure/goog/goog.js';
@@ -21,7 +20,6 @@ import {StatementInput as BaseStatementInput} from '../../../renderers/measurabl
 /**
  * An object containing information about the space a statement input takes up
  * during rendering.
- *
  * @alias Blockly.zelos.StatementInput
  */
 export class StatementInput extends BaseStatementInput {

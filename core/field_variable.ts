@@ -5,7 +5,6 @@
 
 /**
  * Variable input field.
- *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -32,7 +31,6 @@ import * as Xml from './xml.js';
 
 /**
  * Class for a variable's dropdown field.
- *
  * @alias Blockly.FieldVariable
  */
 export class FieldVariable extends FieldDropdown {
@@ -118,7 +116,6 @@ export class FieldVariable extends FieldDropdown {
 
   /**
    * Configure the field based on the given map of options.
-   *
    * @param config A map of options to configure the field based on.
    */
   protected override configure_(config: FieldVariableConfig) {
@@ -130,7 +127,6 @@ export class FieldVariable extends FieldDropdown {
    * Initialize the model for this field if it has not already been initialized.
    * If the value has not been set to a variable by the first render, we make up
    * a variable rather than let the value be invalid.
-   *
    * @internal
    */
   override initModel() {
@@ -152,7 +148,6 @@ export class FieldVariable extends FieldDropdown {
 
   /**
    * Initialize this field based on the given XML.
-   *
    * @param fieldElement The element containing information about the variable
    *     field's state.
    */
@@ -184,10 +179,9 @@ export class FieldVariable extends FieldDropdown {
 
   /**
    * Serialize this field to XML.
-   *
    * @param fieldElement The element to populate with info about the field's
    *     state.
-   * @returns The element containing info about the field's state.
+   * @return The element containing info about the field's state.
    */
   override toXml(fieldElement: Element): Element {
     // Make sure the variable is initialized.
@@ -203,11 +197,10 @@ export class FieldVariable extends FieldDropdown {
 
   /**
    * Saves this field's value.
-   *
    * @param doFullSerialization If true, the variable field will serialize the
    *     full state of the field being referenced (ie ID, name, and type) rather
    *     than just a reference to it (ie ID).
-   * @returns The state of the variable field.
+   * @return The state of the variable field.
    * @internal
    */
   override saveState(doFullSerialization?: boolean): AnyDuringMigration {
@@ -227,7 +220,6 @@ export class FieldVariable extends FieldDropdown {
 
   /**
    * Sets the field's value based on the given state.
-   *
    * @param state The state of the variable to assign to this variable field.
    * @internal
    */
@@ -244,7 +236,6 @@ export class FieldVariable extends FieldDropdown {
 
   /**
    * Attach this field to a block.
-   *
    * @param block The block containing this field.
    */
   override setSourceBlock(block: Block) {
@@ -256,8 +247,7 @@ export class FieldVariable extends FieldDropdown {
 
   /**
    * Get the variable's ID.
-   *
-   * @returns Current variable's ID.
+   * @return Current variable's ID.
    */
   override getValue(): string|null {
     return this.variable_ ? this.variable_.getId() : null;
@@ -265,9 +255,8 @@ export class FieldVariable extends FieldDropdown {
 
   /**
    * Get the text from this field, which is the selected variable's name.
-   *
-   * @returns The selected variable's name, or the empty string if no variable
-   *     is selected.
+   * @return The selected variable's name, or the empty string if no variable is
+   *     selected.
    */
   override getText(): string {
     return this.variable_ ? this.variable_.name : '';
@@ -277,8 +266,7 @@ export class FieldVariable extends FieldDropdown {
    * Get the variable model for the selected variable.
    * Not guaranteed to be in the variable map on the workspace (e.g. if accessed
    * after the variable has been deleted).
-   *
-   * @returns The selected variable, or null if none was selected.
+   * @return The selected variable, or null if none was selected.
    * @internal
    */
   getVariable(): VariableModel|null {
@@ -290,8 +278,7 @@ export class FieldVariable extends FieldDropdown {
    * Returns null if the variable is not set, because validators should not
    * run on the initial setValue call, because the field won't be attached to
    * a block and workspace at that point.
-   *
-   * @returns Validation function, or null.
+   * @return Validation function, or null.
    */
   override getValidator(): Function|null {
     // Validators shouldn't operate on the initial setValue call.
@@ -305,9 +292,8 @@ export class FieldVariable extends FieldDropdown {
 
   /**
    * Ensure that the ID belongs to a valid variable of an allowed type.
-   *
    * @param opt_newValue The ID of the new variable to set.
-   * @returns The validated ID, or null if invalid.
+   * @return The validated ID, or null if invalid.
    */
   protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
       string|null {
@@ -337,7 +323,6 @@ export class FieldVariable extends FieldDropdown {
    *
    * The variable ID should be valid at this point, but if a variable field
    * validator returns a bad ID, this could break.
-   *
    * @param newId The value to be saved.
    */
   protected override doValueUpdate_(newId: AnyDuringMigration) {
@@ -348,9 +333,8 @@ export class FieldVariable extends FieldDropdown {
 
   /**
    * Check whether the given variable type is allowed on this field.
-   *
    * @param type The type to check.
-   * @returns True if the type is in the list of allowed types.
+   * @return True if the type is in the list of allowed types.
    */
   private typeIsAllowed_(type: string): boolean {
     const typeList = this.getVariableTypes_();
@@ -367,8 +351,7 @@ export class FieldVariable extends FieldDropdown {
 
   /**
    * Return a list of variable types to include in the dropdown.
-   *
-   * @returns Array of variable types.
+   * @return Array of variable types.
    * @throws {Error} if variableTypes is an empty array.
    */
   private getVariableTypes_(): string[] {
@@ -393,7 +376,6 @@ export class FieldVariable extends FieldDropdown {
   /**
    * Parse the optional arguments representing the allowed variable types and
    * the default variable type.
-   *
    * @param opt_variableTypes A list of the types of variables to include in the
    *     dropdown.  If null or undefined, variables of all types will be
    *     displayed in the dropdown.
@@ -437,7 +419,6 @@ export class FieldVariable extends FieldDropdown {
    * Refreshes the name of the variable by grabbing the name of the model.
    * Used when a variable gets renamed, but the ID stays the same. Should only
    * be called by the block.
-   *
    * @internal
    */
   override refreshVariableName() {
@@ -448,7 +429,6 @@ export class FieldVariable extends FieldDropdown {
    * Handle the selection of an item in the variable dropdown menu.
    * Special case the 'Rename variable...' and 'Delete variable...' options.
    * In the rename case, prompt the user for a new name.
-   *
    * @param menu The Menu component clicked.
    * @param menuItem The MenuItem selected within menu.
    */
@@ -474,8 +454,7 @@ export class FieldVariable extends FieldDropdown {
   /**
    * Overrides referencesVariables(), indicating this field refers to a
    * variable.
-   *
-   * @returns True.
+   * @return True.
    * @internal
    */
   override referencesVariables(): boolean {
@@ -485,10 +464,9 @@ export class FieldVariable extends FieldDropdown {
   /**
    * Construct a FieldVariable from a JSON arg object,
    * dereferencing any string table references.
-   *
    * @param options A JSON object with options (variable, variableTypes, and
    *     defaultType).
-   * @returns The new field instance.
+   * @return The new field instance.
    * @nocollapse
    * @internal
    */
@@ -503,9 +481,7 @@ export class FieldVariable extends FieldDropdown {
   /**
    * Return a sorted list of variable names for variable dropdown menus.
    * Include a special option at the end for creating a new variable name.
-   *
-   * @param this
-   * @returns Array of variable names/id tuples.
+   * @return Array of variable names/id tuples.
    */
   static dropdownCreate(this: FieldVariable): AnyDuringMigration[][] {
     if (!this.variable_) {

@@ -7,7 +7,6 @@
  * ARIA-related constants and utilities.
  * These methods are not specific to Blockly, and could be factored out into
  * a JavaScript framework such as Closure.
- *
  * @namespace Blockly.utils.aria
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -23,7 +22,6 @@ const ROLE_ATTRIBUTE = 'role';
 /**
  * ARIA role values.
  * Copied from Closure's goog.a11y.aria.Role
- *
  * @alias Blockly.utils.aria.Role
  */
 export enum Role {
@@ -63,7 +61,6 @@ export enum Role {
 /**
  * ARIA states and properties.
  * Copied from Closure's goog.a11y.aria.State
- *
  * @alias Blockly.utils.aria.State
  */
 export enum State {
@@ -137,7 +134,6 @@ export function setRole(element: Element, roleName: Role) {
 /**
  * Sets the state or property of an element.
  * Copied from Closure's goog.a11y.aria
- *
  * @param element DOM node where we set state.
  * @param stateName State attribute being set.
  *     Automatically adds prefix 'aria-' to the state name if the attribute is

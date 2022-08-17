@@ -5,7 +5,6 @@
 
 /**
  * Methods for graphically rendering a block as SVG.
- *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -46,7 +45,6 @@ import type {Renderer} from './renderer.js';
  * This measure pass does not propagate changes to the block (although fields
  * may choose to rerender when getSize() is called).  However, calling it
  * repeatedly may be expensive.
- *
  * @alias Blockly.blockRendering.RenderInfo
  */
 export class RenderInfo {
@@ -146,8 +144,7 @@ export class RenderInfo {
 
   /**
    * Get the block renderer in use.
-   *
-   * @returns The block renderer in use.
+   * @return The block renderer in use.
    * @internal
    */
   getRenderer(): Renderer {
@@ -161,7 +158,6 @@ export class RenderInfo {
    * This measure pass does not propagate changes to the block (although fields
    * may choose to rerender when getSize() is called).  However, calling it
    * repeatedly may be expensive.
-   *
    * @internal
    */
   measure() {
@@ -230,7 +226,6 @@ export class RenderInfo {
 
   /**
    * Create all non-spacer elements that belong on the top row.
-   *
    * @internal
    */
   populateTopRow_() {
@@ -275,7 +270,6 @@ export class RenderInfo {
 
   /**
    * Create all non-spacer elements that belong on the bottom row.
-   *
    * @internal
    */
   populateBottomRow_() {
@@ -320,7 +314,6 @@ export class RenderInfo {
   /**
    * Add an input element to the active row, if needed, and record the type of
    * the input on the row.
-   *
    * @param input The input to record information about.
    * @param activeRow The row that is currently being populated.
    */
@@ -352,10 +345,9 @@ export class RenderInfo {
 
   /**
    * Decide whether to start a new row between the two Blockly.Inputs.
-   *
    * @param input The first input to consider
    * @param lastInput The input that follows.
-   * @returns True if the next input should be rendered on a new row.
+   * @return True if the next input should be rendered on a new row.
    */
   protected shouldStartNewRow_(input: Input, lastInput: Input): boolean {
     // If this is the first input, just add to the existing row.
@@ -408,10 +400,9 @@ export class RenderInfo {
    * Calculate the width of a spacer element in a row based on the previous and
    * next elements in that row.  For instance, extra padding is added between
    * two editable fields.
-   *
    * @param prev The element before the spacer.
    * @param next The element after the spacer.
-   * @returns The size of the spacing between the two elements.
+   * @return The size of the spacing between the two elements.
    */
   protected getInRowSpacing_(prev: Measurable|null, next: Measurable|null):
       number {
@@ -517,9 +508,8 @@ export class RenderInfo {
 
   /**
    * Calculate the desired width of an input row.
-   *
    * @param _row The input row.
-   * @returns The desired width of the input row.
+   * @return The desired width of the input row.
    */
   protected getDesiredRowWidth_(_row: Row): number {
     return this.width - this.startX;
@@ -529,7 +519,6 @@ export class RenderInfo {
    * Modify the given row to add the given amount of padding around its fields.
    * The exact location of the padding is based on the alignment property of the
    * last input in the field.
-   *
    * @param row The row to add padding to.
    * @param missingSpace How much padding to add.
    */
@@ -561,7 +550,6 @@ export class RenderInfo {
   /**
    * Align the elements of a statement row based on computed bounds.
    * Unlike other types of rows, statement rows add space in multiple places.
-   *
    * @param row The statement row to resize.
    */
   protected alignStatementRow_(row: InputRow) {
@@ -599,10 +587,9 @@ export class RenderInfo {
 
   /**
    * Create a spacer row to go between prev and next, and set its size.
-   *
    * @param prev The previous row.
    * @param next The next row.
-   * @returns The newly created spacer row.
+   * @return The newly created spacer row.
    */
   protected makeSpacerRow_(prev: Row, next: Row): SpacerRow {
     const height = this.getSpacerRowHeight_(prev, next);
@@ -619,10 +606,9 @@ export class RenderInfo {
 
   /**
    * Calculate the width of a spacer row.
-   *
    * @param _prev The row before the spacer.
    * @param _next The row after the spacer.
-   * @returns The desired width of the spacer row between these two rows.
+   * @return The desired width of the spacer row between these two rows.
    */
   protected getSpacerRowWidth_(_prev: Row, _next: Row): number {
     return this.width - this.startX;
@@ -630,10 +616,9 @@ export class RenderInfo {
 
   /**
    * Calculate the height of a spacer row.
-   *
    * @param _prev The row before the spacer.
    * @param _next The row after the spacer.
-   * @returns The desired height of the spacer row between these two rows.
+   * @return The desired height of the spacer row between these two rows.
    */
   protected getSpacerRowHeight_(_prev: Row, _next: Row): number {
     return this.constants_.MEDIUM_PADDING;
@@ -644,10 +629,9 @@ export class RenderInfo {
    * This base implementation puts the centerline at the middle of the row
    * vertically, with no special cases.  You will likely need extra logic to
    * handle (at minimum) top and bottom rows.
-   *
    * @param row The row containing the element.
    * @param elem The element to place.
-   * @returns The desired centerline of the given element, as an offset from the
+   * @return The desired centerline of the given element, as an offset from the
    *     top left of the block.
    */
   protected getElemCenterline_(row: Row, elem: Measurable): number {
@@ -678,7 +662,6 @@ export class RenderInfo {
   /**
    * Record final position information on elements on the given row, for use in
    * drawing.  At minimum this records xPos and centerline on each element.
-   *
    * @param row The row containing the elements.
    */
   protected recordElemPositions_(row: Row) {

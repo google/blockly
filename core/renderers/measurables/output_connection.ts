@@ -6,7 +6,6 @@
 /**
  * Class representing the space a output connection takes up
  * during rendering.
- *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';

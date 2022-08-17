@@ -6,7 +6,6 @@
 /**
  * Non-editable, non-serializable text field.  Used for titles,
  *    labels, etc.
- *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -21,7 +20,6 @@ import type {Sentinel} from './utils/sentinel.js';
 
 /**
  * Class for a non-editable, non-serializable text field.
- *
  * @alias Blockly.FieldLabel
  */
 export class FieldLabel extends Field {
@@ -69,7 +67,6 @@ export class FieldLabel extends Field {
 
   /**
    * Create block UI for this label.
-   *
    * @internal
    */
   override initView() {
@@ -81,9 +78,8 @@ export class FieldLabel extends Field {
 
   /**
    * Ensure that the input value casts to a valid string.
-   *
    * @param opt_newValue The input value.
-   * @returns A valid string, or null if invalid.
+   * @return A valid string, or null if invalid.
    */
   protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
       string|null {
@@ -95,7 +91,6 @@ export class FieldLabel extends Field {
 
   /**
    * Set the CSS class applied to the field's textElement_.
-   *
    * @param cssClass The new CSS class name, or null to remove.
    */
   setClass(cssClass: string|null) {
@@ -115,9 +110,8 @@ export class FieldLabel extends Field {
   /**
    * Construct a FieldLabel from a JSON arg object,
    * dereferencing any string table references.
-   *
    * @param options A JSON object with options (text, and class).
-   * @returns The new field instance.
+   * @return The new field instance.
    * @nocollapse
    * @internal
    */

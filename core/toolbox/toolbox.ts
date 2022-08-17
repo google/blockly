@@ -5,7 +5,6 @@
 
 /**
  * Toolbox from whence to create blocks.
- *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -52,7 +51,6 @@ import {CollapsibleToolboxCategory} from './collapsible_category.js';
 /**
  * Class for a Toolbox.
  * Creates the toolbox's DOM.
- *
  * @alias Blockly.Toolbox
  */
 export class Toolbox extends DeleteArea implements IAutoHideable,
@@ -134,9 +132,8 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Handles the given keyboard shortcut.
-   *
    * @param _shortcut The shortcut to be handled.
-   * @returns True if the shortcut has been handled, false otherwise.
+   * @return True if the shortcut has been handled, false otherwise.
    */
   onShortcut(_shortcut: KeyboardShortcut): boolean {
     return false;
@@ -172,9 +169,8 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Creates the DOM for the toolbox.
-   *
    * @param workspace The workspace this toolbox is on.
-   * @returns The HTML container for the toolbox.
+   * @return The HTML container for the toolbox.
    */
   protected createDom_(workspace: WorkspaceSvg): HTMLDivElement {
     const svg = workspace.getParentSvg();
@@ -194,8 +190,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Creates the container div for the toolbox.
-   *
-   * @returns The HTML container for the toolbox.
+   * @return The HTML container for the toolbox.
    */
   protected createContainer_(): HTMLDivElement {
     const toolboxContainer = (document.createElement('div'));
@@ -208,8 +203,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Creates the container for all the contents in the toolbox.
-   *
-   * @returns The HTML container for the toolbox contents.
+   * @return The HTML container for the toolbox contents.
    */
   protected createContentsContainer_(): HTMLDivElement {
     const contentsContainer = (document.createElement('div'));
@@ -222,7 +216,6 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Adds event listeners to the toolbox container div.
-   *
    * @param container The HTML container for the toolbox.
    * @param contentsContainer The HTML container for the contents of the
    *     toolbox.
@@ -243,7 +236,6 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Handles on click events for when the toolbox or toolbox items are clicked.
-   *
    * @param e Click event to handle.
    */
   protected onClick_(e: MouseEvent) {
@@ -268,7 +260,6 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Handles key down events for the toolbox.
-   *
    * @param e The key down event.
    */
   protected onKeyDown_(e: KeyboardEvent) {
@@ -314,8 +305,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Creates the flyout based on the toolbox layout.
-   *
-   * @returns The flyout for the toolbox.
+   * @return The flyout for the toolbox.
    * @throws {Error} If missing a require for `Blockly.HorizontalFlyout`,
    *     `Blockly.VerticalFlyout`, and no flyout plugin is specified.
    */
@@ -349,7 +339,6 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Fills the toolbox with new toolbox items and removes any old contents.
-   *
    * @param toolboxDef Object holding information for creating a toolbox.
    * @internal
    */
@@ -370,7 +359,6 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Adds all the toolbox items to the toolbox.
-   *
    * @param toolboxDef Array holding objects containing information on the
    *     contents of the toolbox.
    */
@@ -387,7 +375,6 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Creates and renders the toolbox item.
-   *
    * @param toolboxItemDef Any information that can be used to create an item in
    *     the toolbox.
    * @param fragment The document fragment to add the child toolbox elements to.
@@ -423,7 +410,6 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Adds an item to the toolbox.
-   *
    * @param toolboxItem The item in the toolbox.
    */
   protected addToolboxItem_(toolboxItem: IToolboxItem) {
@@ -441,8 +427,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Gets the items in the toolbox.
-   *
-   * @returns The list of items in the toolbox.
+   * @return The list of items in the toolbox.
    */
   getToolboxItems(): IToolboxItem[] {
     return this.contents_;
@@ -450,7 +435,6 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Adds a style on the toolbox. Usually used to change the cursor.
-   *
    * @param style The name of the class to add.
    * @internal
    */
@@ -460,7 +444,6 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Removes a style from the toolbox. Usually used to change the cursor.
-   *
    * @param style The name of the class to remove.
    * @internal
    */
@@ -471,8 +454,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
   /**
    * Returns the bounding rectangle of the drag target area in pixel units
    * relative to viewport.
-   *
-   * @returns The component's bounding box. Null if drag target area should be
+   * @return The component's bounding box. Null if drag target area should be
    *     ignored.
    */
   override getClientRect(): Rect|null {
@@ -508,10 +490,9 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
    * this area.
    * This method should check if the element is deletable and is always called
    * before onDragEnter/onDragOver/onDragExit.
-   *
    * @param element The block or bubble currently being dragged.
    * @param _couldConnect Whether the element could could connect to another.
-   * @returns Whether the element provided would be deleted if dropped on this
+   * @return Whether the element provided would be deleted if dropped on this
    *     area.
    */
   override wouldDelete(element: IDraggable, _couldConnect: boolean): boolean {
@@ -527,7 +508,6 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Handles when a cursor with a block or bubble enters this drag target.
-   *
    * @param _dragElement The block or bubble currently being dragged.
    */
   override onDragEnter(_dragElement: IDraggable) {
@@ -536,7 +516,6 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Handles when a cursor with a block or bubble exits this drag target.
-   *
    * @param _dragElement The block or bubble currently being dragged.
    */
   override onDragExit(_dragElement: IDraggable) {
@@ -546,7 +525,6 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
   /**
    * Handles when a block or bubble is dropped on this component.
    * Should not handle delete here.
-   *
    * @param _dragElement The block or bubble currently being dragged.
    */
   override onDrop(_dragElement: IDraggable) {
@@ -555,7 +533,6 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Updates the internal wouldDelete_ state.
-   *
    * @param wouldDelete The new value for the wouldDelete state.
    */
   protected override updateWouldDelete_(wouldDelete: boolean) {
@@ -576,7 +553,6 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
    * Adds or removes the CSS style of the cursor over the toolbox based whether
    * the block or bubble over it is expected to be deleted if dropped (using the
    * internal this.wouldDelete_ property).
-   *
    * @param addStyle Whether the style should be added or removed.
    */
   protected updateCursorDeleteStyle_(addStyle: boolean) {
@@ -591,9 +567,8 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Gets the toolbox item with the given ID.
-   *
    * @param id The ID of the toolbox item.
-   * @returns The toolbox item with the given ID, or null if no item exists.
+   * @return The toolbox item with the given ID, or null if no item exists.
    */
   getToolboxItemById(id: string): IToolboxItem|null {
     return this.contentMap_[id] || null;
@@ -601,8 +576,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Gets the width of the toolbox.
-   *
-   * @returns The width of the toolbox.
+   * @return The width of the toolbox.
    */
   getWidth(): number {
     return this.width_;
@@ -610,8 +584,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Gets the height of the toolbox.
-   *
-   * @returns The width of the toolbox.
+   * @return The width of the toolbox.
    */
   getHeight(): number {
     return this.height_;
@@ -619,8 +592,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Gets the toolbox flyout.
-   *
-   * @returns The toolbox flyout.
+   * @return The toolbox flyout.
    */
   getFlyout(): IFlyout|null {
     return this.flyout_;
@@ -628,8 +600,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Gets the workspace for the toolbox.
-   *
-   * @returns The parent workspace for the toolbox.
+   * @return The parent workspace for the toolbox.
    */
   getWorkspace(): WorkspaceSvg {
     return this.workspace_;
@@ -637,8 +608,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Gets the selected item.
-   *
-   * @returns The selected item, or null if no item is currently selected.
+   * @return The selected item, or null if no item is currently selected.
    */
   getSelectedItem(): ISelectableToolboxItem|null {
     return this.selectedItem_;
@@ -646,8 +616,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Gets the previously selected item.
-   *
-   * @returns The previously selected item, or null if no item was previously
+   * @return The previously selected item, or null if no item was previously
    *     selected.
    */
   getPreviouslySelectedItem(): ISelectableToolboxItem|null {
@@ -656,8 +625,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Gets whether or not the toolbox is horizontal.
-   *
-   * @returns True if the toolbox is horizontal, false if the toolbox is
+   * @return True if the toolbox is horizontal, false if the toolbox is
    *     vertical.
    */
   isHorizontal(): boolean {
@@ -702,7 +670,6 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Handles resizing the toolbox when a toolbox item resizes.
-   *
    * @internal
    */
   handleToolboxItemResize() {
@@ -730,7 +697,6 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Updates the category colours and background colour of selected categories.
-   *
    * @internal
    */
   refreshTheme() {
@@ -758,7 +724,6 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Shows or hides the toolbox.
-   *
    * @param isVisible True if toolbox should be visible.
    */
   setVisible(isVisible: boolean) {
@@ -775,7 +740,6 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Hides the component. Called in WorkspaceSvg.hideChaff.
-   *
    * @param onlyClosePopups Whether only popups should be closed.
    *     Flyouts should not be closed if this is true.
    */
@@ -788,7 +752,6 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
   /**
    * Sets the given item as selected.
    * No-op if the item is not selectable.
-   *
    * @param newItem The toolbox item to select.
    */
   setSelectedItem(newItem: IToolboxItem|null) {
@@ -825,10 +788,9 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Decides whether the old item should be deselected.
-   *
    * @param oldItem The previously selected toolbox item.
    * @param newItem The newly selected toolbox item.
-   * @returns True if the old item should be deselected, false otherwise.
+   * @return True if the old item should be deselected, false otherwise.
    */
   protected shouldDeselectItem_(
       oldItem: ISelectableToolboxItem|null,
@@ -841,10 +803,9 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Decides whether the new item should be selected.
-   *
    * @param oldItem The previously selected toolbox item.
    * @param newItem The newly selected toolbox item.
-   * @returns True if the new item should be selected, false otherwise.
+   * @return True if the new item should be selected, false otherwise.
    */
   protected shouldSelectItem_(
       oldItem: ISelectableToolboxItem|null,
@@ -855,7 +816,6 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Deselects the given item, marks it as unselected, and updates aria state.
-   *
    * @param item The previously selected toolbox item which should be
    *     deselected.
    */
@@ -869,7 +829,6 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Selects the given item, marks it selected, and updates aria state.
-   *
    * @param oldItem The previously selected toolbox item.
    * @param newItem The newly selected toolbox item.
    */
@@ -885,7 +844,6 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Selects the toolbox item by its position in the list of toolbox items.
-   *
    * @param position The position of the item to select.
    */
   selectItemByPosition(position: number) {
@@ -899,7 +857,6 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Decides whether to hide or show the flyout depending on the selected item.
-   *
    * @param oldItem The previously selected toolbox item.
    * @param newItem The newly selected toolbox item.
    */
@@ -917,7 +874,6 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Emits an event when a new toolbox item is selected.
-   *
    * @param oldItem The previously selected toolbox item.
    * @param newItem The newly selected toolbox item.
    */
@@ -937,8 +893,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Closes the current item if it is expanded, or selects the parent.
-   *
-   * @returns True if a parent category was selected, false otherwise.
+   * @return True if a parent category was selected, false otherwise.
    */
   private selectParent_(): boolean {
     if (!this.selectedItem_) {
@@ -962,8 +917,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
   /**
    * Selects the first child of the currently selected item, or nothing if the
    * toolbox item has no children.
-   *
-   * @returns True if a child category was selected, false otherwise.
+   * @return True if a child category was selected, false otherwise.
    */
   private selectChild_(): boolean {
     if (!this.selectedItem_ || !this.selectedItem_.isCollapsible()) {
@@ -981,8 +935,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Selects the next visible toolbox item.
-   *
-   * @returns True if a next category was selected, false otherwise.
+   * @return True if a next category was selected, false otherwise.
    */
   private selectNext_(): boolean {
     if (!this.selectedItem_) {
@@ -1005,8 +958,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
 
   /**
    * Selects the previous visible toolbox item.
-   *
-   * @returns True if a previous category was selected, false otherwise.
+   * @return True if a previous category was selected, false otherwise.
    */
   private selectPrevious_(): boolean {
     if (!this.selectedItem_) {

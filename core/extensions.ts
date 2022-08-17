@@ -8,7 +8,6 @@
  *      adding dynamic behavior such as onchange handlers and mutators. These
  *      are applied using Block.applyExtension(), or the JSON "extensions"
  *      array attribute.
- *
  * @namespace Blockly.Extensions
  */
 import * as goog from '../closure/goog/goog.js';
@@ -33,7 +32,6 @@ export const TEST_ONLY = {allExtensions};
  * initialize blocks, usually adding dynamic behavior such as onchange
  * handlers and mutators. These are applied using Block.applyExtension(), or
  * the JSON "extensions" array attribute.
- *
  * @param name The name of this extension.
  * @param initFn The function to initialize an extended block.
  * @throws {Error} if the extension name is empty, the extension is already
@@ -55,7 +53,6 @@ export function register(name: string, initFn: Function) {
 
 /**
  * Registers a new extension function that adds all key/value of mixinObj.
- *
  * @param name The name of this extension.
  * @param mixinObj The values to mix in.
  * @throws {Error} if the extension name is empty or the extension is already
@@ -76,7 +73,6 @@ export function registerMixin(name: string, mixinObj: AnyDuringMigration) {
  * At register time this performs some basic sanity checks on the mutator.
  * The wrapper may also add a mutator dialog to the block, if both compose and
  * decompose are defined on the mixin.
- *
  * @param name The name of this mutator extension.
  * @param mixinObj The values to mix in.
  * @param opt_helperFn An optional function to apply after mixing in the object.
@@ -113,7 +109,6 @@ export function registerMutator(
 
 /**
  * Unregisters the extension registered with the given name.
- *
  * @param name The name of the extension to unregister.
  * @alias Blockly.Extensions.unregister
  */
@@ -128,9 +123,8 @@ export function unregister(name: string) {
 
 /**
  * Returns whether an extension is registered with the given name.
- *
  * @param name The name of the extension to check for.
- * @returns True if the extension is registered.  False if it is not registered.
+ * @return True if the extension is registered.  False if it is not registered.
  * @alias Blockly.Extensions.isRegistered
  */
 export function isRegistered(name: string): boolean {
@@ -140,7 +134,6 @@ export function isRegistered(name: string): boolean {
 /**
  * Applies an extension method to a block. This should only be called during
  * block construction.
- *
  * @param name The name of the extension.
  * @param block The block to apply the named extension to.
  * @param isMutator True if this extension defines a mutator.
@@ -180,7 +173,6 @@ export function apply(name: string, block: Block, isMutator: boolean) {
  * Check that the given block does not have any of the four mutator properties
  * defined on it.  This function should be called before applying a mutator
  * extension to a block, to make sure we are not overwriting properties.
- *
  * @param mutationName The name of the mutation to reference in error messages.
  * @param block The block to check.
  * @throws {Error} if any of the properties already exist on the block.
@@ -198,10 +190,9 @@ function checkNoMutatorProperties(mutationName: string, block: Block) {
 /**
  * Checks if the given object has both the 'mutationToDom' and 'domToMutation'
  * functions.
- *
  * @param object The object to check.
  * @param errorPrefix The string to prepend to any error message.
- * @returns True if the object has both functions.  False if it has neither
+ * @return True if the object has both functions.  False if it has neither
  *     function.
  * @throws {Error} if the object has only one of the functions, or either is not
  *     actually a function.
@@ -215,10 +206,9 @@ function checkXmlHooks(
 /**
  * Checks if the given object has both the 'saveExtraState' and 'loadExtraState'
  * functions.
- *
  * @param object The object to check.
  * @param errorPrefix The string to prepend to any error message.
- * @returns True if the object has both functions.  False if it has neither
+ * @return True if the object has both functions.  False if it has neither
  *     function.
  * @throws {Error} if the object has only one of the functions, or either is not
  *     actually a function.
@@ -232,10 +222,9 @@ function checkJsonHooks(
 
 /**
  * Checks if the given object has both the 'compose' and 'decompose' functions.
- *
  * @param object The object to check.
  * @param errorPrefix The string to prepend to any error message.
- * @returns True if the object has both functions.  False if it has neither
+ * @return True if the object has both functions.  False if it has neither
  *     function.
  * @throws {Error} if the object has only one of the functions, or either is not
  *     actually a function.
@@ -249,11 +238,10 @@ function checkMutatorDialog(
 /**
  * Checks that both or neither of the given functions exist and that they are
  * indeed functions.
- *
  * @param func1 The first function in the pair.
  * @param func2 The second function in the pair.
  * @param errorPrefix The string to prepend to any error message.
- * @returns True if the object has both functions.  False if it has neither
+ * @return True if the object has both functions.  False if it has neither
  *     function.
  * @throws {Error} If the object has only one of the functions, or either is not
  *     actually a function.
@@ -274,7 +262,6 @@ function checkHasFunctionPair(
 
 /**
  * Checks that the given object required mutator properties.
- *
  * @param errorPrefix The string to prepend to any error message.
  * @param object The object to inspect.
  */
@@ -294,10 +281,9 @@ function checkHasMutatorProperties(
 
 /**
  * Get a list of values of mutator properties on the given block.
- *
  * @param block The block to inspect.
- * @returns A list with all of the defined properties, which should be
- *     functions, but may be anything other than undefined.
+ * @return A list with all of the defined properties, which should be functions,
+ *     but may be anything other than undefined.
  */
 function getMutatorProperties(block: Block): AnyDuringMigration[] {
   const result = [];
@@ -328,10 +314,9 @@ function getMutatorProperties(block: Block): AnyDuringMigration[] {
  * Check that the current mutator properties match a list of old mutator
  * properties.  This should be called after applying a non-mutator extension,
  * to verify that the extension didn't change properties it shouldn't.
- *
  * @param oldProperties The old values to compare to.
  * @param block The block to inspect for new values.
- * @returns True if the property lists match.
+ * @return True if the property lists match.
  */
 function mutatorPropertiesMatch(
     oldProperties: AnyDuringMigration[], block: Block): boolean {
@@ -349,7 +334,6 @@ function mutatorPropertiesMatch(
 
 /**
  * Calls a function after the page has loaded, possibly immediately.
- *
  * @param fn Function to run.
  * @throws Error Will throw if no global document can be found (e.g., Node.js).
  * @internal
@@ -384,11 +368,10 @@ export function runAfterPageLoad(fn: () => AnyDuringMigration) {
  * loading the first block of any given type, the extension will validate every
  * dropdown option has a matching tooltip in the lookupTable.  Errors are
  * reported as warnings in the console, and are never fatal.
- *
  * @param dropdownName The name of the field whose value is the key to the
  *     lookup table.
  * @param lookupTable The table of field values to tooltip text.
- * @returns The extension function.
+ * @return The extension function.
  * @alias Blockly.Extensions.buildTooltipForDropdown
  */
 export function buildTooltipForDropdown(
@@ -409,11 +392,7 @@ export function buildTooltipForDropdown(
     });
   }
 
-  /**
-   * The actual extension.
-   *
-   * @param this
-   */
+  /** The actual extension. */
   function extensionFn(this: Block) {
     if (this.type && blockTypesChecked.indexOf(this.type) === -1) {
       checkDropdownOptionsInTable(this, dropdownName, lookupTable);
@@ -445,7 +424,6 @@ export function buildTooltipForDropdown(
 /**
  * Checks all options keys are present in the provided string lookup table.
  * Emits console warnings when they are not.
- *
  * @param block The block containing the dropdown
  * @param dropdownName The name of the dropdown
  * @param lookupTable The string lookup table
@@ -471,11 +449,10 @@ function checkDropdownOptionsInTable(
  * Builds an extension function that will install a dynamic tooltip. The
  * tooltip message should include the string '%1' and that string will be
  * replaced with the text of the named field.
- *
  * @param msgTemplate The template form to of the message text, with %1
  *     placeholder.
  * @param fieldName The field with the replacement text.
- * @returns The extension function.
+ * @return The extension function.
  * @alias Blockly.Extensions.buildTooltipWithFieldText
  */
 export function buildTooltipWithFieldText(
@@ -491,11 +468,7 @@ export function buildTooltipWithFieldText(
     });
   }
 
-  /**
-   * The actual extension.
-   *
-   * @param this
-   */
+  /** The actual extension. */
   function extensionFn(this: Block) {
     this.setTooltip(function(this: Block) {
       const field = this.getField(fieldName);
@@ -511,8 +484,6 @@ export function buildTooltipWithFieldText(
  * uses the tooltip text at the time this extension is initialized. This takes
  * advantage of the fact that all other values from JSON are initialized before
  * extensions.
- *
- * @param this
  */
 function extensionParentTooltip(this: Block) {
   const tooltipWhenNotConnected = this.tooltip;

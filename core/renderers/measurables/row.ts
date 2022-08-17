@@ -5,7 +5,6 @@
 
 /**
  * Object representing a single row on a rendered block.
- *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -22,7 +21,6 @@ import {Types} from './types.js';
 /**
  * An object representing a single row on a rendered block and all of its
  * subcomponents.
- *
  * @alias Blockly.blockRendering.Row
  */
 export class Row {
@@ -31,14 +29,12 @@ export class Row {
 
   /**
    * An array of elements contained in this row.
-   *
    * @internal
    */
   elements: Measurable[] = [];
 
   /**
    * The height of the row.
-   *
    * @internal
    */
   height = 0;
@@ -46,14 +42,12 @@ export class Row {
   /**
    * The width of the row, from the left edge of the block to the right.
    * Does not include child blocks unless they are inline.
-   *
    * @internal
    */
   width = 0;
 
   /**
    * The minimum height of the row.
-   *
    * @internal
    */
   minHeight = 0;
@@ -61,7 +55,6 @@ export class Row {
   /**
    * The minimum width of the row, from the left edge of the block to the
    * right. Does not include child blocks unless they are inline.
-   *
    * @internal
    */
   minWidth = 0;
@@ -69,7 +62,6 @@ export class Row {
   /**
    * The width of the row, from the left edge of the block to the edge of the
    * block or any connected child blocks.
-   *
    * @internal
    */
   widthWithConnectedBlocks = 0;
@@ -77,7 +69,6 @@ export class Row {
   /**
    * The Y position of the row relative to the origin of the block's svg
    * group.
-   *
    * @internal
    */
   yPos = 0;
@@ -85,21 +76,18 @@ export class Row {
   /**
    * The X position of the row relative to the origin of the block's svg
    * group.
-   *
    * @internal
    */
   xPos = 0;
 
   /**
    * Whether the row has any external inputs.
-   *
    * @internal
    */
   hasExternalInput = false;
 
   /**
    * Whether the row has any statement inputs.
-   *
    * @internal
    */
   hasStatement = false;
@@ -113,21 +101,18 @@ export class Row {
 
   /**
    * Whether the row has any inline inputs.
-   *
    * @internal
    */
   hasInlineInput = false;
 
   /**
    * Whether the row has any dummy inputs.
-   *
    * @internal
    */
   hasDummyInput = false;
 
   /**
    * Whether the row has a jagged edge.
-   *
    * @internal
    */
   hasJaggedEdge = false;
@@ -135,7 +120,6 @@ export class Row {
 
   /**
    * Alignment of the row.
-   *
    * @internal
    */
   align: number|null = null;
@@ -158,8 +142,7 @@ export class Row {
 
   /**
    * Get the last input on this row, if it has one.
-   *
-   * @returns The last input on the row, or null.
+   * @return The last input on the row, or null.
    * @internal
    */
   getLastInput(): InputConnection {
@@ -177,7 +160,6 @@ export class Row {
 
   /**
    * Inspect all subcomponents and populate all size properties on the row.
-   *
    * @internal
    */
   measure() {
@@ -186,8 +168,7 @@ export class Row {
 
   /**
    * Determines whether this row should start with an element spacer.
-   *
-   * @returns Whether the row should start with a spacer.
+   * @return Whether the row should start with a spacer.
    * @internal
    */
   startsWithElemSpacer(): boolean {
@@ -196,8 +177,7 @@ export class Row {
 
   /**
    * Determines whether this row should end with an element spacer.
-   *
-   * @returns Whether the row should end with a spacer.
+   * @return Whether the row should end with a spacer.
    * @internal
    */
   endsWithElemSpacer(): boolean {
@@ -206,8 +186,7 @@ export class Row {
 
   /**
    * Convenience method to get the first spacer element on this row.
-   *
-   * @returns The first spacer element on this row.
+   * @return The first spacer element on this row.
    * @internal
    */
   getFirstSpacer(): InRowSpacer {
@@ -224,8 +203,7 @@ export class Row {
 
   /**
    * Convenience method to get the last spacer element on this row.
-   *
-   * @returns The last spacer element on this row.
+   * @return The last spacer element on this row.
    * @internal
    */
   getLastSpacer(): InRowSpacer {

@@ -5,7 +5,6 @@
 
 /**
  * Zelos renderer.
- *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -36,7 +35,6 @@ import {PathObject} from './path_object.js';
 
 /**
  * The zelos renderer.
- *
  * @alias Blockly.zelos.Renderer
  */
 export class Renderer extends BaseRenderer {
@@ -52,8 +50,7 @@ export class Renderer extends BaseRenderer {
 
   /**
    * Create a new instance of the renderer's constant provider.
-   *
-   * @returns The constant provider.
+   * @return The constant provider.
    */
   protected override makeConstants_(): ConstantProvider {
     return new ConstantProvider();
@@ -61,9 +58,8 @@ export class Renderer extends BaseRenderer {
 
   /**
    * Create a new instance of the renderer's render info object.
-   *
    * @param block The block to measure.
-   * @returns The render info object.
+   * @return The render info object.
    */
   protected override makeRenderInfo_(block: BlockSvg): RenderInfo {
     return new RenderInfo(this, block);
@@ -71,11 +67,10 @@ export class Renderer extends BaseRenderer {
 
   /**
    * Create a new instance of the renderer's drawer.
-   *
    * @param block The block to render.
    * @param info An object containing all information needed to render this
    *     block.
-   * @returns The drawer.
+   * @return The drawer.
    */
   protected override makeDrawer_(block: BlockSvg, info: BaseRenderInfo):
       Drawer {
@@ -84,10 +79,9 @@ export class Renderer extends BaseRenderer {
 
   /**
    * Create a new instance of the renderer's cursor drawer.
-   *
    * @param workspace The workspace the cursor belongs to.
    * @param marker The marker.
-   * @returns The object in charge of drawing the marker.
+   * @return The object in charge of drawing the marker.
    * @internal
    */
   override makeMarkerDrawer(workspace: WorkspaceSvg, marker: Marker):
@@ -97,10 +91,9 @@ export class Renderer extends BaseRenderer {
 
   /**
    * Create a new instance of a renderer path object.
-   *
    * @param root The root SVG element.
    * @param style The style object to use for colouring.
-   * @returns The renderer path object.
+   * @return The renderer path object.
    * @internal
    */
   override makePathObject(root: SVGElement, style: BlockStyle): PathObject {
@@ -111,8 +104,7 @@ export class Renderer extends BaseRenderer {
   /**
    * Get the current renderer's constant provider.  We assume that when this is
    * called, the renderer has already been initialized.
-   *
-   * @returns The constant provider.
+   * @return The constant provider.
    */
   override getConstants(): ConstantProvider {
     return this.constants_;

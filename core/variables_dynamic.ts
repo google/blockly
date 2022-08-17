@@ -26,25 +26,16 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  * variable blocks.
  * See also Blockly.Variables.CATEGORY_NAME and
  * Blockly.Procedures.CATEGORY_NAME.
- *
  * @alias Blockly.VariablesDynamic.CATEGORY_NAME
  */
 export const CATEGORY_NAME = 'VARIABLE_DYNAMIC';
 
-/**
- *
- * @param button
- */
 function stringButtonClickHandler(button: AnyDuringMigration) {
   Variables.createVariableButtonHandler(
       button.getTargetWorkspace(), undefined, 'String');
 }
 // eslint-disable-next-line camelcase
 export const onCreateVariableButtonClick_String = stringButtonClickHandler;
-/**
- *
- * @param button
- */
 function numberButtonClickHandler(button: AnyDuringMigration) {
   Variables.createVariableButtonHandler(
       button.getTargetWorkspace(), undefined, 'Number');
@@ -52,10 +43,6 @@ function numberButtonClickHandler(button: AnyDuringMigration) {
 // eslint-disable-next-line camelcase
 export const onCreateVariableButtonClick_Number = numberButtonClickHandler;
 
-/**
- *
- * @param button
- */
 function colourButtonClickHandler(button: AnyDuringMigration) {
   Variables.createVariableButtonHandler(
       button.getTargetWorkspace(), undefined, 'Colour');
@@ -66,9 +53,8 @@ export const onCreateVariableButtonClick_Colour = colourButtonClickHandler;
 /**
  * Construct the elements (blocks and button) required by the flyout for the
  * variable category.
- *
  * @param workspace The workspace containing variables.
- * @returns Array of XML elements.
+ * @return Array of XML elements.
  * @alias Blockly.VariablesDynamic.flyoutCategory
  */
 export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
@@ -102,9 +88,8 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
 
 /**
  * Construct the blocks required by the flyout for the variable category.
- *
  * @param workspace The workspace containing variables.
- * @returns Array of XML block elements.
+ * @return Array of XML block elements.
  * @alias Blockly.VariablesDynamic.flyoutCategoryBlocks
  */
 export function flyoutCategoryBlocks(workspace: Workspace): Element[] {

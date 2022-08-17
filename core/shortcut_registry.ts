@@ -6,7 +6,6 @@
 /**
  * The namespace used to keep track of keyboard shortcuts and the
  * key codes used to execute those shortcuts.
- *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -21,7 +20,6 @@ import type {Workspace} from './workspace.js';
  * Class for the registry of keyboard shortcuts. This is intended to be a
  * singleton. You should not create a new instance, and only access this class
  * from ShortcutRegistry.registry.
- *
  * @alias Blockly.ShortcutRegistry
  */
 export class ShortcutRegistry {
@@ -46,7 +44,6 @@ export class ShortcutRegistry {
 
   /**
    * Registers a keyboard shortcut.
-   *
    * @param shortcut The shortcut for this key code.
    * @param opt_allowOverrides True to prevent a warning when overriding an
    *     already registered item.
@@ -72,9 +69,8 @@ export class ShortcutRegistry {
   /**
    * Unregisters a keyboard shortcut registered with the given key code. This
    * will also remove any key mappings that reference this shortcut.
-   *
    * @param shortcutName The name of the shortcut to unregister.
-   * @returns True if an item was unregistered, false otherwise.
+   * @return True if an item was unregistered, false otherwise.
    */
   unregister(shortcutName: string): boolean {
     const shortcut = this.shortcuts.get(shortcutName);
@@ -93,7 +89,6 @@ export class ShortcutRegistry {
 
   /**
    * Adds a mapping between a keycode and a keyboard shortcut.
-   *
    * @param keyCode The key code for the keyboard shortcut. If registering a key
    *     code with a modifier (ex: ctrl+c) use
    *     ShortcutRegistry.registry.createSerializedKey;
@@ -121,7 +116,6 @@ export class ShortcutRegistry {
 
   /**
    * Removes a mapping between a keycode and a keyboard shortcut.
-   *
    * @param keyCode The key code for the keyboard shortcut. If registering a key
    *     code with a modifier (ex: ctrl+c) use
    *     ShortcutRegistry.registry.createSerializedKey;
@@ -129,7 +123,7 @@ export class ShortcutRegistry {
    *     keycode is pressed.
    * @param opt_quiet True to not console warn when there is no shortcut to
    *     remove.
-   * @returns True if a key mapping was removed, false otherwise.
+   * @return True if a key mapping was removed, false otherwise.
    */
   removeKeyMapping(keyCode: string, shortcutName: string, opt_quiet?: boolean):
       boolean {
@@ -164,7 +158,6 @@ export class ShortcutRegistry {
    * Removes all the key mappings for a shortcut with the given name.
    * Useful when changing the default key mappings and the key codes registered
    * to the shortcut are unknown.
-   *
    * @param shortcutName The name of the shortcut to remove from the key map.
    */
   removeAllKeyMappings(shortcutName: string) {
@@ -176,7 +169,6 @@ export class ShortcutRegistry {
   /**
    * Sets the key map. Setting the key map will override any default key
    * mappings.
-   *
    * @param newKeyMap The object with key code to shortcut names.
    */
   setKeyMap(newKeyMap: {[key: string]: string[]}) {
@@ -188,8 +180,7 @@ export class ShortcutRegistry {
 
   /**
    * Gets the current key map.
-   *
-   * @returns The object holding key codes to ShortcutRegistry.KeyboardShortcut.
+   * @return The object holding key codes to ShortcutRegistry.KeyboardShortcut.
    */
   getKeyMap(): {[key: string]: string[]} {
     const legacyKeyMap: {[key: string]: string[]} = Object.create(null);
@@ -201,8 +192,7 @@ export class ShortcutRegistry {
 
   /**
    * Gets the registry of keyboard shortcuts.
-   *
-   * @returns The registry of keyboard shortcuts.
+   * @return The registry of keyboard shortcuts.
    */
   getRegistry(): {[key: string]: KeyboardShortcut} {
     const legacyRegistry: {[key: string]: KeyboardShortcut} =
@@ -215,10 +205,9 @@ export class ShortcutRegistry {
 
   /**
    * Handles key down events.
-   *
    * @param workspace The main workspace where the event was captured.
    * @param e The key down event.
-   * @returns True if the event was handled, false otherwise.
+   * @return True if the event was handled, false otherwise.
    */
   onKeyDown(workspace: Workspace, e: KeyboardEvent): boolean {
     const key = this.serializeKeyEvent_(e);
@@ -240,9 +229,8 @@ export class ShortcutRegistry {
 
   /**
    * Gets the shortcuts registered to the given key code.
-   *
    * @param keyCode The serialized key code.
-   * @returns The list of shortcuts to call when the given keyCode is used.
+   * @return The list of shortcuts to call when the given keyCode is used.
    *     Undefined if no shortcuts exist.
    */
   getShortcutNamesByKeyCode(keyCode: string): string[]|undefined {
@@ -252,9 +240,8 @@ export class ShortcutRegistry {
   /**
    * Gets the serialized key codes that the shortcut with the given name is
    * registered under.
-   *
    * @param shortcutName The name of the shortcut.
-   * @returns An array with all the key codes the shortcut is registered under.
+   * @return An array with all the key codes the shortcut is registered under.
    */
   getKeyCodesByShortcutName(shortcutName: string): string[] {
     const keys = [];
@@ -269,9 +256,8 @@ export class ShortcutRegistry {
 
   /**
    * Serializes a key event.
-   *
    * @param e A key down event.
-   * @returns The serialized key code for the given event.
+   * @return The serialized key code for the given event.
    */
   private serializeKeyEvent_(e: KeyboardEvent): string {
     let serializedKey = '';
@@ -293,7 +279,6 @@ export class ShortcutRegistry {
 
   /**
    * Checks whether any of the given modifiers are not valid.
-   *
    * @param modifiers List of modifiers to be used with the key.
    * @throws {Error} if the modifier is not in the valid modifiers list.
    */
@@ -308,11 +293,10 @@ export class ShortcutRegistry {
 
   /**
    * Creates the serialized key code that will be used in the key map.
-   *
    * @param keyCode Number code representing the key.
    * @param modifiers List of modifier key codes to be used with the key. All
    *     valid modifiers can be found in the ShortcutRegistry.modifierKeys.
-   * @returns The serialized key code for the given modifiers and key.
+   * @return The serialized key code for the given modifiers and key.
    */
   createSerializedKey(keyCode: number, modifiers: KeyCodes[]|null): string {
     let serializedKey = '';

@@ -6,7 +6,6 @@
 /**
  * An object that encapsulates logic for checking whether a
  * potential connection is safe and valid.
- *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -23,20 +22,18 @@ import type {RenderedConnection} from './rendered_connection.js';
 
 /**
  * Class for connection type checking logic.
- *
  * @alias Blockly.ConnectionChecker
  */
 export class ConnectionChecker implements IConnectionChecker {
   /**
    * Check whether the current connection can connect with the target
    * connection.
-   *
    * @param a Connection to check compatibility with.
    * @param b Connection to check compatibility with.
    * @param isDragging True if the connection is being made by dragging a block.
    * @param opt_distance The max allowable distance between the connections for
    *     drag checks.
-   * @returns Whether the connection is legal.
+   * @return Whether the connection is legal.
    */
   canConnect(
       a: Connection|null, b: Connection|null, isDragging: boolean,
@@ -48,13 +45,12 @@ export class ConnectionChecker implements IConnectionChecker {
   /**
    * Checks whether the current connection can connect with the target
    * connection, and return an error code if there are problems.
-   *
    * @param a Connection to check compatibility with.
    * @param b Connection to check compatibility with.
    * @param isDragging True if the connection is being made by dragging a block.
    * @param opt_distance The max allowable distance between the connections for
    *     drag checks.
-   * @returns Connection.CAN_CONNECT if the connection is legal, an error code
+   * @return Connection.CAN_CONNECT if the connection is legal, an error code
    *     otherwise.
    */
   canConnectWithReason(
@@ -84,11 +80,10 @@ export class ConnectionChecker implements IConnectionChecker {
 
   /**
    * Helper method that translates a connection error code into a string.
-   *
    * @param errorCode The error code.
    * @param a One of the two connections being checked.
    * @param b The second of the two connections being checked.
-   * @returns A developer-readable error string.
+   * @return A developer-readable error string.
    */
   getErrorMessage(errorCode: number, a: Connection|null, b: Connection|null):
       string {
@@ -124,10 +119,9 @@ export class ConnectionChecker implements IConnectionChecker {
   /**
    * Check that connecting the given connections is safe, meaning that it would
    * not break any of Blockly's basic assumptions (e.g. no self connections).
-   *
    * @param a The first of the connections to check.
    * @param b The second of the connections to check.
-   * @returns An enum with the reason this connection is safe or unsafe.
+   * @return An enum with the reason this connection is safe or unsafe.
    */
   doSafetyChecks(a: Connection|null, b: Connection|null): number {
     if (!a || !b) {
@@ -176,10 +170,9 @@ export class ConnectionChecker implements IConnectionChecker {
    * Check whether this connection is compatible with another connection with
    * respect to the value type system.  E.g. square_root("Hello") is not
    * compatible.
-   *
    * @param a Connection to compare.
    * @param b Connection to compare against.
-   * @returns True if the connections share a type.
+   * @return True if the connections share a type.
    */
   doTypeChecks(a: Connection, b: Connection): boolean {
     const checkArrayOne = a.getCheck();
@@ -201,11 +194,10 @@ export class ConnectionChecker implements IConnectionChecker {
 
   /**
    * Check whether this connection can be made by dragging.
-   *
    * @param a Connection to compare.
    * @param b Connection to compare against.
    * @param distance The maximum allowable distance between connections.
-   * @returns True if the connection is allowed during a drag.
+   * @return True if the connection is allowed during a drag.
    */
   doDragChecks(a: RenderedConnection, b: RenderedConnection, distance: number):
       boolean {
@@ -266,11 +258,10 @@ export class ConnectionChecker implements IConnectionChecker {
 
   /**
    * Helper function for drag checking.
-   *
    * @param a The connection to check, which must be a statement input or next
    *     connection.
    * @param b A nearby connection to check, which must be a previous connection.
-   * @returns True if the connection is allowed, false otherwise.
+   * @return True if the connection is allowed, false otherwise.
    */
   protected canConnectToPrevious_(a: Connection, b: Connection): boolean {
     if (a.targetConnection) {

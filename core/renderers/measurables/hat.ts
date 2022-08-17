@@ -6,7 +6,6 @@
 /**
  * Objects representing a hat in a row of a rendered
  * block.
- *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';

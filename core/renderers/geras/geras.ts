@@ -1,4 +1,4 @@
-/** @file Re-exports of Blockly.geras.* modules. */
+/** @fileoverview Re-exports of Blockly.geras.* modules. */
 
 /**
  * Copyright 2021 Google LLC
@@ -7,7 +7,6 @@
 
 /**
  * Re-exports of Blockly.geras.* modules.
- *
  * @namespace Blockly.geras
  */
 import * as goog from '../../../closure/goog/goog.js';

@@ -6,7 +6,6 @@
 /**
  * Class representing external value inputs with connections on a
  * rendered block.
- *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';

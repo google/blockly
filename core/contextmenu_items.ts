@@ -5,7 +5,6 @@
 
 /**
  * Registers default context menu items.
- *
  * @namespace Blockly.ContextMenuItems
  */
 import * as goog from '../closure/goog/goog.js';
@@ -26,7 +25,6 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Option to undo previous action.
- *
  * @alias Blockly.ContextMenuItems.registerUndo
  */
 export function registerUndo() {
@@ -52,7 +50,6 @@ export function registerUndo() {
 
 /**
  * Option to redo previous action.
- *
  * @alias Blockly.ContextMenuItems.registerRedo
  */
 export function registerRedo() {
@@ -78,7 +75,6 @@ export function registerRedo() {
 
 /**
  * Option to clean up blocks.
- *
  * @alias Blockly.ContextMenuItems.registerCleanup
  */
 export function registerCleanup() {
@@ -106,7 +102,6 @@ export function registerCleanup() {
 }
 /**
  * Creates a callback to collapse or expand top blocks.
- *
  * @param shouldCollapse Whether a block should collapse.
  * @param topBlocks Top blocks in the workspace.
  */
@@ -114,10 +109,6 @@ function toggleOption_(shouldCollapse: boolean, topBlocks: BlockSvg[]) {
   const DELAY = 10;
   let ms = 0;
   let timeoutCounter = 0;
-  /**
-   *
-   * @param block
-   */
   function timeoutFn(block: BlockSvg) {
     timeoutCounter--;
     block.setCollapsed(shouldCollapse);
@@ -139,7 +130,6 @@ function toggleOption_(shouldCollapse: boolean, topBlocks: BlockSvg[]) {
 
 /**
  * Option to collapse all blocks.
- *
  * @alias Blockly.ContextMenuItems.registerCollapse
  */
 export function registerCollapse() {
@@ -175,7 +165,6 @@ export function registerCollapse() {
 
 /**
  * Option to expand all blocks.
- *
  * @alias Blockly.ContextMenuItems.registerExpand
  */
 export function registerExpand() {
@@ -210,7 +199,6 @@ export function registerExpand() {
 }
 /**
  * Adds a block and its children to a list of deletable blocks.
- *
  * @param block to delete.
  * @param deleteList list of blocks that can be deleted.
  *     This will be modified in place with the given block and its descendants.
@@ -228,9 +216,8 @@ function addDeletableBlocks_(block: BlockSvg, deleteList: BlockSvg[]) {
 
 /**
  * Constructs a list of blocks that can be deleted in the given workspace.
- *
  * @param workspace to delete all blocks from.
- * @returns list of blocks to delete.
+ * @return list of blocks to delete.
  */
 function getDeletableBlocks_(workspace: WorkspaceSvg): BlockSvg[] {
   const deleteList: BlockSvg[] = [];
@@ -243,7 +230,6 @@ function getDeletableBlocks_(workspace: WorkspaceSvg): BlockSvg[] {
 
 /**
  * Deletes the given blocks. Used to delete all blocks in the workspace.
- *
  * @param deleteList list of blocks to delete.
  * @param eventGroup event group ID with which all delete events should be
  *     associated.
@@ -265,7 +251,6 @@ function deleteNext_(deleteList: BlockSvg[], eventGroup: string) {
 
 /**
  * Option to delete all blocks.
- *
  * @alias Blockly.ContextMenuItems.registerDeleteAll
  */
 export function registerDeleteAll() {
@@ -327,7 +312,6 @@ function registerWorkspaceOptions_() {
 
 /**
  * Option to duplicate a block.
- *
  * @alias Blockly.ContextMenuItems.registerDuplicate
  */
 export function registerDuplicate() {
@@ -359,7 +343,6 @@ export function registerDuplicate() {
 
 /**
  * Option to add or remove block-level comment.
- *
  * @alias Blockly.ContextMenuItems.registerComment
  */
 export function registerComment() {
@@ -399,7 +382,6 @@ export function registerComment() {
 
 /**
  * Option to inline variables.
- *
  * @alias Blockly.ContextMenuItems.registerInline
  */
 export function registerInline() {
@@ -434,7 +416,6 @@ export function registerInline() {
 
 /**
  * Option to collapse or expand a block.
- *
  * @alias Blockly.ContextMenuItems.registerCollapseExpandBlock
  */
 export function registerCollapseExpandBlock() {
@@ -463,7 +444,6 @@ export function registerCollapseExpandBlock() {
 
 /**
  * Option to disable or enable a block.
- *
  * @alias Blockly.ContextMenuItems.registerDisable
  */
 export function registerDisable() {
@@ -503,7 +483,6 @@ export function registerDisable() {
 
 /**
  * Option to delete a block.
- *
  * @alias Blockly.ContextMenuItems.registerDelete
  */
 export function registerDelete() {
@@ -541,7 +520,6 @@ export function registerDelete() {
 
 /**
  * Option to open help for a block.
- *
  * @alias Blockly.ContextMenuItems.registerHelp
  */
 export function registerHelp() {
@@ -582,7 +560,6 @@ function registerBlockOptions_() {
 /**
  * Registers all default context menu items. This should be called once per
  * instance of ContextMenuRegistry.
- *
  * @alias Blockly.ContextMenuItems.registerDefaultOptions
  * @internal
  */

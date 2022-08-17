@@ -6,7 +6,6 @@
 /**
  * An object that provides constants for rendering blocks in the
  * minimalist renderer.
- *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -17,7 +16,6 @@ import {ConstantProvider as BaseConstantProvider} from '../common/constants.js';
 
 /**
  * An object that provides constants for rendering blocks in the sample.
- *
  * @alias Blockly.minimalist.ConstantProvider
  */
 export class ConstantProvider extends BaseConstantProvider {

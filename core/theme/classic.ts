@@ -6,7 +6,6 @@
 /**
  * Classic theme.
  * Contains multi-coloured border to create shadow effect.
- *
  * @namespace Blockly.Themes.Classic
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -43,7 +42,6 @@ const categoryStyles = {
 /**
  * Classic theme.
  * Contains multi-coloured border to create shadow effect.
- *
  * @alias Blockly.Themes.Classic
  */
 export const Classic = new Theme(

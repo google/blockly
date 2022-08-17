@@ -5,7 +5,6 @@
 
 /**
  * Object representing a code comment on a rendered workspace.
- *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -49,7 +48,6 @@ const TEXTAREA_OFFSET = 2;
 
 /**
  * Class for a workspace comment's SVG representation.
- *
  * @alias Blockly.WorkspaceCommentSvg
  */
 export class WorkspaceCommentSvg extends WorkspaceComment implements
@@ -57,7 +55,6 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
   /**
    * The width and height to use to size a workspace comment when it is first
    * added, before it has been edited by the user.
-   *
    * @internal
    */
   static DEFAULT_SIZE = 100;
@@ -135,7 +132,6 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /**
    * Dispose of this comment.
-   *
    * @internal
    */
   override dispose() {
@@ -194,7 +190,6 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /**
    * Handle a mouse-down on an SVG comment.
-   *
    * @param e Mouse down event or touch start event.
    */
   private pathMouseDown_(e: Event) {
@@ -206,7 +201,6 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /**
    * Show the context menu for this workspace comment.
-   *
    * @param e Mouse event.
    * @internal
    */
@@ -219,7 +213,6 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /**
    * Select this comment.  Highlight it visually.
-   *
    * @internal
    */
   select() {
@@ -246,7 +239,6 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /**
    * Unselect this comment.  Remove its highlighting.
-   *
    * @internal
    */
   unselect() {
@@ -263,7 +255,6 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /**
    * Select this comment.  Highlight it visually.
-   *
    * @internal
    */
   addSelect() {
@@ -273,7 +264,6 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /**
    * Unselect this comment.  Remove its highlighting.
-   *
    * @internal
    */
   removeSelect() {
@@ -283,7 +273,6 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /**
    * Focus this comment.  Highlight it visually.
-   *
    * @internal
    */
   addFocus() {
@@ -292,7 +281,6 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /**
    * Unfocus this comment.  Remove its highlighting.
-   *
    * @internal
    */
   removeFocus() {
@@ -305,8 +293,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * If the comment is on the workspace, (0, 0) is the origin of the workspace
    * coordinate system.
    * This does not change with workspace scale.
-   *
-   * @returns Object with .x and .y properties in workspace coordinates.
+   * @return Object with .x and .y properties in workspace coordinates.
    * @internal
    */
   getRelativeToSurfaceXY(): Coordinate {
@@ -346,7 +333,6 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /**
    * Move a comment by a relative offset.
-   *
    * @param dx Horizontal offset, in workspace units.
    * @param dy Vertical offset, in workspace units.
    * @internal
@@ -366,7 +352,6 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
   /**
    * Transforms a comment by setting the translation on the transform attribute
    * of the block's SVG.
-   *
    * @param x The x coordinate of the translation in workspace units.
    * @param y The y coordinate of the translation in workspace units.
    * @internal
@@ -381,7 +366,6 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * Move this comment to its workspace's drag surface, accounting for
    * positioning.  Generally should be called at the same time as
    * setDragging(true).  Does nothing if useDragSurface_ is false.
-   *
    * @internal
    */
   moveToDragSurface() {
@@ -402,7 +386,6 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
   /**
    * Move this comment during a drag, taking into account whether we are using a
    * drag surface to translate blocks.
-   *
    * @param dragSurface The surface that carries rendered items during a drag,
    *     or null if no drag surface is in use.
    * @param newLoc The location to translate to, in workspace coordinates.
@@ -424,7 +407,6 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /**
    * Move the bubble group to the specified location in workspace coordinates.
-   *
    * @param x The x position to move to.
    * @param y The y position to move to.
    * @internal
@@ -445,8 +427,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * Returns the coordinates of a bounding box describing the dimensions of this
    * comment.
    * Coordinate system: workspace coordinates.
-   *
-   * @returns Object with coordinates of the bounding box.
+   * @return Object with coordinates of the bounding box.
    * @internal
    */
   getBoundingRectangle(): Rect {
@@ -472,7 +453,6 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /**
    * Add or remove the UI indicating if this comment is movable or not.
-   *
    * @internal
    */
   updateMovable() {
@@ -485,7 +465,6 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /**
    * Set whether this comment is movable or not.
-   *
    * @param movable True if movable.
    * @internal
    */
@@ -496,7 +475,6 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /**
    * Set whether this comment is editable or not.
-   *
    * @param editable True if editable.
    */
   override setEditable(editable: boolean) {
@@ -509,7 +487,6 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
   /**
    * Recursively adds or removes the dragging class to this node and its
    * children.
-   *
    * @param adding True if adding, false if removing.
    * @internal
    */
@@ -526,8 +503,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /**
    * Return the root node of the SVG or null if none exists.
-   *
-   * @returns The root SVG node (probably a group).
+   * @return The root SVG node (probably a group).
    * @internal
    */
   getSvgRoot(): SVGElement {
@@ -536,8 +512,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /**
    * Returns this comment's text.
-   *
-   * @returns Comment text.
+   * @return Comment text.
    * @internal
    */
   override getContent(): string {
@@ -546,7 +521,6 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /**
    * Set this comment's content.
-   *
    * @param content Comment content.
    * @internal
    */
@@ -559,7 +533,6 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /**
    * Update the cursor over this comment by adding or removing a class.
-   *
    * @param enable True if the delete cursor should be shown, false otherwise.
    * @internal
    */
@@ -575,7 +548,6 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * Set whether auto-layout of this bubble is enabled.  The first time a bubble
    * is shown it positions itself to not cover any blocks.  Once a user has
    * dragged it to reposition, it renders where the user put it.
-   *
    * @param _enable True if auto-layout should be enabled, false otherwise.
    * @internal
    */
@@ -584,9 +556,8 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /**
    * Encode a comment subtree as XML with XY coordinates.
-   *
    * @param opt_noId True if the encoder should skip the comment ID.
-   * @returns Tree of XML elements.
+   * @return Tree of XML elements.
    * @internal
    */
   override toXmlWithXY(opt_noId?: boolean): Element {
@@ -617,8 +588,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /**
    * Encode a comment for copying.
-   *
-   * @returns Copy metadata.
+   * @return Copy metadata.
    * @internal
    */
   toCopyData(): CopyData {
@@ -631,8 +601,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /**
    * Returns a bounding box describing the dimensions of this comment.
-   *
-   * @returns Object with height and width properties in workspace units.
+   * @return Object with height and width properties in workspace units.
    * @internal
    */
   getHeightWidth(): {height: number, width: number} {
@@ -641,7 +610,6 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /**
    * Renders the workspace comment.
-   *
    * @internal
    */
   render() {
@@ -707,8 +675,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /**
    * Create the text area for the comment.
-   *
-   * @returns The top-level node of the editor.
+   * @return The top-level node of the editor.
    */
   private createEditor_(): Element {
     /* Create the editor.  Here's the markup that will be generated:
@@ -825,7 +792,6 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /**
    * Handle a mouse-down on comment's resize corner.
-   *
    * @param e Mouse down event.
    */
   private resizeMouseDown_(e: MouseEvent) {
@@ -852,7 +818,6 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /**
    * Handle a mouse-down on comment's delete icon.
-   *
    * @param e Mouse down event.
    */
   private deleteMouseDown_(e: Event) {
@@ -865,7 +830,6 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /**
    * Handle a mouse-out on comment's delete icon.
-   *
    * @param _e Mouse out event.
    */
   private deleteMouseOut_(_e: Event) {
@@ -876,7 +840,6 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /**
    * Handle a mouse-up on comment's delete icon.
-   *
    * @param e Mouse up event.
    */
   private deleteMouseUp_(e: Event) {
@@ -900,7 +863,6 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /**
    * Handle a mouse-up event while dragging a comment's border or resize handle.
-   *
    * @param _e Mouse up event.
    */
   private resizeMouseUp_(_e: Event) {
@@ -910,7 +872,6 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /**
    * Resize this comment to follow the mouse.
-   *
    * @param e Mouse move event.
    */
   private resizeMouseMove_(e: MouseEvent) {
@@ -943,7 +904,6 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /**
    * Set size
-   *
    * @param width width of the container
    * @param height height of the container
    */
@@ -1010,7 +970,6 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /**
    * Set the focus on the text area.
-   *
    * @internal
    */
   setFocus() {
@@ -1034,7 +993,6 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /**
    * Remove focus from the text area.
-   *
    * @internal
    */
   blurFocus() {
@@ -1059,12 +1017,11 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
   /**
    * Decode an XML comment tag and create a rendered comment on the workspace.
-   *
    * @param xmlComment XML comment element.
    * @param workspace The workspace.
    * @param opt_wsWidth The width of the workspace, which is used to position
    *     comments correctly in RTL.
-   * @returns The created workspace comment.
+   * @return The created workspace comment.
    * @internal
    */
   static fromXmlRendered(

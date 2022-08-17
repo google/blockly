@@ -1,4 +1,4 @@
-/** @file Re-exports of Blockly.thrasos.* modules. */
+/** @fileoverview Re-exports of Blockly.thrasos.* modules. */
 
 /**
  * Copyright 2021 Google LLC
@@ -7,7 +7,6 @@
 
 /**
  * Re-exports of Blockly.thrasos.* modules.
- *
  * @namespace Blockly.thrasos
  */
 import * as goog from '../../../closure/goog/goog.js';

@@ -5,7 +5,6 @@
 
 /**
  * Object representing a warning.
- *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -25,7 +24,6 @@ import {Svg} from './utils/svg.js';
 
 /**
  * Class for a warning.
- *
  * @alias Blockly.Warning
  */
 export class Warning extends Icon {
@@ -48,7 +46,6 @@ export class Warning extends Icon {
 
   /**
    * Draw the warning icon.
-   *
    * @param group The icon group.
    */
   protected override drawIcon_(group: Element) {
@@ -81,7 +78,6 @@ export class Warning extends Icon {
 
   /**
    * Show or hide the warning bubble.
-   *
    * @param visible True if the bubble should be visible.
    */
   override setVisible(visible: boolean) {
@@ -119,7 +115,6 @@ export class Warning extends Icon {
 
   /**
    * Set this warning's text.
-   *
    * @param text Warning text (or '' to delete). This supports linebreaks.
    * @param id An ID for this text entry to be able to maintain multiple
    *     warnings.
@@ -141,8 +136,7 @@ export class Warning extends Icon {
 
   /**
    * Get this warning's texts.
-   *
-   * @returns All texts concatenated into one string.
+   * @return All texts concatenated into one string.
    */
   getText(): string {
     const allWarnings = [];

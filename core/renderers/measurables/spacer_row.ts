@@ -5,7 +5,6 @@
 
 /**
  * Object representing a spacer between two rows.
- *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';

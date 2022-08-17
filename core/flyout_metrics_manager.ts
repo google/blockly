@@ -5,7 +5,6 @@
 
 /**
  * Calculates and reports flyout workspace metrics.
- *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -19,7 +18,6 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 /**
  * Calculates metrics for a flyout's workspace.
  * The metrics are mainly used to size scrollbars for the flyout.
- *
  * @alias Blockly.FlyoutMetricsManager
  */
 export class FlyoutMetricsManager extends MetricsManager {
@@ -38,8 +36,7 @@ export class FlyoutMetricsManager extends MetricsManager {
   /**
    * Gets the bounding box of the blocks on the flyout's workspace.
    * This is in workspace coordinates.
-   *
-   * @returns The bounding box of the blocks on the workspace.
+   * @return The bounding box of the blocks on the workspace.
    */
   private getBoundingBox_(): SVGRect|
       {height: number, y: number, width: number, x: number} {

@@ -5,7 +5,6 @@
 
 /**
  * Text input field.
- *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -35,7 +34,6 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Class for an editable text field.
- *
  * @alias Blockly.FieldTextInput
  */
 export class FieldTextInput extends Field {
@@ -158,9 +156,8 @@ export class FieldTextInput extends Field {
 
   /**
    * Ensure that the input value casts to a valid string.
-   *
    * @param opt_newValue The input value.
-   * @returns A valid string, or null if invalid.
+   * @return A valid string, or null if invalid.
    */
   protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
       AnyDuringMigration {
@@ -174,7 +171,6 @@ export class FieldTextInput extends Field {
    * Called by setValue if the text input is not valid. If the field is
    * currently being edited it reverts value of the field to the previous
    * value while allowing the display text to be handled by the htmlInput_.
-   *
    * @param _invalidValue The input value that was determined to be invalid.
    *    This is not used by the text input because its display value is stored
    * on the htmlInput_.
@@ -197,7 +193,6 @@ export class FieldTextInput extends Field {
    * Called by setValue if the text input is valid. Updates the value of the
    * field, and updates the text of the field if it is not currently being
    * edited (i.e. handled by the htmlInput_).
-   *
    * @param newValue The value to be saved. The default validator guarantees
    *     that this is a string.
    */
@@ -212,7 +207,6 @@ export class FieldTextInput extends Field {
 
   /**
    * Updates text field to match the colour/style of the block.
-   *
    * @internal
    */
   override applyColour() {
@@ -251,7 +245,6 @@ export class FieldTextInput extends Field {
 
   /**
    * Set whether this field is spellchecked by the browser.
-   *
    * @param check True if checked.
    */
   setSpellcheck(check: boolean) {
@@ -269,7 +262,6 @@ export class FieldTextInput extends Field {
 
   /**
    * Show the inline free-text editor on top of the text.
-   *
    * @param _opt_e Optional mouse event that triggered the field to open, or
    *     undefined if triggered programmatically.
    * @param opt_quietInput True if editor should be created without focus.
@@ -302,7 +294,6 @@ export class FieldTextInput extends Field {
 
   /**
    * Create and show a text input editor that sits directly over the text input.
-   *
    * @param quietInput True if editor should be created without focus.
    */
   private showInlineEditor_(quietInput: boolean) {
@@ -320,8 +311,7 @@ export class FieldTextInput extends Field {
 
   /**
    * Create the text input editor widget.
-   *
-   * @returns The newly created text input editor.
+   * @return The newly created text input editor.
    */
   protected widgetCreate_(): HTMLElement {
     eventUtils.setGroup(true);
@@ -401,7 +391,6 @@ export class FieldTextInput extends Field {
 
   /**
    * A callback triggered when the user is done editing the field via the UI.
-   *
    * @param _value The new value of the field.
    */
   onFinishEditing_(_value: AnyDuringMigration) {}
@@ -410,7 +399,6 @@ export class FieldTextInput extends Field {
 
   /**
    * Bind handlers for user input on the text input field's editor.
-   *
    * @param htmlInput The htmlInput to which event handlers will be bound.
    */
   protected bindInputEvents_(htmlInput: HTMLElement) {
@@ -436,7 +424,6 @@ export class FieldTextInput extends Field {
 
   /**
    * Handle key down to the editor.
-   *
    * @param e Keyboard event.
    */
   protected onHtmlInputKeyDown_(e: Event) {
@@ -468,7 +455,6 @@ export class FieldTextInput extends Field {
 
   /**
    * Handle a change to the editor.
-   *
    * @param _e Keyboard event.
    */
   private onHtmlInputChange_(_e: Event) {
@@ -487,7 +473,6 @@ export class FieldTextInput extends Field {
    * Set the HTML input value and the field's internal value. The difference
    * between this and ``setValue`` is that this also updates the HTML input
    * value whilst editing.
-   *
    * @param newValue New value.
    */
   protected setEditorValue_(newValue: AnyDuringMigration) {
@@ -520,8 +505,7 @@ export class FieldTextInput extends Field {
 
   /**
    * Returns whether or not the field is tab navigable.
-   *
-   * @returns True if the field is tab navigable.
+   * @return True if the field is tab navigable.
    */
   override isTabNavigable(): boolean {
     return true;
@@ -532,8 +516,7 @@ export class FieldTextInput extends Field {
    * representation. When we're currently editing, return the current HTML value
    * instead. Otherwise, return null which tells the field to use the default
    * behaviour (which is a string cast of the field's value).
-   *
-   * @returns The HTML value if we're editing, otherwise null.
+   * @return The HTML value if we're editing, otherwise null.
    */
   protected override getText_(): string|null {
     if (this.isBeingEdited_ && this.htmlInput_) {
@@ -548,9 +531,8 @@ export class FieldTextInput extends Field {
    * Override this method if the field's HTML input representation is different
    * than the field's value. This should be coupled with an override of
    * `getValueFromEditorText_`.
-   *
    * @param value The value stored in this field.
-   * @returns The text to show on the HTML input.
+   * @return The text to show on the HTML input.
    */
   protected getEditorText_(value: AnyDuringMigration): string {
     return String(value);
@@ -562,9 +544,8 @@ export class FieldTextInput extends Field {
    * Override this method if the field's HTML input representation is different
    * than the field's value. This should be coupled with an override of
    * `getEditorText_`.
-   *
    * @param text Text received from the HTML input.
-   * @returns The value to store.
+   * @return The value to store.
    */
   protected getValueFromEditorText_(text: string): AnyDuringMigration {
     return text;
@@ -573,9 +554,8 @@ export class FieldTextInput extends Field {
   /**
    * Construct a FieldTextInput from a JSON arg object,
    * dereferencing any string table references.
-   *
    * @param options A JSON object with options (text, and spellcheck).
-   * @returns The new field instance.
+   * @return The new field instance.
    * @nocollapse
    * @internal
    */

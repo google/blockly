@@ -5,7 +5,6 @@
 
 /**
  * Utility functions for the toolbox and flyout.
- *
  * @namespace Blockly.utils.toolbox
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -28,7 +27,6 @@ import * as userAgent from './useragent.js';
 /**
  * The information needed to create a block in the toolbox.
  * Note that disabled has a different type for backwards compatibility.
- *
  * @alias Blockly.utils.toolbox.BlockInfo
  */
 export interface BlockInfo {
@@ -53,7 +51,6 @@ export interface BlockInfo {
 
 /**
  * The information needed to create a separator in the toolbox.
- *
  * @alias Blockly.utils.toolbox.SeparatorInfo
  */
 export interface SeparatorInfo {
@@ -65,7 +62,6 @@ export interface SeparatorInfo {
 
 /**
  * The information needed to create a button in the toolbox.
- *
  * @alias Blockly.utils.toolbox.ButtonInfo
  */
 export interface ButtonInfo {
@@ -76,7 +72,6 @@ export interface ButtonInfo {
 
 /**
  * The information needed to create a label in the toolbox.
- *
  * @alias Blockly.utils.toolbox.LabelInfo
  */
 export interface LabelInfo {
@@ -87,14 +82,12 @@ export interface LabelInfo {
 
 /**
  * The information needed to create either a button or a label in the flyout.
- *
  * @alias Blockly.utils.toolbox.ButtonOrLabelInfo
  */
 export type ButtonOrLabelInfo = ButtonInfo|LabelInfo;
 
 /**
  * The information needed to create a category in the toolbox.
- *
  * @alias Blockly.utils.toolbox.StaticCategoryInfo
  */
 export interface StaticCategoryInfo {
@@ -110,7 +103,6 @@ export interface StaticCategoryInfo {
 
 /**
  * The information needed to create a custom category.
- *
  * @alias Blockly.utils.toolbox.DynamicCategoryInfo
  */
 export interface DynamicCategoryInfo {
@@ -125,21 +117,18 @@ export interface DynamicCategoryInfo {
 
 /**
  * The information needed to create either a dynamic or static category.
- *
  * @alias Blockly.utils.toolbox.CategoryInfo
  */
 export type CategoryInfo = StaticCategoryInfo|DynamicCategoryInfo;
 
 /**
  * Any information that can be used to create an item in the toolbox.
- *
  * @alias Blockly.utils.toolbox.ToolboxItemInfo
  */
 export type ToolboxItemInfo = FlyoutItemInfo|StaticCategoryInfo;
 
 /**
  * All the different types that can be displayed in a flyout.
- *
  * @alias Blockly.utils.toolbox.FlyoutItemInfo
  */
 export type FlyoutItemInfo =
@@ -147,7 +136,6 @@ export type FlyoutItemInfo =
 
 /**
  * The JSON definition of a toolbox.
- *
  * @alias Blockly.utils.toolbox.ToolboxInfo
  */
 export interface ToolboxInfo {
@@ -157,21 +145,18 @@ export interface ToolboxInfo {
 
 /**
  * An array holding flyout items.
- *
  * @alias Blockly.utils.toolbox.FlyoutItemInfoArray
  */
 export type FlyoutItemInfoArray = FlyoutItemInfo[];
 
 /**
  * All of the different types that can create a toolbox.
- *
  * @alias Blockly.utils.toolbox.ToolboxDefinition
  */
 export type ToolboxDefinition = Node|ToolboxInfo|string;
 
 /**
  * All of the different types that can be used to show items in a flyout.
- *
  * @alias Blockly.utils.toolbox.FlyoutDefinition
  */
 export type FlyoutDefinition = FlyoutItemInfoArray|NodeList|ToolboxInfo|Node[];
@@ -192,7 +177,6 @@ const FLYOUT_TOOLBOX_KIND = 'flyoutToolbox';
 
 /**
  * Position of the toolbox and/or flyout relative to the workspace.
- *
  * @alias Blockly.utils.toolbox.Position
  */
 export enum Position {
@@ -204,9 +188,8 @@ export enum Position {
 
 /**
  * Converts the toolbox definition into toolbox JSON.
- *
  * @param toolboxDef The definition of the toolbox in one of its many forms.
- * @returns Object holding information for creating a toolbox.
+ * @return Object holding information for creating a toolbox.
  * @alias Blockly.utils.toolbox.convertToolboxDefToJson
  * @internal
  */
@@ -230,7 +213,6 @@ export function convertToolboxDefToJson(toolboxDef: ToolboxDefinition|
 
 /**
  * Validates the toolbox JSON fields have been set correctly.
- *
  * @param toolboxJson Object holding information for creating a toolbox.
  * @throws {Error} if the toolbox is not the correct format.
  */
@@ -254,9 +236,8 @@ function validateToolbox(toolboxJson: ToolboxInfo) {
 
 /**
  * Converts the flyout definition into a list of flyout items.
- *
  * @param flyoutDef The definition of the flyout in one of its many forms.
- * @returns A list of flyout items.
+ * @return A list of flyout items.
  * @alias Blockly.utils.toolbox.convertFlyoutDefToJsonArray
  * @internal
  */
@@ -286,9 +267,8 @@ export function convertFlyoutDefToJsonArray(flyoutDef: FlyoutDefinition|
 
 /**
  * Whether or not the toolbox definition has categories.
- *
  * @param toolboxJson Object holding information for creating a toolbox.
- * @returns True if the toolbox has categories.
+ * @return True if the toolbox has categories.
  * @alias Blockly.utils.toolbox.hasCategories
  * @internal
  */
@@ -298,8 +278,6 @@ export function hasCategories(toolboxJson: ToolboxInfo|null): boolean {
 
 /**
  * Private version of hasCategories for stubbing in tests.
- *
- * @param toolboxJson
  */
 function hasCategoriesInternal(toolboxJson: ToolboxInfo|null): boolean {
   if (!toolboxJson) {
@@ -319,9 +297,8 @@ function hasCategoriesInternal(toolboxJson: ToolboxInfo|null): boolean {
 
 /**
  * Whether or not the category is collapsible.
- *
  * @param categoryInfo Object holing information for creating a category.
- * @returns True if the category has subcategories.
+ * @return True if the category has subcategories.
  * @alias Blockly.utils.toolbox.isCategoryCollapsible
  * @internal
  */
@@ -340,9 +317,8 @@ export function isCategoryCollapsible(categoryInfo: CategoryInfo): boolean {
 
 /**
  * Parses the provided toolbox definition into a consistent format.
- *
  * @param toolboxDef The definition of the toolbox in one of its many forms.
- * @returns Object holding information for creating a toolbox.
+ * @return Object holding information for creating a toolbox.
  */
 function convertToToolboxJson(toolboxDef: Node): ToolboxInfo {
   const contents = xmlToJsonArray(toolboxDef as Node | Node[]);
@@ -355,9 +331,8 @@ function convertToToolboxJson(toolboxDef: Node): ToolboxInfo {
 
 /**
  * Converts the xml for a toolbox to JSON.
- *
  * @param toolboxDef The definition of the toolbox in one of its many forms.
- * @returns A list of objects in the toolbox.
+ * @return A list of objects in the toolbox.
  */
 function xmlToJsonArray(toolboxDef: Node|Node[]|NodeList): FlyoutItemInfoArray|
     ToolboxItemInfo[] {
@@ -397,7 +372,6 @@ function xmlToJsonArray(toolboxDef: Node|Node[]|NodeList): FlyoutItemInfoArray|
 
 /**
  * Adds the attributes on the node to the given object.
- *
  * @param node The node to copy the attributes from.
  * @param obj The object to copy the attributes to.
  */
@@ -419,9 +393,8 @@ function addAttributes(node: Node, obj: AnyDuringMigration) {
 
 /**
  * Parse the provided toolbox tree into a consistent DOM format.
- *
  * @param toolboxDef DOM tree of blocks, or text representation of same.
- * @returns DOM tree of blocks, or null.
+ * @return DOM tree of blocks, or null.
  * @alias Blockly.utils.toolbox.parseToolboxTree
  */
 export function parseToolboxTree(toolboxDef: Element|null|string): Element|

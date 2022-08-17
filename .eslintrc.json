@@ -145,8 +145,8 @@
             // params and returns docs are optional.
             "jsdoc/require-param-description": ["off"],
             "jsdoc/require-returns": ["off"],
-            // Don't automatically add missing params (breaks on `this`)
-            "jsdoc/require-param": ["warn", {"enableFixer": false}],
+            // Disable for now (breaks on `this` which is not really a param).
+            "jsdoc/require-param": ["off"],
             // Don't auto-add missing jsdoc.
             "jsdoc/require-jsdoc": ["warn", {"enableFixer": false}]
                        

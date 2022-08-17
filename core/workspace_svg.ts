@@ -248,11 +248,10 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   currentGesture_: TouchGesture|null = null;
 
   /** This workspace's surface for dragging blocks, if it exists. */
-  private readonly blockDragSurface_: BlockDragSurfaceSvg|null = null
+  private readonly blockDragSurface_: BlockDragSurfaceSvg|null = null;
 
-      /** This workspace's drag surface, if it exists. */
-      private readonly workspaceDragSurface_: WorkspaceDragSurfaceSvg|null =
-          null;
+  /** This workspace's drag surface, if it exists. */
+  private readonly workspaceDragSurface_: WorkspaceDragSurfaceSvg|null = null;
 
   /**
    * Whether to move workspace to the drag surface when it is dragged.

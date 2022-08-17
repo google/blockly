@@ -151,17 +151,14 @@ export class Scrollbar {
     // Store the thickness in a temp variable for readability.
     const scrollbarThickness = Scrollbar.scrollbarThickness;
     if (horizontal) {
-      this.svgBackground_!.setAttribute(
-          'height', String(scrollbarThickness));
+      this.svgBackground_!.setAttribute('height', String(scrollbarThickness));
       this.outerSvg_!.setAttribute('height', String(scrollbarThickness));
-      this.svgHandle_!.setAttribute(
-          'height', String(scrollbarThickness - 5));
+      this.svgHandle_!.setAttribute('height', String(scrollbarThickness - 5));
       this.svgHandle_!.setAttribute('y', String(2.5));
     } else {
       this.svgBackground_!.setAttribute('width', String(scrollbarThickness));
       this.outerSvg_!.setAttribute('width', String(scrollbarThickness));
-      this.svgHandle_!.setAttribute(
-          'width', String(scrollbarThickness - 5));
+      this.svgHandle_!.setAttribute('width', String(scrollbarThickness - 5));
       this.svgHandle_!.setAttribute('x', String(2.5));
 
       this.lengthAttribute_ = 'height';

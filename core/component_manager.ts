@@ -183,7 +183,7 @@ export class ComponentManager {
     if (sorted) {
       const componentDataList: ComponentDatum[] = [];
       componentIds.forEach((id) => {
-        componentDataList.push(this.componentData.get(id));
+        componentDataList.push(this.componentData.get(id)!);
       });
       componentDataList.sort(function(a, b) {
         return a.weight - b.weight;

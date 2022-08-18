@@ -147,8 +147,8 @@
             "jsdoc/require-returns": ["off"],
             // Disable for now (breaks on `this` which is not really a param).
             "jsdoc/require-param": ["off"],
-            // Don't auto-add missing jsdoc.
-            "jsdoc/require-jsdoc": ["warn", {"enableFixer": false}],
+            // Don't auto-add missing jsdoc. Only required on exported items.
+            "jsdoc/require-jsdoc": ["warn", {"enableFixer": false, "publicOnly": true}],
             // Disable because of false alarms with Closure-supported tags.
             // Re-enable after Closure is removed.
             "jsdoc/check-tag-names": ["off"],

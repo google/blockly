@@ -158,7 +158,9 @@
             "jsdoc/valid-types": ["off"],
             // Disabled due to not handling `this`. If re-enabled, checkDestructured option
             // should be left as false.
-            "jsdoc/check-param-names": ["off", {"checkDestructured": false}]
+            "jsdoc/check-param-names": ["off", {"checkDestructured": false}],
+            // Allow any text in the license tag. Other checks are not relevant.
+            "jsdoc/check-values": ["off"]
                        
         }
     }]

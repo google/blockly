@@ -34,11 +34,6 @@ import * as WidgetDiv from './widgetdiv.js';
  */
 export class HorizontalFlyout extends Flyout {
   override horizontalLayout = true;
-  // Record the width for workspace metrics.
-  override width_: AnyDuringMigration;
-
-  // Record the height for workspace metrics and .position.
-  override height_: AnyDuringMigration;
 
   /** @param workspaceOptions Dictionary of options for the workspace. */
   constructor(workspaceOptions: Options) {
@@ -260,15 +255,10 @@ export class HorizontalFlyout extends Flyout {
         }
         block!.moveBy(moveX, cursorY);
 
-        // AnyDuringMigration because:  Argument of type 'BlockSvg | undefined'
-        // is not assignable to parameter of type 'BlockSvg'.
-        const rect = this.createRect_(
-            block as AnyDuringMigration, moveX, cursorY, blockHW, i);
+        const rect = this.createRect_(block!, moveX, cursorY, blockHW, i);
         cursorX += blockHW.width + gaps[i];
 
-        // AnyDuringMigration because:  Argument of type 'BlockSvg | undefined'
-        // is not assignable to parameter of type 'BlockSvg'.
-        this.addBlockListeners_(root, block as AnyDuringMigration, rect);
+        this.addBlockListeners_(root, block!, rect);
       } else if (item.type === 'button') {
         const button = item.button as FlyoutButton;
         this.initFlyoutButton_(button, cursorX, cursorY);
@@ -352,10 +342,7 @@ export class HorizontalFlyout extends Flyout {
     if (this.height_ !== flyoutHeight) {
       for (let i = 0, block; block = blocks[i]; i++) {
         if (this.rectMap_.has(block)) {
-          // AnyDuringMigration because:  Argument of type 'SVGElement |
-          // undefined' is not assignable to parameter of type 'SVGElement'.
-          this.moveRectToBlock_(
-              this.rectMap_.get(block) as AnyDuringMigration, block);
+          this.moveRectToBlock_(this.rectMap_.get(block)!, block);
         }
       }
 

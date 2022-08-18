@@ -15,7 +15,7 @@ gulp.sourcemaps = require('gulp-sourcemaps');
 
 var path = require('path');
 var fs = require('fs');
-var execSync = require('child_process').execSync;
+const {exec, execSync} = require('child_process');
 var through2 = require('through2');
 
 const clangFormat = require('clang-format');
@@ -336,18 +336,47 @@ function buildDeps(done) {
     'tests/mocha'
   ];
 
-  const args = roots.map(root => `--root '${root}' `).join('');
-  execSync(
-      `closure-make-deps ${args} 2>/dev/null >'${DEPS_FILE}'`,
-      {stdio: 'inherit'});
+  function filterErrors(text) {
+    return text.split('\n')
+        .filter(
+            (line) => !/^WARNING /.test(line) ||
+                !(/Missing type declaration./.test(line) ||
+                  /illegal use of unknown JSDoc tag/.test(line)))
+        .join('\n');
+  }
 
-  // Use grep to filter out the entries that are already in deps.js.
-  const testArgs = testRoots.map(root => `--root '${root}' `).join('');
-  execSync(
-      `closure-make-deps ${testArgs} 2>/dev/null \
-           | grep 'tests/mocha' > '${TEST_DEPS_FILE}'`,
-      {stdio: 'inherit'});
-  done();
+  new Promise((resolve, reject) => {
+    const args = roots.map(root => `--root '${root}' `).join('');
+    exec(
+        `closure-make-deps ${args} >'${DEPS_FILE}'`,
+        {stdio: ['inherit', 'inherit', 'pipe']},
+        (error, stdout, stderr) => {
+          console.warn(filterErrors(stderr));
+          if (error) {
+            reject(error);
+          } else {
+            resolve();
+          }
+        });
+  }).then(() => new Promise((resolve, reject) => {
+    // Use grep to filter out the entries that are already in deps.js.
+    const testArgs =
+        testRoots.map(root => `--root '${root}' `).join('');
+    exec(
+        `closure-make-deps ${testArgs} 2>/dev/null\
+             | grep 'tests/mocha' > '${TEST_DEPS_FILE}'`,
+        {stdio: ['inherit', 'inherit', 'pipe']},
+        (error, stdout, stderr) => {
+          console.warn(filterErrors(stderr));
+          if (error) {
+            reject(error);
+          } else {
+            resolve();
+          }
+        });
+  })).then(() => {
+    done();
+  });
 }
 
 /**

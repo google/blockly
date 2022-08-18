@@ -1,4 +1,5 @@
 /**
+ * @license
  * Copyright 2014 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -538,8 +539,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * Get the marker with the given ID.
    *
    * @param id The ID of the marker.
-   * @returns The marker with the given ID or null if no marker with the given
-   *     ID exists.
+   * @returns The marker with the given ID or null if no marker with the given ID
+   *     exists.
    * @internal
    */
   getMarker(id: string): Marker|null {
@@ -2623,8 +2624,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * May create a new gesture.
    *
    * @param e Mouse event or touch event.
-   * @returns The gesture that is tracking this touch stream, or null if no
-   *     valid gesture exists.
+   * @returns The gesture that is tracking this touch stream, or null if no valid
+   *     gesture exists.
    * @internal
    */
   getGesture(e: Event): TouchGesture|null {

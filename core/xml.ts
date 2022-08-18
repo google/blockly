@@ -1,4 +1,5 @@
 /**
+ * @license
  * Copyright 2012 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -391,8 +392,7 @@ export function domToPrettyText(dom: Node): string {
  * Converts an XML string into a DOM structure.
  *
  * @param text An XML string.
- * @returns A DOM object representing the singular child of the document
- *     element.
+ * @returns A DOM object representing the singular child of the document element.
  * @throws if the text doesn't parse.
  * @alias Blockly.Xml.textToDom
  */

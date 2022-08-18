@@ -1,4 +1,5 @@
 /**
+ * @license
  * Copyright 2011 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -59,8 +60,7 @@ export class ConnectionDB {
    *
    * @param conn The connection to find.
    * @param yPos The y position used to find the index of the connection.
-   * @returns The index of the connection, or -1 if the connection was not
-   *     found.
+   * @returns The index of the connection, or -1 if the connection was not found.
    */
   private findIndexOfConnection_(conn: RenderedConnection, yPos: number):
       number {
@@ -170,8 +170,8 @@ export class ConnectionDB {
      * variables.
      *
      * @param yIndex The other connection's index in the database.
-     * @returns True if the current connection's vertical distance from the
-     *     other connection is less than the allowed radius.
+     * @returns True if the current connection's vertical distance from the other
+     *     connection is less than the allowed radius.
      */
     function checkConnection_(yIndex: number): boolean {
       const dx = currentX - db[yIndex].x;

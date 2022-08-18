@@ -1,4 +1,5 @@
 /**
+ * @license
  * Copyright 2011 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */

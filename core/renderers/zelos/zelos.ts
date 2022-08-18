@@ -1,6 +1,7 @@
 /** @file Re-exports of Blockly.zelos.* modules. */
 
 /**
+ * @license
  * Copyright 2021 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */

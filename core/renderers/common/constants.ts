@@ -1,4 +1,5 @@
 /**
+ * @license
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -767,8 +768,7 @@ export class ConstantProvider {
   }
 
   /**
-   * @returns An object containing sizing and path information about puzzle
-   *     tabs.
+   * @returns An object containing sizing and path information about puzzle tabs.
    * @internal
    */
   makePuzzleTab(): PuzzleTab {

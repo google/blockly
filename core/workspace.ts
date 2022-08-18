@@ -488,8 +488,8 @@ export class Workspace implements IASTNodeLocation {
    *     variables with empty string type.
    *
    * @param type Type of the variables to find.
-   * @returns The sought after variables of the passed in type. An empty array if
-   *     none are found.
+   * @returns The sought after variables of the passed in type. An empty array
+   *     if none are found.
    */
   getVariablesOfType(type: string|null): VariableModel[] {
     return this.variableMap_.getVariablesOfType(type);
@@ -534,7 +534,8 @@ export class Workspace implements IASTNodeLocation {
     return 0;
   }
 
-  /* eslint-disable jsdoc/require-returns-check, @typescript-eslint/no-unused-vars */
+  /* eslint-disable jsdoc/require-returns-check */
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   /**
    * Obtain a newly created block.
    *
@@ -549,7 +550,7 @@ export class Workspace implements IASTNodeLocation {
         'The implementation of newBlock should be ' +
         'monkey-patched in by blockly.ts');
   }
-  /* eslint-enable jsdoc/require-returns-check, @typescript-eslint/no-unused-vars */
+  /* eslint-enable */
 
   /**
    * The number of blocks that may be added to the workspace before reaching

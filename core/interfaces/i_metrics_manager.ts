@@ -101,8 +101,8 @@ export interface IMetricsManager {
    *
    * @param opt_getWorkspaceCoordinates True to get the view metrics in
    *     workspace coordinates, false to get them in pixel coordinates.
-   * @returns The width, height, top and left of the viewport in either workspace
-   *     coordinates or pixel coordinates.
+   * @returns The width, height, top and left of the viewport in either
+   *     workspace coordinates or pixel coordinates.
    */
   getViewMetrics(opt_getWorkspaceCoordinates?: boolean): ContainerRegion;
 

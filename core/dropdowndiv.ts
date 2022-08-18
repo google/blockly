@@ -360,8 +360,8 @@ const internal = {};
  * @param primaryY Desired origin point y, in absolute px.
  * @param secondaryX Secondary/alternative origin point x, in absolute px.
  * @param secondaryY Secondary/alternative origin point y, in absolute px.
- * @returns Various final metrics, including rendered positions for drop-down and
- *     arrow.
+ * @returns Various final metrics, including rendered positions for drop-down
+ *     and arrow.
  */
 // AnyDuringMigration because:  Property 'getPositionMetrics' does not exist on
 // type '{}'.
@@ -403,8 +403,8 @@ const internal = {};
  *     element (bounding box and width/height).
  * @param divSize An object containing information about the size of the
  *     DropDownDiv (width & height).
- * @returns Various final metrics, including rendered positions for drop-down and
- *     arrow.
+ * @returns Various final metrics, including rendered positions for drop-down
+ *     and arrow.
  */
 function getPositionBelowMetrics(
     primaryX: number, primaryY: number, boundsInfo: BoundsInfo,
@@ -436,8 +436,8 @@ function getPositionBelowMetrics(
  *     element (bounding box and width/height).
  * @param divSize An object containing information about the size of the
  *     DropDownDiv (width & height).
- * @returns Various final metrics, including rendered positions for drop-down and
- *     arrow.
+ * @returns Various final metrics, including rendered positions for drop-down
+ *     and arrow.
  */
 function getPositionAboveMetrics(
     secondaryX: number, secondaryY: number, boundsInfo: BoundsInfo,
@@ -469,8 +469,8 @@ function getPositionAboveMetrics(
  *     element (bounding box and width/height).
  * @param divSize An object containing information about the size of the
  *     DropDownDiv (width & height).
- * @returns Various final metrics, including rendered positions for drop-down and
- *     arrow.
+ * @returns Various final metrics, including rendered positions for drop-down
+ *     and arrow.
  */
 function getPositionTopOfPageMetrics(
     sourceX: number, boundsInfo: BoundsInfo, divSize: Size): PositionMetrics {

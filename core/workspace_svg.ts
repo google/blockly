@@ -539,8 +539,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * Get the marker with the given ID.
    *
    * @param id The ID of the marker.
-   * @returns The marker with the given ID or null if no marker with the given ID
-   *     exists.
+   * @returns The marker with the given ID or null if no marker with the given
+   *     ID exists.
    * @internal
    */
   getMarker(id: string): Marker|null {
@@ -1713,7 +1713,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       }
     }
   }
-/* eslint-disable jsdoc/require-returns-check, @typescript-eslint/no-unused-vars */
+  /* eslint-disable jsdoc/require-returns-check */
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   /**
    * Obtain a newly created block.
    *
@@ -1728,7 +1729,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
         'The implementation of newBlock should be ' +
         'monkey-patched in by blockly.ts');
   }
-  /* eslint-enable jsdoc/require-returns-check, @typescript-eslint/no-unused-vars */
+  /* eslint-enable */
 
   /**
    * Returns the drag target the mouse event is over.
@@ -2624,8 +2625,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * May create a new gesture.
    *
    * @param e Mouse event or touch event.
-   * @returns The gesture that is tracking this touch stream, or null if no valid
-   *     gesture exists.
+   * @returns The gesture that is tracking this touch stream, or null if no
+   *     valid gesture exists.
    * @internal
    */
   getGesture(e: Event): TouchGesture|null {

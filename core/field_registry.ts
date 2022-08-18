@@ -52,8 +52,8 @@ export function unregister(type: string) {
  *
  * @param options A JSON object with a type and options specific to the field
  *     type.
- * @returns The new field instance or null if a field wasn't found with the given
- *     type name
+ * @returns The new field instance or null if a field wasn't found with the
+ *     given type name
  * @alias Blockly.fieldRegistry.fromJson
  * @internal
  */

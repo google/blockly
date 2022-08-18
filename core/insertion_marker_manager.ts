@@ -433,7 +433,8 @@ export class InsertionMarkerManager {
   /**
    * Decide the radius at which to start searching for the closest connection.
    *
-   * @returns The radius at which to start the search for the closest connection.
+   * @returns The radius at which to start the search for the closest
+   *     connection.
    */
   private getStartRadius_(): number {
     // If there is already a connection highlighted,

@@ -534,6 +534,7 @@ export class Workspace implements IASTNodeLocation {
     return 0;
   }
 
+  /* eslint-disable jsdoc/require-returns-check, @typescript-eslint/no-unused-vars */
   /**
    * Obtain a newly created block.
    *
@@ -543,12 +544,12 @@ export class Workspace implements IASTNodeLocation {
    *     ID.
    * @returns The created block.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   newBlock(prototypeName: string, opt_id?: string): Block {
     throw new Error(
         'The implementation of newBlock should be ' +
         'monkey-patched in by blockly.ts');
   }
+  /* eslint-enable jsdoc/require-returns-check, @typescript-eslint/no-unused-vars */
 
   /**
    * The number of blocks that may be added to the workspace before reaching

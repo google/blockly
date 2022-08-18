@@ -32,12 +32,23 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  */
 export const CATEGORY_NAME = 'VARIABLE_DYNAMIC';
 
+/**
+ * Click handler for a button that creates String variables.
+ *
+ * @param button
+ */
 function stringButtonClickHandler(button: AnyDuringMigration) {
   Variables.createVariableButtonHandler(
       button.getTargetWorkspace(), undefined, 'String');
 }
 // eslint-disable-next-line camelcase
 export const onCreateVariableButtonClick_String = stringButtonClickHandler;
+
+/**
+ * Click handler for a button that creates Number variables.
+ *
+ * @param button
+ */
 function numberButtonClickHandler(button: AnyDuringMigration) {
   Variables.createVariableButtonHandler(
       button.getTargetWorkspace(), undefined, 'Number');
@@ -45,6 +56,11 @@ function numberButtonClickHandler(button: AnyDuringMigration) {
 // eslint-disable-next-line camelcase
 export const onCreateVariableButtonClick_Number = numberButtonClickHandler;
 
+/**
+ * Click handler for a button that creates Colour variables.
+ *
+ * @param button
+ */
 function colourButtonClickHandler(button: AnyDuringMigration) {
   Variables.createVariableButtonHandler(
       button.getTargetWorkspace(), undefined, 'Colour');

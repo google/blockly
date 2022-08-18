@@ -1713,7 +1713,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       }
     }
   }
-
+/* eslint-disable jsdoc/require-returns-check, @typescript-eslint/no-unused-vars */
   /**
    * Obtain a newly created block.
    *
@@ -1723,12 +1723,12 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *     ID.
    * @returns The created block.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   override newBlock(prototypeName: string, opt_id?: string): BlockSvg {
     throw new Error(
         'The implementation of newBlock should be ' +
         'monkey-patched in by blockly.ts');
   }
+  /* eslint-enable jsdoc/require-returns-check, @typescript-eslint/no-unused-vars */
 
   /**
    * Returns the drag target the mouse event is over.

@@ -49,10 +49,20 @@ export function getAllWorkspaces(): Workspace[] {
   return workspaces;
 }
 
+/**
+ * Register a workspace in the workspace db.
+ *
+ * @param workspace
+ */
 export function registerWorkspace(workspace: Workspace) {
   WorkspaceDB_[workspace.id] = workspace;
 }
 
+/**
+ * Unregister a workspace from the workspace db.
+ *
+ * @param workspace
+ */
 export function unregisterWorkpace(workspace: Workspace) {
   delete WorkspaceDB_[workspace.id];
 }

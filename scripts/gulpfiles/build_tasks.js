@@ -659,15 +659,6 @@ function buildCompiled() {
     // option to Closure Compiler; instead feed them as input via gulp.src.
   };
 
-  // Symlink source dirs from build dir so that sourcemaps work in
-  // compiled-mode testing.
-  for (const src of ['core', 'blocks', 'generators']) {
-    const target = `${BUILD_DIR}/${src}`
-    if (!fs.existsSync(target)) {
-      fs.symlinkSync(`../${src}`, target);
-    }
-  }
-
   // Fire up compilation pipline.
   return gulp.src(chunkOptions.js, {base: './'})
       .pipe(stripApacheLicense())

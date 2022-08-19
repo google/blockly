@@ -550,6 +550,7 @@ blocks['procedures_with_argument_defnoreturn'] = {
   },
 
   ...PROCEDURES_WITH_ARGUMENT,
+  callType_: 'procedures_with_argument_callnoreturn',
 };
 
 blocks['procedures_with_argument_defreturn'] = {

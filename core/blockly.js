@@ -22,6 +22,7 @@ const Css = goog.require('Blockly.Css');
 const Events = goog.require('Blockly.Events');
 const Extensions = goog.require('Blockly.Extensions');
 const Procedures = goog.require('Blockly.Procedures');
+const ProceduresLocalArgument = goog.require('Blockly.ProceduresLocalArgument');
 const ShortcutItems = goog.require('Blockly.ShortcutItems');
 const Themes = goog.require('Blockly.Themes');
 const Tooltip = goog.require('Blockly.Tooltip');
@@ -709,6 +710,8 @@ exports.VARIABLE_DYNAMIC_CATEGORY_NAME = VariablesDynamic.CATEGORY_NAME;
  */
 exports.PROCEDURE_CATEGORY_NAME = Procedures.CATEGORY_NAME;
 
+exports.PROCEDURE_LOCAL_ARGUMENT_CATEGORY_NAME = ProceduresLocalArgument.CATEGORY_NAME;
+
 // Re-export submodules that no longer declareLegacyNamespace.
 exports.ASTNode = ASTNode;
 exports.BasicCursor = BasicCursor;
@@ -798,6 +801,7 @@ exports.Msg = Msg;
 exports.Names = Names;
 exports.Options = Options;
 exports.Procedures = Procedures;
+exports.ProceduresLocalArgument = ProceduresLocalArgument;
 exports.RenderedConnection = RenderedConnection;
 exports.Scrollbar = Scrollbar;
 exports.ScrollbarPair = ScrollbarPair;

@@ -44,7 +44,7 @@
   * @const {string}
   * @alias Blockly.ProceduresLocalArgument.CATEGORY_NAME
   */
- const CATEGORY_NAME = 'PROCEDURE';
+ const CATEGORY_NAME = 'PROCEDURE_LOCAL_ARGUMENT';
  exports.CATEGORY_NAME = CATEGORY_NAME;
 
  /**

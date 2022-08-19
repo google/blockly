@@ -153,7 +153,7 @@ export class FieldMultilineInput extends FieldTextInput {
         Svg.G, {
           'class': 'blocklyEditableText',
         },
-        this.fieldGroup_);
+        this.fieldGroup_!);
   }
 
   /**
@@ -189,7 +189,7 @@ export class FieldMultilineInput extends FieldTextInput {
         textLines += '\n';
       }
     }
-    if (this.sourceBlock_.RTL) {
+    if (this.sourceBlock_!.RTL) {
       // The SVG is LTR, force value to be RTL by adding an RLM.
       textLines += '\u200F';
     }
@@ -248,7 +248,7 @@ export class FieldMultilineInput extends FieldTextInput {
     this.updateSize_();
 
     if (this.isBeingEdited_) {
-      if (this.sourceBlock_.RTL) {
+      if (this.sourceBlock_!.RTL) {
         // in RTL, we need to let the browser reflow before resizing
         // in order to get the correct bounding box of the borderRect
         // avoiding issue #2777.

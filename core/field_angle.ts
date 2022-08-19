@@ -202,7 +202,7 @@ export class FieldAngle extends FieldTextInput {
     // #2380)
     this.symbol_ = dom.createSvgElement(Svg.TSPAN, {});
     this.symbol_.appendChild(document.createTextNode('°'));
-    this.textElement_.appendChild(this.symbol_);
+    this.textElement_!.appendChild(this.symbol_);
   }
 
   /** Updates the graph when the field rerenders. */
@@ -436,12 +436,12 @@ export class FieldAngle extends FieldTextInput {
     // 'Event'.
     if ((e as AnyDuringMigration).keyCode === KeyCodes.LEFT) {
       // decrement (increment in RTL)
-      multiplier = this.sourceBlock_.RTL ? 1 : -1;
+      multiplier = this.sourceBlock_!.RTL ? 1 : -1;
       // AnyDuringMigration because:  Property 'keyCode' does not exist on type
       // 'Event'.
     } else if ((e as AnyDuringMigration).keyCode === KeyCodes.RIGHT) {
       // increment (decrement in RTL)
-      multiplier = this.sourceBlock_.RTL ? -1 : 1;
+      multiplier = this.sourceBlock_!.RTL ? -1 : 1;
       // AnyDuringMigration because:  Property 'keyCode' does not exist on type
       // 'Event'.
     } else if ((e as AnyDuringMigration).keyCode === KeyCodes.DOWN) {

@@ -148,7 +148,7 @@ export class FieldImage extends Field {
           'width': this.size_.width + 'px',
           'alt': this.altText_,
         },
-        this.fieldGroup_);
+        this.fieldGroup_!);
     this.imageElement_.setAttributeNS(
         dom.XLINK_NS, 'xlink:href', this.value_ as string);
 

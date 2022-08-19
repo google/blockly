@@ -139,7 +139,7 @@ export class FieldVariable extends FieldDropdown {
       return;  // Initialization already happened.
     }
     const variable = Variables.getOrCreateVariablePackage(
-        this.sourceBlock_.workspace, null, this.defaultVariableName,
+        this.sourceBlock_!.workspace, null, this.defaultVariableName,
         this.defaultType_);
     // Don't call setValue because we don't want to cause a rerender.
     this.doValueUpdate_(variable.getId());
@@ -148,7 +148,7 @@ export class FieldVariable extends FieldDropdown {
   override shouldAddBorderRect_() {
     return super.shouldAddBorderRect_() &&
         (!this.getConstants()!.FIELD_DROPDOWN_NO_BORDER_RECT_SHADOW ||
-         this.sourceBlock_.type !== 'variables_get');
+         this.sourceBlock_!.type !== 'variables_get');
   }
 
   /**
@@ -168,7 +168,7 @@ export class FieldVariable extends FieldDropdown {
     // AnyDuringMigration because:  Argument of type 'string | null' is not
     // assignable to parameter of type 'string | undefined'.
     const variable = Variables.getOrCreateVariablePackage(
-        this.sourceBlock_.workspace, id, variableName as AnyDuringMigration,
+        this.sourceBlock_!.workspace, id, variableName as AnyDuringMigration,
         variableType);
 
     // This should never happen :)
@@ -238,7 +238,7 @@ export class FieldVariable extends FieldDropdown {
     }
     // This is necessary so that blocks in the flyout can have custom var names.
     const variable = Variables.getOrCreateVariablePackage(
-        this.sourceBlock_.workspace, state['id'] || null, state['name'],
+        this.sourceBlock_!.workspace, state['id'] || null, state['name'],
         state['type'] || '');
     this.setValue(variable.getId());
   }
@@ -316,7 +316,7 @@ export class FieldVariable extends FieldDropdown {
       return null;
     }
     const newId = opt_newValue as string;
-    const variable = Variables.getVariable(this.sourceBlock_.workspace, newId);
+    const variable = Variables.getVariable(this.sourceBlock_!.workspace, newId);
     if (!variable) {
       console.warn(
           'Variable id doesn\'t point to a real variable! ' +
@@ -343,7 +343,7 @@ export class FieldVariable extends FieldDropdown {
    */
   protected override doValueUpdate_(newId: AnyDuringMigration) {
     this.variable_ =
-        Variables.getVariable(this.sourceBlock_.workspace, newId as string);
+        Variables.getVariable(this.sourceBlock_!.workspace, newId as string);
     super.doValueUpdate_(newId);
   }
 

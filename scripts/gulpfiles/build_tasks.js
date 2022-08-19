@@ -674,8 +674,7 @@ function buildCompiled() {
       .pipe(gulp.sourcemaps.init())
       .pipe(compile(options))
       .pipe(gulp.rename({suffix: COMPILED_SUFFIX}))
-      .pipe(
-          gulp.sourcemaps.write('.', {includeContent: false, sourceRoot: './'}))
+      .pipe(gulp.sourcemaps.write('.'))
       .pipe(gulp.dest(BUILD_DIR));
 }
 

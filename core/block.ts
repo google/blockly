@@ -1371,7 +1371,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @returns Text of block.
    */
   toString(opt_maxLength?: number, opt_emptyToken?: string): string {
-    let text = [];
+    const text = [];
     const emptyFieldPlaceholder = opt_emptyToken || '?';
 
     // Temporarily set flag to navigate to all fields.
@@ -1460,26 +1460,20 @@ export class Block implements IASTNodeLocation, IDeletable {
     }
 
     // Join the text array, removing spaces around added parentheses.
-    // AnyDuringMigration because:  Type 'string' is not assignable to type
-    // 'any[]'.
-    text = text.reduce(function(acc, value) {
+    let combinedText: string = text.reduce(function(acc, value) {
       return acc + (acc.substr(-1) === '(' || value === ')' ? '' : ' ') + value;
-    }, '') as AnyDuringMigration;
-    // AnyDuringMigration because:  Property 'trim' does not exist on type
-    // 'any[]'.
-    text = (text as AnyDuringMigration).trim() || '???';
+    }, '');
+
+    combinedText = combinedText.trim() || '???';
     if (opt_maxLength) {
       // TODO: Improve truncation so that text from this block is given
       // priority. E.g. "1+2+3+4+5+6+7+8+9=0" should be "...6+7+8+9=0", not
       // "1+2+3+4+5...". E.g. "1+2+3+4+5=6+7+8+9+0" should be "...4+5=6+7...".
-      if (text.length > opt_maxLength) {
-        // AnyDuringMigration because:  Type 'string' is not assignable to type
-        // 'any[]'.
-        text = (text.substring(0, opt_maxLength - 3) + '...') as
-            AnyDuringMigration;
+      if (combinedText.length > opt_maxLength) {
+        combinedText = combinedText.substring(0, opt_maxLength - 3) + '...';
       }
     }
-    return text;
+    return combinedText;
   }
 
   /**

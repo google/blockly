@@ -417,20 +417,18 @@ function addAttributes(node: Node, obj: AnyDuringMigration) {
  */
 export function parseToolboxTree(toolboxDef: Element|null|string): Element|
     null {
+  let parsedToolboxDef: Element|null = null;
   if (toolboxDef) {
-    if (typeof toolboxDef !== 'string' && !(toolboxDef instanceof Element)) {
-      toolboxDef = null;
-    }
     if (typeof toolboxDef === 'string') {
-      toolboxDef = Xml.textToDom(toolboxDef);
-      if (toolboxDef.nodeName.toLowerCase() !== 'xml') {
+      parsedToolboxDef = Xml.textToDom(toolboxDef);
+      if (parsedToolboxDef.nodeName.toLowerCase() !== 'xml') {
         throw TypeError('Toolbox should be an <xml> document.');
       }
+    } else if (toolboxDef instanceof Element) {
+      parsedToolboxDef = toolboxDef;
     }
-  } else {
-    toolboxDef = null;
   }
-  return toolboxDef;
+  return parsedToolboxDef;
 }
 
 export const TEST_ONLY = {

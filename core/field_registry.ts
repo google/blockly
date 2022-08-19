@@ -68,7 +68,7 @@ export function fromJson(options: AnyDuringMigration): Field|null {
  */
 function fromJsonInternal(options: AnyDuringMigration): Field|null {
   const fieldObject =
-      registry.getObject(registry.Type.FIELD, options['type']) as
+      registry.getObject(registry.Type.FIELD, options['type']) as unknown as
           IRegistrableField |
       null;
   if (!fieldObject) {

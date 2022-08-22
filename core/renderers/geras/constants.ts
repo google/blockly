@@ -46,16 +46,14 @@ export class ConstantProvider extends BaseConstantProvider {
   }
 
   override getCSS_(selector: string) {
-    return super.getCSS_(selector)
-        .concat(/* eslint-enable indent */
-                [
-                  /* eslint-disable indent */
-                  // Insertion marker.
-                  selector + ' .blocklyInsertionMarker>.blocklyPathLight,',
-                  selector + ' .blocklyInsertionMarker>.blocklyPathDark {',
-                  'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';',
-                  'stroke: none;',
-                  '}',
-                ]);
+    return super.getCSS_(selector).concat([
+      /* eslint-disable indent */
+      // Insertion marker.
+      selector + ' .blocklyInsertionMarker>.blocklyPathLight,',
+      selector + ' .blocklyInsertionMarker>.blocklyPathDark {',
+      'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';', 'stroke: none;',
+      '}',
+      /* eslint-enable indent */
+    ]);
   }
 }

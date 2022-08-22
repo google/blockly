@@ -1094,32 +1094,77 @@ export class ConstantProvider {
       /* eslint-disable indent */
       /* clang-format off */
       // Text.
-      selector + ' .blocklyText, ', selector + ' .blocklyFlyoutLabelText {', 'font: ' + this.FIELD_TEXT_FONTWEIGHT + ' ' + this.FIELD_TEXT_FONTSIZE + 'pt ' + this.FIELD_TEXT_FONTFAMILY + ';', '}',
+      selector + ' .blocklyText, ',
+      selector + ' .blocklyFlyoutLabelText {',
+        'font: ' + this.FIELD_TEXT_FONTWEIGHT + ' ' +
+            this.FIELD_TEXT_FONTSIZE + 'pt ' + this.FIELD_TEXT_FONTFAMILY + ';',
+      '}',
 
       // Fields.
-      selector + ' .blocklyText {', 'fill: #fff;', '}', selector + ' .blocklyNonEditableText>rect,', selector + ' .blocklyEditableText>rect {', 'fill: ' + this.FIELD_BORDER_RECT_COLOUR + ';', 'fill-opacity: .6;', 'stroke: none;', '}', selector + ' .blocklyNonEditableText>text,', selector + ' .blocklyEditableText>text {', 'fill: #000;', '}',
+      selector + ' .blocklyText {',
+        'fill: #fff;',
+      '}',
+      selector + ' .blocklyNonEditableText>rect,',
+      selector + ' .blocklyEditableText>rect {',
+        'fill: ' + this.FIELD_BORDER_RECT_COLOUR + ';',
+        'fill-opacity: .6;',
+        'stroke: none;',
+      '}',
+      selector + ' .blocklyNonEditableText>text,',
+      selector + ' .blocklyEditableText>text {',
+        'fill: #000;',
+      '}',
 
       // Flyout labels.
-      selector + ' .blocklyFlyoutLabelText {', 'fill: #000;', '}',
+      selector + ' .blocklyFlyoutLabelText {',
+        'fill: #000;',
+      '}',
 
       // Bubbles.
-      selector + ' .blocklyText.blocklyBubbleText {', 'fill: #000;', '}',
+      selector + ' .blocklyText.blocklyBubbleText {',
+        'fill: #000;',
+      '}',
 
       // Editable field hover.
-      selector + ' .blocklyEditableText:not(.editing):hover>rect {', 'stroke: #fff;', 'stroke-width: 2;', '}',
+      selector + ' .blocklyEditableText:not(.editing):hover>rect {',
+        'stroke: #fff;',
+        'stroke-width: 2;',
+      '}',
 
       // Text field input.
-      selector + ' .blocklyHtmlInput {', 'font-family: ' + this.FIELD_TEXT_FONTFAMILY + ';', 'font-weight: ' + this.FIELD_TEXT_FONTWEIGHT + ';', '}', // Selection highlight.
-      selector + ' .blocklySelected>.blocklyPath {', 'stroke: #fc3;', 'stroke-width: 3px;', '}',
+      selector + ' .blocklyHtmlInput {',
+        'font-family: ' + this.FIELD_TEXT_FONTFAMILY + ';',
+        'font-weight: ' + this.FIELD_TEXT_FONTWEIGHT + ';',
+      '}',
+
+      // Selection highlight.
+      selector + ' .blocklySelected>.blocklyPath {',
+        'stroke: #fc3;',
+        'stroke-width: 3px;',
+      '}',
 
       // Connection highlight.
-      selector + ' .blocklyHighlightedConnectionPath {', 'stroke: #fc3;', '}',
+      selector + ' .blocklyHighlightedConnectionPath {',
+        'stroke: #fc3;',
+      '}',
 
       // Replaceable highlight.
-      selector + ' .blocklyReplaceable .blocklyPath {', 'fill-opacity: .5;', '}', selector + ' .blocklyReplaceable .blocklyPathLight,', selector + ' .blocklyReplaceable .blocklyPathDark {', 'display: none;', '}',
+      selector + ' .blocklyReplaceable .blocklyPath {',
+        'fill-opacity: .5;',
+      '}',
+      selector + ' .blocklyReplaceable .blocklyPathLight,',
+      selector + ' .blocklyReplaceable .blocklyPathDark {',
+        'display: none;',
+      '}',
 
       // Insertion marker.
-      selector + ' .blocklyInsertionMarker>.blocklyPath {', 'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';', 'stroke: none;', '}'];
+      selector + ' .blocklyInsertionMarker>.blocklyPath {',
+        'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';',
+        'stroke: none;',
+      '}',
+      /* clang-format on */
+      /* eslint-enable indent */
+    ];
   }
 }
 /* clang-format on */

@@ -82,7 +82,7 @@
 	"CONTROLS_IF_TOOLTIP_4": "Ako je prva vrijednost istina, tada izvrši prvi blok naredbi. Inače, ako je druga vrijednost istina izvrši drugi blok naredbi. Ako niti jedna vrijednost nije istina, izvrši zadnji blok naredbi.",
 	"CONTROLS_IF_MSG_IF": "ako",
 	"CONTROLS_IF_MSG_ELSEIF": "inače ako",
-	"CONTROLS_IF_MSG_ELSE": "onda",
+	"CONTROLS_IF_MSG_ELSE": "inače",
 	"CONTROLS_IF_IF_TOOLTIP": "Dodaj, ukloni ili promijeni redoslijed kako biste presložili ovaj blok.",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Dodaj uvjet bloku.",
 	"CONTROLS_IF_ELSE_TOOLTIP": "Dodaj završni, \"vrijedi za sve\" uvjet bloku.",

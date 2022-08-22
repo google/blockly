@@ -121,8 +121,6 @@
             "require-jsdoc": ["off"],
             // Temporarily disable. 55 problems.
             "@typescript-eslint/ban-types": ["off"],
-            // Temporarily disable. 18 problems. Autofixable?
-            "@typescript-eslint/no-inferrable-types": ["off"],
             // Temporarily disable. 33 problems.
             "@typescript-eslint/no-empty-function": ["off"],
             // Temporarily disable. 3 problems.

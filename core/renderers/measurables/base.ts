@@ -27,9 +27,9 @@ import {Types} from './types.js';
  * @alias Blockly.blockRendering.Measurable
  */
 export class Measurable {
-  width: number = 0;
+  width = 0;
 
-  height: number = 0;
+  height = 0;
   type: number;
   xPos = 0;
 

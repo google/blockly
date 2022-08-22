@@ -222,13 +222,13 @@ export class ConstantProvider {
    * ``setFontConstants_`` to be the height of the text based on the font
    * used.
    */
-  FIELD_TEXT_HEIGHT: number = -1;  // Dynamically set.
+  FIELD_TEXT_HEIGHT = -1;  // Dynamically set.
 
   /**
    * Text baseline.  This constant is dynamically set in ``setFontConstants_``
    * to be the baseline of the text based on the font used.
    */
-  FIELD_TEXT_BASELINE: number = -1;  // Dynamically set.
+  FIELD_TEXT_BASELINE = -1;  // Dynamically set.
 
   /** A field's border rect corner radius. */
   FIELD_BORDER_RECT_RADIUS = 4;

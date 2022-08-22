@@ -295,11 +295,12 @@ var JSCOMP_OFF = [
  * needed, and we don't want to, because a tsc error would prevent
  * other workflows (like lint and format) from completing.
  */
-function prepare() {
+function prepare(done) {
   if (process.env.CI) {
-    return gulp.src('.');  // Do nothing.
+    done();
+    return;
   }
-  return buildJavaScriptAndDeps();
+  return buildJavaScriptAndDeps(done);
 }
 
 const buildJavaScriptAndDeps = gulp.series(buildJavaScript, buildDeps);

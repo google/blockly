@@ -831,7 +831,7 @@ export class ConstantProvider extends BaseConstantProvider {
       `${selector} .blocklyDropdownText {`,
       `fill: #fff !important;`,
       `}`,
-      
+
       // Widget and Dropdown Div
       `${selector}.blocklyWidgetDiv .goog-menuitem,`,
       `${selector}.blocklyDropDownDiv .goog-menuitem {`,

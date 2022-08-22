@@ -49,9 +49,10 @@ export class ConstantProvider extends BaseConstantProvider {
     return super.getCSS_(selector).concat([
       /* eslint-disable indent */
       // Insertion marker.
-      selector + ' .blocklyInsertionMarker>.blocklyPathLight,',
-      selector + ' .blocklyInsertionMarker>.blocklyPathDark {',
-      'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';', 'stroke: none;',
+      `${selector} .blocklyInsertionMarker>.blocklyPathLight,`,
+      `${selector} .blocklyInsertionMarker>.blocklyPathDark {`,
+      `fill-opacity: ${this.INSERTION_MARKER_OPACITY};`,
+      `stroke: none;`,
       '}',
       /* eslint-enable indent */
     ]);

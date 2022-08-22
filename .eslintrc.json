@@ -125,8 +125,6 @@
             "@typescript-eslint/no-inferrable-types": ["off"],
             // Temporarily disable. 33 problems.
             "@typescript-eslint/no-empty-function": ["off"],
-            // Temporarily disable. 17 problems.
-            "@typescript-eslint/no-this-alias": ["off"],
             // Temporarily disable. 3 problems.
             "@typescript-eslint/no-empty-interface": ["off"],
             // Temporarily disable. 34 problems.

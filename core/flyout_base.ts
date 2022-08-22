@@ -897,12 +897,11 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
    * @return Function to call when block is clicked.
    */
   private blockMouseDown_(block: BlockSvg): Function {
-    const flyout = this;
     return (e: MouseEvent) => {
-      const gesture = flyout.targetWorkspace.getGesture(e);
+      const gesture = this.targetWorkspace.getGesture(e);
       if (gesture) {
         gesture.setStartBlock(block);
-        gesture.handleFlyoutStart(e, flyout);
+        gesture.handleFlyoutStart(e, this);
       }
     };
   }

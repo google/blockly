@@ -570,6 +570,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @return The block (if any) that surrounds the current block.
    */
   getSurroundParent(): this|null {
+    /* eslint-disable-next-line @typescript-eslint/no-this-alias */
     let block = this;
     let prevBlock;
     do {
@@ -625,6 +626,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    */
   getRootBlock(): this {
     let rootBlock: this;
+    /* eslint-disable-next-line @typescript-eslint/no-this-alias */
     let block: this|null = this;
     do {
       rootBlock = block;
@@ -641,6 +643,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @internal
    */
   getTopStackBlock(): this {
+    /* eslint-disable-next-line @typescript-eslint/no-this-alias */
     let block = this;
     let previous;
     do {

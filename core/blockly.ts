@@ -566,13 +566,11 @@ WorkspaceCommentSvg.prototype.showContextMenu =
       if (this.workspace.options.readOnly) {
         return;
       }
-      // Save the current workspace comment in a variable for use in closures.
-      const comment = this;
       const menuOptions = [];
     
       if (this.isDeletable() && this.isMovable()) {
-        menuOptions.push(ContextMenu.commentDuplicateOption(comment));
-        menuOptions.push(ContextMenu.commentDeleteOption(comment));
+        menuOptions.push(ContextMenu.commentDuplicateOption(this));
+        menuOptions.push(ContextMenu.commentDeleteOption(this));
       }
     
       ContextMenu.show(e, menuOptions, this.RTL);

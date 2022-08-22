@@ -247,10 +247,10 @@ function init(mainWorkspace: WorkspaceSvg) {
   }
 
   if (options.hasTrashcan) {
-    mainWorkspace.trashcan.init();
+    mainWorkspace.trashcan!.init();
   }
   if (options.zoomOptions && options.zoomOptions.controls) {
-    mainWorkspace.zoomControls_.init();
+    mainWorkspace.zoomControls_!.init();
   }
 
   if (options.moveOptions && options.moveOptions.scrollbars) {

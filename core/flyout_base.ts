@@ -70,7 +70,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
    *     between 0 and 1 specifying the degree of scrolling and a
    *     similar x property.
    */
-  protected abstract setMetrics_(xyRatio: {x: number, y: number}): void;
+  protected abstract setMetrics_(xyRatio: {x?: number, y?: number}): void;
 
   /**
    * Lay out the blocks in the flyout.
@@ -493,7 +493,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     }
     // Update the scrollbar's visibility too since it should mimic the
     // flyout's visibility.
-    this.workspace_.scrollbar.setContainerVisible(show);
+    this.workspace_.scrollbar?.setContainerVisible(show);
   }
 
   /**
@@ -682,14 +682,14 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     // Look up the correct category generation function and call that to get a
     // valid XML list.
     const fnToApply =
-        this.workspace_.targetWorkspace.getToolboxCategoryCallback(
+        this.workspace_.targetWorkspace!.getToolboxCategoryCallback(
             categoryName);
     if (typeof fnToApply !== 'function') {
       throw TypeError(
           'Couldn\'t find a callback function when opening' +
           ' a toolbox category.');
     }
-    return fnToApply(this.workspace_.targetWorkspace);
+    return fnToApply(this.workspace_.targetWorkspace!);
   }
 
   /**

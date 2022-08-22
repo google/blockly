@@ -52,7 +52,7 @@ export function paste(): ICopyable|null {
   // started in a flyout workspace.
   let workspace = copyData.source;
   if (workspace.isFlyout) {
-    workspace = workspace.targetWorkspace;
+    workspace = workspace.targetWorkspace!;
   }
   if (copyData.typeCounts &&
       workspace.isCapacityAvailable(copyData.typeCounts)) {

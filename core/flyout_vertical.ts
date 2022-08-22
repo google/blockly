@@ -185,7 +185,7 @@ export class VerticalFlyout extends Flyout {
 
   /** Scroll the flyout to the top. */
   override scrollToStart() {
-    this.workspace_.scrollbar.setY(0);
+    this.workspace_.scrollbar?.setY(0);
   }
 
   /**
@@ -201,7 +201,7 @@ export class VerticalFlyout extends Flyout {
       const viewMetrics = metricsManager.getViewMetrics();
       const pos = viewMetrics.top - scrollMetrics.top + scrollDelta.y;
 
-      this.workspace_.scrollbar.setY(pos);
+      this.workspace_.scrollbar?.setY(pos);
       // When the flyout moves from a wheel event, hide WidgetDiv and
       // dropDownDiv.
       WidgetDiv.hide();

@@ -194,7 +194,7 @@ export class HorizontalFlyout extends Flyout {
 
   /** Scroll the flyout to the top. */
   override scrollToStart() {
-    this.workspace_.scrollbar.setX(this.RTL ? Infinity : 0);
+    this.workspace_.scrollbar?.setX(this.RTL ? Infinity : 0);
   }
 
   /**
@@ -211,7 +211,7 @@ export class HorizontalFlyout extends Flyout {
       const viewMetrics = metricsManager.getViewMetrics();
 
       const pos = viewMetrics.left - scrollMetrics.left + delta;
-      this.workspace_.scrollbar.setX(pos);
+      this.workspace_.scrollbar?.setX(pos);
       // When the flyout moves from a wheel event, hide WidgetDiv and
       // dropDownDiv.
       WidgetDiv.hide();

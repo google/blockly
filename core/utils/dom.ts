@@ -72,7 +72,8 @@ let canvasContext: CanvasRenderingContext2D = null as AnyDuringMigration;
  * @alias Blockly.utils.dom.createSvgElement
  */
 export function createSvgElement<T extends SVGElement>(
-    name: string|Svg<T>, attrs: AnyDuringMigration, opt_parent?: Element): T {
+    name: string|Svg<T>, attrs: AnyDuringMigration,
+    opt_parent?: Element|null): T {
   const e = document.createElementNS(SVG_NS, String(name)) as T;
   for (const key in attrs) {
     e.setAttribute(key, attrs[key]);

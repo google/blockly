@@ -172,27 +172,28 @@ export class ComponentManager {
    * @param sorted Whether to return list ordered by weights.
    * @return The components that match the specified capability.
    */
-  getComponents<T>(capability: string|Capability<T>, sorted: boolean): T[] {
+  getComponents<T extends IComponent>(
+      capability: string|Capability<T>, sorted: boolean): T[] {
     capability = String(capability).toLowerCase();
     const componentIds = this.capabilityToComponentIds.get(capability);
     if (!componentIds) {
       return [];
     }
-    const components: AnyDuringMigration[] = [];
+    const components: T[] = [];
     if (sorted) {
-      const componentDataList: AnyDuringMigration[] = [];
+      const componentDataList: ComponentDatum[] = [];
       componentIds.forEach((id) => {
-        componentDataList.push(this.componentData.get(id));
+        componentDataList.push(this.componentData.get(id)!);
       });
       componentDataList.sort(function(a, b) {
         return a.weight - b.weight;
       });
-      componentDataList.forEach(function(ComponentDatum) {
-        components.push(ComponentDatum.component);
+      componentDataList.forEach(function(componentDatum) {
+        components.push(componentDatum.component as T);
       });
     } else {
       componentIds.forEach((id) => {
-        components.push(this.componentData.get(id)!.component);
+        components.push(this.componentData.get(id)!.component as T);
       });
     }
     return components;

@@ -102,6 +102,7 @@ import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
 import type {WorkspaceDragSurfaceSvg} from './workspace_drag_surface_svg.js';
 import * as Xml from './xml.js';
 import {ZoomControls} from './zoom_controls.js';
+import {ContextMenuOption} from './contextmenu_registry.js';
 
 
 /** Margin around the top/bottom/left/right after a zoomToFit call. */
@@ -209,9 +210,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   startScrollY = 0;
 
   /** Distance from mouse to object being dragged. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'Coordinate'.
-  private dragDeltaXY_: Coordinate = null as AnyDuringMigration;
+  private dragDeltaXY_: Coordinate|null = null;
 
   /** Current scale. */
   scale = 1;
@@ -226,49 +225,33 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   private oldLeft_ = 0;
 
   /** The workspace's trashcan (if any). */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'Trashcan'.
-  trashcan: Trashcan = null as AnyDuringMigration;
+  trashcan: Trashcan|null = null;
 
   /** This workspace's scrollbars, if they exist. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'ScrollbarPair'.
-  scrollbar: ScrollbarPair = null as AnyDuringMigration;
+  scrollbar: ScrollbarPair|null = null;
 
   /**
    * Fixed flyout providing blocks which may be dragged into this workspace.
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'IFlyout'.
-  private flyout_: IFlyout = null as AnyDuringMigration;
+  private flyout_: IFlyout|null = null;
 
   /**
    * Category-based toolbox providing blocks which may be dragged into this
    * workspace.
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'IToolbox'.
-  private toolbox_: IToolbox = null as AnyDuringMigration;
+  private toolbox_: IToolbox|null = null;
 
   /**
    * The current gesture in progress on this workspace, if any.
    * @internal
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'TouchGesture'.
-  currentGesture_: TouchGesture = null as AnyDuringMigration;
+  currentGesture_: TouchGesture|null = null;
 
   /** This workspace's surface for dragging blocks, if it exists. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'BlockDragSurfaceSvg'.
-  private readonly blockDragSurface_: BlockDragSurfaceSvg =
-      null as AnyDuringMigration;
+  private readonly blockDragSurface_: BlockDragSurfaceSvg|null = null;
 
   /** This workspace's drag surface, if it exists. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'WorkspaceDragSurfaceSvg'.
-  private readonly workspaceDragSurface_: WorkspaceDragSurfaceSvg =
-      null as AnyDuringMigration;
+  private readonly workspaceDragSurface_: WorkspaceDragSurfaceSvg|null = null;
 
   /**
    * Whether to move workspace to the drag surface when it is dragged.
@@ -288,18 +271,14 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * The first parent div with 'injectionDiv' in the name, or null if not set.
    * Access this with getInjectionDiv.
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'Element'.
-  private injectionDiv_: Element = null as AnyDuringMigration;
+  private injectionDiv_: Element|null = null;
 
   /**
    * Last known position of the page scroll.
    * This is used to determine whether we have recalculated screen coordinate
    * stuff since the page scrolled.
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'Coordinate'.
-  private lastRecordedPageScroll_: Coordinate = null as AnyDuringMigration;
+  private lastRecordedPageScroll_: Coordinate|null = null;
 
   /**
    * Developers may define this function to add custom menu options to the
@@ -308,16 +287,15 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @param options List of menu options to add to.
    * @param e The right-click event that triggered the context menu.
    */
-  configureContextMenu: AnyDuringMigration;
+  configureContextMenu:
+      ((menuOptions: ContextMenuOption[], e: Event) => void)|null = null;
 
   /**
    * In a flyout, the target workspace where blocks should be placed after a
    * drag. Otherwise null.
    * @internal
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'WorkspaceSvg'.
-  targetWorkspace: WorkspaceSvg = null as AnyDuringMigration;
+  targetWorkspace: WorkspaceSvg|null = null;
 
   /** Inverted screen CTM, for use in mouseToSvg. */
   private inverseScreenCTM_: SVGMatrix|null = null;
@@ -328,7 +306,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /** @internal */
   getMetrics: () => Metrics;
   /** @internal */
-  setMetrics: (p1: {x: number, y: number}) => void;
+  setMetrics: (p1: {x?: number, y?: number}) => void;
   private readonly componentManager_: ComponentManager;
 
   /**
@@ -337,19 +315,26 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    */
   private readonly highlightedBlocks_: BlockSvg[] = [];
   private audioManager_: WorkspaceAudio;
-  private grid_: Grid;
+  private grid_: Grid|null;
   private markerManager_: MarkerManager;
-  private toolboxCategoryCallbacks_:
-      {[key: string]: ((p1: WorkspaceSvg) => toolbox.FlyoutDefinition)|null};
-  private flyoutButtonCallbacks_:
-      {[key: string]: ((p1: FlyoutButton) => AnyDuringMigration)|null};
+
+  /**
+   * Map from function names to callbacks, for deciding what to do when a
+   * custom toolbox category is opened.
+   */
+  private toolboxCategoryCallbacks =
+      new Map<string, (p1: WorkspaceSvg) => toolbox.FlyoutDefinition>();
+
+  /**
+   * Map from function names to callbacks, for deciding what to do when a
+   * button is clicked.
+   */
+  private flyoutButtonCallbacks = new Map<string, (p1: FlyoutButton) => void>();
   protected themeManager_: ThemeManager;
   private readonly renderer_: Renderer;
 
   /** Cached parent SVG. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'SVGElement'.
-  private cachedParentSvg_: SVGElement = null as AnyDuringMigration;
+  private cachedParentSvg_: SVGElement|null = null;
 
   /** True if keyboard accessibility mode is on, false otherwise. */
   keyboardAccessibilityMode = false;
@@ -369,7 +354,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   svgBlockCanvas_!: SVGElement;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   svgBubbleCanvas_!: SVGElement;
-  zoomControls_: AnyDuringMigration;
+  zoomControls_: ZoomControls|null = null;
 
   /**
    * @param options Dictionary of options.
@@ -416,26 +401,12 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
         new WorkspaceAudio((options.parentWorkspace as WorkspaceSvg));
 
     /** This workspace's grid object or null. */
-    // AnyDuringMigration because:  Type 'Grid | null' is not assignable to type
-    // 'Grid'.
-    this.grid_ = (this.options.gridPattern ?
-                      new Grid(this.options.gridPattern, options.gridOptions) :
-                      null) as AnyDuringMigration;
+    this.grid_ = this.options.gridPattern ?
+        new Grid(this.options.gridPattern, options.gridOptions) :
+        null;
 
     /** Manager in charge of markers and cursors. */
     this.markerManager_ = new MarkerManager(this);
-
-    /**
-     * Map from function names to callbacks, for deciding what to do when a
-     * custom toolbox category is opened.
-     */
-    this.toolboxCategoryCallbacks_ = Object.create(null);
-
-    /**
-     * Map from function names to callbacks, for deciding what to do when a
-     * button is clicked.
-     */
-    this.flyoutButtonCallbacks_ = Object.create(null);
 
     if (Variables && Variables.flyoutCategory) {
       this.registerToolboxCategoryCallback(
@@ -457,9 +428,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     this.themeManager_ = this.options.parentWorkspace ?
         this.options.parentWorkspace.getThemeManager() :
         new ThemeManager(this, this.options.theme || Classic);
-    // AnyDuringMigration because:  Argument of type 'this' is not assignable to
-    // parameter of type 'Workspace'.
-    this.themeManager_.subscribeWorkspace(this as AnyDuringMigration);
+    this.themeManager_.subscribeWorkspace(this);
 
     /** The block renderer used for rendering blocks on this workspace. */
     this.renderer_ = blockRendering.init(
@@ -599,11 +568,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     }
 
     // Update all blocks in workspace that have a style name.
-    // AnyDuringMigration because:  Argument of type 'BlockSvg[]' is not
-    // assignable to parameter of type 'Block[]'.
     this.updateBlockStyles_(this.getAllBlocks(false).filter(function(block) {
       return !!block.getStyleName();
-    }) as AnyDuringMigration);
+    }));
 
     // Update current toolbox selection.
     this.refreshToolboxSelection();
@@ -745,7 +712,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
         element = element.parentNode as Element;
       }
     }
-    return this.injectionDiv_;
+    return this.injectionDiv_!;
   }
 
   /**
@@ -848,91 +815,56 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     }
     if (this.svgGroup_) {
       dom.removeNode(this.svgGroup_);
-      // AnyDuringMigration because:  Type 'null' is not assignable to type
-      // 'SVGElement'.
-      this.svgGroup_ = null as AnyDuringMigration;
     }
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'SVGElement'.
-    this.svgBlockCanvas_ = null as AnyDuringMigration;
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'SVGElement'.
-    this.svgBubbleCanvas_ = null as AnyDuringMigration;
     if (this.toolbox_) {
       this.toolbox_.dispose();
-      // AnyDuringMigration because:  Type 'null' is not assignable to type
-      // 'IToolbox'.
-      this.toolbox_ = null as AnyDuringMigration;
+      this.toolbox_ = null;
     }
     if (this.flyout_) {
       this.flyout_.dispose();
-      // AnyDuringMigration because:  Type 'null' is not assignable to type
-      // 'IFlyout'.
-      this.flyout_ = null as AnyDuringMigration;
+      this.flyout_ = null;
     }
     if (this.trashcan) {
       this.trashcan.dispose();
-      // AnyDuringMigration because:  Type 'null' is not assignable to type
-      // 'Trashcan'.
-      this.trashcan = null as AnyDuringMigration;
+      this.trashcan = null;
     }
     if (this.scrollbar) {
       this.scrollbar.dispose();
-      // AnyDuringMigration because:  Type 'null' is not assignable to type
-      // 'ScrollbarPair'.
-      this.scrollbar = null as AnyDuringMigration;
+      this.scrollbar = null;
     }
     if (this.zoomControls_) {
       this.zoomControls_.dispose();
-      this.zoomControls_ = null;
     }
 
     if (this.audioManager_) {
       this.audioManager_.dispose();
-      // AnyDuringMigration because:  Type 'null' is not assignable to type
-      // 'WorkspaceAudio'.
-      this.audioManager_ = null as AnyDuringMigration;
     }
 
     if (this.grid_) {
-      // AnyDuringMigration because:  Type 'null' is not assignable to type
-      // 'Grid'.
-      this.grid_ = null as AnyDuringMigration;
+      this.grid_ = null;
     }
 
     this.renderer_.dispose();
 
     if (this.markerManager_) {
       this.markerManager_.dispose();
-      // AnyDuringMigration because:  Type 'null' is not assignable to type
-      // 'MarkerManager'.
-      this.markerManager_ = null as AnyDuringMigration;
     }
 
     super.dispose();
 
     // Dispose of theme manager after all blocks and mutators are disposed of.
     if (this.themeManager_) {
-      // AnyDuringMigration because:  Argument of type 'this' is not assignable
-      // to parameter of type 'Workspace'.
-      this.themeManager_.unsubscribeWorkspace(this as AnyDuringMigration);
+      this.themeManager_.unsubscribeWorkspace(this);
       this.themeManager_.unsubscribe(this.svgBackground_);
       if (!this.options.parentWorkspace) {
         this.themeManager_.dispose();
-        // AnyDuringMigration because:  Type 'null' is not assignable to type
-        // 'ThemeManager'.
-        this.themeManager_ = null as AnyDuringMigration;
       }
     }
 
     this.connectionDBList.length = 0;
 
-    // AnyDuringMigration because:  Type 'null' is not assignable to type '{
-    // [key: string]: ((p1: WorkspaceSvg) => FlyoutDefinition) | null; }'.
-    this.toolboxCategoryCallbacks_ = null as AnyDuringMigration;
-    // AnyDuringMigration because:  Type 'null' is not assignable to type '{
-    // [key: string]: ((p1: FlyoutButton) => any) | null; }'.
-    this.flyoutButtonCallbacks_ = null as AnyDuringMigration;
+    this.toolboxCategoryCallbacks.clear();
+    this.flyoutButtonCallbacks.clear();
 
     if (!this.options.parentWorkspace) {
       // Top-most workspace.  Dispose of the div that the
@@ -1135,17 +1067,13 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       this.cachedParentSvgSize_.width = width;
       // This is set to support the public (but deprecated) Blockly.svgSize
       // method.
-      // AnyDuringMigration because:  Argument of type 'number' is not
-      // assignable to parameter of type 'string'.
-      svg.setAttribute('data-cached-width', width as AnyDuringMigration);
+      svg.setAttribute('data-cached-width', width.toString());
     }
     if (height != null) {
       this.cachedParentSvgSize_.height = height;
       // This is set to support the public (but deprecated) Blockly.svgSize
       // method.
-      // AnyDuringMigration because:  Argument of type 'number' is not
-      // assignable to parameter of type 'string'.
-      svg.setAttribute('data-cached-height', height as AnyDuringMigration);
+      svg.setAttribute('data-cached-height', height.toString());
     }
   }
 
@@ -1212,7 +1140,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    */
   translate(x: number, y: number) {
     if (this.useWorkspaceDragSurface_ && this.isDragSurfaceActive_) {
-      this.workspaceDragSurface_.translateSurface(x, y);
+      this.workspaceDragSurface_?.translateSurface(x, y);
     } else {
       const translation = 'translate(' + x + ',' + y + ') ' +
           'scale(' + this.scale + ')';
@@ -1245,8 +1173,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
     this.isDragSurfaceActive_ = false;
 
-    const trans = this.workspaceDragSurface_.getSurfaceTranslation();
-    this.workspaceDragSurface_.clearAndHide(this.svgGroup_);
+    const trans = this.workspaceDragSurface_!.getSurfaceTranslation();
+    this.workspaceDragSurface_!.clearAndHide(this.svgGroup_);
     const translation = 'translate(' + trans.x + ',' + trans.y + ') ' +
         'scale(' + this.scale + ')';
     this.svgBlockCanvas_.setAttribute('transform', translation);
@@ -1279,19 +1207,15 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     // Figure out where we want to put the canvas back.  The order
     // in the is important because things are layered.
     const previousElement = this.svgBlockCanvas_.previousSibling as Element;
-    // AnyDuringMigration because:  Argument of type 'string | null' is not
-    // assignable to parameter of type 'string'.
-    const width = parseInt(
-        this.getParentSvg().getAttribute('width') as AnyDuringMigration, 10);
-    // AnyDuringMigration because:  Argument of type 'string | null' is not
-    // assignable to parameter of type 'string'.
-    const height = parseInt(
-        this.getParentSvg().getAttribute('height') as AnyDuringMigration, 10);
+    const width =
+        parseInt(this.getParentSvg().getAttribute('width') ?? '0', 10);
+    const height =
+        parseInt(this.getParentSvg().getAttribute('height') ?? '0', 10);
     const coord = svgMath.getRelativeXY(this.getCanvas());
-    this.workspaceDragSurface_.setContentsAndShow(
+    this.workspaceDragSurface_!.setContentsAndShow(
         this.getCanvas(), this.getBubbleCanvas(), previousElement, width,
         height, this.scale);
-    this.workspaceDragSurface_.translateSurface(coord.x, coord.y);
+    this.workspaceDragSurface_!.translateSurface(coord.x, coord.y);
   }
 
   /**
@@ -1458,24 +1382,14 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       let blockX = 0;
       let blockY = 0;
       if (xmlBlock) {
-        // AnyDuringMigration because:  Argument of type 'this' is not
-        // assignable to parameter of type 'Workspace'.
-        block =
-            Xml.domToBlock(xmlBlock, this as AnyDuringMigration) as BlockSvg;
-        // AnyDuringMigration because:  Argument of type 'string | null' is not
-        // assignable to parameter of type 'string'.
-        blockX = parseInt(xmlBlock.getAttribute('x') as AnyDuringMigration, 10);
+        block = Xml.domToBlock(xmlBlock, this) as BlockSvg;
+        blockX = parseInt(xmlBlock.getAttribute('x') ?? '0', 10);
         if (this.RTL) {
           blockX = -blockX;
         }
-        // AnyDuringMigration because:  Argument of type 'string | null' is not
-        // assignable to parameter of type 'string'.
-        blockY = parseInt(xmlBlock.getAttribute('y') as AnyDuringMigration, 10);
+        blockY = parseInt(xmlBlock.getAttribute('y') ?? '0', 10);
       } else if (jsonBlock) {
-        // AnyDuringMigration because:  Argument of type 'this' is not
-        // assignable to parameter of type 'Workspace'.
-        block =
-            blocks.append(jsonBlock, this as AnyDuringMigration) as BlockSvg;
+        block = blocks.append(jsonBlock, this) as BlockSvg;
         blockX = jsonBlock['x'] || 10;
         if (this.RTL) {
           blockX = this.getWidth() - blockX;
@@ -1545,19 +1459,10 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     eventUtils.disable();
     let comment: WorkspaceCommentSvg;
     try {
-      // AnyDuringMigration because:  Property 'get' does not exist on type
-      // '(name: string) => void'.
-      comment =
-          WorkspaceCommentSvg.fromXml(xmlComment, this) as AnyDuringMigration;
+      comment = WorkspaceCommentSvg.fromXmlRendered(xmlComment, this);
       // Move the duplicate to original position.
-      // AnyDuringMigration because:  Argument of type 'string | null' is not
-      // assignable to parameter of type 'string'.
-      let commentX =
-          parseInt(xmlComment.getAttribute('x') as AnyDuringMigration, 10);
-      // AnyDuringMigration because:  Argument of type 'string | null' is not
-      // assignable to parameter of type 'string'.
-      let commentY =
-          parseInt(xmlComment.getAttribute('y') as AnyDuringMigration, 10);
+      let commentX = parseInt(xmlComment.getAttribute('x') ?? '0', 10);
+      let commentY = parseInt(xmlComment.getAttribute('y') ?? '0', 10);
       if (!isNaN(commentX) && !isNaN(commentY)) {
         if (this.RTL) {
           commentX = -commentX;
@@ -1573,8 +1478,6 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       eventUtils.enable();
     }
     if (eventUtils.isEnabled()) {
-      // AnyDuringMigration because:  Property 'get' does not exist on type
-      // '(name: string) => void'.
       WorkspaceComment.fireCreateEvent(comment);
     }
     comment.select();
@@ -1636,12 +1539,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @deprecated Use workspace.recordDragTargets. (2021 June)
    */
   recordDeleteAreas() {
-    // AnyDuringMigration because:  Property 'warn' does not exist on type
-    // 'void'.
-    (utils.deprecation as AnyDuringMigration)
-        .warn(
-            'WorkspaceSvg.prototype.recordDeleteAreas', 'June 2021',
-            'June 2022', 'WorkspaceSvg.prototype.recordDragTargets');
+    utils.deprecation.warn(
+        'WorkspaceSvg.prototype.recordDeleteAreas', 'June 2021', 'June 2022',
+        'WorkspaceSvg.prototype.recordDragTargets');
     this.recordDragTargets();
   }
 
@@ -1685,9 +1585,6 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    */
   getDragTarget(e: Event): IDragTarget|null {
     for (let i = 0, targetArea; targetArea = this.dragTargetAreas_[i]; i++) {
-      // AnyDuringMigration because:  Property 'clientY' does not exist on
-      // type 'Event'. AnyDuringMigration because:  Property 'clientX' does
-      // not exist on type 'Event'.
       if (targetArea.clientRect.contains(
               (e as AnyDuringMigration).clientX,
               (e as AnyDuringMigration).clientY)) {
@@ -1734,7 +1631,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     // Fix scale of mouse event.
     point.x /= this.scale;
     point.y /= this.scale;
-    return Coordinate.sum((this.dragDeltaXY_), point);
+    return Coordinate.sum((this.dragDeltaXY_!), point);
   }
 
   /**
@@ -1779,7 +1676,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     const hasScrollbars = !!this.scrollbar;
     return this.isMovable() &&
         (!hasScrollbars ||
-         hasScrollbars && this.scrollbar.canScrollHorizontally());
+         hasScrollbars && this.scrollbar!.canScrollHorizontally());
   }
 
   /**
@@ -1790,7 +1687,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     const hasScrollbars = !!this.scrollbar;
     return this.isMovable() &&
         (!hasScrollbars ||
-         hasScrollbars && this.scrollbar.canScrollVertically());
+         hasScrollbars && this.scrollbar!.canScrollVertically());
   }
 
   /**
@@ -1867,8 +1764,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     // Start at 1 since the 0th block was used for initialization.
     for (let i = 1; i < topElements.length; i++) {
       const topElement = topElements[i];
-      if ((topElement as AnyDuringMigration).isInsertionmarker &&
-          (topElement as AnyDuringMigration).isInsertionMarker()) {
+      if ((topElement as any).isInsertionMarker &&
+          (topElement as any).isInsertionMarker()) {
         continue;
       }
       const blockBoundary = topElement.getBoundingRectangle();
@@ -1918,11 +1815,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     if (this.options.readOnly || this.isFlyout) {
       return;
     }
-    // AnyDuringMigration because:  Argument of type '{ workspace: this; }' is
-    // not assignable to parameter of type 'Scope'.
     const menuOptions = ContextMenuRegistry.registry.getContextMenuOptions(
-        ContextMenuRegistry.ScopeType.WORKSPACE,
-        {workspace: this} as AnyDuringMigration);
+        ContextMenuRegistry.ScopeType.WORKSPACE, {workspace: this});
 
     // Allow the developer to add or modify menuOptions.
     if (this.configureContextMenu) {
@@ -1970,9 +1864,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     if (this.options.parentWorkspace) {
       this.options.parentWorkspace.markFocused();
     } else {
-      // AnyDuringMigration because:  Argument of type 'this' is not assignable
-      // to parameter of type 'Workspace'.
-      common.setMainWorkspace(this as AnyDuringMigration);
+      common.setMainWorkspace(this);
       // We call e.preventDefault in many event handlers which means we
       // need to explicitly grab focus (e.g from a textarea) because
       // the browser will not do it for us.  How to do this is browser
@@ -1988,13 +1880,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     // In IE, SVGs can't be blurred or focused. Check to make sure the current
     // focus can be blurred before doing so.
     // See https://github.com/google/blockly/issues/4440
-    // AnyDuringMigration because:  Property 'blur' does not exist on type
-    // 'Element'.
     if (document.activeElement &&
-        (document.activeElement as AnyDuringMigration).blur) {
-      // AnyDuringMigration because:  Property 'blur' does not exist on type
-      // 'Element'.
-      (document.activeElement as AnyDuringMigration).blur();
+        document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
     }
     try {
       // Focus the workspace SVG - this is for Chrome and Firefox.
@@ -2006,7 +1894,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       try {
         // In IE11, use setActive (which is IE only) so the page doesn't scroll
         // to the workspace gaining focus.
-        (this.getParentSvg().parentElement as AnyDuringMigration).setActive();
+        (this.getParentSvg().parentElement as any).setActive();
       } catch (e) {
         // setActive support was discontinued in Edge so when that fails, call
         // focus instead.
@@ -2465,12 +2353,11 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @param key The name to use to look up this function.
    * @param func The function to call when the given button is clicked.
    */
-  registerButtonCallback(
-      key: string, func: (p1: FlyoutButton) => AnyDuringMigration) {
+  registerButtonCallback(key: string, func: (p1: FlyoutButton) => void) {
     if (typeof func !== 'function') {
       throw TypeError('Button callbacks must be functions.');
     }
-    this.flyoutButtonCallbacks_[key] = func;
+    this.flyoutButtonCallbacks.set(key, func);
   }
 
   /**
@@ -2480,10 +2367,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @return The function corresponding to the given key for this workspace;
    *     null if no callback is registered.
    */
-  getButtonCallback(key: string):
-      ((p1: FlyoutButton) => AnyDuringMigration)|null {
-    const result = this.flyoutButtonCallbacks_[key];
-    return result ? result : null;
+  getButtonCallback(key: string): ((p1: FlyoutButton) => void)|null {
+    return this.flyoutButtonCallbacks.get(key) ?? null;
   }
 
   /**
@@ -2491,7 +2376,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @param key The name associated with the callback function.
    */
   removeButtonCallback(key: string) {
-    this.flyoutButtonCallbacks_[key] = null;
+    this.flyoutButtonCallbacks.delete(key);
   }
 
   /**
@@ -2506,7 +2391,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     if (typeof func !== 'function') {
       throw TypeError('Toolbox category callbacks must be functions.');
     }
-    this.toolboxCategoryCallbacks_[key] = func;
+    this.toolboxCategoryCallbacks.set(key, func);
   }
 
   /**
@@ -2518,7 +2403,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    */
   getToolboxCategoryCallback(key: string):
       ((p1: WorkspaceSvg) => toolbox.FlyoutDefinition)|null {
-    return this.toolboxCategoryCallbacks_[key] || null;
+    return this.toolboxCategoryCallbacks.get(key) || null;
   }
 
   /**
@@ -2526,7 +2411,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @param key The name associated with the callback function.
    */
   removeToolboxCategoryCallback(key: string) {
-    this.toolboxCategoryCallbacks_[key] = null;
+    this.toolboxCategoryCallbacks.delete(key);
   }
 
   /**
@@ -2568,9 +2453,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @internal
    */
   clearGesture() {
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'TouchGesture'.
-    this.currentGesture_ = null as AnyDuringMigration;
+    this.currentGesture_ = null;
   }
 
   /**
@@ -2622,7 +2505,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *     and 1 specifying the degree of scrolling.
    */
   private static setTopLevelWorkspaceMetrics_(
-      this: WorkspaceSvg, xyRatio: AnyDuringMigration) {
+      this: WorkspaceSvg, xyRatio: {x?: number, y?: number}) {
     const metrics = this.getMetrics();
 
     if (typeof xyRatio.x === 'number') {

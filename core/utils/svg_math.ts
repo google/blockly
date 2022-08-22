@@ -31,14 +31,14 @@ import * as style from './style.js';
  * Note that IE (9,10) returns 'translate(16 8)' instead of 'translate(16, 8)'.
  * Note that IE has been reported to return scientific notation (0.123456e-42).
  */
-const XY_REGEX: RegExp = /translate\(\s*([-+\d.e]+)([ ,]\s*([-+\d.e]+)\s*)?/;
+const XY_REGEX = /translate\(\s*([-+\d.e]+)([ ,]\s*([-+\d.e]+)\s*)?/;
 
 /**
  * Static regex to pull the x,y values out of a translate() or translate3d()
  * style property.
  * Accounts for same exceptions as XY_REGEX.
  */
-const XY_STYLE_REGEX: RegExp =
+const XY_STYLE_REGEX =
     /transform:\s*translate(?:3d)?\(\s*([-+\d.e]+)\s*px([ ,]\s*([-+\d.e]+)\s*px)?/;
 
 /**

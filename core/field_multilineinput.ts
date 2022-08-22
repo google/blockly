@@ -46,7 +46,7 @@ export class FieldMultilineInput extends FieldTextInput {
    * Defines the maximum number of lines of field.
    * If exceeded, scrolling functionality is enabled.
    */
-  protected maxLines_: number = Infinity;
+  protected maxLines_ = Infinity;
 
   /** Whether Y overflow is currently occurring. */
   protected isOverflowedY_ = false;

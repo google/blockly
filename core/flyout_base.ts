@@ -120,7 +120,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
    * Whether the flyout should be laid out horizontally or not.
    * @internal
    */
-  horizontalLayout: boolean = false;
+  horizontalLayout = false;
   protected toolboxPosition_: number;
 
   /**
@@ -173,17 +173,17 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   /**
    * Does the flyout automatically close when a block is created?
    */
-  autoClose: boolean = true;
+  autoClose = true;
 
   /**
    * Whether the flyout is visible.
    */
-  private isVisible_: boolean = false;
+  private isVisible_ = false;
 
   /**
    * Whether the workspace containing this flyout is visible.
    */
-  private containerVisible_: boolean = true;
+  private containerVisible_ = true;
   protected rectMap_: WeakMap<BlockSvg, SVGElement>;
 
   /**
@@ -202,12 +202,12 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   /**
    * Width of flyout.
    */
-  protected width_: number = 0;
+  protected width_ = 0;
 
   /**
    * Height of flyout.
    */
-  protected height_: number = 0;
+  protected height_ = 0;
   // clang-format off
   /**
    * Range of a drag angle from a flyout considered "dragging toward
@@ -225,7 +225,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
    * flyout. Setting it to 360 means that all drags create a new block.
    */
   // clang-format on
-  protected dragAngleRange_: number = 70;
+  protected dragAngleRange_ = 70;
 
   /**
    * The path around the background of the flyout, which will be filled with a

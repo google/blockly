@@ -153,6 +153,7 @@ export class RenderedConnection extends Connection {
         return;
       }
       // Swap the connections and move the 'static' connection instead.
+      /* eslint-disable-next-line @typescript-eslint/no-this-alias */
       staticConnection = this;
       reverse = true;
     }
@@ -495,8 +496,7 @@ export class RenderedConnection extends Connection {
 
     const renderedChildConnection = childConnection as RenderedConnection;
 
-    const parentConnection = this;
-    const parentBlock = parentConnection.getSourceBlock();
+    const parentBlock = this.getSourceBlock();
     const childBlock = renderedChildConnection.getSourceBlock();
     const parentRendered = parentBlock.rendered;
     const childRendered = childBlock.rendered;
@@ -508,8 +508,8 @@ export class RenderedConnection extends Connection {
       childBlock.updateDisabled();
     }
     if (parentRendered && childRendered) {
-      if (parentConnection.type === ConnectionType.NEXT_STATEMENT ||
-          parentConnection.type === ConnectionType.PREVIOUS_STATEMENT) {
+      if (this.type === ConnectionType.NEXT_STATEMENT ||
+          this.type === ConnectionType.PREVIOUS_STATEMENT) {
         // Child block may need to square off its corners if it is in a stack.
         // Rendering a child will render its parent.
         childBlock.render();

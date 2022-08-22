@@ -164,12 +164,10 @@ export class Scrollbar {
       this.lengthAttribute_ = 'height';
       this.positionAttribute_ = 'y';
     }
-    const scrollbar = this;
     this.onMouseDownBarWrapper_ = browserEvents.conditionalBind(
-        this.svgBackground_!, 'mousedown', scrollbar,
-        scrollbar.onMouseDownBar_);
+        this.svgBackground_!, 'mousedown', this, this.onMouseDownBar_);
     this.onMouseDownHandleWrapper_ = browserEvents.conditionalBind(
-        this.svgHandle_!, 'mousedown', scrollbar, scrollbar.onMouseDownHandle_);
+        this.svgHandle_!, 'mousedown', this, this.onMouseDownHandle_);
   }
 
   /**

@@ -227,20 +227,19 @@ export class VariableMap {
         }
       }
 
-      const map = this;
       if (uses.length > 1) {
         // Confirm before deleting multiple blocks.
         const confirmText = Msg['DELETE_VARIABLE_CONFIRMATION']
                                 .replace('%1', String(uses.length))
                                 .replace('%2', variableName);
-        dialog.confirm(confirmText, function(ok) {
+        dialog.confirm(confirmText, (ok) => {
           if (ok && variable) {
-            map.deleteVariableInternal(variable, uses);
+            this.deleteVariableInternal(variable, uses);
           }
         });
       } else {
         // No confirmation necessary for a single block.
-        map.deleteVariableInternal(variable, uses);
+        this.deleteVariableInternal(variable, uses);
       }
     } else {
       console.warn('Can\'t delete non-existent variable: ' + id);

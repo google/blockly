@@ -978,20 +978,18 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * @internal
    */
   setFocus() {
-    const comment = this;
     this.focused_ = true;
     // Defer CSS changes.
-    setTimeout(function() {
-      if (comment.disposed_) {
+    setTimeout(() => {
+      if (this.disposed_) {
         return;
       }
-      comment.textarea_!.focus();
-      comment.addFocus();
+      this.textarea_!.focus();
+      this.addFocus();
       dom.addClass(
-          comment.svgRectTarget_ as SVGRectElement,
-          'blocklyCommentTargetFocused');
+          this.svgRectTarget_ as SVGRectElement, 'blocklyCommentTargetFocused');
       dom.addClass(
-          comment.svgHandleTarget_ as SVGRectElement,
+          this.svgHandleTarget_ as SVGRectElement,
           'blocklyCommentHandleTargetFocused');
     }, 0);
   }
@@ -1001,21 +999,19 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * @internal
    */
   blurFocus() {
-    const comment = this;
     this.focused_ = false;
     // Defer CSS changes.
-    setTimeout(function() {
-      if (comment.disposed_) {
+    setTimeout(() => {
+      if (this.disposed_) {
         return;
       }
 
-      comment.textarea_!.blur();
-      comment.removeFocus();
+      this.textarea_!.blur();
+      this.removeFocus();
       dom.removeClass(
-          comment.svgRectTarget_ as SVGRectElement,
-          'blocklyCommentTargetFocused');
+          this.svgRectTarget_ as SVGRectElement, 'blocklyCommentTargetFocused');
       dom.removeClass(
-          comment.svgHandleTarget_ as SVGRectElement,
+          this.svgHandleTarget_ as SVGRectElement,
           'blocklyCommentHandleTargetFocused');
     }, 0);
   }

@@ -67,36 +67,24 @@ export abstract class Icon {
     if (this.block_.isInFlyout) {
       dom.addClass(this.iconGroup_ as Element, 'blocklyIconGroupReadonly');
     }
-    // AnyDuringMigration because:  Argument of type 'SVGGElement | null' is not
-    // assignable to parameter of type 'Element'.
-    this.drawIcon_(this.iconGroup_ as AnyDuringMigration);
+    this.drawIcon_(this.iconGroup_);
 
-    // AnyDuringMigration because:  Argument of type 'SVGGElement | null' is not
-    // assignable to parameter of type 'Node'.
-    this.block_.getSvgRoot().appendChild(this.iconGroup_ as AnyDuringMigration);
-    // AnyDuringMigration because:  Argument of type 'SVGGElement | null' is not
-    // assignable to parameter of type 'EventTarget'.
+    this.block_.getSvgRoot().appendChild(this.iconGroup_);
     browserEvents.conditionalBind(
-        this.iconGroup_ as AnyDuringMigration, 'mouseup', this,
-        this.iconClick_);
+        this.iconGroup_, 'mouseup', this, this.iconClick_);
     this.updateEditable();
   }
 
   /** Dispose of this icon. */
   dispose() {
-    // Dispose of and unlink the icon.
-    dom.removeNode(this.iconGroup_);
-    this.iconGroup_ = null;
-    // Dispose of and unlink the bubble.
-    this.setVisible(false);
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'BlockSvg'.
-    this.block_ = null as AnyDuringMigration;
+    dom.removeNode(this.iconGroup_);  // Dispose of and unlink the icon.
+    this.setVisible(false);           // Dispose of and unlink the bubble.
   }
 
   /** Add or remove the UI indicating if this icon may be clicked or not. */
-  updateEditable() {}
-  // No-op on the base class.
+  updateEditable() {
+    // No-op on the base class.
+  }
 
   /**
    * Is the associated bubble visible?

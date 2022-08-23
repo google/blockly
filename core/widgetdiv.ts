@@ -22,12 +22,10 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 
 /** The object currently using this container. */
-let owner: AnyDuringMigration = null;
+let owner: unknown = null;
 
 /** Optional cleanup function set by whichever object uses the widget. */
-// AnyDuringMigration because:  Type 'null' is not assignable to type
-// 'Function'.
-let dispose: Function = null as AnyDuringMigration;
+let dispose: (() => void)|null = null;
 
 /** A class name representing the current owner's workspace renderer. */
 let rendererClassName = '';
@@ -85,22 +83,19 @@ export function createDom() {
  * @alias Blockly.WidgetDiv.show
  */
 export function show(
-    newOwner: AnyDuringMigration, rtl: boolean, newDispose: Function) {
+    newOwner: unknown, rtl: boolean, newDispose: () => void) {
   hide();
   owner = newOwner;
   dispose = newDispose;
   const div = containerDiv;
-  div!.style.direction = rtl ? 'rtl' : 'ltr';
-  div!.style.display = 'block';
+  if (!div) return;
+  div.style.direction = rtl ? 'rtl' : 'ltr';
+  div.style.display = 'block';
   const mainWorkspace = common.getMainWorkspace() as WorkspaceSvg;
   rendererClassName = mainWorkspace.getRenderer().getClassName();
   themeClassName = mainWorkspace.getTheme().getClassName();
-  // AnyDuringMigration because:  Argument of type 'HTMLDivElement | null' is
-  // not assignable to parameter of type 'Element'.
-  dom.addClass(div as AnyDuringMigration, rendererClassName);
-  // AnyDuringMigration because:  Argument of type 'HTMLDivElement | null' is
-  // not assignable to parameter of type 'Element'.
-  dom.addClass(div as AnyDuringMigration, themeClassName);
+  dom.addClass(div, rendererClassName);
+  dom.addClass(div, themeClassName);
 }
 
 /**
@@ -115,25 +110,20 @@ export function hide() {
   owner = null;
 
   const div = containerDiv;
-  div!.style.display = 'none';
-  div!.style.left = '';
-  div!.style.top = '';
+  if (!div) return;
+  div.style.display = 'none';
+  div.style.left = '';
+  div.style.top = '';
   dispose && dispose();
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'Function'.
-  dispose = null as AnyDuringMigration;
-  div!.textContent = '';
+  dispose = null;
+  div.textContent = '';
 
   if (rendererClassName) {
-    // AnyDuringMigration because:  Argument of type 'HTMLDivElement | null' is
-    // not assignable to parameter of type 'Element'.
-    dom.removeClass(div as AnyDuringMigration, rendererClassName);
+    dom.removeClass(div, rendererClassName);
     rendererClassName = '';
   }
   if (themeClassName) {
-    // AnyDuringMigration because:  Argument of type 'HTMLDivElement | null' is
-    // not assignable to parameter of type 'Element'.
-    dom.removeClass(div as AnyDuringMigration, themeClassName);
+    dom.removeClass(div, themeClassName);
     themeClassName = '';
   }
   (common.getMainWorkspace() as WorkspaceSvg).markFocused();
@@ -156,7 +146,7 @@ export function isVisible(): boolean {
  * @param oldOwner The object that was using this container.
  * @alias Blockly.WidgetDiv.hideIfOwner
  */
-export function hideIfOwner(oldOwner: AnyDuringMigration) {
+export function hideIfOwner(oldOwner: unknown) {
   if (owner === oldOwner) {
     hide();
   }

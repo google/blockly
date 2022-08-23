@@ -82,8 +82,7 @@ export function createDom() {
  *     closed.
  * @alias Blockly.WidgetDiv.show
  */
-export function show(
-    newOwner: unknown, rtl: boolean, newDispose: () => void) {
+export function show(newOwner: unknown, rtl: boolean, newDispose: () => void) {
   hide();
   owner = newOwner;
   dispose = newDispose;

@@ -101,8 +101,7 @@ export class Warning extends Icon {
   private createBubble_() {
     this.paragraphElement_ = Bubble.textToDom(this.getText());
     this.bubble_ = Bubble.createNonEditableBubble(
-        this.paragraphElement_, this.block_,
-        this.iconXY_ as Coordinate);
+        this.paragraphElement_, this.block_, this.iconXY_ as Coordinate);
     this.applyColour();
   }
 

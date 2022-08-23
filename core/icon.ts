@@ -71,15 +71,14 @@ export abstract class Icon {
 
     this.block_.getSvgRoot().appendChild(this.iconGroup_);
     browserEvents.conditionalBind(
-        this.iconGroup_, 'mouseup', this,
-        this.iconClick_);
+        this.iconGroup_, 'mouseup', this, this.iconClick_);
     this.updateEditable();
   }
 
   /** Dispose of this icon. */
   dispose() {
     dom.removeNode(this.iconGroup_);  // Dispose of and unlink the icon.
-    this.setVisible(false);  // Dispose of and unlink the bubble.
+    this.setVisible(false);           // Dispose of and unlink the bubble.
   }
 
   /** Add or remove the UI indicating if this icon may be clicked or not. */

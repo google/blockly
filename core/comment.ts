@@ -76,7 +76,6 @@ export class Comment extends Icon {
 
   /** The top-level node of the comment text, or null if not created. */
   private paragraphElement_: SVGTextElement|null = null;
-  override bubble_: AnyDuringMigration;
 
   /** @param block The block associated with this comment. */
   constructor(block: BlockSvg) {
@@ -187,9 +186,7 @@ export class Comment extends Icon {
 
     setTimeout(textarea.focus.bind(textarea), 0);
 
-    // AnyDuringMigration because:  Type 'SVGForeignObjectElement | null' is not
-    // assignable to type 'SVGElement'.
-    return this.foreignObject_ as AnyDuringMigration;
+    return this.foreignObject_;
   }
 
   /** Add or remove editability of the comment. */
@@ -207,7 +204,7 @@ export class Comment extends Icon {
    * Resize the text area accordingly.
    */
   private onBubbleResize_() {
-    if (!this.isVisible()) {
+    if (!this.isVisible() || !this.bubble_) {
       return;
     }
     this.model_.size = this.bubble_.getBubbleSize();
@@ -223,14 +220,8 @@ export class Comment extends Icon {
     const doubleBorderWidth = 2 * Bubble.BORDER_WIDTH;
     const widthMinusBorder = size.width - doubleBorderWidth;
     const heightMinusBorder = size.height - doubleBorderWidth;
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
-    this.foreignObject_!.setAttribute(
-        'width', widthMinusBorder as AnyDuringMigration);
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
-    this.foreignObject_!.setAttribute(
-        'height', heightMinusBorder as AnyDuringMigration);
+    this.foreignObject_!.setAttribute('width', String(widthMinusBorder));
+    this.foreignObject_!.setAttribute('height', String(heightMinusBorder));
     this.textarea_!.style.width = widthMinusBorder - 4 + 'px';
     this.textarea_!.style.height = heightMinusBorder - 4 + 'px';
   }
@@ -307,7 +298,7 @@ export class Comment extends Icon {
       browserEvents.unbind(this.onInputWrapper_);
       this.onInputWrapper_ = null;
     }
-    this.bubble_.dispose();
+    this.bubble_?.dispose();
     this.bubble_ = null;
     this.textarea_ = null;
     this.foreignObject_ = null;
@@ -322,7 +313,7 @@ export class Comment extends Icon {
    * @param _e Mouse up event.
    */
   private startEdit_(_e: Event) {
-    if (this.bubble_.promote()) {
+    if (this.bubble_?.promote()) {
       // Since the act of moving this node within the DOM causes a loss of
       // focus, we need to reapply the focus.
       this.textarea_!.focus();

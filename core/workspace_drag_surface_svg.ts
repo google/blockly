@@ -37,17 +37,13 @@ export class WorkspaceDragSurfaceSvg {
   /**
    * The SVG drag surface. Set once by WorkspaceDragSurfaceSvg.createDom.
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'SVGElement'.
-  private SVG_: SVGElement = null as AnyDuringMigration;
+  private SVG!: SVGElement;
 
   /**
    * The element to insert the block canvas and bubble canvas after when it
    * goes back in the DOM at the end of a drag.
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'Element'.
-  private previousSibling_: Element = null as AnyDuringMigration;
+  private previousSibling: Element|null = null;
 
   /** @param container Containing element. */
   constructor(private readonly container: Element) {
@@ -56,7 +52,7 @@ export class WorkspaceDragSurfaceSvg {
 
   /** Create the drag surface and inject it into the container. */
   createDom() {
-    if (this.SVG_) {
+    if (this.SVG) {
       return;  // Already created.
     }
     /**
@@ -67,14 +63,14 @@ export class WorkspaceDragSurfaceSvg {
      *   <g class="blocklyBubbleCanvas">/g>
      * </svg>
      */
-    this.SVG_ = dom.createSvgElement(Svg.SVG, {
+    this.SVG = dom.createSvgElement(Svg.SVG, {
       'xmlns': dom.SVG_NS,
       'xmlns:html': dom.HTML_NS,
       'xmlns:xlink': dom.XLINK_NS,
       'version': '1.1',
       'class': 'blocklyWsDragSurface blocklyOverflowVisible',
     });
-    this.container.appendChild(this.SVG_);
+    this.container.appendChild(this.SVG);
   }
 
   /**
@@ -91,9 +87,9 @@ export class WorkspaceDragSurfaceSvg {
     const fixedX = Math.round(x);
     const fixedY = Math.round(y);
 
-    this.SVG_.style.display = 'block';
+    this.SVG.style.display = 'block';
     dom.setCssTransform(
-        this.SVG_, 'translate3d(' + fixedX + 'px, ' + fixedY + 'px, 0)');
+        this.SVG, 'translate3d(' + fixedX + 'px, ' + fixedY + 'px, 0)');
   }
 
   /**
@@ -103,7 +99,7 @@ export class WorkspaceDragSurfaceSvg {
    * @internal
    */
   getSurfaceTranslation(): Coordinate {
-    return svgMath.getRelativeXY((this.SVG_));
+    return svgMath.getRelativeXY((this.SVG));
   }
 
   /**
@@ -117,8 +113,8 @@ export class WorkspaceDragSurfaceSvg {
       throw Error(
           'Couldn\'t clear and hide the drag surface: missing new surface.');
     }
-    const blockCanvas = this.SVG_.childNodes[0] as Element;
-    const bubbleCanvas = this.SVG_.childNodes[1] as Element;
+    const blockCanvas = this.SVG.childNodes[0] as Element;
+    const bubbleCanvas = this.SVG.childNodes[1] as Element;
     if (!blockCanvas || !bubbleCanvas ||
         !dom.hasClass(blockCanvas, 'blocklyBlockCanvas') ||
         !dom.hasClass(bubbleCanvas, 'blocklyBubbleCanvas')) {
@@ -128,8 +124,8 @@ export class WorkspaceDragSurfaceSvg {
 
     // If there is a previous sibling, put the blockCanvas back right
     // afterwards, otherwise insert it as the first child node in newSurface.
-    if (this.previousSibling_ !== null) {
-      dom.insertAfter(blockCanvas, this.previousSibling_);
+    if (this.previousSibling !== null) {
+      dom.insertAfter(blockCanvas, this.previousSibling);
     } else {
       newSurface.insertBefore(blockCanvas, newSurface.firstChild);
     }
@@ -137,14 +133,12 @@ export class WorkspaceDragSurfaceSvg {
     // Reattach the bubble canvas after the blockCanvas.
     dom.insertAfter(bubbleCanvas, blockCanvas);
     // Hide the drag surface.
-    this.SVG_.style.display = 'none';
-    if (this.SVG_.childNodes.length) {
+    this.SVG.style.display = 'none';
+    if (this.SVG.childNodes.length) {
       throw Error('Drag surface was not cleared.');
     }
-    dom.setCssTransform(this.SVG_, '');
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'Element'.
-    this.previousSibling_ = null as AnyDuringMigration;
+    dom.setCssTransform(this.SVG, '');
+    this.previousSibling = null;
   }
 
   /**
@@ -165,23 +159,19 @@ export class WorkspaceDragSurfaceSvg {
   setContentsAndShow(
       blockCanvas: SVGElement, bubbleCanvas: SVGElement,
       previousSibling: Element, width: number, height: number, scale: number) {
-    if (this.SVG_.childNodes.length) {
+    if (this.SVG.childNodes.length) {
       throw Error('Already dragging a block.');
     }
-    this.previousSibling_ = previousSibling;
+    this.previousSibling = previousSibling;
     // Make sure the blocks and bubble canvas are scaled appropriately.
     blockCanvas.setAttribute(
         'transform', 'translate(0, 0) scale(' + scale + ')');
     bubbleCanvas.setAttribute(
         'transform', 'translate(0, 0) scale(' + scale + ')');
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
-    this.SVG_.setAttribute('width', width as AnyDuringMigration);
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
-    this.SVG_.setAttribute('height', height as AnyDuringMigration);
-    this.SVG_.appendChild(blockCanvas);
-    this.SVG_.appendChild(bubbleCanvas);
-    this.SVG_.style.display = 'block';
+    this.SVG.setAttribute('width', String(width));
+    this.SVG.setAttribute('height', String(height));
+    this.SVG.appendChild(blockCanvas);
+    this.SVG.appendChild(bubbleCanvas);
+    this.SVG.style.display = 'block';
   }
 }

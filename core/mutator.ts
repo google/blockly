@@ -44,7 +44,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  * @alias Blockly.Mutator
  */
 export class Mutator extends Icon {
-  quarkNames_: AnyDuringMigration;
+  private quarkNames_: string[];
 
   /** Workspace in the mutator's bubble. */
   private workspace_: WorkspaceSvg|null = null;
@@ -209,9 +209,7 @@ export class Mutator extends Icon {
     }
     this.svgDialog_!.appendChild(background);
 
-    // AnyDuringMigration because:  Type 'SVGSVGElement | null' is not
-    // assignable to type 'SVGElement'.
-    return this.svgDialog_ as AnyDuringMigration;
+    return this.svgDialog_;
   }
 
   /**
@@ -270,14 +268,8 @@ export class Mutator extends Icon {
       // Resize the bubble.
       this.bubble_!.setBubbleSize(
           width + doubleBorderWidth, height + doubleBorderWidth);
-      // AnyDuringMigration because:  Argument of type 'number' is not
-      // assignable to parameter of type 'string'.
-      this.svgDialog_!.setAttribute(
-          'width', this.workspaceWidth_ as AnyDuringMigration);
-      // AnyDuringMigration because:  Argument of type 'number' is not
-      // assignable to parameter of type 'string'.
-      this.svgDialog_!.setAttribute(
-          'height', this.workspaceHeight_ as AnyDuringMigration);
+      this.svgDialog_!.setAttribute('width', `${this.workspaceWidth_}`);
+      this.svgDialog_!.setAttribute('height', `${this.workspaceHeight_}`);
       this.workspace_!.setCachedParentSvgSize(
           this.workspaceWidth_, this.workspaceHeight_);
     }

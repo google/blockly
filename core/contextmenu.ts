@@ -318,10 +318,9 @@ export function commentDuplicateOption(comment: WorkspaceCommentSvg):
  */
 export function workspaceCommentOption(
     ws: WorkspaceSvg, e: Event): ContextMenuOption {
-  // Helper function to create and position a comment correctly based on the
-  // location of the mouse event.
   /**
-   *
+   * Helper function to create and position a comment correctly based on the
+   * location of the mouse event.
    */
   function addWsComment() {
     const comment = new WorkspaceCommentSvg(

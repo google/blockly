@@ -32,14 +32,13 @@ import {Svg} from './utils/svg.js';
  * @alias Blockly.Warning
  */
 export class Warning extends Icon {
-  text_: AnyDuringMigration;
+  private text_: {[key: string]: string};
 
   /** The top-level node of the warning text, or null if not created. */
   private paragraphElement_: SVGTextElement|null = null;
 
   /** Does this icon get hidden when the block is collapsed? */
   override collapseHidden = false;
-  override bubble_: AnyDuringMigration;
 
   /** @param block The block associated with this warning. */
   constructor(block: BlockSvg) {
@@ -89,10 +88,8 @@ export class Warning extends Icon {
     if (visible === this.isVisible()) {
       return;
     }
-    // AnyDuringMigration because:  Property 'block_' does not exist on type
-    // 'Warning'.
     eventUtils.fire(new (eventUtils.get(eventUtils.BUBBLE_OPEN))!
-                    ((this as AnyDuringMigration).block_, visible, 'warning'));
+                    (this.block_, visible, 'warning'));
     if (visible) {
       this.createBubble_();
     } else {
@@ -103,18 +100,18 @@ export class Warning extends Icon {
   /** Show the bubble. */
   private createBubble_() {
     this.paragraphElement_ = Bubble.textToDom(this.getText());
-    // AnyDuringMigration because:  Property 'block_' does not exist on type
-    // 'Warning'.
     this.bubble_ = Bubble.createNonEditableBubble(
-        this.paragraphElement_, (this as AnyDuringMigration).block_ as BlockSvg,
+        this.paragraphElement_, this.block_,
         this.iconXY_ as Coordinate);
     this.applyColour();
   }
 
   /** Dispose of the bubble and references to it. */
   private disposeBubble_() {
-    this.bubble_.dispose();
-    this.bubble_ = null;
+    if (this.bubble_) {
+      this.bubble_.dispose();
+      this.bubble_ = null;
+    }
     this.paragraphElement_ = null;
   }
 
@@ -153,9 +150,7 @@ export class Warning extends Icon {
 
   /** Dispose of this warning. */
   override dispose() {
-    // AnyDuringMigration because:  Property 'block_' does not exist on type
-    // 'Warning'.
-    (this as AnyDuringMigration).block_.warning = null;
+    this.block_.warning = null;
     super.dispose();
   }
 }

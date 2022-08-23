@@ -81,6 +81,7 @@ export type BaseShape = {
   type: number; width: number; height: number;
 };
 
+/** An object containing sizing and type information about a dynamic shape. */
 export type DynamicShape = {
   type: number; width: (p1: number) => number; height: (p1: number) => number;
   isDynamic: true;
@@ -94,20 +95,6 @@ export type DynamicShape = {
 
 /** An object containing sizing and type information about a shape. */
 export type Shape = BaseShape|DynamicShape;
-
-/** An object containing sizing and type information about a dynamic shape. */
-// export interface DynamicShape {
-//   type: number;
-//   width: (p1: number) => number;
-//   height: (p1: number) => number;
-//   isDynamic: boolean;
-//   connectionOffsetY: (p1: number) => number;
-//   connectionOffsetX: (p1: number) => number;
-//   pathDown: (p1: number) => string;
-//   pathUp: (p1: number) => string;
-//   pathRightDown: (p1: number) => string;
-//   pathRightUp: (p1: number) => string;
-// }
 
 /**
  * An object that provides constants for rendering blocks.

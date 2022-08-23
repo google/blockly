@@ -15,15 +15,14 @@
  */
 goog.module('Blockly.MassOperations.Handler');
 
-const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 const {ShortcutRegistry} = goog.require('Blockly.ShortcutRegistry');
 const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
 const {Msg} = goog.require('Blockly.Msg');
+const {config} = goog.require('Blockly.config');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 const {ContextMenuRegistry} = goog.require('Blockly.ContextMenuRegistry');
 const ContextMenu = goog.require('Blockly.ContextMenu');
 const clipboard = goog.require('Blockly.clipboard');
-const internalConstants = goog.require('Blockly.internalConstants');
 const registry = goog.require('Blockly.registry');
 const browserEvents = goog.require('Blockly.browserEvents');
 const eventUtils = goog.require('Blockly.Events.utils');
@@ -198,7 +197,7 @@ MassOperationsHandler.prototype.handleMove_ = function(e) {
 
   if (!this.hasExceededDragRadius_) {
     const currentDragDelta = Coordinate.magnitude(this.currentDragDeltaXY_);
-    const limitRadius = internalConstants.DRAG_RADIUS;
+    const limitRadius = config.dragRadius;
     this.hasExceededDragRadius_ = currentDragDelta > limitRadius;
   }
 

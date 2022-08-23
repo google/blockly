@@ -13,8 +13,7 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.dialog');
 
 
-let alertImplementation = function(
-    message: AnyDuringMigration, opt_callback: AnyDuringMigration) {
+let alertImplementation = function(message: string, opt_callback?: () => void) {
   window.alert(message);
   if (opt_callback) {
     opt_callback();
@@ -22,13 +21,13 @@ let alertImplementation = function(
 };
 
 let confirmImplementation = function(
-    message: AnyDuringMigration, callback: AnyDuringMigration) {
+    message: string, callback: (result: boolean) => void) {
   callback(window.confirm(message));
 };
 
 let promptImplementation = function(
-    message: AnyDuringMigration, defaultValue: AnyDuringMigration,
-    callback: AnyDuringMigration) {
+    message: string, defaultValue: string,
+    callback: (result: string|null) => void) {
   callback(window.prompt(message, defaultValue));
 };
 
@@ -40,8 +39,7 @@ let promptImplementation = function(
  * @param opt_callback The callback when the alert is dismissed.
  * @alias Blockly.dialog.alert
  */
-export function alert(
-    message: string, opt_callback?: () => AnyDuringMigration) {
+export function alert(message: string, opt_callback?: () => void) {
   alertImplementation(message, opt_callback);
 }
 
@@ -52,9 +50,7 @@ export function alert(
  * @see Blockly.dialog.alert
  * @alias Blockly.dialog.setAlert
  */
-export function setAlert(
-    alertFunction: (p1: string, p2?: () => AnyDuringMigration) =>
-        AnyDuringMigration) {
+export function setAlert(alertFunction: (p1: string, p2?: () => void) => void) {
   alertImplementation = alertFunction;
 }
 
@@ -66,16 +62,14 @@ export function setAlert(
  * @param callback The callback for handling user response.
  * @alias Blockly.dialog.confirm
  */
-export function confirm(
-    message: string, callback: (p1: boolean) => AnyDuringMigration) {
+export function confirm(message: string, callback: (p1: boolean) => void) {
   TEST_ONLY.confirmInternal(message, callback);
 }
 
 /**
  * Private version of confirm for stubbing in tests.
  */
-function confirmInternal(
-    message: string, callback: (p1: boolean) => AnyDuringMigration) {
+function confirmInternal(message: string, callback: (p1: boolean) => void) {
   confirmImplementation(message, callback);
 }
 
@@ -88,8 +82,7 @@ function confirmInternal(
  * @alias Blockly.dialog.setConfirm
  */
 export function setConfirm(
-    confirmFunction: (p1: string, p2: (p1: boolean) => AnyDuringMigration) =>
-        AnyDuringMigration) {
+    confirmFunction: (p1: string, p2: (p1: boolean) => void) => void) {
   confirmImplementation = confirmFunction;
 }
 
@@ -106,7 +99,7 @@ export function setConfirm(
  */
 export function prompt(
     message: string, defaultValue: string,
-    callback: (p1: string|null) => AnyDuringMigration) {
+    callback: (p1: string|null) => void) {
   promptImplementation(message, defaultValue, callback);
 }
 
@@ -118,9 +111,8 @@ export function prompt(
  * @alias Blockly.dialog.setPrompt
  */
 export function setPrompt(
-    promptFunction:
-        (p1: string, p2: string, p3: (p1: string|null) => AnyDuringMigration) =>
-            AnyDuringMigration) {
+    promptFunction: (p1: string, p2: string, p3: (p1: string|null) => void) =>
+        void) {
   promptImplementation = promptFunction;
 }
 

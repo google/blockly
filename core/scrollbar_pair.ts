@@ -26,9 +26,9 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  * @alias Blockly.ScrollbarPair
  */
 export class ScrollbarPair {
-  hScroll: AnyDuringMigration;
-  vScroll: AnyDuringMigration;
-  corner_: AnyDuringMigration;
+  hScroll: Scrollbar|null = null;
+  vScroll: Scrollbar|null = null;
+  corner_: SVGRectElement|null = null;
 
   /** Previously recorded metrics from the workspace. */
   private oldHostMetrics_: Metrics|null = null;
@@ -76,9 +76,6 @@ export class ScrollbarPair {
   dispose() {
     dom.removeNode(this.corner_);
     this.corner_ = null;
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'WorkspaceSvg'.
-    this.workspace = null as AnyDuringMigration;
     this.oldHostMetrics_ = null;
     if (this.hScroll) {
       this.hScroll.dispose();
@@ -149,12 +146,12 @@ export class ScrollbarPair {
       if (!this.oldHostMetrics_ ||
           this.oldHostMetrics_.viewWidth !== hostMetrics.viewWidth ||
           this.oldHostMetrics_.absoluteLeft !== hostMetrics.absoluteLeft) {
-        this.corner_.setAttribute('x', this.vScroll.position.x);
+        this.corner_?.setAttribute('x', String(this.vScroll.position.x));
       }
       if (!this.oldHostMetrics_ ||
           this.oldHostMetrics_.viewHeight !== hostMetrics.viewHeight ||
           this.oldHostMetrics_.absoluteTop !== hostMetrics.absoluteTop) {
-        this.corner_.setAttribute('y', this.hScroll.position.y);
+        this.corner_?.setAttribute('y', String(this.hScroll.position.y));
       }
     }
 
@@ -224,20 +221,14 @@ export class ScrollbarPair {
 
     if (updateMetrics || updateMetrics === undefined) {
       // Update metrics.
-      const xyRatio = {};
+      const xyRatio: {x?: number, y?: number} = {};
       if (this.hScroll) {
-        // AnyDuringMigration because:  Property 'x' does not exist on type
-        // '{}'.
-        (xyRatio as AnyDuringMigration).x = this.hScroll.getRatio_();
+        xyRatio.x = this.hScroll.getRatio_();
       }
       if (this.vScroll) {
-        // AnyDuringMigration because:  Property 'y' does not exist on type
-        // '{}'.
-        (xyRatio as AnyDuringMigration).y = this.vScroll.getRatio_();
+        xyRatio.y = this.vScroll.getRatio_();
       }
-      // AnyDuringMigration because:  Argument of type '{}' is not assignable to
-      // parameter of type '{ x: number; y: number; }'.
-      this.workspace.setMetrics(xyRatio as AnyDuringMigration);
+      this.workspace.setMetrics(xyRatio);
     }
   }
 

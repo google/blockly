@@ -208,7 +208,10 @@ export class Comment extends Icon {
    * Resize the text area accordingly.
    */
   private onBubbleResize_() {
-    if (!this.bubble_) return;
+    if (!this.isVisible() || !this.bubble_) {
+      return;
+    }
+
     this.model_.size = this.bubble_.getBubbleSize();
     this.resizeTextarea_();
   }

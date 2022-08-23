@@ -39,12 +39,6 @@ export class VerticalFlyout extends Flyout {
   /** The name of the vertical flyout in the registry. */
   static registryName = 'verticalFlyout';
 
-  // Record the height for workspace metrics.
-  override height_: AnyDuringMigration;
-
-  // Record the width for workspace metrics and .position.
-  override width_: AnyDuringMigration;
-
   /** @param workspaceOptions Dictionary of options for the workspace. */
   constructor(workspaceOptions: Options) {
     super(workspaceOptions);
@@ -247,15 +241,11 @@ export class VerticalFlyout extends Flyout {
             block!.outputConnection ? cursorX - this.tabWidth_ : cursorX;
         block!.moveBy(moveX, cursorY);
 
-        // AnyDuringMigration because:  Argument of type 'BlockSvg | undefined'
-        // is not assignable to parameter of type 'BlockSvg'.
         const rect = this.createRect_(
-            block as AnyDuringMigration,
-            this.RTL ? moveX - blockHW.width : moveX, cursorY, blockHW, i);
+            block!, this.RTL ? moveX - blockHW.width : moveX, cursorY, blockHW,
+            i);
 
-        // AnyDuringMigration because:  Argument of type 'BlockSvg | undefined'
-        // is not assignable to parameter of type 'BlockSvg'.
-        this.addBlockListeners_(root, block as AnyDuringMigration, rect);
+        this.addBlockListeners_(root, block!, rect);
 
         cursorY += blockHW.height + gaps[i];
       } else if (item.type === 'button') {
@@ -355,10 +345,7 @@ export class VerticalFlyout extends Flyout {
           block.moveBy(newX - oldX, 0);
         }
         if (this.rectMap_.has(block)) {
-          // AnyDuringMigration because:  Argument of type 'SVGElement |
-          // undefined' is not assignable to parameter of type 'SVGElement'.
-          this.moveRectToBlock_(
-              this.rectMap_.get(block) as AnyDuringMigration, block);
+          this.moveRectToBlock_(this.rectMap_.get(block)!, block);
         }
       }
       if (this.RTL) {

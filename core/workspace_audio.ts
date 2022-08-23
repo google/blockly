@@ -36,8 +36,7 @@ export class WorkspaceAudio {
   private sounds = new Map<string, HTMLAudioElement>();
 
   /** Time that the last sound was played. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type 'Date'.
-  private lastSound_: Date = null as AnyDuringMigration;
+  private lastSound_: Date|null = null;
 
   /**
    * @param parentWorkspace The parent of the workspace this audio object
@@ -50,9 +49,6 @@ export class WorkspaceAudio {
    * @internal
    */
   dispose() {
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'WorkspaceSvg'.
-    this.parentWorkspace = null as AnyDuringMigration;
     this.sounds.clear();
   }
 

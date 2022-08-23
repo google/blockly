@@ -1,4 +1,4 @@
-/** @fileoverview Re-exports of Blockly.zelos.* modules. */
+/** @file Re-exports of Blockly.zelos.* modules. */
 
 /**
  * @license
@@ -8,6 +8,7 @@
 
 /**
  * Re-exports of Blockly.zelos.* modules.
+ *
  * @namespace Blockly.zelos
  */
 import * as goog from '../../../closure/goog/goog.js';

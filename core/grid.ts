@@ -5,13 +5,9 @@
  */
 
 /**
- * @fileoverview Object for configuring and updating a workspace grid in
- * Blockly.
- */
-
-/**
  * Object for configuring and updating a workspace grid in
  * Blockly.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -24,6 +20,7 @@ import {GridOptions} from './blockly_options.js';
 
 /**
  * Class for a workspace's grid.
+ *
  * @alias Blockly.Grid
  */
 export class Grid {
@@ -63,7 +60,8 @@ export class Grid {
 
   /**
    * Whether blocks should snap to the grid, based on the initial configuration.
-   * @return True if blocks should snap, false otherwise.
+   *
+   * @returns True if blocks should snap, false otherwise.
    * @internal
    */
   shouldSnap(): boolean {
@@ -72,7 +70,8 @@ export class Grid {
 
   /**
    * Get the spacing of the grid points (in px).
-   * @return The spacing of the grid points.
+   *
+   * @returns The spacing of the grid points.
    * @internal
    */
   getSpacing(): number {
@@ -82,7 +81,8 @@ export class Grid {
   /**
    * Get the ID of the pattern element, which should be randomized to avoid
    * conflicts with other Blockly instances on the page.
-   * @return The pattern ID.
+   *
+   * @returns The pattern ID.
    * @internal
    */
   getPatternId(): string {
@@ -91,6 +91,7 @@ export class Grid {
 
   /**
    * Update the grid with a new scale.
+   *
    * @param scale The new workspace scale.
    * @internal
    */
@@ -117,6 +118,7 @@ export class Grid {
   /**
    * Set the attributes on one of the lines in the grid.  Use this to update the
    * length and stroke width of the grid lines.
+   *
    * @param line Which line to update.
    * @param width The new stroke size (in px).
    * @param x1 The new x start position of the line (in px).
@@ -139,6 +141,7 @@ export class Grid {
   /**
    * Move the grid to a new x and y position, and make sure that change is
    * visible.
+   *
    * @param x The new x position of the grid (in px).
    * @param y The new y position of the grid (in px).
    * @internal
@@ -150,10 +153,11 @@ export class Grid {
 
   /**
    * Create the DOM for the grid described by options.
+   *
    * @param rnd A random ID to append to the pattern's ID.
    * @param gridOptions The object containing grid configuration.
    * @param defs The root SVG element for this workspace's defs.
-   * @return The SVG element for the grid pattern.
+   * @returns The SVG element for the grid pattern.
    * @internal
    */
   static createDom(rnd: string, gridOptions: GridOptions, defs: SVGElement):

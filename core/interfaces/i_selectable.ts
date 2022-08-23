@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview The interface for an object that is selectable.
- */
-
-/**
  * The interface for an object that is selectable.
+ *
  * @namespace Blockly.ISelectable
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -21,6 +18,7 @@ import type {IMovable} from './i_movable.js';
 
 /**
  * The interface for an object that is selectable.
+ *
  * @alias Blockly.ISelectable
  */
 export interface ISelectable extends IDeletable, IMovable {

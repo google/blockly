@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Class for a block creation event.
- */
-
-/**
  * Class for a block creation event.
+ *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -26,6 +23,7 @@ import * as eventUtils from './utils.js';
 
 /**
  * Class for a block creation event.
+ *
  * @alias Blockly.Events.BlockCreate
  */
 export class BlockCreate extends BlockBase {
@@ -61,7 +59,8 @@ export class BlockCreate extends BlockBase {
 
   /**
    * Encode the event as JSON.
-   * @return JSON representation.
+   *
+   * @returns JSON representation.
    */
   override toJson(): AnyDuringMigration {
     const json = super.toJson();
@@ -76,6 +75,7 @@ export class BlockCreate extends BlockBase {
 
   /**
    * Decode the JSON event.
+   *
    * @param json JSON representation.
    */
   override fromJson(json: AnyDuringMigration) {
@@ -90,6 +90,7 @@ export class BlockCreate extends BlockBase {
 
   /**
    * Run a creation event.
+   *
    * @param forward True if run forward, false if run backward (undo).
    */
   override run(forward: boolean) {

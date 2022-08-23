@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview An enum for the possible types of connections.
- */
-
-/**
  * An enum for the possible types of connections.
+ *
  * @namespace Blockly.ConnectionType
  */
 import * as goog from '../closure/goog/goog.js';
@@ -18,6 +15,7 @@ goog.declareModuleId('Blockly.ConnectionType');
 
 /**
  * Enum for the type of a connection or input.
+ *
  * @alias Blockly.ConnectionType
  */
 export enum ConnectionType {

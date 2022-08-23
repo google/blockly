@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview XML reader and writer.
- */
-
-/**
  * XML reader and writer.
+ *
  * @namespace Blockly.Xml
  */
 import * as goog from '../closure/goog/goog.js';
@@ -43,9 +40,10 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Encode a block tree as XML.
+ *
  * @param workspace The workspace containing blocks.
  * @param opt_noId True if the encoder should skip the block IDs.
- * @return XML DOM element.
+ * @returns XML DOM element.
  * @alias Blockly.Xml.workspaceToDom
  */
 export function workspaceToDom(
@@ -71,8 +69,9 @@ export function workspaceToDom(
 
 /**
  * Encode a list of variables as XML.
+ *
  * @param variableList List of all variable models.
- * @return Tree of XML elements.
+ * @returns Tree of XML elements.
  * @alias Blockly.Xml.variablesToDom
  */
 export function variablesToDom(variableList: VariableModel[]): Element {
@@ -92,9 +91,10 @@ export function variablesToDom(variableList: VariableModel[]): Element {
 
 /**
  * Encode a block subtree as XML with XY coordinates.
+ *
  * @param block The root block to encode.
  * @param opt_noId True if the encoder should skip the block ID.
- * @return Tree of XML elements or an empty document fragment if the block was
+ * @returns Tree of XML elements or an empty document fragment if the block was
  *     an insertion marker.
  * @alias Blockly.Xml.blockToDomWithXY
  */
@@ -127,8 +127,9 @@ export function blockToDomWithXY(block: Block, opt_noId?: boolean): Element|
 
 /**
  * Encode a field as XML.
+ *
  * @param field The field to encode.
- * @return XML element, or null if the field did not need to be serialized.
+ * @returns XML element, or null if the field did not need to be serialized.
  */
 function fieldToDom(field: Field): Element|null {
   if (field.isSerializable()) {
@@ -142,6 +143,7 @@ function fieldToDom(field: Field): Element|null {
 /**
  * Encode all of a block's fields as XML and attach them to the given tree of
  * XML elements.
+ *
  * @param block A block with fields to be encoded.
  * @param element The XML element to which the field DOM should be attached.
  */
@@ -160,9 +162,10 @@ function allFieldsToDom(block: Block, element: Element) {
 
 /**
  * Encode a block subtree as XML.
+ *
  * @param block The root block to encode.
  * @param opt_noId True if the encoder should skip the block ID.
- * @return Tree of XML elements or an empty document fragment if the block was
+ * @returns Tree of XML elements or an empty document fragment if the block was
  *     an insertion marker.
  * @alias Blockly.Xml.blockToDom
  */
@@ -293,9 +296,10 @@ export function blockToDom(block: Block, opt_noId?: boolean): Element|
 
 /**
  * Deeply clone the shadow's DOM so that changes don't back-wash to the block.
+ *
  * @param shadow A tree of XML elements.
  * @param opt_noId True if the encoder should skip the block ID.
- * @return A tree of XML elements.
+ * @returns A tree of XML elements.
  */
 function cloneShadow(shadow: Element, opt_noId?: boolean): Element {
   shadow = shadow.cloneNode(true) as Element;
@@ -339,8 +343,9 @@ function cloneShadow(shadow: Element, opt_noId?: boolean): Element {
  * Converts a DOM structure into plain text.
  * Currently the text format is fairly ugly: all one line with no whitespace,
  * unless the DOM itself has whitespace built-in.
+ *
  * @param dom A tree of XML nodes.
- * @return Text representation.
+ * @returns Text representation.
  * @alias Blockly.Xml.domToText
  */
 export function domToText(dom: Node): string {
@@ -352,8 +357,9 @@ export function domToText(dom: Node): string {
 
 /**
  * Converts a DOM structure into properly indented text.
+ *
  * @param dom A tree of XML elements.
- * @return Text representation.
+ * @returns Text representation.
  * @alias Blockly.Xml.domToPrettyText
  */
 export function domToPrettyText(dom: Node): string {
@@ -384,8 +390,10 @@ export function domToPrettyText(dom: Node): string {
 
 /**
  * Converts an XML string into a DOM structure.
+ *
  * @param text An XML string.
- * @return A DOM object representing the singular child of the document element.
+ * @returns A DOM object representing the singular child of the document
+ *     element.
  * @throws if the text doesn't parse.
  * @alias Blockly.Xml.textToDom
  */
@@ -401,9 +409,10 @@ export function textToDom(text: string): Element {
 /**
  * Clear the given workspace then decode an XML DOM and
  * create blocks on the workspace.
+ *
  * @param xml XML DOM.
  * @param workspace The workspace.
- * @return An array containing new block IDs.
+ * @returns An array containing new block IDs.
  * @alias Blockly.Xml.clearWorkspaceAndLoadFromXml
  */
 export function clearWorkspaceAndLoadFromXml(
@@ -419,9 +428,10 @@ export function clearWorkspaceAndLoadFromXml(
 
 /**
  * Decode an XML DOM and create blocks on the workspace.
+ *
  * @param xml XML DOM.
  * @param workspace The workspace.
- * @return An array containing new block IDs.
+ * @returns An array containing new block IDs.
  * @suppress {strictModuleDepCheck} Suppress module check while workspace
  * comments are not bundled in.
  * @alias Blockly.Xml.domToWorkspace
@@ -510,9 +520,10 @@ export function domToWorkspace(xml: Element, workspace: Workspace): string[] {
 /**
  * Decode an XML DOM and create blocks on the workspace. Position the new
  * blocks immediately below prior blocks, aligned by their starting edge.
+ *
  * @param xml The XML DOM.
  * @param workspace The workspace to add to.
- * @return An array containing new block IDs.
+ * @returns An array containing new block IDs.
  * @alias Blockly.Xml.appendDomToWorkspace
  */
 export function appendDomToWorkspace(
@@ -563,9 +574,10 @@ export function appendDomToWorkspace(
 /**
  * Decode an XML block tag and create a block (and possibly sub blocks) on the
  * workspace.
+ *
  * @param xmlBlock XML block element.
  * @param workspace The workspace.
- * @return The root block created.
+ * @returns The root block created.
  * @alias Blockly.Xml.domToBlock
  */
 export function domToBlock(xmlBlock: Element, workspace: Workspace): Block {
@@ -627,6 +639,7 @@ export function domToBlock(xmlBlock: Element, workspace: Workspace): Block {
 
 /**
  * Decode an XML list of variables and add the variables to the workspace.
+ *
  * @param xmlVariables List of XML variable elements.
  * @param workspace The workspace to which the variable should be added.
  * @alias Blockly.Xml.domToVariables
@@ -657,8 +670,9 @@ interface childNodeTagMap {
 /**
  * Creates a mapping of childNodes for each supported XML tag for the provided
  * xmlBlock. Logs a warning for any encountered unsupported tags.
+ *
  * @param xmlBlock XML block element.
- * @return The childNode map from nodeName to node.
+ * @returns The childNode map from nodeName to node.
  */
 function mapSupportedXmlTags(xmlBlock: Element): childNodeTagMap {
   const childNodeMap = {
@@ -708,9 +722,10 @@ function mapSupportedXmlTags(xmlBlock: Element): childNodeTagMap {
 
 /**
  * Applies mutation tag child nodes to the given block.
+ *
  * @param xmlChildren Child nodes.
  * @param block The block to apply the child nodes on.
- * @return True if mutation may have added some elements that need
+ * @returns True if mutation may have added some elements that need
  *     initialization (requiring initSvg call).
  */
 function applyMutationTagNodes(xmlChildren: Element[], block: Block): boolean {
@@ -731,6 +746,7 @@ function applyMutationTagNodes(xmlChildren: Element[], block: Block): boolean {
 
 /**
  * Applies comment tag child nodes to the given block.
+ *
  * @param xmlChildren Child nodes.
  * @param block The block to apply the child nodes on.
  */
@@ -765,6 +781,7 @@ function applyCommentTagNodes(xmlChildren: Element[], block: Block) {
 
 /**
  * Applies data tag child nodes to the given block.
+ *
  * @param xmlChildren Child nodes.
  * @param block The block to apply the child nodes on.
  */
@@ -777,6 +794,7 @@ function applyDataTagNodes(xmlChildren: Element[], block: Block) {
 
 /**
  * Applies field tag child nodes to the given block.
+ *
  * @param xmlChildren Child nodes.
  * @param block The block to apply the child nodes on.
  */
@@ -792,8 +810,9 @@ function applyFieldTagNodes(xmlChildren: Element[], block: Block) {
 
 /**
  * Finds any enclosed blocks or shadows within this XML node.
+ *
  * @param xmlNode The XML node to extract child block info from.
- * @return Any found child block.
+ * @returns Any found child block.
  */
 function findChildBlocks(xmlNode: Element):
     {childBlockElement: Element|null, childShadowElement: Element|null} {
@@ -818,6 +837,7 @@ function findChildBlocks(xmlNode: Element):
 }
 /**
  * Applies input child nodes (value or statement) to the given block.
+ *
  * @param xmlChildren Child nodes.
  * @param workspace The workspace containing the given block.
  * @param block The block to apply the child nodes on.
@@ -855,6 +875,7 @@ function applyInputTagNodes(
 
 /**
  * Applies next child nodes to the given block.
+ *
  * @param xmlChildren Child nodes.
  * @param workspace The workspace containing the given block.
  * @param block The block to apply the child nodes on.
@@ -887,13 +908,14 @@ function applyNextTagNodes(
 /**
  * Decode an XML block tag and create a block (and possibly sub blocks) on the
  * workspace.
+ *
  * @param xmlBlock XML block element.
  * @param workspace The workspace.
  * @param parentConnection The parent connection to to connect this block to
  *     after instantiating.
  * @param connectedToParentNext Whether the provided parent connection is a next
  *     connection, rather than output or statement.
- * @return The root block created.
+ * @returns The root block created.
  */
 function domToBlockHeadless(
     xmlBlock: Element, workspace: Workspace, parentConnection?: Connection,
@@ -992,6 +1014,7 @@ function domToBlockHeadless(
 
 /**
  * Decode an XML field tag and set the value of that field on the given block.
+ *
  * @param block The block that is currently being deserialized.
  * @param fieldName The name of the field on the block.
  * @param xml The field tag to decode.
@@ -1008,6 +1031,7 @@ function domToField(block: Block, fieldName: string, xml: Element) {
 
 /**
  * Remove any 'next' block (statements in a stack).
+ *
  * @param xmlBlock XML block element or an empty DocumentFragment if the block
  *     was an insertion marker.
  * @alias Blockly.Xml.deleteNext

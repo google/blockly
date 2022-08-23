@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Touch handling for Blockly.
- */
-
-/**
  * Touch handling for Blockly.
+ *
  * @namespace Blockly.Touch
  */
 import * as goog from '../closure/goog/goog.js';
@@ -52,6 +49,7 @@ let touchIdentifier_: string|null = null;
 /**
  * The TOUCH_MAP lookup dictionary specifies additional touch events to fire,
  * in conjunction with mouse events.
+ *
  * @alias Blockly.Touch.TOUCH_MAP
  */
 export const TOUCH_MAP: {[key: string]: string[]} = globalThis['PointerEvent'] ?
@@ -81,6 +79,7 @@ let longPid_: AnyDuringMigration = 0;
  * by Chrome.  This function is fired on any touchstart event, queues a task,
  * which after about a second opens the context menu.  The tasks is killed
  * if the touch event terminates early.
+ *
  * @param e Touch start event.
  * @param gesture The gesture that triggered this longStart.
  * @alias Blockly.Touch.longStart
@@ -119,6 +118,7 @@ export function longStart(e: Event, gesture: Gesture) {
 /**
  * Nope, that's not a long-press.  Either touchend or touchcancel was fired,
  * or a drag hath begun.  Kill the queued long-press task.
+ *
  * @alias Blockly.Touch.longStop
  * @internal
  */
@@ -133,6 +133,7 @@ export function longStop() {
  * Clear the touch identifier that tracks which touch stream to pay attention
  * to.  This ends the current drag/gesture and allows other pointers to be
  * captured.
+ *
  * @alias Blockly.Touch.clearTouchIdentifier
  */
 export function clearTouchIdentifier() {
@@ -143,8 +144,9 @@ export function clearTouchIdentifier() {
  * Decide whether Blockly should handle or ignore this event.
  * Mouse and touch events require special checks because we only want to deal
  * with one touch stream at a time.  All other events should always be handled.
+ *
  * @param e The event to check.
- * @return True if this event should be passed through to the registered
+ * @returns True if this event should be passed through to the registered
  *     handler; false if it should be blocked.
  * @alias Blockly.Touch.shouldHandleEvent
  */
@@ -155,8 +157,9 @@ export function shouldHandleEvent(e: Event|PseudoEvent): boolean {
 /**
  * Get the touch identifier from the given event.  If it was a mouse event, the
  * identifier is the string 'mouse'.
+ *
  * @param e Mouse event or touch event.
- * @return The touch identifier from the first changed touch, if defined.
+ * @returns The touch identifier from the first changed touch, if defined.
  *     Otherwise 'mouse'.
  * @alias Blockly.Touch.getTouchIdentifierFromEvent
  */
@@ -201,8 +204,9 @@ export function getTouchIdentifierFromEvent(e: Event|PseudoEvent): string {
  * If the current identifier was unset, save the identifier from the
  * event.  This starts a drag/gesture, during which touch events with other
  * identifiers will be silently ignored.
+ *
  * @param e Mouse event or touch event.
- * @return Whether the identifier on the event matches the current saved
+ * @returns Whether the identifier on the event matches the current saved
  *     identifier.
  * @alias Blockly.Touch.checkTouchIdentifier
  */
@@ -232,6 +236,7 @@ export function checkTouchIdentifier(e: Event|PseudoEvent): boolean {
 /**
  * Set an event's clientX and clientY from its first changed touch.  Use this to
  * make a touch event work in a mouse event handler.
+ *
  * @param e A touch event.
  * @alias Blockly.Touch.setClientFromTouch
  */
@@ -254,8 +259,9 @@ export function setClientFromTouch(e: Event|PseudoEvent) {
 
 /**
  * Check whether a given event is a mouse, touch, or pointer event.
+ *
  * @param e An event.
- * @return True if it is a mouse, touch, or pointer event; false otherwise.
+ * @returns True if it is a mouse, touch, or pointer event; false otherwise.
  * @alias Blockly.Touch.isMouseOrTouchEvent
  */
 export function isMouseOrTouchEvent(e: Event|PseudoEvent): boolean {
@@ -265,8 +271,9 @@ export function isMouseOrTouchEvent(e: Event|PseudoEvent): boolean {
 
 /**
  * Check whether a given event is a touch event or a pointer event.
+ *
  * @param e An event.
- * @return True if it is a touch or pointer event; false otherwise.
+ * @returns True if it is a touch or pointer event; false otherwise.
  * @alias Blockly.Touch.isTouchEvent
  */
 export function isTouchEvent(e: Event|PseudoEvent): boolean {
@@ -276,8 +283,9 @@ export function isTouchEvent(e: Event|PseudoEvent): boolean {
 /**
  * Split an event into an array of events, one per changed touch or mouse
  * point.
+ *
  * @param e A mouse event or a touch event with one or more changed touches.
- * @return An array of events or pseudo events.
+ * @returns An array of events or pseudo events.
  *     Each pseudo-touch event will have exactly one changed touch and there
  * will be no real touch events.
  * @alias Blockly.Touch.splitEventByTouches

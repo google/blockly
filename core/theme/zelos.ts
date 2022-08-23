@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Zelos theme.
- */
-
-/**
  * Zelos theme.
+ *
  * @namespace Blockly.Themes.Zelos
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -86,6 +83,7 @@ const categoryStyles = {
 
 /**
  * Zelos theme.
+ *
  * @alias Blockly.Themes.Zelos
  */
 export const Zelos = new Theme('zelos', defaultBlockStyles, categoryStyles);

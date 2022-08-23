@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Namespace for themes.
- */
-
-/**
  * Namespace for themes.
+ *
  * @namespace Blockly.Themes
  */
 import * as goog from '../../closure/goog/goog.js';

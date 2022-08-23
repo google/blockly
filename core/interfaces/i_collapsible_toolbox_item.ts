@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview The interface for a collapsible toolbox item.
- */
-
-/**
  * The interface for a collapsible toolbox item.
+ *
  * @namespace Blockly.ICollapsibleToolboxItem
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -26,18 +23,21 @@ import type {IToolboxItem} from './i_toolbox_item.js';
 
 /**
  * Interface for an item in the toolbox that can be collapsed.
+ *
  * @alias Blockly.ICollapsibleToolboxItem
  */
 export interface ICollapsibleToolboxItem extends ISelectableToolboxItem {
   /**
    * Gets any children toolbox items. (ex. Gets the subcategories)
-   * @return The child toolbox items.
+   *
+   * @returns The child toolbox items.
    */
   getChildToolboxItems(): IToolboxItem[];
 
   /**
    * Whether the toolbox item is expanded to show its child subcategories.
-   * @return True if the toolbox item shows its children, false if it is
+   *
+   * @returns True if the toolbox item shows its children, false if it is
    *     collapsed.
    */
   isExpanded(): boolean;

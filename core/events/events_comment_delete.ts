@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Class for comment deletion event.
- */
-
-/**
  * Class for comment deletion event.
+ *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -24,6 +21,7 @@ import * as eventUtils from './utils.js';
 
 /**
  * Class for a comment deletion event.
+ *
  * @alias Blockly.Events.CommentDelete
  */
 export class CommentDelete extends CommentBase {
@@ -49,7 +47,8 @@ export class CommentDelete extends CommentBase {
   // TODO (#1266): "Full" and "minimal" serialization.
   /**
    * Encode the event as JSON.
-   * @return JSON representation.
+   *
+   * @returns JSON representation.
    */
   override toJson(): AnyDuringMigration {
     const json = super.toJson();
@@ -58,6 +57,7 @@ export class CommentDelete extends CommentBase {
 
   /**
    * Decode the JSON event.
+   *
    * @param json JSON representation.
    */
   override fromJson(json: AnyDuringMigration) {
@@ -66,6 +66,7 @@ export class CommentDelete extends CommentBase {
 
   /**
    * Run a creation event.
+   *
    * @param forward True if run forward, false if run backward (undo).
    */
   override run(forward: boolean) {

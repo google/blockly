@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Utility functions for handling procedures.
- */
-
-/**
  * Utility functions for handling procedures.
+ *
  * @namespace Blockly.Procedures
  */
 import * as goog from '../closure/goog/goog.js';
@@ -41,18 +38,21 @@ import * as Xml from './xml.js';
  * procedure blocks.
  * See also Blockly.Variables.CATEGORY_NAME and
  * Blockly.VariablesDynamic.CATEGORY_NAME.
+ *
  * @alias Blockly.Procedures.CATEGORY_NAME
  */
 export const CATEGORY_NAME = 'PROCEDURE';
 
 /**
  * The default argument for a procedures_mutatorarg block.
+ *
  * @alias Blockly.Procedures.DEFAULT_ARG
  */
 export const DEFAULT_ARG = 'x';
 
 /**
  * Procedure block type.
+ *
  * @alias Blockly.Procedures.ProcedureBlock
  */
 export interface ProcedureBlock {
@@ -63,8 +63,9 @@ export interface ProcedureBlock {
 
 /**
  * Find all user-created procedure definitions in a workspace.
+ *
  * @param root Root workspace.
- * @return Pair of arrays, the first contains procedures without return
+ * @returns Pair of arrays, the first contains procedures without return
  *     variables, the second with. Each procedure is defined by a three-element
  *     list of name, parameter list, and return value boolean.
  * @alias Blockly.Procedures.allProcedures
@@ -87,9 +88,10 @@ export function allProcedures(root: Workspace): AnyDuringMigration[][][] {
 /**
  * Comparison function for case-insensitive sorting of the first element of
  * a tuple.
+ *
  * @param ta First tuple.
  * @param tb Second tuple.
- * @return -1, 0, or 1 to signify greater than, equality, or less than.
+ * @returns -1, 0, or 1 to signify greater than, equality, or less than.
  */
 function procTupleComparator(
     ta: AnyDuringMigration[], tb: AnyDuringMigration[]): number {
@@ -100,9 +102,10 @@ function procTupleComparator(
  * Ensure two identically-named procedures don't exist.
  * Take the proposed procedure name, and return a legal name i.e. one that
  * is not empty and doesn't collide with other procedures.
+ *
  * @param name Proposed procedure name.
  * @param block Block to disambiguate.
- * @return Non-colliding name.
+ * @returns Non-colliding name.
  * @alias Blockly.Procedures.findLegalName
  */
 export function findLegalName(name: string, block: Block): string {
@@ -125,11 +128,12 @@ export function findLegalName(name: string, block: Block): string {
 /**
  * Does this procedure have a legal name?  Illegal names include names of
  * procedures already defined.
+ *
  * @param name The questionable name.
  * @param workspace The workspace to scan for collisions.
  * @param opt_exclude Optional block to exclude from comparisons (one doesn't
  *     want to collide with oneself).
- * @return True if the name is legal.
+ * @returns True if the name is legal.
  */
 function isLegalName(
     name: string, workspace: Workspace, opt_exclude?: Block): boolean {
@@ -138,11 +142,12 @@ function isLegalName(
 
 /**
  * Return if the given name is already a procedure name.
+ *
  * @param name The questionable name.
  * @param workspace The workspace to scan for collisions.
  * @param opt_exclude Optional block to exclude from comparisons (one doesn't
  *     want to collide with oneself).
- * @return True if the name is used, otherwise return false.
+ * @returns True if the name is used, otherwise return false.
  * @alias Blockly.Procedures.isNameUsed
  */
 export function isNameUsed(
@@ -167,8 +172,9 @@ export function isNameUsed(
 
 /**
  * Rename a procedure.  Called by the editable field.
+ *
  * @param name The proposed new name.
- * @return The accepted name.
+ * @returns The accepted name.
  * @alias Blockly.Procedures.rename
  */
 export function rename(this: Field, name: string): string {
@@ -193,8 +199,9 @@ export function rename(this: Field, name: string): string {
 
 /**
  * Construct the blocks required by the flyout for the procedure category.
+ *
  * @param workspace The workspace containing procedures.
- * @return Array of XML block elements.
+ * @returns Array of XML block elements.
  * @alias Blockly.Procedures.flyoutCategory
  */
 export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
@@ -249,6 +256,7 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
 
   /**
    * Add items to xmlList for each listed procedure.
+   *
    * @param procedureList A list of procedures, each of which is defined by a
    *     three-element list of name, parameter list, and return value boolean.
    * @param templateName The type of the block to generate.
@@ -291,6 +299,7 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
 /**
  * Updates the procedure mutator's flyout so that the arg block is not a
  * duplicate of another arg.
+ *
  * @param workspace The procedure mutator's workspace. This workspace's flyout
  *     is what is being updated.
  */
@@ -320,6 +329,7 @@ function updateMutatorFlyout(workspace: WorkspaceSvg) {
 /**
  * Listens for when a procedure mutator is opened. Then it triggers a flyout
  * update and adds a mutator change listener to the mutator workspace.
+ *
  * @param e The event that triggered this listener.
  * @alias Blockly.Procedures.mutatorOpenListener
  * @internal
@@ -347,6 +357,7 @@ export function mutatorOpenListener(e: Abstract) {
 /**
  * Listens for changes in a procedure mutator and triggers flyout updates when
  * necessary.
+ *
  * @param e The event that triggered this listener.
  */
 function mutatorChangeListener(e: Abstract) {
@@ -362,9 +373,10 @@ function mutatorChangeListener(e: Abstract) {
 
 /**
  * Find all the callers of a named procedure.
+ *
  * @param name Name of procedure.
  * @param workspace The workspace to find callers in.
- * @return Array of caller blocks.
+ * @returns Array of caller blocks.
  * @alias Blockly.Procedures.getCallers
  */
 export function getCallers(name: string, workspace: Workspace): Block[] {
@@ -388,6 +400,7 @@ export function getCallers(name: string, workspace: Workspace): Block[] {
 /**
  * When a procedure definition changes its parameters, find and edit all its
  * callers.
+ *
  * @param defBlock Procedure definition block.
  * @alias Blockly.Procedures.mutateCallers
  */
@@ -419,9 +432,10 @@ export function mutateCallers(defBlock: Block) {
 
 /**
  * Find the definition block for the named procedure.
+ *
  * @param name Name of procedure.
  * @param workspace The workspace to search.
- * @return The procedure definition block, or null not found.
+ * @returns The procedure definition block, or null not found.
  * @alias Blockly.Procedures.getDefinition
  */
 export function getDefinition(name: string, workspace: Workspace): Block|null {

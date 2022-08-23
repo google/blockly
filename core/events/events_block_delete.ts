@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Class for a block delete event.
- */
-
-/**
  * Class for a block delete event.
+ *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -26,6 +23,7 @@ import * as eventUtils from './utils.js';
 
 /**
  * Class for a block deletion event.
+ *
  * @alias Blockly.Events.BlockDelete
  */
 export class BlockDelete extends BlockBase {
@@ -70,7 +68,8 @@ export class BlockDelete extends BlockBase {
 
   /**
    * Encode the event as JSON.
-   * @return JSON representation.
+   *
+   * @returns JSON representation.
    */
   override toJson(): AnyDuringMigration {
     const json = super.toJson();
@@ -86,6 +85,7 @@ export class BlockDelete extends BlockBase {
 
   /**
    * Decode the JSON event.
+   *
    * @param json JSON representation.
    */
   override fromJson(json: AnyDuringMigration) {
@@ -102,6 +102,7 @@ export class BlockDelete extends BlockBase {
 
   /**
    * Run a deletion event.
+   *
    * @param forward True if run forward, false if run backward (undo).
    */
   override run(forward: boolean) {

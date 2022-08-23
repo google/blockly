@@ -5,13 +5,9 @@
  */
 
 /**
- * @fileoverview Helper function for warning developers about deprecations.
- * This method is not specific to Blockly.
- */
-
-/**
  * Helper function for warning developers about deprecations.
  * This method is not specific to Blockly.
+ *
  * @namespace Blockly.utils.deprecation
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -20,6 +16,7 @@ goog.declareModuleId('Blockly.utils.deprecation');
 
 /**
  * Warn developers that a function or property is deprecated.
+ *
  * @param name The name of the function or property.
  * @param deprecationDate The date of deprecation.
  *     Prefer 'month yyyy' or 'quarter yyyy' format.

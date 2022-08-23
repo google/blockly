@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Generators for unique IDs.
- */
-
-/**
  * Generators for unique IDs.
+ *
  * @namespace Blockly.utils.idGenerator
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -19,6 +16,7 @@ goog.declareModuleId('Blockly.utils.idGenerator');
 /**
  * Namespace object for internal implementations we want to be able to
  * stub in tests.
+ *
  * @ignore
  */
 const internal = {};
@@ -35,7 +33,7 @@ let nextId = 0;
  * For UUIDs use genUid (below) instead; this ID generator should
  * primarily be used for IDs that end up in the DOM.
  *
- * @return The next unique identifier.
+ * @returns The next unique identifier.
  * @alias Blockly.utils.idGenerator.getNextUniqueId
  */
 export function getNextUniqueId(): string {
@@ -55,7 +53,8 @@ const soup = '!#$%()*+,-./:;=?@[]^_`{|}~' +
 /**
  * Generate a random unique ID.  This should be globally unique.
  * 87 characters ^ 20 length > 128 bits (better than a UUID).
- * @return A globally unique ID string.
+ *
+ * @returns A globally unique ID string.
  */
 // AnyDuringMigration because:  Property 'genUid' does not exist on type '{}'.
 (internal as AnyDuringMigration).genUid = function(): string {
@@ -70,8 +69,9 @@ const soup = '!#$%()*+,-./:;=?@[]^_`{|}~' +
 
 /**
  * Generate a random unique ID.
+ *
  * @see internal.genUid
- * @return A globally unique ID string.
+ * @returns A globally unique ID string.
  * @alias Blockly.utils.idGenerator.genUid
  */
 export function genUid(): string {

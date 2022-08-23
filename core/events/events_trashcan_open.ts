@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Events fired as a result of trashcan flyout open and close.
- */
-
-/**
  * Events fired as a result of trashcan flyout open and close.
+ *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -23,6 +20,7 @@ import * as eventUtils from './utils.js';
 
 /**
  * Class for a trashcan open event.
+ *
  * @alias Blockly.Events.TrashcanOpen
  */
 export class TrashcanOpen extends UiBase {
@@ -47,7 +45,8 @@ export class TrashcanOpen extends UiBase {
 
   /**
    * Encode the event as JSON.
-   * @return JSON representation.
+   *
+   * @returns JSON representation.
    */
   override toJson(): AnyDuringMigration {
     const json = super.toJson();
@@ -57,6 +56,7 @@ export class TrashcanOpen extends UiBase {
 
   /**
    * Decode the JSON event.
+   *
    * @param json JSON representation.
    */
   override fromJson(json: AnyDuringMigration) {

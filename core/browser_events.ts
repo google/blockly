@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Browser event handling.
- */
-
-/**
  * Browser event handling.
+ *
  * @namespace Blockly.browserEvents
  */
 import * as goog from '../closure/goog/goog.js';
@@ -22,6 +19,7 @@ import * as userAgent from './utils/useragent.js';
 /**
  * Blockly opaque event data used to unbind events when using
  * `bind` and `conditionalBind`.
+ *
  * @alias Blockly.browserEvents.Data
  */
 export type Data = [EventTarget, string, (e: Event) => void][];
@@ -45,6 +43,7 @@ const PAGE_MODE_MULTIPLIER = 125;
  * touch stream.
  * Use this for events that either start or continue a multi-part gesture (e.g.
  * mousedown or mousemove, which may be part of a drag or click).
+ *
  * @param node Node upon which to listen.
  * @param name Event name to listen to (e.g. 'mousedown').
  * @param thisObject The value of 'this' in the function.
@@ -55,13 +54,17 @@ const PAGE_MODE_MULTIPLIER = 125;
  * @param opt_noPreventDefault True if triggering on this event should prevent
  *     the default handler.  False by default.  If opt_noPreventDefault is
  *     provided, opt_noCaptureIdentifier must also be provided.
- * @return Opaque data that can be passed to unbindEvent_.
+ * @returns Opaque data that can be passed to unbindEvent_.
  * @alias Blockly.browserEvents.conditionalBind
  */
 export function conditionalBind(
     node: EventTarget, name: string, thisObject: Object|null, func: Function,
     opt_noCaptureIdentifier?: boolean, opt_noPreventDefault?: boolean): Data {
   let handled = false;
+  /**
+   *
+   * @param e
+   */
   function wrapFunc(e: Event) {
     const captureIdentifier = !opt_noCaptureIdentifier;
     // Handle each touch point separately.  If the event was a mouse event, this
@@ -119,16 +122,21 @@ export function conditionalBind(
  * of the active touch stream.
  * Use this for events that are not part of a multi-part gesture (e.g.
  * mouseover for tooltips).
+ *
  * @param node Node upon which to listen.
  * @param name Event name to listen to (e.g. 'mousedown').
  * @param thisObject The value of 'this' in the function.
  * @param func Function to call when event is triggered.
- * @return Opaque data that can be passed to unbindEvent_.
+ * @returns Opaque data that can be passed to unbindEvent_.
  * @alias Blockly.browserEvents.bind
  */
 export function bind(
     node: EventTarget, name: string, thisObject: Object|null,
     func: Function): Data {
+  /**
+   *
+   * @param e
+   */
   function wrapFunc(e: Event) {
     if (thisObject) {
       func.call(thisObject, e);
@@ -179,9 +187,10 @@ export function bind(
 
 /**
  * Unbind one or more events event from a function call.
+ *
  * @param bindData Opaque data from bindEvent_.
  *     This list is emptied during the course of calling this function.
- * @return The function call.
+ * @returns The function call.
  * @alias Blockly.browserEvents.unbind
  */
 export function unbind(bindData: Data): (e: Event) => void {
@@ -201,8 +210,9 @@ export function unbind(bindData: Data): (e: Event) => void {
 
 /**
  * Returns true if this event is targeting a text input widget?
+ *
  * @param e An event.
- * @return True if text input.
+ * @returns True if text input.
  * @alias Blockly.browserEvents.isTargetInput
  */
 export function isTargetInput(e: Event): boolean {
@@ -230,8 +240,9 @@ export function isTargetInput(e: Event): boolean {
 
 /**
  * Returns true this event is a right-click.
+ *
  * @param e Mouse event.
- * @return True if right-click.
+ * @returns True if right-click.
  * @alias Blockly.browserEvents.isRightButton
  */
 export function isRightButton(e: MouseEvent): boolean {
@@ -246,10 +257,11 @@ export function isRightButton(e: MouseEvent): boolean {
 /**
  * Returns the converted coordinates of the given mouse event.
  * The origin (0,0) is the top-left corner of the Blockly SVG.
+ *
  * @param e Mouse event.
  * @param svg SVG element.
  * @param matrix Inverted screen CTM to use.
- * @return Object with .x and .y properties.
+ * @returns Object with .x and .y properties.
  * @alias Blockly.browserEvents.mouseToSvg
  */
 export function mouseToSvg(
@@ -266,8 +278,9 @@ export function mouseToSvg(
 
 /**
  * Returns the scroll delta of a mouse event in pixel units.
+ *
  * @param e Mouse event.
- * @return Scroll delta object with .x and .y properties.
+ * @returns Scroll delta object with .x and .y properties.
  * @alias Blockly.browserEvents.getScrollDeltaPixels
  */
 export function getScrollDeltaPixels(e: WheelEvent): {x: number, y: number} {

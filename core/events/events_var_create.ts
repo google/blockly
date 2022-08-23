@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Class for a variable creation event.
- */
-
-/**
  * Class for a variable creation event.
+ *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -24,6 +21,7 @@ import * as eventUtils from './utils.js';
 
 /**
  * Class for a variable creation event.
+ *
  * @alias Blockly.Events.VarCreate
  */
 export class VarCreate extends VarBase {
@@ -52,7 +50,8 @@ export class VarCreate extends VarBase {
 
   /**
    * Encode the event as JSON.
-   * @return JSON representation.
+   *
+   * @returns JSON representation.
    */
   override toJson(): AnyDuringMigration {
     const json = super.toJson();
@@ -63,6 +62,7 @@ export class VarCreate extends VarBase {
 
   /**
    * Decode the JSON event.
+   *
    * @param json JSON representation.
    */
   override fromJson(json: AnyDuringMigration) {
@@ -73,6 +73,7 @@ export class VarCreate extends VarBase {
 
   /**
    * Run a variable creation event.
+   *
    * @param forward True if run forward, false if run backward (undo).
    */
   override run(forward: boolean) {

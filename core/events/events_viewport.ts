@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Events fired as a result of a viewport change.
- */
-
-/**
  * Events fired as a result of a viewport change.
+ *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -23,6 +20,7 @@ import * as eventUtils from './utils.js';
 
 /**
  * Class for a viewport change event.
+ *
  * @alias Blockly.Events.ViewportChange
  */
 export class ViewportChange extends UiBase {
@@ -72,7 +70,8 @@ export class ViewportChange extends UiBase {
 
   /**
    * Encode the event as JSON.
-   * @return JSON representation.
+   *
+   * @returns JSON representation.
    */
   override toJson(): AnyDuringMigration {
     const json = super.toJson();
@@ -85,6 +84,7 @@ export class ViewportChange extends UiBase {
 
   /**
    * Decode the JSON event.
+   *
    * @param json JSON representation.
    */
   override fromJson(json: AnyDuringMigration) {

@@ -6,12 +6,8 @@
  */
 
 /**
- * @fileoverview A div that floats on top of the workspace, for drop-down menus.
- * The drop-down can be kept inside the workspace, animate in/out, etc.
- */
-
-/**
  * A div that floats on top of the workspace, for drop-down menus.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -115,6 +111,7 @@ export interface PositionMetrics {
 
 /**
  * Create and insert the DOM element for this div.
+ *
  * @internal
  */
 export function createDom() {
@@ -154,6 +151,7 @@ export function createDom() {
 /**
  * Set an element to maintain bounds within. Drop-downs will appear
  * within the box of this element if possible.
+ *
  * @param boundsElem Element to bind drop-down to.
  */
 export function setBoundsElement(boundsElem: Element|null) {
@@ -162,7 +160,8 @@ export function setBoundsElement(boundsElem: Element|null) {
 
 /**
  * Provide the div for inserting content into the drop-down.
- * @return Div to populate with content.
+ *
+ * @returns Div to populate with content.
  */
 export function getContentDiv(): Element {
   return content;
@@ -176,6 +175,7 @@ export function clearContent() {
 
 /**
  * Set the colour for the drop-down.
+ *
  * @param backgroundColour Any CSS colour for the background.
  * @param borderColour Any CSS colour for the border.
  */
@@ -189,11 +189,12 @@ export function setColour(backgroundColour: string, borderColour: string) {
  * by a particular block. The primary position will be below the block,
  * and the secondary position above the block. Drop-down will be
  * constrained to the block's workspace.
+ *
  * @param field The field showing the drop-down.
  * @param block Block to position the drop-down around.
  * @param opt_onHide Optional callback for when the drop-down is hidden.
  * @param opt_secondaryYOffset Optional Y offset for above-block positioning.
- * @return True if the menu rendered below block; false if above.
+ * @returns True if the menu rendered below block; false if above.
  */
 export function showPositionedByBlock(
     field: Field, block: BlockSvg, opt_onHide?: Function,
@@ -207,10 +208,11 @@ export function showPositionedByBlock(
  * by a particular field. The primary position will be below the field,
  * and the secondary position above the field. Drop-down will be
  * constrained to the block's workspace.
+ *
  * @param field The field to position the dropdown against.
  * @param opt_onHide Optional callback for when the drop-down is hidden.
  * @param opt_secondaryYOffset Optional Y offset for above-block positioning.
- * @return True if the menu rendered below block; false if above.
+ * @returns True if the menu rendered below block; false if above.
  */
 export function showPositionedByField(
     field: Field, opt_onHide?: Function,
@@ -221,8 +223,9 @@ export function showPositionedByField(
 }
 /**
  * Get the scaled bounding box of a block.
+ *
  * @param block The block.
- * @return The scaled bounding box of the block.
+ * @returns The scaled bounding box of the block.
  */
 function getScaledBboxOfBlock(block: BlockSvg): Rect {
   const blockSvg = block.getSvgRoot();
@@ -235,8 +238,9 @@ function getScaledBboxOfBlock(block: BlockSvg): Rect {
 
 /**
  * Get the scaled bounding box of a field.
+ *
  * @param field The field.
- * @return The scaled bounding box of the field.
+ * @returns The scaled bounding box of the field.
  */
 function getScaledBboxOfField(field: Field): Rect {
   const bBox = field.getScaledBBox();
@@ -248,11 +252,12 @@ function getScaledBboxOfField(field: Field): Rect {
  * by a scaled bounding box.  The primary position will be below the rect,
  * and the secondary position above the rect. Drop-down will be constrained to
  * the block's workspace.
+ *
  * @param bBox The scaled bounding box.
  * @param field The field to position the dropdown against.
  * @param opt_onHide Optional callback for when the drop-down is hidden.
  * @param opt_secondaryYOffset Optional Y offset for above-block positioning.
- * @return True if the menu rendered below block; false if above.
+ * @returns True if the menu rendered below block; false if above.
  */
 function showPositionedByRect(
     bBox: Rect, field: Field, opt_onHide?: Function,
@@ -286,6 +291,7 @@ function showPositionedByRect(
  * will point there, and the container will be positioned below it.
  * If we can't maintain the container bounds at the primary point, fall-back to
  * the secondary point and position above.
+ *
  * @param newOwner The object showing the drop-down
  * @param rtl Right-to-left (true) or left-to-right (false).
  * @param primaryX Desired origin point x, in absolute px.
@@ -293,7 +299,7 @@ function showPositionedByRect(
  * @param secondaryX Secondary/alternative origin point x, in absolute px.
  * @param secondaryY Secondary/alternative origin point y, in absolute px.
  * @param opt_onHide Optional callback for when the drop-down is hidden.
- * @return True if the menu rendered at the primary origin point.
+ * @returns True if the menu rendered at the primary origin point.
  * @internal
  */
 export function show(
@@ -326,7 +332,8 @@ const internal = {};
 
 /**
  * Get sizing info about the bounding element.
- * @return An object containing size information about the bounding element
+ *
+ * @returns An object containing size information about the bounding element
  *     (bounding box and width/height).
  */
 // AnyDuringMigration because:  Property 'getBoundsInfo' does not exist on type
@@ -348,12 +355,13 @@ const internal = {};
 /**
  * Helper to position the drop-down and the arrow, maintaining bounds.
  * See explanation of origin points in show.
+ *
  * @param primaryX Desired origin point x, in absolute px.
  * @param primaryY Desired origin point y, in absolute px.
  * @param secondaryX Secondary/alternative origin point x, in absolute px.
  * @param secondaryY Secondary/alternative origin point y, in absolute px.
- * @return Various final metrics, including rendered positions for drop-down and
- *     arrow.
+ * @returns Various final metrics, including rendered positions for drop-down
+ *     and arrow.
  */
 // AnyDuringMigration because:  Property 'getPositionMetrics' does not exist on
 // type '{}'.
@@ -388,14 +396,15 @@ const internal = {};
 
 /**
  * Get the metrics for positioning the div below the source.
+ *
  * @param primaryX Desired origin point x, in absolute px.
  * @param primaryY Desired origin point y, in absolute px.
  * @param boundsInfo An object containing size information about the bounding
  *     element (bounding box and width/height).
  * @param divSize An object containing information about the size of the
  *     DropDownDiv (width & height).
- * @return Various final metrics, including rendered positions for drop-down and
- *     arrow.
+ * @returns Various final metrics, including rendered positions for drop-down
+ *     and arrow.
  */
 function getPositionBelowMetrics(
     primaryX: number, primaryY: number, boundsInfo: BoundsInfo,
@@ -420,14 +429,15 @@ function getPositionBelowMetrics(
 
 /**
  * Get the metrics for positioning the div above the source.
+ *
  * @param secondaryX Secondary/alternative origin point x, in absolute px.
  * @param secondaryY Secondary/alternative origin point y, in absolute px.
  * @param boundsInfo An object containing size information about the bounding
  *     element (bounding box and width/height).
  * @param divSize An object containing information about the size of the
  *     DropDownDiv (width & height).
- * @return Various final metrics, including rendered positions for drop-down and
- *     arrow.
+ * @returns Various final metrics, including rendered positions for drop-down
+ *     and arrow.
  */
 function getPositionAboveMetrics(
     secondaryX: number, secondaryY: number, boundsInfo: BoundsInfo,
@@ -453,13 +463,14 @@ function getPositionAboveMetrics(
 
 /**
  * Get the metrics for positioning the div at the top of the page.
+ *
  * @param sourceX Desired origin point x, in absolute px.
  * @param boundsInfo An object containing size information about the bounding
  *     element (bounding box and width/height).
  * @param divSize An object containing information about the size of the
  *     DropDownDiv (width & height).
- * @return Various final metrics, including rendered positions for drop-down and
- *     arrow.
+ * @returns Various final metrics, including rendered positions for drop-down
+ *     and arrow.
  */
 function getPositionTopOfPageMetrics(
     sourceX: number, boundsInfo: BoundsInfo, divSize: Size): PositionMetrics {
@@ -482,11 +493,12 @@ function getPositionTopOfPageMetrics(
 /**
  * Get the x positions for the left side of the DropDownDiv and the arrow,
  * accounting for the bounds of the workspace.
+ *
  * @param sourceX Desired origin point x, in absolute px.
  * @param boundsLeft The left edge of the bounding element, in absolute px.
  * @param boundsRight The right edge of the bounding element, in absolute px.
  * @param divWidth The width of the div in px.
- * @return An object containing metrics for the x positions of the left side of
+ * @returns An object containing metrics for the x positions of the left side of
  *     the DropDownDiv and the arrow.
  * @internal
  */
@@ -514,7 +526,8 @@ export function getPositionX(
 
 /**
  * Is the container visible?
- * @return True if visible.
+ *
+ * @returns True if visible.
  */
 export function isVisible(): boolean {
   return !!owner;
@@ -522,10 +535,11 @@ export function isVisible(): boolean {
 
 /**
  * Hide the menu only if it is owned by the provided object.
+ *
  * @param divOwner Object which must be owning the drop-down to hide.
  * @param opt_withoutAnimation True if we should hide the dropdown without
  *     animating.
- * @return True if hidden.
+ * @returns True if hidden.
  */
 export function hideIfOwner(
     divOwner: AnyDuringMigration|null,
@@ -600,11 +614,12 @@ export function hideWithoutAnimation() {
 
 /**
  * Set the dropdown div's position.
+ *
  * @param primaryX Desired origin point x, in absolute px.
  * @param primaryY Desired origin point y, in absolute px.
  * @param secondaryX Secondary/alternative origin point x, in absolute px.
  * @param secondaryY Secondary/alternative origin point y, in absolute px.
- * @return True if the menu rendered at the primary origin point.
+ * @returns True if the menu rendered at the primary origin point.
  */
 function positionInternal(
     primaryX: number, primaryY: number, secondaryX: number,
@@ -655,6 +670,7 @@ function positionInternal(
 /**
  * Repositions the dropdownDiv on window resize. If it doesn't know how to
  * calculate the new position, it will just hide it instead.
+ *
  * @internal
  */
 export function repositionForWindowResize() {

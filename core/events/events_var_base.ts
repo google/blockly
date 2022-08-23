@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Abstract class for a variable event.
- */
-
-/**
  * Abstract class for a variable event.
+ *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -22,6 +19,7 @@ import {Abstract as AbstractEvent} from './events_abstract.js';
 
 /**
  * Abstract class for a variable event.
+ *
  * @alias Blockly.Events.VarBase
  */
 export class VarBase extends AbstractEvent {
@@ -46,7 +44,8 @@ export class VarBase extends AbstractEvent {
 
   /**
    * Encode the event as JSON.
-   * @return JSON representation.
+   *
+   * @returns JSON representation.
    */
   override toJson(): AnyDuringMigration {
     const json = super.toJson();
@@ -56,6 +55,7 @@ export class VarBase extends AbstractEvent {
 
   /**
    * Decode the JSON event.
+   *
    * @param json JSON representation.
    */
   override fromJson(json: AnyDuringMigration) {

@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Events fired as a result of element select action.
- */
-
-/**
  * Events fired as a result of element select action.
+ *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -23,6 +20,7 @@ import * as eventUtils from './utils.js';
 
 /**
  * Class for a selected event.
+ *
  * @alias Blockly.Events.Selected
  */
 export class Selected extends UiBase {
@@ -55,7 +53,8 @@ export class Selected extends UiBase {
 
   /**
    * Encode the event as JSON.
-   * @return JSON representation.
+   *
+   * @returns JSON representation.
    */
   override toJson(): AnyDuringMigration {
     const json = super.toJson();
@@ -66,6 +65,7 @@ export class Selected extends UiBase {
 
   /**
    * Decode the JSON event.
+   *
    * @param json JSON representation.
    */
   override fromJson(json: AnyDuringMigration) {

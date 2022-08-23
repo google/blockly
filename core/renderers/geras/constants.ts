@@ -5,13 +5,9 @@
  */
 
 /**
- * @fileoverview An object that provides constants for rendering blocks in Geras
- * mode.
- */
-
-/**
  * An object that provides constants for rendering blocks in Geras
  * mode.
+ *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -22,6 +18,7 @@ import {ConstantProvider as BaseConstantProvider} from '../common/constants.js';
 
 /**
  * An object that provides constants for rendering blocks in Geras mode.
+ *
  * @alias Blockly.geras.ConstantProvider
  */
 export class ConstantProvider extends BaseConstantProvider {

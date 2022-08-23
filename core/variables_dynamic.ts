@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Utility functions for handling typed variables.
- */
-
-/**
  * Utility functions for handling typed variables.
  *
  * @namespace Blockly.VariablesDynamic
@@ -31,16 +27,28 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  * variable blocks.
  * See also Blockly.Variables.CATEGORY_NAME and
  * Blockly.Procedures.CATEGORY_NAME.
+ *
  * @alias Blockly.VariablesDynamic.CATEGORY_NAME
  */
 export const CATEGORY_NAME = 'VARIABLE_DYNAMIC';
 
+/**
+ * Click handler for a button that creates String variables.
+ *
+ * @param button
+ */
 function stringButtonClickHandler(button: AnyDuringMigration) {
   Variables.createVariableButtonHandler(
       button.getTargetWorkspace(), undefined, 'String');
 }
 // eslint-disable-next-line camelcase
 export const onCreateVariableButtonClick_String = stringButtonClickHandler;
+
+/**
+ * Click handler for a button that creates Number variables.
+ *
+ * @param button
+ */
 function numberButtonClickHandler(button: AnyDuringMigration) {
   Variables.createVariableButtonHandler(
       button.getTargetWorkspace(), undefined, 'Number');
@@ -48,6 +56,11 @@ function numberButtonClickHandler(button: AnyDuringMigration) {
 // eslint-disable-next-line camelcase
 export const onCreateVariableButtonClick_Number = numberButtonClickHandler;
 
+/**
+ * Click handler for a button that creates Colour variables.
+ *
+ * @param button
+ */
 function colourButtonClickHandler(button: AnyDuringMigration) {
   Variables.createVariableButtonHandler(
       button.getTargetWorkspace(), undefined, 'Colour');
@@ -58,8 +71,9 @@ export const onCreateVariableButtonClick_Colour = colourButtonClickHandler;
 /**
  * Construct the elements (blocks and button) required by the flyout for the
  * variable category.
+ *
  * @param workspace The workspace containing variables.
- * @return Array of XML elements.
+ * @returns Array of XML elements.
  * @alias Blockly.VariablesDynamic.flyoutCategory
  */
 export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
@@ -93,8 +107,9 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
 
 /**
  * Construct the blocks required by the flyout for the variable category.
+ *
  * @param workspace The workspace containing variables.
- * @return Array of XML block elements.
+ * @returns Array of XML block elements.
  * @alias Blockly.VariablesDynamic.flyoutCategoryBlocks
  */
 export function flyoutCategoryBlocks(workspace: Workspace): Element[] {

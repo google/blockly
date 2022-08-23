@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview The interface for a positionable UI element.
- */
-
-/**
  * The interface for a positionable UI element.
+ *
  * @namespace Blockly.IPositionable
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -30,11 +27,13 @@ import type {IComponent} from './i_component.js';
 
 /**
  * Interface for a component that is positioned on top of the workspace.
+ *
  * @alias Blockly.IPositionable
  */
 export interface IPositionable extends IComponent {
   /**
    * Positions the element. Called when the window is resized.
+   *
    * @param metrics The workspace metrics.
    * @param savedPositions List of rectangles that are already on the workspace.
    */
@@ -43,7 +42,8 @@ export interface IPositionable extends IComponent {
   /**
    * Returns the bounding rectangle of the UI element in pixel units relative to
    * the Blockly injection div.
-   * @return The UI elements's bounding box. Null if bounding box should be
+   *
+   * @returns The UI elements's bounding box. Null if bounding box should be
    *     ignored by other UI elements.
    */
   getBoundingRectangle(): Rect|null;

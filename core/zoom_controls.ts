@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Object representing a zoom icons.
- */
-
-/**
  * Object representing a zoom icons.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -39,6 +36,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Class for a zoom controls.
+ *
  * @alias Blockly.ZoomControls
  */
 export class ZoomControls implements IPositionable {
@@ -120,7 +118,8 @@ export class ZoomControls implements IPositionable {
 
   /**
    * Create the zoom controls.
-   * @return The zoom controls SVG group.
+   *
+   * @returns The zoom controls SVG group.
    */
   createDom(): SVGElement {
     this.svgGroup_ = dom.createSvgElement(Svg.G, {});
@@ -172,7 +171,8 @@ export class ZoomControls implements IPositionable {
   /**
    * Returns the bounding rectangle of the UI element in pixel units relative to
    * the Blockly injection div.
-   * @return The UI elements's bounding box. Null if bounding box should be
+   *
+   * @returns The UI elements's bounding box. Null if bounding box should be
    *     ignored by other UI elements.
    */
   getBoundingRectangle(): Rect|null {
@@ -189,6 +189,7 @@ export class ZoomControls implements IPositionable {
    * Positions the zoom controls.
    * It is positioned in the opposite corner to the corner the
    * categories/toolbox starts at.
+   *
    * @param metrics The workspace metrics.
    * @param savedPositions List of rectangles that are already on the workspace.
    */
@@ -244,6 +245,7 @@ export class ZoomControls implements IPositionable {
 
   /**
    * Create the zoom in icon and its event handler.
+   *
    * @param rnd The random string to use as a suffix in the clip path's ID.
    *     These IDs must be unique in case there are multiple Blockly instances
    *     on the same page.
@@ -290,6 +292,7 @@ export class ZoomControls implements IPositionable {
 
   /**
    * Create the zoom out icon and its event handler.
+   *
    * @param rnd The random string to use as a suffix in the clip path's ID.
    *     These IDs must be unique in case there are multiple Blockly instances
    *     on the same page.
@@ -336,6 +339,7 @@ export class ZoomControls implements IPositionable {
   /**
    * Handles a mouse down event on the zoom in or zoom out buttons on the
    *    workspace.
+   *
    * @param amount Amount of zooming. Negative amount values zoom out, and
    *     positive amount values zoom in.
    * @param e A mouse down event.
@@ -351,6 +355,7 @@ export class ZoomControls implements IPositionable {
 
   /**
    * Create the zoom reset icon and its event handler.
+   *
    * @param rnd The random string to use as a suffix in the clip path's ID.
    *     These IDs must be unique in case there are multiple Blockly instances
    *     on the same page.
@@ -391,6 +396,7 @@ export class ZoomControls implements IPositionable {
 
   /**
    * Handles a mouse down event on the reset zoom button on the workspace.
+   *
    * @param e A mouse down event.
    */
   private resetZoom_(e: Event) {

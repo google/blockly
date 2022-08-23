@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Object representing a workspace rendered as SVG.
- */
-
-/**
  * Object representing a workspace rendered as SVG.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -111,6 +108,7 @@ const ZOOM_TO_FIT_MARGIN = 20;
 /**
  * Class for a workspace.  This is an onscreen area with optional trashcan,
  * scrollbars, bubbles, and dragging.
+ *
  * @alias Blockly.WorkspaceSvg
  */
 export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
@@ -243,6 +241,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * The current gesture in progress on this workspace, if any.
+   *
    * @internal
    */
   currentGesture_: TouchGesture|null = null;
@@ -284,6 +283,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * Developers may define this function to add custom menu options to the
    * workspace's context menu or edit the workspace-created set of menu
    * options.
+   *
    * @param options List of menu options to add to.
    * @param e The right-click event that triggered the context menu.
    */
@@ -293,6 +293,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * In a flyout, the target workspace where blocks should be placed after a
    * drag. Otherwise null.
+   *
    * @internal
    */
   targetWorkspace: WorkspaceSvg|null = null;
@@ -444,7 +445,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Get the marker manager for this workspace.
-   * @return The marker manager.
+   *
+   * @returns The marker manager.
    */
   getMarkerManager(): MarkerManager {
     return this.markerManager_;
@@ -452,7 +454,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Gets the metrics manager for this workspace.
-   * @return The metrics manager.
+   *
+   * @returns The metrics manager.
    */
   getMetricsManager(): IMetricsManager {
     return this.metricsManager_;
@@ -460,6 +463,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Sets the metrics manager for the workspace.
+   *
    * @param metricsManager The metrics manager.
    * @internal
    */
@@ -471,7 +475,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Gets the component manager for this workspace.
-   * @return The component manager.
+   *
+   * @returns The component manager.
    */
   getComponentManager(): ComponentManager {
     return this.componentManager_;
@@ -479,6 +484,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Add the cursor SVG to this workspaces SVG group.
+   *
    * @param cursorSvg The SVG root of the cursor to be added to the workspace
    *     SVG group.
    * @internal
@@ -489,6 +495,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Add the marker SVG to this workspaces SVG group.
+   *
    * @param markerSvg The SVG root of the marker to be added to the workspace
    *     SVG group.
    * @internal
@@ -499,9 +506,10 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Get the marker with the given ID.
+   *
    * @param id The ID of the marker.
-   * @return The marker with the given ID or null if no marker with the given ID
-   *     exists.
+   * @returns The marker with the given ID or null if no marker with the given
+   *     ID exists.
    * @internal
    */
   getMarker(id: string): Marker|null {
@@ -513,7 +521,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * The cursor for this workspace.
-   * @return The cursor for the workspace.
+   *
+   * @returns The cursor for the workspace.
    */
   getCursor(): Cursor|null {
     if (this.markerManager_) {
@@ -524,7 +533,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Get the block renderer attached to this workspace.
-   * @return The renderer attached to this workspace.
+   *
+   * @returns The renderer attached to this workspace.
    */
   getRenderer(): Renderer {
     return this.renderer_;
@@ -532,7 +542,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Get the theme manager for this workspace.
-   * @return The theme manager for this workspace.
+   *
+   * @returns The theme manager for this workspace.
    * @internal
    */
   getThemeManager(): ThemeManager {
@@ -541,7 +552,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Get the workspace theme object.
-   * @return The workspace theme object.
+   *
+   * @returns The workspace theme object.
    */
   getTheme(): Theme {
     return this.themeManager_.getTheme();
@@ -550,6 +562,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Set the workspace theme object.
    * If no theme is passed, default to the `Classic` theme.
+   *
    * @param theme The workspace theme object.
    */
   setTheme(theme: Theme) {
@@ -590,6 +603,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Updates all the blocks with new style.
+   *
    * @param blocks List of blocks to update the style on.
    */
   private updateBlockStyles_(blocks: Block[]) {
@@ -607,7 +621,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Getter for the inverted screen CTM.
-   * @return The matrix to use in mouseToSvg
+   *
+   * @returns The matrix to use in mouseToSvg
    */
   getInverseScreenCTM(): SVGMatrix|null {
     // Defer getting the screen CTM until we actually need it, this should
@@ -630,7 +645,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Getter for isVisible
-   * @return Whether the workspace is visible.
+   *
+   * @returns Whether the workspace is visible.
    *     False if the workspace has been hidden by calling `setVisible(false)`.
    */
   isVisible(): boolean {
@@ -641,8 +657,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * Return the absolute coordinates of the top-left corner of this element,
    * scales that after canvas SVG element, if it's a descendant.
    * The origin (0,0) is the top-left corner of the Blockly SVG.
+   *
    * @param element SVG element to find the coordinates of.
-   * @return Object with .x and .y properties.
+   * @returns Object with .x and .y properties.
    * @internal
    */
   getSvgXY(element: SVGElement): Coordinate {
@@ -670,7 +687,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Gets the size of the workspace's parent SVG element.
-   * @return The cached width and height of the workspace's parent SVG element.
+   *
+   * @returns The cached width and height of the workspace's parent SVG element.
    * @internal
    */
   getCachedParentSvgSize(): Size {
@@ -683,7 +701,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * origin in pixels.
    * The workspace origin is where a block would render at position (0, 0).
    * It is not the upper left corner of the workspace SVG.
-   * @return Offset in pixels.
+   *
+   * @returns Offset in pixels.
    * @internal
    */
   getOriginOffsetInPixels(): Coordinate {
@@ -695,7 +714,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * Walks the DOM the first time it's called, then returns a cached value.
    * Note: We assume this is only called after the workspace has been injected
    * into the DOM.
-   * @return The first parent div with 'injectionDiv' in the name.
+   *
+   * @returns The first parent div with 'injectionDiv' in the name.
    * @internal
    */
   getInjectionDiv(): Element {
@@ -717,7 +737,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Get the SVG block canvas for the workspace.
-   * @return The SVG group for the workspace.
+   *
+   * @returns The SVG group for the workspace.
    * @internal
    */
   getBlockCanvas(): SVGElement|null {
@@ -726,6 +747,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Save resize handler data so we can delete it later in dispose.
+   *
    * @param handler Data that can be passed to eventHandling.unbind.
    */
   setResizeHandlerWrapper(handler: browserEvents.Data) {
@@ -734,9 +756,10 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Create the workspace DOM elements.
+   *
    * @param opt_backgroundClass Either 'blocklyMainBackground' or
    *     'blocklyMutatorBackground'.
-   * @return The workspace's SVG group.
+   * @returns The workspace's SVG group.
    */
   createDom(opt_backgroundClass?: string): Element {
     /**
@@ -805,6 +828,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Dispose of this workspace.
    * Unlink from all DOM elements to prevent memory leaks.
+   *
    * @suppress {checkTypes}
    */
   override dispose() {
@@ -882,6 +906,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Add a trashcan.
+   *
    * @internal
    */
   addTrashcan() {
@@ -891,6 +916,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   }
 
   /**
+   * @param _workspace
    * @internal
    */
   static newTrashcan(_workspace: WorkspaceSvg): Trashcan {
@@ -901,6 +927,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Add zoom controls.
+   *
    * @internal
    */
   addZoomControls() {
@@ -911,8 +938,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Add a flyout element in an element with the given tag name.
+   *
    * @param tagName What type of tag the flyout belongs in.
-   * @return The element containing the flyout DOM.
+   * @returns The element containing the flyout DOM.
    * @internal
    */
   addFlyout(tagName: string|Svg<SVGSVGElement>|Svg<SVGGElement>): Element {
@@ -950,8 +978,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * Getter for the flyout associated with this workspace.  This flyout may be
    * owned by either the toolbox or the workspace, depending on toolbox
    * configuration.  It will be null if there is no flyout.
+   *
    * @param opt_own Whether to only return the workspace's own flyout.
-   * @return The flyout on this workspace.
+   * @returns The flyout on this workspace.
    * @internal
    */
   getFlyout(opt_own?: boolean): IFlyout|null {
@@ -966,7 +995,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Getter for the toolbox associated with this workspace, if one exists.
-   * @return The toolbox on this workspace.
+   *
+   * @returns The toolbox on this workspace.
    * @internal
    */
   getToolbox(): IToolbox|null {
@@ -986,6 +1016,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * If enabled, resize the parts of the workspace that change when the
    * workspace contents (e.g. block positions) change.  This will also scroll
    * the workspace contents if needed.
+   *
    * @internal
    */
   resizeContents() {
@@ -1034,6 +1065,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Resizes and repositions workspace chrome if the page has a new
    * scroll position.
+   *
    * @internal
    */
   updateScreenCalculationsIfScrolled() {
@@ -1048,7 +1080,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Get the SVG element that forms the drawing surface.
-   * @return SVG group element.
+   *
+   * @returns SVG group element.
    */
   getCanvas(): SVGGElement {
     return this.svgBlockCanvas_ as SVGGElement;
@@ -1057,6 +1090,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Caches the width and height of the workspace's parent SVG element for use
    * with getSvgMetrics.
+   *
    * @param width The width of the parent SVG element.
    * @param height The height of the parent SVG element
    * @internal
@@ -1079,7 +1113,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Get the SVG element that forms the bubble surface.
-   * @return SVG group element.
+   *
+   * @returns SVG group element.
    */
   getBubbleCanvas(): SVGGElement {
     return this.svgBubbleCanvas_ as SVGGElement;
@@ -1089,7 +1124,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * Get the SVG element that contains this workspace.
    * Note: We assume this is only called after the workspace has been injected
    * into the DOM.
-   * @return SVG element.
+   *
+   * @returns SVG element.
    */
   getParentSvg(): SVGSVGElement {
     if (!this.cachedParentSvg_) {
@@ -1108,6 +1144,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Fires a viewport event if events are enabled and there is a change in
    * viewport values.
+   *
    * @internal
    */
   maybeFireViewportChangeEvent() {
@@ -1133,6 +1170,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Translate this workspace to new coordinates.
+   *
    * @param x Horizontal translation, in pixel units relative to the top left of
    *     the Blockly div.
    * @param y Vertical translation, in pixel units relative to the top left of
@@ -1163,6 +1201,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * Called at the end of a workspace drag to take the contents
    * out of the drag surface and put them back into the workspace SVG.
    * Does nothing if the workspace drag surface is not enabled.
+   *
    * @internal
    */
   resetDragSurface() {
@@ -1185,6 +1224,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * Called at the beginning of a workspace drag to move contents of
    * the workspace to the drag surface.
    * Does nothing if the drag surface is not enabled.
+   *
    * @internal
    */
   setupDragSurface() {
@@ -1220,7 +1260,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Gets the drag surface blocks are moved to when a drag is started.
-   * @return This workspace's block drag surface, if one is in use.
+   *
+   * @returns This workspace's block drag surface, if one is in use.
    * @internal
    */
   getBlockDragSurface(): BlockDragSurfaceSvg|null {
@@ -1230,7 +1271,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Returns the horizontal offset of the workspace.
    * Intended for LTR/RTL compatibility in XML.
-   * @return Width.
+   *
+   * @returns Width.
    */
   override getWidth(): number {
     const metrics = this.getMetrics();
@@ -1240,6 +1282,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Toggles the visibility of the workspace.
    * Currently only intended for main workspace.
+   *
    * @param isVisible True if workspace should be visible.
    */
   setVisible(isVisible: boolean) {
@@ -1303,6 +1346,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Highlight or unhighlight a block in the workspace.  Block highlighting is
    * often used to visually mark blocks currently being executed.
+   *
    * @param id ID of block to highlight/unhighlight, or null for no block (used
    *     to unhighlight all blocks).
    * @param opt_state If undefined, highlight specified block and automatically
@@ -1335,8 +1379,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * Pastes the provided block or workspace comment onto the workspace.
    * Does not check whether there is remaining capacity for the object, that
    * should be done before calling this method.
+   *
    * @param state The representation of the thing to paste.
-   * @return The pasted thing, or null if the paste was not successful.
+   * @returns The pasted thing, or null if the paste was not successful.
    */
   paste(state: AnyDuringMigration|Element|DocumentFragment): ICopyable|null {
     if (!this.rendered || !state['type'] && !state['tagName']) {
@@ -1370,9 +1415,10 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Paste the provided block onto the workspace.
+   *
    * @param xmlBlock XML block element.
    * @param jsonBlock JSON block representation.
-   * @return The pasted block.
+   * @returns The pasted block.
    */
   private pasteBlock_(xmlBlock: Element|null, jsonBlock: blocks.State|null):
       BlockSvg {
@@ -1450,8 +1496,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Paste the provided comment onto the workspace.
+   *
    * @param xmlComment XML workspace comment element.
-   * @return The pasted workspace comment.
+   * @returns The pasted workspace comment.
    * @suppress {checkTypes} Suppress checks while workspace comments are not
    * bundled in.
    */
@@ -1486,6 +1533,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Refresh the toolbox unless there's a drag in progress.
+   *
    * @internal
    */
   refreshToolboxSelection() {
@@ -1498,6 +1546,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Rename a variable by updating its name in the variable map.  Update the
    *     flyout to show the renamed variable immediately.
+   *
    * @param id ID of the variable to rename.
    * @param newName New variable name.
    */
@@ -1509,6 +1558,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Delete a variable by the passed in ID.   Update the flyout to show
    *     immediately that the variable is deleted.
+   *
    * @param id ID of variable to delete.
    */
   override deleteVariableById(id: string) {
@@ -1519,12 +1569,13 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Create a new variable with the given name.  Update the flyout to show the
    *     new variable immediately.
+   *
    * @param name The new variable's name.
    * @param opt_type The type of the variable like 'int' or 'string'.
    *     Does not need to be unique. Field_variable can filter variables based
    * on their type. This will default to '' which is a specific type.
    * @param opt_id The unique ID of the variable. This will default to a UUID.
-   * @return The newly created variable.
+   * @returns The newly created variable.
    */
   override createVariable(
       name: string, opt_type?: string|null,
@@ -1536,6 +1587,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Make a list of all the delete areas for this workspace.
+   *
    * @deprecated Use workspace.recordDragTargets. (2021 June)
    */
   recordDeleteAreas() {
@@ -1561,26 +1613,29 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       }
     }
   }
-
+  /* eslint-disable jsdoc/require-returns-check */
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   /**
    * Obtain a newly created block.
+   *
    * @param prototypeName Name of the language object containing type-specific
    *     functions for this block.
    * @param opt_id Optional ID.  Use this ID if provided, otherwise create a new
    *     ID.
-   * @return The created block.
+   * @returns The created block.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   override newBlock(prototypeName: string, opt_id?: string): BlockSvg {
     throw new Error(
         'The implementation of newBlock should be ' +
         'monkey-patched in by blockly.ts');
   }
+  /* eslint-enable */
 
   /**
    * Returns the drag target the mouse event is over.
+   *
    * @param e Mouse move event.
-   * @return Null if not over a drag target, or the drag target the event is
+   * @returns Null if not over a drag target, or the drag target the event is
    *     over.
    */
   getDragTarget(e: Event): IDragTarget|null {
@@ -1596,6 +1651,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Handle a mouse-down on SVG drawing surface.
+   *
    * @param e Mouse down event.
    */
   private onMouseDown_(e: MouseEvent) {
@@ -1607,6 +1663,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Start tracking a drag of an object on this workspace.
+   *
    * @param e Mouse down event.
    * @param xy Starting location of object.
    */
@@ -1622,8 +1679,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Track a drag of an object on this workspace.
+   *
    * @param e Mouse move event.
-   * @return New location of object.
+   * @returns New location of object.
    */
   moveDrag(e: MouseEvent): Coordinate {
     const point = browserEvents.mouseToSvg(
@@ -1636,7 +1694,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Is the user currently dragging a block or scrolling the flyout/workspace?
-   * @return True if currently dragging or scrolling.
+   *
+   * @returns True if currently dragging or scrolling.
    */
   isDragging(): boolean {
     return this.currentGesture_ !== null && this.currentGesture_.isDragging();
@@ -1644,7 +1703,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Is this workspace draggable?
-   * @return True if this workspace may be dragged.
+   *
+   * @returns True if this workspace may be dragged.
    */
   isDraggable(): boolean {
     return this.options.moveOptions && this.options.moveOptions.drag;
@@ -1658,7 +1718,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * through zooming with the scroll wheel or pinch (since the zoom is centered
    * on the mouse position). This does not include zooming with the zoom
    * controls since the X Y coordinates are decided programmatically.
-   * @return True if the workspace is movable, false otherwise.
+   *
+   * @returns True if the workspace is movable, false otherwise.
    */
   isMovable(): boolean {
     return this.options.moveOptions && !!this.options.moveOptions.scrollbars ||
@@ -1670,7 +1731,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Is this workspace movable horizontally?
-   * @return True if the workspace is movable horizontally, false otherwise.
+   *
+   * @returns True if the workspace is movable horizontally, false otherwise.
    */
   isMovableHorizontally(): boolean {
     const hasScrollbars = !!this.scrollbar;
@@ -1681,7 +1743,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Is this workspace movable vertically?
-   * @return True if the workspace is movable vertically, false otherwise.
+   *
+   * @returns True if the workspace is movable vertically, false otherwise.
    */
   isMovableVertically(): boolean {
     const hasScrollbars = !!this.scrollbar;
@@ -1692,6 +1755,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Handle a mouse-wheel on SVG drawing surface.
+   *
    * @param e Mouse wheel event.
    */
   private onMouseWheel_(e: WheelEvent) {
@@ -1748,7 +1812,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * Calculate the bounding box for the blocks on the workspace.
    * Coordinate system: workspace coordinates.
    *
-   * @return Contains the position and size of the bounding box containing the
+   * @returns Contains the position and size of the bounding box containing the
    *     blocks on the workspace.
    */
   getBlocksBoundingBox(): Rect {
@@ -1808,6 +1872,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Show the context menu for the workspace.
+   *
    * @param e Mouse event.
    * @internal
    */
@@ -1828,6 +1893,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Modify the block tree on the existing toolbox.
+   *
    * @param toolboxDef DOM tree of toolbox contents, string of toolbox contents,
    *     or JSON representing toolbox definition.
    */
@@ -1906,6 +1972,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Zooms the workspace in or out relative to/centered on the given (x, y)
    * coordinate.
+   *
    * @param x X coordinate of center, in pixel units relative to the top-left
    *     corner of the parentSVG.
    * @param y Y coordinate of center, in pixel units relative to the top-left
@@ -1958,6 +2025,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Zooming the blocks centered in the center of view with zooming in or out.
+   *
    * @param type Type of zooming (-1 zooming out and 1 zooming in).
    */
   zoomCenter(type: number) {
@@ -2030,6 +2098,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Add a transition class to the block and bubble canvas, to animate any
    * transform changes.
+   *
    * @internal
    */
   beginCanvasTransition() {
@@ -2039,6 +2108,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Remove transition class from the block and bubble canvas.
+   *
    * @internal
    */
   endCanvasTransition() {
@@ -2068,6 +2138,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Scroll the workspace to center on the given block. If the block has other
    * blocks stacked below it, the workspace will be centered on the stack.
+   *
    * @param id ID of block center on.
    */
   centerOnBlock(id: string|null) {
@@ -2123,6 +2194,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Set the workspace's zoom factor.
+   *
    * @param newScale Zoom factor. Units: (pixels / workspaceUnit).
    */
   setScale(newScale: number) {
@@ -2172,7 +2244,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Get the workspace's zoom factor.  If the workspace has a parent, we call
    * into the parent to get the workspace scale.
-   * @return The workspace zoom factor. Units: (pixels / workspaceUnit).
+   *
+   * @returns The workspace zoom factor. Units: (pixels / workspaceUnit).
    */
   getScale(): number {
     if (this.options.parentWorkspace) {
@@ -2185,6 +2258,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * Scroll the workspace to a specified offset (in pixels), keeping in the
    * workspace bounds. See comment on workspaceSvg.scrollX for more detail on
    * the meaning of these values.
+   *
    * @param x Target X to scroll to.
    * @param y Target Y to scroll to.
    * @internal
@@ -2229,8 +2303,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Find the block on this workspace with the specified ID.
+   *
    * @param id ID of block to find.
-   * @return The sought after block, or null if not found.
+   * @returns The sought after block, or null if not found.
    */
   override getBlockById(id: string): BlockSvg|null {
     return super.getBlockById(id) as BlockSvg;
@@ -2239,8 +2314,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Find all blocks in workspace.  Blocks are optionally sorted
    * by position; top to bottom (with slight LTR or RTL bias).
+   *
    * @param ordered Sort the list if true.
-   * @return Array of blocks.
+   * @returns Array of blocks.
    */
   override getAllBlocks(ordered: boolean): BlockSvg[] {
     return super.getAllBlocks(ordered) as BlockSvg[];
@@ -2249,8 +2325,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Finds the top-level blocks and returns them.  Blocks are optionally sorted
    * by position; top to bottom (with slight LTR or RTL bias).
+   *
    * @param ordered Sort the list if true.
-   * @return The top-level block objects.
+   * @returns The top-level block objects.
    */
   override getTopBlocks(ordered: boolean): BlockSvg[] {
     return super.getTopBlocks(ordered) as BlockSvg[];
@@ -2258,6 +2335,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Adds a block to the list of top blocks.
+   *
    * @param block Block to add.
    */
   override addTopBlock(block: Block) {
@@ -2267,6 +2345,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Removes a block from the list of top blocks.
+   *
    * @param block Block to remove.
    */
   override removeTopBlock(block: Block) {
@@ -2276,6 +2355,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Adds a comment to the list of top comments.
+   *
    * @param comment comment to add.
    */
   override addTopComment(comment: WorkspaceComment) {
@@ -2285,6 +2365,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Removes a comment from the list of top comments.
+   *
    * @param comment comment to remove.
    */
   override removeTopComment(comment: WorkspaceComment) {
@@ -2294,6 +2375,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Adds a bounded element to the list of top bounded elements.
+   *
    * @param element Bounded element to add.
    */
   addTopBoundedElement(element: IBoundedElement) {
@@ -2302,6 +2384,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Removes a bounded element from the list of top bounded elements.
+   *
    * @param element Bounded element to remove.
    */
   removeTopBoundedElement(element: IBoundedElement) {
@@ -2310,7 +2393,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Finds the top-level bounded elements and returns them.
-   * @return The top-level bounded elements.
+   *
+   * @returns The top-level bounded elements.
    */
   getTopBoundedElements(): IBoundedElement[] {
     return (new Array<IBoundedElement>()).concat(this.topBoundedElements_);
@@ -2321,6 +2405,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * If enabled, workspace will resize when appropriate.
    * If disabled, workspace will not resize until re-enabled.
    * Use to avoid resizing during a batch operation, for performance.
+   *
    * @param enabled Whether resizes should be enabled.
    */
   setResizesEnabled(enabled: boolean) {
@@ -2350,6 +2435,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * <button text="create variable" callbackKey="CREATE_VARIABLE"></button>
    * should be matched by a call to
    * registerButtonCallback("CREATE_VARIABLE", yourCallbackFunction).
+   *
    * @param key The name to use to look up this function.
    * @param func The function to call when the given button is clicked.
    */
@@ -2363,8 +2449,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Get the callback function associated with a given key, for clicks on
    * buttons and labels in the flyout.
+   *
    * @param key The name to use to look up the function.
-   * @return The function corresponding to the given key for this workspace;
+   * @returns The function corresponding to the given key for this workspace;
    *     null if no callback is registered.
    */
   getButtonCallback(key: string): ((p1: FlyoutButton) => void)|null {
@@ -2373,6 +2460,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Remove a callback for a click on a button in the flyout.
+   *
    * @param key The name associated with the callback function.
    */
   removeButtonCallback(key: string) {
@@ -2383,6 +2471,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * Register a callback function associated with a given key, for populating
    * custom toolbox categories in this workspace.  See the variable and
    * procedure categories as an example.
+   *
    * @param key The name to use to look up this function.
    * @param func The function to call when the given toolbox category is opened.
    */
@@ -2397,8 +2486,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Get the callback function associated with a given key, for populating
    * custom toolbox categories in this workspace.
+   *
    * @param key The name to use to look up the function.
-   * @return The function corresponding to the given key for this workspace, or
+   * @returns The function corresponding to the given key for this workspace, or
    *     null if no function is registered.
    */
   getToolboxCategoryCallback(key: string):
@@ -2408,6 +2498,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Remove a callback for a click on a custom category's name in the toolbox.
+   *
    * @param key The name associated with the callback function.
    */
   removeToolboxCategoryCallback(key: string) {
@@ -2417,9 +2508,10 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Look up the gesture that is tracking this touch stream on this workspace.
    * May create a new gesture.
+   *
    * @param e Mouse event or touch event.
-   * @return The gesture that is tracking this touch stream, or null if no valid
-   *     gesture exists.
+   * @returns The gesture that is tracking this touch stream, or null if no
+   *     valid gesture exists.
    * @internal
    */
   getGesture(e: Event): TouchGesture|null {
@@ -2450,6 +2542,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Clear the reference to the current gesture.
+   *
    * @internal
    */
   clearGesture() {
@@ -2458,6 +2551,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Cancel the current gesture, if one exists.
+   *
    * @internal
    */
   cancelCurrentGesture() {
@@ -2468,7 +2562,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Get the audio manager for this workspace.
-   * @return The audio manager for this workspace.
+   *
+   * @returns The audio manager for this workspace.
    */
   getAudioManager(): WorkspaceAudio {
     return this.audioManager_;
@@ -2476,7 +2571,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Get the grid object for this workspace, or null if there is none.
-   * @return The grid object for this workspace.
+   *
+   * @returns The grid object for this workspace.
    * @internal
    */
   getGrid(): Grid|null {
@@ -2485,6 +2581,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Close tooltips, context menus, dropdown selections, etc.
+   *
    * @param opt_onlyClosePopups Whether only popups should be closed.
    */
   hideChaff(opt_onlyClosePopups?: boolean) {
@@ -2501,6 +2598,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /**
    * Sets the X/Y translations of a top level workspace.
+   *
    * @param xyRatio Contains an x and/or y property which is a float between 0
    *     and 1 specifying the degree of scrolling.
    */
@@ -2530,6 +2628,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 /**
  * Size the workspace when the contents change.  This also updates
  * scrollbars accordingly.
+ *
  * @param workspace The workspace to resize.
  * @alias Blockly.WorkspaceSvg.resizeSvgContents
  * @internal

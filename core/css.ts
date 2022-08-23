@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Inject Blockly's CSS synchronously.
- */
-
-/**
  * Inject Blockly's CSS synchronously.
+ *
  * @namespace Blockly.Css
  */
 import * as goog from '../closure/goog/goog.js';
@@ -24,6 +21,7 @@ let injected = false;
 /**
  * Add some CSS to the blob that will be injected later.  Allows optional
  * components such as fields and the toolbox to store separate CSS.
+ *
  * @param cssContent Multiline CSS string or an array of single lines of CSS.
  * @alias Blockly.Css.register
  */
@@ -49,6 +47,7 @@ export function register(cssContent: string|string[]) {
  * a) It loads synchronously and doesn't force a redraw later.
  * b) It speeds up loading by not blocking on a separate HTTP transfer.
  * c) The CSS content may be made dynamic depending on init options.
+ *
  * @param hasCss If false, don't inject CSS (providing CSS becomes the
  *     document's responsibility).
  * @param pathToMedia Path from page to the Blockly media directory.
@@ -79,6 +78,7 @@ export function inject(hasCss: boolean, pathToMedia: string) {
 
 /**
  * The CSS content for Blockly.
+ *
  * @alias Blockly.Css.content
  */
 let content = `

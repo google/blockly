@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Events fired as a result of UI click in Blockly's editor.
- */
-
-/**
  * Events fired as a result of UI click in Blockly's editor.
+ *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -24,6 +21,7 @@ import * as eventUtils from './utils.js';
 
 /**
  * Class for a click event.
+ *
  * @alias Blockly.Events.Click
  */
 export class Click extends UiBase {
@@ -59,7 +57,8 @@ export class Click extends UiBase {
 
   /**
    * Encode the event as JSON.
-   * @return JSON representation.
+   *
+   * @returns JSON representation.
    */
   override toJson(): AnyDuringMigration {
     const json = super.toJson();
@@ -72,6 +71,7 @@ export class Click extends UiBase {
 
   /**
    * Decode the JSON event.
+   *
    * @param json JSON representation.
    */
   override fromJson(json: AnyDuringMigration) {

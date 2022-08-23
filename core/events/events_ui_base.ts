@@ -5,13 +5,9 @@
  */
 
 /**
- * @fileoverview Base class for events fired as a result of UI actions in
- * Blockly's editor.
- */
-
-/**
  * Base class for events fired as a result of UI actions in
  * Blockly's editor.
+ *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -26,6 +22,7 @@ import {Abstract as AbstractEvent} from './events_abstract.js';
  * editing to work (e.g. scrolling the workspace, zooming, opening toolbox
  * categories).
  * UI events do not undo or redo.
+ *
  * @alias Blockly.Events.UiBase
  */
 export class UiBase extends AbstractEvent {

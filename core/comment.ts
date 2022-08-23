@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Object representing a code comment.
- */
-
-/**
  * Object representing a code comment.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -43,6 +40,7 @@ import {Svg} from './utils/svg.js';
 
 /**
  * Class for a comment.
+ *
  * @alias Blockly.Comment
  */
 export class Comment extends Icon {
@@ -92,6 +90,7 @@ export class Comment extends Icon {
 
   /**
    * Draw the comment icon.
+   *
    * @param group The icon group.
    */
   protected override drawIcon_(group: Element) {
@@ -123,7 +122,8 @@ export class Comment extends Icon {
 
   /**
    * Create the editor for the comment's bubble.
-   * @return The top-level node of the editor.
+   *
+   * @returns The top-level node of the editor.
    */
   private createEditor_(): SVGElement {
     /* Create the editor.  Here's the markup that will be generated in
@@ -169,7 +169,9 @@ export class Comment extends Icon {
         });
     this.onChangeWrapper_ = browserEvents.conditionalBind(
         textarea, 'change', this,
-        /** @param _e Unused event parameter. */
+        /**
+         * @param _e Unused event parameter.
+         */
         function(this: Comment, _e: Event) {
           if (this.cachedText_ !== this.model_.text) {
             eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))!
@@ -179,7 +181,9 @@ export class Comment extends Icon {
         });
     this.onInputWrapper_ = browserEvents.conditionalBind(
         textarea, 'input', this,
-        /** @param _e Unused event parameter. */
+        /**
+         * @param _e Unused event parameter.
+         */
         function(this: Comment, _e: Event) {
           this.model_.text = textarea.value;
         });
@@ -226,6 +230,7 @@ export class Comment extends Icon {
 
   /**
    * Show or hide the comment bubble.
+   *
    * @param visible True if the bubble should be visible.
    */
   override setVisible(visible: boolean) {
@@ -265,6 +270,7 @@ export class Comment extends Icon {
 
   /**
    * Show a non-editable bubble.
+   *
    * @suppress {checkTypes} Suppress `this` type mismatch.
    */
   private createNonEditableBubble_() {
@@ -277,6 +283,7 @@ export class Comment extends Icon {
 
   /**
    * Dispose of the bubble.
+   *
    * @suppress {checkTypes} Suppress `this` type mismatch.
    */
   private disposeBubble_() {
@@ -310,6 +317,7 @@ export class Comment extends Icon {
    *
    * Bring the comment to the top of the stack when clicked on. Also cache the
    * current text so it can be used to fire a change event.
+   *
    * @param _e Mouse up event.
    */
   private startEdit_(_e: Event) {
@@ -324,7 +332,8 @@ export class Comment extends Icon {
 
   /**
    * Get the dimensions of this comment's bubble.
-   * @return Object with width and height properties.
+   *
+   * @returns Object with width and height properties.
    */
   getBubbleSize(): Size {
     return this.model_.size;
@@ -332,6 +341,7 @@ export class Comment extends Icon {
 
   /**
    * Size this comment's bubble.
+   *
    * @param width Width of the bubble.
    * @param height Height of the bubble.
    */
@@ -346,6 +356,7 @@ export class Comment extends Icon {
 
   /**
    * Update the comment's view to match the model.
+   *
    * @internal
    */
   updateText() {

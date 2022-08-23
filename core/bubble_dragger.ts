@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Methods for dragging a bubble visually.
- */
-
-/**
  * Methods for dragging a bubble visually.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -37,6 +34,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  * Class for a bubble dragger.  It moves things on the bubble canvas around the
  * workspace when they are being dragged by a mouse or touch.  These can be
  * block comments, mutators, warnings, or workspace comments.
+ *
  * @alias Blockly.BubbleDragger
  */
 export class BubbleDragger {
@@ -71,6 +69,7 @@ export class BubbleDragger {
 
   /**
    * Start dragging a bubble.  This includes moving it to the drag surface.
+   *
    * @internal
    */
   startBubbleDrag() {
@@ -93,6 +92,7 @@ export class BubbleDragger {
   /**
    * Execute a step of bubble dragging, based on the given event.  Update the
    * display accordingly.
+   *
    * @param e The most recent move event.
    * @param currentDragDeltaXY How far the pointer has moved from the position
    *     at the start of the drag, in pixel units.
@@ -123,8 +123,9 @@ export class BubbleDragger {
 
   /**
    * Whether ending the drag would delete the bubble.
+   *
    * @param dragTarget The drag target that the bubblee is currently over.
-   * @return Whether dropping the bubble immediately would delete the block.
+   * @returns Whether dropping the bubble immediately would delete the block.
    */
   private shouldDelete_(dragTarget: IDragTarget|null): boolean {
     if (dragTarget) {
@@ -148,6 +149,7 @@ export class BubbleDragger {
 
   /**
    * Finish a bubble drag and put the bubble back on the workspace.
+   *
    * @param e The mouseup/touchend event.
    * @param currentDragDeltaXY How far the pointer has moved from the position
    *     at the start of the drag, in pixel units.
@@ -210,8 +212,9 @@ export class BubbleDragger {
    * correction for mutator workspaces.
    * This function does not consider differing origins.  It simply scales the
    * input's x and y values.
+   *
    * @param pixelCoord A coordinate with x and y values in CSS pixel units.
-   * @return The input coordinate divided by the workspace scale.
+   * @returns The input coordinate divided by the workspace scale.
    */
   private pixelsToWorkspaceUnits_(pixelCoord: Coordinate): Coordinate {
     const result = new Coordinate(

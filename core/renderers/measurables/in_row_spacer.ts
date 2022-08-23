@@ -5,13 +5,9 @@
  */
 
 /**
- * @fileoverview Objects representing a spacer in a row of a rendered
- * block.
- */
-
-/**
  * Objects representing a spacer in a row of a rendered
  * block.
+ *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -26,7 +22,7 @@ import {Types} from './types.js';
 /**
  * An object containing information about a spacer between two elements on a
  * row.
- * @struct
+ *
  * @alias Blockly.blockRendering.InRowSpacer
  */
 export class InRowSpacer extends Measurable {

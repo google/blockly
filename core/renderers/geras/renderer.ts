@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Geras renderer.
- */
-
-/**
  * Geras renderer.
+ *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -34,6 +31,7 @@ import {PathObject} from './path_object.js';
 
 /**
  * The geras renderer.
+ *
  * @alias Blockly.geras.Renderer
  */
 export class Renderer extends BaseRenderer {
@@ -54,6 +52,7 @@ export class Renderer extends BaseRenderer {
   /**
    * Initialize the renderer.  Geras has a highlight provider in addition to
    * the normal constant provider.
+   *
    * @internal
    */
   override init(theme: Theme, opt_rendererOverrides: AnyDuringMigration) {
@@ -73,8 +72,9 @@ export class Renderer extends BaseRenderer {
 
   /**
    * Create a new instance of the renderer's render info object.
+   *
    * @param block The block to measure.
-   * @return The render info object.
+   * @returns The render info object.
    */
   protected override makeRenderInfo_(block: BlockSvg): RenderInfo {
     return new RenderInfo(this, block);
@@ -82,10 +82,11 @@ export class Renderer extends BaseRenderer {
 
   /**
    * Create a new instance of the renderer's drawer.
+   *
    * @param block The block to render.
    * @param info An object containing all information needed to render this
    *     block.
-   * @return The drawer.
+   * @returns The drawer.
    */
   protected override makeDrawer_(block: BlockSvg, info: BaseRenderInfo):
       Drawer {
@@ -94,9 +95,10 @@ export class Renderer extends BaseRenderer {
 
   /**
    * Create a new instance of a renderer path object.
+   *
    * @param root The root SVG element.
    * @param style The style object to use for colouring.
-   * @return The renderer path object.
+   * @returns The renderer path object.
    * @internal
    */
   override makePathObject(root: SVGElement, style: BlockStyle): PathObject {
@@ -106,7 +108,8 @@ export class Renderer extends BaseRenderer {
 
   /**
    * Create a new instance of the renderer's highlight constant provider.
-   * @return The highlight constant provider.
+   *
+   * @returns The highlight constant provider.
    */
   protected makeHighlightConstants_(): HighlightConstantProvider {
     return new HighlightConstantProvider((this.getConstants()));
@@ -115,7 +118,8 @@ export class Renderer extends BaseRenderer {
   /**
    * Get the renderer's highlight constant provider.  We assume that when this
    * is called, the renderer has already been initialized.
-   * @return The highlight constant provider.
+   *
+   * @returns The highlight constant provider.
    * @internal
    */
   getHighlightConstants(): HighlightConstantProvider {

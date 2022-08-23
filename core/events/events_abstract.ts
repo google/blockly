@@ -5,13 +5,9 @@
  */
 
 /**
- * @fileoverview Abstract class for events fired as a result of actions in
- * Blockly's editor.
- */
-
-/**
  * Abstract class for events fired as a result of actions in
  * Blockly's editor.
+ *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -25,6 +21,7 @@ import * as eventUtils from './utils.js';
 
 /**
  * Abstract class for an event.
+ *
  * @alias Blockly.Events.Abstract
  */
 export abstract class Abstract {
@@ -57,7 +54,8 @@ export abstract class Abstract {
 
   /**
    * Encode the event as JSON.
-   * @return JSON representation.
+   *
+   * @returns JSON representation.
    */
   toJson(): AnyDuringMigration {
     const json = {'type': this.type};
@@ -69,6 +67,7 @@ export abstract class Abstract {
 
   /**
    * Decode the JSON event.
+   *
    * @param json JSON representation.
    */
   fromJson(json: AnyDuringMigration) {
@@ -78,7 +77,8 @@ export abstract class Abstract {
 
   /**
    * Does this event record any change of state?
-   * @return True if null, false if something changed.
+   *
+   * @returns True if null, false if something changed.
    */
   isNull(): boolean {
     return false;
@@ -86,6 +86,7 @@ export abstract class Abstract {
 
   /**
    * Run an event.
+   *
    * @param _forward True if run forward, false if run backward (undo).
    */
   run(_forward: boolean) {}
@@ -93,7 +94,8 @@ export abstract class Abstract {
 
   /**
    * Get workspace the event belongs to.
-   * @return The workspace the event belongs to.
+   *
+   * @returns The workspace the event belongs to.
    * @throws {Error} if workspace is null.
    * @internal
    */

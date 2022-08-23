@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Class for comment move event.
- */
-
-/**
  * Class for comment move event.
+ *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -25,6 +22,7 @@ import * as eventUtils from './utils.js';
 
 /**
  * Class for a comment move event.  Created before the move.
+ *
  * @alias Blockly.Events.CommentMove
  */
 export class CommentMove extends CommentBase {
@@ -83,6 +81,7 @@ export class CommentMove extends CommentBase {
   /**
    * Override the location before the move.  Use this if you don't create the
    * event until the end of the move, but you know the original location.
+   *
    * @param xy The location before the move, in workspace coordinates.
    */
   setOldCoordinate(xy: Coordinate) {
@@ -92,7 +91,8 @@ export class CommentMove extends CommentBase {
   // TODO (#1266): "Full" and "minimal" serialization.
   /**
    * Encode the event as JSON.
-   * @return JSON representation.
+   *
+   * @returns JSON representation.
    */
   override toJson(): AnyDuringMigration {
     const json = super.toJson();
@@ -109,6 +109,7 @@ export class CommentMove extends CommentBase {
 
   /**
    * Decode the JSON event.
+   *
    * @param json JSON representation.
    */
   override fromJson(json: AnyDuringMigration) {
@@ -126,7 +127,8 @@ export class CommentMove extends CommentBase {
 
   /**
    * Does this event record any change of state?
-   * @return False if something changed.
+   *
+   * @returns False if something changed.
    */
   override isNull(): boolean {
     return Coordinate.equals(this.oldCoordinate_, this.newCoordinate_);
@@ -134,6 +136,7 @@ export class CommentMove extends CommentBase {
 
   /**
    * Run a move event.
+   *
    * @param forward True if run forward, false if run backward (undo).
    */
   override run(forward: boolean) {

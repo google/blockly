@@ -5,15 +5,10 @@
  */
 
 /**
- * @fileoverview Constant declarations for common key codes.
- * These methods are not specific to Blockly, and could be factored out into
- * a JavaScript framework such as Closure.
- */
-
-/**
  * Constant declarations for common key codes.
  * These methods are not specific to Blockly, and could be factored out into
  * a JavaScript framework such as Closure.
+ *
  * @namespace Blockly.utils.KeyCodes
  */
 import * as goog from '../../closure/goog/goog.js';

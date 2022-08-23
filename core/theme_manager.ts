@@ -5,13 +5,9 @@
  */
 
 /**
- * @fileoverview Object in charge of storing and updating a workspace theme
- *     and UI components.
- */
-
-/**
  * Object in charge of storing and updating a workspace theme
  *     and UI components.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -26,6 +22,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Class for storing and updating a workspace's theme and UI components.
+ *
  * @alias Blockly.ThemeManager
  */
 export class ThemeManager {
@@ -43,7 +40,8 @@ export class ThemeManager {
 
   /**
    * Get the workspace theme.
-   * @return The workspace theme.
+   *
+   * @returns The workspace theme.
    * @internal
    */
   getTheme(): Theme {
@@ -52,6 +50,7 @@ export class ThemeManager {
 
   /**
    * Set the workspace theme, and refresh the workspace and all components.
+   *
    * @param theme The workspace theme.
    * @internal
    */
@@ -92,6 +91,7 @@ export class ThemeManager {
   /**
    * Subscribe a workspace to changes to the selected theme.  If a new theme is
    * set, the workspace is called to refresh its blocks.
+   *
    * @param workspace The workspace to subscribe.
    * @internal
    */
@@ -101,6 +101,7 @@ export class ThemeManager {
 
   /**
    * Unsubscribe a workspace to changes to the selected theme.
+   *
    * @param workspace The workspace to unsubscribe.
    * @internal
    */
@@ -114,6 +115,7 @@ export class ThemeManager {
   /**
    * Subscribe an element to changes to the selected theme.  If a new theme is
    * selected, the element's style is refreshed with the new theme's style.
+   *
    * @param element The element to subscribe.
    * @param componentName The name used to identify the component. This must be
    *     the same name used to configure the style in the Theme object.
@@ -137,6 +139,7 @@ export class ThemeManager {
 
   /**
    * Unsubscribe an element to changes to the selected theme.
+   *
    * @param element The element to unsubscribe.
    * @internal
    */
@@ -160,6 +163,7 @@ export class ThemeManager {
 
   /**
    * Dispose of this theme manager.
+   *
    * @suppress {checkTypes}
    * @internal
    */

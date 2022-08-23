@@ -665,8 +665,7 @@ exports.DRAG_RADIUS = internalConstants.DRAG_RADIUS;
 exports.FLYOUT_DRAG_RADIUS = internalConstants.FLYOUT_DRAG_RADIUS;
 exports.SNAP_RADIUS = internalConstants.SNAP_RADIUS;
 exports.CONNECTING_SNAP_RADIUS = internalConstants.CONNECTING_SNAP_RADIUS;
-exports.CURRENT_CONNECTION_PREFERENCE =
-  internalConstants.CURRENT_CONNECTION_PREFERENCE;
+exports.CURRENT_CONNECTION_PREFERENCE = internalConstants.CURRENT_CONNECTION_PREFERENCE;
 exports.BUMP_DELAY = internalConstants.BUMP_DELAY;
 exports.BUMP_RANDOMNESS = internalConstants.BUMP_RANDOMNESS;
 exports.COLLAPSE_CHARS = internalConstants.COLLAPSE_CHARS;

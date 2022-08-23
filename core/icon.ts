@@ -65,20 +65,13 @@ export abstract class Icon {
     this.iconGroup_ =
         dom.createSvgElement(Svg.G, {'class': 'blocklyIconGroup'});
     if (this.block_.isInFlyout) {
-      dom.addClass(this.iconGroup_ as Element, 'blocklyIconGroupReadonly');
+      dom.addClass(this.iconGroup_, 'blocklyIconGroupReadonly');
     }
-    // AnyDuringMigration because:  Argument of type 'SVGGElement | null' is not
-    // assignable to parameter of type 'Element'.
-    this.drawIcon_(this.iconGroup_ as AnyDuringMigration);
+    this.drawIcon_(this.iconGroup_);
 
-    // AnyDuringMigration because:  Argument of type 'SVGGElement | null' is not
-    // assignable to parameter of type 'Node'.
-    this.block_.getSvgRoot().appendChild(this.iconGroup_ as AnyDuringMigration);
-    // AnyDuringMigration because:  Argument of type 'SVGGElement | null' is not
-    // assignable to parameter of type 'EventTarget'.
+    this.block_.getSvgRoot().appendChild(this.iconGroup_);
     browserEvents.conditionalBind(
-        this.iconGroup_ as AnyDuringMigration, 'mouseup', this,
-        this.iconClick_);
+        this.iconGroup_, 'mouseup', this, this.iconClick_);
     this.updateEditable();
   }
 
@@ -89,9 +82,6 @@ export abstract class Icon {
     this.iconGroup_ = null;
     // Dispose of and unlink the bubble.
     this.setVisible(false);
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'BlockSvg'.
-    this.block_ = null as AnyDuringMigration;
   }
 
   /** Add or remove the UI indicating if this icon may be clicked or not. */

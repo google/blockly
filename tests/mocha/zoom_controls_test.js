@@ -30,7 +30,7 @@ suite("Zoom Controls", function() {
       });
     }
     test("Zoom in", function() {
-      simulateClick(this.zoomControls.zoomInGroup_);
+      simulateClick(this.zoomControls.zoomInGroup);
 
       assertEventFired(
           this.eventsFireStub, Blockly.Events.Click,
@@ -41,7 +41,7 @@ suite("Zoom Controls", function() {
       chai.assert.closeTo(this.workspace.getScale(), 1.2, 0.05);
     });
     test("Zoom out", function() {
-      simulateClick(this.zoomControls.zoomOutGroup_);
+      simulateClick(this.zoomControls.zoomOutGroup);
 
       assertEventFired(
           this.eventsFireStub, Blockly.Events.Click,
@@ -52,7 +52,7 @@ suite("Zoom Controls", function() {
       chai.assert.closeTo(this.workspace.getScale(), 0.8, 0.05);
     });
     test("Reset zoom", function() {
-      simulateClick(this.zoomControls.zoomResetGroup_);
+      simulateClick(this.zoomControls.zoomResetGroup);
 
       assertEventFired(
           this.eventsFireStub, Blockly.Events.Click,

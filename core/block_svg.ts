@@ -1283,6 +1283,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * @internal
    */
   bringToFront() {
+    /* eslint-disable-next-line @typescript-eslint/no-this-alias */
     let block = this;
     do {
       const root = block.getSvgRoot();
@@ -1606,19 +1607,18 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * @internal
    */
   scheduleSnapAndBump() {
-    const block = this;
     // Ensure that any snap and bump are part of this move's event group.
     const group = eventUtils.getGroup();
 
-    setTimeout(function() {
+    setTimeout(() => {
       eventUtils.setGroup(group);
-      block.snapToGrid();
+      this.snapToGrid();
       eventUtils.setGroup(false);
     }, config.bumpDelay / 2);
 
-    setTimeout(function() {
+    setTimeout(() => {
       eventUtils.setGroup(group);
-      block.bumpNeighbours();
+      this.bumpNeighbours();
       eventUtils.setGroup(false);
     }, config.bumpDelay);
   }

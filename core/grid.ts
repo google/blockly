@@ -15,7 +15,6 @@ goog.declareModuleId('Blockly.Grid');
 
 import * as dom from './utils/dom.js';
 import {Svg} from './utils/svg.js';
-import * as userAgent from './utils/useragent.js';
 import {GridOptions} from './blockly_options.js';
 
 
@@ -150,12 +149,6 @@ export class Grid {
   moveTo(x: number, y: number) {
     this.pattern.setAttribute('x', x.toString());
     this.pattern.setAttribute('y', y.toString());
-
-    if (userAgent.IE || userAgent.EDGE) {
-      // IE/Edge doesn't notice that the x/y offsets have changed.
-      // Force an update.
-      this.update(this.scale_);
-    }
   }
 
   /**

@@ -26,10 +26,10 @@ import type {Sentinel} from './utils/sentinel.js';
  */
 export class FieldNumber extends FieldTextInput {
   /** The minimum value this number field can contain. */
-  protected min_: number = -Infinity;
+  protected min_ = -Infinity;
 
   /** The maximum value this number field can contain. */
-  protected max_: number = Infinity;
+  protected max_ = Infinity;
 
   /** The multiple to which this fields value is rounded. */
   protected precision_ = 0;

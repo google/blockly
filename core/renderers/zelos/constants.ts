@@ -788,78 +788,82 @@ export class ConstantProvider extends BaseConstantProvider {
     return [
       /* eslint-disable indent */
       // Text.
-      selector + ' .blocklyText,',
-      selector + ' .blocklyFlyoutLabelText {',
-      'font: ' + this.FIELD_TEXT_FONTWEIGHT + ' ' + this.FIELD_TEXT_FONTSIZE +
-          'pt ' + this.FIELD_TEXT_FONTFAMILY + ';',
-      '}',
+      `${selector} .blocklyText,`,
+      `${selector} .blocklyFlyoutLabelText {`,
+      `font: ${this.FIELD_TEXT_FONTWEIGHT} ${this.FIELD_TEXT_FONTSIZE}` +
+          `pt ${this.FIELD_TEXT_FONTFAMILY};`,
+      `}`,
 
       // Fields.
-      selector + ' .blocklyText {',
-      'fill: #fff;',
-      '}',
-      selector + ' .blocklyNonEditableText>rect:not(.blocklyDropdownRect),',
-      selector + ' .blocklyEditableText>rect:not(.blocklyDropdownRect) {',
-      'fill: ' + this.FIELD_BORDER_RECT_COLOUR + ';',
-      '}',
-      selector + ' .blocklyNonEditableText>text,',
-      selector + ' .blocklyEditableText>text,',
-      selector + ' .blocklyNonEditableText>g>text,',
-      selector + ' .blocklyEditableText>g>text {',
-      'fill: #575E75;',
-      '}',  // Flyout labels.
-      selector + ' .blocklyFlyoutLabelText {',
-      'fill: #575E75;',
-      '}',
+      `${selector} .blocklyText {`,
+      `fill: #fff;`,
+      `}`,
+      `${selector} .blocklyNonEditableText>rect:not(.blocklyDropdownRect),`,
+      `${selector} .blocklyEditableText>rect:not(.blocklyDropdownRect) {`,
+      `fill: ${this.FIELD_BORDER_RECT_COLOUR};`,
+      `}`,
+      `${selector} .blocklyNonEditableText>text,`,
+      `${selector} .blocklyEditableText>text,`,
+      `${selector} .blocklyNonEditableText>g>text,`,
+      `${selector} .blocklyEditableText>g>text {`,
+      `fill: #575E75;`,
+      `}`,
+
+      // Flyout labels.
+      `${selector} .blocklyFlyoutLabelText {`,
+      `fill: #575E75;`,
+      `}`,
 
       // Bubbles.
-      selector + ' .blocklyText.blocklyBubbleText {',
-      'fill: #575E75;',
-      '}',
+      `${selector} .blocklyText.blocklyBubbleText {`,
+      `fill: #575E75;`,
+      `}`,
 
       // Editable field hover.
-      selector + ' .blocklyDraggable:not(.blocklyDisabled)',
-      ' .blocklyEditableText:not(.editing):hover>rect,',
-      selector + ' .blocklyDraggable:not(.blocklyDisabled)',
-      ' .blocklyEditableText:not(.editing):hover>.blocklyPath {',
-      'stroke: #fff;',
-      'stroke-width: 2;',
-      '}',
+      `${selector} .blocklyDraggable:not(.blocklyDisabled)`,
+      ` .blocklyEditableText:not(.editing):hover>rect,`,
+      `${selector} .blocklyDraggable:not(.blocklyDisabled)`,
+      ` .blocklyEditableText:not(.editing):hover>.blocklyPath {`,
+      `stroke: #fff;`,
+      `stroke-width: 2;`,
+      `}`,
 
       // Text field input.
-      selector + ' .blocklyHtmlInput {',
-      'font-family: ' + this.FIELD_TEXT_FONTFAMILY + ';',
-      'font-weight: ' + this.FIELD_TEXT_FONTWEIGHT + ';',
-      'color: #575E75;',
-      '}',
+      `${selector} .blocklyHtmlInput {`,
+      `font-family: ${this.FIELD_TEXT_FONTFAMILY};`,
+      `font-weight: ${this.FIELD_TEXT_FONTWEIGHT};`,
+      `color: #575E75;`,
+      `}`,
 
       // Dropdown field.
-      selector + ' .blocklyDropdownText {',
-      'fill: #fff !important;',
-      '}',  // Widget and Dropdown Div
-      selector + '.blocklyWidgetDiv .goog-menuitem,',
-      selector + '.blocklyDropDownDiv .goog-menuitem {',
-      'font-family: ' + this.FIELD_TEXT_FONTFAMILY + ';',
-      '}',
-      selector + '.blocklyDropDownDiv .goog-menuitem-content {',
-      'color: #fff;',
-      '}',
+      `${selector} .blocklyDropdownText {`,
+      `fill: #fff !important;`,
+      `}`,
+
+      // Widget and Dropdown Div
+      `${selector}.blocklyWidgetDiv .goog-menuitem,`,
+      `${selector}.blocklyDropDownDiv .goog-menuitem {`,
+      `font-family: ${this.FIELD_TEXT_FONTFAMILY};`,
+      `}`,
+      `${selector}.blocklyDropDownDiv .goog-menuitem-content {`,
+      `color: #fff;`,
+      `}`,
 
       // Connection highlight.
-      selector + ' .blocklyHighlightedConnectionPath {',
-      'stroke: ' + this.SELECTED_GLOW_COLOUR + ';',
-      '}',
+      `${selector} .blocklyHighlightedConnectionPath {`,
+      `stroke: ${this.SELECTED_GLOW_COLOUR};`,
+      `}`,
 
       // Disabled outline paths.
-      selector + ' .blocklyDisabled > .blocklyOutlinePath {',
-      'fill: url(#blocklyDisabledPattern' + this.randomIdentifier + ')',
-      '}',
+      `${selector} .blocklyDisabled > .blocklyOutlinePath {`,
+      `fill: url(#blocklyDisabledPattern${this.randomIdentifier})`,
+      `}`,
 
       // Insertion marker.
-      selector + ' .blocklyInsertionMarker>.blocklyPath {',
-      'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';',
-      'stroke: none;',
-      '}',
+      `${selector} .blocklyInsertionMarker>.blocklyPath {`,
+      `fill-opacity: ${this.INSERTION_MARKER_OPACITY};`,
+      `stroke: none;`,
+      `}`,
     ];
   }
 }

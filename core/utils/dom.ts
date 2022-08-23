@@ -15,7 +15,6 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.dom');
 
 import type {Svg} from './svg.js';
-import * as userAgent from './useragent.js';
 
 
 /**
@@ -73,7 +72,8 @@ let canvasContext: CanvasRenderingContext2D = null as AnyDuringMigration;
  * @alias Blockly.utils.dom.createSvgElement
  */
 export function createSvgElement<T extends SVGElement>(
-    name: string|Svg<T>, attrs: AnyDuringMigration, opt_parent?: Element): T {
+    name: string|Svg<T>, attrs: AnyDuringMigration,
+    opt_parent?: Element|null): T {
   const e = document.createElementNS(SVG_NS, String(name)) as T;
   for (const key in attrs) {
     e.setAttribute(key, attrs[key]);
@@ -280,11 +280,7 @@ export function getTextWidth(textElement: SVGTextElement): number {
 
   // Attempt to compute fetch the width of the SVG text element.
   try {
-    if (userAgent.IE || userAgent.EDGE) {
-      width = textElement.getBBox().width;
-    } else {
-      width = textElement.getComputedTextLength();
-    }
+    width = textElement.getComputedTextLength();
   } catch (e) {
     // In other cases where we fail to get the computed text. Instead, use an
     // approximation and do not cache the result. At some later point in time

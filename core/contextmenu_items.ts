@@ -21,7 +21,6 @@ import * as eventUtils from './events/utils.js';
 import {inputTypes} from './input_types.js';
 import {Msg} from './msg.js';
 import * as idGenerator from './utils/idgenerator.js';
-import * as userAgent from './utils/useragent.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
 
@@ -371,10 +370,8 @@ export function registerComment() {
     },
     preconditionFn(scope: Scope) {
       const block = scope.block;
-      // IE doesn't support necessary features for comment editing.
-      if (!userAgent.IE && !block!.isInFlyout &&
-          block!.workspace.options.comments && !block!.isCollapsed() &&
-          block!.isEditable()) {
+      if (!block!.isInFlyout && block!.workspace.options.comments &&
+          !block!.isCollapsed() && block!.isEditable()) {
         return 'enabled';
       }
       return 'hidden';

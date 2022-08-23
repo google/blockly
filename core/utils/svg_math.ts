@@ -19,7 +19,6 @@ import * as deprecation from './deprecation.js';
 import {Rect} from './rect.js';
 import {Size} from './size.js';
 import * as style from './style.js';
-import * as userAgent from './useragent.js';
 
 
 /**
@@ -29,14 +28,14 @@ import * as userAgent from './useragent.js';
  * Note that IE (9,10) returns 'translate(16 8)' instead of 'translate(16, 8)'.
  * Note that IE has been reported to return scientific notation (0.123456e-42).
  */
-const XY_REGEX: RegExp = /translate\(\s*([-+\d.e]+)([ ,]\s*([-+\d.e]+)\s*)?/;
+const XY_REGEX = /translate\(\s*([-+\d.e]+)([ ,]\s*([-+\d.e]+)\s*)?/;
 
 /**
  * Static regex to pull the x,y values out of a translate() or translate3d()
  * style property.
  * Accounts for same exceptions as XY_REGEX.
  */
-const XY_STYLE_REGEX: RegExp =
+const XY_STYLE_REGEX =
     /transform:\s*translate(?:3d)?\(\s*([-+\d.e]+)\s*px([ ,]\s*([-+\d.e]+)\s*px)?/;
 
 /**
@@ -198,12 +197,6 @@ export function getViewportBBox(): Rect {
 export function getDocumentScroll(): Coordinate {
   const el = document.documentElement;
   const win = window;
-  if (userAgent.IE && win.pageYOffset !== el.scrollTop) {
-    // The keyboard on IE10 touch devices shifts the page using the pageYOffset
-    // without modifying scrollTop. For this case, we want the body scroll
-    // offsets.
-    return new Coordinate(el.scrollLeft, el.scrollTop);
-  }
   return new Coordinate(
       win.pageXOffset || el.scrollLeft, win.pageYOffset || el.scrollTop);
 }

@@ -498,6 +498,7 @@ export class ToolboxCategory extends ToolboxItem implements
    * @returns True only if every ancestor is expanded
    */
   protected allAncestorsExpanded_(): boolean {
+    /* eslint-disable-next-line @typescript-eslint/no-this-alias */
     let category: IToolboxItem = this;
     while (category.getParent()) {
       category = category.getParent()!;

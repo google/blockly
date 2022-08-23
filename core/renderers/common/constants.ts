@@ -20,7 +20,6 @@ import * as dom from '../../utils/dom.js';
 import * as parsing from '../../utils/parsing.js';
 import {Svg} from '../../utils/svg.js';
 import * as svgPaths from '../../utils/svg_paths.js';
-import * as userAgent from '../../utils/useragent.js';
 
 
 /** An object containing sizing and path information about outside corners. */
@@ -79,6 +78,7 @@ export type BaseShape = {
   type: number; width: number; height: number;
 };
 
+/** An object containing sizing and type information about a dynamic shape. */
 export type DynamicShape = {
   type: number; width: (p1: number) => number; height: (p1: number) => number;
   isDynamic: true;
@@ -92,20 +92,6 @@ export type DynamicShape = {
 
 /** An object containing sizing and type information about a shape. */
 export type Shape = BaseShape|DynamicShape;
-
-/** An object containing sizing and type information about a dynamic shape. */
-// export interface DynamicShape {
-//   type: number;
-//   width: (p1: number) => number;
-//   height: (p1: number) => number;
-//   isDynamic: boolean;
-//   connectionOffsetY: (p1: number) => number;
-//   connectionOffsetX: (p1: number) => number;
-//   pathDown: (p1: number) => string;
-//   pathUp: (p1: number) => string;
-//   pathRightDown: (p1: number) => string;
-//   pathRightUp: (p1: number) => string;
-// }
 
 /**
  * An object that provides constants for rendering blocks.
@@ -221,13 +207,13 @@ export class ConstantProvider {
    * ``setFontConstants_`` to be the height of the text based on the font
    * used.
    */
-  FIELD_TEXT_HEIGHT: number = -1;  // Dynamically set.
+  FIELD_TEXT_HEIGHT = -1;  // Dynamically set.
 
   /**
    * Text baseline.  This constant is dynamically set in ``setFontConstants_``
    * to be the baseline of the text based on the font used.
    */
-  FIELD_TEXT_BASELINE: number = -1;  // Dynamically set.
+  FIELD_TEXT_BASELINE = -1;  // Dynamically set.
 
   /** A field's border rect corner radius. */
   FIELD_BORDER_RECT_RADIUS = 4;
@@ -472,8 +458,11 @@ export class ConstantProvider {
 
     this.START_POINT = svgPaths.moveBy(0, 0);
 
-    /** A field's text element's dominant baseline. */
-    this.FIELD_TEXT_BASELINE_CENTER = !userAgent.IE && !userAgent.EDGE;
+    /**
+     * A field's text element's dominant baseline. Pre-2022 this could be false
+     * for certain browsers.
+     */
+    this.FIELD_TEXT_BASELINE_CENTER = true;
 
     /** A dropdown field's border rect height. */
     this.FIELD_DROPDOWN_BORDER_RECT_HEIGHT = this.FIELD_BORDER_RECT_HEIGHT;
@@ -1123,32 +1112,77 @@ export class ConstantProvider {
       /* eslint-disable indent */
       /* clang-format off */
       // Text.
-      selector + ' .blocklyText, ', selector + ' .blocklyFlyoutLabelText {', 'font: ' + this.FIELD_TEXT_FONTWEIGHT + ' ' + this.FIELD_TEXT_FONTSIZE + 'pt ' + this.FIELD_TEXT_FONTFAMILY + ';', '}',
+      `${selector} .blocklyText, `,
+      `${selector} .blocklyFlyoutLabelText {`,
+        `font: ${this.FIELD_TEXT_FONTWEIGHT} ` +
+            `${this.FIELD_TEXT_FONTSIZE}pt ${this.FIELD_TEXT_FONTFAMILY};`,
+      `}`,
 
       // Fields.
-      selector + ' .blocklyText {', 'fill: #fff;', '}', selector + ' .blocklyNonEditableText>rect,', selector + ' .blocklyEditableText>rect {', 'fill: ' + this.FIELD_BORDER_RECT_COLOUR + ';', 'fill-opacity: .6;', 'stroke: none;', '}', selector + ' .blocklyNonEditableText>text,', selector + ' .blocklyEditableText>text {', 'fill: #000;', '}',
+      `${selector} .blocklyText {`,
+        `fill: #fff;`,
+      `}`,
+      `${selector} .blocklyNonEditableText>rect,`,
+      `${selector} .blocklyEditableText>rect {`,
+        `fill: ${this.FIELD_BORDER_RECT_COLOUR};`,
+        `fill-opacity: .6;`,
+        `stroke: none;`,
+      `}`,
+      `${selector} .blocklyNonEditableText>text,`,
+      `${selector} .blocklyEditableText>text {`,
+        `fill: #000;`,
+      `}`,
 
       // Flyout labels.
-      selector + ' .blocklyFlyoutLabelText {', 'fill: #000;', '}',
+      `${selector} .blocklyFlyoutLabelText {`,
+        `fill: #000;`,
+      `}`,
 
       // Bubbles.
-      selector + ' .blocklyText.blocklyBubbleText {', 'fill: #000;', '}',
+      `${selector} .blocklyText.blocklyBubbleText {`,
+        `fill: #000;`,
+      `}`,
 
       // Editable field hover.
-      selector + ' .blocklyEditableText:not(.editing):hover>rect {', 'stroke: #fff;', 'stroke-width: 2;', '}',
+      `${selector} .blocklyEditableText:not(.editing):hover>rect {`,
+        `stroke: #fff;`,
+        `stroke-width: 2;`,
+      `}`,
 
       // Text field input.
-      selector + ' .blocklyHtmlInput {', 'font-family: ' + this.FIELD_TEXT_FONTFAMILY + ';', 'font-weight: ' + this.FIELD_TEXT_FONTWEIGHT + ';', '}', // Selection highlight.
-      selector + ' .blocklySelected>.blocklyPath {', 'stroke: #fc3;', 'stroke-width: 3px;', '}',
+      `${selector} .blocklyHtmlInput {`,
+        `font-family: ${this.FIELD_TEXT_FONTFAMILY};`,
+        `font-weight: ${this.FIELD_TEXT_FONTWEIGHT};`,
+      `}`,
+
+      // Selection highlight.
+      `${selector} .blocklySelected>.blocklyPath {`,
+        `stroke: #fc3;`,
+        `stroke-width: 3px;`,
+      `}`,
 
       // Connection highlight.
-      selector + ' .blocklyHighlightedConnectionPath {', 'stroke: #fc3;', '}',
+      `${selector} .blocklyHighlightedConnectionPath {`,
+        `stroke: #fc3;`,
+      `}`,
 
       // Replaceable highlight.
-      selector + ' .blocklyReplaceable .blocklyPath {', 'fill-opacity: .5;', '}', selector + ' .blocklyReplaceable .blocklyPathLight,', selector + ' .blocklyReplaceable .blocklyPathDark {', 'display: none;', '}',
+      `${selector} .blocklyReplaceable .blocklyPath {`,
+        `fill-opacity: .5;`,
+      `}`,
+      `${selector} .blocklyReplaceable .blocklyPathLight,`,
+      `${selector} .blocklyReplaceable .blocklyPathDark {`,
+        `display: none;`,
+      `}`,
 
       // Insertion marker.
-      selector + ' .blocklyInsertionMarker>.blocklyPath {', 'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';', 'stroke: none;', '}'];
+      `${selector} .blocklyInsertionMarker>.blocklyPath {`,
+        `fill-opacity: ${this.INSERTION_MARKER_OPACITY};`,
+        `stroke: none;`,
+      `}`,
+      /* clang-format on */
+      /* eslint-enable indent */
+    ];
   }
 }
 /* clang-format on */

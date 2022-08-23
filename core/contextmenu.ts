@@ -27,7 +27,6 @@ import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
 import {Rect} from './utils/rect.js';
 import * as svgMath from './utils/svg_math.js';
-import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
 import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
@@ -361,9 +360,7 @@ export function workspaceCommentOption(
   }
 
   const wsCommentOption = {
-    // Foreign objects don't work in IE.  Don't let the user create comments
-    // that they won't be able to edit.
-    enabled: !userAgent.IE,
+    enabled: true,
   } as ContextMenuOption;
   wsCommentOption.text = Msg['ADD_COMMENT'];
   wsCommentOption.callback = function() {

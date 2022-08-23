@@ -32,8 +32,8 @@ export class InputConnection extends Connection {
   connectedBlock: BlockSvg|null;
   connectedBlockWidth: number;
   connectedBlockHeight: number;
-  connectionOffsetX: number = 0;
-  connectionOffsetY: number = 0;
+  connectionOffsetX = 0;
+  connectionOffsetY = 0;
 
   /**
    * @param constants The rendering constants provider.

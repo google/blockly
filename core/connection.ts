@@ -93,8 +93,7 @@ export class Connection implements IASTNodeLocationWithBlock {
    */
   protected connect_(childConnection: Connection) {
     const INPUT = ConnectionType.INPUT_VALUE;
-    const parentConnection = this;
-    const parentBlock = parentConnection.getSourceBlock();
+    const parentBlock = this.getSourceBlock();
     const childBlock = childConnection.getSourceBlock();
 
     // Make sure the childConnection is available.
@@ -104,16 +103,16 @@ export class Connection implements IASTNodeLocationWithBlock {
 
     // Make sure the parentConnection is available.
     let orphan;
-    if (parentConnection.isConnected()) {
-      const shadowState = parentConnection.stashShadowState_();
-      const target = parentConnection.targetBlock();
+    if (this.isConnected()) {
+      const shadowState = this.stashShadowState_();
+      const target = this.targetBlock();
       if (target!.isShadow()) {
         target!.dispose(false);
       } else {
-        parentConnection.disconnect();
+        this.disconnect();
         orphan = target;
       }
-      parentConnection.applyShadowState_(shadowState);
+      this.applyShadowState_(shadowState);
     }
 
     // Connect the new connection to the parent.
@@ -122,7 +121,7 @@ export class Connection implements IASTNodeLocationWithBlock {
       event =
           new (eventUtils.get(eventUtils.BLOCK_MOVE))!(childBlock) as BlockMove;
     }
-    connectReciprocally(parentConnection, childConnection);
+    connectReciprocally(this, childConnection);
     childBlock.setParent(parentBlock);
     if (event) {
       event.recordNew();
@@ -131,15 +130,14 @@ export class Connection implements IASTNodeLocationWithBlock {
 
     // Deal with the orphan if it exists.
     if (orphan) {
-      const orphanConnection = parentConnection.type === INPUT ?
-          orphan.outputConnection :
-          orphan.previousConnection;
+      const orphanConnection = this.type === INPUT ? orphan.outputConnection :
+                                                     orphan.previousConnection;
       const connection = Connection.getConnectionForOrphanedConnection(
           childBlock, (orphanConnection));
       if (connection) {
         orphanConnection.connect(connection);
       } else {
-        orphanConnection.onFailedConnect(parentConnection);
+        orphanConnection.onFailedConnect(this);
       }
     }
   }
@@ -265,6 +263,7 @@ export class Connection implements IASTNodeLocationWithBlock {
       // Superior block.
       parentBlock = this.sourceBlock_;
       childBlock = otherConnection.getSourceBlock();
+      /* eslint-disable-next-line @typescript-eslint/no-this-alias */
       parentConnection = this;
     } else {
       // Inferior block.

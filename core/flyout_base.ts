@@ -70,7 +70,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
    *     between 0 and 1 specifying the degree of scrolling and a
    *     similar x property.
    */
-  protected abstract setMetrics_(xyRatio: {x: number, y: number}): void;
+  protected abstract setMetrics_(xyRatio: {x?: number, y?: number}): void;
 
   /**
    * Lay out the blocks in the flyout.
@@ -125,7 +125,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
    *
    * @internal
    */
-  horizontalLayout: boolean = false;
+  horizontalLayout = false;
   protected toolboxPosition_: number;
 
   /**
@@ -179,17 +179,17 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   /**
    * Does the flyout automatically close when a block is created?
    */
-  autoClose: boolean = true;
+  autoClose = true;
 
   /**
    * Whether the flyout is visible.
    */
-  private isVisible_: boolean = false;
+  private isVisible_ = false;
 
   /**
    * Whether the workspace containing this flyout is visible.
    */
-  private containerVisible_: boolean = true;
+  private containerVisible_ = true;
   protected rectMap_: WeakMap<BlockSvg, SVGElement>;
 
   /**
@@ -208,12 +208,12 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   /**
    * Width of flyout.
    */
-  protected width_: number = 0;
+  protected width_ = 0;
 
   /**
    * Height of flyout.
    */
-  protected height_: number = 0;
+  protected height_ = 0;
   // clang-format off
   /**
    * Range of a drag angle from a flyout considered "dragging toward
@@ -231,7 +231,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
    * flyout. Setting it to 360 means that all drags create a new block.
    */
   // clang-format on
-  protected dragAngleRange_: number = 70;
+  protected dragAngleRange_ = 70;
 
   /**
    * The path around the background of the flyout, which will be filled with a
@@ -510,7 +510,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     }
     // Update the scrollbar's visibility too since it should mimic the
     // flyout's visibility.
-    this.workspace_.scrollbar.setContainerVisible(show);
+    this.workspace_.scrollbar?.setContainerVisible(show);
   }
 
   /**
@@ -703,14 +703,14 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     // Look up the correct category generation function and call that to get a
     // valid XML list.
     const fnToApply =
-        this.workspace_.targetWorkspace.getToolboxCategoryCallback(
+        this.workspace_.targetWorkspace!.getToolboxCategoryCallback(
             categoryName);
     if (typeof fnToApply !== 'function') {
       throw TypeError(
           'Couldn\'t find a callback function when opening' +
           ' a toolbox category.');
     }
-    return fnToApply(this.workspace_.targetWorkspace);
+    return fnToApply(this.workspace_.targetWorkspace!);
   }
 
   /**
@@ -927,12 +927,11 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
    * @returns Function to call when block is clicked.
    */
   private blockMouseDown_(block: BlockSvg): Function {
-    const flyout = this;
     return (e: MouseEvent) => {
-      const gesture = flyout.targetWorkspace.getGesture(e);
+      const gesture = this.targetWorkspace.getGesture(e);
       if (gesture) {
         gesture.setStartBlock(block);
-        gesture.handleFlyoutStart(e, flyout);
+        gesture.handleFlyoutStart(e, this);
       }
     };
   }

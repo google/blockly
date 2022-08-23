@@ -70,7 +70,7 @@ export class Options {
    *     argument Contains an x and/or y property which is a float between 0
    *     and 1 specifying the degree of scrolling.
    */
-  setMetrics?: ((p1: {x: number, y: number}) => void) = undefined;
+  setMetrics?: ((p1: {x?: number, y?: number}) => void) = undefined;
 
   /**
    * A function that returns a metrics

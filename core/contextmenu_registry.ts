@@ -85,7 +85,7 @@ export class ContextMenuRegistry {
    */
   getContextMenuOptions(scopeType: ScopeType, scope: Scope):
       ContextMenuOption[] {
-    const menuOptions: AnyDuringMigration[] = [];
+    const menuOptions: ContextMenuOption[] = [];
     for (const item of this.registry_.values()) {
       if (scopeType === item.scopeType) {
         const precondition = item.preconditionFn(scope);
@@ -127,15 +127,15 @@ export namespace ContextMenuRegistry {
    * to callback and displayText functions that depend on this information.
    */
   export interface Scope {
-    block: BlockSvg|undefined;
-    workspace: WorkspaceSvg|undefined;
+    block?: BlockSvg;
+    workspace?: WorkspaceSvg;
   }
 
   /**
    * A menu item as entered in the registry.
    */
   export interface RegistryItem {
-    callback: (p1: Scope) => AnyDuringMigration;
+    callback: (p1: Scope) => void;
     scopeType: ScopeType;
     displayText: ((p1: Scope) => string)|string;
     preconditionFn: (p1: Scope) => string;
@@ -149,7 +149,7 @@ export namespace ContextMenuRegistry {
   export interface ContextMenuOption {
     text: string;
     enabled: boolean;
-    callback: (p1: Scope) => AnyDuringMigration;
+    callback: (p1: Scope) => void;
     scope: Scope;
     weight: number;
   }
@@ -161,7 +161,7 @@ export namespace ContextMenuRegistry {
   export interface LegacyContextMenuOption {
     text: string;
     enabled: boolean;
-    callback: (p1: Scope) => AnyDuringMigration;
+    callback: (p1: Scope) => void;
   }
 
   /**

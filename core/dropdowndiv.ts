@@ -79,7 +79,7 @@ let arrow: HTMLDivElement;
 let boundsElement: Element|null = null;
 
 /** The object currently using the drop-down. */
-let owner: AnyDuringMigration|null = null;
+let owner: Field|null = null;
 
 /** Whether the dropdown was positioned to a field or the source block. */
 let positionToField: boolean|null = null;
@@ -131,9 +131,7 @@ export function createDom() {
   arrow.className = 'blocklyDropDownArrow';
   div.appendChild(arrow);
 
-  // AnyDuringMigration because:  Type 'number' is not assignable to type
-  // 'string'.
-  div.style.opacity = 0 as AnyDuringMigration;
+  div.style.opacity = '0';
   // Transition animation for transform: translate() and opacity.
   div.style.transition = 'transform ' + ANIMATION_TIME + 's, ' +
       'opacity ' + ANIMATION_TIME + 's';
@@ -303,9 +301,8 @@ function showPositionedByRect(
  * @internal
  */
 export function show(
-    newOwner: AnyDuringMigration|null, rtl: boolean, primaryX: number,
-    primaryY: number, secondaryX: number, secondaryY: number,
-    opt_onHide?: Function): boolean {
+    newOwner: Field, rtl: boolean, primaryX: number, primaryY: number,
+    secondaryX: number, secondaryY: number, opt_onHide?: Function): boolean {
   owner = newOwner;
   onHide = opt_onHide || null;
   // Set direction.
@@ -328,70 +325,66 @@ export function show(
   return positionInternal(primaryX, primaryY, secondaryX, secondaryY);
 }
 
-const internal = {};
+const internal = {
+  /**
+   * Get sizing info about the bounding element.
+   * @return An object containing size information about the bounding element
+   *     (bounding box and width/height).
+   */
+  getBoundsInfo: function(): BoundsInfo {
+    const boundPosition = style.getPageOffset(boundsElement as Element);
+    const boundSize = style.getSize(boundsElement as Element);
 
-/**
- * Get sizing info about the bounding element.
- *
- * @returns An object containing size information about the bounding element
- *     (bounding box and width/height).
- */
-// AnyDuringMigration because:  Property 'getBoundsInfo' does not exist on type
-// '{}'.
-(internal as AnyDuringMigration).getBoundsInfo = function(): BoundsInfo {
-  const boundPosition = style.getPageOffset(boundsElement as Element);
-  const boundSize = style.getSize(boundsElement as Element);
+    return {
+      left: boundPosition.x,
+      right: boundPosition.x + boundSize.width,
+      top: boundPosition.y,
+      bottom: boundPosition.y + boundSize.height,
+      width: boundSize.width,
+      height: boundSize.height,
+    };
+  },
 
-  return {
-    left: boundPosition.x,
-    right: boundPosition.x + boundSize.width,
-    top: boundPosition.y,
-    bottom: boundPosition.y + boundSize.height,
-    width: boundSize.width,
-    height: boundSize.height,
-  };
-};
+  /**
+   * Helper to position the drop-down and the arrow, maintaining bounds.
+   * See explanation of origin points in show.
+   * @param primaryX Desired origin point x, in absolute px.
+   * @param primaryY Desired origin point y, in absolute px.
+   * @param secondaryX Secondary/alternative origin point x, in absolute px.
+   * @param secondaryY Secondary/alternative origin point y, in absolute px.
+   * @return Various final metrics, including rendered positions for drop-down
+   *     and arrow.
+   */
+  getPositionMetrics: function(
+      primaryX: number, primaryY: number, secondaryX: number,
+      secondaryY: number): PositionMetrics {
+    const boundsInfo = internal.getBoundsInfo();
+    const divSize = style.getSize(div as Element);
 
-/**
- * Helper to position the drop-down and the arrow, maintaining bounds.
- * See explanation of origin points in show.
- *
- * @param primaryX Desired origin point x, in absolute px.
- * @param primaryY Desired origin point y, in absolute px.
- * @param secondaryX Secondary/alternative origin point x, in absolute px.
- * @param secondaryY Secondary/alternative origin point y, in absolute px.
- * @returns Various final metrics, including rendered positions for drop-down
- *     and arrow.
- */
-// AnyDuringMigration because:  Property 'getPositionMetrics' does not exist on
-// type '{}'.
-(internal as AnyDuringMigration).getPositionMetrics = function(
-    primaryX: number, primaryY: number, secondaryX: number,
-    secondaryY: number): PositionMetrics {
-  // AnyDuringMigration because:  Property 'getBoundsInfo' does not exist on
-  // type '{}'.
-  const boundsInfo = (internal as AnyDuringMigration).getBoundsInfo();
-  const divSize = style.getSize(div as Element);
+    // Can we fit in-bounds below the target?
+    if (primaryY + divSize.height < boundsInfo.bottom) {
+      return getPositionBelowMetrics(primaryX, primaryY, boundsInfo, divSize);
+    }
+    // Can we fit in-bounds above the target?
+    if (secondaryY - divSize.height > boundsInfo.top) {
+      return getPositionAboveMetrics(
+          secondaryX, secondaryY, boundsInfo, divSize);
+    }
+    // Can we fit outside the workspace bounds (but inside the window)
+    // below?
+    if (primaryY + divSize.height < document.documentElement.clientHeight) {
+      return getPositionBelowMetrics(primaryX, primaryY, boundsInfo, divSize);
+    }
+    // Can we fit outside the workspace bounds (but inside the window)
+    // above?
+    if (secondaryY - divSize.height > document.documentElement.clientTop) {
+      return getPositionAboveMetrics(
+          secondaryX, secondaryY, boundsInfo, divSize);
+    }
 
-  // Can we fit in-bounds below the target?
-  if (primaryY + divSize.height < boundsInfo.bottom) {
-    return getPositionBelowMetrics(primaryX, primaryY, boundsInfo, divSize);
-  }
-  // Can we fit in-bounds above the target?
-  if (secondaryY - divSize.height > boundsInfo.top) {
-    return getPositionAboveMetrics(secondaryX, secondaryY, boundsInfo, divSize);
-  }
-  // Can we fit outside the workspace bounds (but inside the window) below?
-  if (primaryY + divSize.height < document.documentElement.clientHeight) {
-    return getPositionBelowMetrics(primaryX, primaryY, boundsInfo, divSize);
-  }
-  // Can we fit outside the workspace bounds (but inside the window) above?
-  if (secondaryY - divSize.height > document.documentElement.clientTop) {
-    return getPositionAboveMetrics(secondaryX, secondaryY, boundsInfo, divSize);
-  }
-
-  // Last resort, render at top of page.
-  return getPositionTopOfPageMetrics(primaryX, boundsInfo, divSize);
+    // Last resort, render at top of page.
+    return getPositionTopOfPageMetrics(primaryX, boundsInfo, divSize);
+  },
 };
 
 /**
@@ -542,8 +535,7 @@ export function isVisible(): boolean {
  * @returns True if hidden.
  */
 export function hideIfOwner(
-    divOwner: AnyDuringMigration|null,
-    opt_withoutAnimation?: boolean): boolean {
+    divOwner: Field, opt_withoutAnimation?: boolean): boolean {
   if (owner === divOwner) {
     if (opt_withoutAnimation) {
       hideWithoutAnimation();
@@ -560,9 +552,7 @@ export function hide() {
   // Start the animation by setting the translation and fading out.
   // Reset to (initialX, initialY) - i.e., no translation.
   div.style.transform = 'translate(0, 0)';
-  // AnyDuringMigration because:  Type 'number' is not assignable to type
-  // 'string'.
-  div.style.opacity = 0 as AnyDuringMigration;
+  div.style.opacity = '0';
   // Finish animation - reset all values to default.
   animateOutTimer = setTimeout(function() {
     hideWithoutAnimation();
@@ -587,9 +577,7 @@ export function hideWithoutAnimation() {
   div.style.transform = '';
   div.style.left = '';
   div.style.top = '';
-  // AnyDuringMigration because:  Type 'number' is not assignable to type
-  // 'string'.
-  div.style.opacity = 0 as AnyDuringMigration;
+  div.style.opacity = '0';
   div.style.display = 'none';
   div.style.backgroundColor = '';
   div.style.borderColor = '';
@@ -624,11 +612,8 @@ export function hideWithoutAnimation() {
 function positionInternal(
     primaryX: number, primaryY: number, secondaryX: number,
     secondaryY: number): boolean {
-  // AnyDuringMigration because:  Property 'getPositionMetrics' does not exist
-  // on type '{}'.
   const metrics =
-      (internal as AnyDuringMigration)
-          .getPositionMetrics(primaryX, primaryY, secondaryX, secondaryY);
+      internal.getPositionMetrics(primaryX, primaryY, secondaryX, secondaryY);
 
   // Update arrow CSS.
   if (metrics.arrowVisible) {
@@ -654,9 +639,7 @@ function positionInternal(
 
   // Show the div.
   div.style.display = 'block';
-  // AnyDuringMigration because:  Type 'number' is not assignable to type
-  // 'string'.
-  div.style.opacity = 1 as AnyDuringMigration;
+  div.style.opacity = '1';
   // Add final translate, animated through `transition`.
   // Coordinates are relative to (initialX, initialY),
   // where the drop-down is absolutely positioned.
@@ -680,9 +663,8 @@ export function repositionForWindowResize() {
   // event and we want the dropdown div to stick around so users can type into
   // it.
   if (owner) {
-    const field = owner as Field;
-    const block = field.getSourceBlock() as BlockSvg;
-    const bBox = positionToField ? getScaledBboxOfField(field) :
+    const block = owner.getSourceBlock() as BlockSvg;
+    const bBox = positionToField ? getScaledBboxOfField(owner) :
                                    getScaledBboxOfBlock(block);
     // If we can fit it, render below the block.
     const primaryX = bBox.left + (bBox.right - bBox.left) / 2;

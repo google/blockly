@@ -5,13 +5,9 @@
  */
 
 /**
- * @fileoverview The interface for an AST node location that has an associated
- * block.
- */
-
-/**
  * The interface for an AST node location that has an associated
  * block.
+ *
  * @namespace Blockly.IASTNodeLocationWithBlock
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -27,12 +23,14 @@ import type {Block} from '../block.js';
 
 /**
  * An AST node location that has an associated block.
+ *
  * @alias Blockly.IASTNodeLocationWithBlock
  */
 export interface IASTNodeLocationWithBlock extends IASTNodeLocation {
   /**
    * Get the source block associated with this node.
-   * @return The source block.
+   *
+   * @returns The source block.
    */
   getSourceBlock(): Block;
 }

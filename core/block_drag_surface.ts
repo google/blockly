@@ -5,21 +5,13 @@
  */
 
 /**
- * @fileoverview A class that manages a surface for dragging blocks.  When a
- * block drag is started, we move the block (and children) to a separate DOM
- * element that we move around using translate3d. At the end of the drag, the
- * blocks are put back in into the SVG they came from. This helps
- * performance by avoiding repainting the entire SVG on every mouse move
- * while dragging blocks.
- */
-
-/**
  * A class that manages a surface for dragging blocks.  When a
  * block drag is started, we move the block (and children) to a separate DOM
  * element that we move around using translate3d. At the end of the drag, the
  * blocks are put back in into the SVG they came from. This helps
  * performance by avoiding repainting the entire SVG on every mouse move
  * while dragging blocks.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -35,6 +27,7 @@ import * as svgMath from './utils/svg_math.js';
 /**
  * Class for a drag surface for the currently dragged block. This is a separate
  * SVG that contains only the currently moving block, or nothing.
+ *
  * @alias Blockly.BlockDragSurfaceSvg
  */
 export class BlockDragSurfaceSvg {
@@ -92,6 +85,7 @@ export class BlockDragSurfaceSvg {
   /**
    * Set the SVG blocks on the drag surface's group and show the surface.
    * Only one block group should be on the drag surface at a time.
+   *
    * @param blocks Block or group of blocks to place on the drag surface.
    */
   setBlocksAndShow(blocks: SVGElement) {
@@ -107,6 +101,7 @@ export class BlockDragSurfaceSvg {
   /**
    * Translate and scale the entire drag surface group to the given position, to
    * keep in sync with the workspace.
+   *
    * @param x X translation in pixel coordinates.
    * @param y Y translation in pixel coordinates.
    * @param scale Scale of the group.
@@ -125,6 +120,7 @@ export class BlockDragSurfaceSvg {
 
   /**
    * Translate the drag surface's SVG based on its internal state.
+   *
    * @private
    */
   translateSurfaceInternal_() {
@@ -139,6 +135,7 @@ export class BlockDragSurfaceSvg {
 
   /**
    * Translates the entire surface by a relative offset.
+   *
    * @param deltaX Horizontal offset in pixel units.
    * @param deltaY Vertical offset in pixel units.
    */
@@ -154,6 +151,7 @@ export class BlockDragSurfaceSvg {
    * We translate the drag surface instead of the blocks inside the surface
    * so that the browser avoids repainting the SVG.
    * Because of this, the drag coordinates must be adjusted by scale.
+   *
    * @param x X translation for the entire surface.
    * @param y Y translation for the entire surface.
    */
@@ -165,7 +163,8 @@ export class BlockDragSurfaceSvg {
   /**
    * Reports the surface translation in scaled workspace coordinates.
    * Use this when finishing a drag to return blocks to the correct position.
-   * @return Current translation of the surface.
+   *
+   * @returns Current translation of the surface.
    */
   getSurfaceTranslation(): Coordinate {
     const xy = svgMath.getRelativeXY(this.svg_ as SVGElement);
@@ -175,7 +174,8 @@ export class BlockDragSurfaceSvg {
   /**
    * Provide a reference to the drag group (primarily for
    * BlockSvg.getRelativeToSurfaceXY).
-   * @return Drag surface group element.
+   *
+   * @returns Drag surface group element.
    */
   getGroup(): SVGElement|null {
     return this.dragGroup_;
@@ -183,6 +183,7 @@ export class BlockDragSurfaceSvg {
 
   /**
    * Returns the SVG drag surface.
+   *
    * @returns The SVG drag surface.
    */
   getSvgRoot(): SVGElement|null {
@@ -192,7 +193,8 @@ export class BlockDragSurfaceSvg {
   /**
    * Get the current blocks on the drag surface, if any (primarily
    * for BlockSvg.getRelativeToSurfaceXY).
-   * @return Drag surface block DOM element, or null if no blocks exist.
+   *
+   * @returns Drag surface block DOM element, or null if no blocks exist.
    */
   getCurrentBlock(): Element|null {
     return this.dragGroup_.firstChild as Element;
@@ -202,7 +204,8 @@ export class BlockDragSurfaceSvg {
    * Gets the translation of the child block surface
    * This surface is in charge of keeping track of how much the workspace has
    * moved.
-   * @return The amount the workspace has been moved.
+   *
+   * @returns The amount the workspace has been moved.
    */
   getWsTranslation(): Coordinate {
     // Returning a copy so the coordinate can not be changed outside this class.
@@ -214,6 +217,7 @@ export class BlockDragSurfaceSvg {
    * element.
    * If the block is being deleted it doesn't need to go back to the original
    * surface, since it would be removed immediately during dispose.
+   *
    * @param opt_newSurface Surface the dragging blocks should be moved to, or
    *     null if the blocks should be removed from this surface without being
    *     moved to a different surface.

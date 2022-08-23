@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview The interface for an object that is draggable.
- */
-
-/**
  * The interface for an object that is draggable.
+ *
  * @namespace Blockly.IDraggable
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -20,6 +17,7 @@ import type {IDeletable} from './i_deletable.js';
 
 /**
  * The interface for an object that can be dragged.
+ *
  * @alias Blockly.IDraggable
  */
 export interface IDraggable extends IDeletable {}

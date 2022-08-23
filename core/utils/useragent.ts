@@ -5,15 +5,10 @@
  */
 
 /**
- * @fileoverview Useragent detection.
- * These methods are not specific to Blockly, and could be factored out into
- * a JavaScript framework such as Closure.
- */
-
-/**
  * Useragent detection.
  * These methods are not specific to Blockly, and could be factored out into
  * a JavaScript framework such as Closure.
+ *
  * @namespace Blockly.utils.userAgent
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -46,8 +41,9 @@ rawUserAgent = raw;
 const rawUpper = rawUserAgent.toUpperCase();
 /**
  * Case-insensitive test of whether name is in the useragent string.
+ *
  * @param name Name to test.
- * @return True if name is present.
+ * @returns True if name is present.
  */
 function has(name: string): boolean {
   return rawUpper.indexOf(name.toUpperCase()) !== -1;

@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Base class for comment events.
- */
-
-/**
  * Base class for comment events.
+ *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -27,6 +24,7 @@ import * as eventUtils from './utils.js';
 
 /**
  * Abstract class for a comment event.
+ *
  * @alias Blockly.Events.CommentBase
  */
 export class CommentBase extends AbstractEvent {
@@ -62,7 +60,8 @@ export class CommentBase extends AbstractEvent {
 
   /**
    * Encode the event as JSON.
-   * @return JSON representation.
+   *
+   * @returns JSON representation.
    */
   override toJson(): AnyDuringMigration {
     const json = super.toJson();
@@ -74,6 +73,7 @@ export class CommentBase extends AbstractEvent {
 
   /**
    * Decode the JSON event.
+   *
    * @param json JSON representation.
    */
   override fromJson(json: AnyDuringMigration) {
@@ -83,6 +83,7 @@ export class CommentBase extends AbstractEvent {
 
   /**
    * Helper function for Comment[Create|Delete]
+   *
    * @param event The event to run.
    * @param create if True then Create, if False then Delete
    */

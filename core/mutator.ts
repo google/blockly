@@ -5,13 +5,9 @@
  */
 
 /**
- * @fileoverview Object representing a mutator dialog.  A mutator allows the
- * user to change the shape of a block using a nested blocks editor.
- */
-
-/**
  * Object representing a mutator dialog.  A mutator allows the
  * user to change the shape of a block using a nested blocks editor.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -41,10 +37,11 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Class for a mutator dialog.
+ *
  * @alias Blockly.Mutator
  */
 export class Mutator extends Icon {
-  quarkNames_: AnyDuringMigration;
+  private quarkNames_: string[];
 
   /** Workspace in the mutator's bubble. */
   private workspace_: WorkspaceSvg|null = null;
@@ -87,6 +84,7 @@ export class Mutator extends Icon {
 
   /**
    * Set the block this mutator is associated with.
+   *
    * @param block The block associated with this mutator.
    * @internal
    */
@@ -96,7 +94,8 @@ export class Mutator extends Icon {
 
   /**
    * Returns the workspace inside this mutator icon's bubble.
-   * @return The workspace inside this mutator icon's bubble or null if the
+   *
+   * @returns The workspace inside this mutator icon's bubble or null if the
    *     mutator isn't open.
    * @internal
    */
@@ -106,6 +105,7 @@ export class Mutator extends Icon {
 
   /**
    * Draw the mutator icon.
+   *
    * @param group The icon group.
    */
   protected override drawIcon_(group: Element) {
@@ -141,6 +141,7 @@ export class Mutator extends Icon {
   /**
    * Clicking on the icon toggles if the mutator bubble is visible.
    * Disable if block is uneditable.
+   *
    * @param e Mouse click event.
    */
   protected override iconClick_(e: MouseEvent) {
@@ -151,7 +152,8 @@ export class Mutator extends Icon {
 
   /**
    * Create the editor for the mutator's bubble.
-   * @return The top-level node of the editor.
+   *
+   * @returns The top-level node of the editor.
    */
   private createEditor_(): SVGElement {
     /* Create the editor.  Here's the markup that will be generated:
@@ -209,9 +211,7 @@ export class Mutator extends Icon {
     }
     this.svgDialog_!.appendChild(background);
 
-    // AnyDuringMigration because:  Type 'SVGSVGElement | null' is not
-    // assignable to type 'SVGElement'.
-    return this.svgDialog_ as AnyDuringMigration;
+    return this.svgDialog_;
   }
 
   /**
@@ -270,14 +270,8 @@ export class Mutator extends Icon {
       // Resize the bubble.
       this.bubble_!.setBubbleSize(
           width + doubleBorderWidth, height + doubleBorderWidth);
-      // AnyDuringMigration because:  Argument of type 'number' is not
-      // assignable to parameter of type 'string'.
-      this.svgDialog_!.setAttribute(
-          'width', this.workspaceWidth_ as AnyDuringMigration);
-      // AnyDuringMigration because:  Argument of type 'number' is not
-      // assignable to parameter of type 'string'.
-      this.svgDialog_!.setAttribute(
-          'height', this.workspaceHeight_ as AnyDuringMigration);
+      this.svgDialog_!.setAttribute('width', `${this.workspaceWidth_}`);
+      this.svgDialog_!.setAttribute('height', `${this.workspaceHeight_}`);
       this.workspace_!.setCachedParentSvgSize(
           this.workspaceWidth_, this.workspaceHeight_);
     }
@@ -299,6 +293,7 @@ export class Mutator extends Icon {
 
   /**
    * Show or hide the mutator bubble.
+   *
    * @param visible True if the bubble should be visible.
    */
   override setVisible(visible: boolean) {
@@ -381,6 +376,7 @@ export class Mutator extends Icon {
 
   /**
    * Fired whenever a change is made to the mutator's workspace.
+   *
    * @param e Custom data for event.
    */
   private workspaceChanged_(e: Abstract) {
@@ -395,8 +391,9 @@ export class Mutator extends Icon {
   /**
    * Returns whether the given event in the mutator workspace should be ignored
    * when deciding whether to update the workspace and compose the block or not.
+   *
    * @param e The event.
-   * @return Whether to ignore the event or not.
+   * @returns Whether to ignore the event or not.
    */
   shouldIgnoreMutatorEvent_(e: Abstract) {
     return e.isUiEvent || e.type === eventUtils.CREATE ||
@@ -512,10 +509,11 @@ export class Mutator extends Icon {
 
   /**
    * Reconnect an block to a mutated input.
+   *
    * @param connectionChild Connection on child block.
    * @param block Parent block.
    * @param inputName Name of input on parent block.
-   * @return True iff a reconnection was made, false otherwise.
+   * @returns True iff a reconnection was made, false otherwise.
    */
   static reconnect(
       connectionChild: Connection, block: Block, inputName: string): boolean {
@@ -539,8 +537,9 @@ export class Mutator extends Icon {
   /**
    * Get the parent workspace of a workspace that is inside a mutator, taking
    * into account whether it is a flyout.
+   *
    * @param workspace The workspace that is inside a mutator.
-   * @return The mutator's parent workspace or null.
+   * @returns The mutator's parent workspace or null.
    */
   static findParentWs(workspace: WorkspaceSvg): WorkspaceSvg|null {
     let outerWs = null;

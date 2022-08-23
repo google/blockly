@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Object in charge of managing markers and the cursor.
- */
-
-/**
  * Object in charge of managing markers and the cursor.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -22,6 +19,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Class to manage the multiple markers and the cursor on a workspace.
+ *
  * @alias Blockly.MarkerManager
  */
 export class MarkerManager {
@@ -48,6 +46,7 @@ export class MarkerManager {
 
   /**
    * Register the marker by adding it to the map of markers.
+   *
    * @param id A unique identifier for the marker.
    * @param marker The marker to register.
    */
@@ -63,6 +62,7 @@ export class MarkerManager {
 
   /**
    * Unregister the marker by removing it from the map of markers.
+   *
    * @param id The ID of the marker to unregister.
    */
   unregisterMarker(id: string) {
@@ -79,7 +79,8 @@ export class MarkerManager {
 
   /**
    * Get the cursor for the workspace.
-   * @return The cursor for this workspace.
+   *
+   * @returns The cursor for this workspace.
    */
   getCursor(): Cursor|null {
     return this.cursor_;
@@ -87,8 +88,9 @@ export class MarkerManager {
 
   /**
    * Get a single marker that corresponds to the given ID.
+   *
    * @param id A unique identifier for the marker.
-   * @return The marker that corresponds to the given ID, or null if none
+   * @returns The marker that corresponds to the given ID, or null if none
    *     exists.
    */
   getMarker(id: string): Marker|null {
@@ -98,6 +100,7 @@ export class MarkerManager {
   /**
    * Sets the cursor and initializes the drawer for use with keyboard
    * navigation.
+   *
    * @param cursor The cursor used to move around this workspace.
    */
   setCursor(cursor: Cursor) {
@@ -115,6 +118,7 @@ export class MarkerManager {
 
   /**
    * Add the cursor SVG to this workspace SVG group.
+   *
    * @param cursorSvg The SVG root of the cursor to be added to the workspace
    *     SVG group.
    * @internal
@@ -131,6 +135,7 @@ export class MarkerManager {
 
   /**
    * Add the marker SVG to this workspaces SVG group.
+   *
    * @param markerSvg The SVG root of the marker to be added to the workspace
    *     SVG group.
    * @internal
@@ -153,6 +158,7 @@ export class MarkerManager {
 
   /**
    * Redraw the attached cursor SVG if needed.
+   *
    * @internal
    */
   updateMarkers() {
@@ -164,6 +170,7 @@ export class MarkerManager {
   /**
    * Dispose of the marker manager.
    * Go through and delete all markers associated with this marker manager.
+   *
    * @suppress {checkTypes}
    * @internal
    */

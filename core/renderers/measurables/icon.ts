@@ -5,13 +5,9 @@
  */
 
 /**
- * @fileoverview Objects representing an icon in a row of a rendered
- * block.
- */
-
-/**
  * Objects representing an icon in a row of a rendered
  * block.
+ *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -28,7 +24,7 @@ import {Types} from './types.js';
 /**
  * An object containing information about the space an icon takes up during
  * rendering
- * @struct
+ *
  * @alias Blockly.blockRendering.Icon
  */
 export class Icon extends Measurable {
@@ -37,6 +33,7 @@ export class Icon extends Measurable {
   /**
    * An object containing information about the space an icon takes up during
    * rendering
+   *
    * @param constants The rendering constants provider.
    * @param icon The icon to measure and store information for.
    * @internal

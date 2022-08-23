@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Events fired as a result of a theme update.
- */
-
-/**
  * Events fired as a result of a theme update.
+ *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -23,6 +20,7 @@ import * as eventUtils from './utils.js';
 
 /**
  * Class for a theme change event.
+ *
  * @alias Blockly.Events.ThemeChange
  */
 export class ThemeChange extends UiBase {
@@ -46,7 +44,8 @@ export class ThemeChange extends UiBase {
 
   /**
    * Encode the event as JSON.
-   * @return JSON representation.
+   *
+   * @returns JSON representation.
    */
   override toJson(): AnyDuringMigration {
     const json = super.toJson();
@@ -56,6 +55,7 @@ export class ThemeChange extends UiBase {
 
   /**
    * Decode the JSON event.
+   *
    * @param json JSON representation.
    */
   override fromJson(json: AnyDuringMigration) {

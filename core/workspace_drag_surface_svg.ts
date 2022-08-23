@@ -5,17 +5,11 @@
  */
 
 /**
- * @fileoverview An SVG that floats on top of the workspace.
- * Blocks are moved into this SVG during a drag, improving performance.
- * The entire SVG is translated using CSS translation instead of SVG so the
- * blocks are never repainted during drag improving performance.
- */
-
-/**
  * An SVG that floats on top of the workspace.
  * Blocks are moved into this SVG during a drag, improving performance.
  * The entire SVG is translated using CSS translation instead of SVG so the
  * blocks are never repainted during drag improving performance.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -31,6 +25,7 @@ import * as svgMath from './utils/svg_math.js';
  * Blocks are moved into this SVG during a drag, improving performance.
  * The entire SVG is translated using CSS transforms instead of SVG so the
  * blocks are never repainted during drag improving performance.
+ *
  * @alias Blockly.WorkspaceDragSurfaceSvg
  */
 export class WorkspaceDragSurfaceSvg {
@@ -78,6 +73,7 @@ export class WorkspaceDragSurfaceSvg {
    * We translate the drag surface instead of the blocks inside the surface
    * so that the browser avoids repainting the SVG.
    * Because of this, the drag coordinates must be adjusted by scale.
+   *
    * @param x X translation for the entire surface
    * @param y Y translation for the entire surface
    * @internal
@@ -95,7 +91,8 @@ export class WorkspaceDragSurfaceSvg {
   /**
    * Reports the surface translation in scaled workspace coordinates.
    * Use this when finishing a drag to return blocks to the correct position.
-   * @return Current translation of the surface
+   *
+   * @returns Current translation of the surface
    * @internal
    */
   getSurfaceTranslation(): Coordinate {
@@ -105,6 +102,7 @@ export class WorkspaceDragSurfaceSvg {
   /**
    * Move the blockCanvas and bubbleCanvas out of the surface SVG and on to
    * newSurface.
+   *
    * @param newSurface The element to put the drag surface contents into.
    * @internal
    */
@@ -142,20 +140,21 @@ export class WorkspaceDragSurfaceSvg {
   }
 
   /**
-     * Set the SVG to have the block canvas and bubble canvas in it and then
-     * show the surface.
-     * @param blockCanvas The block canvas <g> element from the
-     *     workspace.
-     * @param bubbleCanvas The <g> element that contains the
+   * Set the SVG to have the block canvas and bubble canvas in it and then
+   * show the surface.
+   *
+   * @param blockCanvas The block canvas <g> element from the
+   *     workspace.
+   * @param bubbleCanvas The <g> element that contains the
      bubbles.
-     * @param previousSibling The element to insert the block canvas and
+   * @param previousSibling The element to insert the block canvas and
            bubble canvas after when it goes back in the DOM at the end of a
      drag.
-     * @param width The width of the workspace SVG element.
-     * @param height The height of the workspace SVG element.
-     * @param scale The scale of the workspace being dragged.
- * @internal
-     */
+   * @param width The width of the workspace SVG element.
+   * @param height The height of the workspace SVG element.
+   * @param scale The scale of the workspace being dragged.
+   * @internal
+   */
   setContentsAndShow(
       blockCanvas: SVGElement, bubbleCanvas: SVGElement,
       previousSibling: Element, width: number, height: number, scale: number) {

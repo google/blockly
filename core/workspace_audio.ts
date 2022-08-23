@@ -5,13 +5,9 @@
  */
 
 /**
- * @fileoverview Object in charge of loading, storing, and playing audio for a
- *     workspace.
- */
-
-/**
  * Object in charge of loading, storing, and playing audio for a
  *     workspace.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -29,6 +25,7 @@ const SOUND_LIMIT = 100;
 
 /**
  * Class for loading, storing, and playing audio for a workspace.
+ *
  * @alias Blockly.WorkspaceAudio
  */
 export class WorkspaceAudio {
@@ -46,6 +43,7 @@ export class WorkspaceAudio {
 
   /**
    * Dispose of this audio manager.
+   *
    * @internal
    */
   dispose() {
@@ -54,6 +52,7 @@ export class WorkspaceAudio {
 
   /**
    * Load an audio file.  Cache it, ready for instantaneous playing.
+   *
    * @param filenames List of file types in decreasing order of preference (i.e.
    *     increasing size).  E.g. ['media/go.mp3', 'media/go.wav'] Filenames
    *     include path from Blockly's root.  File extensions matter.
@@ -88,6 +87,7 @@ export class WorkspaceAudio {
 
   /**
    * Preload all the audio files so that they play quickly when asked for.
+   *
    * @internal
    */
   preload() {
@@ -120,6 +120,7 @@ export class WorkspaceAudio {
   /**
    * Play a named sound at specified volume.  If volume is not specified,
    * use full volume (1).
+   *
    * @param name Name of sound.
    * @param opt_volume Volume of sound (0-1).
    */

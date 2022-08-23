@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Object representing a pair of scrollbars.
- */
-
-/**
  * Object representing a pair of scrollbars.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -25,6 +22,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Class for a pair of scrollbars.  Horizontal and vertical.
+ *
  * @alias Blockly.ScrollbarPair
  */
 export class ScrollbarPair {
@@ -72,6 +70,7 @@ export class ScrollbarPair {
   /**
    * Dispose of this pair of scrollbars.
    * Unlink from all DOM elements to prevent memory leaks.
+   *
    * @suppress {checkTypes}
    */
   dispose() {
@@ -162,7 +161,8 @@ export class ScrollbarPair {
 
   /**
    * Returns whether scrolling horizontally is enabled.
-   * @return True if horizontal scroll is enabled.
+   *
+   * @returns True if horizontal scroll is enabled.
    */
   canScrollHorizontally(): boolean {
     return !!this.hScroll;
@@ -170,7 +170,8 @@ export class ScrollbarPair {
 
   /**
    * Returns whether scrolling vertically is enabled.
-   * @return True if vertical scroll is enabled.
+   *
+   * @returns True if vertical scroll is enabled.
    */
   canScrollVertically(): boolean {
     return !!this.vScroll;
@@ -181,6 +182,7 @@ export class ScrollbarPair {
    * relative to the injection div origin. This is for times when the scrollbar
    * is used in an object whose origin isn't the same as the main workspace
    * (e.g. in a flyout.)
+   *
    * @param x The x coordinate of the scrollbar's origin, in CSS pixels.
    * @param y The y coordinate of the scrollbar's origin, in CSS pixels.
    * @internal
@@ -196,6 +198,7 @@ export class ScrollbarPair {
 
   /**
    * Set the handles of both scrollbars.
+   *
    * @param x The horizontal content displacement, relative to the view in
    *     pixels.
    * @param y The vertical content displacement, relative to the view in pixels.
@@ -232,6 +235,7 @@ export class ScrollbarPair {
   /**
    * Set the handle of the horizontal scrollbar to be at a certain position in
    *    CSS pixels relative to its parents.
+   *
    * @param x Horizontal scroll value.
    */
   setX(x: number) {
@@ -243,6 +247,7 @@ export class ScrollbarPair {
   /**
    * Set the handle of the vertical scrollbar to be at a certain position in
    *    CSS pixels relative to its parents.
+   *
    * @param y Vertical scroll value.
    */
   setY(y: number) {
@@ -253,6 +258,7 @@ export class ScrollbarPair {
 
   /**
    * Set whether this scrollbar's container is visible.
+   *
    * @param visible Whether the container is visible.
    */
   setContainerVisible(visible: boolean) {
@@ -267,7 +273,8 @@ export class ScrollbarPair {
   /**
    * If any of the scrollbars are visible. Non-paired scrollbars may disappear
    * when they aren't needed.
-   * @return True if visible.
+   *
+   * @returns True if visible.
    */
   isVisible(): boolean {
     let isVisible = false;
@@ -283,6 +290,7 @@ export class ScrollbarPair {
   /**
    * Recalculates the scrollbars' locations within their path and length.
    * This should be called when the contents of the workspace have changed.
+   *
    * @param hostMetrics A data structure describing all the required dimensions,
    *     possibly fetched from the host object.
    */
@@ -298,6 +306,7 @@ export class ScrollbarPair {
   /**
    * Recalculates the scrollbars' locations on the screen and path length.
    * This should be called when the layout or size of the window has changed.
+   *
    * @param hostMetrics A data structure describing all the required dimensions,
    *     possibly fetched from the host object.
    */

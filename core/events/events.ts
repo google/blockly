@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Events fired as a result of actions in Blockly's editor.
- */
-
-/**
  * Events fired as a result of actions in Blockly's editor.
+ *
  * @namespace Blockly.Events
  */
 import * as goog from '../../closure/goog/goog.js';

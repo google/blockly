@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Image field.  Used for pictures, icons, etc.
- */
-
-/**
  * Image field.  Used for pictures, icons, etc.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -26,6 +23,7 @@ import {Svg} from './utils/svg.js';
 
 /**
  * Class for an image on a block.
+ *
  * @alias Blockly.FieldImage
  */
 export class FieldImage extends Field {
@@ -127,6 +125,7 @@ export class FieldImage extends Field {
 
   /**
    * Configure the field based on the given map of options.
+   *
    * @param config A map of options to configure the field based on.
    */
   protected override configure_(config: FieldImageConfig) {
@@ -139,6 +138,7 @@ export class FieldImage extends Field {
 
   /**
    * Create the block UI for this image.
+   *
    * @internal
    */
   override initView() {
@@ -162,8 +162,9 @@ export class FieldImage extends Field {
 
   /**
    * Ensure that the input value (the source URL) is a string.
+   *
    * @param opt_newValue The input value.
-   * @return A string, or null if invalid.
+   * @returns A string, or null if invalid.
    */
   protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
       string|null {
@@ -175,6 +176,7 @@ export class FieldImage extends Field {
 
   /**
    * Update the value of this image field, and update the displayed image.
+   *
    * @param newValue The value to be saved. The default validator guarantees
    *     that this is a string.
    */
@@ -188,7 +190,8 @@ export class FieldImage extends Field {
 
   /**
    * Get whether to flip this image in RTL
-   * @return True if we should flip in RTL.
+   *
+   * @returns True if we should flip in RTL.
    */
   override getFlipRtl(): boolean {
     return this.flipRtl_;
@@ -196,6 +199,7 @@ export class FieldImage extends Field {
 
   /**
    * Set the alt text of this image.
+   *
    * @param alt New alt text.
    */
   setAlt(alt: string|null) {
@@ -220,6 +224,7 @@ export class FieldImage extends Field {
 
   /**
    * Set the function that is called when this image  is clicked.
+   *
    * @param func The function that is called when the image is clicked, or null
    *     to remove.
    */
@@ -231,7 +236,8 @@ export class FieldImage extends Field {
    * Use the `getText_` developer hook to override the field's text
    * representation.
    * Return the image alt text instead.
-   * @return The image alt text.
+   *
+   * @returns The image alt text.
    */
   protected override getText_(): string|null {
     return this.altText_;
@@ -240,9 +246,10 @@ export class FieldImage extends Field {
   /**
    * Construct a FieldImage from a JSON arg object,
    * dereferencing any string table references.
+   *
    * @param options A JSON object with options (src, width, height, alt, and
    *     flipRtl).
-   * @return The new field instance.
+   * @returns The new field instance.
    * @nocollapse
    * @internal
    */

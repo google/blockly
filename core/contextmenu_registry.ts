@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Registry for context menu option items.
- */
-
-/**
  * Registry for context menu option items.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -23,6 +20,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  * Class for the registry of context menu items. This is intended to be a
  * singleton. You should not create a new instance, and only access this class
  * from ContextMenuRegistry.registry.
+ *
  * @alias Blockly.ContextMenuRegistry
  */
 export class ContextMenuRegistry {
@@ -42,6 +40,7 @@ export class ContextMenuRegistry {
 
   /**
    * Registers a RegistryItem.
+   *
    * @param item Context menu item to register.
    * @throws {Error} if an item with the given ID already exists.
    */
@@ -54,6 +53,7 @@ export class ContextMenuRegistry {
 
   /**
    * Unregisters a RegistryItem with the given ID.
+   *
    * @param id The ID of the RegistryItem to remove.
    * @throws {Error} if an item with the given ID does not exist.
    */
@@ -66,7 +66,7 @@ export class ContextMenuRegistry {
 
   /**
    * @param id The ID of the RegistryItem to get.
-   * @return RegistryItem or null if not found
+   * @returns RegistryItem or null if not found
    */
   getItem(id: string): RegistryItem|null {
     return this.registry_.get(id) ?? null;
@@ -76,11 +76,12 @@ export class ContextMenuRegistry {
    * Gets the valid context menu options for the given scope type (e.g. block or
    * workspace) and scope. Blocks are only shown if the preconditionFn shows
    * they should not be hidden.
+   *
    * @param scopeType Type of scope where menu should be shown (e.g. on a block
    *     or on a workspace)
    * @param scope Current scope of context menu (i.e., the exact workspace or
    *     block being clicked on)
-   * @return the list of ContextMenuOptions
+   * @returns the list of ContextMenuOptions
    */
   getContextMenuOptions(scopeType: ScopeType, scope: Scope):
       ContextMenuOption[] {

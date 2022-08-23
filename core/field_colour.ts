@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Colour input field.
- */
-
-/**
  * Colour input field.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -35,6 +32,7 @@ import {Size} from './utils/size.js';
 
 /**
  * Class for a colour input field.
+ *
  * @alias Blockly.FieldColour
  */
 export class FieldColour extends Field {
@@ -172,6 +170,7 @@ export class FieldColour extends Field {
 
   /**
    * Configure the field based on the given map of options.
+   *
    * @param config A map of options to configure the field based on.
    */
   protected override configure_(config: FieldColourConfig) {
@@ -183,6 +182,7 @@ export class FieldColour extends Field {
 
   /**
    * Create the block UI for this colour field.
+   *
    * @internal
    */
   override initView() {
@@ -211,8 +211,9 @@ export class FieldColour extends Field {
 
   /**
    * Ensure that the input value is a valid colour.
+   *
    * @param opt_newValue The input value.
-   * @return A valid colour, or null if invalid.
+   * @returns A valid colour, or null if invalid.
    */
   protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
       string|null {
@@ -224,6 +225,7 @@ export class FieldColour extends Field {
 
   /**
    * Update the value of this colour field, and update the displayed colour.
+   *
    * @param newValue The value to be saved. The default validator guarantees
    *     that this is a colour in '#rrggbb' format.
    */
@@ -242,7 +244,8 @@ export class FieldColour extends Field {
 
   /**
    * Get the text for this field.  Used when the block is collapsed.
-   * @return Text representing the value of this field.
+   *
+   * @returns Text representing the value of this field.
    */
   override getText(): string {
     let colour = this.value_ as string;
@@ -255,11 +258,12 @@ export class FieldColour extends Field {
 
   /**
    * Set a custom colour grid for this field.
+   *
    * @param colours Array of colours for this block, or null to use default
    *     (FieldColour.COLOURS).
    * @param opt_titles Optional array of colour tooltips, or null to use default
    *     (FieldColour.TITLES).
-   * @return Returns itself (for method chaining).
+   * @returns Returns itself (for method chaining).
    */
   setColours(colours: string[], opt_titles?: string[]): FieldColour {
     this.colours_ = colours;
@@ -271,9 +275,10 @@ export class FieldColour extends Field {
 
   /**
    * Set a custom grid size for this field.
+   *
    * @param columns Number of columns for this block, or 0 to use default
    *     (FieldColour.COLUMNS).
-   * @return Returns itself (for method chaining).
+   * @returns Returns itself (for method chaining).
    */
   setColumns(columns: number): FieldColour {
     this.columns_ = columns;
@@ -297,6 +302,7 @@ export class FieldColour extends Field {
 
   /**
    * Handle a click on a colour cell.
+   *
    * @param e Mouse event.
    */
   private onClick_(e: MouseEvent) {
@@ -311,6 +317,7 @@ export class FieldColour extends Field {
   /**
    * Handle a key down event. Navigate around the grid with the
    * arrow keys. Enter selects the highlighted colour.
+   *
    * @param e Keyboard event.
    */
   private onKeyDown_(e: KeyboardEvent) {
@@ -346,6 +353,7 @@ export class FieldColour extends Field {
 
   /**
    * Move the currently highlighted position by dx and dy.
+   *
    * @param dx Change of x
    * @param dy Change of y
    */
@@ -403,6 +411,7 @@ export class FieldColour extends Field {
 
   /**
    * Handle a mouse move event. Highlight the hovered colour.
+   *
    * @param e Mouse event.
    */
   private onMouseMove_(e: MouseEvent) {
@@ -436,7 +445,8 @@ export class FieldColour extends Field {
 
   /**
    * Returns the currently highlighted item (if any).
-   * @return Highlighted item (null if none).
+   *
+   * @returns Highlighted item (null if none).
    */
   private getHighlighted_(): HTMLElement|null {
     if (!this.highlightedIndex_) {
@@ -456,6 +466,7 @@ export class FieldColour extends Field {
 
   /**
    * Update the currently highlighted cell.
+   *
    * @param cell the new cell to highlight
    * @param index the index of the new cell
    */
@@ -563,8 +574,9 @@ export class FieldColour extends Field {
 
   /**
    * Construct a FieldColour from a JSON arg object.
+   *
    * @param options A JSON object with options (colour).
-   * @return The new field instance.
+   * @returns The new field instance.
    * @nocollapse
    * @internal
    */

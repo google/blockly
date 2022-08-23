@@ -5,13 +5,9 @@
  */
 
 /**
- * @fileoverview Class representing external value inputs with connections on a
- * rendered block.
- */
-
-/**
  * Class representing external value inputs with connections on a
  * rendered block.
+ *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -28,7 +24,7 @@ import {Types} from './types.js';
 /**
  * An object containing information about the space an external value input
  * takes up during rendering
- * @struct
+ *
  * @alias Blockly.blockRendering.ExternalValueInput
  */
 export class ExternalValueInput extends InputConnection {

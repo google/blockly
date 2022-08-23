@@ -41,8 +41,6 @@
 
 (function() {
   // Values used to compute default bootstrap options.
-  const isIe = navigator.userAgent.indexOf('MSIE') !== -1 ||
-      navigator.appVersion.indexOf('Trident/') > -1;
   const localhosts = ['localhost', '127.0.0.1', '[::1]'];
   const isLocalhost = localhosts.includes(location.hostname);
   const isFileUrl = location.origin === 'file://';
@@ -52,7 +50,7 @@
   const options = {
     // Decide whether to use compressed mode or not.  Please see issue
     // #5557 for more information.
-    loadCompressed: isIe || !(isLocalhost || isFileUrl),
+    loadCompressed: !(isLocalhost || isFileUrl),
 
     // URL of the blockly repository.  This is needed for a few reasons:
     //
@@ -123,10 +121,7 @@
   };
 
   if (!options.loadCompressed) {
-    // We can load Blockly in uncompressed mode.  Note that this section
-    // needs to parse in IE11 (mostly ES5.1, but allowing e.g. const),
-    // but it does not need to be _executable_ in IE11 - it is safe to
-    // use ES6 builtins.
+    // We can load Blockly in uncompressed mode.
 
     // Disable loading of closure/goog/deps.js (which doesn't exist).
     window.CLOSURE_NO_DEPS = true;
@@ -134,8 +129,8 @@
     // libary we use, mainly for goog.require / goog.provide /
     // goog.module).
     document.write(
-        '<script src="' + options.root +
-            'build/src/closure/goog/base.js"></script>');
+        `<script src="${options.root}build/src/closure/goog/base.js"></script>`
+        );
 
     // Prevent spurious transpilation warnings.
     document.write('<script>goog.TRANSPILE = "never";</script>');
@@ -143,10 +138,8 @@
     // Load dependency graph info from the specified deps files -
     // typically just build/deps.js.  To update deps after changing
     // any module's goog.requires / imports, run `npm run build:deps`.
-    for (let i = 0; i < options.depsFiles.length; i++) {
-      document.write(
-          '<script src="' + options.root + options.depsFiles[i] + '">' +
-              '</script>');
+    for (const depsFile of options.depsFiles) {
+      document.write(`<script src="${options.root + depsFile}"></script>`);
     }
 
     // Record require targets for bootstrap_helper.js.
@@ -170,13 +163,14 @@
     // previous one.
     let requires = options.requires.slice();
     const scripts =
-        ['tests/bootstrap_helper.js'].concat(options.additionalScripts);
+        ['tests/bootstrap_helper.js', ...options.additionalScripts];
     const scriptDeps = [];
-    for (let script, i = 0; script = scripts[i]; i++) {
-      const fakeModuleName = 'script.' + script.replace(/[./]/g, "-");
-      scriptDeps.push('  goog.addDependency(' +
-          quote('../../../../' + script) + ', [' + quote(fakeModuleName) +
-          '], [' + requires.map(quote).join() + "], {'lang': 'es6'});\n");
+    for (const script of scripts) {
+      const fakeModuleName = `script.${script.replace(/[./]/g, '-')}`;
+      scriptDeps.push(
+          `goog.addDependency(${quote('../../../../' + script)}, ` +
+          `[${quote(fakeModuleName)}], [${requires.map(quote).join()}], ` +
+          `{'lang': 'es6'});`);
       requires = [fakeModuleName];
     }
 
@@ -185,20 +179,19 @@
     // requesting the loading of the final target, which will cause
     // all the previous ones to be loaded recursively.  Wrap this in a
     // promise and save it so it can be awaited in bootstrap_done.mjs.
-    document.write(
-        '<script>\n' + scriptDeps.join('') +
-        '  window.bootstrapInfo.done = new Promise((resolve, reject) => {\n' +
-        '    goog.bootstrap([' + requires.map(quote).join() + '], resolve);\n' +
-        '  });\n' +
-        '</script>\n');
+    document.write(`<script>
+  ${scriptDeps.join('\n  ')}
+  window.bootstrapInfo.done = new Promise((resolve, reject) => {
+    goog.bootstrap([${requires.map(quote).join()}], resolve);
+  });
+</script>`);
   } else {
     // We need to load Blockly in compressed mode.  Load
     // blockly_compressed.js et al. using <script> tags.
     const scripts =
-        options.compressedScripts.concat(options.additionalScripts);
-    for (let i = 0; i < scripts.length; i++) {
-      document.write(
-          '<script src="' + options.root + scripts[i] + '"></script>');
+        [...options.compressedScripts, ...options.additionalScripts];
+    for (const script of scripts) {
+      document.write(`<script src="${options.root + script}"></script>`);
     }
   }
 
@@ -231,17 +224,6 @@
     };
     /* eslint-enable no-control-regex, no-multi-spaces */
 
-    /**
-     * Replacer function.
-     * @param {string} c Single UTF-16 code unit ("character") string to
-     *     be replaced.
-     * @return {string} Multi-character string containing escaped
-     *     representation of c.
-     */
-    function replace(c) {
-      return replacements[c];
-    }
-
-    return "'" + str.replace(singleRE, replace) + "'";
+    return "'" + str.replace(singleRE, (c) => replacements[c]) + "'";
   }
 })();

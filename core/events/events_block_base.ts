@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Base class for all types of block events.
- */
-
-/**
  * Base class for all types of block events.
+ *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -22,6 +19,7 @@ import {Abstract as AbstractEvent} from './events_abstract.js';
 
 /**
  * Abstract class for a block event.
+ *
  * @alias Blockly.Events.BlockBase
  */
 export class BlockBase extends AbstractEvent {
@@ -46,7 +44,8 @@ export class BlockBase extends AbstractEvent {
 
   /**
    * Encode the event as JSON.
-   * @return JSON representation.
+   *
+   * @returns JSON representation.
    */
   override toJson(): AnyDuringMigration {
     const json = super.toJson();
@@ -56,6 +55,7 @@ export class BlockBase extends AbstractEvent {
 
   /**
    * Decode the JSON event.
+   *
    * @param json JSON representation.
    */
   override fromJson(json: AnyDuringMigration) {

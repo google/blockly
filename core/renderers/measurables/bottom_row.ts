@@ -5,13 +5,9 @@
  */
 
 /**
- * @fileoverview Object representing a bottom row on a rendered block.
- * of its subcomponents.
- */
-
-/**
  * Object representing a bottom row on a rendered block.
  * of its subcomponents.
+ *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -30,18 +26,20 @@ import {Types} from './types.js';
  * a block as well as spacing information for the bottom row.
  * Elements in a bottom row can consist of corners, spacers and next
  * connections.
- * @struct
+ *
  * @alias Blockly.blockRendering.BottomRow
  */
 export class BottomRow extends Row {
   /**
    * Whether this row has a next connection.
+   *
    * @internal
    */
   hasNextConnection = false;
 
   /**
    * The next connection on the row, if any.
+   *
    * @internal
    */
   connection: NextConnection|null = null;
@@ -50,6 +48,7 @@ export class BottomRow extends Row {
    * The amount that the bottom of the block extends below the horizontal
    * edge, e.g. because of a next connection.  Must be non-negative (see
    * #2820).
+   *
    * @internal
    */
   descenderHeight = 0;
@@ -71,8 +70,9 @@ export class BottomRow extends Row {
 
   /**
    * Returns whether or not the bottom row has a left square corner.
+   *
    * @param block The block whose bottom row this represents.
-   * @return Whether or not the bottom row has a left square corner.
+   * @returns Whether or not the bottom row has a left square corner.
    */
   hasLeftSquareCorner(block: BlockSvg): boolean {
     return !!block.outputConnection || !!block.getNextBlock();
@@ -80,8 +80,9 @@ export class BottomRow extends Row {
 
   /**
    * Returns whether or not the bottom row has a right square corner.
+   *
    * @param _block The block whose bottom row this represents.
-   * @return Whether or not the bottom row has a right square corner.
+   * @returns Whether or not the bottom row has a right square corner.
    */
   hasRightSquareCorner(_block: BlockSvg): boolean {
     return true;

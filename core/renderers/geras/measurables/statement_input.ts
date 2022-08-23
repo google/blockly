@@ -5,13 +5,9 @@
  */
 
 /**
- * @fileoverview Objects representing statement inputs with connections on a
- * rendered block.
- */
-
-/**
  * Objects representing statement inputs with connections on a
  * rendered block.
+ *
  * @class
  */
 import * as goog from '../../../../closure/goog/goog.js';
@@ -27,6 +23,7 @@ import type {ConstantProvider as GerasConstantProvider} from '../constants.js';
 /**
  * An object containing information about the space a statement input takes up
  * during rendering.
+ *
  * @alias Blockly.geras.StatementInput
  */
 export class StatementInput extends BaseStatementInput {

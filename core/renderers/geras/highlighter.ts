@@ -5,13 +5,9 @@
  */
 
 /**
- * @fileoverview Methods for adding highlights on block, for rendering in
- * compatibility mode.
- */
-
-/**
  * Methods for adding highlights on block, for rendering in
  * compatibility mode.
+ *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -44,6 +40,7 @@ import type {InlineInput} from './measurables/inline_input.js';
  * position of each part of the block.  The resulting paths are not continuous
  * or closed paths.  The highlights for tabs and notches are loosely based on
  * tab and notch shapes, but are not exactly the same.
+ *
  * @alias Blockly.geras.Highlighter
  */
 export class Highlighter {
@@ -90,7 +87,8 @@ export class Highlighter {
 
   /**
    * Get the steps for the highlight path.
-   * @return The steps for the highlight path.
+   *
+   * @returns The steps for the highlight path.
    * @internal
    */
   getPath(): string {
@@ -99,6 +97,7 @@ export class Highlighter {
 
   /**
    * Add a highlight to the top corner of a block.
+   *
    * @param row The top row of the block.
    * @internal
    */
@@ -129,6 +128,7 @@ export class Highlighter {
 
   /**
    * Add a highlight on a jagged edge for a collapsed block.
+   *
    * @param row  The row to highlight.
    * @internal
    */
@@ -143,6 +143,7 @@ export class Highlighter {
 
   /**
    * Add a highlight on a value input.
+   *
    * @param row The row the input belongs to.
    * @internal
    */
@@ -164,6 +165,7 @@ export class Highlighter {
 
   /**
    * Add a highlight on a statement input.
+   *
    * @param row The row to highlight.
    * @internal
    */
@@ -187,6 +189,7 @@ export class Highlighter {
 
   /**
    * Add a highlight on the right side of a row.
+   *
    * @param row The row to highlight.
    * @internal
    */
@@ -206,6 +209,7 @@ export class Highlighter {
 
   /**
    * Add a highlight to the bottom row.
+   *
    * @param row The row to highlight.
    * @internal
    */
@@ -230,6 +234,7 @@ export class Highlighter {
 
   /**
    * Draw the highlight on the left side of the block.
+   *
    * @internal
    */
   drawLeft() {
@@ -263,6 +268,7 @@ export class Highlighter {
 
   /**
    * Add a highlight to an inline input.
+   *
    * @param input The input to highlight.
    * @internal
    */

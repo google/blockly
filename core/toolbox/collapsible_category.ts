@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview A toolbox category used to organize blocks in the toolbox.
- */
-
-/**
  * A toolbox category used to organize blocks in the toolbox.
+ *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -29,6 +26,7 @@ import {ToolboxSeparator} from './separator.js';
 
 /**
  * Class for a category in a toolbox that can be collapsed.
+ *
  * @alias Blockly.CollapsibleToolboxCategory
  */
 export class CollapsibleToolboxCategory extends ToolboxCategory implements
@@ -102,6 +100,7 @@ export class CollapsibleToolboxCategory extends ToolboxCategory implements
 
   /**
    * Creates a toolbox item and adds it to the list of toolbox items.
+   *
    * @param itemDef The information needed to create a toolbox item.
    */
   private createToolboxItem_(itemDef: toolbox.ToolboxItemInfo) {
@@ -155,8 +154,9 @@ export class CollapsibleToolboxCategory extends ToolboxCategory implements
 
   /**
    * Create the DOM for all subcategories.
+   *
    * @param subcategories The subcategories.
-   * @return The div holding all the subcategories.
+   * @returns The div holding all the subcategories.
    */
   protected createSubCategoriesDom_(subcategories: IToolboxItem[]):
       HTMLDivElement {
@@ -178,6 +178,7 @@ export class CollapsibleToolboxCategory extends ToolboxCategory implements
 
   /**
    * Opens or closes the current category.
+   *
    * @param isExpanded True to expand the category, false to close.
    */
   setExpanded(isExpanded: boolean) {
@@ -214,7 +215,8 @@ export class CollapsibleToolboxCategory extends ToolboxCategory implements
 
   /**
    * Whether the category is expanded to show its child subcategories.
-   * @return True if the toolbox item shows its children, false if it is
+   *
+   * @returns True if the toolbox item shows its children, false if it is
    *     collapsed.
    */
   isExpanded(): boolean {
@@ -240,7 +242,8 @@ export class CollapsibleToolboxCategory extends ToolboxCategory implements
 
   /**
    * Gets any children toolbox items. (ex. Gets the subcategories)
-   * @return The child toolbox items.
+   *
+   * @returns The child toolbox items.
    */
   getChildToolboxItems(): IToolboxItem[] {
     return this.toolboxItems_;

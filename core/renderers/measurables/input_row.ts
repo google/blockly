@@ -5,13 +5,9 @@
  */
 
 /**
- * @fileoverview Object representing a row that holds one or more inputs on a
- * rendered block.
- */
-
-/**
  * Object representing a row that holds one or more inputs on a
  * rendered block.
+ *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -28,12 +24,13 @@ import {Types} from './types.js';
 
 /**
  * An object containing information about a row that holds one or more inputs.
- * @struct
+ *
  * @alias Blockly.blockRendering.InputRow
  */
 export class InputRow extends Row {
   /**
    * The total width of all blocks connected to this row.
+   *
    * @internal
    */
   connectedBlockWidths = 0;
@@ -49,6 +46,7 @@ export class InputRow extends Row {
 
   /**
    * Inspect all subcomponents and populate all size properties on the row.
+   *
    * @internal
    */
   override measure() {

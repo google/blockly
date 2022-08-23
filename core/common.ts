@@ -5,13 +5,9 @@
  */
 
 /**
- * @fileoverview Common functions used both internally and externally, but which
- * must not be at the top level to avoid circular dependencies.
- */
-
-/**
  * Common functions used both internally and externally, but which
  * must not be at the top level to avoid circular dependencies.
+ *
  * @namespace Blockly.common
  */
 import * as goog from '../closure/goog/goog.js';
@@ -32,8 +28,9 @@ const WorkspaceDB_ = Object.create(null);
 
 /**
  * Find the workspace with the specified ID.
+ *
  * @param id ID of workspace to find.
- * @return The sought after workspace or null if not found.
+ * @returns The sought after workspace or null if not found.
  */
 export function getWorkspaceById(id: string): Workspace|null {
   return WorkspaceDB_[id] || null;
@@ -41,7 +38,8 @@ export function getWorkspaceById(id: string): Workspace|null {
 
 /**
  * Find all workspaces.
- * @return Array of workspaces.
+ *
+ * @returns Array of workspaces.
  */
 export function getAllWorkspaces(): Workspace[] {
   const workspaces = [];
@@ -51,10 +49,20 @@ export function getAllWorkspaces(): Workspace[] {
   return workspaces;
 }
 
+/**
+ * Register a workspace in the workspace db.
+ *
+ * @param workspace
+ */
 export function registerWorkspace(workspace: Workspace) {
   WorkspaceDB_[workspace.id] = workspace;
 }
 
+/**
+ * Unregister a workspace from the workspace db.
+ *
+ * @param workspace
+ */
 export function unregisterWorkpace(workspace: Workspace) {
   delete WorkspaceDB_[workspace.id];
 }
@@ -69,7 +77,8 @@ let mainWorkspace: Workspace;
  * Returns the last used top level workspace (based on focus).  Try not to use
  * this function, particularly if there are multiple Blockly instances on a
  * page.
- * @return The main workspace.
+ *
+ * @returns The main workspace.
  * @alias Blockly.common.getMainWorkspace
  */
 export function getMainWorkspace(): Workspace {
@@ -78,6 +87,7 @@ export function getMainWorkspace(): Workspace {
 
 /**
  * Sets last used main workspace.
+ *
  * @param workspace The most recently used top level workspace.
  * @alias Blockly.common.setMainWorkspace
  */
@@ -92,6 +102,7 @@ let selected: ICopyable|null = null;
 
 /**
  * Returns the currently selected copyable object.
+ *
  * @alias Blockly.common.getSelected
  */
 export function getSelected(): ICopyable|null {
@@ -102,6 +113,7 @@ export function getSelected(): ICopyable|null {
  * Sets the currently selected block. This function does not visually mark the
  * block as selected or fire the required events. If you wish to
  * programmatically select a block, use `BlockSvg#select`.
+ *
  * @param newSelection The newly selected block.
  * @alias Blockly.common.setSelected
  * @internal
@@ -118,7 +130,8 @@ let parentContainer: Element|null;
 /**
  * Get the container element in which to render the WidgetDiv, DropDownDiv and\
  * Tooltip.
- * @return The parent container.
+ *
+ * @returns The parent container.
  * @alias Blockly.common.getParentContainer
  */
 export function getParentContainer(): Element|null {
@@ -130,6 +143,7 @@ export function getParentContainer(): Element|null {
  * DropDownDiv, and Tooltip are rendered into the first time `Blockly.inject`
  * is called.
  * This method is a NOP if called after the first ``Blockly.inject``.
+ *
  * @param newParent The container element.
  * @alias Blockly.common.setParentContainer
  */
@@ -143,6 +157,7 @@ export function setParentContainer(newParent: Element) {
  * See workspace.resizeContents to resize the workspace when the contents
  * change (e.g. when a block is added or removed).
  * Record the height/width of the SVG image.
+ *
  * @param workspace Any workspace in the SVG.
  * @alias Blockly.common.svgResize
  */
@@ -180,11 +195,12 @@ export const draggingConnections: Connection[] = [];
 /**
  * Get a map of all the block's descendants mapping their type to the number of
  *    children with that type.
+ *
  * @param block The block to map.
  * @param opt_stripFollowing Optionally ignore all following
  *    statements (blocks that are not inside a value or statement input
  *    of the block).
- * @return Map of types to type counts for descendants of the bock.
+ * @returns Map of types to type counts for descendants of the bock.
  * @alias Blockly.common.getBlockTypeCounts
  */
 export function getBlockTypeCounts(
@@ -211,8 +227,9 @@ export function getBlockTypeCounts(
 /**
  * Helper function for defining a block from JSON.  The resulting function has
  * the correct value of jsonDef at the point in code where jsonInit is called.
+ *
  * @param jsonDef The JSON definition of a block.
- * @return A function that calls jsonInit with the correct value
+ * @returns A function that calls jsonInit with the correct value
  *     of jsonDef.
  */
 function jsonInitFactory(jsonDef: AnyDuringMigration): () => void {
@@ -224,6 +241,7 @@ function jsonInitFactory(jsonDef: AnyDuringMigration): () => void {
 /**
  * Define blocks from an array of JSON block definitions, as might be generated
  * by the Blockly Developer Tools.
+ *
  * @param jsonArray An array of JSON block definitions.
  * @alias Blockly.common.defineBlocksWithJsonArray
  */
@@ -241,8 +259,9 @@ function defineBlocksWithJsonArrayInternal(jsonArray: AnyDuringMigration[]) {
 /**
  * Define blocks from an array of JSON block definitions, as might be generated
  * by the Blockly Developer Tools.
+ *
  * @param jsonArray An array of JSON block definitions.
- * @return A map of the block
+ * @returns A map of the block
  *     definitions created.
  * @alias Blockly.common.defineBlocksWithJsonArray
  */
@@ -270,6 +289,7 @@ export function createBlockDefinitionsFromJsonArray(
 /**
  * Add the specified block definitions to the block definitions
  * dictionary (Blockly.Blocks).
+ *
  * @param blocks A map of block
  *     type names to block definitions.
  * @alias Blockly.common.defineBlocks

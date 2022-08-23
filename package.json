@@ -78,7 +78,7 @@
     "concurrently": "^7.0.0",
     "eslint": "^8.4.1",
     "eslint-config-google": "^0.14.0",
-    "eslint-plugin-tsdoc": "^0.2.16",
+    "eslint-plugin-jsdoc": "^39.3.6",
     "google-closure-compiler": "^20220803.0.0",
     "google-closure-deps": "^20220719.0.0",
     "gulp": "^4.0.2",

@@ -38,7 +38,7 @@ export class BubbleOpen extends UiBase {
    *     'warning'. Undefined for a blank event.
    */
   constructor(
-      opt_block: BlockSvg, opt_isOpen?: boolean, opt_bubbleType?: string) {
+      opt_block?: BlockSvg, opt_isOpen?: boolean, opt_bubbleType?: string) {
     const workspaceId = opt_block ? opt_block.workspace.id : undefined;
     super(workspaceId);
     this.blockId = opt_block ? opt_block.id : null;

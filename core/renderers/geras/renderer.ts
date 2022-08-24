@@ -51,7 +51,7 @@ export class Renderer extends BaseRenderer {
    *
    * @internal
    */
-  override init(theme: Theme, opt_rendererOverrides: AnyDuringMigration) {
+  override init(theme: Theme, opt_rendererOverrides?: object) {
     super.init(theme, opt_rendererOverrides);
     this.highlightConstants_ = this.makeHighlightConstants_();
     this.highlightConstants_.init();

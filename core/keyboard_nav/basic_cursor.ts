@@ -120,9 +120,7 @@ export class BasicCursor extends Cursor {
       return this.getNextNode_(newNode, isValid);
     }
     const siblingOrParent = this.findSiblingOrParent_(node.out());
-    // AnyDuringMigration because:  Argument of type 'ASTNode | null' is not
-    // assignable to parameter of type 'ASTNode'.
-    if (isValid(siblingOrParent as AnyDuringMigration)) {
+    if (isValid(siblingOrParent)) {
       return siblingOrParent;
     } else if (siblingOrParent) {
       return this.getNextNode_(siblingOrParent, isValid);

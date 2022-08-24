@@ -204,7 +204,7 @@ export const draggingConnections: Connection[] = [];
  * @alias Blockly.common.getBlockTypeCounts
  */
 export function getBlockTypeCounts(
-    block: Block, opt_stripFollowing?: boolean): AnyDuringMigration {
+    block: Block, opt_stripFollowing?: boolean): {[key: string]: number} {
   const typeCountsMap = Object.create(null);
   const descendants = block.getDescendants(true);
   if (opt_stripFollowing) {

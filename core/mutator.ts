@@ -71,10 +71,10 @@ export class Mutator extends Icon {
   private sourceListener_: Function|null = null;
 
   /**
-   * The PID associated with the updateWorkpace_ timeout, or 0 if no timeout
+   * The PID associated with the updateWorkpace_ timeout, or null if no timeout
    * is currently running.
    */
-  private updateWorkspacePid_: AnyDuringMigration = 0;
+  private updateWorkspacePid_: ReturnType<typeof setTimeout>|null = null;
 
   /** @param quarkNames List of names of sub-blocks for flyout. */
   constructor(block: BlockSvg, quarkNames: string[]) {
@@ -382,7 +382,7 @@ export class Mutator extends Icon {
   private workspaceChanged_(e: Abstract) {
     if (!this.shouldIgnoreMutatorEvent_(e) && !this.updateWorkspacePid_) {
       this.updateWorkspacePid_ = setTimeout(() => {
-        this.updateWorkspacePid_ = 0;
+        this.updateWorkspacePid_ = null;
         this.updateWorkspace_();
       }, 0);
     }

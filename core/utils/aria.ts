@@ -152,7 +152,5 @@ export function setState(
     value = value.join(' ');
   }
   const attrStateName = ARIA_PREFIX + stateName;
-  // AnyDuringMigration because:  Argument of type 'string | number | boolean'
-  // is not assignable to parameter of type 'string'.
-  element.setAttribute(attrStateName, value as AnyDuringMigration);
+  element.setAttribute(attrStateName, `${value}`);
 }

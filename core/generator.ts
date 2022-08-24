@@ -27,7 +27,7 @@ import type {Workspace} from './workspace.js';
  * @alias Blockly.Generator
  */
 export class Generator {
-  name_: AnyDuringMigration;
+  name_: string;
 
   /**
    * This is used as a placeholder in functions defined using
@@ -36,7 +36,7 @@ export class Generator {
    * not confuse the regular expression parser.
    */
   protected FUNCTION_NAME_PLACEHOLDER_ = '{leCUI8hutHZI4480Dc}';
-  FUNCTION_NAME_PLACEHOLDER_REGEXP_: AnyDuringMigration;
+  FUNCTION_NAME_PLACEHOLDER_REGEXP_: RegExp;
 
   /**
    * Arbitrary code to inject into locations that risk causing infinite loops.
@@ -86,13 +86,13 @@ export class Generator {
   protected RESERVED_WORDS_ = '';
 
   /** A dictionary of definitions to be printed before the code. */
-  protected definitions_?: AnyDuringMigration = undefined;
+  protected definitions_: {[key: string]: string} = Object.create(null);
 
   /**
    * A dictionary mapping desired function names in definitions_ to actual
    * function names (to avoid collisions with user functions).
    */
-  protected functionNames_?: AnyDuringMigration = undefined;
+  protected functionNames_: {[key: string]: string} = Object.create(null);
 
   /** A database of variable and procedure names. */
   protected nameDB_?: Names = undefined;
@@ -118,7 +118,7 @@ export class Generator {
           'No workspace specified in workspaceToCode call.  Guessing.');
       workspace = common.getMainWorkspace();
     }
-    let code = [];
+    const code = [];
     this.init(workspace);
     const blocks = workspace.getTopBlocks(true);
     for (let i = 0, block; block = blocks[i]; i++) {
@@ -132,9 +132,7 @@ export class Generator {
         if (block.outputConnection) {
           // This block is a naked value.  Ask the language's code generator if
           // it wants to append a semicolon, or something.
-          // AnyDuringMigration because:  Argument of type 'string | any[]' is
-          // not assignable to parameter of type 'string'.
-          line = this.scrubNakedValue(line as AnyDuringMigration);
+          line = this.scrubNakedValue(line);
           if (this.STATEMENT_PREFIX && !block.suppressPrefixSuffix) {
             line = this.injectId(this.STATEMENT_PREFIX, block) + line;
           }
@@ -145,21 +143,14 @@ export class Generator {
         code.push(line);
       }
     }
-    // AnyDuringMigration because:  Type 'string' is not assignable to type
-    // 'any[]'.
     // Blank line between each section.
-    code = code.join('\n') as AnyDuringMigration;
-    // AnyDuringMigration because:  Argument of type 'any[]' is not assignable
-    // to parameter of type 'string'. AnyDuringMigration because:  Type 'string'
-    // is not assignable to type 'any[]'.
-    code = this.finish(code as AnyDuringMigration) as AnyDuringMigration;
+    let codeString = code.join('\n');
+    codeString = this.finish(codeString);
     // Final scrubbing of whitespace.
-    // AnyDuringMigration because:  Property 'replace' does not exist on type
-    // 'any[]'.
-    code = (code as AnyDuringMigration).replace(/^\s+\n/, '');
-    code = code.replace(/\n\s+$/, '\n');
-    code = code.replace(/[ \t]+\n/g, '\n');
-    return code;
+    codeString = codeString.replace(/^\s+\n/, '');
+    codeString = codeString.replace(/\n\s+$/, '\n');
+    codeString = codeString.replace(/[ \t]+\n/g, '\n');
+    return codeString;
   }
 
   // The following are some helpful functions which can be used by multiple
@@ -211,7 +202,7 @@ export class Generator {
    * operator order value.  Returns '' if block is null.
    */
   blockToCode(block: Block|null, opt_thisOnly?: boolean): string
-      |AnyDuringMigration[] {
+      |[string, number] {
     if (this.isInitialized === false) {
       console.warn(
           'Generator init was not called before blockToCode was called.');
@@ -228,7 +219,7 @@ export class Generator {
       return opt_thisOnly ? '' : this.blockToCode(block.getChildren(false)[0]);
     }
 
-    const func = (this as AnyDuringMigration)[block.type];
+    const func = (this as any)[block.type];
     if (typeof func !== 'function') {
       throw Error(
           'Language "' + this.name_ + '" does not know how to generate ' +
@@ -503,8 +494,8 @@ export class Generator {
   finish(code: string): string {
     // Optionally override
     // Clean up temporary data.
-    delete this.definitions_;
-    delete this.functionNames_;
+    this.definitions_ = Object.create(null);
+    this.functionNames_ = Object.create(null);
     return code;
   }
 
@@ -531,8 +522,6 @@ Object.defineProperties(Generator.prototype, {
    * @deprecated 'variableDB_' was renamed to 'nameDB_' (May 2021).
    * @suppress {checkTypes}
    */
-  // AnyDuringMigration because:  Type 'Names | undefined' is not assignable to
-  // type 'PropertyDescriptor'.
   variableDB_: ({
     /** @returns Name database. */
     get(this: Generator): Names |

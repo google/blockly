@@ -123,7 +123,7 @@ export class Menu {
    * @returns The DOM element.
    * @internal
    */
-  getElement(): Element|null {
+  getElement(): HTMLDivElement|null {
     return this.element_;
   }
 
@@ -135,9 +135,7 @@ export class Menu {
   focus() {
     const el = this.getElement();
     if (el) {
-      // AnyDuringMigration because:  Property 'focus' does not exist on type
-      // 'Element'.
-      (el as AnyDuringMigration).focus({preventScroll: true});
+      el.focus({preventScroll: true});
       dom.addClass(el, 'blocklyFocused');
     }
   }
@@ -146,9 +144,7 @@ export class Menu {
   private blur_() {
     const el = this.getElement();
     if (el) {
-      // AnyDuringMigration because:  Property 'blur' does not exist on type
-      // 'Element'.
-      (el as AnyDuringMigration).blur();
+      el.blur();
       dom.removeClass(el, 'blocklyFocused');
     }
   }
@@ -209,8 +205,9 @@ export class Menu {
     // a menu item's div, or some element within the menu item.
     // Walk up parents until one meets either the menu's root element, or
     // a menu item's div.
-    while (elem && elem !== menuElem) {
-      if (dom.hasClass(elem, 'blocklyMenuItem')) {
+    let currentElement: Element|null = elem;
+    while (currentElement && currentElement !== menuElem) {
+      if (dom.hasClass(currentElement, 'blocklyMenuItem')) {
         // Having found a menu item's div, locate that menu item in this menu.
         for (let i = 0, menuItem; menuItem = this.menuItems_[i]; i++) {
           if (menuItem.getElement() === elem) {
@@ -218,9 +215,7 @@ export class Menu {
           }
         }
       }
-      // AnyDuringMigration because:  Type 'HTMLElement | null' is not
-      // assignable to type 'Element'.
-      elem = elem.parentElement as AnyDuringMigration;
+      currentElement = currentElement.parentElement;
     }
     return null;
   }
@@ -258,10 +253,9 @@ export class Menu {
    * @internal
    */
   highlightNext() {
-    // AnyDuringMigration because:  Argument of type 'MenuItem | null' is not
-    // assignable to parameter of type 'MenuItem'.
-    const index =
-        this.menuItems_.indexOf(this.highlightedItem_ as AnyDuringMigration);
+    const index = this.highlightedItem_ ?
+        this.menuItems_.indexOf(this.highlightedItem_) :
+        -1;
     this.highlightHelper_(index, 1);
   }
 
@@ -272,10 +266,9 @@ export class Menu {
    * @internal
    */
   highlightPrevious() {
-    // AnyDuringMigration because:  Argument of type 'MenuItem | null' is not
-    // assignable to parameter of type 'MenuItem'.
-    const index =
-        this.menuItems_.indexOf(this.highlightedItem_ as AnyDuringMigration);
+    const index = this.highlightedItem_ ?
+        this.menuItems_.indexOf(this.highlightedItem_) :
+        -1;
     this.highlightHelper_(index < 0 ? this.menuItems_.length : index, -1);
   }
 

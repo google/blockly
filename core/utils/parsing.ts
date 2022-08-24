@@ -183,8 +183,7 @@ export function tokenizeInterpolation(message: string): (string|number)[] {
  * @returns String with message references replaced.
  * @alias Blockly.utils.parsing.replaceMessageReferences
  */
-export function replaceMessageReferences(message: string|
-                                         AnyDuringMigration): string {
+export function replaceMessageReferences(message: string|any): string {
   if (typeof message !== 'string') {
     return message;
   }

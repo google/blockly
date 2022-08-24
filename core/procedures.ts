@@ -50,6 +50,8 @@ export const CATEGORY_NAME = 'PROCEDURE';
  */
 export const DEFAULT_ARG = 'x';
 
+export type ProcedureTuple = [string, string[], boolean];
+
 /**
  * Procedure block type.
  *
@@ -57,8 +59,8 @@ export const DEFAULT_ARG = 'x';
  */
 export interface ProcedureBlock {
   getProcedureCall: () => string;
-  renameProcedure: (p1: string, p2: string) => AnyDuringMigration;
-  getProcedureDef: () => AnyDuringMigration[];
+  renameProcedure: (p1: string, p2: string) => void;
+  getProcedureDef: () => ProcedureTuple;
 }
 
 /**
@@ -70,7 +72,8 @@ export interface ProcedureBlock {
  *     list of name, parameter list, and return value boolean.
  * @alias Blockly.Procedures.allProcedures
  */
-export function allProcedures(root: Workspace): AnyDuringMigration[][][] {
+export function allProcedures(root: Workspace):
+    [ProcedureTuple[], ProcedureTuple[]] {
   const proceduresNoReturn =
       root.getBlocksByType('procedures_defnoreturn', false)
           .map(function(block) {
@@ -93,8 +96,7 @@ export function allProcedures(root: Workspace): AnyDuringMigration[][][] {
  * @param tb Second tuple.
  * @returns -1, 0, or 1 to signify greater than, equality, or less than.
  */
-function procTupleComparator(
-    ta: AnyDuringMigration[], tb: AnyDuringMigration[]): number {
+function procTupleComparator(ta: ProcedureTuple, tb: ProcedureTuple): number {
   return ta[0].localeCompare(tb[0], undefined, {sensitivity: 'base'});
 }
 
@@ -212,9 +214,7 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
     // </block>
     const block = utilsXml.createElement('block');
     block.setAttribute('type', 'procedures_defnoreturn');
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
-    block.setAttribute('gap', 16 as AnyDuringMigration);
+    block.setAttribute('gap', '16');
     const nameField = utilsXml.createElement('field');
     nameField.setAttribute('name', 'NAME');
     nameField.appendChild(
@@ -228,9 +228,7 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
     // </block>
     const block = utilsXml.createElement('block');
     block.setAttribute('type', 'procedures_defreturn');
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
-    block.setAttribute('gap', 16 as AnyDuringMigration);
+    block.setAttribute('gap', '16');
     const nameField = utilsXml.createElement('field');
     nameField.setAttribute('name', 'NAME');
     nameField.appendChild(
@@ -242,16 +240,12 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
     // <block type="procedures_ifreturn" gap="16"></block>
     const block = utilsXml.createElement('block');
     block.setAttribute('type', 'procedures_ifreturn');
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
-    block.setAttribute('gap', 16 as AnyDuringMigration);
+    block.setAttribute('gap', '16');
     xmlList.push(block);
   }
   if (xmlList.length) {
     // Add slightly larger gap between system blocks and user calls.
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
-    xmlList[xmlList.length - 1].setAttribute('gap', 24 as AnyDuringMigration);
+    xmlList[xmlList.length - 1].setAttribute('gap', '24');
   }
 
   /**
@@ -262,7 +256,7 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
    * @param templateName The type of the block to generate.
    */
   function populateProcedures(
-      procedureList: AnyDuringMigration[][], templateName: string) {
+      procedureList: ProcedureTuple[], templateName: string) {
     for (let i = 0; i < procedureList.length; i++) {
       const name = procedureList[i][0];
       const args = procedureList[i][1];
@@ -273,9 +267,7 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
       // </block>
       const block = utilsXml.createElement('block');
       block.setAttribute('type', templateName);
-      // AnyDuringMigration because:  Argument of type 'number' is not
-      // assignable to parameter of type 'string'.
-      block.setAttribute('gap', 16 as AnyDuringMigration);
+      block.setAttribute('gap', '16');
       const mutation = utilsXml.createElement('mutation');
       mutation.setAttribute('name', name);
       block.appendChild(mutation);
@@ -288,9 +280,7 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
     }
   }
 
-  // AnyDuringMigration because:  Argument of type 'WorkspaceSvg' is not
-  // assignable to parameter of type 'Workspace'.
-  const tuple = allProcedures(workspace as AnyDuringMigration);
+  const tuple = allProcedures(workspace);
   populateProcedures(tuple[0], 'procedures_callnoreturn');
   populateProcedures(tuple[1], 'procedures_callreturn');
   return xmlList;

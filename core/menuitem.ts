@@ -135,8 +135,8 @@ export class MenuItem {
    * @returns value Value associated with the menu item.
    * @internal
    */
-  getValue(): AnyDuringMigration {
-    return this.opt_value;
+  getValue(): string|null {
+    return this.opt_value ?? null;
   }
 
   /**
@@ -245,7 +245,7 @@ export class MenuItem {
    * @param obj Used as the 'this' object in fn when called.
    * @internal
    */
-  onAction(fn: (p1: MenuItem) => AnyDuringMigration, obj: AnyDuringMigration) {
+  onAction(fn: (p1: MenuItem) => void, obj: object) {
     this.actionHandler_ = fn.bind(obj);
   }
 }

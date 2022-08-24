@@ -352,7 +352,7 @@ function mutatorPropertiesMatch(
  * @throws Error Will throw if no global document can be found (e.g., Node.js).
  * @internal
  */
-export function runAfterPageLoad(fn: () => AnyDuringMigration) {
+export function runAfterPageLoad(fn: () => void) {
   if (typeof document !== 'object') {
     throw Error('runAfterPageLoad() requires browser document.');
   }

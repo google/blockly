@@ -991,13 +991,13 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
       // Fire a VarCreate event for each (if any) new variable created.
       for (let i = 0; i < newVariables.length; i++) {
         const thisVariable = newVariables[i];
-        eventUtils.fire(new (eventUtils.get(eventUtils.VAR_CREATE))!
-                        (thisVariable));
+        eventUtils.fire(
+            new (eventUtils.get(eventUtils.VAR_CREATE))(thisVariable));
       }
 
       // Block events come after var events, in case they refer to newly created
       // variables.
-      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))!(newBlock));
+      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(newBlock));
     }
     if (this.autoClose) {
       this.hide();

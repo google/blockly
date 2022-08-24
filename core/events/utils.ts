@@ -507,12 +507,16 @@ export function fromJson(
  * Gets the class for a specific event type from the registry.
  *
  * @param eventType The type of the event to get.
- * @returns The event class with the given type or null if none exists.
+ * @returns The event class with the given type.
  * @alias Blockly.Events.utils.get
  */
 export function get(eventType: string):
-    (new (...p1: AnyDuringMigration[]) => Abstract)|null {
-  return registry.getClass(registry.Type.EVENT, eventType);
+    (new (...p1: AnyDuringMigration[]) => Abstract) {
+  const event = registry.getClass(registry.Type.EVENT, eventType);
+  if (!event) {
+    throw new Error(`Event type ${eventType} not found in registry.`);
+  }
+  return event;
 }
 
 /**

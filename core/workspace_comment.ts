@@ -97,7 +97,7 @@ export class WorkspaceComment {
     }
 
     if (eventUtils.isEnabled()) {
-      eventUtils.fire(new (eventUtils.get(eventUtils.COMMENT_DELETE))!(this));
+      eventUtils.fire(new (eventUtils.get(eventUtils.COMMENT_DELETE))(this));
     }
     // Remove from the list of top comments and the comment database.
     this.workspace.removeTopComment(this);
@@ -167,7 +167,7 @@ export class WorkspaceComment {
    */
   moveBy(dx: number, dy: number) {
     const event =
-        new (eventUtils.get(eventUtils.COMMENT_MOVE))!(this) as CommentMove;
+        new (eventUtils.get(eventUtils.COMMENT_MOVE))(this) as CommentMove;
     this.xy_.translate(dx, dy);
     event.recordNew();
     eventUtils.fire(event);
@@ -252,8 +252,8 @@ export class WorkspaceComment {
    */
   setContent(content: string) {
     if (this.content_ !== content) {
-      eventUtils.fire(new (eventUtils.get(eventUtils.COMMENT_CHANGE))!
-                      (this, this.content_, content));
+      eventUtils.fire(new (eventUtils.get(eventUtils.COMMENT_CHANGE))(
+          this, this.content_, content));
       this.content_ = content;
     }
   }
@@ -314,8 +314,8 @@ export class WorkspaceComment {
         eventUtils.setGroup(true);
       }
       try {
-        eventUtils.fire(new (eventUtils.get(eventUtils.COMMENT_CREATE))!
-                        (comment));
+        eventUtils.fire(
+            new (eventUtils.get(eventUtils.COMMENT_CREATE))(comment));
       } finally {
         if (!existingGroup) {
           eventUtils.setGroup(false);

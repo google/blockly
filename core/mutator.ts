@@ -301,8 +301,8 @@ export class Mutator extends Icon {
       // No change.
       return;
     }
-    eventUtils.fire(new (eventUtils.get(eventUtils.BUBBLE_OPEN))!
-                    (this.block_, visible, 'mutator'));
+    eventUtils.fire(new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
+        this.block_, visible, 'mutator'));
     if (visible) {
       // Create the bubble.
       this.bubble_ = new Bubble(
@@ -460,7 +460,7 @@ export class Mutator extends Icon {
 
       const newExtraState = BlockChange.getExtraBlockState_(block);
       if (oldExtraState !== newExtraState) {
-        eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))!(
+        eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
             block, 'mutation', null, oldExtraState, newExtraState));
         // Ensure that any bump is part of this mutation's event group.
         const mutationGroup = eventUtils.getGroup();

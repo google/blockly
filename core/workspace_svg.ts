@@ -577,8 +577,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       this.setVisible(true);
     }
 
-    const event = new (eventUtils.get(eventUtils.THEME_CHANGE))!
-        (this.getTheme().name, this.id);
+    const event = new (eventUtils.get(eventUtils.THEME_CHANGE))(
+        this.getTheme().name, this.id);
     eventUtils.fire(event);
   }
 
@@ -1141,8 +1141,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       // of negligible changes in viewport top/left.
       return;
     }
-    const event = new (eventUtils.get(eventUtils.VIEWPORT_CHANGE))!
-        (top, left, scale, this.id, this.oldScale_);
+    const event = new (eventUtils.get(eventUtils.VIEWPORT_CHANGE))(
+        top, left, scale, this.id, this.oldScale_);
     this.oldScale_ = scale;
     this.oldTop_ = top;
     this.oldLeft_ = left;
@@ -1469,7 +1469,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       eventUtils.enable();
     }
     if (eventUtils.isEnabled() && !block!.isShadow()) {
-      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))!(block!));
+      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(block!));
     }
     block!.select();
     return block!;

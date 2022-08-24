@@ -122,6 +122,8 @@
                 "argsIgnorePattern": "^_",
                 "varsIgnorePattern": "^_"
             }],
+            "func-call-spacing": ["off"],
+            "@typescript-eslint/func-call-spacing": ["warn"],
             // Temporarily disable. 23 problems.
             "@typescript-eslint/no-explicit-any": ["off"],
             // Temporarily disable. 128 problems.
@@ -132,8 +134,6 @@
             "@typescript-eslint/no-empty-function": ["off"],
             // Temporarily disable. 3 problems.
             "@typescript-eslint/no-empty-interface": ["off"],
-            // Temporarily disable. 34 problems.
-            "func-call-spacing": ["off"],
 
             // TsDoc rules (using JsDoc plugin)
             // Disable built-in jsdoc verifier.

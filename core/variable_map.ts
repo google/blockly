@@ -103,8 +103,8 @@ export class VariableMap {
    */
   private renameVariableAndUses_(
       variable: VariableModel, newName: string, blocks: Block[]) {
-    eventUtils.fire(new (eventUtils.get(eventUtils.VAR_RENAME))!
-                    (variable, newName));
+    eventUtils.fire(
+        new (eventUtils.get(eventUtils.VAR_RENAME))(variable, newName));
     variable.name = newName;
     for (let i = 0; i < blocks.length; i++) {
       blocks[i].updateVarName(variable);
@@ -139,7 +139,7 @@ export class VariableMap {
       blocks[i].renameVarById(variable.getId(), conflictVar.getId());
     }
     // Finally delete the original variable, which is now unreferenced.
-    eventUtils.fire(new (eventUtils.get(eventUtils.VAR_DELETE))!(variable));
+    eventUtils.fire(new (eventUtils.get(eventUtils.VAR_DELETE))(variable));
     // And remove it from the list.
     arrayUtils.removeElem(this.variableMap.get(type)!, variable);
   }
@@ -200,8 +200,8 @@ export class VariableMap {
         const tempVar = variableList[i];
         if (tempVar.getId() === variableId) {
           variableList.splice(i, 1);
-          eventUtils.fire(new (eventUtils.get(eventUtils.VAR_DELETE))!
-                          (variable));
+          eventUtils.fire(
+              new (eventUtils.get(eventUtils.VAR_DELETE))(variable));
           return;
         }
       }

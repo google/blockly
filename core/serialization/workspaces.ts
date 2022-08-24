@@ -96,8 +96,7 @@ export function load(
   }
   dom.stopTextWidthCache();
 
-  eventUtils.fire(new (eventUtils.get(eventUtils.FINISHED_LOADING))!
-                  (workspace));
+  eventUtils.fire(new (eventUtils.get(eventUtils.FINISHED_LOADING))(workspace));
 
   eventUtils.setGroup(existingGroup);
   eventUtils.setRecordUndo(prevRecordUndo);

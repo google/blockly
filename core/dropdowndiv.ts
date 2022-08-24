@@ -328,6 +328,7 @@ export function show(
 const internal = {
   /**
    * Get sizing info about the bounding element.
+   *
    * @return An object containing size information about the bounding element
    *     (bounding box and width/height).
    */
@@ -348,6 +349,7 @@ const internal = {
   /**
    * Helper to position the drop-down and the arrow, maintaining bounds.
    * See explanation of origin points in show.
+   *
    * @param primaryX Desired origin point x, in absolute px.
    * @param primaryY Desired origin point y, in absolute px.
    * @param secondaryX Secondary/alternative origin point x, in absolute px.

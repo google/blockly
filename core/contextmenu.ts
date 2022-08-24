@@ -249,7 +249,7 @@ export function callbackFactory(block: Block, xml: Element): Function {
       eventUtils.enable();
     }
     if (eventUtils.isEnabled() && !newBlock.isShadow()) {
-      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))!(newBlock));
+      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(newBlock));
     }
     newBlock.select();
   };

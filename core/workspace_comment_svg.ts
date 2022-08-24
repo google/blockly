@@ -146,7 +146,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     }
 
     if (eventUtils.isEnabled()) {
-      eventUtils.fire(new (eventUtils.get(eventUtils.COMMENT_DELETE))!(this));
+      eventUtils.fire(new (eventUtils.get(eventUtils.COMMENT_DELETE))(this));
     }
 
     dom.removeNode(this.svgGroup_);
@@ -234,8 +234,8 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
         eventUtils.enable();
       }
     }
-    const event = new (eventUtils.get(eventUtils.SELECTED))!
-        (oldId, this.id, this.workspace.id);
+    const event = new (eventUtils.get(eventUtils.SELECTED))(
+        oldId, this.id, this.workspace.id);
     eventUtils.fire(event);
     common.setSelected(this);
     this.addSelect();
@@ -250,8 +250,8 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     if (common.getSelected() !== this) {
       return;
     }
-    const event = new (eventUtils.get(eventUtils.SELECTED))!
-        (this.id, null, this.workspace.id);
+    const event = new (eventUtils.get(eventUtils.SELECTED))(
+        this.id, null, this.workspace.id);
     eventUtils.fire(event);
     common.setSelected(null);
     this.removeSelect();
@@ -350,7 +350,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    */
   override moveBy(dx: number, dy: number) {
     const event =
-        new (eventUtils.get(eventUtils.COMMENT_MOVE))!(this) as CommentMove;
+        new (eventUtils.get(eventUtils.COMMENT_MOVE))(this) as CommentMove;
     // TODO: Do I need to look up the relative to surface XY position here?
     const xy = this.getRelativeToSurfaceXY();
     this.translate(xy.x + dx, xy.y + dy);

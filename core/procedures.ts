@@ -413,8 +413,8 @@ export function mutateCallers(defBlock: Block) {
       // undo action since it is deterministically tied to the procedure's
       // definition mutation.
       eventUtils.setRecordUndo(false);
-      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))!
-                      (caller, 'mutation', null, oldMutation, newMutation));
+      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+          caller, 'mutation', null, oldMutation, newMutation));
       eventUtils.setRecordUndo(oldRecordUndo);
     }
   }

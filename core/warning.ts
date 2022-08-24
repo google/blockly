@@ -88,8 +88,8 @@ export class Warning extends Icon {
     if (visible === this.isVisible()) {
       return;
     }
-    eventUtils.fire(new (eventUtils.get(eventUtils.BUBBLE_OPEN))!
-                    (this.block_, visible, 'warning'));
+    eventUtils.fire(new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
+        this.block_, visible, 'warning'));
     if (visible) {
       this.createBubble_();
     } else {

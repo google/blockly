@@ -77,7 +77,8 @@ export class Renderer implements IRegistrable {
    * @param opt_rendererOverrides Rendering constant overrides.
    * @internal
    */
-  init(theme: Theme, opt_rendererOverrides?: object) {
+  init(
+      theme: Theme, opt_rendererOverrides?: {[rendererConstant: string]: any}) {
     this.constants_ = this.makeConstants_();
     if (opt_rendererOverrides) {
       this.overrides = opt_rendererOverrides;

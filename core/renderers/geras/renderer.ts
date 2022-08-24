@@ -51,7 +51,8 @@ export class Renderer extends BaseRenderer {
    *
    * @internal
    */
-  override init(theme: Theme, opt_rendererOverrides?: object) {
+  override init(
+      theme: Theme, opt_rendererOverrides?: {[rendererConstant: string]: any}) {
     super.init(theme, opt_rendererOverrides);
     this.highlightConstants_ = this.makeHighlightConstants_();
     this.highlightConstants_.init();

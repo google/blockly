@@ -174,9 +174,9 @@ export class Comment extends Icon {
          */
         function(this: Comment, _e: Event) {
           if (this.cachedText_ !== this.model_.text) {
-            eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))!
-                            (this.block_, 'comment', null, this.cachedText_,
-                             this.model_.text));
+            eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+                this.block_, 'comment', null, this.cachedText_,
+                this.model_.text));
           }
         });
     this.onInputWrapper_ = browserEvents.conditionalBind(
@@ -240,8 +240,8 @@ export class Comment extends Icon {
     if (visible === this.isVisible()) {
       return;
     }
-    eventUtils.fire(new (eventUtils.get(eventUtils.BUBBLE_OPEN))!
-                    (this.block_, visible, 'comment'));
+    eventUtils.fire(new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
+        this.block_, visible, 'comment'));
     this.model_.pinned = visible;
     if (visible) {
       this.createBubble_();

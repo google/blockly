@@ -197,8 +197,8 @@ export class BubbleDragger {
   /** Fire a move event at the end of a bubble drag. */
   private fireMoveEvent_() {
     if (this.bubble instanceof WorkspaceCommentSvg) {
-      const event = new (eventUtils.get(eventUtils.COMMENT_MOVE))!
-          (this.bubble) as CommentMove;
+      const event = new (eventUtils.get(eventUtils.COMMENT_MOVE))(
+                        this.bubble) as CommentMove;
       event.setOldCoordinate(this.startXY_);
       event.recordNew();
       eventUtils.fire(event);

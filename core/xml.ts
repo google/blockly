@@ -512,8 +512,7 @@ export function domToWorkspace(xml: Element, workspace: Workspace): string[] {
   if ((workspace as WorkspaceSvg).setResizesEnabled) {
     (workspace as WorkspaceSvg).setResizesEnabled(true);
   }
-  eventUtils.fire(new (eventUtils.get(eventUtils.FINISHED_LOADING))!
-                  (workspace));
+  eventUtils.fire(new (eventUtils.get(eventUtils.FINISHED_LOADING))(workspace));
   return newBlockIds;
 }
 
@@ -627,12 +626,12 @@ export function domToBlock(xmlBlock: Element, workspace: Workspace): Block {
     // Fire a VarCreate event for each (if any) new variable created.
     for (let i = 0; i < newVariables.length; i++) {
       const thisVariable = newVariables[i];
-      eventUtils.fire(new (eventUtils.get(eventUtils.VAR_CREATE))!
-                      (thisVariable));
+      eventUtils.fire(
+          new (eventUtils.get(eventUtils.VAR_CREATE))(thisVariable));
     }
     // Block events come after var events, in case they refer to newly created
     // variables.
-    eventUtils.fire(new (eventUtils.get(eventUtils.CREATE))!(topBlock));
+    eventUtils.fire(new (eventUtils.get(eventUtils.CREATE))(topBlock));
   }
   return topBlock;
 }

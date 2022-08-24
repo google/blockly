@@ -506,8 +506,8 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
    * @param trashcanOpen Whether the flyout is opening.
    */
   private fireUiEvent_(trashcanOpen: boolean) {
-    const uiEvent = new (eventUtils.get(eventUtils.TRASHCAN_OPEN))!
-        (trashcanOpen, this.workspace.id);
+    const uiEvent = new (eventUtils.get(eventUtils.TRASHCAN_OPEN))(
+        trashcanOpen, this.workspace.id);
     eventUtils.fire(uiEvent);
   }
 

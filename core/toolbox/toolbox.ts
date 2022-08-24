@@ -931,8 +931,8 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
     if (oldItem === newItem) {
       newElement = null;
     }
-    const event = new (eventUtils.get(eventUtils.TOOLBOX_ITEM_SELECT))!
-        (oldElement, newElement, this.workspace_.id);
+    const event = new (eventUtils.get(eventUtils.TOOLBOX_ITEM_SELECT))(
+        oldElement, newElement, this.workspace_.id);
     eventUtils.fire(event);
   }
 

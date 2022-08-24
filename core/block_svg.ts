@@ -284,8 +284,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
         eventUtils.enable();
       }
     }
-    const event = new (eventUtils.get(eventUtils.SELECTED))!
-        (oldId, this.id, this.workspace.id);
+    const event = new (eventUtils.get(eventUtils.SELECTED))(
+        oldId, this.id, this.workspace.id);
     eventUtils.fire(event);
     common.setSelected(this);
     this.addSelect();
@@ -299,8 +299,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     if (common.getSelected() !== this) {
       return;
     }
-    const event = new (eventUtils.get(eventUtils.SELECTED))!
-        (this.id, null, this.workspace.id);
+    const event = new (eventUtils.get(eventUtils.SELECTED))(
+        this.id, null, this.workspace.id);
     event.workspaceId = this.workspace.id;
     eventUtils.fire(event);
     common.setSelected(null);

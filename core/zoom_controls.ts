@@ -417,8 +417,8 @@ export class ZoomControls implements IPositionable {
 
   /** Fires a zoom control UI event. */
   private fireZoomEvent_() {
-    const uiEvent = new (eventUtils.get(eventUtils.CLICK))!
-        (null, this.workspace.id, 'zoom_controls');
+    const uiEvent = new (eventUtils.get(eventUtils.CLICK))(
+        null, this.workspace.id, 'zoom_controls');
     eventUtils.fire(uiEvent);
   }
 }

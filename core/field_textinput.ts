@@ -187,9 +187,9 @@ export class FieldTextInput extends Field {
       // Revert value when the text becomes invalid.
       this.value_ = this.htmlInput_!.getAttribute('data-untyped-default-value');
       if (this.sourceBlock_ && eventUtils.isEnabled()) {
-        eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))!
-                        (this.sourceBlock_, 'field', this.name || null,
-                         oldValue, this.value_));
+        eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+            this.sourceBlock_, 'field', this.name || null, oldValue,
+            this.value_));
       }
     }
   }

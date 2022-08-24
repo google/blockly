@@ -86,13 +86,13 @@ export class Generator {
   protected RESERVED_WORDS_ = '';
 
   /** A dictionary of definitions to be printed before the code. */
-  protected definitions_?: {[key: string]: string};
+  protected definitions_: {[key: string]: string} = Object.create(null);
 
   /**
    * A dictionary mapping desired function names in definitions_ to actual
    * function names (to avoid collisions with user functions).
    */
-  protected functionNames_?: {[key: string]: string};
+  protected functionNames_: {[key: string]: string} = Object.create(null);
 
   /** A database of variable and procedure names. */
   protected nameDB_?: Names = undefined;
@@ -424,10 +424,10 @@ export class Generator {
    */
   protected provideFunction_(desiredName: string, code: string[]|string):
       string {
-    if (!this.definitions_![desiredName]) {
+    if (!this.definitions_[desiredName]) {
       const functionName =
           this.nameDB_!.getDistinctName(desiredName, NameType.PROCEDURE);
-      this.functionNames_![desiredName] = functionName;
+      this.functionNames_[desiredName] = functionName;
       if (Array.isArray(code)) {
         code = code.join('\n');
       }
@@ -443,9 +443,9 @@ export class Generator {
         codeText = codeText.replace(/^(( {2})*) {2}/gm, '$1\0');
       }
       codeText = codeText.replace(/\0/g, this.INDENT);
-      this.definitions_![desiredName] = codeText;
+      this.definitions_[desiredName] = codeText;
     }
-    return this.functionNames_![desiredName];
+    return this.functionNames_[desiredName];
   }
 
   /**
@@ -494,8 +494,8 @@ export class Generator {
   finish(code: string): string {
     // Optionally override
     // Clean up temporary data.
-    delete this.definitions_;
-    delete this.functionNames_;
+    this.definitions_ = Object.create(null);
+    this.functionNames_ = Object.create(null);
     return code;
   }
 

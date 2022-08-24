@@ -452,8 +452,8 @@ export function nameUsedWithAnyType(
  * @returns The generated DOM.
  * @alias Blockly.Variables.generateVariableFieldDom
  */
-export function generateVariableFieldDom(variableModel: VariableModel): Element|
-    null {
+export function generateVariableFieldDom(variableModel: VariableModel):
+    Element {
   /* Generates the following XML:
    * <field name="VAR" id="goKTKmYJ8DhVHpruv" variabletype="int">foo</field>
    */

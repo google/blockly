@@ -24,16 +24,11 @@ import {GridOptions} from './blockly_options.js';
  * @alias Blockly.Grid
  */
 export class Grid {
-  /**
-   * The scale of the grid, used to set stroke width on grid lines.
-   * This should always be the same as the workspace scale.
-   */
-  private scale_ = 1;
-  private readonly spacing_: number;
-  private readonly length_: number;
-  private readonly line1_: SVGElement;
-  private readonly line2_: SVGElement;
-  private readonly snapToGrid_: boolean;
+  private readonly spacing: number;
+  private readonly length: number;
+  private readonly line1: SVGElement;
+  private readonly line2: SVGElement;
+  private readonly snapToGrid: boolean;
 
   /**
    * @param pattern The grid's SVG pattern, created during injection.
@@ -43,19 +38,19 @@ export class Grid {
    */
   constructor(private pattern: SVGElement, options: GridOptions) {
     /** The spacing of the grid lines (in px). */
-    this.spacing_ = options['spacing'] ?? 0;
+    this.spacing = options['spacing'] ?? 0;
 
     /** How long the grid lines should be (in px). */
-    this.length_ = options['length'] ?? 1;
+    this.length = options['length'] ?? 1;
 
     /** The horizontal grid line, if it exists. */
-    this.line1_ = pattern.firstChild as SVGElement;
+    this.line1 = pattern.firstChild as SVGElement;
 
     /** The vertical grid line, if it exists. */
-    this.line2_ = this.line1_ && this.line1_.nextSibling as SVGElement;
+    this.line2 = this.line1 && this.line1.nextSibling as SVGElement;
 
     /** Whether blocks should snap to the grid. */
-    this.snapToGrid_ = options['snap'] ?? false;
+    this.snapToGrid = options['snap'] ?? false;
   }
 
   /**
@@ -65,7 +60,7 @@ export class Grid {
    * @internal
    */
   shouldSnap(): boolean {
-    return this.snapToGrid_;
+    return this.snapToGrid;
   }
 
   /**
@@ -75,7 +70,7 @@ export class Grid {
    * @internal
    */
   getSpacing(): number {
-    return this.spacing_;
+    return this.spacing;
   }
 
   /**
@@ -96,23 +91,22 @@ export class Grid {
    * @internal
    */
   update(scale: number) {
-    this.scale_ = scale;
     // MSIE freaks if it sees a 0x0 pattern, so set empty patterns to 100x100.
-    const safeSpacing = this.spacing_ * scale || 100;
+    const safeSpacing = this.spacing * scale || 100;
 
     this.pattern.setAttribute('width', safeSpacing.toString());
     this.pattern.setAttribute('height', safeSpacing.toString());
 
-    let half = Math.floor(this.spacing_ / 2) + 0.5;
-    let start = half - this.length_ / 2;
-    let end = half + this.length_ / 2;
+    let half = Math.floor(this.spacing / 2) + 0.5;
+    let start = half - this.length / 2;
+    let end = half + this.length / 2;
 
     half *= scale;
     start *= scale;
     end *= scale;
 
-    this.setLineAttributes_(this.line1_, scale, start, end, half, half);
-    this.setLineAttributes_(this.line2_, scale, half, half, start, end);
+    this.setLineAttributes(this.line1, scale, start, end, half, half);
+    this.setLineAttributes(this.line2, scale, half, half, start, end);
   }
 
   /**
@@ -126,7 +120,7 @@ export class Grid {
    * @param y1 The new y start position of the line (in px).
    * @param y2 The new y end position of the line (in px).
    */
-  private setLineAttributes_(
+  private setLineAttributes(
       line: SVGElement, width: number, x1: number, x2: number, y1: number,
       y2: number) {
     if (line) {

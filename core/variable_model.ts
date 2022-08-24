@@ -59,7 +59,7 @@ export class VariableModel {
      */
     this.id_ = opt_id || idGenerator.genUid();
 
-    eventUtils.fire(new (eventUtils.get(eventUtils.VAR_CREATE))!(this));
+    eventUtils.fire(new (eventUtils.get(eventUtils.VAR_CREATE))(this));
   }
 
   /** @returns The ID for the variable. */

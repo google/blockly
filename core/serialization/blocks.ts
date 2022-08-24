@@ -361,7 +361,7 @@ export function appendInternal(
   const block = appendPrivate(state, workspace, {parentConnection, isShadow});
 
   eventUtils.enable();
-  eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))!(block));
+  eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(block));
   eventUtils.setGroup(existingGroup);
   eventUtils.setRecordUndo(prevRecordUndo);
 

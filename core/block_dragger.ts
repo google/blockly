@@ -163,8 +163,8 @@ export class BlockDragger implements IBlockDragger {
 
   /** Fire a UI event at the start of a block drag. */
   protected fireDragStartEvent_() {
-    const event = new (eventUtils.get(eventUtils.BLOCK_DRAG))!
-        (this.draggingBlock_, true, this.draggingBlock_.getDescendants(false));
+    const event = new (eventUtils.get(eventUtils.BLOCK_DRAG))(
+        this.draggingBlock_, true, this.draggingBlock_.getDescendants(false));
     eventUtils.fire(event);
   }
 
@@ -312,8 +312,8 @@ export class BlockDragger implements IBlockDragger {
 
   /** Fire a UI event at the end of a block drag. */
   protected fireDragEndEvent_() {
-    const event = new (eventUtils.get(eventUtils.BLOCK_DRAG))!
-        (this.draggingBlock_, false, this.draggingBlock_.getDescendants(false));
+    const event = new (eventUtils.get(eventUtils.BLOCK_DRAG))(
+        this.draggingBlock_, false, this.draggingBlock_.getDescendants(false));
     eventUtils.fire(event);
   }
 
@@ -352,8 +352,8 @@ export class BlockDragger implements IBlockDragger {
 
   /** Fire a move event at the end of a block drag. */
   protected fireMoveEvent_() {
-    const event = new (eventUtils.get(eventUtils.BLOCK_MOVE))!
-        (this.draggingBlock_) as BlockMove;
+    const event = new (eventUtils.get(eventUtils.BLOCK_MOVE))(
+                      this.draggingBlock_) as BlockMove;
     event.oldCoordinate = this.startXY_;
     event.recordNew();
     eventUtils.fire(event);

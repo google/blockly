@@ -291,7 +291,7 @@ export class Block implements IASTNodeLocation, IDeletable {
 
       // Fire a create event.
       if (eventUtils.isEnabled()) {
-        eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))!(this));
+        eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(this));
       }
     } finally {
       if (!existingGroup) {
@@ -323,7 +323,7 @@ export class Block implements IASTNodeLocation, IDeletable {
 
     this.unplug(healStack);
     if (eventUtils.isEnabled()) {
-      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_DELETE))!(this));
+      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_DELETE))(this));
     }
 
     if (this.onchangeWrapper_) {
@@ -1248,8 +1248,8 @@ export class Block implements IASTNodeLocation, IDeletable {
    */
   setInputsInline(newBoolean: boolean) {
     if (this.inputsInline !== newBoolean) {
-      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))!
-                      (this, 'inline', null, this.inputsInline, newBoolean));
+      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+          this, 'inline', null, this.inputsInline, newBoolean));
       this.inputsInline = newBoolean;
     }
   }
@@ -1318,8 +1318,8 @@ export class Block implements IASTNodeLocation, IDeletable {
     if (this.isEnabled() !== enabled) {
       const oldValue = this.disabled;
       this.disabled = !enabled;
-      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))!
-                      (this, 'disabled', null, oldValue, !enabled));
+      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+          this, 'disabled', null, oldValue, !enabled));
     }
   }
 
@@ -1357,8 +1357,8 @@ export class Block implements IASTNodeLocation, IDeletable {
    */
   setCollapsed(collapsed: boolean) {
     if (this.collapsed_ !== collapsed) {
-      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))!
-                      (this, 'collapsed', null, this.collapsed_, collapsed));
+      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+          this, 'collapsed', null, this.collapsed_, collapsed));
       this.collapsed_ = collapsed;
     }
   }
@@ -2064,8 +2064,8 @@ export class Block implements IASTNodeLocation, IDeletable {
     if (this.commentModel.text === text) {
       return;
     }
-    eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))!
-                    (this, 'comment', null, this.commentModel.text, text));
+    eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+        this, 'comment', null, this.commentModel.text, text));
     this.commentModel.text = text;
     // AnyDuringMigration because:  Type 'string | null' is not assignable to
     // type 'string | Comment'.
@@ -2111,7 +2111,7 @@ export class Block implements IASTNodeLocation, IDeletable {
       throw Error('Block has parent.');
     }
     const event =
-        new (eventUtils.get(eventUtils.BLOCK_MOVE))!(this) as BlockMove;
+        new (eventUtils.get(eventUtils.BLOCK_MOVE))(this) as BlockMove;
     this.xy_.translate(dx, dy);
     event.recordNew();
     eventUtils.fire(event);

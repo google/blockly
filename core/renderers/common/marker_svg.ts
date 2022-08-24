@@ -562,8 +562,8 @@ export class MarkerSvg {
    */
   private fireMarkerEvent_(oldNode: ASTNode, curNode: ASTNode) {
     const curBlock = curNode.getSourceBlock();
-    const event = new (eventUtils.get(eventUtils.MARKER_MOVE))!
-        (curBlock, this.isCursor(), oldNode, curNode);
+    const event = new (eventUtils.get(eventUtils.MARKER_MOVE))(
+        curBlock, this.isCursor(), oldNode, curNode);
     eventUtils.fire(event);
   }
 

@@ -625,8 +625,8 @@ export class Gesture {
    * @param ws The workspace that a user clicks on.
    */
   private fireWorkspaceClick_(ws: WorkspaceSvg) {
-    eventUtils.fire(new (eventUtils.get(eventUtils.CLICK))!
-                    (null, ws.id, 'workspace'));
+    eventUtils.fire(
+        new (eventUtils.get(eventUtils.CLICK))(null, ws.id, 'workspace'));
   }
 
   /**
@@ -712,8 +712,8 @@ export class Gesture {
       }
     } else {
       // Clicks events are on the start block, even if it was a shadow.
-      const event = new (eventUtils.get(eventUtils.CLICK))!
-          (this.startBlock_, this.startWorkspace_.id, 'block');
+      const event = new (eventUtils.get(eventUtils.CLICK))(
+          this.startBlock_, this.startWorkspace_.id, 'block');
       eventUtils.fire(event);
     }
     this.bringBlockToFront_();

@@ -296,7 +296,7 @@ export function getObject<T>(
  * @alias Blockly.registry.getAllItems
  */
 export function getAllItems<T>(
-    type: string|Type<T>, opt_cased: boolean, opt_throwIfMissing?: boolean):
+    type: string|Type<T>, opt_cased?: boolean, opt_throwIfMissing?: boolean):
     {[key: string]: T|null|(new (...p1: AnyDuringMigration[]) => T)}|null {
   type = String(type).toLowerCase();
   const typeRegistry = typeMap[type];

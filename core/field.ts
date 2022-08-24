@@ -317,7 +317,7 @@ export abstract class Field implements IASTNodeLocationSvg,
           'width': this.size_.width,
           'class': 'blocklyFieldRect',
         },
-        this.fieldGroup_!);
+        this.getSvgRoot());
   }
 
   /**
@@ -330,7 +330,7 @@ export abstract class Field implements IASTNodeLocationSvg,
         Svg.TEXT, {
           'class': 'blocklyText',
         },
-        this.fieldGroup_!);
+        this.getSvgRoot());
     if (this.getConstants()!.FIELD_TEXT_BASELINE_CENTER) {
       this.textElement_.setAttribute('dominant-baseline', 'central');
     }
@@ -473,7 +473,7 @@ export abstract class Field implements IASTNodeLocationSvg,
     if (!this.EDITABLE || !group) {
       return;
     }
-    if (this.enabled_ && this.sourceBlock_!.isEditable()) {
+    if (this.enabled_ && this.getSourceBlock().isEditable()) {
       dom.addClass(group, 'blocklyEditableText');
       dom.removeClass(group, 'blocklyNonEditableText');
       group.style.cursor = this.CURSOR;
@@ -711,8 +711,9 @@ export abstract class Field implements IASTNodeLocationSvg,
     this.textElement_.setAttribute(
         'x',
         `${
-            this.sourceBlock_!.RTL ? this.size_.width - contentWidth - xOffset :
-                                     xOffset}`);
+            this.getSourceBlock().RTL ?
+                this.size_.width - contentWidth - xOffset :
+                xOffset}`);
     this.textElement_.setAttribute(
         'y',
         `${
@@ -778,7 +779,7 @@ export abstract class Field implements IASTNodeLocationSvg,
       // - Webkit / Blink: fill-box / object bounding box
       // - Gecko: stroke-box
       const bBox = (this.sourceBlock_ as BlockSvg).getHeightWidth();
-      const scale = (this.sourceBlock_!.workspace as WorkspaceSvg).scale;
+      const scale = (this.getSourceBlock().workspace as WorkspaceSvg).scale;
       xy = this.getAbsoluteXY_();
       scaledWidth = (bBox.width + 1) * scale;
       scaledHeight = (bBox.height + 1) * scale;
@@ -1111,7 +1112,7 @@ export abstract class Field implements IASTNodeLocationSvg,
    */
   getParentInput(): Input {
     let parentInput = null;
-    const block = this.sourceBlock_!;
+    const block = this.getSourceBlock();
     const inputs = block.inputList;
 
     for (let idx = 0; idx < block.inputList.length; idx++) {
@@ -1167,7 +1168,7 @@ export abstract class Field implements IASTNodeLocationSvg,
       return;
     }
 
-    this.fieldGroup_!.appendChild(cursorSvg);
+    this.getSvgRoot().appendChild(cursorSvg);
     this.cursorSvg_ = cursorSvg;
   }
 
@@ -1183,13 +1184,13 @@ export abstract class Field implements IASTNodeLocationSvg,
       return;
     }
 
-    this.fieldGroup_!.appendChild(markerSvg);
+    this.getSvgRoot().appendChild(markerSvg);
     this.markerSvg_ = markerSvg;
   }
 
   /** Redraw any attached marker or cursor svgs if needed. */
   protected updateMarkers_() {
-    const workspace = this.sourceBlock_!.workspace as WorkspaceSvg;
+    const workspace = this.getSourceBlock().workspace as WorkspaceSvg;
     if (workspace.keyboardAccessibilityMode && this.cursorSvg_) {
       workspace.getCursor()!.draw();
     }

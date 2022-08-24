@@ -15,19 +15,6 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.IFlyout');
 
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-// import '../utils/toolbox.js';
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-// import '../block_svg.js';
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-// import '../utils/coordinate.js';
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-// import '../utils/svg.js';
-
 import type {WorkspaceSvg} from '../workspace_svg.js';
 import type {BlockSvg} from '../block_svg.js';
 import type {Coordinate} from '../utils/coordinate.js';

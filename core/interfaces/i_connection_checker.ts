@@ -19,14 +19,6 @@ import type {Connection} from '../connection.js';
 import type {RenderedConnection} from '../rendered_connection.js';
 goog.declareModuleId('Blockly.IConnectionChecker');
 
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-// import '../connection.js';
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-// import '../rendered_connection.js';
-
-
 /**
  * Class for connection type checking logic.
  * @alias Blockly.IConnectionChecker

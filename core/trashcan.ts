@@ -15,9 +15,6 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Trashcan');
 
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-// import './metrics_manager.js';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_trashcan_open.js';
 

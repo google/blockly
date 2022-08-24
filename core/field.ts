@@ -19,13 +19,8 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Field');
 
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-// import './shortcut_registry.js';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_block_change.js';
-// Unused import preserved for side-effects. Remove if unneeded.
-// import './gesture.js';
 
 import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';

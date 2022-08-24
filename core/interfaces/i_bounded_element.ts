@@ -16,11 +16,6 @@ import * as goog from '../../closure/goog/goog.js';
 import type {Rect} from '../utils/rect.js';
 goog.declareModuleId('Blockly.IBoundedElement');
 
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-// import '../utils/rect.js';
-
-
 /**
  * A bounded element interface.
  * @alias Blockly.IBoundedElement

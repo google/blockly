@@ -17,14 +17,6 @@ import type {Rect} from '../utils/rect.js';
 import type {UiMetrics} from '../metrics_manager.js';
 goog.declareModuleId('Blockly.IPositionable');
 
-/* eslint-disable-next-line no-unused-vars */
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-// import '../metrics_manager.js';
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-// import '../utils/rect.js';
-
 import type {IComponent} from './i_component.js';
 
 

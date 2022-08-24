@@ -17,14 +17,6 @@ import type {Coordinate} from '../utils/coordinate.js';
 import type {BlockSvg} from '../block_svg.js';
 goog.declareModuleId('Blockly.IBlockDragger');
 
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-// import '../block_svg.js';
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-// import '../utils/coordinate.js';
-
-
 /**
  * A block dragger interface.
  * @alias Blockly.IBlockDragger

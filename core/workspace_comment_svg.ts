@@ -16,10 +16,6 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.WorkspaceCommentSvg');
 
 // Unused import preserved for side-effects. Remove if unneeded.
-// import './events/events_comment_create.js';
-// Unused import preserved for side-effects. Remove if unneeded.
-// import './events/events_comment_delete.js';
-// Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_selected.js';
 
 import type {BlockDragSurfaceSvg} from './block_drag_surface.js';

@@ -15,10 +15,6 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.uiPosition');
 
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-// import './metrics_manager.js';
-
 import type {UiMetrics} from './metrics_manager.js';
 import {Scrollbar} from './scrollbar.js';
 import {Rect} from './utils/rect.js';

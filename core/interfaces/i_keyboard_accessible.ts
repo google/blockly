@@ -16,11 +16,6 @@ import * as goog from '../../closure/goog/goog.js';
 import {KeyboardShortcut} from '../shortcut_registry.js';
 goog.declareModuleId('Blockly.IKeyboardAccessible');
 
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-// import '../shortcut_registry.js';
-
-
 /**
  * An interface for an object that handles keyboard shortcuts.
  * @alias Blockly.IKeyboardAccessible

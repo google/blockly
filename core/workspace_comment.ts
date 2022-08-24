@@ -15,13 +15,6 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.WorkspaceComment');
 
-// Unused import preserved for side-effects. Remove if unneeded.
-// import './events/events_comment_change.js';
-// Unused import preserved for side-effects. Remove if unneeded.
-// import './events/events_comment_create.js';
-// Unused import preserved for side-effects. Remove if unneeded.
-// import './events/events_comment_delete.js';
-
 import type {CommentMove} from './events/events_comment_move.js';
 import * as eventUtils from './events/utils.js';
 import {Coordinate} from './utils/coordinate.js';

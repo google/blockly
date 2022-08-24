@@ -189,8 +189,8 @@ export class FieldMultilineInput extends FieldTextInput {
         textLines += '\n';
       }
     }
-    if (this.sourceBlock_!.RTL) {
-      // The SVG is LTR, force value to be RTL by adding an RLM.
+    if (this.getSourceBlock().RTL) {
+      // The SVG is LTR, force value to be RTL.
       textLines += '\u200F';
     }
     return textLines;
@@ -248,7 +248,7 @@ export class FieldMultilineInput extends FieldTextInput {
     this.updateSize_();
 
     if (this.isBeingEdited_) {
-      if (this.sourceBlock_!.RTL) {
+      if (this.getSourceBlock().RTL) {
         // in RTL, we need to let the browser reflow before resizing
         // in order to get the correct bounding box of the borderRect
         // avoiding issue #2777.

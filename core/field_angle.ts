@@ -436,12 +436,12 @@ export class FieldAngle extends FieldTextInput {
     // 'Event'.
     if ((e as AnyDuringMigration).keyCode === KeyCodes.LEFT) {
       // decrement (increment in RTL)
-      multiplier = this.sourceBlock_!.RTL ? 1 : -1;
+      multiplier = this.getSourceBlock().RTL ? 1 : -1;
       // AnyDuringMigration because:  Property 'keyCode' does not exist on type
       // 'Event'.
     } else if ((e as AnyDuringMigration).keyCode === KeyCodes.RIGHT) {
       // increment (decrement in RTL)
-      multiplier = this.sourceBlock_!.RTL ? -1 : 1;
+      multiplier = this.getSourceBlock().RTL ? -1 : 1;
       // AnyDuringMigration because:  Property 'keyCode' does not exist on type
       // 'Event'.
     } else if ((e as AnyDuringMigration).keyCode === KeyCodes.DOWN) {

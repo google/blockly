@@ -27,11 +27,6 @@ import {GridOptions} from './blockly_options.js';
  * @alias Blockly.Grid
  */
 export class Grid {
-  /**
-   * The scale of the grid, used to set stroke width on grid lines.
-   * This should always be the same as the workspace scale.
-   */
-  private scale_ = 1;
   private readonly spacing: number;
   private readonly length: number;
   private readonly line1: SVGElement;
@@ -95,7 +90,6 @@ export class Grid {
    * @internal
    */
   update(scale: number) {
-    this.scale_ = scale;
     // MSIE freaks if it sees a 0x0 pattern, so set empty patterns to 100x100.
     const safeSpacing = this.spacing * scale || 100;
 

@@ -17,7 +17,7 @@ import type {BlockSvg} from '../block_svg.js';
 import * as registry from '../registry.js';
 import * as Xml from '../xml.js';
 
-import {BlockBase} from './events_block_base.js';
+import {BlockBase, BlockBaseJson} from './events_block_base.js';
 import * as eventUtils from './utils.js';
 
 
@@ -32,8 +32,8 @@ export class BlockChange extends BlockBase {
   element!: string;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   name!: string|null;
-  oldValue: AnyDuringMigration;
-  newValue: AnyDuringMigration;
+  oldValue: unknown;
+  newValue: unknown;
 
   /**
    * @param opt_block The changed block.  Undefined for a blank event.
@@ -44,7 +44,7 @@ export class BlockChange extends BlockBase {
    */
   constructor(
       opt_block?: Block, opt_element?: string, opt_name?: string|null,
-      opt_oldValue?: AnyDuringMigration, opt_newValue?: AnyDuringMigration) {
+      opt_oldValue?: unknown, opt_newValue?: unknown) {
     super(opt_block);
 
     /** Type of this event. */
@@ -64,8 +64,8 @@ export class BlockChange extends BlockBase {
    *
    * @returns JSON representation.
    */
-  override toJson(): AnyDuringMigration {
-    const json = super.toJson();
+  override toJson(): BlockChangeJson {
+    const json = super.toJson() as BlockChangeJson;
     json['element'] = this.element;
     if (this.name) {
       json['name'] = this.name;
@@ -80,10 +80,10 @@ export class BlockChange extends BlockBase {
    *
    * @param json JSON representation.
    */
-  override fromJson(json: AnyDuringMigration) {
+  override fromJson(json: BlockChangeJson) {
     super.fromJson(json);
     this.element = json['element'];
-    this.name = json['name'];
+    this.name = json['name'] || '';
     this.oldValue = json['oldValue'];
     this.newValue = json['newValue'];
   }
@@ -174,6 +174,13 @@ export class BlockChange extends BlockBase {
     }
     return '';
   }
+}
+
+export interface BlockChangeJson extends BlockBaseJson {
+  element: string;
+  name?: string;
+  newValue: unknown;
+  oldValue: unknown;
 }
 
 registry.register(registry.Type.EVENT, eventUtils.CHANGE, BlockChange);

@@ -15,7 +15,7 @@ goog.declareModuleId('Blockly.Events.CommentChange');
 import * as registry from '../registry.js';
 import type {WorkspaceComment} from '../workspace_comment.js';
 
-import {CommentBase} from './events_comment_base.js';
+import {CommentBase, CommentBaseJson} from './events_comment_base.js';
 import * as eventUtils from './utils.js';
 
 
@@ -61,8 +61,8 @@ export class CommentChange extends CommentBase {
    *
    * @returns JSON representation.
    */
-  override toJson(): AnyDuringMigration {
-    const json = super.toJson();
+  override toJson(): CommentChangeJson {
+    const json = super.toJson() as CommentChangeJson;
     json['oldContents'] = this.oldContents_;
     json['newContents'] = this.newContents_;
     return json;
@@ -73,7 +73,7 @@ export class CommentChange extends CommentBase {
    *
    * @param json JSON representation.
    */
-  override fromJson(json: AnyDuringMigration) {
+  override fromJson(json: CommentChangeJson) {
     super.fromJson(json);
     this.oldContents_ = json['oldContents'];
     this.newContents_ = json['newContents'];
@@ -104,6 +104,11 @@ export class CommentChange extends CommentBase {
 
     comment.setContent(contents);
   }
+}
+
+export interface CommentChangeJson extends CommentBaseJson {
+  oldContents: string;
+  newContents: string;
 }
 
 registry.register(

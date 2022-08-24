@@ -16,7 +16,7 @@ import * as registry from '../registry.js';
 import type {WorkspaceComment} from '../workspace_comment.js';
 import * as Xml from '../xml.js';
 
-import {CommentBase} from './events_comment_base.js';
+import {CommentBase, CommentBaseJson} from './events_comment_base.js';
 import * as eventUtils from './utils.js';
 
 
@@ -28,7 +28,7 @@ import * as eventUtils from './utils.js';
 export class CommentCreate extends CommentBase {
   override type: string;
 
-  xml: AnyDuringMigration;
+  xml: Element|DocumentFragment|null = null;
 
   /**
    * @param opt_comment The created comment.
@@ -53,9 +53,9 @@ export class CommentCreate extends CommentBase {
    *
    * @returns JSON representation.
    */
-  override toJson(): AnyDuringMigration {
-    const json = super.toJson();
-    json['xml'] = Xml.domToText(this.xml);
+  override toJson(): CommentCreateJson {
+    const json = super.toJson() as CommentCreateJson;
+    json['xml'] = Xml.domToText(this.xml!);
     return json;
   }
 
@@ -64,7 +64,7 @@ export class CommentCreate extends CommentBase {
    *
    * @param json JSON representation.
    */
-  override fromJson(json: AnyDuringMigration) {
+  override fromJson(json: CommentCreateJson) {
     super.fromJson(json);
     this.xml = Xml.textToDom(json['xml']);
   }
@@ -77,6 +77,10 @@ export class CommentCreate extends CommentBase {
   override run(forward: boolean) {
     CommentBase.CommentCreateDeleteHelper(this, forward);
   }
+}
+
+export interface CommentCreateJson extends CommentBaseJson {
+  xml: string;
 }
 
 registry.register(

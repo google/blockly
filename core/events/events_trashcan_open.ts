@@ -13,6 +13,7 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.TrashcanOpen');
 
 import * as registry from '../registry.js';
+import { AbstractEventJson } from './events_abstract.js';
 
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
@@ -48,9 +49,9 @@ export class TrashcanOpen extends UiBase {
    *
    * @returns JSON representation.
    */
-  override toJson(): AnyDuringMigration {
-    const json = super.toJson();
-    json['isOpen'] = this.isOpen;
+  override toJson(): TrashcanOpenJson {
+    const json = super.toJson() as TrashcanOpenJson;
+    json['isOpen'] = !!this.isOpen;
     return json;
   }
 
@@ -59,10 +60,14 @@ export class TrashcanOpen extends UiBase {
    *
    * @param json JSON representation.
    */
-  override fromJson(json: AnyDuringMigration) {
+  override fromJson(json: TrashcanOpenJson) {
     super.fromJson(json);
     this.isOpen = json['isOpen'];
   }
+}
+
+export interface TrashcanOpenJson extends AbstractEventJson {
+  isOpen: boolean;
 }
 
 registry.register(registry.Type.EVENT, eventUtils.TRASHCAN_OPEN, TrashcanOpen);

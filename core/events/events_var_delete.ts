@@ -15,7 +15,7 @@ goog.declareModuleId('Blockly.Events.VarDelete');
 import * as registry from '../registry.js';
 import type {VariableModel} from '../variable_model.js';
 
-import {VarBase} from './events_var_base.js';
+import {VarBase, VarBaseJson} from './events_var_base.js';
 import * as eventUtils from './utils.js';
 
 
@@ -53,8 +53,8 @@ export class VarDelete extends VarBase {
    *
    * @returns JSON representation.
    */
-  override toJson(): AnyDuringMigration {
-    const json = super.toJson();
+  override toJson(): VarDeleteJson {
+    const json = super.toJson() as VarDeleteJson;
     json['varType'] = this.varType;
     json['varName'] = this.varName;
     return json;
@@ -65,7 +65,7 @@ export class VarDelete extends VarBase {
    *
    * @param json JSON representation.
    */
-  override fromJson(json: AnyDuringMigration) {
+  override fromJson(json: VarDeleteJson) {
     super.fromJson(json);
     this.varType = json['varType'];
     this.varName = json['varName'];
@@ -84,6 +84,11 @@ export class VarDelete extends VarBase {
       workspace.createVariable(this.varName, this.varType, this.varId);
     }
   }
+}
+
+export interface VarDeleteJson extends VarBaseJson {
+  varType: string;
+  varName: string;
 }
 
 registry.register(registry.Type.EVENT, eventUtils.VAR_DELETE, VarDelete);

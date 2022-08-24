@@ -12,9 +12,9 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.BubbleOpen');
 
+import type {AbstractEventJson} from './events_abstract.js';
 import type {BlockSvg} from '../block_svg.js';
 import * as registry from '../registry.js';
-
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
 
@@ -58,11 +58,11 @@ export class BubbleOpen extends UiBase {
    *
    * @returns JSON representation.
    */
-  override toJson(): AnyDuringMigration {
-    const json = super.toJson();
-    json['isOpen'] = this.isOpen;
-    json['bubbleType'] = this.bubbleType;
-    json['blockId'] = this.blockId;
+  override toJson(): BubbleOpenJson {
+    const json = super.toJson() as BubbleOpenJson;
+    json['isOpen'] = !!this.isOpen;
+    json['bubbleType'] = this.bubbleType || '';
+    json['blockId'] = this.blockId || '';
     return json;
   }
 
@@ -71,12 +71,18 @@ export class BubbleOpen extends UiBase {
    *
    * @param json JSON representation.
    */
-  override fromJson(json: AnyDuringMigration) {
+  override fromJson(json: BubbleOpenJson) {
     super.fromJson(json);
     this.isOpen = json['isOpen'];
     this.bubbleType = json['bubbleType'];
     this.blockId = json['blockId'];
   }
+}
+
+export interface BubbleOpenJson extends AbstractEventJson {
+  isOpen: boolean;
+  bubbleType: string;
+  blockId: string;
 }
 
 registry.register(registry.Type.EVENT, eventUtils.BUBBLE_OPEN, BubbleOpen);

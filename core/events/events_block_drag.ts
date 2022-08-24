@@ -14,7 +14,7 @@ goog.declareModuleId('Blockly.Events.BlockDrag');
 
 import type {Block} from '../block.js';
 import * as registry from '../registry.js';
-
+import {AbstractEventJson} from './events_abstract.js';
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
 
@@ -25,7 +25,7 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.BlockDrag
  */
 export class BlockDrag extends UiBase {
-  blockId: AnyDuringMigration;
+  blockId: string;
   isStart?: boolean;
   blocks?: Block[];
   override type: string;
@@ -41,7 +41,7 @@ export class BlockDrag extends UiBase {
   constructor(opt_block?: Block, opt_isStart?: boolean, opt_blocks?: Block[]) {
     const workspaceId = opt_block ? opt_block.workspace.id : undefined;
     super(workspaceId);
-    this.blockId = opt_block ? opt_block.id : null;
+    this.blockId = opt_block ? opt_block.id : '';
 
     /** Whether this is the start of a block drag. */
     this.isStart = opt_isStart;
@@ -58,10 +58,12 @@ export class BlockDrag extends UiBase {
    *
    * @returns JSON representation.
    */
-  override toJson(): AnyDuringMigration {
-    const json = super.toJson();
-    json['isStart'] = this.isStart;
+  override toJson(): BlockDragJson {
+    const json = super.toJson() as BlockDragJson;
+    json['isStart'] = !!this.isStart;
     json['blockId'] = this.blockId;
+    // TODO: I don't think we should actually apply the blocks array to the JSON
+    //   object b/c they have functions and aren't actually serializable.
     json['blocks'] = this.blocks;
     return json;
   }
@@ -71,12 +73,18 @@ export class BlockDrag extends UiBase {
    *
    * @param json JSON representation.
    */
-  override fromJson(json: AnyDuringMigration) {
+  override fromJson(json: BlockDragJson) {
     super.fromJson(json);
     this.isStart = json['isStart'];
     this.blockId = json['blockId'];
     this.blocks = json['blocks'];
   }
+}
+
+export interface BlockDragJson extends AbstractEventJson {
+  isStart: boolean;
+  blockId: string;
+  blocks?: Block[];
 }
 
 registry.register(registry.Type.EVENT, eventUtils.BLOCK_DRAG, BlockDrag);

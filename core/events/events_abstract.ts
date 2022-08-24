@@ -37,7 +37,7 @@ export abstract class Abstract {
   isUiEvent = false;
 
   /** Type of this event. */
-  type?: string = undefined;
+  type: string = '';
 
   /** @alias Blockly.Events.Abstract */
   constructor() {
@@ -57,10 +57,10 @@ export abstract class Abstract {
    *
    * @returns JSON representation.
    */
-  toJson(): AnyDuringMigration {
-    const json = {'type': this.type};
+  toJson(): AbstractEventJson {
+    const json: AbstractEventJson = {'type': this.type};
     if (this.group) {
-      (json as AnyDuringMigration)['group'] = this.group;
+      json['group'] = this.group;
     }
     return json;
   }
@@ -70,9 +70,9 @@ export abstract class Abstract {
    *
    * @param json JSON representation.
    */
-  fromJson(json: AnyDuringMigration) {
+  fromJson(json: AbstractEventJson) {
     this.isBlank = false;
-    this.group = json['group'];
+    this.group = json['group'] || '';
   }
 
   /**
@@ -111,4 +111,9 @@ export abstract class Abstract {
     }
     return workspace;
   }
+}
+
+export interface AbstractEventJson {
+  type: string;
+  group?: string;
 }

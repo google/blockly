@@ -16,7 +16,7 @@ import * as utilsXml from '../utils/xml.js';
 import type {WorkspaceComment} from '../workspace_comment.js';
 import * as Xml from '../xml.js';
 
-import {Abstract as AbstractEvent} from './events_abstract.js';
+import {Abstract as AbstractEvent, AbstractEventJson} from './events_abstract.js';
 import type {CommentCreate} from './events_comment_create.js';
 import type {CommentDelete} from './events_comment_delete.js';
 import * as eventUtils from './utils.js';
@@ -63,8 +63,8 @@ export class CommentBase extends AbstractEvent {
    *
    * @returns JSON representation.
    */
-  override toJson(): AnyDuringMigration {
-    const json = super.toJson();
+  override toJson(): CommentBaseJson {
+    const json = super.toJson() as CommentBaseJson;
     if (this.commentId) {
       json['commentId'] = this.commentId;
     }
@@ -76,9 +76,9 @@ export class CommentBase extends AbstractEvent {
    *
    * @param json JSON representation.
    */
-  override fromJson(json: AnyDuringMigration) {
+  override fromJson(json: CommentBaseJson) {
     super.fromJson(json);
-    this.commentId = json['commentId'];
+    this.commentId = json['commentId'] || '';
   }
 
   /**
@@ -105,4 +105,8 @@ export class CommentBase extends AbstractEvent {
       }
     }
   }
+}
+
+export interface CommentBaseJson extends AbstractEventJson {
+  commentId?: string;
 }

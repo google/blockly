@@ -13,7 +13,7 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.ViewportChange');
 
 import * as registry from '../registry.js';
-
+import { AbstractEventJson } from './events_abstract.js';
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
 
@@ -24,10 +24,10 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.ViewportChange
  */
 export class ViewportChange extends UiBase {
-  viewTop?: number;
-  viewLeft?: number;
-  scale?: number;
-  oldScale?: number;
+  viewTop: number;
+  viewLeft: number;
+  scale: number;
+  oldScale: number;
   override type: string;
 
   /**
@@ -50,19 +50,19 @@ export class ViewportChange extends UiBase {
      * Top-edge of the visible portion of the workspace, relative to the
      * workspace origin.
      */
-    this.viewTop = opt_top;
+    this.viewTop = opt_top || 0;
 
     /**
      * Left-edge of the visible portion of the workspace, relative to the
      * workspace origin.
      */
-    this.viewLeft = opt_left;
+    this.viewLeft = opt_left || 0;
 
     /** The scale of the workspace. */
-    this.scale = opt_scale;
+    this.scale = opt_scale || 0;
 
     /** The old scale of the workspace. */
-    this.oldScale = opt_oldScale;
+    this.oldScale = opt_oldScale || 0;
 
     /** Type of this event. */
     this.type = eventUtils.VIEWPORT_CHANGE;
@@ -73,8 +73,8 @@ export class ViewportChange extends UiBase {
    *
    * @returns JSON representation.
    */
-  override toJson(): AnyDuringMigration {
-    const json = super.toJson();
+  override toJson(): ViewportChangeJson {
+    const json = super.toJson() as ViewportChangeJson;
     json['viewTop'] = this.viewTop;
     json['viewLeft'] = this.viewLeft;
     json['scale'] = this.scale;
@@ -87,13 +87,20 @@ export class ViewportChange extends UiBase {
    *
    * @param json JSON representation.
    */
-  override fromJson(json: AnyDuringMigration) {
+  override fromJson(json: ViewportChangeJson) {
     super.fromJson(json);
     this.viewTop = json['viewTop'];
     this.viewLeft = json['viewLeft'];
     this.scale = json['scale'];
     this.oldScale = json['oldScale'];
   }
+}
+
+export interface ViewportChangeJson extends AbstractEventJson {
+  viewTop: number;
+  viewLeft: number;
+  scale: number;
+  oldScale: number;
 }
 
 registry.register(

@@ -14,7 +14,7 @@ goog.declareModuleId('Blockly.Events.BlockBase');
 
 import type {Block} from '../block.js';
 
-import {Abstract as AbstractEvent} from './events_abstract.js';
+import {Abstract as AbstractEvent, AbstractEventJson} from './events_abstract.js';
 
 
 /**
@@ -23,7 +23,7 @@ import {Abstract as AbstractEvent} from './events_abstract.js';
  * @alias Blockly.Events.BlockBase
  */
 export class BlockBase extends AbstractEvent {
-  override isBlank: AnyDuringMigration;
+  override isBlank: boolean;
   blockId: string;
   override workspaceId: string;
 
@@ -47,8 +47,8 @@ export class BlockBase extends AbstractEvent {
    *
    * @returns JSON representation.
    */
-  override toJson(): AnyDuringMigration {
-    const json = super.toJson();
+  override toJson(): AbstractEventJson {
+    const json = super.toJson() as BlockBaseJson;
     json['blockId'] = this.blockId;
     return json;
   }
@@ -58,8 +58,12 @@ export class BlockBase extends AbstractEvent {
    *
    * @param json JSON representation.
    */
-  override fromJson(json: AnyDuringMigration) {
+  override fromJson(json: BlockBaseJson) {
     super.fromJson(json);
     this.blockId = json['blockId'];
   }
+}
+
+export interface BlockBaseJson extends AbstractEventJson {
+  blockId: string;
 }

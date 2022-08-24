@@ -16,7 +16,7 @@ import * as registry from '../registry.js';
 import {Coordinate} from '../utils/coordinate.js';
 import type {WorkspaceComment} from '../workspace_comment.js';
 
-import {CommentBase} from './events_comment_base.js';
+import {CommentBase, CommentBaseJson} from './events_comment_base.js';
 import * as eventUtils from './utils.js';
 
 
@@ -34,9 +34,7 @@ export class CommentMove extends CommentBase {
   oldCoordinate_!: Coordinate;
 
   /** The location after the move, in workspace coordinates. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'Coordinate'.
-  newCoordinate_: Coordinate = null as AnyDuringMigration;
+  newCoordinate_?: Coordinate;
 
   /**
    * @param opt_comment The comment that is being moved.  Undefined for a blank
@@ -67,15 +65,12 @@ export class CommentMove extends CommentBase {
    * called once.
    */
   recordNew() {
-    if (!this.comment_) {
+    if (this.newCoordinate_) {
       throw Error(
           'Tried to record the new position of a comment on the ' +
           'same event twice.');
     }
     this.newCoordinate_ = this.comment_.getXY();
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'WorkspaceComment'.
-    this.comment_ = null as AnyDuringMigration;
   }
 
   /**
@@ -94,8 +89,8 @@ export class CommentMove extends CommentBase {
    *
    * @returns JSON representation.
    */
-  override toJson(): AnyDuringMigration {
-    const json = super.toJson();
+  override toJson(): CommentMoveJson {
+    const json = super.toJson() as CommentMoveJson;
     if (this.oldCoordinate_) {
       json['oldCoordinate'] = Math.round(this.oldCoordinate_.x) + ',' +
           Math.round(this.oldCoordinate_.y);
@@ -112,7 +107,7 @@ export class CommentMove extends CommentBase {
    *
    * @param json JSON representation.
    */
-  override fromJson(json: AnyDuringMigration) {
+  override fromJson(json: CommentMoveJson) {
     super.fromJson(json);
 
     if (json['oldCoordinate']) {
@@ -131,7 +126,8 @@ export class CommentMove extends CommentBase {
    * @returns False if something changed.
    */
   override isNull(): boolean {
-    return Coordinate.equals(this.oldCoordinate_, this.newCoordinate_);
+    return !this.newCoordinate_ ||
+        Coordinate.equals(this.oldCoordinate_, this.newCoordinate_);
   }
 
   /**
@@ -150,8 +146,13 @@ export class CommentMove extends CommentBase {
     const target = forward ? this.newCoordinate_ : this.oldCoordinate_;
     // TODO: Check if the comment is being dragged, and give up if so.
     const current = comment.getXY();
-    comment.moveBy(target.x - current.x, target.y - current.y);
+    comment.moveBy(target!.x - current.x, target!.y - current.y);
   }
+}
+
+export interface CommentMoveJson extends CommentBaseJson {
+  oldCoordinate?: string;
+  newCoordinate?: string;
 }
 
 registry.register(registry.Type.EVENT, eventUtils.COMMENT_MOVE, CommentMove);

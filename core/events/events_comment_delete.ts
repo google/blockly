@@ -44,25 +44,6 @@ export class CommentDelete extends CommentBase {
 
     this.xml = opt_comment.toXmlWithXY();
   }
-  // TODO (#1266): "Full" and "minimal" serialization.
-  /**
-   * Encode the event as JSON.
-   *
-   * @returns JSON representation.
-   */
-  override toJson(): AnyDuringMigration {
-    const json = super.toJson();
-    return json;
-  }
-
-  /**
-   * Decode the JSON event.
-   *
-   * @param json JSON representation.
-   */
-  override fromJson(json: AnyDuringMigration) {
-    super.fromJson(json);
-  }
 
   /**
    * Run a creation event.

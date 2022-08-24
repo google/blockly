@@ -13,7 +13,7 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.ThemeChange');
 
 import * as registry from '../registry.js';
-
+import {AbstractEventJson} from './events_abstract.js';
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
 
@@ -47,9 +47,9 @@ export class ThemeChange extends UiBase {
    *
    * @returns JSON representation.
    */
-  override toJson(): AnyDuringMigration {
-    const json = super.toJson();
-    json['themeName'] = this.themeName;
+  override toJson(): ThemeChangeJson {
+    const json = super.toJson() as ThemeChangeJson;
+    json['themeName'] = this.themeName || '';
     return json;
   }
 
@@ -58,10 +58,14 @@ export class ThemeChange extends UiBase {
    *
    * @param json JSON representation.
    */
-  override fromJson(json: AnyDuringMigration) {
+  override fromJson(json: ThemeChangeJson) {
     super.fromJson(json);
     this.themeName = json['themeName'];
   }
+}
+
+export interface ThemeChangeJson extends AbstractEventJson {
+  themeName: string;
 }
 
 registry.register(registry.Type.EVENT, eventUtils.THEME_CHANGE, ThemeChange);

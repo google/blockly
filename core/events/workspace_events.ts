@@ -34,7 +34,7 @@ export class FinishedLoading extends AbstractEvent {
   // Workspace events do not undo or redo.
   override recordUndo = false;
   override type: string;
-  override group: AnyDuringMigration;
+  override group: string = '';
 
   /**
    * @param opt_workspace The workspace that has finished loading.  Undefined
@@ -57,15 +57,13 @@ export class FinishedLoading extends AbstractEvent {
    *
    * @returns JSON representation.
    */
-  override toJson(): AnyDuringMigration {
-    const json = {
-      'type': this.type,
-    };
+  override toJson(): FinishedLoadingJson {
+    const json = {'type': this.type} as FinishedLoadingJson;
     if (this.group) {
-      (json as AnyDuringMigration)['group'] = this.group;
+      json['group'] = this.group;
     }
     if (this.workspaceId) {
-      (json as AnyDuringMigration)['workspaceId'] = this.workspaceId;
+      json['workspaceId'] = this.workspaceId;
     }
     return json;
   }
@@ -75,11 +73,17 @@ export class FinishedLoading extends AbstractEvent {
    *
    * @param json JSON representation.
    */
-  override fromJson(json: AnyDuringMigration) {
+  override fromJson(json: FinishedLoadingJson) {
     this.isBlank = false;
-    this.workspaceId = json['workspaceId'];
-    this.group = json['group'];
+    this.workspaceId = json['workspaceId'] || '';
+    this.group = json['group'] || '';
   }
+}
+
+export interface FinishedLoadingJson {
+  type: string;
+  group?: string;
+  workspaceId?: string;
 }
 
 registry.register(

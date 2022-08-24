@@ -17,7 +17,7 @@ import * as registry from '../registry.js';
 import * as blocks from '../serialization/blocks.js';
 import * as Xml from '../xml.js';
 
-import {BlockBase} from './events_block_base.js';
+import {BlockBase, BlockBaseJson} from './events_block_base.js';
 import * as eventUtils from './utils.js';
 
 
@@ -28,7 +28,8 @@ import * as eventUtils from './utils.js';
  */
 export class BlockDelete extends BlockBase {
   override type: string;
-  oldXml: AnyDuringMigration;
+  oldXml: Element|DocumentFragment|null = null;
+  ;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   ids!: string[];
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
@@ -71,9 +72,9 @@ export class BlockDelete extends BlockBase {
    *
    * @returns JSON representation.
    */
-  override toJson(): AnyDuringMigration {
-    const json = super.toJson();
-    json['oldXml'] = Xml.domToText(this.oldXml);
+  override toJson(): BlockDeleteJson {
+    const json = super.toJson() as BlockDeleteJson;
+    json['oldXml'] = Xml.domToText(this.oldXml!);
     json['ids'] = this.ids;
     json['wasShadow'] = this.wasShadow;
     json['oldJson'] = this.oldJson;
@@ -88,7 +89,7 @@ export class BlockDelete extends BlockBase {
    *
    * @param json JSON representation.
    */
-  override fromJson(json: AnyDuringMigration) {
+  override fromJson(json: BlockDeleteJson) {
     super.fromJson(json);
     this.oldXml = Xml.textToDom(json['oldXml']);
     this.ids = json['ids'];
@@ -122,6 +123,14 @@ export class BlockDelete extends BlockBase {
       blocks.append(this.oldJson, workspace);
     }
   }
+}
+
+export interface BlockDeleteJson extends BlockBaseJson {
+  oldXml: string;
+  ids: string[];
+  wasShadow: boolean;
+  oldJson: object;
+  recordUndo?: boolean;
 }
 
 registry.register(registry.Type.EVENT, eventUtils.DELETE, BlockDelete);

@@ -13,6 +13,7 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.Selected');
 
 import * as registry from '../registry.js';
+import {AbstractEventJson} from './events_abstract.js';
 
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
@@ -56,10 +57,10 @@ export class Selected extends UiBase {
    *
    * @returns JSON representation.
    */
-  override toJson(): AnyDuringMigration {
-    const json = super.toJson();
-    json['oldElementId'] = this.oldElementId;
-    json['newElementId'] = this.newElementId;
+  override toJson(): SelectedJson {
+    const json = super.toJson() as SelectedJson;
+    json['oldElementId'] = this.oldElementId || '';
+    json['newElementId'] = this.newElementId || '';
     return json;
   }
 
@@ -68,11 +69,16 @@ export class Selected extends UiBase {
    *
    * @param json JSON representation.
    */
-  override fromJson(json: AnyDuringMigration) {
+  override fromJson(json: SelectedJson) {
     super.fromJson(json);
     this.oldElementId = json['oldElementId'];
     this.newElementId = json['newElementId'];
   }
+}
+
+export interface SelectedJson extends AbstractEventJson {
+  oldElementId: string;
+  newElementId: string;
 }
 
 registry.register(registry.Type.EVENT, eventUtils.SELECTED, Selected);

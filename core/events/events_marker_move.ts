@@ -16,6 +16,7 @@ import type {Block} from '../block.js';
 import {ASTNode} from '../keyboard_nav/ast_node.js';
 import * as registry from '../registry.js';
 import type {Workspace} from '../workspace.js';
+import {AbstractEventJson} from './events_abstract.js';
 
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
@@ -73,12 +74,12 @@ export class MarkerMove extends UiBase {
    *
    * @returns JSON representation.
    */
-  override toJson(): AnyDuringMigration {
-    const json = super.toJson();
-    json['isCursor'] = this.isCursor;
-    json['blockId'] = this.blockId;
-    json['oldNode'] = this.oldNode;
-    json['newNode'] = this.newNode;
+  override toJson(): MarkerMoveJson {
+    const json = super.toJson() as MarkerMoveJson;
+    json['isCursor'] = !!this.isCursor;
+    json['blockId'] = this.blockId || '';
+    json['oldNode'] = this.oldNode!;
+    json['newNode'] = this.newNode!;
     return json;
   }
 
@@ -87,13 +88,20 @@ export class MarkerMove extends UiBase {
    *
    * @param json JSON representation.
    */
-  override fromJson(json: AnyDuringMigration) {
+  override fromJson(json: MarkerMoveJson) {
     super.fromJson(json);
     this.isCursor = json['isCursor'];
     this.blockId = json['blockId'];
     this.oldNode = json['oldNode'];
     this.newNode = json['newNode'];
   }
+}
+
+export interface MarkerMoveJson extends AbstractEventJson {
+  isCursor: boolean;
+  blockId: string;
+  oldNode: ASTNode;
+  newNode: ASTNode;
 }
 
 registry.register(registry.Type.EVENT, eventUtils.MARKER_MOVE, MarkerMove);

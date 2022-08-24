@@ -17,7 +17,7 @@ import {ConnectionType} from '../connection_type.js';
 import * as registry from '../registry.js';
 import {Coordinate} from '../utils/coordinate.js';
 
-import {BlockBase} from './events_block_base.js';
+import {BlockBase, BlockBaseJson} from './events_block_base.js';
 import * as eventUtils from './utils.js';
 
 
@@ -72,8 +72,8 @@ export class BlockMove extends BlockBase {
    *
    * @returns JSON representation.
    */
-  override toJson(): AnyDuringMigration {
-    const json = super.toJson();
+  override toJson(): BlockMoveJson {
+    const json = super.toJson() as BlockMoveJson;
     if (this.newParentId) {
       json['newParentId'] = this.newParentId;
     }
@@ -95,10 +95,10 @@ export class BlockMove extends BlockBase {
    *
    * @param json JSON representation.
    */
-  override fromJson(json: AnyDuringMigration) {
+  override fromJson(json: BlockMoveJson) {
     super.fromJson(json);
-    this.newParentId = json['newParentId'];
-    this.newInputName = json['newInputName'];
+    this.newParentId = json['newParentId'] || '';
+    this.newInputName = json['newInputName'] || '';
     if (json['newCoordinate']) {
       const xy = json['newCoordinate'].split(',');
       this.newCoordinate = new Coordinate(Number(xy[0]), Number(xy[1]));
@@ -129,9 +129,7 @@ export class BlockMove extends BlockBase {
     const parent = block!.getParent();
     if (parent) {
       location.parentId = parent.id;
-      // AnyDuringMigration because:  Argument of type 'Block | null' is not
-      // assignable to parameter of type 'Block'.
-      const input = parent.getInputWithBlock(block as AnyDuringMigration);
+      const input = parent.getInputWithBlock(block!);
       if (input) {
         location.inputName = input.name;
       }
@@ -204,6 +202,13 @@ export class BlockMove extends BlockBase {
       }
     }
   }
+}
+
+export interface BlockMoveJson extends BlockBaseJson {
+  newParentId?: string;
+  newInputName?: string;
+  newCoordinate?: string;
+  recordUndo?: boolean;
 }
 
 registry.register(registry.Type.EVENT, eventUtils.MOVE, BlockMove);

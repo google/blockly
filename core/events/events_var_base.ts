@@ -14,7 +14,7 @@ goog.declareModuleId('Blockly.Events.VarBase');
 
 import type {VariableModel} from '../variable_model.js';
 
-import {Abstract as AbstractEvent} from './events_abstract.js';
+import {Abstract as AbstractEvent, AbstractEventJson} from './events_abstract.js';
 
 
 /**
@@ -47,8 +47,8 @@ export class VarBase extends AbstractEvent {
    *
    * @returns JSON representation.
    */
-  override toJson(): AnyDuringMigration {
-    const json = super.toJson();
+  override toJson(): VarBaseJson {
+    const json = super.toJson() as VarBaseJson;
     json['varId'] = this.varId;
     return json;
   }
@@ -58,8 +58,12 @@ export class VarBase extends AbstractEvent {
    *
    * @param json JSON representation.
    */
-  override fromJson(json: AnyDuringMigration) {
+  override fromJson(json: VarBaseJson) {
     super.fromJson(json);
     this.varId = json['varId'];
   }
+}
+
+export interface VarBaseJson extends AbstractEventJson {
+  varId: string;
 }

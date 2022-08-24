@@ -15,7 +15,7 @@ goog.declareModuleId('Blockly.Events.VarCreate');
 import * as registry from '../registry.js';
 import type {VariableModel} from '../variable_model.js';
 
-import {VarBase} from './events_var_base.js';
+import {VarBase, VarBaseJson} from './events_var_base.js';
 import * as eventUtils from './utils.js';
 
 
@@ -53,8 +53,8 @@ export class VarCreate extends VarBase {
    *
    * @returns JSON representation.
    */
-  override toJson(): AnyDuringMigration {
-    const json = super.toJson();
+  override toJson(): VarCreateJson {
+    const json = super.toJson() as VarCreateJson;
     json['varType'] = this.varType;
     json['varName'] = this.varName;
     return json;
@@ -65,7 +65,7 @@ export class VarCreate extends VarBase {
    *
    * @param json JSON representation.
    */
-  override fromJson(json: AnyDuringMigration) {
+  override fromJson(json: VarCreateJson) {
     super.fromJson(json);
     this.varType = json['varType'];
     this.varName = json['varName'];
@@ -84,6 +84,11 @@ export class VarCreate extends VarBase {
       workspace.deleteVariableById(this.varId);
     }
   }
+}
+
+export interface VarCreateJson extends VarBaseJson {
+  varType: string;
+  varName: string;
 }
 
 registry.register(registry.Type.EVENT, eventUtils.VAR_CREATE, VarCreate);

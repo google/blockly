@@ -13,7 +13,7 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.ToolboxItemSelect');
 
 import * as registry from '../registry.js';
-
+import {AbstractEventJson} from './events_abstract.js';
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
 
@@ -56,10 +56,10 @@ export class ToolboxItemSelect extends UiBase {
    *
    * @returns JSON representation.
    */
-  override toJson(): AnyDuringMigration {
-    const json = super.toJson();
-    json['oldItem'] = this.oldItem;
-    json['newItem'] = this.newItem;
+  override toJson(): ToolboxItemSelectJson {
+    const json = super.toJson() as ToolboxItemSelectJson;
+    json['oldItem'] = this.oldItem || '';
+    json['newItem'] = this.newItem || '';
     return json;
   }
 
@@ -68,11 +68,16 @@ export class ToolboxItemSelect extends UiBase {
    *
    * @param json JSON representation.
    */
-  override fromJson(json: AnyDuringMigration) {
+  override fromJson(json: ToolboxItemSelectJson) {
     super.fromJson(json);
     this.oldItem = json['oldItem'];
     this.newItem = json['newItem'];
   }
+}
+
+export interface ToolboxItemSelectJson extends AbstractEventJson {
+  oldItem: string;
+  newItem: string;
 }
 
 registry.register(

@@ -15,7 +15,7 @@ goog.declareModuleId('Blockly.Events.VarRename');
 import * as registry from '../registry.js';
 import type {VariableModel} from '../variable_model.js';
 
-import {VarBase} from './events_var_base.js';
+import {VarBase, VarBaseJson} from './events_var_base.js';
 import * as eventUtils from './utils.js';
 
 
@@ -54,8 +54,8 @@ export class VarRename extends VarBase {
    *
    * @returns JSON representation.
    */
-  override toJson(): AnyDuringMigration {
-    const json = super.toJson();
+  override toJson(): VarRenameJson {
+    const json = super.toJson() as VarRenameJson;
     json['oldName'] = this.oldName;
     json['newName'] = this.newName;
     return json;
@@ -66,7 +66,7 @@ export class VarRename extends VarBase {
    *
    * @param json JSON representation.
    */
-  override fromJson(json: AnyDuringMigration) {
+  override fromJson(json: VarRenameJson) {
     super.fromJson(json);
     this.oldName = json['oldName'];
     this.newName = json['newName'];
@@ -85,6 +85,11 @@ export class VarRename extends VarBase {
       workspace.renameVariableById(this.varId, this.oldName);
     }
   }
+}
+
+export interface VarRenameJson extends VarBaseJson {
+  oldName: string;
+  newName: string;
 }
 
 registry.register(registry.Type.EVENT, eventUtils.VAR_RENAME, VarRename);

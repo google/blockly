@@ -17,7 +17,7 @@ import * as registry from '../registry.js';
 import * as blocks from '../serialization/blocks.js';
 import * as Xml from '../xml.js';
 
-import {BlockBase} from './events_block_base.js';
+import {BlockBase, BlockBaseJson} from './events_block_base.js';
 import * as eventUtils from './utils.js';
 
 
@@ -28,7 +28,7 @@ import * as eventUtils from './utils.js';
  */
 export class BlockCreate extends BlockBase {
   override type: string;
-  xml: AnyDuringMigration;
+  xml: Element|DocumentFragment|null = null;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   ids!: string[];
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
@@ -62,9 +62,9 @@ export class BlockCreate extends BlockBase {
    *
    * @returns JSON representation.
    */
-  override toJson(): AnyDuringMigration {
-    const json = super.toJson();
-    json['xml'] = Xml.domToText(this.xml);
+  override toJson(): BlockCreateJson {
+    const json = super.toJson() as BlockCreateJson;
+    json['xml'] = Xml.domToText(this.xml!);
     json['ids'] = this.ids;
     json['json'] = this.json;
     if (!this.recordUndo) {
@@ -78,7 +78,7 @@ export class BlockCreate extends BlockBase {
    *
    * @param json JSON representation.
    */
-  override fromJson(json: AnyDuringMigration) {
+  override fromJson(json: BlockCreateJson) {
     super.fromJson(json);
     this.xml = Xml.textToDom(json['xml']);
     this.ids = json['ids'];
@@ -110,6 +110,13 @@ export class BlockCreate extends BlockBase {
       }
     }
   }
+}
+
+export interface BlockCreateJson extends BlockBaseJson {
+  xml: string;
+  ids: string[];
+  json: object;
+  recordUndo?: boolean;
 }
 
 registry.register(registry.Type.EVENT, eventUtils.CREATE, BlockCreate);

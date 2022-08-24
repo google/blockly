@@ -77,7 +77,7 @@ export class MarkerMove extends UiBase {
   override toJson(): MarkerMoveJson {
     const json = super.toJson() as MarkerMoveJson;
     json['isCursor'] = !!this.isCursor;
-    json['blockId'] = this.blockId || '';
+    json['blockId'] = this.blockId || null;
     json['oldNode'] = this.oldNode!;
     json['newNode'] = this.newNode!;
     return json;
@@ -99,7 +99,7 @@ export class MarkerMove extends UiBase {
 
 export interface MarkerMoveJson extends AbstractEventJson {
   isCursor: boolean;
-  blockId: string;
+  blockId: string|null;
   oldNode: ASTNode;
   newNode: ASTNode;
 }

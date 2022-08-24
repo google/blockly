@@ -25,8 +25,8 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.Selected
  */
 export class Selected extends UiBase {
-  oldElementId?: string|null;
-  newElementId?: string|null;
+  oldElementId: string|null;
+  newElementId: string|null;
   override type: string;
 
   /**
@@ -42,11 +42,11 @@ export class Selected extends UiBase {
       opt_workspaceId?: string) {
     super(opt_workspaceId);
 
-    /** The ID of the last selected element. */
-    this.oldElementId = opt_oldElementId;
+    /** The id of the last selected element. */
+    this.oldElementId = opt_oldElementId || null;
 
-    /** The ID of the selected element. */
-    this.newElementId = opt_newElementId;
+    /** The id of the selected element. */
+    this.newElementId = opt_newElementId || null;
 
     /** Type of this event. */
     this.type = eventUtils.SELECTED;
@@ -59,8 +59,8 @@ export class Selected extends UiBase {
    */
   override toJson(): SelectedJson {
     const json = super.toJson() as SelectedJson;
-    json['oldElementId'] = this.oldElementId || '';
-    json['newElementId'] = this.newElementId || '';
+    json['oldElementId'] = this.oldElementId;
+    json['newElementId'] = this.newElementId;
     return json;
   }
 
@@ -77,8 +77,8 @@ export class Selected extends UiBase {
 }
 
 export interface SelectedJson extends AbstractEventJson {
-  oldElementId: string;
-  newElementId: string;
+  oldElementId: string|null;
+  newElementId: string|null;
 }
 
 registry.register(registry.Type.EVENT, eventUtils.SELECTED, Selected);

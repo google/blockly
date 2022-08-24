@@ -27,13 +27,8 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.FinishedLoading
  */
 export class FinishedLoading extends AbstractEvent {
-  override isBlank: boolean;
-  override workspaceId: string;
-
   // Workspace events do not undo or redo.
   override recordUndo = false;
-  override type: string;
-  override group = '';
 
   /**
    * @param opt_workspace The workspace that has finished loading.  Undefined

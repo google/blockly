@@ -18,8 +18,7 @@ goog.declareModuleId('Blockly.utils.array');
  * @alias Blockly.array.removeElem
  * @internal
  */
-export function removeElem(
-    arr: AnyDuringMigration[], value: AnyDuringMigration): boolean {
+export function removeElem<T>(arr: Array<T>, value: T): boolean {
   const i = arr.indexOf(value);
   if (i === -1) {
     return false;

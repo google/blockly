@@ -158,7 +158,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
   /**
    * List of event listeners.
    */
-  private listeners_: AnyDuringMigration[][] = [];
+  private listeners_: browserEvents.Data[] = [];
 
   /**
    * List of blocks that should always be disabled.

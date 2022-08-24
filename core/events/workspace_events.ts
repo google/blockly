@@ -14,7 +14,6 @@ goog.declareModuleId('Blockly.Events.FinishedLoading');
 
 import * as registry from '../registry.js';
 import type {Workspace} from '../workspace.js';
-
 import {Abstract as AbstractEvent} from './events_abstract.js';
 import * as eventUtils from './utils.js';
 
@@ -34,7 +33,7 @@ export class FinishedLoading extends AbstractEvent {
   // Workspace events do not undo or redo.
   override recordUndo = false;
   override type: string;
-  override group: string = '';
+  override group = '';
 
   /**
    * @param opt_workspace The workspace that has finished loading.  Undefined

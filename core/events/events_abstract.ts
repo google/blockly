@@ -37,7 +37,7 @@ export abstract class Abstract {
   isUiEvent = false;
 
   /** Type of this event. */
-  type: string = '';
+  type = '';
 
   /** @alias Blockly.Events.Abstract */
   constructor() {

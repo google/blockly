@@ -27,9 +27,7 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.BlockDelete
  */
 export class BlockDelete extends BlockBase {
-  override type: string;
   oldXml: Element|DocumentFragment|null = null;
-  ;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   ids!: string[];
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.

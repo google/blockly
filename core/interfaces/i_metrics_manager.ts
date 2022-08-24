@@ -15,17 +15,6 @@ import type {Size} from '../utils/size.js';
 import type {Metrics} from '../utils/metrics.js';
 goog.declareModuleId('Blockly.IMetricsManager');
 
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-// import '../metrics_manager.js';
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-// import '../utils/metrics.js';
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-// import '../utils/size.js';
-
-
 /**
  * Interface for a metrics manager.
  *

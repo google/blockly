@@ -12,9 +12,6 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Connection');
 
-// Unused import preserved for side-effects. Remove if unneeded.
-// import './constants.js';
-
 import type {Block} from './block.js';
 import {ConnectionType} from './connection_type.js';
 import type {BlockMove} from './events/events_block_move.js';

@@ -12,9 +12,6 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Toolbox');
 
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-// import '../shortcut_registry.js';
 // Unused import preserved for side-effects. Remove if unneeded.
 import '../events/events_toolbox_item_select.js';
 

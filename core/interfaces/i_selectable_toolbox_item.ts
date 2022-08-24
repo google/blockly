@@ -13,10 +13,6 @@ import * as goog from '../../closure/goog/goog.js';
 import type {FlyoutItemInfoArray} from '../utils/toolbox';
 goog.declareModuleId('Blockly.ISelectableToolboxItem');
 
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-// import '../utils/toolbox.js';
-
 import type {IToolboxItem} from './i_toolbox_item.js';
 
 

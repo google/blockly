@@ -14,13 +14,6 @@ import type {Coordinate} from '../utils/coordinate.js';
 import type {BlockDragSurfaceSvg} from '../block_drag_surface.js';
 goog.declareModuleId('Blockly.IBubble');
 
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-// import '../block_drag_surface.js';
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-// import '../utils/coordinate.js';
-
 import type {IContextMenu} from './i_contextmenu.js';
 import type {IDraggable} from './i_draggable.js';
 

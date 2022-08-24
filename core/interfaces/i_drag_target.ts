@@ -17,14 +17,6 @@ import {IDraggable} from './i_draggable.js';
 
 goog.declareModuleId('Blockly.IDragTarget');
 
-/* eslint-disable-next-line no-unused-vars */
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-// import './i_draggable.js';
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-// import '../utils/rect.js';
-
 import type {IComponent} from './i_component.js';
 
 

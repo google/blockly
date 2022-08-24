@@ -13,10 +13,6 @@
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.geras.Highlighter');
 
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-// import './renderer.js';
-
 import * as svgPaths from '../../utils/svg_paths.js';
 import type {ConstantProvider} from '../common/constants.js';
 import type {BottomRow} from '../measurables/bottom_row.js';

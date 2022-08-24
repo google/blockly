@@ -14,9 +14,6 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.ConnectionDB');
 
-// Unused import preserved for side-effects. Remove if unneeded.
-// import './constants.js';
-
 import {ConnectionType} from './connection_type.js';
 import type {IConnectionChecker} from './interfaces/i_connection_checker.js';
 import type {RenderedConnection} from './rendered_connection.js';

@@ -12,11 +12,6 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.BubbleDragger');
 
-// Unused import preserved for side-effects. Remove if unneeded.
-// import './bubble.js';
-// Unused import preserved for side-effects. Remove if unneeded.
-// import './constants.js';
-
 import type {BlockDragSurfaceSvg} from './block_drag_surface.js';
 import {ComponentManager} from './component_manager.js';
 import type {CommentMove} from './events/events_comment_move.js';

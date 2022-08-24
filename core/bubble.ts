@@ -12,12 +12,6 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Bubble');
 
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-// import './metrics_manager.js';
-// Unused import preserved for side-effects. Remove if unneeded.
-// import './workspace.js';
-
 import type {BlockDragSurfaceSvg} from './block_drag_surface.js';
 import type {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';

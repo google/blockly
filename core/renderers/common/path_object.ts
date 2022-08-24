@@ -12,10 +12,6 @@
 import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.PathObject');
 
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-// import '../../theme.js';
-
 import type {BlockSvg} from '../../block_svg.js';
 import type {Connection} from '../../connection.js';
 import type {BlockStyle} from '../../theme.js';

@@ -12,11 +12,6 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.ICollapsibleToolboxItem');
 
-/* eslint-disable-next-line no-unused-vars */
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-// import './i_toolbox_item.js';
-
 import type {ISelectableToolboxItem} from './i_selectable_toolbox_item.js';
 import type {IToolboxItem} from './i_toolbox_item.js';
 

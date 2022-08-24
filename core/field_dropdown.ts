@@ -196,7 +196,7 @@ export class FieldDropdown extends Field {
     }
     this.createTextElement_();
 
-    this.imageElement_ = dom.createSvgElement(Svg.IMAGE, {}, this.fieldGroup_!);
+    this.imageElement_ = dom.createSvgElement(Svg.IMAGE, {}, this.getSvgRoot());
 
     if (this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW) {
       this.createSVGArrow_();
@@ -245,7 +245,7 @@ export class FieldDropdown extends Field {
           'height': this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_SIZE + 'px',
           'width': this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_SIZE + 'px',
         },
-        this.fieldGroup_!);
+        this.getSvgRoot());
     this.svgArrow_!.setAttributeNS(
         dom.XLINK_NS, 'xlink:href',
         this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_DATAURI);

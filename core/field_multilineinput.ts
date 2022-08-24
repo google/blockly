@@ -153,7 +153,7 @@ export class FieldMultilineInput extends FieldTextInput {
         Svg.G, {
           'class': 'blocklyEditableText',
         },
-        this.fieldGroup_!);
+        this.getSvgRoot());
   }
 
   /**

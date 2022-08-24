@@ -26,7 +26,7 @@ interface CloneRect {
 }
 
 /** PID of disconnect UI animation.  There can only be one at a time. */
-let disconnectPid: AnyDuringMigration = 0;
+let disconnectPid: ReturnType<typeof setTimeout>|null = null;
 
 /** SVG group of wobbling block.  There can only be one at a time. */
 let disconnectGroup: SVGElement|null = null;
@@ -199,7 +199,9 @@ function disconnectUiStep(group: SVGElement, magnitude: number, start: Date) {
  */
 export function disconnectUiStop() {
   if (disconnectGroup) {
-    clearTimeout(disconnectPid);
+    if (disconnectPid) {
+      clearTimeout(disconnectPid);
+    }
     disconnectGroup.setAttribute('transform', '');
     disconnectGroup = null;
   }

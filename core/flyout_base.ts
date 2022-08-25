@@ -1035,10 +1035,8 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
    * @param y The y position of the cursor during this layout pass.
    * @param blockHW The height and width of
    *     the block.
-   * @param blockHW.height
    * @param index The index into the mats list where this rect should
    *     be placed.
-   * @param blockHW.width
    * @returns Newly created SVG element for the rectangle behind
    *     the block.
    */

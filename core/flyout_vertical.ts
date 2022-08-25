@@ -44,8 +44,6 @@ export class VerticalFlyout extends Flyout {
    *
    * @param xyRatio Contains a y property which is a float between 0 and 1
    *     specifying the degree of scrolling and a similar x property.
-   * @param xyRatio.x
-   * @param xyRatio.y
    */
   protected override setMetrics_(xyRatio: {x: number, y: number}) {
     if (!this.isVisible()) {

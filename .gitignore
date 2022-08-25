@@ -18,3 +18,4 @@ local_build/local_*_compressed.js
 chromedriver
 build/
 dist/
+temp/

@@ -342,14 +342,17 @@
       "default": {
         "logLevel": "warning"
         // "addToApiReportFile": false
-      }
+      },
 
-      // "ae-extra-release-tag": {
-      //   "logLevel": "warning",
-      //   "addToApiReportFile": true
-      // },
-      //
-      // . . .
+      // We don't use `@public`, that's just the default.
+      "ae-missing-release-tag": {
+        "logLevel": "none"
+      },
+
+      // Needs investigation.
+      "ae-forgotten-export": {
+        "logLevel": "none"
+      }
     },
 
     /**
@@ -366,15 +369,22 @@
       },
 
       "tsdoc-param-tag-missing-hyphen": {
-        "logLevel": "none",
+        "logLevel": "none"
       },
 
-      // "tsdoc-link-tag-unescaped-text": {
-      //   "logLevel": "warning",
-      //   "addToApiReportFile": true
-      // },
-      //
-      // . . .
+      // These two are due to "type-like" tags in JsDoc like
+      // `@suppress {warningName}`. The braces are unexpected in TsDoc.
+      "tsdoc-malformed-inline-tag": {
+        "logLevel": "none"
+      },
+      "tsdoc-escape-right-brace": {
+        "logLevel": "none"
+      },
+
+      // Needs to be fixed
+      "tsdoc-missing-deprecation-message": {
+        "logLevel": "none"
+      }
     }
   }
 }

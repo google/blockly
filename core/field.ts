@@ -255,7 +255,10 @@ export abstract class Field implements IASTNodeLocationSvg,
    * @returns The block containing this field.
    */
   getSourceBlock(): Block {
-    return this.sourceBlock_!;
+    if (!this.sourceBlock_) {
+      throw new Error(`The source block is ${this.sourceBlock_}.`);
+    }
+    return this.sourceBlock_;
   }
 
   /**
@@ -613,7 +616,10 @@ export abstract class Field implements IASTNodeLocationSvg,
    * @returns The group element.
    */
   getSvgRoot(): SVGGElement {
-    return this.fieldGroup_!;
+    if (!this.fieldGroup_) {
+      throw new Error(`The field group is ${this.fieldGroup_}.`);
+    }
+    return this.fieldGroup_;
   }
 
   /**

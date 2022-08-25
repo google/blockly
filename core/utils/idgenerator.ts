@@ -31,7 +31,7 @@ const soup = '!#$%()*+,-./:;=?@[]^_`{|}~' +
 const internal = {
   /**
    * Generate a random unique ID.  This should be globally unique.
-   * 87 characters ^ 20 length > 128 bits (better than a UUID).
+   * 87 characters ^ 20 length is greater than 128 bits (better than a UUID).
    *
    * @returns A globally unique ID string.
    */

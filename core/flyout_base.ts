@@ -220,11 +220,16 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
    * workspace". Drags that are within the bounds of this many degrees from
    * the orthogonal line to the flyout edge are considered to be "drags toward
    * the workspace".
-   * Example:
+   *
+   * @example
+   *
+   * ```
    * Flyout                                                 Edge   Workspace
    * [block] /  <-within this angle, drags "toward workspace" |
    * [block] ---- orthogonal to flyout boundary ----          |
    * [block] \                                                |
+   * ```
+   *
    * The angle is given in degrees from the orthogonal.
    *
    * This is used to know when to create a new block and when to scroll the

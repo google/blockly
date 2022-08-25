@@ -128,7 +128,7 @@ export function setSelected(newSelection: ICopyable|null) {
 let parentContainer: Element|null;
 
 /**
- * Get the container element in which to render the WidgetDiv, DropDownDiv and\
+ * Get the container element in which to render the WidgetDiv, DropDownDiv and
  * Tooltip.
  *
  * @returns The parent container.

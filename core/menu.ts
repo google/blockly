@@ -381,7 +381,7 @@ export class Menu {
   /**
    * Attempts to handle a keyboard event, if the menu item is enabled, by
    * calling
-   * {@link handleKeyEventInternal_}.
+   * {@link Menu#handleKeyEventInternal_}.
    *
    * @param e Key event to handle.
    */

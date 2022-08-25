@@ -4,11 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Type definitions for Blockly.
- * @author samelh@google.com (Sam El-Husseini)
- */
-
-export * from './core/blockly';
-export * as libraryBlocks from './blocks';  // Handcrafted file.
+import * as core from './core/blockly';
+import * as libraryBlocks from './blocks';  // Handcrafted file.
+export {core};
+export {libraryBlocks};
 export const JavaScript: any;

@@ -280,7 +280,7 @@ export abstract class Field implements IASTNodeLocationSvg,
    * Initialize everything to render this field. Override
    * methods initModel and initView rather than this method.
    *
-   * @final
+   * @sealed
    * @internal
    */
   init() {
@@ -662,7 +662,7 @@ export abstract class Field implements IASTNodeLocationSvg,
    *
    * @param opt_e Optional mouse event that triggered the field to open, or
    *     undefined if triggered programmatically.
-   * @final
+   * @sealed
    * @internal
    */
   showEditor(opt_e?: Event) {
@@ -862,7 +862,7 @@ export abstract class Field implements IASTNodeLocationSvg,
    * value to a string.
    *
    * @returns Current text.
-   * @final
+   * @sealed
    */
   getText(): string {
     // this.getText_ was intended so that devs don't have to remember to call
@@ -924,7 +924,7 @@ export abstract class Field implements IASTNodeLocationSvg,
    * than this method.
    *
    * @param newValue New value.
-   * @final
+   * @sealed
    */
   setValue(newValue: AnyDuringMigration) {
     const doLogging = false;

@@ -51,7 +51,6 @@ import type {Workspace} from './workspace.js';
  * Class for one block.
  * Not normally called directly, workspace.newBlock() is preferred.
  *
- * @unrestricted
  * @alias Blockly.Block
  */
 export class Block implements IASTNodeLocation, IDeletable {

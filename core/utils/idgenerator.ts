@@ -24,9 +24,9 @@ const soup = '!#$%()*+,-./:;=?@[]^_`{|}~' +
 
 /**
  * Namespace object for internal implementations we want to be able to
- * stub in tests.
+ * stub in tests. Do not use externally.
  *
- * @ignore
+ * @internal
  */
 const internal = {
   /**

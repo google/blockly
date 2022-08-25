@@ -253,6 +253,7 @@ export abstract class Field implements IASTNodeLocationSvg,
    * Get the block this field is attached to.
    *
    * @returns The block containing this field.
+   * @throws An error if the source block is not defined.
    */
   getSourceBlock(): Block {
     if (!this.sourceBlock_) {
@@ -614,6 +615,7 @@ export abstract class Field implements IASTNodeLocationSvg,
    * Used for measuring the size and for positioning.
    *
    * @returns The group element.
+   * @throws An error if the field group is not defined.
    */
   getSvgRoot(): SVGGElement {
     if (!this.fieldGroup_) {
@@ -940,8 +942,8 @@ export abstract class Field implements IASTNodeLocationSvg,
 
     this.doValueUpdate_(newValue);
     if (source && eventUtils.isEnabled()) {
-      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
-          source, 'field', this.name || null, oldValue, newValue));
+      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))!
+                      (source, 'field', this.name || null, oldValue, newValue));
     }
     if (this.isDirty_) {
       this.forceRerender();

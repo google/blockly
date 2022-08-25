@@ -833,7 +833,7 @@ export abstract class Field implements IASTNodeLocationSvg,
 
   /**
    * Get the text from this field to display on the block. May differ from
-   * ``getText`` due to ellipsis, and other formatting.
+   * `getText` due to ellipsis, and other formatting.
    *
    * @returns Text to display.
    */

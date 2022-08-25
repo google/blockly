@@ -1,4 +1,4 @@
-/** @fileoverview Re-exports of Blockly.thrasos.* modules. */
+/** @file Re-exports of Blockly.thrasos.* modules. */
 
 /**
  * @license
@@ -8,6 +8,7 @@
 
 /**
  * Re-exports of Blockly.thrasos.* modules.
+ *
  * @namespace Blockly.thrasos
  */
 import * as goog from '../../../closure/goog/goog.js';

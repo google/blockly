@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Object representing a warning.
- */
-
-/**
  * Object representing a warning.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -29,17 +26,17 @@ import {Svg} from './utils/svg.js';
 
 /**
  * Class for a warning.
+ *
  * @alias Blockly.Warning
  */
 export class Warning extends Icon {
-  text_: AnyDuringMigration;
+  private text_: {[key: string]: string};
 
   /** The top-level node of the warning text, or null if not created. */
   private paragraphElement_: SVGTextElement|null = null;
 
   /** Does this icon get hidden when the block is collapsed? */
   override collapseHidden = false;
-  override bubble_: AnyDuringMigration;
 
   /** @param block The block associated with this warning. */
   constructor(block: BlockSvg) {
@@ -51,6 +48,7 @@ export class Warning extends Icon {
 
   /**
    * Draw the warning icon.
+   *
    * @param group The icon group.
    */
   protected override drawIcon_(group: Element) {
@@ -83,16 +81,15 @@ export class Warning extends Icon {
 
   /**
    * Show or hide the warning bubble.
+   *
    * @param visible True if the bubble should be visible.
    */
   override setVisible(visible: boolean) {
     if (visible === this.isVisible()) {
       return;
     }
-    // AnyDuringMigration because:  Property 'block_' does not exist on type
-    // 'Warning'.
-    eventUtils.fire(new (eventUtils.get(eventUtils.BUBBLE_OPEN))!
-                    ((this as AnyDuringMigration).block_, visible, 'warning'));
+    eventUtils.fire(new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
+        this.block_, visible, 'warning'));
     if (visible) {
       this.createBubble_();
     } else {
@@ -103,23 +100,23 @@ export class Warning extends Icon {
   /** Show the bubble. */
   private createBubble_() {
     this.paragraphElement_ = Bubble.textToDom(this.getText());
-    // AnyDuringMigration because:  Property 'block_' does not exist on type
-    // 'Warning'.
     this.bubble_ = Bubble.createNonEditableBubble(
-        this.paragraphElement_, (this as AnyDuringMigration).block_ as BlockSvg,
-        this.iconXY_ as Coordinate);
+        this.paragraphElement_, this.block_, this.iconXY_ as Coordinate);
     this.applyColour();
   }
 
   /** Dispose of the bubble and references to it. */
   private disposeBubble_() {
-    this.bubble_.dispose();
-    this.bubble_ = null;
+    if (this.bubble_) {
+      this.bubble_.dispose();
+      this.bubble_ = null;
+    }
     this.paragraphElement_ = null;
   }
 
   /**
    * Set this warning's text.
+   *
    * @param text Warning text (or '' to delete). This supports linebreaks.
    * @param id An ID for this text entry to be able to maintain multiple
    *     warnings.
@@ -141,7 +138,8 @@ export class Warning extends Icon {
 
   /**
    * Get this warning's texts.
-   * @return All texts concatenated into one string.
+   *
+   * @returns All texts concatenated into one string.
    */
   getText(): string {
     const allWarnings = [];
@@ -153,9 +151,7 @@ export class Warning extends Icon {
 
   /** Dispose of this warning. */
   override dispose() {
-    // AnyDuringMigration because:  Property 'block_' does not exist on type
-    // 'Warning'.
-    (this as AnyDuringMigration).block_.warning = null;
+    this.block_.warning = null;
     super.dispose();
   }
 }

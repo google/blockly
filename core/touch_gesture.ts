@@ -5,13 +5,9 @@
  */
 
 /**
- * @fileoverview The class extends Gesture to support pinch to zoom
- * for both pointer and touch events.
- */
-
-/**
  * The class extends Gesture to support pinch to zoom
  * for both pointer and touch events.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -21,8 +17,6 @@ import * as browserEvents from './browser_events.js';
 import {Gesture} from './gesture.js';
 import * as Touch from './touch.js';
 import {Coordinate} from './utils/coordinate.js';
-import type {WorkspaceSvg} from './workspace_svg.js';
-
 
 /*
  * Note: In this file "start" refers to touchstart, mousedown, and pointerstart
@@ -37,12 +31,15 @@ const ZOOM_OUT_MULTIPLIER = 6;
 
 /**
  * Class for one gesture.
+ *
  * @alias Blockly.TouchGesture
  */
 export class TouchGesture extends Gesture {
   /** Boolean for whether or not this gesture is a multi-touch gesture. */
   private isMultiTouch_ = false;
-  private cachedPoints_: {[key: string]: Coordinate};
+
+  /** A map of cached points used for tracking multi-touch gestures. */
+  private cachedPoints = new Map<string, Coordinate|null>();
 
   /**
    * This is the ratio between the starting distance between the touch points
@@ -68,20 +65,9 @@ export class TouchGesture extends Gesture {
   override onUpWrapper_: AnyDuringMigration;
 
   /**
-   * @param e The event that kicked off this gesture.
-   * @param creatorWorkspace The workspace that created this gesture and has a
-   *     reference to it.
-   */
-  constructor(e: Event, creatorWorkspace: WorkspaceSvg) {
-    super(e, creatorWorkspace);
-
-    /** A map of cached points used for tracking multi-touch gestures. */
-    this.cachedPoints_ = Object.create(null);
-  }
-
-  /**
    * Start a gesture: update the workspace to indicate that a gesture is in
    * progress and bind mousemove and mouseup handlers.
+   *
    * @param e A mouse down, touch start or pointer down event.
    * @internal
    */
@@ -101,6 +87,7 @@ export class TouchGesture extends Gesture {
    * opt_noCaptureIdentifier.
    * In addition, binding a second mouse down event to detect multi-touch
    * events.
+   *
    * @param e A mouse down or touch start event.
    * @internal
    */
@@ -121,6 +108,7 @@ export class TouchGesture extends Gesture {
 
   /**
    * Handle a mouse down, touch start, or pointer down event.
+   *
    * @param e A mouse down, touch start, or pointer down event.
    * @internal
    */
@@ -140,6 +128,7 @@ export class TouchGesture extends Gesture {
 
   /**
    * Handle a mouse move, touch move, or pointer move event.
+   *
    * @param e A mouse move, touch move, or pointer move event.
    * @internal
    */
@@ -163,6 +152,7 @@ export class TouchGesture extends Gesture {
 
   /**
    * Handle a mouse up, touch end, or pointer up event.
+   *
    * @param e A mouse up, touch end, or pointer up event.
    * @internal
    */
@@ -185,7 +175,8 @@ export class TouchGesture extends Gesture {
 
   /**
    * Whether this gesture is part of a multi-touch gesture.
-   * @return Whether this gesture is part of a multi-touch gesture.
+   *
+   * @returns Whether this gesture is part of a multi-touch gesture.
    * @internal
    */
   isMultiTouch(): boolean {
@@ -194,6 +185,7 @@ export class TouchGesture extends Gesture {
 
   /**
    * Sever all links from this object.
+   *
    * @internal
    */
   override dispose() {
@@ -207,20 +199,19 @@ export class TouchGesture extends Gesture {
   /**
    * Handle a touch start or pointer down event and keep track of current
    * pointers.
+   *
    * @param e A touch start, or pointer down event.
    * @internal
    */
   handleTouchStart(e: Event) {
     const pointerId = Touch.getTouchIdentifierFromEvent(e);
     // store the pointerId in the current list of pointers
-    // AnyDuringMigration because:  Type 'Coordinate | null' is not assignable
-    // to type 'Coordinate'.
-    this.cachedPoints_[pointerId] = this.getTouchPoint(e) as AnyDuringMigration;
-    const pointers = Object.keys(this.cachedPoints_);
+    this.cachedPoints.set(pointerId, this.getTouchPoint(e));
+    const pointers = Array.from(this.cachedPoints.keys());
     // If two pointers are down, store info
     if (pointers.length === 2) {
-      const point0 = (this.cachedPoints_[pointers[0]]);
-      const point1 = (this.cachedPoints_[pointers[1]]);
+      const point0 = (this.cachedPoints.get(pointers[0]))!;
+      const point1 = (this.cachedPoints.get(pointers[1]))!;
       this.startDistance_ = Coordinate.distance(point0, point1);
       this.isMultiTouch_ = true;
       e.preventDefault();
@@ -230,18 +221,16 @@ export class TouchGesture extends Gesture {
   /**
    * Handle a touch move or pointer move event and zoom in/out if two pointers
    * are on the screen.
+   *
    * @param e A touch move, or pointer move event.
    * @internal
    */
   handleTouchMove(e: MouseEvent) {
     const pointerId = Touch.getTouchIdentifierFromEvent(e);
     // Update the cache
-    // AnyDuringMigration because:  Type 'Coordinate | null' is not assignable
-    // to type 'Coordinate'.
-    this.cachedPoints_[pointerId] = this.getTouchPoint(e) as AnyDuringMigration;
+    this.cachedPoints.set(pointerId, this.getTouchPoint(e));
 
-    const pointers = Object.keys(this.cachedPoints_);
-    if (this.isPinchZoomEnabled_ && pointers.length === 2) {
+    if (this.isPinchZoomEnabled_ && this.cachedPoints.size === 2) {
       this.handlePinch_(e);
     } else {
       super.handleMove(e);
@@ -250,13 +239,14 @@ export class TouchGesture extends Gesture {
 
   /**
    * Handle pinch zoom gesture.
+   *
    * @param e A touch move, or pointer move event.
    */
   private handlePinch_(e: MouseEvent) {
-    const pointers = Object.keys(this.cachedPoints_);
+    const pointers = Array.from(this.cachedPoints.keys());
     // Calculate the distance between the two pointers
-    const point0 = (this.cachedPoints_[pointers[0]]);
-    const point1 = (this.cachedPoints_[pointers[1]]);
+    const point0 = (this.cachedPoints.get(pointers[0]))!;
+    const point1 = (this.cachedPoints.get(pointers[1]))!;
     const moveDistance = Coordinate.distance(point0, point1);
     const scale = moveDistance / this.startDistance_;
 
@@ -275,24 +265,26 @@ export class TouchGesture extends Gesture {
 
   /**
    * Handle a touch end or pointer end event and end the gesture.
+   *
    * @param e A touch end, or pointer end event.
    * @internal
    */
   handleTouchEnd(e: Event) {
     const pointerId = Touch.getTouchIdentifierFromEvent(e);
-    if (this.cachedPoints_[pointerId]) {
-      delete this.cachedPoints_[pointerId];
+    if (this.cachedPoints.has(pointerId)) {
+      this.cachedPoints.delete(pointerId);
     }
-    if (Object.keys(this.cachedPoints_).length < 2) {
-      this.cachedPoints_ = Object.create(null);
+    if (this.cachedPoints.size < 2) {
+      this.cachedPoints.clear();
       this.previousScale_ = 0;
     }
   }
 
   /**
    * Helper function returning the current touch point coordinate.
+   *
    * @param e A touch or pointer event.
-   * @return The current touch point coordinate
+   * @returns The current touch point coordinate
    * @internal
    */
   getTouchPoint(e: Event): Coordinate|null {

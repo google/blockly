@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Calculates and reports flyout workspace metrics.
- */
-
-/**
  * Calculates and reports flyout workspace metrics.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -23,6 +20,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 /**
  * Calculates metrics for a flyout's workspace.
  * The metrics are mainly used to size scrollbars for the flyout.
+ *
  * @alias Blockly.FlyoutMetricsManager
  */
 export class FlyoutMetricsManager extends MetricsManager {
@@ -41,7 +39,8 @@ export class FlyoutMetricsManager extends MetricsManager {
   /**
    * Gets the bounding box of the blocks on the flyout's workspace.
    * This is in workspace coordinates.
-   * @return The bounding box of the blocks on the workspace.
+   *
+   * @returns The bounding box of the blocks on the workspace.
    */
   private getBoundingBox_(): SVGRect|
       {height: number, y: number, width: number, x: number} {
@@ -57,7 +56,7 @@ export class FlyoutMetricsManager extends MetricsManager {
     return blockBoundingBox;
   }
 
-  override getContentMetrics(opt_getWorkspaceCoordinates: boolean) {
+  override getContentMetrics(opt_getWorkspaceCoordinates?: boolean) {
     // The bounding box is in workspace coordinates.
     const blockBoundingBox = this.getBoundingBox_();
     const scale = opt_getWorkspaceCoordinates ? 1 : this.workspace_.scale;
@@ -71,11 +70,10 @@ export class FlyoutMetricsManager extends MetricsManager {
   }
 
   override getScrollMetrics(
-      opt_getWorkspaceCoordinates: boolean, opt_viewMetrics: ContainerRegion,
-      opt_contentMetrics: ContainerRegion) {
+      opt_getWorkspaceCoordinates?: boolean, opt_viewMetrics?: ContainerRegion,
+      opt_contentMetrics?: ContainerRegion) {
     // AnyDuringMigration because:  Expected 1 arguments, but got 0.
-    const contentMetrics =
-        opt_contentMetrics || (this.getContentMetrics as AnyDuringMigration)();
+    const contentMetrics = opt_contentMetrics || this.getContentMetrics();
     const margin = this.flyout_.MARGIN * this.workspace_.scale;
     const scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;
 

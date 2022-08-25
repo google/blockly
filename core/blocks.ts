@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview A mapping of block type names to block prototype objects.
- */
-
-/**
  * A mapping of block type names to block prototype objects.
+ *
  * @namespace Blockly.blocks
  */
 import * as goog from '../closure/goog/goog.js';
@@ -24,6 +21,7 @@ export type BlockDefinition = AnyDuringMigration;
 
 /**
  * A mapping of block type names to block prototype objects.
+ *
  * @alias Blockly.blocks.Blocks
  */
 export const Blocks: {[key: string]: BlockDefinition} = Object.create(null);

@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Blockly menu similar to Closure's goog.ui.Menu
- */
-
-/**
  * Blockly menu similar to Closure's goog.ui.Menu
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -27,6 +24,7 @@ import * as style from './utils/style.js';
 
 /**
  * A basic menu class.
+ *
  * @alias Blockly.Menu
  */
 export class Menu {
@@ -76,6 +74,7 @@ export class Menu {
 
   /**
    * Add a new menu item to the bottom of this menu.
+   *
    * @param menuItem Menu item to append.
    * @internal
    */
@@ -85,6 +84,7 @@ export class Menu {
 
   /**
    * Creates the menu DOM.
+   *
    * @param container Element upon which to append this menu.
    */
   render(container: Element) {
@@ -119,23 +119,23 @@ export class Menu {
 
   /**
    * Gets the menu's element.
-   * @return The DOM element.
+   *
+   * @returns The DOM element.
    * @internal
    */
-  getElement(): Element|null {
+  getElement(): HTMLDivElement|null {
     return this.element_;
   }
 
   /**
    * Focus the menu element.
+   *
    * @internal
    */
   focus() {
     const el = this.getElement();
     if (el) {
-      // AnyDuringMigration because:  Property 'focus' does not exist on type
-      // 'Element'.
-      (el as AnyDuringMigration).focus({preventScroll: true});
+      el.focus({preventScroll: true});
       dom.addClass(el, 'blocklyFocused');
     }
   }
@@ -144,15 +144,14 @@ export class Menu {
   private blur_() {
     const el = this.getElement();
     if (el) {
-      // AnyDuringMigration because:  Property 'blur' does not exist on type
-      // 'Element'.
-      (el as AnyDuringMigration).blur();
+      el.blur();
       dom.removeClass(el, 'blocklyFocused');
     }
   }
 
   /**
    * Set the menu accessibility role.
+   *
    * @param roleName role name.
    * @internal
    */
@@ -196,8 +195,9 @@ export class Menu {
   /**
    * Returns the child menu item that owns the given DOM element,
    * or null if no such menu item is found.
+   *
    * @param elem DOM element whose owner is to be returned.
-   * @return Menu item for which the DOM element belongs to.
+   * @returns Menu item for which the DOM element belongs to.
    */
   private getMenuItem_(elem: Element): MenuItem|null {
     const menuElem = this.getElement();
@@ -205,8 +205,9 @@ export class Menu {
     // a menu item's div, or some element within the menu item.
     // Walk up parents until one meets either the menu's root element, or
     // a menu item's div.
-    while (elem && elem !== menuElem) {
-      if (dom.hasClass(elem, 'blocklyMenuItem')) {
+    let currentElement: Element|null = elem;
+    while (currentElement && currentElement !== menuElem) {
+      if (dom.hasClass(currentElement, 'blocklyMenuItem')) {
         // Having found a menu item's div, locate that menu item in this menu.
         for (let i = 0, menuItem; menuItem = this.menuItems_[i]; i++) {
           if (menuItem.getElement() === elem) {
@@ -214,9 +215,7 @@ export class Menu {
           }
         }
       }
-      // AnyDuringMigration because:  Type 'HTMLElement | null' is not
-      // assignable to type 'Element'.
-      elem = elem.parentElement as AnyDuringMigration;
+      currentElement = currentElement.parentElement;
     }
     return null;
   }
@@ -225,6 +224,7 @@ export class Menu {
 
   /**
    * Highlights the given menu item, or clears highlighting if null.
+   *
    * @param item Item to highlight, or null.
    * @internal
    */
@@ -249,26 +249,26 @@ export class Menu {
   /**
    * Highlights the next highlightable item (or the first if nothing is
    * currently highlighted).
+   *
    * @internal
    */
   highlightNext() {
-    // AnyDuringMigration because:  Argument of type 'MenuItem | null' is not
-    // assignable to parameter of type 'MenuItem'.
-    const index =
-        this.menuItems_.indexOf(this.highlightedItem_ as AnyDuringMigration);
+    const index = this.highlightedItem_ ?
+        this.menuItems_.indexOf(this.highlightedItem_) :
+        -1;
     this.highlightHelper_(index, 1);
   }
 
   /**
    * Highlights the previous highlightable item (or the last if nothing is
    * currently highlighted).
+   *
    * @internal
    */
   highlightPrevious() {
-    // AnyDuringMigration because:  Argument of type 'MenuItem | null' is not
-    // assignable to parameter of type 'MenuItem'.
-    const index =
-        this.menuItems_.indexOf(this.highlightedItem_ as AnyDuringMigration);
+    const index = this.highlightedItem_ ?
+        this.menuItems_.indexOf(this.highlightedItem_) :
+        -1;
     this.highlightHelper_(index < 0 ? this.menuItems_.length : index, -1);
   }
 
@@ -285,6 +285,7 @@ export class Menu {
   /**
    * Helper function that manages the details of moving the highlight among
    * child menuitems in response to keyboard events.
+   *
    * @param startIndex Start index.
    * @param delta Step direction: 1 to go down, -1 to go up.
    */
@@ -304,6 +305,7 @@ export class Menu {
 
   /**
    * Handles mouseover events. Highlight menuitems as the user hovers over them.
+   *
    * @param e Mouse event to handle.
    */
   private handleMouseOver_(e: Event) {
@@ -322,6 +324,7 @@ export class Menu {
 
   /**
    * Handles click events. Pass the event onto the child menuitem to handle.
+   *
    * @param e Click event to handle.
    */
   private handleClick_(e: Event) {
@@ -354,6 +357,7 @@ export class Menu {
 
   /**
    * Handles mouse enter events. Focus the element.
+   *
    * @param _e Mouse event to handle.
    */
   private handleMouseEnter_(_e: Event) {
@@ -362,6 +366,7 @@ export class Menu {
 
   /**
    * Handles mouse leave events. Blur and clear highlight.
+   *
    * @param _e Mouse event to handle.
    */
   private handleMouseLeave_(_e: Event) {
@@ -377,6 +382,7 @@ export class Menu {
    * Attempts to handle a keyboard event, if the menu item is enabled, by
    * calling
    * {@link handleKeyEventInternal_}.
+   *
    * @param e Key event to handle.
    */
   private handleKeyEvent_(e: Event) {
@@ -436,7 +442,8 @@ export class Menu {
 
   /**
    * Get the size of a rendered menu.
-   * @return Object with width and height properties.
+   *
+   * @returns Object with width and height properties.
    * @internal
    */
   getSize(): Size {

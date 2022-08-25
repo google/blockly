@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview The class representing one block.
- */
-
-/**
  * The class representing one block.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -53,6 +50,7 @@ import type {Workspace} from './workspace.js';
 /**
  * Class for one block.
  * Not normally called directly, workspace.newBlock() is preferred.
+ *
  * @unrestricted
  * @alias Blockly.Block
  */
@@ -78,6 +76,7 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Has this block been disposed of?
+   *
    * @internal
    */
   disposed = false;
@@ -184,6 +183,7 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * A string representing the comment attached to this block.
+   *
    * @deprecated August 2019. Use getCommentText instead.
    */
   comment: string|Comment|null = null;
@@ -214,6 +214,7 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * A count of statement inputs on the block.
+   *
    * @internal
    */
   statementInputCount = 0;
@@ -290,7 +291,7 @@ export class Block implements IASTNodeLocation, IDeletable {
 
       // Fire a create event.
       if (eventUtils.isEnabled()) {
-        eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))!(this));
+        eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(this));
       }
     } finally {
       if (!existingGroup) {
@@ -309,6 +310,7 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Dispose of this block.
+   *
    * @param healStack If true, then try to heal any gap by connecting the next
    *     statement with the previous statement.  Otherwise, dispose of all
    *     children of this block.
@@ -316,18 +318,18 @@ export class Block implements IASTNodeLocation, IDeletable {
    */
   dispose(healStack: boolean) {
     if (this.disposed) {
-      // Already deleted.
       return;
-    }
-    // Terminate onchange event calls.
-    if (this.onchangeWrapper_) {
-      this.workspace.removeChangeListener(this.onchangeWrapper_);
     }
 
     this.unplug(healStack);
     if (eventUtils.isEnabled()) {
-      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_DELETE))!(this));
+      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_DELETE))(this));
     }
+
+    if (this.onchangeWrapper_) {
+      this.workspace.removeChangeListener(this.onchangeWrapper_);
+    }
+
     eventUtils.disable();
 
     try {
@@ -380,6 +382,7 @@ export class Block implements IASTNodeLocation, IDeletable {
   /**
    * Unplug this block from its superior block.  If this block is a statement,
    * optionally reconnect the block underneath with the block on top.
+   *
    * @param opt_healStack Disconnect child statement and reconnect stack.
    *     Defaults to false.
    */
@@ -395,6 +398,7 @@ export class Block implements IASTNodeLocation, IDeletable {
   /**
    * Unplug this block's output from an input on another block.  Optionally
    * reconnect the block's parent to the only child block, if possible.
+   *
    * @param opt_healStack Disconnect right-side block and connect to left-side
    *     block.  Defaults to false.
    */
@@ -438,7 +442,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * Since only one block can be displaced and attached to the insertion marker
    * this should only ever return one connection.
    *
-   * @return The connection on the value input, or null.
+   * @returns The connection on the value input, or null.
    */
   private getOnlyValueConnection_(): Connection|null {
     let connection = null;
@@ -459,6 +463,7 @@ export class Block implements IASTNodeLocation, IDeletable {
   /**
    * Unplug this statement block from its superior block.  Optionally reconnect
    * the block underneath with the block on top.
+   *
    * @param opt_healStack Disconnect child statement and reconnect stack.
    *     Defaults to false.
    */
@@ -486,8 +491,9 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Returns all connections originating from this block.
+   *
    * @param _all If true, return all connections even hidden ones.
-   * @return Array of connections.
+   * @returns Array of connections.
    * @internal
    */
   getConnections_(_all: boolean): Connection[] {
@@ -512,10 +518,11 @@ export class Block implements IASTNodeLocation, IDeletable {
   /**
    * Walks down a stack of blocks and finds the last next connection on the
    * stack.
+   *
    * @param ignoreShadows If true,the last connection on a non-shadow block will
    *     be returned. If false, this will follow shadows to find the last
    *     connection.
-   * @return The last next connection on the stack, or null.
+   * @returns The last next connection on the stack, or null.
    * @internal
    */
   lastConnectionInStack(ignoreShadows: boolean): Connection|null {
@@ -542,7 +549,8 @@ export class Block implements IASTNodeLocation, IDeletable {
    * parent block is either the block connected to the previous connection (for
    * a statement block) or the block connected to the output connection (for a
    * value block).
-   * @return The block (if any) that holds the current block.
+   *
+   * @returns The block (if any) that holds the current block.
    */
   getParent(): this|null {
     return this.parentBlock_;
@@ -550,8 +558,9 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Return the input that connects to the specified block.
+   *
    * @param block A block connected to an input on this block.
-   * @return The input (if any) that connects to the specified block.
+   * @returns The input (if any) that connects to the specified block.
    */
   getInputWithBlock(block: Block): Input|null {
     for (let i = 0, input; input = this.inputList[i]; i++) {
@@ -567,9 +576,11 @@ export class Block implements IASTNodeLocation, IDeletable {
    * block has no surrounding block.  A parent block might just be the previous
    * statement, whereas the surrounding block is an if statement, while loop,
    * etc.
-   * @return The block (if any) that surrounds the current block.
+   *
+   * @returns The block (if any) that surrounds the current block.
    */
   getSurroundParent(): this|null {
+    /* eslint-disable-next-line @typescript-eslint/no-this-alias */
     let block = this;
     let prevBlock;
     do {
@@ -588,7 +599,8 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Return the next statement block directly connected to this block.
-   * @return The next statement block or null.
+   *
+   * @returns The next statement block or null.
    */
   getNextBlock(): Block|null {
     return this.nextConnection && this.nextConnection.targetBlock();
@@ -596,7 +608,8 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Returns the block connected to the previous connection.
-   * @return The previous statement block or null.
+   *
+   * @returns The previous statement block or null.
    */
   getPreviousBlock(): Block|null {
     return this.previousConnection && this.previousConnection.targetBlock();
@@ -605,7 +618,8 @@ export class Block implements IASTNodeLocation, IDeletable {
   /**
    * Return the connection on the first statement input on this block, or null
    * if there are none.
-   * @return The first statement connection or null.
+   *
+   * @returns The first statement connection or null.
    * @internal
    */
   getFirstStatementConnection(): Connection|null {
@@ -621,10 +635,12 @@ export class Block implements IASTNodeLocation, IDeletable {
   /**
    * Return the top-most block in this block's tree.
    * This will return itself if this block is at the top level.
-   * @return The root block.
+   *
+   * @returns The root block.
    */
   getRootBlock(): this {
     let rootBlock: this;
+    /* eslint-disable-next-line @typescript-eslint/no-this-alias */
     let block: this|null = this;
     do {
       rootBlock = block;
@@ -637,10 +653,12 @@ export class Block implements IASTNodeLocation, IDeletable {
    * Walk up from the given block up through the stack of blocks to find
    * the top block of the sub stack. If we are nested in a statement input only
    * find the top-most nested block. Do not go all the way to the root block.
-   * @return The top block in a stack.
+   *
+   * @returns The top block in a stack.
    * @internal
    */
   getTopStackBlock(): this {
+    /* eslint-disable-next-line @typescript-eslint/no-this-alias */
     let block = this;
     let previous;
     do {
@@ -657,8 +675,9 @@ export class Block implements IASTNodeLocation, IDeletable {
    * Includes value and statement inputs, as well as any following statement.
    * Excludes any connection on an output tab or any preceding statement.
    * Blocks are optionally sorted by position; top to bottom.
+   *
    * @param ordered Sort the list if true.
-   * @return Array of blocks.
+   * @returns Array of blocks.
    */
   getChildren(ordered: boolean): Block[] {
     if (!ordered) {
@@ -682,6 +701,7 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Set parent of this block to be a new block or null.
+   *
    * @param newParent New parent block.
    * @internal
    */
@@ -734,8 +754,9 @@ export class Block implements IASTNodeLocation, IDeletable {
    * Includes value and statement inputs, as well as any following statements.
    * Excludes any connection on an output tab or any preceding statements.
    * Blocks are optionally sorted by position; top to bottom.
+   *
    * @param ordered Sort the list if true.
-   * @return Flattened array of blocks.
+   * @returns Flattened array of blocks.
    */
   getDescendants(ordered: boolean): this[] {
     const blocks = [this];
@@ -743,15 +764,15 @@ export class Block implements IASTNodeLocation, IDeletable {
     for (let child, i = 0; child = childBlocks[i]; i++) {
       // AnyDuringMigration because:  Argument of type 'Block[]' is not
       // assignable to parameter of type 'this[]'.
-      blocks.push.apply(
-          blocks, child.getDescendants(ordered) as AnyDuringMigration);
+      blocks.push(...child.getDescendants(ordered) as AnyDuringMigration);
     }
     return blocks;
   }
 
   /**
    * Get whether this block is deletable or not.
-   * @return True if deletable.
+   *
+   * @returns True if deletable.
    */
   isDeletable(): boolean {
     return this.deletable_ && !this.isShadow_ && !this.disposed &&
@@ -760,6 +781,7 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Set whether this block is deletable or not.
+   *
    * @param deletable True if deletable.
    */
   setDeletable(deletable: boolean) {
@@ -768,7 +790,8 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Get whether this block is movable or not.
-   * @return True if movable.
+   *
+   * @returns True if movable.
    */
   isMovable(): boolean {
     return this.movable_ && !this.isShadow_ && !this.disposed &&
@@ -777,6 +800,7 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Set whether this block is movable or not.
+   *
    * @param movable True if movable.
    */
   setMovable(movable: boolean) {
@@ -788,7 +812,8 @@ export class Block implements IASTNodeLocation, IDeletable {
    * descendants will put this block over the workspace's capacity this block is
    * not duplicatable. If duplicating this block and descendants will put any
    * type over their maxInstances this block is not duplicatable.
-   * @return True if duplicatable.
+   *
+   * @returns True if duplicatable.
    */
   isDuplicatable(): boolean {
     if (!this.workspace.hasBlockLimits()) {
@@ -800,7 +825,8 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Get whether this block is a shadow block or not.
-   * @return True if a shadow.
+   *
+   * @returns True if a shadow.
    */
   isShadow(): boolean {
     return this.isShadow_;
@@ -808,6 +834,7 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Set whether this block is a shadow block or not.
+   *
    * @param shadow True if a shadow.
    * @internal
    */
@@ -817,7 +844,8 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Get whether this block is an insertion marker block or not.
-   * @return True if an insertion marker.
+   *
+   * @returns True if an insertion marker.
    */
   isInsertionMarker(): boolean {
     return this.isInsertionMarker_;
@@ -826,6 +854,7 @@ export class Block implements IASTNodeLocation, IDeletable {
   /**
    * Set whether this block is an insertion marker block or not.
    * Once set this cannot be unset.
+   *
    * @param insertionMarker True if an insertion marker.
    * @internal
    */
@@ -835,7 +864,8 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Get whether this block is editable or not.
-   * @return True if editable.
+   *
+   * @returns True if editable.
    */
   isEditable(): boolean {
     return this.editable_ && !this.disposed && !this.workspace.options.readOnly;
@@ -843,6 +873,7 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Set whether this block is editable or not.
+   *
    * @param editable True if editable.
    */
   setEditable(editable: boolean) {
@@ -856,7 +887,8 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Returns if this block has been disposed of / deleted.
-   * @return True if this block has been disposed of / deleted.
+   *
+   * @returns True if this block has been disposed of / deleted.
    */
   isDisposed(): boolean {
     return this.disposed;
@@ -866,9 +898,10 @@ export class Block implements IASTNodeLocation, IDeletable {
    * Find the connection on this block that corresponds to the given connection
    * on the other block.
    * Used to match connections between a block and its insertion marker.
+   *
    * @param otherBlock The other block to match against.
    * @param conn The other connection to match.
-   * @return The matching connection on this block, or null.
+   * @returns The matching connection on this block, or null.
    * @internal
    */
   getMatchingConnection(otherBlock: Block, conn: Connection): Connection|null {
@@ -887,6 +920,7 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Set the URL of this block's help page.
+   *
    * @param url URL string for block help, or function that returns a URL.  Null
    *     for no help.
    */
@@ -896,6 +930,7 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Sets the tooltip for this block.
+   *
    * @param newTip The text for the tooltip, a function that returns the text
    *     for the tooltip, or a parent object whose tooltip will be used. To not
    *     display a tooltip pass the empty string.
@@ -906,7 +941,8 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Returns the tooltip text for this block.
-   * @return The tooltip text for this block.
+   *
+   * @returns The tooltip text for this block.
    */
   getTooltip(): string {
     return Tooltip.getTooltipOfObject(this);
@@ -914,7 +950,8 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Get the colour of a block.
-   * @return #RRGGBB string.
+   *
+   * @returns #RRGGBB string.
    */
   getColour(): string {
     return this.colour_;
@@ -922,7 +959,8 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Get the name of the block style.
-   * @return Name of the block style.
+   *
+   * @returns Name of the block style.
    */
   getStyleName(): string {
     return this.styleName_;
@@ -930,7 +968,8 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Get the HSV hue value of a block.  Null if hue not set.
-   * @return Hue value (0-360).
+   *
+   * @returns Hue value (0-360).
    */
   getHue(): number|null {
     return this.hue_;
@@ -938,6 +977,7 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Change the colour of a block.
+   *
    * @param colour HSV hue value (0 to 360), #RRGGBB string, or a message
    *     reference string pointing to one of those two values.
    */
@@ -949,6 +989,7 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Set the style and colour values of a block.
+   *
    * @param blockStyleName Name of the block style.
    */
   setStyle(blockStyleName: string) {
@@ -960,6 +1001,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * changes, replacing any prior onchange handler. This is usually only called
    * from the constructor, the block type initializer function, or an extension
    * initializer function.
+   *
    * @param onchangeFn The callback to call when the block's workspace changes.
    * @throws {Error} if onchangeFn is not falsey and not a function.
    */
@@ -977,8 +1019,9 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Returns the named field from a block.
+   *
    * @param name The name of the field.
-   * @return Named field, or null if field does not exist.
+   * @returns Named field, or null if field does not exist.
    */
   getField(name: string): Field|null {
     if (typeof name !== 'string') {
@@ -1000,7 +1043,8 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Return all variables referenced by this block.
-   * @return List of variable ids.
+   *
+   * @returns List of variable ids.
    */
   getVars(): string[] {
     const vars = [];
@@ -1016,7 +1060,8 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Return all variables referenced by this block.
-   * @return List of variable models.
+   *
+   * @returns List of variable models.
    * @internal
    */
   getVarModels(): VariableModel[] {
@@ -1040,6 +1085,7 @@ export class Block implements IASTNodeLocation, IDeletable {
   /**
    * Notification that a variable is renaming but keeping the same ID.  If the
    * variable is in use on this block, rerender to show the new name.
+   *
    * @param variable The variable being renamed.
    * @internal
    */
@@ -1057,6 +1103,7 @@ export class Block implements IASTNodeLocation, IDeletable {
   /**
    * Notification that a variable is renaming.
    * If the ID matches one of this block's variables, rename it.
+   *
    * @param oldId ID of variable to rename.
    * @param newId ID of new variable.  May be the same as oldId, but with an
    *     updated name.
@@ -1073,8 +1120,9 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Returns the language-neutral value of the given field.
+   *
    * @param name The name of the field.
-   * @return Value of the field or null if field does not exist.
+   * @returns Value of the field or null if field does not exist.
    */
   getFieldValue(name: string): AnyDuringMigration {
     const field = this.getField(name);
@@ -1086,6 +1134,7 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Sets the value of the given field for this block.
+   *
    * @param newValue The value to set.
    * @param name The name of the field to set the value of.
    */
@@ -1099,6 +1148,7 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Set whether this block can chain onto the bottom of another block.
+   *
    * @param newBoolean True if there can be a previous statement.
    * @param opt_check Statement type or list of statement types.  Null/undefined
    *     if any type could be connected.
@@ -1130,6 +1180,7 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Set whether another block can chain onto the bottom of this block.
+   *
    * @param newBoolean True if there can be a next statement.
    * @param opt_check Statement type or list of statement types.  Null/undefined
    *     if any type could be connected.
@@ -1161,6 +1212,7 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Set whether this block returns a value.
+   *
    * @param newBoolean True if there is an output.
    * @param opt_check Returned type or list of returned types.  Null or
    *     undefined if any type could be returned (e.g. variable get).
@@ -1191,19 +1243,21 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Set whether value inputs are arranged horizontally or vertically.
+   *
    * @param newBoolean True if inputs are horizontal.
    */
   setInputsInline(newBoolean: boolean) {
     if (this.inputsInline !== newBoolean) {
-      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))!
-                      (this, 'inline', null, this.inputsInline, newBoolean));
+      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+          this, 'inline', null, this.inputsInline, newBoolean));
       this.inputsInline = newBoolean;
     }
   }
 
   /**
    * Get whether value inputs are arranged horizontally or vertically.
-   * @return True if inputs are horizontal.
+   *
+   * @returns True if inputs are horizontal.
    */
   getInputsInline(): boolean {
     if (this.inputsInline !== undefined) {
@@ -1230,6 +1284,7 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Set the block's output shape.
+   *
    * @param outputShape Value representing an output shape.
    */
   setOutputShape(outputShape: number|null) {
@@ -1238,7 +1293,8 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Get the block's output shape.
-   * @return Value representing output shape if one exists.
+   *
+   * @returns Value representing output shape if one exists.
    */
   getOutputShape(): number|null {
     return this.outputShape_;
@@ -1246,7 +1302,8 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Get whether this block is enabled or not.
-   * @return True if enabled.
+   *
+   * @returns True if enabled.
    */
   isEnabled(): boolean {
     return !this.disabled;
@@ -1254,21 +1311,23 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Set whether the block is enabled or not.
+   *
    * @param enabled True if enabled.
    */
   setEnabled(enabled: boolean) {
     if (this.isEnabled() !== enabled) {
       const oldValue = this.disabled;
       this.disabled = !enabled;
-      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))!
-                      (this, 'disabled', null, oldValue, !enabled));
+      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+          this, 'disabled', null, oldValue, !enabled));
     }
   }
 
   /**
    * Get whether the block is disabled or not due to parents.
    * The block's own disabled property is not considered.
-   * @return True if disabled.
+   *
+   * @returns True if disabled.
    */
   getInheritedDisabled(): boolean {
     let ancestor = this.getSurroundParent();
@@ -1284,7 +1343,8 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Get whether the block is collapsed or not.
-   * @return True if collapsed.
+   *
+   * @returns True if collapsed.
    */
   isCollapsed(): boolean {
     return this.collapsed_;
@@ -1292,22 +1352,24 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Set whether the block is collapsed or not.
+   *
    * @param collapsed True if collapsed.
    */
   setCollapsed(collapsed: boolean) {
     if (this.collapsed_ !== collapsed) {
-      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))!
-                      (this, 'collapsed', null, this.collapsed_, collapsed));
+      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+          this, 'collapsed', null, this.collapsed_, collapsed));
       this.collapsed_ = collapsed;
     }
   }
 
   /**
    * Create a human-readable text representation of this block and any children.
+   *
    * @param opt_maxLength Truncate the string to this length.
    * @param opt_emptyToken The placeholder string used to denote an empty field.
    *     If not specified, '?' is used.
-   * @return Text of block.
+   * @returns Text of block.
    */
   toString(opt_maxLength?: number, opt_emptyToken?: string): string {
     let text = [];
@@ -1322,8 +1384,9 @@ export class Block implements IASTNodeLocation, IDeletable {
 
     /**
      * Whether or not to add parentheses around an input.
+     *
      * @param connection The connection.
-     * @return True if we should add parentheses around the input.
+     * @returns True if we should add parentheses around the input.
      */
     function shouldAddParentheses(connection: Connection): boolean {
       let checks = connection.getCheck();
@@ -1422,9 +1485,10 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Shortcut for appending a value input row.
+   *
    * @param name Language-neutral identifier which may used to find this input
    *     again.  Should be unique to this block.
-   * @return The input object created.
+   * @returns The input object created.
    */
   appendValueInput(name: string): Input {
     return this.appendInput_(inputTypes.VALUE, name);
@@ -1432,9 +1496,10 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Shortcut for appending a statement input row.
+   *
    * @param name Language-neutral identifier which may used to find this input
    *     again.  Should be unique to this block.
-   * @return The input object created.
+   * @returns The input object created.
    */
   appendStatementInput(name: string): Input {
     return this.appendInput_(inputTypes.STATEMENT, name);
@@ -1442,9 +1507,10 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Shortcut for appending a dummy input row.
+   *
    * @param opt_name Language-neutral identifier which may used to find this
    *     input again.  Should be unique to this block.
-   * @return The input object created.
+   * @returns The input object created.
    */
   appendDummyInput(opt_name?: string): Input {
     return this.appendInput_(inputTypes.DUMMY, opt_name || '');
@@ -1453,6 +1519,7 @@ export class Block implements IASTNodeLocation, IDeletable {
   /**
    * Initialize this block using a cross-platform, internationalization-friendly
    * JSON description.
+   *
    * @param json Structured data describing the block.
    */
   jsonInit(json: AnyDuringMigration) {
@@ -1547,6 +1614,7 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Initialize the colour of this block from the JSON description.
+   *
    * @param json Structured data describing the block.
    * @param warningPrefix Warning prefix string identifying block.
    */
@@ -1567,6 +1635,7 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Initialize the style of this block from the JSON description.
+   *
    * @param json Structured data describing the block.
    * @param warningPrefix Warning prefix string identifying block.
    */
@@ -1585,6 +1654,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * the block, including prototype values. This provides some insurance against
    * mixin / extension incompatibilities with future block features. This check
    * can be disabled by passing true as the second argument.
+   *
    * @param mixinObj The key/values pairs to add to this block object.
    * @param opt_disableCheck Option flag to disable overwrite checks.
    */
@@ -1611,6 +1681,7 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Interpolate a message description onto the block.
+   *
    * @param message Text contains interpolation tokens (%1, %2, ...) that match
    *     with fields or inputs defined in the args array.
    * @param args Array of arguments to be interpolated.
@@ -1652,6 +1723,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * Validates that the tokens are within the correct bounds, with no
    * duplicates, and that all of the arguments are referred to. Throws errors if
    * any of these things are not true.
+   *
    * @param tokens An array of tokens to validate
    * @param argsCount The number of args that need to be referred to.
    */
@@ -1687,11 +1759,12 @@ export class Block implements IASTNodeLocation, IDeletable {
    * Inserts args in place of numerical tokens. String args are converted to
    * JSON that defines a label field. If necessary an extra dummy input is added
    * to the end of the elements.
+   *
    * @param tokens The tokens to interpolate
    * @param args The arguments to insert.
    * @param lastDummyAlign The alignment the added dummy input should have, if
    *     we are required to add one.
-   * @return The JSON definitions of field and inputs to add to the block.
+   * @returns The JSON definitions of field and inputs to add to the block.
    */
   private interpolateArguments_(
       tokens: Array<string|number>, args: Array<AnyDuringMigration|string>,
@@ -1732,8 +1805,9 @@ export class Block implements IASTNodeLocation, IDeletable {
    * Creates a field from the JSON definition of a field. If a field with the
    * given type cannot be found, this attempts to create a different field using
    * the 'alt' property of the JSON definition (if it exists).
+   *
    * @param element The element to try to turn into a field.
-   * @return The field defined by the JSON, or null if one couldn't be created.
+   * @returns The field defined by the JSON, or null if one couldn't be created.
    */
   private fieldFromJson_(element: {alt?: string, type?: string, text?: string}):
       Field|null {
@@ -1751,10 +1825,11 @@ export class Block implements IASTNodeLocation, IDeletable {
   /**
    * Creates an input from the JSON definition of an input. Sets the input's
    * check and alignment if they are provided.
+   *
    * @param element The JSON to turn into an input.
    * @param warningPrefix The prefix to add to warnings to help the developer
    *     debug.
-   * @return The input that has been created, or null if one could not be
+   * @returns The input that has been created, or null if one could not be
    *     created for some reason (should never happen).
    */
   private inputFromJson_(element: AnyDuringMigration, warningPrefix: string):
@@ -1801,8 +1876,9 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Returns true if the given string matches one of the input keywords.
+   *
    * @param str The string to check.
-   * @return True if the given string matches one of the input keywords, false
+   * @returns True if the given string matches one of the input keywords, false
    *     otherwise.
    */
   private isInputKeyword_(str: string): boolean {
@@ -1813,8 +1889,9 @@ export class Block implements IASTNodeLocation, IDeletable {
   /**
    * Turns a string into the JSON definition of a label field. If the string
    * becomes an empty string when trimmed, this returns null.
+   *
    * @param str String to turn into the JSON definition of a label field.
-   * @return The JSON definition or null.
+   * @returns The JSON definition or null.
    */
   private stringToFieldJson_(str: string): {text: string, type: string}|null {
     str = str.trim();
@@ -1829,10 +1906,11 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Add a value input, statement input or local variable to this block.
+   *
    * @param type One of Blockly.inputTypes.
    * @param name Language-neutral identifier which may used to find this input
    *     again.  Should be unique to this block.
-   * @return The input object created.
+   * @returns The input object created.
    */
   protected appendInput_(type: number, name: string): Input {
     let connection = null;
@@ -1853,6 +1931,7 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Move a named input to a different location on this block.
+   *
    * @param name The name of the input to move.
    * @param refName Name of input that should be after the moved input, or null
    *     to be the input at the end.
@@ -1888,6 +1967,7 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Move a numbered input to a different location on this block.
+   *
    * @param inputIndex Index of the input to move.
    * @param refIndex Index of input that should be after the moved input.
    */
@@ -1914,9 +1994,10 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Remove an input from this block.
+   *
    * @param name The name of the input.
    * @param opt_quiet True to prevent an error if input is not present.
-   * @return True if operation succeeds, false if input is not present and
+   * @returns True if operation succeeds, false if input is not present and
    *     opt_quiet is true.
    * @throws {Error} if the input is not present and opt_quiet is not true.
    */
@@ -1939,8 +2020,9 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Fetches the named input object.
+   *
    * @param name The name of the input.
-   * @return The input object, or null if input does not exist.
+   * @returns The input object, or null if input does not exist.
    */
   getInput(name: string): Input|null {
     for (let i = 0, input; input = this.inputList[i]; i++) {
@@ -1954,8 +2036,9 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Fetches the block attached to the named input.
+   *
    * @param name The name of the input.
-   * @return The attached value block, or null if the input is either
+   * @returns The attached value block, or null if the input is either
    *     disconnected or if the input does not exist.
    */
   getInputTargetBlock(name: string): Block|null {
@@ -1965,7 +2048,8 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Returns the comment on this block (or null if there is no comment).
-   * @return Block's comment.
+   *
+   * @returns Block's comment.
    */
   getCommentText(): string|null {
     return this.commentModel.text;
@@ -1973,14 +2057,15 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Set this block's comment text.
+   *
    * @param text The text, or null to delete.
    */
   setCommentText(text: string|null) {
     if (this.commentModel.text === text) {
       return;
     }
-    eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))!
-                    (this, 'comment', null, this.commentModel.text, text));
+    eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+        this, 'comment', null, this.commentModel.text, text));
     this.commentModel.text = text;
     // AnyDuringMigration because:  Type 'string | null' is not assignable to
     // type 'string | Comment'.
@@ -1989,6 +2074,7 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Set this block's warning text.
+   *
    * @param _text The text, or null to delete.
    * @param _opt_id An optional ID for the warning text to be able to maintain
    *     multiple warnings.
@@ -1998,6 +2084,7 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Give this block a mutator dialog.
+   *
    * @param _mutator A mutator dialog instance or null to remove.
    */
   setMutator(_mutator: Mutator) {}
@@ -2006,7 +2093,8 @@ export class Block implements IASTNodeLocation, IDeletable {
   /**
    * Return the coordinates of the top-left corner of this block relative to the
    * drawing surface's origin (0,0), in workspace units.
-   * @return Object with .x and .y properties.
+   *
+   * @returns Object with .x and .y properties.
    */
   getRelativeToSurfaceXY(): Coordinate {
     return this.xy_;
@@ -2014,6 +2102,7 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Move a block by a relative offset.
+   *
    * @param dx Horizontal offset, in workspace units.
    * @param dy Vertical offset, in workspace units.
    */
@@ -2022,7 +2111,7 @@ export class Block implements IASTNodeLocation, IDeletable {
       throw Error('Block has parent.');
     }
     const event =
-        new (eventUtils.get(eventUtils.BLOCK_MOVE))!(this) as BlockMove;
+        new (eventUtils.get(eventUtils.BLOCK_MOVE))(this) as BlockMove;
     this.xy_.translate(dx, dy);
     event.recordNew();
     eventUtils.fire(event);
@@ -2030,8 +2119,9 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Create a connection of the specified type.
+   *
    * @param type The type of the connection to create.
-   * @return A new connection of the specified type.
+   * @returns A new connection of the specified type.
    */
   protected makeConnection_(type: number): Connection {
     return new Connection(this, type);
@@ -2040,9 +2130,10 @@ export class Block implements IASTNodeLocation, IDeletable {
   /**
    * Recursively checks whether all statement and value inputs are filled with
    * blocks. Also checks all following statement blocks in this stack.
+   *
    * @param opt_shadowBlocksAreFilled An optional argument controlling whether
    *     shadow blocks are counted as filled. Defaults to true.
-   * @return True if all inputs are filled, false otherwise.
+   * @returns True if all inputs are filled, false otherwise.
    */
   allInputsFilled(opt_shadowBlocksAreFilled?: boolean): boolean {
     // Account for the shadow block filledness toggle.
@@ -2080,7 +2171,8 @@ export class Block implements IASTNodeLocation, IDeletable {
    * Intended to on be used in console logs and errors. If you need a string
    * that uses the user's native language (including block text, field values,
    * and child blocks), use [toString()]{@link Block#toString}.
-   * @return The description.
+   *
+   * @returns The description.
    */
   toDevString(): string {
     let msg = this.type ? '"' + this.type + '" block' : 'Block';

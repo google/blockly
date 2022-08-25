@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview The interface for an object that is copyable.
- */
-
-/**
  * The interface for an object that is copyable.
+ *
  * @namespace Blockly.ICopyable
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -23,7 +20,8 @@ import type {ISelectable} from './i_selectable.js';
 export interface ICopyable extends ISelectable {
   /**
    * Encode for copying.
-   * @return Copy metadata.
+   *
+   * @returns Copy metadata.
    * @internal
    */
   toCopyData(): CopyData|null;

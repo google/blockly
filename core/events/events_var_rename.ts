@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Class for a variable rename event.
- */
-
-/**
  * Class for a variable rename event.
+ *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -24,6 +21,7 @@ import * as eventUtils from './utils.js';
 
 /**
  * Class for a variable rename event.
+ *
  * @alias Blockly.Events.VarRename
  */
 export class VarRename extends VarBase {
@@ -53,7 +51,8 @@ export class VarRename extends VarBase {
 
   /**
    * Encode the event as JSON.
-   * @return JSON representation.
+   *
+   * @returns JSON representation.
    */
   override toJson(): AnyDuringMigration {
     const json = super.toJson();
@@ -64,6 +63,7 @@ export class VarRename extends VarBase {
 
   /**
    * Decode the JSON event.
+   *
    * @param json JSON representation.
    */
   override fromJson(json: AnyDuringMigration) {
@@ -74,6 +74,7 @@ export class VarRename extends VarBase {
 
   /**
    * Run a variable rename event.
+   *
    * @param forward True if run forward, false if run backward (undo).
    */
   override run(forward: boolean) {

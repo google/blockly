@@ -5,27 +5,17 @@
  */
 
 /**
- * @fileoverview Field.  Used for editable titles, variables, etc.
- * This is an abstract class that defines the UI on the block.  Actual
- * instances would be FieldTextInput, FieldDropdown, etc.
- */
-
-/**
  * Field.  Used for editable titles, variables, etc.
  * This is an abstract class that defines the UI on the block.  Actual
  * instances would be FieldTextInput, FieldDropdown, etc.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Field');
 
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-// import './shortcut_registry.js';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_block_change.js';
-// Unused import preserved for side-effects. Remove if unneeded.
-// import './gesture.js';
 
 import type {Block} from './block.js';
 import type {BlockSvg} from './block_svg.js';
@@ -58,6 +48,7 @@ import * as Xml from './xml.js';
 
 /**
  * Abstract class for an editable field.
+ *
  * @alias Blockly.Field
  */
 export abstract class Field implements IASTNodeLocationSvg,
@@ -140,6 +131,7 @@ export abstract class Field implements IASTNodeLocationSvg,
 
   /**
    * Has this field been disposed of?
+   *
    * @internal
    */
   disposed = false;
@@ -169,12 +161,14 @@ export abstract class Field implements IASTNodeLocationSvg,
 
   /**
    * The prefix field.
+   *
    * @internal
    */
   prefixField: string|null = null;
 
   /**
    * The suffix field.
+   *
    * @internal
    */
   suffixField: string|null = null;
@@ -233,6 +227,7 @@ export abstract class Field implements IASTNodeLocationSvg,
 
   /**
    * Process the configuration map passed to the field.
+   *
    * @param config A map of options used to configure the field. See the
    *     individual field's documentation for a list of properties this
    *     parameter supports.
@@ -247,6 +242,7 @@ export abstract class Field implements IASTNodeLocationSvg,
 
   /**
    * Attach this field to a block.
+   *
    * @param block The block containing this field.
    */
   setSourceBlock(block: Block) {
@@ -258,7 +254,8 @@ export abstract class Field implements IASTNodeLocationSvg,
 
   /**
    * Get the renderer constant provider.
-   * @return The renderer constant provider.
+   *
+   * @returns The renderer constant provider.
    */
   getConstants(): ConstantProvider|null {
     if (!this.constants_ && this.sourceBlock_ && !this.sourceBlock_.disposed &&
@@ -272,7 +269,8 @@ export abstract class Field implements IASTNodeLocationSvg,
 
   /**
    * Get the block this field is attached to.
-   * @return The block containing this field.
+   *
+   * @returns The block containing this field.
    */
   getSourceBlock(): Block {
     return this.sourceBlock_;
@@ -281,6 +279,7 @@ export abstract class Field implements IASTNodeLocationSvg,
   /**
    * Initialize everything to render this field. Override
    * methods initModel and initView rather than this method.
+   *
    * @final
    * @internal
    */
@@ -304,6 +303,7 @@ export abstract class Field implements IASTNodeLocationSvg,
 
   /**
    * Create the block UI for this field.
+   *
    * @internal
    */
   initView() {
@@ -314,6 +314,7 @@ export abstract class Field implements IASTNodeLocationSvg,
   /**
    * Initializes the model of the field after it has been installed on a block.
    * No-op by default.
+   *
    * @internal
    */
   initModel() {}
@@ -368,6 +369,7 @@ export abstract class Field implements IASTNodeLocationSvg,
   /**
    * Sets the field's value based on the given XML element. Should only be
    * called by Blockly.Xml.
+   *
    * @param fieldElement The element containing info about the field's state.
    * @internal
    */
@@ -377,9 +379,10 @@ export abstract class Field implements IASTNodeLocationSvg,
 
   /**
    * Serializes this field's value to XML. Should only be called by Blockly.Xml.
+   *
    * @param fieldElement The element to populate with info about the field's
    *     state.
-   * @return The element containing info about the field's state.
+   * @returns The element containing info about the field's state.
    * @internal
    */
   toXml(fieldElement: Element): Element {
@@ -390,10 +393,11 @@ export abstract class Field implements IASTNodeLocationSvg,
   /**
    * Saves this fields value as something which can be serialized to JSON.
    * Should only be called by the serialization system.
+   *
    * @param _doFullSerialization If true, this signals to the field that if it
    *     normally just saves a reference to some state (eg variable fields) it
    *     should instead serialize the full state of the thing being referenced.
-   * @return JSON serializable state.
+   * @returns JSON serializable state.
    * @internal
    */
   saveState(_doFullSerialization?: boolean): AnyDuringMigration {
@@ -407,6 +411,7 @@ export abstract class Field implements IASTNodeLocationSvg,
   /**
    * Sets the field's state based on the given state value. Should only be
    * called by the serialization system.
+   *
    * @param state The state we want to apply to the field.
    * @internal
    */
@@ -421,9 +426,10 @@ export abstract class Field implements IASTNodeLocationSvg,
    * Returns a stringified version of the XML state, if it should be used.
    * Otherwise this returns null, to signal the field should use its own
    * serialization.
+   *
    * @param callingClass The class calling this method.
    *     Used to see if `this` has overridden any relevant hooks.
-   * @return The stringified version of the XML state, or null.
+   * @returns The stringified version of the XML state, or null.
    */
   protected saveLegacyState(callingClass: AnyDuringMigration): string|null {
     if (callingClass.prototype.saveState === this.saveState &&
@@ -442,10 +448,11 @@ export abstract class Field implements IASTNodeLocationSvg,
   /**
    * Loads the given state using either the old XML hooks, if they should be
    * used. Returns true to indicate loading has been handled, false otherwise.
+   *
    * @param callingClass The class calling this method.
    *     Used to see if `this` has overridden any relevant hooks.
    * @param state The state to apply to the field.
-   * @return Whether the state was applied or not.
+   * @returns Whether the state was applied or not.
    */
   loadLegacyState(callingClass: AnyDuringMigration, state: AnyDuringMigration):
       boolean {
@@ -461,6 +468,7 @@ export abstract class Field implements IASTNodeLocationSvg,
 
   /**
    * Dispose of all DOM objects and events belonging to this editable field.
+   *
    * @internal
    */
   dispose() {
@@ -497,6 +505,7 @@ export abstract class Field implements IASTNodeLocationSvg,
   /**
    * Set whether this field's value can be changed using the editor when the
    *     source block is editable.
+   *
    * @param enabled True if enabled.
    */
   setEnabled(enabled: boolean) {
@@ -507,7 +516,8 @@ export abstract class Field implements IASTNodeLocationSvg,
   /**
    * Check whether this field's value can be changed using the editor when the
    *     source block is editable.
-   * @return Whether this field is enabled.
+   *
+   * @returns Whether this field is enabled.
    */
   isEnabled(): boolean {
     return this.enabled_;
@@ -515,7 +525,8 @@ export abstract class Field implements IASTNodeLocationSvg,
 
   /**
    * Check whether this field defines the showEditor_ function.
-   * @return Whether this field is clickable.
+   *
+   * @returns Whether this field is clickable.
    */
   isClickable(): boolean {
     return this.enabled_ && !!this.sourceBlock_ &&
@@ -527,7 +538,8 @@ export abstract class Field implements IASTNodeLocationSvg,
    * Check whether this field is currently editable.  Some fields are never
    * EDITABLE (e.g. text labels). Other fields may be EDITABLE but may exist on
    * non-editable blocks or be currently disabled.
-   * @return Whether this field is currently enabled, editable and on an
+   *
+   * @returns Whether this field is currently enabled, editable and on an
    *     editable block.
    */
   isCurrentlyEditable(): boolean {
@@ -538,7 +550,8 @@ export abstract class Field implements IASTNodeLocationSvg,
   /**
    * Check whether this field should be serialized by the XML renderer.
    * Handles the logic for backwards compatibility and incongruous states.
-   * @return Whether this field should be serialized or not.
+   *
+   * @returns Whether this field should be serialized or not.
    */
   isSerializable(): boolean {
     let isSerializable = false;
@@ -558,7 +571,8 @@ export abstract class Field implements IASTNodeLocationSvg,
 
   /**
    * Gets whether this editable field is visible or not.
-   * @return True if visible.
+   *
+   * @returns True if visible.
    */
   isVisible(): boolean {
     return this.visible_;
@@ -567,6 +581,7 @@ export abstract class Field implements IASTNodeLocationSvg,
   /**
    * Sets whether this editable field is visible or not. Should only be called
    * by input.setVisible.
+   *
    * @param visible True if visible.
    * @internal
    */
@@ -602,7 +617,8 @@ export abstract class Field implements IASTNodeLocationSvg,
 
   /**
    * Gets the validation function for editable fields, or null if not set.
-   * @return Validation function, or null.
+   *
+   * @returns Validation function, or null.
    */
   getValidator(): Function|null {
     return this.validator_;
@@ -611,7 +627,8 @@ export abstract class Field implements IASTNodeLocationSvg,
   /**
    * Gets the group element for this editable field.
    * Used for measuring the size and for positioning.
-   * @return The group element.
+   *
+   * @returns The group element.
    */
   getSvgRoot(): SVGGElement {
     return this.fieldGroup_;
@@ -620,6 +637,7 @@ export abstract class Field implements IASTNodeLocationSvg,
   /**
    * Updates the field to match the colour/style of the block. Should only be
    * called by BlockSvg.applyColour().
+   *
    * @internal
    */
   applyColour() {}
@@ -641,6 +659,7 @@ export abstract class Field implements IASTNodeLocationSvg,
   /**
    * Calls showEditor_ when the field is clicked if the field is clickable.
    * Do not override.
+   *
    * @param opt_e Optional mouse event that triggered the field to open, or
    *     undefined if triggered programmatically.
    * @final
@@ -655,6 +674,7 @@ export abstract class Field implements IASTNodeLocationSvg,
   /**
    * A developer hook to create an editor for the field. This is no-op by
    * default, and must be overriden to create an editor.
+   *
    * @param _e Optional mouse event that triggered the field to open, or
    *     undefined if triggered programmatically.
    */
@@ -663,6 +683,7 @@ export abstract class Field implements IASTNodeLocationSvg,
 
   /**
    * Updates the size of the field based on the text.
+   *
    * @param opt_margin margin to use when positioning the text element.
    */
   protected updateSize_(opt_margin?: number) {
@@ -694,6 +715,7 @@ export abstract class Field implements IASTNodeLocationSvg,
   /**
    * Position a field's text element after a size change.  This handles both LTR
    * and RTL positioning.
+   *
    * @param xOffset x offset to use when positioning the text element.
    * @param contentWidth The content width.
    */
@@ -749,7 +771,8 @@ export abstract class Field implements IASTNodeLocationSvg,
    * Returns the height and width of the field.
    *
    * This should *in general* be the only place render_ gets called from.
-   * @return Height and width.
+   *
+   * @returns Height and width.
    */
   getSize(): Size {
     if (!this.isVisible()) {
@@ -773,7 +796,8 @@ export abstract class Field implements IASTNodeLocationSvg,
   /**
    * Returns the bounding box of the rendered field, accounting for workspace
    * scaling.
-   * @return An object with top, bottom, left, and right in pixels relative to
+   *
+   * @returns An object with top, bottom, left, and right in pixels relative to
    *     the top left corner of the page (window coordinates).
    * @internal
    */
@@ -784,25 +808,19 @@ export abstract class Field implements IASTNodeLocationSvg,
     if (!this.borderRect_) {
       // Browsers are inconsistent in what they return for a bounding box.
       // - Webkit / Blink: fill-box / object bounding box
-      // - Gecko / Triden / EdgeHTML: stroke-box
+      // - Gecko: stroke-box
       const bBox = (this.sourceBlock_ as BlockSvg).getHeightWidth();
       const scale = (this.sourceBlock_.workspace as WorkspaceSvg).scale;
       xy = this.getAbsoluteXY_();
-      scaledWidth = bBox.width * scale;
-      scaledHeight = bBox.height * scale;
+      scaledWidth = (bBox.width + 1) * scale;
+      scaledHeight = (bBox.height + 1) * scale;
 
       if (userAgent.GECKO) {
         xy.x += 1.5 * scale;
         xy.y += 1.5 * scale;
-        scaledWidth += 1 * scale;
-        scaledHeight += 1 * scale;
       } else {
-        if (!userAgent.EDGE && !userAgent.IE) {
-          xy.x -= 0.5 * scale;
-          xy.y -= 0.5 * scale;
-        }
-        scaledWidth += 1 * scale;
-        scaledHeight += 1 * scale;
+        xy.x -= 0.5 * scale;
+        xy.y -= 0.5 * scale;
       }
     } else {
       const bBox = this.borderRect_.getBoundingClientRect();
@@ -816,7 +834,8 @@ export abstract class Field implements IASTNodeLocationSvg,
   /**
    * Get the text from this field to display on the block. May differ from
    * ``getText`` due to ellipsis, and other formatting.
-   * @return Text to display.
+   *
+   * @returns Text to display.
    */
   protected getDisplayText_(): string {
     let text = this.getText();
@@ -841,7 +860,8 @@ export abstract class Field implements IASTNodeLocationSvg,
    * Get the text from this field.
    * Override getText_ to provide a different behavior than simply casting the
    * value to a string.
-   * @return Current text.
+   *
+   * @returns Current text.
    * @final
    */
   getText(): string {
@@ -859,7 +879,8 @@ export abstract class Field implements IASTNodeLocationSvg,
    * Override if the text representation of the value of this field
    * is not just a string cast of its value.
    * Return null to resort to a string cast.
-   * @return Current text or null.
+   *
+   * @returns Current text or null.
    */
   protected getText_(): string|null {
     return null;
@@ -870,6 +891,7 @@ export abstract class Field implements IASTNodeLocationSvg,
    * rerender this field and adjust for any sizing changes.
    * Other fields on the same block will not rerender, because their sizes have
    * already been recorded.
+   *
    * @internal
    */
   markDirty() {
@@ -884,6 +906,7 @@ export abstract class Field implements IASTNodeLocationSvg,
    * rerender this field and adjust for any sizing changes.
    * Other fields on the same block will not rerender, because their sizes have
    * already been recorded.
+   *
    * @internal
    */
   forceRerender() {
@@ -899,6 +922,7 @@ export abstract class Field implements IASTNodeLocationSvg,
    * Used to change the value of the field. Handles validation and events.
    * Subclasses should override doClassValidation_ and doValueUpdate_ rather
    * than this method.
+   *
    * @param newValue New value.
    * @final
    */
@@ -943,8 +967,8 @@ export abstract class Field implements IASTNodeLocationSvg,
 
     this.doValueUpdate_(newValue);
     if (source && eventUtils.isEnabled()) {
-      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))!
-                      (source, 'field', this.name || null, oldValue, newValue));
+      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+          source, 'field', this.name || null, oldValue, newValue));
     }
     if (this.isDirty_) {
       this.forceRerender();
@@ -954,9 +978,10 @@ export abstract class Field implements IASTNodeLocationSvg,
 
   /**
    * Process the result of validation.
+   *
    * @param newValue New value.
    * @param validatedValue Validated value.
-   * @return New value, or an Error object.
+   * @returns New value, or an Error object.
    */
   private processValidation_(
       newValue: AnyDuringMigration,
@@ -976,7 +1001,8 @@ export abstract class Field implements IASTNodeLocationSvg,
 
   /**
    * Get the current value of the field.
-   * @return Current value.
+   *
+   * @returns Current value.
    */
   getValue(): AnyDuringMigration {
     return this.value_;
@@ -985,8 +1011,9 @@ export abstract class Field implements IASTNodeLocationSvg,
   /**
    * Used to validate a value. Returns input by default. Can be overridden by
    * subclasses, see FieldDropdown.
+   *
    * @param opt_newValue The value to be validated.
-   * @return The validated value, same as input by default.
+   * @returns The validated value, same as input by default.
    */
   protected doClassValidation_(opt_newValue?: AnyDuringMigration):
       AnyDuringMigration {
@@ -999,6 +1026,7 @@ export abstract class Field implements IASTNodeLocationSvg,
   /**
    * Used to update the value of a field. Can be overridden by subclasses to do
    * custom storage of values/updating of external things.
+   *
    * @param newValue The value to be saved.
    */
   protected doValueUpdate_(newValue: AnyDuringMigration) {
@@ -1010,6 +1038,7 @@ export abstract class Field implements IASTNodeLocationSvg,
    * Used to notify the field an invalid value was input. Can be overridden by
    * subclasses, see FieldTextInput.
    * No-op by default.
+   *
    * @param _invalidValue The input value that was determined to be invalid.
    */
   protected doValueInvalid_(_invalidValue: AnyDuringMigration) {}
@@ -1017,6 +1046,7 @@ export abstract class Field implements IASTNodeLocationSvg,
 
   /**
    * Handle a mouse down event on a field.
+   *
    * @param e Mouse down event.
    */
   protected onMouseDown_(e: Event) {
@@ -1031,6 +1061,7 @@ export abstract class Field implements IASTNodeLocationSvg,
 
   /**
    * Sets the tooltip for this field.
+   *
    * @param newTip The text for the tooltip, a function that returns the text
    *     for the tooltip, a parent object whose tooltip will be used, or null to
    *     display the tooltip of the parent block. To not display a tooltip pass
@@ -1051,7 +1082,8 @@ export abstract class Field implements IASTNodeLocationSvg,
 
   /**
    * Returns the tooltip text for this field.
-   * @return The tooltip text for this field.
+   *
+   * @returns The tooltip text for this field.
    */
   getTooltip(): string {
     const clickTarget = this.getClickTarget_();
@@ -1066,7 +1098,8 @@ export abstract class Field implements IASTNodeLocationSvg,
    * The element to bind the click handler to. If not set explicitly, defaults
    * to the SVG root of the field. When this element is
    * clicked on an editable field, the editor will open.
-   * @return Element to bind click handler to.
+   *
+   * @returns Element to bind click handler to.
    */
   protected getClickTarget_(): Element {
     return this.clickTarget_ || this.getSvgRoot();
@@ -1075,7 +1108,8 @@ export abstract class Field implements IASTNodeLocationSvg,
   /**
    * Return the absolute coordinates of the top-left corner of this field.
    * The origin (0,0) is the top-left corner of the page body.
-   * @return Object with .x and .y properties.
+   *
+   * @returns Object with .x and .y properties.
    */
   protected getAbsoluteXY_(): Coordinate {
     return style.getPageOffset(this.getClickTarget_() as SVGRectElement);
@@ -1085,7 +1119,8 @@ export abstract class Field implements IASTNodeLocationSvg,
    * Whether this field references any Blockly variables.  If true it may need
    * to be handled differently during serialization and deserialization.
    * Subclasses may override this.
-   * @return True if this field has any variable references.
+   *
+   * @returns True if this field has any variable references.
    * @internal
    */
   referencesVariables(): boolean {
@@ -1095,6 +1130,7 @@ export abstract class Field implements IASTNodeLocationSvg,
   /**
    * Refresh the variable name referenced by this field if this field references
    * variables.
+   *
    * @internal
    */
   refreshVariableName() {}
@@ -1103,7 +1139,8 @@ export abstract class Field implements IASTNodeLocationSvg,
   /**
    * Search through the list of inputs and their fields in order to find the
    * parent input of a field.
-   * @return The input that the field belongs to.
+   *
+   * @returns The input that the field belongs to.
    * @internal
    */
   getParentInput(): Input {
@@ -1128,7 +1165,8 @@ export abstract class Field implements IASTNodeLocationSvg,
 
   /**
    * Returns whether or not we should flip the field in RTL.
-   * @return True if we should flip in RTL.
+   *
+   * @returns True if we should flip in RTL.
    */
   getFlipRtl(): boolean {
     return false;
@@ -1136,7 +1174,8 @@ export abstract class Field implements IASTNodeLocationSvg,
 
   /**
    * Returns whether or not the field is tab navigable.
-   * @return True if the field is tab navigable.
+   *
+   * @returns True if the field is tab navigable.
    */
   isTabNavigable(): boolean {
     return false;
@@ -1144,8 +1183,9 @@ export abstract class Field implements IASTNodeLocationSvg,
 
   /**
    * Handles the given keyboard shortcut.
+   *
    * @param _shortcut The shortcut to be handled.
-   * @return True if the shortcut has been handled, false otherwise.
+   * @returns True if the shortcut has been handled, false otherwise.
    */
   onShortcut(_shortcut: KeyboardShortcut): boolean {
     return false;
@@ -1153,6 +1193,7 @@ export abstract class Field implements IASTNodeLocationSvg,
 
   /**
    * Add the cursor SVG to this fields SVG group.
+   *
    * @param cursorSvg The SVG root of the cursor to be added to the field group.
    * @internal
    */
@@ -1170,6 +1211,7 @@ export abstract class Field implements IASTNodeLocationSvg,
 
   /**
    * Add the marker SVG to this fields SVG group.
+   *
    * @param markerSvg The SVG root of the marker to be added to the field group.
    * @internal
    */

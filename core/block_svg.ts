@@ -5,23 +5,15 @@
  */
 
 /**
- * @fileoverview Methods for graphically rendering a block as SVG.
- */
-
-/**
  * Methods for graphically rendering a block as SVG.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.BlockSvg');
 
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-// import './theme.js';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_selected.js';
-// Unused import preserved for side-effects. Remove if unneeded.
-// import './touch.js';
 
 import {Block} from './block.js';
 import * as blockAnimations from './block_animations.js';
@@ -69,6 +61,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 /**
  * Class for a block's SVG representation.
  * Not normally called directly, workspace.newBlock() is preferred.
+ *
  * @alias Blockly.BlockSvg
  */
 export class BlockSvg extends Block implements IASTNodeLocationSvg,
@@ -95,6 +88,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * An property used internally to reference the block's rendering debugger.
+   *
    * @internal
    */
   renderingDebugger: BlockRenderingDebug|null = null;
@@ -115,10 +109,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * Map from IDs for warnings text to PIDs of functions to apply them.
    * Used to be able to maintain multiple warnings.
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type '{ [key:
-  // string]: number; }'.
-  private warningTextDb_: {[key: string]: AnyDuringMigration} =
-      null as AnyDuringMigration;
+  private warningTextDb = new Map<string, ReturnType<typeof setTimeout>>();
 
   /** Block's mutator icon (if any). */
   mutator: Mutator|null = null;
@@ -248,7 +239,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Get the secondary colour of a block.
-   * @return #RRGGBB string.
+   *
+   * @returns #RRGGBB string.
    */
   getColourSecondary(): string|null {
     return this.style.colourSecondary;
@@ -256,7 +248,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Get the tertiary colour of a block.
-   * @return #RRGGBB string.
+   *
+   * @returns #RRGGBB string.
    */
   getColourTertiary(): string|null {
     return this.style.colourTertiary;
@@ -286,8 +279,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
         eventUtils.enable();
       }
     }
-    const event = new (eventUtils.get(eventUtils.SELECTED))!
-        (oldId, this.id, this.workspace.id);
+    const event = new (eventUtils.get(eventUtils.SELECTED))(
+        oldId, this.id, this.workspace.id);
     eventUtils.fire(event);
     common.setSelected(this);
     this.addSelect();
@@ -301,8 +294,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     if (common.getSelected() !== this) {
       return;
     }
-    const event = new (eventUtils.get(eventUtils.SELECTED))!
-        (this.id, null, this.workspace.id);
+    const event = new (eventUtils.get(eventUtils.SELECTED))(
+        this.id, null, this.workspace.id);
     event.workspaceId = this.workspace.id;
     eventUtils.fire(event);
     common.setSelected(null);
@@ -311,7 +304,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Returns a list of mutator, comment, and warning icons.
-   * @return List of icons.
+   *
+   * @returns List of icons.
    */
   getIcons(): Icon[] {
     const icons = [];
@@ -329,6 +323,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Sets the parent of this block to be a new block or null.
+   *
    * @param newParent New parent block.
    * @internal
    */
@@ -374,7 +369,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * If the block is on the workspace, (0, 0) is the origin of the workspace
    * coordinate system.
    * This does not change with workspace scale.
-   * @return Object with .x and .y properties in workspace coordinates.
+   *
+   * @returns Object with .x and .y properties in workspace coordinates.
    */
   override getRelativeToSurfaceXY(): Coordinate {
     let x = 0;
@@ -410,6 +406,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Move a block by a relative offset.
+   *
    * @param dx Horizontal offset in workspace units.
    * @param dy Vertical offset in workspace units.
    */
@@ -435,6 +432,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   /**
    * Transforms a block by setting the translation on the transform attribute
    * of the block's SVG.
+   *
    * @param x The x coordinate of the translation in workspace units.
    * @param y The y coordinate of the translation in workspace units.
    */
@@ -447,6 +445,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * Move this block to its workspace's drag surface, accounting for
    * positioning. Generally should be called at the same time as
    * setDragging_(true). Does nothing if useDragSurface_ is false.
+   *
    * @internal
    */
   moveToDragSurface() {
@@ -469,6 +468,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Move a block to a position.
+   *
    * @param xy The position to move to in workspace units.
    */
   moveTo(xy: Coordinate) {
@@ -480,6 +480,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * Move this block back to the workspace block canvas.
    * Generally should be called at the same time as setDragging_(false).
    * Does nothing if useDragSurface_ is false.
+   *
    * @param newXY The position the block should take on on the workspace canvas,
    *     in workspace coordinates.
    * @internal
@@ -498,6 +499,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * Move this block during a drag, taking into account whether we are using a
    * drag surface to translate blocks.
    * This block must be a top-level block.
+   *
    * @param newLoc The location to translate to, in workspace coordinates.
    * @internal
    */
@@ -530,7 +532,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       return;  // Deleted block.
     }
     if (this.workspace.isDragging()) {
-      return  // Don't bump blocks during a drag.;
+      return;  // Don't bump blocks during a drag.;
     }
 
     if (this.getParent()) {
@@ -559,7 +561,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * Returns the coordinates of a bounding box describing the dimensions of this
    * block and any blocks stacked below it.
    * Coordinate system: workspace coordinates.
-   * @return Object with coordinates of the bounding box.
+   *
+   * @returns Object with coordinates of the bounding box.
    */
   getBoundingRectangle(): Rect {
     const blockXY = this.getRelativeToSurfaceXY();
@@ -589,6 +592,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Set whether the block is collapsed or not.
+   *
    * @param collapsed True if collapsed.
    */
   override setCollapsed(collapsed: boolean) {
@@ -647,6 +651,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Open the next (or previous) FieldTextInput.
+   *
    * @param start Current field.
    * @param forward If true go forward, otherwise backward.
    */
@@ -675,6 +680,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Handle a mouse-down on an SVG block.
+   *
    * @param e Mouse down event or touch start event.
    */
   private onMouseDown_(e: Event) {
@@ -686,6 +692,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Load the block's help page in a new window.
+   *
    * @internal
    */
   showHelp() {
@@ -698,7 +705,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Generate the context menu for this block.
-   * @return Context menu options or null if no menu.
+   *
+   * @returns Context menu options or null if no menu.
    */
   protected generateContextMenu():
       Array<ContextMenuOption|LegacyContextMenuOption>|null {
@@ -721,6 +729,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Show the context menu for this block.
+   *
    * @param e Mouse event.
    * @internal
    */
@@ -738,6 +747,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   /**
    * Move the connections for this block and all blocks attached under it.
    * Also update any attached bubbles.
+   *
    * @param dx Horizontal offset from current location, in workspace units.
    * @param dy Vertical offset from current location, in workspace units.
    * @internal
@@ -766,6 +776,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   /**
    * Recursively adds or removes the dragging class to this node and its
    * children.
+   *
    * @param adding True if adding, false if removing.
    * @internal
    */
@@ -788,6 +799,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Set whether this block is movable or not.
+   *
    * @param movable True if movable.
    */
   override setMovable(movable: boolean) {
@@ -797,6 +809,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Set whether this block is editable or not.
+   *
    * @param editable True if editable.
    */
   override setEditable(editable: boolean) {
@@ -809,6 +822,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Sets whether this block is a shadow block or not.
+   *
    * @param shadow True if a shadow.
    * @internal
    */
@@ -820,6 +834,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   /**
    * Set whether this block is an insertion marker block or not.
    * Once set this cannot be unset.
+   *
    * @param insertionMarker True if an insertion marker.
    * @internal
    */
@@ -837,7 +852,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Return the root node of the SVG or null if none exists.
-   * @return The root SVG node (probably a group).
+   *
+   * @returns The root SVG node (probably a group).
    */
   getSvgRoot(): SVGGElement {
     return this.svgGroup_;
@@ -845,6 +861,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Dispose of this block.
+   *
    * @param healStack If true, then try to heal any gap by connecting the next
    *     statement with the previous statement.  Otherwise, dispose of all
    *     children of this block.
@@ -880,14 +897,10 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     this.rendered = false;
 
     // Clear pending warnings.
-    if (this.warningTextDb_) {
-      for (const n in this.warningTextDb_) {
-        clearTimeout(this.warningTextDb_[n]);
-      }
-      // AnyDuringMigration because:  Type 'null' is not assignable to type '{
-      // [key: string]: number; }'.
-      this.warningTextDb_ = null as AnyDuringMigration;
+    for (const n of this.warningTextDb.values()) {
+      clearTimeout(n);
     }
+    this.warningTextDb.clear();
 
     const icons = this.getIcons();
     for (let i = 0; i < icons.length; i++) {
@@ -938,7 +951,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Encode a block for copying.
-   * @return Copy metadata, or null if the block is an insertion marker.
+   *
+   * @returns Copy metadata, or null if the block is an insertion marker.
    * @internal
    */
   toCopyData(): CopyData|null {
@@ -960,6 +974,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Updates the colour of the block to match the block's state.
+   *
    * @internal
    */
   applyColour() {
@@ -980,6 +995,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   /**
    * Updates the color of the block (and children) to match the current disabled
    * state.
+   *
    * @internal
    */
   updateDisabled() {
@@ -998,7 +1014,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   /**
    * Get the comment icon attached to this block, or null if the block has no
    * comment.
-   * @return The comment icon attached to this block, or null.
+   *
+   * @returns The comment icon attached to this block, or null.
    */
   getCommentIcon(): Comment|null {
     return this.commentIcon_;
@@ -1006,6 +1023,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Set this block's comment text.
+   *
    * @param text The text, or null to delete.
    */
   override setCommentText(text: string|null) {
@@ -1040,38 +1058,34 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Set this block's warning text.
+   *
    * @param text The text, or null to delete.
    * @param opt_id An optional ID for the warning text to be able to maintain
    *     multiple warnings.
    */
   override setWarningText(text: string|null, opt_id?: string) {
-    if (!this.warningTextDb_) {
-      // Create a database of warning PIDs.
-      // Only runs once per block (and only those with warnings).
-      this.warningTextDb_ = Object.create(null);
-    }
     const id = opt_id || '';
     if (!id) {
       // Kill all previous pending processes, this edit supersedes them all.
-      for (const n of Object.keys(this.warningTextDb_)) {
-        clearTimeout(this.warningTextDb_[n]);
-        delete this.warningTextDb_[n];
+      for (const timeout of this.warningTextDb.values()) {
+        clearTimeout(timeout);
       }
-    } else if (this.warningTextDb_[id]) {
+      this.warningTextDb.clear();
+    } else if (this.warningTextDb.has(id)) {
       // Only queue up the latest change.  Kill any earlier pending process.
-      clearTimeout(this.warningTextDb_[id]);
-      delete this.warningTextDb_[id];
+      clearTimeout(this.warningTextDb.get(id)!);
+      this.warningTextDb.delete(id);
     }
     if (this.workspace.isDragging()) {
       // Don't change the warning text during a drag.
       // Wait until the drag finishes.
-      const thisBlock = this;
-      this.warningTextDb_[id] = setTimeout(function() {
-        if (!thisBlock.disposed) {  // Check block wasn't deleted.
-          delete thisBlock.warningTextDb_[id];
-          thisBlock.setWarningText(text, id);
-        }
-      }, 100);
+      this.warningTextDb.set(
+          id, setTimeout(() => {
+            if (!this.disposed) {  // Check block wasn't deleted.
+              this.warningTextDb.delete(id);
+              this.setWarningText(text, id);
+            }
+          }, 100));
       return;
     }
     if (this.isInFlyout) {
@@ -1123,6 +1137,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Give this block a mutator dialog.
+   *
    * @param mutator A mutator dialog instance or null to remove.
    */
   override setMutator(mutator: Mutator|null) {
@@ -1143,6 +1158,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Set whether the block is enabled or not.
+   *
    * @param enabled True if enabled.
    */
   override setEnabled(enabled: boolean) {
@@ -1157,6 +1173,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   /**
    * Set whether the block is highlighted or not.  Block highlighting is
    * often used to visually mark blocks currently being executed.
+   *
    * @param highlighted True if highlighted.
    */
   setHighlighted(highlighted: boolean) {
@@ -1169,6 +1186,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   /**
    * Adds the visual "select" effect to the block, but does not actually select
    * it or fire an event.
+   *
    * @see BlockSvg#select
    */
   addSelect() {
@@ -1178,6 +1196,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   /**
    * Removes the visual "select" effect from the block, but does not actually
    * unselect it or fire an event.
+   *
    * @see BlockSvg#unselect
    */
   removeSelect() {
@@ -1186,6 +1205,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Update the cursor over this block by adding or removing a class.
+   *
    * @param enable True if the delete cursor should be shown, false otherwise.
    * @internal
    */
@@ -1199,7 +1219,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Get the colour of a block.
-   * @return #RRGGBB string.
+   *
+   * @returns #RRGGBB string.
    */
   override getColour(): string {
     return this.style.colourPrimary;
@@ -1207,6 +1228,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Change the colour of a block.
+   *
    * @param colour HSV hue value, or #RRGGBB string.
    */
   override setColour(colour: number|string) {
@@ -1224,6 +1246,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Set the style and colour values of a block.
+   *
    * @param blockStyleName Name of the block style.
    * @throws {Error} if the block style does not exist.
    */
@@ -1251,9 +1274,11 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * <g> tags do not respect z-index so SVG renders them in the
    * order that they are in the DOM.  By placing this block first within the
    * block group's <g>, it will render on top of any other blocks.
+   *
    * @internal
    */
   bringToFront() {
+    /* eslint-disable-next-line @typescript-eslint/no-this-alias */
     let block = this;
     do {
       const root = block.getSvgRoot();
@@ -1271,6 +1296,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Set whether this block can chain onto the bottom of another block.
+   *
    * @param newBoolean True if there can be a previous statement.
    * @param opt_check Statement type or list of statement types.  Null/undefined
    *     if any type could be connected.
@@ -1287,6 +1313,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Set whether another block can chain onto the bottom of this block.
+   *
    * @param newBoolean True if there can be a next statement.
    * @param opt_check Statement type or list of statement types.  Null/undefined
    *     if any type could be connected.
@@ -1303,6 +1330,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Set whether this block returns a value.
+   *
    * @param newBoolean True if there is an output.
    * @param opt_check Returned type or list of returned types.  Null or
    *     undefined if any type could be returned (e.g. variable get).
@@ -1318,6 +1346,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Set whether value inputs are arranged horizontally or vertically.
+   *
    * @param newBoolean True if inputs are horizontal.
    */
   override setInputsInline(newBoolean: boolean) {
@@ -1331,9 +1360,10 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Remove an input from this block.
+   *
    * @param name The name of the input.
    * @param opt_quiet True to prevent error if input is not present.
-   * @return True if operation succeeds, false if input is not present and
+   * @returns True if operation succeeds, false if input is not present and
    *     opt_quiet is true
    * @throws {Error} if the input is not present and opt_quiet is not true.
    */
@@ -1351,6 +1381,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Move a numbered input to a different location on this block.
+   *
    * @param inputIndex Index of the input to move.
    * @param refIndex Index of input that should be after the moved input.
    */
@@ -1366,10 +1397,11 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Add a value input, statement input or local variable to this block.
+   *
    * @param type One of Blockly.inputTypes.
    * @param name Language-neutral identifier which may used to find this input
    *     again.  Should be unique to this block.
-   * @return The input object created.
+   * @returns The input object created.
    */
   protected override appendInput_(type: number, name: string): Input {
     const input = super.appendInput_(type, name);
@@ -1388,6 +1420,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * Used by the deserializer to be more efficient. Setting a connection's
    * tracked_ value to false keeps it from adding itself to the db when it
    * gets its first moveTo call, saving expensive ops for later.
+   *
    * @param track If true, start tracking. If false, stop tracking.
    * @internal
    */
@@ -1429,10 +1462,11 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Returns connections originating from this block.
+   *
    * @param all If true, return all connections even hidden ones.
    *     Otherwise, for a non-rendered block return an empty list, and for a
    * collapsed block don't return inputs connections.
-   * @return Array of connections.
+   * @returns Array of connections.
    * @internal
    */
   override getConnections_(all: boolean): RenderedConnection[] {
@@ -1461,10 +1495,11 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   /**
    * Walks down a stack of blocks and finds the last next connection on the
    * stack.
+   *
    * @param ignoreShadows If true,the last connection on a non-shadow block will
    *     be returned. If false, this will follow shadows to find the last
    *     connection.
-   * @return The last next connection on the stack, or null.
+   * @returns The last next connection on the stack, or null.
    * @internal
    */
   override lastConnectionInStack(ignoreShadows: boolean): RenderedConnection
@@ -1476,9 +1511,10 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * Find the connection on this block that corresponds to the given connection
    * on the other block.
    * Used to match connections between a block and its insertion marker.
+   *
    * @param otherBlock The other block to match against.
    * @param conn The other connection to match.
-   * @return The matching connection on this block, or null.
+   * @returns The matching connection on this block, or null.
    * @internal
    */
   override getMatchingConnection(otherBlock: Block, conn: Connection):
@@ -1488,8 +1524,9 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Create a connection of the specified type.
+   *
    * @param type The type of the connection to create.
-   * @return A new connection of the specified type.
+   * @returns A new connection of the specified type.
    */
   protected override makeConnection_(type: number): RenderedConnection {
     return new RenderedConnection(this, type);
@@ -1497,7 +1534,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Return the next statement block directly connected to this block.
-   * @return The next statement block or null.
+   *
+   * @returns The next statement block or null.
    */
   override getNextBlock(): BlockSvg|null {
     return super.getNextBlock() as BlockSvg;
@@ -1505,7 +1543,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Returns the block connected to the previous connection.
-   * @return The previous statement block or null.
+   *
+   * @returns The previous statement block or null.
    */
   override getPreviousBlock(): BlockSvg|null {
     return super.getPreviousBlock() as BlockSvg;
@@ -1559,22 +1598,22 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   /**
    * Schedule snapping to grid and bumping neighbours to occur after a brief
    * delay.
+   *
    * @internal
    */
   scheduleSnapAndBump() {
-    const block = this;
     // Ensure that any snap and bump are part of this move's event group.
     const group = eventUtils.getGroup();
 
-    setTimeout(function() {
+    setTimeout(() => {
       eventUtils.setGroup(group);
-      block.snapToGrid();
+      this.snapToGrid();
       eventUtils.setGroup(false);
     }, config.bumpDelay / 2);
 
-    setTimeout(function() {
+    setTimeout(() => {
       eventUtils.setGroup(group);
-      block.bumpNeighbours();
+      this.bumpNeighbours();
       eventUtils.setGroup(false);
     }, config.bumpDelay);
   }
@@ -1583,6 +1622,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * Position a block so that it doesn't move the target block when connected.
    * The block to position is usually either the first block in a dragged stack
    * or an insertion marker.
+   *
    * @param sourceConnection The connection on the moving block's stack.
    * @param targetConnection The connection that should stay stationary as this
    *     block is positioned.
@@ -1603,7 +1643,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   }
 
   /**
-   * @return The first statement connection or null.
+   * @returns The first statement connection or null.
    * @internal
    */
   override getFirstStatementConnection(): RenderedConnection|null {
@@ -1615,8 +1655,9 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * Includes value and statement inputs, as well as any following statement.
    * Excludes any connection on an output tab or any preceding statement.
    * Blocks are optionally sorted by position; top to bottom.
+   *
    * @param ordered Sort the list if true.
-   * @return Array of blocks.
+   * @returns Array of blocks.
    */
   override getChildren(ordered: boolean): BlockSvg[] {
     return super.getChildren(ordered) as BlockSvg[];
@@ -1624,6 +1665,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Lays out and reflows a block based on its contents and settings.
+   *
    * @param opt_bubble If false, just render this block.
    *   If true, also render block's parent, grandparent, etc.  Defaults to true.
    */
@@ -1706,6 +1748,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Add the cursor SVG to this block's SVG group.
+   *
    * @param cursorSvg The SVG root of the cursor to be added to the block SVG
    *     group.
    * @internal
@@ -1716,6 +1759,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /**
    * Add the marker SVG to this block's SVG group.
+   *
    * @param markerSvg The SVG root of the marker to be added to the block SVG
    *     group.
    * @internal
@@ -1727,7 +1771,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   /**
    * Returns a bounding box describing the dimensions of this block
    * and any blocks stacked below it.
-   * @return Object with height and width properties in workspace units.
+   *
+   * @returns Object with height and width properties in workspace units.
    * @internal
    */
   getHeightWidth(): {height: number, width: number} {
@@ -1749,6 +1794,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * Visual effect to show that if the dragging block is dropped, this block
    * will be replaced.  If a shadow block, it will disappear.  Otherwise it will
    * bump.
+   *
    * @param add True if highlighting should be added.
    * @internal
    */
@@ -1759,6 +1805,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   /**
    * Visual effect to show that if the dragging block is dropped it will connect
    * to this input.
+   *
    * @param conn The connection on the input to highlight.
    * @param add True if highlighting should be added.
    * @internal

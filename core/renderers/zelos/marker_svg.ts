@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Methods for graphically rendering a marker as SVG.
- */
-
-/**
  * Methods for graphically rendering a marker as SVG.
+ *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -30,6 +27,7 @@ import type {ConstantProvider as ZelosConstantProvider} from './constants.js';
 
 /**
  * Class to draw a marker.
+ *
  * @alias Blockly.zelos.MarkerSvg
  */
 export class MarkerSvg extends BaseMarkerSvg {
@@ -51,6 +49,7 @@ export class MarkerSvg extends BaseMarkerSvg {
 
   /**
    * Position and display the marker for an input or an output connection.
+   *
    * @param curNode The node to draw the marker for.
    */
   private showWithInputOutput_(curNode: ASTNode) {
@@ -73,6 +72,7 @@ export class MarkerSvg extends BaseMarkerSvg {
 
   /**
    * Draw a rectangle around the block.
+   *
    * @param curNode The current node of the marker.
    */
   override showWithBlock_(curNode: ASTNode) {
@@ -89,6 +89,7 @@ export class MarkerSvg extends BaseMarkerSvg {
 
   /**
    * Position the circle we use for input and output connections.
+   *
    * @param x The x position of the circle.
    * @param y The y position of the circle.
    */

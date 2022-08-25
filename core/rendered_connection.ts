@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Components for creating connections between blocks.
- */
-
-/**
  * Components for creating connections between blocks.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -46,6 +43,7 @@ const BUMP_RANDOMNESS = 10;
 
 /**
  * Class for a connection between blocks that may be rendered on screen.
+ *
  * @alias Blockly.RenderedConnection
  */
 export class RenderedConnection extends Connection {
@@ -90,6 +88,7 @@ export class RenderedConnection extends Connection {
   /**
    * Dispose of this connection. Remove it from the database (if it is
    * tracked) and call the super-function to deal with connected blocks.
+   *
    * @internal
    */
   override dispose() {
@@ -101,7 +100,8 @@ export class RenderedConnection extends Connection {
 
   /**
    * Get the source block for this connection.
-   * @return The source block.
+   *
+   * @returns The source block.
    */
   override getSourceBlock(): BlockSvg {
     return super.getSourceBlock() as BlockSvg;
@@ -109,7 +109,8 @@ export class RenderedConnection extends Connection {
 
   /**
    * Returns the block that this connection connects to.
-   * @return The connected block or null if none is connected.
+   *
+   * @returns The connected block or null if none is connected.
    */
   override targetBlock(): BlockSvg|null {
     return super.targetBlock() as BlockSvg;
@@ -118,8 +119,9 @@ export class RenderedConnection extends Connection {
   /**
    * Returns the distance between this connection and another connection in
    * workspace units.
+   *
    * @param otherConnection The other connection to measure the distance to.
-   * @return The distance between connections, in workspace units.
+   * @returns The distance between connections, in workspace units.
    */
   distanceFrom(otherConnection: Connection): number {
     const xDiff = this.x - otherConnection.x;
@@ -130,6 +132,7 @@ export class RenderedConnection extends Connection {
   /**
    * Move the block(s) belonging to the connection to a point where they don't
    * visually interfere with the specified connection.
+   *
    * @param staticConnection The connection to move away from.
    * @internal
    */
@@ -153,6 +156,7 @@ export class RenderedConnection extends Connection {
         return;
       }
       // Swap the connections and move the 'static' connection instead.
+      /* eslint-disable-next-line @typescript-eslint/no-this-alias */
       staticConnection = this;
       reverse = true;
     }
@@ -177,6 +181,7 @@ export class RenderedConnection extends Connection {
 
   /**
    * Change the connection's coordinates.
+   *
    * @param x New absolute x coordinate, in workspace coordinates.
    * @param y New absolute y coordinate, in workspace coordinates.
    */
@@ -194,6 +199,7 @@ export class RenderedConnection extends Connection {
 
   /**
    * Change the connection's coordinates.
+   *
    * @param dx Change to x coordinate, in workspace units.
    * @param dy Change to y coordinate, in workspace units.
    */
@@ -204,6 +210,7 @@ export class RenderedConnection extends Connection {
   /**
    * Move this connection to the location given by its offset within the block
    * and the location of the block's top left corner.
+   *
    * @param blockTL The location of the top left corner of the block, in
    *     workspace coordinates.
    */
@@ -214,6 +221,7 @@ export class RenderedConnection extends Connection {
 
   /**
    * Set the offset of this connection relative to the top left of its block.
+   *
    * @param x The new relative x, in workspace units.
    * @param y The new relative y, in workspace units.
    */
@@ -224,7 +232,8 @@ export class RenderedConnection extends Connection {
 
   /**
    * Get the offset of this connection relative to the top left of its block.
-   * @return The offset of the connection.
+   *
+   * @returns The offset of the connection.
    * @internal
    */
   getOffsetInBlock(): Coordinate {
@@ -233,6 +242,7 @@ export class RenderedConnection extends Connection {
 
   /**
    * Move the blocks on either side of this connection right next to each other.
+   *
    * @internal
    */
   tighten() {
@@ -255,10 +265,11 @@ export class RenderedConnection extends Connection {
   /**
    * Find the closest compatible connection to this connection.
    * All parameters are in workspace units.
+   *
    * @param maxLimit The maximum radius to another connection.
    * @param dxy Offset between this connection's location in the database and
    *     the current location (as a result of dragging).
-   * @return Contains two properties: 'connection' which is either another
+   * @returns Contains two properties: 'connection' which is either another
    *     connection or null, and 'radius' which is the distance.
    */
   closest(maxLimit: number, dxy: Coordinate):
@@ -315,6 +326,7 @@ export class RenderedConnection extends Connection {
 
   /**
    * Set whether this connections is tracked in the database or not.
+   *
    * @param doTracking If true, start tracking. If false, stop tracking.
    * @internal
    */
@@ -346,6 +358,7 @@ export class RenderedConnection extends Connection {
    * collapsed.
    *
    * Also closes down-stream icons/bubbles.
+   *
    * @internal
    */
   stopTrackingAll() {
@@ -372,7 +385,8 @@ export class RenderedConnection extends Connection {
    * Start tracking this connection, as well as all down-stream connections on
    * any block attached to this connection. This happens when a block is
    * expanded.
-   * @return List of blocks to render.
+   *
+   * @returns List of blocks to render.
    */
   startTrackingAll(): Block[] {
     this.setTracking(true);
@@ -400,7 +414,7 @@ export class RenderedConnection extends Connection {
         connections = block.getConnections_(true);
       }
       for (let i = 0; i < connections.length; i++) {
-        renderList.push.apply(renderList, connections[i].startTrackingAll());
+        renderList.push(...connections[i].startTrackingAll());
       }
       if (!renderList.length) {
         // Leaf block.
@@ -414,6 +428,7 @@ export class RenderedConnection extends Connection {
    * Behavior after a connection attempt fails.
    * Bumps this connection away from the other connection. Called when an
    * attempted connection fails.
+   *
    * @param otherConnection Connection that this connection failed to connect
    *     to.
    * @internal
@@ -434,6 +449,7 @@ export class RenderedConnection extends Connection {
 
   /**
    * Disconnect two blocks that are connected by this connection.
+   *
    * @param parentBlock The superior block.
    * @param childBlock The inferior block.
    */
@@ -476,9 +492,10 @@ export class RenderedConnection extends Connection {
   /**
    * Find all nearby compatible connections to this connection.
    * Type checking does not apply, since this function is used for bumping.
+   *
    * @param maxLimit The maximum radius to another connection, in workspace
    *     units.
-   * @return List of connections.
+   * @returns List of connections.
    * @internal
    */
   override neighbours(maxLimit: number): Connection[] {
@@ -488,6 +505,7 @@ export class RenderedConnection extends Connection {
   /**
    * Connect two connections together.  This is the connection on the superior
    * block.  Rerender blocks as needed.
+   *
    * @param childConnection Connection on inferior block.
    */
   protected override connect_(childConnection: Connection) {
@@ -495,8 +513,7 @@ export class RenderedConnection extends Connection {
 
     const renderedChildConnection = childConnection as RenderedConnection;
 
-    const parentConnection = this;
-    const parentBlock = parentConnection.getSourceBlock();
+    const parentBlock = this.getSourceBlock();
     const childBlock = renderedChildConnection.getSourceBlock();
     const parentRendered = parentBlock.rendered;
     const childRendered = childBlock.rendered;
@@ -508,8 +525,8 @@ export class RenderedConnection extends Connection {
       childBlock.updateDisabled();
     }
     if (parentRendered && childRendered) {
-      if (parentConnection.type === ConnectionType.NEXT_STATEMENT ||
-          parentConnection.type === ConnectionType.PREVIOUS_STATEMENT) {
+      if (this.type === ConnectionType.NEXT_STATEMENT ||
+          this.type === ConnectionType.PREVIOUS_STATEMENT) {
         // Child block may need to square off its corners if it is in a stack.
         // Rendering a child will render its parent.
         childBlock.render();

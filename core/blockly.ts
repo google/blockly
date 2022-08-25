@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview The top level namespace used to access the Blockly library.
- */
-
-/**
  * The top level namespace used to access the Blockly library.
+ *
  * @namespace Blockly
  */
 import * as goog from '../closure/goog/goog.js';
@@ -186,6 +183,7 @@ import {ZoomControls} from './zoom_controls.js';
  * buildCompressed gulp task.
  * For local builds, you can pass --define='Blockly.VERSION=X.Y.Z' to the
  * compiler to override this constant.
+ *
  * @define {string}
  * @alias Blockly.VERSION
  */
@@ -290,6 +288,7 @@ export const TOOLBOX_AT_RIGHT = toolbox.Position.RIGHT;
  * See workspace.resizeContents to resize the workspace when the contents
  * change (e.g. when a block is added or removed).
  * Record the height/width of the SVG image.
+ *
  * @param workspace Any workspace in the SVG.
  * @see Blockly.common.svgResize
  * @alias Blockly.svgResize
@@ -298,6 +297,7 @@ export const svgResize = common.svgResize;
 
 /**
  * Close tooltips, context menus, dropdown selections, etc.
+ *
  * @param opt_onlyClosePopups Whether only popups should be closed.
  * @see Blockly.WorkspaceSvg.hideChaff
  * @alias Blockly.hideChaff
@@ -310,6 +310,7 @@ export function hideChaff(opt_onlyClosePopups?: boolean) {
  * Returns the main workspace.  Returns the last used main workspace (based on
  * focus).  Try not to use this function, particularly if there are multiple
  * Blockly instances on a page.
+ *
  * @see Blockly.common.getMainWorkspace
  * @alias Blockly.getMainWorkspace
  */
@@ -317,6 +318,7 @@ export const getMainWorkspace = common.getMainWorkspace;
 
 /**
  * Returns the currently selected copyable object.
+ *
  * @alias Blockly.common.getSelected
  */
 export const getSelected = common.getSelected;
@@ -324,6 +326,7 @@ export const getSelected = common.getSelected;
 /**
  * Define blocks from an array of JSON block definitions, as might be generated
  * by the Blockly Developer Tools.
+ *
  * @param jsonArray An array of JSON block definitions.
  * @see Blockly.common.defineBlocksWithJsonArray
  * @alias Blockly.defineBlocksWithJsonArray
@@ -335,6 +338,7 @@ export const defineBlocksWithJsonArray = common.defineBlocksWithJsonArray;
  * dropDownDiv, and Tooltip are rendered into the first time `Blockly.inject`
  * is called.
  * This method is a NOP if called after the first ``Blockly.inject``.
+ *
  * @param container The container element.
  * @see Blockly.common.setParentContainer
  * @alias Blockly.setParentContainer
@@ -343,8 +347,9 @@ export const setParentContainer = common.setParentContainer;
 
 /**
  * Returns the dimensions of the specified SVG image.
+ *
  * @param svg SVG image.
- * @return Contains width and height properties.
+ * @returns Contains width and height properties.
  * @deprecated Use workspace.setCachedParentSvgSize. (2021 March 5)
  * @see Blockly.WorkspaceSvg.setCachedParentSvgSize
  * @alias Blockly.svgSize
@@ -354,6 +359,7 @@ export const svgSize = svgMath.svgSize;
 /**
  * Size the workspace when the contents change.  This also updates
  * scrollbars accordingly.
+ *
  * @param workspace The workspace to resize.
  * @deprecated Use workspace.resizeContents. (2021 December)
  * @see Blockly.WorkspaceSvg.resizeContents
@@ -369,6 +375,7 @@ export const resizeSvgContents = resizeSvgContentsLocal;
 
 /**
  * Copy a block or workspace comment onto the local clipboard.
+ *
  * @param toCopy Block or Workspace Comment to be copied.
  * @deprecated Use Blockly.clipboard.copy(). (2021 December)
  * @see Blockly.clipboard.copy
@@ -383,7 +390,8 @@ export function copy(toCopy: ICopyable) {
 
 /**
  * Paste a block or workspace comment on to the main workspace.
- * @return True if the paste was successful, false otherwise.
+ *
+ * @returns True if the paste was successful, false otherwise.
  * @deprecated Use Blockly.clipboard.paste(). (2021 December)
  * @see Blockly.clipboard.paste
  * @alias Blockly.paste
@@ -397,6 +405,7 @@ export function paste(): boolean {
 
 /**
  * Duplicate this block and its children, or a workspace comment.
+ *
  * @param toDuplicate Block or Workspace Comment to be copied.
  * @deprecated Use Blockly.clipboard.duplicate(). (2021 December)
  * @see Blockly.clipboard.duplicate
@@ -411,8 +420,9 @@ export function duplicate(toDuplicate: ICopyable) {
 
 /**
  * Is the given string a number (includes negative and decimals).
+ *
  * @param str Input string.
- * @return True if number, false otherwise.
+ * @returns True if number, false otherwise.
  * @deprecated Use Blockly.utils.string.isNumber(str). (2021 December)
  * @see Blockly.utils.string.isNumber
  * @alias Blockly.isNumber
@@ -426,8 +436,9 @@ export function isNumber(str: string): boolean {
 
 /**
  * Convert a hue (HSV model) into an RGB hex triplet.
+ *
  * @param hue Hue on a colour wheel (0-360).
- * @return RGB code, e.g. '#5ba65b'.
+ * @returns RGB code, e.g. '#5ba65b'.
  * @deprecated Use Blockly.utils.colour.hueToHex(). (2021 December)
  * @see Blockly.utils.colour.hueToHex
  * @alias Blockly.hueToHex
@@ -444,11 +455,12 @@ export function hueToHex(hue: number): string {
  * of the active touch stream.
  * Use this for events that are not part of a multi-part gesture (e.g.
  * mouseover for tooltips).
+ *
  * @param node Node upon which to listen.
  * @param name Event name to listen to (e.g. 'mousedown').
  * @param thisObject The value of 'this' in the function.
  * @param func Function to call when event is triggered.
- * @return Opaque data that can be passed to unbindEvent_.
+ * @returns Opaque data that can be passed to unbindEvent_.
  * @deprecated Use Blockly.browserEvents.bind(). (December 2021)
  * @see Blockly.browserEvents.bind
  * @alias Blockly.bindEvent_
@@ -464,9 +476,10 @@ export function bindEvent_(
 
 /**
  * Unbind one or more events event from a function call.
+ *
  * @param bindData Opaque data from bindEvent_.
  *     This list is emptied during the course of calling this function.
- * @return The function call.
+ * @returns The function call.
  * @deprecated Use Blockly.browserEvents.unbind(). (December 2021)
  * @see browserEvents.unbind
  * @alias Blockly.unbindEvent_
@@ -483,6 +496,7 @@ export function unbindEvent_(bindData: browserEvents.Data): Function {
  * touch stream.
  * Use this for events that either start or continue a multi-part gesture (e.g.
  * mousedown or mousemove, which may be part of a drag or click).
+ *
  * @param node Node upon which to listen.
  * @param name Event name to listen to (e.g. 'mousedown').
  * @param thisObject The value of 'this' in the function.
@@ -493,7 +507,7 @@ export function unbindEvent_(bindData: browserEvents.Data): Function {
  * @param opt_noPreventDefault True if triggering on this event should prevent
  *     the default handler.  False by default.  If opt_noPreventDefault is
  *     provided, opt_noCaptureIdentifier must also be provided.
- * @return Opaque data that can be passed to unbindEvent_.
+ * @returns Opaque data that can be passed to unbindEvent_.
  * @deprecated Use Blockly.browserEvents.conditionalBind(). (December 2021)
  * @see browserEvents.conditionalBind
  * @alias Blockly.bindEventWithChecks_
@@ -523,6 +537,7 @@ export const COLLAPSED_FIELD_NAME = constants.COLLAPSED_FIELD_NAME;
  * String for use in the "custom" attribute of a category in toolbox XML.
  * This string indicates that the category should be dynamically populated with
  * variable blocks.
+ *
  * @alias Blockly.VARIABLE_CATEGORY_NAME
  */
 export const VARIABLE_CATEGORY_NAME: string = Variables.CATEGORY_NAME;
@@ -531,6 +546,7 @@ export const VARIABLE_CATEGORY_NAME: string = Variables.CATEGORY_NAME;
  * String for use in the "custom" attribute of a category in toolbox XML.
  * This string indicates that the category should be dynamically populated with
  * variable blocks.
+ *
  * @alias Blockly.VARIABLE_DYNAMIC_CATEGORY_NAME
  */
 export const VARIABLE_DYNAMIC_CATEGORY_NAME: string =
@@ -539,6 +555,7 @@ export const VARIABLE_DYNAMIC_CATEGORY_NAME: string =
  * String for use in the "custom" attribute of a category in toolbox XML.
  * This string indicates that the category should be dynamically populated with
  * procedure blocks.
+ *
  * @alias Blockly.PROCEDURE_CATEGORY_NAME
  */
 export const PROCEDURE_CATEGORY_NAME: string = Procedures.CATEGORY_NAME;
@@ -550,49 +567,47 @@ export const PROCEDURE_CATEGORY_NAME: string = Procedures.CATEGORY_NAME;
 Workspace.prototype.newBlock =
     function(prototypeName: string, opt_id?: string): Block {
       return new Block(this, prototypeName, opt_id);
-    }
+    };
 
 WorkspaceSvg.prototype.newBlock =
     function(prototypeName: string, opt_id?: string): BlockSvg {
       return new BlockSvg(this, prototypeName, opt_id);
-    }
+    };
 
 WorkspaceSvg.newTrashcan = function(workspace: WorkspaceSvg): Trashcan {
   return new Trashcan(workspace);
-}
+};
 
 WorkspaceCommentSvg.prototype.showContextMenu =
     function(this: WorkspaceCommentSvg, e: Event) {
       if (this.workspace.options.readOnly) {
         return;
       }
-      // Save the current workspace comment in a variable for use in closures.
-      const comment = this;
       const menuOptions = [];
     
       if (this.isDeletable() && this.isMovable()) {
-        menuOptions.push(ContextMenu.commentDuplicateOption(comment));
-        menuOptions.push(ContextMenu.commentDeleteOption(comment));
+        menuOptions.push(ContextMenu.commentDuplicateOption(this));
+        menuOptions.push(ContextMenu.commentDeleteOption(this));
       }
     
       ContextMenu.show(e, menuOptions, this.RTL);
-    }
+    };
 
 Mutator.prototype.newWorkspaceSvg =
     function(options: Options): WorkspaceSvg {
       return new WorkspaceSvg(options);
-    }
+    };
 
 Names.prototype.populateProcedures =
     function(this: Names, workspace: Workspace) {
-      let procedures = Procedures.allProcedures(workspace);
+      const procedures = Procedures.allProcedures(workspace);
       // Flatten the return vs no-return procedure lists.
-      let flattenedProcedures: AnyDuringMigration[][] =
+      const flattenedProcedures: AnyDuringMigration[][] =
           procedures[0].concat(procedures[1]);
       for (let i = 0; i < flattenedProcedures.length; i++) {
         this.getName(flattenedProcedures[i][0], Names.NameType.PROCEDURE);
       }
-    }
+    };
 // clang-format on
 
 
@@ -746,4 +761,4 @@ export namespace serialization {
   export const variables = serializationVariables;
   export const workspaces = serializationWorkspaces;
   export type ISerializer = SerializerInterface;
-};
+}

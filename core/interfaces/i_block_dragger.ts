@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview The interface for a block dragger.
- */
-
-/**
  * The interface for a block dragger.
+ *
  * @namespace Blockly.IBlockDragger
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -17,21 +14,15 @@ import type {Coordinate} from '../utils/coordinate.js';
 import type {BlockSvg} from '../block_svg.js';
 goog.declareModuleId('Blockly.IBlockDragger');
 
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-// import '../block_svg.js';
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-// import '../utils/coordinate.js';
-
-
 /**
  * A block dragger interface.
+ *
  * @alias Blockly.IBlockDragger
  */
 export interface IBlockDragger {
   /**
    * Start dragging a block.  This includes moving it to the drag surface.
+   *
    * @param currentDragDeltaXY How far the pointer has moved from the position
    *     at mouse down, in pixel units.
    * @param healStack Whether or not to heal the stack after disconnecting.
@@ -41,6 +32,7 @@ export interface IBlockDragger {
   /**
    * Execute a step of block dragging, based on the given event.  Update the
    * display accordingly.
+   *
    * @param e The most recent move event.
    * @param currentDragDeltaXY How far the pointer has moved from the position
    *     at the start of the drag, in pixel units.
@@ -49,6 +41,7 @@ export interface IBlockDragger {
 
   /**
    * Finish a block drag and put the block back on the workspace.
+   *
    * @param e The mouseup/touchend event.
    * @param currentDragDeltaXY How far the pointer has moved from the position
    *     at the start of the drag, in pixel units.
@@ -58,7 +51,8 @@ export interface IBlockDragger {
   /**
    * Get a list of the insertion markers that currently exist.  Drags have 0, 1,
    * or 2 insertion markers.
-   * @return A possibly empty list of insertion marker blocks.
+   *
+   * @returns A possibly empty list of insertion marker blocks.
    */
   getInsertionMarkers(): BlockSvg[];
 

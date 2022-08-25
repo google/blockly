@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Class for a finished loading workspace event.
- */
-
-/**
  * Class for a finished loading workspace event.
+ *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -27,6 +24,7 @@ import * as eventUtils from './utils.js';
  * Used to notify the developer when the workspace has finished loading (i.e
  * domToWorkspace).
  * Finished loading events do not record undo or redo.
+ *
  * @alias Blockly.Events.FinishedLoading
  */
 export class FinishedLoading extends AbstractEvent {
@@ -56,7 +54,8 @@ export class FinishedLoading extends AbstractEvent {
 
   /**
    * Encode the event as JSON.
-   * @return JSON representation.
+   *
+   * @returns JSON representation.
    */
   override toJson(): AnyDuringMigration {
     const json = {
@@ -73,6 +72,7 @@ export class FinishedLoading extends AbstractEvent {
 
   /**
    * Decode the JSON event.
+   *
    * @param json JSON representation.
    */
   override fromJson(json: AnyDuringMigration) {

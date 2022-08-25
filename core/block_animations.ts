@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Methods animating a block on connection and disconnection.
- */
-
-/**
  * Methods animating a block on connection and disconnection.
+ *
  * @namespace Blockly.blockAnimations
  */
 import * as goog from '../closure/goog/goog.js';
@@ -29,7 +26,7 @@ interface CloneRect {
 }
 
 /** PID of disconnect UI animation.  There can only be one at a time. */
-let disconnectPid: AnyDuringMigration = 0;
+let disconnectPid: ReturnType<typeof setTimeout>|null = null;
 
 /** SVG group of wobbling block.  There can only be one at a time. */
 let disconnectGroup: SVGElement|null = null;
@@ -37,6 +34,7 @@ let disconnectGroup: SVGElement|null = null;
 
 /**
  * Play some UI effects (sound, animation) when disposing of a block.
+ *
  * @param block The block being disposed of.
  * @alias Blockly.blockAnimations.disposeUiEffect
  * @internal
@@ -59,6 +57,7 @@ export function disposeUiEffect(block: BlockSvg) {
  * Animate a cloned block and eventually dispose of it.
  * This is a class method, not an instance method since the original block has
  * been destroyed and is no longer accessible.
+ *
  * @param clone SVG element to animate and dispose of.
  * @param rect Starting rect of the clone.
  * @param rtl True if RTL, false if LTR.
@@ -87,6 +86,7 @@ function disposeUiStep(
 
 /**
  * Play some UI effects (sound, ripple) after a connection has been established.
+ *
  * @param block The block being connected.
  * @alias Blockly.blockAnimations.connectionUiEffect
  * @internal
@@ -124,6 +124,7 @@ export function connectionUiEffect(block: BlockSvg) {
 
 /**
  * Expand a ripple around a connection.
+ *
  * @param ripple Element to animate.
  * @param start Date of animation's start.
  * @param scale Scale of workspace.
@@ -142,6 +143,7 @@ function connectionUiStep(ripple: SVGElement, start: Date, scale: number) {
 
 /**
  * Play some UI effects (sound, animation) when disconnecting a block.
+ *
  * @param block The block being disconnected.
  * @alias Blockly.blockAnimations.disconnectUiEffect
  * @internal
@@ -167,6 +169,7 @@ export function disconnectUiEffect(block: BlockSvg) {
 
 /**
  * Animate a brief wiggle of a disconnected block.
+ *
  * @param group SVG element to animate.
  * @param magnitude Maximum degrees skew (reversed for RTL).
  * @param start Date of animation's start.
@@ -190,12 +193,15 @@ function disconnectUiStep(group: SVGElement, magnitude: number, start: Date) {
 
 /**
  * Stop the disconnect UI animation immediately.
+ *
  * @alias Blockly.blockAnimations.disconnectUiStop
  * @internal
  */
 export function disconnectUiStop() {
   if (disconnectGroup) {
-    clearTimeout(disconnectPid);
+    if (disconnectPid) {
+      clearTimeout(disconnectPid);
+    }
     disconnectGroup.setAttribute('transform', '');
     disconnectGroup = null;
   }

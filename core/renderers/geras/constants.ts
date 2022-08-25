@@ -5,13 +5,9 @@
  */
 
 /**
- * @fileoverview An object that provides constants for rendering blocks in Geras
- * mode.
- */
-
-/**
  * An object that provides constants for rendering blocks in Geras
  * mode.
+ *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -22,6 +18,7 @@ import {ConstantProvider as BaseConstantProvider} from '../common/constants.js';
 
 /**
  * An object that provides constants for rendering blocks in Geras mode.
+ *
  * @alias Blockly.geras.ConstantProvider
  */
 export class ConstantProvider extends BaseConstantProvider {
@@ -46,16 +43,17 @@ export class ConstantProvider extends BaseConstantProvider {
   }
 
   override getCSS_(selector: string) {
-    return super.getCSS_(selector)
-        .concat(/* eslint-enable indent */
-                [
-                  /* eslint-disable indent */
-                  // Insertion marker.
-                  selector + ' .blocklyInsertionMarker>.blocklyPathLight,',
-                  selector + ' .blocklyInsertionMarker>.blocklyPathDark {',
-                  'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';',
-                  'stroke: none;',
-                  '}',
-                ]);
+    return super.getCSS_(selector).concat([
+      /* eslint-disable indent */
+      /* clang-format off */
+      // Insertion marker.
+      `${selector} .blocklyInsertionMarker>.blocklyPathLight,`,
+      `${selector} .blocklyInsertionMarker>.blocklyPathDark {`,
+      `fill-opacity: ${this.INSERTION_MARKER_OPACITY};`,
+      `stroke: none;`,
+      '}',
+      /* clang-format on */
+      /* eslint-enable indent */
+    ]);
   }
 }

@@ -5,38 +5,35 @@
  */
 
 /**
- * @fileoverview Utility methods for DOM manipulation.
- * These methods are not specific to Blockly, and could be factored out into
- * a JavaScript framework such as Closure.
- */
-
-/**
  * Utility methods for DOM manipulation.
  * These methods are not specific to Blockly, and could be factored out into
  * a JavaScript framework such as Closure.
+ *
  * @namespace Blockly.utils.dom
  */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.dom');
 
 import type {Svg} from './svg.js';
-import * as userAgent from './useragent.js';
 
 
 /**
  * Required name space for SVG elements.
+ *
  * @alias Blockly.utils.dom.SVG_NS
  */
 export const SVG_NS = 'http://www.w3.org/2000/svg';
 
 /**
  * Required name space for HTML elements.
+ *
  * @alias Blockly.utils.dom.HTML_NS
  */
 export const HTML_NS = 'http://www.w3.org/1999/xhtml';
 
 /**
  * Required name space for XLINK elements.
+ *
  * @alias Blockly.utils.dom.XLINK_NS
  */
 export const XLINK_NS = 'http://www.w3.org/1999/xlink';
@@ -44,6 +41,7 @@ export const XLINK_NS = 'http://www.w3.org/1999/xlink';
 /**
  * Node type constants.
  * https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType
+ *
  * @alias Blockly.utils.dom.NodeType
  */
 export enum NodeType {
@@ -66,14 +64,16 @@ let canvasContext: CanvasRenderingContext2D = null as AnyDuringMigration;
 
 /**
  * Helper method for creating SVG elements.
+ *
  * @param name Element's tag name.
  * @param attrs Dictionary of attribute names and values.
  * @param opt_parent Optional parent on which to append the element.
- * @return if name is a string or a more specific type if it a member of Svg.
+ * @returns if name is a string or a more specific type if it a member of Svg.
  * @alias Blockly.utils.dom.createSvgElement
  */
 export function createSvgElement<T extends SVGElement>(
-    name: string|Svg<T>, attrs: AnyDuringMigration, opt_parent?: Element): T {
+    name: string|Svg<T>, attrs: AnyDuringMigration,
+    opt_parent?: Element|null): T {
   const e = document.createElementNS(SVG_NS, String(name)) as T;
   for (const key in attrs) {
     e.setAttribute(key, attrs[key]);
@@ -94,9 +94,10 @@ export function createSvgElement<T extends SVGElement>(
 /**
  * Add a CSS class to a element.
  * Similar to Closure's goog.dom.classes.add, except it handles SVG elements.
+ *
  * @param element DOM element to add class to.
  * @param className Name of class to add.
- * @return True if class was added, false if already present.
+ * @returns True if class was added, false if already present.
  * @alias Blockly.utils.dom.addClass
  */
 export function addClass(element: Element, className: string): boolean {
@@ -113,6 +114,7 @@ export function addClass(element: Element, className: string): boolean {
 
 /**
  * Removes multiple calsses from an element.
+ *
  * @param element DOM element to remove classes from.
  * @param classNames A string of one or multiple class names for an element.
  * @alias Blockly.utils.dom.removeClasses
@@ -127,9 +129,10 @@ export function removeClasses(element: Element, classNames: string) {
 /**
  * Remove a CSS class from a element.
  * Similar to Closure's goog.dom.classes.remove, except it handles SVG elements.
+ *
  * @param element DOM element to remove class from.
  * @param className Name of class to remove.
- * @return True if class was removed, false if never present.
+ * @returns True if class was removed, false if never present.
  * @alias Blockly.utils.dom.removeClass
  */
 export function removeClass(element: Element, className: string): boolean {
@@ -155,9 +158,10 @@ export function removeClass(element: Element, className: string): boolean {
 /**
  * Checks if an element has the specified CSS class.
  * Similar to Closure's goog.dom.classes.has, except it handles SVG elements.
+ *
  * @param element DOM element to check.
  * @param className Name of class to check.
- * @return True if class exists, false otherwise.
+ * @returns True if class exists, false otherwise.
  * @alias Blockly.utils.dom.hasClass
  */
 export function hasClass(element: Element, className: string): boolean {
@@ -167,8 +171,9 @@ export function hasClass(element: Element, className: string): boolean {
 
 /**
  * Removes a node from its parent. No-op if not attached to a parent.
+ *
  * @param node The node to remove.
- * @return The node removed if removed; else, null.
+ * @returns The node removed if removed; else, null.
  * @alias Blockly.utils.dom.removeNode
  */
 // Copied from Closure goog.dom.removeNode
@@ -179,6 +184,7 @@ export function removeNode(node: Node|null): Node|null {
 /**
  * Insert a node after a reference node.
  * Contrast with node.insertBefore function.
+ *
  * @param newNode New element to insert.
  * @param refNode Existing element to precede new node.
  * @alias Blockly.utils.dom.insertAfter
@@ -198,9 +204,10 @@ export function insertAfter(newNode: Element, refNode: Element) {
 
 /**
  * Whether a node contains another node.
+ *
  * @param parent The node that should contain the other node.
  * @param descendant The node to test presence of.
- * @return Whether the parent node contains the descendant node.
+ * @returns Whether the parent node contains the descendant node.
  * @alias Blockly.utils.dom.containsNode
  */
 export function containsNode(parent: Node, descendant: Node): boolean {
@@ -213,6 +220,7 @@ export function containsNode(parent: Node, descendant: Node): boolean {
  * Sets the CSS transform property on an element. This function sets the
  * non-vendor-prefixed and vendor-prefixed versions for backwards compatibility
  * with older browsers. See https://caniuse.com/#feat=transforms2d
+ *
  * @param element Element to which the CSS transform will be applied.
  * @param transform The value of the CSS `transform` property.
  * @alias Blockly.utils.dom.setCssTransform
@@ -229,6 +237,7 @@ export function setCssTransform(element: Element, transform: string) {
 /**
  * Start caching text widths. Every call to this function MUST also call
  * stopTextWidthCache. Caches must not survive between execution threads.
+ *
  * @alias Blockly.utils.dom.startTextWidthCache
  */
 export function startTextWidthCache() {
@@ -241,6 +250,7 @@ export function startTextWidthCache() {
 /**
  * Stop caching field widths. Unless caching was already on when the
  * corresponding call to startTextWidthCache was made.
+ *
  * @alias Blockly.utils.dom.stopTextWidthCache
  */
 export function stopTextWidthCache() {
@@ -252,8 +262,9 @@ export function stopTextWidthCache() {
 
 /**
  * Gets the width of a text element, caching it in the process.
+ *
  * @param textElement An SVG 'text' element.
- * @return Width of element.
+ * @returns Width of element.
  * @alias Blockly.utils.dom.getTextWidth
  */
 export function getTextWidth(textElement: SVGTextElement): number {
@@ -269,11 +280,7 @@ export function getTextWidth(textElement: SVGTextElement): number {
 
   // Attempt to compute fetch the width of the SVG text element.
   try {
-    if (userAgent.IE || userAgent.EDGE) {
-      width = textElement.getBBox().width;
-    } else {
-      width = textElement.getComputedTextLength();
-    }
+    width = textElement.getComputedTextLength();
   } catch (e) {
     // In other cases where we fail to get the computed text. Instead, use an
     // approximation and do not cache the result. At some later point in time
@@ -293,11 +300,12 @@ export function getTextWidth(textElement: SVGTextElement): number {
  * Gets the width of a text element using a faster method than `getTextWidth`.
  * This method requires that we know the text element's font family and size in
  * advance. Similar to `getTextWidth`, we cache the width we compute.
+ *
  * @param textElement An SVG 'text' element.
  * @param fontSize The font size to use.
  * @param fontWeight The font weight to use.
  * @param fontFamily The font family to use.
- * @return Width of element.
+ * @returns Width of element.
  * @alias Blockly.utils.dom.getFastTextWidth
  */
 export function getFastTextWidth(
@@ -313,11 +321,12 @@ export function getFastTextWidth(
  * advance. Similar to `getTextWidth`, we cache the width we compute.
  * This method is similar to ``getFastTextWidth`` but expects the font size
  * parameter to be a string.
+ *
  * @param textElement An SVG 'text' element.
  * @param fontSize The font size to use.
  * @param fontWeight The font weight to use.
  * @param fontFamily The font family to use.
- * @return Width of element.
+ * @returns Width of element.
  * @alias Blockly.utils.dom.getFastTextWidthWithSizeString
  */
 export function getFastTextWidthWithSizeString(
@@ -366,11 +375,12 @@ export function getFastTextWidthWithSizeString(
 
 /**
  * Measure a font's metrics. The height and baseline values.
+ *
  * @param text Text to measure the font dimensions of.
  * @param fontSize The font size to use.
  * @param fontWeight The font weight to use.
  * @param fontFamily The font family to use.
- * @return Font measurements.
+ * @returns Font measurements.
  * @alias Blockly.utils.dom.measureFontMetrics
  */
 export function measureFontMetrics(

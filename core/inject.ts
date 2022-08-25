@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Functions for injecting Blockly into a web page.
- */
-
-/**
  * Functions for injecting Blockly into a web page.
+ *
  * @namespace Blockly.inject
  */
 import * as goog from '../closure/goog/goog.js';
@@ -34,16 +31,16 @@ import * as dom from './utils/dom.js';
 import {Svg} from './utils/svg.js';
 import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
-import {Workspace} from './workspace.js';
 import {WorkspaceDragSurfaceSvg} from './workspace_drag_surface_svg.js';
 import {WorkspaceSvg} from './workspace_svg.js';
 
 
 /**
  * Inject a Blockly editor into the specified container element (usually a div).
+ *
  * @param container Containing element, or its ID, or a CSS selector.
  * @param opt_options Optional dictionary of options.
- * @return Newly created main workspace.
+ * @returns Newly created main workspace.
  * @alias Blockly.inject
  */
 export function inject(
@@ -102,9 +99,10 @@ export function inject(
 
 /**
  * Create the SVG image.
+ *
  * @param container Containing element.
  * @param options Dictionary of options.
- * @return Newly created SVG image.
+ * @returns Newly created SVG image.
  */
 function createDom(container: Element, options: Options): Element {
   // Sadly browsers (Chrome vs Firefox) are currently inconsistent in laying
@@ -153,11 +151,12 @@ function createDom(container: Element, options: Options): Element {
 
 /**
  * Create a main workspace and add it to the SVG.
+ *
  * @param svg SVG element with pattern defined.
  * @param options Dictionary of options.
  * @param blockDragSurface Drag surface SVG for the blocks.
  * @param workspaceDragSurface Drag surface SVG for the workspace.
- * @return Newly created main workspace.
+ * @returns Newly created main workspace.
  */
 function createMainWorkspace(
     svg: Element, options: Options, blockDragSurface: BlockDragSurfaceSvg,
@@ -207,6 +206,7 @@ function createMainWorkspace(
 
 /**
  * Initialize Blockly with various handlers.
+ *
  * @param mainWorkspace Newly created main workspace.
  */
 function init(mainWorkspace: WorkspaceSvg) {
@@ -248,10 +248,10 @@ function init(mainWorkspace: WorkspaceSvg) {
   }
 
   if (options.hasTrashcan) {
-    mainWorkspace.trashcan.init();
+    mainWorkspace.trashcan!.init();
   }
   if (options.zoomOptions && options.zoomOptions.controls) {
-    mainWorkspace.zoomControls_.init();
+    mainWorkspace.zoomControls_!.init();
   }
 
   if (options.moveOptions && options.moveOptions.scrollbars) {
@@ -276,6 +276,7 @@ function init(mainWorkspace: WorkspaceSvg) {
 /**
  * Handle a key-down on SVG drawing surface. Does nothing if the main workspace
  * is not visible.
+ *
  * @param e Key down event.
  */
 // TODO (https://github.com/google/blockly/issues/1998) handle cases where there
@@ -341,6 +342,7 @@ function bindDocumentEvents() {
 
 /**
  * Load sounds for the given workspace.
+ *
  * @param pathToMedia The path to the media directory.
  * @param workspace The workspace to load sounds for.
  */
@@ -370,6 +372,9 @@ function loadSounds(pathToMedia: string, workspace: WorkspaceSvg) {
 
   // Bind temporary hooks that preload the sounds.
   const soundBinds: AnyDuringMigration[] = [];
+  /**
+   *
+   */
   function unbindSounds() {
     while (soundBinds.length) {
       browserEvents.unbind(soundBinds.pop());

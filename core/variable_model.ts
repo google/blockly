@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Components for the variable model.
- */
-
-/**
  * Components for the variable model.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -26,6 +23,7 @@ import type {Workspace} from './workspace.js';
 /**
  * Class for a variable model.
  * Holds information for the variable including name, ID, and type.
+ *
  * @see {Blockly.FieldVariable}
  * @alias Blockly.VariableModel
  */
@@ -49,6 +47,7 @@ export class VariableModel {
      * The type of the variable, such as 'int' or 'sound_effect'. This may be
      * used to build a list of variables of a specific type. By default this is
      * the empty string '', which is a specific type.
+     *
      * @see {Blockly.FieldVariable}
      */
     this.type = opt_type || '';
@@ -60,19 +59,20 @@ export class VariableModel {
      */
     this.id_ = opt_id || idGenerator.genUid();
 
-    eventUtils.fire(new (eventUtils.get(eventUtils.VAR_CREATE))!(this));
+    eventUtils.fire(new (eventUtils.get(eventUtils.VAR_CREATE))(this));
   }
 
-  /** @return The ID for the variable. */
+  /** @returns The ID for the variable. */
   getId(): string {
     return this.id_;
   }
 
   /**
    * A custom compare function for the VariableModel objects.
+   *
    * @param var1 First variable to compare.
    * @param var2 Second variable to compare.
-   * @return -1 if name of var1 is less than name of var2, 0 if equal, and 1 if
+   * @returns -1 if name of var1 is less than name of var2, 0 if equal, and 1 if
    *     greater.
    * @internal
    */

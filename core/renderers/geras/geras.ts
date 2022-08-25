@@ -1,4 +1,4 @@
-/** @fileoverview Re-exports of Blockly.geras.* modules. */
+/** @file Re-exports of Blockly.geras.* modules. */
 
 /**
  * @license
@@ -8,6 +8,7 @@
 
 /**
  * Re-exports of Blockly.geras.* modules.
+ *
  * @namespace Blockly.geras
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -33,5 +34,5 @@ export {
   PathObject,
   Renderer,
   RenderInfo,
-  StatementInput
+  StatementInput,
 };

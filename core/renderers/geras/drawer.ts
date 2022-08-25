@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Renderer that preserves the look and feel of Blockly pre-2019.
- */
-
-/**
  * Renderer that preserves the look and feel of Blockly pre-2019.
+ *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -30,6 +27,7 @@ import type {PathObject} from './path_object.js';
 
 /**
  * An object that draws a block based on the given rendering information.
+ *
  * @alias Blockly.geras.Drawer
  */
 export class Drawer extends BaseDrawer {

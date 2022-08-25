@@ -5,18 +5,12 @@
  */
 
 /**
- * @fileoverview Utility functions for handling variable and procedure names.
- */
-
-/**
  * Utility functions for handling variable and procedure names.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Names');
-
-// Unused import preserved for side-effects. Remove if unneeded.
-// import './procedures.js';
 
 import {Msg} from './msg.js';
 // import * as Procedures from './procedures.js';
@@ -27,14 +21,24 @@ import type {Workspace} from './workspace.js';
 
 /**
  * Class for a database of entity names (variables, procedures, etc).
+ *
  * @alias Blockly.Names
  */
 export class Names {
   static DEVELOPER_VARIABLE_TYPE: NameType;
   private readonly variablePrefix_: string;
-  private readonly reservedDict_: AnyDuringMigration;
-  private db_: {[key: string]: {[key: string]: string}};
-  private dbReverse_: {[key: string]: boolean};
+
+  /** A set of reserved words. */
+  private readonly reservedWords: Set<string>;
+
+  /**
+   * A map from type (e.g. name, procedure) to maps from names to generated
+   * names.
+   */
+  private readonly db = new Map<string, Map<string, string>>();
+
+  /** A set of used names to avoid collisions. */
+  private readonly dbReverse = new Set<string>();
 
   /**
    * The variable map from the workspace, containing Blockly variable models.
@@ -42,47 +46,31 @@ export class Names {
   private variableMap_: VariableMap|null = null;
 
   /**
-   * @param reservedWords A comma-separated string of words that are illegal for
-   *     use as names in a language (e.g. 'new,if,this,...').
+   * @param reservedWordsList A comma-separated string of words that are illegal
+   *     for use as names in a language (e.g. 'new,if,this,...').
    * @param opt_variablePrefix Some languages need a '$' or a namespace before
    *     all variable names (but not procedure names).
    */
-  constructor(reservedWords: string, opt_variablePrefix?: string) {
+  constructor(reservedWordsList: string, opt_variablePrefix?: string) {
     /** The prefix to attach to variable names in generated code. */
     this.variablePrefix_ = opt_variablePrefix || '';
 
-    /** A dictionary of reserved words. */
-    this.reservedDict_ = Object.create(null);
-
-    /**
-     * A map from type (e.g. name, procedure) to maps from names to generated
-     * names.
-     */
-    this.db_ = Object.create(null);
-
-    /** A map from used names to booleans to avoid collisions. */
-    this.dbReverse_ = Object.create(null);
-
-    if (reservedWords) {
-      const splitWords = reservedWords.split(',');
-      for (let i = 0; i < splitWords.length; i++) {
-        this.reservedDict_[splitWords[i]] = true;
-      }
-    }
-    this.reset();
+    this.reservedWords =
+        new Set<string>(reservedWordsList ? reservedWordsList.split(',') : []);
   }
 
   /**
    * Empty the database and start from scratch.  The reserved words are kept.
    */
   reset() {
-    this.db_ = Object.create(null);
-    this.dbReverse_ = Object.create(null);
+    this.db.clear();
+    this.dbReverse.clear();
     this.variableMap_ = null;
   }
 
   /**
    * Set the variable map that maps from variable name to variable object.
+   *
    * @param map The map to track.
    */
   setVariableMap(map: VariableMap) {
@@ -92,8 +80,9 @@ export class Names {
   /**
    * Get the name for a user-defined variable, based on its ID.
    * This should only be used for variables of NameType VARIABLE.
+   *
    * @param id The ID to look up in the variable map.
-   * @return The name of the referenced variable, or null if there was no
+   * @returns The name of the referenced variable, or null if there was no
    *     variable map or the variable was not found in the map.
    */
   private getNameForUserVariable_(id: string): string|null {
@@ -115,6 +104,7 @@ export class Names {
 
   /**
    * Generate names for user variables, but only ones that are being used.
+   *
    * @param workspace Workspace to generate variables from.
    */
   populateVariables(workspace: Workspace) {
@@ -126,8 +116,10 @@ export class Names {
 
   /**
    * Generate names for procedures.
+   *
    * @param workspace Workspace to generate procedures from.
    */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   populateProcedures(workspace: Workspace) {
     throw new Error(
         'The implementation of populateProcedures should be ' +
@@ -136,10 +128,11 @@ export class Names {
 
   /**
    * Convert a Blockly entity name to a legal exportable entity name.
+   *
    * @param nameOrId The Blockly entity name (no constraints) or variable ID.
    * @param type The type of the name in Blockly ('VARIABLE', 'PROCEDURE',
    *     'DEVELOPER_VARIABLE', etc...).
-   * @return An entity name that is legal in the exported language.
+   * @returns An entity name that is legal in the exported language.
    */
   getName(nameOrId: string, type: NameType|string): string {
     let name = nameOrId;
@@ -156,27 +149,28 @@ export class Names {
         type === NameType.VARIABLE || type === NameType.DEVELOPER_VARIABLE;
 
     const prefix = isVar ? this.variablePrefix_ : '';
-    if (!(type in this.db_)) {
-      this.db_[type] = Object.create(null);
+    if (!this.db.has(type)) {
+      this.db.set(type, new Map<string, string>());
     }
-    const typeDb = this.db_[type];
-    if (normalizedName in typeDb) {
-      return prefix + typeDb[normalizedName];
+    const typeDb = this.db.get(type);
+    if (typeDb!.has(normalizedName)) {
+      return prefix + typeDb!.get(normalizedName);
     }
     const safeName = this.getDistinctName(name, type);
-    typeDb[normalizedName] = safeName.substr(prefix.length);
+    typeDb!.set(normalizedName, safeName.substr(prefix.length));
     return safeName;
   }
 
   /**
    * Return a list of all known user-created names of a specified name type.
+   *
    * @param type The type of entity in Blockly ('VARIABLE', 'PROCEDURE',
    *     'DEVELOPER_VARIABLE', etc...).
-   * @return A list of Blockly entity names (no constraints).
+   * @returns A list of Blockly entity names (no constraints).
    */
   getUserNames(type: NameType|string): string[] {
-    const typeDb = this.db_[type] || {};
-    return Object.keys(typeDb);
+    const userNames = this.db.get(type)?.keys();
+    return userNames ? Array.from(userNames) : [];
   }
 
   /**
@@ -184,23 +178,24 @@ export class Names {
    * Ensure that this is a new name not overlapping any previously defined name.
    * Also check against list of reserved words for the current language and
    * ensure name doesn't collide.
+   *
    * @param name The Blockly entity name (no constraints).
    * @param type The type of entity in Blockly ('VARIABLE', 'PROCEDURE',
    *     'DEVELOPER_VARIABLE', etc...).
-   * @return An entity name that is legal in the exported language.
+   * @returns An entity name that is legal in the exported language.
    */
   getDistinctName(name: string, type: NameType|string): string {
     let safeName = this.safeName_(name);
     let i = '';
-    while (this.dbReverse_[safeName + i] ||
-           safeName + i in this.reservedDict_) {
+    while (this.dbReverse.has(safeName + i) ||
+           this.reservedWords.has(safeName + i)) {
       // Collision with existing name.  Create a unique name.
       // AnyDuringMigration because:  Type 'string | 2' is not assignable to
       // type 'string'.
       i = (i ? i + 1 : 2) as AnyDuringMigration;
     }
     safeName += i;
-    this.dbReverse_[safeName] = true;
+    this.dbReverse.add(safeName);
     const isVar =
         type === NameType.VARIABLE || type === NameType.DEVELOPER_VARIABLE;
     const prefix = isVar ? this.variablePrefix_ : '';
@@ -211,8 +206,9 @@ export class Names {
    * Given a proposed entity name, generate a name that conforms to the
    * [_A-Za-z][_A-Za-z0-9]* format that most languages consider legal for
    * variable and function names.
+   *
    * @param name Potentially illegal entity name.
-   * @return Safe entity name.
+   * @returns Safe entity name.
    */
   private safeName_(name: string): string {
     if (!name) {
@@ -233,9 +229,10 @@ export class Names {
   /**
    * Do the given two entity names refer to the same entity?
    * Blockly names are case-insensitive.
+   *
    * @param name1 First name.
    * @param name2 Second name.
-   * @return True if names are the same.
+   * @returns True if names are the same.
    */
   static equals(name1: string, name2: string): boolean {
     // name1.localeCompare(name2) is slower.
@@ -253,6 +250,7 @@ export namespace Names {
    * Therefore, Blockly keeps a separate name type to disambiguate.
    * getName('foo', 'VARIABLE') -> 'foo'
    * getName('foo', 'PROCEDURE') -> 'foo2'
+   *
    * @alias Blockly.Names.NameType
    */
   export enum NameType {

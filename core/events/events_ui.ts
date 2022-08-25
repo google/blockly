@@ -5,13 +5,9 @@
  */
 
 /**
- * @fileoverview (Deprecated) Events fired as a result of UI actions in
- * Blockly's editor.
- */
-
-/**
  * (Deprecated) Events fired as a result of UI actions in
  * Blockly's editor.
+ *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -26,6 +22,7 @@ import * as eventUtils from './utils.js';
 
 /**
  * Class for a UI event.
+ *
  * @deprecated December 2020. Instead use a more specific UI event.
  * @alias Blockly.Events.Ui
  */
@@ -60,7 +57,8 @@ export class Ui extends UiBase {
 
   /**
    * Encode the event as JSON.
-   * @return JSON representation.
+   *
+   * @returns JSON representation.
    */
   override toJson(): AnyDuringMigration {
     const json = super.toJson();
@@ -76,6 +74,7 @@ export class Ui extends UiBase {
 
   /**
    * Decode the JSON event.
+   *
    * @param json JSON representation.
    */
   override fromJson(json: AnyDuringMigration) {

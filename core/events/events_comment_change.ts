@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Class for comment change event.
- */
-
-/**
  * Class for comment change event.
+ *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -24,6 +21,7 @@ import * as eventUtils from './utils.js';
 
 /**
  * Class for a comment change event.
+ *
  * @alias Blockly.Events.CommentChange
  */
 export class CommentChange extends CommentBase {
@@ -60,7 +58,8 @@ export class CommentChange extends CommentBase {
 
   /**
    * Encode the event as JSON.
-   * @return JSON representation.
+   *
+   * @returns JSON representation.
    */
   override toJson(): AnyDuringMigration {
     const json = super.toJson();
@@ -71,6 +70,7 @@ export class CommentChange extends CommentBase {
 
   /**
    * Decode the JSON event.
+   *
    * @param json JSON representation.
    */
   override fromJson(json: AnyDuringMigration) {
@@ -81,7 +81,8 @@ export class CommentChange extends CommentBase {
 
   /**
    * Does this event record any change of state?
-   * @return False if something changed.
+   *
+   * @returns False if something changed.
    */
   override isNull(): boolean {
     return this.oldContents_ === this.newContents_;
@@ -89,6 +90,7 @@ export class CommentChange extends CommentBase {
 
   /**
    * Run a change event.
+   *
    * @param forward True if run forward, false if run backward (undo).
    */
   override run(forward: boolean) {

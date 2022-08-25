@@ -5,19 +5,13 @@
  */
 
 /**
- * @fileoverview Object representing a trash can icon.
- */
-
-/**
  * Object representing a trash can icon.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Trashcan');
 
-/* eslint-disable-next-line no-unused-vars */
-// Unused import preserved for side-effects. Remove if unneeded.
-// import './metrics_manager.js';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_trashcan_open.js';
 
@@ -49,6 +43,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Class for a trash can.
+ *
  * @alias Blockly.Trashcan
  */
 export class Trashcan extends DeleteArea implements IAutoHideable,
@@ -66,6 +61,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
 
   /**
    * The trashcan flyout.
+   *
    * @internal
    */
   flyout: IFlyout|null = null;
@@ -144,7 +140,8 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
 
   /**
    * Create the trash can elements.
-   * @return The trash can's SVG group.
+   *
+   * @returns The trash can's SVG group.
    */
   createDom(): SVGElement {
     /* Here's the markup that will be generated:
@@ -217,8 +214,8 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
   init() {
     if (this.workspace.options.maxTrashcanContents > 0) {
       dom.insertAfter(
-          this.flyout?.createDom(Svg.SVG)!, this.workspace.getParentSvg());
-      this.flyout?.init(this.workspace);
+          this.flyout!.createDom(Svg.SVG)!, this.workspace.getParentSvg());
+      this.flyout!.init(this.workspace);
     }
     this.workspace.getComponentManager().addComponent({
       component: this,
@@ -237,6 +234,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
   /**
    * Dispose of this trash can.
    * Unlink from all DOM elements to prevent memory leaks.
+   *
    * @suppress {checkTypes}
    */
   dispose() {
@@ -253,7 +251,8 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
 
   /**
    * Whether the trashcan has contents.
-   * @return True if the trashcan has contents.
+   *
+   * @returns True if the trashcan has contents.
    */
   private hasContents_(): boolean {
     return !!this.contents_.length;
@@ -261,7 +260,8 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
 
   /**
    * Returns true if the trashcan contents-flyout is currently open.
-   * @return True if the trashcan contents-flyout is currently open.
+   *
+   * @returns True if the trashcan contents-flyout is currently open.
    */
   contentsIsOpen(): boolean {
     return !!this.flyout && this.flyout.isVisible();
@@ -291,6 +291,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
 
   /**
    * Hides the component. Called in WorkspaceSvg.hideChaff.
+   *
    * @param onlyClosePopups Whether only popups should be closed.
    *     Flyouts should not be closed if this is true.
    */
@@ -319,6 +320,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
    * Positions the trashcan.
    * It is positioned in the opposite corner to the corner the
    * categories/toolbox starts at.
+   *
    * @param metrics The workspace metrics.
    * @param savedPositions List of rectangles that are already on the workspace.
    */
@@ -352,7 +354,8 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
   /**
    * Returns the bounding rectangle of the UI element in pixel units relative to
    * the Blockly injection div.
-   * @return The UI elements's bounding box. Null if bounding box should be
+   *
+   * @returns The UI elements's bounding box. Null if bounding box should be
    *     ignored by other UI elements.
    */
   getBoundingRectangle(): Rect|null {
@@ -364,7 +367,8 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
   /**
    * Returns the bounding rectangle of the drag target area in pixel units
    * relative to viewport.
-   * @return The component's bounding box. Null if drag target area should be
+   *
+   * @returns The component's bounding box. Null if drag target area should be
    *     ignored.
    */
   override getClientRect(): Rect|null {
@@ -383,6 +387,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
   /**
    * Handles when a cursor with a block or bubble is dragged over this drag
    * target.
+   *
    * @param _dragElement The block or bubble currently being dragged.
    */
   override onDragOver(_dragElement: IDraggable) {
@@ -391,6 +396,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
 
   /**
    * Handles when a cursor with a block or bubble exits this drag target.
+   *
    * @param _dragElement The block or bubble currently being dragged.
    */
   override onDragExit(_dragElement: IDraggable) {
@@ -400,6 +406,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
   /**
    * Handles when a block or bubble is dropped on this component.
    * Should not handle delete here.
+   *
    * @param _dragElement The block or bubble currently being dragged.
    */
   override onDrop(_dragElement: IDraggable) {
@@ -408,6 +415,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
 
   /**
    * Flip the lid open or shut.
+   *
    * @param state True if open.
    * @internal
    */
@@ -446,6 +454,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
 
   /**
    * Set the angle of the trashcan's lid.
+   *
    * @param lidAngle The angle at which to set the lid.
    */
   private setLidAngle_(lidAngle: number) {
@@ -461,6 +470,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
   /**
    * Sets the minimum openness of the trashcan lid. If the lid is currently
    * closed, this will update lid's position.
+   *
    * @param newMin The new minimum openness of the lid. Should be between 0
    *     and 1.
    */
@@ -489,16 +499,18 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
 
   /**
    * Fires a UI event for trashcan flyout open or close.
+   *
    * @param trashcanOpen Whether the flyout is opening.
    */
   private fireUiEvent_(trashcanOpen: boolean) {
-    const uiEvent = new (eventUtils.get(eventUtils.TRASHCAN_OPEN))!
-        (trashcanOpen, this.workspace.id);
+    const uiEvent = new (eventUtils.get(eventUtils.TRASHCAN_OPEN))(
+        trashcanOpen, this.workspace.id);
     eventUtils.fire(uiEvent);
   }
 
   /**
    * Prevents a workspace scroll and click event if the trashcan has blocks.
+   *
    * @param e A mouse down event.
    */
   private blockMouseDownWhenOpenable_(e: Event) {
@@ -530,6 +542,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
   /**
    * Handle a BLOCK_DELETE event. Adds deleted blocks oldXml to the content
    * array.
+   *
    * @param event Workspace event.
    */
   private onDelete_(event: Abstract) {
@@ -557,8 +570,9 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
   /**
    * Converts JSON representing a block into text that can be stored in the
    * content array.
+   *
    * @param json A JSON representation of a block's state.
-   * @return A BlockInfo object corresponding to the JSON, cleaned of all
+   * @returns A BlockInfo object corresponding to the JSON, cleaned of all
    *     unnecessary attributes.
    */
   private cleanBlockJson_(json: blocks.State): BlockInfo {
@@ -567,6 +581,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
 
     /**
      * Reshape JSON into a nicer format.
+     *
      * @param json The JSON to clean.
      */
     function cleanRec(json: blocks.State) {

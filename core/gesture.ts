@@ -5,20 +5,14 @@
  */
 
 /**
- * @fileoverview The class representing an in-progress gesture, usually a drag
- * or a tap.
- */
-
-/**
  * The class representing an in-progress gesture, usually a drag
  * or a tap.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Gesture');
 
-// Unused import preserved for side-effects. Remove if unneeded.
-// import './block_dragger.js';
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_click.js';
 
@@ -50,6 +44,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 // TODO: Consider touchcancel/pointercancel.
 /**
  * Class for one gesture.
+ *
  * @alias Blockly.Gesture
  */
 export class Gesture {
@@ -190,6 +185,7 @@ export class Gesture {
 
   /**
    * Sever all links from this object.
+   *
    * @internal
    */
   dispose() {
@@ -215,6 +211,7 @@ export class Gesture {
 
   /**
    * Update internal state based on an event.
+   *
    * @param e The most recent mouse or touch event.
    */
   private updateFromEvent_(e: Event) {
@@ -234,9 +231,10 @@ export class Gesture {
 
   /**
    * DO MATH to set currentDragDeltaXY_ based on the most recent mouse position.
+   *
    * @param currentXY The most recent mouse/pointer position, in pixel units,
    *     with (0, 0) at the window's top left corner.
-   * @return True if the drag just exceeded the drag radius for the first time.
+   * @returns True if the drag just exceeded the drag radius for the first time.
    */
   private updateDragDelta_(currentXY: Coordinate): boolean {
     this.currentDragDeltaXY_ =
@@ -263,7 +261,8 @@ export class Gesture {
    * gesture. If a block should be dragged from the flyout this function creates
    * the new block on the main workspace and updates targetBlock_ and
    * startWorkspace_.
-   * @return True if a block is being dragged from the flyout.
+   *
+   * @returns True if a block is being dragged from the flyout.
    */
   private updateIsDraggingFromFlyout_(): boolean {
     if (!this.targetBlock_) {
@@ -300,7 +299,8 @@ export class Gesture {
    * the drag radius is exceeded.  It should be called no more than once per
    * gesture. If a bubble should be dragged this function creates the necessary
    * BubbleDragger and starts the drag.
-   * @return True if a bubble is being dragged.
+   *
+   * @returns True if a bubble is being dragged.
    */
   private updateIsDraggingBubble_(): boolean {
     if (!this.startBubble_) {
@@ -319,7 +319,8 @@ export class Gesture {
    * gesture. If a block should be dragged, either from the flyout or in the
    * workspace, this function creates the necessary BlockDragger and starts the
    * drag.
-   * @return True if a block is being dragged.
+   *
+   * @returns True if a block is being dragged.
    */
   private updateIsDraggingBlock_(): boolean {
     if (!this.targetBlock_) {
@@ -411,6 +412,7 @@ export class Gesture {
   /**
    * Start a gesture: update the workspace to indicate that a gesture is in
    * progress and bind mousemove and mouseup handlers.
+   *
    * @param e A mouse down or touch start event.
    * @internal
    */
@@ -471,6 +473,7 @@ export class Gesture {
 
   /**
    * Bind gesture events.
+   *
    * @param e A mouse down or touch start event.
    * @internal
    */
@@ -486,6 +489,7 @@ export class Gesture {
 
   /**
    * Handle a mouse move or touch move event.
+   *
    * @param e A mouse move or touch move event.
    * @internal
    */
@@ -505,6 +509,7 @@ export class Gesture {
 
   /**
    * Handle a mouse up or touch end event.
+   *
    * @param e A mouse up or touch end event.
    * @internal
    */
@@ -548,6 +553,7 @@ export class Gesture {
   /**
    * Cancel an in-progress gesture.  If a workspace or block drag is in
    * progress, end the drag at the most recent location.
+   *
    * @internal
    */
   cancel() {
@@ -572,6 +578,7 @@ export class Gesture {
 
   /**
    * Handle a real or faked right-click event by showing a context menu.
+   *
    * @param e A mouse move or touch move event.
    * @internal
    */
@@ -596,6 +603,7 @@ export class Gesture {
 
   /**
    * Handle a mousedown/touchstart event on a workspace.
+   *
    * @param e A mouse down or touch start event.
    * @param ws The workspace the event hit.
    * @internal
@@ -613,15 +621,17 @@ export class Gesture {
 
   /**
    * Fires a workspace click event.
+   *
    * @param ws The workspace that a user clicks on.
    */
   private fireWorkspaceClick_(ws: WorkspaceSvg) {
-    eventUtils.fire(new (eventUtils.get(eventUtils.CLICK))!
-                    (null, ws.id, 'workspace'));
+    eventUtils.fire(
+        new (eventUtils.get(eventUtils.CLICK))(null, ws.id, 'workspace'));
   }
 
   /**
    * Handle a mousedown/touchstart event on a flyout.
+   *
    * @param e A mouse down or touch start event.
    * @param flyout The flyout the event hit.
    * @internal
@@ -638,6 +648,7 @@ export class Gesture {
 
   /**
    * Handle a mousedown/touchstart event on a block.
+   *
    * @param e A mouse down or touch start event.
    * @param block The block the event hit.
    * @internal
@@ -654,6 +665,7 @@ export class Gesture {
 
   /**
    * Handle a mousedown/touchstart event on a bubble.
+   *
    * @param e A mouse down or touch start event.
    * @param bubble The bubble the event hit.
    * @internal
@@ -700,8 +712,8 @@ export class Gesture {
       }
     } else {
       // Clicks events are on the start block, even if it was a shadow.
-      const event = new (eventUtils.get(eventUtils.CLICK))!
-          (this.startBlock_, this.startWorkspace_.id, 'block');
+      const event = new (eventUtils.get(eventUtils.CLICK))(
+          this.startBlock_, this.startWorkspace_.id, 'block');
       eventUtils.fire(event);
     }
     this.bringBlockToFront_();
@@ -711,6 +723,7 @@ export class Gesture {
   /**
    * Execute a workspace click. When in accessibility mode shift clicking will
    * move the cursor.
+   *
    * @param _e A mouse up or touch end event.
    */
   private doWorkspaceClick_(_e: Event) {
@@ -741,6 +754,7 @@ export class Gesture {
 
   /**
    * Record the field that a gesture started on.
+   *
    * @param field The field the gesture started on.
    * @internal
    */
@@ -757,6 +771,7 @@ export class Gesture {
 
   /**
    * Record the bubble that a gesture started on
+   *
    * @param bubble The bubble the gesture started on.
    * @internal
    */
@@ -769,6 +784,7 @@ export class Gesture {
   /**
    * Record the block that a gesture started on, and set the target block
    * appropriately.
+   *
    * @param block The block the gesture started on.
    * @internal
    */
@@ -788,6 +804,7 @@ export class Gesture {
    * Record the block that a gesture targets, meaning the block that will be
    * dragged if this turns into a drag.  If this block is a shadow, that will be
    * its first non-shadow parent.
+   *
    * @param block The block the gesture targets.
    */
   private setTargetBlock_(block: BlockSvg) {
@@ -802,6 +819,7 @@ export class Gesture {
 
   /**
    * Record the workspace that a gesture started on.
+   *
    * @param ws The workspace the gesture started on.
    */
   private setStartWorkspace_(ws: WorkspaceSvg) {
@@ -812,6 +830,7 @@ export class Gesture {
 
   /**
    * Record the flyout that a gesture started on.
+   *
    * @param flyout The flyout the gesture started on.
    */
   private setStartFlyout_(flyout: IFlyout) {
@@ -828,7 +847,8 @@ export class Gesture {
   /**
    * Whether this gesture is a click on a bubble.  This should only be called
    * when ending a gesture (mouse up, touch end).
-   * @return Whether this gesture was a click on a bubble.
+   *
+   * @returns Whether this gesture was a click on a bubble.
    */
   private isBubbleClick_(): boolean {
     // A bubble click starts on a bubble and never escapes the drag radius.
@@ -839,7 +859,8 @@ export class Gesture {
   /**
    * Whether this gesture is a click on a block.  This should only be called
    * when ending a gesture (mouse up, touch end).
-   * @return Whether this gesture was a click on a block.
+   *
+   * @returns Whether this gesture was a click on a block.
    */
   private isBlockClick_(): boolean {
     // A block click starts on a block, never escapes the drag radius, and is
@@ -852,7 +873,8 @@ export class Gesture {
   /**
    * Whether this gesture is a click on a field.  This should only be called
    * when ending a gesture (mouse up, touch end).
-   * @return Whether this gesture was a click on a field.
+   *
+   * @returns Whether this gesture was a click on a field.
    */
   private isFieldClick_(): boolean {
     const fieldClickable =
@@ -864,7 +886,8 @@ export class Gesture {
   /**
    * Whether this gesture is a click on a workspace.  This should only be called
    * when ending a gesture (mouse up, touch end).
-   * @return Whether this gesture was a click on a workspace.
+   *
+   * @returns Whether this gesture was a click on a workspace.
    */
   private isWorkspaceClick_(): boolean {
     const onlyTouchedWorkspace =
@@ -878,7 +901,8 @@ export class Gesture {
    * Whether this gesture is a drag of either a workspace or block.
    * This function is called externally to block actions that cannot be taken
    * mid-drag (e.g. using the keyboard to delete the selected blocks).
-   * @return True if this gesture is a drag of a workspace or block.
+   *
+   * @returns True if this gesture is a drag of a workspace or block.
    * @internal
    */
   isDragging(): boolean {
@@ -890,7 +914,8 @@ export class Gesture {
    * Whether this gesture has already been started.  In theory every mouse down
    * has a corresponding mouse up, but in reality it is possible to lose a
    * mouse up, leaving an in-process gesture hanging.
-   * @return Whether this gesture was a click on a workspace.
+   *
+   * @returns Whether this gesture was a click on a workspace.
    * @internal
    */
   hasStarted(): boolean {
@@ -900,7 +925,8 @@ export class Gesture {
   /**
    * Get a list of the insertion markers that currently exist.  Block drags have
    * 0, 1, or 2 insertion markers.
-   * @return A possibly empty list of insertion marker blocks.
+   *
+   * @returns A possibly empty list of insertion marker blocks.
    * @internal
    */
   getInsertionMarkers(): BlockSvg[] {
@@ -913,7 +939,8 @@ export class Gesture {
   /**
    * Gets the current dragger if an item is being dragged. Null if nothing is
    * being dragged.
-   * @return The dragger that is currently in use or null if no drag is in
+   *
+   * @returns The dragger that is currently in use or null if no drag is in
    *     progress.
    */
   getCurrentDragger(): WorkspaceDragger|BubbleDragger|IBlockDragger|null {
@@ -929,7 +956,8 @@ export class Gesture {
 
   /**
    * Is a drag or other gesture currently in progress on any workspace?
-   * @return True if gesture is occurring.
+   *
+   * @returns True if gesture is occurring.
    */
   static inProgress(): boolean {
     const workspaces = common.getAllWorkspaces();

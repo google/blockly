@@ -5,13 +5,9 @@
  */
 
 /**
- * @fileoverview The class representing a basic cursor.
- * Used to demo switching between different cursors.
- */
-
-/**
  * The class representing a basic cursor.
  * Used to demo switching between different cursors.
+ *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -27,6 +23,7 @@ import {Cursor} from './cursor.js';
  * Class for a basic cursor.
  * This will allow the user to get to all nodes in the AST by hitting next or
  * previous.
+ *
  * @alias Blockly.BasicCursor
  */
 export class BasicCursor extends Cursor {
@@ -40,7 +37,8 @@ export class BasicCursor extends Cursor {
 
   /**
    * Find the next node in the pre order traversal.
-   * @return The next node, or null if the current node is not set or there is
+   *
+   * @returns The next node, or null if the current node is not set or there is
    *     no next value.
    */
   override next(): ASTNode|null {
@@ -60,7 +58,8 @@ export class BasicCursor extends Cursor {
    * For a basic cursor we only have the ability to go next and previous, so
    * in will also allow the user to get to the next node in the pre order
    * traversal.
-   * @return The next node, or null if the current node is not set or there is
+   *
+   * @returns The next node, or null if the current node is not set or there is
    *     no next value.
    */
   override in(): ASTNode|null {
@@ -69,7 +68,8 @@ export class BasicCursor extends Cursor {
 
   /**
    * Find the previous node in the pre order traversal.
-   * @return The previous node, or null if the current node is not set or there
+   *
+   * @returns The previous node, or null if the current node is not set or there
    *     is no previous value.
    */
   override prev(): ASTNode|null {
@@ -89,7 +89,8 @@ export class BasicCursor extends Cursor {
    * For a basic cursor we only have the ability to go next and previous, so
    * out will allow the user to get to the previous node in the pre order
    * traversal.
-   * @return The previous node, or null if the current node is not set or there
+   *
+   * @returns The previous node, or null if the current node is not set or there
    *     is no previous value.
    */
   override out(): ASTNode|null {
@@ -100,10 +101,11 @@ export class BasicCursor extends Cursor {
    * Uses pre order traversal to navigate the Blockly AST. This will allow
    * a user to easily navigate the entire Blockly AST without having to go in
    * and out levels on the tree.
+   *
    * @param node The current position in the AST.
    * @param isValid A function true/false depending on whether the given node
    *     should be traversed.
-   * @return The next node in the traversal.
+   * @returns The next node in the traversal.
    */
   protected getNextNode_(
       node: ASTNode|null, isValid: (p1: ASTNode|null) => boolean): ASTNode
@@ -118,9 +120,7 @@ export class BasicCursor extends Cursor {
       return this.getNextNode_(newNode, isValid);
     }
     const siblingOrParent = this.findSiblingOrParent_(node.out());
-    // AnyDuringMigration because:  Argument of type 'ASTNode | null' is not
-    // assignable to parameter of type 'ASTNode'.
-    if (isValid(siblingOrParent as AnyDuringMigration)) {
+    if (isValid(siblingOrParent)) {
       return siblingOrParent;
     } else if (siblingOrParent) {
       return this.getNextNode_(siblingOrParent, isValid);
@@ -132,10 +132,11 @@ export class BasicCursor extends Cursor {
    * Reverses the pre order traversal in order to find the previous node. This
    * will allow a user to easily navigate the entire Blockly AST without having
    * to go in and out levels on the tree.
+   *
    * @param node The current position in the AST.
    * @param isValid A function true/false depending on whether the given node
    *     should be traversed.
-   * @return The previous node in the traversal or null if no previous node
+   * @returns The previous node in the traversal or null if no previous node
    *     exists.
    */
   protected getPreviousNode_(
@@ -162,8 +163,9 @@ export class BasicCursor extends Cursor {
   /**
    * Decides what nodes to traverse and which ones to skip. Currently, it
    * skips output, stack and workspace nodes.
+   *
    * @param node The AST node to check whether it is valid.
-   * @return True if the node should be visited, false otherwise.
+   * @returns True if the node should be visited, false otherwise.
    */
   protected validNode_(node: ASTNode|null): boolean {
     let isValid = false;
@@ -178,8 +180,9 @@ export class BasicCursor extends Cursor {
 
   /**
    * From the given node find either the next valid sibling or parent.
+   *
    * @param node The current position in the AST.
-   * @return The parent AST node or null if there are no valid parents.
+   * @returns The parent AST node or null if there are no valid parents.
    */
   private findSiblingOrParent_(node: ASTNode|null): ASTNode|null {
     if (!node) {
@@ -194,8 +197,9 @@ export class BasicCursor extends Cursor {
 
   /**
    * Get the right most child of a node.
+   *
    * @param node The node to find the right most child of.
-   * @return The right most child of the given node, or the node if no child
+   * @returns The right most child of the given node, or the node if no child
    *     exists.
    */
   private getRightMostChild_(node: ASTNode|null): ASTNode|null {

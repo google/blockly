@@ -5,13 +5,9 @@
  */
 
 /**
- * @fileoverview Interface for a workspace component that can be registered with
- * the ComponentManager.
- */
-
-/**
  * Interface for a workspace component that can be registered with
  * the ComponentManager.
+ *
  * @namespace Blockly.IComponent
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -21,6 +17,7 @@ goog.declareModuleId('Blockly.IComponent');
 /**
  * The interface for a workspace component that can be registered with the
  * ComponentManager.
+ *
  * @alias Blockly.IComponent
  */
 export interface IComponent {

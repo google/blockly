@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Class for a button in the flyout.
- */
-
-/**
  * Class for a button in the flyout.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -28,6 +25,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Class for a button or label in the flyout.
+ *
  * @alias Blockly.FlyoutButton
  */
 export class FlyoutButton {
@@ -88,7 +86,8 @@ export class FlyoutButton {
 
   /**
    * Create the button elements.
-   * @return The button's SVG group.
+   *
+   * @returns The button's SVG group.
    */
   createDom(): SVGElement {
     let cssClass = this.isLabel_ ? 'blocklyFlyoutLabel' : 'blocklyFlyoutButton';
@@ -190,6 +189,7 @@ export class FlyoutButton {
 
   /**
    * Move the button to the given x, y coordinates.
+   *
    * @param x The new x coordinate.
    * @param y The new y coordinate.
    */
@@ -199,28 +199,30 @@ export class FlyoutButton {
     this.updateTransform_();
   }
 
-  /** @return Whether or not the button is a label. */
+  /** @returns Whether or not the button is a label. */
   isLabel(): boolean {
     return this.isLabel_;
   }
 
   /**
    * Location of the button.
-   * @return x, y coordinates.
+   *
+   * @returns x, y coordinates.
    * @internal
    */
   getPosition(): Coordinate {
     return this.position_;
   }
 
-  /** @return Text of the button. */
+  /** @returns Text of the button. */
   getButtonText(): string {
     return this.text_;
   }
 
   /**
    * Get the button's target workspace.
-   * @return The target workspace of the flyout where this button resides.
+   *
+   * @returns The target workspace of the flyout where this button resides.
    */
   getTargetWorkspace(): WorkspaceSvg {
     return this.targetWorkspace;
@@ -241,6 +243,7 @@ export class FlyoutButton {
 
   /**
    * Do something when the button is clicked.
+   *
    * @param e Mouse up event.
    */
   private onMouseUp_(e: Event) {

@@ -5,15 +5,10 @@
  */
 
 /**
- * @fileoverview Non-editable, serializable text field. Behaves like a
- *    normal label but is serialized to XML. It may only be
- *    edited programmatically.
- */
-
-/**
  * Non-editable, serializable text field. Behaves like a
  *    normal label but is serialized to XML. It may only be
  *    edited programmatically.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -26,6 +21,7 @@ import * as parsing from './utils/parsing.js';
 
 /**
  * Class for a non-editable, serializable text field.
+ *
  * @alias Blockly.FieldLabelSerializable
  */
 export class FieldLabelSerializable extends FieldLabel {
@@ -59,8 +55,9 @@ export class FieldLabelSerializable extends FieldLabel {
   /**
    * Construct a FieldLabelSerializable from a JSON arg object,
    * dereferencing any string table references.
+   *
    * @param options A JSON object with options (text, and class).
-   * @return The new field instance.
+   * @returns The new field instance.
    * @nocollapse
    * @internal
    */

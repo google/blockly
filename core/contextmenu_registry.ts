@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Registry for context menu option items.
- */
-
-/**
  * Registry for context menu option items.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -23,12 +20,13 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  * Class for the registry of context menu items. This is intended to be a
  * singleton. You should not create a new instance, and only access this class
  * from ContextMenuRegistry.registry.
+ *
  * @alias Blockly.ContextMenuRegistry
  */
 export class ContextMenuRegistry {
   static registry: ContextMenuRegistry;
-  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  private registry_!: {[key: string]: RegistryItem};
+  /** Registry of all registered RegistryItems, keyed by ID. */
+  private registry_ = new Map<string, RegistryItem>();
 
   /** Resets the existing singleton instance of ContextMenuRegistry. */
   constructor() {
@@ -37,58 +35,58 @@ export class ContextMenuRegistry {
 
   /** Clear and recreate the registry. */
   reset() {
-    /** Registry of all registered RegistryItems, keyed by ID. */
-    this.registry_ = Object.create(null);
+    this.registry_.clear();
   }
 
   /**
    * Registers a RegistryItem.
+   *
    * @param item Context menu item to register.
    * @throws {Error} if an item with the given ID already exists.
    */
   register(item: RegistryItem) {
-    if (this.registry_[item.id]) {
+    if (this.registry_.has(item.id)) {
       throw Error('Menu item with ID "' + item.id + '" is already registered.');
     }
-    this.registry_[item.id] = item;
+    this.registry_.set(item.id, item);
   }
 
   /**
    * Unregisters a RegistryItem with the given ID.
+   *
    * @param id The ID of the RegistryItem to remove.
    * @throws {Error} if an item with the given ID does not exist.
    */
   unregister(id: string) {
-    if (!this.registry_[id]) {
+    if (!this.registry_.has(id)) {
       throw new Error('Menu item with ID "' + id + '" not found.');
     }
-    delete this.registry_[id];
+    this.registry_.delete(id);
   }
 
   /**
    * @param id The ID of the RegistryItem to get.
-   * @return RegistryItem or null if not found
+   * @returns RegistryItem or null if not found
    */
   getItem(id: string): RegistryItem|null {
-    return this.registry_[id] || null;
+    return this.registry_.get(id) ?? null;
   }
 
   /**
    * Gets the valid context menu options for the given scope type (e.g. block or
    * workspace) and scope. Blocks are only shown if the preconditionFn shows
    * they should not be hidden.
+   *
    * @param scopeType Type of scope where menu should be shown (e.g. on a block
    *     or on a workspace)
    * @param scope Current scope of context menu (i.e., the exact workspace or
    *     block being clicked on)
-   * @return the list of ContextMenuOptions
+   * @returns the list of ContextMenuOptions
    */
   getContextMenuOptions(scopeType: ScopeType, scope: Scope):
       ContextMenuOption[] {
-    const menuOptions: AnyDuringMigration[] = [];
-    const registry = this.registry_;
-    Object.keys(registry).forEach(function(id) {
-      const item = registry[id];
+    const menuOptions: ContextMenuOption[] = [];
+    for (const item of this.registry_.values()) {
       if (scopeType === item.scopeType) {
         const precondition = item.preconditionFn(scope);
         if (precondition !== 'hidden') {
@@ -105,7 +103,7 @@ export class ContextMenuRegistry {
           menuOptions.push(menuOption);
         }
       }
-    });
+    }
     menuOptions.sort(function(a, b) {
       return a.weight - b.weight;
     });
@@ -129,15 +127,15 @@ export namespace ContextMenuRegistry {
    * to callback and displayText functions that depend on this information.
    */
   export interface Scope {
-    block: BlockSvg|undefined;
-    workspace: WorkspaceSvg|undefined;
+    block?: BlockSvg;
+    workspace?: WorkspaceSvg;
   }
 
   /**
    * A menu item as entered in the registry.
    */
   export interface RegistryItem {
-    callback: (p1: Scope) => AnyDuringMigration;
+    callback: (p1: Scope) => void;
     scopeType: ScopeType;
     displayText: ((p1: Scope) => string)|string;
     preconditionFn: (p1: Scope) => string;
@@ -151,7 +149,7 @@ export namespace ContextMenuRegistry {
   export interface ContextMenuOption {
     text: string;
     enabled: boolean;
-    callback: (p1: Scope) => AnyDuringMigration;
+    callback: (p1: Scope) => void;
     scope: Scope;
     weight: number;
   }
@@ -163,7 +161,7 @@ export namespace ContextMenuRegistry {
   export interface LegacyContextMenuOption {
     text: string;
     enabled: boolean;
-    callback: (p1: Scope) => AnyDuringMigration;
+    callback: (p1: Scope) => void;
   }
 
   /**

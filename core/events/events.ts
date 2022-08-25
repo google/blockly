@@ -5,17 +5,13 @@
  */
 
 /**
- * @fileoverview Events fired as a result of actions in Blockly's editor.
- */
-
-/**
  * Events fired as a result of actions in Blockly's editor.
+ *
  * @namespace Blockly.Events
  */
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events');
 
-import * as deprecation from '../utils/deprecation.js';
 
 import {Abstract as AbstractEvent} from './events_abstract.js';
 import {BlockBase} from './events_block_base.js';

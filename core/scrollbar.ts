@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Object representing a scrollbar.
- */
-
-/**
  * Object representing a scrollbar.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -34,6 +31,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  * Class for a pure SVG scrollbar.
  * This technique offers a scrollbar that is guaranteed to work, but may not
  * look or behave like the system's scrollbars.
+ *
  * @alias Blockly.Scrollbar
  */
 export class Scrollbar {
@@ -46,6 +44,7 @@ export class Scrollbar {
   /**
    * Default margin around the scrollbar (between the scrollbar and the edge of
    * the viewport in pixels).
+   *
    * @internal
    */
   static readonly DEFAULT_SCROLLBAR_MARGIN = 0.5;
@@ -57,6 +56,7 @@ export class Scrollbar {
 
   /**
    * The ratio of handle position offset to workspace content displacement.
+   *
    * @internal
    */
   ratio = 1;
@@ -105,8 +105,10 @@ export class Scrollbar {
 
   lengthAttribute_ = 'width';
   positionAttribute_ = 'x';
-  onMouseDownBarWrapper_: AnyDuringMigration;
-  onMouseDownHandleWrapper_: AnyDuringMigration;
+  onMouseDownBarWrapper_: browserEvents.Data|null;
+  onMouseDownHandleWrapper_: browserEvents.Data|null;
+  onMouseUpWrapper_: browserEvents.Data|null = null;
+  onMouseMoveWrapper_: browserEvents.Data|null = null;
 
   /**
    * @param workspace Workspace to bind the scrollbar to.
@@ -142,6 +144,7 @@ export class Scrollbar {
      * The upper left corner of the scrollbar's SVG group in CSS pixels relative
      * to the scrollbar's origin.  This is usually relative to the injection div
      * origin.
+     *
      * @internal
      */
     this.position = new Coordinate(0, 0);
@@ -149,48 +152,41 @@ export class Scrollbar {
     // Store the thickness in a temp variable for readability.
     const scrollbarThickness = Scrollbar.scrollbarThickness;
     if (horizontal) {
-      this.svgBackground_!.setAttribute(
-          'height', scrollbarThickness.toString());
-      this.outerSvg_!.setAttribute('height', scrollbarThickness.toString());
-      this.svgHandle_!.setAttribute(
-          'height', (scrollbarThickness - 5).toString());
-      this.svgHandle_!.setAttribute('y', (2.5).toString());
+      this.svgBackground_!.setAttribute('height', String(scrollbarThickness));
+      this.outerSvg_!.setAttribute('height', String(scrollbarThickness));
+      this.svgHandle_!.setAttribute('height', String(scrollbarThickness - 5));
+      this.svgHandle_!.setAttribute('y', String(2.5));
     } else {
-      this.svgBackground_!.setAttribute('width', scrollbarThickness.toString());
-      this.outerSvg_!.setAttribute('width', scrollbarThickness.toString());
-      this.svgHandle_!.setAttribute(
-          'width', (scrollbarThickness - 5).toString());
-      // AnyDuringMigration because:  Argument of type 'number' is not
-      // assignable to parameter of type 'string'.
-      this.svgHandle_!.setAttribute('x', (2.5).toString());
+      this.svgBackground_!.setAttribute('width', String(scrollbarThickness));
+      this.outerSvg_!.setAttribute('width', String(scrollbarThickness));
+      this.svgHandle_!.setAttribute('width', String(scrollbarThickness - 5));
+      this.svgHandle_!.setAttribute('x', String(2.5));
 
       this.lengthAttribute_ = 'height';
       this.positionAttribute_ = 'y';
     }
-    const scrollbar = this;
-    // AnyDuringMigration because:  Argument of type 'SVGRectElement | null' is
-    // not assignable to parameter of type 'EventTarget'.
     this.onMouseDownBarWrapper_ = browserEvents.conditionalBind(
-        this.svgBackground_ as AnyDuringMigration, 'mousedown', scrollbar,
-        scrollbar.onMouseDownBar_);
-    // AnyDuringMigration because:  Argument of type 'SVGRectElement | null' is
-    // not assignable to parameter of type 'EventTarget'.
+        this.svgBackground_!, 'mousedown', this, this.onMouseDownBar_);
     this.onMouseDownHandleWrapper_ = browserEvents.conditionalBind(
-        this.svgHandle_ as AnyDuringMigration, 'mousedown', scrollbar,
-        scrollbar.onMouseDownHandle_);
+        this.svgHandle_!, 'mousedown', this, this.onMouseDownHandle_);
   }
 
   /**
    * Dispose of this scrollbar.
    * Unlink from all DOM elements to prevent memory leaks.
+   *
    * @suppress {checkTypes}
    */
   dispose() {
     this.cleanUp_();
-    browserEvents.unbind(this.onMouseDownBarWrapper_);
-    this.onMouseDownBarWrapper_ = null;
-    browserEvents.unbind(this.onMouseDownHandleWrapper_);
-    this.onMouseDownHandleWrapper_ = null;
+    if (this.onMouseDownBarWrapper_) {
+      browserEvents.unbind(this.onMouseDownBarWrapper_);
+      this.onMouseDownBarWrapper_ = null;
+    }
+    if (this.onMouseDownHandleWrapper_) {
+      browserEvents.unbind(this.onMouseDownHandleWrapper_);
+      this.onMouseDownHandleWrapper_ = null;
+    }
 
     dom.removeNode(this.outerSvg_);
     this.outerSvg_ = null;
@@ -200,16 +196,14 @@ export class Scrollbar {
       this.workspace.getThemeManager().unsubscribe(this.svgHandle_);
       this.svgHandle_ = null;
     }
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'WorkspaceSvg'.
-    this.workspace = null as AnyDuringMigration;
   }
 
   /**
    * Constrain the handle's length within the minimum (0) and maximum
    * (scrollbar background) values allowed for the scrollbar.
+   *
    * @param value Value that is potentially out of bounds, in CSS pixels.
-   * @return Constrained value, in CSS pixels.
+   * @returns Constrained value, in CSS pixels.
    */
   private constrainHandleLength_(value: number): number {
     if (value <= 0 || isNaN(value)) {
@@ -223,21 +217,21 @@ export class Scrollbar {
   /**
    * Set the length of the scrollbar's handle and change the SVG attribute
    * accordingly.
+   *
    * @param newLength The new scrollbar handle length in CSS pixels.
    */
   private setHandleLength_(newLength: number) {
     this.handleLength_ = newLength;
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
     this.svgHandle_!.setAttribute(
-        this.lengthAttribute_, this.handleLength_ as AnyDuringMigration);
+        this.lengthAttribute_, String(this.handleLength_));
   }
 
   /**
    * Constrain the handle's position within the minimum (0) and maximum values
    * allowed for the scrollbar.
+   *
    * @param value Value that is potentially out of bounds, in CSS pixels.
-   * @return Constrained value, in CSS pixels.
+   * @returns Constrained value, in CSS pixels.
    */
   private constrainHandlePosition_(value: number): number {
     if (value <= 0 || isNaN(value)) {
@@ -254,37 +248,34 @@ export class Scrollbar {
   /**
    * Set the offset of the scrollbar's handle from the scrollbar's position, and
    * change the SVG attribute accordingly.
+   *
    * @param newPosition The new scrollbar handle offset in CSS pixels.
    */
   setHandlePosition(newPosition: number) {
     this.handlePosition_ = newPosition;
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
     this.svgHandle_!.setAttribute(
-        this.positionAttribute_, this.handlePosition_ as AnyDuringMigration);
+        this.positionAttribute_, String(this.handlePosition_));
   }
 
   /**
    * Set the size of the scrollbar's background and change the SVG attribute
    * accordingly.
+   *
    * @param newSize The new scrollbar background length in CSS pixels.
    */
   private setScrollbarLength_(newSize: number) {
     this.scrollbarLength_ = newSize;
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
     this.outerSvg_!.setAttribute(
-        this.lengthAttribute_, this.scrollbarLength_ as AnyDuringMigration);
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
+        this.lengthAttribute_, String(this.scrollbarLength_));
     this.svgBackground_!.setAttribute(
-        this.lengthAttribute_, this.scrollbarLength_ as AnyDuringMigration);
+        this.lengthAttribute_, String(this.scrollbarLength_));
   }
 
   /**
    * Set the position of the scrollbar's SVG group in CSS pixels relative to the
    * scrollbar's origin.  This sets the scrollbar's location within the
    * workspace.
+   *
    * @param x The new x coordinate.
    * @param y The new y coordinate.
    * @internal
@@ -301,6 +292,7 @@ export class Scrollbar {
 
   /**
    * Recalculate the scrollbar's location and its length.
+   *
    * @param opt_metrics A data structure of from the describing all the required
    *     dimensions.  If not provided, it will be fetched from the host object.
    */
@@ -335,9 +327,10 @@ export class Scrollbar {
   /**
    * Returns whether the a resizeView is necessary by comparing the passed
    * hostMetrics with cached old host metrics.
+   *
    * @param hostMetrics A data structure describing all the required dimensions,
    *     possibly fetched from the host object.
-   * @return Whether a resizeView is necessary.
+   * @returns Whether a resizeView is necessary.
    */
   private requiresViewResize_(hostMetrics: Metrics): boolean {
     if (!this.oldHostMetrics_) {
@@ -351,6 +344,7 @@ export class Scrollbar {
 
   /**
    * Recalculate a horizontal scrollbar's location and length.
+   *
    * @param hostMetrics A data structure describing all the required dimensions,
    *     possibly fetched from the host object.
    */
@@ -366,6 +360,7 @@ export class Scrollbar {
    * Recalculate a horizontal scrollbar's location on the screen and path
    * length. This should be called when the layout or size of the window has
    * changed.
+   *
    * @param hostMetrics A data structure describing all the required dimensions,
    *     possibly fetched from the host object.
    */
@@ -396,6 +391,7 @@ export class Scrollbar {
   /**
    * Recalculate a horizontal scrollbar's location within its path and length.
    * This should be called when the contents of the workspace have changed.
+   *
    * @param hostMetrics A data structure describing all the required dimensions,
    *     possibly fetched from the host object.
    */
@@ -449,6 +445,7 @@ export class Scrollbar {
 
   /**
    * Recalculate a vertical scrollbar's location and length.
+   *
    * @param hostMetrics A data structure describing all the required dimensions,
    *     possibly fetched from the host object.
    */
@@ -463,6 +460,7 @@ export class Scrollbar {
   /**
    * Recalculate a vertical scrollbar's location on the screen and path length.
    * This should be called when the layout or size of the window has changed.
+   *
    * @param hostMetrics A data structure describing all the required dimensions,
    *     possibly fetched from the host object.
    */
@@ -490,6 +488,7 @@ export class Scrollbar {
   /**
    * Recalculate a vertical scrollbar's location within its path and length.
    * This should be called when the contents of the workspace have changed.
+   *
    * @param hostMetrics A data structure describing all the required dimensions,
    *     possibly fetched from the host object.
    */
@@ -544,6 +543,7 @@ export class Scrollbar {
   /**
    * Create all the DOM elements required for a scrollbar.
    * The resulting widget is not sized.
+   *
    * @param opt_class A class to be applied to this scrollbar.
    */
   private createDom_(opt_class?: string) {
@@ -561,41 +561,26 @@ export class Scrollbar {
       className += ' ' + opt_class;
     }
     this.outerSvg_ = dom.createSvgElement(Svg.SVG, {'class': className});
-    // AnyDuringMigration because:  Argument of type 'SVGSVGElement | null' is
-    // not assignable to parameter of type 'Element | undefined'.
-    this.svgGroup_ =
-        dom.createSvgElement(Svg.G, {}, this.outerSvg_ as AnyDuringMigration);
-    // AnyDuringMigration because:  Argument of type 'SVGGElement | null' is not
-    // assignable to parameter of type 'Element | undefined'.
+    this.svgGroup_ = dom.createSvgElement(Svg.G, {}, this.outerSvg_);
     this.svgBackground_ = dom.createSvgElement(
-        Svg.RECT, {'class': 'blocklyScrollbarBackground'},
-        this.svgGroup_ as AnyDuringMigration);
+        Svg.RECT, {'class': 'blocklyScrollbarBackground'}, this.svgGroup_);
     const radius = Math.floor((Scrollbar.scrollbarThickness - 5) / 2);
-    // AnyDuringMigration because:  Argument of type 'SVGGElement | null' is not
-    // assignable to parameter of type 'Element | undefined'.
     this.svgHandle_ = dom.createSvgElement(
         Svg.RECT,
         {'class': 'blocklyScrollbarHandle', 'rx': radius, 'ry': radius},
-        this.svgGroup_ as AnyDuringMigration);
-    // AnyDuringMigration because:  Argument of type 'SVGRectElement | null' is
-    // not assignable to parameter of type 'Element'.
+        this.svgGroup_);
     this.workspace.getThemeManager().subscribe(
-        this.svgHandle_ as AnyDuringMigration, 'scrollbarColour', 'fill');
-    // AnyDuringMigration because:  Argument of type 'SVGRectElement | null' is
-    // not assignable to parameter of type 'Element'.
+        this.svgHandle_!, 'scrollbarColour', 'fill');
     this.workspace.getThemeManager().subscribe(
-        this.svgHandle_ as AnyDuringMigration, 'scrollbarOpacity',
-        'fill-opacity');
-    // AnyDuringMigration because:  Argument of type 'SVGSVGElement | null' is
-    // not assignable to parameter of type 'Element'.
-    dom.insertAfter(
-        this.outerSvg_ as AnyDuringMigration, this.workspace.getParentSvg());
+        this.svgHandle_!, 'scrollbarOpacity', 'fill-opacity');
+    dom.insertAfter(this.outerSvg_!, this.workspace.getParentSvg());
   }
 
   /**
    * Is the scrollbar visible.  Non-paired scrollbars disappear when they aren't
    * needed.
-   * @return True if visible.
+   *
+   * @returns True if visible.
    */
   isVisible(): boolean {
     return this.isVisible_;
@@ -604,6 +589,7 @@ export class Scrollbar {
   /**
    * Set whether the scrollbar's container is visible and update
    * display accordingly if visibility has changed.
+   *
    * @param visible Whether the container is visible
    */
   setContainerVisible(visible: boolean) {
@@ -618,6 +604,7 @@ export class Scrollbar {
   /**
    * Set whether the scrollbar is visible.
    * Only applies to non-paired scrollbars.
+   *
    * @param visible True if visible.
    */
   setVisible(visible: boolean) {
@@ -658,6 +645,7 @@ export class Scrollbar {
   /**
    * Scroll by one pageful.
    * Called when scrollbar background is clicked.
+   *
    * @param e Mouse down event.
    */
   private onMouseDownBar_(e: MouseEvent) {
@@ -697,6 +685,7 @@ export class Scrollbar {
   /**
    * Start a dragging operation.
    * Called when scrollbar handle is clicked.
+   *
    * @param e Mouse down event.
    */
   private onMouseDownHandle_(e: MouseEvent) {
@@ -717,35 +706,22 @@ export class Scrollbar {
     this.workspace.setupDragSurface();
 
     // Record the current mouse position.
-    // AnyDuringMigration because:  Property 'clientY' does not exist on type
-    // 'Event'. AnyDuringMigration because:  Property 'clientX' does not exist
-    // on type 'Event'.
-    this.startDragMouse_ = this.horizontal ? (e as AnyDuringMigration).clientX :
-                                             (e as AnyDuringMigration).clientY;
-    // AnyDuringMigration because:  Property 'onMouseUpWrapper_' does not exist
-    // on type 'typeof Scrollbar'.
-    (Scrollbar as AnyDuringMigration).onMouseUpWrapper_ =
-        browserEvents.conditionalBind(
-            document, 'mouseup', this, this.onMouseUpHandle_);
-    // AnyDuringMigration because:  Property 'onMouseMoveWrapper_' does not
-    // exist on type 'typeof Scrollbar'.
-    (Scrollbar as AnyDuringMigration).onMouseMoveWrapper_ =
-        browserEvents.conditionalBind(
-            document, 'mousemove', this, this.onMouseMoveHandle_);
+    this.startDragMouse_ = this.horizontal ? e.clientX : e.clientY;
+    this.onMouseUpWrapper_ = browserEvents.conditionalBind(
+        document, 'mouseup', this, this.onMouseUpHandle_);
+    this.onMouseMoveWrapper_ = browserEvents.conditionalBind(
+        document, 'mousemove', this, this.onMouseMoveHandle_);
     e.stopPropagation();
     e.preventDefault();
   }
 
   /**
    * Drag the scrollbar's handle.
-   * @param e Mouse up event.
+   *
+   * @param e Mouse move event.
    */
-  private onMouseMoveHandle_(e: Event) {
-    // AnyDuringMigration because:  Property 'clientY' does not exist on type
-    // 'Event'. AnyDuringMigration because:  Property 'clientX' does not exist
-    // on type 'Event'.
-    const currentMouse = this.horizontal ? (e as AnyDuringMigration).clientX :
-                                           (e as AnyDuringMigration).clientY;
+  private onMouseMoveHandle_(e: MouseEvent) {
+    const currentMouse = this.horizontal ? e.clientX : e.clientY;
     const mouseDelta = currentMouse - this.startDragMouse_;
     const handlePosition = this.startDragHandle + mouseDelta;
     // Position the bar.
@@ -767,32 +743,20 @@ export class Scrollbar {
    */
   private cleanUp_() {
     this.workspace.hideChaff(true);
-    // AnyDuringMigration because:  Property 'onMouseUpWrapper_' does not exist
-    // on type 'typeof Scrollbar'.
-    if ((Scrollbar as AnyDuringMigration).onMouseUpWrapper_) {
-      // AnyDuringMigration because:  Property 'onMouseUpWrapper_' does not
-      // exist on type 'typeof Scrollbar'.
-      browserEvents.unbind((Scrollbar as AnyDuringMigration).onMouseUpWrapper_);
-      // AnyDuringMigration because:  Property 'onMouseUpWrapper_' does not
-      // exist on type 'typeof Scrollbar'.
-      (Scrollbar as AnyDuringMigration).onMouseUpWrapper_ = null;
+    if (this.onMouseUpWrapper_) {
+      browserEvents.unbind(this.onMouseUpWrapper_);
+      this.onMouseUpWrapper_ = null;
     }
-    // AnyDuringMigration because:  Property 'onMouseMoveWrapper_' does not
-    // exist on type 'typeof Scrollbar'.
-    if ((Scrollbar as AnyDuringMigration).onMouseMoveWrapper_) {
-      // AnyDuringMigration because:  Property 'onMouseMoveWrapper_' does not
-      // exist on type 'typeof Scrollbar'.
-      browserEvents.unbind(
-          (Scrollbar as AnyDuringMigration).onMouseMoveWrapper_);
-      // AnyDuringMigration because:  Property 'onMouseMoveWrapper_' does not
-      // exist on type 'typeof Scrollbar'.
-      (Scrollbar as AnyDuringMigration).onMouseMoveWrapper_ = null;
+    if (this.onMouseMoveWrapper_) {
+      browserEvents.unbind(this.onMouseMoveWrapper_);
+      this.onMouseMoveWrapper_ = null;
     }
   }
 
   /**
    * Helper to calculate the ratio of handle position to scrollbar view size.
-   * @return Ratio.
+   *
+   * @returns Ratio.
    * @internal
    */
   getRatio_(): number {
@@ -810,21 +774,16 @@ export class Scrollbar {
    */
   private updateMetrics_() {
     const ratio = this.getRatio_();
-    const xyRatio = {};
     if (this.horizontal) {
-      // AnyDuringMigration because:  Property 'x' does not exist on type '{}'.
-      (xyRatio as AnyDuringMigration).x = ratio;
+      this.workspace.setMetrics({x: ratio});
     } else {
-      // AnyDuringMigration because:  Property 'y' does not exist on type '{}'.
-      (xyRatio as AnyDuringMigration).y = ratio;
+      this.workspace.setMetrics({y: ratio});
     }
-    // AnyDuringMigration because:  Argument of type '{}' is not assignable to
-    // parameter of type '{ x: number; y: number; }'.
-    this.workspace.setMetrics(xyRatio as AnyDuringMigration);
   }
 
   /**
    * Set the scrollbar handle's position.
+   *
    * @param value The content displacement, relative to the view in pixels.
    * @param updateMetrics Whether to update metrics on this set call.
    *    Defaults to true.
@@ -841,6 +800,7 @@ export class Scrollbar {
    * relative to the injection div origin. This is for times when the scrollbar
    * is used in an object whose origin isn't the same as the main workspace
    * (e.g. in a flyout.)
+   *
    * @param x The x coordinate of the scrollbar's origin, in CSS pixels.
    * @param y The y coordinate of the scrollbar's origin, in CSS pixels.
    */
@@ -852,7 +812,7 @@ export class Scrollbar {
    * @param first An object containing computed measurements of a workspace.
    * @param second Another object containing computed measurements of a
    *     workspace.
-   * @return Whether the two sets of metrics are equivalent.
+   * @returns Whether the two sets of metrics are equivalent.
    */
   private static metricsAreEquivalent_(first: Metrics, second: Metrics):
       boolean {

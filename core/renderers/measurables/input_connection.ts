@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Class representing inputs with connections on a rendered block.
- */
-
-/**
  * Class representing inputs with connections on a rendered block.
+ *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -27,6 +24,7 @@ import {Types} from './types.js';
 /**
  * The base class to represent an input that takes up space on a block
  * during rendering
+ *
  * @alias Blockly.blockRendering.InputConnection
  */
 export class InputConnection extends Connection {
@@ -34,8 +32,8 @@ export class InputConnection extends Connection {
   connectedBlock: BlockSvg|null;
   connectedBlockWidth: number;
   connectedBlockHeight: number;
-  connectionOffsetX: number = 0;
-  connectionOffsetY: number = 0;
+  connectionOffsetX = 0;
+  connectionOffsetY = 0;
 
   /**
    * @param constants The rendering constants provider.

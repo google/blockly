@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Methods for dragging a workspace visually.
- */
-
-/**
  * Methods for dragging a workspace visually.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -26,6 +23,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  * Note that the workspace itself manages whether or not it has a drag surface
  * and how to do translations based on that.  This simply passes the right
  * commands based on events.
+ *
  * @alias Blockly.WorkspaceDragger
  */
 export class WorkspaceDragger {
@@ -50,6 +48,7 @@ export class WorkspaceDragger {
 
   /**
    * Sever all links from this object.
+   *
    * @suppress {checkTypes}
    * @internal
    */
@@ -61,6 +60,7 @@ export class WorkspaceDragger {
 
   /**
    * Start dragging the workspace.
+   *
    * @internal
    */
   startDrag() {
@@ -72,6 +72,7 @@ export class WorkspaceDragger {
 
   /**
    * Finish dragging the workspace and put everything back where it belongs.
+   *
    * @param currentDragDeltaXY How far the pointer has moved from the position
    *     at the start of the drag, in pixel coordinates.
    * @internal
@@ -84,6 +85,7 @@ export class WorkspaceDragger {
 
   /**
    * Move the workspace based on the most recent mouse movements.
+   *
    * @param currentDragDeltaXY How far the pointer has moved from the position
    *     at the start of the drag, in pixel coordinates.
    * @internal

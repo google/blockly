@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Object representing a pair of scrollbars.
- */
-
-/**
  * Object representing a pair of scrollbars.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -25,12 +22,13 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 /**
  * Class for a pair of scrollbars.  Horizontal and vertical.
+ *
  * @alias Blockly.ScrollbarPair
  */
 export class ScrollbarPair {
-  hScroll: AnyDuringMigration;
-  vScroll: AnyDuringMigration;
-  corner_: AnyDuringMigration;
+  hScroll: Scrollbar|null = null;
+  vScroll: Scrollbar|null = null;
+  corner_: SVGRectElement|null = null;
 
   /** Previously recorded metrics from the workspace. */
   private oldHostMetrics_: Metrics|null = null;
@@ -72,14 +70,12 @@ export class ScrollbarPair {
   /**
    * Dispose of this pair of scrollbars.
    * Unlink from all DOM elements to prevent memory leaks.
+   *
    * @suppress {checkTypes}
    */
   dispose() {
     dom.removeNode(this.corner_);
     this.corner_ = null;
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'WorkspaceSvg'.
-    this.workspace = null as AnyDuringMigration;
     this.oldHostMetrics_ = null;
     if (this.hScroll) {
       this.hScroll.dispose();
@@ -150,12 +146,12 @@ export class ScrollbarPair {
       if (!this.oldHostMetrics_ ||
           this.oldHostMetrics_.viewWidth !== hostMetrics.viewWidth ||
           this.oldHostMetrics_.absoluteLeft !== hostMetrics.absoluteLeft) {
-        this.corner_.setAttribute('x', this.vScroll.position.x);
+        this.corner_?.setAttribute('x', String(this.vScroll.position.x));
       }
       if (!this.oldHostMetrics_ ||
           this.oldHostMetrics_.viewHeight !== hostMetrics.viewHeight ||
           this.oldHostMetrics_.absoluteTop !== hostMetrics.absoluteTop) {
-        this.corner_.setAttribute('y', this.hScroll.position.y);
+        this.corner_?.setAttribute('y', String(this.hScroll.position.y));
       }
     }
 
@@ -165,7 +161,8 @@ export class ScrollbarPair {
 
   /**
    * Returns whether scrolling horizontally is enabled.
-   * @return True if horizontal scroll is enabled.
+   *
+   * @returns True if horizontal scroll is enabled.
    */
   canScrollHorizontally(): boolean {
     return !!this.hScroll;
@@ -173,7 +170,8 @@ export class ScrollbarPair {
 
   /**
    * Returns whether scrolling vertically is enabled.
-   * @return True if vertical scroll is enabled.
+   *
+   * @returns True if vertical scroll is enabled.
    */
   canScrollVertically(): boolean {
     return !!this.vScroll;
@@ -184,6 +182,7 @@ export class ScrollbarPair {
    * relative to the injection div origin. This is for times when the scrollbar
    * is used in an object whose origin isn't the same as the main workspace
    * (e.g. in a flyout.)
+   *
    * @param x The x coordinate of the scrollbar's origin, in CSS pixels.
    * @param y The y coordinate of the scrollbar's origin, in CSS pixels.
    * @internal
@@ -199,6 +198,7 @@ export class ScrollbarPair {
 
   /**
    * Set the handles of both scrollbars.
+   *
    * @param x The horizontal content displacement, relative to the view in
    *     pixels.
    * @param y The vertical content displacement, relative to the view in pixels.
@@ -221,26 +221,21 @@ export class ScrollbarPair {
 
     if (updateMetrics || updateMetrics === undefined) {
       // Update metrics.
-      const xyRatio = {};
+      const xyRatio: {x?: number, y?: number} = {};
       if (this.hScroll) {
-        // AnyDuringMigration because:  Property 'x' does not exist on type
-        // '{}'.
-        (xyRatio as AnyDuringMigration).x = this.hScroll.getRatio_();
+        xyRatio.x = this.hScroll.getRatio_();
       }
       if (this.vScroll) {
-        // AnyDuringMigration because:  Property 'y' does not exist on type
-        // '{}'.
-        (xyRatio as AnyDuringMigration).y = this.vScroll.getRatio_();
+        xyRatio.y = this.vScroll.getRatio_();
       }
-      // AnyDuringMigration because:  Argument of type '{}' is not assignable to
-      // parameter of type '{ x: number; y: number; }'.
-      this.workspace.setMetrics(xyRatio as AnyDuringMigration);
+      this.workspace.setMetrics(xyRatio);
     }
   }
 
   /**
    * Set the handle of the horizontal scrollbar to be at a certain position in
    *    CSS pixels relative to its parents.
+   *
    * @param x Horizontal scroll value.
    */
   setX(x: number) {
@@ -252,6 +247,7 @@ export class ScrollbarPair {
   /**
    * Set the handle of the vertical scrollbar to be at a certain position in
    *    CSS pixels relative to its parents.
+   *
    * @param y Vertical scroll value.
    */
   setY(y: number) {
@@ -262,6 +258,7 @@ export class ScrollbarPair {
 
   /**
    * Set whether this scrollbar's container is visible.
+   *
    * @param visible Whether the container is visible.
    */
   setContainerVisible(visible: boolean) {
@@ -276,7 +273,8 @@ export class ScrollbarPair {
   /**
    * If any of the scrollbars are visible. Non-paired scrollbars may disappear
    * when they aren't needed.
-   * @return True if visible.
+   *
+   * @returns True if visible.
    */
   isVisible(): boolean {
     let isVisible = false;
@@ -292,6 +290,7 @@ export class ScrollbarPair {
   /**
    * Recalculates the scrollbars' locations within their path and length.
    * This should be called when the contents of the workspace have changed.
+   *
    * @param hostMetrics A data structure describing all the required dimensions,
    *     possibly fetched from the host object.
    */
@@ -307,6 +306,7 @@ export class ScrollbarPair {
   /**
    * Recalculates the scrollbars' locations on the screen and path length.
    * This should be called when the layout or size of the window has changed.
+   *
    * @param hostMetrics A data structure describing all the required dimensions,
    *     possibly fetched from the host object.
    */

@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Classes for all types of variable events.
- */
-
-/**
  * Classes for all types of variable events.
+ *
  * @class
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -24,6 +21,7 @@ import * as eventUtils from './utils.js';
 
 /**
  * Class for a variable deletion event.
+ *
  * @alias Blockly.Events.VarDelete
  */
 export class VarDelete extends VarBase {
@@ -52,7 +50,8 @@ export class VarDelete extends VarBase {
 
   /**
    * Encode the event as JSON.
-   * @return JSON representation.
+   *
+   * @returns JSON representation.
    */
   override toJson(): AnyDuringMigration {
     const json = super.toJson();
@@ -63,6 +62,7 @@ export class VarDelete extends VarBase {
 
   /**
    * Decode the JSON event.
+   *
    * @param json JSON representation.
    */
   override fromJson(json: AnyDuringMigration) {
@@ -73,6 +73,7 @@ export class VarDelete extends VarBase {
 
   /**
    * Run a variable deletion event.
+   *
    * @param forward True if run forward, false if run backward (undo).
    */
   override run(forward: boolean) {

@@ -5,15 +5,10 @@
  */
 
 /**
- * @fileoverview Utilities for element styles.
- * These methods are not specific to Blockly, and could be factored out into
- * a JavaScript framework such as Closure.
- */
-
-/**
  * Utilities for element styles.
  * These methods are not specific to Blockly, and could be factored out into
  * a JavaScript framework such as Closure.
+ *
  * @namespace Blockly.utils.style
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -27,8 +22,9 @@ import {Size} from './size.js';
 /**
  * Gets the height and width of an element.
  * Similar to Closure's goog.style.getSize
+ *
  * @param element Element to get size of.
- * @return Object with width/height properties.
+ * @returns Object with width/height properties.
  * @alias Blockly.utils.style.getSize
  */
 export function getSize(element: Element): Size {
@@ -67,8 +63,9 @@ function getSizeInternal(element: Element): Size {
 
 /**
  * Gets the height and width of an element when the display is not none.
+ *
  * @param element Element to get size of.
- * @return Object with width/height properties.
+ * @returns Object with width/height properties.
  */
 function getSizeWithDisplay(element: Element): Size {
   const offsetWidth = (element as HTMLElement).offsetWidth;
@@ -87,7 +84,7 @@ function getSizeWithDisplay(element: Element): Size {
  *
  * @param element Element to get style of.
  * @param style Property to get (must be camelCase, not CSS-style).
- * @return Style value.
+ * @returns Style value.
  */
 function getStyle(element: Element, style: string): string {
   // AnyDuringMigration because:  Property 'style' does not exist on type
@@ -108,7 +105,7 @@ function getStyle(element: Element, style: string): string {
  *
  * @param element Element to get style of.
  * @param property Property to get (camel-case).
- * @return Style value.
+ * @returns Style value.
  * @alias Blockly.utils.style.getComputedStyle
  */
 export function getComputedStyle(element: Element, property: string): string {
@@ -133,7 +130,7 @@ export function getComputedStyle(element: Element, property: string): string {
  *
  * @param element Element to get style of.
  * @param style Property to get (camel-case).
- * @return Style value.
+ * @returns Style value.
  * @alias Blockly.utils.style.getCascadedStyle
  */
 export function getCascadedStyle(element: Element, style: string): string {
@@ -148,8 +145,9 @@ export function getCascadedStyle(element: Element, style: string): string {
 /**
  * Returns a Coordinate object relative to the top-left of the HTML document.
  * Similar to Closure's goog.style.getPageOffset
+ *
  * @param el Element to get the page offset for.
- * @return The page offset.
+ * @returns The page offset.
  * @alias Blockly.utils.style.getPageOffset
  */
 export function getPageOffset(el: Element): Coordinate {
@@ -171,7 +169,8 @@ export function getPageOffset(el: Element): Coordinate {
 /**
  * Calculates the viewport coordinates relative to the document.
  * Similar to Closure's goog.style.getViewportPageOffset
- * @return The page offset of the viewport.
+ *
+ * @returns The page offset of the viewport.
  * @alias Blockly.utils.style.getViewportPageOffset
  */
 export function getViewportPageOffset(): Coordinate {
@@ -206,7 +205,7 @@ export function setElementShown(el: Element, isShown: AnyDuringMigration) {
  * Copied from Closure's goog.style.isRightToLeft
  *
  * @param el The element to test.
- * @return True for right to left, false for left to right.
+ * @returns True for right to left, false for left to right.
  * @alias Blockly.utils.style.isRightToLeft
  */
 export function isRightToLeft(el: Element): boolean {
@@ -216,8 +215,9 @@ export function isRightToLeft(el: Element): boolean {
 /**
  * Gets the computed border widths (on all sides) in pixels
  * Copied from Closure's goog.style.getBorderBox
+ *
  * @param element  The element to get the border widths for.
- * @return The computed border widths.
+ * @returns The computed border widths.
  * @alias Blockly.utils.style.getBorderBox
  */
 export function getBorderBox(element: Element): Rect {
@@ -262,7 +262,7 @@ export function scrollIntoContainerView(
  *     scroll element will be used.
  * @param opt_center Whether to center the element in the container.
  *     Defaults to false.
- * @return The new scroll position of the container.
+ * @returns The new scroll position of the container.
  * @alias Blockly.utils.style.getContainerOffsetToScrollInto
  */
 export function getContainerOffsetToScrollInto(
@@ -303,4 +303,4 @@ export function getContainerOffsetToScrollInto(
 
 export const TEST_ONLY = {
   getSizeInternal,
-}
+};

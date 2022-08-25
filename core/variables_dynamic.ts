@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Utility functions for handling typed variables.
- */
-
-/**
  * Utility functions for handling typed variables.
  *
  * @namespace Blockly.VariablesDynamic
@@ -23,6 +19,7 @@ import {VariableModel} from './variable_model.js';
 import * as Variables from './variables.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
+import type {FlyoutButton} from './flyout_button.js';
 
 
 /**
@@ -31,32 +28,53 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  * variable blocks.
  * See also Blockly.Variables.CATEGORY_NAME and
  * Blockly.Procedures.CATEGORY_NAME.
+ *
  * @alias Blockly.VariablesDynamic.CATEGORY_NAME
  */
 export const CATEGORY_NAME = 'VARIABLE_DYNAMIC';
 
-function stringButtonClickHandler(button: AnyDuringMigration) {
+/**
+ * Click handler for a button that creates String variables.
+ *
+ * @param button
+ */
+function stringButtonClickHandler(button: FlyoutButton) {
   Variables.createVariableButtonHandler(
       button.getTargetWorkspace(), undefined, 'String');
 }
+// eslint-disable-next-line camelcase
 export const onCreateVariableButtonClick_String = stringButtonClickHandler;
-function numberButtonClickHandler(button: AnyDuringMigration) {
+
+/**
+ * Click handler for a button that creates Number variables.
+ *
+ * @param button
+ */
+function numberButtonClickHandler(button: FlyoutButton) {
   Variables.createVariableButtonHandler(
       button.getTargetWorkspace(), undefined, 'Number');
 }
+// eslint-disable-next-line camelcase
 export const onCreateVariableButtonClick_Number = numberButtonClickHandler;
 
-function colourButtonClickHandler(button: AnyDuringMigration) {
+/**
+ * Click handler for a button that creates Colour variables.
+ *
+ * @param button
+ */
+function colourButtonClickHandler(button: FlyoutButton) {
   Variables.createVariableButtonHandler(
       button.getTargetWorkspace(), undefined, 'Colour');
 }
+// eslint-disable-next-line camelcase
 export const onCreateVariableButtonClick_Colour = colourButtonClickHandler;
 
 /**
  * Construct the elements (blocks and button) required by the flyout for the
  * variable category.
+ *
  * @param workspace The workspace containing variables.
- * @return Array of XML elements.
+ * @returns Array of XML elements.
  * @alias Blockly.VariablesDynamic.flyoutCategory
  */
 export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
@@ -81,17 +99,16 @@ export function flyoutCategory(workspace: WorkspaceSvg): Element[] {
   workspace.registerButtonCallback(
       'CREATE_VARIABLE_COLOUR', colourButtonClickHandler);
 
-  // AnyDuringMigration because:  Argument of type 'WorkspaceSvg' is not
-  // assignable to parameter of type 'Workspace'.
-  const blockList = flyoutCategoryBlocks(workspace as AnyDuringMigration);
+  const blockList = flyoutCategoryBlocks(workspace);
   xmlList = xmlList.concat(blockList);
   return xmlList;
 }
 
 /**
  * Construct the blocks required by the flyout for the variable category.
+ *
  * @param workspace The workspace containing variables.
- * @return Array of XML block elements.
+ * @returns Array of XML block elements.
  * @alias Blockly.VariablesDynamic.flyoutCategoryBlocks
  */
 export function flyoutCategoryBlocks(workspace: Workspace): Element[] {
@@ -103,14 +120,8 @@ export function flyoutCategoryBlocks(workspace: Workspace): Element[] {
       const firstVariable = variableModelList[variableModelList.length - 1];
       const block = xml.createElement('block');
       block.setAttribute('type', 'variables_set_dynamic');
-      // AnyDuringMigration because:  Argument of type 'number' is not
-      // assignable to parameter of type 'string'.
-      block.setAttribute('gap', 24 as AnyDuringMigration);
-      // AnyDuringMigration because:  Argument of type 'Element | null' is not
-      // assignable to parameter of type 'Node'.
-      block.appendChild(
-          Variables.generateVariableFieldDom(firstVariable) as
-          AnyDuringMigration);
+      block.setAttribute('gap', '24');
+      block.appendChild(Variables.generateVariableFieldDom(firstVariable));
       xmlList.push(block);
     }
     if (Blocks['variables_get_dynamic']) {
@@ -118,13 +129,8 @@ export function flyoutCategoryBlocks(workspace: Workspace): Element[] {
       for (let i = 0, variable; variable = variableModelList[i]; i++) {
         const block = xml.createElement('block');
         block.setAttribute('type', 'variables_get_dynamic');
-        // AnyDuringMigration because:  Argument of type 'number' is not
-        // assignable to parameter of type 'string'.
-        block.setAttribute('gap', 8 as AnyDuringMigration);
-        // AnyDuringMigration because:  Argument of type 'Element | null' is not
-        // assignable to parameter of type 'Node'.
-        block.appendChild(
-            Variables.generateVariableFieldDom(variable) as AnyDuringMigration);
+        block.setAttribute('gap', '8');
+        block.appendChild(Variables.generateVariableFieldDom(variable));
         xmlList.push(block);
       }
     }

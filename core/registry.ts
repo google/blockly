@@ -5,13 +5,9 @@
  */
 
 /**
- * @fileoverview This file is a universal registry that provides generic methods
- *    for registering and unregistering different types of classes.
- */
-
-/**
  * This file is a universal registry that provides generic methods
  *    for registering and unregistering different types of classes.
+ *
  * @namespace Blockly.registry
  */
 import * as goog from '../closure/goog/goog.js';
@@ -52,21 +48,24 @@ const nameMap: {[key: string]: {[key: string]: string}} = Object.create(null);
 
 /**
  * The string used to register the default class for a type of plugin.
+ *
  * @alias Blockly.registry.DEFAULT
  */
 export const DEFAULT = 'default';
 
 /**
  * A name with the type of the element stored in the generic.
+ *
  * @alias Blockly.registry.Type
  */
-export class Type<T> {
+export class Type<_T> {
   /** @param name The name of the registry type. */
   constructor(private readonly name: string) {}
 
   /**
    * Returns the name of the type.
-   * @return The name.
+   *
+   * @returns The name.
    */
   toString(): string {
     return this.name;
@@ -103,6 +102,7 @@ export class Type<T> {
 
 /**
  * Registers a class based on a type and name.
+ *
  * @param type The type of the plugin.
  *     (e.g. Field, Renderer)
  * @param name The plugin's name. (Ex. field_angle, geras)
@@ -160,6 +160,7 @@ export function register<T>(
 /**
  * Checks the given registry item for properties that are required based on the
  * type.
+ *
  * @param type The type of the plugin. (e.g. Field, Renderer)
  * @param registryItem A class or object that we are checking for the required
  *     properties.
@@ -176,6 +177,7 @@ function validate(type: string, registryItem: Function|AnyDuringMigration) {
 
 /**
  * Unregisters the registry item with the given type and name.
+ *
  * @param type The type of the plugin.
  *     (e.g. Field, Renderer)
  * @param name The plugin's name. (Ex. field_angle, geras)
@@ -198,12 +200,13 @@ export function unregister<T>(type: string|Type<T>, name: string) {
 /**
  * Gets the registry item for the given name and type. This can be either a
  * class or an object.
+ *
  * @param type The type of the plugin.
  *     (e.g. Field, Renderer)
  * @param name The plugin's name. (Ex. field_angle, geras)
  * @param opt_throwIfMissing Whether or not to throw an error if we are unable
  *     to find the plugin.
- * @return The class or object with the given name and type or null if none
+ * @returns The class or object with the given name and type or null if none
  *     exists.
  */
 function getItem<T>(
@@ -228,10 +231,11 @@ function getItem<T>(
 /**
  * Returns whether or not the registry contains an item with the given type and
  * name.
+ *
  * @param type The type of the plugin.
  *     (e.g. Field, Renderer)
  * @param name The plugin's name. (Ex. field_angle, geras)
- * @return True if the registry has an item with the given type and name, false
+ * @returns True if the registry has an item with the given type and name, false
  *     otherwise.
  * @alias Blockly.registry.hasItem
  */
@@ -247,12 +251,13 @@ export function hasItem<T>(type: string|Type<T>, name: string): boolean {
 
 /**
  * Gets the class for the given name and type.
+ *
  * @param type The type of the plugin.
  *     (e.g. Field, Renderer)
  * @param name The plugin's name. (Ex. field_angle, geras)
  * @param opt_throwIfMissing Whether or not to throw an error if we are unable
  *     to find the plugin.
- * @return The class with the given name and type or null if none exists.
+ * @returns The class with the given name and type or null if none exists.
  * @alias Blockly.registry.getClass
  */
 export function getClass<T>(
@@ -265,12 +270,13 @@ export function getClass<T>(
 
 /**
  * Gets the object for the given name and type.
+ *
  * @param type The type of the plugin.
  *     (e.g. Category)
  * @param name The plugin's name. (Ex. logic_category)
  * @param opt_throwIfMissing Whether or not to throw an error if we are unable
  *     to find the object.
- * @return The object with the given name and type or null if none exists.
+ * @returns The object with the given name and type or null if none exists.
  * @alias Blockly.registry.getObject
  */
 export function getObject<T>(
@@ -280,16 +286,17 @@ export function getObject<T>(
 
 /**
  * Returns a map of items registered with the given type.
+ *
  * @param type The type of the plugin. (e.g. Category)
  * @param opt_cased Whether or not to return a map with cased keys (rather than
  *     caseless keys). False by default.
  * @param opt_throwIfMissing Whether or not to throw an error if we are unable
  *     to find the object. False by default.
- * @return A map of objects with the given type, or null if none exists.
+ * @returns A map of objects with the given type, or null if none exists.
  * @alias Blockly.registry.getAllItems
  */
 export function getAllItems<T>(
-    type: string|Type<T>, opt_cased: boolean, opt_throwIfMissing?: boolean):
+    type: string|Type<T>, opt_cased?: boolean, opt_throwIfMissing?: boolean):
     {[key: string]: T|null|(new (...p1: AnyDuringMigration[]) => T)}|null {
   type = String(type).toLowerCase();
   const typeRegistry = typeMap[type];
@@ -318,11 +325,12 @@ export function getAllItems<T>(
 /**
  * Gets the class from Blockly options for the given type.
  * This is used for plugins that override a built in feature. (e.g. Toolbox)
+ *
  * @param type The type of the plugin.
  * @param options The option object to check for the given plugin.
  * @param opt_throwIfMissing Whether or not to throw an error if we are unable
  *     to find the plugin.
- * @return The class for the plugin.
+ * @returns The class for the plugin.
  * @alias Blockly.registry.getClassFromOptions
  */
 export function getClassFromOptions<T>(

@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview An enum for the possible types of inputs.
- */
-
-/**
  * An enum for the possible types of inputs.
+ *
  * @namespace Blockly.inputTypes
  */
 import * as goog from '../closure/goog/goog.js';
@@ -20,6 +17,7 @@ import {ConnectionType} from './connection_type.js';
 
 /**
  * Enum for the type of a connection or input.
+ *
  * @alias Blockly.inputTypes
  */
 export enum inputTypes {

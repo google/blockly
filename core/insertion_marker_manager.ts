@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Class that controls updates to connections during drags.
- */
-
-/**
  * Class that controls updates to connections during drags.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
@@ -50,6 +47,7 @@ const DUPLICATE_BLOCK_ERROR = 'The insertion marker ' +
  * Class that controls updates to connections during drags.  It is primarily
  * responsible for finding the closest eligible connection and highlighting or
  * unhighlighting it as needed during a drag.
+ *
  * @alias Blockly.InsertionMarkerManager
  */
 export class InsertionMarkerManager {
@@ -152,6 +150,7 @@ export class InsertionMarkerManager {
 
   /**
    * Sever all links from this object.
+   *
    * @internal
    */
   dispose() {
@@ -173,6 +172,7 @@ export class InsertionMarkerManager {
   /**
    * Update the available connections for the top block. These connections can
    * change if a block is unplugged and the stack is healed.
+   *
    * @internal
    */
   updateAvailableConnections() {
@@ -182,7 +182,8 @@ export class InsertionMarkerManager {
   /**
    * Return whether the block would be deleted if dropped immediately, based on
    * information from the most recent move event.
-   * @return True if the block would be deleted if dropped immediately.
+   *
+   * @returns True if the block would be deleted if dropped immediately.
    * @internal
    */
   wouldDeleteBlock(): boolean {
@@ -192,7 +193,8 @@ export class InsertionMarkerManager {
   /**
    * Return whether the block would be connected if dropped immediately, based
    * on information from the most recent move event.
-   * @return True if the block would be connected if dropped immediately.
+   *
+   * @returns True if the block would be connected if dropped immediately.
    * @internal
    */
   wouldConnectBlock(): boolean {
@@ -202,6 +204,7 @@ export class InsertionMarkerManager {
   /**
    * Connect to the closest connection and render the results.
    * This should be called at the end of a drag.
+   *
    * @internal
    */
   applyConnections() {
@@ -231,6 +234,7 @@ export class InsertionMarkerManager {
 
   /**
    * Update connections based on the most recent move location.
+   *
    * @param dxy Position relative to drag start, in workspace units.
    * @param dragTarget The drag target that the block is currently over.
    * @internal
@@ -254,8 +258,9 @@ export class InsertionMarkerManager {
 
   /**
    * Create an insertion marker that represents the given block.
+   *
    * @param sourceBlock The block that the insertion marker will represent.
-   * @return The insertion marker that represents the given block.
+   * @returns The insertion marker that represents the given block.
    */
   private createMarkerBlock_(sourceBlock: BlockSvg): BlockSvg {
     const imType = sourceBlock.type;
@@ -315,7 +320,8 @@ export class InsertionMarkerManager {
    * should only be called once, at the beginning of a drag. If the stack has
    * more than one block, this function will populate lastOnStack_ and create
    * the corresponding insertion marker.
-   * @return A list of available connections.
+   *
+   * @returns A list of available connections.
    */
   private initAvailableConnections_(): RenderedConnection[] {
     const available = this.topBlock_.getConnections_(false);
@@ -340,10 +346,11 @@ export class InsertionMarkerManager {
   /**
    * Whether the previews (insertion marker and replacement marker) should be
    * updated based on the closest candidate and the current drag distance.
+   *
    * @param candidate An object containing a local connection, a closest
    *     connection, and a radius.  Returned by getCandidate_.
    * @param dxy Position relative to drag start, in workspace units.
-   * @return Whether the preview should be updated.
+   * @returns Whether the preview should be updated.
    */
   private shouldUpdatePreviews_(
       candidate: CandidateConnection, dxy: Coordinate): boolean {
@@ -390,8 +397,9 @@ export class InsertionMarkerManager {
   /**
    * Find the nearest valid connection, which may be the same as the current
    * closest connection.
+   *
    * @param dxy Position relative to drag start, in workspace units.
-   * @return An object containing a local connection, a closest connection, and
+   * @returns An object containing a local connection, a closest connection, and
    *     a radius.
    */
   private getCandidate_(dxy: Coordinate): CandidateConnection {
@@ -424,7 +432,9 @@ export class InsertionMarkerManager {
 
   /**
    * Decide the radius at which to start searching for the closest connection.
-   * @return The radius at which to start the search for the closest connection.
+   *
+   * @returns The radius at which to start the search for the closest
+   *     connection.
    */
   private getStartRadius_(): number {
     // If there is already a connection highlighted,
@@ -441,10 +451,11 @@ export class InsertionMarkerManager {
 
   /**
    * Whether ending the drag would delete the block.
+   *
    * @param candidate An object containing a local connection, a closest
    *     connection, and a radius.
    * @param dragTarget The drag target that the block is currently over.
-   * @return Whether dropping the block immediately would delete the block.
+   * @returns Whether dropping the block immediately would delete the block.
    */
   private shouldDelete_(
       candidate: CandidateConnection, dragTarget: IDragTarget|null): boolean {
@@ -465,6 +476,7 @@ export class InsertionMarkerManager {
    * needed.
    * At the beginning of this function, this.localConnection_ and
    * this.closestConnection_ should both be null.
+   *
    * @param candidate An object containing a local connection, a closest
    *     connection, and a radius.
    */
@@ -533,6 +545,7 @@ export class InsertionMarkerManager {
    * needed.
    * At the end of this function, this.localConnection_ and
    * this.closestConnection_ should both be null.
+   *
    * @param candidate An object containing a local connection, a closest
    *     connection, and a radius.
    */
@@ -757,7 +770,8 @@ export class InsertionMarkerManager {
   /**
    * Get a list of the insertion markers that currently exist.  Drags have 0, 1,
    * or 2 insertion markers.
-   * @return A possibly empty list of insertion marker blocks.
+   *
+   * @returns A possibly empty list of insertion marker blocks.
    * @internal
    */
   getInsertionMarkers(): BlockSvg[] {

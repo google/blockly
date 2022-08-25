@@ -5,20 +5,12 @@
  */
 
 /**
- * @fileoverview Layout code for a vertical variant of the flyout.
- */
-
-/**
  * Layout code for a vertical variant of the flyout.
+ *
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.VerticalFlyout');
-
-// Unused import preserved for side-effects. Remove if unneeded.
-// import './block.js';
-// Unused import preserved for side-effects. Remove if unneeded.
-// import './constants.js';
 
 import * as browserEvents from './browser_events.js';
 import * as dropDownDiv from './dropdowndiv.js';
@@ -35,17 +27,12 @@ import * as WidgetDiv from './widgetdiv.js';
 
 /**
  * Class for a flyout.
+ *
  * @alias Blockly.VerticalFlyout
  */
 export class VerticalFlyout extends Flyout {
   /** The name of the vertical flyout in the registry. */
   static registryName = 'verticalFlyout';
-
-  // Record the height for workspace metrics.
-  override height_: AnyDuringMigration;
-
-  // Record the width for workspace metrics and .position.
-  override width_: AnyDuringMigration;
 
   /** @param workspaceOptions Dictionary of options for the workspace. */
   constructor(workspaceOptions: Options) {
@@ -54,8 +41,11 @@ export class VerticalFlyout extends Flyout {
 
   /**
    * Sets the translation of the flyout to match the scrollbars.
+   *
    * @param xyRatio Contains a y property which is a float between 0 and 1
    *     specifying the degree of scrolling and a similar x property.
+   * @param xyRatio.x
+   * @param xyRatio.y
    */
   protected override setMetrics_(xyRatio: {x: number, y: number}) {
     if (!this.isVisible()) {
@@ -78,7 +68,8 @@ export class VerticalFlyout extends Flyout {
 
   /**
    * Calculates the x coordinate for the flyout position.
-   * @return X coordinate.
+   *
+   * @returns X coordinate.
    */
   override getX(): number {
     if (!this.isVisible()) {
@@ -126,7 +117,8 @@ export class VerticalFlyout extends Flyout {
 
   /**
    * Calculates the y coordinate for the flyout position.
-   * @return Y coordinate.
+   *
+   * @returns Y coordinate.
    */
   override getY(): number {
     // Y is always 0 since this is a vertical flyout.
@@ -155,6 +147,7 @@ export class VerticalFlyout extends Flyout {
 
   /**
    * Create and set the path for the visible boundaries of the flyout.
+   *
    * @param width The width of the flyout, not including the rounded corners.
    * @param height The height of the flyout, not including rounded corners.
    */
@@ -185,11 +178,12 @@ export class VerticalFlyout extends Flyout {
 
   /** Scroll the flyout to the top. */
   override scrollToStart() {
-    this.workspace_.scrollbar.setY(0);
+    this.workspace_.scrollbar?.setY(0);
   }
 
   /**
    * Scroll the flyout.
+   *
    * @param e Mouse wheel scroll event.
    */
   protected override wheel_(e: WheelEvent) {
@@ -201,7 +195,7 @@ export class VerticalFlyout extends Flyout {
       const viewMetrics = metricsManager.getViewMetrics();
       const pos = viewMetrics.top - scrollMetrics.top + scrollDelta.y;
 
-      this.workspace_.scrollbar.setY(pos);
+      this.workspace_.scrollbar?.setY(pos);
       // When the flyout moves from a wheel event, hide WidgetDiv and
       // dropDownDiv.
       WidgetDiv.hide();
@@ -215,6 +209,7 @@ export class VerticalFlyout extends Flyout {
 
   /**
    * Lay out the blocks in the flyout.
+   *
    * @param contents The blocks and buttons to lay out.
    * @param gaps The visible gaps between blocks.
    */
@@ -241,15 +236,11 @@ export class VerticalFlyout extends Flyout {
             block!.outputConnection ? cursorX - this.tabWidth_ : cursorX;
         block!.moveBy(moveX, cursorY);
 
-        // AnyDuringMigration because:  Argument of type 'BlockSvg | undefined'
-        // is not assignable to parameter of type 'BlockSvg'.
         const rect = this.createRect_(
-            block as AnyDuringMigration,
-            this.RTL ? moveX - blockHW.width : moveX, cursorY, blockHW, i);
+            block!, this.RTL ? moveX - blockHW.width : moveX, cursorY, blockHW,
+            i);
 
-        // AnyDuringMigration because:  Argument of type 'BlockSvg | undefined'
-        // is not assignable to parameter of type 'BlockSvg'.
-        this.addBlockListeners_(root, block as AnyDuringMigration, rect);
+        this.addBlockListeners_(root, block!, rect);
 
         cursorY += blockHW.height + gaps[i];
       } else if (item.type === 'button') {
@@ -264,9 +255,10 @@ export class VerticalFlyout extends Flyout {
    * Determine if a drag delta is toward the workspace, based on the position
    * and orientation of the flyout. This is used in determineDragIntention_ to
    * determine if a new block should be created or if the flyout should scroll.
+   *
    * @param currentDragDeltaXY How far the pointer has moved from the position
    *     at mouse down, in pixel units.
-   * @return True if the drag is toward the workspace.
+   * @returns True if the drag is toward the workspace.
    * @internal
    */
   override isDragTowardWorkspace(currentDragDeltaXY: Coordinate): boolean {
@@ -287,7 +279,8 @@ export class VerticalFlyout extends Flyout {
   /**
    * Returns the bounding rectangle of the drag target area in pixel units
    * relative to viewport.
-   * @return The component's bounding box. Null if drag target area should be
+   *
+   * @returns The component's bounding box. Null if drag target area should be
    *     ignored.
    */
   override getClientRect(): Rect|null {
@@ -347,10 +340,7 @@ export class VerticalFlyout extends Flyout {
           block.moveBy(newX - oldX, 0);
         }
         if (this.rectMap_.has(block)) {
-          // AnyDuringMigration because:  Argument of type 'SVGElement |
-          // undefined' is not assignable to parameter of type 'SVGElement'.
-          this.moveRectToBlock_(
-              this.rectMap_.get(block) as AnyDuringMigration, block);
+          this.moveRectToBlock_(this.rectMap_.get(block)!, block);
         }
       }
       if (this.RTL) {

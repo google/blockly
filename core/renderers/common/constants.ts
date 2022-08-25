@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview An object that provides constants for rendering blocks.
- */
-
-/**
  * An object that provides constants for rendering blocks.
+ *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -23,7 +20,6 @@ import * as dom from '../../utils/dom.js';
 import * as parsing from '../../utils/parsing.js';
 import {Svg} from '../../utils/svg.js';
 import * as svgPaths from '../../utils/svg_paths.js';
-import * as userAgent from '../../utils/useragent.js';
 
 
 /** An object containing sizing and path information about outside corners. */
@@ -82,6 +78,7 @@ export type BaseShape = {
   type: number; width: number; height: number;
 };
 
+/** An object containing sizing and type information about a dynamic shape. */
 export type DynamicShape = {
   type: number; width: (p1: number) => number; height: (p1: number) => number;
   isDynamic: true;
@@ -96,22 +93,9 @@ export type DynamicShape = {
 /** An object containing sizing and type information about a shape. */
 export type Shape = BaseShape|DynamicShape;
 
-/** An object containing sizing and type information about a dynamic shape. */
-// export interface DynamicShape {
-//   type: number;
-//   width: (p1: number) => number;
-//   height: (p1: number) => number;
-//   isDynamic: boolean;
-//   connectionOffsetY: (p1: number) => number;
-//   connectionOffsetX: (p1: number) => number;
-//   pathDown: (p1: number) => string;
-//   pathUp: (p1: number) => string;
-//   pathRightDown: (p1: number) => string;
-//   pathRightUp: (p1: number) => string;
-// }
-
 /**
  * An object that provides constants for rendering blocks.
+ *
  * @alias Blockly.blockRendering.ConstantProvider
  */
 export class ConstantProvider {
@@ -223,13 +207,13 @@ export class ConstantProvider {
    * ``setFontConstants_`` to be the height of the text based on the font
    * used.
    */
-  FIELD_TEXT_HEIGHT: number = -1;  // Dynamically set.
+  FIELD_TEXT_HEIGHT = -1;  // Dynamically set.
 
   /**
    * Text baseline.  This constant is dynamically set in ``setFontConstants_``
    * to be the baseline of the text based on the font used.
    */
-  FIELD_TEXT_BASELINE: number = -1;  // Dynamically set.
+  FIELD_TEXT_BASELINE = -1;  // Dynamically set.
 
   /** A field's border rect corner radius. */
   FIELD_BORDER_RECT_RADIUS = 4;
@@ -245,6 +229,7 @@ export class ConstantProvider {
 
   /**
    * The backing colour of a field's border rect.
+   *
    * @internal
    */
   FIELD_BORDER_RECT_COLOUR = '#fff';
@@ -298,6 +283,7 @@ export class ConstantProvider {
 
   /**
    * The ID of the emboss filter, or the empty string if no filter is set.
+   *
    * @internal
    */
   embossFilterId = '';
@@ -309,6 +295,7 @@ export class ConstantProvider {
 
   /**
    * The ID of the disabled pattern, or the empty string if no pattern is set.
+   *
    * @internal
    */
   disabledPatternId = '';
@@ -339,48 +326,56 @@ export class ConstantProvider {
 
   /**
    * Cursor colour.
+   *
    * @internal
    */
   CURSOR_COLOUR = '#cc0a0a';
 
   /**
    * Immovable marker colour.
+   *
    * @internal
    */
   MARKER_COLOUR = '#4286f4';
 
   /**
    * Width of the horizontal cursor.
+   *
    * @internal
    */
   CURSOR_WS_WIDTH = 100;
 
   /**
    * Height of the horizontal cursor.
+   *
    * @internal
    */
   WS_CURSOR_HEIGHT = 5;
 
   /**
    * Padding around a stack.
+   *
    * @internal
    */
   CURSOR_STACK_PADDING = 10;
 
   /**
    * Padding around a block.
+   *
    * @internal
    */
   CURSOR_BLOCK_PADDING = 2;
 
   /**
    * Stroke of the cursor.
+   *
    * @internal
    */
   CURSOR_STROKE_WIDTH = 4;
 
   /**
    * Whether text input and colour fields fill up the entire source block.
+   *
    * @internal
    */
   FULL_BLOCK_FIELDS = false;
@@ -388,12 +383,14 @@ export class ConstantProvider {
   /**
    * The main colour of insertion markers, in hex.  The block is rendered a
    * transparent grey by changing the fill opacity in CSS.
+   *
    * @internal
    */
   INSERTION_MARKER_COLOUR = '#000000';
 
   /**
    * The insertion marker opacity.
+   *
    * @internal
    */
   INSERTION_MARKER_OPACITY = 0.2;
@@ -461,8 +458,11 @@ export class ConstantProvider {
 
     this.START_POINT = svgPaths.moveBy(0, 0);
 
-    /** A field's text element's dominant baseline. */
-    this.FIELD_TEXT_BASELINE_CENTER = !userAgent.IE && !userAgent.EDGE;
+    /**
+     * A field's text element's dominant baseline. Pre-2022 this could be false
+     * for certain browsers.
+     */
+    this.FIELD_TEXT_BASELINE_CENTER = true;
 
     /** A dropdown field's border rect height. */
     this.FIELD_DROPDOWN_BORDER_RECT_HEIGHT = this.FIELD_BORDER_RECT_HEIGHT;
@@ -493,6 +493,7 @@ export class ConstantProvider {
     /**
      * A random identifier used to ensure a unique ID is used for each
      * filter/pattern for the case of multiple Blockly instances on a page.
+     *
      * @internal
      */
     this.randomIdentifier = String(Math.random()).substring(2);
@@ -500,6 +501,7 @@ export class ConstantProvider {
 
   /**
    * Initialize shape objects based on the constants set in the constructor.
+   *
    * @internal
    */
   init() {
@@ -533,6 +535,7 @@ export class ConstantProvider {
 
   /**
    * Refresh constants properties that depend on the theme.
+   *
    * @param theme The current workspace theme.
    * @internal
    */
@@ -550,6 +553,7 @@ export class ConstantProvider {
 
   /**
    * Sets dynamic properties that depend on other values or theme properties.
+   *
    * @param theme The current workspace theme.
    */
   protected setDynamicProperties_(theme: Theme) {
@@ -562,6 +566,7 @@ export class ConstantProvider {
 
   /**
    * Set constants related to fonts.
+   *
    * @param theme The current workspace theme.
    */
   protected setFontConstants_(theme: Theme) {
@@ -587,6 +592,7 @@ export class ConstantProvider {
 
   /**
    * Set constants from a theme's component styles.
+   *
    * @param theme The current workspace theme.
    */
   protected setComponentConstants_(theme: Theme) {
@@ -605,8 +611,9 @@ export class ConstantProvider {
   /**
    * Get or create a block style based on a single colour value.  Generate a
    * name for the style based on the colour.
+   *
    * @param colour #RRGGBB colour string.
-   * @return An object containing the style and an autogenerated name for that
+   * @returns An object containing the style and an autogenerated name for that
    *     style.
    * @internal
    */
@@ -620,8 +627,9 @@ export class ConstantProvider {
 
   /**
    * Gets the BlockStyle for the given block style name.
+   *
    * @param blockStyleName The name of the block style.
-   * @return The named block style, or a default style if no style with the
+   * @returns The named block style, or a default style if no style with the
    *     given name was found.
    */
   getBlockStyle(blockStyleName: string|null): BlockStyle {
@@ -633,8 +641,9 @@ export class ConstantProvider {
 
   /**
    * Create a block style object based on the given colour.
+   *
    * @param colour #RRGGBB colour string.
-   * @return A populated block style based on the given colour.
+   * @returns A populated block style based on the given colour.
    */
   protected createBlockStyle_(colour: string): BlockStyle {
     return this.validatedBlockStyle_({'colourPrimary': colour});
@@ -643,8 +652,9 @@ export class ConstantProvider {
   /**
    * Get a full block style object based on the input style object.  Populate
    * any missing values.
+   *
    * @param blockStyle A full or partial block style object.
-   * @return A full block style object, with all required properties populated.
+   * @returns A full block style object, with all required properties populated.
    */
   protected validatedBlockStyle_(blockStyle: {
     colourPrimary: string,
@@ -674,8 +684,9 @@ export class ConstantProvider {
 
   /**
    * Generate a secondary colour from the passed in primary colour.
+   *
    * @param inputColour Primary colour.
-   * @return The generated secondary colour.
+   * @returns The generated secondary colour.
    */
   protected generateSecondaryColour_(inputColour: string): string {
     return colour.blend('#fff', inputColour, 0.6) || inputColour;
@@ -683,8 +694,9 @@ export class ConstantProvider {
 
   /**
    * Generate a tertiary colour from the passed in primary colour.
+   *
    * @param inputColour Primary colour.
-   * @return The generated tertiary colour.
+   * @returns The generated tertiary colour.
    */
   protected generateTertiaryColour_(inputColour: string): string {
     return colour.blend('#fff', inputColour, 0.3) || inputColour;
@@ -693,6 +705,7 @@ export class ConstantProvider {
   /**
    * Dispose of this constants provider.
    * Delete all DOM elements that this provider created.
+   *
    * @internal
    */
   dispose() {
@@ -711,7 +724,7 @@ export class ConstantProvider {
   }
 
   /**
-   * @return An object containing sizing and path information about collapsed
+   * @returns An object containing sizing and path information about collapsed
    *     block indicators.
    * @internal
    */
@@ -728,7 +741,7 @@ export class ConstantProvider {
   }
 
   /**
-   * @return An object containing sizing and path information about start hats.
+   * @returns An object containing sizing and path information about start hats.
    * @internal
    */
   makeStartHat(): StartHat {
@@ -744,7 +757,8 @@ export class ConstantProvider {
   }
 
   /**
-   * @return An object containing sizing and path information about puzzle tabs.
+   * @returns An object containing sizing and path information about puzzle
+   *     tabs.
    * @internal
    */
   makePuzzleTab(): PuzzleTab {
@@ -757,9 +771,10 @@ export class ConstantProvider {
      * versions of the paths are the same, but the Y sign flips.  Forward and
      * back are the signs to use to move the cursor in the direction that the
      * path is being drawn.
+     *
      * @param up True if the path should be drawn from bottom to top, false
      *     otherwise.
-     * @return A path fragment describing a puzzle tab.
+     * @returns A path fragment describing a puzzle tab.
      */
     function makeMainPath(up: boolean): string {
       const forward = up ? -1 : 1;
@@ -800,7 +815,7 @@ export class ConstantProvider {
   }
 
   /**
-   * @return An object containing sizing and path information about notches.
+   * @returns An object containing sizing and path information about notches.
    * @internal
    */
   makeNotch(): Notch {
@@ -811,9 +826,10 @@ export class ConstantProvider {
 
     /**
      * Make the main path for the notch.
+     *
      * @param dir Direction multiplier to apply to horizontal offsets along the
      *     path. Either 1 or -1.
-     * @return A path fragment describing a notch.
+     * @returns A path fragment describing a notch.
      */
     function makeMainPath(dir: number): string {
       return svgPaths.line([
@@ -835,7 +851,7 @@ export class ConstantProvider {
   }
 
   /**
-   * @return An object containing sizing and path information about inside
+   * @returns An object containing sizing and path information about inside
    *     corners.
    * @internal
    */
@@ -857,7 +873,7 @@ export class ConstantProvider {
   }
 
   /**
-   * @return An object containing sizing and path information about outside
+   * @returns An object containing sizing and path information about outside
    *     corners.
    * @internal
    */
@@ -891,8 +907,9 @@ export class ConstantProvider {
   /**
    * Get an object with connection shape and sizing information based on the
    * type of the connection.
+   *
    * @param connection The connection to find a shape object for
-   * @return The shape object for the connection.
+   * @returns The shape object for the connection.
    * @internal
    */
   shapeFor(connection: RenderedConnection): Shape {
@@ -910,6 +927,7 @@ export class ConstantProvider {
 
   /**
    * Create any DOM elements that this renderer needs (filters, patterns, etc).
+   *
    * @param svg The root of the workspace's SVG.
    * @param tagName The name to use for the CSS style tag.
    * @param selector The CSS selector to use.
@@ -1060,6 +1078,7 @@ export class ConstantProvider {
 
   /**
    * Inject renderer specific CSS into the page.
+   *
    * @param tagName The name of the style tag to use.
    * @param selector The CSS selector to use.
    */
@@ -1084,40 +1103,86 @@ export class ConstantProvider {
 
   /**
    * Get any renderer specific CSS to inject when the renderer is initialized.
+   *
    * @param selector CSS selector to use.
-   * @return Array of CSS strings.
+   * @returns Array of CSS strings.
    */
   protected getCSS_(selector: string): string[] {
     return [
       /* eslint-disable indent */
       /* clang-format off */
       // Text.
-      selector + ' .blocklyText, ', selector + ' .blocklyFlyoutLabelText {', 'font: ' + this.FIELD_TEXT_FONTWEIGHT + ' ' + this.FIELD_TEXT_FONTSIZE + 'pt ' + this.FIELD_TEXT_FONTFAMILY + ';', '}',
+      `${selector} .blocklyText, `,
+      `${selector} .blocklyFlyoutLabelText {`,
+        `font: ${this.FIELD_TEXT_FONTWEIGHT} ` +
+            `${this.FIELD_TEXT_FONTSIZE}pt ${this.FIELD_TEXT_FONTFAMILY};`,
+      `}`,
 
       // Fields.
-      selector + ' .blocklyText {', 'fill: #fff;', '}', selector + ' .blocklyNonEditableText>rect,', selector + ' .blocklyEditableText>rect {', 'fill: ' + this.FIELD_BORDER_RECT_COLOUR + ';', 'fill-opacity: .6;', 'stroke: none;', '}', selector + ' .blocklyNonEditableText>text,', selector + ' .blocklyEditableText>text {', 'fill: #000;', '}',
+      `${selector} .blocklyText {`,
+        `fill: #fff;`,
+      `}`,
+      `${selector} .blocklyNonEditableText>rect,`,
+      `${selector} .blocklyEditableText>rect {`,
+        `fill: ${this.FIELD_BORDER_RECT_COLOUR};`,
+        `fill-opacity: .6;`,
+        `stroke: none;`,
+      `}`,
+      `${selector} .blocklyNonEditableText>text,`,
+      `${selector} .blocklyEditableText>text {`,
+        `fill: #000;`,
+      `}`,
 
       // Flyout labels.
-      selector + ' .blocklyFlyoutLabelText {', 'fill: #000;', '}',
+      `${selector} .blocklyFlyoutLabelText {`,
+        `fill: #000;`,
+      `}`,
 
       // Bubbles.
-      selector + ' .blocklyText.blocklyBubbleText {', 'fill: #000;', '}',
+      `${selector} .blocklyText.blocklyBubbleText {`,
+        `fill: #000;`,
+      `}`,
 
       // Editable field hover.
-      selector + ' .blocklyEditableText:not(.editing):hover>rect {', 'stroke: #fff;', 'stroke-width: 2;', '}',
+      `${selector} .blocklyEditableText:not(.editing):hover>rect {`,
+        `stroke: #fff;`,
+        `stroke-width: 2;`,
+      `}`,
 
       // Text field input.
-      selector + ' .blocklyHtmlInput {', 'font-family: ' + this.FIELD_TEXT_FONTFAMILY + ';', 'font-weight: ' + this.FIELD_TEXT_FONTWEIGHT + ';', '}', // Selection highlight.
-      selector + ' .blocklySelected>.blocklyPath {', 'stroke: #fc3;', 'stroke-width: 3px;', '}',
+      `${selector} .blocklyHtmlInput {`,
+        `font-family: ${this.FIELD_TEXT_FONTFAMILY};`,
+        `font-weight: ${this.FIELD_TEXT_FONTWEIGHT};`,
+      `}`,
+
+      // Selection highlight.
+      `${selector} .blocklySelected>.blocklyPath {`,
+        `stroke: #fc3;`,
+        `stroke-width: 3px;`,
+      `}`,
 
       // Connection highlight.
-      selector + ' .blocklyHighlightedConnectionPath {', 'stroke: #fc3;', '}',
+      `${selector} .blocklyHighlightedConnectionPath {`,
+        `stroke: #fc3;`,
+      `}`,
 
       // Replaceable highlight.
-      selector + ' .blocklyReplaceable .blocklyPath {', 'fill-opacity: .5;', '}', selector + ' .blocklyReplaceable .blocklyPathLight,', selector + ' .blocklyReplaceable .blocklyPathDark {', 'display: none;', '}',
+      `${selector} .blocklyReplaceable .blocklyPath {`,
+        `fill-opacity: .5;`,
+      `}`,
+      `${selector} .blocklyReplaceable .blocklyPathLight,`,
+      `${selector} .blocklyReplaceable .blocklyPathDark {`,
+        `display: none;`,
+      `}`,
 
       // Insertion marker.
-      selector + ' .blocklyInsertionMarker>.blocklyPath {', 'fill-opacity: ' + this.INSERTION_MARKER_OPACITY + ';', 'stroke: none;', '}',];
+      `${selector} .blocklyInsertionMarker>.blocklyPath {`,
+        `fill-opacity: ${this.INSERTION_MARKER_OPACITY};`,
+        `stroke: none;`,
+      `}`,
+      /* clang-format on */
+      /* eslint-enable indent */
+    ];
   }
 }
 /* clang-format on */

@@ -5,11 +5,8 @@
  */
 
 /**
- * @fileoverview Methods for graphically rendering a block as SVG.
- */
-
-/**
  * Methods for graphically rendering a block as SVG.
+ *
  * @class
  */
 import * as goog from '../../../closure/goog/goog.js';
@@ -24,12 +21,13 @@ import {Types} from './types.js';
  * The base class to represent a part of a block that takes up space during
  * rendering.  The constructor for each non-spacer Measurable records the size
  * of the block element (e.g. field, statement input).
+ *
  * @alias Blockly.blockRendering.Measurable
  */
 export class Measurable {
-  width: number = 0;
+  width = 0;
 
-  height: number = 0;
+  height = 0;
   type: number;
   xPos = 0;
 
@@ -37,7 +35,7 @@ export class Measurable {
   notchOffset: number;
 
   /** The renderer's constant provider. */
-  protected readonly constants_: ConstantProvider
+  protected readonly constants_: ConstantProvider;
 
   /**
    * @param constants The rendering constants provider.

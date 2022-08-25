@@ -5,15 +5,10 @@
  */
 
 /**
- * @fileoverview Utility methods for string manipulation.
- * These methods are not specific to Blockly, and could be factored out into
- * a JavaScript framework such as Closure.
- */
-
-/**
  * Utility methods for string manipulation.
  * These methods are not specific to Blockly, and could be factored out into
  * a JavaScript framework such as Closure.
+ *
  * @namespace Blockly.utils.string
  */
 import * as goog from '../../closure/goog/goog.js';
@@ -25,9 +20,10 @@ import * as deprecation from './deprecation.js';
 /**
  * Fast prefix-checker.
  * Copied from Closure's goog.string.startsWith.
+ *
  * @param str The string to check.
  * @param prefix A string to look for at the start of `str`.
- * @return True if `str` begins with `prefix`.
+ * @returns True if `str` begins with `prefix`.
  * @alias Blockly.utils.string.startsWith
  * @deprecated April 2022. Use built-in string.startsWith.
  */
@@ -40,8 +36,9 @@ export function startsWith(str: string, prefix: string): boolean {
 
 /**
  * Given an array of strings, return the length of the shortest one.
+ *
  * @param array Array of strings.
- * @return Length of shortest string.
+ * @returns Length of shortest string.
  * @alias Blockly.utils.string.shortestStringLength
  */
 export function shortestStringLength(array: string[]): number {
@@ -58,9 +55,10 @@ export function shortestStringLength(array: string[]): number {
 /**
  * Given an array of strings, return the length of the common prefix.
  * Words may not be split.  Any space after a word is included in the length.
+ *
  * @param array Array of strings.
  * @param opt_shortest Length of shortest string.
- * @return Length of common prefix.
+ * @returns Length of common prefix.
  * @alias Blockly.utils.string.commonWordPrefix
  */
 export function commonWordPrefix(
@@ -96,9 +94,10 @@ export function commonWordPrefix(
 /**
  * Given an array of strings, return the length of the common suffix.
  * Words may not be split.  Any space after a word is included in the length.
+ *
  * @param array Array of strings.
  * @param opt_shortest Length of shortest string.
- * @return Length of common suffix.
+ * @returns Length of common suffix.
  * @alias Blockly.utils.string.commonWordSuffix
  */
 export function commonWordSuffix(
@@ -133,9 +132,10 @@ export function commonWordSuffix(
 
 /**
  * Wrap text to the specified width.
+ *
  * @param text Text to wrap.
  * @param limit Width to wrap each line.
- * @return Wrapped text.
+ * @returns Wrapped text.
  * @alias Blockly.utils.string.wrap
  */
 export function wrap(text: string, limit: number): string {
@@ -148,9 +148,10 @@ export function wrap(text: string, limit: number): string {
 
 /**
  * Wrap single line of text to the specified width.
+ *
  * @param text Text to wrap.
  * @param limit Width to wrap each line.
- * @return Wrapped text.
+ * @returns Wrapped text.
  */
 function wrapLine(text: string, limit: number): string {
   if (text.length <= limit) {
@@ -197,10 +198,11 @@ function wrapLine(text: string, limit: number): string {
 
 /**
  * Compute a score for how good the wrapping is.
+ *
  * @param words Array of each word.
  * @param wordBreaks Array of line breaks.
  * @param limit Width to wrap each line.
- * @return Larger the better.
+ * @returns Larger the better.
  */
 function wrapScore(
     words: string[], wordBreaks: boolean[], limit: number): number {
@@ -217,7 +219,7 @@ function wrapScore(
       lineLengths[lineLengths.length - 1]++;
     }
   }
-  const maxLength = Math.max.apply(Math, lineLengths);
+  const maxLength = Math.max(...lineLengths);
 
   let score = 0;
   for (let i = 0; i < lineLengths.length; i++) {
@@ -249,10 +251,11 @@ function wrapScore(
 /**
  * Mutate the array of line break locations until an optimal solution is found.
  * No line breaks are added or deleted, they are simply moved around.
+ *
  * @param words Array of each word.
  * @param wordBreaks Array of line breaks.
  * @param limit Width to wrap each line.
- * @return New array of optimal line breaks.
+ * @returns New array of optimal line breaks.
  */
 function wrapMutate(
     words: string[], wordBreaks: boolean[], limit: number): boolean[] {
@@ -282,9 +285,10 @@ function wrapMutate(
 
 /**
  * Reassemble the array of words into text, with the specified line breaks.
+ *
  * @param words Array of each word.
  * @param wordBreaks Array of line breaks.
- * @return Plain text.
+ * @returns Plain text.
  */
 function wrapToText(words: string[], wordBreaks: boolean[]): string {
   const text = [];
@@ -299,8 +303,9 @@ function wrapToText(words: string[], wordBreaks: boolean[]): string {
 
 /**
  * Is the given string a number (includes negative and decimals).
+ *
  * @param str Input string.
- * @return True if number, false otherwise.
+ * @returns True if number, false otherwise.
  * @alias Blockly.utils.string.isNumber
  */
 export function isNumber(str: string): boolean {

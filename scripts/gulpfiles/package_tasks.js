@@ -80,15 +80,6 @@ function checkBuildDir(done) {
 }
 
 /**
- * This task copies source files into the release directory.
- */
-function packageSources() {
-  return gulp.src(['core/**/**', 'blocks/**', 'generators/**/**'],
-      {base: '.'})
-    .pipe(gulp.dest(RELEASE_DIR));
-};
-
-/**
  * This task copies the compressed files and their source maps into
  * the release directory.
  */
@@ -414,7 +405,6 @@ const package = gulp.series(
     cleanReleaseDir,
     gulp.parallel(
         packageIndex,
-        packageSources,
         packageCompressed,
         packageBrowser,
         packageNode,

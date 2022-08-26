@@ -25,8 +25,7 @@ import * as deprecation from './deprecation.js';
  */
 export function inherits(childCtor: Function, parentCtor: Function) {
   deprecation.warn(
-      'Blockly.utils.object.inherits', 'September 2022', 'September 2023',
-      'normal inheritance');
+      'Blockly.utils.object.inherits', 'September 2022', 'version 9.0.0');
   // Set a .superClass_ property so that methods can call parent methods
   // without hard-coding the parent class name.
   // Could be replaced by ES6's super().
@@ -90,7 +89,7 @@ export function deepMerge(
  */
 export function values(obj: AnyDuringMigration): AnyDuringMigration[] {
   deprecation.warn(
-      'Blockly.utils.object.values', 'September 2022', 'September 2023',
+      'Blockly.utils.object.values', 'September 2022', 'version 9.0.0',
       'Object.values');
   return Object.values(obj);
 }

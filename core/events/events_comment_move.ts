@@ -34,7 +34,7 @@ export class CommentMove extends CommentBase {
   oldCoordinate_!: Coordinate;
 
   /** The location after the move, in workspace coordinates. */
-  newCoordinate_?: Coordinate;
+  newCoordinate_!: Coordinate;
 
   /**
    * @param opt_comment The comment that is being moved.  Undefined for a blank
@@ -91,14 +91,10 @@ export class CommentMove extends CommentBase {
    */
   override toJson(): CommentMoveJson {
     const json = super.toJson() as CommentMoveJson;
-    if (this.oldCoordinate_) {
-      json['oldCoordinate'] = Math.round(this.oldCoordinate_.x) + ',' +
-          Math.round(this.oldCoordinate_.y);
-    }
-    if (this.newCoordinate_) {
-      json['newCoordinate'] = Math.round(this.newCoordinate_.x) + ',' +
-          Math.round(this.newCoordinate_.y);
-    }
+    json['oldCoordinate'] = `${Math.round(this.oldCoordinate_.x)}, ` +
+        `${Math.round(this.oldCoordinate_.y)}`;
+    json['newCoordinate'] = Math.round(this.newCoordinate_.x) + ',' +
+        Math.round(this.newCoordinate_.y);
     return json;
   }
 
@@ -109,15 +105,10 @@ export class CommentMove extends CommentBase {
    */
   override fromJson(json: CommentMoveJson) {
     super.fromJson(json);
-
-    if (json['oldCoordinate']) {
-      const xy = json['oldCoordinate'].split(',');
-      this.oldCoordinate_ = new Coordinate(Number(xy[0]), Number(xy[1]));
-    }
-    if (json['newCoordinate']) {
-      const xy = json['newCoordinate'].split(',');
-      this.newCoordinate_ = new Coordinate(Number(xy[0]), Number(xy[1]));
-    }
+    let xy = json['oldCoordinate'].split(',');
+    this.oldCoordinate_ = new Coordinate(Number(xy[0]), Number(xy[1]));
+    xy = json['newCoordinate'].split(',');
+    this.newCoordinate_ = new Coordinate(Number(xy[0]), Number(xy[1]));
   }
 
   /**
@@ -151,8 +142,8 @@ export class CommentMove extends CommentBase {
 }
 
 export interface CommentMoveJson extends CommentBaseJson {
-  oldCoordinate?: string;
-  newCoordinate?: string;
+  oldCoordinate: string;
+  newCoordinate: string;
 }
 
 registry.register(registry.Type.EVENT, eventUtils.COMMENT_MOVE, CommentMove);

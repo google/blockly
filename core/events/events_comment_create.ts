@@ -28,7 +28,7 @@ import * as eventUtils from './utils.js';
 export class CommentCreate extends CommentBase {
   override type: string;
 
-  xml: Element|DocumentFragment|null = null;
+  xml!: Element|DocumentFragment;
 
   /**
    * @param opt_comment The created comment.
@@ -55,7 +55,7 @@ export class CommentCreate extends CommentBase {
    */
   override toJson(): CommentCreateJson {
     const json = super.toJson() as CommentCreateJson;
-    json['xml'] = Xml.domToText(this.xml!);
+    json['xml'] = Xml.domToText(this.xml);
     return json;
   }
 

@@ -28,9 +28,9 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.MarkerMove
  */
 export class MarkerMove extends UiBase {
-  blockId: string|null;
-  oldNode?: ASTNode|null;
-  newNode?: ASTNode;
+  blockId!: string;
+  oldNode!: ASTNode;
+  newNode!: ASTNode;
   isCursor?: boolean;
   override type: string;
 
@@ -54,13 +54,13 @@ export class MarkerMove extends UiBase {
     super(workspaceId);
 
     /** The workspace identifier for this event. */
-    this.blockId = opt_block ? opt_block.id : null;
+    this.blockId = opt_block?.id ?? '';
 
     /** The old node the marker used to be on. */
-    this.oldNode = opt_oldNode;
+    this.oldNode = opt_oldNode!;
 
     /** The new node the  marker is now on. */
-    this.newNode = opt_newNode;
+    this.newNode = opt_newNode!;
 
     /** Whether this is a cursor event. */
     this.isCursor = isCursor;
@@ -77,9 +77,9 @@ export class MarkerMove extends UiBase {
   override toJson(): MarkerMoveJson {
     const json = super.toJson() as MarkerMoveJson;
     json['isCursor'] = !!this.isCursor;
-    json['blockId'] = this.blockId || null;
-    json['oldNode'] = this.oldNode!;
-    json['newNode'] = this.newNode!;
+    json['blockId'] = this.blockId;
+    json['oldNode'] = this.oldNode;
+    json['newNode'] = this.newNode;
     return json;
   }
 
@@ -99,7 +99,7 @@ export class MarkerMove extends UiBase {
 
 export interface MarkerMoveJson extends AbstractEventJson {
   isCursor: boolean;
-  blockId: string|null;
+  blockId: string;
   oldNode: ASTNode;
   newNode: ASTNode;
 }

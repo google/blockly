@@ -22,10 +22,10 @@ import * as eventUtils from './utils.js';
 
 
 interface BlockLocation {
-  parentId: string;
-  inputName: string;
-  coordinate: Coordinate|null;
-}  // eslint-disable-line no-unused-vars
+  parentId?: string;
+  inputName?: string;
+  coordinate?: Coordinate;
+}
 
 /**
  * Class for a block move event.  Created before the move.
@@ -34,16 +34,13 @@ interface BlockLocation {
  */
 export class BlockMove extends BlockBase {
   override type: string;
-  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  oldParentId!: string;
-  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  oldInputName!: string;
-  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  oldCoordinate!: Coordinate|null;
+  oldParentId?: string;
+  oldInputName?: string;
+  oldCoordinate?: Coordinate;
 
-  newParentId: string|null = null;
-  newInputName: string|null = null;
-  newCoordinate: Coordinate|null = null;
+  newParentId?: string;
+  newInputName?: string;
+  newCoordinate?: Coordinate;
 
   /** @param opt_block The moved block.  Undefined for a blank event. */
   constructor(opt_block?: Block) {
@@ -74,15 +71,11 @@ export class BlockMove extends BlockBase {
    */
   override toJson(): BlockMoveJson {
     const json = super.toJson() as BlockMoveJson;
-    if (this.newParentId) {
-      json['newParentId'] = this.newParentId;
-    }
-    if (this.newInputName) {
-      json['newInputName'] = this.newInputName;
-    }
+    json['newParentId'] = this.newParentId;
+    json['newInputName'] = this.newInputName;
     if (this.newCoordinate) {
-      json['newCoordinate'] = Math.round(this.newCoordinate.x) + ',' +
-          Math.round(this.newCoordinate.y);
+      json['newCoordinate'] = `${Math.round(this.newCoordinate.x)}, ` +
+          `${Math.round(this.newCoordinate.y)}`;
     }
     if (!this.recordUndo) {
       json['recordUndo'] = this.recordUndo;
@@ -97,8 +90,8 @@ export class BlockMove extends BlockBase {
    */
   override fromJson(json: BlockMoveJson) {
     super.fromJson(json);
-    this.newParentId = json['newParentId'] || '';
-    this.newInputName = json['newInputName'] || '';
+    this.newParentId = json['newParentId'];
+    this.newInputName = json['newInputName'];
     if (json['newCoordinate']) {
       const xy = json['newCoordinate'].split(',');
       this.newCoordinate = new Coordinate(Number(xy[0]), Number(xy[1]));

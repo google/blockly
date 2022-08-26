@@ -26,7 +26,7 @@ import * as eventUtils from './utils.js';
  */
 export class BlockDrag extends UiBase {
   blockId: string;
-  isStart?: boolean;
+  isStart: boolean;
   blocks?: Block[];
   override type: string;
 
@@ -44,7 +44,7 @@ export class BlockDrag extends UiBase {
     this.blockId = opt_block ? opt_block.id : '';
 
     /** Whether this is the start of a block drag. */
-    this.isStart = opt_isStart;
+    this.isStart = !!opt_isStart;
 
     /** The blocks affected by this drag event. */
     this.blocks = opt_blocks;
@@ -60,7 +60,7 @@ export class BlockDrag extends UiBase {
    */
   override toJson(): BlockDragJson {
     const json = super.toJson() as BlockDragJson;
-    json['isStart'] = !!this.isStart;
+    json['isStart'] = this.isStart;
     json['blockId'] = this.blockId;
     // TODO: I don't think we should actually apply the blocks array to the JSON
     //   object b/c they have functions and aren't actually serializable.

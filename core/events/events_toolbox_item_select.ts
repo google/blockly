@@ -24,8 +24,8 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.ToolboxItemSelect
  */
 export class ToolboxItemSelect extends UiBase {
-  oldItem: string|null;
-  newItem: string|null;
+  oldItem!: string;
+  newItem!: string;
   override type: string;
 
   /**
@@ -42,10 +42,10 @@ export class ToolboxItemSelect extends UiBase {
     super(opt_workspaceId);
 
     /** The previously selected toolbox item. */
-    this.oldItem = opt_oldItem || null;
+    this.oldItem = opt_oldItem!;
 
     /** The newly selected toolbox item. */
-    this.newItem = opt_newItem || null;
+    this.newItem = opt_newItem!;
 
     /** Type of this event. */
     this.type = eventUtils.TOOLBOX_ITEM_SELECT;
@@ -76,8 +76,8 @@ export class ToolboxItemSelect extends UiBase {
 }
 
 export interface ToolboxItemSelectJson extends AbstractEventJson {
-  oldItem: string|null;
-  newItem: string|null;
+  oldItem: string;
+  newItem: string;
 }
 
 registry.register(

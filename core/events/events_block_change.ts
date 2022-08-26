@@ -30,8 +30,7 @@ export class BlockChange extends BlockBase {
   override type: string;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   element!: string;
-  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  name!: string|null;
+  name?: string;
   oldValue: unknown;
   newValue: unknown;
 
@@ -54,7 +53,7 @@ export class BlockChange extends BlockBase {
       return;  // Blank event to be populated by fromJson.
     }
     this.element = typeof opt_element === 'undefined' ? '' : opt_element;
-    this.name = typeof opt_name === 'undefined' ? '' : opt_name;
+    this.name = opt_name || undefined;
     this.oldValue = typeof opt_oldValue === 'undefined' ? '' : opt_oldValue;
     this.newValue = typeof opt_newValue === 'undefined' ? '' : opt_newValue;
   }
@@ -67,9 +66,7 @@ export class BlockChange extends BlockBase {
   override toJson(): BlockChangeJson {
     const json = super.toJson() as BlockChangeJson;
     json['element'] = this.element;
-    if (this.name) {
-      json['name'] = this.name;
-    }
+    json ['name'] = this.name;
     json['oldValue'] = this.oldValue;
     json['newValue'] = this.newValue;
     return json;
@@ -83,7 +80,7 @@ export class BlockChange extends BlockBase {
   override fromJson(json: BlockChangeJson) {
     super.fromJson(json);
     this.element = json['element'];
-    this.name = json['name'] || '';
+    this.name = json['name'];
     this.oldValue = json['oldValue'];
     this.newValue = json['newValue'];
   }

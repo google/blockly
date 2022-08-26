@@ -26,7 +26,7 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.Click
  */
 export class Click extends UiBase {
-  blockId: string|null = null;
+  blockId?: string;
   targetType?: ClickTarget;
   override type: string;
 
@@ -47,7 +47,7 @@ export class Click extends UiBase {
       workspaceId = undefined;
     }
     super(workspaceId);
-    this.blockId = opt_block ? opt_block.id : null;
+    this.blockId = opt_block?.id ?? undefined;
 
     /** The type of element targeted by this click event. */
     this.targetType = opt_targetType;
@@ -64,9 +64,7 @@ export class Click extends UiBase {
   override toJson(): ClickJson {
     const json = super.toJson() as ClickJson;
     json['targetType'] = this.targetType!;
-    if (this.blockId) {
-      json['blockId'] = this.blockId;
-    }
+    json['blockId'] = this.blockId;
     return json;
   }
 
@@ -78,7 +76,7 @@ export class Click extends UiBase {
   override fromJson(json: ClickJson) {
     super.fromJson(json);
     this.targetType = json['targetType'];
-    this.blockId = json['blockId'] || null;
+    this.blockId = json['blockId'];
   }
 }
 

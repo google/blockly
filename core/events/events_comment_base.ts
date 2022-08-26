@@ -39,13 +39,13 @@ export class CommentBase extends AbstractEvent {
   constructor(opt_comment?: WorkspaceComment) {
     super();
     /** Whether or not an event is blank. */
-    this.isBlank = typeof opt_comment === 'undefined';
+    this.isBlank = !opt_comment;
 
     /** The ID of the comment this event pertains to. */
-    this.commentId = this.isBlank ? '' : opt_comment!.id;
+    this.commentId = opt_comment?.id ?? '';
 
     /** The workspace identifier for this event. */
-    this.workspaceId = this.isBlank ? '' : opt_comment!.workspace.id;
+    this.workspaceId = opt_comment?.workspace.id ?? '';
 
     /**
      * The event group ID for the group this event belongs to. Groups define
@@ -65,9 +65,7 @@ export class CommentBase extends AbstractEvent {
    */
   override toJson(): CommentBaseJson {
     const json = super.toJson() as CommentBaseJson;
-    if (this.commentId) {
-      json['commentId'] = this.commentId;
-    }
+    json['commentId'] = this.commentId;
     return json;
   }
 
@@ -78,7 +76,7 @@ export class CommentBase extends AbstractEvent {
    */
   override fromJson(json: CommentBaseJson) {
     super.fromJson(json);
-    this.commentId = json['commentId'] || '';
+    this.commentId = json['commentId'];
   }
 
   /**
@@ -108,5 +106,5 @@ export class CommentBase extends AbstractEvent {
 }
 
 export interface CommentBaseJson extends AbstractEventJson {
-  commentId?: string;
+  commentId: string;
 }

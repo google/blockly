@@ -37,7 +37,7 @@ export abstract class Abstract {
   isUiEvent = false;
 
   /** Type of this event. */
-  type?: string;
+  type = '';
 
   /** @alias Blockly.Events.Abstract */
   constructor() {
@@ -58,11 +58,10 @@ export abstract class Abstract {
    * @returns JSON representation.
    */
   toJson(): AbstractEventJson {
-    const json: AbstractEventJson = {'type': this.type};
-    if (this.group) {
-      json['group'] = this.group;
-    }
-    return json;
+    return {
+      'type': this.type,
+      'group': this.group,
+    };
   }
 
   /**
@@ -114,6 +113,6 @@ export abstract class Abstract {
 }
 
 export interface AbstractEventJson {
-  type?: string;
-  group?: string;
+  type: string;
+  group: string;
 }

@@ -28,7 +28,7 @@ import * as eventUtils from './utils.js';
  */
 export class BlockCreate extends BlockBase {
   override type: string;
-  xml: Element|DocumentFragment|null = null;
+  xml!: Element|DocumentFragment;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   ids!: string[];
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.

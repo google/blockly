@@ -27,7 +27,7 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.BlockDelete
  */
 export class BlockDelete extends BlockBase {
-  oldXml: Element|DocumentFragment|null = null;
+  oldXml!: Element|DocumentFragment;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   ids!: string[];
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
@@ -93,7 +93,7 @@ export class BlockDelete extends BlockBase {
     this.ids = json['ids'];
     this.wasShadow =
         json['wasShadow'] || this.oldXml.tagName.toLowerCase() === 'shadow';
-    this.oldJson = json['oldJson'] as blocks.State;
+    this.oldJson = json['oldJson'];
     if (json['recordUndo'] !== undefined) {
       this.recordUndo = json['recordUndo'];
     }
@@ -127,7 +127,7 @@ export interface BlockDeleteJson extends BlockBaseJson {
   oldXml: string;
   ids: string[];
   wasShadow: boolean;
-  oldJson: object;
+  oldJson: blocks.State;
   recordUndo?: boolean;
 }
 

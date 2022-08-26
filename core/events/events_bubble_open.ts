@@ -27,7 +27,7 @@ import * as eventUtils from './utils.js';
 export class BubbleOpen extends UiBase {
   blockId: string|null;
   isOpen?: boolean;
-  bubbleType?: string;
+  bubbleType!: BubbleType;
   override type: string;
 
   /**
@@ -38,7 +38,7 @@ export class BubbleOpen extends UiBase {
    *     'warning'. Undefined for a blank event.
    */
   constructor(
-      opt_block?: BlockSvg, opt_isOpen?: boolean, opt_bubbleType?: string) {
+      opt_block?: BlockSvg, opt_isOpen?: boolean, opt_bubbleType?: BubbleType) {
     const workspaceId = opt_block ? opt_block.workspace.id : undefined;
     super(workspaceId);
     this.blockId = opt_block ? opt_block.id : null;
@@ -47,7 +47,9 @@ export class BubbleOpen extends UiBase {
     this.isOpen = opt_isOpen;
 
     /** The type of bubble. One of 'mutator', 'comment', or 'warning'. */
-    this.bubbleType = opt_bubbleType;
+    // TODO: We're assuming that this will be set by fromJson before it's a
+    //   problem.
+    this.bubbleType = opt_bubbleType!;
 
     /** Type of this event. */
     this.type = eventUtils.BUBBLE_OPEN;
@@ -61,7 +63,7 @@ export class BubbleOpen extends UiBase {
   override toJson(): BubbleOpenJson {
     const json = super.toJson() as BubbleOpenJson;
     json['isOpen'] = !!this.isOpen;
-    json['bubbleType'] = this.bubbleType || '';
+    json['bubbleType'] = this.bubbleType;
     json['blockId'] = this.blockId || '';
     return json;
   }
@@ -79,9 +81,15 @@ export class BubbleOpen extends UiBase {
   }
 }
 
+export enum BubbleType {
+  MUTATOR = 'mutator',
+  COMMENT = 'comment',
+  WARNING = 'warning',
+}
+
 export interface BubbleOpenJson extends AbstractEventJson {
   isOpen: boolean;
-  bubbleType: string;
+  bubbleType: BubbleType;
   blockId: string;
 }
 

@@ -14,7 +14,7 @@ goog.declareModuleId('Blockly.Events.FinishedLoading');
 
 import * as registry from '../registry.js';
 import type {Workspace} from '../workspace.js';
-import {Abstract as AbstractEvent} from './events_abstract.js';
+import {Abstract as AbstractEvent, AbstractEventJson} from './events_abstract.js';
 import * as eventUtils from './utils.js';
 
 
@@ -29,6 +29,7 @@ import * as eventUtils from './utils.js';
 export class FinishedLoading extends AbstractEvent {
   // Workspace events do not undo or redo.
   override recordUndo = false;
+  override workspaceId: string;
 
   /**
    * @param opt_workspace The workspace that has finished loading.  Undefined
@@ -40,7 +41,7 @@ export class FinishedLoading extends AbstractEvent {
     this.isBlank = typeof opt_workspace === 'undefined';
 
     /** The workspace identifier for this event. */
-    this.workspaceId = opt_workspace ? opt_workspace.id : '';
+    this.workspaceId = opt_workspace?.id ?? '';
 
     /** Type of this event. */
     this.type = eventUtils.FINISHED_LOADING;
@@ -52,13 +53,8 @@ export class FinishedLoading extends AbstractEvent {
    * @returns JSON representation.
    */
   override toJson(): FinishedLoadingJson {
-    const json = {'type': this.type} as FinishedLoadingJson;
-    if (this.group) {
-      json['group'] = this.group;
-    }
-    if (this.workspaceId) {
-      json['workspaceId'] = this.workspaceId;
-    }
+    const json = super.toJson() as FinishedLoadingJson;
+    json['workspaceId'] = this.workspaceId;
     return json;
   }
 
@@ -68,16 +64,13 @@ export class FinishedLoading extends AbstractEvent {
    * @param json JSON representation.
    */
   override fromJson(json: FinishedLoadingJson) {
-    this.isBlank = false;
-    this.workspaceId = json['workspaceId'] || '';
-    this.group = json['group'] || '';
+    super.fromJson(json);
+    this.workspaceId = json['workspaceId'];
   }
 }
 
-export interface FinishedLoadingJson {
-  type: string;
-  group?: string;
-  workspaceId?: string;
+export interface FinishedLoadingJson extends AbstractEventJson {
+  workspaceId: string;
 }
 
 registry.register(

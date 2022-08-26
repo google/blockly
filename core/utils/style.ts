@@ -182,37 +182,6 @@ export function getViewportPageOffset(): Coordinate {
 }
 
 /**
- * Shows or hides an element from the page. Hiding the element is done by
- * setting the display property to "none", removing the element from the
- * rendering hierarchy so it takes up no space. To show the element, the default
- * inherited display property is restored (defined either in stylesheets or by
- * the browser's default style rules).
- * Copied from Closure's goog.style.getViewportPageOffset
- *
- * @param el Element to show or hide.
- * @param isShown True to render the element in its default style, false to
- *     disable rendering the element.
- * @alias Blockly.utils.style.setElementShown
- */
-export function setElementShown(el: Element, isShown: AnyDuringMigration) {
-  // AnyDuringMigration because:  Property 'style' does not exist on type
-  // 'Element'.
-  (el as AnyDuringMigration).style.display = isShown ? '' : 'none';
-}
-
-/**
- * Returns true if the element is using right to left (RTL) direction.
- * Copied from Closure's goog.style.isRightToLeft
- *
- * @param el The element to test.
- * @returns True for right to left, false for left to right.
- * @alias Blockly.utils.style.isRightToLeft
- */
-export function isRightToLeft(el: Element): boolean {
-  return 'rtl' === getStyle(el, 'direction');
-}
-
-/**
  * Gets the computed border widths (on all sides) in pixels
  * Copied from Closure's goog.style.getBorderBox
  *

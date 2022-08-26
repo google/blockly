@@ -63,8 +63,6 @@ export function allUsedVarModels(ws: Workspace): VariableModel[] {
   return Array.from(variables.values());
 }
 
-const ALL_DEVELOPER_VARS_WARNINGS_BY_BLOCK_TYPE: {[key: string]: boolean} = {};
-
 /**
  * Find all developer variables used by blocks in the workspace.
  * Developer variables are never shown to the user, but are declared as global
@@ -81,18 +79,7 @@ export function allDeveloperVariables(workspace: Workspace): string[] {
   const blocks = workspace.getAllBlocks(false);
   const variables = new Set<string>();
   for (let i = 0, block; block = blocks[i]; i++) {
-    let getDeveloperVariables = block.getDeveloperVariables;
-    if (!getDeveloperVariables && (block as any).getDeveloperVars) {
-      // August 2018: getDeveloperVars() was deprecated and renamed
-      // getDeveloperVariables().
-      getDeveloperVariables = (block as any).getDeveloperVars;
-      if (!ALL_DEVELOPER_VARS_WARNINGS_BY_BLOCK_TYPE[block.type]) {
-        console.warn(
-            'Function getDeveloperVars() deprecated. Use ' +
-            'getDeveloperVariables() (block type \'' + block.type + '\')');
-        ALL_DEVELOPER_VARS_WARNINGS_BY_BLOCK_TYPE[block.type] = true;
-      }
-    }
+    const getDeveloperVariables = block.getDeveloperVariables;
     if (getDeveloperVariables) {
       const devVars = getDeveloperVariables();
       for (let j = 0; j < devVars.length; j++) {

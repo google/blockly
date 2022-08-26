@@ -76,7 +76,7 @@ export class FieldLabel extends Field {
   override initView() {
     this.createTextElement_();
     if (this.class_) {
-      dom.addClass(this.textElement_!, this.class_);
+      dom.addClass(this.getTextElement(), this.class_);
     }
   }
 

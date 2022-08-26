@@ -112,8 +112,9 @@ export class FieldCheckbox extends Field {
   override initView() {
     super.initView();
 
-    dom.addClass(this.textElement_!, 'blocklyCheckbox');
-    this.textElement_!.style.display = this.value_ ? 'block' : 'none';
+    const textElement = this.getTextElement();
+    dom.addClass(textElement, 'blocklyCheckbox');
+    textElement.style.display = this.value_ ? 'block' : 'none';
   }
 
   override render_() {

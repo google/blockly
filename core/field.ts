@@ -617,11 +617,47 @@ export abstract class Field implements IASTNodeLocationSvg,
    * @returns The group element.
    * @throws An error if the field group is not defined.
    */
-  getSvgRoot(): SVGGElement {
-    if (!this.fieldGroup_) {
-      throw new Error(`The field group is ${this.fieldGroup_}.`);
-    }
+  getSvgRoot(): SVGGElement|null {
     return this.fieldGroup_;
+  }
+
+  /**
+   * Gets the border rectangle element.
+   *
+   * @returns The border rectangle element.
+   * @throws An error if the border rectangle element is not defined.
+   */
+  protected getBorderRect(): SVGRectElement {
+    if (!this.borderRect_) {
+      throw new Error(`The border rectangle is ${this.borderRect_}.`);
+    }
+    return this.borderRect_;
+  }
+
+  /**
+   * Gets the text element.
+   *
+   * @returns The text element.
+   * @throws An error if the text element is not defined.
+   */
+  protected getTextElement(): SVGTextElement {
+    if (!this.textElement_) {
+      throw new Error(`The text element is ${this.textElement_}.`);
+    }
+    return this.textElement_;
+  }
+
+  /**
+   * Gets the text content.
+   *
+   * @returns The text content.
+   * @throws An error if the text content is not defined.
+   */
+  protected getTextContent(): Text {
+    if (!this.textContent_) {
+      throw new Error(`The text content is ${this.textContent_}.`);
+    }
+    return this.textContent_;
   }
 
   /**
@@ -1077,6 +1113,9 @@ export abstract class Field implements IASTNodeLocationSvg,
    * @returns Element to bind click handler to.
    */
   protected getClickTarget_(): Element {
+    if (!this.clickTarget_ || !this.getSvgRoot()) {
+      throw new Error(`A click target has not been set.`);
+    }
     return this.clickTarget_ || this.getSvgRoot();
   }
 
@@ -1176,7 +1215,10 @@ export abstract class Field implements IASTNodeLocationSvg,
       return;
     }
 
-    this.getSvgRoot().appendChild(cursorSvg);
+    if (!this.fieldGroup_) {
+      throw new Error(`The field group is ${this.fieldGroup_}.`);
+    }
+    this.fieldGroup_.appendChild(cursorSvg);
     this.cursorSvg_ = cursorSvg;
   }
 
@@ -1192,7 +1234,10 @@ export abstract class Field implements IASTNodeLocationSvg,
       return;
     }
 
-    this.getSvgRoot().appendChild(markerSvg);
+    if (!this.fieldGroup_) {
+      throw new Error(`The field group is ${this.fieldGroup_}.`);
+    }
+    this.fieldGroup_.appendChild(markerSvg);
     this.markerSvg_ = markerSvg;
   }
 

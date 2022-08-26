@@ -222,19 +222,19 @@ export class FieldDropdown extends Field {
 
   /** Create a tspan based arrow. */
   protected createTextArrow_() {
-    this.arrow_ = dom.createSvgElement(Svg.TSPAN, {}, this.textElement_!);
+    this.arrow_ = dom.createSvgElement(Svg.TSPAN, {}, this.textElement_);
     this.arrow_!.appendChild(document.createTextNode(
         this.getSourceBlock().RTL ? FieldDropdown.ARROW_CHAR + ' ' :
                                     ' ' + FieldDropdown.ARROW_CHAR));
     if (this.getSourceBlock().RTL) {
       // AnyDuringMigration because:  Argument of type 'SVGTSpanElement | null'
       // is not assignable to parameter of type 'Node'.
-      this.textElement_!.insertBefore(
+      this.getTextElement().insertBefore(
           this.arrow_ as AnyDuringMigration, this.textContent_);
     } else {
       // AnyDuringMigration because:  Argument of type 'SVGTSpanElement | null'
       // is not assignable to parameter of type 'Node'.
-      this.textElement_!.appendChild(this.arrow_ as AnyDuringMigration);
+      this.getTextElement().appendChild(this.arrow_ as AnyDuringMigration);
     }
   }
 
@@ -532,7 +532,7 @@ export class FieldDropdown extends Field {
   /** Draws the border with the correct width. */
   protected override render_() {
     // Hide both elements.
-    this.textContent_!.nodeValue = '';
+    this.getTextContent().nodeValue = '';
     this.imageElement_!.style.display = 'none';
 
     // Show correct element.
@@ -595,7 +595,7 @@ export class FieldDropdown extends Field {
       this.imageElement_!.setAttribute('x', imageX.toString());
     } else {
       arrowX = imageWidth + arrowWidth;
-      this.textElement_!.setAttribute('text-anchor', 'end');
+      this.getTextElement().setAttribute('text-anchor', 'end');
       this.imageElement_!.setAttribute('x', xPadding.toString());
     }
     this.imageElement_!.setAttribute(
@@ -607,9 +607,10 @@ export class FieldDropdown extends Field {
   /** Renders the selected option, which must be text. */
   private renderSelectedText_() {
     // Retrieves the selected option to display through getText_.
-    this.textContent_!.nodeValue = this.getDisplayText_();
-    dom.addClass(this.textElement_!, 'blocklyDropdownText');
-    this.textElement_!.setAttribute('text-anchor', 'start');
+    this.getTextContent().nodeValue = this.getDisplayText_();
+    const textElement = this.getTextElement();
+    dom.addClass(textElement, 'blocklyDropdownText');
+    textElement.setAttribute('text-anchor', 'start');
 
     // Height and width include the border rect.
     const hasBorder = !!this.borderRect_;
@@ -617,7 +618,7 @@ export class FieldDropdown extends Field {
         hasBorder ? this.getConstants()!.FIELD_DROPDOWN_BORDER_RECT_HEIGHT : 0,
         this.getConstants()!.FIELD_TEXT_HEIGHT);
     const textWidth = dom.getFastTextWidth(
-        this.textElement_!, this.getConstants()!.FIELD_TEXT_FONTSIZE,
+        this.getTextElement(), this.getConstants()!.FIELD_TEXT_FONTSIZE,
         this.getConstants()!.FIELD_TEXT_FONTWEIGHT,
         this.getConstants()!.FIELD_TEXT_FONTFAMILY);
     const xPadding =

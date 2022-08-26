@@ -202,7 +202,7 @@ export class FieldAngle extends FieldTextInput {
     // #2380)
     this.symbol_ = dom.createSvgElement(Svg.TSPAN, {});
     this.symbol_.appendChild(document.createTextNode('°'));
-    this.textElement_!.appendChild(this.symbol_);
+    this.getTextElement().appendChild(this.symbol_);
   }
 
   /** Updates the graph when the field rerenders. */

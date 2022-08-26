@@ -321,7 +321,7 @@ export abstract class Field implements IASTNodeLocationSvg,
           'width': this.size_.width,
           'class': 'blocklyFieldRect',
         },
-        this.getSvgRoot());
+        this.fieldGroup_);
   }
 
   /**
@@ -334,7 +334,7 @@ export abstract class Field implements IASTNodeLocationSvg,
         Svg.TEXT, {
           'class': 'blocklyText',
         },
-        this.getSvgRoot());
+        this.fieldGroup_);
     if (this.getConstants()!.FIELD_TEXT_BASELINE_CENTER) {
       this.textElement_.setAttribute('dominant-baseline', 'central');
     }
@@ -576,7 +576,7 @@ export abstract class Field implements IASTNodeLocationSvg,
       return;
     }
     this.visible_ = visible;
-    const root = this.getSvgRoot();
+    const root = this.fieldGroup_;
     if (root) {
       root.style.display = visible ? 'block' : 'none';
     }
@@ -942,8 +942,8 @@ export abstract class Field implements IASTNodeLocationSvg,
 
     this.doValueUpdate_(newValue);
     if (source && eventUtils.isEnabled()) {
-      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))!
-                      (source, 'field', this.name || null, oldValue, newValue));
+      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+          source, 'field', this.name || null, oldValue, newValue));
     }
     if (this.isDirty_) {
       this.forceRerender();
@@ -1220,4 +1220,4 @@ export interface FieldConfig {
  * For use by Field and descendants of Field. Constructors can change
  * in descendants, though they should contain all of Field's prototype methods.
  */
-export type FieldProto = Pick<typeof Field, 'prototype'>
+export type FieldProto = Pick<typeof Field, 'prototype'>;

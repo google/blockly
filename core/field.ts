@@ -347,9 +347,11 @@ export abstract class Field implements IASTNodeLocationSvg,
    * do custom input handling.
    */
   protected bindEvents_() {
-    Tooltip.bindMouseEvents(this.getClickTarget_());
+    const clickTarget = this.getClickTarget_();
+    if (!clickTarget) throw new Error('A click target has not been set.');
+    Tooltip.bindMouseEvents(clickTarget);
     this.mouseDownWrapper_ = browserEvents.conditionalBind(
-        this.getClickTarget_(), 'mousedown', this, this.onMouseDown_);
+        clickTarget, 'mousedown', this, this.onMouseDown_);
   }
 
   /**
@@ -615,7 +617,6 @@ export abstract class Field implements IASTNodeLocationSvg,
    * Used for measuring the size and for positioning.
    *
    * @returns The group element.
-   * @throws An error if the field group is not defined.
    */
   getSvgRoot(): SVGGElement|null {
     return this.fieldGroup_;
@@ -1112,10 +1113,7 @@ export abstract class Field implements IASTNodeLocationSvg,
    *
    * @returns Element to bind click handler to.
    */
-  protected getClickTarget_(): Element {
-    if (!this.clickTarget_ || !this.getSvgRoot()) {
-      throw new Error(`A click target has not been set.`);
-    }
+  protected getClickTarget_(): Element|null {
     return this.clickTarget_ || this.getSvgRoot();
   }
 

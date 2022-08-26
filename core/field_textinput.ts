@@ -333,7 +333,9 @@ export class FieldTextInput extends Field {
     eventUtils.setGroup(true);
     const div = WidgetDiv.getDiv();
 
-    dom.addClass(this.getClickTarget_(), 'editing');
+    const clickTarget = this.getClickTarget_();
+    if (!clickTarget) throw new Error('A click target has not been set.');
+    dom.addClass(clickTarget, 'editing');
 
     const htmlInput = (document.createElement('input'));
     htmlInput.className = 'blocklyHtmlInput';
@@ -402,7 +404,9 @@ export class FieldTextInput extends Field {
     style.boxShadow = '';
     this.htmlInput_ = null;
 
-    dom.removeClass(this.getClickTarget_(), 'editing');
+    const clickTarget = this.getClickTarget_();
+    if (!clickTarget) throw new Error('A click target has not been set.');
+    dom.removeClass(clickTarget, 'editing');
   }
 
   /**

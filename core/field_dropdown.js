@@ -26,7 +26,7 @@ const fieldRegistry = goog.require('Blockly.fieldRegistry');
 const parsing = goog.require('Blockly.utils.parsing');
 const userAgent = goog.require('Blockly.utils.userAgent');
 const utilsString = goog.require('Blockly.utils.string');
-const browserEvents = goog.require('Blockly.browserEvents');
+const internalConstants = goog.require('Blockly.internalConstants');
 const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 const {Field} = goog.require('Blockly.Field');
 const {MenuItem} = goog.require('Blockly.MenuItem');
@@ -34,7 +34,6 @@ const {Menu} = goog.require('Blockly.Menu');
 /* eslint-disable-next-line no-unused-vars */
 const {Sentinel} = goog.requireType('Blockly.utils.Sentinel');
 const {Svg} = goog.require('Blockly.utils.Svg');
-const {Msg} = goog.require('Blockly.Msg');
 
 
 /**
@@ -353,6 +352,13 @@ class FieldDropdown extends Field {
     const options = this.getOptions(false);
     this.selectedMenuItem_ = null;
     options.sort((a, b) => a[0].localeCompare(b[0], undefined, {numeric: true, sensitivity: 'base'}));
+
+    const renameVarIndex = options.findIndex((option) => option[1] === internalConstants.RENAME_VARIABLE_ID);
+    if (renameVarIndex !== -1 || renameVarIndex !== 0) {
+      const renameVarOption = options.splice(renameVarIndex, 1);
+      options.unshift(...renameVarOption);
+    }
+
 
     for (let i = 0; i < options.length; i++) {
       let content = options[i][0];  // Human-readable text or image.

@@ -35,6 +35,7 @@ export function workspaceTeardown(workspace) {
 function createEventsFireStubFireImmediately_(clock) {
   const stub = sinon.stub(eventUtils.TEST_ONLY, 'fireInternal');
   stub.callsFake(function(event) {
+    //console.log(event);
     // Call original method.
     stub.wrappedMethod.call(this, ...arguments);
     // Advance clock forward to run any queued events.

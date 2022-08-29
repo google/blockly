@@ -28,8 +28,8 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.MarkerMove
  */
 export class MarkerMove extends UiBase {
-  blockId!: string;
-  oldNode!: ASTNode;
+  blockId?: string;
+  oldNode?: ASTNode;
   newNode!: ASTNode;
   isCursor?: boolean;
   override type: string;
@@ -54,10 +54,10 @@ export class MarkerMove extends UiBase {
     super(workspaceId);
 
     /** The workspace identifier for this event. */
-    this.blockId = opt_block?.id ?? '';
+    this.blockId = opt_block?.id;
 
     /** The old node the marker used to be on. */
-    this.oldNode = opt_oldNode!;
+    this.oldNode = opt_oldNode || undefined;
 
     /** The new node the  marker is now on. */
     this.newNode = opt_newNode!;
@@ -99,8 +99,8 @@ export class MarkerMove extends UiBase {
 
 export interface MarkerMoveJson extends AbstractEventJson {
   isCursor: boolean;
-  blockId: string;
-  oldNode: ASTNode;
+  blockId?: string;
+  oldNode?: ASTNode;
   newNode: ASTNode;
 }
 

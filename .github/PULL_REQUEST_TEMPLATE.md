@@ -36,26 +36,10 @@
 ### Test Coverage
 
 <!-- TODO: Please show how you have added tests to cover your changes,
-  -        or tell us how you tested it. For each systems you tested,
-  -        uncomment the systems in the list below.
+  -        or tell us how you tested it. If your change includes
+  -        browser-specific behaviour, include information about the
+  -        browser and device that you used for testing.
   -->
-
-<!-- Tested on: -->
-<!-- * Desktop Chrome -->
-<!-- * Desktop Firefox -->
-<!-- * Desktop Safari -->
-<!-- * Desktop Opera -->
-<!-- * Windows Internet Explorer 10 -->
-<!-- * Windows Internet Explorer 11 -->
-<!-- * Windows Edge -->
-
-<!--
-* Smartphone/Tablet/Chromebook (please complete the following information):
-  * Device: [e.g. iPhone6]
-  * OS: [e.g. iOS8.1]
-  * Browser [e.g. stock browser, safari]
-  * Version [e.g. 22]
--->
 
 ### Documentation
 

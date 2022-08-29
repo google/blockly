@@ -318,7 +318,7 @@ exports.commentDeleteOption = commentDeleteOption;
  */
 const blockMoveToModuleOption = function(block, module) {
   return {
-    text: Blockly.Msg['BLOCK_MOVE_TO_MODULE'].replace('%1', Blockly.Msg[module.name] || module.name),
+    text: Blockly.Msg['BLOCK_MOVE_TO_MODULE'].replace('%1', module.getName()),
     enabled: block.isMovable(),
     callback: function() {
       block.workspace.getModuleManager().moveBlockToModule(block, module);

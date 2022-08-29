@@ -14,6 +14,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.style');
 
+import * as deprecation from './deprecation.js';
 import {Coordinate} from './coordinate.js';
 import {Rect} from './rect.js';
 import {Size} from './size.js';
@@ -75,8 +76,7 @@ function getSizeWithDisplay(element: Element): Size {
 
 /**
  * Cross-browser pseudo get computed style. It returns the computed style where
- * available. If not available it tries the cascaded style value (IE
- * currentStyle) and in worst case the inline style value.  It shouldn't be
+ * available. If not available it tries the inline style value.  It shouldn't be
  * called directly, see http://wiki/Main/ComputedStyleVsCascadedStyle for
  * discussion.
  *
@@ -88,17 +88,14 @@ function getSizeWithDisplay(element: Element): Size {
  */
 function getStyle(element: Element, style: string): string {
   // AnyDuringMigration because:  Property 'style' does not exist on type
-  // 'Element'. AnyDuringMigration because:  Property 'style' does not exist on
-  // type 'Element'.
-  return getComputedStyle(element, style) || getCascadedStyle(element, style) ||
-      (element as AnyDuringMigration).style &&
-      (element as AnyDuringMigration).style[style];
+  // 'Element'.
+  return getComputedStyle(element, style) ||
+      (element as AnyDuringMigration).style?.[style];
 }
 
 /**
- * Retrieves a computed style value of a node. It returns empty string if the
- * value cannot be computed (which will be the case in Internet Explorer) or
- * "none" if the property requested is an SVG one and it has not been
+ * Retrieves a computed style value of a node. It returns empty string
+ * if the property requested is an SVG one and it has not been
  * explicitly set (firefox and webkit).
  *
  * Copied from Closure's goog.style.getComputedStyle
@@ -109,17 +106,11 @@ function getStyle(element: Element, style: string): string {
  * @alias Blockly.utils.style.getComputedStyle
  */
 export function getComputedStyle(element: Element, property: string): string {
-  if (document.defaultView && document.defaultView.getComputedStyle) {
-    const styles = document.defaultView.getComputedStyle(element, null);
-    if (styles) {
-      // element.style[..] is undefined for browser specific styles
-      // as 'filter'.
-      return (styles as AnyDuringMigration)[property] ||
-          styles.getPropertyValue(property) || '';
-    }
-  }
-
-  return '';
+  const styles = window.getComputedStyle(element);
+  // element.style[..] is undefined for browser specific styles
+  // as 'filter'.
+  return (styles as AnyDuringMigration)[property] ||
+      styles.getPropertyValue(property) || '';
 }
 
 /**
@@ -134,6 +125,9 @@ export function getComputedStyle(element: Element, property: string): string {
  * @alias Blockly.utils.style.getCascadedStyle
  */
 export function getCascadedStyle(element: Element, style: string): string {
+  deprecation.warn(
+      'Blockly.utils.style.getCascadedStyle', 'version 9.0.0',
+      'version 10.0.0');
   // AnyDuringMigration because:  Property 'currentStyle' does not exist on type
   // 'Element'. AnyDuringMigration because:  Property 'currentStyle' does not
   // exist on type 'Element'.

@@ -44,8 +44,7 @@ export class CommentMove extends CommentBase {
     }
 
     /**
-     * The comment that is being moved.  Will be cleared after recording the new
-     * location.
+     * The comment that is being moved.
      */
     this.comment_ = opt_comment;
 

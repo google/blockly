@@ -53,33 +53,26 @@ export class Gesture {
    * pixels, with (0, 0) at the top left of the browser window (mouseEvent
    * clientX/Y).
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'Coordinate'.
-  private mouseDownXY_: Coordinate = null as AnyDuringMigration;
+  private mouseDownXY_ = new Coordinate(0, 0);
   private currentDragDeltaXY_: Coordinate;
 
   /**
    * The bubble that the gesture started on, or null if it did not start on a
    * bubble.
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'IBubble'.
-  private startBubble_: IBubble = null as AnyDuringMigration;
+  private startBubble_: IBubble|null = null;
 
   /**
    * The field that the gesture started on, or null if it did not start on a
    * field.
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type 'Field'.
-  private startField_: Field = null as AnyDuringMigration;
+  private startField_: Field|null = null;
 
   /**
    * The block that the gesture started on, or null if it did not start on a
    * block.
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'BlockSvg'.
-  private startBlock_: BlockSvg = null as AnyDuringMigration;
+  private startBlock_: BlockSvg|null = null;
 
   /**
    * The block that this gesture targets.  If the gesture started on a
@@ -87,18 +80,14 @@ export class Gesture {
    * gesture started in the flyout, this is the root block of the block group
    * that was clicked or dragged.
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'BlockSvg'.
-  private targetBlock_: BlockSvg = null as AnyDuringMigration;
+  private targetBlock_: BlockSvg|null = null;
 
   /**
    * The workspace that the gesture started on.  There may be multiple
    * workspaces on a page; this is more accurate than using
    * Blockly.common.getMainWorkspace().
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'WorkspaceSvg'.
-  protected startWorkspace_: WorkspaceSvg = null as AnyDuringMigration;
+  protected startWorkspace_: WorkspaceSvg|null = null;
 
   /**
    * Whether the pointer has at any point moved out of the drag radius.
@@ -106,15 +95,6 @@ export class Gesture {
    * at its start point.
    */
   private hasExceededDragRadius_ = false;
-
-  /** Whether the workspace is currently being dragged. */
-  private isDraggingWorkspace_ = false;
-
-  /** Whether the block is currently being dragged. */
-  private isDraggingBlock_ = false;
-
-  /** Whether the bubble is currently being dragged. */
-  private isDraggingBubble_ = false;
 
   /**
    * A handle to use to unbind a mouse move listener at the end of a drag.
@@ -129,9 +109,7 @@ export class Gesture {
   protected onUpWrapper_: browserEvents.Data|null = null;
 
   /** The object tracking a bubble drag, or null if none is in progress. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'BubbleDragger'.
-  private bubbleDragger_: BubbleDragger = null as AnyDuringMigration;
+  private bubbleDragger_: BubbleDragger|null = null;
 
   /** The object tracking a block drag, or null if none is in progress. */
   private blockDragger_: IBlockDragger|null = null;
@@ -140,14 +118,10 @@ export class Gesture {
    * The object tracking a workspace or flyout workspace drag, or null if none
    * is in progress.
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'WorkspaceDragger'.
-  private workspaceDragger_: WorkspaceDragger = null as AnyDuringMigration;
+  private workspaceDragger_: WorkspaceDragger|null = null;
 
   /** The flyout a gesture started in, if any. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'IFlyout'.
-  private flyout_: IFlyout = null as AnyDuringMigration;
+  private flyout_: IFlyout|null = null;
 
   /** Boolean for sanity-checking that some code is only called once. */
   private calledUpdateIsDragging_ = false;
@@ -265,17 +239,21 @@ export class Gesture {
    * @returns True if a block is being dragged from the flyout.
    */
   private updateIsDraggingFromFlyout_(): boolean {
-    if (!this.targetBlock_) {
-      return false;
+    if (!this.flyout_) {
+      throw new Error('Cannot update dragging from the flyout because the ' +
+          'flyout is undefined');
     }
-    if (!this.flyout_.isBlockCreatable(this.targetBlock_)) {
+    if (!this.flyout_.targetWorkspace) {
+      throw new Error(`Cannot update dragging from the flyout because the ' +
+          'flyout's target workspace is undefined`);
+    }
+    if (!this.targetBlock_ ||
+        !this.flyout_.isBlockCreatable(this.targetBlock_)) {
       return false;
     }
     if (!this.flyout_.isScrollable() ||
         this.flyout_.isDragTowardWorkspace(this.currentDragDeltaXY_)) {
-      // AnyDuringMigration because:  Type 'WorkspaceSvg | null' is not
-      // assignable to type 'WorkspaceSvg'.
-      this.startWorkspace_ = this.flyout_.targetWorkspace as AnyDuringMigration;
+      this.startWorkspace_ = this.flyout_.targetWorkspace;
       this.startWorkspace_.updateScreenCalculationsIfScrolled();
       // Start the event group now, so that the same event group is used for
       // block creation and block dragging.
@@ -283,9 +261,7 @@ export class Gesture {
         eventUtils.setGroup(true);
       }
       // The start block is no longer relevant, because this is a drag.
-      // AnyDuringMigration because:  Type 'null' is not assignable to type
-      // 'BlockSvg'.
-      this.startBlock_ = null as AnyDuringMigration;
+      this.startBlock_ = null;
       this.targetBlock_ = this.flyout_.createBlock(this.targetBlock_);
       this.targetBlock_.select();
       return true;
@@ -307,7 +283,6 @@ export class Gesture {
       return false;
     }
 
-    this.isDraggingBubble_ = true;
     this.startDraggingBubble_();
     return true;
   }
@@ -326,14 +301,12 @@ export class Gesture {
     if (!this.targetBlock_) {
       return false;
     }
-
     if (this.flyout_) {
-      this.isDraggingBlock_ = this.updateIsDraggingFromFlyout_();
+      if (this.updateIsDraggingFromFlyout_()) {
+        this.startDraggingBlock_();
+        return true;
+      }
     } else if (this.targetBlock_.isMovable()) {
-      this.isDraggingBlock_ = true;
-    }
-
-    if (this.isDraggingBlock_) {
       this.startDraggingBlock_();
       return true;
     }
@@ -348,17 +321,18 @@ export class Gesture {
    * necessary WorkspaceDragger and starts the drag.
    */
   private updateIsDraggingWorkspace_() {
+    if (!this.startWorkspace_) {
+      throw new Error('Cannot update dragging the workspace because the ' +
+          'start workspace is undefined');
+    }
+
     const wsMovable = this.flyout_ ?
         this.flyout_.isScrollable() :
         this.startWorkspace_ && this.startWorkspace_.isDraggable();
+    if (!wsMovable) return;
 
-    if (!wsMovable) {
-      return;
-    }
+    this.workspaceDragger_ = new WorkspaceDragger(this.startWorkspace_);
 
-    this.workspaceDragger_ = new WorkspaceDragger((this.startWorkspace_));
-
-    this.isDraggingWorkspace_ = true;
     this.workspaceDragger_.startDrag();
   }
 
@@ -402,8 +376,17 @@ export class Gesture {
   // TODO (fenichel): Possibly combine this and startDraggingBlock_.
   /** Create a bubble dragger and start dragging the selected bubble. */
   private startDraggingBubble_() {
+    if (!this.startBubble_) {
+      throw new Error('Cannot update dragging the bubble because the start ' +
+          'bubble is undefined');
+    }
+    if (!this.startWorkspace_) {
+      throw new Error('Cannot update dragging the bubble because the start ' +
+          'workspace is undefined');
+    }
+
     this.bubbleDragger_ =
-        new BubbleDragger((this.startBubble_), (this.startWorkspace_));
+        new BubbleDragger(this.startBubble_, this.startWorkspace_);
     this.bubbleDragger_.startBubbleDrag();
     this.bubbleDragger_.dragBubble(
         this.mostRecentEvent_, this.currentDragDeltaXY_);
@@ -424,6 +407,12 @@ export class Gesture {
     this.hasStarted_ = true;
 
     blockAnimations.disconnectUiStop();
+
+    if (!this.startWorkspace_) {
+      throw new Error('Cannot start the gesture because the start ' +
+          'workspace is undefined');
+    }
+
     this.startWorkspace_.updateScreenCalculationsIfScrolled();
     if (this.startWorkspace_.isMutator) {
       // Mutator's coordinate system could be out of date because the bubble was
@@ -495,11 +484,11 @@ export class Gesture {
    */
   handleMove(e: Event) {
     this.updateFromEvent_(e);
-    if (this.isDraggingWorkspace_) {
+    if (this.workspaceDragger_) {
       this.workspaceDragger_.drag(this.currentDragDeltaXY_);
-    } else if (this.isDraggingBlock_) {
-      this.blockDragger_!.drag(this.mostRecentEvent_, this.currentDragDeltaXY_);
-    } else if (this.isDraggingBubble_) {
+    } else if (this.blockDragger_) {
+      this.blockDragger_.drag(this.mostRecentEvent_, this.currentDragDeltaXY_);
+    } else if (this.bubbleDragger_) {
       this.bubbleDragger_.dragBubble(
           this.mostRecentEvent_, this.currentDragDeltaXY_);
     }
@@ -527,11 +516,11 @@ export class Gesture {
     // priority than workspaces.
     // The ordering within drags does not matter, because the three types of
     // dragging are exclusive.
-    if (this.isDraggingBubble_) {
+    if (this.bubbleDragger_) {
       this.bubbleDragger_.endBubbleDrag(e, this.currentDragDeltaXY_);
-    } else if (this.isDraggingBlock_) {
-      this.blockDragger_!.endDrag(e, this.currentDragDeltaXY_);
-    } else if (this.isDraggingWorkspace_) {
+    } else if (this.blockDragger_) {
+      this.blockDragger_.endDrag(e, this.currentDragDeltaXY_);
+    } else if (this.workspaceDragger_) {
       this.workspaceDragger_.endDrag(this.currentDragDeltaXY_);
     } else if (this.isBubbleClick_()) {
       // Bubbles are in front of all fields and blocks.
@@ -564,13 +553,13 @@ export class Gesture {
       return;
     }
     Touch.longStop();
-    if (this.isDraggingBubble_) {
+    if (this.bubbleDragger_) {
       this.bubbleDragger_.endBubbleDrag(
           this.mostRecentEvent_, this.currentDragDeltaXY_);
-    } else if (this.isDraggingBlock_) {
-      this.blockDragger_!.endDrag(
+    } else if (this.blockDragger_) {
+      this.blockDragger_.endDrag(
           this.mostRecentEvent_, this.currentDragDeltaXY_);
-    } else if (this.isDraggingWorkspace_) {
+    } else if (this.workspaceDragger_) {
       this.workspaceDragger_.endDrag(this.currentDragDeltaXY_);
     }
     this.dispose();
@@ -695,6 +684,10 @@ export class Gesture {
 
   /** Execute a field click. */
   private doFieldClick_() {
+    if (!this.startField_) {
+      throw new Error('Cannot do a field click because the start field is ' +
+          'undefined');
+    }
     this.startField_.showEditor(this.mostRecentEvent_);
     this.bringBlockToFront_();
   }
@@ -703,6 +696,10 @@ export class Gesture {
   private doBlockClick_() {
     // Block click in an autoclosing flyout.
     if (this.flyout_ && this.flyout_.autoClose) {
+      if (!this.targetBlock_) {
+        throw new Error('Cannot do a block click because the target block is ' +
+            'undefined');
+      }
       if (this.targetBlock_.isEnabled()) {
         if (!eventUtils.getGroup()) {
           eventUtils.setGroup(true);
@@ -711,6 +708,10 @@ export class Gesture {
         newBlock.scheduleSnapAndBump();
       }
     } else {
+      if (!this.startWorkspace_) {
+        throw new Error('Cannot do a block click because the start workspace ' +
+            'is undefined');
+      }
       // Clicks events are on the start block, even if it was a shadow.
       const event = new (eventUtils.get(eventUtils.CLICK))(
           this.startBlock_, this.startWorkspace_.id, 'block');
@@ -809,9 +810,9 @@ export class Gesture {
    */
   private setTargetBlock_(block: BlockSvg) {
     if (block.isShadow()) {
-      // AnyDuringMigration because:  Argument of type 'BlockSvg | null' is not
-      // assignable to parameter of type 'BlockSvg'.
-      this.setTargetBlock_(block.getParent() as AnyDuringMigration);
+      // Non-null assertion is fine b/c it is an invariant that shadows always
+      // have parents.
+      this.setTargetBlock_(block.getParent()!);
     } else {
       this.targetBlock_ = block;
     }
@@ -906,8 +907,8 @@ export class Gesture {
    * @internal
    */
   isDragging(): boolean {
-    return this.isDraggingWorkspace_ || this.isDraggingBlock_ ||
-        this.isDraggingBubble_;
+    return !!this.workspaceDragger_ || !!this.blockDragger_ ||
+        !!this.bubbleDragger_;
   }
 
   /**
@@ -944,14 +945,7 @@ export class Gesture {
    *     progress.
    */
   getCurrentDragger(): WorkspaceDragger|BubbleDragger|IBlockDragger|null {
-    if (this.isDraggingBlock_) {
-      return this.blockDragger_;
-    } else if (this.isDraggingWorkspace_) {
-      return this.workspaceDragger_;
-    } else if (this.isDraggingBubble_) {
-      return this.bubbleDragger_;
-    }
-    return null;
+    return this.blockDragger_ ?? this.workspaceDragger_ ?? this.bubbleDragger_;
   }
 
   /**

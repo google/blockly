@@ -632,7 +632,8 @@ export class InsertionMarkerManager {
     }
 
     if (!imConn) {
-      throw new Error('Cannot show the insertion marker because there is no ' +
+      throw new Error(
+          'Cannot show the insertion marker because there is no ' +
           'associated connection');
     }
 

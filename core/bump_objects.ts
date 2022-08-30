@@ -154,9 +154,9 @@ function extractObjectFromEvent(
       break;
     case eventUtils.COMMENT_CREATE:
     case eventUtils.COMMENT_MOVE:
-      object = workspace.getCommentById(
-                   (e as CommentCreate | CommentMove).commentId!) as
-              WorkspaceCommentSvg |
+      object =
+          workspace.getCommentById((e as CommentCreate | CommentMove).commentId!
+                                   ) as WorkspaceCommentSvg |
           null;
       break;
   }

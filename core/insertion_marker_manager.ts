@@ -624,10 +624,16 @@ export class InsertionMarkerManager {
       insertionMarker = isLastInStack ? this.lastMarker_ : this.firstMarker_;
       if (!insertionMarker) {
         throw new Error(
-            'Cannot show the insertion marker because there is no insertion marker block');
+            'Cannot show the insertion marker because there is no insertion ' +
+            'marker block');
       }
       imConn =
           insertionMarker.getMatchingConnection(local.getSourceBlock(), local);
+    }
+
+    if (!imConn) {
+      throw new Error('Cannot show the insertion marker because there is no ' +
+          'associated connection');
     }
 
     if (imConn === this.markerConnection_) {
@@ -648,7 +654,7 @@ export class InsertionMarkerManager {
     }
     if (closest) {
       // Connect() also renders the insertion marker.
-      imConn!.connect(closest);
+      imConn.connect(closest);
     }
 
     this.markerConnection_ = imConn;
@@ -730,12 +736,12 @@ export class InsertionMarkerManager {
     if (!this.highlightedBlock_) {
       throw new Error(
           'Cannot hide the insertion marker outline because ' +
-          'there is no highlighted block')
+          'there is no highlighted block');
     }
     if (!this.closestConnection_) {
       throw new Error(
           'Cannot hide the insertion marker outline because ' +
-          'there is no closest connection')
+          'there is no closest connection');
     }
     this.highlightedBlock_.highlightShapeForInput(
         this.closestConnection_, false);

@@ -38,6 +38,9 @@ const XY_REGEX = /translate\(\s*([-+\d.e]+)([ ,]\s*([-+\d.e]+)\s*)?/;
 const XY_STYLE_REGEX =
     /transform:\s*translate(?:3d)?\(\s*([-+\d.e]+)\s*px([ ,]\s*([-+\d.e]+)\s*px)?/;
 
+/** Cached return value of isSupported3d. */
+let is3dSupportedCached: boolean|undefined;
+
 /**
  * Return the coordinates of the top-left corner of this element relative to
  * its parent.  Only for SVG elements and children (e.g. rect, g, path).
@@ -117,57 +120,38 @@ export function getInjectionDivXY(element: Element): Coordinate {
  * @alias Blockly.utils.svgMath.is3dSupported
  */
 export function is3dSupported(): boolean {
-  // AnyDuringMigration because:  Property 'cached_' does not exist on type '()
-  // => boolean'.
-  if ((is3dSupported as AnyDuringMigration).cached_ !== undefined) {
-    // AnyDuringMigration because:  Property 'cached_' does not exist on type
-    // '() => boolean'.
-    return (is3dSupported as AnyDuringMigration).cached_;
+  if (is3dSupportedCached !== undefined) {
+    return is3dSupportedCached;
   }
   // CC-BY-SA Lorenzo Polidori
+  // Based on
   // stackoverflow.com/questions/5661671/detecting-transform-translate3d-support
-  if (!globalThis['getComputedStyle']) {
-    return false;
-  }
 
   const el = document.createElement('p');
   let has3d = 'none';
-  const transforms = {
-    'webkitTransform': '-webkit-transform',
-    'OTransform': '-o-transform',
-    'msTransform': '-ms-transform',
-    'MozTransform': '-moz-transform',
-    'transform': 'transform',
-  };
+  const transform = 'transform';
 
   // Add it to the body to get the computed style.
   document.body.insertBefore(el, null);
 
-  for (const t in transforms) {
-    if ((el.style as AnyDuringMigration)[t] !== undefined) {
-      (el.style as AnyDuringMigration)[t] = 'translate3d(1px,1px,1px)';
-      const computedStyle = globalThis['getComputedStyle'](el);
-      if (!computedStyle) {
-        // getComputedStyle in Firefox returns null when Blockly is loaded
-        // inside an iframe with display: none.  Returning false and not
-        // caching is3dSupported means we try again later.  This is most likely
-        // when users are interacting with blocks which should mean Blockly is
-        // visible again.
-        // See https://bugzilla.mozilla.org/show_bug.cgi?id=548397
-        document.body.removeChild(el);
-        return false;
-      }
-      has3d =
-          computedStyle.getPropertyValue((transforms as AnyDuringMigration)[t]);
+  if ((el.style as AnyDuringMigration)[transform] !== undefined) {
+    (el.style as AnyDuringMigration)[transform] = 'translate3d(1px,1px,1px)';
+    const computedStyle = window.getComputedStyle(el);
+    if (!computedStyle) {
+      // getComputedStyle in Firefox returns null when Blockly is loaded
+      // inside an iframe with display: none.  Returning false and not
+      // caching is3dSupported means we try again later.  This is most likely
+      // when users are interacting with blocks which should mean Blockly is
+      // visible again.
+      // See https://bugzilla.mozilla.org/show_bug.cgi?id=548397
+      document.body.removeChild(el);
+      return false;
     }
+    has3d = computedStyle.getPropertyValue(transform);
   }
   document.body.removeChild(el);
-  // AnyDuringMigration because:  Property 'cached_' does not exist on type '()
-  // => boolean'.
-  (is3dSupported as AnyDuringMigration).cached_ = has3d !== 'none';
-  // AnyDuringMigration because:  Property 'cached_' does not exist on type '()
-  // => boolean'.
-  return (is3dSupported as AnyDuringMigration).cached_;
+  is3dSupportedCached = (has3d !== 'none');
+  return is3dSupportedCached;
 }
 
 /**

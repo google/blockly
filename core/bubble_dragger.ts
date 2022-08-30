@@ -56,8 +56,7 @@ export class BubbleDragger {
      * The drag surface to move bubbles to during a drag, or null if none should
      * be used.  Block dragging and bubble dragging use the same surface.
      */
-    this.dragSurface_ =
-        svgMath.is3dSupported() && !!workspace.getBlockDragSurface() ?
+    this.dragSurface_ = !!workspace.getBlockDragSurface() ?
         workspace.getBlockDragSurface() :
         null;
   }

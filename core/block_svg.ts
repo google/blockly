@@ -196,8 +196,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
      * Whether to move the block to the drag surface when it is dragged.
      * True if it should move, false if it should be translated directly.
      */
-    this.useDragSurface_ =
-        svgMath.is3dSupported() && !!workspace.getBlockDragSurface();
+    this.useDragSurface_ = !!workspace.getBlockDragSurface();
 
     const svgPath = this.pathObject.svgPath;
     (svgPath as AnyDuringMigration).tooltip = this;

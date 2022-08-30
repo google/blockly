@@ -124,8 +124,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
      * Whether to move the comment to the drag surface when it is dragged.
      * True if it should move, false if it should be translated directly.
      */
-    this.useDragSurface_ =
-        svgMath.is3dSupported() && !!workspace.getBlockDragSurface();
+    this.useDragSurface_ = !!workspace.getBlockDragSurface();
 
     this.render();
   }

@@ -95,7 +95,7 @@ ModuleModel.prototype.getId = function() {
 };
 
 /**
- * @return {string} Translateed or raw module name.
+ * @return {string} Translated or raw module name.
  */
 ModuleModel.prototype.getName = function() {
   const translatedName = Blockly.Msg[this._translationKey];

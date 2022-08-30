@@ -254,7 +254,7 @@ MassOperationsHandler.prototype.handleMove_ = function(e) {
   dragSurfaceMinCoordinate.y -= this.dragSurfacePadding_;
   dragSurfaceMaxCoordinate.x += this.dragSurfacePadding_;
   dragSurfaceMaxCoordinate.y += this.dragSurfacePadding_;
-  
+
   // Now we can place all blocks to relative position on drag surface and keep positions between blocks
   this.blockDraggers_.forEach((dragger, index) => {
     const block = this.selectedBlocks_[index];
@@ -271,7 +271,7 @@ MassOperationsHandler.prototype.handleMove_ = function(e) {
   const dragSurfaceHeight = (dragSurfaceMaxCoordinate.y - dragSurfaceMinCoordinate.y) + blockSvgWithMaxY.getBBox().height;
   const dragSurface = this.workspace_.getBlockDragSurface();
   const blocksSvg = this.selectedBlocks_.map((b) => b.getSvgRoot());
-  
+
   this.initBlockStartCoordinates = dragSurfaceMinCoordinate.clone();
 
   dragSurface.translateSurface(this.initBlockStartCoordinates.x, this.initBlockStartCoordinates.y, true);
@@ -633,7 +633,7 @@ MassOperationsHandler.prototype.generateContextMenu = function() {
     moduleManager.getAllModules().forEach((module) => {
       if (aBlock.getModuleId() !== module.getId()) {
         menuOptions.push({
-          text: Msg['MOVE_SELECTED_BLOCKS_TO_MODULE'].replace('%1', module.name),
+          text: Msg['MOVE_SELECTED_BLOCKS_TO_MODULE'].replace('%1', module.getName()),
           enabled: true,
           callback: () => {
             this.moveBlocksToAnotherModule = true;

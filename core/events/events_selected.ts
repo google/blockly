@@ -25,8 +25,8 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.Selected
  */
 export class Selected extends UiBase {
-  oldElementId!: string;
-  newElementId!: string;
+  oldElementId?: string;
+  newElementId?: string;
   override type: string;
 
   /**
@@ -59,6 +59,16 @@ export class Selected extends UiBase {
    */
   override toJson(): SelectedJson {
     const json = super.toJson() as SelectedJson;
+    if (!this.oldElementId) {
+      throw new Error(
+          'The old element ID is undefined. Either pass an ID to ' +
+          'the constructor, or call fromJson');
+    }
+    if (!this.newElementId) {
+      throw new Error(
+          'The new element ID is undefined. Either pass an ID to ' +
+          'the constructor, or call fromJson');
+    }
     json['oldElementId'] = this.oldElementId;
     json['newElementId'] = this.newElementId;
     return json;

@@ -15,7 +15,7 @@ goog.declareModuleId('Blockly.Events.CommentDelete');
 import * as registry from '../registry.js';
 import type {WorkspaceComment} from '../workspace_comment.js';
 
-import {CommentBase} from './events_comment_base.js';
+import {CommentBase, CommentBaseJson} from './events_comment_base.js';
 import * as eventUtils from './utils.js';
 
 
@@ -25,8 +25,8 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.CommentDelete
  */
 export class CommentDelete extends CommentBase {
-  override type: string;
-  xml: AnyDuringMigration;
+  override type = eventUtils.COMMENT_DELETE;
+  xml?: Element;
 
   /**
    * @param opt_comment The deleted comment.
@@ -34,9 +34,6 @@ export class CommentDelete extends CommentBase {
    */
   constructor(opt_comment?: WorkspaceComment) {
     super(opt_comment);
-
-    /** Type of this event. */
-    this.type = eventUtils.COMMENT_DELETE;
 
     if (!opt_comment) {
       return;  // Blank event to be populated by fromJson.

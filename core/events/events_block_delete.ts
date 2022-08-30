@@ -27,13 +27,10 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.BlockDelete
  */
 export class BlockDelete extends BlockBase {
-  oldXml!: Element|DocumentFragment;
-  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  ids!: string[];
-  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  wasShadow!: boolean;
-  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  oldJson!: blocks.State;
+  oldXml?: Element|DocumentFragment;
+  ids?: string[];
+  wasShadow?: boolean;
+  oldJson?: blocks.State;
 
   /** @param opt_block The deleted block.  Undefined for a blank event. */
   constructor(opt_block?: Block) {
@@ -72,7 +69,27 @@ export class BlockDelete extends BlockBase {
    */
   override toJson(): BlockDeleteJson {
     const json = super.toJson() as BlockDeleteJson;
-    json['oldXml'] = Xml.domToText(this.oldXml!);
+    if (!this.oldXml) {
+      throw new Error(
+          'The old block XML is undefined. Either pass a block ' +
+          'to the constructor, or call fromJson');
+    }
+    if (!this.ids) {
+      throw new Error(
+          'The block IDs are undefined. Either pass a block to ' +
+          'the constructor, or call fromJson');
+    }
+    if (this.wasShadow === undefined) {
+      throw new Error(
+          'Whether the block was a shadow is undefined. Either ' +
+          'pass a block to the constructor, or call fromJson');
+    }
+    if (!this.oldJson) {
+      throw new Error(
+          'The old block JSON is undefined. Either pass a block ' +
+          'to the constructor, or call fromJson');
+    }
+    json['oldXml'] = Xml.domToText(this.oldXml);
     json['ids'] = this.ids;
     json['wasShadow'] = this.wasShadow;
     json['oldJson'] = this.oldJson;
@@ -106,6 +123,16 @@ export class BlockDelete extends BlockBase {
    */
   override run(forward: boolean) {
     const workspace = this.getEventWorkspace_();
+    if (!this.ids) {
+      throw new Error(
+          'The block IDs are undefined. Either pass a block to ' +
+          'the constructor, or call fromJson');
+    }
+    if (!this.oldJson) {
+      throw new Error(
+          'The old block JSON is undefined. Either pass a block ' +
+          'to the constructor, or call fromJson');
+    }
     if (forward) {
       for (let i = 0; i < this.ids.length; i++) {
         const id = this.ids[i];

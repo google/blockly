@@ -24,7 +24,7 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.ThemeChange
  */
 export class ThemeChange extends UiBase {
-  themeName!: string;
+  themeName?: string;
   override type: string;
 
   /**
@@ -36,7 +36,7 @@ export class ThemeChange extends UiBase {
     super(opt_workspaceId);
 
     /** The theme name. */
-    this.themeName = opt_themeName!;
+    this.themeName = opt_themeName;
 
     /** Type of this event. */
     this.type = eventUtils.THEME_CHANGE;
@@ -49,6 +49,11 @@ export class ThemeChange extends UiBase {
    */
   override toJson(): ThemeChangeJson {
     const json = super.toJson() as ThemeChangeJson;
+    if (!this.themeName) {
+      throw new Error(
+          'The theme name is undefined. Either pass a theme name to ' +
+          'the constructor, or call fromJson');
+    }
     json['themeName'] = this.themeName;
     return json;
   }

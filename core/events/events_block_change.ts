@@ -28,8 +28,7 @@ import * as eventUtils from './utils.js';
  */
 export class BlockChange extends BlockBase {
   override type: string;
-  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  element!: string;
+  element?: string;
   name?: string;
   oldValue: unknown;
   newValue: unknown;
@@ -52,10 +51,10 @@ export class BlockChange extends BlockBase {
     if (!opt_block) {
       return;  // Blank event to be populated by fromJson.
     }
-    this.element = typeof opt_element === 'undefined' ? '' : opt_element;
+    this.element = opt_element;
     this.name = opt_name || undefined;
-    this.oldValue = typeof opt_oldValue === 'undefined' ? '' : opt_oldValue;
-    this.newValue = typeof opt_newValue === 'undefined' ? '' : opt_newValue;
+    this.oldValue = opt_oldValue;
+    this.newValue = opt_newValue;
   }
 
   /**
@@ -65,8 +64,13 @@ export class BlockChange extends BlockBase {
    */
   override toJson(): BlockChangeJson {
     const json = super.toJson() as BlockChangeJson;
+    if (!this.element) {
+      throw new Error(
+          'The changed element is undefined. Either pass an ' +
+          'element to the constructor, or call fromJson');
+    }
     json['element'] = this.element;
-    json ['name'] = this.name;
+    json['name'] = this.name;
     json['oldValue'] = this.oldValue;
     json['newValue'] = this.newValue;
     return json;
@@ -101,10 +105,16 @@ export class BlockChange extends BlockBase {
    */
   override run(forward: boolean) {
     const workspace = this.getEventWorkspace_();
+    if (!this.blockId) {
+      throw new Error(
+          'The block ID is undefined. Either pass a block to ' +
+          'the constructor, or call fromJson');
+    }
     const block = workspace.getBlockById(this.blockId);
     if (!block) {
-      console.warn('Can\'t change non-existent block: ' + this.blockId);
-      return;
+      throw new Error(
+          'The associated block is undefined. Either pass a ' +
+          'block to the constructor, or call fromJson');
     }
     // Assume the block is rendered so that then we can check.
     const blockSvg = block as BlockSvg;

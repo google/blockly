@@ -29,8 +29,7 @@ import * as eventUtils from './utils.js';
  */
 export class CommentBase extends AbstractEvent {
   override isBlank: boolean;
-  commentId: string;
-  override workspaceId: string;
+  commentId?: string;
 
   /**
    * @param opt_comment The comment this event corresponds to.  Undefined for a
@@ -41,11 +40,13 @@ export class CommentBase extends AbstractEvent {
     /** Whether or not an event is blank. */
     this.isBlank = !opt_comment;
 
+    if (!opt_comment) return;
+
     /** The ID of the comment this event pertains to. */
-    this.commentId = opt_comment?.id ?? '';
+    this.commentId = opt_comment.id;
 
     /** The workspace identifier for this event. */
-    this.workspaceId = opt_comment?.workspace.id ?? '';
+    this.workspaceId = opt_comment.workspace.id;
 
     /**
      * The event group ID for the group this event belongs to. Groups define
@@ -65,6 +66,11 @@ export class CommentBase extends AbstractEvent {
    */
   override toJson(): CommentBaseJson {
     const json = super.toJson() as CommentBaseJson;
+    if (!this.commentId) {
+      throw new Error(
+          'The comment ID is undefined. Either pass a comment to ' +
+          'the constructor, or call fromJson');
+    }
     json['commentId'] = this.commentId;
     return json;
   }
@@ -93,6 +99,11 @@ export class CommentBase extends AbstractEvent {
       xmlElement.appendChild(event.xml);
       Xml.domToWorkspace(xmlElement, workspace);
     } else {
+      if (!event.commentId) {
+        throw new Error(
+            'The comment ID is undefined. Either pass a comment to ' +
+            'the constructor, or call fromJson');
+      }
       const comment = workspace.getCommentById(event.commentId);
       if (comment) {
         comment.dispose();

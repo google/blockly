@@ -26,15 +26,12 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.CommentMove
  */
 export class CommentMove extends CommentBase {
-  override type: string;
-
-  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  comment_!: WorkspaceComment;
-  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  oldCoordinate_!: Coordinate;
+  override type = eventUtils.COMMENT_MOVE;
+  comment_?: WorkspaceComment;
+  oldCoordinate_?: Coordinate;
 
   /** The location after the move, in workspace coordinates. */
-  newCoordinate_!: Coordinate;
+  newCoordinate_?: Coordinate;
 
   /**
    * @param opt_comment The comment that is being moved.  Undefined for a blank
@@ -70,6 +67,11 @@ export class CommentMove extends CommentBase {
           'Tried to record the new position of a comment on the ' +
           'same event twice.');
     }
+    if (!this.comment_) {
+      throw new Error(
+          'The comment is undefined. Pass a comment to ' +
+          'the constructor if you want to use the record functionality');
+    }
     this.newCoordinate_ = this.comment_.getXY();
   }
 
@@ -91,6 +93,16 @@ export class CommentMove extends CommentBase {
    */
   override toJson(): CommentMoveJson {
     const json = super.toJson() as CommentMoveJson;
+    if (!this.oldCoordinate_) {
+      throw new Error(
+          'The old comment position is undefined. Either pass a comment to ' +
+          'the constructor, or call fromJson');
+    }
+    if (!this.newCoordinate_) {
+      throw new Error(
+          'The new comment position is undefined. Either call recordNew, or ' +
+          'call fromJson');
+    }
     json['oldCoordinate'] = `${Math.round(this.oldCoordinate_.x)}, ` +
         `${Math.round(this.oldCoordinate_.y)}`;
     json['newCoordinate'] = Math.round(this.newCoordinate_.x) + ',' +
@@ -128,6 +140,11 @@ export class CommentMove extends CommentBase {
    */
   override run(forward: boolean) {
     const workspace = this.getEventWorkspace_();
+    if (!this.commentId) {
+      throw new Error(
+          'The comment ID is undefined. Either pass a comment to ' +
+          'the constructor, or call fromJson');
+    }
     const comment = workspace.getCommentById(this.commentId);
     if (!comment) {
       console.warn('Can\'t move non-existent comment: ' + this.commentId);

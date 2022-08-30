@@ -28,7 +28,7 @@ import * as eventUtils from './utils.js';
 export class Click extends UiBase {
   blockId?: string;
   targetType?: ClickTarget;
-  override type: string;
+  override type = eventUtils.CLICK;
 
   /**
    * @param opt_block The affected block. Null for click events that do not have
@@ -47,13 +47,12 @@ export class Click extends UiBase {
       workspaceId = undefined;
     }
     super(workspaceId);
-    this.blockId = opt_block?.id ?? undefined;
+    if (!opt_block) return;
+
+    this.blockId = opt_block.id;
 
     /** The type of element targeted by this click event. */
     this.targetType = opt_targetType;
-
-    /** Type of this event. */
-    this.type = eventUtils.CLICK;
   }
 
   /**
@@ -63,7 +62,12 @@ export class Click extends UiBase {
    */
   override toJson(): ClickJson {
     const json = super.toJson() as ClickJson;
-    json['targetType'] = this.targetType!;
+    if (!this.targetType) {
+      throw new Error(
+          'The click target type is undefined. Either pass a block to ' +
+          'the constructor, or call fromJson');
+    }
+    json['targetType'] = this.targetType;
     json['blockId'] = this.blockId;
     return json;
   }

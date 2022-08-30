@@ -26,9 +26,9 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.CommentCreate
  */
 export class CommentCreate extends CommentBase {
-  override type: string;
+  override type = eventUtils.COMMENT_CREATE;
 
-  xml!: Element|DocumentFragment;
+  xml?: Element|DocumentFragment;
 
   /**
    * @param opt_comment The created comment.
@@ -36,9 +36,6 @@ export class CommentCreate extends CommentBase {
    */
   constructor(opt_comment?: WorkspaceComment) {
     super(opt_comment);
-
-    /** Type of this event. */
-    this.type = eventUtils.COMMENT_CREATE;
 
     if (!opt_comment) {
       return;
@@ -55,6 +52,11 @@ export class CommentCreate extends CommentBase {
    */
   override toJson(): CommentCreateJson {
     const json = super.toJson() as CommentCreateJson;
+    if (!this.xml) {
+      throw new Error(
+          'The comment XML is undefined. Either pass a comment to ' +
+          'the constructor, or call fromJson');
+    }
     json['xml'] = Xml.domToText(this.xml);
     return json;
   }

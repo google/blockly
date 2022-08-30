@@ -28,11 +28,9 @@ import * as eventUtils from './utils.js';
  */
 export class BlockCreate extends BlockBase {
   override type: string;
-  xml!: Element|DocumentFragment;
-  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  ids!: string[];
-  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  json!: blocks.State;
+  xml?: Element|DocumentFragment;
+  ids?: string[];
+  json?: blocks.State;
 
   /** @param opt_block The created block.  Undefined for a blank event. */
   constructor(opt_block?: Block) {
@@ -64,7 +62,22 @@ export class BlockCreate extends BlockBase {
    */
   override toJson(): BlockCreateJson {
     const json = super.toJson() as BlockCreateJson;
-    json['xml'] = Xml.domToText(this.xml!);
+    if (!this.xml) {
+      throw new Error(
+          'The block XML is undefined. Either pass a block to ' +
+          'the constructor, or call fromJson');
+    }
+    if (!this.ids) {
+      throw new Error(
+          'The block IDs are undefined. Either pass a block to ' +
+          'the constructor, or call fromJson');
+    }
+    if (!this.json) {
+      throw new Error(
+          'The block JSON is undefined. Either pass a block to ' +
+          'the constructor, or call fromJson');
+    }
+    json['xml'] = Xml.domToText(this.xml);
     json['ids'] = this.ids;
     json['json'] = this.json;
     if (!this.recordUndo) {
@@ -95,6 +108,16 @@ export class BlockCreate extends BlockBase {
    */
   override run(forward: boolean) {
     const workspace = this.getEventWorkspace_();
+    if (!this.json) {
+      throw new Error(
+          'The block JSON is undefined. Either pass a block to ' +
+          'the constructor, or call fromJson');
+    }
+    if (!this.ids) {
+      throw new Error(
+          'The block IDs are undefined. Either pass a block to ' +
+          'the constructor, or call fromJson');
+    }
     if (forward) {
       blocks.append(this.json, workspace);
     } else {

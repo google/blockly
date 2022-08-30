@@ -23,9 +23,8 @@ import {Abstract as AbstractEvent, AbstractEventJson} from './events_abstract.js
  * @alias Blockly.Events.VarBase
  */
 export class VarBase extends AbstractEvent {
-  override isBlank: AnyDuringMigration;
-  varId: string;
-  override workspaceId: string;
+  override isBlank: boolean;
+  varId?: string;
 
   /**
    * @param opt_variable The variable this event corresponds to.  Undefined for
@@ -34,12 +33,13 @@ export class VarBase extends AbstractEvent {
   constructor(opt_variable?: VariableModel) {
     super();
     this.isBlank = typeof opt_variable === 'undefined';
+    if (!opt_variable) return;
 
-    /** The variable ID for the variable this event pertains to. */
-    this.varId = this.isBlank ? '' : opt_variable!.getId();
+    /** The variable id for the variable this event pertains to. */
+    this.varId = opt_variable.getId();
 
     /** The workspace identifier for this event. */
-    this.workspaceId = this.isBlank ? '' : opt_variable!.workspace.id;
+    this.workspaceId = opt_variable?.workspace.id;
   }
 
   /**
@@ -49,6 +49,11 @@ export class VarBase extends AbstractEvent {
    */
   override toJson(): VarBaseJson {
     const json = super.toJson() as VarBaseJson;
+    if (!this.varId) {
+      throw new Error(
+          'The var ID is undefined. Either pass a variable to ' +
+          'the constructor, or call fromJson');
+    }
     json['varId'] = this.varId;
     return json;
   }

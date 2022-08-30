@@ -27,9 +27,8 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.FinishedLoading
  */
 export class FinishedLoading extends AbstractEvent {
-  // Workspace events do not undo or redo.
   override recordUndo = false;
-  override workspaceId: string;
+  override type = eventUtils.FINISHED_LOADING;
 
   /**
    * @param opt_workspace The workspace that has finished loading.  Undefined
@@ -38,13 +37,12 @@ export class FinishedLoading extends AbstractEvent {
   constructor(opt_workspace?: Workspace) {
     super();
     /** Whether or not the event is blank (to be populated by fromJson). */
-    this.isBlank = typeof opt_workspace === 'undefined';
+    this.isBlank = !!opt_workspace;
+
+    if (!opt_workspace) return;
 
     /** The workspace identifier for this event. */
-    this.workspaceId = opt_workspace?.id ?? '';
-
-    /** Type of this event. */
-    this.type = eventUtils.FINISHED_LOADING;
+    this.workspaceId = opt_workspace.id;
   }
 
   /**
@@ -54,6 +52,11 @@ export class FinishedLoading extends AbstractEvent {
    */
   override toJson(): FinishedLoadingJson {
     const json = super.toJson() as FinishedLoadingJson;
+    if (!this.workspaceId) {
+      throw new Error(
+          'The workspace ID is undefined. Either pass a workspace to ' +
+          'the constructor, or call fromJson');
+    }
     json['workspaceId'] = this.workspaceId;
     return json;
   }

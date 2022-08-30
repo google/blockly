@@ -25,12 +25,9 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.CommentChange
  */
 export class CommentChange extends CommentBase {
-  override type: string;
-
-  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  oldContents_!: string;
-  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  newContents_!: string;
+  override type = eventUtils.COMMENT_CHANGE;
+  oldContents_?: string;
+  newContents_?: string;
 
   /**
    * @param opt_comment The comment that is being changed.  Undefined for a
@@ -42,9 +39,6 @@ export class CommentChange extends CommentBase {
       opt_comment?: WorkspaceComment, opt_oldContents?: string,
       opt_newContents?: string) {
     super(opt_comment);
-
-    /** Type of this event. */
-    this.type = eventUtils.COMMENT_CHANGE;
 
     if (!opt_comment) {
       return;  // Blank event to be populated by fromJson.
@@ -63,6 +57,16 @@ export class CommentChange extends CommentBase {
    */
   override toJson(): CommentChangeJson {
     const json = super.toJson() as CommentChangeJson;
+    if (!this.oldContents_) {
+      throw new Error(
+          'The old contents is undefined. Either pass a value to ' +
+          'the constructor, or call fromJson');
+    }
+    if (!this.newContents_) {
+      throw new Error(
+          'The new contents is undefined. Either pass a value to ' +
+          'the constructor, or call fromJson');
+    }
     json['oldContents'] = this.oldContents_;
     json['newContents'] = this.newContents_;
     return json;
@@ -95,13 +99,27 @@ export class CommentChange extends CommentBase {
    */
   override run(forward: boolean) {
     const workspace = this.getEventWorkspace_();
+    if (!this.commentId) {
+      throw new Error(
+          'The comment ID is undefined. Either pass a comment to ' +
+          'the constructor, or call fromJson');
+    }
     const comment = workspace.getCommentById(this.commentId);
     if (!comment) {
       console.warn('Can\'t change non-existent comment: ' + this.commentId);
       return;
     }
     const contents = forward ? this.newContents_ : this.oldContents_;
-
+    if (!contents) {
+      if (forward) {
+        throw new Error(
+            'The new contents is undefined. Either pass a value to ' +
+            'the constructor, or call fromJson');
+      }
+      throw new Error(
+          'The old contents is undefined. Either pass a value to ' +
+          'the constructor, or call fromJson');
+    }
     comment.setContent(contents);
   }
 }

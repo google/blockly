@@ -24,11 +24,11 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.ViewportChange
  */
 export class ViewportChange extends UiBase {
-  viewTop: number;
-  viewLeft: number;
-  scale: number;
-  oldScale: number;
-  override type: string;
+  viewTop?: number;
+  viewLeft?: number;
+  scale?: number;
+  oldScale?: number;
+  override type = eventUtils.VIEWPORT_CHANGE;
 
   /**
    * @param opt_top Top-edge of the visible portion of the workspace, relative
@@ -50,22 +50,19 @@ export class ViewportChange extends UiBase {
      * Top-edge of the visible portion of the workspace, relative to the
      * workspace origin.
      */
-    this.viewTop = opt_top || 0;
+    this.viewTop = opt_top;
 
     /**
      * Left-edge of the visible portion of the workspace, relative to the
      * workspace origin.
      */
-    this.viewLeft = opt_left || 0;
+    this.viewLeft = opt_left;
 
     /** The scale of the workspace. */
-    this.scale = opt_scale || 0;
+    this.scale = opt_scale;
 
     /** The old scale of the workspace. */
-    this.oldScale = opt_oldScale || 0;
-
-    /** Type of this event. */
-    this.type = eventUtils.VIEWPORT_CHANGE;
+    this.oldScale = opt_oldScale;
   }
 
   /**
@@ -75,6 +72,26 @@ export class ViewportChange extends UiBase {
    */
   override toJson(): ViewportChangeJson {
     const json = super.toJson() as ViewportChangeJson;
+    if (!this.viewTop) {
+      throw new Error(
+          'The view top is undefined. Either pass a value to ' +
+          'the constructor, or call fromJson');
+    }
+    if (!this.viewLeft) {
+      throw new Error(
+          'The view left is undefined. Either pass a value to ' +
+          'the constructor, or call fromJson');
+    }
+    if (!this.scale) {
+      throw new Error(
+          'The scale is undefined. Either pass a value to ' +
+          'the constructor, or call fromJson');
+    }
+    if (!this.oldScale) {
+      throw new Error(
+          'The old scale is undefined. Either pass a value to ' +
+          'the constructor, or call fromJson');
+    }
     json['viewTop'] = this.viewTop;
     json['viewLeft'] = this.viewLeft;
     json['scale'] = this.scale;

@@ -24,9 +24,9 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.ToolboxItemSelect
  */
 export class ToolboxItemSelect extends UiBase {
-  oldItem!: string;
-  newItem!: string;
-  override type: string;
+  oldItem?: string;
+  newItem?: string;
+  override type = eventUtils.TOOLBOX_ITEM_SELECT;
 
   /**
    * @param opt_oldItem The previously selected toolbox item.
@@ -42,13 +42,10 @@ export class ToolboxItemSelect extends UiBase {
     super(opt_workspaceId);
 
     /** The previously selected toolbox item. */
-    this.oldItem = opt_oldItem!;
+    this.oldItem = opt_oldItem ?? undefined;
 
     /** The newly selected toolbox item. */
-    this.newItem = opt_newItem!;
-
-    /** Type of this event. */
-    this.type = eventUtils.TOOLBOX_ITEM_SELECT;
+    this.newItem = opt_newItem ?? undefined;
   }
 
   /**
@@ -58,6 +55,16 @@ export class ToolboxItemSelect extends UiBase {
    */
   override toJson(): ToolboxItemSelectJson {
     const json = super.toJson() as ToolboxItemSelectJson;
+    if (!this.oldItem) {
+      throw new Error(
+          'The old item is undefined. Either pass a value to ' +
+          'the constructor, or call fromJson');
+    }
+    if (!this.newItem) {
+      throw new Error(
+          'The new item is undefined. Either pass a value to ' +
+          'the constructor, or call fromJson');
+    }
     json['oldItem'] = this.oldItem;
     json['newItem'] = this.newItem;
     return json;

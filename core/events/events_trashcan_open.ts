@@ -25,8 +25,8 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.TrashcanOpen
  */
 export class TrashcanOpen extends UiBase {
-  isOpen: boolean;
-  override type: string;
+  isOpen?: boolean;
+  override type = eventUtils.TRASHCAN_OPEN;
 
   /**
    * @param opt_isOpen Whether the trashcan flyout is opening (false if
@@ -38,10 +38,7 @@ export class TrashcanOpen extends UiBase {
     super(opt_workspaceId);
 
     /** Whether the trashcan flyout is opening (false if closing). */
-    this.isOpen = !!opt_isOpen;
-
-    /** Type of this event. */
-    this.type = eventUtils.TRASHCAN_OPEN;
+    this.isOpen = opt_isOpen;
   }
 
   /**
@@ -51,6 +48,11 @@ export class TrashcanOpen extends UiBase {
    */
   override toJson(): TrashcanOpenJson {
     const json = super.toJson() as TrashcanOpenJson;
+    if (this.isOpen === undefined) {
+      throw new Error(
+          'Whether this is already open or not is undefined. Either pass ' +
+          'a value to the constructor, or call fromJson');
+    }
     json['isOpen'] = this.isOpen;
     return json;
   }

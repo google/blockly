@@ -25,21 +25,15 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.VarDelete
  */
 export class VarDelete extends VarBase {
-  override type: string;
-
-  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  varType!: string;
-  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  varName!: string;
+  override type = eventUtils.VAR_DELETE;
+  varType?: string;
+  varName?: string;
 
   /**
    * @param opt_variable The deleted variable. Undefined for a blank event.
    */
   constructor(opt_variable?: VariableModel) {
     super(opt_variable);
-
-    /** Type of this event. */
-    this.type = eventUtils.VAR_DELETE;
 
     if (!opt_variable) {
       return;  // Blank event to be populated by fromJson.
@@ -55,6 +49,16 @@ export class VarDelete extends VarBase {
    */
   override toJson(): VarDeleteJson {
     const json = super.toJson() as VarDeleteJson;
+    if (!this.varType) {
+      throw new Error(
+          'The var type is undefined. Either pass a variable to ' +
+          'the constructor, or call fromJson');
+    }
+    if (!this.varName) {
+      throw new Error(
+          'The var name is undefined. Either pass a variable to ' +
+          'the constructor, or call fromJson');
+    }
     json['varType'] = this.varType;
     json['varName'] = this.varName;
     return json;
@@ -78,6 +82,16 @@ export class VarDelete extends VarBase {
    */
   override run(forward: boolean) {
     const workspace = this.getEventWorkspace_();
+    if (!this.varId) {
+      throw new Error(
+          'The var ID is undefined. Either pass a variable to ' +
+          'the constructor, or call fromJson');
+    }
+    if (!this.varName) {
+      throw new Error(
+          'The var name is undefined. Either pass a variable to ' +
+          'the constructor, or call fromJson');
+    }
     if (forward) {
       workspace.deleteVariableById(this.varId);
     } else {

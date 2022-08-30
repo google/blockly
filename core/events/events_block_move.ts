@@ -117,6 +117,11 @@ export class BlockMove extends BlockBase {
    */
   private currentLocation_(): BlockLocation {
     const workspace = this.getEventWorkspace_();
+    if (!this.blockId) {
+      throw new Error(
+          'The block ID is undefined. Either pass a block to ' +
+          'the constructor, or call fromJson');
+    }
     const block = workspace.getBlockById(this.blockId);
     const location = {} as BlockLocation;
     const parent = block!.getParent();
@@ -150,6 +155,11 @@ export class BlockMove extends BlockBase {
    */
   override run(forward: boolean) {
     const workspace = this.getEventWorkspace_();
+    if (!this.blockId) {
+      throw new Error(
+          'The block ID is undefined. Either pass a block to ' +
+          'the constructor, or call fromJson');
+    }
     const block = workspace.getBlockById(this.blockId);
     if (!block) {
       console.warn('Can\'t move non-existent block: ' + this.blockId);

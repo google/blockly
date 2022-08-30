@@ -25,10 +25,10 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.BubbleOpen
  */
 export class BubbleOpen extends UiBase {
-  blockId: string|null;
+  blockId?: string;
   isOpen?: boolean;
-  bubbleType!: BubbleType;
-  override type: string;
+  bubbleType?: BubbleType;
+  override type = eventUtils.BUBBLE_OPEN;
 
   /**
    * @param opt_block The associated block. Undefined for a blank event.
@@ -41,18 +41,15 @@ export class BubbleOpen extends UiBase {
       opt_block?: BlockSvg, opt_isOpen?: boolean, opt_bubbleType?: BubbleType) {
     const workspaceId = opt_block ? opt_block.workspace.id : undefined;
     super(workspaceId);
-    this.blockId = opt_block ? opt_block.id : null;
+    if (!opt_block) return;
+
+    this.blockId = opt_block.id;
 
     /** Whether the bubble is opening (false if closing). */
     this.isOpen = opt_isOpen;
 
     /** The type of bubble. One of 'mutator', 'comment', or 'warning'. */
-    // TODO: We're assuming that this will be set by fromJson before it's a
-    //   problem.
-    this.bubbleType = opt_bubbleType!;
-
-    /** Type of this event. */
-    this.type = eventUtils.BUBBLE_OPEN;
+    this.bubbleType = opt_bubbleType;
   }
 
   /**
@@ -62,7 +59,19 @@ export class BubbleOpen extends UiBase {
    */
   override toJson(): BubbleOpenJson {
     const json = super.toJson() as BubbleOpenJson;
-    json['isOpen'] = !!this.isOpen;
+    if (this.isOpen === undefined) {
+      throw new Error(
+          'Whether this event is for opening the bubble is ' +
+          'undefined. Either pass the value to the constructor, or call ' +
+          'fromJson');
+    }
+    if (!this.bubbleType) {
+      throw new Error(
+          'The type of bubble is undefined. Either pass the ' +
+          'value to the constructor, or call ' +
+          'fromJson');
+    }
+    json['isOpen'] = this.isOpen;
     json['bubbleType'] = this.bubbleType;
     json['blockId'] = this.blockId || '';
     return json;

@@ -24,8 +24,8 @@ import {Abstract as AbstractEvent, AbstractEventJson} from './events_abstract.js
  */
 export class BlockBase extends AbstractEvent {
   override isBlank: boolean;
-  blockId: string;
-  override workspaceId: string;
+  blockId?: string;
+  override workspaceId?: string;
 
   /**
    * @param opt_block The block this event corresponds to.
@@ -33,13 +33,15 @@ export class BlockBase extends AbstractEvent {
    */
   constructor(opt_block?: Block) {
     super();
-    this.isBlank = typeof opt_block === 'undefined';
+    this.isBlank = !!opt_block;
+
+    if (!opt_block) return;
 
     /** The block ID for the block this event pertains to */
-    this.blockId = this.isBlank ? '' : opt_block!.id;
+    this.blockId = opt_block.id;
 
     /** The workspace identifier for this event. */
-    this.workspaceId = this.isBlank ? '' : opt_block!.workspace.id;
+    this.workspaceId = opt_block.workspace.id;
   }
 
   /**
@@ -49,6 +51,11 @@ export class BlockBase extends AbstractEvent {
    */
   override toJson(): AbstractEventJson {
     const json = super.toJson() as BlockBaseJson;
+    if (!this.blockId) {
+      throw new Error(
+          'The block ID is undefined. Either pass a block to ' +
+          'the constructor, or call fromJson');
+    }
     json['blockId'] = this.blockId;
     return json;
   }

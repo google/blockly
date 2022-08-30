@@ -25,12 +25,9 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.VarRename
  */
 export class VarRename extends VarBase {
-  override type: string;
-
-  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  oldName!: string;
-  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  newName!: string;
+  override type = eventUtils.VAR_RENAME;
+  oldName?: string;
+  newName?: string;
 
   /**
    * @param opt_variable The renamed variable. Undefined for a blank event.
@@ -38,9 +35,6 @@ export class VarRename extends VarBase {
    */
   constructor(opt_variable?: VariableModel, newName?: string) {
     super(opt_variable);
-
-    /** Type of this event. */
-    this.type = eventUtils.VAR_RENAME;
 
     if (!opt_variable) {
       return;  // Blank event to be populated by fromJson.
@@ -56,6 +50,16 @@ export class VarRename extends VarBase {
    */
   override toJson(): VarRenameJson {
     const json = super.toJson() as VarRenameJson;
+    if (!this.oldName) {
+      throw new Error(
+          'The old var name is undefined. Either pass a variable to ' +
+          'the constructor, or call fromJson');
+    }
+    if (!this.newName) {
+      throw new Error(
+          'The new var name is undefined. Either pass a value to ' +
+          'the constructor, or call fromJson');
+    }
     json['oldName'] = this.oldName;
     json['newName'] = this.newName;
     return json;
@@ -79,6 +83,21 @@ export class VarRename extends VarBase {
    */
   override run(forward: boolean) {
     const workspace = this.getEventWorkspace_();
+    if (!this.varId) {
+      throw new Error(
+          'The var ID is undefined. Either pass a variable to ' +
+          'the constructor, or call fromJson');
+    }
+    if (!this.oldName) {
+      throw new Error(
+          'The old var name is undefined. Either pass a variable to ' +
+          'the constructor, or call fromJson');
+    }
+    if (!this.newName) {
+      throw new Error(
+          'The new var name is undefined. Either pass a value to ' +
+          'the constructor, or call fromJson');
+    }
     if (forward) {
       workspace.renameVariableById(this.varId, this.newName);
     } else {

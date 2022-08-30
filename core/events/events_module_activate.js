@@ -25,10 +25,10 @@ goog.module('Blockly.Events.ModuleActivate');
 
 const Abstract = goog.require('Blockly.Events.Abstract');
 const object = goog.require('Blockly.utils.object');
-const eventUtils = goog.require('Blockly.Events.utils')
+const eventUtils = goog.require('Blockly.Events.utils');
 const registry = goog.require('Blockly.registry');
-const {ModuleBase} = goog.require('Blockly.Events.ModuleBase')
-const {ModuleDelete} = goog.require('Blockly.Events.ModuleDelete')
+const {ModuleBase} = goog.require('Blockly.Events.ModuleBase');
+const {ModuleDelete} = goog.require('Blockly.Events.ModuleDelete');
 
 /**
  * Class for a module activation event.
@@ -37,7 +37,7 @@ const {ModuleDelete} = goog.require('Blockly.Events.ModuleDelete')
  * @extends {ModuleBase}
  * @constructor
  */
-ModuleActivate = function(module, previousActiveModule) {
+const ModuleActivate = function(module, previousActiveModule) {
   if (!module) {
     return;  // Blank event to be populated by fromJson.
   }
@@ -82,7 +82,7 @@ ModuleActivate.prototype.run = function(forward) {
   
   if (forward) {
     moduleManager.activateModule(moduleManager.getModuleById(this.moduleId));
-  } else if(this.previousActiveId) {
+  } else if (this.previousActiveId) {
     moduleManager.activateModule(moduleManager.getModuleById(this.previousActiveId));
   }
 };
@@ -90,4 +90,4 @@ ModuleActivate.prototype.run = function(forward) {
 registry.register(
   registry.Type.EVENT, eventUtils.MODULE_ACTIVATE, ModuleActivate);
 
-exports.ModuleActivate = ModuleActivate
+exports.ModuleActivate = ModuleActivate;

@@ -2579,10 +2579,10 @@ class WorkspaceSvg extends Workspace {
    * @param {!Block} block Block to add.
    */
   addTopBlock(block) {
-    this.addTopBoundedElement(/** @type {!BlockSvg} */ (block));
+    super.addTopBlock(block);
 
     if (block.workspace.rendered && block.inActiveModule()) {
-      super.addTopBlock(block);
+      this.addTopBoundedElement(/** @type {!BlockSvg} */ (block));
     }
   }
 

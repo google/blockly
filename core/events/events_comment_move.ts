@@ -29,7 +29,6 @@ export class CommentMove extends CommentBase {
   override type = eventUtils.COMMENT_MOVE;
   comment_?: WorkspaceComment;
   oldCoordinate_?: Coordinate;
-
   /** The location after the move, in workspace coordinates. */
   newCoordinate_?: Coordinate;
 
@@ -39,9 +38,6 @@ export class CommentMove extends CommentBase {
    */
   constructor(opt_comment?: WorkspaceComment) {
     super(opt_comment);
-
-    /** Type of this event. */
-    this.type = eventUtils.COMMENT_MOVE;
 
     if (!opt_comment) {
       return;  // Blank event to be populated by fromJson.

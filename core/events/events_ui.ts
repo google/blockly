@@ -30,7 +30,7 @@ export class Ui extends UiBase {
   element: AnyDuringMigration;
   oldValue: AnyDuringMigration;
   newValue: AnyDuringMigration;
-  override type: string;
+  override type = eventUtils.UI;
 
   /**
    * @param opt_block The affected block.  Null for UI events that do not have
@@ -49,9 +49,6 @@ export class Ui extends UiBase {
     this.element = typeof opt_element === 'undefined' ? '' : opt_element;
     this.oldValue = typeof opt_oldValue === 'undefined' ? '' : opt_oldValue;
     this.newValue = typeof opt_newValue === 'undefined' ? '' : opt_newValue;
-
-    /** Type of this event. */
-    this.type = eventUtils.UI;
   }
 
   /**

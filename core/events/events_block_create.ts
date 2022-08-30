@@ -27,7 +27,7 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.BlockCreate
  */
 export class BlockCreate extends BlockBase {
-  override type: string;
+  override type = eventUtils.BLOCK_CREATE;
   xml?: Element|DocumentFragment;
   ids?: string[];
   json?: blocks.State;
@@ -35,9 +35,6 @@ export class BlockCreate extends BlockBase {
   /** @param opt_block The created block.  Undefined for a blank event. */
   constructor(opt_block?: Block) {
     super(opt_block);
-
-    /** Type of this event. */
-    this.type = eventUtils.BLOCK_CREATE;
 
     if (!opt_block) {
       return;  // Blank event to be populated by fromJson.

@@ -31,13 +31,11 @@ export class BlockDelete extends BlockBase {
   ids?: string[];
   wasShadow?: boolean;
   oldJson?: blocks.State;
+  override type = eventUtils.BLOCK_DELETE;
 
   /** @param opt_block The deleted block.  Undefined for a blank event. */
   constructor(opt_block?: Block) {
     super(opt_block);
-
-    /** Type of this event. */
-    this.type = eventUtils.BLOCK_DELETE;
 
     if (!opt_block) {
       return;  // Blank event to be populated by fromJson.

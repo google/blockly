@@ -33,7 +33,7 @@ interface BlockLocation {
  * @alias Blockly.Events.BlockMove
  */
 export class BlockMove extends BlockBase {
-  override type: string;
+  override type = eventUtils.BLOCK_MOVE;
   oldParentId?: string;
   oldInputName?: string;
   oldCoordinate?: Coordinate;
@@ -45,9 +45,6 @@ export class BlockMove extends BlockBase {
   /** @param opt_block The moved block.  Undefined for a blank event. */
   constructor(opt_block?: Block) {
     super(opt_block);
-
-    /** Type of this event. */
-    this.type = eventUtils.BLOCK_MOVE;
 
     if (!opt_block) {
       return;

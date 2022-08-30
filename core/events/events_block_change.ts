@@ -27,7 +27,7 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.BlockChange
  */
 export class BlockChange extends BlockBase {
-  override type: string;
+  override type = eventUtils.BLOCK_CHANGE;
   element?: string;
   name?: string;
   oldValue: unknown;
@@ -44,9 +44,6 @@ export class BlockChange extends BlockBase {
       opt_block?: Block, opt_element?: string, opt_name?: string|null,
       opt_oldValue?: unknown, opt_newValue?: unknown) {
     super(opt_block);
-
-    /** Type of this event. */
-    this.type = eventUtils.BLOCK_CHANGE;
 
     if (!opt_block) {
       return;  // Blank event to be populated by fromJson.

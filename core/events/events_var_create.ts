@@ -25,7 +25,7 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.VarCreate
  */
 export class VarCreate extends VarBase {
-  override type: string;
+  override type = eventUtils.VAR_CREATE;
   varType?: string;
   varName?: string;
 
@@ -34,9 +34,6 @@ export class VarCreate extends VarBase {
    */
   constructor(opt_variable?: VariableModel) {
     super(opt_variable);
-
-    /** Type of this event. */
-    this.type = eventUtils.VAR_CREATE;
 
     if (!opt_variable) {
       return;  // Blank event to be populated by fromJson.

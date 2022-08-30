@@ -25,7 +25,7 @@ import * as eventUtils from './utils.js';
  */
 export class ThemeChange extends UiBase {
   themeName?: string;
-  override type: string;
+  override type = eventUtils.THEME_CHANGE;
 
   /**
    * @param opt_themeName The theme name. Undefined for a blank event.
@@ -37,9 +37,6 @@ export class ThemeChange extends UiBase {
 
     /** The theme name. */
     this.themeName = opt_themeName;
-
-    /** Type of this event. */
-    this.type = eventUtils.THEME_CHANGE;
   }
 
   /**

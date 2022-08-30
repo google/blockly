@@ -36,7 +36,7 @@ export function getSize(element: Element): Size {
  * Private version of getSize for stubbing in tests.
  */
 function getSizeInternal(element: Element): Size {
-  if (getStyle(element, 'display') !== 'none') {
+  if (getComputedStyle(element, 'display') !== 'none') {
     return getSizeWithDisplay(element);
   }
 
@@ -75,25 +75,6 @@ function getSizeWithDisplay(element: Element): Size {
 }
 
 /**
- * Cross-browser pseudo get computed style. It returns the computed style where
- * available. If not available it tries the inline style value.  It shouldn't be
- * called directly, see http://wiki/Main/ComputedStyleVsCascadedStyle for
- * discussion.
- *
- * Copied from Closure's goog.style.getStyle_
- *
- * @param element Element to get style of.
- * @param style Property to get (must be camelCase, not CSS-style).
- * @returns Style value.
- */
-function getStyle(element: Element, style: string): string {
-  // AnyDuringMigration because:  Property 'style' does not exist on type
-  // 'Element'.
-  return getComputedStyle(element, style) ||
-      (element as AnyDuringMigration).style?.[style];
-}
-
-/**
  * Retrieves a computed style value of a node. It returns empty string
  * if the property requested is an SVG one and it has not been
  * explicitly set (firefox and webkit).
@@ -110,7 +91,7 @@ export function getComputedStyle(element: Element, property: string): string {
   // element.style[..] is undefined for browser specific styles
   // as 'filter'.
   return (styles as AnyDuringMigration)[property] ||
-      styles.getPropertyValue(property) || '';
+      styles.getPropertyValue(property);
 }
 
 /**

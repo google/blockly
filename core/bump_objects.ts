@@ -147,7 +147,7 @@ function extractObjectFromEvent(
   switch (e.type) {
     case eventUtils.BLOCK_CREATE:
     case eventUtils.BLOCK_MOVE:
-      object = workspace.getBlockById((e as BlockCreate | BlockMove).blockId);
+      object = workspace.getBlockById((e as BlockCreate | BlockMove).blockId!);
       if (object) {
         object = object.getRootBlock();
       }
@@ -155,7 +155,7 @@ function extractObjectFromEvent(
     case eventUtils.COMMENT_CREATE:
     case eventUtils.COMMENT_MOVE:
       object = workspace.getCommentById(
-                   (e as CommentCreate | CommentMove).commentId) as
+                   (e as CommentCreate | CommentMove).commentId!) as
               WorkspaceCommentSvg |
           null;
       break;

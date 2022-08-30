@@ -72,22 +72,22 @@ export class ViewportChange extends UiBase {
    */
   override toJson(): ViewportChangeJson {
     const json = super.toJson() as ViewportChangeJson;
-    if (!this.viewTop) {
+    if (this.viewTop === undefined) {
       throw new Error(
           'The view top is undefined. Either pass a value to ' +
           'the constructor, or call fromJson');
     }
-    if (!this.viewLeft) {
+    if (this.viewLeft === undefined) {
       throw new Error(
           'The view left is undefined. Either pass a value to ' +
           'the constructor, or call fromJson');
     }
-    if (!this.scale) {
+    if (this.scale === undefined) {
       throw new Error(
           'The scale is undefined. Either pass a value to ' +
           'the constructor, or call fromJson');
     }
-    if (!this.oldScale) {
+    if (this.oldScale === undefined) {
       throw new Error(
           'The old scale is undefined. Either pass a value to ' +
           'the constructor, or call fromJson');

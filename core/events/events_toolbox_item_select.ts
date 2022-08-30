@@ -55,16 +55,6 @@ export class ToolboxItemSelect extends UiBase {
    */
   override toJson(): ToolboxItemSelectJson {
     const json = super.toJson() as ToolboxItemSelectJson;
-    if (!this.oldItem) {
-      throw new Error(
-          'The old item is undefined. Either pass a value to ' +
-          'the constructor, or call fromJson');
-    }
-    if (!this.newItem) {
-      throw new Error(
-          'The new item is undefined. Either pass a value to ' +
-          'the constructor, or call fromJson');
-    }
     json['oldItem'] = this.oldItem;
     json['newItem'] = this.newItem;
     return json;
@@ -83,8 +73,8 @@ export class ToolboxItemSelect extends UiBase {
 }
 
 export interface ToolboxItemSelectJson extends AbstractEventJson {
-  oldItem: string;
-  newItem: string;
+  oldItem?: string;
+  newItem?: string;
 }
 
 registry.register(

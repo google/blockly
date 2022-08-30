@@ -96,6 +96,9 @@ export class CommentBase extends AbstractEvent {
     const workspace = event.getEventWorkspace_();
     if (create) {
       const xmlElement = utilsXml.createElement('xml');
+      if (!event.xml) {
+        throw new Error('Ecountered a comment event without proper xml');
+      }
       xmlElement.appendChild(event.xml);
       Xml.domToWorkspace(xmlElement, workspace);
     } else {

@@ -27,7 +27,7 @@ import * as eventUtils from './utils.js';
 export class Selected extends UiBase {
   oldElementId?: string;
   newElementId?: string;
-  override type: string;
+  override type = eventUtils.SELECTED;
 
   /**
    * @param opt_oldElementId The ID of the previously selected element. Null if
@@ -43,13 +43,10 @@ export class Selected extends UiBase {
     super(opt_workspaceId);
 
     /** The id of the last selected element. */
-    this.oldElementId = opt_oldElementId!;
+    this.oldElementId = opt_oldElementId ?? undefined;
 
     /** The id of the selected element. */
-    this.newElementId = opt_newElementId!;
-
-    /** Type of this event. */
-    this.type = eventUtils.SELECTED;
+    this.newElementId = opt_newElementId ?? undefined;
   }
 
   /**
@@ -59,16 +56,6 @@ export class Selected extends UiBase {
    */
   override toJson(): SelectedJson {
     const json = super.toJson() as SelectedJson;
-    if (!this.oldElementId) {
-      throw new Error(
-          'The old element ID is undefined. Either pass an ID to ' +
-          'the constructor, or call fromJson');
-    }
-    if (!this.newElementId) {
-      throw new Error(
-          'The new element ID is undefined. Either pass an ID to ' +
-          'the constructor, or call fromJson');
-    }
     json['oldElementId'] = this.oldElementId;
     json['newElementId'] = this.newElementId;
     return json;
@@ -87,8 +74,8 @@ export class Selected extends UiBase {
 }
 
 export interface SelectedJson extends AbstractEventJson {
-  oldElementId: string;
-  newElementId: string;
+  oldElementId?: string;
+  newElementId?: string;
 }
 
 registry.register(registry.Type.EVENT, eventUtils.SELECTED, Selected);

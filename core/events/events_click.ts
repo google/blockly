@@ -47,9 +47,8 @@ export class Click extends UiBase {
       workspaceId = undefined;
     }
     super(workspaceId);
-    if (!opt_block) return;
 
-    this.blockId = opt_block.id;
+    this.blockId = opt_block ? opt_block.id : undefined;
 
     /** The type of element targeted by this click event. */
     this.targetType = opt_targetType;

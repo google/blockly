@@ -53,8 +53,6 @@ export class MarkerMove extends UiBase {
     }
     super(workspaceId);
 
-    if (!opt_block) return;
-
     /** The block identifier for this event. */
     this.blockId = opt_block?.id;
 

@@ -24,6 +24,8 @@ import * as deprecation from './deprecation.js';
  * @alias Blockly.utils.object.inherits
  */
 export function inherits(childCtor: Function, parentCtor: Function) {
+  deprecation.warn(
+      'Blockly.utils.object.inherits', 'version 9.0.0', 'version 10.0.0');
   // Set a .superClass_ property so that methods can call parent methods
   // without hard-coding the parent class name.
   // Could be replaced by ES6's super().
@@ -86,11 +88,8 @@ export function deepMerge(
  * @alias Blockly.utils.object.values
  */
 export function values(obj: AnyDuringMigration): AnyDuringMigration[] {
-  if (Object.values) {
-    return Object.values(obj);
-  }
-  // Fallback for IE.
-  return Object.keys(obj).map(function(e) {
-    return obj[e];
-  });
+  deprecation.warn(
+      'Blockly.utils.object.values', 'version 9.0.0', 'version 10.0.0',
+      'Object.values');
+  return Object.values(obj);
 }

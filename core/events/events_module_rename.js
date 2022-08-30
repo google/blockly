@@ -25,9 +25,9 @@ goog.module('Blockly.Events.ModuleRename');
 
 const Abstract = goog.require('Blockly.Events.Abstract');
 const object = goog.require('Blockly.utils.object');
-const eventUtils = goog.require('Blockly.Events.utils')
+const eventUtils = goog.require('Blockly.Events.utils');
 const registry = goog.require('Blockly.registry');
-const {ModuleBase} = goog.require('Blockly.Events.ModuleBase')
+const {ModuleBase} = goog.require('Blockly.Events.ModuleBase');
 
 /**
  * Class for a module rename event.
@@ -58,7 +58,7 @@ ModuleRename.prototype.type = eventUtils.MODULE_RENAME;
  * @return {!Object} JSON representation.
  */
 ModuleRename.prototype.toJson = function() {
-  var json = ModuleRename.superClass_.toJson.call(this);
+  const json = ModuleRename.superClass_.toJson.call(this);
   json['oldName'] = this.oldName;
   json['newName'] = this.newName;
   return json;
@@ -79,8 +79,8 @@ ModuleRename.prototype.fromJson = function(json) {
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
 ModuleRename.prototype.run = function(forward) {
-  var moduleManager = this.getEventWorkspace_().getModuleManager();
-  var module = moduleManager.getModuleById(this.moduleId);
+  const moduleManager = this.getEventWorkspace_().getModuleManager();
+  const module = moduleManager.getModuleById(this.moduleId);
   if (forward) {
     moduleManager.renameModule(module, this.newName);
   } else {
@@ -91,4 +91,4 @@ ModuleRename.prototype.run = function(forward) {
 registry.register(
   registry.Type.EVENT, eventUtils.MODULE_RENAME, ModuleRename);
 
-exports.ModuleRename = ModuleRename
+exports.ModuleRename = ModuleRename;

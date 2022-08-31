@@ -20,7 +20,6 @@ import type {IBubble} from './interfaces/i_bubble.js';
 import type {IDeleteArea} from './interfaces/i_delete_area.js';
 import type {IDragTarget} from './interfaces/i_drag_target.js';
 import {Coordinate} from './utils/coordinate.js';
-import * as svgMath from './utils/svg_math.js';
 import {WorkspaceCommentSvg} from './workspace_comment_svg.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
@@ -56,9 +55,7 @@ export class BubbleDragger {
      * The drag surface to move bubbles to during a drag, or null if none should
      * be used.  Block dragging and bubble dragging use the same surface.
      */
-    this.dragSurface_ = !!workspace.getBlockDragSurface() ?
-        workspace.getBlockDragSurface() :
-        null;
+    this.dragSurface_ = workspace.getBlockDragSurface();
   }
 
   /**

@@ -59,7 +59,7 @@ export class Drawer extends BaseDrawer {
       pathObject.flipRTL();
     }
     if (debug.isDebuggerEnabled()) {
-      this.block_.renderingDebugger.drawDebug(this.block_, this.info_);
+      this.block_?.renderingDebugger?.drawDebug(this.block_, this.info_);
     }
     this.recordSizeOnBlock_();
   }

@@ -13,6 +13,7 @@ import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.Drawer');
 
 import type {BlockSvg} from '../../block_svg.js';
+import {Coordinate} from '../../utils.js';
 import * as svgPaths from '../../utils/svg_paths.js';
 import {Connection} from '../measurables/connection.js';
 import type {ExternalValueInput} from '../measurables/external_value_input.js';
@@ -34,9 +35,9 @@ import type {RenderInfo} from './info.js';
  * @alias Blockly.blockRendering.Drawer
  */
 export class Drawer {
-  block_: AnyDuringMigration;
-  info_: AnyDuringMigration;
-  topLeft_: AnyDuringMigration;
+  block_: BlockSvg;
+  info_: RenderInfo;
+  topLeft_: Coordinate;
   outlinePath_ = '';
   inlinePath_ = '';
   protected constants_: ConstantProvider;
@@ -77,7 +78,7 @@ export class Drawer {
       this.block_.pathObject.flipRTL();
     }
     if (debug.isDebuggerEnabled()) {
-      this.block_.renderingDebugger.drawDebug(this.block_, this.info_);
+      this.block_.renderingDebugger?.drawDebug(this.block_, this.info_);
     }
     this.recordSizeOnBlock_();
   }
@@ -98,7 +99,7 @@ export class Drawer {
   /** Hide icons that were marked as hidden. */
   protected hideHiddenIcons_() {
     for (let i = 0, iconInfo; iconInfo = this.info_.hiddenIcons[i]; i++) {
-      iconInfo.icon.iconGroup_.setAttribute('display', 'none');
+      iconInfo.icon.iconGroup_?.setAttribute('display', 'none');
     }
   }
 
@@ -263,12 +264,13 @@ export class Drawer {
     this.positionOutputConnection_();
 
     if (outputConnection) {
+      const shape = outputConnection.shape as PuzzleTab;
       const tabBottom =
           outputConnection.connectionOffsetY + outputConnection.height;
-      const pathUp = typeof outputConnection.shape.pathUp === 'function' ?
-          (outputConnection.shape.pathUp as (p1: number) =>
+      const pathUp = typeof shape.pathUp === 'function' ?
+          (shape.pathUp as (p1: number) =>
                AnyDuringMigration)(outputConnection.height) :
-          outputConnection.shape.pathUp;
+          shape.pathUp;
 
       // Draw a line up to the bottom of the tab.
       this.outlinePath_ += svgPaths.lineOnAxis('V', tabBottom) + pathUp;

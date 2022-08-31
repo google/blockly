@@ -321,10 +321,12 @@ export class RenderInfo extends BaseRenderInfo {
     }
     if (this.outputConnection && this.block_.nextConnection &&
         this.block_.nextConnection.isConnected()) {
-      // Include width of connected block in value to stack width measurement.
-      widestRowWithConnectedBlocks = Math.max(
-          widestRowWithConnectedBlocks,
-          this.block_.nextConnection.targetBlock().getHeightWidth().width);
+      const target = this.block_.nextConnection.targetBlock();
+      if (target) {
+        // Include width of connected block in value to stack width measurement.
+        widestRowWithConnectedBlocks = Math.max(
+            widestRowWithConnectedBlocks, target.getHeightWidth().width);
+      }
     }
 
     this.bottomRow.baseline = yCursor - this.bottomRow.descenderHeight;

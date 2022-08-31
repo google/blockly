@@ -461,7 +461,7 @@ export class RenderInfo extends BaseRenderInfo {
    * @returns The amount of spacing to reduce the first or last spacer.
    */
   protected getNegativeSpacing_(elem: Measurable): number {
-    if (!elem) {
+    if (!elem || !this.outputConnection) {
       return 0;
     }
     const connectionWidth = this.outputConnection.width;

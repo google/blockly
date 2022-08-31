@@ -239,6 +239,10 @@ export class Gesture {
    * @returns True if a block is being dragged from the flyout.
    */
   private updateIsDraggingFromFlyout_(): boolean {
+    if (!this.targetBlock_ ||
+        !this.flyout_?.isBlockCreatable(this.targetBlock_)) {
+      return false;
+    }
     if (!this.flyout_) {
       throw new Error('Cannot update dragging from the flyout because the ' +
           'flyout is undefined');
@@ -246,10 +250,6 @@ export class Gesture {
     if (!this.flyout_.targetWorkspace) {
       throw new Error(`Cannot update dragging from the flyout because the ' +
           'flyout's target workspace is undefined`);
-    }
-    if (!this.targetBlock_ ||
-        !this.flyout_.isBlockCreatable(this.targetBlock_)) {
-      return false;
     }
     if (!this.flyout_.isScrollable() ||
         this.flyout_.isDragTowardWorkspace(this.currentDragDeltaXY_)) {

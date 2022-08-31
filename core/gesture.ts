@@ -244,7 +244,8 @@ export class Gesture {
       return false;
     }
     if (!this.flyout_) {
-      throw new Error('Cannot update dragging from the flyout because the ' +
+      throw new Error(
+          'Cannot update dragging from the flyout because the ' +
           'flyout is undefined');
     }
     if (!this.flyout_.targetWorkspace) {
@@ -322,7 +323,8 @@ export class Gesture {
    */
   private updateIsDraggingWorkspace_() {
     if (!this.startWorkspace_) {
-      throw new Error('Cannot update dragging the workspace because the ' +
+      throw new Error(
+          'Cannot update dragging the workspace because the ' +
           'start workspace is undefined');
     }
 
@@ -377,11 +379,13 @@ export class Gesture {
   /** Create a bubble dragger and start dragging the selected bubble. */
   private startDraggingBubble_() {
     if (!this.startBubble_) {
-      throw new Error('Cannot update dragging the bubble because the start ' +
+      throw new Error(
+          'Cannot update dragging the bubble because the start ' +
           'bubble is undefined');
     }
     if (!this.startWorkspace_) {
-      throw new Error('Cannot update dragging the bubble because the start ' +
+      throw new Error(
+          'Cannot update dragging the bubble because the start ' +
           'workspace is undefined');
     }
 
@@ -409,7 +413,8 @@ export class Gesture {
     blockAnimations.disconnectUiStop();
 
     if (!this.startWorkspace_) {
-      throw new Error('Cannot start the gesture because the start ' +
+      throw new Error(
+          'Cannot start the gesture because the start ' +
           'workspace is undefined');
     }
 
@@ -685,7 +690,8 @@ export class Gesture {
   /** Execute a field click. */
   private doFieldClick_() {
     if (!this.startField_) {
-      throw new Error('Cannot do a field click because the start field is ' +
+      throw new Error(
+          'Cannot do a field click because the start field is ' +
           'undefined');
     }
     this.startField_.showEditor(this.mostRecentEvent_);
@@ -697,7 +703,8 @@ export class Gesture {
     // Block click in an autoclosing flyout.
     if (this.flyout_ && this.flyout_.autoClose) {
       if (!this.targetBlock_) {
-        throw new Error('Cannot do a block click because the target block is ' +
+        throw new Error(
+            'Cannot do a block click because the target block is ' +
             'undefined');
       }
       if (this.targetBlock_.isEnabled()) {
@@ -709,7 +716,8 @@ export class Gesture {
       }
     } else {
       if (!this.startWorkspace_) {
-        throw new Error('Cannot do a block click because the start workspace ' +
+        throw new Error(
+            'Cannot do a block click because the start workspace ' +
             'is undefined');
       }
       // Clicks events are on the start block, even if it was a shadow.

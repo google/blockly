@@ -73,7 +73,8 @@ export class TouchGesture extends Gesture {
    */
   override doStart(e: MouseEvent) {
     if (!this.startWorkspace_) {
-      throw new Error('Cannot start the touch event becauase the start ' +
+      throw new Error(
+          'Cannot start the touch event becauase the start ' +
           'workspace is undefined');
     }
     this.isPinchZoomEnabled_ = this.startWorkspace_.options.zoomOptions &&
@@ -259,7 +260,8 @@ export class TouchGesture extends Gesture {
       const delta = gestureScale > 0 ? gestureScale * ZOOM_IN_MULTIPLIER :
                                        gestureScale * ZOOM_OUT_MULTIPLIER;
       if (!this.startWorkspace_) {
-        throw new Error('Cannot handle a pinch because the start workspace ' +
+        throw new Error(
+            'Cannot handle a pinch because the start workspace ' +
             'is undefined');
       }
       const workspace = this.startWorkspace_;

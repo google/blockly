@@ -272,6 +272,39 @@ class FieldMultilineInput extends FieldTextInput {
   }
 
   /**
+   * Get max line length in lines list
+   * @private
+   * @return {number} Max line length
+   */
+  getFastTextWidth_() {
+    let maxLineLength = 0;
+    // The default width is based on the longest line in the display text,
+    // but when it's being edited, width should be calculated based on the
+    // absolute longest line, even if it would be truncated after editing.
+    // Otherwise we would get wrong editor width when there are more
+    // lines than this.maxLines_.
+    const actualEditorLines = this.value_.split('\n');
+    const dummyTextElement = dom.createSvgElement(Svg.TEXT, {'class': 'blocklyText blocklyMultilineText'});
+    const fontSize = this.getConstants().FIELD_TEXT_FONTSIZE;
+    const fontWeight = this.getConstants().FIELD_TEXT_FONTWEIGHT;
+    const fontFamily = this.getConstants().FIELD_TEXT_FONTFAMILY;
+
+    for (let i = 0; i < actualEditorLines.length; i++) {
+      if (actualEditorLines[i].length > this.maxDisplayLength) {
+        actualEditorLines[i] = actualEditorLines[i].substring(0, this.maxDisplayLength);
+      }
+
+      dummyTextElement.textContent = actualEditorLines[i];
+      const lineWidth = dom.getFastTextWidth(dummyTextElement, fontSize, fontWeight, fontFamily);
+      
+      if (lineWidth > maxLineLength) {
+        maxLineLength = lineWidth;
+      }
+    }
+    return maxLineLength;
+  }
+
+  /**
    * Updates the size of the field based on the text.
    * @protected
    */
@@ -279,53 +312,27 @@ class FieldMultilineInput extends FieldTextInput {
     const nodes = this.textGroup_.childNodes;
     let totalWidth = 0;
     let totalHeight = 0;
-    for (let i = 0; i < nodes.length; i++) {
-      const tspan = /** @type {!Element} */ (nodes[i]);
-      const textWidth = dom.getTextWidth(tspan);
-      if (textWidth > totalWidth) {
-        totalWidth = textWidth;
-      }
-      totalHeight += this.getConstants().FIELD_TEXT_HEIGHT +
-          (i > 0 ? this.getConstants().FIELD_BORDER_RECT_Y_PADDING : 0);
-    }
+
+    const countLines = nodes.length === 0 ? 1 : nodes.length;
+    totalHeight += this.getConstants().FIELD_TEXT_HEIGHT * countLines;
+    totalHeight += this.getConstants().FIELD_BORDER_RECT_Y_PADDING * (countLines - 1);
+
+    totalWidth = this.getFastTextWidth_();
+
     if (this.isBeingEdited_) {
-      // The default width is based on the longest line in the display text,
-      // but when it's being edited, width should be calculated based on the
-      // absolute longest line, even if it would be truncated after editing.
-      // Otherwise we would get wrong editor width when there are more
-      // lines than this.maxLines_.
-      const actualEditorLines = this.value_.split('\n');
-      const dummyTextElement = dom.createSvgElement(
-          Svg.TEXT, {'class': 'blocklyText blocklyMultilineText'});
-      const fontSize = this.getConstants().FIELD_TEXT_FONTSIZE;
-      const fontWeight = this.getConstants().FIELD_TEXT_FONTWEIGHT;
-      const fontFamily = this.getConstants().FIELD_TEXT_FONTFAMILY;
+      const scrollbarWidth = this.htmlInput_.offsetWidth - this.htmlInput_.clientWidth;
+      totalWidth += scrollbarWidth;
+    }
 
-      for (let i = 0; i < actualEditorLines.length; i++) {
-      if (actualEditorLines[i].length > this.maxDisplayLength) {
-        actualEditorLines[i] =
-            actualEditorLines[i].substring(0, this.maxDisplayLength);
-      }
-      dummyTextElement.textContent = actualEditorLines[i];
-      const lineWidth = dom.getFastTextWidth(
-            dummyTextElement, fontSize, fontWeight, fontFamily);
-        if (lineWidth > totalWidth) {
-          totalWidth = lineWidth;
-        }
-      }
+    if (this.borderRect_) {
+      totalHeight += this.getConstants().FIELD_BORDER_RECT_Y_PADDING * 2;
+      totalWidth += this.getConstants().FIELD_BORDER_RECT_X_PADDING * 2;
+      this.borderRect_.setAttribute('width', totalWidth);
+      this.borderRect_.setAttribute('height', totalHeight);
+    }
 
-      const scrollbarWidth =
-        this.htmlInput_.offsetWidth - this.htmlInput_.clientWidth;
-    totalWidth += scrollbarWidth;
-  }
-  if (this.borderRect_) {
-    totalHeight += this.getConstants().FIELD_BORDER_RECT_Y_PADDING * 2;
-    totalWidth += this.getConstants().FIELD_BORDER_RECT_X_PADDING * 2;
-    this.borderRect_.setAttribute('width', totalWidth);
-    this.borderRect_.setAttribute('height', totalHeight);
-  }
-  this.size_.width = totalWidth;
-  this.size_.height = totalHeight;
+    this.size_.width = totalWidth;
+    this.size_.height = totalHeight;
 
     this.positionBorderRect_();
   }

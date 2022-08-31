@@ -373,8 +373,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       this.workspaceDragSurface_ = opt_wsDragSurface;
     }
 
-    this.useWorkspaceDragSurface_ =
-        !!this.workspaceDragSurface_ && svgMath.is3dSupported();
+    this.useWorkspaceDragSurface_ = !!this.workspaceDragSurface_;
 
     /**
      * Object in charge of loading, storing, and playing audio for a workspace.

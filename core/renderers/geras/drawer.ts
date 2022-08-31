@@ -31,7 +31,7 @@ import type {PathObject} from './path_object.js';
  * @alias Blockly.geras.Drawer
  */
 export class Drawer extends BaseDrawer {
-  highlighter_: AnyDuringMigration;
+  highlighter_: Highlighter;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   override constants_!: ConstantProvider;
 

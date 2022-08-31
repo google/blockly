@@ -32,10 +32,7 @@ import {PathObject} from './path_object.js';
  */
 export class Renderer extends BaseRenderer {
   /** The renderer's highlight constant provider. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'HighlightConstantProvider'.
-  private highlightConstants_: HighlightConstantProvider =
-      null as AnyDuringMigration;
+  private highlightConstants_: HighlightConstantProvider|null = null;
 
   /**
    * @param name The renderer name.
@@ -120,6 +117,11 @@ export class Renderer extends BaseRenderer {
    * @internal
    */
   getHighlightConstants(): HighlightConstantProvider {
+    if (!this.highlightConstants_) {
+      throw new Error(
+          'Cannot access the highlight constants because init has not ' +
+          'been called');
+    }
     return this.highlightConstants_;
   }
 }

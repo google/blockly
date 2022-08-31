@@ -40,7 +40,6 @@ export class PathObject extends BasePathObject {
    * @internal
    */
   colourDark = '#000000';
-  override style: AnyDuringMigration;
 
   /**
    * @param root The root SVG element.

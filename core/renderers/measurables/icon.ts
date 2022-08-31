@@ -29,6 +29,7 @@ import {Types} from './types.js';
  */
 export class Icon extends Measurable {
   isVisible: boolean;
+  flipRtl = false;
 
   /**
    * An object containing information about the space an icon takes up during

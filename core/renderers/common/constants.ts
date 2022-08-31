@@ -94,6 +94,16 @@ export type DynamicShape = {
 export type Shape = BaseShape|DynamicShape;
 
 /**
+ * Returns whether the shape is dynamic or not.
+ *
+ * @param shape The shape to check for dynamic-ness.
+ * @returns Whether the shape is a dynamic shape or not.
+ */
+export function isDynamicShape(shape: Shape): shape is DynamicShape {
+  return (shape as DynamicShape).isDynamic;
+}
+
+/**
  * An object that provides constants for rendering blocks.
  *
  * @alias Blockly.blockRendering.ConstantProvider

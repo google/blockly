@@ -29,6 +29,7 @@ import type {ConstantProvider} from './constants.js';
 export interface IPathObject {
   /**
    * The primary path of the block.
+   *
    * @internal
    */
   svgPath: SVGElement;

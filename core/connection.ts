@@ -427,7 +427,7 @@ export class Connection implements IASTNodeLocationWithBlock {
    *
    * Headless configurations (the default) do not have neighboring connection,
    * and always return an empty list (the default).
-   * {@link Blockly.RenderedConnection} overrides this behavior with a list
+   * {@link RenderedConnection#neighbours} overrides this behavior with a list
    * computed from the rendered positioning.
    *
    * @param _maxLimit The maximum radius to another connection.

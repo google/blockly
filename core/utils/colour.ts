@@ -77,11 +77,11 @@ export function setHsvValue(newValue: number) {
 
 /**
  * Parses a colour from a string.
- * .parse('red') -> '#ff0000'
- * .parse('#f00') -> '#ff0000'
- * .parse('#ff0000') -> '#ff0000'
- * .parse('0xff0000') -> '#ff0000'
- * .parse('rgb(255, 0, 0)') -> '#ff0000'
+ * .parse('red') = '#ff0000'
+ * .parse('#f00') = '#ff0000'
+ * .parse('#ff0000') = '#ff0000'
+ * .parse('0xff0000') = '#ff0000'
+ * .parse('rgb(255, 0, 0)') = '#ff0000'
  *
  * @param str Colour in some CSS format.
  * @returns A string containing a hex representation of the colour, or null if

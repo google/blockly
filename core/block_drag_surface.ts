@@ -121,7 +121,7 @@ export class BlockDragSurfaceSvg {
   /**
    * Translate the drag surface's SVG based on its internal state.
    *
-   * @private
+   * @internal
    */
   translateSurfaceInternal_() {
     let x = this.surfaceXY_!.x;

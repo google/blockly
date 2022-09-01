@@ -204,13 +204,13 @@ export class ConstantProvider {
 
   /**
    * Height of text.  This constant is dynamically set in
-   * ``setFontConstants_`` to be the height of the text based on the font
+   * `setFontConstants_` to be the height of the text based on the font
    * used.
    */
   FIELD_TEXT_HEIGHT = -1;  // Dynamically set.
 
   /**
-   * Text baseline.  This constant is dynamically set in ``setFontConstants_``
+   * Text baseline.  This constant is dynamically set in `setFontConstants_`
    * to be the baseline of the text based on the font used.
    */
   FIELD_TEXT_BASELINE = -1;  // Dynamically set.

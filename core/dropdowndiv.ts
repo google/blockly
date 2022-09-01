@@ -329,7 +329,7 @@ const internal = {
   /**
    * Get sizing info about the bounding element.
    *
-   * @return An object containing size information about the bounding element
+   * @returns An object containing size information about the bounding element
    *     (bounding box and width/height).
    */
   getBoundsInfo: function(): BoundsInfo {
@@ -354,7 +354,7 @@ const internal = {
    * @param primaryY Desired origin point y, in absolute px.
    * @param secondaryX Secondary/alternative origin point x, in absolute px.
    * @param secondaryY Secondary/alternative origin point y, in absolute px.
-   * @return Various final metrics, including rendered positions for drop-down
+   * @returns Various final metrics, including rendered positions for drop-down
    *     and arrow.
    */
   getPositionMetrics: function(

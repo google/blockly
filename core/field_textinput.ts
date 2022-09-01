@@ -486,7 +486,7 @@ export class FieldTextInput extends Field {
 
   /**
    * Set the HTML input value and the field's internal value. The difference
-   * between this and ``setValue`` is that this also updates the HTML input
+   * between this and `setValue` is that this also updates the HTML input
    * value whilst editing.
    *
    * @param newValue New value.

@@ -193,7 +193,7 @@ function generateUniqueNameInternal(workspace: Workspace): string {
 
 /**
  * Returns a unique name that is not present in the usedNames array. This
- * will try to generate single letter names in the range a -> z (skip l). It
+ * will try to generate single letter names in the range a - z (skip l). It
  * will start with the character passed to startChar.
  *
  * @param startChar The character to start the search at.

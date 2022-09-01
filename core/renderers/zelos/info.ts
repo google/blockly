@@ -296,7 +296,7 @@ export class RenderInfo extends BaseRenderInfo {
 
   /**
    * Adjust the x position of fields to bump all non-label fields in the first
-   * row past the notch position.  This must be called before ``computeBounds``
+   * row past the notch position.  This must be called before `computeBounds`
    * is called.
    */
   protected adjustXPosition_() {

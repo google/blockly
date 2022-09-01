@@ -70,6 +70,7 @@
     "@blockly/dev-tools": "^4.0.2",
     "@blockly/theme-modern": "^2.1.1",
     "@hyperjump/json-schema": "^0.18.4",
+    "@microsoft/api-extractor": "^7.29.5",
     "@typescript-eslint/eslint-plugin": "^5.33.1",
     "@wdio/selenium-standalone-service": "^7.10.1",
     "chai": "^4.2.0",

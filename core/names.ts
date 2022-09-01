@@ -248,8 +248,8 @@ export namespace Names {
    * procedure 'foo' would collide.  However, Blockly has no such problems since
    * variable get 'foo' and procedure call 'foo' are unambiguous.
    * Therefore, Blockly keeps a separate name type to disambiguate.
-   * getName('foo', 'VARIABLE') -> 'foo'
-   * getName('foo', 'PROCEDURE') -> 'foo2'
+   * getName('foo', 'VARIABLE') = 'foo'
+   * getName('foo', 'PROCEDURE') = 'foo2'
    *
    * @alias Blockly.Names.NameType
    */

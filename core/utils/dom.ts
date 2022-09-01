@@ -312,7 +312,7 @@ export function getFastTextWidth(
  * Gets the width of a text element using a faster method than `getTextWidth`.
  * This method requires that we know the text element's font family and size in
  * advance. Similar to `getTextWidth`, we cache the width we compute.
- * This method is similar to ``getFastTextWidth`` but expects the font size
+ * This method is similar to `getFastTextWidth` but expects the font size
  * parameter to be a string.
  *
  * @param textElement An SVG 'text' element.

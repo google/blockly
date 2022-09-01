@@ -82,8 +82,7 @@ function checkBranch(done) {
 // Sanity check that the RELASE_DIR directory exists, and that certain
 // files are in it.
 function checkReleaseDir(done) {
-  const sanityFiles = ['blockly_compressed.js', 'blocks_compressed.js',
-                       'core', 'blocks', 'generators'];
+  const sanityFiles = ['blockly_compressed.js', 'blocks_compressed.js'];
   // Check that directory exists.
   if (fs.existsSync(RELEASE_DIR)) {
     // Sanity check that certain files exist in RELASE_DIR.

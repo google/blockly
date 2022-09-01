@@ -59,18 +59,14 @@ export class InsertionMarkerManager {
    * first block.
    * Set in initAvailableConnections, if at all.
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'RenderedConnection'.
-  private lastOnStack_: RenderedConnection = null as AnyDuringMigration;
+  private lastOnStack_: RenderedConnection|null = null;
 
   /**
    * The insertion marker corresponding to the last block in the stack, if
    * that's not the same as the first block in the stack.
    * Set in initAvailableConnections, if at all
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'BlockSvg'.
-  private lastMarker_: BlockSvg = null as AnyDuringMigration;
+  private lastMarker_: BlockSvg|null = null;
   private firstMarker_: BlockSvg;
 
   /**
@@ -78,9 +74,7 @@ export class InsertionMarkerManager {
    * Updated on every mouse move.
    * This is not on any of the blocks that are being dragged.
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'RenderedConnection'.
-  private closestConnection_: RenderedConnection = null as AnyDuringMigration;
+  private closestConnection_: RenderedConnection|null = null;
 
   /**
    * The connection that would connect to this.closestConnection_ if this
@@ -88,9 +82,7 @@ export class InsertionMarkerManager {
    * the top block that is being dragged or the last block in the dragging
    * stack.
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'RenderedConnection'.
-  private localConnection_: RenderedConnection = null as AnyDuringMigration;
+  private localConnection_: RenderedConnection|null = null;
 
   /**
    * Whether the block would be deleted if it were dropped immediately.
@@ -102,19 +94,13 @@ export class InsertionMarkerManager {
    * Connection on the insertion marker block that corresponds to
    * this.localConnection_ on the currently dragged block.
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'RenderedConnection'.
-  private markerConnection_: RenderedConnection = null as AnyDuringMigration;
+  private markerConnection_: RenderedConnection|null = null;
 
   /** The block that currently has an input being highlighted, or null. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'BlockSvg'.
-  private highlightedBlock_: BlockSvg = null as AnyDuringMigration;
+  private highlightedBlock_: BlockSvg|null = null;
 
   /** The block being faded to indicate replacement, or null. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'BlockSvg'.
-  private fadedBlock_: BlockSvg = null as AnyDuringMigration;
+  private fadedBlock_: BlockSvg|null = null;
   private availableConnections_: RenderedConnection[];
 
   /** @param block The top block in the stack being dragged. */
@@ -208,27 +194,27 @@ export class InsertionMarkerManager {
    * @internal
    */
   applyConnections() {
-    if (this.closestConnection_) {
-      // Don't fire events for insertion markers.
-      eventUtils.disable();
-      this.hidePreview_();
-      eventUtils.enable();
-      // Connect two blocks together.
-      // AnyDuringMigration because:  Argument of type 'RenderedConnection' is
-      // not assignable to parameter of type 'Connection'.
-      this.localConnection_.connect(
-          this.closestConnection_ as AnyDuringMigration);
-      if (this.topBlock_.rendered) {
-        // Trigger a connection animation.
-        // Determine which connection is inferior (lower in the source stack).
-        const inferiorConnection = this.localConnection_.isSuperior() ?
-            this.closestConnection_ :
-            this.localConnection_;
-        blockAnimations.connectionUiEffect(inferiorConnection.getSourceBlock());
-        // Bring the just-edited stack to the front.
-        const rootBlock = this.topBlock_.getRootBlock();
-        rootBlock.bringToFront();
-      }
+    if (!this.closestConnection_) return;
+    if (!this.localConnection_) {
+      throw new Error(
+          'Cannot apply connections because there is no local connection');
+    }
+    // Don't fire events for insertion markers.
+    eventUtils.disable();
+    this.hidePreview_();
+    eventUtils.enable();
+    // Connect two blocks together.
+    this.localConnection_.connect(this.closestConnection_);
+    if (this.topBlock_.rendered) {
+      // Trigger a connection animation.
+      // Determine which connection is inferior (lower in the source stack).
+      const inferiorConnection = this.localConnection_.isSuperior() ?
+          this.closestConnection_ :
+          this.localConnection_;
+      blockAnimations.connectionUiEffect(inferiorConnection.getSourceBlock());
+      // Bring the just-edited stack to the front.
+      const rootBlock = this.topBlock_.getRootBlock();
+      rootBlock.bringToFront();
     }
   }
 
@@ -502,9 +488,7 @@ export class InsertionMarkerManager {
     }
     // Add an insertion marker or replacement marker.
     this.closestConnection_ = closest;
-    // AnyDuringMigration because:  Type 'RenderedConnection | null' is not
-    // assignable to type 'RenderedConnection'.
-    this.localConnection_ = local as AnyDuringMigration;
+    this.localConnection_ = local;
     this.showPreview_();
   }
 
@@ -513,10 +497,18 @@ export class InsertionMarkerManager {
    * block highlight or an insertion marker, and shows the appropriate one.
    */
   private showPreview_() {
+    if (!this.closestConnection_) {
+      throw new Error(
+          'Cannot show the preview because there is no closest connection');
+    }
+    if (!this.localConnection_) {
+      throw new Error(
+          'Cannot show the preview because there is no local connection');
+    }
     const closest = this.closestConnection_;
     const renderer = this.workspace_.getRenderer();
     const method = renderer.getConnectionPreviewMethod(
-        (closest), (this.localConnection_), this.topBlock_);
+        closest, this.localConnection_, this.topBlock_);
 
     switch (method) {
       case InsertionMarkerManager.PREVIEW_TYPE.INPUT_OUTLINE:
@@ -532,10 +524,7 @@ export class InsertionMarkerManager {
 
     // Optionally highlight the actual connection, as a nod to previous
     // behaviour.
-    // AnyDuringMigration because:  Argument of type 'RenderedConnection' is not
-    // assignable to parameter of type 'Connection'.
-    if (closest &&
-        renderer.shouldHighlightConnection(closest as AnyDuringMigration)) {
+    if (closest && renderer.shouldHighlightConnection(closest)) {
       closest.highlight();
     }
   }
@@ -571,15 +560,9 @@ export class InsertionMarkerManager {
     }
 
     // Either way, clear out old state.
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'RenderedConnection'.
-    this.markerConnection_ = null as AnyDuringMigration;
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'RenderedConnection'.
-    this.closestConnection_ = null as AnyDuringMigration;
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'RenderedConnection'.
-    this.localConnection_ = null as AnyDuringMigration;
+    this.markerConnection_ = null;
+    this.closestConnection_ = null;
+    this.localConnection_ = null;
   }
 
   /**
@@ -587,11 +570,9 @@ export class InsertionMarkerManager {
    *  highlight or an insertion marker, and hides the appropriate one.
    */
   private hidePreview_() {
-    // AnyDuringMigration because:  Argument of type 'RenderedConnection' is not
-    // assignable to parameter of type 'Connection'.
     if (this.closestConnection_ && this.closestConnection_.targetBlock() &&
         this.workspace_.getRenderer().shouldHighlightConnection(
-            this.closestConnection_ as AnyDuringMigration)) {
+            this.closestConnection_)) {
       this.closestConnection_.unhighlight();
     }
     if (this.fadedBlock_) {
@@ -608,17 +589,30 @@ export class InsertionMarkerManager {
    * manager state).
    */
   private showInsertionMarker_() {
+    if (!this.localConnection_) {
+      throw new Error(
+          'Cannot show the insertion marker because there is no local ' +
+          'connection');
+    }
+    if (!this.closestConnection_) {
+      throw new Error(
+          'Cannot show the insertion marker because there is no closest ' +
+          'connection');
+    }
     const local = this.localConnection_;
     const closest = this.closestConnection_;
 
     const isLastInStack = this.lastOnStack_ && local === this.lastOnStack_;
-    let imBlock = isLastInStack ? this.lastMarker_ : this.firstMarker_;
+    let insertionMarker = isLastInStack ? this.lastMarker_ : this.firstMarker_;
+    if (!insertionMarker) {
+      throw new Error(
+          'Cannot show the insertion marker because there is no insertion ' +
+          'marker block');
+    }
     let imConn;
     try {
-      // AnyDuringMigration because:  Argument of type 'BlockSvg' is not
-      // assignable to parameter of type 'Block'.
-      imConn = imBlock.getMatchingConnection(
-          local.getSourceBlock() as AnyDuringMigration, local);
+      imConn =
+          insertionMarker.getMatchingConnection(local.getSourceBlock(), local);
     } catch (e) {
       // It's possible that the number of connections on the local block has
       // changed since the insertion marker was originally created.  Let's
@@ -627,39 +621,44 @@ export class InsertionMarkerManager {
       // called more often during the drag, but creating a block that often
       // might be too slow, so we only do it if necessary.
       this.firstMarker_ = this.createMarkerBlock_(this.topBlock_);
-      imBlock = isLastInStack ? this.lastMarker_ : this.firstMarker_;
-      // AnyDuringMigration because:  Argument of type 'BlockSvg' is not
-      // assignable to parameter of type 'Block'.
-      imConn = imBlock.getMatchingConnection(
-          local.getSourceBlock() as AnyDuringMigration, local);
+      insertionMarker = isLastInStack ? this.lastMarker_ : this.firstMarker_;
+      if (!insertionMarker) {
+        throw new Error(
+            'Cannot show the insertion marker because there is no insertion ' +
+            'marker block');
+      }
+      imConn =
+          insertionMarker.getMatchingConnection(local.getSourceBlock(), local);
+    }
+
+    if (!imConn) {
+      throw new Error(
+          'Cannot show the insertion marker because there is no ' +
+          'associated connection');
     }
 
     if (imConn === this.markerConnection_) {
-      throw Error(
+      throw new Error(
           'Made it to showInsertionMarker_ even though the marker isn\'t ' +
           'changing');
     }
 
     // Render disconnected from everything else so that we have a valid
     // connection location.
-    imBlock.render();
-    imBlock.rendered = true;
-    imBlock.getSvgRoot().setAttribute('visibility', 'visible');
+    insertionMarker.render();
+    insertionMarker.rendered = true;
+    insertionMarker.getSvgRoot().setAttribute('visibility', 'visible');
 
     if (imConn && closest) {
       // Position so that the existing block doesn't move.
-      imBlock.positionNearConnection(imConn, closest);
+      insertionMarker.positionNearConnection(imConn, closest);
     }
     if (closest) {
       // Connect() also renders the insertion marker.
-      // AnyDuringMigration because:  Argument of type 'RenderedConnection' is
-      // not assignable to parameter of type 'Connection'.
-      imConn!.connect(closest as AnyDuringMigration);
+      imConn.connect(closest);
     }
 
-    // AnyDuringMigration because:  Type 'RenderedConnection | null' is not
-    // assignable to type 'RenderedConnection'.
-    this.markerConnection_ = imConn as AnyDuringMigration;
+    this.markerConnection_ = imConn;
   }
 
   /**
@@ -700,11 +699,8 @@ export class InsertionMarkerManager {
           markerPrev ? markerPrev.targetConnection : null;
 
       imBlock.unplug(true);
-      if (previousBlockNextConnection) {
-        // AnyDuringMigration because:  Argument of type 'RenderedConnection' is
-        // not assignable to parameter of type 'Connection'.
-        previousBlockNextConnection.connect(
-            innerConnection as AnyDuringMigration);
+      if (previousBlockNextConnection && innerConnection) {
+        previousBlockNextConnection.connect(innerConnection);
       }
     } else {
       imBlock.unplug(/* healStack */
@@ -717,9 +713,7 @@ export class InsertionMarkerManager {
           'disconnectInsertionMarker');
     }
 
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'RenderedConnection'.
-    this.markerConnection_ = null as AnyDuringMigration;
+    this.markerConnection_ = null;
     const svg = imBlock.getSvgRoot();
     if (svg) {
       svg.setAttribute('visibility', 'hidden');
@@ -728,23 +722,31 @@ export class InsertionMarkerManager {
 
   /** Shows an outline around the input the closest connection belongs to. */
   private showInsertionInputOutline_() {
+    if (!this.closestConnection_) {
+      throw new Error(
+          'Cannot show the insertion marker outline because ' +
+          'there is no closest connection');
+    }
     const closest = this.closestConnection_;
     this.highlightedBlock_ = closest.getSourceBlock();
-    // AnyDuringMigration because:  Argument of type 'RenderedConnection' is not
-    // assignable to parameter of type 'Connection'.
-    this.highlightedBlock_.highlightShapeForInput(
-        closest as AnyDuringMigration, true);
+    this.highlightedBlock_.highlightShapeForInput(closest, true);
   }
 
   /** Hides any visible input outlines. */
   private hideInsertionInputOutline_() {
-    // AnyDuringMigration because:  Argument of type 'RenderedConnection' is not
-    // assignable to parameter of type 'Connection'.
+    if (!this.highlightedBlock_) {
+      throw new Error(
+          'Cannot hide the insertion marker outline because ' +
+          'there is no highlighted block');
+    }
+    if (!this.closestConnection_) {
+      throw new Error(
+          'Cannot hide the insertion marker outline because ' +
+          'there is no closest connection');
+    }
     this.highlightedBlock_.highlightShapeForInput(
-        this.closestConnection_ as AnyDuringMigration, false);
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'BlockSvg'.
-    this.highlightedBlock_ = null as AnyDuringMigration;
+        this.closestConnection_, false);
+    this.highlightedBlock_ = null;
   }
 
   /**
@@ -752,19 +754,29 @@ export class InsertionMarkerManager {
    * (the block that is currently connected to it).
    */
   private showReplacementFade_() {
-    // AnyDuringMigration because:  Type 'BlockSvg | null' is not assignable to
-    // type 'BlockSvg'.
-    this.fadedBlock_ =
-        this.closestConnection_.targetBlock() as AnyDuringMigration;
+    if (!this.closestConnection_) {
+      throw new Error(
+          'Cannot show the replacement fade because there ' +
+          'is no closest connection');
+    }
+    this.fadedBlock_ = this.closestConnection_.targetBlock();
+    if (!this.fadedBlock_) {
+      throw new Error(
+          'Cannot show the replacement fade because the ' +
+          'closest connection does not have a target block');
+    }
     this.fadedBlock_.fadeForReplacement(true);
   }
 
   /** Hides/Removes any visible fade affects. */
   private hideReplacementFade_() {
+    if (!this.fadedBlock_) {
+      throw new Error(
+          'Cannot hide the replacement because there is no ' +
+          'faded block');
+    }
     this.fadedBlock_.fadeForReplacement(false);
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'BlockSvg'.
-    this.fadedBlock_ = null as AnyDuringMigration;
+    this.fadedBlock_ = null;
   }
 
   /**

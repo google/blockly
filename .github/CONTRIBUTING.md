@@ -29,9 +29,9 @@ All submissions, including submissions by project members, require review. We
 use Github pull requests for this purpose.
 
 ### Browser compatibility
-We care strongly about making Blockly work on all browsers.  As of 2017 we 
-support IE 10 and 11, Edge, Chrome, Safari, and Firefox.  We will not accept
-changes that only work on a subset of those browsers.  You can check [caniuse.com](https://caniuse.com/) 
+We care strongly about making Blockly work on all browsers.  As of 2022 we 
+support Edge, Chrome, Safari, and Firefox.  We will not accept changes that only
+work on a subset of those browsers.  You can check [caniuse.com](https://caniuse.com/) 
 for compatibility information.
 
 ### The small print

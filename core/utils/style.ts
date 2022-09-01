@@ -14,6 +14,7 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.utils.style');
 
+import * as deprecation from './deprecation.js';
 import {Coordinate} from './coordinate.js';
 import {Rect} from './rect.js';
 import {Size} from './size.js';
@@ -35,7 +36,7 @@ export function getSize(element: Element): Size {
  * Private version of getSize for stubbing in tests.
  */
 function getSizeInternal(element: Element): Size {
-  if (getStyle(element, 'display') !== 'none') {
+  if (getComputedStyle(element, 'display') !== 'none') {
     return getSizeWithDisplay(element);
   }
 
@@ -74,31 +75,8 @@ function getSizeWithDisplay(element: Element): Size {
 }
 
 /**
- * Cross-browser pseudo get computed style. It returns the computed style where
- * available. If not available it tries the cascaded style value (IE
- * currentStyle) and in worst case the inline style value.  It shouldn't be
- * called directly, see http://wiki/Main/ComputedStyleVsCascadedStyle for
- * discussion.
- *
- * Copied from Closure's goog.style.getStyle_
- *
- * @param element Element to get style of.
- * @param style Property to get (must be camelCase, not CSS-style).
- * @returns Style value.
- */
-function getStyle(element: Element, style: string): string {
-  // AnyDuringMigration because:  Property 'style' does not exist on type
-  // 'Element'. AnyDuringMigration because:  Property 'style' does not exist on
-  // type 'Element'.
-  return getComputedStyle(element, style) || getCascadedStyle(element, style) ||
-      (element as AnyDuringMigration).style &&
-      (element as AnyDuringMigration).style[style];
-}
-
-/**
- * Retrieves a computed style value of a node. It returns empty string if the
- * value cannot be computed (which will be the case in Internet Explorer) or
- * "none" if the property requested is an SVG one and it has not been
+ * Retrieves a computed style value of a node. It returns empty string
+ * if the property requested is an SVG one and it has not been
  * explicitly set (firefox and webkit).
  *
  * Copied from Closure's goog.style.getComputedStyle
@@ -109,17 +87,11 @@ function getStyle(element: Element, style: string): string {
  * @alias Blockly.utils.style.getComputedStyle
  */
 export function getComputedStyle(element: Element, property: string): string {
-  if (document.defaultView && document.defaultView.getComputedStyle) {
-    const styles = document.defaultView.getComputedStyle(element, null);
-    if (styles) {
-      // element.style[..] is undefined for browser specific styles
-      // as 'filter'.
-      return (styles as AnyDuringMigration)[property] ||
-          styles.getPropertyValue(property) || '';
-    }
-  }
-
-  return '';
+  const styles = window.getComputedStyle(element);
+  // element.style[..] is undefined for browser specific styles
+  // as 'filter'.
+  return (styles as AnyDuringMigration)[property] ||
+      styles.getPropertyValue(property);
 }
 
 /**
@@ -134,6 +106,9 @@ export function getComputedStyle(element: Element, property: string): string {
  * @alias Blockly.utils.style.getCascadedStyle
  */
 export function getCascadedStyle(element: Element, style: string): string {
+  deprecation.warn(
+      'Blockly.utils.style.getCascadedStyle', 'version 9.0.0',
+      'version 10.0.0');
   // AnyDuringMigration because:  Property 'currentStyle' does not exist on type
   // 'Element'. AnyDuringMigration because:  Property 'currentStyle' does not
   // exist on type 'Element'.
@@ -179,37 +154,6 @@ export function getViewportPageOffset(): Coordinate {
   const scrollLeft = body.scrollLeft || documentElement.scrollLeft;
   const scrollTop = body.scrollTop || documentElement.scrollTop;
   return new Coordinate(scrollLeft, scrollTop);
-}
-
-/**
- * Shows or hides an element from the page. Hiding the element is done by
- * setting the display property to "none", removing the element from the
- * rendering hierarchy so it takes up no space. To show the element, the default
- * inherited display property is restored (defined either in stylesheets or by
- * the browser's default style rules).
- * Copied from Closure's goog.style.getViewportPageOffset
- *
- * @param el Element to show or hide.
- * @param isShown True to render the element in its default style, false to
- *     disable rendering the element.
- * @alias Blockly.utils.style.setElementShown
- */
-export function setElementShown(el: Element, isShown: AnyDuringMigration) {
-  // AnyDuringMigration because:  Property 'style' does not exist on type
-  // 'Element'.
-  (el as AnyDuringMigration).style.display = isShown ? '' : 'none';
-}
-
-/**
- * Returns true if the element is using right to left (RTL) direction.
- * Copied from Closure's goog.style.isRightToLeft
- *
- * @param el The element to test.
- * @returns True for right to left, false for left to right.
- * @alias Blockly.utils.style.isRightToLeft
- */
-export function isRightToLeft(el: Element): boolean {
-  return 'rtl' === getStyle(el, 'direction');
 }
 
 /**

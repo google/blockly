@@ -78,13 +78,6 @@ export function createSvgElement<T extends SVGElement>(
   for (const key in attrs) {
     e.setAttribute(key, attrs[key]);
   }
-  // IE defines a unique attribute "runtimeStyle", it is NOT applied to
-  // elements created with createElementNS. However, Closure checks for IE
-  // and assumes the presence of the attribute and crashes.
-  if ((document.body as any)
-          .runtimeStyle) {  // Indicates presence of IE-only attr.
-    (e as any).runtimeStyle = (e as any).currentStyle = e.style;
-  }
   if (opt_parent) {
     opt_parent.appendChild(e);
   }

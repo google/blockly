@@ -117,57 +117,10 @@ export function getInjectionDivXY(element: Element): Coordinate {
  * @alias Blockly.utils.svgMath.is3dSupported
  */
 export function is3dSupported(): boolean {
-  // AnyDuringMigration because:  Property 'cached_' does not exist on type '()
-  // => boolean'.
-  if ((is3dSupported as AnyDuringMigration).cached_ !== undefined) {
-    // AnyDuringMigration because:  Property 'cached_' does not exist on type
-    // '() => boolean'.
-    return (is3dSupported as AnyDuringMigration).cached_;
-  }
-  // CC-BY-SA Lorenzo Polidori
-  // stackoverflow.com/questions/5661671/detecting-transform-translate3d-support
-  if (!globalThis['getComputedStyle']) {
-    return false;
-  }
-
-  const el = document.createElement('p');
-  let has3d = 'none';
-  const transforms = {
-    'webkitTransform': '-webkit-transform',
-    'OTransform': '-o-transform',
-    'msTransform': '-ms-transform',
-    'MozTransform': '-moz-transform',
-    'transform': 'transform',
-  };
-
-  // Add it to the body to get the computed style.
-  document.body.insertBefore(el, null);
-
-  for (const t in transforms) {
-    if ((el.style as AnyDuringMigration)[t] !== undefined) {
-      (el.style as AnyDuringMigration)[t] = 'translate3d(1px,1px,1px)';
-      const computedStyle = globalThis['getComputedStyle'](el);
-      if (!computedStyle) {
-        // getComputedStyle in Firefox returns null when Blockly is loaded
-        // inside an iframe with display: none.  Returning false and not
-        // caching is3dSupported means we try again later.  This is most likely
-        // when users are interacting with blocks which should mean Blockly is
-        // visible again.
-        // See https://bugzilla.mozilla.org/show_bug.cgi?id=548397
-        document.body.removeChild(el);
-        return false;
-      }
-      has3d =
-          computedStyle.getPropertyValue((transforms as AnyDuringMigration)[t]);
-    }
-  }
-  document.body.removeChild(el);
-  // AnyDuringMigration because:  Property 'cached_' does not exist on type '()
-  // => boolean'.
-  (is3dSupported as AnyDuringMigration).cached_ = has3d !== 'none';
-  // AnyDuringMigration because:  Property 'cached_' does not exist on type '()
-  // => boolean'.
-  return (is3dSupported as AnyDuringMigration).cached_;
+  // All browsers support translate3d in 2022.
+  deprecation.warn(
+      'Blockly.utils.svgMath.is3dSupported', 'version 9.0.0', 'version 10.0.0');
+  return true;
 }
 
 /**

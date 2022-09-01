@@ -299,9 +299,8 @@ export class ShortcutRegistry {
    * @throws {Error} if the modifier is not in the valid modifiers list.
    */
   private checkModifiers_(modifiers: KeyCodes[]) {
-    const validModifiers = object.values(ShortcutRegistry.modifierKeys);
     for (let i = 0, modifier; modifier = modifiers[i]; i++) {
-      if (validModifiers.indexOf(modifier) < 0) {
+      if (!(modifier in ShortcutRegistry.modifierKeys)) {
         throw new Error(modifier + ' is not a valid modifier key.');
       }
     }

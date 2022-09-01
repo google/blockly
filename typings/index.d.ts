@@ -4,8 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import * as core from './core/blockly';
 import * as libraryBlocks from './blocks';  // Handcrafted file.
-export {core};
+export * from './core/blockly';
 export {libraryBlocks};
 export const JavaScript: any;

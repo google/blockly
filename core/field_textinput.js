@@ -126,6 +126,18 @@ class FieldTextInput extends Field {
     this.SERIALIZABLE = true;
 
     /**
+     * Minimal move distance workspace
+     * @type {number}
+     */
+    this.MIN_DISTANCE = 15;
+
+    /**
+     * No-sensitivity zone overflow.
+     * @type {number}
+     */
+    this.NO_SENSITIVITY = 10;
+
+    /**
      * Mouse cursor style when over the hotspot that initiates the editor.
      * @type {string}
      */
@@ -304,6 +316,9 @@ class FieldTextInput extends Field {
     } else {
       this.showInlineEditor_(quietInput);
     }
+
+    this.moveWorkspace_();
+    this.resizeEditor_();
   }
 
   /**
@@ -490,6 +505,7 @@ class FieldTextInput extends Field {
       const value = this.getValueFromEditorText_(text);
       this.setValue(value);
       this.forceRerender();
+      this.moveWorkspace_();
       this.resizeEditor_();
     }
   }
@@ -511,6 +527,40 @@ class FieldTextInput extends Field {
       this.htmlInput_.value = this.getEditorText_(newValue);
     }
     this.setValue(newValue);
+  }
+
+  /**
+   * Move the workspace when field input overflows
+   * over the edge of the canvas.
+   * @private
+   */
+  moveWorkspace_() {
+    const div = WidgetDiv.getDiv();
+    const workspaceClientRect = this.workspace_.getInjectionDiv().getBoundingClientRect();
+    const widgetDivRect = div.getBoundingClientRect();
+
+    let moveX = 0;
+    let moveY = 0;
+
+    if (widgetDivRect.right + this.NO_SENSITIVITY > workspaceClientRect.right) {
+      moveX = this.MIN_DISTANCE;
+
+      const delta = widgetDivRect.right - workspaceClientRect.right;
+      if (delta > moveX) {
+        moveX += delta;
+      }
+    }
+
+    if (widgetDivRect.bottom + this.NO_SENSITIVITY > workspaceClientRect.bottom) {
+      moveY = this.MIN_DISTANCE;
+
+      const delta = widgetDivRect.bottom - workspaceClientRect.bottom;
+      if (delta > moveY) {
+        moveY += delta;
+      }
+    }
+
+    this.workspace_.scroll(this.workspace_.scrollX - moveX, this.workspace_.scrollY - moveY, true);
   }
 
   /**

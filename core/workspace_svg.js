@@ -2497,10 +2497,13 @@ class WorkspaceSvg extends Workspace {
    * the meaning of these values.
    * @param {number} x Target X to scroll to.
    * @param {number} y Target Y to scroll to.
+   * @param {boolean} skipHideChaff Need skip call hideChaff
    * @package
    */
-  scroll(x, y) {
-    this.hideChaff(/* opt_onlyClosePopups= */ true);
+  scroll(x, y, skipHideChaff) {
+    if (!skipHideChaff) {
+      this.hideChaff(/* opt_onlyClosePopups= */ true);
+    }
 
     // Keep scrolling within the bounds of the content.
     const metrics = this.getMetrics();

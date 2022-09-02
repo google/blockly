@@ -151,7 +151,7 @@ function updateBetaVersion(done) {
 const rebuildAll = gulp.series(
   buildTasks.cleanBuildDir,
   buildTasks.build,
-  buildTasks.checkinBuilt,
+  buildTasks.checkin,
   );
 
 // Package and publish to npm.

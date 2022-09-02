@@ -105,7 +105,7 @@ const updateGithubPages = gulp.series(
   },
   buildTasks.cleanBuildDir,
   buildTasks.build,
-  buildTasks.checkinBuilt,
+  buildTasks.checkin,
   function(done) {
     execSync('git commit -am "Rebuild"', { stdio: 'inherit' });
     execSync('git push ' + upstream_url + ' gh-pages --force', { stdio: 'inherit' });

@@ -21,29 +21,39 @@ const releaseTasks = require('./scripts/gulpfiles/release_tasks');
 const cleanupTasks = require('./scripts/gulpfiles/cleanup_tasks');
 
 module.exports = {
+  // Default target if gulp invoked without specifying.
+  default: buildTasks.build,
+
+  // Main sequence targets.  They already invoke prerequisites.
+  cleanBuildDir: buildTasks.cleanBuildDir,
+  messages: buildTasks.messages,
+  tsc: buildTasks.tsc,
+  deps: buildTasks.deps,
+  minify: buildTasks.minify,
+  build: buildTasks.build,
+
+  // Manually-invokable targets that invoke prerequisites.
+  prepare: buildTasks.prepare,
+  format: buildTasks.format,
+  generate: buildTasks.generate,
+  clean: gulp.parallel(buildTasks.cleanBuildDir, packageTasks.cleanReleaseDir),
+  buildAdvancedCompilationTest: buildTasks.buildAdvancedCompilationTest,
+  
+  // Targets intended only for invocation by scripts; may omit prerequisites.
+  onlyBuildAdvancedCompilationTest: buildTasks.onlyBuildAdvancedCompilationTest,
+
+  // Legacy target, to be deleted.
+  checkin: buildTasks.checkin,
+
+  // TBD.
   deployDemos: appengineTasks.deployDemos,
   deployDemosBeta: appengineTasks.deployDemosBeta,
-  default: buildTasks.build,
-  generateLangfiles: buildTasks.generateLangfiles,
-  build: buildTasks.build,
-  buildDeps: buildTasks.deps,
-  buildLangfiles: buildTasks.langfiles,
-  buildCompiled: buildTasks.compiled,
-  buildAdvancedCompilationTest: buildTasks.advancedCompilationTest,
-  buildJavaScript: buildTasks.javaScript,
-  buildJavaScriptAndDeps: buildTasks.javaScriptAndDeps,
-  checkin: gulp.parallel(buildTasks.checkinBuilt),
-  checkinBuilt: buildTasks.checkinBuilt,
-  clangFormat: buildTasks.format,
-  clean: gulp.parallel(buildTasks.cleanBuildDir, packageTasks.cleanReleaseDir),
-  cleanBuildDir: buildTasks.cleanBuildDir,
   cleanReleaseDir: packageTasks.cleanReleaseDir,
   gitSyncDevelop: gitTasks.syncDevelop,
   gitSyncMaster: gitTasks.syncMaster,
   gitCreateRC: gitTasks.createRC,
   gitUpdateGithubPages: gitTasks.updateGithubPages,
   package: packageTasks.package,
-  prepare: buildTasks.prepare,
   checkLicenses: licenseTasks.checkLicenses,
   recompile: releaseTasks.recompile,
   prepareDemos: appengineTasks.prepareDemos,

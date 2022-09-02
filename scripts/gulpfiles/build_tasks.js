@@ -300,15 +300,12 @@ function prepare(done) {
     done();
     return;
   }
-  return buildJavaScriptAndDeps(done);
+  return exports.deps(done);
 }
-
-const buildJavaScriptAndDeps = gulp.series(buildJavaScript, buildDeps);
 
 /**
  * Builds Blockly as a JS program, by running tsc on all the files in
- * the core directory.  This must be run before buildDeps or
- * buildCompiled.
+ * the core directory.
  */
 function buildJavaScript(done) {
   execSync(
@@ -323,6 +320,8 @@ function buildJavaScript(done) {
  *
  * Also updates TEST_DEPS_FILE (deps.mocha.js), used by the mocha test
  * suite.
+ *
+ * Prerequisite: buildJavaScript.
  */
 function buildDeps(done) {
   const roots = [
@@ -639,6 +638,8 @@ function compile(options) {
  * blockly_compressed.js, blocks_compressed.js, etc.
  *
  * The deps.js file must be up-to-date.
+ *
+ * Prerequisite: buildDeps.
  */
 function buildCompiled() {
   // Get chunking.
@@ -673,6 +674,8 @@ function buildCompiled() {
 /**
  * This task builds Blockly core, blocks and generators together and uses
  * closure compiler's ADVANCED_COMPILATION mode.
+ *
+ * Prerequisite: buildDeps.
  */
 function buildAdvancedCompilationTest() {
   const srcs = [
@@ -702,25 +705,10 @@ function buildAdvancedCompilationTest() {
 }
 
 /**
- * This task builds all of Blockly:
- *     blockly_compressed.js
- *     blocks_compressed.js
- *     javascript_compressed.js
- *     python_compressed.js
- *     php_compressed.js
- *     lua_compressed.js
- *     dart_compressed.js
- *     msg/json/*.js
- *     test/deps*.js
- */
-const build = gulp.parallel(
-    gulp.series(buildJavaScript, buildDeps, buildCompiled),
-    buildLangfiles,
-    );
-
-/**
  * This task copies built files from BUILD_DIR back to the repository
  * so they can be committed to git.
+ *
+ * Prerequisite: buildCompiled, buildLangfiles.
  */
 function checkinBuilt() {
   return gulp.src([
@@ -753,17 +741,23 @@ function format() {
       .pipe(gulp.dest('.'));
 }
 
-module.exports = {
-  prepare: prepare,
-  build: build,
-  javaScriptAndDeps: buildJavaScriptAndDeps,
-  javaScript: buildJavaScript,
-  deps: buildDeps,
-  generateLangfiles: generateLangfiles,
-  langfiles: buildLangfiles,
-  compiled: buildCompiled,
-  format: format,
-  checkinBuilt: checkinBuilt,
-  cleanBuildDir: cleanBuildDir,
-  advancedCompilationTest: buildAdvancedCompilationTest,
-}
+// Main sequence targets.  Each should invoke any immediate prerequisite(s).
+exports.cleanBuildDir = cleanBuildDir;
+exports.messages = buildLangfiles;
+exports.tsc = buildJavaScript;
+exports.deps = gulp.series(exports.tsc, buildDeps);
+exports.minify = gulp.series(exports.deps, buildCompiled);
+exports.build = gulp.parallel(exports.minify, exports.messages);
+
+// Manually-invokable targets, with prequisites where required.
+exports.prepare = prepare;
+exports.format = format;
+exports.generate = generateLangfiles;
+exports.buildAdvancedCompilationTest =
+    gulp.series(exports.deps, buildAdvancedCompilationTest);
+
+// Targets intended only for invocation by scripts; may omit prerequisites.
+exports.onlyBuildAdvancedCompilationTest = buildAdvancedCompilationTest;
+
+// Legacy target, to be deleted.
+exports.checkin = gulp.series(exports.build, checkinBuilt);

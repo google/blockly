@@ -351,13 +351,17 @@ class FieldDropdown extends Field {
 
     const options = this.getOptions(false);
     this.selectedMenuItem_ = null;
-    options.sort((a, b) => a[0].localeCompare(b[0], undefined, {numeric: true, sensitivity: 'base'}));
 
-    const renameVarIndex = options.findIndex((option) => option[1] === internalConstants.RENAME_VARIABLE_ID);
-    if (renameVarIndex !== -1 || renameVarIndex !== 0) {
-      const renameVarOption = options.splice(renameVarIndex, 1);
-      options.unshift(...renameVarOption);
+    // Move to top rename variable and delete variable in list options.
+    options.sort((a, b) => {
+    if (a[1] === internalConstants.DELETE_VARIABLE_ID && b[1] === internalConstants.RENAME_VARIABLE_ID) {
+      return 1;
     }
+    if (a[1] === internalConstants.RENAME_VARIABLE_ID || a[1] === internalConstants.DELETE_VARIABLE_ID) {
+      return -1;
+    }
+    return a[0].localeCompare(b[0], undefined, {numeric: true, sensitivity: 'base'});
+    });
 
 
     for (let i = 0; i < options.length; i++) {

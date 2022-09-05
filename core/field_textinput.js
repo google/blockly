@@ -132,10 +132,10 @@ class FieldTextInput extends Field {
     this.MIN_DISTANCE = 15;
 
     /**
-     * No-sensitivity zone overflow.
+     * No-sensitivity zone overflow width in px.
      * @type {number}
      */
-    this.NO_SENSITIVITY = 10;
+    this.NO_SENSITIVITY_WIDTH_ZONE = 10;
 
     /**
      * Mouse cursor style when over the hotspot that initiates the editor.
@@ -542,7 +542,7 @@ class FieldTextInput extends Field {
     let moveX = 0;
     let moveY = 0;
 
-    if (widgetDivRect.right + this.NO_SENSITIVITY > workspaceClientRect.right) {
+    if (widgetDivRect.right + this.NO_SENSITIVITY_WIDTH_ZONE > workspaceClientRect.right) {
       moveX = this.MIN_DISTANCE;
 
       const delta = widgetDivRect.right - workspaceClientRect.right;
@@ -551,7 +551,7 @@ class FieldTextInput extends Field {
       }
     }
 
-    if (widgetDivRect.bottom + this.NO_SENSITIVITY > workspaceClientRect.bottom) {
+    if (widgetDivRect.bottom + this.NO_SENSITIVITY_WIDTH_ZONE > workspaceClientRect.bottom) {
       moveY = this.MIN_DISTANCE;
 
       const delta = widgetDivRect.bottom - workspaceClientRect.bottom;

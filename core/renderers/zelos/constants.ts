@@ -43,32 +43,7 @@ export interface InsideCorners {
  */
 export class ConstantProvider extends BaseConstantProvider {
   GRID_UNIT = 4;
-  override SMALL_PADDING: AnyDuringMigration;
-  override MEDIUM_PADDING: AnyDuringMigration;
-  override MEDIUM_LARGE_PADDING: AnyDuringMigration;
-  override LARGE_PADDING: AnyDuringMigration;
-  override CORNER_RADIUS: AnyDuringMigration;
-  override NOTCH_WIDTH: AnyDuringMigration;
-  override NOTCH_HEIGHT: AnyDuringMigration;
-  override NOTCH_OFFSET_LEFT: AnyDuringMigration;
-  override STATEMENT_INPUT_NOTCH_OFFSET: AnyDuringMigration;
-  override MIN_BLOCK_WIDTH: AnyDuringMigration;
-  override MIN_BLOCK_HEIGHT: AnyDuringMigration;
-  override EMPTY_STATEMENT_INPUT_HEIGHT: AnyDuringMigration;
-
-  override TAB_OFFSET_FROM_TOP = 0;
-  override TOP_ROW_MIN_HEIGHT: AnyDuringMigration;
-  override TOP_ROW_PRECEDES_STATEMENT_MIN_HEIGHT: AnyDuringMigration;
-  override BOTTOM_ROW_MIN_HEIGHT: AnyDuringMigration;
-  override BOTTOM_ROW_AFTER_STATEMENT_MIN_HEIGHT: AnyDuringMigration;
-  override STATEMENT_BOTTOM_SPACER: AnyDuringMigration;
   STATEMENT_INPUT_SPACER_MIN_WIDTH: number;
-  override STATEMENT_INPUT_PADDING_LEFT: AnyDuringMigration;
-  override EMPTY_INLINE_INPUT_PADDING: AnyDuringMigration;
-  override EMPTY_INLINE_INPUT_HEIGHT: AnyDuringMigration;
-  override DUMMY_INPUT_MIN_HEIGHT: AnyDuringMigration;
-  override DUMMY_INPUT_SHADOW_MIN_HEIGHT: AnyDuringMigration;
-  override CURSOR_WS_WIDTH: AnyDuringMigration;
 
   override CURSOR_COLOUR = '#ffa200';
 
@@ -87,33 +62,55 @@ export class ConstantProvider extends BaseConstantProvider {
   override START_HAT_WIDTH = 96;
 
   override SHAPES = {HEXAGONAL: 1, ROUND: 2, SQUARE: 3, PUZZLE: 4, NOTCH: 5};
-  SHAPE_IN_SHAPE_PADDING: AnyDuringMigration;
+
+  /**
+   * Map of output/input shapes and the amount they should cause a block to be
+   * padded. Outer key is the outer shape, inner key is the inner shape.
+   * When a block with the outer shape contains an input block with the inner
+   * shape on its left or right edge, the block elements are aligned such that
+   * the padding specified is reached.
+   *
+   * @internal
+   */
+  SHAPE_IN_SHAPE_PADDING: {[key: number]: {[key: number]: number}} = {
+      1: {
+        // Outer shape: hexagon.
+        0: 5 * this.GRID_UNIT,  // Field in hexagon.
+        1: 2 * this.GRID_UNIT,  // Hexagon in hexagon.
+        2: 5 * this.GRID_UNIT,  // Round in hexagon.
+        3: 5 * this.GRID_UNIT,  // Square in hexagon.
+      },
+      2: {
+        // Outer shape: round.
+        0: 3 * this.GRID_UNIT,  // Field in round.
+        1: 3 * this.GRID_UNIT,  // Hexagon in round.
+        2: 1 * this.GRID_UNIT,  // Round in round.
+        3: 2 * this.GRID_UNIT,  // Square in round.
+      },
+      3: {
+        // Outer shape: square.
+        0: 2 * this.GRID_UNIT,  // Field in square.
+        1: 2 * this.GRID_UNIT,  // Hexagon in square.
+        2: 2 * this.GRID_UNIT,  // Round in square.
+        3: 2 * this.GRID_UNIT,  // Square in square.
+      },
+    };
 
   override FULL_BLOCK_FIELDS = true;
-  override FIELD_TEXT_FONTSIZE: AnyDuringMigration;
 
   override FIELD_TEXT_FONTWEIGHT = 'bold';
 
   override FIELD_TEXT_FONTFAMILY =
       '"Helvetica Neue", "Segoe UI", Helvetica, sans-serif';
-  override FIELD_BORDER_RECT_RADIUS: AnyDuringMigration;
-  override FIELD_BORDER_RECT_X_PADDING: AnyDuringMigration;
-  override FIELD_BORDER_RECT_Y_PADDING: AnyDuringMigration;
-  override FIELD_BORDER_RECT_HEIGHT: AnyDuringMigration;
-  override FIELD_DROPDOWN_BORDER_RECT_HEIGHT: AnyDuringMigration;
 
   override FIELD_DROPDOWN_NO_BORDER_RECT_SHADOW = true;
 
   override FIELD_DROPDOWN_COLOURED_DIV = true;
 
   override FIELD_DROPDOWN_SVG_ARROW = true;
-  override FIELD_DROPDOWN_SVG_ARROW_PADDING: AnyDuringMigration;
   override FIELD_TEXTINPUT_BOX_SHADOW = true;
 
   override FIELD_COLOUR_FULL_BLOCK = true;
-  override FIELD_COLOUR_DEFAULT_WIDTH: AnyDuringMigration;
-  override FIELD_COLOUR_DEFAULT_HEIGHT: AnyDuringMigration;
-  override FIELD_CHECKBOX_X_OFFSET: AnyDuringMigration;
   MAX_DYNAMIC_CONNECTION_SHAPE_WIDTH: number;
 
   /** The selected glow colour. */
@@ -139,9 +136,7 @@ export class ConstantProvider extends BaseConstantProvider {
   /**
    * The <filter> element to use for a selected glow, or null if not set.
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'SVGElement'.
-  private selectedGlowFilter_: SVGElement = null as AnyDuringMigration;
+  private selectedGlowFilter_: SVGElement|null = null;
 
   /**
    * The ID of the replacement glow filter, or the empty string if no filter
@@ -154,9 +149,7 @@ export class ConstantProvider extends BaseConstantProvider {
   /**
    * The <filter> element to use for a replacement glow, or null if not set.
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'SVGElement'.
-  private replacementGlowFilter_: SVGElement = null as AnyDuringMigration;
+  private replacementGlowFilter_: SVGElement|null = null;
 
   /**
    * The object containing information about the hexagon used for a boolean
@@ -228,39 +221,6 @@ export class ConstantProvider extends BaseConstantProvider {
     this.DUMMY_INPUT_SHADOW_MIN_HEIGHT = 6 * this.GRID_UNIT;
 
     this.CURSOR_WS_WIDTH = 20 * this.GRID_UNIT;
-
-    /**
-     * Map of output/input shapes and the amount they should cause a block to be
-     * padded. Outer key is the outer shape, inner key is the inner shape.
-     * When a block with the outer shape contains an input block with the inner
-     * shape on its left or right edge, the block elements are aligned such that
-     * the padding specified is reached.
-     *
-     * @internal
-     */
-    this.SHAPE_IN_SHAPE_PADDING = {
-      1: {
-        // Outer shape: hexagon.
-        0: 5 * this.GRID_UNIT,  // Field in hexagon.
-        1: 2 * this.GRID_UNIT,  // Hexagon in hexagon.
-        2: 5 * this.GRID_UNIT,  // Round in hexagon.
-        3: 5 * this.GRID_UNIT,  // Square in hexagon.
-      },
-      2: {
-        // Outer shape: round.
-        0: 3 * this.GRID_UNIT,  // Field in round.
-        1: 3 * this.GRID_UNIT,  // Hexagon in round.
-        2: 1 * this.GRID_UNIT,  // Round in round.
-        3: 2 * this.GRID_UNIT,  // Square in round.
-      },
-      3: {
-        // Outer shape: square.
-        0: 2 * this.GRID_UNIT,  // Field in square.
-        1: 2 * this.GRID_UNIT,  // Hexagon in square.
-        2: 2 * this.GRID_UNIT,  // Round in square.
-        3: 2 * this.GRID_UNIT,  // Square in square.
-      },
-    };
 
     this.FIELD_TEXT_FONTSIZE = 3 * this.GRID_UNIT;
 

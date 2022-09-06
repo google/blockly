@@ -316,7 +316,8 @@ export class RenderInfo extends BaseRenderInfo {
 
       if (Types.isInputRow(row) && row.hasStatement) {
         row.measure();
-        minXPos = row.width - (row.getLastInput()?.width ?? 0) + notchTotalWidth;
+        minXPos =
+            row.width - (row.getLastInput()?.width ?? 0) + notchTotalWidth;
       } else if (
           hasPrevNotch && (i === 2 || hasNextNotch) && Types.isInputRow(row) &&
           !row.hasStatement) {

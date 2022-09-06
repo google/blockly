@@ -49,7 +49,6 @@ export class TopRow extends Row {
 
   /** The previous connection on the block, if any. */
   connection: PreviousConnection|null = null;
-  override widthWithConnectedBlocks: AnyDuringMigration;
 
   /**
    * @param constants The rendering constants provider.
@@ -96,9 +95,8 @@ export class TopRow extends Row {
       const elem = this.elements[i];
       width += elem.width;
       if (!Types.isSpacer(elem)) {
-        // AnyDuringMigration because:  Property 'isHat' does not exist on type
-        // 'typeof Types'.
-        if ((Types as AnyDuringMigration).isHat(elem) && elem instanceof Hat) {
+        // AnyDof Types'.
+        if (Types.isHat(elem) && elem instanceof Hat) {
           ascenderHeight = Math.max(ascenderHeight, elem.ascenderHeight);
         } else {
           height = Math.max(height, elem.height);

@@ -119,15 +119,13 @@ export class MarkerSvg extends BaseMarkerSvg {
     /* clang-format on */
     super.createDomInternal_();
 
-    // AnyDuringMigration because:  Argument of type 'SVGGElement | null' is not
-    // assignable to parameter of type 'Element | undefined'.
     this.markerCircle_ = dom.createSvgElement(
         Svg.CIRCLE, {
           'r': this.constants_.CURSOR_RADIUS,
           'style': 'display: none',
           'stroke-width': this.constants_.CURSOR_STROKE_WIDTH,
         },
-        this.markerSvg_!);
+        this.markerSvg_);
 
     // Markers and stack cursors don't blink.
     if (this.isCursor()) {

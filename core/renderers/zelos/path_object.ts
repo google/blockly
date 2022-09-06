@@ -47,7 +47,7 @@ export class PathObject extends BasePathObject {
    * The type of block's output connection shape.  This is set when a block
    * with an output connection is drawn.
    */
-  outputShapeType = null;
+  outputShapeType: number|null = null;
 
   /** @internal */
   public override constants: ConstantProvider;

@@ -28,6 +28,9 @@ import type {Renderer} from './renderer.js';
  * @alias Blockly.minimalist.RenderInfo
  */
 export class RenderInfo extends BaseRenderInfo {
+  // Exclamation is fine b/c this is assigned by the super constructor.
+  protected override renderer_!: Renderer;
+
   /**
    * @param renderer The renderer in use.
    * @param block The block to measure.
@@ -44,8 +47,6 @@ export class RenderInfo extends BaseRenderInfo {
    * @internal
    */
   override getRenderer(): Renderer {
-    // AnyDuringMigration because:  Property 'renderer_' does not exist on type
-    // 'RenderInfo'.
-    return (this as AnyDuringMigration).renderer_ as Renderer;
+    return this.renderer_;
   }
 }

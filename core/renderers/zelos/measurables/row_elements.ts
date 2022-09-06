@@ -35,8 +35,6 @@ export class RightConnectionShape extends Measurable {
    */
   constructor(constants: ConstantProvider) {
     super(constants);
-    // AnyDuringMigration because:  Property 'getType' does not exist on type
-    // 'typeof Types'.
-    this.type |= (Types as AnyDuringMigration).getType('RIGHT_CONNECTION');
+    this.type |= Types.getType('RIGHT_CONNECTION');
   }
 }

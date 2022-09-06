@@ -161,7 +161,7 @@ const createMainWorkspace = function(svg, options, blockDragSurface, workspaceDr
 
   mainWorkspace.scale = wsOptions.zoomOptions.startScale;
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
-  mainWorkspace.initAfterAppendDOM()
+  mainWorkspace.initAfterAppendDOM();
 
   // Set the theme name and renderer name onto the injection div.
   dom.addClass(mainWorkspace.getInjectionDiv(), mainWorkspace.getRenderer().getClassName());

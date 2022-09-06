@@ -67,10 +67,7 @@ export function fromJson(options: AnyDuringMigration): Field|null {
  * @param options
  */
 function fromJsonInternal(options: AnyDuringMigration): Field|null {
-  const fieldObject =
-      registry.getObject(registry.Type.FIELD, options['type']) as
-          IRegistrableField |
-      null;
+  const fieldObject = registry.getObject(registry.Type.FIELD, options['type']);
   if (!fieldObject) {
     console.warn(
         'Blockly could not create a field of type ' + options['type'] +
@@ -78,8 +75,11 @@ function fromJsonInternal(options: AnyDuringMigration): Field|null {
         ' the file is not loaded, the field does not register itself (Issue' +
         ' #1584), or the registration is not being reached.');
     return null;
+  } else if (typeof (fieldObject as any)['fromJson'] !== 'function') {
+    throw new TypeError('returned Field was not a IRegistrableField');
+  } else {
+    return (fieldObject as unknown as IRegistrableField).fromJson(options);
   }
-  return fieldObject.fromJson(options);
 }
 
 export const TEST_ONLY = {

@@ -853,7 +853,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    */
   private deleteMouseDown_(e: Event) {
     // Highlight the delete icon.
-            this.deleteIconBorder_?.classList.add('blocklyDeleteIconHighlighted');
+    this.deleteIconBorder_?.classList.add('blocklyDeleteIconHighlighted');
     // This event has been handled.  No need to bubble up to the document.
     e.stopPropagation();
   }
@@ -1017,9 +1017,8 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
       }
       this.textarea_!.focus();
       this.addFocus();
-          this.svgRectTarget_?.classList.add('blocklyCommentTargetFocused');
-          this.svgHandleTarget_?.classList.add(
-          'blocklyCommentHandleTargetFocused');
+      this.svgRectTarget_?.classList.add('blocklyCommentTargetFocused');
+      this.svgHandleTarget_?.classList.add('blocklyCommentHandleTargetFocused');
     }, 0);
   }
 

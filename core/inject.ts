@@ -169,9 +169,10 @@ function createMainWorkspace(
   svg.appendChild(mainWorkspace.createDom('blocklyMainBackground'));
 
   // Set the theme name and renderer name onto the injection div.
-      mainWorkspace.getInjectionDiv().classList.add(
+  mainWorkspace.getInjectionDiv().classList.add(
       mainWorkspace.getRenderer().getClassName());
-      mainWorkspace.getInjectionDiv().classList.add(mainWorkspace.getTheme().getClassName());
+  mainWorkspace.getInjectionDiv().classList.add(
+      mainWorkspace.getTheme().getClassName());
 
   if (!wsOptions.hasCategories && wsOptions.languageTree) {
     // Add flyout as an <svg> that is a sibling of the workspace SVG.

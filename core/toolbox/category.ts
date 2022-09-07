@@ -218,11 +218,11 @@ export class ToolboxCategory extends ToolboxItem implements
    * @returns The div that holds the icon and the label.
    */
   protected createContainer_(): HTMLDivElement {
-    const container = (document.createElement('div'));
-    // AnyDuringMigration because:  Argument of type 'string | undefined' is not
-    // assignable to parameter of type 'string'.
-    dom.addClass(
-        container, (this.cssConfig_ as AnyDuringMigration)['container']);
+    const container = document.createElement('div');
+    const className = this.cssConfig_.container;
+    if (className) {
+      container.classList.add(className);
+    }
     return container;
   }
 
@@ -234,9 +234,10 @@ export class ToolboxCategory extends ToolboxItem implements
    */
   protected createRowContainer_(): HTMLDivElement {
     const rowDiv = (document.createElement('div'));
-    // AnyDuringMigration because:  Argument of type 'string | undefined' is not
-    // assignable to parameter of type 'string'.
-    dom.addClass(rowDiv, (this.cssConfig_ as AnyDuringMigration)['row']);
+    const className = this.cssConfig_.row;
+    if (className) {
+      rowDiv.classList.add(className);
+    }
     let nestedPadding = ToolboxCategory.nestedPadding * this.getLevel();
     // AnyDuringMigration because:  Type 'string' is not assignable to type
     // 'number'.
@@ -257,12 +258,11 @@ export class ToolboxCategory extends ToolboxItem implements
    * @returns The div that holds the icon and the label.
    */
   protected createRowContentsContainer_(): HTMLDivElement {
-    const contentsContainer = (document.createElement('div'));
-    // AnyDuringMigration because:  Argument of type 'string | undefined' is not
-    // assignable to parameter of type 'string'.
-    dom.addClass(
-        contentsContainer,
-        (this.cssConfig_ as AnyDuringMigration)['rowcontentcontainer']);
+    const contentsContainer = document.createElement('div');
+    const className = this.cssConfig_.rowcontentcontainer;
+    if (className) {
+      contentsContainer.classList.add(className);
+    }
     return contentsContainer;
   }
 
@@ -274,10 +274,10 @@ export class ToolboxCategory extends ToolboxItem implements
   protected createIconDom_(): Element {
     const toolboxIcon = document.createElement('span');
     if (!this.parentToolbox_.isHorizontal()) {
-      // AnyDuringMigration because:  Argument of type 'string | undefined' is
-      // not assignable to parameter of type 'string'.
-      dom.addClass(
-          toolboxIcon, (this.cssConfig_ as AnyDuringMigration)['icon']);
+      const className = this.cssConfig_.icon;
+      if (className) {
+        toolboxIcon.classList.add(className);
+      }
     }
 
     toolboxIcon.style.display = 'inline-block';
@@ -295,10 +295,10 @@ export class ToolboxCategory extends ToolboxItem implements
     const toolboxLabel = document.createElement('span');
     toolboxLabel.setAttribute('id', this.getId() + '.label');
     toolboxLabel.textContent = name;
-    // AnyDuringMigration because:  Argument of type 'string | undefined' is not
-    // assignable to parameter of type 'string'.
-    dom.addClass(
-        toolboxLabel, (this.cssConfig_ as AnyDuringMigration)['label']);
+    const className = this.cssConfig_.label;
+    if (className) {
+      toolboxLabel.classList.add(className);
+    }
     return toolboxLabel;
   }
 
@@ -428,9 +428,10 @@ export class ToolboxCategory extends ToolboxItem implements
     // assignable to parameter of type 'string'.
     dom.removeClasses(
         iconDiv, (this.cssConfig_ as AnyDuringMigration)['closedicon']);
-    // AnyDuringMigration because:  Argument of type 'string | undefined' is not
-    // assignable to parameter of type 'string'.
-    dom.addClass(iconDiv, (this.cssConfig_ as AnyDuringMigration)['openicon']);
+    const className = this.cssConfig_.openicon;
+    if (className) {
+      iconDiv.classList.add(className);
+    }
   }
 
   /**
@@ -446,10 +447,10 @@ export class ToolboxCategory extends ToolboxItem implements
     // assignable to parameter of type 'string'.
     dom.removeClasses(
         iconDiv, (this.cssConfig_ as AnyDuringMigration)['openicon']);
-    // AnyDuringMigration because:  Argument of type 'string | undefined' is not
-    // assignable to parameter of type 'string'.
-    dom.addClass(
-        iconDiv, (this.cssConfig_ as AnyDuringMigration)['closedicon']);
+    const className = this.cssConfig_.closedicon;
+    if (className) {
+      iconDiv.classList.add(className);
+    }
   }
 
   /**
@@ -531,7 +532,10 @@ export class ToolboxCategory extends ToolboxItem implements
       const defaultColour =
           this.parseColour_(ToolboxCategory.defaultBackgroundColour);
       this.rowDiv_!.style.backgroundColor = this.colour_ || defaultColour;
-      dom.addClass(this.rowDiv_!, this.cssConfig_['selected']!);
+      const className = this.cssConfig_.selected;
+      if (className && this.rowDiv_ {
+        this.rowDiv_.classList.add(className);
+      }
     } else {
       this.rowDiv_!.style.backgroundColor = '';
       dom.removeClass(this.rowDiv_!, this.cssConfig_['selected']!);

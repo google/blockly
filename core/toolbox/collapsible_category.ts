@@ -141,10 +141,10 @@ export class CollapsibleToolboxCategory extends ToolboxCategory implements
   override createIconDom_() {
     const toolboxIcon = document.createElement('span');
     if (!this.parentToolbox_.isHorizontal()) {
-      // AnyDuringMigration because:  Argument of type 'string | undefined' is
-      // not assignable to parameter of type 'string'.
-      dom.addClass(
-          toolboxIcon, (this.cssConfig_ as AnyDuringMigration)['icon']);
+      const className = this.cssConfig_.icon;
+      if (className) {
+        toolboxIcon.classList.add(className);
+      }
       toolboxIcon.style.visibility = 'visible';
     }
 
@@ -160,9 +160,11 @@ export class CollapsibleToolboxCategory extends ToolboxCategory implements
    */
   protected createSubCategoriesDom_(subcategories: IToolboxItem[]):
       HTMLDivElement {
-    const contentsContainer = (document.createElement('div'));
-    dom.addClass(
-        contentsContainer, (this.cssConfig_ as AnyDuringMigration)['contents']);
+    const contentsContainer = document.createElement('div');
+    const className = (this.cssConfig_ as AnyDuringMigration).contents;
+    if (className) {
+      contentsContainer.classList.add(className);
+    }
 
     for (let i = 0; i < subcategories.length; i++) {
       const newCategory = subcategories[i];

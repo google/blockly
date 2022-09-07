@@ -17,7 +17,6 @@ import type {IToolbox} from '../interfaces/i_toolbox.js';
 import type {IToolboxItem} from '../interfaces/i_toolbox_item.js';
 import * as registry from '../registry.js';
 import * as aria from '../utils/aria.js';
-import * as dom from '../utils/dom.js';
 import * as toolbox from '../utils/toolbox.js';
 
 import {ToolboxCategory} from './category.js';

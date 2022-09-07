@@ -533,7 +533,7 @@ export class ToolboxCategory extends ToolboxItem implements
           this.parseColour_(ToolboxCategory.defaultBackgroundColour);
       this.rowDiv_!.style.backgroundColor = this.colour_ || defaultColour;
       const className = this.cssConfig_.selected;
-      if (className && this.rowDiv_ {
+      if (className && this.rowDiv_) {
         this.rowDiv_.classList.add(className);
       }
     } else {

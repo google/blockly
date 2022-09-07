@@ -17,7 +17,6 @@ import './events/events_block_change.js';
 
 import {FieldConfig, Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
-import * as dom from './utils/dom.js';
 import type {Sentinel} from './utils/sentinel.js';
 
 

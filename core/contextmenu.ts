@@ -181,7 +181,7 @@ function createWidget_(menu: Menu) {
   }
   menu.render(div);
   const menuDom = menu.getElement();
-  dom.addClass((menuDom as Element), 'blocklyContextMenu');
+  menuDom?.classList.add('blocklyContextMenu');
   // Prevent system context menu when right-clicking a Blockly context menu.
   browserEvents.conditionalBind(
       (menuDom as EventTarget), 'contextmenu', null, haltPropagation);

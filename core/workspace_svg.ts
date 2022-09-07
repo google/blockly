@@ -2082,8 +2082,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @internal
    */
   beginCanvasTransition() {
-    dom.addClass((this.svgBlockCanvas_), 'blocklyCanvasTransitioning');
-    dom.addClass((this.svgBubbleCanvas_), 'blocklyCanvasTransitioning');
+    this.svgBlockCanvas_.classList.add('blocklyCanvasTransitioning');
+    this.svgBubbleCanvas_.classList.add('blocklyCanvasTransitioning');
   }
 
   /**

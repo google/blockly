@@ -237,7 +237,7 @@ export class Mutator extends Icon {
         // Close any mutator bubble.  Icon is not clickable.
         this.setVisible(false);
         if (this.iconGroup_) {
-          dom.addClass(this.iconGroup_ as Element, 'blocklyIconGroupReadonly');
+          this.iconGroup_.classList.add('blocklyIconGroupReadonly');
         }
       }
     }

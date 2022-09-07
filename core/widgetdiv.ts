@@ -93,8 +93,8 @@ export function show(newOwner: unknown, rtl: boolean, newDispose: () => void) {
   const mainWorkspace = common.getMainWorkspace() as WorkspaceSvg;
   rendererClassName = mainWorkspace.getRenderer().getClassName();
   themeClassName = mainWorkspace.getTheme().getClassName();
-  dom.addClass(div, rendererClassName);
-  dom.addClass(div, themeClassName);
+  div.classList.add(rendererClassName);
+  div.classList.add(themeClassName);
 }
 
 /**

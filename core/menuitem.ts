@@ -196,8 +196,8 @@ export class MenuItem {
       const name = 'blocklyMenuItemHighlight';
       const nameDep = 'goog-menuitem-highlight';
       if (highlight) {
-        dom.addClass(el, name);
-        dom.addClass(el, nameDep);
+        el.classList.add(name);
+        el.classList.add(nameDep);
       } else {
         dom.removeClass(el, name);
         dom.removeClass(el, nameDep);

@@ -241,7 +241,7 @@ export class FieldTextInput extends Field {
       this.resizeEditor_();
       const htmlInput = this.htmlInput_ as HTMLElement;
       if (!this.isTextValid_) {
-        dom.addClass(htmlInput, 'blocklyInvalidInput');
+        htmlInput.classList.add('blocklyInvalidInput');
         aria.setState(htmlInput, aria.State.INVALID, true);
       } else {
         dom.removeClass(htmlInput, 'blocklyInvalidInput');
@@ -328,7 +328,7 @@ export class FieldTextInput extends Field {
     eventUtils.setGroup(true);
     const div = WidgetDiv.getDiv();
 
-    dom.addClass(this.getClickTarget_(), 'editing');
+    this.getClickTarget_().classList.add('editing');
 
     const htmlInput = (document.createElement('input'));
     htmlInput.className = 'blocklyHtmlInput';

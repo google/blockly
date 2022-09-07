@@ -76,7 +76,7 @@ export class FieldLabel extends Field {
   override initView() {
     this.createTextElement_();
     if (this.class_) {
-      dom.addClass((this.textElement_), this.class_);
+      this.textElement_.classList.add(this.class_);
     }
   }
 
@@ -107,7 +107,7 @@ export class FieldLabel extends Field {
         dom.removeClass(this.textElement_, this.class_);
       }
       if (cssClass) {
-        dom.addClass(this.textElement_, cssClass);
+        this.textElement_.classList.add(cssClass);
       }
     }
     this.class_ = cssClass;

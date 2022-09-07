@@ -63,7 +63,7 @@ export class ThemeManager {
       if (prevTheme) {
         dom.removeClass(injectionDiv, prevTheme.getClassName());
       }
-      dom.addClass(injectionDiv, this.theme.getClassName());
+      injectionDiv.classList.add(this.theme.getClassName());
     }
 
     // Refresh all subscribed workspaces.

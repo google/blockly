@@ -477,7 +477,7 @@ export class FieldColour extends Field {
       dom.removeClass(highlighted, 'blocklyColourHighlighted');
     }
     // Highlight new item.
-    dom.addClass(cell, 'blocklyColourHighlighted');
+    cell.classList.add('blocklyColourHighlighted');
     // Set new highlighted index.
     this.highlightedIndex_ = index;
 

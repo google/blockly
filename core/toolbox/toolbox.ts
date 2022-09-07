@@ -198,8 +198,8 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
   protected createContainer_(): HTMLDivElement {
     const toolboxContainer = (document.createElement('div'));
     toolboxContainer.setAttribute('layout', this.isHorizontal() ? 'h' : 'v');
-    dom.addClass(toolboxContainer, 'blocklyToolboxDiv');
-    dom.addClass(toolboxContainer, 'blocklyNonSelectable');
+    toolboxContainer.classList.add('blocklyToolboxDiv');
+    toolboxContainer.classList.add('blocklyNonSelectable');
     toolboxContainer.setAttribute('dir', this.RTL ? 'RTL' : 'LTR');
     return toolboxContainer;
   }
@@ -211,7 +211,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
    */
   protected createContentsContainer_(): HTMLDivElement {
     const contentsContainer = (document.createElement('div'));
-    dom.addClass(contentsContainer, 'blocklyToolboxContents');
+    contentsContainer.classList.add('blocklyToolboxContents');
     if (this.isHorizontal()) {
       contentsContainer.style.flexDirection = 'row';
     }
@@ -453,7 +453,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
    * @internal
    */
   addStyle(style: string) {
-    dom.addClass(this.HtmlDiv as Element, style);
+    this.HtmlDiv?.classList.add(style);
   }
 
   /**

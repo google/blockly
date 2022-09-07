@@ -139,7 +139,7 @@ export function createDom() {
   // Handle focusin/out events to add a visual indicator when
   // a child is focused or blurred.
   div.addEventListener('focusin', function() {
-    dom.addClass(div, 'blocklyFocused');
+    div.classList.add('blocklyFocused');
   });
   div.addEventListener('focusout', function() {
     dom.removeClass(div, 'blocklyFocused');
@@ -311,8 +311,8 @@ export function show(
   const mainWorkspace = common.getMainWorkspace() as WorkspaceSvg;
   renderedClassName = mainWorkspace.getRenderer().getClassName();
   themeClassName = mainWorkspace.getTheme().getClassName();
-  dom.addClass(div, renderedClassName);
-  dom.addClass(div, themeClassName);
+  div.classList.add(renderedClassName);
+  div.classList.add(themeClassName);
 
   // When we change `translate` multiple times in close succession,
   // Chrome may choose to wait and apply them all at once.

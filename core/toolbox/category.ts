@@ -259,7 +259,8 @@ export class ToolboxCategory extends ToolboxItem implements
    */
   protected createRowContentsContainer_(): HTMLDivElement {
     const contentsContainer = document.createElement('div');
-    const className = (this.cssConfig_ as AnyDuringMigration)['rowcontentcontainer'];
+    const className =
+        (this.cssConfig_ as AnyDuringMigration)['rowcontentcontainer'];
     if (className) {
       contentsContainer.classList.add(className);
     }

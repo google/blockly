@@ -15,7 +15,6 @@ goog.declareModuleId('Blockly.ThemeManager');
 
 import type {Theme} from './theme.js';
 import * as arrayUtils from './utils/array.js';
-import * as dom from './utils/dom.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 

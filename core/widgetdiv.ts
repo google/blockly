@@ -15,7 +15,6 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.WidgetDiv');
 
 import * as common from './common.js';
-import * as dom from './utils/dom.js';
 import type {Rect} from './utils/rect.js';
 import type {Size} from './utils/size.js';
 import type {WorkspaceSvg} from './workspace_svg.js';

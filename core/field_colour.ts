@@ -23,7 +23,6 @@ import {FieldConfig, Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import * as aria from './utils/aria.js';
 import * as colour from './utils/colour.js';
-import * as dom from './utils/dom.js';
 import * as idGenerator from './utils/idgenerator.js';
 import {KeyCodes} from './utils/keycodes.js';
 import type {Sentinel} from './utils/sentinel.js';

@@ -13,7 +13,6 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.MenuItem');
 
 import * as aria from './utils/aria.js';
-import * as dom from './utils/dom.js';
 import * as idGenerator from './utils/idgenerator.js';
 
 

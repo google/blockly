@@ -4,5 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-declare const lua: any;
-export = lua;
+/**
+ * @fileoverview Type definitions for the Lua generator.
+ */
+
+export declare const luaGenerator: any;

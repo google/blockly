@@ -4,5 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-declare const python: any;
-export = python;
+/**
+ * @fileoverview Type definitions for the Python generator.
+ */
+
+export declare const pythonGenerator: any;

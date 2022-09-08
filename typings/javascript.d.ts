@@ -4,5 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-declare const javascript: any;
-export = javascript;
+/**
+ * @fileoverview Type definitions for the JavaScript generator.
+ */
+
+export declare const javascriptGenerator: any;

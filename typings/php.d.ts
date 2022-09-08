@@ -4,5 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-declare const php: any;
-export = php;
+/**
+ * @fileoverview Type definitions for the PHP generator.
+ */
+
+export declare const phpGenerator: any;

@@ -4,5 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-declare const dart: any;
-export = dart;
+/**
+ * @fileoverview Type definitions for the Dart generator.
+ */
+
+export declare const dartGenerator: any;

@@ -207,7 +207,7 @@ export class Menu {
     // a menu item's div.
     let currentElement: Element|null = elem;
     while (currentElement && currentElement !== menuElem) {
-      if (dom.hasClass(currentElement, 'blocklyMenuItem')) {
+      if (currentElement.classList.contains('blocklyMenuItem')) {
         // Having found a menu item's div, locate that menu item in this menu.
         for (let i = 0, menuItem; menuItem = this.menuItems_[i]; i++) {
           if (menuItem.getElement() === currentElement) {

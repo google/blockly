@@ -1036,8 +1036,9 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
       this.textarea_!.blur();
       this.removeFocus();
-          this.svgRectTarget_?.classList.remove('blocklyCommentTargetFocused');
-          this.svgHandleTarget_?.classList.remove('blocklyCommentHandleTargetFocused');
+      this.svgRectTarget_?.classList.remove('blocklyCommentTargetFocused');
+      this.svgHandleTarget_?.classList.remove(
+          'blocklyCommentHandleTargetFocused');
     }, 0);
   }
 

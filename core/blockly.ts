@@ -563,6 +563,7 @@ export const PROCEDURE_CATEGORY_NAME: string = Procedures.CATEGORY_NAME;
 /**
  * Sets the locale (i.e. the localized messages/block-text/etc) to the given
  * locale.
+ *
  * @param locale An object defining the messages for the given language.
  */
 export const setLocale = function(locale: {[key: string]: string}) {

@@ -255,7 +255,7 @@ class Flyout extends DeleteArea {
      * @type {number}
      * @const
      */
-    this.START_MARGIN = 52;
+    this.START_MARGIN = 60;
 
     /**
      * Gap between items in horizontal flyouts. Can be overridden with the "sep"

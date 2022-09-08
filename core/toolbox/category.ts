@@ -219,7 +219,7 @@ export class ToolboxCategory extends ToolboxItem implements
    */
   protected createContainer_(): HTMLDivElement {
     const container = document.createElement('div');
-    const className = this.cssConfig_.container;
+    const className = (this.cssConfig_ as AnyDuringMigration)['container'];
     if (className) {
       container.classList.add(className);
     }
@@ -234,7 +234,7 @@ export class ToolboxCategory extends ToolboxItem implements
    */
   protected createRowContainer_(): HTMLDivElement {
     const rowDiv = (document.createElement('div'));
-    const className = this.cssConfig_.row;
+    const className = (this.cssConfig_ as AnyDuringMigration)['row'];
     if (className) {
       rowDiv.classList.add(className);
     }
@@ -259,7 +259,7 @@ export class ToolboxCategory extends ToolboxItem implements
    */
   protected createRowContentsContainer_(): HTMLDivElement {
     const contentsContainer = document.createElement('div');
-    const className = this.cssConfig_.rowcontentcontainer;
+    const className = (this.cssConfig_ as AnyDuringMigration)['rowcontentcontainer'];
     if (className) {
       contentsContainer.classList.add(className);
     }
@@ -274,7 +274,7 @@ export class ToolboxCategory extends ToolboxItem implements
   protected createIconDom_(): Element {
     const toolboxIcon = document.createElement('span');
     if (!this.parentToolbox_.isHorizontal()) {
-      const className = this.cssConfig_.icon;
+      const className = (this.cssConfig_ as AnyDuringMigration)['icon'];
       if (className) {
         toolboxIcon.classList.add(className);
       }
@@ -295,7 +295,7 @@ export class ToolboxCategory extends ToolboxItem implements
     const toolboxLabel = document.createElement('span');
     toolboxLabel.setAttribute('id', this.getId() + '.label');
     toolboxLabel.textContent = name;
-    const className = this.cssConfig_.label;
+    const className = (this.cssConfig_ as AnyDuringMigration)['label'];
     if (className) {
       toolboxLabel.classList.add(className);
     }
@@ -428,7 +428,7 @@ export class ToolboxCategory extends ToolboxItem implements
     // assignable to parameter of type 'string'.
     dom.removeClasses(
         iconDiv, (this.cssConfig_ as AnyDuringMigration)['closedicon']);
-    const className = this.cssConfig_.openicon;
+    const className = (this.cssConfig_ as AnyDuringMigration)['openicon'];
     if (className) {
       iconDiv.classList.add(className);
     }
@@ -447,7 +447,7 @@ export class ToolboxCategory extends ToolboxItem implements
     // assignable to parameter of type 'string'.
     dom.removeClasses(
         iconDiv, (this.cssConfig_ as AnyDuringMigration)['openicon']);
-    const className = this.cssConfig_.closedicon;
+    const className = (this.cssConfig_ as AnyDuringMigration)['closedicon'];
     if (className) {
       iconDiv.classList.add(className);
     }
@@ -532,7 +532,7 @@ export class ToolboxCategory extends ToolboxItem implements
       const defaultColour =
           this.parseColour_(ToolboxCategory.defaultBackgroundColour);
       this.rowDiv_!.style.backgroundColor = this.colour_ || defaultColour;
-      const className = this.cssConfig_.selected;
+      const className = (this.cssConfig_ as AnyDuringMigration)['selected'];
       if (className && this.rowDiv_) {
         this.rowDiv_.classList.add(className);
       }

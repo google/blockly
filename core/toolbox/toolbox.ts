@@ -453,7 +453,9 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
    * @internal
    */
   addStyle(style: string) {
-    this.HtmlDiv?.classList.add(style);
+    if (style) {
+      this.HtmlDiv?.classList.add(style);
+    }
   }
 
   /**

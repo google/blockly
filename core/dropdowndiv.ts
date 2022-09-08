@@ -311,8 +311,12 @@ export function show(
   const mainWorkspace = common.getMainWorkspace() as WorkspaceSvg;
   renderedClassName = mainWorkspace.getRenderer().getClassName();
   themeClassName = mainWorkspace.getTheme().getClassName();
-  div.classList.add(renderedClassName);
-  div.classList.add(themeClassName);
+  if (renderedClassName) {
+    div.classList.add(renderedClassName);
+  }
+  if (themeClassName) {
+    div.classList.add(themeClassName);
+  }
 
   // When we change `translate` multiple times in close succession,
   // Chrome may choose to wait and apply them all at once.

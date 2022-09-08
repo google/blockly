@@ -241,7 +241,7 @@ export class FieldMultilineInput extends FieldTextInput {
       if (this.isOverflowedY_) {
         htmlInput.classList.add('blocklyHtmlTextAreaInputOverflowedY');
       } else {
-        dom.removeClass(htmlInput, 'blocklyHtmlTextAreaInputOverflowedY');
+        htmlInput.classList.remove('blocklyHtmlTextAreaInputOverflowedY');
       }
     }
 
@@ -261,7 +261,7 @@ export class FieldMultilineInput extends FieldTextInput {
         htmlInput.classList.add('blocklyInvalidInput');
         aria.setState(htmlInput, aria.State.INVALID, true);
       } else {
-        dom.removeClass(htmlInput, 'blocklyInvalidInput');
+        htmlInput.classList.remove('blocklyInvalidInput');
         aria.setState(htmlInput, aria.State.INVALID, false);
       }
     }

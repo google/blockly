@@ -465,7 +465,9 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
    * @internal
    */
   removeStyle(style: string) {
-    dom.removeClass(this.HtmlDiv as Element, style);
+    if (style) {
+      this.HtmlDiv?.classList.remove(style);
+    }
   }
 
   /**

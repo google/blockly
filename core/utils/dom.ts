@@ -115,7 +115,7 @@ export function addClass(element: Element, className: string): boolean {
 export function removeClasses(element: Element, classNames: string) {
   const classList = classNames.split(' ');
   for (let i = 0; i < classList.length; i++) {
-    removeClass(element, classList[i]);
+    element.classList.remove(classList[i]);
   }
 }
 

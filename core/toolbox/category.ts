@@ -529,17 +529,22 @@ export class ToolboxCategory extends ToolboxItem implements
    * @param isSelected True if this category is selected, false otherwise.
    */
   setSelected(isSelected: boolean) {
+    if (!this.rowDiv_) {
+      return;
+    }
+    const className = (this.cssConfig_ as AnyDuringMigration)['selected'];
     if (isSelected) {
       const defaultColour =
           this.parseColour_(ToolboxCategory.defaultBackgroundColour);
-      this.rowDiv_!.style.backgroundColor = this.colour_ || defaultColour;
-      const className = (this.cssConfig_ as AnyDuringMigration)['selected'];
-      if (className && this.rowDiv_) {
+      this.rowDiv_.style.backgroundColor = this.colour_ || defaultColour;
+      if (className) {
         this.rowDiv_.classList.add(className);
       }
     } else {
-      this.rowDiv_!.style.backgroundColor = '';
-      dom.removeClass(this.rowDiv_!, this.cssConfig_['selected']!);
+      this.rowDiv_.style.backgroundColor = '';
+      if (className) {
+        this.rowDiv_.classList.remove(className);
+      }
     }
     aria.setState(this.htmlDiv_ as Element, aria.State.SELECTED, isSelected);
   }

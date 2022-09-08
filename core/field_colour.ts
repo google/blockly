@@ -439,7 +439,7 @@ export class FieldColour extends Field {
     (this.picker_ as AnyDuringMigration)!.blur();
     const highlighted = this.getHighlighted_();
     if (highlighted) {
-      dom.removeClass(highlighted, 'blocklyColourHighlighted');
+      highlighted.classList.remove('blocklyColourHighlighted');
     }
   }
 
@@ -474,7 +474,7 @@ export class FieldColour extends Field {
     // Unhighlight the current item.
     const highlighted = this.getHighlighted_();
     if (highlighted) {
-      dom.removeClass(highlighted, 'blocklyColourHighlighted');
+      highlighted.classList.remove('blocklyColourHighlighted');
     }
     // Highlight new item.
     cell.classList.add('blocklyColourHighlighted');

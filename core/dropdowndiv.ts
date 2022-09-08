@@ -142,7 +142,7 @@ export function createDom() {
     div.classList.add('blocklyFocused');
   });
   div.addEventListener('focusout', function() {
-    dom.removeClass(div, 'blocklyFocused');
+    div.classList.remove('blocklyFocused');
   });
 }
 
@@ -596,11 +596,11 @@ export function hideWithoutAnimation() {
   owner = null;
 
   if (renderedClassName) {
-    dom.removeClass(div, renderedClassName);
+    div.classList.remove(renderedClassName);
     renderedClassName = '';
   }
   if (themeClassName) {
-    dom.removeClass(div, themeClassName);
+    div.classList.remove(themeClassName);
     themeClassName = '';
   }
   (common.getMainWorkspace() as WorkspaceSvg).markFocused();

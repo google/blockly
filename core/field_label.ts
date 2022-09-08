@@ -101,10 +101,8 @@ export class FieldLabel extends Field {
    */
   setClass(cssClass: string|null) {
     if (this.textElement_) {
-      // This check isn't necessary, but it's faster than letting removeClass
-      // figure it out.
       if (this.class_) {
-        dom.removeClass(this.textElement_, this.class_);
+        this.textElement_.classList.remove(this.class_);
       }
       if (cssClass) {
         this.textElement_.classList.add(cssClass);

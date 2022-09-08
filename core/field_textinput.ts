@@ -244,7 +244,7 @@ export class FieldTextInput extends Field {
         htmlInput.classList.add('blocklyInvalidInput');
         aria.setState(htmlInput, aria.State.INVALID, true);
       } else {
-        dom.removeClass(htmlInput, 'blocklyInvalidInput');
+        htmlInput.classList.remove('blocklyInvalidInput');
         aria.setState(htmlInput, aria.State.INVALID, false);
       }
     }
@@ -397,7 +397,7 @@ export class FieldTextInput extends Field {
     style.boxShadow = '';
     this.htmlInput_ = null;
 
-    dom.removeClass(this.getClickTarget_(), 'editing');
+    this.getClickTarget_().classList.remove('editing');
   }
 
   /**

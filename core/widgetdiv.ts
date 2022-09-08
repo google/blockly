@@ -122,11 +122,11 @@ export function hide() {
   div.textContent = '';
 
   if (rendererClassName) {
-    dom.removeClass(div, rendererClassName);
+    div.classList.remove(rendererClassName);
     rendererClassName = '';
   }
   if (themeClassName) {
-    dom.removeClass(div, themeClassName);
+    div.classList.remove(themeClassName);
     themeClassName = '';
   }
   (common.getMainWorkspace() as WorkspaceSvg).markFocused();

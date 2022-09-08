@@ -61,7 +61,10 @@ export class ThemeManager {
     const injectionDiv = this.workspace.getInjectionDiv();
     if (injectionDiv) {
       if (prevTheme) {
-        dom.removeClass(injectionDiv, prevTheme.getClassName());
+        const oldClassName = prevTheme.getClassName();
+        if (oldClassName) {
+          injectionDiv.classList.remove(oldClassName);
+        }
       }
       const newClassName = this.theme.getClassName();
       if (newClassName) {

@@ -61,8 +61,8 @@ export class TouchGesture extends Gesture {
 
   /** Boolean for whether or not the workspace supports pinch-zoom. */
   private isPinchZoomEnabled_: boolean|null = null;
-  override onMoveWrapper_: AnyDuringMigration;
-  override onUpWrapper_: AnyDuringMigration;
+  override onMoveWrapper_: browserEvents.Data|null = null;
+  override onUpWrapper_: browserEvents.Data|null = null;
 
   /**
    * Start a gesture: update the workspace to indicate that a gesture is in
@@ -72,6 +72,11 @@ export class TouchGesture extends Gesture {
    * @internal
    */
   override doStart(e: MouseEvent) {
+    if (!this.startWorkspace_) {
+      throw new Error(
+          'Cannot start the touch event becauase the start ' +
+          'workspace is undefined');
+    }
     this.isPinchZoomEnabled_ = this.startWorkspace_.options.zoomOptions &&
         this.startWorkspace_.options.zoomOptions.pinch;
     super.doStart(e);
@@ -254,6 +259,11 @@ export class TouchGesture extends Gesture {
       const gestureScale = scale - this.previousScale_;
       const delta = gestureScale > 0 ? gestureScale * ZOOM_IN_MULTIPLIER :
                                        gestureScale * ZOOM_OUT_MULTIPLIER;
+      if (!this.startWorkspace_) {
+        throw new Error(
+            'Cannot handle a pinch because the start workspace ' +
+            'is undefined');
+      }
       const workspace = this.startWorkspace_;
       const position = browserEvents.mouseToSvg(
           e, workspace.getParentSvg(), workspace.getInverseScreenCTM());

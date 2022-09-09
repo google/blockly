@@ -212,6 +212,10 @@ export class MarkerSvg {
     }
   }
 
+  /**************************
+   * Display
+   **************************/
+
   /**
    * Show the marker as a combination of the previous connection and block,
    * the output connection and block, or just the block.
@@ -379,6 +383,10 @@ export class MarkerSvg {
       this.currentMarkerSvg.style.display = '';
     }
   }
+
+  /**************************
+   * Position
+   **************************/
 
   /**
    * Position the marker for a block.

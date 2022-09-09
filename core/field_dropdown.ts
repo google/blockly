@@ -125,6 +125,8 @@ export class FieldDropdown extends Field {
 
     if (Array.isArray(menuGenerator)) {
       validateOptions(menuGenerator);
+      // Deep copy the option structure so it doesn't change.
+      menuGenerator = JSON.parse(JSON.stringify(menuGenerator));
     }
 
     /**

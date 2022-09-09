@@ -53,7 +53,7 @@ export class RenderedConnection extends Connection {
   private readonly dbOpposite_: ConnectionDB;
   private readonly offsetInBlock_: Coordinate;
   private trackedState_: TrackedState;
-  private highlightPath: SVGPathElement | null = null;
+  private highlightPath: SVGPathElement|null = null;
 
   /** Connection this connection connects to.  Null if not connected. */
   override targetConnection: RenderedConnection|null = null;
@@ -304,13 +304,13 @@ export class RenderedConnection extends Connection {
     const x = this.x - xy.x;
     const y = this.y - xy.y;
     this.highlightPath = dom.createSvgElement(
-      Svg.PATH, {
-        'class': 'blocklyHighlightedConnectionPath',
-        'd': steps,
-        'transform': 'translate(' + x + ',' + y + ')' +
-            (this.sourceBlock_.RTL ? ' scale(-1 1)' : ''),
-      },
-      this.sourceBlock_.getSvgRoot());
+        Svg.PATH, {
+          'class': 'blocklyHighlightedConnectionPath',
+          'd': steps,
+          'transform': 'translate(' + x + ',' + y + ')' +
+              (this.sourceBlock_.RTL ? ' scale(-1 1)' : ''),
+        },
+        this.sourceBlock_.getSvgRoot());
   }
 
   /** Remove the highlighting around this connection. */

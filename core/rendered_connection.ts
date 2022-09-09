@@ -53,6 +53,7 @@ export class RenderedConnection extends Connection {
   private readonly dbOpposite_: ConnectionDB;
   private readonly offsetInBlock_: Coordinate;
   private trackedState_: TrackedState;
+  private highlightPath: SVGPathElement | null = null;
 
   /** Connection this connection connects to.  Null if not connected. */
   override targetConnection: RenderedConnection|null = null;
@@ -302,26 +303,22 @@ export class RenderedConnection extends Connection {
     const xy = this.sourceBlock_.getRelativeToSurfaceXY();
     const x = this.x - xy.x;
     const y = this.y - xy.y;
-    // AnyDuringMigration because:  Property 'highlightedPath_' does not exist
-    // on type 'typeof Connection'.
-    (Connection as AnyDuringMigration).highlightedPath_ = dom.createSvgElement(
-        Svg.PATH, {
-          'class': 'blocklyHighlightedConnectionPath',
-          'd': steps,
-          'transform': 'translate(' + x + ',' + y + ')' +
-              (this.sourceBlock_.RTL ? ' scale(-1 1)' : ''),
-        },
-        this.sourceBlock_.getSvgRoot());
+    this.highlightPath = dom.createSvgElement(
+      Svg.PATH, {
+        'class': 'blocklyHighlightedConnectionPath',
+        'd': steps,
+        'transform': 'translate(' + x + ',' + y + ')' +
+            (this.sourceBlock_.RTL ? ' scale(-1 1)' : ''),
+      },
+      this.sourceBlock_.getSvgRoot());
   }
 
   /** Remove the highlighting around this connection. */
   unhighlight() {
-    // AnyDuringMigration because:  Property 'highlightedPath_' does not exist
-    // on type 'typeof Connection'.
-    dom.removeNode((Connection as AnyDuringMigration).highlightedPath_);
-    // AnyDuringMigration because:  Property 'highlightedPath_' does not exist
-    // on type 'typeof Connection'.
-    delete (Connection as AnyDuringMigration).highlightedPath_;
+    if (this.highlightPath) {
+      dom.removeNode(this.highlightPath);
+      this.highlightPath = null;
+    }
   }
 
   /**

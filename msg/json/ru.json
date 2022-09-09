@@ -380,5 +380,6 @@
 	"COLLAPSED_WARNINGS_WARNING": "Свёрнутые блоки содержат предупреждения.",
 	"DIALOG_OK": "OK",
 	"DIALOG_CANCEL": "Отмена",
-	"SEARCH": "Поиск"
+	"SEARCH": "Поиск",
+	"NEW_TAB": "Новая вкладка"
 }

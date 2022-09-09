@@ -29,6 +29,7 @@ const utils = goog.require("Blockly.utils");
 const utilsDom = goog.require("Blockly.utils.dom");
 const browserEvents = goog.require("Blockly.browserEvents");
 const eventUtils = goog.require("Blockly.Events.utils");
+const {Msg} = goog.require('Blockly.Msg');
 
 /**
  * Class for a module bar.
@@ -183,8 +184,7 @@ ModuleBar.prototype.render = function() {
   newLink.setAttribute("role", "create-module-control");
 
   const createIcon = document.createElement("span");
-  createIcon.className =
-    "blocklyModuleBarTabIcon blocklyModuleBarTabCreateIcon";
+  createIcon.innerHTML = Msg['NEW_TAB'];
   createIcon.setAttribute("role", "create-module-control");
 
   newLink.appendChild(createIcon);
@@ -639,7 +639,7 @@ Css.register(
     border-color: #ddd;
   }
 
-  .blocklyModuleBarContainer:not(.cursorNotAllowed) > .blocklyModuleBarTab:not(.blocklyModuleBarTabDropZone) .blocklyModuleBarLink:not(.blocklyModuleBarLinkActive):hover {
+  .blocklyModuleBarContainer:not(.cursorNotAllowed) > .blocklyModuleBarTab:not(.blocklyModuleBarTabDropZone) .blocklyModuleBarTab:not(.blocklyModuleBarTabCreate) .blocklyModuleBarLink:not(.blocklyModuleBarLinkActive):hover {
     background-color: #e4e4e4;
     border-color: #e4e4e4;
   }
@@ -648,10 +648,16 @@ Css.register(
     background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='iso-8859-1'%3F%3E%3C!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'%3E%3Csvg version='1.1' id='Capa_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='255px' height='255px' viewBox='0 0 255 255' style='enable-background:new 0 0 255 255;' xml:space='preserve'%3E%3Cg%3E%3Cg id='arrow-drop-down'%3E%3Cpolygon points='0,63.75 127.5,191.25 255,63.75 '/%3E%3C/g%3E%3C/g%3E%3C/svg%3E%0A");
   }
 
-  .blocklyModuleBarTabCreateIcon {
-    background: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE2LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCINCgkgd2lkdGg9IjM1N3B4IiBoZWlnaHQ9IjM1N3B4IiB2aWV3Qm94PSIwIDAgMzU3IDM1NyIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMzU3IDM1NzsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPGc+DQoJPGcgaWQ9ImFkZCI+DQoJCTxwYXRoIGQ9Ik0zNTcsMjA0SDIwNHYxNTNoLTUxVjIwNEgwdi01MWgxNTNWMGg1MXYxNTNoMTUzVjIwNHoiLz4NCgk8L2c+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8L3N2Zz4NCg==');
-    width: 15px;
-    height: 15px;
+  .blocklyModuleBarTabCreate {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    background-color: #ddd;
+    opacity: 0.65;
+  }
+   
+  .blocklyModuleBarTabCreate:hover {
+    opacity: 1;
+    cursor: pointer;
   }
 
   .blocklyModuleBarTabIcon {

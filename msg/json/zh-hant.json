@@ -369,5 +369,7 @@
 	"WORKSPACE_ARIA_LABEL": "Blockly工作區",
 	"COLLAPSED_WARNINGS_WARNING": "收合含有警告的區塊。",
 	"DIALOG_OK": "確定",
-	"DIALOG_CANCEL": "取消"
+	"DIALOG_CANCEL": "取消",
+	"SEARCH": "搜索",
+	"NEW_TAB": "新标签"
 }

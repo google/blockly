@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Varwin <devops@varwin.com>",
-		"lastupdated": "2022-07-21 14:23:53.892013",
+		"lastupdated": "2022-09-09 13:39:54.541557",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -415,5 +415,6 @@
 	"COLLAPSED_WARNINGS_WARNING": "Collapsed blocks contain warnings.",
 	"DIALOG_OK": "OK",
 	"DIALOG_CANCEL": "Cancel",
-	"SEARCH": "Search"
+	"SEARCH": "Search",
+	"NEW_TAB": "New tab"
 }

@@ -243,11 +243,6 @@ export class Gesture {
         !this.flyout_?.isBlockCreatable(this.targetBlock_)) {
       return false;
     }
-    if (!this.flyout_) {
-      throw new Error(
-          'Cannot update dragging from the flyout because the ' +
-          'flyout is undefined');
-    }
     if (!this.flyout_.targetWorkspace) {
       throw new Error(`Cannot update dragging from the flyout because the ' +
           'flyout's target workspace is undefined`);
@@ -289,7 +284,10 @@ export class Gesture {
   }
 
   /**
-   * Update this gesture to record whether a block is being dragged.
+   * Check whether to start a block drag. If a block should be dragged, either
+   * from the flyout or in the workspace, create the necessary BlockDragger and
+   * start the drag.
+   *
    * This function should be called on a mouse/touch move event the first time
    * the drag radius is exceeded.  It should be called no more than once per
    * gesture. If a block should be dragged, either from the flyout or in the
@@ -315,7 +313,9 @@ export class Gesture {
   }
 
   /**
-   * Update this gesture to record whether a workspace is being dragged.
+   * Check whether to start a workspace drag. If a workspace is being dragged,
+   * create the necessary WorkspaceDragger and start the drag.
+   *
    * This function should be called on a mouse/touch move event the first time
    * the drag radius is exceeded.  It should be called no more than once per
    * gesture. If a workspace is being dragged this function creates the
@@ -408,15 +408,16 @@ export class Gesture {
       this.cancel();
       return;
     }
-    this.hasStarted_ = true;
-
-    blockAnimations.disconnectUiStop();
 
     if (!this.startWorkspace_) {
       throw new Error(
           'Cannot start the gesture because the start ' +
           'workspace is undefined');
     }
+
+    this.hasStarted_ = true;
+
+    blockAnimations.disconnectUiStop();
 
     this.startWorkspace_.updateScreenCalculationsIfScrolled();
     if (this.startWorkspace_.isMutator) {

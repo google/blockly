@@ -242,3 +242,17 @@ Blockly.Arduino['leaphy_display_display'] = function(block) {
     var code = 'display.display();\n';
     return code;
 };
+
+Blockly.Arduino['leaphy_update_lsm9ds1'] = function(block) {
+    return "  lsm.read();  /* ask it to read in the data */  \n \n  /* Get a new sensor event */  \n  sensors_event_t a, m, g, temp; \n \n  lsm.getEvent(&a, &m, &g, &temp);"
+}
+
+Blockly.Arduino['leaphy_use_lsm9ds1'] = function(block) {
+    var sensor = block.getFieldValue('SENSOR');
+    var axis = block.getFieldValue('AXIS');
+    Blockly.Arduino.addInclude('adafruit_lsm9ds1', '#include <Adafruit_LSM9DS1.h>');
+    Blockly.Arduino.addDeclaration('lsm9ds1_declaration', 'Adafruit_LSM9DS1 lsm = Adafruit_LSM9DS1();\n');
+    Blockly.Arduino.addFunction('lsm9ds1_setttings', 'void setupSettings()\n{\n    lsm.setupAccel(lsm.LSM9DS1_ACCELRANGE_2G);\n    lsm.setupMag(lsm.LSM9DS1_MAGGAIN_4GAUSS);\n    lsm.setupGyro(lsm.LSM9DS1_GYROSCALE_245DPS);\n}\n');
+    Blockly.Arduino.addSetup("lsm9ds1_setup', 'void setup()  \n{ \n  Serial.begin(115200); \n \n  while (!Serial) { \n    delay(1); // will pause Zero, Leonardo, etc until serial console opens \n  } \n   \n  Serial.println('LSM9DS1 data read demo'); \n   \n  // Try to initialise and warn if we couldn't detect the chip \n  if (!lsm.begin()) \n  { \n    Serial.println('Oops ... unable to initialize the LSM9DS1. Check your wiring!'); \n    while (1); \n  } \n  Serial.println('Found LSM9DS1 9DOF'); \n \n  // helper to just set the default scaling we want, see above! \n  setupSensor(); \n}");
+    return [sensor + axis, Blockly.Arduino.ORDER_ATOMIC]
+}

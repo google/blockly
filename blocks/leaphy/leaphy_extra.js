@@ -383,5 +383,35 @@ Blockly.defineBlocksWithJsonArray([
     "extensions": "updateDisplay",
     "tooltip": "",
     "helpUrl": ""
+  },
+  {
+    "type": "leaphy_use_lsm9ds1",
+    "message0": "%1 %2",
+    "args0": [
+      {
+        "type": "field_dropdown",
+        "name": "SENSOR",
+        "options": [["Gyro", "g.gyro"], ["Compass", "m.magnetic"], ["Accelerator", "a.acceleration"]]
+      },
+      {
+        "type": "field_dropdown",
+        "name": "AXIS",
+        "options": [["X-axis", ".x"], ["Y-axis", ".y"], ["Z-axis", ".z"]]
+      }
+    ],
+    "inputsInline": true,
+    "output": "Number",
+    "style": "leaphy_blocks",
+    "tooltip": "",
+    "helpUrl": ""
+  },
+  {
+    "type": "leaphy_update_lsm9ds1",
+    "message0": "Update Lsm9ds1",
+    "previousStatement": null,
+    "nextStatement": null,
+    "style": "leaphy_blocks",
+    "tooltip": "",
+    "helpUrl": ""
   }
 ]);

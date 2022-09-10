@@ -24,47 +24,60 @@ goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.FieldLabel');
 goog.require('Blockly.Mutator');
 
-var stomachSensorTypes = [["%{BKY_LEAPHY_STOMACH_SENSOR_TYPE1}", "1"], ["%{BKY_LEAPHY_STOMACH_SENSOR_TYPE2}", "2"]];
+var stomachSensorOptions = [["%{BKY_LEAPHY_STOMACH_SENSOR_TYPE1}", "1"], ["%{BKY_LEAPHY_STOMACH_SENSOR_TYPE2}", "2"]]
 
-Blockly.Blocks['leaphy_flitz_read_stomach_sensor'] = {
-  init: function(){
-    this.appendDummyInput()
-        .appendField(Blockly.Msg.LEAPHY_READ_STOMACH)
-        .appendField(new Blockly.FieldDropdown(stomachSensorTypes), "SENSOR_TYPE");
-    this.setOutput(true, 'Number');
-    this.setStyle('leaphy_blocks');
+Blockly.defineBlocksWithJsonArray([
+  {
+    "type": "leaphy_flitz_read_stomach_sensor",
+    "message0": "%%{BKY_LEAPHY_READ_STOMACH} %1",
+    "args0": [
+      {
+        "type": "field_dropdown",
+        "name": "SENSOR_TYPE",
+        "options": stomachSensorOptions
+      }
+    ],
+    "output": "Number",
+    "style": "leaphy_blocks",
+    "tooltip": "",
+    "helpUrl": ""
+  },
+  {
+    "type": "leaphy_flitz_read_hand_sensor",
+    "message0": "%%{BKY_LEAPHY_READ_HAND}",
+    "output": "Number",
+    "style": "leaphy_blocks",
+    "tooltip": "",
+    "helpUrl": ""
+  },
+  {
+    "type": "leaphy_flitz_led",
+    "message0": "%%{BKY_LEAPHY_FLITZ_LED} %1 %%{BKY_LEAPHY_FLITZ_LED_R} %2 %%{BKY_LEAPHY_FLITZ_LED_G} %3 %%{BKY_LEAPHY_FLITZ_LED_B} %4",
+    "args0": [
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "input_value",
+        "name": "FLITZ_LED_R",
+        "check": "Number"
+      },
+      {
+        "type": "input_value",
+        "name": "FLITZ_LED_G",
+        "check": "Number"
+      },
+      {
+        "type": "input_value",
+        "name": "FLITZ_LED_B",
+        "check": "Number"
+      }
+    ],
+    "inputsInline": true,
+    "previousStatement": null,
+    "nextStatement": null,
+    "style": "leaphy_blocks",
+    "tooltip": "",
+    "helpUrl": ""
   }
-};
-
-Blockly.Blocks['leaphy_flitz_read_hand_sensor'] = {
-  init: function(){
-    this.appendDummyInput()
-        .appendField(Blockly.Msg.LEAPHY_READ_HAND);
-    this.setOutput(true, 'Number');
-    this.setStyle('leaphy_blocks');
-  }
-};
-
-Blockly.Blocks['leaphy_flitz_led'] = {
-  init: function(){
-    this.appendDummyInput()
-        .appendField(Blockly.Msg.LEAPHY_FLITZ_LED);
-    this.appendValueInput("FLITZ_LED_R")
-        .appendField(Blockly.Msg.LEAPHY_FLITZ_LED_R)
-        .setCheck('Number');
-    this.appendValueInput("FLITZ_LED_G")
-        .appendField(Blockly.Msg.LEAPHY_FLITZ_LED_G)
-        .setCheck('Number');
-    this.appendValueInput("FLITZ_LED_B")
-        .appendField(Blockly.Msg.LEAPHY_FLITZ_LED_B)
-        .setCheck('Number');
-    this.setInputsInline(true);
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
-    this.setStyle('leaphy_blocks');
-  }
-};
-
-// Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
-
-// ]);  // END JSON EXTRACT (Do not delete this comment.)
+]);

@@ -94,6 +94,16 @@ export type DynamicShape = {
 export type Shape = BaseShape|DynamicShape;
 
 /**
+ * Returns whether the shape is dynamic or not.
+ *
+ * @param shape The shape to check for dynamic-ness.
+ * @returns Whether the shape is a dynamic shape or not.
+ */
+export function isDynamicShape(shape: Shape): shape is DynamicShape {
+  return (shape as DynamicShape).isDynamic;
+}
+
+/**
  * An object that provides constants for rendering blocks.
  *
  * @alias Blockly.blockRendering.ConstantProvider
@@ -185,7 +195,7 @@ export class ConstantProvider {
 
   EXTERNAL_VALUE_INPUT_PADDING = 2;
   EMPTY_STATEMENT_INPUT_HEIGHT: number;
-  START_POINT: AnyDuringMigration;
+  START_POINT: string;
 
   /** Height of SVG path for jagged teeth at the end of collapsed blocks. */
   JAGGED_TEETH_HEIGHT = 12;
@@ -289,9 +299,7 @@ export class ConstantProvider {
   embossFilterId = '';
 
   /** The <filter> element to use for highlighting, or null if not set. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'SVGElement'.
-  private embossFilter_: SVGElement = null as AnyDuringMigration;
+  private embossFilter_: SVGElement|null = null;
 
   /**
    * The ID of the disabled pattern, or the empty string if no pattern is set.
@@ -303,9 +311,7 @@ export class ConstantProvider {
   /**
    * The <pattern> element to use for disabled blocks, or null if not set.
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'SVGElement'.
-  private disabledPattern_: SVGElement = null as AnyDuringMigration;
+  private disabledPattern_: SVGElement|null = null;
 
   /**
    * The ID of the debug filter, or the empty string if no pattern is set.
@@ -315,14 +321,10 @@ export class ConstantProvider {
   /**
    * The <filter> element to use for a debug highlight, or null if not set.
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'SVGElement'.
-  private debugFilter_: SVGElement = null as AnyDuringMigration;
+  private debugFilter_: SVGElement|null = null;
 
   /** The <style> element to use for injecting renderer specific CSS. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'HTMLStyleElement'.
-  private cssNode_: HTMLStyleElement = null as AnyDuringMigration;
+  private cssNode_: HTMLStyleElement|null = null;
 
   /**
    * Cursor colour.
@@ -718,9 +720,7 @@ export class ConstantProvider {
     if (this.debugFilter_) {
       dom.removeNode(this.debugFilter_);
     }
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'HTMLStyleElement'.
-    this.cssNode_ = null as AnyDuringMigration;
+    this.cssNode_ = null;
   }
 
   /**
@@ -958,11 +958,9 @@ export class ConstantProvider {
                          k1="0" k2="1" k3="1" k4="0" />
           </filter>
         */
-    // AnyDuringMigration because:  Argument of type 'SVGElement | null' is not
-    // assignable to parameter of type 'Element | undefined'.
     const embossFilter = dom.createSvgElement(
         Svg.FILTER, {'id': 'blocklyEmbossFilter' + this.randomIdentifier},
-        this.defs_ as AnyDuringMigration);
+        this.defs_);
     dom.createSvgElement(
         Svg.FEGAUSSIANBLUR,
         {'in': 'SourceAlpha', 'stdDeviation': 1, 'result': 'blur'},
@@ -1009,8 +1007,6 @@ export class ConstantProvider {
        stroke="#cc0" />
           </pattern>
         */
-    // AnyDuringMigration because:  Argument of type 'SVGElement | null' is not
-    // assignable to parameter of type 'Element | undefined'.
     const disabledPattern = dom.createSvgElement(
         Svg.PATTERN, {
           'id': 'blocklyDisabledPattern' + this.randomIdentifier,
@@ -1018,7 +1014,7 @@ export class ConstantProvider {
           'width': 10,
           'height': 10,
         },
-        this.defs_ as AnyDuringMigration);
+        this.defs_);
     dom.createSvgElement(
         Svg.RECT, {'width': 10, 'height': 10, 'fill': '#aaa'}, disabledPattern);
     dom.createSvgElement(
@@ -1037,8 +1033,6 @@ export class ConstantProvider {
   private createDebugFilter() {
     // Only create the debug filter once.
     if (!this.debugFilter_) {
-      // AnyDuringMigration because:  Argument of type 'SVGElement | null' is
-      // not assignable to parameter of type 'Element | undefined'.
       const debugFilter = dom.createSvgElement(
           Svg.FILTER, {
             'id': 'blocklyDebugFilter' + this.randomIdentifier,
@@ -1047,7 +1041,7 @@ export class ConstantProvider {
             'y': '-30%',
             'x': '-40%',
           },
-          this.defs_ as AnyDuringMigration);
+          this.defs_);
       // Set all gaussian blur pixels to 1 opacity before applying flood
       const debugComponentTransfer = dom.createSvgElement(
           Svg.FECOMPONENTTRANSFER, {'result': 'outBlur'}, debugFilter);

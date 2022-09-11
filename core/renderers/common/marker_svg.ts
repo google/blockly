@@ -57,7 +57,7 @@ export class MarkerSvg {
   private parent_: IASTNodeLocationSvg|null = null;
 
   /** The current SVG element for the marker. */
-  currentMarkerSvg: Element|null = null;
+  currentMarkerSvg: SVGElement|null = null;
   colour_: string;
 
   /** The root SVG group containing the marker. */
@@ -96,10 +96,8 @@ export class MarkerSvg {
    *
    * @returns The root SVG node.
    */
-  getSvgRoot(): SVGElement {
-    // AnyDuringMigration because:  Type 'SVGGElement | null' is not assignable
-    // to type 'SVGElement'.
-    return this.svgGroup_ as AnyDuringMigration;
+  getSvgRoot(): SVGElement|null {
+    return this.svgGroup_;
   }
 
   /**
@@ -233,13 +231,12 @@ export class MarkerSvg {
 
     if (block.previousConnection) {
       const connectionShape =
-          this.constants_.shapeFor(block.previousConnection) as Notch |
-          PuzzleTab;
+          this.constants_.shapeFor(block.previousConnection) as Notch;
       this.positionPrevious_(
           width, markerOffset, markerHeight, connectionShape);
     } else if (block.outputConnection) {
       const connectionShape =
-          this.constants_.shapeFor(block.outputConnection) as Notch | PuzzleTab;
+          this.constants_.shapeFor(block.outputConnection) as PuzzleTab;
       this.positionOutput_(width, height, connectionShape);
     } else {
       this.positionBlock_(width, markerOffset, markerHeight);
@@ -382,9 +379,9 @@ export class MarkerSvg {
   /** Show the current marker. */
   protected showCurrent_() {
     this.hide();
-    // AnyDuringMigration because:  Property 'style' does not exist on type
-    // 'Element'.
-    (this.currentMarkerSvg as AnyDuringMigration)!.style.display = '';
+    if (this.currentMarkerSvg) {
+      this.currentMarkerSvg.style.display = '';
+    }
   }
 
   /**************************
@@ -405,11 +402,13 @@ export class MarkerSvg {
         svgPaths.lineOnAxis('V', -markerOffset) +
         svgPaths.lineOnAxis('H', width + markerOffset * 2) +
         svgPaths.lineOnAxis('V', markerHeight);
-    this.markerBlock_!.setAttribute('d', markerPath);
+    if (!this.markerBlock_) {
+      throw new Error(
+          'createDom should be called before positioning the marker');
+    }
+    this.markerBlock_.setAttribute('d', markerPath);
     if (this.workspace.RTL) {
-      // AnyDuringMigration because:  Argument of type 'SVGPathElement | null'
-      // is not assignable to parameter of type 'SVGElement'.
-      this.flipRtl_(this.markerBlock_ as AnyDuringMigration);
+      this.flipRtl_(this.markerBlock_);
     }
     this.currentMarkerSvg = this.markerBlock_;
   }
@@ -444,15 +443,12 @@ export class MarkerSvg {
    * @param width The new width, in workspace units.
    */
   protected positionLine_(x: number, y: number, width: number) {
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
-    this.markerSvgLine_!.setAttribute('x', x as AnyDuringMigration);
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
-    this.markerSvgLine_!.setAttribute('y', y as AnyDuringMigration);
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
-    this.markerSvgLine_!.setAttribute('width', width as AnyDuringMigration);
+    if (!this.markerSvgLine_) {
+      throw new Error('createDom should be called before positioning the line');
+    }
+    this.markerSvgLine_.setAttribute('x', `${x}`);
+    this.markerSvgLine_.setAttribute('y', `${y}`);
+    this.markerSvgLine_.setAttribute('width', `${width}`);
     this.currentMarkerSvg = this.markerSvgLine_;
   }
 
@@ -465,19 +461,19 @@ export class MarkerSvg {
    * @param connectionShape The shape object for the connection.
    */
   protected positionOutput_(
-      width: number, height: number, connectionShape: Notch|PuzzleTab) {
-    // AnyDuringMigration because:  Property 'pathDown' does not exist on type
-    // 'Notch | PuzzleTab'.
+      width: number, height: number, connectionShape: PuzzleTab) {
+    if (!this.markerBlock_) {
+      throw new Error(
+          'createDom should be called before positioning the output');
+    }
     const markerPath = svgPaths.moveBy(width, 0) +
         svgPaths.lineOnAxis('h', -(width - connectionShape.width)) +
         svgPaths.lineOnAxis('v', this.constants_.TAB_OFFSET_FROM_TOP) +
-        (connectionShape as AnyDuringMigration).pathDown +
-        svgPaths.lineOnAxis('V', height) + svgPaths.lineOnAxis('H', width);
-    this.markerBlock_!.setAttribute('d', markerPath);
+        connectionShape.pathDown + svgPaths.lineOnAxis('V', height) +
+        svgPaths.lineOnAxis('H', width);
+    this.markerBlock_.setAttribute('d', markerPath);
     if (this.workspace.RTL) {
-      // AnyDuringMigration because:  Argument of type 'SVGPathElement | null'
-      // is not assignable to parameter of type 'SVGElement'.
-      this.flipRtl_(this.markerBlock_ as AnyDuringMigration);
+      this.flipRtl_(this.markerBlock_);
     }
     this.currentMarkerSvg = this.markerBlock_;
   }
@@ -494,20 +490,20 @@ export class MarkerSvg {
    */
   protected positionPrevious_(
       width: number, markerOffset: number, markerHeight: number,
-      connectionShape: Notch|PuzzleTab) {
-    // AnyDuringMigration because:  Property 'pathLeft' does not exist on type
-    // 'Notch | PuzzleTab'.
+      connectionShape: Notch) {
+    if (!this.markerBlock_) {
+      throw new Error(
+          'createDom should be called before positioning the previous connection marker');
+    }
     const markerPath = svgPaths.moveBy(-markerOffset, markerHeight) +
         svgPaths.lineOnAxis('V', -markerOffset) +
         svgPaths.lineOnAxis('H', this.constants_.NOTCH_OFFSET_LEFT) +
-        (connectionShape as AnyDuringMigration).pathLeft +
+        connectionShape.pathLeft +
         svgPaths.lineOnAxis('H', width + markerOffset * 2) +
         svgPaths.lineOnAxis('V', markerHeight);
-    this.markerBlock_!.setAttribute('d', markerPath);
+    this.markerBlock_.setAttribute('d', markerPath);
     if (this.workspace.RTL) {
-      // AnyDuringMigration because:  Argument of type 'SVGPathElement | null'
-      // is not assignable to parameter of type 'SVGElement'.
-      this.flipRtl_(this.markerBlock_ as AnyDuringMigration);
+      this.flipRtl_(this.markerBlock_);
     }
     this.currentMarkerSvg = this.markerBlock_;
   }
@@ -522,18 +518,13 @@ export class MarkerSvg {
    * @param height The new height, in workspace units.
    */
   protected positionRect_(x: number, y: number, width: number, height: number) {
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
-    this.markerSvgRect_!.setAttribute('x', x as AnyDuringMigration);
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
-    this.markerSvgRect_!.setAttribute('y', y as AnyDuringMigration);
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
-    this.markerSvgRect_!.setAttribute('width', width as AnyDuringMigration);
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
-    this.markerSvgRect_!.setAttribute('height', height as AnyDuringMigration);
+    if (!this.markerSvgRect_) {
+      throw new Error('createDom should be called before positioning the rect');
+    }
+    this.markerSvgRect_.setAttribute('x', `${x}`);
+    this.markerSvgRect_.setAttribute('y', `${y}`);
+    this.markerSvgRect_.setAttribute('width', `${width}`);
+    this.markerSvgRect_.setAttribute('height', `${height}`);
     this.currentMarkerSvg = this.markerSvgRect_;
   }
 
@@ -548,10 +539,14 @@ export class MarkerSvg {
 
   /** Hide the marker. */
   hide() {
-    this.markerSvgLine_!.style.display = 'none';
-    this.markerSvgRect_!.style.display = 'none';
-    this.markerInput_!.style.display = 'none';
-    this.markerBlock_!.style.display = 'none';
+    if (!this.markerSvgLine_ || !this.markerSvgRect_ || !this.markerInput_ ||
+        !this.markerBlock_) {
+      throw new Error('createDom should be called before hiding the marker');
+    }
+    this.markerSvgLine_.style.display = 'none';
+    this.markerSvgRect_.style.display = 'none';
+    this.markerInput_.style.display = 'none';
+    this.markerBlock_.style.display = 'none';
   }
 
   /**
@@ -572,7 +567,7 @@ export class MarkerSvg {
    *
    * @returns The object holding attributes to make the marker blink.
    */
-  protected getBlinkProperties_(): AnyDuringMigration {
+  protected getBlinkProperties_(): object {
     return {
       'attributeType': 'XML',
       'attributeName': 'fill',
@@ -598,30 +593,24 @@ export class MarkerSvg {
         </g>
         */
 
-    // AnyDuringMigration because:  Argument of type 'SVGGElement | null' is not
-    // assignable to parameter of type 'Element | undefined'.
     this.markerSvg_ = dom.createSvgElement(
         Svg.G, {
           'width': this.constants_.CURSOR_WS_WIDTH,
           'height': this.constants_.WS_CURSOR_HEIGHT,
         },
-        this.svgGroup_ as AnyDuringMigration);
+        this.svgGroup_);
 
     // A horizontal line used to represent a workspace coordinate or next
     // connection.
-    // AnyDuringMigration because:  Argument of type 'SVGGElement | null' is not
-    // assignable to parameter of type 'Element | undefined'.
     this.markerSvgLine_ = dom.createSvgElement(
         Svg.RECT, {
           'width': this.constants_.CURSOR_WS_WIDTH,
           'height': this.constants_.WS_CURSOR_HEIGHT,
           'style': 'display: none',
         },
-        this.markerSvg_ as AnyDuringMigration);
+        this.markerSvg_);
 
     // A filled in rectangle used to represent a stack.
-    // AnyDuringMigration because:  Argument of type 'SVGGElement | null' is not
-    // assignable to parameter of type 'Element | undefined'.
     this.markerSvgRect_ = dom.createSvgElement(
         Svg.RECT, {
           'class': 'blocklyVerticalMarker',
@@ -629,19 +618,14 @@ export class MarkerSvg {
           'ry': 10,
           'style': 'display: none',
         },
-        this.markerSvg_ as AnyDuringMigration);
+        this.markerSvg_);
 
     // A filled in puzzle piece used to represent an input value.
-    // AnyDuringMigration because:  Argument of type 'SVGGElement | null' is not
-    // assignable to parameter of type 'Element | undefined'.
     this.markerInput_ = dom.createSvgElement(
-        Svg.PATH, {'transform': '', 'style': 'display: none'},
-        this.markerSvg_ as AnyDuringMigration);
+        Svg.PATH, {'transform': '', 'style': 'display: none'}, this.markerSvg_);
 
     // A path used to represent a previous connection and a block, an output
     // connection and a block, or a block.
-    // AnyDuringMigration because:  Argument of type 'SVGGElement | null' is not
-    // assignable to parameter of type 'Element | undefined'.
     this.markerBlock_ = dom.createSvgElement(
         Svg.PATH, {
           'transform': '',
@@ -649,32 +633,19 @@ export class MarkerSvg {
           'fill': 'none',
           'stroke-width': this.constants_.CURSOR_STROKE_WIDTH,
         },
-        this.markerSvg_ as AnyDuringMigration);
+        this.markerSvg_);
 
     // Markers and stack markers don't blink.
     if (this.isCursor()) {
       const blinkProperties = this.getBlinkProperties_();
-      // AnyDuringMigration because:  Argument of type 'SVGRectElement | null'
-      // is not assignable to parameter of type 'Element | undefined'.
+      dom.createSvgElement(Svg.ANIMATE, blinkProperties, this.markerSvgLine_);
+      dom.createSvgElement(Svg.ANIMATE, blinkProperties, this.markerInput_);
       dom.createSvgElement(
-          Svg.ANIMATE, blinkProperties,
-          this.markerSvgLine_ as AnyDuringMigration);
-      // AnyDuringMigration because:  Argument of type 'SVGPathElement | null'
-      // is not assignable to parameter of type 'Element | undefined'.
-      dom.createSvgElement(
-          Svg.ANIMATE, blinkProperties,
-          this.markerInput_ as AnyDuringMigration);
-      blinkProperties['attributeName'] = 'stroke';
-      // AnyDuringMigration because:  Argument of type 'SVGPathElement | null'
-      // is not assignable to parameter of type 'Element | undefined'.
-      dom.createSvgElement(
-          Svg.ANIMATE, blinkProperties,
-          this.markerBlock_ as AnyDuringMigration);
+          Svg.ANIMATE, {...blinkProperties, attributeName: 'stroke'},
+          this.markerBlock_);
     }
 
-    // AnyDuringMigration because:  Type 'SVGGElement | null' is not assignable
-    // to type 'Element'.
-    return this.markerSvg_ as AnyDuringMigration;
+    return this.markerSvg_;
   }
 
   /**
@@ -683,16 +654,21 @@ export class MarkerSvg {
    * @param _curNode The node that we want to draw the marker for.
    */
   protected applyColour_(_curNode: ASTNode) {
-    this.markerSvgLine_!.setAttribute('fill', this.colour_);
-    this.markerSvgRect_!.setAttribute('stroke', this.colour_);
-    this.markerInput_!.setAttribute('fill', this.colour_);
-    this.markerBlock_!.setAttribute('stroke', this.colour_);
+    if (!this.markerSvgLine_ || !this.markerSvgRect_ || !this.markerInput_ ||
+        !this.markerBlock_) {
+      throw new Error(
+          'createDom should be called before applying color to the markerj');
+    }
+    this.markerSvgLine_.setAttribute('fill', this.colour_);
+    this.markerSvgRect_.setAttribute('stroke', this.colour_);
+    this.markerInput_.setAttribute('fill', this.colour_);
+    this.markerBlock_.setAttribute('stroke', this.colour_);
 
     if (this.isCursor()) {
       const values = this.colour_ + ';transparent;transparent;';
-      this.markerSvgLine_!.firstElementChild!.setAttribute('values', values);
-      this.markerInput_!.firstElementChild!.setAttribute('values', values);
-      this.markerBlock_!.firstElementChild!.setAttribute('values', values);
+      this.markerSvgLine_.firstElementChild!.setAttribute('values', values);
+      this.markerInput_.firstElementChild!.setAttribute('values', values);
+      this.markerBlock_.firstElementChild!.setAttribute('values', values);
     }
   }
 

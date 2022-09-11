@@ -13,6 +13,7 @@ import * as goog from '../../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.blockRendering.Drawer');
 
 import type {BlockSvg} from '../../block_svg.js';
+import {Coordinate} from '../../utils.js';
 import * as svgPaths from '../../utils/svg_paths.js';
 import {Connection} from '../measurables/connection.js';
 import type {ExternalValueInput} from '../measurables/external_value_input.js';
@@ -23,6 +24,7 @@ import type {PreviousConnection} from '../measurables/previous_connection.js';
 import type {Row} from '../measurables/row.js';
 import {Types} from '../measurables/types.js';
 
+import {isDynamicShape} from './constants.js';
 import type {ConstantProvider, Notch, PuzzleTab} from './constants.js';
 import * as debug from './debug.js';
 import type {RenderInfo} from './info.js';
@@ -34,9 +36,9 @@ import type {RenderInfo} from './info.js';
  * @alias Blockly.blockRendering.Drawer
  */
 export class Drawer {
-  block_: AnyDuringMigration;
-  info_: AnyDuringMigration;
-  topLeft_: AnyDuringMigration;
+  block_: BlockSvg;
+  info_: RenderInfo;
+  topLeft_: Coordinate;
   outlinePath_ = '';
   inlinePath_ = '';
   protected constants_: ConstantProvider;
@@ -77,7 +79,7 @@ export class Drawer {
       this.block_.pathObject.flipRTL();
     }
     if (debug.isDebuggerEnabled()) {
-      this.block_.renderingDebugger.drawDebug(this.block_, this.info_);
+      this.block_.renderingDebugger?.drawDebug(this.block_, this.info_);
     }
     this.recordSizeOnBlock_();
   }
@@ -98,7 +100,7 @@ export class Drawer {
   /** Hide icons that were marked as hidden. */
   protected hideHiddenIcons_() {
     for (let i = 0, iconInfo; iconInfo = this.info_.hiddenIcons[i]; i++) {
-      iconInfo.icon.iconGroup_.setAttribute('display', 'none');
+      iconInfo.icon.iconGroup_?.setAttribute('display', 'none');
     }
   }
 
@@ -140,9 +142,7 @@ export class Drawer {
           Types.isPreviousConnection(elem) && elem instanceof Connection) {
         this.outlinePath_ +=
             ((elem as PreviousConnection).shape as Notch).pathLeft;
-        // AnyDuringMigration because:  Property 'isHat' does not exist on type
-        // 'typeof Types'.
-      } else if ((Types as AnyDuringMigration).isHat(elem)) {
+      } else if (Types.isHat(elem)) {
         this.outlinePath_ += this.constants_.START_HAT.path;
       } else if (Types.isSpacer(elem)) {
         this.outlinePath_ += svgPaths.lineOnAxis('h', elem.width);
@@ -173,15 +173,9 @@ export class Drawer {
     const input = row.getLastInput() as ExternalValueInput | InlineInput;
     this.positionExternalValueConnection_(row);
 
-    // AnyDuringMigration because:  Property 'pathDown' does not exist on type
-    // 'Shape'. AnyDuringMigration because:  Property 'pathDown' does not exist
-    // on type 'Shape'. AnyDuringMigration because:  Property 'pathDown' does
-    // not exist on type 'Shape'.
-    const pathDown =
-        typeof (input.shape as AnyDuringMigration).pathDown === 'function' ?
-        ((input.shape as AnyDuringMigration).pathDown as (p1: number) =>
-             AnyDuringMigration)(input.height) :
-        (input.shape as AnyDuringMigration).pathDown;
+    const pathDown = isDynamicShape(input.shape) ?
+        input.shape.pathDown(input.height) :
+        (input.shape as PuzzleTab).pathDown;
 
     this.outlinePath_ += svgPaths.lineOnAxis('H', input.xPos + input.width) +
         pathDown +
@@ -265,10 +259,9 @@ export class Drawer {
     if (outputConnection) {
       const tabBottom =
           outputConnection.connectionOffsetY + outputConnection.height;
-      const pathUp = typeof outputConnection.shape.pathUp === 'function' ?
-          (outputConnection.shape.pathUp as (p1: number) =>
-               AnyDuringMigration)(outputConnection.height) :
-          outputConnection.shape.pathUp;
+      const pathUp = isDynamicShape(outputConnection.shape) ?
+          outputConnection.shape.pathUp(outputConnection.height) :
+          (outputConnection.shape as PuzzleTab).pathUp;
 
       // Draw a line up to the bottom of the tab.
       this.outlinePath_ += svgPaths.lineOnAxis('V', tabBottom) + pathUp;
@@ -300,25 +293,16 @@ export class Drawer {
    * @param fieldInfo The rendering information for the field or icon.
    */
   protected layoutField_(fieldInfo: Icon|Field) {
-    let svgGroup;
-    if (Types.isField(fieldInfo)) {
-      // AnyDuringMigration because:  Property 'field' does not exist on type
-      // 'Icon | Field'.
-      svgGroup = (fieldInfo as AnyDuringMigration).field.getSvgRoot();
-    } else if (Types.isIcon(fieldInfo)) {
-      // AnyDuringMigration because:  Property 'icon' does not exist on type
-      // 'Icon | Field'.
-      svgGroup = (fieldInfo as AnyDuringMigration).icon.iconGroup_;
-    }
+    const svgGroup = Types.isField(fieldInfo) ?
+        (fieldInfo as Field).field.getSvgRoot() :
+        (fieldInfo as Icon).icon.iconGroup_!;  // Never null in rendered case.
 
     const yPos = fieldInfo.centerline - fieldInfo.height / 2;
     let xPos = fieldInfo.xPos;
     let scale = '';
     if (this.info_.RTL) {
       xPos = -(xPos + fieldInfo.width);
-      // AnyDuringMigration because:  Property 'flipRtl' does not exist on type
-      // 'Icon | Field'.
-      if ((fieldInfo as AnyDuringMigration).flipRtl) {
+      if (fieldInfo.flipRtl) {
         xPos += fieldInfo.width;
         scale = 'scale(-1 1)';
       }
@@ -327,9 +311,7 @@ export class Drawer {
       svgGroup.setAttribute('display', 'block');
       svgGroup.setAttribute(
           'transform', 'translate(' + xPos + ',' + yPos + ')');
-      // AnyDuringMigration because:  Property 'icon' does not exist on type
-      // 'Icon | Field'.
-      (fieldInfo as AnyDuringMigration).icon.computeIconLocation();
+      (fieldInfo as Icon).icon.computeIconLocation();
     } else {
       svgGroup.setAttribute(
           'transform', 'translate(' + xPos + ',' + yPos + ')' + scale);

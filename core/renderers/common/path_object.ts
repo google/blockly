@@ -29,7 +29,7 @@ import type {IPathObject} from './i_path_object.js';
  * @alias Blockly.blockRendering.PathObject
  */
 export class PathObject implements IPathObject {
-  svgRoot: AnyDuringMigration;
+  svgRoot: SVGElement;
   /** @internal */
   svgPath: SVGElement;
 
@@ -39,9 +39,7 @@ export class PathObject implements IPathObject {
    *
    * @internal
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'SVGElement'.
-  cursorSvg: SVGElement = null as AnyDuringMigration;
+  cursorSvg: SVGElement|null = null;
 
   /**
    * Holds the markers svg element when the marker is attached to the block.
@@ -49,9 +47,7 @@ export class PathObject implements IPathObject {
    *
    * @internal
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'SVGElement'.
-  markerSvg: SVGElement = null as AnyDuringMigration;
+  markerSvg: SVGElement|null = null;
 
   /** @internal */
   constants: ConstantProvider;
@@ -104,9 +100,7 @@ export class PathObject implements IPathObject {
    */
   setCursorSvg(cursorSvg: SVGElement) {
     if (!cursorSvg) {
-      // AnyDuringMigration because:  Type 'null' is not assignable to type
-      // 'SVGElement'.
-      this.cursorSvg = null as AnyDuringMigration;
+      this.cursorSvg = null;
       return;
     }
 
@@ -123,9 +117,7 @@ export class PathObject implements IPathObject {
    */
   setMarkerSvg(markerSvg: SVGElement) {
     if (!markerSvg) {
-      // AnyDuringMigration because:  Type 'null' is not assignable to type
-      // 'SVGElement'.
-      this.markerSvg = null as AnyDuringMigration;
+      this.markerSvg = null;
       return;
     }
 
@@ -279,6 +271,7 @@ export class PathObject implements IPathObject {
    * @param _enable True if styling should be added.
    * @internal
    */
-  updateShapeForInputHighlight(_conn: Connection, _enable: boolean) {}
+  updateShapeForInputHighlight(_conn: Connection, _enable: boolean) {
+    // NOOP
+  }
 }
-// NOP

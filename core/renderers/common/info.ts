@@ -51,9 +51,9 @@ import type {Renderer} from './renderer.js';
  * @alias Blockly.blockRendering.RenderInfo
  */
 export class RenderInfo {
-  block_: AnyDuringMigration;
+  block_: BlockSvg;
   protected constants_: ConstantProvider;
-  outputConnection: OutputConnection;
+  outputConnection: OutputConnection|null;
   isInline: boolean;
   isCollapsed: boolean;
   isInsertionMarker: boolean;
@@ -108,13 +108,9 @@ export class RenderInfo {
      * A measurable representing the output connection if the block has one.
      * Otherwise null.
      */
-    // AnyDuringMigration because:  Type 'OutputConnection | null' is not
-    // assignable to type 'OutputConnection'.
-    this.outputConnection =
-        (!block.outputConnection ?
-             null :
-             new OutputConnection(this.constants_, (block.outputConnection))) as
-        AnyDuringMigration;
+    this.outputConnection = block.outputConnection ?
+        new OutputConnection(this.constants_, block.outputConnection) :
+        null;
 
     /**
      * Whether the block should be rendered as a single line, either because
@@ -195,7 +191,7 @@ export class RenderInfo {
       }
     }
 
-    let lastInput = null;
+    let lastInput = undefined;
     // Loop across all of the inputs on the block, creating objects for anything
     // that needs to be rendered and breaking the block up into visual rows.
     for (let i = 0, input; input = this.block_.inputList[i]; i++) {
@@ -358,7 +354,7 @@ export class RenderInfo {
    * @param lastInput The input that follows.
    * @returns True if the next input should be rendered on a new row.
    */
-  protected shouldStartNewRow_(input: Input, lastInput: Input): boolean {
+  protected shouldStartNewRow_(input: Input, lastInput?: Input): boolean {
     // If this is the first input, just add to the existing row.
     // That row is either empty or has some icons in it.
     if (!lastInput) {
@@ -424,9 +420,7 @@ export class RenderInfo {
     }
     // Between inputs and the end of the row.
     if (prev && Types.isInput(prev) && !next) {
-      // AnyDuringMigration because:  Property 'isExternalInput' does not exist
-      // on type 'typeof Types'.
-      if ((Types as AnyDuringMigration).isExternalInput(prev)) {
+      if (Types.isExternalInput(prev)) {
         return this.constants_.NO_PADDING;
       } else if (Types.isInlineInput(prev)) {
         return this.constants_.LARGE_PADDING;
@@ -507,9 +501,7 @@ export class RenderInfo {
         if (missingSpace > 0) {
           this.addAlignmentPadding_(row, missingSpace);
         }
-        // AnyDuringMigration because:  Property 'isTopOrBottomRow' does not
-        // exist on type 'typeof Types'.
-        if ((Types as AnyDuringMigration).isTopOrBottomRow(row)) {
+        if (Types.isTopOrBottomRow(row)) {
           row.widthWithConnectedBlocks = row.width;
         }
       }
@@ -666,9 +658,7 @@ export class RenderInfo {
     }
     if (Types.isTopRow(row)) {
       const topRow = row as TopRow;
-      // AnyDuringMigration because:  Property 'isHat' does not exist on type
-      // 'typeof Types'.
-      if ((Types as AnyDuringMigration).isHat(elem)) {
+      if (Types.isHat(elem)) {
         return topRow.capline - elem.height / 2;
       }
       return topRow.capline + elem.height / 2;
@@ -714,12 +704,13 @@ export class RenderInfo {
           Math.max(widestRowWithConnectedBlocks, row.widthWithConnectedBlocks);
       this.recordElemPositions_(row);
     }
-    if (this.outputConnection && this.block_.nextConnection &&
-        this.block_.nextConnection.isConnected()) {
-      // Include width of connected block in value to stack width measurement.
-      widestRowWithConnectedBlocks = Math.max(
-          widestRowWithConnectedBlocks,
-          this.block_.nextConnection.targetBlock().getHeightWidth().width);
+    if (this.outputConnection && this.block_.nextConnection) {
+      const target = this.block_.nextConnection.targetBlock();
+      if (target) {
+        // Include width of connected block in value to stack width measurement.
+        widestRowWithConnectedBlocks = Math.max(
+            widestRowWithConnectedBlocks, target.getHeightWidth().width);
+      }
     }
 
     this.widthWithChildren = widestRowWithConnectedBlocks + this.startX;

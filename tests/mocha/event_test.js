@@ -997,10 +997,6 @@ suite('Events', function() {
             this.eventsFireSpy, 0, Blockly.Events.BlockDelete,
             {oldXml: expectedOldXml, group: ''},
             workspaceSvg.id, expectedId);
-        assertNthCallEventArgEquals(
-            changeListenerSpy, 0, Blockly.Events.BlockDelete,
-            {oldXml: expectedOldXml, group: ''},
-            workspaceSvg.id, expectedId);
 
         // Expect the workspace to not have a variable with ID 'test_block_id'.
         chai.assert.isNull(this.workspace.getVariableById(TEST_BLOCK_ID));

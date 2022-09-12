@@ -319,7 +319,6 @@ export class Block implements IASTNodeLocation, IDeletable {
     if (this.disposed) {
       return;
     }
-    this.disposed = true;
 
     this.unplug(healStack);
     if (eventUtils.isEnabled()) {
@@ -339,6 +338,7 @@ export class Block implements IASTNodeLocation, IDeletable {
       this.workspace.removeTypedBlock(this);
       // Remove from block database.
       this.workspace.removeBlockById(this.id);
+      this.disposed = true;
 
       // First, dispose of all my children.
       for (let i = this.childBlocks_.length - 1; i >= 0; i--) {

@@ -241,7 +241,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    *
    * @returns #RRGGBB string.
    */
-  getColourSecondary(): string|null {
+  getColourSecondary(): string|undefined {
     return this.style.colourSecondary;
   }
 
@@ -250,7 +250,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    *
    * @returns #RRGGBB string.
    */
-  getColourTertiary(): string|null {
+  getColourTertiary(): string|undefined {
     return this.style.colourTertiary;
   }
 

@@ -563,7 +563,7 @@ export class ConstantProvider {
     this.setComponentConstants_(theme);
 
     this.ADD_START_HATS =
-        theme.startHats !== null ? theme.startHats : this.ADD_START_HATS;
+        theme.startHats !== undefined ? theme.startHats : this.ADD_START_HATS;
   }
 
   /**

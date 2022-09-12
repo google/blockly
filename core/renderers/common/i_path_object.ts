@@ -15,8 +15,8 @@ goog.declareModuleId('Blockly.blockRendering.IPathObject');
 
 import type {BlockStyle} from '../../theme.js';
 import type {BlockSvg} from '../../block_svg.js';
-import type {Connection} from '../../connection.js';
 import type {ConstantProvider} from './constants.js';
+import {RenderedConnection} from '../../rendered_connection.js';
 
 
 /**
@@ -162,5 +162,5 @@ export interface IPathObject {
    * @param enable True if styling should be added.
    * @internal
    */
-  updateShapeForInputHighlight(conn: RenderingContext, enable: boolean): void;
+  updateShapeForInputHighlight(conn: RenderedConnection, enable: boolean): void;
 }

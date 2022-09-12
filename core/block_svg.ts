@@ -1809,7 +1809,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * @param add True if highlighting should be added.
    * @internal
    */
-  highlightShapeForInput(conn: Connection, add: boolean) {
+  highlightShapeForInput(conn: RenderedConnection, add: boolean) {
     this.pathObject.updateShapeForInputHighlight(conn, add);
   }
 }

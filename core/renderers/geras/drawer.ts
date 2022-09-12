@@ -31,7 +31,7 @@ import type {PathObject} from './path_object.js';
  * @alias Blockly.geras.Drawer
  */
 export class Drawer extends BaseDrawer {
-  highlighter_: AnyDuringMigration;
+  highlighter_: Highlighter;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   override constants_!: ConstantProvider;
 
@@ -136,7 +136,7 @@ export class Drawer extends BaseDrawer {
 
   override positionStatementInputConnection_(row: Row) {
     const input = row.getLastInput();
-    if (input.connectionModel) {
+    if (input?.connectionModel) {
       let connX = row.xPos + row.statementEdge + input.notchOffset;
       if (this.info_.RTL) {
         connX *= -1;
@@ -150,7 +150,7 @@ export class Drawer extends BaseDrawer {
 
   override positionExternalValueConnection_(row: Row) {
     const input = row.getLastInput();
-    if (input.connectionModel) {
+    if (input && input.connectionModel) {
       let connX = row.xPos + row.width + this.constants_.DARK_PATH_OFFSET;
       if (this.info_.RTL) {
         connX *= -1;

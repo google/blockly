@@ -163,7 +163,7 @@ export class Row {
    * @returns The last input on the row, or null.
    * @internal
    */
-  getLastInput(): InputConnection {
+  getLastInput(): InputConnection|null {
     // TODO: Consider moving this to InputRow, if possible.
     for (let i = this.elements.length - 1; i >= 0; i--) {
       const elem = this.elements[i];
@@ -171,9 +171,7 @@ export class Row {
         return elem as InputConnection;
       }
     }
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'InputConnection'.
-    return null as AnyDuringMigration;
+    return null;
   }
 
   /**
@@ -211,16 +209,14 @@ export class Row {
    * @returns The first spacer element on this row.
    * @internal
    */
-  getFirstSpacer(): InRowSpacer {
+  getFirstSpacer(): InRowSpacer|null {
     for (let i = 0; i < this.elements.length; i++) {
       const elem = this.elements[i];
       if (Types.isSpacer(elem)) {
         return elem as InRowSpacer;
       }
     }
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'InRowSpacer'.
-    return null as AnyDuringMigration;
+    return null;
   }
 
   /**
@@ -229,15 +225,13 @@ export class Row {
    * @returns The last spacer element on this row.
    * @internal
    */
-  getLastSpacer(): InRowSpacer {
+  getLastSpacer(): InRowSpacer|null {
     for (let i = this.elements.length - 1; i >= 0; i--) {
       const elem = this.elements[i];
       if (Types.isSpacer(elem)) {
         return elem as InRowSpacer;
       }
     }
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'InRowSpacer'.
-    return null as AnyDuringMigration;
+    return null;
   }
 }

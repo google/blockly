@@ -167,6 +167,7 @@ export class Highlighter {
    */
   drawStatementInput(row: Row) {
     const input = row.getLastInput();
+    if (!input) return;
     if (this.RTL_) {
       const innerHeight = row.height - 2 * this.insideCornerPaths_.height;
       this.steps_ += svgPaths.moveTo(input.xPos, row.yPos) +

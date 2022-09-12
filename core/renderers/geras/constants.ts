@@ -33,13 +33,13 @@ export class ConstantProvider extends BaseConstantProvider {
    * inputs inline.
    */
   MAX_BOTTOM_WIDTH = 30;
-  override STATEMENT_BOTTOM_SPACER: AnyDuringMigration;
+  override STATEMENT_BOTTOM_SPACER = -this.NOTCH_HEIGHT / 2;
 
-  /** @internal */
+  /**
+   * @internal
+   */
   constructor() {
     super();
-
-    this.STATEMENT_BOTTOM_SPACER = -this.NOTCH_HEIGHT / 2;
   }
 
   override getCSS_(selector: string) {

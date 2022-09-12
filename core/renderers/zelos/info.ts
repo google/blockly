@@ -175,10 +175,7 @@ export class RenderInfo extends BaseRenderInfo {
       }
     }
     // Spacing between a square corner and a hat.
-    // AnyDuringMigration because:  Property 'isHat' does not exist on type
-    // 'typeof Types'.
-    if (prev && Types.isLeftSquareCorner(prev) && next &&
-        (Types as AnyDuringMigration).isHat(next)) {
+    if (prev && Types.isLeftSquareCorner(prev) && next && Types.isHat(next)) {
       return this.constants_.NO_PADDING;
     }
     return this.constants_.MEDIUM_PADDING;
@@ -319,7 +316,8 @@ export class RenderInfo extends BaseRenderInfo {
 
       if (Types.isInputRow(row) && row.hasStatement) {
         row.measure();
-        minXPos = row.width - row.getLastInput().width + notchTotalWidth;
+        minXPos =
+            row.width - (row.getLastInput()?.width ?? 0) + notchTotalWidth;
       } else if (
           hasPrevNotch && (i === 2 || hasNextNotch) && Types.isInputRow(row) &&
           !row.hasStatement) {
@@ -442,9 +440,7 @@ export class RenderInfo extends BaseRenderInfo {
       this.rightSide!.xPos -= totalNegativeSpacing;
       for (let i = 0; i < this.rows.length; i++) {
         const row = this.rows[i];
-        // AnyDuringMigration because:  Property 'isTopOrBottomRow' does not
-        // exist on type 'typeof Types'.
-        if ((Types as AnyDuringMigration).isTopOrBottomRow(row)) {
+        if (Types.isTopOrBottomRow(row)) {
           row.elements[1].width -= totalNegativeSpacing;
         }
         row.width -= totalNegativeSpacing;

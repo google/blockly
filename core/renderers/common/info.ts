@@ -60,7 +60,7 @@ export class RenderInfo {
   RTL: boolean;
 
   /** The block renderer in use. */
-  protected readonly renderer_: Renderer;
+  protected readonly renderer_!: Renderer;
 
   /** The height of the rendered block, including child blocks. */
   height = 0;
@@ -459,7 +459,7 @@ export class RenderInfo {
       blockWidth = Math.max(blockWidth, row.width);
       if (row.hasStatement) {
         const statementInput = row.getLastInput();
-        const innerWidth = row.width - statementInput.width;
+        const innerWidth = row.width - (statementInput?.width ?? 0);
         widestStatementRowFields =
             Math.max(widestStatementRowFields, innerWidth);
       }
@@ -534,19 +534,21 @@ export class RenderInfo {
     }
 
     // Decide where the extra padding goes.
-    if (row.align === Align.LEFT) {
+    if (row.align === Align.LEFT && lastSpacer) {
       // Add padding to the end of the row.
       lastSpacer.width += missingSpace;
-    } else if (row.align === Align.CENTRE) {
+    } else if (row.align === Align.CENTRE && firstSpacer && lastSpacer) {
       // Split the padding between the beginning and end of the row.
       firstSpacer.width += missingSpace / 2;
       lastSpacer.width += missingSpace / 2;
-    } else if (row.align === Align.RIGHT) {
+    } else if (row.align === Align.RIGHT && firstSpacer) {
       // Add padding at the beginning of the row.
       firstSpacer.width += missingSpace;
-    } else {
+    } else if (lastSpacer) {
       // Default to left-aligning.
       lastSpacer.width += missingSpace;
+    } else {
+      return;
     }
     row.width += missingSpace;
   }
@@ -559,6 +561,7 @@ export class RenderInfo {
    */
   protected alignStatementRow_(row: InputRow) {
     const statementInput = row.getLastInput();
+    if (!statementInput) return;
     let currentWidth = row.width - statementInput.width;
     let desiredWidth = this.statementEdge;
     // Add padding before the statement input.

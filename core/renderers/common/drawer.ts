@@ -189,6 +189,7 @@ export class Drawer {
    */
   protected drawStatementInput_(row: Row) {
     const input = row.getLastInput();
+    if (!input) return;
     // Where to start drawing the notch, which is on the right side in LTR.
     const x = input.xPos + input.notchOffset + (input.shape as Notch).width;
 
@@ -378,7 +379,7 @@ export class Drawer {
    */
   protected positionStatementInputConnection_(row: Row) {
     const input = row.getLastInput();
-    if (input.connectionModel) {
+    if (input?.connectionModel) {
       let connX = row.xPos + row.statementEdge + input.notchOffset;
       if (this.info_.RTL) {
         connX *= -1;
@@ -396,7 +397,7 @@ export class Drawer {
    */
   protected positionExternalValueConnection_(row: Row) {
     const input = row.getLastInput();
-    if (input.connectionModel) {
+    if (input && input.connectionModel) {
       let connX = row.xPos + row.width;
       if (this.info_.RTL) {
         connX *= -1;

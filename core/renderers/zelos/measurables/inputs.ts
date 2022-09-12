@@ -27,7 +27,6 @@ import {StatementInput as BaseStatementInput} from '../../../renderers/measurabl
  */
 export class StatementInput extends BaseStatementInput {
   connectedBottomNextConnection = false;
-  override height: AnyDuringMigration;
 
   /**
    * @param constants The rendering constants provider.

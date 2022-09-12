@@ -36,9 +36,8 @@ import type {Renderer} from './renderer.js';
  * @alias Blockly.thrasos.RenderInfo
  */
 export class RenderInfo extends BaseRenderInfo {
-  override widthWithChildren: AnyDuringMigration;
-  override height: AnyDuringMigration;
-  override startY: AnyDuringMigration;
+  // Exclamation is fine b/c this is assigned by the super constructor.
+  protected override renderer_!: Renderer;
 
   /**
    * @param renderer The renderer in use.
@@ -56,9 +55,7 @@ export class RenderInfo extends BaseRenderInfo {
    * @internal
    */
   override getRenderer(): Renderer {
-    // AnyDuringMigration because:  Property 'renderer_' does not exist on type
-    // 'RenderInfo'.
-    return (this as AnyDuringMigration).renderer_ as Renderer;
+    return this.renderer_;
   }
 
   override addElemSpacing_() {
@@ -128,16 +125,12 @@ export class RenderInfo extends BaseRenderInfo {
       if (Types.isIcon(prev)) {
         return this.constants_.LARGE_PADDING * 2 + 1;
       }
-      // AnyDuringMigration because:  Property 'isHat' does not exist on type
-      // 'typeof Types'.
-      if ((Types as AnyDuringMigration).isHat(prev)) {
+      if (Types.isHat(prev)) {
         return this.constants_.NO_PADDING;
       }
       // Establish a minimum width for a block with a previous or next
       // connection.
-      // AnyDuringMigration because:  Property 'isPreviousOrNextConnection' does
-      // not exist on type 'typeof Types'.
-      if ((Types as AnyDuringMigration).isPreviousOrNextConnection(prev)) {
+      if (Types.isPreviousOrNextConnection(prev)) {
         return this.constants_.LARGE_PADDING;
       }
       // Between rounded corner and the end of the row.
@@ -153,9 +146,7 @@ export class RenderInfo extends BaseRenderInfo {
     }
     // Between inputs and the end of the row.
     if (Types.isInput(prev) && !next) {
-      // AnyDuringMigration because:  Property 'isExternalInput' does not exist
-      // on type 'typeof Types'.
-      if ((Types as AnyDuringMigration).isExternalInput(prev)) {
+      if (Types.isExternalInput(prev)) {
         return this.constants_.NO_PADDING;
       } else if (Types.isInlineInput(prev)) {
         return this.constants_.LARGE_PADDING;
@@ -170,17 +161,13 @@ export class RenderInfo extends BaseRenderInfo {
       if (Types.isField(prev) && (prev as Field).isEditable) {
         if (Types.isInlineInput(next)) {
           return this.constants_.SMALL_PADDING;
-          // AnyDuringMigration because:  Property 'isExternalInput' does not
-          // exist on type 'typeof Types'.
-        } else if ((Types as AnyDuringMigration).isExternalInput(next)) {
+        } else if (Types.isExternalInput(next)) {
           return this.constants_.SMALL_PADDING;
         }
       } else {
         if (Types.isInlineInput(next)) {
           return this.constants_.MEDIUM_LARGE_PADDING;
-          // AnyDuringMigration because:  Property 'isExternalInput' does not
-          // exist on type 'typeof Types'.
-        } else if ((Types as AnyDuringMigration).isExternalInput(next)) {
+        } else if (Types.isExternalInput(next)) {
           return this.constants_.MEDIUM_LARGE_PADDING;
         } else if (Types.isStatementInput(next)) {
           return this.constants_.LARGE_PADDING;
@@ -207,9 +194,7 @@ export class RenderInfo extends BaseRenderInfo {
 
     if (Types.isLeftSquareCorner(prev) && next) {
       // Spacing between a hat and a corner
-      // AnyDuringMigration because:  Property 'isHat' does not exist on type
-      // 'typeof Types'.
-      if ((Types as AnyDuringMigration).isHat(next)) {
+      if (Types.isHat(next)) {
         return this.constants_.NO_PADDING;
       }
       // Spacing between a square corner and a previous or next connection
@@ -275,9 +260,7 @@ export class RenderInfo extends BaseRenderInfo {
     }
     if (Types.isTopRow(row)) {
       const topRow = row as TopRow;
-      // AnyDuringMigration because:  Property 'isHat' does not exist on type
-      // 'typeof Types'.
-      if ((Types as AnyDuringMigration).isHat(elem)) {
+      if (Types.isHat(elem)) {
         return topRow.capline - elem.height / 2;
       }
       return topRow.capline + elem.height / 2;

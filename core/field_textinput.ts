@@ -226,8 +226,7 @@ export class FieldTextInput extends Field {
         throw new Error(
             'The renderer did not properly initialize the block style');
       }
-      this.borderRect_.setAttribute(
-          'stroke', source.style.colourTertiary);
+      this.borderRect_.setAttribute('stroke', source.style.colourTertiary);
     } else {
       source.pathObject.svgPath.setAttribute(
           'fill', this.getConstants()!.FIELD_BORDER_RECT_COLOUR);

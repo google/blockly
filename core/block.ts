@@ -319,6 +319,7 @@ export class Block implements IASTNodeLocation, IDeletable {
     if (this.disposed) {
       return;
     }
+    this.disposed = true;
 
     this.unplug(healStack);
     if (eventUtils.isEnabled()) {
@@ -356,7 +357,6 @@ export class Block implements IASTNodeLocation, IDeletable {
       }
     } finally {
       eventUtils.enable();
-      this.disposed = true;
     }
   }
 

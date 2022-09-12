@@ -379,7 +379,7 @@ export class Drawer {
    */
   protected positionStatementInputConnection_(row: Row) {
     const input = row.getLastInput();
-    if (input && input.connectionModel) {
+    if (input?.connectionModel) {
       let connX = row.xPos + row.statementEdge + input.notchOffset;
       if (this.info_.RTL) {
         connX *= -1;

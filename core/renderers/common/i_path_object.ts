@@ -162,5 +162,5 @@ export interface IPathObject {
    * @param enable True if styling should be added.
    * @internal
    */
-  updateShapeForInputHighlight(conn: Connection, enable: boolean): void;
+  updateShapeForInputHighlight(conn: RenderingContext, enable: boolean): void;
 }

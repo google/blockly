@@ -95,7 +95,6 @@ export class TopRow extends Row {
       const elem = this.elements[i];
       width += elem.width;
       if (!Types.isSpacer(elem)) {
-        // AnyDof Types'.
         if (Types.isHat(elem) && elem instanceof Hat) {
           ascenderHeight = Math.max(ascenderHeight, elem.ascenderHeight);
         } else {

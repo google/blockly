@@ -60,7 +60,7 @@ export class RenderInfo {
   RTL: boolean;
 
   /** The block renderer in use. */
-  protected readonly renderer_: Renderer;
+  protected readonly renderer_!: Renderer;
 
   /** The height of the rendered block, including child blocks. */
   height = 0;
@@ -547,6 +547,8 @@ export class RenderInfo {
     } else if (lastSpacer) {
       // Default to left-aligning.
       lastSpacer.width += missingSpace;
+    } else {
+      return;
     }
     row.width += missingSpace;
   }

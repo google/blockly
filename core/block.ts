@@ -323,7 +323,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @suppress {checkTypes}
    */
   dispose(healStack: boolean) {
-    if (this.disposing || this.disposed) {
+    if (this.isDeadOrDying()) {
       return;
     }
 
@@ -366,6 +366,16 @@ export class Block implements IASTNodeLocation, IDeletable {
       eventUtils.enable();
       this.disposed = true;
     }
+  }
+
+  /**
+   * Returns true if the block is either in the process of being disposed, or
+   * is disposed.
+   *
+   * @internal
+   */
+  isDeadOrDying(): boolean {
+    return this.disposing || this.disposed;
   }
 
   /**
@@ -782,8 +792,8 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @returns True if deletable.
    */
   isDeletable(): boolean {
-    return this.deletable_ && !this.isShadow_ && !this.disposing &&
-        !this.disposed && !this.workspace.options.readOnly;
+    return this.deletable_ && !this.isShadow_ && !this.isDeadOrDying() &&
+        !this.workspace.options.readOnly;
   }
 
   /**
@@ -801,8 +811,8 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @returns True if movable.
    */
   isMovable(): boolean {
-    return this.movable_ && !this.isShadow_ && !this.disposing &&
-        !this.disposed && !this.workspace.options.readOnly;
+    return this.movable_ && !this.isShadow_ && !this.isDeadOrDying() &&
+        !this.workspace.options.readOnly;
   }
 
   /**
@@ -875,7 +885,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @returns True if editable.
    */
   isEditable(): boolean {
-    return this.editable_ && !this.disposing && !this.disposed &&
+    return this.editable_ && !this.isDeadOrDying() &&
         !this.workspace.options.readOnly;
   }
 

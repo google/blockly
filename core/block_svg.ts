@@ -527,7 +527,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /** Snap this block to the nearest grid point. */
   snapToGrid() {
-    if (this.disposing || this.disposed) {
+    if (this.isDeadOrDying()) {
       return;  // Deleted block.
     }
     if (this.workspace.isDragging()) {
@@ -868,7 +868,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * @suppress {checkTypes}
    */
   override dispose(healStack?: boolean, animate?: boolean) {
-    if (this.disposing || this.disposed) {
+    if (this.isDeadOrDying()) {
       return;
     }
     Tooltip.dispose();
@@ -1078,7 +1078,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       // Don't change the warning text during a drag.
       // Wait until the drag finishes.
       this.warningTextDb.set(id, setTimeout(() => {
-                               if (!this.disposing && !this.disposed) {
+                               if (!this.isDeadOrDying()) {
                                  this.warningTextDb.delete(id);
                                  this.setWarningText(text, id);
                                }
@@ -1552,7 +1552,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * connected should not coincidentally line up on screen.
    */
   override bumpNeighbours() {
-    if (this.disposing || this.disposed) {
+    if (this.isDeadOrDying()) {
       return;
     }
     if (this.workspace.isDragging()) {

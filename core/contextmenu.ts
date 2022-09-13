@@ -178,9 +178,8 @@ function createWidget_(menu: Menu) {
   if (!div) {
     throw Error('Attempting to create a context menu when widget div is null');
   }
-  menu.render(div);
-  const menuDom = menu.getElement();
-  menuDom?.classList.add('blocklyContextMenu');
+  const menuDom = menu.render(div);
+  menuDom.classList.add('blocklyContextMenu');
   // Prevent system context menu when right-clicking a Blockly context menu.
   browserEvents.conditionalBind(
       (menuDom as EventTarget), 'contextmenu', null, haltPropagation);

@@ -273,8 +273,7 @@ export class FieldDropdown extends Field {
     // Remove any pre-existing elements in the dropdown.
     dropDownDiv.clearContent();
     // Element gets created in render.
-    this.menu_!.render(dropDownDiv.getContentDiv());
-    const menuElement = this.menu_!.getElement() as Element;
+    const menuElement = this.menu_!.render(dropDownDiv.getContentDiv());
     menuElement.classList.add('blocklyDropdownMenu');
 
     if (this.getConstants()!.FIELD_DROPDOWN_COLOURED_DIV) {

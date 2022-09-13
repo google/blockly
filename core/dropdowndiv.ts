@@ -16,7 +16,6 @@ goog.declareModuleId('Blockly.dropDownDiv');
 import type {BlockSvg} from './block_svg.js';
 import * as common from './common.js';
 import type {Field} from './field.js';
-import * as dom from './utils/dom.js';
 import * as math from './utils/math.js';
 import {Rect} from './utils/rect.js';
 import type {Size} from './utils/size.js';
@@ -139,10 +138,10 @@ export function createDom() {
   // Handle focusin/out events to add a visual indicator when
   // a child is focused or blurred.
   div.addEventListener('focusin', function() {
-    dom.addClass(div, 'blocklyFocused');
+    div.classList.add('blocklyFocused');
   });
   div.addEventListener('focusout', function() {
-    dom.removeClass(div, 'blocklyFocused');
+    div.classList.remove('blocklyFocused');
   });
 }
 
@@ -311,8 +310,12 @@ export function show(
   const mainWorkspace = common.getMainWorkspace() as WorkspaceSvg;
   renderedClassName = mainWorkspace.getRenderer().getClassName();
   themeClassName = mainWorkspace.getTheme().getClassName();
-  dom.addClass(div, renderedClassName);
-  dom.addClass(div, themeClassName);
+  if (renderedClassName) {
+    div.classList.add(renderedClassName);
+  }
+  if (themeClassName) {
+    div.classList.add(themeClassName);
+  }
 
   // When we change `translate` multiple times in close succession,
   // Chrome may choose to wait and apply them all at once.
@@ -592,11 +595,11 @@ export function hideWithoutAnimation() {
   owner = null;
 
   if (renderedClassName) {
-    dom.removeClass(div, renderedClassName);
+    div.classList.remove(renderedClassName);
     renderedClassName = '';
   }
   if (themeClassName) {
-    dom.removeClass(div, themeClassName);
+    div.classList.remove(themeClassName);
     themeClassName = '';
   }
   (common.getMainWorkspace() as WorkspaceSvg).markFocused();

@@ -230,14 +230,13 @@ export class Mutator extends Icon {
     if (!this.block_.isInFlyout) {
       if (this.block_.isEditable()) {
         if (this.iconGroup_) {
-          dom.removeClass(
-              this.iconGroup_ as Element, 'blocklyIconGroupReadonly');
+          this.iconGroup_.classList.remove('blocklyIconGroupReadonly');
         }
       } else {
         // Close any mutator bubble.  Icon is not clickable.
         this.setVisible(false);
         if (this.iconGroup_) {
-          dom.addClass(this.iconGroup_ as Element, 'blocklyIconGroupReadonly');
+          this.iconGroup_.classList.add('blocklyIconGroupReadonly');
         }
       }
     }

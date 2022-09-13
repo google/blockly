@@ -114,8 +114,8 @@ export class WorkspaceDragSurfaceSvg {
     const blockCanvas = this.SVG.childNodes[0] as Element;
     const bubbleCanvas = this.SVG.childNodes[1] as Element;
     if (!blockCanvas || !bubbleCanvas ||
-        !dom.hasClass(blockCanvas, 'blocklyBlockCanvas') ||
-        !dom.hasClass(bubbleCanvas, 'blocklyBubbleCanvas')) {
+        !(blockCanvas.classList.contains('blocklyBlockCanvas') ||
+          !bubbleCanvas.classList.contains('blocklyBubbleCanvas'))) {
       throw Error(
           'Couldn\'t clear and hide the drag surface. A node was missing.');
     }

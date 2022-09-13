@@ -23,7 +23,6 @@ import {FieldConfig, Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import * as aria from './utils/aria.js';
 import * as colour from './utils/colour.js';
-import * as dom from './utils/dom.js';
 import * as idGenerator from './utils/idgenerator.js';
 import {KeyCodes} from './utils/keycodes.js';
 import type {Sentinel} from './utils/sentinel.js';
@@ -439,7 +438,7 @@ export class FieldColour extends Field {
     (this.picker_ as AnyDuringMigration)!.blur();
     const highlighted = this.getHighlighted_();
     if (highlighted) {
-      dom.removeClass(highlighted, 'blocklyColourHighlighted');
+      highlighted.classList.remove('blocklyColourHighlighted');
     }
   }
 
@@ -474,10 +473,10 @@ export class FieldColour extends Field {
     // Unhighlight the current item.
     const highlighted = this.getHighlighted_();
     if (highlighted) {
-      dom.removeClass(highlighted, 'blocklyColourHighlighted');
+      highlighted.classList.remove('blocklyColourHighlighted');
     }
     // Highlight new item.
-    dom.addClass(cell, 'blocklyColourHighlighted');
+    cell.classList.add('blocklyColourHighlighted');
     // Set new highlighted index.
     this.highlightedIndex_ = index;
 

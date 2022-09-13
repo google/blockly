@@ -58,8 +58,11 @@ export class ToolboxSeparator extends ToolboxItem {
    * @returns The parent element for the separator.
    */
   protected createDom_(): HTMLDivElement {
-    const container = (document.createElement('div'));
-    dom.addClass(container, this.cssConfig_['container']!);
+    const container = document.createElement('div');
+    const className = (this.cssConfig_ as AnyDuringMigration)['container'];
+    if (className) {
+      container.classList.add(className);
+    }
     this.htmlDiv_ = container;
     return container;
   }

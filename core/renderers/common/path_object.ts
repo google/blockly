@@ -162,10 +162,13 @@ export class PathObject implements IPathObject {
    *     removed.
    */
   protected setClass_(className: string, add: boolean) {
+    if (!className) {
+      return;
+    }
     if (add) {
-      dom.addClass(this.svgRoot as Element, className);
+      this.svgRoot.classList.add(className);
     } else {
-      dom.removeClass(this.svgRoot as Element, className);
+      this.svgRoot.classList.remove(className);
     }
   }
 

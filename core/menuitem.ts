@@ -13,7 +13,6 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.MenuItem');
 
 import * as aria from './utils/aria.js';
-import * as dom from './utils/dom.js';
 import * as idGenerator from './utils/idgenerator.js';
 
 
@@ -196,11 +195,11 @@ export class MenuItem {
       const name = 'blocklyMenuItemHighlight';
       const nameDep = 'goog-menuitem-highlight';
       if (highlight) {
-        dom.addClass(el, name);
-        dom.addClass(el, nameDep);
+        el.classList.add(name);
+        el.classList.add(nameDep);
       } else {
-        dom.removeClass(el, name);
-        dom.removeClass(el, nameDep);
+        el.classList.remove(name);
+        el.classList.remove(nameDep);
       }
     }
   }

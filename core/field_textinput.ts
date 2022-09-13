@@ -25,7 +25,6 @@ import * as fieldRegistry from './field_registry.js';
 import {Msg} from './msg.js';
 import * as aria from './utils/aria.js';
 import {Coordinate} from './utils/coordinate.js';
-import * as dom from './utils/dom.js';
 import {KeyCodes} from './utils/keycodes.js';
 import * as parsing from './utils/parsing.js';
 import type {Sentinel} from './utils/sentinel.js';
@@ -241,10 +240,10 @@ export class FieldTextInput extends Field {
       this.resizeEditor_();
       const htmlInput = this.htmlInput_ as HTMLElement;
       if (!this.isTextValid_) {
-        dom.addClass(htmlInput, 'blocklyInvalidInput');
+        htmlInput.classList.add('blocklyInvalidInput');
         aria.setState(htmlInput, aria.State.INVALID, true);
       } else {
-        dom.removeClass(htmlInput, 'blocklyInvalidInput');
+        htmlInput.classList.remove('blocklyInvalidInput');
         aria.setState(htmlInput, aria.State.INVALID, false);
       }
     }
@@ -328,7 +327,7 @@ export class FieldTextInput extends Field {
     eventUtils.setGroup(true);
     const div = WidgetDiv.getDiv();
 
-    dom.addClass(this.getClickTarget_(), 'editing');
+    this.getClickTarget_().classList.add('editing');
 
     const htmlInput = (document.createElement('input'));
     htmlInput.className = 'blocklyHtmlInput';
@@ -397,7 +396,7 @@ export class FieldTextInput extends Field {
     style.boxShadow = '';
     this.htmlInput_ = null;
 
-    dom.removeClass(this.getClickTarget_(), 'editing');
+    this.getClickTarget_().classList.remove('editing');
   }
 
   /**

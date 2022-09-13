@@ -16,7 +16,6 @@ import * as browserEvents from './browser_events.js';
 import type {MenuItem} from './menuitem.js';
 import * as aria from './utils/aria.js';
 import {Coordinate} from './utils/coordinate.js';
-import * as dom from './utils/dom.js';
 import {KeyCodes} from './utils/keycodes.js';
 import type {Size} from './utils/size.js';
 import * as style from './utils/style.js';
@@ -136,7 +135,7 @@ export class Menu {
     const el = this.getElement();
     if (el) {
       el.focus({preventScroll: true});
-      dom.addClass(el, 'blocklyFocused');
+      el.classList.add('blocklyFocused');
     }
   }
 
@@ -145,7 +144,7 @@ export class Menu {
     const el = this.getElement();
     if (el) {
       el.blur();
-      dom.removeClass(el, 'blocklyFocused');
+      el.classList.remove('blocklyFocused');
     }
   }
 
@@ -207,7 +206,7 @@ export class Menu {
     // a menu item's div.
     let currentElement: Element|null = elem;
     while (currentElement && currentElement !== menuElem) {
-      if (dom.hasClass(currentElement, 'blocklyMenuItem')) {
+      if (currentElement.classList.contains('blocklyMenuItem')) {
         // Having found a menu item's div, locate that menu item in this menu.
         for (let i = 0, menuItem; menuItem = this.menuItems_[i]; i++) {
           if (menuItem.getElement() === currentElement) {

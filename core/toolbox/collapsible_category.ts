@@ -17,7 +17,6 @@ import type {IToolbox} from '../interfaces/i_toolbox.js';
 import type {IToolboxItem} from '../interfaces/i_toolbox_item.js';
 import * as registry from '../registry.js';
 import * as aria from '../utils/aria.js';
-import * as dom from '../utils/dom.js';
 import * as toolbox from '../utils/toolbox.js';
 
 import {ToolboxCategory} from './category.js';
@@ -141,10 +140,10 @@ export class CollapsibleToolboxCategory extends ToolboxCategory implements
   override createIconDom_() {
     const toolboxIcon = document.createElement('span');
     if (!this.parentToolbox_.isHorizontal()) {
-      // AnyDuringMigration because:  Argument of type 'string | undefined' is
-      // not assignable to parameter of type 'string'.
-      dom.addClass(
-          toolboxIcon, (this.cssConfig_ as AnyDuringMigration)['icon']);
+      const className = (this.cssConfig_ as AnyDuringMigration)['icon'];
+      if (className) {
+        toolboxIcon.classList.add(className);
+      }
       toolboxIcon.style.visibility = 'visible';
     }
 
@@ -160,9 +159,11 @@ export class CollapsibleToolboxCategory extends ToolboxCategory implements
    */
   protected createSubCategoriesDom_(subcategories: IToolboxItem[]):
       HTMLDivElement {
-    const contentsContainer = (document.createElement('div'));
-    dom.addClass(
-        contentsContainer, (this.cssConfig_ as AnyDuringMigration)['contents']);
+    const contentsContainer = document.createElement('div');
+    const className = (this.cssConfig_ as AnyDuringMigration)['contents'];
+    if (className) {
+      contentsContainer.classList.add(className);
+    }
 
     for (let i = 0; i < subcategories.length; i++) {
       const newCategory = subcategories[i];

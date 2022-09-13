@@ -492,12 +492,12 @@ export abstract class Field implements IASTNodeLocationSvg,
       return;
     }
     if (this.enabled_ && this.sourceBlock_.isEditable()) {
-      dom.addClass(group, 'blocklyEditableText');
-      dom.removeClass(group, 'blocklyNonEditableText');
+      group.classList.add('blocklyEditableText');
+      group.classList.remove('blocklyNonEditableText');
       group.style.cursor = this.CURSOR;
     } else {
-      dom.addClass(group, 'blocklyNonEditableText');
-      dom.removeClass(group, 'blocklyEditableText');
+      group.classList.add('blocklyNonEditableText');
+      group.classList.remove('blocklyEditableText');
       group.style.cursor = '';
     }
   }

@@ -86,7 +86,7 @@ export class Menu {
    *
    * @param container Element upon which to append this menu.
    */
-  render(container: Element) : HTMLDivElement {
+  render(container: Element): HTMLDivElement {
     const element = (document.createElement('div'));
     // goog-menu is deprecated, use blocklyMenu.  May 2020.
     element.className = 'blocklyMenu goog-menu blocklyNonSelectable';

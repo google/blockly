@@ -148,7 +148,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
       eventUtils.fire(new (eventUtils.get(eventUtils.COMMENT_DELETE))(this));
     }
 
-    dom.removeNode(this.svgGroup_);
+    this.svgGroup_?.remove();
     // Dispose of any rendered components
     this.disposeInternal_();
 

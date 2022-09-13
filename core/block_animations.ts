@@ -70,7 +70,7 @@ function disposeUiStep(
   const ms = new Date().getTime() - start.getTime();
   const percent = ms / 150;
   if (percent > 1) {
-    dom.removeNode(clone);
+    clone.remove();
   } else {
     const x =
         rect.x + (rtl ? -1 : 1) * rect.width * workspaceScale / 2 * percent;
@@ -133,7 +133,7 @@ function connectionUiStep(ripple: SVGElement, start: Date, scale: number) {
   const ms = new Date().getTime() - start.getTime();
   const percent = ms / 150;
   if (percent > 1) {
-    dom.removeNode(ripple);
+    ripple.remove();
   } else {
     ripple.setAttribute('r', (percent * 25 * scale).toString());
     ripple.style.opacity = (1 - percent).toString();

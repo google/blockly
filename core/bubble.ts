@@ -780,7 +780,7 @@ export class Bubble implements IBubble {
       browserEvents.unbind(this.onMouseDownResizeWrapper_);
     }
     Bubble.unbindDragEvents_();
-    dom.removeNode(this.bubbleGroup_);
+    this.bubbleGroup_?.remove();
     this.disposed = true;
   }
 

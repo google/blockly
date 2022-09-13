@@ -914,13 +914,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     }
 
     super.dispose(!!healStack);
-
-    dom.removeNode(this.svgGroup_);
+    this.svgGroup_.remove();
     blockWorkspace.resizeContents();
-    // Sever JavaScript to DOM connections.
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'SVGGElement'.
-    this.svgGroup_ = null as AnyDuringMigration;
     dom.stopTextWidthCache();
   }
 

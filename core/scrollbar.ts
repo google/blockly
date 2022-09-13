@@ -188,8 +188,7 @@ export class Scrollbar {
       this.onMouseDownHandleWrapper_ = null;
     }
 
-    dom.removeNode(this.outerSvg_);
-    this.outerSvg_ = null;
+    this.outerSvg_?.remove();
     this.svgGroup_ = null;
     this.svgBackground_ = null;
     if (this.svgHandle_) {

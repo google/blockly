@@ -674,8 +674,6 @@ export class MarkerSvg {
 
   /** Dispose of this marker. */
   dispose() {
-    if (this.svgGroup_) {
-      dom.removeNode(this.svgGroup_);
-    }
+    this.svgGroup_?.remove();
   }
 }

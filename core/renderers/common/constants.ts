@@ -711,15 +711,9 @@ export class ConstantProvider {
    * @internal
    */
   dispose() {
-    if (this.embossFilter_) {
-      dom.removeNode(this.embossFilter_);
-    }
-    if (this.disabledPattern_) {
-      dom.removeNode(this.disabledPattern_);
-    }
-    if (this.debugFilter_) {
-      dom.removeNode(this.debugFilter_);
-    }
+    this.embossFilter_?.remove();
+    this.disabledPattern_?.remove();
+    this.debugFilter_?.remove();
     this.cssNode_ = null;
   }
 

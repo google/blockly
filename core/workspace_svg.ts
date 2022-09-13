@@ -817,9 +817,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     if (this.currentGesture_) {
       this.currentGesture_.cancel();
     }
-    if (this.svgGroup_) {
-      dom.removeNode(this.svgGroup_);
-    }
+    this.svgGroup_?.remove();
     if (this.toolbox_) {
       this.toolbox_.dispose();
       this.toolbox_ = null;

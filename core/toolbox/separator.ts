@@ -15,7 +15,6 @@ goog.declareModuleId('Blockly.ToolboxSeparator');
 import * as Css from '../css.js';
 import type {IToolbox} from '../interfaces/i_toolbox.js';
 import * as registry from '../registry.js';
-import * as dom from '../utils/dom.js';
 import type * as toolbox from '../utils/toolbox.js';
 
 import {ToolboxItem} from './toolbox_item.js';
@@ -72,7 +71,7 @@ export class ToolboxSeparator extends ToolboxItem {
   }
 
   override dispose() {
-    dom.removeNode(this.htmlDiv_ as HTMLDivElement);
+    this.htmlDiv_?.remove();
   }
 }
 

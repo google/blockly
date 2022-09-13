@@ -233,9 +233,7 @@ export class FlyoutButton {
     if (this.onMouseUpWrapper_) {
       browserEvents.unbind(this.onMouseUpWrapper_);
     }
-    if (this.svgGroup_) {
-      dom.removeNode(this.svgGroup_);
-    }
+    this.svgGroup_?.remove();
     if (this.svgText_) {
       this.workspace.getThemeManager().unsubscribe(this.svgText_);
     }

@@ -411,10 +411,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
       this.workspace_.getThemeManager().unsubscribe(this.svgBackground_!);
       this.workspace_.dispose();
     }
-    if (this.svgGroup_) {
-      dom.removeNode(this.svgGroup_);
-      this.svgGroup_ = null;
-    }
+    this.svgGroup_?.remove();
     this.svgBackground_ = null;
   }
 
@@ -853,7 +850,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
       const rect = this.mats_[j];
       if (rect) {
         Tooltip.unbindMouseEvents(rect);
-        dom.removeNode(rect);
+        rect.remove();
       }
     }
     this.mats_.length = 0;

@@ -316,7 +316,7 @@ export class RenderedConnection extends Connection {
   /** Remove the highlighting around this connection. */
   unhighlight() {
     if (this.highlightPath) {
-      dom.removeNode(this.highlightPath);
+      this.highlightPath.remove();
       this.highlightPath = null;
     }
   }

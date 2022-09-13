@@ -614,6 +614,7 @@ export class ToolboxCategory extends ToolboxItem implements
 
   override dispose() {
     dom.removeNode(this.htmlDiv_);
+    this.htmlDiv_?.remove();
   }
 }
 

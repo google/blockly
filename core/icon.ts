@@ -75,8 +75,8 @@ export abstract class Icon {
 
   /** Dispose of this icon. */
   dispose() {
-    dom.removeNode(this.iconGroup_);  // Dispose of and unlink the icon.
-    this.setVisible(false);           // Dispose of and unlink the bubble.
+    this.iconGroup_?.remove();  // Dispose of and unlink the icon.
+    this.setVisible(false);     // Dispose of and unlink the bubble.
   }
 
   /** Add or remove the UI indicating if this icon may be clicked or not. */

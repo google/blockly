@@ -239,10 +239,7 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
    */
   dispose() {
     this.workspace.getComponentManager().removeComponent('trashcan');
-    if (this.svgGroup_) {
-      dom.removeNode(this.svgGroup_);
-      this.svgGroup_ = null;
-    }
+    this.svgGroup_?.remove();
     this.svgLid_ = null;
     if (this.lidTask_) {
       clearTimeout(this.lidTask_);

@@ -75,8 +75,7 @@ export class Debug {
    */
   clearElems() {
     for (let i = 0; i < this.debugElements_.length; i++) {
-      const elem = this.debugElements_[i];
-      dom.removeNode(elem);
+      this.debugElements_[i].remove();
     }
 
     this.debugElements_ = [];

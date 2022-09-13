@@ -287,12 +287,8 @@ export class ConstantProvider extends BaseConstantProvider {
 
   override dispose() {
     super.dispose();
-    if (this.selectedGlowFilter_) {
-      dom.removeNode(this.selectedGlowFilter_);
-    }
-    if (this.replacementGlowFilter_) {
-      dom.removeNode(this.replacementGlowFilter_);
-    }
+    this.selectedGlowFilter_?.remove();
+    this.replacementGlowFilter_?.remove();
   }
 
   override makeStartHat() {

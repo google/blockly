@@ -74,8 +74,7 @@ export class ScrollbarPair {
    * @suppress {checkTypes}
    */
   dispose() {
-    dom.removeNode(this.corner_);
-    this.corner_ = null;
+    this.corner_?.remove();
     this.oldHostMetrics_ = null;
     if (this.hScroll) {
       this.hScroll.dispose();

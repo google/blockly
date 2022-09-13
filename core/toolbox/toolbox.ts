@@ -1048,7 +1048,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
     // not assignable to parameter of type 'Element'.
     this.workspace_.getThemeManager().unsubscribe(
         this.HtmlDiv as AnyDuringMigration);
-    dom.removeNode(this.HtmlDiv);
+    this.HtmlDiv?.remove();
   }
 }
 

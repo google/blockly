@@ -143,9 +143,7 @@ export class ZoomControls implements IPositionable {
    */
   dispose() {
     this.workspace.getComponentManager().removeComponent('zoomControls');
-    if (this.svgGroup) {
-      dom.removeNode(this.svgGroup);
-    }
+    this.svgGroup?.remove();
     if (this.onZoomResetWrapper_) {
       browserEvents.unbind(this.onZoomResetWrapper_);
     }

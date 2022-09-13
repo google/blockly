@@ -85,6 +85,7 @@ export class Menu {
    * Creates the menu DOM.
    *
    * @param container Element upon which to append this menu.
+   * @returns The menu's root DOM element.
    */
   render(container: Element): HTMLDivElement {
     const element = (document.createElement('div'));

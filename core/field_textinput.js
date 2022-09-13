@@ -366,6 +366,7 @@ class FieldTextInput extends Field {
     const htmlInput =
         /** @type {HTMLInputElement} */ (document.createElement('input'));
     htmlInput.className = 'blocklyHtmlInput';
+    htmlInput.maxLength = this.maxLength;
     htmlInput.setAttribute('spellcheck', this.spellcheck_);
     const scale = this.workspace_.getScale();
     const fontSize = (this.getConstants().FIELD_TEXT_FONTSIZE * scale) + 'pt';

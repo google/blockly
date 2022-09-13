@@ -364,6 +364,7 @@ class FieldMultilineInput extends FieldTextInput {
     const htmlInput =
       /** @type {HTMLTextAreaElement} */ (document.createElement('textarea'));
   htmlInput.className = 'blocklyHtmlInput blocklyHtmlTextAreaInput';
+  htmlInput.maxLength = this.maxLength;
   htmlInput.setAttribute('spellcheck', this.spellcheck_);
   const fontSize = (this.getConstants().FIELD_TEXT_FONTSIZE * scale) + 'pt';
     div.style.fontSize = fontSize;

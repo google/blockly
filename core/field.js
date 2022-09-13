@@ -196,6 +196,12 @@ class Field {
     this.maxDisplayLength = 80;
 
     /**
+     * Maximum characters of text can be field have.
+     * @type {number}
+     */
+    this.maxLength = 10000;
+
+    /**
      * Block this field is attached to.  Starts as null, then set in init.
      * @type {Block}
      * @protected

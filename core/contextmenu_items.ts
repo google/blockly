@@ -249,7 +249,7 @@ function deleteNext_(deleteList: BlockSvg[], eventGroup: string) {
   eventUtils.setGroup(eventGroup);
   const block = deleteList.shift();
   if (block) {
-    if (!block.disposed) {
+    if (!block.disposing && !block.disposed) {
       block.dispose(false, true);
       setTimeout(deleteNext_, DELAY, deleteList, eventGroup);
     } else {

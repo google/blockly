@@ -181,6 +181,13 @@ export class Block implements IASTNodeLocation, IDeletable {
   protected outputShape_: number|null = null;
 
   /**
+   * Is the current block currently in the process of being disposed?
+   *
+   * @internal
+   */
+  disposing = false;
+
+  /**
    * A string representing the comment attached to this block.
    *
    * @deprecated August 2019. Use getCommentText instead.
@@ -316,7 +323,7 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @suppress {checkTypes}
    */
   dispose(healStack: boolean) {
-    if (this.disposed) {
+    if (this.disposing || this.disposed) {
       return;
     }
 
@@ -338,7 +345,7 @@ export class Block implements IASTNodeLocation, IDeletable {
       this.workspace.removeTypedBlock(this);
       // Remove from block database.
       this.workspace.removeBlockById(this.id);
-      this.disposed = true;
+      this.disposing = true;
 
       // First, dispose of all my children.
       for (let i = this.childBlocks_.length - 1; i >= 0; i--) {
@@ -357,6 +364,7 @@ export class Block implements IASTNodeLocation, IDeletable {
       }
     } finally {
       eventUtils.enable();
+      this.disposed = true;
     }
   }
 
@@ -774,8 +782,8 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @returns True if deletable.
    */
   isDeletable(): boolean {
-    return this.deletable_ && !this.isShadow_ && !this.disposed &&
-        !this.workspace.options.readOnly;
+    return this.deletable_ && !this.isShadow_ && !this.disposing &&
+        !this.disposed && !this.workspace.options.readOnly;
   }
 
   /**
@@ -793,8 +801,8 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @returns True if movable.
    */
   isMovable(): boolean {
-    return this.movable_ && !this.isShadow_ && !this.disposed &&
-        !this.workspace.options.readOnly;
+    return this.movable_ && !this.isShadow_ && !this.disposing &&
+        !this.disposed && !this.workspace.options.readOnly;
   }
 
   /**
@@ -867,7 +875,8 @@ export class Block implements IASTNodeLocation, IDeletable {
    * @returns True if editable.
    */
   isEditable(): boolean {
-    return this.editable_ && !this.disposed && !this.workspace.options.readOnly;
+    return this.editable_ && !this.disposing && !this.disposed &&
+        !this.workspace.options.readOnly;
   }
 
   /**

@@ -258,8 +258,8 @@ export abstract class Field implements IASTNodeLocationSvg,
    * @returns The renderer constant provider.
    */
   getConstants(): ConstantProvider|null {
-    if (!this.constants_ && this.sourceBlock_ && !this.sourceBlock_.disposed &&
-        this.sourceBlock_.workspace.rendered) {
+    if (!this.constants_ && this.sourceBlock_ && !this.sourceBlock_.disposing &&
+        !this.sourceBlock_.disposed && this.sourceBlock_.workspace.rendered) {
       this.constants_ = (this.sourceBlock_.workspace as WorkspaceSvg)
                             .getRenderer()
                             .getConstants();
@@ -1050,7 +1050,8 @@ export abstract class Field implements IASTNodeLocationSvg,
    * @param e Mouse down event.
    */
   protected onMouseDown_(e: Event) {
-    if (!this.sourceBlock_ || this.sourceBlock_.disposed) {
+    if (!this.sourceBlock_ || this.sourceBlock_.disposing ||
+        this.sourceBlock_.disposed) {
       return;
     }
     const gesture = (this.sourceBlock_.workspace as WorkspaceSvg).getGesture(e);

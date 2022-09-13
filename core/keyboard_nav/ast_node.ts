@@ -275,7 +275,8 @@ export class ASTNode {
     // TODO(#6097): Use instanceof checks to exit early for values of
     // curLocation that don't make sense.
     const curLocationAsBlock = curLocation as Block;
-    if (!curLocationAsBlock || curLocationAsBlock.disposed) {
+    if (!curLocationAsBlock || curLocationAsBlock.disposing ||
+        curLocationAsBlock.disposed) {
       return null;
     }
     const curRoot = curLocationAsBlock.getRootBlock();

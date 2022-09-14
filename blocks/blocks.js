@@ -22,6 +22,7 @@ const procedures = goog.require('Blockly.libraryBlocks.procedures');
 const texts = goog.require('Blockly.libraryBlocks.texts');
 const variables = goog.require('Blockly.libraryBlocks.variables');
 const variablesDynamic = goog.require('Blockly.libraryBlocks.variablesDynamic');
+const leaphyOriginal = goog.require('Blockly.libraryBlocks.leaphyOriginal');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockDefinition} = goog.requireType('Blockly.blocks');
 
@@ -35,6 +36,7 @@ exports.procedures = procedures;
 exports.texts = texts;
 exports.variables = variables;
 exports.variablesDynamic = variablesDynamic;
+exports.leaphyOriginal = leaphyOriginal;
 
 /**
  * A dictionary of the block definitions provided by all the
@@ -43,5 +45,5 @@ exports.variablesDynamic = variablesDynamic;
  */
 const blocks = Object.assign(
     {}, colour.blocks, lists.blocks, logic.blocks, loops.blocks, math.blocks,
-    procedures.blocks, variables.blocks, variablesDynamic.blocks);
+    procedures.blocks, variables.blocks, variablesDynamic.blocks, leaphyOriginal.blocks);
 exports.blocks = blocks;

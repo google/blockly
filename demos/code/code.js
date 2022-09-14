@@ -240,7 +240,7 @@ Code.LANG = Code.getLang();
  * @private
  */
 Code.TABS_ = [
-  'blocks', 'javascript', 'php', 'python', 'dart', 'lua', 'xml', 'json'
+  'blocks', 'javascript', 'php', 'python', 'dart', 'lua', 'arduino', 'xml', 'json'
 ];
 
 /**
@@ -248,7 +248,7 @@ Code.TABS_ = [
  * @private
  */
 Code.TABS_DISPLAY_ = [
-  'Blocks', 'JavaScript', 'PHP', 'Python', 'Dart', 'Lua', 'XML', 'JSON'
+  'Blocks', 'JavaScript', 'PHP', 'Python', 'Dart', 'Lua', 'Arduino', 'XML', 'JSON'
 ];
 
 Code.selected = 'blocks';
@@ -365,6 +365,8 @@ Code.renderContent = function() {
     Code.attemptCodeGeneration(Blockly.Dart);
   } else if (content.id === 'content_lua') {
     Code.attemptCodeGeneration(Blockly.Lua);
+  } else if (content.id === 'content_arduino') {
+    Code.attemptCodeGeneration(Blockly.Arduino);
   }
   if (typeof PR === 'object') {
     PR.prettyPrint();
@@ -621,6 +623,6 @@ Code.discard = function() {
 // Load the Code demo's language strings.
 document.write('<script src="msg/' + Code.LANG + '.js"></script>\n');
 // Load Blockly's language strings.
-document.write('<script src="../../msg/js/' + Code.LANG + '.js"></script>\n');
+document.write('<script src="../../build/msg/js/' + Code.LANG + '.js"></script>\n');
 
 window.addEventListener('load', Code.init);

@@ -130,6 +130,11 @@ const chunks = [
     name: 'dart',
     entry: 'generators/dart/all.js',
     reexport: 'Blockly.Dart',
+  },
+  {
+    name: 'arduino',
+    entry: 'generators/arduino/all.js',
+    reexport: 'Blockly.Arduino',
   }
 ];
 

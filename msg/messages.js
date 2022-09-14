@@ -31,6 +31,243 @@
  * them to msg/json/qqq.json, and they show up in the translation console.
  */
 
+ /** @type {string} */
+/// leaphy start block title - The text that appears in the Leaphy start block.
+Blockly.Msg.LEAPHY_START = 'Leaphy';
+/** @type {string} */
+/// leaphy Original Category title - The text that appears in the Leaphy Original Category.
+Blockly.Msg.LEAPHY_ORIGINAL_CATEGORY = 'Leaphy Original';
+/** @type {string} */
+/// leaphy Click Category title - The text that appears in the Leaphy Click Category.
+Blockly.Msg.LEAPHY_CLICK_CATEGORY = 'Leaphy Click';
+/** @type {string} */
+/// leaphy Flitz Category title - The text that appears in the Leaphy Flitz Category.
+Blockly.Msg.LEAPHY_FLITZ_CATEGORY = 'Leaphy Flitz';
+/** @type {string} */
+/// leaphy Arduino Uno Category title - The text that appears in the Leaphy Arduino Uno Category.
+Blockly.Msg.LEAPHY_UNO_CATEGORY = 'Arduino Uno';
+/** @type {string} */
+/// leaphy Extra Category title - The text that appears in the Leaphy Extra Category.
+Blockly.Msg.LEAPHY_EXTRA_CATEGORY = 'Leaphy Extra';
+/** @type {string} */
+/// leaphy Motor Forward.
+Blockly.Msg.LEAPHY_MOTOR_FORWARD = 'Forward';
+/** @type {string} */
+/// leaphy Motor Backward.
+Blockly.Msg.LEAPHY_MOTOR_BACKWARD = 'Backward';
+/** @type {string} */
+/// leaphy Motor Left.
+Blockly.Msg.LEAPHY_MOTOR_LEFT = 'Left';
+/** @type {string} */
+/// leaphy Motor Right.
+Blockly.Msg.LEAPHY_MOTOR_RIGHT = 'Right';
+/** @type {string} */
+/// leaphy Motor Left.
+Blockly.Msg.LEAPHY_MOTOR_LEFT_DROPDOWN = 'Motor_L';
+/** @type {string} */
+/// leaphy Motor Right.
+Blockly.Msg.LEAPHY_MOTOR_RIGHT_DROPDOWN = 'Motor_R';
+/** @type {string} */
+/// leaphy Motor A.
+Blockly.Msg.LEAPHY_MOTOR_A_DROPDOWN = 'Motor_A';
+/** @type {string} */
+/// leaphy Motor B.
+Blockly.Msg.LEAPHY_MOTOR_B_DROPDOWN = 'Motor_B';
+/** @type {string} */
+/// leaphy LED.
+Blockly.Msg.LEAPHY_LED = 'Led';
+/** @type {string} */
+/// leaphy LED Red.
+Blockly.Msg.LEAPHY_LED_RED = 'Red';
+/** @type {string} */
+/// leaphy LED Blue.
+Blockly.Msg.LEAPHY_LED_BLUE = 'Blue';
+/** @type {string} */
+/// leaphy LED Green.
+Blockly.Msg.LEAPHY_LED_GREEN = 'Green';
+/** @type {string} */
+/// leaphy Motor Type.
+Blockly.Msg.LEAPHY_MOTOR_TYPE = 'Type';
+/** @type {string} */
+/// leaphy Motor Speed.
+Blockly.Msg.LEAPHY_MOTOR_SPEED = 'Speed';
+/** @type {string} */
+/// leaphy Motor Direction.
+Blockly.Msg.LEAPHY_MOTOR_DIRECTION = 'Direction';
+/** @type {string} */
+/// leaphy Get Distance.
+Blockly.Msg.LEAPHY_GET_DISTANCE = 'Get distance';
+/** @type {string} */
+/// leaphy Read Digital Pin.
+Blockly.Msg.LEAPHY_DIGITAL_READ = 'Read digipin';
+/** @type {string} */
+/// leaphy Read Analog Pin.
+Blockly.Msg.LEAPHY_ANALOG_READ = 'Read anapin';
+/** @type {string} */
+/// leaphy Read RGB Sensor.
+Blockly.Msg.LEAPHY_RGB_READ_SENSOR = 'Read RGB sensor';
+/** @type {string} */
+/// leaphy color r-255
+Blockly.Msg.LEAPHY_RGB_COLOR_RED = 'Color R-255';
+/** @type {string} */
+/// leaphy color g-255
+Blockly.Msg.LEAPHY_RGB_COLOR_GREEN = 'Color G-255';
+/** @type {string} */
+/// leaphy color b-255
+Blockly.Msg.LEAPHY_RGB_COLOR_BLUE = 'Color B-255';
+/** @type {string} */
+/// leaphy rawcolor red
+Blockly.Msg.LEAPHY_RGB_RAW_COLOR_RED = 'RawColor Red';
+/** @type {string} */
+/// leaphy rawcolor green
+Blockly.Msg.LEAPHY_RGB_RAW_COLOR_GREEN = 'RawColor Green';
+/** @type {string} */
+/// leaphy rawcolor blue
+Blockly.Msg.LEAPHY_RGB_RAW_COLOR_BLUE = 'RawColor Blue';
+/** @type {string} */
+/// leaphy Read Belly Sensor.
+Blockly.Msg.LEAPHY_READ_STOMACH = 'Read Belly sensor';
+/** @type {string} */
+/// leaphy Belly Sensor Type 1.
+Blockly.Msg.LEAPHY_STOMACH_SENSOR_TYPE1 = 'Type 1';
+/** @type {string} */
+/// leaphy Belly Sensor Type 2.
+Blockly.Msg.LEAPHY_STOMACH_SENSOR_TYPE2 = 'Type 2';
+/** @type {string} */
+/// leaphy Read Hand Sensor
+Blockly.Msg.LEAPHY_READ_HAND = 'Read Hand sensor';
+/** @type {string} */
+/// {{Notranslate}} Hue value for all Leaphy blocks.
+Blockly.Msg.LEAPHY_HUE = '188';
+/** @type {string} */
+/// leaphy flitz set LED
+Blockly.Msg.LEAPHY_FLITZ_LED = 'Set LED';
+/** @type {string} */
+/// leaphy flitz set LED red
+Blockly.Msg.LEAPHY_FLITZ_LED_R = 'Red';
+/** @type {string} */
+/// leaphy flitz set LED green
+Blockly.Msg.LEAPHY_FLITZ_LED_G = 'Green';
+/** @type {string} */
+/// leaphy flitz set LED blue
+Blockly.Msg.LEAPHY_FLITZ_LED_B = 'Blue';
+/** @type {string} */
+/// leaphy ledstrip set strip
+Blockly.Msg.LEAPHY_LED_SET_STRIP = 'Set LED Strip';
+/** @type {string} */
+/// leaphy ledstrip set pin
+Blockly.Msg.LEAPHY_LED_SET_PIN = 'Pin';
+/** @type {string} */
+/// leaphy ledstrip set leds
+Blockly.Msg.LEAPHY_LED_SET_LEDS = 'Leds';
+/** @type {string} */
+/// leaphy ledstrip basic led
+Blockly.Msg.LEAPHY_LED_BASIC_LED = 'Ledstrip basis - Led'
+/** @type {string} */
+/// leaphy ledstrip basic red
+Blockly.Msg.LEAPHY_LED_BASIC_RED = 'R'
+/** @type {string} */
+/// leaphy ledstrip basic green
+Blockly.Msg.LEAPHY_LED_BASIC_GREEN = 'G'
+/** @type {string} */
+/// leaphy ledstrip basic blue
+Blockly.Msg.LEAPHY_LED_BASIC_BLUE = 'B'
+/** @type {string} */
+/// leaphy ledstrip speed value
+Blockly.Msg.LEAPHY_LED_SET_SPEEDVALUE = 'Ledstrip demo - Speed'
+/** @type {string} */
+/// leaphy ledstrip demo
+Blockly.Msg.LEAPHY_LED_STRIP_DEMO = 'Ledstrip demo'
+/** @type {string} */
+/// leaphy ledstrip demo lightbank
+Blockly.Msg.LEAPHY_LED_STRIP_LIGHTBANK = 'Lightbank'
+/** @type {string} */
+/// leaphy ledstrip demo breathe
+Blockly.Msg.LEAPHY_LED_STRIP_BREATHE = 'Breathe'
+/** @type {string} */
+/// leaphy ledstrip demo gulf
+Blockly.Msg.LEAPHY_LED_STRIP_GULF = 'Gulf'
+/** @type {string} */
+/// leaphy ledstrip demo rainbow
+Blockly.Msg.LEAPHY_LED_STRIP_RAINBOW = 'Rainbow'
+/** @type {string} */
+/// leaphy ledstrip demo color gulf
+Blockly.Msg.LEAPHY_LED_STRIP_COLORGULF = 'Color Gulf'
+/** @type {string} */
+/// leaphy servo write
+Blockly.Msg.ARD_SERVO_WRITE = 'Set servo pin'
+/** @type {string} */
+/// leaphy servo write to
+Blockly.Msg.ARD_SERVO_WRITE_TO = 'angle to'
+/** @type {string} */
+/// leaphy servo write angle
+Blockly.Msg.ARD_SERVO_WRITE_DEG_180 = 'degrees'
+/** @type {string} */
+/// leaphy servo read angle
+Blockly.Msg.ARD_SERVO_READ = 'Read servo pin'
+/** @type {string} */
+/// leaphy write digital pin
+Blockly.Msg.ARD_DIGITALWRITE = 'Set digital pin'
+/** @type {string} */
+/// leaphy write pin value
+Blockly.Msg.ARD_WRITE_TO = 'To'
+/** @type {string} */
+/// leaphy arduino pin warning
+Blockly.Msg.ARD_PIN_WARN1 = 'Pin %1 is needed for %2 as pin %3. Already in use as %4.'
+/** @type {string} */
+/// leaphy write analog pin
+Blockly.Msg.ARD_ANALOGWRITE = 'Set PWM pin'
+/** @type {string} */
+/// Trig pin
+Blockly.Msg.LEAPHY_SONAR_READ_TRIG = 'Sonar Trig';
+/** @type {string} */
+/// Echo pin
+Blockly.Msg.LEAPHY_SONAR_READ_ECHO = 'Echo';
+/** @type {string} */
+/// Buzz buzz
+Blockly.Msg.LEAPHY_BUZZ_BUZZ = 'Buzz';
+/** @type {string} */
+/// Buzz Herz
+Blockly.Msg.LEAPHY_BUZZ_HERTZ = 'Hertz';
+/** @type {string} */
+/// Buzz ms
+Blockly.Msg.LEAPHY_BUZZ_MS = 'ms';
+/** @type {string} */
+/// Print print
+Blockly.Msg.LEAPHY_SERIAL_PRINT = 'Show on screen';
+/** @type {string} */
+/// Clear display
+Blockly.Msg.LEAPHY_DISPLAY_CLEAR = 'Clear display';
+/** @type {string} */
+/// Set display
+Blockly.Msg.LEAPHY_DISPLAY_PRINT = 'Display - Set Ln.';
+/** @type {string} */
+/// Print display
+Blockly.Msg.LEAPHY_DISPLAY_DISPLAY = 'Show on display';
+
+/** @type {string} */
+/// Sitation Category Title
+Blockly.Msg.LEAPHY_SITUATION_CATEGORY = 'Thinkflow';
+/** @type {string} */
+/// Numbers Category Title
+Blockly.Msg.LEAPHY_NUMBERS_CATEGORY = 'Numbers';
+/** @type {string} */
+/// Variables Category Title
+Blockly.Msg.LEAPHY_VARIABLES_CATEGORY = 'Variables';
+/** @type {string} */
+/// Functions Category Title
+Blockly.Msg.LEAPHY_FUNCTIONS_CATEGORY = 'Custom Blocks';
+
+/** @type {string} */
+/// Arduino Delay in ms
+Blockly.Msg.ARD_TIME_DELAY = 'during'
+/** @type {string} */
+/// Arduino ms
+Blockly.Msg.ARD_TIME_MS = 'ms'
+/** @type {string} */
+/// Frduino Delay in ms tooltip
+Blockly.Msg.ARD_TIME_DELAY_TIP = 'Wait specific time in milliseconds';
+
 /** @type {string} */
 /// {{Notranslate}} Hue value for all logic blocks.
 Blockly.Msg.LOGIC_HUE = '210';

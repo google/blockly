@@ -333,9 +333,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     }
 
     dom.startTextWidthCache();
-    // AnyDuringMigration because:  Argument of type 'Block | null' is not
-    // assignable to parameter of type 'Block'.
-    super.setParent(newParent as AnyDuringMigration);
+    super.setParent(newParent);
     dom.stopTextWidthCache();
 
     const svgRoot = this.getSvgRoot();
@@ -642,10 +640,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     }
     const input = this.getInput(collapsedInputName) ||
         this.appendDummyInput(collapsedInputName);
-    // AnyDuringMigration because:  Argument of type 'FieldLabel' is not
-    // assignable to parameter of type 'string | Field'.
-    input.appendField(
-        new FieldLabel(text) as AnyDuringMigration, collapsedFieldName);
+    input.appendField(new FieldLabel(text), collapsedFieldName);
   }
 
   /**
@@ -737,9 +732,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
     if (menuOptions && menuOptions.length) {
       ContextMenu.show(e, menuOptions, this.RTL);
-      // AnyDuringMigration because:  Argument of type 'this' is not assignable
-      // to parameter of type 'Block | null'.
-      ContextMenu.setCurrentBlock(this as AnyDuringMigration);
+      ContextMenu.setCurrentBlock(this);
     }
   }
 
@@ -958,16 +951,13 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     if (this.isInsertionMarker_) {
       return null;
     }
-    // AnyDuringMigration because:  Argument of type 'this' is not assignable to
-    // parameter of type 'Block'. AnyDuringMigration because:  Argument of type
-    // 'this' is not assignable to parameter of type 'Block'.
     return {
       saveInfo: blocks.save(
-                    this as AnyDuringMigration,
+                    this,
                     {addCoordinates: true, addNextBlocks: false}) as
           blocks.State,
       source: this.workspace,
-      typeCounts: common.getBlockTypeCounts(this as AnyDuringMigration, true),
+      typeCounts: common.getBlockTypeCounts(this, true),
     };
   }
 

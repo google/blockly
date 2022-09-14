@@ -952,9 +952,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       return null;
     }
     return {
-      saveInfo: blocks.save(
-                    this,
-                    {addCoordinates: true, addNextBlocks: false}) as
+      saveInfo:
+          blocks.save(this, {addCoordinates: true, addNextBlocks: false}) as
           blocks.State,
       source: this.workspace,
       typeCounts: common.getBlockTypeCounts(this, true),
@@ -1268,7 +1267,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    */
   bringToFront() {
     /* eslint-disable-next-line @typescript-eslint/no-this-alias */
-    let block : this|null = this;
+    let block: this|null = this;
     do {
       const root = block.getSvgRoot();
       const parent = root.parentNode;

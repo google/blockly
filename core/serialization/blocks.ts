@@ -390,13 +390,17 @@ export function appendInternal(
  * @param param1 parentConnection: If provided, the system will attempt to
  *     connect the block to this connection after it is created. Undefined by
  *     default. isShadow: The block will be set to a shadow block after it is
- *     created. False by default.
+ *     created. False by default. loadedBlocks: An array to store the loaded
+ *     blocks. Empty by default.
  * @returns The block that was just appended.
  */
 function appendPrivate(
     state: State, workspace: Workspace,
-    {parentConnection = undefined, isShadow = false}:
-        {parentConnection?: Connection, isShadow?: boolean} = {}): Block {
+    {parentConnection = undefined, isShadow = false, loadedBlocks = []}: {
+      parentConnection?: Connection,
+      isShadow?: boolean,
+      loadedBlocks?: BlockSvg[],
+    } = {}): Block {
   if (!state['type']) {
     throw new MissingBlockType(state);
   }
@@ -409,9 +413,14 @@ function appendPrivate(
   tryToConnectParent(parentConnection, block, state);
   loadIcons(block, state);
   loadFields(block, state);
-  loadInputBlocks(block, state);
-  loadNextBlocks(block, state);
-  initBlock(block, workspace.rendered);
+  loadInputBlocks(block, state, loadedBlocks);
+  loadNextBlocks(block, state, loadedBlocks);
+  initBlock(block, workspace.rendered, loadedBlocks);
+
+  if (!parentConnection) {
+    // Render the loaded blocks.
+    loadedBlocks.forEach((block: BlockSvg) => block.render(false));
+  }
 
   return block;
 }
@@ -578,8 +587,9 @@ function loadFields(block: Block, state: State) {
  *
  * @param block The block to attach input blocks to.
  * @param state The state object to reference.
+ * @param loadedBlocks An array to store the loaded blocks.
  */
-function loadInputBlocks(block: Block, state: State) {
+function loadInputBlocks(block: Block, state: State, loadedBlocks: BlockSvg[]) {
   if (!state['inputs']) {
     return;
   }
@@ -590,7 +600,7 @@ function loadInputBlocks(block: Block, state: State) {
     if (!input || !input.connection) {
       throw new MissingConnection(inputName, block, state);
     }
-    loadConnection(input.connection, state['inputs'][inputName]);
+    loadConnection(input.connection, state['inputs'][inputName], loadedBlocks);
   }
 }
 
@@ -600,15 +610,16 @@ function loadInputBlocks(block: Block, state: State) {
  *
  * @param block The block to attach next blocks to.
  * @param state The state object to reference.
+ * @param loadedBlocks An array to store the loaded blocks.
  */
-function loadNextBlocks(block: Block, state: State) {
+function loadNextBlocks(block: Block, state: State, loadedBlocks: BlockSvg[]) {
   if (!state['next']) {
     return;
   }
   if (!block.nextConnection) {
     throw new MissingConnection('next', block, state);
   }
-  loadConnection(block.nextConnection, state['next']);
+  loadConnection(block.nextConnection, state['next'], loadedBlocks);
 }
 /**
  * Applies the state defined by connectionState to the given connection, ie
@@ -619,14 +630,15 @@ function loadNextBlocks(block: Block, state: State) {
  *     shadow block, or any connected real block.
  */
 function loadConnection(
-    connection: Connection, connectionState: ConnectionState) {
+    connection: Connection, connectionState: ConnectionState,
+    loadedBlocks: BlockSvg[]) {
   if (connectionState['shadow']) {
     connection.setShadowState(connectionState['shadow']);
   }
   if (connectionState['block']) {
     appendPrivate(
         connectionState['block'], connection.getSourceBlock().workspace,
-        {parentConnection: connection});
+        {parentConnection: connection, loadedBlocks});
   }
 }
 
@@ -636,8 +648,9 @@ function loadConnection(
  *
  * @param block The block to initialize.
  * @param rendered Whether the block is a rendered or headless block.
+ * @param loadedBlocks An array to store the loaded blocks.
  */
-function initBlock(block: Block, rendered: boolean) {
+function initBlock(block: Block, rendered: boolean, loadedBlocks: BlockSvg[]) {
   if (rendered) {
     const blockSvg = block as BlockSvg;
     // Adding connections to the connection db is expensive. This defers that
@@ -645,7 +658,8 @@ function initBlock(block: Block, rendered: boolean) {
     blockSvg.setConnectionTracking(false);
 
     blockSvg.initSvg();
-    blockSvg.render(false);
+    // Render the block later.
+    loadedBlocks.push(blockSvg);
     // fixes #6076 JSO deserialization doesn't
     // set .iconXY_ property so here it will be set
     const icons = blockSvg.getIcons();

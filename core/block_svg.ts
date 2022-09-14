@@ -1268,7 +1268,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    */
   bringToFront() {
     /* eslint-disable-next-line @typescript-eslint/no-this-alias */
-    let block = this;
+    let block : this|null = this;
     do {
       const root = block.getSvgRoot();
       const parent = root.parentNode;
@@ -1277,9 +1277,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       if (childNodes[childNodes.length - 1] !== root) {
         parent!.appendChild(root);
       }
-      // AnyDuringMigration because:  Type 'BlockSvg | null' is not assignable
-      // to type 'this'.
-      block = block.getParent() as AnyDuringMigration;
+      block = block.getParent();
     } while (block);
   }
 

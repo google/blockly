@@ -19,6 +19,7 @@ const licenseTasks = require('./scripts/gulpfiles/license_tasks');
 const appengineTasks = require('./scripts/gulpfiles/appengine_tasks');
 const releaseTasks = require('./scripts/gulpfiles/release_tasks');
 const cleanupTasks = require('./scripts/gulpfiles/cleanup_tasks');
+const testTasks = require('./scripts/gulpfiles/test_tasks');
 
 module.exports = {
   deployDemos: appengineTasks.deployDemos,
@@ -50,4 +51,6 @@ module.exports = {
   publish: releaseTasks.publish,
   publishBeta: releaseTasks.publishBeta,
   sortRequires: cleanupTasks.sortRequires,
+  test: testTasks.test,
+  testGenerators: testTasks.generators,
 };

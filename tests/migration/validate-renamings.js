@@ -17,6 +17,7 @@ const JsonSchema = require('@hyperjump/json-schema');
 const JSON5 = require('json5');
 const fs = require('fs');
 const path = require('path');
+const {normalizePath} = require('../../scripts/build_helper');
 
 
 /**
@@ -35,7 +36,7 @@ const RENAMINGS_FILENAME =
 // Can't use top-level await outside a module, and can't use require
 // in a module, so use an IIAFE.
 (async function() {
-  const schemaUrl = 'file://' + path.resolve(SCHEMA_FILENAME);
+  const schemaUrl = 'file://' + normalizePath(path.resolve(SCHEMA_FILENAME));
   const schema = await JsonSchema.get(schemaUrl);
 
   const renamingsJson5 = fs.readFileSync(RENAMINGS_FILENAME);

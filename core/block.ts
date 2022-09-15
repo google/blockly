@@ -580,13 +580,11 @@ export class Block implements IASTNodeLocation, IDeletable {
    */
   getSurroundParent(): this|null {
     /* eslint-disable-next-line @typescript-eslint/no-this-alias */
-    let block = this;
+    let block: this|null = this;
     let prevBlock;
     do {
       prevBlock = block;
-      // AnyDuringMigration because:  Type 'Block | null' is not assignable to
-      // type 'this'.
-      block = block.getParent() as AnyDuringMigration;
+      block = block.getParent();
       if (!block) {
         // Ran off the top.
         return null;

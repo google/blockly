@@ -225,17 +225,25 @@ class ToolboxCategory extends ToolboxItem {
     this.rowContents_.style.pointerEvents = 'none';
     this.rowDiv_.appendChild(this.rowContents_);
 
-    this.iconDom_ = this.createIconDom_();
-    aria.setRole(this.iconDom_, aria.Role.PRESENTATION);
-    this.rowContents_.appendChild(this.iconDom_);
+    // This is disabled because the icon is now created within the createLabelDom_ method. 
+    // TODO: We should evaluate whether it would not be better to just use the createIconDom_
+    // for this because it is a better fit semantically.
+    //this.iconDom_ = this.createIconDom_();
+    //aria.setRole(this.iconDom_, aria.Role.PRESENTATION);
+    //this.rowContents_.appendChild(this.iconDom_);
 
-    this.labelDom_ = this.createLabelDom_(this.name_);
+    // This is changed to a separate method that creates the label in the Leaphy way
+    // See other comments for possible improvements in this area.
+    this.labelDom_ = this.createLeaphyLabelDom_(this.name_);
+    //this.labelDom_ = this.createLabelDom_(this.name_);
     this.rowContents_.appendChild(this.labelDom_);
     aria.setState(
         /** @type {!Element} */ (this.htmlDiv_), aria.State.LABELLEDBY,
         this.labelDom_.getAttribute('id'));
 
-    this.addColourBorder_(this.colour_);
+    // This is disabled because we have this inside the Leaphy Client now.
+    // TODO: We should try to have this back into Blockly
+    //this.addColourBorder_(this.colour_);
 
     return this.htmlDiv_;
   }
@@ -295,6 +303,44 @@ class ToolboxCategory extends ToolboxItem {
 
     toolboxIcon.style.display = 'inline-block';
     return toolboxIcon;
+  }
+
+  /**
+   * Creates the span that holds the Leaphy category label.
+   * This should have an ID for accessibility purposes.
+   * @param {string} name The name of the category.
+   * @return {!Element} The span that holds the category label.
+   * @protected
+   */
+   createLeaphyLabelDom_(name) {
+    const toolboxLabelContainer = document.createElement('div');
+    toolboxLabelContainer.style.position = 'relative';
+  
+    const toolboxIcon = document.createElement('img');
+    toolboxIcon.setAttribute('src', 'media/' + this.getId() + '.svg');
+    toolboxIcon.setAttribute('height', '72px');
+    toolboxIcon.setAttribute('width', '72px');
+    toolboxIcon.style.marginLeft = '0px';
+  
+    toolboxLabelContainer.appendChild(toolboxIcon);
+  
+    const toolboxTextLabel = document.createElement('div');
+    
+    toolboxTextLabel.style.top = '40px';
+    toolboxTextLabel.style.width = '50px';
+    toolboxTextLabel.style.marginLeft = '11px';
+    toolboxTextLabel.style.position = 'absolute';
+    toolboxTextLabel.style.fontSize = '10px';
+    toolboxTextLabel.style.lineHeight = '12px';
+    toolboxTextLabel.style.lineHeight = '99%';
+    toolboxTextLabel.style.textAlign = 'center';
+    toolboxTextLabel.style.verticalAlign = 'top';
+  
+    toolboxTextLabel.textContent = name;
+  
+    toolboxLabelContainer.appendChild(toolboxTextLabel);
+  
+    return toolboxLabelContainer;
   }
 
   /**
@@ -676,19 +722,19 @@ Css.register(`
 }
 
 .blocklyToolboxDiv[layout="h"] .blocklyToolboxCategory {
-  margin: 1px 5px 1px 0;
+  margin: 1px 0px 1px 0;
 }
 
 .blocklyToolboxDiv[dir="RTL"][layout="h"] .blocklyToolboxCategory {
-  margin: 1px 0 1px 5px;
+  margin: 1px 0 1px 0px;
 }
 
 .blocklyTreeRow {
-  height: 22px;
-  line-height: 22px;
-  margin-bottom: 3px;
-  padding-right: 8px;
-  white-space: nowrap;
+  text-align: center;
+  height: 72px;
+  max-width: 72px;
+  margin-bottom: 0px;
+  padding: 0px;
 }
 
 .blocklyToolboxDiv[dir="RTL"] .blocklyTreeRow {

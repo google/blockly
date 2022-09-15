@@ -13,6 +13,9 @@
 
  goog.module('Blockly.Arduino.all');
  
+ goog.require('Blockly.Arduino.leaphyCommon');
  goog.require('Blockly.Arduino.leaphyOriginal');
+ goog.require('Blockly.Arduino.arduino');
+ goog.require('Blockly.Arduino.math');
  
  

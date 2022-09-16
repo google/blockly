@@ -181,10 +181,9 @@ class FieldMultilineInput extends FieldTextInput {
         return;
       }
 
-      for (let i = 0; i < line.length; i += this.maxDisplayLength) {
-        const trimLine = line.substring(i, i + this.maxDisplayLength);
-        formatText += `${trimLine}\n`;
-      }
+      // reg cut long string by new line witch more maxDisplayLength
+      const regCutString = new RegExp(`S{${this.maxDisplayLength}}|[\\s\\S]{1,${this.maxDisplayLength}}(?!\\S)`, 'g');
+      formatText += line.replace(regCutString, '$&\n');
     });
 
     if (this.sourceBlock_.RTL) {
@@ -278,6 +277,7 @@ class FieldMultilineInput extends FieldTextInput {
    */
   getFastTextWidth_() {
     let maxLineLength = 0;
+    const padding = 7;
     // The default width is based on the longest line in the display text,
     // but when it's being edited, width should be calculated based on the
     // absolute longest line, even if it would be truncated after editing.
@@ -291,7 +291,7 @@ class FieldMultilineInput extends FieldTextInput {
 
     for (let i = 0; i < actualEditorLines.length; i++) {
       if (actualEditorLines[i].length > this.maxDisplayLength) {
-        actualEditorLines[i] = actualEditorLines[i].substring(0, this.maxDisplayLength);
+        actualEditorLines[i] = actualEditorLines[i].substring(0, this.maxDisplayLength + padding);
       }
 
       dummyTextElement.textContent = actualEditorLines[i];

@@ -486,6 +486,7 @@ let content = (`
 }
 
 .blocklyFlyoutBookmark {
+  display: flex;
   padding: 4px 6px;
   background-color: #eee;
   overflow: hidden;

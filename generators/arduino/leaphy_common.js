@@ -32,7 +32,7 @@ Arduino['leaphy_start'] = function (block) {
     var code = returnType + ' ' + funcName + '() {\n' + branch + '}';
 
     code = Blockly.Arduino.scrub_(block, code);
-    //Arduino.userFunctions_[funcName] = code;
+    Arduino.userFunctions_[funcName] = code;
     Arduino.addSetup('userSetupCode', funcName + '();', false);
     return null;
 };

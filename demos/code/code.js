@@ -464,17 +464,21 @@ Code.init = function() {
   var toolboxXml = Blockly.Xml.textToDom(toolboxText);
 
   Code.workspace = Blockly.inject('content_blocks',
-      {grid:
-          {spacing: 25,
-           length: 3,
-           colour: '#ccc',
-           snap: true},
-       media: '../../media/',
-       rtl: rtl,
-       toolbox: toolboxXml,
-       zoom:
-           {controls: true,
-            wheel: true}
+      {
+        grid: {
+          spacing: 25,
+          length: 3,
+          colour: '#ccc',
+          snap: true
+        },
+        media: '../../media/',
+        rtl: rtl,
+        toolbox: toolboxXml,
+        zoom: {
+          controls: true,
+          wheel: true
+        },
+        renderer: 'zelos'
       });
 
   // Add to reserved word list: Local variables in execution environment (runJS)

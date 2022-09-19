@@ -1,13 +1,13 @@
 {
   "chunk": [
     "blockly:261",
-    "blocks:13:blockly",
+    "blocks:16:blockly",
     "all:11:blockly",
     "all1:11:blockly",
     "all2:11:blockly",
     "all3:11:blockly",
     "all4:11:blockly",
-    "all5:9:blockly"
+    "all5:13:blockly"
   ],
   "js": [
     "./core/inject.js",
@@ -272,6 +272,9 @@
     "./closure/goog/base_minimal.js",
     "./core/blockly.js",
     "./blocks/arduino.js",
+    "./blocks/leaphy_extra.js",
+    "./blocks/leaphy_click.js",
+    "./blocks/leaphy_flitz.js",
     "./blocks/leaphy_original.js",
     "./blocks/leaphy_common.js",
     "./blocks/variables_dynamic.js",
@@ -339,8 +342,12 @@
     "./generators/dart.js",
     "./generators/dart/colour.js",
     "./generators/dart/all.js",
+    "./generators/arduino/logic.js",
+    "./generators/arduino/loops.js",
     "./generators/arduino/math.js",
     "./generators/arduino/arduino.js",
+    "./generators/arduino/leaphy_flitz.js",
+    "./generators/arduino/leaphy_click.js",
     "./generators/arduino/leaphy_original.js",
     "./core/Ardublockly/types.js",
     "./core/Ardublockly/type.js",

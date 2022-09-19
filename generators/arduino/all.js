@@ -15,7 +15,11 @@
  
  goog.require('Blockly.Arduino.leaphyCommon');
  goog.require('Blockly.Arduino.leaphyOriginal');
+ goog.require('Blockly.Arduino.leaphyClick');
+ goog.require('Blockly.Arduino.leaphyFlitz');
  goog.require('Blockly.Arduino.arduino');
  goog.require('Blockly.Arduino.math');
+ goog.require('Blockly.Arduino.loops');
+ goog.require('Blockly.Arduino.logic');
  
  

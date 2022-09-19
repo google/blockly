@@ -131,6 +131,7 @@
 	"COLOUR_BLEND_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Colour#blending-colours https://github.com/google/blockly/wiki/Colour#blending-colours].",
 	"CONTROLS_REPEAT_HELPURL": "{{Optional}} url - Describes 'repeat loops' in computer programs; consider using the translation of the page [https://en.wikipedia.org/wiki/Control_flow https://en.wikipedia.org/wiki/Control_flow].",
 	"CONTROLS_REPEAT_TITLE": "block input text - Title of [https://github.com/google/blockly/wiki/Loops#repeat repeat block].\n\nParameters:\n* %1 - the number of times the body of the loop should be repeated.",
+	"CONTROLS_REPEAT_FOREVER_TITLE": "block input text - Title of repeat forever block",
 	"CONTROLS_REPEAT_INPUT_DO": "block text - Preceding the blocks in the body of the loop.  See [https://github.com/google/blockly/wiki/Loops https://github.com/google/blockly/wiki/Loops].\n{{Identical|Do}}",
 	"CONTROLS_REPEAT_TOOLTIP": "tooltip - See [https://github.com/google/blockly/wiki/Loops#repeat https://github.com/google/blockly/wiki/Loops#repeat].",
 	"CONTROLS_WHILEUNTIL_HELPURL": "{{Optional}} url - Describes 'while loops' in computer programs; consider using the translation of [https://en.wikipedia.org/wiki/While_loop https://en.wikipedia.org/wiki/While_loop], if present, or [https://en.wikipedia.org/wiki/Control_flow https://en.wikipedia.org/wiki/Control_flow].",

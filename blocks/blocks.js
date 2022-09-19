@@ -24,6 +24,9 @@ const variables = goog.require('Blockly.libraryBlocks.variables');
 const variablesDynamic = goog.require('Blockly.libraryBlocks.variablesDynamic');
 const leaphyCommon = goog.require('Blockly.libraryBlocks.leaphyCommon');
 const leaphyOriginal = goog.require('Blockly.libraryBlocks.leaphyOriginal');
+const leaphyFlitz = goog.require('Blockly.libraryBlocks.leaphyFlitz');
+const leaphyClick = goog.require('Blockly.libraryBlocks.leaphyClick');
+const leaphyExtra = goog.require('Blockly.libraryBlocks.leaphyExtra');
 const arduino = goog.require('Blockly.libraryBlocks.arduino');
 /* eslint-disable-next-line no-unused-vars */
 const {BlockDefinition} = goog.requireType('Blockly.blocks');
@@ -40,6 +43,9 @@ exports.variables = variables;
 exports.variablesDynamic = variablesDynamic;
 exports.leaphyCommon = leaphyCommon;
 exports.leaphyOriginal = leaphyOriginal;
+exports.leaphyFlitz = leaphyFlitz;
+exports.leaphyClick = leaphyClick;
+exports.leaphyExtra = leaphyExtra;
 exports.arduino = arduino;
 
 /**
@@ -58,6 +64,9 @@ const blocks = Object.assign({},
     variablesDynamic.blocks, 
     leaphyCommon.blocks,
     leaphyOriginal.blocks,
+    leaphyFlitz.blocks,
+    leaphyClick.blocks,
+    leaphyExtra.blocks,
     arduino.blocks
     );
 exports.blocks = blocks;

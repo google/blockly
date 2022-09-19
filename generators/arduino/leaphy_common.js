@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Generating Arduino for leaphy_common blocks.
+ * @fileoverview Generating Arduino for Leaphy Common blocks.
  */
  'use strict';
 
@@ -31,23 +31,23 @@ Arduino['leaphy_start'] = function (block) {
     var returnType = 'void';
     var code = returnType + ' ' + funcName + '() {\n' + branch + '}';
 
-    code = Blockly.Arduino.scrub_(block, code);
+    code = Arduino.scrub_(block, code);
     Arduino.userFunctions_[funcName] = code;
     Arduino.addSetup('userSetupCode', funcName + '();', false);
     return null;
 };
 
 Arduino['leaphy_serial_print_line'] = function(block) {
-    Blockly.Arduino.addSetup('serial', 'Serial.begin(115200);', false);
-    var value = Blockly.Arduino.valueToCode(this, 'VALUE', Blockly.Arduino.ORDER_ATOMIC) || '0';
+    Arduino.addSetup('serial', 'Serial.begin(115200);', false);
+    var value = Arduino.valueToCode(this, 'VALUE', Arduino.ORDER_ATOMIC) || '0';
     var code = 'Serial.println(' + value + ');\n';
     return code;
 };
 
 Arduino['leaphy_serial_print_value'] = function(block) {
-    Blockly.Arduino.addSetup('serial', 'Serial.begin(115200);', false);
-    var name = Blockly.Arduino.valueToCode(this, 'NAME', Blockly.Arduino.ORDER_ATOMIC) || '0';
-    var value = Blockly.Arduino.valueToCode(this, 'VALUE', Blockly.Arduino.ORDER_ATOMIC) || '0';
+    Arduino.addSetup('serial', 'Serial.begin(115200);', false);
+    var name = Arduino.valueToCode(this, 'NAME', Arduino.ORDER_ATOMIC) || '0';
+    var value = Arduino.valueToCode(this, 'VALUE', Arduino.ORDER_ATOMIC) || '0';
     var code = 'Serial.print(' + name + ');\nSerial.print(" = ");\nSerial.println(' + value + ');\n';
     return code;
 };

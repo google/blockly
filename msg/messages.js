@@ -476,6 +476,9 @@ Blockly.Msg.CONTROLS_REPEAT_HELPURL = 'https://en.wikipedia.org/wiki/For_loop';
 /// block input text - Title of [https://github.com/google/blockly/wiki/Loops#repeat repeat block].\n\nParameters:\n* %1 - the number of times the body of the loop should be repeated.
 Blockly.Msg.CONTROLS_REPEAT_TITLE = 'repeat %1 times';
 /** @type {string} */
+/// block input text - Title of repeat forever block
+Blockly.Msg.CONTROLS_REPEAT_FOREVER_TITLE = 'repeat forever';
+/** @type {string} */
 /// block text - Preceding the blocks in the body of the loop.  See [https://github.com/google/blockly/wiki/Loops https://github.com/google/blockly/wiki/Loops].\n{{Identical|Do}}
 Blockly.Msg.CONTROLS_REPEAT_INPUT_DO = 'do';
 /** @type {string} */

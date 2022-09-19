@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Generating Arduino for leaphy_common blocks.
+ * @fileoverview Generating Arduino for Arduino blocks.
  */
  'use strict';
 

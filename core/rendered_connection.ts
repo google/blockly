@@ -391,7 +391,7 @@ export class RenderedConnection extends Connection {
     // rendering takes place, since rendering requires knowing the dimensions
     // of lower blocks. Also, since rendering a block renders all its parents,
     // we only need to render the leaf nodes.
-    let renderList: AnyDuringMigration[] = [];
+    let renderList: Block[] = [];
     if (this.type !== ConnectionType.INPUT_VALUE &&
         this.type !== ConnectionType.NEXT_STATEMENT) {
       // Only spider down.

@@ -7,7 +7,7 @@
     "all2:11:blockly",
     "all3:11:blockly",
     "all4:11:blockly",
-    "all5:13:blockly"
+    "all5:14:blockly"
   ],
   "js": [
     "./core/inject.js",
@@ -342,6 +342,7 @@
     "./generators/dart.js",
     "./generators/dart/colour.js",
     "./generators/dart/all.js",
+    "./generators/arduino/variables.js",
     "./generators/arduino/logic.js",
     "./generators/arduino/loops.js",
     "./generators/arduino/math.js",

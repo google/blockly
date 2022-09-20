@@ -13,7 +13,7 @@ goog.module('Blockly.Arduino.arduino');
  
 const Arduino = goog.require('Blockly.Arduino');
  
- 
+
 Arduino['time_delay'] = function (block) {
     var delayTime = Arduino.valueToCode(
         block, 'DELAY_TIME_MILI', Arduino.ORDER_ATOMIC) || '0';

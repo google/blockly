@@ -32,7 +32,6 @@ goog.require('Blockly.Generator');
 goog.require('Blockly.StaticTyping');
 const {Names, NameType} = goog.require('Blockly.Names');
 
-
 /**
  * Arduino code generator.
  * @type {!Blockly.Generator}
@@ -144,6 +143,8 @@ Arduino.init = function (workspace) {
     this.nameDB_.reset();
   }
 
+  Arduino.nameDB_.setVariableMap(workspace.getVariableMap());
+
   // Create a dictionary of definitions to be printed at the top of the sketch
   Arduino.includes_ = Object.create(null);
   // Create a dictionary of global definitions to be printed after variables
@@ -174,19 +175,19 @@ Arduino.init = function (workspace) {
         Arduino.addVariable(varName,
           varType
           + ' '
-          + this.nameDB_.getName(varName, Blockly.Variables.NAME_TYPE)
+          + this.nameDB_.getName(varName, NameType.VARIABLE)
           + ';');
       } else {
         Arduino.addVariable(varName,
           Arduino.getArduinoType_(varsWithTypes[varName])
           + ' '
-          + this.nameDB_.getName(varName, Blockly.Variables.NAME_TYPE)
+          + this.nameDB_.getName(varName, NameType.VARIABLE)
           + ';');
       }
     } else {
       Arduino.addVariable(varName,
         'undefined '
-        + this.nameDB_.getName(varName, Blockly.Variables.NAME_TYPE)
+        + this.nameDB_.getName(varName, NameType.VARIABLE)
         + ';');
     }
   }
@@ -527,7 +528,10 @@ Arduino.getArduinoType_ = function (typeBlockly) {
     case Blockly.Types.BOOLEAN.typeId:
       return 'boolean';
     case Blockly.Types.NULL.typeId:
-      return 'void';
+      //return 'void';
+      // TODO: Find a more elegant way to default to double type
+      // This could be by removing StaticTyping completely from Leaphy Blockly
+      return 'double';
     case Blockly.Types.ARRAY.typeId:
       return Arduino.getArduinoType_(typeBlockly.arrayType);
     case Blockly.Types.UNDEF.typeId:

@@ -12,6 +12,7 @@
 goog.module('Blockly.Arduino.math');
 
 const Arduino = goog.require('Blockly.Arduino');
+const {NameType} = goog.require('Blockly.Names');
 
 
 /**
@@ -247,8 +248,8 @@ Arduino['math_number_property'] = function (block) {
 Arduino['math_change'] = function (block) {
     var argument0 = Arduino.valueToCode(block, 'DELTA',
         Arduino.ORDER_ADDITIVE) || '0';
-    var varName = Arduino.variableDB_.getName(
-        block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
+    var varName = Arduino.nameDB_.getName(
+        block.getFieldValue('VAR'), NameType.VARIABLE);
     return varName + ' += ' + argument0 + ';\n';
 };
 
@@ -314,7 +315,7 @@ Arduino['math_random_int'] = function (block) {
         Arduino.ORDER_NONE) || '0';
     var argument1 = Arduino.valueToCode(block, 'TO',
         Arduino.ORDER_NONE) || '0';
-    var functionName = Arduino.variableDB_.getDistinctName(
+    var functionName = Arduino.nameDB_.getDistinctName(
         'math_random_int', Blockly.Generator.NAME_TYPE);
     Arduino.math_random_int.random_function = functionName;
     var func = [

@@ -7,7 +7,7 @@
     "all2:11:blockly",
     "all3:11:blockly",
     "all4:11:blockly",
-    "all5:15:blockly"
+    "all5:16:blockly"
   ],
   "js": [
     "./core/inject.js",
@@ -348,6 +348,7 @@
     "./generators/arduino/loops.js",
     "./generators/arduino/math.js",
     "./generators/arduino/arduino.js",
+    "./generators/arduino/leaphy_extra.js",
     "./generators/arduino/leaphy_flitz.js",
     "./generators/arduino/leaphy_click.js",
     "./generators/arduino/leaphy_original.js",

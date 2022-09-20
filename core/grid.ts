@@ -15,7 +15,7 @@ goog.declareModuleId('Blockly.Grid');
 
 import * as dom from './utils/dom.js';
 import {Svg} from './utils/svg.js';
-import {GridOptions} from './blockly_options.js';
+import {GridOptions} from './options.js';
 
 
 /**

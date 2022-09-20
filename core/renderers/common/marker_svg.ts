@@ -567,7 +567,7 @@ export class MarkerSvg {
    *
    * @returns The object holding attributes to make the marker blink.
    */
-  protected getBlinkProperties_(): object {
+  protected getBlinkProperties_(): {[key: string]: string} {
     return {
       'attributeType': 'XML',
       'attributeName': 'fill',

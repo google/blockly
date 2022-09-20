@@ -22,5 +22,6 @@
  goog.require('Blockly.Arduino.loops');
  goog.require('Blockly.Arduino.logic');
  goog.require('Blockly.Arduino.variables');
+ goog.require('Blockly.Arduino.procedures');
  
  

@@ -22,7 +22,7 @@ Blockly.Instances.NAME_TYPE = 'INSTANCE';
 
 /**
  * Find all user-created instances.
- * @param {?string}
+ * @param {?string} instanceType
  * @param {!Blockly.Workspace} workspace Workspace to transverse for instances.
  * @return {!Array.<string>} Array of instance names.
  */

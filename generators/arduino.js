@@ -21,7 +21,7 @@
 /**
  * @fileoverview Helper functions for generating Arduino for blocks.
  * @author gasolin@gmail.com (Fred Lin)
- * @reboot scanet@libreduc.cc (SebCanet)
+ * reboot scanet@libreduc.cc (SebCanet)
  */
 'use strict';
 

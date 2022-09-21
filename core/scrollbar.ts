@@ -287,7 +287,9 @@ export class Scrollbar {
     const tempX = this.position.x + this.origin_.x;
     const tempY = this.position.y + this.origin_.y;
     const transform = 'translate(' + tempX + 'px,' + tempY + 'px)';
-    dom.setCssTransform(this.outerSvg_ as Element, transform);
+    if (this.outerSvg_) {
+      dom.setCssTransform(this.outerSvg_, transform);
+    }
   }
 
   /**

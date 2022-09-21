@@ -59,7 +59,7 @@ export class ToolboxSeparator extends ToolboxItem {
    */
   protected createDom_(): HTMLDivElement {
     const container = document.createElement('div');
-    const className = (this.cssConfig_ as AnyDuringMigration)['container'];
+    const className = this.cssConfig_['container'];
     if (className) {
       container.classList.add(className);
     }

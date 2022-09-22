@@ -26,11 +26,15 @@ module.exports = {
 
   // Main sequence targets.  They already invoke prerequisites.
   cleanBuildDir: buildTasks.cleanBuildDir,
+  cleanReleaseDir: packageTasks.cleanReleaseDir,
   messages: buildTasks.messages,
   tsc: buildTasks.tsc,
   deps: buildTasks.deps,
   minify: buildTasks.minify,
   build: buildTasks.build,
+  package: packageTasks.package,
+  publish: releaseTasks.publish,
+  publishBeta: releaseTasks.publishBeta,
 
   // Manually-invokable targets that invoke prerequisites.
   prepare: buildTasks.prepare,
@@ -44,20 +48,16 @@ module.exports = {
 
   // Legacy target, to be deleted.
   checkin: buildTasks.checkin,
+  recompile: releaseTasks.recompile,
 
   // TBD.
   deployDemos: appengineTasks.deployDemos,
   deployDemosBeta: appengineTasks.deployDemosBeta,
-  cleanReleaseDir: packageTasks.cleanReleaseDir,
   gitSyncDevelop: gitTasks.syncDevelop,
   gitSyncMaster: gitTasks.syncMaster,
   gitCreateRC: gitTasks.createRC,
   gitUpdateGithubPages: gitTasks.updateGithubPages,
-  package: packageTasks.package,
   checkLicenses: licenseTasks.checkLicenses,
-  recompile: releaseTasks.recompile,
   prepareDemos: appengineTasks.prepareDemos,
-  publish: releaseTasks.publish,
-  publishBeta: releaseTasks.publishBeta,
   sortRequires: cleanupTasks.sortRequires,
 };

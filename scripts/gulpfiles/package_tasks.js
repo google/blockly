@@ -19,6 +19,7 @@ gulp.replace = require('gulp-replace');
 var path = require('path');
 var fs = require('fs');
 var rimraf = require('rimraf');
+var build = require('./build_tasks');
 var {getPackageJson} = require('./helper_tasks');
 var {BUILD_DIR, RELEASE_DIR, TYPINGS_BUILD_DIR} = require('./config');
 
@@ -52,32 +53,6 @@ function packageCommonJS(namespace, dependencies) {
     template: path.join(TEMPLATE_DIR, 'node.template')
   });
 };
-
-// Sanity check that the BUILD_DIR directory exists, and that certain
-// files are in it.
-function checkBuildDir(done) {
-  // Check that directory exists.
-  if (!fs.existsSync(BUILD_DIR)) {
-    done(new Error(`The ${BUILD_DIR} directory does not exist.  ` +
-        'Has packageTasks.build been run?'));
-    return;
-  }
-  // Check files built by buildTasks.build exist in BUILD_DIR.
-  for (const fileName of [
-    'blockly_compressed.js',  // buildTasks.buildCompressed
-    'blocks_compressed.js',  // buildTasks.buildBlocks
-    'javascript_compressed.js',  // buildTasks.buildGenerators
-    'msg/js/en.js',  // buildTaks.buildLangfiles
-  ]) {
-    if (!fs.existsSync(`${BUILD_DIR}/${fileName}`)) {
-      done(new Error(
-          `Your ${BUILD_DIR} directory does not contain ${fileName}.  ` +
-          'Has packageTasks.build been run?  Try "npm run build".'));
-      return;
-    }
-  }
-  done();
-}
 
 /**
  * This task copies the compressed files and their source maps into
@@ -399,10 +374,14 @@ function cleanReleaseDir(done) {
 /**
  * This task prepares the files to be included in the NPM by copying
  * them into the release directory.
+ *
+ * Prerequisite: build.
  */
 const package = gulp.series(
-    checkBuildDir,
-    cleanReleaseDir,
+    gulp.parallel(
+        build.cleanBuildDir,
+        cleanReleaseDir),
+    build.build,
     gulp.parallel(
         packageIndex,
         packageCompressed,
@@ -426,6 +405,7 @@ const package = gulp.series(
     );
 
 module.exports = {
+  // Main sequence targets.  Each should invoke any immediate prerequisite(s).
   cleanReleaseDir: cleanReleaseDir,
   package: package,
 };

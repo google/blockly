@@ -38,7 +38,7 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  */
 export class ZoomControls implements IPositionable {
   /**
-   * The unique id for this component that is used to register with the
+   * The unique ID for this component that is used to register with the
    * ComponentManager.
    */
   id = 'zoomControls';

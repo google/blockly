@@ -5,7 +5,7 @@
  */
 
 /**
- * @fileoverview Type definitions for the Blockly id locale.
+ * @fileoverview Type definitions for the Blockly ID locale.
  * @author samelh@google.com (Sam El-Husseini)
  */
 
@@ -13,4 +13,3 @@
 
 import BlocklyMsg = Blockly.Msg;
 export = BlocklyMsg;
-

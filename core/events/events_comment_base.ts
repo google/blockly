@@ -48,7 +48,7 @@ export class CommentBase extends AbstractEvent {
     this.workspaceId = this.isBlank ? '' : opt_comment!.workspace.id;
 
     /**
-     * The event group id for the group this event belongs to. Groups define
+     * The event group ID for the group this event belongs to. Groups define
      * events that should be treated as an single action from the user's
      * perspective, and should be undone together.
      */

@@ -35,7 +35,7 @@ export class VarBase extends AbstractEvent {
     super();
     this.isBlank = typeof opt_variable === 'undefined';
 
-    /** The variable id for the variable this event pertains to. */
+    /** The variable ID for the variable this event pertains to. */
     this.varId = this.isBlank ? '' : opt_variable!.getId();
 
     /** The workspace identifier for this event. */

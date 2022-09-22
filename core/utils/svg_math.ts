@@ -55,10 +55,10 @@ export function getRelativeXY(element: Element): Coordinate {
   const x = (element as any).x && element.getAttribute('x');
   const y = (element as any).y && element.getAttribute('y');
   if (x) {
-    xy.x = parseInt(x, 10);
+    xy.x = parseInt(x);
   }
   if (y) {
-    xy.y = parseInt(y, 10);
+    xy.y = parseInt(y);
   }
   // Second, check for transform="translate(...)" attribute.
   const transform = element.getAttribute('transform');

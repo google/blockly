@@ -122,7 +122,7 @@ export function findLegalName(name: string, block: Block): string {
     if (!r) {
       name += '2';
     } else {
-      name = r[1] + (parseInt(r[2], 10) + 1);
+      name = r[1] + (parseInt(r[2]) + 1);
     }
   }
   return name;

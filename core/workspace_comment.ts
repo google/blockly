@@ -341,11 +341,11 @@ export class WorkspaceComment {
     // AnyDuringMigration because:  Argument of type 'string | null' is not
     // assignable to parameter of type 'string'.
     const commentX =
-        parseInt(xmlComment.getAttribute('x') as AnyDuringMigration, 10);
+        parseInt(xmlComment.getAttribute('x') as AnyDuringMigration);
     // AnyDuringMigration because:  Argument of type 'string | null' is not
     // assignable to parameter of type 'string'.
     const commentY =
-        parseInt(xmlComment.getAttribute('y') as AnyDuringMigration, 10);
+        parseInt(xmlComment.getAttribute('y') as AnyDuringMigration);
     if (!isNaN(commentX) && !isNaN(commentY)) {
       comment.moveBy(commentX, commentY);
     }
@@ -376,31 +376,25 @@ export class WorkspaceComment {
       // @type {string}
       // AnyDuringMigration because:  Type 'string | null' is not assignable to
       // type 'string'.
-      id: xml.getAttribute('id') as
-          AnyDuringMigration,  // The height of the comment in workspace units,
-      // or 100 if not specified.
+      id: xml.getAttribute('id') as AnyDuringMigration,
+      // The height of the comment in workspace units, or 100 if not specified.
       // @type {number}
-      h: xmlH ? parseInt(xmlH, 10) :
-                100,  // The width of the comment in workspace units, or 100 if
-      // not specified.
+      h: xmlH ? parseInt(xmlH) : 100,
+      // The width of the comment in workspace units, or 100 if not specified.
       // @type {number}
-      w: xmlW ? parseInt(xmlW, 10) :
-                100,  // The x position of the comment in workspace coordinates,
-      // or NaN if not
-      // specified in the XML.
+      w: xmlW ? parseInt(xmlW) : 100,
+      // The x position of the comment in workspace coordinates,
+      // or NaN if not specified in the XML.
       // @type {number}
       // AnyDuringMigration because:  Argument of type 'string | null' is not
       // assignable to parameter of type 'string'.
-      x: parseInt(
-          xml.getAttribute('x') as AnyDuringMigration,
-          10),  // The y position of the comment in workspace coordinates, or
-      // NaN if not
-      // specified in the XML.
+      x: parseInt(xml.getAttribute('x') as AnyDuringMigration),
+      // The y position of the comment in workspace coordinates,
+      // or NaN if not specified in the XML.
       // @type {number}
       // AnyDuringMigration because:  Argument of type 'string | null' is not
       // assignable to parameter of type 'string'.
-      y: parseInt(
-          xml.getAttribute('y') as AnyDuringMigration, 10),  // @type {string}
+      y: parseInt(xml.getAttribute('y') as AnyDuringMigration),  // @type {string}
       // AnyDuringMigration because:  Type 'string | null' is not assignable to
       // type 'string'.
       content: xml.textContent as AnyDuringMigration,

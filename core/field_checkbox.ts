@@ -27,7 +27,7 @@ import type {Sentinel} from './utils/sentinel.js';
  */
 export class FieldCheckbox extends Field {
   /** Default character for the checkmark. */
-  static readonly CHECK_CHAR = '\u2713';
+  static readonly CHECK_CHAR = '✓';
   private checkChar_: string;
 
   /**

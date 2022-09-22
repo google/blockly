@@ -190,7 +190,7 @@ export class FieldMultilineInput extends FieldTextInput {
       }
     }
     if (this.sourceBlock_.RTL) {
-      // The SVG is LTR, force value to be RTL.
+      // The SVG is LTR, force value to be RTL by adding an RLM.
       textLines += '\u200F';
     }
     return textLines;

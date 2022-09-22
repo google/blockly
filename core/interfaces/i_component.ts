@@ -22,7 +22,7 @@ goog.declareModuleId('Blockly.IComponent');
  */
 export interface IComponent {
   /**
-   * The unique id for this component that is used to register with the
+   * The unique ID for this component that is used to register with the
    * ComponentManager.
    */
   id: string;

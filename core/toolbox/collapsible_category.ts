@@ -107,7 +107,7 @@ export class CollapsibleToolboxCategory extends ToolboxCategory implements
     const categoryDef = itemDef as toolbox.CategoryInfo;
     // Categories that are collapsible are created using a class registered
     // under a different name.
-    if (registryName.toUpperCase() == 'CATEGORY' &&
+    if (registryName.toUpperCase() === 'CATEGORY' &&
         toolbox.isCategoryCollapsible(categoryDef)) {
       registryName = CollapsibleToolboxCategory.registrationName;
     }

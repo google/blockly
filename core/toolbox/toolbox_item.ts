@@ -43,7 +43,7 @@ export class ToolboxItem implements IToolboxItem {
   constructor(
       toolboxItemDef: toolbox.ToolboxItemInfo, parentToolbox: IToolbox,
       opt_parent?: ICollapsibleToolboxItem) {
-    /** The id for the category. */
+    /** The ID for the category. */
     this.id_ = (toolboxItemDef as AnyDuringMigration)['toolboxitemid'] ||
         idGenerator.getNextUniqueId();
 

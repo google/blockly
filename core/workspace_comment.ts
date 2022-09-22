@@ -370,15 +370,15 @@ export class WorkspaceComment {
     return {
       id: xmlId,
       // The height of the comment in workspace units, or 100 if not specified.
-      h: xmlH ? parseInt(xmlH, 10) : 100,
+      h: xmlH ? parseInt(xmlH) : 100,
       // The width of the comment in workspace units, or 100 if not specified.
-      w: xmlW ? parseInt(xmlW, 10) : 100,
+      w: xmlW ? parseInt(xmlW) : 100,
       // The x position of the comment in workspace coordinates, or NaN if not
       // specified in the XML.
-      x: xmlX ? parseInt(xmlX, 10) : NaN,
+      x: xmlX ? parseInt(xmlX) : NaN,
       // The y position of the comment in workspace coordinates, or NaN if not
       // specified in the XML.
-      y: xmlY ? parseInt(xmlY, 10) : NaN,
+      y: xmlY ? parseInt(xmlY) : NaN,
       content: xml.textContent ?? '',
     };
   }

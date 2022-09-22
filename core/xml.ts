@@ -459,14 +459,12 @@ export function domToWorkspace(xml: Element, workspace: Workspace): string[] {
         // AnyDuringMigration because:  Argument of type 'string | null' is not
         // assignable to parameter of type 'string'.
         const blockX = xmlChildElement.hasAttribute('x') ?
-            parseInt(
-                xmlChildElement.getAttribute('x') as AnyDuringMigration, 10) :
+            parseInt(xmlChildElement.getAttribute('x') as AnyDuringMigration) :
             10;
         // AnyDuringMigration because:  Argument of type 'string | null' is not
         // assignable to parameter of type 'string'.
         const blockY = xmlChildElement.hasAttribute('y') ?
-            parseInt(
-                xmlChildElement.getAttribute('y') as AnyDuringMigration, 10) :
+            parseInt(xmlChildElement.getAttribute('y') as AnyDuringMigration) :
             10;
         if (!isNaN(blockX) && !isNaN(blockY)) {
           block.moveBy(workspace.RTL ? width - blockX : blockX, blockY);
@@ -747,12 +745,10 @@ function applyCommentTagNodes(xmlChildren: Element[], block: Block) {
     const pinned = xmlChild.getAttribute('pinned') === 'true';
     // AnyDuringMigration because:  Argument of type 'string | null' is not
     // assignable to parameter of type 'string'.
-    const width =
-        parseInt(xmlChild.getAttribute('w') as AnyDuringMigration, 10);
+    const width = parseInt(xmlChild.getAttribute('w') as AnyDuringMigration);
     // AnyDuringMigration because:  Argument of type 'string | null' is not
     // assignable to parameter of type 'string'.
-    const height =
-        parseInt(xmlChild.getAttribute('h') as AnyDuringMigration, 10);
+    const height = parseInt(xmlChild.getAttribute('h') as AnyDuringMigration);
 
     block.setCommentText(text);
     block.commentModel.pinned = pinned;

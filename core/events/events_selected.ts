@@ -41,10 +41,10 @@ export class Selected extends UiBase {
       opt_workspaceId?: string) {
     super(opt_workspaceId);
 
-    /** The id of the last selected element. */
+    /** The ID of the last selected element. */
     this.oldElementId = opt_oldElementId;
 
-    /** The id of the selected element. */
+    /** The ID of the selected element. */
     this.newElementId = opt_newElementId;
 
     /** Type of this event. */

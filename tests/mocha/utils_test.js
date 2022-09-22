@@ -344,9 +344,9 @@ suite('Utils', function() {
       const p = document.createElement('p');
       p.className = ' one three  two three  ';
       Blockly.utils.dom.removeClass(p, 'two');
-      chai.assert.equal(p.className, 'one three three', 'Removing "two"');
+      chai.assert.equal(p.className, 'one three', 'Removing "two"');
       Blockly.utils.dom.removeClass(p, 'four');
-      chai.assert.equal(p.className, 'one three three', 'Removing "four"');
+      chai.assert.equal(p.className, 'one three', 'Removing "four"');
       Blockly.utils.dom.removeClass(p, 'three');
       chai.assert.equal(p.className, 'one', 'Removing "three"');
       Blockly.utils.dom.removeClass(p, 'ne');

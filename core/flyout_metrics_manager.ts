@@ -72,7 +72,6 @@ export class FlyoutMetricsManager extends MetricsManager {
   override getScrollMetrics(
       opt_getWorkspaceCoordinates?: boolean, opt_viewMetrics?: ContainerRegion,
       opt_contentMetrics?: ContainerRegion) {
-    // AnyDuringMigration because:  Expected 1 arguments, but got 0.
     const contentMetrics = opt_contentMetrics || this.getContentMetrics();
     const margin = this.flyout_.MARGIN * this.workspace_.scale;
     const scale = opt_getWorkspaceCoordinates ? this.workspace_.scale : 1;

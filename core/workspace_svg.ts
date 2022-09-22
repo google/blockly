@@ -1227,10 +1227,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     // Figure out where we want to put the canvas back.  The order
     // in the is important because things are layered.
     const previousElement = this.svgBlockCanvas_.previousSibling as Element;
-    const width =
-        parseInt(this.getParentSvg().getAttribute('width') ?? '0');
-    const height =
-        parseInt(this.getParentSvg().getAttribute('height') ?? '0');
+    const width = parseInt(this.getParentSvg().getAttribute('width') ?? '0');
+    const height = parseInt(this.getParentSvg().getAttribute('height') ?? '0');
     const coord = svgMath.getRelativeXY(this.getCanvas());
     this.workspaceDragSurface_!.setContentsAndShow(
         this.getCanvas(), this.getBubbleCanvas(), previousElement, width,

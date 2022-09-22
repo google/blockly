@@ -52,15 +52,13 @@ export enum NodeType {
 }
 
 /** Temporary cache of text widths. */
-let cacheWidths: AnyDuringMigration = null;
+let cacheWidths: {[key: string]: number}|null = null;
 
 /** Number of current references to cache. */
 let cacheReference = 0;
 
 /** A HTML canvas context used for computing text width. */
-// AnyDuringMigration because:  Type 'null' is not assignable to type
-// 'CanvasRenderingContext2D'.
-let canvasContext: CanvasRenderingContext2D = null as AnyDuringMigration;
+let canvasContext: CanvasRenderingContext2D|null = null;
 
 /**
  * Helper method for creating SVG elements.
@@ -72,11 +70,11 @@ let canvasContext: CanvasRenderingContext2D = null as AnyDuringMigration;
  * @alias Blockly.utils.dom.createSvgElement
  */
 export function createSvgElement<T extends SVGElement>(
-    name: string|Svg<T>, attrs: AnyDuringMigration,
+    name: string|Svg<T>, attrs: {[key: string]: string|number},
     opt_parent?: Element|null): T {
   const e = document.createElementNS(SVG_NS, String(name)) as T;
   for (const key in attrs) {
-    e.setAttribute(key, attrs[key]);
+    e.setAttribute(key, `${attrs[key]}`);
   }
   if (opt_parent) {
     opt_parent.appendChild(e);
@@ -218,13 +216,10 @@ export function containsNode(parent: Node, descendant: Node): boolean {
  * @param transform The value of the CSS `transform` property.
  * @alias Blockly.utils.dom.setCssTransform
  */
-export function setCssTransform(element: Element, transform: string) {
-  // AnyDuringMigration because:  Property 'style' does not exist on type
-  // 'Element'.
-  (element as AnyDuringMigration).style['transform'] = transform;
-  // AnyDuringMigration because:  Property 'style' does not exist on type
-  // 'Element'.
-  (element as AnyDuringMigration).style['-webkit-transform'] = transform;
+export function setCssTransform(
+    element: HTMLElement|SVGElement, transform: string) {
+  element.style['transform'] = transform;
+  element.style['-webkit-transform' as any] = transform;
 }
 
 /**
@@ -302,7 +297,7 @@ export function getTextWidth(textElement: SVGTextElement): number {
  * @alias Blockly.utils.dom.getFastTextWidth
  */
 export function getFastTextWidth(
-    textElement: Element, fontSize: number, fontWeight: string,
+    textElement: SVGTextElement, fontSize: number, fontWeight: string,
     fontFamily: string): number {
   return getFastTextWidthWithSizeString(
       textElement, fontSize + 'pt', fontWeight, fontFamily);
@@ -323,13 +318,10 @@ export function getFastTextWidth(
  * @alias Blockly.utils.dom.getFastTextWidthWithSizeString
  */
 export function getFastTextWidthWithSizeString(
-    textElement: Element, fontSize: string, fontWeight: string,
+    textElement: SVGTextElement, fontSize: string, fontWeight: string,
     fontFamily: string): number {
   const text = textElement.textContent;
-  // AnyDuringMigration because:  Property 'baseVal' does not exist on type
-  // 'string'.
-  const key =
-      text + '\n' + (textElement.className as AnyDuringMigration).baseVal;
+  const key = text + '\n' + textElement.className.baseVal;
   let width;
 
   // Return the cached width if it exists.
@@ -355,9 +347,11 @@ export function getFastTextWidthWithSizeString(
   canvasContext.font = fontWeight + ' ' + fontSize + ' ' + fontFamily;
 
   // Measure the text width using the helper canvas context.
-  // AnyDuringMigration because:  Argument of type 'string | null' is not
-  // assignable to parameter of type 'string'.
-  width = canvasContext.measureText(text as AnyDuringMigration).width;
+  if (text) {
+    width = canvasContext.measureText(text).width;
+  } else {
+    width = 0;
+  }
 
   // Cache the computed width and return.
   if (cacheWidths) {
@@ -385,9 +379,7 @@ export function measureFontMetrics(
 
   const block = (document.createElement('div'));
   block.style.width = '1px';
-  // AnyDuringMigration because:  Type 'number' is not assignable to type
-  // 'string'.
-  block.style.height = 0 as AnyDuringMigration;
+  block.style.height = '0';
 
   const div = (document.createElement('div'));
   div.setAttribute('style', 'position: fixed; top: 0; left: 0; display: flex;');

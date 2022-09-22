@@ -250,6 +250,7 @@
 	"LISTS_GET_INDEX_GET": "prender",
 	"LISTS_GET_INDEX_GET_REMOVE": "prender e remover",
 	"LISTS_GET_INDEX_REMOVE": "remover",
+	"LISTS_GET_INDEX_FROM_START": "#",
 	"LISTS_GET_INDEX_FROM_END": "№ ab fin",
 	"LISTS_GET_INDEX_FIRST": "prime",
 	"LISTS_GET_INDEX_LAST": "ultime",

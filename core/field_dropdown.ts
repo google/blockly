@@ -741,7 +741,7 @@ const IMAGE_Y_OFFSET = 5;
 const IMAGE_Y_PADDING: number = IMAGE_Y_OFFSET * 2;
 
 /** Android can't (in 2014) display "▾", so use "▼" instead. */
-FieldDropdown.ARROW_CHAR = userAgent.ANDROID ? '▾' : '▼';
+FieldDropdown.ARROW_CHAR = userAgent.ANDROID ? '▼' : '▾';
 
 /**
  * Validates the data structure to be processed as an options list.

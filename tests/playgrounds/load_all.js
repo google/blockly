@@ -48,6 +48,7 @@ if ((location.hostname === 'localhost' || location.hostname === '127.0.0.1' ||
   document.write(`<script src="../lua_compressed.js"></script>`);
   document.write(`<script src="../php_compressed.js"></script>`);
   document.write(`<script src="../python_compressed.js"></script>`);
+  document.write(`<script src="../go_compressed.js"></script>`);
   document.write(`<script src="../msg/messages.js"></script>`);
 }
 })();

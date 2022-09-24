@@ -130,6 +130,11 @@ const chunks = [
     name: 'dart',
     entry: 'generators/dart/all.js',
     reexport: 'Blockly.Dart',
+  },
+  {
+    name: 'go',
+    entry: 'generators/go/all.js',
+    reexport: 'Blockly.Go',
   }
 ];
 
@@ -158,7 +163,7 @@ function stripApacheLicense() {
  * For a full list of closure compiler groups, consult the output of
  * google-closure-compiler --help or look in the source  here:
  * https://github.com/google/closure-compiler/blob/master/src/com/google/javascript/jscomp/DiagnosticGroups.java#L117
- * 
+ *
  * The list in JSCOMP_ERROR contains all the diagnostic groups we know
  * about, but some are commented out if we don't want them, and may
  * appear in JSCOMP_WARNING or JSCOMP_OFF instead.  Items not
@@ -238,7 +243,7 @@ var JSCOMP_OFF = [
    * core/utils/*. We were downgrading access control violations
    * (including @private) to warnings, but this ends up being so
    * spammy that it makes the compiler output nearly useless.
-   * 
+   *
    * Once ES module migration is complete, they will be re-enabled and
    * an alternative to @package will be established.
    */
@@ -363,7 +368,7 @@ function chunkWrapper(chunk) {
     browserDepsExpr = `root.${chunk.parent.reexport}`;
     factoryArgs = '__parent__';
     namespaceExpr = `${factoryArgs}.${NAMESPACE_PROPERTY}`;
-  }    
+  }
 
   // Expression that evaluates the the value of the exports object for
   // the specified chunk.  For now we guess the name that is created
@@ -374,7 +379,7 @@ function chunkWrapper(chunk) {
   // name for the ES module's exports object.
   // const exportsExpression =
   //     'module$' + chunk.entry.replace(/\.m?js$/, '').replace(/\//g, '$');
-  
+
 
   // Note that when loading in a browser the base of the exported path
   // (e.g. Blockly.blocks.all - see issue #5932) might not exist
@@ -657,6 +662,7 @@ function buildAdvancedCompilationTest() {
  *     php_compressed.js
  *     lua_compressed.js
  *     dart_compressed.js
+ *     go_compressed.js
  *     blockly_uncompressed.js
  *     msg/json/*.js
  *     test/deps*.js

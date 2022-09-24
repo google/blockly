@@ -84,6 +84,7 @@
       'lua_compressed.js',
       'php_compressed.js',
       'python_compressed.js',
+      'go_compressed.js',
     ];
 
     // We need to load Blockly in compiled mode.

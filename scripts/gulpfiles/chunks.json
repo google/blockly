@@ -1,12 +1,13 @@
 {
   "chunk": [
-    "blockly:260",
+    "blockly:263",
     "blocks:10:blockly",
     "all:11:blockly",
     "all1:11:blockly",
     "all2:11:blockly",
     "all3:11:blockly",
-    "all4:11:blockly"
+    "all4:11:blockly",
+    "all5:11:blockly"
   ],
   "js": [
     "./core/inject.js",
@@ -49,6 +50,9 @@
     "./core/theme/zelos.js",
     "./core/theme/themes.js",
     "./core/shortcut_items.js",
+    "./core/types.js",
+    "./core/type.js",
+    "./core/static_typing.js",
     "./core/events/workspace_events.js",
     "./core/events/events_toolbox_item_select.js",
     "./core/events/events_ui.js",
@@ -333,6 +337,17 @@
     "./generators/dart/lists.js",
     "./generators/dart.js",
     "./generators/dart/colour.js",
-    "./generators/dart/all.js"
+    "./generators/dart/all.js",
+    "./generators/go/variables_dynamic.js",
+    "./generators/go/variables.js",
+    "./generators/go/text.js",
+    "./generators/go/procedures.js",
+    "./generators/go/math.js",
+    "./generators/go/loops.js",
+    "./generators/go/logic.js",
+    "./generators/go/lists.js",
+    "./generators/go.js",
+    "./generators/go/colour.js",
+    "./generators/go/all.js"
   ]
 }

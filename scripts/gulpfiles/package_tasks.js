@@ -225,9 +225,12 @@ function packageNode() {
       },{
         name: 'BlocklyLua',
         cjs: './lua',
-      }, {
+    }, {
         name: 'BlocklyDart',
         cjs: './dart',
+    }, {
+        name: 'BlocklyGo',
+        cjs: './go',
       }]))
     .pipe(gulp.rename('node.js'))
     .pipe(gulp.dest(RELEASE_DIR));

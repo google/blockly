@@ -40,7 +40,7 @@ const blocks = createBlockDefinitionsFromJsonArray([
   //   <mutation items="0"></mutation>
   // </block>
   {
-    'type': 'lists_create_empty',
+    'type': 'lists_string_create_empty',
     'message0': '%{BKY_LISTS_CREATE_EMPTY_TITLE}',
     'output': 'Array',
     'style': 'list_blocks',
@@ -119,7 +119,7 @@ const blocks = createBlockDefinitionsFromJsonArray([
 ]);
 exports.blocks = blocks;
 
-blocks['lists_create_with'] = {
+blocks['lists_string_create_with'] = {
   /**
    * Block for creating a list with any number of elements of any type.
    * @this {Block}
@@ -248,9 +248,301 @@ blocks['lists_create_with'] = {
     // Add new inputs.
     for (let i = 0; i < this.itemCount_; i++) {
       if (!this.getInput('ADD' + i)) {
-        const input = this.appendValueInput('ADD' + i).setAlign(Align.RIGHT);
+        const input = this.appendValueInput('ADD' + i)
+            .setCheck("String")
+            .setAlign(Align.RIGHT);
         if (i === 0) {
-          input.appendField(Msg['LISTS_CREATE_WITH_INPUT_WITH']);
+          input.appendField(Msg['create string list with']);
+        }
+      }
+    }
+    // Remove deleted inputs.
+    for (let i = this.itemCount_; this.getInput('ADD' + i); i++) {
+      this.removeInput('ADD' + i);
+    }
+  },
+};
+
+
+blocks['lists_number_create_with'] = {
+  /**
+   * Block for creating a list with any number of elements of any type.
+   * @this {Block}
+   */
+  init: function() {
+    this.setHelpUrl(Msg['LISTS_CREATE_WITH_HELPURL']);
+    this.setStyle('list_blocks');
+    this.itemCount_ = 3;
+    this.updateShape_();
+    this.setOutput(true, 'Array');
+    this.setMutator(new Mutator(['lists_create_with_item']));
+    this.setTooltip(Msg['LISTS_CREATE_WITH_TOOLTIP']);
+  },
+  /**
+   * Create XML to represent list inputs.
+   * Backwards compatible serialization implementation.
+   * @return {!Element} XML storage element.
+   * @this {Block}
+   */
+  mutationToDom: function() {
+    const container = xmlUtils.createElement('mutation');
+    container.setAttribute('items', this.itemCount_);
+    return container;
+  },
+  /**
+   * Parse XML to restore the list inputs.
+   * Backwards compatible serialization implementation.
+   * @param {!Element} xmlElement XML storage element.
+   * @this {Block}
+   */
+  domToMutation: function(xmlElement) {
+    this.itemCount_ = parseInt(xmlElement.getAttribute('items'), 10);
+    this.updateShape_();
+  },
+  /**
+   * Returns the state of this block as a JSON serializable object.
+   * @return {{itemCount: number}} The state of this block, ie the item count.
+   */
+  saveExtraState: function() {
+    return {
+      'itemCount': this.itemCount_,
+    };
+  },
+  /**
+   * Applies the given state to this block.
+   * @param {*} state The state to apply to this block, ie the item count.
+   */
+  loadExtraState: function(state) {
+    this.itemCount_ = state['itemCount'];
+    this.updateShape_();
+  },
+  /**
+   * Populate the mutator's dialog with this block's components.
+   * @param {!Workspace} workspace Mutator's workspace.
+   * @return {!Block} Root block in mutator.
+   * @this {Block}
+   */
+  decompose: function(workspace) {
+    const containerBlock = workspace.newBlock('lists_create_with_container');
+    containerBlock.initSvg();
+    let connection = containerBlock.getInput('STACK').connection;
+    for (let i = 0; i < this.itemCount_; i++) {
+      const itemBlock = workspace.newBlock('lists_create_with_item');
+      itemBlock.initSvg();
+      connection.connect(itemBlock.previousConnection);
+      connection = itemBlock.nextConnection;
+    }
+    return containerBlock;
+  },
+  /**
+   * Reconfigure this block based on the mutator dialog's components.
+   * @param {!Block} containerBlock Root block in mutator.
+   * @this {Block}
+   */
+  compose: function(containerBlock) {
+    let itemBlock = containerBlock.getInputTargetBlock('STACK');
+    // Count number of inputs.
+    const connections = [];
+    while (itemBlock && !itemBlock.isInsertionMarker()) {
+      connections.push(itemBlock.valueConnection_);
+      itemBlock =
+          itemBlock.nextConnection && itemBlock.nextConnection.targetBlock();
+    }
+    // Disconnect any children that don't belong.
+    for (let i = 0; i < this.itemCount_; i++) {
+      const connection = this.getInput('ADD' + i).connection.targetConnection;
+      if (connection && connections.indexOf(connection) === -1) {
+        connection.disconnect();
+      }
+    }
+    this.itemCount_ = connections.length;
+    this.updateShape_();
+    // Reconnect any child blocks.
+    for (let i = 0; i < this.itemCount_; i++) {
+      Mutator.reconnect(connections[i], this, 'ADD' + i);
+    }
+  },
+  /**
+   * Store pointers to any connected child blocks.
+   * @param {!Block} containerBlock Root block in mutator.
+   * @this {Block}
+   */
+  saveConnections: function(containerBlock) {
+    let itemBlock = containerBlock.getInputTargetBlock('STACK');
+    let i = 0;
+    while (itemBlock) {
+      const input = this.getInput('ADD' + i);
+      itemBlock.valueConnection_ = input && input.connection.targetConnection;
+      itemBlock =
+          itemBlock.nextConnection && itemBlock.nextConnection.targetBlock();
+      i++;
+    }
+  },
+  /**
+   * Modify this block to have the correct number of inputs.
+   * @private
+   * @this {Block}
+   */
+  updateShape_: function() {
+    if (this.itemCount_ && this.getInput('EMPTY')) {
+      this.removeInput('EMPTY');
+    } else if (!this.itemCount_ && !this.getInput('EMPTY')) {
+      this.appendDummyInput('EMPTY').appendField(
+          Msg['LISTS_CREATE_EMPTY_TITLE']);
+    }
+    // Add new inputs.
+    for (let i = 0; i < this.itemCount_; i++) {
+      if (!this.getInput('ADD' + i)) {
+        const input = this.appendValueInput('ADD' + i)
+            .setCheck("Number")
+            .setAlign(Align.RIGHT);
+        if (i === 0) {
+          input.appendField(Msg['create number list with']);
+        }
+      }
+    }
+    // Remove deleted inputs.
+    for (let i = this.itemCount_; this.getInput('ADD' + i); i++) {
+      this.removeInput('ADD' + i);
+    }
+  },
+};
+
+
+blocks['lists_colour_create_with'] = {
+  /**
+   * Block for creating a list with any number of elements of any type.
+   * @this {Block}
+   */
+  init: function() {
+    this.setHelpUrl(Msg['LISTS_CREATE_WITH_HELPURL']);
+    this.setStyle('list_blocks');
+    this.itemCount_ = 3;
+    this.updateShape_();
+    this.setOutput(true, 'Array');
+    this.setMutator(new Mutator(['lists_create_with_item']));
+    this.setTooltip(Msg['LISTS_CREATE_WITH_TOOLTIP']);
+  },
+  /**
+   * Create XML to represent list inputs.
+   * Backwards compatible serialization implementation.
+   * @return {!Element} XML storage element.
+   * @this {Block}
+   */
+  mutationToDom: function() {
+    const container = xmlUtils.createElement('mutation');
+    container.setAttribute('items', this.itemCount_);
+    return container;
+  },
+  /**
+   * Parse XML to restore the list inputs.
+   * Backwards compatible serialization implementation.
+   * @param {!Element} xmlElement XML storage element.
+   * @this {Block}
+   */
+  domToMutation: function(xmlElement) {
+    this.itemCount_ = parseInt(xmlElement.getAttribute('items'), 10);
+    this.updateShape_();
+  },
+  /**
+   * Returns the state of this block as a JSON serializable object.
+   * @return {{itemCount: number}} The state of this block, ie the item count.
+   */
+  saveExtraState: function() {
+    return {
+      'itemCount': this.itemCount_,
+    };
+  },
+  /**
+   * Applies the given state to this block.
+   * @param {*} state The state to apply to this block, ie the item count.
+   */
+  loadExtraState: function(state) {
+    this.itemCount_ = state['itemCount'];
+    this.updateShape_();
+  },
+  /**
+   * Populate the mutator's dialog with this block's components.
+   * @param {!Workspace} workspace Mutator's workspace.
+   * @return {!Block} Root block in mutator.
+   * @this {Block}
+   */
+  decompose: function(workspace) {
+    const containerBlock = workspace.newBlock('lists_create_with_container');
+    containerBlock.initSvg();
+    let connection = containerBlock.getInput('STACK').connection;
+    for (let i = 0; i < this.itemCount_; i++) {
+      const itemBlock = workspace.newBlock('lists_create_with_item');
+      itemBlock.initSvg();
+      connection.connect(itemBlock.previousConnection);
+      connection = itemBlock.nextConnection;
+    }
+    return containerBlock;
+  },
+  /**
+   * Reconfigure this block based on the mutator dialog's components.
+   * @param {!Block} containerBlock Root block in mutator.
+   * @this {Block}
+   */
+  compose: function(containerBlock) {
+    let itemBlock = containerBlock.getInputTargetBlock('STACK');
+    // Count number of inputs.
+    const connections = [];
+    while (itemBlock && !itemBlock.isInsertionMarker()) {
+      connections.push(itemBlock.valueConnection_);
+      itemBlock =
+          itemBlock.nextConnection && itemBlock.nextConnection.targetBlock();
+    }
+    // Disconnect any children that don't belong.
+    for (let i = 0; i < this.itemCount_; i++) {
+      const connection = this.getInput('ADD' + i).connection.targetConnection;
+      if (connection && connections.indexOf(connection) === -1) {
+        connection.disconnect();
+      }
+    }
+    this.itemCount_ = connections.length;
+    this.updateShape_();
+    // Reconnect any child blocks.
+    for (let i = 0; i < this.itemCount_; i++) {
+      Mutator.reconnect(connections[i], this, 'ADD' + i);
+    }
+  },
+  /**
+   * Store pointers to any connected child blocks.
+   * @param {!Block} containerBlock Root block in mutator.
+   * @this {Block}
+   */
+  saveConnections: function(containerBlock) {
+    let itemBlock = containerBlock.getInputTargetBlock('STACK');
+    let i = 0;
+    while (itemBlock) {
+      const input = this.getInput('ADD' + i);
+      itemBlock.valueConnection_ = input && input.connection.targetConnection;
+      itemBlock =
+          itemBlock.nextConnection && itemBlock.nextConnection.targetBlock();
+      i++;
+    }
+  },
+  /**
+   * Modify this block to have the correct number of inputs.
+   * @private
+   * @this {Block}
+   */
+  updateShape_: function() {
+    if (this.itemCount_ && this.getInput('EMPTY')) {
+      this.removeInput('EMPTY');
+    } else if (!this.itemCount_ && !this.getInput('EMPTY')) {
+      this.appendDummyInput('EMPTY').appendField(
+          Msg['LISTS_CREATE_EMPTY_TITLE']);
+    }
+    // Add new inputs.
+    for (let i = 0; i < this.itemCount_; i++) {
+      if (!this.getInput('ADD' + i)) {
+        const input = this.appendValueInput('ADD' + i)
+            .setCheck("Colour")
+            .setAlign(Align.RIGHT);
+        if (i === 0) {
+          input.appendField(Msg['create colour list with']);
         }
       }
     }

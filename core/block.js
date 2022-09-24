@@ -253,6 +253,12 @@ class Block {
     this.outputShape_ = null;
 
     /**
+     * @type {?number}
+     * @protected
+     */
+    this.output_ = null;
+
+    /**
      * A string representing the comment attached to this block.
      * @type {string|Comment}
      * @deprecated August 2019. Use getCommentText instead.
@@ -1254,6 +1260,7 @@ class Block {
    *     (e.g. variable get).
    */
   setOutput(newBoolean, opt_check) {
+    this.output_ = opt_check;
     if (newBoolean) {
       if (opt_check === undefined) {
         opt_check = null;
@@ -1328,6 +1335,14 @@ class Block {
    */
   getOutputShape() {
     return this.outputShape_;
+  }
+
+  /**
+   * Get the block's output.
+   * @return {?number} Value representing output if one exists.
+   */
+  getOutput() {
+    return this.output_;
   }
 
   /**

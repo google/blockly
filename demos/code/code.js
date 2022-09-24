@@ -365,6 +365,8 @@ Code.renderContent = function() {
     Code.attemptCodeGeneration(Blockly.Dart);
   } else if (content.id === 'content_lua') {
     Code.attemptCodeGeneration(Blockly.Lua);
+  } else if (content.id === 'content_go') {
+    Code.attemptCodeGeneration(Blockly.Go);
   }
   if (typeof PR === 'object') {
     PR.prettyPrint();

@@ -39,7 +39,7 @@ export class VarBase extends AbstractEvent {
     this.varId = opt_variable.getId();
 
     /** The workspace identifier for this event. */
-    this.workspaceId = opt_variable?.workspace.id;
+    this.workspaceId = opt_variable.workspace.id;
   }
 
   /**

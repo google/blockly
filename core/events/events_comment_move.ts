@@ -124,7 +124,7 @@ export class CommentMove extends CommentBase {
    * @returns False if something changed.
    */
   override isNull(): boolean {
-    return !this.newCoordinate_ ||
+    return !this.newCoordinate_ || !this.oldCoordinate_ ||
         Coordinate.equals(this.oldCoordinate_, this.newCoordinate_);
   }
 
@@ -147,9 +147,15 @@ export class CommentMove extends CommentBase {
     }
 
     const target = forward ? this.newCoordinate_ : this.oldCoordinate_;
+    if (!target) {
+      throw new Error(
+          'Either oldCoordinate_ or newCoordinate_ is undefined. ' +
+          'Either pass a comment to the constructor and call recordNew, ' +
+          'or call fromJson');
+    }
     // TODO: Check if the comment is being dragged, and give up if so.
     const current = comment.getXY();
-    comment.moveBy(target!.x - current.x, target!.y - current.y);
+    comment.moveBy(target.x - current.x, target.y - current.y);
   }
 }
 

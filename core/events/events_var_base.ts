@@ -23,7 +23,7 @@ import {Abstract as AbstractEvent, AbstractEventJson} from './events_abstract.js
  * @alias Blockly.Events.VarBase
  */
 export class VarBase extends AbstractEvent {
-  override isBlank: boolean;
+  override isBlank = true;
   varId?: string;
 
   /**

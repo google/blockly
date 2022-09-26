@@ -26,7 +26,7 @@ import * as eventUtils from './utils.js';
  */
 export abstract class Abstract {
   /** Whether or not the event is blank (to be populated by fromJson). */
-  isBlank: boolean|null = null;
+  abstract isBlank: boolean;
 
   /** The workspace identifier for this event. */
   workspaceId?: string = undefined;

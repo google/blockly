@@ -26,7 +26,7 @@ import {Abstract as AbstractEvent} from './events_abstract.js';
  * @alias Blockly.Events.UiBase
  */
 export class UiBase extends AbstractEvent {
-  override isBlank: boolean;
+  override isBlank = true;
   override workspaceId: string;
 
   // UI events do not undo or redo.

@@ -28,7 +28,7 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.CommentBase
  */
 export class CommentBase extends AbstractEvent {
-  override isBlank: boolean;
+  override isBlank = true;
   commentId?: string;
 
   /**

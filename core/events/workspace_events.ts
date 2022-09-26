@@ -27,6 +27,7 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.FinishedLoading
  */
 export class FinishedLoading extends AbstractEvent {
+  override isBlank = true;
   override recordUndo = false;
   override type = eventUtils.FINISHED_LOADING;
 

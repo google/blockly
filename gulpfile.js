@@ -35,6 +35,7 @@ module.exports = {
   package: packageTasks.package,
   publish: releaseTasks.publish,
   publishBeta: releaseTasks.publishBeta,
+  gitUpdateGithubPages: gitTasks.updateGithubPages,
 
   // Manually-invokable targets that invoke prerequisites.
   prepare: buildTasks.prepare,
@@ -42,21 +43,20 @@ module.exports = {
   generate: buildTasks.generate,
   clean: gulp.parallel(buildTasks.cleanBuildDir, packageTasks.cleanReleaseDir),
   buildAdvancedCompilationTest: buildTasks.buildAdvancedCompilationTest,
+  gitCreateRC: gitTasks.createRC,
   
   // Targets intended only for invocation by scripts; may omit prerequisites.
   onlyBuildAdvancedCompilationTest: buildTasks.onlyBuildAdvancedCompilationTest,
 
-  // Legacy target, to be deleted.
+  // Legacy targets, to be deleted.
   checkin: buildTasks.checkin,
   recompile: releaseTasks.recompile,
+  gitSyncDevelop: gitTasks.syncDevelop,
+  gitSyncMaster: gitTasks.syncMaster,
 
   // TBD.
   deployDemos: appengineTasks.deployDemos,
   deployDemosBeta: appengineTasks.deployDemosBeta,
-  gitSyncDevelop: gitTasks.syncDevelop,
-  gitSyncMaster: gitTasks.syncMaster,
-  gitCreateRC: gitTasks.createRC,
-  gitUpdateGithubPages: gitTasks.updateGithubPages,
   checkLicenses: licenseTasks.checkLicenses,
   prepareDemos: appengineTasks.prepareDemos,
   sortRequires: cleanupTasks.sortRequires,

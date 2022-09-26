@@ -12,6 +12,7 @@ var gulp = require('gulp');
 var execSync = require('child_process').execSync;
 
 var buildTasks = require('./build_tasks');
+const packageTasks = require('./package_tasks');
 
 const upstream_url = "https://github.com/google/blockly.git";
 
@@ -94,7 +95,11 @@ function pushRebuildBranch(done) {
   done();
 }
 
-// Update github pages with what is currently in develop.
+/**
+ * Update github pages with what is currently in develop.
+ *
+ * Prerequisite: build.
+ */
 const updateGithubPages = gulp.series(
   function(done) {
     execSync('git stash save -m "Stash for sync"', { stdio: 'inherit' });
@@ -114,10 +119,15 @@ const updateGithubPages = gulp.series(
 );
 
 module.exports = {
-  syncDevelop: syncDevelop,
-  syncMaster: syncMaster,
-  createRC: createRC,
-  updateGithubPages: updateGithubPages,
-  createRebuildBranch: createRebuildBranch,
-  pushRebuildBranch: pushRebuildBranch
-}
+  // Main sequence targets.  Each should invoke any immediate prerequisite(s).
+  updateGithubPages: gulp.series(packageTasks.package, updateGithubPages),
+
+  // Manually-invokable targets that invoke prerequisites.
+  createRC,
+
+  // Legacy script-only targets, to be deleted.
+  syncDevelop,
+  syncMaster,
+  createRebuildBranch,
+  pushRebuildBranch,
+};

@@ -147,7 +147,7 @@ export class BlockMove extends BlockBase {
   override isNull(): boolean {
     return this.oldParentId === this.newParentId &&
         this.oldInputName === this.newInputName &&
-         Coordinate.equals(this.oldCoordinate, this.newCoordinate);
+        Coordinate.equals(this.oldCoordinate, this.newCoordinate);
   }
 
   /**

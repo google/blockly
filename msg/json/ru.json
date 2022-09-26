@@ -17,6 +17,7 @@
 			"SimondR",
 			"Teretalexev",
 			"Thothsum",
+			"UniCollab",
 			"Vlad5250",
 			"Zauzolkov"
 		]
@@ -123,6 +124,12 @@
 	"LOGIC_TERNARY_TOOLTIP": "Проверяет условие выбора. Если условие истинно, возвращает первое значение, в противном случае возвращает второе значение.",
 	"MATH_NUMBER_HELPURL": "https://ru.wikipedia.org/wiki/Число",
 	"MATH_NUMBER_TOOLTIP": "Число.",
+	"MATH_TRIG_SIN": "sin",
+	"MATH_TRIG_COS": "cos",
+	"MATH_TRIG_TAN": "tan",
+	"MATH_TRIG_ASIN": "arcsin",
+	"MATH_TRIG_ACOS": "arccos",
+	"MATH_TRIG_ATAN": "arctan",
 	"MATH_ARITHMETIC_HELPURL": "https://ru.wikipedia.org/wiki/Арифметика",
 	"MATH_ARITHMETIC_TOOLTIP_ADD": "Возвращает сумму двух чисел.",
 	"MATH_ARITHMETIC_TOOLTIP_MINUS": "Возвращает разность двух чисел.",
@@ -265,6 +272,7 @@
 	"LISTS_GET_INDEX_GET": "взять",
 	"LISTS_GET_INDEX_GET_REMOVE": "взять и удалить",
 	"LISTS_GET_INDEX_REMOVE": "удалить",
+	"LISTS_GET_INDEX_FROM_START": "№",
 	"LISTS_GET_INDEX_FROM_END": "№ с конца",
 	"LISTS_GET_INDEX_FIRST": "первый",
 	"LISTS_GET_INDEX_LAST": "последний",

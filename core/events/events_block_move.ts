@@ -120,16 +120,21 @@ export class BlockMove extends BlockBase {
           'the constructor, or call fromJson');
     }
     const block = workspace.getBlockById(this.blockId);
+    if (!block) {
+      throw new Error(
+          'The block associated with the block move event ' +
+          'could not be found');
+    }
     const location = {} as BlockLocation;
-    const parent = block!.getParent();
+    const parent = block.getParent();
     if (parent) {
       location.parentId = parent.id;
-      const input = parent.getInputWithBlock(block!);
+      const input = parent.getInputWithBlock(block);
       if (input) {
         location.inputName = input.name;
       }
     } else {
-      location.coordinate = block!.getRelativeToSurfaceXY();
+      location.coordinate = block.getRelativeToSurfaceXY();
     }
     return location;
   }
@@ -142,7 +147,8 @@ export class BlockMove extends BlockBase {
   override isNull(): boolean {
     return this.oldParentId === this.newParentId &&
         this.oldInputName === this.newInputName &&
-        Coordinate.equals(this.oldCoordinate, this.newCoordinate);
+        (!this.oldCoordinate || !this.newCoordinate ||
+         Coordinate.equals(this.oldCoordinate, this.newCoordinate));
   }
 
   /**

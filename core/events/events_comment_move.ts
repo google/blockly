@@ -124,8 +124,7 @@ export class CommentMove extends CommentBase {
    * @returns False if something changed.
    */
   override isNull(): boolean {
-    return !this.newCoordinate_ || !this.oldCoordinate_ ||
-        Coordinate.equals(this.oldCoordinate_, this.newCoordinate_);
+    return Coordinate.equals(this.oldCoordinate_, this.newCoordinate_);
   }
 
   /**

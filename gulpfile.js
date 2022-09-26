@@ -37,10 +37,12 @@ module.exports = {
   publishBeta: releaseTasks.publishBeta,
   gitUpdateGithubPages: gitTasks.updateGithubPages,
 
-  // Manually-invokable targets that invoke prerequisites.
+  // Manually-invokable targets, with prequisites where required.
   prepare: buildTasks.prepare,
   format: buildTasks.format,
   generate: buildTasks.generate,
+  sortRequires: cleanupTasks.sortRequires,
+  checkLicenses: licenseTasks.checkLicenses,
   clean: gulp.parallel(buildTasks.cleanBuildDir, packageTasks.cleanReleaseDir),
   buildAdvancedCompilationTest: buildTasks.buildAdvancedCompilationTest,
   gitCreateRC: gitTasks.createRC,
@@ -57,7 +59,5 @@ module.exports = {
   // TBD.
   deployDemos: appengineTasks.deployDemos,
   deployDemosBeta: appengineTasks.deployDemosBeta,
-  checkLicenses: licenseTasks.checkLicenses,
   prepareDemos: appengineTasks.prepareDemos,
-  sortRequires: cleanupTasks.sortRequires,
 };

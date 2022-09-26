@@ -81,5 +81,6 @@ function sortRequires() {
 };
 
 module.exports = {
+  // Manually-invokable targets, with prequisites where required.
   sortRequires: sortRequires
 };

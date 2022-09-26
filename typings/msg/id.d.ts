@@ -1,15 +1,8 @@
 /**
  * @license
- * Copyright 2020 Google LLC
+ * Copyright 2022 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Type definitions for the Blockly ID locale.
- * @author samelh@google.com (Sam El-Husseini)
- */
+export * from './msg';
 
-/// <reference path="msg.d.ts" />
-
-import BlocklyMsg = Blockly.Msg;
-export = BlocklyMsg;

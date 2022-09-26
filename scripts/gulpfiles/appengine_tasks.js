@@ -143,6 +143,7 @@ const deployDemos = gulp.series(prepareDemos, deployAndClean);
 const deployDemosBeta = gulp.series(prepareDemos, deployBetaAndClean);
 
 module.exports = {
+  // Main sequence targets.  Each should invoke any immediate prerequisite(s).
   deployDemos: deployDemos,
   deployDemosBeta: deployDemosBeta,
   prepareDemos: prepareDemos

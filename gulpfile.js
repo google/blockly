@@ -35,6 +35,9 @@ module.exports = {
   package: packageTasks.package,
   publish: releaseTasks.publish,
   publishBeta: releaseTasks.publishBeta,
+  prepareDemos: appengineTasks.prepareDemos,
+  deployDemos: appengineTasks.deployDemos,
+  deployDemosBeta: appengineTasks.deployDemosBeta,
   gitUpdateGithubPages: gitTasks.updateGithubPages,
 
   // Manually-invokable targets, with prequisites where required.
@@ -55,9 +58,4 @@ module.exports = {
   recompile: releaseTasks.recompile,
   gitSyncDevelop: gitTasks.syncDevelop,
   gitSyncMaster: gitTasks.syncMaster,
-
-  // TBD.
-  deployDemos: appengineTasks.deployDemos,
-  deployDemosBeta: appengineTasks.deployDemosBeta,
-  prepareDemos: appengineTasks.prepareDemos,
 };

@@ -92,7 +92,8 @@ export class PathObject extends BasePathObject {
     this.svgPathDark.style.display = '';
     if (!this.style.colourTertiary) {
       throw new Error(
-          'The renderer did not properly initialize the block style');
+          'The renderer did not properly initialize the tertiary colour of ' +
+          'the block style');
     }
     this.svgPathLight.setAttribute('stroke', this.style.colourTertiary);
     this.svgPathDark.setAttribute('fill', this.colourDark);
@@ -124,7 +125,8 @@ export class PathObject extends BasePathObject {
       this.svgPathLight.style.display = 'none';
       if (!this.style.colourSecondary) {
         throw new Error(
-            'The renderer did not properly initialize the block style');
+            'The renderer did not properly initialize the secondary colour ' +
+            'of the block style block style');
       }
       this.svgPathDark.setAttribute('fill', this.style.colourSecondary);
       this.svgPath.setAttribute('stroke', 'none');

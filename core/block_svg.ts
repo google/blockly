@@ -525,7 +525,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /** Snap this block to the nearest grid point. */
   snapToGrid() {
-    if (this.disposed) {
+    if (this.isDeadOrDying()) {
       return;  // Deleted block.
     }
     if (this.workspace.isDragging()) {
@@ -861,8 +861,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * @suppress {checkTypes}
    */
   override dispose(healStack?: boolean, animate?: boolean) {
-    if (this.disposed) {
-      // The block has already been deleted.
+    if (this.isDeadOrDying()) {
       return;
     }
     Tooltip.dispose();
@@ -1067,13 +1066,12 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     if (this.workspace.isDragging()) {
       // Don't change the warning text during a drag.
       // Wait until the drag finishes.
-      this.warningTextDb.set(
-          id, setTimeout(() => {
-            if (!this.disposed) {  // Check block wasn't deleted.
-              this.warningTextDb.delete(id);
-              this.setWarningText(text, id);
-            }
-          }, 100));
+      this.warningTextDb.set(id, setTimeout(() => {
+                               if (!this.isDeadOrDying()) {
+                                 this.warningTextDb.delete(id);
+                                 this.setWarningText(text, id);
+                               }
+                             }, 100));
       return;
     }
     if (this.isInFlyout) {
@@ -1541,11 +1539,11 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * connected should not coincidentally line up on screen.
    */
   override bumpNeighbours() {
-    if (this.disposed) {
-      return;  // Deleted block.
+    if (this.isDeadOrDying()) {
+      return;
     }
     if (this.workspace.isDragging()) {
-      return;  // Don't bump blocks during a drag.
+      return;
     }
     const rootBlock = this.getRootBlock();
     if (rootBlock.isInFlyout) {

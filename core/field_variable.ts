@@ -377,7 +377,7 @@ export class FieldVariable extends FieldDropdown {
     let variableTypes = this.variableTypes;
     if (variableTypes === null) {
       // If variableTypes is null, return all variable types.
-      if (this.sourceBlock_ && !this.sourceBlock_.disposed) {
+      if (this.sourceBlock_ && !this.sourceBlock_.isDeadOrDying()) {
         return this.sourceBlock_.workspace.getVariableTypes();
       }
     }
@@ -456,7 +456,7 @@ export class FieldVariable extends FieldDropdown {
   protected override onItemSelected_(menu: Menu, menuItem: MenuItem) {
     const id = menuItem.getValue();
     // Handle special cases.
-    if (this.sourceBlock_ && !this.sourceBlock_.disposed) {
+    if (this.sourceBlock_ && !this.sourceBlock_.isDeadOrDying()) {
       if (id === internalConstants.RENAME_VARIABLE_ID) {
         // Rename variable.
         Variables.renameVariable(
@@ -515,7 +515,7 @@ export class FieldVariable extends FieldDropdown {
     }
     const name = this.getText();
     let variableModelList: AnyDuringMigration[] = [];
-    if (this.sourceBlock_ && !this.sourceBlock_.disposed) {
+    if (this.sourceBlock_ && !this.sourceBlock_.isDeadOrDying()) {
       const variableTypes = this.getVariableTypes_();
       // Get a copy of the list, so that adding rename and new variable options
       // doesn't modify the workspace's list.

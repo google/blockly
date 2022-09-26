@@ -77,11 +77,19 @@ export class PathObject extends BasePathObject {
     // Set shadow stroke colour.
     const parent = block.getParent();
     if (block.isShadow() && parent) {
+      if (!parent.style.colourTertiary) {
+        throw new Error(
+            'The renderer did not properly initialize the block style');
+      }
       this.svgPath.setAttribute('stroke', parent.style.colourTertiary);
     }
 
     // Apply colour to outlines.
     for (const outline of this.outlines.values()) {
+      if (!this.style.colourTertiary) {
+        throw new Error(
+            'The renderer did not properly initialize the block style');
+      }
       outline.setAttribute('fill', this.style.colourTertiary);
     }
   }
@@ -175,6 +183,10 @@ export class PathObject extends BasePathObject {
   setOutlinePath(name: string, pathString: string) {
     const outline = this.getOutlinePath_(name);
     outline.setAttribute('d', pathString);
+    if (!this.style.colourTertiary) {
+      throw new Error(
+          'The renderer did not properly initialize the block style');
+    }
     outline.setAttribute('fill', this.style.colourTertiary);
   }
 

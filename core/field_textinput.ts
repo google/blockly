@@ -216,15 +216,19 @@ export class FieldTextInput extends Field {
    * @internal
    */
   override applyColour() {
-    if (this.sourceBlock_ && this.getConstants()!.FULL_BLOCK_FIELDS) {
-      if (this.borderRect_) {
-        this.borderRect_.setAttribute(
-            'stroke', (this.sourceBlock_ as BlockSvg).style.colourTertiary);
-      } else {
-        (this.sourceBlock_ as BlockSvg)
-            .pathObject.svgPath.setAttribute(
-                'fill', this.getConstants()!.FIELD_BORDER_RECT_COLOUR);
+    if (!this.sourceBlock_ || !this.getConstants()!.FULL_BLOCK_FIELDS) return;
+
+    const source = this.sourceBlock_ as BlockSvg;
+
+    if (this.borderRect_) {
+      if (!source.style.colourTertiary) {
+        throw new Error(
+            'The renderer did not properly initialize the block style');
       }
+      this.borderRect_.setAttribute('stroke', source.style.colourTertiary);
+    } else {
+      source.pathObject.svgPath.setAttribute(
+          'fill', this.getConstants()!.FIELD_BORDER_RECT_COLOUR);
     }
   }
 

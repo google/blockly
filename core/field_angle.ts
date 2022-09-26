@@ -228,6 +228,10 @@ export class FieldAngle extends FieldTextInput {
     dropDownDiv.getContentDiv().appendChild(this.editor_ as AnyDuringMigration);
 
     if (this.sourceBlock_ instanceof BlockSvg) {
+      if (!this.sourceBlock_.style.colourTertiary) {
+        throw new Error(
+            'The renderer did not properly initialize the block style');
+      }
       dropDownDiv.setColour(
           this.sourceBlock_.style.colourPrimary,
           this.sourceBlock_.style.colourTertiary);

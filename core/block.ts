@@ -182,10 +182,8 @@ export class Block implements IASTNodeLocation, IDeletable {
 
   /**
    * Is the current block currently in the process of being disposed?
-   *
-   * @internal
    */
-  disposing = false;
+  private disposing = false;
 
   /**
    * A string representing the comment attached to this block.

@@ -552,6 +552,9 @@ export class Trashcan extends DeleteArea implements IAutoHideable,
     }
     const deleteEvent = event as BlockDelete;
     if (event.type === eventUtils.BLOCK_DELETE && !deleteEvent.wasShadow) {
+      if (!deleteEvent.oldJson) {
+        throw new Error('Encountered a delete event without proper oldJson');
+      }
       const cleanedJson =
           JSON.stringify(this.cleanBlockJson_(deleteEvent.oldJson));
       if (this.contents_.indexOf(cleanedJson) !== -1) {

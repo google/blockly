@@ -12,9 +12,9 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.BubbleOpen');
 
+import type {AbstractEventJson} from './events_abstract.js';
 import type {BlockSvg} from '../block_svg.js';
 import * as registry from '../registry.js';
-
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
 
@@ -25,10 +25,10 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.BubbleOpen
  */
 export class BubbleOpen extends UiBase {
-  blockId: string|null;
+  blockId?: string;
   isOpen?: boolean;
-  bubbleType?: string;
-  override type: string;
+  bubbleType?: BubbleType;
+  override type = eventUtils.BUBBLE_OPEN;
 
   /**
    * @param opt_block The associated block. Undefined for a blank event.
@@ -38,19 +38,18 @@ export class BubbleOpen extends UiBase {
    *     'warning'. Undefined for a blank event.
    */
   constructor(
-      opt_block?: BlockSvg, opt_isOpen?: boolean, opt_bubbleType?: string) {
+      opt_block?: BlockSvg, opt_isOpen?: boolean, opt_bubbleType?: BubbleType) {
     const workspaceId = opt_block ? opt_block.workspace.id : undefined;
     super(workspaceId);
-    this.blockId = opt_block ? opt_block.id : null;
+    if (!opt_block) return;
+
+    this.blockId = opt_block.id;
 
     /** Whether the bubble is opening (false if closing). */
     this.isOpen = opt_isOpen;
 
     /** The type of bubble. One of 'mutator', 'comment', or 'warning'. */
     this.bubbleType = opt_bubbleType;
-
-    /** Type of this event. */
-    this.type = eventUtils.BUBBLE_OPEN;
   }
 
   /**
@@ -58,11 +57,23 @@ export class BubbleOpen extends UiBase {
    *
    * @returns JSON representation.
    */
-  override toJson(): AnyDuringMigration {
-    const json = super.toJson();
+  override toJson(): BubbleOpenJson {
+    const json = super.toJson() as BubbleOpenJson;
+    if (this.isOpen === undefined) {
+      throw new Error(
+          'Whether this event is for opening the bubble is ' +
+          'undefined. Either pass the value to the constructor, or call ' +
+          'fromJson');
+    }
+    if (!this.bubbleType) {
+      throw new Error(
+          'The type of bubble is undefined. Either pass the ' +
+          'value to the constructor, or call ' +
+          'fromJson');
+    }
     json['isOpen'] = this.isOpen;
     json['bubbleType'] = this.bubbleType;
-    json['blockId'] = this.blockId;
+    json['blockId'] = this.blockId || '';
     return json;
   }
 
@@ -71,12 +82,24 @@ export class BubbleOpen extends UiBase {
    *
    * @param json JSON representation.
    */
-  override fromJson(json: AnyDuringMigration) {
+  override fromJson(json: BubbleOpenJson) {
     super.fromJson(json);
     this.isOpen = json['isOpen'];
     this.bubbleType = json['bubbleType'];
     this.blockId = json['blockId'];
   }
+}
+
+export enum BubbleType {
+  MUTATOR = 'mutator',
+  COMMENT = 'comment',
+  WARNING = 'warning',
+}
+
+export interface BubbleOpenJson extends AbstractEventJson {
+  isOpen: boolean;
+  bubbleType: BubbleType;
+  blockId: string;
 }
 
 registry.register(registry.Type.EVENT, eventUtils.BUBBLE_OPEN, BubbleOpen);

@@ -14,8 +14,7 @@ goog.declareModuleId('Blockly.Events.FinishedLoading');
 
 import * as registry from '../registry.js';
 import type {Workspace} from '../workspace.js';
-
-import {Abstract as AbstractEvent} from './events_abstract.js';
+import {Abstract as AbstractEvent, AbstractEventJson} from './events_abstract.js';
 import * as eventUtils from './utils.js';
 
 
@@ -28,13 +27,9 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.FinishedLoading
  */
 export class FinishedLoading extends AbstractEvent {
-  override isBlank: boolean;
-  override workspaceId: string;
-
-  // Workspace events do not undo or redo.
+  override isBlank = true;
   override recordUndo = false;
-  override type: string;
-  override group: AnyDuringMigration;
+  override type = eventUtils.FINISHED_LOADING;
 
   /**
    * @param opt_workspace The workspace that has finished loading.  Undefined
@@ -43,13 +38,12 @@ export class FinishedLoading extends AbstractEvent {
   constructor(opt_workspace?: Workspace) {
     super();
     /** Whether or not the event is blank (to be populated by fromJson). */
-    this.isBlank = typeof opt_workspace === 'undefined';
+    this.isBlank = !!opt_workspace;
+
+    if (!opt_workspace) return;
 
     /** The workspace identifier for this event. */
-    this.workspaceId = opt_workspace ? opt_workspace.id : '';
-
-    /** Type of this event. */
-    this.type = eventUtils.FINISHED_LOADING;
+    this.workspaceId = opt_workspace.id;
   }
 
   /**
@@ -57,16 +51,14 @@ export class FinishedLoading extends AbstractEvent {
    *
    * @returns JSON representation.
    */
-  override toJson(): AnyDuringMigration {
-    const json = {
-      'type': this.type,
-    };
-    if (this.group) {
-      (json as AnyDuringMigration)['group'] = this.group;
+  override toJson(): FinishedLoadingJson {
+    const json = super.toJson() as FinishedLoadingJson;
+    if (!this.workspaceId) {
+      throw new Error(
+          'The workspace ID is undefined. Either pass a workspace to ' +
+          'the constructor, or call fromJson');
     }
-    if (this.workspaceId) {
-      (json as AnyDuringMigration)['workspaceId'] = this.workspaceId;
-    }
+    json['workspaceId'] = this.workspaceId;
     return json;
   }
 
@@ -75,11 +67,14 @@ export class FinishedLoading extends AbstractEvent {
    *
    * @param json JSON representation.
    */
-  override fromJson(json: AnyDuringMigration) {
-    this.isBlank = false;
+  override fromJson(json: FinishedLoadingJson) {
+    super.fromJson(json);
     this.workspaceId = json['workspaceId'];
-    this.group = json['group'];
   }
+}
+
+export interface FinishedLoadingJson extends AbstractEventJson {
+  workspaceId: string;
 }
 
 registry.register(

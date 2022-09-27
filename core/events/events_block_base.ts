@@ -14,7 +14,7 @@ goog.declareModuleId('Blockly.Events.BlockBase');
 
 import type {Block} from '../block.js';
 
-import {Abstract as AbstractEvent} from './events_abstract.js';
+import {Abstract as AbstractEvent, AbstractEventJson} from './events_abstract.js';
 
 
 /**
@@ -23,9 +23,8 @@ import {Abstract as AbstractEvent} from './events_abstract.js';
  * @alias Blockly.Events.BlockBase
  */
 export class BlockBase extends AbstractEvent {
-  override isBlank: AnyDuringMigration;
-  blockId: string;
-  override workspaceId: string;
+  override isBlank = true;
+  blockId?: string;
 
   /**
    * @param opt_block The block this event corresponds to.
@@ -33,13 +32,15 @@ export class BlockBase extends AbstractEvent {
    */
   constructor(opt_block?: Block) {
     super();
-    this.isBlank = typeof opt_block === 'undefined';
+    this.isBlank = !!opt_block;
+
+    if (!opt_block) return;
 
     /** The block ID for the block this event pertains to */
-    this.blockId = this.isBlank ? '' : opt_block!.id;
+    this.blockId = opt_block.id;
 
     /** The workspace identifier for this event. */
-    this.workspaceId = this.isBlank ? '' : opt_block!.workspace.id;
+    this.workspaceId = opt_block.workspace.id;
   }
 
   /**
@@ -47,8 +48,13 @@ export class BlockBase extends AbstractEvent {
    *
    * @returns JSON representation.
    */
-  override toJson(): AnyDuringMigration {
-    const json = super.toJson();
+  override toJson(): AbstractEventJson {
+    const json = super.toJson() as BlockBaseJson;
+    if (!this.blockId) {
+      throw new Error(
+          'The block ID is undefined. Either pass a block to ' +
+          'the constructor, or call fromJson');
+    }
     json['blockId'] = this.blockId;
     return json;
   }
@@ -58,8 +64,12 @@ export class BlockBase extends AbstractEvent {
    *
    * @param json JSON representation.
    */
-  override fromJson(json: AnyDuringMigration) {
+  override fromJson(json: BlockBaseJson) {
     super.fromJson(json);
     this.blockId = json['blockId'];
   }
+}
+
+export interface BlockBaseJson extends AbstractEventJson {
+  blockId: string;
 }

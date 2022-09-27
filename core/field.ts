@@ -54,9 +54,6 @@ import * as Xml from './xml.js';
 export abstract class Field implements IASTNodeLocationSvg,
                                        IASTNodeLocationWithBlock,
                                        IKeyboardAccessible, IRegistrable {
-  /** The default value for this field. */
-  protected DEFAULT_VALUE: any = null;
-
   /** Non-breaking space. */
   static readonly NBSP = '\u00A0';
 
@@ -208,7 +205,9 @@ export abstract class Field implements IASTNodeLocationSvg,
      * A generic value possessed by the field.
      * Should generally be non-null, only null when the field is created.
      */
-    this.value_ = (new.target).prototype.DEFAULT_VALUE;
+    this.value_ = ('DEFAULT_VALUE' in (new.target).prototype) ?
+        ((new.target).prototype as AnyDuringMigration).DEFAULT_VALUE :
+        null;
 
     /** The size of the area rendered by the field. */
     this.size_ = new Size(0, 0);

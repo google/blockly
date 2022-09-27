@@ -133,7 +133,7 @@ blocks['lists_create_with'] = {
     this.itemCount_ = 3;
     this.updateShape_();
     this.setOutput(true, 'Array');
-    this.setMutator(new Mutator(['lists_create_with_item']));
+    this.setMutator(new Mutator(['lists_create_with_item'], this));
     this.setTooltip(Msg['LISTS_CREATE_WITH_TOOLTIP']);
   },
   /**

@@ -864,7 +864,7 @@ const TEXT_JOIN_EXTENSION = function() {
   this.itemCount_ = 2;
   this.updateShape_();
   // Configure the mutator UI.
-  this.setMutator(new Mutator(['text_create_join_item']));
+  this.setMutator(new Mutator(['text_create_join_item'], this));
 };
 
 // Update the tooltip of 'text_append' block to reference the variable.

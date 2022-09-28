@@ -24,6 +24,8 @@
  const {Blocks} = goog.require('Blockly.blocks');
  /* eslint-disable-next-line no-unused-vars */
  const {Block} = goog.requireType('Blockly.Block');
+  /* eslint-disable-next-line no-unused-vars */
+ const {BubbleOpen} = goog.requireType('Blockly.Events.BubbleOpen');
  /* eslint-disable-next-line no-unused-vars */
  const {Field} = goog.requireType('Blockly.Field');
  const {Msg} = goog.require('Blockly.Msg');
@@ -203,7 +205,7 @@
 
  /**
   * Construct the blocks required by the flyout for the procedure category.
-  * @param {!Workspace} workspace The workspace containing procedures.
+  * @param {!WorkspaceSvg} workspace The workspace containing procedures.
   * @return {!Array<!Element>} Array of XML block elements.
   * @alias Blockly.ProceduresLocalArgument.flyoutCategory
   */
@@ -317,17 +319,21 @@
   * @package
   */
  const mutatorOpenListener = function(e) {
-   if (!(e.type === eventUtils.BUBBLE_OPEN && e.bubbleType === 'mutator' &&
-         e.isOpen)) {
-     return;
-   }
-   const workspaceId = /** @type {string} */ (e.workspaceId);
-   const block = Workspace.getById(workspaceId).getBlockById(e.blockId);
+    if (e.type !== eventUtils.BUBBLE_OPEN) {
+      return;
+    }
+    const bubbleEvent = /** @type {!BubbleOpen} */ (e);
+    if (!(bubbleEvent.bubbleType === 'mutator' && bubbleEvent.isOpen)) {
+      return;
+    }
+  
+   const workspaceId = /** @type {string} */ (bubbleEvent.workspaceId);
+   const block = /** @type {!BlockSvg} */ Workspace.getById(workspaceId).getBlockById(bubbleEvent.blockId);
    const type = block.type;
    if (type !== 'procedures_with_argument_defnoreturn' && type !== 'procedures_with_argument_defreturn') {
      return;
    }
-   const workspace = block.mutator.getWorkspace();
+   const workspace = /** @type {!WorkspaceSvg} */ block.mutator.getWorkspace();
    updateMutatorFlyout(workspace);
    workspace.addChangeListener(mutatorChangeListener);
  };

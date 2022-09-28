@@ -520,6 +520,8 @@ class WorkspaceSvg extends Workspace {
     if (Procedures && Procedures.flyoutCategory) {
       this.registerToolboxCategoryCallback(Procedures.CATEGORY_NAME, proceduresCallback);
       this.addChangeListener(Procedures.mutatorOpenListener);
+      this.addChangeListener(ProceduresLocalArgument.mutatorOpenListener);
+      this.addChangeListener(ProceduresLocalArgument.updateFlyout);
     }
 
     /**

@@ -147,7 +147,7 @@ export class Menu {
     const el = this.getElement();
     if (el) {
       el.blur();
-      el.classList.remove('blocklyFocused');
+      dom.removeClass(el, 'blocklyFocused');
     }
   }
 

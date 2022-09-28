@@ -292,7 +292,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * @internal
    */
   removeFocus() {
-    this.svgGroup_.classList.remove('blocklyFocused');
+    dom.removeClass(this.svgGroup_, 'blocklyFocused');
   }
 
   /**
@@ -475,7 +475,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     if (this.isMovable()) {
       dom.addClass(this.svgGroup_, 'blocklyDraggable');
     } else {
-      this.svgGroup_.classList.remove('blocklyDraggable');
+      dom.removeClass(this.svgGroup_, 'blocklyDraggable');
     }
   }
 
@@ -516,7 +516,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
       (group as AnyDuringMigration).skew_ = '';
       dom.addClass(this.svgGroup_, 'blocklyDragging');
     } else {
-      this.svgGroup_.classList.remove('blocklyDragging');
+      dom.removeClass(this.svgGroup_, 'blocklyDragging');
     }
   }
 
@@ -563,7 +563,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
     if (enable) {
       dom.addClass(this.svgGroup_, 'blocklyDraggingDelete');
     } else {
-      this.svgGroup_.classList.remove('blocklyDraggingDelete');
+      dom.removeClass(this.svgGroup_, 'blocklyDraggingDelete');
     }
   }
 
@@ -867,7 +867,9 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    */
   private deleteMouseOut_(_e: Event) {
     // Restore highlight on the delete icon.
-    this.deleteIconBorder_?.classList.remove('blocklyDeleteIconHighlighted');
+    if (this.deleteIconBorder_) {
+      dom.removeClass(this.deleteIconBorder_, 'blocklyDeleteIconHighlighted');
+    }
   }
 
   /**
@@ -1042,9 +1044,12 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
       this.textarea_!.blur();
       this.removeFocus();
-      this.svgRectTarget_?.classList.remove('blocklyCommentTargetFocused');
-      this.svgHandleTarget_?.classList.remove(
-          'blocklyCommentHandleTargetFocused');
+      if (this.svgRectTarget_) {
+        dom.removeClass(this.svgRectTarget_, 'blocklyCommentTargetFocused');
+      }
+      if (this.svgHandleTarget_) {
+        dom.removeClass(this.svgHandleTarget_, 'blocklyCommentHandleTargetFocused');
+      }
     }, 0);
   }
 

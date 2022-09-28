@@ -238,7 +238,7 @@ export class Mutator extends Icon {
     if (!this.getBlock().isInFlyout) {
       if (this.getBlock().isEditable()) {
         if (this.iconGroup_) {
-          this.iconGroup_.classList.remove('blocklyIconGroupReadonly');
+          dom.removeClass(this.iconGroup_, 'blocklyIconGroupReadonly');
         }
       } else {
         // Close any mutator bubble.  Icon is not clickable.

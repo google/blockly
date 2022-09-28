@@ -172,7 +172,7 @@ export class PathObject implements IPathObject {
     if (add) {
       dom.addClass(this.svgRoot, className);
     } else {
-      this.svgRoot.classList.remove(className);
+      dom.removeClass(this.svgRoot, className);
     }
   }
 

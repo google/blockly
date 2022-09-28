@@ -199,8 +199,8 @@ export class MenuItem {
         dom.addClass(el, name);
         dom.addClass(el, nameDep);
       } else {
-        el.classList.remove(name);
-        el.classList.remove(nameDep);
+        dom.removeClass(el, name);
+        dom.removeClass(el, nameDep);
       }
     }
   }

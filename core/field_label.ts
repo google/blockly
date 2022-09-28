@@ -102,7 +102,7 @@ export class FieldLabel extends Field {
   setClass(cssClass: string|null) {
     if (this.textElement_) {
       if (this.class_) {
-        this.textElement_.classList.remove(this.class_);
+        dom.removeClass(this.textElement_, this.class_);
       }
       if (cssClass) {
         dom.addClass(this.textElement_, cssClass);

@@ -532,7 +532,7 @@ export class ToolboxCategory extends ToolboxItem implements
     } else {
       this.rowDiv_.style.backgroundColor = '';
       if (className) {
-        this.rowDiv_.classList.remove(className);
+        dom.removeClass(this.rowDiv_, className);
       }
     }
     aria.setState(this.htmlDiv_ as Element, aria.State.SELECTED, isSelected);

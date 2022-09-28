@@ -135,7 +135,7 @@ suite('Toolbox', function() {
         {
           "kind": "category",
           "cssConfig": {
-            "icon": "customIcon customIconEvents"
+            "icon": "customIcon customIconEvents",
           },
           "contents": [
             {
@@ -147,9 +147,9 @@ suite('Toolbox', function() {
       ]};
       chai.assert.doesNotThrow(() => {
         this.toolbox.render(jsonDef);
-      })
+      });
       chai.assert.lengthOf(this.toolbox.contents_, 1);
-    })
+    });
   });
 
   suite('onClick_', function() {

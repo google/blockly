@@ -1024,7 +1024,8 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
         dom.addClass(this.svgRectTarget_, 'blocklyCommentTargetFocused');
       }
       if (this.svgHandleTarget_) {
-        dom.addClass(this.svgHandleTarget_, 'blocklyCommentHandleTargetFocused');
+        dom.addClass(
+            this.svgHandleTarget_, 'blocklyCommentHandleTargetFocused');
       }
     }, 0);
   }
@@ -1048,7 +1049,8 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
         dom.removeClass(this.svgRectTarget_, 'blocklyCommentTargetFocused');
       }
       if (this.svgHandleTarget_) {
-        dom.removeClass(this.svgHandleTarget_, 'blocklyCommentHandleTargetFocused');
+        dom.removeClass(
+            this.svgHandleTarget_, 'blocklyCommentHandleTargetFocused');
       }
     }, 0);
   }

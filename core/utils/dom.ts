@@ -84,7 +84,7 @@ export function createSvgElement<T extends SVGElement>(
 
 /**
  * Add a CSS class to a element.
- * 
+ *
  * Handles multiple space-separated classes for legacy reasons.
  *
  * @param element DOM element to add class to.
@@ -114,7 +114,7 @@ export function removeClasses(element: Element, classNames: string) {
 
 /**
  * Remove a CSS class from a element.
- * 
+ *
  * Handles multiple space-separated classes for legacy reasons.
  *
  * @param element DOM element to remove class from.

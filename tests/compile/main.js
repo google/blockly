@@ -4,27 +4,33 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.provide('Main');
+goog.module('Main');
+
 // Core
 // Either require 'Blockly.requires', or just the components you use:
-goog.require('Blockly');
+/* eslint-disable-next-line no-unused-vars */
+const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
+const {inject} = goog.require('Blockly.inject');
+/** @suppress {extraRequire} */
 goog.require('Blockly.geras.Renderer');
+/** @suppress {extraRequire} */
 goog.require('Blockly.VerticalFlyout');
 // Blocks
-goog.require('Blockly.Constants.Logic');
-goog.require('Blockly.Constants.Loops');
-goog.require('Blockly.Constants.Math');
-goog.require('Blockly.Constants.TestBlocks');
-goog.require('Blockly.Constants.Text');
-goog.require('Blockly.Constants.Lists');
-goog.require('Blockly.Constants.Colour');
-goog.require('Blockly.Constants.Variables');
-goog.require('Blockly.Constants.VariablesDynamic');
-goog.require('Blockly.Blocks.procedures');
+/** @suppress {extraRequire} */
+goog.require('Blockly.libraryBlocks.logic');
+/** @suppress {extraRequire} */
+goog.require('Blockly.libraryBlocks.loops');
+/** @suppress {extraRequire} */
+goog.require('Blockly.libraryBlocks.math');
+/** @suppress {extraRequire} */
+goog.require('Blockly.libraryBlocks.texts');
+/** @suppress {extraRequire} */
+goog.require('Blockly.libraryBlocks.testBlocks');
 
-Main.init = function() {
-  Blockly.inject('blocklyDiv', {
-    'toolbox': document.getElementById('toolbox')
-  });
+
+function init() {
+  inject('blocklyDiv', /** @type {BlocklyOptions} */ ({
+           'toolbox': document.getElementById('toolbox')
+         }));
 };
-window.addEventListener('load', Main.init);
+window.addEventListener('load', init);

@@ -79,14 +79,6 @@
 	"CONTROLS_IF_MSG_ELSEIF": "নতুবা যদি",
 	"CONTROLS_IF_MSG_ELSE": "নতুবা",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "যদি নামক ব্লক এ একটি শর্ত যোগ করুন।",
-	"IOS_OK": "ঠিক আছে",
-	"IOS_CANCEL": "বাতিল",
-	"IOS_ERROR": "ত্রুটি",
-	"IOS_VARIABLES_ADD_BUTTON": "যোগ",
-	"IOS_VARIABLES_RENAME_BUTTON": "পুনরায় শুরু",
-	"IOS_VARIABLES_DELETE_BUTTON": "অপসারণ",
-	"IOS_VARIABLES_VARIABLE_NAME": "চলকের নাম",
-	"IOS_VARIABLES_EMPTY_NAME_ERROR": "অাপনি চলকের নাম খালি রাখতে পারেননা।",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "পাঠাবে সত্য যদি উভয় ইনপুটই সমান হয়।",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "পাঠাবে সত্য যদি উভয় ইনপুটই সমান না হয়।",
 	"LOGIC_COMPARE_TOOLTIP_LT": "পাঠাবে সত্য যদি প্রথম ইনপুট দ্বিতীয় ইনপুট থেকে ছোট হয়।",
@@ -191,5 +183,7 @@
 	"PROCEDURES_MUTATORARG_TITLE": "ইনপুটের নাম:",
 	"PROCEDURES_MUTATORARG_TOOLTIP": "ক্রিয়াতে একটি ইনপুট যোগ করুন।",
 	"PROCEDURES_HIGHLIGHT_DEF": "ক্রিয়ার সংজ্ঞা উজ্জল করুন",
-	"PROCEDURES_IFRETURN_TOOLTIP": "যদি মান সত্য হয় তাহলে দ্বিতীয় মান পাঠাবে।"
+	"PROCEDURES_IFRETURN_TOOLTIP": "যদি মান সত্য হয় তাহলে দ্বিতীয় মান পাঠাবে।",
+	"DIALOG_OK": "ঠিক আছে",
+	"DIALOG_CANCEL": "বাতিল"
 }

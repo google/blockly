@@ -6,15 +6,16 @@
 
 /**
  * @fileoverview English strings.
- * @author fraser@google.com (Neil Fraser)
  *
- * After modifying this file, either run "build.py" from the parent directory,
- * or run (from this directory):
- * ../scripts/i18n/js_to_json.py
- * to regenerate json/{en,qqq,synonyms}.json.
+ * After modifying this file, run:
+ *
+ *     npm run generate:langfiles
+ *
+ * to regenerate json/{en,qqq,constants,synonyms}.json.
  *
  * To convert all of the json files to .js files, run:
- * ../scripts/i18n/create_messages.py json/*.json
+ *
+ *     npm run build:langfiles
  */
 'use strict';
 
@@ -479,7 +480,7 @@ Blockly.Msg.CONTROLS_REPEAT_TITLE = 'repeat %1 times';
 Blockly.Msg.CONTROLS_REPEAT_FOREVER_TITLE = 'repeat forever';
 /** @type {string} */
 /// block text - Preceding the blocks in the body of the loop.  See [https://github.com/google/blockly/wiki/Loops https://github.com/google/blockly/wiki/Loops].\n{{Identical|Do}}
-Blockly.Msg.CONTROLS_REPEAT_INPUT_DO = '';
+Blockly.Msg.CONTROLS_REPEAT_INPUT_DO = 'do';
 /** @type {string} */
 /// tooltip - See [https://github.com/google/blockly/wiki/Loops#repeat https://github.com/google/blockly/wiki/Loops#repeat].
 Blockly.Msg.CONTROLS_REPEAT_TOOLTIP = 'Do some statements several times.';
@@ -487,7 +488,7 @@ Blockly.Msg.CONTROLS_REPEAT_TOOLTIP = 'Do some statements several times.';
 /// {{Optional}} url - Describes 'while loops' in computer programs; consider using the translation of [https://en.wikipedia.org/wiki/While_loop https://en.wikipedia.org/wiki/While_loop], if present, or [https://en.wikipedia.org/wiki/Control_flow https://en.wikipedia.org/wiki/Control_flow].
 Blockly.Msg.CONTROLS_WHILEUNTIL_HELPURL = 'https://github.com/google/blockly/wiki/Loops#repeat';
 /** @type {string} */
-Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = '';
+Blockly.Msg.CONTROLS_WHILEUNTIL_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
 /** @type {string} */
 /// dropdown - Specifies that a loop should [https://github.com/google/blockly/wiki/Loops#repeat-while repeat while] the following condition is true.
 Blockly.Msg.CONTROLS_WHILEUNTIL_OPERATOR_WHILE = 'repeat while';
@@ -517,7 +518,7 @@ Blockly.Msg.CONTROLS_FOR_TOOLTIP = 'Have the variable "%1" take on the values fr
 /// [[File:Blockly-count-with.png]]
 Blockly.Msg.CONTROLS_FOR_TITLE = 'count with %1 from %2 to %3 by %4';
 /** @type {string} */
-Blockly.Msg.CONTROLS_FOR_INPUT_DO = '';
+Blockly.Msg.CONTROLS_FOR_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
 
 /** @type {string} */
 /// {{Optional}} url - Describes 'for-each loops' in computer programs.  Consider using your language's translation of [https://en.wikipedia.org/wiki/Foreach https://en.wikipedia.org/wiki/Foreach] if present.
@@ -527,7 +528,7 @@ Blockly.Msg.CONTROLS_FOREACH_HELPURL = 'https://github.com/google/blockly/wiki/L
 /// Sequentially assigns every item in array %2 to the valiable %1.
 Blockly.Msg.CONTROLS_FOREACH_TITLE = 'for each item %1 in list %2';
 /** @type {string} */
-Blockly.Msg.CONTROLS_FOREACH_INPUT_DO = '';
+Blockly.Msg.CONTROLS_FOREACH_INPUT_DO = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
 /** @type {string} */
 /// block text - Description of [https://github.com/google/blockly/wiki/Loops#for-each for each blocks].\n\nParameters:\n* %1 - the name of the loop variable.
 Blockly.Msg.CONTROLS_FOREACH_TOOLTIP = 'For each item in a list, set the variable "%1" to the item, and then do some statements.';
@@ -578,7 +579,7 @@ Blockly.Msg.CONTROLS_IF_MSG_ELSEIF = 'else if';
 /// block text - See [https://github.com/google/blockly/wiki/IfElse https://github.com/google/blockly/wiki/IfElse].  The English word "otherwise" would probably be superior to "else", but the latter is used because it is traditional and shorter.
 Blockly.Msg.CONTROLS_IF_MSG_ELSE = 'else';
 /** @type {string} */
-Blockly.Msg.CONTROLS_IF_MSG_THEN = 'then';
+Blockly.Msg.CONTROLS_IF_MSG_THEN = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
 /** @type {string} */
 Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @type {string} */
@@ -594,46 +595,6 @@ Blockly.Msg.CONTROLS_IF_ELSE_TITLE_ELSE = Blockly.Msg.CONTROLS_IF_MSG_ELSE;
 /** @type {string} */
 /// tooltip - Describes the 'else' subblock during [https://github.com/google/blockly/wiki/IfElse#block-modification if block modification].
 Blockly.Msg.CONTROLS_IF_ELSE_TOOLTIP = 'Add a final, catch-all condition to the if block.';
-
-/** @type {string} */
-/// button text - Text on a button inside a dialogue window, which will accept or acknowledge the contents of the dialogue when pressed.\n{{Identical|OK}}
-Blockly.Msg.IOS_OK = 'OK';
-/** @type {string} */
-/// button text - Text on a button inside a dialogue window, which will close or cancel the dialogue when pressed.\n{{Identical|Cancel}}
-Blockly.Msg.IOS_CANCEL = 'Cancel';
-/** @type {string} */
-/// alert - Title text for an error dialogue.\n{{Identical|Error}}
-Blockly.Msg.IOS_ERROR = 'Error';
-/** @type {string} */
-/// header text - Title of a section that displays a list of parameters (aka. "inputs") that have been defined for a procedure. This is used inside a dialogue window to configure a procedure.\n{{Identical|Input}}
-Blockly.Msg.IOS_PROCEDURES_INPUTS = 'INPUTS';
-/** @type {string} */
-/// button text - Text on a button which will add a parameter (aka. "input") to a procedure. This is used inside a dialogue window to configure a procedure. NOTE: The "+" should be preserved at the beginning of the text.
-Blockly.Msg.IOS_PROCEDURES_ADD_INPUT = '+ Add Input';
-/** @type {string} */
-/// option text - Text describing an option to allow statements to be added within a procedure. This is used inside a dialogue window to configure a procedure.
-Blockly.Msg.IOS_PROCEDURES_ALLOW_STATEMENTS = 'Allow statements';
-/** @type {string} */
-/// alert - Error message when duplicate parameters (aka. "inputs") have been defined on a procedure. This is used inside a dialogue window to configure procedure parameters.
-Blockly.Msg.IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR = 'This function has duplicate inputs.';
-/** @type {string} */
-/// button text - Text on a button which will open a variable creation dialogue when pressed. NOTE: The "+" should be preserved at the beginning of the text.
-Blockly.Msg.IOS_VARIABLES_ADD_VARIABLE = '+ Add Variable';
-/** @type {string} */
-/// button text - Text on a button inside a variable creation dialogue, which will add a variable when pressed.\n{{Identical|Add}}
-Blockly.Msg.IOS_VARIABLES_ADD_BUTTON = 'Add';
-/** @type {string} */
-/// button text - Text on a button inside a variable rename dialogue, which will rename a variable when pressed.\n{{Identical|Rename}}
-Blockly.Msg.IOS_VARIABLES_RENAME_BUTTON = 'Rename';
-/** @type {string} */
-/// button text - Text on a button inside a variable deletion dialogue, which will delete a variable when pressed.\n{{Identical|Delete}}
-Blockly.Msg.IOS_VARIABLES_DELETE_BUTTON = 'Delete';
-/** @type {string} */
-/// placeholder text - Placeholder text used inside a text input, where a variable name should be entered.
-Blockly.Msg.IOS_VARIABLES_VARIABLE_NAME = 'Variable name';
-/** @type {string} */
-/// alert - Error message that is displayed when the user attempts to create a variable without a name.
-Blockly.Msg.IOS_VARIABLES_EMPTY_NAME_ERROR = 'You can\'t use an empty variable name.';
 
 /** @type {string} */
 /// {{Optional}} url - Information about comparisons.
@@ -1742,18 +1703,13 @@ Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL = 'https://en.wikipedia.org/wiki/Subr
 /// block text - This precedes the name of the function when defining it.  See
 /// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#c84aoc this sample
 /// function definition].
-Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE = 'Subprogram';
-/** @type {string} */
-/// block text - This precedes the name of the function when defining it.  See
-/// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#c84aoc this sample
-/// function definition].
-Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = 'Subprogram';
+Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE = 'to';
 /** @type {string} */
 /// default name - This acts as a placeholder for the name of a function on a
 /// function definition block, as shown on
 /// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#w7cfju this block].
 /// The user will replace it with the function's name.
-Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE = 'name';
+Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE = 'do something';
 /** @type {string} */
 /// block text - This precedes the list of parameters on a function's definition block.  See
 /// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#voztpd this sample
@@ -1779,6 +1735,8 @@ Blockly.Msg.PROCEDURES_DEFNORETURN_COMMENT = 'Describe this function...';
 /** @type {string} */
 /// {{Optional}} url - Information about defining [https://en.wikipedia.org/wiki/Subroutine functions] that have return values.
 Blockly.Msg.PROCEDURES_DEFRETURN_HELPURL = 'https://en.wikipedia.org/wiki/Subroutine';
+/** @type {string} */
+Blockly.Msg.PROCEDURES_DEFRETURN_TITLE = Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE;
 /** @type {string} */
 Blockly.Msg.PROCEDURES_DEFRETURN_PROCEDURE = Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE;
 /** @type {string} */
@@ -1871,3 +1829,11 @@ Blockly.Msg.WORKSPACE_ARIA_LABEL = 'Blockly Workspace';
 /// that block have warnings attached to them. It should inform the user that the
 /// block they collapsed contains blocks that have warnings.
 Blockly.Msg.COLLAPSED_WARNINGS_WARNING = 'Collapsed blocks contain warnings.';
+
+/** @type {string} */
+/// button label - Pressing this button closes help information.\n{{Identical|OK}}
+Blockly.Msg.DIALOG_OK = 'OK';
+
+/** @type {string} */
+/// button label - Pressing this button cancels a proposed action.\n{{Identical|Cancel}}
+Blockly.Msg.DIALOG_CANCEL = 'Cancel';

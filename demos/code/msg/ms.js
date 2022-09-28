@@ -19,6 +19,6 @@ var MSG = {
   httpRequestError: "Permintaan itu terdapat masalah.",
   linkAlert: "Kongsikan blok-blok anda dengan pautan ini:\n\n%1",
   hashError: "Maaf, '%1' tidak berpadanan dengan sebarang aturcara yang disimpan.",
-  xmlError: "Fail simpanan anda tidak dapat dimuatkan. Jangan-jangan ia dicipta dengan versi Blockly yang berlainan?",
-  badXml: "Ralat ketika menghuraikan XML:\n%1\n\nPilih 'OK' untuk melucutkan suntingan anda atau 'Batal' untuk bersambung menyunting XML-nya."
+  loadError: "Fail simpanan anda tidak dapat dimuatkan. Jangan-jangan ia dicipta dengan versi Blockly yang berlainan?",
+  parseError: "Ralat ketika menghuraikan %1:\n%2\n\nPilih 'OK' untuk melucutkan suntingan anda atau 'Batal' untuk bersambung menyunting %1-nya."
 };

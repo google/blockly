@@ -9,62 +9,72 @@
  */
 'use strict';
 
-goog.provide('Blockly.minimalist.Renderer');
+/**
+ * Minimalist renderer.
+ * @class
+ */
+goog.module('Blockly.minimalist.Renderer');
 
-goog.require('Blockly.blockRendering');
-goog.require('Blockly.blockRendering.Renderer');
-goog.require('Blockly.minimalist.ConstantProvider');
-goog.require('Blockly.minimalist.Drawer');
-goog.require('Blockly.minimalist.RenderInfo');
-goog.require('Blockly.utils.object');
+const blockRendering = goog.require('Blockly.blockRendering');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {ConstantProvider} = goog.require('Blockly.minimalist.ConstantProvider');
+const {Drawer} = goog.require('Blockly.minimalist.Drawer');
+/* eslint-disable-next-line no-unused-vars */
+const {RenderInfo: BaseRenderInfo} = goog.requireType('Blockly.blockRendering.RenderInfo');
+const {RenderInfo} = goog.require('Blockly.minimalist.RenderInfo');
+const {Renderer: BaseRenderer} = goog.require('Blockly.blockRendering.Renderer');
 
 
 /**
  * The minimalist renderer.
- * @param {string} name The renderer name.
- * @package
- * @constructor
- * @extends {Blockly.blockRendering.Renderer}
+ * @extends {BaseRenderer}
+ * @alias Blockly.minimalist.Renderer
  */
-Blockly.minimalist.Renderer = function(name) {
-  Blockly.minimalist.Renderer.superClass_.constructor.call(this, name);
-};
-Blockly.utils.object.inherits(Blockly.minimalist.Renderer,
-    Blockly.blockRendering.Renderer);
+class Renderer extends BaseRenderer {
+  /**
+   * @param {string} name The renderer name.
+   * @package
+   */
+  constructor(name) {
+    super(name);
+  }
 
-/**
- * Create a new instance of the renderer's constant provider.
- * @return {!Blockly.minimalist.ConstantProvider} The constant provider.
- * @protected
- * @override
- */
-Blockly.minimalist.Renderer.prototype.makeConstants_ = function() {
-  return new Blockly.minimalist.ConstantProvider();
-};
+  /**
+   * Create a new instance of the renderer's constant provider.
+   * @return {!ConstantProvider} The constant provider.
+   * @protected
+   * @override
+   */
+  makeConstants_() {
+    return new ConstantProvider();
+  }
 
-/**
- * Create a new instance of the renderer's render info object.
- * @param {!Blockly.BlockSvg} block The block to measure.
- * @return {!Blockly.minimalist.RenderInfo} The render info object.
- * @protected
- * @override
- */
-Blockly.minimalist.Renderer.prototype.makeRenderInfo_ = function(block) {
-  return new Blockly.minimalist.RenderInfo(this, block);
-};
+  /**
+   * Create a new instance of the renderer's render info object.
+   * @param {!BlockSvg} block The block to measure.
+   * @return {!RenderInfo} The render info object.
+   * @protected
+   * @override
+   */
+  makeRenderInfo_(block) {
+    return new RenderInfo(this, block);
+  }
 
-/**
- * Create a new instance of the renderer's drawer.
- * @param {!Blockly.BlockSvg} block The block to render.
- * @param {!Blockly.blockRendering.RenderInfo} info An object containing all
- *   information needed to render this block.
- * @return {!Blockly.minimalist.Drawer} The drawer.
- * @protected
- * @override
- */
-Blockly.minimalist.Renderer.prototype.makeDrawer_ = function(block, info) {
-  return new Blockly.minimalist.Drawer(block,
-      /** @type {!Blockly.minimalist.RenderInfo} */ (info));
-};
+  /**
+   * Create a new instance of the renderer's drawer.
+   * @param {!BlockSvg} block The block to render.
+   * @param {!BaseRenderInfo} info An object containing all
+   *   information needed to render this block.
+   * @return {!Drawer} The drawer.
+   * @protected
+   * @override
+   */
+  makeDrawer_(block, info) {
+    return new Drawer(block, /** @type {!RenderInfo} */ (info));
+  }
+}
 
-Blockly.blockRendering.register('minimalist', Blockly.minimalist.Renderer);
+blockRendering.register('minimalist', Renderer);
+
+exports.Renderer = Renderer;

@@ -19,6 +19,6 @@ var MSG = {
   httpRequestError: "Er is een probleem opgetreden tijdens het verwerken van het verzoek.",
   linkAlert: "Deel uw blokken via deze koppeling:\n\n%1",
   hashError: "\"%1\" komt helaas niet overeen met een opgeslagen bestand.",
-  xmlError: "Uw opgeslagen bestand kan niet geladen worden. Is het misschien gemaakt met een andere versie van Blockly?",
-  badXml: "Fout tijdens het verwerken van de XML:\n%1\n\nSelecteer \"OK\" om uw wijzigingen te negeren of \"Annuleren\" om de XML verder te bewerken."
+  loadError: "Uw opgeslagen bestand kan niet geladen worden. Is het misschien gemaakt met een andere versie van Blockly?",
+  parseError: "Fout tijdens het verwerken van de %1:\n%2\n\nSelecteer \"OK\" om uw wijzigingen te negeren of \"Annuleren\" om de %1 verder te bewerken."
 };

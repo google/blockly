@@ -4,6 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.fieldTextInput');
+
+const {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSetValueTests} = goog.require('Blockly.test.helpers.fields');
+const {createTestBlock, defineRowBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
+const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+
+
 suite('Text Input Fields', function() {
   setup(function() {
     sharedTestSetup.call(this);
@@ -15,7 +22,7 @@ suite('Text Input Fields', function() {
    * Configuration for field tests with invalid values.
    * @type {!Array<!FieldCreationTestCase>}
    */
-  var invalidValueTestCases = [
+  const invalidValueTestCases = [
     {title: 'Undefined', value: undefined},
     {title: 'Null', value: null},
   ];
@@ -23,7 +30,7 @@ suite('Text Input Fields', function() {
    * Configuration for field tests with valid values.
    * @type {!Array<!FieldCreationTestCase>}
    */
-  var validValueTestCases = [
+  const validValueTestCases = [
     {title: 'String', value: 'value', expectedValue: 'value'},
     {title: 'Boolean true', value: true, expectedValue: 'true'},
     {title: 'Boolean false', value: false, expectedValue: 'false'},
@@ -31,7 +38,7 @@ suite('Text Input Fields', function() {
     {title: 'Number (Falsy)', value: 0, expectedValue: '0'},
     {title: 'NaN', value: NaN, expectedValue: 'NaN'},
   ];
-  var addArgsAndJson = function(testCase) {
+  const addArgsAndJson = function(testCase) {
     testCase.args = [testCase.value];
     testCase.json = {'text': testCase.value};
   };
@@ -42,29 +49,29 @@ suite('Text Input Fields', function() {
    * The expected default value for the field being tested.
    * @type {*}
    */
-  var defaultFieldValue = '';
+  const defaultFieldValue = '';
   /**
    * Asserts that the field property values are set to default.
    * @param {!Blockly.FieldTextInput} field The field to check.
    */
-  var assertFieldDefault = function(field) {
-    testHelpers.assertFieldValue(field, defaultFieldValue);
+  const assertFieldDefault = function(field) {
+    assertFieldValue(field, defaultFieldValue);
   };
   /**
    * Asserts that the field properties are correct based on the test case.
    * @param {!Blockly.FieldTextInput} field The field to check.
    * @param {!FieldValueTestCase} testCase The test case.
    */
-  var validTestCaseAssertField = function(field, testCase) {
-    testHelpers.assertFieldValue(field, testCase.expectedValue);
+  const validTestCaseAssertField = function(field, testCase) {
+    assertFieldValue(field, testCase.expectedValue);
   };
 
-  testHelpers.runConstructorSuiteTests(
+  runConstructorSuiteTests(
       Blockly.FieldTextInput, validValueTestCases, invalidValueTestCases,
       validTestCaseAssertField, assertFieldDefault);
 
-  testHelpers.runFromJsonSuiteTests(
-      Blockly.FieldTextInput, validValueTestCases,invalidValueTestCases,
+  runFromJsonSuiteTests(
+      Blockly.FieldTextInput, validValueTestCases, invalidValueTestCases,
       validTestCaseAssertField, assertFieldDefault);
 
   suite('setValue', function() {
@@ -72,25 +79,25 @@ suite('Text Input Fields', function() {
       setup(function() {
         this.field = new Blockly.FieldTextInput();
       });
-      testHelpers.runSetValueTests(
+      runSetValueTests(
           validValueTestCases, invalidValueTestCases, defaultFieldValue);
       test('With source block', function() {
         this.field.setSourceBlock(createTestBlock());
         this.field.setValue('value');
-        testHelpers.assertFieldValue(this.field, 'value');
+        assertFieldValue(this.field, 'value');
       });
     });
     suite('Value -> New Value', function() {
-      var initialValue = 'oldValue';
+      const initialValue = 'oldValue';
       setup(function() {
         this.field = new Blockly.FieldTextInput(initialValue);
       });
-      testHelpers.runSetValueTests(
+      runSetValueTests(
           validValueTestCases, invalidValueTestCases, initialValue);
       test('With source block', function() {
         this.field.setSourceBlock(createTestBlock());
         this.field.setValue('value');
-        testHelpers.assertFieldValue(this.field, 'value');
+        assertFieldValue(this.field, 'value');
       });
     });
   });
@@ -106,7 +113,7 @@ suite('Text Input Fields', function() {
     teardown(function() {
       sinon.restore();
     });
-    var testSuites = [
+    const testSuites = [
       {title: 'Null Validator',
         validator:
             function() {
@@ -131,12 +138,12 @@ suite('Text Input Fields', function() {
           this.field.isBeingEdited_ = true;
           this.field.htmlInput_.value = suiteInfo.value;
           this.field.onHtmlInputChange_(null);
-          testHelpers.assertFieldValue(
+          assertFieldValue(
               this.field, suiteInfo.expectedValue, suiteInfo.value);
         });
         test('When Not Editing', function() {
           this.field.setValue(suiteInfo.value);
-          testHelpers.assertFieldValue(this.field, suiteInfo.expectedValue);
+          assertFieldValue(this.field, suiteInfo.expectedValue);
         });
       });
     });
@@ -146,29 +153,37 @@ suite('Text Input Fields', function() {
     suite('Spellcheck', function() {
       setup(function() {
         this.prepField = function(field) {
-          var workspace = {
+          const workspace = {
             getScale: function() {
               return 1;
             },
-            getRenderer: function() { return {
-              getClassName: function() { return ''; }
-            }; },
-            getTheme: function() { return {
-              getClassName: function() { return ''; }
-            }; },
-            markFocused: function() {}
+            getRenderer: function() {
+              return {
+                getClassName: function() {
+                  return '';
+                },
+              };
+            },
+            getTheme: function() {
+              return {
+                getClassName: function() {
+                  return '';
+                },
+              };
+            },
+            markFocused: function() {},
           };
           field.sourceBlock_ = {
-            workspace: workspace
+            workspace: workspace,
           };
           field.constants_ = {
             FIELD_TEXT_FONTSIZE: 11,
             FIELD_TEXT_FONTWEIGHT: 'normal',
-            FIELD_TEXT_FONTFAMILY: 'sans-serif'
+            FIELD_TEXT_FONTFAMILY: 'sans-serif',
           };
           field.clickTarget_ = document.createElement('div');
-          Blockly.mainWorkspace = workspace;
-          Blockly.WidgetDiv.DIV = document.createElement('div');
+          Blockly.common.setMainWorkspace(workspace);
+          Blockly.WidgetDiv.createDom();
           this.stub = sinon.stub(field, 'resizeEditor_');
         };
 
@@ -185,34 +200,57 @@ suite('Text Input Fields', function() {
         }
       });
       test('Default', function() {
-        var field = new Blockly.FieldTextInput('test');
+        const field = new Blockly.FieldTextInput('test');
         this.assertSpellcheck(field, true);
       });
       test('JS Constructor', function() {
-        var field = new Blockly.FieldTextInput('test', null, {
-          spellcheck: false
+        const field = new Blockly.FieldTextInput('test', null, {
+          spellcheck: false,
         });
         this.assertSpellcheck(field, false);
       });
       test('JSON Definition', function() {
-        var field = Blockly.FieldTextInput.fromJson({
+        const field = Blockly.FieldTextInput.fromJson({
           text: 'test',
-          spellcheck: false
+          spellcheck: false,
         });
         this.assertSpellcheck(field, false);
       });
       test('setSpellcheck Editor Hidden', function() {
-        var field = new Blockly.FieldTextInput('test');
+        const field = new Blockly.FieldTextInput('test');
         field.setSpellcheck(false);
         this.assertSpellcheck(field, false);
       });
       test('setSpellcheck Editor Shown', function() {
-        var field = new Blockly.FieldTextInput('test');
+        const field = new Blockly.FieldTextInput('test');
         this.prepField(field);
         field.showEditor_();
         field.setSpellcheck(false);
         chai.assert.equal(field.htmlInput_.getAttribute('spellcheck'), 'false');
       });
+    });
+  });
+
+  suite('Serialization', function() {
+    setup(function() {
+      this.workspace = new Blockly.Workspace();
+      defineRowBlock();
+
+      this.assertValue = (value) => {
+        const block = this.workspace.newBlock('row_block');
+        const field = new Blockly.FieldTextInput(value);
+        block.getInput('INPUT').appendField(field, 'TEXT');
+        const jso = Blockly.serialization.blocks.save(block);
+        chai.assert.deepEqual(jso['fields'], {'TEXT': value});
+      };
+    });
+
+    teardown(function() {
+      workspaceTeardown.call(this, this.workspace);
+    });
+
+    test('Simple', function() {
+      this.assertValue('test text');
     });
   });
 });

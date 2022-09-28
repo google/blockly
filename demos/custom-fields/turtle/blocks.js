@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Turtle field demo blocks.
- * @author bekawestberg@gmail.com (Beka Westberg)
  */
 
 Blockly.Blocks['turtle_basic'] = {
@@ -42,12 +41,12 @@ Blockly.Blocks['turtle_nullifier'] = {
       pattern: newValue.pattern,
       hat: newValue.hat,
     };
-    if ((newValue.turtleName == 'Leonardo' && newValue.hat == 'Mask') ||
-        (newValue.turtleName == 'Yertle' && newValue.hat == 'Crown') ||
-        (newValue.turtleName == 'Franklin') && newValue.hat == 'Propeller') {
+    if ((newValue.turtleName === 'Leonardo' && newValue.hat === 'Mask') ||
+        (newValue.turtleName === 'Yertle' && newValue.hat === 'Crown') ||
+        (newValue.turtleName === 'Franklin') && newValue.hat === 'Propeller') {
 
       var currentValue = this.getValue();
-      if (newValue.turtleName != currentValue.turtleName) {
+      if (newValue.turtleName !== currentValue.turtleName) {
         // Turtle name changed.
         this.cachedValidatedValue_.turtleName = null;
       } else {

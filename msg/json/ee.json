@@ -81,19 +81,6 @@
 	"CONTROLS_IF_IF_TOOLTIP": "Tsɔ kpee, ɖee le eme alo gbugbɔ akpawo ɖo nàtsɔ asi le ne ƒe ƒuƒoƒoa ŋu.",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Tsɔ biabia aɖe kpe ne ƒuƒoƒo la.",
 	"CONTROLS_IF_ELSE_TOOLTIP": "Tsɔ lé wo katã ƒe ne ƒe ƒuƒoƒo kpe biabia mamlɛa.",
-	"IOS_OK": "YOO",
-	"IOS_CANCEL": "Natasii",
-	"IOS_ERROR": "Vodada",
-	"IOS_PROCEDURES_INPUTS": "NUDEMEWO",
-	"IOS_PROCEDURES_ADD_INPUT": "+ Tsɔ nu kpe Nudemea",
-	"IOS_PROCEDURES_ALLOW_STATEMENTS": "Ɖe mɔ ɖe taɖodzinyawo ŋu",
-	"IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR": "Nudeme evee le wɔƒe sia si.",
-	"IOS_VARIABLES_ADD_VARIABLE": "+ Tsɔ nugba kpee",
-	"IOS_VARIABLES_ADD_BUTTON": "Tsɔ kpee",
-	"IOS_VARIABLES_RENAME_BUTTON": "Gbugbɔ na ŋkɔe",
-	"IOS_VARIABLES_DELETE_BUTTON": "Tutui",
-	"IOS_VARIABLES_VARIABLE_NAME": "Nugba ŋkɔ",
-	"IOS_VARIABLES_EMPTY_NAME_ERROR": "Màte ŋu azã nugba si mena ŋkɔe o.",
 	"LOGIC_COMPARE_HELPURL": "https://en.wikipedia.org/wiki/Masɔmasɔ_(akɔntabubu)",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "Ŋuɖoɖoa nenye nyateƒe ne nudeme eveawo sɔ kple wo nɔewo.",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "Ŋuɖoɖoa nenye nyateƒe ne nudeme eveawo mesɔ kple wo nɔewo o.",
@@ -168,5 +155,7 @@
 	"LISTS_SORT_ORDER_ASCENDING": "dzi yim",
 	"LISTS_SORT_ORDER_DESCENDING": "ɖiɖim",
 	"PROCEDURES_BEFORE_PARAMS": "kple:",
-	"PROCEDURES_CALL_BEFORE_PARAMS": "kple:"
+	"PROCEDURES_CALL_BEFORE_PARAMS": "kple:",
+	"DIALOG_OK": "Yoo",
+	"DIALOG_CANCEL": "Natasii"
 }

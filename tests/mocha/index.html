@@ -4,27 +4,10 @@
     <meta charset="utf-8">
     <title>Mocha Tests for Blockly</title>
 
-    <link href="https://unpkg.com/mocha@5.2.0/mocha.css" rel="stylesheet" />
+    <link href="../../node_modules/mocha/mocha.css" rel="stylesheet" />
     <script src="../../blockly_uncompressed.js"></script>
-    <script src="../../generators/dart.js"></script>
-    <script src="../../generators/javascript.js"></script>
-    <script src="../../generators/lua.js"></script>
-    <script src="../../generators/php.js"></script>
-    <script src="../../generators/python.js"></script>
-
-    <script src="../../generators/dart/text.js"></script>
-    <script src="../../generators/javascript/text.js"></script>
-    <script src="../../generators/lua/text.js"></script>
-    <script src="../../generators/php/text.js"></script>
-    <script src="../../generators/python/text.js"></script>
-
+    <script src="../deps.mocha.js"></script>
     <script src="../../msg/messages.js"></script>
-    <script src="../../blocks/loops.js"></script>
-    <script src="../../blocks/lists.js"></script>
-    <script src="../../blocks/logic.js"></script>
-    <script src="../../blocks/math.js"></script>
-    <script src="../../blocks/procedures.js"></script>
-    <script src="../../blocks/text.js"></script>
   </head>
   <style>
     #blocklyDiv {
@@ -35,83 +18,124 @@
     }
   </style>
   <body>
-
     <div id="mocha"></div>
     <div id="failureCount" style="display:none" tests_failed="unset"></div>
-    <script src="https://unpkg.com/chai/chai.js"></script>
-    <script src="https://unpkg.com/mocha@5.2.0/mocha.js"></script>
-    <script src="https://unpkg.com/sinon/pkg/sinon.js"></script>
-    <script src="https://unpkg.com/@blockly/dev-tools/dist/index.js"></script>
+    <div id="failureMessages" style="display:none"></div>
+    <script src="../../node_modules/chai/chai.js"></script>
+    <script src="../../node_modules/mocha/mocha.js"></script>
+    <script src="../../node_modules/sinon/pkg/sinon.js"></script>
     <script>
       mocha.setup({
-        ui: 'tdd'
+        ui: 'tdd',
+        failZero: true,
       });
     </script>
 
-    <script src="test_helpers.js"></script>
-    <script src="toolbox_helper.js"></script>
+    <script>
+      // Require optional modules needed by tests.
+      goog.require('Blockly.Dart');
+      goog.require('Blockly.Dart.texts');
+      goog.require('Blockly.JavaScript');
+      goog.require('Blockly.JavaScript.texts');
+      goog.require('Blockly.Lua');
+      goog.require('Blockly.Lua.texts');
+      goog.require('Blockly.PHP');
+      goog.require('Blockly.PHP.texts');
+      goog.require('Blockly.Python');
+      goog.require('Blockly.Python.texts');
+      goog.require('Blockly.libraryBlocks.colour');
+      goog.require('Blockly.libraryBlocks.logic');
+      goog.require('Blockly.libraryBlocks.lists');
+      goog.require('Blockly.libraryBlocks.loops');
+      goog.require('Blockly.libraryBlocks.math');
+      goog.require('Blockly.libraryBlocks.procedures');
+      goog.require('Blockly.libraryBlocks.texts');
+      goog.require('Blockly.libraryBlocks.variables');
+      goog.require('Blockly.libraryBlocks.variablesDynamic');
 
-    <script src="astnode_test.js"></script>
-    <script src="block_json_test.js"></script>
-    <script src="block_test.js"></script>
-    <script src="comment_test.js"></script>
-    <script src="connection_db_test.js"></script>
-    <script src="connection_checker_test.js"></script>
-    <script src="connection_test.js"></script>
-    <script src="contextmenu_items_test.js"></script>
-    <script src="cursor_test.js"></script>
-    <script src="dropdowndiv_test.js"></script>
-    <script src="event_test.js"></script>
-    <script src="extensions_test.js"></script>
-    <script src="field_test.js"></script>
-    <script src="field_angle_test.js"></script>
-    <script src="field_checkbox_test.js"></script>
-    <script src="field_colour_test.js"></script>
-    <script src="field_dropdown_test.js"></script>
-    <script src="field_image_test.js"></script>
-    <script src="field_label_test.js"></script>
-    <script src="field_label_serializable_test.js"></script>
-    <script src="field_multilineinput_test.js"></script>
-    <script src="field_number_test.js"></script>
-    <script src="field_registry_test.js"></script>
-    <script src="field_textinput_test.js"></script>
-    <script src="field_variable_test.js"></script>
-    <script src="flyout_test.js"></script>
-    <script src="generator_test.js"></script>
-    <script src="gesture_test.js"></script>
-    <script src="input_test.js"></script>
-    <script src="insertion_marker_test.js"></script>
-    <script src="json_test.js"></script>
-    <script src="shortcut_registry_test.js"></script>
-    <script src="keydown_test.js"></script>
-    <script src="logic_ternary_test.js"></script>
-    <script src="metrics_test.js"></script>
-    <script src="names_test.js"></script>
-    <script src="procedures_test_helpers.js"></script>
-    <script src="procedures_test.js"></script>
-    <script src="registry_test.js"></script>
-    <script src="theme_test.js"></script>
-    <script src="toolbox_test.js"></script>
-    <script src="tooltip_test.js"></script>
-    <script src="trashcan_test.js"></script>
-    <script src="utils_test.js"></script>
-    <script src="variable_map_test.js"></script>
-    <script src="variable_model_test.js"></script>
-    <script src="variables_test.js"></script>
-    <script src="widget_div_test.js"></script>
-    <script src="workspace_test.js"></script>
-    <script src="workspace_svg_test.js"></script>
-    <script src="workspace_comment_test.js"></script>
-    <script src="xml_test.js"></script>
-    <script src="zoom_controls_test.js"></script>
+      // Run tests.
+      goog.require('Blockly.test.astNode');
+      goog.require('Blockly.test.blockChangeEvent');
+      goog.require('Blockly.test.blockCreateEvent');
+      goog.require('Blockly.test.blockJson');
+      goog.require('Blockly.test.blocks');
+      goog.require('Blockly.test.comments');
+      goog.require('Blockly.test.commentDeserialization');
+      goog.require('Blockly.test.connectionChecker');
+      goog.require('Blockly.test.connectionDb');
+      goog.require('Blockly.test.connection');
+      goog.require('Blockly.test.contextMenuItem');
+      goog.require('Blockly.test.cursor');
+      goog.require('Blockly.test.dropdown');
+      goog.require('Blockly.test.event');
+      goog.require('Blockly.test.extensions');
+      goog.require('Blockly.test.fieldAngle');
+      goog.require('Blockly.test.fieldCheckbox');
+      goog.require('Blockly.test.fieldColour');
+      goog.require('Blockly.test.fieldDropdown');
+      goog.require('Blockly.test.fieldImage');
+      goog.require('Blockly.test.fieldLabelSerialization');
+      goog.require('Blockly.test.fieldLabel');
+      goog.require('Blockly.test.fieldMultiline');
+      goog.require('Blockly.test.fieldNumber');
+      goog.require('Blockly.test.fieldRegistry');
+      goog.require('Blockly.test.fieldTest');
+      goog.require('Blockly.test.fieldTextInput');
+      goog.require('Blockly.test.fieldVariable');
+      goog.require('Blockly.test.flyout');
+      goog.require('Blockly.test.generator');
+      goog.require('Blockly.test.gesture');
+      goog.require('Blockly.test.input');
+      goog.require('Blockly.test.insertionMarker');
+      goog.require('Blockly.test.jsoDeserialization');
+      goog.require('Blockly.test.jsoSerialization');
+      goog.require('Blockly.test.json');
+      goog.require('Blockly.test.keydown');
+      goog.require('Blockly.test.logicTernary');
+      goog.require('Blockly.test.metrics');
+      goog.require('Blockly.test.mutator');
+      goog.require('Blockly.test.names');
+      goog.require('Blockly.test.procedures');
+      goog.require('Blockly.test.registry');
+      goog.require('Blockly.test.serialization');
+      goog.require('Blockly.test.shortcutRegistry');
+      goog.require('Blockly.test.theme');
+      goog.require('Blockly.test.toolbox');
+      goog.require('Blockly.test.tooltip');
+      goog.require('Blockly.test.trashcan');
+      goog.require('Blockly.test.utils');
+      goog.require('Blockly.test.variableMap');
+      goog.require('Blockly.test.variableModel');
+      goog.require('Blockly.test.variables');
+      goog.require('Blockly.test.widgetDiv');
+      goog.require('Blockly.test.workspaceComment');
+      goog.require('Blockly.test.workspaceSvg');
+      goog.require('Blockly.test.workspace');
+      goog.require('Blockly.test.xml');
+      goog.require('Blockly.test.zoomControls');
+    </script>
 
     <div id="blocklyDiv"></div>
+
     <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-simple" style="display: none">
-      <block type="logic_operation"></block>
+      <block type="logic_compare">
+        <field name="OP">NEQ</field>
+        <value name="A">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="B">
+          <block type="math_number">
+            <field name="NUM">2</field>
+          </block>
+        </value>
+      </block>
       <sep gap="20"></sep>
       <button text="insert" callbackkey="insertConnectionRows"></button>
       <label text="tooltips"></label>
     </xml>
+
     <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-categories" style="display: none">
       <category name="First" css-container="something">
         <block type="basic_block">
@@ -127,6 +151,7 @@
         </block>
       </category>
     </xml>
+
     <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-test" style="display: none">
       <category name="First" expanded="true" categorystyle="logic_category">
         <sep gap="-1"></sep>
@@ -150,9 +175,15 @@
     </xml>
 
     <script>
-      mocha.run(function(failures) {
+      let runner = mocha.run(function(failures) {
         var failureDiv = document.getElementById('failureCount');
         failureDiv.setAttribute('tests_failed', failures);
+      });
+      runner.on('fail', function(test, err) {
+        const msg = document.createElement('p');
+        msg.textContent = `"${test.fullTitle()}" failed: ${err.message}`;
+        const div = document.getElementById('failureMessages');
+        div.appendChild(msg);
       });
     </script>
   </body>

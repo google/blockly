@@ -4,28 +4,30 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Tests for Blockly.fieldRegistry
- * @author bekawestberg@gmail.com (Beka Westberg)
- */
-'use strict';
+goog.module('Blockly.test.fieldRegistry');
+
+const {createDeprecationWarningStub} = goog.require('Blockly.test.helpers.warnings');
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+
 
 suite('Field Registry', function() {
-  function CustomFieldType(value) {
-    CustomFieldType.superClass_.constructor.call(this, value);
+  class CustomFieldType extends Blockly.Field {
+    constructor(value) {
+      super(value);
+    }
+
+    static fromJson(options) {
+      return new CustomFieldType(options['value']);
+    }
   }
-  Blockly.utils.object.inherits(CustomFieldType, Blockly.Field);
-  CustomFieldType.fromJson = function(options) {
-    return new CustomFieldType(options['value']);
-  };
 
   setup(function() {
     sharedTestSetup.call(this);
   });
   teardown(function() {
     sharedTestTeardown.call(this);
-    if (Blockly.registry.typeMap_['field']['field_custom_test']) {
-      delete Blockly.registry.typeMap_['field']['field_custom_test'];
+    if (Blockly.registry.TEST_ONLY.typeMap['field']['field_custom_test']) {
+      delete Blockly.registry.TEST_ONLY.typeMap['field']['field_custom_test'];
     }
   });
 
@@ -39,7 +41,7 @@ suite('Field Registry', function() {
       }, 'Invalid name');
     });
     test('No fromJson', function() {
-      var fromJson = CustomFieldType.fromJson;
+      const fromJson = CustomFieldType.fromJson;
       delete CustomFieldType.fromJson;
       chai.assert.throws(function() {
         Blockly.fieldRegistry.register('field_custom_test', CustomFieldType);
@@ -47,7 +49,7 @@ suite('Field Registry', function() {
       CustomFieldType.fromJson = fromJson;
     });
     test('fromJson not a function', function() {
-      var fromJson = CustomFieldType.fromJson;
+      const fromJson = CustomFieldType.fromJson;
       CustomFieldType.fromJson = true;
       chai.assert.throws(function() {
         Blockly.fieldRegistry.register('field_custom_test', CustomFieldType);
@@ -59,27 +61,24 @@ suite('Field Registry', function() {
     test('Simple', function() {
       Blockly.fieldRegistry.register('field_custom_test', CustomFieldType);
 
-      var json = {
+      const json = {
         type: 'field_custom_test',
-        value: 'ok'
+        value: 'ok',
       };
 
-      // TODO(#4197): Remove stubbing of deprecation warning after fixing.
-      var deprecationWarnStub = createDeprecationWarningStub();
-      var field = Blockly.fieldRegistry.fromJson(json);
-      deprecationWarnStub.restore();
+      const field = Blockly.fieldRegistry.fromJson(json);
 
       chai.assert.isNotNull(field);
       chai.assert.equal(field.getValue(), 'ok');
     });
     test('Not Registered', function() {
-      var json = {
+      const json = {
         type: 'field_custom_test',
-        value: 'ok'
+        value: 'ok',
       };
 
-      var spy = sinon.stub(console, 'warn');
-      var field = Blockly.fieldRegistry.fromJson(json);
+      const spy = sinon.stub(console, 'warn');
+      const field = Blockly.fieldRegistry.fromJson(json);
       chai.assert.isNull(field);
       chai.assert.isTrue(spy.called);
       spy.restore();
@@ -87,15 +86,12 @@ suite('Field Registry', function() {
     test('Case Different', function() {
       Blockly.fieldRegistry.register('field_custom_test', CustomFieldType);
 
-      var json = {
+      const json = {
         type: 'FIELD_CUSTOM_TEST',
-        value: 'ok'
+        value: 'ok',
       };
 
-      // TODO(#4197): Remove stubbing of deprecation warning after fixing.
-      var deprecationWarnStub = createDeprecationWarningStub();
-      var field = Blockly.fieldRegistry.fromJson(json);
-      deprecationWarnStub.restore();
+      const field = Blockly.fieldRegistry.fromJson(json);
       
       chai.assert.isNotNull(field);
       chai.assert.equal(field.getValue(), 'ok');

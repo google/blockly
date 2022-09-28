@@ -67,19 +67,6 @@
 	"CONTROLS_IF_IF_TOOLTIP": "كۆپۈيۈپ كىتىدۇ، ئۆچۈرۈش ياكى قايتا تىزىلغان بايرام « if （ سۆزىنىڭ پارچە قايتىدىن تەقسىملەش .",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "بۇ بىلمەيمىز جۈملە بۆلىكى قوشۇلۇپ بىر if شەرتى .",
 	"CONTROLS_IF_ELSE_TOOLTIP": "ئەڭ ئاخىرقى قوشۇش ، ھەممە ئەھۋالنى ئۆز ئىچىگە ئالىدۇ بايرىمىدا بىلمەيمىز ifپارچىلىرى .",
-	"IOS_OK": "ماقۇل",
-	"IOS_CANCEL": "ۋاز كەچ",
-	"IOS_ERROR": "خاتالىق",
-	"IOS_PROCEDURES_INPUTS": "كىرگۈزۈش",
-	"IOS_PROCEDURES_ADD_INPUT": "+ كىرگۈزۈپ قوشۇش",
-	"IOS_PROCEDURES_ALLOW_STATEMENTS": "كېلىشىمگە قوشۇلۇش",
-	"IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR": "بۇنىڭدا مەزمۇننى قايتا كىرگۈزۈش ئىقتىدارى بار .",
-	"IOS_VARIABLES_ADD_VARIABLE": "+ ئۆزگەرگۈچى مىقدار قوشۇش",
-	"IOS_VARIABLES_ADD_BUTTON": "قوشۇش",
-	"IOS_VARIABLES_RENAME_BUTTON": "ئىسىم ئۆزگەرتىش",
-	"IOS_VARIABLES_DELETE_BUTTON": "ئۆچۈرۈش",
-	"IOS_VARIABLES_VARIABLE_NAME": "ئۆزگەرگۈچى مىقدارنىڭ نامى",
-	"IOS_VARIABLES_EMPTY_NAME_ERROR": "سىز ئۆزگەرگۈچى مىقدار نامى ئىشلىتىشكە بولمايدۇ .",
 	"LOGIC_COMPARE_HELPURL": "https://zh.wikipedia.org/wiki/ تەڭ ئەمەس",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "ئەگەر ئىككى دانە كىرگۈزۈش نەتىجىسى تەڭ بولسا ، راستىنلا كەينىگە قايتسا.",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "ئەگەر ئىككى دانە كىرگۈزۈش نەتىجىسى تەڭ بولمايدۇ ، بەك كەلدى .",
@@ -139,5 +126,7 @@
 	"LISTS_SORT_ORDER_DESCENDING": "تۆۋەنگە",
 	"LISTS_SORT_TYPE_NUMERIC": "سان بويىچە تىزىل",
 	"LISTS_SORT_TYPE_TEXT": " ھەرپ بويىچە تىزىل",
-	"LISTS_SORT_TYPE_IGNORECASE": "ھەرب بويىچە تىزىل، چوڭ كىچىك يېزىلىش ھېساپ قىلىنمايدۇ"
+	"LISTS_SORT_TYPE_IGNORECASE": "ھەرب بويىچە تىزىل، چوڭ كىچىك يېزىلىش ھېساپ قىلىنمايدۇ",
+	"DIALOG_OK": "ماقۇل",
+	"DIALOG_CANCEL": "ۋاز كەچ"
 }

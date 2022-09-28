@@ -86,19 +86,6 @@
 	"CONTROLS_IF_IF_TOOLTIP": "Legg til, fjern eller flytt seksjoner i denne hvis-blokken.",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Legg til en betingelse til hvis blokken.",
 	"CONTROLS_IF_ELSE_TOOLTIP": "Legg til hva som skal skje hvis de andre ikke slår til.",
-	"IOS_OK": "OK",
-	"IOS_CANCEL": "Avbryt",
-	"IOS_ERROR": "Feil",
-	"IOS_PROCEDURES_INPUTS": "PARAMETERE",
-	"IOS_PROCEDURES_ADD_INPUT": "+ Legg til parameter",
-	"IOS_PROCEDURES_ALLOW_STATEMENTS": "Tillat kommandoer",
-	"IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR": "Denne funksjonen har duplikatparametere.",
-	"IOS_VARIABLES_ADD_VARIABLE": "+ Legg til variabel",
-	"IOS_VARIABLES_ADD_BUTTON": "Legg til",
-	"IOS_VARIABLES_RENAME_BUTTON": "Endre navn",
-	"IOS_VARIABLES_DELETE_BUTTON": "Slett",
-	"IOS_VARIABLES_VARIABLE_NAME": "Variabelnavn",
-	"IOS_VARIABLES_EMPTY_NAME_ERROR": "Du kan ikke bruke et tomt variabelnavn.",
 	"LOGIC_COMPARE_HELPURL": "https://en.wikipedia.org/wiki/Inequality_(mathematics)",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "Returnerer sann hvis begge inputene er like hverandre.",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "Returnerer sant hvis begge argumentene er ulike hverandre.",
@@ -369,5 +356,7 @@
 	"PROCEDURES_CREATE_DO": "Opprett '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Hvis en verdi er sann, returner da en annen verdi.",
 	"PROCEDURES_IFRETURN_WARNING": "Advarsel: Denne blokken kan bare benyttes innenfor en funksjonsdefinisjon.",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Si noe …"
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Si noe …",
+	"DIALOG_OK": "OK",
+	"DIALOG_CANCEL": "Avbryt"
 }

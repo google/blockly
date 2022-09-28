@@ -84,19 +84,6 @@
 	"CONTROLS_IF_MSG_ELSEIF": "bestela baldin eta",
 	"CONTROLS_IF_MSG_ELSE": "bestela",
 	"CONTROLS_IF_IF_TOOLTIP": "Gehitu, ezabatu, ala berrantolatu aukeraketak \"ba\" bloke hau berrezartzeko.",
-	"IOS_OK": "Ados",
-	"IOS_CANCEL": "Utzi",
-	"IOS_ERROR": "Errorea",
-	"IOS_PROCEDURES_INPUTS": "SARRERAK",
-	"IOS_PROCEDURES_ADD_INPUT": "+ Gehitu sarrera",
-	"IOS_PROCEDURES_ALLOW_STATEMENTS": "Adierazpenak baimendu",
-	"IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR": "Funtzio honek errepikatutako sarrerak ditu.",
-	"IOS_VARIABLES_ADD_VARIABLE": "+ Gehitu aldagaia",
-	"IOS_VARIABLES_ADD_BUTTON": "Gehitu",
-	"IOS_VARIABLES_RENAME_BUTTON": "Izena aldatu",
-	"IOS_VARIABLES_DELETE_BUTTON": "Ezabatu",
-	"IOS_VARIABLES_VARIABLE_NAME": "Aldagaiaren izena",
-	"IOS_VARIABLES_EMPTY_NAME_ERROR": "Ezin duzu aldagaiaren izen huts bat erabili.",
 	"LOGIC_COMPARE_HELPURL": "https://eu.wikipedia.org/wiki/Desberdintza",
 	"LOGIC_OPERATION_AND": "eta",
 	"LOGIC_OPERATION_OR": "edo",
@@ -228,5 +215,7 @@
 	"PROCEDURES_MUTATORARG_TITLE": "sarreraren izena:",
 	"PROCEDURES_CREATE_DO": "'%1' sortu",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Balioa egiazkoa bada, orduan itzuli bigarren baliora.",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Esan zerbait..."
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Esan zerbait...",
+	"DIALOG_OK": "Ados",
+	"DIALOG_CANCEL": "Utzi"
 }

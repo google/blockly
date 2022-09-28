@@ -6,142 +6,168 @@
 
 /**
  * @fileoverview An item in the toolbox.
- * @author aschmiedt@google.com (Abby Schmiedt)
  */
 'use strict';
 
-goog.provide('Blockly.ToolboxItem');
+/**
+ * An item in the toolbox.
+ * @class
+ */
+goog.module('Blockly.ToolboxItem');
 
-goog.requireType('Blockly.ICollapsibleToolboxItem');
-goog.requireType('Blockly.IToolbox');
-goog.requireType('Blockly.IToolboxItem');
-goog.requireType('Blockly.utils.toolbox');
-goog.requireType('Blockly.WorkspaceSvg');
+const idGenerator = goog.require('Blockly.utils.idGenerator');
+/* eslint-disable-next-line no-unused-vars */
+const toolbox = goog.requireType('Blockly.utils.toolbox');
+/* eslint-disable-next-line no-unused-vars */
+const {ICollapsibleToolboxItem} = goog.requireType('Blockly.ICollapsibleToolboxItem');
+/* eslint-disable-next-line no-unused-vars */
+const {IToolboxItem} = goog.require('Blockly.IToolboxItem');
+/* eslint-disable-next-line no-unused-vars */
+const {IToolbox} = goog.requireType('Blockly.IToolbox');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
  * Class for an item in the toolbox.
- * @param {!Blockly.utils.toolbox.ToolboxItemInfo} toolboxItemDef The JSON defining the
- *     toolbox item.
- * @param {!Blockly.IToolbox} toolbox The toolbox that holds the toolbox item.
- * @param {Blockly.ICollapsibleToolboxItem=} opt_parent The parent toolbox item
- *     or null if the category does not have a parent.
- * @constructor
- * @implements {Blockly.IToolboxItem}
+ * @implements {IToolboxItem}
+ * @alias Blockly.ToolboxItem
  */
-Blockly.ToolboxItem = function(toolboxItemDef, toolbox, opt_parent) {
+class ToolboxItem {
+  /**
+   * @param {!toolbox.ToolboxItemInfo} toolboxItemDef The JSON defining
+   *     the toolbox item.
+   * @param {!IToolbox} toolbox The toolbox that holds the toolbox item.
+   * @param {ICollapsibleToolboxItem=} opt_parent The parent toolbox item
+   *     or null if the category does not have a parent.
+   */
+  constructor(toolboxItemDef, toolbox, opt_parent) {
+    /**
+     * The id for the category.
+     * @type {string}
+     * @protected
+     */
+    this.id_ = toolboxItemDef['toolboxitemid'] || idGenerator.getNextUniqueId();
+
+    /**
+     * The parent of the category.
+     * @type {?ICollapsibleToolboxItem}
+     * @protected
+     */
+    this.parent_ = opt_parent || null;
+
+    /**
+     * The level that the category is nested at.
+     * @type {number}
+     * @protected
+     */
+    this.level_ = this.parent_ ? this.parent_.getLevel() + 1 : 0;
+
+    /**
+     * The JSON definition of the toolbox item.
+     * @type {?toolbox.ToolboxItemInfo}
+     * @protected
+     */
+    this.toolboxItemDef_ = toolboxItemDef;
+
+    /**
+     * The toolbox this category belongs to.
+     * @type {!IToolbox}
+     * @protected
+     */
+    this.parentToolbox_ = toolbox;
+
+    /**
+     * The workspace of the parent toolbox.
+     * @type {!WorkspaceSvg}
+     * @protected
+     */
+    this.workspace_ = this.parentToolbox_.getWorkspace();
+  }
 
   /**
-   * The id for the category.
-   * @type {string}
-   * @protected
+   * Initializes the toolbox item.
+   * This includes creating the DOM and updating the state of any items based
+   * on the info object.
+   * @public
    */
-  this.id_ = toolboxItemDef['toolboxitemid'] || Blockly.utils.IdGenerator.getNextUniqueId();
+  init() {
+    // No-op by default.
+  }
 
   /**
-   * The parent of the category.
-   * @type {?Blockly.ICollapsibleToolboxItem}
-   * @protected
+   * Gets the div for the toolbox item.
+   * @return {?Element} The div for the toolbox item.
+   * @public
    */
-  this.parent_ = opt_parent || null;
+  getDiv() {
+    return null;
+  }
 
   /**
-   * The level that the category is nested at.
-   * @type {number}
-   * @protected
+   * Gets the HTML element that is clickable.
+   * The parent toolbox element receives clicks. The parent toolbox will add an
+   * ID to this element so it can pass the onClick event to the correct
+   * toolboxItem.
+   * @return {?Element} The HTML element that receives clicks, or null if this
+   *     item should not receive clicks.
+   * @public
    */
-  this.level_ = this.parent_ ? this.parent_.getLevel() + 1 : 0;
+  getClickTarget() {
+    return null;
+  }
 
   /**
-   * The JSON definition of the toolbox item.
-   * @type {!Blockly.utils.toolbox.ToolboxItemInfo}
-   * @protected
+   * Gets a unique identifier for this toolbox item.
+   * @return {string} The ID for the toolbox item.
+   * @public
    */
-  this.toolboxItemDef_ = toolboxItemDef;
+  getId() {
+    return this.id_;
+  }
 
   /**
-   * The toolbox this category belongs to.
-   * @type {!Blockly.IToolbox}
-   * @protected
+   * Gets the parent if the toolbox item is nested.
+   * @return {?IToolboxItem} The parent toolbox item, or null if
+   *     this toolbox item is not nested.
+   * @public
    */
-  this.parentToolbox_ = toolbox;
+  getParent() {
+    return null;
+  }
 
   /**
-   * The workspace of the parent toolbox.
-   * @type {!Blockly.WorkspaceSvg}
-   * @protected
+   * Gets the nested level of the category.
+   * @return {number} The nested level of the category.
+   * @package
    */
-  this.workspace_ = this.parentToolbox_.getWorkspace();
-};
+  getLevel() {
+    return this.level_;
+  }
 
-/**
- * Initializes the toolbox item.
- * This includes creating the dom and updating the state of any items based
- * on the info object.
- * @public
- */
-Blockly.ToolboxItem.prototype.init = function() {
-  // No-op by default.
-};
+  /**
+   * Whether the toolbox item is selectable.
+   * @return {boolean} True if the toolbox item can be selected.
+   * @public
+   */
+  isSelectable() {
+    return false;
+  }
 
-/**
- * Gets the div for the toolbox item.
- * @return {?Element} The div for the toolbox item.
- * @public
- */
-Blockly.ToolboxItem.prototype.getDiv = function() {
-  return null;
-};
+  /**
+   * Whether the toolbox item is collapsible.
+   * @return {boolean} True if the toolbox item is collapsible.
+   * @public
+   */
+  isCollapsible() {
+    return false;
+  }
 
-/**
- * Gets a unique identifier for this toolbox item.
- * @return {string} The id for the toolbox item.
- * @public
- */
-Blockly.ToolboxItem.prototype.getId = function() {
-  return this.id_;
-};
+  /**
+   * Dispose of this toolbox item. No-op by default.
+   * @public
+   */
+  dispose() {}
+}
 
-/**
- * Gets the parent if the toolbox item is nested.
- * @return {?Blockly.IToolboxItem} The parent toolbox item, or null if
- *     this toolbox item is not nested.
- * @public
- */
-Blockly.ToolboxItem.prototype.getParent = function() {
-  return null;
-};
-
-/**
- * Gets the nested level of the category.
- * @return {number} The nested level of the category.
- * @package
- */
-Blockly.ToolboxItem.prototype.getLevel = function() {
-  return this.level_;
-};
-
-/**
- * Whether the toolbox item is selectable.
- * @return {boolean} True if the toolbox item can be selected.
- * @public
- */
-Blockly.ToolboxItem.prototype.isSelectable = function() {
-  return false;
-};
-
-/**
- * Whether the toolbox item is collapsible.
- * @return {boolean} True if the toolbox item is collapsible.
- * @public
- */
-Blockly.ToolboxItem.prototype.isCollapsible = function() {
-  return false;
-};
-
-/**
- * Dispose of this toolbox item. No-op by default.
- * @public
- */
-Blockly.ToolboxItem.prototype.dispose = function() {
-};
+exports.ToolboxItem = ToolboxItem;

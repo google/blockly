@@ -73,17 +73,6 @@
 	"CONTROLS_IF_MSG_ELSE": "инаку",
 	"CONTROLS_IF_IF_TOOLTIP": "Додава, отстранува или прередува делови за прераспоредување на овој блок „ако“.",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Додај услов кон „ако“ блокот.",
-	"IOS_OK": "ОК",
-	"IOS_CANCEL": "Откажи",
-	"IOS_ERROR": "Грешка",
-	"IOS_PROCEDURES_ADD_INPUT": "+ Додај влез",
-	"IOS_PROCEDURES_ALLOW_STATEMENTS": "Дозволи тврдења",
-	"IOS_VARIABLES_ADD_VARIABLE": "+ Додај променлива",
-	"IOS_VARIABLES_ADD_BUTTON": "Додај",
-	"IOS_VARIABLES_RENAME_BUTTON": "Преименувај",
-	"IOS_VARIABLES_DELETE_BUTTON": "Избриши",
-	"IOS_VARIABLES_VARIABLE_NAME": "Име на променливата",
-	"IOS_VARIABLES_EMPTY_NAME_ERROR": "Не можете да искористите празно име за променлива.",
 	"LOGIC_COMPARE_HELPURL": "https://mk.wikipedia.org/wiki/Неравенство",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "Дава вистина ако обата вноса се еднакви.",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "Дава вистина ако обата вноса не се еднакви.",
@@ -184,5 +173,7 @@
 	"PROCEDURES_CALLNORETURN_HELPURL": "https://mk.wikipedia.org/wiki/Потпрограма",
 	"PROCEDURES_MUTATORCONTAINER_TOOLTIP": "Додај, отстрани или пренареди ги влезните параметри за оваа функција.",
 	"PROCEDURES_CREATE_DO": "Создај го '%1'",
-	"WORKSPACE_ARIA_LABEL": "Работен простор на Blockly"
+	"WORKSPACE_ARIA_LABEL": "Работен простор на Blockly",
+	"DIALOG_OK": "ОК",
+	"DIALOG_CANCEL": "Откажи"
 }

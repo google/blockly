@@ -7,44 +7,46 @@
 /**
  * @fileoverview The class representing a cursor that is used to navigate
  * between tab navigable fields.
- * @author samelh@google.com (Sam El-Husseini)
  */
 'use strict';
 
-goog.provide('Blockly.TabNavigateCursor');
+/**
+ * The class representing a cursor that is used to navigate
+ * between tab navigable fields.
+ * @class
+ */
+goog.module('Blockly.TabNavigateCursor');
 
-goog.require('Blockly.ASTNode');
-goog.require('Blockly.BasicCursor');
-goog.require('Blockly.utils.object');
-
-goog.requireType('Blockly.Field');
+const {ASTNode} = goog.require('Blockly.ASTNode');
+const {BasicCursor} = goog.require('Blockly.BasicCursor');
+/* eslint-disable-next-line no-unused-vars */
+const {Field} = goog.requireType('Blockly.Field');
 
 
 /**
  * A cursor for navigating between tab navigable fields.
- * @constructor
- * @extends {Blockly.BasicCursor}
+ * @extends {BasicCursor}
+ * @alias Blockly.TabNavigateCursor
  */
-Blockly.TabNavigateCursor = function() {
-  Blockly.TabNavigateCursor.superClass_.constructor.call(this);
-};
-Blockly.utils.object.inherits(Blockly.TabNavigateCursor, Blockly.BasicCursor);
-
-/**
- * Skip all nodes except for tab navigable fields.
- * @param {Blockly.ASTNode} node The AST node to check whether it is valid.
- * @return {boolean} True if the node should be visited, false otherwise.
- * @override
- */
-Blockly.TabNavigateCursor.prototype.validNode_ = function(node) {
-  var isValid = false;
-  var type = node && node.getType();
-  if (node) {
-    var location = /** @type {Blockly.Field} */ (node.getLocation());
-    if (type == Blockly.ASTNode.types.FIELD &&
-        location && location.isTabNavigable() && location.isClickable()) {
-      isValid = true;
+class TabNavigateCursor extends BasicCursor {
+  /**
+   * Skip all nodes except for tab navigable fields.
+   * @param {?ASTNode} node The AST node to check whether it is valid.
+   * @return {boolean} True if the node should be visited, false otherwise.
+   * @override
+   */
+  validNode_(node) {
+    let isValid = false;
+    const type = node && node.getType();
+    if (node) {
+      const location = /** @type {Field} */ (node.getLocation());
+      if (type === ASTNode.types.FIELD && location &&
+          location.isTabNavigable() && location.isClickable()) {
+        isValid = true;
+      }
     }
+    return isValid;
   }
-  return isValid;
-};
+}
+
+exports.TabNavigateCursor = TabNavigateCursor;

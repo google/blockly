@@ -8,7 +8,6 @@
  * @fileoverview Javascript for BlockLibraryView class. It manages the display
  * of the Block Library dropdown, save, and delete buttons.
  *
- * @author quachtina96 (Tina Quach)
  */
 
 'use strict';
@@ -64,7 +63,7 @@ BlockLibraryView.prototype.setSelectedBlockType = function(blockTypeToSelect) {
   // if null or invalid block type selected.
   for (var blockType in this.optionMap) {
     var option = this.optionMap[blockType];
-    if (blockType == blockTypeToSelect) {
+    if (blockType === blockTypeToSelect) {
       this.selectOption_(option);
     } else {
       this.deselectOption_(option);
@@ -127,7 +126,7 @@ BlockLibraryView.prototype.updateButtons =
 
       // If block type is the default, 'block_type', make button red to alert
       // user.
-      if (blockType == 'block_type') {
+      if (blockType === 'block_type') {
         buttonFormatClass = 'button_alert';
       }
       this.saveButton.classList.add(buttonFormatClass);

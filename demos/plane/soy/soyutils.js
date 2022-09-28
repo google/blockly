@@ -613,7 +613,7 @@ goog.string.StringBuffer.prototype.append = function(a1, opt_a2, var_args) {
       // directly to avoid arguments instantiation, another 2x improvement.
       this.buffer_[this.bufferLength_++] = a1;
     } else {
-      var arr = /**@type {Array.<number|string|boolean>}*/(this.buffer_);
+      var arr = /**@type {Array<number|string|boolean>}*/(this.buffer_);
       arr.push.apply(arr, arguments);
       this.bufferLength_ = this.buffer_.length;
     }
@@ -1656,7 +1656,7 @@ soy.$$checkMapKey = function(key) {
 /**
  * Gets the keys in a map as an array. There are no guarantees on the order.
  * @param {Object} map The map to get the keys of.
- * @return {Array.<string>} The array of keys in the given map.
+ * @return {Array<string>} The array of keys in the given map.
  */
 soy.$$getMapKeys = function(map) {
   var mapKeys = [];
@@ -1779,9 +1779,9 @@ soy.$$getDelegateFn = function(
  * Private helper soy.$$getDelegateFn(). This is the empty template function
  * that is returned whenever there's no delegate implementation found.
  *
- * @param {Object.<string, *>=} opt_data
+ * @param {Object<string, *>=} opt_data
  * @param {soy.StringBuilder=} opt_sb
- * @param {Object.<string, *>=} opt_ijData
+ * @param {Object<string, *>=} opt_ijData
  * @return {string}
  * @private
  */
@@ -2052,7 +2052,7 @@ soy.$$HTML5_VOID_ELEMENTS_ = new RegExp(
  *
  * @param {*} value The HTML to be escaped. May not be a string, but the
  *     value will be coerced to a string.
- * @param {Object.<string, number>=} opt_tagAllowlist Has an own property whose
+ * @param {Object<string, number>=} opt_tagAllowlist Has an own property whose
  *     name is a lower-case tag name and whose value is {@code 1} for
  *     each element that is allowed in the output.
  * @return {string} A representation of value without disallowed tags,
@@ -2118,7 +2118,7 @@ soy.$$stripHtmlTags = function(value, opt_tagAllowlist) {
  * If {@code <table>} is used for formatting, embedded HTML shouldn't be able
  * to use a mismatched {@code </table>} to break page layout.
  *
- * @param {Array.<string>} tags an array of tags that will be modified in place
+ * @param {Array<string>} tags an array of tags that will be modified in place
  *    include tags, the empty string, or concatenations of empty tags.
  * @return {string} zero or more closed tags that close all elements that are
  *    opened in tags but not closed.
@@ -2575,7 +2575,7 @@ soy.$$isLowSurrogate_ = function(ch) {
 /**
  * Cache of bidi formatter by context directionality, so we don't keep on
  * creating new objects.
- * @type {!Object.<!goog.i18n.BidiFormatter>}
+ * @type {!Object<!goog.i18n.BidiFormatter>}
  * @private
  */
 soy.$$bidiFormatterCache_ = {};
@@ -2799,7 +2799,7 @@ soy.esc.$$escapeUriHelper = function(v) {
 
 /**
  * Maps characters to the escaped versions for the named escape directives.
- * @type {Object.<string, string>}
+ * @type {Object<string, string>}
  * @private
  */
 soy.esc.$$ESCAPE_MAP_FOR_ESCAPE_HTML__AND__NORMALIZE_HTML__AND__ESCAPE_HTML_NOSPACE__AND__NORMALIZE_HTML_NOSPACE_ = {
@@ -2837,7 +2837,7 @@ soy.esc.$$REPLACER_FOR_ESCAPE_HTML__AND__NORMALIZE_HTML__AND__ESCAPE_HTML_NOSPAC
 
 /**
  * Maps characters to the escaped versions for the named escape directives.
- * @type {Object.<string, string>}
+ * @type {Object<string, string>}
  * @private
  */
 soy.esc.$$ESCAPE_MAP_FOR_ESCAPE_JS_STRING__AND__ESCAPE_JS_REGEX_ = {
@@ -2889,7 +2889,7 @@ soy.esc.$$REPLACER_FOR_ESCAPE_JS_STRING__AND__ESCAPE_JS_REGEX_ = function(ch) {
 
 /**
  * Maps characters to the escaped versions for the named escape directives.
- * @type {Object.<string, string>}
+ * @type {Object<string, string>}
  * @private
  */
 soy.esc.$$ESCAPE_MAP_FOR_ESCAPE_CSS_STRING_ = {
@@ -2934,7 +2934,7 @@ soy.esc.$$REPLACER_FOR_ESCAPE_CSS_STRING_ = function(ch) {
 
 /**
  * Maps characters to the escaped versions for the named escape directives.
- * @type {Object.<string, string>}
+ * @type {Object<string, string>}
  * @private
  */
 soy.esc.$$ESCAPE_MAP_FOR_NORMALIZE_URI__AND__FILTER_NORMALIZE_URI_ = {
@@ -3291,7 +3291,7 @@ soy.esc.$$LT_REGEX_ = /</g;
 /**
  * Maps lower-case names of innocuous tags to 1.
  *
- * @type {Object.<string,number>}
+ * @type {Object<string,number>}
  * @private
  */
 soy.esc.$$SAFE_TAG_ALLOWLIST_ = {'b': 1, 'br': 1, 'em': 1, 'i': 1, 's': 1, 'sub': 1, 'sup': 1, 'u': 1};

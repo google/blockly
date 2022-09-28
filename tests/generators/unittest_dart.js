@@ -6,13 +6,12 @@
 
 /**
  * @fileoverview Generating Dart for unit test blocks.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
 Blockly.Dart['unittest_main'] = function(block) {
   // Container for unit tests.
-  var resultsVar = Blockly.Dart.variableDB_.getName('unittestResults',
+  var resultsVar = Blockly.Dart.nameDB_.getName('unittestResults',
       Blockly.Names.DEVELOPER_VARIABLE_TYPE);
   var functionName = Blockly.Dart.provideFunction_(
       'unittest_report',
@@ -61,7 +60,7 @@ Blockly.Dart['unittest_main'] = function(block) {
 };
 
 Blockly.Dart['unittest_main'].defineAssert_ = function() {
-  var resultsVar = Blockly.Dart.variableDB_.getName('unittestResults',
+  var resultsVar = Blockly.Dart.nameDB_.getName('unittestResults',
       Blockly.Names.DEVELOPER_VARIABLE_TYPE);
   var functionName = Blockly.Dart.provideFunction_(
       'unittest_assertequals',
@@ -116,11 +115,11 @@ Blockly.Dart['unittest_assertvalue'] = function(block) {
   var actual = Blockly.Dart.valueToCode(block, 'ACTUAL',
       Blockly.Dart.ORDER_NONE) || 'null';
   var expected = block.getFieldValue('EXPECTED');
-  if (expected == 'TRUE') {
+  if (expected === 'TRUE') {
     expected = 'true';
-  } else if (expected == 'FALSE') {
+  } else if (expected === 'FALSE') {
     expected = 'false';
-  } else if (expected == 'NULL') {
+  } else if (expected === 'NULL') {
     expected = 'null';
   }
   return Blockly.Dart['unittest_main'].defineAssert_() +
@@ -129,7 +128,7 @@ Blockly.Dart['unittest_assertvalue'] = function(block) {
 
 Blockly.Dart['unittest_fail'] = function(block) {
   // Always assert an error.
-  var resultsVar = Blockly.Dart.variableDB_.getName('unittestResults',
+  var resultsVar = Blockly.Dart.nameDB_.getName('unittestResults',
       Blockly.Names.DEVELOPER_VARIABLE_TYPE);
   var message = Blockly.Dart.quote_(block.getFieldValue('MESSAGE'));
   var functionName = Blockly.Dart.provideFunction_(

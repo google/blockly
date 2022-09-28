@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Pitch field demo blocks.
- * @author samelh@gmail.com (Sam El-Husseini)
  */
 
 Blockly.Blocks['test_pitch_field'] = {

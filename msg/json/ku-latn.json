@@ -1,0 +1,41 @@
+{
+	"@metadata": {
+		"authors": [
+			"Bikarhêner",
+			"George Animal",
+			"Ghybu",
+			"Kur"
+		]
+	},
+	"TODAY": "Îro",
+	"ADD_COMMENT": "Şîroveyekê lê zêde bike",
+	"HELP": "Alîkarî",
+	"UNDO": "Betal bike",
+	"COLOUR_RANDOM_TITLE": "rengeke ketober",
+	"COLOUR_RGB_RED": "sor",
+	"COLOUR_RGB_GREEN": "kesk",
+	"COLOUR_RGB_BLUE": "şîn",
+	"COLOUR_BLEND_COLOUR1": "reng 1",
+	"COLOUR_BLEND_COLOUR2": "reng 2",
+	"CONTROLS_IF_MSG_IF": "heke",
+	"LOGIC_OPERATION_AND": "û",
+	"LOGIC_OPERATION_OR": "an",
+	"LOGIC_BOOLEAN_TRUE": "rast",
+	"LOGIC_BOOLEAN_FALSE": "nerast",
+	"LOGIC_TERNARY_CONDITION": "test",
+	"LOGIC_TERNARY_IF_TRUE": "heke rast be",
+	"LOGIC_TERNARY_IF_FALSE": "heke nerast be",
+	"TEXT_CREATE_JOIN_TITLE_JOIN": "beşdarî",
+	"TEXT_ISEMPTY_TITLE": "%1 vala ye",
+	"TEXT_PRINT_TITLE": "çap %1",
+	"LISTS_CREATE_WITH_CONTAINER_TITLE_ADD": "lîste",
+	"LISTS_ISEMPTY_TITLE": "%1 vala ye",
+	"LISTS_GET_INDEX_FIRST": "ya pêşîn",
+	"LISTS_GET_INDEX_LAST": "ya paşîn",
+	"LISTS_GET_INDEX_RANDOM": "ketober",
+	"PROCEDURES_DEFRETURN_RETURN": "vegere",
+	"PROCEDURES_CREATE_DO": "Biafirîne '%1'",
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Tiştek bibêje...",
+	"DIALOG_OK": "Baş e",
+	"DIALOG_CANCEL": "Betal bike"
+}

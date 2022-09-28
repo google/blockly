@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Ajeje Brazorf",
 			"Codynguyen1116",
 			"Fitoschido",
 			"Harvest",
@@ -67,7 +68,7 @@
 	"COLOUR_BLEND_COLOUR2": "color 2",
 	"COLOUR_BLEND_RATIO": "proporción",
 	"COLOUR_BLEND_TOOLTIP": "Combina dos colores con una proporción determinada (0,0-1,0).",
-	"CONTROLS_REPEAT_HELPURL": "https://en.wikipedia.org/wiki/For_loop",
+	"CONTROLS_REPEAT_HELPURL": "https://es.wikipedia.org/wiki/Bucle_for",
 	"CONTROLS_REPEAT_TITLE": "repetir %1 veces",
 	"CONTROLS_REPEAT_INPUT_DO": "hacer",
 	"CONTROLS_REPEAT_TOOLTIP": "Hacer algunas declaraciones varias veces.",
@@ -95,19 +96,6 @@
 	"CONTROLS_IF_IF_TOOLTIP": "Agregar, eliminar o reordenar las secciones para reconfigurar este bloque.",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Agregar una condición a este bloque.",
 	"CONTROLS_IF_ELSE_TOOLTIP": "Agregar una condición general final a este bloque.",
-	"IOS_OK": "Aceptar",
-	"IOS_CANCEL": "Cancelar",
-	"IOS_ERROR": "Error",
-	"IOS_PROCEDURES_INPUTS": "ENTRADAS",
-	"IOS_PROCEDURES_ADD_INPUT": "+ Añadir entrada",
-	"IOS_PROCEDURES_ALLOW_STATEMENTS": "Permitir declaraciones",
-	"IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR": "Esta función tiene entradas duplicadas.",
-	"IOS_VARIABLES_ADD_VARIABLE": "+ Añadir variable",
-	"IOS_VARIABLES_ADD_BUTTON": "Añadir",
-	"IOS_VARIABLES_RENAME_BUTTON": "Cambiar nombre",
-	"IOS_VARIABLES_DELETE_BUTTON": "Borrar",
-	"IOS_VARIABLES_VARIABLE_NAME": "Nombre de la variable",
-	"IOS_VARIABLES_EMPTY_NAME_ERROR": "No puedes usar un nombre de variable vacío.",
 	"LOGIC_COMPARE_HELPURL": "https://es.wikipedia.org/wiki/Desigualdad_matemática",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "Devuelve verdadero si ambas entradas son iguales.",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "Devuelve verdadero si ambas entradas son distintas.",
@@ -361,5 +349,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "Advertencia: Este bloque solo puede ser utilizado dentro de la definición de una función.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Di algo…",
 	"WORKSPACE_ARIA_LABEL": "Espacio de trabajo de Blockly",
-	"COLLAPSED_WARNINGS_WARNING": "Bloques colapsados contienen advertencias."
+	"COLLAPSED_WARNINGS_WARNING": "Bloques colapsados contienen advertencias.",
+	"DIALOG_OK": "Aceptar",
+	"DIALOG_CANCEL": "Cancelar"
 }

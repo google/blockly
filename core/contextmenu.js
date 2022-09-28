@@ -6,98 +6,155 @@
 
 /**
  * @fileoverview Functionality for the right-click context menus.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
 /**
- * @name Blockly.ContextMenu
- * @namespace
+ * Functionality for the right-click context menus.
+ * @namespace Blockly.ContextMenu
  */
-goog.provide('Blockly.ContextMenu');
+goog.module('Blockly.ContextMenu');
 
-goog.require('Blockly.browserEvents');
-/** @suppress {extraRequire} */
-goog.require('Blockly.constants');
-goog.require('Blockly.Events');
+const WidgetDiv = goog.require('Blockly.WidgetDiv');
+const Xml = goog.require('Blockly.Xml');
+const aria = goog.require('Blockly.utils.aria');
+const browserEvents = goog.require('Blockly.browserEvents');
+const clipboard = goog.require('Blockly.clipboard');
+const deprecation = goog.require('Blockly.utils.deprecation');
+const dom = goog.require('Blockly.utils.dom');
+const eventUtils = goog.require('Blockly.Events.utils');
+const userAgent = goog.require('Blockly.utils.userAgent');
+const svgMath = goog.require('Blockly.utils.svgMath');
+/* eslint-disable-next-line no-unused-vars */
+const {Block} = goog.requireType('Blockly.Block');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {config} = goog.require('Blockly.config');
+const {Coordinate} = goog.require('Blockly.utils.Coordinate');
+const {MenuItem} = goog.require('Blockly.MenuItem');
+const {Menu} = goog.require('Blockly.Menu');
+const {Msg} = goog.require('Blockly.Msg');
+const {Rect} = goog.require('Blockly.utils.Rect');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceCommentSvg} = goog.requireType('Blockly.WorkspaceCommentSvg');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Events.BlockCreate');
-goog.require('Blockly.Menu');
-goog.require('Blockly.MenuItem');
-goog.require('Blockly.Msg');
-goog.require('Blockly.utils');
-goog.require('Blockly.utils.aria');
-goog.require('Blockly.utils.Coordinate');
-goog.require('Blockly.utils.dom');
-goog.require('Blockly.utils.Rect');
-goog.require('Blockly.utils.userAgent');
-goog.require('Blockly.WidgetDiv');
-goog.require('Blockly.Xml');
-
-goog.requireType('Blockly.Block');
-goog.requireType('Blockly.WorkspaceSvg');
 
 
 /**
  * Which block is the context menu attached to?
- * @type {Blockly.Block}
+ * @type {?Block}
  */
-Blockly.ContextMenu.currentBlock = null;
+let currentBlock = null;
+
+/**
+ * Gets the block the context menu is currently attached to.
+ * @return {?Block} The block the context menu is attached to.
+ * @alias Blockly.ContextMenu.getCurrentBlock
+ */
+const getCurrentBlock = function() {
+  return currentBlock;
+};
+exports.getCurrentBlock = getCurrentBlock;
+
+/**
+ * Sets the block the context menu is currently attached to.
+ * @param {?Block} block The block the context menu is attached to.
+ * @alias Blockly.ContextMenu.setCurrentBlock
+ */
+const setCurrentBlock = function(block) {
+  currentBlock = block;
+};
+exports.setCurrentBlock = setCurrentBlock;
+
+// Add JS accessors for backwards compatibility.
+Object.defineProperties(exports, {
+  /**
+   * Which block is the context menu attached to?
+   * @name Blockly.ContextMenu.currentBlock
+   * @type {Block}
+   * @deprecated Use Blockly.Tooltip.getCurrentBlock() /
+   *     .setCurrentBlock() instead.  (September 2021)
+   * @suppress {checkTypes}
+   */
+  currentBlock: {
+    get: function() {
+      deprecation.warn(
+          'Blockly.ContextMenu.currentBlock', 'September 2021',
+          'September 2022', 'Blockly.Tooltip.getCurrentBlock()');
+      return getCurrentBlock();
+    },
+    set: function(block) {
+      deprecation.warn(
+          'Blockly.ContextMenu.currentBlock', 'September 2021',
+          'September 2022', 'Blockly.Tooltip.setCurrentBlock(block)');
+      setCurrentBlock(block);
+    },
+  },
+});
 
 /**
  * Menu object.
- * @type {Blockly.Menu}
- * @private
+ * @type {Menu}
  */
-Blockly.ContextMenu.menu_ = null;
+let menu_ = null;
 
 /**
  * Construct the menu based on the list of options and show the menu.
  * @param {!Event} e Mouse event.
- * @param {!Array.<!Object>} options Array of menu options.
+ * @param {!Array<!Object>} options Array of menu options.
  * @param {boolean} rtl True if RTL, false if LTR.
+ * @alias Blockly.ContextMenu.show
  */
-Blockly.ContextMenu.show = function(e, options, rtl) {
-  Blockly.WidgetDiv.show(Blockly.ContextMenu, rtl, Blockly.ContextMenu.dispose);
+const show = function(e, options, rtl) {
+  WidgetDiv.show(exports, rtl, dispose);
   if (!options.length) {
-    Blockly.ContextMenu.hide();
+    hide();
     return;
   }
-  var menu = Blockly.ContextMenu.populate_(options, rtl);
-  Blockly.ContextMenu.menu_ = menu;
+  const menu = populate_(options, rtl);
+  menu_ = menu;
 
-  Blockly.ContextMenu.position_(menu, e, rtl);
+  position_(menu, e, rtl);
   // 1ms delay is required for focusing on context menus because some other
   // mouse event is still waiting in the queue and clears focus.
-  setTimeout(function() {menu.focus();}, 1);
-  Blockly.ContextMenu.currentBlock = null;  // May be set by Blockly.Block.
+  setTimeout(function() {
+    menu.focus();
+  }, 1);
+  currentBlock = null;  // May be set by Blockly.Block.
 };
+exports.show = show;
 
 /**
  * Create the context menu object and populate it with the given options.
- * @param {!Array.<!Object>} options Array of menu options.
+ * @param {!Array<!Object>} options Array of menu options.
  * @param {boolean} rtl True if RTL, false if LTR.
- * @return {!Blockly.Menu} The menu that will be shown on right click.
+ * @return {!Menu} The menu that will be shown on right click.
  * @private
  */
-Blockly.ContextMenu.populate_ = function(options, rtl) {
+const populate_ = function(options, rtl) {
   /* Here's what one option object looks like:
     {text: 'Make It So',
      enabled: true,
      callback: Blockly.MakeItSo}
   */
-  var menu = new Blockly.Menu();
-  menu.setRole(Blockly.utils.aria.Role.MENU);
-  for (var i = 0, option; (option = options[i]); i++) {
-    var menuItem = new Blockly.MenuItem(option.text);
+  const menu = new Menu();
+  menu.setRole(aria.Role.MENU);
+  for (let i = 0; i < options.length; i++) {
+    const option = options[i];
+    const menuItem = new MenuItem(option.text);
     menuItem.setRightToLeft(rtl);
-    menuItem.setRole(Blockly.utils.aria.Role.MENUITEM);
+    menuItem.setRole(aria.Role.MENUITEM);
     menu.addChild(menuItem);
     menuItem.setEnabled(option.enabled);
     if (option.enabled) {
-      var actionHandler = function(_menuItem) {
-        var option = this;
-        Blockly.ContextMenu.hide();
+      const actionHandler = function(_menuItem) {
+        // TODO: Create a type for option that can be used in an @this tag.
+        /* eslint-disable-next-line no-invalid-this */
+        const option = this;
+        hide();
         option.callback(option.scope);
       };
       menuItem.onAction(actionHandler, option);
@@ -108,26 +165,23 @@ Blockly.ContextMenu.populate_ = function(options, rtl) {
 
 /**
  * Add the menu to the page and position it correctly.
- * @param {!Blockly.Menu} menu The menu to add and position.
+ * @param {!Menu} menu The menu to add and position.
  * @param {!Event} e Mouse event for the right click that is making the context
  *     menu appear.
  * @param {boolean} rtl True if RTL, false if LTR.
  * @private
  */
-Blockly.ContextMenu.position_ = function(menu, e, rtl) {
+const position_ = function(menu, e, rtl) {
   // Record windowSize and scrollOffset before adding menu.
-  var viewportBBox = Blockly.utils.getViewportBBox();
+  const viewportBBox = svgMath.getViewportBBox();
   // This one is just a point, but we'll pretend that it's a rect so we can use
   // some helper functions.
-  var anchorBBox = new Blockly.utils.Rect(
-      e.clientY + viewportBBox.top,
-      e.clientY + viewportBBox.top,
-      e.clientX + viewportBBox.left,
-      e.clientX + viewportBBox.left
-  );
+  const anchorBBox = new Rect(
+      e.clientY + viewportBBox.top, e.clientY + viewportBBox.top,
+      e.clientX + viewportBBox.left, e.clientX + viewportBBox.left);
 
-  Blockly.ContextMenu.createWidget_(menu);
-  var menuSize = menu.getSize();
+  createWidget_(menu);
+  const menuSize = menu.getSize();
 
   if (rtl) {
     anchorBBox.left += menuSize.width;
@@ -136,7 +190,7 @@ Blockly.ContextMenu.position_ = function(menu, e, rtl) {
     viewportBBox.right += menuSize.width;
   }
 
-  Blockly.WidgetDiv.positionWithAnchor(viewportBBox, anchorBBox, menuSize, rtl);
+  WidgetDiv.positionWithAnchor(viewportBBox, anchorBBox, menuSize, rtl);
   // Calling menuDom.focus() has to wait until after the menu has been placed
   // correctly.  Otherwise it will cause a page scroll to get the misplaced menu
   // in view.  See issue #1329.
@@ -145,158 +199,183 @@ Blockly.ContextMenu.position_ = function(menu, e, rtl) {
 
 /**
  * Create and render the menu widget inside Blockly's widget div.
- * @param {!Blockly.Menu} menu The menu to add to the widget div.
+ * @param {!Menu} menu The menu to add to the widget div.
  * @private
  */
-Blockly.ContextMenu.createWidget_ = function(menu) {
-  var div = Blockly.WidgetDiv.DIV;
+const createWidget_ = function(menu) {
+  const div = WidgetDiv.getDiv();
+  if (!div) {
+    throw Error('Attempting to create a context menu when widget div is null');
+  }
   menu.render(div);
-  var menuDom = menu.getElement();
-  Blockly.utils.dom.addClass(
+  const menuDom = menu.getElement();
+  dom.addClass(
       /** @type {!Element} */ (menuDom), 'blocklyContextMenu');
   // Prevent system context menu when right-clicking a Blockly context menu.
-  Blockly.browserEvents.conditionalBind(
+  browserEvents.conditionalBind(
       /** @type {!EventTarget} */ (menuDom), 'contextmenu', null,
-      Blockly.utils.noEvent);
+      haltPropagation);
   // Focus only after the initial render to avoid issue #1329.
   menu.focus();
 };
 
 /**
- * Hide the context menu.
+ * Halts the propagation of the event without doing anything else.
+ * @param {!Event} e An event.
  */
-Blockly.ContextMenu.hide = function() {
-  Blockly.WidgetDiv.hideIfOwner(Blockly.ContextMenu);
-  Blockly.ContextMenu.currentBlock = null;
+const haltPropagation = function(e) {
+  // This event has been handled.  No need to bubble up to the document.
+  e.preventDefault();
+  e.stopPropagation();
 };
 
 /**
- * Dispose of the menu.
+ * Hide the context menu.
+ * @alias Blockly.ContextMenu.hide
  */
-Blockly.ContextMenu.dispose = function() {
-  if (Blockly.ContextMenu.menu_) {
-    Blockly.ContextMenu.menu_.dispose();
-    Blockly.ContextMenu.menu_ = null;
+const hide = function() {
+  WidgetDiv.hideIfOwner(exports);
+  currentBlock = null;
+};
+exports.hide = hide;
+
+/**
+ * Dispose of the menu.
+ * @alias Blockly.ContextMenu.dispose
+ */
+const dispose = function() {
+  if (menu_) {
+    menu_.dispose();
+    menu_ = null;
   }
 };
+exports.dispose = dispose;
 
 /**
  * Create a callback function that creates and configures a block,
  *   then places the new block next to the original.
- * @param {!Blockly.Block} block Original block.
+ * @param {!Block} block Original block.
  * @param {!Element} xml XML representation of new block.
  * @return {!Function} Function that creates a block.
+ * @alias Blockly.ContextMenu.callbackFactory
  */
-Blockly.ContextMenu.callbackFactory = function(block, xml) {
+const callbackFactory = function(block, xml) {
   return function() {
-    Blockly.Events.disable();
+    eventUtils.disable();
+    let newBlock;
     try {
-      var newBlock = Blockly.Xml.domToBlock(xml, block.workspace);
+      newBlock =
+          /** @type {!BlockSvg} */ (Xml.domToBlock(xml, block.workspace));
       // Move the new block next to the old block.
-      var xy = block.getRelativeToSurfaceXY();
+      const xy = block.getRelativeToSurfaceXY();
       if (block.RTL) {
-        xy.x -= Blockly.SNAP_RADIUS;
+        xy.x -= config.snapRadius;
       } else {
-        xy.x += Blockly.SNAP_RADIUS;
+        xy.x += config.snapRadius;
       }
-      xy.y += Blockly.SNAP_RADIUS * 2;
+      xy.y += config.snapRadius * 2;
       newBlock.moveBy(xy.x, xy.y);
     } finally {
-      Blockly.Events.enable();
+      eventUtils.enable();
     }
-    if (Blockly.Events.isEnabled() && !newBlock.isShadow()) {
-      Blockly.Events.fire(
-          new (Blockly.Events.get(Blockly.Events.BLOCK_CREATE))(newBlock));
+    if (eventUtils.isEnabled() && !newBlock.isShadow()) {
+      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CREATE))(newBlock));
     }
     newBlock.select();
   };
 };
+exports.callbackFactory = callbackFactory;
 
 // Helper functions for creating context menu options.
 
 /**
  * Make a context menu option for deleting the current workspace comment.
- * @param {!Blockly.WorkspaceCommentSvg} comment The workspace comment where the
+ * @param {!WorkspaceCommentSvg} comment The workspace comment where the
  *     right-click originated.
  * @return {!Object} A menu option, containing text, enabled, and a callback.
+ * @alias Blockly.ContextMenu.commentDeleteOption
  * @package
  */
-Blockly.ContextMenu.commentDeleteOption = function(comment) {
-  var deleteOption = {
-    text: Blockly.Msg['REMOVE_COMMENT'],
+const commentDeleteOption = function(comment) {
+  const deleteOption = {
+    text: Msg['REMOVE_COMMENT'],
     enabled: true,
     callback: function() {
-      Blockly.Events.setGroup(true);
-      comment.dispose(true, true);
-      Blockly.Events.setGroup(false);
-    }
+      eventUtils.setGroup(true);
+      comment.dispose();
+      eventUtils.setGroup(false);
+    },
   };
   return deleteOption;
 };
+exports.commentDeleteOption = commentDeleteOption;
 
 /**
  * Make a context menu option for duplicating the current workspace comment.
- * @param {!Blockly.WorkspaceCommentSvg} comment The workspace comment where the
+ * @param {!WorkspaceCommentSvg} comment The workspace comment where the
  *     right-click originated.
  * @return {!Object} A menu option, containing text, enabled, and a callback.
+ * @alias Blockly.ContextMenu.commentDuplicateOption
  * @package
  */
-Blockly.ContextMenu.commentDuplicateOption = function(comment) {
-  var duplicateOption = {
-    text: Blockly.Msg['DUPLICATE_COMMENT'],
+const commentDuplicateOption = function(comment) {
+  const duplicateOption = {
+    text: Msg['DUPLICATE_COMMENT'],
     enabled: true,
     callback: function() {
-      Blockly.duplicate(comment);
-    }
+      clipboard.duplicate(comment);
+    },
   };
   return duplicateOption;
 };
+exports.commentDuplicateOption = commentDuplicateOption;
 
 /**
  * Make a context menu option for adding a comment on the workspace.
- * @param {!Blockly.WorkspaceSvg} ws The workspace where the right-click
+ * @param {!WorkspaceSvg} ws The workspace where the right-click
  *     originated.
  * @param {!Event} e The right-click mouse event.
  * @return {!Object} A menu option, containing text, enabled, and a callback.
  * @package
  * @suppress {strictModuleDepCheck,checkTypes} Suppress checks while workspace
  *     comments are not bundled in.
+ * @alias Blockly.ContextMenu.workspaceCommentOption
  */
-Blockly.ContextMenu.workspaceCommentOption = function(ws, e) {
-  if (!Blockly.WorkspaceCommentSvg) {
+const workspaceCommentOption = function(ws, e) {
+  const {WorkspaceCommentSvg} = goog.module.get('Blockly.WorkspaceCommentSvg');
+  if (!WorkspaceCommentSvg) {
     throw Error('Missing require for Blockly.WorkspaceCommentSvg');
   }
   // Helper function to create and position a comment correctly based on the
   // location of the mouse event.
-  var addWsComment = function() {
-    var comment = new Blockly.WorkspaceCommentSvg(
-        ws, Blockly.Msg['WORKSPACE_COMMENT_DEFAULT_TEXT'],
-        Blockly.WorkspaceCommentSvg.DEFAULT_SIZE,
-        Blockly.WorkspaceCommentSvg.DEFAULT_SIZE);
+  const addWsComment = function() {
+    const comment = new WorkspaceCommentSvg(
+        ws, Msg['WORKSPACE_COMMENT_DEFAULT_TEXT'],
+        WorkspaceCommentSvg.DEFAULT_SIZE, WorkspaceCommentSvg.DEFAULT_SIZE);
 
-    var injectionDiv = ws.getInjectionDiv();
+    const injectionDiv = ws.getInjectionDiv();
     // Bounding rect coordinates are in client coordinates, meaning that they
     // are in pixels relative to the upper left corner of the visible browser
     // window.  These coordinates change when you scroll the browser window.
-    var boundingRect = injectionDiv.getBoundingClientRect();
+    const boundingRect = injectionDiv.getBoundingClientRect();
 
     // The client coordinates offset by the injection div's upper left corner.
-    var clientOffsetPixels = new Blockly.utils.Coordinate(
+    const clientOffsetPixels = new Coordinate(
         e.clientX - boundingRect.left, e.clientY - boundingRect.top);
 
     // The offset in pixels between the main workspace's origin and the upper
     // left corner of the injection div.
-    var mainOffsetPixels = ws.getOriginOffsetInPixels();
+    const mainOffsetPixels = ws.getOriginOffsetInPixels();
 
     // The position of the new comment in pixels relative to the origin of the
     // main workspace.
-    var finalOffset = Blockly.utils.Coordinate.difference(clientOffsetPixels,
-        mainOffsetPixels);
+    const finalOffset =
+        Coordinate.difference(clientOffsetPixels, mainOffsetPixels);
     // The position of the new comment in main workspace coordinates.
     finalOffset.scale(1 / ws.scale);
 
-    var commentX = finalOffset.x;
-    var commentY = finalOffset.y;
+    const commentX = finalOffset.x;
+    const commentY = finalOffset.y;
     comment.moveBy(commentX, commentY);
     if (ws.rendered) {
       comment.initSvg();
@@ -305,14 +384,15 @@ Blockly.ContextMenu.workspaceCommentOption = function(ws, e) {
     }
   };
 
-  var wsCommentOption = {
+  const wsCommentOption = {
     // Foreign objects don't work in IE.  Don't let the user create comments
     // that they won't be able to edit.
-    enabled: !Blockly.utils.userAgent.IE
+    enabled: !userAgent.IE,
   };
-  wsCommentOption.text = Blockly.Msg['ADD_COMMENT'];
+  wsCommentOption.text = Msg['ADD_COMMENT'];
   wsCommentOption.callback = function() {
     addWsComment();
   };
   return wsCommentOption;
 };
+exports.workspaceCommentOption = workspaceCommentOption;

@@ -1,52 +1,53 @@
 /**
- * @license Licensed under the Apache License, Version 2.0 (the "License"):
- *          http://www.apache.org/licenses/LICENSE-2.0
+ * @license
+ * Copyright 2012 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
- * @fileoverview Code generator for Leaphy Common Blocks.
+ * @fileoverview Generating Arduino for Leaphy Common blocks.
  */
-'use strict';
+ 'use strict';
 
-goog.provide('Blockly.Arduino.LeaphyCommon');
-
-goog.require('Blockly.Arduino');
-
-Blockly.Arduino['leaphy_start'] = function (block) {
+goog.module('Blockly.Arduino.leaphyCommon');
+ 
+const Arduino = goog.require('Blockly.Arduino');
+ 
+ 
+Arduino['leaphy_start'] = function (block) {
     // Define the Start procedure
     var funcName = 'leaphyProgram';
-    var branch = Blockly.Arduino.statementToCode(block, 'STACK');
-    if (Blockly.Arduino.STATEMENT_PREFIX) {
+    var branch = Arduino.statementToCode(block, 'STACK');
+    if (Arduino.STATEMENT_PREFIX) {
         var id = block.id.replace(/\$/g, '$$$$');  // Issue 251.
-        branch = Blockly.Arduino.prefixLines(
-            Blockly.Arduino.STATEMENT_PREFIX.replace(/%1/g,
-                '\'' + id + '\''), Blockly.Arduino.INDENT) + branch;
+        branch = Arduino.prefixLines(
+            Arduino.STATEMENT_PREFIX.replace(/%1/g,
+                '\'' + id + '\''), Arduino.INDENT) + branch;
     }
-    if (Blockly.Arduino.INFINITE_LOOP_TRAP) {
-        branch = Blockly.Arduino.INFINITE_LOOP_TRAP.replace(/%1/g,
+    if (Arduino.INFINITE_LOOP_TRAP) {
+        branch = Arduino.INFINITE_LOOP_TRAP.replace(/%1/g,
             '\'' + block.id + '\'') + branch;
     }
     var returnType = 'void';
     var code = returnType + ' ' + funcName + '() {\n' + branch + '}';
 
-    code = Blockly.Arduino.scrub_(block, code);
-    Blockly.Arduino.userFunctions_[funcName] = code;
-    Blockly.Arduino.addSetup('userSetupCode', funcName + '();', false);
+    code = Arduino.scrub_(block, code);
+    Arduino.userFunctions_[funcName] = code;
+    Arduino.addSetup('userSetupCode', funcName + '();', false);
     return null;
 };
 
-
-Blockly.Arduino['leaphy_serial_print_line'] = function(block) {
-    Blockly.Arduino.addSetup('serial', 'Serial.begin(115200);', false);
-    var value = Blockly.Arduino.valueToCode(this, 'VALUE', Blockly.Arduino.ORDER_ATOMIC) || '0';
+Arduino['leaphy_serial_print_line'] = function(block) {
+    Arduino.addSetup('serial', 'Serial.begin(115200);', false);
+    var value = Arduino.valueToCode(this, 'VALUE', Arduino.ORDER_ATOMIC) || '0';
     var code = 'Serial.println(' + value + ');\n';
     return code;
 };
 
-Blockly.Arduino['leaphy_serial_print_value'] = function(block) {
-    Blockly.Arduino.addSetup('serial', 'Serial.begin(115200);', false);
-    var name = Blockly.Arduino.valueToCode(this, 'NAME', Blockly.Arduino.ORDER_ATOMIC) || '0';
-    var value = Blockly.Arduino.valueToCode(this, 'VALUE', Blockly.Arduino.ORDER_ATOMIC) || '0';
+Arduino['leaphy_serial_print_value'] = function(block) {
+    Arduino.addSetup('serial', 'Serial.begin(115200);', false);
+    var name = Arduino.valueToCode(this, 'NAME', Arduino.ORDER_ATOMIC) || '0';
+    var value = Arduino.valueToCode(this, 'VALUE', Arduino.ORDER_ATOMIC) || '0';
     var code = 'Serial.print(' + name + ');\nSerial.print(" = ");\nSerial.println(' + value + ');\n';
     return code;
 };

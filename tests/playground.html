@@ -3,78 +3,16 @@
 <head>
 <meta charset="utf-8">
 <title>Blockly Playground</title>
-<script src="../blockly_uncompressed.js"></script>
-<script src="../generators/javascript.js"></script>
-<script src="../generators/javascript/logic.js"></script>
-<script src="../generators/javascript/loops.js"></script>
-<script src="../generators/javascript/math.js"></script>
-<script src="../generators/javascript/text.js"></script>
-<script src="../generators/javascript/lists.js"></script>
-<script src="../generators/javascript/colour.js"></script>
-<script src="../generators/javascript/variables.js"></script>
-<script src="../generators/javascript/variables_dynamic.js"></script>
-<script src="../generators/javascript/procedures.js"></script>
-<script src="../generators/python.js"></script>
-<script src="../generators/python/logic.js"></script>
-<script src="../generators/python/loops.js"></script>
-<script src="../generators/python/math.js"></script>
-<script src="../generators/python/text.js"></script>
-<script src="../generators/python/lists.js"></script>
-<script src="../generators/python/colour.js"></script>
-<script src="../generators/python/variables.js"></script>
-<script src="../generators/python/variables_dynamic.js"></script>
-<script src="../generators/python/procedures.js"></script>
-<script src="../generators/php.js"></script>
-<script src="../generators/php/logic.js"></script>
-<script src="../generators/php/loops.js"></script>
-<script src="../generators/php/math.js"></script>
-<script src="../generators/php/text.js"></script>
-<script src="../generators/php/lists.js"></script>
-<script src="../generators/php/colour.js"></script>
-<script src="../generators/php/variables.js"></script>
-<script src="../generators/php/variables_dynamic.js"></script>
-<script src="../generators/php/procedures.js"></script>
-<script src="../generators/lua.js"></script>
-<script src="../generators/lua/logic.js"></script>
-<script src="../generators/lua/loops.js"></script>
-<script src="../generators/lua/math.js"></script>
-<script src="../generators/lua/text.js"></script>
-<script src="../generators/lua/lists.js"></script>
-<script src="../generators/lua/colour.js"></script>
-<script src="../generators/lua/variables.js"></script>
-<script src="../generators/lua/variables_dynamic.js"></script>
-<script src="../generators/lua/procedures.js"></script>
-<script src="../generators/dart.js"></script>
-<script src="../generators/dart/logic.js"></script>
-<script src="../generators/dart/loops.js"></script>
-<script src="../generators/dart/math.js"></script>
-<script src="../generators/dart/text.js"></script>
-<script src="../generators/dart/lists.js"></script>
-<script src="../generators/dart/colour.js"></script>
-<script src="../generators/dart/variables.js"></script>
-<script src="../generators/dart/variables_dynamic.js"></script>
-<script src="../generators/dart/procedures.js"></script>
-<script src="../msg/messages.js"></script>
-<script src="../blocks/logic.js"></script>
-<script src="../blocks/loops.js"></script>
-<script src="../blocks/math.js"></script>
-<script src="../blocks/text.js"></script>
-<script src="../blocks/lists.js"></script>
-<script src="../blocks/colour.js"></script>
-<script src="../blocks/variables.js"></script>
-<script src="../blocks/variables_dynamic.js"></script>
-<script src="../blocks/procedures.js"></script>
-<script src="themes/test_themes.js"></script>
-<script src="./playgrounds/screenshot.js"></script>
-<script src="../node_modules/@blockly/block-test/dist/index.js"></script>
 
-<script>
-// Custom requires for the playground.
-goog.require('Blockly.WorkspaceCommentSvg');
-goog.require('Blockly.WorkspaceCommentSvg.render');
-</script>
-<script>
-'use strict';
+  <!-- This script loads uncompressed when on localhost and loads compressed when it is being hosted.
+       Please add any other dependencies to playgrounds/prepare.js.-->
+<script src="playgrounds/prepare.js"></script>
+<script src="playgrounds/screenshot.js"></script>
+<script src="../node_modules/@blockly/dev-tools/dist/index.js"></script>
+<script type=module>
+import Blockly from './playgrounds/blockly.mjs';
+
+const IS_UNCOMPRESSED = Boolean(window.BlocklyLoader);  // See prepare.js
 var workspace = null;
 
 function start() {
@@ -146,15 +84,18 @@ function start() {
   }
   taChange();
   if (autoimport) {
-    fromXml();
+    load();
   }
+
+  addEventHandlers();
 }
 
 function setBackgroundColour() {
-  // Set background colour to differentiate server vs local copy.
-  if (location.protocol == 'file:') {
-    var lilac = '#d6d6ff';
-    document.body.style.backgroundColor = lilac;
+  // Set background colour to differentiate between compressed and uncompressed mode.
+  if (IS_UNCOMPRESSED) {
+    document.body.style.backgroundColor = '#d6d6ff';  // Familiar lilac.
+  } else {
+    document.body.style.backgroundColor = '#60fcfc';  // Unfamiliar blue.
   }
 }
 
@@ -200,7 +141,7 @@ function initToolbox(workspace) {
   }
 }
 
-function toXml() {
+function saveXml() {
   var output = document.getElementById('importExport');
   var xml = Blockly.Xml.workspaceToDom(workspace);
   output.value = Blockly.Xml.domToPrettyText(xml);
@@ -209,13 +150,28 @@ function toXml() {
   taChange();
 }
 
-function fromXml() {
+function saveJson() {
+  var output = document.getElementById('importExport');
+  var state = Blockly.serialization.workspaces.save(workspace);
+  output.value = JSON.stringify(state, null, 2);
+  output.focus();
+  output.select();
+  taChange();
+}
+
+function load() {
   var input = document.getElementById('importExport');
   if (!input.value) {
     return;
   }
-  var xml = Blockly.Xml.textToDom(input.value);
-  Blockly.Xml.domToWorkspace(xml, workspace);
+  var valid = saveIsValid(input.value);
+  if (valid.json) {
+    var state = JSON.parse(input.value);
+    Blockly.serialization.workspaces.load(state, workspace);
+  } else if (valid.xml) {
+    var xml = Blockly.Xml.textToDom(input.value);
+    Blockly.Xml.domToWorkspace(xml, workspace);
+  }
   taChange();
 }
 
@@ -225,20 +181,34 @@ function toCode(lang) {
   taChange();
 }
 
-// Disable the "Import from XML" button if the XML is invalid.
+// Disable the "Load" button if the save state is invalid.
 // Preserve text between page reloads.
 function taChange() {
   var textarea = document.getElementById('importExport');
   if (sessionStorage) {
     sessionStorage.setItem('textarea', textarea.value);
   }
-  var valid = true;
+  var valid = saveIsValid(textarea.value);
+  document.getElementById('import').disabled = !valid.json && !valid.xml;
+}
+
+function saveIsValid(save) {
+  var validJson = true;
   try {
-    Blockly.Xml.textToDom(textarea.value);
+    JSON.parse(save);
   } catch (e) {
-    valid = false;
+    validJson = false;
   }
-  document.getElementById('import').disabled = !valid;
+  var validXml = true
+  try {
+    Blockly.Xml.textToDom(save);
+  } catch (e) {
+    validXml = false;
+  }
+  return {
+    json: validJson,
+    xml: validXml
+  }
 }
 
 function logEvents(state) {
@@ -273,7 +243,7 @@ function configureContextMenu(menuOptions, e) {
     text: 'Download Screenshot',
     enabled: workspace.getTopBlocks().length,
     callback: function() {
-      Blockly.downloadScreenshot(workspace);
+      downloadScreenshot(workspace);
     }
   };
   menuOptions.push(screenshotOption);
@@ -347,6 +317,117 @@ var spaghettiXml = [
   '    <next></next>',
   '  </block>'].join('\n');
 
+  function jsoSpaghetti(n) {
+    var str = spaghettiJs;
+    for (var i = 0; i < n; i++) {
+      str = str.replace(/{}/g, `{"block":${spaghettiJs}}`);
+    }
+    var obj = {
+      'blocks': {
+        'blocks': [
+          JSON.parse(str)
+        ]
+      }
+    };
+    console.time('Spaghetti serialization');
+    Blockly.serialization.workspaces.load(obj, workspace);
+    console.timeEnd('Spaghetti serialization');
+  }
+  var spaghettiJs = JSON.stringify({
+    'type': 'controls_if',
+    'inputs': {
+      'IF0': {
+        'block': {
+          'type': 'logic_compare',
+          'fields': {
+            'OP': 'EQ',
+          },
+          'inputs': {
+            'A': {
+              'block': {
+                'type': 'math_arithmetic',
+                'fields': {
+                  'OP': 'MULTIPLY',
+                },
+                'inputs': {
+                  'A': {
+                    'block': {
+                      'type': 'math_number',
+                      'fields': {
+                        'NUM': 6
+                      }
+                    }
+                  },
+                  'B': {
+                    'block': {
+                      'type': 'math_number',
+                      'fields': {
+                        'NUM': 7
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            'B': {
+              'block': {
+                'type': 'math_number',
+                'fields': {
+                  'NUM': 42
+                }
+              }
+            }
+          }
+        }
+      },
+      'DO0': { }
+    },
+    'next': { }
+  });
+
+// Call start().  Because this <script> has type=module, it is
+// automatically deferred, so it will not be run until after the
+// document has been parsed, but before firing DOMContentLoaded.
+
+function addEventHandlers() {
+  document.getElementById('save-json').addEventListener('click', saveJson);
+  document.getElementById('save-xml').addEventListener('click', saveXml);
+  document.getElementById('import').addEventListener('click', load);
+
+  document.getElementById('to-code-js')
+      .addEventListener('click', () => toCode('JavaScript'));
+  document.getElementById('to-code-py')
+      .addEventListener('click', () => toCode('Python'));
+  document.getElementById('to-code-php')
+      .addEventListener('click', () => toCode('PHP'));
+  document.getElementById('to-code-lua')
+      .addEventListener('click', () => toCode('Lua'));
+  document.getElementById('to-code-dart')
+      .addEventListener('click', () => toCode('Dart'));
+
+  document.getElementById('airstrike')
+      .addEventListener('click', () => airstrike(100));
+  document.getElementById('spaghetti-xml')
+      .addEventListener('click', () => spaghetti(8));
+  document.getElementById('spaghetti-js')
+      .addEventListener('click', () => jsoSpaghetti(8));
+
+  document.getElementById('logCheck')
+      .addEventListener('click', function() { logEvents(this.checked) });
+  document.getElementById('logFlyoutCheck')
+      .addEventListener('click', function() { logFlyoutEvents(this.checked) });
+
+  document.getElementById('importExport').addEventListener('change', taChange);
+  document.getElementById('importExport').addEventListener('keyup', taChange);
+
+  document.getElementById('show')
+      .addEventListener('click', function() { workspace.setVisible(true); });
+  document.getElementById('hide')
+      .addEventListener('click', function() { workspace.setVisible(false); });
+}
+  
+start();
+
 </script>
 
 <style>
@@ -387,24 +468,22 @@ var spaghettiXml = [
     margin-top: 1em;
   }
 
-  .blockRenderDebug {
-    display: none;
-  }
-
   .zelos-renderer .blocklyFlyoutButton .blocklyText {
     font-size: 1.5rem;
   }
 </style>
 </head>
-<body onload="start()">
+<body>
 
   <div id="blocklyDiv"></div>
 
   <h1>Blockly Playground</h1>
 
-  <p><a href="javascript:void(workspace.setVisible(true))">Show</a>
-   - <a href="javascript:void(workspace.setVisible(false))">Hide</a>
-   - <a href="playgrounds/advanced_playground.html">Advanced</a></p>
+  <p>
+    <input id="show" type="button" value="Show"></input> -
+    <input id="hide" type="button" value="Hide"></input> -
+    <a href="playgrounds/advanced_playground.html">Advanced</a>
+  </p>
 
   <form id="options">
     <select name="dir" onchange="document.forms.options.submit()">
@@ -419,37 +498,33 @@ var spaghettiXml = [
     </select>
   </form>
   <p>
-    <input type="button" value="Export to XML" onclick="toXml()">
-    &nbsp;
-    <input type="button" value="Import from XML" onclick="fromXml()" id="import">
+    <input id="save-json" type="button" value="Save JSON">
+    <input id="save-xml" type="button" value="Save XML">
+    <input type="button" value="Load" id="import">
     <br>
-    <input type="button" value="To JavaScript" onclick="toCode('JavaScript')">
-    &nbsp;
-    <input type="button" value="To Python" onclick="toCode('Python')">
-    &nbsp;
-    <input type="button" value="To PHP" onclick="toCode('PHP')">
-    &nbsp;
-    <input type="button" value="To Lua" onclick="toCode('Lua')">
-    &nbsp;
-    <input type="button" value="To Dart" onclick="toCode('Dart')">
+    <input id="to-code-js" type="button" value="To JavaScript">
+    <input id="to-code-py" type="button" value="To Python">
+    <input id="to-code-php" type="button" value="To PHP">
+    <input id="to-code-lua" type="button" value="To Lua">
+    <input id="to-code-dart" type="button" value="To Dart">
     <br>
-    <textarea id="importExport" style="width: 26%; height: 12em"
-      onchange="taChange();" onkeyup="taChange()"></textarea>
+    <textarea id="importExport" style="width: 26%; height: 12em"></textarea>
   </p>
 
   <p>
     Stress test: &nbsp;
-    <input type="button" value="Airstrike!" onclick="airstrike(100)">
-    <input type="button" value="Spaghetti!" onclick="spaghetti(8)">
+    <input id="airstrike" type="button" value="Airstrike!">
+    <input id="spaghetti-xml" type="button" value="Spaghetti!">
+    <input id="spaghetti-js" type="button" value="JS Spaghetti!">
   </p>
   <ul class="playgroundToggleOptions">
     <li>
       <label for="logCheck">Log main workspace events:</label>
-      <input type="checkbox" onclick="logEvents(this.checked)" id="logCheck">
+      <input type="checkbox" id="logCheck">
     </li>
     <li>
     <label for="logFlyoutCheck">Log flyout events:</label>
-    <input type="checkbox" onclick="logFlyoutEvents(this.checked)" id="logFlyoutCheck">
+    <input type="checkbox" id="logFlyoutCheck">
   </li>
   </ul>
 

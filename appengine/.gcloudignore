@@ -11,7 +11,6 @@ deploy
 /static/scripts/
 /static/typings/
 
-/static/build.py
 /static/eslintrc.json
 /static/gulpfile.js
 /static/jsconfig.json

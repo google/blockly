@@ -93,19 +93,6 @@
 	"CONTROLS_IF_IF_TOOLTIP": "أضف, إزل, أو أعد ترتيب المقاطع لإعادة تكوين القطعة الشرطية \"إذا\".",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "إضف شرطا إلى القطعة الشرطية \"إذا\".",
 	"CONTROLS_IF_ELSE_TOOLTIP": "أضف شرط \"نهاية، إجمع\" إلى القطعة الشرطية \"إذا\".",
-	"IOS_OK": "أوافق",
-	"IOS_CANCEL": "إلغاء",
-	"IOS_ERROR": "خطأ",
-	"IOS_PROCEDURES_INPUTS": "المدخلات",
-	"IOS_PROCEDURES_ADD_INPUT": "+اضافة ادخال",
-	"IOS_PROCEDURES_ALLOW_STATEMENTS": "العبارات المسموحة",
-	"IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR": "هذه الدالة لها مدخلات مكررة.",
-	"IOS_VARIABLES_ADD_VARIABLE": "+اضف متغير",
-	"IOS_VARIABLES_ADD_BUTTON": "أضف",
-	"IOS_VARIABLES_RENAME_BUTTON": "أعد التسمية",
-	"IOS_VARIABLES_DELETE_BUTTON": "احذف",
-	"IOS_VARIABLES_VARIABLE_NAME": "اسم المتغير",
-	"IOS_VARIABLES_EMPTY_NAME_ERROR": "لا يمكنك استخدام اسم متغير فارغ.",
 	"LOGIC_COMPARE_HELPURL": "https://ar.wikipedia.org/wiki/متباينة_(جبر)",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "يرجع صحيح إذا كان كلا المدخلات مساوية بعضها البعض.",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "يرجع صحيح إذا كانت كلا المدخلات غير مساوية لبعضها البعض.",
@@ -370,5 +357,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "تحذير:هذه القطعة تستخدم فقط داخل تعريف دالة.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "قل شيئا...",
 	"WORKSPACE_ARIA_LABEL": "مساحة عمل بلوكلي",
-	"COLLAPSED_WARNINGS_WARNING": "الكتل المطوية تحتوي على تحذيرات."
+	"COLLAPSED_WARNINGS_WARNING": "الكتل المطوية تحتوي على تحذيرات.",
+	"DIALOG_OK": "موافق",
+	"DIALOG_CANCEL": "إلغاء"
 }

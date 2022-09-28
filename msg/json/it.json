@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Ajeje Brazorf",
 			"Albe Albe 460",
 			"Albe Albe460",
 			"Beta16",
@@ -48,7 +49,7 @@
 	"NEW_VARIABLE_TYPE_TITLE": "Tipo della nuova variabile:",
 	"NEW_VARIABLE_TITLE": "Nome della nuova variabile:",
 	"VARIABLE_ALREADY_EXISTS": "Una variabile denominata '%1' esiste già.",
-	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Una variabile nominata '%1' esiste già per un'altro tipo: '%2'.",
+	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "Una variabile nominata '%1' esiste già per un altro tipo: '%2'.",
 	"DELETE_VARIABLE_CONFIRMATION": "Cancella %1 usi della variabile '%2'?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "Non si può cancellare la variabile '%1' perché è parte della definizione della funzione '%2'",
 	"DELETE_VARIABLE": "Cancella la variabile '%1'",
@@ -93,19 +94,6 @@
 	"CONTROLS_IF_IF_TOOLTIP": "Aggiungi, elimina o riordina le sezioni per riconfigurare questo blocco se.",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Aggiungi una condizione al blocco se.",
 	"CONTROLS_IF_ELSE_TOOLTIP": "Aggiungi una condizione finale pigliatutto al blocco se.",
-	"IOS_OK": "OK",
-	"IOS_CANCEL": "Annulla",
-	"IOS_ERROR": "Errore",
-	"IOS_PROCEDURES_INPUTS": "INPUTS",
-	"IOS_PROCEDURES_ADD_INPUT": "+ Aggiungi input",
-	"IOS_PROCEDURES_ALLOW_STATEMENTS": "Consenti dichiarazioni",
-	"IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR": "Questa funzione ha entrate duplicate.",
-	"IOS_VARIABLES_ADD_VARIABLE": "+ Aggiungi variabile",
-	"IOS_VARIABLES_ADD_BUTTON": "Aggiungi",
-	"IOS_VARIABLES_RENAME_BUTTON": "Rinomina",
-	"IOS_VARIABLES_DELETE_BUTTON": "Cancella",
-	"IOS_VARIABLES_VARIABLE_NAME": "Nome variabile",
-	"IOS_VARIABLES_EMPTY_NAME_ERROR": "Non puoi utilizzare un nome di variabile vuoto.",
 	"LOGIC_COMPARE_HELPURL": "https://it.wikipedia.org/wiki/Disuguaglianza",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "Restituisce vero se gli input sono uno uguale all'altro.",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "Restituisce vero se gli input non sono uno uguale all'altro.",
@@ -356,5 +344,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "Attenzioneː Questo blocco può essere usato solo all'interno di una definizione di funzione.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Scrivi qualcosa...",
 	"WORKSPACE_ARIA_LABEL": "Area di lavoro di Blockly",
-	"COLLAPSED_WARNINGS_WARNING": "I blocchi compressi contengono avvertimenti."
+	"COLLAPSED_WARNINGS_WARNING": "I blocchi compressi contengono avvertimenti.",
+	"DIALOG_OK": "OK",
+	"DIALOG_CANCEL": "Annulla"
 }

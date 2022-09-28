@@ -86,19 +86,6 @@
 	"CONTROLS_IF_IF_TOOLTIP": "Rnu, kkes, neq ales asmizzwer n tgezmiyin akken ad talseḍ tawila n yiḥder-a ma.",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Rnu tawtilt i yiḥder ma.",
 	"CONTROLS_IF_ELSE_TOOLTIP": "Rnu tawtilt taneggarut i yiḥder ma igebren akk tinaḍin.",
-	"IOS_OK": "IH",
-	"IOS_CANCEL": "Sefsex",
-	"IOS_ERROR": "Tuccḍa",
-	"IOS_PROCEDURES_INPUTS": "INEKCAM",
-	"IOS_PROCEDURES_ADD_INPUT": "+ Rnu anekcum",
-	"IOS_PROCEDURES_ALLOW_STATEMENTS": "Sireg asmizzwer",
-	"IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR": "Tawuri-a ɣur-s inekcam imsinen.",
-	"IOS_VARIABLES_ADD_VARIABLE": "+ Rnu amutti",
-	"IOS_VARIABLES_ADD_BUTTON": "Rnu",
-	"IOS_VARIABLES_RENAME_BUTTON": "Snifel isem",
-	"IOS_VARIABLES_DELETE_BUTTON": "Kkes",
-	"IOS_VARIABLES_VARIABLE_NAME": "Isem n umutti",
-	"IOS_VARIABLES_EMPTY_NAME_ERROR": "Ur tezmireḍ ara ad tesqedceḍ isem n umutti amaynut.",
 	"LOGIC_COMPARE_HELPURL": "https://en.wikipedia.org/wiki/Inequality_(mathematics)",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "Ad yerr idetti ma yella i sin n yinekcam d imegduya.",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "Ad d-yerr idetti mayella i sin n yinekcam mačči d imegduya.",
@@ -346,5 +333,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "Ɣur-k: Iḥder-a yezmer ur yettwaseqdac ara anagar deg tebadut n twuri-a.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Ini kra...",
 	"WORKSPACE_ARIA_LABEL": "Tallunt n umahel Blockly",
-	"COLLAPSED_WARNINGS_WARNING": "Iḥedran yettin gebren ilɣa."
+	"COLLAPSED_WARNINGS_WARNING": "Iḥedran yettin gebren ilɣa.",
+	"DIALOG_OK": "IH",
+	"DIALOG_CANCEL": "Sefsex"
 }

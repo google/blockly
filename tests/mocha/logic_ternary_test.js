@@ -4,6 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.logicTernary');
+
+const eventUtils = goog.require('Blockly.Events.utils');
+const {runSerializationTestSuite} = goog.require('Blockly.test.helpers.serialization');
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+
+
 suite('Logic ternary', function() {
   setup(function() {
     sharedTestSetup.call(this);
@@ -67,13 +74,13 @@ suite('Logic ternary', function() {
           },
     },
   ];
-  testHelpers.runSerializationTestSuite(testCases);
+  runSerializationTestSuite(testCases);
 
   suite('Connections', function() {
     function connectParentAndCheckConnections(
         block, parent, parentInputName, opt_thenInput, opt_elseInput) {
       parent.getInput(parentInputName).connection.connect(block.outputConnection);
-      Blockly.Events.fireNow_();  // Force synchronous onchange() call.
+      eventUtils.TEST_ONLY.fireNow();  // Force synchronous onchange() call.
       chai.assert.equal(block.getParent(), parent,
           'Successful connection to parent');
       if (opt_thenInput) {
@@ -88,7 +95,7 @@ suite('Logic ternary', function() {
     function connectThenInputAndCheckConnections(
         block, thenInput, opt_elseInput, opt_parent) {
       block.getInput('THEN').connection.connect(thenInput.outputConnection);
-      Blockly.Events.fireNow_();  // Force synchronous onchange() call.
+      eventUtils.TEST_ONLY.fireNow();  // Force synchronous onchange() call.
       chai.assert.equal(thenInput.getParent(), block, 'THEN is connected');
       if (opt_parent) {
         chai.assert.equal(block.getParent(), opt_parent,
@@ -102,7 +109,7 @@ suite('Logic ternary', function() {
     function connectElseInputAndCheckConnections(
         block, elseInput, opt_thenInput, opt_parent) {
       block.getInput('ELSE').connection.connect(elseInput.outputConnection);
-      Blockly.Events.fireNow_();  // Force synchronous onchange() call.
+      eventUtils.TEST_ONLY.fireNow();  // Force synchronous onchange() call.
       chai.assert.equal(elseInput.getParent(), block, 'ELSE is connected');
       if (opt_parent) {
         chai.assert.equal(block.getParent(), opt_parent,
@@ -123,56 +130,56 @@ suite('Logic ternary', function() {
     });
     suite('No parent', function() {
       test('Attach inputs same type', function() {
-        var string1 = this.workspace.newBlock('text');
-        var string2 = this.workspace.newBlock('text_charAt');
+        const string1 = this.workspace.newBlock('text');
+        const string2 = this.workspace.newBlock('text_charAt');
 
         connectInputsAndCheckConnections(this.block, string1, string2);
       });
       test('Attach inputs different types', function() {
-        var string = this.workspace.newBlock('text');
-        var number = this.workspace.newBlock('math_number');
+        const string = this.workspace.newBlock('text');
+        const number = this.workspace.newBlock('math_number');
 
         connectInputsAndCheckConnections(this.block, string, number);
       });
     });
     suite('With parent already attached', function() {
       test('Attach inputs same type with matching parent', function() {
-        var parent = this.workspace.newBlock('text_trim');
+        const parent = this.workspace.newBlock('text_trim');
 
         connectParentAndCheckConnections(this.block, parent, 'TEXT');
 
-        var string1 = this.workspace.newBlock('text');
-        var string2 = this.workspace.newBlock('text_charAt');
+        const string1 = this.workspace.newBlock('text');
+        const string2 = this.workspace.newBlock('text_charAt');
 
         connectInputsAndCheckConnections(this.block, string1, string2, parent);
       });
       test('Attach inputs different types with unchecked parent', function() {
-        var parent = this.workspace.newBlock('text_print');
+        const parent = this.workspace.newBlock('text_print');
 
         connectParentAndCheckConnections(this.block, parent, 'TEXT');
 
-        var string = this.workspace.newBlock('text');
-        var number = this.workspace.newBlock('math_number');
+        const string = this.workspace.newBlock('text');
+        const number = this.workspace.newBlock('math_number');
 
         connectInputsAndCheckConnections(this.block, string, number, parent);
       });
       test('Attach inputs different types with permissive parent', function() {
-        var parent = this.workspace.newBlock('text_length');  // Allows String or Array
+        const parent = this.workspace.newBlock('text_length');  // Allows String or Array
 
         connectParentAndCheckConnections(this.block, parent, 'VALUE');
 
-        var string = this.workspace.newBlock('text');
-        var array = this.workspace.newBlock('lists_create_empty');
+        const string = this.workspace.newBlock('text');
+        const array = this.workspace.newBlock('lists_create_empty');
 
         connectInputsAndCheckConnections(this.block, string, array, parent);
       });
       test('Attach mismatch type to then causes break with parent', function() {
-        var parent = this.workspace.newBlock('text_length');  // Allows String or Array
+        const parent = this.workspace.newBlock('text_length');  // Allows String or Array
 
         connectParentAndCheckConnections(this.block, parent, 'VALUE');
 
-        var string = this.workspace.newBlock('text');
-        var number = this.workspace.newBlock('math_number');
+        const string = this.workspace.newBlock('text');
+        const number = this.workspace.newBlock('math_number');
 
         connectElseInputAndCheckConnections(this.block, string, null, parent);
 
@@ -182,12 +189,12 @@ suite('Logic ternary', function() {
             'Disconnected from parent');
       });
       test('Attach mismatch type to else causes break with parent', function() {
-        var parent = this.workspace.newBlock('text_length');  // Allows String or Array
+        const parent = this.workspace.newBlock('text_length');  // Allows String or Array
 
         connectParentAndCheckConnections(this.block, parent, 'VALUE');
 
-        var string = this.workspace.newBlock('text');
-        var number = this.workspace.newBlock('math_number');
+        const string = this.workspace.newBlock('text');
+        const number = this.workspace.newBlock('math_number');
 
         connectThenInputAndCheckConnections(this.block, string, null, parent);
 
@@ -199,44 +206,44 @@ suite('Logic ternary', function() {
     });
     suite('Attaching parent after inputs', function() {
       test('Unchecked parent with inputs different types', function() {
-        var string = this.workspace.newBlock('text');
-        var number = this.workspace.newBlock('math_number');
+        const string = this.workspace.newBlock('text');
+        const number = this.workspace.newBlock('math_number');
 
         connectInputsAndCheckConnections(this.block, string, number);
 
-        var parent = this.workspace.newBlock('text_print');
+        const parent = this.workspace.newBlock('text_print');
         connectParentAndCheckConnections(
             this.block, parent, 'TEXT', string, number);
       });
       test('Permissive parent with inputs different types', function() {
-        var string = this.workspace.newBlock('text');
-        var array = this.workspace.newBlock('lists_create_empty');
+        const string = this.workspace.newBlock('text');
+        const array = this.workspace.newBlock('lists_create_empty');
 
         connectInputsAndCheckConnections(this.block, string, array);
 
-        var parent = this.workspace.newBlock('text_print');
+        const parent = this.workspace.newBlock('text_print');
         connectParentAndCheckConnections(
             this.block, parent, 'TEXT', string, array);
       });
       test('Mismatch with then causes break with then', function() {
-        var number = this.workspace.newBlock('math_number');
-        var string = this.workspace.newBlock('text');
+        const number = this.workspace.newBlock('math_number');
+        const string = this.workspace.newBlock('text');
 
         connectInputsAndCheckConnections(this.block, number, string);
 
-        var parent = this.workspace.newBlock('text_trim');
+        const parent = this.workspace.newBlock('text_trim');
         connectParentAndCheckConnections(
             this.block, parent, 'TEXT', null, string);
         chai.assert.equal(number.getRootBlock(), number,
             'Input THEN disconnected');
       });
       test('Mismatch with else causes break with else', function() {
-        var string = this.workspace.newBlock('text');
-        var number = this.workspace.newBlock('math_number');
+        const string = this.workspace.newBlock('text');
+        const number = this.workspace.newBlock('math_number');
 
         connectInputsAndCheckConnections(this.block, string, number);
 
-        var parent = this.workspace.newBlock('text_trim');
+        const parent = this.workspace.newBlock('text_trim');
         connectParentAndCheckConnections(this.block, parent, 'TEXT', string);
         chai.assert.equal(number.getRootBlock(), number,
             'Input ELSE disconnected');

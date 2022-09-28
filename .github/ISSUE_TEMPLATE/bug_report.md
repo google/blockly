@@ -1,7 +1,7 @@
 ---
 name: Bug Report
 about: Create a report to help us improve
-labels: 'type: bug, triage'
+labels: 'type: bug, issue: triage'
 assignees: ''
 
 ---

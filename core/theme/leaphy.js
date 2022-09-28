@@ -6,18 +6,19 @@
 
 /**
  * @fileoverview Leaphy theme.
- * Contains multi-coloured border to create shadow effect.
  */
-'use strict';
+ 'use strict';
 
-goog.provide('Blockly.Themes.Leaphy');
+/**
+* Leaphy theme.
+* @namespace Blockly.Themes.Leaphy
+*/
+goog.module('Blockly.Themes.Leaphy');
+ 
+const {Theme} = goog.require('Blockly.Theme');
 
-goog.require('Blockly.Theme');
 
-// Temporary holding object.
-Blockly.Themes.Leaphy = {};
-
-Blockly.Themes.Leaphy.defaultBlockStyles = {
+const defaultBlockStyles = {
   "leaphy_blocks": {
     "colourPrimary": "#06778f",
     "hat": "cap"
@@ -28,15 +29,15 @@ Blockly.Themes.Leaphy.defaultBlockStyles = {
   "numbers_blocks": {
     "colourPrimary": "#75B342"
   },
-  "variables_blocks": {
+  "variable_blocks": {
     "colourPrimary": "#DE7C3B"
   },
-  "functions_blocks": {
+  "procedure_blocks": {
     "colourPrimary": "#4095CE"
   }
 };
 
-Blockly.Themes.Leaphy.categoryStyles = {
+const categoryStyles = {
   "leaphy_category": {
     "colour": "#06778f"
   },
@@ -54,7 +55,7 @@ Blockly.Themes.Leaphy.categoryStyles = {
   }
 };
 
-Blockly.Themes.Leaphy.componentStyles = {
+const componentStyles = {
   'workspaceBackgroundColour': "#E5E5E5",
   'toolboxBackgroundColour': '#343444',
   'toolboxForegroundColour': '#fff',
@@ -63,9 +64,11 @@ Blockly.Themes.Leaphy.componentStyles = {
   'flyoutOpacity': 1
 };
 
+/**
+ * Leaphy theme.
+ * @type {Theme}
+ * @alias Blockly.Themes.Leaphy
+ */
+ const Leaphy = new Theme('leaphy', defaultBlockStyles, categoryStyles, componentStyles);
 
-
-
-Blockly.Themes.Classic =
-    new Blockly.Theme('leaphy', Blockly.Themes.Leaphy.defaultBlockStyles,
-        Blockly.Themes.Leaphy.categoryStyles, Blockly.Themes.Leaphy.componentStyles);
+ exports.Leaphy = Leaphy;

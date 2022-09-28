@@ -290,5 +290,7 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "برجسته‌سازی تعریف تابع",
 	"PROCEDURES_CREATE_DO": "ساختن «%1»",
 	"PROCEDURES_IFRETURN_TOOLTIP": "اگر یک مقدار صحیح است، مقدار دوم را برگردان.",
-	"PROCEDURES_IFRETURN_WARNING": "اخطار: این بلوک احتمالاً فقط داخل یک تابع استفاده می‌شود."
+	"PROCEDURES_IFRETURN_WARNING": "اخطار: این بلوک احتمالاً فقط داخل یک تابع استفاده می‌شود.",
+	"DIALOG_OK": "تأیید",
+	"DIALOG_CANCEL": "ئآهووسانن/لغو"
 }

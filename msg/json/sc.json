@@ -293,5 +293,7 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "Marca sa definitzioni de funtzioni.",
 	"PROCEDURES_CREATE_DO": "Ingenerau'%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Si unu valori est berus, tandu torrat unu segundu valori.",
-	"PROCEDURES_IFRETURN_WARNING": "Amonestu: Custu brocu ddu podis ponni sceti aintru de una funtzioni."
+	"PROCEDURES_IFRETURN_WARNING": "Amonestu: Custu brocu ddu podis ponni sceti aintru de una funtzioni.",
+	"DIALOG_OK": "OK",
+	"DIALOG_CANCEL": "Annulla"
 }

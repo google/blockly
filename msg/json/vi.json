@@ -89,19 +89,6 @@
 	"CONTROLS_IF_IF_TOOLTIP": "Thêm, bỏ, hoặc đổi thứ tự các mảnh con để tạo cấu trúc mới cho mảnh nếu.",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Thêm một điều kiện vào mảnh nếu.",
 	"CONTROLS_IF_ELSE_TOOLTIP": "Cuối cùng, khi không điều kiện nào đúng.",
-	"IOS_OK": "Đồng ý",
-	"IOS_CANCEL": "Hủy bỏ",
-	"IOS_ERROR": "Lỗi",
-	"IOS_PROCEDURES_INPUTS": "NHẬP VÀO",
-	"IOS_PROCEDURES_ADD_INPUT": "+ Thêm đầu vào",
-	"IOS_PROCEDURES_ALLOW_STATEMENTS": "Cho phép báo cáo",
-	"IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR": "Hàm này có chứa các input trùng nhau.",
-	"IOS_VARIABLES_ADD_VARIABLE": "+ Thêm biến",
-	"IOS_VARIABLES_ADD_BUTTON": "Thêm",
-	"IOS_VARIABLES_RENAME_BUTTON": "Đổi tên",
-	"IOS_VARIABLES_DELETE_BUTTON": "Xóa",
-	"IOS_VARIABLES_VARIABLE_NAME": "Tên biến",
-	"IOS_VARIABLES_EMPTY_NAME_ERROR": "Bạn không thể không nhập tên biến.",
 	"LOGIC_COMPARE_HELPURL": "https://vi.wikipedia.org/wiki/B%E1%BA%A5t_%C4%91%E1%BA%B3ng_th%E1%BB%A9c",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "Hoàn trả giá trị \"đúng\" (true) nếu giá trị hai đầu vào bằng nhau.",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "Hoàn trả giá trị \"đúng\" (true) nếu giá trị hai đầu vào không bằng nhau.",
@@ -353,5 +340,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "Chú ý: Mảnh này chỉ có thể dùng trong một thủ tục.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Hãy nói gì đó...",
 	"WORKSPACE_ARIA_LABEL": "Không gian làm việc Blockly",
-	"COLLAPSED_WARNINGS_WARNING": "Các khối bị sập có chứa cảnh báo."
+	"COLLAPSED_WARNINGS_WARNING": "Các khối bị sập có chứa cảnh báo.",
+	"DIALOG_OK": "OK",
+	"DIALOG_CANCEL": "Hủy"
 }

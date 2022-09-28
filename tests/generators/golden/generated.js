@@ -38,11 +38,11 @@ function assertEquals(actual, expected, message) {
   function equals(a, b) {
     if (a === b) {
       return true;
-    } else if ((typeof a == "number") && (typeof b == "number") &&
+    } else if ((typeof a === "number") && (typeof b === "number") &&
         (a.toPrecision(15) == b.toPrecision(15))) {
       return true;
     } else if (a instanceof Array && b instanceof Array) {
-      if (a.length != b.length) {
+      if (a.length !== b.length) {
         return false;
       }
       for (var i = 0; i < a.length; i++) {
@@ -177,7 +177,7 @@ function test_foreach() {
 function test_repeat() {
   count = 0;
   for (var count2 = 0; count2 < 10; count2++) {
-    count = (typeof count == 'number' ? count : 0) + 1;
+    count = (typeof count === 'number' ? count : 0) + 1;
   }
   assertEquals(count, 10, 'repeat 10');
 }
@@ -192,12 +192,12 @@ function test_while() {
   }
   count = 1;
   while (count != 10) {
-    count = (typeof count == 'number' ? count : 0) + 1;
+    count = (typeof count === 'number' ? count : 0) + 1;
   }
   assertEquals(count, 10, 'while 10');
   count = 1;
   while (!(count == 10)) {
-    count = (typeof count == 'number' ? count : 0) + 1;
+    count = (typeof count === 'number' ? count : 0) + 1;
   }
   assertEquals(count, 10, 'until 10');
 }
@@ -206,7 +206,7 @@ function test_while() {
 function test_repeat_ext() {
   count = 0;
   for (var count3 = 0; count3 < 10; count3++) {
-    count = (typeof count == 'number' ? count : 0) + 1;
+    count = (typeof count === 'number' ? count : 0) + 1;
   }
   assertEquals(count, 10, 'repeat 10');
 }
@@ -304,7 +304,7 @@ function test_continue() {
   log = '';
   count = 0;
   while (count != 8) {
-    count = (typeof count == 'number' ? count : 0) + 1;
+    count = (typeof count === 'number' ? count : 0) + 1;
     if (count == 5) {
       continue;
     }
@@ -314,7 +314,7 @@ function test_continue() {
   log = '';
   count = 0;
   while (!(count == 8)) {
-    count = (typeof count == 'number' ? count : 0) + 1;
+    count = (typeof count === 'number' ? count : 0) + 1;
     if (count == 5) {
       continue;
     }
@@ -348,7 +348,7 @@ function test_break() {
     if (count == 5) {
       break;
     }
-    count = (typeof count == 'number' ? count : 0) + 1;
+    count = (typeof count === 'number' ? count : 0) + 1;
   }
   assertEquals(count, 5, 'while break');
   count = 1;
@@ -356,7 +356,7 @@ function test_break() {
     if (count == 5) {
       break;
     }
-    count = (typeof count == 'number' ? count : 0) + 1;
+    count = (typeof count === 'number' ? count : 0) + 1;
   }
   assertEquals(count, 5, 'until break');
   log = '';
@@ -432,12 +432,12 @@ function mathIsPrime(n) {
   }
   // False if n is NaN, negative, is 1, or not whole.
   // And false if n is divisible by 2 or 3.
-  if (isNaN(n) || n <= 1 || n % 1 != 0 || n % 2 == 0 || n % 3 == 0) {
+  if (isNaN(n) || n <= 1 || n % 1 !== 0 || n % 2 === 0 || n % 3 === 0) {
     return false;
   }
   // Check all the numbers of form 6k +/- 1, up to sqrt(n).
   for (var x = 6; x <= Math.sqrt(n) + 1; x += 6) {
-    if (n % (x - 1) == 0 || n % (x + 1) == 0) {
+    if (n % (x - 1) === 0 || n % (x + 1) === 0) {
       return false;
     }
   }
@@ -446,15 +446,19 @@ function mathIsPrime(n) {
 
 // Tests the "number property" blocks.
 function test_number_properties() {
-  assertEquals(42 % 2 == 0, true, 'even');
-  assertEquals(42.1 % 2 == 1, false, 'odd');
+  assertEquals(42 % 2 === 0, true, 'even');
+  assertEquals(42.1 % 2 === 1, false, 'odd');
   assertEquals(mathIsPrime(5), true, 'prime 5');
+  assertEquals(mathIsPrime(5 + 2), true, 'prime 5 + 2 (extra parentheses)');
   assertEquals(mathIsPrime(25), false, 'prime 25');
   assertEquals(mathIsPrime(-31.1), false, 'prime negative');
-  assertEquals(Math.PI % 1 == 0, false, 'whole');
+  assertEquals(Math.PI % 1 === 0, false, 'whole');
   assertEquals(Infinity > 0, true, 'positive');
+  assertEquals(5 + 2 > 0, true, '5 + 2 is positive (extra parentheses)');
   assertEquals(-42 < 0, true, 'negative');
-  assertEquals(42 % 2 == 0, true, 'divisible');
+  assertEquals(3 + 2 < 0, false, '3 + 2 is negative (extra parentheses)');
+  assertEquals(42 % 2 === 0, true, 'divisible');
+  assertEquals(!(42 % 0 === 0), true, 'divisible by 0');
 }
 
 // Tests the "round" block.
@@ -467,7 +471,7 @@ function test_round() {
 // Tests the "change" block.
 function test_change() {
   varToChange = 100;
-  varToChange = (typeof varToChange == 'number' ? varToChange : 0) + 42;
+  varToChange = (typeof varToChange === 'number' ? varToChange : 0) + 42;
   assertEquals(varToChange, 142, 'change');
 }
 
@@ -476,10 +480,10 @@ function mathMean(myList) {
 }
 
 function mathMedian(myList) {
-  var localList = myList.filter(function (x) {return typeof x == 'number';});
+  var localList = myList.filter(function (x) {return typeof x === 'number';});
   if (!localList.length) return null;
   localList.sort(function(a, b) {return b - a;});
-  if (localList.length % 2 == 0) {
+  if (localList.length % 2 === 0) {
     return (localList[localList.length / 2 - 1] + localList[localList.length / 2]) / 2;
   } else {
     return localList[(localList.length - 1) / 2];
@@ -508,7 +512,7 @@ function mathModes(values) {
     maxCount = Math.max(thisCount, maxCount);
   }
   for (var j = 0; j < counts.length; j++) {
-    if (counts[j][1] == maxCount) {
+    if (counts[j][1] === maxCount) {
         modes.push(counts[j][0]);
     }
   }
@@ -569,7 +573,7 @@ function mathRandomInt(a, b) {
 function test_random_integer() {
   rand = mathRandomInt(5, 10);
   assertEquals(rand >= 5 && rand <= 10, true, 'randRange');
-  assertEquals(rand % 1 == 0, true, 'randInteger');
+  assertEquals(rand % 1 === 0, true, 'randInteger');
 }
 
 // Tests the "random fraction" block.
@@ -645,7 +649,7 @@ function test_find_text_simple() {
 
 // Creates a string for use with the find test.
 function get_fruit() {
-  number_of_calls = (typeof number_of_calls == 'number' ? number_of_calls : 0) + 1;
+  number_of_calls = (typeof number_of_calls === 'number' ? number_of_calls : 0) + 1;
   return 'Banana';
 }
 
@@ -691,7 +695,7 @@ function test_get_text_simple() {
 
 // Creates a string for use with the get test.
 function get_Blockly() {
-  number_of_calls = (typeof number_of_calls == 'number' ? number_of_calls : 0) + 1;
+  number_of_calls = (typeof number_of_calls === 'number' ? number_of_calls : 0) + 1;
   return 'Blockly';
 }
 
@@ -733,7 +737,7 @@ function test_get_text_complex() {
 
 // Creates a string for use with the substring test.
 function get_numbers() {
-  number_of_calls = (typeof number_of_calls == 'number' ? number_of_calls : 0) + 1;
+  number_of_calls = (typeof number_of_calls === 'number' ? number_of_calls : 0) + 1;
   return '123456789';
 }
 
@@ -900,8 +904,8 @@ function test_text_reverse() {
 }
 
 function textReplace(haystack, needle, replacement) {
-  needle = needle.replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g,"\\$1")
-                 .replace(/\x08/g,"\\x08");
+  needle = needle.replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, '\\$1')
+                 .replace(/\x08/g, '\\x08');
   return haystack.replace(new RegExp(needle, 'g'), replacement);
 }
 
@@ -984,7 +988,7 @@ function test_find_lists_simple() {
 
 // Creates a list for use with the find test.
 function get_names() {
-  number_of_calls = (typeof number_of_calls == 'number' ? number_of_calls : 0) + 1;
+  number_of_calls = (typeof number_of_calls === 'number' ? number_of_calls : 0) + 1;
   return ['Alice', 'Eve', 'Bob', 'Eve'];
 }
 
@@ -1046,7 +1050,7 @@ function test_get_lists_create_list() {
 
 // Creates a list for use with the get test.
 function get_star_wars() {
-  number_of_calls = (typeof number_of_calls == 'number' ? number_of_calls : 0) + 1;
+  number_of_calls = (typeof number_of_calls === 'number' ? number_of_calls : 0) + 1;
   return ['Kirk', 'Spock', 'McCoy'];
 }
 
@@ -1263,7 +1267,7 @@ function test_sublist_simple() {
 
 // Creates a list for use with the sublist test.
 function get_space_shuttles() {
-  number_of_calls = (typeof number_of_calls == 'number' ? number_of_calls : 0) + 1;
+  number_of_calls = (typeof number_of_calls === 'number' ? number_of_calls : 0) + 1;
   return ['Columbia', 'Challenger', 'Discovery', 'Atlantis', 'Endeavour'];
 }
 
@@ -1331,15 +1335,15 @@ function test_split() {
 
 function listsGetSortCompare(type, direction) {
   var compareFuncs = {
-    "NUMERIC": function(a, b) {
+    'NUMERIC': function(a, b) {
         return Number(a) - Number(b); },
-    "TEXT": function(a, b) {
+    'TEXT': function(a, b) {
         return a.toString() > b.toString() ? 1 : -1; },
-    "IGNORE_CASE": function(a, b) {
+    'IGNORE_CASE': function(a, b) {
         return a.toString().toLowerCase() > b.toString().toLowerCase() ? 1 : -1; },
   };
   var compare = compareFuncs[type];
-  return function(a, b) { return compare(a, b) * direction; }
+  return function(a, b) { return compare(a, b) * direction; };
 }
 
 // Tests the "alphabetic sort" block.
@@ -1476,7 +1480,7 @@ function function_1(func_x, func_y) {
 
 // Describe this function...
 function function_2(func_a) {
-  func_a = (typeof func_a == 'number' ? func_a : 0) + 1;
+  func_a = (typeof func_a === 'number' ? func_a : 0) + 1;
   return String(func_a) + String(func_c);
 }
 

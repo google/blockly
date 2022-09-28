@@ -88,19 +88,6 @@
 	"CONTROLS_IF_IF_TOOLTIP": "Tilføj, fjern eller byt om på rækkefølgen af delene for at konfigurere denne \"hvis\" blok.",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Tilføj en betingelse til denne \"hvis\" blok.",
 	"CONTROLS_IF_ELSE_TOOLTIP": "Tilføj en sidste fang-alt betingelse, til denne \"hvis\" blok.",
-	"IOS_OK": "O.k.",
-	"IOS_CANCEL": "Annuller",
-	"IOS_ERROR": "Fejl",
-	"IOS_PROCEDURES_INPUTS": "INDDATA",
-	"IOS_PROCEDURES_ADD_INPUT": "+ Tilføj inddata",
-	"IOS_PROCEDURES_ALLOW_STATEMENTS": "Tillad udsagn",
-	"IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR": "Denne funktion har duplikerede inddata.",
-	"IOS_VARIABLES_ADD_VARIABLE": "+ Tilføj variabel",
-	"IOS_VARIABLES_ADD_BUTTON": "Tilføj",
-	"IOS_VARIABLES_RENAME_BUTTON": "Omdøb",
-	"IOS_VARIABLES_DELETE_BUTTON": "Slet",
-	"IOS_VARIABLES_VARIABLE_NAME": "Variabelnavn",
-	"IOS_VARIABLES_EMPTY_NAME_ERROR": "Du kan ikke bruge et tomt variabelnavn.",
 	"LOGIC_COMPARE_HELPURL": "https://da.wikipedia.org/wiki/Ulighed_(matematik)",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "Returnere sand, hvis begge inputs er lig med hinanden.",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "Returnere sand, hvis begge inputs ikke er lig med hinanden.",
@@ -347,5 +334,7 @@
 	"PROCEDURES_IFRETURN_TOOLTIP": "Hvis en værdi er sand, så returnér en anden værdi.",
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Advarsel: Denne blok kan kun anvendes inden for en funktionsdefinition.",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Sig noget ..."
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Sig noget ...",
+	"DIALOG_OK": "OK",
+	"DIALOG_CANCEL": "Afbryd"
 }

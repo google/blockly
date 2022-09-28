@@ -13,16 +13,16 @@
  */
 CustomDialog = {};
 
-/** Override Blockly.alert() with custom implementation. */
-Blockly.alert = function(message, callback) {
+/** Override Blockly.dialog.alert() with custom implementation. */
+Blockly.dialog.setAlert(function(message, callback) {
   console.log('Alert: ' + message);
   CustomDialog.show('Alert', message, {
     onCancel: callback
   });
-};
+});
 
-/** Override Blockly.confirm() with custom implementation. */
-Blockly.confirm = function(message, callback) {
+/** Override Blockly.dialog.confirm() with custom implementation. */
+Blockly.dialog.setConfirm(function(message, callback) {
   console.log('Confirm: ' + message);
   CustomDialog.show('Confirm', message, {
     showOkay: true,
@@ -34,10 +34,10 @@ Blockly.confirm = function(message, callback) {
       callback(false);
     }
   });
-};
+});
 
-/** Override Blockly.prompt() with custom implementation. */
-Blockly.prompt = function(message, defaultValue, callback) {
+/** Override Blockly.dialog.prompt() with custom implementation. */
+Blockly.dialog.setPrompt(function(message, defaultValue, callback) {
   console.log('Prompt: ' + message);
   CustomDialog.show('Prompt', message, {
     showInput: true,
@@ -51,7 +51,7 @@ Blockly.prompt = function(message, defaultValue, callback) {
     }
   });
   CustomDialog.inputField.value = defaultValue;
-};
+});
 
 /** Hides any currently visible dialog. */
 CustomDialog.hide = function() {
@@ -133,11 +133,11 @@ CustomDialog.show = function(title, message, options) {
     dialogInput.focus();
 
     dialogInput.onkeyup = function(event) {
-      if (event.keyCode == 13) {
+      if (event.keyCode === 13) {
         // Process as OK when user hits enter.
         onOkay();
         return false;
-      } else if (event.keyCode == 27)  {
+      } else if (event.keyCode === 27)  {
         // Process as cancel when user hits esc.
         onCancel();
         return false;

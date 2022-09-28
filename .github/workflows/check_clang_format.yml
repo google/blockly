@@ -1,0 +1,28 @@
+name: Check clang format
+
+# N.B.: Runs with a read-only repo token.  Safe(ish) to check out the
+# submitted branch.
+on: [pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  clang-formatter:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: DoozyX/clang-format-lint-action@v0.13
+      with:
+        source: 'core'
+        extensions: 'js,ts'
+        # This should be as close as possible to the version that the npm
+        # package supports. This can be found by running:
+        # npx clang-format --version.
+        clangFormatVersion: 13
+
+    # The Report clang format workflow (report_clang_format.yml) will
+    # run (if required) after this one to post a comment to the PR.
+    # (Note that the version of that workflow run will be the one on
+    # the master (default) branch, not the PR target branch.)

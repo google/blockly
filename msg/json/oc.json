@@ -61,19 +61,6 @@
 	"CONTROLS_IF_MSG_ELSEIF": "siquenon se",
 	"CONTROLS_IF_MSG_ELSE": "siquenon",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Apondre una condicion al blòt 'se'.",
-	"IOS_OK": "D'acòrdi",
-	"IOS_CANCEL": "Anullar",
-	"IOS_ERROR": "Error",
-	"IOS_PROCEDURES_INPUTS": "ENTRADAS",
-	"IOS_PROCEDURES_ADD_INPUT": "+ Apondre una entrada",
-	"IOS_PROCEDURES_ALLOW_STATEMENTS": "Òrdres autorizats",
-	"IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR": "Aquesta foncion a d'entradas duplicadas.",
-	"IOS_VARIABLES_ADD_VARIABLE": "+ Apondre una variabla",
-	"IOS_VARIABLES_ADD_BUTTON": "Apondre",
-	"IOS_VARIABLES_RENAME_BUTTON": "Renomenar",
-	"IOS_VARIABLES_DELETE_BUTTON": "Suprimir",
-	"IOS_VARIABLES_VARIABLE_NAME": "Nom de la variabla",
-	"IOS_VARIABLES_EMPTY_NAME_ERROR": "Podètz pas utilizar un nom de variabla void.",
 	"LOGIC_COMPARE_HELPURL": "https://fr.wikipedia.org/wiki/Inegalite_(mathematiques)",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "Renviar verai se las doas entradas son egalas.",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "Renviar verai se las doas entradas son diferentas.",
@@ -206,5 +193,7 @@
 	"PROCEDURES_CALLRETURN_HELPURL": "https://en.wikipedia.org/wiki/Subroutine",
 	"PROCEDURES_MUTATORCONTAINER_TITLE": "entradas",
 	"PROCEDURES_MUTATORARG_TITLE": "nom de l’entrada :",
-	"PROCEDURES_CREATE_DO": "Crear '%1'"
+	"PROCEDURES_CREATE_DO": "Crear '%1'",
+	"DIALOG_OK": "D'acòrdi",
+	"DIALOG_CANCEL": "Anullar"
 }

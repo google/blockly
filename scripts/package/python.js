@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview Python Generator module.
+ * @fileoverview Python generator module; just a wrapper for
+ *     python_compressed.js.
  */
-
-/* eslint-disable */
-'use strict';
-
-Blockly.Python = BlocklyPython;

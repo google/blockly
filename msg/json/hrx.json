@@ -283,5 +283,7 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "Markiear Funktionsblock",
 	"PROCEDURES_CREATE_DO": "Generier/erzeich \"Uffruf %1\"",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Wenn der earste Weart woahr (true) ist, Geb den zwooite Weart zurück.",
-	"PROCEDURES_IFRETURN_WARNING": "Warnung: Der Block därref nuar innich en Funktionsblock genutzt sin."
+	"PROCEDURES_IFRETURN_WARNING": "Warnung: Der Block därref nuar innich en Funktionsblock genutzt sin.",
+	"DIALOG_OK": "Okay",
+	"DIALOG_CANCEL": "Abbreche"
 }

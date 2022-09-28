@@ -7,8 +7,6 @@
 
 /**
  * @fileoverview Music pitch input field. Borrowed from Blockly Games.
- * @author fraser@google.com (Neil Fraser)
- * @author samelh@google.com (Sam El-Husseini)
  */
 'use strict';
 
@@ -68,9 +66,9 @@ CustomFields.FieldPitch.NOTES = 'C3 D3 E3 F3 G3 A3 B3 C4 D4 E4 F4 G4 A4'.split(/
 CustomFields.FieldPitch.prototype.showEditor_ = function() {
   CustomFields.FieldPitch.superClass_.showEditor_.call(this);
 
-  var div = Blockly.WidgetDiv.DIV;
+  var div = Blockly.WidgetDiv.getDiv();
   if (!div.firstChild) {
-    // Mobile interface uses Blockly.prompt.
+    // Mobile interface uses Blockly.dialog.prompt.
     return;
   }
   // Build the DOM.

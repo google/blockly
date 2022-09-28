@@ -4,11 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-/**
- * @fileoverview Blockly names tests.
- * @author samelh@google.com (Sam El-Husseini)
- */
-'use strict';
+goog.module('Blockly.test.names');
+
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+
 
 suite('Names', function() {
   setup(function() {
@@ -19,9 +18,9 @@ suite('Names', function() {
   });
 
   test('Safe name', function() {
-    var varDB = new Blockly.Names('window,door');
-    chai.assert.equal(varDB.safeName_(''), 'unnamed','SafeName empty.');
-    chai.assert.equal( varDB.safeName_('foobar'), 'foobar','SafeName ok.');
+    const varDB = new Blockly.Names('window,door');
+    chai.assert.equal(varDB.safeName_(''), 'unnamed', 'SafeName empty.');
+    chai.assert.equal(varDB.safeName_('foobar'), 'foobar', 'SafeName ok.');
     chai.assert.equal(varDB.safeName_('9lives'), 'my_9lives', 'SafeName number start.');
     chai.assert.equal(varDB.safeName_('lives9'), 'lives9', 'SafeName number end.');
     chai.assert.equal(varDB.safeName_('!@#$'), '____', 'SafeName special chars.');
@@ -29,7 +28,7 @@ suite('Names', function() {
   });
 
   test('Get name', function() {
-    var varDB = new Blockly.Names('window,door');
+    const varDB = new Blockly.Names('window,door');
     chai.assert.equal(varDB.getName('Foo.bar', 'var'), 'Foo_bar', 'Name add #1.');
     chai.assert.equal(varDB.getName('Foo.bar', 'var'), 'Foo_bar', 'Name get #1.');
     chai.assert.equal(varDB.getName('Foo bar', 'var'), 'Foo_bar2', 'Name add #2.');
@@ -38,10 +37,13 @@ suite('Names', function() {
     chai.assert.equal(varDB.getName('Foo.bar', 'proc'), 'Foo_bar3', 'Name add #4.');
     chai.assert.equal(varDB.getName('Foo.bar', 'var'), 'Foo_bar', 'Name get #1b.');
     chai.assert.equal(varDB.getName('Foo.bar', 'proc'), 'Foo_bar3', 'Name get #4.');
+
+    chai.assert.equal(String(varDB.getUserNames('var')), 'foo.bar,foo bar,door', 'Get var names.');
+    chai.assert.equal(String(varDB.getUserNames('proc')), 'foo.bar', 'Get proc names.');
   });
 
   test('Get distinct name', function() {
-    var varDB = new Blockly.Names('window,door');
+    const varDB = new Blockly.Names('window,door');
     chai.assert.equal(varDB.getDistinctName('Foo.bar', 'var'), 'Foo_bar',
         'Name distinct #1.');
     chai.assert.equal(varDB.getDistinctName('Foo.bar', 'var'), 'Foo_bar2',
@@ -58,5 +60,4 @@ suite('Names', function() {
     chai.assert.isFalse(Blockly.Names.equals('Foo.bar', 'Foo_bar'), 'Name equals #2.');
     chai.assert.isTrue(Blockly.Names.equals('Foo.bar', 'FOO.BAR'), 'Name equals #3.');
   });
-
 });

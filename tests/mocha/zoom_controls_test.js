@@ -4,6 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.zoomControls');
+
+const {assertEventFired, assertEventNotFired} = goog.require('Blockly.test.helpers.events');
+const eventUtils = goog.require('Blockly.Events.utils');
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+const {simulateClick} = goog.require('Blockly.test.helpers.userInput');
+
+
 suite("Zoom Controls", function() {
   setup(function() {
     sharedTestSetup.call(this);
@@ -26,10 +34,10 @@ suite("Zoom Controls", function() {
 
       assertEventFired(
           this.eventsFireStub, Blockly.Events.Click,
-          {targetType: 'zoom_controls'}, this.workspace.id, null);
+          {targetType: 'zoom_controls', type: eventUtils.CLICK}, this.workspace.id, null);
       assertEventNotFired(
           this.eventsFireStub, Blockly.Events.Click,
-          {targetType: 'workspace'});
+          {targetType: 'workspace', type: eventUtils.CLICK});
       chai.assert.closeTo(this.workspace.getScale(), 1.2, 0.05);
     });
     test("Zoom out", function() {
@@ -37,10 +45,10 @@ suite("Zoom Controls", function() {
 
       assertEventFired(
           this.eventsFireStub, Blockly.Events.Click,
-          {targetType: 'zoom_controls'}, this.workspace.id, null);
+          {targetType: 'zoom_controls', type: eventUtils.CLICK}, this.workspace.id, null);
       assertEventNotFired(
           this.eventsFireStub, Blockly.Events.Click,
-          {targetType: 'workspace'});
+          {targetType: 'workspace', type: eventUtils.CLICK});
       chai.assert.closeTo(this.workspace.getScale(), 0.8, 0.05);
     });
     test("Reset zoom", function() {
@@ -48,10 +56,10 @@ suite("Zoom Controls", function() {
 
       assertEventFired(
           this.eventsFireStub, Blockly.Events.Click,
-          {targetType: 'zoom_controls'}, this.workspace.id, null);
+          {targetType: 'zoom_controls', type: eventUtils.CLICK}, this.workspace.id, null);
       assertEventNotFired(
           this.eventsFireStub, Blockly.Events.Click,
-          {targetType: 'workspace'});
+          {targetType: 'workspace', type: eventUtils.CLICK});
       chai.assert.equal(this.workspace.getScale(), 1);
     });
   });

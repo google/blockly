@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Blocks for Blockly's Plane Seat Calculator application.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 

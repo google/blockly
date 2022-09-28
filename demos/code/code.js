@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview JavaScript for Blockly's Code demo.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -33,6 +32,7 @@ Code.LANGUAGE_NAME = {
   'fa': 'فارسی',
   'fr': 'Français',
   'he': 'עברית',
+  'hr': 'Hrvatski',
   'hrx': 'Hunsrik',
   'hu': 'Magyar',
   'ia': 'Interlingua',
@@ -95,8 +95,8 @@ Code.getStringParamFromUrl = function (name, defaultValue) {
 Code.getLang = function () {
   var lang = Code.getStringParamFromUrl('lang', '');
   if (Code.LANGUAGE_NAME[lang] === undefined) {
-    // Default to Dutch.
-    lang = 'nl';
+    // Default to English.
+    lang = 'en';
   }
   return lang;
 };
@@ -106,7 +106,7 @@ Code.getLang = function () {
  * @return {boolean} True if RTL, false if LTR.
  */
 Code.isRtl = function () {
-  return Code.LANGUAGE_RTL.indexOf(Code.LANG) != -1;
+  return Code.LANGUAGE_RTL.indexOf(Code.LANG) !== -1;
 };
 
 /**
@@ -184,11 +184,16 @@ Code.changeCodingLanguage = function () {
  * @param {!Function} func Event handler to bind.
  */
 Code.bindClick = function (el, func) {
-  if (typeof el == 'string') {
+  if (typeof el === 'string') {
     el = document.getElementById(el);
   }
   el.addEventListener('click', func, true);
-  el.addEventListener('touchend', func, true);
+  function touchFunc(e) {
+    // Prevent code from being executed twice on touchscreens.
+    e.preventDefault();
+    func(e);
+  }
+  el.addEventListener('touchend', touchFunc, true);
 };
 
 /**
@@ -234,14 +239,16 @@ Code.LANG = Code.getLang();
  * List of tab names.
  * @private
  */
-Code.TABS_ = ['blocks','arduino', 'xml'];
+Code.TABS_ = [
+  'blocks', 'arduino', 'python', 'xml', 'json'
+];
 
 /**
  * List of tab names with casing, for display in the UI.
  * @private
  */
 Code.TABS_DISPLAY_ = [
-  'Blocks','Arduino', 'XML',
+  'Blocks', 'Arduino', 'Python', 'XML', 'JSON'
 ];
 
 Code.selected = 'blocks';
@@ -259,8 +266,8 @@ Code.tabClick = function (clickedName) {
     try {
       xmlDom = Blockly.Xml.textToDom(xmlText);
     } catch (e) {
-      var q =
-        window.confirm(MSG['badXml'].replace('%1', e));
+      var q = window.confirm(
+        MSG['parseError'].replace(/%1/g, 'XML').replace('%2', e));
       if (!q) {
         // Leave the user on the XML tab.
         return;
@@ -269,6 +276,25 @@ Code.tabClick = function (clickedName) {
     if (xmlDom) {
       Code.workspace.clear();
       Blockly.Xml.domToWorkspace(xmlDom, Code.workspace);
+    }
+  }
+
+  if (document.getElementById('tab_json').classList.contains('tabon')) {
+    var jsonTextarea = document.getElementById('content_json');
+    var jsonText = jsonTextarea.value;
+    var json = null;
+    try {
+      json = JSON.parse(jsonText);
+    } catch (e) {
+      var q = window.confirm(
+        MSG['parseError'].replace(/%1/g, 'JSON').replace('%2', e));
+      if (!q) {
+        // Leave the user on the JSON tab.
+        return;
+      }
+    }
+    if (json) {
+      Blockly.serialization.workspaces.load(json, Code.workspace);
     }
   }
 
@@ -295,7 +321,7 @@ Code.tabClick = function (clickedName) {
   Code.renderContent();
   // The code menu tab is on if the blocks tab is off.
   var codeMenuTab = document.getElementById('tab_code');
-  if (clickedName == 'blocks') {
+  if (clickedName === 'blocks') {
     Code.workspace.setVisible(true);
     codeMenuTab.className = 'taboff';
   } else {
@@ -304,7 +330,7 @@ Code.tabClick = function (clickedName) {
   // Sync the menu's value with the clicked tab value if needed.
   var codeMenu = document.getElementById('code_menu');
   for (var i = 0; i < codeMenu.options.length; i++) {
-    if (codeMenu.options[i].value == clickedName) {
+    if (codeMenu.options[i].value === clickedName) {
       codeMenu.selectedIndex = i;
       break;
     }
@@ -318,28 +344,27 @@ Code.tabClick = function (clickedName) {
 Code.renderContent = function () {
   var content = document.getElementById('content_' + Code.selected);
   // Initialize the pane.
-  if (content.id == 'content_xml') {
+  if (content.id === 'content_xml') {
     var xmlTextarea = document.getElementById('content_xml');
     var xmlDom = Blockly.Xml.workspaceToDom(Code.workspace);
     var xmlText = Blockly.Xml.domToPrettyText(xmlDom);
     xmlTextarea.value = xmlText;
     xmlTextarea.focus();
-  } else if (content.id == 'content_javascript') {
-    Code.attemptCodeGeneration(Blockly.JavaScript);
-  } else if (content.id == 'content_python') {
+  } else if (content.id === 'content_json') {
+    var jsonTextarea = document.getElementById('content_json');
+    jsonTextarea.value = JSON.stringify(
+      Blockly.serialization.workspaces.save(Code.workspace), null, 2);
+    jsonTextarea.focus();
+  } else if (content.id === 'content_arduino') {
+    Code.attemptCodeGeneration(Blockly.Arduino);
+  } else if (content.id === 'content_python') {
     Code.attemptCodeGeneration(Blockly.Python);
-  } else if (content.id == 'content_php') {
-    Code.attemptCodeGeneration(Blockly.PHP);
-  } else if (content.id == 'content_dart') {
-    Code.attemptCodeGeneration(Blockly.Dart);
-  } else if (content.id == 'content_lua') {
-    Code.attemptCodeGeneration(Blockly.Lua);
-} else if (content.id == 'content_arduino') {
-  Code.attemptCodeGeneration(Blockly.Arduino);
-}
-if (typeof PR == 'object') {
-  PR.prettyPrint();
-}
+  } else if (content.id === 'content_arduino') {
+    Code.attemptCodeGeneration(Blockly.Arduino);
+  }
+  if (typeof PR === 'object') {
+    PR.prettyPrint();
+  }
 };
 
 /**
@@ -367,17 +392,17 @@ Code.checkAllGeneratorFunctionsDefined = function (generator) {
   for (var i = 0; i < blocks.length; i++) {
     var blockType = blocks[i].type;
     if (!generator[blockType]) {
-      if (missingBlockGenerators.indexOf(blockType) == -1) {
+      if (missingBlockGenerators.indexOf(blockType) === -1) {
         missingBlockGenerators.push(blockType);
       }
     }
   }
 
-  var valid = missingBlockGenerators.length == 0;
+  var valid = missingBlockGenerators.length === 0;
   if (!valid) {
     var msg = 'The generator code for the following blocks not specified for ' +
       generator.name_ + ':\n - ' + missingBlockGenerators.join('\n - ');
-    Blockly.alert(msg);  // Assuming synchronous. No callback.
+    Blockly.dialog.alert(msg);  // Assuming synchronous. No callback.
   }
   return valid;
 };
@@ -421,7 +446,7 @@ Code.init = function () {
   // TODO: Clean up the message files so this is done explicitly instead of
   // through this for-loop.
   for (var messageKey in MSG) {
-    if (messageKey.indexOf('cat') == 0) {
+    if (messageKey.indexOf('cat') === 0) {
       Blockly.Msg[messageKey.toUpperCase()] = MSG[messageKey];
     }
   }
@@ -434,8 +459,7 @@ Code.init = function () {
 
   Code.workspace = Blockly.inject('content_blocks',
     {
-      grid:
-      {
+      grid: {
         spacing: 25,
         length: 3,
         colour: '#ccc',
@@ -444,18 +468,18 @@ Code.init = function () {
       media: '../../media/',
       rtl: rtl,
       toolbox: toolboxXml,
-      zoom:
-      {
+      zoom: {
         controls: true,
         wheel: true
       },
-      renderer: 'zelos',
+      renderer: 'zelos'
     });
 
   Code.workspace.getToolbox().getFlyout().autoClose = false;
   Code.workspace.getToolbox().selectItemByPosition(0);
   Code.workspace.getToolbox().refreshTheme();
-  Code.loadBlocks('<xml xmlns="https://developers.google.com/blockly/xml"><block type="leaphy_start" id="rzE0Ve:6bHB~8aIqyj-U" deletable="false" x="250" y="10"/></xml>');
+
+  Code.loadBlocks('<xml xmlns="https://developers.google.com/blockly/xml"><block type="leaphy_start" id="rzE0Ve:6bHB~8aIqyj-U" deletable="false" x="500" y="10"/></xml>');
 
   if ('BlocklyStorage' in window) {
     // Hook a save function onto unload.
@@ -473,7 +497,7 @@ Code.init = function () {
     BlocklyStorage['HTTPREQUEST_ERROR'] = MSG['httpRequestError'];
     BlocklyStorage['LINK_ALERT'] = MSG['linkAlert'];
     BlocklyStorage['HASH_ERROR'] = MSG['hashError'];
-    BlocklyStorage['XML_ERROR'] = MSG['xmlError'];
+    BlocklyStorage['XML_ERROR'] = MSG['loadError'];
     Code.bindClick(linkButton,
       function () { BlocklyStorage.link(Code.workspace); });
   } else if (linkButton) {
@@ -528,7 +552,7 @@ Code.initLanguage = function () {
     var tuple = languages[i];
     var lang = tuple[tuple.length - 1];
     var option = new Option(tuple[0], lang);
-    if (lang == Code.LANG) {
+    if (lang === Code.LANG) {
       option.selected = true;
     }
     languageMenu.options.add(option);
@@ -556,22 +580,28 @@ Code.initLanguage = function () {
 /**
  * Execute the user's code.
  * Just a quick and dirty eval.  Catch infinite loops.
+ * @param {Event} event Event created from listener bound to the function.
  */
-Code.runJS = function () {
-  Blockly.JavaScript.INFINITE_LOOP_TRAP = 'checkTimeout();\n';
-  var timeouts = 0;
-  var checkTimeout = function () {
-    if (timeouts++ > 1000000) {
-      throw MSG['timeout'];
-    }
-  };
-  var code = Blockly.JavaScript.workspaceToCode(Code.workspace);
-  Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
-  try {
-    eval(code);
-  } catch (e) {
-    alert(MSG['badCode'].replace('%1', e));
+Code.runJS = function (event) {
+  // Prevent code from being executed twice on touchscreens.
+  if (event.type === 'touchend') {
+    event.preventDefault();
   }
+
+  // Blockly.JavaScript.INFINITE_LOOP_TRAP = 'checkTimeout();\n';
+  // var timeouts = 0;
+  // var checkTimeout = function() {
+  //   if (timeouts++ > 1000000) {
+  //     throw MSG['timeout'];
+  //   }
+  // };
+  // var code = Blockly.JavaScript.workspaceToCode(Code.workspace);
+  // Blockly.JavaScript.INFINITE_LOOP_TRAP = null;
+  // try {
+  //   eval(code);
+  // } catch (e) {
+  //   alert(MSG['badCode'].replace('%1', e));
+  // }
 };
 
 /**
@@ -591,6 +621,6 @@ Code.discard = function () {
 // Load the Code demo's language strings.
 document.write('<script src="msg/' + Code.LANG + '.js"></script>\n');
 // Load Blockly's language strings.
-document.write('<script src="../../msg/js/' + Code.LANG + '.js"></script>\n');
+document.write('<script src="../../build/msg/js/' + Code.LANG + '.js"></script>\n');
 
 window.addEventListener('load', Code.init);

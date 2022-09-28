@@ -14,10 +14,3 @@
 
 // Include the EN Locale by default.
 Blockly.setLocale(En);
-
-Blockly.Blocks = Blockly.Blocks || {};
-Object.keys(BlocklyBlocks).forEach(function (k) {
-  Blockly.Blocks[k] = BlocklyBlocks[k];
-});
-
-Blockly.Arduino = BlocklyArduino;

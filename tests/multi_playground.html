@@ -3,18 +3,16 @@
 <head>
 <meta charset="utf-8">
 <title>Multi-toolbox Playground</title>
-<script src="../blockly_uncompressed.js"></script>
-<script src="../msg/messages.js"></script>
-<script src="../blocks/logic.js"></script>
-<script src="../blocks/loops.js"></script>
-<script src="../blocks/math.js"></script>
-<script src="../blocks/text.js"></script>
-<script src="../blocks/lists.js"></script>
-<script src="../blocks/colour.js"></script>
-<script src="../blocks/variables.js"></script>
-<script src="../blocks/procedures.js"></script>
+
+<!-- This script loads uncompressed when on localhost and loads compressed when it is being hosted.
+     Please add any other dependencies to playgrounds/load_all.js.-->
+<script src="playgrounds/load_all.js"></script>
+
 <script>
 'use strict';
+
+const IS_UNCOMPRESSED = !!document.getElementById('blockly-uncompressed-script');
+
 var options = {
   comments: true,
   collapse: true,
@@ -40,6 +38,7 @@ var options = {
 };
 
 function start() {
+  setBackgroundColour();
   var match = location.search.match(/toolbox=([^&]+)/);
   var toolbox =
       document.getElementById('toolbox-' + (match ? match[1] : 'categories'));
@@ -65,6 +64,15 @@ function startBlocklyInstance(suffix, rtl, horizontalLayout, position,
   options.horizontalLayout = horizontalLayout;
   options.toolboxPosition = position;
   Blockly.inject('blocklyDiv' + suffix, options);
+}
+
+function setBackgroundColour() {
+  // Set background colour to differentiate between compressed and uncompressed mode.
+  if (IS_UNCOMPRESSED) {
+    document.body.style.backgroundColor = '#d6d6ff';  // Familiar lilac.
+  } else {
+    document.body.style.backgroundColor = '#60fcfc';  // Unfamiliar blue.
+  }
 }
 </script>
 

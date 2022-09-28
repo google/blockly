@@ -1,0 +1,30 @@
+{
+	"@metadata": {
+		"authors": [
+			"Aefgh39622",
+			"Sovichet"
+		]
+	},
+	"VARIABLES_DEFAULT_NAME": "ធាតុ",
+	"TODAY": "ថ្ងៃនេះ",
+	"DUPLICATE_BLOCK": "ធ្វើស្ទួន",
+	"ADD_COMMENT": "បន្ថែម​មតិ",
+	"REMOVE_COMMENT": "ដក​មតិ​ចេញ",
+	"EXTERNAL_INPUTS": "ធាតុបញ្ចូលខាងក្រៅ",
+	"DELETE_BLOCK": "លុបប្លុក",
+	"DELETE_X_BLOCKS": "លុបប្លុក %1",
+	"DELETE_ALL_BLOCKS": "លុបប្លុក %1 ទាំងអស់?",
+	"DISABLE_BLOCK": "បិទប្លុក",
+	"ENABLE_BLOCK": "បើកប្លុក",
+	"HELP": "ជំនួយ",
+	"UNDO": "មិន​ធ្វើ​វិញ",
+	"REDO": "ធ្វើ​វិញ",
+	"CHANGE_VALUE_TITLE": "ប្ដូរ​តម្លៃ៖",
+	"RENAME_VARIABLE": "ដក​អថេរ​ចេញ...",
+	"RENAME_VARIABLE_TITLE": "ប្ដូរ​ឈ្មោះ​អថេរ​ទាំង '%1' ទៅ​ជា៖",
+	"NEW_VARIABLE": "បង្កើតអថេរ...",
+	"NEW_VARIABLE_TITLE": "ឈ្មោះ​អថេរ​ថ្មី៖",
+	"COLOUR_PICKER_HELPURL": "https://en.wikipedia.org/wiki/Color",
+	"COLOUR_PICKER_TOOLTIP": "ជ្រើស​ពណ៌​មួយ​ពី​បន្ទះ​ពណ៌",
+	"DIALOG_OK": "យល់ព្រម"
+}

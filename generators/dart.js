@@ -6,31 +6,35 @@
 
 /**
  * @fileoverview Helper functions for generating Dart for blocks.
- * @author fraser@google.com (Neil Fraser)
+ * @suppress {checkTypes|globalThis}
  */
 'use strict';
 
-goog.provide('Blockly.Dart');
+goog.module('Blockly.Dart');
+goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Generator');
-goog.require('Blockly.inputTypes');
-goog.require('Blockly.utils.string');
+const Variables = goog.require('Blockly.Variables');
+const stringUtils = goog.require('Blockly.utils.string');
+const {Block} = goog.requireType('Blockly.Block');
+const {Generator} = goog.require('Blockly.Generator');
+const {Names, NameType} = goog.require('Blockly.Names');
+const {Workspace} = goog.requireType('Blockly.Workspace');
+const {inputTypes} = goog.require('Blockly.inputTypes');
 
 
 /**
  * Dart code generator.
- * @type {!Blockly.Generator}
+ * @type {!Generator}
  */
-Blockly.Dart = new Blockly.Generator('Dart');
+const Dart = new Generator('Dart');
 
 /**
  * List of illegal variable names.
  * This is not intended to be a security feature.  Blockly is 100% client-side,
  * so bypassing this list is trivial.  This is intended to prevent users from
  * accidentally clobbering a built-in object or function.
- * @private
  */
-Blockly.Dart.addReservedWords(
+Dart.addReservedWords(
     // https://www.dartlang.org/docs/spec/latest/dart-language-specification.pdf
     // Section 16.1.1
     'assert,break,case,catch,class,const,continue,default,do,else,enum,' +
@@ -53,102 +57,101 @@ Blockly.Dart.addReservedWords(
  * Order of operation ENUMs.
  * https://dart.dev/guides/language/language-tour#operators
  */
-Blockly.Dart.ORDER_ATOMIC = 0;         // 0 "" ...
-Blockly.Dart.ORDER_UNARY_POSTFIX = 1;  // expr++ expr-- () [] . ?.
-Blockly.Dart.ORDER_UNARY_PREFIX = 2;   // -expr !expr ~expr ++expr --expr
-Blockly.Dart.ORDER_MULTIPLICATIVE = 3; // * / % ~/
-Blockly.Dart.ORDER_ADDITIVE = 4;       // + -
-Blockly.Dart.ORDER_SHIFT = 5;          // << >>
-Blockly.Dart.ORDER_BITWISE_AND = 6;    // &
-Blockly.Dart.ORDER_BITWISE_XOR = 7;    // ^
-Blockly.Dart.ORDER_BITWISE_OR = 8;     // |
-Blockly.Dart.ORDER_RELATIONAL = 9;     // >= > <= < as is is!
-Blockly.Dart.ORDER_EQUALITY = 10;      // == !=
-Blockly.Dart.ORDER_LOGICAL_AND = 11;   // &&
-Blockly.Dart.ORDER_LOGICAL_OR = 12;    // ||
-Blockly.Dart.ORDER_IF_NULL = 13;       // ??
-Blockly.Dart.ORDER_CONDITIONAL = 14;   // expr ? expr : expr
-Blockly.Dart.ORDER_CASCADE = 15;       // ..
-Blockly.Dart.ORDER_ASSIGNMENT = 16;    // = *= /= ~/= %= += -= <<= >>= &= ^= |=
-Blockly.Dart.ORDER_NONE = 99;          // (...)
+Dart.ORDER_ATOMIC = 0;         // 0 "" ...
+Dart.ORDER_UNARY_POSTFIX = 1;  // expr++ expr-- () [] . ?.
+Dart.ORDER_UNARY_PREFIX = 2;   // -expr !expr ~expr ++expr --expr
+Dart.ORDER_MULTIPLICATIVE = 3; // * / % ~/
+Dart.ORDER_ADDITIVE = 4;       // + -
+Dart.ORDER_SHIFT = 5;          // << >>
+Dart.ORDER_BITWISE_AND = 6;    // &
+Dart.ORDER_BITWISE_XOR = 7;    // ^
+Dart.ORDER_BITWISE_OR = 8;     // |
+Dart.ORDER_RELATIONAL = 9;     // >= > <= < as is is!
+Dart.ORDER_EQUALITY = 10;      // == !=
+Dart.ORDER_LOGICAL_AND = 11;   // &&
+Dart.ORDER_LOGICAL_OR = 12;    // ||
+Dart.ORDER_IF_NULL = 13;       // ??
+Dart.ORDER_CONDITIONAL = 14;   // expr ? expr : expr
+Dart.ORDER_CASCADE = 15;       // ..
+Dart.ORDER_ASSIGNMENT = 16;    // = *= /= ~/= %= += -= <<= >>= &= ^= |=
+Dart.ORDER_NONE = 99;          // (...)
 
 /**
  * Whether the init method has been called.
  * @type {?boolean}
  */
-Blockly.Dart.isInitialized = false;
+Dart.isInitialized = false;
 
 /**
  * Initialise the database of variable names.
- * @param {!Blockly.Workspace} workspace Workspace to generate code from.
+ * @param {!Workspace} workspace Workspace to generate code from.
  */
-Blockly.Dart.init = function(workspace) {
-  // Create a dictionary of definitions to be printed before the code.
-  Blockly.Dart.definitions_ = Object.create(null);
-  // Create a dictionary mapping desired function names in definitions_
-  // to actual function names (to avoid collisions with user functions).
-  Blockly.Dart.functionNames_ = Object.create(null);
+Dart.init = function(workspace) {
+  // Call Blockly.Generator's init.
+  Object.getPrototypeOf(this).init.call(this);
 
-  if (!Blockly.Dart.variableDB_) {
-    Blockly.Dart.variableDB_ =
-        new Blockly.Names(Blockly.Dart.RESERVED_WORDS_);
+  if (!this.nameDB_) {
+    this.nameDB_ = new Names(this.RESERVED_WORDS_);
   } else {
-    Blockly.Dart.variableDB_.reset();
+    this.nameDB_.reset();
   }
 
-  Blockly.Dart.variableDB_.setVariableMap(workspace.getVariableMap());
+  this.nameDB_.setVariableMap(workspace.getVariableMap());
+  this.nameDB_.populateVariables(workspace);
+  this.nameDB_.populateProcedures(workspace);
 
-  var defvars = [];
+  const defvars = [];
   // Add developer variables (not created or named by the user).
-  var devVarList = Blockly.Variables.allDeveloperVariables(workspace);
-  for (var i = 0; i < devVarList.length; i++) {
-    defvars.push(Blockly.Dart.variableDB_.getName(devVarList[i],
-        Blockly.Names.DEVELOPER_VARIABLE_TYPE));
+  const devVarList = Variables.allDeveloperVariables(workspace);
+  for (let i = 0; i < devVarList.length; i++) {
+    defvars.push(this.nameDB_.getName(devVarList[i],
+        NameType.DEVELOPER_VARIABLE));
   }
 
   // Add user variables, but only ones that are being used.
-  var variables = Blockly.Variables.allUsedVarModels(workspace);
-  for (var i = 0; i < variables.length; i++) {
-    defvars.push(Blockly.Dart.variableDB_.getName(variables[i].getId(),
-        Blockly.VARIABLE_CATEGORY_NAME));
+  const variables = Variables.allUsedVarModels(workspace);
+  for (let i = 0; i < variables.length; i++) {
+    defvars.push(this.nameDB_.getName(variables[i].getId(),
+        NameType.VARIABLE));
   }
 
   // Declare all of the variables.
   if (defvars.length) {
-    Blockly.Dart.definitions_['variables'] =
+    this.definitions_['variables'] =
         'var ' + defvars.join(', ') + ';';
   }
   this.isInitialized = true;
 };
 
 /**
- * Prepend the generated code with the variable definitions.
+ * Prepend the generated code with import statements and variable definitions.
  * @param {string} code Generated code.
  * @return {string} Completed code.
  */
-Blockly.Dart.finish = function(code) {
+Dart.finish = function(code) {
   // Indent every line.
   if (code) {
-    code = Blockly.Dart.prefixLines(code, Blockly.Dart.INDENT);
+    code = this.prefixLines(code, this.INDENT);
   }
   code = 'main() {\n' + code + '}';
 
   // Convert the definitions dictionary into a list.
-  var imports = [];
-  var definitions = [];
-  for (var name in Blockly.Dart.definitions_) {
-    var def = Blockly.Dart.definitions_[name];
+  const imports = [];
+  const definitions = [];
+  for (let name in this.definitions_) {
+    const def = this.definitions_[name];
     if (def.match(/^import\s/)) {
       imports.push(def);
     } else {
       definitions.push(def);
     }
   }
-  // Clean up temporary data.
-  delete Blockly.Dart.definitions_;
-  delete Blockly.Dart.functionNames_;
-  Blockly.Dart.variableDB_.reset();
-  var allDefs = imports.join('\n') + '\n\n' + definitions.join('\n\n');
+  // Call Blockly.Generator's finish.
+  code = Object.getPrototypeOf(this).finish.call(this, code);
+  this.isInitialized = false;
+
+  this.nameDB_.reset();
+  const allDefs = imports.join('\n') + '\n\n' + definitions.join('\n\n');
   return allDefs.replace(/\n\n+/g, '\n\n').replace(/\n*$/, '\n\n\n') + code;
 };
 
@@ -158,7 +161,7 @@ Blockly.Dart.finish = function(code) {
  * @param {string} line Line of generated code.
  * @return {string} Legal line of code.
  */
-Blockly.Dart.scrubNakedValue = function(line) {
+Dart.scrubNakedValue = function(line) {
   return line + ';\n';
 };
 
@@ -168,7 +171,7 @@ Blockly.Dart.scrubNakedValue = function(line) {
  * @return {string} Dart string.
  * @protected
  */
-Blockly.Dart.quote_ = function(string) {
+Dart.quote_ = function(string) {
   // Can't use goog.string.quote since $ must also be escaped.
   string = string.replace(/\\/g, '\\\\')
                  .replace(/\n/g, '\\\n')
@@ -184,8 +187,8 @@ Blockly.Dart.quote_ = function(string) {
  * @return {string} Dart string.
  * @protected
  */
-Blockly.Dart.multiline_quote_ = function (string) {
-  var lines = string.split(/\n/g).map(Blockly.Dart.quote_);
+Dart.multiline_quote_ = function (string) {
+  const lines = string.split(/\n/g).map(this.quote_);
   // Join with the following, plus a newline:
   // + '\n' +
   return lines.join(' + \'\\n\' + \n');
@@ -195,76 +198,81 @@ Blockly.Dart.multiline_quote_ = function (string) {
  * Common tasks for generating Dart from blocks.
  * Handles comments for the specified block and any connected value blocks.
  * Calls any statements following this block.
- * @param {!Blockly.Block} block The current block.
+ * @param {!Block} block The current block.
  * @param {string} code The Dart code created for this block.
  * @param {boolean=} opt_thisOnly True to generate code for only this statement.
  * @return {string} Dart code with comments and subsequent blocks added.
  * @protected
  */
-Blockly.Dart.scrub_ = function(block, code, opt_thisOnly) {
-  var commentCode = '';
+Dart.scrub_ = function(block, code, opt_thisOnly) {
+  let commentCode = '';
   // Only collect comments for blocks that aren't inline.
   if (!block.outputConnection || !block.outputConnection.targetConnection) {
     // Collect comment for this block.
-    var comment = block.getCommentText();
+    let comment = block.getCommentText();
     if (comment) {
-      comment = Blockly.utils.string.wrap(comment,
-          Blockly.Dart.COMMENT_WRAP - 3);
+      comment = stringUtils.wrap(comment, this.COMMENT_WRAP - 3);
       if (block.getProcedureDef) {
         // Use documentation comment for function comments.
-        commentCode += Blockly.Dart.prefixLines(comment + '\n', '/// ');
+        commentCode += this.prefixLines(comment + '\n', '/// ');
       } else {
-        commentCode += Blockly.Dart.prefixLines(comment + '\n', '// ');
+        commentCode += this.prefixLines(comment + '\n', '// ');
       }
     }
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.
-    for (var i = 0; i < block.inputList.length; i++) {
-      if (block.inputList[i].type == Blockly.inputTypes.VALUE) {
-        var childBlock = block.inputList[i].connection.targetBlock();
+    for (let i = 0; i < block.inputList.length; i++) {
+      if (block.inputList[i].type === inputTypes.VALUE) {
+        const childBlock = block.inputList[i].connection.targetBlock();
         if (childBlock) {
-          comment = Blockly.Dart.allNestedComments(childBlock);
+          comment = this.allNestedComments(childBlock);
           if (comment) {
-            commentCode += Blockly.Dart.prefixLines(comment, '// ');
+            commentCode += this.prefixLines(comment, '// ');
           }
         }
       }
     }
   }
-  var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
-  var nextCode = opt_thisOnly ? '' : Blockly.Dart.blockToCode(nextBlock);
+  const nextBlock = block.nextConnection && block.nextConnection.targetBlock();
+  const nextCode = opt_thisOnly ? '' : this.blockToCode(nextBlock);
   return commentCode + code + nextCode;
 };
 
 /**
  * Gets a property and adjusts the value while taking into account indexing.
- * @param {!Blockly.Block} block The block.
+ * @param {!Block} block The block.
  * @param {string} atId The property ID of the element to get.
  * @param {number=} opt_delta Value to add.
  * @param {boolean=} opt_negate Whether to negate the value.
  * @param {number=} opt_order The highest order acting on this value.
  * @return {string|number}
  */
-Blockly.Dart.getAdjusted = function(block, atId, opt_delta, opt_negate,
+Dart.getAdjusted = function(block, atId, opt_delta, opt_negate,
     opt_order) {
-  var delta = opt_delta || 0;
-  var order = opt_order || Blockly.Dart.ORDER_NONE;
+  let delta = opt_delta || 0;
+  let order = opt_order || this.ORDER_NONE;
   if (block.workspace.options.oneBasedIndex) {
     delta--;
   }
-  var defaultAtIndex = block.workspace.options.oneBasedIndex ? '1' : '0';
+  const defaultAtIndex = block.workspace.options.oneBasedIndex ? '1' : '0';
+
+  /** @type {number} */
+  let outerOrder;
+  let innerOrder;
   if (delta) {
-    var at = Blockly.Dart.valueToCode(block, atId,
-        Blockly.Dart.ORDER_ADDITIVE) || defaultAtIndex;
+    outerOrder = this.ORDER_ADDITIVE;
+    innerOrder = this.ORDER_ADDITIVE;
   } else if (opt_negate) {
-    var at = Blockly.Dart.valueToCode(block, atId,
-        Blockly.Dart.ORDER_UNARY_PREFIX) || defaultAtIndex;
+    outerOrder = this.ORDER_UNARY_PREFIX;
+    innerOrder = this.ORDER_UNARY_PREFIX;
   } else {
-    var at = Blockly.Dart.valueToCode(block, atId, order) ||
-        defaultAtIndex;
+    outerOrder = order;
   }
 
-  if (Blockly.isNumber(at)) {
+  /** @type {string|number} */
+  let at = this.valueToCode(block, atId, outerOrder) || defaultAtIndex;
+
+  if (stringUtils.isNumber(at)) {
     // If the index is a naked number, adjust it right now.
     at = parseInt(at, 10) + delta;
     if (opt_negate) {
@@ -274,10 +282,8 @@ Blockly.Dart.getAdjusted = function(block, atId, opt_delta, opt_negate,
     // If the index is dynamic, adjust it in code.
     if (delta > 0) {
       at = at + ' + ' + delta;
-      var innerOrder = Blockly.Dart.ORDER_ADDITIVE;
     } else if (delta < 0) {
       at = at + ' - ' + -delta;
-      var innerOrder = Blockly.Dart.ORDER_ADDITIVE;
     }
     if (opt_negate) {
       if (delta) {
@@ -285,7 +291,6 @@ Blockly.Dart.getAdjusted = function(block, atId, opt_delta, opt_negate,
       } else {
         at = '-' + at;
       }
-      var innerOrder = Blockly.Dart.ORDER_UNARY_PREFIX;
     }
     innerOrder = Math.floor(innerOrder);
     order = Math.floor(order);
@@ -295,3 +300,5 @@ Blockly.Dart.getAdjusted = function(block, atId, opt_delta, opt_negate,
   }
   return at;
 };
+
+exports = Dart;

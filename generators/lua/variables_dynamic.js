@@ -6,16 +6,16 @@
 
 /**
  * @fileoverview Generating Lua for dynamic variable blocks.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
-goog.provide('Blockly.Lua.variablesDynamic');
+goog.module('Blockly.Lua.variablesDynamic');
 
-goog.require('Blockly.Lua');
+const Lua = goog.require('Blockly.Lua');
+/** @suppress {extraRequire} */
 goog.require('Blockly.Lua.variables');
 
 
 // Lua is dynamically typed.
-Blockly.Lua['variables_get_dynamic'] = Blockly.Lua['variables_get'];
-Blockly.Lua['variables_set_dynamic'] = Blockly.Lua['variables_set'];
+Lua['variables_get_dynamic'] = Lua['variables_get'];
+Lua['variables_set_dynamic'] = Lua['variables_set'];

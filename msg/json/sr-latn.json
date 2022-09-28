@@ -78,19 +78,6 @@
 	"CONTROLS_IF_IF_TOOLTIP": "Dodaj, ukloni, ili preuredi delove kako bih rekonfigurisali ovaj if blok.",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Dodajte uslov bloku „ako“.",
 	"CONTROLS_IF_ELSE_TOOLTIP": "Dodaj konačni, catch-all  (uhvati sve) uslove if bloka.",
-	"IOS_OK": "U redu",
-	"IOS_CANCEL": "Otkaži",
-	"IOS_ERROR": "Greška",
-	"IOS_PROCEDURES_INPUTS": "UNOSI",
-	"IOS_PROCEDURES_ADD_INPUT": "+ Dodaj unos",
-	"IOS_PROCEDURES_ALLOW_STATEMENTS": "Dozvoli izjave",
-	"IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR": "Ova funkcija ima duplicirane unose.",
-	"IOS_VARIABLES_ADD_VARIABLE": "+ Dodaj varijablu",
-	"IOS_VARIABLES_ADD_BUTTON": "Dodaj",
-	"IOS_VARIABLES_RENAME_BUTTON": "Preimenuj",
-	"IOS_VARIABLES_DELETE_BUTTON": "Obriši",
-	"IOS_VARIABLES_VARIABLE_NAME": "Ime varijable",
-	"IOS_VARIABLES_EMPTY_NAME_ERROR": "Ne možete da koristite prazno ime varijable.",
 	"LOGIC_COMPARE_HELPURL": "https://sr.wikipedia.org/wiki/Nejednakost",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "Vraća vrednost „tačno“ ako su oba ulaza jednaka.",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "Vraća vrednost „tačno“ ako su oba ulaza nejednaka.",
@@ -353,5 +340,7 @@
 	"PROCEDURES_HIGHLIGHT_DEF": "Istakni definiciju funkcije",
 	"PROCEDURES_CREATE_DO": "Napravi „%1“",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Ukoliko je vrednost tačna, vrati drugu vrednost.",
-	"PROCEDURES_IFRETURN_WARNING": "Upozorenje: Ovaj blok se može koristiti jedino u definiciji funkcije."
+	"PROCEDURES_IFRETURN_WARNING": "Upozorenje: Ovaj blok se može koristiti jedino u definiciji funkcije.",
+	"DIALOG_OK": "U redu",
+	"DIALOG_CANCEL": "Otkaži"
 }

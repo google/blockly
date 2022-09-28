@@ -85,18 +85,6 @@
 	"CONTROLS_IF_IF_TOOLTIP": "Selle „kui“ ploki muutmine sektsioonide lisamise, eemaldamise ja järjestamisega.",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Lisab „kui“ plokile tingimuse.",
 	"CONTROLS_IF_ELSE_TOOLTIP": "Lisab „kui“ plokile lõpliku tingimuseta koodiploki.",
-	"IOS_OK": "OK",
-	"IOS_CANCEL": "Tühista",
-	"IOS_ERROR": "Viga",
-	"IOS_PROCEDURES_INPUTS": "SISEND",
-	"IOS_PROCEDURES_ADD_INPUT": "+ Lisa sisend",
-	"IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR": "Sellel funktsioonil on dubleerivad sisendid.",
-	"IOS_VARIABLES_ADD_VARIABLE": "+ Lisa muutuja",
-	"IOS_VARIABLES_ADD_BUTTON": "Lisa",
-	"IOS_VARIABLES_RENAME_BUTTON": "Nimeta ümber",
-	"IOS_VARIABLES_DELETE_BUTTON": "Kustuta",
-	"IOS_VARIABLES_VARIABLE_NAME": "Muutuja nimi",
-	"IOS_VARIABLES_EMPTY_NAME_ERROR": "Tühja muutuja nime ei saa kasutada.",
 	"LOGIC_COMPARE_HELPURL": "https://en.wikipedia.org/wiki/Inequality_(mathematics)",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "Tagastab „tõene“, kui avaldiste väärtused on võrdsed.",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "Tagastab „tõene“, kui avaldiste väärtused pole võrdsed.",
@@ -344,5 +332,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "Hoiatus: Seda plokki saab kasutada ainult funktsiooni definitsioonis.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Ütle midagi...",
 	"WORKSPACE_ARIA_LABEL": "Blockly tööruum",
-	"COLLAPSED_WARNINGS_WARNING": "Kokkuvajunud plokid sisaldavad hoiatusi."
+	"COLLAPSED_WARNINGS_WARNING": "Kokkuvajunud plokid sisaldavad hoiatusi.",
+	"DIALOG_OK": "Sobib",
+	"DIALOG_CANCEL": "Loobu"
 }

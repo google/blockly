@@ -2,6 +2,7 @@
 	"@metadata": {
 		"authors": [
 			"Aursani",
+			"Charan",
 			"Indus Asia",
 			"Mehtab ahmed",
 			"Tweety"
@@ -13,12 +14,12 @@
 	"ADD_COMMENT": "رايو ڏيو",
 	"REMOVE_COMMENT": "رايو ڊاهيو",
 	"DUPLICATE_COMMENT": "نقل رايو",
-	"EXTERNAL_INPUTS": "ٻاهرين داخلائون",
+	"EXTERNAL_INPUTS": "ٻاهريون داخلائون",
 	"INLINE_INPUTS": "اِنلائين اِن پٽس",
 	"DELETE_BLOCK": "بلاڪ ڊاهيو",
 	"DELETE_X_BLOCKS": "1٪ بلاڪ ڊاهيو",
 	"DELETE_ALL_BLOCKS": "سڀ %1 بلاڪ ڊاھيون؟",
-	"CLEAN_UP": "بندشون هٽايو",
+	"CLEAN_UP": "بلاڪ صاف ڪيو",
 	"COLLAPSE_BLOCK": "بلاڪ ڍڪيو",
 	"COLLAPSE_ALL": "بلاڪَ ڍڪيو",
 	"EXPAND_BLOCK": "بلاڪ نمايو",
@@ -26,7 +27,7 @@
 	"DISABLE_BLOCK": "بلاڪ کي غيرفعال بڻايو",
 	"ENABLE_BLOCK": "بلاڪ کي فعال بڻايو",
 	"HELP": "مدد",
-	"UNDO": "ڊاهيو",
+	"UNDO": "اڻڪريو",
 	"REDO": "ٻيهر ڪريو",
 	"CHANGE_VALUE_TITLE": "قدر بدلايو",
 	"RENAME_VARIABLE": "ڦرڻي کي نئون نالو ڏيو...",
@@ -56,15 +57,6 @@
 	"CONTROLS_IF_MSG_IF": "جيڪڏهن",
 	"CONTROLS_IF_MSG_ELSEIF": "نہ تہ جي",
 	"CONTROLS_IF_MSG_ELSE": "نہ تہ",
-	"IOS_OK": "ٺيڪ (او ڪي) آهي",
-	"IOS_CANCEL": "رد",
-	"IOS_ERROR": "چُڪَ",
-	"IOS_PROCEDURES_INPUTS": "داخلائون (اِن پٽس)",
-	"IOS_VARIABLES_ADD_VARIABLE": "تبديل ٿيندڙ (ويريئيبل) وجهو",
-	"IOS_VARIABLES_ADD_BUTTON": "شامل ڪيو",
-	"IOS_VARIABLES_RENAME_BUTTON": "ٻيهر نالو ڏيو",
-	"IOS_VARIABLES_DELETE_BUTTON": "ڊاهيو",
-	"IOS_VARIABLES_VARIABLE_NAME": "تبيديل ٿيندڙ (ويريئيبل) جو نالو",
 	"LOGIC_COMPARE_HELPURL": "https://en.wikipedia.org/wiki/Inequality_(mathematics)",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "جيڪڏهن ٻئي ان پُٽس برابر آهن تہ درست وراڻيو",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "جيڪڏهن ٻئي ان پُٽس اڻ برابر آهن تہ درست وراڻيو",
@@ -154,5 +146,7 @@
 	"PROCEDURES_CALL_BEFORE_PARAMS": "سان:",
 	"PROCEDURES_DEFRETURN_RETURN": "واپس ورو",
 	"PROCEDURES_MUTATORCONTAINER_TITLE": "ان پُٽس",
-	"PROCEDURES_CREATE_DO": "تخليق ڪريو '%1'"
+	"PROCEDURES_CREATE_DO": "تخليق ڪريو '%1'",
+	"DIALOG_OK": "ٺيڪ",
+	"DIALOG_CANCEL": "رد"
 }

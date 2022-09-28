@@ -398,12 +398,16 @@ def test_number_properties():
   assertEquals(42 % 2 == 0, True, 'even')
   assertEquals(42.1 % 2 == 1, False, 'odd')
   assertEquals(math_isPrime(5), True, 'prime 5')
+  assertEquals(math_isPrime(5 + 2), True, 'prime 5 + 2 (extra parentheses)')
   assertEquals(math_isPrime(25), False, 'prime 25')
   assertEquals(math_isPrime(-31.1), False, 'prime negative')
   assertEquals(math.pi % 1 == 0, False, 'whole')
   assertEquals(float('inf') > 0, True, 'positive')
+  assertEquals(5 + 2 > 0, True, '5 + 2 is positive (extra parentheses)')
   assertEquals(-42 < 0, True, 'negative')
+  assertEquals(3 + 2 < 0, False, '3 + 2 is negative (extra parentheses)')
   assertEquals(42 % 2 == 0, True, 'divisible')
+  assertEquals(not False, True, 'divisible by 0')
 
 # Tests the "round" block.
 def test_round():
@@ -595,7 +599,7 @@ def test_find_text_complex():
 
 def text_random_letter(text):
   x = int(random.random() * len(text))
-  return text[x];
+  return text[x]
 
 # Tests the "get letter" block with a variable.
 def test_get_text_simple():

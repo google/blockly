@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"Chaduvari",
 			"Naidugari Jayanna",
 			"Veeven",
 			"WP MANIKHANTA"
@@ -80,7 +81,7 @@
 	"LISTS_CREATE_WITH_CONTAINER_TITLE_ADD": "జాబితా",
 	"LISTS_INLIST": "జాబితాలో",
 	"LISTS_GET_INDEX_GET": "పొందు",
-	"LISTS_GET_INDEX_GET_REMOVE": "పొందు మరియు తొలగించు",
+	"LISTS_GET_INDEX_GET_REMOVE": "తెచ్చుకుని, తీసెయ్యి",
 	"LISTS_GET_INDEX_REMOVE": "తొలగించు",
 	"LISTS_GET_INDEX_FROM_END": "#చివరి నుండి",
 	"LISTS_GET_INDEX_FIRST": "మొదటి",
@@ -94,5 +95,7 @@
 	"PROCEDURES_DEFNORETURN_PROCEDURE": "ఏదో ఒకటి చేయి",
 	"PROCEDURES_BEFORE_PARAMS": "తో:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "తో:",
-	"PROCEDURES_DEFRETURN_RETURN": "తిరిగి వెళ్ళు"
+	"PROCEDURES_DEFRETURN_RETURN": "తిరిగి వెళ్ళు",
+	"DIALOG_OK": "సరే",
+	"DIALOG_CANCEL": "రద్దు"
 }

@@ -4,10 +4,12 @@
 			"AZISS",
 			"Adil",
 			"Cekli829",
-			"Masalli qasimli"
+			"Masalli qasimli",
+			"Şeyx Şamil"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "element",
+	"UNNAMED_KEY": "adsız",
 	"TODAY": "Bugün",
 	"DUPLICATE_BLOCK": "Dublikat",
 	"ADD_COMMENT": "Şərh əlavə et",
@@ -85,19 +87,6 @@
 	"CONTROLS_IF_IF_TOOLTIP": "Bu \"əgər\" blokunu dəyişdirmək üçün bölümlərin yenisini əlavə et, sil və ya yerini dəyiş.",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "\"Əgər\" blokuna bir şərt əlavə et.",
 	"CONTROLS_IF_ELSE_TOOLTIP": "\"Əgər\" blokuna qalan bütün halları əhatə edəb son bir şərt əlavə et.",
-	"IOS_OK": "OK",
-	"IOS_CANCEL": "Ləğv et",
-	"IOS_ERROR": "Xəta",
-	"IOS_PROCEDURES_INPUTS": "GİRİŞ",
-	"IOS_PROCEDURES_ADD_INPUT": "+ Giriş əlavə et",
-	"IOS_PROCEDURES_ALLOW_STATEMENTS": "Operatorlara icazə",
-	"IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR": "Bu funksiyada təkrarlanan giriş dəyişənləri vardır.",
-	"IOS_VARIABLES_ADD_VARIABLE": "+ Dəyişən əlavə et",
-	"IOS_VARIABLES_ADD_BUTTON": "Əlavə et",
-	"IOS_VARIABLES_RENAME_BUTTON": "Adını dəyiş",
-	"IOS_VARIABLES_DELETE_BUTTON": "Sil",
-	"IOS_VARIABLES_VARIABLE_NAME": "Dəyişənin adı",
-	"IOS_VARIABLES_EMPTY_NAME_ERROR": "Adsız dəyişən istifadə edə bilməzsiniz.",
 	"LOGIC_COMPARE_HELPURL": "https://az.wikipedia.org/wiki/bərabərsizlik_(riyazi)",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "Girişlər bir birinə bərabərdirsə \"doğru\" cavabını qaytarır.",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "Girişlər bərabər deyillərsə \"doğru\" cavabını qaytarır.",
@@ -118,7 +107,7 @@
 	"LOGIC_NULL_TOOLTIP": "Boş cavab qaytarır.",
 	"LOGIC_TERNARY_CONDITION": "test",
 	"LOGIC_TERNARY_IF_TRUE": "əgər doğrudursa",
-	"LOGIC_TERNARY_IF_FALSE": "əgər səhfdirsə",
+	"LOGIC_TERNARY_IF_FALSE": "əgər səhvdirsə",
 	"LOGIC_TERNARY_TOOLTIP": "'Yoxla' əmrindəki şərtə nəzər yetirin. Əgər şərt \"doğru\"-dursa \"əgər doğru\", əks halda isə \"əgər yalan\" cavabını qaytarır.",
 	"MATH_NUMBER_HELPURL": "https://az.wikipedia.org/wiki/Ədəd",
 	"MATH_NUMBER_TOOLTIP": "Ədəd.",
@@ -354,5 +343,7 @@
 	"PROCEDURES_CREATE_DO": "'%1' yarat",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Əgər bir dəyər \"doğru\"-dursa onda ikinci dəyəri qaytar.",
 	"PROCEDURES_IFRETURN_WARNING": "Xəbərdarlıq: Bu blok ancaq bir funksiyanın təyinatı daxilində işlədilə bilər.",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Buraya nə isə yaz..."
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Buraya nə isə yaz...",
+	"DIALOG_OK": "TAMAM",
+	"DIALOG_CANCEL": "Ləğv et"
 }

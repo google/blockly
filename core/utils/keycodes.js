@@ -8,11 +8,16 @@
  * @fileoverview Constant declarations for common key codes.
  * These methods are not specific to Blockly, and could be factored out into
  * a JavaScript framework such as Closure.
- * @author samelh@google.com (Sam El-Husseini)
  */
 'use strict';
 
-goog.provide('Blockly.utils.KeyCodes');
+/**
+ * Constant declarations for common key codes.
+ * These methods are not specific to Blockly, and could be factored out into
+ * a JavaScript framework such as Closure.
+ * @namespace Blockly.utils.KeyCodes
+ */
+goog.module('Blockly.utils.KeyCodes');
 
 
 /**
@@ -24,8 +29,9 @@ goog.provide('Blockly.utils.KeyCodes');
  * correct for non US keyboard layouts. See comments below.
  *
  * @enum {number}
+ * @alias Blockly.utils.KeyCodes
  */
-Blockly.utils.KeyCodes = {
+const KeyCodes = {
   WIN_KEY_FF_LINUX: 0,
   MAC_ENTER: 3,
   BACKSPACE: 8,
@@ -160,5 +166,7 @@ Blockly.utils.KeyCodes = {
   // they're all using Dell Inspiron laptops, so we suspect that this
   // indicates a hardware/bios problem.
   // http://en.community.dell.com/support-forums/laptop/f/3518/p/19285957/19523128.aspx
-  PHANTOM: 255
+  PHANTOM: 255,
 };
+
+exports.KeyCodes = KeyCodes;

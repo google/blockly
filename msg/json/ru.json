@@ -15,6 +15,7 @@
 			"Silovan",
 			"SimondR",
 			"Teretalexev",
+			"Thothsum",
 			"Vlad5250"
 		]
 	},
@@ -30,7 +31,7 @@
 	"DELETE_BLOCK": "Удалить блок",
 	"DELETE_X_BLOCKS": "Удалить %1 блоков",
 	"DELETE_ALL_BLOCKS": "Удалить все блоки (%1)?",
-	"CLEAN_UP": "Убрать блоки",
+	"CLEAN_UP": "Очистить блоки",
 	"COLLAPSE_BLOCK": "Свернуть блок",
 	"COLLAPSE_ALL": "Свернуть блоки",
 	"EXPAND_BLOCK": "Развернуть блок",
@@ -95,19 +96,6 @@
 	"CONTROLS_IF_IF_TOOLTIP": "Добавьте, удалите, переставьте фрагменты для переделки блока \"если\".",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Добавляет условие к блоку \"если\"",
 	"CONTROLS_IF_ELSE_TOOLTIP": "Добавить заключительный подблок для случая, когда все условия ложны.",
-	"IOS_OK": "OK",
-	"IOS_CANCEL": "Отмена",
-	"IOS_ERROR": "Ошибка",
-	"IOS_PROCEDURES_INPUTS": "ВХОД",
-	"IOS_PROCEDURES_ADD_INPUT": "+ Добавить входную переменную",
-	"IOS_PROCEDURES_ALLOW_STATEMENTS": "Разрешить операторы",
-	"IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR": "У этой функции есть дублирующиеся входные переменные.",
-	"IOS_VARIABLES_ADD_VARIABLE": "+ Добавить переменную",
-	"IOS_VARIABLES_ADD_BUTTON": "Добавить",
-	"IOS_VARIABLES_RENAME_BUTTON": "Переименовать",
-	"IOS_VARIABLES_DELETE_BUTTON": "Удалить",
-	"IOS_VARIABLES_VARIABLE_NAME": "Имя переменной",
-	"IOS_VARIABLES_EMPTY_NAME_ERROR": "Вы не можете использовать пустое имя переменной.",
 	"LOGIC_COMPARE_HELPURL": "https://ru.wikipedia.org/wiki/Неравенство",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "Возвращает положительное значение, если вводы равны.",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "Возвращает положительное значение, если вводы не равны.",
@@ -364,5 +352,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "Предупреждение: Этот блок может использоваться только внутри определения функции.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Напишите здесь что-нибудь...",
 	"WORKSPACE_ARIA_LABEL": "Рабочая область Blockly",
-	"COLLAPSED_WARNINGS_WARNING": "Свёрнутые блоки содержат предупреждения."
+	"COLLAPSED_WARNINGS_WARNING": "Свёрнутые блоки содержат предупреждения.",
+	"DIALOG_OK": "OK",
+	"DIALOG_CANCEL": "Отмена"
 }

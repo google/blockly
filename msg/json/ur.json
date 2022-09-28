@@ -115,5 +115,7 @@
 	"PROCEDURES_CALL_BEFORE_PARAMS": "سمیت:",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "بغیر آوٹ پٹ کا فنکشن بنائیں",
 	"PROCEDURES_DEFRETURN_RETURN": "واپس آ جائیں",
-	"PROCEDURES_DEFRETURN_TOOLTIP": "بغیر آوٹ پٹ کا فنکشن بنائیں"
+	"PROCEDURES_DEFRETURN_TOOLTIP": "بغیر آوٹ پٹ کا فنکشن بنائیں",
+	"DIALOG_OK": "ٹھیک ہے",
+	"DIALOG_CANCEL": "منسوخ"
 }

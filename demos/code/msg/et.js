@@ -19,6 +19,6 @@ var MSG = {
   httpRequestError: "Probleem päringuga.",
   linkAlert: "Oma plokke saad jagada selle lingiga:\n\n%1",
   hashError: "Vabandust, kuid '%1' ei vasta ühelegi salvestatud programmile.",
-  xmlError: "Su salvestatud faili ei õnnestunud laadida. Võibolla on see loodud mõne teise Blockly versiooniga?",
-  badXml: "Viga XML-i parsimisel:\n%1\n\nTehtud muudatustest loobumiseks vajuta 'OK', XML-i muudatuste tegemise jätkamiseks 'Katkesta'."
+  loadError: "Su salvestatud faili ei õnnestunud laadida. Võibolla on see loodud mõne teise Blockly versiooniga?",
+  parseError: "Viga %1-i parsimisel:\n%2\n\nTehtud muudatustest loobumiseks vajuta 'OK', %1-i muudatuste tegemise jätkamiseks 'Katkesta'."
 };

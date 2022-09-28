@@ -32,22 +32,30 @@ async function runLangGeneratorInBrowser(browser, filename, codegenFn) {
 }
 
 /**
- * Runs the generator tests in Firefox. It uses webdriverio to
- * launch Firefox and load index.html. Outputs a summary of the test results
+ * Runs the generator tests in Chrome. It uses webdriverio to
+ * launch Chrome and load index.html. Outputs a summary of the test results
  * to the console and outputs files for later validation.
  * @return the Thenable managing the processing of the browser tests.
  */
 async function runGeneratorsInBrowser() {
   var options = {
     capabilities: {
-      browserName: 'firefox'
+      browserName: 'chrome',
     },
-    path: '/wd/hub'
+    logLevel: 'warn',
+    services: ['selenium-standalone']
   };
   // Run in headless mode on Github Actions.
   if (process.env.CI) {
-    options.capabilities['moz:firefoxOptions'] = {
-      args: ['-headless']
+    options.capabilities['goog:chromeOptions'] = {
+      args: ['--headless', '--no-sandbox', '--disable-dev-shm-usage', '--allow-file-access-from-files']
+    };
+  } else {
+    // --disable-gpu is needed to prevent Chrome from hanging on Linux with
+    // NVIDIA drivers older than v295.20. See 
+    // https://github.com/google/blockly/issues/5345 for details.   
+    options.capabilities['goog:chromeOptions'] = {
+      args: ['--allow-file-access-from-files', '--disable-gpu']
     };
   }
 

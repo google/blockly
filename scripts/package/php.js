@@ -5,10 +5,5 @@
  */
 
 /**
- * @fileoverview PHP Generator module.
+ * @fileoverview PHP generator module; just a wrapper for php_compressed.js.
  */
-
-/* eslint-disable */
-'use strict';
-
-Blockly.PHP = BlocklyPHP;

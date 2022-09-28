@@ -2,6 +2,8 @@
 
 'use strict';
 
+var Blockly = Blockly || { Msg: Object.create(null) };
+
 Blockly.Msg["ADD_COMMENT"] = "افزودن نظر";
 Blockly.Msg["ARD_ANALOGWRITE"] = "Set PWM pin";  // untranslated
 Blockly.Msg["ARD_DIGITALWRITE"] = "Set digital pin";  // untranslated
@@ -44,11 +46,9 @@ Blockly.Msg["CONTROLS_FLOW_STATEMENTS_TOOLTIP_BREAK"] = "شکستن حلقهٔ �
 Blockly.Msg["CONTROLS_FLOW_STATEMENTS_TOOLTIP_CONTINUE"] = "پریدن از بقیهٔ حلقه و ادامه با تکرار بعدی.";
 Blockly.Msg["CONTROLS_FLOW_STATEMENTS_WARNING"] = "اخطار: این بلوک ممکن است فقط داخل یک حلقه استفاده شود.";
 Blockly.Msg["CONTROLS_FOREACH_HELPURL"] = "https://github.com/google/blockly/wiki/Loops#for-each";  // untranslated
-Blockly.Msg["CONTROLS_FOREACH_INPUT_DO"] = "";  // untranslated
 Blockly.Msg["CONTROLS_FOREACH_TITLE"] = "برای هر مورد %1 در فهرست %2";
 Blockly.Msg["CONTROLS_FOREACH_TOOLTIP"] = "برای هر مورد در این فهرست، تنظیم متغیر «%1» به مورد و انجام تعدادی عبارت.";
 Blockly.Msg["CONTROLS_FOR_HELPURL"] = "https://github.com/google/blockly/wiki/Loops#count-with";  // untranslated
-Blockly.Msg["CONTROLS_FOR_INPUT_DO"] = "";  // untranslated
 Blockly.Msg["CONTROLS_FOR_TITLE"] = "با تعداد %1 از %2 به %3 با گام‌های %4";
 Blockly.Msg["CONTROLS_FOR_TOOLTIP"] = "متغیر %1 را در مقادیر شروع‌شده از عدد انتهای  به عدد انتهایی را دارد، با فواصل مشخص‌شده می‌شمارد و این بلوک مشخص‌شده را انجام می‌دهد.";
 Blockly.Msg["CONTROLS_IF_ELSEIF_TOOLTIP"] = "افزودن یک شرط به بلوک اگر.";
@@ -58,18 +58,16 @@ Blockly.Msg["CONTROLS_IF_IF_TOOLTIP"] = "افزودن، حذف یا بازمرت
 Blockly.Msg["CONTROLS_IF_MSG_ELSE"] = "درغیر اینصورت";
 Blockly.Msg["CONTROLS_IF_MSG_ELSEIF"] = "درغیر اینصورت اگر";
 Blockly.Msg["CONTROLS_IF_MSG_IF"] = "اگر";
-Blockly.Msg["CONTROLS_IF_MSG_THEN"] = "then";  // untranslated
 Blockly.Msg["CONTROLS_IF_TOOLTIP_1"] = "اگر یک مقدار صحیح است، سپس چند عبارت را انجام بده.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_2"] = "اگر یک مقدار صحیح است، اول بلوک اول عبارات را انجام بده.  در غیر این صورت بلوک دوم عبارات انجام بده.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_3"] = "اگر مقدار اول صحیح بود، از آن بلوک اول عبارات را انجام بده.  در غیر این صورت، اگر مقدار دوم صحیح است، بلوک دوم عبارات را انجام بده.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_4"] = "اگر مقدار اول درست است، بلوک اول عبارات را انجام بده.  در غیر این صورت، اگر مقدار دوم درست باشد بلوک دوم عبارات را انجام بده.  اگر هیچ از مقادیر درست نبود، آخرین بلوک عبارات را انجام بده.";
 Blockly.Msg["CONTROLS_REPEAT_FOREVER_TITLE"] = "repeat forever";  // untranslated
-Blockly.Msg["CONTROLS_REPEAT_HELPURL"] = "https://fa.wikipedia.org/wiki/%D8%AD%D9%84%D9%82%D9%87_%D9%81%D9%88%D8%B1";
+Blockly.Msg["CONTROLS_REPEAT_HELPURL"] = "https://fa.wikipedia.org/wiki/حلقه_فور";
 Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"] = "انجام";
 Blockly.Msg["CONTROLS_REPEAT_TITLE"] = "%1 بار تکرار";
 Blockly.Msg["CONTROLS_REPEAT_TOOLTIP"] = "انجام چند عبارت چندین بار.";
 Blockly.Msg["CONTROLS_WHILEUNTIL_HELPURL"] = "https://github.com/google/blockly/wiki/Loops#repeat";  // untranslated
-Blockly.Msg["CONTROLS_WHILEUNTIL_INPUT_DO"] = "";  // untranslated
 Blockly.Msg["CONTROLS_WHILEUNTIL_OPERATOR_UNTIL"] = "تکرار تا زمانی که";
 Blockly.Msg["CONTROLS_WHILEUNTIL_OPERATOR_WHILE"] = "تکرار در حالی که";
 Blockly.Msg["CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL"] = "تا زمانی که یک مقدار ناصحیح است، چند عبارت را انجام بده.";
@@ -79,28 +77,17 @@ Blockly.Msg["DELETE_BLOCK"] = "حذف بلوک";
 Blockly.Msg["DELETE_VARIABLE"] = "متغیر '%1'را پاک کنید";
 Blockly.Msg["DELETE_VARIABLE_CONFIRMATION"] = "تعداد %1 استفاده از متغیر '%2' پاک شود؟";
 Blockly.Msg["DELETE_X_BLOCKS"] = "حذف بلوک‌های %1";
+Blockly.Msg["DIALOG_CANCEL"] = "لغو";
+Blockly.Msg["DIALOG_OK"] = "تأیید";
 Blockly.Msg["DISABLE_BLOCK"] = "غیرفعال‌سازی بلوک";
 Blockly.Msg["DUPLICATE_BLOCK"] = "تکراری";
-Blockly.Msg["DUPLICATE_COMMENT"] = "Duplicate Comment";  // untranslated
+Blockly.Msg["DUPLICATE_COMMENT"] = "دیدگاه تکراری";
 Blockly.Msg["ENABLE_BLOCK"] = "فعال‌سازی بلوک";
 Blockly.Msg["EXPAND_ALL"] = "گسترش بلوک‌ها";
 Blockly.Msg["EXPAND_BLOCK"] = "گسترش بلوک";
 Blockly.Msg["EXTERNAL_INPUTS"] = "ورودی‌های خارجی";
 Blockly.Msg["HELP"] = "راهنما";
 Blockly.Msg["INLINE_INPUTS"] = "ورودی‌های درون خطی";
-Blockly.Msg["IOS_CANCEL"] = "لغو";
-Blockly.Msg["IOS_ERROR"] = "خطا";
-Blockly.Msg["IOS_OK"] = "تأیید";
-Blockly.Msg["IOS_PROCEDURES_ADD_INPUT"] = "+ افزودن ورودی";
-Blockly.Msg["IOS_PROCEDURES_ALLOW_STATEMENTS"] = "اجازه اظهارات";
-Blockly.Msg["IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR"] = "این تابع دارای ورودی‌های تکراری است.";
-Blockly.Msg["IOS_PROCEDURES_INPUTS"] = "ورودی‌ها";
-Blockly.Msg["IOS_VARIABLES_ADD_BUTTON"] = "افزودن";
-Blockly.Msg["IOS_VARIABLES_ADD_VARIABLE"] = "+ افزودن متغیر";
-Blockly.Msg["IOS_VARIABLES_DELETE_BUTTON"] = "حذف";
-Blockly.Msg["IOS_VARIABLES_EMPTY_NAME_ERROR"] = "نام متغیر نمی‌تواند خالی باشد";
-Blockly.Msg["IOS_VARIABLES_RENAME_BUTTON"] = "تغییر نام";
-Blockly.Msg["IOS_VARIABLES_VARIABLE_NAME"] = "نام متغیر";
 Blockly.Msg["LEAPHY_ANALOG_READ"] = "Read anapin";  // untranslated
 Blockly.Msg["LEAPHY_BUZZ_BUZZ"] = "Buzz";  // untranslated
 Blockly.Msg["LEAPHY_BUZZ_HERTZ"] = "Hertz";  // untranslated
@@ -285,7 +272,7 @@ Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_DIVIDE"] = "بازگرداندن باقی�
 Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_MINUS"] = "بازگرداندن تفاوت دو عدد.";
 Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_MULTIPLY"] = "بازگرداندن حاصلضرب دو عدد.";
 Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_POWER"] = "بازگرداندن اولین عددی که از توان عدد دوم حاصل شده باشد.";
-Blockly.Msg["MATH_ATAN2_HELPURL"] = "https://en.wikipedia.org/wiki/Atan2";  // untranslated
+Blockly.Msg["MATH_ATAN2_HELPURL"] = "https://en.wikipedia.org/wiki/Atan2";
 Blockly.Msg["MATH_ATAN2_TITLE"] = "atan2 of X:%1 Y:%2";  // untranslated
 Blockly.Msg["MATH_ATAN2_TOOLTIP"] = "Return the arctangent of point (X, Y) in degrees from -180 to 180.";  // untranslated
 Blockly.Msg["MATH_CHANGE_HELPURL"] = "https://fa.wikipedia.org/wiki/%D8%A7%D8%B5%D8%B7%D9%84%D8%A7%D8%AD_%D8%A8%D8%B1%D9%86%D8%A7%D9%85%D9%87%E2%80%8C%D9%86%D9%88%DB%8C%D8%B3%DB%8C#.D8.A7.D9.81.D8.B2.D8.A7.DB.8C.D8.B4_.D8.B4.D9.85.D8.A7.D8.B1.D9.86.D8.AF.D9.87";
@@ -387,7 +374,6 @@ Blockly.Msg["PROCEDURES_DEFNORETURN_TITLE"] = "به";
 Blockly.Msg["PROCEDURES_DEFNORETURN_TOOLTIP"] = "تابعی می‌سازد بدون هیچ خروجی.";
 Blockly.Msg["PROCEDURES_DEFRETURN_HELPURL"] = "https://en.wikipedia.org/wiki/Subroutine";  // untranslated
 Blockly.Msg["PROCEDURES_DEFRETURN_RETURN"] = "بازگشت";
-Blockly.Msg["PROCEDURES_DEFRETURN_TITLE"] = "Subprogram";  // untranslated
 Blockly.Msg["PROCEDURES_DEFRETURN_TOOLTIP"] = "تابعی با یک خروجی می‌سازد.";
 Blockly.Msg["PROCEDURES_DEF_DUPLICATE_WARNING"] = "اخطار: این تابعی پارامتر تکراری دارد.";
 Blockly.Msg["PROCEDURES_HIGHLIGHT_DEF"] = "برجسته‌سازی تعریف تابع";
@@ -485,9 +471,13 @@ Blockly.Msg["VARIABLE_ALREADY_EXISTS"] = "متغیری با نام '%1' هم ا�
 Blockly.Msg["VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE"] = "در حال حاضر یک متغیر با نام '%1' برای متغیر دیگری از نوع '%2' وجود دارد.";
 Blockly.Msg["WORKSPACE_ARIA_LABEL"] = "Blockly Workspace";  // untranslated
 Blockly.Msg["WORKSPACE_COMMENT_DEFAULT_TEXT"] = "یک چیزی بگو...";
+Blockly.Msg["CONTROLS_FOREACH_INPUT_DO"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];
+Blockly.Msg["CONTROLS_FOR_INPUT_DO"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];
 Blockly.Msg["CONTROLS_IF_ELSEIF_TITLE_ELSEIF"] = Blockly.Msg["CONTROLS_IF_MSG_ELSEIF"];
 Blockly.Msg["CONTROLS_IF_ELSE_TITLE_ELSE"] = Blockly.Msg["CONTROLS_IF_MSG_ELSE"];
 Blockly.Msg["CONTROLS_IF_IF_TITLE_IF"] = Blockly.Msg["CONTROLS_IF_MSG_IF"];
+Blockly.Msg["CONTROLS_IF_MSG_THEN"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];
+Blockly.Msg["CONTROLS_WHILEUNTIL_INPUT_DO"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];
 Blockly.Msg["LISTS_CREATE_WITH_ITEM_TITLE"] = Blockly.Msg["VARIABLES_DEFAULT_NAME"];
 Blockly.Msg["LISTS_GET_INDEX_HELPURL"] = Blockly.Msg["LISTS_INDEX_OF_HELPURL"];
 Blockly.Msg["LISTS_GET_INDEX_INPUT_IN_LIST"] = Blockly.Msg["LISTS_INLIST"];
@@ -498,6 +488,7 @@ Blockly.Msg["MATH_CHANGE_TITLE_ITEM"] = Blockly.Msg["VARIABLES_DEFAULT_NAME"];
 Blockly.Msg["PROCEDURES_DEFRETURN_COMMENT"] = Blockly.Msg["PROCEDURES_DEFNORETURN_COMMENT"];
 Blockly.Msg["PROCEDURES_DEFRETURN_DO"] = Blockly.Msg["PROCEDURES_DEFNORETURN_DO"];
 Blockly.Msg["PROCEDURES_DEFRETURN_PROCEDURE"] = Blockly.Msg["PROCEDURES_DEFNORETURN_PROCEDURE"];
+Blockly.Msg["PROCEDURES_DEFRETURN_TITLE"] = Blockly.Msg["PROCEDURES_DEFNORETURN_TITLE"];
 Blockly.Msg["TEXT_APPEND_VARIABLE"] = Blockly.Msg["VARIABLES_DEFAULT_NAME"];
 Blockly.Msg["TEXT_CREATE_JOIN_ITEM_TITLE_ITEM"] = Blockly.Msg["VARIABLES_DEFAULT_NAME"];
 

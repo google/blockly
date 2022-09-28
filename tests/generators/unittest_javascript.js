@@ -6,13 +6,12 @@
 
 /**
  * @fileoverview Generating JavaScript for unit test blocks.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
 Blockly.JavaScript['unittest_main'] = function(block) {
   // Container for unit tests.
-  var resultsVar = Blockly.JavaScript.variableDB_.getName('unittestResults',
+  var resultsVar = Blockly.JavaScript.nameDB_.getName('unittestResults',
       Blockly.Names.DEVELOPER_VARIABLE_TYPE);
   var functionName = Blockly.JavaScript.provideFunction_(
       'unittest_report',
@@ -62,7 +61,7 @@ Blockly.JavaScript['unittest_main'] = function(block) {
 };
 
 Blockly.JavaScript['unittest_main'].defineAssert_ = function(block) {
-  var resultsVar = Blockly.JavaScript.variableDB_.getName('unittestResults',
+  var resultsVar = Blockly.JavaScript.nameDB_.getName('unittestResults',
       Blockly.Names.DEVELOPER_VARIABLE_TYPE);
   var functionName = Blockly.JavaScript.provideFunction_(
       'assertEquals',
@@ -75,11 +74,11 @@ Blockly.JavaScript['unittest_main'].defineAssert_ = function(block) {
         '  function equals(a, b) {',
         '    if (a === b) {',
         '      return true;',
-        '    } else if ((typeof a == "number") && (typeof b == "number") &&',
+        '    } else if ((typeof a === "number") && (typeof b === "number") &&',
         '        (a.toPrecision(15) == b.toPrecision(15))) {',
         '      return true;',
         '    } else if (a instanceof Array && b instanceof Array) {',
-        '      if (a.length != b.length) {',
+        '      if (a.length !== b.length) {',
         '        return false;',
         '      }',
         '      for (var i = 0; i < a.length; i++) {',
@@ -120,11 +119,11 @@ Blockly.JavaScript['unittest_assertvalue'] = function(block) {
   var actual = Blockly.JavaScript.valueToCode(block, 'ACTUAL',
       Blockly.JavaScript.ORDER_NONE) || 'null';
   var expected = block.getFieldValue('EXPECTED');
-  if (expected == 'TRUE') {
+  if (expected === 'TRUE') {
     expected = 'true';
-  } else if (expected == 'FALSE') {
+  } else if (expected === 'FALSE') {
     expected = 'false';
-  } else if (expected == 'NULL') {
+  } else if (expected === 'NULL') {
     expected = 'null';
   }
   return Blockly.JavaScript['unittest_main'].defineAssert_() +
@@ -133,7 +132,7 @@ Blockly.JavaScript['unittest_assertvalue'] = function(block) {
 
 Blockly.JavaScript['unittest_fail'] = function(block) {
   // Always assert an error.
-  var resultsVar = Blockly.JavaScript.variableDB_.getName('unittestResults',
+  var resultsVar = Blockly.JavaScript.nameDB_.getName('unittestResults',
       Blockly.Names.DEVELOPER_VARIABLE_TYPE);
   var message = Blockly.JavaScript.quote_(block.getFieldValue('MESSAGE'));
   var functionName = Blockly.JavaScript.provideFunction_(

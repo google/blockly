@@ -1,0 +1,46 @@
+# This workflow updates the check_metadata.sh script, which compares the current
+# size of build artifacts against their size in the previous version of Blockly.
+
+name: Update Metadata
+
+on: [workflow_dispatch]
+
+permissions:
+  contents: read
+
+jobs:
+  update-metadata:
+    permissions:
+      contents: write  # for peter-evans/create-pull-request to create branch
+      pull-requests: write  # for peter-evans/create-pull-request to create a PR
+    runs-on: ubuntu-latest        
+
+    steps:
+    - name: Check Out Blockly
+      uses: actions/checkout@v2
+      with:
+        ref: 'develop'
+
+    - name: Use Node.js 16.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 16.x
+
+    - name: Build Blockly
+      run: npm run build:compressed
+
+    - name: Build Blockly blocks
+      run: npm run build:blocks
+
+    - name: Update Metadata
+      run: source ./tests/scripts/update_metadata.sh
+
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@9825ae65b1cb54b543b938503728b432a0176d29
+      with:
+        commit-message: Update build artifact sizes in check_metadata.sh
+        delete-branch: true
+        title: Update build artifact sizes in check_metadata.sh
+
+    - name: View Pull Request
+      run: echo "View Pull Request - ${{ steps.cpr.outputs.pull-request-url }}"

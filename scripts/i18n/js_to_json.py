@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 # Gives the translation status of the specified apps and languages.
 #
@@ -35,8 +35,6 @@ The file qqq.json would get:
     "Blockly.SOME_KEY", "Here is a description of the following message.",
 
 Commas would of course be omitted for the final entry of each value.
-
-@author Ellen Spertus (ellen.spertus@gmail.com)
 """
 
 import argparse

@@ -66,13 +66,6 @@
 	"CONTROLS_IF_MSG_IF": "თუ",
 	"CONTROLS_IF_MSG_ELSEIF": "შხვანერო თუ",
 	"CONTROLS_IF_MSG_ELSE": "შხვანერო",
-	"IOS_OK": "OK",
-	"IOS_CANCEL": "გოუქვაფა",
-	"IOS_ERROR": "ჩილათა",
-	"IOS_PROCEDURES_INPUTS": "მიშულა",
-	"IOS_VARIABLES_ADD_BUTTON": "გეძინა",
-	"IOS_VARIABLES_RENAME_BUTTON": "ჯოხოშ თირუა",
-	"IOS_VARIABLES_DELETE_BUTTON": "ლასუა",
 	"LOGIC_OPERATION_AND": "დო",
 	"LOGIC_OPERATION_OR": "ვარდა",
 	"LOGIC_BOOLEAN_TRUE": "ნანდული",
@@ -90,5 +83,6 @@
 	"MATH_IS_WHOLE": "ნთელი რე",
 	"MATH_IS_POSITIVE": "დადებითი რე",
 	"MATH_IS_NEGATIVE": "უარყოფითი რე",
-	"LISTS_ISEMPTY_TITLE": "%1 ცარიელი რე"
+	"LISTS_ISEMPTY_TITLE": "%1 ცარიელი რე",
+	"DIALOG_CANCEL": "გოუქვაფა"
 }

@@ -57,18 +57,6 @@
 	"CONTROLS_IF_MSG_IF": "se",
 	"CONTROLS_IF_MSG_ELSEIF": "mais se",
 	"CONTROLS_IF_MSG_ELSE": "senón",
-	"IOS_OK": "Feito",
-	"IOS_CANCEL": "Cancelar",
-	"IOS_ERROR": "Erro",
-	"IOS_PROCEDURES_INPUTS": "ENTRADAS",
-	"IOS_PROCEDURES_ADD_INPUT": "+ Engadir entrada",
-	"IOS_PROCEDURES_ALLOW_STATEMENTS": "Permitir declaracións",
-	"IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR": "Esta función ten entradas duplicadas.",
-	"IOS_VARIABLES_ADD_VARIABLE": "+ Engadir variábel",
-	"IOS_VARIABLES_ADD_BUTTON": "Engadir",
-	"IOS_VARIABLES_RENAME_BUTTON": "Renomear",
-	"IOS_VARIABLES_DELETE_BUTTON": "Eliminar",
-	"IOS_VARIABLES_VARIABLE_NAME": "Nome da variábel",
 	"LOGIC_OPERATION_AND": "e",
 	"LOGIC_OPERATION_OR": "ou",
 	"LOGIC_NEGATE_TITLE": "non %1",
@@ -153,5 +141,7 @@
 	"PROCEDURES_BEFORE_PARAMS": "con:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "con:",
 	"PROCEDURES_DEFRETURN_RETURN": "retornar",
-	"PROCEDURES_MUTATORCONTAINER_TITLE": "entradas"
+	"PROCEDURES_MUTATORCONTAINER_TITLE": "entradas",
+	"DIALOG_OK": "Aceptar",
+	"DIALOG_CANCEL": "Cancelar"
 }

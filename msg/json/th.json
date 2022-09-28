@@ -88,19 +88,6 @@
 	"CONTROLS_IF_IF_TOOLTIP": "เพิ่ม ลบ หรือจัดเรียงบล็อก \"ถ้า\" นี้ใหม่",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "กำหนดเงื่อนไขของบล็อก \"ถ้า\"",
 	"CONTROLS_IF_ELSE_TOOLTIP": "เพิ่มสิ่งสุดท้าย ที่จะตรวจจับความเป็นไปได้ทั้งหมดของบล็อก \"ถ้า\"",
-	"IOS_OK": "ตกลง",
-	"IOS_CANCEL": "ยกเลิก",
-	"IOS_ERROR": "ข้อผิดพลาด",
-	"IOS_PROCEDURES_INPUTS": "อินพุต",
-	"IOS_PROCEDURES_ADD_INPUT": "+ เพิ่มอินพุต",
-	"IOS_PROCEDURES_ALLOW_STATEMENTS": "อนุญาตคำสั่ง",
-	"IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR": "ฟังก์ชันนี้มีอินพุตที่ซ้ำกัน",
-	"IOS_VARIABLES_ADD_VARIABLE": "+ เพิ่มตัวแปร",
-	"IOS_VARIABLES_ADD_BUTTON": "เพิ่ม",
-	"IOS_VARIABLES_RENAME_BUTTON": "เปลี่ยนชื่อ",
-	"IOS_VARIABLES_DELETE_BUTTON": "ลบ",
-	"IOS_VARIABLES_VARIABLE_NAME": "ชื่อตัวแปร",
-	"IOS_VARIABLES_EMPTY_NAME_ERROR": "คุณไม่สามารถใช้ชื่อตัวแปรที่ว่างเปล่าได้",
 	"LOGIC_COMPARE_HELPURL": "https://th.wikipedia.org/wiki/อสมการ",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "คืนค่าเป็น \"จริง\" ถ้าค่าที่ใส่ทั้งสองค่านั้นเท่ากัน",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "คืนค่าเป็น \"จริง\" ถ้าค่าที่ใส่ทั้งสองค่านั้นไม่เท่ากัน",
@@ -348,5 +335,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "ระวัง: บล็อกนี้ใช้เฉพาะในการสร้างฟังก์ชันเท่านั้น",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "เขียนอะไรสักอย่าง",
 	"WORKSPACE_ARIA_LABEL": "พื้นที่ทำงาน Blockly",
-	"COLLAPSED_WARNINGS_WARNING": "บล็อกที่ถูกพับมีคำเตือนอยู่ข้างใน."
+	"COLLAPSED_WARNINGS_WARNING": "บล็อกที่ถูกพับมีคำเตือนอยู่ข้างใน.",
+	"DIALOG_OK": "ตกลง",
+	"DIALOG_CANCEL": "ยกเลิก"
 }

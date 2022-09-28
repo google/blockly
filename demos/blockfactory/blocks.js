@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview Blocks for Blockly's Block Factory application.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -95,21 +94,21 @@ Blockly.Blocks['factory_base'] = {
     var outputExists = this.getInput('OUTPUTTYPE');
     var topExists = this.getInput('TOPTYPE');
     var bottomExists = this.getInput('BOTTOMTYPE');
-    if (option == 'LEFT') {
+    if (option === 'LEFT') {
       if (!outputExists) {
         this.addTypeInput_('OUTPUTTYPE', 'output type');
       }
     } else if (outputExists) {
       this.removeInput('OUTPUTTYPE');
     }
-    if (option == 'TOP' || option == 'BOTH') {
+    if (option === 'TOP' || option === 'BOTH') {
       if (!topExists) {
         this.addTypeInput_('TOPTYPE', 'top type');
       }
     } else if (topExists) {
       this.removeInput('TOPTYPE');
     }
-    if (option == 'BOTTOM' || option == 'BOTH') {
+    if (option === 'BOTTOM' || option === 'BOTH') {
       if (!bottomExists) {
         this.addTypeInput_('BOTTOMTYPE', 'bottom type');
       }
@@ -352,7 +351,7 @@ Blockly.Blocks['field_dropdown'] = {
   domToMutation: function(container) {
     // Parse XML to restore the menu options.
     var value = JSON.parse(container.getAttribute('options'));
-    if (typeof value == 'number') {
+    if (typeof value === 'number') {
       // Old format from before images were added.  November 2016.
       this.optionList_ = [];
       for (var i = 0; i < value; i++) {
@@ -384,9 +383,9 @@ Blockly.Blocks['field_dropdown'] = {
     this.optionList_.length = 0;
     var data = [];
     while (optionBlock) {
-      if (optionBlock.type == 'field_dropdown_option_text') {
+      if (optionBlock.type === 'field_dropdown_option_text') {
         this.optionList_.push('text');
-      } else if (optionBlock.type == 'field_dropdown_option_image') {
+      } else if (optionBlock.type === 'field_dropdown_option_image') {
         this.optionList_.push('image');
       }
       data.push([optionBlock.userData_, optionBlock.cpuData_]);
@@ -398,7 +397,7 @@ Blockly.Blocks['field_dropdown'] = {
     for (var i = 0; i < this.optionList_.length; i++) {
       var userData = data[i][0];
       if (userData !== undefined) {
-        if (typeof userData == 'string') {
+        if (typeof userData === 'string') {
           this.setFieldValue(userData || 'option', 'USER' + i);
         } else {
           this.setFieldValue(userData.src, 'SRC' + i);
@@ -434,13 +433,13 @@ Blockly.Blocks['field_dropdown'] = {
     var src = 'https://www.gstatic.com/codesite/ph/images/star_on.gif';
     for (var i = 0; i <= this.optionList_.length; i++) {
       var type = this.optionList_[i];
-      if (type == 'text') {
+      if (type === 'text') {
         this.appendDummyInput('OPTION' + i)
             .appendField('•')
             .appendField(new Blockly.FieldTextInput('option'), 'USER' + i)
             .appendField(',')
             .appendField(new Blockly.FieldTextInput('OPTIONNAME'), 'CPU' + i);
-      } else if (type == 'image') {
+      } else if (type === 'image') {
         this.appendDummyInput('OPTION' + i)
             .appendField('•')
             .appendField('image')
@@ -466,10 +465,10 @@ Blockly.Blocks['field_dropdown'] = {
     }
   },
   getUserData: function(n) {
-    if (this.optionList_[n] == 'text') {
+    if (this.optionList_[n] === 'text') {
       return this.getFieldValue('USER' + n);
     }
-    if (this.optionList_[n] == 'image') {
+    if (this.optionList_[n] === 'image') {
       return {
         src: this.getFieldValue('SRC' + n),
         width: Number(this.getFieldValue('WIDTH' + n)),
@@ -633,7 +632,7 @@ Blockly.Blocks['type_group'] = {
     for (var i = 0; i < this.typeCount_; i++) {
       var input = this.appendValueInput('TYPE' + i)
                       .setCheck('Type');
-      if (i == 0) {
+      if (i === 0) {
         input.appendField('any of');
       }
     }
@@ -664,7 +663,7 @@ Blockly.Blocks['type_group'] = {
     // Disconnect any children that don't belong.
     for (var i = 0; i < this.typeCount_; i++) {
       var connection = this.getInput('TYPE' + i).connection.targetConnection;
-      if (connection && connections.indexOf(connection) == -1) {
+      if (connection && connections.indexOf(connection) === -1) {
         connection.disconnect();
       }
     }
@@ -693,7 +692,7 @@ Blockly.Blocks['type_group'] = {
     for (var i = 0; i < this.typeCount_; i++) {
       if (!this.getInput('TYPE' + i)) {
         var input = this.appendValueInput('TYPE' + i);
-        if (i == 0) {
+        if (i === 0) {
           input.appendField('any of');
         }
       }
@@ -863,7 +862,7 @@ function fieldNameCheck(referenceBlock) {
   for (var i = 0, block; block = blocks[i]; i++) {
     var otherName = block.getFieldValue('FIELDNAME');
     if (!block.disabled && !block.getInheritedDisabled() &&
-        otherName && otherName.toLowerCase() == name) {
+        otherName && otherName.toLowerCase() === name) {
       count++;
     }
   }
@@ -888,7 +887,7 @@ function inputNameCheck(referenceBlock) {
   for (var i = 0, block; block = blocks[i]; i++) {
     var otherName = block.getFieldValue('INPUTNAME');
     if (!block.disabled && !block.getInheritedDisabled() &&
-        otherName && otherName.toLowerCase() == name) {
+        otherName && otherName.toLowerCase() === name) {
       count++;
     }
   }

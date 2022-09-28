@@ -1,0 +1,30 @@
+{
+	"@metadata": {
+		"authors": [
+			"Markos"
+		]
+	},
+	"UNNAMED_KEY": "ያልተሰየመ",
+	"TODAY": "ዛሬ",
+	"DUPLICATE_BLOCK": "ቅጂ",
+	"ADD_COMMENT": "ማስታወሻ ያክሉ",
+	"REMOVE_COMMENT": "ማስታወሻ ያጥፉ",
+	"DUPLICATE_COMMENT": "ማስታወሻውን ይቅዱ",
+	"EXTERNAL_INPUTS": "የውጪ ግብዓቶች",
+	"INLINE_INPUTS": "የውስጥ ግብዓቶች",
+	"DELETE_BLOCK": "ብሎኩን ይሰርዙ",
+	"DELETE_X_BLOCKS": "%1 ብሎኮች ይሰርዙ",
+	"DELETE_ALL_BLOCKS": "%1 ያህል ብሎኮች ይሰረዙ？",
+	"CLEAN_UP": "ብሎኮቹን ይሰድሩ",
+	"COLLAPSE_BLOCK": "የብሎኩን መረጃ ያሳጥሩ",
+	"COLLAPSE_ALL": "የብሎኮቹን መረጃዎች ያሳጥሩ",
+	"EXPAND_BLOCK": "የብሎኩን መረጃ ዳግም ያስረዝሙ",
+	"EXPAND_ALL": "የብሎኮቹን መረጃዎች ዳግም ያስረዝሙ",
+	"DISABLE_BLOCK": "ብሎኩን ለጊዜው ያጥፉ",
+	"ENABLE_BLOCK": "ብሎኩን ደግመው ያስጀምሩ",
+	"HELP": "እገዛ",
+	"UNDO": "ይቀልብሱ",
+	"REDO": "ከእንደገና",
+	"DIALOG_OK": "እሺ",
+	"DIALOG_CANCEL": "ይቅር"
+}

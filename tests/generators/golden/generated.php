@@ -1,32 +1,3 @@
-$unittestResults;
-$test_name;
-$naked;
-$proc_x;
-$proc_y;
-$func_x;
-$func_y;
-$func_a;
-$n;
-$ok;
-$log;
-$count;
-$varToChange;
-$rand;
-$item;
-$text;
-$number_of_calls;
-$list2;
-$proc_z;
-$func_z;
-$x;
-$proc_w;
-$func_c;
-$if2;
-$i;
-$loglist;
-$changing_list;
-$list_copy;
-
 function unittest_report() {
   global $unittestResults;
   // Create test report.
@@ -473,12 +444,16 @@ function test_number_properties() {
   assertEquals(42 % 2 == 0, true, 'even');
   assertEquals(42.1 % 2 == 1, false, 'odd');
   assertEquals(math_isPrime(5), true, 'prime 5');
+  assertEquals(math_isPrime(5 + 2), true, 'prime 5 + 2 (extra parentheses)');
   assertEquals(math_isPrime(25), false, 'prime 25');
   assertEquals(math_isPrime(-31.1), false, 'prime negative');
   assertEquals(is_int(M_PI), false, 'whole');
   assertEquals(INF > 0, true, 'positive');
+  assertEquals(5 + 2 > 0, true, '5 + 2 is positive (extra parentheses)');
   assertEquals(-42 < 0, true, 'negative');
+  assertEquals(3 + 2 < 0, false, '3 + 2 is negative (extra parentheses)');
   assertEquals(42 % 2 == 0, true, 'divisible');
+  assertEquals(!false, true, 'divisible by 0');
 }
 
 // Tests the "round" block.
@@ -503,8 +478,8 @@ function math_mean($myList) {
 
 function math_median($arr) {
   sort($arr,SORT_NUMERIC);
-  return (count($arr) % 2) ? $arr[floor(count($arr)/2)] :
-      ($arr[floor(count($arr)/2)] + $arr[floor(count($arr)/2) - 1]) / 2;
+  return (count($arr) % 2) ? $arr[floor(count($arr) / 2)] :
+      ($arr[floor(count($arr) / 2)] + $arr[floor(count($arr) / 2) - 1]) / 2;
 }
 
 function math_modes($values) {
@@ -628,9 +603,8 @@ function test_empty_text() {
 function length($value) {
   if (is_string($value)) {
     return strlen($value);
-  } else {
-    return count($value);
   }
+  return count($value);
 }
 
 // Tests the "length" block.
@@ -1409,9 +1383,9 @@ function test_split() {
 
 function lists_sort($list, $type, $direction) {
   $sortCmpFuncs = array(
-    "NUMERIC" => "strnatcasecmp",
-    "TEXT" => "strcmp",
-    "IGNORE_CASE" => "strcasecmp"
+    'NUMERIC' => 'strnatcasecmp',
+    'TEXT' => 'strcmp',
+    'IGNORE_CASE' => 'strcasecmp'
   );
   $sortCmp = $sortCmpFuncs[$type];
   $list2 = $list;

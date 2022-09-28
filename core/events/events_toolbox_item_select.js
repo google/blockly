@@ -6,74 +6,79 @@
 
 /**
  * @fileoverview Events fired as a result of selecting an item on the toolbox.
- * @author kozbial@google.com (Monica Kozbial)
  */
 'use strict';
 
-goog.provide('Blockly.Events.ToolboxItemSelect');
+/**
+ * Events fired as a result of selecting an item on the toolbox.
+ * @class
+ */
+goog.module('Blockly.Events.ToolboxItemSelect');
 
-goog.require('Blockly.Events');
-goog.require('Blockly.Events.UiBase');
-goog.require('Blockly.registry');
-goog.require('Blockly.utils.object');
+const eventUtils = goog.require('Blockly.Events.utils');
+const registry = goog.require('Blockly.registry');
+const {UiBase} = goog.require('Blockly.Events.UiBase');
 
 
 /**
  * Class for a toolbox item select event.
- * @param {?string=} opt_oldItem The previously selected toolbox item. Undefined
- *    for a blank event.
- * @param {?string=} opt_newItem The newly selected toolbox item. Undefined for
- *    a blank event.
- * @param {string=} opt_workspaceId The workspace identifier for this event.
- *    Undefined for a blank event.
- * @extends {Blockly.Events.UiBase}
- * @constructor
+ * @extends {UiBase}
+ * @alias Blockly.Events.ToolboxItemSelect
  */
-Blockly.Events.ToolboxItemSelect = function(opt_oldItem, opt_newItem,
-    opt_workspaceId) {
-  Blockly.Events.ToolboxItemSelect.superClass_.constructor.call(
-      this, opt_workspaceId);
+class ToolboxItemSelect extends UiBase {
+  /**
+   * @param {?string=} opt_oldItem The previously selected toolbox item.
+   *     Undefined for a blank event.
+   * @param {?string=} opt_newItem The newly selected toolbox item. Undefined
+   *     for a blank event.
+   * @param {string=} opt_workspaceId The workspace identifier for this event.
+   *    Undefined for a blank event.
+   */
+  constructor(opt_oldItem, opt_newItem, opt_workspaceId) {
+    super(opt_workspaceId);
+
+    /**
+     * The previously selected toolbox item.
+     * @type {?string|undefined}
+     */
+    this.oldItem = opt_oldItem;
+
+    /**
+     * The newly selected toolbox item.
+     * @type {?string|undefined}
+     */
+    this.newItem = opt_newItem;
+
+    /**
+     * Type of this event.
+     * @type {string}
+     */
+    this.type = eventUtils.TOOLBOX_ITEM_SELECT;
+  }
 
   /**
-   * The previously selected toolbox item.
-   * @type {?string|undefined}
+   * Encode the event as JSON.
+   * @return {!Object} JSON representation.
    */
-  this.oldItem = opt_oldItem;
+  toJson() {
+    const json = super.toJson();
+    json['oldItem'] = this.oldItem;
+    json['newItem'] = this.newItem;
+    return json;
+  }
 
   /**
-   * The newly selected toolbox item.
-   * @type {?string|undefined}
+   * Decode the JSON event.
+   * @param {!Object} json JSON representation.
    */
-  this.newItem = opt_newItem;
-};
-Blockly.utils.object.inherits(Blockly.Events.ToolboxItemSelect, Blockly.Events.UiBase);
+  fromJson(json) {
+    super.fromJson(json);
+    this.oldItem = json['oldItem'];
+    this.newItem = json['newItem'];
+  }
+}
 
-/**
- * Type of this event.
- * @type {string}
- */
-Blockly.Events.ToolboxItemSelect.prototype.type = Blockly.Events.TOOLBOX_ITEM_SELECT;
+registry.register(
+    registry.Type.EVENT, eventUtils.TOOLBOX_ITEM_SELECT, ToolboxItemSelect);
 
-/**
- * Encode the event as JSON.
- * @return {!Object} JSON representation.
- */
-Blockly.Events.ToolboxItemSelect.prototype.toJson = function() {
-  var json = Blockly.Events.ToolboxItemSelect.superClass_.toJson.call(this);
-  json['oldItem'] = this.oldItem;
-  json['newItem'] = this.newItem;
-  return json;
-};
-
-/**
- * Decode the JSON event.
- * @param {!Object} json JSON representation.
- */
-Blockly.Events.ToolboxItemSelect.prototype.fromJson = function(json) {
-  Blockly.Events.ToolboxItemSelect.superClass_.fromJson.call(this, json);
-  this.oldItem = json['oldItem'];
-  this.newItem = json['newItem'];
-};
-
-Blockly.registry.register(Blockly.registry.Type.EVENT,
-    Blockly.Events.TOOLBOX_ITEM_SELECT, Blockly.Events.ToolboxItemSelect);
+exports.ToolboxItemSelect = ToolboxItemSelect;

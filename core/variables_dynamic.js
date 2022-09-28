@@ -7,96 +7,123 @@
 /**
  * @fileoverview Utility functions for handling typed variables.
  *
- * @author duzc2dtw@gmail.com (Du Tian Wei)
  */
 'use strict';
 
-goog.provide('Blockly.VariablesDynamic');
+/**
+ * Utility functions for handling typed variables.
+ *
+ * @namespace Blockly.VariablesDynamic
+ */
+goog.module('Blockly.VariablesDynamic');
 
-goog.require('Blockly.Blocks');
-goog.require('Blockly.Msg');
-goog.require('Blockly.utils.xml');
-goog.require('Blockly.VariableModel');
-goog.require('Blockly.Variables');
+const Variables = goog.require('Blockly.Variables');
+const xml = goog.require('Blockly.utils.xml');
+const {Blocks} = goog.require('Blockly.blocks');
+const {Msg} = goog.require('Blockly.Msg');
+const {VariableModel} = goog.require('Blockly.VariableModel');
+/* eslint-disable-next-line no-unused-vars */
+const {Workspace} = goog.requireType('Blockly.Workspace');
+/* eslint-disable-next-line no-unused-vars */
+const {WorkspaceSvg} = goog.requireType('Blockly.WorkspaceSvg');
 
-goog.requireType('Blockly.Workspace');
 
+/**
+ * String for use in the "custom" attribute of a category in toolbox XML.
+ * This string indicates that the category should be dynamically populated with
+ * variable blocks.
+ * See also Blockly.Variables.CATEGORY_NAME and
+ * Blockly.Procedures.CATEGORY_NAME.
+ * @const {string}
+ * @alias Blockly.VariablesDynamic.CATEGORY_NAME
+ */
+const CATEGORY_NAME = 'VARIABLE_DYNAMIC';
+exports.CATEGORY_NAME = CATEGORY_NAME;
 
-Blockly.VariablesDynamic.onCreateVariableButtonClick_String = function(button) {
-  Blockly.Variables.createVariableButtonHandler(button.getTargetWorkspace(),
-      undefined, 'String');
+const stringButtonClickHandler = function(button) {
+  Variables.createVariableButtonHandler(
+      button.getTargetWorkspace(), undefined, 'String');
 };
-Blockly.VariablesDynamic.onCreateVariableButtonClick_Number = function(button) {
-  Blockly.Variables.createVariableButtonHandler(button.getTargetWorkspace(),
-      undefined, 'Number');
+exports.onCreateVariableButtonClick_String = stringButtonClickHandler;
+
+const numberButtonClickHandler = function(button) {
+  Variables.createVariableButtonHandler(
+      button.getTargetWorkspace(), undefined, 'Number');
 };
-Blockly.VariablesDynamic.onCreateVariableButtonClick_Colour = function(button) {
-  Blockly.Variables.createVariableButtonHandler(button.getTargetWorkspace(),
-      undefined, 'Colour');
+exports.onCreateVariableButtonClick_Number = numberButtonClickHandler;
+
+const colourButtonClickHandler = function(button) {
+  Variables.createVariableButtonHandler(
+      button.getTargetWorkspace(), undefined, 'Colour');
 };
+exports.onCreateVariableButtonClick_Colour = colourButtonClickHandler;
+
 /**
  * Construct the elements (blocks and button) required by the flyout for the
  * variable category.
- * @param {!Blockly.Workspace} workspace The workspace containing variables.
- * @return {!Array.<!Element>} Array of XML elements.
+ * @param {!WorkspaceSvg} workspace The workspace containing variables.
+ * @return {!Array<!Element>} Array of XML elements.
+ * @alias Blockly.VariablesDynamic.flyoutCategory
  */
-Blockly.VariablesDynamic.flyoutCategory = function(workspace) {
-  var xmlList = [];
-  var button = document.createElement('button');
-  button.setAttribute('text', Blockly.Msg['NEW_STRING_VARIABLE']);
+const flyoutCategory = function(workspace) {
+  let xmlList = [];
+  let button = document.createElement('button');
+  button.setAttribute('text', Msg['NEW_STRING_VARIABLE']);
   button.setAttribute('callbackKey', 'CREATE_VARIABLE_STRING');
   xmlList.push(button);
   button = document.createElement('button');
-  button.setAttribute('text', Blockly.Msg['NEW_NUMBER_VARIABLE']);
+  button.setAttribute('text', Msg['NEW_NUMBER_VARIABLE']);
   button.setAttribute('callbackKey', 'CREATE_VARIABLE_NUMBER');
   xmlList.push(button);
   button = document.createElement('button');
-  button.setAttribute('text', Blockly.Msg['NEW_COLOUR_VARIABLE']);
+  button.setAttribute('text', Msg['NEW_COLOUR_VARIABLE']);
   button.setAttribute('callbackKey', 'CREATE_VARIABLE_COLOUR');
   xmlList.push(button);
 
-  workspace.registerButtonCallback('CREATE_VARIABLE_STRING',
-      Blockly.VariablesDynamic.onCreateVariableButtonClick_String);
-  workspace.registerButtonCallback('CREATE_VARIABLE_NUMBER',
-      Blockly.VariablesDynamic.onCreateVariableButtonClick_Number);
-  workspace.registerButtonCallback('CREATE_VARIABLE_COLOUR',
-      Blockly.VariablesDynamic.onCreateVariableButtonClick_Colour);
+  workspace.registerButtonCallback(
+      'CREATE_VARIABLE_STRING', stringButtonClickHandler);
+  workspace.registerButtonCallback(
+      'CREATE_VARIABLE_NUMBER', numberButtonClickHandler);
+  workspace.registerButtonCallback(
+      'CREATE_VARIABLE_COLOUR', colourButtonClickHandler);
 
 
-  var blockList = Blockly.VariablesDynamic.flyoutCategoryBlocks(workspace);
+  const blockList = flyoutCategoryBlocks(workspace);
   xmlList = xmlList.concat(blockList);
   return xmlList;
 };
+exports.flyoutCategory = flyoutCategory;
 
 /**
  * Construct the blocks required by the flyout for the variable category.
- * @param {!Blockly.Workspace} workspace The workspace containing variables.
- * @return {!Array.<!Element>} Array of XML block elements.
+ * @param {!Workspace} workspace The workspace containing variables.
+ * @return {!Array<!Element>} Array of XML block elements.
+ * @alias Blockly.VariablesDynamic.flyoutCategoryBlocks
  */
-Blockly.VariablesDynamic.flyoutCategoryBlocks = function(workspace) {
-  var variableModelList = workspace.getAllVariables();
+const flyoutCategoryBlocks = function(workspace) {
+  const variableModelList = workspace.getAllVariables();
 
-  var xmlList = [];
+  const xmlList = [];
   if (variableModelList.length > 0) {
-    if (Blockly.Blocks['variables_set_dynamic']) {
-      var firstVariable = variableModelList[variableModelList.length - 1];
-      var block = Blockly.utils.xml.createElement('block');
+    if (Blocks['variables_set_dynamic']) {
+      const firstVariable = variableModelList[variableModelList.length - 1];
+      const block = xml.createElement('block');
       block.setAttribute('type', 'variables_set_dynamic');
       block.setAttribute('gap', 24);
-      block.appendChild(
-          Blockly.Variables.generateVariableFieldDom(firstVariable));
+      block.appendChild(Variables.generateVariableFieldDom(firstVariable));
       xmlList.push(block);
     }
-    if (Blockly.Blocks['variables_get_dynamic']) {
-      variableModelList.sort(Blockly.VariableModel.compareByName);
-      for (var i = 0, variable; (variable = variableModelList[i]); i++) {
-        var block = Blockly.utils.xml.createElement('block');
+    if (Blocks['variables_get_dynamic']) {
+      variableModelList.sort(VariableModel.compareByName);
+      for (let i = 0, variable; (variable = variableModelList[i]); i++) {
+        const block = xml.createElement('block');
         block.setAttribute('type', 'variables_get_dynamic');
         block.setAttribute('gap', 8);
-        block.appendChild(Blockly.Variables.generateVariableFieldDom(variable));
+        block.appendChild(Variables.generateVariableFieldDom(variable));
         xmlList.push(block);
       }
     }
   }
   return xmlList;
 };
+exports.flyoutCategoryBlocks = flyoutCategoryBlocks;

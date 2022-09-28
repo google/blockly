@@ -104,19 +104,6 @@
 	"CONTROLS_IF_IF_TOOLTIP": "Dodaj, usuń lub zmień kolejność czynności, żeby zmodyfikować ten klocek „jeśli”.",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Dodaj warunek do klocka „jeśli”.",
 	"CONTROLS_IF_ELSE_TOOLTIP": "Dodaj ostatni zawsze prawdziwy warunek do klocka „jeśli”.",
-	"IOS_OK": "OK",
-	"IOS_CANCEL": "Anuluj",
-	"IOS_ERROR": "Błąd",
-	"IOS_PROCEDURES_INPUTS": "WEJŚCIA",
-	"IOS_PROCEDURES_ADD_INPUT": "+ Dodaj Wejście",
-	"IOS_PROCEDURES_ALLOW_STATEMENTS": "Zezwalaj na czynności.",
-	"IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR": "Ta funkcja ma zduplikowane wejścia.",
-	"IOS_VARIABLES_ADD_VARIABLE": "+ Dodaj Zmienną",
-	"IOS_VARIABLES_ADD_BUTTON": "Dodaj",
-	"IOS_VARIABLES_RENAME_BUTTON": "Zmień nazwę",
-	"IOS_VARIABLES_DELETE_BUTTON": "Usuń",
-	"IOS_VARIABLES_VARIABLE_NAME": "Nazwa zmiennej",
-	"IOS_VARIABLES_EMPTY_NAME_ERROR": "Nie możesz utworzyć funkcji bez nazwy.",
 	"LOGIC_COMPARE_HELPURL": "https://pl.wikipedia.org/wiki/Nierówność",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "Zwraca \"prawda\", jeśli wejścia są identyczne.",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "Zwraca \"prawda\", jeśli wejścia nie są identyczne.",
@@ -387,5 +374,7 @@
 	"PROCEDURES_IFRETURN_TOOLTIP": "Jeśli warunek jest spełniony zwróć drugą wartość.",
 	"PROCEDURES_IFRETURN_WARNING": "Uwaga: Ten klocek może być używany tylko w definicji funkcji.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Powiedz coś...",
-	"COLLAPSED_WARNINGS_WARNING": "Zwinięte bloki zawierają ostrzeżenia."
+	"COLLAPSED_WARNINGS_WARNING": "Zwinięte bloki zawierają ostrzeżenia.",
+	"DIALOG_OK": "OK",
+	"DIALOG_CANCEL": "Anuluj"
 }

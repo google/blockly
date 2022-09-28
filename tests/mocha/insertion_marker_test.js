@@ -4,6 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.insertionMarker');
+
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+
+
 suite('InsertionMarkers', function() {
   setup(function() {
     sharedTestSetup.call(this);
@@ -13,7 +18,7 @@ suite('InsertionMarkers', function() {
         "type": "stack_block",
         "message0": "",
         "previousStatement": null,
-        "nextStatement": null
+        "nextStatement": null,
       },
       {
         "type": "row_block",
@@ -21,10 +26,10 @@ suite('InsertionMarkers', function() {
         "args0": [
           {
             "type": "input_value",
-            "name": "INPUT"
-          }
+            "name": "INPUT",
+          },
         ],
-        "output": null
+        "output": null,
       },
       {
         "type": "statement_block",
@@ -32,11 +37,11 @@ suite('InsertionMarkers', function() {
         "args0": [
           {
             "type": "input_statement",
-            "name": "STATEMENT"
-          }
+            "name": "STATEMENT",
+          },
         ],
         "previousStatement": null,
-        "nextStatement": null
+        "nextStatement": null,
       }]);
   });
   teardown(function() {
@@ -48,9 +53,9 @@ suite('InsertionMarkers', function() {
         return 'stack[' + block.id + '];\n';
       };
       Blockly.JavaScript['row_block'] = function(block) {
-        var value = Blockly.JavaScript
+        const value = Blockly.JavaScript
             .valueToCode(block, 'INPUT', Blockly.JavaScript.ORDER_NONE);
-        var code = 'row[' + block.id + '](' + value + ')';
+        const code = 'row[' + block.id + '](' + value + ')';
         return [code, Blockly.JavaScript.ORDER_NONE];
       };
       Blockly.JavaScript['statement_block'] = function(block) {
@@ -60,9 +65,9 @@ suite('InsertionMarkers', function() {
 
       this.assertGen = function(xml, expectedCode) {
         Blockly.Xml.domToWorkspace(xml, this.workspace);
-        var block = this.workspace.getBlockById('insertion');
+        const block = this.workspace.getBlockById('insertion');
         block.isInsertionMarker_ = true;
-        var code = Blockly.JavaScript.workspaceToCode(this.workspace);
+        const code = Blockly.JavaScript.workspaceToCode(this.workspace);
         chai.assert.equal(code, expectedCode);
       };
     });
@@ -72,7 +77,7 @@ suite('InsertionMarkers', function() {
       delete Blockly.JavaScript['statement_block'];
     });
     test('Marker Surrounds', function() {
-      var xml = Blockly.Xml.textToDom(
+      const xml = Blockly.Xml.textToDom(
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="statement_block" id="insertion">' +
           '    <statement name="STATEMENT">' +
@@ -83,7 +88,7 @@ suite('InsertionMarkers', function() {
       this.assertGen(xml, 'statement[a]{\n};\n');
     });
     test('Marker Enclosed', function() {
-      var xml = Blockly.Xml.textToDom(
+      const xml = Blockly.Xml.textToDom(
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="statement_block" id="a">' +
           '    <statement name="STATEMENT">' +
@@ -94,7 +99,7 @@ suite('InsertionMarkers', function() {
       this.assertGen(xml, 'statement[a]{\n};\n');
     });
     test('Marker Enclosed and Surrounds', function() {
-      var xml = Blockly.Xml.textToDom(
+      const xml = Blockly.Xml.textToDom(
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="statement_block" id="a">' +
           '    <statement name="STATEMENT">' +
@@ -113,7 +118,7 @@ suite('InsertionMarkers', function() {
           '};\n');
     });
     test('Marker Prev', function() {
-      var xml = Blockly.Xml.textToDom(
+      const xml = Blockly.Xml.textToDom(
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="stack_block" id="insertion">' +
           '    <next>' +
@@ -124,7 +129,7 @@ suite('InsertionMarkers', function() {
       this.assertGen(xml, 'stack[a];\n');
     });
     test('Marker Next', function() {
-      var xml = Blockly.Xml.textToDom(
+      const xml = Blockly.Xml.textToDom(
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="stack_block" id="a">' +
           '    <next>' +
@@ -135,7 +140,7 @@ suite('InsertionMarkers', function() {
       this.assertGen(xml, 'stack[a];\n');
     });
     test('Marker Middle of Stack', function() {
-      var xml = Blockly.Xml.textToDom(
+      const xml = Blockly.Xml.textToDom(
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="stack_block" id="a">' +
           '    <next>' +
@@ -152,7 +157,7 @@ suite('InsertionMarkers', function() {
           'stack[b];\n');
     });
     test('Marker On Output', function() {
-      var xml = Blockly.Xml.textToDom(
+      const xml = Blockly.Xml.textToDom(
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="row_block" id="insertion">' +
           '    <value name="INPUT">' +
@@ -163,7 +168,7 @@ suite('InsertionMarkers', function() {
       this.assertGen(xml, 'row[a]();\n');
     });
     test('Marker On Input', function() {
-      var xml = Blockly.Xml.textToDom(
+      const xml = Blockly.Xml.textToDom(
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="row_block" id="a">' +
           '    <value name="INPUT">' +
@@ -174,7 +179,7 @@ suite('InsertionMarkers', function() {
       this.assertGen(xml, 'row[a]();\n');
     });
     test('Marker Middle of Row', function() {
-      var xml = Blockly.Xml.textToDom(
+      const xml = Blockly.Xml.textToDom(
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="row_block" id="a">' +
           '    <value name="INPUT">' +
@@ -189,7 +194,7 @@ suite('InsertionMarkers', function() {
       this.assertGen(xml, 'row[a](row[b]());\n');
     });
     test('Marker Detatched', function() {
-      var xml = Blockly.Xml.textToDom(
+      const xml = Blockly.Xml.textToDom(
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="stack_block" id="insertion"/>' +
           '  <block type="stack_block" id="a"/>' +
@@ -199,18 +204,18 @@ suite('InsertionMarkers', function() {
   });
   suite('Serialization', function() {
     setup(function() {
-      this.assertXml = function(xml, expectXml) {
-        Blockly.Xml.domToWorkspace(xml, this.workspace);
-        var block = this.workspace.getBlockById('insertion');
+      this.assertXml = function(xmlIn, expectXml) {
+        Blockly.Xml.domToWorkspace(xmlIn, this.workspace);
+        const block = this.workspace.getBlockById('insertion');
         block.setInsertionMarker(true);
-        var xml = Blockly.Xml.workspaceToDom(this.workspace);
+        let xml = Blockly.Xml.workspaceToDom(this.workspace);
         Blockly.Xml.domToWorkspace(xml, this.workspace);
         xml = Blockly.Xml.domToText(xml);
         chai.assert.equal(xml, expectXml);
       };
     });
     test('Marker Surrounds', function() {
-      var xml = Blockly.Xml.textToDom(
+      const xml = Blockly.Xml.textToDom(
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="statement_block" id="insertion" x="20" y="20">' +
           '    <statement name="STATEMENT">' +
@@ -226,7 +231,7 @@ suite('InsertionMarkers', function() {
           '</xml>');
     });
     test('Marker Enclosed', function() {
-      var xml = Blockly.Xml.textToDom(
+      const xml = Blockly.Xml.textToDom(
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="statement_block" id="a" x="20" y="20">' +
           '    <statement name="STATEMENT">' +
@@ -240,7 +245,7 @@ suite('InsertionMarkers', function() {
           '</xml>');
     });
     test('Marker Enclosed and Surrounds', function() {
-      var xml = Blockly.Xml.textToDom(
+      const xml = Blockly.Xml.textToDom(
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="statement_block" id="a" x="20" y="20">' +
           '    <statement name="STATEMENT">' +
@@ -262,7 +267,7 @@ suite('InsertionMarkers', function() {
           '</xml>');
     });
     test('Marker Prev', function() {
-      var xml = Blockly.Xml.textToDom(
+      const xml = Blockly.Xml.textToDom(
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="stack_block" id="insertion" x="20" y="20">' +
           '    <next>' +
@@ -278,7 +283,7 @@ suite('InsertionMarkers', function() {
           '</xml>');
     });
     test('Marker Next', function() {
-      var xml = Blockly.Xml.textToDom(
+      const xml = Blockly.Xml.textToDom(
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="stack_block" id="a" x="20" y="20">' +
           '    <next>' +
@@ -292,7 +297,7 @@ suite('InsertionMarkers', function() {
           '</xml>');
     });
     test('Marker Middle of Stack', function() {
-      var xml = Blockly.Xml.textToDom(
+      const xml = Blockly.Xml.textToDom(
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="stack_block" id="a" x="20" y="20">' +
           '    <next>' +
@@ -314,7 +319,7 @@ suite('InsertionMarkers', function() {
           '</xml>');
     });
     test('Marker On Output', function() {
-      var xml = Blockly.Xml.textToDom(
+      const xml = Blockly.Xml.textToDom(
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="row_block" id="insertion" x="20" y="20">' +
           '    <value name="INPUT">' +
@@ -330,7 +335,7 @@ suite('InsertionMarkers', function() {
           '</xml>');
     });
     test('Marker On Input', function() {
-      var xml = Blockly.Xml.textToDom(
+      const xml = Blockly.Xml.textToDom(
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="row_block" id="a" x="20" y="20">' +
           '    <value name="INPUT">' +
@@ -344,7 +349,7 @@ suite('InsertionMarkers', function() {
           '</xml>');
     });
     test('Marker Middle of Row', function() {
-      var xml = Blockly.Xml.textToDom(
+      const xml = Blockly.Xml.textToDom(
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="row_block" id="a" x="20" y="20">' +
           '    <value name="INPUT">' +
@@ -366,7 +371,7 @@ suite('InsertionMarkers', function() {
           '</xml>');
     });
     test('Marker Detatched', function() {
-      var xml = Blockly.Xml.textToDom(
+      const xml = Blockly.Xml.textToDom(
           '<xml xmlns="https://developers.google.com/blockly/xml">' +
           '  <block type="stack_block" id="insertion"/>' +
           '  <block type="stack_block" id="a" x="20" y="20"/>' +

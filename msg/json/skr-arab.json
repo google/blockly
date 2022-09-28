@@ -45,15 +45,6 @@
 	"CONTROLS_IF_MSG_IF": "جے",
 	"CONTROLS_IF_MSG_ELSEIF": "ٻیا اگر",
 	"CONTROLS_IF_MSG_ELSE": "وکھرا",
-	"IOS_OK": "ٹھیک ہے",
-	"IOS_CANCEL": "منسوخ",
-	"IOS_ERROR": "نقص",
-	"IOS_PROCEDURES_INPUTS": "ان پٹ",
-	"IOS_VARIABLES_ADD_VARIABLE": "+ متغیر شامل کرو",
-	"IOS_VARIABLES_ADD_BUTTON": "شامل کرو",
-	"IOS_VARIABLES_RENAME_BUTTON": "نواں ناں لکھو",
-	"IOS_VARIABLES_DELETE_BUTTON": "مٹاؤ",
-	"IOS_VARIABLES_VARIABLE_NAME": "متغیر ناں",
 	"LOGIC_OPERATION_AND": "اتے",
 	"LOGIC_OPERATION_OR": "یا",
 	"LOGIC_NEGATE_TITLE": "%1 کائنی",
@@ -108,5 +99,7 @@
 	"PROCEDURES_BEFORE_PARAMS": "نال:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "نال:",
 	"PROCEDURES_DEFRETURN_RETURN": "واپس آ ونڄو",
-	"PROCEDURES_MUTATORARG_TITLE": "ان پُٹ ناں:"
+	"PROCEDURES_MUTATORARG_TITLE": "ان پُٹ ناں:",
+	"DIALOG_OK": "ٹھیک ہے",
+	"DIALOG_CANCEL": "منسوخ"
 }

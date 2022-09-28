@@ -1,0 +1,35 @@
+{
+	"@metadata": {
+		"authors": [
+			"Adithyak1997"
+		]
+	},
+	"VARIABLES_DEFAULT_NAME": "ഇനം",
+	"UNNAMED_KEY": "പേരില്ലാത്തവ",
+	"TODAY": "ഇന്ന്",
+	"DUPLICATE_BLOCK": "പകർപ്പ്",
+	"ADD_COMMENT": "അഭിപ്രായം ചേർക്കുക",
+	"REMOVE_COMMENT": "അഭിപ്രായം ഒഴിവാക്കുക",
+	"HELP": "സഹായം",
+	"UNDO": "തിരസ്കരിക്കുക",
+	"REDO": "വീണ്ടും ചെയ്യുക",
+	"RENAME_VARIABLE": "ചരത്തിന്റെ പേര് മാറ്റുക...",
+	"NEW_VARIABLE": "ചരം സൃഷ്ടിക്കുക...",
+	"NEW_STRING_VARIABLE": "സ്ട്രിങ് ചരം സൃഷ്ടിക്കുക...",
+	"NEW_NUMBER_VARIABLE": "ക്രമസംഖ്യ ചരം സൃഷ്ടിക്കുക...",
+	"NEW_COLOUR_VARIABLE": "നിറം ചരം സൃഷ്ടിക്കുക...",
+	"NEW_VARIABLE_TITLE": "പുതിയ ചരത്തിന്റെ പേര്:",
+	"VARIABLE_ALREADY_EXISTS": "\"%1\" എന്ന പേരിലുള്ള ചരം നിലവിലുണ്ട്.",
+	"COLOUR_RANDOM_TITLE": "ക്രമരഹിത നിറം",
+	"COLOUR_RANDOM_TOOLTIP": "ക്രമരഹിതമായി ഒരു നിറം തിരഞ്ഞെടുക്കുക.",
+	"COLOUR_RGB_RED": "ചുവപ്പ്",
+	"COLOUR_RGB_GREEN": "പച്ച",
+	"COLOUR_RGB_BLUE": "നീല",
+	"COLOUR_BLEND_COLOUR1": "ഒന്നാം നിറം",
+	"COLOUR_BLEND_COLOUR2": "രണ്ടാം നിറം",
+	"COLOUR_BLEND_RATIO": "അനുപാതം",
+	"CONTROLS_REPEAT_TITLE": "%1 തവണ ആവർത്തിക്കുക",
+	"CONTROLS_REPEAT_TOOLTIP": "ചില വരികൾ കൂടുതൽ തവണ ചെയ്യുക.",
+	"CONTROLS_FLOW_STATEMENTS_OPERATOR_BREAK": "കുരുക്കിന് പുറത്തുകടക്കുക",
+	"DIALOG_OK": "ശരി"
+}

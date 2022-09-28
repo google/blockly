@@ -88,19 +88,6 @@
 	"CONTROLS_IF_IF_TOOLTIP": "Добави, премахни или пренареди частите, за да промениш този „ако“ блок.",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Добави условие към „ако“ блока.",
 	"CONTROLS_IF_ELSE_TOOLTIP": "Добави окончателно, прихващащо всички останали случаи условие към блок „ако“.",
-	"IOS_OK": "Добре",
-	"IOS_CANCEL": "Отказ",
-	"IOS_ERROR": "Грешка",
-	"IOS_PROCEDURES_INPUTS": "Входни данни",
-	"IOS_PROCEDURES_ADD_INPUT": "+ Добавяне на данни",
-	"IOS_PROCEDURES_ALLOW_STATEMENTS": "Позволи твърденията",
-	"IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR": "Тази функция има дублирани входни данни.",
-	"IOS_VARIABLES_ADD_VARIABLE": "+ Добавяне на променлива",
-	"IOS_VARIABLES_ADD_BUTTON": "Добавяне",
-	"IOS_VARIABLES_RENAME_BUTTON": "Преименуване",
-	"IOS_VARIABLES_DELETE_BUTTON": "Изтриване",
-	"IOS_VARIABLES_VARIABLE_NAME": "Име на променливата",
-	"IOS_VARIABLES_EMPTY_NAME_ERROR": "Не може да използвате празно име за променлива",
 	"LOGIC_COMPARE_HELPURL": "https://en.wikipedia.org/wiki/Inequality_(mathematics)",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "Върни вярно, ако двата параметъра са еднакви.",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "Върни вярно, ако двата параметъра са различни.",
@@ -353,5 +340,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "Предупреждение: Този блок може да се използва само във функция.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Коментирайте нещо...",
 	"WORKSPACE_ARIA_LABEL": "Работна област на Blockly",
-	"COLLAPSED_WARNINGS_WARNING": "Свитите блокове съдържат предупреждения."
+	"COLLAPSED_WARNINGS_WARNING": "Свитите блокове съдържат предупреждения.",
+	"DIALOG_OK": "ОК",
+	"DIALOG_CANCEL": "Отказ"
 }

@@ -1,0 +1,37 @@
+{
+	"@metadata": {
+		"authors": [
+			"Nodirbek"
+		]
+	},
+	"DELETE_BLOCK": "Blokni o'chirish",
+	"DELETE_X_BLOCKS": "%1 bloklarini o‘chirish",
+	"DELETE_ALL_BLOCKS": "Barcha %1 bloklar o'chirilsinmi?",
+	"CLEAN_UP": "Bloklarni tozalash",
+	"COLLAPSE_BLOCK": "Blokni yopish",
+	"COLLAPSE_ALL": "Bloklarni yopish",
+	"EXPAND_BLOCK": "Blokni kengaytirish",
+	"EXPAND_ALL": "Bloklarni kengaytirish",
+	"DISABLE_BLOCK": "Bloklashni o‘chirish",
+	"ENABLE_BLOCK": "Bloklashni yoqish",
+	"HELP": "Yordam",
+	"UNDO": "Bekor qilish",
+	"REDO": "Qaytarish",
+	"CHANGE_VALUE_TITLE": "Qiymatni o'zgartirish:",
+	"NEW_STRING_VARIABLE": "String o'zgaruvchisini yaratish ...",
+	"NEW_NUMBER_VARIABLE": "Raqam o'zgaruvchisini yarating ...",
+	"NEW_COLOUR_VARIABLE": "Rang o'zgaruvchisini yaratish ...",
+	"NEW_VARIABLE_TYPE_TITLE": "Yangi o'zgaruvchining turi:",
+	"NEW_VARIABLE_TITLE": "Yangi o'zgaruvchining nomi:",
+	"VARIABLE_ALREADY_EXISTS": "'%1' nomli o'zgaruvchi mavjud.",
+	"VARIABLE_ALREADY_EXISTS_FOR_ANOTHER_TYPE": "'%1' nomli o'zgaruvchi boshqa tur uchun allaqachon mavjud: '%2'.",
+	"DELETE_VARIABLE": "'%1' o'zgaruvchisini o'chirib tashlang",
+	"COLOUR_PICKER_HELPURL": "https://en.wikipedia.org/wiki/Color",
+	"COLOUR_RANDOM_TITLE": "tasodifiy rang",
+	"COLOUR_RANDOM_TOOLTIP": "Tasodifiy rangni tanlang.",
+	"COLOUR_RGB_RED": "qizil",
+	"COLOUR_RGB_GREEN": "yashil",
+	"COLOUR_RGB_BLUE": "ko'k",
+	"DIALOG_OK": "Mayli",
+	"DIALOG_CANCEL": "Bekor qilish"
+}

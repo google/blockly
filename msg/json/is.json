@@ -83,14 +83,6 @@
 	"CONTROLS_IF_IF_TOOLTIP": "Bæta við, fjarlægja eða umraða til að breyta skipan þessa EF kubbs.",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Bæta skilyrði við EF kubbinn.",
 	"CONTROLS_IF_ELSE_TOOLTIP": "Bæta við hluta EF kubbs sem grípur öll tilfelli sem uppfylla ekki hin skilyrðin.",
-	"IOS_OK": "Í lagi",
-	"IOS_CANCEL": "Hætta við",
-	"IOS_ERROR": "Villa",
-	"IOS_VARIABLES_ADD_VARIABLE": "+ Bæta við breytu",
-	"IOS_VARIABLES_ADD_BUTTON": "Bæta við",
-	"IOS_VARIABLES_RENAME_BUTTON": "Endurnefna",
-	"IOS_VARIABLES_DELETE_BUTTON": "Eyða",
-	"IOS_VARIABLES_VARIABLE_NAME": "Nafn breytu",
 	"LOGIC_COMPARE_HELPURL": "https://en.wikipedia.org/wiki/Inequality_(mathematics)",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "Skila sönnu ef inntökin eru jöfn.",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "Skila sönnu ef inntökin eru ekki jöfn.",
@@ -370,5 +362,7 @@
 	"PROCEDURES_IFRETURN_TOOLTIP": "Ef gildi er satt, skal skila öðru gildi.",
 	"PROCEDURES_IFRETURN_HELPURL": "http://c2.com/cgi/wiki?GuardClause",
 	"PROCEDURES_IFRETURN_WARNING": "Aðvörun: Þennan kubb má aðeins nota í skilgreiningu falls.",
-	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Segðu eitthvað..."
+	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Segðu eitthvað...",
+	"DIALOG_OK": "Í lagi",
+	"DIALOG_CANCEL": "Hætta við"
 }

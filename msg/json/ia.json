@@ -83,19 +83,6 @@
 	"CONTROLS_IF_IF_TOOLTIP": "Adde, remove o reordina sectiones pro reconfigurar iste bloco \"si\".",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Adder un condition al bloco \"si\".",
 	"CONTROLS_IF_ELSE_TOOLTIP": "Adder un condition final de reserva al bloco \"si\".",
-	"IOS_OK": "OK",
-	"IOS_CANCEL": "Cancellar",
-	"IOS_ERROR": "Error",
-	"IOS_PROCEDURES_INPUTS": "ENTRATAS",
-	"IOS_PROCEDURES_ADD_INPUT": "+ Adder entrata",
-	"IOS_PROCEDURES_ALLOW_STATEMENTS": "Permitter declarationes",
-	"IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR": "Iste function ha entratas duplicate.",
-	"IOS_VARIABLES_ADD_VARIABLE": "+ Adder variabile",
-	"IOS_VARIABLES_ADD_BUTTON": "Adder",
-	"IOS_VARIABLES_RENAME_BUTTON": "Renominar",
-	"IOS_VARIABLES_DELETE_BUTTON": "Deler",
-	"IOS_VARIABLES_VARIABLE_NAME": "Nomine del variabile",
-	"IOS_VARIABLES_EMPTY_NAME_ERROR": "Non es possibile usar un nomine de variabile vacue.",
 	"LOGIC_COMPARE_HELPURL": "https://ia.wikipedia.org/wiki/Inequalitate_(mathematica)",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "Retornar ver si le duo entratas es equal.",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "Retornar ver si le duo entratas non es equal.",
@@ -333,5 +320,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "Attention: Iste bloco pote solmente esser usate in le definition de un function.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Dice qualcosa...",
 	"WORKSPACE_ARIA_LABEL": "Spatio de travalio de Blockly",
-	"COLLAPSED_WARNINGS_WARNING": "Blocos plicate contine advertimentos."
+	"COLLAPSED_WARNINGS_WARNING": "Blocos plicate contine advertimentos.",
+	"DIALOG_OK": "OK",
+	"DIALOG_CANCEL": "Cancellar"
 }

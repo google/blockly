@@ -3,6 +3,7 @@
 		"authors": [
 			"Amara-Amaziɣ",
 			"Aslmad mohamed belarhzali",
+			"Brahim-essaidi",
 			"Hakim1bal"
 		]
 	},
@@ -37,7 +38,7 @@
 	"COLOUR_BLEND_COLOUR2": "ⴰⴽⵍⵓ 2",
 	"COLOUR_BLEND_RATIO": "ⴰⵙⵙⴰⵖ",
 	"CONTROLS_REPEAT_HELPURL": "https://en.wikipedia.org/wiki/For_loop",
-	"CONTROLS_REPEAT_TITLE": "ⴰⵍⵙ ⴷⴰⵖ %1 ⵜⴽⴽⵍⵜ",
+	"CONTROLS_REPEAT_TITLE": "ⴰⵍⵙ %1 ⵜⵉⴽⴽⴰⵍ",
 	"CONTROLS_REPEAT_INPUT_DO": "ⴳ",
 	"CONTROLS_WHILEUNTIL_OPERATOR_WHILE": "ⴰⵍⵙ ⴰⴷⴷⴰⴳ",
 	"CONTROLS_WHILEUNTIL_OPERATOR_UNTIL": "ⴰⵍⵙ ⴰⵔⴷ",
@@ -45,17 +46,6 @@
 	"CONTROLS_IF_MSG_IF": "ⵎⴽ",
 	"CONTROLS_IF_MSG_ELSEIF": "ⵉⵙ",
 	"CONTROLS_IF_MSG_ELSE": "ⵎⴽ ⴷ ⵓⵀⵓ",
-	"IOS_OK": "ⵡⴰⵅⵅⴰ",
-	"IOS_CANCEL": "ⵙⵔ",
-	"IOS_ERROR": "ⴰⵣⴳⴰⵍ",
-	"IOS_PROCEDURES_INPUTS": "ⵉⵏⴽⵛⵓⵎⵏ",
-	"IOS_PROCEDURES_ADD_INPUT": "+ ⵔⵏⵓ ⵢⴰⵜ ⵜⵏⴽⵛⵓⵎⵜ",
-	"IOS_VARIABLES_ADD_VARIABLE": "+ ⵔⵏⵓ ⴰⵎⵙⴽⵉⵍ",
-	"IOS_VARIABLES_ADD_BUTTON": "ⵔⵏⵓ",
-	"IOS_VARIABLES_RENAME_BUTTON": "ⵙⵏⴼⵍ ⵉⵙⵎ",
-	"IOS_VARIABLES_DELETE_BUTTON": "ⴽⴽⵙ",
-	"IOS_VARIABLES_VARIABLE_NAME": "ⵉⵙⵎ ⵏ ⵓⵎⵙⴽⵉⵍ",
-	"IOS_VARIABLES_EMPTY_NAME_ERROR": "ⵓⵔ ⵜⵓⴼⵉⴷ ⴰⴷ ⵜⵙⵙⵎⵔⵙⴷ ⵢⴰⵏ ⵢⵉⵙⵎ ⵏ ⵓⵎⵙⴽⵉⵍ ⵢⵓⵔⴰⵏ.",
 	"LOGIC_COMPARE_HELPURL": "https://en.wikipedia.org/wiki/Inequality_(mathematics)",
 	"LOGIC_OPERATION_AND": "ⴷ",
 	"LOGIC_OPERATION_OR": "ⵏⵖ",
@@ -81,7 +71,7 @@
 	"TEXT_LENGTH_TITLE": "ⵜⵉⵖⵣⵉ ⵏ %1",
 	"TEXT_INDEXOF_TITLE": "ⴳ ⵓⴹⵕⵉⵚ %1 %2 %3",
 	"TEXT_GET_SUBSTRING_INPUT_IN_TEXT": "ⴳ ⵓⴹⵕⵉⵚ",
-	"TEXT_GET_SUBSTRING_END_LAST": "ⴰⵔ ⵓⵙⴽⴽⵉⵍ ⴰⵎⴳⴳⴰⵔⵓ",
+	"TEXT_GET_SUBSTRING_END_LAST": "ⴰⵔ ⴰⵙⴽⴽⵉⵍ ⴰⵏⴳⴳⴰⵔⵓ",
 	"LISTS_LENGTH_TITLE": "ⵜⵉⵖⵣⵉ ⵏ %1",
 	"LISTS_INLIST": "ⴳ ⵜⵍⴳⴰⵎⵜ",
 	"LISTS_GET_INDEX_REMOVE": "ⵙⵉⵜⵜⵢ",
@@ -98,5 +88,7 @@
 	"PROCEDURES_CALL_BEFORE_PARAMS": "ⵙ:",
 	"PROCEDURES_CALLNORETURN_HELPURL": "https://en.wikipedia.org/wiki/Subroutine",
 	"PROCEDURES_CALLRETURN_HELPURL": "https://en.wikipedia.org/wiki/Subroutine",
-	"PROCEDURES_MUTATORARG_TOOLTIP": "ⵔⵏⵓ ⴰⵏⴽⵛⴰⵎ ⵖⵔ ⵜⵙⵖⵏⵜ."
+	"PROCEDURES_MUTATORARG_TOOLTIP": "ⵔⵏⵓ ⴰⵏⴽⵛⴰⵎ ⵖⵔ ⵜⵙⵖⵏⵜ.",
+	"DIALOG_OK": "ⵡⴰⵅⵅⴰ",
+	"DIALOG_CANCEL": "ⵙⵔ"
 }

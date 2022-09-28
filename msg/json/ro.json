@@ -89,19 +89,6 @@
 	"CONTROLS_IF_IF_TOOLTIP": "Adaugă, elimină sau reordonează secțiuni pentru a reconfigura acest bloc if.",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Adăugați o condiție în blocul if.",
 	"CONTROLS_IF_ELSE_TOOLTIP": "Adauga o stare finala, cuprinde toata conditia din blocul if.",
-	"IOS_OK": "OK",
-	"IOS_CANCEL": "Anulare",
-	"IOS_ERROR": "Eroare",
-	"IOS_PROCEDURES_INPUTS": "INTRĂRI",
-	"IOS_PROCEDURES_ADD_INPUT": "+ Adăugați intrare",
-	"IOS_PROCEDURES_ALLOW_STATEMENTS": "Permite declarațiile",
-	"IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR": "Această funcție are intrări duplicate.",
-	"IOS_VARIABLES_ADD_VARIABLE": "+Adăugați variabilă",
-	"IOS_VARIABLES_ADD_BUTTON": "Adaugă",
-	"IOS_VARIABLES_RENAME_BUTTON": "Redenumire",
-	"IOS_VARIABLES_DELETE_BUTTON": "Ștergeți",
-	"IOS_VARIABLES_VARIABLE_NAME": "Numele variabilei",
-	"IOS_VARIABLES_EMPTY_NAME_ERROR": "Nu puteți utiliza un nume de variabilă gol.",
 	"LOGIC_COMPARE_HELPURL": "https://en.wikipedia.org/wiki/Inequality_(mathematics)",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "Returnează adevărat dacă ambele intrări sunt egale.",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "Returnează adevărat daca cele două intrări nu sunt egale.",
@@ -365,5 +352,7 @@
 	"PROCEDURES_IFRETURN_TOOLTIP": "Dacă o valoare este adevărată, atunci returnează valoarea a doua.",
 	"PROCEDURES_IFRETURN_WARNING": "Avertisment: Acest bloc poate fi utilizat numai în definiția unei funcții.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Spune ceva...",
-	"COLLAPSED_WARNINGS_WARNING": "Blocurile blocate conțin avertismente."
+	"COLLAPSED_WARNINGS_WARNING": "Blocurile blocate conțin avertismente.",
+	"DIALOG_OK": "OK",
+	"DIALOG_CANCEL": "Revocare"
 }

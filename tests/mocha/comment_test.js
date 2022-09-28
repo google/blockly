@@ -4,6 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.comments');
+
+const {assertEventFired} = goog.require('Blockly.test.helpers.events');
+const eventUtils = goog.require('Blockly.Events.utils');
+const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+
+
 suite('Comments', function() {
   setup(function() {
     sharedTestSetup.call(this);
@@ -11,12 +18,12 @@ suite('Comments', function() {
       {
         "type": "empty_block",
         "message0": "",
-        "args0": []
+        "args0": [],
       },
     ]);
     this.workspace = Blockly.inject('blocklyDiv', {
       comments: true,
-      scrollbars: true
+      scrollbars: true,
     });
     this.block = Blockly.Xml.domToBlock(Blockly.Xml.textToDom(
         '<block type="empty_block"/>'
@@ -49,47 +56,38 @@ suite('Comments', function() {
       assertEditable(this.comment);
       assertEventFired(
           this.eventsFireStub, Blockly.Events.BubbleOpen,
-          {bubbleType: 'comment', isOpen: true}, this.workspace.id,
+          {bubbleType: 'comment', isOpen: true, type: eventUtils.BUBBLE_OPEN}, this.workspace.id,
           this.block.id);
     });
     test('Not Editable', function() {
       sinon.stub(this.block, 'isEditable').returns(false);
 
-      // TODO(#4186): Remove stubbing of deprecation warning after fixing.
-      var deprecationWarnStub = createDeprecationWarningStub();
       this.comment.setVisible(true);
-      deprecationWarnStub.restore();
 
       chai.assert.isTrue(this.comment.isVisible());
       assertNotEditable(this.comment);
       assertEventFired(
           this.eventsFireStub, Blockly.Events.BubbleOpen,
-          {bubbleType: 'comment', isOpen: true}, this.workspace.id,
-          this.block.id);
+          {bubbleType: 'comment', isOpen: true, type: eventUtils.BUBBLE_OPEN},
+          this.workspace.id, this.block.id);
     });
     test('Editable -> Not Editable', function() {
       this.comment.setVisible(true);
       sinon.stub(this.block, 'isEditable').returns(false);
 
-      // TODO(#4186): Remove stubbing of deprecation warning after fixing.
-      var deprecationWarnStub = createDeprecationWarningStub();
       this.comment.updateEditable();
-      deprecationWarnStub.restore();
 
       chai.assert.isTrue(this.comment.isVisible());
       assertNotEditable(this.comment);
       assertEventFired(
           this.eventsFireStub, Blockly.Events.BubbleOpen,
-          {bubbleType: 'comment', isOpen: true}, this.workspace.id,
-          this.block.id);
+          {bubbleType: 'comment', isOpen: true, type: eventUtils.BUBBLE_OPEN},
+          this.workspace.id, this.block.id);
     });
     test('Not Editable -> Editable', function() {
-      var editableStub = sinon.stub(this.block, 'isEditable').returns(false);
+      const editableStub = sinon.stub(this.block, 'isEditable').returns(false);
 
-      // TODO(#4186): Remove stubbing of deprecation warning after fixing.
-      var deprecationWarnStub = createDeprecationWarningStub();
       this.comment.setVisible(true);
-      deprecationWarnStub.restore();
 
       editableStub.returns(true);
 
@@ -98,8 +96,8 @@ suite('Comments', function() {
       assertEditable(this.comment);
       assertEventFired(
           this.eventsFireStub, Blockly.Events.BubbleOpen,
-          {bubbleType: 'comment', isOpen: true}, this.workspace.id,
-          this.block.id);
+          {bubbleType: 'comment', isOpen: true, type: eventUtils.BUBBLE_OPEN},
+          this.workspace.id, this.block.id);
     });
   });
   suite('Set/Get Bubble Size', function() {
@@ -107,7 +105,7 @@ suite('Comments', function() {
       sinon.restore();
     });
     function assertBubbleSize(comment, height, width) {
-      var size = comment.getBubbleSize();
+      const size = comment.getBubbleSize();
       chai.assert.equal(size.height, height);
       chai.assert.equal(size.width, width);
     }
@@ -116,7 +114,7 @@ suite('Comments', function() {
     }
     test('Set Size While Visible', function() {
       this.comment.setVisible(true);
-      var bubbleSizeSpy = sinon.spy(this.comment.bubble_, 'setBubbleSize');
+      const bubbleSizeSpy = sinon.spy(this.comment.bubble_, 'setBubbleSize');
 
       assertBubbleSizeDefault(this.comment);
       this.comment.setBubbleSize(100, 100);

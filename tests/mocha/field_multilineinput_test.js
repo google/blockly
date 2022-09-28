@@ -4,6 +4,14 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+goog.module('Blockly.test.fieldMultiline');
+
+const {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSetValueTests} = goog.require('Blockly.test.helpers.fields');
+const {createTestBlock, defineRowBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
+const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+const {runCodeGenerationTestSuites} = goog.require('Blockly.test.helpers.codeGeneration');
+
+
 suite('Multiline Input Fields', function() {
   setup(function() {
     sharedTestSetup.call(this);
@@ -15,7 +23,7 @@ suite('Multiline Input Fields', function() {
    * Configuration for field tests with invalid values.
    * @type {!Array<!FieldCreationTestCase>}
    */
-  var invalidValueTestCases = [
+  const invalidValueTestCases = [
     {title: 'Undefined', value: undefined},
     {title: 'Null', value: null},
   ];
@@ -23,7 +31,7 @@ suite('Multiline Input Fields', function() {
    * Configuration for field tests with valid values.
    * @type {!Array<!FieldCreationTestCase>}
    */
-  var validValueTestCases = [
+  const validValueTestCases = [
     {title: 'Empty string', value: '', expectedValue: ''},
     {title: 'String no newline', value: 'value', expectedValue: 'value'},
     {title: 'String with newline', value: 'bark bark\n bark bark bark\n bark bar bark bark\n', expectedValue: 'bark bark\n bark bark bark\n bark bar bark bark\n'},
@@ -33,7 +41,7 @@ suite('Multiline Input Fields', function() {
     {title: 'Number (Falsy)', value: 0, expectedValue: '0'},
     {title: 'NaN', value: NaN, expectedValue: 'NaN'},
   ];
-  var addArgsAndJson = function(testCase) {
+  const addArgsAndJson = function(testCase) {
     testCase.args = [testCase.value];
     testCase.json = {'text': testCase.value};
   };
@@ -44,29 +52,29 @@ suite('Multiline Input Fields', function() {
    * The expected default value for the field being tested.
    * @type {*}
    */
-  var defaultFieldValue = '';
+  const defaultFieldValue = '';
   /**
    * Asserts that the field property values are set to default.
    * @param {!Blockly.FieldMultilineInput} field The field to check.
    */
-  var assertFieldDefault = function(field) {
-    testHelpers.assertFieldValue(field, defaultFieldValue);
+  const assertFieldDefault = function(field) {
+    assertFieldValue(field, defaultFieldValue);
   };
   /**
    * Asserts that the field properties are correct based on the test case.
    * @param {!Blockly.FieldMultilineInput} field The field to check.
    * @param {!FieldValueTestCase} testCase The test case.
    */
-  var validTestCaseAssertField = function(field, testCase) {
-    testHelpers.assertFieldValue(field, testCase.expectedValue);
+  const validTestCaseAssertField = function(field, testCase) {
+    assertFieldValue(field, testCase.expectedValue);
   };
 
-  testHelpers.runConstructorSuiteTests(
+  runConstructorSuiteTests(
       Blockly.FieldMultilineInput, validValueTestCases, invalidValueTestCases,
       validTestCaseAssertField, assertFieldDefault);
 
-  testHelpers.runFromJsonSuiteTests(
-      Blockly.FieldMultilineInput, validValueTestCases,invalidValueTestCases,
+  runFromJsonSuiteTests(
+      Blockly.FieldMultilineInput, validValueTestCases, invalidValueTestCases,
       validTestCaseAssertField, assertFieldDefault);
 
   suite('setValue', function() {
@@ -74,25 +82,25 @@ suite('Multiline Input Fields', function() {
       setup(function() {
         this.field = new Blockly.FieldMultilineInput();
       });
-      testHelpers.runSetValueTests(
+      runSetValueTests(
           validValueTestCases, invalidValueTestCases, defaultFieldValue);
       test('With source block', function() {
         this.field.setSourceBlock(createTestBlock());
         this.field.setValue('value');
-        testHelpers.assertFieldValue(this.field, 'value');
+        assertFieldValue(this.field, 'value');
       });
     });
     suite('Value -> New Value', function() {
-      var initialValue = 'oldValue';
+      const initialValue = 'oldValue';
       setup(function() {
         this.field = new Blockly.FieldMultilineInput(initialValue);
       });
-      testHelpers.runSetValueTests(
+      runSetValueTests(
           validValueTestCases, invalidValueTestCases, initialValue);
       test('With source block', function() {
         this.field.setSourceBlock(createTestBlock());
         this.field.setValue('value');
-        testHelpers.assertFieldValue(this.field, 'value');
+        assertFieldValue(this.field, 'value');
       });
     });
   });
@@ -103,8 +111,8 @@ suite('Multiline Input Fields', function() {
     });
     const createBlockFn = (value) => {
       return (workspace) => {
-        var block = workspace.newBlock('text_multiline');
-        var textField = block.getField('TEXT');
+        const block = workspace.newBlock('text_multiline');
+        const textField = block.getField('TEXT');
         textField.setValue(value);
         return block;
       };
@@ -151,6 +159,33 @@ suite('Multiline Input Fields', function() {
             createBlock: createBlockFn('bark bark\n bark bark bark\n bark bar bark bark\n')},
         ]},
     ];
-    testHelpers.runCodeGenerationTestSuites(testSuites);
+    runCodeGenerationTestSuites(testSuites);
+  });
+
+  suite('Serialization', function() {
+    setup(function() {
+      this.workspace = new Blockly.Workspace();
+      defineRowBlock();
+      
+      this.assertValue = (value) => {
+        const block = this.workspace.newBlock('row_block');
+        const field = new Blockly.FieldMultilineInput(value);
+        block.getInput('INPUT').appendField(field, 'MULTILINE');
+        const jso = Blockly.serialization.blocks.save(block);
+        chai.assert.deepEqual(jso['fields'], {'MULTILINE': value});
+      };
+    });
+
+    teardown(function() {
+      workspaceTeardown.call(this, this.workspace);
+    });
+
+    test('Single line', function() {
+      this.assertValue('this is a single line');
+    });
+
+    test('Multiple lines', function() {
+      this.assertValue('this\nis\n  multiple\n    lines');
+    });
   });
 });

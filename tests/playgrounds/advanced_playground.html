@@ -3,83 +3,14 @@
 <head>
 <meta charset="utf-8">
 <title>Advanced Blockly Playground</title>
-<script src="../../blockly_uncompressed.js"></script>
-<script src="../../generators/javascript.js"></script>
-<script src="../../generators/javascript/logic.js"></script>
-<script src="../../generators/javascript/loops.js"></script>
-<script src="../../generators/javascript/math.js"></script>
-<script src="../../generators/javascript/text.js"></script>
-<script src="../../generators/javascript/lists.js"></script>
-<script src="../../generators/javascript/colour.js"></script>
-<script src="../../generators/javascript/variables.js"></script>
-<script src="../../generators/javascript/variables_dynamic.js"></script>
-<script src="../../generators/javascript/procedures.js"></script>
-<script src="../../generators/python.js"></script>
-<script src="../../generators/python/logic.js"></script>
-<script src="../../generators/python/loops.js"></script>
-<script src="../../generators/python/math.js"></script>
-<script src="../../generators/python/text.js"></script>
-<script src="../../generators/python/lists.js"></script>
-<script src="../../generators/python/colour.js"></script>
-<script src="../../generators/python/variables.js"></script>
-<script src="../../generators/python/variables_dynamic.js"></script>
-<script src="../../generators/python/procedures.js"></script>
-<script src="../../generators/php.js"></script>
-<script src="../../generators/php/logic.js"></script>
-<script src="../../generators/php/loops.js"></script>
-<script src="../../generators/php/math.js"></script>
-<script src="../../generators/php/text.js"></script>
-<script src="../../generators/php/lists.js"></script>
-<script src="../../generators/php/colour.js"></script>
-<script src="../../generators/php/variables.js"></script>
-<script src="../../generators/php/variables_dynamic.js"></script>
-<script src="../../generators/php/procedures.js"></script>
-<script src="../../generators/lua.js"></script>
-<script src="../../generators/lua/logic.js"></script>
-<script src="../../generators/lua/loops.js"></script>
-<script src="../../generators/lua/math.js"></script>
-<script src="../../generators/lua/text.js"></script>
-<script src="../../generators/lua/lists.js"></script>
-<script src="../../generators/lua/colour.js"></script>
-<script src="../../generators/lua/variables.js"></script>
-<script src="../../generators/lua/variables_dynamic.js"></script>
-<script src="../../generators/lua/procedures.js"></script>
-<script src="../../generators/dart.js"></script>
-<script src="../../generators/dart/logic.js"></script>
-<script src="../../generators/dart/loops.js"></script>
-<script src="../../generators/dart/math.js"></script>
-<script src="../../generators/dart/text.js"></script>
-<script src="../../generators/dart/lists.js"></script>
-<script src="../../generators/dart/colour.js"></script>
-<script src="../../generators/dart/variables.js"></script>
-<script src="../../generators/dart/variables_dynamic.js"></script>
-<script src="../../generators/dart/procedures.js"></script>
-<script src="../../msg/messages.js"></script>
-<script src="../../blocks/logic.js"></script>
-<script src="../../blocks/loops.js"></script>
-<script src="../../blocks/math.js"></script>
-<script src="../../blocks/text.js"></script>
-<script src="../../blocks/lists.js"></script>
-<script src="../../blocks/colour.js"></script>
-<script src="../../blocks/variables.js"></script>
-<script src="../../blocks/variables_dynamic.js"></script>
-<script src="../../blocks/procedures.js"></script>
-<script src="../themes/test_themes.js"></script>
+<script src="prepare.js"></script>
 <script src="./screenshot.js"></script>
+<script src="../themes/test_themes.js"></script>
 <script src="../../node_modules/@blockly/dev-tools/dist/index.js"></script>
 <script src="../../node_modules/@blockly/theme-modern/dist/index.js"></script>
 
-<script>
-// Custom requires for the playground.
-// Rendering.
-goog.require('Blockly.minimalist.Renderer');
-goog.require('Blockly.Themes.Zelos');
-
-// Other.
-goog.require('Blockly.WorkspaceCommentSvg');
-goog.require('Blockly.WorkspaceCommentSvg.render');
-</script>
-<script>
+<script type="module">
+import Blockly from './blockly.mjs';
 'use strict';
 
 function start() {
@@ -172,10 +103,14 @@ function initPlayground() {
 }
 
 function setBackgroundColour() {
-  // Set background colour to differentiate server vs local copy.
+  // Set background colour to differentiate file: vs. localhost
+  // vs. server copy.
   if (location.protocol == 'file:') {
-    var lilac = '#d6d6ff';
-    document.body.style.backgroundColor = lilac;
+    document.body.style.backgroundColor = '#89A203';  // Unpleasant green.
+  } else if (location.hostname  === 'localhost' ||
+      location.hostname === '127.0.0.1' ||
+      location.hostname === '[::1]') {
+    document.body.style.backgroundColor = '#d6d6ff';  // Familliar lilac.
   }
 }
 
@@ -186,7 +121,7 @@ function configureContextMenu(menuOptions, e) {
     text: 'Download Screenshot',
     enabled: workspace.getTopBlocks().length,
     callback: function() {
-      Blockly.downloadScreenshot(workspace);
+      downloadScreenshot(workspace);
     }
   };
   menuOptions.push(screenshotOption);
@@ -194,7 +129,7 @@ function configureContextMenu(menuOptions, e) {
   // Adds a default-sized workspace comment to the workspace.
   menuOptions.push(Blockly.ContextMenu.workspaceCommentOption(workspace, e));
 }
-
+start();
 </script>
 
 <style>
@@ -219,7 +154,7 @@ function configureContextMenu(menuOptions, e) {
   }
 </style>
 </head>
-<body onload="start()">
+<body>
   <div id="root"></div>
 </body>
 </html>

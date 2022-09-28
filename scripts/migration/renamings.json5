@@ -1,0 +1,1341 @@
+/**
+ * @license
+ * Copyright 2021 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Collected information about modules and module
+ * exports that have been renamed between versions.
+ *
+ * This file is in JSON5 format; see https://json5.org/.
+ */
+
+{
+  // Example entry:
+  '0.0.0': [ // Version that includes the rename.
+    // Each entry in the array is a module.
+    // All of the properties are optional.
+    {
+      // The name that the module had before this version.
+      oldName: 'old.module.name',
+
+      // The name that the module now has in this version.
+      newName: 'new.module.name',
+
+      // If a module had a default export and now has a named export,
+      // the name of the named export can be given here.
+      newExport: 'newNameForDefaultExport',
+
+      // The old location of this module on the Blockly tree (the
+      // mega-object that people access if they are importing all of
+      // Blockly). Usually this is the same as the oldName and can be
+      // omitted.
+      oldPath: 'old.path.on.Blockly.tree',
+
+      // The new location of this module on the Blockly tree. To be
+      // backwards compatible with people accessing the Blockly tree,
+      // this should be the same as the oldPath.  If omitted, newPath
+      // is assumed to be the same newName.
+      newPath: 'new.path.on.Blockly.tree',
+
+      // Each entry in this map is the old name of a named export.
+      exports: {
+        // The name that the export had before this version.
+        // All of the properties on this object are optional.
+        'oldExportName': {
+          // The new module that the export is in in this version.  If
+          // this is not provided, the newModule is assumed to be the
+          // parent module's newPath.
+          newModule: 'new.module.name',
+
+          // The name that the export now has in this version.
+          newExport: 'newExportName',
+
+          // The old location of this module on the Blockly tree.
+          // If omitted, oldPath defaults to
+          // <enclosing module's.oldPath>.<old export name>.
+          oldPath: 'old.path.on.Blockly.tree',
+
+          // The new location of this module on the Blockly tree. To
+          // be backwards compatible with people accessing the
+          // Blockkly tree, this should be the same as the oldPath.
+          // Defaults to `${newModule}.${newExport}`.
+          newPath: 'new.path.on.Blockly.tree',
+
+          // If a named export has been changed to a private variable
+          // with a get method, this is the name of the get method.
+          getMethod: 'getMethodName',
+
+          // If a named export has been changed to a private variable
+          // with a set method, this is the name of the set method.
+          setMethod: 'setMethodName',
+        },
+
+        // This file can also document the renaming of a property or
+        // sub-property of an (object-valued) named export.
+        'exportExport.oldProperty': {
+          newExport: 'newExport.newProperty',
+          // Additional options as above.
+        },
+
+        // Or promotion of property to named export, etc.
+        'exportExport.oldProperty': {
+          newExport: 'newTopLevelExport',
+        },
+      },
+    },
+  ],
+
+  '5.20210325.0': [
+    {
+      oldName: 'Blockly',
+      exports: {
+        // bind/unbind events functions.  See PR #4642
+        EventData: {newModule: 'Blockly.browserEvents', newExport: 'Data'},
+        bindEvent_: {newModule: 'Blockly.browserEvents', newExport: 'bind'},
+        unbindEvent_: {newModule: 'Blockly.browserEvents', newExport: 'unbind'},
+        bindEventWithChecks_: {
+          newModule: 'Blockly.browserEvents',
+          newExport: 'conditionalBind',
+        },
+      },
+    }
+  ],
+
+  '7.20211209.0-beta.0': [
+    {
+      oldName: 'Blockly',
+      exports: {
+        // Clipboard.  See PR #5237.
+        clipboardXml_: {newModule: 'Blockly.clipboard', newExport: 'xml'},
+        clipboardSource_: {newModule: 'Blockly.clipboard', newExport: 'source'},
+        clipboardTypeCounts_: {
+          newModule: 'Blockly.clipboard',
+          newExport: 'typeCounts',
+        },
+        copy: {newModule: 'Blockly.clipboard'},
+        paste: {newModule: 'Blockly.clipboard'},
+        duplicate: {newModule: 'Blockly.clipboard'},
+
+        // mainWorkspace.  See PR #5244.
+        mainWorkspace: {
+          newModule: 'Blockly.common',
+          getMethod: 'getMainWorkspace',
+          setMethod: 'setMainWorkspace',
+        },
+        getMainWorkspace: {newModule: 'Blockly.common'},
+
+        // parentContainer, draggingConnections.  See PR #5262.
+        parentContainer: {
+          newModule: 'Blockly.common',
+          getMethod: 'getParentContainer',
+          setMethod: 'setParentContainer',
+        },
+        setParentContainer: {newModule: 'Blockly.common'},
+        draggingConnections: {newModule: 'Blockly.common'},
+
+        // Dialogs.  See PR #5457.
+        alert: {
+          newModule: 'Blockly.dialog',
+          newExport: 'alert',
+          setMethod: 'setAlert',
+        },
+        confirm: {
+          newModule: 'Blockly.dialog',
+          newExport: 'confirm',
+          setMethod: 'setConfirm',
+        },
+        prompt: {
+          newModule: 'Blockly.dialog',
+          newExport: 'prompt',
+          setMethod: 'setPrompt',
+        },
+        // hueToHex.  See PR #5462.
+        hueToHex: {newModule: 'Blockly.utils.colour'},
+        // Blockly.hideChaff() became
+        // Blockly.common.getMainWorkspace().hideChaff().  See PR #5460.
+
+        // selected.  See PR #5489.
+        selected: {
+          newModule: 'Blockly.common',
+          getMethod: 'getSelected',
+          setMethod: 'setSelected',
+        },
+      }
+    },
+    {
+      oldName: 'Blockly.Blocks',
+      newName: 'Blockly.blocks',
+      newExport: 'Blocks',        // Previous default export now named.
+      newPath: 'Blockly.Blocks',  // But still on tree with original name.
+    },
+    {
+      oldName: 'Blockly.ContextMenu',
+      exports: {
+        currentBlock: {
+          getMethod: 'getCurrentBlock',
+          setMethod: 'setCurrentBlock'
+        },
+      },
+    },
+    {
+      oldName: 'Blockly.Events',
+      exports: {
+        recordUndo: {getMethod: 'getRecordUndo', setMethod: 'setRecordUndo'},
+      },
+    },
+    {
+      oldName: 'Blockly.Tooltip',
+      exports: {
+        DIV: {getMethod: 'getDiv', setMethod: 'setDiv'},
+        visible: {getMethod: 'isVisible'},
+      },
+    },
+    {
+      oldName: 'Blockly.WidgetDiv',
+      exports: {
+        DIV: {getMethod: 'getDiv'},
+      },
+    },
+    {
+      oldName: 'Blockly.connectionTypes',
+      newName: 'Blockly.ConnectionType',
+      newExport: 'ConnectionType',        // Previous default export now named.
+      newPath: 'Blockly.ConnectionType',  // Type reexported directly.
+    },
+    {
+      oldName: 'Blockly.utils',
+      exports: {
+        genUid: {newModule: 'Blockly.utils.idGenerator'},
+        getScrollDelta: {newModule: 'Blockly.utils.browserEvents'},
+        isTargetInput: {newModule: 'Blockly.utils.browserEvents'},
+        isRightButton: {newModule: 'Blockly.utils.browserEvents'},
+        mouseToSvg: {newModule: 'Blockly.utils.browserEvents'},
+      },
+    },
+    {
+      oldName: 'Blockly.utils.global',
+      newExport: 'globalThis',
+      newPath: 'Blockly.utils.global',
+    },
+    {
+      oldName: 'Blockly.utils.IdGenerator',
+      newName: 'Blockly.utils.idGenerator',
+    },
+    {
+      oldName: 'Blockly.utils.xml',
+      exports: {
+        // document was a function before, too - not a static property
+        // or get accessor.
+        document: {newExport: 'getDocument'},
+      },
+    },
+  ],
+
+  '7.20211209.0': [
+    {
+      oldName: 'Blockly',
+      exports: {
+        // Align.
+        ALIGN_LEFT: {
+          newModule: 'Blockly.Input',
+          newExport: 'Align.LEFT',
+          newPath: 'Blockly.ALIGN_LEFT',
+        },
+        ALIGN_CENTRE: {
+          newModule: 'Blockly.Input',
+          newExport: 'Align.CENTRE',
+          newPath: 'Blockly.ALIGN_CENTRE',
+        },
+        ALIGN_RIGHT: {
+          newModule: 'Blockly.Input',
+          newExport: 'Align.RIGHT',
+          newPath: 'Blockly.ALIGN_RIGHT',
+        },
+
+        svgSize: {newModule: 'Blockly.utils.svgMath'},
+        resizeSvgContents: {newModule: 'Blockly.WorkspaecSvg'},
+        defineBlocksWithJsonArray: {newModule: 'Blockly.common'},
+        isNumber: {newModule: 'Blockly.utils.string'},
+      }
+    },
+
+    {
+      oldName: 'Blockly.Blocks.colour',
+      newName: 'Blockly.blocks.colour'
+    },
+    // Blockly.Blocks.lists not previously provided.
+    {
+      oldName: 'Blockly.Blocks.logic',
+      newName: 'Blockly.blocks.logic'
+    },
+    {
+      oldName: 'Blockly.Blocks.loops',
+      newName: 'Blockly.blocks.loops'
+    },
+    {
+      oldName: 'Blockly.Blocks.math',
+      newName: 'Blockly.blocks.math'
+    },
+    {
+      oldName: 'Blockly.Blocks.procedures',
+      newName: 'Blockly.blocks.procedures'
+    },
+    {
+      oldName: 'Blockly.Blocks.texts',
+      newName: 'Blockly.blocks.texts'
+    },
+    {
+      oldName: 'Blockly.Blocks.variables',
+      newName: 'Blockly.blocks.variables'
+    },
+    // Blockly.Blocks.variablesDynamic not previously provided.
+
+    {
+      oldName: 'Blockly.utils',
+      exports: {
+        screenToWsCoordinates: {newModule: 'Blockly.utils.svgMath'},
+        getDocumentScroll: {newModule: 'Blockly.utils.svgMath'},
+        getViewportBBox: {newModule: 'Blockly.utils.svgMath'},
+        is3dSupported: {newModule: 'Blockly.utils.svgMath'},
+        getRelativeXY: {newModule: 'Blockly.utils.svgMath'},
+        getInjectionDivXY_: {
+          newModule: 'Blockly.utils.svgMath',
+          newExport: 'getInjectionDivXY'
+        },
+        parseBlockColour: {newModule: 'Blockly.utils.parsing'},
+        checkMessageReferences: {newModule: 'Blockly.utils.parsing'},
+        replaceMessageReferences: {newModule: 'Blockly.utils.parsing'},
+        tokenizeInterpolation: {newModule: 'Blockly.utils.parsing'},
+        arrayRemove: {
+          newModule: 'Blockly.utils.array',
+          newExport: 'removeElem'
+        },
+        getBlockTypeCounts:
+            {newModule: 'Blockly.common', newExport: 'getBlockTypeCounts'},
+        runAfterPageLoad:
+            {newModule: 'Blockly.Extensions', newExport: 'runAfterPageLoad'},
+      },
+    },
+
+    // Default exports to named exports.
+    {
+      oldName: 'Blockly.Events.Abstract',
+      newExport: 'Abstract',
+      newPath: 'Blockly.Events.Abstract',
+    },
+    {
+      oldName: 'Blockly.Events.BlockBase',
+      newExport: 'BlockBase',
+      newPath: 'Blockly.Events.BlockBase',
+    },
+    {
+      oldName: 'Blockly.Events.BlockChange',
+      newExport: 'BlockChange',
+      newPath: 'Blockly.Events.BlockChange',
+    },
+    {
+      oldName: 'Blockly.Events.BlockCreate',
+      newExport: 'BlockCreate',
+      newPath: 'Blockly.Events.BlockCreate',
+    },
+    {
+      oldName: 'Blockly.Events.BlockDelete',
+      newExport: 'BlockDelete',
+      newPath: 'Blockly.Events.BlockDelete',
+    },
+    {
+      oldName: 'Blockly.Events.BlockDrag',
+      newExport: 'BlockDrag',
+      newPath: 'Blockly.Events.BlockDrag',
+    },
+    {
+      oldName: 'Blockly.Events.BlockMove',
+      newExport: 'BlockMove',
+      newPath: 'Blockly.Events.BlockMove',
+    },
+    {
+      oldName: 'Blockly.Events.BubbleOpen',
+      newExport: 'BubbleOpen',
+      newPath: 'Blockly.Events.BubbleOpen',
+    },
+    {
+      oldName: 'Blockly.Events.Click',
+      newExport: 'Click',
+      newPath: 'Blockly.Events.Click',
+    },
+    {
+      oldName: 'Blockly.Events.CommentBase',
+      newExport: 'CommentBase',
+      newPath: 'Blockly.Events.CommentBase',
+    },
+    {
+      oldName: 'Blockly.Events.CommentChange',
+      newExport: 'CommentChange',
+      newPath: 'Blockly.Events.CommentChange',
+    },
+    {
+      oldName: 'Blockly.Events.CommentCreate',
+      newExport: 'CommentCreate',
+      newPath: 'Blockly.Events.CommentCreate',
+    },
+    {
+      oldName: 'Blockly.Events.CommentDelete',
+      newExport: 'CommentDelete',
+      newPath: 'Blockly.Events.CommentDelete',
+    },
+    {
+      oldName: 'Blockly.Events.CommentMove',
+      newExport: 'CommentMove',
+      newPath: 'Blockly.Events.CommentMove',
+    },
+    {
+      oldName: 'Blockly.Events.MarkerMove',
+      newExport: 'MarkerMove',
+      newPath: 'Blockly.Events.MarkerMove',
+    },
+    {
+      oldName: 'Blockly.Events.Selected',
+      newExport: 'Selected',
+      newPath: 'Blockly.Events.Selected',
+    },
+    {
+      oldName: 'Blockly.Events.ThemeChange',
+      newExport: 'ThemeChange',
+      newPath: 'Blockly.Events.ThemeChange',
+    },
+    {
+      oldName: 'Blockly.Events.ToolboxItemSelect',
+      newExport: 'ToolboxItemSelect',
+      newPath: 'Blockly.Events.ToolboxItemSelect',
+    },
+    {
+      oldName: 'Blockly.Events.TrashcanOpen',
+      newExport: 'TrashcanOpen',
+      newPath: 'Blockly.Events.TrashcanOpen',
+    },
+    {
+      oldName: 'Blockly.Events.Ui',
+      newExport: 'Ui',
+      newPath: 'Blockly.Events.Ui',
+    },
+    {
+      oldName: 'Blockly.Events.UiBase',
+      newExport: 'UiBase',
+      newPath: 'Blockly.Events.UiBase',
+    },
+    {
+      oldName: 'Blockly.Events.VarBase',
+      newExport: 'VarBase',
+      newPath: 'Blockly.Events.VarBase',
+    },
+    {
+      oldName: 'Blockly.Events.VarCreate',
+      newExport: 'VarCreate',
+      newPath: 'Blockly.Events.VarCreate',
+    },
+    {
+      oldName: 'Blockly.Events.VarDelete',
+      newExport: 'VarDelete',
+      newPath: 'Blockly.Events.VarDelete',
+    },
+    {
+      oldName: 'Blockly.Events.VarRename',
+      newExport: 'VarRename',
+      newPath: 'Blockly.Events.VarRename',
+    },
+    {
+      oldName: 'Blockly.Events.ViewportChange',
+      newExport: 'ViewportChange',
+      newPath: 'Blockly.Events.ViewportChange',
+    },
+    {
+      oldName: 'Blockly.Events.FinishedLoading',
+      newExport: 'FinishedLoading',
+      newPath: 'Blockly.Events.FinishedLoading',
+    },
+    {
+      oldName: 'Blockly.IASTNodeLocation',
+      newExport: 'IASTNodeLocation',
+      newPath: 'Blockly.IASTNodeLocation',
+    },
+    {
+      oldName: 'Blockly.IASTNodeLocationSvg',
+      newExport: 'IASTNodeLocationSvg',
+      newPath: 'Blockly.IASTNodeLocationSvg',
+    },
+    {
+      oldName: 'Blockly.IASTNodeLocationWithBlock',
+      newExport: 'IASTNodeLocationWithBlock',
+      newPath: 'Blockly.IASTNodeLocationWithBlock',
+    },
+    {
+      oldName: 'Blockly.IAutoHideable',
+      newExport: 'IAutoHideable',
+      newPath: 'Blockly.IAutoHideable',
+    },
+    {
+      oldName: 'Blockly.IBlockDragger',
+      newExport: 'IBlockDragger',
+      newPath: 'Blockly.IBlockDragger',
+    },
+    {
+      oldName: 'Blockly.IBoundedElement',
+      newExport: 'IBoundedElement',
+      newPath: 'Blockly.IBoundedElement',
+    },
+    {
+      oldName: 'Blockly.IBubble',
+      newExport: 'IBubble',
+      newPath: 'Blockly.IBubble',
+    },
+    {
+      oldName: 'Blockly.ICollapsibleToolboxItem',
+      newExport: 'ICollapsibleToolboxItem',
+      newPath: 'Blockly.ICollapsibleToolboxItem',
+    },
+    {
+      oldName: 'Blockly.IComponent',
+      newExport: 'IComponent',
+      newPath: 'Blockly.IComponent',
+    },
+    {
+      oldName: 'Blockly.IConnectionChecker',
+      newExport: 'IConnectionChecker',
+      newPath: 'Blockly.IConnectionChecker',
+    },
+    {
+      oldName: 'Blockly.IContextMenu',
+      newExport: 'IContextMenu',
+      newPath: 'Blockly.IContextMenu',
+    },
+    {
+      oldName: 'Blockly.ICopyable',
+      newExport: 'ICopyable',
+      newPath: 'Blockly.ICopyable',
+    },
+    {
+      oldName: 'Blockly.IDeletable',
+      newExport: 'IDeletable',
+      newPath: 'Blockly.IDeletable',
+    },
+    {
+      oldName: 'Blockly.IDeleteArea',
+      newExport: 'IDeleteArea',
+      newPath: 'Blockly.IDeleteArea',
+    },
+    {
+      oldName: 'Blockly.IDragTarget',
+      newExport: 'IDragTarget',
+      newPath: 'Blockly.IDragTarget',
+    },
+    {
+      oldName: 'Blockly.IDraggable',
+      newExport: 'IDraggable',
+      newPath: 'Blockly.IDraggable',
+    },
+    {
+      oldName: 'Blockly.IFlyout',
+      newExport: 'IFlyout',
+      newPath: 'Blockly.IFlyout',
+    },
+    {
+      oldName: 'Blockly.IKeyboardAccessible',
+      newExport: 'IKeyboardAccessible',
+      newPath: 'Blockly.IKeyboardAccessible',
+    },
+    {
+      oldName: 'Blockly.IMetricsManager',
+      newExport: 'IMetricsManager',
+      newPath: 'Blockly.IMetricsManager',
+    },
+    {
+      oldName: 'Blockly.IMovable',
+      newExport: 'IMovable',
+      newPath: 'Blockly.IMovable',
+    },
+    {
+      oldName: 'Blockly.IPositionable',
+      newExport: 'IPositionable',
+      newPath: 'Blockly.IPositionable',
+    },
+    {
+      oldName: 'Blockly.IRegistrable',
+      newExport: 'IRegistrable',
+      newPath: 'Blockly.IRegistrable',
+    },
+    {
+      oldName: 'Blockly.IRegistrableField',
+      newExport: 'IRegistrableField',
+      newPath: 'Blockly.IRegistrableField',
+    },
+    {
+      oldName: 'Blockly.ISelectable',
+      newExport: 'ISelectable',
+      newPath: 'Blockly.ISelectable',
+    },
+    {
+      oldName: 'Blockly.ISelectableToolboxItem',
+      newExport: 'ISelectableToolboxItem',
+      newPath: 'Blockly.ISelectableToolboxItem',
+    },
+    {
+      oldName: 'Blockly.IStyleable',
+      newExport: 'IStyleable',
+      newPath: 'Blockly.IStyleable',
+    },
+    {
+      oldName: 'Blockly.IToolbox',
+      newExport: 'IToolbox',
+      newPath: 'Blockly.IToolbox',
+    },
+    {
+      oldName: 'Blockly.IToolboxItem',
+      newExport: 'IToolboxItem',
+      newPath: 'Blockly.IToolboxItem',
+    },
+    {
+      oldName: 'Blockly.blockRendering.ConstantProvider',
+      newExport: 'ConstantProvider',
+      newPath: 'Blockly.blockRendering.ConstantProvider',
+    },
+    {
+      oldName: 'Blockly.blockRendering.Debug',
+      newExport: 'Debug',
+      newPath: 'Blockly.blockRendering.Debug',
+    },
+    {
+      oldName: 'Blockly.blockRendering.Drawer',
+      newExport: 'Drawer',
+      newPath: 'Blockly.blockRendering.Drawer',
+    },
+    {
+      oldName: 'Blockly.blockRendering.IPathObject',
+      newExport: 'IPathObject',
+      newPath: 'Blockly.blockRendering.IPathObject',
+    },
+    {
+      oldName: 'Blockly.blockRendering.RenderInfo',
+      newExport: 'RenderInfo',
+      newPath: 'Blockly.blockRendering.RenderInfo',
+    },
+    {
+      oldName: 'Blockly.blockRendering.MarkerSvg',
+      newExport: 'MarkerSvg',
+      newPath: 'Blockly.blockRendering.MarkerSvg',
+    },
+    {
+      oldName: 'Blockly.blockRendering.PathObject',
+      newExport: 'PathObject',
+      newPath: 'Blockly.blockRendering.PathObject',
+    },
+    {
+      oldName: 'Blockly.blockRendering.Renderer',
+      newExport: 'Renderer',
+      newPath: 'Blockly.blockRendering.Renderer',
+    },
+    {
+      oldName: 'Blockly.geras.InlineInput',
+      newExport: 'InlineInput',
+      newPath: 'Blockly.geras.InlineInput',
+    },
+    {
+      oldName: 'Blockly.geras.StatementInput',
+      newExport: 'StatementInput',
+      newPath: 'Blockly.geras.StatementInput',
+    },
+    {
+      oldName: 'Blockly.geras.ConstantProvider',
+      newExport: 'ConstantProvider',
+      newPath: 'Blockly.geras.ConstantProvider',
+    },
+    {
+      oldName: 'Blockly.geras.Drawer',
+      newExport: 'Drawer',
+      newPath: 'Blockly.geras.Drawer',
+    },
+    {
+      oldName: 'Blockly.geras.HighlightConstantProvider',
+      newExport: 'HighlightConstantProvider',
+      newPath: 'Blockly.geras.HighlightConstantProvider',
+    },
+    {
+      oldName: 'Blockly.geras.Highlighter',
+      newExport: 'Highlighter',
+      newPath: 'Blockly.geras.Highlighter',
+    },
+    {
+      oldName: 'Blockly.geras.RenderInfo',
+      newExport: 'RenderInfo',
+      newPath: 'Blockly.geras.RenderInfo',
+    },
+    {
+      oldName: 'Blockly.geras.PathObject',
+      newExport: 'PathObject',
+      newPath: 'Blockly.geras.PathObject',
+    },
+    {
+      oldName: 'Blockly.geras.Renderer',
+      newExport: 'Renderer',
+      newPath: 'Blockly.geras.Renderer',
+    },
+    {
+      oldName: 'Blockly.blockRendering.Measurable',
+      newExport: 'Measurable',
+      newPath: 'Blockly.blockRendering.Measurable',
+    },
+    {
+      oldName: 'Blockly.blockRendering.BottomRow',
+      newExport: 'BottomRow',
+      newPath: 'Blockly.blockRendering.BottomRow',
+    },
+    {
+      oldName: 'Blockly.blockRendering.Connection',
+      newExport: 'Connection',
+      newPath: 'Blockly.blockRendering.Connection',
+    },
+    {
+      oldName: 'Blockly.blockRendering.ExternalValueInput',
+      newExport: 'ExternalValueInput',
+      newPath: 'Blockly.blockRendering.ExternalValueInput',
+    },
+    {
+      oldName: 'Blockly.blockRendering.Field',
+      newExport: 'Field',
+      newPath: 'Blockly.blockRendering.Field',
+    },
+    {
+      oldName: 'Blockly.blockRendering.Hat',
+      newExport: 'Hat',
+      newPath: 'Blockly.blockRendering.Hat',
+    },
+    {
+      oldName: 'Blockly.blockRendering.Icon',
+      newExport: 'Icon',
+      newPath: 'Blockly.blockRendering.Icon',
+    },
+    {
+      oldName: 'Blockly.blockRendering.InRowSpacer',
+      newExport: 'InRowSpacer',
+      newPath: 'Blockly.blockRendering.InRowSpacer',
+    },
+    {
+      oldName: 'Blockly.blockRendering.InlineInput',
+      newExport: 'InlineInput',
+      newPath: 'Blockly.blockRendering.InlineInput',
+    },
+    {
+      oldName: 'Blockly.blockRendering.InputConnection',
+      newExport: 'InputConnection',
+      newPath: 'Blockly.blockRendering.InputConnection',
+    },
+    {
+      oldName: 'Blockly.blockRendering.InputRow',
+      newExport: 'InputRow',
+      newPath: 'Blockly.blockRendering.InputRow',
+    },
+    {
+      oldName: 'Blockly.blockRendering.JaggedEdge',
+      newExport: 'JaggedEdge',
+      newPath: 'Blockly.blockRendering.JaggedEdge',
+    },
+    {
+      oldName: 'Blockly.blockRendering.NextConnection',
+      newExport: 'NextConnection',
+      newPath: 'Blockly.blockRendering.NextConnection',
+    },
+    {
+      oldName: 'Blockly.blockRendering.OutputConnection',
+      newExport: 'OutputConnection',
+      newPath: 'Blockly.blockRendering.OutputConnection',
+    },
+    {
+      oldName: 'Blockly.blockRendering.PreviousConnection',
+      newExport: 'PreviousConnection',
+      newPath: 'Blockly.blockRendering.PreviousConnection',
+    },
+    {
+      oldName: 'Blockly.blockRendering.RoundCorner',
+      newExport: 'RoundCorner',
+      newPath: 'Blockly.blockRendering.RoundCorner',
+    },
+    {
+      oldName: 'Blockly.blockRendering.Row',
+      newExport: 'Row',
+      newPath: 'Blockly.blockRendering.Row',
+    },
+    {
+      oldName: 'Blockly.blockRendering.SpacerRow',
+      newExport: 'SpacerRow',
+      newPath: 'Blockly.blockRendering.SpacerRow',
+    },
+    {
+      oldName: 'Blockly.blockRendering.SquareCorner',
+      newExport: 'SquareCorner',
+      newPath: 'Blockly.blockRendering.SquareCorner',
+    },
+    {
+      oldName: 'Blockly.blockRendering.StatementInput',
+      newExport: 'StatementInput',
+      newPath: 'Blockly.blockRendering.StatementInput',
+    },
+    {
+      oldName: 'Blockly.blockRendering.TopRow',
+      newExport: 'TopRow',
+      newPath: 'Blockly.blockRendering.TopRow',
+    },
+    {
+      oldName: 'Blockly.blockRendering.Types',
+      newExport: 'Types',
+      newPath: 'Blockly.blockRendering.Types',
+    },
+    {
+      oldName: 'Blockly.minimalist.ConstantProvider',
+      newExport: 'ConstantProvider',
+      newPath: 'Blockly.minimalist.ConstantProvider',
+    },
+    {
+      oldName: 'Blockly.minimalist.Drawer',
+      newExport: 'Drawer',
+      newPath: 'Blockly.minimalist.Drawer',
+    },
+    {
+      oldName: 'Blockly.minimalist.RenderInfo',
+      newExport: 'RenderInfo',
+      newPath: 'Blockly.minimalist.RenderInfo',
+    },
+    {
+      oldName: 'Blockly.minimalist.Renderer',
+      newExport: 'Renderer',
+      newPath: 'Blockly.minimalist.Renderer',
+    },
+    {
+      oldName: 'Blockly.thrasos.RenderInfo',
+      newExport: 'RenderInfo',
+      newPath: 'Blockly.thrasos.RenderInfo',
+    },
+    {
+      oldName: 'Blockly.thrasos.Renderer',
+      newExport: 'Renderer',
+      newPath: 'Blockly.thrasos.Renderer',
+    },
+    {
+      oldName: 'Blockly.zelos.BottomRow',
+      newExport: 'BottomRow',
+      newPath: 'Blockly.zelos.BottomRow',
+    },
+    {
+      oldName: 'Blockly.zelos.StatementInput',
+      newExport: 'StatementInput',
+      newPath: 'Blockly.zelos.StatementInput',
+    },
+    {
+      oldName: 'Blockly.zelos.RightConnectionShape',
+      newExport: 'RightConnectionShape',
+      newPath: 'Blockly.zelos.RightConnectionShape',
+    },
+    {
+      oldName: 'Blockly.zelos.TopRow',
+      newExport: 'TopRow',
+      newPath: 'Blockly.zelos.TopRow',
+    },
+    {
+      oldName: 'Blockly.zelos.ConstantProvider',
+      newExport: 'ConstantProvider',
+      newPath: 'Blockly.zelos.ConstantProvider',
+    },
+    {
+      oldName: 'Blockly.zelos.Drawer',
+      newExport: 'Drawer',
+      newPath: 'Blockly.zelos.Drawer',
+    },
+    {
+      oldName: 'Blockly.zelos.RenderInfo',
+      newExport: 'RenderInfo',
+      newPath: 'Blockly.zelos.RenderInfo',
+    },
+    {
+      oldName: 'Blockly.zelos.MarkerSvg',
+      newExport: 'MarkerSvg',
+      newPath: 'Blockly.zelos.MarkerSvg',
+    },
+    {
+      oldName: 'Blockly.zelos.PathObject',
+      newExport: 'PathObject',
+      newPath: 'Blockly.zelos.PathObject',
+    },
+    {
+      oldName: 'Blockly.zelos.Renderer',
+      newExport: 'Renderer',
+      newPath: 'Blockly.zelos.Renderer',
+    },
+    {
+      oldName: 'Blockly.Themes.Classic',
+      newExport: 'Classic',
+      newPath: 'Blockly.Themes.Classic',
+    },
+    {
+      oldName: 'Blockly.Themes.Zelos',
+      newExport: 'Zelos',
+      newPath: 'Blockly.Themes.Zelos',
+    },
+    {
+      oldName: 'Blockly.ToolboxCategory',
+      newExport: 'ToolboxCategory',
+      newPath: 'Blockly.ToolboxCategory',
+    },
+    {
+      oldName: 'Blockly.CollapsibleToolboxCategory',
+      newExport: 'CollapsibleToolboxCategory',
+      newPath: 'Blockly.CollapsibleToolboxCategory',
+    },
+    {
+      oldName: 'Blockly.ToolboxSeparator',
+      newExport: 'ToolboxSeparator',
+      newPath: 'Blockly.ToolboxSeparator',
+    },
+    {
+      oldName: 'Blockly.Toolbox',
+      newExport: 'Toolbox',
+      newPath: 'Blockly.Toolbox',
+    },
+    {
+      oldName: 'Blockly.ToolboxItem',
+      newExport: 'ToolboxItem',
+      newPath: 'Blockly.ToolboxItem',
+    },
+    {
+      oldName: 'Blockly.utils.Coordinate',
+      newExport: 'Coordinate',
+      newPath: 'Blockly.utils.Coordinate',
+    },
+    {
+      oldName: 'Blockly.utils.KeyCodes',
+      newExport: 'KeyCodes',
+      newPath: 'Blockly.utils.KeyCodes',
+    },
+    {
+      oldName: 'Blockly.utils.Metrics',
+      newExport: 'Metrics',
+      newPath: 'Blockly.utils.Metrics',
+    },
+    {
+      oldName: 'Blockly.utils.Rect',
+      newExport: 'Rect',
+      newPath: 'Blockly.utils.Rect',
+    },
+    {
+      oldName: 'Blockly.utils.Size',
+      newExport: 'Size',
+      newPath: 'Blockly.utils.Size',
+    },
+    {
+      oldName: 'Blockly.utils.Svg',
+      newExport: 'Svg',
+      newPath: 'Blockly.utils.Svg',
+    },
+    {
+      oldName: 'Blockly.BlocklyOptions',
+      newExport: 'BlocklyOptions',
+      newPath: 'Blockly.BlocklyOptions',
+    },
+    {
+      oldName: 'Blockly.Bubble',
+      newExport: 'Bubble',
+      newPath: 'Blockly.Bubble',
+    },
+    {
+      oldName: 'Blockly.BubbleDragger',
+      newExport: 'BubbleDragger',
+      newPath: 'Blockly.BubbleDragger',
+    },
+    {
+      oldName: 'Blockly.Comment',
+      newExport: 'Comment',
+      newPath: 'Blockly.Comment',
+    },
+    {
+      oldName: 'Blockly.ComponentManager',
+      newExport: 'ComponentManager',
+      newPath: 'Blockly.ComponentManager',
+    },
+    {
+      oldName: 'Blockly.Connection',
+      newExport: 'Connection',
+      newPath: 'Blockly.Connection',
+    },
+    {
+      oldName: 'Blockly.ConnectionChecker',
+      newExport: 'ConnectionChecker',
+      newPath: 'Blockly.ConnectionChecker',
+    },
+    {
+      oldName: 'Blockly.ConnectionDB',
+      newExport: 'ConnectionDB',
+      newPath: 'Blockly.ConnectionDB',
+    },
+    {
+      oldName: 'Blockly.ContextMenuRegistry',
+      newExport: 'ContextMenuRegistry',
+      newPath: 'Blockly.ContextMenuRegistry',
+    },
+    {
+      oldName: 'Blockly.DeleteArea',
+      newExport: 'DeleteArea',
+      newPath: 'Blockly.DeleteArea',
+    },
+    {
+      oldName: 'Blockly.DragTarget',
+      newExport: 'DragTarget',
+      newPath: 'Blockly.DragTarget',
+    },
+    {
+      oldName: 'Blockly.DropDownDiv',
+      newExport: 'DropDownDiv',
+      newPath: 'Blockly.DropDownDiv',
+    },
+    {
+      oldName: 'Blockly.Field',
+      newExport: 'Field',
+      newPath: 'Blockly.Field',
+    },
+    {
+      oldName: 'Blockly.FieldAngle',
+      newExport: 'FieldAngle',
+      newPath: 'Blockly.FieldAngle',
+    },
+    {
+      oldName: 'Blockly.FieldCheckbox',
+      newExport: 'FieldCheckbox',
+      newPath: 'Blockly.FieldCheckbox',
+    },
+    {
+      oldName: 'Blockly.FieldColour',
+      newExport: 'FieldColour',
+      newPath: 'Blockly.FieldColour',
+    },
+    {
+      oldName: 'Blockly.FieldDropdown',
+      newExport: 'FieldDropdown',
+      newPath: 'Blockly.FieldDropdown',
+    },
+    {
+      oldName: 'Blockly.FieldImage',
+      newExport: 'FieldImage',
+      newPath: 'Blockly.FieldImage',
+    },
+    {
+      oldName: 'Blockly.FieldLabel',
+      newExport: 'FieldLabel',
+      newPath: 'Blockly.FieldLabel',
+    },
+    {
+      oldName: 'Blockly.FieldLabelSerializable',
+      newExport: 'FieldLabelSerializable',
+      newPath: 'Blockly.FieldLabelSerializable',
+    },
+    {
+      oldName: 'Blockly.FieldMultilineInput',
+      newExport: 'FieldMultilineInput',
+      newPath: 'Blockly.FieldMultilineInput',
+    },
+    {
+      oldName: 'Blockly.FieldNumber',
+      newExport: 'FieldNumber',
+      newPath: 'Blockly.FieldNumber',
+    },
+    {
+      oldName: 'Blockly.FieldTextInput',
+      newExport: 'FieldTextInput',
+      newPath: 'Blockly.FieldTextInput',
+    },
+    {
+      oldName: 'Blockly.FieldVariable',
+      newExport: 'FieldVariable',
+      newPath: 'Blockly.FieldVariable',
+    },
+    {
+      oldName: 'Blockly.Flyout',
+      newExport: 'Flyout',
+      newPath: 'Blockly.Flyout',
+    },
+    {
+      oldName: 'Blockly.FlyoutButton',
+      newExport: 'FlyoutButton',
+      newPath: 'Blockly.FlyoutButton',
+    },
+    {
+      oldName: 'Blockly.HorizontalFlyout',
+      newExport: 'HorizontalFlyout',
+      newPath: 'Blockly.HorizontalFlyout',
+    },
+    {
+      oldName: 'Blockly.FlyoutMetricsManager',
+      newExport: 'FlyoutMetricsManager',
+      newPath: 'Blockly.FlyoutMetricsManager',
+    },
+    {
+      oldName: 'Blockly.VerticalFlyout',
+      newExport: 'VerticalFlyout',
+      newPath: 'Blockly.VerticalFlyout',
+    },
+    {
+      oldName: 'Blockly.Generator',
+      newExport: 'Generator',
+      newPath: 'Blockly.Generator',
+    },
+    {
+      oldName: 'Blockly.Gesture',
+      newExport: 'Gesture',
+      newPath: 'Blockly.Gesture',
+    },
+    {
+      oldName: 'Blockly.Grid',
+      newExport: 'Grid',
+      newPath: 'Blockly.Grid',
+    },
+    {
+      oldName: 'Blockly.Icon',
+      newExport: 'Icon',
+      newPath: 'Blockly.Icon',
+    },
+    {
+      oldName: 'Blockly.inject',
+      newExport: 'inject',
+      newPath: 'Blockly.inject',
+    },
+    {
+      oldName: 'Blockly.Input',
+      newExport: 'Input',
+      newPath: 'Blockly.Input',
+    },
+    {
+      oldName: 'Blockly.inputTypes',
+      newExport: 'inputTypes',
+      newPath: 'Blockly.inputTypes',
+    },
+    {
+      oldName: 'Blockly.InsertionMarkerManager',
+      newExport: 'InsertionMarkerManager',
+      newPath: 'Blockly.InsertionMarkerManager',
+    },
+    {
+      oldName: 'Blockly.MarkerManager',
+      newExport: 'MarkerManager',
+      newPath: 'Blockly.MarkerManager',
+    },
+    {
+      oldName: 'Blockly.Menu',
+      newExport: 'Menu',
+      newPath: 'Blockly.Menu',
+    },
+    {
+      oldName: 'Blockly.MenuItem',
+      newExport: 'MenuItem',
+      newPath: 'Blockly.MenuItem',
+    },
+    {
+      oldName: 'Blockly.MetricsManager',
+      newExport: 'MetricsManager',
+      newPath: 'Blockly.MetricsManager',
+    },
+    {
+      oldName: 'Blockly.Msg',
+      newExport: 'Msg',
+      newPath: 'Blockly.Msg',
+    },
+    {
+      oldName: 'Blockly.Mutator',
+      newExport: 'Mutator',
+      newPath: 'Blockly.Mutator',
+    },
+    {
+      oldName: 'Blockly.Names',
+      newExport: 'Names',
+      newPath: 'Blockly.Names',
+    },
+    {
+      oldName: 'Blockly.Options',
+      newExport: 'Options',
+      newPath: 'Blockly.Options',
+    },
+    {
+      oldName: 'Blockly.RenderedConnection',
+      newExport: 'RenderedConnection',
+      newPath: 'Blockly.RenderedConnection',
+    },
+    {
+      oldName: 'Blockly.Scrollbar',
+      newExport: 'Scrollbar',
+      newPath: 'Blockly.Scrollbar',
+    },
+    {
+      oldName: 'Blockly.ScrollbarPair',
+      newExport: 'ScrollbarPair',
+      newPath: 'Blockly.ScrollbarPair',
+    },
+    {
+      oldName: 'Blockly.ShortcutRegistry',
+      newExport: 'ShortcutRegistry',
+      newPath: 'Blockly.ShortcutRegistry',
+    },
+    {
+      oldName: 'Blockly.Theme',
+      newExport: 'Theme',
+      newPath: 'Blockly.Theme',
+    },
+    {
+      oldName: 'Blockly.ThemeManager',
+      newExport: 'ThemeManager',
+      newPath: 'Blockly.ThemeManager',
+    },
+    {
+      oldName: 'Blockly.TouchGesture',
+      newExport: 'TouchGesture',
+      newPath: 'Blockly.TouchGesture',
+    },
+    {
+      oldName: 'Blockly.Trashcan',
+      newExport: 'Trashcan',
+      newPath: 'Blockly.Trashcan',
+    },
+    {
+      oldName: 'Blockly.VariableMap',
+      newExport: 'VariableMap',
+      newPath: 'Blockly.VariableMap',
+    },
+    {
+      oldName: 'Blockly.VariableModel',
+      newExport: 'VariableModel',
+      newPath: 'Blockly.VariableModel',
+    },
+    {
+      oldName: 'Blockly.Warning',
+      newExport: 'Warning',
+      newPath: 'Blockly.Warning',
+    },
+    {
+      oldName: 'Blockly.Workspace',
+      newExport: 'Workspace',
+      newPath: 'Blockly.Workspace',
+    },
+    {
+      oldName: 'Blockly.WorkspaceAudio',
+      newExport: 'WorkspaceAudio',
+      newPath: 'Blockly.WorkspaceAudio',
+    },
+    {
+      oldName: 'Blockly.WorkspaceComment',
+      newExport: 'WorkspaceComment',
+      newPath: 'Blockly.WorkspaceComment',
+    },
+    {
+      oldName: 'Blockly.WorkspaceCommentSvg',
+      newExport: 'WorkspaceCommentSvg',
+      newPath: 'Blockly.WorkspaceCommentSvg',
+    },
+    {
+      oldName: 'Blockly.WorkspaceDragSurfaceSvg',
+      newExport: 'WorkspaceDragSurfaceSvg',
+      newPath: 'Blockly.WorkspaceDragSurfaceSvg',
+    },
+    {
+      oldName: 'Blockly.WorkspaceDragger',
+      newExport: 'WorkspaceDragger',
+      newPath: 'Blockly.WorkspaceDragger',
+    },
+    {
+      oldName: 'Blockly.WorkspaceSvg',
+      newExport: 'WorkspaceSvg',
+      newPath: 'Blockly.WorkspaceSvg',
+    },
+    {
+      oldName: 'Blockly.ZoomControls',
+      newExport: 'ZoomControls',
+      newPath: 'Blockly.ZoomControls',
+    },
+  ],
+
+  '8.0.0': [
+    {
+      oldName: 'Blockly',
+      exports: {
+        DRAG_RADIUS: {
+          newModule: 'Blockly.config',
+          newExport: 'config.dragRadius',
+        },
+        FLYOUT_DRAG_RADIUS: {
+          newModule: 'Blockly.config',
+          newExport: 'config.flyoutDragRadius',
+        },
+        SNAP_RADIUS: {
+          newModule: 'Blockly.config',
+          newExport: 'config.snapRadius',
+        },
+        CONNECTING_SNAP_RADIUS: {
+          newModule: 'Blockly.config',
+          newExport: 'config.connectingSnapRadius',
+        },
+        CURRENT_CONNECTION_PREFERENCE: {
+          newModule: 'Blockly.config',
+          newExport: 'config.currentConnectionPreference',
+        },
+        BUMP_DELAY: {
+          newModule: 'Blockly.config',
+          newExport: 'config.bumpDelay',
+        },
+        SPRITE: {
+          newModule: 'Blockly.constants',
+        },
+      },
+    },
+    {
+      oldName: 'Blockly.blocks.all',
+      newName: 'Blockly.libraryBlocks',
+    },
+    {
+      oldName: 'Blockly.blocks.colour',
+      newName: 'Blockly.libraryBlocks.colour',
+    },
+    {
+      oldName: 'Blockly.blocks.lists',
+      newName: 'Blockly.libraryBlocks.lists',
+    },
+    {
+      oldName: 'Blockly.blocks.logic',
+      newName: 'Blockly.libraryBlocks.logic',
+    },
+    {
+      oldName: 'Blockly.blocks.loops',
+      newName: 'Blockly.libraryBlocks.loops',
+    },
+    {
+      oldName: 'Blockly.blocks.math',
+      newName: 'Blockly.libraryBlocks.math',
+    },
+    {
+      oldName: 'Blockly.blocks.procedures',
+      newName: 'Blockly.libraryBlocks.procedures',
+    },
+    {
+      oldName: 'Blockly.blocks.text',
+      newName: 'Blockly.libraryBlocks.text',
+    },
+    {
+      oldName: 'Blockly.blocks.variables',
+      newName: 'Blockly.libraryBlocks.variables',
+    },
+    {
+      oldName: 'Blockly.blocks.variablesDynamic',
+      newName: 'Blockly.libraryBlocks.variablesDynamic',
+    },
+    {
+      oldName: 'Blockly.DropDownDiv',
+      newName: 'Blockly.dropDownDiv',
+      newPath: 'Blockly.DropDownDiv',
+    },
+  ],
+
+  'develop': [ ],
+}

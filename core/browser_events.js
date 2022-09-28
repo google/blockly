@@ -6,22 +6,46 @@
 
 /**
  * @fileoverview Browser event handling.
- * @author fenichel@google.com (Rachel Fenichel)
  */
 'use strict';
 
-goog.provide('Blockly.browserEvents');
+/**
+ * Browser event handling.
+ * @namespace Blockly.browserEvents
+ */
+goog.module('Blockly.browserEvents');
 
-goog.require('Blockly.Touch');
+const Touch = goog.require('Blockly.Touch');
+const userAgent = goog.require('Blockly.utils.userAgent');
+const {globalThis} = goog.require('Blockly.utils.global');
 
 
 /**
  * Blockly opaque event data used to unbind events when using
- * `Blockly.browserEvents.bind` and
- * `Blockly.browserEvents.conditionalBind`.
- * @typedef {!Array.<!Array>}
+ * `bind` and `conditionalBind`.
+ * @typedef {!Array<!Array>}
+ * @alias Blockly.browserEvents.Data
  */
-Blockly.browserEvents.Data;
+let Data;
+exports.Data = Data;
+
+/**
+ * The multiplier for scroll wheel deltas using the line delta mode.
+ * See https://developer.mozilla.org/en-US/docs/Web/API/WheelEvent/deltaMode
+ * for more information on deltaMode.
+ * @type {number}
+ * @const
+ */
+const LINE_MODE_MULTIPLIER = 40;
+
+/**
+ * The multiplier for scroll wheel deltas using the page delta mode.
+ * See https://developer.mozilla.org/en-US/docs/Web/API/WheelEvent/deltaMode
+ * for more information on deltaMode.
+ * @type {number}
+ * @const
+ */
+const PAGE_MODE_MULTIPLIER = 125;
 
 /**
  * Bind an event handler that can be ignored if it is not part of the active
@@ -30,7 +54,7 @@ Blockly.browserEvents.Data;
  * mousedown or mousemove, which may be part of a drag or click).
  * @param {!EventTarget} node Node upon which to listen.
  * @param {string} name Event name to listen to (e.g. 'mousedown').
- * @param {Object} thisObject The value of 'this' in the function.
+ * @param {?Object} thisObject The value of 'this' in the function.
  * @param {!Function} func Function to call when event is triggered.
  * @param {boolean=} opt_noCaptureIdentifier True if triggering on this event
  *     should not block execution of other event handlers on this touch or
@@ -39,24 +63,25 @@ Blockly.browserEvents.Data;
  *     should prevent the default handler.  False by default.  If
  *     opt_noPreventDefault is provided, opt_noCaptureIdentifier must also be
  *     provided.
- * @return {!Blockly.browserEvents.Data} Opaque data that can be passed to
+ * @return {!Data} Opaque data that can be passed to
  *     unbindEvent_.
- * @public
+ * @alias Blockly.browserEvents.conditionalBind
  */
-Blockly.browserEvents.conditionalBind = function(
+const conditionalBind = function(
     node, name, thisObject, func, opt_noCaptureIdentifier,
     opt_noPreventDefault) {
-  var handled = false;
-  var wrapFunc = function(e) {
-    var captureIdentifier = !opt_noCaptureIdentifier;
+  let handled = false;
+  const wrapFunc = function(e) {
+    const captureIdentifier = !opt_noCaptureIdentifier;
     // Handle each touch point separately.  If the event was a mouse event, this
     // will hand back an array with one element, which we're fine handling.
-    var events = Blockly.Touch.splitEventByTouches(e);
-    for (var i = 0, event; (event = events[i]); i++) {
-      if (captureIdentifier && !Blockly.Touch.shouldHandleEvent(event)) {
+    const events = Touch.splitEventByTouches(e);
+    for (let i = 0; i < events.length; i++) {
+      const event = events[i];
+      if (captureIdentifier && !Touch.shouldHandleEvent(event)) {
         continue;
       }
-      Blockly.Touch.setClientFromTouch(event);
+      Touch.setClientFromTouch(event);
       if (thisObject) {
         func.call(thisObject, event);
       } else {
@@ -66,10 +91,10 @@ Blockly.browserEvents.conditionalBind = function(
     }
   };
 
-  var bindData = [];
-  if (Blockly.utils.global['PointerEvent'] &&
-      (name in Blockly.Touch.TOUCH_MAP)) {
-    for (var i = 0, type; (type = Blockly.Touch.TOUCH_MAP[name][i]); i++) {
+  const bindData = [];
+  if (globalThis['PointerEvent'] && (name in Touch.TOUCH_MAP)) {
+    for (let i = 0; i < Touch.TOUCH_MAP[name].length; i++) {
+      const type = Touch.TOUCH_MAP[name][i];
       node.addEventListener(type, wrapFunc, false);
       bindData.push([node, type, wrapFunc]);
     }
@@ -78,17 +103,18 @@ Blockly.browserEvents.conditionalBind = function(
     bindData.push([node, name, wrapFunc]);
 
     // Add equivalent touch event.
-    if (name in Blockly.Touch.TOUCH_MAP) {
-      var touchWrapFunc = function(e) {
+    if (name in Touch.TOUCH_MAP) {
+      const touchWrapFunc = function(e) {
         wrapFunc(e);
         // Calling preventDefault stops the browser from scrolling/zooming the
         // page.
-        var preventDef = !opt_noPreventDefault;
+        const preventDef = !opt_noPreventDefault;
         if (handled && preventDef) {
           e.preventDefault();
         }
       };
-      for (var i = 0, type; (type = Blockly.Touch.TOUCH_MAP[name][i]); i++) {
+      for (let i = 0; i < Touch.TOUCH_MAP[name].length; i++) {
+        const type = Touch.TOUCH_MAP[name][i];
         node.addEventListener(type, touchWrapFunc, false);
         bindData.push([node, type, touchWrapFunc]);
       }
@@ -96,6 +122,7 @@ Blockly.browserEvents.conditionalBind = function(
   }
   return bindData;
 };
+exports.conditionalBind = conditionalBind;
 
 
 /**
@@ -105,14 +132,14 @@ Blockly.browserEvents.conditionalBind = function(
  * mouseover for tooltips).
  * @param {!EventTarget} node Node upon which to listen.
  * @param {string} name Event name to listen to (e.g. 'mousedown').
- * @param {Object} thisObject The value of 'this' in the function.
+ * @param {?Object} thisObject The value of 'this' in the function.
  * @param {!Function} func Function to call when event is triggered.
- * @return {!Blockly.browserEvents.Data} Opaque data that can be passed to
+ * @return {!Data} Opaque data that can be passed to
  *     unbindEvent_.
- * @public
+ * @alias Blockly.browserEvents.bind
  */
-Blockly.browserEvents.bind = function(node, name, thisObject, func) {
-  var wrapFunc = function(e) {
+const bind = function(node, name, thisObject, func) {
+  const wrapFunc = function(e) {
     if (thisObject) {
       func.call(thisObject, e);
     } else {
@@ -120,10 +147,10 @@ Blockly.browserEvents.bind = function(node, name, thisObject, func) {
     }
   };
 
-  var bindData = [];
-  if (Blockly.utils.global['PointerEvent'] &&
-      (name in Blockly.Touch.TOUCH_MAP)) {
-    for (var i = 0, type; (type = Blockly.Touch.TOUCH_MAP[name][i]); i++) {
+  const bindData = [];
+  if (globalThis['PointerEvent'] && (name in Touch.TOUCH_MAP)) {
+    for (let i = 0; i < Touch.TOUCH_MAP[name].length; i++) {
+      const type = Touch.TOUCH_MAP[name][i];
       node.addEventListener(type, wrapFunc, false);
       bindData.push([node, type, wrapFunc]);
     }
@@ -132,12 +159,12 @@ Blockly.browserEvents.bind = function(node, name, thisObject, func) {
     bindData.push([node, name, wrapFunc]);
 
     // Add equivalent touch event.
-    if (name in Blockly.Touch.TOUCH_MAP) {
-      var touchWrapFunc = function(e) {
+    if (name in Touch.TOUCH_MAP) {
+      const touchWrapFunc = function(e) {
         // Punt on multitouch events.
-        if (e.changedTouches && e.changedTouches.length == 1) {
+        if (e.changedTouches && e.changedTouches.length === 1) {
           // Map the touch event's properties to the event.
-          var touchPoint = e.changedTouches[0];
+          const touchPoint = e.changedTouches[0];
           e.clientX = touchPoint.clientX;
           e.clientY = touchPoint.clientY;
         }
@@ -146,7 +173,8 @@ Blockly.browserEvents.bind = function(node, name, thisObject, func) {
         // Stop the browser from scrolling/zooming the page.
         e.preventDefault();
       };
-      for (var i = 0, type; (type = Blockly.Touch.TOUCH_MAP[name][i]); i++) {
+      for (let i = 0; i < Touch.TOUCH_MAP[name].length; i++) {
+        const type = Touch.TOUCH_MAP[name][i];
         node.addEventListener(type, touchWrapFunc, false);
         bindData.push([node, type, touchWrapFunc]);
       }
@@ -154,21 +182,103 @@ Blockly.browserEvents.bind = function(node, name, thisObject, func) {
   }
   return bindData;
 };
+exports.bind = bind;
 
 /**
  * Unbind one or more events event from a function call.
- * @param {!Blockly.browserEvents.Data} bindData Opaque data from bindEvent_.
+ * @param {!Data} bindData Opaque data from bindEvent_.
  *     This list is emptied during the course of calling this function.
  * @return {!Function} The function call.
- * @public
+ * @alias Blockly.browserEvents.unbind
  */
-Blockly.browserEvents.unbind = function(bindData) {
+const unbind = function(bindData) {
+  let func;
   while (bindData.length) {
-    var bindDatum = bindData.pop();
-    var node = bindDatum[0];
-    var name = bindDatum[1];
-    var func = bindDatum[2];
+    const bindDatum = bindData.pop();
+    const node = bindDatum[0];
+    const name = bindDatum[1];
+    func = bindDatum[2];
     node.removeEventListener(name, func, false);
   }
   return func;
 };
+exports.unbind = unbind;
+
+/**
+ * Returns true if this event is targeting a text input widget?
+ * @param {!Event} e An event.
+ * @return {boolean} True if text input.
+ * @alias Blockly.browserEvents.isTargetInput
+ */
+const isTargetInput = function(e) {
+  return e.target.type === 'textarea' || e.target.type === 'text' ||
+      e.target.type === 'number' || e.target.type === 'email' ||
+      e.target.type === 'password' || e.target.type === 'search' ||
+      e.target.type === 'tel' || e.target.type === 'url' ||
+      e.target.isContentEditable ||
+      (e.target.dataset && e.target.dataset.isTextInput === 'true');
+};
+exports.isTargetInput = isTargetInput;
+
+/**
+ * Returns true this event is a right-click.
+ * @param {!Event} e Mouse event.
+ * @return {boolean} True if right-click.
+ * @alias Blockly.browserEvents.isRightButton
+ */
+const isRightButton = function(e) {
+  if (e.ctrlKey && userAgent.MAC) {
+    // Control-clicking on Mac OS X is treated as a right-click.
+    // WebKit on Mac OS X fails to change button to 2 (but Gecko does).
+    return true;
+  }
+  return e.button === 2;
+};
+exports.isRightButton = isRightButton;
+
+/**
+ * Returns the converted coordinates of the given mouse event.
+ * The origin (0,0) is the top-left corner of the Blockly SVG.
+ * @param {!Event} e Mouse event.
+ * @param {!Element} svg SVG element.
+ * @param {?SVGMatrix} matrix Inverted screen CTM to use.
+ * @return {!SVGPoint} Object with .x and .y properties.
+ * @alias Blockly.browserEvents.mouseToSvg
+ */
+const mouseToSvg = function(e, svg, matrix) {
+  const svgPoint = svg.createSVGPoint();
+  svgPoint.x = e.clientX;
+  svgPoint.y = e.clientY;
+
+  if (!matrix) {
+    matrix = svg.getScreenCTM().inverse();
+  }
+  return svgPoint.matrixTransform(matrix);
+};
+exports.mouseToSvg = mouseToSvg;
+
+/**
+ * Returns the scroll delta of a mouse event in pixel units.
+ * @param {!Event} e Mouse event.
+ * @return {{x: number, y: number}} Scroll delta object with .x and .y
+ *    properties.
+ * @alias Blockly.browserEvents.getScrollDeltaPixels
+ */
+const getScrollDeltaPixels = function(e) {
+  switch (e.deltaMode) {
+    case 0x00:  // Pixel mode.
+    default:
+      return {x: e.deltaX, y: e.deltaY};
+    case 0x01:  // Line mode.
+      return {
+        x: e.deltaX * LINE_MODE_MULTIPLIER,
+        y: e.deltaY * LINE_MODE_MULTIPLIER,
+      };
+    case 0x02:  // Page mode.
+      return {
+        x: e.deltaX * PAGE_MODE_MULTIPLIER,
+        y: e.deltaY * PAGE_MODE_MULTIPLIER,
+      };
+  }
+};
+exports.getScrollDeltaPixels = getScrollDeltaPixels;

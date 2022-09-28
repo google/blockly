@@ -5,10 +5,6 @@
  */
 
 /**
- * @fileoverview JavaScript Generator module.
+ * @fileoverview Arduino Generator module; just a wrapper for
+ *     arduino_compressed.js.
  */
-
-/* eslint-disable */
-'use strict';
-
-Blockly.Arduino = BlocklyArduino;

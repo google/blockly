@@ -104,19 +104,6 @@
 	"CONTROLS_IF_IF_TOOLTIP": "If bloğuna ekle, kaldır veya yeniden düzenleme yap.",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "If bloğuna bir koşul ekleyin.",
 	"CONTROLS_IF_ELSE_TOOLTIP": "If bloğuna kalan durumları \"yakalayan\" bir son ekle.",
-	"IOS_OK": "Tamam",
-	"IOS_CANCEL": "İptal",
-	"IOS_ERROR": "Hata",
-	"IOS_PROCEDURES_INPUTS": "GİRİŞLER",
-	"IOS_PROCEDURES_ADD_INPUT": "+ Giriş Ekle",
-	"IOS_PROCEDURES_ALLOW_STATEMENTS": "Açıklamalara izin ver",
-	"IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR": "Bu fonksiyonda mükerrer girdi tanımlı.",
-	"IOS_VARIABLES_ADD_VARIABLE": "+ Değişken Ekle",
-	"IOS_VARIABLES_ADD_BUTTON": "Ekle",
-	"IOS_VARIABLES_RENAME_BUTTON": "Yeniden adlandır",
-	"IOS_VARIABLES_DELETE_BUTTON": "Sil",
-	"IOS_VARIABLES_VARIABLE_NAME": "Değişken adı",
-	"IOS_VARIABLES_EMPTY_NAME_ERROR": "Değişken adı kısmı boş bırakılamaz.",
 	"LOGIC_COMPARE_HELPURL": "https://tr.wikipedia.org/wiki/Eşitsizlikler",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "Her iki giriş de birbirine eşitse true değerini döndürün.",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "Her iki giriş de birbirine eşit değilse true değerini döndürün.",
@@ -390,5 +377,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "Uyarı: Bu blok yalnızca bir işlev tanımı içinde kullanılabilir.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Bir şeyler söyle...",
 	"WORKSPACE_ARIA_LABEL": "Blockly Çalışma Alanı",
-	"COLLAPSED_WARNINGS_WARNING": "Daraltılmış bloklar uyarı içerir."
+	"COLLAPSED_WARNINGS_WARNING": "Daraltılmış bloklar uyarı içerir.",
+	"DIALOG_OK": "Tamam",
+	"DIALOG_CANCEL": "İptal"
 }

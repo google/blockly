@@ -1,0 +1,11 @@
+{
+	"@metadata": {
+		"authors": [
+			"John Reid"
+		]
+	},
+	"PROCEDURES_MUTATORCONTAINER_TOOLTIP": "Eik, remuiv, or reorder inputs tae this function.",
+	"PROCEDURES_MUTATORARG_TOOLTIP": "Eik aen input tae the function.",
+	"DIALOG_OK": "OK",
+	"DIALOG_CANCEL": "Cancel"
+}

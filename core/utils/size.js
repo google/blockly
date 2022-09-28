@@ -8,51 +8,58 @@
  * @fileoverview Utility methods for size calculation.
  * These methods are not specific to Blockly, and could be factored out into
  * a JavaScript framework such as Closure.
- * @author samelh@google.com (Sam El-Husseini)
  */
 'use strict';
 
 /**
- * @name Blockly.utils.Size
- * @namespace
+ * Utility methods for size calculation.
+ * These methods are not specific to Blockly, and could be factored out into
+ * a JavaScript framework such as Closure.
+ * @class
  */
-goog.provide('Blockly.utils.Size');
+goog.module('Blockly.utils.Size');
 
 
 /**
  * Class for representing sizes consisting of a width and height.
- * @param {number} width Width.
- * @param {number} height Height.
- * @struct
- * @constructor
+ * @alias Blockly.utils.Size
  */
-Blockly.utils.Size = function(width, height) {
+const Size = class {
   /**
-   * Width
-   * @type {number}
+   * @param {number} width Width.
+   * @param {number} height Height.
+   * @struct
    */
-  this.width = width;
+  constructor(width, height) {
+    /**
+     * Width
+     * @type {number}
+     */
+    this.width = width;
+
+    /**
+     * Height
+     * @type {number}
+     */
+    this.height = height;
+  }
 
   /**
-   * Height
-   * @type {number}
+   * Compares sizes for equality.
+   * @param {?Size} a A Size.
+   * @param {?Size} b A Size.
+   * @return {boolean} True iff the sizes have equal widths and equal
+   *     heights, or if both are null.
    */
-  this.height = height;
+  static equals(a, b) {
+    if (a === b) {
+      return true;
+    }
+    if (!a || !b) {
+      return false;
+    }
+    return a.width === b.width && a.height === b.height;
+  }
 };
 
-/**
- * Compares sizes for equality.
- * @param {Blockly.utils.Size} a A Size.
- * @param {Blockly.utils.Size} b A Size.
- * @return {boolean} True iff the sizes have equal widths and equal
- *     heights, or if both are null.
- */
-Blockly.utils.Size.equals = function(a, b) {
-  if (a == b) {
-    return true;
-  }
-  if (!a || !b) {
-    return false;
-  }
-  return a.width == b.width && a.height == b.height;
-};
+exports.Size = Size;

@@ -89,19 +89,6 @@
 	"CONTROLS_IF_IF_TOOLTIP": "Afegeix, esborra o reordena seccions per reconfigurar aquest bloc 'si'.",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Afegeix una condició al bloc 'si'.",
 	"CONTROLS_IF_ELSE_TOOLTIP": "Afegeix una condició final, que recull qualsevol altra possibilitat, al bloc 'si'.",
-	"IOS_OK": "D'acord",
-	"IOS_CANCEL": "Cancel·lar",
-	"IOS_ERROR": "Error",
-	"IOS_PROCEDURES_INPUTS": "ENTRADES",
-	"IOS_PROCEDURES_ADD_INPUT": "+ Afegeix Entrada",
-	"IOS_PROCEDURES_ALLOW_STATEMENTS": "Permetre instruccions",
-	"IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR": "Aquesta funció té entrades duplicades.",
-	"IOS_VARIABLES_ADD_VARIABLE": "+ Afegeix Variable",
-	"IOS_VARIABLES_ADD_BUTTON": "Afegir",
-	"IOS_VARIABLES_RENAME_BUTTON": "Reanomena",
-	"IOS_VARIABLES_DELETE_BUTTON": "Esborrar",
-	"IOS_VARIABLES_VARIABLE_NAME": "Nom de la variable",
-	"IOS_VARIABLES_EMPTY_NAME_ERROR": "No es pot fer servir un nom de variable buit.",
 	"LOGIC_COMPARE_HELPURL": "https://ca.wikipedia.org/wiki/Inequaci%C3%B3",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "Retorna cert si totes dues entrades són iguals.",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "Retorna cert si totes dues entrades són diferents.",
@@ -349,5 +336,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "Advertència: Aquest bloc només es pot utilitzar dins de la definició d'una funció.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Digues alguna cosa...",
 	"WORKSPACE_ARIA_LABEL": "Espai de treball Blockly",
-	"COLLAPSED_WARNINGS_WARNING": "Els blocs plegats contenen avisos."
+	"COLLAPSED_WARNINGS_WARNING": "Els blocs plegats contenen avisos.",
+	"DIALOG_OK": "D'acord",
+	"DIALOG_CANCEL": "Cancel·la"
 }

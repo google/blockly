@@ -9,11 +9,9 @@
  */
 'use strict';
 
-goog.provide('Blockly.Constants.TestBlocks');
+goog.provide('Blockly.libraryBlocks.testBlocks');
 
 goog.require('Blockly');
-goog.require('Blockly.Blocks');
-
 
 Blockly.defineBlocksWithJsonArray([
     {

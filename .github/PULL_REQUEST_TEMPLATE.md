@@ -10,6 +10,7 @@
 - [ ] I branched from develop
 - [ ] My pull request is against develop
 - [ ] My code follows the [style guide](https://developers.google.com/blockly/guides/modify/web/style-guide)
+- [ ] I ran `npm run format` and `npm run lint`
 
 ## The details
 ### Resolves
@@ -34,27 +35,11 @@
 
 ### Test Coverage
 
-<!-- TODO: Please show how you have added tests to cover your changes,
-  -        or tell us how you tested it. For each systems you tested,
-  -        uncomment the systems in the list below.
+<!-- TODO: Please do one of the following:
+  -    * Create unit tests, and explain here how they cover your changes.
+  -    * List steps you used for manual testing, and explain how they cover
+  -      your changes.
   -->
-
-<!-- Tested on: -->
-<!-- * Desktop Chrome -->
-<!-- * Desktop Firefox -->
-<!-- * Desktop Safari -->
-<!-- * Desktop Opera -->
-<!-- * Windows Internet Explorer 10 -->
-<!-- * Windows Internet Explorer 11 -->
-<!-- * Windows Edge -->
-
-<!--
-* Smartphone/Tablet/Chromebook (please complete the following information):
-  * Device: [e.g. iPhone6]
-  * OS: [e.g. iOS8.1]
-  * Browser [e.g. stock browser, safari]
-  * Version [e.g. 22]
--->
 
 ### Documentation
 

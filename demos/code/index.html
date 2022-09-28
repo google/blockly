@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,12 +7,12 @@
   <title>Blockly Demo:</title>
   <link rel="stylesheet" href="style.css">
   <script src="/storage.js"></script>
-  <script src="../../blockly_compressed.js"></script>
-  <script src="../../blocks_compressed.js"></script>
-  <script src="../../arduino_compressed.js"></script>
+  <script src="../../build/blockly_compressed.js"></script>
+  <script src="../../build/blocks_compressed.js"></script>
+  <script src="../../build/arduino_compressed.js"></script>
+  <script src="../../build/python_compressed.js"></script>
   <script src="code.js"></script>
 </head>
-
 <body>
   <table width="100%" height="100%">
     <tr>
@@ -36,7 +35,11 @@
             <td class="tabmin tab_collapse">&nbsp;</td>
             <td id="tab_arduino" class="taboff tab_collapse">Arduino</td>
             <td class="tabmin tab_collapse">&nbsp;</td>
+            <td id="tab_python" class="taboff tab_collapse">Python</td>
+            <td class="tabmin tab_collapse">&nbsp;</td>
             <td id="tab_xml" class="taboff tab_collapse">XML</td>
+            <td class="tabmin tab_collapse">&nbsp;</td>
+            <td id="tab_json" class="taboff tab_collapse">JSON</td>
             <td class="tabmin">&nbsp;</td>
             <td id="tab_code" class="taboff">
               <select id="code_menu"></select>
@@ -63,7 +66,9 @@
   </table>
   <div id="content_blocks" class="content"></div>
   <pre id="content_arduino" class="content prettyprint lang-arduino"></pre>
+  <pre id="content_python" class="content prettyprint lang-py"></pre>
   <textarea id="content_xml" class="content" wrap="off"></textarea>
+  <textarea id="content_json" class="content" wrap="off"></textarea>
 
   <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
     <category toolboxitemid="l_situation" name="%{BKY_LEAPHY_SITUATION_CATEGORY}" categorystyle="situation_category">
@@ -439,7 +444,7 @@
       </block>
       <block type="leaphy_use_lsm9ds1">
       </block>
-  </category>
+    </category>
   </xml>
-</body>
+  </body>
 </html>

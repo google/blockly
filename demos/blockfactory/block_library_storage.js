@@ -8,7 +8,6 @@
  * @fileoverview Javascript for Block Library's Storage Class.
  * Depends on Block Library for its namespace.
  *
- * @author quachtina96 (Tina Quach)
  */
 
 'use strict';
@@ -26,7 +25,7 @@ function BlockLibraryStorage(blockLibraryName, opt_blocks) {
   if (!opt_blocks) {
     // Initialize this.blocks by loading from local storage.
     this.loadFromLocalStorage();
-    if (this.blocks == null) {
+    if (this.blocks === null) {
       this.blocks = Object.create(null);
       // The line above is equivalent of {} except that this object is TRULY
       // empty. It doesn't have built-in attributes/functions such as length or
@@ -100,7 +99,7 @@ BlockLibraryStorage.prototype.getBlockXml = function(blockType) {
 /**
  * Returns map of each block type to its corresponding XML stored in current
  * block library (this.blocks).
- * @param {!Array.<string>} blockTypes Types of blocks.
+ * @param {!Array<string>} blockTypes Types of blocks.
  * @return {!Object} Map of block type to corresponding XML.
  */
 BlockLibraryStorage.prototype.getBlockXmlMap = function(blockTypes) {
@@ -115,7 +114,7 @@ BlockLibraryStorage.prototype.getBlockXmlMap = function(blockTypes) {
 
 /**
  * Returns array of all block types stored in current block library.
- * @return {!Array.<string>} Array of block types stored in library.
+ * @return {!Array<string>} Array of block types stored in library.
  */
 BlockLibraryStorage.prototype.getBlockTypes = function() {
   return Object.keys(this.blocks);
@@ -134,7 +133,7 @@ BlockLibraryStorage.prototype.isEmpty = function() {
 
 /**
  * Returns array of all block types stored in current block library.
- * @return {!Array.<string>} Map of block type to corresponding XML text.
+ * @return {!Array<string>} Map of block type to corresponding XML text.
  */
 BlockLibraryStorage.prototype.getBlockXmlTextMap = function() {
   return this.blocks;

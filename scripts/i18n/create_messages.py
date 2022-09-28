@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 # Generate .js files defining Blockly core and language messages.
 #
@@ -123,6 +123,8 @@ def main():
 
 'use strict';
 
+var Blockly = Blockly || {{ Msg: Object.create(null) }};
+
 """.format(target_lang.replace('-', '.')))
         # For each key in the source language file, output the target value
         # if present; otherwise, output the source language value with a
@@ -155,7 +157,7 @@ def main():
         outfile.write(constants_text)
 
       if not args.quiet:
-        print('Created {0}.'.format(outname))
+        print('Created {0}'.format(outname))
 
 
 if __name__ == '__main__':

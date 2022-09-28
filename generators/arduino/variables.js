@@ -1,17 +1,18 @@
 /**
- * @license Licensed under the Apache License, Version 2.0 (the "License"):
- *          http://www.apache.org/licenses/LICENSE-2.0
+ * @license
+ * Copyright 2012 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
- * @fileoverview Generating Arduino code for variables blocks.
+ * @fileoverview Generating Arduino for Variable blocks.
  */
 'use strict';
 
-goog.provide('Blockly.Arduino.variables');
+goog.module('Blockly.Arduino.variables');
 
-goog.require('Blockly.Arduino');
-
+const Arduino = goog.require('Blockly.Arduino');
+const {NameType} = goog.require('Blockly.Names');
 
 /**
  * Code generator for variable (X) getter.
@@ -19,12 +20,10 @@ goog.require('Blockly.Arduino');
  * @param {Blockly.Block} block Block to generate the code from.
  * @return {array} Completed code with order of operation.
  */
-Blockly.Arduino['variables_get'] = function (block) {
+Arduino['variables_get'] = function (block) {
 
-  var varName = Blockly.Arduino.variableDB_.getName(block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
-  Blockly.Arduino.addDeclaration(varName, 'double ' + varName + ';');
-
-  return [varName, Blockly.Arduino.ORDER_ATOMIC];
+    var varName = Arduino.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
+    return [varName, Blockly.Arduino.ORDER_ATOMIC];
 };
 
 /**
@@ -34,25 +33,10 @@ Blockly.Arduino['variables_get'] = function (block) {
  * @param {Blockly.Block} block Block to generate the code from.
  * @return {string} Completed code.
  */
-Blockly.Arduino['variables_set'] = function (block) {
+Arduino['variables_set'] = function (block) {
 
-  var argument0 = Blockly.Arduino.valueToCode(block, 'VALUE', Blockly.Arduino.ORDER_ASSIGNMENT) || '0';
-  var varName = Blockly.Arduino.variableDB_.getName(block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
+    var argument0 = Arduino.valueToCode(block, 'VALUE', Arduino.ORDER_ASSIGNMENT) || '0';
+    var varName = Arduino.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
 
-  return varName + ' = ' + argument0 + ';\n';
-};
-
-/**
- * Code generator for variable (X) casting (Y).
- * Arduino code: loop { (Y)X }
- * @param {Blockly.Block} block Block to generate the code from.
- * @return {array} Completed code with order of operation.
- */
-Blockly.Arduino['variables_set_type'] = function (block) {
-  var argument0 = Blockly.Arduino.valueToCode(block, 'VARIABLE_SETTYPE_INPUT',
-    Blockly.Arduino.ORDER_ASSIGNMENT) || '0';
-  var varType = Blockly.Arduino.getArduinoType_(
-    Blockly.Types[block.getFieldValue('VARIABLE_SETTYPE_TYPE')]);
-  var code = '(' + varType + ')(' + argument0 + ')';
-  return [code, Blockly.Arduino.ORDER_ATOMIC];
+    return varName + ' = ' + argument0 + ';\n';
 };

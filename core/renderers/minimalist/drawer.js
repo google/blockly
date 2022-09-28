@@ -9,24 +9,34 @@
  */
 'use strict';
 
-goog.provide('Blockly.minimalist.Drawer');
+/**
+ * Minimalist rendering drawer.
+ * @class
+ */
+goog.module('Blockly.minimalist.Drawer');
 
-goog.require('Blockly.blockRendering.Drawer');
-goog.require('Blockly.minimalist.RenderInfo');
-goog.require('Blockly.utils.object');
+/* eslint-disable-next-line no-unused-vars */
+const {BlockSvg} = goog.requireType('Blockly.BlockSvg');
+const {Drawer: BaseDrawer} = goog.require('Blockly.blockRendering.Drawer');
+/* eslint-disable-next-line no-unused-vars */
+const {RenderInfo} = goog.requireType('Blockly.minimalist.RenderInfo');
 
 
 /**
  * An object that draws a block based on the given rendering information.
- * @param {!Blockly.BlockSvg} block The block to render.
- * @param {!Blockly.minimalist.RenderInfo} info An object containing all
- *   information needed to render this block.
- * @package
- * @constructor
- * @extends {Blockly.blockRendering.Drawer}
+ * @extends {BaseDrawer}
+ * @alias Blockly.minimalist.Drawer
  */
-Blockly.minimalist.Drawer = function(block, info) {
-  Blockly.minimalist.Drawer.superClass_.constructor.call(this, block, info);
-};
-Blockly.utils.object.inherits(Blockly.minimalist.Drawer,
-    Blockly.blockRendering.Drawer);
+class Drawer extends BaseDrawer {
+  /**
+   * @param {!BlockSvg} block The block to render.
+   * @param {!RenderInfo} info An object containing all
+   *   information needed to render this block.
+   * @package
+   */
+  constructor(block, info) {
+    super(block, info);
+  }
+}
+
+exports.Drawer = Drawer;

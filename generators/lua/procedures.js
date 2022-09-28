@@ -6,107 +6,100 @@
 
 /**
  * @fileoverview Generating Lua for procedure blocks.
- * @author rodrigoq@google.com (Rodrigo Queiro)
  */
 'use strict';
 
-goog.provide('Blockly.Lua.procedures');
+goog.module('Blockly.Lua.procedures');
 
-goog.require('Blockly.Lua');
+const Lua = goog.require('Blockly.Lua');
+const {NameType} = goog.require('Blockly.Names');
 
 
-Blockly.Lua['procedures_defreturn'] = function(block) {
+Lua['procedures_defreturn'] = function(block) {
   // Define a procedure with a return value.
-  var funcName = Blockly.Lua.variableDB_.getName(
-      block.getFieldValue('NAME'), Blockly.PROCEDURE_CATEGORY_NAME);
-  var xfix1 = '';
-  if (Blockly.Lua.STATEMENT_PREFIX) {
-    xfix1 += Blockly.Lua.injectId(Blockly.Lua.STATEMENT_PREFIX, block);
+  const funcName =
+      Lua.nameDB_.getName(block.getFieldValue('NAME'), NameType.PROCEDURE);
+  let xfix1 = '';
+  if (Lua.STATEMENT_PREFIX) {
+    xfix1 += Lua.injectId(Lua.STATEMENT_PREFIX, block);
   }
-  if (Blockly.Lua.STATEMENT_SUFFIX) {
-    xfix1 += Blockly.Lua.injectId(Blockly.Lua.STATEMENT_SUFFIX, block);
+  if (Lua.STATEMENT_SUFFIX) {
+    xfix1 += Lua.injectId(Lua.STATEMENT_SUFFIX, block);
   }
   if (xfix1) {
-    xfix1 = Blockly.Lua.prefixLines(xfix1, Blockly.Lua.INDENT);
+    xfix1 = Lua.prefixLines(xfix1, Lua.INDENT);
   }
-  var loopTrap = '';
-  if (Blockly.Lua.INFINITE_LOOP_TRAP) {
-    loopTrap = Blockly.Lua.prefixLines(
-        Blockly.Lua.injectId(Blockly.Lua.INFINITE_LOOP_TRAP, block),
-        Blockly.Lua.INDENT);
+  let loopTrap = '';
+  if (Lua.INFINITE_LOOP_TRAP) {
+    loopTrap = Lua.prefixLines(
+        Lua.injectId(Lua.INFINITE_LOOP_TRAP, block), Lua.INDENT);
   }
-  var branch = Blockly.Lua.statementToCode(block, 'STACK');
-  var returnValue = Blockly.Lua.valueToCode(block, 'RETURN',
-      Blockly.Lua.ORDER_NONE) || '';
-  var xfix2 = '';
+  let branch = Lua.statementToCode(block, 'STACK');
+  let returnValue = Lua.valueToCode(block, 'RETURN', Lua.ORDER_NONE) || '';
+  let xfix2 = '';
   if (branch && returnValue) {
     // After executing the function body, revisit this block for the return.
     xfix2 = xfix1;
   }
   if (returnValue) {
-    returnValue = Blockly.Lua.INDENT + 'return ' + returnValue + '\n';
+    returnValue = Lua.INDENT + 'return ' + returnValue + '\n';
   } else if (!branch) {
     branch = '';
   }
-  var args = [];
-  var variables = block.getVars();
-  for (var i = 0; i < variables.length; i++) {
-    args[i] = Blockly.Lua.variableDB_.getName(variables[i],
-        Blockly.VARIABLE_CATEGORY_NAME);
+  const args = [];
+  const variables = block.getVars();
+  for (let i = 0; i < variables.length; i++) {
+    args[i] = Lua.nameDB_.getName(variables[i], NameType.VARIABLE);
   }
-  var code = 'function ' + funcName + '(' + args.join(', ') + ')\n' +
-      xfix1 + loopTrap + branch + xfix2 + returnValue + 'end\n';
-  code = Blockly.Lua.scrub_(block, code);
+  let code = 'function ' + funcName + '(' + args.join(', ') + ')\n' + xfix1 +
+      loopTrap + branch + xfix2 + returnValue + 'end\n';
+  code = Lua.scrub_(block, code);
   // Add % so as not to collide with helper functions in definitions list.
-  Blockly.Lua.definitions_['%' + funcName] = code;
+  Lua.definitions_['%' + funcName] = code;
   return null;
 };
 
 // Defining a procedure without a return value uses the same generator as
 // a procedure with a return value.
-Blockly.Lua['procedures_defnoreturn'] =
-    Blockly.Lua['procedures_defreturn'];
+Lua['procedures_defnoreturn'] = Lua['procedures_defreturn'];
 
-Blockly.Lua['procedures_callreturn'] = function(block) {
+Lua['procedures_callreturn'] = function(block) {
   // Call a procedure with a return value.
-  var funcName = Blockly.Lua.variableDB_.getName(
-      block.getFieldValue('NAME'), Blockly.PROCEDURE_CATEGORY_NAME);
-  var args = [];
-  var variables = block.getVars();
-  for (var i = 0; i < variables.length; i++) {
-    args[i] = Blockly.Lua.valueToCode(block, 'ARG' + i,
-        Blockly.Lua.ORDER_NONE) || 'nil';
+  const funcName =
+      Lua.nameDB_.getName(block.getFieldValue('NAME'), NameType.PROCEDURE);
+  const args = [];
+  const variables = block.getVars();
+  for (let i = 0; i < variables.length; i++) {
+    args[i] = Lua.valueToCode(block, 'ARG' + i, Lua.ORDER_NONE) || 'nil';
   }
-  var code = funcName + '(' + args.join(', ') + ')';
-  return [code, Blockly.Lua.ORDER_HIGH];
+  const code = funcName + '(' + args.join(', ') + ')';
+  return [code, Lua.ORDER_HIGH];
 };
 
-Blockly.Lua['procedures_callnoreturn'] = function(block) {
+Lua['procedures_callnoreturn'] = function(block) {
   // Call a procedure with no return value.
   // Generated code is for a function call as a statement is the same as a
   // function call as a value, with the addition of line ending.
-  var tuple = Blockly.Lua['procedures_callreturn'](block);
+  const tuple = Lua['procedures_callreturn'](block);
   return tuple[0] + '\n';
 };
 
-Blockly.Lua['procedures_ifreturn'] = function(block) {
+Lua['procedures_ifreturn'] = function(block) {
   // Conditionally return value from a procedure.
-  var condition = Blockly.Lua.valueToCode(block, 'CONDITION',
-      Blockly.Lua.ORDER_NONE) || 'false';
-  var code = 'if ' + condition + ' then\n';
-  if (Blockly.Lua.STATEMENT_SUFFIX) {
+  const condition =
+      Lua.valueToCode(block, 'CONDITION', Lua.ORDER_NONE) || 'false';
+  let code = 'if ' + condition + ' then\n';
+  if (Lua.STATEMENT_SUFFIX) {
     // Inject any statement suffix here since the regular one at the end
     // will not get executed if the return is triggered.
-    code += Blockly.Lua.prefixLines(
-        Blockly.Lua.injectId(Blockly.Lua.STATEMENT_SUFFIX, block),
-        Blockly.Lua.INDENT);
+    code +=
+        Lua.prefixLines(Lua.injectId(Lua.STATEMENT_SUFFIX, block), Lua.INDENT);
   }
   if (block.hasReturnValue_) {
-    var value = Blockly.Lua.valueToCode(block, 'VALUE',
-        Blockly.Lua.ORDER_NONE) || 'nil';
-    code += Blockly.Lua.INDENT + 'return ' + value + '\n';
+    const value = Lua.valueToCode(block, 'VALUE', Lua.ORDER_NONE) || 'nil';
+    code += Lua.INDENT + 'return ' + value + '\n';
   } else {
-    code += Blockly.Lua.INDENT + 'return\n';
+    code += Lua.INDENT + 'return\n';
   }
   code += 'end\n';
   return code;

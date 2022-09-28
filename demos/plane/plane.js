@@ -6,7 +6,6 @@
 
 /**
  * @fileoverview JavaScript for Blockly's Plane Seat Calculator demo.
- * @author fraser@google.com (Neil Fraser)
  */
 'use strict';
 
@@ -111,7 +110,7 @@ Plane.getLang = function() {
  * @return {boolean} True if RTL, false if LTR.
  */
 Plane.isRtl = function() {
-  return Plane.LANGUAGE_RTL.indexOf(Plane.LANG) != -1;
+  return Plane.LANGUAGE_RTL.indexOf(Plane.LANG) !== -1;
 };
 
 /**
@@ -147,7 +146,7 @@ Plane.changeLanguage = function() {
   // This should be skipped for the index page, which has no blocks and does
   // not load Blockly.
   // MSIE 11 does not support sessionStorage on file:// URLs.
-  if (typeof Blockly != 'undefined' && window.sessionStorage) {
+  if (typeof Blockly !== 'undefined' && window.sessionStorage) {
     var xml = Blockly.Xml.workspaceToDom(Plane.workspace);
     var text = Blockly.Xml.domToText(xml);
     window.sessionStorage.loadOnceBlocks = text;
@@ -315,7 +314,7 @@ Plane.initLanguage = function() {
     var tuple = languages[i];
     var lang = tuple[tuple.length - 1];
     var option = new Option(tuple[0], lang);
-    if (lang == Plane.LANG) {
+    if (lang === Plane.LANG) {
       option.selected = true;
     }
     languageMenu.options.add(option);
@@ -332,7 +331,7 @@ Plane.recalculate = function() {
   var rootBlock = null;
   var blocks = Plane.workspace.getTopBlocks(false);
   for (var i = 0, block; block = blocks[i]; i++) {
-    if (block.type == 'plane_set_seats') {
+    if (block.type === 'plane_set_seats') {
       rootBlock = block;
     }
   }
@@ -347,7 +346,7 @@ Plane.recalculate = function() {
   Plane.setText('seatText',
       Plane.getMsg('Plane_seats').replace(
           '%1', isNaN(seats) ? '?' : seats));
-  Plane.setCorrect(isNaN(seats) ? null : (Plane.answer() == seats));
+  Plane.setCorrect(isNaN(seats) ? null : (Plane.answer() === seats));
 };
 
 /**
@@ -355,11 +354,11 @@ Plane.recalculate = function() {
  * @return {number} Number of seats.
  */
 Plane.answer = function() {
-  if (Plane.LEVEL == 1) {
+  if (Plane.LEVEL === 1) {
     return Plane.rows1st * 4;
-  } else if (Plane.LEVEL == 2) {
+  } else if (Plane.LEVEL === 2) {
     return 2 + (Plane.rows1st * 4);
-  } else if (Plane.LEVEL == 3) {
+  } else if (Plane.LEVEL === 3) {
     return 2 + (Plane.rows1st * 4) + (Plane.rows2nd * 5);
   }
   throw 'Unknown level.';
@@ -373,7 +372,7 @@ Plane.redraw = function(newRows) {
   var rows1st = Plane.rows1st;
   var rows2nd = Plane.rows2nd;
   var svg = document.getElementById('plane');
-  if (newRows != rows1st) {
+  if (newRows !== rows1st) {
     while (newRows < rows1st) {
       var row = document.getElementById('row1st' + rows1st);
       row.parentNode.removeChild(row);
@@ -390,7 +389,7 @@ Plane.redraw = function(newRows) {
       svg.appendChild(row);
     }
 
-    if (Plane.LEVEL == 3) {
+    if (Plane.LEVEL === 3) {
       newRows = Math.floor((21 - newRows) * 1.11);
       while (newRows < rows2nd) {
         var row = document.getElementById('row2nd' + rows2nd);

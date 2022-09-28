@@ -91,19 +91,6 @@
 	"CONTROLS_IF_IF_TOOLTIP": "A ha blokk testreszabásához bővítsd, töröld vagy rendezd át a részeit.",
 	"CONTROLS_IF_ELSEIF_TOOLTIP": "Feltétel hozzáadása a ha blokkhoz.",
 	"CONTROLS_IF_ELSE_TOOLTIP": "Végső feltétel hozzáadása a ha blokkhoz.",
-	"IOS_OK": "OK",
-	"IOS_CANCEL": "Mégse",
-	"IOS_ERROR": "Hiba",
-	"IOS_PROCEDURES_INPUTS": "BEMENETEK",
-	"IOS_PROCEDURES_ADD_INPUT": "+ Bemenet hozzáadása",
-	"IOS_PROCEDURES_ALLOW_STATEMENTS": "Utasítások engedélyezése",
-	"IOS_PROCEDURES_DUPLICATE_INPUTS_ERROR": "Ennek a függvénynek kettőzött bemenete van.",
-	"IOS_VARIABLES_ADD_VARIABLE": "+ Változó hozzáadása",
-	"IOS_VARIABLES_ADD_BUTTON": "Hozzáadás",
-	"IOS_VARIABLES_RENAME_BUTTON": "Átnevezés",
-	"IOS_VARIABLES_DELETE_BUTTON": "Törlés",
-	"IOS_VARIABLES_VARIABLE_NAME": "Változó neve",
-	"IOS_VARIABLES_EMPTY_NAME_ERROR": "Nem használhat üres változónevet.",
 	"LOGIC_COMPARE_HELPURL": "https://hu.wikipedia.org/wiki/Egyenl%C5%91tlens%C3%A9g",
 	"LOGIC_COMPARE_TOOLTIP_EQ": "Igaz, ha a kifejezés két oldala egyenlő.",
 	"LOGIC_COMPARE_TOOLTIP_NEQ": "Igaz, ha a kifejezés két oldala nem egyenlő..",
@@ -359,5 +346,7 @@
 	"PROCEDURES_IFRETURN_WARNING": "Figyelem: Ez a blokk csak függvénydefiníción belül használható.",
 	"WORKSPACE_COMMENT_DEFAULT_TEXT": "Mondj valamit...",
 	"WORKSPACE_ARIA_LABEL": "Blockly munkaterület",
-	"COLLAPSED_WARNINGS_WARNING": "Az összecsukott blokk figyelmeztetéseket tartalmaz."
+	"COLLAPSED_WARNINGS_WARNING": "Az összecsukott blokk figyelmeztetéseket tartalmaz.",
+	"DIALOG_OK": "OK",
+	"DIALOG_CANCEL": "Mégse"
 }

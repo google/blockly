@@ -29,10 +29,10 @@ const defaultBlockStyles = {
   "numbers_blocks": {
     "colourPrimary": "#75B342"
   },
-  "variables_blocks": {
+  "variable_blocks": {
     "colourPrimary": "#DE7C3B"
   },
-  "functions_blocks": {
+  "procedure_blocks": {
     "colourPrimary": "#4095CE"
   }
 };

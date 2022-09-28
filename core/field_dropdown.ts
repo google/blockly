@@ -205,7 +205,7 @@ export class FieldDropdown extends Field {
     }
 
     if (this.borderRect_) {
-      this.borderRect_.classList.add('blocklyDropdownRect');
+      dom.addClass(this.borderRect_, 'blocklyDropdownRect');
     }
   }
 
@@ -276,7 +276,7 @@ export class FieldDropdown extends Field {
     dropDownDiv.clearContent();
     // Element gets created in render.
     const menuElement = this.menu_!.render(dropDownDiv.getContentDiv());
-    menuElement.classList.add('blocklyDropdownMenu');
+    dom.addClass(menuElement, 'blocklyDropdownMenu');
 
     if (this.getConstants()!.FIELD_DROPDOWN_COLOURED_DIV) {
       const primaryColour = this.sourceBlock_.isShadow() ?
@@ -608,7 +608,7 @@ export class FieldDropdown extends Field {
   private renderSelectedText_() {
     // Retrieves the selected option to display through getText_.
     this.textContent_.nodeValue = this.getDisplayText_();
-    this.textElement_.classList.add('blocklyDropdownText');
+    dom.addClass(this.textElement_, 'blocklyDropdownText');
     this.textElement_.setAttribute('text-anchor', 'start');
 
     // Height and width include the border rect.

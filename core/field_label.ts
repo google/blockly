@@ -13,6 +13,7 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.FieldLabel');
 
+import * as dom from './utils/dom.js';
 import {FieldConfig, Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import * as parsing from './utils/parsing.js';
@@ -75,7 +76,7 @@ export class FieldLabel extends Field {
   override initView() {
     this.createTextElement_();
     if (this.class_) {
-      this.textElement_.classList.add(this.class_);
+      dom.addClass(this.textElement_, this.class_);
     }
   }
 
@@ -101,10 +102,10 @@ export class FieldLabel extends Field {
   setClass(cssClass: string|null) {
     if (this.textElement_) {
       if (this.class_) {
-        this.textElement_.classList.remove(this.class_);
+        dom.removeClass(this.textElement_, this.class_);
       }
       if (cssClass) {
-        this.textElement_.classList.add(cssClass);
+        dom.addClass(this.textElement_, cssClass);
       }
     }
     this.class_ = cssClass;

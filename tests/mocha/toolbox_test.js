@@ -130,6 +130,26 @@ suite('Toolbox', function() {
       this.toolbox.render(jsonDef);
       chai.assert.lengthOf(this.toolbox.contents_, 1);
     });
+    test('multiple icon classes can be applied', function() {
+      const jsonDef = {'contents': [
+        {
+          "kind": "category",
+          "cssConfig": {
+            "icon": "customIcon customIconEvents",
+          },
+          "contents": [
+            {
+              "kind": "block",
+              "blockxml": '<block xmlns="http://www.w3.org/1999/xhtml" type="basic_block"><field name="TEXT">FirstCategory-FirstBlock</field></block>',
+            },
+          ],
+        },
+      ]};
+      chai.assert.doesNotThrow(() => {
+        this.toolbox.render(jsonDef);
+      });
+      chai.assert.lengthOf(this.toolbox.contents_, 1);
+    });
   });
 
   suite('onClick_', function() {

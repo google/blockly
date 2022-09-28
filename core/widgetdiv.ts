@@ -15,6 +15,7 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.WidgetDiv');
 
 import * as common from './common.js';
+import * as dom from './utils/dom.js';
 import type {Rect} from './utils/rect.js';
 import type {Size} from './utils/size.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
@@ -93,10 +94,10 @@ export function show(newOwner: unknown, rtl: boolean, newDispose: () => void) {
   rendererClassName = mainWorkspace.getRenderer().getClassName();
   themeClassName = mainWorkspace.getTheme().getClassName();
   if (rendererClassName) {
-    div.classList.add(rendererClassName);
+    dom.addClass(div, rendererClassName);
   }
   if (themeClassName) {
-    div.classList.add(themeClassName);
+    dom.addClass(div, themeClassName);
   }
 }
 
@@ -121,11 +122,11 @@ export function hide() {
   div.textContent = '';
 
   if (rendererClassName) {
-    div.classList.remove(rendererClassName);
+    dom.removeClass(div, rendererClassName);
     rendererClassName = '';
   }
   if (themeClassName) {
-    div.classList.remove(themeClassName);
+    dom.removeClass(div, themeClassName);
     themeClassName = '';
   }
   (common.getMainWorkspace() as WorkspaceSvg).markFocused();

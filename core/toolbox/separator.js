@@ -113,15 +113,15 @@ Css.register(`
 .blocklyTreeSeparator {
   border-bottom: solid #e5e5e5 1px;
   height: 0;
-  margin: 5px 0;
+  margin: 0px 0;
 }
 
 .blocklyToolboxDiv[layout="h"] .blocklyTreeSeparator {
   border-right: solid #e5e5e5 1px;
   border-bottom: none;
   height: auto;
-  margin: 0 5px 0 5px;
-  padding: 5px 0;
+  margin: 0 0px 0 5px;
+  padding: 0px 0;
   width: 0;
 }
 `);

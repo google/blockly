@@ -558,7 +558,7 @@ function updateGenerator(block) {
         code.push(makeVar('variable', name) +
                   " = Blockly." + language +
                   ".nameDB_.getName(block.getFieldValue('" + name +
-                  "'), Blockly.Variables.NAME_TYPE);");
+                  "'), NameType.VARIABLE);");
       } else if (field instanceof Blockly.FieldAngle) {
         // Subclass of Blockly.FieldTextInput, must test first.
         code.push(makeVar('angle', name) +

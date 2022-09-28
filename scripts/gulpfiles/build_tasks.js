@@ -107,30 +107,41 @@ const chunks = [
     reexport: 'Blockly.libraryBlocks',
   },
   {
-    name: 'javascript',
-    entry: 'generators/javascript/all.js',
-    reexport: 'Blockly.JavaScript',
+    name: 'arduino',
+    entry: 'generators/arduino/all.js',
+    reexport: 'Blockly.Arduino',
   },
   {
     name: 'python',
     entry: 'generators/python/all.js',
     reexport: 'Blockly.Python',
-  },
-  {
-    name: 'php',
-    entry: 'generators/php/all.js',
-    reexport: 'Blockly.PHP',
-  },
-  {
-    name: 'lua',
-    entry: 'generators/lua/all.js',
-    reexport: 'Blockly.Lua',
-  },
-  {
-    name: 'dart',
-    entry: 'generators/dart/all.js',
-    reexport: 'Blockly.Dart',
   }
+  // {
+  //   name: 'javascript',
+  //   entry: 'generators/javascript/all.js',
+  //   reexport: 'Blockly.JavaScript',
+  // },
+  // {
+  //   name: 'python',
+  //   entry: 'generators/python/all.js',
+  //   reexport: 'Blockly.Python',
+  // },
+  // {
+  //   name: 'php',
+  //   entry: 'generators/php/all.js',
+  //   reexport: 'Blockly.PHP',
+  // },
+  // {
+  //   name: 'lua',
+  //   entry: 'generators/lua/all.js',
+  //   reexport: 'Blockly.Lua',
+  // },
+  // {
+  //   name: 'dart',
+  //   entry: 'generators/dart/all.js',
+  //   reexport: 'Blockly.Dart',
+  // },
+  
 ];
 
 const licenseRegex = `\\/\\*\\*

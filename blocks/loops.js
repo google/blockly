@@ -58,9 +58,23 @@ const blocks = createBlockDefinitionsFromJsonArray([
     }],
     'previousStatement': null,
     'nextStatement': null,
-    'style': 'loop_blocks',
+    'style': 'situation_blocks',
     'tooltip': '%{BKY_CONTROLS_REPEAT_TOOLTIP}',
     'helpUrl': '%{BKY_CONTROLS_REPEAT_HELPURL}',
+  },
+  {
+    "type": "controls_repeat_forever",
+    "message0": "%{BKY_CONTROLS_REPEAT_FOREVER_TITLE}",
+    "message1": "%{BKY_CONTROLS_REPEAT_INPUT_DO} %1",
+    "args1": [{
+      "type": "input_statement",
+      "name": "DO"
+    }],
+    "previousStatement": null,
+    "nextStatement": null,
+    "style": "situation_blocks",
+    "tooltip": "%{BKY_CONTROLS_REPEAT_TOOLTIP}",
+    "helpUrl": "%{BKY_CONTROLS_REPEAT_HELPURL}"
   },
   // Block for repeat n times (internal number).
   // The 'controls_repeat_ext' block is preferred as it is more flexible.
@@ -111,7 +125,7 @@ const blocks = createBlockDefinitionsFromJsonArray([
     }],
     'previousStatement': null,
     'nextStatement': null,
-    'style': 'loop_blocks',
+    'style': 'situation_blocks',
     'helpUrl': '%{BKY_CONTROLS_WHILEUNTIL_HELPURL}',
     'extensions': ['controls_whileUntil_tooltip'],
   },

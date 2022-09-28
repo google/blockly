@@ -20,7 +20,8 @@ const registry = goog.require('Blockly.registry');
 const toolbox = goog.require('Blockly.utils.toolbox');
 /* eslint-disable-next-line no-unused-vars */
 const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
-const {Classic} = goog.require('Blockly.Themes.Classic');
+//const {Classic} = goog.require('Blockly.Themes.Classic');
+const {Leaphy} = goog.require('Blockly.Themes.Leaphy');
 /* eslint-disable-next-line no-unused-vars */
 const {Metrics} = goog.requireType('Blockly.utils.Metrics');
 const {Theme} = goog.require('Blockly.Theme');
@@ -325,14 +326,14 @@ class Options {
   }
 
   /**
-   * Parse the user-specified theme options, using the classic theme as a
+   * Parse the user-specified theme options, using the leaphy theme as a
    * default. https://developers.google.com/blockly/guides/configure/web/themes
    * @param {!Object} options Dictionary of options.
    * @return {!Theme} A Blockly Theme.
    * @private
    */
   static parseThemeOptions_(options) {
-    const theme = options['theme'] || Classic;
+    const theme = options['theme'] || Leaphy;
     if (typeof theme === 'string') {
       return /** @type {!Theme} */ (
           registry.getObject(registry.Type.THEME, theme));

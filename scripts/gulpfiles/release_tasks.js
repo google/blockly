@@ -17,7 +17,7 @@ var buildTasks = require('./build_tasks');
 var gitTasks = require('./git_tasks');
 var packageTasks = require('./package_tasks');
 var {getPackageJson} = require('./helper_tasks');
-var {RELEASE_DIR} = require('./config');
+var {RELEASE_DIR } = require('./config');
 
 
 // Gets the current major version.
@@ -82,8 +82,8 @@ function checkBranch(done) {
 // Sanity check that the RELASE_DIR directory exists, and that certain
 // files are in it.
 function checkReleaseDir(done) {
-  const sanityFiles = ['blockly_compressed.js', 'blocks_compressed.js',
-                       'core', 'blocks', 'generators'];
+  //const sanityFiles = ['blockly_compressed.js', 'blocks_compressed.js', 'core', 'blocks', 'generators'];
+  const sanityFiles = ['blockly_compressed.js', 'blocks_compressed.js', 'media', 'msg'];
   // Check that directory exists.
   if (fs.existsSync(RELEASE_DIR)) {
     // Sanity check that certain files exist in RELASE_DIR.
@@ -105,8 +105,8 @@ function checkReleaseDir(done) {
 function loginAndPublish_(done, isBeta) {
   var { version } = getPackageJson();
   if(readlineSync.keyInYN(`You are about to publish blockly with the version number:${version}. Do you want to continue?`)) {
-    execSync(`npm login --registry https://wombat-dressing-room.appspot.com`, {stdio: 'inherit'});
-    execSync(`npm publish --registry https://wombat-dressing-room.appspot.com ${isBeta ? '--tag beta' : ''}`, {cwd: RELEASE_DIR, stdio: 'inherit'});
+    execSync(`npm login`, {stdio: 'inherit'});
+    execSync(`npm publish ${isBeta ? '--tag beta' : ''}`, {cwd: RELEASE_DIR, stdio: 'inherit'});
     done();
   } else {
     done(new Error('User quit due to the version number not being correct.'));

@@ -328,12 +328,12 @@
     }
   
    const workspaceId = /** @type {string} */ (bubbleEvent.workspaceId);
-   const block = /** @type {!BlockSvg} */ Workspace.getById(workspaceId).getBlockById(bubbleEvent.blockId);
+   const block = Workspace.getById(workspaceId).getBlockById(bubbleEvent.blockId);
    const type = block.type;
    if (type !== 'procedures_with_argument_defnoreturn' && type !== 'procedures_with_argument_defreturn') {
      return;
    }
-   const workspace = /** @type {!WorkspaceSvg} */ block.mutator.getWorkspace();
+   const workspace = block.mutator.getWorkspace();
    updateMutatorFlyout(workspace);
    workspace.addChangeListener(mutatorChangeListener);
  };

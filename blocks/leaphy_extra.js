@@ -48,7 +48,7 @@ const blocks = createBlockDefinitionsFromJsonArray([
     "args0": [
       {
         "type": "field_dropdown",
-        "name": "COLOR_TYPE ",
+        "name": "COLOR_TYPE_RAW ",
         "options": rgbColorRaw
       }
     ],

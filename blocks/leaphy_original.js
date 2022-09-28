@@ -61,7 +61,7 @@ const blocks = createBlockDefinitionsFromJsonArray([
     "args0": [
       {
         "type": "field_dropdown",
-        "name": "NAME",
+        "name": "MOTOR_TYPE",
         "options": motorLeftRightDropdown
       },
       {

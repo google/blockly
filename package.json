@@ -1,16 +1,16 @@
 {
-  "name": "blockly",
-  "version": "8.0.5",
+  "name": "leaphy-blockly",
+  "version": "2.0.0",
   "description": "Blockly is a library for building visual programming editors.",
   "keywords": [
     "blockly"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/google/blockly.git"
+    "url": "https://github.com/leaphy-robotics/leaphy-blockly.git"
   },
   "bugs": {
-    "url": "https://github.com/google/blockly/issues"
+    "url": "https://github.com/leaphy-robotics/leaphy-blockly/issues"
   },
   "homepage": "https://developers.google.com/blockly/",
   "author": {
@@ -54,15 +54,6 @@
     "test:compile:advanced": "gulp buildAdvancedCompilationTest --debug",
     "typings": "gulp typings",
     "updateGithubPages": "gulp gitUpdateGithubPages"
-  },
-  "main": "./index.js",
-  "umd": "./blockly.min.js",
-  "unpkg": "./blockly.min.js",
-  "types": "./index.d.ts",
-  "browser": {
-    "./node.js": "./browser.js",
-    "./core.js": "./core-browser.js",
-    "./blockly-node.js": "./blockly.js"
   },
   "license": "Apache-2.0",
   "devDependencies": {

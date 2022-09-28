@@ -65,7 +65,7 @@ function checkBuildDir(done) {
   for (const fileName of [
     'blockly_compressed.js',  // buildTasks.buildCompressed
     'blocks_compressed.js',  // buildTasks.buildBlocks
-    'javascript_compressed.js',  // buildTasks.buildGenerators
+    'arduino_compressed.js',  // buildTasks.buildGenerators
     'msg/js/en.js',  // buildTaks.buildLangfiles
   ]) {
     if (!fs.existsSync(`${BUILD_DIR}/${fileName}`)) {
@@ -274,6 +274,15 @@ function packageGenerator(file, rename, namespace) {
 };
 
 /**
+ * This task wraps arduino_compressed.js into a UMD module.
+ * @example import 'blockly/arduino';
+ */
+ function packageArduino() {
+  return packageGenerator('arduino_compressed.js', 'arduino.js', 'Arduino');
+};
+
+
+/**
  * This task wraps javascript_compressed.js into a UMD module.
  * @example import 'blockly/javascript';
  */
@@ -413,26 +422,28 @@ const package = gulp.series(
     checkBuildDir,
     cleanReleaseDir,
     gulp.parallel(
-        packageIndex,
-        packageSources,
+        //packageIndex,
+        //packageSources,
         packageCompressed,
-        packageBrowser,
-        packageNode,
-        packageCore,
-        packageNodeCore,
-        packageBlockly,
-        packageBlocks,
-        packageJavascript,
-        packagePython,
-        packageLua,
-        packageDart,
-        packagePHP,
+        //packageBrowser,
+        //packageNode,
+        //packageCore,
+        //packageNodeCore,
+        //packageBlockly,
+        //packageBlocks,
+        //packageArduino,
+        //packageJavascript,
+        //packagePython,
+        //packageLua,
+        //packageDart,
+        //packagePHP,
         packageLocales,
         packageMedia,
-        packageUMDBundle,
+        //packageUMDBundle,
         packageJSON,
         packageReadme,
-        packageDTS)
+        //packageDTS
+        )
     );
 
 module.exports = {

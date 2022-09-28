@@ -300,7 +300,7 @@ Arduino.finish = function (code) {
   // userSetupCode added at the end of the setup function without leading spaces
   var setups = [''], userSetupCode = '';
   if (Arduino.setups_['userSetupCode'] !== undefined) {
-    userSetupCode = '\n' + Arduino.setups_['userSetupCode'];
+    userSetupCode = '\n  ' + Arduino.setups_['userSetupCode'];
     delete Arduino.setups_['userSetupCode'];
   }
   for (var name in Arduino.setups_) {

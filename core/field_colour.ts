@@ -18,6 +18,7 @@ import './events/events_block_change.js';
 import {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import * as Css from './css.js';
+import * as dom from './utils/dom.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import {FieldConfig, Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
@@ -476,7 +477,7 @@ export class FieldColour extends Field {
       highlighted.classList.remove('blocklyColourHighlighted');
     }
     // Highlight new item.
-    cell.classList.add('blocklyColourHighlighted');
+    dom.addClass(cell, 'blocklyColourHighlighted');
     // Set new highlighted index.
     this.highlightedIndex_ = index;
 

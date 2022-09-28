@@ -69,7 +69,7 @@ export abstract class Icon {
     this.iconGroup_ =
         dom.createSvgElement(Svg.G, {'class': 'blocklyIconGroup'});
     if (this.getBlock().isInFlyout) {
-      this.iconGroup_.classList.add('blocklyIconGroupReadonly');
+      dom.addClass(this.iconGroup_, 'blocklyIconGroupReadonly');
     }
     this.drawIcon_(this.iconGroup_);
 

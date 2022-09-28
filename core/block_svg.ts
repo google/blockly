@@ -778,7 +778,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       (group as AnyDuringMigration).translate_ = '';
       (group as AnyDuringMigration).skew_ = '';
       common.draggingConnections.push(...this.getConnections_(true));
-      this.svgGroup_.classList.add('blocklyDragging');
+      dom.addClass(this.svgGroup_, 'blocklyDragging');
     } else {
       common.draggingConnections.length = 0;
       this.svgGroup_.classList.remove('blocklyDragging');

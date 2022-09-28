@@ -239,7 +239,7 @@ export class FieldMultilineInput extends FieldTextInput {
     if (this.isBeingEdited_) {
       const htmlInput = this.htmlInput_ as HTMLElement;
       if (this.isOverflowedY_) {
-        htmlInput.classList.add('blocklyHtmlTextAreaInputOverflowedY');
+        dom.addClass(htmlInput, 'blocklyHtmlTextAreaInputOverflowedY');
       } else {
         htmlInput.classList.remove('blocklyHtmlTextAreaInputOverflowedY');
       }
@@ -258,7 +258,7 @@ export class FieldMultilineInput extends FieldTextInput {
       }
       const htmlInput = this.htmlInput_ as HTMLElement;
       if (!this.isTextValid_) {
-        htmlInput.classList.add('blocklyInvalidInput');
+        dom.addClass(htmlInput, 'blocklyInvalidInput');
         aria.setState(htmlInput, aria.State.INVALID, true);
       } else {
         htmlInput.classList.remove('blocklyInvalidInput');

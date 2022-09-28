@@ -15,6 +15,7 @@ goog.declareModuleId('Blockly.dropDownDiv');
 
 import type {BlockSvg} from './block_svg.js';
 import * as common from './common.js';
+import * as dom from './utils/dom.js';
 import type {Field} from './field.js';
 import * as math from './utils/math.js';
 import {Rect} from './utils/rect.js';
@@ -138,7 +139,7 @@ export function createDom() {
   // Handle focusin/out events to add a visual indicator when
   // a child is focused or blurred.
   div.addEventListener('focusin', function() {
-    div.classList.add('blocklyFocused');
+    dom.addClass(div, 'blocklyFocused');
   });
   div.addEventListener('focusout', function() {
     div.classList.remove('blocklyFocused');
@@ -311,10 +312,10 @@ export function show(
   renderedClassName = mainWorkspace.getRenderer().getClassName();
   themeClassName = mainWorkspace.getTheme().getClassName();
   if (renderedClassName) {
-    div.classList.add(renderedClassName);
+    dom.addClass(div, renderedClassName);
   }
   if (themeClassName) {
-    div.classList.add(themeClassName);
+    dom.addClass(div, themeClassName);
   }
 
   // When we change `translate` multiple times in close succession,

@@ -18,6 +18,7 @@ import './events/events_block_change.js';
 import type {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import * as dialog from './dialog.js';
+import * as dom from './utils/dom.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import * as eventUtils from './events/utils.js';
 import {FieldConfig, Field} from './field.js';
@@ -244,7 +245,7 @@ export class FieldTextInput extends Field {
       this.resizeEditor_();
       const htmlInput = this.htmlInput_ as HTMLElement;
       if (!this.isTextValid_) {
-        htmlInput.classList.add('blocklyInvalidInput');
+        dom.addClass(htmlInput, 'blocklyInvalidInput');
         aria.setState(htmlInput, aria.State.INVALID, true);
       } else {
         htmlInput.classList.remove('blocklyInvalidInput');
@@ -331,7 +332,7 @@ export class FieldTextInput extends Field {
     eventUtils.setGroup(true);
     const div = WidgetDiv.getDiv();
 
-    this.getClickTarget_().classList.add('editing');
+    dom.addClass(this.getClickTarget_(), 'editing');
 
     const htmlInput = (document.createElement('input'));
     htmlInput.className = 'blocklyHtmlInput';

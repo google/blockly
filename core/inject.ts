@@ -172,11 +172,11 @@ function createMainWorkspace(
   const injectionDiv = mainWorkspace.getInjectionDiv();
   const rendererClassName = mainWorkspace.getRenderer().getClassName();
   if (rendererClassName) {
-    injectionDiv.classList.add(rendererClassName);
+    dom.addClass(injectionDiv, rendererClassName);
   }
   const themeClassName = mainWorkspace.getTheme().getClassName();
   if (themeClassName) {
-    injectionDiv.classList.add(themeClassName);
+    dom.addClass(injectionDiv, themeClassName);
   }
 
   if (!wsOptions.hasCategories && wsOptions.languageTree) {

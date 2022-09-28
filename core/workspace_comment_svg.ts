@@ -263,7 +263,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * @internal
    */
   addSelect() {
-    this.svgGroup_.classList.add('blocklySelected');
+    dom.addClass(this.svgGroup_, 'blocklySelected');
     this.setFocus();
   }
 
@@ -273,7 +273,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * @internal
    */
   removeSelect() {
-    this.svgGroup_.classList.add('blocklySelected');
+    dom.addClass(this.svgGroup_, 'blocklySelected');
     this.blurFocus();
   }
 
@@ -283,7 +283,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * @internal
    */
   addFocus() {
-    this.svgGroup_.classList.add('blocklyFocused');
+    dom.addClass(this.svgGroup_, 'blocklyFocused');
   }
 
   /**
@@ -473,7 +473,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    */
   updateMovable() {
     if (this.isMovable()) {
-      this.svgGroup_.classList.add('blocklyDraggable');
+      dom.addClass(this.svgGroup_, 'blocklyDraggable');
     } else {
       this.svgGroup_.classList.remove('blocklyDraggable');
     }
@@ -514,7 +514,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
       const group = this.getSvgRoot();
       (group as AnyDuringMigration).translate_ = '';
       (group as AnyDuringMigration).skew_ = '';
-      this.svgGroup_.classList.add('blocklyDragging');
+      dom.addClass(this.svgGroup_, 'blocklyDragging');
     } else {
       this.svgGroup_.classList.remove('blocklyDragging');
     }
@@ -561,7 +561,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    */
   setDeleteStyle(enable: boolean) {
     if (enable) {
-      this.svgGroup_.classList.add('blocklyDraggingDelete');
+      dom.addClass(this.svgGroup_, 'blocklyDraggingDelete');
     } else {
       this.svgGroup_.classList.remove('blocklyDraggingDelete');
     }
@@ -853,7 +853,9 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    */
   private deleteMouseDown_(e: Event) {
     // Highlight the delete icon.
-    this.deleteIconBorder_?.classList.add('blocklyDeleteIconHighlighted');
+    if (this.deleteIconBorder_) {
+      dom.addClass(this.deleteIconBorder_, 'blocklyDeleteIconHighlighted');
+    }
     // This event has been handled.  No need to bubble up to the document.
     e.stopPropagation();
   }
@@ -1016,8 +1018,12 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
       }
       this.textarea_!.focus();
       this.addFocus();
-      this.svgRectTarget_?.classList.add('blocklyCommentTargetFocused');
-      this.svgHandleTarget_?.classList.add('blocklyCommentHandleTargetFocused');
+      if (this.svgRectTarget_) {
+        dom.addClass(this.svgRectTarget_, 'blocklyCommentTargetFocused');
+      }
+      if (this.svgHandleTarget_) {
+        dom.addClass(this.svgHandleTarget_, 'blocklyCommentHandleTargetFocused');
+      }
     }, 0);
   }
 

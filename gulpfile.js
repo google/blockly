@@ -19,6 +19,7 @@ const licenseTasks = require('./scripts/gulpfiles/license_tasks');
 const appengineTasks = require('./scripts/gulpfiles/appengine_tasks');
 const releaseTasks = require('./scripts/gulpfiles/release_tasks');
 const cleanupTasks = require('./scripts/gulpfiles/cleanup_tasks');
+const docsTasks = require('./scripts/gulpfiles/docs_tasks');
 
 module.exports = {
   deployDemos: appengineTasks.deployDemos,
@@ -38,6 +39,7 @@ module.exports = {
   clean: gulp.parallel(buildTasks.cleanBuildDir, packageTasks.cleanReleaseDir),
   cleanBuildDir: buildTasks.cleanBuildDir,
   cleanReleaseDir: packageTasks.cleanReleaseDir,
+  docs: docsTasks.docs,
   gitSyncDevelop: gitTasks.syncDevelop,
   gitSyncMaster: gitTasks.syncMaster,
   gitCreateRC: gitTasks.createRC,

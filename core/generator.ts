@@ -527,7 +527,7 @@ Object.defineProperties(Generator.prototype, {
     get(this: Generator): Names |
         undefined {
           deprecation.warn(
-              'variableDB_', 'May 2021', 'September 2022', 'nameDB_');
+              'variableDB_', 'version 9', 'version 10', 'nameDB_');
           return this.nameDB_;
         },
     /** @param nameDb New name database. */

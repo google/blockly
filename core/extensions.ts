@@ -350,7 +350,7 @@ function mutatorPropertiesMatch(
  *
  * @param fn Function to run.
  * @throws Error Will throw if no global document can be found (e.g., Node.js).
- * @alias Blockly.extensions.runAfterPageLoad
+ * @internal
  */
 export function runAfterPageLoad(fn: () => void) {
   if (typeof document !== 'object') {

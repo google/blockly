@@ -72,7 +72,7 @@ export {
  * Halts the propagation of the event without doing anything else.
  *
  * @param e An event.
- * @deprecated This is no longer needed.
+ * @deprecated No longer provided by Blockly.
  * @alias Blockly.utils.noEvent
  */
 export function noEvent(e: Event) {
@@ -374,12 +374,11 @@ export function parseBlockColour(colour: number|
  *
  * @param fn Function to run.
  * @throws Error Will throw if no global document can be found (e.g., Node.js).
- * @deprecated Use **Blockly.extensions.runAfterPageLoad** instead.
+ * @deprecated No longer provided by Blockly.
  * @alias Blockly.utils.runAfterPageLoad
  */
 export function runAfterPageLoad(fn: () => void) {
   deprecation.warn(
-      'Blockly.utils.runAfterPageLoad', 'December 2021', 'December 2022',
-      'Blockly.extensions.runAfterPageLoad');
+      'Blockly.utils.runAfterPageLoad', 'December 2021', 'December 2022');
   extensions.runAfterPageLoad(fn);
 }

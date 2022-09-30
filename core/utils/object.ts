@@ -21,6 +21,7 @@ import * as deprecation from './deprecation.js';
  * @param childCtor Child class.
  * @param parentCtor Parent class.
  * @suppress {strictMissingProperties} superClass_ is not defined on Function.
+ * @deprecated No longer provided by Blockly.
  * @alias Blockly.utils.object.inherits
  */
 export function inherits(childCtor: Function, parentCtor: Function) {
@@ -49,6 +50,7 @@ export function inherits(childCtor: Function, parentCtor: Function) {
  *
  * @param target Target.
  * @param source Source.
+ * @deprecated Use the built-in **Object.assign** instead.
  * @alias Blockly.utils.object.mixin
  */
 export function mixin(target: AnyDuringMigration, source: AnyDuringMigration) {
@@ -85,6 +87,7 @@ export function deepMerge(
  *
  * @param obj Object containing values.
  * @returns Array of values.
+ * @deprecated Use the built-in **Object.values** instead.
  * @alias Blockly.utils.object.values
  */
 export function values(obj: AnyDuringMigration): AnyDuringMigration[] {

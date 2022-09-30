@@ -75,7 +75,10 @@ export class BlockDragSurfaceSvg {
     this.dragGroup_ = dom.createSvgElement(Svg.G, {}, this.svg_ as SVGElement);
   }
 
-  /** Create the drag surface and inject it into the container. */
+  /**
+   * Create the drag surface and inject it into the container.
+   * @deprecated The DOM is automatically created by the constructor.
+   */
   createDom() {
     // No alternative provided, because now the dom is just automatically
     // created in the constructor now.

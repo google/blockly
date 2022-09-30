@@ -114,6 +114,7 @@ export function getInjectionDivXY(element: Element): Coordinate {
  * and attempting to set the property.
  *
  * @returns True if 3D transforms are supported.
+ * @deprecated No longer provided by Blockly.
  * @alias Blockly.utils.svgMath.is3dSupported
  */
 export function is3dSupported(): boolean {

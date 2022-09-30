@@ -361,7 +361,7 @@ export const svgSize = svgMath.svgSize;
  * scrollbars accordingly.
  *
  * @param workspace The workspace to resize.
- * @deprecated Use workspace.resizeContents. (2021 December)
+ * @deprecated Use **workspace.resizeContents** instead.
  * @see Blockly.WorkspaceSvg.resizeContents
  * @alias Blockly.resizeSvgContents
  */
@@ -377,7 +377,7 @@ export const resizeSvgContents = resizeSvgContentsLocal;
  * Copy a block or workspace comment onto the local clipboard.
  *
  * @param toCopy Block or Workspace Comment to be copied.
- * @deprecated Use Blockly.clipboard.copy(). (2021 December)
+ * @deprecated Use **Blockly.clipboard.copy** instead.
  * @see Blockly.clipboard.copy
  * @alias Blockly.copy
  */
@@ -392,7 +392,7 @@ export function copy(toCopy: ICopyable) {
  * Paste a block or workspace comment on to the main workspace.
  *
  * @returns True if the paste was successful, false otherwise.
- * @deprecated Use Blockly.clipboard.paste(). (2021 December)
+ * @deprecated Use **Blockly.clipboard.paste** instead.
  * @see Blockly.clipboard.paste
  * @alias Blockly.paste
  */
@@ -407,7 +407,7 @@ export function paste(): boolean {
  * Duplicate this block and its children, or a workspace comment.
  *
  * @param toDuplicate Block or Workspace Comment to be copied.
- * @deprecated Use Blockly.clipboard.duplicate(). (2021 December)
+ * @deprecated Use **Blockly.clipboard.duplicate** instead.
  * @see Blockly.clipboard.duplicate
  * @alias Blockly.duplicate
  */
@@ -423,7 +423,7 @@ export function duplicate(toDuplicate: ICopyable) {
  *
  * @param str Input string.
  * @returns True if number, false otherwise.
- * @deprecated Use Blockly.utils.string.isNumber(str). (2021 December)
+ * @deprecated Use **Blockly.utils.string.isNumber** instead.
  * @see Blockly.utils.string.isNumber
  * @alias Blockly.isNumber
  */
@@ -439,7 +439,7 @@ export function isNumber(str: string): boolean {
  *
  * @param hue Hue on a colour wheel (0-360).
  * @returns RGB code, e.g. '#5ba65b'.
- * @deprecated Use Blockly.utils.colour.hueToHex(). (2021 December)
+ * @deprecated Use **Blockly.utils.colour.hueToHex** instead.
  * @see Blockly.utils.colour.hueToHex
  * @alias Blockly.hueToHex
  */
@@ -461,7 +461,7 @@ export function hueToHex(hue: number): string {
  * @param thisObject The value of 'this' in the function.
  * @param func Function to call when event is triggered.
  * @returns Opaque data that can be passed to unbindEvent_.
- * @deprecated Use Blockly.browserEvents.bind(). (December 2021)
+ * @deprecated Use **Blockly.browserEvents.bind** instead.
  * @see Blockly.browserEvents.bind
  * @alias Blockly.bindEvent_
  */
@@ -480,7 +480,7 @@ export function bindEvent_(
  * @param bindData Opaque data from bindEvent_.
  *     This list is emptied during the course of calling this function.
  * @returns The function call.
- * @deprecated Use Blockly.browserEvents.unbind(). (December 2021)
+ * @deprecated Use **Blockly.browserEvents.unbind** instead.
  * @see browserEvents.unbind
  * @alias Blockly.unbindEvent_
  */
@@ -508,7 +508,7 @@ export function unbindEvent_(bindData: browserEvents.Data): Function {
  *     the default handler.  False by default.  If opt_noPreventDefault is
  *     provided, opt_noCaptureIdentifier must also be provided.
  * @returns Opaque data that can be passed to unbindEvent_.
- * @deprecated Use Blockly.browserEvents.conditionalBind(). (December 2021)
+ * @deprecated Use **Blockly.browserEvents.conditionalBind** instead.
  * @see browserEvents.conditionalBind
  * @alias Blockly.bindEventWithChecks_
  */

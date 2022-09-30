@@ -103,6 +103,7 @@ export function getComputedStyle(element: Element, property: string): string {
  * @param element Element to get style of.
  * @param style Property to get (camel-case).
  * @returns Style value.
+ * @deprecated No longer provided by Blockly.
  * @alias Blockly.utils.style.getCascadedStyle
  */
 export function getCascadedStyle(element: Element, style: string): string {

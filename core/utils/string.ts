@@ -25,7 +25,7 @@ import * as deprecation from './deprecation.js';
  * @param prefix A string to look for at the start of `str`.
  * @returns True if `str` begins with `prefix`.
  * @alias Blockly.utils.string.startsWith
- * @deprecated April 2022. Use built-in string.startsWith.
+ * @deprecated Use built-in **string.startsWith** instead.
  */
 export function startsWith(str: string, prefix: string): boolean {
   deprecation.warn(

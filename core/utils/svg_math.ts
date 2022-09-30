@@ -119,7 +119,7 @@ export function getInjectionDivXY(element: Element): Coordinate {
 export function is3dSupported(): boolean {
   // All browsers support translate3d in 2022.
   deprecation.warn(
-      'Blockly.utils.svgMath.is3dSupported', 'version 9.0.0', 'version 10.0.0');
+      'Blockly.utils.svgMath.is3dSupported', 'version 9', 'version 10');
   return true;
 }
 

@@ -1646,19 +1646,14 @@ class WorkspaceSvg extends Workspace {
 
       if (xmlBlock) {
         block = /** @type {!BlockSvg} */ (Xml.domToBlock(xmlBlock, this));
-
-        if (this.RTL) {
-          blockX = -blockX;
-        }
-
-        blockY = parseInt(xmlBlock.getAttribute('y'), 10);
       } else if (jsonBlock) {
-        block = /** @type {!BlockSvg} */ (blocks.append(jsonBlock, this));
-        blockX = jsonBlock['x'] || 10;
-        if (this.RTL) {
-          blockX = this.getWidth() - blockX;
+        if (jsonBlock.pasteOffset) {
+          blockX += jsonBlock.pasteOffset.x;
+          blockY += jsonBlock.pasteOffset.y;
+          delete jsonBlock.pasteOffset;
         }
-        blockY = jsonBlock['y'] || 10;
+        
+        block = /** @type {!BlockSvg} */ (blocks.append(jsonBlock, this));
       }
 
       // Move the duplicate to original position.

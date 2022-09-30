@@ -107,8 +107,8 @@ export function getComputedStyle(element: Element, property: string): string {
  */
 export function getCascadedStyle(element: Element, style: string): string {
   deprecation.warn(
-      'Blockly.utils.style.getCascadedStyle', 'version 9.0.0',
-      'version 10.0.0');
+      'Blockly.utils.style.getCascadedStyle', 'version 9',
+      'version 10');
   // AnyDuringMigration because:  Property 'currentStyle' does not exist on type
   // 'Element'. AnyDuringMigration because:  Property 'currentStyle' does not
   // exist on type 'Element'.

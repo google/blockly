@@ -133,7 +133,7 @@ export class FieldTextInput extends Field {
       let nFields = 0;
       let nConnections = 0;
       // Count the number of fields, excluding text fields
-      for (let i = 0, input; input = this.sourceBlock_.inputList[i]; i++) {
+      for (let i = 0, input; input = this.getSourceBlock().inputList[i]; i++) {
         for (let j = 0; input.fieldRow[j]; j++) {
           nFields++;
         }
@@ -143,8 +143,8 @@ export class FieldTextInput extends Field {
       }
       // The special case is when this is the only non-label field on the block
       // and it has an output but no inputs.
-      this.fullBlockClickTarget_ =
-          nFields <= 1 && this.sourceBlock_.outputConnection && !nConnections;
+      this.fullBlockClickTarget_ = nFields <= 1 &&
+          this.getSourceBlock().outputConnection && !nConnections;
     } else {
       this.fullBlockClickTarget_ = false;
     }
@@ -311,7 +311,8 @@ export class FieldTextInput extends Field {
    * @param quietInput True if editor should be created without focus.
    */
   private showInlineEditor_(quietInput: boolean) {
-    WidgetDiv.show(this, this.sourceBlock_.RTL, this.widgetDispose_.bind(this));
+    WidgetDiv.show(
+        this, this.getSourceBlock().RTL, this.widgetDispose_.bind(this));
     this.htmlInput_ = this.widgetCreate_() as HTMLInputElement;
     this.isBeingEdited_ = true;
 
@@ -332,7 +333,9 @@ export class FieldTextInput extends Field {
     eventUtils.setGroup(true);
     const div = WidgetDiv.getDiv();
 
-    dom.addClass(this.getClickTarget_(), 'editing');
+    const clickTarget = this.getClickTarget_();
+    if (!clickTarget) throw new Error('A click target has not been set.');
+    dom.addClass(clickTarget, 'editing');
 
     const htmlInput = (document.createElement('input'));
     htmlInput.className = 'blocklyHtmlInput';
@@ -352,8 +355,8 @@ export class FieldTextInput extends Field {
       // Override border radius.
       borderRadius = (bBox.bottom - bBox.top) / 2 + 'px';
       // Pull stroke colour from the existing shadow block
-      const strokeColour = this.sourceBlock_.getParent() ?
-          (this.sourceBlock_.getParent() as BlockSvg).style.colourTertiary :
+      const strokeColour = this.getSourceBlock().getParent() ?
+          (this.getSourceBlock().getParent() as BlockSvg).style.colourTertiary :
           (this.sourceBlock_ as BlockSvg).style.colourTertiary;
       htmlInput.style.border = 1 * scale + 'px solid ' + strokeColour;
       div!.style.borderRadius = borderRadius;
@@ -401,7 +404,9 @@ export class FieldTextInput extends Field {
     style.boxShadow = '';
     this.htmlInput_ = null;
 
-    dom.removeClass(this.getClickTarget_(), 'editing');
+    const clickTarget = this.getClickTarget_();
+    if (!clickTarget) throw new Error('A click target has not been set.');
+    dom.removeClass(clickTarget, 'editing');
   }
 
   /**
@@ -516,7 +521,8 @@ export class FieldTextInput extends Field {
 
     // In RTL mode block fields and LTR input fields the left edge moves,
     // whereas the right edge is fixed.  Reposition the editor.
-    const x = this.sourceBlock_.RTL ? bBox.right - div!.offsetWidth : bBox.left;
+    const x =
+        this.getSourceBlock().RTL ? bBox.right - div!.offsetWidth : bBox.left;
     const xy = new Coordinate(x, bBox.top);
 
     div!.style.left = xy.x + 'px';

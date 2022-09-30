@@ -247,7 +247,7 @@ export function bindMouseEvents(element: Element) {
  * @param element SVG element onto which tooltip is bound.
  * @alias Blockly.Tooltip.unbindMouseEvents
  */
-export function unbindMouseEvents(element: Element) {
+export function unbindMouseEvents(element: Element|null) {
   if (!element) {
     return;
   }

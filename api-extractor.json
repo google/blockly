@@ -379,11 +379,6 @@
       },
       "tsdoc-escape-right-brace": {
         "logLevel": "none"
-      },
-
-      // Needs to be fixed
-      "tsdoc-missing-deprecation-message": {
-        "logLevel": "none"
       }
     }
   }

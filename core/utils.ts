@@ -69,35 +69,6 @@ export {
 };
 
 /**
- * Halts the propagation of the event without doing anything else.
- *
- * @param e An event.
- * @deprecated No longer provided by Blockly.
- * @alias Blockly.utils.noEvent
- */
-export function noEvent(e: Event) {
-  deprecation.warn('Blockly.utils.noEvent', 'September 2021', 'September 2022');
-  // This event has been handled.  No need to bubble up to the document.
-  e.preventDefault();
-  e.stopPropagation();
-}
-
-/**
- * Returns true if this event is targeting a text input widget?
- *
- * @param e An event.
- * @returns True if text input.
- * @deprecated Use **Blockly.browserEvents.isTargetInput** instead.
- * @alias Blockly.utils.isTargetInput
- */
-export function isTargetInput(e: Event): boolean {
-  deprecation.warn(
-      'Blockly.utils.isTargetInput', 'September 2021', 'September 2022',
-      'Blockly.browserEvents.isTargetInput');
-  return browserEvents.isTargetInput(e);
-}
-
-/**
  * Return the coordinates of the top-left corner of this element relative to
  * its parent.  Only for SVG elements and children (e.g. rect, g, path).
  *
@@ -130,55 +101,6 @@ function getInjectionDivXY(element: Element): Coordinate {
   return svgMath.getInjectionDivXY(element);
 }
 export const getInjectionDivXY_ = getInjectionDivXY;
-
-/**
- * Returns true this event is a right-click.
- *
- * @param e Mouse event.
- * @returns True if right-click.
- * @deprecated Use **Blockly.browserEvents.isRightButton** instead.
- * @alias Blockly.utils.isRightButton
- */
-export function isRightButton(e: Event): boolean {
-  deprecation.warn(
-      'Blockly.utils.isRightButton', 'September 2021', 'September 2022',
-      'Blockly.browserEvents.isRightButton');
-  return browserEvents.isRightButton(e as MouseEvent);
-}
-
-/**
- * Returns the converted coordinates of the given mouse event.
- * The origin (0,0) is the top-left corner of the Blockly SVG.
- *
- * @param e Mouse event.
- * @param svg SVG element.
- * @param matrix Inverted screen CTM to use.
- * @returns Object with .x and .y properties.
- * @deprecated Use **Blockly.browserEvents.mouseToSvg** instead;
- * @alias Blockly.utils.mouseToSvg
- */
-export function mouseToSvg(
-    e: Event, svg: SVGSVGElement, matrix: SVGMatrix|null): SVGPoint {
-  deprecation.warn(
-      'Blockly.utils.mouseToSvg', 'September 2021', 'September 2022',
-      'Blockly.browserEvents.mouseToSvg');
-  return browserEvents.mouseToSvg(e as MouseEvent, svg, matrix);
-}
-
-/**
- * Returns the scroll delta of a mouse event in pixel units.
- *
- * @param e Mouse event.
- * @returns Scroll delta object with .x and .y properties.
- * @deprecated Use **Blockly.browserEvents.getScrollDeltaPixels** instead.
- * @alias Blockly.utils.getScrollDeltaPixels
- */
-export function getScrollDeltaPixels(e: WheelEvent): {x: number, y: number} {
-  deprecation.warn(
-      'Blockly.utils.getScrollDeltaPixels', 'September 2021', 'September 2022',
-      'Blockly.browserEvents.getScrollDeltaPixels');
-  return browserEvents.getScrollDeltaPixels(e);
-}
 
 /**
  * Parse a string with any number of interpolation tokens (%1, %2, ...).
@@ -233,20 +155,6 @@ export function checkMessageReferences(message: string): boolean {
       'Blockly.utils.checkMessageReferences', 'December 2021', 'December 2022',
       'Blockly.utils.parsing.checkMessageReferences');
   return parsing.checkMessageReferences(message);
-}
-
-/**
- * Generate a unique ID.
- *
- * @returns A globally unique ID string.
- * @deprecated Use **Blockly.utils.idGenerator.genUid** instead.
- * @alias Blockly.utils.genUid
- */
-export function genUid(): string {
-  deprecation.warn(
-      'Blockly.utils.genUid', 'September 2021', 'September 2022',
-      'Blockly.utils.idGenerator.genUid');
-  return idGenerator.genUid();
 }
 
 /**

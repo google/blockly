@@ -1563,18 +1563,6 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     return newVar;
   }
 
-  /**
-   * Make a list of all the delete areas for this workspace.
-   *
-   * @deprecated Use workspace.recordDragTargets. (2021 June)
-   */
-  recordDeleteAreas() {
-    utils.deprecation.warn(
-        'WorkspaceSvg.prototype.recordDeleteAreas', 'June 2021', 'June 2022',
-        'WorkspaceSvg.prototype.recordDragTargets');
-    this.recordDragTargets();
-  }
-
   /** Make a list of all the delete areas for this workspace. */
   recordDragTargets() {
     const dragTargets = this.componentManager_.getComponents(

@@ -191,28 +191,6 @@ export function screenToWsCoordinates(
   return finalOffsetMainWs;
 }
 
-/**
- * Returns the dimensions of the specified SVG image.
- *
- * @param svg SVG image.
- * @returns Contains width and height properties.
- * @deprecated Use workspace.getCachedParentSvgSize. (2021 March 5)
- * @alias Blockly.utils.svgMath.svgSize
- */
-export function svgSize(svg: SVGElement): Size {
-  // When removing this function, remove svg.cachedWidth_ and svg.cachedHeight_
-  // from setCachedParentSvgSize.
-  // The deprecated name is `Blockly.svgSize` because this function used to be
-  // declared in Blockly.js.
-  deprecation.warn(
-      'Blockly.svgSize', 'March 2021', 'March 2022',
-      'workspace.getCachedParentSvgSize');
-  svg = svg as AnyDuringMigration;
-  return new Size(
-      Number(svg.getAttribute('data-cached-width')),
-      Number(svg.getAttribute('data-cached-height')));
-}
-
 export const TEST_ONLY = {
   XY_REGEX,
   XY_STYLE_REGEX,

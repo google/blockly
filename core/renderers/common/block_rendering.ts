@@ -54,7 +54,8 @@ import {Renderer} from './renderer.js';
  *
  * @returns Whether the debugger is turned on.
  * @alias Blockly.blockRendering.isDebuggerEnabled
- * @deprecated Use the debug renderer in **\@blockly/dev-tools** (See {@link https://www.npmjs.com/package/@blockly/dev-tools}.)
+ * @deprecated Use the debug renderer in **\@blockly/dev-tools** (See {@link
+ *     https://www.npmjs.com/package/@blockly/dev-tools}.)
  * @internal
  */
 export function isDebuggerEnabled(): boolean {
@@ -90,7 +91,8 @@ export function unregister(name: string) {
  * Turn on the blocks debugger.
  *
  * @alias Blockly.blockRendering.startDebugger
- * @deprecated Use the debug renderer in **\@blockly/dev-tools** (See {@link https://www.npmjs.com/package/@blockly/dev-tools}.)
+ * @deprecated Use the debug renderer in **\@blockly/dev-tools** (See {@link
+ *     https://www.npmjs.com/package/@blockly/dev-tools}.)
  * @internal
  */
 export function startDebugger() {
@@ -105,7 +107,8 @@ export function startDebugger() {
  * Turn off the blocks debugger.
  *
  * @alias Blockly.blockRendering.stopDebugger
- * @deprecated Use the debug renderer in **\@blockly/dev-tools** (See {@link https://www.npmjs.com/package/@blockly/dev-tools}.)
+ * @deprecated Use the debug renderer in **\@blockly/dev-tools** (See {@link
+ *     https://www.npmjs.com/package/@blockly/dev-tools}.)
  * @internal
  */
 export function stopDebugger() {

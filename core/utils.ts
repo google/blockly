@@ -293,7 +293,8 @@ export function getViewportBBox(): Rect {
  */
 export function arrayRemove<T>(arr: Array<T>, value: T): boolean {
   deprecation.warn(
-      'Blockly.utils.arrayRemove', 'December 2021', 'December 2022', 'Blockly.array.removeElem');
+      'Blockly.utils.arrayRemove', 'December 2021', 'December 2022',
+      'Blockly.array.removeElem');
   return arrayUtils.removeElem(arr, value);
 }
 
@@ -378,6 +379,7 @@ export function parseBlockColour(colour: number|
  */
 export function runAfterPageLoad(fn: () => void) {
   deprecation.warn(
-      'Blockly.utils.runAfterPageLoad', 'December 2021', 'December 2022', 'Blockly.extensions.runAfterPageLoad');
+      'Blockly.utils.runAfterPageLoad', 'December 2021', 'December 2022',
+      'Blockly.extensions.runAfterPageLoad');
   extensions.runAfterPageLoad(fn);
 }

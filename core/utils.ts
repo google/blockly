@@ -72,7 +72,7 @@ export {
  * Halts the propagation of the event without doing anything else.
  *
  * @param e An event.
- * @deprecated
+ * @deprecated No longer provided by Blockly.
  * @alias Blockly.utils.noEvent
  */
 export function noEvent(e: Event) {
@@ -87,7 +87,7 @@ export function noEvent(e: Event) {
  *
  * @param e An event.
  * @returns True if text input.
- * @deprecated Use Blockly.browserEvents.isTargetInput instead.
+ * @deprecated Use **Blockly.browserEvents.isTargetInput** instead.
  * @alias Blockly.utils.isTargetInput
  */
 export function isTargetInput(e: Event): boolean {
@@ -103,7 +103,7 @@ export function isTargetInput(e: Event): boolean {
  *
  * @param element SVG element to find the coordinates of.
  * @returns Object with .x and .y properties.
- * @deprecated
+ * @deprecated Use **Blockly.utils.svgMath.getRelativeXY** instead.
  * @alias Blockly.utils.getRelativeXY
  */
 export function getRelativeXY(element: Element): Coordinate {
@@ -120,7 +120,7 @@ export function getRelativeXY(element: Element): Coordinate {
  * @param element SVG element to find the coordinates of. If this is not a child
  *     of the div Blockly was injected into, the behaviour is undefined.
  * @returns Object with .x and .y properties.
- * @deprecated
+ * @deprecated Use **Blockly.utils.svgMath.getInjectionDivXY** instead.
  * @alias Blockly.utils.getInjectionDivXY_
  */
 function getInjectionDivXY(element: Element): Coordinate {
@@ -136,7 +136,7 @@ export const getInjectionDivXY_ = getInjectionDivXY;
  *
  * @param e Mouse event.
  * @returns True if right-click.
- * @deprecated Use Blockly.browserEvents.isRightButton instead.
+ * @deprecated Use **Blockly.browserEvents.isRightButton** instead.
  * @alias Blockly.utils.isRightButton
  */
 export function isRightButton(e: Event): boolean {
@@ -154,7 +154,7 @@ export function isRightButton(e: Event): boolean {
  * @param svg SVG element.
  * @param matrix Inverted screen CTM to use.
  * @returns Object with .x and .y properties.
- * @deprecated Use Blockly.browserEvents.mouseToSvg instead;
+ * @deprecated Use **Blockly.browserEvents.mouseToSvg** instead;
  * @alias Blockly.utils.mouseToSvg
  */
 export function mouseToSvg(
@@ -170,7 +170,7 @@ export function mouseToSvg(
  *
  * @param e Mouse event.
  * @returns Scroll delta object with .x and .y properties.
- * @deprecated Use Blockly.browserEvents.getScrollDeltaPixels instead.
+ * @deprecated Use **Blockly.browserEvents.getScrollDeltaPixels** instead.
  * @alias Blockly.utils.getScrollDeltaPixels
  */
 export function getScrollDeltaPixels(e: WheelEvent): {x: number, y: number} {
@@ -190,7 +190,7 @@ export function getScrollDeltaPixels(e: WheelEvent): {x: number, y: number} {
  * @param message Text which might contain string table references and
  *     interpolation tokens.
  * @returns Array of strings and numbers.
- * @deprecated
+ * @deprecated Use **Blockly.utils.parsing.tokenizeInterpolation** instead.
  * @alias Blockly.utils.tokenizeInterpolation
  */
 export function tokenizeInterpolation(message: string): Array<string|number> {
@@ -208,7 +208,7 @@ export function tokenizeInterpolation(message: string): Array<string|number> {
  * @param message Message, which may be a string that contains string table
  *     references.
  * @returns String with message references replaced.
- * @deprecated
+ * @deprecated Use **Blockly.utils.parsing.replaceMessageReferences** instead.
  * @alias Blockly.utils.replaceMessageReferences
  */
 export function replaceMessageReferences(message: string|any): string {
@@ -225,7 +225,7 @@ export function replaceMessageReferences(message: string|any): string {
  * @param message Text which might contain string table references.
  * @returns True if all message references have matching values.
  *     Otherwise, false.
- * @deprecated
+ * @deprecated Use **Blockly.utils.parsing.checkMessageReferences** instead.
  * @alias Blockly.utils.checkMessageReferences
  */
 export function checkMessageReferences(message: string): boolean {
@@ -239,7 +239,7 @@ export function checkMessageReferences(message: string): boolean {
  * Generate a unique ID.
  *
  * @returns A globally unique ID string.
- * @deprecated Use Blockly.utils.idGenerator.genUid instead.
+ * @deprecated Use **Blockly.utils.idGenerator.genUid** instead.
  * @alias Blockly.utils.genUid
  */
 export function genUid(): string {
@@ -254,7 +254,7 @@ export function genUid(): string {
  * and attempting to set the property.
  *
  * @returns True if 3D transforms are supported.
- * @deprecated
+ * @deprecated Use **Blockly.utils.svgMath.is3dSupported** instead.
  * @alias Blockly.utils.is3dSupported
  */
 export function is3dSupported(): boolean {
@@ -271,7 +271,7 @@ export function is3dSupported(): boolean {
  * @returns An object containing window width, height, and scroll position in
  *     window coordinates.
  * @alias Blockly.utils.getViewportBBox
- * @deprecated
+ * @deprecated Use **Blockly.utils.svgMath.getViewportBBox** instead.
  * @internal
  */
 export function getViewportBBox(): Rect {
@@ -288,12 +288,13 @@ export function getViewportBBox(): Rect {
  * @param value Value to remove.
  * @returns True if an element was removed.
  * @alias Blockly.utils.arrayRemove
- * @deprecated
+ * @deprecated Use **Blockly.array.removeElem** instead.
  * @internal
  */
 export function arrayRemove<T>(arr: Array<T>, value: T): boolean {
   deprecation.warn(
-      'Blockly.utils.arrayRemove', 'December 2021', 'December 2022');
+      'Blockly.utils.arrayRemove', 'December 2021', 'December 2022',
+      'Blockly.array.removeElem');
   return arrayUtils.removeElem(arr, value);
 }
 
@@ -302,7 +303,7 @@ export function arrayRemove<T>(arr: Array<T>, value: T): boolean {
  * Copied from Closure's goog.dom.getDocumentScroll.
  *
  * @returns Object with values 'x' and 'y'.
- * @deprecated
+ * @deprecated Use **Blockly.utils.svgMath.getDocumentScroll** instead.
  * @alias Blockly.utils.getDocumentScroll
  */
 export function getDocumentScroll(): Coordinate {
@@ -320,7 +321,7 @@ export function getDocumentScroll(): Coordinate {
  * @param opt_stripFollowing Optionally ignore all following statements (blocks
  *     that are not inside a value or statement input of the block).
  * @returns Map of types to type counts for descendants of the bock.
- * @deprecated
+ * @deprecated Use **Blockly.common.getBlockTypeCounts** instead.
  * @alias Blockly.utils.getBlockTypeCounts
  */
 export function getBlockTypeCounts(
@@ -337,7 +338,7 @@ export function getBlockTypeCounts(
  * @param ws The workspace to find the coordinates on.
  * @param screenCoordinates The screen coordinates to be converted to workspace
  *     coordinates
- * @deprecated
+ * @deprecated Use **Blockly.utils.svgMath.screenToWsCoordinates** instead.
  * @returns The workspace coordinates.
  */
 export function screenToWsCoordinates(
@@ -357,7 +358,7 @@ export function screenToWsCoordinates(
  * @returns An object containing the colour as a #RRGGBB string, and the hue if
  *     the input was an HSV hue value.
  * @throws {Error} If the colour cannot be parsed.
- * @deprecated
+ * @deprecated Use **Blockly.utils.parsing.parseBlockColour** instead.
  * @alias Blockly.utils.parseBlockColour
  */
 export function parseBlockColour(colour: number|
@@ -373,7 +374,7 @@ export function parseBlockColour(colour: number|
  *
  * @param fn Function to run.
  * @throws Error Will throw if no global document can be found (e.g., Node.js).
- * @deprecated
+ * @deprecated No longer provided by Blockly.
  * @alias Blockly.utils.runAfterPageLoad
  */
 export function runAfterPageLoad(fn: () => void) {

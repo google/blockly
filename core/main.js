@@ -130,14 +130,12 @@ Object.defineProperties(Blockly, {
   selected: {
     get: function() {
       deprecation.warn(
-          'Blockly.selected', 'version 9', 'version 10',
-          'Blockly.getSelected');
+          'Blockly.selected', 'version 9', 'version 10', 'Blockly.getSelected');
       return common.getSelected();
     },
     set: function(newSelection) {
       deprecation.warn(
-          'Blockly.selected', 'version 9', 'version 10',
-          'Blockly.getSelected');
+          'Blockly.selected', 'version 9', 'version 10', 'Blockly.getSelected');
       common.setSelected(newSelection);
     },
   },

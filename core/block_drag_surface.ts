@@ -77,6 +77,7 @@ export class BlockDragSurfaceSvg {
 
   /**
    * Create the drag surface and inject it into the container.
+   * 
    * @deprecated The DOM is automatically created by the constructor.
    */
   createDom() {

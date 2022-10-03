@@ -17,7 +17,6 @@ import type {WorkspaceSvg} from '../workspace_svg.js';
 import {Coordinate} from './coordinate.js';
 import * as deprecation from './deprecation.js';
 import {Rect} from './rect.js';
-import {Size} from './size.js';
 import * as style from './style.js';
 
 

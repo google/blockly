@@ -58,7 +58,6 @@ import {ThemeManager} from './theme_manager.js';
 import * as Tooltip from './tooltip.js';
 import {TouchGesture} from './touch_gesture.js';
 import type {Trashcan} from './trashcan.js';
-import * as utils from './utils.js';
 import * as arrayUtils from './utils/array.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';

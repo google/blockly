@@ -25,8 +25,7 @@ import * as deprecation from './deprecation.js';
  * @alias Blockly.utils.object.inherits
  */
 export function inherits(childCtor: Function, parentCtor: Function) {
-  deprecation.warn(
-      'Blockly.utils.object.inherits', 'version 9', 'version 10');
+  deprecation.warn('Blockly.utils.object.inherits', 'version 9', 'version 10');
   // Set a .superClass_ property so that methods can call parent methods
   // without hard-coding the parent class name.
   // Could be replaced by ES6's super().

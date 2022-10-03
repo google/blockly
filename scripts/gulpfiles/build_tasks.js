@@ -25,7 +25,7 @@ var closureDeps = require('google-closure-deps');
 var argv = require('yargs').argv;
 var rimraf = require('rimraf');
 
-var {BUILD_DIR, DEPS_FILE, TEST_DEPS_FILE, TSC_OUTPUT_DIR, TYPINGS_BUILD_DIR} = require('./config');
+var {BUILD_DIR, DEPS_FILE, RELEASE_DIR, TEST_DEPS_FILE, TSC_OUTPUT_DIR, TYPINGS_BUILD_DIR} = require('./config');
 var {getPackageJson} = require('./helper_tasks');
 
 ////////////////////////////////////////////////////////////
@@ -668,7 +668,7 @@ function buildCompiled() {
       .pipe(compile(options))
       .pipe(gulp.rename({suffix: COMPILED_SUFFIX}))
       .pipe(gulp.sourcemaps.write('.'))
-      .pipe(gulp.dest(BUILD_DIR));
+      .pipe(gulp.dest(RELEASE_DIR));
 }
 
 /**
@@ -705,17 +705,17 @@ function buildAdvancedCompilationTest() {
 }
 
 /**
- * This task copies built files from BUILD_DIR back to the repository
- * so they can be committed to git.
+ * This task copies built files from BUILD_DIR and RELEASE_DIR back to
+ * the repository so they can be committed to git.
  *
  * Prerequisite: buildCompiled, buildLangfiles.
  */
 function checkinBuilt() {
   return gulp.src([
-    `${BUILD_DIR}/*_compressed.js`,
-    `${BUILD_DIR}/*_compressed.js.map`,
-    `${BUILD_DIR}/msg/js/*.js`,
-  ], {base: BUILD_DIR}).pipe(gulp.dest('.'));
+    `${RELEASE_DIR}/*_compressed.js`,
+    `${RELEASE_DIR}/*_compressed.js.map`,
+    // `${BUILD_DIR}/msg/js/*.js`,  // Temporarily disabled (base mismatch).
+  ], {base: RELEASE_DIR}).pipe(gulp.dest('.'));
 }
 
 /**

@@ -10,7 +10,7 @@
 #
 # (TODO(#5007): Should fetch this from scripts/gulpfiles/config.js
 # instead of hardcoding it here.
-readonly BUILD_DIR='build'
+readonly RELEASE_DIR='dist'
 
 # These values should be updated with each release.  (Note that the
 # historic values are tab-delimited.)
@@ -101,8 +101,8 @@ trap fail ERR
 # GZip them for additional size comparisons (keep originals, force
 # overwite previously-gzipped copies).
 echo "Zipping the compressed files"
-gzip -kf "${BUILD_DIR}/blockly_compressed.js"
-gzip -kf "${BUILD_DIR}/blocks_compressed.js"
+gzip -kf "${RELEASE_DIR}/blockly_compressed.js"
+gzip -kf "${RELEASE_DIR}/blocks_compressed.js"
 
 # Check the sizes of the files
 
@@ -126,9 +126,9 @@ compare_size() {
   fi
 }
 
-compare_size "${BUILD_DIR}/blockly_compressed.js" $BLOCKLY_SIZE_EXPECTED
-compare_size "${BUILD_DIR}/blocks_compressed.js" $BLOCKS_SIZE_EXPECTED
-compare_size "${BUILD_DIR}/blockly_compressed.js.gz" $BLOCKLY_GZ_SIZE_EXPECTED
-compare_size "${BUILD_DIR}/blocks_compressed.js.gz" $BLOCKS_GZ_SIZE_EXPECTED
+compare_size "${RELEASE_DIR}/blockly_compressed.js" $BLOCKLY_SIZE_EXPECTED
+compare_size "${RELEASE_DIR}/blocks_compressed.js" $BLOCKS_SIZE_EXPECTED
+compare_size "${RELEASE_DIR}/blockly_compressed.js.gz" $BLOCKLY_GZ_SIZE_EXPECTED
+compare_size "${RELEASE_DIR}/blocks_compressed.js.gz" $BLOCKS_GZ_SIZE_EXPECTED
 
 exit $has_failed

@@ -55,15 +55,6 @@ function packageCommonJS(namespace, dependencies) {
 };
 
 /**
- * This task copies the compressed files and their source maps into
- * the release directory.
- */
-function packageCompressed() {
-  return gulp.src('*_compressed.js?(.map)', {cwd: BUILD_DIR})
-    .pipe(gulp.dest(RELEASE_DIR));
-};
-
-/**
  * This task wraps scripts/package/blockly.js into a UMD module.
  * @example import 'blockly/blockly';
  */
@@ -300,10 +291,10 @@ function packageLocales() {
  */
 function packageUMDBundle() {
   var srcs = [
-    `${BUILD_DIR}/blockly_compressed.js`,
-    `${BUILD_DIR}/msg/js/en.js`,
-    `${BUILD_DIR}/blocks_compressed.js`,
-    `${BUILD_DIR}/javascript_compressed.js`,
+    `${RELEASE_DIR}/blockly_compressed.js`,
+    `${RELEASE_DIR}/msg/en.js`,
+    `${RELEASE_DIR}/blocks_compressed.js`,
+    `${RELEASE_DIR}/javascript_compressed.js`,
   ];
   return gulp.src(srcs)
       .pipe(gulp.concat('blockly.min.js'))
@@ -384,7 +375,6 @@ const package = gulp.series(
     build.build,
     gulp.parallel(
         packageIndex,
-        packageCompressed,
         packageBrowser,
         packageNode,
         packageCore,
@@ -396,9 +386,8 @@ const package = gulp.series(
         packageLua,
         packageDart,
         packagePHP,
-        packageLocales,
         packageMedia,
-        packageUMDBundle,
+        gulp.series(packageLocales, packageUMDBundle),
         packageJSON,
         packageReadme,
         packageDTS)

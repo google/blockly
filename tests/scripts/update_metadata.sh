@@ -7,15 +7,15 @@
 #
 # (TODO(#5007): Should fetch this from scripts/gulpfiles/config.js
 # instead of hardcoding it here.
-readonly BUILD_DIR='build'
+readonly RELEASE_DIR='dist'
 
-gzip -k "${BUILD_DIR}/blockly_compressed.js"
-gzip -k "${BUILD_DIR}/blocks_compressed.js"
+gzip -k "${RELEASE_DIR}/blockly_compressed.js"
+gzip -k "${RELEASE_DIR}/blocks_compressed.js"
 
-blockly_size=$(wc -c < "${BUILD_DIR}/blockly_compressed.js")
-blocks_size=$(wc -c < "${BUILD_DIR}/blocks_compressed.js")
-blockly_gz_size=$(wc -c < "${BUILD_DIR}/blockly_compressed.js.gz")
-blocks_gz_size=$(wc -c < "${BUILD_DIR}/blocks_compressed.js.gz")
+blockly_size=$(wc -c < "${RELEASE_DIR}/blockly_compressed.js")
+blocks_size=$(wc -c < "${RELEASE_DIR}/blocks_compressed.js")
+blockly_gz_size=$(wc -c < "${RELEASE_DIR}/blockly_compressed.js.gz")
+blocks_gz_size=$(wc -c < "${RELEASE_DIR}/blocks_compressed.js.gz")
 quarters=(1 1 1 2 2 2 3 3 3 4 4 4)
 month=$(date +%-m)
 quarter=$(echo Q${quarters[$month - 1]} $(date +%Y))

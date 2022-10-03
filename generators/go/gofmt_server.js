@@ -7,12 +7,14 @@
 'use strict';
 
 /** Create a name space for the application. */
+goog.provide('GoFmtServer');
+
 var GoFmtServer = {};
 
 /**
  * Reads JSON data from the server and forwards formatted JavaScript object.
  * @param {!string} url Location for the JSON data.
- * @param {!function} jsonDataCb Callback with JSON object or null for error.
+ * @param {!Function} callback Callback with JSON object or null for error.
  */
 GoFmtServer.getJson = function(url, callback) {
   GoFmtServer.sendRequest(url, 'GET', 'application/json', null, callback);
@@ -22,7 +24,7 @@ GoFmtServer.getJson = function(url, callback) {
  * Sends JSON data to the GoFmtServer.
  * @param {!string} url Requestor URL.
  * @param {!string} json JSON string.
- * @param {!function} callback Request callback function.
+ * @param {!Function} callback Request callback function.
  */
 GoFmtServer.postJson = function(url, json, callback) {
   GoFmtServer.sendRequest(url, 'POST', 'application/octet-stream', json, callback);
@@ -34,7 +36,7 @@ GoFmtServer.postJson = function(url, json, callback) {
  * @param {!string} method HTTP method.
  * @param {!string} contentType HTTP content type.
  * @param {string} jsonObjSend JavaScript object to be parsed into JSON to send.
- * @param {!function} cb Request callback function, takes a single input for a
+ * @param {!Function} cb Request callback function, takes a single input for a
  *     parsed JSON object.
  */
 GoFmtServer.sendRequest = function(
@@ -89,7 +91,7 @@ GoFmtServer.createRequest = function() {
       } catch (e) {
         throw 'Your browser does not support AJAX. You will not be able to' +
         'use all of GoFmt features.';
-        request = null;
+        // request = null;
       }
     }
   }

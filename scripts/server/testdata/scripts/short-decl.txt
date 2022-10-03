@@ -1,0 +1,48 @@
+gofumpt -w foo.go
+cmp foo.go foo.go.golden
+
+gofumpt -d foo.go.golden
+! stdout .
+
+-- foo.go --
+package p
+
+var global = x
+
+func f() {
+	var local = x
+	var local2, local3 = x, y
+
+	var onlyType T
+
+	var typeAndVar T = x
+
+	var _ = unused
+
+	var (
+		aligned = x
+		vars    = y
+		here    = y
+	)
+}
+-- foo.go.golden --
+package p
+
+var global = x
+
+func f() {
+	local := x
+	local2, local3 := x, y
+
+	var onlyType T
+
+	var typeAndVar T = x
+
+	_ = unused
+
+	var (
+		aligned = x
+		vars    = y
+		here    = y
+	)
+}

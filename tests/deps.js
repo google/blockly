@@ -1,13 +1,13 @@
 goog.addDependency('../../blocks/blocks.js', ['Blockly.libraryBlocks'], ['Blockly.libraryBlocks.colour', 'Blockly.libraryBlocks.lists', 'Blockly.libraryBlocks.logic', 'Blockly.libraryBlocks.loops', 'Blockly.libraryBlocks.math', 'Blockly.libraryBlocks.procedures', 'Blockly.libraryBlocks.texts', 'Blockly.libraryBlocks.variables', 'Blockly.libraryBlocks.variablesDynamic'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../blocks/colour.js', ['Blockly.libraryBlocks.colour'], ['Blockly.FieldColour', 'Blockly.common'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../blocks/gopherbot.js', ['Blockly.Gopherbot'], ['Blockly.Go', 'Blockly.TinyGo', 'Blockly.Types']);
+goog.addDependency('../../blocks/gopherbot.js', ['Blockly.Gopherbot'], ['Blockly.Go', 'Blockly.TinyGo', 'Blockly.Types'], {'lang': 'es6'});
 goog.addDependency('../../blocks/lists.js', ['Blockly.libraryBlocks.lists'], ['Blockly.ConnectionType', 'Blockly.FieldDropdown', 'Blockly.FieldDropdown', 'Blockly.Input', 'Blockly.Msg', 'Blockly.Mutator', 'Blockly.common', 'Blockly.utils.xml'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../blocks/logic.js', ['Blockly.libraryBlocks.logic'], ['Blockly.Events', 'Blockly.Extensions', 'Blockly.FieldDropdown', 'Blockly.FieldLabel', 'Blockly.Msg', 'Blockly.Mutator', 'Blockly.common', 'Blockly.utils.xml'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../blocks/loops.js', ['Blockly.libraryBlocks.loops'], ['Blockly.ContextMenu', 'Blockly.Events', 'Blockly.Extensions', 'Blockly.FieldDropdown', 'Blockly.FieldLabel', 'Blockly.FieldNumber', 'Blockly.FieldVariable', 'Blockly.Msg', 'Blockly.Variables', 'Blockly.Warning', 'Blockly.common', 'Blockly.utils.xml'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../blocks/math.js', ['Blockly.libraryBlocks.math'], ['Blockly.Extensions', 'Blockly.FieldDropdown', 'Blockly.FieldLabel', 'Blockly.FieldNumber', 'Blockly.FieldVariable', 'Blockly.common', 'Blockly.utils.xml'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../blocks/procedures.js', ['Blockly.libraryBlocks.procedures'], ['Blockly.Comment', 'Blockly.ContextMenu', 'Blockly.Events', 'Blockly.FieldCheckbox', 'Blockly.FieldLabel', 'Blockly.FieldTextInput', 'Blockly.Input', 'Blockly.Msg', 'Blockly.Mutator', 'Blockly.Names', 'Blockly.Procedures', 'Blockly.Variables', 'Blockly.Warning', 'Blockly.Xml', 'Blockly.common', 'Blockly.config', 'Blockly.utils.xml'], {'lang': 'es9', 'module': 'goog'});
 goog.addDependency('../../blocks/text.js', ['Blockly.libraryBlocks.texts'], ['Blockly.ConnectionType', 'Blockly.Extensions', 'Blockly.FieldDropdown', 'Blockly.FieldImage', 'Blockly.FieldMultilineInput', 'Blockly.FieldTextInput', 'Blockly.FieldVariable', 'Blockly.Input', 'Blockly.Msg', 'Blockly.Mutator', 'Blockly.common', 'Blockly.utils.xml'], {'lang': 'es9', 'module': 'goog'});
-goog.addDependency('../../blocks/tinygo.js', ['Blockly.TinyGo'], ['Blockly.Go', 'Blockly.Types'], {'lang': 'es6'});
+goog.addDependency('../../blocks/tinygo.js', ['Blockly.TinyGo'], ['Blockly.Types'], {'lang': 'es6'});
 goog.addDependency('../../blocks/variables.js', ['Blockly.libraryBlocks.variables'], ['Blockly.ContextMenu', 'Blockly.Extensions', 'Blockly.FieldLabel', 'Blockly.FieldVariable', 'Blockly.Msg', 'Blockly.Variables', 'Blockly.common', 'Blockly.utils.xml'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../blocks/variables_dynamic.js', ['Blockly.libraryBlocks.variablesDynamic'], ['Blockly.ContextMenu', 'Blockly.Extensions', 'Blockly.FieldLabel', 'Blockly.FieldVariable', 'Blockly.Msg', 'Blockly.Variables', 'Blockly.common', 'Blockly.utils.xml'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/block.js', ['Blockly.Block'], ['Blockly.ASTNode', 'Blockly.Connection', 'Blockly.ConnectionType', 'Blockly.Events.BlockChange', 'Blockly.Events.BlockCreate', 'Blockly.Events.BlockDelete', 'Blockly.Events.BlockMove', 'Blockly.Events.utils', 'Blockly.Extensions', 'Blockly.IASTNodeLocation', 'Blockly.IDeletable', 'Blockly.Input', 'Blockly.Tooltip', 'Blockly.blocks', 'Blockly.common', 'Blockly.constants', 'Blockly.fieldRegistry', 'Blockly.inputTypes', 'Blockly.utils.Coordinate', 'Blockly.utils.Size', 'Blockly.utils.array', 'Blockly.utils.idGenerator', 'Blockly.utils.object', 'Blockly.utils.parsing'], {'lang': 'es6', 'module': 'goog'});
@@ -215,7 +215,7 @@ goog.addDependency('../../core/serialization/workspaces.js', ['Blockly.serializa
 goog.addDependency('../../core/shortcut_items.js', ['Blockly.ShortcutItems'], ['Blockly.Gesture', 'Blockly.ShortcutRegistry', 'Blockly.clipboard', 'Blockly.common', 'Blockly.utils.KeyCodes'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/shortcut_registry.js', ['Blockly.ShortcutRegistry'], ['Blockly.utils.KeyCodes', 'Blockly.utils.object'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/sprites.js', ['Blockly.sprite'], [], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../core/static_typing.js', ['Blockly.StaticTyping'], ['Blockly.Block', 'Blockly.Type', 'Blockly.Types', 'Blockly.Workspace']);
+goog.addDependency('../../core/static_typing.js', ['Blockly.StaticTyping'], ['Blockly.Block', 'Blockly.Type', 'Blockly.Types', 'Blockly.Workspace'], {'lang': 'es6'});
 goog.addDependency('../../core/theme.js', ['Blockly.Theme'], ['Blockly.registry', 'Blockly.utils.object'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/theme/classic.js', ['Blockly.Themes.Classic'], ['Blockly.Theme'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../core/theme/themes.js', ['Blockly.Themes'], ['Blockly.Themes.Classic', 'Blockly.Themes.Zelos'], {'lang': 'es6', 'module': 'goog'});
@@ -283,10 +283,10 @@ goog.addDependency('../../generators/dart/procedures.js', ['Blockly.Dart.procedu
 goog.addDependency('../../generators/dart/text.js', ['Blockly.Dart.texts'], ['Blockly.Dart', 'Blockly.Names'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../generators/dart/variables.js', ['Blockly.Dart.variables'], ['Blockly.Dart', 'Blockly.Names'], {'lang': 'es6', 'module': 'goog'});
 goog.addDependency('../../generators/dart/variables_dynamic.js', ['Blockly.Dart.variablesDynamic'], ['Blockly.Dart', 'Blockly.Dart.variables'], {'lang': 'es6', 'module': 'goog'});
-goog.addDependency('../../generators/go.js', ['Blockly.Go'], ['Blockly.Generator', 'Blockly.Types', 'Blockly.utils.string'], {'lang': 'es6'});
+goog.addDependency('../../generators/go.js', ['Blockly.Go'], ['Blockly.Generator', 'Blockly.TinyGo', 'Blockly.Types', 'Blockly.utils.string', 'GoFmtServer'], {'lang': 'es6'});
 goog.addDependency('../../generators/go/all.js', ['Blockly.Go.all'], ['Blockly.Go.colour', 'Blockly.Go.lists', 'Blockly.Go.logic', 'Blockly.Go.loops', 'Blockly.Go.math', 'Blockly.Go.procedures', 'Blockly.Go.texts', 'Blockly.Go.variables', 'Blockly.Go.variablesDynamic'], {'module': 'goog'});
 goog.addDependency('../../generators/go/colour.js', ['Blockly.Go.colour'], ['Blockly.Go']);
-goog.addDependency('../../generators/go/gofmt_server.js', [], []);
+goog.addDependency('../../generators/go/gofmt_server.js', ['GoFmtServer'], []);
 goog.addDependency('../../generators/go/lists.js', ['Blockly.Go.lists'], []);
 goog.addDependency('../../generators/go/logic.js', ['Blockly.Go.logic'], ['Blockly.Go']);
 goog.addDependency('../../generators/go/loops.js', ['Blockly.Go.loops'], ['Blockly.Go']);

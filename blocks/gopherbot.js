@@ -27,24 +27,24 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "options": [
           [
             "ON",
-            "On"
+            "On",
           ],
           [
             "OFF",
-            "Off"
+            "Off",
           ],
           [
             "BLINK",
-            "Blink"
-          ]
-        ]
-      }
+            "Blink",
+          ],
+        ],
+      },
     ],
     "previousStatement": null,
     "nextStatement": null,
     "colour": 230,
     "tooltip": "",
-    "helpUrl": ""
+    "helpUrl": "",
   },
   {
     "type": "gopherbot_visor",
@@ -56,32 +56,32 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "options": [
           [
             "RED",
-            "Red"
+            "Red",
           ],
           [
             "GREEN",
-            "Green"
+            "Green",
           ],
           [
             "BLUE",
-            "Blue"
+            "Blue",
           ],
           [
             "CYLON",
-            "Cylon"
+            "Cylon",
           ],
           [
             "XMAS",
-            "Xmas"
-          ]
-        ]
-      }
+            "Xmas",
+          ],
+        ],
+      },
     ],
     "previousStatement": null,
     "nextStatement": null,
     "colour": 230,
     "tooltip": "",
-    "helpUrl": ""
+    "helpUrl": "",
   },
   {
     "type": "gopherbot_button",
@@ -93,19 +93,19 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "options": [
           [
             "LEFT",
-            "LEFT"
+            "LEFT",
           ],
           [
             "RIGHT",
-            "RIGHT"
-          ]
-        ]
-      }
+            "RIGHT",
+          ],
+        ],
+      },
     ],
     "output": "Boolean",
     "colour": 230,
     "tooltip": "",
-    "helpUrl": ""
+    "helpUrl": "",
   },
   {
     "type": "gopherbot_backpack",
@@ -117,32 +117,32 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "options": [
           [
             "RED",
-            "Red"
+            "Red",
           ],
           [
             "GREEN",
-            "Green"
+            "Green",
           ],
           [
             "BLUE",
-            "Blue"
+            "Blue",
           ],
           [
             "CYLON",
-            "Cylon"
+            "Cylon",
           ],
           [
             "XMAS",
-            "Xmas"
-          ]
-        ]
-      }
+            "Xmas",
+          ],
+        ],
+      },
     ],
     "previousStatement": null,
     "nextStatement": null,
     "colour": 230,
     "tooltip": "",
-    "helpUrl": ""
+    "helpUrl": "",
   }, {
     "type": "gopherbot_backpack",
     "message0": "backpack mode %1",
@@ -153,32 +153,32 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "options": [
           [
             "RED",
-            "Red"
+            "Red",
           ],
           [
             "GREEN",
-            "Green"
+            "Green",
           ],
           [
             "BLUE",
-            "Blue"
+            "Blue",
           ],
           [
             "CYLON",
-            "Cylon"
+            "Cylon",
           ],
           [
             "XMAS",
-            "Xmas"
-          ]
-        ]
-      }
+            "Xmas",
+          ],
+        ],
+      },
     ],
     "previousStatement": null,
     "nextStatement": null,
     "colour": 230,
     "tooltip": "",
-    "helpUrl": ""
+    "helpUrl": "",
   },
   {
     "type": "gopherbot_backpack_alternate",
@@ -188,20 +188,20 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       {
         "type": "field_colour",
         "name": "COLOR1",
-        "colour": "#ff0000"
+        "colour": "#ff0000",
       },
       {
         "type": "field_colour",
         "name": "COLOR2",
-        "colour": "#00ff00"
-      }
+        "colour": "#00ff00",
+      },
     ],
     "inputsInline": true,
     "previousStatement": null,
     "nextStatement": null,
     "colour": 230,
     "tooltip": "",
-    "helpUrl": ""
+    "helpUrl": "",
   },
   {
     "type": "gopherbot_speaker",
@@ -213,26 +213,25 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "options": [
           [
             "BLEEP",
-            "Bleep"
+            "Bleep",
           ],
           [
             "BLOOP",
-            "Bloop"
+            "Bloop",
           ],
           [
             "BLIP",
-            "Blip"
-          ]
-        ]
-      }
+            "Blip",
+          ],
+        ],
+      },
     ],
     "previousStatement": null,
     "nextStatement": null,
     "colour": 230,
     "tooltip": "",
-    "helpUrl": ""
-  }
-
+    "helpUrl": "",
+  },
 
 ]);
 
@@ -241,8 +240,8 @@ Blockly.Go['gopherbot_antenna'] = function(block) {
   Blockly.TinyGo.addVariable('gopherbot_antenna', 'var antenna *gopherbot.AntennaDevice');
   Blockly.TinyGo.addDeclaration('gopherbot_antenna', 'antenna = gopherbot.Antenna()');
 
-  var state = block.getFieldValue('STATE');
-  var code = 'antenna.' + state + '()\n';
+  const state = block.getFieldValue('STATE');
+  const code = 'antenna.' + state + '()\n';
   return code;
 };
 
@@ -251,15 +250,15 @@ Blockly.Go['gopherbot_visor'] = function(block) {
   Blockly.TinyGo.addVariable('gopherbot_visor', 'var visor *gopherbot.VisorDevice');
   Blockly.TinyGo.addDeclaration('gopherbot_visor', 'visor = gopherbot.Visor()');
 
-  var mode = block.getFieldValue('MODE');
-  var code = 'visor.' + mode + '()\n';
+  const mode = block.getFieldValue('MODE');
+  const code = 'visor.' + mode + '()\n';
   return code;
 };
 
 
 Blockly.Go['gopherbot_button'] = function(block) {
   Blockly.TinyGo.addImport('gopherbot', 'github.com/hybridgroup/gopherbot');
-  var btn = block.getFieldValue('BUTTON');
+  const btn = block.getFieldValue('BUTTON');
   if (btn == "LEFT") {
     Blockly.TinyGo.addVariable('gopherbot_btn_left', 'var btnLeft *gopherbot.ButtonDevice');
     Blockly.TinyGo.addDeclaration('gopherbot_btn_left', 'btnLeft = gopherbot.LeftButton()');
@@ -275,8 +274,8 @@ Blockly.Go['gopherbot_backpack'] = function(block) {
   Blockly.TinyGo.addVariable('gopherbot_backpack', 'var backpack *gopherbot.BackpackDevice');
   Blockly.TinyGo.addDeclaration('gopherbot_backpack', 'backpack = gopherbot.Backpack()');
 
-  var mode = block.getFieldValue('MODE');
-  var code = 'backpack.' + mode + '()\n';
+  const mode = block.getFieldValue('MODE');
+  const code = 'backpack.' + mode + '()\n';
   return code;
 };
 
@@ -286,7 +285,7 @@ Blockly.Go['gopherbot_backpack_alternate'] = function(block) {
   Blockly.TinyGo.addVariable('gopherbot_backpack', 'var backpack *gopherbot.BackpackDevice');
   Blockly.TinyGo.addDeclaration('gopherbot_backpack', 'backpack = gopherbot.Backpack()');
 
-  var code = 'backpack.Alternate(' + Blockly.TinyGo.HexToRgbA(block.getFieldValue('COLOR1')) + ', ' + Blockly.TinyGo.HexToRgbA(block.getFieldValue('COLOR2')) + ')\n';
+  const code = 'backpack.Alternate(' + Blockly.TinyGo.HexToRgbA(block.getFieldValue('COLOR1')) + ', ' + Blockly.TinyGo.HexToRgbA(block.getFieldValue('COLOR2')) + ')\n';
   return code;
 };
 
@@ -296,13 +295,13 @@ Blockly.Go['gopherbot_speaker'] = function(block) {
   Blockly.TinyGo.addVariable('gopherbot_speaker', 'var speaker *gopherbot.SpeakerDevice');
   Blockly.TinyGo.addDeclaration('gopherbot_speaker', 'speaker = gopherbot.Speaker()');
 
-  var mode = block.getFieldValue('MODE');
-  var code = 'speaker.' + mode + '()\n';
+  const mode = block.getFieldValue('MODE');
+  const code = 'speaker.' + mode + '()\n';
   return code;
 };
 
 Blockly.TinyGo.HexToRgbA = function(hex) {
-  var c;
+  let c;
   if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
     c = hex.substring(1).split('');
     if (c.length == 3) {

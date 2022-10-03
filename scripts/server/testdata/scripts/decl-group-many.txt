@@ -1,0 +1,56 @@
+gofumpt -w foo.go
+cmp foo.go foo.go.golden
+
+gofumpt -d foo.go.golden
+! stdout .
+
+-- foo.go --
+package p
+
+var single = "foo"
+var another = "bar"
+
+const one = 'q'
+const two = 'w'
+const three = 'e'
+const four = 'r'
+
+var not = 'a'
+
+var to = 's'
+// comment
+var be = 'd'
+const joined = 'f'
+
+const inline1 = "s1" // c1
+const inline2 = "s2" // c2
+const inline3 = "s3" // c3
+-- foo.go.golden --
+package p
+
+var (
+	single  = "foo"
+	another = "bar"
+)
+
+const (
+	one   = 'q'
+	two   = 'w'
+	three = 'e'
+	four  = 'r'
+)
+
+var not = 'a'
+
+var to = 's'
+
+// comment
+var be = 'd'
+
+const joined = 'f'
+
+const (
+	inline1 = "s1" // c1
+	inline2 = "s2" // c2
+	inline3 = "s3" // c3
+)

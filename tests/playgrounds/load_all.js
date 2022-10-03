@@ -36,6 +36,7 @@ if ((location.hostname === 'localhost' || location.hostname === '127.0.0.1' ||
                 goog.require('Blockly.JavaScript.all');
                 goog.require('Blockly.Lua.all');
                 goog.require('Blockly.PHP.all');
+                goog.require('Blockly.Go.all');
                 goog.require('Blockly.Python.all');
                 goog.require('Blockly.WorkspaceCommentSvg');
             </script>`);

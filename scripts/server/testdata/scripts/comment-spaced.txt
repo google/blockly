@@ -1,0 +1,122 @@
+gofumpt -w foo.go
+cmp foo.go foo.go.golden
+
+gofumpt -d foo.go.golden
+! stdout .
+
+-- foo.go --
+// +build tag
+
+package p
+
+//go:generate some command
+
+//go:unknowndirective
+
+//lint:disablefoo
+
+//go-sumtype:decl Foo
+
+//nolint
+
+//nolint // explanation
+
+//nolint:somelinter // explanation
+
+//not actually: a directive
+
+//https://just.one/url
+
+//TODO: do something
+
+//export CgoFunc
+
+//extern open
+func c_open(name *byte, mode int, perm int) int
+
+//line 123
+
+//sys   Unlink(path string) (err error)
+
+//sysnb	Getpid() (pid int)
+
+//foo is foo.
+type foo int
+
+//	comment with a tab.
+
+//  comment with many spaces
+
+//comment group
+//123 numbers too
+
+// comment group
+//123 numbers too
+
+//{
+//this is probably code
+//}
+
+////////////
+// ascii art
+//----------
+
+//
+-- foo.go.golden --
+// +build tag
+
+package p
+
+//go:generate some command
+
+//go:unknowndirective
+
+//lint:disablefoo
+
+//go-sumtype:decl Foo
+
+//nolint
+
+//nolint // explanation
+
+//nolint:somelinter // explanation
+
+// not actually: a directive
+
+// https://just.one/url
+
+// TODO: do something
+
+//export CgoFunc
+
+//extern open
+func c_open(name *byte, mode int, perm int) int
+
+//line 123
+
+//sys   Unlink(path string) (err error)
+
+//sysnb	Getpid() (pid int)
+
+// foo is foo.
+type foo int
+
+//	comment with a tab.
+
+//  comment with many spaces
+
+// comment group
+// 123 numbers too
+
+// comment group
+// 123 numbers too
+
+//{
+//this is probably code
+//}
+
+////////////
+// ascii art
+//----------
+
+//

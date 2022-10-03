@@ -270,11 +270,15 @@ export class FieldMultilineInput extends FieldTextInput {
   /** Updates the size of the field based on the text. */
   protected override updateSize_() {
     const nodes = this.textGroup_.childNodes;
+    const fontSize = this.getConstants()!.FIELD_TEXT_FONTSIZE;
+    const fontWeight = this.getConstants()!.FIELD_TEXT_FONTWEIGHT;
+    const fontFamily = this.getConstants()!.FIELD_TEXT_FONTFAMILY;
     let totalWidth = 0;
     let totalHeight = 0;
     for (let i = 0; i < nodes.length; i++) {
       const tspan = nodes[i] as SVGTextElement;
-      const textWidth = dom.getTextWidth(tspan);
+      const textWidth =
+          dom.getFastTextWidth(tspan, fontSize, fontWeight, fontFamily);
       if (textWidth > totalWidth) {
         totalWidth = textWidth;
       }
@@ -290,9 +294,6 @@ export class FieldMultilineInput extends FieldTextInput {
       const actualEditorLines = this.value_.split('\n');
       const dummyTextElement = dom.createSvgElement(
           Svg.TEXT, {'class': 'blocklyText blocklyMultilineText'});
-      const fontSize = this.getConstants()!.FIELD_TEXT_FONTSIZE;
-      const fontWeight = this.getConstants()!.FIELD_TEXT_FONTWEIGHT;
-      const fontFamily = this.getConstants()!.FIELD_TEXT_FONTFAMILY;
 
       for (let i = 0; i < actualEditorLines.length; i++) {
         if (actualEditorLines[i].length > this.maxDisplayLength) {

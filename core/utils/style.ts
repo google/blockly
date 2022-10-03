@@ -103,12 +103,12 @@ export function getComputedStyle(element: Element, property: string): string {
  * @param element Element to get style of.
  * @param style Property to get (camel-case).
  * @returns Style value.
+ * @deprecated No longer provided by Blockly.
  * @alias Blockly.utils.style.getCascadedStyle
  */
 export function getCascadedStyle(element: Element, style: string): string {
   deprecation.warn(
-      'Blockly.utils.style.getCascadedStyle', 'version 9.0.0',
-      'version 10.0.0');
+      'Blockly.utils.style.getCascadedStyle', 'version 9', 'version 10');
   // AnyDuringMigration because:  Property 'currentStyle' does not exist on type
   // 'Element'. AnyDuringMigration because:  Property 'currentStyle' does not
   // exist on type 'Element'.

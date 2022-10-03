@@ -48,24 +48,6 @@ import {MarkerSvg} from './marker_svg.js';
 import {PathObject} from './path_object.js';
 import {Renderer} from './renderer.js';
 
-
-/**
- * Returns whether the debugger is turned on.
- *
- * @returns Whether the debugger is turned on.
- * @alias Blockly.blockRendering.isDebuggerEnabled
- * @deprecated Use the debug renderer in **\@blockly/dev-tools** (See {@link
- *     https://www.npmjs.com/package/@blockly/dev-tools}.)
- * @internal
- */
-export function isDebuggerEnabled(): boolean {
-  deprecation.warn(
-      'Blockly.blockRendering.isDebuggerEnabled()', 'September 2021',
-      'September 2022',
-      'the debug renderer in @blockly/dev-tools (See https://www.npmjs.com/package/@blockly/dev-tools.)');
-  return debug.isDebuggerEnabled();
-}
-
 /**
  * Registers a new renderer.
  *
@@ -85,22 +67,6 @@ export function register(name: string, rendererClass: Function) {
  */
 export function unregister(name: string) {
   registry.unregister(registry.Type.RENDERER, name);
-}
-
-/**
- * Turn on the blocks debugger.
- *
- * @alias Blockly.blockRendering.startDebugger
- * @deprecated Use the debug renderer in **\@blockly/dev-tools** (See {@link
- *     https://www.npmjs.com/package/@blockly/dev-tools}.)
- * @internal
- */
-export function startDebugger() {
-  deprecation.warn(
-      'Blockly.blockRendering.startDebugger()', 'September 2021',
-      'September 2022',
-      'the debug renderer in @blockly/dev-tools (See https://www.npmjs.com/package/@blockly/dev-tools.)');
-  debug.startDebugger();
 }
 
 /**

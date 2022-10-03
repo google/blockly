@@ -526,13 +526,12 @@ Object.defineProperties(Generator.prototype, {
     /** @returns Name database. */
     get(this: Generator): Names |
         undefined {
-          deprecation.warn(
-              'variableDB_', 'May 2021', 'September 2022', 'nameDB_');
+          deprecation.warn('variableDB_', 'version 9', 'version 10', 'nameDB_');
           return this.nameDB_;
         },
     /** @param nameDb New name database. */
     set(this: Generator, nameDb: Names|undefined) {
-      deprecation.warn('variableDB_', 'May 2021', 'September2022', 'nameDB_');
+      deprecation.warn('variableDB_', 'version 9', 'version 10', 'nameDB_');
       this.nameDB_ = nameDb;
     },
   }),

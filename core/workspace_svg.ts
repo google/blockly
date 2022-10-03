@@ -58,7 +58,6 @@ import {ThemeManager} from './theme_manager.js';
 import * as Tooltip from './tooltip.js';
 import {TouchGesture} from './touch_gesture.js';
 import type {Trashcan} from './trashcan.js';
-import * as utils from './utils.js';
 import * as arrayUtils from './utils/array.js';
 import {Coordinate} from './utils/coordinate.js';
 import * as dom from './utils/dom.js';
@@ -1561,18 +1560,6 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     const newVar = super.createVariable(name, opt_type, opt_id);
     this.refreshToolboxSelection();
     return newVar;
-  }
-
-  /**
-   * Make a list of all the delete areas for this workspace.
-   *
-   * @deprecated Use workspace.recordDragTargets. (2021 June)
-   */
-  recordDeleteAreas() {
-    utils.deprecation.warn(
-        'WorkspaceSvg.prototype.recordDeleteAreas', 'June 2021', 'June 2022',
-        'WorkspaceSvg.prototype.recordDragTargets');
-    this.recordDragTargets();
   }
 
   /** Make a list of all the delete areas for this workspace. */

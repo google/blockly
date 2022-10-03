@@ -346,17 +346,6 @@ export const defineBlocksWithJsonArray = common.defineBlocksWithJsonArray;
 export const setParentContainer = common.setParentContainer;
 
 /**
- * Returns the dimensions of the specified SVG image.
- *
- * @param svg SVG image.
- * @returns Contains width and height properties.
- * @deprecated Use workspace.setCachedParentSvgSize. (2021 March 5)
- * @see Blockly.WorkspaceSvg.setCachedParentSvgSize
- * @alias Blockly.svgSize
- */
-export const svgSize = svgMath.svgSize;
-
-/**
  * Size the workspace when the contents change.  This also updates
  * scrollbars accordingly.
  *

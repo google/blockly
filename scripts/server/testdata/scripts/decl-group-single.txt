@@ -1,0 +1,89 @@
+gofumpt -w f1.go f2.go
+cmp f1.go f1.go.golden
+cmp f2.go f2.go.golden
+
+gofumpt -d f1.go.golden f2.go.golden
+! stdout .
+
+-- f1.go --
+package p
+
+import "non-grouped"
+
+import (
+	"grouped"
+)
+
+var single = "foo"
+
+var (
+	// verbose is verbose.
+	verbose = "bar"
+)
+
+// This entire block has a comment.
+var (
+	groupComment = "bar"
+)
+
+var (
+	multiple1 string
+	multiple2 string
+)
+
+const (
+	first = iota
+)
+
+var (
+	multiline = []string{
+		"foo",
+		"bar",
+	}
+)
+-- f1.go.golden --
+package p
+
+import "non-grouped"
+
+import (
+	"grouped"
+)
+
+var single = "foo"
+
+// verbose is verbose.
+var verbose = "bar"
+
+// This entire block has a comment.
+var (
+	groupComment = "bar"
+)
+
+var (
+	multiple1 string
+	multiple2 string
+)
+
+const (
+	first = iota
+)
+
+var multiline = []string{
+	"foo",
+	"bar",
+}
+-- f2.go --
+package p
+
+func _() {
+	var (
+		_ int
+	)
+}
+-- f2.go.golden --
+package p
+
+func _() {
+	var _ int
+}

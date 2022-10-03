@@ -1,0 +1,119 @@
+gofumpt -w foo.go
+cmp foo.go foo.go.golden
+
+gofumpt -d foo.go.golden
+! stdout .
+
+-- foo.go --
+package p
+
+func f1() {
+
+	println("multiple")
+
+	println("statements")
+
+}
+
+func f2() {
+
+	// comment directly before
+	println()
+
+	// comment after
+
+}
+
+func _() {
+	f3 := func() {
+
+		println()
+
+	}
+}
+
+func multilineParams(p1 string,
+	p2 string) {
+
+	println("body")
+
+}
+
+func multilineParamsUnambiguous(p1 string,
+	p2 string,
+) {
+
+	println("body")
+
+}
+
+func multilineResults() (p1 string,
+	p2 string) {
+
+	println("body")
+
+}
+
+func multilineResultsUnambiguous() (p1 string,
+	p2 string,
+) {
+
+	println("body")
+
+}
+
+func multilineNoFields(
+) {
+
+	println("body")
+
+}
+-- foo.go.golden --
+package p
+
+func f1() {
+	println("multiple")
+
+	println("statements")
+}
+
+func f2() {
+	// comment directly before
+	println()
+
+	// comment after
+}
+
+func _() {
+	f3 := func() {
+		println()
+	}
+}
+
+func multilineParams(p1 string,
+	p2 string) {
+
+	println("body")
+}
+
+func multilineParamsUnambiguous(p1 string,
+	p2 string,
+) {
+	println("body")
+}
+
+func multilineResults() (p1 string,
+	p2 string) {
+
+	println("body")
+}
+
+func multilineResultsUnambiguous() (p1 string,
+	p2 string,
+) {
+	println("body")
+}
+
+func multilineNoFields() {
+	println("body")
+}

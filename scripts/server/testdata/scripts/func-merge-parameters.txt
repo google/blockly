@@ -1,0 +1,95 @@
+# By default, this rule isn't enabled.
+gofumpt foo.go
+cmp stdout foo.go
+
+# It's run with -extra.
+gofumpt -extra foo.go
+cmp stdout foo.go.golden
+
+gofumpt -d foo.go.golden
+! stdout .
+
+-- foo.go --
+package p
+
+type f func(x int, y int) int
+
+type i interface {
+	add(x int, y int)
+}
+
+type s struct {
+	x int
+	y int
+}
+
+func mergeAdjacent(x int, y int) {}
+
+func mergeThreeAdjacent(x int, y int, z int) {}
+
+func mergeOneWithTwo(x, y int, z int) {}
+
+func mergeTwoWithOne(x int, y, z int) {}
+
+func mergeWithComment(
+	x int, y int, // comment
+)
+
+func mergeAllSyntax(x chan []*foo.Bar, y chan []*foo.Bar) {}
+
+func dontMergeAnonymousParams(int, int) {}
+
+func dontMergeMultipleLines(
+	x int,
+	y int,
+) {
+}
+
+func dontMergeMultipleLines2(
+	x,
+	y int,
+	z int,
+) {
+}
+-- foo.go.golden --
+package p
+
+type f func(x, y int) int
+
+type i interface {
+	add(x, y int)
+}
+
+type s struct {
+	x int
+	y int
+}
+
+func mergeAdjacent(x, y int) {}
+
+func mergeThreeAdjacent(x, y, z int) {}
+
+func mergeOneWithTwo(x, y, z int) {}
+
+func mergeTwoWithOne(x, y, z int) {}
+
+func mergeWithComment(
+	x, y int, // comment
+)
+
+func mergeAllSyntax(x, y chan []*foo.Bar) {}
+
+func dontMergeAnonymousParams(int, int) {}
+
+func dontMergeMultipleLines(
+	x int,
+	y int,
+) {
+}
+
+func dontMergeMultipleLines2(
+	x,
+	y int,
+	z int,
+) {
+}

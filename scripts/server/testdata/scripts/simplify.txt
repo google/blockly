@@ -1,0 +1,12 @@
+# gofumpt changes -s to default to true.
+gofumpt foo.go
+cmp stdout foo.go.golden
+
+-- foo.go --
+package p
+
+var _ = [][]int{[]int{1}}
+-- foo.go.golden --
+package p
+
+var _ = [][]int{{1}}

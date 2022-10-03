@@ -1,0 +1,8 @@
+# A missing import shouldn't matter nor be fixed by gofumpt.
+gofumpt foo.go
+cmp stdout foo.go
+
+-- foo.go --
+package p
+
+var _ bytes.Buffer

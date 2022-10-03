@@ -59,6 +59,7 @@
                   'Blockly.Dart.all',
                   'Blockly.JavaScript.all',
                   'Blockly.Lua.all',
+                  'Blockly.Go.all',
                   'Blockly.PHP.all',
                   'Blockly.Python.all',
                 ], resolve);

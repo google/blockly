@@ -1,0 +1,45 @@
+cd module
+cp foo.go foo.go.orig
+
+# Initially, the Go language version is too low.
+gofumpt foo.go
+cmp stdout foo.go.orig
+
+# We can give an explicitly newer version.
+gofumpt -lang=1.13 foo.go
+cmp stdout foo.go.golden
+
+# If we bump the version in go.mod, it should be picked up.
+exec go mod edit -go=1.13
+gofumpt foo.go
+cmp stdout foo.go.golden
+
+gofumpt -d foo.go.golden
+! stdout .
+
+# We can give an explicitly older version.
+gofumpt -lang=v1 foo.go
+cmp stdout foo.go.orig
+
+-- module/go.mod --
+module test
+
+go 1.12
+-- module/foo.go --
+package p
+
+const (
+	i = 0
+	j = 022
+	k = 0o_7_5_5
+	l = 1022
+)
+-- module/foo.go.golden --
+package p
+
+const (
+	i = 0
+	j = 0o22
+	k = 0o_7_5_5
+	l = 1022
+)

@@ -7,7 +7,7 @@
     "all2:11:blockly",
     "all3:11:blockly",
     "all4:11:blockly",
-    "all5:11:blockly"
+    "all5:13:blockly"
   ],
   "js": [
     "./core/inject.js",
@@ -346,6 +346,8 @@
     "./generators/go/loops.js",
     "./generators/go/logic.js",
     "./generators/go/lists.js",
+    "./blocks/tinygo.js",
+    "./generators/go/gofmt_server.js",
     "./generators/go.js",
     "./generators/go/colour.js",
     "./generators/go/all.js"

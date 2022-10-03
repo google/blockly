@@ -1,0 +1,104 @@
+gofumpt -w foo.go
+cmp foo.go foo.go.golden
+
+gofumpt -d foo.go.golden
+! stdout .
+
+-- foo.go --
+package p
+
+var Do1 func() error
+
+var Do2 func() (int, error)
+
+func f() {
+	n1, err := Do2()
+	if err != nil {
+		panic(err)
+	}
+
+	if n2, err := Do2(); err != nil {
+		panic(err)
+	}
+
+	n3, err := Do2()
+
+	if err != nil {
+		panic(err)
+	}
+
+	select {
+	default:
+		err := Do1()
+
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	n4, err := Do2()
+
+	if err != nil && err.Error() == "complex condition" {
+		panic(err)
+	}
+
+	err1 := Do1()
+
+	if err != nil {
+		panic(err)
+	}
+
+	{
+		if err != nil {
+			panic(err)
+		}
+	}
+}
+-- foo.go.golden --
+package p
+
+var Do1 func() error
+
+var Do2 func() (int, error)
+
+func f() {
+	n1, err := Do2()
+	if err != nil {
+		panic(err)
+	}
+
+	if n2, err := Do2(); err != nil {
+		panic(err)
+	}
+
+	n3, err := Do2()
+	if err != nil {
+		panic(err)
+	}
+
+	select {
+	default:
+		err := Do1()
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	n4, err := Do2()
+
+	if err != nil && err.Error() == "complex condition" {
+		panic(err)
+	}
+
+	err1 := Do1()
+
+	if err != nil {
+		panic(err)
+	}
+
+	{
+		if err != nil {
+			panic(err)
+		}
+	}
+}

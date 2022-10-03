@@ -1,0 +1,116 @@
+gofumpt -w foo.go
+cmp foo.go foo.go.golden
+
+gofumpt -d foo.go.golden
+! stdout .
+
+-- foo.go --
+package p
+
+var _ = []int{}
+
+var _ = []int{
+}
+
+var _ = []int{1, 2,
+	3, 4}
+
+var _ = []int{
+	1, 2, 3, 4}
+
+var _ = [][]string{{
+	"no need for more newlines",
+	"if wrapping a single expression",
+}}
+
+var _ = []string{`
+	no need for newlines
+	`, `
+	if no elements are surrounded by newlines
+`}
+
+var _ = []struct{ a int }{
+	{ // consistent
+		a: 1,
+	},
+	{
+		a: 2,
+	}, { // inconsistent
+		a: 3,
+	},
+}
+
+var _ = []struct{ a int }{{
+	a: 1,
+}, {
+	a: 2,
+}, {
+	a: 3,
+}}
+
+var _ interface{
+}
+
+func _(struct{
+})
+
+var _ = []interface {
+}{1, 2, 3}
+
+func _(
+)
+
+-- foo.go.golden --
+package p
+
+var _ = []int{}
+
+var _ = []int{}
+
+var _ = []int{
+	1, 2,
+	3, 4,
+}
+
+var _ = []int{
+	1, 2, 3, 4,
+}
+
+var _ = [][]string{{
+	"no need for more newlines",
+	"if wrapping a single expression",
+}}
+
+var _ = []string{`
+	no need for newlines
+	`, `
+	if no elements are surrounded by newlines
+`}
+
+var _ = []struct{ a int }{
+	{ // consistent
+		a: 1,
+	},
+	{
+		a: 2,
+	},
+	{ // inconsistent
+		a: 3,
+	},
+}
+
+var _ = []struct{ a int }{{
+	a: 1,
+}, {
+	a: 2,
+}, {
+	a: 3,
+}}
+
+var _ interface{}
+
+func _(struct{})
+
+var _ = []interface{}{1, 2, 3}
+
+func _()

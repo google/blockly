@@ -248,7 +248,7 @@ Code.TABS_ = [
  * @private
  */
 Code.TABS_DISPLAY_ = [
-  'Blocks', 'JavaScript', 'PHP', 'Python', 'Dart', 'Lua', 'XML', 'JSON'
+  'Blocks', 'JavaScript', 'PHP', 'Python', 'Go', 'Dart', 'Lua', 'XML', 'JSON'
 ];
 
 Code.selected = 'blocks';

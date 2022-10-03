@@ -26,40 +26,21 @@ Blockly.StaticTyping = function() {
     this.pendingVarTypeDict = Object.create(null);
 };
 
-/**
- * Navigates through all the statement blocks, collecting all variables and
- * their type into an associative array with the variable names as the keys and
- * the type as the values.
- * @param {Blockly.Workspace} workspace Blockly Workspace to collect variables.
- * @return {Object{ String: Blockly.Type, } Associative array with the variable
- *     names as the keys and the type as the values.
- */
 Blockly.StaticTyping.prototype.collectVarsWithTypes = function(workspace) {
     this.varTypeDict = Object.create(null);
     this.pendingVarTypeDict = Object.create(null);
-    var blocks = Blockly.StaticTyping.getAllStatementsOrdered(workspace);
-    for (var i = 0; i < blocks.length; i++) {
-        //blocks[i].select();  // for step debugging, highlights block in workspace
+    const blocks = Blockly.StaticTyping.getAllStatementsOrdered(workspace);
+    for (let i = 0; i < blocks.length; i++) {
+        // blocks[i].select();  // for step debugging, highlights block in workspace
         // Each statement block iterates through its input children collecting vars
-        var blockVarAndTypes = Blockly.StaticTyping.getBlockVars(blocks[i]);
-        for (var j = 0; j < blockVarAndTypes.length; j++) {
-            var variableName = blockVarAndTypes[j][0];
-            var variableType = blockVarAndTypes[j][1];
+        const blockVarAndTypes = Blockly.StaticTyping.getBlockVars(blocks[i]);
+        for (let j = 0; j < blockVarAndTypes.length; j++) {
+            const variableName = blockVarAndTypes[j][0];
+            let variableType = blockVarAndTypes[j][1];
             // If the type comes from a variable, so it's not directly defined, it
             // returns an Array<String(block type), String(source variable name)>
             if (Array.isArray(variableType)) {
                 console.log("IS ARRAY", variableType);
-                /*if (this.varTypeDict[variableType[1]]) {
-                  variableType = this.varTypeDict[variableType[1]];
-                } else {
-                  // Dependant variable undefined, add this var to the pending list
-                  if (!goog.isArray(this.pendingVarTypeDict[variableType[1]])) {
-                    this.pendingVarTypeDict[variableType[1]] = [variableName];
-                  } else {
-                    this.pendingVarTypeDict[variableType[1]].push(variableName);
-                  }
-                  variableType = Blockly.Types.UNDEF;
-                }*/
                 variableType = Blockly.Types.ARRAY;
             }
             this.assignTypeToVars(blocks[i], variableName, variableType);
@@ -77,7 +58,7 @@ Blockly.StaticTyping.prototype.collectVarsWithTypes = function(workspace) {
  */
 Blockly.StaticTyping.getAllStatementsOrdered = function(workspace) {
     if (!workspace.getTopBlocks) {
-        throw 'Not a valid workspace: ' + workspace;
+        throw Error('Not a valid workspace: ' + workspace);
     }
 
     /**
@@ -87,19 +68,18 @@ Blockly.StaticTyping.getAllStatementsOrdered = function(workspace) {
      * @return {Array<Blockly.Block>} Array containing all continuous statement
      *     blocks.
      */
-    var getAllContinuousStatements = function(startBlock) {
-        var block = startBlock;
-        var nextBlock = null;
-        var connections = null;
-        var blockNextConnection = null;
-        var blocks = [];
+    const getAllContinuousStatements = function(startBlock) {
+        let block = startBlock;
+        let nextBlock = null;
+        let connections = null;
+        let blockNextConnection = null;
+        let blocks = [];
         do {
-            //block.select();    // for step debugging, highlights block in workspace
             blocks.push(block);
             blockNextConnection = block.nextConnection;
             connections = block.getConnections_();
             block = null;
-            for (var j = 0; j < connections.length; j++) {
+            for (let j = 0; j < connections.length; j++) {
                 if (connections[j].type == Blockly.NEXT_STATEMENT) {
                     nextBlock = connections[j].targetBlock();
                     if (nextBlock) {
@@ -118,9 +98,9 @@ Blockly.StaticTyping.getAllStatementsOrdered = function(workspace) {
         return blocks;
     };
 
-    var allStatementBlocks = [];
-    var topBlocks = workspace.getTopBlocks(true);
-    for (var i = 0; i < topBlocks.length; i++) {
+    let allStatementBlocks = [];
+    const topBlocks = workspace.getTopBlocks(true);
+    for (let i = 0; i < topBlocks.length; i++) {
         allStatementBlocks = allStatementBlocks.concat(
             getAllContinuousStatements(topBlocks[i]));
     }
@@ -135,14 +115,14 @@ Blockly.StaticTyping.getAllStatementsOrdered = function(workspace) {
  *     block variable as the first item pair and variable type as the second.
  */
 Blockly.StaticTyping.getBlockVars = function(block) {
-    var blockVarAndTypes = [];
-    var getVars = block.getVars;
+    const blockVarAndTypes = [];
+    const getVars = block.getVars;
     if (getVars) {
-        var blockVariables = getVars.call(block);
+        const blockVariables = getVars.call(block);
         // Iterate through the variables used in this block
-        for (var i = 0; i < blockVariables.length; i++) {
-            var varName = blockVariables[i];
-            var varType = Blockly.StaticTyping.getVarType(block, varName);
+        for (let i = 0; i < blockVariables.length; i++) {
+            const varName = blockVariables[i];
+            const varType = Blockly.StaticTyping.getVarType(block, varName);
             if (varType) {
                 blockVarAndTypes.push([varName, varType]);
             } else {
@@ -168,7 +148,7 @@ Blockly.StaticTyping.prototype.assignTypeToVars =
                 this.varTypeDict[varName] = varType;
                 if ((varType != Blockly.Types.UNDEF) &&
                     (this.pendingVarTypeDict[varName] !== undefined)) {
-                    for (var i = 0; i < this.pendingVarTypeDict[varName].length; i++) {
+                    for (let i = 0; i < this.pendingVarTypeDict[varName].length; i++) {
                         this.assignTypeToVars(
                             block, this.pendingVarTypeDict[varName][i], varType);
                     }
@@ -191,7 +171,7 @@ Blockly.StaticTyping.prototype.assignTypeToVars =
  */
 Blockly.StaticTyping.prototype.setBlockTypeWarning =
     function(block, blockType, varName) {
-        var warningLabel = 'varType';
+        const warningLabel = 'varType';
         if ((blockType == Blockly.Types.CHILD_BLOCK_MISSING) ||
             (this.varTypeDict[varName] == Blockly.Types.CHILD_BLOCK_MISSING)) {
             // User still has to attach a block to this variable or its first
@@ -214,9 +194,9 @@ Blockly.StaticTyping.prototype.setBlockTypeWarning =
  * @param {Blockly.Workspace} workspace Blockly Workspace to collect variables.
  */
 Blockly.StaticTyping.prototype.setProcedureArgs = function(workspace) {
-    var blocks = workspace.getTopBlocks();
-    for (var i = 0, length_ = blocks.length; i < length_; i++) {
-        var setArgsType = blocks[i].setArgsType;
+    const blocks = workspace.getTopBlocks();
+    for (let i = 0, length_ = blocks.length; i < length_; i++) {
+        const setArgsType = blocks[i].setArgsType;
         if (setArgsType) {
             setArgsType.call(blocks[i], this.varTypeDict);
         }
@@ -224,14 +204,14 @@ Blockly.StaticTyping.prototype.setProcedureArgs = function(workspace) {
 };
 
 Blockly.StaticTyping.getVarType = function(block, varName) {
-    var children = block.getChildren();
-    for (var i = 0; i < children.length; i++) {
+    const children = block.getChildren();
+    for (let i = 0; i < children.length; i++) {
         if (children[i].getChildren().length > 0) {
             return Blockly.StaticTyping.getVarType(children[i]);
         } else if (children[i].getOutput() != undefined) {
             return children[i].getOutput();
         }
-        return Blockly.Types.UNDEF;
     }
+    return Blockly.Types.UNDEF;
 };
 

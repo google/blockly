@@ -1,0 +1,70 @@
+gofumpt -w foo.go
+cmp foo.go foo.go.golden
+
+gofumpt -d foo.go.golden
+! stdout .
+
+-- foo.go --
+package p
+
+func f1() { println("single line") }
+func f2() { println("single line") }
+
+func f3() {
+	println("multiline")
+}
+func f4() {
+	println("multiline")
+}
+
+// l1 is a var.
+var l1 = []int{
+	1, 2,
+}
+// l2 is a var.
+var l2 = []int{
+	3, 4,
+}
+
+var (
+	s3 = `
+		ok if grouped together
+	`
+	s4 = `
+		ok if grouped together
+	`
+)
+var _ = "ok if either isn't multiline"
+-- foo.go.golden --
+package p
+
+func f1() { println("single line") }
+func f2() { println("single line") }
+
+func f3() {
+	println("multiline")
+}
+
+func f4() {
+	println("multiline")
+}
+
+// l1 is a var.
+var l1 = []int{
+	1, 2,
+}
+
+// l2 is a var.
+var l2 = []int{
+	3, 4,
+}
+
+var (
+	s3 = `
+		ok if grouped together
+	`
+	s4 = `
+		ok if grouped together
+	`
+)
+var _ = "ok if either isn't multiline"

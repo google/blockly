@@ -49,7 +49,7 @@ import * as Blockly from 'blockly/core';
 #### Blockly built in blocks
 
 ```js
-import {libraryBlocks} from  'blockly/blocks';
+import * as libraryBlocks from  'blockly/blocks';
 ```
 
 #### Blockly Generators

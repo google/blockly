@@ -49,8 +49,8 @@
     "recompile": "gulp recompile",
     "release": "gulp gitCreateRC",
     "start": "http-server ./ -o /tests/playground.html -c-1",
-    "test": "gulp test",
-    "test:generators": "gulp testGenerators",
+    "test": "gulp --silent test",
+    "test:generators": "gulp --silent testGenerators",
     "test:mocha:interactive": "http-server ./ -o /tests/mocha/index.html -c-1",
     "test:compile:advanced": "gulp buildAdvancedCompilationTest --debug",
     "updateGithubPages": "gulp gitUpdateGithubPages"

@@ -7,67 +7,100 @@
 /**
  * @fileoverview Gulp tasks to test.
  */
+/* eslint-env node */
 
-var gulp = require('gulp');
-var gzip = require('gulp-gzip');
-var fs = require('fs');
-var path = require('path');
-var { execSync } = require('child_process');
-var rimraf = require('rimraf');
+const gulp = require('gulp');
+const gzip = require('gulp-gzip');
+const fs = require('fs');
+const path = require('path');
+const {execSync} = require('child_process');
+const rimraf = require('rimraf');
 
-var {BUILD_DIR} = require('./config');
+const {BUILD_DIR} = require('./config');
 
-const TMP_DIR='tests/generators/tmp/';
-const GOLDEN_DIR='tests/generators/golden/';
+const runGeneratorsInBrowser =
+  require('../../tests/generators/run_generators_in_browser.js');
+
+const TMP_DIR = 'tests/generators/tmp/';
+const GOLDEN_DIR = 'tests/generators/golden/';
 
 const BOLD_GREEN = '\x1b[1;32m';
 const BOLD_RED = '\x1b[1;31m';
 const ANSI_RESET = '\x1b[0m';
 
+let failerCount = 0;
+
+/**
+ * Helper method for running test code block.
+ * @param {string} id test id
+ * @param {function} block test code block
+ * @return {Promise} asynchronous result
+ */
+function runTestBlock(id, block) {
+  return new Promise((resolve) => {
+    console.log('=======================================');
+    console.log(`== ${id}`);
+    block()
+      .then((result) => {
+        console.log(`${BOLD_GREEN}SUCCESS:${ANSI_RESET} ${id}`);
+        resolve(result);
+      })
+      .catch((err) => {
+        failerCount++;
+        console.error(err.message);
+        console.log(`${BOLD_RED}FAILED:${ANSI_RESET} ${id}`);
+        // Always continue.
+        resolve(err);
+      });
+  });
+}
+
 /**
  * Helper method for running test command.
+ * @param {string} id test id
+ * @param {string} command command line to run
+ * @return {Promise} asynchronous result
  */
-function runTestCommand(command) {
-  return new Promise((resolve, reject) => {
-    try {
-      const result = execSync(command, { stdio: 'inherit' });
-      resolve(result);
-    } catch(err) {
-      reject(new Error(err.message));
-    }
+function runTestCommand(id, command) {
+  return runTestBlock(id, async() => {
+    return execSync(command, {stdio: 'inherit'});
   });
 }
 
 /**
  * Lint the codebase.
  * Skip for CI environments, because linting is run separately.
+ * @return {Promise} asynchronous result
  */
-function eslint(done) {
+function eslint() {
   if (process.env.CI) {
     console.log('Skip linting.');
-    done();
-  } else {
-    return runTestCommand('eslint .');
+    return Promise.resolve();
   }
-};
+  return runTestCommand('eslint', 'eslint .');
+}
 
 /**
  * Run the full usual build process, checking to ensure there are no
  * closure compiler warnings / errors.
+ * @return {Promise} asynchronous result
  */
 function buildDebug() {
-  return runTestCommand('npm run build-debug');
+  return runTestCommand('build-debug', 'npm run build-debug');
 }
 
 /**
  * Run renaming validation test.
+ * @return {Promise} asynchronous result
  */
 function renamings() {
-  return runTestCommand('node tests/migration/validate-renamings.js');
+  return runTestCommand('renamings', 'node tests/migration/validate-renamings.js');
 }
 
 /**
  * Helper method for gzipping file.
+ * @param {string} file target file
+ * @return {Promise} asynchronous result
  */
 function gzipFile(file) {
   return new Promise((resolve) => {
@@ -80,11 +113,14 @@ function gzipFile(file) {
     stream.on('end', () => {
       resolve();
     });
-  })
+  });
 }
 
 /**
  * Helper method for comparing file size.
+ * @param {string} file target file
+ * @param {number} expected expected size
+ * @return {number} 0: success / 1: failed
  */
 function compareSize(file, expected) {
   const name = path.posix.join(BUILD_DIR, file);
@@ -93,20 +129,23 @@ function compareSize(file, expected) {
   const size = stat.size;
 
   if (size > compare) {
-    const message = `Failed: Size of ${name} has grown more than 10%. ${size} vs ${expected} `;
+    const message = `Failed: ` +
+      `Size of ${name} has grown more than 10%. ${size} vs ${expected} `;
     console.log(`${BOLD_RED}${message}${ANSI_RESET}`);
     return 1;
   } else {
-    const message = `Size of ${name} at ${size} compared to previous ${expected}`;
+    const message =
+      `Size of ${name} at ${size} compared to previous ${expected}`;
     console.log(`${BOLD_GREEN}${message}${ANSI_RESET}`);
     return 0;
   }
 }
 
 /**
- * Zipping the compressed files.
+ * Helper method for zipping the compressed files.
+ * @return {Promise} asynchronous result
  */
-function compress() {
+function zippingFiles() {
   // GZip them for additional size comparisons (keep originals, force
   // overwite previously-gzipped copies).
   console.log('Zipping the compressed files');
@@ -117,37 +156,51 @@ function compress() {
 
 /**
  * Check the sizes of built files for unexpected growth.
+ * @return {Promise} asynchronous result
  */
-function metadata(done) {
-  // Read expected size from script.
-  const contents = fs.readFileSync('tests/scripts/check_metadata.sh').toString();
-  const pattern = /^readonly (?<key>[A-Z_]+)=(?<value>\d+)$/gm;
-  const matches = contents.matchAll(pattern);
-  const expected = {};
-  for (const match of matches) {
-    expected[match.groups.key] = match.groups.value;
-  }
+function metadata() {
+  return runTestBlock('metadata', async() => {
+    // Zipping the compressed files.
+    await zippingFiles();
+    // Read expected size from script.
+    const contents = fs.readFileSync('tests/scripts/check_metadata.sh')
+      .toString();
+    const pattern = /^readonly (?<key>[A-Z_]+)=(?<value>\d+)$/gm;
+    const matches = contents.matchAll(pattern);
+    const expected = {};
+    for (const match of matches) {
+      expected[match.groups.key] = match.groups.value;
+    }
 
-  // Check the sizes of the files.
-  let failed = 0;
-  failed += compareSize('blockly_compressed.js', expected.BLOCKLY_SIZE_EXPECTED);
-  failed += compareSize('blocks_compressed.js', expected.BLOCKS_SIZE_EXPECTED);
-  failed += compareSize('blockly_compressed.js.gz', expected.BLOCKLY_GZ_SIZE_EXPECTED);
-  failed += compareSize('blocks_compressed.js.gz', expected.BLOCKS_GZ_SIZE_EXPECTED);
-  if (failed === 0) {
-    done();
-  }
+    // Check the sizes of the files.
+    let failed = 0;
+    failed += compareSize('blockly_compressed.js',
+      expected.BLOCKLY_SIZE_EXPECTED);
+    failed += compareSize('blocks_compressed.js',
+      expected.BLOCKS_SIZE_EXPECTED);
+    failed += compareSize('blockly_compressed.js.gz',
+      expected.BLOCKLY_GZ_SIZE_EXPECTED);
+    failed += compareSize('blocks_compressed.js.gz',
+      expected.BLOCKS_GZ_SIZE_EXPECTED);
+    if (failed > 0) {
+      throw new Error('Unexpected growth was detected.');
+    }
+  });
 }
 
 /**
  * Run Mocha tests inside a browser.
+ * @return {Promise} asynchronous result
  */
 function mocha() {
-  return runTestCommand('node tests/mocha/run_mocha_tests_in_browser.js');
+  return runTestCommand('mocha', 'node tests/mocha/run_mocha_tests_in_browser.js');
 }
 
 /**
  * Helper method for comparison file.
+ * @param {string} file1 first target file
+ * @param {string} file2 second target file
+ * @return {boolean} comparison result (true: same / false: different)
  */
 function compareFile(file1, file2) {
   const buf1 = fs.readFileSync(file1);
@@ -161,6 +214,8 @@ function compareFile(file1, file2) {
 
 /**
  * Helper method for checking the result of generator.
+ * @param {string} suffix target suffix
+ * @return {number} check result (0: success / 1: failed)
  */
 function checkResult(suffix) {
   const fileName = `generated.${suffix}`;
@@ -173,10 +228,13 @@ function checkResult(suffix) {
     const goldenFileName = path.posix.join(GOLDEN_DIR, fileName);
     if (fs.existsSync(goldenFileName)) {
       if (compareFile(tmpFileName, goldenFileName)) {
-        console.log(`${SUCCESS_PREFIX} ${suffix}: ${tmpFileName} matches ${goldenFileName}`);
+        console.log(`${SUCCESS_PREFIX} ${suffix}: ` +
+          `${tmpFileName} matches ${goldenFileName}`);
         return 0;
       } else {
-        console.log(`${FAILURE_PREFIX} ${suffix}: ${tmpFileName} does not match ${goldenFileName}`);
+        console.log(
+          `${FAILURE_PREFIX} ${suffix}: ` +
+          `${tmpFileName} does not match ${goldenFileName}`);
       }
     } else {
       console.log(`File ${goldenFileName} not found!`);
@@ -189,48 +247,72 @@ function checkResult(suffix) {
 
 /**
  * Run generator tests inside a browser and check the results.
+ * @return {Promise} asynchronous result
  */
-function generators(done) {
-  fs.mkdirSync(TMP_DIR);
+function generators() {
+  return runTestBlock('generators', async() => {
+    // Clean up.
+    rimraf.sync(TMP_DIR);
+    fs.mkdirSync(TMP_DIR);
 
-  execSync('node tests/generators/run_generators_in_browser.js');
+    await runGeneratorsInBrowser().catch(() => {});
 
-  const generatorSuffixes = ['js', 'py', 'dart', 'lua', 'php'];
-  let failed = 0;
-  generatorSuffixes.forEach(suffix => {
-    failed += checkResult(suffix);
+    const generatorSuffixes = ['js', 'py', 'dart', 'lua', 'php'];
+    let failed = 0;
+    generatorSuffixes.forEach((suffix) => {
+      failed += checkResult(suffix);
+    });
+      
+    // Clean up.
+    rimraf.sync(TMP_DIR);
+     
+    if (failed === 0) {
+      console.log(`${BOLD_GREEN}All generator tests passed.${ANSI_RESET}`);
+    } else {
+      console.log(
+        `${BOLD_RED}Failures in ${failed} generator tests.${ANSI_RESET}`);
+      throw new Error('Generator tests failed.');
+    }
   });
-
-  // Clean up.
-  rimraf.sync(TMP_DIR);
-
-  if (failed === 0) {
-    console.log(`${BOLD_GREEN}All generator tests passed.${ANSI_RESET}`);
-    done();
-  } else {
-    console.log(`${BOLD_RED}Failures in ${failed} generator tests.${ANSI_RESET}`);
-  }
 }
 
 /**
  * Run the package build process, as Node tests depend on it.
+ * @return {Promise} asynchronous result
  */
 function package() {
-  return runTestCommand('npm run package');
+  return runTestCommand('package', 'npm run package');
 }
 
 /**
  * Run Node tests.
+ * @return {Promise} asynchronous result
  */
 function node() {
-  return runTestCommand('mocha tests/node --config tests/node/.mocharc.js');
+  return runTestCommand('node', 'mocha tests/node --config tests/node/.mocharc.js');
 }
 
 /**
  * Attempt advanced compilation of a Blockly app.
+ * @return {Promise} asynchronous result
  */
 function advancedCompile() {
-  return runTestCommand('npm run test:compile:advanced');
+  return runTestCommand('advanced_compile', 'npm run test:compile:advanced');
+}
+
+/**
+ * Report test result.
+ * @return {Promise} asynchronous result
+ */
+function reportTestResult() {
+  console.log('=======================================');
+  // Check result.
+  if (failerCount === 0) {
+    console.log(`${BOLD_GREEN}All tests passed.${ANSI_RESET}`);
+  } else {
+    console.log(`${BOLD_RED}Failures in ${failerCount} test groups.${ANSI_RESET}`);
+  }
+  return Promise.resolve();
 }
 
 // Indivisual tasks.
@@ -238,19 +320,17 @@ const testTasks = {
   eslint,
   buildDebug,
   renamings,
-  compress,
   metadata,
   mocha,
   generators,
   package,
   node,
   advancedCompile,
+  reportTestResult,
 };
 
 // Run all tests in sequence.
-const test = gulp.series(
-  Object.values(testTasks)
-);
+const test = gulp.series(Object.values(testTasks));
 
 module.exports = {
   test,

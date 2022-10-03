@@ -28,7 +28,7 @@ var rimraf = require('rimraf');
 var {BUILD_DIR, DEPS_FILE, TEST_DEPS_FILE, TSC_OUTPUT_DIR, TYPINGS_BUILD_DIR} = require('./config');
 var {getPackageJson} = require('./helper_tasks');
 
-var {normalizePath} = require('../build_helper');
+var {posixPath} = require('../helpers');
 
 ////////////////////////////////////////////////////////////
 //                        Build                           //
@@ -339,10 +339,15 @@ function buildDeps(done) {
     'tests/mocha'
   ];
 
-  function filterOutputs(text, keyword) {
+  /**
+   * Extracts lines that contain the specified keyword.
+   * @param {string} text output text
+   * @param {string} keyword extract lines with this keyword
+   * @returns {string} modified text
+   */
+  function extractOutputs(text, keyword) {
     return text.split('\n')
-        .filter(
-          (line) => line.indexOf(keyword) >= 0)
+        .filter((line) => line.includes(keyword))
         .join('\n');
   }
 
@@ -381,7 +386,8 @@ function buildDeps(done) {
           if (error) {
             reject(error);
           } else {
-            fs.writeFileSync(TEST_DEPS_FILE, filterOutputs(stdout, 'tests/mocha'));
+            fs.writeFileSync(TEST_DEPS_FILE,
+              extractOutputs(stdout, 'tests/mocha'));
             resolve();
           }
         });
@@ -533,8 +539,8 @@ function getChunkOptions() {
   if (argv.compileTs) {
     chunks[0].entry = path.join(TSC_OUTPUT_DIR, chunks[0].entry);
   }
-  // Normalize chunk entry path.
-  chunks.forEach(chunk => chunk.entry = normalizePath(chunk.entry));
+  // Convert chunk entry path to posix.
+  chunks.forEach(chunk => chunk.entry = posixPath(chunk.entry));
   const basePath =
       path.join(TSC_OUTPUT_DIR, 'closure', 'goog', 'base_minimal.js');
   const cccArgs = [
@@ -572,8 +578,9 @@ function getChunkOptions() {
   // chunk depends on any chunk but the first), so we look for
   // one of the entrypoints amongst the files in each chunk.
   const chunkByNickname = Object.create(null);
-  // Normalize js files path.
-  const jsFiles = rawOptions.js.slice().map(p => normalizePath(p));  // Will be modified via .splice!
+  // Convert js file path to posix.
+  const jsFiles = rawOptions.js.slice()
+    .map(p => posixPath(p));  // Will be modified via .splice!
   const chunkList = rawOptions.chunk.map((element) => {
     const [nickname, numJsFiles, parentNick] = element.split(':');
 

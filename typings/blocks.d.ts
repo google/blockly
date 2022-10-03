@@ -14,4 +14,4 @@ export const texts: any;
 export const variables: any;
 export const variablesDynamic: any;
 
-export const blocks: any;
+export const libraryBlocks: any;

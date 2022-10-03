@@ -5,10 +5,12 @@
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "آئٹم",
+	"UNNAMED_KEY": "بغیر ناں",
 	"TODAY": "اڄ",
 	"DUPLICATE_BLOCK": "ڈپلیکیٹ",
 	"ADD_COMMENT": "تبصرہ کرو",
 	"REMOVE_COMMENT": "رائے مٹاؤ",
+	"DUPLICATE_COMMENT": " نقل  تبصرہ",
 	"EXTERNAL_INPUTS": "باہرلے انپٹ",
 	"INLINE_INPUTS": "ان لائن ان پٹ",
 	"DELETE_BLOCK": "بلاک مٹاؤ",

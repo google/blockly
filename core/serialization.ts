@@ -25,5 +25,5 @@ export {
   registry,
   variables,
   workspaces,
-  ISerializer
-}
+  ISerializer,
+};

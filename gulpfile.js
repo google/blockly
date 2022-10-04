@@ -54,7 +54,6 @@ module.exports = {
   onlyBuildAdvancedCompilationTest: buildTasks.onlyBuildAdvancedCompilationTest,
 
   // Legacy targets, to be deleted.
-  checkin: buildTasks.checkin,
   recompile: releaseTasks.recompile,
   gitSyncDevelop: gitTasks.syncDevelop,
   gitSyncMaster: gitTasks.syncMaster,

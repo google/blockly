@@ -705,20 +705,6 @@ function buildAdvancedCompilationTest() {
 }
 
 /**
- * This task copies built files from BUILD_DIR and RELEASE_DIR back to
- * the repository so they can be committed to git.
- *
- * Prerequisite: buildCompiled, buildLangfiles.
- */
-function checkinBuilt() {
-  return gulp.src([
-    `${RELEASE_DIR}/*_compressed.js`,
-    `${RELEASE_DIR}/*_compressed.js.map`,
-    // `${BUILD_DIR}/msg/*.js`,  // Temporarily disabled (base mismatch).
-  ], {base: RELEASE_DIR}).pipe(gulp.dest('.'));
-}
-
-/**
  * This task cleans the build directory (by deleting it).
  */
 function cleanBuildDir(done) {
@@ -758,6 +744,3 @@ exports.buildAdvancedCompilationTest =
 
 // Targets intended only for invocation by scripts; may omit prerequisites.
 exports.onlyBuildAdvancedCompilationTest = buildAdvancedCompilationTest;
-
-// Legacy target, to be deleted.
-exports.checkin = gulp.series(exports.build, checkinBuilt);

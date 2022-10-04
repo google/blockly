@@ -31,7 +31,6 @@
     "clean": "gulp clean",
     "clean:build": "gulp cleanBuildDir",
     "clean:release": "gulp cleanReleaseDir",
-    "checkin": "gulp checkin",
     "deployDemos": "npm ci && gulp deployDemos",
     "deployDemos:beta": "npm ci && gulp deployDemosBeta",
     "format": "gulp format",

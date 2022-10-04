@@ -13,7 +13,6 @@ var fs = require('fs');
 var gulp = require('gulp');
 var readlineSync = require('readline-sync');
 
-var buildTasks = require('./build_tasks');
 var gitTasks = require('./git_tasks');
 var packageTasks = require('./package_tasks');
 var {getPackageJson} = require('./helper_tasks');
@@ -171,7 +170,6 @@ const recompileDevelop = gulp.series(
   gitTasks.createRebuildBranch,
   updateVersionPrompt,
   packageTasks.package,  // Does clean + build.
-  buildTasks.checkin,
   gitTasks.pushRebuildBranch
   );
 

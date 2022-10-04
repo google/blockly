@@ -1,6 +1,7 @@
 {
 	"@metadata": {
 		"authors": [
+			"No Sleep till Krupki",
 			"SimondR",
 			"ZlyiLev"
 		]
@@ -276,7 +277,6 @@
 	"LISTS_GET_SUBLIST_END_FROM_END": "па # з канца",
 	"LISTS_GET_SUBLIST_END_LAST": "па апошні",
 	"LISTS_GET_SUBLIST_TOOLTIP": "Стварае копію ўказанай частцы спісу.",
-	"LISTS_SORT_HELPURL": "https://github.com/google/blockly/wiki/Lists#sorting-a-list",
 	"LISTS_SORT_TITLE": "сартаваць %1 %2 %3",
 	"LISTS_SORT_TOOLTIP": "Сартаваць копію спісу.",
 	"LISTS_SORT_ORDER_ASCENDING": "па ўзрастанню",
@@ -300,21 +300,21 @@
 	"PROCEDURES_DEFNORETURN_PROCEDURE": "выканаць нешта",
 	"PROCEDURES_BEFORE_PARAMS": "з:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "з:",
-	"PROCEDURES_DEFNORETURN_TOOLTIP": "Стварыць працэдуру, якая ня вяртае значэнне.",
+	"PROCEDURES_DEFNORETURN_TOOLTIP": "Стварыць функцыю, якая не вяртае значэнне.",
 	"PROCEDURES_DEFNORETURN_COMMENT": "Апішыце гэтую функцыю...",
 	"PROCEDURES_DEFRETURN_RETURN": "вярнуць",
-	"PROCEDURES_DEFRETURN_TOOLTIP": "Стварыць працэдуру, якая вяртае значэнне.",
+	"PROCEDURES_DEFRETURN_TOOLTIP": "Стварыць функцыю, якая вяртае значэнне.",
 	"PROCEDURES_ALLOW_STATEMENTS": "дазволіць аператары",
 	"PROCEDURES_DEF_DUPLICATE_WARNING": "Папярэджанне: гэтая функцыя мае паўтаральныя параметры.",
 	"PROCEDURES_CALLNORETURN_HELPURL": "https://be.wikipedia.org/wiki/Падпраграма",
-	"PROCEDURES_CALLNORETURN_TOOLTIP": "Выконвае вызначаную карыстальнікам працэдуру '%1'.",
+	"PROCEDURES_CALLNORETURN_TOOLTIP": "Выконвае вызначаную карыстальнікам функцыю '%1'.",
 	"PROCEDURES_CALLRETURN_HELPURL": "https://be.wikipedia.org/wiki/Падпраграма",
-	"PROCEDURES_CALLRETURN_TOOLTIP": "Выконвае вызначаную карыстальнікам працэдуру '%1' і вяртае вылічанае значэнне.",
+	"PROCEDURES_CALLRETURN_TOOLTIP": "Выконвае вызначаную карыстальнікам функцыю '%1' і ўжыць яе значэнне.",
 	"PROCEDURES_MUTATORCONTAINER_TITLE": "параметры",
 	"PROCEDURES_MUTATORCONTAINER_TOOLTIP": "Дадаць, выдаліць або змяніць парадак уваходных параметраў для гэтай функцыі.",
 	"PROCEDURES_MUTATORARG_TITLE": "імя параметра:",
 	"PROCEDURES_MUTATORARG_TOOLTIP": "Дадаць уваходны параметр ў функцыю.",
-	"PROCEDURES_HIGHLIGHT_DEF": "Вылучыць вызначэнне працэдуры",
+	"PROCEDURES_HIGHLIGHT_DEF": "Вылучыць вызначэнне функцыі",
 	"PROCEDURES_CREATE_DO": "Стварыць выклік '%1'",
 	"PROCEDURES_IFRETURN_TOOLTIP": "Калі першае значэнне ісцінае, вяртае другое значэнне.",
 	"PROCEDURES_IFRETURN_WARNING": "Папярэджанне: гэты блок можа выкарыстоўвацца толькі ўнутры вызначэння функцыі.",

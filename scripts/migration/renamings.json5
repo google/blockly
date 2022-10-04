@@ -1337,7 +1337,7 @@
     },
   ],
 
-  'develop': [
+  '9.0.0': [
     {
       'oldName': 'Blockly.utils.global',
       'newPath': 'globalThis',
@@ -1416,4 +1416,8 @@
       },
     },
   ],
+
+  'develop': [
+    // New renamings go here!
+  ]
 }

@@ -98,7 +98,7 @@ function pushRebuildBranch(done) {
 /**
  * Update github pages with what is currently in develop.
  *
- * Prerequisite: build.
+ * Prerequisites (invoked): clean, build.
  */
 const updateGithubPages = gulp.series(
   function(done) {
@@ -109,18 +109,20 @@ const updateGithubPages = gulp.series(
     done();
   },
   buildTasks.cleanBuildDir,
+  packageTasks.cleanReleaseDir,
   buildTasks.build,
-  buildTasks.checkin,
   function(done) {
-    execSync('git commit -am "Rebuild"', { stdio: 'inherit' });
-    execSync('git push ' + upstream_url + ' gh-pages --force', { stdio: 'inherit' });
+    execSync('git add build/msg/* dist/*_compressed.js*', {stdio: 'inherit'});
+    execSync('git commit -am "Rebuild"', {stdio: 'inherit'});
+    execSync('git push ' + upstream_url + ' gh-pages --force',
+        {stdio: 'inherit'});
     done();
   }
 );
 
 module.exports = {
   // Main sequence targets.  Each should invoke any immediate prerequisite(s).
-  updateGithubPages: gulp.series(packageTasks.package, updateGithubPages),
+  updateGithubPages,
 
   // Manually-invokable targets that invoke prerequisites.
   createRC,

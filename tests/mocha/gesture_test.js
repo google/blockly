@@ -4,13 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.gesture');
+goog.declareModuleId('Blockly.test.gesture');
 
-const {assertEventFired, assertEventNotFired} = goog.require('Blockly.test.helpers.events');
-const {defineBasicBlockWithField} = goog.require('Blockly.test.helpers.blockDefinitions');
-const {dispatchPointerEvent} = goog.require('Blockly.test.helpers.userInput');
-const eventUtils = goog.require('Blockly.Events.utils');
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+import {assertEventFired, assertEventNotFired} from './test_helpers/events.js';
+import {defineBasicBlockWithField} from './test_helpers/block_definitions.js';
+import {dispatchPointerEvent} from './test_helpers/user_input.js';
+import * as eventUtils from '../../build/src/core/events/utils.js';
+import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 
 suite('Gesture', function() {
@@ -38,7 +38,7 @@ suite('Gesture', function() {
 
 
     assertEventFired(eventsFireStub, Blockly.Events.Selected,
-        {oldElementId: null, newElementId: block.id, type: eventUtils.SELECTED}, fieldWorkspace.id);
+        {newElementId: block.id, type: eventUtils.SELECTED}, fieldWorkspace.id);
     assertEventNotFired(eventsFireStub, Blockly.Events.Click, {type: eventUtils.CLICK});
   }
 
@@ -61,7 +61,7 @@ suite('Gesture', function() {
     const e = {id: 'dummy_test_event'};
     const gesture = new Blockly.Gesture(e, this.workspace);
     chai.assert.equal(gesture.mostRecentEvent_, e);
-    chai.assert.equal(gesture.creatorWorkspace_, this.workspace);
+    chai.assert.equal(gesture.creatorWorkspace, this.workspace);
   });
 
   test('Field click - Click in workspace', function() {

@@ -11,7 +11,7 @@
 
 goog.module('Blockly.Lua.logic');
 
-const Lua = goog.require('Blockly.Lua');
+const {luaGenerator: Lua} = goog.require('Blockly.Lua');
 
 
 Lua['controls_if'] = function(block) {

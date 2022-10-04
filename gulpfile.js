@@ -30,9 +30,8 @@ module.exports = {
   buildLangfiles: buildTasks.langfiles,
   buildCompiled: buildTasks.compiled,
   buildAdvancedCompilationTest: buildTasks.advancedCompilationTest,
-  buildTs: buildTasks.buildTypescript,
-  // TODO(5621): Re-enable once typings generation is fixed.
-  // checkin: gulp.parallel(buildTasks.checkinBuilt, typings.checkinTypings),
+  buildJavaScript: buildTasks.javaScript,
+  buildJavaScriptAndDeps: buildTasks.javaScriptAndDeps,
   checkin: gulp.parallel(buildTasks.checkinBuilt),
   checkinBuilt: buildTasks.checkinBuilt,
   clangFormat: buildTasks.format,
@@ -43,10 +42,8 @@ module.exports = {
   gitSyncMaster: gitTasks.syncMaster,
   gitCreateRC: gitTasks.createRC,
   gitUpdateGithubPages: gitTasks.updateGithubPages,
-  // TODO(5621): Re-enable once typings generation is fixed.
-  // typings: gulp.series(typings.typings, typings.msgTypings),
-  // checkinTypings: typings.checkinTypings,
   package: packageTasks.package,
+  prepare: buildTasks.prepare,
   checkLicenses: licenseTasks.checkLicenses,
   recompile: releaseTasks.recompile,
   prepareDemos: appengineTasks.prepareDemos,

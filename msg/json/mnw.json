@@ -40,7 +40,6 @@
 	"DELETE_VARIABLE_CONFIRMATION": "ဇိုတ်ပလီု %1 တုဲ ရပ်စပ် '%2' နဒဒှ်မပြံင်လှာဲဟာ?",
 	"CANNOT_DELETE_VARIABLE_PROCEDURE": "မပြံင်လှာဲ '%1' ဂှ် ဇိုတ်ပလီု ဟွံဂွံ၊ ဟိုတ်နူ ဍေဟ်ဂှ် ဆက်စပ်ဒၟံင် ကုဝှင်ရှေန် '%2'",
 	"DELETE_VARIABLE": "ဇိုတ်ပလီု အပြံင်အလှာဲ '%1'",
-	"COLOUR_PICKER_HELPURL": "https://en.wikipedia.org/wiki/Color",
 	"COLOUR_PICKER_TOOLTIP": "ရုဲကေတ် အသာ် မွဲ နူကဵု ဖလာတ်",
 	"COLOUR_RANDOM_TITLE": "ဇျောမ်ကေတ် အသာ်",
 	"COLOUR_RANDOM_TOOLTIP": "ရုဲစှ်ကေတ် အသာ် မွဲ ပ္ဍဲ ဇဟောမ်",
@@ -54,7 +53,6 @@
 	"COLOUR_BLEND_COLOUR2": "အသာ် ၂",
 	"COLOUR_BLEND_RATIO": "ဗၞတ်ဗ္ၜတ်",
 	"COLOUR_BLEND_TOOLTIP": "ပနှဴ အသာ် ၜါ နကဵု ဗၞတ်ဗ္ၜတ် (0.0 - 1.0).",
-	"CONTROLS_REPEAT_HELPURL": "https://en.wikipedia.org/wiki/For_loop",
 	"CONTROLS_REPEAT_TITLE": "ထပ်ဂလိုင်ပတိုန် %1 နာဍဳ",
 	"CONTROLS_REPEAT_INPUT_DO": "ပ",
 	"CONTROLS_REPEAT_TOOLTIP": "ကၠောန်ပတိတ် လလောင်တြး မဂၠိုင် ကုအလန်၊၊",
@@ -85,10 +83,7 @@
 	"LOGIC_TERNARY_CONDITION": "စမ်ၜတ်",
 	"LOGIC_TERNARY_IF_TRUE": "ယဝ်ဍာံ",
 	"LOGIC_TERNARY_IF_FALSE": "ယဝ်ဗၠေတ်",
-	"MATH_NUMBER_HELPURL": "https://en.wikipedia.org/wiki/Number",
 	"MATH_NUMBER_TOOLTIP": "မဂၞန်မွဲ",
-	"MATH_ARITHMETIC_HELPURL": "https://en.wikipedia.org/wiki/Arithmetic",
-	"MATH_SINGLE_HELPURL": "https://en.wikipedia.org/wiki/Square_root",
 	"MATH_SINGLE_OP_ABSOLUTE": "ဍာံဍာံ",
 	"DIALOG_CANCEL": "တးပဲါ"
 }

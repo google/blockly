@@ -11,8 +11,8 @@
 
 goog.module('Blockly.Lua.procedures');
 
-const Lua = goog.require('Blockly.Lua');
 const {NameType} = goog.require('Blockly.Names');
+const {luaGenerator: Lua} = goog.require('Blockly.Lua');
 
 
 Lua['procedures_defreturn'] = function(block) {

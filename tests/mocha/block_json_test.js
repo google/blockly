@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.blockJson');
+goog.declareModuleId('Blockly.test.blockJson');
 
-const {Align} = goog.require('Blockly.Input');
+import {Align} from '../../build/src/core/input.js';
 
 
 suite('Block JSON initialization', function() {
@@ -289,7 +289,7 @@ suite('Block JSON initialization', function() {
 
   suite('fieldFromJson_', function() {
     setup(function() {
-      this.stub = sinon.stub(Blockly.fieldRegistry, 'fromJson')
+      this.stub = sinon.stub(Blockly.fieldRegistry.TEST_ONLY, 'fromJsonInternal')
           .callsFake(function(elem) {
             switch (elem['type']) {
               case 'field_label':

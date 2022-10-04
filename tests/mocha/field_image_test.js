@@ -4,10 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.fieldImage');
+goog.declareModuleId('Blockly.test.fieldImage');
 
-const {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSetValueTests} = goog.require('Blockly.test.helpers.fields');
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+import * as Blockly from '../../build/src/core/blockly.js';
+import {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSetValueTests} from './test_helpers/fields.js';
+import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 
 suite('Image Fields', function() {
@@ -22,7 +23,6 @@ suite('Image Fields', function() {
    * @type {!Array<!FieldCreationTestCase>}
    */
   const invalidValueTestCases = [
-    {title: 'Undefined Src', value: undefined, args: [undefined, 1, 1]},
     {title: 'Undefined Size', value: 'src', args: ['src', undefined, undefined]},
     {title: 'Zero Size', value: 'src', args: ['src', 0, 0]},
     {title: 'Non-Parsable String for Size', value: 'src', args: ['src', 'bad', 'bad']},

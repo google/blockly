@@ -24,7 +24,7 @@ async function runLangGeneratorInBrowser(browser, filename, codegenFn) {
   await browser.execute(codegenFn);
   var elem = await browser.$("#importExport");
   var result = await elem.getValue();
-  fs.writeFile(filename, result, function(err) {
+  fs.writeFileSync(filename, result, function(err) {
     if (err) {
       return console.log(err);
     }

@@ -13,6 +13,7 @@
 
 goog.module('Blockly.Lua.all');
 
+const moduleExports = goog.require('Blockly.Lua');
 goog.require('Blockly.Lua.colour');
 goog.require('Blockly.Lua.lists');
 goog.require('Blockly.Lua.logic');
@@ -23,3 +24,4 @@ goog.require('Blockly.Lua.texts');
 goog.require('Blockly.Lua.variables');
 goog.require('Blockly.Lua.variablesDynamic');
 
+exports = moduleExports;

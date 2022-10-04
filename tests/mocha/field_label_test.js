@@ -4,11 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.fieldLabel');
+goog.declareModuleId('Blockly.test.fieldLabel');
 
-const {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSetValueTests} = goog.require('Blockly.test.helpers.fields');
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
-const {createTestBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
+import * as Blockly from '../../build/src/core/blockly.js';
+import {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSetValueTests} from './test_helpers/fields.js';
+import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
+import {createTestBlock} from './test_helpers/block_definitions.js';
 
 
 suite('Label Fields', function() {

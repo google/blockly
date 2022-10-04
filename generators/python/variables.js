@@ -11,8 +11,8 @@
 
 goog.module('Blockly.Python.variables');
 
-const Python = goog.require('Blockly.Python');
 const {NameType} = goog.require('Blockly.Names');
+const {pythonGenerator: Python} = goog.require('Blockly.Python');
 
 
 Python['variables_get'] = function(block) {

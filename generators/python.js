@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.Python');
-goog.module.declareLegacyNamespace();
 
 const stringUtils = goog.require('Blockly.utils.string');
 const Variables = goog.require('Blockly.Variables');
@@ -331,4 +330,4 @@ Python.getAdjustedInt = function(block, atId, opt_delta, opt_negate) {
   return at;
 };
 
-exports = Python;
+exports.pythonGenerator = Python;

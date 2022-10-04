@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.libraryBlocks');
-goog.module.declareLegacyNamespace();
 
 const colour = goog.require('Blockly.libraryBlocks.colour');
 const lists = goog.require('Blockly.libraryBlocks.lists');
@@ -22,8 +21,10 @@ const procedures = goog.require('Blockly.libraryBlocks.procedures');
 const texts = goog.require('Blockly.libraryBlocks.texts');
 const variables = goog.require('Blockly.libraryBlocks.variables');
 const variablesDynamic = goog.require('Blockly.libraryBlocks.variablesDynamic');
+// const {BlockDefinition} = goog.requireType('Blockly.blocks');
+// TODO (6248): Properly import the BlockDefinition type.
 /* eslint-disable-next-line no-unused-vars */
-const {BlockDefinition} = goog.requireType('Blockly.blocks');
+const BlockDefinition = Object;
 
 
 exports.colour = colour;

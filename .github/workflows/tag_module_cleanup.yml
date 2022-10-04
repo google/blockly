@@ -16,7 +16,7 @@ jobs:
     # Add the type: cleanup label
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/github-script@a3e7071a34d7e1f219a8a4de9a5e0a34d1ee1293
+      - uses: actions/github-script@v6
         with:
           script: |
             // Note that pull requests are considered issues and "shared"

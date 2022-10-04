@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.insertionMarker');
+goog.declareModuleId('Blockly.test.insertionMarker');
 
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 
 suite('InsertionMarkers', function() {
@@ -49,17 +49,17 @@ suite('InsertionMarkers', function() {
   });
   suite('Code Generation', function() {
     setup(function() {
-      Blockly.JavaScript['stack_block'] = function(block) {
+      javascriptGenerator['stack_block'] = function(block) {
         return 'stack[' + block.id + '];\n';
       };
-      Blockly.JavaScript['row_block'] = function(block) {
-        const value = Blockly.JavaScript
-            .valueToCode(block, 'INPUT', Blockly.JavaScript.ORDER_NONE);
+      javascriptGenerator['row_block'] = function(block) {
+        const value = javascriptGenerator
+            .valueToCode(block, 'INPUT', javascriptGenerator.ORDER_NONE);
         const code = 'row[' + block.id + '](' + value + ')';
-        return [code, Blockly.JavaScript.ORDER_NONE];
+        return [code, javascriptGenerator.ORDER_NONE];
       };
-      Blockly.JavaScript['statement_block'] = function(block) {
-        return 'statement[' + block.id + ']{\n' + Blockly.JavaScript
+      javascriptGenerator['statement_block'] = function(block) {
+        return 'statement[' + block.id + ']{\n' + javascriptGenerator
             .statementToCode(block, 'STATEMENT') + '};\n';
       };
 
@@ -67,14 +67,14 @@ suite('InsertionMarkers', function() {
         Blockly.Xml.domToWorkspace(xml, this.workspace);
         const block = this.workspace.getBlockById('insertion');
         block.isInsertionMarker_ = true;
-        const code = Blockly.JavaScript.workspaceToCode(this.workspace);
+        const code = javascriptGenerator.workspaceToCode(this.workspace);
         chai.assert.equal(code, expectedCode);
       };
     });
     teardown(function() {
-      delete Blockly.JavaScript['stack_block'];
-      delete Blockly.JavaScript['row_block'];
-      delete Blockly.JavaScript['statement_block'];
+      delete javascriptGenerator['stack_block'];
+      delete javascriptGenerator['row_block'];
+      delete javascriptGenerator['statement_block'];
     });
     test('Marker Surrounds', function() {
       const xml = Blockly.Xml.textToDom(

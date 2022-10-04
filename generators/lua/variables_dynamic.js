@@ -11,7 +11,7 @@
 
 goog.module('Blockly.Lua.variablesDynamic');
 
-const Lua = goog.require('Blockly.Lua');
+const {luaGenerator: Lua} = goog.require('Blockly.Lua');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Lua.variables');
 

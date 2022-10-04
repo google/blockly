@@ -11,7 +11,7 @@
 
 goog.module('Blockly.Lua.colour');
 
-const Lua = goog.require('Blockly.Lua');
+const {luaGenerator: Lua} = goog.require('Blockly.Lua');
 
 
 Lua['colour_picker'] = function(block) {

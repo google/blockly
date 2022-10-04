@@ -11,8 +11,8 @@
 
 goog.module('Blockly.JavaScript.procedures');
 
-const JavaScript = goog.require('Blockly.JavaScript');
 const {NameType} = goog.require('Blockly.Names');
+const {javascriptGenerator: JavaScript} = goog.require('Blockly.JavaScript');
 
 
 JavaScript['procedures_defreturn'] = function(block) {

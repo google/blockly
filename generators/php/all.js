@@ -13,6 +13,7 @@
 
 goog.module('Blockly.PHP.all');
 
+const moduleExports = goog.require('Blockly.PHP');
 goog.require('Blockly.PHP.colour');
 goog.require('Blockly.PHP.lists');
 goog.require('Blockly.PHP.logic');
@@ -23,3 +24,4 @@ goog.require('Blockly.PHP.texts');
 goog.require('Blockly.PHP.variables');
 goog.require('Blockly.PHP.variablesDynamic');
 
+exports = moduleExports;

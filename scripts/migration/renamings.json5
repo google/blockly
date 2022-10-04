@@ -1337,5 +1337,87 @@
     },
   ],
 
-  'develop': [ ],
+  '9.0.0': [
+    {
+      'oldName': 'Blockly.utils.global',
+      'newPath': 'globalThis',
+    },
+    {
+      oldName: 'Blockly.Dart',
+      newExport: 'dartGenerator',
+      newPath: 'Blockly.Dart',
+    },
+    {
+      oldName: 'Blockly.JavaScript',
+      newExport: 'javascriptGenerator',
+      newPath: 'Blockly.JavaScript',
+    },
+    {
+      oldName: 'Blockly.Lua',
+      newExport: 'luaGenerator',
+      newPath: 'Blockly.Lua',
+    },
+    {
+      oldName: 'Blockly.PHP',
+      newExport: 'phpGenerator',
+      newPath: 'Blockly.php',
+    },
+    {
+      oldName: 'Blockly.Python',
+      newExport: 'pythonGenerator',
+      newPath: 'Blockly.Python',
+      'oldName': 'Blockly.ContextMenuRegistry',
+      exports: {
+        'ContextMenuRegistry.ScopeType': {
+          oldPath: 'Blockly.ContextMenuRegistry.ScopeType',
+          newExport: 'ScopeType',
+          newPath: 'Blockly.ContextMenuRegistry.ScopeType',
+        },
+        'ContextMenuRegistry.Scope': {
+          oldPath: 'Blockly.ContextMenuRegistry.Scope',
+          newExport: 'Scope',
+          newPath: 'Blockly.ContextMenuRegistry.Scope',
+        },
+        'ContextMenuRegistry.RegistryItem': {
+          oldPath: 'Blockly.ContextMenuRegistry.RegistryItem',
+          newExport: 'RegistryItem',
+          newPath: 'Blockly.ContextMenuRegistry.RegistryItem',
+        },
+        'ContextMenuRegistry.ContextMenuOption': {
+          oldPath: 'Blockly.ContextMenuRegistry.ContextMenuOption',
+          newExport: 'ContextMenuOption',
+          newPath: 'Blockly.ContextMenuRegistry.ContextMenuOption',
+        },
+        'ContextMenuRegistry.LegacyContextMenuOption': {
+          oldPath: 'Blockly.ContextMenuRegistry.LegacyContextMenuOption',
+          newExport: 'LegacyContextMenuOption',
+          newPath: 'Blockly.ContextMenuRegistry.LegacyContextMenuOption',
+        },
+      },
+    },
+    {
+      'oldName': 'Blockly.Input',
+      exports: {
+        'Input.Align': {
+          oldPath: 'Blockly.Input.Align',
+          newExport: 'Align',
+          newPath: 'Blockly.Input.Align',
+        },
+      },
+    },
+    {
+      'oldName': 'Blockly.Names',
+      exports: {
+        'Names.NameType': {
+          oldPath: 'Blockly.Names.NameType',
+          newExport: 'NameType',
+          newPath: 'Blockly.Names.NameType',
+        },
+      },
+    },
+  ],
+
+  'develop': [
+    // New renamings go here!
+  ]
 }

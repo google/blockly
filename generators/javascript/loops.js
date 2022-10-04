@@ -12,8 +12,8 @@
 goog.module('Blockly.JavaScript.loops');
 
 const stringUtils = goog.require('Blockly.utils.string');
-const JavaScript = goog.require('Blockly.JavaScript');
 const {NameType} = goog.require('Blockly.Names');
+const {javascriptGenerator: JavaScript} = goog.require('Blockly.JavaScript');
 
 
 JavaScript['controls_repeat_ext'] = function(block) {

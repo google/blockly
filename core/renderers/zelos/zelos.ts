@@ -1,0 +1,40 @@
+/** @file Re-exports of Blockly.zelos.* modules. */
+
+/**
+ * @license
+ * Copyright 2021 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * Re-exports of Blockly.zelos.* modules.
+ *
+ * @namespace Blockly.zelos
+ */
+import * as goog from '../../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.zelos');
+
+import {ConstantProvider} from './constants.js';
+import {Drawer} from './drawer.js';
+import {RenderInfo} from './info.js';
+import {MarkerSvg} from './marker_svg.js';
+import {BottomRow} from './measurables/bottom_row.js';
+import {StatementInput} from './measurables/inputs.js';
+import {RightConnectionShape} from './measurables/row_elements.js';
+import {TopRow} from './measurables/top_row.js';
+import {PathObject} from './path_object.js';
+import {Renderer} from './renderer.js';
+
+
+export {
+  BottomRow,
+  ConstantProvider,
+  Drawer,
+  MarkerSvg,
+  PathObject,
+  Renderer,
+  RenderInfo,
+  RightConnectionShape,
+  StatementInput,
+  TopRow,
+};

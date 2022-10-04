@@ -17,12 +17,12 @@ jobs:
 
     steps:
     - name: Check Out Blockly
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         ref: 'develop'
 
     - name: Use Node.js 16.x
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v3
       with:
         node-version: 16.x
 
@@ -36,7 +36,7 @@ jobs:
       run: source ./tests/scripts/update_metadata.sh
 
     - name: Create Pull Request
-      uses: peter-evans/create-pull-request@9825ae65b1cb54b543b938503728b432a0176d29
+      uses: peter-evans/create-pull-request@171dd555b9ab6b18fa02519fdfacbb8bf671e1b4
       with:
         commit-message: Update build artifact sizes in check_metadata.sh
         delete-branch: true

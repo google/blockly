@@ -14,6 +14,7 @@ gulp.replace = require('gulp-replace');
 gulp.rename = require('gulp-rename');
 gulp.insert = require('gulp-insert');
 gulp.umd = require('gulp-umd');
+gulp.replace = require('gulp-replace');
 
 var path = require('path');
 var fs = require('fs');
@@ -77,15 +78,6 @@ function checkBuildDir(done) {
   }
   done();
 }
-
-/**
- * This task copies source files into the release directory.
- */
-function packageSources() {
-  return gulp.src(['core/**/**.js', 'blocks/**.js', 'generators/**/**.js'],
-      {base: '.'})
-    .pipe(gulp.dest(RELEASE_DIR));
-};
 
 /**
  * This task copies the compressed files and their source maps into
@@ -377,20 +369,19 @@ function packageReadme() {
 };
 
 /**
- * This task copies the typings/blockly.d.ts TypeScript definition
- * file into the release directory.  The bundled declaration file is
- * referenced in package.json in the types property.
- * As of Q4 2021 this simply copies the existing ts definition files, since
- * generation through typescript-closure-tools does not work with goog.module.
- * TODO(5621): Regenerate definition files and copy them into the release dir as
- * needed.
+ * This task copies the generated .d.ts files in build/declarations and the
+ * hand-written .d.ts files in typings/ into the release directory. The main
+ * entrypoint file (index.d.ts) is referenced in package.json in the types
+ * property.
  */
 function packageDTS() {
   const handwrittenSrcs = [
     'typings/*.d.ts',
-    'typings/msg/msg.d.ts',
+    'typings/msg/*.d.ts',
   ];
   return gulp.src(handwrittenSrcs, {base: 'typings'})
+      .pipe(gulp.src(`${TYPINGS_BUILD_DIR}/**/*.d.ts`))
+      .pipe(gulp.replace('AnyDuringMigration', 'any'))
       .pipe(gulp.dest(RELEASE_DIR));
 };
 
@@ -414,7 +405,6 @@ const package = gulp.series(
     cleanReleaseDir,
     gulp.parallel(
         packageIndex,
-        packageSources,
         packageCompressed,
         packageBrowser,
         packageNode,

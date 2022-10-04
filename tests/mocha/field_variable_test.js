@@ -4,11 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.fieldVariable');
+goog.declareModuleId('Blockly.test.fieldVariable');
 
-const {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSetValueTests} = goog.require('Blockly.test.helpers.fields');
-const {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
-const {createTestBlock, defineRowBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
+import * as Blockly from '../../build/src/core/blockly.js';
+import {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSetValueTests} from './test_helpers/fields.js';
+import {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
+import {createTestBlock, defineRowBlock} from './test_helpers/block_definitions.js';
 
 
 suite('Variable Fields', function() {
@@ -18,7 +19,7 @@ suite('Variable Fields', function() {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
     // Stub for default variable name.
-    sinon.stub(Blockly.Variables, 'generateUniqueName').returns(
+    sinon.stub(Blockly.Variables.TEST_ONLY, 'generateUniqueNameInternal').returns(
       FAKE_VARIABLE_NAME);
   });
   teardown(function() {

@@ -11,9 +11,9 @@
 
 goog.module('Blockly.Python.loops');
 
-const Python = goog.require('Blockly.Python');
 const stringUtils = goog.require('Blockly.utils.string');
 const {NameType} = goog.require('Blockly.Names');
+const {pythonGenerator: Python} = goog.require('Blockly.Python');
 
 
 Python['controls_repeat_ext'] = function(block) {
@@ -134,14 +134,11 @@ def ${Python.FUNCTION_NAME_PLACEHOLDER_}(start, stop, step):
       if (stringUtils.isNumber(arg)) {
         // Simple number.
         arg = Number(arg);
-      } else if (arg.match(/^\w+$/)) {
-        // Variable.
-        arg = 'float(' + arg + ')';
-      } else {
-        // It's complicated.
+      } else if (!arg.match(/^\w+$/)) {
+        // Not a variable, it's complicated.
         const varName = Python.nameDB_.getDistinctName(
             variable0 + suffix, NameType.VARIABLE);
-        code += varName + ' = float(' + arg + ')\n';
+        code += varName + ' = ' + arg + '\n';
         arg = varName;
       }
       return arg;

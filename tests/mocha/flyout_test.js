@@ -4,10 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.flyout');
+goog.declareModuleId('Blockly.test.flyout');
 
-const {defineStackBlock, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
-const {getBasicToolbox, getChildItem, getCollapsibleItem, getDeeplyNestedJSON, getInjectedToolbox, getNonCollapsibleItem, getProperSimpleJson, getSeparator, getSimpleJson, getXmlArray} = goog.require('Blockly.test.helpers.toolboxDefinitions');
+import {sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
+import {defineStackBlock} from './test_helpers/block_definitions.js';
+import {getBasicToolbox, getChildItem, getCollapsibleItem, getDeeplyNestedJSON, getInjectedToolbox, getNonCollapsibleItem, getProperSimpleJson, getSeparator, getSimpleJson, getXmlArray} from './test_helpers/toolbox_definitions.js';
 
 
 suite('Flyout', function() {

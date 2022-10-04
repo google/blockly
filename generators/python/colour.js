@@ -11,7 +11,7 @@
 
 goog.module('Blockly.Python.colour');
 
-const Python = goog.require('Blockly.Python');
+const {pythonGenerator: Python} = goog.require('Blockly.Python');
 
 
 Python['colour_picker'] = function(block) {
@@ -34,7 +34,7 @@ def ${Python.FUNCTION_NAME_PLACEHOLDER_}(r, g, b):
   r = round(min(100, max(0, r)) * 2.55)
   g = round(min(100, max(0, g)) * 2.55)
   b = round(min(100, max(0, b)) * 2.55)
-  return \'#%02x%02x%02x\' % (r, g, b)
+  return '#%02x%02x%02x' % (r, g, b)
 `);
   const r = Python.valueToCode(block, 'RED', Python.ORDER_NONE) || 0;
   const g = Python.valueToCode(block, 'GREEN', Python.ORDER_NONE) || 0;
@@ -54,7 +54,7 @@ def ${Python.FUNCTION_NAME_PLACEHOLDER_}(colour1, colour2, ratio):
   r = round(r1 * (1 - ratio) + r2 * ratio)
   g = round(g1 * (1 - ratio) + g2 * ratio)
   b = round(b1 * (1 - ratio) + b2 * ratio)
-  return \'#%02x%02x%02x\' % (r, g, b)
+  return '#%02x%02x%02x' % (r, g, b)
 `);
   const colour1 =
       Python.valueToCode(block, 'COLOUR1', Python.ORDER_NONE) || '\'#000000\'';

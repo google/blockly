@@ -96,7 +96,7 @@
     // whether Blockly is loaded from compressed or uncompressed.
     // Paths relative to root.
     additionalScripts: [
-      'msg/messages.js',
+      'build/msg/en.js',
     ],
   };
   if (typeof window.BLOCKLY_BOOTSTRAP_OPTIONS === 'object') {

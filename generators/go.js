@@ -17,6 +17,7 @@ goog.require('Blockly.Generator');
 goog.require('Blockly.utils.string');
 goog.require('GoFmtServer');
 goog.require('Blockly.TinyGo');
+goog.require('Blockly.Names');
 
 
 /**
@@ -150,11 +151,16 @@ Blockly.Go.init = function (workspace) {
     var varsWithTypes = Blockly.Go.StaticTyping.collectVarsWithTypes(workspace);
     Blockly.Go.StaticTyping.setProcedureArgs(workspace, varsWithTypes);
     // Set variable declarations with their Go type in the defines dictionary
-    console.log(varsWithTypes, variables);
-    for (var varName in varsWithTypes) {
+    for (let varName in varsWithTypes) {
+        let vName = "xXx";
+        for (let v in variables) {
+            if (variables[v].id_ == varName) {
+                vName = variables[v].name;
+                break;
+            }
+        }
         Blockly.Go.addVariable(varName,
-            'var ' +
-            Blockly.Go.variableDB.getName(varName, Blockly.Variables.NAME_TYPE) + ' ' + Blockly.Go.getGoType_(varsWithTypes[varName]));
+            'var ' + vName + ' ' + Blockly.Go.getGoType_(varsWithTypes[varName]));
     }
 
     Blockly.TinyGo.init(workspace);

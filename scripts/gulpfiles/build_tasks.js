@@ -415,7 +415,7 @@ this removal!
  */
 function buildLangfiles(done) {
   // Create output directory.
-  const outputDir = path.join(BUILD_DIR, 'msg', 'js');
+  const outputDir = path.join(BUILD_DIR, 'msg');
   fs.mkdirSync(outputDir, {recursive: true});
 
   // Run create_messages.py.
@@ -714,7 +714,7 @@ function checkinBuilt() {
   return gulp.src([
     `${RELEASE_DIR}/*_compressed.js`,
     `${RELEASE_DIR}/*_compressed.js.map`,
-    // `${BUILD_DIR}/msg/js/*.js`,  // Temporarily disabled (base mismatch).
+    // `${BUILD_DIR}/msg/*.js`,  // Temporarily disabled (base mismatch).
   ], {base: RELEASE_DIR}).pipe(gulp.dest('.'));
 }
 

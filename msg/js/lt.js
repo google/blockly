@@ -62,6 +62,7 @@ Blockly.Msg["CONTROLS_IF_TOOLTIP_1"] = "Jeigu sąlyga tenkinama, tai atlik veiks
 Blockly.Msg["CONTROLS_IF_TOOLTIP_2"] = "Jei sąlyga tenkinama, atlikti jai priklausančius veiksmus, o jei ne -- atlikti kitus nurodytus veiksmus.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_3"] = "Jei pirma sąlyga tenkinama, atlikti jai priklausančius veiksmus, O jei ne, tikrinti antrą sąlygą -- ir jei ši tenkinama, atlikti jos veiksmus.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_4"] = "Jei pirma sąlyga tenkinama, atlikti jai priklausančius veiksmus, O jei ne, tikrinti antrą sąlygą -- ir jei ši tenkinama, atlikti jos veiksmus. Kitais atvejais -- atlikti paskutinio bloko veiksmus.";
+Blockly.Msg["CONTROLS_REPEAT_FOREVER_TITLE"] = "repeat forever";  // untranslated
 Blockly.Msg["CONTROLS_REPEAT_HELPURL"] = "https://en.wikipedia.org/wiki/For_loop";  // untranslated
 Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"] = "daryti";
 Blockly.Msg["CONTROLS_REPEAT_TITLE"] = "pakartokite %1 kartus";

@@ -62,6 +62,7 @@ Blockly.Msg["CONTROLS_IF_TOOLTIP_1"] = "Bi iye yii ba je otito, lẹyinna ṣe a
 Blockly.Msg["CONTROLS_IF_TOOLTIP_2"] = "Bi iye yii ba je otito, lẹyinna ṣe alaye bulọọku akọkọ. Bibẹẹkọ, ṣe alaye akọkọ bulọọku keji.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_3"] = "Bi iye akọkọ yii ba je otito, lẹyinna ṣe alaye bulọọku akọkọ. Bibẹẹkọ, Bi iye keji yii ba je otito, ṣe alaye akọkọ bulọọku keji.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_4"] = "Bi iye akọkọ yii ba je otito, lẹyinna ṣe alaye bulọọku akọkọ. Bi iye keji yii ba je otito, ṣe alaye akọkọ bulọọku keji. Bi eyikeyi iye naa ko ba je otito, ṣe alaye akọkọ bulọọku ti o gbeyin.";
+Blockly.Msg["CONTROLS_REPEAT_FOREVER_TITLE"] = "repeat forever";  // untranslated
 Blockly.Msg["CONTROLS_REPEAT_HELPURL"] = "https://en.wikipedia.org/wiki/For_loop";  // untranslated
 Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"] = "ṣe";
 Blockly.Msg["CONTROLS_REPEAT_TITLE"] = "Iye igba %1 ti tun ṣe";

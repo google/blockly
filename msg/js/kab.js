@@ -62,6 +62,7 @@ Blockly.Msg["CONTROLS_IF_TOOLTIP_1"] = "mayella azal d idetti, ihi selkem kra n 
 Blockly.Msg["CONTROLS_IF_TOOLTIP_2"] = "Mayella azal d idetti, selkem iḥder amezwaru. Neɣ ma ulac, selkem iḥder wis sin.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_3"] = "Mayella azal amezwaru d idetti, selkem iḥder amezwaru. Neɣ ma azal wis sin d ucciḍ, selkem iḥder wis sin.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_4"] = "Mayella azal amezwaru d idetti, selkem iḥder amezwaru. Neɣ, mayella azal wis sin d idetti, selkem iḥder wis sin. Mayella ula d yiwen seg-sen ur yelli d idetti, selkem iḥder aneggaru.";
+Blockly.Msg["CONTROLS_REPEAT_FOREVER_TITLE"] = "repeat forever";  // untranslated
 Blockly.Msg["CONTROLS_REPEAT_HELPURL"] = "https://en.wikipedia.org/wiki/For_loop";  // untranslated
 Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"] = "eg";
 Blockly.Msg["CONTROLS_REPEAT_TITLE"] = "Ales %1 n tikkal";

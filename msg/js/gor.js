@@ -62,6 +62,7 @@ Blockly.Msg["CONTROLS_IF_TOOLTIP_1"] = "If a value is true, then do some stateme
 Blockly.Msg["CONTROLS_IF_TOOLTIP_2"] = "If a value is true, then do the first block of statements. Otherwise, do the second block of statements.";  // untranslated
 Blockly.Msg["CONTROLS_IF_TOOLTIP_3"] = "If the first value is true, then do the first block of statements. Otherwise, if the second value is true, do the second block of statements.";  // untranslated
 Blockly.Msg["CONTROLS_IF_TOOLTIP_4"] = "If the first value is true, then do the first block of statements. Otherwise, if the second value is true, do the second block of statements. If none of the values are true, do the last block of statements.";  // untranslated
+Blockly.Msg["CONTROLS_REPEAT_FOREVER_TITLE"] = "repeat forever";  // untranslated
 Blockly.Msg["CONTROLS_REPEAT_HELPURL"] = "https://en.wikipedia.org/wiki/For_loop";  // untranslated
 Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"] = "pohutuwa";
 Blockly.Msg["CONTROLS_REPEAT_TITLE"] = "ulangiya %1 kali";

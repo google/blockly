@@ -62,6 +62,7 @@ Blockly.Msg["CONTROLS_IF_TOOLTIP_1"] = "Ak je hodnota pravda, vykonaj príkazy."
 Blockly.Msg["CONTROLS_IF_TOOLTIP_2"] = "Ak je hodnota pravda, vykonaj príkazy v prvom bloku. Inak vykonaj príkazy v druhom bloku.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_3"] = "Ak je prvá hodnota pravda, vykonaj príkazy v prvom bloku. Inak, ak je druhá hodnota pravda, vykonaj príkazy v druhom bloku.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_4"] = "Ak je prvá hodnota pravda, vykonaj príkazy v prvom bloku. Inak, ak je druhá hodnota pravda, vykonaj príkazy v druhom bloku. Ak ani jedna hodnota nie je pravda, vykonaj príkazy v poslednom bloku.";
+Blockly.Msg["CONTROLS_REPEAT_FOREVER_TITLE"] = "repeat forever";  // untranslated
 Blockly.Msg["CONTROLS_REPEAT_HELPURL"] = "https://en.wikipedia.org/wiki/For_loop";  // untranslated
 Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"] = "rob";
 Blockly.Msg["CONTROLS_REPEAT_TITLE"] = "opakuj %1 krát";

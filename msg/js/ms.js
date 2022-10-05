@@ -62,6 +62,7 @@ Blockly.Msg["CONTROLS_IF_TOOLTIP_1"] = "Jika nilai yang benar, lakukan beberapa 
 Blockly.Msg["CONTROLS_IF_TOOLTIP_2"] = "Jika suatu nilai benar, lakukan penyata blok pertama.  Jika tidak, bina penyata blok kedua.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_3"] = "Jika nilai yang pertama adalah benar, lakukan penyata pertama blok.  Sebaliknya, jika nilai kedua adalah benar, lakukan penyata blok kedua.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_4"] = "Jika nilai yang pertama adalah benar, lakukan penyata blok pertama.  Sebaliknya, jika nilai kedua adalah benar, lakukan penyata blok kedua.  Jika tiada nilai adalah benar, lakukan penyata blok terakhir.";
+Blockly.Msg["CONTROLS_REPEAT_FOREVER_TITLE"] = "repeat forever";  // untranslated
 Blockly.Msg["CONTROLS_REPEAT_HELPURL"] = "https://en.wikipedia.org/wiki/For_loop";  // untranslated
 Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"] = "lakukan";
 Blockly.Msg["CONTROLS_REPEAT_TITLE"] = "ulang %1 kali";

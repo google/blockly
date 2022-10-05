@@ -62,6 +62,7 @@ Blockly.Msg["CONTROLS_IF_TOOLTIP_1"] = "Kui avaldis on tõene, käivita ploki se
 Blockly.Msg["CONTROLS_IF_TOOLTIP_2"] = "Kui avaldis on tõene, käivita käsud esimesest plokist. Vastasel juhul käivita käsud teisest plokist.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_3"] = "Kui esimene avaldis on tõene, käivita käsud esimesest plokist. Vastasel juhul, kui teine avaldis on tõene, käivita käsud teisest plokist.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_4"] = "Kui esimene avaldis on tõene, käivita käsud esimesest plokist. Vastasel juhul, kui teine avaldis on tõene, käivita käsud teisest plokist. Kui ükski avaldistest pole tõene, käivita käsud viimasest plokist.";
+Blockly.Msg["CONTROLS_REPEAT_FOREVER_TITLE"] = "repeat forever";  // untranslated
 Blockly.Msg["CONTROLS_REPEAT_HELPURL"] = "https://en.wikipedia.org/wiki/For_loop";  // untranslated
 Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"] = "käivita";
 Blockly.Msg["CONTROLS_REPEAT_TITLE"] = "%1 korda";

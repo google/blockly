@@ -62,6 +62,7 @@ Blockly.Msg["CONTROLS_IF_TOOLTIP_1"] = "Si un valor a l'é ver, antlora eseguì 
 Blockly.Msg["CONTROLS_IF_TOOLTIP_2"] = "Si un valor a l'é ver, antlora eseguì ël prim blòch d'anstrussion. Dësnò, eseguì ël second blòch d'anstrussion.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_3"] = "Si ël prim valor a l'é ver, antlora fé andé ël prim blòch d'anstrussion. Dësnò, si ël second valor a l'é ver, fé andé ël second blòch d'anstrussion.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_4"] = "Si ël prim valor a l'é ver, antlora fé andé ël prim blòch d'anstrussion. Dësnò, si ël second valor a l'é ver, fé andé ël second blòcj d'anstrussion. Si gnun dij valor a l'é ver, fé andé l'ùltim blòch d'anstrussion.";
+Blockly.Msg["CONTROLS_REPEAT_FOREVER_TITLE"] = "repeat forever";  // untranslated
 Blockly.Msg["CONTROLS_REPEAT_HELPURL"] = "https://en.wikipedia.org/wiki/For_loop";  // untranslated
 Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"] = "fé";
 Blockly.Msg["CONTROLS_REPEAT_TITLE"] = "arpete %1 vire";

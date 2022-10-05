@@ -62,6 +62,7 @@ Blockly.Msg["CONTROLS_IF_TOOLTIP_1"] = "ಮೌಲ್ಯವು ಸತ್ಯವಾ
 Blockly.Msg["CONTROLS_IF_TOOLTIP_2"] = "ಮೌಲ್ಯವು ಸತ್ಯ ಆಗಿದ್ದರೆ, ಮೊದಲನೇ ವಿಭಾಗದ ಹೇಳಿಕೆಗಳನ್ನು ಮಾಡು, ಇಲ್ಲವಾದರೆ, ಎರಡನೇ ವಿಭಾಗದ ಹೇಳಿಕೆಗಳನ್ನು ಮಾಡು.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_3"] = "ಮೊದಲನೇ ಮೌಲ್ಯವು ಸತ್ಯವಾಗಿದ್ದರೆ, ಮೊದಲ ವಿಭಾಗದ ಹೇಳಿಕೆಗಳನ್ನು  ಮಾಡಿ. ಇಲ್ಲದಿದ್ದರೆ, ಎರಡನೇ  ಮೌಲ್ಯವು ಸತ್ಯವಾಗಿದ್ದರೆ, ಎರಡನೇ ವಿಭಾಗದ  ಹೇಳಿಕೆಗಳನ್ನು ಮಾಡಿ.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_4"] = "ಮೊದಲನೆಯ ಮೌಲ್ಯವು ಸತ್ಯ ಆಗಿದ್ದರೆ, ಮೊದಲ ವಿಭಾಗದ ಹೇಳಿಕೆಗಳನ್ನು ಮಾಡು. ಇಲ್ಲವಾದರೆ, ಎರಡನೇ ಮೌಲ್ಯವು ಸತ್ಯವಾಗಿದ್ದರೆ, ಎರಡನೇ ವಿಭಾಗದ ಹೇಳಿಕೆಗಳನ್ನು ಮಾಡು. ಒಂದುವೇಳೆ ಯಾವುದೇ ಮೌಲ್ಯವೂ ಸತ್ಯವಾಗಿರದಿದ್ದರೆ, ಕೊನೆಯ ವಿಭಾಗದ ಹೇಳಿಕೆಗಳನ್ನು ಮಾಡು.";
+Blockly.Msg["CONTROLS_REPEAT_FOREVER_TITLE"] = "repeat forever";  // untranslated
 Blockly.Msg["CONTROLS_REPEAT_HELPURL"] = "https://en.wikipedia.org/wiki/For_loop";  // untranslated
 Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"] = "ಮಾಡು";
 Blockly.Msg["CONTROLS_REPEAT_TITLE"] = "%1 ಬಾರಿ ಪುನರಾವರ್ತಿಸು";

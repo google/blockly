@@ -62,6 +62,7 @@ Blockly.Msg["CONTROLS_IF_TOOLTIP_1"] = "Si su valori est berus, tandu fait parig
 Blockly.Msg["CONTROLS_IF_TOOLTIP_2"] = "Si su valori est berus, tandu fai su primu brocu de is cumandus. Sinuncas, fai su segundu brocu de is cumandus.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_3"] = "Si su primu valori est beridadi, tandu fai su primu brocu de is cumandus. Sinuncas, si su segundu valori est beridadi, fai su segundu brocu de is cumandus.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_4"] = "Si su primu valori est berus, tandu fai su primu brocu de is cumandus. Sinuncas, si su segundu valori est berus, fai su segundu brocu de is cumandus. Si mancu unu valori est berus, tandu fai s'urtimu brocu de is cumandus.";
+Blockly.Msg["CONTROLS_REPEAT_FOREVER_TITLE"] = "repeat forever";  // untranslated
 Blockly.Msg["CONTROLS_REPEAT_HELPURL"] = "https://en.wikipedia.org/wiki/For_loop";  // untranslated
 Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"] = "fai";
 Blockly.Msg["CONTROLS_REPEAT_TITLE"] = "repiti %1 bortas";

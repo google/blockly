@@ -62,6 +62,7 @@ Blockly.Msg["CONTROLS_IF_TOOLTIP_1"] = "Jos arvo on tosi, suorita lauseke.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_2"] = "Jos arvo on tosi, suorita ensimmäinen lohko lausekkeita. Muuten suorita toinen lohko lausekkeita.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_3"] = "Jos ensimmäinen arvo on tosi, suorita ensimmäinen lohko lausekkeita. Muuten, jos toinen arvo on tosi, suorita toinen lohko lausekkeita.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_4"] = "Jos ensimmäinen arvo on tosi, suorita ensimmäinen lohko lausekkeita. Muuten, jos toinen arvo on tosi, suorita toinen lohko lausekkeita. Jos mikään arvoista ei ole tosi, suorita viimeinen lohko lausekkeita.";
+Blockly.Msg["CONTROLS_REPEAT_FOREVER_TITLE"] = "repeat forever";  // untranslated
 Blockly.Msg["CONTROLS_REPEAT_HELPURL"] = "https://en.wikipedia.org/wiki/For_loop";  // untranslated
 Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"] = "tee";
 Blockly.Msg["CONTROLS_REPEAT_TITLE"] = "toista %1 kertaa";

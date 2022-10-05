@@ -62,6 +62,7 @@ Blockly.Msg["CONTROLS_IF_TOOLTIP_1"] = "Ma vez gwir un dalvoudenn, seveniñ urzh
 Blockly.Msg["CONTROLS_IF_TOOLTIP_2"] = "Ma vez gwir un dalvoudenn, seveniñ ar c'henañ bloc'had urzhioù neuze. Anez seveniñ an eil bloc'had urzhioù.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_3"] = "Ma vez gwir an dalvoudenn gentañ, seveniñ ar c'hentañ bloc'had urzhioù neuze. Anez ma vez gwir an eil talvoudenn, seveniñ an eil bloc'had urzhioù.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_4"] = "Ma vez gwir an dalvoudenn gentañ, seveniñ ar c'hentañ bloc'had. Anez, ma vez gwir an eil talvoudenn, seveniñ an eil bloc'had urzhioù. Ma ne vez gwir talvoudenn ebet, seveniñ ar bloc'had diwezhañ a urzhioù.";
+Blockly.Msg["CONTROLS_REPEAT_FOREVER_TITLE"] = "repeat forever";  // untranslated
 Blockly.Msg["CONTROLS_REPEAT_HELPURL"] = "https://en.wikipedia.org/wiki/For_loop";  // untranslated
 Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"] = "ober";
 Blockly.Msg["CONTROLS_REPEAT_TITLE"] = "adober %1 gwech";

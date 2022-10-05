@@ -62,6 +62,7 @@ Blockly.Msg["CONTROLS_IF_TOOLTIP_1"] = "Idan kima gaskiya ce, to a yi wasu magan
 Blockly.Msg["CONTROLS_IF_TOOLTIP_2"] = "Idan kimar gaskiya ce, to a yi bulo na farko na maganganu. Idan ba haka ba, yi bulo na biyu na maganganu.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_3"] = "Idan kimar farko gaskiya ce, to yi bulon farko na maganganun. In ba haka ba, idan kima ta biyu ce gaskiya, yi bolu na biyu na maganganun.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_4"] = "Idan kimar farko gaskiya ce, to yi bulon farko na maganganun. In ba haka ba, idan kima ta biyu ce gaskiya, yi bolu na biyu na maganganun. Idan babu kimar da take gaskiya, yi bulo na ƙarshe na maganganun.";
+Blockly.Msg["CONTROLS_REPEAT_FOREVER_TITLE"] = "repeat forever";  // untranslated
 Blockly.Msg["CONTROLS_REPEAT_HELPURL"] = "https://en.wikipedia.org/wiki/For_loop";  // untranslated
 Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"] = "yi";
 Blockly.Msg["CONTROLS_REPEAT_TITLE"] = "maimaita sau %1";

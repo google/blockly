@@ -62,6 +62,7 @@ Blockly.Msg["CONTROLS_IF_TOOLTIP_1"] = "Nếu điều kiện đúng, thực hi�
 Blockly.Msg["CONTROLS_IF_TOOLTIP_2"] = "Nếu điều kiện đúng, thực hiện các lệnh đầu.  Nếu sai, thực hiện các lệnh sau.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_3"] = "Nếu điều kiện đúng, thực hiện các lệnh đầu.  Nếu không, nếu điều kiện thứ hai đúng, thực hiện các lệnh thứ hai.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_4"] = "Nếu điều kiện đúng, thực hiện các lệnh đầu.  Nếu không, nếu điều kiện thứ hai đúng, thực hiện các lệnh thứ hai.  Nếu không điều kiện nào đúng, thực hiện các lệnh cuối cùng.";
+Blockly.Msg["CONTROLS_REPEAT_FOREVER_TITLE"] = "repeat forever";  // untranslated
 Blockly.Msg["CONTROLS_REPEAT_HELPURL"] = "https://en.wikipedia.org/wiki/For_loop";  // untranslated
 Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"] = "thực hiện";
 Blockly.Msg["CONTROLS_REPEAT_TITLE"] = "lặp lại %1 lần";

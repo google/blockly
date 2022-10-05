@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.astNode');
+goog.declareModuleId('Blockly.test.astNode');
 
-const {ASTNode} = goog.require('Blockly.ASTNode');
-const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+import {ASTNode} from '../../build/src/core/keyboard_nav/ast_node.js';
+import {sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
 
 
 suite('ASTNode', function() {

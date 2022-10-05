@@ -8,6 +8,7 @@ build-debug.log
 *.pyc
 *.komodoproject
 /nbproject/private/
+tsdoc-metadata.json
 
 tests/compile/main_compressed.js
 tests/compile/main_compressed.js.map
@@ -18,3 +19,4 @@ local_build/local_*_compressed.js
 chromedriver
 build/
 dist/
+temp/

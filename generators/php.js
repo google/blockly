@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.PHP');
-goog.module.declareLegacyNamespace();
 
 const objectUtils = goog.require('Blockly.utils.object');
 const stringUtils = goog.require('Blockly.utils.string');
@@ -301,4 +300,4 @@ PHP.getAdjusted = function(block, atId, opt_delta, opt_negate, opt_order) {
   return at;
 };
 
-exports = PHP;
+exports.phpGenerator = PHP;

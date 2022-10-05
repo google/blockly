@@ -18,24 +18,24 @@ Blockly.Msg["ARD_TIME_MS"] = "ms";  // untranslated
 Blockly.Msg["ARD_WRITE_TO"] = "To";  // untranslated
 Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "لايمكن حذف متغير \"%1\" بسبب انه جزء من الدالة \"%2\"";
 Blockly.Msg["CHANGE_VALUE_TITLE"] = "تغيير قيمة:";
-Blockly.Msg["CLEAN_UP"] = "ترتيب القطع";
+Blockly.Msg["CLEAN_UP"] = "تنظيف الكتل";
 Blockly.Msg["COLLAPSED_WARNINGS_WARNING"] = "الكتل المطوية تحتوي على تحذيرات.";
-Blockly.Msg["COLLAPSE_ALL"] = "إخفاء القطع";
-Blockly.Msg["COLLAPSE_BLOCK"] = "إخفاء القطعة";
+Blockly.Msg["COLLAPSE_ALL"] = "انهيار الكتل";
+Blockly.Msg["COLLAPSE_BLOCK"] = "انهيار الكتلة";
 Blockly.Msg["COLOUR_BLEND_COLOUR1"] = "اللون 1";
 Blockly.Msg["COLOUR_BLEND_COLOUR2"] = "اللون 2";
-Blockly.Msg["COLOUR_BLEND_HELPURL"] = "https://meyerweb.com/eric/tools/color-blend/#:::rgbp";
+Blockly.Msg["COLOUR_BLEND_HELPURL"] = "https://meyerweb.com/eric/tools/color-blend/#:::rgbp";  // untranslated
 Blockly.Msg["COLOUR_BLEND_RATIO"] = "نسبة";
 Blockly.Msg["COLOUR_BLEND_TITLE"] = "دمج";
 Blockly.Msg["COLOUR_BLEND_TOOLTIP"] = "دمج لونين ببعضهما البعض بنسبة (0.0 - 1.0).";
-Blockly.Msg["COLOUR_PICKER_HELPURL"] = "https://ar.wikipedia.org/wiki/Color";
+Blockly.Msg["COLOUR_PICKER_HELPURL"] = "https://ar.wikipedia.org/wiki/لون";
 Blockly.Msg["COLOUR_PICKER_TOOLTIP"] = "اختر لون من اللوحة.";
 Blockly.Msg["COLOUR_RANDOM_HELPURL"] = "http://randomcolour.com";  // untranslated
 Blockly.Msg["COLOUR_RANDOM_TITLE"] = "لون عشوائي";
 Blockly.Msg["COLOUR_RANDOM_TOOLTIP"] = "اختر لون بشكل عشوائي.";
 Blockly.Msg["COLOUR_RGB_BLUE"] = "أزرق";
 Blockly.Msg["COLOUR_RGB_GREEN"] = "أخضر";
-Blockly.Msg["COLOUR_RGB_HELPURL"] = "https://www.december.com/html/spec/colorpercompact.html";
+Blockly.Msg["COLOUR_RGB_HELPURL"] = "https://www.december.com/html/spec/colorpercompact.html";  // untranslated
 Blockly.Msg["COLOUR_RGB_RED"] = "أحمر";
 Blockly.Msg["COLOUR_RGB_TITLE"] = "لون مع";
 Blockly.Msg["COLOUR_RGB_TOOLTIP"] = "إنشئ لون بالكمية المحددة من الأحمر, الأخضر والأزرق. بحيث يجب تكون كافة القيم بين 0 و 100.";
@@ -72,20 +72,20 @@ Blockly.Msg["CONTROLS_WHILEUNTIL_OPERATOR_UNTIL"] = "اكرّر حتى";
 Blockly.Msg["CONTROLS_WHILEUNTIL_OPERATOR_WHILE"] = "اكرّر طالما";
 Blockly.Msg["CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL"] = "بما ان القيمة خاطئة, نفّذ بعض الأوامر.";
 Blockly.Msg["CONTROLS_WHILEUNTIL_TOOLTIP_WHILE"] = "بما ان القيمة صحيحة, نفّذ بعض الأوامر.";
-Blockly.Msg["DELETE_ALL_BLOCKS"] = "حذف %1 قطعة؟";
-Blockly.Msg["DELETE_BLOCK"] = "احذف القطعة";
+Blockly.Msg["DELETE_ALL_BLOCKS"] = "حذف %1 كتلة؟";
+Blockly.Msg["DELETE_BLOCK"] = "حذف كتلة";
 Blockly.Msg["DELETE_VARIABLE"] = "حذف المتغير %1";
 Blockly.Msg["DELETE_VARIABLE_CONFIRMATION"] = "حذف%1 1 استخدامات المتغير '%2'؟";
-Blockly.Msg["DELETE_X_BLOCKS"] = "احذف %1 قطع";
+Blockly.Msg["DELETE_X_BLOCKS"] = "احذف %1 كتلة";
 Blockly.Msg["DIALOG_CANCEL"] = "إلغاء";
 Blockly.Msg["DIALOG_OK"] = "موافق";
-Blockly.Msg["DISABLE_BLOCK"] = "عطّل القطعة";
+Blockly.Msg["DISABLE_BLOCK"] = "عطّل كتلة";
 Blockly.Msg["DUPLICATE_BLOCK"] = "مكرر";
 Blockly.Msg["DUPLICATE_COMMENT"] = "تعليق مكرر";
-Blockly.Msg["ENABLE_BLOCK"] = "أعد تفعيل القطعة";
-Blockly.Msg["EXPAND_ALL"] = "وسٌّع القطع";
-Blockly.Msg["EXPAND_BLOCK"] = "وسٌّع القطعة";
-Blockly.Msg["EXTERNAL_INPUTS"] = "ادخال خارجي";
+Blockly.Msg["ENABLE_BLOCK"] = "تمكين كتلة";
+Blockly.Msg["EXPAND_ALL"] = "وسٌّع الكتل";
+Blockly.Msg["EXPAND_BLOCK"] = "وسٌّع الكتلة";
+Blockly.Msg["EXTERNAL_INPUTS"] = "مدخلات خارجية";
 Blockly.Msg["HELP"] = "مساعدة";
 Blockly.Msg["INLINE_INPUTS"] = "ادخال خطي";
 Blockly.Msg["LEAPHY_ANALOG_READ"] = "Read anapin";  // untranslated
@@ -224,7 +224,7 @@ Blockly.Msg["LISTS_SET_INDEX_TOOLTIP_SET_FIRST"] = "يحدد العنصر الأ
 Blockly.Msg["LISTS_SET_INDEX_TOOLTIP_SET_FROM"] = "يحدد العنصر في الموضع المحدد في قائمة ما.";
 Blockly.Msg["LISTS_SET_INDEX_TOOLTIP_SET_LAST"] = "يحدد العنصر الأخير في قائمة.";
 Blockly.Msg["LISTS_SET_INDEX_TOOLTIP_SET_RANDOM"] = "يحدد عنصرا عشوائيا في قائمة.";
-Blockly.Msg["LISTS_SORT_HELPURL"] = "https://github.com/google/blockly/wiki/Lists#sorting-a-list";
+Blockly.Msg["LISTS_SORT_HELPURL"] = "https://github.com/google/blockly/wiki/Lists#sorting-a-list";  // untranslated
 Blockly.Msg["LISTS_SORT_ORDER_ASCENDING"] = "تصاعديا";
 Blockly.Msg["LISTS_SORT_ORDER_DESCENDING"] = "تنازليا";
 Blockly.Msg["LISTS_SORT_TITLE"] = "رتب %1 %2 %3";
@@ -253,7 +253,7 @@ Blockly.Msg["LOGIC_NEGATE_HELPURL"] = "https://github.com/google/blockly/wiki/Lo
 Blockly.Msg["LOGIC_NEGATE_TITLE"] = "ليس %1";
 Blockly.Msg["LOGIC_NEGATE_TOOLTIP"] = "يرجع صحيح إذا كان الإدخال خاطئ .  يرجع خاطئ إذا كان الإدخال صحيح.";
 Blockly.Msg["LOGIC_NULL"] = "فارغ";
-Blockly.Msg["LOGIC_NULL_HELPURL"] = "https://en.wikipedia.org/wiki/Nullable_type";
+Blockly.Msg["LOGIC_NULL_HELPURL"] = "https://en.wikipedia.org/wiki/Nullable_type";  // untranslated
 Blockly.Msg["LOGIC_NULL_TOOLTIP"] = "ترجع ملغى.";
 Blockly.Msg["LOGIC_OPERATION_AND"] = "و";
 Blockly.Msg["LOGIC_OPERATION_HELPURL"] = "https://github.com/google/blockly/wiki/Logic#logical-operations";  // untranslated
@@ -265,17 +265,17 @@ Blockly.Msg["LOGIC_TERNARY_HELPURL"] = ":https://ar.wikipedia.org/wiki/%3F";
 Blockly.Msg["LOGIC_TERNARY_IF_FALSE"] = "إذا كانت العبارة خاطئة";
 Blockly.Msg["LOGIC_TERNARY_IF_TRUE"] = "إذا كانت العبارة صحيحة";
 Blockly.Msg["LOGIC_TERNARY_TOOLTIP"] = "تحقق الشرط في 'الاختبار'. إذا كان الشرط صحيح، يقوم بإرجاع قيمة 'اذا كانت العبارة صحيحة'؛ خلاف ذلك يرجع قيمة 'اذا كانت العبارة خاطئة'.";
-Blockly.Msg["MATH_ADDITION_SYMBOL"] = "+";
+Blockly.Msg["MATH_ADDITION_SYMBOL"] = "+";  // untranslated
 Blockly.Msg["MATH_ARITHMETIC_HELPURL"] = "https://ar.wikipedia.org/wiki/حسابيات";
 Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_ADD"] = "يرجع مجموع الرقمين.";
 Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_DIVIDE"] = "يرجع حاصل قسمة الرقمين.";
 Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_MINUS"] = "يرجع الفرق بين الرقمين.";
 Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_MULTIPLY"] = "يرجع حاصل ضرب الرقمين.";
 Blockly.Msg["MATH_ARITHMETIC_TOOLTIP_POWER"] = "يرجع الرقم الأول مرفوع إلى تربيع الرقم الثاني.";
-Blockly.Msg["MATH_ATAN2_HELPURL"] = "https://en.wikipedia.org/wiki/Atan2";
+Blockly.Msg["MATH_ATAN2_HELPURL"] = "https://en.wikipedia.org/wiki/Atan2";  // untranslated
 Blockly.Msg["MATH_ATAN2_TITLE"] = "atan2 من X:%1 Y:%2";
 Blockly.Msg["MATH_ATAN2_TOOLTIP"] = "عودة قوس ظل النقطة (س، ص) بالدرجات من -180 إلى 180.";
-Blockly.Msg["MATH_CHANGE_HELPURL"] = "https://en.wikipedia.org/wiki/Programming_idiom#Incrementing_a_counter";
+Blockly.Msg["MATH_CHANGE_HELPURL"] = "https://en.wikipedia.org/wiki/Programming_idiom#Incrementing_a_counter";  // untranslated
 Blockly.Msg["MATH_CHANGE_TITLE"] = "غير %1 بـ %2";
 Blockly.Msg["MATH_CHANGE_TOOLTIP"] = "إضف رقم إلى متغير '%1'.";
 Blockly.Msg["MATH_CONSTANT_HELPURL"] = "https://ar.wikipedia.org/wiki/ثابت رياضي";
@@ -283,7 +283,7 @@ Blockly.Msg["MATH_CONSTANT_TOOLTIP"] = "ير جع واحد من الثوابت �
 Blockly.Msg["MATH_CONSTRAIN_HELPURL"] = "https://en.wikipedia.org/wiki/Clamping_(graphics)";  // untranslated
 Blockly.Msg["MATH_CONSTRAIN_TITLE"] = "تقيد %1 منخفض %2 مرتفع %3";
 Blockly.Msg["MATH_CONSTRAIN_TOOLTIP"] = "تقييد العددليكون بين الحدود المحددة (ضمناً).";
-Blockly.Msg["MATH_DIVISION_SYMBOL"] = "÷";
+Blockly.Msg["MATH_DIVISION_SYMBOL"] = "÷";  // untranslated
 Blockly.Msg["MATH_IS_DIVISIBLE_BY"] = "قابل للقسمة";
 Blockly.Msg["MATH_IS_EVEN"] = "هو زوجي";
 Blockly.Msg["MATH_IS_NEGATIVE"] = "هو سالب";
@@ -295,7 +295,7 @@ Blockly.Msg["MATH_IS_WHOLE"] = "هو صحيح";
 Blockly.Msg["MATH_MODULO_HELPURL"] = "https://tr.wikipedia.org/wiki/عامل_قسمة_مع_باقي";
 Blockly.Msg["MATH_MODULO_TITLE"] = "باقي %1 ÷ %2";
 Blockly.Msg["MATH_MODULO_TOOLTIP"] = "يرجع الباقي من قسمة الرقمين.";
-Blockly.Msg["MATH_MULTIPLICATION_SYMBOL"] = "×";
+Blockly.Msg["MATH_MULTIPLICATION_SYMBOL"] = "×";  // untranslated
 Blockly.Msg["MATH_NUMBER_HELPURL"] = "https://ar.wikipedia.org/wiki/%D8%B9%D8%AF%D8%AF";
 Blockly.Msg["MATH_NUMBER_TOOLTIP"] = "عدد ما.";
 Blockly.Msg["MATH_ONLIST_HELPURL"] = "";  // untranslated
@@ -315,7 +315,7 @@ Blockly.Msg["MATH_ONLIST_TOOLTIP_MODE"] = "يرجع قائمة من العنصر
 Blockly.Msg["MATH_ONLIST_TOOLTIP_RANDOM"] = "يرجع عنصر عشوائي من القائمة.";
 Blockly.Msg["MATH_ONLIST_TOOLTIP_STD_DEV"] = "يرجع الانحراف المعياري للقائمة.";
 Blockly.Msg["MATH_ONLIST_TOOLTIP_SUM"] = "يرجع مجموع كافة الأرقام الموجودة في القائمة.";
-Blockly.Msg["MATH_POWER_SYMBOL"] = "^";
+Blockly.Msg["MATH_POWER_SYMBOL"] = "^";  // untranslated
 Blockly.Msg["MATH_RANDOM_FLOAT_HELPURL"] = "https://ar.wikipedia.org/wiki/توليد_الأعداد_العشوائية";
 Blockly.Msg["MATH_RANDOM_FLOAT_TITLE_RANDOM"] = "كسر عشوائي";
 Blockly.Msg["MATH_RANDOM_FLOAT_TOOLTIP"] = "يرجع جزء عشوائي بين 0.0 (ضمنياً) و 1.0 (خارجيا).";
@@ -337,7 +337,7 @@ Blockly.Msg["MATH_SINGLE_TOOLTIP_LOG10"] = "يرجع لوغاريتم عدد م�
 Blockly.Msg["MATH_SINGLE_TOOLTIP_NEG"] = "يرجع عدد سالب.";
 Blockly.Msg["MATH_SINGLE_TOOLTIP_POW10"] = "يرجع مضروب الرقم 10 في نفسه .";
 Blockly.Msg["MATH_SINGLE_TOOLTIP_ROOT"] = "يرجع الجذر التربيعي للرقم.";
-Blockly.Msg["MATH_SUBTRACTION_SYMBOL"] = "-";
+Blockly.Msg["MATH_SUBTRACTION_SYMBOL"] = "-";  // untranslated
 Blockly.Msg["MATH_TRIG_ACOS"] = "acos";
 Blockly.Msg["MATH_TRIG_ASIN"] = "asin";
 Blockly.Msg["MATH_TRIG_ATAN"] = "atan";

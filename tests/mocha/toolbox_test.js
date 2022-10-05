@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.toolbox');
+goog.declareModuleId('Blockly.test.toolbox');
 
-const {defineStackBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
-const {getBasicToolbox, getCategoryJSON, getChildItem, getCollapsibleItem, getDeeplyNestedJSON, getInjectedToolbox, getNonCollapsibleItem, getSeparator, getSimpleJson, getXmlArray} = goog.require('Blockly.test.helpers.toolboxDefinitions');
+import {defineStackBlock} from './test_helpers/block_definitions.js';
+import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
+import {getBasicToolbox, getCategoryJSON, getChildItem, getCollapsibleItem, getDeeplyNestedJSON, getInjectedToolbox, getNonCollapsibleItem, getSeparator, getSimpleJson, getXmlArray} from './test_helpers/toolbox_definitions.js';
 
 
 suite('Toolbox', function() {
@@ -128,6 +128,26 @@ suite('Toolbox', function() {
         },
       ]};
       this.toolbox.render(jsonDef);
+      chai.assert.lengthOf(this.toolbox.contents_, 1);
+    });
+    test('multiple icon classes can be applied', function() {
+      const jsonDef = {'contents': [
+        {
+          "kind": "category",
+          "cssConfig": {
+            "icon": "customIcon customIconEvents",
+          },
+          "contents": [
+            {
+              "kind": "block",
+              "blockxml": '<block xmlns="http://www.w3.org/1999/xhtml" type="basic_block"><field name="TEXT">FirstCategory-FirstBlock</field></block>',
+            },
+          ],
+        },
+      ]};
+      chai.assert.doesNotThrow(() => {
+        this.toolbox.render(jsonDef);
+      });
       chai.assert.lengthOf(this.toolbox.contents_, 1);
     });
   });

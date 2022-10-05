@@ -12,8 +12,8 @@
 
 goog.module('Blockly.JavaScript.lists');
 
-const JavaScript = goog.require('Blockly.JavaScript');
 const {NameType} = goog.require('Blockly.Names');
+const {javascriptGenerator: JavaScript} = goog.require('Blockly.JavaScript');
 
 
 JavaScript['lists_create_empty'] = function(block) {

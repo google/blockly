@@ -11,8 +11,8 @@
 
 goog.module('Blockly.Dart.procedures');
 
-const Dart = goog.require('Blockly.Dart');
 const {NameType} = goog.require('Blockly.Names');
+const {dartGenerator: Dart} = goog.require('Blockly.Dart');
 
 
 Dart['procedures_defreturn'] = function(block) {

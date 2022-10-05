@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.dropdown');
+goog.declareModuleId('Blockly.test.dropdown');
 
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 
 suite('DropDownDiv', function() {
@@ -22,7 +22,7 @@ suite('DropDownDiv', function() {
             width: 100,
             height: 100,
           });
-      this.sizeStub = sinon.stub(Blockly.utils.style, 'getSize')
+      this.sizeStub = sinon.stub(Blockly.utils.style.TEST_ONLY, 'getSizeInternal')
           .returns({
             width: 60,
             height: 60,

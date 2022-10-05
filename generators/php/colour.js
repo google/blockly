@@ -11,7 +11,7 @@
 
 goog.module('Blockly.PHP.colour');
 
-const PHP = goog.require('Blockly.PHP');
+const {phpGenerator: PHP} = goog.require('Blockly.PHP');
 
 
 PHP['colour_picker'] = function(block) {

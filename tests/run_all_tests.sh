@@ -58,10 +58,6 @@ fi
 # closure compiler warnings / errors.
 run_test_command "build-debug" "npm run build-debug"
 
-# Generate TypeScript typings and ensure there are no errors.
-# TODO(5621): Re-enable this test once typings generation is fixed.
-# run_test_command "typings" "npm run typings"
-
 # Run renaming validation test.
 run_test_command "renamings" "tests/migration/validate-renamings.js"
 

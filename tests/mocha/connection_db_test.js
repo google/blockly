@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.connectionDb');
+goog.declareModuleId('Blockly.test.connectionDb');
 
-const {ConnectionType} = goog.require('Blockly.ConnectionType');
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+import {ConnectionType} from '../../build/src/core/connection_type.js';
+import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 
 suite('Connection Database', function() {
@@ -203,13 +203,13 @@ suite('Connection Database', function() {
   suite('Search For Closest', function() {
     setup(function() {
       // Ignore type checks.
-      sinon.stub(this.database.connectionChecker_, 'doTypeChecks')
+      sinon.stub(this.database.connectionChecker, 'doTypeChecks')
           .returns(true);
       // Ignore safety checks.
-      sinon.stub(this.database.connectionChecker_, 'doSafetyChecks')
+      sinon.stub(this.database.connectionChecker, 'doSafetyChecks')
           .returns(Blockly.Connection.CAN_CONNECT);
       // Skip everything but the distance checks.
-      sinon.stub(this.database.connectionChecker_, 'doDragChecks')
+      sinon.stub(this.database.connectionChecker, 'doDragChecks')
           .callsFake(function(a, b, distance) {
             return a.distanceFrom(b) <= distance;
           });

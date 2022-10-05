@@ -4,10 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.fieldRegistry');
+goog.declareModuleId('Blockly.test.fieldRegistry');
 
-const {createDeprecationWarningStub} = goog.require('Blockly.test.helpers.warnings');
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+import * as Blockly from '../../build/src/core/blockly.js';
+import {createDeprecationWarningStub} from './test_helpers/warnings.js';
+import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 
 suite('Field Registry', function() {

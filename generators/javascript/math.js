@@ -12,8 +12,8 @@
 
 goog.module('Blockly.JavaScript.math');
 
-const JavaScript = goog.require('Blockly.JavaScript');
 const {NameType} = goog.require('Blockly.Names');
+const {javascriptGenerator: JavaScript} = goog.require('Blockly.JavaScript');
 
 
 JavaScript['math_number'] = function(block) {
@@ -222,7 +222,7 @@ JavaScript['math_on_list'] = function(block) {
     case 'SUM':
       list = JavaScript.valueToCode(block, 'LIST',
           JavaScript.ORDER_MEMBER) || '[]';
-      code = list + '.reduce(function(x, y) {return x + y;})';
+      code = list + '.reduce(function(x, y) {return x + y;}, 0)';
       break;
     case 'MIN':
       list = JavaScript.valueToCode(block, 'LIST',
@@ -238,7 +238,7 @@ JavaScript['math_on_list'] = function(block) {
       // mathMean([null,null,1,3]) === 2.0.
       const functionName = JavaScript.provideFunction_('mathMean', `
 function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(myList) {
-  return myList.reduce(function(x, y) {return x + y;}) / myList.length;
+  return myList.reduce(function(x, y) {return x + y;}, 0) / myList.length;
 }
 `);
       list = JavaScript.valueToCode(block, 'LIST',
@@ -250,7 +250,7 @@ function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(myList) {
       // mathMedian([null,null,1,3]) === 2.0.
       const functionName = JavaScript.provideFunction_('mathMedian', `
 function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(myList) {
-  var localList = myList.filter(function (x) {return typeof x === \'number\';});
+  var localList = myList.filter(function (x) {return typeof x === 'number';});
   if (!localList.length) return null;
   localList.sort(function(a, b) {return b - a;});
   if (localList.length % 2 === 0) {

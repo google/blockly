@@ -4,10 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.fieldTest');
+goog.declareModuleId('Blockly.test.fieldTest');
 
-const {addBlockTypeToCleanup, addMessageToCleanup, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
-const {createDeprecationWarningStub} = goog.require('Blockly.test.helpers.warnings');
+import * as Blockly from '../../build/src/core/blockly.js';
+import {addBlockTypeToCleanup, addMessageToCleanup, sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
+import {createDeprecationWarningStub} from './test_helpers/warnings.js';
 
 
 suite('Abstract Fields', function() {

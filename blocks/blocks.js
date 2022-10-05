@@ -11,7 +11,6 @@
 'use strict';
 
 goog.module('Blockly.libraryBlocks');
-goog.module.declareLegacyNamespace();
 
 const colour = goog.require('Blockly.libraryBlocks.colour');
 const lists = goog.require('Blockly.libraryBlocks.lists');
@@ -28,8 +27,10 @@ const leaphyFlitz = goog.require('Blockly.libraryBlocks.leaphyFlitz');
 const leaphyClick = goog.require('Blockly.libraryBlocks.leaphyClick');
 const leaphyExtra = goog.require('Blockly.libraryBlocks.leaphyExtra');
 const arduino = goog.require('Blockly.libraryBlocks.arduino');
+// const {BlockDefinition} = goog.requireType('Blockly.blocks');
+// TODO (6248): Properly import the BlockDefinition type.
 /* eslint-disable-next-line no-unused-vars */
-const {BlockDefinition} = goog.requireType('Blockly.blocks');
+const BlockDefinition = Object;
 
 
 exports.colour = colour;

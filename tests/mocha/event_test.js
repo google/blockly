@@ -4,20 +4,21 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.event');
+goog.declareModuleId('Blockly.test.event');
 
-const {ASTNode} = goog.require('Blockly.ASTNode');
-const {assertEventEquals, assertNthCallEventArgEquals, createFireChangeListenerSpy} = goog.require('Blockly.test.helpers.events');
-const {assertVariableValues} = goog.require('Blockly.test.helpers.variables');
-const {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
-const eventUtils = goog.require('Blockly.Events.utils');
-goog.require('Blockly.WorkspaceComment');
+import * as Blockly from '../../build/src/core/blockly.js';
+import {ASTNode} from '../../build/src/core/keyboard_nav/ast_node.js';
+import {assertEventEquals, assertNthCallEventArgEquals, createFireChangeListenerSpy} from './test_helpers/events.js';
+import {assertVariableValues} from './test_helpers/variables.js';
+import {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
+import * as eventUtils from '../../build/src/core/events/utils.js';
+import {WorkspaceComment} from '../../build/src/core/workspace_comment.js';
 
 
 suite('Events', function() {
   setup(function() {
     sharedTestSetup.call(this, {fireEventsNow: false});
-    this.eventsFireSpy = sinon.spy(eventUtils, 'fire');
+    this.eventsFireSpy = sinon.spy(eventUtils.TEST_ONLY, 'fireInternal');
     this.workspace = new Blockly.Workspace();
     Blockly.defineBlocksWithJsonArray([{
       'type': 'field_variable_test_block',
@@ -60,7 +61,7 @@ suite('Events', function() {
   suite('Constructors', function() {
     test('Abstract', function() {
       const event = new Blockly.Events.Abstract();
-      assertEventEquals(event, undefined, undefined, undefined, {
+      assertEventEquals(event, '', undefined, undefined, {
         'recordUndo': true,
         'group': '',
       });
@@ -68,7 +69,7 @@ suite('Events', function() {
 
     test('UI event without block', function() {
       const event = new Blockly.Events.UiBase(this.workspace.id);
-      assertEventEquals(event, undefined, this.workspace.id, undefined, {
+      assertEventEquals(event, '', this.workspace.id, undefined, {
         'recordUndo': false,
         'group': '',
       }, true);
@@ -109,10 +110,9 @@ suite('Events', function() {
       test('Block base', function() {
         const event = new Blockly.Events.BlockBase(this.block);
         sinon.assert.calledOnce(this.genUidStub);
-        assertEventEquals(event, undefined,
+        assertEventEquals(event, '',
             this.workspace.id, this.TEST_BLOCK_ID,
             {
-              'varId': undefined,
               'recordUndo': true,
               'group': '',
             });
@@ -222,7 +222,7 @@ suite('Events', function() {
       test('Block base', function() {
         const event = new Blockly.Events.BlockBase(this.block);
         sinon.assert.calledOnce(this.genUidStub);
-        assertEventEquals(event, undefined,
+        assertEventEquals(event, '',
             this.workspace.id, this.TEST_BLOCK_ID,
             {
               'varId': undefined,
@@ -338,51 +338,51 @@ suite('Events', function() {
     const variableEventTestCases = [
       {title: 'Var create', class: Blockly.Events.VarCreate,
         getArgs: (thisObj) => [thisObj.variable],
-        getExpectedJson: () => ({type: 'var_create', varId: 'id1',
+        getExpectedJson: () => ({type: 'var_create', group: '', varId: 'id1',
           varType: 'type1', varName: 'name1'})},
       {title: 'Var delete', class: Blockly.Events.VarDelete,
         getArgs: (thisObj) => [thisObj.variable],
-        getExpectedJson: () => ({type: 'var_delete', varId: 'id1',
+        getExpectedJson: () => ({type: 'var_delete', group: '', varId: 'id1',
           varType: 'type1', varName: 'name1'})},
       {title: 'Var rename', class: Blockly.Events.VarRename,
         getArgs: (thisObj) => [thisObj.variable, 'name2'],
-        getExpectedJson: () => ({type: 'var_rename', varId: 'id1',
+        getExpectedJson: () => ({type: 'var_rename', group: '', varId: 'id1',
           oldName: 'name1', newName: 'name2'})},
     ];
     const uiEventTestCases = [
       {title: 'Bubble open', class: Blockly.Events.BubbleOpen,
         getArgs: (thisObj) => [thisObj.block, true, 'mutator'],
-        getExpectedJson: (thisObj) => ({type: 'bubble_open', isOpen: true,
+        getExpectedJson: (thisObj) => ({type: 'bubble_open', group: '', isOpen: true,
           bubbleType: 'mutator', blockId: thisObj.block.id})},
       {title: 'Block click', class: Blockly.Events.Click,
         getArgs: (thisObj) => [thisObj.block, null, 'block'],
-        getExpectedJson: (thisObj) => ({type: 'click', targetType: 'block',
+        getExpectedJson: (thisObj) => ({type: 'click', group: '', targetType: 'block',
           blockId: thisObj.block.id})},
       {title: 'Workspace click', class: Blockly.Events.Click,
         getArgs: (thisObj) => [null, thisObj.workspace.id, 'workspace'],
-        getExpectedJson: (thisObj) => ({type: 'click',
+        getExpectedJson: (thisObj) => ({type: 'click', group: '',
           targetType: 'workspace'})},
       {title: 'Drag start', class: Blockly.Events.BlockDrag,
         getArgs: (thisObj) => [thisObj.block, true, [thisObj.block]],
-        getExpectedJson: (thisObj) => ({type: 'drag',
+        getExpectedJson: (thisObj) => ({type: 'drag', group: '',
           isStart: true, blockId: thisObj.block.id, blocks: [thisObj.block]})},
       {title: 'Drag end', class: Blockly.Events.BlockDrag,
         getArgs: (thisObj) => [thisObj.block, false, [thisObj.block]],
-        getExpectedJson: (thisObj) => ({type: 'drag',
+        getExpectedJson: (thisObj) => ({type: 'drag', group: '',
           isStart: false, blockId: thisObj.block.id, blocks: [thisObj.block]})},
       {title: 'null to Block Marker move', class: Blockly.Events.MarkerMove,
         getArgs: (thisObj) => [thisObj.block, true, null,
           new ASTNode(ASTNode.types.BLOCK, thisObj.block)],
-        getExpectedJson: (thisObj) => ({type: 'marker_move',
-          isCursor: true, blockId: thisObj.block.id, oldNode: null,
+        getExpectedJson: (thisObj) => ({type: 'marker_move', group: '',
+          isCursor: true, blockId: thisObj.block.id, oldNode: undefined,
           newNode: new ASTNode(ASTNode.types.BLOCK,
               thisObj.block)})},
       {title: 'null to Workspace Marker move', class: Blockly.Events.MarkerMove,
         getArgs: (thisObj) => [null, true, null,
           ASTNode.createWorkspaceNode(thisObj.workspace,
               new Blockly.utils.Coordinate(0, 0))],
-        getExpectedJson: (thisObj) => ({type: 'marker_move',
-          isCursor: true, blockId: null, oldNode: null,
+        getExpectedJson: (thisObj) => ({type: 'marker_move', group: '',
+          isCursor: true, blockId: undefined, oldNode: undefined,
           newNode: ASTNode.createWorkspaceNode(thisObj.workspace,
               new Blockly.utils.Coordinate(0, 0))})},
       {title: 'Workspace to Block Marker move',
@@ -391,7 +391,7 @@ suite('Events', function() {
           ASTNode.createWorkspaceNode(thisObj.workspace,
               new Blockly.utils.Coordinate(0, 0)),
           new ASTNode(ASTNode.types.BLOCK, thisObj.block)],
-        getExpectedJson: (thisObj) => ({type: 'marker_move',
+        getExpectedJson: (thisObj) => ({type: 'marker_move', group: '',
           isCursor: true, blockId: thisObj.block.id,
           oldNode: ASTNode.createWorkspaceNode(thisObj.workspace,
               new Blockly.utils.Coordinate(0, 0)),
@@ -405,40 +405,39 @@ suite('Events', function() {
               new Blockly.utils.Coordinate(0, 0))]},
       {title: 'Selected', class: Blockly.Events.Selected,
         getArgs: (thisObj) => [null, thisObj.block.id, thisObj.workspace.id],
-        getExpectedJson: (thisObj) => ({type: 'selected', oldElementId: null,
+        getExpectedJson: (thisObj) => ({type: 'selected', group: '',
           newElementId: thisObj.block.id})},
       {title: 'Selected (deselect)', class: Blockly.Events.Selected,
         getArgs: (thisObj) => [thisObj.block.id, null, thisObj.workspace.id],
-        getExpectedJson: (thisObj) => ({type: 'selected',
-          oldElementId: thisObj.block.id, newElementId: null})},
+        getExpectedJson: (thisObj) => ({type: 'selected', group: '',
+          oldElementId: thisObj.block.id})},
       {title: 'Theme Change', class: Blockly.Events.ThemeChange,
         getArgs: (thisObj) => ['classic', thisObj.workspace.id],
-        getExpectedJson: () => ({type: 'theme_change', themeName: 'classic'})},
+        getExpectedJson: () => ({type: 'theme_change', group: '', themeName: 'classic'})},
       {title: 'Toolbox item select',
         class: Blockly.Events.ToolboxItemSelect,
         getArgs: (thisObj) => ['Math', 'Loops', thisObj.workspace.id],
-        getExpectedJson: () => ({type: 'toolbox_item_select', oldItem: 'Math',
+        getExpectedJson: () => ({type: 'toolbox_item_select', group: '', oldItem: 'Math',
           newItem: 'Loops'})},
       {title: 'Toolbox item select (no previous)',
         class: Blockly.Events.ToolboxItemSelect,
         getArgs: (thisObj) => [null, 'Loops', thisObj.workspace.id],
-        getExpectedJson: () => ({type: 'toolbox_item_select', oldItem: null,
+        getExpectedJson: () => ({type: 'toolbox_item_select', group: '',
           newItem: 'Loops'})},
       {title: 'Toolbox item select (deselect)',
         class: Blockly.Events.ToolboxItemSelect,
         getArgs: (thisObj) => ['Math', null, thisObj.workspace.id],
-        getExpectedJson: () => ({type: 'toolbox_item_select', oldItem: 'Math',
-          newItem: null})},
+        getExpectedJson: () => ({type: 'toolbox_item_select', group: '', oldItem: 'Math'})},
       {title: 'Trashcan open', class: Blockly.Events.TrashcanOpen,
         getArgs: (thisObj) => [true, thisObj.workspace.id],
-        getExpectedJson: () => ({type: 'trashcan_open', isOpen: true})},
+        getExpectedJson: () => ({type: 'trashcan_open', group: '', isOpen: true})},
       {title: 'Viewport change', class: Blockly.Events.ViewportChange,
         getArgs: (thisObj) => [2.666, 1.333, 1.2, thisObj.workspace.id, 1],
-        getExpectedJson: () => ({type: 'viewport_change', viewTop: 2.666,
+        getExpectedJson: () => ({type: 'viewport_change', group: '', viewTop: 2.666,
           viewLeft: 1.333, scale: 1.2, oldScale: 1})},
       {title: 'Viewport change (0,0)', class: Blockly.Events.ViewportChange,
         getArgs: (thisObj) => [0, 0, 1.2, thisObj.workspace.id, 1],
-        getExpectedJson: () => ({type: 'viewport_change', viewTop: 0,
+        getExpectedJson: () => ({type: 'viewport_change', group: '', viewTop: 0,
           viewLeft: 0, scale: 1.2, oldScale: 1})},
     ];
     const blockEventTestCases = [
@@ -448,6 +447,7 @@ suite('Events', function() {
         getArgs: (thisObj) => [thisObj.block, 'collapsed', null, false, true],
         getExpectedJson: (thisObj) => ({
           type: 'change',
+          group: '',
           blockId: thisObj.block.id,
           element: 'collapsed',
           oldValue: false,
@@ -460,6 +460,7 @@ suite('Events', function() {
         getArgs: (thisObj) => [thisObj.block],
         getExpectedJson: (thisObj) => ({
           type: 'create',
+          group: '',
           blockId: thisObj.block.id,
           xml: '<block xmlns="https://developers.google.com/blockly/xml"' +
               ' type="simple_test_block" id="testBlockId1" x="0" y="0">' +
@@ -479,6 +480,7 @@ suite('Events', function() {
         getArgs: (thisObj) => [thisObj.shadowBlock],
         getExpectedJson: (thisObj) => ({
           type: 'create',
+          group: '',
           blockId: thisObj.shadowBlock.id,
           xml: '<shadow xmlns="https://developers.google.com/blockly/xml"' +
               ' type="simple_test_block" id="testBlockId2" x="0" y="0">' +
@@ -499,6 +501,7 @@ suite('Events', function() {
         getArgs: (thisObj) => [thisObj.block],
         getExpectedJson: (thisObj) => ({
           type: 'delete',
+          group: '',
           blockId: thisObj.block.id,
           oldXml: '<block xmlns="https://developers.google.com/blockly/xml"' +
               ' type="simple_test_block" id="testBlockId1" x="0" y="0">' +
@@ -519,6 +522,7 @@ suite('Events', function() {
         getArgs: (thisObj) => [thisObj.shadowBlock],
         getExpectedJson: (thisObj) => ({
           type: 'delete',
+          group: '',
           blockId: thisObj.shadowBlock.id,
           oldXml: '<shadow xmlns="https://developers.google.com/blockly/xml"' +
               ' type="simple_test_block" id="testBlockId2" x="0" y="0">' +
@@ -541,6 +545,7 @@ suite('Events', function() {
         getArgs: (thisObj) => [thisObj.block],
         getExpectedJson: (thisObj) => ({
           type: 'move',
+          group: '',
           blockId: thisObj.block.id,
         }),
       },
@@ -550,6 +555,7 @@ suite('Events', function() {
         getArgs: (thisObj) => [thisObj.shadowBlock],
         getExpectedJson: (thisObj) => ({
           type: 'move',
+          group: '',
           blockId: thisObj.shadowBlock.id,
           recordUndo: false,
         }),
@@ -558,29 +564,25 @@ suite('Events', function() {
     const workspaceEventTestCases = [
       {title: 'Finished Loading', class: Blockly.Events.FinishedLoading,
         getArgs: (thisObj) => [thisObj.workspace],
-        getExpectedJson: (thisObj) => ({type: 'finished_loading',
+        getExpectedJson: (thisObj) => ({type: 'finished_loading', group: '',
           workspaceId: thisObj.workspace.id})},
     ];
     const workspaceCommentEventTestCases = [
       {title: 'Comment change', class: Blockly.Events.CommentChange,
         getArgs: (thisObj) => [thisObj.comment, 'bar', 'foo'],
-        getExpectedJson: (thisObj) => ({type: 'comment_change',
+        getExpectedJson: (thisObj) => ({type: 'comment_change', group: '',
           commentId: thisObj.comment.id, oldContents: 'bar',
           newContents: 'foo'})},
       {title: 'Comment create', class: Blockly.Events.CommentCreate,
         getArgs: (thisObj) => [thisObj.comment],
-        getExpectedJson: (thisObj) => ({type: 'comment_create',
+        getExpectedJson: (thisObj) => ({type: 'comment_create', group: '',
           commentId: thisObj.comment.id,
           xml: Blockly.Xml.domToText(thisObj.comment.toXmlWithXY())})},
       {title: 'Comment delete', class: Blockly.Events.CommentDelete,
         getArgs: (thisObj) => [thisObj.comment],
-        getExpectedJson: (thisObj) => ({type: 'comment_delete',
+        getExpectedJson: (thisObj) => ({type: 'comment_delete', group: '',
           commentId: thisObj.comment.id})},
       // TODO(#4577) Test serialization of move event coordinate properties.
-      {title: 'Comment move', class: Blockly.Events.CommentMove,
-        getArgs: (thisObj) => [thisObj.comment],
-        getExpectedJson: (thisObj) => ({type: 'comment_move',
-          commentId: thisObj.comment.id, oldCoordinate: '0,0'})},
     ];
     const testSuites = [
       {title: 'Variable events', testCases: variableEventTestCases,
@@ -669,7 +671,7 @@ suite('Events', function() {
     suite('Constructors', function() {
       test('Var base', function() {
         const event = new Blockly.Events.VarBase(this.variable);
-        assertEventEquals(event, undefined, this.workspace.id, undefined, {
+        assertEventEquals(event, '', this.workspace.id, undefined, {
           'varId': 'id1',
           'recordUndo': true,
           'group': '',
@@ -994,10 +996,6 @@ suite('Events', function() {
 
         assertNthCallEventArgEquals(
             this.eventsFireSpy, 0, Blockly.Events.BlockDelete,
-            {oldXml: expectedOldXml, group: ''},
-            workspaceSvg.id, expectedId);
-        assertNthCallEventArgEquals(
-            changeListenerSpy, 0, Blockly.Events.BlockDelete,
             {oldXml: expectedOldXml, group: ''},
             workspaceSvg.id, expectedId);
 

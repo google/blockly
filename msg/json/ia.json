@@ -3,7 +3,8 @@
 		"authors": [
 			"Fanjiayi",
 			"Karmwiki",
-			"McDutchie"
+			"McDutchie",
+			"Zauzolkov"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "cosa",
@@ -107,6 +108,12 @@
 	"LOGIC_TERNARY_TOOLTIP": "Verificar le condition in 'test'. Si le condition es ver, retorna le valor de 'si ver'; si non, retorna le valor de 'si false'.",
 	"MATH_NUMBER_HELPURL": "https://ia.wikipedia.org/wiki/Numero",
 	"MATH_NUMBER_TOOLTIP": "Un numero.",
+	"MATH_TRIG_SIN": "sin",
+	"MATH_TRIG_COS": "cos",
+	"MATH_TRIG_TAN": "tan",
+	"MATH_TRIG_ASIN": "asin",
+	"MATH_TRIG_ACOS": "acos",
+	"MATH_TRIG_ATAN": "atan",
 	"MATH_ARITHMETIC_HELPURL": "https://ia.wikipedia.org/wiki/Arithmetica",
 	"MATH_ARITHMETIC_TOOLTIP_ADD": "Retornar le summa del duo numeros.",
 	"MATH_ARITHMETIC_TOOLTIP_MINUS": "Retornar le differentia del duo numeros.",
@@ -121,7 +128,7 @@
 	"MATH_SINGLE_TOOLTIP_NEG": "Retornar le negation de un numero.",
 	"MATH_SINGLE_TOOLTIP_LN": "Retornar le logarithmo natural de un numero.",
 	"MATH_SINGLE_TOOLTIP_LOG10": "Retornar le logarithmo in base 10 de un numero.",
-	"MATH_SINGLE_TOOLTIP_EXP": "Retornar <em>e</em> elevate al potentia de un numero.",
+	"MATH_SINGLE_TOOLTIP_EXP": "Retornar e elevate al potentia de un numero.",
 	"MATH_SINGLE_TOOLTIP_POW10": "Retornar 10 elevate al potentia de un numero.",
 	"MATH_TRIG_TOOLTIP_SIN": "Retornar le sino de un grado (non radiano).",
 	"MATH_TRIG_TOOLTIP_COS": "Retornar le cosino de un grado (non radiano).",
@@ -243,6 +250,7 @@
 	"LISTS_GET_INDEX_GET": "prender",
 	"LISTS_GET_INDEX_GET_REMOVE": "prender e remover",
 	"LISTS_GET_INDEX_REMOVE": "remover",
+	"LISTS_GET_INDEX_FROM_START": "#",
 	"LISTS_GET_INDEX_FROM_END": "№ ab fin",
 	"LISTS_GET_INDEX_FIRST": "prime",
 	"LISTS_GET_INDEX_LAST": "ultime",

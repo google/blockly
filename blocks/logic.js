@@ -19,8 +19,10 @@ const Extensions = goog.require('Blockly.Extensions');
 const xmlUtils = goog.require('Blockly.utils.xml');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+// const {BlockDefinition} = goog.requireType('Blockly.blocks');
+// TODO (6248): Properly import the BlockDefinition type.
 /* eslint-disable-next-line no-unused-vars */
-const {BlockDefinition} = goog.requireType('Blockly.blocks');
+const BlockDefinition = Object;
 const {Msg} = goog.require('Blockly.Msg');
 const {Mutator} = goog.require('Blockly.Mutator');
 /* eslint-disable-next-line no-unused-vars */
@@ -394,7 +396,11 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
     const valueConnections = [null];
     const statementConnections = [null];
     let elseStatementConnection = null;
-    while (clauseBlock && !clauseBlock.isInsertionMarker()) {
+    while (clauseBlock) {
+      if (clauseBlock.isInsertionMarker()) {
+        clauseBlock = clauseBlock.getNextBlock();
+        continue;
+      }
       switch (clauseBlock.type) {
         case 'controls_if_elseif':
           this.elseifCount_++;
@@ -408,8 +414,7 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
         default:
           throw TypeError('Unknown block type: ' + clauseBlock.type);
       }
-      clauseBlock = clauseBlock.nextConnection &&
-          clauseBlock.nextConnection.targetBlock();
+      clauseBlock = clauseBlock.getNextBlock();
     }
     this.updateShape_();
     // Reconnect any child blocks.
@@ -425,6 +430,10 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
     let clauseBlock = containerBlock.nextConnection.targetBlock();
     let i = 1;
     while (clauseBlock) {
+      if (clauseBlock.isInsertionMarker()) {
+        clauseBlock = clauseBlock.getNextBlock();
+        continue;
+      }
       switch (clauseBlock.type) {
         case 'controls_if_elseif': {
           const inputIf = this.getInput('IF' + i);
@@ -445,8 +454,7 @@ const CONTROLS_IF_MUTATOR_MIXIN = {
         default:
           throw TypeError('Unknown block type: ' + clauseBlock.type);
       }
-      clauseBlock = clauseBlock.nextConnection &&
-          clauseBlock.nextConnection.targetBlock();
+      clauseBlock = clauseBlock.getNextBlock();
     }
   },
   /**

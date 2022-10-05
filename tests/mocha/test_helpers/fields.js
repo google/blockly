@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.helpers.fields');
+goog.declareModuleId('Blockly.test.helpers.fields');
 
-const {runTestCases, TestCase} = goog.require('Blockly.test.helpers.common');
+import {runTestCases, TestCase} from './common.js';
 
 
 /**
@@ -14,7 +14,7 @@ const {runTestCases, TestCase} = goog.require('Blockly.test.helpers.common');
  * @implements {TestCase}
  * @record
  */
-class FieldValueTestCase {
+export class FieldValueTestCase {
   /**
    * Class for a a field value test case.
    */
@@ -39,14 +39,13 @@ class FieldValueTestCase {
     this.errMsgMatcher;
   }
 }
-exports.FieldValueTestCase = FieldValueTestCase;
 
 /**
  * Field creation test case.
  * @extends {FieldValueTestCase}
  * @record
  */
-class FieldCreationTestCase {
+export class FieldCreationTestCase {
   /**
    * Class for a field creation test case.
    */
@@ -61,7 +60,6 @@ class FieldCreationTestCase {
     this.json;
   }
 }
-exports.FieldCreationTestCase = FieldCreationTestCase;
 
 /**
  * Assert a field's value is the same as the expected value.
@@ -69,7 +67,7 @@ exports.FieldCreationTestCase = FieldCreationTestCase;
  * @param {*} expectedValue The expected value.
  * @param {string=} expectedText The expected text.
  */
-function assertFieldValue(field, expectedValue, expectedText = undefined) {
+export function assertFieldValue(field, expectedValue, expectedText = undefined) {
   const actualValue = field.getValue();
   const actualText = field.getText();
   if (expectedText === undefined) {
@@ -78,7 +76,6 @@ function assertFieldValue(field, expectedValue, expectedText = undefined) {
   chai.assert.equal(actualValue, expectedValue, 'Value');
   chai.assert.equal(actualText, expectedText, 'Text');
 }
-exports.assertFieldValue = assertFieldValue;
 
 /**
  * Runs provided creation test cases.
@@ -145,7 +142,7 @@ function runCreationTestsAssertThrows_(testCases, creation) {
  * @param {function(!FieldCreationTestCase=)=} customCreateWithJs Custom
  *    creation function to use in tests.
  */
-function runConstructorSuiteTests(TestedField, validValueTestCases,
+export function runConstructorSuiteTests(TestedField, validValueTestCases,
     invalidValueTestCases, validRunAssertField, assertFieldDefault,
     customCreateWithJs) {
   suite('Constructor', function() {
@@ -182,7 +179,6 @@ function runConstructorSuiteTests(TestedField, validValueTestCases,
     runCreationTests_(validValueTestCases, validRunAssertField, createWithJs);
   });
 }
-exports.runConstructorSuiteTests = runConstructorSuiteTests;
 
 /**
  * Runs suite of tests for fromJson creation of specified field.
@@ -200,7 +196,7 @@ exports.runConstructorSuiteTests = runConstructorSuiteTests;
  * @param {function(!FieldCreationTestCase=)=} customCreateWithJson Custom
  *    creation function to use in tests.
  */
-function runFromJsonSuiteTests(TestedField, validValueTestCases,
+export function runFromJsonSuiteTests(TestedField, validValueTestCases,
     invalidValueTestCases, validRunAssertField, assertFieldDefault,
     customCreateWithJson) {
   suite('fromJson', function() {
@@ -237,7 +233,6 @@ function runFromJsonSuiteTests(TestedField, validValueTestCases,
     runCreationTests_(validValueTestCases, validRunAssertField, createWithJson);
   });
 }
-exports.runFromJsonSuiteTests = runFromJsonSuiteTests;
 
 /**
  * Runs tests for setValue calls.
@@ -250,7 +245,7 @@ exports.runFromJsonSuiteTests = runFromJsonSuiteTests;
  * @param {string=} invalidRunExpectedText Expected text for field after invalid
  *    call to setValue.
  */
-function runSetValueTests(validValueTestCases, invalidValueTestCases,
+export function runSetValueTests(validValueTestCases, invalidValueTestCases,
     invalidRunExpectedValue, invalidRunExpectedText) {
   /**
    * Creates test callback for invalid setValue test.
@@ -279,4 +274,3 @@ function runSetValueTests(validValueTestCases, invalidValueTestCases,
   runTestCases(invalidValueTestCases, createInvalidSetValueTestCallback);
   runTestCases(validValueTestCases, createValidSetValueTestCallback);
 }
-exports.runSetValueTests = runSetValueTests;

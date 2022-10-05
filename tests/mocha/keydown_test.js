@@ -4,11 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.keydown');
+goog.declareModuleId('Blockly.test.keydown');
 
-const {createKeyDownEvent} = goog.require('Blockly.test.helpers.userInput');
-const {defineStackBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+import * as Blockly from '../../build/src/core/blockly.js';
+import {createKeyDownEvent} from './test_helpers/user_input.js';
+import {defineStackBlock} from './test_helpers/block_definitions.js';
+import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 
 suite('Key Down', function() {
@@ -103,7 +104,7 @@ suite('Key Down', function() {
   suite('Copy', function() {
     setup(function() {
       setSelectedBlock(this.workspace);
-      this.copySpy = sinon.spy(Blockly.clipboard, 'copy');
+      this.copySpy = sinon.spy(Blockly.clipboard.TEST_ONLY, 'copyInternal');
       this.hideChaffSpy = sinon.spy(
         Blockly.WorkspaceSvg.prototype, 'hideChaff');
     });

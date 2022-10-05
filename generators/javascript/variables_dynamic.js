@@ -11,7 +11,7 @@
 
 goog.module('Blockly.JavaScript.variablesDynamic');
 
-const JavaScript = goog.require('Blockly.JavaScript');
+const {javascriptGenerator: JavaScript} = goog.require('Blockly.JavaScript');
 /** @suppress {extraRequire} */
 goog.require('Blockly.JavaScript.variables');
 

@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.variableMap');
+goog.declareModuleId('Blockly.test.variableMap');
 
-const {assertVariableValues} = goog.require('Blockly.test.helpers.variables');
-const {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+import {assertVariableValues} from './test_helpers/variables.js';
+import {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 
 suite('Variable Map', function() {
@@ -28,21 +28,21 @@ suite('Variable Map', function() {
     });
 
     test('Already exists', function() {
-      // Expect that when the variable already exists, the variableMap_ is unchanged.
+      // Expect that when the variable already exists, the variableMap is unchanged.
       this.variableMap.createVariable('name1', 'type1', 'id1');
 
       // Assert there is only one variable in the this.variableMap.
-      let keys = Object.keys(this.variableMap.variableMap_);
+      let keys = Array.from(this.variableMap.variableMap.keys());
       chai.assert.equal(keys.length, 1);
-      let varMapLength = this.variableMap.variableMap_[keys[0]].length;
+      let varMapLength = this.variableMap.variableMap.get(keys[0]).length;
       chai.assert.equal(varMapLength, 1);
 
       this.variableMap.createVariable('name1', 'type1');
       assertVariableValues(this.variableMap, 'name1', 'type1', 'id1');
-      // Check that the size of the variableMap_ did not change.
-      keys = Object.keys(this.variableMap.variableMap_);
+      // Check that the size of the variableMap did not change.
+      keys = Array.from(this.variableMap.variableMap.keys());
       chai.assert.equal(keys.length, 1);
-      varMapLength = this.variableMap.variableMap_[keys[0]].length;
+      varMapLength = this.variableMap.variableMap.get(keys[0]).length;
       chai.assert.equal(varMapLength, 1);
     });
 
@@ -52,16 +52,16 @@ suite('Variable Map', function() {
       this.variableMap.createVariable('name1', 'type1', 'id1');
 
       // Assert there is only one variable in the this.variableMap.
-      let keys = Object.keys(this.variableMap.variableMap_);
+      let keys = Array.from(this.variableMap.variableMap.keys());
       chai.assert.equal(keys.length, 1);
-      const varMapLength = this.variableMap.variableMap_[keys[0]].length;
+      const varMapLength = this.variableMap.variableMap.get(keys[0]).length;
       chai.assert.equal(varMapLength, 1);
 
       this.variableMap.createVariable('name1', 'type2', 'id2');
       assertVariableValues(this.variableMap, 'name1', 'type1', 'id1');
       assertVariableValues(this.variableMap, 'name1', 'type2', 'id2');
-      // Check that the size of the variableMap_ did change.
-      keys = Object.keys(this.variableMap.variableMap_);
+      // Check that the size of the variableMap did change.
+      keys = Array.from(this.variableMap.variableMap.keys());
       chai.assert.equal(keys.length, 2);
     });
 

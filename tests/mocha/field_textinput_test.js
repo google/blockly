@@ -4,11 +4,12 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.fieldTextInput');
+goog.declareModuleId('Blockly.test.fieldTextInput');
 
-const {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSetValueTests} = goog.require('Blockly.test.helpers.fields');
-const {createTestBlock, defineRowBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
-const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+import * as Blockly from '../../build/src/core/blockly.js';
+import {assertFieldValue, runConstructorSuiteTests, runFromJsonSuiteTests, runSetValueTests} from './test_helpers/fields.js';
+import {createTestBlock, defineRowBlock} from './test_helpers/block_definitions.js';
+import {sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
 
 
 suite('Text Input Fields', function() {
@@ -105,9 +106,9 @@ suite('Text Input Fields', function() {
   suite('Validators', function() {
     setup(function() {
       this.field = new Blockly.FieldTextInput('value');
-      this.field.htmlInput_ = Object.create(null);
-      this.field.htmlInput_.oldValue_ = 'value';
-      this.field.htmlInput_.untypedDefaultValue_ = 'value';
+      this.field.htmlInput_ = document.createElement('input');
+      this.field.htmlInput_.setAttribute('data-old-value', 'value');
+      this.field.htmlInput_.setAttribute('data-untyped-default-value', 'value');
       this.stub = sinon.stub(this.field, 'resizeEditor_');
     });
     teardown(function() {

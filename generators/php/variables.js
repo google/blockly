@@ -11,8 +11,8 @@
 
 goog.module('Blockly.PHP.variables');
 
-const PHP = goog.require('Blockly.PHP');
 const {NameType} = goog.require('Blockly.Names');
+const {phpGenerator: PHP} = goog.require('Blockly.PHP');
 
 
 PHP['variables_get'] = function(block) {

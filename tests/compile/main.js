@@ -9,7 +9,8 @@ goog.module('Main');
 // Core
 // Either require 'Blockly.requires', or just the components you use:
 /* eslint-disable-next-line no-unused-vars */
-const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
+// TODO: I think we need to make sure these get exported?
+// const {BlocklyOptions} = goog.requireType('Blockly.BlocklyOptions');
 const {inject} = goog.require('Blockly.inject');
 /** @suppress {extraRequire} */
 goog.require('Blockly.geras.Renderer');
@@ -25,7 +26,7 @@ goog.require('Blockly.libraryBlocks.math');
 /** @suppress {extraRequire} */
 goog.require('Blockly.libraryBlocks.texts');
 /** @suppress {extraRequire} */
-goog.require('Blockly.libraryBlocks.testBlocks');
+goog.require('testBlocks');
 
 
 function init() {

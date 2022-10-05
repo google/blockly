@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.workspaceComment');
+goog.declareModuleId('Blockly.test.workspaceComment');
 
-goog.require('Blockly.WorkspaceComment');
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+import {WorkspaceComment} from '../../build/src/core/workspace_comment.js';
+import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 
 suite('Workspace comment', function() {
@@ -29,7 +29,7 @@ suite('Workspace comment', function() {
       const comment = new Blockly.WorkspaceComment(
           this.workspace, 'comment text', 0, 0, 'comment id');
       chai.assert.equal(this.workspace.getTopComments(true).length, 1);
-      chai.assert.equal(this.workspace.commentDB_['comment id'], comment);
+      chai.assert.equal(this.workspace.commentDB.get('comment id'), comment);
     });
 
     test('After clear empty workspace', function() {
@@ -42,7 +42,7 @@ suite('Workspace comment', function() {
           this.workspace, 'comment text', 0, 0, 'comment id');
       this.workspace.clear();
       chai.assert.equal(this.workspace.getTopComments(true).length, 0);
-      chai.assert.isFalse('comment id' in this.workspace.commentDB_);
+      chai.assert.isFalse(this.workspace.commentDB.has('comment id'));
     });
 
     test('After dispose', function() {
@@ -50,7 +50,7 @@ suite('Workspace comment', function() {
           this.workspace, 'comment text', 0, 0, 'comment id');
       comment.dispose();
       chai.assert.equal(this.workspace.getTopComments(true).length, 0);
-      chai.assert.isFalse('comment id' in this.workspace.commentDB_);
+      chai.assert.isFalse(this.workspace.commentDB.has('comment id'));
     });
   });
 
@@ -63,7 +63,7 @@ suite('Workspace comment', function() {
       const comment = new Blockly.WorkspaceComment(
           this.workspace, 'comment text', 0, 0, 'comment id');
       chai.assert.equal(this.workspace.getTopComments(false).length, 1);
-      chai.assert.equal(this.workspace.commentDB_['comment id'], comment);
+      chai.assert.equal(this.workspace.commentDB.get('comment id'), comment);
     });
 
     test('After clear empty workspace', function() {
@@ -76,7 +76,7 @@ suite('Workspace comment', function() {
           this.workspace, 'comment text', 0, 0, 'comment id');
       this.workspace.clear();
       chai.assert.equal(this.workspace.getTopComments(false).length, 0);
-      chai.assert.isFalse('comment id' in this.workspace.commentDB_);
+      chai.assert.isFalse(this.workspace.commentDB.has('comment id'));
     });
 
     test('After dispose', function() {
@@ -84,7 +84,7 @@ suite('Workspace comment', function() {
           this.workspace, 'comment text', 0, 0, 'comment id');
       comment.dispose();
       chai.assert.equal(this.workspace.getTopComments(false).length, 0);
-      chai.assert.isFalse('comment id' in this.workspace.commentDB_);
+      chai.assert.isFalse(this.workspace.commentDB.has('comment id'));
     });
   });
 

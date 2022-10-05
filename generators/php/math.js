@@ -11,8 +11,8 @@
 
 goog.module('Blockly.PHP.math');
 
-const PHP = goog.require('Blockly.PHP');
 const {NameType} = goog.require('Blockly.Names');
+const {phpGenerator: PHP} = goog.require('Blockly.PHP');
 
 
 PHP['math_number'] = function(block) {

@@ -11,8 +11,10 @@
 
 goog.module('Blockly.libraryBlocks.leaphyExtra');
 
+// const {BlockDefinition} = goog.requireType('Blockly.blocks');
+// TODO (6248): Properly import the BlockDefinition type.
 /* eslint-disable-next-line no-unused-vars */
-const { BlockDefinition } = goog.requireType('Blockly.blocks');
+const BlockDefinition = Object;
 const { createBlockDefinitionsFromJsonArray, defineBlocks } = goog.require('Blockly.common');
 
 var digitalPinOptions = [["2", "2"], ["3", "3"], ["4", "4"], ["5", "5"], ["6", "6"], ["7", "7"], ["8", "8"], ["9", "9"], ["10", "10"], ["11", "11"], ["12", "12"], ["13", "13"], ["14", "14"], ["15", "15"], ["16", "16"], ["17", "17"], ["18", "18"], ["19", "19"]];

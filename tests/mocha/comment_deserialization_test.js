@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.commentDeserialization');
+goog.declareModuleId('Blockly.test.commentDeserialization');
 
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
-const {simulateClick} = goog.require('Blockly.test.helpers.userInput');
+import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
+import {simulateClick} from './test_helpers/user_input.js';
 
 
 suite('Comment Deserialization', function() {

@@ -19,8 +19,10 @@ const xmlUtils = goog.require('Blockly.utils.xml');
 const {Align} = goog.require('Blockly.Input');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+// const {BlockDefinition} = goog.requireType('Blockly.blocks');
+// TODO (6248): Properly import the BlockDefinition type.
 /* eslint-disable-next-line no-unused-vars */
-const {BlockDefinition} = goog.requireType('Blockly.blocks');
+const BlockDefinition = Object;
 const {ConnectionType} = goog.require('Blockly.ConnectionType');
 const {FieldDropdown} = goog.require('Blockly.FieldDropdown');
 const {FieldImage} = goog.require('Blockly.FieldImage');
@@ -341,7 +343,7 @@ blocks['text_getSubstring'] = {
         /**
          * @param {*} value The input value.
          * @this {FieldDropdown}
-         * @returns {null|undefined} Null if the field has been replaced;
+         * @return {null|undefined} Null if the field has been replaced;
          *     otherwise undefined.
          */
         function(value) {
@@ -781,10 +783,13 @@ const TEXT_JOIN_MUTATOR_MIXIN = {
     let itemBlock = containerBlock.getInputTargetBlock('STACK');
     // Count number of inputs.
     const connections = [];
-    while (itemBlock && !itemBlock.isInsertionMarker()) {
+    while (itemBlock) {
+      if (itemBlock.isInsertionMarker()) {
+        itemBlock = itemBlock.getNextBlock();
+        continue;
+      }
       connections.push(itemBlock.valueConnection_);
-      itemBlock =
-          itemBlock.nextConnection && itemBlock.nextConnection.targetBlock();
+      itemBlock = itemBlock.getNextBlock();
     }
     // Disconnect any children that don't belong.
     for (let i = 0; i < this.itemCount_; i++) {
@@ -809,10 +814,13 @@ const TEXT_JOIN_MUTATOR_MIXIN = {
     let itemBlock = containerBlock.getInputTargetBlock('STACK');
     let i = 0;
     while (itemBlock) {
+      if (itemBlock.isInsertionMarker()) {
+        itemBlock = itemBlock.getNextBlock();
+        continue;
+      }
       const input = this.getInput('ADD' + i);
       itemBlock.valueConnection_ = input && input.connection.targetConnection;
-      itemBlock =
-          itemBlock.nextConnection && itemBlock.nextConnection.targetBlock();
+      itemBlock = itemBlock.getNextBlock();
       i++;
     }
   },
@@ -856,7 +864,7 @@ const TEXT_JOIN_EXTENSION = function() {
   this.itemCount_ = 2;
   this.updateShape_();
   // Configure the mutator UI.
-  this.setMutator(new Mutator(['text_create_join_item']));
+  this.setMutator(new Mutator(['text_create_join_item'], this));
 };
 
 // Update the tooltip of 'text_append' block to reference the variable.

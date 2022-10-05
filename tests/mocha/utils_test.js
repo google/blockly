@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.utils');
+goog.declareModuleId('Blockly.test.utils');
 
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 
 suite('Utils', function() {
@@ -80,10 +80,6 @@ suite('Utils', function() {
     });
 
     suite('String table interpolation', function() {
-      setup(function() {
-        Blockly.Msg = Blockly.Msg || { };
-      });
-
       test('Simple interpolation', function() {
         Blockly.Msg.STRING_REF = 'test string';
         chai.assert.deepEqual(
@@ -185,7 +181,6 @@ suite('Utils', function() {
   });
 
   test('replaceMessageReferences', function() {
-    Blockly.Msg = Blockly.Msg || {};
     Blockly.Msg.STRING_REF = 'test string';
     Blockly.Msg.SUBREF = 'subref';
     Blockly.Msg.STRING_REF_WITH_ARG = 'test %1 string';
@@ -349,9 +344,9 @@ suite('Utils', function() {
       const p = document.createElement('p');
       p.className = ' one three  two three  ';
       Blockly.utils.dom.removeClass(p, 'two');
-      chai.assert.equal(p.className, 'one three three', 'Removing "two"');
+      chai.assert.equal(p.className, 'one three', 'Removing "two"');
       Blockly.utils.dom.removeClass(p, 'four');
-      chai.assert.equal(p.className, 'one three three', 'Removing "four"');
+      chai.assert.equal(p.className, 'one three', 'Removing "four"');
       Blockly.utils.dom.removeClass(p, 'three');
       chai.assert.equal(p.className, 'one', 'Removing "three"');
       Blockly.utils.dom.removeClass(p, 'ne');
@@ -364,13 +359,6 @@ suite('Utils', function() {
   });
 
   suite('String', function() {
-    test('starts with', function() {
-      chai.assert.isFalse(Blockly.utils.string.startsWith('123', '2'), 'Does not start with');
-      chai.assert.isTrue(Blockly.utils.string.startsWith('123', '12'), 'Start with');
-      chai.assert.isTrue(Blockly.utils.string.startsWith('123', ''), 'Start with empty string 1');
-      chai.assert.isTrue(Blockly.utils.string.startsWith('', ''), 'Start with empty string 12');
-    });
-
     test('shortest string length', function() {
       let len = Blockly.utils.string.shortestStringLength('one,two,three,four,five'.split(','));
       chai.assert.equal(len, 3, 'Length of "one"');

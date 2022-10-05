@@ -4,15 +4,23 @@
 <meta charset="utf-8">
 <title>Blockly Playground</title>
 
-  <!-- This script loads uncompressed when on localhost and loads compressed when it is being hosted.
-       Please add any other dependencies to playgrounds/prepare.js.-->
-<script src="playgrounds/prepare.js"></script>
-<script src="playgrounds/screenshot.js"></script>
-<script src="../node_modules/@blockly/dev-tools/dist/index.js"></script>
+<!-- This script loads uncompressed when on localhost and loads
+     compressed when it is being hosted or on Internet Explorer.  -->
+<script>
+  var BLOCKLY_BOOTSTRAP_OPTIONS = {
+    additionalScripts: [
+      'msg/messages.js',
+      'tests/playgrounds/screenshot.js',
+      'node_modules/@blockly/dev-tools/dist/index.js',
+    ],
+  }
+</script>
+<script src="bootstrap.js"></script>
 <script type=module>
-import Blockly from './playgrounds/blockly.mjs';
+// Wait for Blockly to finish loading.
+import './bootstrap_done.mjs';
 
-const IS_UNCOMPRESSED = Boolean(window.BlocklyLoader);  // See prepare.js
+const IS_UNCOMPRESSED = !window.bootstrapInfo.compressed;  // See bootstrap.js
 var workspace = null;
 
 function start() {
@@ -176,8 +184,15 @@ function load() {
 }
 
 function toCode(lang) {
+  var generator = ({
+    'JavaScript': javascriptGenerator,
+    'Python': pythonGenerator,
+    'PHP': phpGenerator,
+    'Lua': luaGenerator,
+    'Dart': dartGenerator,
+  })[lang];
   var output = document.getElementById('importExport');
-  output.value = Blockly[lang].workspaceToCode(workspace);
+  output.value = generator.workspaceToCode(workspace);
   taChange();
 }
 
@@ -385,10 +400,6 @@ var spaghettiXml = [
     'next': { }
   });
 
-// Call start().  Because this <script> has type=module, it is
-// automatically deferred, so it will not be run until after the
-// document has been parsed, but before firing DOMContentLoaded.
-
 function addEventHandlers() {
   document.getElementById('save-json').addEventListener('click', saveJson);
   document.getElementById('save-xml').addEventListener('click', saveXml);
@@ -426,6 +437,9 @@ function addEventHandlers() {
       .addEventListener('click', function() { workspace.setVisible(false); });
 }
   
+// Call start().  Because this <script> has type=module, it is
+// automatically deferred, so it will not be run until after the
+// document has been parsed, but before firing DOMContentLoaded.
 start();
 
 </script>

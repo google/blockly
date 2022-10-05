@@ -3,13 +3,19 @@
 # Determines the size of generated files and updates check_metadata.sh to
 # reflect the new values.
 
-gzip -k build/blockly_compressed.js
-gzip -k build/blocks_compressed.js
+# Location of the pre-built compressed files.
+#
+# (TODO(#5007): Should fetch this from scripts/gulpfiles/config.js
+# instead of hardcoding it here.
+readonly BUILD_DIR='build'
 
-blockly_size=$(wc -c < "build/blockly_compressed.js")
-blocks_size=$(wc -c < "build/blocks_compressed.js")
-blockly_gz_size=$(wc -c < "build/blockly_compressed.js.gz")
-blocks_gz_size=$(wc -c < "build/blocks_compressed.js.gz")
+gzip -k "${BUILD_DIR}/blockly_compressed.js"
+gzip -k "${BUILD_DIR}/blocks_compressed.js"
+
+blockly_size=$(wc -c < "${BUILD_DIR}/blockly_compressed.js")
+blocks_size=$(wc -c < "${BUILD_DIR}/blocks_compressed.js")
+blockly_gz_size=$(wc -c < "${BUILD_DIR}/blockly_compressed.js.gz")
+blocks_gz_size=$(wc -c < "${BUILD_DIR}/blocks_compressed.js.gz")
 quarters=(1 1 1 2 2 2 3 3 3 4 4 4)
 month=$(date +%-m)
 quarter=$(echo Q${quarters[$month - 1]} $(date +%Y))

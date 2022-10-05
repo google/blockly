@@ -11,8 +11,8 @@
 
 goog.module('Blockly.PHP.texts');
 
-const PHP = goog.require('Blockly.PHP');
 const {NameType} = goog.require('Blockly.Names');
+const {phpGenerator: PHP} = goog.require('Blockly.PHP');
 
 
 PHP['text'] = function(block) {

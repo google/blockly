@@ -11,7 +11,7 @@
 
 goog.module('Blockly.JavaScript.colour');
 
-const JavaScript = goog.require('Blockly.JavaScript');
+const {javascriptGenerator: JavaScript} = goog.require('Blockly.JavaScript');
 
 
 JavaScript['colour_picker'] = function(block) {

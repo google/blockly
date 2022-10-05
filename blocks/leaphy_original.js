@@ -11,8 +11,10 @@
 
 goog.module('Blockly.libraryBlocks.leaphyOriginal');
 
+// const {BlockDefinition} = goog.requireType('Blockly.blocks');
+// TODO (6248): Properly import the BlockDefinition type.
 /* eslint-disable-next-line no-unused-vars */
-const { BlockDefinition } = goog.requireType('Blockly.blocks');
+const BlockDefinition = Object;
 const { createBlockDefinitionsFromJsonArray, defineBlocks } = goog.require('Blockly.common');
 
 var motorLeftRightDropdown = [["%{BKY_LEAPHY_MOTOR_LEFT_DROPDOWN}", "9"], ["%{BKY_LEAPHY_MOTOR_RIGHT_DROPDOWN}", "10"]]

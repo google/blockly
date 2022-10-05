@@ -4,14 +4,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.generator');
+goog.declareModuleId('Blockly.test.generator');
 
-goog.require('Blockly.Dart');
-goog.require('Blockly.JavaScript');
-goog.require('Blockly.Lua');
-goog.require('Blockly.PHP');
-goog.require('Blockly.Python');
-const {sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+import * as Blockly from '../../build/src/core/blockly.js';
+const {dartGenerator} = goog.require('Blockly.Dart');
+const {javascriptGenerator} = goog.require('Blockly.JavaScript');
+const {luaGenerator} = goog.require('Blockly.Lua');
+const {phpGenerator} = goog.require('Blockly.PHP');
+const {pythonGenerator} = goog.require('Blockly.Python');
+import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 
 suite('Generator', function() {
@@ -83,11 +84,11 @@ suite('Generator', function() {
     });
 
     const testCase = [
-      [Blockly.Dart, 'Dart'],
-      [Blockly.JavaScript, 'JavaScript'],
-      [Blockly.Lua, 'Lua'],
-      [Blockly.PHP, 'PHP'],
-      [Blockly.Python, 'Python']];
+      [dartGenerator, 'Dart'],
+      [javascriptGenerator, 'JavaScript'],
+      [luaGenerator, 'Lua'],
+      [phpGenerator, 'PHP'],
+      [pythonGenerator, 'Python']];
 
     suite('Trivial', function() {
       testCase.forEach(function(testCase) {

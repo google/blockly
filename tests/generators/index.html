@@ -3,41 +3,36 @@
 <head>
 <meta charset="utf-8">
 <title>Blockly Generator Tests</title>
-<script src="../../blockly_uncompressed.js"></script>
-<script src="../../msg/messages.js"></script>
-
 <script>
-// Require optional modules needed by tests.
-goog.require('Blockly.Dart.all');
-goog.require('Blockly.JavaScript.all');
-goog.require('Blockly.Lua.all');
-goog.require('Blockly.PHP.all');
-goog.require('Blockly.Python.all');
-goog.require('Blockly.libraryBlocks');
+  var BLOCKLY_BOOTSTRAP_OPTIONS = {
+    additionalScripts: [
+      'msg/messages.js',
+      'tests/generators/unittest_javascript.js',
+      'tests/generators/unittest_python.js',
+      'tests/generators/unittest_php.js',
+      'tests/generators/unittest_lua.js',
+      'tests/generators/unittest_dart.js',
+      'tests/generators/unittest.js',
+    ],
+  }
 </script>
-<script src="unittest_javascript.js"></script>
-<script src="unittest_python.js"></script>
-<script src="unittest_php.js"></script>
-<script src="unittest_lua.js"></script>
-<script src="unittest_dart.js"></script>
-<script src="unittest.js"></script>
+<script src="../bootstrap.js"></script>
 <script>
-'use strict';
-
 var demoWorkspace = null;
 var outputCode = '';
 
 function start() {
-  demoWorkspace = Blockly.inject('blocklyDiv',
-      {grid:
-         {spacing: 25,
-          length: 3,
-          colour: '#ccc',
-          snap: true},
-       media: '../../media/',
-       toolbox: document.getElementById('toolbox'),
-       zoom: {controls: true, wheel: true}
-       });
+  demoWorkspace = Blockly.inject('blocklyDiv', {
+    grid: {
+      spacing: 25,
+      length: 3,
+      colour: '#ccc',
+      snap: true
+    },
+    media: '../../media/',
+    toolbox: document.getElementById('toolbox'),
+    zoom: {controls: true, wheel: true}
+  });
   changeIndex();
 }
 
@@ -175,31 +170,31 @@ function toXml() {
 
 function toJavaScript() {
   var code = '\'use strict\';\n\n'
-  code += Blockly.JavaScript.workspaceToCode(demoWorkspace);
+  code += javascriptGenerator.workspaceToCode(demoWorkspace);
   setOutput(code);
   outputCode = code;
 }
 
 function toPython() {
-  var code = Blockly.Python.workspaceToCode(demoWorkspace);
+  var code = pythonGenerator.workspaceToCode(demoWorkspace);
   setOutput(code);
   outputCode = code;
 }
 
 function toPhp() {
-  var code = Blockly.PHP.workspaceToCode(demoWorkspace);
+  var code = phpGenerator.workspaceToCode(demoWorkspace);
   setOutput(code);
   outputCode = code;
 }
 
 function toLua() {
-  var code = Blockly.Lua.workspaceToCode(demoWorkspace);
+  var code = luaGenerator.workspaceToCode(demoWorkspace);
   setOutput(code);
   outputCode = code;
 }
 
 function toDart() {
-  var code = Blockly.Dart.workspaceToCode(demoWorkspace);
+  var code = dartGenerator.workspaceToCode(demoWorkspace);
   setOutput(code);
   outputCode = code;
 }
@@ -209,6 +204,12 @@ function changeIndex() {
   demoWorkspace.options.oneBasedIndex = oneBasedIndex;
   demoWorkspace.getToolbox().flyout_.workspace_.options.oneBasedIndex = oneBasedIndex;
 }
+</script>
+<script type=module>
+// Wait for Blockly to finish loading before running tests.
+import '../bootstrap_done.mjs';
+
+start();
 </script>
 
 <style>
@@ -240,7 +241,7 @@ h1 {
 }
 </style>
 </head>
-<body onload="start()">
+<body>
 
   <div id="blocklyDiv"></div>
 

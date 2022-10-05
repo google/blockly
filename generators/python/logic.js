@@ -11,7 +11,7 @@
 
 goog.module('Blockly.Python.logic');
 
-const Python = goog.require('Blockly.Python');
+const {pythonGenerator: Python} = goog.require('Blockly.Python');
 
 
 Python['controls_if'] = function(block) {

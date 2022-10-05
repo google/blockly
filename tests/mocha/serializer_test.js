@@ -4,10 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.serialization');
+goog.declareModuleId('Blockly.test.serialization');
 
-const {TestCase, TestSuite, runTestCases, runTestSuites} = goog.require('Blockly.test.helpers.common');
-const {sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
+import * as Blockly from '../../build/src/core/blockly.js';
+import {TestCase, TestSuite, runTestCases, runTestSuites} from './test_helpers/common.js';
+import {sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
 
 
 // TODO: Move this into samples as part of the dev-tools package.
@@ -167,7 +168,6 @@ Serializer.Attributes.testSuites = [
 ];
 
 Serializer.Fields = new SerializerTestSuite('Fields');
-Serializer.Fields.skip = true;
 
 Serializer.Fields.Angle = new SerializerTestSuite('Angle');
 Serializer.Fields.Angle.Simple = new SerializerTestCase('Simple',

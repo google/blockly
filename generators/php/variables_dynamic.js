@@ -11,7 +11,7 @@
 
 goog.module('Blockly.PHP.variablesDynamic');
 
-const PHP = goog.require('Blockly.PHP');
+const {phpGenerator: PHP} = goog.require('Blockly.PHP');
 /** @suppress {extraRequire} */
 goog.require('Blockly.PHP.variables');
 

@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <title>Multi-toolbox Playground</title>
 
-<!-- This script loads uncompressed when on localhost and loads compressed when it is being hosted.
-     Please add any other dependencies to playgrounds/load_all.js.-->
-<script src="playgrounds/load_all.js"></script>
+<!-- This script loads uncompressed when on localhost and loads
+     compressed when it is being hosted or on Internet Explorer.  -->
+<script src="bootstrap.js"></script>
+<script type=module>
+// Wait for Blockly to finish loading.
+import './bootstrap_done.mjs';
 
-<script>
-'use strict';
-
-const IS_UNCOMPRESSED = !!document.getElementById('blockly-uncompressed-script');
+const IS_UNCOMPRESSED = !window.bootstrapInfo.compressed;  // See bootstrap.js
 
 var options = {
   comments: true,
@@ -74,6 +74,12 @@ function setBackgroundColour() {
     document.body.style.backgroundColor = '#60fcfc';  // Unfamiliar blue.
   }
 }
+
+// Call start().  Because this <script> has type=module, it is
+// automatically deferred, so it will not be run until after the
+// document has been parsed, but before firing DOMContentLoaded.
+start();
+
 </script>
 
 <style>
@@ -105,7 +111,7 @@ h1 {
 }
 </style>
 </head>
-<body onload="start()">
+<body>
   <h1>Blockly Multi Playground</h1>
 
   <form id="options">

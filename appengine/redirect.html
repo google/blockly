@@ -61,6 +61,39 @@ if (loc.match('/apps/puzzle/')) {
   loc = loc.replace('/apps/', '/demos/');
 }
 
+// Demos without saved data were moved to Blockly Samples in 2021.
+if (loc.match('/demos/fixed/')) {
+  loc = 'https://google.github.io/blockly-samples/examples/fixed-demo/';
+} else if (loc.match('/demos/resizable/')) {
+  loc = 'https://google.github.io/blockly-samples/examples/resizable-demo/';
+} else if (loc.match('/demos/toolbox/')) {
+  loc = 'https://google.github.io/blockly-samples/examples/toolbox-demo/';
+} else if (loc.match('/demos/maxBlocks/')) {
+  loc = 'https://google.github.io/blockly-samples/examples/max-blocks-demo/';
+} else if (loc.match('/demos/generator/')) {
+  loc = 'https://google.github.io/blockly-samples/examples/generator-demo/';
+} else if (loc.match('/demos/headless/')) {
+  loc = 'https://google.github.io/blockly-samples/examples/headless-demo/';
+} else if (loc.match('/demos/interpreter/step-execution')) {
+  loc = 'https://google.github.io/blockly-samples/examples/interpreter-demo/step-execution.html';
+} else if (loc.match('/demos/interpreter/async-execution')) {
+  loc = 'https://google.github.io/blockly-samples/examples/interpreter-demo/async-execution.html';
+} else if (loc.match('/demos/graph/')) {
+  loc = 'https://google.github.io/blockly-samples/examples/graph-demo/';
+} else if (loc.match('/demos/rtl/')) {
+  loc = 'https://google.github.io/blockly-samples/examples/rtl-demo/';
+} else if (loc.match('/demos/custom-dialogs/')) {
+  loc = 'https://google.github.io/blockly-samples/examples/custom-dialogs-demo';
+} else if (loc.match('/demos/custom-fields/turtle/')) {
+  loc = 'https://google.github.io/blockly-samples/examples/turtle-field-demo/';
+} else if (loc.match('/demos/custom-fields/pitch/')) {
+  loc = 'https://google.github.io/blockly-samples/examples/pitch-field-demo/';
+} else if (loc.match('/demos/mirror/')) {
+  loc = 'https://google.github.io/blockly-samples/examples/mirror-demo/';
+} else if (loc.match('/demos/plane/')) {
+  loc = 'https://google.github.io/blockly-samples/examples/plane-demo/';
+}
+
 location = loc;
 
     </script>

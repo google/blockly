@@ -4,10 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.jsoSerialization');
+goog.declareModuleId('Blockly.test.jsoSerialization');
 
-const {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
-const {defineRowBlock, defineStackBlock, defineStatementBlock} = goog.require('Blockly.test.helpers.blockDefinitions');
+import * as Blockly from '../../build/src/core/blockly.js';
+import {createGenUidStubWithReturns, sharedTestSetup, sharedTestTeardown, workspaceTeardown} from './test_helpers/setup_teardown.js';
+import {defineRowBlock, defineStackBlock, defineStatementBlock} from './test_helpers/block_definitions.js';
 
 
 suite('JSO Serialization', function() {

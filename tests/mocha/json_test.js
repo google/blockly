@@ -4,10 +4,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-goog.module('Blockly.test.json');
+goog.declareModuleId('Blockly.test.json');
 
-const {addMessageToCleanup, sharedTestSetup, sharedTestTeardown} = goog.require('Blockly.test.helpers.setupTeardown');
-const {assertNoWarnings, assertWarnings} = goog.require('Blockly.test.helpers.warnings');
+import {addMessageToCleanup, sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
+import {assertNoWarnings, assertWarnings} from './test_helpers/warnings.js';
 
 
 suite('JSON Block Definitions', function() {
@@ -275,7 +275,7 @@ suite('JSON Block Definitions', function() {
 
       const image1 = options[1][0];
       assertImageEquals(IMAGE1, image1);
-      chai.assert.equal(IMAGE1.alt, IMAGE1_ALT_TEXT);  // Via Msg reference
+      chai.assert.equal(image1.alt, IMAGE1_ALT_TEXT);  // Via Msg reference
       chai.assert.equal(VALUE1, options[1][1]);
 
       const image2 = options[2][0];

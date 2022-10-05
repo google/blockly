@@ -23,8 +23,10 @@ const xmlUtils = goog.require('Blockly.utils.xml');
 const {Align} = goog.require('Blockly.Input');
 /* eslint-disable-next-line no-unused-vars */
 const {Block} = goog.requireType('Blockly.Block');
+// const {BlockDefinition} = goog.requireType('Blockly.blocks');
+// TODO (6248): Properly import the BlockDefinition type.
 /* eslint-disable-next-line no-unused-vars */
-const {BlockDefinition} = goog.requireType('Blockly.blocks');
+const BlockDefinition = Object;
 const {config} = goog.require('Blockly.config');
 /* eslint-disable-next-line no-unused-vars */
 const {FieldCheckbox} = goog.require('Blockly.FieldCheckbox');
@@ -459,7 +461,7 @@ blocks['procedures_defnoreturn'] = {
         .appendField(Msg['PROCEDURES_DEFNORETURN_TITLE'])
         .appendField(nameField, 'NAME')
         .appendField('', 'PARAMS');
-    this.setMutator(new Mutator(['procedures_mutatorarg']));
+    this.setMutator(new Mutator(['procedures_mutatorarg'], this));
     if ((this.workspace.options.comments ||
          (this.workspace.options.parentWorkspace &&
           this.workspace.options.parentWorkspace.options.comments)) &&
@@ -505,7 +507,7 @@ blocks['procedures_defreturn'] = {
     this.appendValueInput('RETURN')
         .setAlign(Align.RIGHT)
         .appendField(Msg['PROCEDURES_DEFRETURN_RETURN']);
-    this.setMutator(new Mutator(['procedures_mutatorarg']));
+    this.setMutator(new Mutator(['procedures_mutatorarg'], this));
     if ((this.workspace.options.comments ||
          (this.workspace.options.parentWorkspace &&
           this.workspace.options.parentWorkspace.options.comments)) &&
@@ -978,7 +980,7 @@ const PROCEDURE_CALL_COMMON = {
         Xml.domToWorkspace(xml, this.workspace);
         Events.setGroup(false);
       }
-    } else if (event.type === Events.BLOCK_DELETE) {
+    } else if (event.type === Events.BLOCK_DELETE && event.blockId != this.id) {
       // Look for the case where a procedure definition has been deleted,
       // leaving this block (a procedure call) orphaned.  In this case, delete
       // the orphan.

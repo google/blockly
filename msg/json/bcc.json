@@ -2,10 +2,13 @@
 	"@metadata": {
 		"authors": [
 			"Baloch Afghanistan",
+			"StarrySky",
 			"Sultanselim baloch"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "مورد",
+	"UNNAMED_KEY": "بدون نام",
+	"TODAY": "مرۏچی",
 	"DUPLICATE_BLOCK": "تکراری",
 	"ADD_COMMENT": "افزودن نظر",
 	"REMOVE_COMMENT": "حذف نظر",
@@ -273,9 +276,7 @@
 	"PROCEDURES_DEFRETURN_TOOLTIP": "تابعی با یک خروجی می‌سازد.",
 	"PROCEDURES_ALLOW_STATEMENTS": "اجازه اظهارات",
 	"PROCEDURES_DEF_DUPLICATE_WARNING": "اخطار: این تابعی پارامتر تکراری دارد.",
-	"PROCEDURES_CALLNORETURN_HELPURL": "https://fa.wikipedia.org/wiki/%D8%B1%D9%88%DB%8C%D9%87_%28%D8%B9%D9%84%D9%88%D9%85_%D8%B1%D8%A7%DB%8C%D8%A7%D9%86%D9%87%29",
 	"PROCEDURES_CALLNORETURN_TOOLTIP": "اجرای تابع تعریف‌شده توسط کاربر «%1».",
-	"PROCEDURES_CALLRETURN_HELPURL": "https://fa.wikipedia.org/wiki/%D8%B1%D9%88%DB%8C%D9%87_%28%D8%B9%D9%84%D9%88%D9%85_%D8%B1%D8%A7%DB%8C%D8%A7%D9%86%D9%87%29",
 	"PROCEDURES_CALLRETURN_TOOLTIP": "اجرای تابع تعریف‌شده توسط کاربر «%1» و استفاده از خروجی آن.",
 	"PROCEDURES_MUTATORCONTAINER_TITLE": "ورودی‌ها",
 	"PROCEDURES_MUTATORCONTAINER_TOOLTIP": "افزودن، حذف یا دوباره مرتب‌کردن ورودی این تابع.",

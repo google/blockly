@@ -11,7 +11,7 @@
 
 goog.module('Blockly.PHP.logic');
 
-const PHP = goog.require('Blockly.PHP');
+const {phpGenerator: PHP} = goog.require('Blockly.PHP');
 
 
 PHP['controls_if'] = function(block) {

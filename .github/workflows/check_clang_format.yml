@@ -11,9 +11,9 @@ jobs:
   clang-formatter:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
-    - uses: DoozyX/clang-format-lint-action@v0.13
+    - uses: DoozyX/clang-format-lint-action@v0.14
       with:
         source: 'core'
         extensions: 'js,ts'

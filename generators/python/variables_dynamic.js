@@ -11,7 +11,7 @@
 
 goog.module('Blockly.Python.variablesDynamic');
 
-const Python = goog.require('Blockly.Python');
+const {pythonGenerator: Python} = goog.require('Blockly.Python');
 /** @suppress {extraRequire} */
 goog.require('Blockly.Python.variables');
 

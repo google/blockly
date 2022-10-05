@@ -13,6 +13,7 @@
 
 goog.module('Blockly.Dart.all');
 
+const moduleExports = goog.require('Blockly.Dart');
 goog.require('Blockly.Dart.colour');
 goog.require('Blockly.Dart.lists');
 goog.require('Blockly.Dart.logic');
@@ -23,3 +24,4 @@ goog.require('Blockly.Dart.texts');
 goog.require('Blockly.Dart.variables');
 goog.require('Blockly.Dart.variablesDynamic');
 
+exports = moduleExports;

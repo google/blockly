@@ -11,8 +11,8 @@
 
 goog.module('Blockly.Lua.math');
 
-const Lua = goog.require('Blockly.Lua');
 const {NameType} = goog.require('Blockly.Names');
+const {luaGenerator: Lua} = goog.require('Blockly.Lua');
 
 
 Lua['math_number'] = function(block) {

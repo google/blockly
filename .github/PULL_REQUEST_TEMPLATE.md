@@ -35,11 +35,11 @@
 
 ### Test Coverage
 
-<!-- TODO: Please do one of the following:
-  -    * Create unit tests, and explain here how they cover your changes.
-  -    * List steps you used for manual testing, and explain how they cover
-  -      your changes.
-  -->
+<!-- TODO: Please create unit tests, and explain here how they cover
+           your changes, or tell us how you tested it manually. If
+           your changes include browser-specific behaviour, include
+           information about the browser and device that you used for
+           testing. -->
 
 ### Documentation
 

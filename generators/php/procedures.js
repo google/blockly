@@ -11,9 +11,9 @@
 
 goog.module('Blockly.PHP.procedures');
 
-const PHP = goog.require('Blockly.PHP');
 const Variables = goog.require('Blockly.Variables');
 const {NameType} = goog.require('Blockly.Names');
+const {phpGenerator: PHP} = goog.require('Blockly.PHP');
 
 
 PHP['procedures_defreturn'] = function(block) {

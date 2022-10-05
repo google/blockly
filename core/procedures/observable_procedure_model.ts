@@ -8,23 +8,25 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.procedures.ObservableProcedureModel');
 
-import {IProcedureModel} from '../interfaces/i_procedure_model.js';
-import {Workspace} from '../workspace.js';
+import type {IParameterModel} from '../interfaces/i_parameter_model.js';
+import type {IProcedureModel} from '../interfaces/i_procedure_model.js';
+import type {Workspace} from '../workspace.js';
 import {genUid} from '../utils/idgenerator.js';
-import {IParameterModel} from '../interfaces/i_parameter_model.js';
 
 
 export class ObservableProcedureModel implements IProcedureModel {
-  private id = '';
+  private id: string;
   private name = '';
-  private parameters: IParameterModel[];
+  private parameters: IParameterModel[] = [];
+  private returnType: string[]|null = null;
+  private enabled = true;
 
   constructor(private readonly workspace: Workspace, id?: string) {
     this.id = id ?? genUid();
   }
 
   /** Sets the human-readable name of the procedure. */
-  setName(name: string): IProcedureModel {
+  setName(name: string): ObservableProcedureModel {
     this.name = name;
     return this;
   }
@@ -34,48 +36,73 @@ export class ObservableProcedureModel implements IProcedureModel {
    *
    * To move a parameter, first delete it, and then re-insert.
    */
-  insertParameter(parameterModel: IParameterModel): IParameterModel {
-    this.parameters.
+  insertParameter(
+      parameterModel: IParameterModel,
+      index: number
+  ): IParameterModel {
+    this.parameters.splice(index, 0, parameterModel);
+    return parameterModel;
   }
 
   /** Removes the parameter at the given index from the parameter list. */
-  deleteParameter(index: number): IProcedureModel;
+  deleteParameter(index: number): ObservableProcedureModel {
+    this.parameters.splice(index, 1);
+    return this;
+  }
 
   /**
    * Sets the return type(s) of the procedure.
    *
    * Pass null to represent a procedure that does not return.
    */
-  setReturnType(types: string[]|null): IProcedureModel;
+  setReturnType(types: string[]|null): ObservableProcedureModel {
+    this.returnType = types;
+    return this;
+  }
 
   /**
    * Sets whether this procedure is enabled/disabled. If a procedure is disabled
    * all procedure caller blocks should be disabled as well.
    */
-  setEnabled(enabled: boolean): IProcedureModel;
+  setEnabled(enabled: boolean): ObservableProcedureModel {
+    this.enabled = enabled;
+    return this;
+  }
 
   /** Returns the unique language-neutral ID for the procedure. */
-  getId(): string;
+  getId(): string {
+    return this.id;
+  }
 
   /** Returns the human-readable name of the procedure. */
-  getName(): string;
+  getName(): string {
+    return this.name;
+  }
 
   /** Returns the parameter at the given index in the parameter list. */
-  getParameter(index: number): IParameterModel;
+  getParameter(index: number): IParameterModel {
+    return this.parameters[index];
+  }
 
   /** Returns an array of all of the parameters in the parameter list. */
-  getParameters(): IParameterModel[];
+  getParameters(): IParameterModel[] {
+    return [...this.parameters];
+  }
 
   /**
    * Returns the return type of the procedure.
    *
    * Null represents a procedure that does not return a value.
    */
-  getReturnType(): string[]|null;
+  getReturnType(): string[]|null {
+    return this.returnType;
+  }
 
   /**
    * Returns whether the procedure is enabled/disabled. If a procedure is
    * disabled, all procedure caller blocks should be disabled as well.
    */
-  getEnabled(): boolean;
+  getEnabled(): boolean {
+    return this.enabled;
+  }
 }

@@ -36,10 +36,8 @@ export class ObservableProcedureModel implements IProcedureModel {
    *
    * To move a parameter, first delete it, and then re-insert.
    */
-  insertParameter(
-      parameterModel: IParameterModel,
-      index: number
-  ): IParameterModel {
+  insertParameter(parameterModel: IParameterModel, index: number):
+      IParameterModel {
     this.parameters.splice(index, 0, parameterModel);
     return parameterModel;
   }

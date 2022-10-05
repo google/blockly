@@ -18,10 +18,8 @@ export class ObservableParameterModel implements IParameterModel {
   private id: string;
 
   constructor(
-      private readonly workspace: Workspace,
-      private variable: VariableModel,
-      id?: string
-  ) {
+      private readonly workspace: Workspace, private variable: VariableModel,
+      id?: string) {
     this.id = id ?? genUid();
   }
 

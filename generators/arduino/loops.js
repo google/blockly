@@ -12,7 +12,7 @@
 
 goog.module('Blockly.Arduino.loops');
 
-const Arduino = goog.require('Blockly.Arduino');
+const { arduinoGenerator: Arduino } = goog.require('Blockly.Arduino');
 const {NameType} = goog.require('Blockly.Names');
 
 /**

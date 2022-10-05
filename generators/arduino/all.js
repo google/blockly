@@ -13,6 +13,7 @@
 
  goog.module('Blockly.Arduino.all');
  
+ const moduleExports = goog.require('Blockly.Arduino');
  goog.require('Blockly.Arduino.leaphyCommon');
  goog.require('Blockly.Arduino.leaphyOriginal');
  goog.require('Blockly.Arduino.leaphyClick');
@@ -25,5 +26,7 @@
  goog.require('Blockly.Arduino.variables');
  goog.require('Blockly.Arduino.procedures');
  goog.require('Blockly.Arduino.text');
+
+ exports = moduleExports;
  
  

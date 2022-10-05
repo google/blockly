@@ -11,7 +11,7 @@
 
 goog.module('Blockly.Arduino.leaphyFlitz');
  
-const Arduino = goog.require('Blockly.Arduino');
+const { arduinoGenerator: Arduino } = goog.require('Blockly.Arduino');
  
 
 Arduino['leaphy_flitz_read_stomach_sensor'] = function (block){

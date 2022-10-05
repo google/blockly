@@ -11,7 +11,7 @@
 
 goog.module('Blockly.Arduino.variables');
 
-const Arduino = goog.require('Blockly.Arduino');
+const { arduinoGenerator: Arduino } = goog.require('Blockly.Arduino');
 const {NameType} = goog.require('Blockly.Names');
 
 /**
@@ -23,7 +23,7 @@ const {NameType} = goog.require('Blockly.Names');
 Arduino['variables_get'] = function (block) {
 
     var varName = Arduino.nameDB_.getName(block.getFieldValue('VAR'), NameType.VARIABLE);
-    return [varName, Blockly.Arduino.ORDER_ATOMIC];
+    return [varName, Arduino.ORDER_ATOMIC];
 };
 
 /**

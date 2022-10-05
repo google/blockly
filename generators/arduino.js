@@ -1,21 +1,7 @@
 /**
  * @license
- * Visual Blocks Language
- *
- * Copyright 2012 Google Inc.
- * https://developers.google.com/blockly/
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright 2014 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
  */
 
 /**
@@ -26,18 +12,17 @@
 'use strict';
 
 goog.module('Blockly.Arduino');
-goog.module.declareLegacyNamespace();
 
-goog.require('Blockly.Generator');
+const Variables = goog.require('Blockly.Variables');
+const { Generator } = goog.require('Blockly.Generator');
 goog.require('Blockly.StaticTyping');
-const {Names, NameType} = goog.require('Blockly.Names');
+const { Names, NameType } = goog.require('Blockly.Names');
 
 /**
  * Arduino code generator.
  * @type {!Blockly.Generator}
  */
-const Arduino = new Blockly.Generator('Arduino');
-const StaticTyping = new Blockly.StaticTyping();
+const Arduino = new Generator('Arduino');
 
 /**
  * List of illegal variable names.
@@ -144,121 +129,38 @@ Arduino.init = function (workspace) {
   }
 
   Arduino.nameDB_.setVariableMap(workspace.getVariableMap());
+  this.nameDB_.populateVariables(workspace);
+  this.nameDB_.populateProcedures(workspace);
+
+  const defvars = [];
+  // Add developer variables (not created or named by the user).
+  const devVarList = Variables.allDeveloperVariables(workspace);
+  for (let i = 0; i < devVarList.length; i++) {
+    defvars.push(this.nameDB_.getName(devVarList[i],
+      NameType.DEVELOPER_VARIABLE));
+  }
+
+  // Add user variables, but only ones that are being used.
+  const variables = Variables.allUsedVarModels(workspace);
+  for (let i = 0; i < variables.length; i++) {
+    defvars.push(this.nameDB_.getName(variables[i].getId(),
+      NameType.VARIABLE));
+  }
+
+  // Declare all of the variables.
+  if (defvars.length) {
+    this.definitions_['variables'] =
+      'double ' + defvars.join(' = 0, ') + ' = 0;\n';
+  }
 
   // Create a dictionary of definitions to be printed at the top of the sketch
-  Arduino.includes_ = Object.create(null);
-  // Create a dictionary of global definitions to be printed after variables
-  Arduino.definitions_ = Object.create(null);
-  // Create a dictionary of variables
-  Arduino.variables_ = Object.create(null);
-  // Create a dictionary of functions from the code generator
-  Arduino.codeFunctions_ = Object.create(null);
-  // Create a dictionary of functions created by the user
-  Arduino.userFunctions_ = Object.create(null);
-  // Create a dictionary mapping desired function names in definitions_
-  // to actual function names (to avoid collisions with user functions)
-  Arduino.functionNames_ = Object.create(null);
+  this.includes_ = Object.create(null);
   // Create a dictionary of setups to be printed in the setup() function
-  Arduino.setups_ = Object.create(null);
+  this.setups_ = Object.create(null);
   // Create a dictionary of pins to check if their use conflicts
-  Arduino.pins_ = Object.create(null);
+  this.pins_ = Object.create(null);
 
-  // Iterate through to capture all blocks types and set the function arguments
-  var varsWithTypes = StaticTyping.collectVarsWithTypes(workspace);
-  StaticTyping.setProcedureArgs(workspace, varsWithTypes);
-
-  // Set variable declarations with their Arduino type in the defines dictionary
-  for (var varName in varsWithTypes) {
-    if (varsWithTypes[varName]) {
-      if (varsWithTypes[varName].arrayType) {
-        var varType = Arduino.recurseArrayType(varName, varsWithTypes);
-        Arduino.addVariable(varName,
-          varType
-          + ' '
-          + this.nameDB_.getName(varName, NameType.VARIABLE)
-          + ';');
-      } else {
-        Arduino.addVariable(varName,
-          Arduino.getArduinoType_(varsWithTypes[varName])
-          + ' '
-          + this.nameDB_.getName(varName, NameType.VARIABLE)
-          + ';');
-      }
-    } else {
-      Arduino.addVariable(varName,
-        'undefined '
-        + this.nameDB_.getName(varName, NameType.VARIABLE)
-        + ';');
-    }
-  }
-};
-
-/**
- * Recurse array construction to determine Arduino type and dimension
- * 
- * @param {string} var name
- * @param {array} All vars collected
- * @return {string} Array type, in a string format (varName[x]).
- */
-Arduino.recurseArrayType = function (varName, varsWithTypes) {
-  if (!varsWithTypes[varName].arrayType
-    || varsWithTypes[varName].arrayType instanceof Blockly.Type) {
-    // The var is directly defined by an array block with childblock
-    var arrayDimension = '';
-    if (varsWithTypes[varName].arrayType) {
-      // if array block is constructed with array blocks
-      var subArray = varsWithTypes[varName].arrayType;
-      // build array dimension(s)
-      arrayDimension = '[' + varsWithTypes[varName].arraySize + ']';
-      while (subArray.arrayType) {
-        arrayDimension += '[' + subArray.arraySize + ']';
-        subArray = subArray.arrayType;
-      }
-      // if the final block is a variable
-      if (!(subArray instanceof Blockly.Type)) {
-        varName = subArray[1];
-        if (varsWithTypes[varName].arrayType) {
-          var varType = Arduino.recurseArrayType(varName, varsWithTypes);
-          // if the var is an array
-          // 1- get the type
-          // 2- apply the dimensions already built
-          // 3- add the dimension of this array
-          return varType.substr(0, varType.indexOf('['))
-            + arrayDimension
-            + varType.substr(varType.indexOf('['));
-        }
-      }
-    }
-
-    return Arduino.getArduinoType_(varsWithTypes[varName]) + arrayDimension;
-  } else {
-    // the var is inderectly defined by an array block with variable on
-    // input
-    var varTab = varsWithTypes[varName].arrayType[1];
-    if (varTab == varName || !varsWithTypes[varTab]) {
-      // prevent direct recursive calls
-      // don't prevent undirect use of the same variable
-      return 'undefined';
-    } else {
-      var varType = Arduino.recurseArrayType(varTab, varsWithTypes);
-      return Arduino.insertParentArraySize(varType, varsWithTypes[varName].arraySize);
-    }
-  }
-};
-
-/**
- * Insert parent array dimension in the current array type
- * 
- * @param {string} var type (like varName[x])
- * @param {array} All vars collected
- * @return {string} Array type, in a string format (varName[y][x]).
- */
-Arduino.insertParentArraySize = function (varType, parentArraySize) {
-  if (varType.indexOf('[') >= 0) {
-    return varType.substr(0, varType.indexOf('[')) + '[' + parentArraySize + ']' + varType.substr(varType.indexOf('['));
-  } else {
-    return varType + '[' + parentArraySize + ']';
-  }
+  this.isInitialized = true;
 };
 
 /**
@@ -275,28 +177,13 @@ Arduino.finish = function (code) {
   if (includes.length) {
     includes.push('\n');
   }
-  for (var name in Arduino.definitions_) {
+  for (var name in this.definitions_) {
     definitions.push(Arduino.definitions_[name]);
   }
   if (definitions.length) {
     definitions.push('\n');
   }
-  for (var name in Arduino.variables_) {
-    variables.push(Arduino.variables_[name]);
-  }
-  if (variables.length) {
-    variables.push('\n');
-  }
-  for (var name in Arduino.codeFunctions_) {
-    functions.push(Arduino.codeFunctions_[name]);
-  }
-  for (var name in Arduino.userFunctions_) {
-    functions.push(Arduino.userFunctions_[name]);
-  }
-  if (functions.length) {
-    functions.push('\n');
-  }
-
+  
   // userSetupCode added at the end of the setup function without leading spaces
   var setups = [''], userSetupCode = '';
   if (Arduino.setups_['userSetupCode'] !== undefined) {
@@ -359,7 +246,7 @@ Arduino.addDeclaration = function (declarationTag, code) {
  * @param {boolean=} overwrite Flag to ignore previously set value.
  * @return {!boolean} Indicates if the declaration overwrote a previous one.
  */
-Arduino.addVariable = function (varName, code, overwrite) {
+ Arduino.addVariable = function (varName, code, overwrite) {
   var overwritten = false;
   if (overwrite || (Arduino.variables_[varName] === undefined)) {
     Arduino.variables_[varName] = code;
@@ -554,4 +441,4 @@ Arduino.noGeneratorCodeLine = function () {
   return '';
 };
 
-exports = Arduino;
+exports.arduinoGenerator = Arduino;

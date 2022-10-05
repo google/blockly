@@ -11,7 +11,7 @@
 
 goog.module('Blockly.Arduino.text');
 
-const Arduino = goog.require('Blockly.Arduino');
+const { arduinoGenerator: Arduino } = goog.require('Blockly.Arduino');
 
 /**
 * Code generator for a literal String (X).

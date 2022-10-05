@@ -11,7 +11,7 @@
 
 goog.module('Blockly.Arduino.leaphyClick');
  
-const Arduino = goog.require('Blockly.Arduino');
+const { arduinoGenerator: Arduino } = goog.require('Blockly.Arduino');
 
 Arduino['leaphy_click_rgb_digitalwrite'] = function (block) {
     var pin1 = block.getFieldValue('PIN1');

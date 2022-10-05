@@ -11,7 +11,7 @@
 
 goog.module('Blockly.Arduino.math');
 
-const Arduino = goog.require('Blockly.Arduino');
+const { arduinoGenerator: Arduino } = goog.require('Blockly.Arduino');
 const {NameType} = goog.require('Blockly.Names');
 
 

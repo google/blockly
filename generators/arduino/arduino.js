@@ -11,7 +11,7 @@
 
 goog.module('Blockly.Arduino.arduino');
  
-const Arduino = goog.require('Blockly.Arduino');
+const { arduinoGenerator: Arduino } = goog.require('Blockly.Arduino');
  
 
 Arduino['time_delay'] = function (block) {

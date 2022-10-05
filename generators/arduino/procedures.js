@@ -11,7 +11,7 @@
 
 goog.module('Blockly.Arduino.procedures');
 
-const Arduino = goog.require('Blockly.Arduino');
+const { arduinoGenerator: Arduino } = goog.require('Blockly.Arduino');
 const { NameType } = goog.require('Blockly.Names');
 
 /**
@@ -60,7 +60,7 @@ Arduino['procedures_defreturn'] = function (block) {
     var code = returnType + ' ' + funcName + '(' + args.join(', ') + ') {\n' +
         branch + returnValue + '}';
     code = Arduino.scrub_(block, code);
-    Arduino.userFunctions_[funcName] = code;
+    Arduino.definitions_[funcName] = code;
     return null;
 };
 

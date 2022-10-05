@@ -11,7 +11,7 @@
 
 goog.module('Blockly.Arduino.leaphyOriginal');
  
-const Arduino = goog.require('Blockly.Arduino');
+const { arduinoGenerator: Arduino } = goog.require('Blockly.Arduino');
  
  
 Arduino['leaphy_original_set_led'] = function (block) {

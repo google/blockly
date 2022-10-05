@@ -113,10 +113,10 @@ export class Bubble implements IBubble {
   /** Method to call on move of bubble. */
   private moveCallback: (() => void)|null = null;
 
-  /** Mouse down on bubbleBack_ event data. */
+  /** Mouse down on bubbleBack event data. */
   private onMouseDownBubbleWrapper: browserEvents.Data|null = null;
 
-  /** Mouse down on resizeGroup_ event data. */
+  /** Mouse down on resizeGroup event data. */
   private onMouseDownResizeWrapper: browserEvents.Data|null = null;
 
   /**
@@ -153,7 +153,7 @@ export class Bubble implements IBubble {
 
     const canvas = workspace.getBubbleCanvas();
     canvas.appendChild(
-        this.createDom_(content, !!(bubbleWidth && bubbleHeight)));
+        this.createDom(content, !!(bubbleWidth && bubbleHeight)));
 
     this.setAnchorLocation(anchorXY);
     if (!bubbleWidth || !bubbleHeight) {
@@ -164,8 +164,8 @@ export class Bubble implements IBubble {
     this.setBubbleSize(bubbleWidth, bubbleHeight);
 
     // Render the bubble.
-    this.positionBubble_();
-    this.renderArrow_();
+    this.positionBubble();
+    this.renderArrow();
     this.rendered = true;
   }
 
@@ -176,7 +176,7 @@ export class Bubble implements IBubble {
    * @param hasResize Add diagonal resize gripper if true.
    * @returns The bubble's SVG group.
    */
-  private createDom_(content: Element, hasResize: boolean): SVGElement {
+  private createDom(content: Element, hasResize: boolean): SVGElement {
     /* Create the bubble.  Here's the markup that will be generated:
         <g>
           <g filter="url(#blocklyEmbossFilter837493)">
@@ -249,10 +249,10 @@ export class Bubble implements IBubble {
 
     if (!this.workspace_.options.readOnly) {
       this.onMouseDownBubbleWrapper = browserEvents.conditionalBind(
-          this.bubbleBack, 'mousedown', this, this.bubbleMouseDown_);
+          this.bubbleBack, 'mousedown', this, this.bubbleMouseDown);
       if (this.resizeGroup) {
         this.onMouseDownResizeWrapper = browserEvents.conditionalBind(
-            this.resizeGroup, 'mousedown', this, this.resizeMouseDown_);
+            this.resizeGroup, 'mousedown', this, this.resizeMouseDown);
       }
     }
     this.bubbleGroup.appendChild(content);
@@ -282,7 +282,7 @@ export class Bubble implements IBubble {
    *
    * @param e Mouse down event.
    */
-  private bubbleMouseDown_(e: Event) {
+  private bubbleMouseDown(e: Event) {
     const gesture = this.workspace_.getGesture(e);
     if (gesture) {
       gesture.handleBubbleStart(e, this);
@@ -322,9 +322,9 @@ export class Bubble implements IBubble {
    *
    * @param e Mouse down event.
    */
-  private resizeMouseDown_(e: MouseEvent) {
+  private resizeMouseDown(e: MouseEvent) {
     this.promote();
-    Bubble.unbindDragEvents_();
+    Bubble.unbindDragEvents();
     if (browserEvents.isRightButton(e)) {
       // No right-click.
       e.stopPropagation();
@@ -337,9 +337,9 @@ export class Bubble implements IBubble {
             this.workspace_.RTL ? -this.width : this.width, this.height));
 
     Bubble.onMouseUpWrapper = browserEvents.conditionalBind(
-        document, 'mouseup', this, Bubble.bubbleMouseUp_);
+        document, 'mouseup', this, Bubble.bubbleMouseUp);
     Bubble.onMouseMoveWrapper = browserEvents.conditionalBind(
-        document, 'mousemove', this, this.resizeMouseMove_);
+        document, 'mousemove', this, this.resizeMouseMove);
     this.workspace_.hideChaff();
     // This event has been handled.  No need to bubble up to the document.
     e.stopPropagation();
@@ -350,13 +350,13 @@ export class Bubble implements IBubble {
    *
    * @param e Mouse move event.
    */
-  private resizeMouseMove_(e: MouseEvent) {
+  private resizeMouseMove(e: MouseEvent) {
     this.autoLayout = false;
     const newXY = this.workspace_.moveDrag(e);
     this.setBubbleSize(this.workspace_.RTL ? -newXY.x : newXY.x, newXY.y);
     if (this.workspace_.RTL) {
       // RTL requires the bubble to move its left edge.
-      this.positionBubble_();
+      this.positionBubble();
     }
   }
 
@@ -402,18 +402,18 @@ export class Bubble implements IBubble {
   setAnchorLocation(xy: Coordinate) {
     this.anchorXY = xy;
     if (this.rendered) {
-      this.positionBubble_();
+      this.positionBubble();
     }
   }
 
   /** Position the bubble so that it does not fall off-screen. */
-  private layoutBubble_() {
+  private layoutBubble() {
     // Get the metrics in workspace units.
     const viewMetrics =
         this.workspace_.getMetricsManager().getViewMetrics(true);
 
-    const optimalLeft = this.getOptimalRelativeLeft_(viewMetrics);
-    const optimalTop = this.getOptimalRelativeTop_(viewMetrics);
+    const optimalLeft = this.getOptimalRelativeLeft(viewMetrics);
+    const optimalTop = this.getOptimalRelativeTop(viewMetrics);
     const bbox = (this.shape_ as SVGGraphicsElement).getBBox();
 
     const topPosition = {
@@ -431,11 +431,11 @@ export class Bubble implements IBubble {
     const fartherPosition =
         bbox.width < bbox.height ? bottomPosition : endPosition;
 
-    const topPositionOverlap = this.getOverlap_(topPosition, viewMetrics);
-    const startPositionOverlap = this.getOverlap_(startPosition, viewMetrics);
-    const closerPositionOverlap = this.getOverlap_(closerPosition, viewMetrics);
+    const topPositionOverlap = this.getOverlap(topPosition, viewMetrics);
+    const startPositionOverlap = this.getOverlap(startPosition, viewMetrics);
+    const closerPositionOverlap = this.getOverlap(closerPosition, viewMetrics);
     const fartherPositionOverlap =
-        this.getOverlap_(fartherPosition, viewMetrics);
+        this.getOverlap(fartherPosition, viewMetrics);
 
     // Set the position to whichever position shows the most of the bubble,
     // with tiebreaks going in the order: top > start > close > far.
@@ -474,7 +474,7 @@ export class Bubble implements IBubble {
    *     in.
    * @returns The percentage of the bubble that is visible.
    */
-  private getOverlap_(
+  private getOverlap(
       relativeMin: {x: number, y: number},
       viewMetrics: ContainerRegion): number {
     // The position of the top-left corner of the bubble in workspace units.
@@ -522,7 +522,7 @@ export class Bubble implements IBubble {
    * @returns The optimal horizontal position of the top-left corner of the
    *     bubble.
    */
-  private getOptimalRelativeLeft_(viewMetrics: ContainerRegion): number {
+  private getOptimalRelativeLeft(viewMetrics: ContainerRegion): number {
     let relativeLeft = -this.width / 4;
 
     // No amount of sliding left or right will give us a better overlap.
@@ -578,7 +578,7 @@ export class Bubble implements IBubble {
    * @returns The optimal vertical position of the top-left corner of the
    *     bubble.
    */
-  private getOptimalRelativeTop_(viewMetrics: ContainerRegion): number {
+  private getOptimalRelativeTop(viewMetrics: ContainerRegion): number {
     let relativeTop = -this.height / 4;
 
     // No amount of sliding up or down will give us a better overlap.
@@ -606,7 +606,7 @@ export class Bubble implements IBubble {
   }
 
   /** Move the bubble to a location relative to the anchor's centre. */
-  private positionBubble_() {
+  private positionBubble() {
     let left = this.anchorXY.x;
     if (this.workspace_.RTL) {
       left -= this.relativeLeft + this.width;
@@ -681,10 +681,10 @@ export class Bubble implements IBubble {
       }
     }
     if (this.autoLayout) {
-      this.layoutBubble_();
+      this.layoutBubble();
     }
-    this.positionBubble_();
-    this.renderArrow_();
+    this.positionBubble();
+    this.renderArrow();
 
     // Allow the contents to resize.
     if (this.resizeCallback) {
@@ -693,7 +693,7 @@ export class Bubble implements IBubble {
   }
 
   /** Draw the arrow between the bubble and the origin. */
-  private renderArrow_() {
+  private renderArrow() {
     const steps = [];
     // Find the relative coordinates of the center of the bubble.
     const relBubbleX = this.width / 2;
@@ -780,7 +780,7 @@ export class Bubble implements IBubble {
     if (this.onMouseDownResizeWrapper) {
       browserEvents.unbind(this.onMouseDownResizeWrapper);
     }
-    Bubble.unbindDragEvents_();
+    Bubble.unbindDragEvents();
     dom.removeNode(this.bubbleGroup);
     this.disposed = true;
   }
@@ -806,7 +806,7 @@ export class Bubble implements IBubble {
       this.relativeLeft = newLoc.x - this.anchorXY.x;
     }
     this.relativeTop = newLoc.y - this.anchorXY.y;
-    this.renderArrow_();
+    this.renderArrow();
   }
 
   /**
@@ -836,7 +836,7 @@ export class Bubble implements IBubble {
   }
 
   /** Stop binding to the global mouseup and mousemove events. */
-  private static unbindDragEvents_() {
+  private static unbindDragEvents() {
     if (Bubble.onMouseUpWrapper) {
       browserEvents.unbind(Bubble.onMouseUpWrapper);
       Bubble.onMouseUpWrapper = null;
@@ -852,9 +852,9 @@ export class Bubble implements IBubble {
    *
    * @param _e Mouse up event.
    */
-  private static bubbleMouseUp_(_e: MouseEvent) {
+  private static bubbleMouseUp(_e: MouseEvent) {
     Touch.clearTouchIdentifier();
-    Bubble.unbindDragEvents_();
+    Bubble.unbindDragEvents();
   }
 
   /**

@@ -11,8 +11,10 @@
 
 goog.module('Blockly.libraryBlocks.arduino');
 
+// const {BlockDefinition} = goog.requireType('Blockly.blocks');
+// TODO (6248): Properly import the BlockDefinition type.
 /* eslint-disable-next-line no-unused-vars */
-const { BlockDefinition } = goog.requireType('Blockly.blocks');
+const BlockDefinition = Object;
 const { createBlockDefinitionsFromJsonArray, defineBlocks } = goog.require('Blockly.common');
 
 /**

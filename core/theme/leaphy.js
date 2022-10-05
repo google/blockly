@@ -5,17 +5,14 @@
  */
 
 /**
- * @fileoverview Leaphy theme.
+ * Leaphy theme.
+ *
+ * @namespace Blockly.Themes.Leaphy
  */
- 'use strict';
+import * as goog from '../../closure/goog/goog.js';
+goog.declareModuleId('Blockly.Themes.Leaphy');
 
-/**
-* Leaphy theme.
-* @namespace Blockly.Themes.Leaphy
-*/
-goog.module('Blockly.Themes.Leaphy');
- 
-const {Theme} = goog.require('Blockly.Theme');
+import { Theme } from '../theme.js';
 
 
 const defaultBlockStyles = {
@@ -66,9 +63,7 @@ const componentStyles = {
 
 /**
  * Leaphy theme.
- * @type {Theme}
+ *
  * @alias Blockly.Themes.Leaphy
  */
- const Leaphy = new Theme('leaphy', defaultBlockStyles, categoryStyles, componentStyles);
-
- exports.Leaphy = Leaphy;
+export const Leaphy = new Theme('leaphy', defaultBlockStyles, categoryStyles, componentStyles);

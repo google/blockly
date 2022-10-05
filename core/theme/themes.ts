@@ -14,6 +14,6 @@ goog.declareModuleId('Blockly.Themes');
 
 import {Classic} from './classic.js';
 import {Zelos} from './zelos.js';
+import {Leaphy} from './leaphy.js';
 
-
-export {Classic, Zelos};
+export {Classic, Zelos, Leaphy};

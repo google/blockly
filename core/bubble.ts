@@ -508,8 +508,7 @@ export class Bubble implements IBubble {
         Math.max(bubbleMin.y, workspaceMin.y);
     return Math.max(
         0,
-        Math.min(
-            1, overlapWidth * overlapHeight / (this.width * this.height)));
+        Math.min(1, overlapWidth * overlapHeight / (this.width * this.height)));
   }
 
   /**

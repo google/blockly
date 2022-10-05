@@ -74,7 +74,7 @@ export class BlockDragSurfaceSvg {
         },
         this.container);
 
-    this.dragGroup = dom.createSvgElement(Svg.G, {}, this.svg as SVGElement);
+    this.dragGroup = dom.createSvgElement(Svg.G, {}, this.svg);
   }
 
   /**

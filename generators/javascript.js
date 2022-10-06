@@ -13,7 +13,6 @@
 goog.module('Blockly.JavaScript');
 
 const Variables = goog.require('Blockly.Variables');
-const objectUtils = goog.require('Blockly.utils.object');
 const stringUtils = goog.require('Blockly.utils.string');
 const {Block} = goog.requireType('Blockly.Block');
 const {Generator} = goog.require('Blockly.Generator');
@@ -169,7 +168,7 @@ JavaScript.init = function(workspace) {
  */
 JavaScript.finish = function(code) {
   // Convert the definitions dictionary into a list.
-  const definitions = objectUtils.values(this.definitions_);
+  const definitions = Object.values(this.definitions_);
   // Call Blockly.Generator's finish.
   code = Object.getPrototypeOf(this).finish.call(this, code);
   this.isInitialized = false;

@@ -157,6 +157,7 @@ import {Trashcan} from './trashcan.js';
 import * as utils from './utils.js';
 import * as colour from './utils/colour.js';
 import * as deprecation from './utils/deprecation.js';
+import * as svgMath from './utils/svg_math.js';
 import * as toolbox from './utils/toolbox.js';
 import {VariableMap} from './variable_map.js';
 import {VariableModel} from './variable_model.js';

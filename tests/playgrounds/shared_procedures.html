@@ -25,7 +25,50 @@ var workspace = null;
 function start() {
   setBackgroundColour();
 
-  var toolbox = document.getElementById('toolbox');
+  var toolbox = {
+    'kind': 'categoryToolbox',
+    'contents': [
+      {
+        'kind': 'category',
+        'name': 'Other Blocks',
+        'categorystyle': 'logic_category',
+        'contents': [
+          {
+            'kind': 'block',
+            'type': 'controls_if',
+          },
+          {
+            'kind': 'block',
+            'type': 'logic_operation',
+          },
+          {
+            'kind': 'block',
+            'type': 'logic_negate',
+          },
+          {
+            'kind': 'block',
+            'type': 'logic_boolean',
+          },
+          {
+            'kind': 'block',
+            'type': 'text_print',
+          },
+        ]
+      },
+      {
+        'kind': 'category',
+        'name': 'Variables',
+        'categorystyle': 'variable_category',
+        'custom': 'VARIABLE',
+      },
+      {
+        'kind': 'category',
+        'name': 'Procedures',
+        'categorystyle': 'procedure_category',
+        'custom': 'PROCEDURE',
+      },
+    ],
+  };
   var options = {
     comments: true,
     collapse: true,

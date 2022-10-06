@@ -9,10 +9,9 @@
  *
  * @namespace Blockly.IProcedureMap
  */
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.IProcedureMap');
 
 import {IProcedureModel} from './i_procedure_model.js';
+
 
 /**
  * A special collection of procedure models.

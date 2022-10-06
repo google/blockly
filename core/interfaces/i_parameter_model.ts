@@ -9,10 +9,9 @@
  *
  * @namespace Blockly.IParameterModel
  */
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.IParameterModel');
 
 import {VariableModel} from '../variable_model.js';
+
 
 /**
  * A data model for a procedure.

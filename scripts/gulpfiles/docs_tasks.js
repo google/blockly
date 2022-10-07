@@ -1,13 +1,15 @@
+const { execSync } = require('child_process');
 const { Extractor } = require('markdown-tables-to-json');
 const fs = require('fs');
 const gulp = require('gulp');
 const header = require('gulp-header');
 const replace = require('gulp-replace');
-const { execSync } = require('child_process');
 
 const docsDir = 'docs';
 
-
+/**
+ * Run API Extractor to generate the intermediate json file.
+ */
 const generateApiJson = function(done) {
     execSync('api-extractor run --local', { stdio: 'inherit' });
     done();
@@ -23,8 +25,13 @@ const removeRenames = function() {
         .pipe(gulp.dest('temp/'));
 }
 
+/**
+ * Run API Documenter to generate the raw docs files.
+ */
 const generateDocs = function(done) {
     if (!fs.existsSync(docsDir)) {
+        // Create the directory if it doesn't exist.
+        // If it already exists, the contents will be deleted by api-documenter.
         fs.mkdirSync(docsDir);
     }
     execSync(`api-documenter markdown --input-folder temp --output-folder ${docsDir}`, { stdio: 'inherit' });

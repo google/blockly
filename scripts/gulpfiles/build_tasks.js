@@ -104,7 +104,9 @@ const NAMESPACE_PROPERTY = '__namespace__';
 const chunks = [
   {
     name: 'blockly',
-    entry: path.join(CORE_DIR, 'main.js'),
+    entry: posixPath((argv.compileTs) ?
+      path.join(TSC_OUTPUT_DIR, CORE_DIR, 'main.js') :
+      path.join(CORE_DIR, 'main.js')),
     exports: 'module$build$src$core$blockly',
     reexport: 'Blockly',
   },
@@ -364,7 +366,6 @@ function buildDeps(done) {
     const args = roots.map(root => `--root '${root}' `).join('');
     exec(
         `closure-make-deps ${args}`,
-        {stdio: ['inherit', 'inherit', 'pipe']},
         (error, stdout, stderr) => {
           console.warn(filterErrors(stderr));
           if (error) {
@@ -380,7 +381,6 @@ function buildDeps(done) {
         testRoots.map(root => `--root '${root}' `).join('');
     exec(
         `closure-make-deps ${testArgs}`,
-        {stdio: ['inherit', 'inherit', 'pipe']},
         (error, stdout, stderr) => {
           console.warn(filterErrors(stderr));
           if (error) {
@@ -536,11 +536,6 @@ return ${chunk.exports};
  *     closure-calculate-chunks.
  */
 function getChunkOptions() {
-  if (argv.compileTs) {
-    chunks[0].entry = path.join(TSC_OUTPUT_DIR, chunks[0].entry);
-  }
-  // Convert chunk entry path to posix.
-  chunks.forEach(chunk => chunk.entry = posixPath(chunk.entry));
   const basePath =
       path.join(TSC_OUTPUT_DIR, 'closure', 'goog', 'base_minimal.js');
   const cccArgs = [
@@ -578,9 +573,9 @@ function getChunkOptions() {
   // chunk depends on any chunk but the first), so we look for
   // one of the entrypoints amongst the files in each chunk.
   const chunkByNickname = Object.create(null);
-  // Convert js file path to posix.
-  const jsFiles = rawOptions.js.slice()
-    .map(p => posixPath(p));  // Will be modified via .splice!
+  // Copy and convert to posix js file paths.
+  // Result will be modified via `.splice`!
+  const jsFiles = rawOptions.js.map(p => posixPath(p));
   const chunkList = rawOptions.chunk.map((element) => {
     const [nickname, numJsFiles, parentNick] = element.split(':');
 

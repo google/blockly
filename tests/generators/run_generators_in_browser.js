@@ -9,6 +9,7 @@
  */
 var webdriverio = require('webdriverio');
 var fs = require('fs');
+var path = require('path');
 
 module.exports = runGeneratorsInBrowser;
 
@@ -35,9 +36,10 @@ async function runLangGeneratorInBrowser(browser, filename, codegenFn) {
  * Runs the generator tests in Chrome. It uses webdriverio to
  * launch Chrome and load index.html. Outputs a summary of the test results
  * to the console and outputs files for later validation.
+ * @param {string} outputDir output directory
  * @return the Thenable managing the processing of the browser tests.
  */
-async function runGeneratorsInBrowser() {
+async function runGeneratorsInBrowser(outputDir) {
   var options = {
     capabilities: {
       browserName: 'chrome',
@@ -60,7 +62,7 @@ async function runGeneratorsInBrowser() {
   }
 
   var url = 'file://' + __dirname + '/index.html';
-  var prefix = 'tests/generators/tmp/generated';
+  var prefix = path.join(outputDir, 'generated');
 
   console.log('Starting webdriverio...');
   const browser = await webdriverio.remote(options);
@@ -97,7 +99,7 @@ async function runGeneratorsInBrowser() {
 }
 
 if (require.main === module) {
-  runGeneratorsInBrowser().catch(e => {
+  runGeneratorsInBrowser('tests/generators/tmp').catch(e => {
     console.error(e);
     process.exit(1);
   }).then(function(result) {

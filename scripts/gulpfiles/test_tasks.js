@@ -21,7 +21,7 @@ const {BUILD_DIR} = require('./config');
 const runGeneratorsInBrowser =
   require('../../tests/generators/run_generators_in_browser.js');
 
-const TMP_DIR = 'tests/generators/tmp/';
+const OUTPUT_DIR = 'build/generators/';
 const GOLDEN_DIR = 'tests/generators/golden/';
 
 const BOLD_GREEN = '\x1b[1;32m';
@@ -34,18 +34,23 @@ let failerCount = 0;
  * Helper method for running test code block.
  * @param {string} id test id
  * @param {function} block test code block
+ * @param {boolean} grouping grouping log lines (for GitHub Action)
  * @return {Promise} asynchronous result
  */
-function runTestBlock(id, block) {
+function runTestBlock(id, block, grouping = true) {
   return new Promise((resolve) => {
     console.log('=======================================');
     console.log(`== ${id}`);
+    if (process.env.CI && grouping) console.log('::group::');
     block()
       .then((result) => {
+        if (process.env.CI && grouping) console.log('::endgroup::');
         console.log(`${BOLD_GREEN}SUCCESS:${ANSI_RESET} ${id}`);
         resolve(result);
       })
       .catch((err) => {
+        if (process.env.CI && grouping) console.log('::endgroup::');
+        console.log(`${BOLD_GREEN}SUCCESS:${ANSI_RESET} ${id}`);
         failerCount++;
         console.error(err.message);
         console.log(`${BOLD_RED}FAILED:${ANSI_RESET} ${id}`);
@@ -64,7 +69,7 @@ function runTestBlock(id, block) {
 function runTestCommand(id, command) {
   return runTestBlock(id, async() => {
     return execSync(command, {stdio: 'inherit'});
-  });
+  }, false);
 }
 
 /**
@@ -219,28 +224,28 @@ function compareFile(file1, file2) {
  */
 function checkResult(suffix) {
   const fileName = `generated.${suffix}`;
-  const tmpFileName = path.posix.join(TMP_DIR, fileName);
+  const resultFileName = path.posix.join(OUTPUT_DIR, fileName);
 
   const SUCCESS_PREFIX = `${BOLD_GREEN}SUCCESS:${ANSI_RESET}`;
   const FAILURE_PREFIX = `${BOLD_RED}FAILED:${ANSI_RESET}`;
 
-  if (fs.existsSync(tmpFileName)) {
+  if (fs.existsSync(resultFileName)) {
     const goldenFileName = path.posix.join(GOLDEN_DIR, fileName);
     if (fs.existsSync(goldenFileName)) {
-      if (compareFile(tmpFileName, goldenFileName)) {
+      if (compareFile(resultFileName, goldenFileName)) {
         console.log(`${SUCCESS_PREFIX} ${suffix}: ` +
-          `${tmpFileName} matches ${goldenFileName}`);
+          `${resultFileName} matches ${goldenFileName}`);
         return 0;
       } else {
         console.log(
           `${FAILURE_PREFIX} ${suffix}: ` +
-          `${tmpFileName} does not match ${goldenFileName}`);
+          `${resultFileName} does not match ${goldenFileName}`);
       }
     } else {
       console.log(`File ${goldenFileName} not found!`);
     }
   } else {
-    console.log(`File ${tmpFileName} not found!`);
+    console.log(`File ${resultFileName} not found!`);
   }
   return 1;
 }
@@ -252,10 +257,10 @@ function checkResult(suffix) {
 function generators() {
   return runTestBlock('generators', async() => {
     // Clean up.
-    rimraf.sync(TMP_DIR);
-    fs.mkdirSync(TMP_DIR);
+    rimraf.sync(OUTPUT_DIR);
+    fs.mkdirSync(OUTPUT_DIR);
 
-    await runGeneratorsInBrowser().catch(() => {});
+    await runGeneratorsInBrowser(OUTPUT_DIR).catch(() => {});
 
     const generatorSuffixes = ['js', 'py', 'dart', 'lua', 'php'];
     let failed = 0;
@@ -263,9 +268,6 @@ function generators() {
       failed += checkResult(suffix);
     });
       
-    // Clean up.
-    rimraf.sync(TMP_DIR);
-     
     if (failed === 0) {
       console.log(`${BOLD_GREEN}All generator tests passed.${ANSI_RESET}`);
     } else {
@@ -316,7 +318,7 @@ function reportTestResult() {
 }
 
 // Indivisual tasks.
-const testTasks = {
+const testTasks = [
   eslint,
   buildDebug,
   renamings,
@@ -327,13 +329,12 @@ const testTasks = {
   node,
   advancedCompile,
   reportTestResult,
-};
+];
 
 // Run all tests in sequence.
-const test = gulp.series(Object.values(testTasks));
+const test = gulp.series(...testTasks);
 
 module.exports = {
   test,
-  // Export indivisual tasks.
-  ...testTasks,
+  generators,
 };

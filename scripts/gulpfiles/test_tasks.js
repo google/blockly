@@ -34,22 +34,21 @@ let failerCount = 0;
  * Helper method for running test code block.
  * @param {string} id test id
  * @param {function} block test code block
- * @param {boolean} grouping grouping log lines (for GitHub Action)
  * @return {Promise} asynchronous result
  */
-function runTestBlock(id, block, grouping = true) {
+function runTestBlock(id, block) {
   return new Promise((resolve) => {
     console.log('=======================================');
     console.log(`== ${id}`);
-    if (process.env.CI && grouping) console.log('::group::');
+    if (process.env.CI) console.log('::group::');
     block()
       .then((result) => {
-        if (process.env.CI && grouping) console.log('::endgroup::');
+        if (process.env.CI) console.log('::endgroup::');
         console.log(`${BOLD_GREEN}SUCCESS:${ANSI_RESET} ${id}`);
         resolve(result);
       })
       .catch((err) => {
-        if (process.env.CI && grouping) console.log('::endgroup::');
+        if (process.env.CI) console.log('::endgroup::');
         console.log(`${BOLD_GREEN}SUCCESS:${ANSI_RESET} ${id}`);
         failerCount++;
         console.error(err.message);
@@ -311,10 +310,11 @@ function reportTestResult() {
   // Check result.
   if (failerCount === 0) {
     console.log(`${BOLD_GREEN}All tests passed.${ANSI_RESET}`);
+    return Promise.resolve();
   } else {
     console.log(`${BOLD_RED}Failures in ${failerCount} test groups.${ANSI_RESET}`);
+    return Promise.reject();
   }
-  return Promise.resolve();
 }
 
 // Indivisual tasks.

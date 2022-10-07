@@ -281,8 +281,8 @@ export class RenderedConnection extends Connection {
   /** Add highlighting around this connection. */
   highlight() {
     if (this.highlightPath) {
-        // This connection is already highlighted
-        return;
+      // This connection is already highlighted
+      return;
     }
     let steps;
     const sourceBlockSvg = (this.sourceBlock_);

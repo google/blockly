@@ -18,6 +18,9 @@ const rimraf = require('rimraf');
 
 const {BUILD_DIR} = require('./config');
 
+const runMochaTestsInBrowser =
+  require('../../tests/mocha/run_mocha_tests_in_browser.js');
+
 const runGeneratorsInBrowser =
   require('../../tests/generators/run_generators_in_browser.js');
 
@@ -48,10 +51,9 @@ function runTestBlock(id, block) {
         resolve(result);
       })
       .catch((err) => {
-        if (process.env.CI) console.log('::endgroup::');
-        console.log(`${BOLD_GREEN}SUCCESS:${ANSI_RESET} ${id}`);
         failerCount++;
         console.error(err.message);
+        if (process.env.CI) console.log('::endgroup::');
         console.log(`${BOLD_RED}FAILED:${ANSI_RESET} ${id}`);
         // Always continue.
         resolve(err);
@@ -197,7 +199,15 @@ function metadata() {
  * @return {Promise} asynchronous result
  */
 function mocha() {
-  return runTestCommand('mocha', 'node tests/mocha/run_mocha_tests_in_browser.js');
+  return runTestBlock('mocha', async() => {
+    const result =  await runMochaTestsInBrowser().catch(e => {
+      throw e;
+    });
+    if (result) {
+      throw new Error('Mocha tests failed');
+    }
+    console.log('Mocha tests passed');
+  });
 }
 
 /**

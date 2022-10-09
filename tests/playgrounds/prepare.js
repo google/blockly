@@ -56,12 +56,7 @@
                 [
                   'Blockly',
                   'Blockly.libraryBlocks',
-                  'Blockly.Dart.all',
-                  'Blockly.JavaScript.all',
-                  'Blockly.Lua.all',
                   'Blockly.Go.all',
-                  'Blockly.PHP.all',
-                  'Blockly.Python.all',
                 ], resolve);
           }).then(() => {
             // Copy Messages from temporary Blockly.Msg object to the real one:
@@ -80,11 +75,6 @@
       'blockly_compressed.js',
       'msg/messages.js',
       'blocks_compressed.js',
-      'dart_compressed.js',
-      'javascript_compressed.js',
-      'lua_compressed.js',
-      'php_compressed.js',
-      'python_compressed.js',
       'go_compressed.js',
     ];
 

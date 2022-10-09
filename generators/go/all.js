@@ -22,4 +22,3 @@ goog.require('Blockly.Go.procedures');
 goog.require('Blockly.Go.texts');
 goog.require('Blockly.Go.variables');
 goog.require('Blockly.Go.variablesDynamic');
-

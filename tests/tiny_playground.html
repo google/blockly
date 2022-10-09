@@ -1,791 +1,833 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>Blockly Playground</title>
+    <meta charset="utf-8">
+    <title>Blockly Playground</title>
 
-  <!-- This script loads uncompressed when on localhost and loads compressed when it is being hosted.
-       Please add any other dependencies to playgrounds/prepare.js.-->
-<script src="playgrounds/prepare.js"></script>
-<script src="playgrounds/screenshot.js"></script>
-<script src="../node_modules/@blockly/dev-tools/dist/index.js"></script>
-<script type=module>
-import Blockly from './playgrounds/blockly.mjs';
+    <!-- This script loads uncompressed when on localhost and loads compressed when it is being hosted.
+         Please add any other dependencies to playgrounds/prepare.js.-->
+    <script src="playgrounds/prepare.js"></script>
+    <script src="playgrounds/screenshot.js"></script>
+    <script src="../node_modules/@blockly/dev-tools/dist/index.js"></script>
+    <script type=module>
+        import Blockly from './playgrounds/blockly.mjs';
 
-const IS_UNCOMPRESSED = Boolean(window.BlocklyLoader);  // See prepare.js
-var workspace = null;
+        const IS_UNCOMPRESSED = Boolean(window.BlocklyLoader);  // See prepare.js
+        var workspace = null;
 
-function start() {
-  setBackgroundColour();
+        function start() {
+            setBackgroundColour();
 
-  // Parse the URL arguments.
-  var match = location.search.match(/dir=([^&]+)/);
-  var rtl = match && match[1] == 'rtl';
-  var toolbox = document.getElementById('toolbox-categories-typed-variables');
-  match = location.search.match(/side=([^&]+)/);
-  var autoimport = !!location.search.match(/autoimport=([^&]+)/);
-  // Create main workspace.
-  workspace = Blockly.inject('blocklyDiv',
-      {
-        comments: true,
-        collapse: true,
-        disable: true,
-        grid:
-          {
-            spacing: 25,
-            length: 3,
-            colour: '#ccc',
-            snap: true
-          },
-        horizontalLayout: false,
-        maxBlocks: Infinity,
-        maxInstances: {'test_basic_limit_instances': 3},
-        maxTrashcanContents: 256,
-        media: '../media/',
-        oneBasedIndex: true,
-        readOnly: false,
-        rtl: rtl,
-        move: {
-          scrollbars: true,
-          drag: true,
-          wheel: false,
-        },
-        toolbox: toolbox,
-        toolboxPosition: 'start',
-        renderer: 'geras',
-        zoom:
-          {
-            controls: true,
-            wheel: true,
-            startScale: 1.0,
-            maxScale: 4,
-            minScale: 0.25,
-            scaleSpeed: 1.1
-          }
-      });
-  workspace.configureContextMenu = configureContextMenu;
-  // Restore previously displayed text.
-  if (sessionStorage) {
-    var text = sessionStorage.getItem('textarea');
-    if (text) {
-      document.getElementById('importExport').value = text;
-    }
-    // Restore event logging state.
-    var logMainEventsState = sessionStorage.getItem('logEvents');
-    logEvents(Boolean(Number(logMainEventsState)));
-    var logToolboxFlyoutEventsState = sessionStorage.getItem('logFlyoutEvents');
-    logFlyoutEvents(Boolean(Number(logToolboxFlyoutEventsState)));
-  } else {
-    // MSIE 11 does not support sessionStorage on file:// URLs.
-    logEvents(false);
-  }
-  taChange();
-  if (autoimport) {
-    load();
-  }
-
-  addEventHandlers();
-}
-
-function setBackgroundColour() {
-  // Set background colour to differentiate between compressed and uncompressed mode.
-  if (IS_UNCOMPRESSED) {
-    document.body.style.backgroundColor = '#d6d6ff';  // Familiar lilac.
-  } else {
-    document.body.style.backgroundColor = '#60fcfc';  // Unfamiliar blue.
-  }
-}
-
-function saveXml() {
-  var output = document.getElementById('importExport');
-  var xml = Blockly.Xml.workspaceToDom(workspace);
-  output.value = Blockly.Xml.domToPrettyText(xml);
-  output.focus();
-  output.select();
-  taChange();
-}
-
-function saveJson() {
-  var output = document.getElementById('importExport');
-  var state = Blockly.serialization.workspaces.save(workspace);
-  output.value = JSON.stringify(state, null, 2);
-  output.focus();
-  output.select();
-  taChange();
-}
-
-function load() {
-  var input = document.getElementById('importExport');
-  if (!input.value) {
-    return;
-  }
-  var valid = saveIsValid(input.value);
-  if (valid.json) {
-    var state = JSON.parse(input.value);
-    Blockly.serialization.workspaces.load(state, workspace);
-  } else if (valid.xml) {
-    var xml = Blockly.Xml.textToDom(input.value);
-    Blockly.Xml.domToWorkspace(xml, workspace);
-  }
-  taChange();
-}
-
-function toCode(lang) {
-  var output = document.getElementById('importExport');
-  output.value = Blockly[lang].workspaceToCode(workspace);
-  taChange();
-}
-
-// Disable the "Load" button if the save state is invalid.
-// Preserve text between page reloads.
-function taChange() {
-  var textarea = document.getElementById('importExport');
-  if (sessionStorage) {
-    sessionStorage.setItem('textarea', textarea.value);
-  }
-  var valid = saveIsValid(textarea.value);
-  document.getElementById('import').disabled = !valid.json && !valid.xml;
-}
-
-function saveIsValid(save) {
-  var validJson = true;
-  try {
-    JSON.parse(save);
-  } catch (e) {
-    validJson = false;
-  }
-  var validXml = true
-  try {
-    Blockly.Xml.textToDom(save);
-  } catch (e) {
-    validXml = false;
-  }
-  return {
-    json: validJson,
-    xml: validXml
-  }
-}
-
-function logEvents(state) {
-  var checkbox = document.getElementById('logCheck');
-  checkbox.checked = state;
-  if (sessionStorage) {
-    sessionStorage.setItem('logEvents', Number(state));
-  }
-  if (state) {
-    workspace.addChangeListener(logger);
-  } else {
-    workspace.removeChangeListener(logger);
-  }
-}
-
-function logFlyoutEvents(state) {
-  var checkbox = document.getElementById('logFlyoutCheck');
-  checkbox.checked = state;
-  if (sessionStorage) {
-    sessionStorage.setItem('logFlyoutEvents', Number(state));
-  }
-  var flyoutWorkspace = workspace.getFlyout().getWorkspace();
-  if (state) {
-    flyoutWorkspace.addChangeListener(logger);
-  } else {
-    flyoutWorkspace.removeChangeListener(logger);
-  }
-}
-
-function configureContextMenu(menuOptions, e) {
-  var screenshotOption = {
-    text: 'Download Screenshot',
-    enabled: workspace.getTopBlocks().length,
-    callback: function() {
-      downloadScreenshot(workspace);
-    }
-  };
-  menuOptions.push(screenshotOption);
-
-  // Adds a default-sized workspace comment to the workspace.
-  menuOptions.push(Blockly.ContextMenu.workspaceCommentOption(workspace, e));
-}
-
-function logger(e) {
-  console.log(e);
-}
-
-function airstrike(n) {
-  var prototypes = [];
-  var toolbox = document.getElementById('toolbox-categories-typed-variables');
-  var blocks = toolbox.getElementsByTagName('block');
-  for (var i = 0, block; block = blocks[i]; i++) {
-    prototypes.push(block.getAttribute('type'));
-  }
-  for (var i = 0; i < n; i++) {
-    var prototype = prototypes[Math.floor(Math.random() * prototypes.length)];
-    var block = workspace.newBlock(prototype);
-    block.initSvg();
-    block.getSvgRoot().setAttribute('transform', 'translate(' +
-        Math.round(Math.random() * 450 + 40) + ', ' +
-        Math.round(Math.random() * 600 + 40) + ')');
-    block.render();
-  }
-}
-
-function spaghetti(n) {
-  var xml = spaghettiXml;
-  for(var i = 0; i < n; i++) {
-    xml = xml.replace(/(<(statement|next)( name="DO0")?>)<\//g,
-        '$1' + spaghettiXml + '</');
-  }
-  xml = '<xml xmlns="https://developers.google.com/blockly/xml">' + xml + '</xml>';
-  var dom = Blockly.Xml.textToDom(xml);
-  console.time('Spaghetti domToWorkspace');
-  Blockly.Xml.domToWorkspace(dom, workspace);
-  console.timeEnd('Spaghetti domToWorkspace');
-}
-var spaghettiXml = [
-  '<xml xmlns="https://developers.google.com/blockly/xml">'+
-  '<variables>'+
-  '<variable type="Number" id=";BH:gcJ[Dewi}[0?X3d0">asdfsadf</variable>'+
-'</variables>'+
-'<block type="variables_set_dynamic" id="owj^Ru5A]zU.r2t=p8dO" x="413" y="263">'+
-  '<field name="VAR" id=";BH:gcJ[Dewi}[0?X3d0" variabletype="Number">asdfsadf</field>'+
-  '<value name="VALUE">'+
-    '<block type="math_number" id="cDr(*MK`H}W5f8@Z6_Di">'+
-      '<field name="NUM">123</field>'+
-    '</block>'+
-  '</value>'+
-'</block>'+
-'</xml>'].join('\n');
-
-  function jsoSpaghetti(n) {
-    var str = spaghettiJs;
-    for (var i = 0; i < n; i++) {
-      str = str.replace(/{}/g, `{"block":${spaghettiJs}}`);
-    }
-    var obj = {
-      'blocks': {
-        'blocks': [
-          JSON.parse(str)
-        ]
-      }
-    };
-    console.time('Spaghetti serialization');
-    Blockly.serialization.workspaces.load(obj, workspace);
-    console.timeEnd('Spaghetti serialization');
-  }
-  var spaghettiJs = JSON.stringify({
-    'type': 'controls_if',
-    'inputs': {
-      'IF0': {
-        'block': {
-          'type': 'logic_compare',
-          'fields': {
-            'OP': 'EQ',
-          },
-          'inputs': {
-            'A': {
-              'block': {
-                'type': 'math_arithmetic',
-                'fields': {
-                  'OP': 'MULTIPLY',
-                },
-                'inputs': {
-                  'A': {
-                    'block': {
-                      'type': 'math_number',
-                      'fields': {
-                        'NUM': 6
-                      }
-                    }
-                  },
-                  'B': {
-                    'block': {
-                      'type': 'math_number',
-                      'fields': {
-                        'NUM': 7
-                      }
-                    }
-                  }
+            // Parse the URL arguments.
+            var match = location.search.match(/dir=([^&]+)/);
+            var rtl = match && match[1] == 'rtl';
+            var toolbox = document.getElementById('toolbox-categories-typed-variables');
+            match = location.search.match(/side=([^&]+)/);
+            var autoimport = !!location.search.match(/autoimport=([^&]+)/);
+            // Create main workspace.
+            workspace = Blockly.inject('blocklyDiv',
+                {
+                    comments: true,
+                    collapse: true,
+                    disable: true,
+                    grid:
+                        {
+                            spacing: 25,
+                            length: 3,
+                            colour: '#ccc',
+                            snap: true
+                        },
+                    horizontalLayout: false,
+                    maxBlocks: Infinity,
+                    maxInstances: {'test_basic_limit_instances': 3},
+                    maxTrashcanContents: 256,
+                    media: '../media/',
+                    oneBasedIndex: true,
+                    readOnly: false,
+                    rtl: rtl,
+                    move: {
+                        scrollbars: true,
+                        drag: true,
+                        wheel: false,
+                    },
+                    toolbox: toolbox,
+                    toolboxPosition: 'start',
+                    renderer: 'geras',
+                    zoom:
+                        {
+                            controls: true,
+                            wheel: true,
+                            startScale: 1.0,
+                            maxScale: 4,
+                            minScale: 0.25,
+                            scaleSpeed: 1.1
+                        }
+                });
+            workspace.configureContextMenu = configureContextMenu;
+            // Restore previously displayed text.
+            if (sessionStorage) {
+                var text = sessionStorage.getItem('textarea');
+                if (text) {
+                    document.getElementById('importExport').value = text;
                 }
-              }
-            },
-            'B': {
-              'block': {
-                'type': 'math_number',
-                'fields': {
-                  'NUM': 42
-                }
-              }
+                // Restore event logging state.
+                var logMainEventsState = sessionStorage.getItem('logEvents');
+                logEvents(Boolean(Number(logMainEventsState)));
+                var logToolboxFlyoutEventsState = sessionStorage.getItem('logFlyoutEvents');
+                logFlyoutEvents(Boolean(Number(logToolboxFlyoutEventsState)));
+            } else {
+                // MSIE 11 does not support sessionStorage on file:// URLs.
+                logEvents(false);
             }
-          }
+            taChange();
+            if (autoimport) {
+                load();
+            }
+
+            addEventHandlers();
         }
-      },
-      'DO0': { }
-    },
-    'next': { }
-  });
 
-// Call start().  Because this <script> has type=module, it is
-// automatically deferred, so it will not be run until after the
-// document has been parsed, but before firing DOMContentLoaded.
+        function setBackgroundColour() {
+            // Set background colour to differentiate between compressed and uncompressed mode.
+            if (IS_UNCOMPRESSED) {
+                document.body.style.backgroundColor = '#d6d6ff';  // Familiar lilac.
+            } else {
+                document.body.style.backgroundColor = '#60fcfc';  // Unfamiliar blue.
+            }
+        }
 
-function addEventHandlers() {
-  document.getElementById('save-json').addEventListener('click', saveJson);
-  document.getElementById('save-xml').addEventListener('click', saveXml);
-  document.getElementById('import').addEventListener('click', load);
+        function saveXml() {
+            var output = document.getElementById('importExport');
+            var xml = Blockly.Xml.workspaceToDom(workspace);
+            output.value = Blockly.Xml.domToPrettyText(xml);
+            output.focus();
+            output.select();
+            taChange();
+        }
 
-  document.getElementById('to-code-js')
-      .addEventListener('click', () => toCode('JavaScript'));
-  document.getElementById('to-code-py')
-      .addEventListener('click', () => toCode('Python'));
-  document.getElementById('to-code-php')
-      .addEventListener('click', () => toCode('PHP'));
-  document.getElementById('to-code-lua')
-      .addEventListener('click', () => toCode('Lua'));
-  document.getElementById('to-code-dart')
-          .addEventListener('click', () => toCode('Dart'));
-  document.getElementById('to-code-go')
-          .addEventListener('click', () => toCode('Go'));
+        function load() {
+            var input = document.getElementById('importExport');
+            if (!input.value) {
+                return;
+            }
+            var valid = saveIsValid(input.value);
+            if (valid.json) {
+                var state = JSON.parse(input.value);
+                Blockly.serialization.workspaces.load(state, workspace);
+            } else if (valid.xml) {
+                var xml = Blockly.Xml.textToDom(input.value);
+                Blockly.Xml.domToWorkspace(xml, workspace);
+            }
+            taChange();
+        }
 
-  document.getElementById('airstrike')
-      .addEventListener('click', () => airstrike(100));
-  document.getElementById('spaghetti-xml')
-      .addEventListener('click', () => spaghetti(8));
-  document.getElementById('spaghetti-js')
-      .addEventListener('click', () => jsoSpaghetti(8));
+        function toCode(lang) {
+            var output = document.getElementById('importExport');
+            output.value = Blockly[lang].workspaceToCode(workspace);
+            taChange();
+        }
 
-  document.getElementById('logCheck')
-      .addEventListener('click', function() { logEvents(this.checked) });
-  document.getElementById('logFlyoutCheck')
-      .addEventListener('click', function() { logFlyoutEvents(this.checked) });
+        // Disable the "Load" button if the save state is invalid.
+        // Preserve text between page reloads.
+        function taChange() {
+            var textarea = document.getElementById('importExport');
+            if (sessionStorage) {
+                sessionStorage.setItem('textarea', textarea.value);
+            }
+            var valid = saveIsValid(textarea.value);
+            document.getElementById('import').disabled = !valid.json && !valid.xml;
+        }
 
-  document.getElementById('importExport').addEventListener('change', taChange);
-  document.getElementById('importExport').addEventListener('keyup', taChange);
+        function saveIsValid(save) {
+            var validJson = true;
+            try {
+                JSON.parse(save);
+            } catch (e) {
+                validJson = false;
+            }
+            var validXml = true
+            try {
+                Blockly.Xml.textToDom(save);
+            } catch (e) {
+                validXml = false;
+            }
+            return {
+                json: validJson,
+                xml: validXml
+            }
+        }
 
-  document.getElementById('show')
-      .addEventListener('click', function() { workspace.setVisible(true); });
-  document.getElementById('hide')
-      .addEventListener('click', function() { workspace.setVisible(false); });
-}
+        function logEvents(state) {
+            var checkbox = document.getElementById('logCheck');
+            checkbox.checked = state;
+            if (sessionStorage) {
+                sessionStorage.setItem('logEvents', Number(state));
+            }
+            if (state) {
+                workspace.addChangeListener(logger);
+            } else {
+                workspace.removeChangeListener(logger);
+            }
+        }
 
-start();
+        function logFlyoutEvents(state) {
+            var checkbox = document.getElementById('logFlyoutCheck');
+            checkbox.checked = state;
+            if (sessionStorage) {
+                sessionStorage.setItem('logFlyoutEvents', Number(state));
+            }
+            var flyoutWorkspace = workspace.getFlyout().getWorkspace();
+            if (state) {
+                flyoutWorkspace.addChangeListener(logger);
+            } else {
+                flyoutWorkspace.removeChangeListener(logger);
+            }
+        }
 
-</script>
+        function configureContextMenu(menuOptions, e) {
+            var screenshotOption = {
+                text: 'Download Screenshot',
+                enabled: workspace.getTopBlocks().length,
+                callback: function () {
+                    downloadScreenshot(workspace);
+                }
+            };
+            menuOptions.push(screenshotOption);
 
-<style>
-  html, body {
-    height: 100%;
-  }
-  body {
-    background-color: #fff;
-    font-family: sans-serif;
-    overflow: hidden;
-  }
-  h1 {
-    font-weight: normal;
-    font-size: 140%;
-  }
-  #blocklyDiv {
-    float: right;
-    height: 95%;
-    width: 70%;
-  }
-  #importExport {
-    font-family: monospace;
-  }
+            // Adds a default-sized workspace comment to the workspace.
+            menuOptions.push(Blockly.ContextMenu.workspaceCommentOption(workspace, e));
+        }
 
-  .ioLabel>.blocklyFlyoutLabelText {
-    font-style: italic;
-  }
+        function logger(e) {
+            console.log(e);
+        }
 
-  #blocklyDiv.renderingDebug .blockRenderDebug {
-    display: block;
-  }
+        function demo1() {
+            let xml = '<xml xmlns="https://developers.google.com/blockly/xml">\n' +
+                '  <variables>\n' +
+                '    <variable id="u4_z4}fDa{QDLKOxw+%o">myNumberVariable</variable>\n' +
+                '    <variable id="euuwT4c};O%W6;W}2*uE">myTextVariable</variable>\n' +
+                '  </variables>\n' +
+                '  <block type="tinygo_goroutine" id="YUDrD$#=z}vJ!hYw{z=h" x="63" y="188">\n' +
+                '    <statement name="GR0">\n' +
+                '      <block type="procedures_callnoreturn" id="z)8,8CCknTq70t,c[1?P">\n' +
+                '        <mutation name="myFunction"></mutation>\n' +
+                '      </block>\n' +
+                '    </statement>\n' +
+                '    <next>\n' +
+                '      <block type="text_print" id="u;HQTjr1bidF=DQ]QYnJ">\n' +
+                '        <value name="TEXT">\n' +
+                '          <shadow type="text" id=":*)A)6Lx`If}y=b@_GkM">\n' +
+                '            <field name="TEXT">Another line</field>\n' +
+                '          </shadow>\n' +
+                '          <block type="text" id="cJT)0fsUup[I;#lh#@BL">\n' +
+                '            <field name="TEXT">some text</field>\n' +
+                '          </block>\n' +
+                '        </value>\n' +
+                '      </block>\n' +
+                '    </next>\n' +
+                '  </block>\n' +
+                '  <block type="procedures_defnoreturn" id="=L99xd,8%v,g1lgZ?)3#" x="338" y="188">\n' +
+                '    <field name="NAME">myFunction</field>\n' +
+                '    <comment pinned="false" h="80" w="160">Describe this function...</comment>\n' +
+                '    <statement name="STACK">\n' +
+                '      <block type="variables_set" id="{[xKp:K`;osNPM`@X^z6">\n' +
+                '        <field name="VAR" id="u4_z4}fDa{QDLKOxw+%o">myNumberVariable</field>\n' +
+                '        <value name="VALUE">\n' +
+                '          <block type="math_number" id="zpPMyveuQ4*gk_={2Q*z">\n' +
+                '            <field name="NUM">123</field>\n' +
+                '          </block>\n' +
+                '        </value>\n' +
+                '        <next>\n' +
+                '          <block type="variables_set" id="^XtlOW1p1w7r9[+fOJrZ">\n' +
+                '            <field name="VAR" id="euuwT4c};O%W6;W}2*uE">myTextVariable</field>\n' +
+                '            <value name="VALUE">\n' +
+                '              <block type="text" id="#c7EB*UBb?dw9M9U/Z|r">\n' +
+                '                <field name="TEXT">ABC</field>\n' +
+                '              </block>\n' +
+                '            </value>\n' +
+                '            <next>\n' +
+                '              <block type="tinygo_led" id=":;L8d5Aul;$Pd!P_?iyj">\n' +
+                '                <field name="PINNUMBER">13</field>\n' +
+                '                <value name="STATE">\n' +
+                '                  <block type="tinygo_led_state" id="=gbVwq#Qsqd])Np|VULi">\n' +
+                '                    <field name="BOOL">FALSE</field>\n' +
+                '                  </block>\n' +
+                '                </value>\n' +
+                '                <next>\n' +
+                '                  <block type="controls_repeat_ext" id="R5$eaW2W5-vNF7a#diZy">\n' +
+                '                    <value name="TIMES">\n' +
+                '                      <shadow type="math_number" id="3;yIrPR7}@/^6p!br^S$">\n' +
+                '                        <field name="NUM">10</field>\n' +
+                '                      </shadow>\n' +
+                '                    </value>\n' +
+                '                    <statement name="DO">\n' +
+                '                      <block type="text_print" id="+.N68[fQvn#pmLb(6)aI">\n' +
+                '                        <value name="TEXT">\n' +
+                '                          <shadow type="text" id="`)RD-D/a*DzXavvN]MiK">\n' +
+                '                            <field name="TEXT">abc</field>\n' +
+                '                          </shadow>\n' +
+                '                          <block type="variables_get" id="H_6V4}{[CyGWC2UGdtad">\n' +
+                '                            <field name="VAR" id="euuwT4c};O%W6;W}2*uE">myTextVariable</field>\n' +
+                '                          </block>\n' +
+                '                        </value>\n' +
+                '                      </block>\n' +
+                '                    </statement>\n' +
+                '                    <next>\n' +
+                '                      <block type="controls_whileUntil" id="Eb_0Q)uTs)HwPV}9I3YM">\n' +
+                '                        <field name="MODE">WHILE</field>\n' +
+                '                        <value name="BOOL">\n' +
+                '                          <block type="logic_boolean" id="6t/RprAhMj(zFYoT[}?X">\n' +
+                '                            <field name="BOOL">TRUE</field>\n' +
+                '                          </block>\n' +
+                '                        </value>\n' +
+                '                        <statement name="DO">\n' +
+                '                          <block type="math_change" id="NaKX2[d!+1zkBO(-Op9E">\n' +
+                '                            <field name="VAR" id="u4_z4}fDa{QDLKOxw+%o">myNumberVariable</field>\n' +
+                '                            <value name="DELTA">\n' +
+                '                              <shadow type="math_number" id="sw!x5C|c}NHub9MHLG|H">\n' +
+                '                                <field name="NUM">1</field>\n' +
+                '                              </shadow>\n' +
+                '                              <block type="math_number" id="boe4o.dd;WIUr|L,6?Du">\n' +
+                '                                <field name="NUM">2</field>\n' +
+                '                              </block>\n' +
+                '                            </value>\n' +
+                '                            <next>\n' +
+                '                              <block type="text_print" id="|Fv[T3zu%0{2nQyu3-$q">\n' +
+                '                                <value name="TEXT">\n' +
+                '                                  <shadow type="text">\n' +
+                '                                    <field name="TEXT">abc</field>\n' +
+                '                                  </shadow>\n' +
+                '                                  <block type="variables_get" id="3U|Tjf8`f%PAce=MFhr*">\n' +
+                '                                    <field name="VAR" id="u4_z4}fDa{QDLKOxw+%o">myNumberVariable</field>\n' +
+                '                                  </block>\n' +
+                '                                </value>\n' +
+                '                                <next>\n' +
+                '                                  <block type="controls_if" id="au+!b%Z4$:juSU{Et+Hf">\n' +
+                '                                    <value name="IF0">\n' +
+                '                                      <block type="logic_compare" id="wJ]~.y3r/(?vsNM?m4.A">\n' +
+                '                                        <field name="OP">GTE</field>\n' +
+                '                                        <value name="A">\n' +
+                '                                          <block type="variables_get" id="}F^(AiLoTC*kf}%8J`66">\n' +
+                '                                            <field name="VAR" id="u4_z4}fDa{QDLKOxw+%o">myNumberVariable</field>\n' +
+                '                                          </block>\n' +
+                '                                        </value>\n' +
+                '                                        <value name="B">\n' +
+                '                                          <block type="math_number" id="8y^Y;Kn$+Qkpc42:5B8:">\n' +
+                '                                            <field name="NUM">130</field>\n' +
+                '                                          </block>\n' +
+                '                                        </value>\n' +
+                '                                      </block>\n' +
+                '                                    </value>\n' +
+                '                                    <statement name="DO0">\n' +
+                '                                      <block type="controls_flow_statements" id="jR+K#D.ra/3%$}zNme[o">\n' +
+                '                                        <field name="FLOW">BREAK</field>\n' +
+                '                                      </block>\n' +
+                '                                    </statement>\n' +
+                '                                  </block>\n' +
+                '                                </next>\n' +
+                '                              </block>\n' +
+                '                            </next>\n' +
+                '                          </block>\n' +
+                '                        </statement>\n' +
+                '                        <next>\n' +
+                '                          <block type="tinygo_led" id="{CrlLMUgD0+pgJrDce)K">\n' +
+                '                            <field name="PINNUMBER">13</field>\n' +
+                '                            <value name="STATE">\n' +
+                '                              <block type="tinygo_led_state" id="0bUs8B!Gao$gV:Wv[.(x">\n' +
+                '                                <field name="BOOL">TRUE</field>\n' +
+                '                              </block>\n' +
+                '                            </value>\n' +
+                '                          </block>\n' +
+                '                        </next>\n' +
+                '                      </block>\n' +
+                '                    </next>\n' +
+                '                  </block>\n' +
+                '                </next>\n' +
+                '              </block>\n' +
+                '            </next>\n' +
+                '          </block>\n' +
+                '        </next>\n' +
+                '      </block>\n' +
+                '    </statement>\n' +
+                '  </block>\n' +
+                '</xml>';
+            var dom = Blockly.Xml.textToDom(xml);
+            Blockly.Xml.domToWorkspace(dom, workspace);
+        }
 
-  .playgroundToggleOptions {
-    list-style: none;
-    padding: 0;
-  }
-  .playgroundToggleOptions li {
-    margin-top: 1em;
-  }
+        function demo2() {
+            let xml = '<xml xmlns="https://developers.google.com/blockly/xml">\n' +
+        '    <variables>\n' +
+        '        <variable type="String" id="w})YR(b!+/^HM(Zy6G|i">fdggh</variable>\n' +
+        '    </variables>\n' +
+        '    <block type="variables_set_dynamic" id="S,3yjdwE0:D}1+IkMMcy" x="188" y="288">\n' +
+        '        <field name="VAR" id="w})YR(b!+/^HM(Zy6G|i" variabletype="String">fdggh</field>\n' +
+        '        <value name="VALUE">\n' +
+        '            <block type="text" id="bIZ1w?FH+U*QU1/=BYk(">\n' +
+        '                <field name="TEXT">gdfg</field>\n' +
+        '            </block>\n' +
+        '        </value>\n' +
+        '    </block>\n' +
+        '</xml>';
+        var dom = Blockly.Xml.textToDom(xml);
+        Blockly.Xml.domToWorkspace(dom, workspace);
+        }
 
-  .zelos-renderer .blocklyFlyoutButton .blocklyText {
-    font-size: 1.5rem;
-  }
-</style>
+
+        // Call start().  Because this <script> has type=module, it is
+        // automatically deferred, so it will not be run until after the
+        // document has been parsed, but before firing DOMContentLoaded.
+
+        function addEventHandlers() {
+            document.getElementById('save-xml').addEventListener('click', saveXml);
+            document.getElementById('import').addEventListener('click', load);
+
+            document.getElementById('to-code-go')
+                .addEventListener('click', () => toCode('Go'));
+
+            document.getElementById('demo1')
+                .addEventListener('click', () => demo1());
+
+            document.getElementById('demo2')
+                .addEventListener('click', () => demo2());
+
+            document.getElementById('logCheck')
+                .addEventListener('click', function () {
+                    logEvents(this.checked)
+                });
+            document.getElementById('logFlyoutCheck')
+                .addEventListener('click', function () {
+                    logFlyoutEvents(this.checked)
+                });
+
+            document.getElementById('importExport').addEventListener('change', taChange);
+            document.getElementById('importExport').addEventListener('keyup', taChange);
+        }
+
+        start();
+
+    </script>
+
+    <style>
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            background-color: #fff;
+            font-family: sans-serif;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-weight: normal;
+            font-size: 140%;
+        }
+
+        #blocklyDiv {
+            float: right;
+            height: 95%;
+            width: 70%;
+        }
+
+        #importExport {
+            font-family: monospace;
+        }
+
+        .ioLabel > .blocklyFlyoutLabelText {
+            font-style: italic;
+        }
+
+        #blocklyDiv.renderingDebug .blockRenderDebug {
+            display: block;
+        }
+
+        .playgroundToggleOptions {
+            list-style: none;
+            padding: 0;
+        }
+
+        .playgroundToggleOptions li {
+            margin-top: 1em;
+        }
+
+        .zelos-renderer .blocklyFlyoutButton .blocklyText {
+            font-size: 1.5rem;
+        }
+    </style>
 </head>
 <body>
 
-  <div id="blocklyDiv"></div>
+<div id="blocklyDiv"></div>
 
-  <h1>Blockly Playground</h1>
+<h1>Blockly Playground</h1>
 
-  <p>
+<p>
     <input id="save-xml" type="button" value="Save XML">
     <input type="button" value="Load" id="import">
     <br>
     <input id="to-code-go" type="button" value="To Go">
     <br>
     <textarea id="importExport" style="width: 26%; height: 12em"></textarea>
-  </p>
+</p>
 
-  <p>
+<p>
     Stress test: &nbsp;
-    <input id="airstrike" type="button" value="Airstrike!">
-    <input id="spaghetti-xml" type="button" value="Spaghetti!">
-    <input id="spaghetti-js" type="button" value="JS Spaghetti!">
-  </p>
-  <ul class="playgroundToggleOptions">
+    <input id="demo1" type="button" value="Demo 1">
+    <input id="demo2" type="button" value="Demo 2">
+</p>
+<ul class="playgroundToggleOptions">
     <li>
-      <label for="logCheck">Log main workspace events:</label>
-      <input type="checkbox" id="logCheck">
+        <label for="logCheck">Log main workspace events:</label>
+        <input type="checkbox" id="logCheck">
     </li>
     <li>
-    <label for="logFlyoutCheck">Log flyout events:</label>
-    <input type="checkbox" id="logFlyoutCheck">
-  </li>
-  </ul>
+        <label for="logFlyoutCheck">Log flyout events:</label>
+        <input type="checkbox" id="logFlyoutCheck">
+    </li>
+</ul>
 
-  <!-- toolbox-categories-typed-variables has a category menu and an
-  auto-closing flyout.  The Variables category uses typed variable blocks.
-  See https://developers.google.com/blockly/guides/create-custom-blocks/variables#typed_variable_blocks for more information. -->
-  <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-categories-typed-variables" style="display: none">
+<!-- toolbox-categories-typed-variables has a category menu and an
+auto-closing flyout.  The Variables category uses typed variable blocks.
+See https://developers.google.com/blockly/guides/create-custom-blocks/variables#typed_variable_blocks for more information. -->
+<xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-categories-typed-variables" style="display: none">
     <category name="Logic" categorystyle="logic_category">
-      <block type="controls_if"></block>
-      <block type="logic_compare"></block>
-      <block type="logic_operation"></block>
-      <block type="logic_negate"></block>
-      <block type="logic_boolean"></block>
-      <block type="logic_null" disabled="true"></block>
-      <block type="logic_ternary"></block>
+        <block type="controls_if"></block>
+        <block type="logic_compare"></block>
+        <block type="logic_operation"></block>
+        <block type="logic_negate"></block>
+        <block type="logic_boolean"></block>
+        <block type="logic_null" disabled="true"></block>
+        <block type="logic_ternary"></block>
     </category>
     <category name="Loops" categorystyle="loop_category">
-      <block type="controls_repeat_ext">
-        <value name="TIMES">
-          <shadow type="math_number">
-            <field name="NUM">10</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="controls_repeat" disabled="true"></block>
-      <block type="controls_whileUntil"></block>
-      <block type="controls_for">
-        <value name="FROM">
-          <shadow type="math_number">
-            <field name="NUM">1</field>
-          </shadow>
-        </value>
-        <value name="TO">
-          <shadow type="math_number">
-            <field name="NUM">10</field>
-          </shadow>
-        </value>
-        <value name="BY">
-          <shadow type="math_number">
-            <field name="NUM">1</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="controls_forEach"></block>
-      <block type="controls_flow_statements"></block>
+        <block type="controls_repeat_ext">
+            <value name="TIMES">
+                <shadow type="math_number">
+                    <field name="NUM">10</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="controls_repeat" disabled="true"></block>
+        <block type="controls_whileUntil"></block>
+        <block type="controls_for">
+            <value name="FROM">
+                <shadow type="math_number">
+                    <field name="NUM">1</field>
+                </shadow>
+            </value>
+            <value name="TO">
+                <shadow type="math_number">
+                    <field name="NUM">10</field>
+                </shadow>
+            </value>
+            <value name="BY">
+                <shadow type="math_number">
+                    <field name="NUM">1</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="controls_forEach"></block>
+        <block type="controls_flow_statements"></block>
     </category>
     <category name="Math" categorystyle="math_category">
-      <block type="math_number" gap="32">
-        <field name="NUM">123</field>
-      </block>
-      <block type="math_arithmetic">
-        <value name="A">
-          <shadow type="math_number">
-            <field name="NUM">1</field>
-          </shadow>
-        </value>
-        <value name="B">
-          <shadow type="math_number">
-            <field name="NUM">1</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="math_single">
-        <value name="NUM">
-          <shadow type="math_number">
-            <field name="NUM">9</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="math_trig">
-        <value name="NUM">
-          <shadow type="math_number">
-            <field name="NUM">45</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="math_constant"></block>
-      <block type="math_number_property">
-        <value name="NUMBER_TO_CHECK">
-          <shadow type="math_number">
-            <field name="NUM">0</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="math_round">
-        <value name="NUM">
-          <shadow type="math_number">
-            <field name="NUM">3.1</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="math_on_list"></block>
-      <block type="math_modulo">
-        <value name="DIVIDEND">
-          <shadow type="math_number">
-            <field name="NUM">64</field>
-          </shadow>
-        </value>
-        <value name="DIVISOR">
-          <shadow type="math_number">
-            <field name="NUM">10</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="math_constrain">
-        <value name="VALUE">
-          <shadow type="math_number">
-            <field name="NUM">50</field>
-          </shadow>
-        </value>
-        <value name="LOW">
-          <shadow type="math_number">
-            <field name="NUM">1</field>
-          </shadow>
-        </value>
-        <value name="HIGH">
-          <shadow type="math_number">
-            <field name="NUM">100</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="math_random_int">
-        <value name="FROM">
-          <shadow type="math_number">
-            <field name="NUM">1</field>
-          </shadow>
-        </value>
-        <value name="TO">
-          <shadow type="math_number">
-            <field name="NUM">100</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="math_random_float"></block>
-      <block type="math_atan2">
-        <value name="X">
-          <shadow type="math_number">
-            <field name="NUM">1</field>
-          </shadow>
-        </value>
-        <value name="Y">
-          <shadow type="math_number">
-            <field name="NUM">1</field>
-          </shadow>
-        </value>
-      </block>
+        <block type="math_number" gap="32">
+            <field name="NUM">123</field>
+        </block>
+        <block type="math_arithmetic">
+            <value name="A">
+                <shadow type="math_number">
+                    <field name="NUM">1</field>
+                </shadow>
+            </value>
+            <value name="B">
+                <shadow type="math_number">
+                    <field name="NUM">1</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="math_single">
+            <value name="NUM">
+                <shadow type="math_number">
+                    <field name="NUM">9</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="math_trig">
+            <value name="NUM">
+                <shadow type="math_number">
+                    <field name="NUM">45</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="math_constant"></block>
+        <block type="math_number_property">
+            <value name="NUMBER_TO_CHECK">
+                <shadow type="math_number">
+                    <field name="NUM">0</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="math_round">
+            <value name="NUM">
+                <shadow type="math_number">
+                    <field name="NUM">3.1</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="math_on_list"></block>
+        <block type="math_modulo">
+            <value name="DIVIDEND">
+                <shadow type="math_number">
+                    <field name="NUM">64</field>
+                </shadow>
+            </value>
+            <value name="DIVISOR">
+                <shadow type="math_number">
+                    <field name="NUM">10</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="math_constrain">
+            <value name="VALUE">
+                <shadow type="math_number">
+                    <field name="NUM">50</field>
+                </shadow>
+            </value>
+            <value name="LOW">
+                <shadow type="math_number">
+                    <field name="NUM">1</field>
+                </shadow>
+            </value>
+            <value name="HIGH">
+                <shadow type="math_number">
+                    <field name="NUM">100</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="math_random_int">
+            <value name="FROM">
+                <shadow type="math_number">
+                    <field name="NUM">1</field>
+                </shadow>
+            </value>
+            <value name="TO">
+                <shadow type="math_number">
+                    <field name="NUM">100</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="math_random_float"></block>
+        <block type="math_atan2">
+            <value name="X">
+                <shadow type="math_number">
+                    <field name="NUM">1</field>
+                </shadow>
+            </value>
+            <value name="Y">
+                <shadow type="math_number">
+                    <field name="NUM">1</field>
+                </shadow>
+            </value>
+        </block>
     </category>
     <category name="Text" categorystyle="text_category">
-      <block type="text"></block>
-      <block type="text_multiline"></block>
-      <block type="text_join"></block>
-      <block type="text_append">
-        <value name="TEXT">
-          <shadow type="text"></shadow>
-        </value>
-      </block>
-      <block type="text_length">
-        <value name="VALUE">
-          <shadow type="text">
-            <field name="TEXT">abc</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="text_isEmpty">
-        <value name="VALUE">
-          <shadow type="text">
-            <field name="TEXT"></field>
-          </shadow>
-        </value>
-      </block>
-      <block type="text_indexOf">
-        <value name="VALUE">
-          <block type="variables_get">
-            <field name="VAR">text</field>
-          </block>
-        </value>
-        <value name="FIND">
-          <shadow type="text">
-            <field name="TEXT">abc</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="text_charAt">
-        <value name="VALUE">
-          <block type="variables_get">
-            <field name="VAR">text</field>
-          </block>
-        </value>
-      </block>
-      <block type="text_getSubstring">
-        <value name="STRING">
-          <block type="variables_get">
-            <field name="VAR">text</field>
-          </block>
-        </value>
-      </block>
-      <block type="text_changeCase">
-        <value name="TEXT">
-          <shadow type="text">
-            <field name="TEXT">abc</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="text_trim">
-        <value name="TEXT">
-          <shadow type="text">
-            <field name="TEXT">abc</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="text_count">
-        <value name="SUB">
-          <shadow type="text"></shadow>
-        </value>
-        <value name="TEXT">
-          <shadow type="text"></shadow>
-        </value>
-      </block>
-      <block type="text_replace">
-        <value name="FROM">
-          <shadow type="text"></shadow>
-        </value>
-        <value name="TO">
-          <shadow type="text"></shadow>
-        </value>
-        <value name="TEXT">
-          <shadow type="text"></shadow>
-        </value>
-      </block>
-      <block type="text_reverse">
-        <value name="TEXT">
-          <shadow type="text"></shadow>
-        </value>
-      </block>
-      <label text="Input/Output:" web-class="ioLabel"></label>
-      <block type="text_print">
-        <value name="TEXT">
-          <shadow type="text">
-            <field name="TEXT">abc</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="text_prompt_ext">
-        <value name="TEXT">
-          <shadow type="text">
-            <field name="TEXT">abc</field>
-          </shadow>
-        </value>
-      </block>
+        <block type="text"></block>
+        <block type="text_multiline"></block>
+        <block type="text_join"></block>
+        <block type="text_append">
+            <value name="TEXT">
+                <shadow type="text"></shadow>
+            </value>
+        </block>
+        <block type="text_length">
+            <value name="VALUE">
+                <shadow type="text">
+                    <field name="TEXT">abc</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="text_isEmpty">
+            <value name="VALUE">
+                <shadow type="text">
+                    <field name="TEXT"></field>
+                </shadow>
+            </value>
+        </block>
+        <block type="text_indexOf">
+            <value name="VALUE">
+                <block type="variables_get">
+                    <field name="VAR">text</field>
+                </block>
+            </value>
+            <value name="FIND">
+                <shadow type="text">
+                    <field name="TEXT">abc</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="text_charAt">
+            <value name="VALUE">
+                <block type="variables_get">
+                    <field name="VAR">text</field>
+                </block>
+            </value>
+        </block>
+        <block type="text_getSubstring">
+            <value name="STRING">
+                <block type="variables_get">
+                    <field name="VAR">text</field>
+                </block>
+            </value>
+        </block>
+        <block type="text_changeCase">
+            <value name="TEXT">
+                <shadow type="text">
+                    <field name="TEXT">abc</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="text_trim">
+            <value name="TEXT">
+                <shadow type="text">
+                    <field name="TEXT">abc</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="text_count">
+            <value name="SUB">
+                <shadow type="text"></shadow>
+            </value>
+            <value name="TEXT">
+                <shadow type="text"></shadow>
+            </value>
+        </block>
+        <block type="text_replace">
+            <value name="FROM">
+                <shadow type="text"></shadow>
+            </value>
+            <value name="TO">
+                <shadow type="text"></shadow>
+            </value>
+            <value name="TEXT">
+                <shadow type="text"></shadow>
+            </value>
+        </block>
+        <block type="text_reverse">
+            <value name="TEXT">
+                <shadow type="text"></shadow>
+            </value>
+        </block>
+        <label text="Input/Output:" web-class="ioLabel"></label>
+        <block type="text_print">
+            <value name="TEXT">
+                <shadow type="text">
+                    <field name="TEXT">abc</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="text_prompt_ext">
+            <value name="TEXT">
+                <shadow type="text">
+                    <field name="TEXT">abc</field>
+                </shadow>
+            </value>
+        </block>
     </category>
     <category name="Lists" categorystyle="list_category">
-      <block type="lists_create_with">
-        <mutation items="0"></mutation>
-      </block>
-      <block type="lists_create_with"></block>
-      <block type="lists_repeat">
-        <value name="NUM">
-          <shadow type="math_number">
-            <field name="NUM">5</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="lists_length"></block>
-      <block type="lists_isEmpty"></block>
-      <block type="lists_indexOf">
-        <value name="VALUE">
-          <block type="variables_get">
-            <field name="VAR">list</field>
-          </block>
-        </value>
-      </block>
-      <block type="lists_getIndex">
-        <value name="VALUE">
-          <block type="variables_get">
-            <field name="VAR">list</field>
-          </block>
-        </value>
-      </block>
-      <block type="lists_setIndex">
-        <value name="LIST">
-          <block type="variables_get">
-            <field name="VAR">list</field>
-          </block>
-        </value>
-      </block>
-      <block type="lists_getSublist">
-        <value name="LIST">
-          <block type="variables_get">
-            <field name="VAR">list</field>
-          </block>
-        </value>
-      </block>
-      <block type="lists_split">
-        <value name="DELIM">
-          <shadow type="text">
-            <field name="TEXT">,</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="lists_sort"></block>
-      <block type="lists_reverse"></block>
+        <block type="lists_create_with">
+            <mutation items="0"></mutation>
+        </block>
+        <block type="lists_create_with"></block>
+        <block type="lists_repeat">
+            <value name="NUM">
+                <shadow type="math_number">
+                    <field name="NUM">5</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="lists_length"></block>
+        <block type="lists_isEmpty"></block>
+        <block type="lists_indexOf">
+            <value name="VALUE">
+                <block type="variables_get">
+                    <field name="VAR">list</field>
+                </block>
+            </value>
+        </block>
+        <block type="lists_getIndex">
+            <value name="VALUE">
+                <block type="variables_get">
+                    <field name="VAR">list</field>
+                </block>
+            </value>
+        </block>
+        <block type="lists_setIndex">
+            <value name="LIST">
+                <block type="variables_get">
+                    <field name="VAR">list</field>
+                </block>
+            </value>
+        </block>
+        <block type="lists_getSublist">
+            <value name="LIST">
+                <block type="variables_get">
+                    <field name="VAR">list</field>
+                </block>
+            </value>
+        </block>
+        <block type="lists_split">
+            <value name="DELIM">
+                <shadow type="text">
+                    <field name="TEXT">,</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="lists_sort"></block>
+        <block type="lists_reverse"></block>
     </category>
     <category name="Colour" categorystyle="colour_category">
-      <block type="colour_picker"></block>
-      <block type="colour_random"></block>
-      <block type="colour_rgb">
-        <value name="RED">
-          <shadow type="math_number">
-            <field name="NUM">100</field>
-          </shadow>
-        </value>
-        <value name="GREEN">
-          <shadow type="math_number">
-            <field name="NUM">50</field>
-          </shadow>
-        </value>
-        <value name="BLUE">
-          <shadow type="math_number">
-            <field name="NUM">0</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="colour_blend">
-        <value name="COLOUR1">
-          <shadow type="colour_picker">
-            <field name="COLOUR">#ff0000</field>
-          </shadow>
-        </value>
-        <value name="COLOUR2">
-          <shadow type="colour_picker">
-            <field name="COLOUR">#3333ff</field>
-          </shadow>
-        </value>
-        <value name="RATIO">
-          <shadow type="math_number">
-            <field name="NUM">0.5</field>
-          </shadow>
-        </value>
-      </block>
+        <block type="colour_picker"></block>
+        <block type="colour_random"></block>
+        <block type="colour_rgb">
+            <value name="RED">
+                <shadow type="math_number">
+                    <field name="NUM">100</field>
+                </shadow>
+            </value>
+            <value name="GREEN">
+                <shadow type="math_number">
+                    <field name="NUM">50</field>
+                </shadow>
+            </value>
+            <value name="BLUE">
+                <shadow type="math_number">
+                    <field name="NUM">0</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="colour_blend">
+            <value name="COLOUR1">
+                <shadow type="colour_picker">
+                    <field name="COLOUR">#ff0000</field>
+                </shadow>
+            </value>
+            <value name="COLOUR2">
+                <shadow type="colour_picker">
+                    <field name="COLOUR">#3333ff</field>
+                </shadow>
+            </value>
+            <value name="RATIO">
+                <shadow type="math_number">
+                    <field name="NUM">0.5</field>
+                </shadow>
+            </value>
+        </block>
     </category>
     <sep></sep>
     <category name="Variables" categorystyle="variable_category" custom="VARIABLE_DYNAMIC"></category>
     <category name="Functions" categorystyle="procedure_category" custom="PROCEDURE"></category>
-  </xml>
+</xml>
 </body>
 </html>

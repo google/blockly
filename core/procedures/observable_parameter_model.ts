@@ -16,23 +16,33 @@ import type {Workspace} from '../workspace.js';
 
 export class ObservableParameterModel implements IParameterModel {
   private id: string;
+  private variable: VariableModel;
 
   constructor(
-      private readonly workspace: Workspace, private variable: VariableModel,
-      id?: string) {
+      private readonly workspace: Workspace, name: string, id?: string) {
     this.id = id ?? genUid();
+    this.variable = workspace.createVariable(name);
   }
 
   /**
-   * Sets the variable associated with the parameter model.
-   *
-   * Parameters have an identity (represented by the ID) which is separate from
-   * both their position in the parameter list, and the variable model they are
-   * associated with. The variable they are associated with can change over time
-   * as the human-readable parameter name is renamed.
+   * Sets the name of this parameter to the given name.
    */
-  setVariable(variable: VariableModel): ObservableParameterModel {
-    this.variable = variable;
+  setName(name: string): ObservableParameterModel {
+    if (name == this.variable.name) return this;
+    this.variable =
+        this.workspace.getVariable(name) ?? this.workspace.createVariable(name);
+    return this;
+  }
+
+  /**
+   * Unimplemented. The built-in ParameterModel does not support typing.
+   * If you want your procedure blocks to have typed parameters, you need to
+   * implement your own ParameterModel.
+   */
+  setType(type: string): ObservableParameterModel {
+    console.warn(
+        'The built-in ParameterModel does not support typing. You need to ' +
+        'implement your own custom ParameterModel.')
     return this;
   }
 

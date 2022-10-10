@@ -18,14 +18,14 @@ import {VariableModel} from '../variable_model.js';
  */
 export interface IParameterModel {
   /**
-   * Sets the variable associated with the parameter model.
-   *
-   * Parameters have an identity (represented by the ID) which is separate from
-   * both their position in the parameter list, and the variable model they are
-   * associated with. The variable they are associated with can change over time
-   * as the human-readable parameter name is renamed.
+   * Sets the name of this parameter to the given name.
    */
-  setVariable(variable: VariableModel): IParameterModel;
+  setName(name: string): IParameterModel;
+
+  /**
+   * Sets the type(s) of this parameter to the given types.
+   */
+  setTypes(types: string[]): IParameterModel;
 
   /**
    * Returns the unique language-neutral ID for the parameter.
@@ -34,7 +34,4 @@ export interface IParameterModel {
    * over time.
    */
   getId(): string;
-
-  /** Returns the variable model associated with the parameter model. */
-  getVariableModel(): VariableModel
 }

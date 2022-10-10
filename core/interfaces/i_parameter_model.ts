@@ -23,9 +23,9 @@ export interface IParameterModel {
   setName(name: string): IParameterModel;
 
   /**
-   * Sets the type(s) of this parameter to the given types.
+   * Sets the type of this parameter to the given type.
    */
-  setTypes(types: string[]): IParameterModel;
+  setType(types: string): IParameterModel;
 
   /**
    * Returns the unique language-neutral ID for the parameter.

@@ -66,9 +66,9 @@
   },
   "license": "Apache-2.0",
   "devDependencies": {
-    "@blockly/block-test": "^2.0.1",
-    "@blockly/dev-tools": "^4.0.2",
-    "@blockly/theme-modern": "^2.1.1",
+    "@blockly/block-test": "^3.0.0",
+    "@blockly/dev-tools": "^5.0.0",
+    "@blockly/theme-modern": "^3.0.0",
     "@hyperjump/json-schema": "^0.18.4",
     "@microsoft/api-extractor": "^7.29.5",
     "@typescript-eslint/eslint-plugin": "^5.33.1",

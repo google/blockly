@@ -222,10 +222,6 @@ export class FieldTextInput extends Field {
     const source = this.sourceBlock_ as BlockSvg;
 
     if (this.borderRect_) {
-      if (!source.style.colourTertiary) {
-        throw new Error(
-            'The renderer did not properly initialize the block style');
-      }
       this.borderRect_.setAttribute('stroke', source.style.colourTertiary);
     } else {
       source.pathObject.svgPath.setAttribute(

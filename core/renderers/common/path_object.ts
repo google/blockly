@@ -137,10 +137,6 @@ export class PathObject implements IPathObject {
    * @internal
    */
   applyColour(block: BlockSvg) {
-    if (!this.style.colourTertiary) {
-      throw new Error(
-          'The renderer did not properly initialize the block style');
-    }
     this.svgPath.setAttribute('stroke', this.style.colourTertiary);
     this.svgPath.setAttribute('fill', this.style.colourPrimary);
 
@@ -199,10 +195,6 @@ export class PathObject implements IPathObject {
    */
   protected updateShadow_(shadow: boolean) {
     if (shadow) {
-      if (!this.style.colourSecondary) {
-        throw new Error(
-            'The renderer did not properly initialize the block style');
-      }
       this.svgPath.setAttribute('stroke', 'none');
       this.svgPath.setAttribute('fill', this.style.colourSecondary);
     }

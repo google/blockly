@@ -17,7 +17,7 @@ import * as object from './utils/object.js';
 
 
 export interface ITheme {
-  blockStyles?: {[key: string]: BlockStyle};
+  blockStyles?: {[key: string]: Partial<BlockStyle>};
   categoryStyles?: {[key: string]: CategoryStyle};
   componentStyles?: ComponentStyle;
   fontStyle?: FontStyle;
@@ -58,9 +58,11 @@ export class Theme implements ITheme {
    * @param opt_componentStyles A map of Blockly component names to style value.
    */
   constructor(
-      public name: string, opt_blockStyles?: {[key: string]: BlockStyle},
+      public name: string,
+      opt_blockStyles?: {[key: string]: Partial<BlockStyle>},
       opt_categoryStyles?: {[key: string]: CategoryStyle},
-      opt_componentStyles?: ComponentStyle) {
+      opt_componentStyles?: ComponentStyle
+  ) {
     /** The block styles map. */
     this.blockStyles = opt_blockStyles || Object.create(null);
 
@@ -187,9 +189,9 @@ export class Theme implements ITheme {
 export namespace Theme {
   export interface BlockStyle {
     colourPrimary: string;
-    colourSecondary?: string;
-    colourTertiary?: string;
-    hat?: string;
+    colourSecondary: string;
+    colourTertiary: string;
+    hat: string;
   }
 
   export interface CategoryStyle {

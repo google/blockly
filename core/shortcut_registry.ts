@@ -111,8 +111,7 @@ export class ShortcutRegistry {
     const shortcutNames = this.keyMap.get(keyCode);
     if (shortcutNames && !opt_allowCollision) {
       throw new Error(
-          'Shortcut with name "' + shortcutName + '" collides with shortcuts ' +
-          shortcutNames.toString());
+          `Shortcut with name "${shortcutName}" collides with shortcuts "${shortcutNames}"`);
     } else if (shortcutNames && opt_allowCollision) {
       shortcutNames.unshift(shortcutName);
     } else {
@@ -139,8 +138,7 @@ export class ShortcutRegistry {
     if (!shortcutNames) {
       if (!opt_quiet) {
         console.warn(
-            'No keyboard shortcut with name "' + shortcutName +
-            '" registered with key code "' + keyCode + '"');
+            `No keyboard shortcut with name "${shortcutName}" registered with key code "${keyCode}"`);
       }
       return false;
     }
@@ -155,8 +153,7 @@ export class ShortcutRegistry {
     }
     if (!opt_quiet) {
       console.warn(
-          'No keyboard shortcut with name "' + shortcutName +
-          '" registered with key code "' + keyCode + '"');
+          `No keyboard shortcut with name "${shortcutName}" registered with key code "${keyCode}"`);
     }
     return false;
   }

@@ -980,8 +980,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   }
 
   /**
-   * Updates the color of the block (and children) to match the current disabled
-   * state.
+   * Updates the colour of the block (and children) to match the current
+   * disabled state.
    *
    * @internal
    */

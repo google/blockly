@@ -285,10 +285,6 @@ export class FieldDropdown extends Field {
       const borderColour = this.getSourceBlock().isShadow() ?
           (this.getSourceBlock().getParent() as BlockSvg).style.colourTertiary :
           (this.sourceBlock_ as BlockSvg).style.colourTertiary;
-      if (!borderColour) {
-        throw new Error(
-            'The renderer did not properly initialize the block style');
-      }
       dropDownDiv.setColour(primaryColour, borderColour);
     }
 
@@ -503,14 +499,6 @@ export class FieldDropdown extends Field {
    */
   override applyColour() {
     const style = (this.sourceBlock_ as BlockSvg).style;
-    if (!style.colourSecondary) {
-      throw new Error(
-          'The renderer did not properly initialize the block style');
-    }
-    if (!style.colourTertiary) {
-      throw new Error(
-          'The renderer did not properly initialize the block style');
-    }
     if (this.borderRect_) {
       this.borderRect_.setAttribute('stroke', style.colourTertiary);
       if (this.menu_) {

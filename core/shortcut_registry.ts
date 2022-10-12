@@ -57,7 +57,7 @@ export class ShortcutRegistry {
     const registeredShortcut = this.shortcuts.get(shortcut.name);
     if (registeredShortcut && !opt_allowOverrides) {
       throw new Error(
-          'Shortcut with name "' + shortcut.name + '" already exists.');
+          'Shortcut named "' + shortcut.name + '" already exists.');
     }
     this.shortcuts.set(shortcut.name, shortcut);
 
@@ -82,7 +82,7 @@ export class ShortcutRegistry {
 
     if (!shortcut) {
       console.warn(
-          'Keyboard shortcut with name "' + shortcutName + '" not found.');
+          'Keyboard shortcut named "' + shortcutName + '" not found.');
       return false;
     }
 
@@ -111,7 +111,7 @@ export class ShortcutRegistry {
     const shortcutNames = this.keyMap.get(keyCode);
     if (shortcutNames && !opt_allowCollision) {
       throw new Error(
-          `Shortcut with name "${shortcutName}" collides with shortcuts "${shortcutNames}"`);
+          `Shortcut named "${shortcutName}" collides with shortcuts "${shortcutNames}"`);
     } else if (shortcutNames && opt_allowCollision) {
       shortcutNames.unshift(shortcutName);
     } else {
@@ -138,7 +138,7 @@ export class ShortcutRegistry {
     if (!shortcutNames) {
       if (!opt_quiet) {
         console.warn(
-            `No keyboard shortcut with name "${shortcutName}" registered with key code "${keyCode}"`);
+            `No keyboard shortcut named "${shortcutName}" registered with key code "${keyCode}"`);
       }
       return false;
     }
@@ -153,7 +153,7 @@ export class ShortcutRegistry {
     }
     if (!opt_quiet) {
       console.warn(
-          `No keyboard shortcut with name "${shortcutName}" registered with key code "${keyCode}"`);
+          `No keyboard shortcut named "${shortcutName}" registered with key code "${keyCode}"`);
     }
     return false;
   }

@@ -43,7 +43,7 @@ suite('Gesture', function() {
   }
 
   function getTopFlyoutBlock(flyout) {
-    return flyout.workspace_.topBlocks_[0];
+    return flyout.workspace_.getTopBlocks(false)[0];
   }
 
   setup(function() {

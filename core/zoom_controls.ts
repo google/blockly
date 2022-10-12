@@ -117,12 +117,12 @@ export class ZoomControls implements IPositionable {
     // instances on a page.  Browser behaviour becomes undefined otherwise.
     // https://neil.fraser.name/news/2015/11/01/
     const rnd = String(Math.random()).substring(2);
-    this.createZoomOutSvg_(rnd);
-    this.createZoomInSvg_(rnd);
+    this.createZoomOutSvg(rnd);
+    this.createZoomInSvg(rnd);
     if (this.workspace.isMovable()) {
       // If we zoom to the center and the workspace isn't movable we could
       // loose blocks at the edges of the workspace.
-      this.createZoomResetSvg_(rnd);
+      this.createZoomResetSvg(rnd);
     }
     return this.svgGroup;
   }
@@ -239,7 +239,7 @@ export class ZoomControls implements IPositionable {
    *     These IDs must be unique in case there are multiple Blockly instances
    *     on the same page.
    */
-  private createZoomOutSvg_(rnd: string) {
+  private createZoomOutSvg(rnd: string) {
     /* This markup will be generated and added to the .svgGroup:
         <g class="blocklyZoom">
           <clipPath id="blocklyZoomoutClipPath837493">
@@ -276,7 +276,7 @@ export class ZoomControls implements IPositionable {
 
     // Attach listener.
     this.onZoomOutWrapper = browserEvents.conditionalBind(
-        this.zoomOutGroup, 'mousedown', null, this.zoom_.bind(this, -1));
+        this.zoomOutGroup, 'mousedown', null, this.zoom.bind(this, -1));
   }
 
   /**
@@ -286,7 +286,7 @@ export class ZoomControls implements IPositionable {
    *     These IDs must be unique in case there are multiple Blockly instances
    *     on the same page.
    */
-  private createZoomInSvg_(rnd: string) {
+  private createZoomInSvg(rnd: string) {
     /* This markup will be generated and added to the .svgGroup:
         <g class="blocklyZoom">
           <clipPath id="blocklyZoominClipPath837493">
@@ -322,7 +322,7 @@ export class ZoomControls implements IPositionable {
 
     // Attach listener.
     this.onZoomInWrapper = browserEvents.conditionalBind(
-        this.zoomInGroup, 'mousedown', null, this.zoom_.bind(this, 1));
+        this.zoomInGroup, 'mousedown', null, this.zoom.bind(this, 1));
   }
 
   /**
@@ -333,10 +333,10 @@ export class ZoomControls implements IPositionable {
    *     positive amount values zoom in.
    * @param e A mouse down event.
    */
-  private zoom_(amount: number, e: Event) {
+  private zoom(amount: number, e: Event) {
     this.workspace.markFocused();
     this.workspace.zoomCenter(amount);
-    this.fireZoomEvent_();
+    this.fireZoomEvent();
     Touch.clearTouchIdentifier();  // Don't block future drags.
     e.stopPropagation();           // Don't start a workspace scroll.
     e.preventDefault();            // Stop double-clicking from selecting text.
@@ -349,7 +349,7 @@ export class ZoomControls implements IPositionable {
    *     These IDs must be unique in case there are multiple Blockly instances
    *     on the same page.
    */
-  private createZoomResetSvg_(rnd: string) {
+  private createZoomResetSvg(rnd: string) {
     /* This markup will be generated and added to the .svgGroup:
         <g class="blocklyZoom">
           <clipPath id="blocklyZoomresetClipPath837493">
@@ -380,7 +380,7 @@ export class ZoomControls implements IPositionable {
 
     // Attach event listeners.
     this.onZoomResetWrapper = browserEvents.conditionalBind(
-        this.zoomResetGroup, 'mousedown', null, this.resetZoom_.bind(this));
+        this.zoomResetGroup, 'mousedown', null, this.resetZoom.bind(this));
   }
 
   /**
@@ -388,7 +388,7 @@ export class ZoomControls implements IPositionable {
    *
    * @param e A mouse down event.
    */
-  private resetZoom_(e: Event) {
+  private resetZoom(e: Event) {
     this.workspace.markFocused();
 
     // zoom is passed amount and computes the new scale using the formula:
@@ -406,14 +406,14 @@ export class ZoomControls implements IPositionable {
     this.workspace.scrollCenter();
 
     setTimeout(this.workspace.endCanvasTransition.bind(this.workspace), 500);
-    this.fireZoomEvent_();
+    this.fireZoomEvent();
     Touch.clearTouchIdentifier();  // Don't block future drags.
     e.stopPropagation();           // Don't start a workspace scroll.
     e.preventDefault();            // Stop double-clicking from selecting text.
   }
 
   /** Fires a zoom control UI event. */
-  private fireZoomEvent_() {
+  private fireZoomEvent() {
     const uiEvent = new (eventUtils.get(eventUtils.CLICK))(
         null, this.workspace.id, 'zoom_controls');
     eventUtils.fire(uiEvent);

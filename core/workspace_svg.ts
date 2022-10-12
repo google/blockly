@@ -96,7 +96,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * A wrapper function called when a resize event occurs.
    * You can pass the result to `eventHandling.unbind`.
    */
-  private resizeHandlerWrapper_: browserEvents.Data|null = null;
+  private resizeHandlerWrapper: browserEvents.Data|null = null;
 
   /**
    * The render status of an SVG workspace.
@@ -115,7 +115,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * Whether this workspace has resizes enabled.
    * Disable during batch operations for a performance improvement.
    */
-  private resizesEnabled_ = true;
+  private resizesEnabled = true;
 
   /**
    * Current horizontal scrolling offset in pixel units, relative to the
@@ -188,19 +188,19 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   startScrollY = 0;
 
   /** Distance from mouse to object being dragged. */
-  private dragDeltaXY_: Coordinate|null = null;
+  private dragDeltaXY: Coordinate|null = null;
 
   /** Current scale. */
   scale = 1;
 
   /** Cached scale value. Used to detect changes in viewport. */
-  private oldScale_ = 1;
+  private oldScale = 1;
 
   /** Cached viewport top value. Used to detect changes in viewport. */
-  private oldTop_ = 0;
+  private oldTop = 0;
 
   /** Cached viewport left value. Used to detect changes in viewport. */
-  private oldLeft_ = 0;
+  private oldLeft = 0;
 
   /** The workspace's trashcan (if any). */
   trashcan: Trashcan|null = null;
@@ -211,7 +211,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   /**
    * Fixed flyout providing blocks which may be dragged into this workspace.
    */
-  private flyout_: IFlyout|null = null;
+  private flyout: IFlyout|null = null;
 
   /**
    * Category-based toolbox providing blocks which may be dragged into this
@@ -227,16 +227,16 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   currentGesture_: TouchGesture|null = null;
 
   /** This workspace's surface for dragging blocks, if it exists. */
-  private readonly blockDragSurface_: BlockDragSurfaceSvg|null = null;
+  private readonly blockDragSurface: BlockDragSurfaceSvg|null = null;
 
   /** This workspace's drag surface, if it exists. */
-  private readonly workspaceDragSurface_: WorkspaceDragSurfaceSvg|null = null;
+  private readonly workspaceDragSurface: WorkspaceDragSurfaceSvg|null = null;
 
   /**
    * Whether to move workspace to the drag surface when it is dragged.
    * True if it should move, false if it should be translated directly.
    */
-  private readonly useWorkspaceDragSurface_;
+  private readonly useWorkspaceDragSurface;
 
   /**
    * Whether the drag surface is actively in use. When true, calls to
@@ -244,20 +244,20 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * workspace directly.
    * This is set to true in setupDragSurface and to false in resetDragSurface.
    */
-  private isDragSurfaceActive_ = false;
+  private isDragSurfaceActive = false;
 
   /**
    * The first parent div with 'injectionDiv' in the name, or null if not set.
    * Access this with getInjectionDiv.
    */
-  private injectionDiv_: Element|null = null;
+  private injectionDiv: Element|null = null;
 
   /**
    * Last known position of the page scroll.
    * This is used to determine whether we have recalculated screen coordinate
    * stuff since the page scrolled.
    */
-  private lastRecordedPageScroll_: Coordinate|null = null;
+  private lastRecordedPageScroll: Coordinate|null = null;
 
   /**
    * Developers may define this function to add custom menu options to the
@@ -279,25 +279,25 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   targetWorkspace: WorkspaceSvg|null = null;
 
   /** Inverted screen CTM, for use in mouseToSvg. */
-  private inverseScreenCTM_: SVGMatrix|null = null;
+  private inverseScreenCTM: SVGMatrix|null = null;
 
   /** Inverted screen CTM is dirty, recalculate it. */
-  private inverseScreenCTMDirty_ = true;
-  private metricsManager_: IMetricsManager;
+  private inverseScreenCTMDirty = true;
+  private metricsManager: IMetricsManager;
   /** @internal */
   getMetrics: () => Metrics;
   /** @internal */
   setMetrics: (p1: {x?: number, y?: number}) => void;
-  private readonly componentManager_: ComponentManager;
+  private readonly componentManager: ComponentManager;
 
   /**
    * List of currently highlighted blocks.  Block highlighting is often used
    * to visually mark blocks currently being executed.
    */
-  private readonly highlightedBlocks_: BlockSvg[] = [];
-  private audioManager_: WorkspaceAudio;
-  private grid_: Grid|null;
-  private markerManager_: MarkerManager;
+  private readonly highlightedBlocks: BlockSvg[] = [];
+  private audioManager: WorkspaceAudio;
+  private grid: Grid|null;
+  private markerManager: MarkerManager;
 
   /**
    * Map from function names to callbacks, for deciding what to do when a
@@ -312,21 +312,21 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    */
   private flyoutButtonCallbacks = new Map<string, (p1: FlyoutButton) => void>();
   protected themeManager_: ThemeManager;
-  private readonly renderer_: Renderer;
+  private readonly renderer: Renderer;
 
   /** Cached parent SVG. */
-  private cachedParentSvg_: SVGElement|null = null;
+  private cachedParentSvg: SVGElement|null = null;
 
   /** True if keyboard accessibility mode is on, false otherwise. */
   keyboardAccessibilityMode = false;
 
   /** The list of top-level bounded elements on the workspace. */
-  private topBoundedElements_: IBoundedElement[] = [];
+  private topBoundedElements: IBoundedElement[] = [];
 
   /** The recorded drag targets. */
-  private dragTargetAreas_: Array<{component: IDragTarget, clientRect: Rect}> =
+  private dragTargetAreas: Array<{component: IDragTarget, clientRect: Rect}> =
       [];
-  private readonly cachedParentSvgSize_: Size;
+  private readonly cachedParentSvgSize: Size;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   svgGroup_!: SVGElement;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
@@ -350,43 +350,43 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     const MetricsManagerClass = registry.getClassFromOptions(
         registry.Type.METRICS_MANAGER, options, true);
     /** Object in charge of calculating metrics for the workspace. */
-    this.metricsManager_ = new MetricsManagerClass!(this);
+    this.metricsManager = new MetricsManagerClass!(this);
 
     /** Method to get all the metrics that have to do with a workspace. */
     this.getMetrics = options.getMetrics ||
-        this.metricsManager_.getMetrics.bind(this.metricsManager_);
+        this.metricsManager.getMetrics.bind(this.metricsManager);
 
     /** Translates the workspace. */
     this.setMetrics =
         options.setMetrics || WorkspaceSvg.setTopLevelWorkspaceMetrics_;
 
-    this.componentManager_ = new ComponentManager();
+    this.componentManager = new ComponentManager();
 
     this.connectionDBList = ConnectionDB.init(this.connectionChecker);
 
     if (opt_blockDragSurface) {
-      this.blockDragSurface_ = opt_blockDragSurface;
+      this.blockDragSurface = opt_blockDragSurface;
     }
 
     if (opt_wsDragSurface) {
-      this.workspaceDragSurface_ = opt_wsDragSurface;
+      this.workspaceDragSurface = opt_wsDragSurface;
     }
 
-    this.useWorkspaceDragSurface_ = !!this.workspaceDragSurface_;
+    this.useWorkspaceDragSurface = !!this.workspaceDragSurface;
 
     /**
      * Object in charge of loading, storing, and playing audio for a workspace.
      */
-    this.audioManager_ =
+    this.audioManager =
         new WorkspaceAudio((options.parentWorkspace as WorkspaceSvg));
 
     /** This workspace's grid object or null. */
-    this.grid_ = this.options.gridPattern ?
+    this.grid = this.options.gridPattern ?
         new Grid(this.options.gridPattern, options.gridOptions) :
         null;
 
     /** Manager in charge of markers and cursors. */
-    this.markerManager_ = new MarkerManager(this);
+    this.markerManager = new MarkerManager(this);
 
     if (Variables && Variables.flyoutCategory) {
       this.registerToolboxCategoryCallback(
@@ -411,7 +411,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     this.themeManager_.subscribeWorkspace(this);
 
     /** The block renderer used for rendering blocks on this workspace. */
-    this.renderer_ = blockRendering.init(
+    this.renderer = blockRendering.init(
         this.options.renderer || 'geras', this.getTheme(),
         this.options.rendererOverrides ?? undefined);
 
@@ -419,7 +419,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
      * The cached size of the parent svg element.
      * Used to compute svg metrics.
      */
-    this.cachedParentSvgSize_ = new Size(0, 0);
+    this.cachedParentSvgSize = new Size(0, 0);
   }
 
   /**
@@ -428,7 +428,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @returns The marker manager.
    */
   getMarkerManager(): MarkerManager {
-    return this.markerManager_;
+    return this.markerManager;
   }
 
   /**
@@ -437,7 +437,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @returns The metrics manager.
    */
   getMetricsManager(): IMetricsManager {
-    return this.metricsManager_;
+    return this.metricsManager;
   }
 
   /**
@@ -447,9 +447,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @internal
    */
   setMetricsManager(metricsManager: IMetricsManager) {
-    this.metricsManager_ = metricsManager;
+    this.metricsManager = metricsManager;
     this.getMetrics =
-        this.metricsManager_.getMetrics.bind(this.metricsManager_);
+        this.metricsManager.getMetrics.bind(this.metricsManager);
   }
 
   /**
@@ -458,7 +458,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @returns The component manager.
    */
   getComponentManager(): ComponentManager {
-    return this.componentManager_;
+    return this.componentManager;
   }
 
   /**
@@ -469,7 +469,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @internal
    */
   setCursorSvg(cursorSvg: SVGElement) {
-    this.markerManager_.setCursorSvg(cursorSvg);
+    this.markerManager.setCursorSvg(cursorSvg);
   }
 
   /**
@@ -480,7 +480,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @internal
    */
   setMarkerSvg(markerSvg: SVGElement) {
-    this.markerManager_.setMarkerSvg(markerSvg);
+    this.markerManager.setMarkerSvg(markerSvg);
   }
 
   /**
@@ -492,8 +492,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @internal
    */
   getMarker(id: string): Marker|null {
-    if (this.markerManager_) {
-      return this.markerManager_.getMarker(id);
+    if (this.markerManager) {
+      return this.markerManager.getMarker(id);
     }
     return null;
   }
@@ -504,8 +504,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @returns The cursor for the workspace.
    */
   getCursor(): Cursor|null {
-    if (this.markerManager_) {
-      return this.markerManager_.getCursor();
+    if (this.markerManager) {
+      return this.markerManager.getCursor();
     }
     return null;
   }
@@ -516,7 +516,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @returns The renderer attached to this workspace.
    */
   getRenderer(): Renderer {
-    return this.renderer_;
+    return this.renderer;
   }
 
   /**
@@ -556,7 +556,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    */
   refreshTheme() {
     if (this.svgGroup_) {
-      this.renderer_.refreshDom(this.svgGroup_, this.getTheme());
+      this.renderer.refreshDom(this.svgGroup_, this.getTheme());
     }
 
     // Update all blocks in workspace that have a style name.
@@ -606,20 +606,20 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   getInverseScreenCTM(): SVGMatrix|null {
     // Defer getting the screen CTM until we actually need it, this should
     // avoid forced reflows from any calls to updateInverseScreenCTM.
-    if (this.inverseScreenCTMDirty_) {
+    if (this.inverseScreenCTMDirty) {
       const ctm = this.getParentSvg().getScreenCTM();
       if (ctm) {
-        this.inverseScreenCTM_ = (ctm).inverse();
-        this.inverseScreenCTMDirty_ = false;
+        this.inverseScreenCTM = (ctm).inverse();
+        this.inverseScreenCTMDirty = false;
       }
     }
 
-    return this.inverseScreenCTM_;
+    return this.inverseScreenCTM;
   }
 
   /** Mark the inverse screen CTM as dirty. */
   updateInverseScreenCTM() {
-    this.inverseScreenCTMDirty_ = true;
+    this.inverseScreenCTMDirty = true;
   }
 
   /**
@@ -671,7 +671,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @internal
    */
   getCachedParentSvgSize(): Size {
-    const size = this.cachedParentSvgSize_;
+    const size = this.cachedParentSvgSize;
     return new Size(size.width, size.height);
   }
 
@@ -700,18 +700,18 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   getInjectionDiv(): Element {
     // NB: it would be better to pass this in at createDom, but is more likely
     // to break existing uses of Blockly.
-    if (!this.injectionDiv_) {
+    if (!this.injectionDiv) {
       let element: Element = this.svgGroup_;
       while (element) {
         const classes = element.getAttribute('class') || '';
         if ((' ' + classes + ' ').indexOf(' injectionDiv ') !== -1) {
-          this.injectionDiv_ = element;
+          this.injectionDiv = element;
           break;
         }
         element = element.parentNode as Element;
       }
     }
-    return this.injectionDiv_!;
+    return this.injectionDiv!;
   }
 
   /**
@@ -730,7 +730,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @param handler Data that can be passed to eventHandling.unbind.
    */
   setResizeHandlerWrapper(handler: browserEvents.Data) {
-    this.resizeHandlerWrapper_ = handler;
+    this.resizeHandlerWrapper = handler;
   }
 
   /**
@@ -760,9 +760,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
           {'height': '100%', 'width': '100%', 'class': opt_backgroundClass},
           this.svgGroup_);
 
-      if (opt_backgroundClass === 'blocklyMainBackground' && this.grid_) {
+      if (opt_backgroundClass === 'blocklyMainBackground' && this.grid) {
         this.svgBackground_.style.fill =
-            'url(#' + this.grid_.getPatternId() + ')';
+            'url(#' + this.grid.getPatternId() + ')';
       } else {
         this.themeManager_.subscribe(
             this.svgBackground_, 'workspaceBackgroundColour', 'fill');
@@ -791,16 +791,16 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
           registry.Type.TOOLBOX, this.options, true);
       this.toolbox_ = new ToolboxClass!(this);
     }
-    if (this.grid_) {
-      this.grid_.update(this.scale);
+    if (this.grid) {
+      this.grid.update(this.scale);
     }
     this.recordDragTargets();
     const CursorClass =
         registry.getClassFromOptions(registry.Type.CURSOR, this.options);
 
-    CursorClass && this.markerManager_.setCursor(new CursorClass());
+    CursorClass && this.markerManager.setCursor(new CursorClass());
 
-    this.renderer_.createDom(this.svgGroup_, this.getTheme());
+    this.renderer.createDom(this.svgGroup_, this.getTheme());
     return this.svgGroup_;
   }
 
@@ -823,9 +823,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       this.toolbox_.dispose();
       this.toolbox_ = null;
     }
-    if (this.flyout_) {
-      this.flyout_.dispose();
-      this.flyout_ = null;
+    if (this.flyout) {
+      this.flyout.dispose();
+      this.flyout = null;
     }
     if (this.trashcan) {
       this.trashcan.dispose();
@@ -839,18 +839,18 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       this.zoomControls_.dispose();
     }
 
-    if (this.audioManager_) {
-      this.audioManager_.dispose();
+    if (this.audioManager) {
+      this.audioManager.dispose();
     }
 
-    if (this.grid_) {
-      this.grid_ = null;
+    if (this.grid) {
+      this.grid = null;
     }
 
-    this.renderer_.dispose();
+    this.renderer.dispose();
 
-    if (this.markerManager_) {
-      this.markerManager_.dispose();
+    if (this.markerManager) {
+      this.markerManager.dispose();
     }
 
     super.dispose();
@@ -877,9 +877,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
         dom.removeNode(parentSvg.parentNode);
       }
     }
-    if (this.resizeHandlerWrapper_) {
-      browserEvents.unbind(this.resizeHandlerWrapper_);
-      this.resizeHandlerWrapper_ = null;
+    if (this.resizeHandlerWrapper) {
+      browserEvents.unbind(this.resizeHandlerWrapper);
+      this.resizeHandlerWrapper = null;
     }
   }
 
@@ -938,19 +938,19 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     if (this.horizontalLayout) {
       const HorizontalFlyout = registry.getClassFromOptions(
           registry.Type.FLYOUTS_HORIZONTAL_TOOLBOX, this.options, true);
-      this.flyout_ = new HorizontalFlyout!(workspaceOptions);
+      this.flyout = new HorizontalFlyout!(workspaceOptions);
     } else {
       const VerticalFlyout = registry.getClassFromOptions(
           registry.Type.FLYOUTS_VERTICAL_TOOLBOX, this.options, true);
-      this.flyout_ = new VerticalFlyout!(workspaceOptions);
+      this.flyout = new VerticalFlyout!(workspaceOptions);
     }
-    this.flyout_.autoClose = false;
-    this.flyout_.getWorkspace().setVisible(true);
+    this.flyout.autoClose = false;
+    this.flyout.getWorkspace().setVisible(true);
 
     // Return the element so that callers can place it in their desired
     // spot in the DOM.  For example, mutator flyouts do not go in the same
     // place as main workspace flyouts.
-    return this.flyout_.createDom(tagName);
+    return this.flyout.createDom(tagName);
   }
 
   /**
@@ -963,8 +963,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @internal
    */
   getFlyout(opt_own?: boolean): IFlyout|null {
-    if (this.flyout_ || opt_own) {
-      return this.flyout_;
+    if (this.flyout || opt_own) {
+      return this.flyout;
     }
     if (this.toolbox_) {
       return this.toolbox_.getFlyout();
@@ -999,7 +999,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @internal
    */
   resizeContents() {
-    if (!this.resizesEnabled_ || !this.rendered) {
+    if (!this.resizesEnabled || !this.rendered) {
       return;
     }
     if (this.scrollbar) {
@@ -1019,11 +1019,11 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     if (this.toolbox_) {
       this.toolbox_.position();
     }
-    if (this.flyout_) {
-      this.flyout_.position();
+    if (this.flyout) {
+      this.flyout.position();
     }
 
-    const positionables = this.componentManager_.getComponents(
+    const positionables = this.componentManager.getComponents(
         ComponentManager.Capability.POSITIONABLE, true);
     const metrics = this.getMetricsManager().getUiMetrics();
     const savedPositions = [];
@@ -1050,8 +1050,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   updateScreenCalculationsIfScrolled() {
     /* eslint-disable indent */
     const currScroll = svgMath.getDocumentScroll();
-    if (!Coordinate.equals(this.lastRecordedPageScroll_, currScroll)) {
-      this.lastRecordedPageScroll_ = currScroll;
+    if (!Coordinate.equals(this.lastRecordedPageScroll, currScroll)) {
+      this.lastRecordedPageScroll = currScroll;
       this.updateScreenCalculations_();
     }
   }
@@ -1077,13 +1077,13 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   setCachedParentSvgSize(width: number|null, height: number|null) {
     const svg = this.getParentSvg();
     if (width != null) {
-      this.cachedParentSvgSize_.width = width;
+      this.cachedParentSvgSize.width = width;
       // This is set to support the public (but deprecated) Blockly.svgSize
       // method.
       svg.setAttribute('data-cached-width', width.toString());
     }
     if (height != null) {
-      this.cachedParentSvgSize_.height = height;
+      this.cachedParentSvgSize.height = height;
       // This is set to support the public (but deprecated) Blockly.svgSize
       // method.
       svg.setAttribute('data-cached-height', height.toString());
@@ -1107,17 +1107,17 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @returns SVG element.
    */
   getParentSvg(): SVGSVGElement {
-    if (!this.cachedParentSvg_) {
+    if (!this.cachedParentSvg) {
       let element = this.svgGroup_;
       while (element) {
         if (element.tagName === 'svg') {
-          this.cachedParentSvg_ = element;
+          this.cachedParentSvg = element;
           break;
         }
         element = element.parentNode as SVGSVGElement;
       }
     }
-    return this.cachedParentSvg_ as SVGSVGElement;
+    return this.cachedParentSvg as SVGSVGElement;
   }
 
   /**
@@ -1133,17 +1133,17 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     const scale = this.scale;
     const top = -this.scrollY;
     const left = -this.scrollX;
-    if (scale === this.oldScale_ && Math.abs(top - this.oldTop_) < 1 &&
-        Math.abs(left - this.oldLeft_) < 1) {
+    if (scale === this.oldScale && Math.abs(top - this.oldTop) < 1 &&
+        Math.abs(left - this.oldLeft) < 1) {
       // Ignore sub-pixel changes in top and left. Due to #4192 there are a lot
       // of negligible changes in viewport top/left.
       return;
     }
     const event = new (eventUtils.get(eventUtils.VIEWPORT_CHANGE))(
-        top, left, scale, this.id, this.oldScale_);
-    this.oldScale_ = scale;
-    this.oldTop_ = top;
-    this.oldLeft_ = left;
+        top, left, scale, this.id, this.oldScale);
+    this.oldScale = scale;
+    this.oldTop = top;
+    this.oldLeft = left;
     eventUtils.fire(event);
   }
 
@@ -1156,8 +1156,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *     the Blockly div.
    */
   translate(x: number, y: number) {
-    if (this.useWorkspaceDragSurface_ && this.isDragSurfaceActive_) {
-      this.workspaceDragSurface_?.translateSurface(x, y);
+    if (this.useWorkspaceDragSurface && this.isDragSurfaceActive) {
+      this.workspaceDragSurface?.translateSurface(x, y);
     } else {
       const translation = 'translate(' + x + ',' + y + ') ' +
           'scale(' + this.scale + ')';
@@ -1165,12 +1165,12 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       this.svgBubbleCanvas_.setAttribute('transform', translation);
     }
     // Now update the block drag surface if we're using one.
-    if (this.blockDragSurface_) {
-      this.blockDragSurface_.translateAndScaleGroup(x, y, this.scale);
+    if (this.blockDragSurface) {
+      this.blockDragSurface.translateAndScaleGroup(x, y, this.scale);
     }
     // And update the grid if we're using one.
-    if (this.grid_) {
-      this.grid_.moveTo(x, y);
+    if (this.grid) {
+      this.grid.moveTo(x, y);
     }
 
     this.maybeFireViewportChangeEvent();
@@ -1185,14 +1185,14 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    */
   resetDragSurface() {
     // Don't do anything if we aren't using a drag surface.
-    if (!this.useWorkspaceDragSurface_) {
+    if (!this.useWorkspaceDragSurface) {
       return;
     }
 
-    this.isDragSurfaceActive_ = false;
+    this.isDragSurfaceActive = false;
 
-    const trans = this.workspaceDragSurface_!.getSurfaceTranslation();
-    this.workspaceDragSurface_!.clearAndHide(this.svgGroup_);
+    const trans = this.workspaceDragSurface!.getSurfaceTranslation();
+    this.workspaceDragSurface!.clearAndHide(this.svgGroup_);
     const translation = 'translate(' + trans.x + ',' + trans.y + ') ' +
         'scale(' + this.scale + ')';
     this.svgBlockCanvas_.setAttribute('transform', translation);
@@ -1208,7 +1208,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    */
   setupDragSurface() {
     // Don't do anything if we aren't using a drag surface.
-    if (!this.useWorkspaceDragSurface_) {
+    if (!this.useWorkspaceDragSurface) {
       return;
     }
 
@@ -1217,11 +1217,11 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     // iframe) and then moves the mouse back in the workspace.  On mobile and
     // ff, we get the mouseup outside the frame. On chrome and safari desktop we
     // do not.
-    if (this.isDragSurfaceActive_) {
+    if (this.isDragSurfaceActive) {
       return;
     }
 
-    this.isDragSurfaceActive_ = true;
+    this.isDragSurfaceActive = true;
 
     // Figure out where we want to put the canvas back.  The order
     // in the is important because things are layered.
@@ -1229,10 +1229,10 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     const width = parseInt(this.getParentSvg().getAttribute('width') ?? '0');
     const height = parseInt(this.getParentSvg().getAttribute('height') ?? '0');
     const coord = svgMath.getRelativeXY(this.getCanvas());
-    this.workspaceDragSurface_!.setContentsAndShow(
+    this.workspaceDragSurface!.setContentsAndShow(
         this.getCanvas(), this.getBubbleCanvas(), previousElement, width,
         height, this.scale);
-    this.workspaceDragSurface_!.translateSurface(coord.x, coord.y);
+    this.workspaceDragSurface!.translateSurface(coord.x, coord.y);
   }
 
   /**
@@ -1242,7 +1242,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @internal
    */
   getBlockDragSurface(): BlockDragSurfaceSvg|null {
-    return this.blockDragSurface_;
+    return this.blockDragSurface;
   }
 
   /**
@@ -1317,7 +1317,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       }
     }
 
-    this.markerManager_.updateMarkers();
+    this.markerManager.updateMarkers();
   }
 
   /**
@@ -1333,10 +1333,10 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   highlightBlock(id: string|null, opt_state?: boolean) {
     if (opt_state === undefined) {
       // Unhighlight all blocks.
-      for (let i = 0, block; block = this.highlightedBlocks_[i]; i++) {
+      for (let i = 0, block; block = this.highlightedBlocks[i]; i++) {
         block.setHighlighted(false);
       }
-      this.highlightedBlocks_.length = 0;
+      this.highlightedBlocks.length = 0;
     }
     // Highlight/unhighlight the specified block.
     const block = id ? this.getBlockById(id) : null;
@@ -1344,9 +1344,9 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       const state = opt_state === undefined || opt_state;
       // Using Set here would be great, but at the cost of IE10 support.
       if (!state) {
-        arrayUtils.removeElem(this.highlightedBlocks_, block);
-      } else if (this.highlightedBlocks_.indexOf(block) === -1) {
-        this.highlightedBlocks_.push(block);
+        arrayUtils.removeElem(this.highlightedBlocks, block);
+      } else if (this.highlightedBlocks.indexOf(block) === -1) {
+        this.highlightedBlocks.push(block);
       }
       block.setHighlighted(state);
     }
@@ -1564,14 +1564,14 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
   /** Make a list of all the delete areas for this workspace. */
   recordDragTargets() {
-    const dragTargets = this.componentManager_.getComponents(
+    const dragTargets = this.componentManager.getComponents(
         ComponentManager.Capability.DRAG_TARGET, true);
 
-    this.dragTargetAreas_ = [];
+    this.dragTargetAreas = [];
     for (let i = 0, targetArea; targetArea = dragTargets[i]; i++) {
       const rect = targetArea.getClientRect();
       if (rect) {
-        this.dragTargetAreas_.push({
+        this.dragTargetAreas.push({
           component: targetArea,
           clientRect: rect,
         });
@@ -1604,7 +1604,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    *     over.
    */
   getDragTarget(e: Event): IDragTarget|null {
-    for (let i = 0, targetArea; targetArea = this.dragTargetAreas_[i]; i++) {
+    for (let i = 0, targetArea; targetArea = this.dragTargetAreas[i]; i++) {
       if (targetArea.clientRect.contains(
               (e as AnyDuringMigration).clientX,
               (e as AnyDuringMigration).clientY)) {
@@ -1639,7 +1639,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     // Fix scale of mouse event.
     point.x /= this.scale;
     point.y /= this.scale;
-    this.dragDeltaXY_ = Coordinate.difference(xy, point);
+    this.dragDeltaXY = Coordinate.difference(xy, point);
   }
 
   /**
@@ -1654,7 +1654,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     // Fix scale of mouse event.
     point.x /= this.scale;
     point.y /= this.scale;
-    return Coordinate.sum((this.dragDeltaXY_!), point);
+    return Coordinate.sum((this.dragDeltaXY!), point);
   }
 
   /**
@@ -1829,7 +1829,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       block.snapToGrid();
       cursorY = block.getRelativeToSurfaceXY().y +
           block.getHeightWidth().height +
-          this.renderer_.getConstants().MIN_BLOCK_HEIGHT;
+          this.renderer.getConstants().MIN_BLOCK_HEIGHT;
     }
     eventUtils.setGroup(false);
     this.setResizesEnabled(true);
@@ -1882,11 +1882,11 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       this.options.languageTree = parsedToolboxDef;
       this.toolbox_.render(parsedToolboxDef);
     } else {
-      if (!this.flyout_) {
+      if (!this.flyout) {
         throw Error('Existing toolbox has categories.  Can\'t change mode.');
       }
       this.options.languageTree = parsedToolboxDef;
-      this.flyout_.show(parsedToolboxDef);
+      this.flyout.show(parsedToolboxDef);
     }
   }
 
@@ -1997,7 +1997,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     const metrics = this.getMetrics();
     let x;
     let y;
-    if (this.flyout_) {
+    if (this.flyout) {
       // If you want blocks in the center of the view (visible portion of the
       // workspace) to stay centered when the size of the view decreases (i.e.
       // when the size of the flyout increases) you need the center of the
@@ -2031,19 +2031,19 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
     if (!blocksWidth) {
       return;  // Prevents zooming to infinity.
     }
-    if (this.flyout_) {
+    if (this.flyout) {
       // We have to add the flyout size to both the workspace size and the
       // block size because the blocks we want to resize include the blocks in
       // the flyout, and the area we want to fit them includes the portion of
       // the workspace that is behind the flyout.
       if (this.horizontalLayout) {
-        workspaceHeight += this.flyout_.getHeight();
+        workspaceHeight += this.flyout.getHeight();
         // Convert from pixels to workspace coordinates.
-        blocksHeight += this.flyout_.getHeight() / this.scale;
+        blocksHeight += this.flyout.getHeight() / this.scale;
       } else {
-        workspaceWidth += this.flyout_.getWidth();
+        workspaceWidth += this.flyout.getWidth();
         // Convert from pixels to workspace coordinates.
-        blocksWidth += this.flyout_.getWidth() / this.scale;
+        blocksWidth += this.flyout.getWidth() / this.scale;
       }
     }
 
@@ -2180,8 +2180,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
       flyout.reflow();
       this.recordDragTargets();
     }
-    if (this.grid_) {
-      this.grid_.update(this.scale);
+    if (this.grid) {
+      this.grid.update(this.scale);
     }
 
     // We call scroll instead of scrollbar.resize() so that we can center the
@@ -2198,7 +2198,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
 
     this.scroll(this.scrollX, this.scrollY);
     if (this.scrollbar) {
-      if (this.flyout_) {
+      if (this.flyout) {
         this.scrollbar.resizeView(metrics);
       } else {
         this.scrollbar.resizeContent(metrics);
@@ -2344,7 +2344,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @param element Bounded element to add.
    */
   addTopBoundedElement(element: IBoundedElement) {
-    this.topBoundedElements_.push(element);
+    this.topBoundedElements.push(element);
   }
 
   /**
@@ -2353,7 +2353,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @param element Bounded element to remove.
    */
   removeTopBoundedElement(element: IBoundedElement) {
-    arrayUtils.removeElem(this.topBoundedElements_, element);
+    arrayUtils.removeElem(this.topBoundedElements, element);
   }
 
   /**
@@ -2362,7 +2362,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @returns The top-level bounded elements.
    */
   getTopBoundedElements(): IBoundedElement[] {
-    return (new Array<IBoundedElement>()).concat(this.topBoundedElements_);
+    return (new Array<IBoundedElement>()).concat(this.topBoundedElements);
   }
 
   /**
@@ -2374,8 +2374,8 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @param enabled Whether resizes should be enabled.
    */
   setResizesEnabled(enabled: boolean) {
-    const reenabled = !this.resizesEnabled_ && enabled;
-    this.resizesEnabled_ = enabled;
+    const reenabled = !this.resizesEnabled && enabled;
+    this.resizesEnabled = enabled;
     if (reenabled) {
       // Newly enabled.  Trigger a resize.
       this.resizeContents();
@@ -2389,7 +2389,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
   override clear() {
     this.setResizesEnabled(false);
     super.clear();
-    this.topBoundedElements_ = [];
+    this.topBoundedElements = [];
     this.setResizesEnabled(true);
   }
 
@@ -2531,7 +2531,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @returns The audio manager for this workspace.
    */
   getAudioManager(): WorkspaceAudio {
-    return this.audioManager_;
+    return this.audioManager;
   }
 
   /**
@@ -2541,7 +2541,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    * @internal
    */
   getGrid(): Grid|null {
-    return this.grid_;
+    return this.grid;
   }
 
   /**

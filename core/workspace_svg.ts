@@ -448,8 +448,7 @@ export class WorkspaceSvg extends Workspace implements IASTNodeLocationSvg {
    */
   setMetricsManager(metricsManager: IMetricsManager) {
     this.metricsManager = metricsManager;
-    this.getMetrics =
-        this.metricsManager.getMetrics.bind(this.metricsManager);
+    this.getMetrics = this.metricsManager.getMetrics.bind(this.metricsManager);
   }
 
   /**

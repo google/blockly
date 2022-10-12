@@ -92,7 +92,7 @@ suite('Variables', function() {
   });
 
   suite('getVariable', function() {
-    test('By id', function() {
+    test('By ID', function() {
       const var1 = this.workspace.createVariable('name1', 'type1', 'id1');
       const var2 = this.workspace.createVariable('name2', 'type1', 'id2');
       const var3 = this.workspace.createVariable('name3', 'type2', 'id3');
@@ -122,7 +122,7 @@ suite('Variables', function() {
       chai.assert.equal(var3, result3);
     });
 
-    test('Bad id with name and type fallback', function() {
+    test('Bad ID with name and type fallback', function() {
       const var1 = this.workspace.createVariable('name1', 'type1', 'id1');
       const var2 = this.workspace.createVariable('name2', 'type1', 'id2');
       const var3 = this.workspace.createVariable('name3', 'type2', 'id3');

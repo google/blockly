@@ -178,26 +178,38 @@ BlockFactory.updatePreview = function() {
     return;
   }
 
-  // Backup Blockly.Blocks definitions so we can delete them all
-  // before instantiating user-defined block.  This avoids a collision
-  // between the main workspace and preview if the user creates a
-  // 'factory_base' block, for instance.
-  var originalBlocks = Object.assign(Object.create(null), Blockly.Blocks);
-  try {
-    // Delete existing blocks.
-    for (var key in Blockly.Blocks) {
-      delete Blockly.Blocks[key];
+  // Don't let the user create a block type that already exists,
+  // because it doesn't work.
+  var warnExistingBlock = function(blockType) {
+    if (blockType in Blockly.Blocks) {
+      var text = `You can't make a block called ${blockType} in this tool because that name already exists.`;
+      FactoryUtils.getRootBlock(BlockFactory.mainWorkspace).setWarningText(text);
+      console.error(text);
+      return true;
     }
+    return false;
+  }
 
+  var blockType = 'block_type';
+  var blockCreated = false;
+  try {
     if (format === 'JSON') {
       var json = JSON.parse(code);
-      Blockly.Blocks[json.type || BlockFactory.UNNAMED] = {
+      blockType = json.type || BlockFactory.UNNAMED;
+      if (warnExistingBlock(blockType)) {
+        return;
+      }
+      Blockly.Blocks[blockType] = {
         init: function() {
           this.jsonInit(json);
         }
       };
     } else if (format === 'JavaScript') {
       try {
+        blockType = FactoryUtils.getBlockTypeFromJsDefinition(code);
+        if (warnExistingBlock(blockType)) {
+          return;
+        }
         eval(code);
       } catch (e) {
         // TODO: Display error in the UI
@@ -205,15 +217,7 @@ BlockFactory.updatePreview = function() {
         return;
       }
     }
-
-    // Look for newly-created block(s) (ideally just one).
-    var createdTypes = Object.getOwnPropertyNames(Blockly.Blocks);
-    if (createdTypes.length < 1) {
-      return;
-    } else if (createdTypes.length > 1) {
-      console.log('Unexpectedly found more than one block definition');
-    }
-    var blockType = createdTypes[0];
+    blockCreated = true;
 
     // Create the preview block.
     var previewBlock = BlockFactory.previewWorkspace.newBlock(blockType);
@@ -247,12 +251,12 @@ BlockFactory.updatePreview = function() {
     BlockFactory.updateBlocksFlag = false
     BlockFactory.updateBlocksFlagDelayed = false
   } finally {
-    // Remove all newly-created block(s).
-    for (var key in Blockly.Blocks) {
-      delete Blockly.Blocks[key];
+    // Remove the newly-created block.
+    // We have to check if the block was actually created so that we don't remove
+    // one of the built-in blocks, like factory_base.
+    if (blockCreated) {
+      delete Blockly.Blocks[blockType];
     }
-    // Restore original blocks.
-    Object.assign(Blockly.Blocks, originalBlocks);
   }
 };
 

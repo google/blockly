@@ -56,8 +56,7 @@ export class ShortcutRegistry {
   register(shortcut: KeyboardShortcut, opt_allowOverrides?: boolean) {
     const registeredShortcut = this.shortcuts.get(shortcut.name);
     if (registeredShortcut && !opt_allowOverrides) {
-      throw new Error(
-          'Shortcut named "' + shortcut.name + '" already exists.');
+      throw new Error(`Shortcut named "${shortcut.name}" already exists.`);
     }
     this.shortcuts.set(shortcut.name, shortcut);
 
@@ -81,8 +80,7 @@ export class ShortcutRegistry {
     const shortcut = this.shortcuts.get(shortcutName);
 
     if (!shortcut) {
-      console.warn(
-          'Keyboard shortcut named "' + shortcutName + '" not found.');
+      console.warn(`Keyboard shortcut named "${shortcutName}" not found.`);
       return false;
     }
 
@@ -110,8 +108,8 @@ export class ShortcutRegistry {
     keyCode = String(keyCode);
     const shortcutNames = this.keyMap.get(keyCode);
     if (shortcutNames && !opt_allowCollision) {
-      throw new Error(
-          `Shortcut named "${shortcutName}" collides with shortcuts "${shortcutNames}"`);
+      throw new Error(`Shortcut named "${
+          shortcutName}" collides with shortcuts "${shortcutNames}"`);
     } else if (shortcutNames && opt_allowCollision) {
       shortcutNames.unshift(shortcutName);
     } else {
@@ -137,8 +135,8 @@ export class ShortcutRegistry {
 
     if (!shortcutNames) {
       if (!opt_quiet) {
-        console.warn(
-            `No keyboard shortcut named "${shortcutName}" registered with key code "${keyCode}"`);
+        console.warn(`No keyboard shortcut named "${
+            shortcutName}" registered with key code "${keyCode}"`);
       }
       return false;
     }
@@ -152,8 +150,8 @@ export class ShortcutRegistry {
       return true;
     }
     if (!opt_quiet) {
-      console.warn(
-          `No keyboard shortcut named "${shortcutName}" registered with key code "${keyCode}"`);
+      console.warn(`No keyboard shortcut named "${
+          shortcutName}" registered with key code "${keyCode}"`);
     }
     return false;
   }

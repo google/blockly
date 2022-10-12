@@ -10,7 +10,6 @@
  * Depends on WorkspaceFactoryController (for adding mouse listeners). Tabs for
  * each category are stored in tab map, which associates a unique ID for a
  * category with a particular tab.
- *
  */
 
 
@@ -122,7 +121,7 @@ WorkspaceFactoryView.prototype.createCategoryIdName = function(name) {
 WorkspaceFactoryView.prototype.setCategoryTabSelection =
     function(id, selected) {
   if (!this.tabMap[id]) {
-    return;   // Exit if tab does not exist.
+    return;  // Exit if tab does not exist.
   }
   this.tabMap[id].className = selected ? 'tabon' : 'taboff';
 };
@@ -329,7 +328,7 @@ WorkspaceFactoryView.prototype.markShadowBlock = function(block) {
  */
 WorkspaceFactoryView.prototype.unmarkShadowBlock = function(block) {
   // Remove Blockly CSS for user-generated shadow blocks.
-  block.getSvgRoot().classList.removeClass('shadowBlock');
+  block.getSvgRoot().classList.remove('shadowBlock');
 };
 
 /**
@@ -387,8 +386,7 @@ WorkspaceFactoryView.prototype.setBaseOptions = function() {
 
   // Check infinite blocks and hide suboption.
   document.getElementById('option_infiniteBlocks_checkbox').checked = true;
-  document.getElementById('maxBlockNumber_option').style.display =
-      'none';
+  document.getElementById('maxBlockNumber_option').style.display = 'none';
 
   // Uncheck grid and zoom options and hide suboptions.
   document.getElementById('option_grid_checkbox').checked = false;

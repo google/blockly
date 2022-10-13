@@ -10,8 +10,6 @@
  * @namespace Blockly.IParameterModel
  */
 
-import {VariableModel} from '../variable_model.js';
-
 
 /**
  * A data model for a procedure.
@@ -23,9 +21,9 @@ export interface IParameterModel {
   setName(name: string): IParameterModel;
 
   /**
-   * Sets the type of this parameter to the given type.
+   * Sets the types of this parameter to the given type.
    */
-  setType(types: string): IParameterModel;
+  setTypes(types: string[]): IParameterModel;
 
   /**
    * Returns the unique language-neutral ID for the parameter.

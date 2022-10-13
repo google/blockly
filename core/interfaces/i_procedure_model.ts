@@ -26,7 +26,7 @@ export interface IProcedureModel {
    * To move a parameter, first delete it, and then re-insert.
    */
   insertParameter(parameterModel: IParameterModel, index: number):
-      IParameterModel;
+      IProcedureModel;
 
   /** Removes the parameter at the given index from the parameter list. */
   deleteParameter(index: number): IProcedureModel;
@@ -36,7 +36,7 @@ export interface IProcedureModel {
    *
    * Pass null to represent a procedure that does not return.
    */
-  setReturnType(types: string[]|null): IProcedureModel;
+  setReturnTypes(types: string[]|null): IProcedureModel;
 
   /**
    * Sets whether this procedure is enabled/disabled. If a procedure is disabled
@@ -57,11 +57,11 @@ export interface IProcedureModel {
   getParameters(): IParameterModel[];
 
   /**
-   * Returns the return type of the procedure.
+   * Returns the return type(s) of the procedure.
    *
    * Null represents a procedure that does not return a value.
    */
-  getReturnType(): string[]|null;
+  getReturnTypes(): string[]|null;
 
   /**
    * Returns whether the procedure is enabled/disabled. If a procedure is

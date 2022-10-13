@@ -480,7 +480,7 @@ Blockly.Msg.CONTROLS_REPEAT_TITLE = 'repeat %1 times';
 Blockly.Msg.CONTROLS_REPEAT_FOREVER_TITLE = 'repeat forever';
 /** @type {string} */
 /// block text - Preceding the blocks in the body of the loop.  See [https://github.com/google/blockly/wiki/Loops https://github.com/google/blockly/wiki/Loops].\n{{Identical|Do}}
-Blockly.Msg.CONTROLS_REPEAT_INPUT_DO = 'do';
+Blockly.Msg.CONTROLS_REPEAT_INPUT_DO = '';
 /** @type {string} */
 /// tooltip - See [https://github.com/google/blockly/wiki/Loops#repeat https://github.com/google/blockly/wiki/Loops#repeat].
 Blockly.Msg.CONTROLS_REPEAT_TOOLTIP = 'Do some statements several times.';
@@ -579,7 +579,7 @@ Blockly.Msg.CONTROLS_IF_MSG_ELSEIF = 'else if';
 /// block text - See [https://github.com/google/blockly/wiki/IfElse https://github.com/google/blockly/wiki/IfElse].  The English word "otherwise" would probably be superior to "else", but the latter is used because it is traditional and shorter.
 Blockly.Msg.CONTROLS_IF_MSG_ELSE = 'else';
 /** @type {string} */
-Blockly.Msg.CONTROLS_IF_MSG_THEN = Blockly.Msg.CONTROLS_REPEAT_INPUT_DO;
+Blockly.Msg.CONTROLS_IF_MSG_THEN = 'then';
 /** @type {string} */
 Blockly.Msg.CONTROLS_IF_IF_TITLE_IF = Blockly.Msg.CONTROLS_IF_MSG_IF;
 /** @type {string} */
@@ -1703,13 +1703,13 @@ Blockly.Msg.PROCEDURES_DEFNORETURN_HELPURL = 'https://en.wikipedia.org/wiki/Subr
 /// block text - This precedes the name of the function when defining it.  See
 /// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#c84aoc this sample
 /// function definition].
-Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE = 'to';
+Blockly.Msg.PROCEDURES_DEFNORETURN_TITLE = 'Subprogram';
 /** @type {string} */
 /// default name - This acts as a placeholder for the name of a function on a
 /// function definition block, as shown on
 /// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#w7cfju this block].
 /// The user will replace it with the function's name.
-Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE = 'do something';
+Blockly.Msg.PROCEDURES_DEFNORETURN_PROCEDURE = 'name';
 /** @type {string} */
 /// block text - This precedes the list of parameters on a function's definition block.  See
 /// [https://blockly-demo.appspot.com/static/apps/code/index.html?lang=en#voztpd this sample

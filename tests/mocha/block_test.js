@@ -1866,7 +1866,7 @@ suite('Blocks', function() {
           '</shadow>' +
           '</value>' +
         '</block>',
-        toString: 'repeat 10 times do ?',
+        toString: 'repeat 10 times ?',
       },
       {
         name: 'nested statement blocks',
@@ -1880,7 +1880,7 @@ suite('Blocks', function() {
             '<block type="controls_if"></block>' +
           '</statement>' +
         '</block>',
-        toString: 'repeat 10 times do if ? do ?',
+        toString: 'repeat 10 times if ? then ?',
       },
       {
         name: 'nested Boolean output blocks',
@@ -1896,7 +1896,7 @@ suite('Blocks', function() {
             '</block>' +
           '</value>' +
         '</block>',
-        toString: 'if ((? and ?) = ?) do ?',
+        toString: 'if ((? and ?) = ?) then ?',
       },
       {
         name: 'output block',

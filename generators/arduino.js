@@ -15,12 +15,13 @@ goog.module('Blockly.Arduino');
 
 const Variables = goog.require('Blockly.Variables');
 const { Generator } = goog.require('Blockly.Generator');
-goog.require('Blockly.StaticTyping');
 const { Names, NameType } = goog.require('Blockly.Names');
+const { ConnectionType } = goog.require('Blockly.ConnectionType');
+const {Msg} = goog.require('Blockly.Msg');
 
 /**
  * Arduino code generator.
- * @type {!Blockly.Generator}
+ * @type {!Generator}
  */
 const Arduino = new Generator('Arduino');
 
@@ -115,7 +116,7 @@ Arduino.DEF_FUNC_NAME = Arduino.FUNCTION_NAME_PLACEHOLDER_;
 /**
  * Initialises the database of global definitions, the setup function, function
  * names, and variable names.
- * @param {Blockly.Workspace} workspace Workspace to generate code from.
+ * @param {Workspace} workspace Workspace to generate code from.
  */
 Arduino.init = function (workspace) {
 
@@ -286,7 +287,7 @@ Arduino.addSetup = function (setupTag, code, overwrite) {
 Arduino.addFunction = function (preferedName, code) {
   if (Arduino.codeFunctions_[preferedName] === undefined) {
     var uniqueName = this.nameDB_.getDistinctName(
-      preferedName, Blockly.Generator.NAME_TYPE);
+      preferedName, NameType.PROCEDURE);
     Arduino.codeFunctions_[preferedName] =
       code.replace(Arduino.DEF_FUNC_NAME, uniqueName);
     Arduino.functionNames_[preferedName] = uniqueName;
@@ -296,7 +297,7 @@ Arduino.addFunction = function (preferedName, code) {
 
 /**
  * Description.
- * @param {!Blockly.Block} block Description.
+ * @param {!Block} block Description.
  * @param {!string} pin Description.
  * @param {!string} pinType Description.
  * @param {!string} warningTag Description.
@@ -304,7 +305,7 @@ Arduino.addFunction = function (preferedName, code) {
 Arduino.reservePin = function (block, pin, pinType, warningTag) {
   if (Arduino.pins_[pin] !== undefined) {
     if (Arduino.pins_[pin] != pinType) {
-      block.setWarningText(Blockly.Msg.ARD_PIN_WARN1.replace('%1', pin)
+      block.setWarningText(Msg.ARD_PIN_WARN1.replace('%1', pin)
         .replace('%2', warningTag).replace('%3', pinType)
         .replace('%4', Arduino.pins_[pin]), warningTag);
     } else {
@@ -345,10 +346,10 @@ Arduino.quote_ = function (string) {
  * Common tasks for generating Arduino from blocks.
  * Handles comments for the specified block and any connected value blocks.
  * Calls any statements following this block.
- * @param {!Blockly.Block} block The current block.
+ * @param {!Block} block The current block.
  * @param {string} code The Arduino code created for this block.
  * @return {string} Arduino code with comments and subsequent blocks added.
- * @this {Blockly.CodeGenerator}
+ * @this {!Generator}
  * @private
  */
 Arduino.scrub_ = function (block, code) {
@@ -367,7 +368,7 @@ Arduino.scrub_ = function (block, code) {
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.
     for (var x = 0; x < block.inputList.length; x++) {
-      if (block.inputList[x].type == Blockly.INPUT_VALUE) {
+      if (block.inputList[x].type == ConnectionType.INPUT_VALUE) {
         var childBlock = block.inputList[x].connection.targetBlock();
         if (childBlock) {
           var comment = this.allNestedComments(childBlock);
@@ -381,55 +382,6 @@ Arduino.scrub_ = function (block, code) {
   var nextBlock = block.nextConnection && block.nextConnection.targetBlock();
   var nextCode = this.blockToCode(nextBlock);
   return commentCode + code + nextCode;
-};
-
-/**
- * Generates Arduino Types from a Blockly Type.
- * @param {!Blockly.Type} typeBlockly The Blockly type to be converted.
- * @return {string} Arduino type for the respective Blockly input type, in a
- *     string format.
- * @private
- */
-Arduino.getArduinoType_ = function (typeBlockly) {
-  switch (typeBlockly.typeId) {
-    case Blockly.Types.VOLATIL_NUMBER.typeId:
-      return 'volatile int';
-    case Blockly.Types.SHORT_NUMBER.typeId:
-      return 'byte';
-    case Blockly.Types.NUMBER.typeId:
-      return 'int';
-    case Blockly.Types.UNS_NUMBER.typeId:
-      return 'unsigned int';
-    case Blockly.Types.LARGE_NUMBER.typeId:
-      return 'long';
-    case Blockly.Types.LARGE_UNS_NUMBER.typeId:
-      return 'unsigned long';
-    case Blockly.Types.DECIMAL.typeId:
-      return 'float';
-    case Blockly.Types.TEXT.typeId:
-      return 'String';
-    case Blockly.Types.CHARACTER.typeId:
-      return 'char';
-    case Blockly.Types.ARRAY_CHAR.typeId:
-      return 'char*';
-    case Blockly.Types.BOOLEAN.typeId:
-      return 'boolean';
-    case Blockly.Types.NULL.typeId:
-      //return 'void';
-      // TODO: Find a more elegant way to default to double type
-      // This could be by removing StaticTyping completely from Leaphy Blockly
-      return 'double';
-    case Blockly.Types.ARRAY.typeId:
-      return Arduino.getArduinoType_(typeBlockly.arrayType);
-    case Blockly.Types.UNDEF.typeId:
-      return 'undefined';
-    case Blockly.Types.CHILD_BLOCK_MISSING.typeId:
-      // If no block connected default to int, change for easier debugging
-      //return 'ChildBlockMissing';
-      return 'int';
-    default:
-      return 'Invalid Blockly Type';
-  }
 };
 
 /** Used for not-yet-implemented block code generators */

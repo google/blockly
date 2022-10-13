@@ -16,7 +16,7 @@ const { arduinoGenerator: Arduino } = goog.require('Blockly.Arduino');
 /**
 * Code generator for a literal String (X).
 * Arduino code: loop { "X" }
-* @param {!Blockly.Block} block Block to generate the code from.
+* @param {!Block} block Block to generate the code from.
 * @return {array} Completed code with order of operation.
 */
 Arduino['text'] = function (block) {

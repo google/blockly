@@ -14,12 +14,13 @@ goog.module('Blockly.Arduino.loops');
 
 const { arduinoGenerator: Arduino } = goog.require('Blockly.Arduino');
 const {NameType} = goog.require('Blockly.Names');
+const stringUtils = goog.require('Blockly.utils.string');
 
 /**
  * Generator for the repeat block (number in a drop down) using a For loop
  * statement.
  * Arduino code: loop { for (int count = 0; count < X; count++) { Y } }
- * @param {!Blockly.Block} block Block to generate the code from.
+ * @param {!Block} block Block to generate the code from.
  * @return {string} Completed code.
  */
 Arduino['controls_repeat'] = function(block) {
@@ -38,7 +39,7 @@ Arduino['controls_repeat'] = function(block) {
  * Generator for the repeat block (using external number block) using a
  * For loop statement.
  * Arduino code: loop { for (int count = 0; count < X; count++) { Y } }
- * @param {!Blockly.Block} block Block to generate the code from.
+ * @param {!Block} block Block to generate the code from.
  * @return {string} Completed code.
  */
 Arduino['controls_repeat_ext'] = function(block) {
@@ -50,7 +51,7 @@ Arduino['controls_repeat_ext'] = function(block) {
   var loopVar = Arduino.nameDB_.getDistinctName(
       'count', NameType.VARIABLE);
   var endVar = repeats;
-  if (!repeats.match(/^\w+$/) && !Blockly.isNumber(repeats)) {
+  if (!repeats.match(/^\w+$/) && !stringUtils.isNumber(repeats)) {
     var endVar = Arduino.nameDB_.getDistinctName(
         'repeat_end', NameType.VARIABLE);
     code += 'int ' + endVar + ' = ' + repeats + ';\n';
@@ -71,7 +72,7 @@ Arduino['controls_repeat_forever'] = function(block) {
 /**
  * Generator for the repeat while block using a While statement.
  * Arduino code: loop { while (X) { Y } }
- * @param {!Blockly.Block} block Block to generate the code from.
+ * @param {!Block} block Block to generate the code from.
  * @return {string} Completed code.
  */
 Arduino['controls_whileUntil'] = function(block) {
@@ -94,7 +95,7 @@ Arduino['controls_whileUntil'] = function(block) {
 /**
  * Generator for the For loop statements.
  * Arduino code: loop { for (i = X; i <= Y; i+=Z) { } }
- * @param {!Blockly.Block} block Block to generate the code from.
+ * @param {!Block} block Block to generate the code from.
  * @return {string} Completed code.
  */
 Arduino['controls_for'] = function(block) {
@@ -109,8 +110,8 @@ Arduino['controls_for'] = function(block) {
   var branch = Arduino.statementToCode(block, 'DO');
   branch = Arduino.addLoopTrap(branch, block.id);
   var code;
-  if (Blockly.isNumber(argument0) && Blockly.isNumber(argument1) &&
-      Blockly.isNumber(increment)) {
+  if (stringUtils.isNumber(argument0) && stringUtils.isNumber(argument1) &&
+      stringUtils.isNumber(increment)) {
     // All arguments are simple numbers.
     var up = parseFloat(argument0) <= parseFloat(argument1);
     code = 'for (' + variable0 + ' = ' + argument0 + '; ' +
@@ -127,13 +128,13 @@ Arduino['controls_for'] = function(block) {
     code = '';
     // Cache non-trivial values to variables to prevent repeated look-ups.
     var startVar = argument0;
-    if (!argument0.match(/^\w+$/) && !Blockly.isNumber(argument0)) {
+    if (!argument0.match(/^\w+$/) && !stringUtils.isNumber(argument0)) {
       var startVar = Arduino.nameDB_.getDistinctName(
           variable0 + '_start', NameType.VARIABLE);
       code += 'int ' + startVar + ' = ' + argument0 + ';\n';
     }
     var endVar = argument1;
-    if (!argument1.match(/^\w+$/) && !Blockly.isNumber(argument1)) {
+    if (!argument1.match(/^\w+$/) && !stringUtils.isNumber(argument1)) {
       var endVar = Arduino.nameDB_.getDistinctName(
           variable0 + '_end', NameType.VARIABLE);
       code += 'int ' + endVar + ' = ' + argument1 + ';\n';
@@ -143,7 +144,7 @@ Arduino['controls_for'] = function(block) {
     var incVar = Arduino.nameDB_.getDistinctName(
         variable0 + '_inc', NameType.VARIABLE);
     code += 'int ' + incVar + ' = ';
-    if (Blockly.isNumber(increment)) {
+    if (stringUtils.isNumber(increment)) {
       code += Math.abs(increment) + ';\n';
     } else {
       code += 'abs(' + increment + ');\n';
@@ -164,7 +165,7 @@ Arduino['controls_for'] = function(block) {
 /**
  * A "for each" block.
  * TODO: Removed for now from toolbox as lists are not yet implemented.
- * @param {!Blockly.Block} block Block to generate the code from.
+ * @param {!Block} block Block to generate the code from.
  * @return {string} Completed code.
  */
 Arduino['controls_forEach'] = Arduino.noGeneratorCodeLine;
@@ -172,7 +173,7 @@ Arduino['controls_forEach'] = Arduino.noGeneratorCodeLine;
 /**
  * Generator for the loop flow control statements.
  * Arduino code: loop { break;/continue; }
- * @param {!Blockly.Block} block Block to generate the code from.
+ * @param {!Block} block Block to generate the code from.
  * @return {string} Completed code.
  */
 Arduino['controls_flow_statements'] = function(block) {

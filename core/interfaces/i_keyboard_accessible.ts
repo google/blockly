@@ -11,6 +11,7 @@
  */
 import * as goog from '../../closure/goog/goog.js';
 import {KeyboardShortcut} from '../shortcut_registry.js';
+
 goog.declareModuleId('Blockly.IKeyboardAccessible');
 
 /**

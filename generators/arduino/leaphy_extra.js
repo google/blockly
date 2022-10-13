@@ -131,7 +131,7 @@ Arduino['leaphy_servo_write'] = function (block) {
  *               Servo myServoX;
  *               setup { myServoX.attach(X); }
  *               loop  { myServoX.read();    }
- * @param {!Blockly.Block} block Block to generate the code from.
+ * @param {!Block} block Block to generate the code from.
  * @return {array} Completed code with order of operation.
  */
 

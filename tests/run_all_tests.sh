@@ -74,7 +74,8 @@ run_test_command "generators" "tests/scripts/run_generators.sh"
 run_test_command "package" "npm run package"
 
 # Run Node tests.
-run_test_command "node" "./node_modules/.bin/mocha tests/node --config tests/node/.mocharc.js"
+# No don't. Don't run Node tests. Leaphy Blockly does not support a Node env for now.
+# run_test_command "node" "./node_modules/.bin/mocha tests/node --config tests/node/.mocharc.js"
 
 # Attempt advanced compilation of a Blockly app.
 run_test_command "advanced_compile" "npm run test:compile:advanced"

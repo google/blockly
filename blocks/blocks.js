@@ -54,20 +54,9 @@ exports.arduino = arduino;
  * Blockly.libraryBlocks.* modules.
  * @type {!Object<string, !BlockDefinition>}
  */
-const blocks = Object.assign({}, 
-    colour.blocks, 
-    lists.blocks, 
-    logic.blocks, 
-    loops.blocks, 
-    math.blocks,
-    procedures.blocks, 
-    variables.blocks, 
-    variablesDynamic.blocks, 
-    leaphyCommon.blocks,
-    leaphyOriginal.blocks,
-    leaphyFlitz.blocks,
-    leaphyClick.blocks,
-    leaphyExtra.blocks,
-    arduino.blocks
-    );
+const blocks = Object.assign(
+    {}, colour.blocks, lists.blocks, logic.blocks, loops.blocks, math.blocks,
+    procedures.blocks, variables.blocks, variablesDynamic.blocks,
+    leaphyCommon.blocks, leaphyOriginal.blocks, leaphyFlitz.blocks,
+    leaphyClick.blocks, leaphyExtra.blocks, arduino.blocks);
 exports.blocks = blocks;

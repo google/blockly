@@ -17,7 +17,7 @@ const { NameType } = goog.require('Blockly.Names');
 /**
  * Code generator to create a function with a return value (X).
  * Arduino code: void functionname { return X }
- * @param {!Blockly.Block} block Block to generate the code from.
+ * @param {!Block} block Block to generate the code from.
  * @return {null} There is no code added to loop.
  */
 Arduino['procedures_defreturn'] = function (block) {
@@ -50,10 +50,7 @@ Arduino['procedures_defreturn'] = function (block) {
     }
 
     // Get return type
-    var returnType = Blockly.Types.NULL;
-    if (block.getReturnType) {
-        returnType = block.getReturnType();
-    }
+    var returnType = 'double'
     returnType = Arduino.getArduinoType_(returnType);
 
     // Construct code
@@ -76,7 +73,7 @@ Arduino['procedures_defnoreturn'] =
 /**
  * Code generator to create a function call with a return value.
  * Arduino code: loop { functionname() }
- * @param {!Blockly.Block} block Block to generate the code from.
+ * @param {!Block} block Block to generate the code from.
  * @return {array} Completed code with order of operation.
  */
 Arduino['procedures_callreturn'] = function (block) {
@@ -94,7 +91,7 @@ Arduino['procedures_callreturn'] = function (block) {
 /**
  * Code generator to create a function call without a return value.
  * Arduino code: loop { functionname() }
- * @param {!Blockly.Block} block Block to generate the code from.
+ * @param {!Block} block Block to generate the code from.
  * @return {string} Completed code.
  */
 Arduino['procedures_callnoreturn'] = function (block) {
@@ -112,7 +109,7 @@ Arduino['procedures_callnoreturn'] = function (block) {
 /**
  * Code generator to create a conditional (X) return value (Y) for a function.
  * Arduino code: if (X) { return Y; }
- * @param {!Blockly.Block} block Block to generate the code from.
+ * @param {!Block} block Block to generate the code from.
  * @return {string} Completed code.
  */
 Arduino['procedures_ifreturn'] = function (block) {
@@ -133,7 +130,7 @@ Arduino['procedures_ifreturn'] = function (block) {
 /**
  * Code generator to add code into the setup() and loop() functions.
  * Its use is not mandatory, but necessary to add manual code to setup().
- * @param {!Blockly.Block} block Block to generate the code from.
+ * @param {!Block} block Block to generate the code from.
  * @return {string} Completed code.
  */
 Arduino['arduino_functions'] = function (block) {

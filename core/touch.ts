@@ -158,18 +158,18 @@ export function shouldHandleEvent(e: Event|PseudoEvent): boolean {
  * Get the touch identifier from the given event.  If it was a mouse event, the
  * identifier is the string 'mouse'.
  *
- * @param e Mouse event or touch event.
- * @returns The touch identifier from the first changed touch, if defined.
+ * @param e Pointer event, mouse event, or touch event.
+ * @returns The pointerId, or touch identifier from the first changed touch, if defined.
  *     Otherwise 'mouse'.
  * @alias Blockly.Touch.getTouchIdentifierFromEvent
  */
 export function getTouchIdentifierFromEvent(e: Event|PseudoEvent): string {
-  if (e instanceof MouseEvent) {
-    return 'mouse';
-  }
-
   if (e instanceof PointerEvent) {
     return String(e.pointerId);
+  }
+  
+  if (e instanceof MouseEvent) {
+    return 'mouse';
   }
 
   /**

@@ -17,23 +17,23 @@ goog.module('Blockly.libraryBlocks.leaphyOriginal');
 const BlockDefinition = Object;
 const {createBlockDefinitionsFromJsonArray, defineBlocks} = goog.require('Blockly.common');
 
-var motorLeftRightDropdown = [
+const motorLeftRightDropdown = [
   ['%{BKY_LEAPHY_MOTOR_LEFT_DROPDOWN}', '9'],
-  ['%{BKY_LEAPHY_MOTOR_RIGHT_DROPDOWN}', '10']
+  ['%{BKY_LEAPHY_MOTOR_RIGHT_DROPDOWN}', '10'],
 ];
-var motorForwardBackwardDropdown = [
+const motorForwardBackwardDropdown = [
   ['%{BKY_LEAPHY_MOTOR_FORWARD}', '1'], ['%{BKY_LEAPHY_MOTOR_BACKWARD}', '2'],
-  ['%{BKY_LEAPHY_MOTOR_LEFT}', '3'], ['%{BKY_LEAPHY_MOTOR_RIGHT}', '4']
+  ['%{BKY_LEAPHY_MOTOR_LEFT}', '3'], ['%{BKY_LEAPHY_MOTOR_RIGHT}', '4'],
 ];
-var digitalPinOptions = [
+const digitalPinOptions = [
   ['2', '2'], ['3', '3'], ['4', '4'], ['5', '5'], ['6', '6'], ['7', '7'],
   ['8', '8'], ['9', '9'], ['10', '10'], ['11', '11'], ['12', '12'],
   ['13', '13'], ['14', '14'], ['15', '15'], ['16', '16'], ['17', '17'],
-  ['18', '18'], ['19', '19']
+  ['18', '18'], ['19', '19'],
 ];
-var analogPinOptions = [
+const analogPinOptions = [
   ['A0', 'A0'], ['A1', 'A1'], ['A2', 'A2'], ['A3', 'A3'], ['A4', 'A4'],
-  ['A5', 'A5']
+  ['A5', 'A5'],
 ];
 
 /**
@@ -49,14 +49,14 @@ const blocks = createBlockDefinitionsFromJsonArray([
       {'type': 'input_dummy'},
       {'type': 'input_value', 'name': 'LED_RED', 'check': 'Number'},
       {'type': 'input_value', 'name': 'LED_GREEN', 'check': 'Number'},
-      {'type': 'input_value', 'name': 'LED_BLUE', 'check': 'Number'}
+      {'type': 'input_value', 'name': 'LED_BLUE', 'check': 'Number'},
     ],
     'inputsInline': true,
     'previousStatement': null,
     'nextStatement': null,
     'style': 'leaphy_blocks',
     'tooltip': '',
-    'helpUrl': ''
+    'helpUrl': '',
   },
   {
     'type': 'leaphy_original_set_motor',
@@ -65,17 +65,17 @@ const blocks = createBlockDefinitionsFromJsonArray([
       {
         'type': 'field_dropdown',
         'name': 'MOTOR_TYPE',
-        'options': motorLeftRightDropdown
+        'options': motorLeftRightDropdown,
       },
       {'type': 'input_dummy'},
-      {'type': 'input_value', 'name': 'MOTOR_SPEED', 'check': 'Number'}
+      {'type': 'input_value', 'name': 'MOTOR_SPEED', 'check': 'Number'},
     ],
     'inputsInline': true,
     'previousStatement': null,
     'nextStatement': null,
     'style': 'leaphy_blocks',
     'tooltip': '',
-    'helpUrl': ''
+    'helpUrl': '',
   },
   {
     'type': 'leaphy_original_get_distance',
@@ -83,7 +83,7 @@ const blocks = createBlockDefinitionsFromJsonArray([
     'style': 'leaphy_blocks',
     'output': 'Number',
     'tooltip': '',
-    'helpUrl': ''
+    'helpUrl': '',
   },
   {
     'type': 'leaphy_original_move_motors',
@@ -92,39 +92,39 @@ const blocks = createBlockDefinitionsFromJsonArray([
       {
         'type': 'field_dropdown',
         'name': 'MOTOR_DIRECTION',
-        'options': motorForwardBackwardDropdown
+        'options': motorForwardBackwardDropdown,
       },
       {'type': 'input_dummy'},
-      {'type': 'input_value', 'name': 'MOTOR_SPEED', 'check': 'Number'}
+      {'type': 'input_value', 'name': 'MOTOR_SPEED', 'check': 'Number'},
     ],
     'inputsInline': true,
     'previousStatement': null,
     'nextStatement': null,
     'style': 'leaphy_blocks',
     'tooltip': '',
-    'helpUrl': ''
+    'helpUrl': '',
   },
   {
     'type': 'leaphy_original_digital_read',
     'message0': '%%{BKY_LEAPHY_DIGITAL_READ} %1',
     'args0': [
-      {'type': 'field_dropdown', 'name': 'PIN', 'options': digitalPinOptions}
+      {'type': 'field_dropdown', 'name': 'PIN', 'options': digitalPinOptions},
     ],
     'style': 'leaphy_blocks',
     'output': 'Number',
     'tooltip': '',
-    'helpUrl': ''
+    'helpUrl': '',
   },
   {
     'type': 'leaphy_original_analog_read',
     'message0': '%%{BKY_LEAPHY_ANALOG_READ} %1',
     'args0': [
-      {'type': 'field_dropdown', 'name': 'PIN', 'options': analogPinOptions}
+      {'type': 'field_dropdown', 'name': 'PIN', 'options': analogPinOptions},
     ],
     'style': 'leaphy_blocks',
     'output': 'Number',
     'tooltip': '',
-    'helpUrl': ''
+    'helpUrl': '',
   },
   {
     'type': 'leaphy_original_buzz',
@@ -132,15 +132,15 @@ const blocks = createBlockDefinitionsFromJsonArray([
         '%%{BKY_LEAPHY_BUZZ_BUZZ} %1 %%{BKY_LEAPHY_BUZZ_HERTZ} %2 %%{BKY_LEAPHY_BUZZ_MS}',
     'args0': [
       {'type': 'input_value', 'name': 'FREQUENCY', 'check': 'Number'},
-      {'type': 'input_value', 'name': 'DURATION', 'check': 'Number'}
+      {'type': 'input_value', 'name': 'DURATION', 'check': 'Number'},
     ],
     'inputsInline': true,
     'previousStatement': null,
     'nextStatement': null,
     'style': 'leaphy_blocks',
     'tooltip': '',
-    'helpUrl': ''
-  }
+    'helpUrl': '',
+  },
 ]);
 exports.blocks = blocks;
 

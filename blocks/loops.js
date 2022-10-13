@@ -73,7 +73,7 @@ const blocks = createBlockDefinitionsFromJsonArray([
     'nextStatement': null,
     'style': 'situation_blocks',
     'tooltip': '%{BKY_CONTROLS_REPEAT_TOOLTIP}',
-    'helpUrl': '%{BKY_CONTROLS_REPEAT_HELPURL}'
+    'helpUrl': '%{BKY_CONTROLS_REPEAT_HELPURL}',
   },
   // Block for repeat n times (internal number).
   // The 'controls_repeat_ext' block is preferred as it is more flexible.

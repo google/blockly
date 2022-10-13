@@ -17,36 +17,29 @@ goog.module('Blockly.libraryBlocks.leaphyExtra');
 const BlockDefinition = Object;
 const {createBlockDefinitionsFromJsonArray, defineBlocks} = goog.require('Blockly.common');
 
-var digitalPinOptions = [
+const digitalPinOptions = [
   ['2', '2'], ['3', '3'], ['4', '4'], ['5', '5'], ['6', '6'], ['7', '7'],
   ['8', '8'], ['9', '9'], ['10', '10'], ['11', '11'], ['12', '12'],
   ['13', '13'], ['14', '14'], ['15', '15'], ['16', '16'], ['17', '17'],
-  ['18', '18'], ['19', '19']
+  ['18', '18'], ['19', '19'],
 ];
-var ledstripDemoOptions = [
+const ledstripDemoOptions = [
   ['%{BKY_LEAPHY_LED_STRIP_LIGHTBANK}', '0'],
   ['%{BKY_LEAPHY_LED_STRIP_BREATHE}', '1'],
   ['%{BKY_LEAPHY_LED_STRIP_GULF}', '3'],
   ['%{BKY_LEAPHY_LED_STRIP_RAINBOW}', '4'],
-  ['%{BKY_LEAPHY_LED_STRIP_COLORGULF}', '5']
+  ['%{BKY_LEAPHY_LED_STRIP_COLORGULF}', '5'],
 ];
-var rgbColor = [
+const rgbColor = [
   ['%{BKY_LEAPHY_RGB_COLOR_RED}', '0'], ['%{BKY_LEAPHY_RGB_COLOR_GREEN}', '1'],
-  ['%{BKY_LEAPHY_RGB_COLOR_BLUE}', '2']
+  ['%{BKY_LEAPHY_RGB_COLOR_BLUE}', '2'],
 ];
-var rgbColorRaw = [
+const rgbColorRaw = [
   ['%{BKY_LEAPHY_RGB_RAW_COLOR_RED}', '0'],
   ['%{BKY_LEAPHY_RGB_RAW_COLOR_GREEN}', '1'],
-  ['%{BKY_LEAPHY_RGB_RAW_COLOR_BLUE}', '2']
+  ['%{BKY_LEAPHY_RGB_RAW_COLOR_BLUE}', '2'],
 ];
-var displayPinNumbers = [['1', '0'], ['2', '1'], ['3', '2']];
-var ledstripDemoOptions = [
-  ['%{BKY_LEAPHY_LED_STRIP_LIGHTBANK}', '0'],
-  ['%{BKY_LEAPHY_LED_STRIP_BREATHE}', '1'],
-  ['%{BKY_LEAPHY_LED_STRIP_GULF}', '3'],
-  ['%{BKY_LEAPHY_LED_STRIP_RAINBOW}', '4'],
-  ['%{BKY_LEAPHY_LED_STRIP_COLORGULF}', '5']
-];
+const displayPinNumbers = [['1', '0'], ['2', '1'], ['3', '2']];
 
 /**
  * A dictionary of the block definitions provided by this module.
@@ -61,7 +54,7 @@ const blocks = createBlockDefinitionsFromJsonArray([
     'style': 'leaphy_blocks',
     'output': 'Number',
     'tooltip': '',
-    'helpUrl': ''
+    'helpUrl': '',
   },
   {
     'type': 'leaphy_rgb_color_raw',
@@ -69,12 +62,12 @@ const blocks = createBlockDefinitionsFromJsonArray([
     'args0': [{
       'type': 'field_dropdown',
       'name': 'COLOR_TYPE_RAW',
-      'options': rgbColorRaw
+      'options': rgbColorRaw,
     }],
     'style': 'leaphy_blocks',
     'output': 'Number',
     'tooltip': '',
-    'helpUrl': ''
+    'helpUrl': '',
   },
   {
     'type': 'leaphy_rgb_raw_color_red',
@@ -82,7 +75,7 @@ const blocks = createBlockDefinitionsFromJsonArray([
     'style': 'leaphy_blocks',
     'output': 'Number',
     'tooltip': '',
-    'helpUrl': ''
+    'helpUrl': '',
   },
   {
     'type': 'leaphy_rgb_raw_color_green',
@@ -90,7 +83,7 @@ const blocks = createBlockDefinitionsFromJsonArray([
     'style': 'leaphy_blocks',
     'output': 'Number',
     'tooltip': '',
-    'helpUrl': ''
+    'helpUrl': '',
   },
   {
     'type': 'leaphy_rgb_raw_color_blue',
@@ -98,7 +91,7 @@ const blocks = createBlockDefinitionsFromJsonArray([
     'style': 'leaphy_blocks',
     'output': 'Number',
     'tooltip': '',
-    'helpUrl': ''
+    'helpUrl': '',
   },
   {
     'type': 'leaphy_led_set_strip',
@@ -107,14 +100,14 @@ const blocks = createBlockDefinitionsFromJsonArray([
     'args0': [
       {'type': 'input_dummy'},
       {'type': 'input_value', 'name': 'LED_SET_PIN', 'check': 'Number'},
-      {'type': 'input_value', 'name': 'LED_SET_LEDS', 'check': 'Number'}
+      {'type': 'input_value', 'name': 'LED_SET_LEDS', 'check': 'Number'},
     ],
     'inputsInline': true,
     'previousStatement': null,
     'nextStatement': null,
     'style': 'leaphy_blocks',
     'tooltip': '',
-    'helpUrl': ''
+    'helpUrl': '',
   },
   {
     'type': 'leaphy_led_set_basic',
@@ -124,27 +117,27 @@ const blocks = createBlockDefinitionsFromJsonArray([
       {'type': 'input_value', 'name': 'LED_SET_LED', 'check': 'Number'},
       {'type': 'input_value', 'name': 'LED_BASIC_RED', 'check': 'Number'},
       {'type': 'input_value', 'name': 'LED_BASIC_GREEN', 'check': 'Number'},
-      {'type': 'input_value', 'name': 'LED_BASIC_BLUE', 'check': 'Number'}
+      {'type': 'input_value', 'name': 'LED_BASIC_BLUE', 'check': 'Number'},
     ],
     'inputsInline': true,
     'previousStatement': null,
     'nextStatement': null,
     'style': 'leaphy_blocks',
     'tooltip': '',
-    'helpUrl': ''
+    'helpUrl': '',
   },
   {
     'type': 'leaphy_led_set_speed',
     'message0': '%%{BKY_LEAPHY_LED_SET_SPEEDVALUE} %1',
     'args0': [
-      {'type': 'input_value', 'name': 'LED_SET_SPEEDVALUE', 'check': 'Number'}
+      {'type': 'input_value', 'name': 'LED_SET_SPEEDVALUE', 'check': 'Number'},
     ],
     'inputsInline': true,
     'previousStatement': null,
     'nextStatement': null,
     'style': 'leaphy_blocks',
     'tooltip': '',
-    'helpUrl': ''
+    'helpUrl': '',
   },
   {
     'type': 'leaphy_led_strip_demo',
@@ -153,23 +146,23 @@ const blocks = createBlockDefinitionsFromJsonArray([
       {
         'type': 'field_dropdown',
         'name': 'DEMO_TYPE',
-        'options': ledstripDemoOptions
+        'options': ledstripDemoOptions,
       },
       {'type': 'input_dummy'},
       {'type': 'input_value', 'name': 'LED_STRIP_DEMO_RED', 'check': 'Number'},
       {
         'type': 'input_value',
         'name': 'LED_STRIP_DEMO_GREEN',
-        'check': 'Number'
+        'check': 'Number',
       },
-      {'type': 'input_value', 'name': 'LED_STRIP_DEMO_BLUE', 'check': 'Number'}
+      {'type': 'input_value', 'name': 'LED_STRIP_DEMO_BLUE', 'check': 'Number'},
     ],
     'inputsInline': true,
     'previousStatement': null,
     'nextStatement': null,
     'style': 'leaphy_blocks',
     'tooltip': '',
-    'helpUrl': ''
+    'helpUrl': '',
   },
   {
     'type': 'leaphy_servo_write',
@@ -179,18 +172,18 @@ const blocks = createBlockDefinitionsFromJsonArray([
       {
         'type': 'field_dropdown',
         'name': 'SERVO_PIN',
-        'options': digitalPinOptions
+        'options': digitalPinOptions,
       },
       {'type': 'input_dummy'},
-      {'type': 'input_value', 'name': 'SERVO_ANGLE', 'check': 'Number'}
+      {'type': 'input_value', 'name': 'SERVO_ANGLE', 'check': 'Number'},
     ],
     'inputsInline': true,
     'previousStatement': null,
     'nextStatement': null,
     'style': 'leaphy_blocks',
-    //"extensions": "refreshServoPinFields",
+    // "extensions": "refreshServoPinFields",
     'tooltip': '%{BKY_ARD_SERVO_WRITE_TIP}',
-    'helpUrl': 'http://arduino.cc/en/Reference/ServoWrite'
+    'helpUrl': 'http://arduino.cc/en/Reference/ServoWrite',
   },
   {
     'type': 'leaphy_servo_read',
@@ -198,42 +191,42 @@ const blocks = createBlockDefinitionsFromJsonArray([
     'args0': [{
       'type': 'field_dropdown',
       'name': 'SERVO_PIN',
-      'options': digitalPinOptions
+      'options': digitalPinOptions,
     }],
     'output': 'Number',
     'style': 'leaphy_blocks',
-    //"extensions": "returnAndUpdateServoRead",
+    // "extensions": "returnAndUpdateServoRead",
     'tooltip': '%{BKY_ARD_SERVO_READ_TIP}',
-    'helpUrl': 'http://arduino.cc/en/Reference/ServoRead'
+    'helpUrl': 'http://arduino.cc/en/Reference/ServoRead',
   },
   {
     'type': 'leaphy_io_digitalwrite',
     'message0': '%%{BKY_ARD_DIGITALWRITE} %1 %%{BKY_ARD_WRITE_TO} %2',
     'args0': [
       {'type': 'field_dropdown', 'name': 'PIN', 'options': digitalPinOptions},
-      {'type': 'input_value', 'name': 'NAME', 'check': 'Boolean'}
+      {'type': 'input_value', 'name': 'NAME', 'check': 'Boolean'},
     ],
     'inputsInline': true,
     'previousStatement': null,
     'nextStatement': null,
     'style': 'leaphy_blocks',
     'tooltip': '%{BKY_ARD_DIGITALWRITE_TIP}',
-    'helpUrl': 'http://arduino.cc/en/Reference/DigitalWrite'
+    'helpUrl': 'http://arduino.cc/en/Reference/DigitalWrite',
   },
   {
     'type': 'leaphy_io_analogwrite',
     'message0': '%%{BKY_ARD_ANALOGWRITE} %1 %%{BKY_ARD_WRITE_TO} %2',
     'args0': [
       {'type': 'field_dropdown', 'name': 'PIN', 'options': digitalPinOptions},
-      {'type': 'input_value', 'name': 'NUM', 'check': 'Number'}
+      {'type': 'input_value', 'name': 'NUM', 'check': 'Number'},
     ],
     'inputsInline': true,
     'previousStatement': null,
     'nextStatement': null,
     'style': 'leaphy_blocks',
-    //"extensions": "inputAndUpdateAnalog",
+    // "extensions": "inputAndUpdateAnalog",
     'tooltip': '%{BKY_ARD_ANALOGWRITE_TIP}',
-    'helpUrl': 'http://arduino.cc/en/Reference/AnalogWrite'
+    'helpUrl': 'http://arduino.cc/en/Reference/AnalogWrite',
   },
   {
     'type': 'leaphy_sonar_read',
@@ -243,19 +236,19 @@ const blocks = createBlockDefinitionsFromJsonArray([
       {
         'type': 'field_dropdown',
         'name': 'TRIG_PIN',
-        'options': digitalPinOptions
+        'options': digitalPinOptions,
       },
       {
         'type': 'field_dropdown',
         'name': 'ECHO_PIN',
-        'options': digitalPinOptions
-      }
+        'options': digitalPinOptions,
+      },
     ],
     'output': 'Number',
     'style': 'leaphy_blocks',
-    //"extensions": "returnAndUpdateTrig",
+    // "extensions": "returnAndUpdateTrig",
     'tooltip': '%{BKY_LEAPHY_SONAR_READ_TIP}',
-    'helpUrl': ''
+    'helpUrl': '',
   },
   {
     'type': 'leaphy_display_clear',
@@ -264,7 +257,7 @@ const blocks = createBlockDefinitionsFromJsonArray([
     'nextStatement': null,
     'style': 'leaphy_blocks',
     'tooltip': '',
-    'helpUrl': ''
+    'helpUrl': '',
   },
   {
     'type': 'leaphy_display_display',
@@ -273,7 +266,7 @@ const blocks = createBlockDefinitionsFromJsonArray([
     'nextStatement': null,
     'style': 'leaphy_blocks',
     'tooltip': '',
-    'helpUrl': ''
+    'helpUrl': '',
   },
   {
     'type': 'leaphy_display_print_line',
@@ -282,17 +275,17 @@ const blocks = createBlockDefinitionsFromJsonArray([
       {'type': 'input_dummy'}, {
         'type': 'field_dropdown',
         'name': 'DISPLAY_ROW',
-        'options': displayPinNumbers
+        'options': displayPinNumbers,
       },
-      {'type': 'input_value', 'name': 'VALUE'}
+      {'type': 'input_value', 'name': 'VALUE'},
     ],
     'inputsInline': true,
     'previousStatement': null,
     'nextStatement': null,
     'style': 'leaphy_blocks',
-    //"extensions": "updateDisplay",
+    // "extensions": "updateDisplay",
     'tooltip': '',
-    'helpUrl': ''
+    'helpUrl': '',
   },
   {
     'type': 'leaphy_display_print_value',
@@ -301,18 +294,18 @@ const blocks = createBlockDefinitionsFromJsonArray([
       {'type': 'input_dummy'}, {
         'type': 'field_dropdown',
         'name': 'DISPLAY_ROW',
-        'options': displayPinNumbers
+        'options': displayPinNumbers,
       },
       {'type': 'input_value', 'name': 'NAME'}, {'type': 'input_dummy'},
-      {'type': 'input_value', 'name': 'VALUE'}
+      {'type': 'input_value', 'name': 'VALUE'},
     ],
     'inputsInline': true,
     'previousStatement': null,
     'nextStatement': null,
     'style': 'leaphy_blocks',
-    //"extensions": "updateDisplay",
+    // "extensions": "updateDisplay",
     'tooltip': '',
-    'helpUrl': ''
+    'helpUrl': '',
   },
   {
     'type': 'leaphy_use_lsm9ds1',
@@ -323,20 +316,20 @@ const blocks = createBlockDefinitionsFromJsonArray([
         'name': 'SENSOR',
         'options': [
           ['Gyro', 'g.gyro'], ['Compass', 'm.magnetic'],
-          ['Accelerator', 'a.acceleration']
-        ]
+          ['Accelerator', 'a.acceleration'],
+        ],
       },
       {
         'type': 'field_dropdown',
         'name': 'AXIS',
-        'options': [['X-axis', '.x'], ['Y-axis', '.y'], ['Z-axis', '.z']]
-      }
+        'options': [['X-axis', '.x'], ['Y-axis', '.y'], ['Z-axis', '.z']],
+      },
     ],
     'inputsInline': true,
     'output': 'Number',
     'style': 'leaphy_blocks',
     'tooltip': '',
-    'helpUrl': ''
+    'helpUrl': '',
   },
   {
     'type': 'leaphy_update_lsm9ds1',
@@ -345,8 +338,8 @@ const blocks = createBlockDefinitionsFromJsonArray([
     'nextStatement': null,
     'style': 'leaphy_blocks',
     'tooltip': '',
-    'helpUrl': ''
-  }
+    'helpUrl': '',
+  },
 ]);
 
 exports.blocks = blocks;

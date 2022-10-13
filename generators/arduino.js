@@ -15,7 +15,6 @@ goog.module('Blockly.Arduino');
 
 const Variables = goog.require('Blockly.Variables');
 const { Generator } = goog.require('Blockly.Generator');
-goog.require('Blockly.StaticTyping');
 const { Names, NameType } = goog.require('Blockly.Names');
 
 /**

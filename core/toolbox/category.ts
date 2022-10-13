@@ -288,6 +288,7 @@ export class ToolboxCategory extends ToolboxItem implements
   /**
    * Creates the span that holds the Leaphy category label.
    * This should have an ID for accessibility purposes.
+   *
    * @param {string} name The name of the category.
    * @return {!Element} The span that holds the category label.
    * @protected

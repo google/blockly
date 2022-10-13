@@ -31,7 +31,7 @@ const blocks = createBlockDefinitionsFromJsonArray([{
   'nextStatement': null,
   'style': 'situation_blocks',
   'tooltip': '%{BKY_ARD_TIME_DELAY_TIP}',
-  'helpUrl': 'http://arduino.cc/en/Reference/Delay'
+  'helpUrl': 'http://arduino.cc/en/Reference/Delay',
 }]);
 exports.blocks = blocks;
 

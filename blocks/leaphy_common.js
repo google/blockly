@@ -31,7 +31,7 @@ const blocks = createBlockDefinitionsFromJsonArray([
     'extensions': ['appendStatementInputStack'],
     'isDeletable': false,
     'tooltip': '',
-    'helpUrl': ''
+    'helpUrl': '',
   },
   {
     'type': 'leaphy_serial_print_line',
@@ -43,28 +43,30 @@ const blocks = createBlockDefinitionsFromJsonArray([
     'nextStatement': null,
     'style': 'leaphy_blocks',
     'tooltip': '',
-    'helpUrl': ''
+    'helpUrl': '',
   },
   {
     'type': 'leaphy_serial_print_value',
     'message0': '%%{BKY_LEAPHY_SERIAL_PRINT} %1 %2 = %3 %4',
     'args0': [
       {'type': 'input_dummy'}, {'type': 'input_value', 'name': 'NAME'},
-      {'type': 'input_dummy'}, {'type': 'input_value', 'name': 'VALUE'}
+      {'type': 'input_dummy'}, {'type': 'input_value', 'name': 'VALUE'},
     ],
     'inputsInline': true,
     'previousStatement': null,
     'nextStatement': null,
     'style': 'leaphy_blocks',
     'tooltip': '',
-    'helpUrl': ''
-  }
+    'helpUrl': '',
+  },
 ]);
 exports.blocks = blocks;
 
-Extensions.register('appendStatementInputStack', function() {
+const APPEND_STATEMENT_INPUT_STACK = function() {
   this.appendStatementInput('STACK');
-});
+};
+
+Extensions.register('appendStatementInputStack', APPEND_STATEMENT_INPUT_STACK);
 
 // Register provided blocks.
 defineBlocks(blocks);

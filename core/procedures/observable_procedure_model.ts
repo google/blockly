@@ -14,7 +14,7 @@ export class ObservableProcedureModel implements IProcedureModel {
   private id: string;
   private name = '';
   private parameters: IParameterModel[] = [];
-  private returnType: string[]|null = null;
+  private returnTypes: string[]|null = null;
   private enabled = true;
 
   constructor(private readonly workspace: Workspace, id?: string) {
@@ -49,7 +49,7 @@ export class ObservableProcedureModel implements IProcedureModel {
    * Pass null to represent a procedure that does not return.
    */
   setReturnTypes(types: string[]|null): this {
-    this.returnType = types;
+    this.returnTypes = types;
     return this;
   }
 
@@ -88,7 +88,7 @@ export class ObservableProcedureModel implements IProcedureModel {
    * Null represents a procedure that does not return a value.
    */
   getReturnTypes(): string[]|null {
-    return this.returnType;
+    return this.returnTypes;
   }
 
   /**

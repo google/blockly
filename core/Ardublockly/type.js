@@ -11,8 +11,6 @@
 
 goog.provide('Blockly.Type');
 
-//goog.require('goog.asserts');
-
 
 /**
  * Blockly Type class constructor.
@@ -23,25 +21,28 @@ goog.provide('Blockly.Type');
 Blockly.Type = function(args) {
   if ((args.typeId === undefined) || (args.typeMsgName === undefined) ||
       (args.compatibleTypes === undefined)) {
-    throw new Error('Creating a Type requires the following format:\n{\n' +
-                    '  typeId: string,\n' +
-                    '  typeMsgName: Blockly.Msg string member var name to\n' +
-                    '               identify the translatable Type name.\n' +
-                    '  compatibleTypes: [Blockly.Type,]\n}');
+    throw new Error(
+        'Creating a Type requires the following format:\n{\n' +
+        '  typeId: string,\n' +
+        '  typeMsgName: Blockly.Msg string member var name to\n' +
+        '               identify the translatable Type name.\n' +
+        '  compatibleTypes: [Blockly.Type,]\n}');
   }
   if (!Array.isArray(args.compatibleTypes)) {
-    throw new Error('The compatible types for a Blockly Types needs to be an ' +
-                    'array of Blockly.Type items.');
+    throw new Error(
+        'The compatible types for a Blockly Types needs to be an ' +
+        'array of Blockly.Type items.');
   }
   /** @type {string} */
   this.typeId = args.typeId;
-  /** @type {string}
+  /**
+   * @type {string}
    * This is the translatable Blockly.Msg member string name.
    * @private
    */
   this.typeMsgName_ = args.typeMsgName;
   /**
-   * @type {Array<Blockly.Type>} 
+   * @type {Array<Blockly.Type>}
    * @private
    */
   this.compatibleTypes_ = args.compatibleTypes;
@@ -60,7 +61,8 @@ Object.defineProperty(Blockly.Type.prototype, 'typeName', {
     return Blockly.Msg[this.typeMsgName_] || this.typeId;
   },
   set: function(value) {
-    console.warn('"Blockly.Type" property "typeName" is not allowed to be set.');
+    console.warn(
+        '"Blockly.Type" property "typeName" is not allowed to be set.');
   }
 });
 
@@ -76,7 +78,7 @@ Object.defineProperty(Blockly.Type.prototype, 'output', {
 
 /** Getter for the check property, use for block input checks. */
 Object.defineProperty(Blockly.Type.prototype, 'checkList', {
-  get : function() {
+  get: function() {
     return this.generatedCheckList_;
   },
   set: function(value) {
@@ -111,8 +113,9 @@ Blockly.Type.prototype.generateCheckList_ = function(compatibleType) {
 Blockly.Type.prototype.addCompatibleType = function(compatibleType) {
   if (!compatibleType || !compatibleType.constructor ||
       !(compatibleType instanceof Blockly.Type)) {
-    throw new Error('To add a compatible type to ' + this.typeId +
-                    ' provide a Blockly.Type object.');
+    throw new Error(
+        'To add a compatible type to ' + this.typeId +
+        ' provide a Blockly.Type object.');
   }
   this.compatibleTypes_.push(compatibleType);
   this.generateCheckList_();
@@ -125,14 +128,16 @@ Blockly.Type.prototype.addCompatibleType = function(compatibleType) {
  */
 Blockly.Type.prototype.addCompatibleTypes = function(compatibleTypeArray) {
   if (!Array.isArray(compatibleTypeArray)) {
-    throw new Error('To add compatible types to the Blockly Type ' +
-                    this.typeId +' provide an array of Blockly.Type items.');
+    throw new Error(
+        'To add compatible types to the Blockly Type ' + this.typeId +
+        ' provide an array of Blockly.Type items.');
   }
   for (var i = 0; i < compatibleTypeArray.length; i++) {
     if (!compatibleTypeArray[i] || !compatibleTypeArray[i].constructor ||
         !(compatibleTypeArray[i] instanceof Blockly.Type)) {
-      throw new Error('To add a compatible type to ' + this.typeId + ' you ' +
-                      'must point to a Blockly.Type object.');
+      throw new Error(
+          'To add a compatible type to ' + this.typeId + ' you ' +
+          'must point to a Blockly.Type object.');
     }
     this.compatibleTypes_.push(compatibleTypeArray[i]);
   }

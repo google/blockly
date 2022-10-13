@@ -193,17 +193,18 @@ export class ToolboxCategory extends ToolboxItem implements
     this.rowContents_.style.pointerEvents = 'none';
     this.rowDiv_.appendChild(this.rowContents_);
 
-    // This is disabled because the icon is now created within the createLabelDom_ method. 
-    // TODO: We should evaluate whether it would not be better to just use the createIconDom_
-    // for this because it is a better fit semantically.
-    //this.iconDom_ = this.createIconDom_();
-    //aria.setRole(this.iconDom_, aria.Role.PRESENTATION);
-    //this.rowContents_.appendChild(this.iconDom_);
+    // This is disabled because the icon is now created within the
+    // createLabelDom_ method.
+    // TODO: We should evaluate whether it would not be better to just use the
+    // createIconDom_ for this because it is a better fit semantically.
+    // this.iconDom_ = this.createIconDom_();
+    // aria.setRole(this.iconDom_, aria.Role.PRESENTATION);
+    // this.rowContents_.appendChild(this.iconDom_);
 
-    // This is changed to a separate method that creates the label in the Leaphy way
-    // See other comments for possible improvements in this area.
+    // This is changed to a separate method that creates the label in the Leaphy
+    // way See other comments for possible improvements in this area.
     this.labelDom_ = this.createLeaphyLabelDom_(this.name_);
-    //this.labelDom_ = this.createLabelDom_(this.name_);
+    // this.labelDom_ = this.createLabelDom_(this.name_);
     this.rowContents_.appendChild(this.labelDom_);
 
     const id = this.labelDom_.getAttribute('id');
@@ -213,7 +214,7 @@ export class ToolboxCategory extends ToolboxItem implements
 
     // This is disabled because we have this inside the Leaphy Client now.
     // TODO: We should try to have this back into Blockly
-    //this.addColourBorder_(this.colour_);
+    // this.addColourBorder_(this.colour_);
 
     return this.htmlDiv_;
   }
@@ -284,14 +285,14 @@ export class ToolboxCategory extends ToolboxItem implements
     return toolboxIcon;
   }
 
-    /**
+  /**
    * Creates the span that holds the Leaphy category label.
    * This should have an ID for accessibility purposes.
    * @param {string} name The name of the category.
    * @return {!Element} The span that holds the category label.
    * @protected
    */
-    createLeaphyLabelDom_(name: string) {
+  createLeaphyLabelDom_(name: string) {
     const toolboxLabelContainer = document.createElement('div');
     toolboxLabelContainer.style.position = 'relative';
 

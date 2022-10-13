@@ -14,7 +14,6 @@ goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.Instances');
 goog.require('Blockly.Msg');
 goog.require('Blockly.utils');
-//goog.require('goog.string');
 
 
 /**
@@ -35,16 +34,16 @@ goog.require('Blockly.utils');
 Blockly.FieldInstance = function(
     instanceType, instanceName, uniqueName, opt_lockNew, opt_lockRename,
     opt_editDropdownData, opt_validator) {
-  Blockly.FieldInstance.superClass_.constructor.call(this,
-      this.dropdownCreate, opt_validator);
+  Blockly.FieldInstance.superClass_.constructor.call(
+      this, this.dropdownCreate, opt_validator);
 
   this.instanceType_ = instanceType;
   this.setValue(instanceName);
   this.uniqueName_ = (uniqueName === true);
   this.lockNew_ = (opt_lockNew === true);
   this.lockRename_ = (opt_lockRename === true);
-  this.editDropdownData = (opt_editDropdownData instanceof Function) ?
-      opt_editDropdownData : null;
+  this.editDropdownData =
+      (opt_editDropdownData instanceof Function) ? opt_editDropdownData : null;
 };
 goog.inherits(Blockly.FieldInstance, Blockly.FieldDropdown);
 
@@ -87,30 +86,29 @@ Blockly.FieldInstance.prototype.init = function() {
   Blockly.FieldInstance.superClass_.init.call(this);
 
   var workspace = this.sourceBlock_.isInFlyout ?
-      this.sourceBlock_.workspace.targetWorkspace : this.sourceBlock_.workspace;
+      this.sourceBlock_.workspace.targetWorkspace :
+      this.sourceBlock_.workspace;
 
   if (!this.getValue()) {
     // Instances without names get uniquely named for this workspace.
     this.setValue(Blockly.Instances.generateUniqueName(workspace));
   } else {
-      if (this.uniqueName_) {
-        // Ensure the given name is unique in the workspace, but not in flyout
-        if (!this.sourceBlock_.isInFlyout) {
-          this.setValue(
-              Blockly.Instances.convertToUniqueNameBlock(
-                  this.getValue(), this.sourceBlock_));
-        }
-      } else {
-        // Pick an existing name from the workspace if any exists
-        var instanceList =
-        Blockly.Instances.allInstancesOf(this.instanceType_,
-                                         this.sourceBlock_.workspace);
-        if (instanceList.indexOf(this.getValue()) == -1) {
-          var existingName =
-              Blockly.Instances.getAnyInstanceOf(this.instanceType_ , workspace);
-          if (existingName) this.setValue(existingName);
-        }
+    if (this.uniqueName_) {
+      // Ensure the given name is unique in the workspace, but not in flyout
+      if (!this.sourceBlock_.isInFlyout) {
+        this.setValue(Blockly.Instances.convertToUniqueNameBlock(
+            this.getValue(), this.sourceBlock_));
       }
+    } else {
+      // Pick an existing name from the workspace if any exists
+      var instanceList = Blockly.Instances.allInstancesOf(
+          this.instanceType_, this.sourceBlock_.workspace);
+      if (instanceList.indexOf(this.getValue()) == -1) {
+        var existingName =
+            Blockly.Instances.getAnyInstanceOf(this.instanceType_, workspace);
+        if (existingName) this.setValue(existingName);
+      }
+    }
   }
 };
 
@@ -142,14 +140,13 @@ Blockly.FieldInstance.prototype.setValue = function(newValue) {
 
 /**
  * Return a sorted list of instance names for instance dropdown menus.
- * If editDropdownData has been defined it passes this list to the 
+ * If editDropdownData has been defined it passes this list to the
  * @return {!Array.<string>} Array of instance names.
  */
 Blockly.FieldInstance.prototype.dropdownCreate = function() {
   if (this.sourceBlock_ && this.sourceBlock_.workspace) {
-    var instanceList =
-        Blockly.Instances.allInstancesOf(this.instanceType_,
-                                         this.sourceBlock_.workspace);
+    var instanceList = Blockly.Instances.allInstancesOf(
+        this.instanceType_, this.sourceBlock_.workspace);
   } else {
     var instanceList = [];
   }
@@ -213,11 +210,12 @@ Blockly.FieldInstance.dropdownChange = function(text) {
             oldInstance, text, thisFieldInstance.instanceType_, workspace);
       }
     };
-    promptName(Blockly.Msg.RENAME_INSTANCE_TITLE.replace('%1', oldInstance),
-               oldInstance, callbackRename);
+    promptName(
+        Blockly.Msg.RENAME_INSTANCE_TITLE.replace('%1', oldInstance),
+        oldInstance, callbackRename);
     return null;
   } else if (text == Blockly.Msg.NEW_INSTANCE) {
-    //TODO: this return needs to be replaced with an asynchronous callback
+    // TODO: this return needs to be replaced with an asynchronous callback
     return Blockly.Instances.generateUniqueName(workspace);
   }
   return undefined;

@@ -14,11 +14,8 @@ goog.provide('Blockly.Types');
 goog.require('Blockly.Type');
 
 /** Single character. */
-Blockly.Types.CHARACTER = new Blockly.Type({
-  typeId: 'Character',
-  typeMsgName: 'ARD_TYPE_CHAR',
-  compatibleTypes: []
-});
+Blockly.Types.CHARACTER = new Blockly.Type(
+    {typeId: 'Character', typeMsgName: 'ARD_TYPE_CHAR', compatibleTypes: []});
 
 /** Text string. */
 Blockly.Types.TEXT = new Blockly.Type({
@@ -28,24 +25,21 @@ Blockly.Types.TEXT = new Blockly.Type({
 });
 
 /** Boolean. */
-Blockly.Types.BOOLEAN = new Blockly.Type({
-  typeId: 'Boolean',
-  typeMsgName: 'ARD_TYPE_BOOL',
-  compatibleTypes: []
-});
+Blockly.Types.BOOLEAN = new Blockly.Type(
+    {typeId: 'Boolean', typeMsgName: 'ARD_TYPE_BOOL', compatibleTypes: []});
 
 /** Short integer number. */
 Blockly.Types.SHORT_NUMBER = new Blockly.Type({
   typeId: 'Short Number',
   typeMsgName: 'ARD_TYPE_SHORT',
-  compatibleTypes: []    // Circular dependencies, add after all declarations
+  compatibleTypes: []  // Circular dependencies, add after all declarations
 });
 
 /** Integer number. */
 Blockly.Types.NUMBER = new Blockly.Type({
   typeId: 'Number',
   typeMsgName: 'ARD_TYPE_NUMBER',
-  compatibleTypes: []    // Circular dependencies, add after all declarations
+  compatibleTypes: []  // Circular dependencies, add after all declarations
 });
 
 /** Unsigned integer number. */
@@ -53,22 +47,23 @@ Blockly.Types.UNS_NUMBER = new Blockly.Type({
   typeId: 'Unsigned number',
   typeMsgName: 'ARD_TYPE_UNS_NUMBER',
   compatibleTypes: [
-                    Blockly.Types.SHORT_NUMBER,
-                    Blockly.Types.NUMBER]    // Circular dependencies, add after all declarations
+    Blockly.Types.SHORT_NUMBER,
+    Blockly.Types.NUMBER
+  ]  // Circular dependencies, add after all declarations
 });
 
 /** Volatile integer number. */
 Blockly.Types.VOLATIL_NUMBER = new Blockly.Type({
   typeId: 'Volatil Number',
   typeMsgName: 'ARD_TYPE_VOLATILE',
-  compatibleTypes: []    // Circular dependencies, add after all declarations
+  compatibleTypes: []  // Circular dependencies, add after all declarations
 });
 
 /** Large integer number. */
 Blockly.Types.LARGE_NUMBER = new Blockly.Type({
   typeId: 'Large Number',
   typeMsgName: 'ARD_TYPE_LONG',
-  compatibleTypes: []    // Circular dependencies, add after all declarations
+  compatibleTypes: []  // Circular dependencies, add after all declarations
 });
 
 /** Large unsigned integer number. */
@@ -76,27 +71,23 @@ Blockly.Types.LARGE_UNS_NUMBER = new Blockly.Type({
   typeId: 'Unisgned Large Number',
   typeMsgName: 'ARD_TYPE_UNS_LONG',
   compatibleTypes: [
-                    Blockly.Types.SHORT_NUMBER,
-                    Blockly.Types.NUMBER,
-                    Blockly.Types.LARGE_NUMBER]
+    Blockly.Types.SHORT_NUMBER, Blockly.Types.NUMBER, Blockly.Types.LARGE_NUMBER
+  ]
 });
 
 /** Decimal/floating point number. */
 Blockly.Types.DECIMAL = new Blockly.Type({
   typeId: 'Decimal',
   typeMsgName: 'ARD_TYPE_DECIMAL',
-  compatibleTypes: [Blockly.Types.BOOLEAN,
-                    Blockly.Types.SHORT_NUMBER,
-                    Blockly.Types.NUMBER,
-                    Blockly.Types.LARGE_NUMBER]
+  compatibleTypes: [
+    Blockly.Types.BOOLEAN, Blockly.Types.SHORT_NUMBER, Blockly.Types.NUMBER,
+    Blockly.Types.LARGE_NUMBER
+  ]
 });
 
 /** Array/List of items. */
-Blockly.Types.ARRAY = new Blockly.Type({
-  typeId: 'Array',
-  typeMsgName: 'ARD_TYPE_ARRAY',
-  compatibleTypes: []
-});
+Blockly.Types.ARRAY = new Blockly.Type(
+    {typeId: 'Array', typeMsgName: 'ARD_TYPE_ARRAY', compatibleTypes: []});
 /** Array/List of character. */
 Blockly.Types.ARRAY_CHAR = new Blockly.Type({
   typeId: 'ArrayChar',
@@ -105,18 +96,12 @@ Blockly.Types.ARRAY_CHAR = new Blockly.Type({
 });
 
 /** Null indicate there is no type. */
-Blockly.Types.NULL = new Blockly.Type({
-  typeId: 'Null',
-  typeMsgName: 'ARD_TYPE_NULL',
-  compatibleTypes: []
-});
+Blockly.Types.NULL = new Blockly.Type(
+    {typeId: 'Null', typeMsgName: 'ARD_TYPE_NULL', compatibleTypes: []});
 
 /** Type not defined, or not yet defined. */
-Blockly.Types.UNDEF = new Blockly.Type({
-  typeId: 'Undefined',
-  typeMsgName: 'ARD_TYPE_UNDEF',
-  compatibleTypes: []
-});
+Blockly.Types.UNDEF = new Blockly.Type(
+    {typeId: 'Undefined', typeMsgName: 'ARD_TYPE_UNDEF', compatibleTypes: []});
 
 /** Set when no child block (meant to define the variable type) is connected. */
 Blockly.Types.CHILD_BLOCK_MISSING = new Blockly.Type({
@@ -130,46 +115,35 @@ Blockly.Types.CHILD_BLOCK_MISSING = new Blockly.Type({
  * after declaration.
  */
 Blockly.Types.NUMBER.addCompatibleTypes([
-    Blockly.Types.BOOLEAN,
-    Blockly.Types.SHORT_NUMBER,
-    Blockly.Types.LARGE_NUMBER,
-    Blockly.Types.DECIMAL]);
+  Blockly.Types.BOOLEAN, Blockly.Types.SHORT_NUMBER, Blockly.Types.LARGE_NUMBER,
+  Blockly.Types.DECIMAL
+]);
 
 Blockly.Types.UNS_NUMBER.addCompatibleTypes([
-    Blockly.Types.BOOLEAN,
-    Blockly.Types.SHORT_NUMBER,
-    Blockly.Types.NUMBER,
-    Blockly.Types.DECIMAL]);
+  Blockly.Types.BOOLEAN, Blockly.Types.SHORT_NUMBER, Blockly.Types.NUMBER,
+  Blockly.Types.DECIMAL
+]);
 
-Blockly.Types.SHORT_NUMBER.addCompatibleTypes([
-    Blockly.Types.BOOLEAN,
-    Blockly.Types.NUMBER,
-    Blockly.Types.DECIMAL]);
+Blockly.Types.SHORT_NUMBER.addCompatibleTypes(
+    [Blockly.Types.BOOLEAN, Blockly.Types.NUMBER, Blockly.Types.DECIMAL]);
 
 Blockly.Types.LARGE_NUMBER.addCompatibleTypes([
-    Blockly.Types.BOOLEAN,
-    Blockly.Types.SHORT_NUMBER,
-    Blockly.Types.UNS_NUMBER,
-    Blockly.Types.NUMBER,
-    Blockly.Types.DECIMAL]);
+  Blockly.Types.BOOLEAN, Blockly.Types.SHORT_NUMBER, Blockly.Types.UNS_NUMBER,
+  Blockly.Types.NUMBER, Blockly.Types.DECIMAL
+]);
 
 Blockly.Types.LARGE_UNS_NUMBER.addCompatibleTypes([
-    Blockly.Types.BOOLEAN,
-    Blockly.Types.SHORT_NUMBER,
-    Blockly.Types.UNS_NUMBER,
-    Blockly.Types.NUMBER,
-    Blockly.Types.LARGE_NUMBER,
-    Blockly.Types.DECIMAL]);
-	
+  Blockly.Types.BOOLEAN, Blockly.Types.SHORT_NUMBER, Blockly.Types.UNS_NUMBER,
+  Blockly.Types.NUMBER, Blockly.Types.LARGE_NUMBER, Blockly.Types.DECIMAL
+]);
+
 Blockly.Types.VOLATIL_NUMBER.addCompatibleTypes([
-    Blockly.Types.SHORT_NUMBER,
-    Blockly.Types.LARGE_NUMBER,
-    Blockly.Types.UNS_NUMBER,
-    Blockly.Types.NUMBER]);
-    
-Blockly.Types.ARRAY_CHAR.addCompatibleTypes([
-    Blockly.Types.CHARACTER,
-    Blockly.Types.TEXT]);
+  Blockly.Types.SHORT_NUMBER, Blockly.Types.LARGE_NUMBER,
+  Blockly.Types.UNS_NUMBER, Blockly.Types.NUMBER
+]);
+
+Blockly.Types.ARRAY_CHAR.addCompatibleTypes(
+    [Blockly.Types.CHARACTER, Blockly.Types.TEXT]);
 
 /**
  * Adds another type to the Blockly.Types collection.
@@ -221,7 +195,8 @@ Blockly.Types.getChildBlockType = function(block) {
   // Only checks first input block, so it decides the type. Incoherences amongst
   // multiple inputs dealt at a per-block level with their own block warnings
   while (nextBlock && (nextBlock.getBlockType === undefined) &&
-         (nextBlock.inputList.length > 0) && (nextBlock.inputList[0].connection != null)) {
+         (nextBlock.inputList.length > 0) &&
+         (nextBlock.inputList[0].connection != null)) {
     nextBlock = nextBlock.inputList[0].connection.targetBlock();
   }
   if (nextBlock === block) {
@@ -261,17 +236,17 @@ Blockly.Types.regExpFloat_ = new RegExp(/^-?[0-9]*[.][0-9]+$/);
  * @return {!Blockly.Type} Blockly type.
  */
 Blockly.Types.identifyNumber = function(numberString) {
-    if (Blockly.Types.regExpInt_.test(numberString)) {
-      var intValue = parseInt(numberString);
-      if (isNaN(intValue)) {
-        return Blockly.Types.NULL;
-      }
-      if (intValue > 32767 || intValue < -32768) {
-        return Blockly.Types.LARGE_NUMBER;
-      }
-      return Blockly.Types.NUMBER;
-    } else if (Blockly.Types.regExpFloat_.test(numberString)) {
-      return Blockly.Types.DECIMAL;
+  if (Blockly.Types.regExpInt_.test(numberString)) {
+    var intValue = parseInt(numberString);
+    if (isNaN(intValue)) {
+      return Blockly.Types.NULL;
     }
-    return Blockly.Types.NULL;
+    if (intValue > 32767 || intValue < -32768) {
+      return Blockly.Types.LARGE_NUMBER;
+    }
+    return Blockly.Types.NUMBER;
+  } else if (Blockly.Types.regExpFloat_.test(numberString)) {
+    return Blockly.Types.DECIMAL;
+  }
+  return Blockly.Types.NULL;
 };

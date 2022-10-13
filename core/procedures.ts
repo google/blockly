@@ -180,12 +180,12 @@ export function isNameUsed(
  * @alias Blockly.Procedures.rename
  */
 export function rename(this: Field, name: string): string {
-    const block = this.getSourceBlock();
-    if (!block) {
-      throw new Error(
-          'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.')
-    }
+  const block = this.getSourceBlock();
+  if (!block) {
+    throw new Error(
+        'The field has not yet been attached to its input. ' +
+        'Call appendField to attach it.');
+  }
 
   // Strip leading and trailing whitespace.  Beyond this, all names are legal.
   name = name.trim();

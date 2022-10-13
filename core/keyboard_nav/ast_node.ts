@@ -544,7 +544,7 @@ export class ASTNode {
         const field = this.location_ as Field;
         const block = field.getSourceBlock();
         if (!block) {
-           throw new Error(
+          throw new Error(
               'The current AST location is not associated with a block');
         }
         return ASTNode.createBlockNode(block);

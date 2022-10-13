@@ -225,7 +225,7 @@ export class FieldDropdown extends Field {
     this.arrow_ = dom.createSvgElement(Svg.TSPAN, {}, this.textElement_);
     this.arrow_!.appendChild(document.createTextNode(
         this.getSourceBlock()?.RTL ? FieldDropdown.ARROW_CHAR + ' ' :
-                                    ' ' + FieldDropdown.ARROW_CHAR));
+                                     ' ' + FieldDropdown.ARROW_CHAR));
     if (this.getSourceBlock()?.RTL) {
       // AnyDuringMigration because:  Argument of type 'SVGTSpanElement | null'
       // is not assignable to parameter of type 'Node'.
@@ -262,7 +262,7 @@ export class FieldDropdown extends Field {
     if (!block) {
       throw new Error(
           'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.')
+          'Call appendField to attach it.');
     }
     this.dropdownCreate_();
     // AnyDuringMigration because:  Property 'clientX' does not exist on type
@@ -285,9 +285,8 @@ export class FieldDropdown extends Field {
     dom.addClass(menuElement, 'blocklyDropdownMenu');
 
     if (this.getConstants()!.FIELD_DROPDOWN_COLOURED_DIV) {
-      const primaryColour = block.isShadow() ?
-          block.getParent()!.getColour() :
-          block.getColour();
+      const primaryColour =
+          block.isShadow() ? block.getParent()!.getColour() : block.getColour();
       const borderColour = block.isShadow() ?
           (block.getParent() as BlockSvg).style.colourTertiary :
           (this.sourceBlock_ as BlockSvg).style.colourTertiary;
@@ -314,7 +313,7 @@ export class FieldDropdown extends Field {
     if (!block) {
       throw new Error(
           'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.')
+          'Call appendField to attach it.');
     }
     const menu = new Menu();
     menu.setRole(aria.Role.LISTBOX);
@@ -556,7 +555,7 @@ export class FieldDropdown extends Field {
     if (!block) {
       throw new Error(
           'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.')
+          'Call appendField to attach it.');
     }
     this.imageElement_!.style.display = '';
     this.imageElement_!.setAttributeNS(
@@ -656,7 +655,7 @@ export class FieldDropdown extends Field {
     if (!block) {
       throw new Error(
           'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.')
+          'Call appendField to attach it.');
     }
     const hasBorder = !!this.borderRect_;
     const xPadding =

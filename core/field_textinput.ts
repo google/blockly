@@ -131,7 +131,7 @@ export class FieldTextInput extends Field {
     if (!block) {
       throw new Error(
           'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.')
+          'Call appendField to attach it.');
     }
     if (this.getConstants()!.FULL_BLOCK_FIELDS) {
       // Step one: figure out if this is the only field on this block.
@@ -149,8 +149,8 @@ export class FieldTextInput extends Field {
       }
       // The special case is when this is the only non-label field on the block
       // and it has an output but no inputs.
-      this.fullBlockClickTarget_ = nFields <= 1 &&
-          block.outputConnection && !nConnections;
+      this.fullBlockClickTarget_ =
+          nFields <= 1 && block.outputConnection && !nConnections;
     } else {
       this.fullBlockClickTarget_ = false;
     }
@@ -317,10 +317,9 @@ export class FieldTextInput extends Field {
     if (!block) {
       throw new Error(
           'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.')
+          'Call appendField to attach it.');
     }
-    WidgetDiv.show(
-        this, block.RTL, this.widgetDispose_.bind(this));
+    WidgetDiv.show(this, block.RTL, this.widgetDispose_.bind(this));
     this.htmlInput_ = this.widgetCreate_() as HTMLInputElement;
     this.isBeingEdited_ = true;
 
@@ -342,7 +341,7 @@ export class FieldTextInput extends Field {
     if (!block) {
       throw new Error(
           'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.')
+          'Call appendField to attach it.');
     }
     eventUtils.setGroup(true);
     const div = WidgetDiv.getDiv();
@@ -532,7 +531,7 @@ export class FieldTextInput extends Field {
     if (!block) {
       throw new Error(
           'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.')
+          'Call appendField to attach it.');
     }
     const div = WidgetDiv.getDiv();
     const bBox = this.getScaledBBox();
@@ -541,8 +540,7 @@ export class FieldTextInput extends Field {
 
     // In RTL mode block fields and LTR input fields the left edge moves,
     // whereas the right edge is fixed.  Reposition the editor.
-    const x =
-        block.RTL ? bBox.right - div!.offsetWidth : bBox.left;
+    const x = block.RTL ? bBox.right - div!.offsetWidth : bBox.left;
     const xy = new Coordinate(x, bBox.top);
 
     div!.style.left = xy.x + 'px';

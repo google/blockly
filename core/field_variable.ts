@@ -139,14 +139,13 @@ export class FieldVariable extends FieldDropdown {
     if (!block) {
       throw new Error(
           'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.')
+          'Call appendField to attach it.');
     }
     if (this.variable_) {
       return;  // Initialization already happened.
     }
     const variable = Variables.getOrCreateVariablePackage(
-        block.workspace, null, this.defaultVariableName,
-        this.defaultType_);
+        block.workspace, null, this.defaultVariableName, this.defaultType_);
     // Don't call setValue because we don't want to cause a rerender.
     this.doValueUpdate_(variable.getId());
   }
@@ -156,7 +155,7 @@ export class FieldVariable extends FieldDropdown {
     if (!block) {
       throw new Error(
           'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.')
+          'Call appendField to attach it.');
     }
     return super.shouldAddBorderRect_() &&
         (!this.getConstants()!.FIELD_DROPDOWN_NO_BORDER_RECT_SHADOW ||
@@ -174,7 +173,7 @@ export class FieldVariable extends FieldDropdown {
     if (!block) {
       throw new Error(
           'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.')
+          'Call appendField to attach it.');
     }
     const id = fieldElement.getAttribute('id');
     const variableName = fieldElement.textContent;
@@ -186,8 +185,7 @@ export class FieldVariable extends FieldDropdown {
     // AnyDuringMigration because:  Argument of type 'string | null' is not
     // assignable to parameter of type 'string | undefined'.
     const variable = Variables.getOrCreateVariablePackage(
-        block.workspace, id, variableName as AnyDuringMigration,
-        variableType);
+        block.workspace, id, variableName as AnyDuringMigration, variableType);
 
     // This should never happen :)
     if (variableType !== null && variableType !== variable.type) {
@@ -255,7 +253,7 @@ export class FieldVariable extends FieldDropdown {
     if (!block) {
       throw new Error(
           'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.')
+          'Call appendField to attach it.');
     }
     if (this.loadLegacyState(FieldVariable, state)) {
       return;
@@ -343,11 +341,10 @@ export class FieldVariable extends FieldDropdown {
     if (!block) {
       throw new Error(
           'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.')
+          'Call appendField to attach it.');
     }
     const newId = opt_newValue as string;
-    const variable =
-        Variables.getVariable(block.workspace, newId);
+    const variable = Variables.getVariable(block.workspace, newId);
     if (!variable) {
       console.warn(
           'Variable id doesn\'t point to a real variable! ' +
@@ -377,10 +374,9 @@ export class FieldVariable extends FieldDropdown {
     if (!block) {
       throw new Error(
           'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.')
+          'Call appendField to attach it.');
     }
-    this.variable_ =
-        Variables.getVariable(block.workspace, newId as string);
+    this.variable_ = Variables.getVariable(block.workspace, newId as string);
     super.doValueUpdate_(newId);
   }
 

@@ -167,7 +167,7 @@ export class FieldMultilineInput extends FieldTextInput {
     if (!block) {
       throw new Error(
           'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.')
+          'Call appendField to attach it.');
     }
     let textLines = this.getText();
     if (!textLines) {
@@ -222,7 +222,7 @@ export class FieldMultilineInput extends FieldTextInput {
     if (!block) {
       throw new Error(
           'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.')
+          'Call appendField to attach it.');
     }
     // Remove all text group children.
     let currentChild;

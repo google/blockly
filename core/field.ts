@@ -821,7 +821,7 @@ export abstract class Field implements IASTNodeLocationSvg,
     if (!block) {
       throw new Error(
           'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.')
+          'Call appendField to attach it.');
     }
 
     if (!this.borderRect_) {
@@ -1166,7 +1166,7 @@ export abstract class Field implements IASTNodeLocationSvg,
     if (!block) {
       throw new Error(
           'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.')
+          'Call appendField to attach it.');
     }
     const inputs = block.inputList;
 
@@ -1255,7 +1255,7 @@ export abstract class Field implements IASTNodeLocationSvg,
     if (!block) {
       throw new Error(
           'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.')
+          'Call appendField to attach it.');
     }
     const workspace = block.workspace as WorkspaceSvg;
     if (workspace.keyboardAccessibilityMode && this.cursorSvg_) {

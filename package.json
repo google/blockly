@@ -1,6 +1,6 @@
 {
   "name": "leaphy-blockly",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Leaphy Blockly is an adaptation of the Blockly library for building visual programming editors.",
   "keywords": [
     "blockly",

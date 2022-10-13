@@ -180,14 +180,21 @@ export function isNameUsed(
  * @alias Blockly.Procedures.rename
  */
 export function rename(this: Field, name: string): string {
+    const block = this.getSourceBlock();
+    if (!block) {
+      throw new Error(
+          'The field has not yet been attached to its input. ' +
+          'Call appendField to attach it.')
+    }
+
   // Strip leading and trailing whitespace.  Beyond this, all names are legal.
   name = name.trim();
 
-  const legalName = findLegalName(name, (this.getSourceBlock()));
+  const legalName = findLegalName(name, block);
   const oldName = this.getValue();
   if (oldName !== name && oldName !== legalName) {
     // Rename any callers.
-    const blocks = this.getSourceBlock().workspace.getAllBlocks(false);
+    const blocks = block.workspace.getAllBlocks(false);
     for (let i = 0; i < blocks.length; i++) {
       // Assume it is a procedure so we can check.
       const procedureBlock = blocks[i] as unknown as ProcedureBlock;

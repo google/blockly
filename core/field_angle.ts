@@ -412,15 +412,21 @@ export class FieldAngle extends FieldTextInput {
    */
   protected override onHtmlInputKeyDown_(e: Event) {
     super.onHtmlInputKeyDown_(e);
+    const block = this.getSourceBlock();
+    if (!block) {
+      throw new Error(
+          'The field has not yet been attached to its input. ' +
+          'Call appendField to attach it.')
+    }
 
     const keyboardEvent = e as KeyboardEvent;
     let multiplier;
     if (keyboardEvent.keyCode === KeyCodes.LEFT) {
       // decrement (increment in RTL)
-      multiplier = this.getSourceBlock().RTL ? 1 : -1;
+      multiplier = block.RTL ? 1 : -1;
     } else if (keyboardEvent.keyCode === KeyCodes.RIGHT) {
       // increment (decrement in RTL)
-      multiplier = this.getSourceBlock().RTL ? -1 : 1;
+      multiplier = block.RTL ? -1 : 1;
     } else if (keyboardEvent.keyCode === KeyCodes.DOWN) {
       // decrement
       multiplier = -1;

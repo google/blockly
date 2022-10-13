@@ -135,20 +135,32 @@ export class FieldVariable extends FieldDropdown {
    * @internal
    */
   override initModel() {
+    const block = this.getSourceBlock();
+    if (!block) {
+      throw new Error(
+          'The field has not yet been attached to its input. ' +
+          'Call appendField to attach it.')
+    }
     if (this.variable_) {
       return;  // Initialization already happened.
     }
     const variable = Variables.getOrCreateVariablePackage(
-        this.getSourceBlock().workspace, null, this.defaultVariableName,
+        block.workspace, null, this.defaultVariableName,
         this.defaultType_);
     // Don't call setValue because we don't want to cause a rerender.
     this.doValueUpdate_(variable.getId());
   }
 
   override shouldAddBorderRect_() {
+    const block = this.getSourceBlock();
+    if (!block) {
+      throw new Error(
+          'The field has not yet been attached to its input. ' +
+          'Call appendField to attach it.')
+    }
     return super.shouldAddBorderRect_() &&
         (!this.getConstants()!.FIELD_DROPDOWN_NO_BORDER_RECT_SHADOW ||
-         this.getSourceBlock().type !== 'variables_get');
+         block.type !== 'variables_get');
   }
 
   /**
@@ -158,6 +170,12 @@ export class FieldVariable extends FieldDropdown {
    *     field's state.
    */
   override fromXml(fieldElement: Element) {
+    const block = this.getSourceBlock();
+    if (!block) {
+      throw new Error(
+          'The field has not yet been attached to its input. ' +
+          'Call appendField to attach it.')
+    }
     const id = fieldElement.getAttribute('id');
     const variableName = fieldElement.textContent;
     // 'variabletype' should be lowercase, but until July 2019 it was sometimes
@@ -168,7 +186,7 @@ export class FieldVariable extends FieldDropdown {
     // AnyDuringMigration because:  Argument of type 'string | null' is not
     // assignable to parameter of type 'string | undefined'.
     const variable = Variables.getOrCreateVariablePackage(
-        this.getSourceBlock().workspace, id, variableName as AnyDuringMigration,
+        block.workspace, id, variableName as AnyDuringMigration,
         variableType);
 
     // This should never happen :)
@@ -233,12 +251,18 @@ export class FieldVariable extends FieldDropdown {
    * @internal
    */
   override loadState(state: AnyDuringMigration) {
+    const block = this.getSourceBlock();
+    if (!block) {
+      throw new Error(
+          'The field has not yet been attached to its input. ' +
+          'Call appendField to attach it.')
+    }
     if (this.loadLegacyState(FieldVariable, state)) {
       return;
     }
     // This is necessary so that blocks in the flyout can have custom var names.
     const variable = Variables.getOrCreateVariablePackage(
-        this.getSourceBlock().workspace, state['id'] || null, state['name'],
+        block.workspace, state['id'] || null, state['name'],
         state['type'] || '');
     this.setValue(variable.getId());
   }
@@ -315,9 +339,15 @@ export class FieldVariable extends FieldDropdown {
     if (opt_newValue === null) {
       return null;
     }
+    const block = this.getSourceBlock();
+    if (!block) {
+      throw new Error(
+          'The field has not yet been attached to its input. ' +
+          'Call appendField to attach it.')
+    }
     const newId = opt_newValue as string;
     const variable =
-        Variables.getVariable(this.getSourceBlock().workspace, newId);
+        Variables.getVariable(block.workspace, newId);
     if (!variable) {
       console.warn(
           'Variable id doesn\'t point to a real variable! ' +
@@ -343,8 +373,14 @@ export class FieldVariable extends FieldDropdown {
    * @param newId The value to be saved.
    */
   protected override doValueUpdate_(newId: AnyDuringMigration) {
+    const block = this.getSourceBlock();
+    if (!block) {
+      throw new Error(
+          'The field has not yet been attached to its input. ' +
+          'Call appendField to attach it.')
+    }
     this.variable_ =
-        Variables.getVariable(this.getSourceBlock().workspace, newId as string);
+        Variables.getVariable(block.workspace, newId as string);
     super.doValueUpdate_(newId);
   }
 

@@ -39,10 +39,10 @@ export class ObservableParameterModel implements IParameterModel {
    * If you want your procedure blocks to have typed parameters, you need to
    * implement your own ParameterModel.
    */
-  setTypes(types: string[]): this {
+  setTypes(_types: string[]): this {
     console.warn(
         'The built-in ParameterModel does not support typing. You need to ' +
-        'implement your own custom ParameterModel.')
+        'implement your own custom ParameterModel.');
     return this;
   }
 

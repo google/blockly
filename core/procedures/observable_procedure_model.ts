@@ -37,9 +37,9 @@ export class ObservableProcedureModel implements IProcedureModel {
    * To move a parameter, first delete it, and then re-insert.
    */
   insertParameter(parameterModel: IParameterModel, index: number):
-      IParameterModel {
+      ObservableProcedureModel {
     this.parameters.splice(index, 0, parameterModel);
-    return parameterModel;
+    return this;
   }
 
   /** Removes the parameter at the given index from the parameter list. */
@@ -53,7 +53,7 @@ export class ObservableProcedureModel implements IProcedureModel {
    *
    * Pass null to represent a procedure that does not return.
    */
-  setReturnType(types: string[]|null): ObservableProcedureModel {
+  setReturnTypes(types: string[]|null): ObservableProcedureModel {
     this.returnType = types;
     return this;
   }
@@ -92,7 +92,7 @@ export class ObservableProcedureModel implements IProcedureModel {
    *
    * Null represents a procedure that does not return a value.
    */
-  getReturnType(): string[]|null {
+  getReturnTypes(): string[]|null {
     return this.returnType;
   }
 

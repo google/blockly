@@ -1565,9 +1565,12 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       }
 
       for (const neighbour of conn.neighbours(config.snapRadius)) {
+        // Don't bump away from things that are in our stack.
         if (neighbourIsInStack(neighbour)) continue;
+        // If both connections are connected, that's fine.
         if (conn.isConnected() && neighbour.isConnected()) continue;
 
+        // Always bump the inferior connection.
         if (conn.isSuperior()) {
           neighbour.bumpAwayFrom(conn);
         } else {

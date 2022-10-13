@@ -8,41 +8,47 @@
 import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.procedures.ObservableParameterModel');
 
-import type {IProcedureMap} from '../interfaces/i_procedure_map.js';
 import type {IProcedureModel} from '../interfaces/i_procedure_model.js';
 import type {Workspace} from '../workspace.js';
 
 
-export class ObservableProcedureMap implements IProcedureMap {
-  private procedures = new Map<string, IProcedureModel>();
-
-  constructor(private readonly workspace: Workspace) {}
-
-  /**
-   * Adds the given procedure model to the map of procedures, so that blocks
-   * can find it.
-   */
-  addProcedure(procedureModel: IProcedureModel): IProcedureModel {
-    this.procedures.set(procedureModel.getId(), procedureModel);
-    return procedureModel;
+export class ObservableProcedureMap extends Map<string, IProcedureModel> {
+  constructor(private readonly workspace: Workspace) {
+    super();
   }
 
-  /** Deletes the procedure with the given id from the procedure map. */
-  deleteProcedure(id: string): ObservableProcedureMap {
-    this.procedures.delete(id);
+  /**
+   * Adds the given procedure model to the procedure map.
+   */
+  override set(id: string, proc: IProcedureModel): this {
+    // TODO(#6156): Fire events.
+    super.set(id, proc);
     return this;
   }
 
   /**
-   * Returns the procedure model with the given ID, if one exists in the
-   * procedure map, undefined otherwise.
+   * Deletes the ProcedureModel with the given ID from the procedure map (if it
+   * exists).
    */
-  getProcedure(id: string): IProcedureModel|undefined {
-    return this.procedures.get(id);
+  override delete(id: string): boolean {
+    // TODO(#6156): Fire events.
+    return super.delete(id);
   }
 
-  /** Returns an array of all of the procedure models in the procedure map. */
-  getProcedures(): IProcedureModel[] {
-    return [...this.procedures.values()];
+  /**
+   * Removes all ProcedureModels from the procedure map.
+   */
+  override clear() {
+    // TODO(#6156): Fire events.
+    super.clear();
+  }
+
+  /**
+   * Adds the given ProcedureModel to the map of procedure models, so that
+   * blocks can find it.
+   */
+  add(proc: IProcedureModel): this {
+    // TODO(#6156): Fire events.
+    return this.set(proc.getId(), proc);
   }
 }

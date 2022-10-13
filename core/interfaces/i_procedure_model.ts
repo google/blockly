@@ -18,7 +18,7 @@ import {IParameterModel} from './i_parameter_model.js';
  */
 export interface IProcedureModel {
   /** Sets the human-readable name of the procedure. */
-  setName(name: string): IProcedureModel;
+  setName(name: string): this;
 
   /**
    * Inserts a parameter into the list of parameters.
@@ -26,23 +26,23 @@ export interface IProcedureModel {
    * To move a parameter, first delete it, and then re-insert.
    */
   insertParameter(parameterModel: IParameterModel, index: number):
-      IProcedureModel;
+      this;
 
   /** Removes the parameter at the given index from the parameter list. */
-  deleteParameter(index: number): IProcedureModel;
+  deleteParameter(index: number): this;
 
   /**
    * Sets the return type(s) of the procedure.
    *
    * Pass null to represent a procedure that does not return.
    */
-  setReturnTypes(types: string[]|null): IProcedureModel;
+  setReturnTypes(types: string[]|null): this;
 
   /**
    * Sets whether this procedure is enabled/disabled. If a procedure is disabled
    * all procedure caller blocks should be disabled as well.
    */
-  setEnabled(enabled: boolean): IProcedureModel;
+  setEnabled(enabled: boolean): this;
 
   /** Returns the unique language-neutral ID for the procedure. */
   getId(): string;

@@ -18,12 +18,12 @@ export interface IParameterModel {
   /**
    * Sets the name of this parameter to the given name.
    */
-  setName(name: string): IParameterModel;
+  setName(name: string): this;
 
   /**
    * Sets the types of this parameter to the given type.
    */
-  setTypes(types: string[]): IParameterModel;
+  setTypes(types: string[]): this;
 
   /**
    * Returns the unique language-neutral ID for the parameter.

@@ -32,7 +32,7 @@ readonly BUILD_DIR='build'
 # Q2 2022	8.0.0	  928056
 # Q3 2022	8.0.0	1040413 (mid-quarter typescript conversion)
 # Q4 2022	8.0.0	  870104
-readonly BLOCKLY_SIZE_EXPECTED=870104
+readonly BLOCKLY_SIZE_EXPECTED=121861 
 
 # Size of blocks_compressed.js
 # Q2 2019	2.20190722.0	75618
@@ -69,7 +69,7 @@ readonly BLOCKS_SIZE_EXPECTED=102213
 # Q2 2022	8.0.0	  173997
 # Q3 2022	8.0.0	185766 (mid-quarter typescript conversion)
 # Q4 2022	8.0.0	  175140
-readonly BLOCKLY_GZ_SIZE_EXPECTED=175140
+readonly BLOCKLY_GZ_SIZE_EXPECTED=19601
 
 # Size of blocks_compressed.js.gz
 # Q2 2019	2.20190722.0	14552

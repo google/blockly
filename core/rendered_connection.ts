@@ -499,7 +499,7 @@ export class RenderedConnection extends Connection {
    * @returns List of connections.
    * @internal
    */
-  override neighbours(maxLimit: number): Connection[] {
+  override neighbours(maxLimit: number): RenderedConnection[] {
     return this.dbOpposite_.getNeighbours(this, maxLimit);
   }
 

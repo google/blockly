@@ -17,6 +17,8 @@ const Variables = goog.require('Blockly.Variables');
 const { Generator } = goog.require('Blockly.Generator');
 const { Names, NameType } = goog.require('Blockly.Names');
 const { ConnectionType } = goog.require('Blockly.ConnectionType');
+const {Msg} = goog.require('Blockly.Msg');
+
 /**
  * Arduino code generator.
  * @type {!Generator}

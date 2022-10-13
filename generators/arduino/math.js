@@ -18,7 +18,7 @@ const {NameType} = goog.require('Blockly.Names');
 /**
  * Generator for a numeric value (X).
  * Arduino code: loop { X }
- * @param {!Blockly.Block} block Block to generate the code from.
+ * @param {!Block} block Block to generate the code from.
  * @return {array} Completed code with order of operation.
  */
 Arduino['math_number'] = function (block) {
@@ -36,7 +36,7 @@ Arduino['math_number'] = function (block) {
  * Generator for a basic arithmetic operators (X and Y) and power function
  * (X ^ Y).
  * Arduino code: loop { X operator Y }
- * @param {!Blockly.Block} block Block to generate the code from.
+ * @param {!Block} block Block to generate the code from.
  * @return {array} Completed code with order of operation.
  */
 Arduino['math_arithmetic'] = function (block) {
@@ -65,7 +65,7 @@ Arduino['math_arithmetic'] = function (block) {
 /**
  * Generator for math operators that contain a single operand (X).
  * Arduino code: loop { operator(X) }
- * @param {!Blockly.Block} block Block to generate the code from.
+ * @param {!Block} block Block to generate the code from.
  * @return {array} Completed code with order of operation.
  */
 Arduino['math_single'] = function (block) {
@@ -158,7 +158,7 @@ Arduino['math_single'] = function (block) {
  * Arduino code: loop { constant }
  * TODO: Might need to include "#define _USE_MATH_DEFINES"
  *       The arduino header file already includes math.h
- * @param {!Blockly.Block} block Block to generate the code from.
+ * @param {!Block} block Block to generate the code from.
  * @return {string} Completed code.
  */
 Arduino['math_constant'] = function (block) {
@@ -177,7 +177,7 @@ Arduino['math_constant'] = function (block) {
  * Generator for math checks: if a number is even, odd, prime, whole, positive,
  * negative, or if it is divisible by certain number. Returns true or false.
  * Arduino code: complex code, can create external functions.
- * @param {!Blockly.Block} block Block to generate the code from.
+ * @param {!Block} block Block to generate the code from.
  * @return {array} Completed code with order of operation.
  */
 Arduino['math_number_property'] = function (block) {
@@ -242,7 +242,7 @@ Arduino['math_number_property'] = function (block) {
  * If variable X has not been declared before this block it will be declared as
  * a (not initialised) global int, however globals are 0 initialised in C/C++.
  * Arduino code: loop { X += Y; }
- * @param {!Blockly.Block} block Block to generate the code from.
+ * @param {!Block} block Block to generate the code from.
  * @return {array} Completed code with order of operation.
  */
 Arduino['math_change'] = function (block) {
@@ -263,7 +263,7 @@ Arduino['math_trig'] = Arduino['math_single'];
  * Generator for the math function to a list.
  * Arduino code: ???
  * TODO: List have to be implemented first. Removed from toolbox for now.
- * @param {!Blockly.Block} block Block to generate the code from.
+ * @param {!Block} block Block to generate the code from.
  * @return {array} Completed code with order of operation.
  */
 Arduino['math_on_list'] = Arduino.noGeneratorCodeInline;
@@ -271,7 +271,7 @@ Arduino['math_on_list'] = Arduino.noGeneratorCodeInline;
 /**
  * Generator for the math modulo function (calculates remainder of X/Y).
  * Arduino code: loop { X % Y }
- * @param {!Blockly.Block} block Block to generate the code from.
+ * @param {!Block} block Block to generate the code from.
  * @return {array} Completed code with order of operation.
  */
 Arduino['math_modulo'] = function (block) {
@@ -286,7 +286,7 @@ Arduino['math_modulo'] = function (block) {
 /**
  * Generator for clipping a number(X) between two limits (Y and Z).
  * Arduino code: loop { (X < Y ? Y : ( X > Z ? Z : X)) }
- * @param {!Blockly.Block} block Block to generate the code from.
+ * @param {!Block} block Block to generate the code from.
  * @return {array} Completed code with order of operation.
  */
 Arduino['math_constrain'] = function (block) {
@@ -307,7 +307,7 @@ Arduino['math_constrain'] = function (block) {
  * Generator for a random integer between two numbers (X and Y).
  * Arduino code: loop { math_random_int(X, Y); }
  *               and an aditional math_random_int function
- * @param {!Blockly.Block} block Block to generate the code from.
+ * @param {!Block} block Block to generate the code from.
  * @return {array} Completed code with order of operation.
  */
 Arduino['math_random_int'] = function (block) {
@@ -316,7 +316,7 @@ Arduino['math_random_int'] = function (block) {
     var argument1 = Arduino.valueToCode(block, 'TO',
         Arduino.ORDER_NONE) || '0';
     var functionName = Arduino.nameDB_.getDistinctName(
-        'math_random_int', Blockly.Generator.NAME_TYPE);
+        'math_random_int', NameType.PROCEDURE);
     Arduino.math_random_int.random_function = functionName;
     var func = [
         'int ' + Arduino.DEF_FUNC_NAME + '(int min, int max) {',
@@ -336,7 +336,7 @@ Arduino['math_random_int'] = function (block) {
 /**
  * Generator for a random float from 0 to 1.
  * Arduino code: loop { (rand() / RAND_MAX) }
- * @param {!Blockly.Block} block Block to generate the code from.
+ * @param {!Block} block Block to generate the code from.
  * @return {string} Completed code.
  */
 Arduino['math_random_float'] = function (block) {

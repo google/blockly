@@ -17,7 +17,7 @@ const { arduinoGenerator: Arduino } = goog.require('Blockly.Arduino');
 /**
  * Code generator to create if/if else/else statement.
  * Arduino code: loop { if (X)/else if ()/else { X } }
- * @param {!Blockly.Block} block Block to generate the code from.
+ * @param {!Block} block Block to generate the code from.
  * @return {string} Completed code.
  */
 Arduino['controls_if'] = function (block) {
@@ -42,7 +42,7 @@ Arduino['controls_if'] = function (block) {
 /**
  * Code generator for the comparison operator block.
  * Arduino code: loop { X operator Y }
- * @param {!Blockly.Block} block Block to generate the code from.
+ * @param {!Block} block Block to generate the code from.
  * @return {array} Completed code with order of operation.
  */
 Arduino['logic_compare'] = function (block) {
@@ -66,7 +66,7 @@ Arduino['logic_compare'] = function (block) {
 /**
  * Code generator for the logic operator block.
  * Arduino code: loop { X operator Y }
- * @param {!Blockly.Block} block Block to generate the code from.
+ * @param {!Block} block Block to generate the code from.
  * @return {array} Completed code with order of operation.
  */
 Arduino['logic_operation'] = function (block) {
@@ -96,7 +96,7 @@ Arduino['logic_operation'] = function (block) {
 /**
  * Code generator for the logic negate operator.
  * Arduino code: loop { !X }
- * @param {!Blockly.Block} block Block to generate the code from.
+ * @param {!Block} block Block to generate the code from.
  * @return {array} Completed code with order of operation.
  */
 Arduino['logic_negate'] = function (block) {
@@ -109,7 +109,7 @@ Arduino['logic_negate'] = function (block) {
 /**
  * Code generator for the boolean values true and false.
  * Arduino code: loop { true/false }
- * @param {!Blockly.Block} block Block to generate the code from.
+ * @param {!Block} block Block to generate the code from.
  * @return {array} Completed code with order of operation.
  */
 Arduino['logic_boolean'] = function (block) {
@@ -120,7 +120,7 @@ Arduino['logic_boolean'] = function (block) {
 /**
  * Code generator for the null value.
  * Arduino code: loop { X ? Y : Z }
- * @param {!Blockly.Block} block Block to generate the code from.
+ * @param {!Block} block Block to generate the code from.
  * @return {array} Completed code with order of operation.
  */
 Arduino['logic_null'] = function (block) {
@@ -131,7 +131,7 @@ Arduino['logic_null'] = function (block) {
 /**
  * Code generator for the ternary operator.
  * Arduino code: loop { NULL }
- * @param {!Blockly.Block} block Block to generate the code from.
+ * @param {!Block} block Block to generate the code from.
  * @return {array} Completed code with order of operation.
  *
  * TODO: Check types of THEN and ELSE blocks and add warning to this block if

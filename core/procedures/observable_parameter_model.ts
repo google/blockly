@@ -4,10 +4,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-
-import * as goog from '../../closure/goog/goog.js';
-goog.declareModuleId('Blockly.procedures.ObservableParameterModel');
-
 import type {IParameterModel} from '../interfaces/i_parameter_model.js';
 import {genUid} from '../utils/idgenerator.js';
 import type {VariableModel} from '../variable_model.js';

@@ -27,7 +27,7 @@ export class ObservableParameterModel implements IParameterModel {
   /**
    * Sets the name of this parameter to the given name.
    */
-  setName(name: string): ObservableParameterModel {
+  setName(name: string): this {
     if (name == this.variable.name) return this;
     this.variable =
         this.workspace.getVariable(name) ?? this.workspace.createVariable(name);
@@ -39,7 +39,7 @@ export class ObservableParameterModel implements IParameterModel {
    * If you want your procedure blocks to have typed parameters, you need to
    * implement your own ParameterModel.
    */
-  setTypes(types: string[]): ObservableParameterModel {
+  setTypes(types: string[]): this {
     console.warn(
         'The built-in ParameterModel does not support typing. You need to ' +
         'implement your own custom ParameterModel.')

@@ -26,7 +26,7 @@ export class ObservableProcedureModel implements IProcedureModel {
   }
 
   /** Sets the human-readable name of the procedure. */
-  setName(name: string): ObservableProcedureModel {
+  setName(name: string): this {
     this.name = name;
     return this;
   }
@@ -36,14 +36,13 @@ export class ObservableProcedureModel implements IProcedureModel {
    *
    * To move a parameter, first delete it, and then re-insert.
    */
-  insertParameter(parameterModel: IParameterModel, index: number):
-      ObservableProcedureModel {
+  insertParameter(parameterModel: IParameterModel, index: number): this {
     this.parameters.splice(index, 0, parameterModel);
     return this;
   }
 
   /** Removes the parameter at the given index from the parameter list. */
-  deleteParameter(index: number): ObservableProcedureModel {
+  deleteParameter(index: number): this {
     this.parameters.splice(index, 1);
     return this;
   }
@@ -53,7 +52,7 @@ export class ObservableProcedureModel implements IProcedureModel {
    *
    * Pass null to represent a procedure that does not return.
    */
-  setReturnTypes(types: string[]|null): ObservableProcedureModel {
+  setReturnTypes(types: string[]|null): this {
     this.returnType = types;
     return this;
   }
@@ -62,7 +61,7 @@ export class ObservableProcedureModel implements IProcedureModel {
    * Sets whether this procedure is enabled/disabled. If a procedure is disabled
    * all procedure caller blocks should be disabled as well.
    */
-  setEnabled(enabled: boolean): ObservableProcedureModel {
+  setEnabled(enabled: boolean): this {
     this.enabled = enabled;
     return this;
   }

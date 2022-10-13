@@ -58,6 +58,7 @@ Blockly.Msg["CONTROLS_IF_IF_TOOLTIP"] = "اضافه، حذف یا ترتیب‌�
 Blockly.Msg["CONTROLS_IF_MSG_ELSE"] = "آنگاه";
 Blockly.Msg["CONTROLS_IF_MSG_ELSEIF"] = "اگر آنگاه";
 Blockly.Msg["CONTROLS_IF_MSG_IF"] = "اگر";
+Blockly.Msg["CONTROLS_IF_MSG_THEN"] = "then";  // untranslated
 Blockly.Msg["CONTROLS_IF_TOOLTIP_1"] = "اگر یک مقدار صحیح است، سپس چند عبارت را انجام بده.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_2"] = "اگر یک مقدار صحیح است، اول بلوک اول عبارات را انجام بده.  در غیر این صورت بلوک دوم عبارات انجام بده.";
 Blockly.Msg["CONTROLS_IF_TOOLTIP_3"] = "اگر مقدار اول صحیح بود، از آن بلوک اول عبارات را انجام بده.  در غیر این صورت، اگر مقدار دوم صحیح است، بلوک دوم عبارات را انجام بده.";
@@ -476,7 +477,6 @@ Blockly.Msg["CONTROLS_FOR_INPUT_DO"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];
 Blockly.Msg["CONTROLS_IF_ELSEIF_TITLE_ELSEIF"] = Blockly.Msg["CONTROLS_IF_MSG_ELSEIF"];
 Blockly.Msg["CONTROLS_IF_ELSE_TITLE_ELSE"] = Blockly.Msg["CONTROLS_IF_MSG_ELSE"];
 Blockly.Msg["CONTROLS_IF_IF_TITLE_IF"] = Blockly.Msg["CONTROLS_IF_MSG_IF"];
-Blockly.Msg["CONTROLS_IF_MSG_THEN"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];
 Blockly.Msg["CONTROLS_WHILEUNTIL_INPUT_DO"] = Blockly.Msg["CONTROLS_REPEAT_INPUT_DO"];
 Blockly.Msg["LISTS_CREATE_WITH_ITEM_TITLE"] = Blockly.Msg["VARIABLES_DEFAULT_NAME"];
 Blockly.Msg["LISTS_GET_INDEX_HELPURL"] = Blockly.Msg["LISTS_INDEX_OF_HELPURL"];

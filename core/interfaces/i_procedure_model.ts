@@ -25,8 +25,7 @@ export interface IProcedureModel {
    *
    * To move a parameter, first delete it, and then re-insert.
    */
-  insertParameter(parameterModel: IParameterModel, index: number):
-      this;
+  insertParameter(parameterModel: IParameterModel, index: number): this;
 
   /** Removes the parameter at the given index from the parameter list. */
   deleteParameter(index: number): this;

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Shared Procedures Playground</title>
+
+<!-- This script loads uncompressed when on localhost and loads
+     compressed when it is being hosted or on Internet Explorer.  -->
+<script>
+  var BLOCKLY_BOOTSTRAP_OPTIONS = {
+    additionalScripts: [
+      'msg/messages.js',
+      'node_modules/@blockly/dev-tools/dist/index.js',
+    ],
+  }
+</script>
+<script src="../bootstrap.js"></script>
+<script type=module>
+// Wait for Blockly to finish loading.
+import '../bootstrap_done.mjs';
+
+const IS_UNCOMPRESSED = !window.bootstrapInfo.compressed;  // See bootstrap.js
+var workspace = null;
+
+function start() {
+  setBackgroundColour();
+
+  var toolbox = {
+    'kind': 'categoryToolbox',
+    'contents': [
+      {
+        'kind': 'category',
+        'name': 'Other Blocks',
+        'categorystyle': 'logic_category',
+        'contents': [
+          {
+            'kind': 'block',
+            'type': 'controls_if',
+          },
+          {
+            'kind': 'block',
+            'type': 'logic_operation',
+          },
+          {
+            'kind': 'block',
+            'type': 'logic_negate',
+          },
+          {
+            'kind': 'block',
+            'type': 'logic_boolean',
+          },
+          {
+            'kind': 'block',
+            'type': 'text_print',
+          },
+        ]
+      },
+      {
+        'kind': 'category',
+        'name': 'Variables',
+        'categorystyle': 'variable_category',
+        'custom': 'VARIABLE',
+      },
+      {
+        'kind': 'category',
+        'name': 'Procedures',
+        'categorystyle': 'procedure_category',
+        'custom': 'PROCEDURE',
+      },
+    ],
+  };
+  var options = {
+    comments: true,
+    collapse: true,
+    disable: true,
+    grid:
+      {
+        spacing: 25,
+        length: 3,
+        colour: '#ccc',
+        snap: true
+      },
+    horizontalLayout: false,
+    maxBlocks: Infinity,
+    maxInstances: {'test_basic_limit_instances': 3},
+    maxTrashcanContents: 256,
+    media: '../../media/',
+    oneBasedIndex: true,
+    readOnly: false,
+    rtl: false,
+    move: {
+      scrollbars: true,
+      drag: true,
+      wheel: false,
+    },
+    toolbox: toolbox,
+    toolboxPosition: 'start',
+    renderer: 'geras',
+    zoom:
+      {
+        controls: true,
+        wheel: true,
+        startScale: 1.0,
+        maxScale: 4,
+        minScale: 0.25,
+        scaleSpeed: 1.1
+      }
+  };
+  workspace = Blockly.inject('blocklyDiv1', options);
+  workspace = Blockly.inject('blocklyDiv2', options);
+}
+
+function setBackgroundColour() {
+  // Set background colour to differentiate between compressed and uncompressed mode.
+  if (IS_UNCOMPRESSED) {
+    document.body.style.backgroundColor = '#d6d6ff';  // Familiar lilac.
+  } else {
+    document.body.style.backgroundColor = '#60fcfc';  // Unfamiliar blue.
+  }
+}
+
+start();
+</script>
+
+<style>
+  html, body {
+    height: 100%;
+  }
+  body {
+    background-color: #fff;
+    font-family: sans-serif;
+    overflow: hidden;
+  }
+  h1 {
+    font-weight: normal;
+    font-size: 140%;
+  }
+  #blocklyDiv1 {
+    float: left;
+    height: 95%;
+    width: 49%;
+  }
+  #blocklyDiv2 {
+    float: right;
+    height: 95%;
+    width: 49%;
+  }
+  #importExport {
+    font-family: monospace;
+  }
+
+  .ioLabel>.blocklyFlyoutLabelText {
+    font-style: italic;
+  }
+
+  #blocklyDiv.renderingDebug .blockRenderDebug {
+    display: block;
+  }
+
+  .playgroundToggleOptions {
+    list-style: none;
+    padding: 0;
+  }
+  .playgroundToggleOptions li {
+    margin-top: 1em;
+  }
+
+  .zelos-renderer .blocklyFlyoutButton .blocklyText {
+    font-size: 1.5rem;
+  }
+</style>
+</head>
+<body>
+  <h1>Shared Procedures Playground</h1>
+
+  <div id="blocklyDiv1"></div>
+  <div id="blocklyDiv2"></div>
+</body>
+</html>

@@ -37,7 +37,7 @@ import * as Xml from './xml.js';
  * @alias Blockly.FieldVariable
  */
 export class FieldVariable extends FieldDropdown {
-  protected override menuGenerator_: MenuGenerator | undefined;
+  protected override menuGenerator_: MenuGenerator|undefined;
   defaultVariableName: string;
 
   /** The type of the default variable for this field. */

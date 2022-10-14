@@ -44,7 +44,7 @@ export class FieldDropdown extends Field {
    * height.
    */
   static MAX_MENU_HEIGHT_VH = 0.45;
-  static ARROW_CHAR: AnyDuringMigration;
+  static ARROW_CHAR: '▼'|'▾';
 
   /** A reference to the currently selected menu item. */
   private selectedMenuItem_: MenuItem|null = null;
@@ -112,11 +112,13 @@ export class FieldDropdown extends Field {
    * for a list of properties this parameter supports.
    * @throws {TypeError} If `menuGenerator` options are incorrectly structured.
    */
-  constructor(menuGenerator: MenuGenerator, opt_validator?: Function, opt_config?: FieldConfig);
+  constructor(
+      menuGenerator: MenuGenerator, opt_validator?: Function,
+      opt_config?: FieldConfig);
   constructor(menuGenerator: Sentinel);
   constructor(
-    menuGenerator: MenuGenerator|Sentinel,
-    opt_validator?: Function, opt_config?: FieldConfig) {
+      menuGenerator: MenuGenerator|Sentinel, opt_validator?: Function,
+      opt_config?: FieldConfig) {
     super(Field.SKIP_SETUP);
 
     if (isMenuGenerator(menuGenerator)) {
@@ -316,7 +318,7 @@ export class FieldDropdown extends Field {
     for (let i = 0; i < options.length; i++) {
       const [label, value] = options[i];
       const content = (() => {
-        if (typeof label === "object") {
+        if (typeof label === 'object') {
           // Convert ImageProperties to an HTMLImageElement.
           const image = new Image(label['width'], label['height']);
           image.src = label['src'];
@@ -661,7 +663,7 @@ export type MenuOption = [string | ImageProperties, string];
 
 export type MenuGeneratorFunction = (this: FieldDropdown) => MenuOption[];
 
-export type MenuGenerator = MenuOption[] | MenuGeneratorFunction;
+export type MenuGenerator = MenuOption[]|MenuGeneratorFunction;
 
 /**
  * fromJson config for the dropdown field.
@@ -686,7 +688,8 @@ FieldDropdown.ARROW_CHAR = userAgent.ANDROID ? '▼' : '▾';
  * NOTE: Because Sentinel is an empty class, proving a value is Sentinel does
  * not resolve in TS that it isn't a MenuGenerator.
  */
-function isMenuGenerator(menuGenerator: MenuGenerator | Sentinel): menuGenerator is MenuGenerator {
+function isMenuGenerator(menuGenerator: MenuGenerator|
+                         Sentinel): menuGenerator is MenuGenerator {
   return menuGenerator !== Field.SKIP_SETUP;
 }
 
@@ -694,14 +697,11 @@ function isMenuGenerator(menuGenerator: MenuGenerator | Sentinel): menuGenerator
  * Factor out common words in statically defined options.
  * Create prefix and/or suffix labels.
  */
-function trimOptions(options: MenuOption[]): {
-  options: MenuOption[];
-  prefix?: string;
-  suffix?: string;
-} {
+function trimOptions(options: MenuOption[]):
+    {options: MenuOption[]; prefix?: string; suffix?: string;} {
   let hasImages = false;
   const trimmedOptions = options.map(([label, value]): MenuOption => {
-    if (typeof label === "string") {
+    if (typeof label === 'string') {
       return [parsing.replaceMessageReferences(label), value];
     }
 
@@ -709,8 +709,8 @@ function trimOptions(options: MenuOption[]): {
     // Copy the image properties so they're not influenced by the original.
     // NOTE: No need to deep copy since image properties are only 1 level deep.
     const imageLabel = label.alt !== null ?
-      {...label, alt: parsing.replaceMessageReferences(label.alt)} :
-      {...label};
+        {...label, alt: parsing.replaceMessageReferences(label.alt)} :
+        {...label};
     return [imageLabel, value];
   });
 
@@ -723,16 +723,20 @@ function trimOptions(options: MenuOption[]): {
   const prefixLength = utilsString.commonWordPrefix(stringLabels, shortest);
   const suffixLength = utilsString.commonWordSuffix(stringLabels, shortest);
 
-  if ((!prefixLength && !suffixLength) || (
-    // One or more strings will entirely vanish if we proceed.  Abort.
-    shortest <= prefixLength + suffixLength
-  )) return {options: stringOptions};
+  if ((!prefixLength && !suffixLength) ||
+      (
+          // One or more strings will entirely vanish if we proceed.  Abort.
+          shortest <= prefixLength + suffixLength))
+    return {options: stringOptions};
 
-  const prefix = prefixLength ? stringLabels[0].substring(0, prefixLength - 1) : undefined;
-  const suffix = suffixLength ? stringLabels[0].substr(1 - suffixLength) : undefined;
+  const prefix =
+      prefixLength ? stringLabels[0].substring(0, prefixLength - 1) : undefined;
+  const suffix =
+      suffixLength ? stringLabels[0].substr(1 - suffixLength) : undefined;
   return {
     options: applyTrim(stringOptions, prefixLength, suffixLength),
-    prefix, suffix,
+    prefix,
+    suffix,
   };
 }
 
@@ -747,11 +751,12 @@ function trimOptions(options: MenuOption[]): {
  * @returns A new array with all of the option text trimmed.
  */
 function applyTrim(
-  options: [string, string][], prefixLength: number,
-  suffixLength: number): MenuOption[] {
-  return options.map(([text, value]) => [
-    text.substring(prefixLength, text.length - suffixLength),
-    value,
+    options: [string, string][], prefixLength: number,
+    suffixLength: number): MenuOption[] {
+  return options.map(
+      ([text, value]) =>
+          [text.substring(prefixLength, text.length - suffixLength),
+           value,
   ]);
 }
 

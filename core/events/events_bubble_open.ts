@@ -61,15 +61,13 @@ export class BubbleOpen extends UiBase {
     const json = super.toJson() as BubbleOpenJson;
     if (this.isOpen === undefined) {
       throw new Error(
-          'Whether this event is for opening the bubble is ' +
-          'undefined. Either pass the value to the constructor, or call ' +
-          'fromJson');
+          'Whether this event is for opening the bubble is undefined. ' +
+          'Either pass the value to the constructor, or call fromJson');
     }
     if (!this.bubbleType) {
       throw new Error(
           'The type of bubble is undefined. Either pass the ' +
-          'value to the constructor, or call ' +
-          'fromJson');
+          'value to the constructor, or call fromJson');
     }
     json['isOpen'] = this.isOpen;
     json['bubbleType'] = this.bubbleType;

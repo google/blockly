@@ -34,7 +34,7 @@ export enum names {
   CUT = 'cut',
   PASTE = 'paste',
   UNDO = 'undo',
-  REDO = 'redo'
+  REDO = 'redo',
 }
 
 /**

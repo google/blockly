@@ -72,13 +72,12 @@ export class FieldDropdown extends Field {
   /** Mouse cursor style when over the hotspot that initiates the editor. */
   override CURSOR = 'default';
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  protected menuGenerator_!: AnyDuringMigration[][]|
-      ((this: FieldDropdown) => AnyDuringMigration[][]);
+  protected menuGenerator_?: MenuGenerator;
 
   /** A cache of the most recently generated options. */
   // AnyDuringMigration because:  Type 'null' is not assignable to type
   // 'string[][]'.
-  private generatedOptions_: string[][] = null as AnyDuringMigration;
+  private generatedOptions_: MenuOption[]|null = null;
 
   /**
    * The prefix field label, of common words set after options are trimmed.
@@ -113,30 +112,27 @@ export class FieldDropdown extends Field {
    * for a list of properties this parameter supports.
    * @throws {TypeError} If `menuGenerator` options are incorrectly structured.
    */
+  constructor(menuGenerator: MenuGenerator, opt_validator?: Function, opt_config?: FieldConfig);
+  constructor(menuGenerator: Sentinel);
   constructor(
-      menuGenerator: AnyDuringMigration[][]|Function|Sentinel,
-      opt_validator?: Function, opt_config?: FieldConfig) {
+    menuGenerator: MenuGenerator|Sentinel,
+    opt_validator?: Function, opt_config?: FieldConfig) {
     super(Field.SKIP_SETUP);
 
-    // If we pass SKIP_SETUP, don't do *anything* with the menu generator.
-    if (menuGenerator === Field.SKIP_SETUP) {
+    if (isMenuGenerator(menuGenerator)) {
+      if (Array.isArray(menuGenerator)) {
+        validateOptions(menuGenerator);
+        const trimmed = trimOptions(menuGenerator);
+        this.menuGenerator_ = trimmed.options;
+        this.prefixField = trimmed.prefix || null;
+        this.suffixField = trimmed.suffix || null;
+      } else {
+        this.menuGenerator_ = menuGenerator;
+      }
+    } else {
+      // If we pass SKIP_SETUP, don't do *anything* with the menu generator.
       return;
     }
-
-    if (Array.isArray(menuGenerator)) {
-      validateOptions(menuGenerator);
-      // Deep copy the option structure so it doesn't change.
-      menuGenerator = JSON.parse(JSON.stringify(menuGenerator));
-    }
-
-    /**
-     * An array of options for a dropdown list,
-     * or a function which generates these options.
-     */
-    this.menuGenerator_ = menuGenerator as AnyDuringMigration[][] |
-        ((this: FieldDropdown) => AnyDuringMigration[][]);
-
-    this.trimOptions_();
 
     /**
      * The currently selected option. The field is initialized with the
@@ -318,15 +314,17 @@ export class FieldDropdown extends Field {
     const options = this.getOptions(false);
     this.selectedMenuItem_ = null;
     for (let i = 0; i < options.length; i++) {
-      let content = options[i][0];  // Human-readable text or image.
-      const value = options[i][1];  // Language-neutral value.
-      if (typeof content === 'object') {
-        // An image, not text.
-        const image = new Image(content['width'], content['height']);
-        image.src = content['src'];
-        image.alt = content['alt'] || '';
-        content = image;
-      }
+      const [label, value] = options[i];
+      const content = (() => {
+        if (typeof label === "object") {
+          // Convert ImageProperties to an HTMLImageElement.
+          const image = new Image(label['width'], label['height']);
+          image.src = label['src'];
+          image.alt = label['alt'] || '';
+          return image;
+        }
+        return label;
+      })();
       const menuItem = new MenuItem(content, value);
       menuItem.setRole(aria.Role.OPTION);
       menuItem.setRightToLeft(block.RTL);
@@ -373,57 +371,6 @@ export class FieldDropdown extends Field {
   }
 
   /**
-   * Factor out common words in statically defined options.
-   * Create prefix and/or suffix labels.
-   */
-  private trimOptions_() {
-    const options = this.menuGenerator_;
-    if (!Array.isArray(options)) {
-      return;
-    }
-    let hasImages = false;
-
-    // Localize label text and image alt text.
-    for (let i = 0; i < options.length; i++) {
-      const label = options[i][0];
-      if (typeof label === 'string') {
-        options[i][0] = parsing.replaceMessageReferences(label);
-      } else {
-        if (label.alt !== null) {
-          options[i][0].alt = parsing.replaceMessageReferences(label.alt);
-        }
-        hasImages = true;
-      }
-    }
-    if (hasImages || options.length < 2) {
-      return;  // Do nothing if too few items or at least one label is an image.
-    }
-    const strings = [];
-    for (let i = 0; i < options.length; i++) {
-      strings.push(options[i][0]);
-    }
-    const shortest = utilsString.shortestStringLength(strings);
-    const prefixLength = utilsString.commonWordPrefix(strings, shortest);
-    const suffixLength = utilsString.commonWordSuffix(strings, shortest);
-    if (!prefixLength && !suffixLength) {
-      return;
-    }
-    if (shortest <= prefixLength + suffixLength) {
-      // One or more strings will entirely vanish if we proceed.  Abort.
-      return;
-    }
-    if (prefixLength) {
-      this.prefixField = strings[0].substring(0, prefixLength - 1);
-    }
-    if (suffixLength) {
-      this.suffixField = strings[0].substr(1 - suffixLength);
-    }
-
-    this.menuGenerator_ =
-        FieldDropdown.applyTrim_(options, prefixLength, suffixLength);
-  }
-
-  /**
    * @returns True if the option list is generated by a function.
    *     Otherwise false.
    */
@@ -440,18 +387,14 @@ export class FieldDropdown extends Field {
    *     (human-readable text or image, language-neutral name).
    * @throws {TypeError} If generated options are incorrectly structured.
    */
-  getOptions(opt_useCache?: boolean): AnyDuringMigration[][] {
-    if (this.isOptionListDynamic()) {
-      if (!this.generatedOptions_ || !opt_useCache) {
-        // AnyDuringMigration because:  Property 'call' does not exist on type
-        // 'any[][] | ((this: FieldDropdown) => any[][])'.
-        this.generatedOptions_ =
-            (this.menuGenerator_ as AnyDuringMigration).call(this);
-        validateOptions(this.generatedOptions_);
-      }
-      return this.generatedOptions_;
-    }
-    return this.menuGenerator_ as string[][];
+  getOptions(opt_useCache?: boolean): MenuOption[] {
+    if (!this.menuGenerator_) return [];
+    if (Array.isArray(this.menuGenerator_)) return this.menuGenerator_;
+    if (opt_useCache && this.generatedOptions_) return this.generatedOptions_;
+
+    this.generatedOptions_ = this.menuGenerator_();
+    validateOptions(this.generatedOptions_);
+    return this.generatedOptions_;
   }
 
   /**
@@ -697,30 +640,6 @@ export class FieldDropdown extends Field {
     // override the static fromJson method.
     return new this(options.options, undefined, options);
   }
-
-  /**
-   * Use the calculated prefix and suffix lengths to trim all of the options in
-   * the given array.
-   *
-   * @param options Array of option tuples:
-   *     (human-readable text or image, language-neutral name).
-   * @param prefixLength The length of the common prefix.
-   * @param suffixLength The length of the common suffix
-   * @returns A new array with all of the option text trimmed.
-   */
-  static applyTrim_(
-      options: AnyDuringMigration[][], prefixLength: number,
-      suffixLength: number): AnyDuringMigration[][] {
-    const newOptions = [];
-    // Remove the prefix and suffix from the options.
-    for (let i = 0; i < options.length; i++) {
-      let text = options[i][0];
-      const value = options[i][1];
-      text = text.substring(prefixLength, text.length - suffixLength);
-      newOptions[i] = [text, value];
-    }
-    return newOptions;
-  }
 }
 
 /**
@@ -739,6 +658,10 @@ export interface ImageProperties {
  * neutral value.
  */
 export type MenuOption = [string | ImageProperties, string];
+
+export type MenuGeneratorFunction = (this: FieldDropdown) => MenuOption[];
+
+export type MenuGenerator = MenuOption[] | MenuGeneratorFunction;
 
 /**
  * fromJson config for the dropdown field.
@@ -760,12 +683,85 @@ const IMAGE_Y_PADDING: number = IMAGE_Y_OFFSET * 2;
 FieldDropdown.ARROW_CHAR = userAgent.ANDROID ? '▼' : '▾';
 
 /**
+ * NOTE: Because Sentinel is an empty class, proving a value is Sentinel does
+ * not resolve in TS that it isn't a MenuGenerator.
+ */
+function isMenuGenerator(menuGenerator: MenuGenerator | Sentinel): menuGenerator is MenuGenerator {
+  return menuGenerator !== Field.SKIP_SETUP;
+}
+
+/**
+ * Factor out common words in statically defined options.
+ * Create prefix and/or suffix labels.
+ */
+function trimOptions(options: MenuOption[]): {
+  options: MenuOption[];
+  prefix?: string;
+  suffix?: string;
+} {
+  let hasImages = false;
+  const trimmedOptions = options.map(([label, value]): MenuOption => {
+    if (typeof label === "string") {
+      return [parsing.replaceMessageReferences(label), value];
+    }
+
+    hasImages = true;
+    // Copy the image properties so they're not influenced by the original.
+    // NOTE: No need to deep copy since image properties are only 1 level deep.
+    const imageLabel = label.alt !== null ?
+      {...label, alt: parsing.replaceMessageReferences(label.alt)} :
+      {...label};
+    return [imageLabel, value];
+  });
+
+  if (hasImages || options.length < 2) return {options: trimmedOptions};
+
+  const stringOptions = trimmedOptions as [string, string][];
+  const stringLabels = stringOptions.map(([label]) => label);
+
+  const shortest = utilsString.shortestStringLength(stringLabels);
+  const prefixLength = utilsString.commonWordPrefix(stringLabels, shortest);
+  const suffixLength = utilsString.commonWordSuffix(stringLabels, shortest);
+
+  if ((!prefixLength && !suffixLength) || (
+    // One or more strings will entirely vanish if we proceed.  Abort.
+    shortest <= prefixLength + suffixLength
+  )) return {options: stringOptions};
+
+  const prefix = prefixLength ? stringLabels[0].substring(0, prefixLength - 1) : undefined;
+  const suffix = suffixLength ? stringLabels[0].substr(1 - suffixLength) : undefined;
+  return {
+    options: applyTrim(stringOptions, prefixLength, suffixLength),
+    prefix, suffix,
+  };
+}
+
+/**
+ * Use the calculated prefix and suffix lengths to trim all of the options in
+ * the given array.
+ *
+ * @param options Array of option tuples:
+ *     (human-readable text or image, language-neutral name).
+ * @param prefixLength The length of the common prefix.
+ * @param suffixLength The length of the common suffix
+ * @returns A new array with all of the option text trimmed.
+ */
+function applyTrim(
+  options: [string, string][], prefixLength: number,
+  suffixLength: number): MenuOption[] {
+  return options.map(([text, value]) => [
+    text.substring(prefixLength, text.length - suffixLength),
+    value,
+  ]);
+}
+
+/**
  * Validates the data structure to be processed as an options list.
  *
  * @param options The proposed dropdown options.
  * @throws {TypeError} If proposed options are incorrectly structured.
  */
-function validateOptions(options: AnyDuringMigration) {
+function validateOptions(options: MenuOption[]) {
   if (!Array.isArray(options)) {
     throw TypeError('FieldDropdown options must be an array.');
   }

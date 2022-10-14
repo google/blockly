@@ -75,7 +75,7 @@ function fromJsonInternal(options: AnyDuringMigration): Field|null {
         ' the file is not loaded, the field does not register itself (Issue' +
         ' #1584), or the registration is not being reached.');
     return null;
-  } else if (typeof (fieldObject as any)['fromJson'] !== 'function') {
+  } else if (typeof (fieldObject as any).fromJson !== 'function') {
     throw new TypeError('returned Field was not a IRegistrableField');
   } else {
     return (fieldObject as unknown as IRegistrableField).fromJson(options);

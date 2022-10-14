@@ -159,7 +159,7 @@ class ToolboxCategory extends ToolboxItem {
       'row': 'blocklyTreeRow',
       'rowcontentcontainer': 'blocklyTreeRowContentContainer',
       'icon': 'blocklyTreeIcon',
-      'customicon': 'blocklyTreeCustomItem',
+      'customicon': 'blocklyTreeCustomIcon',
       'label': 'blocklyTreeLabel',
       'contents': 'blocklyToolboxContents',
       'selected': 'blocklyTreeSelected',
@@ -727,7 +727,7 @@ Css.register(`
   width: 16px;
 }
 
-.blocklyTreeCustomItem {
+.blocklyTreeCustomIcon {
   width: 16px;
   height: 16px;
   margin-right: 3px;

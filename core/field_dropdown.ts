@@ -75,8 +75,6 @@ export class FieldDropdown extends Field {
   protected menuGenerator_?: MenuGenerator;
 
   /** A cache of the most recently generated options. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'string[][]'.
   private generatedOptions_: MenuOption[]|null = null;
 
   /**
@@ -94,7 +92,7 @@ export class FieldDropdown extends Field {
   override suffixField: string|null = null;
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
   private selectedOption_!: Array<string|ImageProperties>;
-  override clickTarget_: AnyDuringMigration;
+  override clickTarget_: SVGElement|null = null;
 
   /**
    * @param menuGenerator A non-empty array of options for a dropdown list, or a
@@ -223,16 +221,11 @@ export class FieldDropdown extends Field {
     this.arrow_ = dom.createSvgElement(Svg.TSPAN, {}, this.textElement_);
     this.arrow_!.appendChild(document.createTextNode(
         this.getSourceBlock()?.RTL ? FieldDropdown.ARROW_CHAR + ' ' :
-                                     ' ' + FieldDropdown.ARROW_CHAR));
+                                    ' ' + FieldDropdown.ARROW_CHAR));
     if (this.getSourceBlock()?.RTL) {
-      // AnyDuringMigration because:  Argument of type 'SVGTSpanElement | null'
-      // is not assignable to parameter of type 'Node'.
-      this.getTextElement().insertBefore(
-          this.arrow_ as AnyDuringMigration, this.textContent_);
+      this.getTextElement().insertBefore(this.arrow_, this.textContent_);
     } else {
-      // AnyDuringMigration because:  Argument of type 'SVGTSpanElement | null'
-      // is not assignable to parameter of type 'Node'.
-      this.getTextElement().appendChild(this.arrow_ as AnyDuringMigration);
+      this.getTextElement().appendChild(this.arrow_);
     }
   }
 
@@ -255,21 +248,14 @@ export class FieldDropdown extends Field {
    * @param opt_e Optional mouse event that triggered the field to open, or
    *     undefined if triggered programmatically.
    */
-  protected override showEditor_(opt_e?: Event) {
+  protected override showEditor_(opt_e?: MouseEvent) {
     const block = this.getSourceBlock();
     if (!block) {
       throw new UnattachedFieldError();
     }
     this.dropdownCreate_();
-    // AnyDuringMigration because:  Property 'clientX' does not exist on type
-    // 'Event'.
-    if (opt_e && typeof (opt_e as AnyDuringMigration).clientX === 'number') {
-      // AnyDuringMigration because:  Property 'clientY' does not exist on type
-      // 'Event'. AnyDuringMigration because:  Property 'clientX' does not exist
-      // on type 'Event'.
-      this.menu_!.openingCoords = new Coordinate(
-          (opt_e as AnyDuringMigration).clientX,
-          (opt_e as AnyDuringMigration).clientY);
+    if (opt_e && typeof opt_e.clientX === 'number') {
+      this.menu_!.openingCoords = new Coordinate(opt_e.clientX, opt_e.clientY);
     } else {
       this.menu_!.openingCoords = null;
     }
@@ -405,17 +391,11 @@ export class FieldDropdown extends Field {
    * @param opt_newValue The input value.
    * @returns A valid language-neutral option, or null if invalid.
    */
-  protected override doClassValidation_(opt_newValue?: AnyDuringMigration):
-      string|null {
-    let isValueValid = false;
+  protected override doClassValidation_(opt_newValue?: MenuOption[1]): string
+      |null {
     const options = this.getOptions(true);
-    for (let i = 0, option; option = options[i]; i++) {
-      // Options are tuples of human-readable text and language-neutral values.
-      if (option[1] === opt_newValue) {
-        isValueValid = true;
-        break;
-      }
-    }
+    const isValueValid = options.some((option) => option[1] === opt_newValue);
+
     if (!isValueValid) {
       if (this.sourceBlock_) {
         console.warn(
@@ -434,7 +414,7 @@ export class FieldDropdown extends Field {
    * @param newValue The value to be saved. The default validator guarantees
    *     that this is one of the valid dropdown options.
    */
-  protected override doValueUpdate_(newValue: AnyDuringMigration) {
+  protected override doValueUpdate_(newValue: MenuOption[1]) {
     super.doValueUpdate_(newValue);
     const options = this.getOptions(true);
     for (let i = 0, option; option = options[i]; i++) {
@@ -499,14 +479,8 @@ export class FieldDropdown extends Field {
     this.imageElement_!.style.display = '';
     this.imageElement_!.setAttributeNS(
         dom.XLINK_NS, 'xlink:href', imageJson.src);
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
-    this.imageElement_!.setAttribute(
-        'height', imageJson.height as AnyDuringMigration);
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
-    this.imageElement_!.setAttribute(
-        'width', imageJson.width as AnyDuringMigration);
+    this.imageElement_!.setAttribute('height', `${imageJson.height}`);
+    this.imageElement_!.setAttribute('width', `${imageJson.width}`);
 
     const imageHeight = Number(imageJson.height);
     const imageWidth = Number(imageJson.width);
@@ -726,8 +700,9 @@ function trimOptions(options: MenuOption[]):
   if ((!prefixLength && !suffixLength) ||
       (
           // One or more strings will entirely vanish if we proceed.  Abort.
-          shortest <= prefixLength + suffixLength))
+          shortest <= prefixLength + suffixLength)) {
     return {options: stringOptions};
+  }
 
   const prefix =
       prefixLength ? stringLabels[0].substring(0, prefixLength - 1) : undefined;

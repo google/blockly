@@ -24,28 +24,28 @@ import * as idGenerator from './utils/idgenerator.js';
  */
 export class MenuItem {
   /** Is the menu item clickable, as opposed to greyed-out. */
-  private enabled_ = true;
+  private enabled = true;
 
   /** The DOM element for the menu item. */
-  private element_: HTMLDivElement|null = null;
+  private element: HTMLDivElement|null = null;
 
   /** Whether the menu item is rendered right-to-left. */
-  private rightToLeft_ = false;
+  private rightToLeft = false;
 
   /** ARIA name for this menu. */
-  private roleName_: aria.Role|null = null;
+  private roleName: aria.Role|null = null;
 
   /** Is this menu item checkable. */
-  private checkable_ = false;
+  private checkable = false;
 
   /** Is this menu item currently checked. */
-  private checked_ = false;
+  private checked = false;
 
   /** Is this menu item currently highlighted. */
-  private highlight_ = false;
+  private highlight = false;
 
   /** Bound function to call when this menu item is clicked. */
-  private actionHandler_: Function|null = null;
+  private actionHandler: Function|null = null;
 
   /**
    * @param content Text caption to display as the content of the item, or a
@@ -64,22 +64,22 @@ export class MenuItem {
   createDom(): Element {
     const element = (document.createElement('div'));
     element.id = idGenerator.getNextUniqueId();
-    this.element_ = element;
+    this.element = element;
 
     // Set class and style
     // goog-menuitem* is deprecated, use blocklyMenuItem*.  May 2020.
     element.className = 'blocklyMenuItem goog-menuitem ' +
-        (this.enabled_ ? '' :
+        (this.enabled ? '' :
                          'blocklyMenuItemDisabled goog-menuitem-disabled ') +
-        (this.checked_ ? 'blocklyMenuItemSelected goog-option-selected ' : '') +
-        (this.highlight_ ? 'blocklyMenuItemHighlight goog-menuitem-highlight ' :
+        (this.checked ? 'blocklyMenuItemSelected goog-option-selected ' : '') +
+        (this.highlight ? 'blocklyMenuItemHighlight goog-menuitem-highlight ' :
                            '') +
-        (this.rightToLeft_ ? 'blocklyMenuItemRtl goog-menuitem-rtl ' : '');
+        (this.rightToLeft ? 'blocklyMenuItemRtl goog-menuitem-rtl ' : '');
 
     const content = (document.createElement('div'));
     content.className = 'blocklyMenuItemContent goog-menuitem-content';
     // Add a checkbox for checkable menu items.
-    if (this.checkable_) {
+    if (this.checkable) {
       const checkbox = (document.createElement('div'));
       checkbox.className = 'blocklyMenuItemCheckbox goog-menuitem-checkbox';
       content.appendChild(checkbox);
@@ -93,20 +93,20 @@ export class MenuItem {
     element.appendChild(content);
 
     // Initialize ARIA role and state.
-    if (this.roleName_) {
-      aria.setRole(element, this.roleName_);
+    if (this.roleName) {
+      aria.setRole(element, this.roleName);
     }
     aria.setState(
         element, aria.State.SELECTED,
-        this.checkable_ && this.checked_ || false);
-    aria.setState(element, aria.State.DISABLED, !this.enabled_);
+        this.checkable && this.checked || false);
+    aria.setState(element, aria.State.DISABLED, !this.enabled);
 
     return element;
   }
 
   /** Dispose of this menu item. */
   dispose() {
-    this.element_ = null;
+    this.element = null;
   }
 
   /**
@@ -116,7 +116,7 @@ export class MenuItem {
    * @internal
    */
   getElement(): Element|null {
-    return this.element_;
+    return this.element;
   }
 
   /**
@@ -126,7 +126,7 @@ export class MenuItem {
    * @internal
    */
   getId(): string {
-    return this.element_!.id;
+    return this.element!.id;
   }
 
   /**
@@ -146,7 +146,7 @@ export class MenuItem {
    * @internal
    */
   setRightToLeft(rtl: boolean) {
-    this.rightToLeft_ = rtl;
+    this.rightToLeft = rtl;
   }
 
   /**
@@ -156,7 +156,7 @@ export class MenuItem {
    * @internal
    */
   setRole(roleName: aria.Role) {
-    this.roleName_ = roleName;
+    this.roleName = roleName;
   }
 
   /**
@@ -167,7 +167,7 @@ export class MenuItem {
    * @internal
    */
   setCheckable(checkable: boolean) {
-    this.checkable_ = checkable;
+    this.checkable = checkable;
   }
 
   /**
@@ -177,7 +177,7 @@ export class MenuItem {
    * @internal
    */
   setChecked(checked: boolean) {
-    this.checked_ = checked;
+    this.checked = checked;
   }
 
   /**
@@ -187,7 +187,7 @@ export class MenuItem {
    * @internal
    */
   setHighlighted(highlight: boolean) {
-    this.highlight_ = highlight;
+    this.highlight = highlight;
 
     const el = this.getElement();
     if (el && this.isEnabled()) {
@@ -212,7 +212,7 @@ export class MenuItem {
    * @internal
    */
   isEnabled(): boolean {
-    return this.enabled_;
+    return this.enabled;
   }
 
   /**
@@ -222,7 +222,7 @@ export class MenuItem {
    * @internal
    */
   setEnabled(enabled: boolean) {
-    this.enabled_ = enabled;
+    this.enabled = enabled;
   }
 
   /**
@@ -232,8 +232,8 @@ export class MenuItem {
    * @internal
    */
   performAction() {
-    if (this.isEnabled() && this.actionHandler_) {
-      this.actionHandler_(this);
+    if (this.isEnabled() && this.actionHandler) {
+      this.actionHandler(this);
     }
   }
 
@@ -246,6 +246,6 @@ export class MenuItem {
    * @internal
    */
   onAction(fn: (p1: MenuItem) => void, obj: object) {
-    this.actionHandler_ = fn.bind(obj);
+    this.actionHandler = fn.bind(obj);
   }
 }

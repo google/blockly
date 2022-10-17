@@ -61,9 +61,8 @@ export class BlockDrag extends UiBase {
     const json = super.toJson() as BlockDragJson;
     if (this.isStart === undefined) {
       throw new Error(
-          'Whether this event is the start of a drag is ' +
-          'undefined. Either pass the value to the constructor, or call ' +
-          'fromJson');
+          'Whether this event is the start of a drag is undefined. ' +
+          'Either pass the value to the constructor, or call fromJson');
     }
     if (this.blockId === undefined) {
       throw new Error(

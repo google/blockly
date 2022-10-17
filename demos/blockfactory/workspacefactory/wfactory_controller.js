@@ -606,7 +606,7 @@ WorkspaceFactoryController.prototype.loadCategoryByName = function(name) {
   // Update the copy in the view.
   var tab = this.view.addCategoryRow(copy.name, copy.id);
   this.addClickToSwitch(tab, copy.id);
-  // Color the category tab in the view.
+  // Colour the category tab in the view.
   if (copy.colour) {
     this.view.setBorderColour(copy.id, copy.colour);
   }

@@ -31,39 +31,40 @@ import * as svgMath from './utils/svg_math.js';
  * @alias Blockly.BlockDragSurfaceSvg
  */
 export class BlockDragSurfaceSvg {
-  /** The SVG drag surface. Set once by BlockDragSurfaceSvg.createDom. */
-  private svg_: SVGElement;
+  /**
+   * The root element of the drag surface.
+   */
+  private svg: SVGElement;
 
   /**
    * This is where blocks live while they are being dragged if the drag
    * surface is enabled.
    */
-  private dragGroup_: SVGElement;
+  private dragGroup: SVGElement;
 
   /**
    * Cached value for the scale of the drag surface.
    * Used to set/get the correct translation during and after a drag.
    */
-  private scale_ = 1;
+  private scale = 1;
 
   /**
    * Cached value for the translation of the drag surface.
    * This translation is in pixel units, because the scale is applied to the
    * drag group rather than the top-level SVG.
    */
-  private surfaceXY_: Coordinate = new Coordinate(0, 0);
-  private readonly childSurfaceXY_: Coordinate;
+  private surfaceXY = new Coordinate(0, 0);
+
+  /**
+   * Cached value for the translation of the child drag surface in pixel
+   * units. Since the child drag surface tracks the translation of the
+   * workspace this is ultimately the translation of the workspace.
+   */
+  private readonly childSurfaceXY = new Coordinate(0, 0);
 
   /** @param container Containing element. */
   constructor(private readonly container: Element) {
-    /**
-     * Cached value for the translation of the child drag surface in pixel
-     * units. Since the child drag surface tracks the translation of the
-     * workspace this is ultimately the translation of the workspace.
-     */
-    this.childSurfaceXY_ = new Coordinate(0, 0);
-
-    this.svg_ = dom.createSvgElement(
+    this.svg = dom.createSvgElement(
         Svg.SVG, {
           'xmlns': dom.SVG_NS,
           'xmlns:html': dom.HTML_NS,
@@ -72,7 +73,8 @@ export class BlockDragSurfaceSvg {
           'class': 'blocklyBlockDragSurface',
         },
         this.container);
-    this.dragGroup_ = dom.createSvgElement(Svg.G, {}, this.svg_ as SVGElement);
+
+    this.dragGroup = dom.createSvgElement(Svg.G, {}, this.svg);
   }
 
   /**
@@ -93,13 +95,13 @@ export class BlockDragSurfaceSvg {
    * @param blocks Block or group of blocks to place on the drag surface.
    */
   setBlocksAndShow(blocks: SVGElement) {
-    if (this.dragGroup_.childNodes.length) {
+    if (this.dragGroup.childNodes.length) {
       throw Error('Already dragging a block.');
     }
     // appendChild removes the blocks from the previous parent
-    this.dragGroup_.appendChild(blocks);
-    this.svg_.style.display = 'block';
-    this.surfaceXY_ = new Coordinate(0, 0);
+    this.dragGroup.appendChild(blocks);
+    this.svg.style.display = 'block';
+    this.surfaceXY = new Coordinate(0, 0);
   }
 
   /**
@@ -111,13 +113,13 @@ export class BlockDragSurfaceSvg {
    * @param scale Scale of the group.
    */
   translateAndScaleGroup(x: number, y: number, scale: number) {
-    this.scale_ = scale;
+    this.scale = scale;
     // Make sure the svg exists on a pixel boundary so that it is not fuzzy.
     const roundX = Math.round(x);
     const roundY = Math.round(y);
-    this.childSurfaceXY_.x = roundX;
-    this.childSurfaceXY_.y = roundY;
-    this.dragGroup_!.setAttribute(
+    this.childSurfaceXY.x = roundX;
+    this.childSurfaceXY.y = roundY;
+    this.dragGroup.setAttribute(
         'transform',
         'translate(' + roundX + ',' + roundY + ') scale(' + scale + ')');
   }
@@ -128,13 +130,11 @@ export class BlockDragSurfaceSvg {
    * @internal
    */
   translateSurfaceInternal_() {
-    let x = this.surfaceXY_!.x;
-    let y = this.surfaceXY_!.y;
     // Make sure the svg exists on a pixel boundary so that it is not fuzzy.
-    x = Math.round(x);
-    y = Math.round(y);
-    this.svg_.style.display = 'block';
-    dom.setCssTransform(this.svg_, 'translate3d(' + x + 'px, ' + y + 'px, 0)');
+    const x = Math.round(this.surfaceXY.x);
+    const y = Math.round(this.surfaceXY.y);
+    this.svg.style.display = 'block';
+    dom.setCssTransform(this.svg, 'translate3d(' + x + 'px, ' + y + 'px, 0)');
   }
 
   /**
@@ -144,9 +144,9 @@ export class BlockDragSurfaceSvg {
    * @param deltaY Vertical offset in pixel units.
    */
   translateBy(deltaX: number, deltaY: number) {
-    const x = this.surfaceXY_.x + deltaX;
-    const y = this.surfaceXY_.y + deltaY;
-    this.surfaceXY_ = new Coordinate(x, y);
+    const x = this.surfaceXY.x + deltaX;
+    const y = this.surfaceXY.y + deltaY;
+    this.surfaceXY = new Coordinate(x, y);
     this.translateSurfaceInternal_();
   }
 
@@ -160,7 +160,7 @@ export class BlockDragSurfaceSvg {
    * @param y Y translation for the entire surface.
    */
   translateSurface(x: number, y: number) {
-    this.surfaceXY_ = new Coordinate(x * this.scale_, y * this.scale_);
+    this.surfaceXY = new Coordinate(x * this.scale, y * this.scale);
     this.translateSurfaceInternal_();
   }
 
@@ -171,8 +171,8 @@ export class BlockDragSurfaceSvg {
    * @returns Current translation of the surface.
    */
   getSurfaceTranslation(): Coordinate {
-    const xy = svgMath.getRelativeXY(this.svg_ as SVGElement);
-    return new Coordinate(xy.x / this.scale_, xy.y / this.scale_);
+    const xy = svgMath.getRelativeXY(this.svg);
+    return new Coordinate(xy.x / this.scale, xy.y / this.scale);
   }
 
   /**
@@ -181,8 +181,8 @@ export class BlockDragSurfaceSvg {
    *
    * @returns Drag surface group element.
    */
-  getGroup(): SVGElement|null {
-    return this.dragGroup_;
+  getGroup(): SVGElement {
+    return this.dragGroup;
   }
 
   /**
@@ -190,8 +190,8 @@ export class BlockDragSurfaceSvg {
    *
    * @returns The SVG drag surface.
    */
-  getSvgRoot(): SVGElement|null {
-    return this.svg_;
+  getSvgRoot(): SVGElement {
+    return this.svg;
   }
 
   /**
@@ -201,7 +201,7 @@ export class BlockDragSurfaceSvg {
    * @returns Drag surface block DOM element, or null if no blocks exist.
    */
   getCurrentBlock(): Element|null {
-    return this.dragGroup_.firstChild as Element;
+    return this.dragGroup.firstChild as Element;
   }
 
   /**
@@ -213,7 +213,7 @@ export class BlockDragSurfaceSvg {
    */
   getWsTranslation(): Coordinate {
     // Returning a copy so the coordinate can not be changed outside this class.
-    return this.childSurfaceXY_.clone();
+    return this.childSurfaceXY.clone();
   }
 
   /**
@@ -230,16 +230,16 @@ export class BlockDragSurfaceSvg {
     const currentBlockElement = this.getCurrentBlock();
     if (currentBlockElement) {
       if (opt_newSurface) {
-        // appendChild removes the node from this.dragGroup_
+        // appendChild removes the node from this.dragGroup
         opt_newSurface.appendChild(currentBlockElement);
       } else {
-        this.dragGroup_.removeChild(currentBlockElement);
+        this.dragGroup.removeChild(currentBlockElement);
       }
     }
-    this.svg_.style.display = 'none';
-    if (this.dragGroup_.childNodes.length) {
+    this.svg.style.display = 'none';
+    if (this.dragGroup.childNodes.length) {
       throw Error('Drag group was not cleared.');
     }
-    this.surfaceXY_ = new Coordinate(0, 0);
+    this.surfaceXY = new Coordinate(0, 0);
   }
 }

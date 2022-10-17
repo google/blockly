@@ -980,8 +980,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   }
 
   /**
-   * Updates the color of the block (and children) to match the current disabled
-   * state.
+   * Updates the colour of the block (and children) to match the current
+   * disabled state.
    *
    * @internal
    */
@@ -1535,45 +1535,46 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   }
 
   /**
-   * Bump unconnected blocks out of alignment.  Two blocks which aren't actually
-   * connected should not coincidentally line up on screen.
+   * Bumps unconnected blocks out of alignment.
+   *
+   * Two blocks which aren't actually connected should not coincidentally line
+   * up on screen, because that creates confusion for end-users.
    */
   override bumpNeighbours() {
-    if (this.isDeadOrDying()) {
+    this.getRootBlock().bumpNeighboursInternal();
+  }
+
+  /**
+   * Bumps unconnected blocks out of alignment.
+   */
+  private bumpNeighboursInternal() {
+    const root = this.getRootBlock();
+    if (this.isDeadOrDying() || this.workspace.isDragging() ||
+        root.isInFlyout) {
       return;
     }
-    if (this.workspace.isDragging()) {
-      return;
+
+    function neighbourIsInStack(neighbour: RenderedConnection) {
+      return neighbour.getSourceBlock().getRootBlock() === root;
     }
-    const rootBlock = this.getRootBlock();
-    if (rootBlock.isInFlyout) {
-      return;
-    }
-    // Don't move blocks around in a flyout.
-    // Loop through every connection on this block.
-    const myConnections = this.getConnections_(false);
-    for (let i = 0, connection; connection = myConnections[i]; i++) {
-      const renderedConn = (connection);
-      // Spider down from this block bumping all sub-blocks.
-      if (renderedConn.isConnected() && renderedConn.isSuperior()) {
-        renderedConn.targetBlock()!.bumpNeighbours();
+
+    for (const conn of this.getConnections_(false)) {
+      if (conn.isSuperior()) {
+        // Recurse down the block stack.
+        conn.targetBlock()?.bumpNeighboursInternal();
       }
 
-      const neighbours = connection.neighbours(config.snapRadius);
-      for (let j = 0, otherConnection; otherConnection = neighbours[j]; j++) {
-        const renderedOther = otherConnection as RenderedConnection;
-        // If both connections are connected, that's probably fine.  But if
-        // either one of them is unconnected, then there could be confusion.
-        if (!renderedConn.isConnected() || !renderedOther.isConnected()) {
-          // Only bump blocks if they are from different tree structures.
-          if (renderedOther.getSourceBlock().getRootBlock() !== rootBlock) {
-            // Always bump the inferior block.
-            if (renderedConn.isSuperior()) {
-              renderedOther.bumpAwayFrom(renderedConn);
-            } else {
-              renderedConn.bumpAwayFrom(renderedOther);
-            }
-          }
+      for (const neighbour of conn.neighbours(config.snapRadius)) {
+        // Don't bump away from things that are in our stack.
+        if (neighbourIsInStack(neighbour)) continue;
+        // If both connections are connected, that's fine.
+        if (conn.isConnected() && neighbour.isConnected()) continue;
+
+        // Always bump the inferior connection.
+        if (conn.isSuperior()) {
+          neighbour.bumpAwayFrom(conn);
+        } else {
+          conn.bumpAwayFrom(neighbour);
         }
       }
     }

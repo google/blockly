@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Seipinne"
+			"Seipinne",
+			"Yupik"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "tiŋgâ",
@@ -94,6 +95,7 @@
 	"LISTS_GET_INDEX_FIRST": "vuosmuš",
 	"LISTS_GET_INDEX_LAST": "majemuš",
 	"LISTS_GET_INDEX_RANDOM": "sätinálásâš",
+	"LISTS_SORT_TITLE": "šlajâttâl %1 %2 %3",
 	"PROCEDURES_DEFNORETURN_PROCEDURE": "poorgâ maidnii",
 	"PROCEDURES_BEFORE_PARAMS": "parameettereh:",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "parameettereh:",

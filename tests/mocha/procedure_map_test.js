@@ -73,7 +73,7 @@ suite('Procedure Map', function() {
             new Blockly.procedures.ObservableProcedureModel(this.workspace);
         this.procedureMap.addProcedure(procedureModel);
 
-        procedureModel.setReturnType(['return type 1', 'return type 2']);
+        procedureModel.setReturnTypes(['return type 1', 'return type 2']);
 
         chai.assert.isTrue(
             this.updateSpy.calledOnce, 'Expected an update to be triggered');
@@ -84,9 +84,9 @@ suite('Procedure Map', function() {
             new Blockly.procedures.ObservableProcedureModel(this.workspace);
         this.procedureMap.addProcedure(procedureModel);
 
-        procedureModel.setReturnType(['return type']);
+        procedureModel.setReturnTypes(['return type']);
         this.updateSpy.reset();
-        procedureModel.setReturnType(null);
+        procedureModel.setReturnTypes(null);
 
         chai.assert.isTrue(
             this.updateSpy.calledOnce, 'Expected an update to be triggered');
@@ -144,17 +144,16 @@ suite('Procedure Map', function() {
     });
 
     suite('parameter model updates', function() {
-      test('setting the variable model triggers an update', function() {
+      test('setting the name triggers an update', function() {
         const procedureModel =
             new Blockly.procedures.ObservableProcedureModel(this.workspace);
         this.procedureMap.addProcedure(procedureModel);
-        const parameterModel =
-            new Blockly.procedures.ObservableParameterModel(this.workspace);
+        const parameterModel = new Blockly.procedures.ObservableParameterModel(
+            this.workspace, 'test1');
         procedureModel.insertParameter(parameterModel);
         this.updateSpy.reset();
 
-        parameterModel.setVariable(
-            new Blockly.VariableModel(this.workspace, 'variable'));
+        parameterModel.setName('test2');
 
         chai.assert.isTrue(
             this.updateSpy.calledOnce, 'Expected an update to be triggered');
@@ -164,12 +163,9 @@ suite('Procedure Map', function() {
         const procedureModel =
             new Blockly.procedures.ObservableProcedureModel(this.workspace);
         this.procedureMap.addProcedure(procedureModel);
-        const parameterModel =
-            new Blockly.procedures.ObservableParameterModel(this.workspace);
+        const parameterModel = new Blockly.procedures.ObservableParameterModel(
+            this.workspace, 'test1');
         procedureModel.insertParameter(parameterModel);
-        const variableModel =
-            new Blockly.VariableModel(this.workspace, 'variable');
-        parameterModel.setVariable(variableModel);
         this.updateSpy.reset();
 
         variableModel.name = 'some name';

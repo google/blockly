@@ -176,6 +176,10 @@ export class ASTNode {
     const location = this.location_ as Field;
     const input = location.getParentInput();
     const block = location.getSourceBlock();
+    if (!block) {
+      throw new Error(
+          'The current AST location is not associated with a block');
+    }
     const curIdx = block.inputList.indexOf((input));
     let fieldIdx = input.fieldRow.indexOf(location) + 1;
     for (let i = curIdx; i < block.inputList.length; i++) {
@@ -235,6 +239,10 @@ export class ASTNode {
     const location = this.location_ as Field;
     const parentInput = location.getParentInput();
     const block = location.getSourceBlock();
+    if (!block) {
+      throw new Error(
+          'The current AST location is not associated with a block');
+    }
     const curIdx = block.inputList.indexOf((parentInput));
     let fieldIdx = parentInput.fieldRow.indexOf(location) - 1;
     for (let i = curIdx; i >= 0; i--) {
@@ -270,7 +278,10 @@ export class ASTNode {
     // TODO(#6097): Use instanceof checks to exit early for values of
     // curLocation that don't make sense.
     if ((curLocation as IASTNodeLocationWithBlock).getSourceBlock) {
-      curLocation = (curLocation as IASTNodeLocationWithBlock).getSourceBlock();
+      const block = (curLocation as IASTNodeLocationWithBlock).getSourceBlock();
+      if (block) {
+        curLocation = block;
+      }
     }
     // TODO(#6097): Use instanceof checks to exit early for values of
     // curLocation that don't make sense.
@@ -531,7 +542,12 @@ export class ASTNode {
       }
       case ASTNode.types.FIELD: {
         const field = this.location_ as Field;
-        return ASTNode.createBlockNode(field.getSourceBlock());
+        const block = field.getSourceBlock();
+        if (!block) {
+          throw new Error(
+              'The current AST location is not associated with a block');
+        }
+        return ASTNode.createBlockNode(block);
       }
       case ASTNode.types.INPUT: {
         const connection = this.location_ as Connection;

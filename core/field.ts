@@ -255,10 +255,7 @@ export abstract class Field implements IASTNodeLocationSvg,
    * @returns The block containing this field.
    * @throws An error if the source block is not defined.
    */
-  getSourceBlock(): Block {
-    if (!this.sourceBlock_) {
-      throw new Error(`The source block is ${this.sourceBlock_}.`);
-    }
+  getSourceBlock(): Block|null {
     return this.sourceBlock_;
   }
 
@@ -476,10 +473,11 @@ export abstract class Field implements IASTNodeLocationSvg,
   /** Add or remove the UI indicating if this field is editable or not. */
   updateEditable() {
     const group = this.fieldGroup_;
-    if (!this.EDITABLE || !group) {
+    const block = this.getSourceBlock();
+    if (!this.EDITABLE || !group || !block) {
       return;
     }
-    if (this.enabled_ && this.getSourceBlock().isEditable()) {
+    if (this.enabled_ && block.isEditable()) {
       dom.addClass(group, 'blocklyEditableText');
       dom.removeClass(group, 'blocklyNonEditableText');
       group.style.cursor = this.CURSOR;
@@ -756,7 +754,7 @@ export abstract class Field implements IASTNodeLocationSvg,
     this.textElement_.setAttribute(
         'x',
         `${
-            this.getSourceBlock().RTL ?
+            this.getSourceBlock()?.RTL ?
                 this.size_.width - contentWidth - xOffset :
                 xOffset}`);
     this.textElement_.setAttribute(
@@ -819,12 +817,17 @@ export abstract class Field implements IASTNodeLocationSvg,
     let scaledWidth;
     let scaledHeight;
     let xy;
+    const block = this.getSourceBlock();
+    if (!block) {
+      throw new UnattachedFieldError();
+    }
+
     if (!this.borderRect_) {
       // Browsers are inconsistent in what they return for a bounding box.
       // - Webkit / Blink: fill-box / object bounding box
       // - Gecko: stroke-box
       const bBox = (this.sourceBlock_ as BlockSvg).getHeightWidth();
-      const scale = (this.getSourceBlock().workspace as WorkspaceSvg).scale;
+      const scale = (block.workspace as WorkspaceSvg).scale;
       xy = this.getAbsoluteXY_();
       scaledWidth = (bBox.width + 1) * scale;
       scaledHeight = (bBox.height + 1) * scale;
@@ -1158,6 +1161,9 @@ export abstract class Field implements IASTNodeLocationSvg,
   getParentInput(): Input {
     let parentInput = null;
     const block = this.getSourceBlock();
+    if (!block) {
+      throw new UnattachedFieldError();
+    }
     const inputs = block.inputList;
 
     for (let idx = 0; idx < block.inputList.length; idx++) {
@@ -1241,7 +1247,11 @@ export abstract class Field implements IASTNodeLocationSvg,
 
   /** Redraw any attached marker or cursor svgs if needed. */
   protected updateMarkers_() {
-    const workspace = this.getSourceBlock().workspace as WorkspaceSvg;
+    const block = this.getSourceBlock();
+    if (!block) {
+      throw new UnattachedFieldError();
+    }
+    const workspace = block.workspace as WorkspaceSvg;
     if (workspace.keyboardAccessibilityMode && this.cursorSvg_) {
       workspace.getCursor()!.draw();
     }
@@ -1264,3 +1274,17 @@ export interface FieldConfig {
  * in descendants, though they should contain all of Field's prototype methods.
  */
 export type FieldProto = Pick<typeof Field, 'prototype'>;
+
+/**
+ * Represents an error where the field is trying to access its block or
+ * information about its block before it has actually been attached to said
+ * block.
+ */
+export class UnattachedFieldError extends Error {
+  /** @internal */
+  constructor() {
+    super(
+        'The field has not yet been attached to its input. ' +
+        'Call appendField to attach it.');
+  }
+}

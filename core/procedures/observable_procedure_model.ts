@@ -23,6 +23,7 @@ export class ObservableProcedureModel implements IProcedureModel {
 
   /** Sets the human-readable name of the procedure. */
   setName(name: string): this {
+    // TODO(#6516): Fire events.
     this.name = name;
     return this;
   }
@@ -33,12 +34,14 @@ export class ObservableProcedureModel implements IProcedureModel {
    * To move a parameter, first delete it, and then re-insert.
    */
   insertParameter(parameterModel: IParameterModel, index: number): this {
+    // TODO(#6516): Fire events.
     this.parameters.splice(index, 0, parameterModel);
     return this;
   }
 
   /** Removes the parameter at the given index from the parameter list. */
   deleteParameter(index: number): this {
+    // TODO(#6516): Fire events.
     this.parameters.splice(index, 1);
     return this;
   }
@@ -49,6 +52,7 @@ export class ObservableProcedureModel implements IProcedureModel {
    * Pass null to represent a procedure that does not return.
    */
   setReturnTypes(types: string[]|null): this {
+    // TODO(#6516): Fire events.
     this.returnTypes = types;
     return this;
   }
@@ -58,6 +62,7 @@ export class ObservableProcedureModel implements IProcedureModel {
    * all procedure caller blocks should be disabled as well.
    */
   setEnabled(enabled: boolean): this {
+    // TODO(#6516): Fire events.
     this.enabled = enabled;
     return this;
   }

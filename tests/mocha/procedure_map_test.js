@@ -56,11 +56,10 @@ suite('Procedure Map', function() {
       });
 
       test('deleting a procedure triggers an update', function() {
-        const procedureModel =
-            new Blockly.procedures.ObservableProcedureModel(this.workspace);
-        this.procedureMap.add(procedureModel);
+        this.procedureMap.add(
+            new Blockly.procedures.ObservableProcedureModel(this.workspace));
 
-        this.procedureMap.delete(procedureModel.getId());
+        this.procedureMap.delete([...this.procedureMap.values()][0].getId());
 
         chai.assert.isTrue(
             this.updateSpy.calledOnce, 'Expected an update to be triggered');
@@ -69,9 +68,9 @@ suite('Procedure Map', function() {
 
     suite('procedure model updates', function() {
       test('setting the name triggers an update', function() {
-        const procedureModel =
-            new Blockly.procedures.ObservableProcedureModel(this.workspace);
-        this.procedureMap.add(procedureModel);
+        this.procedureMap.add(
+            new Blockly.procedures.ObservableProcedureModel(this.workspace));
+        const procedureModel = [...this.procedureMap.values()][0];
 
         procedureModel.setName('new name');
 
@@ -80,9 +79,9 @@ suite('Procedure Map', function() {
       });
   
       test('setting the return type triggers an update', function() {
-        const procedureModel =
-            new Blockly.procedures.ObservableProcedureModel(this.workspace);
-        this.procedureMap.add(procedureModel);
+        this.procedureMap.add(
+            new Blockly.procedures.ObservableProcedureModel(this.workspace));
+        const procedureModel = [...this.procedureMap.values()][0];
 
         procedureModel.setReturnTypes(['return type 1', 'return type 2']);
 
@@ -91,11 +90,10 @@ suite('Procedure Map', function() {
       });
   
       test('removing the return type triggers an update', function() {
-        const procedureModel =
-            new Blockly.procedures.ObservableProcedureModel(this.workspace);
-        this.procedureMap.add(procedureModel);
-        procedureModel.setReturnTypes(['return type']);
-        console.log(this.updateSpy);
+        this.procedureMap.add(
+            new Blockly.procedures.ObservableProcedureModel(this.workspace)
+                .setReturnTypes(['return type']));
+        const procedureModel = [...this.procedureMap.values()][0];
         this.updateSpy.resetHistory();
 
         procedureModel.setReturnTypes(null);
@@ -105,9 +103,9 @@ suite('Procedure Map', function() {
       });
   
       test('disabling the procedure triggers an update', function() {
-        const procedureModel =
-            new Blockly.procedures.ObservableProcedureModel(this.workspace);
-        this.procedureMap.add(procedureModel);
+        this.procedureMap.add(
+            new Blockly.procedures.ObservableProcedureModel(this.workspace));
+        const procedureModel = [...this.procedureMap.values()][0];
 
         procedureModel.setEnabled(false);
 
@@ -116,10 +114,10 @@ suite('Procedure Map', function() {
       });
   
       test('enabling the procedure triggers an update', function() {
-        const procedureModel =
-            new Blockly.procedures.ObservableProcedureModel(this.workspace);
-        this.procedureMap.add(procedureModel);
-        procedureModel.setEnabled(false);
+        this.procedureMap.add(
+            new Blockly.procedures.ObservableProcedureModel(this.workspace)
+                .setEnabled(false));
+        const procedureModel = [...this.procedureMap.values()][0];
         this.updateSpy.resetHistory();
 
         procedureModel.setEnabled(true);
@@ -129,9 +127,9 @@ suite('Procedure Map', function() {
       });
 
       test('inserting a parameter triggers an update', function() {
-        const procedureModel =
-            new Blockly.procedures.ObservableProcedureModel(this.workspace);
-        this.procedureMap.add(procedureModel);
+        this.procedureMap.add(
+            new Blockly.procedures.ObservableProcedureModel(this.workspace));
+        const procedureModel = [...this.procedureMap.values()][0];
 
         procedureModel.insertParameter(
             new Blockly.procedures.ObservableParameterModel(this.workspace));
@@ -141,11 +139,12 @@ suite('Procedure Map', function() {
       });
   
       test('deleting a parameter triggers an update', function() {
-        const procedureModel =
-            new Blockly.procedures.ObservableProcedureModel(this.workspace);
-        this.procedureMap.add(procedureModel);
-        procedureModel.insertParameter(
-            new Blockly.procedures.ObservableParameterModel(this.workspace));
+        this.procedureMap.add(
+            new Blockly.procedures.ObservableProcedureModel(this.workspace)
+                .insertParameter(
+                    new Blockly.procedures.ObservableParameterModel(
+                        this.workspace)));
+        const procedureModel = [...this.procedureMap.values()][0];
         this.updateSpy.resetHistory();
 
         procedureModel.deleteParameter(0);
@@ -157,12 +156,13 @@ suite('Procedure Map', function() {
 
     suite('parameter model updates', function() {
       test('setting the name triggers an update', function() {
-        const procedureModel =
-            new Blockly.procedures.ObservableProcedureModel(this.workspace);
-        this.procedureMap.add(procedureModel);
-        const parameterModel = new Blockly.procedures.ObservableParameterModel(
-            this.workspace, 'test1');
-        procedureModel.insertParameter(parameterModel);
+        this.procedureMap.add(
+            new Blockly.procedures.ObservableProcedureModel(this.workspace)
+                .insertParameter(
+                    new Blockly.procedures.ObservableParameterModel(
+                        this.workspace, 'test1')));
+        const parameterModel =
+            [...this.procedureMap.values()][0].getParameter(0);
         this.updateSpy.resetHistory();
 
         parameterModel.setName('test2');
@@ -172,13 +172,13 @@ suite('Procedure Map', function() {
       });
   
       test('modifying the variable model does not trigger an update', function() {
-        const procedureModel =
-            new Blockly.procedures.ObservableProcedureModel(this.workspace);
-        this.procedureMap.add(procedureModel);
-        const parameterModel = new Blockly.procedures.ObservableParameterModel(
-            this.workspace, 'test1');
-        procedureModel.insertParameter(parameterModel);
-        const variableModel = parameterModel.getVariableModel();
+        this.procedureMap.add(
+            new Blockly.procedures.ObservableProcedureModel(this.workspace)
+                .insertParameter(
+                    new Blockly.procedures.ObservableParameterModel(
+                        this.workspace, 'test1')));
+        const variableModel =
+            [...this.procedureMap.values()][0].getParameter(0).getVariableModel();
         this.updateSpy.resetHistory();
 
         variableModel.name = 'some name';

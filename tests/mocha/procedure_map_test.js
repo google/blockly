@@ -12,7 +12,7 @@ suite('Procedure Map', function() {
   setup(function() {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
-    this.procedureMap = this.workspace.getProcedureMap();
+    // this.procedureMap = this.workspace.getProcedureMap();
   });
 
   teardown(function() {

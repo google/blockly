@@ -70,10 +70,10 @@ export class MenuItem {
     // goog-menuitem* is deprecated, use blocklyMenuItem*.  May 2020.
     element.className = 'blocklyMenuItem goog-menuitem ' +
         (this.enabled ? '' :
-                         'blocklyMenuItemDisabled goog-menuitem-disabled ') +
+                        'blocklyMenuItemDisabled goog-menuitem-disabled ') +
         (this.checked ? 'blocklyMenuItemSelected goog-option-selected ' : '') +
         (this.highlight ? 'blocklyMenuItemHighlight goog-menuitem-highlight ' :
-                           '') +
+                          '') +
         (this.rightToLeft ? 'blocklyMenuItemRtl goog-menuitem-rtl ' : '');
 
     const content = (document.createElement('div'));
@@ -97,8 +97,7 @@ export class MenuItem {
       aria.setRole(element, this.roleName);
     }
     aria.setState(
-        element, aria.State.SELECTED,
-        this.checkable && this.checked || false);
+        element, aria.State.SELECTED, this.checkable && this.checked || false);
     aria.setState(element, aria.State.DISABLED, !this.enabled);
 
     return element;

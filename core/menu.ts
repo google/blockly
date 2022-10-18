@@ -393,9 +393,8 @@ export class Menu {
       return;
     }
     const keyboardEvent = e as KeyboardEvent;
-    if (keyboardEvent.shiftKey ||
-      keyboardEvent.ctrlKey ||
-      keyboardEvent.metaKey || keyboardEvent.altKey) {
+    if (keyboardEvent.shiftKey || keyboardEvent.ctrlKey ||
+        keyboardEvent.metaKey || keyboardEvent.altKey) {
       // Do not handle the key event if any modifier key is pressed.
       return;
     }

@@ -35,14 +35,14 @@ export class ObservableParameterModel implements IParameterModel {
    * Unimplemented. The built-in ParameterModel does not support typing.
    * If you want your procedure blocks to have typed parameters, you need to
    * implement your own ParameterModel.
-   * 
+   *
    * @throws Throws for the ObservableParameterModel specifically because this
    *     method is unimplemented.
    */
   setTypes(_types: string[]): this {
     throw new Error(
         'The built-in ParameterModel does not support typing. You need to ' +
-        'implement your own custom ParameterModel.')
+        'implement your own custom ParameterModel.');
   }
 
   /**

@@ -12,9 +12,7 @@ suite('Procedure Map', function() {
   setup(function() {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
-    //this.procedureMap = this.workspace.getProcedureMap();
-    this.procedureMap =
-        new Blockly.procedures.ObservableProcedureMap(this.workspace);
+    this.procedureMap = this.workspace.getProcedureMap();
   });
 
   teardown(function() {
@@ -255,5 +253,5 @@ suite('Procedure Map', function() {
         },
         'The built-in ParameterModel does not support typing');
     });
-  })
+  });
 });

@@ -1285,6 +1285,6 @@ export class UnattachedFieldError extends Error {
   constructor() {
     super(
         'The field has not yet been attached to its input. ' +
-        'Call appendField to attach it.')
+        'Call appendField to attach it.');
   }
 }

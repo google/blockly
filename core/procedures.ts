@@ -25,6 +25,9 @@ import * as eventUtils from './events/utils.js';
 import {Field, UnattachedFieldError} from './field.js';
 import {Msg} from './msg.js';
 import {Names} from './names.js';
+import {ObservableProcedureMap} from './procedures/observable_procedure_map.js';
+import {ObservableProcedureModel} from './procedures/observable_procedure_model.js';
+import {ObservableParameterModel} from './procedures/observable_parameter_model.js';
 import * as utilsXml from './utils/xml.js';
 import * as Variables from './variables.js';
 import type {Workspace} from './workspace.js';
@@ -449,4 +452,10 @@ export function getDefinition(name: string, workspace: Workspace): Block|null {
     }
   }
   return null;
+}
+
+export {
+  ObservableProcedureMap,
+  ObservableProcedureModel,
+  ObservableParameterModel,
 }

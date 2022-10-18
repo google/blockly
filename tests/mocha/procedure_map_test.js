@@ -8,18 +8,18 @@ import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown
 
 goog.declareModuleId('Blockly.test.procedureMap');
 
-suite.skip('Procedure Map', function() {
+suite('Procedure Map', function() {
   setup(function() {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
-    this.procedureMap = this.workspace.getProcedureMap();
+    //this.procedureMap = this.workspace.getProcedureMap();
   });
 
   teardown(function() {
     sharedTestTeardown.call(this);
   });
 
-  suite('triggering block updates', function() {
+  suite.skip('triggering block updates', function() {
     setup(function() {
       Blockly.Blocks['procedure_mock'] = {
         init: function() { },
@@ -184,4 +184,67 @@ suite.skip('Procedure Map', function() {
   suite('event firing', function() {
     // TBA after the procedure map is implemented
   });
+
+  suite('backing variable to parameters', function() {
+    test(
+        'construction references an existing variable if available',
+        function() {
+          const variable = this.workspace.createVariable('test1');
+          const param = new Blockly.procedures.ObservableParameterModel(
+              this.workspace, 'test1');
+
+          console.log(param);
+
+          chai.assert.equal(
+              variable,
+              param.getVariableModel(),
+              'Expected the parameter model to reference the existing variable');
+        });
+
+    test('construction creates a variable if none exists', function() {
+      const param = new Blockly.procedures.ObservableParameterModel(
+          this.workspace, 'test1');
+
+      chai.assert.equal(
+          this.workspace.getVariable('test1'),
+          param.getVariableModel(),
+          'Expected the parameter model to create a variable');
+    });
+
+    test('setName references an existing variable if available', function() {
+      const variable = this.workspace.createVariable('test2');
+      const param = new Blockly.procedures.ObservableParameterModel(
+          this.workspace, 'test1');
+
+      param.setName('test2');
+
+      chai.assert.equal(
+          variable,
+          param.getVariableModel(),
+          'Expected the parameter model to reference the existing variable');
+    });
+
+    test('setName creates a variable if none exits', function() {
+      const param = new Blockly.procedures.ObservableParameterModel(
+          this.workspace, 'test1');
+
+      param.setName('test2');
+
+      chai.assert.equal(
+          this.workspace.getVariable('test2'),
+          param.getVariableModel(),
+          'Expected the parameter model to create a variable');
+    });
+
+    test('setTypes is unimplemented', function() {
+      const param = new Blockly.procedures.ObservableParameterModel(
+          this.workspace, 'test1');
+
+      chai.assert.throws(
+        () => {
+          param.setTypes(['some', 'types']);
+        },
+        'The built-in ParameterModel does not support typing');
+    });
+  })
 });

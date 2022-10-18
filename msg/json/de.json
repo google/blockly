@@ -258,7 +258,7 @@
 	"LISTS_CREATE_WITH_CONTAINER_TOOLTIP": "Hinzufügen, entfernen und sortieren von Elementen.",
 	"LISTS_CREATE_WITH_ITEM_TOOLTIP": "Ein Element zur Liste hinzufügen.",
 	"LISTS_REPEAT_TOOLTIP": "Erzeugt eine Liste mit einer variablen Anzahl von Elementen.",
-	"LISTS_REPEAT_TITLE": "erzeuge Liste mit %2-mal dem Element %1​",
+	"LISTS_REPEAT_TITLE": "erzeuge Liste mit %2-mal dem Element %1",
 	"LISTS_LENGTH_TITLE": "Länge von %1",
 	"LISTS_LENGTH_TOOLTIP": "Die Anzahl von Elementen in der Liste.",
 	"LISTS_ISEMPTY_TITLE": "%1 ist leer",

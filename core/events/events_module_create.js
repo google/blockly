@@ -25,9 +25,9 @@ goog.module('Blockly.Events.ModuleCreate');
 
 const Abstract = goog.require('Blockly.Events.Abstract');
 const object = goog.require('Blockly.utils.object');
-const eventUtils = goog.require('Blockly.Events.utils')
+const eventUtils = goog.require('Blockly.Events.utils');
 const registry = goog.require('Blockly.registry');
-const {ModuleBase} = goog.require('Blockly.Events.ModuleBase')
+const {ModuleBase} = goog.require('Blockly.Events.ModuleBase');
 
 
 /**
@@ -57,7 +57,7 @@ ModuleCreate.prototype.type = eventUtils.MODULE_CREATE;
  * @return {!Object} JSON representation.
  */
 ModuleCreate.prototype.toJson = function() {
-  var json = ModuleCreate.superClass_.toJson.call(this);
+  const json = ModuleCreate.superClass_.toJson.call(this);
   json['moduleName'] = this.moduleName;
   json['scrollX'] = this.scrollX;
   json['scrollY'] = this.scrollY;
@@ -82,7 +82,7 @@ ModuleCreate.prototype.fromJson = function(json) {
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
 ModuleCreate.prototype.run = function(forward) {
-  var moduleManager = this.getEventWorkspace_().getModuleManager();
+  const moduleManager = this.getEventWorkspace_().getModuleManager();
   if (forward) {
     moduleManager.createModule(this.moduleName, this.moduleId, this.scrollX, this.scrollY, this.scale);
   } else {
@@ -93,4 +93,4 @@ ModuleCreate.prototype.run = function(forward) {
 registry.register(
   registry.Type.EVENT, eventUtils.MODULE_CREATE, ModuleCreate);
 
-exports.ModuleCreate = ModuleCreate
+exports.ModuleCreate = ModuleCreate;

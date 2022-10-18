@@ -31,6 +31,7 @@
 	"DELETE_BLOCK": "刪除區塊",
 	"DELETE_X_BLOCKS": "刪除%1個積木",
   "BLOCK_MOVE_TO_MODULE": "移動到“%1”",
+  "BLOCK_MOVE_TO_NEW_MODULE": "转移到一个新的模块",
   "DELETE_ALL_BLOCKS": "刪除全部 %1 個區塊？",
 	"CLEAN_UP": "整理區塊",
 	"COLLAPSE_BLOCK": "收合區塊",

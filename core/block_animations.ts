@@ -188,7 +188,11 @@ function disconnectUiStep(group: SVGElement, magnitude: number, start: Date) {
     skew = `skewX(${val})`;
     disconnectPid = setTimeout(disconnectUiStep, 10, group, magnitude, start);
   }
-  group.setAttribute('transform', skew);
+  (group as AnyDuringMigration).skew_ = skew;
+  group.setAttribute(
+    'transform',
+    (group as AnyDuringMigration).translate_ +
+    (group as AnyDuringMigration).skew_);
 }
 
 /**
@@ -202,7 +206,9 @@ export function disconnectUiStop() {
     if (disconnectPid) {
       clearTimeout(disconnectPid);
     }
-    disconnectGroup.setAttribute('transform', '');
+    const group = disconnectGroup;
+    (group as AnyDuringMigration).skew_ = '';
+    group.setAttribute('transform', (group as AnyDuringMigration).translate_);
     disconnectGroup = null;
   }
 }

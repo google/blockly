@@ -800,7 +800,7 @@ export abstract class Field implements IASTNodeLocationSvg,
       // If the field is not visible the width will be 0 as well, one of the
       // problems with the old system.
       this.render_();
-      // Don't issue a warning if the field is actualy zero width.
+      // Don't issue a warning if the field is actually zero width.
       if (this.size_.width !== 0) {
         console.warn(
             'Deprecated use of setting size_.width to 0 to rerender a' +

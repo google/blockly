@@ -22,7 +22,7 @@ import * as common from './common.js';
 import type {Abstract} from './events/events_abstract.js';
 import type {BubbleOpen} from './events/events_bubble_open.js';
 import * as eventUtils from './events/utils.js';
-import type {Field} from './field.js';
+import {Field, UnattachedFieldError} from './field.js';
 import {Msg} from './msg.js';
 import {Names} from './names.js';
 import * as utilsXml from './utils/xml.js';
@@ -182,9 +182,7 @@ export function isNameUsed(
 export function rename(this: Field, name: string): string {
   const block = this.getSourceBlock();
   if (!block) {
-    throw new Error(
-        'The field has not yet been attached to its input. ' +
-        'Call appendField to attach it.');
+    throw new UnattachedFieldError();
   }
 
   // Strip leading and trailing whitespace.  Beyond this, all names are legal.

@@ -16,7 +16,7 @@ import {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import * as Css from './css.js';
 import * as dropDownDiv from './dropdowndiv.js';
-import {Field} from './field.js';
+import {Field, UnattachedFieldError} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import {FieldTextInputConfig, FieldTextInput} from './field_textinput.js';
 import * as dom from './utils/dom.js';
@@ -412,15 +412,19 @@ export class FieldAngle extends FieldTextInput {
    */
   protected override onHtmlInputKeyDown_(e: Event) {
     super.onHtmlInputKeyDown_(e);
+    const block = this.getSourceBlock();
+    if (!block) {
+      throw new UnattachedFieldError();
+    }
 
     const keyboardEvent = e as KeyboardEvent;
     let multiplier;
     if (keyboardEvent.keyCode === KeyCodes.LEFT) {
       // decrement (increment in RTL)
-      multiplier = this.getSourceBlock().RTL ? 1 : -1;
+      multiplier = block.RTL ? 1 : -1;
     } else if (keyboardEvent.keyCode === KeyCodes.RIGHT) {
       // increment (decrement in RTL)
-      multiplier = this.getSourceBlock().RTL ? -1 : 1;
+      multiplier = block.RTL ? -1 : 1;
     } else if (keyboardEvent.keyCode === KeyCodes.DOWN) {
       // decrement
       multiplier = -1;

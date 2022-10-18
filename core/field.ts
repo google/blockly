@@ -799,10 +799,13 @@ export abstract class Field implements IASTNodeLocationSvg,
     } else if (this.visible_ && this.size_.width === 0) {
       // If the field is not visible the width will be 0 as well, one of the
       // problems with the old system.
-      console.warn(
-          'Deprecated use of setting size_.width to 0 to rerender a' +
-          ' field. Set field.isDirty_ to true instead.');
       this.render_();
+      // Don't issue a warning if the field is actualy zero width.
+      if (this.size_.width !== 0) {
+        console.warn(
+            'Deprecated use of setting size_.width to 0 to rerender a' +
+            ' field. Set field.isDirty_ to true instead.');
+      }
     }
     return this.size_;
   }

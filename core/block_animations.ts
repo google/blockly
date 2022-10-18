@@ -190,9 +190,9 @@ function disconnectUiStep(group: SVGElement, magnitude: number, start: Date) {
   }
   (group as AnyDuringMigration).skew_ = skew;
   group.setAttribute(
-    'transform',
-    (group as AnyDuringMigration).translate_ +
-    (group as AnyDuringMigration).skew_);
+      'transform',
+      (group as AnyDuringMigration).translate_ +
+          (group as AnyDuringMigration).skew_);
 }
 
 /**

@@ -13,7 +13,7 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.FieldMultilineInput');
 
 import * as Css from './css.js';
-import {Field} from './field.js';
+import {Field, UnattachedFieldError} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import {FieldTextInputConfig, FieldTextInput} from './field_textinput.js';
 import * as aria from './utils/aria.js';
@@ -165,9 +165,7 @@ export class FieldMultilineInput extends FieldTextInput {
   protected override getDisplayText_(): string {
     const block = this.getSourceBlock();
     if (!block) {
-      throw new Error(
-          'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.');
+      throw new UnattachedFieldError();
     }
     let textLines = this.getText();
     if (!textLines) {
@@ -220,9 +218,7 @@ export class FieldMultilineInput extends FieldTextInput {
   protected override render_() {
     const block = this.getSourceBlock();
     if (!block) {
-      throw new Error(
-          'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.');
+      throw new UnattachedFieldError();
     }
     // Remove all text group children.
     let currentChild;

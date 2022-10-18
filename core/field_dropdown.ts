@@ -16,7 +16,7 @@ goog.declareModuleId('Blockly.FieldDropdown');
 
 import type {BlockSvg} from './block_svg.js';
 import * as dropDownDiv from './dropdowndiv.js';
-import {FieldConfig, Field} from './field.js';
+import {FieldConfig, Field, UnattachedFieldError} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import {Menu} from './menu.js';
 import {MenuItem} from './menuitem.js';
@@ -260,9 +260,7 @@ export class FieldDropdown extends Field {
   protected override showEditor_(opt_e?: Event) {
     const block = this.getSourceBlock();
     if (!block) {
-      throw new Error(
-          'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.');
+      throw new UnattachedFieldError();
     }
     this.dropdownCreate_();
     // AnyDuringMigration because:  Property 'clientX' does not exist on type
@@ -311,9 +309,7 @@ export class FieldDropdown extends Field {
   private dropdownCreate_() {
     const block = this.getSourceBlock();
     if (!block) {
-      throw new Error(
-          'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.');
+      throw new UnattachedFieldError();
     }
     const menu = new Menu();
     menu.setRole(aria.Role.LISTBOX);
@@ -553,9 +549,7 @@ export class FieldDropdown extends Field {
   private renderSelectedImage_(imageJson: ImageProperties) {
     const block = this.getSourceBlock();
     if (!block) {
-      throw new Error(
-          'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.');
+      throw new UnattachedFieldError();
     }
     this.imageElement_!.style.display = '';
     this.imageElement_!.setAttributeNS(
@@ -653,9 +647,7 @@ export class FieldDropdown extends Field {
     }
     const block = this.getSourceBlock();
     if (!block) {
-      throw new Error(
-          'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.');
+      throw new UnattachedFieldError();
     }
     const hasBorder = !!this.borderRect_;
     const xPadding =

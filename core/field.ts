@@ -819,9 +819,7 @@ export abstract class Field implements IASTNodeLocationSvg,
     let xy;
     const block = this.getSourceBlock();
     if (!block) {
-      throw new Error(
-          'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.');
+      throw new UnattachedFieldError();
     }
 
     if (!this.borderRect_) {
@@ -1164,9 +1162,7 @@ export abstract class Field implements IASTNodeLocationSvg,
     let parentInput = null;
     const block = this.getSourceBlock();
     if (!block) {
-      throw new Error(
-          'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.');
+      throw new UnattachedFieldError();
     }
     const inputs = block.inputList;
 
@@ -1253,9 +1249,7 @@ export abstract class Field implements IASTNodeLocationSvg,
   protected updateMarkers_() {
     const block = this.getSourceBlock();
     if (!block) {
-      throw new Error(
-          'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.');
+      throw new UnattachedFieldError();
     }
     const workspace = block.workspace as WorkspaceSvg;
     if (workspace.keyboardAccessibilityMode && this.cursorSvg_) {
@@ -1280,3 +1274,17 @@ export interface FieldConfig {
  * in descendants, though they should contain all of Field's prototype methods.
  */
 export type FieldProto = Pick<typeof Field, 'prototype'>;
+
+/**
+ * Represents an error where the field is trying to access its block or
+ * information about its block before it has actually been attached to said
+ * block.
+ */
+export class UnattachedFieldError extends Error {
+  /** @internal */
+  constructor() {
+    super(
+        'The field has not yet been attached to its input. ' +
+        'Call appendField to attach it.')
+  }
+}

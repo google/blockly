@@ -21,7 +21,7 @@ import * as dialog from './dialog.js';
 import * as dom from './utils/dom.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import * as eventUtils from './events/utils.js';
-import {FieldConfig, Field} from './field.js';
+import {FieldConfig, Field, UnattachedFieldError} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import {Msg} from './msg.js';
 import * as aria from './utils/aria.js';
@@ -129,9 +129,7 @@ export class FieldTextInput extends Field {
   override initView() {
     const block = this.getSourceBlock();
     if (!block) {
-      throw new Error(
-          'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.');
+      throw new UnattachedFieldError();
     }
     if (this.getConstants()!.FULL_BLOCK_FIELDS) {
       // Step one: figure out if this is the only field on this block.
@@ -315,9 +313,7 @@ export class FieldTextInput extends Field {
   private showInlineEditor_(quietInput: boolean) {
     const block = this.getSourceBlock();
     if (!block) {
-      throw new Error(
-          'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.');
+      throw new UnattachedFieldError();
     }
     WidgetDiv.show(this, block.RTL, this.widgetDispose_.bind(this));
     this.htmlInput_ = this.widgetCreate_() as HTMLInputElement;
@@ -339,9 +335,7 @@ export class FieldTextInput extends Field {
   protected widgetCreate_(): HTMLElement {
     const block = this.getSourceBlock();
     if (!block) {
-      throw new Error(
-          'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.');
+      throw new UnattachedFieldError();
     }
     eventUtils.setGroup(true);
     const div = WidgetDiv.getDiv();
@@ -529,9 +523,7 @@ export class FieldTextInput extends Field {
   protected resizeEditor_() {
     const block = this.getSourceBlock();
     if (!block) {
-      throw new Error(
-          'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.');
+      throw new UnattachedFieldError();
     }
     const div = WidgetDiv.getDiv();
     const bBox = this.getScaledBBox();

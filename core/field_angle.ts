@@ -16,7 +16,7 @@ import {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import * as Css from './css.js';
 import * as dropDownDiv from './dropdowndiv.js';
-import {Field} from './field.js';
+import {Field, UnattachedFieldError} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import {FieldTextInputConfig, FieldTextInput} from './field_textinput.js';
 import * as dom from './utils/dom.js';
@@ -414,9 +414,7 @@ export class FieldAngle extends FieldTextInput {
     super.onHtmlInputKeyDown_(e);
     const block = this.getSourceBlock();
     if (!block) {
-      throw new Error(
-          'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.');
+      throw new UnattachedFieldError();
     }
 
     const keyboardEvent = e as KeyboardEvent;

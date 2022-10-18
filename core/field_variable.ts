@@ -16,7 +16,7 @@ goog.declareModuleId('Blockly.FieldVariable');
 import './events/events_block_change.js';
 
 import type {Block} from './block.js';
-import {Field, FieldConfig} from './field.js';
+import {Field, FieldConfig, UnattachedFieldError} from './field.js';
 import {FieldDropdown} from './field_dropdown.js';
 import * as fieldRegistry from './field_registry.js';
 import * as internalConstants from './internal_constants.js';
@@ -137,9 +137,7 @@ export class FieldVariable extends FieldDropdown {
   override initModel() {
     const block = this.getSourceBlock();
     if (!block) {
-      throw new Error(
-          'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.');
+      throw new UnattachedFieldError();
     }
     if (this.variable_) {
       return;  // Initialization already happened.
@@ -153,9 +151,7 @@ export class FieldVariable extends FieldDropdown {
   override shouldAddBorderRect_() {
     const block = this.getSourceBlock();
     if (!block) {
-      throw new Error(
-          'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.');
+      throw new UnattachedFieldError();
     }
     return super.shouldAddBorderRect_() &&
         (!this.getConstants()!.FIELD_DROPDOWN_NO_BORDER_RECT_SHADOW ||
@@ -171,9 +167,7 @@ export class FieldVariable extends FieldDropdown {
   override fromXml(fieldElement: Element) {
     const block = this.getSourceBlock();
     if (!block) {
-      throw new Error(
-          'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.');
+      throw new UnattachedFieldError();
     }
     const id = fieldElement.getAttribute('id');
     const variableName = fieldElement.textContent;
@@ -251,9 +245,7 @@ export class FieldVariable extends FieldDropdown {
   override loadState(state: AnyDuringMigration) {
     const block = this.getSourceBlock();
     if (!block) {
-      throw new Error(
-          'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.');
+      throw new UnattachedFieldError();
     }
     if (this.loadLegacyState(FieldVariable, state)) {
       return;
@@ -339,9 +331,7 @@ export class FieldVariable extends FieldDropdown {
     }
     const block = this.getSourceBlock();
     if (!block) {
-      throw new Error(
-          'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.');
+      throw new UnattachedFieldError();
     }
     const newId = opt_newValue as string;
     const variable = Variables.getVariable(block.workspace, newId);
@@ -372,9 +362,7 @@ export class FieldVariable extends FieldDropdown {
   protected override doValueUpdate_(newId: AnyDuringMigration) {
     const block = this.getSourceBlock();
     if (!block) {
-      throw new Error(
-          'The field has not yet been attached to its input. ' +
-          'Call appendField to attach it.');
+      throw new UnattachedFieldError();
     }
     this.variable_ = Variables.getVariable(block.workspace, newId as string);
     super.doValueUpdate_(newId);

@@ -795,7 +795,7 @@ suite('JSO Serialization', function() {
     });
   });
 
-  suite.only('Procedures', function() {
+  suite.skip('Procedures', function() {
     setup(function() {
       this.procedureMap = this.workspace.getProcedureMap();
     });

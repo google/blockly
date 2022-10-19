@@ -30,7 +30,6 @@ export class ObservableProcedureModel implements IProcedureModel {
     return this;
   }
 
-
   /**
    * Inserts a parameter into the list of parameters.
    *

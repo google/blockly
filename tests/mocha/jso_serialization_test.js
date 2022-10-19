@@ -802,40 +802,93 @@ suite('JSO Serialization', function() {
 
     suite('invariant properties', function() {
       test('the state always has an id property', function() {
-        this.procedureMap.add()
+        const procedureModel =
+            new Blockly.procedures.ObservableProcedureModel(this.workspace);
+        this.procedureMap.add(procedureModel);
+        const jso = Blockly.serialization.workspaces.save(this.workspace);
+        const procedure = jso['procedures'][0];
+        assertProperty(procedure, 'id', procedureModel.getId());
       });
 
-      test('the state always has a name property', function() {
+      test('if the name has not been set, name is an empty string', function() {
+        const procedureModel =
+            new Blockly.procedures.ObservableProcedureModel(this.workspace);
+        this.procedureMap.add(procedureModel);
+        const jso = Blockly.serialization.workspaces.save(this.workspace);
+        const procedure = jso['procedures'][0];
+        assertProperty(procedure, 'name', '');
+      });
 
+      test('if the name has been set, name is the string', function() {
+        const procedureModel =
+            new Blockly.procedures.ObservableProcedureModel(this.workspace)
+                .setName('testName');
+        this.procedureMap.add(procedureModel);
+        const jso = Blockly.serialization.workspaces.save(this.workspace);
+        const procedure = jso['procedures'][0];
+        assertProperty(procedure, 'name', 'testName');
       });
     });
 
     suite('return types', function() {
       test('if the procedure does not return, returnTypes is null', function() {
-
+        const procedureModel =
+            new Blockly.procedures.ObservableProcedureModel(this.workspace);
+        this.procedureMap.add(procedureModel);
+        const jso = Blockly.serialization.workspaces.save(this.workspace);
+        const procedure = jso['procedures'][0];
+        assertProperty(procedure, 'returnTypes', null);
       });
 
       test(
           'if the procedure has no return type, returnTypes is an empty array',
           function() {
-
+            const procedureModel =
+                new Blockly.procedures.ObservableProcedureModel(this.workspace)
+                    .setReturnTypes([]);
+            this.procedureMap.add(procedureModel);
+            const jso = Blockly.serialization.workspaces.save(this.workspace);
+            const procedure = jso['procedures'][0];
+            assertProperty(procedure, 'returnTypes', []);
           });
 
       test(
           'if the procedure has return types, returnTypes is the array',
           function() {
-
+            const procedureModel =
+                new Blockly.procedures.ObservableProcedureModel(this.workspace)
+                    .setReturnTypes(['a type']);
+            this.procedureMap.add(procedureModel);
+            const jso = Blockly.serialization.workspaces.save(this.workspace);
+            const procedure = jso['procedures'][0];
+            assertProperty(procedure, 'returnTypes', ['a type']);
           });
     });
 
     suite('parameters', function() {
       suite('invariant properties', function() {
         test('the state always has an id property', function() {
-
+          const parameterModel =
+              new Blockly.procedures.ObservableParameterModel(
+                  this.workspace, 'testparam');
+          this.procedureMap.add(
+              new Blockly.procedures.ObservableProcedureModel(this.workspace)
+                  .insertParameter(parameterModel, 0));
+          const jso = Blockly.serialization.workspaces.save(this.workspace);
+          const parameter = jso['procedures'][0]['parameters'][0];
+          assertProperty(parameter, 'id', parameterModel.getId());
         });
 
         test('the state always has a name property', function() {
-
+          const parameterModel =
+              new Blockly.procedures.ObservableParameterModel(
+                  this.workspace, 'testparam');
+          this.procedureMap.add(
+              new Blockly.procedures.ObservableProcedureModel(this.workspace)
+                  .insertParameter(parameterModel, 0));
+          const jso = Blockly.serialization.workspaces.save(this.workspace);
+          const parameter = jso['procedures'][0]['parameters'][0];
+          assertProperty(parameter, 'id', 'testparam');
         });
       });
 
@@ -843,11 +896,46 @@ suite('JSO Serialization', function() {
         test(
             'if the parameter has no type, there is no type property',
             function() {
-
+              const parameterModel =
+                  new Blockly.procedures.ObservableParameterModel(
+                      this.workspace, 'testparam');
+              this.procedureMap.add(
+                  new Blockly.procedures.ObservableProcedureModel(
+                    this.workspace
+                  )
+                  .insertParameter(parameterModel, 0));
+              const jso = Blockly.serialization.workspaces.save(this.workspace);
+              const parameter = jso['procedures'][0]['parameters'][0];
+              assertNoProperty(parameter, 'types');
              });
 
-        test('if the parameter has types, types is an array', function () {
+        test('if the parameter has types, types is an array', function() {
+          // We need to define a dummy class that actually fully implements the
+          // IParameterModel interface so that we can test serialization (which
+          // only relies on the interface).
+          class TestParameterModel extends
+              Blockly.procedures.ObservableParameterModel {
+            setTypes(types) {
+              this.types = types;
+              return this;
+            }
 
+            getTypes() {
+              return this.types;
+            }
+          }
+
+          const parameterModel =
+              new TestParameterModel(this.workspace, 'testparam')
+                  .setTypes(['a type']);
+          this.procedureMap.add(
+              new Blockly.procedures.ObservableProcedureModel(this.workspace)
+              .insertParameter(parameterModel, 0));
+
+          const jso = Blockly.serialization.workspaces.save(this.workspace);
+
+          const parameter = jso['procedures'][0]['parameters'][0];
+          assertProperty(parameter, 'types', ['a type']);
         });
       });
     });

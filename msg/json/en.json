@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Varwin <devops@varwin.com>",
-		"lastupdated": "2022-09-09 13:39:54.541557",
+		"lastupdated": "2022-10-18 10:51:13.340826",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -19,6 +19,7 @@
 	"DELETE_BLOCK": "Delete Block",
 	"DELETE_X_BLOCKS": "Delete %1 Blocks",
 	"BLOCK_MOVE_TO_MODULE": "Move to '%1'",
+	"BLOCK_MOVE_TO_NEW_MODULE": "Move to new module",
 	"DELETE_ALL_BLOCKS": "Delete all %1 blocks?",
 	"CLEAN_UP": "Clean up Blocks",
 	"COLLAPSE_BLOCK": "Collapse Block",

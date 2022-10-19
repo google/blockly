@@ -25,9 +25,9 @@ goog.module('Blockly.Events.ModuleDelete');
 
 const Abstract = goog.require('Blockly.Events.Abstract');
 const object = goog.require('Blockly.utils.object');
-const eventUtils = goog.require('Blockly.Events.utils')
+const eventUtils = goog.require('Blockly.Events.utils');
 const registry = goog.require('Blockly.registry');
-const {ModuleBase} = goog.require('Blockly.Events.ModuleBase')
+const {ModuleBase} = goog.require('Blockly.Events.ModuleBase');
 
 
 /**
@@ -60,7 +60,7 @@ ModuleDelete.prototype.type = eventUtils.MODULE_DELETE;
  * @return {!Object} JSON representation.
  */
 ModuleDelete.prototype.toJson = function() {
-  var json = ModuleDelete.superClass_.toJson.call(this);
+  const json = ModuleDelete.superClass_.toJson.call(this);
   json['moduleName'] = this.moduleName;
   json['scrollX'] = this.scrollX;
   json['scrollX'] = this.scrollX;
@@ -85,7 +85,7 @@ ModuleDelete.prototype.fromJson = function(json) {
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
 ModuleDelete.prototype.run = function(forward) {
-  var moduleManager = this.getEventWorkspace_().getModuleManager();
+  const moduleManager = this.getEventWorkspace_().getModuleManager();
   if (forward) {
     moduleManager.deleteModule(moduleManager.getModuleById(this.moduleId));
   } else {
@@ -97,4 +97,4 @@ ModuleDelete.prototype.run = function(forward) {
 registry.register(
   registry.Type.EVENT, eventUtils.MODULE_DELETE, ModuleDelete);
 
-exports.ModuleDelete = ModuleDelete
+exports.ModuleDelete = ModuleDelete;

@@ -103,6 +103,9 @@ Blockly.Msg.DELETE_X_BLOCKS = 'Delete %1 Blocks';
 /// context menu - Move selected block to module %1. \n\nParameters:\n* %1 - the module name.
 Blockly.Msg.BLOCK_MOVE_TO_MODULE = 'Move to "%1"';
 /** @type {string} */
+/// context menu - Move selected block to new module
+Blockly.Msg.BLOCK_MOVE_TO_NEW_MODULE = 'Move to new module';
+/** @type {string} */
 /// confirmation prompt - Question the user if they really wanted to permanently delete all %1 blocks.\n\nParameters:\n* %1 - an integer greater than 1.
 Blockly.Msg.DELETE_ALL_BLOCKS = 'Delete all %1 blocks?';
 /** @type {string} */

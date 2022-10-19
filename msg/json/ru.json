@@ -60,6 +60,7 @@
 	"NOT_EMPTY_MODULE_DELETE_RESTRICTION": "Невозможно удалить модуль с блоками. Сначала удалите блоки в модуле.",
 	"DELETE_MODULE": "Удалить",
 	"BLOCK_MOVE_TO_MODULE": "Переместить в '%1'",
+	"BLOCK_MOVE_TO_NEW_MODULE": "Переместить в новый модуль",
 	"CHANGE_VALUE_TITLE": "Измените значение:",
 	"RENAME_ARGUMENT": "Переименовать аргумент…",
 	"RENAME_ARGUMENT_TITLE": "Переименовать аргумент '%1' в:",

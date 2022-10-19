@@ -311,9 +311,49 @@ const commentDeleteOption = function(comment) {
 exports.commentDeleteOption = commentDeleteOption;
 
 /**
+ * Make a context menu option for duplicating the current block on new module.
+ * @param {!BlockSvg} block The block where the right-click originated.
+ * @param {!ModuleModel} module The module to move block.
+ * @return {!Object} A menu option, containing text, enabled, and a callback.
+ * @package
+ */
+ const blockMoveToNewModuleOption = function(block) {
+  return {
+    text: Blockly.Msg['BLOCK_MOVE_TO_NEW_MODULE'],
+    enabled: block.isMovable(),
+    callback: function() {
+      Blockly.dialog.prompt(
+        Blockly.Msg["NEW_MODULE_TITLE"],
+        "",
+        function(moduleName) {
+          if (moduleName) {
+            moduleName = moduleName.replace(/[\s\xa0]+/g, " ").trim();
+          }
+    
+          if (moduleName) {
+            const existingGroup = Blockly.Events.getGroup();
+            if (!existingGroup) {
+              Blockly.Events.setGroup(true);
+            }
+            try {
+              const module = block.workspace.getModuleManager().createModule(moduleName);
+              block.workspace.getModuleManager().moveBlockToModule(block, module);
+            } finally {
+              Blockly.Events.setGroup(false);
+            }
+          }
+        }
+      );
+    },
+  };
+};
+exports.blockMoveToNewModuleOption = blockMoveToNewModuleOption;
+
+/**
  * Make a context menu option for duplicating the current block.
  * @param {!BlockSvg} block The block where the right-click originated.
  * @param {!ModuleModel} module The module to move block.
+ * @return {!Object} A menu option, containing text, enabled, and a callback.
  * @package
  */
 const blockMoveToModuleOption = function(block, module) {

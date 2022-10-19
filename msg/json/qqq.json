@@ -13,6 +13,7 @@
 	"DELETE_BLOCK": "context menu - Permanently delete the selected block.",
 	"DELETE_X_BLOCKS": "context menu - Permanently delete the %1 selected blocks.\n\nParameters:\n* %1 - an integer greater than 1.",
 	"BLOCK_MOVE_TO_MODULE": "context menu - Move selected block to module %1. \n\nParameters:\n* %1 - the module name.",
+	"BLOCK_MOVE_TO_NEW_MODULE": "context menu - Move selected block to new module",
 	"DELETE_ALL_BLOCKS": "confirmation prompt - Question the user if they really wanted to permanently delete all %1 blocks.\n\nParameters:\n* %1 - an integer greater than 1.",
 	"CLEAN_UP": "context menu - Reposition all the blocks so that they form a neat line.",
 	"COLLAPSE_BLOCK": "context menu - Make the appearance of the selected block smaller by hiding some information about it.",

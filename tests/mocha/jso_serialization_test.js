@@ -794,4 +794,62 @@ suite('JSO Serialization', function() {
       assertProperty(variable, 'type', 'testType');
     });
   });
+
+  suite.only('Procedures', function() {
+    setup(function() {
+      this.procedureMap = this.workspace.getProcedureMap();
+    });
+
+    suite('invariant properties', function() {
+      test('the state always has an id property', function() {
+        this.procedureMap.add()
+      });
+
+      test('the state always has a name property', function() {
+
+      });
+    });
+
+    suite('return types', function() {
+      test('if the procedure does not return, returnTypes is null', function() {
+
+      });
+
+      test(
+          'if the procedure has no return type, returnTypes is an empty array',
+          function() {
+
+          });
+
+      test(
+          'if the procedure has return types, returnTypes is the array',
+          function() {
+
+          });
+    });
+
+    suite('parameters', function() {
+      suite('invariant properties', function() {
+        test('the state always has an id property', function() {
+
+        });
+
+        test('the state always has a name property', function() {
+
+        });
+      });
+
+      suite('types', function() {
+        test(
+            'if the parameter has no type, there is no type property',
+            function() {
+
+             });
+
+        test('if the parameter has types, types is an array', function () {
+
+        });
+      });
+    });
+  });
 });

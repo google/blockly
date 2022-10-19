@@ -55,7 +55,7 @@ suite('Procedure Map', function() {
 
       test('deleting a procedure triggers an update', function() {
         const procedureModel =
-            new Blockly.procedures.ObservableProcedureModel(this.workspace)
+            new Blockly.procedures.ObservableProcedureModel(this.workspace);
         this.procedureMap.add(procedureModel);
 
         this.procedureMap.delete(procedureModel.getId());

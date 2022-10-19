@@ -29,7 +29,7 @@ export class ObservableProcedureModel implements IProcedureModel {
     triggerProceduresUpdate(this.workspace);
     return this;
   }
-  
+
 
   /**
    * Inserts a parameter into the list of parameters.

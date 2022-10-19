@@ -17,15 +17,13 @@ export class ObservableParameterModel implements IParameterModel {
   constructor(
       private readonly workspace: Workspace, name: string, id?: string) {
     this.id = id ?? genUid();
-    this.variable =
-        this.workspace.getVariable(name) ?? workspace.createVariable(name);
+    this.variable = workspace.createVariable(name);
   }
 
   /**
    * Sets the name of this parameter to the given name.
    */
   setName(name: string): this {
-    // TODO(#6516): Fire events.
     if (name == this.variable.name) return this;
     this.variable =
         this.workspace.getVariable(name) ?? this.workspace.createVariable(name);
@@ -36,14 +34,12 @@ export class ObservableParameterModel implements IParameterModel {
    * Unimplemented. The built-in ParameterModel does not support typing.
    * If you want your procedure blocks to have typed parameters, you need to
    * implement your own ParameterModel.
-   *
-   * @throws Throws for the ObservableParameterModel specifically because this
-   *     method is unimplemented.
    */
   setTypes(_types: string[]): this {
-    throw new Error(
+    console.warn(
         'The built-in ParameterModel does not support typing. You need to ' +
         'implement your own custom ParameterModel.');
+    return this;
   }
 
   /**

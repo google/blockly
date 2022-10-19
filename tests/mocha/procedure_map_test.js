@@ -21,13 +21,11 @@ suite('Procedure Map', function() {
     sharedTestTeardown.call(this);
   });
 
-  suite.only('triggering block updates', function() {
+  suite('triggering block updates', function() {
     setup(function() {
       Blockly.Blocks['procedure_mock'] = {
         init: function() { },
-        doProcedureUpdate: function() {
-          console.log('called');
-        },
+        doProcedureUpdate: function() { },
       };
 
       this.procedureBlock = this.workspace.newBlock('procedure_mock');

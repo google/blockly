@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {Workspace} from '../workspace.js';
 import {isProcedureBlock} from '../interfaces/i_procedure_block.js';
+import {Workspace} from '../workspace.js';
 
 
 /**

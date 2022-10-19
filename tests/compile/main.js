@@ -16,6 +16,9 @@ const {inject} = goog.require('Blockly.inject');
 goog.require('Blockly.geras.Renderer');
 /** @suppress {extraRequire} */
 goog.require('Blockly.VerticalFlyout');
+/** @suppress {extraRequire} */
+const {Msg} = goog.require('Blockly.Msg');
+
 // Blocks
 /** @suppress {extraRequire} */
 goog.require('Blockly.libraryBlocks.logic');
@@ -30,6 +33,7 @@ goog.require('testBlocks');
 
 
 function init() {
+  Object.assign(Msg, window['Blockly']['Msg']);
   inject('blocklyDiv', /** @type {BlocklyOptions} */ ({
            'toolbox': document.getElementById('toolbox')
          }));

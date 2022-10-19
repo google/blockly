@@ -5,6 +5,7 @@
  */
 
 import type {IProcedureModel} from '../interfaces/i_procedure_model.js';
+import {triggerProceduresUpdate} from './update_procedures.js';
 import type {Workspace} from '../workspace.js';
 
 
@@ -28,7 +29,9 @@ export class ObservableProcedureMap extends Map<string, IProcedureModel> {
    */
   override delete(id: string): boolean {
     // TODO(#6516): Fire events.
-    return super.delete(id);
+    const existed = super.delete(id);
+    triggerProceduresUpdate(this.workspace);
+    return existed;
   }
 
   /**
@@ -37,6 +40,7 @@ export class ObservableProcedureMap extends Map<string, IProcedureModel> {
   override clear() {
     // TODO(#6516): Fire events.
     super.clear();
+    triggerProceduresUpdate(this.workspace);
   }
 
   /**

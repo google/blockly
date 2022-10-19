@@ -13,18 +13,21 @@ suite('Procedure Map', function() {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
     // this.procedureMap = this.workspace.getProcedureMap();
+    this.procedureMap =
+        new Blockly.procedures.ObservableProcedureMap(this.workspace);
   });
 
   teardown(function() {
     sharedTestTeardown.call(this);
   });
 
-  // TODO (#6515): Unskip tests.
-  suite.skip('triggering block updates', function() {
+  suite.only('triggering block updates', function() {
     setup(function() {
       Blockly.Blocks['procedure_mock'] = {
         init: function() { },
-        doProcedureUpdate: function() {},
+        doProcedureUpdate: function() {
+          console.log('called');
+        },
       };
 
       this.procedureBlock = this.workspace.newBlock('procedure_mock');

@@ -19,6 +19,7 @@ suite('Procedure Map', function() {
     sharedTestTeardown.call(this);
   });
 
+  // TODO (#6515): Unskip tests.
   suite.skip('triggering block updates', function() {
     setup(function() {
       Blockly.Blocks['procedure_mock'] = {

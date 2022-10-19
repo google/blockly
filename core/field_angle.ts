@@ -16,7 +16,7 @@ import {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import * as Css from './css.js';
 import * as dropDownDiv from './dropdowndiv.js';
-import {Field} from './field.js';
+import {Field, UnattachedFieldError} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import {FieldTextInputConfig, FieldTextInput} from './field_textinput.js';
 import * as dom from './utils/dom.js';
@@ -430,18 +430,22 @@ export class FieldAngle extends FieldTextInput {
    */
   protected override onHtmlInputKeyDown_(e: Event) {
     super.onHtmlInputKeyDown_(e);
+    const block = this.getSourceBlock();
+    if (!block) {
+      throw new UnattachedFieldError();
+    }
 
     let multiplier;
     // AnyDuringMigration because:  Property 'keyCode' does not exist on type
     // 'Event'.
     if ((e as AnyDuringMigration).keyCode === KeyCodes.LEFT) {
       // decrement (increment in RTL)
-      multiplier = this.getSourceBlock().RTL ? 1 : -1;
+      multiplier = block.RTL ? 1 : -1;
       // AnyDuringMigration because:  Property 'keyCode' does not exist on type
       // 'Event'.
     } else if ((e as AnyDuringMigration).keyCode === KeyCodes.RIGHT) {
       // increment (decrement in RTL)
-      multiplier = this.getSourceBlock().RTL ? -1 : 1;
+      multiplier = block.RTL ? -1 : 1;
       // AnyDuringMigration because:  Property 'keyCode' does not exist on type
       // 'Event'.
     } else if ((e as AnyDuringMigration).keyCode === KeyCodes.DOWN) {

@@ -16,7 +16,7 @@ goog.declareModuleId('Blockly.FieldDropdown');
 
 import type {BlockSvg} from './block_svg.js';
 import * as dropDownDiv from './dropdowndiv.js';
-import {FieldConfig, Field} from './field.js';
+import {FieldConfig, Field, UnattachedFieldError} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import {Menu} from './menu.js';
 import {MenuItem} from './menuitem.js';
@@ -217,16 +217,16 @@ export class FieldDropdown extends Field {
   protected shouldAddBorderRect_(): boolean {
     return !this.getConstants()!.FIELD_DROPDOWN_NO_BORDER_RECT_SHADOW ||
         this.getConstants()!.FIELD_DROPDOWN_NO_BORDER_RECT_SHADOW &&
-        !this.getSourceBlock().isShadow();
+        !this.getSourceBlock()?.isShadow();
   }
 
   /** Create a tspan based arrow. */
   protected createTextArrow_() {
     this.arrow_ = dom.createSvgElement(Svg.TSPAN, {}, this.textElement_);
     this.arrow_!.appendChild(document.createTextNode(
-        this.getSourceBlock().RTL ? FieldDropdown.ARROW_CHAR + ' ' :
-                                    ' ' + FieldDropdown.ARROW_CHAR));
-    if (this.getSourceBlock().RTL) {
+        this.getSourceBlock()?.RTL ? FieldDropdown.ARROW_CHAR + ' ' :
+                                     ' ' + FieldDropdown.ARROW_CHAR));
+    if (this.getSourceBlock()?.RTL) {
       // AnyDuringMigration because:  Argument of type 'SVGTSpanElement | null'
       // is not assignable to parameter of type 'Node'.
       this.getTextElement().insertBefore(
@@ -258,6 +258,10 @@ export class FieldDropdown extends Field {
    *     undefined if triggered programmatically.
    */
   protected override showEditor_(opt_e?: Event) {
+    const block = this.getSourceBlock();
+    if (!block) {
+      throw new UnattachedFieldError();
+    }
     this.dropdownCreate_();
     // AnyDuringMigration because:  Property 'clientX' does not exist on type
     // 'Event'.
@@ -279,11 +283,10 @@ export class FieldDropdown extends Field {
     dom.addClass(menuElement, 'blocklyDropdownMenu');
 
     if (this.getConstants()!.FIELD_DROPDOWN_COLOURED_DIV) {
-      const primaryColour = this.getSourceBlock().isShadow() ?
-          this.getSourceBlock().getParent()!.getColour() :
-          this.getSourceBlock().getColour();
-      const borderColour = this.getSourceBlock().isShadow() ?
-          (this.getSourceBlock().getParent() as BlockSvg).style.colourTertiary :
+      const primaryColour =
+          block.isShadow() ? block.getParent()!.getColour() : block.getColour();
+      const borderColour = block.isShadow() ?
+          (block.getParent() as BlockSvg).style.colourTertiary :
           (this.sourceBlock_ as BlockSvg).style.colourTertiary;
       if (!borderColour) {
         throw new Error(
@@ -308,6 +311,10 @@ export class FieldDropdown extends Field {
 
   /** Create the dropdown editor. */
   private dropdownCreate_() {
+    const block = this.getSourceBlock();
+    if (!block) {
+      throw new UnattachedFieldError();
+    }
     const menu = new Menu();
     menu.setRole(aria.Role.LISTBOX);
     this.menu_ = menu;
@@ -326,7 +333,7 @@ export class FieldDropdown extends Field {
       }
       const menuItem = new MenuItem(content, value);
       menuItem.setRole(aria.Role.OPTION);
-      menuItem.setRightToLeft(this.getSourceBlock().RTL);
+      menuItem.setRightToLeft(block.RTL);
       menuItem.setCheckable(true);
       menu.addChild(menuItem);
       menuItem.setChecked(value === this.value_);
@@ -552,6 +559,10 @@ export class FieldDropdown extends Field {
    * @param imageJson Selected option that must be an image.
    */
   private renderSelectedImage_(imageJson: ImageProperties) {
+    const block = this.getSourceBlock();
+    if (!block) {
+      throw new UnattachedFieldError();
+    }
     this.imageElement_!.style.display = '';
     this.imageElement_!.setAttributeNS(
         dom.XLINK_NS, 'xlink:href', imageJson.src);
@@ -590,7 +601,7 @@ export class FieldDropdown extends Field {
     this.size_.height = height;
 
     let arrowX = 0;
-    if (this.getSourceBlock().RTL) {
+    if (block.RTL) {
       const imageX = xPadding + arrowWidth;
       this.imageElement_!.setAttribute('x', imageX.toString());
     } else {
@@ -646,12 +657,16 @@ export class FieldDropdown extends Field {
     if (!this.svgArrow_) {
       return 0;
     }
+    const block = this.getSourceBlock();
+    if (!block) {
+      throw new UnattachedFieldError();
+    }
     const hasBorder = !!this.borderRect_;
     const xPadding =
         hasBorder ? this.getConstants()!.FIELD_BORDER_RECT_X_PADDING : 0;
     const textPadding = this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_PADDING;
     const svgArrowSize = this.getConstants()!.FIELD_DROPDOWN_SVG_ARROW_SIZE;
-    const arrowX = this.getSourceBlock().RTL ? xPadding : x + textPadding;
+    const arrowX = block.RTL ? xPadding : x + textPadding;
     this.svgArrow_.setAttribute(
         'transform', 'translate(' + arrowX + ',' + y + ')');
     return svgArrowSize + textPadding;

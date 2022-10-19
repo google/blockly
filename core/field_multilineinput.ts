@@ -13,7 +13,7 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.FieldMultilineInput');
 
 import * as Css from './css.js';
-import {Field} from './field.js';
+import {Field, UnattachedFieldError} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import {FieldTextInputConfig, FieldTextInput} from './field_textinput.js';
 import * as aria from './utils/aria.js';
@@ -163,6 +163,10 @@ export class FieldMultilineInput extends FieldTextInput {
    * @returns Currently displayed text.
    */
   protected override getDisplayText_(): string {
+    const block = this.getSourceBlock();
+    if (!block) {
+      throw new UnattachedFieldError();
+    }
     let textLines = this.getText();
     if (!textLines) {
       // Prevent the field from disappearing if empty.
@@ -189,7 +193,7 @@ export class FieldMultilineInput extends FieldTextInput {
         textLines += '\n';
       }
     }
-    if (this.getSourceBlock().RTL) {
+    if (block.RTL) {
       // The SVG is LTR, force value to be RTL.
       textLines += '\u200F';
     }
@@ -212,6 +216,10 @@ export class FieldMultilineInput extends FieldTextInput {
 
   /** Updates the text of the textElement. */
   protected override render_() {
+    const block = this.getSourceBlock();
+    if (!block) {
+      throw new UnattachedFieldError();
+    }
     // Remove all text group children.
     let currentChild;
     while (currentChild = this.textGroup_.firstChild) {
@@ -248,7 +256,7 @@ export class FieldMultilineInput extends FieldTextInput {
     this.updateSize_();
 
     if (this.isBeingEdited_) {
-      if (this.getSourceBlock().RTL) {
+      if (block.RTL) {
         // in RTL, we need to let the browser reflow before resizing
         // in order to get the correct bounding box of the borderRect
         // avoiding issue #2777.

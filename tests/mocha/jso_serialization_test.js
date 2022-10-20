@@ -795,10 +795,10 @@ suite('JSO Serialization', function() {
     });
   });
 
-  suite.only('Procedures', function() {
+  suite.skip('Procedures', function() {
     class MockProcedureModel {
       constructor() {
-        this.id = Blockly.utils.idgenerator.genUid();
+        this.id = Blockly.utils.idGenerator.genUid();
         this.name = '';
         this.parameters = [];
         this.returnTypes = null;
@@ -857,7 +857,7 @@ suite('JSO Serialization', function() {
 
     class MockParameterModel {
       constructor(name) {
-        this.id = Blockly.utils.idgenerator.genUid();
+        this.id = Blockly.utils.idGenerator.genUid();
         this.name = name;
         this.types = [];
       }
@@ -887,6 +887,10 @@ suite('JSO Serialization', function() {
 
     setup(function() {
       this.procedureMap = this.workspace.getProcedureMap();
+    });
+
+    teardown(function() {
+      this.procedureMap = null;
     });
 
     suite('invariant properties', function() {

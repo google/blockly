@@ -893,7 +893,8 @@ suite('JSO Serialization', function() {
       this.procedureMap = null;
     });
 
-    suite('invariant properties', function() {
+    // TODO(#6522): Unskip serialization tests.
+    suite.skip('invariant properties', function() {
       test('the state always has an id property', function() {
         const procedureModel = new MockProcedureModel();
         this.procedureMap.add(procedureModel);

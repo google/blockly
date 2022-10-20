@@ -713,4 +713,18 @@ suite('JSO Deserialization', function() {
       chai.assert.equal(block.someProperty, 'some value');
     });
   });
+
+  suite('Procedures', function() {
+    suite('invariant properties', function() {
+
+    });
+
+    suite('return types', function() {
+
+    });
+
+    suite('parameters', function() {
+
+    });
+  });
 });

@@ -795,6 +795,7 @@ suite('JSO Serialization', function() {
     });
   });
 
+  // TODO(#6522): Unskip serialization tests.
   suite.skip('Procedures', function() {
     class MockProcedureModel {
       constructor() {
@@ -893,8 +894,7 @@ suite('JSO Serialization', function() {
       this.procedureMap = null;
     });
 
-    // TODO(#6522): Unskip serialization tests.
-    suite.skip('invariant properties', function() {
+    suite('invariant properties', function() {
       test('the state always has an id property', function() {
         const procedureModel = new MockProcedureModel();
         this.procedureMap.add(procedureModel);

@@ -56,8 +56,13 @@ export class ObservableProcedureModel implements IProcedureModel {
    * Pass null to represent a procedure that does not return.
    */
   setReturnTypes(types: string[]|null): this {
-    // TODO(#6516): Fire events.
+    if (types && types.length) {
+      throw new Error(
+        'The built-in ProcedureModel does not support typing. You need to ' +
+        'implement your own custom ProcedureModel.');
+    }
     this.returnTypes = types;
+    // TODO(#65): Fire events.
     triggerProceduresUpdate(this.workspace);
     return this;
   }

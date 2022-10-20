@@ -8,13 +8,11 @@ import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown
 
 goog.declareModuleId('Blockly.test.procedureMap');
 
-suite('Procedure Map', function() {
+suite.only('Procedure Map', function() {
   setup(function() {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
-    // this.procedureMap = this.workspace.getProcedureMap();
-    this.procedureMap =
-        new Blockly.procedures.ObservableProcedureMap(this.workspace);
+    this.procedureMap = this.workspace.getProcedureMap();
   });
 
   teardown(function() {
@@ -84,7 +82,7 @@ suite('Procedure Map', function() {
             new Blockly.procedures.ObservableProcedureModel(this.workspace);
         this.procedureMap.add(procedureModel);
 
-        procedureModel.setReturnTypes(['return type 1', 'return type 2']);
+        procedureModel.setReturnTypes([]);
 
         chai.assert.isTrue(
             this.updateSpy.calledOnce, 'Expected an update to be triggered');
@@ -93,7 +91,7 @@ suite('Procedure Map', function() {
       test('removing the return type triggers an update', function() {
         const procedureModel =
             new Blockly.procedures.ObservableProcedureModel(this.workspace)
-                .setReturnTypes(['return type']);
+                .setReturnTypes([]);
         this.procedureMap.add(procedureModel);
         this.updateSpy.resetHistory();
 

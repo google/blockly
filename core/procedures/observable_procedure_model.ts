@@ -58,8 +58,8 @@ export class ObservableProcedureModel implements IProcedureModel {
   setReturnTypes(types: string[]|null): this {
     if (types && types.length) {
       throw new Error(
-        'The built-in ProcedureModel does not support typing. You need to ' +
-        'implement your own custom ProcedureModel.');
+          'The built-in ProcedureModel does not support typing. You need to ' +
+          'implement your own custom ProcedureModel.');
     }
     this.returnTypes = types;
     // TODO(#65): Fire events.

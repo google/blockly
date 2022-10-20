@@ -10,9 +10,8 @@ import type {Workspace} from '../workspace.js';
 import {IProcedureMap} from '../interfaces/i_procedure_map.js';
 
 
-export class ObservableProcedureMap
-    extends Map<string, IProcedureModel>
-    implements IProcedureMap {
+export class ObservableProcedureMap extends
+    Map<string, IProcedureModel> implements IProcedureMap {
   constructor(private readonly workspace: Workspace) {
     super();
   }

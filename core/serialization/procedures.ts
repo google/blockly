@@ -6,7 +6,6 @@
 
 import {IParameterModel} from '../interfaces/i_parameter_model.js';
 import {IProcedureModel} from '../interfaces/i_procedure_model.js';
-
 import type {ISerializer} from '../interfaces/i_serializer.js';
 import {ObservableProcedureModel} from '../procedures/observable_procedure_model.js';
 import {ObservableParameterModel} from '../procedures/observable_parameter_model.js';
@@ -30,11 +29,15 @@ export interface ParameterState {
   id: string, name: string, types?: string[],
 }
 
+/** A method that constructs an IProcedureModel. */
 type ProcedureModelFactory = (workspace: Workspace, name: string, id: string) =>
     IProcedureModel;
+
+/** A method that constructs an IParameterModel. */
 type ParameterModelFactory = (workspace: Workspace, name: string, id: string) =>
     IParameterModel;
 
+/** Serializes the given IProcedureModel to JSON. */
 function saveProcedure(proc: IProcedureModel): State {
   const state: State = {
     id: proc.getId(),
@@ -46,6 +49,7 @@ function saveProcedure(proc: IProcedureModel): State {
   return state;
 }
 
+/** Serializes the given IParameterModel to JSON. */
 function saveParameter(param: IParameterModel): ParameterState {
   const state: ParameterState = {
     id: param.getId(),
@@ -56,9 +60,11 @@ function saveParameter(param: IParameterModel): ParameterState {
   return state;
 }
 
+/** Deserializes the given procedure model State from JSON. */
 function loadProcedure(
     procedureModelFactory: ProcedureModelFactory,
-    parameterModelFactory: ParameterModelFactory, state: State,
+    parameterModelFactory: ParameterModelFactory,
+    state: State,
     workspace: Workspace): IProcedureModel {
   const proc = procedureModelFactory(workspace, state.name, state.id)
                    .setReturnTypes(state.returnTypes);
@@ -70,6 +76,7 @@ function loadProcedure(
   return proc;
 }
 
+/** Deserializes the given ParameterState from JSON. */
 function loadParameter(
     parameterModelFactory: ParameterModelFactory, state: ParameterState,
     workspace: Workspace): IParameterModel {
@@ -77,6 +84,7 @@ function loadParameter(
       .setTypes(state.types || []);
 }
 
+/** Serializer for saving and loading procedure state. */
 class ProcedureSerializer implements ISerializer {
   public priority = priorities.PROCEDURES;
 
@@ -84,12 +92,16 @@ class ProcedureSerializer implements ISerializer {
       private readonly procedureModelFactory: ProcedureModelFactory,
       private readonly parameterModelFactory: ParameterModelFactory) {}
 
+  /** Serializes the procedure models of the given workspace. */
   save(workspace: Workspace): State[]|null {
-    // TODO: use getProcedures().
-    return [...workspace.getProcedureMap().values()].map(
-        (proc) => saveProcedure(proc));
+    return workspace.getProcedureMap().getProcedures()
+        .map((proc) => saveProcedure(proc));
   }
 
+  /**
+   * Deserializes the procedures models defined by the given state into the
+   * workspace.
+   */
   load(state: State[], workspace: Workspace) {
     for (const procState of state) {
       loadProcedure(
@@ -98,6 +110,7 @@ class ProcedureSerializer implements ISerializer {
     }
   }
 
+  /** Disposes of any procedure models that exist on the workspace. */
   clear(workspace: Workspace) {
     workspace.getProcedureMap().clear();
   }

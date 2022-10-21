@@ -665,7 +665,7 @@ const saveBlock = save;
  *
  * @alias Blockly.serialization.blocks.BlockSerializer
  */
-class BlockSerializer implements ISerializer {
+export class BlockSerializer implements ISerializer {
   priority: number;
 
   /* eslint-disable-next-line require-jsdoc */

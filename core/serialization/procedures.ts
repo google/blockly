@@ -104,7 +104,7 @@ class ProcedureSerializer implements ISerializer {
 }
 
 serializationRegistry.register(
-    'variables',
+    'procedures',
     new ProcedureSerializer(
         (workspace: Workspace, name: string, id: string) =>
             new ObservableProcedureModel(workspace, id).setName(name),

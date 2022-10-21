@@ -44,7 +44,9 @@ export class FieldDropdown extends Field {
    * height.
    */
   static MAX_MENU_HEIGHT_VH = 0.45;
-  static ARROW_CHAR: '▼'|'▾';
+
+  /** Android can't (in 2014) display "▾", so use "▼" instead. */
+  static ARROW_CHAR: string = userAgent.ANDROID ? '▼' : '▾';
 
   /** A reference to the currently selected menu item. */
   private selectedMenuItem_: MenuItem|null = null;
@@ -71,7 +73,7 @@ export class FieldDropdown extends Field {
 
   /** Mouse cursor style when over the hotspot that initiates the editor. */
   override CURSOR = 'default';
-  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
+
   protected menuGenerator_?: MenuGenerator;
 
   /** A cache of the most recently generated options. */
@@ -119,19 +121,17 @@ export class FieldDropdown extends Field {
       opt_config?: FieldConfig) {
     super(Field.SKIP_SETUP);
 
-    if (isMenuGenerator(menuGenerator)) {
-      if (Array.isArray(menuGenerator)) {
-        validateOptions(menuGenerator);
-        const trimmed = trimOptions(menuGenerator);
-        this.menuGenerator_ = trimmed.options;
-        this.prefixField = trimmed.prefix || null;
-        this.suffixField = trimmed.suffix || null;
-      } else {
-        this.menuGenerator_ = menuGenerator;
-      }
+    // If we pass SKIP_SETUP, don't do *anything* with the menu generator.
+    if (!isMenuGenerator(menuGenerator)) return;
+
+    if (Array.isArray(menuGenerator)) {
+      validateOptions(menuGenerator);
+      const trimmed = trimOptions(menuGenerator);
+      this.menuGenerator_ = trimmed.options;
+      this.prefixField = trimmed.prefix || null;
+      this.suffixField = trimmed.suffix || null;
     } else {
-      // If we pass SKIP_SETUP, don't do *anything* with the menu generator.
-      return;
+      this.menuGenerator_ = menuGenerator;
     }
 
     /**
@@ -376,13 +376,20 @@ export class FieldDropdown extends Field {
    * @throws {TypeError} If generated options are incorrectly structured.
    */
   getOptions(opt_useCache?: boolean): MenuOption[] {
-    if (!this.menuGenerator_) return [];
-    if (Array.isArray(this.menuGenerator_)) return this.menuGenerator_;
-    if (opt_useCache && this.generatedOptions_) return this.generatedOptions_;
+    const options = (() => {
+      if (!this.menuGenerator_) return [];
+      if (Array.isArray(this.menuGenerator_)) return this.menuGenerator_;
+      if (opt_useCache && this.generatedOptions_) return this.generatedOptions_;
 
-    this.generatedOptions_ = this.menuGenerator_();
-    validateOptions(this.generatedOptions_);
-    return this.generatedOptions_;
+      this.generatedOptions_ = this.menuGenerator_();
+      validateOptions(this.generatedOptions_);
+      return this.generatedOptions_;
+    })();
+
+    if (options.length === 0) {
+      throw new Error('A non-empty array of options should be provided.');
+    }
+    return options;
   }
 
   /**
@@ -635,8 +642,16 @@ export interface ImageProperties {
  */
 export type MenuOption = [string | ImageProperties, string];
 
+/**
+ * A function that generates an array of menu options for FieldDropdown
+ * or its descendants.
+ */
 export type MenuGeneratorFunction = (this: FieldDropdown) => MenuOption[];
 
+/**
+ * Either an array of menu options or a function that generates an array of
+ * menu options for FieldDropdown or its descendants.
+ */
 export type MenuGenerator = MenuOption[]|MenuGeneratorFunction;
 
 /**
@@ -654,9 +669,6 @@ const IMAGE_Y_OFFSET = 5;
 
 /** The total vertical padding above and below an image. */
 const IMAGE_Y_PADDING: number = IMAGE_Y_OFFSET * 2;
-
-/** Android can't (in 2014) display "▾", so use "▼" instead. */
-FieldDropdown.ARROW_CHAR = userAgent.ANDROID ? '▼' : '▾';
 
 /**
  * NOTE: Because Sentinel is an empty class, proving a value is Sentinel does

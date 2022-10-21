@@ -222,7 +222,7 @@ export class FieldDropdown extends Field {
     this.arrow_ = dom.createSvgElement(Svg.TSPAN, {}, this.textElement_);
     this.arrow_!.appendChild(document.createTextNode(
         this.getSourceBlock()?.RTL ? FieldDropdown.ARROW_CHAR + ' ' :
-                                    ' ' + FieldDropdown.ARROW_CHAR));
+                                     ' ' + FieldDropdown.ARROW_CHAR));
     if (this.getSourceBlock()?.RTL) {
       this.getTextElement().insertBefore(this.arrow_, this.textContent_);
     } else {

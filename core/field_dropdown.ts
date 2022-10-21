@@ -27,8 +27,6 @@ import * as parsing from './utils/parsing.js';
 import type {Sentinel} from './utils/sentinel.js';
 import * as utilsString from './utils/string.js';
 import {Svg} from './utils/svg.js';
-import * as userAgent from './utils/useragent.js';
-
 
 /**
  * Class for an editable dropdown field.
@@ -45,8 +43,7 @@ export class FieldDropdown extends Field {
    */
   static MAX_MENU_HEIGHT_VH = 0.45;
 
-  /** Android can't (in 2014) display "▾", so use "▼" instead. */
-  static ARROW_CHAR: string = userAgent.ANDROID ? '▼' : '▾';
+  static ARROW_CHAR = '▾';
 
   /** A reference to the currently selected menu item. */
   private selectedMenuItem_: MenuItem|null = null;
@@ -113,12 +110,16 @@ export class FieldDropdown extends Field {
    * @throws {TypeError} If `menuGenerator` options are incorrectly structured.
    */
   constructor(
-      menuGenerator: MenuGenerator, opt_validator?: Function,
-      opt_config?: FieldConfig);
+      menuGenerator: MenuGenerator,
+      opt_validator?: Function,
+      opt_config?: FieldConfig,
+  );
   constructor(menuGenerator: Sentinel);
   constructor(
-      menuGenerator: MenuGenerator|Sentinel, opt_validator?: Function,
-      opt_config?: FieldConfig) {
+      menuGenerator: MenuGenerator|Sentinel,
+      opt_validator?: Function,
+      opt_config?: FieldConfig,
+  ) {
     super(Field.SKIP_SETUP);
 
     // If we pass SKIP_SETUP, don't do *anything* with the menu generator.
@@ -707,9 +708,8 @@ function trimOptions(options: MenuOption[]):
   const suffixLength = utilsString.commonWordSuffix(stringLabels, shortest);
 
   if ((!prefixLength && !suffixLength) ||
-      (
-          // One or more strings will entirely vanish if we proceed.  Abort.
-          shortest <= prefixLength + suffixLength)) {
+      (shortest <= prefixLength + suffixLength)) {
+    // One or more strings will entirely vanish if we proceed.  Abort.
     return {options: stringOptions};
   }
 

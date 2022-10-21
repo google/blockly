@@ -376,20 +376,17 @@ export class FieldDropdown extends Field {
    * @throws {TypeError} If generated options are incorrectly structured.
    */
   getOptions(opt_useCache?: boolean): MenuOption[] {
-    const options = (() => {
-      if (!this.menuGenerator_) return [];
-      if (Array.isArray(this.menuGenerator_)) return this.menuGenerator_;
-      if (opt_useCache && this.generatedOptions_) return this.generatedOptions_;
-
-      this.generatedOptions_ = this.menuGenerator_();
-      validateOptions(this.generatedOptions_);
-      return this.generatedOptions_;
-    })();
-
-    if (options.length === 0) {
-      throw new Error('A non-empty array of options should be provided.');
+    if (!this.menuGenerator_) {
+      // A subclass improperly skipped setup without defining the menu
+      // generator.
+      throw TypeError('A menu generator was never defined.');
     }
-    return options;
+    if (Array.isArray(this.menuGenerator_)) return this.menuGenerator_;
+    if (opt_useCache && this.generatedOptions_) return this.generatedOptions_;
+
+    this.generatedOptions_ = this.menuGenerator_();
+    validateOptions(this.generatedOptions_);
+    return this.generatedOptions_;
   }
 
   /**

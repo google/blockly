@@ -604,25 +604,6 @@ suite('Procedure Map', function() {
         });
 
     test(
-        'return type change events are fired when the return is removed',
-        function() {
-          const procedureModel =
-              new Blockly.procedures.ObservableProcedureModel(this.workspace)
-                  .setReturnTypes([]);
-          this.procedureMap.add(procedureModel);
-          procedureModel.setReturnTypes(null);
-
-          assertEventFired(
-            this.eventSpy,
-            Blockly.Events.ProcedureChangeReturn,
-            {
-              model: procedureModel,
-              oldTypes: [],
-            },
-            this.workspace.id);
-        });
-
-    test(
         'return type change events are fired when the return is added',
         function() {
           const procedureModel =
@@ -642,18 +623,21 @@ suite('Procedure Map', function() {
         });
 
     test(
-        'return type change events are not fired if removing is noop',
+        'return type change events are fired when the return is removed',
         function() {
           const procedureModel =
               new Blockly.procedures.ObservableProcedureModel(this.workspace)
-                  .setReturnTypes(null);
+                  .setReturnTypes([]);
           this.procedureMap.add(procedureModel);
           procedureModel.setReturnTypes(null);
 
-          assertEventNotFired(
+          assertEventFired(
             this.eventSpy,
             Blockly.Events.ProcedureChangeReturn,
-            {},
+            {
+              model: procedureModel,
+              oldTypes: [],
+            },
             this.workspace.id);
         });
 
@@ -665,6 +649,22 @@ suite('Procedure Map', function() {
                   .setReturnTypes([]);
           this.procedureMap.add(procedureModel);
           procedureModel.setReturnTypes([]);
+
+          assertEventNotFired(
+            this.eventSpy,
+            Blockly.Events.ProcedureChangeReturn,
+            {},
+            this.workspace.id);
+        });
+
+    test(
+        'return type change events are not fired if removing is noop',
+        function() {
+          const procedureModel =
+              new Blockly.procedures.ObservableProcedureModel(this.workspace)
+                  .setReturnTypes(null);
+          this.procedureMap.add(procedureModel);
+          procedureModel.setReturnTypes(null);
 
           assertEventNotFired(
             this.eventSpy,

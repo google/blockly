@@ -317,9 +317,6 @@ suite('Procedure Map', function() {
             this.workspace.id);
         });
 
-    // TODO: I think we only want to fire events from procedures and parameters
-    //   after they are inserted into the map, but they may not be the case.
-
     test('rename events are fired when a procedure is renamed', function() {
       const procedureModel =
           new Blockly.procedures.ObservableProcedureModel(this.workspace)
@@ -347,6 +344,12 @@ suite('Procedure Map', function() {
       chai.assert.isFalse(
           this.eventSpy.called, 'Expected no event to be fired');
     });
+
+    test(
+        'rename events are not fired if the procedure is not in the map',
+        function() {
+          // TODO
+        });
 
     test('enable events are fired when a procedure is enabled', function() {
       const procedureModel =
@@ -397,6 +400,12 @@ suite('Procedure Map', function() {
     });
 
     test(
+        'enable events are not fired if the procedure is not in the map',
+        function() {
+          // TODO
+        });
+
+    test(
         'parameter create events are fired when a parameter is inserted',
         function() {
           const procedureModel =
@@ -416,6 +425,13 @@ suite('Procedure Map', function() {
               index: 0,
             },
             this.workspace.id);
+        });
+
+    test(
+        'parameter create events are not fired if the procedure is ' +
+        'not in the map',
+        function() {
+          // TODO
         });
 
     test(
@@ -439,6 +455,13 @@ suite('Procedure Map', function() {
               index: 0,
             },
             this.workspace.id);
+        });
+
+    test(
+        'parameter delete events are not fired if the procedure is ' +
+        'not in the map',
+        function() {
+          // TODO
         });
 
     test(
@@ -480,6 +503,20 @@ suite('Procedure Map', function() {
 
           chai.assert.isFalse(
               this.eventSpy.called, 'Expected no event to be fired');
+        });
+    
+    test(
+        'parameter rename events are not fired if the procedure is ' +
+        'not in the map',
+        function() {
+          // TODO
+        });
+
+    test(
+        'parameter rename events are not fired if the parameter is ' +
+        'not in a procedure',
+        function() {
+          // TODO
         });
 
     test(
@@ -544,6 +581,13 @@ suite('Procedure Map', function() {
 
           chai.assert.isFalse(
               this.eventSpy.called, 'Expected no event to be fired');
+        });
+
+    test(
+        'return type change events are not fired if the procedure is ' +
+        'not in the map',
+        function() {
+          // TODO
         });
   });
 

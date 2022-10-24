@@ -5,6 +5,7 @@
  */
 
 import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
+import {assertEventFired, createChangeListenerSpy} from './test_helpers/events.js';
 
 goog.declareModuleId('Blockly.test.procedureMap');
 
@@ -200,8 +201,342 @@ suite('Procedure Map', function() {
     });
   });
 
-  suite('event firing', function() {
-    // TBA after the procedure map is implemented
+  suite.only('event firing', function() {
+    setup(function() {
+      this.eventSpy = createChangeListenerSpy(this.workspace);
+    });
+
+    teardown(function() {
+      this.workspace.removeChangeListener(this.eventSpy);
+    });
+
+    test('create events are fired when a procedure is inserted', function() {
+      const procedureModel =
+          new Blockly.procedures.ObservableProcedureModel(this.workspace);
+      this.procedureMap.set(procedureModel.getId(), procedureModel);
+
+      assertEventFired(
+        this.eventSpy,
+        Blockly.Events.ProcedureCreate,
+        {model: procedureModel},
+        this.workspace.id);
+    });
+
+    test(
+        'create events are not fired if a procedure is already inserted',
+        function() {
+          const procedureModel =
+              new Blockly.procedures.ObservableProcedureModel(this.workspace);
+          this.procedureMap.set(procedureModel.getId(), procedureModel);
+
+          this.eventSpy.resetHistory();
+          this.procedureMap.set(procedureModel.getId(), procedureModel);
+
+          chai.assert.isFalse(this.eventSpy.called);
+        });
+
+    test('create events are fired when a procedure is added', function() {
+      const procedureModel =
+          new Blockly.procedures.ObservableProcedureModel(this.workspace);
+      this.procedureMap.add(procedureModel);
+
+      assertEventFired(
+        this.eventSpy,
+        Blockly.Events.ProcedureCreate,
+        {model: procedureModel},
+        this.workspace.id);
+    });
+
+    test(
+        'create events are not fired if a procedure is already added',
+        function() {
+          const procedureModel =
+              new Blockly.procedures.ObservableProcedureModel(this.workspace);
+          this.procedureMap.add(procedureModel);
+
+          this.eventSpy.resetHistory();
+          this.procedureMap.add(procedureModel);
+
+          chai.assert.isFalse(this.eventSpy.called);
+        });
+
+    test('delete events are fired when a procedure is deleted', function() {
+      const procedureModel =
+          new Blockly.procedures.ObservableProcedureModel(this.workspace);
+      this.procedureMap.add(procedureModel);
+      this.procedureMap.delete(procedureModel.getId());
+
+      assertEventFired(
+        this.eventSpy,
+        Blockly.Events.ProcedureDelete,
+        {model: procedureModel},
+        this.workspace.id);
+    });
+
+    test(
+        'delete events are not fired if a procedure does not exist',
+        function() {
+          const procedureModel =
+              new Blockly.procedures.ObservableProcedureModel(this.workspace);
+          this.procedureMap.delete(procedureModel.getId());
+
+          chai.assert.isFalse(this.eventSpy.called);
+        });
+
+    test(
+        'delete events are fired when the procedure map is cleared',
+        function() {
+          const procedureModel1 =
+              new Blockly.procedures.ObservableProcedureModel(this.workspace);
+          const procedureModel2 =
+              new Blockly.procedures.ObservableProcedureModel(this.workspace);
+          const procedureModel3 =
+              new Blockly.procedures.ObservableProcedureModel(this.workspace);
+          this.procedureMap.add(procedureModel1);
+          this.procedureMap.add(procedureModel2);
+          this.procedureMap.add(procedureModel3);
+          this.procedureMap.clear();
+
+          assertEventFired(
+            this.eventSpy,
+            Blockly.Events.ProcedureDelete,
+            {model: procedureModel1},
+            this.workspace.id);
+          assertEventFired(
+            this.eventSpy,
+            Blockly.Events.ProcedureDelete,
+            {model: procedureModel2},
+            this.workspace.id);
+          assertEventFired(
+            this.eventSpy,
+            Blockly.Events.ProcedureDelete,
+            {model: procedureModel3},
+            this.workspace.id);
+        });
+
+    // TODO: I think we only want to fire events from procedures and parameters
+    //   after they are inserted into the map, but they may not be the case.
+
+    test('rename events are fired when a procedure is renamed', function() {
+      const procedureModel =
+          new Blockly.procedures.ObservableProcedureModel(this.workspace)
+          .setName('test name');
+      this.procedureMap.add(procedureModel);
+      procedureModel.setName('new name');
+
+      assertEventFired(
+        this.eventSpy,
+        Blockly.Events.ProcedureRename,
+        {
+          model: procedureModel,
+          oldName: 'test name',
+        },
+        this.workspace.id);
+    });
+
+    test('rename events are not fired if the rename is noop', function() {
+      const procedureModel =
+          new Blockly.procedures.ObservableProcedureModel(this.workspace)
+          .setName('test name');
+      this.procedureMap.add(procedureModel);
+      procedureModel.setName('new name');
+
+      // TODO: Update all of these to have explanations.
+      chai.assert.isFalse(this.eventSpy.called);
+    });
+
+    test('enable events are fired when a procedure is enabled', function() {
+      const procedureModel =
+          new Blockly.procedures.ObservableProcedureModel(this.workspace)
+          .setEnabled(false);
+      this.procedureMap.add(procedureModel);
+      procedureModel.setEnabled(true);
+
+      assertEventFired(
+        this.eventSpy,
+        Blockly.Events.ProcedureEnable,
+        {model: procedureModel},
+        this.workspace.id);
+    });
+
+    test('enable events are fired when a procedure is disabled', function() {
+      const procedureModel =
+          new Blockly.procedures.ObservableProcedureModel(this.workspace);
+      this.procedureMap.add(procedureModel);
+      procedureModel.setEnabled(false);
+
+      assertEventFired(
+        this.eventSpy,
+        Blockly.Events.ProcedureEnable,
+        {model: procedureModel},
+        this.workspace.id);
+    });
+
+    test('enable events are not fired if enabling is noop', function() {
+      const procedureModel =
+          new Blockly.procedures.ObservableProcedureModel(this.workspace);
+      this.procedureMap.add(procedureModel);
+      procedureModel.setEnabled(true);
+
+      chai.assert.isFalse(this.eventSpy.called);
+    });
+
+    test('enable events are not fired if disabling is noop', function() {
+      const procedureModel =
+          new Blockly.procedures.ObservableProcedureModel(this.workspace)
+          .setEnabled(false);
+      this.procedureMap.add(procedureModel);
+      procedureModel.setEnabled(false);
+
+      chai.assert.isFalse(this.eventSpy.called);
+    });
+
+    test(
+        'parameter create events are fired when a parameter is inserted',
+        function() {
+          const procedureModel =
+              new Blockly.procedures.ObservableProcedureModel(this.workspace);
+          this.procedureMap.add(procedureModel);
+          const parameterModel =
+              new Blockly.procedures.ObservableParameterModel(
+                  this.workspace, 'test name');
+          procedureModel.insertParameter(0, parameterModel);
+
+          assertEventFired(
+            this.eventSpy,
+            Blockly.Events.ProcedureParameterCreate,
+            {
+              model: procedureModel,
+              parameter: parameterModel,
+              index: 0,
+            },
+            this.workspace.id);
+        });
+
+    test(
+        'parameter delete events are fired when a parameter is deleted',
+        function() {
+          const procedureModel =
+              new Blockly.procedures.ObservableProcedureModel(this.workspace);
+          this.procedureMap.add(procedureModel);
+          const parameterModel =
+              new Blockly.procedures.ObservableParameterModel(
+                  this.workspace, 'test name');
+          procedureModel.insertParameter(0, parameterModel);
+          procedureModel.deleteParameter(0);
+
+          assertEventFired(
+            this.eventSpy,
+            Blockly.Events.ProcedureParameterDelete,
+            {
+              model: procedureModel,
+              parameter: parameterModel,
+              index: 0,
+            },
+            this.workspace.id);
+        });
+
+    test(
+        'parameter rename events are fired when a parameter is renamed',
+        function() {
+          const procedureModel =
+              new Blockly.procedures.ObservableProcedureModel(this.workspace);
+          this.procedureMap.add(procedureModel);
+          const parameterModel =
+              new Blockly.procedures.ObservableParameterModel(
+                  this.workspace, 'test name');
+          procedureModel.insertParameter(0, parameterModel);
+
+          parameterModel.setName('new name');
+
+          assertEventFired(
+            this.eventSpy,
+            Blockly.Events.ProcedureParameterRename,
+            {
+              model: procedureModel,
+              parameter: parameterModel,
+              oldName: 'test name',
+            },
+            this.workspace.id);
+        });
+
+    test(
+        'parameter rename events are not fired if the rename is noop',
+        function() {
+          const procedureModel =
+              new Blockly.procedures.ObservableProcedureModel(this.workspace);
+          this.procedureMap.add(procedureModel);
+          const parameterModel =
+              new Blockly.procedures.ObservableParameterModel(
+                  this.workspace, 'test name');
+          procedureModel.insertParameter(0, parameterModel);
+
+          parameterModel.setName('test name');
+
+          chai.assert.isFalse(this.eventSpy.called);
+        });
+
+    test(
+        'return type change events are fired when the return is removed',
+        function() {
+          const procedureModel =
+              new Blockly.procedures.ObservableProcedureModel(this.workspace)
+                  .setReturnTypes([]);
+          this.procedureMap.add(procedureModel);
+          procedureModel.setReturnTypes(null);
+
+          assertEventFired(
+            this.eventSpy,
+            Blockly.Events.ProcedureChangeReturn,
+            {
+              model: procedureModel,
+              oldTypes: [],
+            },
+            this.workspace.id);
+        });
+
+    test(
+        'return type change events are fired when the return is added',
+        function() {
+          const procedureModel =
+              new Blockly.procedures.ObservableProcedureModel(this.workspace)
+                  .setReturnTypes(null);
+          this.procedureMap.add(procedureModel);
+          procedureModel.setReturnTypes([]);
+
+          assertEventFired(
+            this.eventSpy,
+            Blockly.Events.ProcedureChangeReturn,
+            {
+              model: procedureModel,
+              oldTypes: null,
+            },
+            this.workspace.id);
+        });
+
+    test(
+        'return type change events are not fired if removing is noop',
+        function() {
+          const procedureModel =
+              new Blockly.procedures.ObservableProcedureModel(this.workspace)
+                  .setReturnTypes(null);
+          this.procedureMap.add(procedureModel);
+          procedureModel.setReturnTypes(null);
+
+          chai.assert.isFalse(this.eventSpy.called);
+        });
+
+    test(
+        'return type change events are not fired if removing is noop',
+        function() {
+          const procedureModel =
+              new Blockly.procedures.ObservableProcedureModel(this.workspace)
+                  .setReturnTypes(null);
+          this.procedureMap.add(procedureModel);
+          procedureModel.setReturnTypes(null);
+
+          chai.assert.isFalse(this.eventSpy.called);
+        });
   });
 
   suite('backing variable to parameters', function() {

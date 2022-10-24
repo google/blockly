@@ -339,7 +339,7 @@ suite('Procedure Map', function() {
           new Blockly.procedures.ObservableProcedureModel(this.workspace)
           .setName('test name');
       this.procedureMap.add(procedureModel);
-      procedureModel.setName('new name');
+      procedureModel.setName('test name');
 
       chai.assert.isFalse(
           this.eventSpy.called, 'Expected no event to be fired');
@@ -348,7 +348,13 @@ suite('Procedure Map', function() {
     test(
         'rename events are not fired if the procedure is not in the map',
         function() {
-          // TODO
+          const procedureModel =
+              new Blockly.procedures.ObservableProcedureModel(this.workspace)
+              .setName('test name');
+          procedureModel.setName('new name');
+
+        chai.assert.isFalse(
+            this.eventSpy.called, 'Expected no event to be fired');
         });
 
     test('enable events are fired when a procedure is enabled', function() {
@@ -402,7 +408,13 @@ suite('Procedure Map', function() {
     test(
         'enable events are not fired if the procedure is not in the map',
         function() {
-          // TODO
+          const procedureModel =
+              new Blockly.procedures.ObservableProcedureModel(this.workspace)
+              .setEnabled(false);
+          procedureModel.setEnabled(true);
+    
+          chai.assert.isFalse(
+              this.eventSpy.called, 'Expected no event to be fired');
         });
 
     test(
@@ -431,7 +443,15 @@ suite('Procedure Map', function() {
         'parameter create events are not fired if the procedure is ' +
         'not in the map',
         function() {
-          // TODO
+          const procedureModel =
+              new Blockly.procedures.ObservableProcedureModel(this.workspace);
+          procedureModel.insertParameter(
+              0,
+              new Blockly.procedures.ObservableParameterModel(
+                  this.workspace, 'test name'));
+
+          chai.assert.isFalse(
+              this.eventSpy.called, 'Expected no event to be fired');
         });
 
     test(
@@ -461,7 +481,16 @@ suite('Procedure Map', function() {
         'parameter delete events are not fired if the procedure is ' +
         'not in the map',
         function() {
-          // TODO
+          const procedureModel =
+              new Blockly.procedures.ObservableProcedureModel(this.workspace)
+                  .insertParameter(
+                      0,
+                      new Blockly.procedures.ObservableParameterModel(
+                          this.workspace, 'test name'));
+          procedureModel.deleteParameter(0);
+
+          chai.assert.isFalse(
+              this.eventSpy.called, 'Expected no event to be fired');
         });
 
     test(
@@ -509,14 +538,30 @@ suite('Procedure Map', function() {
         'parameter rename events are not fired if the procedure is ' +
         'not in the map',
         function() {
-          // TODO
+          const parameterModel =
+              new Blockly.procedures.ObservableParameterModel(
+                  this.workspace, 'test name');
+          new Blockly.procedures.ObservableProcedureModel(this.workspace)
+              .insertParameter(0, parameterModel);
+
+          parameterModel.setName('new name');
+
+          chai.assert.isFalse(
+              this.eventSpy.called, 'Expected no event to be fired');
         });
 
     test(
         'parameter rename events are not fired if the parameter is ' +
         'not in a procedure',
         function() {
-          // TODO
+          const parameterModel =
+              new Blockly.procedures.ObservableParameterModel(
+                  this.workspace, 'test name');
+
+          parameterModel.setName('new name');
+
+          chai.assert.isFalse(
+              this.eventSpy.called, 'Expected no event to be fired');
         });
 
     test(
@@ -571,13 +616,13 @@ suite('Procedure Map', function() {
         });
 
     test(
-        'return type change events are not fired if removing is noop',
+        'return type change events are not fired if adding is noop',
         function() {
           const procedureModel =
               new Blockly.procedures.ObservableProcedureModel(this.workspace)
-                  .setReturnTypes(null);
+                  .setReturnTypes([]);
           this.procedureMap.add(procedureModel);
-          procedureModel.setReturnTypes(null);
+          procedureModel.setReturnTypes([]);
 
           chai.assert.isFalse(
               this.eventSpy.called, 'Expected no event to be fired');
@@ -587,7 +632,14 @@ suite('Procedure Map', function() {
         'return type change events are not fired if the procedure is ' +
         'not in the map',
         function() {
-          // TODO
+          const procedureModel =
+              new Blockly.procedures.ObservableProcedureModel(this.workspace)
+                  .setReturnTypes(null);
+
+          procedureModel.setReturnTypes([]);
+
+          chai.assert.isFalse(
+              this.eventSpy.called, 'Expected no event to be fired');
         });
   });
 

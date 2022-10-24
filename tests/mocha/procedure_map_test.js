@@ -5,7 +5,7 @@
  */
 
 import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
-import {assertEventFired, createChangeListenerSpy} from './test_helpers/events.js';
+import {assertEventFired, assertEventNotFired, createChangeListenerSpy} from './test_helpers/events.js';
 
 goog.declareModuleId('Blockly.test.procedureMap');
 
@@ -232,8 +232,11 @@ suite('Procedure Map', function() {
           this.eventSpy.resetHistory();
           this.procedureMap.set(procedureModel.getId(), procedureModel);
 
-          chai.assert.isFalse(
-              this.eventSpy.called, 'Expected no event to be fired');
+          assertEventNotFired(
+            this.eventSpy,
+            Blockly.Events.ProcedureCreate,
+            {},
+            this.workspace.id);
         });
 
     test('create events are fired when a procedure is added', function() {
@@ -258,8 +261,11 @@ suite('Procedure Map', function() {
           this.eventSpy.resetHistory();
           this.procedureMap.add(procedureModel);
 
-          chai.assert.isFalse(
-              this.eventSpy.called, 'Expected no event to be fired');
+          assertEventNotFired(
+            this.eventSpy,
+            Blockly.Events.ProcedureCreate,
+            {},
+            this.workspace.id);
         });
 
     test('delete events are fired when a procedure is deleted', function() {
@@ -282,8 +288,11 @@ suite('Procedure Map', function() {
               new Blockly.procedures.ObservableProcedureModel(this.workspace);
           this.procedureMap.delete(procedureModel.getId());
 
-          chai.assert.isFalse(
-              this.eventSpy.called, 'Expected no event to be fired');
+          assertEventNotFired(
+            this.eventSpy,
+            Blockly.Events.ProcedureDelete,
+            {},
+            this.workspace.id);
         });
 
     test(
@@ -341,8 +350,11 @@ suite('Procedure Map', function() {
       this.procedureMap.add(procedureModel);
       procedureModel.setName('test name');
 
-      chai.assert.isFalse(
-          this.eventSpy.called, 'Expected no event to be fired');
+      assertEventNotFired(
+        this.eventSpy,
+        Blockly.Events.ProcedureRename,
+        {},
+        this.workspace.id);
     });
 
     test(
@@ -353,8 +365,11 @@ suite('Procedure Map', function() {
               .setName('test name');
           procedureModel.setName('new name');
 
-        chai.assert.isFalse(
-            this.eventSpy.called, 'Expected no event to be fired');
+          assertEventNotFired(
+            this.eventSpy,
+            Blockly.Events.ProcedureRename,
+            {},
+            this.workspace.id);
         });
 
     test('enable events are fired when a procedure is enabled', function() {
@@ -390,8 +405,11 @@ suite('Procedure Map', function() {
       this.procedureMap.add(procedureModel);
       procedureModel.setEnabled(true);
 
-      chai.assert.isFalse(
-          this.eventSpy.called, 'Expected no event to be fired');
+      assertEventNotFired(
+        this.eventSpy,
+        Blockly.Events.ProcedureEnable,
+        {},
+        this.workspace.id);
     });
 
     test('enable events are not fired if disabling is noop', function() {
@@ -401,8 +419,11 @@ suite('Procedure Map', function() {
       this.procedureMap.add(procedureModel);
       procedureModel.setEnabled(false);
 
-      chai.assert.isFalse(
-          this.eventSpy.called, 'Expected no event to be fired');
+      assertEventNotFired(
+        this.eventSpy,
+        Blockly.Events.ProcedureEnable,
+        {},
+        this.workspace.id);
     });
 
     test(
@@ -413,8 +434,11 @@ suite('Procedure Map', function() {
               .setEnabled(false);
           procedureModel.setEnabled(true);
     
-          chai.assert.isFalse(
-              this.eventSpy.called, 'Expected no event to be fired');
+          assertEventNotFired(
+            this.eventSpy,
+            Blockly.Events.ProcedureEnable,
+            {},
+            this.workspace.id);
         });
 
     test(
@@ -450,8 +474,11 @@ suite('Procedure Map', function() {
               new Blockly.procedures.ObservableParameterModel(
                   this.workspace, 'test name'));
 
-          chai.assert.isFalse(
-              this.eventSpy.called, 'Expected no event to be fired');
+          assertEventNotFired(
+            this.eventSpy,
+            Blockly.Events.ProcedureParameterCreate,
+            {},
+            this.workspace.id);
         });
 
     test(
@@ -489,8 +516,11 @@ suite('Procedure Map', function() {
                           this.workspace, 'test name'));
           procedureModel.deleteParameter(0);
 
-          chai.assert.isFalse(
-              this.eventSpy.called, 'Expected no event to be fired');
+          assertEventNotFired(
+            this.eventSpy,
+            Blockly.Events.ProcedureParameterDelete,
+            {},
+            this.workspace.id);
         });
 
     test(
@@ -530,8 +560,11 @@ suite('Procedure Map', function() {
 
           parameterModel.setName('test name');
 
-          chai.assert.isFalse(
-              this.eventSpy.called, 'Expected no event to be fired');
+          assertEventNotFired(
+            this.eventSpy,
+            Blockly.Events.ProcedureParameterRename,
+            {},
+            this.workspace.id);
         });
     
     test(
@@ -546,8 +579,11 @@ suite('Procedure Map', function() {
 
           parameterModel.setName('new name');
 
-          chai.assert.isFalse(
-              this.eventSpy.called, 'Expected no event to be fired');
+          assertEventNotFired(
+            this.eventSpy,
+            Blockly.Events.ProcedureParameterRename,
+            {},
+            this.workspace.id);
         });
 
     test(
@@ -560,8 +596,11 @@ suite('Procedure Map', function() {
 
           parameterModel.setName('new name');
 
-          chai.assert.isFalse(
-              this.eventSpy.called, 'Expected no event to be fired');
+          assertEventNotFired(
+            this.eventSpy,
+            Blockly.Events.ProcedureParameterRename,
+            {},
+            this.workspace.id);
         });
 
     test(
@@ -611,8 +650,11 @@ suite('Procedure Map', function() {
           this.procedureMap.add(procedureModel);
           procedureModel.setReturnTypes(null);
 
-          chai.assert.isFalse(
-              this.eventSpy.called, 'Expected no event to be fired');
+          assertEventNotFired(
+            this.eventSpy,
+            Blockly.Events.ProcedureChangeReturn,
+            {},
+            this.workspace.id);
         });
 
     test(
@@ -624,8 +666,11 @@ suite('Procedure Map', function() {
           this.procedureMap.add(procedureModel);
           procedureModel.setReturnTypes([]);
 
-          chai.assert.isFalse(
-              this.eventSpy.called, 'Expected no event to be fired');
+          assertEventNotFired(
+            this.eventSpy,
+            Blockly.Events.ProcedureChangeReturn,
+            {},
+            this.workspace.id);
         });
 
     test(
@@ -638,8 +683,11 @@ suite('Procedure Map', function() {
 
           procedureModel.setReturnTypes([]);
 
-          chai.assert.isFalse(
-              this.eventSpy.called, 'Expected no event to be fired');
+          assertEventNotFired(
+            this.eventSpy,
+            Blockly.Events.ProcedureChangeReturn,
+            {},
+            this.workspace.id);
         });
   });
 

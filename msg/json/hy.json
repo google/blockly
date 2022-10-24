@@ -6,7 +6,8 @@
 			"Armenoid",
 			"Kareyac",
 			"Nona",
-			"Xelgen"
+			"Xelgen",
+			"Սերգեյ Սաֆարյան"
 		]
 	},
 	"VARIABLES_DEFAULT_NAME": "տարր",
@@ -305,7 +306,7 @@
 	"PROCEDURES_BEFORE_PARAMS": "պարամետրերի ցանկ՝",
 	"PROCEDURES_CALL_BEFORE_PARAMS": "պարամետրերի ցանկ՝",
 	"PROCEDURES_DEFNORETURN_TOOLTIP": "Ստեղծում է ֆունկցիա, որը արժեք չի վերադարձնում:",
-	"PROCEDURES_DEFNORETURN_COMMENT": "Նկարագրիր այս ֆունկցիան...",
+	"PROCEDURES_DEFNORETURN_COMMENT": "Նկարագրեք այս գործառույթը...",
 	"PROCEDURES_DEFRETURN_RETURN": "վերադարձնել",
 	"PROCEDURES_DEFRETURN_TOOLTIP": "Ստեղծում է ֆունկցիա, որը վերադարձնում է արժեք:",
 	"PROCEDURES_ALLOW_STATEMENTS": "թույլատրել արտահայտությունները",

@@ -555,9 +555,7 @@ MassOperationsHandler.prototype.moveSelectedToNewModule_ = function() {
   Blockly.dialog.prompt(Blockly.Msg["NEW_MODULE_TITLE"], "", (moduleName) => {
     if (moduleName) {
       moduleName = moduleName.replace(/[\s\xa0]+/g, " ").trim();
-    }
 
-    if (moduleName) {
       this.moveBlocksToAnotherModule = true;
       const module = this.workspace_
         .getModuleManager()

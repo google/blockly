@@ -56,7 +56,7 @@
 	"RENAME_MODULE_TITLE": "Имя:",
 	"NEW_MODULE": "Создать",
 	"NEW_MODULE_TITLE": "Имя:",
-	"LAST_MODULE_DELETE_RESTRICTION": "Невозможно удалить последнюю вкладку.",
+	"LAST_MODULE_DELETE_RESTRICTION": "Невозможно удалить единственную вкладку.",
 	"NOT_EMPTY_MODULE_DELETE_RESTRICTION": "Невозможно удалить вкладку с блоками. Сначала удалите блоки в модуле.",
 	"DELETE_MODULE": "Удалить",
 	"BLOCK_MOVE_TO_MODULE": "Переместить в '%1'",

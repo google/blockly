@@ -7,29 +7,29 @@
 /**
  * @fileoverview Mass operations handler for workspace
  */
-'use strict';
+"use strict";
 
 /**
  * Mass operations handler for workspace
  * @class
  */
-goog.module('Blockly.MassOperations.Handler');
+goog.module("Blockly.MassOperations.Handler");
 
-const {ShortcutRegistry} = goog.require('Blockly.ShortcutRegistry');
-const {KeyCodes} = goog.require('Blockly.utils.KeyCodes');
-const {Msg} = goog.require('Blockly.Msg');
-const {config} = goog.require('Blockly.config');
-const {Coordinate} = goog.require('Blockly.utils.Coordinate');
-const {ContextMenuRegistry} = goog.require('Blockly.ContextMenuRegistry');
-const ContextMenu = goog.require('Blockly.ContextMenu');
-const clipboard = goog.require('Blockly.clipboard');
-const registry = goog.require('Blockly.registry');
-const browserEvents = goog.require('Blockly.browserEvents');
-const eventUtils = goog.require('Blockly.Events.utils');
-const common = goog.require('Blockly.common');
+const {ShortcutRegistry} = goog.require("Blockly.ShortcutRegistry");
+const {KeyCodes} = goog.require("Blockly.utils.KeyCodes");
+const {Msg} = goog.require("Blockly.Msg");
+const {config} = goog.require("Blockly.config");
+const {Coordinate} = goog.require("Blockly.utils.Coordinate");
+const {ContextMenuRegistry} = goog.require("Blockly.ContextMenuRegistry");
+const ContextMenu = goog.require("Blockly.ContextMenu");
+const clipboard = goog.require("Blockly.clipboard");
+const registry = goog.require("Blockly.registry");
+const browserEvents = goog.require("Blockly.browserEvents");
+const eventUtils = goog.require("Blockly.Events.utils");
+const common = goog.require("Blockly.common");
 
 /** @suppress {extraRequire} */
-goog.require('Blockly.BlockDragger');
+goog.require("Blockly.BlockDragger");
 
 /**
  * Mass operations handler for workspace
@@ -55,9 +55,13 @@ const MassOperationsHandler = function(workspace) {
 
   // Add "deleteAll" method to shortcut registry with ctrl+D key
   const deleteAllShortcut = {
-    name: 'massOperationDelete',
+    name: "massOperationDelete",
     preconditionFn: (workspace) => {
-      return !workspace.options.readOnly && !workspace.isFlyout && this.selectedBlocks_.length;
+      return (
+        !workspace.options.readOnly &&
+        !workspace.isFlyout &&
+        this.selectedBlocks_.length
+      );
     },
     callback: (workspace, e) => {
       this.deleteAll();
@@ -68,12 +72,20 @@ const MassOperationsHandler = function(workspace) {
   };
   ShortcutRegistry.registry.register(deleteAllShortcut, true);
 
-  ShortcutRegistry.registry.addKeyMapping(KeyCodes.DELETE, deleteAllShortcut.name, true);
-  ShortcutRegistry.registry.addKeyMapping(KeyCodes.BACKSPACE, deleteAllShortcut.name, true);
+  ShortcutRegistry.registry.addKeyMapping(
+    KeyCodes.DELETE,
+    deleteAllShortcut.name,
+    true
+  );
+  ShortcutRegistry.registry.addKeyMapping(
+    KeyCodes.BACKSPACE,
+    deleteAllShortcut.name,
+    true
+  );
 
   // Add "selectAll" method to shortcut registry with ctrl+A key
   const selectAllShortcut = {
-    name: 'massOperationSelect',
+    name: "massOperationSelect",
     preconditionFn: (workspace) => {
       return !workspace.options.readOnly && !workspace.isFlyout;
     },
@@ -86,14 +98,20 @@ const MassOperationsHandler = function(workspace) {
   };
   ShortcutRegistry.registry.register(selectAllShortcut, true);
 
-  const ctrlA = ShortcutRegistry.registry.createSerializedKey(KeyCodes.A, [KeyCodes.CTRL]);
+  const ctrlA = ShortcutRegistry.registry.createSerializedKey(KeyCodes.A, [
+    KeyCodes.CTRL,
+  ]);
   ShortcutRegistry.registry.addKeyMapping(ctrlA, selectAllShortcut.name, true);
 
   // Add "copy" method to shortcut registry with ctrl+C key
   const copyShortcut = {
-    name: 'massOperationCopy',
+    name: "massOperationCopy",
     preconditionFn: (workspace) => {
-      return this.selectedBlocks_.length && !workspace.options.readOnly && !workspace.isFlyout;
+      return (
+        this.selectedBlocks_.length &&
+        !workspace.options.readOnly &&
+        !workspace.isFlyout
+      );
     },
     callback: (workspace, e) => {
       const gesture = workspace.getGesture(e);
@@ -111,14 +129,20 @@ const MassOperationsHandler = function(workspace) {
   };
   ShortcutRegistry.registry.register(copyShortcut, true);
 
-  const ctrlC = ShortcutRegistry.registry.createSerializedKey(KeyCodes.C, [KeyCodes.CTRL]);
+  const ctrlC = ShortcutRegistry.registry.createSerializedKey(KeyCodes.C, [
+    KeyCodes.CTRL,
+  ]);
   ShortcutRegistry.registry.addKeyMapping(ctrlC, copyShortcut.name, true);
 
   // Add "pasteShortcut" method to shortcut registry with ctrl+V key
   const pasteShortcut = {
-    name: 'massOperationPaste',
+    name: "massOperationPaste",
     preconditionFn: (workspace) => {
-      return this.blocksCopyData_ && !workspace.options.readOnly && !workspace.isFlyout;
+      return (
+        this.blocksCopyData_ &&
+        !workspace.options.readOnly &&
+        !workspace.isFlyout
+      );
     },
     callback: (workspace, e) => {
       e.preventDefault();
@@ -130,14 +154,20 @@ const MassOperationsHandler = function(workspace) {
   };
   ShortcutRegistry.registry.register(pasteShortcut, true);
 
-  const ctrlV = ShortcutRegistry.registry.createSerializedKey(KeyCodes.V, [KeyCodes.CTRL]);
+  const ctrlV = ShortcutRegistry.registry.createSerializedKey(KeyCodes.V, [
+    KeyCodes.CTRL,
+  ]);
   ShortcutRegistry.registry.addKeyMapping(ctrlV, pasteShortcut.name, true);
 
   // Add "duplicateShortcut" method to shortcut registry with ctrl+D key
   const duplicateShortcut = {
-    name: 'massOperationDuplicate',
+    name: "massOperationDuplicate",
     preconditionFn: (workspace) => {
-      return this.selectedBlocks_.length && !workspace.options.readOnly && !workspace.isFlyout;
+      return (
+        this.selectedBlocks_.length &&
+        !workspace.options.readOnly &&
+        !workspace.isFlyout
+      );
     },
     callback: (workspace, e) => {
       this.copySelected_();
@@ -151,7 +181,9 @@ const MassOperationsHandler = function(workspace) {
   };
   ShortcutRegistry.registry.register(duplicateShortcut, true);
 
-  const ctrlD = ShortcutRegistry.registry.createSerializedKey(KeyCodes.D, [KeyCodes.CTRL]);
+  const ctrlD = ShortcutRegistry.registry.createSerializedKey(KeyCodes.D, [
+    KeyCodes.CTRL,
+  ]);
   ShortcutRegistry.registry.addKeyMapping(ctrlD, duplicateShortcut.name, true);
 };
 
@@ -172,12 +204,22 @@ MassOperationsHandler.prototype.changeListener = function(event) {
 MassOperationsHandler.prototype.selectedBlockMouseDown = function(block, e) {
   this.lastMouseDownBlock_ = block;
   this.mouseDownXY_ = new Coordinate(e.clientX, e.clientY);
-  this.onMoveBlockWrapper_ = browserEvents.conditionalBind(document, 'mousemove', null, this.handleMove_.bind(this));
-  this.onMouseUpBlockWrapper_ = browserEvents.conditionalBind(document, 'mouseup', null, this.handleUp_.bind(this));
+  this.onMoveBlockWrapper_ = browserEvents.conditionalBind(
+    document,
+    "mousemove",
+    null,
+    this.handleMove_.bind(this)
+  );
+  this.onMouseUpBlockWrapper_ = browserEvents.conditionalBind(
+    document,
+    "mouseup",
+    null,
+    this.handleUp_.bind(this)
+  );
 };
 
 MassOperationsHandler.prototype.handleMove_ = function(e) {
-   if (!e.ctrlKey || !this.selectedBlocks_.length) {
+  if (!e.ctrlKey || !this.selectedBlocks_.length) {
     this.lastMouseDownBlock_ = null;
     browserEvents.unbind(this.onMoveBlockWrapper_);
 
@@ -186,12 +228,20 @@ MassOperationsHandler.prototype.handleMove_ = function(e) {
 
   const currentXY = new Coordinate(e.clientX, e.clientY);
 
-  const initBlockCoordinates = this.lastMouseDownBlock_.getRelativeToSurfaceXY();
-  this.currentDragDeltaXY_ = Coordinate.difference(currentXY, this.mouseDownXY_);
+  const initBlockCoordinates =
+    this.lastMouseDownBlock_.getRelativeToSurfaceXY();
+  this.currentDragDeltaXY_ = Coordinate.difference(
+    currentXY,
+    this.mouseDownXY_
+  );
 
   if (this.blockDraggers_) {
     // We need use drag() only for one of draggers, because all sraggers use one drag_surface
-    this.blockDraggers_[0].drag(e, this.currentDragDeltaXY_, this.initBlockStartCoordinates);
+    this.blockDraggers_[0].drag(
+      e,
+      this.currentDragDeltaXY_,
+      this.initBlockStartCoordinates
+    );
     return;
   }
 
@@ -203,8 +253,14 @@ MassOperationsHandler.prototype.handleMove_ = function(e) {
 
   if (!this.hasExceededDragRadius_) return;
 
-  const BlockDraggerClass = registry.getClassFromOptions(registry.Type.BLOCK_DRAGGER, this.workspace_.options, true);
-  this.blockDraggers_ = this.selectedBlocks_.map((block) => new BlockDraggerClass(block, this.workspace_, true));
+  const BlockDraggerClass = registry.getClassFromOptions(
+    registry.Type.BLOCK_DRAGGER,
+    this.workspace_.options,
+    true
+  );
+  this.blockDraggers_ = this.selectedBlocks_.map(
+    (block) => new BlockDraggerClass(block, this.workspace_, true)
+  );
 
   // coordinates of start dragging may be not on top left block and we need to find
   // top left angle for get right position of drag surface under all blocks
@@ -242,7 +298,8 @@ MassOperationsHandler.prototype.handleMove_ = function(e) {
   });
 
   const workspaceCanvas = this.workspace_.getCanvas();
-  const workspaceCanvasTransform = window.getComputedStyle(workspaceCanvas).transform;
+  const workspaceCanvasTransform =
+    window.getComputedStyle(workspaceCanvas).transform;
   const workspaceCanvasMatrix = new WebKitCSSMatrix(workspaceCanvasTransform);
 
   dragSurfaceMinCoordinate.x += workspaceCanvasMatrix.e / this.workspace_.scale;
@@ -267,17 +324,36 @@ MassOperationsHandler.prototype.handleMove_ = function(e) {
     block.prepareForMoveToDragSurface(diff);
   });
 
-  const dragSurfaceWidth = (dragSurfaceMaxCoordinate.x - dragSurfaceMinCoordinate.x) + blockSvgWithMaxX.getBBox().width;
-  const dragSurfaceHeight = (dragSurfaceMaxCoordinate.y - dragSurfaceMinCoordinate.y) + blockSvgWithMaxY.getBBox().height;
+  const dragSurfaceWidth =
+    dragSurfaceMaxCoordinate.x -
+    dragSurfaceMinCoordinate.x +
+    blockSvgWithMaxX.getBBox().width;
+  const dragSurfaceHeight =
+    dragSurfaceMaxCoordinate.y -
+    dragSurfaceMinCoordinate.y +
+    blockSvgWithMaxY.getBBox().height;
   const dragSurface = this.workspace_.getBlockDragSurface();
   const blocksSvg = this.selectedBlocks_.map((b) => b.getSvgRoot());
 
   this.initBlockStartCoordinates = dragSurfaceMinCoordinate.clone();
 
-  dragSurface.translateSurface(this.initBlockStartCoordinates.x, this.initBlockStartCoordinates.y, true);
-  dragSurface.setBlocksAndShow(blocksSvg, dragSurfaceWidth, dragSurfaceHeight, true);
+  dragSurface.translateSurface(
+    this.initBlockStartCoordinates.x,
+    this.initBlockStartCoordinates.y,
+    true
+  );
+  dragSurface.setBlocksAndShow(
+    blocksSvg,
+    dragSurfaceWidth,
+    dragSurfaceHeight,
+    true
+  );
 
-  this.blockDraggers_[0].drag(e, this.currentDragDeltaXY_, this.initBlockStartCoordinates);
+  this.blockDraggers_[0].drag(
+    e,
+    this.currentDragDeltaXY_,
+    this.initBlockStartCoordinates
+  );
 };
 
 MassOperationsHandler.prototype.blockMouseUp = function(block, e) {
@@ -291,7 +367,9 @@ MassOperationsHandler.prototype.blockMouseUp = function(block, e) {
   this.onMoveBlockWrapper_ = null;
 
   if (this.blockDraggers_) {
-    this.blockDraggers_.forEach((dragger) => dragger.endDrag(e, this.currentDragDeltaXY_));
+    this.blockDraggers_.forEach((dragger) =>
+      dragger.endDrag(e, this.currentDragDeltaXY_)
+    );
     this.blockDraggers_ = null;
     this.currentDragDeltaXY_ = null;
   }
@@ -306,7 +384,9 @@ MassOperationsHandler.prototype.handleUp_ = function(e) {
   if (!browserEvents.isLeftButton(e)) return;
 
   if (this.blockDraggers_) {
-    this.blockDraggers_.forEach((dragger) => dragger.endDrag(e, this.currentDragDeltaXY_));
+    this.blockDraggers_.forEach((dragger) =>
+      dragger.endDrag(e, this.currentDragDeltaXY_)
+    );
     this.blockDraggers_ = null;
   }
 
@@ -346,8 +426,11 @@ MassOperationsHandler.prototype.addBlockToSelected = function(block) {
   }
 
   const rootBlock = this.getRootBlock_(block);
-  const blockWithSameRootParentIndex = this.selectedBlocks_.findIndex((b) => this.getRootBlock_(b).id === rootBlock.id);
-  const blockWithSameRootParent = this.selectedBlocks_[blockWithSameRootParentIndex];
+  const blockWithSameRootParentIndex = this.selectedBlocks_.findIndex(
+    (b) => this.getRootBlock_(b).id === rootBlock.id
+  );
+  const blockWithSameRootParent =
+    this.selectedBlocks_[blockWithSameRootParentIndex];
 
   if (blockWithSameRootParent) {
     if (blockWithSameRootParent.id === rootBlock.id) return;
@@ -363,7 +446,10 @@ MassOperationsHandler.prototype.addBlockToSelected = function(block) {
       return;
     }
 
-    const isBlockOnTop = this.findParentBlock_(blockWithSameRootParent, block.id);
+    const isBlockOnTop = this.findParentBlock_(
+      blockWithSameRootParent,
+      block.id
+    );
 
     if (isBlockOnTop) {
       this.selectedBlocks_.push(block);
@@ -374,11 +460,17 @@ MassOperationsHandler.prototype.addBlockToSelected = function(block) {
       return;
     }
 
-    const sameBlockOnTop = this.findParentBlock_(block, blockWithSameRootParent.id);
+    const sameBlockOnTop = this.findParentBlock_(
+      block,
+      blockWithSameRootParent.id
+    );
 
     if (sameBlockOnTop) return;
 
-    const commonParent = this.findCommonParentBlock_(block, blockWithSameRootParent);
+    const commonParent = this.findCommonParentBlock_(
+      block,
+      blockWithSameRootParent
+    );
 
     if (commonParent) {
       this.selectedBlocks_.push(commonParent);
@@ -416,7 +508,10 @@ MassOperationsHandler.prototype.getRootBlock_ = function(block) {
  * This is necessary to check that a block is a deep child of another block.
  * @private
  * */
-MassOperationsHandler.prototype.findParentBlock_ = function(block, targetBlockId) {
+MassOperationsHandler.prototype.findParentBlock_ = function(
+  block,
+  targetBlockId
+) {
   const parent = block.getParent();
 
   if (!parent) return false;
@@ -430,7 +525,10 @@ MassOperationsHandler.prototype.findParentBlock_ = function(block, targetBlockId
  * Recursive finding a common parent block by id.
  * @private
  * */
-MassOperationsHandler.prototype.findCommonParentBlock_ = function(blockA, blockB) {
+MassOperationsHandler.prototype.findCommonParentBlock_ = function(
+  blockA,
+  blockB
+) {
   const parentsA = this.getBlockParentsIds_(blockA, []);
 
   return this.getFirstParentByIds_(blockB, [], parentsA);
@@ -455,7 +553,11 @@ MassOperationsHandler.prototype.getBlockParentsIds_ = function(block, ids) {
  * we can check if the block has one of those parents at one of its levels.
  * @private
  */
-MassOperationsHandler.prototype.getFirstParentByIds_ = function(block, ids, targetIds = []) {
+MassOperationsHandler.prototype.getFirstParentByIds_ = function(
+  block,
+  ids,
+  targetIds = []
+) {
   const parent = block.getParent();
 
   if (!parent) return false;
@@ -495,7 +597,9 @@ MassOperationsHandler.prototype.cleanUp = function() {
 
 MassOperationsHandler.prototype.cleanUpSelectedBlocks_ = function() {
   if (this.selectedBlocks_.length) {
-    this.selectedBlocks_.forEach((block) => block.removeSelectAsMassSelection());
+    this.selectedBlocks_.forEach((block) =>
+      block.removeSelectAsMassSelection()
+    );
     this.selectedBlocks_ = [];
   }
 };
@@ -540,13 +644,36 @@ MassOperationsHandler.prototype.selectAll = function() {
 };
 
 MassOperationsHandler.prototype.copySelected_ = function() {
-  this.blocksCopyData_ = this.selectedBlocks_.map((block) => block.toCopyData(true));
+  this.blocksCopyData_ = this.selectedBlocks_.map((block) =>
+    block.toCopyData(true)
+  );
 
-  const firstBlockCoordinates = this.selectedBlocks_[0].getRelativeToSurfaceXY();
+  const firstBlockCoordinates =
+    this.selectedBlocks_[0].getRelativeToSurfaceXY();
 
   this.selectedBlocks_.slice(1).forEach((block, i) => {
-    const diff = Coordinate.difference(block.getRelativeToSurfaceXY(), firstBlockCoordinates);
+    const diff = Coordinate.difference(
+      block.getRelativeToSurfaceXY(),
+      firstBlockCoordinates
+    );
     this.blocksCopyData_[i + 1].saveInfo.pasteOffset = diff;
+  });
+};
+
+MassOperationsHandler.prototype.moveSelectedToNewModule_ = function() {
+  const moduleManager = this.workspace_.getModuleManager();
+  Blockly.dialog.prompt(Blockly.Msg["NEW_MODULE_TITLE"], "", (moduleName) => {
+    if (moduleName) {
+      moduleName = moduleName.replace(/[\s\xa0]+/g, " ").trim();
+    }
+
+    if (moduleName) {
+      this.moveBlocksToAnotherModule = true;
+      const module = this.workspace_
+        .getModuleManager()
+        .createModule(moduleName);
+      moduleManager.moveBlocksToModule(this.selectedBlocks_, module, this);
+    }
   });
 };
 
@@ -559,7 +686,9 @@ MassOperationsHandler.prototype.pasteCopiedBlocks_ = function() {
   const pastedBlocks = [];
 
   this.blocksCopyData_.forEach((copyData) => {
-    const block = this.workspace_.paste(copyData.saveInfo, {dontSelectNewBLock: true});
+    const block = this.workspace_.paste(copyData.saveInfo, {
+      dontSelectNewBLock: true,
+    });
     if (block) {
       pastedBlocks.push(block);
       this.addBlockToSelected(block);
@@ -597,11 +726,12 @@ MassOperationsHandler.prototype.generateContextMenu = function() {
   if (this.workspace_.options.readOnly) return null;
 
   const menuOptions = ContextMenuRegistry.registry.getContextMenuOptions(
-    ContextMenuRegistry.ScopeType.GROUP, {blocks: this.selectedBlocks_}
+    ContextMenuRegistry.ScopeType.GROUP,
+    {blocks: this.selectedBlocks_}
   );
 
   menuOptions.push({
-    text: Msg['DELETE_ALL_SELECTED'],
+    text: Msg["DELETE_ALL_SELECTED"],
     callback: () => {
       this.deleteAll();
     },
@@ -609,7 +739,7 @@ MassOperationsHandler.prototype.generateContextMenu = function() {
   });
 
   menuOptions.push({
-    text: Msg['COPY_ALL_SELECTED'],
+    text: Msg["COPY_ALL_SELECTED"],
     callback: () => {
       this.copySelected_();
     },
@@ -617,7 +747,7 @@ MassOperationsHandler.prototype.generateContextMenu = function() {
   });
 
   menuOptions.push({
-    text: Msg['DUPLICATE_ALL_SELECTED'],
+    text: Msg["DUPLICATE_ALL_SELECTED"],
     callback: () => {
       this.copySelected_();
       this.pasteCopiedBlocks_();
@@ -625,23 +755,40 @@ MassOperationsHandler.prototype.generateContextMenu = function() {
     enabled: true,
   });
 
-  if (this.workspace_.options.showModuleBar && this.workspace_.getModuleManager().getAllModules().length > 1) {
+  if (this.workspace_.options.showModuleBar) {
     const aBlock = this.selectedBlocks_[0];
 
-    const moduleManager = this.workspace_.getModuleManager();
-
-    moduleManager.getAllModules().forEach((module) => {
-      if (aBlock.getModuleId() !== module.getId()) {
-        menuOptions.push({
-          text: Msg['MOVE_SELECTED_BLOCKS_TO_MODULE'].replace('%1', module.getName()),
-          enabled: true,
-          callback: () => {
-            this.moveBlocksToAnotherModule = true;
-            moduleManager.moveBlocksToModule(this.selectedBlocks_, module, this);
-          },
-        });
-      }
+    menuOptions.push({
+      text: Msg["BLOCK_MOVE_TO_NEW_MODULE"],
+      enabled: true,
+      callback: () => {
+        this.moveSelectedToNewModule_();
+      },
     });
+
+    if (this.workspace_.getModuleManager().getAllModules().length > 1) {
+      const moduleManager = this.workspace_.getModuleManager();
+      
+      moduleManager.getAllModules().forEach((module) => {
+        if (aBlock.getModuleId() !== module.getId()) {
+          menuOptions.push({
+            text: Msg["MOVE_SELECTED_BLOCKS_TO_MODULE"].replace(
+              "%1",
+              module.getName()
+            ),
+            enabled: true,
+            callback: () => {
+              this.moveBlocksToAnotherModule = true;
+              moduleManager.moveBlocksToModule(
+                this.selectedBlocks_,
+                module,
+                this
+              );
+            },
+          });
+        }
+      });
+    }
   }
 
   return menuOptions;

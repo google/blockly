@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Varwin <devops@varwin.com>",
-		"lastupdated": "2022-10-18 10:51:13.340826",
+		"lastupdated": "2022-10-24 10:43:03.690331",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -19,7 +19,7 @@
 	"DELETE_BLOCK": "Delete Block",
 	"DELETE_X_BLOCKS": "Delete %1 Blocks",
 	"BLOCK_MOVE_TO_MODULE": "Move to '%1'",
-	"BLOCK_MOVE_TO_NEW_MODULE": "Move to new module",
+	"BLOCK_MOVE_TO_NEW_MODULE": "Move to new tab",
 	"DELETE_ALL_BLOCKS": "Delete all %1 blocks?",
 	"CLEAN_UP": "Clean up Blocks",
 	"COLLAPSE_BLOCK": "Collapse Block",
@@ -39,11 +39,11 @@
 	"DELETE_ALL_SELECTED": "Delete all selected blocks",
 	"COPY_ALL_SELECTED": "Copy all selected blocks",
 	"DUPLICATE_ALL_SELECTED": "Duplicate all selected blocks",
-	"MOVE_SELECTED_BLOCKS_TO_MODULE": "Move blocks to module %1",
+	"MOVE_SELECTED_BLOCKS_TO_MODULE": "Move blocks to tab %1",
 	"SELECT_ALL": "Select all blocks",
 	"LOADING_ERROR": "Error loading workspace",
-	"LAST_MODULE_DELETE_RESTRICTION": "Can't delete the last module.",
-	"NOT_EMPTY_MODULE_DELETE_RESTRICTION": "Can't delete not empty module. Delete all module blocks first.",
+	"LAST_MODULE_DELETE_RESTRICTION": "Can't delete the last tab.",
+	"NOT_EMPTY_MODULE_DELETE_RESTRICTION": "Can't delete not empty tab. Delete all tab blocks first.",
 	"DELETE_MODULE": "Delete",
 	"RENAME_ARGUMENT": "Rename argument...",
 	"RENAME_ARGUMENT_TITLE": "Rename argument '%1' to:",

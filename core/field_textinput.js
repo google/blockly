@@ -138,6 +138,13 @@ class FieldTextInput extends Field {
     this.NO_SENSITIVITY_WIDTH_ZONE = 10;
 
     /**
+     * Remove everything forbidden by XML 1.0 specifications,
+     * plus the unicode replacement character U+FFFD
+     */
+    // eslint-disable-next-line no-control-regex
+    this.INVALID_XML_CHARS_REGEX = /[^\x09\x0A\x0D\x20-\xFF\x85\xA0-\uD7FF\uE000-\uFDCF\uFDE0-\uFFFD]/g;
+
+    /**
      * Mouse cursor style when over the hotspot that initiates the editor.
      * @type {string}
      */
@@ -204,7 +211,8 @@ class FieldTextInput extends Field {
     if (opt_newValue === null || opt_newValue === undefined) {
       return null;
     }
-    return String(opt_newValue);
+    const filteredNewValue = opt_newValue.replace(this.INVALID_XML_CHARS_REGEX, '');
+    return String(filteredNewValue);
   }
 
   /**

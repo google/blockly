@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /**
  * @license
  * Copyright 2011 Google LLC
@@ -91,6 +92,13 @@ const ModuleBar = function(workspace) {
   this.onMouseMoveWrapper_ = null;
 
   /**
+   * Mouse wheel event data.
+   * @type {?Blockly.EventData}
+   * @private
+   */
+  this.onMouseWheelWrapper_ = null;
+
+  /**
    * Mouse up event data.
    * @type {?Blockly.EventData}
    * @private
@@ -115,9 +123,12 @@ ModuleBar.prototype.init = function() {
    * HTML container for the ModuleBar.
    * @type {Element}
    */
-  this.htmlContainer_ = document.createElement("ul");
+  this.htmlContainer_ = document.createElement("div");
+  // this.htmlContainer_ = document.createElement("ul");
   this.htmlContainer_.className =
     "blocklyModuleBarContainer blocklyNonSelectable cursorNotAllowed";
+  // this.htmlContainer_.appendChild(this.htmlContainer_);
+
   injectionContainer.parentNode.insertBefore(
     this.htmlContainer_,
     injectionContainer
@@ -126,7 +137,6 @@ ModuleBar.prototype.init = function() {
   if (this.workspace_.RTL) {
     this.htmlContainer_.setAttribute("dir", "rtl");
   }
-
   this.attachEvents_();
   this.render();
 };
@@ -232,6 +242,12 @@ ModuleBar.prototype.attachEvents_ = function() {
     this,
     this.onMouseMove_
   );
+  this.onMouseWheelWrapper_ = browserEvents.conditionalBind(
+    this.htmlContainer_,
+    "wheel",
+    this,
+    this.onMouseWheel_
+  );
   this.onWorkspaceChangeWrapper_ = this.workspace_.addChangeListener(
     this.onWorkspaceChange_.bind(this)
   );
@@ -261,6 +277,12 @@ ModuleBar.prototype.detachEvents_ = function() {
     Blockly.browserEvents.unbind(this.onMouseMoveWrapper_);
     this.onMouseMoveWrapper_ = null;
   }
+
+  if (this.onMouseWheelWrapper_) {
+    Blockly.browserEvents.unbind(this.onMouseWheelWrapper_);
+    this.onMouseWheelWrapper_ = null;
+  }
+
   if (this.onWorkspaceChangeWrapper_) {
     this.workspace_.removeChangeListener(this.onWorkspaceChangeWrapper_);
   }
@@ -399,6 +421,18 @@ ModuleBar.prototype.onMouseMove_ = function(e) {
 
   this.dragDropTargetModuleEl_ = targetModuleEl;
   this.dragDropTargetModuleEl_.classList.add("blocklyModuleBarTabDropZone");
+};
+
+/**
+ * Mouse wheel handler.
+ * @param {!Event} e The browser event.
+ * @private
+ */
+ ModuleBar.prototype.onMouseWheel_ = function(e) {
+  e.preventDefault();
+  this.htmlContainer_.scrollBy({
+    left: e.deltaY < 0 ? -30 : 30,
+  });
 };
 
 /**
@@ -599,8 +633,9 @@ Css.register(
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
     list-style: none;
     padding: 0;
     margin: 0;

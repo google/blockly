@@ -1675,4 +1675,4 @@ Blockly.Msg.DIALOG_CANCEL = 'Cancel';
 Blockly.Msg.SEARCH = 'Search';
 
 /** @type {string} */
-Blockly.Msg.NEW_TAB = 'New tab';
+Blockly.Msg.NEW_TAB = 'Add tab';

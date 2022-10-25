@@ -4,10 +4,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import {genUid} from '../utils/idgenerator.js';
 import type {IParameterModel} from '../interfaces/i_parameter_model.js';
 import type {IProcedureModel} from '../interfaces/i_procedure_model.js';
+import {triggerProceduresUpdate} from './update_procedures.js';
 import type {Workspace} from '../workspace.js';
-import {genUid} from '../utils/idgenerator.js';
 
 
 export class ObservableProcedureModel implements IProcedureModel {
@@ -25,6 +26,7 @@ export class ObservableProcedureModel implements IProcedureModel {
   setName(name: string): this {
     // TODO(#6516): Fire events.
     this.name = name;
+    triggerProceduresUpdate(this.workspace);
     return this;
   }
 
@@ -36,6 +38,7 @@ export class ObservableProcedureModel implements IProcedureModel {
   insertParameter(parameterModel: IParameterModel, index: number): this {
     // TODO(#6516): Fire events.
     this.parameters.splice(index, 0, parameterModel);
+    triggerProceduresUpdate(this.workspace);
     return this;
   }
 
@@ -43,6 +46,7 @@ export class ObservableProcedureModel implements IProcedureModel {
   deleteParameter(index: number): this {
     // TODO(#6516): Fire events.
     this.parameters.splice(index, 1);
+    triggerProceduresUpdate(this.workspace);
     return this;
   }
 
@@ -54,6 +58,7 @@ export class ObservableProcedureModel implements IProcedureModel {
   setReturnTypes(types: string[]|null): this {
     // TODO(#6516): Fire events.
     this.returnTypes = types;
+    triggerProceduresUpdate(this.workspace);
     return this;
   }
 
@@ -64,6 +69,7 @@ export class ObservableProcedureModel implements IProcedureModel {
   setEnabled(enabled: boolean): this {
     // TODO(#6516): Fire events.
     this.enabled = enabled;
+    triggerProceduresUpdate(this.workspace);
     return this;
   }
 

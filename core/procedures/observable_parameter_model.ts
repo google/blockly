@@ -4,8 +4,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import type {IParameterModel} from '../interfaces/i_parameter_model.js';
 import {genUid} from '../utils/idgenerator.js';
+import type {IParameterModel} from '../interfaces/i_parameter_model.js';
+import {triggerProceduresUpdate} from './update_procedures.js';
 import type {VariableModel} from '../variable_model.js';
 import type {Workspace} from '../workspace.js';
 
@@ -29,6 +30,7 @@ export class ObservableParameterModel implements IParameterModel {
     if (name == this.variable.name) return this;
     this.variable =
         this.workspace.getVariable(name) ?? this.workspace.createVariable(name);
+    triggerProceduresUpdate(this.workspace);
     return this;
   }
 

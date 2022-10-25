@@ -499,9 +499,7 @@ ModuleBar.prototype.handleCreateModule_ = function() {
     function(moduleName) {
       if (moduleName) {
         moduleName = moduleName.replace(/[\s\xa0]+/g, " ").trim();
-      }
 
-      if (moduleName) {
         const existingGroup = Blockly.Events.getGroup();
         if (!existingGroup) {
           Blockly.Events.setGroup(true);
@@ -531,9 +529,7 @@ ModuleBar.prototype.handleRenameModule_ = function() {
     function(moduleName) {
       if (moduleName) {
         moduleName = moduleName.replace(/[\s\xa0]+/g, " ").trim();
-      }
 
-      if (moduleName) {
         workspace.getModuleManager().renameModule(activeModule, moduleName);
       }
     }

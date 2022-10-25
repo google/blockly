@@ -550,6 +550,21 @@ MassOperationsHandler.prototype.copySelected_ = function() {
   });
 };
 
+MassOperationsHandler.prototype.moveSelectedToNewModule_ = function() {
+  const moduleManager = this.workspace_.getModuleManager();
+  Blockly.dialog.prompt(Blockly.Msg["NEW_MODULE_TITLE"], "", (moduleName) => {
+    if (moduleName) {
+      moduleName = moduleName.replace(/[\s\xa0]+/g, " ").trim();
+
+      this.moveBlocksToAnotherModule = true;
+      const module = this.workspace_
+        .getModuleManager()
+        .createModule(moduleName);
+      moduleManager.moveBlocksToModule(this.selectedBlocks_, module, this);
+    }
+  });
+};
+
 MassOperationsHandler.prototype.pasteCopiedBlocks_ = function() {
   this.cleanUp();
 
@@ -625,23 +640,33 @@ MassOperationsHandler.prototype.generateContextMenu = function() {
     enabled: true,
   });
 
-  if (this.workspace_.options.showModuleBar && this.workspace_.getModuleManager().getAllModules().length > 1) {
+  if (this.workspace_.options.showModuleBar) {
     const aBlock = this.selectedBlocks_[0];
 
-    const moduleManager = this.workspace_.getModuleManager();
-
-    moduleManager.getAllModules().forEach((module) => {
-      if (aBlock.getModuleId() !== module.getId()) {
-        menuOptions.push({
-          text: Msg['MOVE_SELECTED_BLOCKS_TO_MODULE'].replace('%1', module.getName()),
-          enabled: true,
-          callback: () => {
-            this.moveBlocksToAnotherModule = true;
-            moduleManager.moveBlocksToModule(this.selectedBlocks_, module, this);
-          },
-        });
-      }
+    menuOptions.push({
+      text: Msg["BLOCK_MOVE_TO_NEW_MODULE"],
+      enabled: true,
+      callback: () => {
+        this.moveSelectedToNewModule_();
+      },
     });
+
+    if (this.workspace_.getModuleManager().getAllModules().length > 1) {
+      const moduleManager = this.workspace_.getModuleManager();
+
+      moduleManager.getAllModules().forEach((module) => {
+        if (aBlock.getModuleId() !== module.getId()) {
+          menuOptions.push({
+            text: Msg['MOVE_SELECTED_BLOCKS_TO_MODULE'].replace('%1', module.getName()),
+            enabled: true,
+            callback: () => {
+              this.moveBlocksToAnotherModule = true;
+              moduleManager.moveBlocksToModule(this.selectedBlocks_, module, this);
+            },
+          });
+        }
+      });
+    }
   }
 
   return menuOptions;

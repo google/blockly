@@ -49,6 +49,20 @@ export class ObservableParameterModel implements IParameterModel {
   }
 
   /**
+   * Returns the name of this parameter.
+   */
+  getName(): string {
+    return this.variable.name;
+  }
+
+  /**
+   * Returns the types of this parameter.
+   */
+  getTypes(): string[] {
+    return [];
+  }
+
+  /**
    * Returns the unique language-neutral ID for the parameter.
    *
    * This represents the identify of the variable model which does not change

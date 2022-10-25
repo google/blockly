@@ -7,9 +7,11 @@
 import type {IProcedureModel} from '../interfaces/i_procedure_model.js';
 import {triggerProceduresUpdate} from './update_procedures.js';
 import type {Workspace} from '../workspace.js';
+import {IProcedureMap} from '../interfaces/i_procedure_map.js';
 
 
-export class ObservableProcedureMap extends Map<string, IProcedureModel> {
+export class ObservableProcedureMap extends
+    Map<string, IProcedureModel> implements IProcedureMap {
   constructor(private readonly workspace: Workspace) {
     super();
   }
@@ -51,5 +53,12 @@ export class ObservableProcedureMap extends Map<string, IProcedureModel> {
     // TODO(#6516): Fire events.
     // TODO(#6526): See if this method is actually useful.
     return this.set(proc.getId(), proc);
+  }
+
+  /**
+   * Returns all of the procedures stored in this map.
+   */
+  getProcedures(): IProcedureModel[] {
+    return [...this.values()];
   }
 }

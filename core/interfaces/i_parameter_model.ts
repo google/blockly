@@ -26,6 +26,16 @@ export interface IParameterModel {
   setTypes(types: string[]): this;
 
   /**
+   * Returns the name of this parameter.
+   */
+  getName(): string;
+
+  /**
+   * Return the types of this parameter.
+   */
+  getTypes(): string[];
+
+  /**
    * Returns the unique language-neutral ID for the parameter.
    *
    * This represents the identify of the variable model which does not change

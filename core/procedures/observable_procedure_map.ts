@@ -17,7 +17,7 @@ export class ObservableProcedureMap extends Map<string, IProcedureModel> {
    * Adds the given procedure model to the procedure map.
    */
   override set(id: string, proc: IProcedureModel): this {
-    // TODO(#6156): Fire events.
+    // TODO(#6516): Fire events.
     super.set(id, proc);
     return this;
   }
@@ -27,7 +27,7 @@ export class ObservableProcedureMap extends Map<string, IProcedureModel> {
    * exists).
    */
   override delete(id: string): boolean {
-    // TODO(#6156): Fire events.
+    // TODO(#6516): Fire events.
     return super.delete(id);
   }
 
@@ -35,7 +35,7 @@ export class ObservableProcedureMap extends Map<string, IProcedureModel> {
    * Removes all ProcedureModels from the procedure map.
    */
   override clear() {
-    // TODO(#6156): Fire events.
+    // TODO(#6516): Fire events.
     super.clear();
   }
 
@@ -44,7 +44,8 @@ export class ObservableProcedureMap extends Map<string, IProcedureModel> {
    * blocks can find it.
    */
   add(proc: IProcedureModel): this {
-    // TODO(#6156): Fire events.
+    // TODO(#6516): Fire events.
+    // TODO(#6526): See if this method is actually useful.
     return this.set(proc.getId(), proc);
   }
 }

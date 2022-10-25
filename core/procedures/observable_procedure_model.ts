@@ -53,9 +53,13 @@ export class ObservableProcedureModel implements IProcedureModel {
   }
 
   /**
-   * Sets the return type(s) of the procedure.
+   * Sets whether the procedure has a return value (empty array) or no return
+   * value (null).
    *
-   * Pass null to represent a procedure that does not return.
+   * The built-in procedure model does not support procedures that have actual
+   * return types (i.e. non-empty arrays, e.g. ['number']). If you want your
+   * procedure block to have return types, you need to implement your own
+   * procedure model.
    */
   setReturnTypes(types: string[]|null): this {
     if (types && types.length) {
@@ -64,7 +68,7 @@ export class ObservableProcedureModel implements IProcedureModel {
           'implement your own custom ProcedureModel.');
     }
     this.returnTypes = types;
-    // TODO(#65): Fire events.
+    // TODO(#6516): Fire events.
     triggerProceduresUpdate(this.workspace);
     return this;
   }

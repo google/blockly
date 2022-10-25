@@ -63,8 +63,7 @@ function saveParameter(param: IParameterModel): ParameterState {
 /** Deserializes the given procedure model State from JSON. */
 function loadProcedure(
     procedureModelFactory: ProcedureModelFactory,
-    parameterModelFactory: ParameterModelFactory,
-    state: State,
+    parameterModelFactory: ParameterModelFactory, state: State,
     workspace: Workspace): IProcedureModel {
   const proc = procedureModelFactory(workspace, state.name, state.id)
                    .setReturnTypes(state.returnTypes);
@@ -94,8 +93,8 @@ export class ProcedureSerializer implements ISerializer {
 
   /** Serializes the procedure models of the given workspace. */
   save(workspace: Workspace): State[]|null {
-    return workspace.getProcedureMap().getProcedures()
-        .map((proc) => saveProcedure(proc));
+    return workspace.getProcedureMap().getProcedures().map(
+        (proc) => saveProcedure(proc));
   }
 
   /**
@@ -105,12 +104,9 @@ export class ProcedureSerializer implements ISerializer {
   load(state: State[], workspace: Workspace) {
     const map = workspace.getProcedureMap();
     for (const procState of state) {
-      map.add(
-          loadProcedure(
-            this.procedureModelFactory,
-            this.parameterModelFactory,
-            procState,
-            workspace));
+      map.add(loadProcedure(
+          this.procedureModelFactory, this.parameterModelFactory, procState,
+          workspace));
     }
   }
 

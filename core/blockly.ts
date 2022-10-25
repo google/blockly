@@ -602,6 +602,7 @@ export {Css};
 export {Events};
 export {Extensions};
 export {Procedures};
+export {Procedures as procedures};
 export {ShortcutItems};
 export {Themes};
 export {Tooltip};

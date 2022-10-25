@@ -13,13 +13,14 @@ import type {Workspace} from '../workspace.js';
 
 export class ObservableProcedureModel implements IProcedureModel {
   private id: string;
-  private name = '';
+  private name: string;
   private parameters: IParameterModel[] = [];
   private returnTypes: string[]|null = null;
   private enabled = true;
 
-  constructor(private readonly workspace: Workspace, id?: string) {
+  constructor(private readonly workspace: Workspace, name: string, id?: string) {
     this.id = id ?? genUid();
+    this.name = name;
   }
 
   /** Sets the human-readable name of the procedure. */

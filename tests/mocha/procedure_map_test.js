@@ -201,7 +201,7 @@ suite('Procedure Map', function() {
     });
   });
 
-  suite.only('event firing', function() {
+  suite.skip('event firing', function() {
     setup(function() {
       this.eventSpy = createChangeListenerSpy(this.workspace);
     });

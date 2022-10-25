@@ -18,7 +18,8 @@ export class ObservableProcedureModel implements IProcedureModel {
   private returnTypes: string[]|null = null;
   private enabled = true;
 
-  constructor(private readonly workspace: Workspace, name: string, id?: string) {
+  constructor(
+      private readonly workspace: Workspace, name: string, id?: string) {
     this.id = id ?? genUid();
     this.name = name;
   }

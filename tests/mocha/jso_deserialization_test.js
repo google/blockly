@@ -714,12 +714,11 @@ suite('JSO Deserialization', function() {
     });
   });
 
-  // TODO(#6522): Unskip tests.
-  suite.skip('Procedures', function() {
+  suite('Procedures', function() {
     class MockProcedureModel {
-      constructor(id) {
+      constructor(name, id) {
         this.id = id ?? Blockly.utils.idGenerator.genUid();
-        this.name = '';
+        this.name = name;
         this.parameters = [];
         this.returnTypes = null;
         this.enabled = true;
@@ -808,7 +807,8 @@ suite('JSO Deserialization', function() {
     setup(function() {
       this.procedureSerializer = new
           Blockly.serialization.procedures.ProcedureSerializer(
-              MockProcedureModel, MockParameterModel);
+            (workspace, name, id) => new MockProcedureModel(name, id),
+            (workspace, name, id) => new MockParameterModel(name, id));
       this.procedureMap = this.workspace.getProcedureMap();
     });
 

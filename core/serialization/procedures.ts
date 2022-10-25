@@ -85,7 +85,7 @@ function loadParameter(
 }
 
 /** Serializer for saving and loading procedure state. */
-class ProcedureSerializer implements ISerializer {
+export class ProcedureSerializer implements ISerializer {
   public priority = priorities.PROCEDURES;
 
   constructor(
@@ -103,10 +103,14 @@ class ProcedureSerializer implements ISerializer {
    * workspace.
    */
   load(state: State[], workspace: Workspace) {
+    const map = workspace.getProcedureMap();
     for (const procState of state) {
-      loadProcedure(
-          this.procedureModelFactory, this.parameterModelFactory, procState,
-          workspace);
+      map.add(
+          loadProcedure(
+            this.procedureModelFactory,
+            this.parameterModelFactory,
+            procState,
+            workspace));
     }
   }
 
@@ -120,6 +124,6 @@ serializationRegistry.register(
     'procedures',
     new ProcedureSerializer(
         (workspace: Workspace, name: string, id: string) =>
-            new ObservableProcedureModel(workspace, id).setName(name),
+            new ObservableProcedureModel(workspace, name, id),
         (workspace: Workspace, name: string, id: string) =>
             new ObservableParameterModel(workspace, name, id)));

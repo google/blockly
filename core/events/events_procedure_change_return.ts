@@ -6,6 +6,13 @@
  */
 
 import {ProcedureBase} from './events_procedure_base.js';
+import * as registry from '../registry.js';
+import * as eventUtils from './utils.js';
 
 
 export class ProcedureChangeReturn extends ProcedureBase {}
+
+registry.register(
+    registry.Type.EVENT,
+    eventUtils.PROCEDURE_CHANGE_RETURN,
+    ProcedureChangeReturn);

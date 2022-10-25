@@ -5,6 +5,13 @@
  */
 
 import {ProcedureBase} from './events_procedure_base.js';
+import * as registry from '../registry.js';
+import * as eventUtils from './utils.js';
 
 
 export class ProcedureRename extends ProcedureBase {}
+
+registry.register(
+    registry.Type.EVENT,
+    eventUtils.PROCEDURE_RENAME,
+    ProcedureRename);

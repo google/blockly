@@ -5,6 +5,13 @@
  */
 
 import {ProcedureParameterBase} from './events_procedure_parameter_base.js';
+import * as registry from '../registry.js';
+import * as eventUtils from './utils.js';
 
 
 export class ProcedureParameterDelete extends ProcedureParameterBase {}
+
+registry.register(
+    registry.Type.EVENT,
+    eventUtils.PROCEDURE_PARAMETER_DELETE,
+    ProcedureParameterDelete);

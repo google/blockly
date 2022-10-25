@@ -36,30 +36,30 @@ import {Svg} from './utils/svg.js';
  * @alias Blockly.Comment
  */
 export class Comment extends Icon {
-  private readonly model_: CommentModel;
+  private readonly model: CommentModel;
 
   /**
    * The model's text value at the start of an edit.
    * Used to tell if an event should be fired at the end of an edit.
    */
-  private cachedText_: string|null = '';
+  private cachedText: string|null = '';
 
   /** Mouse up event data. */
-  private onMouseUpWrapper_: browserEvents.Data|null = null;
+  private onMouseUpWrapper: browserEvents.Data|null = null;
 
   /** Wheel event data. */
-  private onWheelWrapper_: browserEvents.Data|null = null;
+  private onWheelWrapper: browserEvents.Data|null = null;
 
   /** Change event data. */
-  private onChangeWrapper_: browserEvents.Data|null = null;
+  private onChangeWrapper: browserEvents.Data|null = null;
 
   /** Input event data. */
-  private onInputWrapper_: browserEvents.Data|null = null;
+  private onInputWrapper: browserEvents.Data|null = null;
 
   /**
    * The SVG element that contains the text edit area, or null if not created.
    */
-  private foreignObject_: SVGForeignObjectElement|null = null;
+  private foreignObject: SVGForeignObjectElement|null = null;
 
   /** The editable text area, or null if not created. */
   private textarea_: HTMLTextAreaElement|null = null;
@@ -72,10 +72,10 @@ export class Comment extends Icon {
     super(block);
 
     /** The model for this comment. */
-    this.model_ = block.commentModel;
+    this.model = block.commentModel;
     // If someone creates the comment directly instead of calling
     // block.setCommentText we want to make sure the text is non-null;
-    this.model_.text = this.model_.text ?? '';
+    this.model.text = this.model.text ?? '';
 
     this.createIcon();
   }
@@ -117,7 +117,7 @@ export class Comment extends Icon {
    *
    * @returns The top-level node of the editor.
    */
-  private createEditor_(): SVGElement {
+  private createEditor(): SVGElement {
     /* Create the editor.  Here's the markup that will be generated in
          * editable mode:
           <foreignObject x="8" y="8" width="164" height="164">
@@ -130,7 +130,7 @@ export class Comment extends Icon {
          * For non-editable mode see Warning.textToDom_.
          */
 
-    this.foreignObject_ = dom.createSvgElement(
+    this.foreignObject = dom.createSvgElement(
         Svg.FOREIGNOBJECT,
         {'x': Bubble.BORDER_WIDTH, 'y': Bubble.BORDER_WIDTH});
 
@@ -143,46 +143,46 @@ export class Comment extends Icon {
     const textarea = this.textarea_;
     textarea.className = 'blocklyCommentTextarea';
     textarea.setAttribute('dir', this.getBlock().RTL ? 'RTL' : 'LTR');
-    textarea.value = this.model_.text ?? '';
-    this.resizeTextarea_();
+    textarea.value = this.model.text ?? '';
+    this.resizeTextarea();
 
     body.appendChild(textarea);
-    this.foreignObject_!.appendChild(body);
+    this.foreignObject!.appendChild(body);
 
     // Ideally this would be hooked to the focus event for the comment.
     // However doing so in Firefox swallows the cursor for unknown reasons.
     // So this is hooked to mouseup instead.  No big deal.
-    this.onMouseUpWrapper_ = browserEvents.conditionalBind(
-        textarea, 'mouseup', this, this.startEdit_, true, true);
+    this.onMouseUpWrapper = browserEvents.conditionalBind(
+        textarea, 'mouseup', this, this.startEdit, true, true);
     // Don't zoom with mousewheel.
-    this.onWheelWrapper_ = browserEvents.conditionalBind(
+    this.onWheelWrapper = browserEvents.conditionalBind(
         textarea, 'wheel', this, function(e: Event) {
           e.stopPropagation();
         });
-    this.onChangeWrapper_ = browserEvents.conditionalBind(
+    this.onChangeWrapper = browserEvents.conditionalBind(
         textarea, 'change', this,
         /**
          * @param _e Unused event parameter.
          */
         function(this: Comment, _e: Event) {
-          if (this.cachedText_ !== this.model_.text) {
+          if (this.cachedText !== this.model.text) {
             eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
-                this.getBlock(), 'comment', null, this.cachedText_,
-                this.model_.text));
+                this.getBlock(), 'comment', null, this.cachedText,
+                this.model.text));
           }
         });
-    this.onInputWrapper_ = browserEvents.conditionalBind(
+    this.onInputWrapper = browserEvents.conditionalBind(
         textarea, 'input', this,
         /**
          * @param _e Unused event parameter.
          */
         function(this: Comment, _e: Event) {
-          this.model_.text = textarea.value;
+          this.model.text = textarea.value;
         });
 
     setTimeout(textarea.focus.bind(textarea), 0);
 
-    return this.foreignObject_;
+    return this.foreignObject;
   }
 
   /** Add or remove editability of the comment. */
@@ -190,8 +190,8 @@ export class Comment extends Icon {
     super.updateEditable();
     if (this.isVisible()) {
       // Recreate the bubble with the correct UI.
-      this.disposeBubble_();
-      this.createBubble_();
+      this.disposeBubble();
+      this.createBubble();
     }
   }
 
@@ -199,26 +199,26 @@ export class Comment extends Icon {
    * Callback function triggered when the bubble has resized.
    * Resize the text area accordingly.
    */
-  private onBubbleResize_() {
+  private onBubbleResize() {
     if (!this.isVisible() || !this.bubble_) {
       return;
     }
 
-    this.model_.size = this.bubble_.getBubbleSize();
-    this.resizeTextarea_();
+    this.model.size = this.bubble_.getBubbleSize();
+    this.resizeTextarea();
   }
 
   /**
    * Resizes the text area to match the size defined on the model (which is
    * the size of the bubble).
    */
-  private resizeTextarea_() {
-    const size = this.model_.size;
+  private resizeTextarea() {
+    const size = this.model.size;
     const doubleBorderWidth = 2 * Bubble.BORDER_WIDTH;
     const widthMinusBorder = size.width - doubleBorderWidth;
     const heightMinusBorder = size.height - doubleBorderWidth;
-    this.foreignObject_!.setAttribute('width', `${widthMinusBorder}`);
-    this.foreignObject_!.setAttribute('height', `${heightMinusBorder}`);
+    this.foreignObject!.setAttribute('width', `${widthMinusBorder}`);
+    this.foreignObject!.setAttribute('height', `${heightMinusBorder}`);
     this.textarea_!.style.width = widthMinusBorder - 4 + 'px';
     this.textarea_!.style.height = heightMinusBorder - 4 + 'px';
   }
@@ -234,33 +234,33 @@ export class Comment extends Icon {
     }
     eventUtils.fire(new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
         this.getBlock(), visible, 'comment'));
-    this.model_.pinned = visible;
+    this.model.pinned = visible;
     if (visible) {
-      this.createBubble_();
+      this.createBubble();
     } else {
-      this.disposeBubble_();
+      this.disposeBubble();
     }
   }
 
   /** Show the bubble. Handles deciding if it should be editable or not. */
-  private createBubble_() {
+  private createBubble() {
     if (!this.getBlock().isEditable()) {
-      this.createNonEditableBubble_();
+      this.createNonEditableBubble();
     } else {
-      this.createEditableBubble_();
+      this.createEditableBubble();
     }
   }
 
   /** Show an editable bubble. */
-  private createEditableBubble_() {
+  private createEditableBubble() {
     const block = this.getBlock();
     this.bubble_ = new Bubble(
-        block.workspace, this.createEditor_(), block.pathObject.svgPath,
-        (this.iconXY_ as Coordinate), this.model_.size.width,
-        this.model_.size.height);
+        block.workspace, this.createEditor(), block.pathObject.svgPath,
+        (this.iconXY_ as Coordinate), this.model.size.width,
+        this.model.size.height);
     // Expose this comment's block's ID on its top-level SVG group.
     this.bubble_.setSvgId(block.id);
-    this.bubble_.registerResizeEvent(this.onBubbleResize_.bind(this));
+    this.bubble_.registerResizeEvent(this.onBubbleResize.bind(this));
     this.applyColour();
   }
 
@@ -269,9 +269,9 @@ export class Comment extends Icon {
    *
    * @suppress {checkTypes} Suppress `this` type mismatch.
    */
-  private createNonEditableBubble_() {
+  private createNonEditableBubble() {
     // TODO (#2917): It would be great if the comment could support line breaks.
-    this.paragraphElement_ = Bubble.textToDom(this.model_.text ?? '');
+    this.paragraphElement_ = Bubble.textToDom(this.model.text ?? '');
     this.bubble_ = Bubble.createNonEditableBubble(
         this.paragraphElement_, this.getBlock(), this.iconXY_ as Coordinate);
     this.applyColour();
@@ -282,29 +282,29 @@ export class Comment extends Icon {
    *
    * @suppress {checkTypes} Suppress `this` type mismatch.
    */
-  private disposeBubble_() {
-    if (this.onMouseUpWrapper_) {
-      browserEvents.unbind(this.onMouseUpWrapper_);
-      this.onMouseUpWrapper_ = null;
+  private disposeBubble() {
+    if (this.onMouseUpWrapper) {
+      browserEvents.unbind(this.onMouseUpWrapper);
+      this.onMouseUpWrapper = null;
     }
-    if (this.onWheelWrapper_) {
-      browserEvents.unbind(this.onWheelWrapper_);
-      this.onWheelWrapper_ = null;
+    if (this.onWheelWrapper) {
+      browserEvents.unbind(this.onWheelWrapper);
+      this.onWheelWrapper = null;
     }
-    if (this.onChangeWrapper_) {
-      browserEvents.unbind(this.onChangeWrapper_);
-      this.onChangeWrapper_ = null;
+    if (this.onChangeWrapper) {
+      browserEvents.unbind(this.onChangeWrapper);
+      this.onChangeWrapper = null;
     }
-    if (this.onInputWrapper_) {
-      browserEvents.unbind(this.onInputWrapper_);
-      this.onInputWrapper_ = null;
+    if (this.onInputWrapper) {
+      browserEvents.unbind(this.onInputWrapper);
+      this.onInputWrapper = null;
     }
     if (this.bubble_) {
       this.bubble_.dispose();
       this.bubble_ = null;
     }
     this.textarea_ = null;
-    this.foreignObject_ = null;
+    this.foreignObject = null;
     this.paragraphElement_ = null;
   }
 
@@ -316,14 +316,14 @@ export class Comment extends Icon {
    *
    * @param _e Mouse up event.
    */
-  private startEdit_(_e: Event) {
+  private startEdit(_e: Event) {
     if (this.bubble_?.promote()) {
       // Since the act of moving this node within the DOM causes a loss of
       // focus, we need to reapply the focus.
       this.textarea_!.focus();
     }
 
-    this.cachedText_ = this.model_.text;
+    this.cachedText = this.model.text;
   }
 
   /**
@@ -332,7 +332,7 @@ export class Comment extends Icon {
    * @returns Object with width and height properties.
    */
   getBubbleSize(): Size {
-    return this.model_.size;
+    return this.model.size;
   }
 
   /**
@@ -345,8 +345,8 @@ export class Comment extends Icon {
     if (this.bubble_) {
       this.bubble_.setBubbleSize(width, height);
     } else {
-      this.model_.size.width = width;
-      this.model_.size.height = height;
+      this.model.size.width = width;
+      this.model.size.height = height;
     }
   }
 
@@ -357,11 +357,11 @@ export class Comment extends Icon {
    */
   updateText() {
     if (this.textarea_) {
-      this.textarea_.value = this.model_.text ?? '';
+      this.textarea_.value = this.model.text ?? '';
     } else if (this.paragraphElement_) {
       // Non-Editable mode.
       // TODO (#2917): If 2917 gets added this will probably need to be updated.
-      this.paragraphElement_.firstChild!.textContent = this.model_.text;
+      this.paragraphElement_.firstChild!.textContent = this.model.text;
     }
   }
 

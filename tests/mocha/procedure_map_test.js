@@ -5,7 +5,7 @@
  */
 
 import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
-import {assertEventFired, assertEventNotFired, createChangeListenerSpy} from './test_helpers/events.js';
+import {assertEventNotFired, createChangeListenerSpy} from './test_helpers/events.js';
 
 goog.declareModuleId('Blockly.test.procedureMap');
 
@@ -202,6 +202,23 @@ suite('Procedure Map', function() {
   });
 
   suite.only('event firing', function() {
+    function shallowMatch(expected) {
+      return (actual) => {
+        for (const [key, value] in expected) {
+          if (!actual[key] === value) return false;
+        }
+        return true;
+      };
+    }
+
+    function assertEventFired(spy, instanceType, properties, workspace) {
+      properties = {...properties, workspaceId: workspace.id};
+      sinon.assert.calledWith(
+          spy,
+          sinon.match.instanceOf(instanceType)
+              .and(shallowMatch(properties)));
+    }
+
     setup(function() {
       this.eventSpy = createChangeListenerSpy(this.workspace);
     });
@@ -219,7 +236,7 @@ suite('Procedure Map', function() {
         this.eventSpy,
         Blockly.Events.ProcedureCreate,
         {model: procedureModel},
-        this.workspace.id);
+        this.workspace);
     });
 
     test(
@@ -248,7 +265,7 @@ suite('Procedure Map', function() {
         this.eventSpy,
         Blockly.Events.ProcedureCreate,
         {model: procedureModel},
-        this.workspace.id);
+        this.workspace);
     });
 
     test(
@@ -265,7 +282,7 @@ suite('Procedure Map', function() {
             this.eventSpy,
             Blockly.Events.ProcedureCreate,
             {},
-            this.workspace.id);
+            this.workspace);
         });
 
     test('delete events are fired when a procedure is deleted', function() {
@@ -278,7 +295,7 @@ suite('Procedure Map', function() {
         this.eventSpy,
         Blockly.Events.ProcedureDelete,
         {model: procedureModel},
-        this.workspace.id);
+        this.workspace);
     });
 
     test(
@@ -313,17 +330,17 @@ suite('Procedure Map', function() {
             this.eventSpy,
             Blockly.Events.ProcedureDelete,
             {model: procedureModel1},
-            this.workspace.id);
+            this.workspace);
           assertEventFired(
             this.eventSpy,
             Blockly.Events.ProcedureDelete,
             {model: procedureModel2},
-            this.workspace.id);
+            this.workspace);
           assertEventFired(
             this.eventSpy,
             Blockly.Events.ProcedureDelete,
             {model: procedureModel3},
-            this.workspace.id);
+            this.workspace);
         });
 
     test('rename events are fired when a procedure is renamed', function() {
@@ -340,7 +357,7 @@ suite('Procedure Map', function() {
           model: procedureModel,
           oldName: 'test name',
         },
-        this.workspace.id);
+        this.workspace);
     });
 
     test('rename events are not fired if the rename is noop', function() {
@@ -354,7 +371,7 @@ suite('Procedure Map', function() {
         this.eventSpy,
         Blockly.Events.ProcedureRename,
         {},
-        this.workspace.id);
+        this.workspace);
     });
 
     test(
@@ -369,7 +386,7 @@ suite('Procedure Map', function() {
             this.eventSpy,
             Blockly.Events.ProcedureRename,
             {},
-            this.workspace.id);
+            this.workspace);
         });
 
     test('enable events are fired when a procedure is enabled', function() {
@@ -383,7 +400,7 @@ suite('Procedure Map', function() {
         this.eventSpy,
         Blockly.Events.ProcedureEnable,
         {model: procedureModel},
-        this.workspace.id);
+        this.workspace);
     });
 
     test('enable events are fired when a procedure is disabled', function() {
@@ -396,7 +413,7 @@ suite('Procedure Map', function() {
         this.eventSpy,
         Blockly.Events.ProcedureEnable,
         {model: procedureModel},
-        this.workspace.id);
+        this.workspace);
     });
 
     test('enable events are not fired if enabling is noop', function() {
@@ -409,7 +426,7 @@ suite('Procedure Map', function() {
         this.eventSpy,
         Blockly.Events.ProcedureEnable,
         {},
-        this.workspace.id);
+        this.workspace);
     });
 
     test('enable events are not fired if disabling is noop', function() {
@@ -423,7 +440,7 @@ suite('Procedure Map', function() {
         this.eventSpy,
         Blockly.Events.ProcedureEnable,
         {},
-        this.workspace.id);
+        this.workspace);
     });
 
     test(
@@ -460,7 +477,7 @@ suite('Procedure Map', function() {
               parameter: parameterModel,
               index: 0,
             },
-            this.workspace.id);
+            this.workspace);
         });
 
     test(
@@ -501,7 +518,7 @@ suite('Procedure Map', function() {
               parameter: parameterModel,
               index: 0,
             },
-            this.workspace.id);
+            this.workspace);
         });
 
     test(
@@ -544,7 +561,7 @@ suite('Procedure Map', function() {
               parameter: parameterModel,
               oldName: 'test name',
             },
-            this.workspace.id);
+            this.workspace);
         });
 
     test(
@@ -619,7 +636,7 @@ suite('Procedure Map', function() {
               model: procedureModel,
               oldTypes: null,
             },
-            this.workspace.id);
+            this.workspace);
         });
 
     test(
@@ -638,7 +655,7 @@ suite('Procedure Map', function() {
               model: procedureModel,
               oldTypes: [],
             },
-            this.workspace.id);
+            this.workspace);
         });
 
     test(

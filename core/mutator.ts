@@ -162,7 +162,7 @@ export class Mutator extends Icon {
    *
    * @returns The top-level node of the editor.
    */
-  private createEditor(): SVGElement {
+  private createEditor(): SVGSVGElement {
     /* Create the editor.  Here's the markup that will be generated:
         <svg>
           [Workspace]
@@ -217,7 +217,7 @@ export class Mutator extends Icon {
       // dragging work properly.
       background.insertBefore(flyoutSvg, this.workspace.svgBlockCanvas_);
     }
-    this.svgDialog!.appendChild(background);
+    this.svgDialog.appendChild(background);
 
     return this.svgDialog;
   }
@@ -248,18 +248,21 @@ export class Mutator extends Icon {
 
   /** Resize the bubble to match the size of the workspace. */
   private resizeBubble() {
+    // If the bubble exists, the workspace also exists.
+    const ws = this.workspace as WorkspaceSvg;
     const doubleBorderWidth = 2 * Bubble.BORDER_WIDTH;
-    const workspaceSize = this.workspace!.getCanvas().getBBox();
+    const workspaceSize = ws.getCanvas().getBBox();
     let width = workspaceSize.width + workspaceSize.x;
     let height = workspaceSize.height + doubleBorderWidth * 3;
-    const flyout = this.workspace!.getFlyout();
+    const flyout = ws.getFlyout();
     if (flyout) {
       const flyoutScrollMetrics =
           flyout.getWorkspace().getMetricsManager().getScrollMetrics();
       height = Math.max(height, flyoutScrollMetrics.height + 20);
       width += flyout.getWidth();
     }
-    if (this.getBlock().RTL) {
+    const isRtl = this.getBlock().RTL;
+    if (isRtl) {
       width = -workspaceSize.x;
     }
     width += doubleBorderWidth * 3;
@@ -275,16 +278,15 @@ export class Mutator extends Icon {
           width + doubleBorderWidth, height + doubleBorderWidth);
       this.svgDialog!.setAttribute('width', `${this.workspaceWidth}`);
       this.svgDialog!.setAttribute('height', `${this.workspaceHeight}`);
-      this.workspace!.setCachedParentSvgSize(
-          this.workspaceWidth, this.workspaceHeight);
+      ws.setCachedParentSvgSize(this.workspaceWidth, this.workspaceHeight);
     }
 
-    if (this.getBlock().RTL) {
+    if (isRtl) {
       // Scroll the workspace to always left-align.
       const translation = 'translate(' + this.workspaceWidth + ',0)';
-      this.workspace!.getCanvas().setAttribute('transform', translation);
+      ws.getCanvas().setAttribute('transform', translation);
     }
-    this.workspace!.resize();
+    ws.resize();
   }
 
   /** A method handler for when the bubble is moved. */
@@ -328,13 +330,13 @@ export class Mutator extends Icon {
         child.render();
       }
       // The root block should not be draggable or deletable.
-      this.rootBlock!.setMovable(false);
-      this.rootBlock!.setDeletable(false);
+      this.rootBlock.setMovable(false);
+      this.rootBlock.setDeletable(false);
       let margin;
       let x;
       if (flyout) {
         margin = flyout.CORNER_RADIUS * 2;
-        x = this.rootBlock!.RTL ? flyout.getWidth() + margin : margin;
+        x = this.rootBlock.RTL ? flyout.getWidth() + margin : margin;
       } else {
         margin = 16;
         x = margin;
@@ -342,7 +344,7 @@ export class Mutator extends Icon {
       if (block.RTL) {
         x = -x;
       }
-      this.rootBlock!.moveBy(x, margin);
+      this.rootBlock.moveBy(x, margin);
       // Save the initial connections, then listen for further changes.
       if (block.saveConnections) {
         const thisRootBlock = this.rootBlock;

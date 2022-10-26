@@ -8,6 +8,7 @@ import * as eventUtils from '../events/utils.js';
 import {genUid} from '../utils/idgenerator.js';
 import type {IParameterModel} from '../interfaces/i_parameter_model.js';
 import type {IProcedureModel} from '../interfaces/i_procedure_model.js';
+import {isObservable} from '../interfaces/i_observable.js';
 import {triggerProceduresUpdate} from './update_procedures.js';
 import type {Workspace} from '../workspace.js';
 
@@ -50,7 +51,17 @@ export class ObservableProcedureModel implements IProcedureModel {
         this.parameters[index].getId() === parameterModel.getId()) {
       return this;
     }
+
     this.parameters.splice(index, 0, parameterModel);
+    parameterModel.setProcedureModel(this);
+    if (isObservable(parameterModel)) {
+      if (this.shouldFireEvents) {
+        parameterModel.startPublishing();
+      } else {
+        parameterModel.stopPublishing();
+      }
+    }
+
     triggerProceduresUpdate(this.workspace);
     if (this.shouldFireEvents) {
       eventUtils.fire(
@@ -64,8 +75,13 @@ export class ObservableProcedureModel implements IProcedureModel {
   deleteParameter(index: number): this {
     if (!this.parameters[index]) return this;
     const oldParam = this.parameters[index];
+
     this.parameters.splice(index, 1);
     triggerProceduresUpdate(this.workspace);
+    if (isObservable(oldParam)) {
+      oldParam.stopPublishing();
+    }
+
     if (this.shouldFireEvents) {
       eventUtils.fire(
           new (eventUtils.get(eventUtils.PROCEDURE_PARAMETER_DELETE))(
@@ -162,14 +178,20 @@ export class ObservableProcedureModel implements IProcedureModel {
    */
   startPublishing() {
     this.shouldFireEvents = true;
+    for (const param of this.parameters) {
+      if (isObservable(param)) param.startPublishing();
+    }
   }
 
   /**
    * Tells the procedure model it should not fire events.
-   * 
+   *
    * @internal
    */
   stopPublishing() {
     this.shouldFireEvents = false;
+    for (const param of this.parameters) {
+      if (isObservable(param)) param.stopPublishing();
+    }
   }
 }

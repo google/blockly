@@ -7,9 +7,20 @@
 import {ProcedureParameterBase} from './events_procedure_parameter_base.js';
 import * as registry from '../registry.js';
 import * as eventUtils from './utils.js';
+import {Workspace} from '../workspace.js';
+import {IProcedureModel} from '../interfaces/i_procedure_model.js';
+import {IParameterModel} from '../interfaces/i_parameter_model.js';
 
 
-export class ProcedureParameterRename extends ProcedureParameterBase {}
+export class ProcedureParameterRename extends ProcedureParameterBase {
+  constructor(
+      workspace: Workspace,
+      procedure: IProcedureModel,
+      public readonly parameter: IParameterModel,
+      public readonly oldName: string) {
+    super(workspace, procedure);
+  }
+}
 
 registry.register(
     registry.Type.EVENT,

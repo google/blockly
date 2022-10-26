@@ -201,7 +201,7 @@ suite('Procedure Map', function() {
     });
   });
 
-  suite.only('event firing', function() {
+  suite('event firing', function() {
     function shallowMatch(expected) {
       return (actual) => {
         for (const key in expected) {
@@ -605,6 +605,7 @@ suite('Procedure Map', function() {
   
             parameterModel.setName('new name');
   
+            console.log(this.eventSpy.getCalls());
             assertEventFired(
               this.eventSpy,
               Blockly.Events.ProcedureParameterRename,

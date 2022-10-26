@@ -142,7 +142,6 @@ export function assertEventFired(spy, instanceType, expectedProperties,
  */
 export function assertEventNotFired(spy, instanceType, expectedProperties,
     expectedWorkspaceId, expectedBlockId) {
-  expectedProperties.type = instanceType.prototype.type;
   if (expectedWorkspaceId !== undefined) {
     expectedProperties.workspaceId = expectedWorkspaceId;
   }

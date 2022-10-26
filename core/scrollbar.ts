@@ -48,7 +48,14 @@ export class Scrollbar {
    * @internal
    */
   static readonly DEFAULT_SCROLLBAR_MARGIN = 0.5;
+
+  /** Whether this scrollbar is part of a pair. */
   private readonly pair_: boolean;
+
+  /**
+   * Margin around the scrollbar (between the scrollbar and the edge of the
+   * viewport in pixels).
+   */
   private readonly margin_: number;
 
   /** Previously recorded metrics from the workspace. */
@@ -60,7 +67,14 @@ export class Scrollbar {
    * @internal
    */
   ratio = 1;
-  private origin_: Coordinate;
+
+  /**
+   * The location of the origin of the workspace that the scrollbar is in,
+   * measured in CSS pixels relative to the injection div origin.  This is
+   * usually (0, 0).  When the scrollbar is in a flyout it may have a
+   * different origin.
+   */
+  private origin_ = new Coordinate(0, 0);
 
   /**
    * The position of the mouse along this scrollbar's major axis at the start
@@ -94,14 +108,24 @@ export class Scrollbar {
 
   /** Whether the workspace containing this scrollbar is visible. */
   private containerVisible_ = true;
-  private svgBackground_: SVGRectElement|null = null;
 
-  private svgHandle_: SVGRectElement|null = null;
+  /** The transparent background behind the handle. */
+  private svgBackground_: SVGRectElement;
 
-  private outerSvg_: SVGSVGElement|null = null;
+  /** The visible handle that can be dragged around. */
+  private svgHandle_: SVGRectElement;
 
-  private svgGroup_: SVGGElement|null = null;
-  position: Coordinate;
+  /** The outermost SVG element, which contains all parts of the scrollbar. */
+  private outerSvg_: SVGSVGElement;
+
+  /**
+   * The upper left corner of the scrollbar's SVG group in CSS pixels relative
+   * to the scrollbar's origin.  This is usually relative to the injection div
+   * origin.
+   *
+   * @internal
+   */
+  position = new Coordinate(0, 0);
 
   lengthAttribute_ = 'width';
   positionAttribute_ = 'x';
@@ -120,55 +144,76 @@ export class Scrollbar {
   constructor(
       private workspace: WorkspaceSvg, private readonly horizontal: boolean,
       opt_pair?: boolean, opt_class?: string, opt_margin?: number) {
-    /** Whether this scrollbar is part of a pair. */
     this.pair_ = opt_pair || false;
-    /**
-     * Margin around the scrollbar (between the scrollbar and the edge of the
-     * viewport in pixels).
-     */
+
     this.margin_ = opt_margin !== undefined ?
         opt_margin :
         Scrollbar.DEFAULT_SCROLLBAR_MARGIN;
 
-    /**
-     * The location of the origin of the workspace that the scrollbar is in,
-     * measured in CSS pixels relative to the injection div origin.  This is
-     * usually (0, 0).  When the scrollbar is in a flyout it may have a
-     * different origin.
-     */
-    this.origin_ = new Coordinate(0, 0);
+    let className =
+        'blocklyScrollbar' + (this.horizontal ? 'Horizontal' : 'Vertical');
+    if (opt_class) {
+      className += ' ' + opt_class;
+    }
 
-    this.createDom_(opt_class);
+    /* Create the following DOM:
+      <svg class="blocklyScrollbarHorizontal optionalClass">
+        <g>
+          <rect class="blocklyScrollbarBackground" />
+          <rect class="blocklyScrollbarHandle" rx="8" ry="8" />
+        </g>
+      </svg>
+    */
+    this.outerSvg_ = dom.createSvgElement(Svg.SVG, {'class': className});
+    // Child group to hold the handle and background together.
+    const group = dom.createSvgElement(Svg.G, {}, this.outerSvg_);
 
-    /**
-     * The upper left corner of the scrollbar's SVG group in CSS pixels relative
-     * to the scrollbar's origin.  This is usually relative to the injection div
-     * origin.
-     *
-     * @internal
-     */
-    this.position = new Coordinate(0, 0);
+    this.svgBackground_ = dom.createSvgElement(
+        Svg.RECT, {'class': 'blocklyScrollbarBackground'}, group);
 
-    // Store the thickness in a temp variable for readability.
-    const scrollbarThickness = Scrollbar.scrollbarThickness;
-    if (horizontal) {
-      this.svgBackground_!.setAttribute('height', String(scrollbarThickness));
-      this.outerSvg_!.setAttribute('height', String(scrollbarThickness));
-      this.svgHandle_!.setAttribute('height', String(scrollbarThickness - 5));
-      this.svgHandle_!.setAttribute('y', String(2.5));
-    } else {
-      this.svgBackground_!.setAttribute('width', String(scrollbarThickness));
-      this.outerSvg_!.setAttribute('width', String(scrollbarThickness));
-      this.svgHandle_!.setAttribute('width', String(scrollbarThickness - 5));
-      this.svgHandle_!.setAttribute('x', String(2.5));
+    const radius = Math.floor((Scrollbar.scrollbarThickness - 5) / 2);
+    this.svgHandle_ = dom.createSvgElement(
+        Svg.RECT,
+        {'class': 'blocklyScrollbarHandle', 'rx': radius, 'ry': radius}, group);
 
+    this.workspace.getThemeManager().subscribe(
+        this.svgHandle_, 'scrollbarColour', 'fill');
+    this.workspace.getThemeManager().subscribe(
+        this.svgHandle_, 'scrollbarOpacity', 'fill-opacity');
+
+    // Add everything to the DOM.
+    dom.insertAfter(this.outerSvg_, this.workspace.getParentSvg());
+
+    this.setInitialThickness();
+
+    if (!horizontal) {
       this.lengthAttribute_ = 'height';
       this.positionAttribute_ = 'y';
     }
+
     this.onMouseDownBarWrapper_ = browserEvents.conditionalBind(
-        this.svgBackground_!, 'mousedown', this, this.onMouseDownBar_);
+        this.svgBackground_, 'mousedown', this, this.onMouseDownBar_);
     this.onMouseDownHandleWrapper_ = browserEvents.conditionalBind(
-        this.svgHandle_!, 'mousedown', this, this.onMouseDownHandle_);
+        this.svgHandle_, 'mousedown', this, this.onMouseDownHandle_);
+  }
+
+  /**
+   * Set the size of the scrollbar DOM elements along the minor axis.
+   */
+  private setInitialThickness() {
+    // Store the thickness in a temp variable for readability.
+    const scrollbarThickness = Scrollbar.scrollbarThickness;
+    if (this.horizontal) {
+      this.svgBackground_.setAttribute('height', String(scrollbarThickness));
+      this.outerSvg_.setAttribute('height', String(scrollbarThickness));
+      this.svgHandle_.setAttribute('height', String(scrollbarThickness - 5));
+      this.svgHandle_.setAttribute('y', String(2.5));
+    } else {
+      this.svgBackground_.setAttribute('width', String(scrollbarThickness));
+      this.outerSvg_.setAttribute('width', String(scrollbarThickness));
+      this.svgHandle_.setAttribute('width', String(scrollbarThickness - 5));
+      this.svgHandle_.setAttribute('x', String(2.5));
+    }
   }
 
   /**
@@ -189,12 +234,8 @@ export class Scrollbar {
     }
 
     dom.removeNode(this.outerSvg_);
-    this.outerSvg_ = null;
-    this.svgGroup_ = null;
-    this.svgBackground_ = null;
     if (this.svgHandle_) {
       this.workspace.getThemeManager().unsubscribe(this.svgHandle_);
-      this.svgHandle_ = null;
     }
   }
 
@@ -222,7 +263,7 @@ export class Scrollbar {
    */
   private setHandleLength_(newLength: number) {
     this.handleLength_ = newLength;
-    this.svgHandle_!.setAttribute(
+    this.svgHandle_.setAttribute(
         this.lengthAttribute_, String(this.handleLength_));
   }
 
@@ -253,7 +294,7 @@ export class Scrollbar {
    */
   setHandlePosition(newPosition: number) {
     this.handlePosition_ = newPosition;
-    this.svgHandle_!.setAttribute(
+    this.svgHandle_.setAttribute(
         this.positionAttribute_, String(this.handlePosition_));
   }
 
@@ -265,9 +306,9 @@ export class Scrollbar {
    */
   private setScrollbarLength_(newSize: number) {
     this.scrollbarLength_ = newSize;
-    this.outerSvg_!.setAttribute(
+    this.outerSvg_.setAttribute(
         this.lengthAttribute_, String(this.scrollbarLength_));
-    this.svgBackground_!.setAttribute(
+    this.svgBackground_.setAttribute(
         this.lengthAttribute_, String(this.scrollbarLength_));
   }
 
@@ -287,9 +328,7 @@ export class Scrollbar {
     const tempX = this.position.x + this.origin_.x;
     const tempY = this.position.y + this.origin_.y;
     const transform = 'translate(' + tempX + 'px,' + tempY + 'px)';
-    if (this.outerSvg_) {
-      dom.setCssTransform(this.outerSvg_, transform);
-    }
+    dom.setCssTransform(this.outerSvg_, transform);
   }
 
   /**
@@ -543,42 +582,6 @@ export class Scrollbar {
   }
 
   /**
-   * Create all the DOM elements required for a scrollbar.
-   * The resulting widget is not sized.
-   *
-   * @param opt_class A class to be applied to this scrollbar.
-   */
-  private createDom_(opt_class?: string) {
-    /* Create the following DOM:
-        <svg class="blocklyScrollbarHorizontal  optionalClass">
-          <g>
-            <rect class="blocklyScrollbarBackground" />
-            <rect class="blocklyScrollbarHandle" rx="8" ry="8" />
-          </g>
-        </svg>
-        */
-    let className =
-        'blocklyScrollbar' + (this.horizontal ? 'Horizontal' : 'Vertical');
-    if (opt_class) {
-      className += ' ' + opt_class;
-    }
-    this.outerSvg_ = dom.createSvgElement(Svg.SVG, {'class': className});
-    this.svgGroup_ = dom.createSvgElement(Svg.G, {}, this.outerSvg_);
-    this.svgBackground_ = dom.createSvgElement(
-        Svg.RECT, {'class': 'blocklyScrollbarBackground'}, this.svgGroup_);
-    const radius = Math.floor((Scrollbar.scrollbarThickness - 5) / 2);
-    this.svgHandle_ = dom.createSvgElement(
-        Svg.RECT,
-        {'class': 'blocklyScrollbarHandle', 'rx': radius, 'ry': radius},
-        this.svgGroup_);
-    this.workspace.getThemeManager().subscribe(
-        this.svgHandle_!, 'scrollbarColour', 'fill');
-    this.workspace.getThemeManager().subscribe(
-        this.svgHandle_!, 'scrollbarOpacity', 'fill-opacity');
-    dom.insertAfter(this.outerSvg_!, this.workspace.getParentSvg());
-  }
-
-  /**
    * Is the scrollbar visible.  Non-paired scrollbars disappear when they aren't
    * needed.
    *
@@ -638,9 +641,9 @@ export class Scrollbar {
       show = this.isVisible();
     }
     if (show) {
-      this.outerSvg_!.setAttribute('display', 'block');
+      this.outerSvg_.setAttribute('display', 'block');
     } else {
-      this.outerSvg_!.setAttribute('display', 'none');
+      this.outerSvg_.setAttribute('display', 'none');
     }
   }
 
@@ -664,7 +667,7 @@ export class Scrollbar {
         e, this.workspace.getParentSvg(), this.workspace.getInverseScreenCTM());
     const mouseLocation = this.horizontal ? mouseXY.x : mouseXY.y;
 
-    const handleXY = svgMath.getInjectionDivXY(this.svgHandle_ as Element);
+    const handleXY = svgMath.getInjectionDivXY(this.svgHandle_);
     const handleStart = this.horizontal ? handleXY.x : handleXY.y;
     let handlePosition = this.handlePosition_;
 

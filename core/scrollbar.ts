@@ -129,9 +129,17 @@ export class Scrollbar {
 
   lengthAttribute_ = 'width';
   positionAttribute_ = 'x';
-  onMouseDownBarWrapper_: browserEvents.Data|null;
-  onMouseDownHandleWrapper_: browserEvents.Data|null;
+
+  /** Handler for mouse down events on the background of the scrollbar. */
+  onMouseDownBarWrapper_: browserEvents.Data;
+
+  /** Handler for mouse down events on the handle of the scrollbar. */
+  onMouseDownHandleWrapper_: browserEvents.Data;
+
+  /** Handler for mouse move events during scrollbar drags. */
   onMouseUpWrapper_: browserEvents.Data|null = null;
+
+  /** Handler for mouse up events to end scrollbar drags. */
   onMouseMoveWrapper_: browserEvents.Data|null = null;
 
   /**
@@ -217,26 +225,18 @@ export class Scrollbar {
   }
 
   /**
-   * Dispose of this scrollbar.
-   * Unlink from all DOM elements to prevent memory leaks.
+   * Dispose of this scrollbar. Remove DOM elements, event listeners,
+   * and theme subscriptions.
    *
    * @suppress {checkTypes}
    */
   dispose() {
     this.cleanUp_();
-    if (this.onMouseDownBarWrapper_) {
-      browserEvents.unbind(this.onMouseDownBarWrapper_);
-      this.onMouseDownBarWrapper_ = null;
-    }
-    if (this.onMouseDownHandleWrapper_) {
-      browserEvents.unbind(this.onMouseDownHandleWrapper_);
-      this.onMouseDownHandleWrapper_ = null;
-    }
+    browserEvents.unbind(this.onMouseDownBarWrapper_);
+    browserEvents.unbind(this.onMouseDownHandleWrapper_);
 
     dom.removeNode(this.outerSvg_);
-    if (this.svgHandle_) {
-      this.workspace.getThemeManager().unsubscribe(this.svgHandle_);
-    }
+    this.workspace.getThemeManager().unsubscribe(this.svgHandle_);
   }
 
   /**

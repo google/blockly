@@ -7,6 +7,7 @@
 import * as eventUtils from '../events/utils.js';
 import {IProcedureMap} from '../interfaces/i_procedure_map.js';
 import type {IProcedureModel} from '../interfaces/i_procedure_model.js';
+import {isObservable} from '../interfaces/i_observable.js';
 import {triggerProceduresUpdate} from './update_procedures.js';
 import type {Workspace} from '../workspace.js';
 
@@ -25,6 +26,7 @@ export class ObservableProcedureMap extends
     super.set(id, proc);
     eventUtils.fire(
         new (eventUtils.get(eventUtils.PROCEDURE_CREATE))(this.workspace, proc));
+    if (isObservable(proc)) proc.startPublishing();
     return this;
   }
 
@@ -39,6 +41,7 @@ export class ObservableProcedureMap extends
     triggerProceduresUpdate(this.workspace);
     eventUtils.fire(
         new (eventUtils.get(eventUtils.PROCEDURE_DELETE))(this.workspace, proc));
+    if (isObservable(proc)) proc.stopPublishing();
     return existed;
   }
 
@@ -73,12 +76,3 @@ export class ObservableProcedureMap extends
     return [...this.values()];
   }
 }
-
-// interface IObservable {
-//   startPublishing(): void;
-//   stopPublishing(): void;
-// }
-
-// function isObservable(obj: any): obj is IObservable {
-//   return obj.startPublishing !== null && obj.stopPublishing !== null;
-// }

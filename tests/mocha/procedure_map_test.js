@@ -204,8 +204,10 @@ suite('Procedure Map', function() {
   suite.only('event firing', function() {
     function shallowMatch(expected) {
       return (actual) => {
-        for (const [key, value] in expected) {
-          if (actual[key] !== value) return false;
+        for (const key in expected) {
+          if (actual[key] !== expected[key]) {
+            return false;
+          }
         }
         return true;
       };
@@ -231,6 +233,8 @@ suite('Procedure Map', function() {
       const procedureModel =
           new Blockly.procedures.ObservableProcedureModel(this.workspace);
       this.procedureMap.set(procedureModel.getId(), procedureModel);
+
+      console.log(this.eventSpy.getCalls());
 
       assertEventFired(
         this.eventSpy,
@@ -642,9 +646,10 @@ suite('Procedure Map', function() {
     test(
         'return type change events are fired when the return is removed',
         function() {
+          const types = [];
           const procedureModel =
               new Blockly.procedures.ObservableProcedureModel(this.workspace)
-                  .setReturnTypes([]);
+                  .setReturnTypes(types);
           this.procedureMap.add(procedureModel);
           procedureModel.setReturnTypes(null);
 
@@ -653,7 +658,7 @@ suite('Procedure Map', function() {
             Blockly.Events.ProcedureChangeReturn,
             {
               model: procedureModel,
-              oldTypes: [],
+              oldTypes: types,
             },
             this.workspace);
         });

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import * as eventUtils from '../events/utils.js';
 import {genUid} from '../utils/idgenerator.js';
 import type {IParameterModel} from '../interfaces/i_parameter_model.js';
 import type {IProcedureModel} from '../interfaces/i_procedure_model.js';
@@ -17,6 +18,7 @@ export class ObservableProcedureModel implements IProcedureModel {
   private parameters: IParameterModel[] = [];
   private returnTypes: string[]|null = null;
   private enabled = true;
+  private shouldFireEvents = false;
 
   constructor(
       private readonly workspace: Workspace, name: string, id?: string) {
@@ -26,9 +28,15 @@ export class ObservableProcedureModel implements IProcedureModel {
 
   /** Sets the human-readable name of the procedure. */
   setName(name: string): this {
-    // TODO(#6516): Fire events.
+    if (name === this.name) return this;
+    const prevName = this.name;
     this.name = name;
     triggerProceduresUpdate(this.workspace);
+    if (this.shouldFireEvents) {
+      eventUtils.fire(
+          new (eventUtils.get(eventUtils.PROCEDURE_RENAME))(
+              this.workspace, this, prevName));
+    }
     return this;
   }
 
@@ -67,9 +75,16 @@ export class ObservableProcedureModel implements IProcedureModel {
           'The built-in ProcedureModel does not support typing. You need to ' +
           'implement your own custom ProcedureModel.');
     }
+    // Either they're both an empty array, or both null. Noop either way.
+    if (!!types === !!this.returnTypes) return this;
+    const oldReturnTypes = this.returnTypes;
     this.returnTypes = types;
-    // TODO(#6516): Fire events.
     triggerProceduresUpdate(this.workspace);
+    if (this.shouldFireEvents) {
+      eventUtils.fire(
+          new (eventUtils.get(eventUtils.PROCEDURE_CHANGE_RETURN))(
+              this.workspace, this, oldReturnTypes));
+    }
     return this;
   }
 
@@ -78,9 +93,14 @@ export class ObservableProcedureModel implements IProcedureModel {
    * all procedure caller blocks should be disabled as well.
    */
   setEnabled(enabled: boolean): this {
-    // TODO(#6516): Fire events.
+    if (enabled === this.enabled) return this;
     this.enabled = enabled;
     triggerProceduresUpdate(this.workspace);
+    if (this.shouldFireEvents) {
+      eventUtils.fire(
+          new (eventUtils.get(eventUtils.PROCEDURE_ENABLE))(
+              this.workspace, this));
+    }
     return this;
   }
 
@@ -119,5 +139,21 @@ export class ObservableProcedureModel implements IProcedureModel {
    */
   getEnabled(): boolean {
     return this.enabled;
+  }
+
+  /**
+   * Tells the procedure model it should fire events.
+   * @internal
+   */
+  startPublishing() {
+    this.shouldFireEvents = true;
+  }
+
+  /**
+   * Tells the procedure model it should not fire events.
+   * @internal
+   */
+  stopPublishing() {
+    this.shouldFireEvents = false;
   }
 }

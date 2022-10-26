@@ -175,7 +175,7 @@ export abstract class Icon {
    *
    * @param _group The icon group.
    */
-  protected drawIcon_(_group: Element) {}
+  protected drawIcon_(_group: SVGGElement) {}
   // No-op on base class.
 
   /**

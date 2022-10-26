@@ -85,7 +85,7 @@ export class Comment extends Icon {
    *
    * @param group The icon group.
    */
-  protected override drawIcon_(group: Element) {
+  protected override drawIcon_(group: SVGGElement) {
     // Circle.
     dom.createSvgElement(
         Svg.CIRCLE,
@@ -266,8 +266,6 @@ export class Comment extends Icon {
 
   /**
    * Show a non-editable bubble.
-   *
-   * @suppress {checkTypes} Suppress `this` type mismatch.
    */
   private createNonEditableBubble() {
     // TODO (#2917): It would be great if the comment could support line breaks.
@@ -279,8 +277,6 @@ export class Comment extends Icon {
 
   /**
    * Dispose of the bubble.
-   *
-   * @suppress {checkTypes} Suppress `this` type mismatch.
    */
   private disposeBubble() {
     if (this.onMouseUpWrapper) {

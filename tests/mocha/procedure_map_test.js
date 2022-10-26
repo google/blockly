@@ -205,7 +205,7 @@ suite('Procedure Map', function() {
     function shallowMatch(expected) {
       return (actual) => {
         for (const [key, value] in expected) {
-          if (!actual[key] === value) return false;
+          if (actual[key] !== value) return false;
         }
         return true;
       };
@@ -371,7 +371,7 @@ suite('Procedure Map', function() {
         this.eventSpy,
         Blockly.Events.ProcedureRename,
         {},
-        this.workspace);
+        this.workspace.id);
     });
 
     test(
@@ -386,7 +386,7 @@ suite('Procedure Map', function() {
             this.eventSpy,
             Blockly.Events.ProcedureRename,
             {},
-            this.workspace);
+            this.workspace.id);
         });
 
     test('enable events are fired when a procedure is enabled', function() {
@@ -426,7 +426,7 @@ suite('Procedure Map', function() {
         this.eventSpy,
         Blockly.Events.ProcedureEnable,
         {},
-        this.workspace);
+        this.workspace.id);
     });
 
     test('enable events are not fired if disabling is noop', function() {
@@ -440,7 +440,7 @@ suite('Procedure Map', function() {
         this.eventSpy,
         Blockly.Events.ProcedureEnable,
         {},
-        this.workspace);
+        this.workspace.id);
     });
 
     test(

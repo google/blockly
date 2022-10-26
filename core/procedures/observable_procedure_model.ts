@@ -46,17 +46,31 @@ export class ObservableProcedureModel implements IProcedureModel {
    * To move a parameter, first delete it, and then re-insert.
    */
   insertParameter(parameterModel: IParameterModel, index: number): this {
-    // TODO(#6516): Fire events.
+    if (this.parameters[index] &&
+        this.parameters[index].getId() === parameterModel.getId()) {
+      return this;
+    }
     this.parameters.splice(index, 0, parameterModel);
     triggerProceduresUpdate(this.workspace);
+    if (this.shouldFireEvents) {
+      eventUtils.fire(
+          new (eventUtils.get(eventUtils.PROCEDURE_PARAMETER_CREATE))(
+              this.workspace, this, parameterModel, index));
+    }
     return this;
   }
 
   /** Removes the parameter at the given index from the parameter list. */
   deleteParameter(index: number): this {
-    // TODO(#6516): Fire events.
+    if (!this.parameters[index]) return this;
+    const oldParam = this.parameters[index];
     this.parameters.splice(index, 1);
     triggerProceduresUpdate(this.workspace);
+    if (this.shouldFireEvents) {
+      eventUtils.fire(
+          new (eventUtils.get(eventUtils.PROCEDURE_PARAMETER_DELETE))(
+              this.workspace, this, oldParam, index));
+    }
     return this;
   }
 
@@ -143,6 +157,7 @@ export class ObservableProcedureModel implements IProcedureModel {
 
   /**
    * Tells the procedure model it should fire events.
+   *
    * @internal
    */
   startPublishing() {
@@ -151,6 +166,7 @@ export class ObservableProcedureModel implements IProcedureModel {
 
   /**
    * Tells the procedure model it should not fire events.
+   * 
    * @internal
    */
   stopPublishing() {

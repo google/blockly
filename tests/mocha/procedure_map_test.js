@@ -234,8 +234,6 @@ suite('Procedure Map', function() {
           new Blockly.procedures.ObservableProcedureModel(this.workspace);
       this.procedureMap.set(procedureModel.getId(), procedureModel);
 
-      console.log(this.eventSpy.getCalls());
-
       assertEventFired(
         this.eventSpy,
         Blockly.Events.ProcedureCreate,
@@ -471,7 +469,7 @@ suite('Procedure Map', function() {
           const parameterModel =
               new Blockly.procedures.ObservableParameterModel(
                   this.workspace, 'test name');
-          procedureModel.insertParameter(0, parameterModel);
+          procedureModel.insertParameter(parameterModel, 0);
 
           assertEventFired(
             this.eventSpy,
@@ -485,15 +483,37 @@ suite('Procedure Map', function() {
         });
 
     test(
+        'parameter create events are not fired if the parameter is ' +
+        'already inserted',
+        function() {
+          const procedureModel =
+              new Blockly.procedures.ObservableProcedureModel(this.workspace);
+          this.procedureMap.add(procedureModel);
+          const parameterModel =
+              new Blockly.procedures.ObservableParameterModel(
+                  this.workspace, 'test name');
+          procedureModel.insertParameter(parameterModel, 0);
+
+          this.eventSpy.resetHistory();
+          procedureModel.insertParameter(parameterModel, 0);
+
+          assertEventNotFired(
+            this.eventSpy,
+            Blockly.Events.ProcedureParameterCreate,
+            {},
+            this.workspace.id);
+        });
+
+    test(
         'parameter create events are not fired if the procedure is ' +
         'not in the map',
         function() {
           const procedureModel =
               new Blockly.procedures.ObservableProcedureModel(this.workspace);
           procedureModel.insertParameter(
-              0,
               new Blockly.procedures.ObservableParameterModel(
-                  this.workspace, 'test name'));
+                  this.workspace, 'test name'),
+              0);
 
           assertEventNotFired(
             this.eventSpy,
@@ -511,7 +531,7 @@ suite('Procedure Map', function() {
           const parameterModel =
               new Blockly.procedures.ObservableParameterModel(
                   this.workspace, 'test name');
-          procedureModel.insertParameter(0, parameterModel);
+          procedureModel.insertParameter(parameterModel, 0);
           procedureModel.deleteParameter(0);
 
           assertEventFired(
@@ -526,15 +546,30 @@ suite('Procedure Map', function() {
         });
 
     test(
+        'parameter delete events are not fired if the parameter does not exist',
+        function() {
+          const procedureModel =
+              new Blockly.procedures.ObservableProcedureModel(this.workspace);
+          this.procedureMap.add(procedureModel);
+          procedureModel.deleteParameter(0);
+
+          assertEventNotFired(
+            this.eventSpy,
+            Blockly.Events.ProcedureParameterDelete,
+            {},
+            this.workspace);
+        });
+
+    test(
         'parameter delete events are not fired if the procedure is ' +
         'not in the map',
         function() {
           const procedureModel =
               new Blockly.procedures.ObservableProcedureModel(this.workspace)
                   .insertParameter(
-                      0,
                       new Blockly.procedures.ObservableParameterModel(
-                          this.workspace, 'test name'));
+                          this.workspace, 'test name'),
+                      0);
           procedureModel.deleteParameter(0);
 
           assertEventNotFired(
@@ -553,7 +588,7 @@ suite('Procedure Map', function() {
           const parameterModel =
               new Blockly.procedures.ObservableParameterModel(
                   this.workspace, 'test name');
-          procedureModel.insertParameter(0, parameterModel);
+          procedureModel.insertParameter(parameterModel, 0);
 
           parameterModel.setName('new name');
 
@@ -577,7 +612,7 @@ suite('Procedure Map', function() {
           const parameterModel =
               new Blockly.procedures.ObservableParameterModel(
                   this.workspace, 'test name');
-          procedureModel.insertParameter(0, parameterModel);
+          procedureModel.insertParameter(parameterModel, 0);
 
           parameterModel.setName('test name');
 
@@ -596,7 +631,7 @@ suite('Procedure Map', function() {
               new Blockly.procedures.ObservableParameterModel(
                   this.workspace, 'test name');
           new Blockly.procedures.ObservableProcedureModel(this.workspace)
-              .insertParameter(0, parameterModel);
+              .insertParameter(parameterModel, 0);
 
           parameterModel.setName('new name');
 

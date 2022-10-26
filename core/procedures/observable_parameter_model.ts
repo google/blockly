@@ -14,6 +14,7 @@ import type {Workspace} from '../workspace.js';
 export class ObservableParameterModel implements IParameterModel {
   private id: string;
   private variable: VariableModel;
+  private shouldFireEvents = false;
 
   constructor(
       private readonly workspace: Workspace, name: string, id?: string) {
@@ -75,5 +76,23 @@ export class ObservableParameterModel implements IParameterModel {
   /** Returns the variable model associated with the parameter model. */
   getVariableModel(): VariableModel {
     return this.variable;
+  }
+
+  /**
+   * Tells the parameter model it should fire events.
+   *
+   * @internal
+   */
+  startPublishing() {
+    this.shouldFireEvents = true;
+  }
+
+  /**
+   * Tells the parameter model it should not fire events.
+   *
+   * @internal
+   */
+  stopPublishing() {
+    this.shouldFireEvents = false;
   }
 }

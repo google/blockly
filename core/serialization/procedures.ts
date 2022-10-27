@@ -104,6 +104,17 @@ export class ProcedureSerializer<ProcedureModel extends IProcedureModel,
                                      IParameterModel> implements ISerializer {
   public priority = priorities.PROCEDURES;
 
+  /**
+   * Constructs the procedure serializer.
+   *
+   * Example usage:
+   *   new ProcedureSerializer(MyProcedureModelClass, MyParameterModelClass)
+   *
+   * @param procedureModelClass The class (implementing IProcedureModel) that
+   *     you want this serializer to deserialize.
+   * @param parameterModelClass The class (implementing IParameterModel) that
+   *     you want this serializer to deserialize.
+   */
   constructor(
       private readonly procedureModelClass:
           ProcedureModelConstructor<ProcedureModel>,

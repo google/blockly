@@ -55,7 +55,7 @@ export class CodeGenerationTestSuite {
    */
   constructor() {
     /**
-     * @type {!Blockly.Generator} The generator to use for running test cases.
+     * @type {!Blockly.CodeGenerator} The generator to use for running test cases.
      */
     this.generator;
   }
@@ -64,7 +64,7 @@ export class CodeGenerationTestSuite {
 /**
  * Returns mocha test callback for code generation based on provided
  *    generator.
- * @param {!Blockly.Generator} generator The generator to use in test.
+ * @param {!Blockly.CodeGenerator} generator The generator to use in test.
  * @return {function(!CodeGenerationTestCase):!Function} Function that
  *    returns mocha test callback based on test case.
  * @private

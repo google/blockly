@@ -52,15 +52,13 @@ export enum NodeType {
 }
 
 /** Temporary cache of text widths. */
-let cacheWidths: AnyDuringMigration = null;
+let cacheWidths: {[key: string]: number}|null = null;
 
 /** Number of current references to cache. */
 let cacheReference = 0;
 
 /** A HTML canvas context used for computing text width. */
-// AnyDuringMigration because:  Type 'null' is not assignable to type
-// 'CanvasRenderingContext2D'.
-let canvasContext: CanvasRenderingContext2D = null as AnyDuringMigration;
+let canvasContext: CanvasRenderingContext2D|null = null;
 
 /**
  * Helper method for creating SVG elements.
@@ -72,11 +70,11 @@ let canvasContext: CanvasRenderingContext2D = null as AnyDuringMigration;
  * @alias Blockly.utils.dom.createSvgElement
  */
 export function createSvgElement<T extends SVGElement>(
-    name: string|Svg<T>, attrs: AnyDuringMigration,
+    name: string|Svg<T>, attrs: {[key: string]: string|number},
     opt_parent?: Element|null): T {
   const e = document.createElementNS(SVG_NS, String(name)) as T;
   for (const key in attrs) {
-    e.setAttribute(key, attrs[key]);
+    e.setAttribute(key, `${attrs[key]}`);
   }
   if (opt_parent) {
     opt_parent.appendChild(e);
@@ -86,7 +84,8 @@ export function createSvgElement<T extends SVGElement>(
 
 /**
  * Add a CSS class to a element.
- * Similar to Closure's goog.dom.classes.add, except it handles SVG elements.
+ *
+ * Handles multiple space-separated classes for legacy reasons.
  *
  * @param element DOM element to add class to.
  * @param className Name of class to add.
@@ -94,34 +93,29 @@ export function createSvgElement<T extends SVGElement>(
  * @alias Blockly.utils.dom.addClass
  */
 export function addClass(element: Element, className: string): boolean {
-  let classes = element.getAttribute('class') || '';
-  if ((' ' + classes + ' ').indexOf(' ' + className + ' ') !== -1) {
+  const classNames = className.split(' ');
+  if (classNames.every((name) => element.classList.contains(name))) {
     return false;
   }
-  if (classes) {
-    classes += ' ';
-  }
-  element.setAttribute('class', classes + className);
+  element.classList.add(...classNames);
   return true;
 }
 
 /**
- * Removes multiple calsses from an element.
+ * Removes multiple classes from an element.
  *
  * @param element DOM element to remove classes from.
  * @param classNames A string of one or multiple class names for an element.
  * @alias Blockly.utils.dom.removeClasses
  */
 export function removeClasses(element: Element, classNames: string) {
-  const classList = classNames.split(' ');
-  for (let i = 0; i < classList.length; i++) {
-    element.classList.remove(classList[i]);
-  }
+  element.classList.remove(...classNames.split(' '));
 }
 
 /**
  * Remove a CSS class from a element.
- * Similar to Closure's goog.dom.classes.remove, except it handles SVG elements.
+ *
+ * Handles multiple space-separated classes for legacy reasons.
  *
  * @param element DOM element to remove class from.
  * @param className Name of class to remove.
@@ -129,28 +123,16 @@ export function removeClasses(element: Element, classNames: string) {
  * @alias Blockly.utils.dom.removeClass
  */
 export function removeClass(element: Element, className: string): boolean {
-  const classes = element.getAttribute('class');
-  if ((' ' + classes + ' ').indexOf(' ' + className + ' ') === -1) {
+  const classNames = className.split(' ');
+  if (classNames.every((name) => !element.classList.contains(name))) {
     return false;
   }
-  const classList = classes!.split(/\s+/);
-  for (let i = 0; i < classList.length; i++) {
-    if (!classList[i] || classList[i] === className) {
-      classList.splice(i, 1);
-      i--;
-    }
-  }
-  if (classList.length) {
-    element.setAttribute('class', classList.join(' '));
-  } else {
-    element.removeAttribute('class');
-  }
+  element.classList.remove(...classNames);
   return true;
 }
 
 /**
  * Checks if an element has the specified CSS class.
- * Similar to Closure's goog.dom.classes.has, except it handles SVG elements.
  *
  * @param element DOM element to check.
  * @param className Name of class to check.
@@ -158,8 +140,7 @@ export function removeClass(element: Element, className: string): boolean {
  * @alias Blockly.utils.dom.hasClass
  */
 export function hasClass(element: Element, className: string): boolean {
-  const classes = element.getAttribute('class');
-  return (' ' + classes + ' ').indexOf(' ' + className + ' ') !== -1;
+  return element.classList.contains(className);
 }
 
 /**
@@ -218,13 +199,10 @@ export function containsNode(parent: Node, descendant: Node): boolean {
  * @param transform The value of the CSS `transform` property.
  * @alias Blockly.utils.dom.setCssTransform
  */
-export function setCssTransform(element: Element, transform: string) {
-  // AnyDuringMigration because:  Property 'style' does not exist on type
-  // 'Element'.
-  (element as AnyDuringMigration).style['transform'] = transform;
-  // AnyDuringMigration because:  Property 'style' does not exist on type
-  // 'Element'.
-  (element as AnyDuringMigration).style['-webkit-transform'] = transform;
+export function setCssTransform(
+    element: HTMLElement|SVGElement, transform: string) {
+  element.style['transform'] = transform;
+  element.style['-webkit-transform' as any] = transform;
 }
 
 /**
@@ -302,7 +280,7 @@ export function getTextWidth(textElement: SVGTextElement): number {
  * @alias Blockly.utils.dom.getFastTextWidth
  */
 export function getFastTextWidth(
-    textElement: Element, fontSize: number, fontWeight: string,
+    textElement: SVGTextElement, fontSize: number, fontWeight: string,
     fontFamily: string): number {
   return getFastTextWidthWithSizeString(
       textElement, fontSize + 'pt', fontWeight, fontFamily);
@@ -323,13 +301,10 @@ export function getFastTextWidth(
  * @alias Blockly.utils.dom.getFastTextWidthWithSizeString
  */
 export function getFastTextWidthWithSizeString(
-    textElement: Element, fontSize: string, fontWeight: string,
+    textElement: SVGTextElement, fontSize: string, fontWeight: string,
     fontFamily: string): number {
   const text = textElement.textContent;
-  // AnyDuringMigration because:  Property 'baseVal' does not exist on type
-  // 'string'.
-  const key =
-      text + '\n' + (textElement.className as AnyDuringMigration).baseVal;
+  const key = text + '\n' + textElement.className.baseVal;
   let width;
 
   // Return the cached width if it exists.
@@ -355,9 +330,11 @@ export function getFastTextWidthWithSizeString(
   canvasContext.font = fontWeight + ' ' + fontSize + ' ' + fontFamily;
 
   // Measure the text width using the helper canvas context.
-  // AnyDuringMigration because:  Argument of type 'string | null' is not
-  // assignable to parameter of type 'string'.
-  width = canvasContext.measureText(text as AnyDuringMigration).width;
+  if (text) {
+    width = canvasContext.measureText(text).width;
+  } else {
+    width = 0;
+  }
 
   // Cache the computed width and return.
   if (cacheWidths) {
@@ -385,9 +362,7 @@ export function measureFontMetrics(
 
   const block = (document.createElement('div'));
   block.style.width = '1px';
-  // AnyDuringMigration because:  Type 'number' is not assignable to type
-  // 'string'.
-  block.style.height = 0 as AnyDuringMigration;
+  block.style.height = '0';
 
   const div = (document.createElement('div'));
   div.setAttribute('style', 'position: fixed; top: 0; left: 0; display: flex;');

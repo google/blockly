@@ -263,7 +263,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * @internal
    */
   addSelect() {
-    this.svgGroup_.classList.add('blocklySelected');
+    dom.addClass(this.svgGroup_, 'blocklySelected');
     this.setFocus();
   }
 
@@ -273,7 +273,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * @internal
    */
   removeSelect() {
-    this.svgGroup_.classList.add('blocklySelected');
+    dom.addClass(this.svgGroup_, 'blocklySelected');
     this.blurFocus();
   }
 
@@ -283,7 +283,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * @internal
    */
   addFocus() {
-    this.svgGroup_.classList.add('blocklyFocused');
+    dom.addClass(this.svgGroup_, 'blocklyFocused');
   }
 
   /**
@@ -292,7 +292,7 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    * @internal
    */
   removeFocus() {
-    this.svgGroup_.classList.remove('blocklyFocused');
+    dom.removeClass(this.svgGroup_, 'blocklyFocused');
   }
 
   /**
@@ -473,9 +473,9 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    */
   updateMovable() {
     if (this.isMovable()) {
-      this.svgGroup_.classList.add('blocklyDraggable');
+      dom.addClass(this.svgGroup_, 'blocklyDraggable');
     } else {
-      this.svgGroup_.classList.remove('blocklyDraggable');
+      dom.removeClass(this.svgGroup_, 'blocklyDraggable');
     }
   }
 
@@ -514,9 +514,9 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
       const group = this.getSvgRoot();
       (group as AnyDuringMigration).translate_ = '';
       (group as AnyDuringMigration).skew_ = '';
-      this.svgGroup_.classList.add('blocklyDragging');
+      dom.addClass(this.svgGroup_, 'blocklyDragging');
     } else {
-      this.svgGroup_.classList.remove('blocklyDragging');
+      dom.removeClass(this.svgGroup_, 'blocklyDragging');
     }
   }
 
@@ -561,9 +561,9 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    */
   setDeleteStyle(enable: boolean) {
     if (enable) {
-      this.svgGroup_.classList.add('blocklyDraggingDelete');
+      dom.addClass(this.svgGroup_, 'blocklyDraggingDelete');
     } else {
-      this.svgGroup_.classList.remove('blocklyDraggingDelete');
+      dom.removeClass(this.svgGroup_, 'blocklyDraggingDelete');
     }
   }
 
@@ -853,7 +853,9 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    */
   private deleteMouseDown_(e: Event) {
     // Highlight the delete icon.
-    this.deleteIconBorder_?.classList.add('blocklyDeleteIconHighlighted');
+    if (this.deleteIconBorder_) {
+      dom.addClass(this.deleteIconBorder_, 'blocklyDeleteIconHighlighted');
+    }
     // This event has been handled.  No need to bubble up to the document.
     e.stopPropagation();
   }
@@ -865,7 +867,9 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
    */
   private deleteMouseOut_(_e: Event) {
     // Restore highlight on the delete icon.
-    this.deleteIconBorder_?.classList.remove('blocklyDeleteIconHighlighted');
+    if (this.deleteIconBorder_) {
+      dom.removeClass(this.deleteIconBorder_, 'blocklyDeleteIconHighlighted');
+    }
   }
 
   /**
@@ -1016,8 +1020,13 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
       }
       this.textarea_!.focus();
       this.addFocus();
-      this.svgRectTarget_?.classList.add('blocklyCommentTargetFocused');
-      this.svgHandleTarget_?.classList.add('blocklyCommentHandleTargetFocused');
+      if (this.svgRectTarget_) {
+        dom.addClass(this.svgRectTarget_, 'blocklyCommentTargetFocused');
+      }
+      if (this.svgHandleTarget_) {
+        dom.addClass(
+            this.svgHandleTarget_, 'blocklyCommentHandleTargetFocused');
+      }
     }, 0);
   }
 
@@ -1036,9 +1045,13 @@ export class WorkspaceCommentSvg extends WorkspaceComment implements
 
       this.textarea_!.blur();
       this.removeFocus();
-      this.svgRectTarget_?.classList.remove('blocklyCommentTargetFocused');
-      this.svgHandleTarget_?.classList.remove(
-          'blocklyCommentHandleTargetFocused');
+      if (this.svgRectTarget_) {
+        dom.removeClass(this.svgRectTarget_, 'blocklyCommentTargetFocused');
+      }
+      if (this.svgHandleTarget_) {
+        dom.removeClass(
+            this.svgHandleTarget_, 'blocklyCommentHandleTargetFocused');
+      }
     }, 0);
   }
 

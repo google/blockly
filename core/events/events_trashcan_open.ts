@@ -13,6 +13,7 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.TrashcanOpen');
 
 import * as registry from '../registry.js';
+import {AbstractEventJson} from './events_abstract.js';
 
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
@@ -25,7 +26,7 @@ import * as eventUtils from './utils.js';
  */
 export class TrashcanOpen extends UiBase {
   isOpen?: boolean;
-  override type: string;
+  override type = eventUtils.TRASHCAN_OPEN;
 
   /**
    * @param opt_isOpen Whether the trashcan flyout is opening (false if
@@ -38,9 +39,6 @@ export class TrashcanOpen extends UiBase {
 
     /** Whether the trashcan flyout is opening (false if closing). */
     this.isOpen = opt_isOpen;
-
-    /** Type of this event. */
-    this.type = eventUtils.TRASHCAN_OPEN;
   }
 
   /**
@@ -48,8 +46,13 @@ export class TrashcanOpen extends UiBase {
    *
    * @returns JSON representation.
    */
-  override toJson(): AnyDuringMigration {
-    const json = super.toJson();
+  override toJson(): TrashcanOpenJson {
+    const json = super.toJson() as TrashcanOpenJson;
+    if (this.isOpen === undefined) {
+      throw new Error(
+          'Whether this is already open or not is undefined. Either pass ' +
+          'a value to the constructor, or call fromJson');
+    }
     json['isOpen'] = this.isOpen;
     return json;
   }
@@ -59,10 +62,14 @@ export class TrashcanOpen extends UiBase {
    *
    * @param json JSON representation.
    */
-  override fromJson(json: AnyDuringMigration) {
+  override fromJson(json: TrashcanOpenJson) {
     super.fromJson(json);
     this.isOpen = json['isOpen'];
   }
+}
+
+export interface TrashcanOpenJson extends AbstractEventJson {
+  isOpen: boolean;
 }
 
 registry.register(registry.Type.EVENT, eventUtils.TRASHCAN_OPEN, TrashcanOpen);

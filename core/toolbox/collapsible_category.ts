@@ -17,6 +17,7 @@ import type {IToolbox} from '../interfaces/i_toolbox.js';
 import type {IToolboxItem} from '../interfaces/i_toolbox_item.js';
 import * as registry from '../registry.js';
 import * as aria from '../utils/aria.js';
+import * as dom from '../utils/dom.js';
 import * as toolbox from '../utils/toolbox.js';
 
 import {ToolboxCategory} from './category.js';
@@ -107,7 +108,7 @@ export class CollapsibleToolboxCategory extends ToolboxCategory implements
     const categoryDef = itemDef as toolbox.CategoryInfo;
     // Categories that are collapsible are created using a class registered
     // under a different name.
-    if (registryName.toUpperCase() == 'CATEGORY' &&
+    if (registryName.toUpperCase() === 'CATEGORY' &&
         toolbox.isCategoryCollapsible(categoryDef)) {
       registryName = CollapsibleToolboxCategory.registrationName;
     }
@@ -142,7 +143,7 @@ export class CollapsibleToolboxCategory extends ToolboxCategory implements
     if (!this.parentToolbox_.isHorizontal()) {
       const className = (this.cssConfig_ as AnyDuringMigration)['icon'];
       if (className) {
-        toolboxIcon.classList.add(className);
+        dom.addClass(toolboxIcon, className);
       }
       toolboxIcon.style.visibility = 'visible';
     }
@@ -162,7 +163,7 @@ export class CollapsibleToolboxCategory extends ToolboxCategory implements
     const contentsContainer = document.createElement('div');
     const className = (this.cssConfig_ as AnyDuringMigration)['contents'];
     if (className) {
-      contentsContainer.classList.add(className);
+      dom.addClass(contentsContainer, className);
     }
 
     for (let i = 0; i < subcategories.length; i++) {

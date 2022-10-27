@@ -22,9 +22,12 @@ import * as common from './common.js';
 import type {Abstract} from './events/events_abstract.js';
 import type {BubbleOpen} from './events/events_bubble_open.js';
 import * as eventUtils from './events/utils.js';
-import type {Field} from './field.js';
+import {Field, UnattachedFieldError} from './field.js';
 import {Msg} from './msg.js';
 import {Names} from './names.js';
+import {ObservableProcedureMap} from './procedures/observable_procedure_map.js';
+import {ObservableProcedureModel} from './procedures/observable_procedure_model.js';
+import {ObservableParameterModel} from './procedures/observable_parameter_model.js';
 import * as utilsXml from './utils/xml.js';
 import * as Variables from './variables.js';
 import type {Workspace} from './workspace.js';
@@ -122,7 +125,7 @@ export function findLegalName(name: string, block: Block): string {
     if (!r) {
       name += '2';
     } else {
-      name = r[1] + (parseInt(r[2], 10) + 1);
+      name = r[1] + (parseInt(r[2]) + 1);
     }
   }
   return name;
@@ -180,14 +183,19 @@ export function isNameUsed(
  * @alias Blockly.Procedures.rename
  */
 export function rename(this: Field, name: string): string {
+  const block = this.getSourceBlock();
+  if (!block) {
+    throw new UnattachedFieldError();
+  }
+
   // Strip leading and trailing whitespace.  Beyond this, all names are legal.
   name = name.trim();
 
-  const legalName = findLegalName(name, (this.getSourceBlock()));
+  const legalName = findLegalName(name, block);
   const oldName = this.getValue();
   if (oldName !== name && oldName !== legalName) {
     // Rename any callers.
-    const blocks = this.getSourceBlock().workspace.getAllBlocks(false);
+    const blocks = block.workspace.getAllBlocks(false);
     for (let i = 0; i < blocks.length; i++) {
       // Assume it is a procedure so we can check.
       const procedureBlock = blocks[i] as unknown as ProcedureBlock;
@@ -445,3 +453,9 @@ export function getDefinition(name: string, workspace: Workspace): Block|null {
   }
   return null;
 }
+
+export {
+  ObservableProcedureMap,
+  ObservableProcedureModel,
+  ObservableParameterModel,
+};

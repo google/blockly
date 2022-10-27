@@ -14,7 +14,7 @@ goog.declareModuleId('Blockly.Events.VarBase');
 
 import type {VariableModel} from '../variable_model.js';
 
-import {Abstract as AbstractEvent} from './events_abstract.js';
+import {Abstract as AbstractEvent, AbstractEventJson} from './events_abstract.js';
 
 
 /**
@@ -23,9 +23,8 @@ import {Abstract as AbstractEvent} from './events_abstract.js';
  * @alias Blockly.Events.VarBase
  */
 export class VarBase extends AbstractEvent {
-  override isBlank: AnyDuringMigration;
-  varId: string;
-  override workspaceId: string;
+  override isBlank = true;
+  varId?: string;
 
   /**
    * @param opt_variable The variable this event corresponds to.  Undefined for
@@ -34,12 +33,13 @@ export class VarBase extends AbstractEvent {
   constructor(opt_variable?: VariableModel) {
     super();
     this.isBlank = typeof opt_variable === 'undefined';
+    if (!opt_variable) return;
 
     /** The variable id for the variable this event pertains to. */
-    this.varId = this.isBlank ? '' : opt_variable!.getId();
+    this.varId = opt_variable.getId();
 
     /** The workspace identifier for this event. */
-    this.workspaceId = this.isBlank ? '' : opt_variable!.workspace.id;
+    this.workspaceId = opt_variable.workspace.id;
   }
 
   /**
@@ -47,8 +47,13 @@ export class VarBase extends AbstractEvent {
    *
    * @returns JSON representation.
    */
-  override toJson(): AnyDuringMigration {
-    const json = super.toJson();
+  override toJson(): VarBaseJson {
+    const json = super.toJson() as VarBaseJson;
+    if (!this.varId) {
+      throw new Error(
+          'The var ID is undefined. Either pass a variable to ' +
+          'the constructor, or call fromJson');
+    }
     json['varId'] = this.varId;
     return json;
   }
@@ -58,8 +63,12 @@ export class VarBase extends AbstractEvent {
    *
    * @param json JSON representation.
    */
-  override fromJson(json: AnyDuringMigration) {
+  override fromJson(json: VarBaseJson) {
     super.fromJson(json);
     this.varId = json['varId'];
   }
+}
+
+export interface VarBaseJson extends AbstractEventJson {
+  varId: string;
 }

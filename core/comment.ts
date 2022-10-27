@@ -142,7 +142,7 @@ export class Comment extends Icon {
         HTMLTextAreaElement;
     const textarea = this.textarea_;
     textarea.className = 'blocklyCommentTextarea';
-    textarea.setAttribute('dir', this.block_.RTL ? 'RTL' : 'LTR');
+    textarea.setAttribute('dir', this.getBlock().RTL ? 'RTL' : 'LTR');
     textarea.value = this.model_.text ?? '';
     this.resizeTextarea_();
 
@@ -167,7 +167,7 @@ export class Comment extends Icon {
         function(this: Comment, _e: Event) {
           if (this.cachedText_ !== this.model_.text) {
             eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
-                this.block_, 'comment', null, this.cachedText_,
+                this.getBlock(), 'comment', null, this.cachedText_,
                 this.model_.text));
           }
         });
@@ -233,7 +233,7 @@ export class Comment extends Icon {
       return;
     }
     eventUtils.fire(new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
-        this.block_, visible, 'comment'));
+        this.getBlock(), visible, 'comment'));
     this.model_.pinned = visible;
     if (visible) {
       this.createBubble_();
@@ -244,7 +244,7 @@ export class Comment extends Icon {
 
   /** Show the bubble. Handles deciding if it should be editable or not. */
   private createBubble_() {
-    if (!this.block_.isEditable()) {
+    if (!this.getBlock().isEditable()) {
       this.createNonEditableBubble_();
     } else {
       this.createEditableBubble_();
@@ -253,12 +253,13 @@ export class Comment extends Icon {
 
   /** Show an editable bubble. */
   private createEditableBubble_() {
+    const block = this.getBlock();
     this.bubble_ = new Bubble(
-        this.block_.workspace, this.createEditor_(),
-        this.block_.pathObject.svgPath, (this.iconXY_ as Coordinate),
-        this.model_.size.width, this.model_.size.height);
+        block.workspace, this.createEditor_(), block.pathObject.svgPath,
+        (this.iconXY_ as Coordinate), this.model_.size.width,
+        this.model_.size.height);
     // Expose this comment's block's ID on its top-level SVG group.
-    this.bubble_.setSvgId(this.block_.id);
+    this.bubble_.setSvgId(block.id);
     this.bubble_.registerResizeEvent(this.onBubbleResize_.bind(this));
     this.applyColour();
   }
@@ -272,7 +273,7 @@ export class Comment extends Icon {
     // TODO (#2917): It would be great if the comment could support line breaks.
     this.paragraphElement_ = Bubble.textToDom(this.model_.text ?? '');
     this.bubble_ = Bubble.createNonEditableBubble(
-        this.paragraphElement_, (this.block_), this.iconXY_ as Coordinate);
+        this.paragraphElement_, this.getBlock(), this.iconXY_ as Coordinate);
     this.applyColour();
   }
 
@@ -371,7 +372,7 @@ export class Comment extends Icon {
    * should not be called directly. Instead call block.setCommentText(null);
    */
   override dispose() {
-    this.block_.comment = null;
+    this.getBlock().comment = null;
     super.dispose();
   }
 }

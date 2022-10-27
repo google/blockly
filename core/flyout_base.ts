@@ -801,12 +801,12 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
       blockInfo: toolbox.BlockInfo, gaps: number[], defaultGap: number) {
     let gap;
     if (blockInfo['gap']) {
-      gap = parseInt(blockInfo['gap'].toString(), 10);
+      gap = parseInt(blockInfo['gap'].toString());
     } else if (blockInfo['blockxml']) {
       const xml = (typeof blockInfo['blockxml'] === 'string' ?
                        Xml.textToDom(blockInfo['blockxml']) :
                        blockInfo['blockxml']) as Element;
-      gap = parseInt(xml.getAttribute('gap')!, 10);
+      gap = parseInt(xml.getAttribute('gap')!);
     }
     gaps.push(!gap || isNaN(gap) ? defaultGap : gap);
   }
@@ -826,7 +826,7 @@ export abstract class Flyout extends DeleteArea implements IFlyout {
     // <sep gap="36"></sep>
     // The default gap is 24, can be set larger or smaller.
     // This overwrites the gap attribute on the previous element.
-    const newGap = parseInt(sepInfo['gap']!.toString(), 10);
+    const newGap = parseInt(sepInfo['gap']!.toString());
     // Ignore gaps before the first block.
     if (!isNaN(newGap) && gaps.length > 0) {
       gaps[gaps.length - 1] = newGap;

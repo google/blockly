@@ -15,7 +15,6 @@ goog.declareModuleId('Blockly.Events.Ui');
 
 import type {Block} from '../block.js';
 import * as registry from '../registry.js';
-
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
 
@@ -31,7 +30,7 @@ export class Ui extends UiBase {
   element: AnyDuringMigration;
   oldValue: AnyDuringMigration;
   newValue: AnyDuringMigration;
-  override type: string;
+  override type = eventUtils.UI;
 
   /**
    * @param opt_block The affected block.  Null for UI events that do not have
@@ -50,9 +49,6 @@ export class Ui extends UiBase {
     this.element = typeof opt_element === 'undefined' ? '' : opt_element;
     this.oldValue = typeof opt_oldValue === 'undefined' ? '' : opt_oldValue;
     this.newValue = typeof opt_newValue === 'undefined' ? '' : opt_newValue;
-
-    /** Type of this event. */
-    this.type = eventUtils.UI;
   }
 
   /**
@@ -61,7 +57,7 @@ export class Ui extends UiBase {
    * @returns JSON representation.
    */
   override toJson(): AnyDuringMigration {
-    const json = super.toJson();
+    const json = super.toJson() as AnyDuringMigration;
     json['element'] = this.element;
     if (this.newValue !== undefined) {
       json['newValue'] = this.newValue;

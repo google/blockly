@@ -133,7 +133,7 @@ blocks['lists_create_with'] = {
     this.itemCount_ = 3;
     this.updateShape_();
     this.setOutput(true, 'Array');
-    this.setMutator(new Mutator(['lists_create_with_item']));
+    this.setMutator(new Mutator(['lists_create_with_item'], this));
     this.setTooltip(Msg['LISTS_CREATE_WITH_TOOLTIP']);
   },
   /**
@@ -858,23 +858,23 @@ blocks['lists_sort'] = {
    */
   init: function() {
     this.jsonInit({
-      'message0': Msg['LISTS_SORT_TITLE'],
+      'message0': '%{BKY_LISTS_SORT_TITLE}',
       'args0': [
         {
           'type': 'field_dropdown',
           'name': 'TYPE',
           'options': [
-            [Msg['LISTS_SORT_TYPE_NUMERIC'], 'NUMERIC'],
-            [Msg['LISTS_SORT_TYPE_TEXT'], 'TEXT'],
-            [Msg['LISTS_SORT_TYPE_IGNORECASE'], 'IGNORE_CASE'],
+            ['%{BKY_LISTS_SORT_TYPE_NUMERIC}', 'NUMERIC'],
+            ['%{BKY_LISTS_SORT_TYPE_TEXT}', 'TEXT'],
+            ['%{BKY_LISTS_SORT_TYPE_IGNORECASE}', 'IGNORE_CASE'],
           ],
         },
         {
           'type': 'field_dropdown',
           'name': 'DIRECTION',
           'options': [
-            [Msg['LISTS_SORT_ORDER_ASCENDING'], '1'],
-            [Msg['LISTS_SORT_ORDER_DESCENDING'], '-1'],
+            ['%{BKY_LISTS_SORT_ORDER_ASCENDING}', '1'],
+            ['%{BKY_LISTS_SORT_ORDER_DESCENDING}', '-1'],
           ],
         },
         {
@@ -885,8 +885,8 @@ blocks['lists_sort'] = {
       ],
       'output': 'Array',
       'style': 'list_blocks',
-      'tooltip': Msg['LISTS_SORT_TOOLTIP'],
-      'helpUrl': Msg['LISTS_SORT_HELPURL'],
+      'tooltip': '%{BKY_LISTS_SORT_TOOLTIP}',
+      'helpUrl': '%{BKY_LISTS_SORT_HELPURL}',
     });
   },
 };

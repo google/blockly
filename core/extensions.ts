@@ -98,7 +98,7 @@ export function registerMutator(
   // Sanity checks passed.
   register(name, function(this: Block) {
     if (hasMutatorDialog) {
-      this.setMutator(new Mutator(this as BlockSvg, opt_blockList || []));
+      this.setMutator(new Mutator(opt_blockList || [], this as BlockSvg));
     }
     // Mixin the object.
     this.mixin(mixinObj);

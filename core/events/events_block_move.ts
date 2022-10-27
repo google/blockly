@@ -17,15 +17,15 @@ import {ConnectionType} from '../connection_type.js';
 import * as registry from '../registry.js';
 import {Coordinate} from '../utils/coordinate.js';
 
-import {BlockBase} from './events_block_base.js';
+import {BlockBase, BlockBaseJson} from './events_block_base.js';
 import * as eventUtils from './utils.js';
 
 
 interface BlockLocation {
-  parentId: string;
-  inputName: string;
-  coordinate: Coordinate|null;
-}  // eslint-disable-line no-unused-vars
+  parentId?: string;
+  inputName?: string;
+  coordinate?: Coordinate;
+}
 
 /**
  * Class for a block move event.  Created before the move.
@@ -33,24 +33,18 @@ interface BlockLocation {
  * @alias Blockly.Events.BlockMove
  */
 export class BlockMove extends BlockBase {
-  override type: string;
-  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  oldParentId!: string;
-  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  oldInputName!: string;
-  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  oldCoordinate!: Coordinate|null;
+  override type = eventUtils.BLOCK_MOVE;
+  oldParentId?: string;
+  oldInputName?: string;
+  oldCoordinate?: Coordinate;
 
-  newParentId: string|null = null;
-  newInputName: string|null = null;
-  newCoordinate: Coordinate|null = null;
+  newParentId?: string;
+  newInputName?: string;
+  newCoordinate?: Coordinate;
 
   /** @param opt_block The moved block.  Undefined for a blank event. */
   constructor(opt_block?: Block) {
     super(opt_block);
-
-    /** Type of this event. */
-    this.type = eventUtils.BLOCK_MOVE;
 
     if (!opt_block) {
       return;
@@ -72,17 +66,13 @@ export class BlockMove extends BlockBase {
    *
    * @returns JSON representation.
    */
-  override toJson(): AnyDuringMigration {
-    const json = super.toJson();
-    if (this.newParentId) {
-      json['newParentId'] = this.newParentId;
-    }
-    if (this.newInputName) {
-      json['newInputName'] = this.newInputName;
-    }
+  override toJson(): BlockMoveJson {
+    const json = super.toJson() as BlockMoveJson;
+    json['newParentId'] = this.newParentId;
+    json['newInputName'] = this.newInputName;
     if (this.newCoordinate) {
-      json['newCoordinate'] = Math.round(this.newCoordinate.x) + ',' +
-          Math.round(this.newCoordinate.y);
+      json['newCoordinate'] = `${Math.round(this.newCoordinate.x)}, ` +
+          `${Math.round(this.newCoordinate.y)}`;
     }
     if (!this.recordUndo) {
       json['recordUndo'] = this.recordUndo;
@@ -95,7 +85,7 @@ export class BlockMove extends BlockBase {
    *
    * @param json JSON representation.
    */
-  override fromJson(json: AnyDuringMigration) {
+  override fromJson(json: BlockMoveJson) {
     super.fromJson(json);
     this.newParentId = json['newParentId'];
     this.newInputName = json['newInputName'];
@@ -124,19 +114,27 @@ export class BlockMove extends BlockBase {
    */
   private currentLocation_(): BlockLocation {
     const workspace = this.getEventWorkspace_();
+    if (!this.blockId) {
+      throw new Error(
+          'The block ID is undefined. Either pass a block to ' +
+          'the constructor, or call fromJson');
+    }
     const block = workspace.getBlockById(this.blockId);
+    if (!block) {
+      throw new Error(
+          'The block associated with the block move event ' +
+          'could not be found');
+    }
     const location = {} as BlockLocation;
-    const parent = block!.getParent();
+    const parent = block.getParent();
     if (parent) {
       location.parentId = parent.id;
-      // AnyDuringMigration because:  Argument of type 'Block | null' is not
-      // assignable to parameter of type 'Block'.
-      const input = parent.getInputWithBlock(block as AnyDuringMigration);
+      const input = parent.getInputWithBlock(block);
       if (input) {
         location.inputName = input.name;
       }
     } else {
-      location.coordinate = block!.getRelativeToSurfaceXY();
+      location.coordinate = block.getRelativeToSurfaceXY();
     }
     return location;
   }
@@ -159,6 +157,11 @@ export class BlockMove extends BlockBase {
    */
   override run(forward: boolean) {
     const workspace = this.getEventWorkspace_();
+    if (!this.blockId) {
+      throw new Error(
+          'The block ID is undefined. Either pass a block to ' +
+          'the constructor, or call fromJson');
+    }
     const block = workspace.getBlockById(this.blockId);
     if (!block) {
       console.warn('Can\'t move non-existent block: ' + this.blockId);
@@ -204,6 +207,13 @@ export class BlockMove extends BlockBase {
       }
     }
   }
+}
+
+export interface BlockMoveJson extends BlockBaseJson {
+  newParentId?: string;
+  newInputName?: string;
+  newCoordinate?: string;
+  recordUndo?: boolean;
 }
 
 registry.register(registry.Type.EVENT, eventUtils.MOVE, BlockMove);

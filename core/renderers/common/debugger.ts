@@ -217,9 +217,9 @@ export class Debug {
       return;
     }
 
-    let colour;
-    let size;
-    let fill;
+    let colour = '';
+    let size = 0;
+    let fill = '';
     if (conn.type === ConnectionType.INPUT_VALUE) {
       size = 4;
       colour = 'magenta';

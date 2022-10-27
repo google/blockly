@@ -536,6 +536,9 @@ export function disableOrphans(event: Abstract) {
     }
     const eventWorkspace =
         common.getWorkspaceById(blockEvent.workspaceId) as WorkspaceSvg;
+    if (!blockEvent.blockId) {
+      throw new Error('Encountered a blockEvent without a proper blockId');
+    }
     let block = eventWorkspace.getBlockById(blockEvent.blockId);
     if (block) {
       // Changing blocks as part of this event shouldn't be undoable.

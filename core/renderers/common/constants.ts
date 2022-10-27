@@ -563,7 +563,7 @@ export class ConstantProvider {
     this.setComponentConstants_(theme);
 
     this.ADD_START_HATS =
-        theme.startHats !== null ? theme.startHats : this.ADD_START_HATS;
+        theme.startHats !== undefined ? theme.startHats : this.ADD_START_HATS;
   }
 
   /**
@@ -658,12 +658,7 @@ export class ConstantProvider {
    * @param blockStyle A full or partial block style object.
    * @returns A full block style object, with all required properties populated.
    */
-  protected validatedBlockStyle_(blockStyle: {
-    colourPrimary: string,
-    colourSecondary?: string,
-    colourTertiary?: string,
-    hat?: string
-  }): BlockStyle {
+  protected validatedBlockStyle_(blockStyle: Partial<BlockStyle>): BlockStyle {
     // Make a new object with all of the same properties.
     const valid = {} as BlockStyle;
     if (blockStyle) {

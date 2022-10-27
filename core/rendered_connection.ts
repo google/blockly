@@ -280,6 +280,10 @@ export class RenderedConnection extends Connection {
 
   /** Add highlighting around this connection. */
   highlight() {
+    if (this.highlightPath) {
+      // This connection is already highlighted
+      return;
+    }
     let steps;
     const sourceBlockSvg = (this.sourceBlock_);
     const renderConstants =
@@ -391,7 +395,7 @@ export class RenderedConnection extends Connection {
     // rendering takes place, since rendering requires knowing the dimensions
     // of lower blocks. Also, since rendering a block renders all its parents,
     // we only need to render the leaf nodes.
-    let renderList: AnyDuringMigration[] = [];
+    let renderList: Block[] = [];
     if (this.type !== ConnectionType.INPUT_VALUE &&
         this.type !== ConnectionType.NEXT_STATEMENT) {
       // Only spider down.
@@ -495,7 +499,7 @@ export class RenderedConnection extends Connection {
    * @returns List of connections.
    * @internal
    */
-  override neighbours(maxLimit: number): Connection[] {
+  override neighbours(maxLimit: number): RenderedConnection[] {
     return this.dbOpposite_.getNeighbours(this, maxLimit);
   }
 

@@ -12,7 +12,6 @@
 
 goog.module('Blockly.PHP');
 
-const objectUtils = goog.require('Blockly.utils.object');
 const stringUtils = goog.require('Blockly.utils.string');
 const {Block} = goog.requireType('Blockly.Block');
 const {Generator} = goog.require('Blockly.Generator');
@@ -154,7 +153,7 @@ PHP.init = function(workspace) {
  */
 PHP.finish = function(code) {
   // Convert the definitions dictionary into a list.
-  const definitions = objectUtils.values(this.definitions_);
+  const definitions = Object.values(this.definitions_);
   // Call Blockly.Generator's finish.
   code = Object.getPrototypeOf(this).finish.call(this, code);
   this.isInitialized = false;

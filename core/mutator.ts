@@ -32,6 +32,7 @@ import * as dom from './utils/dom.js';
 import {Svg} from './utils/svg.js';
 import * as toolbox from './utils/toolbox.js';
 import * as xml from './utils/xml.js';
+import * as deprecation from './utils/deprecation.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
 
@@ -77,8 +78,14 @@ export class Mutator extends Icon {
   private updateWorkspacePid_: ReturnType<typeof setTimeout>|null = null;
 
   /** @param quarkNames List of names of sub-blocks for flyout. */
-  constructor(block: BlockSvg, quarkNames: string[]) {
-    super(block);
+  constructor(quarkNames: string[], block?: BlockSvg) {
+    if (!block) {
+      deprecation.warn(
+          'Calling the Mutator constructor without passing the block it is attached to',
+          'version 9', 'version 10',
+          'the constructor by passing the list of subblocks and the block instance to attach the mutator to');
+    }
+    super(block ?? null);
     this.quarkNames_ = quarkNames;
   }
 
@@ -145,7 +152,7 @@ export class Mutator extends Icon {
    * @param e Mouse click event.
    */
   protected override iconClick_(e: MouseEvent) {
-    if (this.block_.isEditable()) {
+    if (this.getBlock().isEditable()) {
       super.iconClick_(e);
     }
   }
@@ -175,19 +182,20 @@ export class Mutator extends Icon {
     } else {
       quarkXml = null;
     }
+    const block = this.getBlock();
     const workspaceOptions = new Options(({
       // If you want to enable disabling, also remove the
       // event filter from workspaceChanged_ .
       'disable': false,
-      'parentWorkspace': this.block_.workspace,
-      'media': this.block_.workspace.options.pathToMedia,
-      'rtl': this.block_.RTL,
+      'parentWorkspace': block.workspace,
+      'media': block.workspace.options.pathToMedia,
+      'rtl': block.RTL,
       'horizontalLayout': false,
-      'renderer': this.block_.workspace.options.renderer,
-      'rendererOverrides': this.block_.workspace.options.rendererOverrides,
+      'renderer': block.workspace.options.renderer,
+      'rendererOverrides': block.workspace.options.rendererOverrides,
     } as BlocklyOptions));
     workspaceOptions.toolboxPosition =
-        this.block_.RTL ? toolbox.Position.RIGHT : toolbox.Position.LEFT;
+        block.RTL ? toolbox.Position.RIGHT : toolbox.Position.LEFT;
     const hasFlyout = !!quarkXml;
     if (hasFlyout) {
       workspaceOptions.languageTree = toolbox.convertToolboxDefToJson(quarkXml);
@@ -227,16 +235,16 @@ export class Mutator extends Icon {
   /** Add or remove the UI indicating if this icon may be clicked or not. */
   override updateEditable() {
     super.updateEditable();
-    if (!this.block_.isInFlyout) {
-      if (this.block_.isEditable()) {
+    if (!this.getBlock().isInFlyout) {
+      if (this.getBlock().isEditable()) {
         if (this.iconGroup_) {
-          this.iconGroup_.classList.remove('blocklyIconGroupReadonly');
+          dom.removeClass(this.iconGroup_, 'blocklyIconGroupReadonly');
         }
       } else {
         // Close any mutator bubble.  Icon is not clickable.
         this.setVisible(false);
         if (this.iconGroup_) {
-          this.iconGroup_.classList.add('blocklyIconGroupReadonly');
+          dom.addClass(this.iconGroup_, 'blocklyIconGroupReadonly');
         }
       }
     }
@@ -255,7 +263,7 @@ export class Mutator extends Icon {
       height = Math.max(height, flyoutScrollMetrics.height + 20);
       width += flyout.getWidth();
     }
-    if (this.block_.RTL) {
+    if (this.getBlock().RTL) {
       width = -workspaceSize.x;
     }
     width += doubleBorderWidth * 3;
@@ -275,7 +283,7 @@ export class Mutator extends Icon {
           this.workspaceWidth_, this.workspaceHeight_);
     }
 
-    if (this.block_.RTL) {
+    if (this.getBlock().RTL) {
       // Scroll the workspace to always left-align.
       const translation = 'translate(' + this.workspaceWidth_ + ',0)';
       this.workspace_!.getCanvas().setAttribute('transform', translation);
@@ -300,16 +308,16 @@ export class Mutator extends Icon {
       // No change.
       return;
     }
+    const block = this.getBlock();
     eventUtils.fire(new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
-        this.block_, visible, 'mutator'));
+        block, visible, 'mutator'));
     if (visible) {
       // Create the bubble.
       this.bubble_ = new Bubble(
-          (this.block_.workspace as WorkspaceSvg), this.createEditor_(),
-          this.block_.pathObject.svgPath, (this.iconXY_ as Coordinate), null,
-          null);
+          block.workspace, this.createEditor_(), block.pathObject.svgPath,
+          (this.iconXY_ as Coordinate), null, null);
       // Expose this mutator's block's ID on its top-level SVG group.
-      this.bubble_.setSvgId(this.block_.id);
+      this.bubble_.setSvgId(block.id);
       this.bubble_.registerMoveEvent(this.onBubbleMove_.bind(this));
       const tree = this.workspace_!.options.languageTree;
       const flyout = this.workspace_!.getFlyout();
@@ -318,7 +326,7 @@ export class Mutator extends Icon {
         flyout!.show(tree);
       }
 
-      this.rootBlock_ = this.block_!.decompose!(this.workspace_!)!;
+      this.rootBlock_ = block.decompose!(this.workspace_!)!;
       const blocks = this.rootBlock_!.getDescendants(false);
       for (let i = 0, child; child = blocks[i]; i++) {
         child.render();
@@ -335,20 +343,21 @@ export class Mutator extends Icon {
         margin = 16;
         x = margin;
       }
-      if (this.block_.RTL) {
+      if (block.RTL) {
         x = -x;
       }
       this.rootBlock_!.moveBy(x, margin);
       // Save the initial connections, then listen for further changes.
-      if (this.block_.saveConnections) {
+      if (block.saveConnections) {
         const thisRootBlock = this.rootBlock_;
-        this.block_.saveConnections(thisRootBlock);
+        block.saveConnections(thisRootBlock);
         this.sourceListener_ = () => {
-          if (this.block_ && this.block_.saveConnections) {
-            this.block_.saveConnections(thisRootBlock);
+          const currentBlock = this.getBlock();
+          if (currentBlock.saveConnections) {
+            currentBlock.saveConnections(thisRootBlock);
           }
         };
-        this.block_.workspace.addChangeListener(this.sourceListener_);
+        block.workspace.addChangeListener(this.sourceListener_);
       }
       this.resizeBubble_();
       // When the mutator's workspace changes, update the source block.
@@ -367,7 +376,7 @@ export class Mutator extends Icon {
       this.workspaceWidth_ = 0;
       this.workspaceHeight_ = 0;
       if (this.sourceListener_) {
-        this.block_.workspace.removeChangeListener(this.sourceListener_);
+        block.workspace.removeChangeListener(this.sourceListener_);
         this.sourceListener_ = null;
       }
     }
@@ -438,7 +447,7 @@ export class Mutator extends Icon {
       if (!existingGroup) {
         eventUtils.setGroup(true);
       }
-      const block = this.block_ as BlockSvg;
+      const block = this.getBlock();
       const oldExtraState = BlockChange.getExtraBlockState_(block);
 
       // Switch off rendering while the source block is rebuilt.
@@ -482,7 +491,7 @@ export class Mutator extends Icon {
 
   /** Dispose of this mutator. */
   override dispose() {
-    this.block_.mutator = null;
+    this.getBlock().mutator = null;
     super.dispose();
   }
 

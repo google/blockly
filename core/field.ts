@@ -54,9 +54,6 @@ import * as Xml from './xml.js';
 export abstract class Field implements IASTNodeLocationSvg,
                                        IASTNodeLocationWithBlock,
                                        IKeyboardAccessible, IRegistrable {
-  /** The default value for this field. */
-  protected DEFAULT_VALUE: any = null;
-
   /** Non-breaking space. */
   static readonly NBSP = '\u00A0';
 
@@ -75,9 +72,7 @@ export abstract class Field implements IASTNodeLocationSvg,
   protected value_: AnyDuringMigration;
 
   /** Validation function called when user edits an editable field. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'Function'.
-  protected validator_: Function = null as AnyDuringMigration;
+  protected validator_: Function|null = null;
 
   /**
    * Used to cache the field's tooltip value if setTooltip is called when the
@@ -90,44 +85,31 @@ export abstract class Field implements IASTNodeLocationSvg,
    * Holds the cursors svg element when the cursor is attached to the field.
    * This is null if there is no cursor on the field.
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'SVGElement'.
-  private cursorSvg_: SVGElement = null as AnyDuringMigration;
+  private cursorSvg_: SVGElement|null = null;
 
   /**
    * Holds the markers svg element when the marker is attached to the field.
    * This is null if there is no marker on the field.
    */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'SVGElement'.
-  private markerSvg_: SVGElement = null as AnyDuringMigration;
+  private markerSvg_: SVGElement|null = null;
 
   /** The rendered field's SVG group element. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'SVGGElement'.
-  protected fieldGroup_: SVGGElement = null as AnyDuringMigration;
+  protected fieldGroup_: SVGGElement|null = null;
 
   /** The rendered field's SVG border element. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'SVGRectElement'.
-  protected borderRect_: SVGRectElement = null as AnyDuringMigration;
+  protected borderRect_: SVGRectElement|null = null;
 
   /** The rendered field's SVG text element. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'SVGTextElement'.
-  protected textElement_: SVGTextElement = null as AnyDuringMigration;
+  protected textElement_: SVGTextElement|null = null;
 
   /** The rendered field's text content element. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type 'Text'.
-  protected textContent_: Text = null as AnyDuringMigration;
+  protected textContent_: Text|null = null;
 
   /** Mouse down event listener data. */
   private mouseDownWrapper_: browserEvents.Data|null = null;
 
   /** Constants associated with the source block's renderer. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'ConstantProvider'.
-  protected constants_: ConstantProvider = null as AnyDuringMigration;
+  protected constants_: ConstantProvider|null = null;
 
   /**
    * Has this field been disposed of?
@@ -140,8 +122,7 @@ export abstract class Field implements IASTNodeLocationSvg,
   maxDisplayLength = 50;
 
   /** Block this field is attached to.  Starts as null, then set in init. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type 'Block'.
-  protected sourceBlock_: Block = null as AnyDuringMigration;
+  protected sourceBlock_: Block|null = null;
 
   /** Does this block need to be re-rendered? */
   protected isDirty_ = true;
@@ -155,9 +136,7 @@ export abstract class Field implements IASTNodeLocationSvg,
   protected enabled_ = true;
 
   /** The element the click handler is bound to. */
-  // AnyDuringMigration because:  Type 'null' is not assignable to type
-  // 'Element'.
-  protected clickTarget_: Element = null as AnyDuringMigration;
+  protected clickTarget_: Element|null = null;
 
   /**
    * The prefix field.
@@ -208,7 +187,9 @@ export abstract class Field implements IASTNodeLocationSvg,
      * A generic value possessed by the field.
      * Should generally be non-null, only null when the field is created.
      */
-    this.value_ = (new.target).prototype.DEFAULT_VALUE;
+    this.value_ = ('DEFAULT_VALUE' in (new.target).prototype) ?
+        ((new.target).prototype as AnyDuringMigration).DEFAULT_VALUE :
+        null;
 
     /** The size of the area rendered by the field. */
     this.size_ = new Size(0, 0);
@@ -258,7 +239,8 @@ export abstract class Field implements IASTNodeLocationSvg,
    * @returns The renderer constant provider.
    */
   getConstants(): ConstantProvider|null {
-    if (!this.constants_ && this.sourceBlock_ && !this.sourceBlock_.disposed &&
+    if (!this.constants_ && this.sourceBlock_ &&
+        !this.sourceBlock_.isDeadOrDying() &&
         this.sourceBlock_.workspace.rendered) {
       this.constants_ = (this.sourceBlock_.workspace as WorkspaceSvg)
                             .getRenderer()
@@ -271,8 +253,9 @@ export abstract class Field implements IASTNodeLocationSvg,
    * Get the block this field is attached to.
    *
    * @returns The block containing this field.
+   * @throws An error if the source block is not defined.
    */
-  getSourceBlock(): Block {
+  getSourceBlock(): Block|null {
     return this.sourceBlock_;
   }
 
@@ -361,9 +344,11 @@ export abstract class Field implements IASTNodeLocationSvg,
    * do custom input handling.
    */
   protected bindEvents_() {
-    Tooltip.bindMouseEvents(this.getClickTarget_());
+    const clickTarget = this.getClickTarget_();
+    if (!clickTarget) throw new Error('A click target has not been set.');
+    Tooltip.bindMouseEvents(clickTarget);
     this.mouseDownWrapper_ = browserEvents.conditionalBind(
-        this.getClickTarget_(), 'mousedown', this, this.onMouseDown_);
+        clickTarget, 'mousedown', this, this.onMouseDown_);
   }
 
   /**
@@ -431,7 +416,7 @@ export abstract class Field implements IASTNodeLocationSvg,
    *     Used to see if `this` has overridden any relevant hooks.
    * @returns The stringified version of the XML state, or null.
    */
-  protected saveLegacyState(callingClass: AnyDuringMigration): string|null {
+  protected saveLegacyState(callingClass: FieldProto): string|null {
     if (callingClass.prototype.saveState === this.saveState &&
         callingClass.prototype.toXml !== this.toXml) {
       const elem = utilsXml.createElement('field');
@@ -454,7 +439,7 @@ export abstract class Field implements IASTNodeLocationSvg,
    * @param state The state to apply to the field.
    * @returns Whether the state was applied or not.
    */
-  loadLegacyState(callingClass: AnyDuringMigration, state: AnyDuringMigration):
+  loadLegacyState(callingClass: FieldProto, state: AnyDuringMigration):
       boolean {
     if (callingClass.prototype.loadState === this.loadState &&
         callingClass.prototype.fromXml !== this.fromXml) {
@@ -488,16 +473,17 @@ export abstract class Field implements IASTNodeLocationSvg,
   /** Add or remove the UI indicating if this field is editable or not. */
   updateEditable() {
     const group = this.fieldGroup_;
-    if (!this.EDITABLE || !group) {
+    const block = this.getSourceBlock();
+    if (!this.EDITABLE || !group || !block) {
       return;
     }
-    if (this.enabled_ && this.sourceBlock_.isEditable()) {
-      group.classList.add('blocklyEditableText');
-      group.classList.remove('blocklyNonEditableText');
+    if (this.enabled_ && block.isEditable()) {
+      dom.addClass(group, 'blocklyEditableText');
+      dom.removeClass(group, 'blocklyNonEditableText');
       group.style.cursor = this.CURSOR;
     } else {
-      group.classList.add('blocklyNonEditableText');
-      group.classList.remove('blocklyEditableText');
+      dom.addClass(group, 'blocklyNonEditableText');
+      dom.removeClass(group, 'blocklyEditableText');
       group.style.cursor = '';
     }
   }
@@ -590,7 +576,7 @@ export abstract class Field implements IASTNodeLocationSvg,
       return;
     }
     this.visible_ = visible;
-    const root = this.getSvgRoot();
+    const root = this.fieldGroup_;
     if (root) {
       root.style.display = visible ? 'block' : 'none';
     }
@@ -630,8 +616,47 @@ export abstract class Field implements IASTNodeLocationSvg,
    *
    * @returns The group element.
    */
-  getSvgRoot(): SVGGElement {
+  getSvgRoot(): SVGGElement|null {
     return this.fieldGroup_;
+  }
+
+  /**
+   * Gets the border rectangle element.
+   *
+   * @returns The border rectangle element.
+   * @throws An error if the border rectangle element is not defined.
+   */
+  protected getBorderRect(): SVGRectElement {
+    if (!this.borderRect_) {
+      throw new Error(`The border rectangle is ${this.borderRect_}.`);
+    }
+    return this.borderRect_;
+  }
+
+  /**
+   * Gets the text element.
+   *
+   * @returns The text element.
+   * @throws An error if the text element is not defined.
+   */
+  protected getTextElement(): SVGTextElement {
+    if (!this.textElement_) {
+      throw new Error(`The text element is ${this.textElement_}.`);
+    }
+    return this.textElement_;
+  }
+
+  /**
+   * Gets the text content.
+   *
+   * @returns The text content.
+   * @throws An error if the text content is not defined.
+   */
+  protected getTextContent(): Text {
+    if (!this.textContent_) {
+      throw new Error(`The text content is ${this.textContent_}.`);
+    }
+    return this.textContent_;
   }
 
   /**
@@ -726,20 +751,19 @@ export abstract class Field implements IASTNodeLocationSvg,
     const constants = this.getConstants();
     const halfHeight = this.size_.height / 2;
 
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
     this.textElement_.setAttribute(
         'x',
-        (this.sourceBlock_.RTL ? this.size_.width - contentWidth - xOffset :
-                                 xOffset) as AnyDuringMigration);
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
+        `${
+            this.getSourceBlock()?.RTL ?
+                this.size_.width - contentWidth - xOffset :
+                xOffset}`);
     this.textElement_.setAttribute(
         'y',
-        (constants!.FIELD_TEXT_BASELINE_CENTER ?
-             halfHeight :
-             halfHeight - constants!.FIELD_TEXT_HEIGHT / 2 +
-                 constants!.FIELD_TEXT_BASELINE) as AnyDuringMigration);
+        `${
+            constants!.FIELD_TEXT_BASELINE_CENTER ?
+                halfHeight :
+                halfHeight - constants!.FIELD_TEXT_HEIGHT / 2 +
+                    constants!.FIELD_TEXT_BASELINE}`);
   }
 
   /** Position a field's border rect after a size change. */
@@ -747,24 +771,12 @@ export abstract class Field implements IASTNodeLocationSvg,
     if (!this.borderRect_) {
       return;
     }
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
+    this.borderRect_.setAttribute('width', `${this.size_.width}`);
+    this.borderRect_.setAttribute('height', `${this.size_.height}`);
     this.borderRect_.setAttribute(
-        'width', this.size_.width as AnyDuringMigration);
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
+        'rx', `${this.getConstants()!.FIELD_BORDER_RECT_RADIUS}`);
     this.borderRect_.setAttribute(
-        'height', this.size_.height as AnyDuringMigration);
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
-    this.borderRect_.setAttribute(
-        'rx',
-        this.getConstants()!.FIELD_BORDER_RECT_RADIUS as AnyDuringMigration);
-    // AnyDuringMigration because:  Argument of type 'number' is not assignable
-    // to parameter of type 'string'.
-    this.borderRect_.setAttribute(
-        'ry',
-        this.getConstants()!.FIELD_BORDER_RECT_RADIUS as AnyDuringMigration);
+        'ry', `${this.getConstants()!.FIELD_BORDER_RECT_RADIUS}`);
   }
 
   /**
@@ -785,10 +797,13 @@ export abstract class Field implements IASTNodeLocationSvg,
     } else if (this.visible_ && this.size_.width === 0) {
       // If the field is not visible the width will be 0 as well, one of the
       // problems with the old system.
-      console.warn(
-          'Deprecated use of setting size_.width to 0 to rerender a' +
-          ' field. Set field.isDirty_ to true instead.');
       this.render_();
+      // Don't issue a warning if the field is actually zero width.
+      if (this.size_.width !== 0) {
+        console.warn(
+            'Deprecated use of setting size_.width to 0 to rerender a' +
+            ' field. Set field.isDirty_ to true instead.');
+      }
     }
     return this.size_;
   }
@@ -805,12 +820,17 @@ export abstract class Field implements IASTNodeLocationSvg,
     let scaledWidth;
     let scaledHeight;
     let xy;
+    const block = this.getSourceBlock();
+    if (!block) {
+      throw new UnattachedFieldError();
+    }
+
     if (!this.borderRect_) {
       // Browsers are inconsistent in what they return for a bounding box.
       // - Webkit / Blink: fill-box / object bounding box
       // - Gecko: stroke-box
       const bBox = (this.sourceBlock_ as BlockSvg).getHeightWidth();
-      const scale = (this.sourceBlock_.workspace as WorkspaceSvg).scale;
+      const scale = (block.workspace as WorkspaceSvg).scale;
       xy = this.getAbsoluteXY_();
       scaledWidth = (bBox.width + 1) * scale;
       scaledHeight = (bBox.height + 1) * scale;
@@ -845,12 +865,12 @@ export abstract class Field implements IASTNodeLocationSvg,
     }
     if (text.length > this.maxDisplayLength) {
       // Truncate displayed string and add an ellipsis ('...').
-      text = text.substring(0, this.maxDisplayLength - 2) + '\u2026';
+      text = text.substring(0, this.maxDisplayLength - 2) + '…';
     }
     // Replace whitespace with non-breaking spaces so the text doesn't collapse.
     text = text.replace(/\s/g, Field.NBSP);
     if (this.sourceBlock_ && this.sourceBlock_.RTL) {
-      // The SVG is LTR, force text to be RTL.
+      // The SVG is LTR, force text to be RTL by adding an RLM.
       text += '\u200F';
     }
     return text;
@@ -896,9 +916,7 @@ export abstract class Field implements IASTNodeLocationSvg,
    */
   markDirty() {
     this.isDirty_ = true;
-    // AnyDuringMigration because:  Type 'null' is not assignable to type
-    // 'ConstantProvider'.
-    this.constants_ = null as AnyDuringMigration;
+    this.constants_ = null;
   }
 
   /**
@@ -1050,7 +1068,7 @@ export abstract class Field implements IASTNodeLocationSvg,
    * @param e Mouse down event.
    */
   protected onMouseDown_(e: Event) {
-    if (!this.sourceBlock_ || this.sourceBlock_.disposed) {
+    if (!this.sourceBlock_ || this.sourceBlock_.isDeadOrDying()) {
       return;
     }
     const gesture = (this.sourceBlock_.workspace as WorkspaceSvg).getGesture(e);
@@ -1101,7 +1119,7 @@ export abstract class Field implements IASTNodeLocationSvg,
    *
    * @returns Element to bind click handler to.
    */
-  protected getClickTarget_(): Element {
+  protected getClickTarget_(): Element|null {
     return this.clickTarget_ || this.getSvgRoot();
   }
 
@@ -1145,7 +1163,10 @@ export abstract class Field implements IASTNodeLocationSvg,
    */
   getParentInput(): Input {
     let parentInput = null;
-    const block = this.sourceBlock_;
+    const block = this.getSourceBlock();
+    if (!block) {
+      throw new UnattachedFieldError();
+    }
     const inputs = block.inputList;
 
     for (let idx = 0; idx < block.inputList.length; idx++) {
@@ -1158,9 +1179,7 @@ export abstract class Field implements IASTNodeLocationSvg,
         }
       }
     }
-    // AnyDuringMigration because:  Type 'Input | null' is not assignable to
-    // type 'Input'.
-    return parentInput as AnyDuringMigration;
+    return parentInput!;
   }
 
   /**
@@ -1199,12 +1218,13 @@ export abstract class Field implements IASTNodeLocationSvg,
    */
   setCursorSvg(cursorSvg: SVGElement) {
     if (!cursorSvg) {
-      // AnyDuringMigration because:  Type 'null' is not assignable to type
-      // 'SVGElement'.
-      this.cursorSvg_ = null as AnyDuringMigration;
+      this.cursorSvg_ = null;
       return;
     }
 
+    if (!this.fieldGroup_) {
+      throw new Error(`The field group is ${this.fieldGroup_}.`);
+    }
     this.fieldGroup_.appendChild(cursorSvg);
     this.cursorSvg_ = cursorSvg;
   }
@@ -1217,19 +1237,24 @@ export abstract class Field implements IASTNodeLocationSvg,
    */
   setMarkerSvg(markerSvg: SVGElement) {
     if (!markerSvg) {
-      // AnyDuringMigration because:  Type 'null' is not assignable to type
-      // 'SVGElement'.
-      this.markerSvg_ = null as AnyDuringMigration;
+      this.markerSvg_ = null;
       return;
     }
 
+    if (!this.fieldGroup_) {
+      throw new Error(`The field group is ${this.fieldGroup_}.`);
+    }
     this.fieldGroup_.appendChild(markerSvg);
     this.markerSvg_ = markerSvg;
   }
 
   /** Redraw any attached marker or cursor svgs if needed. */
   protected updateMarkers_() {
-    const workspace = this.sourceBlock_.workspace as WorkspaceSvg;
+    const block = this.getSourceBlock();
+    if (!block) {
+      throw new UnattachedFieldError();
+    }
+    const workspace = block.workspace as WorkspaceSvg;
     if (workspace.keyboardAccessibilityMode && this.cursorSvg_) {
       workspace.getCursor()!.draw();
     }
@@ -1245,4 +1270,24 @@ export abstract class Field implements IASTNodeLocationSvg,
  */
 export interface FieldConfig {
   tooltip?: string;
+}
+
+/**
+ * For use by Field and descendants of Field. Constructors can change
+ * in descendants, though they should contain all of Field's prototype methods.
+ */
+export type FieldProto = Pick<typeof Field, 'prototype'>;
+
+/**
+ * Represents an error where the field is trying to access its block or
+ * information about its block before it has actually been attached to said
+ * block.
+ */
+export class UnattachedFieldError extends Error {
+  /** @internal */
+  constructor() {
+    super(
+        'The field has not yet been attached to its input. ' +
+        'Call appendField to attach it.');
+  }
 }

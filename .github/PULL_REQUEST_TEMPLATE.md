@@ -35,11 +35,11 @@
 
 ### Test Coverage
 
-<!-- TODO: Please show how you have added tests to cover your changes,
-  -        or tell us how you tested it. If your change includes
-  -        browser-specific behaviour, include information about the
-  -        browser and device that you used for testing.
-  -->
+<!-- TODO: Please create unit tests, and explain here how they cover
+           your changes, or tell us how you tested it manually. If
+           your changes include browser-specific behaviour, include
+           information about the browser and device that you used for
+           testing. -->
 
 ### Documentation
 

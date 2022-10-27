@@ -13,7 +13,7 @@ import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.FieldMultilineInput');
 
 import * as Css from './css.js';
-import {Field} from './field.js';
+import {Field, UnattachedFieldError} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import {FieldTextInputConfig, FieldTextInput} from './field_textinput.js';
 import * as aria from './utils/aria.js';
@@ -163,6 +163,10 @@ export class FieldMultilineInput extends FieldTextInput {
    * @returns Currently displayed text.
    */
   protected override getDisplayText_(): string {
+    const block = this.getSourceBlock();
+    if (!block) {
+      throw new UnattachedFieldError();
+    }
     let textLines = this.getText();
     if (!textLines) {
       // Prevent the field from disappearing if empty.
@@ -189,7 +193,7 @@ export class FieldMultilineInput extends FieldTextInput {
         textLines += '\n';
       }
     }
-    if (this.sourceBlock_.RTL) {
+    if (block.RTL) {
       // The SVG is LTR, force value to be RTL.
       textLines += '\u200F';
     }
@@ -212,6 +216,10 @@ export class FieldMultilineInput extends FieldTextInput {
 
   /** Updates the text of the textElement. */
   protected override render_() {
+    const block = this.getSourceBlock();
+    if (!block) {
+      throw new UnattachedFieldError();
+    }
     // Remove all text group children.
     let currentChild;
     while (currentChild = this.textGroup_.firstChild) {
@@ -239,16 +247,16 @@ export class FieldMultilineInput extends FieldTextInput {
     if (this.isBeingEdited_) {
       const htmlInput = this.htmlInput_ as HTMLElement;
       if (this.isOverflowedY_) {
-        htmlInput.classList.add('blocklyHtmlTextAreaInputOverflowedY');
+        dom.addClass(htmlInput, 'blocklyHtmlTextAreaInputOverflowedY');
       } else {
-        htmlInput.classList.remove('blocklyHtmlTextAreaInputOverflowedY');
+        dom.removeClass(htmlInput, 'blocklyHtmlTextAreaInputOverflowedY');
       }
     }
 
     this.updateSize_();
 
     if (this.isBeingEdited_) {
-      if (this.sourceBlock_.RTL) {
+      if (block.RTL) {
         // in RTL, we need to let the browser reflow before resizing
         // in order to get the correct bounding box of the borderRect
         // avoiding issue #2777.
@@ -258,10 +266,10 @@ export class FieldMultilineInput extends FieldTextInput {
       }
       const htmlInput = this.htmlInput_ as HTMLElement;
       if (!this.isTextValid_) {
-        htmlInput.classList.add('blocklyInvalidInput');
+        dom.addClass(htmlInput, 'blocklyInvalidInput');
         aria.setState(htmlInput, aria.State.INVALID, true);
       } else {
-        htmlInput.classList.remove('blocklyInvalidInput');
+        dom.removeClass(htmlInput, 'blocklyInvalidInput');
         aria.setState(htmlInput, aria.State.INVALID, false);
       }
     }
@@ -270,11 +278,15 @@ export class FieldMultilineInput extends FieldTextInput {
   /** Updates the size of the field based on the text. */
   protected override updateSize_() {
     const nodes = this.textGroup_.childNodes;
+    const fontSize = this.getConstants()!.FIELD_TEXT_FONTSIZE;
+    const fontWeight = this.getConstants()!.FIELD_TEXT_FONTWEIGHT;
+    const fontFamily = this.getConstants()!.FIELD_TEXT_FONTFAMILY;
     let totalWidth = 0;
     let totalHeight = 0;
     for (let i = 0; i < nodes.length; i++) {
       const tspan = nodes[i] as SVGTextElement;
-      const textWidth = dom.getTextWidth(tspan);
+      const textWidth =
+          dom.getFastTextWidth(tspan, fontSize, fontWeight, fontFamily);
       if (textWidth > totalWidth) {
         totalWidth = textWidth;
       }
@@ -290,9 +302,6 @@ export class FieldMultilineInput extends FieldTextInput {
       const actualEditorLines = this.value_.split('\n');
       const dummyTextElement = dom.createSvgElement(
           Svg.TEXT, {'class': 'blocklyText blocklyMultilineText'});
-      const fontSize = this.getConstants()!.FIELD_TEXT_FONTSIZE;
-      const fontWeight = this.getConstants()!.FIELD_TEXT_FONTWEIGHT;
-      const fontFamily = this.getConstants()!.FIELD_TEXT_FONTFAMILY;
 
       for (let i = 0; i < actualEditorLines.length; i++) {
         if (actualEditorLines[i].length > this.maxDisplayLength) {

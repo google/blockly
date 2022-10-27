@@ -181,7 +181,8 @@ export class MarkerSvg {
     // Ensures the marker will be visible immediately after the move.
     const animate = this.currentMarkerSvg!.childNodes[0];
     if (animate !== undefined) {
-      animate instanceof SVGAnimationElement && animate.beginElement();
+      (animate as SVGAnimationElement).beginElement &&
+          (animate as SVGAnimationElement).beginElement();
     }
   }
 
@@ -567,7 +568,7 @@ export class MarkerSvg {
    *
    * @returns The object holding attributes to make the marker blink.
    */
-  protected getBlinkProperties_(): object {
+  protected getBlinkProperties_(): {[key: string]: string} {
     return {
       'attributeType': 'XML',
       'attributeName': 'fill',

@@ -25,8 +25,8 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.CommentDelete
  */
 export class CommentDelete extends CommentBase {
-  override type: string;
-  xml: AnyDuringMigration;
+  override type = eventUtils.COMMENT_DELETE;
+  xml?: Element;
 
   /**
    * @param opt_comment The deleted comment.
@@ -35,33 +35,11 @@ export class CommentDelete extends CommentBase {
   constructor(opt_comment?: WorkspaceComment) {
     super(opt_comment);
 
-    /** Type of this event. */
-    this.type = eventUtils.COMMENT_DELETE;
-
     if (!opt_comment) {
       return;  // Blank event to be populated by fromJson.
     }
 
     this.xml = opt_comment.toXmlWithXY();
-  }
-  // TODO (#1266): "Full" and "minimal" serialization.
-  /**
-   * Encode the event as JSON.
-   *
-   * @returns JSON representation.
-   */
-  override toJson(): AnyDuringMigration {
-    const json = super.toJson();
-    return json;
-  }
-
-  /**
-   * Decode the JSON event.
-   *
-   * @param json JSON representation.
-   */
-  override fromJson(json: AnyDuringMigration) {
-    super.fromJson(json);
   }
 
   /**

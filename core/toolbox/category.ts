@@ -17,6 +17,7 @@ import type {ICollapsibleToolboxItem} from '../interfaces/i_collapsible_toolbox_
 import type {ISelectableToolboxItem} from '../interfaces/i_selectable_toolbox_item.js';
 import type {IToolbox} from '../interfaces/i_toolbox.js';
 import type {IToolboxItem} from '../interfaces/i_toolbox_item.js';
+import type {CategoryInfo, DynamicCategoryInfo, FlyoutDefinition, FlyoutItemInfo, FlyoutItemInfoArray, StaticCategoryInfo} from '../utils/toolbox.js';
 import * as registry from '../registry.js';
 import * as aria from '../utils/aria.js';
 import * as colourUtils from '../utils/colour.js';
@@ -50,7 +51,7 @@ export class ToolboxCategory extends ToolboxItem implements
   static defaultBackgroundColour = '#57e';
 
   // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  override toolboxItemDef_!: toolbox.CategoryInfo;
+  override toolboxItemDef_!: CategoryInfo;
 
   /** The name that will be displayed on the category. */
   protected name_ = '';
@@ -81,7 +82,7 @@ export class ToolboxCategory extends ToolboxItem implements
   protected isDisabled_ = false;
 
   /** The flyout items for this category. */
-  protected flyoutItems_: string|toolbox.FlyoutItemInfoArray = [];
+  protected flyoutItems_: string|FlyoutItemInfoArray = [];
 
   /**
    * @param categoryDef The information needed to create a category in the
@@ -91,7 +92,7 @@ export class ToolboxCategory extends ToolboxItem implements
    *     a parent.
    */
   constructor(
-      categoryDef: toolbox.CategoryInfo, parentToolbox: IToolbox,
+      categoryDef: CategoryInfo, parentToolbox: IToolbox,
       opt_parent?: ICollapsibleToolboxItem) {
     super(categoryDef, parentToolbox, opt_parent);
 
@@ -122,10 +123,6 @@ export class ToolboxCategory extends ToolboxItem implements
    *     category.
    */
   protected makeDefaultCssConfig_(): CssConfig {
-    // AnyDuringMigration because:  Type '{ container: string; row: string;
-    // rowcontentcontainer: string; icon: string; label: string; contents:
-    // string; selected: string; openicon: string; closedicon: string; }' is not
-    // assignable to type 'CssConfig'.
     return {
       'container': 'blocklyToolboxCategory',
       'row': 'blocklyTreeRow',
@@ -136,7 +133,7 @@ export class ToolboxCategory extends ToolboxItem implements
       'selected': 'blocklyTreeSelected',
       'openicon': 'blocklyTreeIconOpen',
       'closedicon': 'blocklyTreeIconClosed',
-    } as AnyDuringMigration;
+    };
   }
 
   /**
@@ -145,18 +142,19 @@ export class ToolboxCategory extends ToolboxItem implements
    *
    * @param categoryDef The information needed to create a category.
    */
-  protected parseContents_(categoryDef: toolbox.CategoryInfo) {
-    const contents = (categoryDef as AnyDuringMigration)['contents'];
+  protected parseContents_(categoryDef: CategoryInfo) {
+    if ('custom' in categoryDef) {
+      this.flyoutItems_ = categoryDef['custom'];
+    } else {
+      const contents = categoryDef['contents'];
+      if (!contents) return;
 
-    if ((categoryDef as AnyDuringMigration)['custom']) {
-      this.flyoutItems_ = (categoryDef as AnyDuringMigration)['custom'];
-    } else if (contents) {
       for (let i = 0; i < contents.length; i++) {
         const itemDef = contents[i];
-        const flyoutItem = itemDef as toolbox.FlyoutItemInfo;
-        // AnyDuringMigration because:  Property 'push' does not exist on type
-        // 'string | FlyoutItemInfoArray'.
-        (this.flyoutItems_ as AnyDuringMigration).push(flyoutItem);
+        const flyoutItem = itemDef as FlyoutItemInfo;
+        if (Array.isArray(this.flyoutItems_)) {
+          this.flyoutItems_.push(flyoutItem);
+        }
       }
     }
   }
@@ -166,14 +164,14 @@ export class ToolboxCategory extends ToolboxItem implements
    *
    * @param categoryDef The information needed to create a category.
    */
-  protected parseCategoryDef_(categoryDef: toolbox.CategoryInfo) {
-    this.name_ = parsing.replaceMessageReferences(
-        (categoryDef as AnyDuringMigration)['name']);
+  protected parseCategoryDef_(categoryDef: CategoryInfo) {
+    this.name_ = 'name' in categoryDef ?
+        parsing.replaceMessageReferences(categoryDef['name']) :
+        '';
     this.colour_ = this.getColour_(categoryDef);
     Object.assign(
         this.cssConfig_,
-        categoryDef['cssconfig'] ||
-            (categoryDef as AnyDuringMigration)['cssConfig']);
+        categoryDef['cssconfig'] || (categoryDef as any)['cssConfig']);
   }
 
   /**
@@ -184,8 +182,8 @@ export class ToolboxCategory extends ToolboxItem implements
   protected createDom_(): HTMLDivElement {
     this.htmlDiv_ = this.createContainer_();
     aria.setRole(this.htmlDiv_, aria.Role.TREEITEM);
-    aria.setState((this.htmlDiv_), aria.State.SELECTED, false);
-    aria.setState((this.htmlDiv_), aria.State.LEVEL, this.level_);
+    aria.setState(this.htmlDiv_, aria.State.SELECTED, false);
+    aria.setState(this.htmlDiv_, aria.State.LEVEL, this.level_);
 
     this.rowDiv_ = this.createRowContainer_();
     this.rowDiv_.style.pointerEvents = 'auto';
@@ -201,11 +199,11 @@ export class ToolboxCategory extends ToolboxItem implements
 
     this.labelDom_ = this.createLabelDom_(this.name_);
     this.rowContents_.appendChild(this.labelDom_);
-    // AnyDuringMigration because:  Argument of type 'string | null' is not
-    // assignable to parameter of type 'string | number | boolean | string[]'.
-    aria.setState(
-        this.htmlDiv_ as Element, aria.State.LABELLEDBY,
-        this.labelDom_.getAttribute('id') as AnyDuringMigration);
+
+    const id = this.labelDom_.getAttribute('id');
+    if (id) {
+      aria.setState(this.htmlDiv_, aria.State.LABELLEDBY, id);
+    }
 
     this.addColourBorder_(this.colour_);
 
@@ -219,9 +217,9 @@ export class ToolboxCategory extends ToolboxItem implements
    */
   protected createContainer_(): HTMLDivElement {
     const container = document.createElement('div');
-    const className = (this.cssConfig_ as AnyDuringMigration)['container'];
+    const className = this.cssConfig_['container'];
     if (className) {
-      container.classList.add(className);
+      dom.addClass(container, className);
     }
     return container;
   }
@@ -233,21 +231,15 @@ export class ToolboxCategory extends ToolboxItem implements
    * @returns The div that holds the contents container.
    */
   protected createRowContainer_(): HTMLDivElement {
-    const rowDiv = (document.createElement('div'));
-    const className = (this.cssConfig_ as AnyDuringMigration)['row'];
+    const rowDiv = document.createElement('div');
+    const className = this.cssConfig_['row'];
     if (className) {
-      rowDiv.classList.add(className);
+      dom.addClass(rowDiv, className);
     }
-    let nestedPadding = ToolboxCategory.nestedPadding * this.getLevel();
-    // AnyDuringMigration because:  Type 'string' is not assignable to type
-    // 'number'.
-    nestedPadding = (nestedPadding.toString() + 'px') as AnyDuringMigration;
-    // AnyDuringMigration because:  Type 'number' is not assignable to type
-    // 'string'. AnyDuringMigration because:  Type 'number' is not assignable to
-    // type 'string'.
-    this.workspace_.RTL ?
-        rowDiv.style.paddingRight = nestedPadding as AnyDuringMigration :
-        rowDiv.style.paddingLeft = nestedPadding as AnyDuringMigration;
+    const nestedPadding =
+        `${ToolboxCategory.nestedPadding * this.getLevel()}px`;
+    this.workspace_.RTL ? rowDiv.style.paddingRight = nestedPadding :
+                          rowDiv.style.paddingLeft = nestedPadding;
     return rowDiv;
   }
 
@@ -259,10 +251,9 @@ export class ToolboxCategory extends ToolboxItem implements
    */
   protected createRowContentsContainer_(): HTMLDivElement {
     const contentsContainer = document.createElement('div');
-    const className =
-        (this.cssConfig_ as AnyDuringMigration)['rowcontentcontainer'];
+    const className = this.cssConfig_['rowcontentcontainer'];
     if (className) {
-      contentsContainer.classList.add(className);
+      dom.addClass(contentsContainer, className);
     }
     return contentsContainer;
   }
@@ -275,9 +266,9 @@ export class ToolboxCategory extends ToolboxItem implements
   protected createIconDom_(): Element {
     const toolboxIcon = document.createElement('span');
     if (!this.parentToolbox_.isHorizontal()) {
-      const className = (this.cssConfig_ as AnyDuringMigration)['icon'];
+      const className = this.cssConfig_['icon'];
       if (className) {
-        toolboxIcon.classList.add(className);
+        dom.addClass(toolboxIcon, className);
       }
     }
 
@@ -296,16 +287,16 @@ export class ToolboxCategory extends ToolboxItem implements
     const toolboxLabel = document.createElement('span');
     toolboxLabel.setAttribute('id', this.getId() + '.label');
     toolboxLabel.textContent = name;
-    const className = (this.cssConfig_ as AnyDuringMigration)['label'];
+    const className = this.cssConfig_['label'];
     if (className) {
-      toolboxLabel.classList.add(className);
+      dom.addClass(toolboxLabel, className);
     }
     return toolboxLabel;
   }
 
   /** Updates the colour for this category. */
   refreshTheme() {
-    this.colour_ = this.getColour_((this.toolboxItemDef_));
+    this.colour_ = this.getColour_(this.toolboxItemDef_);
     this.addColourBorder_(this.colour_);
   }
 
@@ -332,7 +323,7 @@ export class ToolboxCategory extends ToolboxItem implements
    * @param categoryDef The object holding information on the category.
    * @returns The hex colour for the category.
    */
-  protected getColour_(categoryDef: toolbox.CategoryInfo): string {
+  protected getColour_(categoryDef: CategoryInfo): string {
     const styleName =
         categoryDef['categorystyle'] || (categoryDef as any)['categoryStyle'];
     const colour = categoryDef['colour'];
@@ -343,10 +334,8 @@ export class ToolboxCategory extends ToolboxItem implements
           '" must not have both a style and a colour');
     } else if (styleName) {
       return this.getColourfromStyle_(styleName);
-    } else {
-      // AnyDuringMigration because:  Argument of type 'string | undefined' is
-      // not assignable to parameter of type 'string | number'.
-      return this.parseColour_(colour as AnyDuringMigration);
+    } else if (colour) {
+      return this.parseColour_(colour);
     }
     return '';
   }
@@ -425,13 +414,13 @@ export class ToolboxCategory extends ToolboxItem implements
     if (!iconDiv) {
       return;
     }
-    // AnyDuringMigration because:  Argument of type 'string | undefined' is not
-    // assignable to parameter of type 'string'.
-    dom.removeClasses(
-        iconDiv, (this.cssConfig_ as AnyDuringMigration)['closedicon']);
-    const className = (this.cssConfig_ as AnyDuringMigration)['openicon'];
+    const closedIconClass = this.cssConfig_['closedicon'];
+    if (closedIconClass) {
+      dom.removeClasses(iconDiv, closedIconClass);
+    }
+    const className = this.cssConfig_['openicon'];
     if (className) {
-      iconDiv.classList.add(className);
+      dom.addClass(iconDiv, className);
     }
   }
 
@@ -444,13 +433,13 @@ export class ToolboxCategory extends ToolboxItem implements
     if (!iconDiv) {
       return;
     }
-    // AnyDuringMigration because:  Argument of type 'string | undefined' is not
-    // assignable to parameter of type 'string'.
-    dom.removeClasses(
-        iconDiv, (this.cssConfig_ as AnyDuringMigration)['openicon']);
-    const className = (this.cssConfig_ as AnyDuringMigration)['closedicon'];
+    const openIconClass = this.cssConfig_['openicon'];
+    if (openIconClass) {
+      dom.removeClasses(iconDiv, openIconClass);
+    }
+    const className = this.cssConfig_['closedicon'];
     if (className) {
-      iconDiv.classList.add(className);
+      dom.addClass(iconDiv, className);
     }
   }
 
@@ -532,18 +521,18 @@ export class ToolboxCategory extends ToolboxItem implements
     if (!this.rowDiv_) {
       return;
     }
-    const className = (this.cssConfig_ as AnyDuringMigration)['selected'];
+    const className = this.cssConfig_['selected'];
     if (isSelected) {
       const defaultColour =
           this.parseColour_(ToolboxCategory.defaultBackgroundColour);
       this.rowDiv_.style.backgroundColor = this.colour_ || defaultColour;
       if (className) {
-        this.rowDiv_.classList.add(className);
+        dom.addClass(this.rowDiv_, className);
       }
     } else {
       this.rowDiv_.style.backgroundColor = '';
       if (className) {
-        this.rowDiv_.classList.remove(className);
+        dom.removeClass(this.rowDiv_, className);
       }
     }
     aria.setState(this.htmlDiv_ as Element, aria.State.SELECTED, isSelected);
@@ -556,9 +545,7 @@ export class ToolboxCategory extends ToolboxItem implements
    */
   setDisabled(isDisabled: boolean) {
     this.isDisabled_ = isDisabled;
-    // AnyDuringMigration because:  Argument of type 'boolean' is not assignable
-    // to parameter of type 'string'.
-    this.getDiv()!.setAttribute('disabled', isDisabled as AnyDuringMigration);
+    this.getDiv()!.setAttribute('disabled', `${isDisabled}`);
     isDisabled ? this.getDiv()!.setAttribute('disabled', 'true') :
                  this.getDiv()!.removeAttribute('disabled');
   }
@@ -586,7 +573,7 @@ export class ToolboxCategory extends ToolboxItem implements
    *
    * @returns The definition of items to be displayed in the flyout.
    */
-  getContents(): toolbox.FlyoutItemInfoArray|string {
+  getContents(): FlyoutItemInfoArray|string {
     return this.flyoutItems_;
   }
 
@@ -598,18 +585,35 @@ export class ToolboxCategory extends ToolboxItem implements
    * @param contents The contents to be displayed in the flyout. A string can be
    *     supplied to create a dynamic category.
    */
-  updateFlyoutContents(contents: toolbox.FlyoutDefinition|string) {
+  updateFlyoutContents(contents: FlyoutDefinition|string) {
     this.flyoutItems_ = [];
 
     if (typeof contents === 'string') {
-      (this.toolboxItemDef_ as AnyDuringMigration)['custom'] = contents;
+      const newDefinition: DynamicCategoryInfo = {
+        kind: this.toolboxItemDef_.kind,
+        custom: contents,
+        id: this.toolboxItemDef_.id,
+        categorystyle: this.toolboxItemDef_.categorystyle,
+        colour: this.toolboxItemDef_.colour,
+        cssconfig: this.toolboxItemDef_.cssconfig,
+        hidden: this.toolboxItemDef_.hidden,
+      };
+      this.toolboxItemDef_ = newDefinition;
     } else {
-      // Removes old custom field when contents is updated.
-      delete (this.toolboxItemDef_ as AnyDuringMigration)['custom'];
-      (this.toolboxItemDef_ as AnyDuringMigration)['contents'] =
-          toolbox.convertFlyoutDefToJsonArray(contents);
+      const newDefinition: StaticCategoryInfo = {
+        kind: this.toolboxItemDef_.kind,
+        name: 'name' in this.toolboxItemDef_ ? this.toolboxItemDef_['name'] :
+                                               '',
+        contents: toolbox.convertFlyoutDefToJsonArray(contents),
+        id: this.toolboxItemDef_.id,
+        categorystyle: this.toolboxItemDef_.categorystyle,
+        colour: this.toolboxItemDef_.colour,
+        cssconfig: this.toolboxItemDef_.cssconfig,
+        hidden: this.toolboxItemDef_.hidden,
+      };
+      this.toolboxItemDef_ = newDefinition;
     }
-    this.parseContents_((this.toolboxItemDef_));
+    this.parseContents_(this.toolboxItemDef_);
   }
 
   override dispose() {
@@ -620,14 +624,15 @@ export class ToolboxCategory extends ToolboxItem implements
 export namespace ToolboxCategory {
   /** All the CSS class names that are used to create a category. */
   export interface CssConfig {
-    container: string|undefined;
-    row: string|undefined;
-    rowcontentcontainer: string|undefined;
-    icon: string|undefined;
-    label: string|undefined;
-    selected: string|undefined;
-    openicon: string|undefined;
-    closedicon: string|undefined;
+    container?: string;
+    row?: string;
+    rowcontentcontainer?: string;
+    icon?: string;
+    label?: string;
+    contents?: string;
+    selected?: string;
+    openicon?: string;
+    closedicon?: string;
   }
 }
 

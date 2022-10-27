@@ -57,7 +57,7 @@ import {Field} from './field.js';
 import {FieldAngle} from './field_angle.js';
 import {FieldCheckbox} from './field_checkbox.js';
 import {FieldColour} from './field_colour.js';
-import {FieldDropdown} from './field_dropdown.js';
+import {FieldDropdown, MenuGenerator, MenuGeneratorFunction, MenuOption} from './field_dropdown.js';
 import {FieldImage} from './field_image.js';
 import {FieldLabel} from './field_label.js';
 import {FieldLabelSerializable} from './field_label_serializable.js';
@@ -104,7 +104,6 @@ import {IRegistrable} from './interfaces/i_registrable.js';
 import {IRegistrableField} from './interfaces/i_registrable_field.js';
 import {ISelectable} from './interfaces/i_selectable.js';
 import {ISelectableToolboxItem} from './interfaces/i_selectable_toolbox_item.js';
-import {ISerializer as SerializerInterface} from './interfaces/i_serializer.js';
 import {IStyleable} from './interfaces/i_styleable.js';
 import {IToolbox} from './interfaces/i_toolbox.js';
 import {IToolboxItem} from './interfaces/i_toolbox_item.js';
@@ -118,7 +117,7 @@ import {MarkerManager} from './marker_manager.js';
 import {Menu} from './menu.js';
 import {MenuItem} from './menuitem.js';
 import {MetricsManager} from './metrics_manager.js';
-import {Msg} from './msg.js';
+import {Msg, setLocale} from './msg.js';
 import {Mutator} from './mutator.js';
 import {Names} from './names.js';
 import {Options} from './options.js';
@@ -134,12 +133,7 @@ import * as thrasos from './renderers/thrasos/thrasos.js';
 import * as zelos from './renderers/zelos/zelos.js';
 import {Scrollbar} from './scrollbar.js';
 import {ScrollbarPair} from './scrollbar_pair.js';
-import * as serializationBlocks from './serialization/blocks.js';
-import * as serializationExceptions from './serialization/exceptions.js';
-import * as serializationPriorities from './serialization/priorities.js';
-import * as serializationRegistry from './serialization/registry.js';
-import * as serializationVariables from './serialization/variables.js';
-import * as serializationWorkspaces from './serialization/workspaces.js';
+import * as serialization from './serialization.js';
 import * as ShortcutItems from './shortcut_items.js';
 import {ShortcutRegistry} from './shortcut_registry.js';
 import {Theme} from './theme.js';
@@ -157,7 +151,6 @@ import {Trashcan} from './trashcan.js';
 import * as utils from './utils.js';
 import * as colour from './utils/colour.js';
 import * as deprecation from './utils/deprecation.js';
-import * as svgMath from './utils/svg_math.js';
 import * as toolbox from './utils/toolbox.js';
 import {VariableMap} from './variable_map.js';
 import {VariableModel} from './variable_model.js';
@@ -346,22 +339,11 @@ export const defineBlocksWithJsonArray = common.defineBlocksWithJsonArray;
 export const setParentContainer = common.setParentContainer;
 
 /**
- * Returns the dimensions of the specified SVG image.
- *
- * @param svg SVG image.
- * @returns Contains width and height properties.
- * @deprecated Use workspace.setCachedParentSvgSize. (2021 March 5)
- * @see Blockly.WorkspaceSvg.setCachedParentSvgSize
- * @alias Blockly.svgSize
- */
-export const svgSize = svgMath.svgSize;
-
-/**
  * Size the workspace when the contents change.  This also updates
  * scrollbars accordingly.
  *
  * @param workspace The workspace to resize.
- * @deprecated Use workspace.resizeContents. (2021 December)
+ * @deprecated Use **workspace.resizeContents** instead.
  * @see Blockly.WorkspaceSvg.resizeContents
  * @alias Blockly.resizeSvgContents
  */
@@ -377,7 +359,7 @@ export const resizeSvgContents = resizeSvgContentsLocal;
  * Copy a block or workspace comment onto the local clipboard.
  *
  * @param toCopy Block or Workspace Comment to be copied.
- * @deprecated Use Blockly.clipboard.copy(). (2021 December)
+ * @deprecated Use **Blockly.clipboard.copy** instead.
  * @see Blockly.clipboard.copy
  * @alias Blockly.copy
  */
@@ -392,7 +374,7 @@ export function copy(toCopy: ICopyable) {
  * Paste a block or workspace comment on to the main workspace.
  *
  * @returns True if the paste was successful, false otherwise.
- * @deprecated Use Blockly.clipboard.paste(). (2021 December)
+ * @deprecated Use **Blockly.clipboard.paste** instead.
  * @see Blockly.clipboard.paste
  * @alias Blockly.paste
  */
@@ -407,7 +389,7 @@ export function paste(): boolean {
  * Duplicate this block and its children, or a workspace comment.
  *
  * @param toDuplicate Block or Workspace Comment to be copied.
- * @deprecated Use Blockly.clipboard.duplicate(). (2021 December)
+ * @deprecated Use **Blockly.clipboard.duplicate** instead.
  * @see Blockly.clipboard.duplicate
  * @alias Blockly.duplicate
  */
@@ -423,7 +405,7 @@ export function duplicate(toDuplicate: ICopyable) {
  *
  * @param str Input string.
  * @returns True if number, false otherwise.
- * @deprecated Use Blockly.utils.string.isNumber(str). (2021 December)
+ * @deprecated Use **Blockly.utils.string.isNumber** instead.
  * @see Blockly.utils.string.isNumber
  * @alias Blockly.isNumber
  */
@@ -439,7 +421,7 @@ export function isNumber(str: string): boolean {
  *
  * @param hue Hue on a colour wheel (0-360).
  * @returns RGB code, e.g. '#5ba65b'.
- * @deprecated Use Blockly.utils.colour.hueToHex(). (2021 December)
+ * @deprecated Use **Blockly.utils.colour.hueToHex** instead.
  * @see Blockly.utils.colour.hueToHex
  * @alias Blockly.hueToHex
  */
@@ -461,7 +443,7 @@ export function hueToHex(hue: number): string {
  * @param thisObject The value of 'this' in the function.
  * @param func Function to call when event is triggered.
  * @returns Opaque data that can be passed to unbindEvent_.
- * @deprecated Use Blockly.browserEvents.bind(). (December 2021)
+ * @deprecated Use **Blockly.browserEvents.bind** instead.
  * @see Blockly.browserEvents.bind
  * @alias Blockly.bindEvent_
  */
@@ -480,7 +462,7 @@ export function bindEvent_(
  * @param bindData Opaque data from bindEvent_.
  *     This list is emptied during the course of calling this function.
  * @returns The function call.
- * @deprecated Use Blockly.browserEvents.unbind(). (December 2021)
+ * @deprecated Use **Blockly.browserEvents.unbind** instead.
  * @see browserEvents.unbind
  * @alias Blockly.unbindEvent_
  */
@@ -508,7 +490,7 @@ export function unbindEvent_(bindData: browserEvents.Data): Function {
  *     the default handler.  False by default.  If opt_noPreventDefault is
  *     provided, opt_noCaptureIdentifier must also be provided.
  * @returns Opaque data that can be passed to unbindEvent_.
- * @deprecated Use Blockly.browserEvents.conditionalBind(). (December 2021)
+ * @deprecated Use **Blockly.browserEvents.conditionalBind** instead.
  * @see browserEvents.conditionalBind
  * @alias Blockly.bindEventWithChecks_
  */
@@ -559,6 +541,7 @@ export const VARIABLE_DYNAMIC_CATEGORY_NAME: string =
  * @alias Blockly.PROCEDURE_CATEGORY_NAME
  */
 export const PROCEDURE_CATEGORY_NAME: string = Procedures.CATEGORY_NAME;
+
 
 // Context for why we need to monkey-patch in these functions (internal):
 //   https://docs.google.com/document/d/1MbO0LEA-pAyx1ErGLJnyUqTLrcYTo-5zga9qplnxeXo/edit?usp=sharing&resourcekey=0-5h_32-i-dHwHjf_9KYEVKg
@@ -619,6 +602,7 @@ export {Css};
 export {Events};
 export {Extensions};
 export {Procedures};
+export {Procedures as procedures};
 export {ShortcutItems};
 export {Themes};
 export {Tooltip};
@@ -668,7 +652,7 @@ export {Field};
 export {FieldAngle};
 export {FieldCheckbox};
 export {FieldColour};
-export {FieldDropdown};
+export {FieldDropdown, MenuGenerator, MenuGeneratorFunction, MenuOption};
 export {FieldImage};
 export {FieldLabel};
 export {FieldLabelSerializable};
@@ -720,7 +704,7 @@ export {Menu};
 export {MenuItem};
 export {MetricsManager};
 export {Mutator};
-export {Msg};
+export {Msg, setLocale};
 export {Names};
 export {Options};
 export {RenderedConnection};
@@ -753,12 +737,4 @@ export {config};
 export const connectionTypes = ConnectionType;
 export {inject};
 export {inputTypes};
-export namespace serialization {
-  export const blocks = serializationBlocks;
-  export const exceptions = serializationExceptions;
-  export const priorities = serializationPriorities;
-  export const registry = serializationRegistry;
-  export const variables = serializationVariables;
-  export const workspaces = serializationWorkspaces;
-  export type ISerializer = SerializerInterface;
-}
+export {serialization};

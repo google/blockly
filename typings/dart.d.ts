@@ -4,5 +4,4 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-declare const dart: any;
-export = dart;
+export declare const dartGenerator: any;

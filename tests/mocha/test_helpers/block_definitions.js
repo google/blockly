@@ -167,6 +167,7 @@ export function createTestBlock() {
     },
     'renameVarById': Blockly.Block.prototype.renameVarById,
     'updateVarName': Blockly.Block.prototype.updateVarName,
+    'isDeadOrDying': () => false,
   };
 }
 

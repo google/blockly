@@ -57,7 +57,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
                                                    IKeyboardAccessible,
                                                    IStyleable, IToolbox {
   /**
-   * The unique id for this component that is used to register with the
+   * The unique ID for this component that is used to register with the
    * ComponentManager.
    */
   override id = 'toolbox';
@@ -198,8 +198,8 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
   protected createContainer_(): HTMLDivElement {
     const toolboxContainer = (document.createElement('div'));
     toolboxContainer.setAttribute('layout', this.isHorizontal() ? 'h' : 'v');
-    toolboxContainer.classList.add('blocklyToolboxDiv');
-    toolboxContainer.classList.add('blocklyNonSelectable');
+    dom.addClass(toolboxContainer, 'blocklyToolboxDiv');
+    dom.addClass(toolboxContainer, 'blocklyNonSelectable');
     toolboxContainer.setAttribute('dir', this.RTL ? 'RTL' : 'LTR');
     return toolboxContainer;
   }
@@ -211,7 +211,7 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
    */
   protected createContentsContainer_(): HTMLDivElement {
     const contentsContainer = (document.createElement('div'));
-    contentsContainer.classList.add('blocklyToolboxContents');
+    dom.addClass(contentsContainer, 'blocklyToolboxContents');
     if (this.isHorizontal()) {
       contentsContainer.style.flexDirection = 'row';
     }
@@ -453,8 +453,8 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
    * @internal
    */
   addStyle(style: string) {
-    if (style) {
-      this.HtmlDiv?.classList.add(style);
+    if (style && this.HtmlDiv) {
+      dom.addClass(this.HtmlDiv, style);
     }
   }
 
@@ -465,8 +465,8 @@ export class Toolbox extends DeleteArea implements IAutoHideable,
    * @internal
    */
   removeStyle(style: string) {
-    if (style) {
-      this.HtmlDiv?.classList.remove(style);
+    if (style && this.HtmlDiv) {
+      dom.removeClass(this.HtmlDiv, style);
     }
   }
 

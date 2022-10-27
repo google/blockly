@@ -168,7 +168,6 @@ Serializer.Attributes.testSuites = [
 ];
 
 Serializer.Fields = new SerializerTestSuite('Fields');
-Serializer.Fields.skip = true;
 
 Serializer.Fields.Angle = new SerializerTestSuite('Angle');
 Serializer.Fields.Angle.Simple = new SerializerTestCase('Simple',

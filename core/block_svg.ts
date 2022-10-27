@@ -241,7 +241,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    *
    * @returns #RRGGBB string.
    */
-  getColourSecondary(): string|null {
+  getColourSecondary(): string|undefined {
     return this.style.colourSecondary;
   }
 
@@ -250,7 +250,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    *
    * @returns #RRGGBB string.
    */
-  getColourTertiary(): string|null {
+  getColourTertiary(): string|undefined {
     return this.style.colourTertiary;
   }
 
@@ -333,9 +333,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     }
 
     dom.startTextWidthCache();
-    // AnyDuringMigration because:  Argument of type 'Block | null' is not
-    // assignable to parameter of type 'Block'.
-    super.setParent(newParent as AnyDuringMigration);
+    super.setParent(newParent);
     dom.stopTextWidthCache();
 
     const svgRoot = this.getSvgRoot();
@@ -527,7 +525,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
   /** Snap this block to the nearest grid point. */
   snapToGrid() {
-    if (this.disposed) {
+    if (this.isDeadOrDying()) {
       return;  // Deleted block.
     }
     if (this.workspace.isDragging()) {
@@ -642,10 +640,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     }
     const input = this.getInput(collapsedInputName) ||
         this.appendDummyInput(collapsedInputName);
-    // AnyDuringMigration because:  Argument of type 'FieldLabel' is not
-    // assignable to parameter of type 'string | Field'.
-    input.appendField(
-        new FieldLabel(text) as AnyDuringMigration, collapsedFieldName);
+    input.appendField(new FieldLabel(text), collapsedFieldName);
   }
 
   /**
@@ -737,9 +732,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
 
     if (menuOptions && menuOptions.length) {
       ContextMenu.show(e, menuOptions, this.RTL);
-      // AnyDuringMigration because:  Argument of type 'this' is not assignable
-      // to parameter of type 'Block | null'.
-      ContextMenu.setCurrentBlock(this as AnyDuringMigration);
+      ContextMenu.setCurrentBlock(this);
     }
   }
 
@@ -785,10 +778,10 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       (group as AnyDuringMigration).translate_ = '';
       (group as AnyDuringMigration).skew_ = '';
       common.draggingConnections.push(...this.getConnections_(true));
-      this.svgGroup_.classList.add('blocklyDragging');
+      dom.addClass(this.svgGroup_, 'blocklyDragging');
     } else {
       common.draggingConnections.length = 0;
-      this.svgGroup_.classList.remove('blocklyDragging');
+      dom.removeClass(this.svgGroup_, 'blocklyDragging');
     }
     // Recurse through all blocks attached under this one.
     for (let i = 0; i < this.childBlocks_.length; i++) {
@@ -868,8 +861,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    * @suppress {checkTypes}
    */
   override dispose(healStack?: boolean, animate?: boolean) {
-    if (this.disposed) {
-      // The block has already been deleted.
+    if (this.isDeadOrDying()) {
       return;
     }
     Tooltip.dispose();
@@ -958,16 +950,12 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     if (this.isInsertionMarker_) {
       return null;
     }
-    // AnyDuringMigration because:  Argument of type 'this' is not assignable to
-    // parameter of type 'Block'. AnyDuringMigration because:  Argument of type
-    // 'this' is not assignable to parameter of type 'Block'.
     return {
-      saveInfo: blocks.save(
-                    this as AnyDuringMigration,
-                    {addCoordinates: true, addNextBlocks: false}) as
+      saveInfo:
+          blocks.save(this, {addCoordinates: true, addNextBlocks: false}) as
           blocks.State,
       source: this.workspace,
-      typeCounts: common.getBlockTypeCounts(this as AnyDuringMigration, true),
+      typeCounts: common.getBlockTypeCounts(this, true),
     };
   }
 
@@ -992,8 +980,8 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   }
 
   /**
-   * Updates the color of the block (and children) to match the current disabled
-   * state.
+   * Updates the colour of the block (and children) to match the current
+   * disabled state.
    *
    * @internal
    */
@@ -1078,13 +1066,12 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
     if (this.workspace.isDragging()) {
       // Don't change the warning text during a drag.
       // Wait until the drag finishes.
-      this.warningTextDb.set(
-          id, setTimeout(() => {
-            if (!this.disposed) {  // Check block wasn't deleted.
-              this.warningTextDb.delete(id);
-              this.setWarningText(text, id);
-            }
-          }, 100));
+      this.warningTextDb.set(id, setTimeout(() => {
+                               if (!this.isDeadOrDying()) {
+                                 this.warningTextDb.delete(id);
+                                 this.setWarningText(text, id);
+                               }
+                             }, 100));
       return;
     }
     if (this.isInFlyout) {
@@ -1278,7 +1265,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
    */
   bringToFront() {
     /* eslint-disable-next-line @typescript-eslint/no-this-alias */
-    let block = this;
+    let block: this|null = this;
     do {
       const root = block.getSvgRoot();
       const parent = root.parentNode;
@@ -1287,9 +1274,7 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
       if (childNodes[childNodes.length - 1] !== root) {
         parent!.appendChild(root);
       }
-      // AnyDuringMigration because:  Type 'BlockSvg | null' is not assignable
-      // to type 'this'.
-      block = block.getParent() as AnyDuringMigration;
+      block = block.getParent();
     } while (block);
   }
 
@@ -1550,45 +1535,46 @@ export class BlockSvg extends Block implements IASTNodeLocationSvg,
   }
 
   /**
-   * Bump unconnected blocks out of alignment.  Two blocks which aren't actually
-   * connected should not coincidentally line up on screen.
+   * Bumps unconnected blocks out of alignment.
+   *
+   * Two blocks which aren't actually connected should not coincidentally line
+   * up on screen, because that creates confusion for end-users.
    */
   override bumpNeighbours() {
-    if (this.disposed) {
-      return;  // Deleted block.
-    }
-    if (this.workspace.isDragging()) {
-      return;  // Don't bump blocks during a drag.
-    }
-    const rootBlock = this.getRootBlock();
-    if (rootBlock.isInFlyout) {
+    this.getRootBlock().bumpNeighboursInternal();
+  }
+
+  /**
+   * Bumps unconnected blocks out of alignment.
+   */
+  private bumpNeighboursInternal() {
+    const root = this.getRootBlock();
+    if (this.isDeadOrDying() || this.workspace.isDragging() ||
+        root.isInFlyout) {
       return;
     }
-    // Don't move blocks around in a flyout.
-    // Loop through every connection on this block.
-    const myConnections = this.getConnections_(false);
-    for (let i = 0, connection; connection = myConnections[i]; i++) {
-      const renderedConn = (connection);
-      // Spider down from this block bumping all sub-blocks.
-      if (renderedConn.isConnected() && renderedConn.isSuperior()) {
-        renderedConn.targetBlock()!.bumpNeighbours();
+
+    function neighbourIsInStack(neighbour: RenderedConnection) {
+      return neighbour.getSourceBlock().getRootBlock() === root;
+    }
+
+    for (const conn of this.getConnections_(false)) {
+      if (conn.isSuperior()) {
+        // Recurse down the block stack.
+        conn.targetBlock()?.bumpNeighboursInternal();
       }
 
-      const neighbours = connection.neighbours(config.snapRadius);
-      for (let j = 0, otherConnection; otherConnection = neighbours[j]; j++) {
-        const renderedOther = otherConnection as RenderedConnection;
-        // If both connections are connected, that's probably fine.  But if
-        // either one of them is unconnected, then there could be confusion.
-        if (!renderedConn.isConnected() || !renderedOther.isConnected()) {
-          // Only bump blocks if they are from different tree structures.
-          if (renderedOther.getSourceBlock().getRootBlock() !== rootBlock) {
-            // Always bump the inferior block.
-            if (renderedConn.isSuperior()) {
-              renderedOther.bumpAwayFrom(renderedConn);
-            } else {
-              renderedConn.bumpAwayFrom(renderedOther);
-            }
-          }
+      for (const neighbour of conn.neighbours(config.snapRadius)) {
+        // Don't bump away from things that are in our stack.
+        if (neighbourIsInStack(neighbour)) continue;
+        // If both connections are connected, that's fine.
+        if (conn.isConnected() && neighbour.isConnected()) continue;
+
+        // Always bump the inferior connection.
+        if (conn.isSuperior()) {
+          neighbour.bumpAwayFrom(conn);
+        } else {
+          conn.bumpAwayFrom(neighbour);
         }
       }
     }

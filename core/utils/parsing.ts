@@ -29,8 +29,7 @@ function tokenizeInterpolationInternal(
     message: string, parseInterpolationTokens: boolean): (string|number)[] {
   const tokens = [];
   const chars = message.split('');
-  chars.push(  // End marker.
-      '');
+  chars.push('');  // End marker.
   // Parse the message with a finite state machine.
   // 0 - Base case.
   // 1 - % found.

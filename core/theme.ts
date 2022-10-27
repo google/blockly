@@ -17,11 +17,11 @@ import * as object from './utils/object.js';
 
 
 export interface ITheme {
-  blockStyles: {[key: string]: BlockStyle};
-  categoryStyles: {[key: string]: CategoryStyle};
-  componentStyles: ComponentStyle;
-  fontStyle: FontStyle;
-  startHats: boolean|null;
+  blockStyles?: {[key: string]: Partial<BlockStyle>};
+  categoryStyles?: {[key: string]: CategoryStyle};
+  componentStyles?: ComponentStyle;
+  fontStyle?: FontStyle;
+  startHats?: boolean;
   base?: string|Theme;
   name: string;
 }
@@ -47,7 +47,7 @@ export class Theme implements ITheme {
    *
    * @internal
    */
-  startHats: boolean|null = null;
+  startHats?: boolean = false;
 
   /**
    * @param name Theme name.
@@ -58,7 +58,8 @@ export class Theme implements ITheme {
    * @param opt_componentStyles A map of Blockly component names to style value.
    */
   constructor(
-      public name: string, opt_blockStyles?: {[key: string]: BlockStyle},
+      public name: string,
+      opt_blockStyles?: {[key: string]: Partial<BlockStyle>},
       opt_categoryStyles?: {[key: string]: CategoryStyle},
       opt_componentStyles?: ComponentStyle) {
     /** The block styles map. */
@@ -189,7 +190,7 @@ export namespace Theme {
     colourPrimary: string;
     colourSecondary: string;
     colourTertiary: string;
-    hat?: string;
+    hat: string;
   }
 
   export interface CategoryStyle {
@@ -197,28 +198,28 @@ export namespace Theme {
   }
 
   export interface ComponentStyle {
-    workspaceBackgroundColour: string|null;
-    toolboxBackgroundColour: string|null;
-    toolboxForegroundColour: string|null;
-    flyoutBackgroundColour: string|null;
-    flyoutForegroundColour: string|null;
-    flyoutOpacity: number|null;
-    scrollbarColour: string|null;
-    scrollbarOpacity: number|null;
-    insertionMarkerColour: string|null;
-    insertionMarkerOpacity: number|null;
-    markerColour: string|null;
-    cursorColour: string|null;
-    selectedGlowColour: string|null;
-    selectedGlowOpacity: number|null;
-    replacementGlowColour: string|null;
-    replacementGlowOpacity: number|null;
+    workspaceBackgroundColour?: string;
+    toolboxBackgroundColour?: string;
+    toolboxForegroundColour?: string;
+    flyoutBackgroundColour?: string;
+    flyoutForegroundColour?: string;
+    flyoutOpacity?: number;
+    scrollbarColour?: string;
+    scrollbarOpacity?: number;
+    insertionMarkerColour?: string;
+    insertionMarkerOpacity?: number;
+    markerColour?: string;
+    cursorColour?: string;
+    selectedGlowColour?: string;
+    selectedGlowOpacity?: number;
+    replacementGlowColour?: string;
+    replacementGlowOpacity?: number;
   }
 
   export interface FontStyle {
-    family: string|null;
-    weight: string|null;
-    size: number|null;
+    family?: string;
+    weight?: string;
+    size?: number;
   }
 }
 

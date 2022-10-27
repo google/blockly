@@ -52,8 +52,8 @@ async function runGeneratorsInBrowser() {
     };
   } else {
     // --disable-gpu is needed to prevent Chrome from hanging on Linux with
-    // NVIDIA drivers older than v295.20. See 
-    // https://github.com/google/blockly/issues/5345 for details.   
+    // NVIDIA drivers older than v295.20. See
+    // https://github.com/google/blockly/issues/5345 for details.
     options.capabilities['goog:chromeOptions'] = {
       args: ['--allow-file-access-from-files', '--disable-gpu']
     };

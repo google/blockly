@@ -194,4 +194,3 @@ BlocklyDevTools.Analytics.sendQueued = function() {
   // stub
   this.LOG_TO_CONSOLE_ && console.log('Analytics.sendQueued');
 };
-

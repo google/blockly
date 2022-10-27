@@ -36,9 +36,9 @@ For samples on how to integrate Blockly into your project, view the list of samp
 ### Importing Blockly
 
 When you import Blockly with ``import * as Blockly from 'blockly';`` you'll get the default modules:
-Blockly core, Blockly built-in blocks, the JavaScript generator and the English lang files. 
+Blockly core, Blockly built-in blocks, the JavaScript generator and the English lang files.
 
-If you need more flexibility, you'll want to define your imports more carefully: 
+If you need more flexibility, you'll want to define your imports more carefully:
 
 #### Blockly Core
 

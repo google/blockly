@@ -32,7 +32,8 @@ export interface ParameterState {
 /**
  * A newable signature for an IProcedureModel.
  *
- * Refer to https://www.typescriptlang.org/docs/handbook/2/generics.html#using-class-types-in-generics
+ * Refer to
+ * https://www.typescriptlang.org/docs/handbook/2/generics.html#using-class-types-in-generics
  * for what is going on with this.
  */
 type ProcedureModelConstructor<ProcedureModel extends IProcedureModel> =
@@ -41,7 +42,8 @@ type ProcedureModelConstructor<ProcedureModel extends IProcedureModel> =
 /**
  * A newable signature for an IParameterModel.
  *
- * Refer to https://www.typescriptlang.org/docs/handbook/2/generics.html#using-class-types-in-generics
+ * Refer to
+ * https://www.typescriptlang.org/docs/handbook/2/generics.html#using-class-types-in-generics
  * for what is going on with this.
  */
 type ParameterModelConstructor<ParameterModel extends IParameterModel> =

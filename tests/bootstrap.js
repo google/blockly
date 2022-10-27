@@ -68,7 +68,7 @@
     depsFiles: [
       'build/deps.js',
     ],
-    
+
     // List of goog.modules to goog.require.
     requires: [
       'Blockly',

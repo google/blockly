@@ -23,7 +23,7 @@ var goog = goog || {};
 /**
  * Reference to the global object.  This is provided as 'root' by the
  * UMD wrapper, but prefer globalThis if it is defined.
- * 
+ *
  * https://www.ecma-international.org/ecma-262/9.0/index.html#sec-global-object
  *
  * @const

@@ -71,7 +71,7 @@ import {FlyoutButton} from './flyout_button.js';
 import {HorizontalFlyout} from './flyout_horizontal.js';
 import {FlyoutMetricsManager} from './flyout_metrics_manager.js';
 import {VerticalFlyout} from './flyout_vertical.js';
-import {Generator} from './generator.js';
+import {CodeGenerator} from './generator.js';
 import {Gesture} from './gesture.js';
 import {Grid} from './grid.js';
 import {Icon} from './icon.js';
@@ -567,12 +567,12 @@ WorkspaceCommentSvg.prototype.showContextMenu =
         return;
       }
       const menuOptions = [];
-    
+
       if (this.isDeletable() && this.isMovable()) {
         menuOptions.push(ContextMenu.commentDuplicateOption(this));
         menuOptions.push(ContextMenu.commentDeleteOption(this));
       }
-    
+
       ContextMenu.show(e, menuOptions, this.RTL);
     };
 
@@ -663,7 +663,8 @@ export {FieldVariable};
 export {Flyout};
 export {FlyoutButton};
 export {FlyoutMetricsManager};
-export {Generator};
+export {CodeGenerator};
+export {CodeGenerator as Generator};  // Deprecated name, October 2022.
 export {Gesture};
 export {Grid};
 export {HorizontalFlyout};

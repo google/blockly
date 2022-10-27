@@ -80,7 +80,7 @@ suite('Procedure Map', function() {
         chai.assert.isTrue(
             this.updateSpy.calledOnce, 'Expected an update to be triggered');
       });
-  
+
       test('setting the return type triggers an update', function() {
         const procedureModel =
             new Blockly.procedures.ObservableProcedureModel(
@@ -92,7 +92,7 @@ suite('Procedure Map', function() {
         chai.assert.isTrue(
             this.updateSpy.calledOnce, 'Expected an update to be triggered');
       });
-  
+
       test('removing the return type triggers an update', function() {
         const procedureModel =
             new Blockly.procedures.ObservableProcedureModel(
@@ -106,7 +106,7 @@ suite('Procedure Map', function() {
         chai.assert.isTrue(
             this.updateSpy.calledOnce, 'Expected an update to be triggered');
       });
-  
+
       test('disabling the procedure triggers an update', function() {
         const procedureModel =
             new Blockly.procedures.ObservableProcedureModel(
@@ -118,7 +118,7 @@ suite('Procedure Map', function() {
         chai.assert.isTrue(
             this.updateSpy.calledOnce, 'Expected an update to be triggered');
       });
-  
+
       test('enabling the procedure triggers an update', function() {
         const procedureModel =
             new Blockly.procedures.ObservableProcedureModel(
@@ -145,7 +145,7 @@ suite('Procedure Map', function() {
         chai.assert.isTrue(
             this.updateSpy.calledOnce, 'Expected an update to be triggered');
       });
-  
+
       test('deleting a parameter triggers an update', function() {
         const procedureModel =
             new Blockly.procedures.ObservableProcedureModel(
@@ -179,7 +179,7 @@ suite('Procedure Map', function() {
         chai.assert.isTrue(
             this.updateSpy.calledOnce, 'Expected an update to be triggered');
       });
-  
+
       test('modifying the variable model does not trigger an update', function() {
         const parameterModel =
             new Blockly.procedures.ObservableParameterModel(

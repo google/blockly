@@ -388,21 +388,21 @@ suite('JSO Serialization', function() {
                   '<shadow type="' + blockType + '" id="test"></shadow>'));
           return block;
         };
-  
+
         this.assertChild = function(blockType, inputName) {
           const block = this.createBlockWithChild(blockType, inputName);
           const jso = Blockly.serialization.blocks.save(block);
           this.assertInput(
               jso, inputName, {'block': {'type': blockType, 'id': 'id2'}});
         };
-  
+
         this.assertShadow = function(blockType, inputName) {
           const block = this.createBlockWithShadow(blockType, inputName);
           const jso = Blockly.serialization.blocks.save(block);
           this.assertInput(
               jso, inputName, {'shadow': {'type': blockType, 'id': 'test'}});
         };
-  
+
         this.assertOverwrittenShadow = function(blockType, inputName) {
           const block =
               this.createBlockWithShadowAndChild(blockType, inputName);
@@ -428,14 +428,14 @@ suite('JSO Serialization', function() {
               Blockly.serialization.blocks.save(block, {addInputBlocks: false});
           chai.assert.isUndefined(jso['inputs']);
         };
-  
+
         this.assertNoShadow = function(blockType, inputName) {
           const block = this.createBlockWithShadow(blockType, inputName);
           const jso =
               Blockly.serialization.blocks.save(block, {addInputBlocks: false});
           chai.assert.isUndefined(jso['inputs']);
         };
-  
+
         this.assertNoOverwrittenShadow = function(blockType, inputName) {
           const block =
               this.createBlockWithShadowAndChild(blockType, inputName);
@@ -506,11 +506,11 @@ suite('JSO Serialization', function() {
           test('Child', function() {
             this.assertChild('row_block', 'INPUT');
           });
-  
+
           test('Shadow', function() {
             this.assertShadow('row_block', 'INPUT');
           });
-  
+
           test('Overwritten shadow', function() {
             this.assertOverwrittenShadow('row_block', 'INPUT');
           });
@@ -520,11 +520,11 @@ suite('JSO Serialization', function() {
           test('Child', function() {
             this.assertNoChild('row_block', 'INPUT');
           });
-  
+
           test('Shadow', function() {
             this.assertNoShadow('row_block', 'INPUT');
           });
-  
+
           test('Overwritten shadow', function() {
             this.assertNoOverwrittenShadow('row_block', 'INPUT');
           });
@@ -536,11 +536,11 @@ suite('JSO Serialization', function() {
           test('Child', function() {
             this.assertChild('statement_block', 'NAME');
           });
-  
+
           test('Shadow', function() {
             this.assertShadow('statement_block', 'NAME');
           });
-  
+
           test('Overwritten shadow', function() {
             this.assertOverwrittenShadow('statement_block', 'NAME');
           });
@@ -577,11 +577,11 @@ suite('JSO Serialization', function() {
           test('Child', function() {
             this.assertNoChild('statement_block', 'NAME');
           });
-  
+
           test('Shadow', function() {
             this.assertNoShadow('statement_block', 'NAME');
           });
-  
+
           test('Overwritten shadow', function() {
             this.assertNoOverwrittenShadow('statement_block', 'NAME');
           });
@@ -624,14 +624,14 @@ suite('JSO Serialization', function() {
             chai.assert.deepInclude(
                 jso['next'], {'block': {'type': 'stack_block', 'id': 'id2'}});
           });
-  
+
           test('Shadow', function() {
             const block = this.createNextWithShadow();
             const jso = Blockly.serialization.blocks.save(block);
             chai.assert.deepInclude(
                 jso['next'], {'shadow': {'type': 'stack_block', 'id': 'test'}});
           });
-  
+
           test('Overwritten shadow', function() {
             const block = this.createNextWithShadowAndChild();
             const jso = Blockly.serialization.blocks.save(block);
@@ -684,7 +684,7 @@ suite('JSO Serialization', function() {
                 block, {addNextBlocks: false});
             chai.assert.isUndefined(jso['next']);
           });
-  
+
           test('Shadow', function() {
             const block = this.createNextWithShadow();
             const jso = Blockly.serialization.blocks.save(
@@ -809,47 +809,47 @@ suite('JSO Serialization', function() {
         this.name = name;
         return this;
       }
-    
+
       insertParameter(parameterModel, index) {
         this.parameters.splice(index, 0, parameterModel);
         return this;
       }
-    
+
       deleteParameter(index) {
         this.parameters.splice(index, 1);
         return this;
       }
-    
+
       setReturnTypes(types) {
         this.returnTypes = types;
         return this;
       }
-    
+
       setEnabled(enabled) {
         this.enabled = enabled;
         return this;
       }
-    
+
       getId() {
         return this.id;
       }
-    
+
       getName() {
         return this.name;
       }
-    
+
       getParameter(index) {
         return this.parameters[index];
       }
-    
+
       getParameters() {
         return [...this.parameters];
       }
-    
+
       getReturnTypes() {
         return this.returnTypes;
       }
-    
+
       getEnabled() {
         return this.enabled;
       }

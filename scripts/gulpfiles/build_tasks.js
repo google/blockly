@@ -178,7 +178,7 @@ function stripApacheLicense() {
  * For a full list of closure compiler groups, consult the output of
  * google-closure-compiler --help or look in the source  here:
  * https://github.com/google/closure-compiler/blob/master/src/com/google/javascript/jscomp/DiagnosticGroups.java#L117
- * 
+ *
  * The list in JSCOMP_ERROR contains all the diagnostic groups we know
  * about, but some are commented out if we don't want them, and may
  * appear in JSCOMP_WARNING or JSCOMP_OFF instead.  Items not
@@ -281,7 +281,7 @@ var JSCOMP_OFF = [
    * core/utils/*. We were downgrading access control violations
    * (including @private) to warnings, but this ends up being so
    * spammy that it makes the compiler output nearly useless.
-   * 
+   *
    * Once ES module migration is complete, they will be re-enabled and
    * an alternative to @package will be established.
    */
@@ -480,7 +480,7 @@ function chunkWrapper(chunk) {
     browserDepsExpr = `root.${chunk.parent.reexport}`;
     factoryArgs = '__parent__';
     namespaceExpr = `${factoryArgs}.${NAMESPACE_PROPERTY}`;
-  }    
+  }
 
   // Code to assign the result of the factory function to the desired
   // export location when running in a browser.  When

@@ -25,12 +25,12 @@ suite('Block Change Event', function() {
       setup(function() {
         defineMutatorBlocks();
       });
-  
+
       teardown(function() {
         Blockly.Extensions.unregister('xml_mutator');
         Blockly.Extensions.unregister('jso_mutator');
       });
-      
+
       suite('XML', function() {
         test('Undo', function() {
           const block = this.workspace.newBlock('xml_block', 'block_id');

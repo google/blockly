@@ -8,6 +8,7 @@
  * @fileoverview Node.js script to run Mocha tests in Chrome, via webdriver.
  */
 var webdriverio = require('webdriverio');
+var {posixPath} = require('../../scripts/helpers');
 
 module.exports = runMochaTestsInBrowser;
 
@@ -44,7 +45,7 @@ async function runMochaTestsInBrowser() {
     };
   }
 
-  var url = 'file://' + __dirname + '/index.html';
+  var url = 'file://' + posixPath(__dirname) + '/index.html';
   console.log('Starting webdriverio...');
   const browser = await webdriverio.remote(options);
   console.log('Initialized.\nLoading url: ' + url);

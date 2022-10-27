@@ -28,6 +28,8 @@ var rimraf = require('rimraf');
 var {BUILD_DIR, DEPS_FILE, TEST_DEPS_FILE, TSC_OUTPUT_DIR, TYPINGS_BUILD_DIR} = require('./config');
 var {getPackageJson} = require('./helper_tasks');
 
+var {posixPath} = require('../helpers');
+
 ////////////////////////////////////////////////////////////
 //                        Build                           //
 ////////////////////////////////////////////////////////////
@@ -102,7 +104,9 @@ const NAMESPACE_PROPERTY = '__namespace__';
 const chunks = [
   {
     name: 'blockly',
-    entry: path.join(CORE_DIR, 'main.js'),
+    entry: posixPath((argv.compileTs) ?
+      path.join(TSC_OUTPUT_DIR, CORE_DIR, 'main.js') :
+      path.join(CORE_DIR, 'main.js')),
     exports: 'module$build$src$core$blockly',
     reexport: 'Blockly',
   },
@@ -337,6 +341,18 @@ function buildDeps(done) {
     'tests/mocha'
   ];
 
+  /**
+   * Extracts lines that contain the specified keyword.
+   * @param {string} text output text
+   * @param {string} keyword extract lines with this keyword
+   * @returns {string} modified text
+   */
+  function extractOutputs(text, keyword) {
+    return text.split('\n')
+        .filter((line) => line.includes(keyword))
+        .join('\n');
+  }
+
   function filterErrors(text) {
     return text.split('\n')
         .filter(
@@ -349,29 +365,29 @@ function buildDeps(done) {
   new Promise((resolve, reject) => {
     const args = roots.map(root => `--root '${root}' `).join('');
     exec(
-        `closure-make-deps ${args} >'${DEPS_FILE}'`,
-        {stdio: ['inherit', 'inherit', 'pipe']},
+        `closure-make-deps ${args}`,
         (error, stdout, stderr) => {
           console.warn(filterErrors(stderr));
           if (error) {
             reject(error);
           } else {
+            fs.writeFileSync(DEPS_FILE, stdout);
             resolve();
           }
         });
   }).then(() => new Promise((resolve, reject) => {
-    // Use grep to filter out the entries that are already in deps.js.
+    // Filter out the entries that are already in deps.js.
     const testArgs =
         testRoots.map(root => `--root '${root}' `).join('');
     exec(
-        `closure-make-deps ${testArgs} 2>/dev/null\
-             | grep 'tests/mocha' > '${TEST_DEPS_FILE}'`,
-        {stdio: ['inherit', 'inherit', 'pipe']},
+        `closure-make-deps ${testArgs}`,
         (error, stdout, stderr) => {
           console.warn(filterErrors(stderr));
           if (error) {
             reject(error);
           } else {
+            fs.writeFileSync(TEST_DEPS_FILE,
+              extractOutputs(stdout, 'tests/mocha'));
             resolve();
           }
         });
@@ -520,9 +536,6 @@ return ${chunk.exports};
  *     closure-calculate-chunks.
  */
 function getChunkOptions() {
-  if (argv.compileTs) {
-    chunks[0].entry = path.join(TSC_OUTPUT_DIR, chunks[0].entry);
-  }
   const basePath =
       path.join(TSC_OUTPUT_DIR, 'closure', 'goog', 'base_minimal.js');
   const cccArgs = [
@@ -560,7 +573,9 @@ function getChunkOptions() {
   // chunk depends on any chunk but the first), so we look for
   // one of the entrypoints amongst the files in each chunk.
   const chunkByNickname = Object.create(null);
-  const jsFiles = rawOptions.js.slice();  // Will be modified via .splice!
+  // Copy and convert to posix js file paths.
+  // Result will be modified via `.splice`!
+  const jsFiles = rawOptions.js.map(p => posixPath(p));
   const chunkList = rawOptions.chunk.map((element) => {
     const [nickname, numJsFiles, parentNick] = element.split(':');
 

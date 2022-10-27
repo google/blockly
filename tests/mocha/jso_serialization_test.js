@@ -795,8 +795,7 @@ suite('JSO Serialization', function() {
     });
   });
 
-  // TODO(#6522): Unskip serialization tests.
-  suite.skip('Procedures', function() {
+  suite('Procedures', function() {
     class MockProcedureModel {
       constructor() {
         this.id = Blockly.utils.idGenerator.genUid();
@@ -968,7 +967,7 @@ suite('JSO Serialization', function() {
               new MockProcedureModel().insertParameter(parameterModel, 0));
           const jso = Blockly.serialization.workspaces.save(this.workspace);
           const parameter = jso['procedures'][0]['parameters'][0];
-          assertProperty(parameter, 'id', 'testparam');
+          assertProperty(parameter, 'name', 'testparam');
         });
       });
 

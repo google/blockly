@@ -85,7 +85,7 @@ export class Comment extends Icon {
    *
    * @param group The icon group.
    */
-  protected override drawIcon_(group: SVGGElement) {
+  protected override drawIcon_(group: Element) {
     // Circle.
     dom.createSvgElement(
         Svg.CIRCLE,

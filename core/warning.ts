@@ -51,7 +51,7 @@ export class Warning extends Icon {
    *
    * @param group The icon group.
    */
-  protected override drawIcon_(group: SVGGElement) {
+  protected override drawIcon_(group: Element) {
     // Triangle with rounded corners.
     dom.createSvgElement(
         Svg.PATH, {

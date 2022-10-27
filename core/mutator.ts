@@ -115,7 +115,7 @@ export class Mutator extends Icon {
    *
    * @param group The icon group.
    */
-  protected override drawIcon_(group: SVGGElement) {
+  protected override drawIcon_(group: Element) {
     // Square with rounded corners.
     dom.createSvgElement(
         Svg.RECT, {
@@ -236,12 +236,16 @@ export class Mutator extends Icon {
   override updateEditable() {
     super.updateEditable();
     if (!this.getBlock().isInFlyout) {
-      if (!this.getBlock().isEditable) {
+      if (this.getBlock().isEditable()) {
+        if (this.iconGroup_) {
+          dom.removeClass(this.iconGroup_, 'blocklyIconGroupReadonly');
+        }
+      } else {
         // Close any mutator bubble.  Icon is not clickable.
         this.setVisible(false);
-      }
-      if (this.iconGroup_) {
-        dom.removeClass(this.iconGroup_, 'blocklyIconGroupReadonly');
+        if (this.iconGroup_) {
+          dom.addClass(this.iconGroup_, 'blocklyIconGroupReadonly');
+        }
       }
     }
   }
@@ -249,12 +253,15 @@ export class Mutator extends Icon {
   /** Resize the bubble to match the size of the workspace. */
   private resizeBubble() {
     // If the bubble exists, the workspace also exists.
-    const ws = this.workspace as WorkspaceSvg;
+    if (!this.workspace) {
+      return;
+    }
     const doubleBorderWidth = 2 * Bubble.BORDER_WIDTH;
-    const workspaceSize = ws.getCanvas().getBBox();
+    const canvas = this.workspace.getCanvas();
+    const workspaceSize = canvas.getBBox();
     let width = workspaceSize.width + workspaceSize.x;
     let height = workspaceSize.height + doubleBorderWidth * 3;
-    const flyout = ws.getFlyout();
+    const flyout = this.workspace.getFlyout();
     if (flyout) {
       const flyoutScrollMetrics =
           flyout.getWorkspace().getMetricsManager().getScrollMetrics();
@@ -276,17 +283,16 @@ export class Mutator extends Icon {
       // Resize the bubble.
       this.bubble_!.setBubbleSize(
           width + doubleBorderWidth, height + doubleBorderWidth);
-      this.svgDialog!.setAttribute('width', `${this.workspaceWidth}`);
-      this.svgDialog!.setAttribute('height', `${this.workspaceHeight}`);
-      ws.setCachedParentSvgSize(this.workspaceWidth, this.workspaceHeight);
+      this.svgDialog!.setAttribute('width', `${width}`);
+      this.svgDialog!.setAttribute('height', `${height}`);
+      this.workspace.setCachedParentSvgSize(width, height);
     }
 
     if (isRtl) {
       // Scroll the workspace to always left-align.
-      const translation = 'translate(' + this.workspaceWidth + ',0)';
-      ws.getCanvas().setAttribute('transform', translation);
+      canvas.setAttribute('transform', `translate(${this.workspaceWidth}, 0)`);
     }
-    ws.resize();
+    this.workspace.resize();
   }
 
   /** A method handler for when the bubble is moved. */
@@ -314,18 +320,20 @@ export class Mutator extends Icon {
       this.bubble_ = new Bubble(
           block.workspace, this.createEditor(), block.pathObject.svgPath,
           (this.iconXY_ as Coordinate), null, null);
+      // The workspace was created in createEditor.
+      const ws = this.workspace!;
       // Expose this mutator's block's ID on its top-level SVG group.
       this.bubble_.setSvgId(block.id);
       this.bubble_.registerMoveEvent(this.onBubbleMove.bind(this));
-      const tree = this.workspace!.options.languageTree;
-      const flyout = this.workspace!.getFlyout();
+      const tree = ws.options.languageTree;
+      const flyout = ws.getFlyout();
       if (tree) {
-        flyout!.init(this.workspace!);
+        flyout!.init(ws);
         flyout!.show(tree);
       }
 
-      this.rootBlock = block.decompose!(this.workspace!)!;
-      const blocks = this.rootBlock!.getDescendants(false);
+      this.rootBlock = block.decompose!(ws)!;
+      const blocks = this.rootBlock.getDescendants(false);
       for (let i = 0, child; child = blocks[i]; i++) {
         child.render();
       }
@@ -359,7 +367,7 @@ export class Mutator extends Icon {
       }
       this.resizeBubble();
       // When the mutator's workspace changes, update the source block.
-      this.workspace!.addChangeListener(this.workspaceChanged.bind(this));
+      ws.addChangeListener(this.workspaceChanged.bind(this));
       // Update the source block immediately after the bubble becomes visible.
       this.updateWorkspace();
       this.applyColour();

@@ -6,45 +6,58 @@
 
 goog.declareModuleId('Blockly.test.eventProcedureRename');
 
+import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
+
 
 suite('Procedure Rename Event', function() {
-  suite('forward', function() {
-    test('the procedure with the matching ID is renamed', function() {
-
-    });
-
-    test('renaming a procedure fires a rename event', function() {
-
-    });
-
-    test('noop renames do not fire rename events', function() {
-
-    });
-
-    test(
-        'attempting to rename a procedure that does not exist throws',
-        function() {
-
-        });
+  setup(function() {
+    sharedTestSetup.call(this);
+    this.workspace = new Blockly.Workspace();
   });
 
-  suite('backward', function() {
-    test('the procedure with the matching ID is renamed', function() {
+  teardown(function() {
+    sharedTestTeardown.call(this);
+  });
 
+  suite('running', function() {
+    suite('forward', function() {
+      test('the procedure with the matching ID is renamed', function() {
+  
+      });
+  
+      test('renaming a procedure fires a rename event', function() {
+  
+      });
+  
+      test('noop renames do not fire rename events', function() {
+  
+      });
+  
+      test(
+          'attempting to rename a procedure that does not exist throws',
+          function() {
+  
+          });
     });
-
-    test('renaming a procedure fires a rename event', function() {
-
+  
+    suite('backward', function() {
+      test('the procedure with the matching ID is renamed', function() {
+  
+      });
+  
+      test('renaming a procedure fires a rename event', function() {
+  
+      });
+  
+      test('noop renames do not fire rename events', function() {
+  
+      });
+  
+      test(
+          'attempting to rename a procedure that does not exist throws',
+          function() {
+  
+          });
     });
-
-    test('noop renames do not fire rename events', function() {
-
-    });
-
-    test(
-        'attempting to rename a procedure that does not exist throws',
-        function() {
-
-        });
   });
 });

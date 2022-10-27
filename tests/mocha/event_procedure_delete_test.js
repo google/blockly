@@ -1,4 +1,3 @@
-
 /**
  * @license
  * Copyright 2022 Google LLC
@@ -7,8 +6,19 @@
 
 goog.declareModuleId('Blockly.test.eventProcedureDelete');
 
+import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
+
 
 suite('Procedure Delete Event', function() {
+  setup(function() {
+    sharedTestSetup.call(this);
+    this.workspace = new Blockly.Workspace();
+  });
+
+  teardown(function() {
+    sharedTestTeardown.call(this);
+  });
+
   suite('running', function() {
     suite('forward', function() {
       test(

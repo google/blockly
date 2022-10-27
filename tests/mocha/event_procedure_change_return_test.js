@@ -6,47 +6,60 @@
 
 goog.declareModuleId('Blockly.test.eventProcedureChangeReturn');
 
+import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
+
 
 suite('Procedure Change Return Event', function() {
-  suite('forward', function() {
-    test('the procedure with the matching ID has its return set', function() {
-
-    });
-
-    test('changing the return fires a change return event', function() {
-
-    });
-
-    test('noop return changes do not fire change return events', function() {
-
-    });
-
-    test(
-        'attempting to change the return of a procedure that ' +
-        'does not exist throws',
-        function() {
-
-        });
+  setup(function() {
+    sharedTestSetup.call(this);
+    this.workspace = new Blockly.Workspace();
   });
 
-  suite('backward', function() {
-    test('the procedure with the matching ID has its return set', function() {
+  teardown(function() {
+    sharedTestTeardown.call(this);
+  });
 
+  suite('running', function() {
+    suite('forward', function() {
+      test('the procedure with the matching ID has its return set', function() {
+  
+      });
+  
+      test('changing the return fires a change return event', function() {
+  
+      });
+  
+      test('noop return changes do not fire change return events', function() {
+  
+      });
+  
+      test(
+          'attempting to change the return of a procedure that ' +
+          'does not exist throws',
+          function() {
+  
+          });
     });
-
-    test('changing the return fires a change return event', function() {
-
+  
+    suite('backward', function() {
+      test('the procedure with the matching ID has its return set', function() {
+  
+      });
+  
+      test('changing the return fires a change return event', function() {
+  
+      });
+  
+      test('noop return changes do not fire change return events', function() {
+  
+      });
+  
+      test(
+          'attempting to change the return of a procedure that ' +
+          'does not exist throws',
+          function() {
+  
+          });
     });
-
-    test('noop return changes do not fire change return events', function() {
-
-    });
-
-    test(
-        'attempting to change the return of a procedure that ' +
-        'does not exist throws',
-        function() {
-
-        });
   });
 });

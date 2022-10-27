@@ -6,8 +6,19 @@
 
 goog.declareModuleId('Blockly.test.eventProcedureCreate');
 
+import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
+
 
 suite('Procedure Create Event', function() {
+  setup(function() {
+    sharedTestSetup.call(this);
+    this.workspace = new Blockly.Workspace();
+  });
+
+  teardown(function() {
+    sharedTestTeardown.call(this);
+  });
+
   suite('running', function() {
     suite('forward', function() {
       test('a procedure model is created if it does not exist', function() {

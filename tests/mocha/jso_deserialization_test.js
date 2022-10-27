@@ -716,7 +716,7 @@ suite('JSO Deserialization', function() {
 
   suite('Procedures', function() {
     class MockProcedureModel {
-      constructor(name, id) {
+      constructor(workspace, name, id) {
         this.id = id ?? Blockly.utils.idGenerator.genUid();
         this.name = name;
         this.parameters = [];
@@ -775,7 +775,7 @@ suite('JSO Deserialization', function() {
     }
 
     class MockParameterModel {
-      constructor(name, id) {
+      constructor(workspace, name, id) {
         this.id = id ?? Blockly.utils.idGenerator.genUid();
         this.name = name;
         this.types = [];
@@ -807,8 +807,7 @@ suite('JSO Deserialization', function() {
     setup(function() {
       this.procedureSerializer = new
           Blockly.serialization.procedures.ProcedureSerializer(
-            (workspace, name, id) => new MockProcedureModel(name, id),
-            (workspace, name, id) => new MockParameterModel(name, id));
+            MockProcedureModel, MockParameterModel);
       this.procedureMap = this.workspace.getProcedureMap();
     });
 

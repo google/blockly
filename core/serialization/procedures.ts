@@ -29,13 +29,24 @@ export interface ParameterState {
   id: string, name: string, types?: string[],
 }
 
-/** A method that constructs an IProcedureModel. */
-type ProcedureModelFactory = (workspace: Workspace, name: string, id: string) =>
-    IProcedureModel;
+/**
+ * A newable signature for an IProcedureModel.
+ *
+ * Refer to https://www.typescriptlang.org/docs/handbook/2/generics.html#using-class-types-in-generics
+ * for what is going on with this.
+ */
+type ProcedureModelConstructor<ProcedureModel extends IProcedureModel> =
+    new (workspace: Workspace, name: string, id: string) => ProcedureModel;
 
-/** A method that constructs an IParameterModel. */
-type ParameterModelFactory = (workspace: Workspace, name: string, id: string) =>
-    IParameterModel;
+/**
+ * A newable signature for an IParameterModel.
+ *
+ * Refer to https://www.typescriptlang.org/docs/handbook/2/generics.html#using-class-types-in-generics
+ * for what is going on with this.
+ */
+type ParameterModelConstructor<ParameterModel extends IParameterModel> =
+    new (workspace: Workspace, name: string, id: string) => ParameterModel;
+
 
 /** Serializes the given IProcedureModel to JSON. */
 function saveProcedure(proc: IProcedureModel): State {
@@ -61,35 +72,41 @@ function saveParameter(param: IParameterModel): ParameterState {
 }
 
 /** Deserializes the given procedure model State from JSON. */
-function loadProcedure(
-    procedureModelFactory: ProcedureModelFactory,
-    parameterModelFactory: ParameterModelFactory, state: State,
-    workspace: Workspace): IProcedureModel {
-  const proc = procedureModelFactory(workspace, state.name, state.id)
+function
+loadProcedure<ProcedureModel extends IProcedureModel,
+                                     ParameterModel extends IParameterModel>(
+    procedureModelClass: ProcedureModelConstructor<ProcedureModel>,
+    parameterModelClass: ParameterModelConstructor<ParameterModel>,
+    state: State, workspace: Workspace): ProcedureModel {
+  const proc = new procedureModelClass(workspace, state.name, state.id)
                    .setReturnTypes(state.returnTypes);
   if (!state.parameters) return proc;
   for (const [index, param] of state.parameters.entries()) {
     proc.insertParameter(
-        loadParameter(parameterModelFactory, param, workspace), index);
+        loadParameter(parameterModelClass, param, workspace), index);
   }
   return proc;
 }
 
 /** Deserializes the given ParameterState from JSON. */
-function loadParameter(
-    parameterModelFactory: ParameterModelFactory, state: ParameterState,
-    workspace: Workspace): IParameterModel {
-  return parameterModelFactory(workspace, state.name, state.id)
+function loadParameter<ParameterModel extends IParameterModel>(
+    parameterModelClass: ParameterModelConstructor<ParameterModel>,
+    state: ParameterState, workspace: Workspace): ParameterModel {
+  return new parameterModelClass(workspace, state.name, state.id)
       .setTypes(state.types || []);
 }
 
 /** Serializer for saving and loading procedure state. */
-export class ProcedureSerializer implements ISerializer {
+export class ProcedureSerializer<ProcedureModel extends IProcedureModel,
+                                                        ParameterModel extends
+                                     IParameterModel> implements ISerializer {
   public priority = priorities.PROCEDURES;
 
   constructor(
-      private readonly procedureModelFactory: ProcedureModelFactory,
-      private readonly parameterModelFactory: ParameterModelFactory) {}
+      private readonly procedureModelClass:
+          ProcedureModelConstructor<ProcedureModel>,
+      private readonly parameterModelClass:
+          ParameterModelConstructor<ParameterModel>) {}
 
   /** Serializes the procedure models of the given workspace. */
   save(workspace: Workspace): State[]|null {
@@ -105,7 +122,7 @@ export class ProcedureSerializer implements ISerializer {
     const map = workspace.getProcedureMap();
     for (const procState of state) {
       map.add(loadProcedure(
-          this.procedureModelFactory, this.parameterModelFactory, procState,
+          this.procedureModelClass, this.parameterModelClass, procState,
           workspace));
     }
   }
@@ -119,7 +136,4 @@ export class ProcedureSerializer implements ISerializer {
 serializationRegistry.register(
     'procedures',
     new ProcedureSerializer(
-        (workspace: Workspace, name: string, id: string) =>
-            new ObservableProcedureModel(workspace, name, id),
-        (workspace: Workspace, name: string, id: string) =>
-            new ObservableParameterModel(workspace, name, id)));
+        ObservableProcedureModel, ObservableParameterModel));

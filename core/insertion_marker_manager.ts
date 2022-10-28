@@ -51,7 +51,17 @@ const DUPLICATE_BLOCK_ERROR = 'The insertion marker ' +
  * @alias Blockly.InsertionMarkerManager
  */
 export class InsertionMarkerManager {
+
+  /**
+   * The top block in the stack being dragged.
+   * Does not change during a drag.
+   */
   private readonly topBlock_: BlockSvg;
+
+  /**
+   * The workspace on which these connections are being dragged.
+   * Does not change during a drag.
+   */
   private readonly workspace_: WorkspaceSvg;
 
   /**
@@ -67,6 +77,11 @@ export class InsertionMarkerManager {
    * Set in initAvailableConnections, if at all
    */
   private lastMarker_: BlockSvg|null = null;
+
+  /**
+   * The insertion marker that shows up between blocks to show where a block
+   * would go if dropped immediately.
+   */
   private firstMarker_: BlockSvg;
 
   /**
@@ -101,36 +116,24 @@ export class InsertionMarkerManager {
 
   /** The block being faded to indicate replacement, or null. */
   private fadedBlock_: BlockSvg|null = null;
+
+  /**
+   * The connections on the dragging blocks that are available to connect to
+   * other blocks.  This includes all open connections on the top block, as
+   * well as the last connection on the block stack. Does not change during a
+   * drag.
+   */
   private availableConnections_: RenderedConnection[];
 
   /** @param block The top block in the stack being dragged. */
   constructor(block: BlockSvg) {
     common.setSelected(block);
-
-    /**
-     * The top block in the stack being dragged.
-     * Does not change during a drag.
-     */
     this.topBlock_ = block;
 
-    /**
-     * The workspace on which these connections are being dragged.
-     * Does not change during a drag.
-     */
     this.workspace_ = block.workspace;
 
-    /**
-     * The insertion marker that shows up between blocks to show where a block
-     * would go if dropped immediately.
-     */
     this.firstMarker_ = this.createMarkerBlock_(this.topBlock_);
 
-    /**
-     * The connections on the dragging blocks that are available to connect to
-     * other blocks.  This includes all open connections on the top block, as
-     * well as the last connection on the block stack. Does not change during a
-     * drag.
-     */
     this.availableConnections_ = this.initAvailableConnections_();
   }
 

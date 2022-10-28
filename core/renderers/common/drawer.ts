@@ -295,7 +295,7 @@ export class Drawer {
    */
   protected layoutField_(fieldInfo: Icon|Field) {
     const svgGroup = Types.isField(fieldInfo) ?
-        (fieldInfo as Field).field.getSvgRoot() :
+        (fieldInfo as Field).field.getSvgRoot()! :
         (fieldInfo as Icon).icon.iconGroup_!;  // Never null in rendered case.
 
     const yPos = fieldInfo.centerline - fieldInfo.height / 2;

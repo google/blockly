@@ -16,8 +16,8 @@ goog.declareModuleId('Blockly.FieldVariable');
 import './events/events_block_change.js';
 
 import type {Block} from './block.js';
-import {Field, FieldConfig} from './field.js';
-import {FieldDropdown} from './field_dropdown.js';
+import {Field, FieldConfig, UnattachedFieldError} from './field.js';
+import {FieldDropdown, MenuGenerator, MenuOption} from './field_dropdown.js';
 import * as fieldRegistry from './field_registry.js';
 import * as internalConstants from './internal_constants.js';
 import type {Menu} from './menu.js';
@@ -37,8 +37,7 @@ import * as Xml from './xml.js';
  * @alias Blockly.FieldVariable
  */
 export class FieldVariable extends FieldDropdown {
-  protected override menuGenerator_: AnyDuringMigration[][]|
-      ((this: FieldDropdown) => AnyDuringMigration[][]);
+  protected override menuGenerator_: MenuGenerator|undefined;
   defaultVariableName: string;
 
   /** The type of the default variable for this field. */
@@ -89,9 +88,7 @@ export class FieldVariable extends FieldDropdown {
      * An array of options for a dropdown list,
      * or a function which generates these options.
      */
-    // AnyDuringMigration because:  Type '(this: FieldVariable) => any[][]' is
-    // not assignable to type 'any[][] | ((this: FieldDropdown) => any[][])'.
-    this.menuGenerator_ = FieldVariable.dropdownCreate as AnyDuringMigration;
+    this.menuGenerator_ = FieldVariable.dropdownCreate as MenuGenerator;
 
     /**
      * The initial variable name passed to this field's constructor, or an
@@ -135,20 +132,27 @@ export class FieldVariable extends FieldDropdown {
    * @internal
    */
   override initModel() {
+    const block = this.getSourceBlock();
+    if (!block) {
+      throw new UnattachedFieldError();
+    }
     if (this.variable_) {
       return;  // Initialization already happened.
     }
     const variable = Variables.getOrCreateVariablePackage(
-        this.sourceBlock_.workspace, null, this.defaultVariableName,
-        this.defaultType_);
+        block.workspace, null, this.defaultVariableName, this.defaultType_);
     // Don't call setValue because we don't want to cause a rerender.
     this.doValueUpdate_(variable.getId());
   }
 
   override shouldAddBorderRect_() {
+    const block = this.getSourceBlock();
+    if (!block) {
+      throw new UnattachedFieldError();
+    }
     return super.shouldAddBorderRect_() &&
         (!this.getConstants()!.FIELD_DROPDOWN_NO_BORDER_RECT_SHADOW ||
-         this.sourceBlock_.type !== 'variables_get');
+         block.type !== 'variables_get');
   }
 
   /**
@@ -158,6 +162,10 @@ export class FieldVariable extends FieldDropdown {
    *     field's state.
    */
   override fromXml(fieldElement: Element) {
+    const block = this.getSourceBlock();
+    if (!block) {
+      throw new UnattachedFieldError();
+    }
     const id = fieldElement.getAttribute('id');
     const variableName = fieldElement.textContent;
     // 'variabletype' should be lowercase, but until July 2019 it was sometimes
@@ -168,8 +176,7 @@ export class FieldVariable extends FieldDropdown {
     // AnyDuringMigration because:  Argument of type 'string | null' is not
     // assignable to parameter of type 'string | undefined'.
     const variable = Variables.getOrCreateVariablePackage(
-        this.sourceBlock_.workspace, id, variableName as AnyDuringMigration,
-        variableType);
+        block.workspace, id, variableName as AnyDuringMigration, variableType);
 
     // This should never happen :)
     if (variableType !== null && variableType !== variable.type) {
@@ -233,12 +240,16 @@ export class FieldVariable extends FieldDropdown {
    * @internal
    */
   override loadState(state: AnyDuringMigration) {
+    const block = this.getSourceBlock();
+    if (!block) {
+      throw new UnattachedFieldError();
+    }
     if (this.loadLegacyState(FieldVariable, state)) {
       return;
     }
     // This is necessary so that blocks in the flyout can have custom var names.
     const variable = Variables.getOrCreateVariablePackage(
-        this.sourceBlock_.workspace, state['id'] || null, state['name'],
+        block.workspace, state['id'] || null, state['name'],
         state['type'] || '');
     this.setValue(variable.getId());
   }
@@ -315,8 +326,12 @@ export class FieldVariable extends FieldDropdown {
     if (opt_newValue === null) {
       return null;
     }
+    const block = this.getSourceBlock();
+    if (!block) {
+      throw new UnattachedFieldError();
+    }
     const newId = opt_newValue as string;
-    const variable = Variables.getVariable(this.sourceBlock_.workspace, newId);
+    const variable = Variables.getVariable(block.workspace, newId);
     if (!variable) {
       console.warn(
           'Variable id doesn\'t point to a real variable! ' +
@@ -342,8 +357,11 @@ export class FieldVariable extends FieldDropdown {
    * @param newId The value to be saved.
    */
   protected override doValueUpdate_(newId: AnyDuringMigration) {
-    this.variable_ =
-        Variables.getVariable(this.sourceBlock_.workspace, newId as string);
+    const block = this.getSourceBlock();
+    if (!block) {
+      throw new UnattachedFieldError();
+    }
+    this.variable_ = Variables.getVariable(block.workspace, newId as string);
     super.doValueUpdate_(newId);
   }
 
@@ -377,7 +395,7 @@ export class FieldVariable extends FieldDropdown {
     let variableTypes = this.variableTypes;
     if (variableTypes === null) {
       // If variableTypes is null, return all variable types.
-      if (this.sourceBlock_ && !this.sourceBlock_.disposed) {
+      if (this.sourceBlock_ && !this.sourceBlock_.isDeadOrDying()) {
         return this.sourceBlock_.workspace.getVariableTypes();
       }
     }
@@ -456,7 +474,7 @@ export class FieldVariable extends FieldDropdown {
   protected override onItemSelected_(menu: Menu, menuItem: MenuItem) {
     const id = menuItem.getValue();
     // Handle special cases.
-    if (this.sourceBlock_ && !this.sourceBlock_.disposed) {
+    if (this.sourceBlock_ && !this.sourceBlock_.isDeadOrDying()) {
       if (id === internalConstants.RENAME_VARIABLE_ID) {
         // Rename variable.
         Variables.renameVariable(
@@ -507,15 +525,15 @@ export class FieldVariable extends FieldDropdown {
    *
    * @returns Array of variable names/id tuples.
    */
-  static dropdownCreate(this: FieldVariable): AnyDuringMigration[][] {
+  static dropdownCreate(this: FieldVariable): MenuOption[] {
     if (!this.variable_) {
       throw Error(
           'Tried to call dropdownCreate on a variable field with no' +
           ' variable selected.');
     }
     const name = this.getText();
-    let variableModelList: AnyDuringMigration[] = [];
-    if (this.sourceBlock_ && !this.sourceBlock_.disposed) {
+    let variableModelList: VariableModel[] = [];
+    if (this.sourceBlock_ && !this.sourceBlock_.isDeadOrDying()) {
       const variableTypes = this.getVariableTypes_();
       // Get a copy of the list, so that adding rename and new variable options
       // doesn't modify the workspace's list.
@@ -528,7 +546,7 @@ export class FieldVariable extends FieldDropdown {
     }
     variableModelList.sort(VariableModel.compareByName);
 
-    const options = [];
+    const options: [string, string][] = [];
     for (let i = 0; i < variableModelList.length; i++) {
       // Set the UUID as the internal representation of the variable.
       options[i] = [variableModelList[i].name, variableModelList[i].getId()];

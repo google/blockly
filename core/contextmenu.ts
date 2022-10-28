@@ -17,6 +17,7 @@ import type {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import * as clipboard from './clipboard.js';
 import {config} from './config.js';
+import * as dom from './utils/dom.js';
 import type {ContextMenuOption, LegacyContextMenuOption} from './contextmenu_registry.js';
 import * as eventUtils from './events/utils.js';
 import {Menu} from './menu.js';
@@ -179,7 +180,7 @@ function createWidget_(menu: Menu) {
     throw Error('Attempting to create a context menu when widget div is null');
   }
   const menuDom = menu.render(div);
-  menuDom.classList.add('blocklyContextMenu');
+  dom.addClass(menuDom, 'blocklyContextMenu');
   // Prevent system context menu when right-clicking a Blockly context menu.
   browserEvents.conditionalBind(
       (menuDom as EventTarget), 'contextmenu', null, haltPropagation);

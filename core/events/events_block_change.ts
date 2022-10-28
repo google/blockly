@@ -17,7 +17,7 @@ import type {BlockSvg} from '../block_svg.js';
 import * as registry from '../registry.js';
 import * as Xml from '../xml.js';
 
-import {BlockBase} from './events_block_base.js';
+import {BlockBase, BlockBaseJson} from './events_block_base.js';
 import * as eventUtils from './utils.js';
 
 
@@ -27,13 +27,11 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.BlockChange
  */
 export class BlockChange extends BlockBase {
-  override type: string;
-  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  element!: string;
-  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  name!: string|null;
-  oldValue: AnyDuringMigration;
-  newValue: AnyDuringMigration;
+  override type = eventUtils.BLOCK_CHANGE;
+  element?: string;
+  name?: string;
+  oldValue: unknown;
+  newValue: unknown;
 
   /**
    * @param opt_block The changed block.  Undefined for a blank event.
@@ -44,19 +42,16 @@ export class BlockChange extends BlockBase {
    */
   constructor(
       opt_block?: Block, opt_element?: string, opt_name?: string|null,
-      opt_oldValue?: AnyDuringMigration, opt_newValue?: AnyDuringMigration) {
+      opt_oldValue?: unknown, opt_newValue?: unknown) {
     super(opt_block);
-
-    /** Type of this event. */
-    this.type = eventUtils.BLOCK_CHANGE;
 
     if (!opt_block) {
       return;  // Blank event to be populated by fromJson.
     }
-    this.element = typeof opt_element === 'undefined' ? '' : opt_element;
-    this.name = typeof opt_name === 'undefined' ? '' : opt_name;
-    this.oldValue = typeof opt_oldValue === 'undefined' ? '' : opt_oldValue;
-    this.newValue = typeof opt_newValue === 'undefined' ? '' : opt_newValue;
+    this.element = opt_element;
+    this.name = opt_name || undefined;
+    this.oldValue = opt_oldValue;
+    this.newValue = opt_newValue;
   }
 
   /**
@@ -64,12 +59,15 @@ export class BlockChange extends BlockBase {
    *
    * @returns JSON representation.
    */
-  override toJson(): AnyDuringMigration {
-    const json = super.toJson();
-    json['element'] = this.element;
-    if (this.name) {
-      json['name'] = this.name;
+  override toJson(): BlockChangeJson {
+    const json = super.toJson() as BlockChangeJson;
+    if (!this.element) {
+      throw new Error(
+          'The changed element is undefined. Either pass an ' +
+          'element to the constructor, or call fromJson');
     }
+    json['element'] = this.element;
+    json['name'] = this.name;
     json['oldValue'] = this.oldValue;
     json['newValue'] = this.newValue;
     return json;
@@ -80,7 +78,7 @@ export class BlockChange extends BlockBase {
    *
    * @param json JSON representation.
    */
-  override fromJson(json: AnyDuringMigration) {
+  override fromJson(json: BlockChangeJson) {
     super.fromJson(json);
     this.element = json['element'];
     this.name = json['name'];
@@ -104,10 +102,16 @@ export class BlockChange extends BlockBase {
    */
   override run(forward: boolean) {
     const workspace = this.getEventWorkspace_();
+    if (!this.blockId) {
+      throw new Error(
+          'The block ID is undefined. Either pass a block to ' +
+          'the constructor, or call fromJson');
+    }
     const block = workspace.getBlockById(this.blockId);
     if (!block) {
-      console.warn('Can\'t change non-existent block: ' + this.blockId);
-      return;
+      throw new Error(
+          'The associated block is undefined. Either pass a ' +
+          'block to the constructor, or call fromJson');
     }
     // Assume the block is rendered so that then we can check.
     const blockSvg = block as BlockSvg;
@@ -174,6 +178,13 @@ export class BlockChange extends BlockBase {
     }
     return '';
   }
+}
+
+export interface BlockChangeJson extends BlockBaseJson {
+  element: string;
+  name?: string;
+  newValue: unknown;
+  oldValue: unknown;
 }
 
 registry.register(registry.Type.EVENT, eventUtils.CHANGE, BlockChange);

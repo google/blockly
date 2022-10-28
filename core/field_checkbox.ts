@@ -15,6 +15,7 @@ goog.declareModuleId('Blockly.FieldCheckbox');
 // Unused import preserved for side-effects. Remove if unneeded.
 import './events/events_block_change.js';
 
+import * as dom from './utils/dom.js';
 import {FieldConfig, Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import type {Sentinel} from './utils/sentinel.js';
@@ -111,8 +112,9 @@ export class FieldCheckbox extends Field {
   override initView() {
     super.initView();
 
-    this.textElement_.classList.add('blocklyCheckbox');
-    this.textElement_.style.display = this.value_ ? 'block' : 'none';
+    const textElement = this.getTextElement();
+    dom.addClass(textElement, 'blocklyCheckbox');
+    textElement.style.display = this.value_ ? 'block' : 'none';
   }
 
   override render_() {

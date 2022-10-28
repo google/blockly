@@ -1,6 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
+			"Bada Kaji",
+			"बडा काजी",
 			"सरोज कुमार ढकाल"
 		]
 	},
@@ -42,5 +44,5 @@
 	"MATH_IS_NEGATIVE": "ऋणात्मक संख्या हो",
 	"PROCEDURES_MUTATORCONTAINER_TITLE": "इन्पुटहरू",
 	"DIALOG_OK": "हुन्छ",
-	"DIALOG_CANCEL": "रद्द गर्ने"
+	"DIALOG_CANCEL": "रद्द गर्नुहोस्"
 }

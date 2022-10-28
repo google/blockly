@@ -69,7 +69,7 @@ export class Coordinate {
    * @param b A Coordinate.
    * @returns True iff the coordinates are equal, or if both are null.
    */
-  static equals(a: Coordinate|null, b: Coordinate|null): boolean {
+  static equals(a?: Coordinate|null, b?: Coordinate|null): boolean {
     if (a === b) {
       return true;
     }

@@ -15,6 +15,7 @@ goog.declareModuleId('Blockly.ThemeManager');
 
 import type {Theme} from './theme.js';
 import * as arrayUtils from './utils/array.js';
+import * as dom from './utils/dom.js';
 import type {Workspace} from './workspace.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 
@@ -62,12 +63,12 @@ export class ThemeManager {
       if (prevTheme) {
         const oldClassName = prevTheme.getClassName();
         if (oldClassName) {
-          injectionDiv.classList.remove(oldClassName);
+          dom.removeClass(injectionDiv, oldClassName);
         }
       }
       const newClassName = this.theme.getClassName();
       if (newClassName) {
-        injectionDiv.classList.add(newClassName);
+        dom.addClass(injectionDiv, newClassName);
       }
     }
 

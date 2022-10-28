@@ -16,7 +16,7 @@ import * as utilsXml from '../utils/xml.js';
 import type {WorkspaceComment} from '../workspace_comment.js';
 import * as Xml from '../xml.js';
 
-import {Abstract as AbstractEvent} from './events_abstract.js';
+import {Abstract as AbstractEvent, AbstractEventJson} from './events_abstract.js';
 import type {CommentCreate} from './events_comment_create.js';
 import type {CommentDelete} from './events_comment_delete.js';
 import * as eventUtils from './utils.js';
@@ -28,9 +28,8 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.CommentBase
  */
 export class CommentBase extends AbstractEvent {
-  override isBlank: boolean;
-  commentId: string;
-  override workspaceId: string;
+  override isBlank = true;
+  commentId?: string;
 
   /**
    * @param opt_comment The comment this event corresponds to.  Undefined for a
@@ -39,13 +38,15 @@ export class CommentBase extends AbstractEvent {
   constructor(opt_comment?: WorkspaceComment) {
     super();
     /** Whether or not an event is blank. */
-    this.isBlank = typeof opt_comment === 'undefined';
+    this.isBlank = !opt_comment;
+
+    if (!opt_comment) return;
 
     /** The ID of the comment this event pertains to. */
-    this.commentId = this.isBlank ? '' : opt_comment!.id;
+    this.commentId = opt_comment.id;
 
     /** The workspace identifier for this event. */
-    this.workspaceId = this.isBlank ? '' : opt_comment!.workspace.id;
+    this.workspaceId = opt_comment.workspace.id;
 
     /**
      * The event group ID for the group this event belongs to. Groups define
@@ -63,11 +64,14 @@ export class CommentBase extends AbstractEvent {
    *
    * @returns JSON representation.
    */
-  override toJson(): AnyDuringMigration {
-    const json = super.toJson();
-    if (this.commentId) {
-      json['commentId'] = this.commentId;
+  override toJson(): CommentBaseJson {
+    const json = super.toJson() as CommentBaseJson;
+    if (!this.commentId) {
+      throw new Error(
+          'The comment ID is undefined. Either pass a comment to ' +
+          'the constructor, or call fromJson');
     }
+    json['commentId'] = this.commentId;
     return json;
   }
 
@@ -76,7 +80,7 @@ export class CommentBase extends AbstractEvent {
    *
    * @param json JSON representation.
    */
-  override fromJson(json: AnyDuringMigration) {
+  override fromJson(json: CommentBaseJson) {
     super.fromJson(json);
     this.commentId = json['commentId'];
   }
@@ -92,9 +96,17 @@ export class CommentBase extends AbstractEvent {
     const workspace = event.getEventWorkspace_();
     if (create) {
       const xmlElement = utilsXml.createElement('xml');
+      if (!event.xml) {
+        throw new Error('Ecountered a comment event without proper xml');
+      }
       xmlElement.appendChild(event.xml);
       Xml.domToWorkspace(xmlElement, workspace);
     } else {
+      if (!event.commentId) {
+        throw new Error(
+            'The comment ID is undefined. Either pass a comment to ' +
+            'the constructor, or call fromJson');
+      }
       const comment = workspace.getCommentById(event.commentId);
       if (comment) {
         comment.dispose();
@@ -105,4 +117,8 @@ export class CommentBase extends AbstractEvent {
       }
     }
   }
+}
+
+export interface CommentBaseJson extends AbstractEventJson {
+  commentId: string;
 }

@@ -17,7 +17,6 @@ import type {WorkspaceSvg} from '../workspace_svg.js';
 import {Coordinate} from './coordinate.js';
 import * as deprecation from './deprecation.js';
 import {Rect} from './rect.js';
-import {Size} from './size.js';
 import * as style from './style.js';
 
 
@@ -114,12 +113,13 @@ export function getInjectionDivXY(element: Element): Coordinate {
  * and attempting to set the property.
  *
  * @returns True if 3D transforms are supported.
+ * @deprecated No longer provided by Blockly.
  * @alias Blockly.utils.svgMath.is3dSupported
  */
 export function is3dSupported(): boolean {
   // All browsers support translate3d in 2022.
   deprecation.warn(
-      'Blockly.utils.svgMath.is3dSupported', 'version 9.0.0', 'version 10.0.0');
+      'Blockly.utils.svgMath.is3dSupported', 'version 9', 'version 10');
   return true;
 }
 
@@ -189,28 +189,6 @@ export function screenToWsCoordinates(
   // The position in main workspace coordinates.
   const finalOffsetMainWs = finalOffsetPixels.scale(1 / ws.scale);
   return finalOffsetMainWs;
-}
-
-/**
- * Returns the dimensions of the specified SVG image.
- *
- * @param svg SVG image.
- * @returns Contains width and height properties.
- * @deprecated Use workspace.getCachedParentSvgSize. (2021 March 5)
- * @alias Blockly.utils.svgMath.svgSize
- */
-export function svgSize(svg: SVGElement): Size {
-  // When removing this function, remove svg.cachedWidth_ and svg.cachedHeight_
-  // from setCachedParentSvgSize.
-  // The deprecated name is `Blockly.svgSize` because this function used to be
-  // declared in Blockly.js.
-  deprecation.warn(
-      'Blockly.svgSize', 'March 2021', 'March 2022',
-      'workspace.getCachedParentSvgSize');
-  svg = svg as AnyDuringMigration;
-  return new Size(
-      Number(svg.getAttribute('data-cached-width')),
-      Number(svg.getAttribute('data-cached-height')));
 }
 
 export const TEST_ONLY = {

@@ -13,7 +13,7 @@ import * as goog from '../../closure/goog/goog.js';
 goog.declareModuleId('Blockly.Events.ThemeChange');
 
 import * as registry from '../registry.js';
-
+import {AbstractEventJson} from './events_abstract.js';
 import {UiBase} from './events_ui_base.js';
 import * as eventUtils from './utils.js';
 
@@ -25,7 +25,7 @@ import * as eventUtils from './utils.js';
  */
 export class ThemeChange extends UiBase {
   themeName?: string;
-  override type: string;
+  override type = eventUtils.THEME_CHANGE;
 
   /**
    * @param opt_themeName The theme name. Undefined for a blank event.
@@ -37,9 +37,6 @@ export class ThemeChange extends UiBase {
 
     /** The theme name. */
     this.themeName = opt_themeName;
-
-    /** Type of this event. */
-    this.type = eventUtils.THEME_CHANGE;
   }
 
   /**
@@ -47,8 +44,13 @@ export class ThemeChange extends UiBase {
    *
    * @returns JSON representation.
    */
-  override toJson(): AnyDuringMigration {
-    const json = super.toJson();
+  override toJson(): ThemeChangeJson {
+    const json = super.toJson() as ThemeChangeJson;
+    if (!this.themeName) {
+      throw new Error(
+          'The theme name is undefined. Either pass a theme name to ' +
+          'the constructor, or call fromJson');
+    }
     json['themeName'] = this.themeName;
     return json;
   }
@@ -58,10 +60,14 @@ export class ThemeChange extends UiBase {
    *
    * @param json JSON representation.
    */
-  override fromJson(json: AnyDuringMigration) {
+  override fromJson(json: ThemeChangeJson) {
     super.fromJson(json);
     this.themeName = json['themeName'];
   }
+}
+
+export interface ThemeChangeJson extends AbstractEventJson {
+  themeName: string;
 }
 
 registry.register(registry.Type.EVENT, eventUtils.THEME_CHANGE, ThemeChange);

@@ -15,7 +15,7 @@ goog.module('Blockly.Python');
 const stringUtils = goog.require('Blockly.utils.string');
 const Variables = goog.require('Blockly.Variables');
 const {Block} = goog.requireType('Blockly.Block');
-const {Generator} = goog.require('Blockly.Generator');
+const {CodeGenerator} = goog.require('Blockly.CodeGenerator');
 const {inputTypes} = goog.require('Blockly.inputTypes');
 const {Names, NameType} = goog.require('Blockly.Names');
 const {Workspace} = goog.requireType('Blockly.Workspace');
@@ -23,9 +23,9 @@ const {Workspace} = goog.requireType('Blockly.Workspace');
 
 /**
  * Python code generator.
- * @type {!Generator}
+ * @type {!CodeGenerator}
  */
-const Python = new Generator('Python');
+const Python = new CodeGenerator('Python');
 
 /**
  * List of illegal variable names.
@@ -137,10 +137,10 @@ Python.isInitialized = false;
 /**
  * Initialise the database of variable names.
  * @param {!Workspace} workspace Workspace to generate code from.
- * @this {Generator}
+ * @this {CodeGenerator}
  */
 Python.init = function(workspace) {
-  // Call Blockly.Generator's init.
+  // Call Blockly.CodeGenerator's init.
   Object.getPrototypeOf(this).init.call(this);
 
   /**
@@ -196,7 +196,7 @@ Python.finish = function(code) {
       definitions.push(def);
     }
   }
-  // Call Blockly.Generator's finish.
+  // Call Blockly.CodeGenerator's finish.
   code = Object.getPrototypeOf(this).finish.call(this, code);
   this.isInitialized = false;
 

@@ -15,7 +15,7 @@ goog.declareModuleId('Blockly.Events.VarRename');
 import * as registry from '../registry.js';
 import type {VariableModel} from '../variable_model.js';
 
-import {VarBase} from './events_var_base.js';
+import {VarBase, VarBaseJson} from './events_var_base.js';
 import * as eventUtils from './utils.js';
 
 
@@ -25,12 +25,9 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.VarRename
  */
 export class VarRename extends VarBase {
-  override type: string;
-
-  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  oldName!: string;
-  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  newName!: string;
+  override type = eventUtils.VAR_RENAME;
+  oldName?: string;
+  newName?: string;
 
   /**
    * @param opt_variable The renamed variable. Undefined for a blank event.
@@ -38,9 +35,6 @@ export class VarRename extends VarBase {
    */
   constructor(opt_variable?: VariableModel, newName?: string) {
     super(opt_variable);
-
-    /** Type of this event. */
-    this.type = eventUtils.VAR_RENAME;
 
     if (!opt_variable) {
       return;  // Blank event to be populated by fromJson.
@@ -54,8 +48,18 @@ export class VarRename extends VarBase {
    *
    * @returns JSON representation.
    */
-  override toJson(): AnyDuringMigration {
-    const json = super.toJson();
+  override toJson(): VarRenameJson {
+    const json = super.toJson() as VarRenameJson;
+    if (!this.oldName) {
+      throw new Error(
+          'The old var name is undefined. Either pass a variable to ' +
+          'the constructor, or call fromJson');
+    }
+    if (!this.newName) {
+      throw new Error(
+          'The new var name is undefined. Either pass a value to ' +
+          'the constructor, or call fromJson');
+    }
     json['oldName'] = this.oldName;
     json['newName'] = this.newName;
     return json;
@@ -66,7 +70,7 @@ export class VarRename extends VarBase {
    *
    * @param json JSON representation.
    */
-  override fromJson(json: AnyDuringMigration) {
+  override fromJson(json: VarRenameJson) {
     super.fromJson(json);
     this.oldName = json['oldName'];
     this.newName = json['newName'];
@@ -79,12 +83,32 @@ export class VarRename extends VarBase {
    */
   override run(forward: boolean) {
     const workspace = this.getEventWorkspace_();
+    if (!this.varId) {
+      throw new Error(
+          'The var ID is undefined. Either pass a variable to ' +
+          'the constructor, or call fromJson');
+    }
+    if (!this.oldName) {
+      throw new Error(
+          'The old var name is undefined. Either pass a variable to ' +
+          'the constructor, or call fromJson');
+    }
+    if (!this.newName) {
+      throw new Error(
+          'The new var name is undefined. Either pass a value to ' +
+          'the constructor, or call fromJson');
+    }
     if (forward) {
       workspace.renameVariableById(this.varId, this.newName);
     } else {
       workspace.renameVariableById(this.varId, this.oldName);
     }
   }
+}
+
+export interface VarRenameJson extends VarBaseJson {
+  oldName: string;
+  newName: string;
 }
 
 registry.register(registry.Type.EVENT, eventUtils.VAR_RENAME, VarRename);

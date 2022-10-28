@@ -17,7 +17,7 @@ import * as registry from '../registry.js';
 import * as blocks from '../serialization/blocks.js';
 import * as Xml from '../xml.js';
 
-import {BlockBase} from './events_block_base.js';
+import {BlockBase, BlockBaseJson} from './events_block_base.js';
 import * as eventUtils from './utils.js';
 
 
@@ -27,19 +27,14 @@ import * as eventUtils from './utils.js';
  * @alias Blockly.Events.BlockCreate
  */
 export class BlockCreate extends BlockBase {
-  override type: string;
-  xml: AnyDuringMigration;
-  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  ids!: string[];
-  // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
-  json!: blocks.State;
+  override type = eventUtils.BLOCK_CREATE;
+  xml?: Element|DocumentFragment;
+  ids?: string[];
+  json?: blocks.State;
 
   /** @param opt_block The created block.  Undefined for a blank event. */
   constructor(opt_block?: Block) {
     super(opt_block);
-
-    /** Type of this event. */
-    this.type = eventUtils.BLOCK_CREATE;
 
     if (!opt_block) {
       return;  // Blank event to be populated by fromJson.
@@ -62,8 +57,23 @@ export class BlockCreate extends BlockBase {
    *
    * @returns JSON representation.
    */
-  override toJson(): AnyDuringMigration {
-    const json = super.toJson();
+  override toJson(): BlockCreateJson {
+    const json = super.toJson() as BlockCreateJson;
+    if (!this.xml) {
+      throw new Error(
+          'The block XML is undefined. Either pass a block to ' +
+          'the constructor, or call fromJson');
+    }
+    if (!this.ids) {
+      throw new Error(
+          'The block IDs are undefined. Either pass a block to ' +
+          'the constructor, or call fromJson');
+    }
+    if (!this.json) {
+      throw new Error(
+          'The block JSON is undefined. Either pass a block to ' +
+          'the constructor, or call fromJson');
+    }
     json['xml'] = Xml.domToText(this.xml);
     json['ids'] = this.ids;
     json['json'] = this.json;
@@ -78,7 +88,7 @@ export class BlockCreate extends BlockBase {
    *
    * @param json JSON representation.
    */
-  override fromJson(json: AnyDuringMigration) {
+  override fromJson(json: BlockCreateJson) {
     super.fromJson(json);
     this.xml = Xml.textToDom(json['xml']);
     this.ids = json['ids'];
@@ -95,6 +105,16 @@ export class BlockCreate extends BlockBase {
    */
   override run(forward: boolean) {
     const workspace = this.getEventWorkspace_();
+    if (!this.json) {
+      throw new Error(
+          'The block JSON is undefined. Either pass a block to ' +
+          'the constructor, or call fromJson');
+    }
+    if (!this.ids) {
+      throw new Error(
+          'The block IDs are undefined. Either pass a block to ' +
+          'the constructor, or call fromJson');
+    }
     if (forward) {
       blocks.append(this.json, workspace);
     } else {
@@ -110,6 +130,13 @@ export class BlockCreate extends BlockBase {
       }
     }
   }
+}
+
+export interface BlockCreateJson extends BlockBaseJson {
+  xml: string;
+  ids: string[];
+  json: object;
+  recordUndo?: boolean;
 }
 
 registry.register(registry.Type.EVENT, eventUtils.CREATE, BlockCreate);

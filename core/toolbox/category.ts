@@ -219,7 +219,7 @@ export class ToolboxCategory extends ToolboxItem implements
     const container = document.createElement('div');
     const className = this.cssConfig_['container'];
     if (className) {
-      container.classList.add(className);
+      dom.addClass(container, className);
     }
     return container;
   }
@@ -234,7 +234,7 @@ export class ToolboxCategory extends ToolboxItem implements
     const rowDiv = document.createElement('div');
     const className = this.cssConfig_['row'];
     if (className) {
-      rowDiv.classList.add(className);
+      dom.addClass(rowDiv, className);
     }
     const nestedPadding =
         `${ToolboxCategory.nestedPadding * this.getLevel()}px`;
@@ -253,7 +253,7 @@ export class ToolboxCategory extends ToolboxItem implements
     const contentsContainer = document.createElement('div');
     const className = this.cssConfig_['rowcontentcontainer'];
     if (className) {
-      contentsContainer.classList.add(className);
+      dom.addClass(contentsContainer, className);
     }
     return contentsContainer;
   }
@@ -268,7 +268,7 @@ export class ToolboxCategory extends ToolboxItem implements
     if (!this.parentToolbox_.isHorizontal()) {
       const className = this.cssConfig_['icon'];
       if (className) {
-        toolboxIcon.classList.add(className);
+        dom.addClass(toolboxIcon, className);
       }
     }
 
@@ -289,7 +289,7 @@ export class ToolboxCategory extends ToolboxItem implements
     toolboxLabel.textContent = name;
     const className = this.cssConfig_['label'];
     if (className) {
-      toolboxLabel.classList.add(className);
+      dom.addClass(toolboxLabel, className);
     }
     return toolboxLabel;
   }
@@ -420,7 +420,7 @@ export class ToolboxCategory extends ToolboxItem implements
     }
     const className = this.cssConfig_['openicon'];
     if (className) {
-      iconDiv.classList.add(className);
+      dom.addClass(iconDiv, className);
     }
   }
 
@@ -439,7 +439,7 @@ export class ToolboxCategory extends ToolboxItem implements
     }
     const className = this.cssConfig_['closedicon'];
     if (className) {
-      iconDiv.classList.add(className);
+      dom.addClass(iconDiv, className);
     }
   }
 
@@ -527,12 +527,12 @@ export class ToolboxCategory extends ToolboxItem implements
           this.parseColour_(ToolboxCategory.defaultBackgroundColour);
       this.rowDiv_.style.backgroundColor = this.colour_ || defaultColour;
       if (className) {
-        this.rowDiv_.classList.add(className);
+        dom.addClass(this.rowDiv_, className);
       }
     } else {
       this.rowDiv_.style.backgroundColor = '';
       if (className) {
-        this.rowDiv_.classList.remove(className);
+        dom.removeClass(this.rowDiv_, className);
       }
     }
     aria.setState(this.htmlDiv_ as Element, aria.State.SELECTED, isSelected);

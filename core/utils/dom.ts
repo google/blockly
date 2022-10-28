@@ -85,35 +85,37 @@ export function createSvgElement<T extends SVGElement>(
 /**
  * Add a CSS class to a element.
  *
+ * Handles multiple space-separated classes for legacy reasons.
+ *
  * @param element DOM element to add class to.
  * @param className Name of class to add.
  * @returns True if class was added, false if already present.
  * @alias Blockly.utils.dom.addClass
  */
 export function addClass(element: Element, className: string): boolean {
-  if (element.classList.contains(className)) {
+  const classNames = className.split(' ');
+  if (classNames.every((name) => element.classList.contains(name))) {
     return false;
   }
-  element.classList.add(className);
+  element.classList.add(...classNames);
   return true;
 }
 
 /**
- * Removes multiple calsses from an element.
+ * Removes multiple classes from an element.
  *
  * @param element DOM element to remove classes from.
  * @param classNames A string of one or multiple class names for an element.
  * @alias Blockly.utils.dom.removeClasses
  */
 export function removeClasses(element: Element, classNames: string) {
-  const classList = classNames.split(' ');
-  for (let i = 0; i < classList.length; i++) {
-    element.classList.remove(classList[i]);
-  }
+  element.classList.remove(...classNames.split(' '));
 }
 
 /**
  * Remove a CSS class from a element.
+ *
+ * Handles multiple space-separated classes for legacy reasons.
  *
  * @param element DOM element to remove class from.
  * @param className Name of class to remove.
@@ -121,10 +123,11 @@ export function removeClasses(element: Element, classNames: string) {
  * @alias Blockly.utils.dom.removeClass
  */
 export function removeClass(element: Element, className: string): boolean {
-  if (!element.classList.contains(className)) {
+  const classNames = className.split(' ');
+  if (classNames.every((name) => !element.classList.contains(name))) {
     return false;
   }
-  element.classList.remove(className);
+  element.classList.remove(...classNames);
   return true;
 }
 

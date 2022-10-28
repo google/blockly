@@ -37,14 +37,14 @@ export function testAWorkspace() {
   });
 
   function assertBlockVarModelName(workspace, blockIndex, name) {
-    const block = workspace.topBlocks_[blockIndex];
-    chai.assert.exists(block, 'Block at topBlocks_[' + blockIndex + ']');
+    const block = workspace.getTopBlocks(false)[blockIndex];
+    chai.assert.exists(block, 'Block at topBlocks[' + blockIndex + ']');
     const varModel = block.getVarModels()[0];
     chai.assert.exists(varModel,
-        'VariableModel for block at topBlocks_[' + blockIndex + ']');
+        'VariableModel for block at topBlocks[' + blockIndex + ']');
     const blockVarName = varModel.name;
     chai.assert.equal(blockVarName, name,
-        'VariableModel name for block at topBlocks_[' + blockIndex + ']');
+        'VariableModel name for block at topBlocks[' + blockIndex + ']');
   }
 
   function createVarBlocksNoEvents(workspace, ids) {
@@ -68,8 +68,8 @@ export function testAWorkspace() {
       this.workspace.newBlock('');
 
       this.workspace.clear();
-      chai.assert.equal(this.workspace.topBlocks_.length, 0);
-      const varMapLength = this.workspace.variableMap_.variableMap.size;
+      chai.assert.equal(this.workspace.getTopBlocks(false).length, 0);
+      const varMapLength = this.workspace.getVariableMap().variableMap.size;
       chai.assert.equal(varMapLength, 0);
     });
 
@@ -78,8 +78,8 @@ export function testAWorkspace() {
       this.workspace.newBlock('');
 
       this.workspace.clear();
-      chai.assert.equal(this.workspace.topBlocks_.length, 0);
-      const varMapLength = this.workspace.variableMap_.variableMap.size;
+      chai.assert.equal(this.workspace.getTopBlocks(false).length, 0);
+      const varMapLength = this.workspace.getVariableMap().variableMap.size;
       chai.assert.equal(varMapLength, 0);
     });
   });
@@ -1272,7 +1272,7 @@ export function testAWorkspace() {
 
           this.workspace.undo(true);
           // Expect that both variables are deleted
-          chai.assert.equal(this.workspace.topBlocks_.length, 0);
+          chai.assert.equal(this.workspace.getTopBlocks(false).length, 0);
           chai.assert.isNull(this.workspace.getVariableById('id1'));
           chai.assert.isNull(this.workspace.getVariableById('id2'));
 
@@ -1338,12 +1338,12 @@ export function testAWorkspace() {
 
           // Redo delete
           this.workspace.undo(true);
-          chai.assert.equal(this.workspace.topBlocks_.length, 0);
+          chai.assert.equal(this.workspace.getTopBlocks(false).length, 0);
           chai.assert.isNull(this.workspace.getVariableById('id1'));
 
           // Redo delete, nothing should happen
           this.workspace.undo(true);
-          chai.assert.equal(this.workspace.topBlocks_.length, 0);
+          chai.assert.equal(this.workspace.getTopBlocks(false).length, 0);
           chai.assert.isNull(this.workspace.getVariableById('id1'));
         });
       });

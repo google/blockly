@@ -26,7 +26,7 @@ import * as eventUtils from './utils.js';
  */
 export abstract class Abstract {
   /** Whether or not the event is blank (to be populated by fromJson). */
-  isBlank: boolean|null = null;
+  abstract isBlank: boolean;
 
   /** The workspace identifier for this event. */
   workspaceId?: string = undefined;
@@ -37,7 +37,7 @@ export abstract class Abstract {
   isUiEvent = false;
 
   /** Type of this event. */
-  type?: string = undefined;
+  type = '';
 
   /** @alias Blockly.Events.Abstract */
   constructor() {
@@ -57,12 +57,11 @@ export abstract class Abstract {
    *
    * @returns JSON representation.
    */
-  toJson(): AnyDuringMigration {
-    const json = {'type': this.type};
-    if (this.group) {
-      (json as AnyDuringMigration)['group'] = this.group;
-    }
-    return json;
+  toJson(): AbstractEventJson {
+    return {
+      'type': this.type,
+      'group': this.group,
+    };
   }
 
   /**
@@ -70,9 +69,9 @@ export abstract class Abstract {
    *
    * @param json JSON representation.
    */
-  fromJson(json: AnyDuringMigration) {
+  fromJson(json: AbstractEventJson) {
     this.isBlank = false;
-    this.group = json['group'];
+    this.group = json['group'] || '';
   }
 
   /**
@@ -111,4 +110,9 @@ export abstract class Abstract {
     }
     return workspace;
   }
+}
+
+export interface AbstractEventJson {
+  type: string;
+  group: string;
 }

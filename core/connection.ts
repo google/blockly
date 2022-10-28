@@ -571,7 +571,7 @@ export class Connection implements IASTNodeLocationWithBlock {
     const parentBlock = this.getSourceBlock();
     const shadowState = this.getShadowState();
     const shadowDom = this.getShadowDom();
-    if (parentBlock.disposed || !shadowState && !shadowDom) {
+    if (parentBlock.isDeadOrDying() || !shadowState && !shadowDom) {
       return null;
     }
 

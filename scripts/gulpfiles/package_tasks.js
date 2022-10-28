@@ -343,7 +343,7 @@ function packageReadme() {
 function packageDTS() {
   const handwrittenSrcs = [
     'typings/*.d.ts',
-    'typings/msg/msg.d.ts',
+    'typings/msg/*.d.ts',
   ];
   return gulp.src(handwrittenSrcs, {base: 'typings'})
       .pipe(gulp.src(`${TYPINGS_BUILD_DIR}/**/*.d.ts`))

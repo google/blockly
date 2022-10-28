@@ -89,7 +89,7 @@ export class Warning extends Icon {
       return;
     }
     eventUtils.fire(new (eventUtils.get(eventUtils.BUBBLE_OPEN))(
-        this.block_, visible, 'warning'));
+        this.getBlock(), visible, 'warning'));
     if (visible) {
       this.createBubble_();
     } else {
@@ -101,7 +101,7 @@ export class Warning extends Icon {
   private createBubble_() {
     this.paragraphElement_ = Bubble.textToDom(this.getText());
     this.bubble_ = Bubble.createNonEditableBubble(
-        this.paragraphElement_, this.block_, this.iconXY_ as Coordinate);
+        this.paragraphElement_, this.getBlock(), this.iconXY_ as Coordinate);
     this.applyColour();
   }
 
@@ -151,7 +151,7 @@ export class Warning extends Icon {
 
   /** Dispose of this warning. */
   override dispose() {
-    this.block_.warning = null;
+    this.getBlock().warning = null;
     super.dispose();
   }
 }

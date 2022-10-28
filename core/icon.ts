@@ -20,6 +20,7 @@ import * as dom from './utils/dom.js';
 import {Size} from './utils/size.js';
 import {Svg} from './utils/svg.js';
 import * as svgMath from './utils/svg_math.js';
+import * as deprecation from './utils/deprecation.js';
 
 
 /**
@@ -28,7 +29,7 @@ import * as svgMath from './utils/svg_math.js';
  * @alias Blockly.Icon
  */
 export abstract class Icon {
-  protected block_: BlockSvg;
+  protected block_: BlockSvg|null;
   /** The icon SVG group. */
   iconGroup_: SVGGElement|null = null;
 
@@ -45,7 +46,12 @@ export abstract class Icon {
   protected iconXY_: Coordinate|null = null;
 
   /** @param block The block associated with this icon. */
-  constructor(block: BlockSvg) {
+  constructor(block: BlockSvg|null) {
+    if (!block) {
+      deprecation.warn(
+          'Calling the Icon constructor with a null block', 'version 9',
+          'version 10', 'a non-null block');
+    }
     this.block_ = block;
   }
 
@@ -62,12 +68,12 @@ export abstract class Icon {
         */
     this.iconGroup_ =
         dom.createSvgElement(Svg.G, {'class': 'blocklyIconGroup'});
-    if (this.block_.isInFlyout) {
-      this.iconGroup_.classList.add('blocklyIconGroupReadonly');
+    if (this.getBlock().isInFlyout) {
+      dom.addClass(this.iconGroup_, 'blocklyIconGroupReadonly');
     }
     this.drawIcon_(this.iconGroup_);
 
-    this.block_.getSvgRoot().appendChild(this.iconGroup_);
+    this.getBlock().getSvgRoot().appendChild(this.iconGroup_);
     browserEvents.conditionalBind(
         this.iconGroup_, 'mouseup', this, this.iconClick_);
     this.updateEditable();
@@ -99,19 +105,19 @@ export abstract class Icon {
    * @param e Mouse click event.
    */
   protected iconClick_(e: MouseEvent) {
-    if (this.block_.workspace.isDragging()) {
+    if (this.getBlock().workspace.isDragging()) {
       // Drag operation is concluding.  Don't open the editor.
       return;
     }
-    if (!this.block_.isInFlyout && !browserEvents.isRightButton(e)) {
+    if (!this.getBlock().isInFlyout && !browserEvents.isRightButton(e)) {
       this.setVisible(!this.isVisible());
     }
   }
 
   /** Change the colour of the associated bubble to match its block. */
   applyColour() {
-    if (this.isVisible()) {
-      this.bubble_!.setColour(this.block_.style.colourPrimary);
+    if (this.bubble_ && this.isVisible()) {
+      this.bubble_.setColour(this.getBlock().style.colourPrimary);
     }
   }
 
@@ -122,8 +128,8 @@ export abstract class Icon {
    */
   setIconLocation(xy: Coordinate) {
     this.iconXY_ = xy;
-    if (this.isVisible()) {
-      this.bubble_!.setAnchorLocation(xy);
+    if (this.bubble_ && this.isVisible()) {
+      this.bubble_.setAnchorLocation(xy);
     }
   }
 
@@ -133,7 +139,7 @@ export abstract class Icon {
    */
   computeIconLocation() {
     // Find coordinates for the centre of the icon and update the arrow.
-    const blockXY = this.block_.getRelativeToSurfaceXY();
+    const blockXY = this.getBlock().getRelativeToSurfaceXY();
     const iconXY = svgMath.getRelativeXY(this.iconGroup_ as SVGElement);
     const newXY = new Coordinate(
         blockXY.x + iconXY.x + this.SIZE / 2,
@@ -178,5 +184,16 @@ export abstract class Icon {
    * @param _visible True if the icon should be visible.
    */
   setVisible(_visible: boolean) {}
+
+  /**
+   * Returns the block this icon is attached to.
+   */
+  protected getBlock(): BlockSvg {
+    if (!this.block_) {
+      throw new Error('Block is not set for this icon.');
+    }
+
+    return this.block_;
+  }
 }
 // No-op on base class

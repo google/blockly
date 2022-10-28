@@ -18,6 +18,7 @@ import './events/events_block_change.js';
 import {BlockSvg} from './block_svg.js';
 import * as browserEvents from './browser_events.js';
 import * as Css from './css.js';
+import * as dom from './utils/dom.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import {FieldConfig, Field} from './field.js';
 import * as fieldRegistry from './field_registry.js';
@@ -190,7 +191,7 @@ export class FieldColour extends Field {
         this.getConstants()!.FIELD_COLOUR_DEFAULT_HEIGHT);
     if (!this.getConstants()!.FIELD_COLOUR_FULL_BLOCK) {
       this.createBorderRect_();
-      this.borderRect_.style['fillOpacity'] = '1';
+      this.getBorderRect().style['fillOpacity'] = '1';
     } else if (this.sourceBlock_ instanceof BlockSvg) {
       this.clickTarget_ = this.sourceBlock_.getSvgRoot();
     }
@@ -438,7 +439,7 @@ export class FieldColour extends Field {
     (this.picker_ as AnyDuringMigration)!.blur();
     const highlighted = this.getHighlighted_();
     if (highlighted) {
-      highlighted.classList.remove('blocklyColourHighlighted');
+      dom.removeClass(highlighted, 'blocklyColourHighlighted');
     }
   }
 
@@ -473,10 +474,10 @@ export class FieldColour extends Field {
     // Unhighlight the current item.
     const highlighted = this.getHighlighted_();
     if (highlighted) {
-      highlighted.classList.remove('blocklyColourHighlighted');
+      dom.removeClass(highlighted, 'blocklyColourHighlighted');
     }
     // Highlight new item.
-    cell.classList.add('blocklyColourHighlighted');
+    dom.addClass(cell, 'blocklyColourHighlighted');
     // Set new highlighted index.
     this.highlightedIndex_ = index;
 

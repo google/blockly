@@ -11,7 +11,7 @@
  * @class
  */
 import * as goog from '../closure/goog/goog.js';
-goog.declareModuleId('Blockly.Generator');
+goog.declareModuleId('Blockly.CodeGenerator');
 
 import type {Block} from './block.js';
 import * as common from './common.js';
@@ -24,14 +24,14 @@ import type {Workspace} from './workspace.js';
  * Class for a code generator that translates the blocks into a language.
  *
  * @unrestricted
- * @alias Blockly.Generator
+ * @alias Blockly.CodeGenerator
  */
-export class Generator {
+export class CodeGenerator {
   name_: string;
 
   /**
    * This is used as a placeholder in functions defined using
-   * Generator.provideFunction_.  It must not be legal code that could
+   * CodeGenerator.provideFunction_.  It must not be legal code that could
    * legitimately appear in a function definition (or comment), and it must
    * not confuse the regular expression parser.
    */
@@ -205,7 +205,7 @@ export class Generator {
       |[string, number] {
     if (this.isInitialized === false) {
       console.warn(
-          'Generator init was not called before blockToCode was called.');
+          'CodeGenerator init was not called before blockToCode was called.');
     }
     if (!block) {
       return '';
@@ -414,7 +414,7 @@ export class Generator {
    * "listRandom", not "random").  There is no danger of colliding with reserved
    * words, or user-defined variable or procedure names.
    *
-   * The code gets output when Generator.finish() is called.
+   * The code gets output when CodeGenerator.finish() is called.
    *
    * @param desiredName The desired name of the function (e.g. mathIsPrime).
    * @param code A list of statements or one multi-line code string.  Use '  '
@@ -514,25 +514,24 @@ export class Generator {
   }
 }
 
-Object.defineProperties(Generator.prototype, {
+Object.defineProperties(CodeGenerator.prototype, {
   /**
    * A database of variable names.
    *
-   * @name Blockly.Generator.prototype.variableDB_
+   * @name Blockly.CodeGenerator.prototype.variableDB_
    * @deprecated 'variableDB_' was renamed to 'nameDB_' (May 2021).
    * @suppress {checkTypes}
    */
   variableDB_: ({
     /** @returns Name database. */
-    get(this: Generator): Names |
+    get(this: CodeGenerator): Names |
         undefined {
-          deprecation.warn(
-              'variableDB_', 'May 2021', 'September 2022', 'nameDB_');
+          deprecation.warn('variableDB_', 'version 9', 'version 10', 'nameDB_');
           return this.nameDB_;
         },
     /** @param nameDb New name database. */
-    set(this: Generator, nameDb: Names|undefined) {
-      deprecation.warn('variableDB_', 'May 2021', 'September2022', 'nameDB_');
+    set(this: CodeGenerator, nameDb: Names|undefined) {
+      deprecation.warn('variableDB_', 'version 9', 'version 10', 'nameDB_');
       this.nameDB_ = nameDb;
     },
   }),

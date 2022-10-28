@@ -19,6 +19,7 @@ const licenseTasks = require('./scripts/gulpfiles/license_tasks');
 const appengineTasks = require('./scripts/gulpfiles/appengine_tasks');
 const releaseTasks = require('./scripts/gulpfiles/release_tasks');
 const cleanupTasks = require('./scripts/gulpfiles/cleanup_tasks');
+const testTasks = require('./scripts/gulpfiles/test_tasks');
 
 module.exports = {
   // Default target if gulp invoked without specifying.
@@ -47,6 +48,8 @@ module.exports = {
   sortRequires: cleanupTasks.sortRequires,
   checkLicenses: licenseTasks.checkLicenses,
   clean: gulp.parallel(buildTasks.cleanBuildDir, packageTasks.cleanReleaseDir),
+  test: testTasks.test,
+  testGenerators: testTasks.generators,
   buildAdvancedCompilationTest: buildTasks.buildAdvancedCompilationTest,
   gitCreateRC: gitTasks.createRC,
   

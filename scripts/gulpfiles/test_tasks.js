@@ -24,8 +24,8 @@ const runMochaTestsInBrowser =
 const runGeneratorsInBrowser =
   require('../../tests/generators/run_generators_in_browser.js');
 
-const OUTPUT_DIR = 'build/generators/';
-const GOLDEN_DIR = 'tests/generators/golden/';
+const OUTPUT_DIR = 'build/generators';
+const GOLDEN_DIR = 'tests/generators/golden';
 
 const BOLD_GREEN = '\x1b[1;32m';
 const BOLD_RED = '\x1b[1;31m';

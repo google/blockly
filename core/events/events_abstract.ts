@@ -113,9 +113,9 @@ export abstract class Abstract {
    * @param _forward True if run forward, false if run backward (undo).
    */
   run(_forward: boolean) {
-    // Defined by subclasses.
+    // Defined by subclasses. Cannot be abstract b/c UI events do /not/ define
+    // this.
   }
-
 
   /**
    * Get workspace the event belongs to.

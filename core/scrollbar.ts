@@ -220,7 +220,6 @@ export class Scrollbar {
    * Set the size of the scrollbar DOM elements along the minor axis.
    */
   private setInitialThickness() {
-    // Store the thickness in a temp variable for readability.
     const scrollbarThickness = Scrollbar.scrollbarThickness;
     if (this.horizontal) {
       this.svgBackground.setAttribute('height', String(scrollbarThickness));

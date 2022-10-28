@@ -45,15 +45,17 @@ import * as WidgetDiv from './widgetdiv.js';
 import type {WorkspaceSvg} from './workspace_svg.js';
 import * as Xml from './xml.js';
 
+export type FieldValidator<T = unknown> = (value: T) => void;
 
 /**
  * Abstract class for an editable field.
  *
  * @alias Blockly.Field
  */
-export abstract class Field implements IASTNodeLocationSvg,
-                                       IASTNodeLocationWithBlock,
-                                       IKeyboardAccessible, IRegistrable {
+export abstract class Field<T = unknown> implements IASTNodeLocationSvg,
+                                                    IASTNodeLocationWithBlock,
+                                                    IKeyboardAccessible,
+                                                    IRegistrable {
   /** Non-breaking space. */
   static readonly NBSP = '\u00A0';
 
@@ -69,10 +71,10 @@ export abstract class Field implements IASTNodeLocationSvg,
    * Static labels are usually unnamed.
    */
   name?: string = undefined;
-  protected value_: AnyDuringMigration;
+  protected value_: T|null;
 
   /** Validation function called when user edits an editable field. */
-  protected validator_: Function|null = null;
+  protected validator_: FieldValidator<T>|null = null;
 
   /**
    * Used to cache the field's tooltip value if setTooltip is called when the
@@ -181,7 +183,7 @@ export abstract class Field implements IASTNodeLocationSvg,
    * this parameter supports.
    */
   constructor(
-      value: AnyDuringMigration, opt_validator?: Function|null,
+      value: T|Sentinel, opt_validator?: FieldValidator<T>|null,
       opt_config?: FieldConfig) {
     /**
      * A generic value possessed by the field.
@@ -597,7 +599,7 @@ export abstract class Field implements IASTNodeLocationSvg,
    * @param handler The validator function or null to clear a previous
    *     validator.
    */
-  setValidator(handler: Function) {
+  setValidator(handler: FieldValidator<T>) {
     this.validator_ = handler;
   }
 
@@ -1073,7 +1075,7 @@ export abstract class Field implements IASTNodeLocationSvg,
     }
     const gesture = (this.sourceBlock_.workspace as WorkspaceSvg).getGesture(e);
     if (gesture) {
-      gesture.setStartField(this);
+      gesture.setStartField(this as Field);
     }
   }
 

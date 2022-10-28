@@ -18,7 +18,7 @@ import * as Css from './css.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import {Field, UnattachedFieldError} from './field.js';
 import * as fieldRegistry from './field_registry.js';
-import {FieldTextInputConfig, FieldTextInput} from './field_textinput.js';
+import {FieldInput, FieldInputConfig, FieldInputValidator} from './field_input.js';
 import * as dom from './utils/dom.js';
 import {KeyCodes} from './utils/keycodes.js';
 import * as math from './utils/math.js';
@@ -27,13 +27,14 @@ import {Svg} from './utils/svg.js';
 import * as userAgent from './utils/useragent.js';
 import * as WidgetDiv from './widgetdiv.js';
 
+export type FieldAngleValidator = FieldInputValidator<number>;
 
 /**
  * Class for an editable angle field.
  *
  * @alias Blockly.FieldAngle
  */
-export class FieldAngle extends FieldTextInput {
+export class FieldAngle extends FieldInput<number> {
   /** The default value for this field. */
   // protected override DEFAULT_VALUE = 0;
 
@@ -135,7 +136,7 @@ export class FieldAngle extends FieldTextInput {
    * for a list of properties this parameter supports.
    */
   constructor(
-      opt_value?: string|number|Sentinel, opt_validator?: Function,
+      opt_value?: string|number|Sentinel, opt_validator?: FieldAngleValidator,
       opt_config?: FieldAngleConfig) {
     super(Field.SKIP_SETUP);
 
@@ -480,7 +481,7 @@ export class FieldAngle extends FieldTextInput {
    * @nocollapse
    * @internal
    */
-  static override fromJson(options: FieldAngleFromJsonConfig): FieldAngle {
+  static fromJson(options: FieldAngleFromJsonConfig): FieldAngle {
     // `this` might be a subclass of FieldAngle if that class doesn't override
     // the static fromJson method.
     return new this(options.angle, undefined, options);
@@ -541,7 +542,7 @@ export enum Mode {
 /**
  * Extra configuration options for the angle field.
  */
-export interface FieldAngleConfig extends FieldTextInputConfig {
+export interface FieldAngleConfig extends FieldInputConfig {
   mode?: Mode;
   clockwise?: boolean;
   offset?: number;

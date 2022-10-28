@@ -53,19 +53,19 @@ import {DragTarget} from './drag_target.js';
 import * as dropDownDiv from './dropdowndiv.js';
 import * as Events from './events/events.js';
 import * as Extensions from './extensions.js';
-import {Field} from './field.js';
-import {FieldAngle} from './field_angle.js';
-import {FieldCheckbox} from './field_checkbox.js';
-import {FieldColour} from './field_colour.js';
-import {FieldDropdown, MenuGenerator, MenuGeneratorFunction, MenuOption} from './field_dropdown.js';
-import {FieldImage} from './field_image.js';
+import {Field, FieldValidator} from './field.js';
+import {FieldAngle, FieldAngleValidator} from './field_angle.js';
+import {FieldCheckbox, FieldCheckboxValidator} from './field_checkbox.js';
+import {FieldColour, FieldColourValidator} from './field_colour.js';
+import {FieldDropdown, FieldDropdownValidator, MenuGenerator, MenuGeneratorFunction, MenuOption} from './field_dropdown.js';
+import {FieldImage, FieldImageValidator} from './field_image.js';
 import {FieldLabel} from './field_label.js';
 import {FieldLabelSerializable} from './field_label_serializable.js';
-import {FieldMultilineInput} from './field_multilineinput.js';
-import {FieldNumber} from './field_number.js';
+import {FieldMultilineInput, FieldMultilineInputValidator} from './field_multilineinput.js';
+import {FieldNumber, FieldNumberValidator} from './field_number.js';
 import * as fieldRegistry from './field_registry.js';
-import {FieldTextInput} from './field_textinput.js';
-import {FieldVariable} from './field_variable.js';
+import {FieldTextInput, FieldTextInputValidator} from './field_textinput.js';
+import {FieldVariable, FieldVariableValidator} from './field_variable.js';
 import {Flyout} from './flyout_base.js';
 import {FlyoutButton} from './flyout_button.js';
 import {HorizontalFlyout} from './flyout_horizontal.js';
@@ -648,18 +648,24 @@ export {Cursor};
 export {DeleteArea};
 export {DragTarget};
 export const DropDownDiv = dropDownDiv;
-export {Field};
-export {FieldAngle};
-export {FieldCheckbox};
-export {FieldColour};
-export {FieldDropdown, MenuGenerator, MenuGeneratorFunction, MenuOption};
-export {FieldImage};
+export {Field, FieldValidator};
+export {FieldAngle, FieldAngleValidator};
+export {FieldCheckbox, FieldCheckboxValidator};
+export {FieldColour, FieldColourValidator};
+export {
+  FieldDropdown,
+  FieldDropdownValidator,
+  MenuGenerator,
+  MenuGeneratorFunction,
+  MenuOption,
+};
+export {FieldImage, FieldImageValidator};
 export {FieldLabel};
 export {FieldLabelSerializable};
-export {FieldMultilineInput};
-export {FieldNumber};
-export {FieldTextInput};
-export {FieldVariable};
+export {FieldMultilineInput, FieldMultilineInputValidator};
+export {FieldNumber, FieldNumberValidator};
+export {FieldTextInput, FieldTextInputValidator};
+export {FieldVariable, FieldVariableValidator};
 export {Flyout};
 export {FlyoutButton};
 export {FlyoutMetricsManager};

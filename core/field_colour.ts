@@ -20,7 +20,7 @@ import * as browserEvents from './browser_events.js';
 import * as Css from './css.js';
 import * as dom from './utils/dom.js';
 import * as dropDownDiv from './dropdowndiv.js';
-import {FieldConfig, Field} from './field.js';
+import {Field, FieldConfig, FieldValidator} from './field.js';
 import * as fieldRegistry from './field_registry.js';
 import * as aria from './utils/aria.js';
 import * as colour from './utils/colour.js';
@@ -29,13 +29,14 @@ import {KeyCodes} from './utils/keycodes.js';
 import type {Sentinel} from './utils/sentinel.js';
 import {Size} from './utils/size.js';
 
+export type FieldColourValidator = FieldValidator<string>;
 
 /**
  * Class for a colour input field.
  *
  * @alias Blockly.FieldColour
  */
-export class FieldColour extends Field {
+export class FieldColour extends Field<string> {
   /**
    * An array of colour strings for the palette.
    * Copied from goog.ui.ColorPicker.SIMPLE_GRID_COLORS
@@ -152,7 +153,7 @@ export class FieldColour extends Field {
    * for a list of properties this parameter supports.
    */
   constructor(
-      opt_value?: string|Sentinel, opt_validator?: Function,
+      opt_value?: string|Sentinel, opt_validator?: FieldColourValidator,
       opt_config?: FieldColourConfig) {
     super(Field.SKIP_SETUP);
 

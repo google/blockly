@@ -31,7 +31,7 @@ import type {RenderedConnection} from './rendered_connection.js';
  */
 export class Input {
   private sourceBlock_: Block;
-  fieldRow: Field[] = [];
+  fieldRow: Field<unknown>[] = [];
   align: Align;
 
   /** Is the input visible? */
@@ -75,7 +75,7 @@ export class Input {
    *     field again.  Should be unique to the host block.
    * @returns The input being append to (to allow chaining).
    */
-  appendField(field: string|Field, opt_name?: string): Input {
+  appendField(field: string|Field<any>, opt_name?: string): Input {
     this.insertFieldAt(this.fieldRow.length, field, opt_name);
     return this;
   }
@@ -90,7 +90,8 @@ export class Input {
    *     field again.  Should be unique to the host block.
    * @returns The index following the last inserted field.
    */
-  insertFieldAt(index: number, field: string|Field, opt_name?: string): number {
+  insertFieldAt(index: number, field: string|Field<unknown>, opt_name?: string):
+      number {
     if (index < 0 || index > this.fieldRow.length) {
       throw Error('index ' + index + ' out of bounds.');
     }
@@ -102,10 +103,10 @@ export class Input {
 
     // Generate a FieldLabel when given a plain text field.
     if (typeof field === 'string') {
-      field = fieldRegistry.fromJson({
-        'type': 'field_label',
-        'text': field,
-      }) as Field;
+      field = fieldRegistry.fromJson<unknown>({
+        type: 'field_label',
+        text: field,
+      })!;
     }
 
     field.setSourceBlock(this.sourceBlock_);

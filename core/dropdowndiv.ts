@@ -212,12 +212,13 @@ export function showPositionedByBlock(
  * @param opt_secondaryYOffset Optional Y offset for above-block positioning.
  * @returns True if the menu rendered below block; false if above.
  */
-export function showPositionedByField(
-    field: Field, opt_onHide?: Function,
+export function showPositionedByField<T>(
+    field: Field<T>, opt_onHide?: Function,
     opt_secondaryYOffset?: number): boolean {
   positionToField = true;
   return showPositionedByRect(
-      getScaledBboxOfField(field), field, opt_onHide, opt_secondaryYOffset);
+      getScaledBboxOfField(field), field as Field, opt_onHide,
+      opt_secondaryYOffset);
 }
 /**
  * Get the scaled bounding box of a block.
@@ -240,7 +241,7 @@ function getScaledBboxOfBlock(block: BlockSvg): Rect {
  * @param field The field.
  * @returns The scaled bounding box of the field.
  */
-function getScaledBboxOfField(field: Field): Rect {
+function getScaledBboxOfField<T>(field: Field<T>): Rect {
   const bBox = field.getScaledBBox();
   return new Rect(bBox.top, bBox.bottom, bBox.left, bBox.right);
 }
@@ -540,8 +541,8 @@ export function isVisible(): boolean {
  *     animating.
  * @returns True if hidden.
  */
-export function hideIfOwner(
-    divOwner: Field, opt_withoutAnimation?: boolean): boolean {
+export function hideIfOwner<T>(
+    divOwner: Field<T>, opt_withoutAnimation?: boolean): boolean {
   if (owner === divOwner) {
     if (opt_withoutAnimation) {
       hideWithoutAnimation();

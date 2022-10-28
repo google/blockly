@@ -18,6 +18,10 @@ import type {Field} from './field.js';
 import type {IRegistrableField} from './interfaces/i_registrable_field.js';
 import * as registry from './registry.js';
 
+interface RegistryOptions {
+  type: string;
+  [key: string]: unknown;
+}
 
 /**
  * Registers a field type.
@@ -57,7 +61,7 @@ export function unregister(type: string) {
  * @alias Blockly.fieldRegistry.fromJson
  * @internal
  */
-export function fromJson(options: AnyDuringMigration): Field|null {
+export function fromJson<T>(options: RegistryOptions): Field<T>|null {
   return TEST_ONLY.fromJsonInternal(options);
 }
 
@@ -66,8 +70,8 @@ export function fromJson(options: AnyDuringMigration): Field|null {
  *
  * @param options
  */
-function fromJsonInternal(options: AnyDuringMigration): Field|null {
-  const fieldObject = registry.getObject(registry.Type.FIELD, options['type']);
+function fromJsonInternal<T>(options: RegistryOptions): Field<T>|null {
+  const fieldObject = registry.getObject(registry.Type.FIELD, options.type);
   if (!fieldObject) {
     console.warn(
         'Blockly could not create a field of type ' + options['type'] +

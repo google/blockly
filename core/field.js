@@ -1008,10 +1008,10 @@ class Field {
     }
 
     this.doValueUpdate_(newValue);
-  if (source && eventUtils.isEnabled()) {
-      eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
-        source, 'field', this.name || null, oldValue, newValue));
-  }
+    if (source && eventUtils.isEnabled()) {
+        eventUtils.fire(new (eventUtils.get(eventUtils.BLOCK_CHANGE))(
+          source, 'field', this.name || null, oldValue, newValue));
+    }
     if (this.isDirty_) {
       this.forceRerender();
     }

@@ -31,6 +31,7 @@ const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 const {Field} = goog.require('Blockly.Field');
 const {MenuItem} = goog.require('Blockly.MenuItem');
 const {Menu} = goog.require('Blockly.Menu');
+const {Msg} = goog.require('Blockly.Msg');
 /* eslint-disable-next-line no-unused-vars */
 const {Sentinel} = goog.requireType('Blockly.utils.Sentinel');
 const {Svg} = goog.require('Blockly.utils.Svg');
@@ -539,7 +540,7 @@ class FieldDropdown extends Field {
    */
   doValueInvalid_(_invalidValue) {
     if (this.getOptions(true).length > 1) {
-      this.selectedOption_ = ['Removed', _invalidValue];
+      this.selectedOption_ = [Msg.OPTION_VALUE_REMOVED, _invalidValue];
       super.doValueUpdate_(_invalidValue);
     }
   }

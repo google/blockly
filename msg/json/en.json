@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Varwin <devops@varwin.com>",
-		"lastupdated": "2022-10-24 13:17:14.453755",
+		"lastupdated": "2022-10-31 16:07:07.730581",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -417,5 +417,6 @@
 	"DIALOG_OK": "OK",
 	"DIALOG_CANCEL": "Cancel",
 	"SEARCH": "Search",
-	"NEW_TAB": "New tab"
+	"NEW_TAB": "New tab",
+	"OPTION_VALUE_REMOVED": "Value removed"
 }

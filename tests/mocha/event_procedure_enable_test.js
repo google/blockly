@@ -19,10 +19,37 @@ suite('Procedure Enable Event', function() {
     sharedTestTeardown.call(this);
   });
 
-  suite('running', function() {
+  suite.only('running', function() {
+    const ENABLED = true;
+    const DISABLED = false;
+
+    setup(function() {
+      this.createProcedureModel = (enabled) => {
+        return new Blockly.procedures.ObservableProcedureModel(
+            this.workspace, 'test name')
+            .setEnabled(enabled);
+      };
+
+      this.createChangeReturnEventToCurrentState = (procedureModel) => {
+        return new Blockly.Events.ProcedureChangeReturn(
+            this.workspace, procedureModel, !procedureModel.getEnabled());
+      };
+    });
+
     suite('forward', function() {
       test('the procedure with the matching ID is toggled', function() {
-  
+        const procedureModel = this.createProcedureModel(ENABLED);
+        this.procedureMap.add(procedureModel);
+        const eventToEnabled =
+            this.createChangeReturnEventToCurrentState(procedureModel);
+        procedureModel.setEnabled(DISABLED);
+
+        eventToEnabled.run(/* redo */ true);
+
+        chai.assert.equal(
+            procedureModel.getEnabled(),
+            ENABLED,
+            "Expected the procedure's return type to be reverted");
       });
   
       test('toggling a procedure fires an enable event', function() {

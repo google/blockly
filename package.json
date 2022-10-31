@@ -81,7 +81,7 @@
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-jsdoc": "^39.3.6",
     "google-closure-compiler": "^20221004.0.0",
-    "google-closure-deps": "^20220905.0.0",
+    "google-closure-deps": "^20221004.0.0",
     "gulp": "^4.0.2",
     "gulp-clang-format": "^1.0.27",
     "gulp-concat": "^2.6.1",

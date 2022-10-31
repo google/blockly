@@ -146,7 +146,11 @@ export class ProcedureSerializer<ProcedureModel extends IProcedureModel,
   }
 }
 
-serializationRegistry.register(
-    'procedures',
-    new ProcedureSerializer(
-        ObservableProcedureModel, ObservableParameterModel));
+/**
+ * A ProcedureSerializer that deserializes to create the built-in
+ * ObservableProcedureModels and ObservableParameterModels.
+ */
+export const observableProcedureSerializer =
+    new ProcedureSerializer(ObservableProcedureModel, ObservableParameterModel);
+
+serializationRegistry.register('procedures', observableProcedureSerializer);

@@ -231,8 +231,8 @@ export class InsertionMarkerManager {
 
     this.wouldDeleteBlockInternal = this.shouldDelete(candidate, dragTarget);
 
-    const shouldUpdate =
-        this.wouldDeleteBlockInternal || this.shouldUpdatePreviews(candidate, dxy);
+    const shouldUpdate = this.wouldDeleteBlockInternal ||
+        this.shouldUpdatePreviews(candidate, dxy);
 
     if (shouldUpdate) {
       // Don't fire events for insertion marker creation or movement.
@@ -339,8 +339,8 @@ export class InsertionMarkerManager {
    * @param dxy Position relative to drag start, in workspace units.
    * @returns Whether the preview should be updated.
    */
-  private shouldUpdatePreviews(
-      candidate: CandidateConnection, dxy: Coordinate): boolean {
+  private shouldUpdatePreviews(candidate: CandidateConnection, dxy: Coordinate):
+      boolean {
     const candidateLocal = candidate.local;
     const candidateClosest = candidate.closest;
     const radius = candidate.radius;
@@ -355,10 +355,8 @@ export class InsertionMarkerManager {
             this.localConnection === candidateLocal) {
           return false;
         }
-        const xDiff =
-            this.localConnection.x + dxy.x - this.closestConnection.x;
-        const yDiff =
-            this.localConnection.y + dxy.y - this.closestConnection.y;
+        const xDiff = this.localConnection.x + dxy.x - this.closestConnection.x;
+        const yDiff = this.localConnection.y + dxy.y - this.closestConnection.y;
         const curDistance = Math.sqrt(xDiff * xDiff + yDiff * yDiff);
         // Slightly prefer the existing preview over a new preview.
         return !(
@@ -704,13 +702,12 @@ export class InsertionMarkerManager {
         previousBlockNextConnection.connect(innerConnection);
       }
     } else {
-      imBlock.unplug(/* healStack */
-                     true);
+      imBlock.unplug(/* healStack */ true);
     }
 
     if (imConn.targetConnection) {
       throw Error(
-          'markerConnection_ still connected at the end of ' +
+          'markerConnection still connected at the end of ' +
           'disconnectInsertionMarker');
     }
 
@@ -745,8 +742,7 @@ export class InsertionMarkerManager {
           'Cannot hide the insertion marker outline because ' +
           'there is no closest connection');
     }
-    this.highlightedBlock.highlightShapeForInput(
-        this.closestConnection, false);
+    this.highlightedBlock.highlightShapeForInput(this.closestConnection, false);
     this.highlightedBlock = null;
   }
 

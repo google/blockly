@@ -147,7 +147,7 @@ export class ProcedureSerializer<ProcedureModel extends IProcedureModel,
 }
 
 /**
- * A ProcedureSerializer that deserializes to creat the built-in
+ * A ProcedureSerializer that deserializes to create the built-in
  * ObservableProcedureModels and ObservableParameterModels.
  */
 export const observableProcedureSerializer =

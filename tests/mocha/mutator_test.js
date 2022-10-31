@@ -9,6 +9,7 @@ goog.declareModuleId('Blockly.test.mutator');
 
 import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 import {createRenderedBlock, defineMutatorBlocks} from './test_helpers/block_definitions.js';
+import {assertEventFired, assertEventNotFired} from './test_helpers/events.js';
 
 
 suite('Mutator', function() {
@@ -34,11 +35,8 @@ suite('Mutator', function() {
       const mutatorWorkspace = block.mutator.getWorkspace();
       // Trigger mutator change listener.
       createRenderedBlock(mutatorWorkspace, 'checkbox_block');
-      chai.assert.isTrue(
-          this.eventsFireStub.getCalls().every(
-              ({args}) =>
-                args[0].type !== Blockly.Events.BLOCK_CHANGE ||
-                args[0].element !== 'mutation'));
+      assertEventNotFired(this.eventsFireStub, Blockly.Events.BlockChange,
+        {element: 'mutation'});
     });
 
     test('XML', function() {
@@ -61,12 +59,12 @@ suite('Mutator', function() {
       const mutatorWorkspace = block.mutator.getWorkspace();
       mutatorWorkspace.getBlockById('check_block')
           .setFieldValue('TRUE', 'CHECK');
-      chai.assert.isTrue(
-          this.eventsFireStub.getCalls().some(
-              ({args}) =>
-                args[0].type === Blockly.Events.BLOCK_CHANGE &&
-                args[0].element === 'mutation' &&
-                args[0].newValue === '{"hasInput":true}'));
+      assertEventFired(this.eventsFireStub, Blockly.Events.BlockChange,
+        {
+          element: 'mutation',
+          newValue: '{"hasInput":true}',
+        }, this.workspace.id, block.id);
     });
   });
 });
+

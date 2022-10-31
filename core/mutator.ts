@@ -42,40 +42,40 @@ import type {WorkspaceSvg} from './workspace_svg.js';
  * @alias Blockly.Mutator
  */
 export class Mutator extends Icon {
-  private quarkNames_: string[];
+  private quarkNames: string[];
 
   /** Workspace in the mutator's bubble. */
-  private workspace_: WorkspaceSvg|null = null;
+  private workspace: WorkspaceSvg|null = null;
 
   /** Width of workspace. */
-  private workspaceWidth_ = 0;
+  private workspaceWidth = 0;
 
   /** Height of workspace. */
-  private workspaceHeight_ = 0;
+  private workspaceHeight = 0;
 
   /**
    * The SVG element that is the parent of the mutator workspace, or null if
    * not created.
    */
-  private svgDialog_: SVGSVGElement|null = null;
+  private svgDialog: SVGSVGElement|null = null;
 
   /**
    * The root block of the mutator workspace, created by decomposing the
    * source block.
    */
-  private rootBlock_: BlockSvg|null = null;
+  private rootBlock: BlockSvg|null = null;
 
   /**
    * Function registered on the main workspace to update the mutator contents
    * when the main workspace changes.
    */
-  private sourceListener_: Function|null = null;
+  private sourceListener: Function|null = null;
 
   /**
    * The PID associated with the updateWorkpace_ timeout, or null if no timeout
    * is currently running.
    */
-  private updateWorkspacePid_: ReturnType<typeof setTimeout>|null = null;
+  private updateWorkspacePid: ReturnType<typeof setTimeout>|null = null;
 
   /** @param quarkNames List of names of sub-blocks for flyout. */
   constructor(quarkNames: string[], block?: BlockSvg) {
@@ -86,7 +86,7 @@ export class Mutator extends Icon {
           'the constructor by passing the list of subblocks and the block instance to attach the mutator to');
     }
     super(block ?? null);
-    this.quarkNames_ = quarkNames;
+    this.quarkNames = quarkNames;
   }
 
   /**
@@ -107,7 +107,7 @@ export class Mutator extends Icon {
    * @internal
    */
   getWorkspace(): WorkspaceSvg|null {
-    return this.workspace_;
+    return this.workspace;
   }
 
   /**
@@ -162,19 +162,19 @@ export class Mutator extends Icon {
    *
    * @returns The top-level node of the editor.
    */
-  private createEditor_(): SVGElement {
+  private createEditor(): SVGSVGElement {
     /* Create the editor.  Here's the markup that will be generated:
         <svg>
           [Workspace]
         </svg>
         */
-    this.svgDialog_ = dom.createSvgElement(
+    this.svgDialog = dom.createSvgElement(
         Svg.SVG, {'x': Bubble.BORDER_WIDTH, 'y': Bubble.BORDER_WIDTH});
     // Convert the list of names into a list of XML objects for the flyout.
     let quarkXml;
-    if (this.quarkNames_.length) {
+    if (this.quarkNames.length) {
       quarkXml = xml.createElement('xml');
-      for (let i = 0, quarkName; quarkName = this.quarkNames_[i]; i++) {
+      for (let i = 0, quarkName; quarkName = this.quarkNames[i]; i++) {
         const element = xml.createElement('block');
         element.setAttribute('type', quarkName);
         quarkXml.appendChild(element);
@@ -200,26 +200,26 @@ export class Mutator extends Icon {
     if (hasFlyout) {
       workspaceOptions.languageTree = toolbox.convertToolboxDefToJson(quarkXml);
     }
-    this.workspace_ = this.newWorkspaceSvg(workspaceOptions);
-    this.workspace_.internalIsMutator = true;
-    this.workspace_.addChangeListener(eventUtils.disableOrphans);
+    this.workspace = this.newWorkspaceSvg(workspaceOptions);
+    this.workspace.internalIsMutator = true;
+    this.workspace.addChangeListener(eventUtils.disableOrphans);
 
     // Mutator flyouts go inside the mutator workspace's <g> rather than in
     // a top level SVG. Instead of handling scale themselves, mutators
     // inherit scale from the parent workspace.
     // To fix this, scale needs to be applied at a different level in the DOM.
-    const flyoutSvg = hasFlyout ? this.workspace_.addFlyout(Svg.G) : null;
-    const background = this.workspace_.createDom('blocklyMutatorBackground');
+    const flyoutSvg = hasFlyout ? this.workspace.addFlyout(Svg.G) : null;
+    const background = this.workspace.createDom('blocklyMutatorBackground');
 
     if (flyoutSvg) {
       // Insert the flyout after the <rect> but before the block canvas so that
       // the flyout is underneath in z-order.  This makes blocks layering during
       // dragging work properly.
-      background.insertBefore(flyoutSvg, this.workspace_.svgBlockCanvas_);
+      background.insertBefore(flyoutSvg, this.workspace.svgBlockCanvas_);
     }
-    this.svgDialog_!.appendChild(background);
+    this.svgDialog.appendChild(background);
 
-    return this.svgDialog_;
+    return this.svgDialog;
   }
 
   /**
@@ -251,50 +251,54 @@ export class Mutator extends Icon {
   }
 
   /** Resize the bubble to match the size of the workspace. */
-  private resizeBubble_() {
+  private resizeBubble() {
+    // If the bubble exists, the workspace also exists.
+    if (!this.workspace) {
+      return;
+    }
     const doubleBorderWidth = 2 * Bubble.BORDER_WIDTH;
-    const workspaceSize = this.workspace_!.getCanvas().getBBox();
+    const canvas = this.workspace.getCanvas();
+    const workspaceSize = canvas.getBBox();
     let width = workspaceSize.width + workspaceSize.x;
     let height = workspaceSize.height + doubleBorderWidth * 3;
-    const flyout = this.workspace_!.getFlyout();
+    const flyout = this.workspace.getFlyout();
     if (flyout) {
       const flyoutScrollMetrics =
           flyout.getWorkspace().getMetricsManager().getScrollMetrics();
       height = Math.max(height, flyoutScrollMetrics.height + 20);
       width += flyout.getWidth();
     }
-    if (this.getBlock().RTL) {
+    const isRtl = this.getBlock().RTL;
+    if (isRtl) {
       width = -workspaceSize.x;
     }
     width += doubleBorderWidth * 3;
     // Only resize if the size difference is significant.  Eliminates
     // shuddering.
-    if (Math.abs(this.workspaceWidth_ - width) > doubleBorderWidth ||
-        Math.abs(this.workspaceHeight_ - height) > doubleBorderWidth) {
+    if (Math.abs(this.workspaceWidth - width) > doubleBorderWidth ||
+        Math.abs(this.workspaceHeight - height) > doubleBorderWidth) {
       // Record some layout information for workspace metrics.
-      this.workspaceWidth_ = width;
-      this.workspaceHeight_ = height;
+      this.workspaceWidth = width;
+      this.workspaceHeight = height;
       // Resize the bubble.
       this.bubble_!.setBubbleSize(
           width + doubleBorderWidth, height + doubleBorderWidth);
-      this.svgDialog_!.setAttribute('width', `${this.workspaceWidth_}`);
-      this.svgDialog_!.setAttribute('height', `${this.workspaceHeight_}`);
-      this.workspace_!.setCachedParentSvgSize(
-          this.workspaceWidth_, this.workspaceHeight_);
+      this.svgDialog!.setAttribute('width', `${width}`);
+      this.svgDialog!.setAttribute('height', `${height}`);
+      this.workspace.setCachedParentSvgSize(width, height);
     }
 
-    if (this.getBlock().RTL) {
+    if (isRtl) {
       // Scroll the workspace to always left-align.
-      const translation = 'translate(' + this.workspaceWidth_ + ',0)';
-      this.workspace_!.getCanvas().setAttribute('transform', translation);
+      canvas.setAttribute('transform', `translate(${this.workspaceWidth}, 0)`);
     }
-    this.workspace_!.resize();
+    this.workspace.resize();
   }
 
   /** A method handler for when the bubble is moved. */
-  private onBubbleMove_() {
-    if (this.workspace_) {
-      this.workspace_.recordDragTargets();
+  private onBubbleMove() {
+    if (this.workspace) {
+      this.workspace.recordDragTargets();
     }
   }
 
@@ -314,31 +318,33 @@ export class Mutator extends Icon {
     if (visible) {
       // Create the bubble.
       this.bubble_ = new Bubble(
-          block.workspace, this.createEditor_(), block.pathObject.svgPath,
+          block.workspace, this.createEditor(), block.pathObject.svgPath,
           (this.iconXY_ as Coordinate), null, null);
+      // The workspace was created in createEditor.
+      const ws = this.workspace!;
       // Expose this mutator's block's ID on its top-level SVG group.
       this.bubble_.setSvgId(block.id);
-      this.bubble_.registerMoveEvent(this.onBubbleMove_.bind(this));
-      const tree = this.workspace_!.options.languageTree;
-      const flyout = this.workspace_!.getFlyout();
+      this.bubble_.registerMoveEvent(this.onBubbleMove.bind(this));
+      const tree = ws.options.languageTree;
+      const flyout = ws.getFlyout();
       if (tree) {
-        flyout!.init(this.workspace_!);
+        flyout!.init(ws);
         flyout!.show(tree);
       }
 
-      this.rootBlock_ = block.decompose!(this.workspace_!)!;
-      const blocks = this.rootBlock_!.getDescendants(false);
+      this.rootBlock = block.decompose!(ws)!;
+      const blocks = this.rootBlock.getDescendants(false);
       for (let i = 0, child; child = blocks[i]; i++) {
         child.render();
       }
       // The root block should not be draggable or deletable.
-      this.rootBlock_!.setMovable(false);
-      this.rootBlock_!.setDeletable(false);
+      this.rootBlock.setMovable(false);
+      this.rootBlock.setDeletable(false);
       let margin;
       let x;
       if (flyout) {
         margin = flyout.CORNER_RADIUS * 2;
-        x = this.rootBlock_!.RTL ? flyout.getWidth() + margin : margin;
+        x = this.rootBlock.RTL ? flyout.getWidth() + margin : margin;
       } else {
         margin = 16;
         x = margin;
@@ -346,38 +352,38 @@ export class Mutator extends Icon {
       if (block.RTL) {
         x = -x;
       }
-      this.rootBlock_!.moveBy(x, margin);
+      this.rootBlock.moveBy(x, margin);
       // Save the initial connections, then listen for further changes.
       if (block.saveConnections) {
-        const thisRootBlock = this.rootBlock_;
+        const thisRootBlock = this.rootBlock;
         block.saveConnections(thisRootBlock);
-        this.sourceListener_ = () => {
+        this.sourceListener = () => {
           const currentBlock = this.getBlock();
           if (currentBlock.saveConnections) {
             currentBlock.saveConnections(thisRootBlock);
           }
         };
-        block.workspace.addChangeListener(this.sourceListener_);
+        block.workspace.addChangeListener(this.sourceListener);
       }
-      this.resizeBubble_();
+      this.resizeBubble();
       // When the mutator's workspace changes, update the source block.
-      this.workspace_!.addChangeListener(this.workspaceChanged_.bind(this));
+      ws.addChangeListener(this.workspaceChanged.bind(this));
       // Update the source block immediately after the bubble becomes visible.
-      this.updateWorkspace_();
+      this.updateWorkspace();
       this.applyColour();
     } else {
       // Dispose of the bubble.
-      this.svgDialog_ = null;
-      this.workspace_!.dispose();
-      this.workspace_ = null;
-      this.rootBlock_ = null;
+      this.svgDialog = null;
+      this.workspace!.dispose();
+      this.workspace = null;
+      this.rootBlock = null;
       this.bubble_?.dispose();
       this.bubble_ = null;
-      this.workspaceWidth_ = 0;
-      this.workspaceHeight_ = 0;
-      if (this.sourceListener_) {
-        block.workspace.removeChangeListener(this.sourceListener_);
-        this.sourceListener_ = null;
+      this.workspaceWidth = 0;
+      this.workspaceHeight = 0;
+      if (this.sourceListener) {
+        block.workspace.removeChangeListener(this.sourceListener);
+        this.sourceListener = null;
       }
     }
   }
@@ -387,11 +393,11 @@ export class Mutator extends Icon {
    *
    * @param e Custom data for event.
    */
-  private workspaceChanged_(e: Abstract) {
-    if (!this.shouldIgnoreMutatorEvent_(e) && !this.updateWorkspacePid_) {
-      this.updateWorkspacePid_ = setTimeout(() => {
-        this.updateWorkspacePid_ = null;
-        this.updateWorkspace_();
+  private workspaceChanged(e: Abstract) {
+    if (!this.shouldIgnoreMutatorEvent_(e) && !this.updateWorkspacePid) {
+      this.updateWorkspacePid = setTimeout(() => {
+        this.updateWorkspacePid = null;
+        this.updateWorkspace();
       }, 0);
     }
   }
@@ -413,9 +419,9 @@ export class Mutator extends Icon {
    * Updates the source block when the mutator's blocks are changed.
    * Bump down any block that's too high.
    */
-  private updateWorkspace_() {
-    if (!this.workspace_!.isDragging()) {
-      const blocks = this.workspace_!.getTopBlocks(false);
+  private updateWorkspace() {
+    if (!this.workspace!.isDragging()) {
+      const blocks = this.workspace!.getTopBlocks(false);
       const MARGIN = 20;
 
       for (let b = 0, block; block = blocks[b]; b++) {
@@ -428,7 +434,7 @@ export class Mutator extends Icon {
         // Bump any block overlapping the flyout back inside.
         if (block.RTL) {
           let right = -MARGIN;
-          const flyout = this.workspace_!.getFlyout();
+          const flyout = this.workspace!.getFlyout();
           if (flyout) {
             right -= flyout.getWidth();
           }
@@ -442,7 +448,7 @@ export class Mutator extends Icon {
     }
 
     // When the mutator's workspace changes, update the source block.
-    if (this.rootBlock_ && this.rootBlock_.workspace === this.workspace_) {
+    if (this.rootBlock && this.rootBlock.workspace === this.workspace) {
       const existingGroup = eventUtils.getGroup();
       if (!existingGroup) {
         eventUtils.setGroup(true);
@@ -456,7 +462,7 @@ export class Mutator extends Icon {
       block.rendered = false;
 
       // Allow the source block to rebuild itself.
-      block.compose!(this.rootBlock_);
+      block.compose!(this.rootBlock);
       // Restore rendering and show the changes.
       block.rendered = savedRendered;
       // Mutation may have added some elements that need initializing.
@@ -482,8 +488,8 @@ export class Mutator extends Icon {
 
       // Don't update the bubble until the drag has ended, to avoid moving
       // blocks under the cursor.
-      if (!this.workspace_!.isDragging()) {
-        setTimeout(() => this.resizeBubble_(), 0);
+      if (!this.workspace!.isDragging()) {
+        setTimeout(() => this.resizeBubble(), 0);
       }
       eventUtils.setGroup(existingGroup);
     }
@@ -497,7 +503,7 @@ export class Mutator extends Icon {
 
   /** Update the styles on all blocks in the mutator. */
   updateBlockStyle() {
-    const ws = this.workspace_;
+    const ws = this.workspace;
 
     if (ws && ws.getAllBlocks(false)) {
       const workspaceBlocks = ws.getAllBlocks(false);

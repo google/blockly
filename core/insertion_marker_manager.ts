@@ -29,8 +29,8 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 /** Represents a nearby valid connection. */
 interface CandidateConnection {
-  closest: RenderedConnection|null;
-  local: RenderedConnection|null;
+  closest: RenderedConnection;
+  local: RenderedConnection;
   radius: number;
 }
 
@@ -88,7 +88,6 @@ export class InsertionMarkerManager {
    * Updated on every mouse move.
    * This is not on any of the blocks that are being dragged.
    */
-  private closestConnection: RenderedConnection|null = null;
 
   /**
    * The connection that would connect to this.closestConnection if this
@@ -96,7 +95,8 @@ export class InsertionMarkerManager {
    * the top block that is being dragged or the last block in the dragging
    * stack.
    */
-  private localConnection: RenderedConnection|null = null;
+
+  private activeCandidate: CandidateConnection|null = null;
 
   /**
    * Whether the block would be deleted if it were dropped immediately.
@@ -185,7 +185,7 @@ export class InsertionMarkerManager {
    * @internal
    */
   wouldConnectBlock(): boolean {
-    return !!this.closestConnection;
+    return !!this.activeCandidate;
   }
 
   /**
@@ -195,23 +195,21 @@ export class InsertionMarkerManager {
    * @internal
    */
   applyConnections() {
-    if (!this.closestConnection) return;
-    if (!this.localConnection) {
-      throw new Error(
-          'Cannot apply connections because there is no local connection');
-    }
+    if (!this.activeCandidate)return;
     // Don't fire events for insertion markers.
     eventUtils.disable();
     this.hidePreview();
     eventUtils.enable();
+    const local = this.activeCandidate.local;
+    const closest = this.activeCandidate.closest;
     // Connect two blocks together.
-    this.localConnection.connect(this.closestConnection);
+    local.connect(closest);
     if (this.topBlock.rendered) {
       // Trigger a connection animation.
       // Determine which connection is inferior (lower in the source stack).
-      const inferiorConnection = this.localConnection.isSuperior() ?
-          this.closestConnection :
-          this.localConnection;
+      const inferiorConnection = local.isSuperior() ?
+          closest :
+          local;
       blockAnimations.connectionUiEffect(inferiorConnection.getSourceBlock());
       // Bring the just-edited stack to the front.
       const rootBlock = this.topBlock.getRootBlock();
@@ -339,44 +337,38 @@ export class InsertionMarkerManager {
    * @param dxy Position relative to drag start, in workspace units.
    * @returns Whether the preview should be updated.
    */
-  private shouldUpdatePreviews(candidate: CandidateConnection, dxy: Coordinate):
+  private shouldUpdatePreviews(candidate: CandidateConnection|null, dxy: Coordinate):
       boolean {
-    const candidateLocal = candidate.local;
-    const candidateClosest = candidate.closest;
-    const radius = candidate.radius;
-
     // Found a connection!
-    if (candidateLocal && candidateClosest) {
+    if (candidate) {
+      const candidateLocal = candidate.local;
+      const candidateClosest = candidate.closest;
+      const radius = candidate.radius;
       // We're already showing an insertion marker.
       // Decide whether the new connection has higher priority.
-      if (this.localConnection && this.closestConnection) {
+      if (this.activeCandidate) {
+        const activeClosest = this.activeCandidate.closest;
+        const activeLocal = this.activeCandidate.local;
         // The connection was the same as the current connection.
-        if (this.closestConnection === candidateClosest &&
-            this.localConnection === candidateLocal) {
+        if (activeClosest === candidateClosest &&
+           activeLocal === candidateLocal) {
           return false;
         }
-        const xDiff = this.localConnection.x + dxy.x - this.closestConnection.x;
-        const yDiff = this.localConnection.y + dxy.y - this.closestConnection.y;
+        const xDiff = activeLocal.x + dxy.x - activeClosest.x;
+        const yDiff = activeLocal.y + dxy.y - activeClosest.y;
         const curDistance = Math.sqrt(xDiff * xDiff + yDiff * yDiff);
         // Slightly prefer the existing preview over a new preview.
         return !(
             candidateClosest &&
             radius > curDistance - config.currentConnectionPreference);
-      } else if (!this.localConnection && !this.closestConnection) {
+      } else {
         // We weren't showing a preview before, but we should now.
         return true;
-      } else {
-        console.error(
-            'Only one of localConnection_ and closestConnection_ was set.');
       }
     } else {  // No connection found.
       // Only need to update if we were showing a preview before.
-      return !!(this.localConnection && this.closestConnection);
+      return !!(this.activeCandidate);
     }
-
-    console.error(
-        'Returning true from shouldUpdatePreviews, but it\'s not clear why.');
-    return true;
   }
 
   /**
@@ -387,10 +379,7 @@ export class InsertionMarkerManager {
    * @returns An object containing a local connection, a closest connection, and
    *     a radius.
    */
-  private getCandidate(dxy: Coordinate): CandidateConnection {
-    let radius = this.getStartRadius();
-    let candidateClosest = null;
-    let candidateLocal = null;
+  private getCandidate(dxy: Coordinate): CandidateConnection|null {
 
     // It's possible that a block has added or removed connections during a
     // drag, (e.g. in a drag/move event handler), so let's update the available
@@ -403,16 +392,21 @@ export class InsertionMarkerManager {
       this.updateAvailableConnections();
     }
 
+    let radius = this.getStartRadius();
+    let candidate = null;
     for (let i = 0; i < this.availableConnections.length; i++) {
       const myConnection = this.availableConnections[i];
       const neighbour = myConnection.closest(radius, dxy);
       if (neighbour.connection) {
-        candidateClosest = neighbour.connection;
-        candidateLocal = myConnection;
+        candidate = {
+          closest: neighbour.connection, 
+          local: myConnection, 
+          radius: neighbour.radius
+        }
         radius = neighbour.radius;
       }
     }
-    return {closest: candidateClosest, local: candidateLocal, radius};
+    return candidate;
   }
 
   /**
@@ -428,7 +422,7 @@ export class InsertionMarkerManager {
     // insertion marker is created, which could cause the connection became out
     // of range. By increasing radiusConnection when a connection already
     // exists, we never "lose" the connection from the offset.
-    if (this.closestConnection && this.localConnection) {
+    if (this.activeCandidate) {
       return config.connectingSnapRadius;
     }
     return config.snapRadius;
@@ -443,14 +437,14 @@ export class InsertionMarkerManager {
    * @returns Whether dropping the block immediately would delete the block.
    */
   private shouldDelete(
-      candidate: CandidateConnection, dragTarget: IDragTarget|null): boolean {
+      candidate: CandidateConnection|null, dragTarget: IDragTarget|null): boolean {
     if (dragTarget) {
       const componentManager = this.workspace.getComponentManager();
       const isDeleteArea = componentManager.hasCapability(
           dragTarget.id, ComponentManager.Capability.DELETE_AREA);
       if (isDeleteArea) {
         return (dragTarget as IDeleteArea)
-            .wouldDelete(this.topBlock, candidate && !!candidate.closest);
+            .wouldDelete(this.topBlock, !!candidate);
       }
     }
     return false;
@@ -465,66 +459,56 @@ export class InsertionMarkerManager {
    * @param candidate An object containing a local connection, a closest
    *     connection, and a radius.
    */
-  private maybeShowPreview(candidate: CandidateConnection) {
+  private maybeShowPreview(candidate: CandidateConnection|null) {
     // Nope, don't add a marker.
     if (this.wouldDeleteBlockInternal) {
       return;
     }
-    const closest = candidate.closest;
-    const local = candidate.local;
 
     // Nothing to connect to.
-    if (!closest) {
+    if (!candidate) {
       return;
     }
 
+    const closest = candidate.closest;
+
     // Something went wrong and we're trying to connect to an invalid
     // connection.
-    if (closest === this.closestConnection ||
+    if (closest === this.activeCandidate?.closest ||
         closest.getSourceBlock().isInsertionMarker()) {
       console.log('Trying to connect to an insertion marker');
       return;
     }
     // Add an insertion marker or replacement marker.
-    this.closestConnection = closest;
-    this.localConnection = local;
-    this.showPreview();
+    this.activeCandidate = candidate;
+    this.showPreview(this.activeCandidate);
   }
 
   /**
    * A preview should be shown.  This function figures out if it should be a
    * block highlight or an insertion marker, and shows the appropriate one.
    */
-  private showPreview() {
-    if (!this.closestConnection) {
-      throw new Error(
-          'Cannot show the preview because there is no closest connection');
-    }
-    if (!this.localConnection) {
-      throw new Error(
-          'Cannot show the preview because there is no local connection');
-    }
-    const closest = this.closestConnection;
+  private showPreview(activeCandidate: CandidateConnection) {
     const renderer = this.workspace.getRenderer();
     const method = renderer.getConnectionPreviewMethod(
-        closest, this.localConnection, this.topBlock);
+        activeCandidate.closest, activeCandidate.local, this.topBlock);
 
     switch (method) {
       case InsertionMarkerManager.PREVIEW_TYPE.INPUT_OUTLINE:
-        this.showInsertionInputOutline();
+        this.showInsertionInputOutline(activeCandidate);
         break;
       case InsertionMarkerManager.PREVIEW_TYPE.INSERTION_MARKER:
-        this.showInsertionMarker();
+        this.showInsertionMarker(activeCandidate);
         break;
       case InsertionMarkerManager.PREVIEW_TYPE.REPLACEMENT_FADE:
-        this.showReplacementFade();
+        this.showReplacementFade(activeCandidate);
         break;
     }
 
     // Optionally highlight the actual connection, as a nod to previous
     // behaviour.
-    if (closest && renderer.shouldHighlightConnection(closest)) {
-      closest.highlight();
+    if (renderer.shouldHighlightConnection(activeCandidate.closest)) {
+      activeCandidate.closest.highlight();
     }
   }
 
@@ -537,31 +521,30 @@ export class InsertionMarkerManager {
    * @param candidate An object containing a local connection, a closest
    *     connection, and a radius.
    */
-  private maybeHidePreview(candidate: CandidateConnection) {
+  private maybeHidePreview(candidate: CandidateConnection|null) {
     // If there's no new preview, remove the old one but don't bother deleting
     // it. We might need it later, and this saves disposing of it and recreating
     // it.
-    if (!candidate.closest) {
+    if (!candidate) {
       this.hidePreview();
     } else {
+      if (this.activeCandidate) {
+      const closestChanged = this.activeCandidate.closest !== candidate.closest;
+      const localChanged = this.activeCandidate.local !== candidate.local;
+
       // If there's a new preview and there was an preview before, and either
       // connection has changed, remove the old preview.
-      const hadPreview = this.closestConnection && this.localConnection;
-      const closestChanged = this.closestConnection !== candidate.closest;
-      const localChanged = this.localConnection !== candidate.local;
-
       // Also hide if we had a preview before but now we're going to delete
       // instead.
-      if (hadPreview &&
-          (closestChanged || localChanged || this.wouldDeleteBlockInternal)) {
-        this.hidePreview();
+      if ((closestChanged || localChanged || this.wouldDeleteBlockInternal)) {
+      this.hidePreview();
       }
     }
+  }
 
     // Either way, clear out old state.
     this.markerConnection = null;
-    this.closestConnection = null;
-    this.localConnection = null;
+    this.activeCandidate = null;
   }
 
   /**
@@ -569,15 +552,16 @@ export class InsertionMarkerManager {
    *  highlight or an insertion marker, and hides the appropriate one.
    */
   private hidePreview() {
-    if (this.closestConnection && this.closestConnection.targetBlock() &&
+    const closest = this.activeCandidate?.closest;
+    if (closest && closest.targetBlock() &&
         this.workspace.getRenderer().shouldHighlightConnection(
-            this.closestConnection)) {
-      this.closestConnection.unhighlight();
+          closest)) {
+            closest.unhighlight();
     }
     if (this.fadedBlock) {
-      this.hideReplacementFade();
+      this.hideReplacementFade(this.fadedBlock);
     } else if (this.highlightedBlock) {
-      this.hideInsertionInputOutline();
+      this.hideInsertionInputOutline(this.highlightedBlock);
     } else if (this.markerConnection) {
       this.hideInsertionMarker();
     }
@@ -587,19 +571,9 @@ export class InsertionMarkerManager {
    * Shows an insertion marker connected to the appropriate blocks (based on
    * manager state).
    */
-  private showInsertionMarker() {
-    if (!this.localConnection) {
-      throw new Error(
-          'Cannot show the insertion marker because there is no local ' +
-          'connection');
-    }
-    if (!this.closestConnection) {
-      throw new Error(
-          'Cannot show the insertion marker because there is no closest ' +
-          'connection');
-    }
-    const local = this.localConnection;
-    const closest = this.closestConnection;
+  private showInsertionMarker(activeCandidate: CandidateConnection) {
+    const local = activeCandidate.local;
+    const closest = activeCandidate.closest;
 
     const isLastInStack = this.lastOnStack && local === this.lastOnStack;
     let insertionMarker = isLastInStack ? this.lastMarker : this.firstMarker;
@@ -719,30 +693,20 @@ export class InsertionMarkerManager {
   }
 
   /** Shows an outline around the input the closest connection belongs to. */
-  private showInsertionInputOutline() {
-    if (!this.closestConnection) {
-      throw new Error(
-          'Cannot show the insertion marker outline because ' +
-          'there is no closest connection');
-    }
-    const closest = this.closestConnection;
+  private showInsertionInputOutline(activeCandidate: CandidateConnection) {
+    const closest = activeCandidate.closest;
     this.highlightedBlock = closest.getSourceBlock();
     this.highlightedBlock.highlightShapeForInput(closest, true);
   }
 
   /** Hides any visible input outlines. */
-  private hideInsertionInputOutline() {
-    if (!this.highlightedBlock) {
+  private hideInsertionInputOutline(highlightedBlock: BlockSvg) {
+    if (!this.activeCandidate) {
       throw new Error(
           'Cannot hide the insertion marker outline because ' +
-          'there is no highlighted block');
+          'there is no active candidate');
     }
-    if (!this.closestConnection) {
-      throw new Error(
-          'Cannot hide the insertion marker outline because ' +
-          'there is no closest connection');
-    }
-    this.highlightedBlock.highlightShapeForInput(this.closestConnection, false);
+    highlightedBlock.highlightShapeForInput(this.activeCandidate.closest, false);
     this.highlightedBlock = null;
   }
 
@@ -750,13 +714,8 @@ export class InsertionMarkerManager {
    * Shows a replacement fade affect on the closest connection's target block
    * (the block that is currently connected to it).
    */
-  private showReplacementFade() {
-    if (!this.closestConnection) {
-      throw new Error(
-          'Cannot show the replacement fade because there ' +
-          'is no closest connection');
-    }
-    this.fadedBlock = this.closestConnection.targetBlock();
+  private showReplacementFade(activeCandidate: CandidateConnection) {
+    this.fadedBlock = activeCandidate.closest.targetBlock();
     if (!this.fadedBlock) {
       throw new Error(
           'Cannot show the replacement fade because the ' +
@@ -766,13 +725,8 @@ export class InsertionMarkerManager {
   }
 
   /** Hides/Removes any visible fade affects. */
-  private hideReplacementFade() {
-    if (!this.fadedBlock) {
-      throw new Error(
-          'Cannot hide the replacement because there is no ' +
-          'faded block');
-    }
-    this.fadedBlock.fadeForReplacement(false);
+  private hideReplacementFade(fadedBlock: BlockSvg) {
+    fadedBlock.fadeForReplacement(false);
     this.fadedBlock = null;
   }
 

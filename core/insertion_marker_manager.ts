@@ -29,7 +29,16 @@ import type {WorkspaceSvg} from './workspace_svg.js';
 
 /** Represents a nearby valid connection. */
 interface CandidateConnection {
+  /**
+   * A nearby valid connection that is compatible with local.
+   * This is not on any of the blocks that are being dragged.
+   */
   closest: RenderedConnection;
+  /**
+   * A connection on the dragging stack that is compatible with closest. This is
+   * on the top block that is being dragged or the last block in the dragging
+   * stack.
+   */
   local: RenderedConnection;
   radius: number;
 }
@@ -84,18 +93,9 @@ export class InsertionMarkerManager {
   private firstMarker: BlockSvg;
 
   /**
-   * The connection that this block would connect to if released immediately.
-   * Updated on every mouse move.
-   * This is not on any of the blocks that are being dragged.
+   * Information about the connection that would be made if the dragging block
+   * were released immediately. Updated on every mouse move.
    */
-
-  /**
-   * The connection that would connect to this.closestConnection if this
-   * block were released immediately. Updated on every mouse move. This is on
-   * the top block that is being dragged or the last block in the dragging
-   * stack.
-   */
-
   private activeCandidate: CandidateConnection|null = null;
 
   /**
@@ -301,7 +301,7 @@ export class InsertionMarkerManager {
   /**
    * Populate the list of available connections on this block stack.  This
    * should only be called once, at the beginning of a drag. If the stack has
-   * more than one block, this function will populate lastOnStack_ and create
+   * more than one block, this function will populate lastOnStack and create
    * the corresponding insertion marker.
    *
    * @returns A list of available connections.
@@ -330,43 +330,39 @@ export class InsertionMarkerManager {
    * Whether the previews (insertion marker and replacement marker) should be
    * updated based on the closest candidate and the current drag distance.
    *
-   * @param candidate An object containing a local connection, a closest
-   *     connection, and a radius.  Returned by getCandidate_.
+   * @param newCandidate An object containing a local connection, a closest
+   *     connection, and a radius.  Returned by getCandidate.
    * @param dxy Position relative to drag start, in workspace units.
    * @returns Whether the preview should be updated.
    */
   private shouldUpdatePreviews(
-      candidate: CandidateConnection|null, dxy: Coordinate): boolean {
-    // Found a connection!
-    if (candidate) {
-      const candidateLocal = candidate.local;
-      const candidateClosest = candidate.closest;
-      const radius = candidate.radius;
-      // We're already showing an insertion marker.
-      // Decide whether the new connection has higher priority.
-      if (this.activeCandidate) {
-        const activeClosest = this.activeCandidate.closest;
-        const activeLocal = this.activeCandidate.local;
-        // The connection was the same as the current connection.
-        if (activeClosest === candidateClosest &&
-            activeLocal === candidateLocal) {
-          return false;
-        }
-        const xDiff = activeLocal.x + dxy.x - activeClosest.x;
-        const yDiff = activeLocal.y + dxy.y - activeClosest.y;
-        const curDistance = Math.sqrt(xDiff * xDiff + yDiff * yDiff);
-        // Slightly prefer the existing preview over a new preview.
-        return !(
-            candidateClosest &&
-            radius > curDistance - config.currentConnectionPreference);
-      } else {
-        // We weren't showing a preview before, but we should now.
-        return true;
-      }
-    } else {  // No connection found.
+      newCandidate: CandidateConnection|null, dxy: Coordinate): boolean {
+    if (!newCandidate) {
       // Only need to update if we were showing a preview before.
-      return !!(this.activeCandidate);
+      return !!this.activeCandidate;
     }
+
+    // We weren't showing a preview before, but we should now.
+    if (!this.activeCandidate) {
+      return true;
+    }
+
+    // We're already showing an insertion marker.
+    // Decide whether the new connection has higher priority.
+    const activeClosest = this.activeCandidate.closest;
+    const activeLocal = this.activeCandidate.local;
+    if (activeClosest === newCandidate.closest &&
+        activeLocal === newCandidate.local) {
+      // The connection was the same as the current connection.
+      return false;
+    }
+
+    const xDiff = activeLocal.x + dxy.x - activeClosest.x;
+    const yDiff = activeLocal.y + dxy.y - activeClosest.y;
+    const curDistance = Math.sqrt(xDiff * xDiff + yDiff * yDiff);
+    // Slightly prefer the existing preview over a new preview.
+    return (
+        newCandidate.radius < curDistance - config.currentConnectionPreference);
   }
 
   /**

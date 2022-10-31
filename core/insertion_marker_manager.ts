@@ -195,7 +195,7 @@ export class InsertionMarkerManager {
    * @internal
    */
   applyConnections() {
-    if (!this.activeCandidate)return;
+    if (!this.activeCandidate) return;
     // Don't fire events for insertion markers.
     eventUtils.disable();
     this.hidePreview();
@@ -207,9 +207,7 @@ export class InsertionMarkerManager {
     if (this.topBlock.rendered) {
       // Trigger a connection animation.
       // Determine which connection is inferior (lower in the source stack).
-      const inferiorConnection = local.isSuperior() ?
-          closest :
-          local;
+      const inferiorConnection = local.isSuperior() ? closest : local;
       blockAnimations.connectionUiEffect(inferiorConnection.getSourceBlock());
       // Bring the just-edited stack to the front.
       const rootBlock = this.topBlock.getRootBlock();
@@ -337,8 +335,8 @@ export class InsertionMarkerManager {
    * @param dxy Position relative to drag start, in workspace units.
    * @returns Whether the preview should be updated.
    */
-  private shouldUpdatePreviews(candidate: CandidateConnection|null, dxy: Coordinate):
-      boolean {
+  private shouldUpdatePreviews(
+      candidate: CandidateConnection|null, dxy: Coordinate): boolean {
     // Found a connection!
     if (candidate) {
       const candidateLocal = candidate.local;
@@ -351,7 +349,7 @@ export class InsertionMarkerManager {
         const activeLocal = this.activeCandidate.local;
         // The connection was the same as the current connection.
         if (activeClosest === candidateClosest &&
-           activeLocal === candidateLocal) {
+            activeLocal === candidateLocal) {
           return false;
         }
         const xDiff = activeLocal.x + dxy.x - activeClosest.x;
@@ -380,7 +378,6 @@ export class InsertionMarkerManager {
    *     a radius.
    */
   private getCandidate(dxy: Coordinate): CandidateConnection|null {
-
     // It's possible that a block has added or removed connections during a
     // drag, (e.g. in a drag/move event handler), so let's update the available
     // connections. Note that this will be called on every move while dragging,
@@ -399,10 +396,10 @@ export class InsertionMarkerManager {
       const neighbour = myConnection.closest(radius, dxy);
       if (neighbour.connection) {
         candidate = {
-          closest: neighbour.connection, 
-          local: myConnection, 
-          radius: neighbour.radius
-        }
+          closest: neighbour.connection,
+          local: myConnection,
+          radius: neighbour.radius,
+        };
         radius = neighbour.radius;
       }
     }
@@ -437,7 +434,8 @@ export class InsertionMarkerManager {
    * @returns Whether dropping the block immediately would delete the block.
    */
   private shouldDelete(
-      candidate: CandidateConnection|null, dragTarget: IDragTarget|null): boolean {
+      candidate: CandidateConnection|null,
+      dragTarget: IDragTarget|null): boolean {
     if (dragTarget) {
       const componentManager = this.workspace.getComponentManager();
       const isDeleteArea = componentManager.hasCapability(
@@ -529,18 +527,19 @@ export class InsertionMarkerManager {
       this.hidePreview();
     } else {
       if (this.activeCandidate) {
-      const closestChanged = this.activeCandidate.closest !== candidate.closest;
-      const localChanged = this.activeCandidate.local !== candidate.local;
+        const closestChanged =
+            this.activeCandidate.closest !== candidate.closest;
+        const localChanged = this.activeCandidate.local !== candidate.local;
 
-      // If there's a new preview and there was an preview before, and either
-      // connection has changed, remove the old preview.
-      // Also hide if we had a preview before but now we're going to delete
-      // instead.
-      if ((closestChanged || localChanged || this.wouldDeleteBlockInternal)) {
-      this.hidePreview();
+        // If there's a new preview and there was an preview before, and either
+        // connection has changed, remove the old preview.
+        // Also hide if we had a preview before but now we're going to delete
+        // instead.
+        if ((closestChanged || localChanged || this.wouldDeleteBlockInternal)) {
+          this.hidePreview();
+        }
       }
     }
-  }
 
     // Either way, clear out old state.
     this.markerConnection = null;
@@ -554,9 +553,8 @@ export class InsertionMarkerManager {
   private hidePreview() {
     const closest = this.activeCandidate?.closest;
     if (closest && closest.targetBlock() &&
-        this.workspace.getRenderer().shouldHighlightConnection(
-          closest)) {
-            closest.unhighlight();
+        this.workspace.getRenderer().shouldHighlightConnection(closest)) {
+      closest.unhighlight();
     }
     if (this.fadedBlock) {
       this.hideReplacementFade(this.fadedBlock);
@@ -706,7 +704,8 @@ export class InsertionMarkerManager {
           'Cannot hide the insertion marker outline because ' +
           'there is no active candidate');
     }
-    highlightedBlock.highlightShapeForInput(this.activeCandidate.closest, false);
+    highlightedBlock.highlightShapeForInput(
+        this.activeCandidate.closest, false);
     this.highlightedBlock = null;
   }
 

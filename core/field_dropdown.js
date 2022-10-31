@@ -538,8 +538,10 @@ class FieldDropdown extends Field {
    * @protected
    */
   doValueInvalid_(_invalidValue) {
-    this.selectedOption_ = ['Removed', _invalidValue];
-    super.doValueUpdate_(_invalidValue);
+    if (this.getOptions(true).length > 1) {
+      this.selectedOption_ = ['Removed', _invalidValue];
+      super.doValueUpdate_(_invalidValue);
+    }
   }
 
   /**

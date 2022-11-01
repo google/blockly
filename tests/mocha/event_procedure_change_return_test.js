@@ -10,8 +10,7 @@ import {assertEventFiredShallow, assertEventNotFired, createChangeListenerSpy} f
 import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 
-// TODO (#6519): Unskip.
-suite.skip('Procedure Change Return Event', function() {
+suite('Procedure Change Return Event', function() {
   setup(function() {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
@@ -34,10 +33,13 @@ suite.skip('Procedure Change Return Event', function() {
       };
 
       this.createEventToState = (procedureModel) => {
-        return new Blockly.Events.ProcedureChangeReturn(
+        const event = new Blockly.Events.ProcedureChangeReturn(
             this.workspace,
             procedureModel,
-            procedureModel.getReturnTypes());
+            procedureModel.getReturnTypes() === DEFAULT_TYPES ?
+                NON_DEFAULT_TYPES :
+                DEFAULT_TYPES);
+        return event;
       };
     });
 
@@ -140,7 +142,7 @@ suite.skip('Procedure Change Return Event', function() {
             Blockly.Events.ProcedureChangeReturn,
             {
               model: initial,
-              oldTypes: DEFAULT_TYPES,
+              oldTypes: NON_DEFAULT_TYPES,
             },
             this.workspace.id);
       });

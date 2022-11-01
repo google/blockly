@@ -26,8 +26,6 @@ module.exports = {
   default: buildTasks.build,
 
   // Main sequence targets.  They already invoke prerequisites.
-  cleanBuildDir: buildTasks.cleanBuildDir,
-  cleanReleaseDir: packageTasks.cleanReleaseDir,
   messages: buildTasks.messages,
   tsc: buildTasks.tsc,
   deps: buildTasks.deps,

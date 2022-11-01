@@ -29,8 +29,6 @@
     "build:langfiles": "gulp buildLangfiles",
     "bump": "npm --no-git-tag-version version 4.$(date +'%Y%m%d').0",
     "clean": "gulp clean",
-    "clean:build": "gulp cleanBuildDir",
-    "clean:release": "gulp cleanReleaseDir",
     "deployDemos": "npm ci && gulp deployDemos",
     "deployDemos:beta": "npm ci && gulp deployDemosBeta",
     "format": "gulp format",

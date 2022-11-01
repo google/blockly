@@ -18,7 +18,6 @@ const buildTasks = require('./build_tasks.js');
 const packageTasks = require('./package_tasks.js');
 
 var packageJson = require('../../package.json');
-var packageJson = require('../../package.json');
 const demoTmpDir = '../_deploy';
 const demoStaticTmpDir = '../_deploy/static';
 
@@ -172,4 +171,4 @@ module.exports = {
   deployDemos: deployDemos,
   deployDemosBeta: deployDemosBeta,
   prepareDemos: prepareDemos
-}
+};

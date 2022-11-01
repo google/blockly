@@ -10,7 +10,7 @@ import {assertEventFiredShallow, assertEventNotFired, createChangeListenerSpy} f
 import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 
-suite.only('Procedure Delete Event', function() {
+suite('Procedure Delete Event', function() {
   setup(function() {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();

@@ -10,7 +10,8 @@ import {assertEventFiredShallow, assertEventNotFired, createChangeListenerSpy} f
 import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 
-suite('Procedure Enable Event', function() {
+// TODO (#6519): Unskip.
+suite.skip('Procedure Enable Event', function() {
   setup(function() {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();

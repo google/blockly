@@ -13,12 +13,30 @@ import * as eventUtils from './utils.js';
 
 
 export class ProcedureRename extends ProcedureBase {
+  private newName: string;
   type = eventUtils.PROCEDURE_RENAME;
 
   constructor(
       workspace: Workspace, model: IProcedureModel,
       public readonly oldName: string) {
     super(workspace, model);
+
+    this.newName = model.getName();
+  }
+
+  run(forward: boolean) {
+    const procedureModel =
+        this.getEventWorkspace_().getProcedureMap().get(this.model.getId());
+    if (!procedureModel) {
+      throw new Error(
+          'Cannot change the type of a procedure that does not exist ' +
+          'in the procedure map');
+    }
+    if (forward) {
+      procedureModel.setName(this.newName);
+    } else {
+      procedureModel.setName(this.oldName);
+    }
   }
 }
 

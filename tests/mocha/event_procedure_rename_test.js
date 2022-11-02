@@ -10,8 +10,7 @@ import {assertEventFiredShallow, assertEventNotFired, createChangeListenerSpy} f
 import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 
-// TODO (#6519): Unskip.
-suite.skip('Procedure Rename Event', function() {
+suite('Procedure Rename Event', function() {
   setup(function() {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
@@ -37,7 +36,9 @@ suite.skip('Procedure Rename Event', function() {
         return new Blockly.Events.ProcedureRename(
             this.workspace,
             procedureModel,
-            procedureModel.getName());
+            procedureModel.getName() === DEFAULT_NAME ?
+                NON_DEFAULT_NAME :
+                DEFAULT_NAME);
       };
     });
 

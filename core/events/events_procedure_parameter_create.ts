@@ -11,6 +11,7 @@ import {Workspace} from '../workspace.js';
 
 import {ProcedureParameterBase} from './events_procedure_parameter_base.js';
 import * as eventUtils from './utils.js';
+import {ObservableParameterModel} from '../procedures/observable_parameter_model.js';
 
 
 export class ProcedureParameterCreate extends ProcedureParameterBase {
@@ -19,6 +20,32 @@ export class ProcedureParameterCreate extends ProcedureParameterBase {
       public readonly parameter: IParameterModel,
       public readonly index: number) {
     super(workspace, procedure);
+  }
+
+  run(forward: boolean) {
+    const workspace = this.getEventWorkspace_();
+    const procedureMap = workspace.getProcedureMap();
+    const procedureModel = procedureMap.get(this.model.getId());
+    if (!procedureModel) {
+      throw new Error(
+          'Cannot add a parameter to a procedure that does not exist ' +
+          'in the procedure map');
+    }
+    const parameterModel = procedureModel.getParameter(this.index);
+    if (forward) {
+      if (this.parameterMatches(parameterModel)) return;
+      procedureModel.insertParameter(
+          new ObservableParameterModel(
+              workspace, this.parameter.getName(), this.parameter.getId()),
+          this.index);
+    } else {
+      if (!this.parameterMatches(parameterModel)) return;
+      procedureModel.deleteParameter(this.index);
+    }
+  }
+
+  parameterMatches(param: IParameterModel) {
+    return param && param.getId() === this.parameter.getId();
   }
 }
 

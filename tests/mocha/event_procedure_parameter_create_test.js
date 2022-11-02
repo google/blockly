@@ -10,8 +10,7 @@ import {assertEventFiredShallow, assertEventNotFired, createChangeListenerSpy} f
 import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 
-// TODO (#6519): Unskip.
-suite.skip('Procedure Parameter Create Event', function() {
+suite('Procedure Parameter Create Event', function() {
   setup(function() {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
@@ -42,7 +41,7 @@ suite.skip('Procedure Parameter Create Event', function() {
 
       this.createEventToState = (procedureModel, parameterModel) => {
         return new Blockly.Events.ProcedureParameterCreate(
-            this.workspace, procedureModel, parameterModel);
+            this.workspace, procedureModel, parameterModel, 0);
       };
     });
 

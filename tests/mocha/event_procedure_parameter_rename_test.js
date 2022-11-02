@@ -10,8 +10,7 @@ import {assertEventFiredShallow, assertEventNotFired, createChangeListenerSpy} f
 import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 
-// TODO (#6519): Unskip.
-suite.skip('Procedure Parameter Rename Event', function() {
+suite('Procedure Parameter Rename Event', function() {
   setup(function() {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
@@ -38,11 +37,13 @@ suite.skip('Procedure Parameter Rename Event', function() {
       };
 
       this.createEventToState = (procedureModel, parameterModel) => {
-        return new Blockly.Events.ProcedureRename(
+        return new Blockly.Events.ProcedureParameterRename(
             this.workspace,
             procedureModel,
             parameterModel,
-            parameterModel.getName());
+            parameterModel.getName() === DEFAULT_NAME ?
+                NON_DEFAULT_NAME :
+                DEFAULT_NAME);
       };
     });
 
@@ -195,7 +196,6 @@ suite.skip('Procedure Parameter Rename Event', function() {
             initialParam.setName(NON_DEFAULT_NAME);
             undoableParam.setName(NON_DEFAULT_NAME);
             const event = this.createEventToState(undoableProc, undoableParam);
-            this.procedureMap.add(initialProc);
 
             chai.assert.throws(() => {
               event.run(false /* backward */);

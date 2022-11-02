@@ -29,7 +29,8 @@ export class ProcedureChangeReturn extends ProcedureBase {
         this.getEventWorkspace_().getProcedureMap().get(this.model.getId());
     if (!procedureModel) {
       throw new Error(
-          'Cannot rename a procedure that does not exist in the procedure map');
+          'Cannot change the type of a procedure that does not exist ' +
+          'in the procedure map');
     }
     if (forward) {
       procedureModel.setReturnTypes(this.newTypes);

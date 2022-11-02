@@ -399,7 +399,7 @@ function buildDeps(done) {
  * This task regenrates msg/json/en.js and msg/json/qqq.js from
  * msg/messages.js.
  */
-function generateLangfiles(done) {
+function generateMessages(done) {
   // Run js_to_json.py
   const jsToJsonCmd = `python3 scripts/i18n/js_to_json.py \
       --input_file ${path.join('msg', 'messages.js')} \
@@ -414,10 +414,10 @@ Regenerated several flies in msg/json/.  Now run
 
 and check that operation has not overwritten any modifications made to
 hints, etc. by the TranslateWiki volunteers.  If it has, backport
-their changes to msg/messages.js and re-run 'npm run generate:langfiles'.
+their changes to msg/messages.js and re-run 'npm run messages'.
 
 Once you are satisfied that any new hints have been backported you may
-go ahead and commit the changes, but note that the generate script
+go ahead and commit the changes, but note that the messages script
 will have removed the translator credits - be careful not to commit
 this removal!
 `);
@@ -744,16 +744,16 @@ function format() {
 
 // Main sequence targets.  Each should invoke any immediate prerequisite(s).
 exports.cleanBuildDir = cleanBuildDir;
-exports.messages = buildLangfiles;
+exports.langfiles = buildLangfiles;
 exports.tsc = buildJavaScript;
 exports.deps = gulp.series(exports.tsc, buildDeps);
 exports.minify = gulp.series(exports.deps, buildCompiled);
-exports.build = gulp.parallel(exports.minify, exports.messages);
+exports.build = gulp.parallel(exports.minify, exports.langfiles);
 
 // Manually-invokable targets, with prequisites where required.
 exports.prepare = prepare;
 exports.format = format;
-exports.generate = generateLangfiles;
+exports.messages = generateMessages;
 exports.buildAdvancedCompilationTest =
     gulp.series(exports.deps, buildAdvancedCompilationTest);
 

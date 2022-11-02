@@ -10,8 +10,7 @@ import {assertEventFiredShallow, assertEventNotFired, createChangeListenerSpy} f
 import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
 
 
-// TODO (#6519): Unskip.
-suite.skip('Procedure Delete Event', function() {
+suite('Procedure Delete Event', function() {
   setup(function() {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
@@ -65,12 +64,6 @@ suite.skip('Procedure Delete Event', function() {
             {model},
             this.workspace.id);
       });
-
-      test(
-          'a model is not deleted if if nodel with a matching ID exists',
-          function() {
-            // TODO: Figure out what we want to do here.
-          });
           
       test('not deleting a model does not fire a delete event', function() {
         const model = this.createProcedureModel('test name', 'test id');
@@ -116,7 +109,7 @@ suite.skip('Procedure Delete Event', function() {
         assertEventFiredShallow(
             this.eventSpy,
             Blockly.Events.ProcedureCreate,
-            {model: this.procedureMap.get('testid')},
+            {model: this.procedureMap.get('test id')},
             this.workspace.id);
       });
 

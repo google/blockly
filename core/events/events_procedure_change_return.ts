@@ -14,6 +14,7 @@ import * as eventUtils from './utils.js';
 
 
 export class ProcedureChangeReturn extends ProcedureBase {
+  type = eventUtils.PROCEDURE_CHANGE_RETURN;
   private newTypes: string[]|null;
 
   constructor(

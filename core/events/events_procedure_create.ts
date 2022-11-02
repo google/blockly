@@ -14,6 +14,8 @@ import {ObservableProcedureModel} from '../procedures.js';
 
 
 export class ProcedureCreate extends ProcedureBase {
+  type = eventUtils.PROCEDURE_CREATE;
+
   constructor(
       workspace: Workspace,
       model: IProcedureModel) {

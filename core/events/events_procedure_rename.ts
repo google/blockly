@@ -13,8 +13,8 @@ import * as eventUtils from './utils.js';
 
 
 export class ProcedureRename extends ProcedureBase {
-  private newName: string;
   type = eventUtils.PROCEDURE_RENAME;
+  private newName: string;
 
   constructor(
       workspace: Workspace, model: IProcedureModel,

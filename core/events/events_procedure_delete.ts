@@ -15,6 +15,8 @@ import {ObservableProcedureModel} from '../procedures.js';
 
 
 export class ProcedureDelete extends ProcedureBase {
+  type = eventUtils.PROCEDURE_DELETE;
+
   constructor(
       workspace: Workspace,
       model: IProcedureModel) {

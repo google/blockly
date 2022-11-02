@@ -14,6 +14,8 @@ import {IProcedureModel} from '../interfaces/i_procedure_model.js';
 
 
 export class ProcedureEnable extends ProcedureBase {
+  type = eventUtils.PROCEDURE_ENABLE;
+
   private oldState: boolean;
   private newState: boolean;
 

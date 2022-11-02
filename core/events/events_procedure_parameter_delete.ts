@@ -15,6 +15,8 @@ import {ObservableParameterModel} from '../procedures/observable_parameter_model
 
 
 export class ProcedureParameterDelete extends ProcedureParameterBase {
+  type = eventUtils.PROCEDURE_PARAMETER_DELETE;
+
   constructor(
       workspace: Workspace, procedure: IProcedureModel,
       public readonly parameter: IParameterModel,

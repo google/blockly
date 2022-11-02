@@ -14,6 +14,7 @@ import * as eventUtils from './utils.js';
 
 
 export class ProcedureParameterRename extends ProcedureParameterBase {
+  type = eventUtils.PROCEDURE_PARAMETER_RENAME;
   private readonly newName: string;
 
   constructor(

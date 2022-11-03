@@ -7,13 +7,14 @@
 goog.declareModuleId('Blockly.test.insertionMarkerManager');
 
 import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown.js';
-import {defineRowBlock, defineStackBlock} from './test_helpers/block_definitions.js';
+import {defineRowBlock, defineRowToStackBlock, defineStackBlock} from './test_helpers/block_definitions.js';
 
 suite('Insertion marker manager', function() {
   setup(function() {
     sharedTestSetup.call(this);
     defineRowBlock();
     defineStackBlock();
+    defineRowToStackBlock();
     this.workspace = Blockly.inject('blocklyDiv');
   });
   teardown(function() {
@@ -132,6 +133,44 @@ suite('Insertion marker manager', function() {
       const manager = createBlocksAndManager(this.workspace, state);
       const markers = manager.getInsertionMarkers();
       chai.assert.equal(markers.length, 1);
+    });
+
+    test('One row to stack block creates one marker', function() {
+      const state = {
+        'blocks': {
+          'blocks': [
+            {
+              'type': 'row_to_stack_block',
+              'id': 'first',
+            },
+          ],
+        },
+      };
+      const manager = createBlocksAndManager(this.workspace, state);
+      const markers = manager.getInsertionMarkers();
+      chai.assert.equal(markers.length, 1);
+    });
+
+    test('Row to stack block with child creates two markers', function() {
+      const state = {
+        'blocks': {
+          'blocks': [
+            {
+              'type': 'row_to_stack_block',
+              'id': 'first',
+              'next': {
+                'block': {
+                  'type': 'stack_block',
+                  'id': 'second',
+                },
+              },
+            },
+          ],
+        },
+      };
+      const manager = createBlocksAndManager(this.workspace, state);
+      const markers = manager.getInsertionMarkers();
+      chai.assert.equal(markers.length, 2);
     });
   });
 

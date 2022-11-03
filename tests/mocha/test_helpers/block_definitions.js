@@ -30,6 +30,15 @@ export function defineRowBlock(name = 'row_block') {
   }]);
 }
 
+export function defineRowToStackBlock(name = 'row_to_stack_block') {
+  Blockly.defineBlocksWithJsonArray([{
+    "type": name,
+    "message0": "",
+    "output": null,
+    "nextStatement": null,
+  }]);
+}
+
 export function defineStatementBlock(name = 'statement_block') {
   Blockly.defineBlocksWithJsonArray([{
     "type": name,

@@ -744,7 +744,7 @@ function format() {
 
 // Main sequence targets.  Each should invoke any immediate prerequisite(s).
 exports.cleanBuildDir = cleanBuildDir;
-exports.langfiles = buildLangfiles;
+exports.langfiles = buildLangfiles;  // Build build/msg/*.js from msg/json/*.
 exports.tsc = buildJavaScript;
 exports.deps = gulp.series(exports.tsc, buildDeps);
 exports.minify = gulp.series(exports.deps, buildCompiled);
@@ -753,7 +753,7 @@ exports.build = gulp.parallel(exports.minify, exports.langfiles);
 // Manually-invokable targets, with prequisites where required.
 exports.prepare = prepare;
 exports.format = format;
-exports.messages = generateMessages;
+exports.messages = generateMessages;  // Generate msg/json/en.json et al.
 exports.buildAdvancedCompilationTest =
     gulp.series(exports.deps, buildAdvancedCompilationTest);
 

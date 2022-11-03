@@ -25,7 +25,7 @@ var closureDeps = require('google-closure-deps');
 var argv = require('yargs').argv;
 var rimraf = require('rimraf');
 
-var {BUILD_DIR, DEPS_FILE, TEST_DEPS_FILE, TSC_OUTPUT_DIR, TYPINGS_BUILD_DIR} = require('./config');
+var {BUILD_DIR, DEPS_FILE, RELEASE_DIR, TEST_DEPS_FILE, TSC_OUTPUT_DIR, TYPINGS_BUILD_DIR} = require('./config');
 var {getPackageJson} = require('./helper_tasks');
 
 var {posixPath} = require('../helpers');
@@ -304,15 +304,12 @@ function prepare(done) {
     done();
     return;
   }
-  return buildJavaScriptAndDeps(done);
+  return exports.deps(done);
 }
-
-const buildJavaScriptAndDeps = gulp.series(buildJavaScript, buildDeps);
 
 /**
  * Builds Blockly as a JS program, by running tsc on all the files in
- * the core directory.  This must be run before buildDeps or
- * buildCompiled.
+ * the core directory.
  */
 function buildJavaScript(done) {
   execSync(
@@ -327,6 +324,8 @@ function buildJavaScript(done) {
  *
  * Also updates TEST_DEPS_FILE (deps.mocha.js), used by the mocha test
  * suite.
+ *
+ * Prerequisite: buildJavaScript.
  */
 function buildDeps(done) {
   const roots = [
@@ -400,7 +399,7 @@ function buildDeps(done) {
  * This task regenrates msg/json/en.js and msg/json/qqq.js from
  * msg/messages.js.
  */
-function generateLangfiles(done) {
+function generateMessages(done) {
   // Run js_to_json.py
   const jsToJsonCmd = `python3 scripts/i18n/js_to_json.py \
       --input_file ${path.join('msg', 'messages.js')} \
@@ -415,10 +414,10 @@ Regenerated several flies in msg/json/.  Now run
 
 and check that operation has not overwritten any modifications made to
 hints, etc. by the TranslateWiki volunteers.  If it has, backport
-their changes to msg/messages.js and re-run 'npm run generate:langfiles'.
+their changes to msg/messages.js and re-run 'npm run messages'.
 
 Once you are satisfied that any new hints have been backported you may
-go ahead and commit the changes, but note that the generate script
+go ahead and commit the changes, but note that the messages script
 will have removed the translator credits - be careful not to commit
 this removal!
 `);
@@ -432,7 +431,7 @@ this removal!
  */
 function buildLangfiles(done) {
   // Create output directory.
-  const outputDir = path.join(BUILD_DIR, 'msg', 'js');
+  const outputDir = path.join(BUILD_DIR, 'msg');
   fs.mkdirSync(outputDir, {recursive: true});
 
   // Run create_messages.py.
@@ -654,6 +653,8 @@ function compile(options) {
  * blockly_compressed.js, blocks_compressed.js, etc.
  *
  * The deps.js file must be up-to-date.
+ *
+ * Prerequisite: buildDeps.
  */
 function buildCompiled() {
   // Get chunking.
@@ -682,12 +683,14 @@ function buildCompiled() {
       .pipe(compile(options))
       .pipe(gulp.rename({suffix: COMPILED_SUFFIX}))
       .pipe(gulp.sourcemaps.write('.'))
-      .pipe(gulp.dest(BUILD_DIR));
+      .pipe(gulp.dest(RELEASE_DIR));
 }
 
 /**
  * This task builds Blockly core, blocks and generators together and uses
  * closure compiler's ADVANCED_COMPILATION mode.
+ *
+ * Prerequisite: buildDeps.
  */
 function buildAdvancedCompilationTest() {
   const srcs = [
@@ -717,35 +720,6 @@ function buildAdvancedCompilationTest() {
 }
 
 /**
- * This task builds all of Blockly:
- *     blockly_compressed.js
- *     blocks_compressed.js
- *     javascript_compressed.js
- *     python_compressed.js
- *     php_compressed.js
- *     lua_compressed.js
- *     dart_compressed.js
- *     msg/json/*.js
- *     test/deps*.js
- */
-const build = gulp.parallel(
-    gulp.series(buildJavaScript, buildDeps, buildCompiled),
-    buildLangfiles,
-    );
-
-/**
- * This task copies built files from BUILD_DIR back to the repository
- * so they can be committed to git.
- */
-function checkinBuilt() {
-  return gulp.src([
-    `${BUILD_DIR}/*_compressed.js`,
-    `${BUILD_DIR}/*_compressed.js.map`,
-    `${BUILD_DIR}/msg/js/*.js`,
-  ], {base: BUILD_DIR}).pipe(gulp.dest('.'));
-}
-
-/**
  * This task cleans the build directory (by deleting it).
  */
 function cleanBuildDir(done) {
@@ -768,17 +742,20 @@ function format() {
       .pipe(gulp.dest('.'));
 }
 
-module.exports = {
-  prepare: prepare,
-  build: build,
-  javaScriptAndDeps: buildJavaScriptAndDeps,
-  javaScript: buildJavaScript,
-  deps: buildDeps,
-  generateLangfiles: generateLangfiles,
-  langfiles: buildLangfiles,
-  compiled: buildCompiled,
-  format: format,
-  checkinBuilt: checkinBuilt,
-  cleanBuildDir: cleanBuildDir,
-  advancedCompilationTest: buildAdvancedCompilationTest,
-}
+// Main sequence targets.  Each should invoke any immediate prerequisite(s).
+exports.cleanBuildDir = cleanBuildDir;
+exports.langfiles = buildLangfiles;  // Build build/msg/*.js from msg/json/*.
+exports.tsc = buildJavaScript;
+exports.deps = gulp.series(exports.tsc, buildDeps);
+exports.minify = gulp.series(exports.deps, buildCompiled);
+exports.build = gulp.parallel(exports.minify, exports.langfiles);
+
+// Manually-invokable targets, with prequisites where required.
+exports.prepare = prepare;
+exports.format = format;
+exports.messages = generateMessages;  // Generate msg/json/en.json et al.
+exports.buildAdvancedCompilationTest =
+    gulp.series(exports.deps, buildAdvancedCompilationTest);
+
+// Targets intended only for invocation by scripts; may omit prerequisites.
+exports.onlyBuildAdvancedCompilationTest = buildAdvancedCompilationTest;

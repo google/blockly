@@ -288,7 +288,7 @@ Object.defineProperties(WidgetDiv, {
 // CJS or ES module there will not be a Blockly global variable
 // created.  This can cause problems because a very common way of
 // loading translations is to use a <script> tag to load one of
-// msg/js/*.js, which consists of lines like:
+// the generated msg/*.js files, which consists of lines like:
 //
 // Blockly.Msg["ADD_COMMENT"] = "Add Comment";
 // Blockly.Msg["CLEAN_UP"] = "Clean up Blocks";

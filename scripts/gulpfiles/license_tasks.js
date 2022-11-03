@@ -17,5 +17,6 @@ function checkLicenses() {
 };
 
 module.exports = {
+  // Manually-invokable targets, with prequisites where required.
   checkLicenses: checkLicenses
 };

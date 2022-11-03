@@ -16,7 +16,7 @@ const path = require('path');
 const {execSync} = require('child_process');
 const rimraf = require('rimraf');
 
-const {BUILD_DIR} = require('./config');
+const {BUILD_DIR, RELEASE_DIR} = require('./config');
 
 const runMochaTestsInBrowser =
   require('../../tests/mocha/run_mocha_tests_in_browser.js');
@@ -87,12 +87,13 @@ function eslint() {
 }
 
 /**
- * Run the full usual build process, checking to ensure there are no
- * closure compiler warnings / errors.
+ * Run the full usual build and package process, checking to ensure
+ * there are no closure compiler warnings / errors.
  * @return {Promise} asynchronous result
  */
-function buildDebug() {
-  return runTestCommand('build-debug', 'npm run build-debug');
+function build() {
+  return runTestCommand('build + package',
+                        'npm run package -- --verbose --debug');
 }
 
 /**
@@ -110,11 +111,11 @@ function renamings() {
  */
 function gzipFile(file) {
   return new Promise((resolve) => {
-    const name = path.posix.join('build', file);
+    const name = path.posix.join(RELEASE_DIR, file);
 
     const stream = gulp.src(name)
       .pipe(gzip())
-      .pipe(gulp.dest('build'));
+      .pipe(gulp.dest(RELEASE_DIR));
 
     stream.on('end', () => {
       resolve();
@@ -129,7 +130,7 @@ function gzipFile(file) {
  * @return {number} 0: success / 1: failed
  */
 function compareSize(file, expected) {
-  const name = path.posix.join(BUILD_DIR, file);
+  const name = path.posix.join(RELEASE_DIR, file);
   const compare = Math.floor(expected * 1.1);
   const stat = fs.statSync(name);
   const size = stat.size;
@@ -288,14 +289,6 @@ function generators() {
 }
 
 /**
- * Run the package build process, as Node tests depend on it.
- * @return {Promise} asynchronous result
- */
-function package() {
-  return runTestCommand('package', 'npm run package');
-}
-
-/**
  * Run Node tests.
  * @return {Promise} asynchronous result
  */
@@ -308,7 +301,7 @@ function node() {
  * @return {Promise} asynchronous result
  */
 function advancedCompile() {
-  return runTestCommand('advanced_compile', 'npm run test:compile:advanced');
+  return runTestCommand('advanced_compile', 'npm run only:compile:advanced');
 }
 
 /**
@@ -330,12 +323,11 @@ function reportTestResult() {
 // Indivisual tasks.
 const testTasks = [
   eslint,
-  buildDebug,
+  build,
   renamings,
   metadata,
   mocha,
   generators,
-  package,
   node,
   advancedCompile,
   reportTestResult,

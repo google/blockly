@@ -12,6 +12,7 @@ var gulp = require('gulp');
 var execSync = require('child_process').execSync;
 
 var buildTasks = require('./build_tasks');
+const packageTasks = require('./package_tasks');
 
 const upstream_url = "https://github.com/google/blockly.git";
 
@@ -94,7 +95,11 @@ function pushRebuildBranch(done) {
   done();
 }
 
-// Update github pages with what is currently in develop.
+/**
+ * Update github pages with what is currently in develop.
+ *
+ * Prerequisites (invoked): clean, build.
+ */
 const updateGithubPages = gulp.series(
   function(done) {
     execSync('git stash save -m "Stash for sync"', { stdio: 'inherit' });
@@ -104,20 +109,27 @@ const updateGithubPages = gulp.series(
     done();
   },
   buildTasks.cleanBuildDir,
+  packageTasks.cleanReleaseDir,
   buildTasks.build,
-  buildTasks.checkinBuilt,
   function(done) {
-    execSync('git commit -am "Rebuild"', { stdio: 'inherit' });
-    execSync('git push ' + upstream_url + ' gh-pages --force', { stdio: 'inherit' });
+    execSync('git add build/msg/* dist/*_compressed.js*', {stdio: 'inherit'});
+    execSync('git commit -am "Rebuild"', {stdio: 'inherit'});
+    execSync('git push ' + upstream_url + ' gh-pages --force',
+        {stdio: 'inherit'});
     done();
   }
 );
 
 module.exports = {
-  syncDevelop: syncDevelop,
-  syncMaster: syncMaster,
-  createRC: createRC,
-  updateGithubPages: updateGithubPages,
-  createRebuildBranch: createRebuildBranch,
-  pushRebuildBranch: pushRebuildBranch
-}
+  // Main sequence targets.  Each should invoke any immediate prerequisite(s).
+  updateGithubPages,
+
+  // Manually-invokable targets that invoke prerequisites.
+  createRC,
+
+  // Legacy script-only targets, to be deleted.
+  syncDevelop,
+  syncMaster,
+  createRebuildBranch,
+  pushRebuildBranch,
+};

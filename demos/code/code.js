@@ -621,6 +621,6 @@ Code.discard = function() {
 // Load the Code demo's language strings.
 document.write('<script src="msg/' + Code.LANG + '.js"></script>\n');
 // Load Blockly's language strings.
-document.write('<script src="../../msg/js/' + Code.LANG + '.js"></script>\n');
+document.write('<script src="../../build/msg/' + Code.LANG + '.js"></script>\n');
 
 window.addEventListener('load', Code.init);

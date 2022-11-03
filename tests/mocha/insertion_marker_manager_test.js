@@ -150,59 +150,55 @@ suite('Insertion marker manager', function() {
       Blockly.serialization.workspaces.load(state, this.workspace);
       this.block = this.workspace.getBlockById('first');
       this.manager = new Blockly.InsertionMarkerManager(this.block);
+
+      const componentManager = this.workspace.getComponentManager();
+      this.stub = sinon.stub(componentManager, 'hasCapability');
+      this.dxy = new Blockly.utils.Coordinate(0, 0);
     });
 
-    function stubComponentManager(workspace) {
-      const componentManager = workspace.getComponentManager();
-      const stub = sinon.stub(componentManager, 'hasCapability');
-      return stub;
-    }
-
     test('Over delete area: accepted', function() {
-      const dxy = new Blockly.utils.Coordinate(0, 0);
-      const stub = stubComponentManager(this.workspace);
-      stub.withArgs('fakeDragTarget',
-        Blockly.ComponentManager.Capability.DELETE_AREA).returns(true);
+      this.stub
+          .withArgs(
+              'fakeDragTarget', Blockly.ComponentManager.Capability.DELETE_AREA)
+          .returns(true);
       const fakeDragTarget = {
         wouldDelete: sinon.fake.returns(true),
         id: 'fakeDragTarget',
       };
-      this.manager.update(dxy, fakeDragTarget);
+      this.manager.update(this.dxy, fakeDragTarget);
       chai.assert.isTrue(this.manager.wouldDeleteBlock());
       chai.assert.isTrue(fakeDragTarget.wouldDelete.called);
     });
 
     test('Over delete area: rejected', function() {
-      const dxy = new Blockly.utils.Coordinate(0, 0);
-      const stub = stubComponentManager(this.workspace);
-      stub.withArgs('fakeDragTarget',
-        Blockly.ComponentManager.Capability.DELETE_AREA).returns(true);
+      this.stub
+          .withArgs(
+              'fakeDragTarget', Blockly.ComponentManager.Capability.DELETE_AREA)
+          .returns(true);
       const fakeDragTarget = {
         wouldDelete: sinon.fake.returns(false),
         id: 'fakeDragTarget',
       };
-      this.manager.update(dxy, fakeDragTarget);
+      this.manager.update(this.dxy, fakeDragTarget);
       chai.assert.isFalse(this.manager.wouldDeleteBlock());
       chai.assert.isTrue(fakeDragTarget.wouldDelete.called);
     });
 
     test('Drag target is not a delete area', function() {
-      const dxy = new Blockly.utils.Coordinate(0, 0);
-      const stub = stubComponentManager(this.workspace);
-      stub.withArgs('fakeDragTarget',
-        Blockly.ComponentManager.Capability.DELETE_AREA).returns(false);
+      this.stub
+          .withArgs(
+              'fakeDragTarget', Blockly.ComponentManager.Capability.DELETE_AREA)
+          .returns(false);
       const fakeDragTarget = {
         wouldDelete: sinon.fake.returns(false),
         id: 'fakeDragTarget',
       };
-      this.manager.update(dxy, fakeDragTarget);
+      this.manager.update(this.dxy, fakeDragTarget);
       chai.assert.isFalse(this.manager.wouldDeleteBlock());
-      chai.assert.isFalse(fakeDragTarget.wouldDelete.called);
     });
 
     test('Not over drag target', function() {
-      const dxy = new Blockly.utils.Coordinate(0, 0);
-      this.manager.update(dxy, null);
+      this.manager.update(this.dxy, null);
       chai.assert.isFalse(this.manager.wouldDeleteBlock());
     });
   });

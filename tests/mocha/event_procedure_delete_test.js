@@ -30,8 +30,7 @@ suite('Procedure Delete Event', function() {
       };
 
       this.createEventToState = (procedureModel) => {
-        return new Blockly.Events.ProcedureDelete(
-            this.workspace, procedureModel);
+        return new Blockly.Events.ProcedureDelete(this.workspace, procedureModel);
       };
     });
 
@@ -144,6 +143,19 @@ suite('Procedure Delete Event', function() {
             {},
             this.workspace.id);
       });
+    });
+  });
+
+  suite.skip('serialization', function() {
+    test('events round-trip through JSON', function() {
+      const model = new Blockly.procedures.ObservableProcedureModel(
+          this.workspace, 'test name', 'test id');
+      const origEvent = new Blockly.Events.ProcedureDelete(this.workspace, model);
+
+      const json = origEvent.toJson();
+      const newEvent = new Blockly.Events.fromJson(json, this.workspace);
+
+      chai.assert.deepEqual(newEvent, origEvent);
     });
   });
 });

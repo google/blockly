@@ -11,6 +11,9 @@ import {sharedTestSetup, sharedTestTeardown} from './test_helpers/setup_teardown
 
 
 suite('Procedure Change Return Event', function() {
+  const DEFAULT_TYPES = null;
+  const NON_DEFAULT_TYPES = [];
+
   setup(function() {
     sharedTestSetup.call(this);
     this.workspace = new Blockly.Workspace();
@@ -23,9 +26,6 @@ suite('Procedure Change Return Event', function() {
   });
 
   suite('running', function() {
-    const DEFAULT_TYPES = null;
-    const NON_DEFAULT_TYPES = [];
-
     setup(function() {
       this.createProcedureModel = (id) => {
         return new Blockly.procedures.ObservableProcedureModel(
@@ -178,6 +178,20 @@ suite('Procedure Change Return Event', function() {
               event.run(/* forward= */ false);
             });
           });
+    });
+  });
+
+  suite.skip('serialization', function() {
+    test('events round-trip through JSON', function() {
+      const model = new Blockly.procedures.ObservableProcedureModel(
+          this.workspace, 'test name', 'test id');
+      const origEvent = new Blockly.Events.ProcedureChangeReturn(
+          this.workspace, model, NON_DEFAULT_TYPES);
+
+      const json = origEvent.toJson();
+      const newEvent = new Blockly.Events.fromJson(json, this.workspace);
+
+      chai.assert.deepEqual(newEvent, origEvent);
     });
   });
 });

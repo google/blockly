@@ -145,4 +145,17 @@ suite('Procedure Create Event', function() {
       });
     });
   });
+
+  suite.skip('serialization', function() {
+    test('events round-trip through JSON', function() {
+      const model = new Blockly.procedures.ObservableProcedureModel(
+          this.workspace, 'test name', 'test id');
+      const origEvent = new Blockly.Events.ProcedureCreate(this.workspace, model);
+
+      const json = origEvent.toJson();
+      const newEvent = new Blockly.Events.fromJson(json, this.workspace);
+
+      chai.assert.deepEqual(newEvent, origEvent);
+    });
+  });
 });

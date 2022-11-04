@@ -14,8 +14,7 @@
 import * as goog from '../closure/goog/goog.js';
 goog.declareModuleId('Blockly.fieldRegistry');
 
-import type {Field} from './field.js';
-import type {IRegistrableField} from './interfaces/i_registrable_field.js';
+import type {Field, FieldProto} from './field.js';
 import * as registry from './registry.js';
 
 interface RegistryOptions {
@@ -35,7 +34,7 @@ interface RegistryOptions {
  *     or the fieldClass is not an object containing a fromJson function.
  * @alias Blockly.fieldRegistry.register
  */
-export function register(type: string, fieldClass: IRegistrableField) {
+export function register(type: string, fieldClass: FieldProto) {
   registry.register(registry.Type.FIELD, type, fieldClass);
 }
 
@@ -82,7 +81,8 @@ function fromJsonInternal<T>(options: RegistryOptions): Field<T>|null {
   } else if (typeof (fieldObject as any).fromJson !== 'function') {
     throw new TypeError('returned Field was not a IRegistrableField');
   } else {
-    return (fieldObject as unknown as IRegistrableField).fromJson(options);
+    type fromJson = (options: {}) => Field<T>;
+    return (fieldObject as unknown as {fromJson: fromJson}).fromJson(options);
   }
 }
 

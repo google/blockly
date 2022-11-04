@@ -75,7 +75,7 @@ export class Input {
    *     field again.  Should be unique to the host block.
    * @returns The input being append to (to allow chaining).
    */
-  appendField(field: string|Field<any>, opt_name?: string): Input {
+  appendField<T>(field: string|Field<T>, opt_name?: string): Input {
     this.insertFieldAt(this.fieldRow.length, field, opt_name);
     return this;
   }
@@ -90,7 +90,8 @@ export class Input {
    *     field again.  Should be unique to the host block.
    * @returns The index following the last inserted field.
    */
-  insertFieldAt(index: number, field: string|Field, opt_name?: string): number {
+  insertFieldAt<T>(index: number, field: string|Field<T>, opt_name?: string):
+      number {
     if (index < 0 || index > this.fieldRow.length) {
       throw Error('index ' + index + ' out of bounds.');
     }
@@ -121,7 +122,7 @@ export class Input {
       index = this.insertFieldAt(index, field.prefixField);
     }
     // Add the field to the field row.
-    this.fieldRow.splice(index, 0, field);
+    this.fieldRow.splice(index, 0, field as Field);
     index++;
     if (field.suffixField) {
       // Add any suffix.

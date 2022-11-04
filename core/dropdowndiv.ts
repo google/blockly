@@ -194,11 +194,12 @@ export function setColour(backgroundColour: string, borderColour: string) {
  * @param opt_secondaryYOffset Optional Y offset for above-block positioning.
  * @returns True if the menu rendered below block; false if above.
  */
-export function showPositionedByBlock(
-    field: Field, block: BlockSvg, opt_onHide?: Function,
+export function showPositionedByBlock<T>(
+    field: Field<T>, block: BlockSvg, opt_onHide?: Function,
     opt_secondaryYOffset?: number): boolean {
   return showPositionedByRect(
-      getScaledBboxOfBlock(block), field, opt_onHide, opt_secondaryYOffset);
+      getScaledBboxOfBlock(block), field as Field, opt_onHide,
+      opt_secondaryYOffset);
 }
 
 /**
@@ -217,7 +218,7 @@ export function showPositionedByField<T>(
     opt_secondaryYOffset?: number): boolean {
   positionToField = true;
   return showPositionedByRect(
-      getScaledBboxOfField(field), field as Field, opt_onHide,
+      getScaledBboxOfField(field as Field), field as Field, opt_onHide,
       opt_secondaryYOffset);
 }
 /**
@@ -241,7 +242,7 @@ function getScaledBboxOfBlock(block: BlockSvg): Rect {
  * @param field The field.
  * @returns The scaled bounding box of the field.
  */
-function getScaledBboxOfField<T>(field: Field<T>): Rect {
+function getScaledBboxOfField(field: Field): Rect {
   const bBox = field.getScaledBBox();
   return new Rect(bBox.top, bBox.bottom, bBox.left, bBox.right);
 }
@@ -301,10 +302,10 @@ function showPositionedByRect(
  * @returns True if the menu rendered at the primary origin point.
  * @internal
  */
-export function show(
-    newOwner: Field, rtl: boolean, primaryX: number, primaryY: number,
+export function show<T>(
+    newOwner: Field<T>, rtl: boolean, primaryX: number, primaryY: number,
     secondaryX: number, secondaryY: number, opt_onHide?: Function): boolean {
-  owner = newOwner;
+  owner = newOwner as Field;
   onHide = opt_onHide || null;
   // Set direction.
   div.style.direction = rtl ? 'rtl' : 'ltr';

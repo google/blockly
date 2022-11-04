@@ -39,7 +39,6 @@ export class FieldTextInput extends FieldInput<string> {
   }
 }
 
-// TODO DISCUSSION: Should this be `field_textinput`?
 fieldRegistry.register('field_input', FieldTextInput);
 
 (FieldTextInput.prototype as AnyDuringMigration).DEFAULT_VALUE = '';

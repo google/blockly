@@ -58,7 +58,7 @@ import {FieldAngle, FieldAngleValidator} from './field_angle.js';
 import {FieldCheckbox, FieldCheckboxValidator} from './field_checkbox.js';
 import {FieldColour, FieldColourValidator} from './field_colour.js';
 import {FieldDropdown, FieldDropdownValidator, MenuGenerator, MenuGeneratorFunction, MenuOption} from './field_dropdown.js';
-import {FieldImage, FieldImageValidator} from './field_image.js';
+import {FieldImage} from './field_image.js';
 import {FieldLabel} from './field_label.js';
 import {FieldLabelSerializable} from './field_label_serializable.js';
 import {FieldMultilineInput, FieldMultilineInputValidator} from './field_multilineinput.js';
@@ -658,7 +658,7 @@ export {
   MenuGeneratorFunction,
   MenuOption,
 };
-export {FieldImage, FieldImageValidator};
+export {FieldImage};
 export {FieldLabel};
 export {FieldLabelSerializable};
 export {FieldMultilineInput, FieldMultilineInputValidator};

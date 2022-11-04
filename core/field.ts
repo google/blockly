@@ -56,6 +56,17 @@ export abstract class Field<T = unknown> implements IASTNodeLocationSvg,
                                                     IASTNodeLocationWithBlock,
                                                     IKeyboardAccessible,
                                                     IRegistrable {
+  /**
+   * To overwrite the default value which is set in **Field**, directly update
+   * the prototype.
+   *
+   * Example:
+   * ```typescript
+   * FieldImage.prototype.DEFAULT_VALUE = null;
+   * ```
+   */
+  DEFAULT_VALUE: T|null = null;
+
   /** Non-breaking space. */
   static readonly NBSP = '\u00A0';
 
@@ -189,9 +200,9 @@ export abstract class Field<T = unknown> implements IASTNodeLocationSvg,
      * A generic value possessed by the field.
      * Should generally be non-null, only null when the field is created.
      */
-    this.value_ = ('DEFAULT_VALUE' in (new.target).prototype) ?
-        ((new.target).prototype as AnyDuringMigration).DEFAULT_VALUE :
-        null;
+    this.value_ = 'DEFAULT_VALUE' in new.target.prototype ?
+        new.target.prototype.DEFAULT_VALUE :
+        this.DEFAULT_VALUE;
 
     /** The size of the area rendered by the field. */
     this.size_ = new Size(0, 0);

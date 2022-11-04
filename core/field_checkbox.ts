@@ -238,7 +238,7 @@ export class FieldCheckbox extends Field<boolean> {
 
 fieldRegistry.register('field_checkbox', FieldCheckbox);
 
-(FieldCheckbox.prototype as AnyDuringMigration).DEFAULT_VALUE = false;
+FieldCheckbox.prototype.DEFAULT_VALUE = false;
 
 /**
  * Config options for the checkbox field.

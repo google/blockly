@@ -129,7 +129,7 @@ export class FieldLabel extends Field<string> {
 
 fieldRegistry.register('field_label', FieldLabel);
 
-(FieldLabel.prototype as AnyDuringMigration).DEFAULT_VALUE = '';
+FieldLabel.prototype.DEFAULT_VALUE = '';
 
 // clang-format off
 // Clang does not like the 'class' keyword being used as a property.

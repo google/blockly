@@ -268,7 +268,7 @@ export class FieldImage extends Field<string> {
 
 fieldRegistry.register('field_image', FieldImage);
 
-(FieldImage.prototype as AnyDuringMigration).DEFAULT_VALUE = '';
+FieldImage.prototype.DEFAULT_VALUE = '';
 
 /**
  * Config options for the image field.

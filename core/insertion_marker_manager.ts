@@ -200,8 +200,7 @@ export class InsertionMarkerManager {
     eventUtils.disable();
     this.hidePreview();
     eventUtils.enable();
-    const local = this.activeCandidate.local;
-    const closest = this.activeCandidate.closest;
+    const {local, closest} = this.activeCandidate;
     // Connect two blocks together.
     local.connect(closest);
     if (this.topBlock.rendered) {
@@ -349,8 +348,7 @@ export class InsertionMarkerManager {
 
     // We're already showing an insertion marker.
     // Decide whether the new connection has higher priority.
-    const activeClosest = this.activeCandidate.closest;
-    const activeLocal = this.activeCandidate.local;
+    const {local: activeLocal, closest: activeClosest} = this.activeCandidate;
     if (activeClosest === newCandidate.closest &&
         activeLocal === newCandidate.local) {
       // The connection was the same as the current connection.
@@ -571,8 +569,7 @@ export class InsertionMarkerManager {
    *     immediately.
    */
   private showInsertionMarker(activeCandidate: CandidateConnection) {
-    const local = activeCandidate.local;
-    const closest = activeCandidate.closest;
+    const {local, closest} = activeCandidate;
 
     const isLastInStack = this.lastOnStack && local === this.lastOnStack;
     let insertionMarker = isLastInStack ? this.lastMarker : this.firstMarker;

@@ -336,15 +336,11 @@ export class InsertionMarkerManager {
    */
   private shouldUpdatePreviews(
       newCandidate: CandidateConnection|null, dxy: Coordinate): boolean {
-    if (!newCandidate) {
-      // Only need to update if we were showing a preview before.
-      return !!this.activeCandidate;
-    }
+    // Only need to update if we were showing a preview before.
+    if (!newCandidate) return !!this.activeCandidate;
 
     // We weren't showing a preview before, but we should now.
-    if (!this.activeCandidate) {
-      return true;
-    }
+    if (!this.activeCandidate) return true;
 
     // We're already showing an insertion marker.
     // Decide whether the new connection has higher priority.
@@ -409,14 +405,12 @@ export class InsertionMarkerManager {
   private getStartRadius(): number {
     // If there is already a connection highlighted,
     // increase the radius we check for making new connections.
-    // Why? When a connection is highlighted, blocks move around when the
+    // When a connection is highlighted, blocks move around when the
     // insertion marker is created, which could cause the connection became out
     // of range. By increasing radiusConnection when a connection already
     // exists, we never "lose" the connection from the offset.
-    if (this.activeCandidate) {
-      return config.connectingSnapRadius;
-    }
-    return config.snapRadius;
+    return this.activeCandidate ? config.connectingSnapRadius :
+                                  config.snapRadius;
   }
 
   /**
@@ -445,22 +439,14 @@ export class InsertionMarkerManager {
   /**
    * Show an insertion marker or replacement highlighting during a drag, if
    * needed.
-   * At the beginning of this function, this.localConnection and
-   * this.closestConnection should both be null.
+   * At the beginning of this function, this.activeConnection should be null.
    *
    * @param newCandidate A new candidate connection that may replace the current
    *     best candidate.
    */
   private maybeShowPreview(newCandidate: CandidateConnection|null) {
-    // Nope, don't add a marker.
-    if (this.wouldDeleteBlockInternal) {
-      return;
-    }
-
-    // Nothing to connect to.
-    if (!newCandidate) {
-      return;
-    }
+    if (this.wouldDeleteBlockInternal) return;  // Nope, don't add a marker.
+    if (!newCandidate) return;                  // Nothing to connect to.
 
     const closest = newCandidate.closest;
 
@@ -527,7 +513,7 @@ export class InsertionMarkerManager {
             this.activeCandidate.closest !== newCandidate.closest;
         const localChanged = this.activeCandidate.local !== newCandidate.local;
 
-        // If there's a new preview and there was an preview before, and either
+        // If there's a new preview and there was a preview before, and either
         // connection has changed, remove the old preview.
         // Also hide if we had a preview before but now we're going to delete
         // instead.
@@ -544,7 +530,7 @@ export class InsertionMarkerManager {
 
   /**
    * A preview should be hidden.  This function figures out if it is a block
-   *  highlight or an insertion marker, and hides the appropriate one.
+   * highlight or an insertion marker, and hides the appropriate one.
    */
   private hidePreview() {
     const closest = this.activeCandidate?.closest;

@@ -24,8 +24,8 @@ export class ObservableProcedureMap extends
   override set(id: string, proc: IProcedureModel): this {
     if (this.get(id) === proc) return this;
     super.set(id, proc);
-    eventUtils.fire(
-        new (eventUtils.get(eventUtils.PROCEDURE_CREATE))(this.workspace, proc));
+    eventUtils.fire(new (eventUtils.get(eventUtils.PROCEDURE_CREATE))(
+        this.workspace, proc));
     if (isObservable(proc)) proc.startPublishing();
     return this;
   }
@@ -39,8 +39,8 @@ export class ObservableProcedureMap extends
     const existed = super.delete(id);
     if (!existed) return existed;
     triggerProceduresUpdate(this.workspace);
-    eventUtils.fire(
-        new (eventUtils.get(eventUtils.PROCEDURE_DELETE))(this.workspace, proc));
+    eventUtils.fire(new (eventUtils.get(eventUtils.PROCEDURE_DELETE))(
+        this.workspace, proc));
     if (isObservable(proc)) proc.stopPublishing();
     return existed;
   }
@@ -53,9 +53,8 @@ export class ObservableProcedureMap extends
     for (const id of this.keys()) {
       const proc = this.get(id);
       super.delete(id);
-      eventUtils.fire(
-          new (eventUtils.get(eventUtils.PROCEDURE_DELETE))
-              (this.workspace, proc));
+      eventUtils.fire(new (eventUtils.get(eventUtils.PROCEDURE_DELETE))(
+          this.workspace, proc));
     }
     triggerProceduresUpdate(this.workspace);
   }

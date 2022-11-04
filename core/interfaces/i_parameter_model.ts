@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {IProcedureModel} from "./i_procedure_model";
+import {IProcedureModel} from './i_procedure_model';
 
 
 /**

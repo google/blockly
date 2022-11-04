@@ -34,9 +34,8 @@ export class ObservableProcedureModel implements IProcedureModel {
     this.name = name;
     triggerProceduresUpdate(this.workspace);
     if (this.shouldFireEvents) {
-      eventUtils.fire(
-          new (eventUtils.get(eventUtils.PROCEDURE_RENAME))(
-              this.workspace, this, prevName));
+      eventUtils.fire(new (eventUtils.get(eventUtils.PROCEDURE_RENAME))(
+          this.workspace, this, prevName));
     }
     return this;
   }
@@ -111,9 +110,8 @@ export class ObservableProcedureModel implements IProcedureModel {
     this.returnTypes = types;
     triggerProceduresUpdate(this.workspace);
     if (this.shouldFireEvents) {
-      eventUtils.fire(
-          new (eventUtils.get(eventUtils.PROCEDURE_CHANGE_RETURN))(
-              this.workspace, this, oldReturnTypes));
+      eventUtils.fire(new (eventUtils.get(eventUtils.PROCEDURE_CHANGE_RETURN))(
+          this.workspace, this, oldReturnTypes));
     }
     return this;
   }
@@ -127,9 +125,8 @@ export class ObservableProcedureModel implements IProcedureModel {
     this.enabled = enabled;
     triggerProceduresUpdate(this.workspace);
     if (this.shouldFireEvents) {
-      eventUtils.fire(
-          new (eventUtils.get(eventUtils.PROCEDURE_ENABLE))(
-              this.workspace, this));
+      eventUtils.fire(new (eventUtils.get(eventUtils.PROCEDURE_ENABLE))(
+          this.workspace, this));
     }
     return this;
   }

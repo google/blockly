@@ -4,14 +4,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import {ProcedureBase} from './events_procedure_base.js';
 import * as registry from '../registry.js';
+
+import {ProcedureBase} from './events_procedure_base.js';
 import * as eventUtils from './utils.js';
 
 
 export class ProcedureCreate extends ProcedureBase {}
 
 registry.register(
-    registry.Type.EVENT,
-    eventUtils.PROCEDURE_CREATE,
-    ProcedureCreate);
+    registry.Type.EVENT, eventUtils.PROCEDURE_CREATE, ProcedureCreate);

@@ -7,6 +7,7 @@
 
 /**
  * An object that fires events optionally.
+ *
  * @internal
  */
 export interface IObservable {
@@ -16,6 +17,7 @@ export interface IObservable {
 
 /**
  * Type guard for checking if an object fulfills IObservable.
+ *
  * @internal
  */
 export function isObservable(obj: any): obj is IObservable {

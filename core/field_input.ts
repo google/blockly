@@ -592,8 +592,6 @@ export abstract class FieldInput<T extends InputTypes> extends Field<T> {
   }
 }
 
-(FieldInput.prototype as AnyDuringMigration).DEFAULT_VALUE = '';
-
 /**
  * Config options for the input field.
  */

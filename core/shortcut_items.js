@@ -57,8 +57,8 @@ const registerEscape = function() {
     callback: function(workspace) {
       workspace.hideChaff();
 
-      const massOperations = workspace.getMassOperations()
-      if (massOperations) massOperations.cleanUp()
+      const massOperations = workspace.getMassOperations();
+      if (massOperations) massOperations.cleanUp();
 
       return true;
     },
@@ -68,6 +68,10 @@ const registerEscape = function() {
 };
 exports.registerEscape = registerEscape;
 
+/**
+ * Keyboard shortcut to duplicate block on ctrl+d, cmd+d, or alt+d.
+ * @alias Blockly.ShortcutItems.registerDuplicate
+ */
 const registerDuplicate = function() {
   /** @type {!ShortcutRegistry.KeyboardShortcut} */
   const duplicateShortcut = {
@@ -149,8 +153,8 @@ const registerCopy = function() {
       e.preventDefault();
       workspace.hideChaff();
 
-      const massOperations = workspace.getMassOperations()
-      if (massOperations) massOperations.cleanUpClipboard()
+      const massOperations = workspace.getMassOperations();
+      if (massOperations) massOperations.cleanUpClipboard();
 
       clipboard.copy(/** @type {!ICopyable} */ (common.getSelected()));
       return true;

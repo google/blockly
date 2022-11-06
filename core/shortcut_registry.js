@@ -216,7 +216,7 @@ class ShortcutRegistry {
   onKeyDown(workspace, e) {
     const key = this.serializeKeyEvent_(e);
     const shortcutNames = this.getShortcutNamesByKeyCode(key);
-
+    
     if (!shortcutNames) {
       return false;
     }

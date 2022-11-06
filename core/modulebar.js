@@ -112,7 +112,7 @@ const ModuleBar = function(workspace) {
    * @type {Array.<number>}
    * @private
    */
-  this.numberKeyCodes__ = [KeyCodes.ONE, KeyCodes.TWO, KeyCodes.THREE, KeyCodes.FOUR, KeyCodes.FIVE, KeyCodes.SIX, KeyCodes.SEVEN, KeyCodes.EIGHT, KeyCodes.NINE];
+  this.numberKeyCodes_ = [KeyCodes.ONE, KeyCodes.TWO, KeyCodes.THREE, KeyCodes.FOUR, KeyCodes.FIVE, KeyCodes.SIX, KeyCodes.SEVEN, KeyCodes.EIGHT, KeyCodes.NINE];
 };
 
 /**

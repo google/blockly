@@ -725,6 +725,7 @@ Css.register(`
   vertical-align: middle;
   visibility: hidden;
   width: 16px;
+  margin-right: 3px;
 }
 
 .blocklyTreeCustomIcon {

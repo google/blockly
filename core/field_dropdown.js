@@ -31,6 +31,7 @@ const {Coordinate} = goog.require('Blockly.utils.Coordinate');
 const {Field} = goog.require('Blockly.Field');
 const {MenuItem} = goog.require('Blockly.MenuItem');
 const {Menu} = goog.require('Blockly.Menu');
+const {Msg} = goog.require('Blockly.Msg');
 /* eslint-disable-next-line no-unused-vars */
 const {Sentinel} = goog.requireType('Blockly.utils.Sentinel');
 const {Svg} = goog.require('Blockly.utils.Svg');
@@ -531,6 +532,20 @@ class FieldDropdown extends Field {
   }
 
   /**
+   * Used to notify the field an invalid value was input. Can be overridden by
+   * subclasses, see FieldTextInput.
+   * No-op by default.
+   * @param {*} _invalidValue The input value that was determined to be invalid.
+   * @protected
+   */
+  doValueInvalid_(_invalidValue) {
+    if (this.getOptions(true).length > 1) {
+      this.selectedOption_ = [Msg.OPTION_VALUE_REMOVED, _invalidValue];
+      super.doValueUpdate_(_invalidValue);
+    }
+  }
+
+  /**
    * Ensure that the input value is a valid language-neutral option.
    * @param {*=} opt_newValue The input value.
    * @return {?string} A valid language-neutral option, or null if invalid.
@@ -548,12 +563,19 @@ class FieldDropdown extends Field {
     }
     if (!isValueValid) {
       if (this.sourceBlock_) {
+        if (options.length > 1) {
+          this.sourceBlock_.setRemoved(true);
+        }
         console.warn(
             'Cannot set the dropdown\'s value to an unavailable option.' +
             ' Block type: ' + this.sourceBlock_.type +
             ', Field name: ' + this.name + ', Value: ' + opt_newValue);
       }
       return null;
+    }
+
+    if (this.sourceBlock_ && this.sourceBlock_.isRemoved()) {
+      this.sourceBlock_.setRemoved(false);
     }
     return /** @type {string} */ (opt_newValue);
   }

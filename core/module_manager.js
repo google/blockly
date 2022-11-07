@@ -211,8 +211,8 @@ ModuleManager.prototype.fireCreateEvent_ = function(module) {
 
 /**
  * Move block to module.
- * @param {Blockly.BlockSvg} block
- * @param {ModuleModel} module
+ * @param {Blockly.BlockSvg} block The block.
+ * @param {ModuleModel} module Target module.
  */
 ModuleManager.prototype.moveBlockToModule = function(block, module) {
   const newModuleId = module.getId();
@@ -252,8 +252,9 @@ ModuleManager.prototype.moveBlockToModule = function(block, module) {
 
 /**
  * Move blocks to module.
- * @param {Blockly.BlockSvg} block
- * @param {ModuleModel} module
+ * @param {Blockly.BlockSvg} blocks Blocks array to move in module.
+ * @param {ModuleModel} module Module into which will be blocks moved.
+ * @param {MassOperationsHandler} massOperations Mass operations handler for workspace.
  */
 ModuleManager.prototype.moveBlocksToModule = function(blocks, module, massOperations) {
   const newModuleId = module.getId();

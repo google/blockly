@@ -243,6 +243,7 @@ MassOperationsHandler.prototype.handleMove_ = function(e) {
 
   const workspaceCanvas = this.workspace_.getCanvas();
   const workspaceCanvasTransform = window.getComputedStyle(workspaceCanvas).transform;
+  // eslint-disable-next-line no-undef
   const workspaceCanvasMatrix = new WebKitCSSMatrix(workspaceCanvasTransform);
 
   dragSurfaceMinCoordinate.x += workspaceCanvasMatrix.e / this.workspace_.scale;
